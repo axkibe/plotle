@@ -72,11 +72,11 @@ Forms.Jockey =
 	var
 		forms =
 			[
-				'Login',      // XXX
-				'MoveTo',     // XXX
-				'NoAccessToSpace', // XXX
-				'NonExistingSpace', // XXX
-				'SignUp',     // XXX
+				'Login',
+				'MoveTo',
+				'NoAccessToSpace',
+				'NonExistingSpace',
+				'SignUp',
 				'Space',
 				'User',
 				'Welcome'
@@ -97,18 +97,7 @@ Forms.Jockey =
 	{
 		var
 			name =
-				forms[ i ];
-
-		var
-			form;
-
-		switch( name ) { // XXX
-
-		case 'Login' :
-		case 'MoveTo' :
-		case 'NoAccessToSpace' :
-		case 'NonExistingSpace' :
-		case 'SignUp' :
+				forms[ i ],
 
 			form =
 				this._$forms[ name ] =
@@ -118,20 +107,6 @@ Forms.Jockey =
 						'mark',
 							mark
 					);
-
-			break;
-
-		default :
-
-			form =
-				this._$forms[ name ] =
-					new Forms[ name ](
-						'screensize',
-							screensize
-					);
-
-			break;
-		}
 
 		formNames[ form.name ] =
 			name;
@@ -158,12 +133,6 @@ Jockey.prototype.get =
 		)
 	)
 	{
-		switch( name ) { // XXX
-		case 'Login' :
-		case 'MoveTo' :
-		case 'NoAccessToSpace' :
-		case 'NonExistingSpace' :
-		case 'SignUp' :
 		this._$forms[ name ] =
 			Forms[ name ].create(
 				'inherit',
@@ -171,18 +140,6 @@ Jockey.prototype.get =
 				'screensize',
 					screensize
 			);
-
-		break;
-		default :
-		this._$forms[ name ] =
-			new Forms[ name ](
-				'inherit',
-					inherit,
-				'screensize',
-					screensize
-			);
-		break;
-		}
 	}
 
 	return this._$forms[ name ];
@@ -221,12 +178,6 @@ Jockey.prototype.setMark =
 		}
 	}
 
-	switch( formname ) { // XXX
-	case 'Login' :
-	case 'MoveTo' :
-	case 'NoAccessToSpace' :
-	case 'NonExistingSpace' :
-	case 'SignUp' :
 	this._$forms[ formname ] =
 		Forms[ formname ].create(
 			'inherit',
@@ -234,17 +185,6 @@ Jockey.prototype.setMark =
 			'mark',
 				mark
 		);
-	break;
-	default :
-	this._$forms[ formname ] =
-		new Forms[ formname ](
-			'inherit',
-				this._$forms[ formname ],
-			'mark',
-				mark
-		);
-	break;
-	}
 };
 
 

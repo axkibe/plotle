@@ -33,6 +33,10 @@ var
 (function( ) {
 'use strict';
 
+var
+	_tag =
+		'WELCOME-FORM-87505653';
+
 
 /*
 | The login form
@@ -40,15 +44,33 @@ var
 var Welcome =
 Forms.Welcome =
 	function(
-		// free strings
+		tag,
+		inherit,
+		screensize,
+		mark
 	)
 {
+	if( CHECK )
+	{
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'invalid tag'
+			);
+		}
+	}
+
 	this.tree =
 		shellverse.grow( Design.WelcomeForm );
 
-	Forms.Form.apply(
+	Forms.Form.call(
 		this,
-		arguments
+		'inherit',
+			inherit,
+		'screensize',
+			screensize,
+		'mark',
+			mark
 	);
 };
 
@@ -57,6 +79,78 @@ Jools.subclass(
 	Welcome,
 	Forms.Form
 );
+
+
+/*
+| Creates a new form.
+*/
+Welcome.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		screensize =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a++ ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument'
+				);
+		}
+	}
+
+	return new Welcome(
+		_tag,
+		inherit,
+		screensize,
+		mark
+	);
+};
+
 
 
 /*
@@ -91,7 +185,7 @@ Welcome.prototype.pushButton =
 	{
 		// TODO
 	}
-	
+
 	var
 		buttonName =
 			path.get( 1 );

@@ -30,24 +30,118 @@ var
 'use strict';
 
 
+var
+	_tag =
+		'USER-FORM-80340108';
+
 /*
 | The login form
 */
 var User =
 Forms.User =
 	function(
-		// free strings
+		tag,
+		inherit,
+		screensize,
+		mark
 	)
 {
+	if( CHECK )
+	{
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'invalid tag'
+			);
+		}
+	}
+
 	// TODO
 	this.tree =
 		shellverse.grow( this.layout );
 
-	Forms.Form.apply(
+	Forms.Form.call(
 		this,
-		arguments
+		'inherit',
+			inherit,
+		'screensize',
+			screensize,
+		'mark',
+			mark
 	);
 };
+
+
+/*
+| Creates a new form.
+*/
+User.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		screensize =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a++ ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument'
+				);
+		}
+	}
+
+	return new User(
+		_tag,
+		inherit,
+		screensize,
+		mark
+	);
+};
+
 
 
 Jools.subclass(
