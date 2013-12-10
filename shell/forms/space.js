@@ -34,7 +34,7 @@ var
 
 var
 	_tag =
-		'SPACE-FORM-14252451';
+		'FORM-39606038';
 
 /*
 | The login form
@@ -45,6 +45,7 @@ Forms.Space =
 		tag,
 		inherit,
 		screensize,
+		traitSet,
 		mark
 	)
 {
@@ -64,12 +65,10 @@ Forms.Space =
 
 	Forms.Form.call(
 		this,
-		'inherit',
-			inherit,
-		'screensize',
-			screensize,
-		'mark',
-			mark
+		inherit,
+		screensize,
+		traitSet,
+		mark
 	);
 };
 
@@ -78,79 +77,6 @@ Jools.subclass(
 	Space,
 	Forms.Form
 );
-
-
-/*
-| Creates a new space form.
-*/
-Space.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		screensize =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null;
-
-	while( a < aZ )
-	{
-		var
-			arg =
-				arguments[ a++ ];
-
-		switch( arg )
-		{
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a++ ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a++ ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a++ ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument'
-				);
-		}
-	}
-
-	return new Space(
-		_tag,
-		inherit,
-		screensize,
-		mark
-	);
-};
-
-
 
 
 /*

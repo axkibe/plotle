@@ -11,6 +11,7 @@
 var
 	Forms;
 
+
 Forms =
 	Forms || { };
 
@@ -35,6 +36,11 @@ var
 'use strict';
 
 
+var
+	_tag =
+		'FORM-39606038';
+
+
 if( CHECK && typeof( window ) === 'undefined')
 {
 	throw new Error(
@@ -49,62 +55,12 @@ if( CHECK && typeof( window ) === 'undefined')
 var Form =
 Forms.Form =
 	function(
-		// free strings
+		inherit,
+		screensize,
+		traitSet,
+		mark
 	)
 {
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		screensize =
-			null;
-
-	while( a < aZ )
-	{
-		var
-			arg =
-				arguments[ a++ ];
-
-		switch( arg )
-		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a++ ];
-
-				continue;
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a++ ];
-
-				continue;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a++ ];
-
-				continue;
-
-			default :
-
-				throw new Error(
-					'unknown argument: ' + arg
-				);
-		}
-	}
-
 	if( inherit )
 	{
 		if( screensize === null )
@@ -123,6 +79,7 @@ Forms.Form =
 			screensize
 		);
 
+	// XXX fail on null mark
 	this.mark =
 		mark
 		||
@@ -146,7 +103,7 @@ Forms.Form =
 			this.tree.ranks;
 
 	for(
-		a = 0, aZ = ranks.length;
+		var a = 0, aZ = ranks.length;
 		a < aZ;
 		a++
 	)
@@ -207,6 +164,110 @@ Forms.Form =
 
 	Jools.immute( this );
 };
+
+
+/*
+| Creates a new form.
+*/
+Form.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		screensize =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null,
+
+		name =
+			null,
+
+		traitSet =
+			null;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a++ ];
+
+				break;
+
+			case 'name' :
+
+				name =
+					arguments[ a++ ];
+
+				break;
+
+			case 'traitSet' :
+
+				traitSet =
+					arguments[ a++ ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument'
+				);
+		}
+	}
+
+	if( CHECK )
+	{
+		if( !Forms[ name ] )
+		{
+			throw new Error(
+				'invalid formname: ' + name
+			);
+		}
+	}
+
+	return new Forms[ name ](
+		_tag,
+		inherit,
+		screensize,
+		traitSet,
+		mark
+	);
+};
+
+
 
 /*
 | The disc is shown while a form is shown.

@@ -32,9 +32,10 @@ var
 ( function( ) {
 'use strict';
 
+
 var
 	_tag =
-		'SIGNUP-FORM-51533630';
+		'FORM-39606038';
 
 
 /*
@@ -46,6 +47,7 @@ Forms.SignUp =
 		tag,
 		inherit,
 		screensize,
+		traitSet,
 		mark
 	)
 {
@@ -65,12 +67,10 @@ Forms.SignUp =
 
 	Forms.Form.call(
 		this,
-		'inherit',
-			inherit,
-		'screensize',
-			screensize,
-		'mark',
-			mark
+		inherit,
+		screensize,
+		traitSet,
+		mark
 	);
 };
 
@@ -79,78 +79,6 @@ Jools.subclass(
 	SignUp,
 	Forms.Form
 );
-
-
-/*
-| Creates a new form.
-*/
-SignUp.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		screensize =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null;
-
-	while( a < aZ )
-	{
-		var
-			arg =
-				arguments[ a++ ];
-
-		switch( arg )
-		{
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a++ ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a++ ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a++ ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument'
-				);
-		}
-	}
-
-	return new SignUp(
-		_tag,
-		inherit,
-		screensize,
-		mark
-	);
-};
-
 
 
 /*

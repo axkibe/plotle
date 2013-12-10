@@ -36,7 +36,7 @@ var
 
 var
 	_tag =
-		'MOVETO-FORM-46974287';
+		'FORM-39606038';
 
 /*
 | The login form
@@ -47,6 +47,7 @@ Forms.MoveTo =
 		tag,
 		inherit,
 		screensize,
+		traitSet,
 		mark
 	)
 {
@@ -65,12 +66,10 @@ Forms.MoveTo =
 
 	Forms.Form.call(
 		this,
-		'inherit',
-			inherit,
-		'screensize',
-			screensize,
-		'mark',
-			mark
+		inherit,
+		screensize,
+		traitSet,
+		mark
 	);
 
 	// XXX
@@ -83,77 +82,6 @@ Jools.subclass(
 	MoveTo,
 	Forms.Form
 );
-
-
-/*
-| Creates a new form.
-*/
-MoveTo.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		screensize =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null;
-
-	while( a < aZ )
-	{
-		var
-			arg =
-				arguments[ a++ ];
-
-		switch( arg )
-		{
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a++ ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a++ ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a++ ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument'
-				);
-		}
-	}
-
-	return new MoveTo(
-		_tag,
-		inherit,
-		screensize,
-		mark
-	);
-};
 
 
 /*

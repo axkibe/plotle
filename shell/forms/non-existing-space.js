@@ -32,9 +32,10 @@ var
 (function( ) {
 'use strict';
 
+
 var
 	_tag =
-		'NON-EXISTING-SPACE-FORM-7423431';
+		'FORM-39606038';
 
 
 /*
@@ -47,6 +48,7 @@ var
 			tag,
 			inherit,
 			screensize,
+			traitSet,
 			mark
 		)
 {
@@ -66,12 +68,10 @@ var
 
 	Forms.Form.call(
 		this,
-		'inherit',
-			inherit,
-		'screensize',
-			screensize,
-		'mark',
-			mark
+		inherit,
+		screensize,
+		traitSet,
+		mark
 	);
 
 	// XXX
@@ -92,77 +92,6 @@ Jools.subclass(
 */
 NonExistingSpace.prototype.name =
 	'nonExistingSpace';
-
-
-/*
-| Creates a new form.
-*/
-NonExistingSpace.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		screensize =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null;
-
-	while( a < aZ )
-	{
-		var
-			arg =
-				arguments[ a++ ];
-
-		switch( arg )
-		{
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a++ ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a++ ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a++ ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument'
-				);
-		}
-	}
-
-	return new NonExistingSpace(
-		_tag,
-		inherit,
-		screensize,
-		mark
-	);
-};
 
 
 /*

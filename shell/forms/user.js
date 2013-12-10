@@ -32,7 +32,7 @@ var
 
 var
 	_tag =
-		'USER-FORM-80340108';
+		'FORM-39606038';
 
 /*
 | The login form
@@ -43,6 +43,7 @@ Forms.User =
 		tag,
 		inherit,
 		screensize,
+		traitSet,
 		mark
 	)
 {
@@ -62,86 +63,12 @@ Forms.User =
 
 	Forms.Form.call(
 		this,
-		'inherit',
-			inherit,
-		'screensize',
-			screensize,
-		'mark',
-			mark
-	);
-};
-
-
-/*
-| Creates a new form.
-*/
-User.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		screensize =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null;
-
-	while( a < aZ )
-	{
-		var
-			arg =
-				arguments[ a++ ];
-
-		switch( arg )
-		{
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a++ ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a++ ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a++ ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument'
-				);
-		}
-	}
-
-	return new User(
-		_tag,
 		inherit,
 		screensize,
+		traitSet,
 		mark
 	);
 };
-
 
 
 Jools.subclass(

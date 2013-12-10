@@ -33,9 +33,10 @@ var
 (function( ) {
 'use strict';
 
+
 var
 	_tag =
-		'WELCOME-FORM-87505653';
+		'FORM-39606038';
 
 
 /*
@@ -47,6 +48,7 @@ Forms.Welcome =
 		tag,
 		inherit,
 		screensize,
+		traitSet,
 		mark
 	)
 {
@@ -65,12 +67,10 @@ Forms.Welcome =
 
 	Forms.Form.call(
 		this,
-		'inherit',
-			inherit,
-		'screensize',
-			screensize,
-		'mark',
-			mark
+		inherit,
+		screensize,
+		traitSet,
+		mark
 	);
 };
 
@@ -79,78 +79,6 @@ Jools.subclass(
 	Welcome,
 	Forms.Form
 );
-
-
-/*
-| Creates a new form.
-*/
-Welcome.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		screensize =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null;
-
-	while( a < aZ )
-	{
-		var
-			arg =
-				arguments[ a++ ];
-
-		switch( arg )
-		{
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a++ ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a++ ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a++ ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument'
-				);
-		}
-	}
-
-	return new Welcome(
-		_tag,
-		inherit,
-		screensize,
-		mark
-	);
-};
-
 
 
 /*

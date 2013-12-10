@@ -101,7 +101,9 @@ Forms.Jockey =
 
 			form =
 				this._$forms[ name ] =
-					Forms[ name ].create(
+					Forms.Form.create(
+						'name',
+							name,
 						'screensize',
 							screensize,
 						'mark',
@@ -134,7 +136,9 @@ Jockey.prototype.get =
 	)
 	{
 		this._$forms[ name ] =
-			Forms[ name ].create(
+			Forms.Form.create(
+				'name',
+					name,
 				'inherit',
 					inherit,
 				'screensize',
@@ -179,7 +183,9 @@ Jockey.prototype.setMark =
 	}
 
 	this._$forms[ formname ] =
-		Forms[ formname ].create(
+		Forms.Form.create(
+			'name',
+				formname,
 			'inherit',
 				this._$forms[ formname ],
 			'mark',

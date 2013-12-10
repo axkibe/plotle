@@ -33,9 +33,10 @@ var
 (function( ) {
 'use strict';
 
+
 var
 	_tag =
-		'LOGIN-FORM-39606038';
+		'FORM-39606038';
 
 /*
 | The login form.
@@ -46,6 +47,7 @@ Forms.Login =
 		tag,
 		inherit,
 		screensize,
+		traitSet,
 		mark
 	)
 {
@@ -64,12 +66,10 @@ Forms.Login =
 
 	Forms.Form.call(
 		this,
-		'inherit',
-			inherit,
-		'screensize',
-			screensize,
-		'mark',
-			mark
+		inherit,
+		screensize,
+		traitSet,
+		mark
 	);
 };
 
@@ -81,81 +81,11 @@ Jools.subclass(
 
 
 /*
-| Creates a new form.
-*/
-Login.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		screensize =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null;
-
-	while( a < aZ )
-	{
-		var
-			arg =
-				arguments[ a++ ];
-
-		switch( arg )
-		{
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a++ ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a++ ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a++ ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument'
-				);
-		}
-	}
-
-	return new Login(
-		_tag,
-		inherit,
-		screensize,
-		mark
-	);
-};
-
-
-/*
 | Name of the form.
 */
 Login.prototype.name =
 	'login';
+
 
 /*
 | A button of the form has been pushed.
@@ -200,6 +130,7 @@ Login.prototype.pushButton =
 	shell.redraw =
 		true;
 };
+
 
 /*
 | Logins the user
