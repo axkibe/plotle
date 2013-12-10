@@ -204,6 +204,9 @@ Button.create =
 		text =
 			null,
 
+		traitSet =
+			null,
+
 		tree =
 			null,
 
@@ -277,6 +280,13 @@ Button.create =
 			case 'text' :
 
 				text =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'traitSet' :
+
+				traitSet =
 					arguments[ a + 1 ];
 
 				break;

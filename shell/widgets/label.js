@@ -132,6 +132,9 @@ Label.create =
 		text =
 			null,
 
+		traitSet =
+			null,
+
 		tree =
 			null,
 
@@ -202,6 +205,13 @@ Label.create =
 			case 'text' :
 
 				text =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'traitSet' :
+
+				traitSet =
 					arguments[ a + 1 ];
 
 				break;

@@ -71,6 +71,7 @@ Forms.Jockey =
 
 	var
 		forms =
+		this._formList = // TODO remove
 			[
 				'Login',
 				'MoveTo',
@@ -292,57 +293,32 @@ Jockey.prototype.setTraits =
 		traitSet
 	)
 {
+	var
+		forms =
+			this._formList;
+
 	for(
-		var a = 0, aZ = traitSet.length;
+		var a = 0, aZ = forms.length;
 		a < aZ;
 		a++
 	)
 	{
 		var
-			t =
-				traitSet.get( a ),
-
-			path = t.path,
-
 			formname =
-				this._formNames[ path.get( 0 ) ],
+				forms[ a ];
 
-			itemname =
-				path.get( 1 );
+		// TODO precheck if traitSet affects
+		//      the forms
 
-		if( CHECK && !this._$forms[ formname ] )
-		{
-			throw new Error(
-				'invalid formname: ' + formname
+		this._$forms[ formname ] =
+			Forms.Form.create(
+				'name',
+					formname,
+				'inherit',
+					this._$forms[ formname ],
+				'traitSet',
+					traitSet
 			);
-		}
-
-		switch( t.key )
-		{
-			case 'value' :
-
-				this._$forms[ formname ].setValue(
-					itemname,
-					t.val
-				);
-
-				break;
-
-			case 'check' :
-
-				this._$forms[ formname ].setChecked(
-					itemname,
-					t.val
-				);
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid key in setTraits: ' + t.key
-				);
-		}
 	}
 };
 

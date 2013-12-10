@@ -157,6 +157,8 @@ Forms.Form =
 					inherit && inherit.$sub[ name ],
 				'focusAccent',
 					focusAccent,
+				'traitSet',
+					traitSet,
 				'mark',
 					this.mark.concerns( path )
 			);
@@ -680,36 +682,6 @@ Form.prototype.specialKey =
 
 
 /*
-| Sets the value of a widget.
-|
-| TODO remove
-*/
-Form.prototype.setValue =
-	function(
-		widgetName,
-		value
-	)
-{
-	var
-		Proto =
-			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ]
-			);
-
-	this.$sub[ widgetName ] =
-		Proto.create(
-			'inherit',
-				this.$sub[ widgetName ],
-			'value',
-				value
-		);
-
-	shell.redraw =
-		true;
-};
-
-
-/*
 | Sets the focus accent of a widget.
 */
 Form.prototype.setFocusAccent =
@@ -849,35 +821,6 @@ Form.prototype.setVisible =
 				this.$sub[ widgetName ],
 			'visible',
 				visible
-		);
-
-	shell.redraw =
-		true;
-};
-
-
-
-/*
-| Sets the hovered component.
-*/
-Form.prototype.setChecked =
-	function(
-		widgetName,
-		value
-	)
-{
-	var
-		Proto =
-			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ]
-			);
-
-	this.$sub[ widgetName ] =
-		Proto.create(
-			'inherit',
-				this.$sub[ widgetName ],
-			'checked',
-				value
 		);
 
 	shell.redraw =

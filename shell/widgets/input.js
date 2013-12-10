@@ -190,6 +190,9 @@ Input.create =
 		superFrame =
 			null,
 
+		traitSet =
+			null,
+
 		tree =
 			null,
 
@@ -256,16 +259,16 @@ Input.create =
 
 				break;
 
-			case 'tree' :
+			case 'traitSet' :
 
-				tree =
+				traitSet =
 					arguments[ a + 1 ];
 
 				break;
 
-			case 'value' :
+			case 'tree' :
 
-				value =
+				tree =
 					arguments[ a + 1 ];
 
 				break;
@@ -282,6 +285,51 @@ Input.create =
 				throw new Error(
 					'invalid argument: ' + arguments[ a ]
 				);
+		}
+	}
+
+	if( traitSet )
+	{
+		if( CHECK )
+		{
+			if( !path )
+			{
+				throw new Error(
+					'traitSet needs path'
+				);
+			}
+		}
+
+		for(
+			a = 0, aZ = traitSet.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				t =
+					traitSet.get( a );
+
+			if(
+				t.path.equals( path )
+			)
+			{
+				switch( t.key )
+				{
+					case 'value' :
+
+						value =
+							t.val;
+
+						break;
+
+					default :
+
+						throw new Error(
+							'unknown trait: ' + t.key
+						);
+				}
+			}
 		}
 	}
 

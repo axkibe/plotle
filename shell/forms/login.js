@@ -341,15 +341,22 @@ Login.prototype.onAuth =
 Login.prototype.clear =
 	function( )
 {
-	// TODO remove this.setValue
-	this.setValue(
-		'userInput',
-		''
-	);
+	var
+		sub =
+			this.$sub;
 
-	this.setValue(
-		'passwordInput',
-		''
+	shell.setTraits(
+		'forms',
+		TraitSet.create(
+			'trait',
+				sub.userInput.path,
+				'value',
+				'',
+			'trait',
+				sub.passwordInput.path,
+				'value',
+				''
+		)
 	);
 
 	shell.userMark(

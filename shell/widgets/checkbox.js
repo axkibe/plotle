@@ -165,6 +165,9 @@ CheckBox.create =
 		superFrame =
 			null,
 
+		traitSet =
+			null,
+
 		tree =
 			null,
 
@@ -232,6 +235,13 @@ CheckBox.create =
 			case 'superFrame' :
 
 				superFrame =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'traitSet' :
+
+				traitSet =
 					arguments[ a + 1 ];
 
 				break;

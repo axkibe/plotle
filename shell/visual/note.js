@@ -274,7 +274,7 @@ Note.create =
 				t =
 					traitSet.get( a );
 
-			if (
+			if(
 				t.path.equals( path )
 			)
 			{
