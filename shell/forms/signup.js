@@ -24,7 +24,8 @@ var
 	Jools,
 	Path,
 	shell,
-	shellverse;
+	shellverse,
+	TraitSet;
 
 /*
 | Capsule
@@ -324,29 +325,34 @@ SignUp.prototype.onRegister =
 SignUp.prototype.clear =
 	function( )
 {
-	this.setValue(
-		'userInput',
-		''
-	);
+	var
+		sub =
+			this.$sub;
 
-	this.setValue(
-		'emailInput',
-		''
-	);
-
-	this.setValue(
-		'passwordInput',
-		''
-	);
-
-	this.setValue(
-		'password2Input',
-		''
-	);
-
-	this.setChecked(
-		'newsletterCheckBox',
-		true
+	shell.setTraits(
+		'forms',
+		new TraitSet(
+			'trait',
+				sub.userInput.path,
+				'value',
+				'',
+			'trait',
+				sub.emailInput.path,
+				'value',
+				'',
+			'trait',
+				sub.passwordInput.path,
+				'value',
+				'',
+			'trait',
+				sub.password2Input.path,
+				'value',
+				'',
+			'trait',
+				sub.newsletterCheckBox.path,
+				'checked',
+				true
+		)
 	);
 
 	shell.userMark(

@@ -1242,6 +1242,9 @@ Shell.prototype.setTraits =
 				'invalid section'
 			);
 	}
+
+	shell.redraw =
+		true;
 };
 
 

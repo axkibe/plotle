@@ -183,13 +183,6 @@ CheckBox.create =
 	{
 		switch( arguments[ a ] )
 		{
-			case 'checked' :
-
-				checked =
-					arguments[ a + 1 ];
-
-				break;
-
 			case 'inherit' :
 
 				inherit =
@@ -268,6 +261,52 @@ CheckBox.create =
 		}
 	}
 
+	if( traitSet )
+	{
+		if( CHECK )
+		{
+			if( !path )
+			{
+				throw new Error(
+					'traitSet needs path'
+				);
+			}
+		}
+
+		for(
+			a = 0, aZ = traitSet.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				t =
+					traitSet.get( a );
+
+			if(
+				t.path.equals( path )
+			)
+			{
+				switch( t.key )
+				{
+					case 'checked' :
+
+						checked =
+							t.val;
+
+						break;
+
+					default :
+
+						throw new Error(
+							'unknown trait: ' + t.key
+						);
+				}
+			}
+		}
+	}
+
+
 	if( inherit )
 	{
 		if( checked === null )
@@ -344,7 +383,7 @@ CheckBox.create =
 				tree.twig.checked :
 				false;
 	}
-	
+
 	if( frame === null )
 	{
 		if( superFrame === null )
@@ -483,7 +522,7 @@ CheckBox.prototype.pointingStart =
 			TraitSet.create(
 				'trait',
 					this.path,
-					'check',
+					'checked',
 					!this.checked
 			)
 		);
@@ -526,7 +565,7 @@ CheckBox.prototype.specialKey =
 				TraitSet.create(
 					'trait',
 						this.path,
-						'check',
+						'checked',
 						!this.checked
 				)
 			);
@@ -549,7 +588,7 @@ CheckBox.prototype.input =
 		TraitSet.create(
 			'trait',
 				this.path,
-				'check',
+				'checked',
 				!this.checked
 		)
 	);
