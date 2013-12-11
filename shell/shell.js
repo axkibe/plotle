@@ -109,16 +109,15 @@ Shell =
 			);
 
 	this._$formJockey =
-		new Forms.Jockey(
+		Forms.Jockey.create(
 			'screensize',
 				screensize
 		);
 
-	// TODO free-strings
 	this._$discJockey =
-		new Disc.Jockey(
-			null,
-			screensize
+		Disc.Jockey.create(
+			'screensize',
+				screensize
 		);
 
 	this.bridge =
@@ -1218,9 +1217,13 @@ Shell.prototype.setTraits =
 	{
 		case 'forms' :
 
-			this._$formJockey.setTraits(
-				traitSet
-			);
+			this._$formJockey =
+				Forms.Jockey.create(
+					'inherit',
+						this._$formJockey,
+					'traitSet',
+						traitSet
+				);
 
 			break;
 
@@ -1322,11 +1325,12 @@ Shell.prototype.resize =
 					height
 			);
 
-	// TODO only when changed
 	this._$discJockey =
-		new Disc.Jockey(
-			this._$discJockey,
-			screensize
+		Disc.Jockey.create(
+			'inherit',
+				this._$discJockey,
+			'screensize',
+				screensize
 		);
 
 	this._draw( );

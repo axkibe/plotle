@@ -37,16 +37,31 @@ if( CHECK && typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'DISC-JOCKEY-76533526';
+
 /*
 | Constructor
 */
 var Jockey =
 Disc.Jockey =
 	function(
+		tag,
 		inherit,
 		screensize
 	)
 {
+	if( CHECK )
+	{
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'tag mismatch'
+			);
+		}
+	}
+
 	this._$createDisc =
 		new Disc.CreateDisc(
 			inherit && inherit._$createDisc,
@@ -61,6 +76,62 @@ Disc.Jockey =
 			screensize
 		);
 };
+
+
+/*
+| Creates a new disc jockey.
+*/
+Jockey.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit =
+			null,
+
+		screensize =
+			null;
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a + 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: '
+				);
+		}
+	}
+
+	return (
+		new Jockey(
+			_tag,
+			inherit,
+			screensize
+		)
+	);
+};
+
 
 
 /*

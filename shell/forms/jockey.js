@@ -29,43 +29,29 @@ var
 'use strict';
 
 
+var
+	_tag =
+		'FORM-JOCKEY-42381321';
+
 /*
-| The login form
+| The master of forms.
 */
 var Jockey =
 Forms.Jockey =
 	function(
-		// free strings
+		tag,
+		inherit,
+		screensize,
+		traitSet
 	)
 {
-	var
-		inherit =
-			null,
-
-		screensize =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	if( CHECK )
 	{
-		switch( arguments[ a ] )
+		if( tag !== _tag )
 		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a + 1 ];
-
-				break;
+			throw new Error(
+				'tag mismatch'
+			);
 		}
 	}
 
@@ -100,11 +86,16 @@ Forms.Jockey =
 					Forms.Form.create(
 						'name',
 							name,
+						'inherit',
+							inherit && inherit._$forms[ name ],
 						'screensize',
 							screensize,
+						'traitSet',
+							traitSet,
 						'mark',
 							mark
 					);
+
 		if( CHECK )
 		{
 			if( form.reflect !== name )
@@ -120,7 +111,73 @@ Forms.Jockey =
 
 
 /*
-| Returns the appropriate form
+| Creates a new form jockey.
+*/
+Jockey.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit =
+			null,
+
+		screensize =
+			null,
+
+		traitSet =
+			null;
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'traitSet' :
+
+				traitSet =
+					arguments[ a + 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: '
+				);
+		}
+	}
+
+	return (
+		new Jockey(
+			_tag,
+			inherit,
+			screensize,
+			traitSet
+		)
+	);
+};
+
+
+/*
+| Returns the appropriate form.
 */
 Jockey.prototype.get =
 	function(
@@ -275,6 +332,7 @@ Jockey.prototype.setHover =
 /*
 | Sets the value of a form object.
 */
+/*
 Jockey.prototype.setTraits =
 	function(
 		traitSet
@@ -308,6 +366,7 @@ Jockey.prototype.setTraits =
 			);
 	}
 };
+*/
 
 
 /*
