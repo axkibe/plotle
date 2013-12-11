@@ -1538,7 +1538,7 @@ Shell.prototype.onAquireSpace =
 				Forms.Jockey.create(
 					'inherit',
 						this._$formJockey,
-					'TraitSet',
+					'traitSet',
 						TraitSet.create(
 							'trait',
 								path,
@@ -1568,7 +1568,7 @@ Shell.prototype.onAquireSpace =
 				Forms.Jockey.create(
 					'inherit',
 						this._$formJockey,
-					'TraitSet',
+					'traitSet',
 						TraitSet.create(
 							'trait',
 								path,
@@ -1578,7 +1578,7 @@ Shell.prototype.onAquireSpace =
 								path,
 								'spaceTag',
 								asw.spaceTag
-							)
+						)
 				);
 
 			shell.bridge.changeMode( 'NoAccessToSpace' );

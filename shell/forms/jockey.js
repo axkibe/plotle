@@ -177,7 +177,7 @@ Jockey.create =
 			default :
 
 				throw new Error(
-					'invalid argument: '
+					'invalid argument'
 				);
 		}
 	}
