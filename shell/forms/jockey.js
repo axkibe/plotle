@@ -89,11 +89,6 @@ Forms.Jockey =
 	this._$forms =
 		{ };
 
-	var
-		formNames =
-		this._formNames =
-			{ };
-
 	for( var i in forms )
 	{
 		var
@@ -110,9 +105,16 @@ Forms.Jockey =
 						'mark',
 							mark
 					);
-
-		formNames[ form.reflect ] =
-			name;
+		if( CHECK )
+		{
+			if( form.reflect !== name )
+			{
+				throw new Error(
+					'form reflextion mismatch: ' +
+						form.reflect + ' !== ' + name
+				);
+			}
+		}
 	}
 };
 
@@ -158,23 +160,12 @@ Jockey.prototype.get =
 */
 Jockey.prototype.setMark =
 	function(
-		name, // TODO remove
+		formname, // TODO remove
 		mark
 	)
 {
-	var
-		formname =
-			this._formNames[ name ];
-
 	if( CHECK )
 	{
-		if( !formname )
-		{
-			throw new Error(
-				'invalid form: ' + name
-			);
-		}
-
 		if( CHECK && !this._$forms[ formname ] )
 		{
 			throw new Error(
@@ -200,14 +191,10 @@ Jockey.prototype.setMark =
 */
 Jockey.prototype.cycleFocus =
 	function(
-		name,
+		formname,
 		dir
 	)
 {
-	var
-		formname =
-			this._formNames[ name ];
-
 	if( CHECK )
 	{
 		if( !this._$forms[ formname ] )
@@ -233,7 +220,7 @@ Jockey.prototype.pushButton =
 
 	var
 		formname =
-			this._formNames[ path.get( 0 ) ];
+			path.get( 0 );
 
 	if( CHECK )
 	{
@@ -265,7 +252,7 @@ Jockey.prototype.setHover =
 {
 	var
 		formname =
-			this._formNames[ path.get( 0 ) ];
+			path.get( 0 );
 
 	if( CHECK )
 	{

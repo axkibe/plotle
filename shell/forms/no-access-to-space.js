@@ -84,7 +84,7 @@ Jools.subclass(
 | Name of the form.
 */
 NoAccessToSpace.prototype.reflect =
-	'NoAccessSpace';
+	'NoAccessToSpace';
 
 
 /*
