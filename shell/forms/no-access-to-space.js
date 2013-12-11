@@ -21,6 +21,7 @@ Forms =
 var
 	Design,
 	Jools,
+	Path,
 	shell,
 	shellverse;
 
@@ -61,9 +62,6 @@ var
 		}
 	}
 
-	this.tree =
-		shellverse.grow( Design.NoAccessToSpaceForm );
-
 	Forms.Form.call(
 		this,
 		inherit,
@@ -85,6 +83,24 @@ Jools.subclass(
 */
 NoAccessToSpace.prototype.reflect =
 	'NoAccessToSpace';
+
+
+/*
+| Form path.
+*/
+NoAccessToSpace.prototype.path =
+	new Path(
+		[
+			NoAccessToSpace.prototype.reflect
+		]
+	);
+
+
+/*
+| The forms tree.
+*/
+NoAccessToSpace.prototype.tree =
+	shellverse.grow( Design.NoAccessToSpaceForm );
 
 
 /*

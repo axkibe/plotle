@@ -21,8 +21,10 @@ Forms =
 var
 	Design,
 	Jools,
+	Path,
 	shell,
-	shellverse;
+	shellverse,
+	TraitSet;
 
 
 /*
@@ -59,9 +61,78 @@ Forms.Space =
 		}
 	}
 
-	// TODO
-	this.tree =
-		shellverse.grow( Design.SpaceForm );
+	if( inherit )
+	{
+		this.spaceUser =
+			inherit.spaceUser;
+
+		this.spaceTag =
+			inherit.spaceTag;
+	}
+	else
+	{
+		this.spaceUser =
+			null;
+
+		this.spaceTag =
+			null;
+	}
+
+	if( traitSet )
+	{
+		for(
+			var a = 0, aZ = traitSet.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				t =
+					traitSet.get( a );
+
+			if(
+				t.path.equals( this.path )
+			)
+			{
+				switch( t.key )
+				{
+
+					case 'spaceUser' :
+
+						this.spaceUser =
+							t.val;
+
+						break;
+
+					case 'spaceTag' :
+
+						this.spaceTag =
+							t.val;
+
+						break;
+
+					default :
+
+						throw new Error(
+							'unknown trait: ' + t.key
+						);
+				}
+			}
+		}
+	}
+
+	// appends new traits
+	// FIXME only if changed
+
+	traitSet =
+		TraitSet.create(
+			'set',
+				traitSet,
+			'trait',
+				this._widgetPath( 'headline '),
+				'text',
+				this.spaceUser + ':' + this.spaceTag
+		);
 
 	Forms.Form.call(
 		this,
@@ -84,6 +155,24 @@ Jools.subclass(
 */
 Space.prototype.reflect =
 	'Space';
+
+
+/*
+| Path of the form.
+*/
+Space.prototype.path =
+	new Path(
+		[
+			Space.prototype.reflect
+		]
+	);
+
+
+/*
+| The forms tree.
+*/
+Space.prototype.tree =
+	shellverse.grow( Design.SpaceForm );
 
 
 /*
@@ -122,22 +211,6 @@ Space.prototype.pushButton =
 		true;
 };
 
-
-/*
-| Finished loading a space.
-*/
-Space.prototype.arrivedAtSpace =
-	function(
-		spaceUser,
-		spaceTag
-		// access
-	)
-{
-	this.setText(
-		'headline',
-		spaceUser + ':' + spaceTag
-	);
-};
 
 } )( );
 

@@ -149,6 +149,15 @@ TraitSet =
 					bSet =
 						args[ a + 1 ];
 
+				a += 2;
+
+				if( !bSet )
+				{
+					// ignores null sets
+
+					continue;
+				}
+
 				for(
 					var b = 0, bZ = bSet.length;
 					b < bZ;
@@ -177,8 +186,6 @@ TraitSet =
 					set[ length++ ] =
 						t;
 				}
-
-				a += 2;
 
 				continue;
 
@@ -278,5 +285,7 @@ TraitSet.prototype.get =
 {
 	return this._set[ idx ];
 };
+
+
 
 } )( );

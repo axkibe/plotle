@@ -22,6 +22,7 @@ Forms =
 var
 	Design,
 	Jools,
+	Path,
 	shell,
 	shellverse,
 	TraitSet;
@@ -61,10 +62,6 @@ Forms.SignUp =
 		}
 	}
 
-	// TODO
-	this.tree =
-		shellverse.grow( Design.SignUpForm );
-
 	Forms.Form.call(
 		this,
 		inherit,
@@ -86,6 +83,25 @@ Jools.subclass(
 */
 SignUp.prototype.reflect =
 	'SignUp';
+
+
+/*
+| Path of the form.
+*/
+SignUp.prototype.path =
+	new Path(
+		[
+			SignUp.prototype.reflect
+		]
+	);
+
+
+/*
+| The forms tree.
+*/
+SignUp.prototype.tree =
+	shellverse.grow( Design.SignUpForm );
+
 
 /*
 | A button of the form has been pushed.

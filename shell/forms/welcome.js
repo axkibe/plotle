@@ -24,6 +24,7 @@ Forms =
 var
 	Design,
 	Jools,
+	Path,
 	shell,
 	shellverse;
 
@@ -62,9 +63,6 @@ Forms.Welcome =
 		}
 	}
 
-	this.tree =
-		shellverse.grow( Design.WelcomeForm );
-
 	Forms.Form.call(
 		this,
 		inherit,
@@ -86,6 +84,24 @@ Jools.subclass(
 */
 Welcome.prototype.reflect =
 	'Welcome';
+
+
+/*
+| Path of the form.
+*/
+Welcome.prototype.path =
+	new Path(
+		[
+			Welcome.prototype.reflect
+		]
+	);
+
+
+/*
+| The forms tree.
+*/
+Welcome.prototype.tree =
+	shellverse.grow( Design.WelcomeForm );
 
 
 /*

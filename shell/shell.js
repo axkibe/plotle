@@ -34,6 +34,7 @@ var
 	Sign,
 	system,
 	swatch,
+	TraitSet,
 	Visual;
 
 
@@ -200,11 +201,11 @@ Shell.prototype.update =
 
 		mItemTree;
 
-	
+
 	switch( mark.type )
 	{
 		case 'caret' :
-	
+
 			mItemTree =
 				tree.twig[ mark.sign.path.get( 0 ) ];
 
@@ -224,7 +225,7 @@ Shell.prototype.update =
 							mark.sign,
 							chgX
 						);
-						
+
 				// TODO keeping retainx might not be correct
 				//      in some cases
 				mark =
@@ -434,10 +435,7 @@ Shell.prototype._getCurrentDisplay =
 		case 'Welcome' :
 
 			return (
-				this._$formJockey.get(
-					name,
-					this.screensize
-				)
+				this._$formJockey.get( name )
 			);
 
 		default :
@@ -1333,6 +1331,14 @@ Shell.prototype.resize =
 				screensize
 		);
 
+	this._$formJockey =
+		Forms.Jockey.create(
+			'inherit',
+				this._$formJockey,
+			'screensize',
+				screensize
+		);
+
 	this._draw( );
 };
 
@@ -1395,7 +1401,18 @@ Shell.prototype.setUser =
 
 	this._$discJockey.setUser( user );
 
-	this._$formJockey.setUsername( user );
+	this._$formJockey =
+		Forms.Jockey.create(
+			'inherit',
+				this._$formJockey,
+			'traitSet',
+				TraitSet.create(
+					'trait',
+						this._$formJockey.get( 'User' ).path,
+						'user',
+						user
+				)
+		);
 };
 
 
@@ -1502,20 +1519,37 @@ Shell.prototype.onAquireSpace =
 		asw
 	)
 {
-	switch( asw.status ) {
+	var
+		path;
 
+	switch( asw.status )
+	{
 		case 'served' :
 
 			break;
 
 		case 'nonexistent' :
 
-			this._$formJockey.setSpace(
-				'NonExistingSpace',
-				asw.spaceUser,
-				asw.spaceTag
-			);
+			// TODO remove get
+			path =
+				this._$formJockey.get( 'NonExistingSpace' ).path;
 
+			this._$formJockey =
+				Forms.Jockey.create(
+					'inherit',
+						this._$formJockey,
+					'TraitSet',
+						TraitSet.create(
+							'trait',
+								path,
+								'spaceUser',
+								asw.spaceUser,
+							'trait',
+								path,
+								'spaceTag',
+								asw.spaceTag
+							)
+				);
 
 			shell.bridge.changeMode( 'NonExistingSpace' );
 
@@ -1526,11 +1560,26 @@ Shell.prototype.onAquireSpace =
 
 		case 'no access' :
 
-			this._$formJockey.setSpace(
-				'NoAccessToSpace',
-				asw.spaceUser,
-				asw.spaceTag
-			);
+			// TODO remove get
+			path =
+				this._$formJockey.get( 'NoAccessToSpace' ).path;
+
+			this._$formJockey =
+				Forms.Jockey.create(
+					'inherit',
+						this._$formJockey,
+					'TraitSet',
+						TraitSet.create(
+							'trait',
+								path,
+								'spaceUser',
+								asw.spaceUser,
+							'trait',
+								path,
+								'spaceTag',
+								asw.spaceTag
+							)
+				);
 
 			shell.bridge.changeMode( 'NoAccessToSpace' );
 
@@ -1691,17 +1740,33 @@ Shell.prototype.arrivedAtSpace =
 		access
 	)
 {
+	// TODO
 	this._$discJockey.arrivedAtSpace(
 		spaceUser,
 		spaceTag,
 		access
 	);
 
-	this._$formJockey.arrivedAtSpace(
-		spaceUser,
-		spaceTag,
-		access
-	);
+	var
+		spaceFormPath =
+			this._$formJockey.get( 'Space' ).path; // TODO
+
+	this._$formJockey =
+		Forms.Jockey.create(
+			'inherit',
+				this._$formJockey,
+			'traitSet',
+				TraitSet.create(
+					'trait',
+						spaceFormPath,
+						'spaceUser',
+						spaceUser,
+					'trait',
+						spaceFormPath,
+						'spaceTag',
+						spaceTag
+				)
+		);
 
 	this.bridge.changeMode( 'Normal' );
 };

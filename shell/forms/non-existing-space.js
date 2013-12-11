@@ -22,6 +22,7 @@ Forms =
 var
 	Design,
 	Jools,
+	Path,
 	shell,
 	shellverse;
 
@@ -62,9 +63,54 @@ var
 		}
 	}
 
-	// TODO
-	this.tree =
-		shellverse.grow( Design.NonExistingSpaceForm );
+	this.spaceUser =
+		inherit && inherit.spaceUser;
+
+	this.spaceTag =
+		inherit && inherit.spaceTag;
+
+	if( traitSet )
+	{
+		for(
+			var a = 0, aZ = traitSet.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				t =
+					traitSet.get( a );
+
+			if(
+				t.path.equals( this.path )
+			)
+			{
+				switch( t.key )
+				{
+
+					case 'spaceUser' :
+
+						this.spaceUser =
+							t.val;
+
+						break;
+
+					case 'spaceTag' :
+
+						this.spaceTag =
+							t.val;
+
+						break;
+
+					default :
+
+						throw new Error(
+							'unknown trait: ' + t.key
+						);
+				}
+			}
+		}
+	}
 
 	Forms.Form.call(
 		this,
@@ -73,11 +119,6 @@ var
 		traitSet,
 		mark
 	);
-
-	// XXX
-	this.$spaceUser =
-	this.$spaceTag =
-		null;
 };
 
 
@@ -92,6 +133,24 @@ Jools.subclass(
 */
 NonExistingSpace.prototype.reflect =
 	'NonExistingSpace';
+
+
+/*
+| Path of the form.
+*/
+NonExistingSpace.prototype.path =
+	new Path(
+		[
+			NonExistingSpace.prototype.reflect
+		]
+	);
+
+
+/*
+| The forms tree.
+*/
+NonExistingSpace.prototype.tree =
+	shellverse.grow( Design.NonExistingSpaceForm );
 
 
 /*
@@ -124,8 +183,8 @@ NonExistingSpace.prototype.pushButton =
 		case 'yesButton' :
 
 			shell.moveToSpace(
-				this.$spaceUser,
-				this.$spaceTag,
+				this.spaceUser,
+				this.spaceTag,
 				true
 			);
 
@@ -146,6 +205,9 @@ NonExistingSpace.prototype.pushButton =
 /*
 | Sets the space information.
 */
+/*
+	TODO remove
+
 NonExistingSpace.prototype.setSpace =
 	function(
 		spaceUser,
@@ -166,6 +228,7 @@ NonExistingSpace.prototype.setSpace =
 		' does not exist.'
 	);
 };
+*/
 
 
 } )( );

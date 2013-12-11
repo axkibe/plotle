@@ -20,7 +20,8 @@ Forms =
 | Imports
 */
 var
-	Mark;
+	Mark,
+	Path;
 
 /*
 | Capsule
@@ -72,6 +73,9 @@ Forms.Jockey =
 		mark =
 			Mark.Vacant.create( );
 
+	this.screensize =
+		screensize;
+
 	this._$forms =
 		{ };
 
@@ -111,6 +115,18 @@ Forms.Jockey =
 
 
 /*
+| The forms path
+*/
+Jockey.path =
+Jockey.prototype.path =
+	new Path(
+		[
+			'Forms'
+		]
+	);
+
+
+/*
 | Creates a new form jockey.
 */
 Jockey.create =
@@ -127,6 +143,7 @@ Jockey.create =
 
 		traitSet =
 			null;
+
 
 	for(
 		var a = 0, aZ = arguments.length;
@@ -165,6 +182,15 @@ Jockey.create =
 		}
 	}
 
+	if( inherit )
+	{
+		if( screensize === null )
+		{
+			screensize =
+				inherit.screensize;
+		}
+	}
+
 	return (
 		new Jockey(
 			_tag,
@@ -181,31 +207,9 @@ Jockey.create =
 */
 Jockey.prototype.get =
 	function(
-		name,
-		screensize
+		name
 	)
 {
-	var
-		inherit =
-			this._$forms[ name ];
-
-	if(
-		!screensize.equals(
-			inherit.screensize
-		)
-	)
-	{
-		this._$forms[ name ] =
-			Forms.Form.create(
-				'name',
-					name,
-				'inherit',
-					inherit,
-				'screensize',
-					screensize
-			);
-	}
-
 	return this._$forms[ name ];
 };
 
@@ -330,46 +334,6 @@ Jockey.prototype.setHover =
 
 
 /*
-| Sets the value of a form object.
-*/
-/*
-Jockey.prototype.setTraits =
-	function(
-		traitSet
-	)
-{
-	var
-		forms =
-			this._formList;
-
-	for(
-		var a = 0, aZ = forms.length;
-		a < aZ;
-		a++
-	)
-	{
-		var
-			formname =
-				forms[ a ];
-
-		// TODO precheck if traitSet affects
-		//      the forms
-
-		this._$forms[ formname ] =
-			Forms.Form.create(
-				'name',
-					formname,
-				'inherit',
-					this._$forms[ formname ],
-				'traitSet',
-					traitSet
-			);
-	}
-};
-*/
-
-
-/*
 | Sets the username
 |
 | TODO remove
@@ -390,6 +354,7 @@ Jockey.prototype.setUsername =
 /*
 | Sets the space information.
 */
+/*
 Jockey.prototype.setSpace =
 	function(
 		formname,
@@ -402,11 +367,13 @@ Jockey.prototype.setSpace =
 		spaceTag
 	);
 };
+*/
 
 
 /*
 | A space finished loading.
 */
+/*
 Jockey.prototype.arrivedAtSpace =
 	function(
 		spaceUser,
@@ -420,6 +387,7 @@ Jockey.prototype.arrivedAtSpace =
 		access
 	);
 };
+*/
 
 
 } )( );

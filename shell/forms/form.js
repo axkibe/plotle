@@ -165,6 +165,7 @@ Forms.Form =
 	}
 
 	Jools.keyNonGrata( this, 'name' );
+
 	Jools.immute( this );
 };
 
@@ -803,34 +804,6 @@ Form.prototype.setText =
 
 
 /*
-| Sets a visible attribute.
-*/
-Form.prototype.setVisible =
-	function(
-		widgetName,
-		visible
-	)
-{
-	var
-		Proto =
-			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ]
-			);
-
-	this.$sub[ widgetName ] =
-		Proto.create(
-			'inherit',
-				this.$sub[ widgetName ],
-			'visible',
-				visible
-		);
-
-	shell.redraw =
-		true;
-};
-
-
-/*
 | A button of the form has been pushed.
 */
 Form.prototype.pushButton =
@@ -841,32 +814,6 @@ Form.prototype.pushButton =
 	throw new Error(
 		'pushButton should be overloaded!'
 	);
-};
-
-
-/*
-| Returns the first entity a caret can be in
-*/
-Form.prototype._getCaretEntity =
-	function(
-		path
-	)
-{
-	if( path.length !== 2 )
-	{
-		throw new Error(
-			'path.length expected to be 1'
-		);
-	}
-
-	if( path.get( 0 ) !== this.reflect )
-	{
-		throw new Error(
-			'caret path mismatch'
-		);
-	}
-
-	return this.$sub[ path.get( 1 ) ];
 };
 
 
@@ -882,6 +829,33 @@ Form.prototype.mousewheel =
 	)
 {
 	return true;
+};
+
+
+/*
+| Returns the path of a widget
+*/
+Form.prototype._widgetPath =
+	function(
+		widgetName
+	)
+{
+	if( this.$sub )
+	{
+		return this.$sub[ widgetName ].path;
+	}
+	else
+	{
+		// in form creation sub might not exist yet.
+		return (
+			new Path(
+				[
+					this.reflect,
+					widgetName
+				]
+			)
+		);
+	}
 };
 
 

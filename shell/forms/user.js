@@ -17,10 +17,12 @@ Forms =
 | Imports
 */
 var
-	fontPool,
+	Design,
 	Jools,
+	Path,
 	shell,
-	shellverse;
+	shellverse,
+	TraitSet;
 
 
 /*
@@ -57,9 +59,114 @@ Forms.User =
 		}
 	}
 
-	// TODO
-	this.tree =
-		shellverse.grow( this.layout );
+	var
+		user;
+
+	if( inherit )
+	{
+		user =
+		this.user =
+			inherit.user;
+	}
+	else
+	{
+		user =
+		this.user =
+			null;
+	}
+
+	if( traitSet )
+	{
+		for(
+			var a = 0, aZ = traitSet.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				t =
+					traitSet.get( a );
+
+			if(
+				t.path.equals( this.path )
+			)
+			{
+				switch( t.key )
+				{
+
+					case 'user' :
+
+						this.user =
+						user =
+							t.val;
+
+						break;
+
+					default :
+
+						throw new Error(
+							'unknown trait: ' + t.key
+						);
+				}
+			}
+		}
+	}
+
+	var
+		isGuest;
+
+	if( user )
+	{
+		isGuest =
+			user.substr( 0, 7 ) === 'visitor';
+	}
+	else
+	{
+		isGuest =
+			true;
+	}
+
+
+	// appends new traits
+	// FIXME only if changed
+
+	traitSet =
+		TraitSet.create(
+			'set',
+				traitSet,
+			'trait',
+				this._widgetPath( 'headline' ),
+				'text',
+				'hello ' + ( user || '' ),
+			'trait',
+				this._widgetPath( 'visitor1' ),
+				'visible',
+				isGuest,
+			'trait',
+				this._widgetPath( 'visitor2' ),
+				'visible',
+				isGuest,
+			'trait',
+				this._widgetPath( 'visitor3' ),
+				'visible',
+				isGuest,
+			'trait',
+				this._widgetPath( 'visitor4' ),
+				'visible',
+				isGuest,
+			'trait',
+				this._widgetPath( 'greeting1' ),
+				'visible',
+				!isGuest,
+			'trait',
+				this._widgetPath( 'greeting2' ),
+				'visible',
+				!isGuest,
+			'trait',
+				this._widgetPath( 'greeting3' ),
+				'visible',
+				!isGuest
+		);
 
 	Forms.Form.call(
 		this,
@@ -84,401 +191,22 @@ User.prototype.reflect =
 	'User';
 
 
-// TODO move to design
-
 /*
-| Close control
+| Path of the form.
 */
-var closeButton =
-{
-	width :
-		50,
-
-	height :
-		50,
-
-	w :
-		180,
-
-	n :
-		38
-};
-
-
-/*
-| Layout
-*/
-User.prototype.layout =
-{
-	type :
-		'Layout',
-
-	twig :
-	{
-		'headline' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Hello',
-
-			font :
-				fontPool.get( 22, 'ca' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-120
-			}
-		},
-
-		'visitor1' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'You\'re currently an anonymous visitor!',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-50
-			}
-		},
-
-		'visitor2' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Click on "sign up" or "log in"',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					0
-			}
-		},
-
-		'visitor3' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'on the control disc to the left',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					20
-			}
-		},
-
-		'visitor4' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				' to register as an user.',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					40
-			}
-		},
-
-		'greeting1' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'This is your profile page!',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-50
-			}
-		},
-
-		'greeting2' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'In future you will be able to do stuff here,',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-10
-			}
-		},
-
-		'greeting3' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'like for example change your password.',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					10
-			}
-		},
-
-		'closeButton' :
-		{
-			type :
-				'ButtonWidget',
-
-			style :
-				'genericButton',
-
-			frame :
-			{
-				type :
-					'Frame',
-
-				pnw  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						closeButton.w,
-
-					y :
-						closeButton.n
-				},
-
-				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						closeButton.w + closeButton.width,
-
-					y :
-						closeButton.n + closeButton.height
-				}
-			},
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'close',
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
-			},
-
-			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
-
-				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
-			}
-		}
-	},
-
-
-	ranks :
-	[
-		'headline',
-		'visitor1',
-		'visitor2',
-		'visitor3',
-		'visitor4',
-		'greeting1',
-		'greeting2',
-		'greeting3',
-		'closeButton'
-	]
-};
-
-/*
-| sets the username
-*/
-User.prototype.setUsername =
-	function( username )
-{
-	this.setText(
-		'headline',
-		'hello ' + username + '!'
+User.prototype.path =
+	new Path(
+		[
+			User.prototype.reflect
+		]
 	);
 
-	var
-		isGuest =
-			username.substr( 0, 7 ) === 'visitor';
 
-	this.setVisible( 'visitor1', isGuest );
-	this.setVisible( 'visitor2', isGuest );
-	this.setVisible( 'visitor3', isGuest );
-	this.setVisible( 'visitor4', isGuest );
-
-	this.setVisible( 'greeting1', !isGuest );
-	this.setVisible( 'greeting2', !isGuest );
-	this.setVisible( 'greeting3', !isGuest );
-};
+/*
+| The forms tree.
+*/
+User.prototype.tree =
+	shellverse.grow( Design.UserForm );
 
 
 /*

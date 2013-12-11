@@ -22,6 +22,7 @@ Forms =
 var
 	Design,
 	Jools,
+	Path,
 	shell,
 	shellverse,
 	Widgets;
@@ -61,9 +62,6 @@ Forms.MoveTo =
 		}
 	}
 
-	this.tree =
-		shellverse.grow( Design.MoveToForm );
-
 	Forms.Form.call(
 		this,
 		inherit,
@@ -89,6 +87,25 @@ Jools.subclass(
 */
 MoveTo.prototype.reflect =
 	'MoveTo';
+
+
+/*
+| Form path.
+*/
+MoveTo.prototype.path =
+	new Path(
+		[
+			MoveTo.prototype.reflect
+		]
+	);
+
+
+/*
+| The forms tree.
+*/
+MoveTo.prototype.tree =
+	shellverse.grow( Design.MoveToForm );
+
 
 /*
 | Finished loading a space.
