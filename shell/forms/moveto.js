@@ -116,10 +116,6 @@ Forms.MoveTo =
 		}
 	}
 
-	console.log(
-		'user', user
-	);
-
 	var
 		isGuest =
 			user === null

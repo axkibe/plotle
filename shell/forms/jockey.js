@@ -59,7 +59,7 @@ Forms.Jockey =
 	}
 
 	var
-		forms =
+		formList =
 		this._formList = // TODO remove
 			[
 				'Login',
@@ -81,56 +81,56 @@ Forms.Jockey =
 	this.screensize =
 		screensize;
 
-	this._$forms =
-		{ };
+	var
+		forms =
+			{ };
 
-	for( var i in forms )
+	for( var i in formList )
 	{
 		var
 			name =
-				forms[ i ],
+				formList[ i ],
 
 
 			path =
 				inherit ?
-					inherit._$forms[ name ].path
+					inherit._forms[ name ].path
 					:
 					new Path(
 						[
 							name
 						]
-					),
-
-			form =
-				this._$forms[ name ] =
-					Forms.Form.create(
-						'name',
-							name,
-						'inherit',
-							inherit && inherit._$forms[ name ],
-						'screensize',
-							screensize,
-						'traitSet',
-							traitSet,
-						'mark',
-							mark.concerns( path ),
-						'hover',
-							path.equals( Path.empty )
-								?
-								Path.empty
-								:
-								(
-									path.subPathOf( hover )
-									?
-									hover
-									:
-									Path.empty
-								)
 					);
+
+			forms[ name ] =
+				Forms.Form.create(
+					'name',
+						name,
+					'inherit',
+						inherit && inherit._forms[ name ],
+					'screensize',
+						screensize,
+					'traitSet',
+						traitSet,
+					'mark',
+						mark.concerns( path ),
+					'hover',
+						path.equals( Path.empty )
+							?
+							Path.empty
+							:
+							(
+								path.subPathOf( hover )
+								?
+								hover
+								:
+								Path.empty
+							)
+				);
 
 		if( CHECK )
 		{
-			if( form.reflect !== name )
+			if( forms[ name ].reflect !== name )
 			{
 				throw new Error(
 					'form reflextion mismatch: ' +
@@ -139,6 +139,9 @@ Forms.Jockey =
 			}
 		}
 	}
+
+	this._forms =
+		Jools.immute( forms );
 };
 
 
@@ -288,7 +291,7 @@ Jockey.prototype.get =
 		name
 	)
 {
-	return this._$forms[ name ];
+	return this._forms[ name ];
 };
 
 
@@ -303,7 +306,7 @@ Jockey.prototype.cycleFocus =
 {
 	if( CHECK )
 	{
-		if( !this._$forms[ formname ] )
+		if( !this._forms[ formname ] )
 		{
 			throw new Error(
 				'invalid formname: ' + formname
@@ -311,7 +314,7 @@ Jockey.prototype.cycleFocus =
 		}
 	}
 
-	return this._$forms.cycleFocus( dir );
+	return this._forms.cycleFocus( dir );
 };
 
 
@@ -330,7 +333,7 @@ Jockey.prototype.pushButton =
 
 	if( CHECK )
 	{
-		if( !this._$forms[ formname ] )
+		if( !this._forms[ formname ] )
 		{
 			throw new Error(
 				'invalid formname: ' + formname
@@ -339,7 +342,7 @@ Jockey.prototype.pushButton =
 	}
 
 	return (
-		this._$forms[ formname ].pushButton(
+		this._forms[ formname ].pushButton(
 			path,
 			false, // FIXME honor shift / ctrl states
 			false
