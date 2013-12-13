@@ -25,7 +25,7 @@ var
 	Path,
 	shell,
 	shellverse,
-	Widgets;
+	TraitSet;
 
 
 /*
@@ -63,6 +63,83 @@ Forms.MoveTo =
 		}
 	}
 
+	var
+		user;
+
+	if( inherit )
+	{
+		user =
+		this.user =
+			inherit.user;
+	}
+	else
+	{
+		user =
+		this.user =
+			null;
+	}
+
+	if( traitSet )
+	{
+		for(
+			var a = 0, aZ = traitSet.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				t =
+					traitSet.get( a );
+
+			if(
+				t.path.equals( this.path )
+			)
+			{
+				switch( t.key )
+				{
+
+					case 'user' :
+
+						this.user =
+						user =
+							t.val;
+
+						break;
+
+					default :
+
+						throw new Error(
+							'unknown trait: ' + t.key
+						);
+				}
+			}
+		}
+	}
+
+	console.log(
+		'user', user
+	);
+
+	var
+		isGuest =
+			user === null
+			||
+			user.substr( 0, 7 ) === 'visitor';
+
+	traitSet =
+		TraitSet.create(
+			'set',
+				traitSet,
+			'trait',
+				this._widgetPath( 'userHomeButton' ),
+				'visible',
+				!isGuest,
+			'trait',
+				this._widgetPath( 'userHomeButton' ),
+				'text',
+				user + '\n' + 'home'
+		);
+
 	Forms.Form.call(
 		this,
 		inherit,
@@ -71,10 +148,6 @@ Forms.MoveTo =
 		mark,
 		hover
 	);
-
-	// XXX
-	this.$username =
-		null;
 };
 
 
@@ -110,33 +183,6 @@ MoveTo.prototype.tree =
 
 
 /*
-| Finished loading a space.
-*/
-MoveTo.prototype.setUsername =
-	function(
-		username
-	)
-{
-	this.$username =
-		username;
-
-	var
-		isGuest =
-			username.substr( 0, 7 ) === 'visitor';
-
-	this.sub.userHomeButton =
-		Widgets.Button.create(
-			'inherit',
-				this.sub.userHomeButton,
-			'visible',
-				!isGuest,
-			'text',
-				username + '\n' + 'home'
-		);
-};
-
-
-/*
 | A button of the form has been pushed.
 */
 MoveTo.prototype.pushButton =
@@ -150,7 +196,7 @@ MoveTo.prototype.pushButton =
 	{
 		// TODO
 	}
-	
+
 	var
 		buttonName =
 			path.get( 1 );

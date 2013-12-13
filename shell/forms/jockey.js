@@ -20,7 +20,8 @@ Forms =
 | Imports
 */
 var
-	Path;
+	Path,
+	shell;
 
 /*
 | Capsule

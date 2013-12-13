@@ -168,9 +168,14 @@ Login.prototype.login =
 
 	if( user.length < 4 )
 	{
-		this.setText(
-			'errorLabel',
-			'Username too short, min. 4 characters'
+		shell.setTraits(
+			'forms',
+			TraitSet.create(
+				'trait',
+					this._widgetPath( 'errorLabel' ),
+					'text',
+					'Username too short, min. 4 characters'
+			)
 		);
 
 		shell.userMark(
@@ -190,9 +195,14 @@ Login.prototype.login =
 
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		this.setText(
-			'errorLabel',
-			'Username must not start with "visit"'
+		shell.setTraits(
+			'forms',
+			TraitSet.create(
+				'trait',
+					this._widgetPath( 'errorLabel' ),
+					'text',
+					'Username must not start with "visit"'
+			)
 		);
 
 		shell.userMark(
@@ -212,9 +222,14 @@ Login.prototype.login =
 
 	if( pass.length < 5 )
 	{
-		this.setText(
-			'errorLabel',
-			'Password too short, min. 5 characters'
+		shell.setTraits(
+			'forms',
+			TraitSet.create(
+				'trait',
+					this._widgetPath( 'errorLabel' ),
+					'text',
+					'Password too short, min. 5 characters'
+			)
 		);
 
 		shell.userMark(
@@ -291,9 +306,14 @@ Login.prototype.onAuth =
 
 	if( !res.ok )
 	{
-		this.setText(
-			'errorLabel',
-			res.message
+		shell.setTraits(
+			'forms',
+			TraitSet.create(
+				'trait',
+					this._widgetPath( 'errorLabel' ),
+					'text',
+					res.message
+			)
 		);
 
 		if( res.message.search(/Username/) >= 0 )

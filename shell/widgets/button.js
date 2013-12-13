@@ -313,6 +313,58 @@ Button.create =
 		}
 	}
 
+	if( traitSet )
+	{
+		if( CHECK )
+		{
+			if( !path )
+			{
+				throw new Error(
+					'traitSet needs path'
+				);
+			}
+		}
+
+		for(
+			a = 0, aZ = traitSet.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				t =
+					traitSet.get( a );
+
+			if(
+				t.path.equals( path )
+			)
+			{
+				switch( t.key )
+				{
+					case 'text' :
+
+						text =
+							t.val;
+
+						break;
+
+					case 'visible' :
+
+						visible =
+							t.val;
+
+						break;
+
+					default :
+
+						throw new Error(
+							'unknown trait: ' + t.key
+						);
+				}
+			}
+		}
+	}
+
 	if( inherit )
 	{
 		if( focusAccent === null )

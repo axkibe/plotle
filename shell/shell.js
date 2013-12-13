@@ -1431,6 +1431,10 @@ Shell.prototype.setUser =
 					'trait',
 						this._$formJockey.get( 'Welcome' ).path,
 						'user',
+						user,
+					'trait',
+						this._$formJockey.get( 'MoveTo' ).path,
+						'user',
 						user
 				)
 		);
