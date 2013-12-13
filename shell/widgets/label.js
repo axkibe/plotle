@@ -160,6 +160,17 @@ Label.create =
 
 				break;
 
+			case 'hoverAccent' :
+
+				if( CHECK && arguments[ a + 1 ] )
+				{
+					throw new Error(
+						'Labels must not have a hoverAccent'
+					);
+				}
+
+				break;
+
 			case 'inherit' :
 
 				inherit =

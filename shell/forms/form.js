@@ -22,7 +22,6 @@ Forms =
 var
 	Euclid,
 	Jools,
-	Mark,
 	Path,
 	shell,
 	theme,
@@ -41,7 +40,7 @@ var
 		'FORM-39606038';
 
 
-if( CHECK && typeof( window ) === 'undefined')
+if( CHECK && typeof( window ) === 'undefined' )
 {
 	throw new Error(
 		'this code needs a browser!'
@@ -58,7 +57,8 @@ Forms.Form =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	)
 {
 	if( inherit )
@@ -79,23 +79,27 @@ Forms.Form =
 			screensize
 		);
 
-	// XXX fail on null mark
 	this.mark =
-		mark
-		||
-		Mark.Vacant.create( );
+		mark;
+
+	this.hover =
+		hover;
+
+	if( CHECK )
+	{
+		if( !mark )
+		{
+			throw new Error(
+				'invalid mark'
+			);
+		}
+	}
 
 	// all components of the form
-	this.$sub =
-		{ };
-
-	// the component the pointer is hovering above
-	this.$hover =
-		inherit ?
-			inherit.$hover :
-			null;
-
 	var
+		sub =
+			{ },
+
 		twig =
 			this.tree.twig,
 
@@ -143,10 +147,10 @@ Forms.Form =
 					]
 				);
 
-		this.$sub[ name ] =
+		sub[ name ] =
 			Proto.create(
 				'section',
-					'form',
+					'forms',
 				'path',
 					path,
 				'tree',
@@ -154,9 +158,11 @@ Forms.Form =
 				'superFrame',
 					this.frame,
 				'inherit',
-					inherit && inherit.$sub[ name ],
+					inherit && inherit.sub[ name ],
 				'focusAccent',
 					focusAccent,
+				'hoverAccent',
+					path.equals( hover ),
 				'traitSet',
 					traitSet,
 				'mark',
@@ -164,7 +170,8 @@ Forms.Form =
 			);
 	}
 
-	Jools.keyNonGrata( this, 'name' );
+	this.sub =
+		Jools.immute( sub );
 
 	Jools.immute( this );
 };
@@ -184,6 +191,9 @@ Form.create =
 
 		aZ =
 			arguments.length,
+
+		hover =
+			null,
 
 		screensize =
 			null,
@@ -219,6 +229,13 @@ Form.create =
 			case 'inherit' :
 
 				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'hover' :
+
+				hover =
 					arguments[ a++ ];
 
 				break;
@@ -262,12 +279,28 @@ Form.create =
 		}
 	}
 
+	if( inherit )
+	{
+		if( hover === null )
+		{
+			hover =
+				inherit.hover;
+		}
+
+		if( mark === null )
+		{
+			mark =
+				inherit.mark;
+		}
+	}
+
 	return new Forms[ name ](
 		_tag,
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	);
 };
 
@@ -344,7 +377,7 @@ Form.prototype.getFocusedItem =
 		);
 	}
 
-	return this.$sub[ path.get( 1 ) ] || null;
+	return this.sub[ path.get( 1 ) ] || null;
 };
 
 
@@ -379,7 +412,7 @@ Form.prototype.draw =
 				ranks[ a ],
 
 			comp =
-				this.$sub[ name ];
+				this.sub[ name ];
 
 		comp.draw( fabric );
 	}
@@ -398,7 +431,10 @@ Form.prototype.pointingHover =
 {
 	if( p === null )
 	{
-		this.setHover( null );
+		shell.setHover(
+			'forms',
+			Path.empty
+		);
 
 		return;
 	}
@@ -427,7 +463,7 @@ Form.prototype.pointingHover =
 				ranks[ a ],
 
 			comp =
-				this.$sub[ name ];
+				this.sub[ name ];
 
 		if( cursor )
 		{
@@ -450,7 +486,10 @@ Form.prototype.pointingHover =
 
 	if ( cursor === null )
 	{
-		this.setHover( null );
+		shell.setHover(
+			'forms',
+			Path.empty
+		);
 	}
 
 	return cursor || 'default';
@@ -519,7 +558,7 @@ Form.prototype.pointingStart =
 				ranks[ a ],
 
 			ce =
-				this.$sub[ name ],
+				this.sub[ name ],
 
 			r =
 				ce.pointingStart(
@@ -536,7 +575,10 @@ Form.prototype.pointingStart =
 
 	// otherwise ...
 
-	this.setHover( null );
+	shell.setHover(
+		'forms',
+		Path.empty
+	);
 
 	return false;
 };
@@ -608,7 +650,7 @@ Form.prototype.cycleFocus =
 			tree.ranks[ rank ];
 
 		ve =
-			this.$sub[ name ];
+			this.sub[ name ];
 
 		if(
 			ve.focusable &&
@@ -699,103 +741,12 @@ Form.prototype.setFocusAccent =
 				this.tree.twig[ widgetName ]
 			);
 
-	this.$sub[ widgetName ] =
+	this.sub[ widgetName ] =
 		Proto.create(
 			'inherit',
-				this.$sub[ widgetName ],
+				this.sub[ widgetName ],
 			'focusAccent',
 				value
-		);
-
-	shell.redraw =
-		true;
-};
-
-
-/*
-| Sets the hover accent of a widget.
-*/
-Form.prototype.setHoverAccent =
-	function(
-		widgetName,
-		value
-	)
-{
-	var
-		Proto =
-			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ]
-			);
-
-	this.$sub[ widgetName ] =
-		Proto.create(
-			'inherit',
-				this.$sub[ widgetName ],
-			'hoverAccent',
-				value
-		);
-
-	shell.redraw =
-		true;
-};
-
-/*
-| Sets the hovered component.
-*/
-Form.prototype.setHover =
-	function(
-		name
-	)
-{
-	if( this.$hover === name )
-	{
-		return;
-	}
-
-	if( this.$hover )
-	{
-		this.setHoverAccent(
-			this.$hover,
-			false
-		);
-	}
-
-	this.$hover =
-		name;
-
-	if( name )
-	{
-		this.setHoverAccent(
-			name,
-			true
-		);
-	}
-
-	return;
-};
-
-
-/*
-| Sets a text.
-*/
-Form.prototype.setText =
-	function(
-		widgetName,
-		text
-	)
-{
-	var
-		Proto =
-			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ]
-			);
-
-	this.$sub[ widgetName ] =
-		Proto.create(
-			'inherit',
-				this.$sub[ widgetName ],
-			'text',
-				text
 		);
 
 	shell.redraw =
@@ -840,9 +791,9 @@ Form.prototype._widgetPath =
 		widgetName
 	)
 {
-	if( this.$sub )
+	if( this.sub )
 	{
-		return this.$sub[ widgetName ].path;
+		return this.sub[ widgetName ].path;
 	}
 	else
 	{

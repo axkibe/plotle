@@ -51,7 +51,8 @@ Forms.Welcome =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	)
 {
 	if( CHECK )
@@ -132,7 +133,8 @@ Forms.Welcome =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	);
 };
 

@@ -49,7 +49,8 @@ Forms.Login =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	)
 {
 	if( CHECK )
@@ -67,7 +68,8 @@ Forms.Login =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	);
 };
 
@@ -156,7 +158,7 @@ Login.prototype.login =
 {
 	var
 		sub =
-			this.$sub,
+			this.sub,
 
 		user =
 			sub.userInput.value,
@@ -285,7 +287,7 @@ Login.prototype.onAuth =
 {
 	var
 		sub =
-			this.$sub;
+			this.sub;
 
 	if( !res.ok )
 	{
@@ -351,7 +353,7 @@ Login.prototype.clear =
 {
 	var
 		sub =
-			this.$sub;
+			this.sub;
 
 	shell.setTraits(
 		'forms',

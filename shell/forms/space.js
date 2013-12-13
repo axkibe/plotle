@@ -48,7 +48,8 @@ Forms.Space =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	)
 {
 	if( CHECK )
@@ -139,7 +140,8 @@ Forms.Space =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	);
 };
 

@@ -322,12 +322,18 @@ Path.prototype.toJSON =
 };
 
 
+Path.empty =
+	new Path(
+		[ ]
+	);
+
 /*
 | Node export
 */
 if( typeof( window ) === 'undefined' )
 {
-	module.exports = Path;
+	module.exports =
+		Path;
 }
 
 } )( );

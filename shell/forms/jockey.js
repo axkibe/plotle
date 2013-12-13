@@ -43,7 +43,8 @@ Forms.Jockey =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	)
 {
 	if( CHECK )
@@ -72,6 +73,9 @@ Forms.Jockey =
 
 	this.mark =
 		mark;
+
+	this.hover =
+		hover;
 
 	this.screensize =
 		screensize;
@@ -108,7 +112,19 @@ Forms.Jockey =
 						'traitSet',
 							traitSet,
 						'mark',
-							mark.concerns( path )
+							mark.concerns( path ),
+						'hover',
+							path.equals( Path.empty )
+								?
+								Path.empty
+								:
+								(
+									path.subPathOf( hover )
+									?
+									hover
+									:
+									Path.empty
+								)
 					);
 
 		if( CHECK )
@@ -149,6 +165,9 @@ Jockey.create =
 		inherit =
 			null,
 
+		hover =
+			null,
+
 		mark =
 			null,
 
@@ -170,6 +189,13 @@ Jockey.create =
 			case 'inherit' :
 
 				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'hover' :
+
+				hover =
 					arguments[ a + 1 ];
 
 				break;
@@ -216,7 +242,29 @@ Jockey.create =
 			mark =
 				inherit.mark;
 		}
+
+		if( hover === null )
+		{
+			hover =
+				inherit.hover;
+		}
+
+		if(
+			traitSet === null
+			&&
+			screensize.equals( inherit.screensize )
+			&&
+			mark.equals( inherit.mark )
+			&&
+			hover.equals( inherit.hover )
+		)
+		{
+			return inherit;
+		}
 	}
+
+	shell.redraw =
+		true;
 
 	return (
 		new Jockey(
@@ -224,7 +272,8 @@ Jockey.create =
 			inherit,
 			screensize,
 			traitSet,
-			mark
+			mark,
+			hover
 		)
 	);
 };
@@ -293,36 +342,6 @@ Jockey.prototype.pushButton =
 			path,
 			false, // FIXME honor shift / ctrl states
 			false
-		)
-	);
-};
-
-
-/*
-| Sets a hovered component.
-*/
-Jockey.prototype.setHover =
-	function(
-		path
-	)
-{
-	var
-		formname =
-			path.get( 0 );
-
-	if( CHECK )
-	{
-		if( !this._$forms[ formname ] )
-		{
-			throw new Error(
-				'invalid formname: ' + formname
-			);
-		}
-	}
-
-	return (
-		this._$forms[ formname ].setHover(
-			path.get( 1 )
 		)
 	);
 };

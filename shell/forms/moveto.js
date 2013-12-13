@@ -49,7 +49,8 @@ Forms.MoveTo =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	)
 {
 	if( CHECK )
@@ -67,7 +68,8 @@ Forms.MoveTo =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	);
 
 	// XXX
@@ -122,10 +124,10 @@ MoveTo.prototype.setUsername =
 		isGuest =
 			username.substr( 0, 7 ) === 'visitor';
 
-	this.$sub.userHomeButton =
+	this.sub.userHomeButton =
 		Widgets.Button.create(
 			'inherit',
-				this.$sub.userHomeButton,
+				this.sub.userHomeButton,
 			'visible',
 				!isGuest,
 			'text',

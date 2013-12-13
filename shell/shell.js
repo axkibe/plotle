@@ -29,6 +29,7 @@ var
 	Jools,
 	Mark,
 	MeshMashine,
+	Path,
 	Peer,
 	shellverse,
 	Sign,
@@ -114,7 +115,9 @@ Shell =
 			'screensize',
 				screensize,
 			'mark',
-				Mark.Vacant.create( )
+				Mark.Vacant.create( ),
+			'hover',
+				Path.empty
 		);
 
 	this._$discJockey =
@@ -831,9 +834,6 @@ Shell.prototype.userMark =
 		ePath =
 			null,
 
-		form =
-			null,
-
 		mark =
 			null,
 
@@ -894,13 +894,6 @@ Shell.prototype.userMark =
 			case 'ePath' :
 
 				ePath =
-					arguments[ ++a ];
-
-				break;
-
-			case 'form' :
-
-				form =
 					arguments[ ++a ];
 
 				break;
@@ -1170,7 +1163,7 @@ Shell.prototype.pushButton =
 				false
 			);
 
-		case 'form' :
+		case 'forms' :
 
 			return this._$formJockey.pushButton(
 				path,
@@ -1202,17 +1195,27 @@ Shell.prototype.setHover =
 
 			return this._$discJockey.setHover( path );
 
-		case 'form' :
+		case 'forms' :
 
-			return this._$formJockey.setHover( path );
+			this._$formJockey =
+				Forms.Jockey.create(
+					'inherit',
+						this._$formJockey,
+					'hover',
+						path
+				);
+
+			break;
 
 		default :
 
 			throw new Error(
 				'invalid section'
 			);
-
 	}
+
+	shell.redraw =
+		true;
 };
 
 

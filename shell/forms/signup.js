@@ -49,7 +49,8 @@ Forms.SignUp =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	)
 {
 	if( CHECK )
@@ -67,7 +68,8 @@ Forms.SignUp =
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	);
 };
 
@@ -153,7 +155,7 @@ SignUp.prototype.signup =
 {
 	var
 		sub =
-			this.$sub,
+			this.sub,
 
 		user =
 			sub.userInput.value,
@@ -280,7 +282,7 @@ SignUp.prototype.onRegister =
 {
 	var
 		sub =
-			this.$sub;
+			this.sub;
 
 	if( !res.ok )
 	{
@@ -326,7 +328,7 @@ SignUp.prototype.clear =
 {
 	var
 		sub =
-			this.$sub;
+			this.sub;
 
 	shell.setTraits(
 		'forms',

@@ -50,7 +50,8 @@ var
 			inherit,
 			screensize,
 			traitSet,
-			mark
+			mark,
+			hover
 		)
 {
 	if( CHECK )
@@ -117,7 +118,8 @@ var
 		inherit,
 		screensize,
 		traitSet,
-		mark
+		mark,
+		hover
 	);
 };
 
