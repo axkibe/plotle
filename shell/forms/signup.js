@@ -330,7 +330,7 @@ SignUp.prototype.clear =
 
 	shell.setTraits(
 		'forms',
-		new TraitSet(
+		TraitSet.create(
 			'trait',
 				sub.userInput.path,
 				'value',

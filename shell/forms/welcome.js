@@ -63,6 +63,69 @@ Forms.Welcome =
 		}
 	}
 
+	var
+		user;
+
+	if( inherit )
+	{
+		user =
+		this.user =
+			inherit.user;
+	}
+	else
+	{
+		user =
+		this.user =
+			null;
+	}
+
+	if( traitSet )
+	{
+		for(
+			var a = 0, aZ = traitSet.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				t =
+					traitSet.get( a );
+
+			if(
+				t.path.equals( this.path )
+			)
+			{
+				switch( t.key )
+				{
+
+					case 'user' :
+
+						this.user =
+						user =
+							t.val;
+
+						break;
+
+					default :
+
+						throw new Error(
+							'unknown trait: ' + t.key
+						);
+				}
+			}
+		}
+	}
+
+	traitSet =
+		TraitSet.create(
+			'set',
+				traitSet,
+			'trait',
+				this._widgetPath( 'headline' ),
+				'text',
+				'Welcome ' + ( user || '' ) + '!'
+		);
+
 	Forms.Form.call(
 		this,
 		inherit,
@@ -103,18 +166,6 @@ Welcome.prototype.path =
 Welcome.prototype.tree =
 	shellverse.grow( Design.WelcomeForm );
 
-
-/*
-| sets the username
-*/
-Welcome.prototype.setUsername =
-	function( username )
-{
-	this.setText(
-		'headline',
-		'Welcome ' + username + '!'
-	);
-};
 
 /*
 | A button of the form has been pushed.
