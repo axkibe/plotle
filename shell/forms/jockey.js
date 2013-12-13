@@ -20,7 +20,6 @@ Forms =
 | Imports
 */
 var
-	Mark,
 	Path;
 
 /*
@@ -43,7 +42,8 @@ Forms.Jockey =
 		tag,
 		inherit,
 		screensize,
-		traitSet
+		traitSet,
+		mark
 	)
 {
 	if( CHECK )
@@ -68,10 +68,10 @@ Forms.Jockey =
 				'Space',
 				'User',
 				'Welcome'
-			],
+			];
 
-		mark =
-			Mark.Vacant.create( );
+	this.mark =
+		mark;
 
 	this.screensize =
 		screensize;
@@ -85,6 +85,17 @@ Forms.Jockey =
 			name =
 				forms[ i ],
 
+
+			path =
+				inherit ?
+					inherit._$forms[ name ].path
+					:
+					new Path(
+						[
+							name
+						]
+					),
+
 			form =
 				this._$forms[ name ] =
 					Forms.Form.create(
@@ -97,7 +108,7 @@ Forms.Jockey =
 						'traitSet',
 							traitSet,
 						'mark',
-							mark
+							mark.concerns( path )
 					);
 
 		if( CHECK )
@@ -138,6 +149,9 @@ Jockey.create =
 		inherit =
 			null,
 
+		mark =
+			null,
+
 		screensize =
 			null,
 
@@ -156,6 +170,13 @@ Jockey.create =
 			case 'inherit' :
 
 				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
 					arguments[ a + 1 ];
 
 				break;
@@ -189,6 +210,12 @@ Jockey.create =
 			screensize =
 				inherit.screensize;
 		}
+
+		if( mark === null )
+		{
+			mark =
+				inherit.mark;
+		}
 	}
 
 	return (
@@ -196,7 +223,8 @@ Jockey.create =
 			_tag,
 			inherit,
 			screensize,
-			traitSet
+			traitSet,
+			mark
 		)
 	);
 };
@@ -211,39 +239,6 @@ Jockey.prototype.get =
 	)
 {
 	return this._$forms[ name ];
-};
-
-
-/*
-| Sets the mark
-|
-| TODO remove
-*/
-Jockey.prototype.setMark =
-	function(
-		formname, // TODO remove
-		mark
-	)
-{
-	if( CHECK )
-	{
-		if( CHECK && !this._$forms[ formname ] )
-		{
-			throw new Error(
-				'invalid formname: ' + formname
-			);
-		}
-	}
-
-	this._$forms[ formname ] =
-		Forms.Form.create(
-			'name',
-				formname,
-			'inherit',
-				this._$forms[ formname ],
-			'mark',
-				mark
-		);
 };
 
 

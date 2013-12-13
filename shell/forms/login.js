@@ -371,9 +371,8 @@ Login.prototype.clear =
 		'set',
 		'section',
 			'forms',
-		'form',
-			this.reflect,
-		'null'
+		'type',
+			'vacant'
 	);
 };
 

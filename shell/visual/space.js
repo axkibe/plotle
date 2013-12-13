@@ -1105,7 +1105,8 @@ Space.prototype.click =
 		'set',
 		'section',
 			'space',
-		'null'
+		'type',
+			'vacant'
 	);
 
 	shell.redraw =
@@ -1511,7 +1512,8 @@ Space.prototype.dragStop =
 						'set',
 						'section',
 							'space',
-						'null'
+						'type',
+							'vacant'
 					);
 				}
 

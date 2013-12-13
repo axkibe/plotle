@@ -112,7 +112,9 @@ Shell =
 	this._$formJockey =
 		Forms.Jockey.create(
 			'screensize',
-				screensize
+				screensize,
+			'mark',
+				Mark.Vacant.create( )
 		);
 
 	this._$discJockey =
@@ -835,9 +837,6 @@ Shell.prototype.userMark =
 		mark =
 			null,
 
-		name =
-			null,
-
 		path =
 			null,
 
@@ -870,7 +869,7 @@ Shell.prototype.userMark =
 					arguments[ ++a ];
 
 				break;
-			
+
 			case 'bAt1' :
 
 				bAt1 =
@@ -1071,21 +1070,22 @@ Shell.prototype.userMark =
 
 			break;
 
+		case 'vacant' :
+
+			mark =
+				Mark.Vacant.create( );
+
+			break;
+
 		default :
 
-			if( !setnull )
-			{
-				throw new Error(
-					'type missing'
-				);
-			}
-			else
-			{
-				mark =
-					Mark.Vacant.create( );
-			}
+			throw new Error(
+				'invalid mark'
+			);
 	}
 
+
+	// FIXME integrate section into paths of the mark
 
 	switch( section )
 	{
@@ -1099,19 +1099,33 @@ Shell.prototype.userMark =
 						mark
 				);
 
+			this._$formJockey =
+				Forms.Jockey.create(
+					'inherit',
+						this._$formJockey,
+					'mark',
+						Mark.Vacant.create( )
+				);
+
 			break;
 
 		case 'forms' :
 
-			name =
-				setnull ?
-					form :
-					mark.sign.path.get( 0 ),
+			this.$space =
+				Visual.Space.create(
+					'inherit',
+						this.$space,
+					'mark',
+						Mark.Vacant.create( )
+				);
 
-			this._$formJockey.setMark(
-				name,
-				mark
-			);
+			this._$formJockey =
+				Forms.Jockey.create(
+					'inherit',
+						this._$formJockey,
+					'mark',
+						mark
+				);
 
 			break;
 	}

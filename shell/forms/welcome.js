@@ -26,7 +26,8 @@ var
 	Jools,
 	Path,
 	shell,
-	shellverse;
+	shellverse,
+	TraitSet;
 
 /*
 | Capsule
