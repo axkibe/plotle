@@ -171,6 +171,10 @@ var System =
 	this._$lastSpecialKey =
 		-1;
 
+	// remembers last pointing device hovering state.
+	this._$hover =
+		null;
+
 	// The value expected to be in input.
 	// either nothing or the text selection.
 	// if it changes the user did something.
@@ -513,6 +517,26 @@ System.prototype.focusCenter =
 };
 
 
+/*
+| An asyncronous event happened
+|
+| For example:
+|   onArriveAtSpace
+*/
+System.prototype.asyncEvent =
+	function(
+		eventName,
+		asw
+	)
+{
+	this.shell[ eventName ](
+		asw
+	);
+
+	this._repeatHover( );
+};
+
+
 // ---------------------------
 
 
@@ -544,14 +568,16 @@ System.prototype._onAtweenTime =
 		return;
 	}
 
-	var atween =
-		this._$atween;
+	var
+		atween =
+			this._$atween;
 
 	this._$pointingState =
 		'drag';
 
-	var cursor =
-		null;
+	var
+		cursor =
+			null;
 
 	this.shell.dragStart(
 		atween.pos,
@@ -851,20 +877,80 @@ System.prototype._onMouseDown =
 			break;
 	}
 
-	var cursor =
-		this.shell.pointingHover(
-			p,
-			shift,
-			ctrl
+	this._pointingHover(
+		p,
+		shift,
+		ctrl
+	);
+
+	return false;
+};
+
+
+/*
+| Handles hovering of the pointing device.
+*/
+System.prototype._pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	this._$hover =
+		Jools.immute(
+			{
+				p :
+					p,
+
+				shift :
+					shift,
+
+				ctrl :
+					ctrl
+			}
 		);
+
+	var
+		cursor =
+			this.shell.pointingHover(
+				p,
+				shift,
+				ctrl
+			);
 
 	if( cursor !== null )
 	{
-		canvas.style.cursor = cursor;
+		this._canvas.style.cursor = cursor;
+	}
+};
+
+
+/*
+| Repeats the last hover.
+|
+| Used by asyncEvents so the hoveringState is corrected.
+*/
+System.prototype._repeatHover =
+	function( )
+{
+	if( !this._$hover )
+	{
+		return;
 	}
 
+	var
+		cursor =
+			this.shell.pointingHover(
+				this._$hover.p,
+				this._$hover.shift,
+				this._$hover.ctrl
+			);
 
-	return false;
+	if( cursor !== null )
+	{
+		this._canvas.style.cursor = cursor;
+	}
 };
 
 
@@ -902,12 +988,11 @@ System.prototype._onMouseMove =
 	{
 		case false :
 
-			cursor =
-				this.shell.pointingHover(
-					p,
-					shift,
-					ctrl
-				);
+			this._pointingHover(
+				p,
+				shift,
+				ctrl
+			);
 
 			break;
 
@@ -1011,10 +1096,7 @@ System.prototype._onMouseUp =
 			event.shiftKey,
 
 		ctrl =
-			event.ctrlKey || event.metaKey,
-
-		cursor =
-			null;
+			event.ctrlKey || event.metaKey;
 
 	switch( this._$pointingState )
 	{
@@ -1040,12 +1122,11 @@ System.prototype._onMouseUp =
 				ctrl
 			);
 
-			cursor =
-				this.shell.pointingHover(
-					p,
-					shift,
-					ctrl
-				);
+			this._pointingHover(
+				p,
+				shift,
+				ctrl
+			);
 
 			this._$pointingState =
 				false;
@@ -1060,12 +1141,11 @@ System.prototype._onMouseUp =
 				ctrl
 			);
 
-			cursor =
-				this.shell.pointingHover(
-					p,
-					shift,
-					ctrl
-				);
+			this._pointingHover(
+				p,
+				shift,
+				ctrl
+			);
 
 			this._$pointingState =
 				false;
@@ -1074,13 +1154,9 @@ System.prototype._onMouseUp =
 
 		default :
 
-			throw new Error( 'invalid pointingState' );
-	}
-
-	if( cursor !== null )
-	{
-		canvas.style.cursor =
-			cursor;
+			throw new Error(
+				'invalid pointingState'
+			);
 	}
 
 	return false;
@@ -1266,12 +1342,11 @@ System.prototype._onTouchMove =
 	{
 		case false:
 
-			cursor =
-				this.shell.pointingHover(
-					p,
-					shift,
-					ctrl
-				);
+			this.pointingHover(
+				p,
+				shift,
+				ctrl
+			);
 
 			break;
 
@@ -1379,10 +1454,7 @@ System.prototype._onTouchEnd =
 			event.shiftKey,
 
 		ctrl =
-			event.ctrlKey || event.metaKey,
-
-		cursor =
-			null;
+			event.ctrlKey || event.metaKey;
 
 	switch( this._$pointingState )
 	{
@@ -1408,12 +1480,11 @@ System.prototype._onTouchEnd =
 				ctrl
 			);
 
-			cursor =
-				this.shell.pointingHover(
-					p,
-					shift,
-					ctrl
-				);
+			this._pointingHover(
+				p,
+				shift,
+				ctrl
+			);
 
 			this._$pointingState =
 				false;
@@ -1428,12 +1499,11 @@ System.prototype._onTouchEnd =
 				ctrl
 			);
 
-			cursor =
-				this.shell.pointingHover(
-					p,
-					shift,
-					ctrl
-				);
+			this._pointingHover(
+				p,
+				shift,
+				ctrl
+			);
 
 			this._$pointingState =
 				false;

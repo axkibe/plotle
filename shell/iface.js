@@ -367,8 +367,7 @@ IFace.prototype.aquireSpace =
 	function(
 		spaceUser,
 		spaceTag,
-		create,
-		onAquireSpaceReceiver
+		create
 	)
 {
 	var self =
@@ -423,14 +422,18 @@ IFace.prototype.aquireSpace =
 				'aquireSpace.status == ' + ajax.status
 			);
 
-			onAquireSpaceReceiver.onAquireSpace(
-				Jools.immute({
-					status :
-						'connection fail',
+			system.asyncEvent(
+				'onAquireSpace',
+				Jools.immute(
+					{
+						status :
+							'connection fail',
 
-					message :
-						'connection fail: ' + ajax.status
-				})
+						message :
+							'connection fail: ' +
+								ajax.status
+					}
+				)
 			);
 
 			self._update( );
@@ -472,17 +475,21 @@ IFace.prototype.aquireSpace =
 		{
 			case 'nonexistent' :
 			case 'no access' :
-				onAquireSpaceReceiver.onAquireSpace(
-					Jools.immute({
-						status :
-							asw.status,
 
-						spaceUser :
-							spaceUser,
+				system.asyncEvent(
+					'onAquireSpace',
+					Jools.immute(
+						{
+							status :
+								asw.status,
 
-						spaceTag :
-							spaceTag
-					})
+							spaceUser :
+								spaceUser,
+
+							spaceTag :
+								spaceTag
+						}
+					)
 				);
 
 				self._update( );
@@ -525,23 +532,26 @@ IFace.prototype.aquireSpace =
 		self._$redo =
 			[ ];
 
-		onAquireSpaceReceiver.onAquireSpace(
-			Jools.immute({
-				status :
-					asw.status,
+		system.asyncEvent(
+			'onAquireSpace',
+			Jools.immute(
+				{
+					status :
+						asw.status,
 
-				spaceUser :
-					spaceUser,
+					spaceUser :
+						spaceUser,
 
-				spaceTag :
-					spaceTag,
+					spaceTag :
+						spaceTag,
 
-				tree :
-					self.$cSpace,
+					tree :
+						self.$cSpace,
 
-				access :
-					asw.access
-			})
+					access :
+						asw.access
+				}
+			)
 		);
 
 		// waits a second before going into update cycle, so safari

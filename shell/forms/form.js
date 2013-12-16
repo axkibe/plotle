@@ -727,34 +727,6 @@ Form.prototype.specialKey =
 
 
 /*
-| Sets the focus accent of a widget.
-*/
-Form.prototype.setFocusAccent =
-	function(
-		widgetName,
-		value
-	)
-{
-	var
-		Proto =
-			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ]
-			);
-
-	this.sub[ widgetName ] =
-		Proto.create(
-			'inherit',
-				this.sub[ widgetName ],
-			'focusAccent',
-				value
-		);
-
-	shell.redraw =
-		true;
-};
-
-
-/*
 | A button of the form has been pushed.
 */
 Form.prototype.pushButton =

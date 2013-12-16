@@ -20,6 +20,7 @@ Forms =
 | Imports
 */
 var
+	Jools,
 	Path,
 	shell;
 
@@ -134,7 +135,7 @@ Forms.Jockey =
 			{
 				throw new Error(
 					'form reflextion mismatch: ' +
-						form.reflect + ' !== ' + name
+						forms[ name ].reflect + ' !== ' + name
 				);
 			}
 		}

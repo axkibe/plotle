@@ -61,7 +61,7 @@ Disc.Disc =
 
 		screensize =
 			null;
-	
+
 	for(
 		var a = 0, aZ = arguments.length;
 		a < aZ;
@@ -114,7 +114,7 @@ Disc.Disc =
 				'name missing'
 			);
 		}
-		
+
 		if( screensize === null )
 		{
 			throw new Error(

@@ -24,7 +24,8 @@ var
 	Jools,
 	Path,
 	shell,
-	shellverse;
+	shellverse,
+	TraitSet;
 
 
 /*
@@ -64,11 +65,12 @@ var
 		}
 	}
 
-	this.spaceUser =
-		inherit && inherit.spaceUser;
+	var
+		spaceUser =
+			null,
 
-	this.spaceTag =
-		inherit && inherit.spaceTag;
+		spaceTag =
+			null;
 
 	if( traitSet )
 	{
@@ -91,14 +93,14 @@ var
 
 					case 'spaceUser' :
 
-						this.spaceUser =
+						spaceUser =
 							t.val;
 
 						break;
 
 					case 'spaceTag' :
 
-						this.spaceTag =
+						spaceTag =
 							t.val;
 
 						break;
@@ -112,6 +114,40 @@ var
 			}
 		}
 	}
+
+	if( inherit )
+	{
+		if( spaceUser === null )
+		{
+			spaceUser =
+				inherit.spaceUser;
+		}
+
+		if( spaceTag === null )
+		{
+			spaceTag =
+				inherit.spaceTag;
+		}
+	}
+
+	this.spaceUser =
+		spaceUser;
+
+	this.spaceTag =
+		spaceTag;
+
+	traitSet =
+		TraitSet.create(
+			'set',
+				traitSet,
+			'trait',
+				this._widgetPath( 'headline' ),
+				'text',
+				spaceUser +
+					':' +
+					spaceTag +
+					' does not exist.'
+		);
 
 	Forms.Form.call(
 		this,
@@ -202,35 +238,6 @@ NonExistingSpace.prototype.pushButton =
 	shell.redraw =
 		true;
 };
-
-
-/*
-| Sets the space information.
-*/
-/*
-	TODO remove
-
-NonExistingSpace.prototype.setSpace =
-	function(
-		spaceUser,
-		spaceTag
-	)
-{
-	this.$spaceUser =
-		spaceUser;
-
-	this.$spaceTag =
-		spaceTag;
-
-	this.setText(
-		'headline',
-		spaceUser +
-		':' +
-		spaceTag +
-		' does not exist.'
-	);
-};
-*/
 
 
 } )( );

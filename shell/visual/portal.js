@@ -1031,55 +1031,6 @@ Portal.prototype._fonts =
 	} );
 
 
-/*
-| Returns the mark position.
-*/
-/*
-Portal.prototype._getCaretPos =
-	function( )
-{
-	var
-		mark =
-			this.mark,
-
-		section =
-			mark.sign.path.get( -1 ),
-
-		fs =
-			this._fonts[ section ].size,
-
-		descend =
-			fs * theme.bottombox,
-
-		p =
-			this._locateOffset(
-				section,
-				mark.sign.at1
-			),
-
-		s =
-			Math.round( p.y + descend ),
-
-		n =
-			s - Math.round( fs + descend ),
-
-		x =
-			p.x - 1;
-
-	return Jools.immute(
-		{
-			s :
-				s,
-
-			n :
-				n,
-
-			x :
-				x
-		}
-	);
-};
-*/
 
 /*
 | Returns the point of a given offset.
@@ -1143,7 +1094,7 @@ Portal.prototype._drawCaret =
 	{
 		return;
 	}
-	
+
 	var
 		font =
 			this._fonts[ section ],
@@ -1324,7 +1275,6 @@ Portal.prototype._keyDown =
 	{
 		return;
 	}
-		
 
 	var
 		cpos;
@@ -1332,7 +1282,7 @@ Portal.prototype._keyDown =
 	switch( section )
 	{
 		case 'spaceUser' :
-		
+
 			cpos =
 				this._locateOffset(
 					section,
@@ -1359,11 +1309,11 @@ Portal.prototype._keyDown =
 							this._$spaceFields.spaceUser.pnw.x
 					)
 			);
-		
+
 			break;
 
 		case 'spaceTag' :
-			
+
 			shell.userMark(
 				'set',
 				'type',
@@ -1384,7 +1334,7 @@ Portal.prototype._keyDown =
 			break;
 
 		case 'moveToButton' :
-	
+
 			shell.userMark(
 				'set',
 				'type',
@@ -1723,7 +1673,7 @@ Portal.prototype._keyRight =
 
 				cycle =
 					'spaceUser';
-	
+
 				break;
 		}
 

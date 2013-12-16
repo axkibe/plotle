@@ -263,7 +263,7 @@ Shell.prototype.update =
 							mark.bSign,
 							chgX
 						),
-						
+
 					eSign =
 						MeshMashine.tfxSign(
 							mark.eSign,
@@ -295,7 +295,7 @@ Shell.prototype.update =
 			}
 
 			break;
-			
+
 	}
 
 	this.$space =
@@ -1530,8 +1530,7 @@ Shell.prototype.moveToSpace =
 	this.peer.aquireSpace(
 		spaceUser,
 		spaceTag,
-		create,
-		this
+		create
 	);
 };
 
@@ -1555,7 +1554,6 @@ Shell.prototype.onAquireSpace =
 
 		case 'nonexistent' :
 
-			// TODO remove get
 			path =
 				this._$formJockey.get( 'NonExistingSpace' ).path;
 
@@ -1578,8 +1576,7 @@ Shell.prototype.onAquireSpace =
 
 			shell.bridge.changeMode( 'NonExistingSpace' );
 
-			this.redraw =
-				true;
+			this._draw( );
 
 			return;
 
@@ -1608,8 +1605,7 @@ Shell.prototype.onAquireSpace =
 
 			shell.bridge.changeMode( 'NoAccessToSpace' );
 
-			this.redraw =
-				true;
+			this._draw( );
 
 			return;
 

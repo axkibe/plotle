@@ -219,15 +219,13 @@ Peer.prototype.aquireSpace =
 	function(
 		spaceUser,
 		spaceTag,
-		create,
-		onAquireSpaceReceiver
+		create
 	)
 {
 	this._iface.aquireSpace(
 		spaceUser,
 		spaceTag,
-		create,
-		onAquireSpaceReceiver
+		create
 	);
 };
 

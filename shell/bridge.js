@@ -190,7 +190,10 @@ Bridge.prototype.changeMode =
 	this._$mode =
 		mode;
 
-	// FIXME evil knevil
+	shell.redraw =
+		true;
+
+	// XXX evil knevil
 	if( shell._$discJockey )
 	{
 		shell._$discJockey.setMode( mode );
@@ -226,7 +229,7 @@ Bridge.prototype.startAction =
 		this._$action =
 			new Action( arguments );
 
-	// FIXME evil knevil
+	// XXX evil knevil
 	if( shell._$discJockey )
 	{
 		shell._$discJockey.setActive( action && action.type );
@@ -252,7 +255,7 @@ Bridge.prototype.stopAction =
 	this._$action =
 		null;
 
-	// FIXME evil knevil
+	// XXX evil knevil
 	if( shell._$discJockey )
 	{
 		shell._$discJockey.setActive( null );

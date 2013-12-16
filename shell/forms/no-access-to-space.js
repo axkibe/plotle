@@ -63,6 +63,16 @@ var
 		}
 	}
 
+	/*
+	this.setText(
+		'headline',
+			'no access to ' +
+			spaceUser +
+			':' +
+			spaceTag
+	);
+	*/
+
 	Forms.Form.call(
 		this,
 		inherit,
@@ -136,25 +146,6 @@ NoAccessToSpace.prototype.pushButton =
 
 			throw new Error( 'unknown button pushed: ' + buttonName );
 	}
-};
-
-
-/*
-| Sets the space information.
-*/
-NoAccessToSpace.prototype.setSpace =
-	function(
-		spaceUser,
-		spaceTag
-	)
-{
-	this.setText(
-		'headline',
-			'no access to ' +
-			spaceUser +
-			':' +
-			spaceTag
-	);
 };
 
 
