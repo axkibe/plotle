@@ -149,6 +149,11 @@ Path =
 Path.isPath =
 	function( a )
 {
+	if( !a )
+	{
+		return false;
+	}
+
 	return a.constructor === Path;
 };
 

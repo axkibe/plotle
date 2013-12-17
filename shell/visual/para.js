@@ -409,7 +409,7 @@ Para.prototype._drawCaret =
 
 		p =
 			this.locateOffset(
-				mark.sign.at1
+				mark.caretAt
 			).p,
 
 		s =
@@ -530,7 +530,7 @@ Jools.lazyFixate(
 
 			xw =
 				x + w;
-			
+
 			if( flowWidth > 0 && xw > flowWidth )
 			{
 				if( x > 0 )
@@ -605,9 +605,6 @@ Jools.lazyFixate(
 
 		flow.spread =
 			spread;
-
-		//flow.fontsize =
-		//	font.size;
 
 		return flow;
 	}
@@ -726,7 +723,7 @@ Para.prototype.getOffsetAt =
 	{
 		a--;
 	}
-		
+
 	return ftoken.o + a;
 };
 
@@ -905,7 +902,7 @@ Para.prototype.input =
 
 		shell.peer.insertText(
 			para.textPath,
-			shell.space.mark.sign.at1,
+			shell.space.mark.caretAt,
 			line
 		);
 
@@ -915,7 +912,7 @@ Para.prototype.input =
 			// over return values
 			shell.peer.split(
 				para.textPath,
-				shell.space.mark.sign.at1
+				shell.space.mark.caretAt
 			);
 
 			item =
@@ -984,11 +981,11 @@ Para.prototype.specialKey =
 						'space',
 					'bPath',
 						v0.textPath,
-					'bAt1',
+					'bAt',
 						0,
 					'ePath',
 						v1.textPath,
-					'eAt1',
+					'eAt',
 						v1.text.length
 				);
 
@@ -1025,16 +1022,16 @@ Para.prototype.specialKey =
 			case 'enter' :
 
 				shell.removeRange( mark );
-	
+
 				mark =
 					shell.space.mark;
 
 				show =
 					true;
-	
+
 				shell.peer.split(
 					this.textPath,
-					this.mark.eSign.at1
+					this.mark.caretAt
 				);
 
 				return true;
@@ -1045,13 +1042,13 @@ Para.prototype.specialKey =
 		keyHandler =
 			_keyMap[ key ],
 
-		at1 =
+		at =
 			null,
 
 		bPath =
 			null,
 
-		bAt1 =
+		bAt =
 			null,
 
 		retainx =
@@ -1064,7 +1061,7 @@ Para.prototype.specialKey =
 
 			if( CHECK )
 			{
-				if( !this.path.subPathOf( mark.sign.path ) )
+				if( !this.path.subPathOf( mark.caretPath ) )
 				{
 					throw new Error(
 						'path mismatch'
@@ -1072,8 +1069,8 @@ Para.prototype.specialKey =
 				}
 			}
 
-			at1 =
-				mark.sign.at1;
+			at =
+				mark.caretAt;
 
 			retainx =
 				mark.retainx;
@@ -1081,10 +1078,10 @@ Para.prototype.specialKey =
 			if( shift )
 			{
 				bPath =
-					mark.sign.path;
+					mark.caretPath;
 
-				bAt1 =
-					mark.sign.at1;
+				bAt =
+					mark.caretAt;
 			}
 
 			break;
@@ -1093,7 +1090,7 @@ Para.prototype.specialKey =
 
 			if( CHECK )
 			{
-				if( !this.path.subPathOf( mark.eSign.path ) )
+				if( !this.path.subPathOf( mark.caretPath ) )
 				{
 					throw new Error(
 						'path mismatch'
@@ -1101,19 +1098,19 @@ Para.prototype.specialKey =
 				}
 			}
 
-			at1 =
-				mark.eSign.at1;
+			at =
+				mark.caretAt;
 
 			retainx =
 				mark.retainx;
-			
+
 			if( shift )
 			{
 				bPath =
-					mark.bSign.path;
+					mark.bPath;
 
-				bAt1 =
-					mark.bSign.at1;
+				bAt =
+					mark.bAt;
 			}
 
 			break;
@@ -1125,10 +1122,10 @@ Para.prototype.specialKey =
 			this[ keyHandler ](
 				item,
 				doc,
-				at1,
+				at,
 				retainx,
 				bPath,
-				bAt1
+				bAt
 			)
 			||
 			show;
@@ -1231,17 +1228,17 @@ Para.prototype._keyBackspace =
 	function(
 		item,
 		doc,
-		at1
+		at
 		// retainx
 		// bPath,
-		// bAt1
+		// bAt
 	)
 {
-	if( at1 > 0 )
+	if( at > 0 )
 	{
 		shell.peer.removeText(
 			this.textPath,
-			at1 - 1,
+			at - 1,
 			1
 		);
 
@@ -1277,17 +1274,17 @@ Para.prototype._keyDel =
 	function(
 		item,
 		doc,
-		at1
+		at
 		// retainx,
 		// bPath,
-		// bAt1
+		// bAt
 	)
 {
-	if( at1 < this.text.length )
+	if( at < this.text.length )
 	{
 		shell.peer.removeText(
 			this.textPath,
-			at1,
+			at,
 			1
 		);
 
@@ -1319,10 +1316,10 @@ Para.prototype._keyDown =
 	function(
 		item,
 		doc,
-		at1,
+		at,
 		retainx,
 		bPath,
-		bAt1
+		bAt
 	)
 {
 	var
@@ -1330,9 +1327,7 @@ Para.prototype._keyDown =
 			this.flow,
 
 		cpos =
-			this.locateOffset(
-				at1
-			),
+			this.locateOffset( at ),
 
 		x =
 			retainx !== null ?
@@ -1342,7 +1337,7 @@ Para.prototype._keyDown =
 	if( cpos.line < flow.length - 1 )
 	{
 		// stays within this para
-		at1 =
+		at =
 
 		this._setMark(
 			this.getOffsetAt(
@@ -1351,7 +1346,7 @@ Para.prototype._keyDown =
 			),
 			x,
 			bPath,
-			bAt1
+			bAt
 		);
 
 
@@ -1369,14 +1364,14 @@ Para.prototype._keyDown =
 			ve =
 				doc.atRank( r + 1 );
 
-		at1 =
+		at =
 			ve.getOffsetAt( 0, x );
 
 		ve._setMark(
-			at1,
+			at,
 			x,
 			bPath,
-			bAt1
+			bAt
 		);
 	}
 
@@ -1391,13 +1386,13 @@ Para.prototype._keyEnd =
 	function(
 		item,
 		doc,
-		at1,
+		at,
 		retainx,
 		bPath,
-		bAt1
+		bAt
 	)
 {
-	if( at1 === this.text.length )
+	if( at === this.text.length )
 	{
 		return false;
 	}
@@ -1406,7 +1401,7 @@ Para.prototype._keyEnd =
 		this.text.length,
 		null,
 		bPath,
-		bAt1
+		bAt
 	);
 
 	return true;
@@ -1420,15 +1415,15 @@ Para.prototype._keyEnter =
 	function(
 		item,
 		doc,
-		at1
+		at
 		// retainx,
 		// bPath,
-		// bAt1
+		// bAt
 	)
 {
 	shell.peer.split(
 		this.textPath,
-		at1
+		at
 	);
 
 	return true;
@@ -1442,19 +1437,19 @@ Para.prototype._keyLeft =
 	function(
 		item,
 		doc,
-		at1,
+		at,
 		retainx,
 		bPath,
-		bAt1
+		bAt
 	)
 {
-	if( at1 > 0 )
+	if( at > 0 )
 	{
 		this._setMark(
-			at1 - 1,
+			at - 1,
 			null,
 			bPath,
-			bAt1
+			bAt
 		);
 
 		return true;
@@ -1474,7 +1469,7 @@ Para.prototype._keyLeft =
 			ve.text.length,
 			null,
 			bPath,
-			bAt1
+			bAt
 		);
 
 		return true;
@@ -1491,13 +1486,13 @@ Para.prototype._keyPos1 =
 	function(
 		item,
 		doc,
-		at1,
+		at,
 		retainx,
 		bPath,
-		bAt1
+		bAt
 	)
 {
-	if( at1 === 0 )
+	if( at === 0 )
 	{
 		return false;
 	}
@@ -1506,7 +1501,7 @@ Para.prototype._keyPos1 =
 		0,
 		null,
 		bPath,
-		bAt1
+		bAt
 	);
 
 	return true;
@@ -1520,19 +1515,19 @@ Para.prototype._keyRight =
 	function(
 		item,
 		doc,
-		at1,
+		at,
 		retainx,
 		bPath,
-		bAt1
+		bAt
 	)
 {
-	if( at1 < this.text.length )
+	if( at < this.text.length )
 	{
 		this._setMark(
-			at1 + 1,
+			at + 1,
 			null,
 			bPath,
-			bAt1
+			bAt
 		);
 
 		return true;
@@ -1551,7 +1546,7 @@ Para.prototype._keyRight =
 			0,
 			null,
 			bPath,
-			bAt1
+			bAt
 		);
 
 		return true;
@@ -1568,16 +1563,16 @@ Para.prototype._keyUp =
 	function(
 		item,
 		doc,
-		at1,
+		at,
 		retainx,
 		bPath,
-		bAt1
+		bAt
 	)
 {
 	var
 		cpos =
 			this.locateOffset(
-				at1
+				at
 			),
 
 		x =
@@ -1588,17 +1583,17 @@ Para.prototype._keyUp =
 	if( cpos.line > 0 )
 	{
 		// stay within this para
-		at1 =
+		at =
 			this.getOffsetAt(
 				cpos.line - 1,
 				x
 			);
 
 		this._setMark(
-			at1,
+			at,
 			x,
 			bPath,
-			bAt1
+			bAt
 		);
 
 
@@ -1615,17 +1610,17 @@ Para.prototype._keyUp =
 		var ve =
 			doc.atRank( r - 1 );
 
-		at1 =
+		at =
 			ve.getOffsetAt(
 				ve.flow.length - 1,
 				x
 			);
 
 		ve._setMark(
-			at1,
+			at,
 			x,
 			bPath,
-			bAt1
+			bAt
 		);
 
 		return true;
@@ -1640,10 +1635,10 @@ Para.prototype._keyUp =
 */
 Para.prototype._setMark =
 	function(
-		at1,     // position to mark caret (or end of range)
+		at,     // position to mark caret (or end of range)
 		retainx, // retains this x position when moving up/down
 		bPath,   // begin path when marking a range
-		bAt1     // begin at1  when marking a range
+		bAt      // begin at   when marking a range
 	)
 {
 	if( !bPath )
@@ -1658,8 +1653,8 @@ Para.prototype._setMark =
 					'space',
 				'path',
 					this.textPath,
-				'at1',
-					at1,
+				'at',
+					at,
 				'retainx',
 					retainx
 			);
@@ -1674,8 +1669,8 @@ Para.prototype._setMark =
 					'space',
 				'path',
 					this.textPath,
-				'at1',
-					at1
+				'at',
+					at
 			);
 		}
 	}
@@ -1691,12 +1686,12 @@ Para.prototype._setMark =
 					'space',
 				'bPath',
 					bPath,
-				'bAt1',
-					bAt1,
+				'bAt',
+					bAt,
 				'ePath',
 					this.textPath,
-				'eAt1',
-					at1,
+				'eAt',
+					at,
 				'retainx',
 					retainx
 			);
@@ -1711,12 +1706,12 @@ Para.prototype._setMark =
 					'space',
 				'bPath',
 					bPath,
-				'bAt1',
-					bAt1,
+				'bAt',
+					bAt,
 				'ePath',
 					this.textPath,
-				'eAt1',
-					at1
+				'eAt',
+					at
 			);
 		}
 	}

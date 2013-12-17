@@ -868,7 +868,7 @@ Input.prototype._drawCaret =
 
 		p =
 			this.locateOffset(
-				this.mark.sign.at1
+				this.mark.caretAt
 			),
 
 		s =
@@ -896,14 +896,14 @@ Input.prototype.input =
 	)
 {
 	var
-		sign =
-			this.mark.sign,
+		mark =
+			this.mark,
 
 		value =
 			this.value,
 
-		at1 =
-			sign.at1,
+		at =
+			mark.caretAt,
 
 		maxlen =
 			this.tree.twig.maxlen;
@@ -927,9 +927,9 @@ Input.prototype.input =
 			'trait',
 				this.path,
 				'value',
-				value.substring( 0, at1 ) +
+				value.substring( 0, at ) +
 					text +
-					value.substring( at1 )
+					value.substring( at )
 			)
 	);
 
@@ -940,9 +940,9 @@ Input.prototype.input =
 		'section',
 			'forms',
 		'path',
-			sign.path,
-		'at1',
-			at1 + text.length
+			mark.caretPath,
+		'at',
+			at + text.length
 	);
 };
 
@@ -954,13 +954,13 @@ Input.prototype.keyBackspace =
 	function( )
 {
 	var
-		sign =
-			this.mark.sign,
+		mark =
+			this.mark,
 
-		at1 =
-			sign.at1;
+		at =
+			mark.at;
 
-	if( at1 <= 0 )
+	if( at <= 0 )
 	{
 		return;
 	}
@@ -971,8 +971,8 @@ Input.prototype.keyBackspace =
 			'trait',
 				this.path,
 				'value',
-				this.value.substring( 0, at1 - 1 ) +
-					this.value.substring( at1 )
+				this.value.substring( 0, at - 1 ) +
+					this.value.substring( at )
 			)
 	);
 
@@ -983,9 +983,9 @@ Input.prototype.keyBackspace =
 		'section',
 			'forms',
 		'path',
-			sign.path,
-		'at1',
-			at1 - 1
+			mark.caretPath,
+		'at',
+			at - 1
 	);
 };
 
@@ -997,10 +997,10 @@ Input.prototype.keyDel =
 	function( )
 {
 	var
-		at1 =
-			this.mark.sign.at1;
+		at =
+			this.mark.caretAt;
 
-	if( at1 >= this.value.length )
+	if( at >= this.value.length )
 	{
 		return;
 	}
@@ -1011,8 +1011,8 @@ Input.prototype.keyDel =
 			'trait',
 				this.path,
 				'value',
-				this.value.substring( 0, at1 ) +
-					this.value.substring( at1 + 1 )
+				this.value.substring( 0, at ) +
+					this.value.substring( at + 1 )
 			)
 	);
 };
@@ -1051,13 +1051,13 @@ Input.prototype.keyEnd =
 	function( )
 {
 	var
-		sign =
-			this.mark.sign,
+		mark =
+			this.mark,
 
-		at1 =
-			sign.at1;
+		at =
+			mark.caretAt;
 
-	if( at1 >= this.value.length )
+	if( at >= this.value.length )
 	{
 		return;
 	}
@@ -1069,8 +1069,8 @@ Input.prototype.keyEnd =
 		'section',
 			'forms',
 		'path',
-			sign.path,
-		'at1',
+			mark.caretPath,
+		'at',
 			this.value.length
 	);
 };
@@ -1083,10 +1083,10 @@ Input.prototype.keyLeft =
 	function( )
 {
 	var
-		sign =
-			this.mark.sign;
+		mark =
+			this.mark;
 
-	if( sign.at1 <= 0 )
+	if( mark.caretAt <= 0 )
 	{
 		return;
 	}
@@ -1099,9 +1099,9 @@ Input.prototype.keyLeft =
 		'section',
 			'forms',
 		'path',
-			sign.path,
-		'at1',
-			sign.at1 - 1
+			mark.caretPath,
+		'at',
+			mark.caretAt - 1
 	);
 };
 
@@ -1113,10 +1113,10 @@ Input.prototype.keyPos1 =
 	function( )
 {
 	var
-		sign =
-			this.mark.sign;
+		mark =
+			this.mark;
 
-	if( sign.at1 <= 0 )
+	if( mark.at <= 0 )
 	{
 		return;
 	}
@@ -1128,8 +1128,8 @@ Input.prototype.keyPos1 =
 		'section',
 			'forms',
 		'path',
-			sign.path,
-		'at1',
+			mark.caretPath,
+		'at',
 			0
 	);
 };
@@ -1142,10 +1142,10 @@ Input.prototype.keyRight =
 	function( )
 {
 	var
-		sign =
-			this.mark.sign;
+		mark =
+			this.mark;
 
-	if( sign.at1 >= this.value.length )
+	if( mark.caretAt >= this.value.length )
 	{
 		return;
 	}
@@ -1157,9 +1157,9 @@ Input.prototype.keyRight =
 		'section',
 			'forms',
 		'path',
-			sign.path,
-		'at1',
-			sign.at1 + 1
+			mark.caretPath,
+		'at',
+			mark.caretAt + 1
 	);
 };
 
@@ -1344,7 +1344,7 @@ Input.prototype.pointingStart =
 			'forms',
 		'path',
 			this.path,
-		'at1',
+		'at',
 			this.getOffsetAt( pp )
 	);
 

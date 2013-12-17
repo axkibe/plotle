@@ -181,7 +181,7 @@ DocItem.prototype.click =
 					para.key
 				),
 
-			at1 =
+			at =
 				para.getPointOffset(
 					this,
 					pi.sub( ppnw )
@@ -195,8 +195,8 @@ DocItem.prototype.click =
 				'space',
 			'path',
 				para.textPath,
-			'at1',
-				at1
+			'at',
+				at
 		);
 	}
 	else
@@ -212,7 +212,7 @@ DocItem.prototype.click =
 				'space',
 			'path',
 				para.textPath,
-			'at1',
+			'at',
 				para.text.length
 		);
 	}

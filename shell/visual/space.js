@@ -336,6 +336,8 @@ Space.prototype.showDisc =
 
 /*
 | Returns the focused item.
+|
+| TODO handle this differently more gracefully
 */
 Space.prototype.focusedItem =
 	function( )
@@ -348,27 +350,11 @@ Space.prototype.focusedItem =
 			this.mark,
 
 		path =
-			null;
+			mark.caretPath; // TODO euhhh
 
-	switch( mark.type )
+	if( !mark.hasCaret )
 	{
-		case 'caret' :
-
-			path =
-				mark.sign.path;
-
-			break;
-
-		case 'range' :
-
-			path =
-				mark.eSign.path;
-
-			break;
-
-		default :
-
-			return null;
+		return null;
 	}
 
 	if( action )
@@ -1181,7 +1167,7 @@ Space.prototype.dragStop =
 					'caret',
 				'path',
 					shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
-				'at1',
+				'at',
 					0
 			);
 
@@ -1266,7 +1252,7 @@ Space.prototype.dragStop =
 					'space',
 				'path',
 					shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
-				'at1',
+				'at',
 					0
 			);
 
@@ -1315,7 +1301,7 @@ Space.prototype.dragStop =
 					'space',
 				'path',
 					shell.space.sub[ key ].subPaths.spaceUser,
-				'at1',
+				'at',
 					0
 			);
 
@@ -2017,32 +2003,18 @@ Space.prototype.input =
 {
 	var
 		mark =
-			this.mark,
+			this.mark;
 
-		path;
-
-	switch( mark.type )
+	if( !mark.hasCaret )
 	{
-		case 'caret' :
-
-			path =
-				mark.sign.path;
-
-			break;
-
-		case 'range' :
-
-			path =
-				mark.eSign.path;
-
-			break;
-
-		default :
-
-			return;
+		return false;
 	}
 
+
 	var
+		path =
+			mark.caretPath,
+
 		item =
 			this.sub[ path.get( 0 ) ];
 
@@ -2112,32 +2084,17 @@ Space.prototype.specialKey =
 
 	var
 		mark =
-			this.mark,
+			this.mark;
 
-		path;
-
-	switch( mark.type )
+	if( !mark.hasCaret )
 	{
-		case 'caret' :
-
-			path =
-				mark.sign.path;
-
-			break;
-
-		case 'range' :
-
-			path =
-				mark.eSign.path;
-
-			break;
-
-		default :
-
-			return;
+		return;
 	}
 
 	var
+		path =
+			mark.caretPath,
+
 		item =
 			this.sub[ path.get( 0 ) ];
 

@@ -126,7 +126,7 @@ Forms.Form =
 
 		if( Proto.prototype.focusable )
 		{
-			if( !this.mark.sign )
+			if( !this.mark.hasCaret )
 			{
 				focusAccent =
 					false;
@@ -134,7 +134,7 @@ Forms.Form =
 			else
 			{
 				focusAccent =
-					this.mark.sign.path.get( 1 ) === name;
+					this.mark.caretPath.get( 1 ) === name;
 			}
 		}
 
@@ -356,25 +356,25 @@ Form.prototype.getFocusedItem =
 {
 	var
 		mark =
-			this.mark,
+			this.mark;
 
-		sign =
-			mark.sign;
-
-	if( !sign )
+	if( !mark.hasCaret )
 	{
 		return null;
 	}
 
 	var
 		path =
-			sign.path;
+			mark.caretPath;
 
-	if( CHECK && path.get( 0 ) !== this.reflect )
+	if( CHECK )
 	{
-		throw new Error(
-			'the mark is not on this form!'
-		);
+		if( path.get( 0 ) !== this.reflect )
+		{
+			throw new Error(
+				'the mark is not on this form!'
+			);
+		}
 	}
 
 	return this.sub[ path.get( 1 ) ] || null;
@@ -387,8 +387,10 @@ Form.prototype.getFocusedItem =
 Form.prototype.draw =
 	function(  )
 {
-	var fabric =
-		shell.fabric;
+	// TODO hand down fabric
+	var
+		fabric =
+			shell.fabric;
 
 	fabric.paint(
 		theme.forms.style,
@@ -618,8 +620,9 @@ Form.prototype.cycleFocus =
 			this.tree,
 
 		path =
-			this.mark.sign.path;
+			this.mark.caretPath;
 
+	// TODO ugly
 	if( !path )
 	{
 		return;
@@ -667,7 +670,7 @@ Form.prototype.cycleFocus =
 						'forms',
 					'path',
 						ve.path,
-					'at1',
+					'at',
 						0
 				);
 			}

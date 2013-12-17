@@ -146,9 +146,9 @@ Object.defineProperty(
 	{
 		get :
 			function( )
-		{
-			return this.$space;
-		}
+			{
+				return this.$space;
+			}
 	}
 );
 
@@ -212,7 +212,7 @@ Shell.prototype.update =
 		case 'caret' :
 
 			mItemTree =
-				tree.twig[ mark.sign.path.get( 0 ) ];
+				tree.twig[ mark.path.get( 0 ) ];
 
 			// tests if the owning item was removed
 			if (
@@ -227,7 +227,15 @@ Shell.prototype.update =
 				var
 					sign =
 						MeshMashine.tfxSign(
-							mark.sign,
+							new Sign(
+								{
+									path :
+										mark.path,
+
+									at1 :
+										mark.at
+								}
+							),
 							chgX
 						);
 
@@ -235,7 +243,8 @@ Shell.prototype.update =
 				//      in some cases
 				mark =
 					Mark.Caret.create(
-						sign,
+						sign.path,
+						sign.at1,
 						mark.retainx
 					);
 			}
@@ -260,13 +269,29 @@ Shell.prototype.update =
 				var
 					bSign =
 						MeshMashine.tfxSign(
-							mark.bSign,
+							new Sign(
+								{
+									path :
+										mark.bPath,
+
+									at1 :
+										mark.bAt
+								}
+							),
 							chgX
 						),
 
 					eSign =
 						MeshMashine.tfxSign(
-							mark.eSign,
+							new Sign(
+								{
+									path :
+										mark.ePath,
+
+									at1 :
+										mark.eAt
+								}
+							),
 							chgX
 						);
 
@@ -278,7 +303,8 @@ Shell.prototype.update =
 					{
 						mark =
 							Mark.Caret.create(
-								bSign,
+								bSign.path,
+								bSign.at1,
 								mark.retainx
 							);
 					}
@@ -287,8 +313,10 @@ Shell.prototype.update =
 						mark =
 							Mark.Range.create(
 								mItemTree.twig.doc,
-								bSign,
-								eSign,
+								bSign.path,
+								bSign.at1,
+								eSign.path,
+								eSign.at1,
 								mark.retainx
 							);
 					}
@@ -819,16 +847,16 @@ Shell.prototype.userMark =
 	)
 {
 	var
-		at1 =
+		at =
 			null,
 
-		bAt1 =
+		bAt =
 			null,
 
 		bPath =
 			null,
 
-		eAt1 =
+		eAt =
 			null,
 
 		ePath =
@@ -846,9 +874,6 @@ Shell.prototype.userMark =
 		setnull =
 			null,
 
-		sign =
-			null,
-
 		retainx =
 			null,
 
@@ -863,16 +888,16 @@ Shell.prototype.userMark =
 	{
 		switch( arguments[ a ] )
 		{
-			case 'at1' :
+			case 'at' :
 
-				at1 =
+				at =
 					arguments[ ++a ];
 
 				break;
 
-			case 'bAt1' :
+			case 'bAt' :
 
-				bAt1 =
+				bAt =
 					arguments[ ++a ];
 
 				break;
@@ -884,9 +909,9 @@ Shell.prototype.userMark =
 
 				break;
 
-			case 'eAt1' :
+			case 'eAt' :
 
-				eAt1 =
+				eAt =
 					arguments[ ++a ];
 
 				break;
@@ -908,13 +933,6 @@ Shell.prototype.userMark =
 			case 'section' :
 
 				section =
-					arguments[ ++a ];
-
-				break;
-
-			case 'sign' :
-
-				sign =
 					arguments[ ++a ];
 
 				break;
@@ -967,20 +985,18 @@ Shell.prototype.userMark =
 			if( CHECK )
 			{
 				if(
-					( sign === null )
-					&&
-					( path === null || at1 === null )
+					( path === null || at === null )
 				)
 				{
 					throw new Error(
-						'set caret, sign and path/at1 === null'
+						'set caret, path/at === null'
 					);
 				}
 
 				if(
-					bAt1  !== null ||
+					bAt  !== null ||
 					bPath !== null ||
-					eAt1  !== null ||
+					eAt  !== null ||
 					ePath !== null
 				)
 				{
@@ -990,21 +1006,10 @@ Shell.prototype.userMark =
 				}
 			}
 
-			if( sign === null )
-			{
-				sign =
-					new Sign(
-						null,
-						'path',
-							path,
-						'at1',
-							at1
-					);
-			}
-
 			mark =
 				Mark.Caret.create(
-					sign,
+					path,
+					at,
 					retainx
 				);
 
@@ -1017,7 +1022,7 @@ Shell.prototype.userMark =
 			if( CHECK )
 			{
 				if(
-					at1  !== null ||
+					at  !== null ||
 					path !== null
 				)
 				{
@@ -1030,20 +1035,10 @@ Shell.prototype.userMark =
 			mark =
 				Mark.Range.create(
 					shell.space.tree.twig[ bPath.get( 0 ) ].twig.doc,
-					new Sign(
-						null,
-						'path',
-							bPath,
-						'at1',
-							bAt1
-					),
-					new Sign(
-						null,
-						'path',
-							ePath,
-						'at1',
-							eAt1
-					),
+					bPath,
+					bAt,
+					ePath,
+					eAt,
 					retainx
 				);
 
@@ -1054,11 +1049,9 @@ Shell.prototype.userMark =
 			// TODO mark should not be a caret;
 			mark =
 				Mark.Caret.create(
-					new Sign(
-						null,
-						'path',
-							path
-					)
+					path,
+					null,
+					null
 				);
 
 			break;
@@ -1807,11 +1800,11 @@ Shell.prototype.removeRange =
 	if( !range.empty )
 	{
 		this.peer.removeSpan(
-			range.front.path,
-			range.front.at1,
+			range.frontPath,
+			range.frontAt,
 
-			range.back.path,
-			range.back.at1
+			range.backPath,
+			range.backAt
 		);
 	}
 

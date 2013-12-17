@@ -772,8 +772,7 @@ Note.prototype.scrollMarkIntoView =
 		mark =
 			shell.space.mark;
 
-	// TODO handle ranges
-	if( mark.type !== 'caret' )
+	if( !mark.hasCaret )
 	{
 		return;
 	}
@@ -784,7 +783,7 @@ Note.prototype.scrollMarkIntoView =
 
 		para =
 			shell.space.getSub(
-				mark.sign.path,
+				mark.caretPath,
 				'Para'
 			);
 
@@ -814,7 +813,7 @@ Note.prototype.scrollMarkIntoView =
 
 		p =
 			para.locateOffset(
-				mark.sign.at1
+				mark.caretAt
 			).p,
 
 		pnw =

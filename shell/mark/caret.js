@@ -46,20 +46,28 @@ var Caret =
 Mark.Caret =
 	function(
 		tag,
-		sign,
+		path,
+		at,
 		retainx
 	)
 {
-	if( CHECK && tag !== _tag )
+	if( CHECK )
 	{
-		throw new Error(
-			'direct creation'
-		);
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'direct creation'
+			);
+		}
 	}
 
-	// a signature pointing to the item the caret is in
-	this.sign =
-		sign;
+	// the path where the caret is in
+	this.path =
+		path;
+
+	// the offset of the caret
+	this.at =
+		at;
 
 	// x position to retain when using up/down keys.
 	this.retainx =
@@ -77,13 +85,15 @@ Jools.subclass(
 
 Caret.create =
 	function(
-		sign,
+		path,
+		at,
 		retainx
 	)
 {
 	return new Caret(
 		_tag,
-		sign,
+		path,
+		at,
 		retainx
 	);
 };
@@ -101,10 +111,57 @@ Caret.useGetImageData =
 
 /*
 | Reflection.
+|
+| TODO name reflect
 */
 Caret.prototype.type =
 	'caret';
 
+
+/*
+| A caret mark has a caret.
+|
+| (the text range is the other mark
+|  which has this too )
+*/
+Caret.prototype.hasCaret =
+	true;
+
+
+/*
+| Returns the caret path.
+|
+| This allows a common interface with text range.
+*/
+Object.defineProperty(
+	Caret.prototype,
+	'caretPath',
+	{
+		get :
+			function( )
+			{
+				return this.path;
+			}
+	}
+);
+
+
+/*
+| Returns the caret offset.
+|
+| This allows a common interface with text range.
+*/
+Object.defineProperty(
+	Caret.prototype,
+	'caretAt',
+	{
+		get :
+			function( )
+			{
+				return this.at;
+			}
+	}
+);
 
 /*
 | Returns this if an entity of that path should
@@ -118,7 +175,7 @@ Caret.prototype.concerns =
 	if(
 		path
 		&&
-		path.subPathOf( this.sign.path ) )
+		path.subPathOf( this.path ) )
 	{
 		return this;
 	}
@@ -148,9 +205,9 @@ Caret.prototype.equals =
 		(
 			this.type === mark.type
 			&&
-			this.sign.path.equals( mark.sign.path )
+			this.path.equals( mark.path )
 			&&
-			this.sign.at1 === mark.sign.at1
+			this.at === mark.at
 			&&
 			this.retainx === mark.retainx
 		)

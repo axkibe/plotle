@@ -682,6 +682,8 @@ Peer.prototype.removeText =
 
 /*
 | Removes a text spawning over several entities.
+|
+| FIXME call removeRange for consistency
 */
 Peer.prototype.removeSpan =
 	function(

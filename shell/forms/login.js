@@ -186,7 +186,7 @@ Login.prototype.login =
 				'forms',
 			'path',
 				sub.userInput.path,
-			'at1',
+			'at',
 				user.length
 		);
 
@@ -213,7 +213,7 @@ Login.prototype.login =
 				'forms',
 			'path',
 				sub.userInput.path,
-			'at1',
+			'at',
 				0
 		);
 
@@ -240,7 +240,7 @@ Login.prototype.login =
 				'forms',
 			'path',
 				sub.passwordInput.path,
-			'at1',
+			'at',
 				pass.length
 		);
 
@@ -272,7 +272,7 @@ Login.prototype.specialKey =
 	if(
 		key === 'enter' &&
 		this.mark &&
-		this.mark.sign.path.get( 1 ) === 'passwordInput'
+		this.mark.caretPath.get( 1 ) === 'passwordInput'
 	)
 	{
 		this.login( );
@@ -326,7 +326,7 @@ Login.prototype.onAuth =
 					'forms',
 				'path',
 					sub.userInput.path,
-				'at1',
+				'at',
 					user.length
 			);
 		}
@@ -340,7 +340,7 @@ Login.prototype.onAuth =
 					'forms',
 				'path',
 					sub.passwordInput.path,
-				'at1',
+				'at',
 					pass.length
 			);
 		}

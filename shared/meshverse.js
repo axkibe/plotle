@@ -296,11 +296,14 @@ Meshverse.prototype.grow =
 			);
 		}
 
-		if( a < aZ ) // TODO CHECK
+		if( CHECK )
 		{
-			throw new Error(
-				'a < aZ should never happen here'
-			);
+			if( a < aZ )
+			{
+				throw new Error(
+					'a < aZ should never happen here'
+				);
+			}
 		}
 	}
 

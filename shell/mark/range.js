@@ -47,8 +47,10 @@ Mark.Range =
 	function(
 		tag,
 		docTree,
-		bSign,
-		eSign,
+		bPath,
+		bAt,
+		ePath,
+		eAt,
 		retainx
 	)
 {
@@ -57,26 +59,32 @@ Mark.Range =
 
 	if( CHECK )
 	{
-		if( bSign.path.get( -1 ) !== 'text' )
+		if( bPath.get( -1 ) !== 'text' )
 		{
 			throw new Error(
-				'bSign.path.get( -1 ) !== "text"'
+				'bPath.get( -1 ) !== "text"'
 			);
 		}
 
-		if( eSign.path.get( -1 ) !== 'text' )
+		if( ePath.get( -1 ) !== 'text' )
 		{
 			throw new Error(
-				'eSign.path.get( -1 ) !== "text"'
+				'ePath.get( -1 ) !== "text"'
 			);
 		}
 	}
 
-	this.bSign =
-		bSign;
+	this.bPath =
+		bPath;
 
-	this.eSign =
-		eSign;
+	this.bAt =
+		bAt;
+
+	this.ePath =
+		ePath;
+
+	this.eAt =
+		eAt;
 
 	this.retainx =
 		retainx;
@@ -97,57 +105,151 @@ Jools.subclass(
 Range.create =
 	function(
 		docTree,
-		bSign,
-		eSign,
+		bPath,
+		bAt,
+		ePath,
+		eAt,
 		retainx
 	)
 {
 	return new Range(
 		_tag,
 		docTree,
-		bSign,
-		eSign,
+		bPath,
+		bAt,
+		ePath,
+		eAt,
 		retainx
 	);
 };
 
 
+
 /*
-| Returns the signature which comes first in docTree.
+| Returns begin or end path,
+| dependening on which comes first in docTree.
 */
 Object.defineProperty(
 	Range.prototype,
-	'front',
+	'frontPath',
 	{
 		get : function( )
 		{
-			if( !this._front )
+			if( !this._frontPath )
 			{
 				this._normalize( );
 			}
-				
-			return this._front;
+
+			return this._frontPath;
 		}
 	}
 );
 
 
 /*
-| Returns the signature which comes last in docTree.
+| Returns begin or end offset,
+| dependening on which comes first in docTree.
 */
 Object.defineProperty(
 	Range.prototype,
-	'back',
+	'frontAt',
 	{
 		get : function( )
 		{
-			if( !this._back )
+			if( !this._frontPath )
 			{
 				this._normalize( );
 			}
-				
-			return this._back;
+
+			return this._frontAt;
 		}
+	}
+);
+
+/*
+| Returns begin or end path,
+| dependening on which comes last in docTree.
+*/
+Object.defineProperty(
+	Range.prototype,
+	'backPath',
+	{
+		get : function( )
+		{
+			if( !this._backPath )
+			{
+				this._normalize( );
+			}
+
+			return this._backPath;
+		}
+	}
+);
+
+
+/*
+| Returns begin or end path,
+| dependening on which comes last in docTree.
+*/
+Object.defineProperty(
+	Range.prototype,
+	'backAt',
+	{
+		get : function( )
+		{
+			if( !this._backPath )
+			{
+				this._normalize( );
+			}
+
+			return this._backAt;
+		}
+	}
+);
+
+
+/*
+| Ranges also have caret capabilities.
+|
+| The caretPath and caretAt are identical to
+| ePath and eAt
+*/
+Range.prototype.hasCaret =
+	true;
+
+
+/*
+| Returns the caret path.
+|
+| This allows a common interface with text range.
+*/
+Object.defineProperty(
+	Range.prototype,
+	'caretPath',
+	{
+		get :
+			function( )
+			{
+				return this.ePath;
+			}
+	}
+);
+
+
+/*
+| Returns the caret offset.
+|
+| This allows a common interface with text range.
+*/
+Object.defineProperty(
+	Range.prototype,
+	'caretAt',
+	{
+		get :
+			function( )
+			{
+				return this.eAt;
+			}
 	}
 );
 
@@ -161,50 +263,56 @@ Range.prototype.innerText =
 	function( )
 {
 	var
-		s1 =
-			this.front,
+		frontPath =
+			this.frontPath,
 
-		s2 =
-			this.back,
+		frontAt =
+			this.frontAt,
+
+		backPath =
+			this.backPath,
+
+		backAt =
+			this.backAt,
 
 		tree =
 			this.docTree,
 
-		key1 =
-			s1.path.get( -2 ),
+		frontKey =
+			frontPath.get( -2 ),
 
-		key2 =
-			s2.path.get(-2);
+		backKey =
+			backPath.path.get(-2);
 
 
-	if( s1.path.equals( s2.path ) )
+	if( frontPath.equals( backPath ) )
 	{
 		var
 			text =
-				tree.twig[ key1 ].twig.text;
+				tree.twig[ frontKey ].twig.text;
 
 		return text.substring(
-			s1.at1,
-			s2.at1
+			frontAt,
+			backAt
 		);
 	}
 
 	var
-		text1 =
-			tree.twig[ key1 ].twig.text,
+		frontText =
+			tree.twig[ frontKey ].twig.text,
 
-		text2 =
-			tree.twig[ key2 ].twig.text,
+		backText =
+			tree.twig[ backKey ].twig.text,
 
 		buf = [
-			text1.substring(
-				s1.at1,
-				text1.length
+			frontText.substring(
+				frontAt,
+				frontText.length
 			)
 		];
 
 	for(
-		var r = tree.rankOf(key1), rZ = tree.rankOf(key2);
+		var r = tree.rankOf( frontKey ), rZ = tree.rankOf( backKey );
 		r < rZ - 1;
 		r++
 	)
@@ -217,7 +325,7 @@ Range.prototype.innerText =
 
 	buf.push(
 		'\n',
-		text2.substring( 0, s2.at1 )
+		backText.substring( 0, backAt )
 	);
 
 	return buf.join( '' );
@@ -243,7 +351,7 @@ Range.prototype.concerns =
 	if(
 		path
 		&&
-		path.subPathOf( this.bSign.path ) )
+		path.subPathOf( this.bPath ) )
 	{
 		return this;
 	}
@@ -273,13 +381,13 @@ Range.prototype.equals =
 		(
 			this.type === mark.type
 			&&
-			this.bSign.path.equals( mark.bSign.path )
+			this.bPath.equals( mark.bPath )
 			&&
-			this.bSign.at1 === mark.bSign.at1
+			this.bAt === mark.bAt
 			&&
-			this.eSign.path.equals( mark.bSign.path )
+			this.ePath.equals( mark.bPath )
 			&&
-			this.eSign.at1 === mark.eSign.at1
+			this.eAt === mark.eAt
 			&&
 			this.retainx === mark.retainx
 		)
@@ -288,7 +396,7 @@ Range.prototype.equals =
 
 
 /*
-| Return true if bSign equals eSign
+| Return true if begin equals end
 */
 Jools.lazyFixate(
 	Range.prototype,
@@ -296,8 +404,8 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			this.bSign.path.equals( this.eSign.path ) &&
-			this.bSign.at1 === this.eSign.at1
+			this.bPath.equals( this.ePath ) &&
+			this.bAt === this.eAt
 		);
 	}
 );
@@ -310,68 +418,104 @@ Range.prototype._normalize =
 	function( )
 {
 	var
-		s1 =
-			this.bSign,
+		bPath =
+			this.bPath,
 
-		s2 =
-			this.eSign;
+		bAt =
+			this.bAt,
 
-	if( s1.path.equals( s2.path ) )
+		ePath =
+			this.ePath,
+
+		eAt =
+			this.eAt;
+
+
+	if( bPath.equals( ePath ) )
 	{
-		if( s1.at1 <= s2.at1 )
+		if( bAt <= eAt )
 		{
-			this._front =
-				this.bSign;
+			this._frontPath =
+				bPath;
 
-			this._back =
-				this.eSign;
+			this._frontAt =
+				bAt;
+
+			this._backPath =
+				ePath;
+
+			this._backAt =
+				eAt;
 		}
 		else
 		{
-			this._front =
-				this.eSign;
+			this._frontPath =
+				ePath;
 
-			this._back =
-				this.bSign;
+			this._frontAt =
+				eAt;
+
+			this._backPath =
+				bPath;
+
+			this._backAt =
+				bAt;
 		}
 
 		return;
 	}
 
 	var
-		k1 =
-			s1.path.get( -2 ),
+		bk =
+			bPath.get( -2 ),
 
-		k2 =
-			s2.path.get( -2 );
+		ek =
+			ePath.get( -2 );
 
-	if( k1 === k2 )
+	if( CHECK )
 	{
-		throw new Error( 'k1 === k2' );
+		if( bk === ek )
+		{
+			throw new Error(
+				'bk === ek'
+			);
+		}
 	}
 
 	var
-		r1 =
-			this.docTree.rankOf( k1 ),
+		br =
+			this.docTree.rankOf( bk ),
 
-		r2 =
-			this.docTree.rankOf( k2 );
+		er =
+			this.docTree.rankOf( ek );
 
-	if( r1 < r2 )
+	if( br < er )
 	{
-		this._front =
-			s1;
+		this._frontPath =
+			bPath;
 
-		this._back =
-			s2;
+		this._frontAt =
+			bAt;
+
+		this._backPath =
+			ePath;
+
+		this._backAt =
+			eAt;
 	}
 	else
 	{
-		this._front =
-			s2;
+		this._frontPath =
+			ePath;
 
-		this._back =
-			s1;
+		this._frontAt =
+			eAt;
+
+		this._backPath =
+			bPath;
+
+		this._backAt =
+			bAt;
 	}
 };
 

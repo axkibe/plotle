@@ -662,29 +662,14 @@ Doc.prototype.input =
 		text
 	)
 {
-	var
-		path;
-
-	switch( this.mark.type )
+	if( !this.mark.hasCaret )
 	{
-		case 'caret' :
-
-			path =
-				this.mark.sign.path;
-
-			break;
-
-		case 'range' :
-
-			path =
-				this.mark.eSign.path;
-
-			break;
-
-		default :
-
-			return false;
+		return false;
 	}
+
+	var
+		path =
+			this.mark.caretPath;
 
 	return (
 		this
@@ -706,29 +691,14 @@ Doc.prototype.specialKey =
 		ctrl
 	)
 {
-	var
-		path;
-
-	switch( this.mark.type )
+	if( !this.mark.hasCaret )
 	{
-		case 'caret' :
-
-			path =
-				this.mark.sign.path;
-
-			break;
-
-		case 'range' :
-
-			path =
-				this.mark.eSign.path;
-
-			break;
-
-		default :
-
-			return false;
+		return false;
 	}
+
+	var
+		path =
+			this.mark.caretPath;
 
 	return (
 		this
@@ -776,45 +746,51 @@ Doc.prototype.sketchRange =
 	}
 
 	var
-		s1 =
-			mark.front,
+		frontPath =
+			mark.frontPath,
 
-		s2 =
-			mark.back,
+		frontAt =
+			mark.frontAt,
 
-		key1 =
-			s1.path.get( -2 ),
+		backPath =
+			mark.backPath,
 
-		key2 =
-			s2.path.get( -2 ),
+		backAt =
+			mark.backAt,
 
-		pnw1 =
-			this.getPNW( item, key1 ),
+		frontKey =
+			frontPath.get( -2 ),
 
-		pnw2 =
-			this.getPNW( item, key2 ),
+		backKey =
+			backPath.get( -2 ),
 
-		para1 =
-			this.sub[ key1 ],
+		frontPnw =
+			this.getPNW( item, frontKey ),
 
-		para2 =
-			this.sub[ key2 ],
+		backPnw =
+			this.getPNW( item, backKey ),
 
-		o1 =
-			para1.locateOffset(
-				s1.at1
+		frontPara =
+			this.sub[ frontKey ],
+
+		backPara =
+			this.sub[ backKey ],
+
+		fo =
+			frontPara.locateOffset(
+				frontAt
 			),
 
-		o2 =
-			para2.locateOffset(
-				s2.at1
+		bo =
+			backPara.locateOffset(
+				backAt
 			),
 
-		p1 =
-			o1.p,
+		fp =
+			fo.p,
 
-		p2 =
-			o2.p,
+		bp =
+			bo.p,
 
 		fontsize =
 			this.fontsize,
@@ -831,79 +807,80 @@ Doc.prototype.sketchRange =
 		lx =
 			innerMargin.w;
 
-	p1 =
+	fp =
 		shellverse.grow(
 			'Point',
 			'x',
-				Math.round( p1.x + pnw1.x - sp.x ),
+				Math.round( fp.x + frontPnw.x - sp.x ),
 			'y',
-				Math.round( p1.y + pnw1.y - sp.y )
+				Math.round( fp.y + frontPnw.y - sp.y )
 		);
 
-	p2 =
+	bp =
 		shellverse.grow(
 			'Point',
 			'x',
-				Math.round( p2.x + pnw2.x - sp.x ),
+				Math.round( bp.x + backPnw.x - sp.x ),
 			'y',
-				Math.round( p2.y + pnw2.y - sp.y )
+				Math.round( bp.y + backPnw.y - sp.y )
 		);
 
 	if(
-		key1 === key2 &&
-		o1.line === o2.line
+		frontKey === backKey &&
+		fo.line === bo.line
 	)
 	{
-		// p1***p2
-		fabric.moveTo( p1.x, p1.y + descend, view );
-		fabric.lineTo( p1.x, p1.y -  ascend, view );
-		fabric.lineTo( p2.x, p2.y -  ascend, view );
-		fabric.lineTo( p2.x, p2.y + descend, view );
-		fabric.lineTo( p1.x, p1.y + descend, view );
+		// fp ***** bp
+		fabric.moveTo( fp.x, fp.y + descend, view );
+		fabric.lineTo( fp.x, fp.y - ascend,  view );
+		fabric.lineTo( bp.x,  bp.y  - ascend,  view );
+		fabric.lineTo( bp.x,  bp.y  + descend, view );
+		fabric.lineTo( fp.x, fp.y + descend, view );
 	}
 	else if (
-		p2.y - ascend - 1 <= p1.y + descend &&
-		p2.x < p1.x
+		bp.y - ascend - 1 <= fp.y + descend &&
+		bp.x < fp.x
 	)
 	{
-		//        p1***
-		// ***p2
-		fabric.moveTo( rx,   p1.y -  ascend, view );
-		fabric.lineTo( p1.x, p1.y -  ascend, view );
-		fabric.lineTo( p1.x, p1.y + descend, view );
-		fabric.lineTo( rx,   p1.y + descend, view );
+		//         fp *****
+		// ***** bp
+		fabric.moveTo( rx,     fp.y -  ascend, view );
+		fabric.lineTo( fp.x,   fp.y -  ascend, view );
+		fabric.lineTo( fp.x,   fp.y + descend, view );
+		fabric.lineTo( rx,     fp.y + descend, view );
 
-		fabric.moveTo( lx,   p2.y -  ascend, view );
-		fabric.lineTo( p2.x, p2.y -  ascend, view );
-		fabric.lineTo( p2.x, p2.y + descend, view );
-		fabric.lineTo( lx,   p2.y + descend, view );
+		fabric.moveTo( lx,     bp.y -  ascend, view );
+		fabric.lineTo( bp.x,   bp.y -  ascend, view );
+		fabric.lineTo( bp.x,   bp.y + descend, view );
+		fabric.lineTo( lx,     bp.y + descend, view );
 	}
 	else
 	{
-		//   p1*******
-		// ******p2
-		fabric.moveTo( rx,   p2.y -  ascend, view );
-		fabric.lineTo( p2.x, p2.y -  ascend, view );
-		fabric.lineTo( p2.x, p2.y + descend, view );
-		fabric.lineTo( lx,   p2.y + descend, view );
+		//   fp *******
+		// ************* bp
+
+
+		fabric.moveTo( rx,     bp.y -  ascend, view );
+		fabric.lineTo( bp.x,   bp.y -  ascend, view );
+		fabric.lineTo( bp.x,   bp.y + descend, view );
+		fabric.lineTo( lx,     bp.y + descend, view );
 
 		if( twist )
 		{
-			fabric.moveTo( lx, p1.y + descend, view );
+			fabric.moveTo( lx, fp.y + descend, view );
 		}
 		else
 		{
-			fabric.lineTo( lx, p1.y + descend, view );
+			fabric.lineTo( lx, fp.y + descend, view );
 		}
-		fabric.lineTo( p1.x, p1.y + descend, view );
+		fabric.lineTo( fp.x, fp.y + descend, view );
 
-
-		fabric.lineTo( p1.x, p1.y -  ascend, view );
-		fabric.lineTo( rx,   p1.y -  ascend, view );
+		fabric.lineTo( fp.x, fp.y -  ascend, view );
+		fabric.lineTo( rx,   fp.y -  ascend, view );
 
 		if( !twist )
 		{
-			fabric.lineTo( rx, p2.y - ascend, view );
+			fabric.lineTo( rx, bp.y - ascend, view );
 		}
 	}
 };

@@ -330,7 +330,7 @@ Relation.create =
 			'flowWidth',
 				0,
 			'paraSep',
-				0,
+				fontsize * theme.bottombox,
 			'mark',
 				mark
 		);
@@ -398,7 +398,7 @@ Relation.spawn =
 			'space',
 		'path',
 			shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
-		'at1',
+		'at',
 			0
 	);
 };

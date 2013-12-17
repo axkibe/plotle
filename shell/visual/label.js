@@ -301,7 +301,7 @@ Label.create =
 			'flowWidth',
 				0,
 			'paraSep',
-				fontsize * theme.bottombox,
+				0,
 			'mark',
 				mark
 		);

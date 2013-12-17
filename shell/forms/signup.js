@@ -187,7 +187,7 @@ SignUp.prototype.signup =
 				'forms',
 			'path',
 				sub.userInput.path,
-			'at1',
+			'at',
 				user.length
 		);
 
@@ -209,7 +209,7 @@ SignUp.prototype.signup =
 				'forms',
 			'path',
 				sub.userInput.path,
-			'at1',
+			'at',
 				0
 		);
 
@@ -231,7 +231,7 @@ SignUp.prototype.signup =
 				'forms',
 			'path',
 				sub.passwordInput.path,
-			'at1',
+			'at',
 				pass.length
 		);
 
@@ -253,7 +253,7 @@ SignUp.prototype.signup =
 				'forms',
 			'path',
 				sub.password2Input.path,
-			'at1',
+			'at',
 				pass2.length
 		);
 
@@ -301,7 +301,7 @@ SignUp.prototype.onRegister =
 					'forms',
 				'path',
 					sub.userInput.path,
-				'at1',
+				'at',
 					sub.userInput.value.length
 			);
 		}
