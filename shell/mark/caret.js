@@ -111,11 +111,9 @@ Caret.useGetImageData =
 
 /*
 | Reflection.
-|
-| TODO name reflect
 */
-Caret.prototype.type =
-	'caret';
+Caret.prototype.reflect =
+	'Caret';
 
 
 /*
@@ -203,7 +201,7 @@ Caret.prototype.equals =
 		this === mark
 		||
 		(
-			this.type === mark.type
+			this.reflect === mark.reflect
 			&&
 			this.path.equals( mark.path )
 			&&

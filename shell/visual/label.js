@@ -256,6 +256,12 @@ Label.create =
 				inherit.fontsize;
 		}
 
+		if( !mark )
+		{
+			mark =
+				inherit.mark;
+		}
+
 		if( path === null )
 		{
 			path =

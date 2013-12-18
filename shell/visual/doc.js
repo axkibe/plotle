@@ -170,7 +170,7 @@ Visual.Doc =
 				'flowWidth',
 					flowWidth,
 				'mark',
-					mark && mark.concerns( paraPath )
+					mark.concerns( paraPath )
 			);
 	}
 };
@@ -277,6 +277,7 @@ Doc.create =
 		}
 	}
 
+
 	if( inherit )
 	{
 		if( tree === null )
@@ -304,6 +305,12 @@ Doc.create =
 				inherit.flowWidth;
 		}
 
+		if( mark === null )
+		{
+			mark =
+				inherit.mark;
+		}
+
 		if( paraSep === null )
 		{
 			paraSep =
@@ -322,19 +329,13 @@ Doc.create =
 			&&
 			inherit.paraSep === paraSep
 			&&
-			(
-				inherit.mark === mark
-				||
-				(
-					inherit.mark && inherit.mark.equals( mark )
-				)
-			)
+			inherit.mark.equals( mark )
 		)
 		{
 			return inherit;
 		}
 	}
-	
+
 	return (
 		new Doc(
 			_tag,
@@ -391,8 +392,8 @@ Doc.prototype.draw =
 			this.mark;
 
 	if(
-		mark &&
-		mark.type === 'range' &&
+		mark.reflect === 'Range'
+		&&
 		mark.concerns( this.path )
 	)
 	{
@@ -737,10 +738,10 @@ Doc.prototype.sketchRange =
 
 	if( CHECK )
 	{
-		if( mark.type !== 'range' )
+		if( mark.reflect !== 'Range' )
 		{
 			throw new Error(
-				'wronte mark type'
+				'wrong mark'
 			);
 		}
 	}

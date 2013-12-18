@@ -213,8 +213,9 @@ Tree.prototype.rankOf =
 	}
 
 	// checks ranking cache
-	var rof =
-		this._$rof;
+	var
+		rof =
+			this._$rof;
 
 	if( !rof )
 	{
@@ -225,8 +226,9 @@ Tree.prototype.rankOf =
 		);
 	}
 
-	var r =
-		rof[ key ];
+	var
+		r =
+			rof[ key ];
 
 	if( Jools.is( r ) )
 	{
@@ -263,8 +265,9 @@ Jools.lazyFixate(
 Tree.prototype.newUID =
 	function( )
 {
-	var u =
-		Jools.uid( );
+	var
+		u =
+			Jools.uid( );
 
 	return (
 		( !Jools.is( this.twig[ u ] ) ) ?

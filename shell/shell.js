@@ -207,9 +207,9 @@ Shell.prototype.update =
 		mItemTree;
 
 
-	switch( mark.type )
+	switch( mark.reflect )
 	{
-		case 'caret' :
+		case 'Caret' :
 
 			mItemTree =
 				tree.twig[ mark.path.get( 0 ) ];
@@ -251,7 +251,7 @@ Shell.prototype.update =
 
 			break;
 
-		case 'range' :
+		case 'Range' :
 
 			mItemTree =
 				tree.twig[ mark.bSign.path.get( 0 ) ];

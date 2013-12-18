@@ -77,6 +77,14 @@ Mark.Range =
 	this.bPath =
 		bPath;
 
+	// FIXME remove this again when fixed affection below
+	this._bDocPath =
+		new Path(
+			bPath,
+			'--',
+				2
+		);
+
 	this.bAt =
 		bAt;
 
@@ -335,8 +343,8 @@ Range.prototype.innerText =
 /*
 | Reflection.
 */
-Range.prototype.type =
-	'range';
+Range.prototype.reflect =
+	'Range';
 
 
 /*
@@ -348,10 +356,17 @@ Range.prototype.concerns =
 		path
 	)
 {
+
 	if(
 		path
 		&&
-		path.subPathOf( this.bPath ) )
+		// FIXME do proper checking
+		(
+			path.length < 1
+			||
+			path.get( 0 ) === this.bPath.get( 0 )
+		)
+	)
 	{
 		return this;
 	}
@@ -379,13 +394,13 @@ Range.prototype.equals =
 		this === mark
 		||
 		(
-			this.type === mark.type
+			this.reflect === mark.reflect
 			&&
 			this.bPath.equals( mark.bPath )
 			&&
 			this.bAt === mark.bAt
 			&&
-			this.ePath.equals( mark.bPath )
+			this.ePath.equals( mark.ePath )
 			&&
 			this.eAt === mark.eAt
 			&&

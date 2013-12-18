@@ -73,8 +73,8 @@ Jools.subclass(
 /*
 | Reflection.
 */
-Vacant.prototype.type =
-	'vacant';
+Vacant.prototype.reflect =
+	'Vacant';
 
 
 /*

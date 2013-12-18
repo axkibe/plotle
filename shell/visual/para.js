@@ -231,6 +231,12 @@ Para.create =
 				inherit.path;
 		}
 
+		if( !mark )
+		{
+			mark =
+				inherit.mark;
+		}
+
 		if( !tree )
 		{
 			tree =
@@ -354,7 +360,7 @@ Para.prototype.draw =
 				);
 			}
 		}
-		
+
 		f.scale( 1 / zoom );
 
 		var
@@ -363,7 +369,7 @@ Para.prototype.draw =
 
 		if(
 			mark &&
-			mark.type === 'caret' &&
+			mark.reflect === 'Caret' &&
 			mark.concerns( this.path )
 		)
 		{
@@ -876,7 +882,7 @@ Para.prototype.input =
 		text
 	)
 {
-    var
+	var
 		reg  =
 			/([^\n]+)(\n?)/g,
 
@@ -892,7 +898,7 @@ Para.prototype.input =
 		doc =
 			item.sub.doc;
 
-    for(
+	for(
 		var rx = reg.exec( text );
 		rx !== null;
 		rx = reg.exec( text )
@@ -906,7 +912,7 @@ Para.prototype.input =
 			line
 		);
 
-        if( rx[ 2 ] )
+		if( rx[ 2 ] )
 		{
 			// FIXME, somehow use changes
 			// over return values
@@ -929,7 +935,7 @@ Para.prototype.input =
 					doc.tree.rankOf( para.key ) + 1
 				);
 		}
-    }
+	}
 
 	item.scrollMarkIntoView( );
 };
@@ -956,7 +962,7 @@ Para.prototype.specialKey =
 			item.sub.doc,
 
 		mark =
-			null,
+			this.mark,
 
 		show =
 			false;
@@ -996,10 +1002,8 @@ Para.prototype.specialKey =
 		}
 	}
 
-	mark =
-		shell.space.mark;
-
-	if( mark.type === 'range' )
+	// TODO move to Doc
+	if( mark.reflect === 'Range' )
 	{
 		switch( key )
 		{
@@ -1054,10 +1058,9 @@ Para.prototype.specialKey =
 		retainx =
 			null;
 
-
-	switch( mark.type )
+	switch( mark.reflect )
 	{
-		case 'caret' :
+		case 'Caret' :
 
 			if( CHECK )
 			{
@@ -1086,7 +1089,7 @@ Para.prototype.specialKey =
 
 			break;
 
-		case 'range' :
+		case 'Range' :
 
 			if( CHECK )
 			{
@@ -1596,7 +1599,6 @@ Para.prototype._keyUp =
 			bAt
 		);
 
-
 		return true;
 	}
 
@@ -1607,8 +1609,9 @@ Para.prototype._keyUp =
 
 	if( r > 0 )
 	{
-		var ve =
-			doc.atRank( r - 1 );
+		var
+			ve =
+				doc.atRank( r - 1 );
 
 		at =
 			ve.getOffsetAt(

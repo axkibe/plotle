@@ -282,6 +282,12 @@ Portal.create =
 				inherit.fontsize;
 		}
 
+		if( !mark )
+		{
+			mark =
+				inherit.mark;
+		}
+
 		if( !path )
 		{
 			path =
@@ -934,7 +940,7 @@ Portal.prototype._weave =
 
 		if(
 			mark &&
-			mark.type === 'caret' &&
+			mark.reflect === 'Caret' &&
 			mark.concerns( this.path )
 		)
 		{

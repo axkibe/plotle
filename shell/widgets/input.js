@@ -748,9 +748,7 @@ Input.prototype._weave =
 	}
 
 	if(
-		this.mark
-		&&
-		this.mark.type === 'caret'
+		this.mark.reflect === 'Caret'
 	)
 	{
 		this._drawCaret( fabric );

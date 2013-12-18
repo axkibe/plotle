@@ -47,11 +47,13 @@ if (typeof(window) === 'undefined')
 |
 | model is optional and if given the ray is filled with it
 */
-ChangeRay = function( model )
+ChangeRay =
+	function( model )
 {
-	var ray =
-	this._$ray =
-		[ ];
+	var
+		ray =
+		this._$ray =
+			[ ];
 
 	// no model -> nothing to do
 	if( !Jools.is( model ) )
@@ -66,7 +68,11 @@ ChangeRay = function( model )
 		);
 	}
 
-	for( var a = 0, aZ = model.length; a < aZ; a++ )
+	for(
+		var a = 0, aZ = model.length;
+		a < aZ;
+		a++
+	)
 	{
 		var c = model[ a ];
 
@@ -96,8 +102,9 @@ ChangeRay.prototype.invert =
 		return this._$invert;
 	}
 
-	var inv =
-		new ChangeRay( );
+	var
+		inv =
+			new ChangeRay( );
 
 	for(
 		var a = 0, aZ = this.length;
@@ -130,8 +137,11 @@ ChangeRay.prototype.invert =
 |
 | TODO: this is bad, a changeray should be immutable!
 */
+/*
 ChangeRay.prototype.push =
-	function( chg )
+	function(
+		chg
+	)
 {
 	if( this._$invert )
 	{
@@ -141,6 +151,7 @@ ChangeRay.prototype.push =
 
 	this._$ray.push( chg );
 };
+*/
 
 
 /*
@@ -162,7 +173,10 @@ Object.defineProperty (
 /*
 | Gets one change.
 */
-ChangeRay.prototype.get = function( idx )
+ChangeRay.prototype.get =
+	function(
+		idx
+	)
 {
 	return this._$ray[ idx ];
 };

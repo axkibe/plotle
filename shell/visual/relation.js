@@ -287,6 +287,12 @@ Relation.create =
 				inherit.item2key;
 		}
 
+		if( !mark )
+		{
+			mark =
+				inherit.mark;
+		}
+
 		if( path === null )
 		{
 			path =

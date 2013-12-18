@@ -1,11 +1,9 @@
 /*
-|
 | A Point in a 2D plane.
 |
 | Points are pseudo immutable objects.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -93,12 +91,6 @@ Point.prototype.equals =
 		p
 	)
 {
-	if( CHECK && typeof( p ) !== 'object' )
-	{
-		// FIXME this can go eventually
-		throw new Error( 'param fail' );
-	}
-
 	return (
 		this === p
 		||

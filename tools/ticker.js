@@ -1,5 +1,7 @@
 #!/usr/local/bin/node
 
+
+
 /*
 | This ticker will write in short sequences to a note.
 | Used for debugging
@@ -12,15 +14,16 @@ var
 		require( 'http' ),
 
 	util =
-		require('util'),
+		require( 'util' ),
 
 	Jools =
-		require('../shared/jools'),
+		require( '../shared/jools' ),
 
 	config =
 		require( '../config' );
 
-/**
+
+/*
 | Capsule
 */
 ( function( ) {
@@ -39,10 +42,19 @@ var
 	itemid =
 		args[ 4 ];
 
-if(!Jools.is(user) || !Jools.is(pass) || !Jools.is(itemid))
+if(
+	!Jools.is( user )
+	||
+	!Jools.is( pass )
+	||
+	!Jools.is( itemid )
+)
 {
-	console.log('Usage: ' + args[1] + ' USER PASSWORD ITEMID');
-	process.exit(1);
+	console.log(
+		'Usage: ' + args[ 1 ] + ' USER PASSWORD ITEMID'
+	);
+
+	process.exit( 1 );
 }
 
 pass =
@@ -63,35 +75,60 @@ var ops = {
 /*
 | Issue on request and builds its answer.
 */
-function request(cmd, callback) {
-    var req = http.request(ops, function(res) {
-        res.setEncoding('utf8');
+var
+	request =
+	function(
+		cmd,
+		callback
+	)
+{
+	var
+		req =
+			http.request(
+				ops,
+				function( res )
+				{
+					res.setEncoding( 'utf8' );
 
-        var data = [];
+					var data = [ ];
 
-        res.on('data', function(chunk) {
-            data.push(chunk);
-        });
+					res.on(
+						'data',
+						function( chunk )
+						{
+							data.push( chunk );
+				        }
+					);
 
-        res.on('end', function() {
-            var asw = data.join('');
-			callback(null, res.statusCode, asw);
-        });
-    });
+					res.on(
+						'end',
+						function( )
+						{
+			            	var asw = data.join( '' );
+							callback( null, res.statusCode, asw );
+			        	}
+					);
+			    }
+			);
 
-    req.on('error', function(err) {
-        callback(err);
-    });
+	req.on(
+		'error',
+		function( err )
+		{
+	        callback( err );
+	    }
+	);
 
-    req.write(cmd);
-    req.end();
+	req.write( cmd );
+	req.end( );
 }
 
 
 /*
 | Parses and runs one json request, parses and pretty-prints the json answer.
 */
-function jsonRequest(cmd, callback) {
+function jsonRequest(cmd, callback)
+{
 	console.log('> ', util.inspect(cmd, false, null));
 	var s = JSON.stringify(cmd);
 	request(s, function(err, code, asw) {
