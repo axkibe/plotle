@@ -552,7 +552,7 @@ Jools.lazyFixate(
 						0;
 
 					xw =
-						x + w + space;
+						x + w;
 
 					y +=
 						Math.round( font.size * ( 1 + theme.bottombox ) );

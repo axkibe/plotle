@@ -336,7 +336,7 @@ Relation.create =
 			'flowWidth',
 				0,
 			'paraSep',
-				fontsize * theme.bottombox,
+				Math.round( fontsize / 20 ),
 			'mark',
 				mark
 		);
@@ -352,7 +352,8 @@ Relation.create =
 			fontsize,
 			doc,
 			item1key,
-			item2key
+			item2key,
+			mark
 		)
 	);
 };

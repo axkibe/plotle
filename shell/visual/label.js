@@ -79,6 +79,13 @@ Visual.Label =
 				'fontsize mismatch'
 			);
 		}
+
+		if( !mark )
+		{
+			throw new Error(
+				'invalid mark'
+			);
+		}
 	}
 
 	Visual.DocItem.call(
@@ -307,7 +314,7 @@ Label.create =
 			'flowWidth',
 				0,
 			'paraSep',
-				0,
+				Math.round( fontsize / 20 ),
 			'mark',
 				mark
 		);
