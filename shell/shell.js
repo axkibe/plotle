@@ -254,7 +254,7 @@ Shell.prototype.update =
 		case 'Range' :
 
 			mItemTree =
-				tree.twig[ mark.bSign.path.get( 0 ) ];
+				tree.twig[ mark.bPath.get( 0 ) ];
 
 			// tests if the owning item was removed
 			if(

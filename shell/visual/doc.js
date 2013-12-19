@@ -747,6 +747,9 @@ Doc.prototype.sketchRange =
 	}
 
 	var
+		tree =
+			this.tree,
+
 		frontPath =
 			mark.frontPath,
 
@@ -808,6 +811,8 @@ Doc.prototype.sketchRange =
 		lx =
 			innerMargin.w;
 
+	// FIXME do not grow points
+
 	fp =
 		shellverse.grow(
 			'Point',
@@ -826,58 +831,154 @@ Doc.prototype.sketchRange =
 				Math.round( bp.y + backPnw.y - sp.y )
 		);
 
+	var
+		frontFlow =
+			frontPara.flow,
+
+		backFlow =
+			backPara.flow,
+
+		frontRank =
+			tree.rankOf( frontKey ),
+
+		f2Key =
+			( frontRank + 1 < tree.length )
+				?
+				( tree.ranks[ frontRank + 1 ] )
+				:
+				( null ),
+
+		f2Para =
+			f2Key
+			&&
+			this.sub[ f2Key ];
+
+
 	if(
 		frontKey === backKey &&
 		fo.line === bo.line
 	)
 	{
-		// fp ***** bp
+		// fp o******o bp
+
 		fabric.moveTo( fp.x, fp.y + descend, view );
 		fabric.lineTo( fp.x, fp.y - ascend,  view );
-		fabric.lineTo( bp.x,  bp.y  - ascend,  view );
-		fabric.lineTo( bp.x,  bp.y  + descend, view );
+		fabric.lineTo( bp.x, bp.y - ascend,  view );
+		fabric.lineTo( bp.x, bp.y + descend, view );
 		fabric.lineTo( fp.x, fp.y + descend, view );
 	}
 	else if (
-		bp.y - ascend - 1 <= fp.y + descend &&
 		bp.x < fp.x
+		&&
+		(
+			(
+				frontKey === backKey &&
+				fo.line + 1 === bo.line
+			)
+			||
+			(
+				f2Key === backKey &&
+				fo.line + 1 >= frontFlow.length &&
+				bo.line === 0
+			)
+		)
 	)
 	{
-		//         fp *****
-		// ***** bp
-		fabric.moveTo( rx,     fp.y -  ascend, view );
-		fabric.lineTo( fp.x,   fp.y -  ascend, view );
-		fabric.lineTo( fp.x,   fp.y + descend, view );
-		fabric.lineTo( rx,     fp.y + descend, view );
+		//         fp o****
+		// ****o bp
 
-		fabric.moveTo( lx,     bp.y -  ascend, view );
-		fabric.lineTo( bp.x,   bp.y -  ascend, view );
-		fabric.lineTo( bp.x,   bp.y + descend, view );
-		fabric.lineTo( lx,     bp.y + descend, view );
+		fabric.moveTo( rx,   fp.y -  ascend, view );
+		fabric.lineTo( fp.x, fp.y -  ascend, view );
+		fabric.lineTo( fp.x, fp.y + descend, view );
+		fabric.lineTo( rx,   fp.y + descend, view );
+
+		fabric.moveTo( lx,   bp.y -  ascend, view );
+		fabric.lineTo( bp.x, bp.y -  ascend, view );
+		fabric.lineTo( bp.x, bp.y + descend, view );
+		fabric.lineTo( lx,   bp.y + descend, view );
 	}
 	else
 	{
-		//   fp *******
-		// ************* bp
+		//          6 7            8
+		//        fp o*************
+		// fp2  x******************
+		//    5 *******************
+		//      ******************x  bp2
+		//      ************o bp   1
+		//      4          2/3
 
+		var
+			f2y =
+				null,
 
-		fabric.moveTo( rx,     bp.y -  ascend, view );
-		fabric.lineTo( bp.x,   bp.y -  ascend, view );
-		fabric.lineTo( bp.x,   bp.y + descend, view );
-		fabric.lineTo( lx,     bp.y + descend, view );
+			b2y =
+				null;
 
-		if( twist )
+		if( fo.line + 1 < frontFlow.length )
 		{
-			fabric.moveTo( lx, fp.y + descend, view );
+			f2y =
+				Math.round(
+					frontFlow[ fo.line + 1 ].y +
+						frontPnw.y -
+						sp.y
+				);
 		}
 		else
 		{
-			fabric.lineTo( lx, fp.y + descend, view );
+			f2y =
+				Math.round(
+					f2Para.flow[ 0 ].y +
+						this.getPNW( item, f2Key ).y -
+						sp.y
+				);
 		}
-		fabric.lineTo( fp.x, fp.y + descend, view );
 
-		fabric.lineTo( fp.x, fp.y -  ascend, view );
-		fabric.lineTo( rx,   fp.y -  ascend, view );
+		if( bo.line > 0 )
+		{
+			b2y =
+				Math.round(
+					backFlow[ bo.line - 1 ].y +
+						backPnw.y -
+						sp.y
+				);
+		}
+		else
+		{
+			var
+				backRank =
+					tree.rankOf( backKey ),
+
+				b2Key =
+					tree.ranks[ backRank - 1 ],
+
+				b2Para =
+					this.sub[ b2Key ];
+
+			b2y =
+				Math.round(
+					b2Para.flow[ b2Para.flow.length - 1 ].y +
+						this.getPNW( item, b2Key ).y -
+						sp.y
+				);
+		}
+
+		fabric.moveTo( rx,     b2y  + descend, view ); // 1
+		fabric.lineTo( bp.x,   b2y  + descend, view ); // 2
+		fabric.lineTo( bp.x,   bp.y + descend, view ); // 3
+		fabric.lineTo( lx,     bp.y + descend, view ); // 4
+
+		if( twist )
+		{
+			fabric.moveTo( lx, f2y - ascend, view ); // 5
+		}
+		else
+		{
+			fabric.lineTo( lx, f2y - ascend, view ); // 5
+		}
+		fabric.lineTo( fp.x, f2y  - ascend, view );   // 6
+
+		fabric.lineTo( fp.x, fp.y -  ascend, view );   // 7
+		fabric.lineTo( rx,   fp.y -  ascend, view );   // 8
 
 		if( !twist )
 		{

@@ -97,31 +97,34 @@ var
 						function( chunk )
 						{
 							data.push( chunk );
-				        }
+						}
 					);
 
 					res.on(
 						'end',
 						function( )
 						{
-			            	var asw = data.join( '' );
+							var
+								asw =
+									data.join( '' );
+
 							callback( null, res.statusCode, asw );
-			        	}
+						}
 					);
-			    }
+				}
 			);
 
 	req.on(
 		'error',
 		function( err )
 		{
-	        callback( err );
-	    }
+			callback( err );
+		}
 	);
 
 	req.write( cmd );
 	req.end( );
-}
+};
 
 
 /*

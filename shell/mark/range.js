@@ -16,7 +16,8 @@ var
 | Imports
 */
 var
-	Jools;
+	Jools,
+	Path;
 
 
 /*

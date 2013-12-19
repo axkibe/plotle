@@ -22,6 +22,7 @@ Visual =
 var
 	Euclid,
 	Jools,
+	Mark,
 	Path,
 	shell,
 	shellverse,
@@ -890,7 +891,9 @@ Space.prototype.dragStart =
 								'paraSep',
 									Jools.half(
 										theme.note.fontsize
-									)
+									),
+								'mark',
+									Mark.Vacant.create( )
 							)
 					);
 
@@ -918,7 +921,9 @@ Space.prototype.dragStart =
 								'flowWidth',
 									0,
 								'paraSep',
-									0
+									0,
+								'mark',
+									Mark.Vacant.create( )
 							)
 					);
 
@@ -939,7 +944,9 @@ Space.prototype.dragStart =
 								'pnw/pse',
 								p, //TODO depoint?
 								p
-							)
+							),
+						'mark',
+							Mark.Vacant.create( )
 					);
 
 			return;
