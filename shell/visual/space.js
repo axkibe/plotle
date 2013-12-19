@@ -894,7 +894,9 @@ Space.prototype.dragStart =
 									),
 								'mark',
 									Mark.Vacant.create( )
-							)
+							),
+						'mark',
+							Mark.Vacant.create( )
 					);
 
 			return;
@@ -924,7 +926,9 @@ Space.prototype.dragStart =
 									0,
 								'mark',
 									Mark.Vacant.create( )
-							)
+							),
+						'mark',
+							Mark.Vacant.create( )
 					);
 
 			return;
