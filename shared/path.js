@@ -145,6 +145,8 @@ Path =
 
 /*
 | Returns true if argument is a path
+|
+| TODO remove
 */
 Path.isPath =
 	function( a )
@@ -156,6 +158,13 @@ Path.isPath =
 
 	return a.constructor === Path;
 };
+
+
+/*
+| Refletion.
+*/
+Path.prototype.reflect =
+	'Path';
 
 
 /*

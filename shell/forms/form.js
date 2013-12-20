@@ -1,5 +1,5 @@
 /*
-| A form
+| A form.
 |
 | Authors: Axel Kittenberger
 */
@@ -61,6 +61,7 @@ Forms.Form =
 		hover
 	)
 {
+	// TODO use tag
 	if( inherit )
 	{
 		if( screensize === null )
@@ -178,7 +179,7 @@ Forms.Form =
 
 
 /*
-| Creates a new form.
+| (Re)Creates a new form.
 */
 Form.create =
 	function(
@@ -292,7 +293,10 @@ Form.create =
 			mark =
 				inherit.mark;
 		}
+
+		// TODO return inherit
 	}
+
 
 	return new Forms[ name ](
 		_tag,

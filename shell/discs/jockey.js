@@ -9,17 +9,17 @@
 | Export
 */
 var
-	Disc;
+	Discs;
 
-Disc =
-	Disc || { };
+Discs =
+	Discs || { };
 
 
 /*
 | Imports
 */
 var
-	Design,
+	Path,
 	shell;
 
 /*
@@ -45,11 +45,12 @@ var
 | Constructor
 */
 var Jockey =
-Disc.Jockey =
+Discs.Jockey =
 	function(
 		tag,
 		inherit,
-		screensize
+		screensize,
+		hover
 	)
 {
 	if( CHECK )
@@ -60,21 +61,66 @@ Disc.Jockey =
 				'tag mismatch'
 			);
 		}
+
+		if( !hover || hover.reflect !== 'Path' )
+		{
+			throw new Error(
+				'invalid hover'
+			);
+		}
 	}
 
-	this._$createDisc =
-		new Disc.CreateDisc(
-			inherit && inherit._$createDisc,
-			Design.CreateDisc,
-			screensize
-		);
+	// TODO make static, immutable
+	var
+		discList =
+		this._discList =
+			[
+				'MainDisc',
+				'CreateDisc'
+			];
 
-	this._$mainDisc =
-		new Disc.MainDisc(
-			inherit && inherit._$mainDisc,
-			Design.MainDisc,
-			screensize
-		);
+	this.screensize =
+		screensize;
+
+	this.hover =
+		hover;
+
+	var
+		discs =
+			{ };
+
+	for( var i in discList )
+	{
+		var
+			name =
+				discList[ i ];
+
+		discs[ name ] =
+			Discs.Disc.create(
+				'name',
+					name,
+				'inherit',
+					inherit && inherit._discs[ name ],
+				'hover',
+					hover.length === 0
+						?
+						hover // empty
+						:
+						(
+							hover.get( 0 ) === name
+							?
+							hover
+							:
+							Path.empty
+						),
+				'screensize',
+					screensize
+			);
+	}
+
+	// XXX immute
+	this._discs =
+		discs;
 };
 
 
@@ -87,6 +133,9 @@ Jockey.create =
 	)
 {
 	var
+		hover =
+			null,
+
 		inherit =
 			null,
 
@@ -101,6 +150,13 @@ Jockey.create =
 	{
 		switch( arguments[ a ] )
 		{
+			case 'hover' :
+
+				hover =
+					arguments[ a + 1 ];
+
+				break;
+
 			case 'inherit' :
 
 				inherit =
@@ -123,11 +179,29 @@ Jockey.create =
 		}
 	}
 
+	if( inherit )
+	{
+		if( screensize === null )
+		{
+			screensize =
+				inherit.screensize;
+		}
+
+		if( hover === null )
+		{
+			hover =
+				inherit.hover;
+		}
+
+		// FIXME add immuted tests
+	}
+
 	return (
 		new Jockey(
 			_tag,
 			inherit,
-			screensize
+			screensize,
+			hover
 		)
 	);
 };
@@ -145,7 +219,7 @@ Jockey.prototype.arrivedAtSpace =
 	)
 {
 	return (
-		this._$mainDisc.arrivedAtSpace(
+		this._discs.MainDisc.arrivedAtSpace(
 			spaceUser,
 			spaceTag,
 			access
@@ -178,10 +252,10 @@ Jockey.prototype.draw =
 {
 	if( shell.bridge.inMode( 'Create' ) )
 	{
-		this._$createDisc.draw( fabric );
+		this._discs.CreateDisc.draw( fabric );
 	}
 
-	this._$mainDisc.draw( fabric );
+	this._discs.MainDisc.draw( fabric );
 };
 
 
@@ -197,7 +271,7 @@ Jockey.prototype.pointingHover =
 {
 	var
 		hover =
-			this._$mainDisc.pointingHover(
+			this._discs.MainDisc.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -211,7 +285,7 @@ Jockey.prototype.pointingHover =
 	if( shell.bridge.inMode( 'Create' ) )
 	{
 		return (
-			this._$createDisc.pointingHover(
+			this._discs.CreateDisc.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -247,7 +321,7 @@ Jockey.prototype.pointingStart =
 {
 	var
 		start =
-			this._$mainDisc.pointingStart(
+			this._discs.MainDisc.pointingStart(
 				p,
 				shift,
 				ctrl
@@ -261,7 +335,7 @@ Jockey.prototype.pointingStart =
 	if( shell.bridge.inMode( 'Create' ) )
 	{
 		return (
-			this._$createDisc.pointingStart(
+			this._discs.CreateDisc.pointingStart(
 				p,
 				shift,
 				ctrl
@@ -289,20 +363,20 @@ Jockey.prototype.pushButton =
 
 	switch( discname )
 	{
-		case 'create' :
+		case 'CreateDisc' :
 
 			return (
-				this._$createDisc.pushButton(
+				this._discs.CreateDisc.pushButton(
 					path,
 					shift,
 					ctrl
 				)
 			);
 
-		case 'main' :
+		case 'MainDisc' :
 
 			return (
-				this._$mainDisc.pushButton(
+				this._discs.MainDisc.pushButton(
 					path,
 					shift,
 					ctrl
@@ -334,13 +408,33 @@ Jockey.prototype.setHover =
 
 	switch( discname )
 	{
-		case 'create' :
+		case 'CreateDisc' :
 
-			return this._$createDisc.setHover( path );
+			this._discs.CreateDisc =
+				Discs.Disc.create(
+					'name',
+						'CreateDisc',
+					'inherit',
+						this._discs.CreateDisc,
+					'hover',
+						path
+				);
 
-		case 'main' :
+			return;
 
-			return this._$mainDisc.setHover( path );
+		case 'MainDisc' :
+
+			this._discs.MainDisc =
+				Discs.Disc.create(
+					'name',
+						'MainDisc',
+					'inherit',
+						this._discs.MainDisc,
+					'hover',
+						path
+				);
+
+			return;
 
 		default :
 
@@ -361,7 +455,7 @@ Jockey.prototype.setMode =
 		mode
 	)
 {
-	return this._$mainDisc.setMode( mode );
+	return this._discs.MainDisc.setMode( mode );
 };
 
 
@@ -388,7 +482,7 @@ Jockey.prototype.setUser =
 		user
 	)
 {
-	return this._$mainDisc.setUser( user );
+	return this._discs.MainDisc.setUser( user );
 };
 
 
@@ -400,7 +494,7 @@ Jockey.prototype.setActive =
 		active
 	)
 {
-	return this._$createDisc.setActive( active );
+	return this._discs.CreateDisc.setActive( active );
 };
 
 

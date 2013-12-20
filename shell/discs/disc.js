@@ -8,16 +8,17 @@
 /*
 | Export
 */
-var Disc;
+var Discs;
 
-Disc =
-	Disc || { };
+Discs =
+	Discs || { };
 
 
 /*
 | Imports
 */
 var
+	Design,
 	Euclid,
 	Jools,
 	shellverse,
@@ -41,80 +42,24 @@ if( CHECK && typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'DISC-11692648';
+
+
 /*
 | Constructor
 */
-Disc.Disc =
+var Disc =
+Discs.Disc =
 	function(
-		// ... free strings ...
+		inherit,
+		screensize,
+		hover
 	)
 {
-	var
-		name =
-			null,
-
-		inherit =
-			null,
-
-		layout =
-			null,
-
-		screensize =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a++
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'name' :
-
-				name =
-					arguments[ ++a ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ ++a ];
-
-				break;
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ ++a ];
-
-				break;
-
-			case 'layout' :
-
-				layout =
-					arguments[ ++a ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid arguments: ' + arguments[ a + 1]
-				);
-		}
-	}
-
 	if( CHECK )
 	{
-		if( name === null )
-		{
-			throw new Error(
-				'name missing'
-			);
-		}
-
 		if( screensize === null )
 		{
 			throw new Error(
@@ -122,29 +67,21 @@ Disc.Disc =
 			);
 		}
 
-		if( layout === null )
+		if( hover === null )
 		{
 			throw new Error(
-				'layout missing'
+				'hover missing'
 			);
 		}
 	}
 
-	// TODO remove
-	this.name =
-		name;
-
 	this.screensize =
 		screensize;
-
-	// TODO remove
-	this.layout =
-		layout;
 
 	var
 		style =
 		this.style =
-			theme.disc[ this.name ],
+			theme.disc[ this.reflect ],
 
 		width =
 			style.width,
@@ -175,7 +112,7 @@ Disc.Disc =
 	this._tree =
 		inherit ?
 			inherit._tree :
-			shellverse.grow( this.layout );
+			shellverse.grow( Design[ this.reflect ] );
 
 	this.silhoutte =
 		new Euclid.Ellipse(
@@ -214,7 +151,7 @@ Disc.Disc =
 	this.path =
 		new Path(
 			[
-				name
+				this.reflect
 			]
 		);
 
@@ -223,7 +160,7 @@ Disc.Disc =
 		this._icons =
 			inherit ?
 				inherit._icons :
-				new Disc.Icons( );
+				new Discs.Icons( );
 
 	var
 		twig =
@@ -248,7 +185,7 @@ Disc.Disc =
 			path =
 				new Path(
 					[
-						this.name,
+						this.reflect,
 						wname
 					]
 				);
@@ -267,6 +204,8 @@ Disc.Disc =
 							this.frame.zeropnw,
 						'inherit',
 							inherit && inherit.buttons[ wname ],
+						'hoverAccent',
+							path.equals( hover ),
 						'tree',
 							tree,
 						'icons',
@@ -286,6 +225,111 @@ Disc.Disc =
 
 	this.$hover =
 		inherit && inherit.$hover;
+};
+
+
+/*
+| (Re)Creates a new disc.
+*/
+Disc.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		hover =
+			null,
+
+		inherit =
+			null,
+
+		name =
+			null,
+
+		screensize =
+			null;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'hover' :
+
+				hover =
+					arguments[ a++ ];
+
+				break;
+
+			case 'name' :
+
+				name =
+					arguments[ a++ ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument'
+				);
+		}
+	}
+
+	if( CHECK )
+	{
+		if( !Discs[ name ] )
+		{
+			throw new Error(
+				'invalid discname: ' + name
+			);
+		}
+	}
+
+	if( inherit )
+	{
+		if( hover === null )
+		{
+			hover =
+				inherit.hover;
+		}
+
+		if( screensize === null )
+		{
+			screensize =
+				inherit.screensize;
+		}
+	}
+
+	return new Discs[ name ](
+		_tag,
+		inherit,
+		screensize,
+		hover
+	);
 };
 
 

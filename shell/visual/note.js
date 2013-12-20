@@ -68,11 +68,14 @@ Visual.Note =
 		mark
 	)
 {
-	if( CHECK && tag !== _tag )
+	if( CHECK )
 	{
-		throw new Error(
-			'tag mismatch'
-		);
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'tag mismatch'
+			);
+		}
 	}
 
 	Visual.DocItem.call(

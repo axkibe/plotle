@@ -9,10 +9,10 @@
 | Export
 */
 var
-	Disc;
+	Discs;
 
-Disc =
-	Disc || { };
+Discs =
+	Discs || { };
 
 
 /*
@@ -39,7 +39,7 @@ if( CHECK && typeof( window ) === 'undefined')
 | Constructor.
 */
 var Icons =
-Disc.Icons =
+Discs.Icons =
 	function( )
 {
 	// pass

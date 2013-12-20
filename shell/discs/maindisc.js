@@ -9,10 +9,10 @@
 | Export
 */
 var
-	Disc;
+	Discs;
 
-Disc =
-	Disc || { };
+Discs =
+	Discs || { };
 
 
 /*
@@ -39,37 +39,43 @@ if( CHECK && typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'DISC-11692648';
+
+
 /*
 | Constructor
 */
 var MainDisc =
-Disc.MainDisc =
+Discs.MainDisc =
 	function(
+		tag,
 		inherit,
-		layout,
-		screensize
+		screensize,
+		hover
 	)
 {
-	this.$hover =
-		inherit ?
-			inherit.$hover :
-			null;
+	if( CHECK )
+	{
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'tag mismatch'
+			);
+		}
+	}
 
 	this.$mode =
 		inherit ?
 			inherit.$mode :
 			null;
 
-	Disc.Disc.call(
+	Discs.Disc.call(
 		this,
-		'name',
-			'main',
-		'inherit',
-			inherit,
-		'layout',
-			layout,
-		'screensize',
-			screensize
+		inherit,
+		screensize,
+		hover
 	);
 
 	this.$user =
@@ -87,8 +93,15 @@ Disc.MainDisc =
 */
 Jools.subclass(
 	MainDisc,
-	Disc.Disc
+	Discs.Disc
 );
+
+
+/*
+| Reflection.
+*/
+MainDisc.prototype.reflect =
+	'MainDisc';
 
 
 /*
@@ -261,7 +274,7 @@ MainDisc.prototype.pushButton =
 		discname =
 			path.get( 0 );
 
-	if( discname !== 'main' )
+	if( discname !== this.reflect )
 	{
 		throw new Error(
 			'invalid discname: ' + discname
@@ -520,75 +533,6 @@ MainDisc.prototype.specialKey =
 	)
 {
 
-};
-
-
-/*
-| Sets the hovered component.
-|
-| TODO remove
-*/
-MainDisc.prototype.setHover =
-	function(
-		path
-	)
-{
-	if( CHECK )
-	{
-		var
-			discname =
-				path.get( 0 );
-
-		if( discname !== 'main' )
-		{
-			throw new Error(
-				'invalid discname: ' + discname
-			);
-		}
-	}
-
-	var
-		buttonName =
-			path.length > 1 ?
-				path.get( 1 )
-				:
-				null;
-
-	if( this.$hover === buttonName )
-	{
-		return;
-	}
-
-	this.$fabric =
-		null;
-
-	if( this.$hover )
-	{
-		this.buttons[ this.$hover ] =
-			Widgets.Button.create(
-				'inherit',
-					this.buttons[ this.$hover ],
-				'hoverAccent',
-					false
-			);
-	}
-
-	this.$hover =
-		buttonName;
-
-	if( buttonName )
-	{
-		this.buttons[ buttonName ] =
-			Widgets.Button.create(
-				'inherit',
-					this.buttons[ buttonName ],
-				'hoverAccent',
-					true
-			);
-	}
-
-	shell.redraw =
-		true;
 };
 
 

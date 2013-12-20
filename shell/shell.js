@@ -20,7 +20,7 @@ var
 */
 var
 	Bridge,
-	Disc,
+	Discs,
 	Euclid,
 	fontPool,
 	Forms,
@@ -121,9 +121,11 @@ Shell =
 		);
 
 	this._$discJockey =
-		Disc.Jockey.create(
+		Discs.Jockey.create(
 			'screensize',
-				screensize
+				screensize,
+			'hover',
+				Path.empty
 		);
 
 	this.bridge =
@@ -1186,7 +1188,11 @@ Shell.prototype.setHover =
 	{
 		case 'disc' :
 
-			return this._$discJockey.setHover( path );
+			this._$discJockey.setHover( path );
+
+			// XXX
+
+			break;
 
 		case 'forms' :
 
@@ -1334,7 +1340,7 @@ Shell.prototype.resize =
 			);
 
 	this._$discJockey =
-		Disc.Jockey.create(
+		Discs.Jockey.create(
 			'inherit',
 				this._$discJockey,
 			'screensize',

@@ -833,19 +833,19 @@ Server.prototype.prepareResources =
 		'shell/stubs.js',
 			'fb',
 
-		'shell/disc/icons.js',
+		'shell/discs/icons.js',
 			'fb',
 
-		'shell/disc/disc.js',
+		'shell/discs/disc.js',
 			'fb',
 
-		'shell/disc/createdisc.js',
+		'shell/discs/createdisc.js',
 			'fb',
 
-		'shell/disc/maindisc.js',
+		'shell/discs/maindisc.js',
 			'fb',
 
-		'shell/disc/jockey.js',
+		'shell/discs/jockey.js',
 			'fb',
 
 		'shell/action.js',

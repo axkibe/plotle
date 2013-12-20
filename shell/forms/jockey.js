@@ -57,11 +57,26 @@ Forms.Jockey =
 				'tag mismatch'
 			);
 		}
+
+		if( !hover || hover.reflect !== 'Path' )
+		{
+			throw new Error(
+				'invalid hover'
+			);
+		}
+
+		if( !mark )
+		{
+			throw new Error(
+				'invalid mark'
+			);
+		}
 	}
 
+	// TODO make static, immutable
 	var
 		formList =
-		this._formList = // TODO remove
+		this._formList =
 			[
 				'Login',
 				'MoveTo',
@@ -116,7 +131,7 @@ Forms.Jockey =
 					'mark',
 						mark.concerns( path ),
 					'hover',
-						path.equals( Path.empty )
+						path.equals( Path.empty ) // TODO this looks wrong
 							?
 							Path.empty
 							:
