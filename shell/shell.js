@@ -1188,9 +1188,13 @@ Shell.prototype.setHover =
 	{
 		case 'disc' :
 
-			this._$discJockey.setHover( path );
-
-			// XXX
+			this._$discJockey =
+				Discs.Jockey.create(
+					'inherit',
+						this._$discJockey,
+					'hover',
+						path
+				);
 
 			break;
 

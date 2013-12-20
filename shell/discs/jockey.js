@@ -393,59 +393,6 @@ Jockey.prototype.pushButton =
 
 
 /*
-| Sets the hovered component.
-|
-| TODO remove
-*/
-Jockey.prototype.setHover =
-	function(
-		path
-	)
-{
-	var
-		discname =
-			path.get( 0 );
-
-	switch( discname )
-	{
-		case 'CreateDisc' :
-
-			this._discs.CreateDisc =
-				Discs.Disc.create(
-					'name',
-						'CreateDisc',
-					'inherit',
-						this._discs.CreateDisc,
-					'hover',
-						path
-				);
-
-			return;
-
-		case 'MainDisc' :
-
-			this._discs.MainDisc =
-				Discs.Disc.create(
-					'name',
-						'MainDisc',
-					'inherit',
-						this._discs.MainDisc,
-					'hover',
-						path
-				);
-
-			return;
-
-		default :
-
-			throw new Error(
-				'invalid discname: ' + discname
-			);
-	}
-};
-
-
-/*
 | An action started or stoped or changed
 |
 | TODO remove
