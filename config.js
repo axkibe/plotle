@@ -120,7 +120,7 @@ config.debug.puffed =
 | are made immutable. Turned off on releases for performance.
 */
 config.debug.immute =
-	false;
+	true;
 
 
 /*
@@ -128,7 +128,8 @@ config.debug.immute =
 | Set to false/null or the address of the weinre server
 */
 config.debug.weinre =
-	false &&
+	false
+	&&
 	'192.168.88.1:8080';
 
 /*

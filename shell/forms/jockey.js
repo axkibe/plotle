@@ -33,7 +33,22 @@ var
 
 var
 	_tag =
-		'FORM-JOCKEY-42381321';
+		'FORM-JOCKEY-42381321',
+
+	_formList =
+		Object.freeze(
+			[
+				'Login',
+				'MoveTo',
+				'NoAccessToSpace',
+				'NonExistingSpace',
+				'SignUp',
+				'Space',
+				'User',
+				'Welcome'
+			]
+		);
+
 
 /*
 | The master of forms.
@@ -73,21 +88,6 @@ Forms.Jockey =
 		}
 	}
 
-	// TODO make static, immutable
-	var
-		formList =
-		this._formList =
-			[
-				'Login',
-				'MoveTo',
-				'NoAccessToSpace',
-				'NonExistingSpace',
-				'SignUp',
-				'Space',
-				'User',
-				'Welcome'
-			];
-
 	this.mark =
 		mark;
 
@@ -101,11 +101,11 @@ Forms.Jockey =
 		forms =
 			{ };
 
-	for( var i in formList )
+	for( var i in _formList )
 	{
 		var
 			name =
-				formList[ i ],
+				_formList[ i ],
 
 
 			path =
@@ -158,6 +158,8 @@ Forms.Jockey =
 
 	this._forms =
 		Jools.immute( forms );
+
+	Jools.immute( this );
 };
 
 

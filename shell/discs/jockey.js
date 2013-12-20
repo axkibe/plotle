@@ -39,7 +39,16 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'DISC-JOCKEY-76533526';
+		'DISC-JOCKEY-76533526',
+
+	_discList =
+		Object.freeze(
+			[
+				'MainDisc',
+				'CreateDisc'
+			]
+		);
+
 
 /*
 | Constructor
@@ -70,15 +79,6 @@ Discs.Jockey =
 		}
 	}
 
-	// TODO make static, immutable
-	var
-		discList =
-		this._discList =
-			[
-				'MainDisc',
-				'CreateDisc'
-			];
-
 	this.screensize =
 		screensize;
 
@@ -89,11 +89,11 @@ Discs.Jockey =
 		discs =
 			{ };
 
-	for( var i in discList )
+	for( var i in _discList )
 	{
 		var
 			name =
-				discList[ i ];
+				_discList[ i ];
 
 		discs[ name ] =
 			Discs.Disc.create(
