@@ -134,7 +134,7 @@ SignUp.prototype.pushButton =
 
 		case 'closeButton' :
 
-			shell.bridge.changeMode( 'Normal' );
+			shell.setMode( 'Normal' );
 
 			break;
 
@@ -316,7 +316,7 @@ SignUp.prototype.onRegister =
 
 	this.clear( );
 
-	shell.bridge.changeMode( 'Welcome' );
+	shell.setMode( 'Welcome' );
 };
 
 

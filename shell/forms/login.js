@@ -134,7 +134,7 @@ Login.prototype.pushButton =
 
 		case 'closeButton' :
 
-			shell.bridge.changeMode( 'Normal' );
+			shell.setMode( 'Normal' );
 
 			break;
 
@@ -361,7 +361,7 @@ Login.prototype.onAuth =
 		false
 	);
 
-	shell.bridge.changeMode( 'Normal' );
+	shell.setMode( 'Normal' );
 };
 
 

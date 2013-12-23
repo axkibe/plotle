@@ -19,8 +19,7 @@ Discs =
 | Imports
 */
 var
-	Path,
-	shell;
+	Path;
 
 /*
 | Capsule
@@ -58,8 +57,9 @@ Discs.Jockey =
 	function(
 		tag,
 		inherit,
-		screensize,
-		hover
+		hover,
+		mode,
+		screensize
 	)
 {
 	if( CHECK )
@@ -84,6 +84,9 @@ Discs.Jockey =
 
 	this.hover =
 		hover;
+
+	this.mode =
+		mode;
 
 	var
 		discs =
@@ -113,6 +116,8 @@ Discs.Jockey =
 							:
 							Path.empty
 						),
+				'mode',
+					mode,
 				'screensize',
 					screensize
 			);
@@ -137,6 +142,9 @@ Jockey.create =
 			null,
 
 		inherit =
+			null,
+
+		mode =
 			null,
 
 		screensize =
@@ -164,6 +172,13 @@ Jockey.create =
 
 				break;
 
+			case 'mode' :
+
+				mode =
+					arguments[ a + 1 ];
+
+				break;
+
 			case 'screensize' :
 
 				screensize =
@@ -181,27 +196,34 @@ Jockey.create =
 
 	if( inherit )
 	{
-		if( screensize === null )
-		{
-			screensize =
-				inherit.screensize;
-		}
-
 		if( hover === null )
 		{
 			hover =
 				inherit.hover;
 		}
 
-		// FIXME add immuted tests
+		if( mode === null )
+		{
+			mode =
+				inherit.mode;
+		}
+
+		if( screensize === null )
+		{
+			screensize =
+				inherit.screensize;
+		}
+
+		// TODO add immuted tests
 	}
 
 	return (
 		new Jockey(
 			_tag,
 			inherit,
-			screensize,
-			hover
+			hover,
+			mode,
+			screensize
 		)
 	);
 };
@@ -250,7 +272,7 @@ Jockey.prototype.draw =
 		fabric
 	)
 {
-	if( shell.bridge.inMode( 'Create' ) )
+	if( this.mode === 'Create' )
 	{
 		this._discs.CreateDisc.draw( fabric );
 	}
@@ -282,7 +304,7 @@ Jockey.prototype.pointingHover =
 		return hover;
 	}
 
-	if( shell.bridge.inMode( 'Create' ) )
+	if( this.mode === 'Create' )
 	{
 		return (
 			this._discs.CreateDisc.pointingHover(
@@ -332,7 +354,7 @@ Jockey.prototype.pointingStart =
 		return start;
 	}
 
-	if( shell.bridge.inMode( 'Create' ) )
+	if( this.mode === 'Create' )
 	{
 		return (
 			this._discs.CreateDisc.pointingStart(
@@ -389,20 +411,6 @@ Jockey.prototype.pushButton =
 				'invalid discname: ' + discname
 			);
 	}
-};
-
-
-/*
-| An action started or stoped or changed
-|
-| TODO remove
-*/
-Jockey.prototype.setMode =
-	function(
-		mode
-	)
-{
-	return this._discs.MainDisc.setMode( mode );
 };
 
 

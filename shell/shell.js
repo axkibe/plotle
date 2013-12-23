@@ -55,6 +55,90 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 
 /*
+| Valid modes
+|
+| TODO remove when not CHECK
+*/
+var
+	_modes =
+		Jools.immute( {
+
+			/*
+			| Creating a new item.
+			*/
+			'Create' :
+				true,
+
+			/*
+			| Help.
+			*/
+			'Help' :
+				true,
+
+			/*
+			| Logging in.
+			*/
+			'Login' :
+				true,
+
+			/*
+			| Moveing To another space.
+			*/
+			'MoveTo' :
+				true,
+
+			/*
+			| Standard selection, moving stuff around.
+			*/
+			'Normal' :
+				true,
+
+			/*
+			| User does not have access to a space.
+			*/
+			'NoAccessToSpace' :
+				true,
+
+			/*
+			| Space does not exist, but user is allowed to create it.
+			*/
+			'NonExistingSpace' :
+				true,
+
+			/*
+			| Removing items.
+			*/
+			'Remove' :
+				true,
+
+			/*
+			| Signing up
+			*/
+			'SignUp' :
+				true,
+
+			/*
+			| Space view
+			*/
+			'Space' :
+				true,
+
+			/*
+			| User view
+			*/
+			'User' :
+				true,
+
+			/*
+			| Welcome view
+			*/
+			'Welcome' :
+				true
+
+		} );
+
+
+/*
 | Constructor.
 */
 Shell =
@@ -99,6 +183,9 @@ Shell =
 	this.$space =
 		null;
 
+	this._$mode =
+		'Normal';
+
 	var
 		screensize =
 		this.screensize =
@@ -125,7 +212,9 @@ Shell =
 			'screensize',
 				screensize,
 			'hover',
-				Path.empty
+				Path.empty,
+			'mode',
+				this._$mode
 		);
 
 	this.bridge =
@@ -191,6 +280,42 @@ Shell.prototype.messageRCV =
 	}
 	*/
 };
+
+
+/*
+| Changes the mode
+*/
+Shell.prototype.setMode =
+	function(
+		mode
+	)
+{
+	if( CHECK )
+	{
+		if( !_modes[ mode ] )
+		{
+			throw new Error(
+				'invalid mode : ' + mode
+			);
+		}
+	}
+
+	this._$mode =
+		mode;
+
+	this._$discJockey =
+		Discs.Jockey.create(
+			'inherit',
+				this._$discJockey,
+			'mode',
+				mode
+		);
+
+	this.redraw =
+		true;
+};
+
+
 
 
 /*
@@ -445,7 +570,7 @@ Shell.prototype._getCurrentDisplay =
 {
 	var
 		name =
-			this.bridge.mode( );
+			this._$mode;
 
 	if( this._$greenscreen )
 	{
@@ -1577,7 +1702,7 @@ Shell.prototype.onAquireSpace =
 							)
 				);
 
-			shell.bridge.changeMode( 'NonExistingSpace' );
+			shell.setMode( 'NonExistingSpace' );
 
 			this._draw( );
 
@@ -1606,7 +1731,7 @@ Shell.prototype.onAquireSpace =
 						)
 				);
 
-			shell.bridge.changeMode( 'NoAccessToSpace' );
+			shell.setMode( 'NoAccessToSpace' );
 
 			this._draw( );
 
@@ -1792,7 +1917,7 @@ Shell.prototype.arrivedAtSpace =
 				)
 		);
 
-	this.bridge.changeMode( 'Normal' );
+	shell.setMode( 'Normal' );
 };
 
 

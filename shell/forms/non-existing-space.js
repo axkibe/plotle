@@ -214,7 +214,7 @@ NonExistingSpace.prototype.pushButton =
 	{
 		case 'noButton' :
 
-			shell.bridge.changeMode( 'Normal' );
+			shell.setMode( 'Normal' );
 
 			break;
 
@@ -226,7 +226,7 @@ NonExistingSpace.prototype.pushButton =
 				true
 			);
 
-			shell.bridge.changeMode( 'Normal' );
+			shell.setMode( 'Normal' );
 
 			break;
 

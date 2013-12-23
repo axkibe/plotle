@@ -234,7 +234,7 @@ User.prototype.pushButton =
 	{
 		case 'closeButton' :
 
-			shell.bridge.changeMode( 'Normal' );
+			shell.setMode( 'Normal' );
 
 			break;
 

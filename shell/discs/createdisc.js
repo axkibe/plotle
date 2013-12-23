@@ -20,6 +20,7 @@ Discs =
 var
 	Euclid,
 	Jools,
+	Path,
 	shell,
 	Widgets;
 
@@ -52,8 +53,9 @@ Discs.CreateDisc =
 	function(
 		tag,
 		inherit,
-		screensize,
-		hover
+		hover,
+		mode,
+		screensize
 	)
 {
 	if( CHECK )
@@ -66,15 +68,89 @@ Discs.CreateDisc =
 		}
 	}
 
+	this.mode =
+		mode;
+
 	Discs.Disc.call(
 		this,
 		inherit,
-		screensize,
-		hover
+		hover,
+		screensize
 	);
+
+	var
+		buttons =
+			{ },
+
+		twig =
+			this._tree.twig,
+
+		ranks =
+			this._tree.ranks;
+
+	for(
+		var r = 0, rZ = ranks.length;
+		r < rZ;
+		r++
+	)
+	{
+		var
+			wname =
+				ranks[ r ],
+
+			tree =
+				twig[ wname ],
+
+			path =
+				new Path(
+					[
+						this.reflect,
+						wname
+					]
+				);
+
+		switch( tree.twig.type )
+		{
+			case 'ButtonWidget' :
+
+				buttons[ wname ] =
+					Widgets.Button.create(
+						'section',
+							'disc',
+						'path',
+							path,
+						'superFrame',
+							this.frame.zeropnw,
+						'inherit',
+							inherit && inherit.buttons[ wname ],
+						'hoverAccent',
+							path.equals( hover ),
+						'tree',
+							tree,
+						'icons',
+							this._icons
+					);
+
+					break;
+
+			default :
+
+				throw new Error(
+					'Cannot create widget of type: ' +
+						tree.twig.type
+				);
+		}
+	}
+
+	// TODO remove
 
 	this.$active =
 		inherit && inherit.$active;
+
+	this.buttons =
+		buttons;
+
+	Jools.immute( this );
 };
 
 

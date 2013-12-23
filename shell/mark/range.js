@@ -300,6 +300,8 @@ Range.prototype.innerText =
 			text =
 				tree.twig[ frontKey ].twig.text;
 
+		console.log( 'INNER', text.substring( frontAt, backAt ) );
+
 		return text.substring(
 			frontAt,
 			backAt
@@ -336,6 +338,8 @@ Range.prototype.innerText =
 		'\n',
 		backText.substring( 0, backAt )
 	);
+
+	console.log( 'INNER', buf.join( '' ) );
 
 	return buf.join( '' );
 };

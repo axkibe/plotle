@@ -138,13 +138,15 @@ NoAccessToSpace.prototype.pushButton =
 	{
 		case 'okButton' :
 
-			shell.bridge.changeMode( 'Normal' );
+			shell.setMode( 'Normal' );
 
 			break;
 
 		default :
 
-			throw new Error( 'unknown button pushed: ' + buttonName );
+			throw new Error(
+				'unknown button pushed: ' + buttonName
+			);
 	}
 };
 

@@ -149,7 +149,7 @@ Design.MainDisc =
 
 	twig :
 	{
-		'normal' :
+		'Normal' :
 		{
 			type :
 				'ButtonWidget',
@@ -238,7 +238,7 @@ Design.MainDisc =
 			}
 		},
 
-		'create' :
+		'Create' :
 		{
 			type :
 				'ButtonWidget',
@@ -351,7 +351,7 @@ Design.MainDisc =
 			}
 		},
 
-		'remove' :
+		'Remove' :
 		{
 			type :
 				'ButtonWidget',
@@ -443,7 +443,7 @@ Design.MainDisc =
 			}
 		},
 
-		'moveto' :
+		'MoveTo' :
 		{
 			type :
 				'ButtonWidget',
@@ -536,7 +536,7 @@ Design.MainDisc =
 		},
 
 
-		'space' :
+		'Space' :
 		{
 			type :
 				'ButtonWidget',
@@ -649,7 +649,7 @@ Design.MainDisc =
 			}
 		},
 
-		'user' :
+		'User' :
 		{
 			type :
 				'ButtonWidget',
@@ -762,7 +762,7 @@ Design.MainDisc =
 			}
 		},
 
-		'login' :
+		'Login' :
 		{
 			type :
 				'ButtonWidget',
@@ -878,7 +878,7 @@ Design.MainDisc =
 			}
 		},
 
-		'signup' :
+		'SignUp' :
 		{
 			type :
 				'ButtonWidget',
@@ -995,7 +995,7 @@ Design.MainDisc =
 		}
 
 		/*
-		'help' :
+		'Help' :
 		{
 			type :
 				'ButtonWidget',
@@ -1109,14 +1109,14 @@ Design.MainDisc =
 
 	ranks :
 	[
-		'normal',
-		'create',
-		'remove',
-		'moveto',
-		'space',
-		'user',
-		'login',
-		'signup'
+		'Normal',
+		'Create',
+		'Remove',
+		'MoveTo',
+		'Space',
+		'User',
+		'Login',
+		'SignUp'
 		// 'help'
 	]
 };

@@ -21,6 +21,7 @@ Discs =
 var
 	Euclid,
 	Jools,
+	Path,
 	shell,
 	Widgets;
 
@@ -52,8 +53,9 @@ Discs.MainDisc =
 	function(
 		tag,
 		inherit,
-		screensize,
-		hover
+		hover,
+		mode,
+		screensize
 	)
 {
 	if( CHECK )
@@ -66,25 +68,96 @@ Discs.MainDisc =
 		}
 	}
 
-	this.$mode =
-		inherit ?
-			inherit.$mode :
-			null;
+	this.mode =
+		mode;
 
 	Discs.Disc.call(
 		this,
 		inherit,
-		screensize,
-		hover
+		hover,
+		screensize
 	);
 
-	this.$user =
-		null;
+	var
+		buttons =
+			{ },
+
+		twig =
+			this._tree.twig,
+
+		ranks =
+			this._tree.ranks;
+
+	for(
+		var r = 0, rZ = ranks.length;
+		r < rZ;
+		r++
+	)
+	{
+		var
+			wname =
+				ranks[ r ],
+
+			tree =
+				twig[ wname ],
+
+			path =
+				new Path(
+					[
+						this.reflect,
+						wname
+					]
+				);
+
+		switch( tree.twig.type )
+		{
+			case 'ButtonWidget' :
+
+				buttons[ wname ] =
+					Widgets.Button.create(
+						'section',
+							'disc',
+						'path',
+							path,
+						'superFrame',
+							this.frame.zeropnw,
+						'inherit',
+							inherit && inherit.buttons[ wname ],
+						'hoverAccent',
+							path.equals( hover ),
+						'focusAccent',
+							mode === wname,
+						'tree',
+							tree,
+						'icons',
+							this._icons
+					);
+
+					break;
+
+			default :
+
+				throw new Error(
+					'Cannot create widget of type: ' +
+						tree.twig.type
+				);
+		}
+	}
+
+	// TODO remove
+
+
+	// TODO remove
+
+	this.buttons =
+		buttons;
 
 	this._$loggedIn =
 		inherit ?
 			inherit._$loggedIn :
 			false;
+
+	Jools.immute( this );
 };
 
 
@@ -157,107 +230,6 @@ MainDisc.prototype._weave =
 
 
 /*
-| Returns the mode associated with a button
-|
-| TODO remove
-*/
-MainDisc.prototype.getModeOfButton =
-	function(
-		buttonName
-	)
-{
-	switch( buttonName )
-	{
-		case 'create' :
-			return 'Create';
-
-		case 'moveto' :
-			return 'MoveTo';
-
-		case 'help' :
-			return 'Help';
-
-		case 'login' :
-			return 'Login';
-
-		case 'normal' :
-			return 'Normal';
-
-		case 'remove' :
-			return 'Remove';
-
-		case 'signup' :
-			return 'SignUp';
-
-		case 'space' :
-			return 'Space';
-
-		case 'user' :
-			return 'User';
-
-		default :
-			throw new Error(
-				'unknown button:' + buttonName
-			);
-	}
-};
-
-
-/*
-| Returns the mode associated with a button
-|
-| TODO remove
-*/
-MainDisc.prototype.getButtonOfMode =
-	function(
-		mode
-	)
-{
-	switch( mode )
-	{
-		case 'Create' :
-			return 'create';
-
-		case 'MoveTo' :
-			return 'moveto';
-
-		case 'Help' :
-			return 'help';
-
-		case 'Login' :
-			return 'login';
-
-		case 'Normal' :
-			return 'normal';
-
-		case 'Remove' :
-			return 'remove';
-
-		case 'SignUp' :
-			return 'signup';
-
-		case 'Space' :
-			return 'space';
-
-		case 'User' :
-			return 'user';
-
-		case 'NoAccessToSpace' :
-		case 'NonExistingSpace' :
-		case 'Welcome' :
-		case null :
-			return null;
-
-		default :
-
-			throw new Error(
-				'unknown mode:' + mode
-			);
-	}
-};
-
-
-/*
 | A button of the main disc has been pushed.
 */
 MainDisc.prototype.pushButton =
@@ -286,7 +258,7 @@ MainDisc.prototype.pushButton =
 			path.get( 1 );
 
 	if(
-		buttonName === 'login' &&
+		buttonName === 'Login' &&
 		this._$loggedIn
 	)
 	{
@@ -295,17 +267,13 @@ MainDisc.prototype.pushButton =
 		return;
 	}
 
-	bridge.changeMode(
-		this.getModeOfButton(
-			buttonName
-		)
-	);
+	shell.setMode( buttonName );
 
 	var
 		action =
 			bridge.action( );
 
-	if( buttonName === 'remove' )
+	if( buttonName === 'Remove' )
 	{
 		if( action )
 		{
@@ -539,12 +507,14 @@ MainDisc.prototype.specialKey =
 /*
 | An action started or stoped or changed
 */
+/*
+XXX remove
 MainDisc.prototype.setMode =
 	function(
 		mode
 	)
 {
-	if( this.$mode === mode )
+	if( this.mode === mode )
 	{
 		return;
 	}
@@ -554,7 +524,7 @@ MainDisc.prototype.setMode =
 
 	var
 		buttonName =
-			this.getButtonOfMode( this.$mode );
+			mode;
 
 	if( this.buttons[ buttonName ] )
 	{
@@ -571,7 +541,7 @@ MainDisc.prototype.setMode =
 		mode;
 
 	buttonName =
-		this.getButtonOfMode( mode );
+		mode;
 
 	if( this.buttons[ buttonName ] )
 	{
@@ -587,6 +557,7 @@ MainDisc.prototype.setMode =
 	shell.redraw =
 		true;
 };
+*/
 
 
 /*
@@ -614,26 +585,26 @@ MainDisc.prototype.arrivedAtSpace =
 	var buttons =
 		this.buttons;
 
-	buttons.space =
+	buttons.Space =
 		Widgets.Button.create(
 			'inherit',
-				buttons.space,
+				buttons.Space,
 			'text',
 				spaceUser + ':' + spaceTag
 		);
 
-	buttons.create =
+	buttons.Create =
 		Widgets.Button.create(
 			'inherit',
-				buttons.create,
+				buttons.Create,
 			'visible',
 				access === 'rw'
 		);
 
-	buttons.remove =
+	buttons.Remove =
 		Widgets.Button.create(
 			'inherit',
-				buttons.remove,
+				buttons.Remove,
 			'visible',
 				access === 'rw'
 		);
@@ -642,16 +613,13 @@ MainDisc.prototype.arrivedAtSpace =
 
 /*
 | Displays the current user
-| Adapts login/logout/signup button
+| Adapts Login/Logout/SignUp button
 */
 MainDisc.prototype.setUser =
 	function(
 		user
 	)
 {
-	this.$user =
-		user;
-
 	var
 		buttons =
 			this.buttons,
@@ -659,10 +627,10 @@ MainDisc.prototype.setUser =
 		isGuest =
 			user.substr( 0, 5 ) === 'visit';
 
-	buttons.user =
+	buttons.User =
 		Widgets.Button.create(
 			'inherit',
-				buttons.user,
+				buttons.User,
 			'text',
 				user,
 			'visible',
@@ -672,27 +640,25 @@ MainDisc.prototype.setUser =
 	this._$loggedIn =
 		!isGuest;
 
-	buttons.signup =
+	buttons.SignUp =
 		Widgets.Button.create(
 			'inherit',
-				buttons.signup,
+				buttons.SignUp,
 			'visible',
 				isGuest
 		);
 
-	buttons.login =
+	buttons.Login =
 		Widgets.Button.create(
 			'inherit',
-				buttons.login,
+				buttons.Login,
 			'text',
 				isGuest ?
 					'log\nin' :
 					'log\nout'
 		);
 
-	shell.bridge.changeMode(
-		'Normal'
-	);
+	shell.setMode( 'Normal' );
 
 	shell.redraw =
 		true;

@@ -23,8 +23,7 @@ var
 	Jools,
 	shellverse,
 	theme,
-	Path,
-	Widgets;
+	Path;
 
 
 /*
@@ -54,8 +53,8 @@ var Disc =
 Discs.Disc =
 	function(
 		inherit,
-		screensize,
-		hover
+		hover,
+		screensize
 	)
 {
 	if( CHECK )
@@ -103,7 +102,7 @@ Discs.Disc =
 				'x',
 					0,
 				'y',
-					Jools.half( this.screensize.y - height )
+					Jools.half( screensize.y - height )
 			),
 			width,
 			height
@@ -144,10 +143,6 @@ Discs.Disc =
 				650
 		);
 
-	// the buttons
-	this.buttons =
-		{ };
-
 	this.path =
 		new Path(
 			[
@@ -155,76 +150,11 @@ Discs.Disc =
 			]
 		);
 
-	var
-		icons =
-		this._icons =
-			inherit ?
-				inherit._icons :
-				new Discs.Icons( );
+	this._icons =
+		inherit ?
+			inherit._icons :
+			new Discs.Icons( );
 
-	var
-		twig =
-			this._tree.twig,
-
-		ranks =
-			this._tree.ranks;
-
-	for(
-		var r = 0, rZ = ranks.length;
-		r < rZ;
-		r++
-	)
-	{
-		var
-			wname =
-				ranks[ r ],
-
-			tree =
-				twig[ wname ],
-
-			path =
-				new Path(
-					[
-						this.reflect,
-						wname
-					]
-				);
-
-		switch( tree.twig.type )
-		{
-			case 'ButtonWidget' :
-
-				this.buttons[ wname ] =
-					Widgets.Button.create(
-						'section',
-							'disc',
-						'path',
-							path,
-						'superFrame',
-							this.frame.zeropnw,
-						'inherit',
-							inherit && inherit.buttons[ wname ],
-						'hoverAccent',
-							path.equals( hover ),
-						'tree',
-							tree,
-						'icons',
-							icons
-					);
-
-					break;
-
-			default :
-
-				throw new Error(
-					'Cannot create widget of type: ' +
-						tree.twig.type
-				);
-		}
-	}
-
-	this.$hover =
-		inherit && inherit.$hover;
 };
 
 
@@ -249,6 +179,9 @@ Disc.create =
 		inherit =
 			null,
 
+		mode =
+			null,
+
 		name =
 			null,
 
@@ -270,6 +203,13 @@ Disc.create =
 
 				break;
 
+			case 'hover' :
+
+				hover =
+					arguments[ a++ ];
+
+				break;
+
 			case 'inherit' :
 
 				inherit =
@@ -277,9 +217,9 @@ Disc.create =
 
 				break;
 
-			case 'hover' :
+			case 'mode' :
 
-				hover =
+				mode =
 					arguments[ a++ ];
 
 				break;
@@ -322,13 +262,24 @@ Disc.create =
 			screensize =
 				inherit.screensize;
 		}
+
+		if( mode === null )
+		{
+			mode =
+				inherit.mode;
+		}
+
+		// TODO use the discs equals mode
 	}
+
+	console.log( 'DM', mode );
 
 	return new Discs[ name ](
 		_tag,
 		inherit,
-		screensize,
-		hover
+		hover,
+		mode,
+		screensize
 	);
 };
 
