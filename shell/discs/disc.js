@@ -272,8 +272,6 @@ Disc.create =
 		// TODO use the discs equals mode
 	}
 
-	console.log( 'DM', mode );
-
 	return new Discs[ name ](
 		_tag,
 		inherit,

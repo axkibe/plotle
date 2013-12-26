@@ -22,6 +22,7 @@ var
 	config,
 	fontPool,
 	Euclid,
+	HoverReply,
 	Jools,
 	Path,
 	shell,
@@ -58,8 +59,9 @@ Visual.Portal =
 		tag,
 		tree,
 		path,
-		zone,
-		mark
+		hover,
+		mark,
+		zone
 	)
 {
 	if( CHECK && tag !== _tag )
@@ -82,6 +84,13 @@ Visual.Portal =
 		this.subPaths =
 			Jools.immute(
 				{
+					moveToButton :
+						new Path(
+							this.path,
+							'++',
+							'moveToButton'
+						),
+
 					spaceUser :
 						new Path(
 							this.path,
@@ -104,11 +113,15 @@ Visual.Portal =
 			null;
 	}
 
-	this.zone =
-		zone;
+	this.hover =
+		hover;
 
 	this.mark =
 		mark;
+
+	this.zone =
+		zone;
+
 
 	// the prepared space fields
 	// FIXME lazy evaluate
@@ -120,9 +133,6 @@ Visual.Portal =
 			spaceTag :
 				null
 		};
-
-	this._$hover =
-		null;
 };
 
 
@@ -142,6 +152,9 @@ Portal.create =
 			null,
 
 		inherit =
+			null,
+
+		hover =
 			null,
 
 		mark =
@@ -176,6 +189,13 @@ Portal.create =
 						'alter not supported'
 					);
 				}
+
+				break;
+
+			case 'hover' :
+
+				hover =
+					arguments[ a + 1 ];
 
 				break;
 
@@ -282,6 +302,12 @@ Portal.create =
 				inherit.fontsize;
 		}
 
+		if( !hover )
+		{
+			hover =
+				inherit.hover;
+		}
+
 		if( !mark )
 		{
 			mark =
@@ -306,15 +332,22 @@ Portal.create =
 			)
 			&&
 			(
+				inherit.hover.equals( hover )
+			)
+			&&
+			(
+				// TODO remove null check
+				inherit.mark && inherit.mark.equals( mark )
+			)
+			&&
+			(
+				// TODO remove null check
 				inherit.path && inherit.path.equals( path )
 			)
 			&&
 			(
+				// TODO remove null check
 				inherit.zone && inherit.zone.equals( zone )
-			)
-			&&
-			(
-				inherit.mark && inherit.mark.equals( mark )
 			)
 		)
 		{
@@ -327,8 +360,9 @@ Portal.create =
 			_tag,
 			tree,
 			path,
-			zone,
-			mark
+			hover,
+			mark,
+			zone
 		)
 	);
 };
@@ -753,11 +787,6 @@ Portal.prototype.pointingHover =
 		p
 	)
 {
-	if( p === null )
-	{
-		return null;
-	}
-
 	var
 		zone =
 			this.zone;
@@ -771,9 +800,7 @@ Portal.prototype.pointingHover =
 			)
 		)
 	{
-		this._setHover( null );
-
-		return false;
+		return null;
 	}
 
 	var
@@ -793,14 +820,31 @@ Portal.prototype.pointingHover =
 			)
 	)
 	{
-		this._setHover( 'moveToButton' );
+		return (
+			HoverReply.create(
+				'section',
+					'space',
+				'path',
+					this.subPaths.moveToButton,
+				'cursor',
+					'default'
+			)
+		);
 	}
 	else
 	{
-		this._setHover( null );
+		return (
+			HoverReply.create(
+				'section',
+					'space',
+				'path',
+					this.path,
+				'cursor',
+					'default'
+			)
+		);
 	}
 
-	return 'default';
 };
 
 
@@ -879,7 +923,7 @@ Portal.prototype._weave =
 			Style.getStyle(
 				theme.portal.moveTo.style,
 				Accent.state(
-					this._$hover === 'moveToButton',
+					this.hover.equals(  this.subPaths.moveToButton ),
 					section === 'moveToButton'
 				)
 			),
@@ -981,7 +1025,7 @@ Portal.prototype.input =
 		text
 	)
 {
-    var
+	var
 		reg  =
 			/([^\n]+)(\n?)/g,
 
@@ -1004,7 +1048,7 @@ Portal.prototype.input =
 	}
 
 	// ignores newlines
-    for(
+	for(
 		var rx = reg.exec(text);
 		rx !== null;
 		rx = reg.exec( text )
@@ -1093,12 +1137,6 @@ Portal.prototype._drawCaret =
 	)
 {
 	var
-//		item =
-//			shell.space.getSub(
-//				this.path,
-//				'Item'
-//			),
-
 		section =
 			mark.caretPath.get( -1 );
 
@@ -2095,28 +2133,6 @@ Portal.prototype._keyPos1 =
 	shell.redraw =
 		true;
 };
-
-
-/*
-| Sets the hovered element.
-*/
-Portal.prototype._setHover =
-	function(
-		hover
-	)
-{
-	if( this._$hover === hover )
-	{
-		return;
-	}
-
-	shell.redraw =
-		true;
-
-	this._$hover =
-		hover;
-};
-
 
 
 /*

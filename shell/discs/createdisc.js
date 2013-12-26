@@ -314,19 +314,13 @@ CreateDisc.prototype.pointingHover =
 {
 	// shortcut if p is not near the panel
 	if(
-		p === null ||
 		!this.frame.within(
 			null,
 			p
 		)
 	)
 	{
-		return (
-			shell.setHover(
-				'disc',
-				this.path
-			)
-		);
+		return null;
 	}
 
 	var
@@ -346,47 +340,32 @@ CreateDisc.prototype.pointingHover =
 		)
 	)
 	{
-		return (
-			shell.setHover(
-				'disc',
-				this.path
-			)
-		);
+		return null;
 	}
 
-	// this is on the disc
+	// it's on the disc
 	var
 		buttons =
-			this.buttons,
-
-		cursor =
-			null;
+			this.buttons;
 
 	for( var buttonName in buttons )
 	{
-		cursor =
-			buttons[ buttonName ]
-				.pointingHover(
-					pp,
-					shift,
-					ctrl
-				);
+		var
+			reply =
+				buttons[ buttonName ]
+					.pointingHover(
+						pp,
+						shift,
+						ctrl
+					);
 
-		if ( cursor )
+		if( reply )
 		{
-			break;
+			return reply;
 		}
 	}
 
-	if ( cursor === null )
-	{
-		shell.setHover(
-			'disc',
-			this.path
-		);
-	}
-
-	return cursor || 'default';
+	return null;
 };
 
 

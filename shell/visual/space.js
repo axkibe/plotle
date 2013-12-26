@@ -21,6 +21,7 @@ Visual =
 */
 var
 	Euclid,
+	HoverReply,
 	Jools,
 	Mark,
 	Path,
@@ -59,6 +60,7 @@ Visual.Space =
 		spaceUser,
 		spaceTag,
 		access,
+		hover,
 		mark,
 		traitSet
 	)
@@ -69,6 +71,17 @@ Visual.Space =
 		{
 			throw new Error(
 				'tag mismatch'
+			);
+		}
+
+		if(
+			!hover
+			||
+			hover.reflect !== 'Path'
+		)
+		{
+			throw new Error(
+				'invalid hover'
 			);
 		}
 
@@ -110,6 +123,9 @@ Visual.Space =
 				Euclid.Point.zero,
 				0
 			);
+
+	this.hover =
+		hover;
 
 	this.mark =
 		mark;
@@ -156,6 +172,9 @@ Space.create =
 		access =
 			null,
 
+		hover =
+			null,
+
 		inherit =
 			null,
 
@@ -181,6 +200,7 @@ Space.create =
 		aZ =
 			arguments.length;
 
+	// TODO change to for loop
 	while( a < aZ )
 	{
 		switch( arguments[ a ] )
@@ -188,6 +208,15 @@ Space.create =
 			case 'access' :
 
 				access =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'hover' :
+
+				hover =
 					arguments[ a + 1 ];
 
 				a += 2;
@@ -287,6 +316,12 @@ Space.create =
 				inherit.access;
 		}
 
+		if( !hover )
+		{
+			hover =
+				inherit.hover;
+		}
+
 		if( !mark )
 		{
 			mark =
@@ -320,6 +355,7 @@ Space.create =
 			spaceUser,
 			spaceTag,
 			access,
+			hover,
 			mark,
 			traitSet
 		)
@@ -447,6 +483,11 @@ Space.prototype.createItem =
 				tree,
 			'path',
 				path,
+			'hover',
+				path.subPathOf( this.hover ) ?
+					this.hover
+					:
+					Path.empty,
 			'mark',
 				this.mark.concerns( path ),
 			'traitSet',
@@ -670,36 +711,34 @@ Space.prototype.pointingHover =
 		// ctrl
 	)
 {
-	if( p === null )
-	{
-		return null;
-	}
-
 	var
 		view =
 			this.$view,
 
-		cursor =
-			null,
-
 		focus =
-			this.focusedItem( ),
-
-		action =
-			shell.bridge.action( );
+			this.focusedItem( );
 
 	if( focus )
 	{
-		var com =
-			focus.checkHandles(
-				view,
-				p
-			);
+		var
+			com =
+				focus.checkHandles(
+					view,
+					p
+				);
 
 		if( com )
 		{
-			cursor =
-				com + '-resize';
+			return (
+				HoverReply.create(
+					'section',
+						'space',
+					'path',
+						Path.empty,
+					'cursor',
+						com + '-resize'
+				)
+			);
 		}
 	}
 
@@ -713,13 +752,19 @@ Space.prototype.pointingHover =
 			item =
 				this.atRank( a ),
 
-			cu =
+			reply =
 				item.pointingHover(
 					view,
 					p
 				);
 
-		if( !cursor && cu )
+		if( reply )
+		{
+			return reply;
+		}
+
+		/* XXX TODO
+		if( cu )
 		{
 			cursor =
 				cu;
@@ -748,7 +793,8 @@ Space.prototype.pointingHover =
 				case 'createRelation' :
 
 					if(
-						action.relationState === 'start' &&
+						action.relationState === 'start'
+						&&
 						!item.path.equals( action.fromItemPath )
 					)
 					{
@@ -762,8 +808,10 @@ Space.prototype.pointingHover =
 					break;
 			}
 		}
+		*/
 	}
 
+	/*
 	if( !cursor )
 	{
 		switch( action && action.type )
@@ -795,8 +843,18 @@ Space.prototype.pointingHover =
 				break;
 		}
 	}
+	*/
 
-	return cursor || 'pointer';
+	return (
+		HoverReply.create(
+			'section',
+				'space',
+			'path',
+				Path.empty,
+			'cursor',
+				'pointer'
+		)
+	);
 };
 
 
@@ -1988,11 +2046,12 @@ Space.prototype.pointingStart =
 
 	if( focus )
 	{
-		var com =
-			focus.checkHandles(
-				view,
-				p
-			);
+		var
+			com =
+				focus.checkHandles(
+					view,
+					p
+				);
 
 		if( com )
 		{

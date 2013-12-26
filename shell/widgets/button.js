@@ -22,6 +22,7 @@ Widgets =
 var
 	Accent,
 	Euclid,
+	HoverReply,
 	Jools,
 	shell,
 	system,
@@ -659,14 +660,10 @@ Button.prototype._weave =
 | Mouse hover.
 */
 Button.prototype.pointingHover =
-	function(
-		p
-	)
+	function( p )
 {
 	if(
 		!this.visible
-		||
-		p === null
 		||
 		!this.frame.within(
 			Euclid.View.proper,
@@ -696,12 +693,16 @@ Button.prototype.pointingHover =
 		return null;
 	}
 
-	shell.setHover(
-		this.section,
-		this.path
+	return (
+		HoverReply.create(
+			'section',
+				this.section,
+			'path',
+				this.path,
+			'cursor',
+				'default'
+		)
 	);
-
-	return 'default';
 };
 
 

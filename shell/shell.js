@@ -186,6 +186,17 @@ Shell =
 	this._$mode =
 		'Normal';
 
+	// currently hovered thing
+	// TODO change
+	this._$hover =
+		{
+			section :
+				null,
+
+			path :
+				null
+		};
+
 	var
 		screensize =
 		this.screensize =
@@ -615,54 +626,80 @@ Shell.prototype.pointingHover =
 		ctrl
 	)
 {
-	this.$hover =
-		Jools.immute({
-			p :
-				p,
-
-			shift :
-				shift,
-
-			ctrl :
-				ctrl
-		});
-
 	var
 		display =
 			this._getCurrentDisplay( ),
 
-		cursor = null;
+		reply =
+			null;
 
 	if( display && display.showDisc )
 	{
-		cursor =
+		reply =
 			this._$discJockey.pointingHover(
 				p,
 				shift,
 				ctrl
 			);
+
+		if( reply )
+		{
+			if( CHECK )
+			{
+				if( reply.reflect !== 'HoverReply' )
+				{
+					throw new Error( 'invalid reply' );
+				}
+			}
+
+			shell._setHover(
+				reply.section,
+				reply.path
+			);
+
+			if( this.redraw )
+			{
+				this._draw( );
+			}
+
+			return reply.cursor;
+		}
 	}
 
 
 	if( display )
 	{
-		if( cursor )
-		{
+		reply =
 			display.pointingHover(
-				null,
+				p,
 				shift,
 				ctrl
 			);
-		}
-		else
+
+		if( CHECK )
 		{
-			cursor =
-				display.pointingHover(
-					p,
-					shift,
-					ctrl
-				);
+			if(
+				!reply
+				||
+				reply.reflect !== 'HoverReply'
+			)
+			{
+				console.log( reply );
+				throw new Error( 'invalid reply' );
+			}
 		}
+
+		shell._setHover(
+			reply.section,
+			reply.path
+		);
+
+		if( this.redraw )
+		{
+			this._draw( );
+		}
+
+		return reply.cursor;
 	}
 
 	// FIXME this should be called $redraw
@@ -672,7 +709,7 @@ Shell.prototype.pointingHover =
 		this._draw( );
 	}
 
-	return cursor;
+	return 'default';
 };
 
 
@@ -1303,44 +1340,59 @@ Shell.prototype.pushButton =
 /*
 | Sets a hovered component.
 */
-Shell.prototype.setHover =
+Shell.prototype._setHover =
 	function(
 		section, // TODO remove
 		path
 	)
 {
-	switch( section )
+	if(
+		this._$hover.section === section
+		&&
+		this._$hover.path.equals( path )
+	)
 	{
-		case 'disc' :
-
-			this._$discJockey =
-				Discs.Jockey.create(
-					'inherit',
-						this._$discJockey,
-					'hover',
-						path
-				);
-
-			break;
-
-		case 'forms' :
-
-			this._$formJockey =
-				Forms.Jockey.create(
-					'inherit',
-						this._$formJockey,
-					'hover',
-						path
-				);
-
-			break;
-
-		default :
-
-			throw new Error(
-				'invalid section'
-			);
+		return;
 	}
+
+	this._$discJockey =
+		Discs.Jockey.create(
+			'inherit',
+				this._$discJockey,
+			'hover',
+				section === 'disc' ?
+					path
+					:
+					Path.empty
+		);
+
+	this._$formJockey =
+		Forms.Jockey.create(
+			'inherit',
+				this._$formJockey,
+			'hover',
+				section === 'forms' ?
+					path
+					:
+					Path.empty
+		);
+
+	this.$space =
+		Visual.Space.create(
+			'inherit',
+				this.$space,
+			'hover',
+				section === 'space' ?
+					path
+					:
+					Path.empty
+		);
+
+	this._$hover.section =
+		section;
+
+	this._$hover.path =
+		path;
 
 	shell.redraw =
 		true;
@@ -1779,6 +1831,8 @@ Shell.prototype.onAquireSpace =
 				spaceTag,
 			'access',
 				access,
+			'hover',
+				Path.empty,
 			'mark',
 				Mark.Vacant.create( )
 		);

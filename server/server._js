@@ -851,6 +851,9 @@ Server.prototype.prepareResources =
 		'shell/action.js',
 			'fb',
 
+		'shell/hover-reply.js',
+			'fb',
+
 		'shell/widgets/getstyle.js',
 			'fb',
 

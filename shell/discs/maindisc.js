@@ -327,18 +327,9 @@ MainDisc.prototype.pointingHover =
 {
 	// shortcut if p is not near the panel
 	if(
-		p === null ||
-		!this.frame.within(
-			null,
-			p
-		)
+		!this.frame.within( null, p )
 	)
 	{
-		shell.setHover(
-			'disc',
-			this.path
-		);
-
 		return null;
 	}
 
@@ -349,8 +340,6 @@ MainDisc.prototype.pointingHover =
 		pp =
 			p.sub( this.frame.pnw );
 
-	// FIXME Optimize by reusing the latest path of this.$fabric
-
 	if( !fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
@@ -359,46 +348,31 @@ MainDisc.prototype.pointingHover =
 		)
 	)
 	{
-		shell.setHover(
-			'disc',
-			this.path
-		);
-
 		return null;
 	}
 
 	// this is on the disc
 	var
 		buttons =
-			this.buttons,
-
-		cursor =
-			null;
+			this.buttons;
 
 	for( var name in buttons )
 	{
-		cursor =
-			buttons[ name ].pointingHover(
-				pp,
-				shift,
-				ctrl
-			);
+		var
+			reply =
+				buttons[ name ].pointingHover(
+					pp,
+					shift,
+					ctrl
+				);
 
-		if ( cursor )
+		if( reply )
 		{
-			break;
+			return reply;
 		}
 	}
 
-	if ( cursor === null )
-	{
-		shell.setHover(
-			'disc',
-			this.path
-		);
-	}
-
-	return cursor || 'default';
+	return null;
 };
 
 
@@ -420,11 +394,6 @@ MainDisc.prototype.pointingStart =
 		)
 	)
 	{
-		shell.setHover(
-			'disc',
-			this.path
-		);
-
 		return null;
 	}
 
@@ -435,7 +404,6 @@ MainDisc.prototype.pointingStart =
 		pp =
 			p.sub( this.frame.pnw );
 
-	// FIXME Optimize by reusing the latest path of this.$fabric
 	if(
 		!fabric.withinSketch(
 			this.silhoutte,
@@ -445,11 +413,6 @@ MainDisc.prototype.pointingStart =
 		)
 	)
 	{
-		shell.setHover(
-			'disc',
-			this.path
-		);
-
 		return null;
 	}
 

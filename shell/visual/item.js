@@ -20,6 +20,7 @@ Visual =
 */
 var
 	Euclid,
+	HoverReply,
 	Jools,
 	shell,
 	theme,
@@ -100,7 +101,8 @@ Item.prototype.menuSelect =
 
 
 /*
-| Returns the compass direction of the handle if p is on a resizer handle.
+| Returns the compass direction of the handle
+| if p is on a resizer handle.
 */
 Item.prototype.checkHandles =
 	function(
@@ -110,9 +112,11 @@ Item.prototype.checkHandles =
 {
 	var
 		h =
-			this.planHandles(),
+			this.planHandles( ),
+
 		f =
 			shell.fabric,
+
 		d8cwcf =
 			Euclid.Compass.dir8CWCF;
 
@@ -823,21 +827,26 @@ Item.prototype.pointingHover =
 		p
 	)
 {
-	if( p === null )
-	{
-		return null;
-	}
-
 	var
 		sbary =
 			this.scrollbarY;
 
 	if(
-		sbary &&
+		sbary
+		&&
 		sbary.within( view, p )
 	)
 	{
-		return 'default';
+		return (
+			HoverReply.create(
+				'section',
+					'space',
+				'path',
+					this.path,
+				'cursor',
+					'default'
+			)
+		);
 	}
 
 	if(
@@ -850,7 +859,16 @@ Item.prototype.pointingHover =
 		return null;
 	}
 
-	return 'default';
+	return (
+		HoverReply.create(
+			'section',
+				'space',
+			'path',
+				this.path,
+			'cursor',
+				'default'
+		)
+	);
 };
 
 

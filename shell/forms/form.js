@@ -21,6 +21,7 @@ Forms =
 */
 var
 	Euclid,
+	HoverReply,
 	Jools,
 	Path,
 	shell,
@@ -435,22 +436,9 @@ Form.prototype.pointingHover =
 		ctrl
 	)
 {
-	if( p === null )
-	{
-		shell.setHover(
-			'forms',
-			Path.empty
-		);
-
-		return;
-	}
-
 	var
 		a,
 		aZ,
-
-		cursor =
-			null,
 
 		layout =
 			this.tree,
@@ -469,36 +457,31 @@ Form.prototype.pointingHover =
 				ranks[ a ],
 
 			comp =
-				this.sub[ name ];
+				this.sub[ name ],
 
-		if( cursor )
-		{
-			comp.pointingHover(
-				null,
-				shift,
-				ctrl
-			);
-		}
-		else
-		{
-			cursor =
+			reply =
 				comp.pointingHover(
 					p,
 					shift,
 					ctrl
 				);
+
+		if( reply )
+		{
+			return reply;
 		}
 	}
 
-	if ( cursor === null )
-	{
-		shell.setHover(
-			'forms',
-			Path.empty
-		);
-	}
-
-	return cursor || 'default';
+	return (
+		HoverReply.create(
+			'section',
+				'forms',
+			'path',
+				Path.empty,
+			'cursor',
+				'default'
+		)
+	);
 };
 
 
@@ -578,13 +561,6 @@ Form.prototype.pointingStart =
 			return r;
 		}
 	}
-
-	// otherwise ...
-
-	shell.setHover(
-		'forms',
-		Path.empty
-	);
 
 	return false;
 };

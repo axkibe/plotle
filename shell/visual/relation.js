@@ -163,6 +163,12 @@ Relation.create =
 
 				break;
 
+			case 'hover' :
+
+				// ignored
+
+				break;
+
 			case 'inherit' :
 
 				inherit =

@@ -22,6 +22,7 @@ Widgets =
 var
 	Accent,
 	Euclid,
+	HoverReply,
 	Jools,
 	shell,
 	shellverse,
@@ -705,7 +706,7 @@ Input.prototype._weave =
 			Widgets.getStyle(
 				this.tree.twig.style,
 				Accent.state(
-					this.hoverAccent,
+					false && this.hoverAccent, // TODO
 					this.focusAccent
 				)
 			),
@@ -1269,7 +1270,6 @@ Input.prototype.pointingHover =
 	)
 {
 	if(
-		p === null ||
 		!this.frame.within(
 			Euclid.View.proper,
 			p
@@ -1295,7 +1295,16 @@ Input.prototype.pointingHover =
 		return null;
 	}
 
-	return 'text';
+	return (
+		HoverReply.create(
+			'section',
+				'forms',
+			'path',
+				this.path,
+			'cursor',
+				'text'
+		)
+	);
 };
 
 

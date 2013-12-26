@@ -214,8 +214,18 @@ Jockey.create =
 				inherit.screensize;
 		}
 
-		// TODO add immuted tests
+		if(
+			inherit.hover.equals( hover )
+			&&
+			inherit.mode === mode
+			&&
+			inherit.screensize.equals( screensize )
+		)
+		{
+			return inherit;
+		}
 	}
+
 
 	return (
 		new Jockey(
