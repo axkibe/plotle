@@ -136,8 +136,9 @@ config.debug.weinre =
 | enable specific logging categories
 */
 config.log  = {
-//	all :
-//		true,
+	all :
+		false &&
+		true,
 
 	ajax :
 		false,

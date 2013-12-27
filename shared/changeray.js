@@ -133,25 +133,21 @@ ChangeRay.prototype.invert =
 
 
 /*
-| Pushes a change to the change ray.
-|
-| TODO: this is bad, a changeray should be immutable!
+| Returns a changeray with chg pushed.
 */
-/*
 ChangeRay.prototype.push =
 	function(
 		chg
 	)
 {
-	if( this._$invert )
-	{
-		this._$invert =
-			null;
-	}
+	var
+		ray =
+			this._$ray.slice( );
 
-	this._$ray.push( chg );
+	ray.push( chg );
+
+	return new ChangeRay( ray );
 };
-*/
 
 
 /*

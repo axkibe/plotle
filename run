@@ -1,2 +1,2 @@
 #!/bin/bash
-_node -lp server/server._js
+node --harmony server/server.js

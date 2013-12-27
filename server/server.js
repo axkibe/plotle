@@ -31,6 +31,12 @@ if( typeof( require ) === 'undefined' )
 | Imports
 */
 var
+	suspend =
+		require( 'suspend' ),
+
+	resume =
+		suspend.resume,
+
 	Jools =
 		require( '../shared/jools' ),
 
@@ -45,9 +51,6 @@ var
 
 	Resource =
 		require( './resource' ),
-
-	Tree =
-		require( '../shared/tree' ),
 
 	config =
 		require( '../config' ),
@@ -79,16 +82,26 @@ var
 | Server
 */
 var Server =
-	function(_)
+	function( )
+{
+};
+
+
+/*
+| Sets up the server.
+|*/
+Server.prototype.startup =
+	function*( )
 {
 	// files served
 	this.$resources =
 		{ };
 
 	// initializes the database
-	var db =
-	this.$db =
-		{ };
+	var
+		db =
+		this.$db =
+			{ };
 
 	db.server =
 		new mongodb.Server(
@@ -136,7 +149,7 @@ var Server =
 	this.$presences =
 		{ };
 
-	this.prepareResources(_);
+	yield* this.prepareResources( );
 
 	Jools.log(
 		'start',
@@ -146,23 +159,19 @@ var Server =
 	);
 
 	db.connection =
-		db.connector.open(_);
+		yield db.connector.open( resume( ) );
 
 	db.users =
-		db.connection.collection(
-			'users',
-		_);
+		yield db.connection.collection( 'users', resume( ) );
 
 	db.spaces =
-		db.connection.collection(
-			'spaces',
-		_);
+		yield db.connection.collection( 'spaces', resume( ) );
 
-	this.checkRepositorySchemaVersion(_);
+	yield* this.checkRepositorySchemaVersion( );
 
-	this.ensureMeshcraftUser(_);
+	yield* this.ensureMeshcraftUser( );
 
-	this.loadSpaces(_);
+	yield* this.loadSpaces( );
 
 	Jools.log(
 		'start',
@@ -170,10 +179,11 @@ var Server =
 			( config.ip || '*' ) + '/:' + config.port
 	);
 
-	var self =
-		this;
+	var
+		self =
+			this;
 
-	http.createServer(
+	yield http.createServer(
 		function( req, res )
 		{
 			self.requestListener( req, res );
@@ -181,7 +191,8 @@ var Server =
 	).listen(
 		config.port,
 		config.ip,
-	_);
+		resume( )
+	);
 
 	Jools.log(
 		'start',
@@ -194,25 +205,28 @@ var Server =
 | Ensures the repository schema version fits this server.
 */
 Server.prototype.checkRepositorySchemaVersion =
-	function(_)
+	function* ( )
 {
 	Jools.log(
 		'start',
 		'checking repository schema version'
 	);
 
-	var global =
-		this.$db.connection.collection(
-			'global',
-		_);
+	var
+		global =
+			yield this.$db.connection.collection(
+				'global',
+				resume( )
+			),
 
-	var version =
-		global.findOne(
-			{
-				_id :
-					'version'
-			},
-		_);
+		version =
+			yield global.findOne(
+				{
+					_id :
+						'version'
+				},
+				resume( )
+			);
 
 	if( version )
 	{
@@ -229,25 +243,26 @@ Server.prototype.checkRepositorySchemaVersion =
 
 	// otherwise initializes the database repository
 
-	this.initRepository(_);
+	yield* this.initRepository( );
 };
 
 /**
 | Initializes a new repository.
 */
 Server.prototype.initRepository =
-	function(_)
+	function*( )
 {
 	Jools.log(
 		'start',
 		'found no repository, initializing a new one'
 	);
 
-	var initSpaces =
-		[
-			'meshcraft:home',
-			'meshcraft:sandbox'
-		];
+	var
+		initSpaces =
+			[
+				'meshcraft:home',
+				'meshcraft:sandbox'
+			];
 
 	for(
 		var s = 0, sZ = initSpaces.length;
@@ -255,19 +270,21 @@ Server.prototype.initRepository =
 		s++
 	)
 	{
-		var space =
-			initSpaces[ s ];
+		var
+			space =
+				initSpaces[ s ];
 
 		Jools.log(
 			'start',
 			'  initializing space ' + space
 		);
 
-		this.$db.spaces.insert(
+		yield this.$db.spaces.insert(
 			{
 				_id : space
 			},
-		_);
+			resume( )
+		);
 	}
 
 	Jools.log(
@@ -275,17 +292,20 @@ Server.prototype.initRepository =
 		'  initializing global.version'
 	);
 
-	var global =
-		this.$db.connection.collection(
-			'global',
-		_);
+	var
+		global =
+			yield this.$db.connection.collection(
+				'global',
+				resume( )
+			);
 
-	global.insert(
+	yield global.insert(
 		{
 			_id     : 'version',
 			version : 4
 		},
-	_);
+		resume( )
+	);
 };
 
 
@@ -293,19 +313,21 @@ Server.prototype.initRepository =
 | Ensures there is the meshcraft (root) user
 */
 Server.prototype.ensureMeshcraftUser =
-	function (_)
+	function* ( )
 {
 	Jools.log(
 		'start',
 		'ensuring existence of the "meshcraft" user'
 	);
 
-	var mUser =
-		this.$db.users.findOne(
-			{
-				_id : 'meshcraft'
-			},
-		_);
+	var
+		mUser =
+			yield this.$db.users.findOne(
+				{
+					_id : 'meshcraft'
+				},
+				resume( )
+			);
 
 	if( !mUser )
 	{
@@ -314,8 +336,9 @@ Server.prototype.ensureMeshcraftUser =
 			'not found! (re)creating the "meshcraft" user'
 		);
 
-		var pass =
-			Jools.randomPassword(12);
+		var
+			pass =
+				Jools.randomPassword( 12 );
 
 		mUser =
 			{
@@ -323,7 +346,7 @@ Server.prototype.ensureMeshcraftUser =
 					'meshcraft',
 
 				pass :
-					Jools.passhash(pass),
+					Jools.passhash( pass ),
 
 				clearPass :
 					pass,
@@ -332,9 +355,10 @@ Server.prototype.ensureMeshcraftUser =
 					''
 			};
 
-		this.$db.users.insert(
+		yield this.$db.users.insert(
 			mUser,
-		_);
+			resume( )
+		);
 	}
 
 	this.$users.meshcraft =
@@ -352,28 +376,28 @@ Server.prototype.ensureMeshcraftUser =
 | loads all spaces and playbacks all changes from the database.
 */
 Server.prototype.loadSpaces =
-	function(_)
+	function*( )
 {
 	Jools.log(
 		'start',
 		'loading and replaying all spaces'
 	);
 
-	var cursor =
-		this.$db.spaces.find(
-			{ },
-			{ sort: '_id'},
-		_);
+	var
+		cursor =
+			yield this.$db.spaces.find(
+				{ },
+				{ sort: '_id'},
+				resume( )
+			);
 
 	for(
-		var o = cursor.nextObject(_);
+		var o = yield cursor.nextObject( resume( ) );
 		o !== null;
-		o = cursor.nextObject(_)
+		o = yield cursor.nextObject( resume( ) )
 	)
 	{
-		this.loadSpace(
-			o._id,
-		_);
+		yield* this.loadSpace( o._id );
 	}
 };
 
@@ -382,9 +406,9 @@ Server.prototype.loadSpaces =
 | load a spaces and playbacks its changes from the database.
 */
 Server.prototype.loadSpace =
-	function(
-		spaceName,
-	_)
+	function* (
+		spaceName
+	)
 {
 	Jools.log(
 		'start',
@@ -395,9 +419,10 @@ Server.prototype.loadSpace =
 	this.$spaces[ spaceName ] =
 		{
 			$changesDB :
-				this.$db.connection.collection(
+				yield this.$db.connection.collection(
 					'changes:' + spaceName,
-				_),
+					resume( )
+				),
 
 			$changes :
 				[ ],
@@ -409,21 +434,23 @@ Server.prototype.loadSpace =
 				1
 		};
 
-	var cursor =
-		space.$changesDB.find(
-			{
-				// ...
-			},
-			{
-				sort :
-					'_id'
-			},
-		_);
+	var
+		cursor =
+			yield space.$changesDB.find(
+				{
+					// ...
+				},
+				{
+					sort :
+						'_id'
+				},
+				resume( )
+			);
 
 	for(
-		var o = cursor.nextObject( _ );
+		var o = yield cursor.nextObject( resume( ) );
 		o !== null;
-		o = cursor.nextObject( _ )
+		o = yield cursor.nextObject( resume( ) )
 	)
 	{
 		if( o._id !== space.$seqZ )
@@ -505,8 +532,9 @@ Server.prototype.sendMessage =
 		}
 	);
 
-	var self =
-		this;
+	var
+		self =
+			this;
 
 	process.nextTick(
 		function( )
@@ -524,22 +552,23 @@ Server.prototype.sendMessage =
 | Creates a message for a space
 */
 Server.prototype.cmdMessage =
-	function( cmd, _ )
+	function( cmd )
 {
-	var spaceUser =
-		cmd.spaceUser;
+	var
+		spaceUser =
+			cmd.spaceUser,
 
-	var spaceTag =
-		cmd.spaceTag;
+		spaceTag =
+			cmd.spaceTag,
 
-	var message =
-		cmd.message;
+		message =
+			cmd.message,
 
-	var username =
-		cmd.user;
+		username =
+			cmd.user,
 
-	var passhash =
-		cmd.passhash;
+		passhash =
+			cmd.passhash;
 
 	if( !Jools.is( username ) )
 	{
@@ -687,7 +716,7 @@ Server.prototype.buildShellConfig =
 | also builds the bundle for fast-loading.
 */
 Server.prototype.prepareResources =
-	function(_)
+	function* ( )
 {
 	var r;
 
@@ -1012,14 +1041,22 @@ Server.prototype.prepareResources =
 	];
 
 	// ressources served in the bundle
-	var bundleRessources =
-		[ ];
+	var
+		bundleRessources =
+			[ ];
 
 	// creates the Ressources
-	for( var a = 0, aZ = rlist.length; a < aZ; a += 2 )
+	for(
+		var a = 0, aZ = rlist.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		r =
-			new Resource(rlist[a], rlist[a + 1]);
+			new Resource(
+				rlist[ a ],
+				rlist[ a + 1 ]
+			);
 
 		if( r.opts.bundle )
 		{
@@ -1035,10 +1072,12 @@ Server.prototype.prepareResources =
 
 	for( path in this.$resources )
 	{
-		r = this.$resources[path];
+		r =
+			this.$resources[path];
 
 		if(
-			r.data !== null ||
+			r.data !== null
+			||
 			!r.opts.memory
 		)
 		{
@@ -1046,7 +1085,10 @@ Server.prototype.prepareResources =
 		}
 
 		r.data =
-			fs.readFile(r.path, _);
+			yield fs.readFile(
+				r.path,
+				resume( )
+			);
 	}
 
 	this.$resources['favicon.ico'] =
@@ -1093,9 +1135,10 @@ Server.prototype.prepareResources =
 		if( r.data === null )
 		{
 			bundle.push(
-				fs.readFile(
+				yield fs.readFile(
 					r.path,
-				_)
+					resume( )
+				)
 			);
 		}
 		else
@@ -1107,10 +1150,11 @@ Server.prototype.prepareResources =
 	bundle =
 		bundle.join( '\n' );
 
-	//fs.writeFile(
+	//yield fs.writeFile(
 	//	'bundle.js',
 	//	bundle,
-	//_);
+	//  resume( )
+	//);
 
 
 	// uglifies the bundle if configured so
@@ -1141,7 +1185,7 @@ Server.prototype.prepareResources =
 								false
 						}
 					}
-				),
+				);
 
 		ast =
 			ast.transform( compressor );
@@ -1153,7 +1197,7 @@ Server.prototype.prepareResources =
 		bundle =
 			ast.print_to_string( { } );
 	}
-	
+
 	// calculates the hash for the bundle
 	var
 		bsha1 =
@@ -1197,9 +1241,10 @@ Server.prototype.prepareResources =
 			);
 
 		devel.data =
-			fs.readFile(
+			(yield fs.readFile(
 				'shell/devel.html',
-			_) + '';
+				resume( )
+			)) + '';
 
 		devel.data =
 			devel.data.replace(
@@ -1231,9 +1276,10 @@ Server.prototype.prepareResources =
 			);
 
 	main.data =
-		fs.readFile(
+		(yield fs.readFile(
 			'shell/meshcraft.html',
-		_) + '';
+			resume( )
+		)) + '';
 
 	main.data =
 		main.data.replace(
@@ -1247,11 +1293,12 @@ Server.prototype.prepareResources =
 		main;
 
 	// the testpad html file
-	var testpad =
-		new Resource(
-			'testpad/testpad.html',
-			'f'
-		);
+	var
+		testpad =
+			new Resource(
+				'testpad/testpad.html',
+				'f'
+			);
 
 	this.$resources[ 'testpad.html' ] =
 		testpad;
@@ -1268,9 +1315,10 @@ Server.prototype.prepareResources =
 		}
 
 		r.gzip =
-			zlib.gzip(
+			yield zlib.gzip(
 				r.data,
-			_);
+				resume( )
+			);
 	}
 
 	Jools.log(
@@ -1292,8 +1340,8 @@ Server.prototype.prepareResources =
 */
 Server.prototype.cmdAlter =
 	function(
-		cmd,
-	_)
+		cmd
+	)
 {
 	var time =
 		cmd.time;
@@ -1362,22 +1410,26 @@ Server.prototype.cmdAlter =
 		throw Jools.reject( 'cid missing' );
 	}
 
-	var spaceName =
-		spaceUser + ':' + spaceTag;
+	var
+		spaceName =
+			spaceUser + ':' + spaceTag;
 
-	var space =
-		this.$spaces[ spaceName ];
+	var
+		space =
+			this.$spaces[ spaceName ];
 
 	if( !Jools.is( space ) )
 	{
 		throw Jools.reject( 'unknown space' );
 	}
 
-	var changes =
-		space.$changes;
+	var
+		changes =
+			space.$changes;
 
-	var seqZ =
-		space.$seqZ;
+	var
+		seqZ =
+			space.$seqZ;
 
 	if( time === -1 )
 	{
@@ -1452,8 +1504,11 @@ Server.prototype.cmdAlter =
 
 	changes[ seqZ ] =
 		{
-			cid  : cmd.cid,
-			chgX : chgX
+			cid :
+				cmd.cid,
+
+			chgX :
+				chgX
 		};
 
 	// saves the change(ray) in the database
@@ -1475,7 +1530,10 @@ Server.prototype.cmdAlter =
 				Date.now()
 		},
 
-		function( error, count )
+		function(
+			error
+			// count
+		)
 		{
 			if( error !== null )
 			{
@@ -1486,8 +1544,9 @@ Server.prototype.cmdAlter =
 
 	space.$seqZ++;
 
-	var self =
-		this;
+	var
+		self =
+			this;
 
 	process.nextTick(
 		function( )
@@ -1497,8 +1556,11 @@ Server.prototype.cmdAlter =
 	);
 
 	return {
-		ok   : true,
-		chgX : chgX
+		ok :
+			true,
+
+		chgX :
+			chgX
 	};
 };
 
@@ -1507,21 +1569,23 @@ Server.prototype.cmdAlter =
 | Executes an auth command.
 */
 Server.prototype.cmdAuth =
-	function(
-		cmd,
-	_)
+	function* (
+		cmd
+	)
 {
 	if( !Jools.is( cmd.user ) )
 	{
-		throw Jools.reject('user missing');
+		throw Jools.reject( 'user missing' );
 	}
 
 	if( !Jools.is( cmd.passhash ) )
 	{
-		throw Jools.reject('passhash missing');
+		throw Jools.reject( 'passhash missing' );
 	}
 
-	var users = this.$users;
+	var
+		users =
+			this.$users;
 
 	if( cmd.user === 'visitor' )
 	{
@@ -1537,10 +1601,17 @@ Server.prototype.cmdAuth =
 
 		users[ uid ] =
 			{
-				user    : uid,
-				pass    : cmd.passhash,
-				created : Date.now( ),
-				use     : Date.now( )
+				user :
+					uid,
+
+				pass :
+					cmd.passhash,
+
+				created :
+					Date.now( ),
+
+				use :
+					Date.now( )
 			};
 
 		return {
@@ -1554,23 +1625,25 @@ Server.prototype.cmdAuth =
 
 	if( !users[cmd.user] )
 	{
-		var val =
-			this.$db.users.findOne(
-				{ _id : cmd.user},
-			_);
+		var
+			val =
+				yield this.$db.users.findOne(
+					{ _id : cmd.user },
+					resume( )
+				);
 
 		if( val === null )
 		{
 			return Jools.reject( 'Username unknown' );
 		}
 
-		users[cmd.user] =
+		users[ cmd.user ] =
 			val;
 	}
 
 	if( users[cmd.user].pass !== cmd.passhash )
 	{
-		return Jools.reject('Invalid password');
+		return Jools.reject( 'Invalid password' );
 	}
 
 	return {
@@ -1587,19 +1660,23 @@ Server.prototype.cmdAuth =
 | Creates a new space.
 */
 Server.prototype.createSpace =
-	function(
+	function* (
 		spaceUser,
-		spaceTag,
-	_)
+		spaceTag
+	)
 {
-	var spaceName =
-		spaceUser + ':' + spaceTag;
+	var
+		spaceName =
+			spaceUser + ':' + spaceTag;
 
 	var space =
 	this.$spaces[ spaceName ] =
 		{
 			$changesDB :
-				this.$db.connection.collection( 'changes:' + spaceName, _),
+				yield this.$db.connection.collection(
+					'changes:' + spaceName,
+					resume( )
+				),
 
 			$changes :
 				[ ],
@@ -1612,11 +1689,12 @@ Server.prototype.createSpace =
 		};
 
 
-	this.$db.spaces.insert(
+	yield this.$db.spaces.insert(
 		{
 			_id : spaceName
 		},
-	_);
+		resume( )
+	);
 
 	return space;
 };
@@ -1626,21 +1704,25 @@ Server.prototype.createSpace =
 | Executes a register command.
 */
 Server.prototype.cmdRegister =
-	function(
-		cmd,
-	_)
+	function* (
+		cmd
+	)
 {
-	var username =
-		cmd.user;
+	var
+		username =
+			cmd.user;
 
-	var passhash =
-		cmd.passhash;
+	var
+		passhash =
+			cmd.passhash;
 
-	var mail =
-		cmd.mail;
+	var
+		mail =
+			cmd.mail;
 
-	var news =
-		cmd.news;
+	var
+		news =
+			cmd.news;
 
 	if( !Jools.is( username ) )
 	{
@@ -1677,7 +1759,12 @@ Server.prototype.cmdRegister =
 		throw Jools.reject( 'Username too short, min. 4 characters' );
 	}
 
-	var user = this.$db.users.findOne( { _id : username }, _);
+	var
+		user =
+			yield this.$db.users.findOne(
+				{ _id : username },
+				resume( )
+			);
 
 	if( user !== null )
 	{
@@ -1685,21 +1772,31 @@ Server.prototype.cmdRegister =
 	}
 
 	user = {
-		_id  : username,
-		pass : passhash,
-		mail : mail,
-		news : news
+		_id :
+			username,
+
+		pass :
+			passhash,
+
+		mail :
+			mail,
+
+		news :
+			news
 	};
 
-	this.$db.users.insert( user, _);
+	yield this.$db.users.insert(
+		user,
+		resume( )
+	);
 
 	this.$users[ username ] =
 		user;
 
-	this.createSpace(
+	yield* this.createSpace(
 		username,
-		'home',
-	_);
+		'home'
+	);
 
 	return {
 		ok :
@@ -1721,8 +1818,9 @@ Server.prototype.refreshPresence =
 		spaceTag
 	)
 {
-	var pu =
-		this.$presences[ user ];
+	var
+		pu =
+			this.$presences[ user ];
 
 	if( !pu )
 	{
@@ -1733,11 +1831,12 @@ Server.prototype.refreshPresence =
 			};
 	}
 
-	var spaceName =
-		spaceUser + ':' + spaceTag;
+	var
+		spaceName =
+			spaceUser + ':' + spaceTag,
 
-	var pus =
-		pu.spaces[ spaceName ];
+		pus =
+			pu.spaces[ spaceName ];
 
 	if( !pus )
 	{
@@ -1795,15 +1894,16 @@ Server.prototype.establishPresence =
 	function(
 		user,
 		spaceUser,
-		spaceTag,
-		sleepID
+		spaceTag
+		// sleepID
 	)
 {
-	var pres =
-		this.$presences;
+	var
+		pres =
+			this.$presences,
 
-	var pu =
-		pres[ user ];
+		pu =
+			pres[ user ];
 
 	if( !pu )
 	{
@@ -1815,11 +1915,12 @@ Server.prototype.establishPresence =
 			};
 	}
 
-	var spaceName =
-		spaceUser + ':' + spaceTag;
+	var
+		spaceName =
+			spaceUser + ':' + spaceTag,
 
-	var pus =
-		pu.spaces[ spaceName ];
+		pus =
+			pu.spaces[ spaceName ];
 
 	if( !pus )
 	{
@@ -1865,14 +1966,15 @@ Server.prototype.destablishPresence =
 		spaceTag
 	)
 {
-	var pu =
-		this.$presences[ user ];
+	var
+		pu =
+			this.$presences[ user ],
 
-	var spaceName =
-		spaceUser + ':' + spaceTag;
+		spaceName =
+			spaceUser + ':' + spaceTag,
 
-	var pus =
-		pu.spaces[ spaceName ];
+		pus =
+			pu.spaces[ spaceName ];
 
 	pus.establish--;
 
@@ -1907,8 +2009,9 @@ Server.prototype.expirePresence =
 		spaceTag
 	)
 {
-	var spaceName =
-		spaceUser + ':' + spaceTag;
+	var
+		spaceName =
+			spaceUser + ':' + spaceTag;
 
 	self.sendMessage(
 		spaceUser,
@@ -1917,8 +2020,9 @@ Server.prototype.expirePresence =
 		user + ' left "' + spaceName + '"'
 	);
 
-	var pu =
-		self.$presences[ user ];
+	var
+		pu =
+			self.$presences[ user ];
 
 	if( pu.spaces[ spaceName ].establish !== 0 )
 	{
@@ -1933,10 +2037,10 @@ Server.prototype.expirePresence =
 | Gets new changes or waits for them.
 */
 Server.prototype.cmdUpdate =
-	function(
+	function (
 		cmd,
-		res,
-	_)
+		res
+	)
 {
 	var user =
 		cmd.user;
@@ -2308,7 +2412,7 @@ Server.prototype.wake =
 		var res =
 			sleep.res;
 
-		Jools.log('ajax', '->', asw);
+		Jools.log( 'ajax', '->', asw );
 
 		res.writeHead(200,
 			{
@@ -2382,9 +2486,9 @@ Server.prototype.testAccess =
 | Executes a get command.
 */
 Server.prototype.cmdGet =
-	function(
-		cmd,
-	_)
+	function* (
+		cmd
+	)
 {
 	var
 		time =
@@ -2433,15 +2537,16 @@ Server.prototype.cmdGet =
 
 	// TODO test spaceUser/Tag
 
-	var spaceName =
-		cmd.spaceUser + ':'  + cmd.spaceTag;
+	var
+		spaceName =
+			cmd.spaceUser + ':'  + cmd.spaceTag,
 
-	var access =
-		this.testAccess(
-			cmd.user,
-			spaceUser,
-			spaceTag
-		);
+		access =
+			this.testAccess(
+				cmd.user,
+				spaceUser,
+				spaceTag
+			);
 
 	if( access == 'no' )
 	{
@@ -2457,8 +2562,9 @@ Server.prototype.cmdGet =
 		};
 	}
 
-	var space =
-		this.$spaces[ spaceName ];
+	var
+		space =
+			this.$spaces[ spaceName ];
 
 	if( !space )
 	{
@@ -2478,10 +2584,10 @@ Server.prototype.cmdGet =
 		else
 		{
 			space =
-				this.createSpace(
+				yield* this.createSpace(
 					spaceUser,
-					spaceTag,
-				_);
+					spaceTag
+				);
 		}
 	}
 
@@ -2524,7 +2630,8 @@ Server.prototype.cmdGet =
 	}
 
 	// returns the path requested
-	var node;
+	var
+		node;
 	try
 	{
 		node =
@@ -2775,16 +2882,22 @@ Server.prototype.webAjax =
 		res
 	)
 {
-	var self = this;
-	var data = [ ];
+	var
+		self =
+			this,
+
+		data =
+			[ ];
 
 	if( req.method !== 'POST' )
 	{
 		this.webError( res, 400, 'Must use POST' );
+
 		return;
 	}
 
-	req.on('close',
+	req.on(
+		'close',
 		function( )
 		{
 			if( res.sleepID )
@@ -2794,79 +2907,92 @@ Server.prototype.webAjax =
 		}
 	);
 
-	req.on('data',
+	req.on(
+		'data',
 		function( chunk )
 		{
 			data.push( chunk );
 		}
 	);
 
-	var handler = function( )
-	{
-		var query = data.join( '' );
-		var asw, cmd;
-
-		Jools.log( 'ajax', '<-', query );
-
-		try
+	var
+		handler =
+			function*( )
 		{
-			cmd = JSON.parse(query);
-		}
-		catch( err )
-		{
-			self.webError( res, 400, 'Not valid JSON' );
-			return;
-		}
+			var
+				query =
+					data.join( '' ),
 
-		asw = self.ajaxCmd(
-			cmd,
-			res,
-			function( err, asw )
+				asw,
+				cmd;
+
+			Jools.log( 'ajax', '<-', query );
+
+			try
 			{
-				if (err)
-				{
-					if (err.ok !== false)
-					{
-						throw err;
-					}
-					else
-					{
-						Jools.log(
-							'web',
-							'not ok',
-							err.message
-						);
-
-						asw = {
-							ok : false,
-							message : err.message
-						};
-					}
-				}
-
-				if( asw === null )
-				{
-					return;
-				}
-
-				Jools.log( 'ajax', '->', asw );
-
-				res.writeHead( 200,
-					{
-						'Content-Type'  : 'application/json',
-						'Cache-Control' : 'no-cache',
-						'Date'          : new Date().toUTCString()
-					}
-				);
-
-				res.end( JSON.stringify( asw ) );
+				cmd = JSON.parse( query );
 			}
-		);
-	};
+			catch( err )
+			{
+				self.webError( res, 400, 'Not valid JSON' );
+				return;
+			}
+
+			try
+			{
+				asw =
+					yield* self.ajaxCmd( cmd, res );
+			}
+			catch( err )
+			{
+				if( err.ok !== false )
+				{
+					throw err;
+				}
+				else
+				{
+					Jools.log(
+						'web',
+						'not ok',
+						err.message
+					);
+
+					asw = {
+						ok : false,
+						message : err.message
+					};
+				}
+			}
+
+			if( asw === null )
+			{
+				return;
+			}
+
+			Jools.log( 'ajax', '->', asw );
+
+			res.writeHead( 200,
+				{
+					'Content-Type' :
+						'application/json',
+
+					'Cache-Control' :
+						'no-cache',
+
+					'Date' :
+						new Date().toUTCString()
+				}
+			);
+
+			res.end( JSON.stringify( asw ) );
+		};
 
 	req.on(
 		'end',
-		handler
+		function( )
+		{
+			suspend( handler )( );
+		}
 	);
 
 	/*
@@ -2881,40 +3007,44 @@ Server.prototype.webAjax =
 /*
 | Executes an ajaxCmd
 */
-Server.prototype.ajaxCmd = function( cmd, res, _)
+Server.prototype.ajaxCmd =
+	function*( cmd, res )
 {
 	switch ( cmd.cmd )
 	{
 		case 'alter' :
-			return this.cmdAlter( cmd, _);
+			return this.cmdAlter( cmd );
 
 		case 'auth' :
-			return this.cmdAuth(  cmd, _);
+			return yield* this.cmdAuth(  cmd );
 
 		case 'get' :
-			return this.cmdGet( cmd, _);
+			return yield* this.cmdGet( cmd );
 
 		case 'message' :
-			return this.cmdMessage( cmd, _);
+			return this.cmdMessage( cmd );
 
 		case 'register' :
-			return this.cmdRegister( cmd, _);
+			return yield* this.cmdRegister( cmd );
 
 		case 'update' :
-			return this.cmdUpdate( cmd, res, _);
+			return this.cmdUpdate( cmd, res );
 
 		default:
 			return Jools.reject('unknown command');
 	}
 };
 
-new Server(
-	function( err ) {
-		if( err )
-		{
-			throw err;
-		}
-	}
-);
+var run =
+	function*( )
+{
+	var
+		server =
+			new Server( );
+
+	yield* server.startup( );
+};
+
+suspend( run )( );
 
 } ) ();

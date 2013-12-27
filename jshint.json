@@ -1,6 +1,7 @@
 // configuration for jshint
 //	"unused"    : "paramsignore"
 {
+	"esnext"    : true,
 	"newcap"    : false,
 	"node"      : true,
 	"browser"   : true,
