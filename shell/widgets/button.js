@@ -750,14 +750,15 @@ Button.prototype.pointingStart =
 		return null;
 	}
 
+	/*
+	FIXME repeating buttons
 	if(
 		this.repeating &&
 		!this._$retimer
 	)
 	{
-		shell.bridge.startAction(
+		shell.setAction(
 			'ReButton',
-			'board',
 			'itemPath',
 				this.path
 		);
@@ -785,6 +786,7 @@ Button.prototype.pointingStart =
 				repeatFunc
 			);
 	}
+	*/
 
 	shell.pushButton(
 		this.section,

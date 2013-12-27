@@ -254,10 +254,7 @@ CreateDisc.prototype.pushButton =
 		case 'createNote' :
 		case 'createPortal' :
 
-			shell.bridge.startAction(
-				buttonName,
-				'space'
-			);
+			shell.bridge.startAction( buttonName );
 
 			return;
 
@@ -265,8 +262,8 @@ CreateDisc.prototype.pushButton =
 
 			shell.bridge.startAction(
 				'createRelation',
-				'space',
-				'relationState', 'start'
+				'relationState',
+					'start'
 			);
 
 			return;

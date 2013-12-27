@@ -542,7 +542,6 @@ Item.prototype.dragStart =
 	{
 		shell.bridge.startAction(
 			'ScrollY',
-			'space',
 			'itemPath',
 				this.path,
 			'start',
@@ -602,7 +601,6 @@ Item.prototype.dragStart =
 
 		shell.bridge.startAction(
 			'RelBind',
-			'space',
 			'itemPath',
 				this.path,
 			'start',
@@ -640,7 +638,6 @@ Item.prototype.dragStart =
 
 		shell.bridge.startAction(
 			'ItemDrag',
-			'space',
 			'itemPath',
 				this.path,
 			'start',

@@ -897,7 +897,6 @@ Space.prototype.dragStart =
 
 			shell.bridge.startAction(
 				'ItemResize',
-				'space',
 				'itemPath',
 					focus.path,
 				'start',
@@ -1001,14 +1000,16 @@ Space.prototype.dragStart =
 			action.item =
 				this.getActionItemCreator( action )
 					.create(
+						'hover',
+							Path.empty,
+						'mark',
+							Mark.Vacant.create( ),
 						'zone',
 							Euclid.Rect.create(
 								'pnw/pse',
 								p, //TODO depoint?
 								p
-							),
-						'mark',
-							Mark.Vacant.create( )
+							)
 					);
 
 			return;
@@ -1074,7 +1075,6 @@ Space.prototype.dragStart =
 	shell.bridge.startAction
 	(
 		'Pan',
-		'space',
 		'start',
 			p,
 		'pan',

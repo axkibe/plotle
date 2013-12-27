@@ -139,21 +139,8 @@ Action =
 		throw new Error( 'invalid action' );
 	}
 
-	this.section =
-		args[ 1 ];
-
-	switch( this.section )
-	{
-		case 'space' :
-		case 'board' :
-			break;
-
-		default :
-			throw new Error( 'invalid section' );
-	}
-
 	for(
-		var a = 2, aZ = args.length;
+		var a = 1, aZ = args.length;
 		a < aZ;
 		a += 2
 	)

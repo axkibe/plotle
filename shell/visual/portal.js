@@ -64,11 +64,28 @@ Visual.Portal =
 		zone
 	)
 {
-	if( CHECK && tag !== _tag )
+	if( CHECK )
 	{
-		throw new Error(
-			'tag mismatch'
-		);
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'tag mismatch'
+			);
+		}
+
+		if( !hover || hover.reflect !== 'Path' )
+		{
+			throw new Error(
+				'invalid hover'
+			);
+		}
+
+		if( !mark )
+		{
+			throw new Error(
+				'invalid mark'
+			);
+		}
 	}
 
 	Visual.Item.call(

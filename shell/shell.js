@@ -858,36 +858,20 @@ Shell.prototype.dragMove =
 		throw new Error( 'no action on dragMove' );
 	}
 
-	var cursor =
-		null;
+	var
+		cursor =
+			null;
 
-	switch( action.section )
+	// FIXME dragging for discs / forms
+
+	if( this.$space )
 	{
-		// TODO board???
-		case 'board' :
-
-			cursor =
-				this._$discJockey.dragMove(
-					p,
-					shift,
-					ctrl
-				);
-
-			break;
-
-		case 'space' :
-
-			if( this.$space )
-			{
-				cursor =
-					this.$space.dragMove(
-						p,
-						shift,
-						ctrl
-					);
-			}
-
-			break;
+		cursor =
+			this.$space.dragMove(
+				p,
+				shift,
+				ctrl
+			);
 	}
 
 	if( this.redraw )
@@ -922,35 +906,15 @@ Shell.prototype.dragStop =
 		throw new Error( 'no action on dragStop' );
 	}
 
-	switch( action.section )
+	// FIXME dragging for discs / forms
+
+	if( this.$space )
 	{
-		// TODO board???
-		case 'board' :
-
-			this._$discJockey.dragStop(
-				p,
-				shift,
-				ctrl
-			);
-
-			break;
-
-		case 'space' :
-
-			if( this.$space )
-			{
-				this.$space.dragStop(
-					p,
-					shift,
-					ctrl
-				);
-			}
-
-			break;
-
-		default :
-
-			throw new Error( 'unknown action.section' );
+		this.$space.dragStop(
+			p,
+			shift,
+			ctrl
+		);
 	}
 
 	if( this.redraw )

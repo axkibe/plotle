@@ -280,10 +280,7 @@ MainDisc.prototype.pushButton =
 			bridge.stopAction( );
 		}
 
-		bridge.startAction(
-			'Remove',
-			'space'
-		);
+		bridge.startAction( 'Remove' );
 	}
 	else
 	{
