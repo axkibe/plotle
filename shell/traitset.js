@@ -224,8 +224,8 @@ TraitSet.create =
 /*
 | Reflection.
 */
-TraitSet.prototype.type =
-	'traitSet';
+TraitSet.prototype.reflect =
+	'TraitSet';
 
 
 /*

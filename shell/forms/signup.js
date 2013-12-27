@@ -47,6 +47,7 @@ Forms.SignUp =
 	function(
 		tag,
 		inherit,
+		path,
 		screensize,
 		traitSet,
 		mark,
@@ -62,6 +63,9 @@ Forms.SignUp =
 			);
 		}
 	}
+
+	this.path =
+		path;
 
 	Forms.Form.call(
 		this,
@@ -122,7 +126,7 @@ SignUp.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 1 );
+			path.get( 2 );
 
 	switch( buttonName )
 	{
@@ -183,8 +187,6 @@ SignUp.prototype.signup =
 			'set',
 			'type',
 				'caret',
-			'section',
-				'forms',
 			'path',
 				sub.userInput.path,
 			'at',
@@ -205,8 +207,6 @@ SignUp.prototype.signup =
 			'set',
 			'type',
 				'caret',
-			'section',
-				'forms',
 			'path',
 				sub.userInput.path,
 			'at',
@@ -227,8 +227,6 @@ SignUp.prototype.signup =
 			'set',
 			'type',
 				'caret',
-			'section',
-				'forms',
 			'path',
 				sub.passwordInput.path,
 			'at',
@@ -249,8 +247,6 @@ SignUp.prototype.signup =
 			'set',
 			'type',
 				'caret',
-			'section',
-				'forms',
 			'path',
 				sub.password2Input.path,
 			'at',
@@ -297,8 +293,6 @@ SignUp.prototype.onRegister =
 				'set',
 				'type',
 					'caret',
-				'section',
-					'forms',
 				'path',
 					sub.userInput.path,
 				'at',
@@ -331,7 +325,6 @@ SignUp.prototype.clear =
 			this.sub;
 
 	shell.setTraits(
-		'forms',
 		TraitSet.create(
 			'trait',
 				sub.userInput.path,
@@ -358,8 +351,6 @@ SignUp.prototype.clear =
 
 	shell.userMark(
 		'set',
-		'section',
-			'forms',
 		'type',
 			'vacant'
 	);

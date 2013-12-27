@@ -19,7 +19,6 @@ Forms =
 var
 	Design,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	TraitSet;
@@ -44,6 +43,7 @@ Forms.User =
 	function(
 		tag,
 		inherit,
+		path,
 		screensize,
 		traitSet,
 		mark,
@@ -59,6 +59,9 @@ Forms.User =
 			);
 		}
 	}
+
+	this.path =
+		path;
 
 	var
 		user;
@@ -194,17 +197,6 @@ User.prototype.reflect =
 
 
 /*
-| Path of the form.
-*/
-User.prototype.path =
-	new Path(
-		[
-			User.prototype.reflect
-		]
-	);
-
-
-/*
 | The forms tree.
 */
 User.prototype.tree =
@@ -228,7 +220,7 @@ User.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 1 );
+			path.get( 2 );
 
 	switch( buttonName )
 	{

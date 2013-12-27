@@ -57,22 +57,22 @@ Discs.Disc =
 		screensize
 	)
 {
-	if( CHECK )
-	{
-		if( screensize === null )
-		{
-			throw new Error(
-				'screensize missing'
-			);
-		}
-
-		if( hover === null )
-		{
-			throw new Error(
-				'hover missing'
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( !screensize )
+/**/	{
+/**/		throw new Error(
+/**/			'screensize missing'
+/**/		);
+/**/	}
+/**/
+/**/	if( !hover )
+/**/	{
+/**/		throw new Error(
+/**/			'hover missing'
+/**/		);
+/**/	}
+/**/}
 
 	this.screensize =
 		screensize;
@@ -146,6 +146,7 @@ Discs.Disc =
 	this.path =
 		new Path(
 			[
+				'disc',
 				this.reflect
 			]
 		);
@@ -239,15 +240,15 @@ Disc.create =
 		}
 	}
 
-	if( CHECK )
-	{
-		if( !Discs[ name ] )
-		{
-			throw new Error(
-				'invalid discname: ' + name
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( !Discs[ name ] )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid discname: ' + name
+/**/		);
+/**/	}
+/**/}
 
 	if( inherit )
 	{

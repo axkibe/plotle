@@ -644,8 +644,6 @@ Portal.prototype.click =
 					'set',
 					'type',
 						'caret',
-					'section',
-						'space',
 					'path',
 						this.subPaths[ field ],
 					'at',
@@ -670,8 +668,6 @@ Portal.prototype.click =
 			'set',
 			'type',
 				'item',
-			'section',
-				'space',
 			'path',
 				this.path
 		);
@@ -839,8 +835,6 @@ Portal.prototype.pointingHover =
 	{
 		return (
 			HoverReply.create(
-				'section',
-					'space',
 				'path',
 					this.subPaths.moveToButton,
 				'cursor',
@@ -852,8 +846,6 @@ Portal.prototype.pointingHover =
 	{
 		return (
 			HoverReply.create(
-				'section',
-					'space',
 				'path',
 					this.path,
 				'cursor',
@@ -1363,8 +1355,6 @@ Portal.prototype._keyDown =
 				'set',
 				'type',
 					'caret',
-				'section',
-					'space',
 				'path',
 					// FIXME use this paths
 					new Path(
@@ -1388,8 +1378,6 @@ Portal.prototype._keyDown =
 				'set',
 				'type',
 					'caret',
-				'section',
-					'space',
 				'path',
 					// FIXME use this paths
 					new Path(
@@ -1409,8 +1397,6 @@ Portal.prototype._keyDown =
 				'set',
 				'type',
 					'caret',
-				'section',
-					'space',
 				'path',
 					// FIXME use this paths
 					new Path(
@@ -1483,8 +1469,6 @@ Portal.prototype._keyLeft =
 			'set',
 			'type',
 				'caret',
-			'section',
-				'space',
 			'path',
 				// FIXME rather user this.path
 				new Path(
@@ -1509,8 +1493,6 @@ Portal.prototype._keyLeft =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'space',
 		'path',
 			mark.caretPath,
 		'at',
@@ -1573,8 +1555,6 @@ Portal.prototype._keyTab =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'space',
 		'path',
 			new Path(
 				mark.caretPath,
@@ -1646,8 +1626,6 @@ Portal.prototype._keyUp =
 				'set',
 				'type',
 					'caret',
-				'section',
-					'space',
 				'path', // FIXME this.paths
 					new Path(
 						mark.caretPath,
@@ -1670,8 +1648,6 @@ Portal.prototype._keyUp =
 				'set',
 				'type',
 					'caret',
-				'section',
-					'space',
 				'path', // FIXME this.paths
 					new Path(
 						mark.caretPath,
@@ -1750,8 +1726,6 @@ Portal.prototype._keyRight =
 			'set',
 			'type',
 				'caret',
-			'section',
-				'space',
 			'path', // FIXME this.paths
 				new Path(
 					mark.caretPath,
@@ -1772,8 +1746,6 @@ Portal.prototype._keyRight =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'space',
 		'path',
 			mark.caretPath,
 		'at',
@@ -1868,8 +1840,6 @@ Portal.prototype._keyEnd =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'space',
 		'path',
 			mark.caretPath,
 		'at',
@@ -1926,8 +1896,6 @@ Portal.prototype._keyEnter =
 			'set',
 			'type',
 				'caret',
-			'section',
-				'space',
 			'path',
 				new Path(
 					mark.caretPath,
@@ -2139,8 +2107,6 @@ Portal.prototype._keyPos1 =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'space',
 		'path',
 			mark.caretPath,
 		'at',

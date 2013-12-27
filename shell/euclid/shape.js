@@ -263,7 +263,9 @@ Shape.prototype.sketch =
 				break;
 
 			default :
-				throw new Error( 'unknown hull section: ' + hull[h] );
+				throw new Error(
+					'unknown hull section: ' + hull[h]
+				);
 		}
 
 		pp = pn;
@@ -332,7 +334,9 @@ Shape.prototype.getProjection =
 				break;
 
 			default :
-				throw new Error( 'unknown hull section: ' + hull[h] );
+				throw new Error(
+					'unknown hull section: ' + hull[h]
+				);
 
 		}
 
@@ -522,14 +526,18 @@ Shape.prototype.getProjection =
 
 			default :
 
-				throw new Error( 'unknown hull section: ' + hull[h] );
+				throw new Error(
+					'unknown hull section: ' + hull[h]
+				);
 
 		}
 
 		pp = pn;
 	}
 
-	throw new Error( 'no hull section created a projection' );
+	throw new Error(
+		'no hull section created a projection'
+	);
 };
 
 

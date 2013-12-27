@@ -58,7 +58,6 @@ Widgets.Input =
 		tag,
 		inherit,
 		tree,
-		section,
 		path,
 		frame,
 		focusAccent,
@@ -185,9 +184,6 @@ Input.create =
 		path =
 			null,
 
-		section =
-			null,
-
 		superFrame =
 			null,
 
@@ -242,13 +238,6 @@ Input.create =
 			case 'path' :
 
 				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'section' :
-
-				section =
 					arguments[ a + 1 ];
 
 				break;
@@ -366,12 +355,6 @@ Input.create =
 				inherit.path;
 		}
 
-		if( section === null )
-		{
-			section =
-				inherit.section;
-		}
-
 		if( tree === null )
 		{
 			tree =
@@ -436,7 +419,6 @@ Input.create =
 		_tag,
 		inherit,
 		tree,
-		section,
 		path,
 		frame,
 		focusAccent,
@@ -921,7 +903,6 @@ Input.prototype.input =
 	}
 
 	shell.setTraits(
-		'forms',
 		TraitSet.create(
 			'trait',
 				this.path,
@@ -929,15 +910,13 @@ Input.prototype.input =
 				value.substring( 0, at ) +
 					text +
 					value.substring( at )
-			)
+		)
 	);
 
 	shell.userMark(
 		'set',
 		'type',
 			'caret',
-		'section',
-			'forms',
 		'path',
 			mark.caretPath,
 		'at',
@@ -965,7 +944,6 @@ Input.prototype.keyBackspace =
 	}
 
 	shell.setTraits(
-		'forms',
 		TraitSet.create(
 			'trait',
 				this.path,
@@ -979,8 +957,6 @@ Input.prototype.keyBackspace =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'forms',
 		'path',
 			mark.caretPath,
 		'at',
@@ -1005,7 +981,6 @@ Input.prototype.keyDel =
 	}
 
 	shell.setTraits(
-		'forms',
 		TraitSet.create(
 			'trait',
 				this.path,
@@ -1065,8 +1040,6 @@ Input.prototype.keyEnd =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'forms',
 		'path',
 			mark.caretPath,
 		'at',
@@ -1095,8 +1068,6 @@ Input.prototype.keyLeft =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'forms',
 		'path',
 			mark.caretPath,
 		'at',
@@ -1124,8 +1095,6 @@ Input.prototype.keyPos1 =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'forms',
 		'path',
 			mark.caretPath,
 		'at',
@@ -1153,8 +1122,6 @@ Input.prototype.keyRight =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'forms',
 		'path',
 			mark.caretPath,
 		'at',
@@ -1297,8 +1264,6 @@ Input.prototype.pointingHover =
 
 	return (
 		HoverReply.create(
-			'section',
-				'forms',
 			'path',
 				this.path,
 			'cursor',
@@ -1347,8 +1312,6 @@ Input.prototype.pointingStart =
 		'set',
 		'type',
 			'caret',
-		'section',
-			'forms',
 		'path',
 			this.path,
 		'at',

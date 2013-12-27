@@ -101,9 +101,11 @@ Discs.CreateDisc =
 			tree =
 				twig[ wname ],
 
+			// TODO enhance this.path
 			path =
 				new Path(
 					[
+						'disc',
 						this.reflect,
 						wname
 					]
@@ -115,8 +117,6 @@ Discs.CreateDisc =
 
 				buttons[ wname ] =
 					Widgets.Button.create(
-						'section',
-							'disc',
 						'path',
 							path,
 						'superFrame',
@@ -220,7 +220,7 @@ CreateDisc.prototype.pushButton =
 	{
 		var
 			discname =
-				path.get( 0 );
+				path.get( 1 );
 
 		if( discname !== this.reflect )
 		{
@@ -232,7 +232,7 @@ CreateDisc.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 1 );
+			path.get( 2 );
 
 	if( action && action.type === buttonName )
 	{

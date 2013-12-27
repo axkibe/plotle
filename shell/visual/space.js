@@ -100,6 +100,7 @@ Visual.Space =
 		}
 	}
 
+	// TODO give path here
 	Visual.Base.call(
 		this,
 		tree,
@@ -114,6 +115,13 @@ Visual.Space =
 
 	this.access =
 		access;
+
+	this.path =
+		new Path(
+			[
+				'space'
+			]
+		);
 
 	this.$view =
 		inherit ?
@@ -132,7 +140,6 @@ Visual.Space =
 
 	var
 		sub =
-		this.sub =
 			{ };
 
 	for( var k in tree.twig )
@@ -143,13 +150,18 @@ Visual.Space =
 		}
 
 		sub[ k ] =
-			this.createItem(
+			this._createItem(
 				tree.twig[ k ],
 				k,
 				inherit && inherit.sub[ k ],
 				traitSet
 			);
 	}
+
+	this.sub =
+		sub;
+
+	Jools.immute( this );
 };
 
 
@@ -231,7 +243,7 @@ Space.create =
 				{
 					if( arguments[ a + 1 ] )
 					{
-						if( arguments[ a + 1].type !== 'traitSet' )
+						if( arguments[ a + 1].reflect !== 'TraitSet' )
 						{
 							throw new Error(
 								'traitSet not a traitSet'
@@ -374,7 +386,7 @@ Space.prototype.showDisc =
 /*
 | Returns the focused item.
 |
-| TODO handle this differently more gracefully
+| TODO handle this more gracefully
 */
 Space.prototype.focusedItem =
 	function( )
@@ -436,7 +448,7 @@ Space.prototype.getItem =
 		case 'ItemDrag' :
 		case 'ItemResize' :
 
-			if( action.itemPath.get( 0 ) === key )
+			if( action.itemPath.get( 1 ) === key )
 			{
 				return action.item;
 			}
@@ -451,7 +463,7 @@ Space.prototype.getItem =
 /*
 | Creates a new visual representation of an item.
 */
-Space.prototype.createItem =
+Space.prototype._createItem =
 	function(
 		tree,
 		key,
@@ -473,7 +485,11 @@ Space.prototype.createItem =
 	// FIXME; dont create a new path here
 	var
 		path =
-			new Path( [ key ] );
+			new Path(
+				this.path,
+					'++',
+					key
+			);
 
 	return (
 		Proto.create(
@@ -731,8 +747,6 @@ Space.prototype.pointingHover =
 		{
 			return (
 				HoverReply.create(
-					'section',
-						'space',
 					'path',
 						Path.empty,
 					'cursor',
@@ -847,8 +861,6 @@ Space.prototype.pointingHover =
 
 	return (
 		HoverReply.create(
-			'section',
-				'space',
 			'path',
 				Path.empty,
 			'cursor',
@@ -1158,8 +1170,6 @@ Space.prototype.click =
 
 	shell.userMark(
 		'set',
-		'section',
-			'space',
 		'type',
 			'vacant'
 	);
@@ -1230,8 +1240,6 @@ Space.prototype.dragStop =
 
 			shell.userMark(
 				'set',
-				'section',
-					'space',
 				'type',
 					'caret',
 				'path',
@@ -1317,8 +1325,6 @@ Space.prototype.dragStop =
 				'set',
 				'type',
 					'caret',
-				'section',
-					'space',
 				'path',
 					shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
 				'at',
@@ -1366,8 +1372,6 @@ Space.prototype.dragStop =
 				'set',
 				'type',
 					'caret',
-				'section',
-					'space',
 				'path',
 					shell.space.sub[ key ].subPaths.spaceUser,
 				'at',
@@ -1565,8 +1569,6 @@ Space.prototype.dragStop =
 				{
 					shell.userMark(
 						'set',
-						'section',
-							'space',
 						'type',
 							'vacant'
 					);
@@ -2086,7 +2088,7 @@ Space.prototype.input =
 			mark.caretPath,
 
 		item =
-			this.sub[ path.get( 0 ) ];
+			this.sub[ path.get( 1 ) ];
 
 	if( item )
 	{
@@ -2166,7 +2168,7 @@ Space.prototype.specialKey =
 			mark.caretPath,
 
 		item =
-			this.sub[ path.get( 0 ) ];
+			this.sub[ path.get( 1 ) ];
 
 	if( item )
 	{
@@ -2204,7 +2206,7 @@ Space.prototype.getSub =
 			shell.bridge.action( );
 
 	for(
-		var a = 0, aZ = path.length;
+		var a = 1, aZ = path.length;
 		a < aZ;
 		a++
 	)

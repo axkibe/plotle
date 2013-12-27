@@ -142,15 +142,16 @@ Object.defineProperty(
 	Range.prototype,
 	'frontPath',
 	{
-		get : function( )
-		{
-			if( !this._frontPath )
+		get :
+			function( )
 			{
-				this._normalize( );
-			}
+				if( !this._frontPath )
+				{
+					this._normalize( );
+				}
 
-			return this._frontPath;
-		}
+				return this._frontPath;
+			}
 	}
 );
 
@@ -163,15 +164,16 @@ Object.defineProperty(
 	Range.prototype,
 	'frontAt',
 	{
-		get : function( )
-		{
-			if( !this._frontPath )
+		get :
+			function( )
 			{
-				this._normalize( );
-			}
+				if( !this._frontPath )
+				{
+					this._normalize( );
+				}
 
-			return this._frontAt;
-		}
+				return this._frontAt;
+			}
 	}
 );
 
@@ -183,15 +185,16 @@ Object.defineProperty(
 	Range.prototype,
 	'backPath',
 	{
-		get : function( )
-		{
-			if( !this._backPath )
+		get :
+			function( )
 			{
-				this._normalize( );
-			}
+				if( !this._backPath )
+				{
+					this._normalize( );
+				}
 
-			return this._backPath;
-		}
+				return this._backPath;
+			}
 	}
 );
 
@@ -204,15 +207,16 @@ Object.defineProperty(
 	Range.prototype,
 	'backAt',
 	{
-		get : function( )
-		{
-			if( !this._backPath )
+		get :
+			function( )
 			{
-				this._normalize( );
-			}
+				if( !this._backPath )
+				{
+					this._normalize( );
+				}
 
-			return this._backAt;
-		}
+				return this._backAt;
+			}
 	}
 );
 
@@ -367,9 +371,13 @@ Range.prototype.concerns =
 		&&
 		// FIXME do proper checking
 		(
-			path.length < 1
+			path.length < 2
 			||
-			path.get( 0 ) === this.bPath.get( 0 )
+			(
+				path.get( 0 ) === this.bPath.get( 0 )
+				&&
+				path.get( 1 ) === this.bPath.get( 1 )
+			)
 		)
 	)
 	{

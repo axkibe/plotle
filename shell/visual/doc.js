@@ -154,7 +154,8 @@ Visual.Doc =
 				path &&  // TODO is this ever null?
 				new Path(
 					path,
-					'++', k
+					'++',
+						k
 				);
 
 		sub[ k ] =
@@ -674,7 +675,7 @@ Doc.prototype.input =
 
 	return (
 		this
-			.sub[ path.get( 2 ) ]
+			.sub[ path.get( 3 ) ]
 			.input(
 				text
 			)
@@ -703,7 +704,7 @@ Doc.prototype.specialKey =
 
 	return (
 		this
-			.sub[ path.get( 2 ) ]
+			.sub[ path.get( 3 ) ]
 			.specialKey(
 				key,
 				shift,

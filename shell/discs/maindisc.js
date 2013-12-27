@@ -103,10 +103,9 @@ Discs.MainDisc =
 
 			path =
 				new Path(
-					[
-						this.reflect,
+					this.path,
+					'++',
 						wname
-					]
 				);
 
 		switch( tree.twig.type )
@@ -115,8 +114,6 @@ Discs.MainDisc =
 
 				buttons[ wname ] =
 					Widgets.Button.create(
-						'section',
-							'disc',
 						'path',
 							path,
 						'superFrame',
@@ -143,9 +140,6 @@ Discs.MainDisc =
 				);
 		}
 	}
-
-	// TODO remove
-
 
 	// TODO remove
 
@@ -244,7 +238,7 @@ MainDisc.prototype.pushButton =
 			shell.bridge,
 
 		discname =
-			path.get( 0 );
+			path.get( 1 );
 
 	if( discname !== this.reflect )
 	{
@@ -255,7 +249,7 @@ MainDisc.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 1 );
+			path.get( 2 );
 
 	if(
 		buttonName === 'Login' &&

@@ -95,6 +95,17 @@ Forms.Form =
 				'invalid mark'
 			);
 		}
+
+		if(
+			traitSet
+			&&
+			traitSet.reflect !== 'TraitSet'
+		)
+		{
+			throw new Error(
+				'invalid traitSet'
+			);
+		}
 	}
 
 	// all components of the form
@@ -136,23 +147,20 @@ Forms.Form =
 			else
 			{
 				focusAccent =
-					this.mark.caretPath.get( 1 ) === name;
+					this.mark.caretPath.get( 2 ) === name;
 			}
 		}
 
 		var
 			path =
 				new Path(
-					[
-						this.reflect,
+					this.path,
+					'++',
 						name
-					]
 				);
 
 		sub[ name ] =
 			Proto.create(
-				'section',
-					'forms',
 				'path',
 					path,
 				'tree',
@@ -209,6 +217,9 @@ Form.create =
 		name =
 			null,
 
+		path =
+			null,
+
 		traitSet =
 			null;
 
@@ -256,6 +267,13 @@ Form.create =
 
 				break;
 
+			case 'path' :
+
+				path =
+					arguments[ a++ ];
+
+				break;
+
 			case 'traitSet' :
 
 				traitSet =
@@ -295,6 +313,12 @@ Form.create =
 				inherit.mark;
 		}
 
+		if( path === null )
+		{
+			path =
+				inherit.mark;
+		}
+
 		// TODO return inherit
 	}
 
@@ -302,6 +326,7 @@ Form.create =
 	return new Forms[ name ](
 		_tag,
 		inherit,
+		path,
 		screensize,
 		traitSet,
 		mark,
@@ -374,7 +399,7 @@ Form.prototype.getFocusedItem =
 
 	if( CHECK )
 	{
-		if( path.get( 0 ) !== this.reflect )
+		if( path.get( 1 ) !== this.reflect )
 		{
 			throw new Error(
 				'the mark is not on this form!'
@@ -382,7 +407,7 @@ Form.prototype.getFocusedItem =
 		}
 	}
 
-	return this.sub[ path.get( 1 ) ] || null;
+	return this.sub[ path.get( 2 ) ] || null;
 };
 
 
@@ -474,8 +499,6 @@ Form.prototype.pointingHover =
 
 	return (
 		HoverReply.create(
-			'section',
-				'forms',
 			'path',
 				Path.empty,
 			'cursor',
@@ -610,7 +633,7 @@ Form.prototype.cycleFocus =
 
 	var
 		rank =
-			tree.rankOf( path.get( 1 ) ),
+			tree.rankOf( path.get( 2 ) ),
 
 		rs =
 			rank,
@@ -646,8 +669,6 @@ Form.prototype.cycleFocus =
 					'set',
 					'type',
 						'caret',
-					'section',
-						'forms',
 					'path',
 						ve.path,
 					'at',
@@ -660,8 +681,6 @@ Form.prototype.cycleFocus =
 					'set',
 					'type',
 						'item',
-					'section',
-						'forms',
 					'path',
 						ve.path
 				);
@@ -755,10 +774,9 @@ Form.prototype._widgetPath =
 		// in form creation sub might not exist yet.
 		return (
 			new Path(
-				[
-					this.reflect,
+				this.path,
+				'++',
 					widgetName
-				]
 			)
 		);
 	}

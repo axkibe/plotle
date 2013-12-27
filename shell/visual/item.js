@@ -622,8 +622,6 @@ Item.prototype.dragStart =
 				'set',
 				'type',
 					'item',
-				'section',
-					'space',
 				'path',
 					this.path
 			);
@@ -743,7 +741,6 @@ Item.prototype.dragMove =
 					action.startPos + sbary.scale( dy );
 
 			shell.setTraits(
-				'space',
 				TraitSet.create(
 					'trait',
 						this.path,
@@ -836,8 +833,6 @@ Item.prototype.pointingHover =
 	{
 		return (
 			HoverReply.create(
-				'section',
-					'space',
 				'path',
 					this.path,
 				'cursor',
@@ -858,8 +853,6 @@ Item.prototype.pointingHover =
 
 	return (
 		HoverReply.create(
-			'section',
-				'space',
 			'path',
 				this.path,
 			'cursor',

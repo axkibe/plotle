@@ -47,6 +47,7 @@ var
 		function(
 			tag,
 			inherit,
+			path,
 			screensize,
 			traitSet,
 			mark,
@@ -72,6 +73,8 @@ var
 			spaceTag
 	);
 	*/
+	this.path =
+		path;
 
 	Forms.Form.call(
 		this,
@@ -132,7 +135,7 @@ NoAccessToSpace.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 1 );
+			path.get( 2 );
 
 	switch( buttonName )
 	{

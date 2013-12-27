@@ -586,7 +586,7 @@ IFace.prototype.aquireSpace =
 				spaceTag,
 
 			path :
-				new Path( [ ] ),
+				new Path( [ ] ), // TODO Path.empty
 
 			passhash :
 				self.$passhash,

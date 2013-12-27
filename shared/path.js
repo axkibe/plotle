@@ -91,7 +91,9 @@ Path =
 	while(
 		a < aZ &&
 		arguments[ a ] !== '--' &&
-		arguments[ a ] !== '++'
+		arguments[ a ] !== '++' &&
+		arguments[ a ] !== '>>' &&
+		arguments[ a ] !== '<+'
 	)
 	{
 		var k =
@@ -115,17 +117,32 @@ Path =
 		a += 2;
 	}
 
-	if( arguments[a] === '--' )
+	if( arguments[ a ] === '>>' )
 	{
-		var s =
-			arguments[ a + 1 ];
+		path.splice( 0, arguments[ a + 1 ] );
+
+		a += 2;
+	}
+
+	if( arguments[ a ] === '<+' )
+	{
+		path.unshift( arguments[ a + 1 ] );
+
+		a += 2;
+	}
+
+	if( arguments[ a ] === '--' )
+	{
+		var
+			s =
+				arguments[ a + 1 ];
 
 		path.splice( path.length - s, s );
 
 		a += 2;
 	}
 
-	if( arguments[a] === '++' )
+	if( arguments[ a ] === '++' )
 	{
 		for( a++; a < aZ; a++ )
 		{
@@ -137,6 +154,7 @@ Path =
 
 	Jools.immute( path );
 
+	// TODO why innumerable?
 	Jools.innumerable( this, '_path', path );
 
 	Jools.immute( this );
@@ -336,6 +354,22 @@ Path.prototype.toJSON =
 };
 
 
+/*
+| Returns true is this path is empty
+*/
+Jools.lazyFixate(
+	Path.prototype,
+	'isEmpty',
+	function( )
+	{
+		return this._path.length === 0;
+	}
+);
+
+
+/*
+| An empty path
+*/
 Path.empty =
 	new Path(
 		[ ]

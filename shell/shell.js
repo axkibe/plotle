@@ -187,15 +187,8 @@ Shell =
 		'Normal';
 
 	// currently hovered thing
-	// TODO change
 	this._$hover =
-		{
-			section :
-				null,
-
-			path :
-				null
-		};
+		Path.empty;
 
 	var
 		screensize =
@@ -350,13 +343,13 @@ Shell.prototype.update =
 		case 'Caret' :
 
 			mItemTree =
-				tree.twig[ mark.path.get( 0 ) ];
+				tree.twig[ mark.path.get( 1 ) ];
 
-			// tests if the owning item was removed
 			if (
 				!Jools.is( mItemTree )
 			)
 			{
+				// the item holding the caret was removed
 				mark =
 					Mark.Vacant.create( );
 			}
@@ -368,7 +361,11 @@ Shell.prototype.update =
 							new Sign(
 								{
 									path :
-										mark.path,
+										new Path(
+											mark.path,
+											'>>',
+												1
+										),
 
 									at1 :
 										mark.at
@@ -377,11 +374,16 @@ Shell.prototype.update =
 							chgX
 						);
 
-				// TODO keeping retainx might not be correct
-				//      in some cases
+				// FIXME
+				//   keeping retainx might not be correct
+				//   in some cases
 				mark =
 					Mark.Caret.create(
-						sign.path,
+						new Path(
+							sign.path,
+							'<+',
+								'space'
+						),
 						sign.at1,
 						mark.retainx
 					);
@@ -392,7 +394,7 @@ Shell.prototype.update =
 		case 'Range' :
 
 			mItemTree =
-				tree.twig[ mark.bPath.get( 0 ) ];
+				tree.twig[ mark.bPath.get( 1 ) ];
 
 			// tests if the owning item was removed
 			if(
@@ -410,7 +412,11 @@ Shell.prototype.update =
 							new Sign(
 								{
 									path :
-										mark.bPath,
+										new Path(
+											mark.bPath,
+											'>>',
+												1
+										),
 
 									at1 :
 										mark.bAt
@@ -424,7 +430,11 @@ Shell.prototype.update =
 							new Sign(
 								{
 									path :
-										mark.ePath,
+										new Path(
+											mark.ePath,
+											'>>',
+												1
+										),
 
 									at1 :
 										mark.eAt
@@ -441,7 +451,11 @@ Shell.prototype.update =
 					{
 						mark =
 							Mark.Caret.create(
-								bSign.path,
+								new Path(
+									bSign.path,
+									'<+',
+										'space'
+								),
 								bSign.at1,
 								mark.retainx
 							);
@@ -451,9 +465,17 @@ Shell.prototype.update =
 						mark =
 							Mark.Range.create(
 								mItemTree.twig.doc,
-								bSign.path,
+								new Path(
+									bSign.path,
+									'<+',
+										'space'
+								),
 								bSign.at1,
-								eSign.path,
+								new Path(
+									eSign.path,
+									'<+',
+										'space'
+								),
 								eSign.at1,
 								mark.retainx
 							);
@@ -652,10 +674,7 @@ Shell.prototype.pointingHover =
 				}
 			}
 
-			shell._setHover(
-				reply.section,
-				reply.path
-			);
+			shell._setHover( reply.path );
 
 			if( this.redraw )
 			{
@@ -684,15 +703,11 @@ Shell.prototype.pointingHover =
 				reply.reflect !== 'HoverReply'
 			)
 			{
-				console.log( reply );
 				throw new Error( 'invalid reply' );
 			}
 		}
 
-		shell._setHover(
-			reply.section,
-			reply.path
-		);
+		shell._setHover( reply.path );
 
 		if( this.redraw )
 		{
@@ -996,9 +1011,6 @@ Shell.prototype.userMark =
 		path =
 			null,
 
-		section =
-			null,
-
 		setnull =
 			null,
 
@@ -1058,13 +1070,6 @@ Shell.prototype.userMark =
 
 				break;
 
-			case 'section' :
-
-				section =
-					arguments[ ++a ];
-
-				break;
-
 			case 'type' :
 
 				type =
@@ -1095,16 +1100,15 @@ Shell.prototype.userMark =
 		}
 	}
 
-	if( CHECK )
-	{
-		if( command !== 'set' )
-		{
-			throw new Error(
-				'userMark command not "set"'
-			);
-		}
-	}
-
+/**/if( CHECK )
+/**/{
+/**/	if( command !== 'set' )
+/**/	{
+/**/		throw new Error(
+/**/			'userMark command not "set"'
+/**/		);
+/**/	}
+/**/}
 
 	switch( type )
 	{
@@ -1147,22 +1151,22 @@ Shell.prototype.userMark =
 
 		case 'range' :
 
-			if( CHECK )
-			{
-				if(
-					at  !== null ||
-					path !== null
-				)
-				{
-					throw new Error(
-						'set range, but with caret signature'
-					);
-				}
-			}
+/**/		if( CHECK )
+/**/		{
+/**/			if(
+/**/				at  !== null ||
+/**/				path !== null
+/**/			)
+/**/			{
+/**/				throw new Error(
+/**/					'set range, but with caret signature'
+/**/				);
+/**/			}
+/**/		}
 
 			mark =
 				Mark.Range.create(
-					shell.space.tree.twig[ bPath.get( 0 ) ].twig.doc,
+					shell.space.tree.twig[ bPath.get( 1 ) ].twig.doc,
 					bPath,
 					bAt,
 					ePath,
@@ -1198,51 +1202,21 @@ Shell.prototype.userMark =
 			);
 	}
 
+	this.$space =
+		Visual.Space.create(
+			'inherit',
+				this.$space,
+			'mark',
+				mark.concerns( this.$space.path )
+		);
 
-	// FIXME integrate section into paths of the mark
-
-	switch( section )
-	{
-		case 'space' :
-
-			this.$space =
-				Visual.Space.create(
-					'inherit',
-						this.$space,
-					'mark',
-						mark
-				);
-
-			this._$formJockey =
-				Forms.Jockey.create(
-					'inherit',
-						this._$formJockey,
-					'mark',
-						Mark.Vacant.create( )
-				);
-
-			break;
-
-		case 'forms' :
-
-			this.$space =
-				Visual.Space.create(
-					'inherit',
-						this.$space,
-					'mark',
-						Mark.Vacant.create( )
-				);
-
-			this._$formJockey =
-				Forms.Jockey.create(
-					'inherit',
-						this._$formJockey,
-					'mark',
-						mark
-				);
-
-			break;
-	}
+	this._$formJockey =
+		Forms.Jockey.create(
+			'inherit',
+				this._$formJockey,
+			'mark',
+				mark.concerns( this._$formJockey.path )
+		);
 
 	this.redraw =
 		true;
@@ -1269,12 +1243,9 @@ Shell.prototype.cycleFormFocus =
 | A button has been pushed.
 */
 Shell.prototype.pushButton =
-	function(
-		section,
-		path
-	)
+	function( path )
 {
-	switch( section )
+	switch( path.get( 0 ) )
 	{
 		case 'disc' :
 
@@ -1294,9 +1265,7 @@ Shell.prototype.pushButton =
 
 		default :
 
-			throw new Error(
-				'section must be form'
-			);
+			throw new Error( 'invalid path' );
 	}
 };
 
@@ -1306,15 +1275,10 @@ Shell.prototype.pushButton =
 */
 Shell.prototype._setHover =
 	function(
-		section, // TODO remove
 		path
 	)
 {
-	if(
-		this._$hover.section === section
-		&&
-		this._$hover.path.equals( path )
-	)
+	if( this._$hover.equals( path ) )
 	{
 		return;
 	}
@@ -1324,10 +1288,10 @@ Shell.prototype._setHover =
 			'inherit',
 				this._$discJockey,
 			'hover',
-				section === 'disc' ?
-					path
-					:
+				path.isEmpty || path.get( 0 ) !== 'disc' ?
 					Path.empty
+					:
+					path
 		);
 
 	this._$formJockey =
@@ -1335,10 +1299,10 @@ Shell.prototype._setHover =
 			'inherit',
 				this._$formJockey,
 			'hover',
-				section === 'forms' ?
-					path
-					:
+				path.isEmpty || path.get( 0 ) !== 'forms' ?
 					Path.empty
+					:
+					path
 		);
 
 	this.$space =
@@ -1346,16 +1310,13 @@ Shell.prototype._setHover =
 			'inherit',
 				this.$space,
 			'hover',
-				section === 'space' ?
-					path
-					:
+				path.isEmpty || path.get( 0 ) !== 'space' ?
 					Path.empty
+					:
+					path
 		);
 
-	this._$hover.section =
-		section;
-
-	this._$hover.path =
+	this._$hover =
 		path;
 
 	shell.redraw =
@@ -1368,42 +1329,35 @@ Shell.prototype._setHover =
 */
 Shell.prototype.setTraits =
 	function(
-		section,
 		traitSet
 	)
 {
-	switch( section )
+	if( CHECK )
 	{
-		case 'forms' :
-
-			this._$formJockey =
-				Forms.Jockey.create(
-					'inherit',
-						this._$formJockey,
-					'traitSet',
-						traitSet
-				);
-
-			break;
-
-		case 'space' :
-
-			this.$space =
-				Visual.Space.create(
-					'inherit',
-						this.$space,
-					'traitSet',
-						traitSet
-				);
-
-			break;
-
-		default :
-
+		if( traitSet.reflect !== 'TraitSet' )
+		{
 			throw new Error(
-				'invalid section'
+				'invalid traitSet'
 			);
+		}
 	}
+
+	// TODO precheck which traitSet affect
+	this._$formJockey =
+		Forms.Jockey.create(
+			'inherit',
+				this._$formJockey,
+			'traitSet',
+				traitSet
+		);
+
+	this.$space =
+		Visual.Space.create(
+			'inherit',
+				this.$space,
+			'traitSet',
+				traitSet
+		);
 
 	shell.redraw =
 		true;

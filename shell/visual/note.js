@@ -847,7 +847,6 @@ Note.prototype.scrollMarkIntoView =
 	if( n + pnw.y - imargin.n < sy )
 	{
 		shell.setTraits(
-			'space',
 			TraitSet.create(
 				'trait',
 					this.path,
@@ -859,7 +858,6 @@ Note.prototype.scrollMarkIntoView =
 	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
 		shell.setTraits(
-			'space',
 			TraitSet.create(
 				'trait',
 					this.path,
@@ -890,7 +888,6 @@ Note.prototype.scrollPage =
 			this.sub.doc.font.twig.size;
 
 	shell.setTraits(
-		'space',
 		TraitSet.create(
 			'trait',
 				this.path,
@@ -925,7 +922,6 @@ Note.prototype.mousewheel =
 	}
 
 	shell.setTraits(
-		'space',
 		TraitSet.create(
 			'trait',
 				this.path,

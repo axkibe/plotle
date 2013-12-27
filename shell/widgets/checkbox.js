@@ -53,7 +53,6 @@ Widgets.CheckBox =
 		tag,
 		inherit,
 		tree,
-		section,
 		path,
 		frame,
 		focusAccent,
@@ -107,9 +106,6 @@ Widgets.CheckBox =
 	this.tree =
 		tree;
 
-	this.section =
-		section;
-
 	this.focusAccent =
 		focusAccent;
 
@@ -157,9 +153,6 @@ CheckBox.create =
 			null,
 
 		path =
-			null,
-
-		section =
 			null,
 
 		superFrame =
@@ -214,13 +207,6 @@ CheckBox.create =
 			case 'path' :
 
 				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'section' :
-
-				section =
 					arguments[ a + 1 ];
 
 				break;
@@ -339,12 +325,6 @@ CheckBox.create =
 				inherit.path;
 		}
 
-		if( section === null )
-		{
-			section =
-				inherit.section;
-		}
-
 		if( tree === null )
 		{
 			tree =
@@ -405,7 +385,6 @@ CheckBox.create =
 		_tag,
 		inherit,
 		tree,
-		section,
 		path,
 		frame,
 		focusAccent,
@@ -518,7 +497,6 @@ CheckBox.prototype.pointingStart =
 	)
 	{
 		shell.setTraits(
-			'forms',
 			TraitSet.create(
 				'trait',
 					this.path,
@@ -561,7 +539,6 @@ CheckBox.prototype.specialKey =
 		case 'enter' :
 
 			shell.setTraits(
-				'forms',
 				TraitSet.create(
 					'trait',
 						this.path,
@@ -584,7 +561,6 @@ CheckBox.prototype.input =
 	)
 {
 	shell.setTraits(
-		'forms',
 		TraitSet.create(
 			'trait',
 				this.path,

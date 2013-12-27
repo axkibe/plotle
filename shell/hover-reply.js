@@ -47,8 +47,7 @@ HoverReply =
 	function(
 		tag,
 		cursor,
-		path,
-		section
+		path
 	)
 {
 	if( CHECK )
@@ -60,9 +59,6 @@ HoverReply =
 			);
 		}
 	}
-
-	this.section =
-		section;
 
 	this.path =
 		path;
@@ -90,9 +86,6 @@ HoverReply.create =
 			null,
 
 		path =
-			null,
-
-		section =
 			null;
 
 	for(
@@ -124,13 +117,6 @@ HoverReply.create =
 
 				break;
 
-			case 'section' :
-
-				section =
-					arguments[ a + 1 ];
-
-				break;
-
 			default :
 
 				throw new Error(
@@ -153,48 +139,21 @@ HoverReply.create =
 				inherit.path;
 		}
 
-		if( section === null )
-		{
-			section =
-				inherit.section;
-		}
-
 		if(
 			cursor === inherit.cursor
 			&&
 			path === inherit.path
-			&&
-			section == inherit.section
 		)
 		{
 			return inherit;
 		}
 	}
 
-/**/if( CHECK )
-/**/{
-/**/	switch( section )
-/**/	{
-/**/		case 'space' :
-/**/		case 'forms' :
-/**/		case 'disc' :
-/**/
-/**/			break;
-/**/
-/**/		default :
-/**/
-/**/			throw new Error(
-/**/				'invalid section: ' + section
-/**/			);
-/**/	}
-/**/}
-
 	return (
 		new HoverReply(
 			_tag,
 			cursor,
-			path,
-			section
+			path
 		)
 	);
 };

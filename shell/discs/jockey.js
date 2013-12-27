@@ -88,6 +88,13 @@ Discs.Jockey =
 	this.mode =
 		mode;
 
+	this.path =
+		new Path(
+			[
+				'disc'
+			]
+		);
+
 	var
 		discs =
 			{ };
@@ -105,17 +112,10 @@ Discs.Jockey =
 				'inherit',
 					inherit && inherit._discs[ name ],
 				'hover',
-					hover.length === 0
-						?
-						hover // empty
+					hover.isEmpty || hover.get( 1 ) !== name ?
+						Path.empty
 						:
-						(
-							hover.get( 0 ) === name
-							?
-							hover
-							:
-							Path.empty
-						),
+						hover,
 				'mode',
 					mode,
 				'screensize',
@@ -391,7 +391,7 @@ Jockey.prototype.pushButton =
 {
 	var
 		discname =
-			path.get( 0 );
+			path.get( 1 );
 
 	switch( discname )
 	{

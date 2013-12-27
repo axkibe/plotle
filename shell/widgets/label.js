@@ -49,7 +49,6 @@ Widgets.Label =
 		tag,
 		inherit,
 		tree,
-		section,
 		path,
 		pos,
 		visible,
@@ -121,9 +120,6 @@ Label.create =
 			null,
 
 		pos =
-			null,
-
-		section =
 			null,
 
 		superFrame =
@@ -199,13 +195,6 @@ Label.create =
 
 				break;
 
-			case 'section' :
-
-				section =
-					arguments[ a + 1 ];
-
-				break;
-
 			case 'superFrame' :
 
 				superFrame =
@@ -257,6 +246,13 @@ Label.create =
 			{
 				throw new Error(
 					'traitSet needs path'
+				);
+			}
+
+			if( traitSet.reflect !== 'TraitSet' )
+			{
+				throw new Error(
+					'invalid traitset'
 				);
 			}
 		}
@@ -315,12 +311,6 @@ Label.create =
 				inherit.pos;
 		}
 
-		if( section === null )
-		{
-			section =
-				inherit.section;
-		}
-
 		if( tree === null )
 		{
 			tree =
@@ -367,7 +357,6 @@ Label.create =
 		_tag,
 		inherit,
 		tree,
-		section,
 		path,
 		pos,
 		visible,

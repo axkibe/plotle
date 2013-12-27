@@ -25,8 +25,7 @@ var
 	HoverReply,
 	Jools,
 	shell,
-	system,
-	theme;
+	system;
 
 
 /*
@@ -57,7 +56,6 @@ Widgets.Button =
 		tag,
 		inherit,
 		tree,
-		section,
 		path,
 		frame,
 		focusAccent,
@@ -88,13 +86,6 @@ Widgets.Button =
 		{
 			throw new Error(
 				'path missing'
-			);
-		}
-
-		if( section === null )
-		{
-			throw new Error(
-				'section missing'
 			);
 		}
 
@@ -129,9 +120,6 @@ Widgets.Button =
 
 	this.hoverAccent =
 		hoverAccent;
-
-	this.section =
-		section;
 
 	this.path =
 		path;
@@ -196,9 +184,6 @@ Button.create =
 		path =
 			null,
 
-		section =
-			null,
-
 		superFrame =
 			null,
 
@@ -260,13 +245,6 @@ Button.create =
 			case 'path' :
 
 				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'section' :
-
-				section =
 					arguments[ a + 1 ];
 
 				break;
@@ -398,12 +376,6 @@ Button.create =
 				inherit.path;
 		}
 
-		if( section === null )
-		{
-			section =
-				inherit.section;
-		}
-
 		if( text === null )
 		{
 			text =
@@ -464,7 +436,6 @@ Button.create =
 		_tag,
 		inherit,
 		tree,
-		section,
 		path,
 		frame,
 		focusAccent,
@@ -695,8 +666,6 @@ Button.prototype.pointingHover =
 
 	return (
 		HoverReply.create(
-			'section',
-				this.section,
 			'path',
 				this.path,
 			'cursor',
@@ -716,10 +685,6 @@ Button.prototype.pointingStart =
 		// ctrl
 	)
 {
-	var
-		self =
-			this;
-
 	if(
 		!this.visible ||
 		!this.frame.within(
@@ -768,10 +733,7 @@ Button.prototype.pointingStart =
 		repeatFunc =
 			function( )
 			{
-				shell.pushButton(
-					this.section,
-					this.path
-				);
+				shell.pushButton( this.path );
 
 				self._$retimer =
 					system.setTimer(
@@ -788,10 +750,7 @@ Button.prototype.pointingStart =
 	}
 	*/
 
-	shell.pushButton(
-		this.section,
-		this.path
-	);
+	shell.pushButton( this.path );
 
 	return this.repeating ? 'drag' : false;
 };
@@ -827,10 +786,7 @@ Button.prototype.specialKey =
 
 		case 'enter' :
 
-			shell.pushButton(
-				this.section,
-				this.path
-			);
+			shell.pushButton( this.path );
 
 			return;
 	}
@@ -845,10 +801,7 @@ Button.prototype.input =
 		// text
 	)
 {
-	shell.pushButton(
-		this.section,
-		this.path
-	);
+	shell.pushButton( this.path );
 
 	return true;
 };

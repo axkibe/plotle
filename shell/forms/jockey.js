@@ -64,29 +64,29 @@ Forms.Jockey =
 		hover
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-
-		if( !hover || hover.reflect !== 'Path' )
-		{
-			throw new Error(
-				'invalid hover'
-			);
-		}
-
-		if( !mark )
-		{
-			throw new Error(
-				'invalid mark'
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( tag !== _tag )
+/**/	{
+/**/		throw new Error(
+/**/			'tag mismatch'
+/**/		);
+/**/	}
+/**/
+/**/	if( !hover || hover.reflect !== 'Path' )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid hover'
+/**/		);
+/**/	}
+/**/
+/**/	if( !mark )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid mark'
+/**/		);
+/**/	}
+/**/}
 
 	this.mark =
 		mark;
@@ -114,6 +114,7 @@ Forms.Jockey =
 					:
 					new Path(
 						[
+							'forms',
 							name
 						]
 					);
@@ -124,6 +125,8 @@ Forms.Jockey =
 						name,
 					'inherit',
 						inherit && inherit._forms[ name ],
+					'path',
+						path,
 					'screensize',
 						screensize,
 					'traitSet',
@@ -131,17 +134,10 @@ Forms.Jockey =
 					'mark',
 						mark.concerns( path ),
 					'hover',
-						path.equals( Path.empty ) // TODO this looks wrong
-							?
+						hover.isEmpty || !path.subPathOf( hover ) ?
 							Path.empty
 							:
-							(
-								path.subPathOf( hover )
-								?
-								hover
-								:
-								Path.empty
-							)
+							hover
 				);
 
 		if( CHECK )
@@ -170,7 +166,7 @@ Jockey.path =
 Jockey.prototype.path =
 	new Path(
 		[
-			'Forms'
+			'forms'
 		]
 	);
 
@@ -322,15 +318,15 @@ Jockey.prototype.cycleFocus =
 		dir
 	)
 {
-	if( CHECK )
-	{
-		if( !this._forms[ formname ] )
-		{
-			throw new Error(
-				'invalid formname: ' + formname
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( !this._forms[ formname ] )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid formname: ' + formname
+/**/		);
+/**/	}
+/**/}
 
 	return this._forms.cycleFocus( dir );
 };
@@ -347,17 +343,17 @@ Jockey.prototype.pushButton =
 
 	var
 		formname =
-			path.get( 0 );
+			path.get( 1 );
 
-	if( CHECK )
-	{
-		if( !this._forms[ formname ] )
-		{
-			throw new Error(
-				'invalid formname: ' + formname
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( !this._forms[ formname ] )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid formname: ' + formname
+/**/		);
+/**/	}
+/**/}
 
 	return (
 		this._forms[ formname ].pushButton(

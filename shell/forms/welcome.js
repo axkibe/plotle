@@ -24,7 +24,6 @@ Forms =
 var
 	Design,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	TraitSet;
@@ -49,6 +48,7 @@ Forms.Welcome =
 	function(
 		tag,
 		inherit,
+		path,
 		screensize,
 		traitSet,
 		mark,
@@ -64,6 +64,9 @@ Forms.Welcome =
 			);
 		}
 	}
+
+	this.path =
+		path;
 
 	var
 		user;
@@ -153,17 +156,6 @@ Welcome.prototype.reflect =
 
 
 /*
-| Path of the form.
-*/
-Welcome.prototype.path =
-	new Path(
-		[
-			Welcome.prototype.reflect
-		]
-	);
-
-
-/*
 | The forms tree.
 */
 Welcome.prototype.tree =
@@ -187,7 +179,7 @@ Welcome.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 1 );
+			path.get( 2 );
 
 	switch( buttonName )
 	{

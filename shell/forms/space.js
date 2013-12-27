@@ -21,7 +21,6 @@ Forms =
 var
 	Design,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	TraitSet;
@@ -46,6 +45,7 @@ Forms.Space =
 	function(
 		tag,
 		inherit,
+		path,
 		screensize,
 		traitSet,
 		mark,
@@ -61,6 +61,9 @@ Forms.Space =
 			);
 		}
 	}
+
+	this.path =
+		path;
 
 	if( inherit )
 	{
@@ -160,17 +163,6 @@ Space.prototype.reflect =
 
 
 /*
-| Path of the form.
-*/
-Space.prototype.path =
-	new Path(
-		[
-			Space.prototype.reflect
-		]
-	);
-
-
-/*
 | The forms tree.
 */
 Space.prototype.tree =
@@ -194,7 +186,7 @@ Space.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 1 );
+			path.get( 2 );
 
 	switch( buttonName )
 	{

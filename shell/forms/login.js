@@ -22,7 +22,6 @@ Forms =
 var
 	Design,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	TraitSet;
@@ -47,6 +46,7 @@ Forms.Login =
 	function(
 		tag,
 		inherit,
+		path,
 		screensize,
 		traitSet,
 		mark,
@@ -62,6 +62,9 @@ Forms.Login =
 			);
 		}
 	}
+
+	this.path =
+		path;
 
 	Forms.Form.call(
 		this,
@@ -88,17 +91,6 @@ Login.prototype.reflect =
 
 
 /*
-| Form path.
-*/
-Login.prototype.path =
-	new Path(
-		[
-			Login.prototype.reflect
-		]
-	);
-
-
-/*
 | The forms tree
 */
 Login.prototype.tree =
@@ -122,7 +114,7 @@ Login.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 1 );
+			path.get( 2 );
 
 	switch( buttonName )
 	{
@@ -169,7 +161,6 @@ Login.prototype.login =
 	if( user.length < 4 )
 	{
 		shell.setTraits(
-			'forms',
 			TraitSet.create(
 				'trait',
 					this._widgetPath( 'errorLabel' ),
@@ -182,8 +173,6 @@ Login.prototype.login =
 			'set',
 			'type',
 				'caret',
-			'section',
-				'forms',
 			'path',
 				sub.userInput.path,
 			'at',
@@ -196,7 +185,6 @@ Login.prototype.login =
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
 		shell.setTraits(
-			'forms',
 			TraitSet.create(
 				'trait',
 					this._widgetPath( 'errorLabel' ),
@@ -209,8 +197,6 @@ Login.prototype.login =
 			'set',
 			'type',
 				'caret',
-			'section',
-				'forms',
 			'path',
 				sub.userInput.path,
 			'at',
@@ -223,7 +209,6 @@ Login.prototype.login =
 	if( pass.length < 5 )
 	{
 		shell.setTraits(
-			'forms',
 			TraitSet.create(
 				'trait',
 					this._widgetPath( 'errorLabel' ),
@@ -236,8 +221,6 @@ Login.prototype.login =
 			'set',
 			'type',
 				'caret',
-			'section',
-				'forms',
 			'path',
 				sub.passwordInput.path,
 			'at',
@@ -272,7 +255,7 @@ Login.prototype.specialKey =
 	if(
 		key === 'enter' &&
 		this.mark &&
-		this.mark.caretPath.get( 1 ) === 'passwordInput'
+		this.mark.caretPath.get( 2 ) === 'passwordInput'
 	)
 	{
 		this.login( );
@@ -307,7 +290,6 @@ Login.prototype.onAuth =
 	if( !res.ok )
 	{
 		shell.setTraits(
-			'forms',
 			TraitSet.create(
 				'trait',
 					this._widgetPath( 'errorLabel' ),
@@ -322,8 +304,6 @@ Login.prototype.onAuth =
 				'set',
 				'type',
 					'caret',
-				'section',
-					'forms',
 				'path',
 					sub.userInput.path,
 				'at',
@@ -336,8 +316,6 @@ Login.prototype.onAuth =
 				'set',
 				'type',
 					'caret',
-				'section',
-					'forms',
 				'path',
 					sub.passwordInput.path,
 				'at',
@@ -376,7 +354,6 @@ Login.prototype.clear =
 			this.sub;
 
 	shell.setTraits(
-		'forms',
 		TraitSet.create(
 			'trait',
 				sub.userInput.path,
@@ -391,8 +368,6 @@ Login.prototype.clear =
 
 	shell.userMark(
 		'set',
-		'section',
-			'forms',
 		'type',
 			'vacant'
 	);

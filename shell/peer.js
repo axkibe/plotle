@@ -371,10 +371,12 @@ Peer.prototype.setZone =
 				path :
 					new Path(
 						itemPath,
+						'>>',
+							1,
 						'++',
-						'zone'
+							'zone'
 					)
-				}
+			}
 		)
 	);
 };
@@ -399,8 +401,10 @@ Peer.prototype.setFontSize =
 				path :
 					new Path(
 						itemPath,
+						'>>',
+							1,
 						'++',
-						'fontsize'
+							'fontsize'
 					)
 			}
 		)
@@ -427,8 +431,10 @@ Peer.prototype.setPNW =
 				path :
 					new Path(
 						itemPath,
+						'>>',
+							1,
 						'++',
-						'pnw'
+							'pnw'
 					)
 			}
 		)
@@ -600,10 +606,16 @@ Peer.prototype.moveToTop =
 {
 	this._iface.alter(
 		{
-			path: path
+			path :
+				new Path(
+					path,
+					'>>',
+						1
+				)
 		},
 		{
-			rank: 0
+			rank :
+				0
 		}
 	);
 };
@@ -627,7 +639,11 @@ Peer.prototype.insertText =
 			},
 			{
 				path :
-					path,
+					new Path(
+						path,
+						'>>',
+							1
+					),
 
 				at1 :
 					offset
@@ -663,7 +679,11 @@ Peer.prototype.removeText =
 		this._iface.alter(
 			{
 				path :
-					path,
+					new Path(
+						path,
+						'>>',
+							1
+					),
 
 				at1 :
 					at1,
@@ -773,14 +793,18 @@ Peer.prototype.split =
 	return (
 		this._iface.alter(
 			{
-				path:
-					path,
+				path :
+					new Path(
+						path,
+						'>>',
+							1
+					),
 
-				at1:
+				at1 :
 					offset
 			},
 			{
-				proc:
+				proc :
 					'splice'
 			}
 		)
@@ -800,11 +824,19 @@ Peer.prototype.join =
 	return (
 		this._iface.alter(
 			{
-				proc: 'splice'
+				proc :
+					'splice'
 			},
 			{
-				path: path,
-				at1 : at1
+				path :
+					new Path(
+						path,
+						'>>',
+							1
+					),
+
+				at1 :
+					at1
 			}
 		)
 	);
@@ -825,7 +857,11 @@ Peer.prototype.removeItem =
 
 		pivot =
 			this._iface.get(
-				path,
+				new Path(
+					path,
+					'>>',
+						1
+				),
 				-1
 			),
 
@@ -843,7 +879,11 @@ Peer.prototype.removeItem =
 			},
 			{
 				path :
-					path,
+					new Path(
+						path,
+						'>>',
+							1
+					),
 
 				rank :
 					null

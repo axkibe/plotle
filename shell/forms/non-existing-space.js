@@ -49,6 +49,7 @@ var
 		function(
 			tag,
 			inherit,
+			path,
 			screensize,
 			traitSet,
 			mark,
@@ -64,6 +65,9 @@ var
 			);
 		}
 	}
+
+	this.path =
+		path;
 
 	var
 		spaceUser =
@@ -208,7 +212,7 @@ NonExistingSpace.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 1 );
+			path.get( 2 );
 
 	switch( buttonName )
 	{
