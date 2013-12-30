@@ -181,10 +181,8 @@ NonExistingSpace.prototype.reflect =
 | Path of the form.
 */
 NonExistingSpace.prototype.path =
-	new Path(
-		[
-			NonExistingSpace.prototype.reflect
-		]
+	Path.empty.append(
+		NonExistingSpace.prototype.reflect
 	);
 
 

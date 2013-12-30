@@ -20,7 +20,6 @@ Discs =
 var
 	Euclid,
 	Jools,
-	Path,
 	shell,
 	Widgets;
 
@@ -101,15 +100,8 @@ Discs.CreateDisc =
 			tree =
 				twig[ wname ],
 
-			// TODO enhance this.path
 			path =
-				new Path(
-					[
-						'disc',
-						this.reflect,
-						wname
-					]
-				);
+				this.path.append( wname );
 
 		switch( tree.twig.type )
 		{

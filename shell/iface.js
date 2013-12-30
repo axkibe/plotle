@@ -105,21 +105,25 @@ IFace.prototype._ajax =
 		throw new Error( 'ajax request.cmd missing' );
 	}
 
-    var ajax =
-		new XMLHttpRequest( );
 
-    ajax.open(
+	var
+		ajax =
+			new XMLHttpRequest( );
+
+	ajax.open(
 		'POST',
 		'/mm',
 		true
 	);
 
-    ajax.setRequestHeader(
+
+	ajax.setRequestHeader(
 		'Content-type',
 		'application/x-www-form-urlencoded'
 	);
 
-    ajax.onreadystatechange =
+
+	ajax.onreadystatechange =
 		function( )
 	{
 		if( ajax.readyState !== 4 )
@@ -191,9 +195,11 @@ IFace.prototype._ajax =
 		}
 	};
 
-    var rs = JSON.stringify( request );
+	var
+		rs =
+			JSON.stringify( request );
 
-    Jools.log(
+	Jools.log(
 		'iface',
 		'->',
 		rs
@@ -232,7 +238,7 @@ IFace.prototype.auth =
 {
 	var self = this;
 
-    if( self.$authActive )
+	if( self.$authActive )
 	{
 		throw new Error( 'Auth already active' );
 	}
@@ -283,10 +289,11 @@ IFace.prototype.register =
 		onRegisterReceiver
 	)
 {
-	var self =
-		this;
+	var
+		self =
+			this;
 
-    if( self.$regActive )
+	if( self.$regActive )
 	{
 		throw new Error( 'Register already active' );
 	}
@@ -296,9 +303,9 @@ IFace.prototype.register =
 
 	self._ajax(
 		{
-            cmd :
+			cmd :
 				'register',
-            user :
+			user :
 				user,
 			mail :
 				mail,
@@ -337,7 +344,7 @@ IFace.prototype.sendMessage =
 
 	self._ajax(
 		{
-            cmd :
+			cmd :
 				'message',
 
 			user :
@@ -385,22 +392,23 @@ IFace.prototype.aquireSpace =
 			null;
 	}
 
-    var ajax =
-	self.$aquireAjax =
-		new XMLHttpRequest( );
+	var
+		ajax =
+		self.$aquireAjax =
+			new XMLHttpRequest( );
 
-    ajax.open(
+	ajax.open(
 		'POST',
 		'/mm',
 		true
 	);
 
-    ajax.setRequestHeader(
+	ajax.setRequestHeader(
 		'Content-type',
 		'application/x-www-form-urlencoded'
 	);
 
-    ajax.onreadystatechange =
+	ajax.onreadystatechange =
 	function( )
 	{
 		var asw;
@@ -571,9 +579,9 @@ IFace.prototype.aquireSpace =
 		);
 	};
 
-    var request =
+	var request =
 		{
-            cmd :
+			cmd :
 				'get',
 
 			create :
@@ -586,19 +594,19 @@ IFace.prototype.aquireSpace =
 				spaceTag,
 
 			path :
-				new Path( [ ] ), // TODO Path.empty
+				Path.empty,
 
 			passhash :
 				self.$passhash,
 
-            time :
+			time :
 				-1,
 
 			user :
 				self.$user
-        };
+		};
 
-    Jools.log(
+	Jools.log(
 		'iface',
 		'sg->',
 		request
@@ -606,7 +614,7 @@ IFace.prototype.aquireSpace =
 
 	request = JSON.stringify( request );
 
-    ajax.send( request );
+	ajax.send( request );
 };
 
 

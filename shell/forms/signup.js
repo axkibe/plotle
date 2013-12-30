@@ -95,10 +95,8 @@ SignUp.prototype.reflect =
 | Path of the form.
 */
 SignUp.prototype.path =
-	new Path(
-		[
-			SignUp.prototype.reflect
-		]
+	Path.empty.append(
+		SignUp.prototype.reflect
 	);
 
 

@@ -16,8 +16,7 @@ var
 | Imports
 */
 var
-	Jools,
-	Path;
+	Jools;
 
 
 /*
@@ -80,11 +79,7 @@ Mark.Range =
 
 	// FIXME remove this again when fixed affection below
 	this._bDocPath =
-		new Path(
-			bPath,
-			'--',
-				2
-		);
+		bPath.shorten( 2 );
 
 	this.bAt =
 		bAt;

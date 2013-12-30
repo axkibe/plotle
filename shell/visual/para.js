@@ -23,7 +23,6 @@ var
 	Euclid,
 	fontPool,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	theme;
@@ -124,6 +123,12 @@ Jools.subclass(
 	Visual.Base
 );
 
+
+/*
+| Reflection
+*/
+Para.prototype.reflect =
+	'Para';
 
 
 /*
@@ -1178,11 +1183,7 @@ Jools.lazyFixate(
 			return null;
 		}
 
-		return new Path(
-			this.path,
-			'++',
-				'text'
-		);
+		return this.path.append( 'text' );
 	}
 );
 

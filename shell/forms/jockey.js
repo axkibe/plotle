@@ -94,6 +94,9 @@ Forms.Jockey =
 	this.hover =
 		hover;
 
+	this.path =
+		Path.empty.append( 'forms' );
+
 	this.screensize =
 		screensize;
 
@@ -112,12 +115,7 @@ Forms.Jockey =
 				inherit ?
 					inherit._forms[ name ].path
 					:
-					new Path(
-						[
-							'forms',
-							name
-						]
-					);
+					this.path.append( name );
 
 			forms[ name ] =
 				Forms.Form.create(
@@ -164,11 +162,7 @@ Forms.Jockey =
 */
 Jockey.path =
 Jockey.prototype.path =
-	new Path(
-		[
-			'forms'
-		]
-	);
+	Path.empty.append( 'forms' );
 
 
 /*

@@ -2,6 +2,8 @@
 | Paths describe entities in a tree.
 |
 | Authors: Axel Kittenberger
+|
+| XXX isPath
 */
 
 
@@ -36,6 +38,11 @@ if( typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'PATH-87085899';
+
+
 /*
 | Constructs a new Path.
 |
@@ -43,138 +50,99 @@ if( typeof( window ) === 'undefined' )
 | arguments followed by master are appended to the path
 */
 Path =
-	function( model )
-{
-	var path;
-
-	// if true the path needs to be copied
-	var copy = arguments.length > 1;
-
-	switch( model.constructor )
-	{
-		case Path  :
-
-			path =
-				copy ? model._path.slice( ) : model._path;
-
-			break;
-
-		case Array :
-
-			path =
-				copy ? model.slice( ) : model;
-
-			break;
-
-		case null :
-
-			path = [ ];
-
-			break;
-
-		default :
-			throw new Error( 'invalid path-model' );
-	}
-
-	var
-		// length of model
-		mlen =
-			path.length,
-
-		// appends additional arguments
-		a =
-			1,
-
-		aZ =
-			arguments.length;
-
-	while(
-		a < aZ &&
-		arguments[ a ] !== '--' &&
-		arguments[ a ] !== '++' &&
-		arguments[ a ] !== '>>' &&
-		arguments[ a ] !== '<+'
+	function(
+		tag,
+		_path
 	)
-	{
-		var k =
-			arguments[a];
+{
 
-		if( k < 0 )
-		{
-			k += mlen;
-		}
+/**/if( CHECK )
+/**/{
+/**/	if( tag !== _tag )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid tag'
+/**/		);
+/**/	}
+/**/
+/**/	if(
+/**/		( !(_path instanceof Array ) )
+/**/	)
+/**/	{
+/**/		throw new Error(
+/**/			'invalid _path'
+/**/		);
+/**/	}
+/**/}
 
-		if( k < 0 )
-		{
-			throw new Error( 'invalid path key' );
-		}
+	this.length =
+		_path.length;
 
-		checkValidPathArc( arguments[ a + 1 ] );
-
-		path[ k ] =
-			arguments[ a + 1 ];
-
-		a += 2;
-	}
-
-	if( arguments[ a ] === '>>' )
-	{
-		path.splice( 0, arguments[ a + 1 ] );
-
-		a += 2;
-	}
-
-	if( arguments[ a ] === '<+' )
-	{
-		path.unshift( arguments[ a + 1 ] );
-
-		a += 2;
-	}
-
-	if( arguments[ a ] === '--' )
-	{
-		var
-			s =
-				arguments[ a + 1 ];
-
-		path.splice( path.length - s, s );
-
-		a += 2;
-	}
-
-	if( arguments[ a ] === '++' )
-	{
-		for( a++; a < aZ; a++ )
-		{
-			checkValidPathArc( arguments[ a ] );
-
-			path[ path.length ] = arguments[ a ];
-		}
-	}
-
-	Jools.immute( path );
-
-	// TODO why innumerable?
-	Jools.innumerable( this, '_path', path );
+	this._path =
+		Object.freeze( _path );
 
 	Jools.immute( this );
 };
 
 
 /*
-| Returns true if argument is a path
-|
-| TODO remove
+| Creates a new Array from an array
 */
-Path.isPath =
-	function( a )
+Path.create =
+	function(
+		// free strings
+	)
 {
-	if( !a )
+	var
+		p =
+			null,
+
+		a, aZ;
+
+	switch( arguments[ 0 ] )
 	{
-		return false;
+		case 'array' :
+
+			p =
+				arguments[ 1 ].slice( );
+
+/**/		if( CHECK )
+/**/		{
+/**/			if( arguments.length !== 2 )
+/**/			{
+/**/				throw new Error(
+/**/					'too many arguments'
+/**/				);
+/**/			}
+/**/		}
+
+			break;
+
+		case 'list' :
+
+			p =
+				[ ];
+
+			for(
+				a = 1, aZ = arguments.legnth;
+				a < aZ;
+				a++
+			)
+			{
+				p[ a - 1 ] =
+					arguments[ a ];
+			}
+
+			break;
+
+		default :
+
+			throw new Error(
+				'invalid argument'
+			);
 	}
 
-	return a.constructor === Path;
+	return new Path( _tag, p );
 };
 
 
@@ -188,6 +156,7 @@ Path.prototype.reflect =
 /*
 | Returns true is arc is a valid path arc.
 */
+/*
 var checkValidPathArc =
 	function(
 		arc
@@ -207,42 +176,184 @@ var checkValidPathArc =
 		);
 	}
 };
-
-
-/*
-| Length of the path.
 */
-Object.defineProperty(
-	Path.prototype,
-	'length',
-	{
-		get :
-			function( )
-			{
-				return this._path.length;
-			}
-	}
-);
 
 
 /*
 | Returns the arc at index i.
+|
+| TODO remove array base
 */
 Path.prototype.get =
-	function( i )
+	function(
+		idx
+	)
 {
-	if( i < 0 )
+	if( idx < 0 )
 	{
-		i +=
-			this._path.length;
+		idx +=
+			this.length;
 	}
 
-	if( i < 0 || i >= this._path.length )
+/**/if( CHECK )
+/**/{
+/**/	if( idx < 0 || idx >= this.length )
+/**/	{
+/**/		throw new Error( 'invalid get' );
+/**/	}
+/**/}
+
+	return this._path[ idx ];
+};
+
+
+/*
+| Returns a path with key appended
+|
+| TODO cache
+*/
+Path.prototype.append =
+	function(
+		key
+	)
+{
+	var
+		p =
+			this._path.slice( );
+
+	p.push( key );
+
+	return new Path( _tag, p );
+};
+
+
+/*
+| Same as append but without caching.
+*/
+Path.prototype.appendNC =
+	Path.prototype.append;
+
+
+
+/*
+| Returns a path with the first item chopped of.
+|
+| TODO cache
+*/
+Path.prototype.chop =
+	function( )
+{
+	var
+		p =
+			this._path.slice( );
+
+	p.shift( );
+
+	return new Path( _tag, p );
+};
+
+
+
+/*
+| Returns a path with the last item(s) removed.
+|
+| TODO cache
+*/
+Path.prototype.shorten =
+	function(
+		n
+	)
+{
+	var
+		p =
+			this._path.slice( );
+
+	if( !Jools.is( n ) )
 	{
-		throw new Error( 'invalid get' );
+		n =
+			1;
 	}
 
-	return this._path[ i ];
+/**/if( CHECK )
+/**/{
+/**/	if( n > this.length )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid shorten'
+/**/		);
+/**/	}
+/**/}
+
+	if( n === this.length )
+	{
+		return Path.empty;
+	}
+
+	for(
+		var a = 0;
+		a < n;
+		a++
+	)
+	{
+		p.pop( );
+	}
+
+	return new Path( _tag, p );
+};
+
+/*
+| Returns a path with the first item prepended.
+|
+| TODO cache
+*/
+Path.prototype.prepend =
+	function(
+		key
+	)
+{
+	var
+		p =
+			this._path.slice( );
+
+	if( p[ 0 ] === 'space' ) throw new Error( 'XXX' );
+
+	p.unshift( key );
+
+	return new Path( _tag, p );
+};
+
+
+/*
+| Returns a path with key indexed by i set
+*/
+Path.prototype.set =
+	function(
+		idx,
+		key
+	)
+{
+	var
+		p =
+			this._path.slice( );
+
+	if( idx < 0 )
+	{
+		idx +=
+			this.length;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( idx < 0 || idx >= this.length )
+/**/	{
+/**/		throw new Error( 'invalid get' );
+/**/	}
+/**/}
+
+	p[ idx ] =
+		key;
+
+	return new Path( _tag, p );
 };
 
 
@@ -300,13 +411,14 @@ Path.prototype.subPathOf =
 	if( !Jools.is( len ) )
 	{
 		len =
-			this._path.length;
+			this.length;
 	}
 	else
 	{
 		if( len < 0 )
 		{
-			len += this._path.length;
+			len +=
+				this.length;
 		}
 
 		if( len < 0 )
@@ -317,12 +429,16 @@ Path.prototype.subPathOf =
 		}
 	}
 
-	if( len > o._path.length )
+	if( len > o.length )
 	{
 		return false;
 	}
 
-	for( var a = 0; a < len; a++)
+	for(
+		var a = 0;
+		a < len;
+		a++
+	)
 	{
 		if( this._path[ a ] !== o._path[ a ] )
 		{
@@ -340,7 +456,7 @@ Path.prototype.subPathOf =
 Path.prototype.toString =
 	function( )
 {
-	return '[' + this._path.toString() + ']';
+	return '[ ' + this._path.toString() + ' ]';
 };
 
 
@@ -362,7 +478,7 @@ Jools.lazyFixate(
 	'isEmpty',
 	function( )
 	{
-		return this._path.length === 0;
+		return this.length === 0;
 	}
 );
 
@@ -372,6 +488,7 @@ Jools.lazyFixate(
 */
 Path.empty =
 	new Path(
+		_tag,
 		[ ]
 	);
 

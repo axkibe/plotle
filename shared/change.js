@@ -18,8 +18,9 @@ var
 /*
 | Exports
 */
-var Change =
-	null;
+var
+	Change =
+		null;
 
 
 /*
@@ -97,11 +98,14 @@ Change =
 	}
 	else
 	{
-		// TODO move into Sign Constructor
-		if( src.path && !Path.isPath( src.path ) )
+		// TODO do not change callee object
+		if( src.path && src.path.reflect !== 'Path' )
 		{
 			src.path =
-				new Path( src.path );
+				Path.create(
+					'array',
+					src.path
+				);
 		}
 
 		this.src =
@@ -115,10 +119,14 @@ Change =
 	}
 	else
 	{
-		// TODO move into Sign Constructor
-		if( trg.path && !Path.isPath( trg.path ) )
+		// TODO do not change callee object
+		if( trg.path && trg.path.reflect !== 'Path' )
 		{
-			trg.path = new Path( trg.path );
+			trg.path =
+				Path.create(
+					'array',
+					trg.path
+				);
 		}
 
 		this.trg =
@@ -357,7 +365,7 @@ Change.prototype.set =
 	);
 
 	// if $new is given, replaces it with a unique ID
-	if( trg.path.get(-1) === '$new' )
+	if( trg.path.get( -1 ) === '$new' )
 	{
 		pivot =
 			tree.getPath( trg.path, -1 );
@@ -369,13 +377,14 @@ Change.prototype.set =
 			new Sign(
 				trg,
 				'path',
-					new Path( trg.path, -1, key )
+					trg.path.set( -1, key )
 			);
 	}
 
 	// Stores the old value for history tracking.
-	var save =
-		tree.getPath( trg.path );
+	var
+		save =
+			tree.getPath( trg.path );
 
 	if( !Jools.is( save ) )
 	{
@@ -422,7 +431,8 @@ Change.prototype.set =
 				trg.path.get( -1 );
 		}
 
-		var orank;
+		var
+			orank;
 
 		if( src.val !== null )
 		{
@@ -514,13 +524,14 @@ Change.prototype.insert =
 			this.trg;
 
 	Jools.check(
-		Path.isPath( trg.path ),
+		trg.path.reflect === 'Path',
 		cm,
 		'trg.path missing'
 	);
 
-	var str =
-		tree.getPath( trg.path );
+	var
+		str =
+			tree.getPath( trg.path );
 
 	Jools.check(
 		Jools.isString( str ),
@@ -598,8 +609,9 @@ Change.prototype.remove =
 			this.trg;
 
 	Jools.check(
-		Path.isPath( src.path ),
-		cm, 'src.path missing'
+		src.path.reflect === 'Path',
+		cm,
+		'src.path missing'
 	);
 
 	var str =
@@ -711,8 +723,9 @@ Change.prototype.join =
 		'trg.at1 missing'
 	);
 
-	var text =
-		tree.getPath( path );
+	var
+		text =
+			tree.getPath( path );
 
 	Jools.check(
 		Jools.isString( text ),
@@ -757,11 +770,7 @@ Change.prototype.join =
 
 	var
 		path2 =
-			new Path(
-				path,
-				-2,
-				key2
-			);
+			path.set( -2, key2 );
 
 	src =
 		src.affix(
@@ -889,21 +898,29 @@ Change.prototype.split =
 		vKey = pivot.newUID( );
 		trg = new Sign(
 			trg,
-			'path', new Path( src.path, -2, vKey )
+			'path',
+				src.path.set( vKey )
 		);
 	}
 
 	Jools.check(
 		!Jools.isnon( pivot.twig[ vKey ] ),
-		cm, 'newUID not vacant: ', vKey
+		cm,
+		'newUID not vacant: ',
+		vKey
 	);
 
-	var key = path.get( -2 );
-	var kn  = pivot.rankOf( key );
+	var
+		key =
+			path.get( -2 ),
+
+		kn =
+			pivot.rankOf( key );
 
 	Jools.check(
 		kn >= 0,
-		cm, 'invalid line key'
+		cm,
+		'invalid line key'
 	);
 
 	var

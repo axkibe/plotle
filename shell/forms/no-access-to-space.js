@@ -104,10 +104,8 @@ NoAccessToSpace.prototype.reflect =
 | Form path.
 */
 NoAccessToSpace.prototype.path =
-	new Path(
-		[
-			NoAccessToSpace.prototype.reflect
-		]
+	Path.empty.append(
+		NoAccessToSpace.prototype.reflect
 	);
 
 

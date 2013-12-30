@@ -361,11 +361,7 @@ Shell.prototype.update =
 							new Sign(
 								{
 									path :
-										new Path(
-											mark.path,
-											'>>',
-												1
-										),
+										mark.path.chop( ),
 
 									at1 :
 										mark.at
@@ -379,11 +375,7 @@ Shell.prototype.update =
 				//   in some cases
 				mark =
 					Mark.Caret.create(
-						new Path(
-							sign.path,
-							'<+',
-								'space'
-						),
+						sign.path.prepend( 'space' ),
 						sign.at1,
 						mark.retainx
 					);
@@ -412,11 +404,7 @@ Shell.prototype.update =
 							new Sign(
 								{
 									path :
-										new Path(
-											mark.bPath,
-											'>>',
-												1
-										),
+										mark.bPath.chop( ),
 
 									at1 :
 										mark.bAt
@@ -430,11 +418,7 @@ Shell.prototype.update =
 							new Sign(
 								{
 									path :
-										new Path(
-											mark.ePath,
-											'>>',
-												1
-										),
+										mark.bPath.chop( ),
 
 									at1 :
 										mark.eAt
@@ -451,11 +435,7 @@ Shell.prototype.update =
 					{
 						mark =
 							Mark.Caret.create(
-								new Path(
-									bSign.path,
-									'<+',
-										'space'
-								),
+								bSign.path.prepend( 'space' ),
 								bSign.at1,
 								mark.retainx
 							);
@@ -465,17 +445,9 @@ Shell.prototype.update =
 						mark =
 							Mark.Range.create(
 								mItemTree.twig.doc,
-								new Path(
-									bSign.path,
-									'<+',
-										'space'
-								),
+								bSign.path.prepend( 'space' ),
 								bSign.at1,
-								new Path(
-									eSign.path,
-									'<+',
-										'space'
-								),
+								eSign.path.prepend( 'space' ),
 								eSign.at1,
 								mark.retainx
 							);

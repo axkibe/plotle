@@ -21,7 +21,6 @@ Visual =
 var
 	Euclid,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	Style,
@@ -302,18 +301,12 @@ Label.create =
 				tree && tree.twig.doc,
 			'path',
 				inherit ?
-					(
-						inherit.sub.doc.path
-					)
+					inherit.sub.doc.path
 					:
 					(
 						path
 						&&
-						new Path(
-							path,
-							'++',
-								'doc'
-						)
+						path.append( 'doc' )
 					),
 			'fontsize',
 				fontsize,

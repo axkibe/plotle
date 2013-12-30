@@ -21,7 +21,6 @@ Visual =
 var
 	fontPool,
 	Jools,
-	Path,
 	shellverse,
 	theme;
 
@@ -152,11 +151,7 @@ Visual.Doc =
 
 			paraPath =
 				path &&  // TODO is this ever null?
-				new Path(
-					path,
-					'++',
-						k
-				);
+				path.appendNC( k );
 
 		sub[ k ] =
 			Visual.Para.create(

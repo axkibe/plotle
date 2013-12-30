@@ -74,7 +74,7 @@ config.database.name =
 | it will die on a command it considers unacceptable.
 */
 config.devel =
-	'shell';
+	'both';
 	// 'none';
 
 

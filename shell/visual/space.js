@@ -117,11 +117,7 @@ Visual.Space =
 		access;
 
 	this.path =
-		new Path(
-			[
-				'space'
-			]
-		);
+		Path.empty.append( 'space' );
 
 	this.$view =
 		inherit ?
@@ -485,11 +481,7 @@ Space.prototype._createItem =
 	// FIXME; dont create a new path here
 	var
 		path =
-			new Path(
-				this.path,
-					'++',
-					key
-			);
+			this.path.appendNC( key );
 
 	return (
 		Proto.create(

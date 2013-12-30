@@ -144,12 +144,7 @@ Discs.Disc =
 		);
 
 	this.path =
-		new Path(
-			[
-				'disc',
-				this.reflect
-			]
-		);
+		Path.empty.append( 'disc' ).append( this.reflect );
 
 	this._icons =
 		inherit ?

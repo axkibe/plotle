@@ -24,7 +24,6 @@ var
 	config,
 	Euclid,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	Style,
@@ -40,12 +39,12 @@ var
 'use strict';
 
 
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
+/**/if( CHECK && typeof( window ) === 'undefined' )
+/**/{
+/**/	throw new Error(
+/**/		'this code needs a browser!'
+/**/	);
+/**/}
 
 
 var
@@ -68,15 +67,15 @@ Visual.Note =
 		mark
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( tag !== _tag )
+/**/	{
+/**/		throw new Error(
+/**/			'tag mismatch'
+/**/		);
+/**/	}
+/**/}
 
 	Visual.DocItem.call(
 		this,
@@ -263,15 +262,15 @@ Note.create =
 
 	if( traitSet )
 	{
-		if( CHECK )
-		{
-			if( !path )
-			{
-				throw new Error(
-					'traitSet needs path'
-				);
-			}
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'traitSet needs path'
+/**/			);
+/**/		}
+/**/	}
 
 		for(
 			a = 0, aZ = traitSet.length;
@@ -308,15 +307,15 @@ Note.create =
 
 	if( tree )
 	{
-		if( CHECK )
-		{
-			if( !path )
-			{
-				throw new Error(
-					'tree needs path'
-				);
-			}
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'tree needs path'
+/**/			);
+/**/		}
+/**/	}
 
 		if( !fontsize )
 		{
@@ -340,11 +339,7 @@ Note.create =
 					'tree',
 						tree.twig.doc,
 					'path',
-						new Path(
-							path,
-							'++',
-								'doc'
-						),
+						path.append( 'doc' ),
 					'fontsize',
 						fontsize,
 					'flowWidth',
@@ -802,15 +797,15 @@ Note.prototype.scrollMarkIntoView =
 				'Para'
 			);
 
-	if( CHECK )
-	{
-		if( para.constructor !== Visual.Para )
-		{
-			throw new Error(
-				'para not a para.'
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( para.reflect !== 'Para' )
+/**/	{
+/**/		throw new Error(
+/**/			'para not a para.'
+/**/		);
+/**/	}
+/**/}
 
 
 	var

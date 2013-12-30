@@ -153,11 +153,7 @@ Forms.Form =
 
 		var
 			path =
-				new Path(
-					this.path,
-					'++',
-						name
-				);
+				this.path.append( name );
 
 		sub[ name ] =
 			Proto.create(
@@ -772,13 +768,7 @@ Form.prototype._widgetPath =
 	else
 	{
 		// in form creation sub might not exist yet.
-		return (
-			new Path(
-				this.path,
-				'++',
-					widgetName
-			)
-		);
+		return this.path.append( widgetName );
 	}
 };
 

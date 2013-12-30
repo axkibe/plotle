@@ -483,23 +483,18 @@ Server.prototype.loadSpace =
 
 		space.$seqZ++;
 
-		try
-		{
+		try{
 			space.$tree =
 				change.chgX.changeTree(
 					space.$tree,
 					meshverse
 				).tree;
-
 		}
-		catch( e )
+		catch( err )
 		{
-			// catch this to get a useful error message at least
-			// if things go woo.
+			console.log( 'error playing back changes' );
 
-			console.log( 'Error playing back changes: ', e );
-
-			throw e;
+			throw err;
 		}
 	}
 };
@@ -1446,7 +1441,9 @@ Server.prototype.cmdAlter =
 		// FIXME
 		if( Jools.isArray( chgX ) )
 		{
-			throw new Error('Array chgX not yet supported');
+			throw new Error(
+				'Array chgX not yet supported'
+			);
 		}
 
 		chgX = new MeshMashine.Change( chgX );
@@ -2635,11 +2632,18 @@ Server.prototype.cmdGet =
 	try
 	{
 		node =
-			tree.getPath( new Path( cmd.path ) );
+			tree.getPath(
+				Path.create(
+					'array',
+					cmd.path
+				)
+			);
 	}
 	catch( err )
 	{
-		throw Jools.reject( 'cannot get path: ' + err.message );
+		throw Jools.reject(
+			'cannot get path: ' + err.message
+		);
 	}
 
 	return {
@@ -2758,7 +2762,11 @@ Server.prototype.requestListener =
 		return;
 	}
 
-	Jools.log( 'web', req.connection.remoteAddress, red.href );
+	Jools.log(
+		'web',
+		req.connection.remoteAddress,
+		red.href
+	);
 
 	var pathname =
 		red.pathname.replace( /^[\/]+/g, '' );
@@ -2768,28 +2776,35 @@ Server.prototype.requestListener =
 		return this.webAjax( req, red, res );
 	}
 
-	var r = this.$resources[ pathname ];
-	if (!r)
+	var
+		r =
+			this.$resources[ pathname ];
+
+	if( !r )
 	{
 		this.webError( res, '404 Bad Request' );
 		return;
 	}
 
-	if (r.data)
+	if( r.data )
 	{
-		var aenc = r.gzip && req.headers[ 'accept-encoding' ];
-		var header = {
-			'Content-Type' :
-				r.mime,
+		var
+			aenc =
+				r.gzip && req.headers[ 'accept-encoding' ],
 
-			'Cache-Control' :
-				r.opts.cache ? 'max-age=7884000' : 'no-cache',
+			header =
+				{
+					'Content-Type' :
+						r.mime,
 
-			'Date' :
-				new Date().toUTCString()
-		};
+					'Cache-Control' :
+						r.opts.cache ? 'max-age=7884000' : 'no-cache',
 
-		if (aenc && aenc.indexOf('gzip') >= 0)
+					'Date' :
+						new Date().toUTCString()
+				};
+
+		if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
 		{
 			// delivers compressed
 			header[ 'Content-Encoding' ] = 'gzip';
@@ -2805,8 +2820,9 @@ Server.prototype.requestListener =
 		return;
 	}
 
-	var self =
-		this;
+	var
+		self =
+			this;
 
 	if (
 		config.devel !== 'shell' &&

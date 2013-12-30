@@ -81,7 +81,8 @@ Tree.prototype.getPath =
 		shorten
 	)
 {
-	if( !Path.isPath( path ) ) // TODO CHECK
+	// TODO CHECK
+	if( path.reflect !== 'Path' )
 	{
 		throw new Error(
 			'not a path.'
@@ -96,7 +97,9 @@ Tree.prototype.getPath =
 
 	if( shorten < 0 )
 	{
-		throw new Error( 'getPath invalid shorten' );
+		throw new Error(
+			'getPath invalid shorten'
+		);
 	}
 
 	var
@@ -136,7 +139,7 @@ Tree.prototype.setPath =
 		shorten
 	)
 {
-	if( !Path.isPath( path ) )
+	if( path.reflect !== 'Path' )
 	{
 		throw new Error(
 			'no path'

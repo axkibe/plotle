@@ -297,7 +297,7 @@ Peer.prototype.newNote =
 			},
 			{
 				path :
-					new Path( [ '$new' ] ),
+					Path.empty.append( '$new' ),
 
 				rank :
 					0
@@ -342,7 +342,7 @@ Peer.prototype.newPortal =
 			},
 			{
 				path :
-					new Path( [ '$new' ] ),
+					Path.empty.append( '$new' ),
 
 				rank :
 					0
@@ -369,13 +369,7 @@ Peer.prototype.setZone =
 			},
 			{
 				path :
-					new Path(
-						itemPath,
-						'>>',
-							1,
-						'++',
-							'zone'
-					)
+					itemPath.chop( ).append( 'zone' )
 			}
 		)
 	);
@@ -399,13 +393,7 @@ Peer.prototype.setFontSize =
 			},
 			{
 				path :
-					new Path(
-						itemPath,
-						'>>',
-							1,
-						'++',
-							'fontsize'
-					)
+					itemPath.chop( ).append( 'fontsize' )
 			}
 		)
 	);
@@ -429,13 +417,7 @@ Peer.prototype.setPNW =
 			},
 			{
 				path :
-					new Path(
-						itemPath,
-						'>>',
-							1,
-						'++',
-							'pnw'
-					)
+					itemPath.chop( ).append( 'pnw' )
 			}
 		)
 	);
@@ -496,7 +478,7 @@ Peer.prototype.newLabel =
 
 			{
 				path :
-					new Path( [ '$new' ] ),
+					Path.empty.append( '$new' ),
 
 				rank :
 					0
@@ -586,7 +568,7 @@ Peer.prototype.newRelation =
 			},
 			{
 				path :
-					new Path( [ '$new' ] ),
+					Path.empty.append( '$new' ),
 
 				rank :
 					0
@@ -607,11 +589,7 @@ Peer.prototype.moveToTop =
 	this._iface.alter(
 		{
 			path :
-				new Path(
-					path,
-					'>>',
-						1
-				)
+				path.chop( )
 		},
 		{
 			rank :
@@ -639,11 +617,7 @@ Peer.prototype.insertText =
 			},
 			{
 				path :
-					new Path(
-						path,
-						'>>',
-							1
-					),
+					path.chop( 1 ),
 
 				at1 :
 					offset
@@ -679,11 +653,7 @@ Peer.prototype.removeText =
 		this._iface.alter(
 			{
 				path :
-					new Path(
-						path,
-						'>>',
-							1
-					),
+					path.chop( 1 ),
 
 				at1 :
 					at1,
@@ -794,11 +764,7 @@ Peer.prototype.split =
 		this._iface.alter(
 			{
 				path :
-					new Path(
-						path,
-						'>>',
-							1
-					),
+					path.chop( 1 ),
 
 				at1 :
 					offset
@@ -829,11 +795,7 @@ Peer.prototype.join =
 			},
 			{
 				path :
-					new Path(
-						path,
-						'>>',
-							1
-					),
+					path.chop( 1 ),
 
 				at1 :
 					at1
@@ -857,11 +819,7 @@ Peer.prototype.removeItem =
 
 		pivot =
 			this._iface.get(
-				new Path(
-					path,
-					'>>',
-						1
-				),
+				path.chop( 1 ),
 				-1
 			),
 
@@ -879,11 +837,7 @@ Peer.prototype.removeItem =
 			},
 			{
 				path :
-					new Path(
-						path,
-						'>>',
-							1
-					),
+					path.chop( 1 ),
 
 				rank :
 					null

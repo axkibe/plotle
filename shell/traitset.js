@@ -17,8 +17,7 @@ var
 | Imports
 */
 var
-	Jools,
-	Path;
+	Jools;
 
 
 /*
@@ -44,15 +43,15 @@ TraitSet =
 		args
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( tag !== _tag )
+/**/	{
+/**/		throw new Error(
+/**/			'tag mismatch'
+/**/		);
+/**/	}
+/**/}
 
 	var
 		set =
@@ -81,20 +80,20 @@ TraitSet =
 				// adds one trait ( as object )
 				// to be changed
 
-				if( CHECK )
-				{
-					if(
-						this.getByPathKey(
-							args[ a + 1 ].path,
-							args[ a + 1 ].key
-						)
-					)
-					{
-						throw new Error(
-							'trait already in traitSet'
-						);
-					}
-				}
+/**/			if( CHECK )
+/**/			{
+/**/				if(
+/**/					this.getByPathKey(
+/**/						args[ a + 1 ].path,
+/**/						args[ a + 1 ].key
+/**/					)
+/**/				)
+/**/				{
+/**/					throw new Error(
+/**/						'trait already in traitSet'
+/**/					);
+/**/				}
+/**/			}
 
 				set[ length++ ] =
 					args[ a + 1 ];
@@ -108,20 +107,20 @@ TraitSet =
 				// adds one trait ( as key key value tripple )
 				// to be changed
 
-				if( CHECK )
-				{
-					if(
-						this.getByPathKey(
-							args[ a + 1 ],
-							args[ a + 2 ]
-						)
-					)
-					{
-						throw new Error(
-							'trait already in traitSet'
-						);
-					}
-				}
+/**/			if( CHECK )
+/**/			{
+/**/				if(
+/**/					this.getByPathKey(
+/**/						args[ a + 1 ],
+/**/						args[ a + 2 ]
+/**/					)
+/**/				)
+/**/				{
+/**/					throw new Error(
+/**/						'trait already in traitSet'
+/**/					);
+/**/				}
+/**/			}
 
 				set[ length++ ] =
 					Jools.immute(
@@ -168,20 +167,20 @@ TraitSet =
 						t =
 							bSet.get( b );
 
-					if( CHECK )
-					{
-						if(
-							this.getByPathKey(
-								t.path,
-								t.key
-							)
-						)
-						{
-							throw new Error(
-								'trait already in TraitSet'
-							);
-						}
-					}
+/**/				if( CHECK )
+/**/				{
+/**/					if(
+/**/						this.getByPathKey(
+/**/							t.path,
+/**/							t.key
+/**/						)
+/**/					)
+/**/					{
+/**/						throw new Error(
+/**/							'trait already in TraitSet'
+/**/						);
+/**/					}
+/**/				}
 
 					set[ length++ ] =
 						t;
@@ -243,15 +242,15 @@ TraitSet.prototype.getByPathKey =
 
 		t;
 
-	if( CHECK )
-	{
-		if( !Path.isPath( path ) )
-		{
-			throw new Error(
-				'path not a path'
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( path.reflect !== 'Path' )
+/**/	{
+/**/		throw new Error(
+/**/			'path not a path'
+/**/		);
+/**/	}
+/**/}
 
 	for(
 		var a = 0, aZ = this.length;

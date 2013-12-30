@@ -89,11 +89,7 @@ Discs.Jockey =
 		mode;
 
 	this.path =
-		new Path(
-			[
-				'disc'
-			]
-		);
+		Path.empty.append( 'disc' );
 
 	var
 		discs =

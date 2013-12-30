@@ -21,7 +21,6 @@ Discs =
 var
 	Euclid,
 	Jools,
-	Path,
 	shell,
 	Widgets;
 
@@ -102,11 +101,7 @@ Discs.MainDisc =
 				twig[ wname ],
 
 			path =
-				new Path(
-					this.path,
-					'++',
-						wname
-				);
+				this.path.append( wname );
 
 		switch( tree.twig.type )
 		{

@@ -21,7 +21,6 @@ Visual =
 var
 	Euclid,
 	Jools,
-	Path,
 	shell,
 	theme;
 
@@ -331,11 +330,7 @@ Relation.create =
 					(
 						path
 						&&
-						new Path(
-							path,
-							'++',
-								'doc'
-						)
+						path.append( 'doc' )
 					),
 			'fontsize',
 				fontsize,

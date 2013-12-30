@@ -24,7 +24,6 @@ var
 	Euclid,
 	HoverReply,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	Style,
@@ -102,25 +101,13 @@ Visual.Portal =
 			Jools.immute(
 				{
 					moveToButton :
-						new Path(
-							this.path,
-							'++',
-							'moveToButton'
-						),
+						this.path.append( 'moveToButton' ),
 
 					spaceUser :
-						new Path(
-							this.path,
-							'++',
-							'spaceUser'
-						),
+						this.path.append( 'spaceUser' ),
 
 					spaceTag :
-						new Path(
-							this.path,
-							'++',
-							'spaceTag'
-						)
+						this.path.append( 'spaceTag' ),
 				}
 			);
 	}
@@ -1357,8 +1344,7 @@ Portal.prototype._keyDown =
 					'caret',
 				'path',
 					// FIXME use this paths
-					new Path(
-						mark.caretPath,
+					mark.caretPath.set(
 						mark.caretPath.length - 1,
 						'spaceTag'
 					),
@@ -1380,8 +1366,7 @@ Portal.prototype._keyDown =
 					'caret',
 				'path',
 					// FIXME use this paths
-					new Path(
-						mark.caretPath,
+					mark.caretPath.set(
 						mark.caretPath.length - 1,
 						'moveToButton'
 					),
@@ -1399,8 +1384,7 @@ Portal.prototype._keyDown =
 					'caret',
 				'path',
 					// FIXME use this paths
-					new Path(
-						mark.caretPath,
+					mark.caretPath.set(
 						mark.caretPath.length - 1,
 						'spaceUser'
 					),
@@ -1471,11 +1455,10 @@ Portal.prototype._keyLeft =
 				'caret',
 			'path',
 				// FIXME rather user this.path
-				new Path(
-					mark.caretPath,
+				mark.caretPath.set(
 					mark.caretPath.length - 1,
-						cycle
-					),
+					cycle
+				),
 			'at',
 				cycle === 'moveToButton' ?
 					0
@@ -1556,10 +1539,9 @@ Portal.prototype._keyTab =
 		'type',
 			'caret',
 		'path',
-			new Path(
-				mark.caretPath,
+			mark.caretPath.set(
 				mark.caretPath.length - 1,
-					cycle
+				cycle
 			),
 		'at',
 			0
@@ -1603,11 +1585,10 @@ Portal.prototype._keyUp =
 				'section',
 					'space',
 				'path', // FIXME this.paths
-					new Path(
-						mark.caretPath,
+					mark.caretPath.set(
 						mark.caretPath.length - 1,
-							'moveToButton'
-						),
+						'moveToButton'
+					),
 				'at',
 					0
 			);
@@ -1627,11 +1608,10 @@ Portal.prototype._keyUp =
 				'type',
 					'caret',
 				'path', // FIXME this.paths
-					new Path(
-						mark.caretPath,
+					mark.caretPath.set(
 						mark.caretPath.length - 1,
-							'spaceUser'
-						),
+						'spaceUser'
+					),
 				'at',
 					this._getOffsetAt(
 						'spaceUser',
@@ -1649,11 +1629,10 @@ Portal.prototype._keyUp =
 				'type',
 					'caret',
 				'path', // FIXME this.paths
-					new Path(
-						mark.caretPath,
+					mark.caretPath.set(
 						mark.caretPath.length - 1,
-							'spaceTag'
-						),
+						'spaceTag'
+					),
 				'at',
 					0
 			);
@@ -1727,8 +1706,7 @@ Portal.prototype._keyRight =
 			'type',
 				'caret',
 			'path', // FIXME this.paths
-				new Path(
-					mark.caretPath,
+				mark.caretPath.set(
 					mark.caretPath.length - 1,
 					cycle
 				),
@@ -1897,10 +1875,9 @@ Portal.prototype._keyEnter =
 			'type',
 				'caret',
 			'path',
-				new Path(
-					mark.caretPath,
+				mark.caretPath.set(
 					mark.caretPath.length - 1,
-						cycle
+					cycle
 				),
 			'at',
 				0
