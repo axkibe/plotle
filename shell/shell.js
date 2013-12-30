@@ -837,8 +837,9 @@ Shell.prototype.dragMove =
 		ctrl
 	)
 {
-	var action =
-		this.bridge.action( );
+	var
+		action =
+			this.bridge.action( );
 
 	if( !action )
 	{
@@ -885,8 +886,9 @@ Shell.prototype.dragStop =
 		return;
 	}
 
-	var action =
-		this.bridge.action( );
+	var
+		action =
+			this.bridge.action( );
 
 	if( !action )
 	{
@@ -1145,6 +1147,10 @@ Shell.prototype.userMark =
 					eAt,
 					retainx
 				);
+
+			system.setInput(
+				mark.innerText( )
+			);
 
 			break;
 

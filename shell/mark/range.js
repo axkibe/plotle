@@ -290,7 +290,7 @@ Range.prototype.innerText =
 			frontPath.get( -2 ),
 
 		backKey =
-			backPath.path.get(-2);
+			backPath.get( -2 );
 
 
 	if( frontPath.equals( backPath ) )
@@ -298,8 +298,6 @@ Range.prototype.innerText =
 		var
 			text =
 				tree.twig[ frontKey ].twig.text;
-
-		console.log( 'INNER', text.substring( frontAt, backAt ) );
 
 		return text.substring(
 			frontAt,
@@ -337,8 +335,6 @@ Range.prototype.innerText =
 		'\n',
 		backText.substring( 0, backAt )
 	);
-
-	console.log( 'INNER', buf.join( '' ) );
 
 	return buf.join( '' );
 };

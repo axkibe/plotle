@@ -130,9 +130,10 @@ Action =
 		args
 	)
 {
-	var type =
-	this.type =
-		args[0];
+	var
+		type =
+		this.type =
+			args[0];
 
 	if( !actionList[ type ] )
 	{
