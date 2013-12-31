@@ -33,12 +33,12 @@ var
 'use strict';
 
 
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
+/**/if( CHECK && typeof( window ) === 'undefined' )
+/**/{
+/**/	throw new Error(
+/**/		'this code needs a browser!'
+/**/	);
+/**/}
 
 
 var
@@ -169,10 +169,16 @@ Disc.create =
 		aZ =
 			arguments.length,
 
+		access =
+			null,
+
 		hover =
 			null,
 
 		inherit =
+			null,
+
+		mark =
 			null,
 
 		mode =
@@ -182,6 +188,9 @@ Disc.create =
 			null,
 
 		screensize =
+			null,
+
+		username =
 			null;
 
 	while( a < aZ )
@@ -192,9 +201,9 @@ Disc.create =
 
 		switch( arg )
 		{
-			case 'screensize' :
+			case 'access' :
 
-				screensize =
+				access =
 					arguments[ a++ ];
 
 				break;
@@ -213,6 +222,13 @@ Disc.create =
 
 				break;
 
+			case 'mark' :
+
+				mark =
+					arguments[ a++ ];
+
+				break;
+
 			case 'mode' :
 
 				mode =
@@ -227,11 +243,28 @@ Disc.create =
 
 				break;
 
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'username' :
+
+				username =
+					arguments[ a++ ];
+
+				break;
+
 			default :
 
-				throw new Error(
-					'invalid argument'
-				);
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error(
+/**/					'invalid argument: ' + arguments[ a ]
+/**/				);
+/**/			}
 		}
 	}
 
@@ -247,16 +280,22 @@ Disc.create =
 
 	if( inherit )
 	{
+		if( access === null )
+		{
+			hover =
+				inherit.access;
+		}
+
 		if( hover === null )
 		{
 			hover =
 				inherit.hover;
 		}
 
-		if( screensize === null )
+		if( mark === null )
 		{
-			screensize =
-				inherit.screensize;
+			mark =
+				inherit.mark;
 		}
 
 		if( mode === null )
@@ -265,15 +304,30 @@ Disc.create =
 				inherit.mode;
 		}
 
+		if( screensize === null )
+		{
+			screensize =
+				inherit.screensize;
+		}
+
+		if( username === null )
+		{
+			username =
+				inherit.username;
+		}
+
 		// TODO use the discs equals mode
 	}
 
 	return new Discs[ name ](
 		_tag,
 		inherit,
+		access,
 		hover,
+		mark,
 		mode,
-		screensize
+		screensize,
+		username
 	);
 };
 

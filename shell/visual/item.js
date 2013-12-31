@@ -19,6 +19,7 @@ Visual =
 | Imports
 */
 var
+	Action,
 	Euclid,
 	HoverReply,
 	Jools,
@@ -526,7 +527,7 @@ Item.prototype.dragStart =
 {
 	var
 		action =
-			shell.bridge.action( ),
+			shell.action,
 
 		sbary =
 			this.scrollbarY;
@@ -540,14 +541,15 @@ Item.prototype.dragStart =
 		)
 	)
 	{
-		shell.bridge.startAction(
-			'ScrollY',
-			'itemPath',
-				this.path,
-			'start',
-				p,
-			'startPos',
-				sbary.pos
+		shell.setAction(
+			Action.ScrollY.create(
+				'itemPath',
+					this.path,
+				'start',
+					p,
+				'startPos',
+					sbary.pos
+			)
 		);
 
 		return true;
@@ -563,26 +565,10 @@ Item.prototype.dragStart =
 		return false;
 	}
 
-	switch( action && action.type )
+	// XXX
+	switch( action && action.reflect )
 	{
-		case 'Remove' :
-            if(
-                !this.path.equals( action.removeItemPath )
-            )
-            {
-                action.removeItemPath =
-                    this.path;
-
-                action.removeItemFade =
-                    true;
-
-                shell.redraw =
-                    true;
-            }
-
-			return true;
-
-		case 'createRelation' :
+		case 'CreateRelation' :
 
 			action.fromItemPath =
 				this.path;
@@ -599,15 +585,21 @@ Item.prototype.dragStart =
 		shell.redraw =
 			true;
 
-		shell.bridge.startAction(
-			'RelBind',
-			'itemPath',
-				this.path,
-			'start',
-				p,
-			'move',
-				p
+		/*
+
+		XXX REPAIR
+
+		shell.setAction(
+			Action.RelBind.create(
+				'itemPath',
+					this.path,
+				'start',
+					p,
+				'move',
+					p
+			)
 		);
+		*/
 
 		return true;
 	}
@@ -634,18 +626,19 @@ Item.prototype.dragStart =
 		shell.redraw =
 			true;
 
-		shell.bridge.startAction(
-			'ItemDrag',
-			'itemPath',
-				this.path,
-			'start',
-				vp,
-			'move',
-				vp,
-			'item',
-				this,
-			'origin',
-				this
+		shell.setAction(
+			Action.ItemDrag.create(
+				'itemPath',
+					this.path,
+				'start',
+					vp,
+				'move',
+					vp,
+				'item',
+					this,
+				'origin',
+					this
+			)
 		);
 
 		return true;
@@ -668,12 +661,13 @@ Item.prototype.dragMove =
 		// ctrl
 	)
 {
-	var action =
-		shell.bridge.action( );
+	var
+		action =
+			shell.action;
 
-	switch( action.type )
+	switch( action.reflect )
 	{
-		case 'createRelation' :
+		case 'CreateRelation' :
 
 			if(
 				!this.zone.within(
@@ -689,29 +683,6 @@ Item.prototype.dragMove =
 				p;
 
 			action.toItemPath =
-				this.path;
-
-			shell.redraw =
-				true;
-
-			return true;
-
-		case 'RelBind' :
-
-			if(
-				!this.zone.within(
-					view,
-					p
-				)
-			)
-			{
-				return false;
-			}
-
-			action.move =
-				p;
-
-			action.item2Path =
 				this.path;
 
 			shell.redraw =
@@ -757,7 +728,7 @@ Item.prototype.dragMove =
 		default :
 
 			throw new Error(
-				'invalid action.type in dragMove'
+				'invalid action in dragMove'
 			);
 	}
 
@@ -774,12 +745,13 @@ Item.prototype.dragStop =
 		p
 	)
 {
-	var action =
-		shell.bridge.action();
+	var
+		action =
+			shell.action;
 
-	switch( action.type )
+	switch( action.reflect )
 	{
-		case 'createRelation' :
+		case 'CreateRelation' :
 
 			if(
 				!this.zone.within(

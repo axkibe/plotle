@@ -872,9 +872,6 @@ Server.prototype.prepareResources =
 		'shell/discs/jockey.js',
 			'fb',
 
-		'shell/action.js',
-			'fb',
-
 		'shell/hover-reply.js',
 			'fb',
 
@@ -971,7 +968,25 @@ Server.prototype.prepareResources =
 		'shell/mark/range.js',
 			'fb',
 
-		'shell/bridge.js',
+		'shell/action/action.js',
+			'fb',
+
+		'shell/action/create-generic.js',
+			'fb',
+
+		'shell/action/create-relation.js',
+			'fb',
+
+		'shell/action/item-drag.js',
+			'fb',
+
+		'shell/action/item-resize.js',
+			'fb',
+
+		'shell/action/pan.js',
+			'fb',
+
+		'shell/action/scrolly.js',
 			'fb',
 
 		'shell/greenscreen.js',

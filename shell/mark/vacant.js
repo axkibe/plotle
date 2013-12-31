@@ -16,7 +16,8 @@ var
 | Imports
 */
 var
-	Jools;
+	Jools,
+	Path;
 
 
 /*
@@ -94,6 +95,19 @@ Vacant.create =
 
 	return singleton;
 };
+
+
+/*
+| Returns the items path.
+*/
+Jools.lazyFixate(
+	Vacant.prototype,
+	'itemPath',
+	function( )
+	{
+		return Path.empty;
+	}
+);
 
 
 /*

@@ -215,7 +215,7 @@ MoveTo.prototype.pushButton =
 		case 'userHomeButton' :
 
 			shell.moveToSpace(
-				shell.bridge.getUsername( ),
+				shell.username, // XXX
 				'home',
 				false
 			);

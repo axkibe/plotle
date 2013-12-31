@@ -499,16 +499,18 @@ Portal.prototype.dragStop =
 		p
 	)
 {
-	var action =
-		shell.bridge.action( );
+	var
+		action =
+			shell.action;
 
-	switch( action.type )
+	switch( action.reflect )
 	{
 		case 'ItemDrag' :
 		case 'ItemResize' :
 
-			var zone =
-				this.zone;
+			var
+				zone =
+					this.zone;
 
 			if(
 				zone.width < theme.portal.minWidth ||
@@ -701,36 +703,12 @@ Portal.prototype.draw =
 			);
 	}
 
-	var
-		action =
-			shell.bridge.action( );
-
-	if(
-		action &&
-		action.type === 'Remove' &&
-		action.removeItemFade &&
-		this.path &&
-		this.path.equals( action.removeItemPath )
-	)
-	{
-		fabric.drawImage(
-			'image',
-				f,
-			'pnw',
-				vzone.pnw,
-			'alpha',
-				theme.removeAlpha
-		);
-	}
-	else
-	{
-		fabric.drawImage(
-			'image',
-				f,
-			'pnw',
-				vzone.pnw
-		);
-	}
+	fabric.drawImage(
+		'image',
+			f,
+		'pnw',
+			vzone.pnw
+	);
 };
 
 

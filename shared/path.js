@@ -301,6 +301,43 @@ Path.prototype.shorten =
 	return new Path( _tag, p );
 };
 
+
+/*
+| Returns a path limited to a specific lenght.
+*/
+Path.prototype.limit =
+	function(
+		n
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( n > this.length || n < 0 )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid shorten'
+/**/		);
+/**/	}
+/**/}
+
+	if( n === this.length )
+	{
+		return this;
+	}
+
+	if( n === 0 )
+	{
+		return Path.empty;
+	}
+
+	var
+		p =
+			this._path.slice( 0, n );
+
+	return new Path( _tag, p );
+};
+
 /*
 | Returns a path with the first item prepended.
 |

@@ -19,7 +19,7 @@ var
 | Imports
 */
 var
-	Bridge,
+	Action,
 	Discs,
 	Euclid,
 	fontPool,
@@ -106,12 +106,6 @@ var
 				true,
 
 			/*
-			| Removing items.
-			*/
-			'Remove' :
-				true,
-
-			/*
 			| Signing up
 			*/
 			'SignUp' :
@@ -180,7 +174,13 @@ Shell =
 	this.fabric =
 		fabric;
 
+	this.username =
+		null;
+
 	this.$space =
+		null;
+
+	this.$action =
 		null;
 
 	this._$mode =
@@ -203,26 +203,29 @@ Shell =
 
 	this._$formJockey =
 		Forms.Jockey.create(
-			'screensize',
-				screensize,
+			'hover',
+				Path.empty,
 			'mark',
 				Mark.Vacant.create( ),
-			'hover',
-				Path.empty
+			'screensize',
+				screensize
 		);
 
 	this._$discJockey =
 		Discs.Jockey.create(
-			'screensize',
-				screensize,
+			'access',
+				'',
 			'hover',
 				Path.empty,
+			'mark',
+				Mark.Vacant.create( ),
 			'mode',
-				this._$mode
+				this._$mode,
+			'screensize',
+				screensize,
+			'username',
+				''
 		);
-
-	this.bridge =
-		new Bridge( );
 
 	// greenscreen display if not null
 	this._$greenscreen =
@@ -246,6 +249,23 @@ Object.defineProperty(
 			}
 	}
 );
+
+
+/*
+| TODO, workaround until $action is gone
+*/
+Object.defineProperty(
+	Shell.prototype,
+	'action',
+	{
+		get :
+			function( )
+			{
+				return this.$action;
+			}
+	}
+);
+
 
 /*
 | Positions the caret.
@@ -287,7 +307,7 @@ Shell.prototype.messageRCV =
 
 
 /*
-| Changes the mode
+| Changes the mode.
 */
 Shell.prototype.setMode =
 	function(
@@ -320,6 +340,63 @@ Shell.prototype.setMode =
 };
 
 
+/*
+| Sets the current action.
+*/
+Shell.prototype.setAction =
+	function(
+		action
+	)
+{
+	if( this.$action && action )
+	{
+		console.log( 'WARN: action on action!' );
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( action && !Action.isAction( action.reflect ) )
+/**/	{
+/**/			throw new Error(
+/**/				'invalid action'
+/**/			);
+/**/	}
+/**/}
+
+	this.$action =
+		action;
+
+	// XXX updates
+};
+
+
+/*
+| Updates the current action.
+*/
+Shell.prototype.updateAction =
+	function(
+		action
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( !this.$action || !action )
+/**/	{
+/**/		throw new Error( 'updating null action' );
+/**/	}
+/**/
+/**/	if( this.action.reflect !== action.reflect )
+/**/	{
+/**/		throw new Error( 'updating wrong action' );
+/**/	}
+/**/}
+
+	this.$action =
+		action;
+
+	// XXX updates
+};
 
 
 /*
@@ -586,7 +663,6 @@ Shell.prototype._getCurrentDisplay =
 	{
 		case 'Create' :
 		case 'Normal' :
-		case 'Remove' :
 
 			return this.$space;
 
@@ -839,7 +915,7 @@ Shell.prototype.dragMove =
 {
 	var
 		action =
-			this.bridge.action( );
+			this.action;
 
 	if( !action )
 	{
@@ -888,7 +964,7 @@ Shell.prototype.dragStop =
 
 	var
 		action =
-			this.bridge.action( );
+			this.action;
 
 	if( !action )
 	{
@@ -1196,6 +1272,15 @@ Shell.prototype.userMark =
 				mark.concerns( this._$formJockey.path )
 		);
 
+	this._$discJockey =
+		Discs.Jockey.create(
+			'inherit',
+				this._$discJockey,
+			'mark',
+				mark
+		);
+
+
 	this.redraw =
 		true;
 };
@@ -1441,23 +1526,24 @@ Shell.prototype.resize =
 */
 Shell.prototype.setUser =
 	function(
-		user,
+		username,
 		passhash
 	)
 {
+	// TODO this $user and this.username
 	this.$user =
-		user;
+		username;
 
 	this.peer.setUser(
-		user,
+		username,
 		passhash
 	);
 
-	if( user.substr( 0, 5 ) !== 'visit' )
+	if( username.substr( 0, 5 ) !== 'visit' )
 	{
 		window.localStorage.setItem(
-			'user',
-			user
+			'username',
+			username
 		);
 
 		window.localStorage.setItem(
@@ -1480,6 +1566,12 @@ Shell.prototype.setUser =
 		}
 
 		window.localStorage.setItem(
+			'username',
+			null
+		);
+
+		// FIXME remove
+		window.localStorage.setItem(
 			'user',
 			null
 		);
@@ -1490,9 +1582,17 @@ Shell.prototype.setUser =
 		);
 	}
 
-	this.bridge.setUsername( user );
+	// TODO
+	this.username =
+		username;
 
-	this._$discJockey.setUser( user );
+	this._$discJockey =
+		Discs.Jockey.create(
+			'inherit',
+				this._$discJockey,
+			'username',
+				username
+		);
 
 	this._$formJockey =
 		Forms.Jockey.create(
@@ -1503,15 +1603,15 @@ Shell.prototype.setUser =
 					'trait',
 						this._$formJockey.get( 'User' ).path,
 						'user',
-						user,
+						username,
 					'trait',
 						this._$formJockey.get( 'Welcome' ).path,
 						'user',
-						user,
+						username,
 					'trait',
 						this._$formJockey.get( 'MoveTo' ).path,
 						'user',
-						user
+						username
 				)
 		);
 };
@@ -1561,25 +1661,25 @@ Shell.prototype.onload =
 		);
 
 	var
-		user =
-			window.localStorage.getItem( 'user' ),
+		username =
+			window.localStorage.getItem( 'username' ),
 
 		passhash =
 			null;
 
-	if( user )
+	if( username )
 	{
 		passhash =
 			window.localStorage.getItem( 'passhash' );
 	}
 	else
 	{
-		user =
+		username =
 			'visitor';
 	}
 
 	this.peer.auth(
-		user,
+		username,
 		passhash,
 		this
 	);
@@ -1750,7 +1850,7 @@ Shell.prototype.onAquireSpace =
 */
 Shell.prototype.onAuth =
 	function(
-		user,
+		username,
 		passhash,
 		res
 	)
@@ -1759,7 +1859,7 @@ Shell.prototype.onAuth =
 	{
 		// when logging in with a real user failed
 		// takes a visitor instead
-		if( user !== 'visitor' )
+		if( username !== 'visitor' )
 		{
 			this.peer.auth(
 				'visitor',
@@ -1840,10 +1940,17 @@ Shell.prototype.arrivedAtSpace =
 	)
 {
 	// TODO
+	this._$discJockey =
+		Discs.Jockey.create(
+			'inherit',
+				this._$discJockey,
+			'access',
+				access
+		);
+
 	this._$discJockey.arrivedAtSpace(
 		spaceUser,
-		spaceTag,
-		access
+		spaceTag
 	);
 
 	var
@@ -1872,7 +1979,7 @@ Shell.prototype.arrivedAtSpace =
 
 
 /*
-| Removes the selection including its contents.
+| Removes the a (text) range.
 */
 Shell.prototype.removeRange =
 	function(

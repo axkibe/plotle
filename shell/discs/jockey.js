@@ -28,12 +28,12 @@ var
 'use strict';
 
 
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
+/**/if( CHECK && typeof( window ) === 'undefined' )
+/**/{
+/**/	throw new Error(
+/**/		'this code needs a browser!'
+/**/	);
+/**/}
 
 
 var
@@ -57,39 +57,52 @@ Discs.Jockey =
 	function(
 		tag,
 		inherit,
+		access,
 		hover,
+		mark,
 		mode,
-		screensize
+		screensize,
+		username
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
 
-		if( !hover || hover.reflect !== 'Path' )
-		{
-			throw new Error(
-				'invalid hover'
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( tag !== _tag )
+/**/	{
+/**/		throw new Error(
+/**/			'tag mismatch'
+/**/		);
+/**/	}
+/**/
+/**/	if( !hover || hover.reflect !== 'Path' )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid hover'
+/**/		);
+/**/	}
+/**/}
 
 	this.screensize =
 		screensize;
 
+	this.access =
+		access;
+
 	this.hover =
 		hover;
+
+	this.mark =
+		mark;
 
 	this.mode =
 		mode;
 
 	this.path =
 		Path.empty.append( 'disc' );
+
+	this.username =
+		username;
 
 	var
 		discs =
@@ -107,15 +120,21 @@ Discs.Jockey =
 					name,
 				'inherit',
 					inherit && inherit._discs[ name ],
+				'access',
+					access,
 				'hover',
 					hover.isEmpty || hover.get( 1 ) !== name ?
 						Path.empty
 						:
 						hover,
+				'mark',
+					mark,
 				'mode',
 					mode,
 				'screensize',
-					screensize
+					screensize,
+				'username',
+					username
 			);
 	}
 
@@ -134,16 +153,25 @@ Jockey.create =
 	)
 {
 	var
+		access =
+			null,
+
 		hover =
 			null,
 
 		inherit =
 			null,
 
+		mark =
+			null,
+
 		mode =
 			null,
 
 		screensize =
+			null,
+
+		username =
 			null;
 
 	for(
@@ -154,6 +182,13 @@ Jockey.create =
 	{
 		switch( arguments[ a ] )
 		{
+			case 'access' :
+
+				access =
+					arguments[ a + 1 ];
+
+				break;
+
 			case 'hover' :
 
 				hover =
@@ -164,6 +199,13 @@ Jockey.create =
 			case 'inherit' :
 
 				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
 					arguments[ a + 1 ];
 
 				break;
@@ -182,20 +224,43 @@ Jockey.create =
 
 				break;
 
+			case 'username' :
+
+				username =
+					arguments[ a + 1 ];
+
+				break;
+
+
 			default :
 
-				throw new Error(
-					'invalid argument: '
-				);
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error(
+/**/					'invalid argument: ' + arguments[ a ]
+/**/				);
+/**/			}
 		}
 	}
 
 	if( inherit )
 	{
+		if( access === null )
+		{
+			access =
+				inherit.access;
+		}
+
 		if( hover === null )
 		{
 			hover =
 				inherit.hover;
+		}
+
+		if( mark === null )
+		{
+			mark =
+				inherit.mark;
 		}
 
 		if( mode === null )
@@ -211,29 +276,36 @@ Jockey.create =
 		}
 
 		if(
+			inherit.access === access
+			&&
 			inherit.hover.equals( hover )
+			&&
+			inherit.mark.equals( mark )
 			&&
 			inherit.mode === mode
 			&&
 			inherit.screensize.equals( screensize )
+			&&
+			inherit.username === username
 		)
 		{
 			return inherit;
 		}
 	}
 
-
 	return (
 		new Jockey(
 			_tag,
 			inherit,
+			access,
 			hover,
+			mark,
 			mode,
-			screensize
+			screensize,
+			username
 		)
 	);
 };
-
 
 
 /*
@@ -242,15 +314,13 @@ Jockey.create =
 Jockey.prototype.arrivedAtSpace =
 	function(
 		spaceUser,
-		spaceTag,
-		access
+		spaceTag
 	)
 {
 	return (
 		this._discs.MainDisc.arrivedAtSpace(
 			spaceUser,
-			spaceTag,
-			access
+			spaceTag
 		)
 	);
 };
@@ -431,20 +501,6 @@ Jockey.prototype.setSpaceZoom =
 	// nothing
 };
 
-
-/*
-| Displays the current user
-| Adapts login/logout/signup button
-|
-| TODO remove
-*/
-Jockey.prototype.setUser =
-	function(
-		user
-	)
-{
-	return this._discs.MainDisc.setUser( user );
-};
 
 
 /*

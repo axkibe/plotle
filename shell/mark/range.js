@@ -16,7 +16,8 @@ var
 | Imports
 */
 var
-	Jools;
+	Jools,
+	Path;
 
 
 /*
@@ -133,20 +134,17 @@ Range.create =
 | Returns begin or end path,
 | dependening on which comes first in docTree.
 */
-Object.defineProperty(
+Jools.lazyFixate(
 	Range.prototype,
 	'frontPath',
+	function( )
 	{
-		get :
-			function( )
-			{
-				if( !this._frontPath )
-				{
-					this._normalize( );
-				}
+		if( !this._frontPath )
+		{
+			this._normalize( );
+		}
 
-				return this._frontPath;
-			}
+		return this._frontPath;
 	}
 );
 
@@ -155,20 +153,17 @@ Object.defineProperty(
 | Returns begin or end offset,
 | dependening on which comes first in docTree.
 */
-Object.defineProperty(
+Jools.lazyFixate(
 	Range.prototype,
 	'frontAt',
+	function( )
 	{
-		get :
-			function( )
-			{
-				if( !this._frontPath )
-				{
-					this._normalize( );
-				}
+		if( !this._frontPath )
+		{
+			this._normalize( );
+		}
 
-				return this._frontAt;
-			}
+		return this._frontAt;
 	}
 );
 
@@ -176,20 +171,17 @@ Object.defineProperty(
 | Returns begin or end path,
 | dependening on which comes last in docTree.
 */
-Object.defineProperty(
+Jools.lazyFixate(
 	Range.prototype,
 	'backPath',
+	function( )
 	{
-		get :
-			function( )
-			{
-				if( !this._backPath )
-				{
-					this._normalize( );
-				}
+		if( !this._backPath )
+		{
+			this._normalize( );
+		}
 
-				return this._backPath;
-			}
+		return this._backPath;
 	}
 );
 
@@ -198,20 +190,17 @@ Object.defineProperty(
 | Returns begin or end path,
 | dependening on which comes last in docTree.
 */
-Object.defineProperty(
+Jools.lazyFixate(
 	Range.prototype,
 	'backAt',
+	function( )
 	{
-		get :
-			function( )
-			{
-				if( !this._backPath )
-				{
-					this._normalize( );
-				}
+		if( !this._backPath )
+		{
+			this._normalize( );
+		}
 
-				return this._backAt;
-			}
+		return this._backAt;
 	}
 );
 
@@ -231,15 +220,12 @@ Range.prototype.hasCaret =
 |
 | This allows a common interface with text range.
 */
-Object.defineProperty(
+Jools.lazyFixate(
 	Range.prototype,
 	'caretPath',
+	function( )
 	{
-		get :
-			function( )
-			{
-				return this.ePath;
-			}
+		return this.ePath;
 	}
 );
 
@@ -249,15 +235,30 @@ Object.defineProperty(
 |
 | This allows a common interface with text range.
 */
-Object.defineProperty(
+Jools.lazyFixate(
 	Range.prototype,
 	'caretAt',
+	function( )
 	{
-		get :
-			function( )
-			{
-				return this.eAt;
-			}
+		return this.eAt;
+	}
+);
+
+
+/*
+| Returns the items path.
+*/
+Jools.lazyFixate(
+	Range.prototype,
+	'itemPath',
+	function( )
+	{
+		if( this.bPath.length < 2 )
+		{
+			return Path.empty;
+		}
+
+		return this.bPath.limit( 2 );
 	}
 );
 

@@ -18,6 +18,7 @@ Discs =
 | Imports
 */
 var
+	Action,
 	Euclid,
 	Jools,
 	shell,
@@ -31,12 +32,12 @@ var
 'use strict';
 
 
-if( CHECK && typeof( window ) === 'undefined')
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
+/**/if( CHECK && typeof( window ) === 'undefined')
+/**/{
+/**/	throw new Error(
+/**/		'this code needs a browser!'
+/**/	);
+/**/}
 
 
 var
@@ -52,23 +53,36 @@ Discs.CreateDisc =
 	function(
 		tag,
 		inherit,
+		access,
 		hover,
+		mark,
 		mode,
-		screensize
+		screensize,
+		username
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( tag !== _tag )
+/**/	{
+/**/		throw new Error(
+/**/			'tag mismatch'
+/**/		);
+/**/	}
+/**/}
+
+	this.access =
+		access;
+
+	this.mark =
+		mark;
 
 	this.mode =
 		mode;
+
+	this.username =
+		username;
 
 	Discs.Disc.call(
 		this,
@@ -206,27 +220,27 @@ CreateDisc.prototype.pushButton =
 {
 	var
 		action =
-			shell.bridge.action( );
+			shell.action;
 
-	if( CHECK )
-	{
-		var
-			discname =
-				path.get( 1 );
-
-		if( discname !== this.reflect )
-		{
-			throw new Error(
-				'invalid discname: ' + discname
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	var
+/**/		discname =
+/**/			path.get( 1 );
+/**/
+/**/	if( discname !== this.reflect )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid discname: ' + discname
+/**/		);
+/**/	}
+/**/}
 
 	var
 		buttonName =
 			path.get( 2 );
 
-	if( action && action.type === buttonName )
+	if( action && action.reflect === buttonName )
 	{
 		// already in this action
 
@@ -237,25 +251,52 @@ CreateDisc.prototype.pushButton =
 
 	if( action )
 	{
-		shell.bridge.stopAction( );
+		shell.setAction( null );
 	}
 
 	switch( buttonName )
 	{
+		// XXX rename
 		case 'createLabel' :
-		case 'createNote' :
-		case 'createPortal' :
 
-			shell.bridge.startAction( buttonName );
+			shell.setAction(
+				Action.CreateGeneric.create(
+					'itemType',
+						'Label'
+				)
+			);
 
 			return;
 
-		case 'createRelation' :
+		case 'createNote' :
 
-			shell.bridge.startAction(
-				'createRelation',
-				'relationState',
-					'start'
+			shell.setAction(
+				Action.CreateGeneric.create(
+					'itemType',
+						'Note'
+				)
+			);
+
+			return;
+
+		case 'createPortal' :
+
+			shell.setAction(
+				Action.CreateGeneric.create(
+					'itemType',
+						'Portal'
+				)
+			);
+
+			return;
+
+		case 'CreateRelation' :
+
+			shell.setAction(
+				Action.CreateRelation.create(
+					'relationState',
+						'start'
+				)
 			);
 
 			return;

@@ -467,10 +467,11 @@ Note.prototype.dragStop =
 		p
 	)
 {
-	var action =
-		shell.bridge.action( );
+	var
+		action =
+			shell.action;
 
-	switch( action.type )
+	switch( action.reflect )
 	{
 
 		case 'ItemResize' :
@@ -606,38 +607,14 @@ Note.prototype.draw =
 		);
 	}
 
-	var
-		action =
-			shell.bridge.action( );
+	fabric.drawImage(
+		'image',
+			f,
+		'pnw',
+			vzone.pnw
+	);
 
-	// TODO move this logic into the callee
-	if(
-		action &&
-		action.type === 'Remove' &&
-		action.removeItemFade &&
-		this.path.equals( action.removeItemPath )
-	)
-	{
-		fabric.drawImage(
-			'image',
-				f,
-			'pnw',
-				vzone.pnw,
-			'alpha',
-				theme.removeAlpha
-		);
-	}
-	else
-	{
-		fabric.drawImage(
-			'image',
-				f,
-			'pnw',
-				vzone.pnw
-		);
-	}
-
-	if( sbary.visible )
+	if( sbary.visible ) // FIXME maybe just set sbary null
 	{
 		sbary.draw(
 			fabric,

@@ -31,12 +31,12 @@ var
 'use strict';
 
 
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
+/**/if( CHECK && typeof( window ) === 'undefined' )
+/**/{
+/**/	throw new Error(
+/**/		'this code needs a browser!'
+/**/	);
+/**/}
 
 
 var
@@ -52,23 +52,36 @@ Discs.MainDisc =
 	function(
 		tag,
 		inherit,
+		access,
 		hover,
+		mark,
 		mode,
-		screensize
+		screensize,
+		username
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( tag !== _tag )
+/**/	{
+/**/		throw new Error(
+/**/			'tag mismatch'
+/**/		);
+/**/	}
+/**/}
+
+	this.access =
+		access;
+
+	this.mark =
+		mark;
 
 	this.mode =
 		mode;
+
+	this.username =
+		username;
 
 	Discs.Disc.call(
 		this,
@@ -85,7 +98,11 @@ Discs.MainDisc =
 			this._tree.twig,
 
 		ranks =
-			this._tree.ranks;
+			this._tree.ranks,
+
+		isGuest =
+			username.substr( 0, 5 ) === 'visit';
+
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -97,11 +114,62 @@ Discs.MainDisc =
 			wname =
 				ranks[ r ],
 
+			text =
+				null,
+
 			tree =
 				twig[ wname ],
 
 			path =
-				this.path.append( wname );
+				this.path.append( wname ),
+
+			visible =
+				null;
+
+		switch( wname )
+		{
+			case 'Login' :
+
+				visible =
+					true;
+
+				text =
+					isGuest ?
+						'log\nin' :
+						'log\nout';
+
+				break;
+
+			case 'Remove' :
+
+				visible =
+					access === 'rw'
+					&&
+					mark.itemPath.length > 0;
+
+				break;
+
+			case 'Create' :
+
+				visible =
+					access === 'rw';
+
+				break;
+
+			case 'SignUp' :
+
+				visible =
+					isGuest;
+
+				break;
+
+			default :
+
+				visible =
+					true;
+
+				break;
+		}
 
 		switch( tree.twig.type )
 		{
@@ -119,10 +187,14 @@ Discs.MainDisc =
 							path.equals( hover ),
 						'focusAccent',
 							mode === wname,
+						'text',
+							text,
 						'tree',
 							tree,
 						'icons',
-							this._icons
+							this._icons,
+						'visible',
+							visible
 					);
 
 					break;
@@ -141,10 +213,8 @@ Discs.MainDisc =
 	this.buttons =
 		buttons;
 
-	this._$loggedIn =
-		inherit ?
-			inherit._$loggedIn :
-			false;
+	this._loggedIn =
+		!isGuest;
 
 	Jools.immute( this );
 };
@@ -229,9 +299,6 @@ MainDisc.prototype.pushButton =
 	)
 {
 	var
-		bridge =
-			shell.bridge,
-
 		discname =
 			path.get( 1 );
 
@@ -248,7 +315,7 @@ MainDisc.prototype.pushButton =
 
 	if(
 		buttonName === 'Login' &&
-		this._$loggedIn
+		this._loggedIn
 	)
 	{
 		shell.logout( );
@@ -256,27 +323,16 @@ MainDisc.prototype.pushButton =
 		return;
 	}
 
-	shell.setMode( buttonName );
-
-	var
-		action =
-			bridge.action( );
-
 	if( buttonName === 'Remove' )
 	{
-		if( action )
-		{
-			bridge.stopAction( );
-		}
-
-		bridge.startAction( 'Remove' );
+		// XXX Remove
+		//shell.peer.removeItem(
+		//	action.removeItemPath
+		//);
 	}
 	else
 	{
-		if( action && action.type === 'Remove' )
-		{
-			bridge.stopAction( );
-		}
+		shell.setMode( buttonName );
 	}
 
 	shell.redraw =
@@ -523,12 +579,13 @@ MainDisc.prototype.message =
 
 /*
 | Displays a current space
+|
+| TODO remove
 */
 MainDisc.prototype.arrivedAtSpace =
 	function(
 		spaceUser,
-		spaceTag,
-		access
+		spaceTag
 	)
 {
 	var buttons =
@@ -541,76 +598,6 @@ MainDisc.prototype.arrivedAtSpace =
 			'text',
 				spaceUser + ':' + spaceTag
 		);
-
-	buttons.Create =
-		Widgets.Button.create(
-			'inherit',
-				buttons.Create,
-			'visible',
-				access === 'rw'
-		);
-
-	buttons.Remove =
-		Widgets.Button.create(
-			'inherit',
-				buttons.Remove,
-			'visible',
-				access === 'rw'
-		);
-};
-
-
-/*
-| Displays the current user
-| Adapts Login/Logout/SignUp button
-*/
-MainDisc.prototype.setUser =
-	function(
-		user
-	)
-{
-	var
-		buttons =
-			this.buttons,
-
-		isGuest =
-			user.substr( 0, 5 ) === 'visit';
-
-	buttons.User =
-		Widgets.Button.create(
-			'inherit',
-				buttons.User,
-			'text',
-				user,
-			'visible',
-				true
-		);
-
-	this._$loggedIn =
-		!isGuest;
-
-	buttons.SignUp =
-		Widgets.Button.create(
-			'inherit',
-				buttons.SignUp,
-			'visible',
-				isGuest
-		);
-
-	buttons.Login =
-		Widgets.Button.create(
-			'inherit',
-				buttons.Login,
-			'text',
-				isGuest ?
-					'log\nin' :
-					'log\nout'
-		);
-
-	shell.setMode( 'Normal' );
-
-	shell.redraw =
-		true;
 };
 
 

@@ -312,7 +312,7 @@ Design.CreateDisc =
 			}
 		},
 
-		'createRelation' :
+		'CreateRelation' :
 		{
 			type :
 				'ButtonWidget',
@@ -542,7 +542,7 @@ Design.CreateDisc =
 	[
 		'createNote',
 		'createLabel',
-		'createRelation',
+		'CreateRelation',
 		'createPortal'
 	]
 };

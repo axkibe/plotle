@@ -430,7 +430,7 @@ Button.create =
 			);
 	}
 
-    // FIXME inherit cache
+	// FIXME inherit cache
 
 	return new Button(
 		_tag,
@@ -831,6 +831,8 @@ Button.prototype.draw =
 
 /*
 | Stops a ReButton action.
+|
+| FIXME refix
 */
 Button.prototype.dragStop =
 	function( )
@@ -842,7 +844,7 @@ Button.prototype.dragStop =
 	this._$retimer =
 		null;
 
-	shell.bridge.stopAction( );
+	shell.setAction( null );
 };
 
 

@@ -20,6 +20,7 @@ Visual =
 | Imports
 */
 var
+	Action,
 	Euclid,
 	HoverReply,
 	Jools,
@@ -389,7 +390,7 @@ Space.prototype.focusedItem =
 {
 	var
 		action =
-			shell.bridge.action( ),
+			shell.action,
 
 		mark =
 			this.mark,
@@ -404,7 +405,7 @@ Space.prototype.focusedItem =
 
 	if( action )
 	{
-		switch( action.type )
+		switch( action.reflect )
 		{
 			case 'ItemDrag' :
 			case 'ItemResize' :
@@ -437,9 +438,9 @@ Space.prototype.getItem =
 {
 	var
 		action =
-			shell.bridge.action( );
+			shell.action;
 
-	switch( action && action.type )
+	switch( action && action.reflect )
 	{
 		case 'ItemDrag' :
 		case 'ItemResize' :
@@ -522,7 +523,7 @@ Space.prototype.draw =
 			this.$view,
 
 		action =
-			shell.bridge.action( );
+			shell.action;
 
 	// TODO
 	this._center =
@@ -554,11 +555,9 @@ Space.prototype.draw =
 		);
 	}
 
-	switch( action && action.type )
+	switch( action && action.reflect )
 	{
-		case 'createLabel' :
-		case 'createNote' :
-		case 'createPortal' :
+		case 'CreateGeneric' :
 
 			if( action.start && action.move )
 			{
@@ -570,7 +569,7 @@ Space.prototype.draw =
 
 			break;
 
-		case 'createRelation' :
+		case 'CreateRelation' :
 
 			if( action.fromItemPath )
 			{
@@ -775,28 +774,10 @@ Space.prototype.pointingHover =
 			cursor =
 				cu;
 
-			switch( action && action.type )
+			switch( action && action.reflect )
 			{
 
-				case 'Remove' :
-
-					if(
-						!item.path.equals( action.removeItemPath )
-					)
-					{
-						action.removeItemPath =
-							item.path;
-
-						action.removeItemFade =
-							true;
-
-						shell.redraw =
-							true;
-					}
-
-					break;
-
-				case 'createRelation' :
+				case 'CreateRelation' :
 
 					if(
 						action.relationState === 'start'
@@ -820,22 +801,9 @@ Space.prototype.pointingHover =
 	/*
 	if( !cursor )
 	{
-		switch( action && action.type )
+		switch( action && action.reflect )
 		{
-			case 'Remove' :
-
-				if( action.removeItemPath )
-				{
-					action.removeItemPath =
-						null;
-
-					shell.redraw =
-						true;
-				}
-
-				break;
-
-			case 'createRelation' :
+			case 'CreateRelation' :
 
 				if( action.fromItemPath )
 				{
@@ -899,20 +867,21 @@ Space.prototype.dragStart =
 			dp =
 				view.depoint( p );
 
-			shell.bridge.startAction(
-				'ItemResize',
-				'itemPath',
-					focus.path,
-				'start',
-					dp,
-				'move',
-					dp,
-				'item',
-					focus,
-				'origin',
-					focus,
-				'align',
-					com
+			shell.setAction(
+				Action.ItemResize.create(
+					'itemPath',
+						focus.path,
+					'start',
+						dp,
+					'move',
+						dp,
+					'item',
+						focus,
+					'origin',
+						focus,
+					'align',
+						com
+				)
 			);
 
 			return;
@@ -921,107 +890,142 @@ Space.prototype.dragStart =
 
 	var
 		action =
-			shell.bridge.action( );
+			shell.action,
 
+		item =
+			null;
 
-	switch( action && action.type ) {
-
-		case 'createNote' :
-
-			action.start =
-				p;
-
-			action.origin =
-			action.item =
-				this.getActionItemCreator( action )
-					.create(
-						'zone',
-							Euclid.Rect.create(
-								'pnw/pse',
-								p, //TODO depoint?
-								p
-							),
-						'doc',
-							Visual.Doc.create(
-								'tree',
-									Stubs.emptyDoc,
-								'fontsize',
-									theme.note.fontsize,
-								'flowWidth',
-									0,
-								'paraSep',
-									Jools.half(
-										theme.note.fontsize
-									),
-								'mark',
-									Mark.Vacant.create( )
+	// XXX simplify
+	if(
+		action &&
+		action.reflect === 'CreateGeneric' &&
+		action.itemType === 'Note'
+	)
+	{
+		item =
+			Visual[ action.itemType ].create(
+				'zone',
+					Euclid.Rect.create(
+						'pnw/pse',
+						p, //TODO depoint?
+						p
+					),
+				'doc',
+					Visual.Doc.create(
+						'tree',
+							Stubs.emptyDoc,
+						'fontsize',
+							theme.note.fontsize,
+						'flowWidth',
+							0,
+						'paraSep',
+							Jools.half(
+								theme.note.fontsize
 							),
 						'mark',
 							Mark.Vacant.create( )
-					);
+					),
+				'mark',
+					Mark.Vacant.create( )
+			);
 
-			return;
+		shell.updateAction(
+			Action.GenericAction.create(
+				'inherit',
+					action,
+				'start',
+					p,
+				'origin',
+					item,
+				'item',
+					item
+			)
+		);
 
-		case 'createLabel' :
+		return;
+	}
+	else if
+	(
+		action &&
+		action.reflect === 'CreateGeneric' &&
+		action.itemType === 'Label'
 
-			action.start =
-				p;
-
-			action.origin =
-			action.item =
-				this.getActionItemCreator( action )
-					.create(
-						'pnw',
-							view.depoint( p ),
+	)
+	{
+		item =
+			Visual[ action.itemType ].create(
+				'pnw',
+					view.depoint( p ),
+				'fontsize',
+					theme.note.fontsize, // FIXME
+				'doc',
+					Visual.Doc.create(
+						'tree',
+							Stubs.labelDoc,
 						'fontsize',
 							theme.note.fontsize, // FIXME
-						'doc',
-							Visual.Doc.create(
-								'tree',
-									Stubs.labelDoc,
-								'fontsize',
-									theme.note.fontsize, // FIXME
-								'flowWidth',
-									0,
-								'paraSep',
-									0,
-								'mark',
-									Mark.Vacant.create( )
-							),
+						'flowWidth',
+							0,
+						'paraSep',
+							0,
 						'mark',
 							Mark.Vacant.create( )
-					);
+					),
+				'mark',
+					Mark.Vacant.create( )
+			);
 
-			return;
+		shell.updateAction(
+			Action.GenericAction.create(
+				'inherit',
+					action,
+				'start',
+					p,
+				'origin',
+					item,
+				'item',
+					item
+			)
+		);
 
+		return;
+	}
+	else if
+	(
+		action &&
+		action.reflect === 'CreateGeneric' &&
+		action.itemType === 'Portal'
 
-		case 'createPortal' :
+	)
+	{
+		item =
+			Visual[ action.itemType ].create(
+				'hover',
+					Path.empty,
+				'mark',
+					Mark.Vacant.create( ),
+				'zone',
+					Euclid.Rect.create(
+						'pnw/pse',
+						p, //TODO depoint?
+						p
+					)
+			);
 
-			action.start =
-				p;
+		shell.updateAction(
+			Action.GenericAction.create(
+				'inherit',
+					action,
+				'start',
+					p,
+				'origin',
+					item,
+				'item',
+					item
+			)
+		);
 
-			action.origin =
-			action.item =
-				this.getActionItemCreator( action )
-					.create(
-						'hover',
-							Path.empty,
-						'mark',
-							Mark.Vacant.create( ),
-						'zone',
-							Euclid.Rect.create(
-								'pnw/pse',
-								p, //TODO depoint?
-								p
-							)
-					);
-
-			return;
-
-		default :
-
-			// ignore and go on
-			break;
+		return;
 	}
 
 	// see if one item was targeted
@@ -1031,7 +1035,7 @@ Space.prototype.dragStart =
 		a++
 	)
 	{
-		var item =
+		item =
 			this.atRank( a );
 
 		if(
@@ -1049,19 +1053,10 @@ Space.prototype.dragStart =
 	}
 
 	// starts a panning operation instead
-	switch( action && action.type )
+
+	switch( action && action.reflect )
 	{
-		case 'Remove' :
-
-			action.start =
-				p;
-
-			action.pan =
-				view.pan;
-
-			return;
-
-		case 'createRelation' :
+		case 'CreateRelation' :
 
 			action.start =
 				p;
@@ -1076,47 +1071,16 @@ Space.prototype.dragStart =
 	}
 
 	// otherwise panning is initiated
-	shell.bridge.startAction
-	(
-		'Pan',
-		'start',
-			p,
-		'pan',
-			view.pan
+	shell.setAction(
+		Action.Pan.create(
+			'start',
+				p,
+			'pan',
+				view.pan
+		)
 	);
 
 	return;
-};
-
-
-/*
-| Returns the creator for an item to be created
-*/
-Space.prototype.getActionItemCreator =
-	function(
-		action
-	)
-{
-	switch( action.type )
-	{
-		case 'createLabel' :
-
-			return Visual.Label;
-
-		case 'createNote' :
-
-			return Visual.Note;
-
-		case 'createPortal' :
-
-			return Visual.Portal;
-
-		default :
-
-			throw new Error(
-				'unknown action'
-			);
-	}
 };
 
 
@@ -1185,7 +1149,7 @@ Space.prototype.dragStop =
 {
 	var
 		action =
-			shell.bridge.action( ),
+			shell.action,
 
 		view =
 			this.$view,
@@ -1194,14 +1158,17 @@ Space.prototype.dragStop =
 		result,
 		item;
 
-	if( CHECK && !action )
-	{
-		throw new Error(
-			'Dragstop without action'
-		);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( !action )
+/**/	{
+/**/		throw new Error(
+/**/			'Dragstop without action'
+/**/		);
+/**/	}
+/**/}
 
-	switch( action.type )
+	switch( action.reflect )
 	{
 		case 'createNote' :
 			// FIXME move to Note
@@ -1245,7 +1212,7 @@ Space.prototype.dragStop =
 
 			if( !ctrl )
 			{
-				shell.bridge.stopAction( );
+				shell.setAction( null );
 			}
 
 			break;
@@ -1284,7 +1251,7 @@ Space.prototype.dragStop =
 					),
 
 				label =
-					this.getActionItemCreator( action )
+					this.getCreator( action.itemType )
 						.create(
 							'inherit',
 								resized,
@@ -1328,7 +1295,7 @@ Space.prototype.dragStop =
 
 			if( !ctrl )
 			{
-				shell.bridge.stopAction( );
+				shell.setAction( null );
 			}
 
 			break;
@@ -1353,7 +1320,7 @@ Space.prototype.dragStop =
 					this.spaceUser,
 					this.spaceTag,
 					portal.zone,
-					shell.bridge.getUsername( ),
+					shell.username, // XXX
 					'home'
 				);
 
@@ -1373,17 +1340,20 @@ Space.prototype.dragStop =
 			shell.redraw =
 				true;
 
-			shell.bridge.stopAction( );
+			if( !ctrl )
+			{
+				shell.setAction( null );
+			}
 
 			break;
 
 		case 'Pan' :
 
-			shell.bridge.stopAction( );
+			shell.setAction( null );
 
 			break;
 
-		case 'createRelation' :
+		case 'CreateRelation' :
 
 			switch( action.relationState )
 			{
@@ -1406,7 +1376,7 @@ Space.prototype.dragStop =
 					shell.redraw =
 						true;
 
-					shell.bridge.stopAction( );
+					shell.setAction( null );
 
 					break;
 
@@ -1456,7 +1426,7 @@ Space.prototype.dragStop =
 					true;
 			}
 
-			shell.bridge.stopAction( );
+			shell.setAction( null );
 
 			break;
 
@@ -1502,7 +1472,7 @@ Space.prototype.dragStop =
 					true;
 			}
 
-			shell.bridge.stopAction( );
+			shell.setAction( null );
 
 			break;
 
@@ -1518,61 +1488,7 @@ Space.prototype.dragStop =
 				ctrl
 			);
 
-			shell.bridge.stopAction( );
-
-			break;
-
-		case 'Remove' :
-
-			var focus =
-				this.focusedItem( );
-
-			if( action.removeItemPath )
-			{
-				var removeItem =
-					this.getSub(
-						action.removeItemPath,
-						'Item'
-					);
-
-				// checks if the pointer is still
-				// on the items to be removed
-				// otherwise it is not removed!
-				if(
-					!removeItem.zone.within(
-						view,
-						p
-					)
-				)
-				{
-					action.removeItemPath =
-						null;
-
-					shell.redraw =
-						true;
-
-					break;
-				}
-
-				if(
-					focus &&
-					action.removeItemPath.equals( focus.path )
-				)
-				{
-					shell.userMark(
-						'set',
-						'type',
-							'vacant'
-					);
-				}
-
-				shell.peer.removeItem(
-					action.removeItemPath
-				);
-
-				action.removeItemPath =
-					null;
-			}
+			shell.setAction( null );
 
 			shell.redraw =
 				true;
@@ -1582,7 +1498,7 @@ Space.prototype.dragStop =
 		default :
 
 			throw new Error(
-				'Do not know how to handle action: ' + action.type
+				'Do not know how to handle action: ' + action.reflect
 			);
 	}
 
@@ -1605,9 +1521,10 @@ Space.prototype.dragMove =
 			this.$view,
 
 		action =
-			shell.bridge.action( ),
+			shell.action,
 
-		item,
+		item =
+			null,
 
 		fs,
 
@@ -1619,14 +1536,9 @@ Space.prototype.dragMove =
 
 		resized;
 
-	switch( action.type )
+	switch( action.reflect )
 	{
-		case 'createLabel' :
-		case 'createNote' :
-		case 'createPortal' :
-
-			action.move = // TODO remove action.move
-				p;
+		case 'CreateGeneric' :
 
 			origin =
 				action.origin;
@@ -1643,14 +1555,13 @@ Space.prototype.dragMove =
 			{
 				case 'zone' :
 
-					action.item =
-						this.getActionItemCreator( action )
-							.create(
-								'inherit',
-									origin,
-								'zone',
-									zone
-							);
+					item =
+						this.getCreator( action.itemType ).create(
+							'inherit',
+								origin,
+							'zone',
+								zone
+						);
 
 					break;
 
@@ -1673,7 +1584,7 @@ Space.prototype.dragMove =
 								fs
 						);
 
-					action.item =
+					item =
 						action.item.creator.create(
 							'inherit',
 								resized,
@@ -1691,14 +1602,33 @@ Space.prototype.dragMove =
 						);
 
 					break;
+
+				default :
+
+					throw new Error(
+						'invalid positioning'
+					);
 			}
+
+			shell.updateAction(
+				Action.CreateGeneric.create(
+					'inherit',
+						action,
+					'move',
+						p,
+					'item',
+						item
+				)
+			);
 
 			shell.redraw =
 				true;
 
 			return 'pointer';
 
-		case 'createRelation' :
+		case 'CreateRelation' :
+
+			// XXX
 
 			if( action.relationState === 'pan' )
 			{
@@ -1754,48 +1684,6 @@ Space.prototype.dragMove =
 
 			return 'pointer';
 
-
-		case 'Remove' :
-
-			if( !action.removeItemPath )
-			{
-				// dragging while removing
-
-				pd =
-					p.sub( action.start );
-
-				view =
-				this.$view =
-					new Euclid.View(
-						action.pan.add( pd.x / view.zoom, pd.y / view.zoom ),
-						view.fact
-					);
-			}
-			else
-			{
-				var removeItem =
-					this.getSub(
-						action.removeItemPath,
-						'Item'
-					);
-
-				// the item to removed is faded
-				// when the pointer is still upon
-				// it
-
-				action.removeItemFade = (
-					removeItem.zone.within(
-						view,
-						p
-					)
-				);
-			}
-
-			shell.redraw =
-				true;
-
-			return 'pointer';
-
 		case 'Pan' :
 
 			pd =
@@ -1818,9 +1706,6 @@ Space.prototype.dragMove =
 
 		case 'ItemDrag' :
 
-			action.move =
-				view.depoint( p );
-
 			origin =
 				action.origin;
 
@@ -1828,7 +1713,7 @@ Space.prototype.dragMove =
 			{
 				case 'zone' :
 
-					action.item =
+					item =
 						origin.creator.create(
 							'inherit',
 								origin,
@@ -1843,7 +1728,7 @@ Space.prototype.dragMove =
 
 				case 'pnw/fontsize' :
 
-					action.item =
+					item =
 						origin.creator.create(
 							'inherit',
 								origin,
@@ -1855,6 +1740,17 @@ Space.prototype.dragMove =
 					);
 			}
 
+			shell.updateAction(
+				Action.ItemDrag.create(
+					'inherit',
+						action,
+					'move',
+						view.depoint( p ),
+					'item',
+						item
+				)
+			);
+
 			shell.redraw =
 				true;
 
@@ -1862,9 +1758,6 @@ Space.prototype.dragMove =
 
 
 		case 'ItemResize' :
-
-			action.move =
-				view.depoint( p );
 
 			origin =
 				action.origin;
@@ -1877,7 +1770,7 @@ Space.prototype.dragMove =
 			{
 				case 'zone' :
 
-					action.item =
+					item =
 						action.origin.creator.create(
 							'inherit',
 								origin,
@@ -1942,7 +1835,7 @@ Space.prototype.dragMove =
 								fs
 						);
 
-					action.item =
+					item =
 						action.item.creator.create(
 							'inherit',
 								resized,
@@ -1961,16 +1854,26 @@ Space.prototype.dragMove =
 
 					break;
 
-				default :
-
-					if( CHECK )
-					{
-						throw new Error(
-							'invalid positioning'
-						);
-					}
+/**/				default :
+/**/
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error(
+/**/						'invalid positioning'
+/**/					);
+/**/				}
 			}
 
+			shell.updateAction(
+				Action.ItemResize.create(
+					'inherit',
+						action,
+					'move',
+						view.depoint( p ),
+					'item',
+						item
+				)
+			);
 
 			shell.redraw =
 				true;
@@ -2012,20 +1915,13 @@ Space.prototype.pointingStart =
 	}
 	*/
 
-	var action =
-		shell.bridge.action( );
+	var
+		action =
+			shell.action;
 
-	switch( action && action.type )
+	switch( action && action.reflect )
 	{
-		case 'Remove' :
-
-			// starts a drag operation on deletion
-			// so the item gets removed on
-			// mouse/finger up
-
-			return 'drag';
-
-		case 'createRelation' :
+		case 'CreateRelation' :
 
 			// this is either a pan or creates the relation
 			// anyway its a drag.
@@ -2195,7 +2091,7 @@ Space.prototype.getSub =
 			null,
 
 		action =
-			shell.bridge.action( );
+			shell.action;
 
 	for(
 		var a = 1, aZ = path.length;
@@ -2209,7 +2105,7 @@ Space.prototype.getSub =
 			action.itemPath.length === a
 		)
 		{
-			switch( action.type )
+			switch( action.relect )
 			{
 				case 'ItemDrag' :
 				case 'ItemResize' :

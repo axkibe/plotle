@@ -16,7 +16,8 @@ var
 | Imports
 */
 var
-	Jools;
+	Jools,
+	Path;
 
 
 /*
@@ -127,19 +128,34 @@ Caret.prototype.hasCaret =
 
 
 /*
+| Returns the items path.
+*/
+Jools.lazyFixate(
+	Caret.prototype,
+	'itemPath',
+	function( )
+	{
+		if( this.path.length < 2 )
+		{
+			return Path.empty;
+		}
+
+		return this.path.limit( 2 );
+	}
+);
+
+
+/*
 | Returns the caret path.
 |
 | This allows a common interface with text range.
 */
-Object.defineProperty(
+Jools.lazyFixate(
 	Caret.prototype,
 	'caretPath',
+	function( )
 	{
-		get :
-			function( )
-			{
-				return this.path;
-			}
+		return this.path;
 	}
 );
 
@@ -149,15 +165,12 @@ Object.defineProperty(
 |
 | This allows a common interface with text range.
 */
-Object.defineProperty(
+Jools.lazyFixate(
 	Caret.prototype,
 	'caretAt',
+	function( )
 	{
-		get :
-			function( )
-			{
-				return this.at;
-			}
+		return this.at;
 	}
 );
 
