@@ -930,7 +930,7 @@ Space.prototype.dragStart =
 			);
 
 		shell.updateAction(
-			Action.GenericAction.create(
+			Action.CreateGeneric.create(
 				'inherit',
 					action,
 				'start',
@@ -1251,22 +1251,21 @@ Space.prototype.dragStop =
 					),
 
 				label =
-					this.getCreator( action.itemType )
-						.create(
-							'inherit',
-								resized,
-							'pnw',
-								( p.x > action.start.x ) ?
-									zone.pnw
-									:
-									shellverse.grow(
-										'Point',
-										'x',
-											zone.pse.x - resized.zone.width,
-										'y',
-											zone.pnw.y
-									)
-						);
+					resized.creator.create(
+						'inherit',
+							resized,
+						'pnw',
+							( p.x > action.start.x ) ?
+								zone.pnw
+								:
+								shellverse.grow(
+									'Point',
+									'x',
+										zone.pse.x - resized.zone.width,
+									'y',
+										zone.pnw.y
+								)
+					);
 
 			result =
 				shell.peer.newLabel(
@@ -1556,7 +1555,7 @@ Space.prototype.dragMove =
 				case 'zone' :
 
 					item =
-						this.getCreator( action.itemType ).create(
+						origin.creator.create(
 							'inherit',
 								origin,
 							'zone',

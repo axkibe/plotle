@@ -46,7 +46,8 @@ var
 			tag,
 			itemType,
 			item,   // XXX document
-			origin  // XXX document
+			origin, // XXX document
+			start
 		)
 {
 
@@ -68,6 +69,9 @@ var
 
 	this.origin =
 		origin;
+
+	this.start =
+		start;
 
 	Action.Action.call(
 		this,
@@ -102,6 +106,9 @@ CreateGeneric.create =
 			null,
 
 		origin =
+			null,
+
+		start =
 			null;
 
 	for(
@@ -115,6 +122,13 @@ CreateGeneric.create =
 			case 'itemType' :
 
 				itemType =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
 					arguments[ a + 1 ];
 
 				break;
@@ -133,9 +147,9 @@ CreateGeneric.create =
 
 				break;
 
-			case 'inherit' :
+			case 'start' :
 
-				inherit =
+				start =
 					arguments[ a + 1 ];
 
 				break;
@@ -171,6 +185,12 @@ CreateGeneric.create =
 			origin =
 				inherit.origin;
 		}
+
+		if( start === null )
+		{
+			start =
+				inherit.start;
+		}
 	}
 
 	return (
@@ -178,7 +198,8 @@ CreateGeneric.create =
 			_tag,
 			itemType,
 			item,
-			origin
+			origin,
+			start
 		)
 	);
 };
