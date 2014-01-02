@@ -713,349 +713,348 @@ Server.prototype.buildShellConfig =
 Server.prototype.prepareResources =
 	function* ( )
 {
-	var r;
+	var
+		r,
 
-	var rlist = [
-		'media/favicon.ico',
-			'mc',
+		rlist =
+			[
+				'media/favicon.ico',
+					'mc',
 
-		'testpad/testpad.js',
-			'f',
+				'testpad/testpad.js',
+					'f',
 
-		'testpad/iface-sym.js',
-			'f',
+				'testpad/iface-sym.js',
+					'f',
 
-		'shell/fonts/webfont.js',
-			'mc',
+				'shell/fonts/webfont.js',
+					'mc',
 
-		'shared/jools.js',
-			'fb',
+				'shared/jools.js',
+					'fb',
 
-		'shared/sha1.js',
-			'fb',
+				'shared/sha1.js',
+					'fb',
 
-		'shared/meshverse.js',
-			'fb',
+				'shared/meshverse.js',
+					'fb',
 
-		'shared/path.js',
-			'fb',
+				'shared/path.js',
+					'fb',
 
-		'shared/tree.js',
-			'fb',
+				'shared/tree.js',
+					'fb',
 
-		'shared/sign.js',
-			'fb',
+				'shared/sign.js',
+					'fb',
 
-		'shared/change.js',
-			'fb',
+				'shared/change.js',
+					'fb',
 
-		'shared/changeray.js',
-			'fb',
+				'shared/changeray.js',
+					'fb',
 
-		'shared/meshmashine.js',
-			'fb',
+				'shared/meshmashine.js',
+					'fb',
 
-		'shell/euclid/const.js',
-			'fb',
+				'shell/euclid/const.js',
+					'fb',
 
-		'shell/euclid/compass.js',
-			'fb',
+				'shell/euclid/compass.js',
+					'fb',
 
-		'shell/euclid/point.js',
-			'fb',
+				'shell/euclid/point.js',
+					'fb',
 
-		'shell/euclid/rect.js',
-			'fb',
+				'shell/euclid/rect.js',
+					'fb',
 
-		'shell/euclid/margin.js',
-			'fb',
+				'shell/euclid/margin.js',
+					'fb',
 
-		'shell/euclid/font.js',
-			'fb',
+				'shell/euclid/font.js',
+					'fb',
 
-		'shell/euclid/fabric.js',
-			'fb',
+				'shell/euclid/fabric.js',
+					'fb',
 
-		'shell/euclid/measure.js',
-			'fb',
+				'shell/euclid/measure.js',
+					'fb',
 
-		'shell/euclid/rect.js',
-			'fb',
+				'shell/euclid/shape.js',
+					'fb',
 
-		'shell/euclid/shape.js',
-			'fb',
+				'shell/euclid/round-rect.js',
+					'fb',
 
-		'shell/euclid/round-rect.js',
-			'fb',
+				'shell/euclid/ellipse.js',
+					'fb',
 
-		'shell/euclid/ellipse.js',
-			'fb',
+				'shell/euclid/line.js',
+					'fb',
 
-		'shell/euclid/line.js',
-			'fb',
+				'shell/euclid/curve.js',
+					'fb',
 
-		'shell/euclid/curve.js',
-			'fb',
+				'shell/shellverse.js',
+					'fb',
 
-		'shell/shellverse.js',
-			'fb',
+				'shell/fontpool.js',
+					'fb',
 
-		'shell/fontpool.js',
-			'fb',
+				'shell/style.js',
+					'fb',
 
-		'shell/style.js',
-			'fb',
+				'shell/accent.js',
+					'fb',
 
-		'shell/accent.js',
-			'fb',
+				'shell/traitset.js',
+					'fb',
 
-		'shell/traitset.js',
-			'fb',
+				'shell/theme.js',
+					'fb',
 
-		'shell/theme.js',
-			'fb',
+				'shell/design/maindisc.js',
+					'fb',
 
-		'shell/design/maindisc.js',
-			'fb',
+				'shell/design/createdisc.js',
+					'fb',
 
-		'shell/design/createdisc.js',
-			'fb',
+				'shell/design/login-form.js',
+					'fb',
 
-		'shell/design/login-form.js',
-			'fb',
+				'shell/design/moveto-form.js',
+					'fb',
 
-		'shell/design/moveto-form.js',
-			'fb',
+				'shell/design/no-access-to-space-form.js',
+					'fb',
 
-		'shell/design/no-access-to-space-form.js',
-			'fb',
+				'shell/design/non-existing-space-form.js',
+					'fb',
 
-		'shell/design/non-existing-space-form.js',
-			'fb',
+				'shell/design/signup-form.js',
+					'fb',
 
-		'shell/design/signup-form.js',
-			'fb',
+				'shell/design/space-form.js',
+					'fb',
 
-		'shell/design/space-form.js',
-			'fb',
+				'shell/design/user-form.js',
+					'fb',
 
-		'shell/design/user-form.js',
-			'fb',
+				'shell/design/welcome-form.js',
+					'fb',
 
-		'shell/design/welcome-form.js',
-			'fb',
+				'shell/euclid/view.js',
+					'fb',
 
-		'shell/euclid/view.js',
-			'fb',
+				'shell/iface.js',
+					'fb',
 
-		'shell/iface.js',
-			'fb',
+				'shell/peer.js',
+					'fb',
 
-		'shell/peer.js',
-			'fb',
+				'shell/stubs.js',
+					'fb',
 
-		'shell/stubs.js',
-			'fb',
+				'shell/discs/icons.js',
+					'fb',
 
-		'shell/discs/icons.js',
-			'fb',
+				'shell/discs/disc.js',
+					'fb',
 
-		'shell/discs/disc.js',
-			'fb',
+				'shell/discs/createdisc.js',
+					'fb',
 
-		'shell/discs/createdisc.js',
-			'fb',
+				'shell/discs/maindisc.js',
+					'fb',
 
-		'shell/discs/maindisc.js',
-			'fb',
+				'shell/discs/jockey.js',
+					'fb',
 
-		'shell/discs/jockey.js',
-			'fb',
+				'shell/hover-reply.js',
+					'fb',
 
-		'shell/hover-reply.js',
-			'fb',
+				'shell/widgets/getstyle.js',
+					'fb',
 
-		'shell/widgets/getstyle.js',
-			'fb',
+				'shell/widgets/label.js',
+					'fb',
 
-		'shell/widgets/label.js',
-			'fb',
+				'shell/widgets/button.js',
+					'fb',
 
-		'shell/widgets/button.js',
-			'fb',
+				'shell/widgets/input.js',
+					'fb',
 
-		'shell/widgets/input.js',
-			'fb',
+				'shell/widgets/checkbox.js',
+					'fb',
 
-		'shell/widgets/checkbox.js',
-			'fb',
+				'shell/forms/form.js',
+					'fb',
 
-		'shell/forms/form.js',
-			'fb',
+				'shell/forms/login.js',
+					'fb',
 
-		'shell/forms/login.js',
-			'fb',
+				'shell/forms/signup.js',
+					'fb',
 
-		'shell/forms/signup.js',
-			'fb',
+				'shell/forms/space.js',
+					'fb',
 
-		'shell/forms/space.js',
-			'fb',
+				'shell/forms/moveto.js',
+					'fb',
 
-		'shell/forms/moveto.js',
-			'fb',
+				'shell/forms/user.js',
+					'fb',
 
-		'shell/forms/user.js',
-			'fb',
+				'shell/forms/welcome.js',
+					'fb',
 
-		'shell/forms/welcome.js',
-			'fb',
+				'shell/forms/no-access-to-space.js',
+					'fb',
 
-		'shell/forms/no-access-to-space.js',
-			'fb',
+				'shell/forms/non-existing-space.js',
+					'fb',
 
-		'shell/forms/non-existing-space.js',
-			'fb',
+				'shell/forms/jockey.js',
+					'fb',
 
-		'shell/forms/jockey.js',
-			'fb',
+				'shell/visual/base.js',
+					'fb',
 
-		'shell/visual/base.js',
-			'fb',
+				'shell/visual/para.js',
+					'fb',
 
-		'shell/visual/para.js',
-			'fb',
+				'shell/visual/scrollbar.js',
+					'fb',
 
-		'shell/visual/scrollbar.js',
-			'fb',
+				'shell/visual/doc.js',
+					'fb',
 
-		'shell/visual/doc.js',
-			'fb',
+				'shell/visual/item.js',
+					'fb',
 
-		'shell/visual/item.js',
-			'fb',
+				'shell/visual/docitem.js',
+					'fb',
 
-		'shell/visual/docitem.js',
-			'fb',
+				'shell/visual/note.js',
+					'fb',
 
-		'shell/visual/note.js',
-			'fb',
+				'shell/visual/label.js',
+					'fb',
 
-		'shell/visual/label.js',
-			'fb',
+				'shell/visual/relation.js',
+					'fb',
 
-		'shell/visual/relation.js',
-			'fb',
+				'shell/visual/portal.js',
+					'fb',
 
-		'shell/visual/portal.js',
-			'fb',
+				'shell/visual/space.js',
+					'fb',
 
-		'shell/visual/space.js',
-			'fb',
+				'shell/system.js',
+					'fb',
 
-		'shell/system.js',
-			'fb',
+				'shell/mark/mark.js',
+					'fb',
 
-		'shell/mark/mark.js',
-			'fb',
+				'shell/mark/vacant.js',
+					'fb',
 
-		'shell/mark/vacant.js',
-			'fb',
+				'shell/mark/caret.js',
+					'fb',
 
-		'shell/mark/caret.js',
-			'fb',
+				'shell/mark/range.js',
+					'fb',
 
-		'shell/mark/range.js',
-			'fb',
+				'shell/action/action.js',
+					'fb',
 
-		'shell/action/action.js',
-			'fb',
+				'shell/action/create-generic.js',
+					'fb',
 
-		'shell/action/create-generic.js',
-			'fb',
+				'shell/action/create-relation.js',
+					'fb',
 
-		'shell/action/create-relation.js',
-			'fb',
+				'shell/action/item-drag.js',
+					'fb',
 
-		'shell/action/item-drag.js',
-			'fb',
+				'shell/action/item-resize.js',
+					'fb',
 
-		'shell/action/item-resize.js',
-			'fb',
+				'shell/action/pan.js',
+					'fb',
 
-		'shell/action/pan.js',
-			'fb',
+				'shell/action/scrolly.js',
+					'fb',
 
-		'shell/action/scrolly.js',
-			'fb',
+				'shell/greenscreen.js',
+					'fb',
 
-		'shell/greenscreen.js',
-			'fb',
+				'shell/shell.js',
+					'fb',
 
-		'shell/shell.js',
-			'fb',
+				'shell/fontloader.js',
+					'fb',
 
-		'shell/fontloader.js',
-			'fb',
+				'shell/fonts/dejavu.css',
+					'mc',
 
-		'shell/fonts/dejavu.css',
-			'mc',
+				'shell/fonts/dejavusans-boldoblique-webfont.eot',
+					'mc',
 
-		'shell/fonts/dejavusans-boldoblique-webfont.eot',
-			'mc',
+				'shell/fonts/dejavusans-boldoblique-webfont.svg',
+					'mc',
 
-		'shell/fonts/dejavusans-boldoblique-webfont.svg',
-			'mc',
+				'shell/fonts/dejavusans-boldoblique-webfont.ttf',
+					'mc',
 
-		'shell/fonts/dejavusans-boldoblique-webfont.ttf',
-			'mc',
+				'shell/fonts/dejavusans-boldoblique-webfont.woff',
+					'mc',
 
-		'shell/fonts/dejavusans-boldoblique-webfont.woff',
-			'mc',
+				'shell/fonts/dejavusans-bold-webfont.eot',
+					'mc',
 
-		'shell/fonts/dejavusans-bold-webfont.eot',
-			'mc',
+				'shell/fonts/dejavusans-bold-webfont.svg',
+					'mc',
 
-		'shell/fonts/dejavusans-bold-webfont.svg',
-			'mc',
+				'shell/fonts/dejavusans-bold-webfont.ttf',
+					'mc',
 
-		'shell/fonts/dejavusans-bold-webfont.ttf',
-			'mc',
+				'shell/fonts/dejavusans-bold-webfont.woff',
+					'mc',
 
-		'shell/fonts/dejavusans-bold-webfont.woff',
-			'mc',
+				'shell/fonts/dejavusans-oblique-webfont.eot',
+					'mc',
 
-		'shell/fonts/dejavusans-oblique-webfont.eot',
-			'mc',
+				'shell/fonts/dejavusans-oblique-webfont.svg',
+					'mc',
 
-		'shell/fonts/dejavusans-oblique-webfont.svg',
-			'mc',
+				'shell/fonts/dejavusans-oblique-webfont.ttf',
+					'mc',
 
-		'shell/fonts/dejavusans-oblique-webfont.ttf',
-			'mc',
+				'shell/fonts/dejavusans-oblique-webfont.woff',
+					'mc',
 
-		'shell/fonts/dejavusans-oblique-webfont.woff',
-			'mc',
+				'shell/fonts/dejavusans-webfont.eot',
+					'mc',
 
-		'shell/fonts/dejavusans-webfont.eot',
-			'mc',
+				'shell/fonts/dejavusans-webfont.svg',
+					'mc',
 
-		'shell/fonts/dejavusans-webfont.svg',
-			'mc',
+				'shell/fonts/dejavusans-webfont.ttf',
+					'mc',
 
-		'shell/fonts/dejavusans-webfont.ttf',
-			'mc',
-
-		'shell/fonts/dejavusans-webfont.woff',
-			'mc'
-	];
+				'shell/fonts/dejavusans-webfont.woff',
+					'mc'
+		];
 
 	// ressources served in the bundle
 	var
 		bundleRessources =
 			[ ];
 
-	// creates the Ressources
+	// creates the ressources
 	for(
 		var a = 0, aZ = rlist.length;
 		a < aZ;
@@ -1073,17 +1072,30 @@ Server.prototype.prepareResources =
 			bundleRessources.push( r );
 		}
 
-		this.$resources[ r.path ] = r;
+		if( this.$resources[ r.alias ] )
+		{
+			throw new Error(
+				'double ressource: ' + r.alias +
+					' ( ' + r.path + ' ) '
+			);
+		}
+
+		this.$resources[ r.alias ] =
+			r;
 	}
 
-	var path;
+	var
+		alias;
 
-	Jools.log( 'start', 'preparing resources' );
+	Jools.log(
+		'start',
+		'preparing resources'
+	);
 
-	for( path in this.$resources )
+	for( alias in this.$resources )
 	{
 		r =
-			this.$resources[path];
+			this.$resources[ alias ];
 
 		if(
 			r.data !== null
@@ -1101,8 +1113,8 @@ Server.prototype.prepareResources =
 			);
 	}
 
-	this.$resources['favicon.ico'] =
-		this.$resources['media/favicon.ico'];
+	this.$resources[ 'favicon.ico' ] =
+		this.$resources[ 'media/favicon.ico' ];
 
 	var
 		cconfig =
@@ -1113,7 +1125,7 @@ Server.prototype.prepareResources =
 
 	bundleRessources.unshift( cconfig );
 
-	this.$resources[ cconfig.path ] =
+	this.$resources[ cconfig.alias ] =
 		cconfig;
 
 	cconfig.data =
@@ -1139,7 +1151,9 @@ Server.prototype.prepareResources =
 			bundleRessources[ a ];
 
 		devels.push(
-			'<script src="' + r.path + '" type="text/javascript"></script>'
+			'<script src="' +
+				r.alias +
+				'" type="text/javascript"></script>'
 		);
 
 		if( r.data === null )
@@ -1223,7 +1237,7 @@ Server.prototype.prepareResources =
 	br.data =
 		bundle;
 
-	this.$resources[ br.path ] =
+	this.$resources[ br.alias ] =
 		br;
 
 	Jools.log(
@@ -1286,15 +1300,15 @@ Server.prototype.prepareResources =
 			);
 
 	main.data =
-		(yield fs.readFile(
+		( yield fs.readFile(
 			'shell/meshcraft.html',
 			resume( )
-		)) + '';
+		) ) + '';
 
 	main.data =
 		main.data.replace(
 			/<!--COPACK.*>/,
-			'<script src="' + br.path + '" type="text/javascript"></script>'
+			'<script src="' + br.alias + '" type="text/javascript"></script>'
 		);
 
 	this.$resources[ 'meshcraft.html' ] =
@@ -1314,10 +1328,10 @@ Server.prototype.prepareResources =
 		testpad;
 
 	// prepares the zipped versions
-	for( path in this.$resources )
+	for( alias in this.$resources )
 	{
 		r =
-			this.$resources[path];
+			this.$resources[ alias ];
 
 		if( !r.opts.memory )
 		{
@@ -2644,6 +2658,7 @@ Server.prototype.cmdGet =
 	// returns the path requested
 	var
 		node;
+
 	try
 	{
 		node =
@@ -2783,8 +2798,9 @@ Server.prototype.requestListener =
 		red.href
 	);
 
-	var pathname =
-		red.pathname.replace( /^[\/]+/g, '' );
+	var
+		pathname =
+			red.pathname.replace( /^[\/]+/g, '' );
 
 	if( pathname === 'mm' )
 	{

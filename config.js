@@ -74,7 +74,7 @@ config.database.name =
 | it will die on a command it considers unacceptable.
 */
 config.devel =
-	'both';
+	'shell';
 	// 'none';
 
 
@@ -120,7 +120,6 @@ config.debug.puffed =
 | are made immutable. Turned off on releases for performance.
 */
 config.debug.immute =
-	true ||
 	false;
 
 
