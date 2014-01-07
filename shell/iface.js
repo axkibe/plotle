@@ -1040,7 +1040,7 @@ IFace.prototype.alter =
 		trg
 	)
 {
-    var
+	var
 		result =
 			new Change(
 				new Sign( src ),
@@ -1050,7 +1050,7 @@ IFace.prototype.alter =
 				shellverse
 			);
 
-    this.$cSpace =
+	this.$cSpace =
 		result.tree;
 
 	var

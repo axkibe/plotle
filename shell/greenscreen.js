@@ -201,7 +201,14 @@ GreenScreen.prototype.click =
 GreenScreen.prototype.pointingHover =
 	function( )
 {
-	return 'default';
+	return (
+		HoverReply.create(
+			'path',
+				Path.empty,
+			'cursor',
+				'default'
+		)
+	);
 };
 
 

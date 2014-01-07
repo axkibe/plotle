@@ -376,35 +376,6 @@ Shell.prototype.setAction =
 
 
 /*
-| Updates the current action.
-*/
-Shell.prototype.updateAction =
-	function(
-		action
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( !this.$action || !action )
-/**/	{
-/**/		throw new Error( 'updating null action' );
-/**/	}
-/**/
-/**/	if( this.action.reflect !== action.reflect )
-/**/	{
-/**/		throw new Error( 'updating wrong action' );
-/**/	}
-/**/}
-
-	this.$action =
-		action;
-
-	// XXX updates
-};
-
-
-/*
 | MeshMashine is reporting updates.
 */
 Shell.prototype.update =
@@ -546,6 +517,14 @@ Shell.prototype.update =
 				tree,
 			'inherit',
 				this.$space,
+			'mark',
+				mark
+		);
+
+	this._$discJockey =
+		Discs.Jockey.create(
+			'inherit',
+				this._$discJockey,
 			'mark',
 				mark
 		);
@@ -748,17 +727,19 @@ Shell.prototype.pointingHover =
 				ctrl
 			);
 
-		if( CHECK )
-		{
-			if(
-				!reply
-				||
-				reply.reflect !== 'HoverReply'
-			)
-			{
-				throw new Error( 'invalid reply' );
-			}
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if(
+/**/			!reply
+/**/			||
+/**/			reply.reflect !== 'HoverReply'
+/**/		)
+/**/		{
+/**/			throw new Error(
+/**/				'invalid reply'
+/**/			);
+/**/		}
+/**/	}
 
 		shell._setHover( reply.path );
 

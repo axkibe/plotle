@@ -139,6 +139,7 @@ Change =
 
 /*
 | Returns the type of this change.
+|
 | TODO use lazyFixate
 */
 Change.prototype.type =
@@ -225,11 +226,12 @@ Change.prototype.invert =
 		return this._invert;
 	}
 
-	var r =
-		new Change(
-			this.trg,
-			this.src
-		);
+	var
+		r =
+			new Change(
+				this.trg,
+				this.src
+			);
 
 	// caches the inversion for both changies
 
@@ -269,7 +271,7 @@ Change.prototype.changeTree =
 		'trg:',
 			this.trg,
 		'type:',
-			this.type
+			type
 	);
 
 	// executes the op-handler
@@ -277,6 +279,12 @@ Change.prototype.changeTree =
 	var
 		r =
 			this[ type ]( tree, universe );
+
+	Jools.log(
+		'change',
+		'result',
+			r
+	);
 
 	// if answer is null the change has vaporated
 	if( r === null )
@@ -856,51 +864,60 @@ Change.prototype.split =
 		universe
 	)
 {
-	var cm   = 'change.split';
-	var src  = this.src;
-	var trg  = this.trg;
-	var path = src.path;
-
-	var at1 = src.at1;
-
-	Jools.check(
-		Jools.is( at1 ),
-		cm,
-		'src.at1 missing'
-	);
-
-	var text = tree.getPath( path );
-
-	Jools.check(
-		Jools.isString( text ),
-		cm, 'src signates no text'
-	);
-
 	var
+		cm =
+			'change.split',
+
+		src =
+			this.src,
+
+		trg =
+			this.trg,
+
+		path =
+			src.path,
+
+		at1 =
+			src.at1,
+
+		text =
+			tree.getPath( path ),
+
 		pivot =
 			tree.getPath( path, -2 ),
 
 		pattern =
-			universe[ pivot.type ];
+			universe[ pivot.type ],
+
+		vKey;
+
+	Jools.check(
+		Jools.isString( text ),
+		cm,
+		'src signates no text'
+	);
 
 	Jools.check(
 		pattern.ranks,
 		cm, 'pivot has no ranks'
 	);
 
-	var vKey;
 	if( Jools.is( trg.path ) )
 	{
-		vKey = trg.path.get(-2);
+		vKey =
+			trg.path.get( -2 );
 	}
 	else
 	{
-		vKey = pivot.newUID( );
-		trg = new Sign(
-			trg,
-			'path',
-				src.path.set( vKey )
-		);
+		vKey =
+			pivot.newUID( );
+
+		trg =
+			new Sign(
+				trg,
+				'path',
+					src.path.set( -2, vKey )
+			);
 	}
 
 	Jools.check(
@@ -960,7 +977,8 @@ Change.prototype.split =
 			-2
 		);
 
-	var chg;
+	var
+		chg;
 
 	if( src === this.src && trg === this.trg )
 	{

@@ -929,7 +929,7 @@ Space.prototype.dragStart =
 					Mark.Vacant.create( )
 			);
 
-		shell.updateAction(
+		shell.setAction(
 			Action.CreateGeneric.create(
 				'inherit',
 					action,
@@ -975,7 +975,7 @@ Space.prototype.dragStart =
 					Mark.Vacant.create( )
 			);
 
-		shell.updateAction(
+		shell.setAction(
 			Action.CreateGeneric.create(
 				'inherit',
 					action,
@@ -1012,7 +1012,7 @@ Space.prototype.dragStart =
 					)
 			);
 
-		shell.updateAction(
+		shell.setAction(
 			Action.CreateGeneric.create(
 				'inherit',
 					action,
@@ -1639,7 +1639,7 @@ Space.prototype.dragMove =
 					);
 			}
 
-			shell.updateAction(
+			shell.setAction(
 				Action.CreateGeneric.create(
 					'inherit',
 						action,
@@ -1769,7 +1769,7 @@ Space.prototype.dragMove =
 					);
 			}
 
-			shell.updateAction(
+			shell.setAction(
 				Action.ItemDrag.create(
 					'inherit',
 						action,
@@ -1893,7 +1893,7 @@ Space.prototype.dragMove =
 /**/				}
 			}
 
-			shell.updateAction(
+			shell.setAction(
 				Action.ItemResize.create(
 					'inherit',
 						action,
