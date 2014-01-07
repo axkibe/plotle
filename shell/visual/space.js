@@ -976,7 +976,7 @@ Space.prototype.dragStart =
 			);
 
 		shell.updateAction(
-			Action.GenericAction.create(
+			Action.CreateGeneric.create(
 				'inherit',
 					action,
 				'start',
@@ -1013,7 +1013,7 @@ Space.prototype.dragStart =
 			);
 
 		shell.updateAction(
-			Action.GenericAction.create(
+			Action.CreateGeneric.create(
 				'inherit',
 					action,
 				'start',
@@ -1170,185 +1170,207 @@ Space.prototype.dragStop =
 
 	switch( action.reflect )
 	{
-		case 'createNote' :
-			// FIXME move to Note
-			// ( and all others creators )
+		case 'CreateGeneric' :
 
-			var
-				note =
-					Visual.Note.create(
-						'inherit',
-							action.item,
-						'zone',
+			switch( action.itemType )
+			{
+				case 'Note' :
+
+					// FIXME move to Note
+					// ( and all others creators )
+
+					var
+						note =
+							Visual.Note.create(
+								'inherit',
+									action.item,
+								'zone',
+									Euclid.Rect.create(
+										'arbitrary',
+										view.depoint( action.start ),
+										view.depoint( action.move )
+									)
+							);
+
+					result =
+						shell.peer.newNote(
+							this.spaceUser,
+							this.spaceTag,
+							note.zone
+						),
+
+					key =
+						result.chgX.trg.path.get( -1 );
+
+					shell.userMark(
+						'set',
+						'type',
+							'caret',
+						'path',
+							shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
+						'at',
+							0
+					);
+
+					shell.redraw =
+						true;
+
+					if( !ctrl )
+					{
+						shell.setAction(
+							Action.None.create( )
+						);
+					}
+
+					break;
+
+				case 'Label' :
+
+					var
+						origin =
+							action.origin,
+
+						zone =
 							Euclid.Rect.create(
 								'arbitrary',
 								view.depoint( action.start ),
-								view.depoint( action.move )
-							)
+								view.depoint( action.move ) // TODO why not p?
+							),
+
+						oheight =
+							origin.zone.height,
+
+						dy =
+							zone.height - oheight,
+
+						fs =
+							Math.max(
+								origin.sub.doc.fontsize * ( oheight + dy ) / oheight,
+								theme.label.minSize
+						),
+
+						resized =
+							action.item.creator.create(
+								'inherit',
+									origin,
+								'fontsize',
+									fs
+							),
+
+						label =
+							resized.creator.create(
+								'inherit',
+									resized,
+								'pnw',
+									( p.x > action.start.x ) ?
+										zone.pnw
+										:
+										shellverse.grow(
+											'Point',
+											'x',
+												zone.pse.x - resized.zone.width,
+											'y',
+												zone.pnw.y
+										)
+							);
+
+					result =
+						shell.peer.newLabel(
+							this.spaceUser,
+							this.spaceTag,
+							label.pnw,
+							'Label',
+							label.sub.doc.fontsize
+						);
+
+					key =
+						result.chgX.trg.path.get( -1 );
+
+					shell.userMark(
+						'set',
+						'type',
+							'caret',
+						'path',
+							shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
+						'at',
+							0
 					);
 
-			result =
-				shell.peer.newNote(
-					this.spaceUser,
-					this.spaceTag,
-					note.zone
-				),
+					shell.redraw =
+						true;
 
-			key =
-				result.chgX.trg.path.get( -1 );
+					if( !ctrl )
+					{
+						shell.setAction(
+							Action.None.create( )
+						);
+					}
 
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path',
-					shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
-				'at',
-					0
-			);
+					break;
 
-			shell.redraw =
-				true;
+				case 'Portal' :
 
-			if( !ctrl )
-			{
-				shell.setAction( null );
-			}
+					var
+						portal =
+							Visual.Portal.create(
+								'inherit',
+									action.item,
+								'zone',
+									Euclid.Rect.create(
+										'arbitrary',
+										view.depoint( action.start ),
+										view.depoint( action.move )
+									)
+							);
 
-			break;
+					result =
+						shell.peer.newPortal(
+							this.spaceUser,
+							this.spaceTag,
+							portal.zone,
+							shell.username, // TODO
+							'home'
+						);
 
-		case 'createLabel' :
+					key =
+						result.chgX.trg.path.get( -1 );
 
-			var
-				origin =
-					action.origin,
-
-				zone =
-					Euclid.Rect.create(
-						'arbitrary',
-						view.depoint( action.start ),
-						view.depoint( action.move ) // TODO why not p?
-					),
-
-				oheight =
-					origin.zone.height,
-
-				dy =
-					zone.height - oheight,
-
-				fs =
-					Math.max(
-						origin.sub.doc.fontsize * ( oheight + dy ) / oheight,
-						theme.label.minSize
-					),
-
-				resized =
-					action.item.creator.create(
-						'inherit',
-							origin,
-						'fontsize',
-							fs
-					),
-
-				label =
-					resized.creator.create(
-						'inherit',
-							resized,
-						'pnw',
-							( p.x > action.start.x ) ?
-								zone.pnw
-								:
-								shellverse.grow(
-									'Point',
-									'x',
-										zone.pse.x - resized.zone.width,
-									'y',
-										zone.pnw.y
-								)
+					shell.userMark(
+						'set',
+						'type',
+							'caret',
+						'path',
+							shell.space.sub[ key ].subPaths.spaceUser,
+						'at',
+							0
 					);
 
-			result =
-				shell.peer.newLabel(
-					this.spaceUser,
-					this.spaceTag,
-					label.pnw,
-					'Label',
-					label.sub.doc.fontsize
-				);
+					shell.redraw =
+						true;
 
-			key =
-				result.chgX.trg.path.get( -1 );
+					if( !ctrl )
+					{
+						shell.setAction(
+							Action.None.create( )
+						);
+					}
 
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path',
-					shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
-				'at',
-					0
-			);
+					break;
 
-			shell.redraw =
-				true;
+				default :
 
-			if( !ctrl )
-			{
-				shell.setAction( null );
-			}
-
-			break;
-
-		case 'createPortal' :
-
-			var
-				portal =
-					Visual.Portal.create(
-						'inherit',
-							action.item,
-						'zone',
-							Euclid.Rect.create(
-								'arbitrary',
-								view.depoint( action.start ),
-								view.depoint( action.move )
-							)
+					throw new Error(
+						'invalid itemtype'
 					);
-
-			result =
-				shell.peer.newPortal(
-					this.spaceUser,
-					this.spaceTag,
-					portal.zone,
-					shell.username, // XXX
-					'home'
-				);
-
-			key =
-				result.chgX.trg.path.get( -1 );
-
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path',
-					shell.space.sub[ key ].subPaths.spaceUser,
-				'at',
-					0
-			);
-
-			shell.redraw =
-				true;
-
-			if( !ctrl )
-			{
-				shell.setAction( null );
 			}
 
 			break;
 
 		case 'Pan' :
 
-			shell.setAction( null );
+			shell.setAction(
+				Action.None.create( )
+			);
 
 			break;
 
@@ -1375,7 +1397,9 @@ Space.prototype.dragStop =
 					shell.redraw =
 						true;
 
-					shell.setAction( null );
+					shell.setAction(
+						Action.None.create( )
+					);
 
 					break;
 
@@ -1425,7 +1449,9 @@ Space.prototype.dragStop =
 					true;
 			}
 
-			shell.setAction( null );
+			shell.setAction(
+				Action.None.create( )
+			);
 
 			break;
 
@@ -1471,7 +1497,9 @@ Space.prototype.dragStop =
 					true;
 			}
 
-			shell.setAction( null );
+			shell.setAction(
+				Action.None.create( )
+			);
 
 			break;
 
@@ -1487,7 +1515,9 @@ Space.prototype.dragStop =
 				ctrl
 			);
 
-			shell.setAction( null );
+			shell.setAction(
+				Action.None.create( )
+			);
 
 			shell.redraw =
 				true;

@@ -463,7 +463,7 @@ Label.prototype.dragStop =
 {
 	var
 		action =
-			shell.action( );
+			shell.action;
 
 	switch( action.reflect )
 	{

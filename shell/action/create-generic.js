@@ -46,6 +46,7 @@ var
 			tag,
 			itemType,
 			item,   // XXX document
+			move,
 			origin, // XXX document
 			start
 		)
@@ -66,6 +67,9 @@ var
 
 	this.item =
 		item;
+
+	this.move =
+		move;
 
 	this.origin =
 		origin;
@@ -105,6 +109,9 @@ CreateGeneric.create =
 		item =
 			null,
 
+		move =
+			null,
+
 		origin =
 			null,
 
@@ -136,6 +143,13 @@ CreateGeneric.create =
 			case 'item' :
 
 				item =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'move' :
+
+				move =
 					arguments[ a + 1 ];
 
 				break;
@@ -180,6 +194,12 @@ CreateGeneric.create =
 				inherit.item;
 		}
 
+		if( move === null )
+		{
+			move =
+				inherit.move;
+		}
+
 		if( origin === null )
 		{
 			origin =
@@ -198,11 +218,31 @@ CreateGeneric.create =
 			_tag,
 			itemType,
 			item,
+			move,
 			origin,
 			start
 		)
 	);
 };
 
+
+/*
+| Returns true if this action equals another.
+*/
+CreateGeneric.prototype.equals =
+	function(
+		action
+	)
+{
+	if( action === this )
+	{
+		return true;
+	}
+
+	// TODO
+	// proper checking
+
+	return false;
+};
 
 } )( );

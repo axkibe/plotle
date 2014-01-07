@@ -54,6 +54,7 @@ Discs.CreateDisc =
 		tag,
 		inherit,
 		access,
+		action,
 		hover,
 		mark,
 		mode,
@@ -74,6 +75,9 @@ Discs.CreateDisc =
 
 	this.access =
 		access;
+
+	this.action =
+		action;
 
 	this.mark =
 		mark;
@@ -115,7 +119,13 @@ Discs.CreateDisc =
 				twig[ wname ],
 
 			path =
-				this.path.append( wname );
+				this.path.append( wname ),
+
+			focusAccent =
+				CreateDisc._isActiveButton(
+					action,
+					wname
+				);
 
 		switch( tree.twig.type )
 		{
@@ -131,6 +141,8 @@ Discs.CreateDisc =
 							inherit && inherit.buttons[ wname ],
 						'hoverAccent',
 							path.equals( hover ),
+						'focusAccent',
+							focusAccent,
 						'tree',
 							tree,
 						'icons',
@@ -148,16 +160,197 @@ Discs.CreateDisc =
 		}
 	}
 
-	// TODO remove
-
-	this.$active =
-		inherit && inherit.$active;
-
 	this.buttons =
 		buttons;
 
 	Jools.immute( this );
 };
+
+
+/*
+| The CreateDisc is a Disc.
+*/
+Jools.subclass(
+	CreateDisc,
+	Discs.Disc
+);
+
+
+/*
+| (Re)Creates a new disc.
+*/
+CreateDisc.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		access =
+			null,
+
+		action =
+			null,
+
+		hover =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null,
+
+		mode =
+			null,
+
+		screensize =
+			null,
+
+		username =
+			null;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+			case 'access' :
+
+				access =
+					arguments[ a++ ];
+
+				break;
+
+			case 'action' :
+
+				action =
+					arguments[ a++ ];
+
+				break;
+
+			case 'hover' :
+
+				hover =
+					arguments[ a++ ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mode' :
+
+				mode =
+					arguments[ a++ ];
+
+				break;
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'username' :
+
+				username =
+					arguments[ a++ ];
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error(
+/**/					'invalid argument: ' + arguments[ a ]
+/**/				);
+/**/			}
+		}
+	}
+
+	if( inherit )
+	{
+		if( access === null )
+		{
+			hover =
+				inherit.access;
+		}
+
+		if( action === null )
+		{
+			action =
+				inherit.action;
+		}
+
+		if( hover === null )
+		{
+			hover =
+				inherit.hover;
+		}
+
+		if( mark === null )
+		{
+			mark =
+				inherit.mark;
+		}
+
+		if( mode === null )
+		{
+			mode =
+				inherit.mode;
+		}
+
+		if( screensize === null )
+		{
+			screensize =
+				inherit.screensize;
+		}
+
+		if( username === null )
+		{
+			username =
+				inherit.username;
+		}
+
+		// TODO use the discs equals mode
+	}
+
+	return new CreateDisc(
+		_tag,
+		inherit,
+		access,
+		action,
+		hover,
+		mark,
+		mode,
+		screensize,
+		username
+	);
+};
+
+
 
 
 /*
@@ -218,9 +411,6 @@ CreateDisc.prototype.pushButton =
 		// ctrl
 	)
 {
-	var
-		action =
-			shell.action;
 
 /**/if( CHECK )
 /**/{
@@ -240,24 +430,12 @@ CreateDisc.prototype.pushButton =
 		buttonName =
 			path.get( 2 );
 
-	if( action && action.reflect === buttonName )
-	{
-		// already in this action
-
-		return;
-	}
-
-	shell.redraw = true;
-
-	if( action )
-	{
-		shell.setAction( null );
-	}
+	shell.redraw =
+		true;
 
 	switch( buttonName )
 	{
-		// XXX rename
-		case 'createLabel' :
+		case 'CreateLabel' :
 
 			shell.setAction(
 				Action.CreateGeneric.create(
@@ -268,7 +446,7 @@ CreateDisc.prototype.pushButton =
 
 			return;
 
-		case 'createNote' :
+		case 'CreateNote' :
 
 			shell.setAction(
 				Action.CreateGeneric.create(
@@ -279,7 +457,7 @@ CreateDisc.prototype.pushButton =
 
 			return;
 
-		case 'createPortal' :
+		case 'CreatePortal' :
 
 			shell.setAction(
 				Action.CreateGeneric.create(
@@ -506,8 +684,63 @@ CreateDisc.prototype.specialKey =
 
 
 /*
+| Returns true if the button called 'wname'
+| should be highlighted for current 'action'
+*/
+CreateDisc._isActiveButton =
+	function(
+		action,  // the action
+		wname    // the widget name
+	)
+{
+	switch( action.reflect )
+	{
+		case 'CreateGeneric' :
+
+			switch( action.itemType )
+			{
+				case 'Note' :
+
+					return wname === 'CreateNote';
+
+				case 'Label' :
+
+					return wname === 'CreateLabel';
+
+				case 'Portal' :
+
+					return wname === 'CreatePortal';
+
+				default :
+
+					return false;
+			}
+
+/**/		if( CHECK )
+/**/		{
+/**/			throw new Error(
+/**/				'invalid execution point reached'
+/**/			);
+/**/		}
+
+			break;
+
+		case 'CreateRelation' :
+
+			return wname === 'CreateRelation';
+
+		default :
+
+			return false;
+	}
+};
+
+
+/*
 | Sets the active button
 */
+/*
+XXX remove
 CreateDisc.prototype.setActive =
 	function(
 		active
@@ -549,6 +782,7 @@ CreateDisc.prototype.setActive =
 	shell.redraw =
 		true;
 };
+*/
 
 
 } )( );

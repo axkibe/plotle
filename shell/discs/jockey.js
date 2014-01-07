@@ -58,6 +58,7 @@ Discs.Jockey =
 		tag,
 		inherit,
 		access,
+		action,
 		hover,
 		mark,
 		mode,
@@ -89,6 +90,9 @@ Discs.Jockey =
 	this.access =
 		access;
 
+	this.action =
+		action;
+
 	this.hover =
 		hover;
 
@@ -114,14 +118,24 @@ Discs.Jockey =
 			name =
 				_discList[ i ];
 
+/**/	if( CHECK )
+/**/	{
+/**/		if( !Discs[ name ] )
+/**/		{
+/**/			throw new Error(
+/**/				'invalid disc'
+/**/			);
+/**/		}
+/**/	}
+
 		discs[ name ] =
-			Discs.Disc.create(
-				'name',
-					name,
+			Discs[ name ].create(
 				'inherit',
 					inherit && inherit._discs[ name ],
 				'access',
 					access,
+				'action',
+					action,
 				'hover',
 					hover.isEmpty || hover.get( 1 ) !== name ?
 						Path.empty
@@ -156,6 +170,9 @@ Jockey.create =
 		access =
 			null,
 
+		action =
+			null,
+
 		hover =
 			null,
 
@@ -185,6 +202,13 @@ Jockey.create =
 			case 'access' :
 
 				access =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'action' :
+
+				action =
 					arguments[ a + 1 ];
 
 				break;
@@ -251,6 +275,12 @@ Jockey.create =
 				inherit.access;
 		}
 
+		if( action === null )
+		{
+			action =
+				inherit.action;
+		}
+
 		if( hover === null )
 		{
 			hover =
@@ -278,6 +308,8 @@ Jockey.create =
 		if(
 			inherit.access === access
 			&&
+			inherit.action === action
+			&&
 			inherit.hover.equals( hover )
 			&&
 			inherit.mark.equals( mark )
@@ -298,6 +330,7 @@ Jockey.create =
 			_tag,
 			inherit,
 			access,
+			action,
 			hover,
 			mark,
 			mode,

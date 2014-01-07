@@ -135,4 +135,24 @@ Pan.create =
 };
 
 
+/*
+| Returns true if this action equals another.
+*/
+Pan.prototype.equals =
+	function(
+		action
+	)
+{
+	if( action === this )
+	{
+		return true;
+	}
+
+	// TODO
+	// proper checking
+
+	return false;
+};
+
+
 } )( );

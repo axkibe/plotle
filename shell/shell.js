@@ -181,7 +181,7 @@ Shell =
 		null;
 
 	this.$action =
-		null;
+		Action.None.create( );
 
 	this._$mode =
 		'Normal';
@@ -215,6 +215,8 @@ Shell =
 		Discs.Jockey.create(
 			'access',
 				'',
+			'action',
+				Action.None.create( ),
 			'hover',
 				Path.empty,
 			'mark',
@@ -348,25 +350,28 @@ Shell.prototype.setAction =
 		action
 	)
 {
-	if( this.$action && action )
-	{
-		console.log( 'WARN: action on action!' );
-	}
 
-/**/if( CHECK )
+/**/if ( CHECK )
 /**/{
-/**/	if( action && !Action.isAction( action.reflect ) )
+/**/	if( !action || !Action.isAction( action.reflect ) )
 /**/	{
-/**/			throw new Error(
-/**/				'invalid action'
-/**/			);
+/**/		console.log( 'TODO', '/:(', action );
+/**/		throw new Error(
+/**/			'invalid action'
+/**/		);
 /**/	}
 /**/}
 
 	this.$action =
 		action;
 
-	// XXX updates
+	this._$discJockey =
+		Discs.Jockey.create(
+			'inherit',
+				this._$discJockey,
+			'action',
+				action
+		);
 };
 
 

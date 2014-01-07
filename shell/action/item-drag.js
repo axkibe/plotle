@@ -222,4 +222,21 @@ ItemDrag.create =
 };
 
 
+/*
+| Returns true if this action equals another.
+*/
+ItemDrag.prototype.equals =
+	function(
+		action
+	)
+{
+	if( action === this )
+	{
+		return true;
+	}
+
+	return false;
+};
+
+
 } )( );

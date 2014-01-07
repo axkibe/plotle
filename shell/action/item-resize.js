@@ -246,4 +246,24 @@ ItemResize.create =
 };
 
 
+/*
+| Returns true if this action equals another.
+*/
+ItemResize.prototype.equals =
+	function(
+		action
+	)
+{
+	if( action === this )
+	{
+		return true;
+	};
+
+	// TODO
+	// proper checking
+
+	return false;
+};
+
+
 } )( );

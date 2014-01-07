@@ -53,6 +53,7 @@ Discs.MainDisc =
 		tag,
 		inherit,
 		access,
+		action,
 		hover,
 		mark,
 		mode,
@@ -73,6 +74,9 @@ Discs.MainDisc =
 
 	this.access =
 		access;
+
+	this.action =
+		action;
 
 	this.mark =
 		mark;
@@ -230,6 +234,182 @@ Jools.subclass(
 
 
 /*
+| (Re)Creates a new disc.
+*/
+MainDisc.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		access =
+			null,
+
+		action =
+			null,
+
+		hover =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null,
+
+		mode =
+			null,
+
+		screensize =
+			null,
+
+		username =
+			null;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+			case 'access' :
+
+				access =
+					arguments[ a++ ];
+
+				break;
+
+			case 'action' :
+
+				action =
+					arguments[ a++ ];
+
+				break;
+
+			case 'hover' :
+
+				hover =
+					arguments[ a++ ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mode' :
+
+				mode =
+					arguments[ a++ ];
+
+				break;
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'username' :
+
+				username =
+					arguments[ a++ ];
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error(
+/**/					'invalid argument: ' + arguments[ a ]
+/**/				);
+/**/			}
+		}
+	}
+
+	if( inherit )
+	{
+		if( access === null )
+		{
+			hover =
+				inherit.access;
+		}
+
+		if( action === null )
+		{
+			action =
+				inherit.action;
+		}
+
+		if( hover === null )
+		{
+			hover =
+				inherit.hover;
+		}
+
+		if( mark === null )
+		{
+			mark =
+				inherit.mark;
+		}
+
+		if( mode === null )
+		{
+			mode =
+				inherit.mode;
+		}
+
+		if( screensize === null )
+		{
+			screensize =
+				inherit.screensize;
+		}
+
+		if( username === null )
+		{
+			username =
+				inherit.username;
+		}
+
+		// TODO use the discs equals mode
+	}
+
+	return new MainDisc(
+		_tag,
+		inherit,
+		access,
+		action,
+		hover,
+		mark,
+		mode,
+		screensize,
+		username
+	);
+};
+
+
+
+/*
 | Reflection.
 */
 MainDisc.prototype.reflect =
@@ -325,10 +505,7 @@ MainDisc.prototype.pushButton =
 
 	if( buttonName === 'Remove' )
 	{
-		// XXX Remove
-		//shell.peer.removeItem(
-		//	action.removeItemPath
-		//);
+		shell.peer.removeItem( this.mark.itemPath );
 	}
 	else
 	{

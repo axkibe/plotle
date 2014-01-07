@@ -90,7 +90,7 @@ Design.CreateDisc =
 
 	twig :
 	{
-		'createNote' :
+		'CreateNote' :
 		{
 			type :
 				'ButtonWidget',
@@ -201,7 +201,7 @@ Design.CreateDisc =
 			}
 		},
 
-		'createLabel' :
+		'CreateLabel' :
 		{
 			type :
 				'ButtonWidget',
@@ -426,7 +426,7 @@ Design.CreateDisc =
 			}
 		},
 
-		'createPortal' :
+		'CreatePortal' :
 		{
 			type :
 				'ButtonWidget',
@@ -540,10 +540,10 @@ Design.CreateDisc =
 
 	ranks :
 	[
-		'createNote',
-		'createLabel',
+		'CreateNote',
+		'CreateLabel',
 		'CreateRelation',
-		'createPortal'
+		'CreatePortal'
 	]
 };
 

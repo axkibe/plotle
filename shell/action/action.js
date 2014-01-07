@@ -58,9 +58,10 @@ Action.Action =
 /**/		switch ( reflect )
 /**/		{
 /**/			case 'CreateGeneric' :
-/**/			case 'CreateRelection' :
+/**/			case 'CreateRelation' :
 /**/			case 'ItemDrag' :
 /**/			case 'ItemResize' :
+/**/			case 'None' :
 /**/			case 'Pan' :
 /**/			case 'ScrollY' :
 /**/
