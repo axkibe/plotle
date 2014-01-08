@@ -376,7 +376,11 @@ Space.create =
 			&&
 			tree === inherit.tree
 			&&
-			traitSet === null
+			(
+				traitSet === null
+				||
+				!traitSet.containsPath( this.path )
+			)
 		)
 		{
 			return inherit;

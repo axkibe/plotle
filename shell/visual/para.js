@@ -102,6 +102,9 @@ Visual.Para =
 		tree
 	);
 
+	this.path =
+		path;
+
 	this.fontsize =
 		fontsize;
 

@@ -262,7 +262,8 @@ TraitSet.prototype.getByPathKey =
 			set[ a ];
 
 		if(
-			t.path.equals( path ) &&
+			t.path.equals( path )
+			&&
 			t.key === key
 		)
 		{
@@ -285,6 +286,35 @@ TraitSet.prototype.get =
 	return this._set[ idx ];
 };
 
+
+/*
+| Returns true if 'path' is contained in any setting.
+*/
+TraitSet.prototype.containsPath =
+	function(
+		path
+	)
+{
+	var
+		set =
+			this._set;
+
+	for(
+		var a = 0, aZ = this.length;
+		a < aZ;
+		a++
+	)
+	{
+		if(
+			path.subPathOf( set[ a ].path )
+		)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
 
 
 } )( );

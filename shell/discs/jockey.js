@@ -349,7 +349,7 @@ Jockey.create =
 | Reflection.
 */
 Jockey.prototype.reflect =
-	'Disc:Jockey';
+	'Jockey';
 
 
 /*
