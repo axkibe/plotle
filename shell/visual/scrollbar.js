@@ -41,15 +41,15 @@ if( CHECK && typeof( window ) === 'undefined' )
 | Constructor.
 */
 var
-	Scrollbar =
-	Visual.Scrollbar =
-		function(
-			pos,      // position
-			aperture, // the size of the bar
-			max,      // maximum position
-			pnw,      // pnw
-			size      // size
-		)
+Scrollbar =
+Visual.Scrollbar =
+	function(
+		pos,      // position
+		aperture, // the size of the bar
+		max,      // maximum position
+		pnw,      // pnw
+		size      // size
+	)
 {
 	this.visible =
 		false;

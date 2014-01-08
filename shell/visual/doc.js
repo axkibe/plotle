@@ -61,6 +61,11 @@ Visual.Doc =
 		mark
 	)
 {
+	Jools.logNew(
+		this,
+		path
+	);
+
 	if( CHECK )
 	{
 		if( tag !== _tag )
@@ -347,10 +352,17 @@ Doc.create =
 };
 
 /*
-| Marker
+| Marker. TODO
 */
 Doc.prototype.Doc =
 	true;
+
+
+/*
+| Reflection.
+*/
+Doc.prototype.reflect =
+	'Doc';
 
 
 /*
@@ -374,7 +386,7 @@ Doc.prototype.draw =
 	function(
 		fabric,      // to draw upon
 		view,        // current pan/zoom/motion
-		item,        // the item the doc belongs to TODO this is fixed
+		item,        // the item the doc belongs to
 		width,       // the width to draw the document with
 		scrollp      // scroll position
 	)
@@ -435,6 +447,7 @@ Doc.prototype.draw =
 		vpara.draw(
 			fabric,
 			view,
+			item,
 			view.point( p )
 		);
 	}

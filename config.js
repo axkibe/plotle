@@ -146,6 +146,9 @@ config.log  = {
 	change :
 		false,
 
+	news :
+		true,
+
 	debug :
 		true,
 

@@ -60,6 +60,11 @@ Visual.Para =
 		mark
 	)
 {
+	Jools.logNew(
+		this,
+		path
+	);
+
 	if( CHECK )
 	{
 		if( tag !== _tag )
@@ -122,6 +127,43 @@ Jools.subclass(
 	Para,
 	Visual.Base
 );
+
+
+/*
+| Returns the mark if an item with 'path' concerns about
+| the mark.
+*/
+Para.concernsMark =
+	function(
+		mark,
+		path
+	)
+{
+	if( mark.reflect === 'Range' )
+	{
+		if(
+			mark.itemPath.subPathOf( path )
+		)
+		{
+			return mark;
+		}
+		else
+		{
+			return Mark.Vacant.create( );
+		}
+	}
+
+	if(
+		mark.containsPath( path )
+	)
+	{
+		return mark;
+	}
+	else
+	{
+		return Mark.Vacant.create( );
+	}
+};
 
 
 /*
@@ -216,7 +258,25 @@ Para.create =
 		}
 	}
 
-	// TODO user markConcerns
+
+	if( inherit )
+	{
+		if( path === null )
+		{
+			path =
+				inherit.path;
+		}
+	}
+
+
+	if( mark )
+	{
+		mark =
+			Para.concernsMark(
+				mark,
+				path
+			);
+	}
 
 	if( inherit )
 	{
@@ -230,18 +290,6 @@ Para.create =
 		{
 			fontsize =
 				inherit.fontsize;
-		}
-
-		if( !path )
-		{
-			path =
-				inherit.path;
-		}
-
-		if( !mark )
-		{
-			mark =
-				inherit.mark;
 		}
 
 		if( !tree )
@@ -282,7 +330,7 @@ Para.create =
 
 
 /*
-| Marker.
+| Marker. TODO remove all Markers.
 */
 Para.prototype.Para =
 	true;
@@ -295,6 +343,7 @@ Para.prototype.draw =
 	function(
 		fabric, // the fabric to draw upon
 		view,   // the current vient,
+		item,   // the item the para belongs to.
 		pnw     // pnw of this para
 	)
 {
@@ -387,7 +436,7 @@ Para.prototype.draw =
 			this._drawCaret(
 				f,
 				view,
-				mark
+				item
 			);
 		}
 	}
@@ -408,16 +457,10 @@ Para.prototype._drawCaret =
 	function(
 		fabric,
 		view,
-		mark
+		item
 	)
 {
 	var
-		item =
-			shell.space.getSub(
-				this.path,
-				'Item'
-			),
-
 		fs =
 			item.sub.doc.font.twig.size,
 
@@ -426,7 +469,7 @@ Para.prototype._drawCaret =
 
 		p =
 			this.locateOffset(
-				mark.caretAt
+				this.mark.caretAt
 			).p,
 
 		s =

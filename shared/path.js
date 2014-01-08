@@ -488,13 +488,36 @@ Path.prototype.subPathOf =
 
 
 /*
-| Turns the path to a String.
+| Turns the path to a string.
 */
-Path.prototype.toString =
+Jools.lazyFixate(
+	Path.prototype,
+	'string',
 	function( )
-{
-	return '[ ' + this._path.toString() + ' ]';
-};
+	{
+		var
+			b =
+				[ '[' ];
+
+		for(
+			var a = 0, aZ = this.length;
+			a < aZ;
+			a++
+		)
+		{
+			b.push(
+				( a > 0 ?  ', ' : ' ' ),
+				this._path[ a ]
+			);
+		}
+
+		b.push(
+			' ]'
+		);
+
+		return b.join( '' );
+	}
+);
 
 
 /*

@@ -66,6 +66,10 @@ Discs.Jockey =
 		username
 	)
 {
+	Jools.logNew(
+		this,
+		this.path
+	);
 
 /**/if( CHECK )
 /**/{
@@ -101,9 +105,6 @@ Discs.Jockey =
 
 	this.mode =
 		mode;
-
-	this.path =
-		Path.empty.append( 'disc' );
 
 	this.username =
 		username;
@@ -341,6 +342,22 @@ Jockey.create =
 		)
 	);
 };
+
+
+/*
+| Reflection.
+*/
+Jockey.prototype.reflect =
+	'Disc:Jockey';
+
+
+/*
+| Disc jockey path
+|
+| TODO rename 'discs'
+*/
+Jockey.prototype.path =
+	Path.empty.append( 'disc' );
 
 
 /*

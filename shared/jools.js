@@ -944,9 +944,11 @@ Jools.log =
 	)
 {
 	if(
-		category !== true &&
-		!config.log.all &&
-		!config.log[category]
+		category !== true
+		&&
+		!config.log.all
+		&&
+		!config.log[ category ]
 	)
 	{
 		return;
@@ -978,6 +980,32 @@ Jools.log =
 
 	console.log(
 		a.join( '' )
+	);
+};
+
+
+/*
+| Logs creation of new entities.
+*/
+Jools.logNew =
+	function(
+		entity,
+		path
+	)
+{
+	if(
+		!config.log.all
+		&&
+		!config.log.news
+	)
+	{
+		return;
+	}
+
+	Jools.log(
+		'news',
+		entity.reflect,
+		path.string
 	);
 };
 

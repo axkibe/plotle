@@ -94,6 +94,14 @@ Jools.subclass(
 Relation.prototype.creator =
 	Relation;
 
+
+/*
+| Reflection.
+*/
+Relation.prototype.reflect =
+	'Relation';
+
+
 /*
 | Default margin for all relations.
 */

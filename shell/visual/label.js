@@ -63,6 +63,11 @@ Visual.Label =
 		mark
 	)
 {
+	Jools.logNew(
+		this,
+		path
+	);
+
 	if( CHECK )
 	{
 		if( tag !== _tag )
@@ -363,6 +368,13 @@ Jools.subclass(
 	Label,
 	Visual.DocItem
 );
+
+
+/*
+| Reflection.
+*/
+Label.prototype.reflect =
+	'Label';
 
 
 /*

@@ -53,7 +53,6 @@ Widgets.Label =
 		pos,
 		visible,
 		text
-		// mark
 	)
 {
 	if( CHECK )
@@ -113,9 +112,6 @@ Label.create =
 {
 	var
 		inherit =
-			null,
-
-		mark =
 			null,
 
 		path =
@@ -178,8 +174,7 @@ Label.create =
 
 			case 'mark' :
 
-				mark =
-					arguments[ a + 1 ];
+				// ignore
 
 				break;
 
@@ -364,8 +359,7 @@ Label.create =
 		path,
 		pos,
 		visible,
-		text,
-		mark
+		text
 	);
 };
 

@@ -63,6 +63,11 @@ Visual.Portal =
 		zone
 	)
 {
+	Jools.logNew(
+		this,
+		path
+	);
+
 	if( CHECK )
 	{
 		if( tag !== _tag )

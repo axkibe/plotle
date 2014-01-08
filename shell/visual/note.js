@@ -67,6 +67,7 @@ Visual.Note =
 		mark
 	)
 {
+
 /**/if( CHECK )
 /**/{
 /**/	if( tag !== _tag )
@@ -76,6 +77,11 @@ Visual.Note =
 /**/		);
 /**/	}
 /**/}
+
+	Jools.logNew(
+		this,
+		path
+	);
 
 	Visual.DocItem.call(
 		this,
@@ -462,6 +468,13 @@ Note.create =
 		)
 	);
 };
+
+
+/*
+| Reflection.
+*/
+Note.prototype.reflect =
+	'Note';
 
 
 /*
