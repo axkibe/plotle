@@ -874,10 +874,10 @@ Server.prototype.prepareResources =
 				'shell/hover-reply.js',
 					'fb',
 
-				'shell/widgets/getstyle.js',
+				'shell/widgets/widget.js',
 					'fb',
 
-				'shell/widgets/label.js',
+				'shell/widgets/getstyle.js',
 					'fb',
 
 				'shell/widgets/button.js',
@@ -887,6 +887,9 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/widgets/checkbox.js',
+					'fb',
+
+				'shell/widgets/label.js',
 					'fb',
 
 				'shell/forms/form.js',
@@ -2601,7 +2604,15 @@ Server.prototype.cmdGet =
 
 	if( !space )
 	{
-		if( !cmd.create === true )
+		if( cmd.create === true )
+		{
+			space =
+				yield* this.createSpace(
+					spaceUser,
+					spaceTag
+				);
+		}
+		else
 		{
 			return {
 				ok :
@@ -2613,14 +2624,6 @@ Server.prototype.cmdGet =
 				status :
 					'nonexistent'
 			};
-		}
-		else
-		{
-			space =
-				yield* this.createSpace(
-					spaceUser,
-					spaceTag
-				);
 		}
 	}
 

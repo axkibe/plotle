@@ -37,7 +37,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'LABEL-WIDGET-66560489';
+		'WIDGET-52212713';
 
 
 /*
@@ -58,13 +58,6 @@ Widgets.Label =
 {
 	if( CHECK )
 	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-
 		if( path === null )
 		{
 			throw new Error(
@@ -97,8 +90,17 @@ Widgets.Label =
 	this.visible =
 		visible;
 
-	Jools.immute( this );
+	Widgets.Widget.call(
+		this,
+		tag
+	);
 };
+
+
+Jools.subclass(
+	Label,
+	Widgets.Widget
+);
 
 
 /*

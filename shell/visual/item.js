@@ -89,14 +89,8 @@ Item.concernsMark =
 		path
 	)
 {
-	var
-		mip =
-			mark.itemPath;
-
 	if(
-		mip
-		&&
-		mip.subPathOf( path )
+		mark.containsPath( path )
 	)
 	{
 		return mark;

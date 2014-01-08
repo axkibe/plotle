@@ -39,9 +39,10 @@ if( CHECK && typeof( window ) === 'undefined' )
 	);
 }
 
+
 var
 	_tag =
-		'CHECKBOX-WIDGET-90606258';
+		'WIDGET-52212713';
 
 
 /*
@@ -121,8 +122,17 @@ Widgets.CheckBox =
 	this.checked =
 		checked;
 
-	Jools.immute( this );
+	Widgets.Widget.call(
+		this,
+		tag
+	);
 };
+
+
+Jools.subclass(
+	CheckBox,
+	Widgets.Widget
+);
 
 
 /*
@@ -247,7 +257,25 @@ CheckBox.create =
 		}
 	}
 
-	// TODO use concernsMark
+	if( mark && mark.reflect !== 'Vacant' )
+	{
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'mark needs path'
+/**/			);
+/**/		}
+/**/	}
+
+		mark =
+			Widgets.Widget.concernsMark(
+				mark,
+				path
+			);
+	}
 
 	if( traitSet )
 	{

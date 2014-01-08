@@ -46,7 +46,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'INPUT-WIDGET-316354610';
+		'WIDGET-52212713';
 
 
 /*
@@ -69,13 +69,6 @@ Widgets.Input =
 {
 	if( CHECK )
 	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-
 		if( !path )
 		{
 			throw new Error(
@@ -153,8 +146,17 @@ Widgets.Input =
 	this.hoverAccent =
 		hoverAccent;
 
-	Jools.immute( this );
+	Widgets.Widget.call(
+		this,
+		tag
+	);
 };
+
+
+Jools.subclass(
+	Input,
+	Widgets.Widget
+);
 
 
 /*
@@ -278,7 +280,37 @@ Input.create =
 		}
 	}
 
-	// TODO use concernsMark
+
+	if( inherit )
+	{
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+	}
+
+
+	if( mark && mark.reflect !== 'Vacant' )
+	{
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'mark needs path'
+/**/			);
+/**/		}
+/**/	}
+
+		mark =
+			Widgets.Widget.concernsMark(
+				mark,
+				path
+			);
+	}
+
 
 	if( traitSet )
 	{

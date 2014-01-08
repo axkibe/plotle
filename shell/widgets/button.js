@@ -44,7 +44,7 @@ var
 
 var
 	_tag =
-		'BUTTON-WIDGET-52212713';
+		'WIDGET-52212713';
 
 
 /*
@@ -68,13 +68,6 @@ Widgets.Button =
 {
 	if( CHECK )
 	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-
 		if( frame === null )
 		{
 			throw new Error(
@@ -151,7 +144,18 @@ Widgets.Button =
 
 	this._$fabric =
 		null;
+
+	Widgets.Widget.call(
+		this,
+		tag
+	);
 };
+
+
+Jools.subclass(
+	Button,
+	Widgets.Widget
+);
 
 
 /*
@@ -292,7 +296,25 @@ Button.create =
 		}
 	}
 
-	// TODO use concernsMark
+	if( mark && mark.reflect !== 'Vacant' )
+	{
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'mark needs path'
+/**/			);
+/**/		}
+/**/	}
+
+		mark =
+			Widgets.Widget.concernsMark(
+				mark,
+				path
+			);
+	}
 
 	if( traitSet )
 	{
