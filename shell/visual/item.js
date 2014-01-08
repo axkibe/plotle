@@ -49,14 +49,12 @@ if( CHECK && typeof( window ) === 'undefined' )
 var Item =
 Visual.Item =
 	function(
-		tree,
-		path
+		tree
 	)
 {
 	Visual.Base.call(
 		this,
-		tree,
-		path
+		tree
 	);
 
 	this.$fabric =

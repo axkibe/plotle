@@ -67,6 +67,10 @@ Visual.Note =
 		mark
 	)
 {
+	Jools.logNew(
+		this,
+		path
+	);
 
 /**/if( CHECK )
 /**/{
@@ -78,18 +82,15 @@ Visual.Note =
 /**/	}
 /**/}
 
-	Jools.logNew(
-		this,
-		path
-	);
-
 	Visual.DocItem.call(
 		this,
 		tree,
-		path,
 		doc,
 		mark
 	);
+
+	this.path =
+		path;
 
 	this.zone =
 		zone;

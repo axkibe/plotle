@@ -44,15 +44,13 @@ var DocItem =
 Visual.DocItem =
 	function(
 		tree,
-		path,
 		doc,
 		mark
 	)
 {
 	Visual.Item.call(
 		this,
-		tree,
-		path
+		tree
 	);
 
 	this.sub =

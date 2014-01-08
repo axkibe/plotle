@@ -92,10 +92,12 @@ Visual.Portal =
 		}
 	}
 
+	this.path =
+		path;
+
 	Visual.Item.call(
 		this,
-		tree,
-		path
+		tree
 	);
 
 	if( path )

@@ -66,15 +66,18 @@ Visual.Doc =
 		path
 	);
 
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( tag !== _tag )
+/**/	{
+/**/		throw new Error(
+/**/			'tag mismatch'
+/**/		);
+/**/	}
+/**/}
+
+	this.path =
+		path;
 
 	var
 		ranks,
@@ -82,8 +85,7 @@ Visual.Doc =
 
 	Visual.Base.call(
 		this,
-		tree,
-		path
+		tree
 	);
 
 	this.fontsize =

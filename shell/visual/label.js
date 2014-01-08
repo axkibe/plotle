@@ -92,10 +92,12 @@ Visual.Label =
 		}
 	}
 
+	this.path =
+		path;
+
 	Visual.DocItem.call(
 		this,
 		tree,
-		path,
 		doc
 	);
 

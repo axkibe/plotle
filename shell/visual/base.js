@@ -35,18 +35,11 @@ if( CHECK && typeof( window ) === 'undefined' )
 var Base =
 Visual.Base =
 	function(
-		tree,
-		path
+		tree
 	)
 {
 	this.tree =
 		tree;
-
-	this.path =
-		path;
-
-	this.key =
-		path ? path.get( -1 ) : null;
 
 	this.sub =
 		null;

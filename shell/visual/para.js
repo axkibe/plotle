@@ -23,6 +23,7 @@ var
 	Euclid,
 	fontPool,
 	Jools,
+	Mark,
 	shell,
 	shellverse,
 	theme;
@@ -98,8 +99,7 @@ Visual.Para =
 
 	Visual.Base.call(
 		this,
-		tree,
-		path
+		tree
 	);
 
 	this.fontsize =

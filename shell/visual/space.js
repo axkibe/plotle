@@ -66,6 +66,11 @@ Visual.Space =
 		traitSet
 	)
 {
+	Jools.logNew(
+		this,
+		this.path
+	);
+
 	if( CHECK )
 	{
 		if( tag !== _tag )
@@ -101,11 +106,9 @@ Visual.Space =
 		}
 	}
 
-	// TODO give path here
 	Visual.Base.call(
 		this,
-		tree,
-		null
+		tree
 	);
 
 	this.spaceUser =
@@ -116,9 +119,6 @@ Visual.Space =
 
 	this.access =
 		access;
-
-	this.path =
-		Path.empty.append( 'space' );
 
 	this.$view =
 		inherit ?
@@ -317,42 +317,69 @@ Space.create =
 		}
 	}
 
+	if( mark )
+	{
+		mark =
+			Space.concernsMark(
+				mark
+			);
+	}
+
 	if( inherit )
 	{
-		if( !access )
+		if( access === null )
 		{
 			access =
 				inherit.access;
 		}
 
-		if( !hover )
+		if( hover === null )
 		{
 			hover =
 				inherit.hover;
 		}
 
-		if( !mark )
+		if( mark === null )
 		{
 			mark =
 				inherit.mark;
 		}
 
-		if( !spaceTag )
+		if( spaceTag === null )
 		{
 			spaceTag =
 				inherit.spaceTag;
 		}
 
-		if( !spaceUser )
+		if( spaceUser === null )
 		{
 			spaceUser =
 				inherit.spaceUser;
 		}
 
-		if( !tree )
+		if( tree === null )
 		{
 			tree =
 				inherit.tree;
+		}
+
+		if(
+			access === inherit.access
+			&&
+			hover.equals( inherit.hover )
+			&&
+			mark.equals( inherit.mark )
+			&&
+			spaceTag === inherit.spaceTag
+			&&
+			spaceUser === inherit.spaceUser
+			&&
+			tree === inherit.tree
+			&&
+			traitSet === null
+		)
+		{
+			return inherit;
 		}
 	}
 
@@ -378,6 +405,44 @@ Space.create =
 */
 Space.prototype.showDisc =
 	true;
+
+
+/*
+| The spaces path ( in the shell )
+*/
+Space.path =
+Space.prototype.path =
+	Path.empty.append( 'space' );
+
+
+/*
+| Reflection.
+*/
+Space.prototype.reflect =
+	'Space';
+
+
+/*
+| Returns the mark if the form jockey concerns a mark.
+*/
+Space.concernsMark =
+	function(
+		mark
+	)
+{
+	if(
+		mark.containsPath(
+			Space.path
+		)
+	)
+	{
+		return mark;
+	}
+	else
+	{
+		return Mark.Vacant.create( );
+	}
+};
 
 
 /*
@@ -472,12 +537,16 @@ Space.prototype._createItem =
 		Proto =
 			Visual[ tree.twig.type ];
 
-	if( !Proto )
-	{
-		throw new Error(
-			'unknown type: ' + tree.twig.type
-		);
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( !Proto )
+/**/	{
+/**/		throw new Error(
+/**/			'unknown type: ' + tree.twig.type
+/**/		);
+/**/	}
+/**/}
 
 	// FIXME; dont create a new path here
 	var

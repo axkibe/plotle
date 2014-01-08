@@ -496,8 +496,11 @@ Jools.lazyFixate(
 	function( )
 	{
 		var
+			path =
+				this._path,
+
 			b =
-				[ '[' ];
+				[ '[ '[0] ]; // FIXME jshint bug
 
 		for(
 			var a = 0, aZ = this.length;
@@ -507,7 +510,7 @@ Jools.lazyFixate(
 		{
 			b.push(
 				( a > 0 ?  ', ' : ' ' ),
-				this._path[ a ]
+				path[ a ]
 			);
 		}
 
