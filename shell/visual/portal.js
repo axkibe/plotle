@@ -275,6 +275,26 @@ Portal.create =
 		}
 	}
 
+	if( mark && mark.reflect !== 'Vacant' )
+	{
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'mark needs path'
+/**/			);
+/**/		}
+/**/	}
+
+		mark =
+			Visual.Item.concernsMark(
+				mark,
+				path
+			);
+	}
+
 	if( tree )
 	{
 		if( !path )
@@ -316,12 +336,6 @@ Portal.create =
 		{
 			mark =
 				inherit.mark;
-		}
-
-		if( !path )
-		{
-			path =
-				inherit.path;
 		}
 
 		if( !tree )
@@ -959,7 +973,7 @@ Portal.prototype._weave =
 		if(
 			mark &&
 			mark.reflect === 'Caret' &&
-			mark.concerns( this.path )
+			mark.itemPath.equals( this.path )
 		)
 		{
 			this._drawCaret(

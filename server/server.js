@@ -2136,7 +2136,11 @@ Server.prototype.cmdUpdate =
 		mseq = this.$messages.length;
 	}
 
-	if ( !(mseq <= this.$messages.length) )
+	if(
+		!Jools.isInteger( mseq )
+		||
+		mseq > this.$messages.length
+	)
 	{
 		throw Jools.reject(
 			'Invalid or missing mseq: ' + mseq

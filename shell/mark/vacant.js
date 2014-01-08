@@ -111,6 +111,30 @@ Jools.lazyFixate(
 
 
 /*
+| Returns true if an entity of this mark
+| contains 'path'.
+*/
+Vacant.prototype.containsPath =
+	function(
+		path
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.length === 0 )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid empty path'
+/**/		);
+/**/	}
+/**/}
+
+	return false;
+};
+
+
+/*
 | Returns true if this mark equals another.
 */
 Vacant.prototype.equals =
@@ -119,19 +143,6 @@ Vacant.prototype.equals =
 	)
 {
 	return this === mark;
-};
-
-
-/*
-| A vacant mark concerns about nothing
-| and thus returns itself.
-*/
-Vacant.prototype.concerns =
-	function(
-		// path
-	)
-{
-	return this;
 };
 
 

@@ -21,6 +21,7 @@ Forms =
 */
 var
 	Jools,
+	Mark,
 	Path,
 	shell;
 
@@ -64,6 +65,7 @@ Forms.Jockey =
 		hover
 	)
 {
+
 /**/if( CHECK )
 /**/{
 /**/	if( tag !== _tag )
@@ -130,7 +132,7 @@ Forms.Jockey =
 					'traitSet',
 						traitSet,
 					'mark',
-						mark.concerns( path ),
+						mark,
 					'hover',
 						hover.isEmpty || !path.subPathOf( hover ) ?
 							Path.empty
@@ -241,6 +243,14 @@ Jockey.create =
 		}
 	}
 
+	if( mark )
+	{
+		mark =
+			Jockey.concernsMark(
+				mark
+			);
+	}
+
 	if( inherit )
 	{
 		if( screensize === null )
@@ -288,6 +298,29 @@ Jockey.create =
 			hover
 		)
 	);
+};
+
+
+/*
+| Returns the mark if the form jockey concerns a mark.
+*/
+Jockey.concernsMark =
+	function(
+		mark
+	)
+{
+	if(
+		mark.containsPath(
+			Jockey.path
+		)
+	)
+	{
+		return mark;
+	}
+	else
+	{
+		return Mark.Vacant.create( );
+	}
 };
 
 

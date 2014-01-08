@@ -19,6 +19,8 @@ var
 var
 	Euclid,
 	fontPool,
+	HoverReply,
+	Path,
 	Jools;
 
 

@@ -23,6 +23,7 @@ var
 	Euclid,
 	HoverReply,
 	Jools,
+	Mark,
 	Path,
 	shell,
 	theme,
@@ -172,7 +173,7 @@ Forms.Form =
 				'traitSet',
 					traitSet,
 				'mark',
-					this.mark.concerns( path )
+					this.mark
 			);
 	}
 
@@ -285,15 +286,17 @@ Form.create =
 		}
 	}
 
-	if( CHECK )
-	{
-		if( !Forms[ name ] )
-		{
-			throw new Error(
-				'invalid formname: ' + name
-			);
-		}
-	}
+	// TODO use concernsMark
+
+/**/if( CHECK )
+/**/{
+/**/	if( !Forms[ name ] )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid formname: ' + name
+/**/		);
+/**/	}
+/**/}
 
 	if( inherit )
 	{
@@ -332,10 +335,40 @@ Form.create =
 
 
 /*
+| Returns the mark if a form with 'path' concerns about
+| 'mark'.
+*/
+Form.concernsMark =
+	function(
+		mark,
+		path
+	)
+{
+	var
+		mip =
+			mark.itemPath; // TODO widgetPath
+
+	if(
+		mip
+		&&
+		mip.subPathOf( path )
+	)
+	{
+		return mark;
+	}
+	else
+	{
+		return Mark.Vacant.create( );
+	}
+};
+
+
+/*
 | The disc is shown while a form is shown.
 */
 Form.prototype.showDisc =
 	true;
+
 
 
 /*

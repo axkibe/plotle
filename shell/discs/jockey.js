@@ -267,6 +267,8 @@ Jockey.create =
 		}
 	}
 
+	// TODO use concernsMark
+
 	if( inherit )
 	{
 		if( access === null )

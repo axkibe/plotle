@@ -167,6 +167,7 @@ Jools.lazyFixate(
 	}
 );
 
+
 /*
 | Returns begin or end path,
 | dependening on which comes last in docTree.
@@ -264,6 +265,35 @@ Jools.lazyFixate(
 
 
 /*
+| Returns true if an entity of this mark
+| contains 'path'.
+*/
+Range.prototype.containsPath =
+	function(
+		path
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.length === 0 )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid empty path'
+/**/		);
+/**/	}
+/**/}
+
+	return (
+		path.subPathOf( this.bPath )
+		||
+		path.subPathOf( this.ePath )
+	);
+};
+
+
+
+/*
 | The text the selection selects.
 |
 | TODO lazy fixate this
@@ -346,40 +376,6 @@ Range.prototype.innerText =
 */
 Range.prototype.reflect =
 	'Range';
-
-
-/*
-| Returns this if an entity of that path should
-| be concerned about this mark.
-*/
-Range.prototype.concerns =
-	function(
-		path
-	)
-{
-
-	if(
-		path
-		&&
-		// FIXME do proper checking
-		(
-			path.length < 2
-			||
-			(
-				path.get( 0 ) === this.bPath.get( 0 )
-				&&
-				path.get( 1 ) === this.bPath.get( 1 )
-			)
-		)
-	)
-	{
-		return this;
-	}
-	else
-	{
-		return Mark.Vacant.create( );
-	}
-};
 
 
 /*

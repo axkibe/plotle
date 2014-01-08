@@ -34,12 +34,12 @@ var
 ( function( ) {
 'use strict';
 
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
+/**/if( CHECK && typeof( window ) === 'undefined' )
+/**/{
+/**/	throw new Error(
+/**/		'this code needs a browser!'
+/**/	);
+/**/}
 
 
 var
@@ -292,17 +292,19 @@ Button.create =
 		}
 	}
 
+	// TODO use concernsMark
+
 	if( traitSet )
 	{
-		if( CHECK )
-		{
-			if( !path )
-			{
-				throw new Error(
-					'traitSet needs path'
-				);
-			}
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'traitSet needs path'
+/**/			);
+/**/		}
+/**/	}
 
 		for(
 			a = 0, aZ = traitSet.length;

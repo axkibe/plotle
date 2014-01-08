@@ -260,6 +260,28 @@ Note.create =
 		}
 	}
 
+
+	if( mark && mark.reflect !== 'Vacant' )
+	{
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'mark needs path'
+/**/			);
+/**/		}
+/**/	}
+
+		mark =
+			Visual.Item.concernsMark(
+				mark,
+				path
+			);
+	}
+
+
 	if( traitSet )
 	{
 /**/	if( CHECK )
@@ -351,6 +373,7 @@ Note.create =
 				);
 		}
 	}
+
 
 	if( inherit )
 	{

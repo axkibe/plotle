@@ -231,6 +231,35 @@ Relation.create =
 		}
 	}
 
+	if( inherit )
+	{
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+	}
+
+	if( mark && mark.reflect !== 'Vacant' )
+	{
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'mark needs path'
+/**/			);
+/**/		}
+/**/	}
+
+		mark =
+			Visual.Item.concernsMark(
+				mark,
+				path
+			);
+	}
+
 	if( tree )
 	{
 		if( CHECK && !path )
@@ -296,12 +325,6 @@ Relation.create =
 		{
 			mark =
 				inherit.mark;
-		}
-
-		if( path === null )
-		{
-			path =
-				inherit.path;
 		}
 
 		if( pnw === null )

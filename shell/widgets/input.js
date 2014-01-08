@@ -278,17 +278,19 @@ Input.create =
 		}
 	}
 
+	// TODO use concernsMark
+
 	if( traitSet )
 	{
-		if( CHECK )
-		{
-			if( !path )
-			{
-				throw new Error(
-					'traitSet needs path'
-				);
-			}
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'traitSet needs path'
+/**/			);
+/**/		}
+/**/	}
 
 		for(
 			a = 0, aZ = traitSet.length;
@@ -730,12 +732,14 @@ Input.prototype._weave =
 		);
 	}
 
+
 	if(
 		this.mark.reflect === 'Caret'
 	)
 	{
 		this._drawCaret( fabric );
 	}
+
 
 	fabric.edge(
 		style,

@@ -247,17 +247,19 @@ CheckBox.create =
 		}
 	}
 
+	// TODO use concernsMark
+
 	if( traitSet )
 	{
-		if( CHECK )
-		{
-			if( !path )
-			{
-				throw new Error(
-					'traitSet needs path'
-				);
-			}
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if( !path )
+/**/		{
+/**/			throw new Error(
+/**/				'traitSet needs path'
+/**/			);
+/**/		}
+/**/	}
 
 		for(
 			a = 0, aZ = traitSet.length;

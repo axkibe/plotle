@@ -23,6 +23,7 @@ var
 	Euclid,
 	HoverReply,
 	Jools,
+	Mark,
 	shell,
 	theme,
 	TraitSet;
@@ -79,24 +80,30 @@ Item.prototype.Item =
 
 
 /*
-| An entry of the item menu has been selected
+| Returns the mark if an item with 'path' concerns about
+| the mark.
 */
-Item.prototype.menuSelect =
+Item.concernsMark =
 	function(
-		entry
-		// p
+		mark,
+		path
 	)
 {
-	switch( entry )
+	var
+		mip =
+			mark.itemPath;
+
+	if(
+		mip
+		&&
+		mip.subPathOf( path )
+	)
 	{
-		case 'n': // remove
-
-			shell.dropFocus();
-
-			shell.peer.removeItem( this.path );
-
-			break;
-
+		return mark;
+	}
+	else
+	{
+		return Mark.Vacant.create( );
 	}
 };
 

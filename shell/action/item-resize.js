@@ -257,7 +257,7 @@ ItemResize.prototype.equals =
 	if( action === this )
 	{
 		return true;
-	};
+	}
 
 	// TODO
 	// proper checking

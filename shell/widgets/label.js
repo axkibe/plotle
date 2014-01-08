@@ -297,6 +297,8 @@ Label.create =
 		}
 	}
 
+	// TODO use concernsMark
+
 	if( inherit )
 	{
 		if( path === null )

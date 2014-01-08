@@ -166,7 +166,7 @@ Visual.Doc =
 				'flowWidth',
 					flowWidth,
 				'mark',
-					mark.concerns( paraPath )
+					mark
 			);
 	}
 };
@@ -374,7 +374,7 @@ Doc.prototype.draw =
 	function(
 		fabric,      // to draw upon
 		view,        // current pan/zoom/motion
-		item,        // the item the doc belongs to
+		item,        // the item the doc belongs to TODO this is fixed
 		width,       // the width to draw the document with
 		scrollp      // scroll position
 	)
@@ -390,7 +390,7 @@ Doc.prototype.draw =
 	if(
 		mark.reflect === 'Range'
 		&&
-		mark.concerns( this.path )
+		mark.itemPath.equals( item.path )
 	)
 	{
 		fabric.paint(

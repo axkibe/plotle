@@ -498,7 +498,7 @@ Space.prototype._createItem =
 					:
 					Path.empty,
 			'mark',
-				this.mark.concerns( path ),
+				this.mark,
 			'traitSet',
 				traitSet
 		)

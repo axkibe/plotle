@@ -216,6 +216,8 @@ Para.create =
 		}
 	}
 
+	// TODO user markConcerns
+
 	if( inherit )
 	{
 		if( !flowWidth )
@@ -249,13 +251,17 @@ Para.create =
 		}
 
 		if(
-			inherit.tree === tree &&
+			inherit.tree === tree
+			&&
 			(
-				inherit.path && inherit.path.equals( path )
-			) &&
-			inherit.fontsize === fontsize &&
-			inherit.flowWidth === flowWidth &&
-			inherit.mark === mark
+				inherit.path && inherit.path.equals( path ) // TODO
+			)
+			&&
+			inherit.fontsize === fontsize
+			&&
+			inherit.flowWidth === flowWidth
+			&&
+			inherit.mark.equals( mark )
 		)
 		{
 			return inherit;
@@ -375,7 +381,7 @@ Para.prototype.draw =
 		if(
 			mark &&
 			mark.reflect === 'Caret' &&
-			mark.concerns( this.path )
+			this.path.subPathOf( mark.caretPath )
 		)
 		{
 			this._drawCaret(

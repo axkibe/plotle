@@ -1247,7 +1247,7 @@ Shell.prototype.userMark =
 			'inherit',
 				this.$space,
 			'mark',
-				mark.concerns( this.$space.path )
+				mark
 		);
 
 	this._$formJockey =
@@ -1255,7 +1255,7 @@ Shell.prototype.userMark =
 			'inherit',
 				this._$formJockey,
 			'mark',
-				mark.concerns( this._$formJockey.path )
+				mark
 		);
 
 	this._$discJockey =

@@ -174,26 +174,28 @@ Jools.lazyFixate(
 	}
 );
 
+
 /*
-| Returns this if an entity of that path should
-| be concerned about this mark.
+| Returns true if an entity of this mark
+| contains 'path'.
 */
-Caret.prototype.concerns =
+Caret.prototype.containsPath =
 	function(
 		path
 	)
 {
-	if(
-		path
-		&&
-		path.subPathOf( this.path ) )
-	{
-		return this;
-	}
-	else
-	{
-		return Mark.Vacant.create( );
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.length === 0 )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid empty path'
+/**/		);
+/**/	}
+/**/}
+
+	return path.subPathOf( this.path );
 };
 
 
