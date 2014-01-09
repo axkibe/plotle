@@ -61,7 +61,7 @@ var
 		argv[ 2 ],
 
 	jDefExt =
-		'-jdef.js';
+		'.jdef.js';
 
 if(
 	inFilename.substr(
@@ -70,7 +70,7 @@ if(
 )
 {
 	console.log(
-		'Error: jdef-file must end with "-jdef.js"!'
+		'Error: jdef-file must end with ".jdef.js"!'
 	);
 
 	process.exit( -1 );
@@ -100,7 +100,7 @@ try
 			+
 			inFilename
 				.substr( 0, inFilename.length - jDefExt.length )
-				.replace( /\//g, '-' )D;
+				.replace( /\//g, '-' )
 			+
 			'.js';
 

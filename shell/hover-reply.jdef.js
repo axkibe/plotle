@@ -1,10 +1,10 @@
 /*
-| Authors: Axel Kittenberger
-|
 | Answer of a pointingHover call.'
 |
 | Contains the path of the component being hovered over,
 | As well the shape the cursor should get.
+|
+| Authors: Axel Kittenberger
 */
 
 /*

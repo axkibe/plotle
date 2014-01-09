@@ -34,14 +34,22 @@ var
 {
 	var
 		a,
+		aZ,
+
+		aname,
 
 		// shortcut
 		attr =
-			jdef.attributes;
+			jdef.attributes,
 
 		// alphabetical sorted attribute names
-		attrList =
-			[ ],
+		aList =
+			null,
+
+		// alphabetical sorted attribute names
+		// including 'inherit'
+		aListPlus =
+			null,
 
 		r =
 			[ ];
@@ -83,7 +91,15 @@ var
 		);
 	}
 
-	
+	aList =
+		Object.keys( attr ).sort( );
+
+	aListPlus =
+		aList.slice( );
+
+	aListPlus.push( 'inherit' );
+
+	aListPlus.sort( );
 
 	r.push(
 		'/*',
@@ -91,6 +107,20 @@ var
 		'|',
 		'| DO NOT EDIT!',
 		'*/',
+		'',
+		'/*',
+		'| Export',
+		'*/',
+		'',
+		'var',
+		'\t' + jdef.name + ';',
+		'',
+		'/*',
+		'| Imports',
+		'*/',
+		'',
+		'var',
+		'\tJools;',
 		'',
 		'/*',
 		'| Capsule',
@@ -105,40 +135,145 @@ var
 		'/*',
 		'| Constructor.',
 		'*/',
-		a.name = ' =',
+		jdef.name + ' =',
 		'\tfunction(',
 		'\t\ttag,'
 	);
 
-	for( var a in jdef.attributes )
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
 	{
 		r.push(
-			'\t\t' + a
+			'\t\t' + aList[ a ]
 		);
 	}
 
 	r.push(
 		'\t)',
 		'{',
+		'',
 		'/**/if( CHECK )',
-		'/**/{'
-		'/**/\t\tif( tag !== _tag )',
-		'/**/\t\t{',
-		'/**/\t\t\tthrow new Error(',
-		'/**/\t\t\t\t\'tag mismatch\'',
-		'/**/\t\t}',
+		'/**/{',
+		'/**/\tif( tag !== _tag )',
+		'/**/\t{',
+		'/**/\t\tthrow new Error(',
+		'/**/\t\t\t\'tag mismatch\'',
+		'/**/\t\t)',
+		'/**/\t}',
 		''
 	);
 
-	for( var a in jdef.attributes )
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
 	{
+		aname =
+			aList[ a ];
+
 		r.push(
-			'\t\t' + a
+			'\tthis.' + aname + ' =',
+			'\t\t' + aname + ';',
+			''
 		);
 	}
 
 	r.push(
-		'});',
+		'\tJools.immute( this );',
+		'};',
+		'',
+		'',
+		'/*',
+		'| Creates a new ' + jdef.name + ' object.',
+		'*/',
+		jdef.name + '.create =',
+		'\tfunction(',
+		'\t\t// free strings',
+		'\t)',
+		'{',
+		'\tvar',
+		''
+	);
+
+	for(
+		a = 0, aZ = aListPlus.length;
+		a < aZ;
+		a++
+	)
+	{
+		aname =
+			aListPlus[ a ];
+
+		r.push(
+			'\t\t' + aname + ' =',
+			'\t\t\tnull' + ( a + 1 >= aListPlus.length ? ';' : ',' ),
+			''
+		);
+	}
+
+	r.push(
+		'\tfor(',
+		'\t\tvar a = 0, aZ = arguments.length;',
+		'\t\ta < aZ;',
+		'\t\ta += 2',
+		'\t)',
+		'\t{',
+		'\t\tswitch( arguments[ a ] )',
+		'\t\t{'
+	);
+
+	for(
+		a = 0, aZ = aListPlus.length;
+		a < aZ;
+		a++
+	)
+	{
+		aname =
+			aListPlus[ a ];
+
+		r.push(
+			'\t\t\tcase \'' + aname + '\' :',
+			'',
+			'\t\t\t\t' + aname + ' =',
+			'\t\t\t\t\targuments[ a + 1 ];',
+			'',
+			'\t\t\t\tbreak;',
+			''
+		);
+	}
+
+	r.push(
+		'\t\t\tdefault :',
+		'',
+		'/**/\t\t\tif( CHECK )',
+		'/**/\t\t\t{',
+		'/**/\t\t\t\tthrow new Error(',
+		'/**/\t\t\t\t\t\'invalid argument: \' + arguments[ a ]',
+		'/**/\t\t\t\t);',
+		'/**/\t\t\t}',
+		'\t\t}',
+		'\t}',
+		'',
+		'\tif( inherit )',
+		'\t{'
+	);
+
+	r.push(
+		'\t}',
+		''
+	);
+
+	r.push(
+		'};',
+		''
+	);
+
+	r.push(
+		'} )( );',
 		''
 	);
 
