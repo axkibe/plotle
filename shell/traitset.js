@@ -314,7 +314,7 @@ TraitSet.prototype.containsPath =
 	}
 
 	return false;
-}
+};
 
 
 } )( );
