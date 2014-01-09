@@ -7,25 +7,28 @@
 | Authors: Axel Kittenberger
 */
 
-/*
-| Capsule (to make jshint happy)
-*/
 (function( ) {
 'use strict';
 
-	return {
+return {
 
-		name :
-			'HoverReply',
+	name :
+		'HoverReply',
 
-		attributes :
-			{
-				cursor :
-					true,
+	attributes :
+		{
+			cursor :
+				{
+					type :
+						'String'
+				},
 
-				path :
-					true,
-			}
-	};
+			path :
+				{
+					type :
+						'Path'
+				}
+		}
+};
 
 })( );

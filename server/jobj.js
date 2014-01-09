@@ -24,12 +24,99 @@ if( typeof( require ) === 'undefined' )
 
 
 /*
+| Checks if a jdef looks ok.
+*/
+var
+	checkJDef =
+		function(
+			jdef // the jools object definition
+		)
+{
+	var
+		aname;
+
+	for( aname in jdef )
+	{
+		switch( aname )
+		{
+			case 'name' :
+			case 'attributes' :
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid jdef parameter: ' + aname
+				);
+		}
+	}
+
+	if(
+		!Jools.isString( jdef.name )
+	)
+	{
+		throw new Error(
+			'name missing'
+		);
+	}
+
+	var
+		attr =
+			jdef.attributes;
+
+	if( !attr )
+	{
+		throw new Error(
+			'attributes missing'
+		);
+	}
+
+	for( aname in attr )
+	{
+		if( aname === 'inherit' )
+		{
+			throw new Error(
+				'attribute must not be named "inherit"'
+			);
+		}
+
+		for( var aoname in attr[ aname ] )
+		{
+			switch( aoname )
+			{
+				case 'type' :
+
+					break;
+
+				default :
+
+					throw new Error(
+						'attribute ' +
+							'"' + aname + '"' +
+							' has invalid specifier: ' +
+							'"' + aoname + '"'
+					);
+			}
+		}
+
+		if( !Jools.isString( attr[ aname ].type ) )
+		{
+			throw new Error(
+				'type is missing from "' + aname + '"'
+			);
+		}
+	}
+};
+
+
+/*
 | Generates code from a jools object definition
 */
 var
 	jgen =
 		function(
-			jdef  // the jools object definition
+			jdef // the jools object definition
 		)
 {
 	var
@@ -54,42 +141,8 @@ var
 		r =
 			[ ];
 
-	// tests if all parameters are known
-
-	for( a in jdef )
-	{
-		switch( a )
-		{
-			case 'name' :
-			case 'attributes' :
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid jdef parameter: ' + a
-				);
-		}
-	}
-
-	if(
-		!Jools.isString( jdef.name )
-	)
-	{
-		throw new Error(
-			'name missing'
-		);
-	}
-
-	if(
-		!jdef.attributes
-	)
-	{
-		throw new Error(
-			'attributes missing'
-		);
-	}
+	// tests if the jdef looks ok
+	checkJDef( jdef );
 
 	aList =
 		Object.keys( attr ).sort( );
@@ -262,8 +315,27 @@ var
 		'\t{'
 	);
 
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aname =
+			aList[ a ];
+
+		r.push(
+			'\t\tif( ' + aname + ' === null )',
+			'\t\t{',
+			'\t\t\t' + aname + ' =',
+			'\t\t\t\tinherit.' + aname + ';',
+			'\t\t}',
+			'',
+		);
+	}
+
 	r.push(
-		'\t}',
+		'}',
 		''
 	);
 

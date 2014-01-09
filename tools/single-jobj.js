@@ -1,5 +1,5 @@
 /*
-| Runs the jgen generator for a single file
+| Runs the jobj generator for a single file
 |
 | Authors: Axel Kittenberger
 */
@@ -28,8 +28,8 @@ var
 	vm =
 		require( 'vm' ),
 
-	jgen =
-		require( './jgen' ),
+	jobj =
+		require( '../server/jobj' ),
 
 	input =
 		null,
@@ -92,11 +92,11 @@ try
 		);
 
 	output =
-		jgen( idef );
+		jobj( idef );
 
 	var
 		outFilename =
-			'jgen/'
+			'jobj/'
 			+
 			inFilename
 				.substr( 0, inFilename.length - jDefExt.length )
