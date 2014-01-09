@@ -96,9 +96,13 @@ try
 
 	var
 		outFilename =
-			inFilename.substr( 0, inFilename.length - jDefExt.length )
+			'jgen/'
 			+
-			'-jgen.js';
+			inFilename
+				.substr( 0, inFilename.length - jDefExt.length )
+				.replace( /\//g, '-' )D;
+			+
+			'.js';
 
 	fs.writeFileSync(
 		outFilename,
