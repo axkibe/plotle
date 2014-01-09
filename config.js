@@ -147,7 +147,7 @@ config.log  = {
 		false,
 
 	news :
-		true,
+		false,
 
 	debug :
 		true,

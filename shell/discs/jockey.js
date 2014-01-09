@@ -154,9 +154,10 @@ Discs.Jockey =
 			);
 	}
 
-	// XXX immute
 	this._discs =
-		discs;
+		Jools.immute( discs );
+
+	Jools.immute( this );
 };
 
 
@@ -269,7 +270,13 @@ Jockey.create =
 		}
 	}
 
-	// TODO use concernsMark
+	if( mark )
+	{
+		mark =
+			Jockey.concernsMark(
+				mark
+			);
+	}
 
 	if( inherit )
 	{
@@ -309,10 +316,12 @@ Jockey.create =
 				inherit.screensize;
 		}
 
+		// FIXME recreate on interesting action only
+
 		if(
 			inherit.access === access
 			&&
-			inherit.action === action
+			inherit.action.equals( action )
 			&&
 			inherit.hover.equals( hover )
 			&&
@@ -353,10 +362,26 @@ Jockey.prototype.reflect =
 
 
 /*
+| Returns the mark if the form jockey concerns a mark.
+|
+| FIXME go into markItemPath
+*/
+Jockey.concernsMark =
+	function(
+		mark
+	)
+{
+	return mark;
+};
+
+
+
+/*
 | Disc jockey path
 |
 | TODO rename 'discs'
 */
+Jockey.path =
 Jockey.prototype.path =
 	Path.empty.append( 'disc' );
 

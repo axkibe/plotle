@@ -991,15 +991,19 @@ Space.prototype.dragStart =
 							theme.note.fontsize,
 						'flowWidth',
 							0,
+						'mark',
+							Mark.Vacant.create( ),
 						'paraSep',
 							Jools.half(
 								theme.note.fontsize
 							),
-						'mark',
-							Mark.Vacant.create( )
+						'path',
+							Path.empty
 					),
 				'mark',
-					Mark.Vacant.create( )
+					Mark.Vacant.create( ),
+				'path',
+					Path.empty
 			);
 
 		shell.setAction(
@@ -1041,11 +1045,15 @@ Space.prototype.dragStart =
 							0,
 						'paraSep',
 							0,
+						'path',
+							Path.empty,
 						'mark',
 							Mark.Vacant.create( )
 					),
 				'mark',
-					Mark.Vacant.create( )
+					Mark.Vacant.create( ),
+				'path',
+					Path.empty
 			);
 
 		shell.setAction(
@@ -1077,6 +1085,8 @@ Space.prototype.dragStart =
 					Path.empty,
 				'mark',
 					Mark.Vacant.create( ),
+				'path',
+					Path.empty,
 				'zone',
 					Euclid.Rect.create(
 						'pnw/pse',

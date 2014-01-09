@@ -107,7 +107,7 @@ None.create =
 /*
 | Returns true if this action equals another.
 */
-None.equals =
+None.prototype.equals =
 	function(
 		action
 	)
