@@ -101,6 +101,20 @@ Item.concernsMark =
 
 
 /*
+| Shortcut to the item's key.
+| It is the last path entry.
+*/
+Jools.lazyFixate(
+	Item.prototype,
+	'key',
+	function( )
+	{
+		return this.path.get( -1 );
+	}
+);
+
+
+/*
 | Returns the compass direction of the handle
 | if p is on a resizer handle.
 */

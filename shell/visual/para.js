@@ -340,6 +340,20 @@ Para.prototype.Para =
 
 
 /*
+| Shortcut to the para's key.
+| It is the last path entry.
+*/
+Jools.lazyFixate(
+	Para.prototype,
+	'key',
+	function( )
+	{
+		return this.path.get( -1 );
+	}
+);
+
+
+/*
 | Draws the paragraph in its cache and returns it.
 */
 Para.prototype.draw =
@@ -961,7 +975,9 @@ Para.prototype.input =
 		rx = reg.exec( text )
 	)
 	{
-		var line = rx[ 1 ];
+		var
+			line =
+				rx[ 1 ];
 
 		shell.peer.insertText(
 			para.textPath,

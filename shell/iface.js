@@ -1058,7 +1058,7 @@ IFace.prototype.alter =
 			result.chgX,
 
 		c =
-			Jools.immute({
+			Jools.immute( {
 				cid :
 					Jools.uid( ),
 
@@ -1067,7 +1067,7 @@ IFace.prototype.alter =
 
 				time :
 					this.$remoteTime
-			});
+			} );
 
 	this._$outbox.push( c );
 

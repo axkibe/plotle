@@ -821,7 +821,6 @@ Note.prototype.scrollMarkIntoView =
 /**/	}
 /**/}
 
-
 	var
 		zone =
 			this.zone,

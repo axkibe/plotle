@@ -465,12 +465,7 @@ Space.prototype.focusedItem =
 			this.mark,
 
 		path =
-			mark.caretPath; // TODO euhhh
-
-	if( !mark.hasCaret )
-	{
-		return null;
-	}
+			mark.itemPath;
 
 	if( action )
 	{
