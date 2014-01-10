@@ -1269,9 +1269,10 @@ Server.prototype.prepareResources =
 		bsha1
 	);
 
-	// Prepends the CHECK flag after
+	// Prepends the CHECK and JOOBJ flags after
 	// the bundle has been created.
 	cconfig.data =
+		'var JOOBJ = false;\n' +
 		'var CHECK = true;\n' +
 		cconfig.data;
 
