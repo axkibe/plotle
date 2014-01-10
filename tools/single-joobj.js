@@ -1,5 +1,5 @@
 /*
-| Runs the jobj generator for a single file
+| Runs the joobj generator for a single file
 |
 | Authors: Axel Kittenberger
 */
@@ -28,8 +28,8 @@ var
 	vm =
 		require( 'vm' ),
 
-	jobj =
-		require( '../server/jobj' ),
+	joobjGenerator =
+		require( '../server/joobj-generator' ),
 
 	input =
 		null,
@@ -87,16 +87,19 @@ try
 	idef =
 		vm.runInNewContext(
 			input,
-			{ },
+			{
+				JOOBJ :
+					true
+			},
 			inFilename
 		);
 
 	output =
-		jobj( idef );
+		joobjGenerator( idef );
 
 	var
 		outFilename =
-			'jobj/'
+			'joobj/'
 			+
 			inFilename
 				.substr( 0, inFilename.length - jDefExt.length )

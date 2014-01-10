@@ -114,7 +114,7 @@ var
 | Generates code from a jools object definition
 */
 var
-	jgen =
+	joobjGenerator =
 		function(
 			jdef // the jools object definition
 		)
@@ -357,6 +357,6 @@ var
 | Node export
 */
 module.exports =
-	jgen;
+	joobjGenerator;
 
 } )( );

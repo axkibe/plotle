@@ -28,6 +28,35 @@ var
 ( function( ) {
 'use strict';
 
+
+/*
+| the JOOBJ definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'HoverReply',
+
+		attributes :
+			{
+				cursor :
+					{
+						type :
+							'String'
+					},
+
+				path :
+					{
+						type :
+							'Path'
+					}
+			}
+	};
+}
+
+
 if( typeof( window ) === 'undefined' )
 {
 	throw new Error(
