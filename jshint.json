@@ -13,5 +13,9 @@
 	"strict"    : true,
 	"undef"     : true,
 	"unused"    : true,
-	"globals"   : { "CHECK": true }
+	"globals"   :
+		{
+			"CHECK" : true,
+			"JOOBJ" : true
+		}
 }

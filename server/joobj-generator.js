@@ -15,6 +15,7 @@ var
 	Jools =
 		require( '../shared/jools' );
 
+
 if( typeof( require ) === 'undefined' )
 {
 	throw new Error(
@@ -24,18 +25,18 @@ if( typeof( require ) === 'undefined' )
 
 
 /*
-| Checks if a jdef looks ok.
+| Checks if a joobj definition looks ok.
 */
 var
-	checkJDef =
+	checkJoobj =
 		function(
-			jdef // the jools object definition
+			joobj // the jools object definition
 		)
 {
 	var
 		aname;
 
-	for( aname in jdef )
+	for( aname in joobj )
 	{
 		switch( aname )
 		{
@@ -47,13 +48,13 @@ var
 			default :
 
 				throw new Error(
-					'invalid jdef parameter: ' + aname
+					'invalid joobj parameter: ' + aname
 				);
 		}
 	}
 
 	if(
-		!Jools.isString( jdef.name )
+		!Jools.isString( joobj.name )
 	)
 	{
 		throw new Error(
@@ -63,7 +64,7 @@ var
 
 	var
 		attr =
-			jdef.attributes;
+			joobj.attributes;
 
 	if( !attr )
 	{
@@ -116,7 +117,7 @@ var
 var
 	joobjGenerator =
 		function(
-			jdef // the jools object definition
+			joobj // the jools object definition
 		)
 {
 	var
@@ -127,7 +128,7 @@ var
 
 		// shortcut
 		attr =
-			jdef.attributes,
+			joobj.attributes,
 
 		// alphabetical sorted attribute names
 		aList =
@@ -141,8 +142,8 @@ var
 		r =
 			[ ];
 
-	// tests if the jdef looks ok
-	checkJDef( jdef );
+	// tests if the joobj looks ok
+	checkJoobj( joobj );
 
 	aList =
 		Object.keys( attr ).sort( );
@@ -166,7 +167,7 @@ var
 		'*/',
 		'',
 		'var',
-		'\t' + jdef.name + ';',
+		'\t' + joobj.name + ';',
 		'',
 		'/*',
 		'| Imports',
@@ -181,14 +182,16 @@ var
 		'(function( ) {',
 		'\'use strict\';',
 		'',
+		'',
 		'var',
-		'	_tag =',
-		'		\'' + Math.floor( Math.random( ) * 1000000000 ) + '\';',
+		'\t_tag =',
+		'\t\t' + Math.floor( Math.random( ) * 1000000000 ) + ';',
+		'',
 		'',
 		'/*',
 		'| Constructor.',
 		'*/',
-		jdef.name + ' =',
+		joobj.name + ' =',
 		'\tfunction(',
 		'\t\ttag,'
 	);
@@ -200,7 +203,8 @@ var
 	)
 	{
 		r.push(
-			'\t\t' + aList[ a ]
+			'\t\t' + aList[ a ] +
+				( a + 1 < aZ ? ',' : '' )
 		);
 	}
 
@@ -241,9 +245,9 @@ var
 		'',
 		'',
 		'/*',
-		'| Creates a new ' + jdef.name + ' object.',
+		'| Creates a new ' + joobj.name + ' object.',
 		'*/',
-		jdef.name + '.create =',
+		joobj.name + '.create =',
 		'\tfunction(',
 		'\t\t// free strings',
 		'\t)',
@@ -310,7 +314,10 @@ var
 		'/**/\t\t\t}',
 		'\t\t}',
 		'\t}',
-		'',
+		''
+	);
+
+	r.push(
 		'\tif( inherit )',
 		'\t{'
 	);
@@ -330,17 +337,97 @@ var
 			'\t\t\t' + aname + ' =',
 			'\t\t\t\tinherit.' + aname + ';',
 			'\t\t}',
-			'',
+			''
 		);
 	}
 
 	r.push(
-		'}',
+		'\t\tif('
+	);
+
+
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aname =
+			aList[ a ];
+
+		if( a > 0 )
+		{
+			r.push(
+				'\t\t\t&&'
+			);
+		}
+
+		switch( attr[ aname ].type )
+		{
+			case 'String' :
+
+				r.push(
+					'\t\t\t' + aname + ' === inherit.' + aname
+				);
+
+				break;
+
+			default :
+
+				r.push(
+					'\t\t\t' + aname +
+						'.equals( inherit.' + aname + ' )'
+				);
+
+				break;
+		}
+	}
+
+	r.push(
+		'\t\t)',
+		'\t\t{',
+		'\t\t\treturn inherit;',
+		'\t\t}',
+		'\t}',
 		''
 	);
 
 	r.push(
+		'\treturn (',
+		'\t\tnew ' + joobj.name + '(',
+		'\t\t\t_tag,'
+	);
+
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aname =
+			aList[ a ];
+
+		r.push(
+			'\t\t\t' + aname +
+				( a + 1 < aList.length ? ',' : '' )
+		);
+	}
+
+	r.push(
+		'\t\t)',
+		'\t);',
 		'};',
+		'',
+		''
+	);
+
+	r.push(
+		'/*',
+		'| Reflection',
+		'*/',
+		joobj.name + '.prototype.reflect =',
+		'\t\'' + joobj.name + '\';',
+		'',
 		''
 	);
 
@@ -349,7 +436,7 @@ var
 		''
 	);
 
-	return r.join('\n');
+	return r.join( '\n' );
 };
 
 
@@ -358,5 +445,6 @@ var
 */
 module.exports =
 	joobjGenerator;
+
 
 } )( );
