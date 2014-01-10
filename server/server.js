@@ -61,14 +61,20 @@ var
 	http =
 		require( 'http' ),
 
-	sha1 =
-		require( '../shared/sha1' ),
+	joobjGenerator =
+		require( './joobj-generator' ),
 
 	mongodb =
 		require( 'mongodb' ),
 
+	sha1 =
+		require( '../shared/sha1' ),
+
 	url =
 		require( 'url' ),
+
+	vm =
+		require( 'vm' ),
 
 	zlib =
 		require( 'zlib' ),
@@ -183,10 +189,17 @@ Server.prototype.startup =
 		self =
 			this;
 
+	var
+		requestListener =
+			function*( req, res )
+			{
+				yield* self.requestListener( req, res );
+			};
+
 	yield http.createServer(
 		function( req, res )
 		{
-			self.requestListener( req, res );
+			suspend( requestListener )( req, res );
 		}
 	).listen(
 		config.port,
@@ -1169,6 +1182,19 @@ Server.prototype.prepareResources =
 	{
 		r =
 			rBundle[ a ];
+
+		if( r.opts.joobj )
+		{
+			devels.push(
+				'<script src="' +
+					r.joobjAlias +
+					'" type="text/javascript"></script>'
+			);
+
+			bundle.push(
+				yield* this.generateJoobj( r )
+			);
+		}
 
 		devels.push(
 			'<script src="' +
@@ -2800,10 +2826,50 @@ Server.prototype.webRedirect =
 
 
 /*
+| iGenerates the Joobj for a resource
+*/
+Server.prototype.generateJoobj =
+	function*(
+		r
+	)
+{
+	var
+		data =
+			yield fs.readFile(
+				r.path,
+				resume( )
+			),
+
+		joobj =
+			vm.runInNewContext(
+				data,
+				{
+					JOOBJ :
+						true
+				},
+				r.path
+			);
+
+	data =
+		joobjGenerator( joobj );
+
+	// updates the generated file
+	yield fs.writeFile(
+		'joobj/' +
+		r.alias,
+		data,
+		resume( )
+	);
+
+	return data;
+};
+
+
+/*
 | Listens to http requests
 */
 Server.prototype.requestListener =
-	function(
+	function*(
 		req,
 		res
 	)
@@ -2901,10 +2967,6 @@ Server.prototype.requestListener =
 		return;
 	}
 
-	var
-		self =
-			this;
-
 	if (
 		config.devel !== 'shell' &&
 		config.devel !== 'both'
@@ -2915,59 +2977,91 @@ Server.prototype.requestListener =
 		);
 	}
 
-	fs.readFile(
-		r.path,
-		function( err, data )
-		{
-			if( err )
-			{
-				self.webError(
-					res,
-					500,
-					'Internal Server Error'
-				);
+	var
+		data;
 
-				Jools.log(
-					'fail',
-					'Missing file: ' + r.path
-				);
-
-				return;
-			}
-
-			res.writeHead(
-				200,
-				{
-					'Content-Type' :
-						r.mime,
-
-					'Cache-Control' :
-						r.opts.cache ? 'max-age=7884000' : 'no-cache',
-
-					'Date' :
-						new Date().toUTCString()
-				}
-			);
-
-			// weinre can't cope with strict mode
-			// so its disabled when weinre is enabled
-			if( config.debug.weinre )
-			{
-				data =
-					('' + data).replace(
-						/'use strict'/,
-						"'not strict'"
-					).replace(
-						/"use strict"/,
-						'"not strict"'
-					);
-			}
-
-			res.end(
-				data,
-				r.code
-			);
+	// if the joobj is requested generate that one from the file
+	if(
+		pathname.substr( 0, 'joobj-'.length ) === 'joobj-'
+	)
+	{
+		try{
+			data =
+				yield* this.generateJoobj( r );
 		}
+		catch( e )
+		{
+			this.webError(
+				res,
+				500,
+				'Internal Server Error'
+			);
+
+			Jools.log(
+				'fail',
+				'Error generating Joobj: ' + e.toString( )
+			);
+
+			return;
+		}
+	}
+	else
+	{
+		try {
+			data =
+				yield fs.readFile(
+					r.path,
+					resume( )
+				);
+		}
+		catch( e )
+		{
+			this.webError(
+				res,
+				500,
+				'Internal Server Error'
+			);
+
+			Jools.log(
+				'fail',
+				'Missing file: ' + r.path
+			);
+
+			return;
+		}
+	}
+
+	res.writeHead(
+		200,
+		{
+			'Content-Type' :
+				r.mime,
+
+			'Cache-Control' :
+				r.opts.cache ? 'max-age=7884000' : 'no-cache',
+
+			'Date' :
+				new Date().toUTCString()
+		}
+	);
+
+	// weinre can't cope with strict mode
+	// so its disabled when weinre is enabled
+	if( config.debug.weinre )
+	{
+		data =
+			( '' + data ).replace(
+				/'use strict'/,
+				"'not strict'"
+			).replace(
+				/"use strict"/,
+				'"not strict"'
+			);
+	}
+
+	res.end(
+		data,
+		r.code
 	);
 };
 
