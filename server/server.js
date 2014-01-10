@@ -872,7 +872,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/hover-reply.js',
-					'fb',
+					'fbj',
 
 				'shell/widgets/widget.js',
 					'fb',
@@ -1055,12 +1055,12 @@ Server.prototype.prepareResources =
 					'mc'
 		];
 
-	// ressources served in the bundle
+	// resources served in the bundle
 	var
-		bundleRessources =
+		rBundle =
 			[ ];
 
-	// creates the ressources
+	// creates the resources
 	for(
 		var a = 0, aZ = rlist.length;
 		a < aZ;
@@ -1075,15 +1075,22 @@ Server.prototype.prepareResources =
 
 		if( r.opts.bundle )
 		{
-			bundleRessources.push( r );
+			rBundle.push( r );
 		}
 
 		if( this.$resources[ r.alias ] )
 		{
 			throw new Error(
-				'double ressource: ' + r.alias +
+				'double resource: ' +
+					r.alias +
 					' ( ' + r.path + ' ) '
 			);
+		}
+
+		if( r.opts.joobj )
+		{
+			this.$resources[ r.joobjAlias ] =
+				r;
 		}
 
 		this.$resources[ r.alias ] =
@@ -1098,6 +1105,10 @@ Server.prototype.prepareResources =
 		'preparing resources'
 	);
 
+	/*
+	| Reads in all files to be cached
+	| in memory
+	*/
 	for( alias in this.$resources )
 	{
 		r =
@@ -1119,9 +1130,11 @@ Server.prototype.prepareResources =
 			);
 	}
 
+	// alternative alias for favicon
 	this.$resources[ 'favicon.ico' ] =
 		this.$resources[ 'media/favicon.ico' ];
 
+	// autogenerator the shell config as resource
 	var
 		cconfig =
 			new Resource(
@@ -1129,7 +1142,8 @@ Server.prototype.prepareResources =
 				'mb'
 			);
 
-	bundleRessources.unshift( cconfig );
+	// puts the config on top of the rBundle
+	rBundle.unshift( cconfig );
 
 	this.$resources[ cconfig.alias ] =
 		cconfig;
@@ -1146,15 +1160,15 @@ Server.prototype.prepareResources =
 		devels =
 			[ ];
 
-	// loads the to be bundled files
+	// loads the files to be bundled
 	for(
-		a = 0, aZ = bundleRessources.length;
+		a = 0, aZ = rBundle.length;
 		a < aZ;
 		a++
 	)
 	{
 		r =
-			bundleRessources[ a ];
+			rBundle[ a ];
 
 		devels.push(
 			'<script src="' +
@@ -1173,13 +1187,16 @@ Server.prototype.prepareResources =
 		}
 		else
 		{
-			bundle.push( r.data );
+			bundle.push(
+				r.data
+			);
 		}
 	}
 
 	bundle =
 		bundle.join( '\n' );
 
+	//writes the bundle( for debugging )
 	//yield fs.writeFile(
 	//	'bundle.js',
 	//	bundle,
@@ -1233,7 +1250,7 @@ Server.prototype.prepareResources =
 		bsha1 =
 			sha1.sha1hex( bundle ),
 
-		// registers the bundle as ressource
+		// registers the bundle as resource
 		br =
 			new Resource(
 				'meshcraft-' + bsha1 + '.js',
@@ -2790,7 +2807,9 @@ Server.prototype.requestListener =
 		res
 	)
 {
-	var red = url.parse( req.url );
+	var
+		red =
+			url.parse( req.url );
 
 	if(
 		this.webRedirect(
@@ -2823,7 +2842,11 @@ Server.prototype.requestListener =
 
 	if( !r )
 	{
-		this.webError( res, '404 Bad Request' );
+		this.webError(
+			res,
+			'404 Bad Request'
+		);
+
 		return;
 	}
 
@@ -2848,15 +2871,31 @@ Server.prototype.requestListener =
 		if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
 		{
 			// delivers compressed
-			header[ 'Content-Encoding' ] = 'gzip';
-			res.writeHead( 200, header );
-			res.end( r.gzip, 'binary' );
+			header[ 'Content-Encoding' ] =
+				'gzip';
+
+			res.writeHead(
+				200,
+				header
+			);
+
+			res.end(
+				r.gzip,
+				'binary'
+			);
 		}
 		else
 		{
 			// delivers uncompressed
-			res.writeHead( 200, header );
-			res.end( r.data, r.code );
+			res.writeHead(
+				200,
+				header
+			);
+
+			res.end(
+				r.data,
+				r.code
+			);
 		}
 		return;
 	}
@@ -2869,7 +2908,10 @@ Server.prototype.requestListener =
 		config.devel !== 'shell' &&
 		config.devel !== 'both'
 	) {
-		this.webError( res, '404 Bad Request' );
+		this.webError(
+			res,
+			'404 Bad Request'
+		);
 	}
 
 	fs.readFile(
@@ -2948,7 +2990,11 @@ Server.prototype.webAjax =
 
 	if( req.method !== 'POST' )
 	{
-		this.webError( res, 400, 'Must use POST' );
+		this.webError(
+			res,
+			400,
+			'Must use POST'
+		);
 
 		return;
 	}
@@ -2991,7 +3037,12 @@ Server.prototype.webAjax =
 			}
 			catch( err )
 			{
-				self.webError( res, 400, 'Not valid JSON' );
+				self.webError(
+					res,
+					400,
+					'Not valid JSON'
+				);
+
 				return;
 			}
 
@@ -3041,7 +3092,9 @@ Server.prototype.webAjax =
 				}
 			);
 
-			res.end( JSON.stringify( asw ) );
+			res.end(
+				JSON.stringify( asw )
+			);
 		};
 
 	req.on(

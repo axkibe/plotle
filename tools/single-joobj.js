@@ -86,9 +86,7 @@ try
 			'joobj/'
 			+
 			inFilename
-				.replace( /\//g, '-' )
-			+
-			'.js';
+				.replace( /\//g, '-' );
 
 	fs.writeFileSync(
 		outFilename,

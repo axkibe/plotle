@@ -29,6 +29,7 @@ if( typeof( require ) === 'undefined' )
 |   b ... included in the bundle
 |   c ... serve as cached
 |   f ... serve from file
+|   j ... includes a joobj definition
 |   m ... keep in memory
 */
 var
@@ -61,22 +62,28 @@ Resource =
 	// the options for this resource
 	this.opts   =
 	{
+		// this resource is part of the bunlde
+		bundle :
+			opts.indexOf( 'b' ) >= 0,
+
 		// tells the client to cache the resource
 		cache :
 			opts.indexOf( 'c' ) >= 0,
-
-		// the servers hold this resource in memory
-		memory :
-			opts.indexOf( 'm' ) >= 0,
 
 		// the server reads this resource from the file on every access
 		// (used for debugging resources)
 		file :
 			opts.indexOf( 'f' ) >= 0,
 
-		// this resource is part of the bunlde
-		bundle :
-			opts.indexOf( 'b' ) >= 0
+		// this file includes a joobj definition
+		// so the joobj-generator is ran for it
+		joobj :
+			opts.indexOf( 'j' ) >= 0,
+
+		// the servers hold this resource in memory
+		memory :
+			opts.indexOf( 'm' ) >= 0
+
 	};
 
 	if( this.opts.file )
@@ -91,6 +98,28 @@ Resource =
 	{
 		this.alias =
 			path;
+	}
+
+
+	// if this resource contains a joobj
+	// it will serve two files, the file itself
+	// and its joobj-generation
+	//
+	if( this.opts.joobj )
+	{
+		this.joobjAlias =
+			'joobj-' + this.alias;
+
+		this.joobjPath =
+			'joobj-' + this.path;
+	}
+	else
+	{
+		this.joobjAlias =
+			null;
+
+		this.joobjPath =
+			null;
 	}
 
 
