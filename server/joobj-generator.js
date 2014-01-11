@@ -86,6 +86,7 @@ var
 		{
 			switch( aoname )
 			{
+				case 'comment' :
 				case 'type' :
 
 					break;
@@ -112,13 +113,39 @@ var
 
 
 /*
+| Returns a white spaced string with the 'len' length.
+*/
+var
+whiteSpace =
+	function(
+		len
+	)
+{
+	var
+		w =
+			'';
+
+	for(
+		var a = 0;
+		a < len;
+		a++
+	)
+	{
+		w += ' ';
+	}
+
+	return w;
+};
+
+
+/*
 | Generates code from a jools object definition
 */
 var
-	joobjGenerator =
-		function(
-			joobj // the jools object definition
-		)
+joobjGenerator =
+	function(
+		joobj // the jools object definition
+	)
 {
 	var
 		a,
@@ -139,6 +166,10 @@ var
 		aListPlus =
 			null,
 
+		// longest attribute name
+		maxANameLen =
+			0,
+
 		r =
 			[ ];
 
@@ -147,6 +178,22 @@ var
 
 	aList =
 		Object.keys( attr ).sort( );
+
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			aList[ a ];
+
+		if( aName.length > maxANameLen )
+		{
+			maxANameLen =
+				aName.length;
+		}
+	}
 
 	aListPlus =
 		aList.slice( );
@@ -202,22 +249,28 @@ var
 		a++
 	)
 	{
+		aName =
+			aList[ a ];
+
 		var
-			aName =
-				aList[ a ],
-
 			comment =
+				attr[ aName ].comment,
 
+
+			comma =
+				a + 1 < aZ;
 
 		r.push(
 			'\t\t' + aName +
-				( a + 1 < aZ ? ',' : '' )
+				( comma ? ',' : '' ) +
+				( comment ?
+					whiteSpace(
+						maxANameLen - aName.length + (comma ? 0 : 1 )
+					) + ' // ' + comment
+					:
+					''
+				)
 		);
-
-		if( attr[ aName ].comment )
-		{
-
-		}
 	}
 
 	r.push(
