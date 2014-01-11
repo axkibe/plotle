@@ -16,7 +16,7 @@
 
 
 /*
-| the JOOBJ definition.
+| The Joobj definition.
 */
 if( JOOBJ )
 {

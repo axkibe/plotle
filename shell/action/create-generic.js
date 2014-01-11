@@ -24,6 +24,58 @@ var
 'use strict';
 
 
+/*
+| The Joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'CreateGeneric'
+
+		attributes :
+			{
+				itemType :
+					{
+						comment :
+							'item type to be created',
+
+						type :
+							'String'
+					},
+
+				item :
+					{
+						comment :
+							'the transient item in creation',
+
+						type :
+							'Item'
+					},
+
+				origin :
+					{
+						comment :
+							'TODO',
+
+						type :
+							'Item'
+					}
+
+				start :
+					{
+						comment :
+							'Mouse down point on drag creation',
+
+						type :
+							'Point'
+					}
+			}
+	};
+}
+
+
 /**/if( CHECK && typeof( window ) === 'undefined' )
 /**/{
 /**/	throw new Error(
