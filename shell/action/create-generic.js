@@ -32,7 +32,14 @@ if( JOOBJ )
 	return {
 
 		name :
-			'CreateGeneric'
+			'CreateGeneric',
+
+
+		unit :
+			'Action',
+
+		subclass :
+			'Action.Action',
 
 		attributes :
 			{
@@ -61,7 +68,7 @@ if( JOOBJ )
 
 						type :
 							'Item'
-					}
+					},
 
 				start :
 					{

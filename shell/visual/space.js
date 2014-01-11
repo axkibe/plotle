@@ -1397,7 +1397,7 @@ Space.prototype.dragStop =
 									Euclid.Rect.create(
 										'arbitrary',
 										view.depoint( action.start ),
-										view.depoint(p  )
+										view.depoint( p )
 									)
 							);
 
@@ -1796,6 +1796,7 @@ Space.prototype.dragMove =
 			pd =
 				p.sub( action.start );
 
+			// TODO let shell worry about this
 			view =
 			this.$view =
 				new Euclid.View(
@@ -1826,8 +1827,8 @@ Space.prototype.dragMove =
 								origin,
 							'zone',
 								origin.zone.add(
-									p.x - action.start.x,
-									p.y - action.start.y
+									view.dex( p ) - action.start.x,
+									view.dey( p ) - action.start.y
 								)
 					);
 
@@ -1841,8 +1842,8 @@ Space.prototype.dragMove =
 								origin,
 							'pnw',
 								origin.pnw.add(
-									p.x - action.start.x,
-									p.y - action.start.y
+									view.dex( p ) - action.start.x,
+									view.dey( p ) - action.start.y
 								)
 					);
 			}
@@ -1884,8 +1885,8 @@ Space.prototype.dragMove =
 							'zone',
 								origin.zone.cardinalResize(
 									align,
-									p.x - action.start.x,
-									p.y - action.start.y,
+									view.dex( p ) - action.start.x,
+									view.dey( p ) - action.start.y,
 									origin.minHeight,
 									origin.minWidth
 								)
@@ -1906,7 +1907,7 @@ Space.prototype.dragMove =
 						case 'nw' :
 
 							dy =
-								action.start.y - p.y;
+								action.start.y - view.dey( p );
 
 							break;
 
@@ -1914,7 +1915,7 @@ Space.prototype.dragMove =
 						case 'sw' :
 
 							dy =
-								p.y - action.start.y;
+								view.dey( p ) - action.start.y;
 
 							break;
 
@@ -1930,7 +1931,8 @@ Space.prototype.dragMove =
 
 					fs =
 						Math.max(
-							origin.sub.doc.fontsize * ( oheight + dy ) / oheight,
+							origin.sub.doc.fontsize *
+								( oheight + dy ) / oheight,
 							theme.label.minSize
 						);
 
@@ -1951,24 +1953,32 @@ Space.prototype.dragMove =
 							'pnw',
 								origin.pnw.add(
 									align === 'sw' || align === 'nw' ?
-										Math.round( origin.zone.width - resized.zone.width ) :
+										Math.round(
+											origin.zone.width -
+												resized.zone.width
+										)
+										:
 										0,
 									align === 'ne' || align === 'nw' ?
-										Math.round( origin.zone.height - resized.zone.height ) :
+										Math.round(
+											origin.zone.height -
+												resized.zone.height
+										)
+										:
 										0
 								)
 						);
 
 					break;
 
-/**/				default :
-/**/
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'invalid positioning'
-/**/					);
-/**/				}
+/**/			default :
+/**
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error(
+/**/					'invalid positioning'
+/**/				);
+/**/			}
 			}
 
 			shell.setAction(
