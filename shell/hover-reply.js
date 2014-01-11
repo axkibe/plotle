@@ -9,20 +9,6 @@
 
 
 /*
-| Export
-*/
-var
-	HoverReply;
-
-
-/*
-| Imports
-*/
-var
-	Jools;
-
-
-/*
 | Capsule
 */
 ( function( ) {
@@ -43,12 +29,18 @@ if( JOOBJ )
 			{
 				cursor :
 					{
+						comment :
+							'the cursor to display',
+
 						type :
 							'String'
 					},
 
 				path :
 					{
+						comment :
+							'the path to the thing being hovered upon',
+
 						type :
 							'Path'
 					}

@@ -627,7 +627,7 @@ Space.prototype.draw =
 	{
 		case 'CreateGeneric' :
 
-			if( action.start && action.move )
+			if( action.start )
 			{
 				action.item.draw(
 					fabric,
@@ -1266,7 +1266,7 @@ Space.prototype.dragStop =
 									Euclid.Rect.create(
 										'arbitrary',
 										view.depoint( action.start ),
-										view.depoint( action.move )
+										view.depoint( p )
 									)
 							);
 
@@ -1312,7 +1312,7 @@ Space.prototype.dragStop =
 							Euclid.Rect.create(
 								'arbitrary',
 								view.depoint( action.start ),
-								view.depoint( action.move ) // TODO why not p?
+								view.depoint( p )
 							),
 
 						oheight =
@@ -1397,7 +1397,7 @@ Space.prototype.dragStop =
 									Euclid.Rect.create(
 										'arbitrary',
 										view.depoint( action.start ),
-										view.depoint( action.move )
+										view.depoint(p  )
 									)
 							);
 
@@ -1826,8 +1826,8 @@ Space.prototype.dragMove =
 								origin,
 							'zone',
 								origin.zone.add(
-									action.move.x - action.start.x,
-									action.move.y - action.start.y
+									p.x - action.start.x,
+									p.y - action.start.y
 								)
 					);
 
@@ -1841,8 +1841,8 @@ Space.prototype.dragMove =
 								origin,
 							'pnw',
 								origin.pnw.add(
-									action.move.x - action.start.x,
-									action.move.y - action.start.y
+									p.x - action.start.x,
+									p.y - action.start.y
 								)
 					);
 			}
@@ -1884,8 +1884,8 @@ Space.prototype.dragMove =
 							'zone',
 								origin.zone.cardinalResize(
 									align,
-									action.move.x - action.start.x,
-									action.move.y - action.start.y,
+									p.x - action.start.x,
+									p.y - action.start.y,
 									origin.minHeight,
 									origin.minWidth
 								)
@@ -1906,7 +1906,7 @@ Space.prototype.dragMove =
 						case 'nw' :
 
 							dy =
-								action.start.y - action.move.y;
+								action.start.y - p.y;
 
 							break;
 
@@ -1914,7 +1914,7 @@ Space.prototype.dragMove =
 						case 'sw' :
 
 							dy =
-								action.move.y - action.start.y;
+								p.y - action.start.y;
 
 							break;
 

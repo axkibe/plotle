@@ -34,11 +34,11 @@ var
 		)
 {
 	var
-		aname;
+		aName;
 
-	for( aname in joobj )
+	for( aName in joobj )
 	{
-		switch( aname )
+		switch( aName )
 		{
 			case 'name' :
 			case 'attributes' :
@@ -48,7 +48,7 @@ var
 			default :
 
 				throw new Error(
-					'invalid joobj parameter: ' + aname
+					'invalid joobj parameter: ' + aName
 				);
 		}
 	}
@@ -73,16 +73,16 @@ var
 		);
 	}
 
-	for( aname in attr )
+	for( aName in attr )
 	{
-		if( aname === 'inherit' )
+		if( aName === 'inherit' )
 		{
 			throw new Error(
 				'attribute must not be named "inherit"'
 			);
 		}
 
-		for( var aoname in attr[ aname ] )
+		for( var aoname in attr[ aName ] )
 		{
 			switch( aoname )
 			{
@@ -94,17 +94,17 @@ var
 
 					throw new Error(
 						'attribute ' +
-							'"' + aname + '"' +
+							'"' + aName + '"' +
 							' has invalid specifier: ' +
 							'"' + aoname + '"'
 					);
 			}
 		}
 
-		if( !Jools.isString( attr[ aname ].type ) )
+		if( !Jools.isString( attr[ aName ].type ) )
 		{
 			throw new Error(
-				'type is missing from "' + aname + '"'
+				'type is missing from "' + aName + '"'
 			);
 		}
 	}
@@ -124,7 +124,7 @@ var
 		a,
 		aZ,
 
-		aname,
+		aName,
 
 		// shortcut
 		attr =
@@ -202,10 +202,22 @@ var
 		a++
 	)
 	{
+		var
+			aName =
+				aList[ a ],
+
+			comment =
+
+
 		r.push(
-			'\t\t' + aList[ a ] +
+			'\t\t' + aName +
 				( a + 1 < aZ ? ',' : '' )
 		);
+
+		if( attr[ aName ].comment )
+		{
+
+		}
 	}
 
 	r.push(
@@ -230,12 +242,12 @@ var
 		a++
 	)
 	{
-		aname =
+		aName =
 			aList[ a ];
 
 		r.push(
-			'\tthis.' + aname + ' =',
-			'\t\t' + aname + ';',
+			'\tthis.' + aName + ' =',
+			'\t\t' + aName + ';',
 			''
 		);
 	}
@@ -263,11 +275,11 @@ var
 		a++
 	)
 	{
-		aname =
+		aName =
 			aListPlus[ a ];
 
 		r.push(
-			'\t\t' + aname + ' =',
+			'\t\t' + aName + ' =',
 			'\t\t\tnull' + ( a + 1 >= aListPlus.length ? ';' : ',' ),
 			''
 		);
@@ -290,13 +302,13 @@ var
 		a++
 	)
 	{
-		aname =
+		aName =
 			aListPlus[ a ];
 
 		r.push(
-			'\t\t\tcase \'' + aname + '\' :',
+			'\t\t\tcase \'' + aName + '\' :',
 			'',
-			'\t\t\t\t' + aname + ' =',
+			'\t\t\t\t' + aName + ' =',
 			'\t\t\t\t\targuments[ a + 1 ];',
 			'',
 			'\t\t\t\tbreak;',
@@ -329,14 +341,14 @@ var
 		a++
 	)
 	{
-		aname =
+		aName =
 			aList[ a ];
 
 		r.push(
-			'\t\tif( ' + aname + ' === null )',
+			'\t\tif( ' + aName + ' === null )',
 			'\t\t{',
-			'\t\t\t' + aname + ' =',
-			'\t\t\t\tinherit.' + aname + ';',
+			'\t\t\t' + aName + ' =',
+			'\t\t\t\tinherit.' + aName + ';',
 			'\t\t}',
 			''
 		);
@@ -353,7 +365,7 @@ var
 		a++
 	)
 	{
-		aname =
+		aName =
 			aList[ a ];
 
 		if( a > 0 )
@@ -363,12 +375,12 @@ var
 			);
 		}
 
-		switch( attr[ aname ].type )
+		switch( attr[ aName ].type )
 		{
 			case 'String' :
 
 				r.push(
-					'\t\t\t' + aname + ' === inherit.' + aname
+					'\t\t\t' + aName + ' === inherit.' + aName
 				);
 
 				break;
@@ -376,8 +388,8 @@ var
 			default :
 
 				r.push(
-					'\t\t\t' + aname +
-						'.equals( inherit.' + aname + ' )'
+					'\t\t\t' + aName +
+						'.equals( inherit.' + aName + ' )'
 				);
 
 				break;
@@ -405,11 +417,11 @@ var
 		a++
 	)
 	{
-		aname =
+		aName =
 			aList[ a ];
 
 		r.push(
-			'\t\t\t' + aname +
+			'\t\t\t' + aName +
 				( a + 1 < aList.length ? ',' : '' )
 		);
 	}
@@ -428,6 +440,62 @@ var
 		'*/',
 		joobj.name + '.prototype.reflect =',
 		'\t\'' + joobj.name + '\';',
+		'',
+		''
+	);
+
+	r.push(
+		'/*',
+		'| Checks for equal objects.',
+		'*/',
+		joobj.name + '.prototype.equals =',
+		'\tfunction(',
+		'\t\tobj',
+		'\t)',
+		'{',
+		'\treturn ('
+	);
+
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			aList[ a ];
+
+		if( a > 0 )
+		{
+			r.push(
+				'\t\t&&'
+			);
+		}
+
+		switch( attr[ aName ].type )
+		{
+			case 'String' :
+
+				r.push(
+					'\t\tthis.' + aName + ' === obj.' + aName
+				);
+
+				break;
+
+			default :
+
+				r.push(
+					'\t\tthis.' + aName +
+						'.equals( obj.' + aName + ' )'
+				);
+
+				break;
+		}
+	}
+
+	r.push(
+		'\t);',
+		'};',
 		'',
 		''
 	);

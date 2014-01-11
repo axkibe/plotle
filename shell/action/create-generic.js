@@ -45,8 +45,7 @@ var
 		function(
 			tag,
 			itemType,
-			item,   // XXX document
-			move,
+			item,   // the item trunk while it is created
 			origin, // XXX document
 			start
 		)
@@ -67,9 +66,6 @@ var
 
 	this.item =
 		item;
-
-	this.move =
-		move;
 
 	this.origin =
 		origin;
@@ -109,9 +105,6 @@ CreateGeneric.create =
 		item =
 			null,
 
-		move =
-			null,
-
 		origin =
 			null,
 
@@ -143,13 +136,6 @@ CreateGeneric.create =
 			case 'item' :
 
 				item =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'move' :
-
-				move =
 					arguments[ a + 1 ];
 
 				break;
@@ -194,12 +180,6 @@ CreateGeneric.create =
 				inherit.item;
 		}
 
-		if( move === null )
-		{
-			move =
-				inherit.move;
-		}
-
 		if( origin === null )
 		{
 			origin =
@@ -218,7 +198,6 @@ CreateGeneric.create =
 			_tag,
 			itemType,
 			item,
-			move,
 			origin,
 			start
 		)
