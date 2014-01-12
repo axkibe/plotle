@@ -1850,8 +1850,6 @@ Space.prototype.dragMove =
 				Action.ItemDrag.create(
 					'inherit',
 						action,
-					'move',
-						view.depoint( p ),
 					'item',
 						item
 				)

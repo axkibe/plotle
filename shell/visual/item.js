@@ -632,10 +632,6 @@ Item.prototype.dragStart =
 			);
 		}
 
-		var
-			vp =
-				view.depoint( p );
-
 		shell.redraw =
 			true;
 
@@ -644,9 +640,7 @@ Item.prototype.dragStart =
 				'itemPath',
 					this.path,
 				'start',
-					vp,
-				'move',
-					vp,
+					view.depoint( p ),
 				'item',
 					this,
 				'origin',

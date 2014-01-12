@@ -282,6 +282,15 @@ Portal.create =
 		}
 	}
 
+	if( inherit )
+	{
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+	}
+
 	if( mark && mark.reflect !== 'Vacant' )
 	{
 
@@ -361,18 +370,15 @@ Portal.create =
 			)
 			&&
 			(
-				// TODO remove null check
-				inherit.mark && inherit.mark.equals( mark )
+				inherit.mark.equals( mark )
 			)
 			&&
 			(
-				// TODO remove null check
-				inherit.path && inherit.path.equals( path )
+				inherit.path.equals( path )
 			)
 			&&
 			(
-				// TODO remove null check
-				inherit.zone && inherit.zone.equals( zone )
+				inherit.zone.equals( zone )
 			)
 		)
 		{
@@ -869,8 +875,7 @@ Portal.prototype._weave =
 			mark.hasCaret && // TODO hasWidget
 			mark.caretPath.get( -1 );
 
-	// TODO only fill here
-	f.paint(
+	f.fill(
 		Style.getStyle(
 			theme.portal.style,
 			'normal'

@@ -42,7 +42,6 @@ var
 			tag,
 			itemPath,
 			start,
-			move,
 			item,
 			origin
 		)
@@ -64,9 +63,6 @@ var
 
 	this.start =
 		start;
-
-	this.move =
-		move;
 
 	this.item =
 		item;
@@ -106,9 +102,6 @@ ItemDrag.create =
 		start =
 			null,
 
-		move =
-			null,
-
 		item =
 			null,
 
@@ -140,13 +133,6 @@ ItemDrag.create =
 			case 'start' :
 
 				start =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'move' :
-
-				move =
 					arguments[ a + 1 ];
 
 				break;
@@ -190,12 +176,6 @@ ItemDrag.create =
 				inherit.start;
 		}
 
-		if( move === null )
-		{
-			move =
-				inherit.move;
-		}
-
 		if( item === null )
 		{
 			item =
@@ -214,7 +194,6 @@ ItemDrag.create =
 			_tag,
 			itemPath,
 			start,
-			move,
 			item,
 			origin
 		)
