@@ -847,4 +847,18 @@ Item.prototype.pointingHover =
 };
 
 
+/*
+| Returns true if the item equals another
+|
+| FIXME, make this correct.
+*/
+Item.prototype.equals =
+	function(
+		obj
+	)
+{
+	return this === obj;
+};
+
+
 } )( );

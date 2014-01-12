@@ -42,8 +42,9 @@ var
 		{
 			case 'attributes' :
 			case 'name' :
-			case 'unit' :
+			case 'primitiveEquals' :
 			case 'subclass' :
+			case 'unit' :
 
 				break;
 
@@ -182,7 +183,7 @@ var
 generateExportSection =
 	function(
 		r,     // result array
-		joobj  // the joobj definitoin
+		joobj  // the joobj definition
 	)
 {
 	var
@@ -279,7 +280,7 @@ var
 generateConstructor =
 	function(
 		r,     // result array
-		joobj, // the joobj definitoin
+		joobj, // the joobj definition
 		aList  // attribute name list
 	)
 {
@@ -401,6 +402,24 @@ generateConstructor =
 };
 
 
+/*
+| Generates the subclass.
+*/
+var
+generateSubclassSection =
+	function(
+		r,    // result array
+		joobj // the joobj definition
+	)
+{
+	r.push(
+		'Jools.subclass(',
+		'\t' + joobj.name + ',',
+		'\t' + joobj.subclass,
+		');'
+	);
+};
+
 
 /*
 | Generates the creator.
@@ -409,7 +428,7 @@ var
 generateCreator =
 	function(
 		r,     // result array
-		joobj, // the joobj definitoin
+		joobj, // the joobj definition
 		aList  // attribute name list
 	)
 {
@@ -614,12 +633,12 @@ var
 generateReflectionSection =
 	function(
 		r,    // result array
-		joobj // TODO
+		joobj // the joobj definition
 	)
 {
 	r.push(
 		'/*',
-		'| Reflection',
+		'| Reflection.',
 		'*/',
 		joobj.name + '.prototype.reflect =',
 		'\t\'' + joobj.name + '\';'
@@ -628,14 +647,39 @@ generateReflectionSection =
 
 
 /*
-| Generates the equals check
+| Generates a primitive equals check.
+*/
+var
+generatePrimitiveEqualsCheck =
+	function(
+		r,    // result array
+		joobj // the joobj definition
+	)
+{
+	r.push(
+		'/*',
+		'| Checks for equal objects.',
+		'*/',
+		joobj.name + '.prototype.equals =',
+		'\tfunction(',
+		'\t\tobj',
+		'\t)',
+		'{',
+		'\treturn this === obj;',
+		'}'
+	);
+};
+
+
+/*
+| Generates the equals check.
 */
 var
 generateEqualsCheck =
 	function(
 		r,     // result array
-		joobj, // TODO
-		aList  // TODO
+		joobj, // the joobj definition
+		aList  // attribute name list
 	)
 {
 	var
@@ -750,6 +794,13 @@ joobjGenerator =
 
 	generateSeperator( r );
 
+	if( joobj.subclass )
+	{
+		generateSubclassSection( r, joobj );
+
+		generateSeperator( r );
+	}
+
 	generateCreator( r, joobj, aList );
 
 	generateSeperator( r );
@@ -758,7 +809,14 @@ joobjGenerator =
 
 	generateSeperator( r );
 
-	generateEqualsCheck( r, joobj, aList );
+	if( joobj.primitiveEquals )
+	{
+		generatePrimitiveEqualsCheck( r, joobj, aList );
+	}
+	else
+	{
+		generateEqualsCheck( r, joobj, aList );
+	}
 
 	generateSeperator( r );
 

@@ -1721,8 +1721,6 @@ Space.prototype.dragMove =
 				Action.CreateGeneric.create(
 					'inherit',
 						action,
-					'move',
-						p,
 					'item',
 						item
 				)

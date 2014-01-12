@@ -990,7 +990,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/action/create-generic.js',
-					'fb',
+					'fbj',
 
 				'shell/action/create-relation.js',
 					'fb',
