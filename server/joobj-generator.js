@@ -160,6 +160,22 @@ generateFileHeader =
 
 
 /*
+| Generates a section seperator.
+*/
+var
+generateSeperator =
+	function(
+		r // result array
+	)
+{
+	r.push(
+		'',
+		''
+	);
+};
+
+
+/*
 | Generates the export section.
 */
 var
@@ -176,20 +192,21 @@ generateExportSection =
 	r.push(
 		'/*',
 		'| Export',
-		'*/'
+		'*/',
+		'var'
 	);
 
 	if( unit )
 	{
 		r.push(
-			unit + ' =',
-			'\t' + unit + ' || { };'
+			'\t' + unit + ' =',
+			'\t\t' + unit + ' || { };'
 		);
 	}
 	else
 	{
 		r.push(
-			joobj.name + ';'
+			'\t' + joobj.name + ';'
 		);
 	}
 };
@@ -240,6 +257,22 @@ generateCapsuleHeader =
 
 
 /*
+| Generates the capsule footer.
+*/
+var
+generateCapsuleFooter =
+	function(
+		r // result array
+	)
+{
+	r.push(
+		'} )( );',
+		''
+	);
+};
+
+
+/*
 | Generates the constructor.
 */
 var
@@ -284,7 +317,7 @@ generateConstructor =
 	{
 		r.push(
 			'var ' + joobj.name + ' =',
-			joobj.unit + joobj.name + ' ='
+			joobj.unit + '.' + joobj.name + ' ='
 		);
 	}
 	else
@@ -515,7 +548,7 @@ generateCreator =
 			);
 		}
 
-		switch( attr[ aName ].type )
+		switch( joobj.attributes[ aName ].type )
 		{
 			case 'String' :
 
@@ -580,7 +613,8 @@ generateCreator =
 var
 generateReflectionSection =
 	function(
-		r // result array
+		r,    // result array
+		joobj // TODO
 	)
 {
 	r.push(
@@ -594,102 +628,22 @@ generateReflectionSection =
 
 
 /*
-| Generates code from a jools object definition.
+| Generates the equals check
 */
 var
-joobjGenerator =
+generateEqualsCheck =
 	function(
-		joobj // the jools object definition
+		r,     // result array
+		joobj, // TODO
+		aList  // TODO
 	)
 {
 	var
 		a,
 		aZ,
 
-		aName,
-
-		// shortcut
-		attr =
-			joobj.attributes,
-
-		// alphabetical sorted attribute names
-		aList =
-			null,
-
-		r =
-			[ ];
-
-	// tests if the joobj looks ok
-	checkJoobj( joobj );
-
-	aList =
-		Object.keys( attr ).sort( );
-
-	generateFileHeader(
-		r
-	);
-
-	r.push(
-		'',
-		''
-	);
-
-	generateExportSection(
-		r,
-		joobj
-	);
-
-	r.push(
-		'',
-		''
-	);
-
-	generateImportsSection(
-		r
-	);
-
-	r.push(
-		'',
-		''
-	);
-
-	generateCapsuleHeader(
-		r
-	);
-
-	r.push(
-		'',
-		''
-	);
-
-	generateConstructor(
-		r,
-		joobj,
-		aList
-	);
-
-	r.push(
-		'',
-		''
-	);
-
-	generateCreator(
-		r,
-		joobj,
-		aList
-	);
-
-	r.push(
-		'',
-		''
-	);
-
-	generateReflectionSection(
-		r,
-		joobj
-	);
-
-
+		// attribute name
+		aName;
 
 	r.push(
 		'/*',
@@ -724,7 +678,7 @@ joobjGenerator =
 			);
 		}
 
-		switch( attr[ aName ].type )
+		switch( joobj.attributes[ aName ].type )
 		{
 			case 'String' :
 
@@ -747,15 +701,68 @@ joobjGenerator =
 
 	r.push(
 		'\t);',
-		'};',
-		'',
-		''
+		'};'
 	);
+};
 
-	r.push(
-		'} )( );',
-		''
-	);
+
+/*
+| Generates code from a jools object definition.
+*/
+var
+joobjGenerator =
+	function(
+		joobj // the jools object definition
+	)
+{
+	var
+		// alphabetical sorted attribute names
+		aList =
+			null,
+
+		// the result array
+		r =
+			[ ];
+
+	// tests if the joobj looks ok
+	checkJoobj( joobj );
+
+	aList =
+		Object.keys( joobj.attributes ).sort( );
+
+	generateFileHeader( r );
+
+	generateSeperator( r );
+
+	generateExportSection( r, joobj );
+
+	generateSeperator( r );
+
+	generateImportsSection( r );
+
+	generateSeperator( r );
+
+	generateCapsuleHeader( r );
+
+	generateSeperator( r );
+
+	generateConstructor( r, joobj, aList );
+
+	generateSeperator( r );
+
+	generateCreator( r, joobj, aList );
+
+	generateSeperator( r );
+
+	generateReflectionSection( r, joobj );
+
+	generateSeperator( r );
+
+	generateEqualsCheck( r, joobj, aList );
+
+	generateSeperator( r );
+
+	generateCapsuleFooter( r );
 
 	return r.join( '\n' );
 };
