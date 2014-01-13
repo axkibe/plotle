@@ -993,7 +993,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/action/create-relation.js',
-					'fb',
+					'fbj',
 
 				'shell/action/item-drag.js',
 					'fb',

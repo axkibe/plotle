@@ -21,6 +21,7 @@ var
 	Action,
 	Euclid,
 	Jools,
+	Path,
 	shell,
 	Widgets;
 
@@ -472,8 +473,18 @@ CreateDisc.prototype.pushButton =
 
 			shell.setAction(
 				Action.CreateRelation.create(
+					'fromItemPath',
+						Path.empty,
+					'pan',
+						Euclid.Point.zero,
 					'relationState',
-						'start'
+						'start',
+					'start',
+						Euclid.Point.zero,
+					'toPoint',
+						Euclid.Point.zero,
+					'toItemPath',
+						Path.empty
 				)
 			);
 

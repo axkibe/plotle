@@ -639,7 +639,7 @@ Space.prototype.draw =
 
 		case 'CreateRelation' :
 
-			if( action.fromItemPath )
+			if( !action.fromItemPath.isEmpty )
 			{
 				var fromItem =
 					this.getSub(
@@ -654,7 +654,7 @@ Space.prototype.draw =
 
 				var toItem = null;
 
-				if( action.toItemPath )
+				if( !action.toItemPath.isEmpty )
 				{
 					toItem =
 						this.getSub(
@@ -675,7 +675,8 @@ Space.prototype.draw =
 					toSilhoutte;
 
 				if(
-					action.toItemPath &&
+					!action.toItemPath.isEmpty
+					&&
 					!action.toItemPath.equals( action.fromItemPath )
 				)
 				{
@@ -687,7 +688,7 @@ Space.prototype.draw =
 				{
 					// arrow points into nowhere
 					toSilhoutte =
-						view.depoint( action.move );
+						view.depoint( action.toPoint );
 				}
 
 				if( toSilhoutte )
@@ -1136,14 +1137,18 @@ Space.prototype.dragStart =
 	{
 		case 'CreateRelation' :
 
-			action.start =
-				p;
-
-			action.pan =
-				view.pan;
-
-			action.relationState =
-				'pan';
+			shell.setAction(
+				Action.CreateRelation.create(
+					'inherit',
+						action,
+					'pan',
+						view.pan,
+					'start',
+						p,
+					'relationState',
+						'pan'
+				)
+			);
 
 			return;
 	}
@@ -1457,9 +1462,17 @@ Space.prototype.dragStop =
 			switch( action.relationState )
 			{
 
+				case 'start' :
+
+					shell.setAction(
+						Action.None.create( )
+					);
+
+					break;
+
 				case 'hadSelect' :
 
-					if( action.toItemPath )
+					if( !action.toItemPath.isEmpty )
 					{
 						item =
 							this.getSub(
@@ -1483,10 +1496,25 @@ Space.prototype.dragStop =
 
 				case 'pan' :
 
-					action.relationState =
-						'start';
+					shell.setAction(
+						Action.CreateRelation.create(
+							'inherit',
+								action,
+							'relationState',
+								'start'
+						)
+					);
 
 					break;
+
+/**/			default :
+/**/
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error(
+/**/						'unknown relation state'
+/**/					);
+/**/				}
 			}
 
 			break;
@@ -1758,11 +1786,16 @@ Space.prototype.dragMove =
 				return 'pointer';
 			}
 
-			action.toItemPath =
-				null;
-
-			action.move =
-				p;
+			shell.setAction(
+				Action.CreateRelation.create(
+					'inherit',
+						action,
+					'toItemPath',
+						Path.empty,
+					'toPoint',
+						p
+				)
+			);
 
 			for(
 				var r = 0, rZ = this.tree.length;

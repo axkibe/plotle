@@ -1,18 +1,8 @@
 /*
-| An users action in the making.
-|
-| Creating a new relation.
+| A user is creating a new relation.
 |
 | Authors: Axel Kittenberger
 */
-
-
-/*
-| Export
-*/
-var
-	Action =
-		Action || { };
 
 
 /*
@@ -21,167 +11,109 @@ var
 ( function( ) {
 'use strict';
 
-/**/if( CHECK && typeof( window ) === 'undefined' )
-/**/{
-/**/	throw new Error(
-/**/		'this code needs a browser!'
-/**/	);
-/**/}
-
-var
-	_tag =
-		'ACTION-15411607';
 
 /*
-| Constructor.
+| The Joobj definition.
 */
-var
-	CreateRelation =
-	Action.CreateRelation =
-		function(
-			tag,
-			itemPath,
-			start,
-			move,
-			relationState
-		)
+if( JOOBJ )
 {
+	return {
 
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid tag'
-/**/		);
-/**/	}
-/**/}
+		name :
+			'CreateRelation',
 
-	this.itemPath =
-		itemPath;
+		unit :
+			'Action',
 
-	this.start =
-		start;
+		subclass :
+			'Action.Action',
 
-	this.move =
-		move;
+		primitiveEquals :
+			true,
 
-	this.relationState =
-		relationState;
+		attributes :
+			{
+				fromItemPath :
+					{
+						comment :
+							'the item the relation goes from',
 
-	Action.Action.call(
-		this,
-		_tag
-	);
-};
+						type :
+							'Path'
+					},
 
+				// TODO remove
+				itemPath :
+					{
+						comment :
+							'TODO',
 
-/*
-| Reflection.
-*/
-CreateRelation.prototype.reflect =
-	'CreateRelation';
+						type :
+							'String'
+					},
 
+				/*
+				item :
+					{
+						comment :
+							'the transient item in creation',
 
-/*
-| Creates a new CreateRelation action.
-*/
-CreateRelation.create =
-	function(
-		// free strings
-	)
-{
-	var
-		itemPath =  // XXX CHECK
-			null,
-
-		start = // XXX CHECK
-			null,
-
-		move = // XXX CHECK
-			null,
-
-		relationState =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'itemPath' :
-
-				itemPath =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'start' :
-
-				start =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'move' :
-
-				move =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'relationState' :
-
-				relationState =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'invalid argument: ' + arguments[ a ]
-/**/				);
-/**/			}
-
-		}
-	}
-
-	return (
-		new CreateRelation(
-			_tag,
-			itemPath,
-			start,
-			move,
-			relationState
-		)
-	);
-};
+						type :
+							'Item'
+					},
+				*/
 
 
-/*
-| Returns true if this action equals another.
-*/
-CreateRelation.prototype.equals =
-	function(
-		action
-	)
-{
-	if( action === this )
-	{
-		return true;
-	}
+				pan :
+					{
+						comment :
+							'starting pan when panning during creation',
 
-	// TODO
-	// proper checking
+						type :
+							'Point'
+					},
 
-	return false;
-};
+				toItemPath :
+					{
+						comment :
+							'the item the relation goes to',
+
+						type :
+							'Path'
+					},
+
+				toPoint :
+					{
+						comment :
+							'the arrow destination while its floating',
+
+						type :
+							'Point'
+					},
+
+				// FIXME rename
+				// FIXME make a defined state list
+				relationState :
+					{
+						comment :
+							'the state of the relation creation',
+
+						type :
+							'String'
+					},
+
+
+				start :
+					{
+						comment :
+							'mouse down point on drag creation',
+
+						type :
+							'Point'
+					}
+			}
+	};
+}
 
 
 } )( );

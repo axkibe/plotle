@@ -26,7 +26,6 @@ if( JOOBJ )
 		name :
 			'CreateGeneric',
 
-
 		unit :
 			'Action',
 
@@ -38,6 +37,7 @@ if( JOOBJ )
 
 		attributes :
 			{
+				// TODO remove
 				itemType :
 					{
 						comment :
@@ -59,7 +59,7 @@ if( JOOBJ )
 				origin :
 					{
 						comment :
-							'TODO',
+							'a transient item used as model',
 
 						type :
 							'Item'

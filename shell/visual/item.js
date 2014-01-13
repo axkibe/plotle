@@ -583,11 +583,16 @@ Item.prototype.dragStart =
 	{
 		case 'CreateRelation' :
 
-			action.fromItemPath =
-				this.path;
-
-			action.relationState =
-				'hadSelect';
+			shell.setAction(
+				Action.CreateRelation.create(
+					'inherit',
+						action,
+					'fromItemPath',
+						this.path,
+					'relationState',
+						'hadSelect'
+				)
+			);
 
 			return true;
 	}
@@ -686,11 +691,14 @@ Item.prototype.dragMove =
 				return false;
 			}
 
-			action.move =
-				p;
-
-			action.toItemPath =
-				this.path;
+			shell.setAction(
+				Action.CreateRelation.create(
+					'inherit',
+						action,
+					'toItemPath',
+						this.path
+				)
+			);
 
 			shell.redraw =
 				true;

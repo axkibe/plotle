@@ -666,7 +666,7 @@ generatePrimitiveEqualsCheck =
 		'\t)',
 		'{',
 		'\treturn this === obj;',
-		'}'
+		'};'
 	);
 };
 
