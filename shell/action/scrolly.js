@@ -1,18 +1,8 @@
 /*
-| An users action in the making.
-|
-| Scrolling a note.
+| The user is scrolling a note.
 |
 | Authors: Axel Kittenberger
 */
-
-
-/*
-| Export
-*/
-var
-	Action =
-		Action || { };
 
 
 /*
@@ -21,136 +11,57 @@ var
 ( function( ) {
 'use strict';
 
-/**/if( CHECK && typeof( window ) === 'undefined' )
-/**/{
-/**/	throw new Error(
-/**/		'this code needs a browser!'
-/**/	);
-/**/}
-
-var
-	_tag =
-		'ACTION-15411607';
 
 /*
-| Constructor.
+| The joobj definition.
 */
-var
-	ScrollY =
-	Action.ScrollY =
-		function(
-			tag,
-			pan,
-			start
-		)
+if( JOOBJ )
 {
+	return {
 
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid tag'
-/**/		);
-/**/	}
-/**/}
+		name :
+			'ScrollY',
 
-	this.pan =
-		pan;
+		unit :
+			'Action',
 
-	this.start =
-		start;
+		subclass :
+			'Action.Action',
 
-	Action.Action.call(
-		this,
-		_tag
-	);
-};
+		equals :
+			'primitive',
 
+		attributes :
+			{
+				itemPath :
+					{
+						comment :
+							'path to the item being scrolled',
 
-/*
-| Reflection.
-*/
-ScrollY.prototype.reflect =
-	'ScrollY';
+						type :
+							'String'
+					},
 
+				start :
+					{
+						comment :
+							'mouse down point on start of scrolling',
 
-/*
-| Creates a new ScrollY action.
-*/
-ScrollY.create =
-	function(
-		// free strings
-	)
-{
-	var
-		start =
-			null,
+						type :
+							'Point'
+					},
 
-		startPos =
-			null;
+				startPos :
+					{
+						comment :
+							'position of the scrollbar on start of scrolling',
 
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'start' :
+						type :
+							'Integer'
+					}
+			}
+	};
+}
 
-				start =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'startPos' :
-
-				startPos =
-					arguments[ a + 1 ];
-
-				break;
-
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'invalid argument: ' + arguments[ a ]
-/**/				);
-/**/			}
-		}
-	}
-
-	return (
-		new ScrollY(
-			_tag,
-			start,
-			startPos
-		)
-	);
-};
-
-
-/*
-| Returns true if this action equals another.
-*/
-ScrollY.prototype.equals =
-	function(
-		action
-	)
-{
-	if( action === this )
-	{
-		return true;
-	}
-
-	// TODO
-	// proper checking
-
-	return false;
-};
 
 } )( );

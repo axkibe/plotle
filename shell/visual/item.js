@@ -546,8 +546,10 @@ Item.prototype.dragStart =
 			this.scrollbarY;
 
 	if(
-		!action &&
-		sbary &&
+		action.reflect === 'None'
+		&&
+		sbary
+		&&
 		sbary.within(
 			view,
 			p
@@ -712,7 +714,7 @@ Item.prototype.dragMove =
 					action.start,
 
 				dy =
-					p.y - start.y,
+					( p.y - start.y ) / view.zoom,
 
 				item =
 					shell.$space.getSub(

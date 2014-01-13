@@ -1006,7 +1006,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/action/scrolly.js',
-					'fb',
+					'fbj',
 
 				'shell/greenscreen.js',
 					'fb',
