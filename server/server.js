@@ -997,7 +997,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/action/item-drag.js',
-					'fb',
+					'fbj',
 
 				'shell/action/item-resize.js',
 					'fb',

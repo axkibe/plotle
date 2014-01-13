@@ -1,18 +1,8 @@
 /*
-| An users action in the making.
-|
-| Dragging one item.
+| The user is dragging an item.
 |
 | Authors: Axel Kittenberger
 */
-
-
-/*
-| Export
-*/
-var
-	Action =
-		Action || { };
 
 
 /*
@@ -21,201 +11,69 @@ var
 ( function( ) {
 'use strict';
 
-/**/if( CHECK && typeof( window ) === 'undefined' )
-/**/{
-/**/	throw new Error(
-/**/		'this code needs a browser!'
-/**/	);
-/**/}
-
-var
-	_tag =
-		'ACTION-15411607';
 
 /*
-| Constructor.
+| The Joobj definition.
 */
-var
-	ItemDrag =
-	Action.ItemDrag =
-		function(
-			tag,
-			itemPath,
-			start,
-			item,
-			origin
-		)
+if( JOOBJ )
 {
+	return {
 
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid tag'
-/**/		);
-/**/	}
-/**/}
+		name :
+			'ItemDrag',
 
-	// XXX use item.path
-	this.itemPath =
-		itemPath;
+		unit :
+			'Action',
 
-	this.start =
-		start;
+		subclass :
+			'Action.Action',
 
-	this.item =
-		item;
+		equals :
+			'primitive',
 
-	this.origin =
-		origin;
+		attributes :
+			{
+				// TODO remove
+				itemPath :
+					{
+						comment :
+							'path to the item dragged',
 
-	Action.Action.call(
-		this,
-		_tag
-	);
-};
+						type :
+							'Path'
+					},
 
+				start :
+					{
+						comment :
+							'mouse down point on drag creation',
 
-/*
-| Reflection.
-*/
-ItemDrag.prototype.reflect =
-	'ItemDrag';
+						type :
+							'Point'
+					},
 
+				// TODO rename transient
+				item :
+					{
+						comment :
+							'the transient item while it is dragged',
 
-/*
-| Creates a new ItemDrag action.
-*/
-ItemDrag.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit =
-			null,
+						type :
+							'Item'
+					},
 
-		itemPath =
-			null,
+				// TODO rename item
+				origin :
+					{
+						comment :
+							'the item being dragged',
 
-		start =
-			null,
-
-		item =
-			null,
-
-		origin =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'itemPath' :
-
-				itemPath =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'start' :
-
-				start =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'item' :
-
-				item =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'origin' :
-
-				origin =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'invalid argument: ' + arguments[ a ]
-/**/				);
-/**/			}
-		}
-	}
-
-	if( inherit )
-	{
-		if( itemPath === null )
-		{
-			itemPath =
-				inherit.itemPath;
-		}
-
-		if( start === null )
-		{
-			start =
-				inherit.start;
-		}
-
-		if( item === null )
-		{
-			item =
-				inherit.item;
-		}
-
-		if( origin === null )
-		{
-			origin =
-				inherit.origin;
-		}
-	}
-
-	return (
-		new ItemDrag(
-			_tag,
-			itemPath,
-			start,
-			item,
-			origin
-		)
-	);
-};
-
-
-/*
-| Returns true if this action equals another.
-*/
-ItemDrag.prototype.equals =
-	function(
-		action
-	)
-{
-	if( action === this )
-	{
-		return true;
-	}
-
-	return false;
-};
+						type :
+							'Item'
+					}
+			}
+	};
+}
 
 
 } )( );
