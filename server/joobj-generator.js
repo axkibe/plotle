@@ -40,9 +40,11 @@ var
 	{
 		switch( aName )
 		{
+			case 'abstract' :
 			case 'attributes' :
 			case 'name' :
-			case 'primitiveEquals' :
+			case 'notag' :
+			case 'equals' :
 			case 'subclass' :
 			case 'unit' :
 
@@ -69,47 +71,43 @@ var
 		attr =
 			joobj.attributes;
 
-	if( !attr )
+	if( attr )
 	{
-		throw new Error(
-			'attributes missing'
-		);
-	}
-
-	for( aName in attr )
-	{
-		if( aName === 'inherit' )
+		for( aName in attr )
 		{
-			throw new Error(
-				'attribute must not be named "inherit"'
-			);
-		}
-
-		for( var aoname in attr[ aName ] )
-		{
-			switch( aoname )
+			if( aName === 'inherit' )
 			{
-				case 'comment' :
-				case 'type' :
-
-					break;
-
-				default :
-
-					throw new Error(
-						'attribute ' +
-							'"' + aName + '"' +
-							' has invalid specifier: ' +
-							'"' + aoname + '"'
-					);
+				throw new Error(
+					'attribute must not be named "inherit"'
+				);
 			}
-		}
 
-		if( !Jools.isString( attr[ aName ].type ) )
-		{
-			throw new Error(
-				'type is missing from "' + aName + '"'
-			);
+			for( var aoname in attr[ aName ] )
+			{
+				switch( aoname )
+				{
+					case 'comment' :
+					case 'type' :
+
+						break;
+
+					default :
+
+						throw new Error(
+							'attribute ' +
+								'"' + aName + '"' +
+								' has invalid specifier: ' +
+								'"' + aoname + '"'
+						);
+				}
+			}
+
+			if( !Jools.isString( attr[ aName ].type ) )
+			{
+				throw new Error(
+					'type is missing from "' + aName + '"'
+				);
+			}
 		}
 	}
 };
@@ -227,8 +225,7 @@ generateImportsSection =
 		'| Imports',
 		'*/',
 		'var',
-		'\tJools;',
-		''
+		'\tJools;'
 	);
 };
 
@@ -239,7 +236,8 @@ generateImportsSection =
 var
 generateCapsuleHeader =
 	function(
-		r // result array
+		r,     // result array
+		joobj  // the joobj definition
 	)
 {
 	r.push(
@@ -247,13 +245,19 @@ generateCapsuleHeader =
 		'| Capsule',
 		'*/',
 		'(function( ) {',
-		'\'use strict\';',
-		'',
-		'',
-		'var',
-		'\t_tag =',
-		'\t\t' + Math.floor( Math.random( ) * 1000000000 ) + ';'
+		'\'use strict\';'
 	);
+
+	if( !joobj.notag )
+	{
+		r.push(
+			'',
+			'',
+			'var',
+			'\t_tag =',
+			'\t\t' + Math.floor( Math.random( ) * 1000000000 ) + ';'
+		);
+	}
 };
 
 
@@ -279,12 +283,16 @@ generateCapsuleFooter =
 var
 generateConstructor =
 	function(
-		r,     // result array
-		joobj, // the joobj definition
-		aList  // attribute name list
+		r,         // result array
+		joobj,     // the joobj definition
+		reference, // the joobj reference name
+		aList      // attribute name list
 	)
 {
 	var
+		a,
+		aZ,
+
 		// attribute name
 		aName,
 
@@ -292,19 +300,22 @@ generateConstructor =
 		maxANameLen =
 			0;
 
-	for(
-		var a = 0, aZ = aList.length;
-		a < aZ;
-		a++
-	)
+	if( aList )
 	{
-		aName =
-			aList[ a ];
-
-		if( aName.length > maxANameLen )
+		for(
+			a = 0, aZ = aList.length;
+			a < aZ;
+			a++
+		)
 		{
-			maxANameLen =
-				aName.length;
+			aName =
+				aList[ a ];
+
+			if( aName.length > maxANameLen )
+			{
+				maxANameLen =
+					aName.length;
+			}
 		}
 	}
 
@@ -317,82 +328,106 @@ generateConstructor =
 	if( joobj.unit )
 	{
 		r.push(
-			'var ' + joobj.name + ' =',
+			'var ' + reference + ' =',
 			joobj.unit + '.' + joobj.name + ' ='
 		);
 	}
 	else
 	{
 		r.push(
-			joobj.name + ' ='
+			reference + ' ='
 		);
 	}
 
 	r.push(
-		'\tfunction(',
-		'\t\ttag,'
+		'\tfunction('
 	);
 
-	for(
-		a = 0, aZ = aList.length;
-		a < aZ;
-		a++
-	)
+	if( !joobj.notag )
 	{
-		aName =
-			aList[ a ];
-
-		var
-			comment =
-				joobj.attributes[ aName ].comment,
-
-
-			comma =
-				a + 1 < aZ;
-
 		r.push(
-			'\t\t' + aName +
-				( comma ? ',' : '' ) +
-				( comment ?
-					whiteSpace(
-						maxANameLen - aName.length + (comma ? 0 : 1 )
-					) + ' // ' + comment
+			'\t\ttag' +
+				(
+					aList && aList.length > 0
+					?
+					','
 					:
 					''
 				)
 		);
 	}
 
+	if( aList )
+	{
+		for(
+			a = 0, aZ = aList.length;
+			a < aZ;
+			a++
+		)
+		{
+			aName =
+				aList[ a ];
+
+			var
+				comment =
+					joobj.attributes[ aName ].comment,
+
+				comma =
+					a + 1 < aZ;
+
+			r.push(
+				'\t\t' + aName +
+					( comma ? ',' : '' ) +
+					( comment ?
+						whiteSpace(
+							maxANameLen - aName.length + (comma ? 0 : 1 )
+						) + ' // ' + comment
+						:
+						''
+					)
+			);
+		}
+	}
+
 	r.push(
 		'\t)',
-		'{',
-		'',
-		'/**/if( CHECK )',
-		'/**/{',
-		'/**/\tif( tag !== _tag )',
-		'/**/\t{',
-		'/**/\t\tthrow new Error(',
-		'/**/\t\t\t\'tag mismatch\'',
-		'/**/\t\t);',
-		'/**/\t}',
-		'/**/}',
-		''
+		'{'
 	);
 
-	for(
-		a = 0, aZ = aList.length;
-		a < aZ;
-		a++
-	)
+	if( !joobj.notag )
 	{
-		aName =
-			aList[ a ];
-
 		r.push(
-			'\tthis.' + aName + ' =',
-			'\t\t' + aName + ';',
+			'',
+			'/**/if( CHECK )',
+			'/**/{',
+			'/**/\tif( tag !== _tag )',
+			'/**/\t{',
+			'/**/\t\tthrow new Error(',
+			'/**/\t\t\t\'tag mismatch\'',
+			'/**/\t\t);',
+			'/**/\t}',
+			'/**/}',
 			''
 		);
+	}
+
+	if( aList )
+	{
+		for(
+			a = 0, aZ = aList.length;
+			a < aZ;
+			a++
+		)
+		{
+			aName =
+				aList[ a ];
+
+			r.push(
+				'\tthis.' + aName + ' =',
+				'\t\t' + aName + ';',
+				''
+			);
+		}
 	}
 
 	r.push(
@@ -408,13 +443,14 @@ generateConstructor =
 var
 generateSubclassSection =
 	function(
-		r,    // result array
-		joobj // the joobj definition
+		r,        // result array
+		joobj,    // the joobj definition
+		reference // the reference name for the joobj
 	)
 {
 	r.push(
 		'Jools.subclass(',
-		'\t' + joobj.name + ',',
+		'\t' + reference + ',',
 		'\t' + joobj.subclass,
 		');'
 	);
@@ -427,9 +463,10 @@ generateSubclassSection =
 var
 generateCreator =
 	function(
-		r,     // result array
-		joobj, // the joobj definition
-		aList  // attribute name list
+		r,         // result array
+		joobj,     // the joobj definition
+		reference, // the reference name for the joobj
+		aList      // attribute name list
 	)
 {
 	var
@@ -452,7 +489,7 @@ generateCreator =
 		'/*',
 		'| Creates a new ' + joobj.name + ' object.',
 		'*/',
-		joobj.name + '.create =',
+		reference + '.create =',
 		'\tfunction(',
 		'\t\t// free strings',
 		'\t)',
@@ -599,9 +636,15 @@ generateCreator =
 
 	r.push(
 		'\treturn (',
-		'\t\tnew ' + joobj.name + '(',
-		'\t\t\t_tag,'
+		'\t\tnew ' + reference + '('
 	);
+
+	if( !joobj.notag )
+	{
+		r.push(
+			'\t\t\t_tag,'
+		);
+	}
 
 	for(
 		a = 0, aZ = aList.length;
@@ -632,15 +675,16 @@ generateCreator =
 var
 generateReflectionSection =
 	function(
-		r,    // result array
-		joobj // the joobj definition
+		r,        // result array
+		joobj,    // the joobj definition
+		reference // the reference name for the joobj
 	)
 {
 	r.push(
 		'/*',
 		'| Reflection.',
 		'*/',
-		joobj.name + '.prototype.reflect =',
+		reference + '.prototype.reflect =',
 		'\t\'' + joobj.name + '\';'
 	);
 };
@@ -652,15 +696,16 @@ generateReflectionSection =
 var
 generatePrimitiveEqualsCheck =
 	function(
-		r,    // result array
-		joobj // the joobj definition
+		r,        // result array
+		joobj,    // the joobj definition
+		reference // the reference name for the joobj
 	)
 {
 	r.push(
 		'/*',
 		'| Checks for equal objects.',
 		'*/',
-		joobj.name + '.prototype.equals =',
+		reference + '.prototype.equals =',
 		'\tfunction(',
 		'\t\tobj',
 		'\t)',
@@ -677,9 +722,10 @@ generatePrimitiveEqualsCheck =
 var
 generateEqualsCheck =
 	function(
-		r,     // result array
-		joobj, // the joobj definition
-		aList  // attribute name list
+		r,         // result array
+		joobj,     // the joobj definition
+		reference, // the reference name for the joobj
+		aList      // attribute name list
 	)
 {
 	var
@@ -693,7 +739,7 @@ generateEqualsCheck =
 		'/*',
 		'| Checks for equal objects.',
 		'*/',
-		joobj.name + '.prototype.equals =',
+		reference + '.prototype.equals =',
 		'\tfunction(',
 		'\t\tobj',
 		'\t)',
@@ -771,8 +817,28 @@ joobjGenerator =
 	// tests if the joobj looks ok
 	checkJoobj( joobj );
 
-	aList =
-		Object.keys( joobj.attributes ).sort( );
+	var
+		reference =
+			null;
+
+	// in case unit and joobj are named identically
+	// the shortcut will be renamed
+	if( joobj.unit === joobj.name )
+	{
+		reference =
+			joobj.name + 'Obj';
+	}
+	else
+	{
+		reference =
+			joobj.name;
+	}
+
+	if( joobj.attributes )
+	{
+		aList =
+			Object.keys( joobj.attributes ).sort( );
+	}
 
 	generateFileHeader( r );
 
@@ -786,39 +852,61 @@ joobjGenerator =
 
 	generateSeperator( r );
 
-	generateCapsuleHeader( r );
+	generateCapsuleHeader( r, joobj );
 
 	generateSeperator( r );
 
-	generateConstructor( r, joobj, aList );
+	generateConstructor( r, joobj, reference, aList );
 
 	generateSeperator( r );
 
 	if( joobj.subclass )
 	{
-		generateSubclassSection( r, joobj );
+		generateSubclassSection( r, joobj, reference );
 
 		generateSeperator( r );
 	}
 
-	generateCreator( r, joobj, aList );
-
-	generateSeperator( r );
-
-	generateReflectionSection( r, joobj );
-
-	generateSeperator( r );
-
-	if( joobj.primitiveEquals )
+	if( !joobj.abstract )
 	{
-		generatePrimitiveEqualsCheck( r, joobj, aList );
-	}
-	else
-	{
-		generateEqualsCheck( r, joobj, aList );
+		generateCreator( r, joobj, reference, aList );
+
+		generateSeperator( r );
 	}
 
+	generateReflectionSection( r, joobj, reference );
+
 	generateSeperator( r );
+
+	switch( joobj.equals )
+	{
+		case false :
+
+			break;
+
+		case undefined :
+		case true :
+
+			generateEqualsCheck( r, joobj, reference, aList );
+
+			generateSeperator( r );
+
+			break;
+
+		case 'primitive' :
+
+			generatePrimitiveEqualsCheck( r, joobj, reference );
+
+			generateSeperator( r );
+
+			break;
+
+		default :
+
+			throw new Error(
+				'invalid equals value: ' + joobj.equals
+			);
+	}
 
 	generateCapsuleFooter( r );
 

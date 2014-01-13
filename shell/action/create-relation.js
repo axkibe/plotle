@@ -28,8 +28,8 @@ if( JOOBJ )
 		subclass :
 			'Action.Action',
 
-		primitiveEquals :
-			true,
+		equals :
+			'primitive',
 
 		attributes :
 			{

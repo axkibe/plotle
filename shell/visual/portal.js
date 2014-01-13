@@ -100,7 +100,7 @@ Visual.Portal =
 		tree
 	);
 
-	if( path )
+	if( !path.isEmpty )
 	{
 		// paths to spaceUser and spaceTag
 

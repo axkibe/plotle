@@ -17,34 +17,35 @@ var
 
 
 /*
-| Imports
-*/
-var
-	Jools;
-
-
-/*
 | Capsule
 */
 ( function( ) {
 'use strict';
 
-/**/if( CHECK && typeof( window ) === 'undefined' )
-/**/{
-/**/	throw new Error(
-/**/		'this code needs a browser!'
-/**/	);
-/**/}
-
 
 /*
-| Constructor.
+| The Joobj definition.
 */
-Action.Action =
-	function( )
+if( JOOBJ )
 {
-	Jools.immute( this );
-};
+	return {
+
+		name :
+			'Action',
+
+		unit :
+			'Action',
+
+		abstract :
+			true,
+
+		equals :
+			false,
+
+		notag :
+			true
+	};
+}
 
 
 /**/if( CHECK )
@@ -73,5 +74,6 @@ Action.Action =
 /**/		}
 /**/	};
 /**/}
+
 
 } )( );

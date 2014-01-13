@@ -90,6 +90,7 @@ var
 var Server =
 	function( )
 {
+	// pass
 };
 
 
@@ -984,7 +985,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/action/action.js',
-					'fb',
+					'fbj',
 
 				'shell/action/none.js',
 					'fb',
