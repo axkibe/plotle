@@ -46,6 +46,7 @@ var
 			case 'notag' :
 			case 'equals' :
 			case 'subclass' :
+			case 'singleton' :
 			case 'unit' :
 
 				break;
@@ -70,6 +71,13 @@ var
 	var
 		attr =
 			joobj.attributes;
+
+	if( joobj.singleton && attr )
+	{
+		throw new Error(
+			'singletons must not have attributes'
+		);
+	}
 
 	if( attr )
 	{
@@ -489,161 +497,179 @@ generateCreator =
 		// alphabetical sorted attribute names
 		// including 'inherit'
 		aListPlus =
+			null;
+
+	if( aList )
+	{
+		aListPlus =
 			aList.slice( );
 
-	aListPlus.push( 'inherit' );
+		aListPlus.push( 'inherit' );
 
-	aListPlus.sort( );
+		aListPlus.sort( );
+	}
 
 	r.push(
 		'/*',
 		'| Creates a new ' + joobj.name + ' object.',
 		'*/',
 		reference + '.create =',
-		'\tfunction(',
-		'\t\t// free strings',
+		'\tfunction('
+	);
+
+	if( aList )
+	{
+		r.push(
+			'\t\t// free strings'
+		);
+	}
+
+	r.push(
 		'\t)',
 		'{',
 		'\tvar',
 		''
 	);
 
-	for(
-		a = 0, aZ = aListPlus.length;
-		a < aZ;
-		a++
-	)
+	if( aListPlus )
 	{
-		aName =
-			aListPlus[ a ];
-
-		r.push(
-			'\t\t' + aName + ' =',
-			'\t\t\tnull' + ( a + 1 >= aListPlus.length ? ';' : ',' ),
-			''
-		);
-	}
-
-	r.push(
-		'\tfor(',
-		'\t\tvar a = 0, aZ = arguments.length;',
-		'\t\ta < aZ;',
-		'\t\ta += 2',
-		'\t)',
-		'\t{',
-		'\t\tswitch( arguments[ a ] )',
-		'\t\t{'
-	);
-
-	for(
-		a = 0, aZ = aListPlus.length;
-		a < aZ;
-		a++
-	)
-	{
-		aName =
-			aListPlus[ a ];
-
-		r.push(
-			'\t\t\tcase \'' + aName + '\' :',
-			'',
-			'\t\t\t\t' + aName + ' =',
-			'\t\t\t\t\targuments[ a + 1 ];',
-			'',
-			'\t\t\t\tbreak;',
-			''
-		);
-	}
-
-	r.push(
-		'\t\t\tdefault :',
-		'',
-		'/**/\t\t\tif( CHECK )',
-		'/**/\t\t\t{',
-		'/**/\t\t\t\tthrow new Error(',
-		'/**/\t\t\t\t\t\'invalid argument: \' + arguments[ a ]',
-		'/**/\t\t\t\t);',
-		'/**/\t\t\t}',
-		'\t\t}',
-		'\t}',
-		''
-	);
-
-	r.push(
-		'\tif( inherit )',
-		'\t{'
-	);
-
-	for(
-		a = 0, aZ = aList.length;
-		a < aZ;
-		a++
-	)
-	{
-		aName =
-			aList[ a ];
-
-		r.push(
-			'\t\tif( ' + aName + ' === null )',
-			'\t\t{',
-			'\t\t\t' + aName + ' =',
-			'\t\t\t\tinherit.' + aName + ';',
-			'\t\t}',
-			''
-		);
-	}
-
-	r.push(
-		'\t\tif('
-	);
-
-
-	for(
-		a = 0, aZ = aList.length;
-		a < aZ;
-		a++
-	)
-	{
-		aName =
-			aList[ a ];
-
-		if( a > 0 )
+		for(
+			a = 0, aZ = aListPlus.length;
+			a < aZ;
+			a++
+		)
 		{
+			aName =
+				aListPlus[ a ];
+
 			r.push(
-				'\t\t\t&&'
+				'\t\t' + aName + ' =',
+				'\t\t\tnull' + ( a + 1 >= aListPlus.length ? ';' : ',' ),
+				''
 			);
 		}
 
-		switch( joobj.attributes[ aName ].type )
+		r.push(
+			'\tfor(',
+			'\t\tvar a = 0, aZ = arguments.length;',
+			'\t\ta < aZ;',
+			'\t\ta += 2',
+			'\t)',
+			'\t{',
+			'\t\tswitch( arguments[ a ] )',
+			'\t\t{'
+		);
+
+		for(
+			a = 0, aZ = aListPlus.length;
+			a < aZ;
+			a++
+		)
 		{
-			case 'Integer' :
-			case 'String' :
+			aName =
+				aListPlus[ a ];
 
-				r.push(
-					'\t\t\t' + aName + ' === inherit.' + aName
-				);
-
-				break;
-
-			default :
-
-				r.push(
-					'\t\t\t' + aName +
-						'.equals( inherit.' + aName + ' )'
-				);
-
-				break;
+			r.push(
+				'\t\t\tcase \'' + aName + '\' :',
+				'',
+				'\t\t\t\t' + aName + ' =',
+				'\t\t\t\t\targuments[ a + 1 ];',
+				'',
+				'\t\t\t\tbreak;',
+				''
+			);
 		}
-	}
 
-	r.push(
-		'\t\t)',
-		'\t\t{',
-		'\t\t\treturn inherit;',
-		'\t\t}',
-		'\t}',
-		''
-	);
+		r.push(
+			'\t\t\tdefault :',
+			'',
+			'/**/\t\t\tif( CHECK )',
+			'/**/\t\t\t{',
+			'/**/\t\t\t\tthrow new Error(',
+			'/**/\t\t\t\t\t\'invalid argument: \' + arguments[ a ]',
+			'/**/\t\t\t\t);',
+			'/**/\t\t\t}',
+			'\t\t}',
+			'\t}',
+			''
+		);
+
+		r.push(
+			'\tif( inherit )',
+			'\t{'
+		);
+
+		for(
+			a = 0, aZ = aList.length;
+			a < aZ;
+			a++
+		)
+		{
+			aName =
+				aList[ a ];
+
+			r.push(
+				'\t\tif( ' + aName + ' === null )',
+				'\t\t{',
+				'\t\t\t' + aName + ' =',
+				'\t\t\t\tinherit.' + aName + ';',
+				'\t\t}',
+				''
+			);
+		}
+
+		r.push(
+			'\t\tif('
+		);
+
+
+		for(
+			a = 0, aZ = aList.length;
+			a < aZ;
+			a++
+		)
+		{
+			aName =
+				aList[ a ];
+
+			if( a > 0 )
+			{
+				r.push(
+					'\t\t\t&&'
+				);
+			}
+
+			switch( joobj.attributes[ aName ].type )
+			{
+				case 'Integer' :
+				case 'String' :
+
+					r.push(
+						'\t\t\t' + aName + ' === inherit.' + aName
+					);
+
+					break;
+
+				default :
+
+					r.push(
+						'\t\t\t' + aName +
+							'.equals( inherit.' + aName + ' )'
+					);
+
+					break;
+			}
+		}
+
+		r.push(
+			'\t\t)',
+			'\t\t{',
+			'\t\t\treturn inherit;',
+			'\t\t}',
+			'\t}',
+			''
+		);
+	}
 
 	r.push(
 		'\treturn (',
