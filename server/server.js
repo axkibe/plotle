@@ -1003,7 +1003,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/action/pan.js',
-					'fb',
+					'fbj',
 
 				'shell/action/scrolly.js',
 					'fbj',

@@ -1,18 +1,8 @@
 /*
-| An users action in the making.
-|
-| Panning the background.
+| The user is panning the background.
 |
 | Authors: Axel Kittenberger
 */
-
-
-/*
-| Export
-*/
-var
-	Action =
-		Action || { };
 
 
 /*
@@ -22,137 +12,47 @@ var
 'use strict';
 
 
-/**/if( CHECK && typeof( window ) === 'undefined' )
-/**/{
-/**/	throw new Error(
-/**/		'this code needs a browser!'
-/**/	);
-/**/}
-
-var
-	_tag =
-		'ACTION-15411607';
-
 /*
-| Constructor.
+| The joobj definition.
 */
-var
-	Pan =
-	Action.Pan =
-		function(
-			tag,
-			pan,
-			start
-		)
+if( JOOBJ )
 {
+	return {
 
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid tag'
-/**/		);
-/**/	}
-/**/}
+		name :
+			'Pan',
 
-	this.pan =
-		pan;
+		unit :
+			'Action',
 
-	this.start =
-		start;
+		subclass :
+			'Action.Action',
 
-	Action.Action.call(
-		this,
-		_tag
-	);
-};
+		equals :
+			'primitive',
 
+		attributes :
+			{
+				start :
+					{
+						comment :
+							'mouse down point on start of scrolling',
 
-/*
-| Reflection.
-*/
-Pan.prototype.reflect =
-	'Pan';
+						type :
+							'Point'
+					},
 
+				pan :
+					{
+						comment :
+							'pan position on start',
 
-/*
-| Creates a new Pan action.
-*/
-Pan.create =
-	function(
-		// free strings
-	)
-{
-	var
-		pan =
-			null,
-
-		start =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'pan' :
-
-				pan =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'start' :
-
-				start =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'invalid argument: ' + arguments[ a ]
-/**/				);
-/**/			}
-
-		}
-	}
-
-	return (
-		new Pan(
-			_tag,
-			pan,
-			start
-		)
-	);
-};
-
-
-/*
-| Returns true if this action equals another.
-*/
-Pan.prototype.equals =
-	function(
-		action
-	)
-{
-	if( action === this )
-	{
-		return true;
-	}
-
-	// TODO
-	// proper checking
-
-	return false;
-};
+						type :
+							'Point'
+					}
+			}
+	};
+}
 
 
 } )( );

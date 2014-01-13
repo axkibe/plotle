@@ -430,10 +430,20 @@ generateConstructor =
 		}
 	}
 
-	r.push(
-		'\tJools.immute( this );',
-		'};'
-	);
+	if( joobj.subclass )
+	{
+		r.push(
+			'\t' + joobj.subclass + '.call( this );',
+			'};'
+		);
+	}
+	else
+	{
+		r.push(
+			'\tJools.immute( this );',
+			'};'
+		);
+	}
 };
 
 
