@@ -1000,7 +1000,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/action/item-resize.js',
-					'fb',
+					'fbj',
 
 				'shell/action/pan.js',
 					'fbj',

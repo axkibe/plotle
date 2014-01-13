@@ -942,8 +942,6 @@ Space.prototype.dragStart =
 						focus.path,
 					'start',
 						dp,
-					'move',
-						dp,
 					'item',
 						focus,
 					'origin',
@@ -2014,8 +2012,6 @@ Space.prototype.dragMove =
 				Action.ItemResize.create(
 					'inherit',
 						action,
-					'move',
-						view.depoint( p ),
 					'item',
 						item
 				)

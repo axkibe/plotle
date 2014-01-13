@@ -1,18 +1,8 @@
 /*
-| An users action in the making.
-|
-| Resizing an item.
+| The user is resizing an item.
 |
 | Authors: Axel Kittenberger
 */
-
-
-/*
-| Export
-*/
-var
-	Action =
-		Action || { };
 
 
 /*
@@ -22,248 +12,77 @@ var
 'use strict';
 
 
-/**/if( CHECK && typeof( window ) === 'undefined' )
-/**/{
-/**/	throw new Error(
-/**/		'this code needs a browser!'
-/**/	);
-/**/}
-
-
-var
-	_tag =
-		'ACTION-15411607';
-
-
 /*
-| Constructor.
+| The Joobj definition.
 */
-var
-	ItemResize =
-	Action.ItemResize =
-		function(
-			tag,
-			itemPath,
-			item,
-			start,
-			move,
-			origin,
-			align
-		)
+if( JOOBJ )
 {
+	return {
 
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid tag'
-/**/		);
-/**/	}
-/**/}
+		name :
+			'ItemResize',
 
-	// XXX use item.path
-	this.itemPath =
-		itemPath;
+		unit :
+			'Action',
 
-	this.item =
-		item;
+		subclass :
+			'Action.Action',
 
-	this.start =
-		start;
+		equals :
+			'primitive',
 
-	this.move =
-		move;
+		attributes :
+			{
+				align :
+					{
+						comment :
+							'alignment ( compass ) of the resize action',
 
-	this.origin =
-		origin;
+						type :
+							'String'
+					},
 
-	this.align =
-		align;
+				// TODO rename transient
+				item :
+					{
+						comment :
+							'the transient item while it is dragged',
 
-	Action.Action.call(
-		this,
-		_tag
-	);
-};
+						type :
+							'Item'
+					},
 
+				// TODO remove
+				itemPath :
+					{
+						comment :
+							'path to the item dragged',
 
-/*
-| Reflection.
-*/
-ItemResize.prototype.reflect =
-	'ItemResize';
+						type :
+							'Path'
+					},
 
+				// TODO rename item
+				origin :
+					{
+						comment :
+							'the item being resized',
 
-/*
-| Creates a new ItemResize action.
-*/
-ItemResize.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit =
-			null,
+						type :
+							'Item'
+					},
 
-		itemPath =
-			null,
+				start :
+					{
+						comment :
+							'mouseDown point on drag creation',
 
-		item =
-			null,
-
-		start =
-			null,
-
-		move =
-			null,
-
-		origin =
-			null,
-
-		align =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'itemPath' :
-
-				itemPath =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'item' :
-
-				item =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'start' :
-
-				start =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'move' :
-
-				move =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'origin' :
-
-				origin =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'align' :
-
-				align =
-					arguments[ a +1 ];
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'invalid argument: ' + arguments[ a ]
-/**/				);
-/**/			}
-		}
-	}
-
-	if( inherit )
-	{
-		if( itemPath === null )
-		{
-			itemPath =
-				inherit.itemPath;
-		}
-
-		if( item === null )
-		{
-			item =
-				inherit.item;
-		}
-
-		if( start === null )
-		{
-			start =
-				inherit.start;
-		}
-
-		if( move === null )
-		{
-			move =
-				inherit.move;
-		}
-
-		if( origin === null )
-		{
-			origin =
-				inherit.origin;
-		}
-
-		if( align === null )
-		{
-			align =
-				inherit.align;
-		}
-	}
-
-	return (
-		new ItemResize(
-			_tag,
-			itemPath,
-			item,
-			start,
-			move,
-			origin,
-			align
-		)
-	);
-};
-
-
-/*
-| Returns true if this action equals another.
-*/
-ItemResize.prototype.equals =
-	function(
-		action
-	)
-{
-	if( action === this )
-	{
-		return true;
-	}
-
-	// TODO
-	// proper checking
-
-	return false;
-};
+						type :
+							'Point'
+					}
+			}
+	};
+}
 
 
 } )( );
