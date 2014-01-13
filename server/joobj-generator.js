@@ -456,6 +456,26 @@ generateConstructor =
 
 
 /*
+| Generates the singleton section.
+*/
+var
+generateSingletonSection =
+	function(
+		r // result array
+	)
+{
+	r.push(
+		'/*',
+		'| Singleton',
+		'*/',
+		'var',
+		'\t_singleton =',
+		'\t\tnull;'
+	);
+};
+
+
+/*
 | Generates the subclass.
 */
 var
@@ -526,13 +546,15 @@ generateCreator =
 
 	r.push(
 		'\t)',
-		'{',
-		'\tvar',
-		''
+		'{'
 	);
 
 	if( aListPlus )
 	{
+		r.push(
+			'\tvar'
+		);
+
 		for(
 			a = 0, aZ = aListPlus.length;
 			a < aZ;
@@ -670,37 +692,88 @@ generateCreator =
 			''
 		);
 	}
-
-	r.push(
-		'\treturn (',
-		'\t\tnew ' + reference + '('
-	);
-
-	if( !joobj.notag )
+	else
 	{
 		r.push(
-			'\t\t\t_tag,'
+			'',
+			'/**/if( CHECK )',
+			'/**/{',
+			'/**/\tif( arguments.length > 0 )',
+			'/**/\t{',
+			'/**/\t\tthrow new Error(',
+			'/**/\t\t\t\'invalid argument\'',
+			'/**/\t\t);',
+			'/**/\t}',
+			'/**/}',
+			''
 		);
 	}
 
-	for(
-		a = 0, aZ = aList.length;
-		a < aZ;
-		a++
-	)
+	if( joobj.singleton )
 	{
-		aName =
-			aList[ a ];
+		r.push(
+			'\tif( !_singleton )',
+			'\t{',
+			'\t\t_singleton ='
+		);
+
+		if( joobj.notag )
+		{
+			r.push(
+				'\t\t\tnew ' + reference + '( );'
+			);
+		}
+		else
+		{
+			r.push(
+				'\t\t\tnew ' + reference + '(',
+				'\t\t\t\t_tag',
+				'\t\t\t);'
+			);
+		}
 
 		r.push(
-			'\t\t\t' + aName +
-				( a + 1 < aList.length ? ',' : '' )
+			'\t}',
+			'',
+			'\treturn _singleton;'
+		);
+	}
+	else
+	{
+		r.push(
+			'\treturn (',
+			'\t\tnew ' + reference + '('
+		);
+
+		if( !joobj.notag )
+		{
+			r.push(
+				'\t\t\t_tag,'
+			);
+		}
+
+		for(
+			a = 0, aZ = aList.length;
+			a < aZ;
+			a++
+		)
+		{
+			aName =
+				aList[ a ];
+
+			r.push(
+				'\t\t\t' + aName +
+					( a + 1 < aList.length ? ',' : '' )
+			);
+		}
+
+		r.push(
+			'\t\t)',
+			'\t);'
 		);
 	}
 
 	r.push(
-		'\t\t)',
-		'\t);',
 		'};'
 	);
 };
@@ -897,6 +970,14 @@ joobjGenerator =
 	generateConstructor( r, joobj, reference, aList );
 
 	generateSeperator( r );
+
+	if( joobj.singleton )
+	{
+		generateSingletonSection( r );
+
+		generateSeperator( r );
+	}
+
 
 	if( joobj.subclass )
 	{

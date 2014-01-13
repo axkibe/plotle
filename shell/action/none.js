@@ -6,114 +6,35 @@
 
 
 /*
-| Export
-*/
-var
-	Action =
-		Action || { };
-
-
-/*
 | Capsule
 */
 ( function( ) {
 'use strict';
 
 
-/**/if( CHECK && typeof( window ) === 'undefined' )
-/**/{
-/**/	throw new Error(
-/**/		'this code needs a browser!'
-/**/	);
-/**/}
-
-var
-	_tag =
-		'ACTION-15411607';
-
 /*
-| Constructor.
+| The joobj definition.
 */
-var
-	None =
-	Action.None =
-		function( tag )
+if( JOOBJ )
 {
+	return {
 
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid tag'
-/**/		);
-/**/	}
-/**/}
+		name :
+			'None',
 
-	Action.Action.call(
-		this,
-		_tag
-	);
-};
+		unit :
+			'Action',
 
+		singleton :
+			true,
 
-/*
-| Singleton
-|
-| FIXME replace with Jools.lazyFunction
-*/
-var
-	_singleton =
-		null;
+		subclass :
+			'Action.Action',
 
-/*
-| Reflection.
-*/
-None.prototype.reflect =
-	'None';
-
-
-/*
-| Creates a new Pan action.
-*/
-None.create =
-	function(
-		// free strings
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length > 0 )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid argument'
-/**/		);
-/**/	}
-/**/}
-
-	if( !_singleton )
-	{
-		_singleton =
-			new None(
-				_tag
-			);
-	}
-
-	return _singleton;
-};
-
-
-/*
-| Returns true if this action equals another.
-*/
-None.prototype.equals =
-	function(
-		action
-	)
-{
-	return action === this;
-};
+		equals :
+			'primitive',
+	};
+}
 
 
 } )( );

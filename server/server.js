@@ -988,7 +988,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/action/none.js',
-					'fb',
+					'fbj',
 
 				'shell/action/create-generic.js',
 					'fbj',
