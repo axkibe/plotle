@@ -304,9 +304,7 @@ Para.create =
 		if(
 			inherit.tree === tree
 			&&
-			(
-				inherit.path && inherit.path.equals( path ) // TODO
-			)
+			inherit.path.equals( path )
 			&&
 			inherit.fontsize === fontsize
 			&&

@@ -483,12 +483,14 @@ Space.prototype.focusedItem =
 		}
 	}
 
-	return (
-		this.getSub(
-			path,
-			'Item'
-		)
-	);
+	if( path.length > 1 )
+	{
+		return this.getItem( path.get( 1 ) );
+	}
+	else
+	{
+		return null;
+	}
 };
 
 
@@ -641,11 +643,11 @@ Space.prototype.draw =
 
 			if( !action.fromItemPath.isEmpty )
 			{
-				var fromItem =
-					this.getSub(
-						action.fromItemPath,
-						'Item'
-					);
+				var
+					fromItem =
+						this.getItem(
+							action.fromItemPath.get( -1 )
+						);
 
 				fromItem.highlight(
 					fabric,
@@ -657,9 +659,8 @@ Space.prototype.draw =
 				if( !action.toItemPath.isEmpty )
 				{
 					toItem =
-						this.getSub(
-							action.toItemPath,
-							'Item'
+						this.getItem(
+							action.toItemPath.get( -1 )
 						);
 
 					toItem.highlight(
@@ -1475,8 +1476,8 @@ Space.prototype.dragStop =
 					if( !action.toItemPath.isEmpty )
 					{
 						item =
-							this.getSub(
-								action.toItemPath
+							this.getItem(
+								action.toItemPath.get( -1 )
 							);
 
 						item.dragStop(
@@ -1614,9 +1615,8 @@ Space.prototype.dragStop =
 
 		case 'ScrollY' :
 
-			this.getSub(
-				action.itemPath,
-				'dragStop'
+			this.getItem(
+				action.itemPath.get( -1 )
 			).dragStop(
 				view,
 				p,

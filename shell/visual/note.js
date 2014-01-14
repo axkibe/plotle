@@ -794,7 +794,7 @@ Note.prototype.scrollMarkIntoView =
 {
 	var
 		mark =
-			shell.space.mark;
+			this.mark;
 
 	if( !mark.hasCaret )
 	{
@@ -806,10 +806,8 @@ Note.prototype.scrollMarkIntoView =
 			this.scrollbarY.pos,
 
 		para =
-			shell.space.getSub(
-				mark.caretPath,
-				'Para'
-			);
+			// FIXME, more elegant path getting
+			this.sub.doc.sub[ mark.caretPath.get( 3 )  ];
 
 /**/if( CHECK )
 /**/{

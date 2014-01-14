@@ -714,14 +714,8 @@ Item.prototype.dragMove =
 				dy =
 					( p.y - start.y ) / view.zoom,
 
-				item =
-					shell.$space.getSub(
-						action.itemPath,
-						'Item'
-					),
-
 				sbary =
-					item.scrollbarY,
+					this.scrollbarY,
 
 				spos =
 					action.startPos + sbary.scale( dy );
@@ -778,15 +772,19 @@ Item.prototype.dragStop =
 				return false;
 			}
 
-			var space =
-				shell.$space;
+			var
+				space =
+					shell.space;
 
 			Visual.Relation.spawn(
-				space.getSub( action.fromItemPath ),
+				space.getItem(
+					action.fromItemPath.get( -1 )
+				),
 				this
 			);
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			return true;
 
