@@ -331,13 +331,6 @@ Para.create =
 
 
 /*
-| Marker. TODO remove all Markers.
-*/
-Para.prototype.Para =
-	true;
-
-
-/*
 | Shortcut to the para's key.
 | It is the last path entry.
 */

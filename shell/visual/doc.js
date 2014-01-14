@@ -353,12 +353,6 @@ Doc.create =
 	);
 };
 
-/*
-| Marker. TODO
-*/
-Doc.prototype.Doc =
-	true;
-
 
 /*
 | Reflection.

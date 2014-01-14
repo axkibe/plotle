@@ -71,13 +71,6 @@ Jools.subclass(
 
 
 /*
-| Used for lookups
-*/
-Item.prototype.Item =
-	true;
-
-
-/*
 | Returns the mark if an item with 'path' concerns about
 | the mark.
 */
