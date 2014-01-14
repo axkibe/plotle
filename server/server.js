@@ -982,7 +982,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/mark/range.js',
-					'fb',
+					'fbj',
 
 				'shell/action/action.js',
 					'fbj',

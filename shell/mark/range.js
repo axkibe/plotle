@@ -24,111 +24,88 @@ var
 | Capsule
 */
 (function( ) {
-
 'use strict';
 
-if( CHECK && typeof( window ) === 'undefined' )
+
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
 {
-	throw new Error(
-		'this code requires a browser!'
-	);
+	return {
+
+		name :
+			'Range',
+
+		unit :
+			'Mark',
+
+		subclass :
+			'Mark.Mark',
+
+		attributes :
+			{
+				bPath :
+					{
+						comment :
+							'path of the begin of the range',
+
+						type :
+							'Path'
+					},
+
+				bAt :
+					{
+						comment :
+							'offset of the begin of the range',
+
+						type :
+							'Integer'
+					},
+
+				docTree :
+					{
+						comment :
+							'the document tree the range belongs to',
+
+						type :
+							'Tree'
+					},
+
+				ePath :
+					{
+						comment :
+							'path of the end of the range',
+
+						type :
+							'Path'
+					},
+
+				eAt :
+					{
+						comment :
+							'offset of the end of the range',
+
+						type :
+							'Integer'
+					},
+
+				retainx :
+					{
+						comment :
+							'x-position of the caret kept',
+
+						type :
+							'Number'
+					}
+			}
+	};
 }
 
 
 var
-	_tag =
-		'X4052376';
-
-/*
-| Constructor.
-*/
-var
-Range =
-Mark.Range =
-	function(
-		tag,
-		docTree,
-		bPath,
-		bAt,
-		ePath,
-		eAt,
-		retainx
-	)
-{
-	this.docTree =
-		docTree;
-
-	if( CHECK )
-	{
-		if( bPath.get( -1 ) !== 'text' )
-		{
-			throw new Error(
-				'bPath.get( -1 ) !== "text"'
-			);
-		}
-
-		if( ePath.get( -1 ) !== 'text' )
-		{
-			throw new Error(
-				'ePath.get( -1 ) !== "text"'
-			);
-		}
-	}
-
-	this.bPath =
-		bPath;
-
-	// FIXME remove this again when fixed affection below
-	this._bDocPath =
-		bPath.shorten( 2 );
-
-	this.bAt =
-		bAt;
-
-	this.ePath =
-		ePath;
-
-	this.eAt =
-		eAt;
-
-	this.retainx =
-		retainx;
-
-	Mark.Mark.call( this );
-};
-
-
-Jools.subclass(
-	Range,
-	Mark.Mark
-);
-
-
-/*
-| Creates a mark
-*/
-Range.create =
-	function(
-		docTree,
-		bPath,
-		bAt,
-		ePath,
-		eAt,
-		retainx
-	)
-{
-	return new Range(
-		_tag,
-		docTree,
-		bPath,
-		bAt,
-		ePath,
-		eAt,
-		retainx
-	);
-};
-
-
+	Range =
+		Mark.Range;
 
 /*
 | Returns begin or end path,
@@ -373,46 +350,6 @@ Jools.lazyFixate(
 
 
 /*
-| Reflection.
-*/
-Range.prototype.reflect =
-	'Range';
-
-
-/*
-| Returns true if this mark equals another.
-*/
-Range.prototype.equals =
-	function(
-		mark
-	)
-{
-	if( !mark )
-	{
-		return false;
-	}
-
-	return (
-		this === mark
-		||
-		(
-			this.reflect === mark.reflect
-			&&
-			this.bPath.equals( mark.bPath )
-			&&
-			this.bAt === mark.bAt
-			&&
-			this.ePath.equals( mark.ePath )
-			&&
-			this.eAt === mark.eAt
-			&&
-			this.retainx === mark.retainx
-		)
-	);
-};
-
-
-/*
 | Return true if begin equals end
 */
 Jools.lazyFixate(
@@ -421,7 +358,8 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			this.bPath.equals( this.ePath ) &&
+			this.bPath.equals( this.ePath )
+			&&
 			this.bAt === this.eAt
 		);
 	}
@@ -430,6 +368,8 @@ Jools.lazyFixate(
 
 /*
 | Sets _front/_back so _front is before _back.
+|
+| FIXME remove
 */
 Range.prototype._normalize =
 	function( )
@@ -535,7 +475,6 @@ Range.prototype._normalize =
 			bAt;
 	}
 };
-
 
 
 })( );

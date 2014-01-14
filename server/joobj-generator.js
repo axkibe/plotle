@@ -666,6 +666,7 @@ generateCreator =
 				case 'Integer' :
 				case 'Number' :
 				case 'String' :
+				case 'Tree' :
 
 					r.push(
 						'\t\t\t' + aName + ' === inherit.' + aName
@@ -884,6 +885,7 @@ generateEqualsCheck =
 			case 'Integer' :
 			case 'Number' :
 			case 'String' :
+			case 'Tree' :
 
 				r.push(
 					'\t\tthis.' + aName + ' === obj.' + aName

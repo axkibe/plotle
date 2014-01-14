@@ -503,12 +503,18 @@ Shell.prototype.update =
 					{
 						mark =
 							Mark.Range.create(
-								mItemTree.twig.doc,
-								bSign.path.prepend( 'space' ),
-								bSign.at1,
-								eSign.path.prepend( 'space' ),
-								eSign.at1,
-								mark.retainx
+								'docTree',
+									mItemTree.twig.doc,
+								'bPath',
+									bSign.path.prepend( 'space' ),
+								'bAt',
+									bSign.at1,
+								'ePath',
+									eSign.path.prepend( 'space' ),
+								'eAt',
+									eSign.at1,
+								'retainx',
+									mark.retainx
 							);
 					}
 			}
@@ -1213,12 +1219,18 @@ Shell.prototype.userMark =
 
 			mark =
 				Mark.Range.create(
-					shell.space.tree.twig[ bPath.get( 1 ) ].twig.doc,
-					bPath,
-					bAt,
-					ePath,
-					eAt,
-					retainx
+					'docTree',
+						shell.space.tree.twig[ bPath.get( 1 ) ].twig.doc,
+					'bPath',
+						bPath,
+					'bAt',
+						bAt,
+					'ePath',
+						ePath,
+					'eAt',
+						eAt,
+					'retainx',
+						retainx
 				);
 
 			system.setInput( mark.innerText );
