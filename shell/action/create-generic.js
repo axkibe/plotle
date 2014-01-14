@@ -37,17 +37,17 @@ if( JOOBJ )
 
 		attributes :
 			{
-				// TODO remove
 				itemType :
 					{
 						comment :
 							'item type to be created',
 
+						// FIXME make list of possibilities
 						type :
 							'String'
 					},
 
-				item :
+				transItem :
 					{
 						comment :
 							'the transient item in creation',
@@ -56,7 +56,7 @@ if( JOOBJ )
 							'Item'
 					},
 
-				origin :
+				model :
 					{
 						comment :
 							'a transient item used as model',

@@ -33,14 +33,13 @@ if( JOOBJ )
 
 		attributes :
 			{
-				// TODO remove
-				itemPath :
+				origin :
 					{
 						comment :
-							'path to the item dragged',
+							'the item being dragged',
 
 						type :
-							'Path'
+							'Item'
 					},
 
 				start :
@@ -52,21 +51,10 @@ if( JOOBJ )
 							'Point'
 					},
 
-				// TODO rename transient
-				item :
+				transItem :
 					{
 						comment :
 							'the transient item while it is dragged',
-
-						type :
-							'Item'
-					},
-
-				// TODO rename item
-				origin :
-					{
-						comment :
-							'the item being dragged',
 
 						type :
 							'Item'

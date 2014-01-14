@@ -474,9 +474,9 @@ Space.prototype.focusedItem =
 			case 'ItemDrag' :
 			case 'ItemResize' :
 
-				if( action.itemPath.subPathOf( path ) )
+				if( action.transItem.path.subPathOf( path ) )
 				{
-					return action.item;
+					return action.transItem;
 				}
 
 				break;
@@ -509,9 +509,9 @@ Space.prototype.getItem =
 		case 'ItemDrag' :
 		case 'ItemResize' :
 
-			if( action.itemPath.get( 1 ) === key )
+			if( action.transItem.key === key )
 			{
-				return action.item;
+				return action.transItem;
 			}
 
 			break;
@@ -629,7 +629,7 @@ Space.prototype.draw =
 
 			if( action.start )
 			{
-				action.item.draw(
+				action.transItem.draw(
 					fabric,
 					view
 				);
@@ -938,11 +938,9 @@ Space.prototype.dragStart =
 
 			shell.setAction(
 				Action.ItemResize.create(
-					'itemPath',
-						focus.path,
 					'start',
 						dp,
-					'item',
+					'transItem',
 						focus,
 					'origin',
 						focus,
@@ -960,6 +958,9 @@ Space.prototype.dragStart =
 			shell.action,
 
 		item =
+			null,
+
+		transItem =
 			null;
 
 	// XXX simplify
@@ -969,7 +970,7 @@ Space.prototype.dragStart =
 		action.itemType === 'Note'
 	)
 	{
-		item =
+		transItem =
 			Visual[ action.itemType ].create(
 				'zone',
 					Euclid.Rect.create(
@@ -1006,10 +1007,10 @@ Space.prototype.dragStart =
 					action,
 				'start',
 					p,
-				'origin',
-					item,
-				'item',
-					item
+				'model',
+					transItem,
+				'transItem',
+					transItem
 			)
 		);
 
@@ -1023,7 +1024,7 @@ Space.prototype.dragStart =
 
 	)
 	{
-		item =
+		transItem =
 			Visual[ action.itemType ].create(
 				'pnw',
 					view.depoint( p ),
@@ -1056,10 +1057,10 @@ Space.prototype.dragStart =
 					action,
 				'start',
 					p,
-				'origin',
-					item,
-				'item',
-					item
+				'model',
+					transItem,
+				'transItem',
+					transItem
 			)
 		);
 
@@ -1073,7 +1074,7 @@ Space.prototype.dragStart =
 
 	)
 	{
-		item =
+		transItem =
 			Visual[ action.itemType ].create(
 				'hover',
 					Path.empty,
@@ -1095,10 +1096,10 @@ Space.prototype.dragStart =
 					action,
 				'start',
 					p,
-				'origin',
-					item,
-				'item',
-					item
+				'model',
+					transItem,
+				'transItem',
+					transItem
 			)
 		);
 
@@ -1264,7 +1265,7 @@ Space.prototype.dragStop =
 						note =
 							Visual.Note.create(
 								'inherit',
-									action.item,
+									action.transItem,
 								'zone',
 									Euclid.Rect.create(
 										'arbitrary',
@@ -1308,8 +1309,8 @@ Space.prototype.dragStop =
 				case 'Label' :
 
 					var
-						origin =
-							action.origin,
+						model =
+							action.model,
 
 						zone =
 							Euclid.Rect.create(
@@ -1319,21 +1320,22 @@ Space.prototype.dragStop =
 							),
 
 						oheight =
-							origin.zone.height,
+							model.zone.height,
 
 						dy =
 							zone.height - oheight,
 
 						fs =
 							Math.max(
-								origin.sub.doc.fontsize * ( oheight + dy ) / oheight,
+								model.sub.doc.fontsize *
+									( oheight + dy ) / oheight,
 								theme.label.minSize
 						),
 
 						resized =
-							action.item.creator.create(
+							action.transItem.creator.create(
 								'inherit',
-									origin,
+									model,
 								'fontsize',
 									fs
 							),
@@ -1395,7 +1397,7 @@ Space.prototype.dragStop =
 						portal =
 							Visual.Portal.create(
 								'inherit',
-									action.item,
+									action.transItem,
 								'zone',
 									Euclid.Rect.create(
 										'arbitrary',
@@ -1519,15 +1521,15 @@ Space.prototype.dragStop =
 
 		case 'ItemDrag' :
 
-			if( !action.item.zone.equals( action.origin.zone ) )
+			if( !action.transItem.zone.equals( action.origin.zone ) )
 			{
-				switch( action.item.positioning )
+				switch( action.transItem.positioning )
 				{
 					case 'zone' :
 
 						shell.peer.setZone(
-							action.itemPath,
-							action.item.zone
+							action.transItem.path,
+							action.transItem.zone
 						);
 
 						break;
@@ -1535,18 +1537,21 @@ Space.prototype.dragStop =
 					case 'pnw/fontsize' :
 
 						shell.peer.setPNW(
-							action.itemPath,
-							action.item.zone.pnw
+							action.transItem.path,
+							action.transItem.zone.pnw
 						);
 
 						break;
 
 					default :
 
-						throw new Error(
-							'invalid positioning' +
-							action.item.positioning
-						);
+/**/					if( CHECK )
+/**/					{
+/**/						throw new Error(
+/**/							'invalid positioning' +
+/**/							action.transItem.positioning
+/**/						);
+/**/					}
 				}
 
 				shell.redraw =
@@ -1561,16 +1566,16 @@ Space.prototype.dragStop =
 
 		case 'ItemResize' :
 
-			if( !action.item.zone.equals( action.origin.zone ) )
+			if( !action.transItem.zone.equals( action.origin.zone ) )
 			{
 
-				switch( action.item.positioning )
+				switch( action.transItem.positioning )
 				{
 					case 'zone' :
 
 						shell.peer.setZone(
-							action.itemPath,
-							action.item.zone
+							action.transItem.path,
+							action.transItem.zone
 						);
 
 						break;
@@ -1578,13 +1583,13 @@ Space.prototype.dragStop =
 					case 'pnw/fontsize' :
 
 						shell.peer.setPNW(
-							action.itemPath,
-							action.item.zone.pnw
+							action.transItem.path,
+							action.transItem.zone.pnw
 						);
 
 						shell.peer.setFontSize(
-							action.itemPath,
-							action.item.sub.doc.fontsize
+							action.transItem.path,
+							action.transItem.sub.doc.fontsize
 						);
 
 						break;
@@ -1593,7 +1598,7 @@ Space.prototype.dragStop =
 
 						throw new Error(
 							'invalid positioning' +
-							action.item.positioning
+								action.transItem.positioning
 						);
 				}
 
@@ -1656,10 +1661,12 @@ Space.prototype.dragMove =
 		action =
 			shell.action,
 
-		item =
+		transItem =
 			null,
 
 		fs,
+
+		model,
 
 		origin,
 
@@ -1673,8 +1680,8 @@ Space.prototype.dragMove =
 	{
 		case 'CreateGeneric' :
 
-			origin =
-				action.origin;
+			model =
+				action.model;
 
 			var
 				zone =
@@ -1684,14 +1691,14 @@ Space.prototype.dragMove =
 						view.depoint( p )
 					);
 
-			switch( origin.positioning )
+			switch( model.positioning )
 			{
 				case 'zone' :
 
-					item =
-						origin.creator.create(
+					transItem =
+						model.creator.create(
 							'inherit',
-								origin,
+								model,
 							'zone',
 								zone
 						);
@@ -1701,24 +1708,25 @@ Space.prototype.dragMove =
 				case 'pnw/fontsize' :
 
 					oheight =
-						origin.zone.height;
+						model.zone.height;
 
 					fs =
 						Math.max(
-							origin.sub.doc.fontsize * zone.height / oheight,
+							model.sub.doc.fontsize *
+								zone.height / oheight,
 							theme.label.minSize
 						);
 
 					resized =
-						action.item.creator.create(
+						action.transItem.creator.create(
 							'inherit',
-								origin,
+								model,
 							'fontsize',
 								fs
 						);
 
-					item =
-						action.item.creator.create(
+					transItem =
+						action.transItem.creator.create(
 							'inherit',
 								resized,
 							'pnw',
@@ -1747,8 +1755,8 @@ Space.prototype.dragMove =
 				Action.CreateGeneric.create(
 					'inherit',
 						action,
-					'item',
-						item
+					'transItem',
+						transItem
 				)
 			);
 
@@ -1795,17 +1803,15 @@ Space.prototype.dragMove =
 				)
 			);
 
+			// TODO why is this?
 			for(
 				var r = 0, rZ = this.tree.length;
 				r < rZ;
 				r++
 			)
 			{
-				item =
-					this.atRank( r );
-
 				if(
-					item.dragMove(
+					this.atRank( r ).dragMove(
 						view,
 						p
 					)
@@ -1850,7 +1856,7 @@ Space.prototype.dragMove =
 			{
 				case 'zone' :
 
-					item =
+					transItem =
 						origin.creator.create(
 							'inherit',
 								origin,
@@ -1865,7 +1871,7 @@ Space.prototype.dragMove =
 
 				case 'pnw/fontsize' :
 
-					item =
+					transItem =
 						origin.creator.create(
 							'inherit',
 								origin,
@@ -1881,8 +1887,8 @@ Space.prototype.dragMove =
 				Action.ItemDrag.create(
 					'inherit',
 						action,
-					'item',
-						item
+					'transItem',
+						transItem
 				)
 			);
 
@@ -1905,7 +1911,7 @@ Space.prototype.dragMove =
 			{
 				case 'zone' :
 
-					item =
+					transItem =
 						action.origin.creator.create(
 							'inherit',
 								origin,
@@ -1964,15 +1970,15 @@ Space.prototype.dragMove =
 						);
 
 					resized =
-						action.item.creator.create(
+						action.origin.creator.create(
 							'inherit',
 								origin,
 							'fontsize',
 								fs
 						);
 
-					item =
-						action.item.creator.create(
+					transItem =
+						resized.creator.create(
 							'inherit',
 								resized,
 							'fontsize',
@@ -2012,8 +2018,8 @@ Space.prototype.dragMove =
 				Action.ItemResize.create(
 					'inherit',
 						action,
-					'item',
-						item
+					'transItem',
+						transItem
 				)
 			);
 
@@ -2022,17 +2028,26 @@ Space.prototype.dragMove =
 
 			return true;
 
-		default :
+		case 'ScrollY' :
 
-			this.getSub(
-				action.itemPath,
-				'dragMove'
+			this.getItem(
+				action.itemPath.get( -1 )
 			).dragMove(
 				view,
 				p
 			);
 
+			// FIXME let the item decide on the cursor
 			return 'move';
+
+		default :
+
+/**/		if( CHECK )
+/**/		{
+/**/			throw new Error(
+/**/				'unknown action: ' + action.reflect
+/**/			);
+/**/		}
 	}
 };
 
@@ -2241,6 +2256,7 @@ Space.prototype.getSub =
 		a++
 	)
 	{
+		/*
 		if (
 			action &&
 			action.itemPath &&
@@ -2271,6 +2287,7 @@ Space.prototype.getSub =
 					break;
 			}
 		}
+		*/
 
 		if( !n.sub )
 		{

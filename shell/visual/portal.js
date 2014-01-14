@@ -79,6 +79,8 @@ Visual.Portal =
 
 		if( !hover || hover.reflect !== 'Path' )
 		{
+			console.log( hover );
+
 			throw new Error(
 				'invalid hover'
 			);

@@ -42,16 +42,6 @@ if( JOOBJ )
 							'Path'
 					},
 
-				// TODO remove
-				itemPath :
-					{
-						comment :
-							'TODO',
-
-						type :
-							'String'
-					},
-
 				/*
 				item :
 					{

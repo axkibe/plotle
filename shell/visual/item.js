@@ -644,11 +644,9 @@ Item.prototype.dragStart =
 
 		shell.setAction(
 			Action.ItemDrag.create(
-				'itemPath',
-					this.path,
 				'start',
 					view.depoint( p ),
-				'item',
+				'transItem',
 					this,
 				'origin',
 					this

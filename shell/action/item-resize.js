@@ -42,8 +42,7 @@ if( JOOBJ )
 							'String'
 					},
 
-				// TODO rename transient
-				item :
+				transItem :
 					{
 						comment :
 							'the transient item while it is dragged',
@@ -52,17 +51,6 @@ if( JOOBJ )
 							'Item'
 					},
 
-				// TODO remove
-				itemPath :
-					{
-						comment :
-							'path to the item dragged',
-
-						type :
-							'Path'
-					},
-
-				// TODO rename item
 				origin :
 					{
 						comment :
