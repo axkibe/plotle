@@ -8,45 +8,36 @@
 |     nothing (vacant)
 */
 
-
-/*
-| Exports
-*/
-var
-	Mark =
-		null;
-
-
-/*
-| Imports
-*/
-var
-	Jools;
-
-
 /*
 | Capsule
 */
 ( function( ) {
-
 'use strict';
-
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
 
 
 /*
-| Constructor.
+| The joobj definition.
 */
-Mark =
-	function( )
+if( JOOBJ )
 {
-	Jools.immute( this );
-};
+	return {
+
+		name :
+			'Mark',
+
+		unit :
+			'Mark',
+
+		abstract :
+			true,
+
+		equals :
+			false,
+
+		notag :
+			true
+	};
+}
 
 
 } )( );

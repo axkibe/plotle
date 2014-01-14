@@ -428,9 +428,12 @@ Shell.prototype.update =
 				//   in some cases
 				mark =
 					Mark.Caret.create(
-						sign.path.prepend( 'space' ),
-						sign.at1,
-						mark.retainx
+						'path',
+							sign.path.prepend( 'space' ),
+						'at',
+							sign.at1,
+						'retainx',
+							mark.retainx
 					);
 			}
 
@@ -488,9 +491,12 @@ Shell.prototype.update =
 					{
 						mark =
 							Mark.Caret.create(
-								bSign.path.prepend( 'space' ),
-								bSign.at1,
-								mark.retainx
+								'path',
+									bSign.path.prepend( 'space' ),
+								'at',
+									bSign.at1,
+								'retainx',
+									mark.retainx
 							);
 					}
 					else
@@ -1176,9 +1182,12 @@ Shell.prototype.userMark =
 
 			mark =
 				Mark.Caret.create(
-					path,
-					at,
-					retainx
+					'at',
+						at,
+					'path',
+						path,
+					'retainx',
+						retainx
 				);
 
 			system.setInput( '' );
@@ -1221,9 +1230,8 @@ Shell.prototype.userMark =
 			// TODO mark should not be a caret;
 			mark =
 				Mark.Caret.create(
-					path,
-					null,
-					null
+					'path',
+						path
 				);
 
 			break;

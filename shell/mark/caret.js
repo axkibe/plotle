@@ -24,81 +24,62 @@ var
 | Capsule
 */
 (function() {
-
 'use strict';
 
-if( CHECK && typeof( window ) === 'undefined' )
+
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
 {
-	throw new Error(
-		'this code needs a browser!'
-	);
+	return {
+
+		name :
+			'Caret',
+
+		unit :
+			'Mark',
+
+		subclass :
+			'Mark.Mark',
+
+		attributes :
+			{
+				path :
+					{
+						comment :
+							'path of the caret',
+
+						type :
+							'Path'
+					},
+
+				at :
+					{
+						comment :
+							'offset of the caret',
+
+						type :
+							'Integer'
+					},
+
+				retainx :
+					{
+						comment :
+							'x-position of the caret kept',
+
+						type :
+							'Number'
+					}
+
+			}
+	};
 }
 
 
 var
-	_tag =
-		'X59368929';
-
-
-/*
-| Constructor.
-*/
-var Caret =
-Mark.Caret =
-	function(
-		tag,
-		path,
-		at,
-		retainx
-	)
-{
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'direct creation'
-			);
-		}
-	}
-
-	// the path where the caret is in
-	this.path =
-		path;
-
-	// the offset of the caret
-	this.at =
-		at;
-
-	// x position to retain when using up/down keys.
-	this.retainx =
-		retainx;
-
-	Mark.call( this );
-};
-
-
-Jools.subclass(
-	Caret,
-	Mark
-);
-
-
-Caret.create =
-	function(
-		path,
-		at,
-		retainx
-	)
-{
-	return new Caret(
-		_tag,
-		path,
-		at,
-		retainx
-	);
-};
-
+	Caret =
+		Mark.Caret;
 
 /*
 | If true uses getImageData() to cache the image
@@ -108,13 +89,6 @@ Caret.create =
 */
 Caret.useGetImageData =
 	true;
-
-
-/*
-| Reflection.
-*/
-Caret.prototype.reflect =
-	'Caret';
 
 
 /*

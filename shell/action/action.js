@@ -24,7 +24,7 @@ var
 
 
 /*
-| The Joobj definition.
+| The joobj definition.
 */
 if( JOOBJ )
 {

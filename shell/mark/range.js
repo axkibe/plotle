@@ -94,13 +94,13 @@ Mark.Range =
 	this.retainx =
 		retainx;
 
-	Mark.call( this );
+	Mark.Mark.call( this );
 };
 
 
 Jools.subclass(
 	Range,
-	Mark
+	Mark.Mark
 );
 
 

@@ -664,6 +664,7 @@ generateCreator =
 			switch( joobj.attributes[ aName ].type )
 			{
 				case 'Integer' :
+				case 'Number' :
 				case 'String' :
 
 					r.push(
@@ -881,6 +882,7 @@ generateEqualsCheck =
 		switch( joobj.attributes[ aName ].type )
 		{
 			case 'Integer' :
+			case 'Number' :
 			case 'String' :
 
 				r.push(

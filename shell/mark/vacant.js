@@ -61,13 +61,13 @@ Mark.Vacant =
 		);
 	}
 
-	Mark.call( this );
+	Mark.Mark.call( this );
 };
 
 
 Jools.subclass(
 	Vacant,
-	Mark
+	Mark.Mark
 );
 
 
