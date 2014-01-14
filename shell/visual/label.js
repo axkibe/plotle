@@ -387,13 +387,6 @@ Label.prototype.positioning =
 
 
 /*
-| Self referencing creator.
-*/
-Label.prototype.creator =
-	Label;
-
-
-/*
 | Default margin for all labels.
 */
 Label.prototype.innerMargin =

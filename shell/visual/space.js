@@ -1334,7 +1334,7 @@ Space.prototype.dragStop =
 						),
 
 						resized =
-							action.transItem.creator.create(
+							Visual[ action.transItem.reflect ].create(
 								'inherit',
 									model,
 								'fontsize',
@@ -1342,7 +1342,7 @@ Space.prototype.dragStop =
 							),
 
 						label =
-							resized.creator.create(
+							Visual[ resized.reflect ].create(
 								'inherit',
 									resized,
 								'pnw',
@@ -1696,7 +1696,7 @@ Space.prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						model.creator.create(
+						Visual[ model.reflect ].create(
 							'inherit',
 								model,
 							'zone',
@@ -1718,7 +1718,7 @@ Space.prototype.dragMove =
 						);
 
 					resized =
-						action.transItem.creator.create(
+						Visual[ action.transItem.reflect ].create(
 							'inherit',
 								model,
 							'fontsize',
@@ -1726,7 +1726,7 @@ Space.prototype.dragMove =
 						);
 
 					transItem =
-						action.transItem.creator.create(
+						Visual[ action.transItem.reflect ].create(
 							'inherit',
 								resized,
 							'pnw',
@@ -1857,7 +1857,7 @@ Space.prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						origin.creator.create(
+						Visual[ origin.reflect ].create(
 							'inherit',
 								origin,
 							'zone',
@@ -1872,7 +1872,7 @@ Space.prototype.dragMove =
 				case 'pnw/fontsize' :
 
 					transItem =
-						origin.creator.create(
+						Visual[ origin.reflect ].create(
 							'inherit',
 								origin,
 							'pnw',
@@ -1912,7 +1912,7 @@ Space.prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						action.origin.creator.create(
+						Visual[ action.origin.reflect ].create(
 							'inherit',
 								origin,
 							'zone',
@@ -1970,7 +1970,7 @@ Space.prototype.dragMove =
 						);
 
 					resized =
-						action.origin.creator.create(
+						Visual[ action.origin.reflect ].create(
 							'inherit',
 								origin,
 							'fontsize',
@@ -1978,7 +1978,7 @@ Space.prototype.dragMove =
 						);
 
 					transItem =
-						resized.creator.create(
+						Visual[ resized.reflect ].create(
 							'inherit',
 								resized,
 							'fontsize',

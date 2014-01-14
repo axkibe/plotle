@@ -424,10 +424,10 @@ Portal.prototype.positioning =
 
 
 /*
-| Self referencing creator.
+| Reflection.
 */
-Portal.prototype.creator =
-	Portal;
+Portal.prototype.reflect =
+	'Portal';
 
 
 /*

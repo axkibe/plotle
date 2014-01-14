@@ -89,13 +89,6 @@ Jools.subclass(
 
 
 /*
-| Self referencing creator.
-*/
-Relation.prototype.creator =
-	Relation;
-
-
-/*
 | Reflection.
 */
 Relation.prototype.reflect =

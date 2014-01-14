@@ -486,16 +486,6 @@ Note.prototype.positioning =
 
 
 /*
-| Self referencing creator.
-|
-| FIXME: check if ".constructor" is supported by
-|        every JS implementation concerned about.
-*/
-Note.prototype.creator =
-	Note;
-
-
-/*
 | Sets the items position and size after an action.
 */
 Note.prototype.dragStop =
