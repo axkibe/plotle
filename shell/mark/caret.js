@@ -150,6 +150,13 @@ Jools.lazyFixate(
 
 
 /*
+| The content the mark puts into the clipboard.
+*/
+Caret.prototype.clipboard =
+	'';
+
+
+/*
 | Returns true if an entity of this mark
 | contains 'path'.
 */

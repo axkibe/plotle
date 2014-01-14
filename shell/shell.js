@@ -1023,6 +1023,47 @@ Shell.prototype.mousewheel =
 
 /*
 | Sets the user's mark.
+*/
+Shell.prototype.setMark =
+	function(
+		mark
+	)
+{
+	system.setInput( mark.clipboard );
+
+	this.$space =
+		Visual.Space.create(
+			'inherit',
+				this.$space,
+			'mark',
+				mark
+		);
+
+	this._$formJockey =
+		Forms.Jockey.create(
+			'inherit',
+				this._$formJockey,
+			'mark',
+				mark
+		);
+
+	this._$discJockey =
+		Discs.Jockey.create(
+			'inherit',
+				this._$discJockey,
+			'mark',
+				mark
+		);
+
+	this.redraw =
+		true;
+};
+
+
+/*
+| Sets the user's mark.
+|
+| TODO remove
 |
 | This can be
 |     the caret
@@ -1196,10 +1237,6 @@ Shell.prototype.userMark =
 						retainx
 				);
 
-			system.setInput( '' );
-
-			system.restartBlinker( );
-
 			break;
 
 		case 'range' :
@@ -1233,8 +1270,6 @@ Shell.prototype.userMark =
 						retainx
 				);
 
-			system.setInput( mark.innerText );
-
 			break;
 
 		case 'item' :
@@ -1262,33 +1297,7 @@ Shell.prototype.userMark =
 			);
 	}
 
-	this.$space =
-		Visual.Space.create(
-			'inherit',
-				this.$space,
-			'mark',
-				mark
-		);
-
-	this._$formJockey =
-		Forms.Jockey.create(
-			'inherit',
-				this._$formJockey,
-			'mark',
-				mark
-		);
-
-	this._$discJockey =
-		Discs.Jockey.create(
-			'inherit',
-				this._$discJockey,
-			'mark',
-				mark
-		);
-
-
-	this.redraw =
-		true;
+	this.setMark( mark );
 };
 
 

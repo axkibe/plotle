@@ -1036,10 +1036,7 @@ Para.prototype.specialKey =
 			item.sub.doc,
 
 		mark =
-			this.mark,
-
-		show =
-			false;
+			this.mark;
 
 	if( ctrl )
 	{
@@ -1087,9 +1084,6 @@ Para.prototype.specialKey =
 				mark =
 					shell.space.mark;
 
-				show =
-					true;
-
 				key =
 					null;
 
@@ -1101,9 +1095,6 @@ Para.prototype.specialKey =
 
 				mark =
 					shell.space.mark;
-
-				show =
-					true;
 
 				shell.peer.split(
 					this.textPath,
@@ -1301,7 +1292,7 @@ Para.prototype._keyBackspace =
 			1
 		);
 
-		return true;
+		return;
 	}
 
 	var
@@ -1318,11 +1309,7 @@ Para.prototype._keyBackspace =
 			ve.textPath,
 			ve.text.length
 		);
-
-		return true;
 	}
-
-	return false;
 };
 
 
@@ -1347,7 +1334,7 @@ Para.prototype._keyDel =
 			1
 		);
 
-		return true;
+		return;
 	}
 
 	var
@@ -1360,11 +1347,7 @@ Para.prototype._keyDel =
 			this.textPath,
 			this.text.length
 		);
-
-		return true;
 	}
-
-	return false;
 };
 
 
@@ -1408,8 +1391,7 @@ Para.prototype._keyDown =
 			bAt
 		);
 
-
-		return true;
+		return;
 	}
 
 	// goto next para
@@ -1433,8 +1415,6 @@ Para.prototype._keyDown =
 			bAt
 		);
 	}
-
-	return true;
 };
 
 
@@ -1457,8 +1437,6 @@ Para.prototype._keyEnd =
 		bPath,
 		bAt
 	);
-
-	return true;
 };
 
 
@@ -1479,8 +1457,6 @@ Para.prototype._keyEnter =
 		this.textPath,
 		at
 	);
-
-	return true;
 };
 
 
@@ -1559,8 +1535,6 @@ Para.prototype._keyPos1 =
 		bPath,
 		bAt
 	);
-
-	return true;
 };
 
 
@@ -1586,7 +1560,7 @@ Para.prototype._keyRight =
 			bAt
 		);
 
-		return true;
+		return;
 	}
 
 	var r =
@@ -1604,11 +1578,7 @@ Para.prototype._keyRight =
 			bPath,
 			bAt
 		);
-
-		return true;
 	}
-
-	return false;
 };
 
 
@@ -1652,7 +1622,7 @@ Para.prototype._keyUp =
 			bAt
 		);
 
-		return true;
+		return;
 	}
 
 	// goto prev para
@@ -1678,11 +1648,7 @@ Para.prototype._keyUp =
 			bPath,
 			bAt
 		);
-
-		return true;
 	}
-
-	return false;
 };
 
 

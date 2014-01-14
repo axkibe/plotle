@@ -271,11 +271,11 @@ Range.prototype.containsPath =
 
 
 /*
-| The text the selection selects.
+| The content the mark puts into the clipboard.
 */
 Jools.lazyFixate(
 	Range.prototype,
-	'innerText',
+	'clipboard',
 	function( )
 	{
 		var
@@ -299,7 +299,6 @@ Jools.lazyFixate(
 
 			backKey =
 				backPath.get( -2 );
-
 
 		if( frontPath.equals( backPath ) )
 		{
