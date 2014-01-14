@@ -12,6 +12,11 @@
 
 
 var
+	nullAttributes =
+		false;
+
+
+var
 	Jools =
 		require( '../shared/jools' );
 
@@ -421,6 +426,45 @@ generateConstructor =
 
 	if( aList )
 	{
+		if( !nullAttributes )
+		{
+			r.push(
+				'/**/if( CHECK )',
+				'/**/{'
+			);
+
+			for(
+				a = 0, aZ = aList.length;
+				a < aZ;
+				a++
+			)
+			{
+				aName =
+					aList[ a ];
+
+				r.push(
+					'/**/\tif( ' + aName + ' === undefined )',
+					'/**/\t{',
+					'/**/\t\tthrow new Error(',
+					'/**/\t\t\t\'undefined attribute ' + aName + '\'',
+					'/**/\t\t);',
+					'/**/\t}'
+				);
+
+				if( a + 1 < aZ )
+				{
+					r.push(
+						'/**/'
+					);
+				}
+			}
+
+			r.push(
+				'/**/}',
+				''
+			);
+		}
+
 		for(
 			a = 0, aZ = aList.length;
 			a < aZ;
@@ -566,7 +610,7 @@ generateCreator =
 
 			r.push(
 				'\t\t' + aName + ' =',
-				'\t\t\tnull' + ( a + 1 >= aListPlus.length ? ';' : ',' ),
+				'\t\t\tundefined' + ( a + 1 >= aListPlus.length ? ';' : ',' ),
 				''
 			);
 		}
@@ -631,7 +675,7 @@ generateCreator =
 				aList[ a ];
 
 			r.push(
-				'\t\tif( ' + aName + ' === null )',
+				'\t\tif( ' + aName + ' === undefined )',
 				'\t\t{',
 				'\t\t\t' + aName + ' =',
 				'\t\t\t\tinherit.' + aName + ';',

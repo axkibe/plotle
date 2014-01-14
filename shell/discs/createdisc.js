@@ -441,7 +441,13 @@ CreateDisc.prototype.pushButton =
 			shell.setAction(
 				Action.CreateGeneric.create(
 					'itemType',
-						'Label'
+						'Label',
+					'model',
+						null,
+					'start',
+						null,
+					'transItem',
+						null
 				)
 			);
 
@@ -452,7 +458,13 @@ CreateDisc.prototype.pushButton =
 			shell.setAction(
 				Action.CreateGeneric.create(
 					'itemType',
-						'Note'
+						'Note',
+					'model',
+						null,
+					'start',
+						null,
+					'transItem',
+						null
 				)
 			);
 
@@ -463,7 +475,13 @@ CreateDisc.prototype.pushButton =
 			shell.setAction(
 				Action.CreateGeneric.create(
 					'itemType',
-						'Portal'
+						'Portal',
+					'model',
+						null,
+					'start',
+						null,
+					'transItem',
+						null
 				)
 			);
 

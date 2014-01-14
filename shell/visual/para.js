@@ -991,12 +991,8 @@ Para.prototype.input =
 						caretAt + line.length
 					);
 
-			console.log( 'P0', path._path );
-
 			doc =
 				r.tree.getPath( path.chop( ).limit( 2 ) );
-
-			console.log( 'D', doc );
 
 			paraKey =
 				doc.ranks[
@@ -1005,8 +1001,6 @@ Para.prototype.input =
 
 			path =
 				path.limit( 3 ).append( paraKey );
-
-			console.log( 'P1', path._path );
 
 			textPath =
 				path.append( 'text' );
@@ -1050,18 +1044,19 @@ Para.prototype.specialKey =
 					v1 =
 						doc.atRank( doc.tree.length - 1 );
 
-				shell.userMark(
-					'set',
-					'type',
-						'range',
-					'bPath',
-						v0.textPath,
-					'bAt',
-						0,
-					'ePath',
-						v1.textPath,
-					'eAt',
-						v1.text.length
+				shell.setMark(
+					Mark.Range.create(
+						'docTree',
+							doc.tree,
+						'bPath',
+							v0.textPath,
+						'bAt',
+							0,
+						'ePath',
+							v1.textPath,
+						'eAt',
+							v1.text.length
+					)
 				);
 
 				shell.redraw =
@@ -1665,32 +1660,16 @@ Para.prototype._setMark =
 {
 	if( !bPath )
 	{
-		if( retainx )
-		{
-			return shell.userMark(
-				'set',
-				'type',
-					'caret',
+		return shell.setMark(
+			Mark.Caret.create(
 				'path',
 					this.textPath,
 				'at',
 					at,
 				'retainx',
 					retainx
-			);
-		}
-		else
-		{
-			return shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path',
-					this.textPath,
-				'at',
-					at
-			);
-		}
+			)
+		);
 	}
 	else
 	{

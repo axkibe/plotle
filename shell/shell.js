@@ -1278,7 +1278,11 @@ Shell.prototype.userMark =
 			mark =
 				Mark.Caret.create(
 					'path',
-						path
+						path,
+					'at',
+						null, // TODO
+					'retainx',
+						null // TODO
 				);
 
 			break;
