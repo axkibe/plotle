@@ -976,7 +976,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/mark/vacant.js',
-					'fb',
+					'fbj',
 
 				'shell/mark/caret.js',
 					'fbj',
