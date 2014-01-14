@@ -1181,6 +1181,8 @@ Shell.prototype.userMark =
 					retainx
 				);
 
+			system.setInput( '' );
+
 			system.restartBlinker( );
 
 			break;
@@ -1210,9 +1212,7 @@ Shell.prototype.userMark =
 					retainx
 				);
 
-			system.setInput(
-				mark.innerText( )
-			);
+			system.setInput( mark.innerText );
 
 			break;
 

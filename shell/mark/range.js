@@ -295,80 +295,81 @@ Range.prototype.containsPath =
 
 /*
 | The text the selection selects.
-|
-| TODO lazy fixate this
 */
-Range.prototype.innerText =
+Jools.lazyFixate(
+	Range.prototype,
+	'innerText',
 	function( )
-{
-	var
-		frontPath =
-			this.frontPath,
-
-		frontAt =
-			this.frontAt,
-
-		backPath =
-			this.backPath,
-
-		backAt =
-			this.backAt,
-
-		tree =
-			this.docTree,
-
-		frontKey =
-			frontPath.get( -2 ),
-
-		backKey =
-			backPath.get( -2 );
-
-
-	if( frontPath.equals( backPath ) )
 	{
 		var
-			text =
-				tree.twig[ frontKey ].twig.text;
+			frontPath =
+				this.frontPath,
 
-		return text.substring(
-			frontAt,
-			backAt
-		);
-	}
+			frontAt =
+				this.frontAt,
 
-	var
-		frontText =
-			tree.twig[ frontKey ].twig.text,
+			backPath =
+				this.backPath,
 
-		backText =
-			tree.twig[ backKey ].twig.text,
+			backAt =
+				this.backAt,
 
-		buf = [
-			frontText.substring(
+			tree =
+				this.docTree,
+
+			frontKey =
+				frontPath.get( -2 ),
+
+			backKey =
+				backPath.get( -2 );
+
+
+		if( frontPath.equals( backPath ) )
+		{
+			var
+				text =
+					tree.twig[ frontKey ].twig.text;
+
+			return text.substring(
 				frontAt,
-				frontText.length
-			)
-		];
+				backAt
+			);
+		}
 
-	for(
-		var r = tree.rankOf( frontKey ), rZ = tree.rankOf( backKey );
-		r < rZ - 1;
-		r++
-	)
-	{
+		var
+			frontText =
+				tree.twig[ frontKey ].twig.text,
+
+			backText =
+				tree.twig[ backKey ].twig.text,
+
+			buf = [
+				frontText.substring(
+					frontAt,
+					frontText.length
+				)
+			];
+
+		for(
+			var r = tree.rankOf( frontKey ), rZ = tree.rankOf( backKey );
+			r < rZ - 1;
+			r++
+		)
+		{
+			buf.push(
+				'\n',
+				tree.twig[ tree.ranks[ r ] ].twig.text
+			);
+		}
+
 		buf.push(
 			'\n',
-			tree.twig[ tree.ranks[ r ] ].twig.text
+			backText.substring( 0, backAt )
 		);
+
+		return buf.join( '' );
 	}
-
-	buf.push(
-		'\n',
-		backText.substring( 0, backAt )
-	);
-
-	return buf.join( '' );
-};
+);
 
 
 /*

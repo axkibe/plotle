@@ -671,7 +671,8 @@ Doc.prototype.getParaAtPoint =
 */
 Doc.prototype.input =
 	function(
-		text
+		text,
+		item
 	)
 {
 	if( !this.mark.hasCaret )
@@ -687,7 +688,8 @@ Doc.prototype.input =
 		this
 			.sub[ path.get( 3 ) ]
 			.input(
-				text
+				text,
+				item
 			)
 	);
 };
@@ -699,6 +701,7 @@ Doc.prototype.input =
 Doc.prototype.specialKey =
 	function(
 		key,
+		item,
 		shift,
 		ctrl
 	)
@@ -717,6 +720,7 @@ Doc.prototype.specialKey =
 			.sub[ path.get( 3 ) ]
 			.specialKey(
 				key,
+				item,
 				shift,
 				ctrl
 			)

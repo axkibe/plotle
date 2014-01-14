@@ -1087,7 +1087,7 @@ IFace.prototype.alter =
 
 	this._sendChanges( );
 
-    if( this._updateRCV )
+	if( this._updateRCV )
 	{
 		this._updateRCV.update(
 			result.tree,
@@ -1095,7 +1095,7 @@ IFace.prototype.alter =
 		);
 	}
 
-    return result;
+	return result;
 };
 
 

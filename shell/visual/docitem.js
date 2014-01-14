@@ -223,7 +223,12 @@ DocItem.prototype.input =
 		text
 	)
 {
-	return this.sub.doc.input( text );
+	return (
+		this.sub.doc.input(
+			text,
+			this
+		)
+	);
 };
 
 
@@ -239,6 +244,7 @@ DocItem.prototype.specialKey =
 {
 	return this.sub.doc.specialKey(
 		key,
+		this,
 		shift,
 		ctrl
 	);

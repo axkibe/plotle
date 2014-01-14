@@ -948,24 +948,28 @@ Para.prototype.getPointOffset =
 */
 Para.prototype.input =
 	function(
-		text
+		text,
+		item
 	)
 {
 	var
 		reg  =
 			/([^\n]+)(\n?)/g,
 
-		para =
-			this,
+		path =
+			this.path,
 
-		item =
-			shell.space.getSub(
-				para.path,
-				'Item'
-			),
+		paraKey =
+			this.key,
+
+		textPath =
+			this.textPath,
 
 		doc =
-			item.sub.doc;
+			item.sub.doc,
+
+		caretAt =
+			this.mark.caretAt;
 
 	for(
 		var rx = reg.exec( text );
@@ -978,8 +982,8 @@ Para.prototype.input =
 				rx[ 1 ];
 
 		shell.peer.insertText(
-			para.textPath,
-			shell.space.mark.caretAt,
+			textPath,
+			caretAt,
 			line
 		);
 
@@ -987,24 +991,35 @@ Para.prototype.input =
 		{
 			// FIXME, somehow use changes
 			// over return values
-			shell.peer.split(
-				para.textPath,
-				shell.space.mark.caretAt
-			);
+			var
+				r =
+					shell.peer.split(
+						textPath,
+						caretAt + line.length
+					);
 
-			item =
-				shell.space.getSub(
-					para.path,
-					'Item'
-				);
+			console.log( 'P0', path._path );
 
 			doc =
-				item.sub.doc;
+				r.tree.getPath( path.chop( ).limit( 2 ) );
 
-			para =
-				doc.atRank(
-					doc.tree.rankOf( para.key ) + 1
-				);
+			console.log( 'D', doc );
+
+			paraKey =
+				doc.ranks[
+					doc.rankOf( paraKey ) + 1
+				];
+
+			path =
+				path.limit( 3 ).append( paraKey );
+
+			console.log( 'P1', path._path );
+
+			textPath =
+				path.append( 'text' );
+
+			caretAt =
+				0;
 		}
 	}
 
@@ -1018,17 +1033,12 @@ Para.prototype.input =
 Para.prototype.specialKey =
 	function(
 		key,
+		item,
 		shift,
 		ctrl
 	)
 {
 	var
-		item =
-			shell.space.getSub(
-				this.path,
-				'Item'
-			),
-
 		doc =
 			item.sub.doc,
 
@@ -1190,17 +1200,14 @@ Para.prototype.specialKey =
 
 	if( keyHandler )
 	{
-		show =
-			this[ keyHandler ](
-				item,
-				doc,
-				at,
-				retainx,
-				bPath,
-				bAt
-			)
-			||
-			show;
+		this[ keyHandler ](
+			item,
+			doc,
+			at,
+			retainx,
+			bPath,
+			bAt
+		);
 	}
 	else
 	{
@@ -1220,19 +1227,10 @@ Para.prototype.specialKey =
 		}
 	}
 
-	if( show )
-	{
-		item =
-			shell.space.getSub(
-				this.path,
-				'Item'
-			);
+	item.scrollMarkIntoView( );
 
-		item.scrollMarkIntoView( );
-
-		shell.redraw =
-			true;
-	}
+	shell.redraw =
+		true;
 };
 
 
@@ -1460,11 +1458,6 @@ Para.prototype._keyEnd =
 		bAt
 	)
 {
-	if( at === this.text.length )
-	{
-		return false;
-	}
-
 	this._setMark(
 		this.text.length,
 		null,
@@ -1520,7 +1513,7 @@ Para.prototype._keyLeft =
 			bAt
 		);
 
-		return true;
+		return;
 	}
 
 	var
@@ -1540,10 +1533,17 @@ Para.prototype._keyLeft =
 			bAt
 		);
 
-		return true;
+		return;
 	}
-
-	return false;
+	else
+	{
+		this._setMark(
+			at,
+			null,
+			bPath,
+			bAt
+		);
+	}
 };
 
 
@@ -1560,11 +1560,6 @@ Para.prototype._keyPos1 =
 		bAt
 	)
 {
-	if( at === 0 )
-	{
-		return false;
-	}
-
 	this._setMark(
 		0,
 		null,
