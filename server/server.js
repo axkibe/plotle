@@ -987,6 +987,9 @@ Server.prototype.prepareResources =
 				'shell/mark/vacant.js',
 					'fbj',
 
+				'shell/mark/widget.js',
+					'fbj',
+
 				'shell/action/action.js',
 					'fbj',
 

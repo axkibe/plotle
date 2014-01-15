@@ -140,7 +140,7 @@ Forms.Form =
 
 		if( Proto.prototype.focusable )
 		{
-			if( !this.mark.hasCaret )
+			if( this.mark.widgetPath.isEmpty )
 			{
 				focusAccent =
 					false;
@@ -148,7 +148,7 @@ Forms.Form =
 			else
 			{
 				focusAccent =
-					this.mark.caretPath.get( 2 ) === name;
+					this.mark.widgetPath.get( 2 ) === name;
 			}
 		}
 
@@ -346,7 +346,7 @@ Form.concernsMark =
 {
 	var
 		mip =
-			mark.itemPath; // TODO widgetPath
+			mark.widgetPath;
 
 	if(
 		mip
@@ -414,27 +414,18 @@ Form.prototype.getFocusedItem =
 	function( )
 {
 	var
-		mark =
-			this.mark;
-
-	if( !mark.hasCaret )
-	{
-		return null;
-	}
-
-	var
 		path =
-			mark.caretPath;
+			this.mark.widgetPath;
 
-	if( CHECK )
-	{
-		if( path.get( 1 ) !== this.reflect )
-		{
-			throw new Error(
-				'the mark is not on this form!'
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( path.get( 1 ) !== this.reflect )
+/**/	{
+/**/		throw new Error(
+/**/			'the mark is not on this form!'
+/**/		);
+/**/	}
+/**/}
 
 	return this.sub[ path.get( 2 ) ] || null;
 };
@@ -652,10 +643,9 @@ Form.prototype.cycleFocus =
 			this.tree,
 
 		path =
-			this.mark.caretPath;
+			this.mark.widgetPath;
 
-	// TODO ugly
-	if( !path )
+	if( path.isEmpty )
 	{
 		return;
 	}
@@ -694,24 +684,22 @@ Form.prototype.cycleFocus =
 		{
 			if( ve.caretable )
 			{
-				shell.userMark(
-					'set',
-					'type',
-						'caret',
-					'path',
-						ve.path,
-					'at',
-						0
+				shell.setMark(
+					Mark.Caret.create(
+						'path',
+							ve.path,
+						'at',
+							0
+					)
 				);
 			}
 			else
 			{
-				shell.userMark(
-					'set',
-					'type',
-						'item',
-					'path',
-						ve.path
+				shell.setMark(
+					Mark.Widget.create(
+						'path',
+							ve.path
+					)
 				);
 			}
 

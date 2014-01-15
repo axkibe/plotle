@@ -1451,21 +1451,20 @@ Portal.prototype._keyLeft =
 				break;
 		}
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				// FIXME rather user this.path
-				mark.caretPath.set(
-					mark.caretPath.length - 1,
-					cycle
-				),
-			'at',
-				cycle === 'moveToButton' ?
-					0
-					:
-					this.tree.twig[ cycle ].length
+		shell.setMark(
+			Mark.Caret.create(
+				'path',
+					// FIXME rather user this.path
+					mark.caretPath.set(
+						mark.caretPath.length - 1,
+						cycle
+					),
+				'at',
+					cycle === 'moveToButton' ?
+						0
+						:
+						this.tree.twig[ cycle ].length
+			)
 		);
 
 		shell.redraw =
@@ -1474,14 +1473,13 @@ Portal.prototype._keyLeft =
 		return;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath,
-		'at',
-			mark.caretAt - 1
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				mark.caretPath,
+			'at',
+				mark.caretAt - 1
+		)
 	);
 
 	shell.redraw =
@@ -1536,17 +1534,16 @@ Portal.prototype._keyTab =
 			break;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath.set(
-				mark.caretPath.length - 1,
-				cycle
-			),
-		'at',
-			0
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				mark.caretPath.set(
+					mark.caretPath.length - 1,
+					cycle
+				),
+			'at',
+				0
+		)
 	);
 
 	shell.redraw =
@@ -1580,19 +1577,16 @@ Portal.prototype._keyUp =
 	{
 		case 'spaceUser' :
 
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'section',
-					'space',
-				'path', // FIXME this.paths
-					mark.caretPath.set(
-						mark.caretPath.length - 1,
-						'moveToButton'
-					),
-				'at',
-					0
+			shell.setMark(
+				Mark.Caret.create(
+					'path', // FIXME this.paths
+						mark.caretPath.set(
+							mark.caretPath.length - 1,
+							'moveToButton'
+						),
+					'at',
+						0
+				)
 			);
 
 			break;
@@ -1605,38 +1599,36 @@ Portal.prototype._keyUp =
 					mark.caretAt
 				);
 
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path', // FIXME this.paths
-					mark.caretPath.set(
-						mark.caretPath.length - 1,
-						'spaceUser'
-					),
-				'at',
-					this._getOffsetAt(
-						'spaceUser',
-						cpos.x +
-							this._$spaceFields.spaceTag.pnw.x
-					)
+			shell.setMark(
+				Mark.Caret.create(
+					'path', // FIXME this.paths
+						mark.caretPath.set(
+							mark.caretPath.length - 1,
+							'spaceUser'
+						),
+					'at',
+						this._getOffsetAt(
+							'spaceUser',
+							cpos.x +
+								this._$spaceFields.spaceTag.pnw.x
+						)
+				)
 			);
 
 			break;
 
 		case 'moveToButton' :
 
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path', // FIXME this.paths
-					mark.caretPath.set(
-						mark.caretPath.length - 1,
-						'spaceTag'
-					),
-				'at',
-					0
+			shell.setMark(
+				Mark.Caret.create(
+					'path', // FIXME this.paths
+						mark.caretPath.set(
+							mark.caretPath.length - 1,
+							'spaceTag'
+						),
+					'at',
+						0
+				)
 			);
 
 			break;
@@ -1703,17 +1695,16 @@ Portal.prototype._keyRight =
 				break;
 		}
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path', // FIXME this.paths
-				mark.caretPath.set(
-					mark.caretPath.length - 1,
-					cycle
-				),
-			'at',
-				0
+		shell.setMark(
+			Mark.Caret.create(
+				'path', // FIXME this.paths
+					mark.caretPath.set(
+						mark.caretPath.length - 1,
+						cycle
+					),
+				'at',
+					0
+			)
 		);
 
 		shell.redraw =
@@ -1722,14 +1713,13 @@ Portal.prototype._keyRight =
 		return;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath,
-		'at',
-			mark.caretAt + 1
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				mark.caretPath,
+			'at',
+				mark.caretAt + 1
+		)
 	);
 
 	shell.redraw =
@@ -1816,14 +1806,13 @@ Portal.prototype._keyEnd =
 		return;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath,
-		'at',
-			value.length
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				mark.caretPath,
+			'at',
+				value.length
+		)
 	);
 
 	shell.redraw =
@@ -1872,17 +1861,16 @@ Portal.prototype._keyEnter =
 
 	if( cycle )
 	{
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				mark.caretPath.set(
-					mark.caretPath.length - 1,
-					cycle
-				),
-			'at',
-				0
+		shell.setMark(
+			Mark.Caret.create(
+				'path',
+					mark.caretPath.set(
+						mark.caretPath.length - 1,
+						cycle
+					),
+				'at',
+					0
+			)
 		);
 	}
 	else
@@ -2073,23 +2061,13 @@ Portal.prototype._prepareField =
 Portal.prototype._keyPos1 =
 	function( )
 {
-	var
-		mark =
-			this.mark;
-
-	if( mark.caretAt <= 0 )
-	{
-		return;
-	}
-
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath,
-		'at',
-			0
+	shell.setMark(
+		Mark.Caret.create(
+			'inherit',
+				this.mark,
+			'at',
+				0
+		)
 	);
 
 	shell.redraw =

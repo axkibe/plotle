@@ -68,13 +68,23 @@ Jools.lazyFixate(
 	}
 );
 
+/*
+| Returns the widgets path.
+*/
+Jools.lazyFixate(
+	Vacant.prototype,
+	'widgetPath',
+	function( )
+	{
+		return  Path.empty;
+	}
+);
 
 /*
 | The content the mark puts into the clipboard.
 */
 Vacant.prototype.clipboard =
 	'';
-
 
 /*
 | Returns true if an entity of this mark

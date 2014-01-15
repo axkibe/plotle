@@ -24,6 +24,7 @@ var
 	Euclid,
 	HoverReply,
 	Jools,
+	Mark,
 	shell,
 	shellverse,
 	theme,
@@ -949,14 +950,13 @@ Input.prototype.input =
 		)
 	);
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath,
-		'at',
-			at + text.length
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				mark.caretPath,
+			'at',
+				at + text.length
+		)
 	);
 };
 
@@ -989,14 +989,13 @@ Input.prototype.keyBackspace =
 			)
 	);
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath,
-		'at',
-			at - 1
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				mark.caretPath,
+			'at',
+				at - 1
+		)
 	);
 };
 
@@ -1072,14 +1071,13 @@ Input.prototype.keyEnd =
 		return;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath,
-		'at',
-			this.value.length
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				mark.caretPath,
+			'at',
+				this.value.length
+		)
 	);
 };
 
@@ -1100,14 +1098,13 @@ Input.prototype.keyLeft =
 	}
 
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath,
-		'at',
-			mark.caretAt - 1
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				mark.caretPath,
+			'at',
+				mark.caretAt - 1
+		)
 	);
 };
 
@@ -1127,14 +1124,13 @@ Input.prototype.keyPos1 =
 		return;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath,
-		'at',
-			0
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				mark.caretPath,
+			'at',
+				0
+		)
 	);
 };
 
@@ -1154,14 +1150,13 @@ Input.prototype.keyRight =
 		return;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			mark.caretPath,
-		'at',
-			mark.caretAt + 1
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				mark.caretPath,
+			'at',
+				mark.caretAt + 1
+		)
 	);
 };
 
@@ -1344,14 +1339,13 @@ Input.prototype.pointingStart =
 		return null;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			this.path,
-		'at',
-			this.getOffsetAt( pp )
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				this.path,
+			'at',
+				this.getOffsetAt( pp )
+		)
 	);
 
 	return false;

@@ -22,6 +22,7 @@ Visual =
 */
 var
 	Jools,
+	Mark,
 	shell;
 
 
@@ -185,14 +186,13 @@ DocItem.prototype.click =
 					pi.sub( ppnw )
 				);
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				para.textPath,
-			'at',
-				at
+		shell.setMark(
+			Mark.Caret.create(
+				'path',
+					para.textPath,
+				'at',
+					at
+			)
 		);
 	}
 	else
@@ -200,14 +200,13 @@ DocItem.prototype.click =
 		para =
 			doc.atRank( doc.ranks.length - 1 );
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				para.textPath,
-			'at',
-				para.text.length
+		shell.setMark(
+			Mark.Caret.create(
+				'path',
+					para.textPath,
+				'at',
+					para.text.length
+			)
 		);
 	}
 

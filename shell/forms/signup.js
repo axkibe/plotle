@@ -22,6 +22,7 @@ Forms =
 var
 	Design,
 	Jools,
+	Mark,
 	Path,
 	shell,
 	shellverse,
@@ -181,14 +182,13 @@ SignUp.prototype.signup =
 			'Username too short, min. 4 characters'
 		);
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				sub.userInput.path,
-			'at',
-				user.length
+		shell.setMark(
+			Mark.Caret.create(
+				'path',
+					sub.userInput.path,
+				'at',
+					user.length
+			)
 		);
 
 		return;
@@ -201,14 +201,13 @@ SignUp.prototype.signup =
 			'Username must not start with "visit"'
 		);
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				sub.userInput.path,
-			'at',
-				0
+		shell.setMark(
+			Mark.Caret.create(
+				'path',
+					sub.userInput.path,
+				'at',
+					0
+			)
 		);
 
 		return;
@@ -221,14 +220,13 @@ SignUp.prototype.signup =
 			'Password too short, min. 5 characters'
 		);
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				sub.passwordInput.path,
-			'at',
-				pass.length
+		shell.setMark(
+			Mark.Caret.create(
+				'path',
+					sub.passwordInput.path,
+				'at',
+					pass.length
+			)
 		);
 
 		return;
@@ -241,14 +239,13 @@ SignUp.prototype.signup =
 			'Passwords do not match'
 		);
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				sub.password2Input.path,
-			'at',
-				pass2.length
+		shell.setMark(
+			Mark.Caret.create(
+				'path',
+					sub.password2Input.path,
+				'at',
+					pass2.length
+			)
 		);
 
 		return;
@@ -287,14 +284,13 @@ SignUp.prototype.onRegister =
 
 		if( res.message.search( /Username/ ) >= 0 )
 		{
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path',
-					sub.userInput.path,
-				'at',
-					sub.userInput.value.length
+			shell.setMark(
+				Mark.Caret.create(
+					'path',
+						sub.userInput.path,
+					'at',
+						sub.userInput.value.length
+				)
 			);
 		}
 
@@ -347,10 +343,8 @@ SignUp.prototype.clear =
 		)
 	);
 
-	shell.userMark(
-		'set',
-		'type',
-			'vacant'
+	shell.setMark(
+		Mark.Vacant.create( )
 	);
 };
 

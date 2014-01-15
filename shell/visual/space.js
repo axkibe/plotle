@@ -1207,10 +1207,8 @@ Space.prototype.click =
 
 	// otherwise ...
 
-	shell.userMark(
-		'set',
-		'type',
-			'vacant'
+	shell.setMark(
+		Mark.Vacant.create( )
 	);
 
 	shell.redraw =
@@ -1285,14 +1283,17 @@ Space.prototype.dragStop =
 					key =
 						result.chgX.trg.path.get( -1 );
 
-					shell.userMark(
-						'set',
-						'type',
-							'caret',
-						'path',
-							shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
-						'at',
-							0
+					// TODO why does this reference shell.sub
+					shell.setMark(
+						Mark.Caret.create(
+							'path',
+								shell.
+									space.sub[ key ].
+									sub.doc.
+									atRank( 0 ).textPath,
+							'at',
+								0
+						)
 					);
 
 					shell.redraw =
@@ -1370,14 +1371,15 @@ Space.prototype.dragStop =
 					key =
 						result.chgX.trg.path.get( -1 );
 
-					shell.userMark(
-						'set',
-						'type',
-							'caret',
-						'path',
-							shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
-						'at',
-							0
+					shell.setMark(
+						Mark.Caret.create(
+							'path',
+								shell.space
+									.sub[ key ]
+									.sub.doc.atRank( 0 ).textPath,
+							'at',
+								0
+						)
 					);
 
 					shell.redraw =
@@ -1419,14 +1421,15 @@ Space.prototype.dragStop =
 					key =
 						result.chgX.trg.path.get( -1 );
 
-					shell.userMark(
-						'set',
-						'type',
-							'caret',
-						'path',
-							shell.space.sub[ key ].subPaths.spaceUser,
-						'at',
-							0
+					shell.setMark(
+						Mark.Caret.create(
+							'path',
+								shell.space
+									.sub[ key ]
+									.subPaths.spaceUser,
+							'at',
+								0
+						)
 					);
 
 					shell.redraw =

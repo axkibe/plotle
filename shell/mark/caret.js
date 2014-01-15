@@ -115,12 +115,38 @@ Jools.lazyFixate(
 	'itemPath',
 	function( )
 	{
-		if( this.path.length < 2 )
+		if(
+			this.path.length < 2
+			||
+			this.path.get( 0 ) !== 'space'
+		)
 		{
 			return Path.empty;
 		}
 
 		return this.path.limit( 2 );
+	}
+);
+
+
+/*
+| Returns the items path.
+*/
+Jools.lazyFixate(
+	Caret.prototype,
+	'widgetPath',
+	function( )
+	{
+		if(
+			this.path.length < 3
+			||
+			this.path.get( 0 ) !== 'forms'
+		)
+		{
+			return Path.empty;
+		}
+
+		return this.path.limit( 3 );
 	}
 );
 

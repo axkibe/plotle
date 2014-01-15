@@ -59,10 +59,8 @@ Visual.Item =
 
 	this.$fabric =
 		null;
-
-	this.$handles =
-		{ };
 };
+
 
 Jools.subclass(
 	Item,
@@ -119,7 +117,7 @@ Item.prototype.checkHandles =
 {
 	var
 		h =
-			this.planHandles( ),
+			this._handles,
 
 		f =
 			shell.fabric,
@@ -171,202 +169,176 @@ Item.prototype.checkHandles =
 /*
 | Creates the handle object to plan where to sketch the handles to
 */
-Item.prototype.planHandles =
+Jools.lazyFixate(
+	Item.prototype,
+	'_handles',
 	function( )
-{
-	var
-		ha =
-			this.handles,
-
-		zone =
-			this.zone,
-
-		h =
-			this.$handles;
-
-	if(
-		h.zone && zone.equals( h.zone )
-	)
 	{
-		return h;
-	}
+		var
+			ha =
+				this.handles,
 
-	var
-		wx =
-			zone.pnw.x,
+			zone =
+				this.zone,
 
-		ny =
-			zone.pnw.y,
+			wx =
+				zone.pnw.x,
 
-		ex =
-			zone.pse.x,
+			ny =
+				zone.pnw.y,
 
-		sy =
-			zone.pse.y,
+			ex =
+				zone.pse.x,
 
-		mx =
-			Jools.half( wx + ex ),
+			sy =
+				zone.pse.y,
 
-		my =
-			Jools.half( ny + sy ),
+			mx =
+				Jools.half( wx + ex ),
 
-		dcx =
-			theme.handle.cdistance,
+			my =
+				Jools.half( ny + sy ),
 
-		dcy =
-			theme.handle.cdistance,
+			dcx =
+				theme.handle.cdistance,
 
-		dex =
-			theme.handle.edistance,
+			dcy =
+				theme.handle.cdistance,
 
-		dey =
-			theme.handle.edistance,
+			dex =
+				theme.handle.edistance,
 
-		a =
-			Math.min(
-				Math.round( ( zone.width  + 2 * dcx ) / 6 ),
-				theme.handle.maxSize
-			),
+			dey =
+				theme.handle.edistance,
 
-		b =
-			Math.min(
-				Math.round( ( zone.height + 2 * dcy ) / 6 ),
-				theme.handle.maxSize
-			),
+			a =
+				Math.min(
+					Math.round( ( zone.width  + 2 * dcx ) / 6 ),
+					theme.handle.maxSize
+				),
 
-		a2 =
-			2 * a,
+			b =
+				Math.min(
+					Math.round( ( zone.height + 2 * dcy ) / 6 ),
+					theme.handle.maxSize
+				),
 
-		b2 =
-			2 * b;
+			a2 =
+				2 * a,
 
-	if( dcx > a )
-	{
-		dex -=
-			Jools.half( dcx - a );
+			b2 =
+				2 * b;
 
-		dcx =
-			a;
-	}
-
-	if( dcy > b )
-	{
-		dey -=
-			Jools.half( dcy - b );
-
-		dcy =
-			b;
-	}
-
-	h =
-	this.$handles =
+		if( dcx > a )
 		{
-			// ellipse bezier height
-			bb :
-				Math.round( b / 0.75 ),
+			dex -=
+				Jools.half( dcx - a );
 
-			zone :
-				zone,
+			dcx =
+				a;
+		}
 
-			nw :
-				ha.nw &&
-				Euclid.Rect.renew(
-					wx - dcx,
-					ny - dcy,
+		if( dcy > b )
+		{
+			dey -=
+				Jools.half( dcy - b );
 
-					wx - dcx + a2,
-					ny - dcy + b2,
+			dcy =
+				b;
+		}
 
-					h.nw
-				),
+		return Jools.immute(
+			{
+				// ellipse bezier height
+				bb :
+					Math.round( b / 0.75 ),
 
-			n :
-				ha.n &&
-				Euclid.Rect.renew(
-					mx - a,
-					ny - dey,
+				zone :
+					zone,
 
-					mx + a,
-					ny - dey + b2,
+				nw :
+					ha.nw &&
+					Euclid.Rect.renew(
+						wx - dcx,
+						ny - dcy,
 
-					h.n
-				),
+						wx - dcx + a2,
+						ny - dcy + b2
+					),
 
-			ne :
-				ha.ne &&
-				Euclid.Rect.renew(
-					ex + dcx - a2,
-					ny - dcy,
+				n :
+					ha.n &&
+					Euclid.Rect.renew(
+						mx - a,
+						ny - dey,
 
-					ex + dex,
-					ny - dcy + b2,
+						mx + a,
+						ny - dey + b2
+					),
 
-					h.ne
-				),
+				ne :
+					ha.ne &&
+					Euclid.Rect.renew(
+						ex + dcx - a2,
+						ny - dcy,
 
-			e :
-				ha.e &&
-				Euclid.Rect.renew(
-					ex + dex - a2,
-					my - b,
+						ex + dex,
+						ny - dcy + b2
+					),
 
-					ex + dex,
-					my + b,
+				e :
+					ha.e &&
+					Euclid.Rect.renew(
+						ex + dex - a2,
+						my - b,
 
-					h.e
-				),
+						ex + dex,
+						my + b
+					),
 
-			se :
-				ha.se &&
-				Euclid.Rect.renew(
-					ex + dcx - a2,
-					sy + dcy - b2,
+				se :
+					ha.se &&
+					Euclid.Rect.renew(
+						ex + dcx - a2,
+						sy + dcy - b2,
 
-					ex + dcx,
-					sy + dcx,
+						ex + dcx,
+						sy + dcx
+					),
 
-					h.se
-				),
+				s :
+					ha.s &&
+					Euclid.Rect.renew(
+						mx - a,
+						sy + dey -b2,
 
-			s :
-				ha.s &&
-				Euclid.Rect.renew(
-					mx - a,
-					sy + dey -b2,
+						mx + a,
+						sy + dey
+					),
 
-					mx + a,
-					sy + dey,
+				sw :
+					ha.sw &&
+					Euclid.Rect.renew(
+						wx - dcx,
+						sy + dcy - b2,
 
-					h.s
-				),
+						wx - dcx + a2,
+						sy + dcy
+					),
 
-			sw :
-				ha.sw &&
-				Euclid.Rect.renew(
-					wx - dcx,
-					sy + dcy - b2,
+				w :
+					ha.w &&
+					Euclid.Rect.renew(
+						wx - dex,
+						my - b,
 
-					wx - dcx + a2,
-					sy + dcy,
-
-					h.sw
-				),
-
-			w :
-				ha.w &&
-				Euclid.Rect.renew(
-					wx - dex,
-					my - b,
-
-					wx - dex + a2,
-					my + b,
-
-					h.w
-				)
-		};
-
-	return h;
-};
+						wx - dex + a2,
+						my + b
+					)
+			}
+		);
+	}
+);
 
 
 /*
@@ -387,7 +359,7 @@ Item.prototype.sketchAllHandles =
 
 	var
 		h =
-			this.planHandles( ),
+			this._handles,
 
 		d8cwcf =
 			Euclid.Compass.dir8CWCF;
@@ -441,7 +413,7 @@ Item.prototype.sketchHandle =
 	var
 		bb =
 			view.scale(
-				this.$handles.bb
+				this._handles.bb
 			),
 
 		w =

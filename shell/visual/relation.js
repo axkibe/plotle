@@ -21,6 +21,7 @@ Visual =
 var
 	Euclid,
 	Jools,
+	Mark,
 	shell,
 	theme;
 
@@ -422,14 +423,13 @@ Relation.spawn =
 			result.chgX.trg.path.get( -1 );
 
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'path',
-			shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
-		'at',
-			0
+	shell.setMark(
+		Mark.Caret.create(
+			'path',
+				shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
+			'at',
+				0
+		)
 	);
 };
 

@@ -85,6 +85,20 @@ Jools.lazyFixate(
 
 
 /*
+| Returns the widgets path.
+*/
+Jools.lazyFixate(
+	Item.prototype,
+	'widgetPath',
+	function( )
+	{
+		return Path.empty;
+	}
+);
+
+
+
+/*
 | The content the mark puts into the clipboard.
 |
 | FIXME write something

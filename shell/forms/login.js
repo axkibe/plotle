@@ -220,14 +220,12 @@ Login.prototype.login =
 			)
 		);
 
-		shell.userMark(
+		shell.setMark(
 			Mark.Caret.create(
 				'path',
 					sub.passwordInput.path,
 				'at',
-					pass.length,
-				'retainx',
-					null
+					pass.length
 			)
 		);
 
@@ -258,7 +256,7 @@ Login.prototype.specialKey =
 
 	if(
 		key === 'enter' &&
-		this.mark &&
+		this.mark.caretPath &&
 		this.mark.caretPath.get( 2 ) === 'passwordInput'
 	)
 	{
@@ -304,26 +302,24 @@ Login.prototype.onAuth =
 
 		if( res.message.search(/Username/) >= 0 )
 		{
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path',
-					sub.userInput.path,
-				'at',
-					user.length
+			shell.setMark(
+				Mark.Caret.create(
+					'path',
+						sub.userInput.path,
+					'at',
+						user.length
+				)
 			);
 		}
 		else
 		{
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path',
-					sub.passwordInput.path,
-				'at',
-					pass.length
+			shell.setMark(
+				Mark.Caret.create(
+					'path',
+						sub.passwordInput.path,
+					'at',
+						pass.length
+				)
 			);
 		}
 
@@ -370,10 +366,8 @@ Login.prototype.clear =
 		)
 	);
 
-	shell.userMark(
-		'set',
-		'type',
-			'vacant'
+	shell.setMark(
+		Mark.Vacant.create( )
 	);
 };
 
