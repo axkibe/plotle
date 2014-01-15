@@ -854,7 +854,7 @@ IFace.prototype._update =
 				}
 
 				report =
-					report.push( chgX );
+					report.append( chgX );
 			}
 
 			// adapts all queued changes

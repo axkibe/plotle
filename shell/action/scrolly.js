@@ -39,7 +39,7 @@ if( JOOBJ )
 							'path to the item being scrolled',
 
 						type :
-							'String'
+							'Path'
 					},
 
 				start :
@@ -57,7 +57,7 @@ if( JOOBJ )
 							'position of the scrollbar on start of scrolling',
 
 						type :
-							'Integer'
+							'Number'
 					}
 			}
 	};
