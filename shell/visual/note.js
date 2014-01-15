@@ -21,7 +21,6 @@ Visual =
 | Imports
 */
 var
-	config,
 	Euclid,
 	Jools,
 	shell,
@@ -61,10 +60,13 @@ Visual.Note =
 		tag,
 		tree,
 		path,
+		view,
 		zone,
 		doc,
 		scrolly,
-		mark
+		mark,
+		ifabric,
+		iview
 	)
 {
 	Jools.logNew(
@@ -109,6 +111,15 @@ Visual.Note =
 			),
 			zone.height - theme.scrollbar.vdis * 2
 		);
+
+	this.view =
+		view;
+
+	this._ifabric =
+		ifabric;
+
+	this._iview =
+		iview;
 };
 
 
@@ -154,9 +165,17 @@ Note.create =
 		tree =
 			null,
 
-		zone =
-			null;
+		view =
+			null,
 
+		zone =
+			null,
+
+		ifabric =
+			null,
+
+		iview =
+			null;
 
 	for(
 		a = 0, aZ = arguments.length;
@@ -210,6 +229,13 @@ Note.create =
 			case 'traitSet' :
 
 				traitSet =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'view' :
+
+				view =
 					arguments[ a + 1 ];
 
 				break;
@@ -407,6 +433,12 @@ Note.create =
 				inherit.fontsize;
 		}
 
+		if( !view )
+		{
+			view =
+				inherit.view;
+		}
+
 		if( !mark )
 		{
 			mark =
@@ -437,11 +469,11 @@ Note.create =
 			)
 			&&
 			(
-				inherit.path && inherit.path.equals( path )
+				inherit.path.equals( path )
 			)
 			&&
 			(
-				inherit.zone && inherit.zone.equals( zone )
+				inherit.zone.equals( zone )
 			)
 			&&
 			(
@@ -453,7 +485,18 @@ Note.create =
 			)
 		)
 		{
-			return inherit;
+			if( inherit.view.equals( view ) )
+			{
+				return inherit;
+			}
+			else
+			{
+				ifabric =
+					inherit._fabric;
+
+				iview =
+					inherit.view;
+			}
 		}
 	}
 
@@ -462,10 +505,13 @@ Note.create =
 			_tag,
 			tree,
 			path,
+			view,
 			zone,
 			doc,
 			scrolly || 0,
-			mark
+			mark,
+			ifabric,
+			iview
 		)
 	);
 };
@@ -552,47 +598,38 @@ Note.prototype.minHeight =
 Note.prototype.minWidth =
 	theme.note.minWidth;
 
+
 /*
-| Draws the note.
+| Creates the items fabric.
 */
-Note.prototype.draw =
-	function(
-		fabric,
-		view
-	)
-{
-	var
-		zone =
-			this.zone,
-
-		vzone =
-			view.rect( zone ),
-
-		f =
-			this.$fabric,
-
-		sbary =
-			this.scrollbarY;
-
-	// no buffer hit?
-	if(
-		config.debug.noCache
-		||
-		!f
-		||
-		vzone.width !== f.width
-		||
-		vzone.height !== f.height
-	)
+Jools.lazyFixate(
+	Note.prototype,
+	'_fabric',
+	function( )
 	{
-		f =
-		this.$fabric =
-			new Euclid.Fabric(
-				vzone.width,
-				vzone.height
-			);
+		var
+			vzone =
+				this.view.rect( this.zone ),
+
+			hview =
+				this.view.home( );
+
+		if(
+			this._ifabric
+			&&
+			this._iview.zoom === this.view.zoom
+		)
+		{
+			return this._ifabric;
+		}
 
 		var
+			f =
+				new Euclid.Fabric(
+					vzone.width,
+					vzone.height
+				),
+
 			doc =
 				this.sub.doc,
 
@@ -600,16 +637,20 @@ Note.prototype.draw =
 				Style.getStyle(
 					theme.note.style,
 					'normal'
-				);
+				),
+
+			sbary =
+				this.scrollbarY;
 
 		f.fill(
 			style,
 			this.zeroSilhoutte,
 			'sketch',
-			view.home( )
+			hview
 		);
 
 		// draws selection and text
+		// TODO this looks evil
 		sbary.point =
 			Euclid.Point.renew(
 				0,
@@ -619,9 +660,9 @@ Note.prototype.draw =
 
 		doc.draw(
 			f,
-			view.home( ),
+			hview,
 			this,
-			zone.width,
+			this.zone.width,
 			sbary.point
 		);
 
@@ -630,22 +671,42 @@ Note.prototype.draw =
 			style,
 			this.zeroSilhoutte,
 			'sketch',
-			view.home( )
+			hview
 		);
+
+		return f;
 	}
+);
+
+/*
+| Draws the note.
+*/
+Note.prototype.draw =
+	function(
+		fabric
+	)
+{
+	var
+		zone =
+			this.zone,
+
+		sbary =
+			this.scrollbarY;
+
 
 	fabric.drawImage(
 		'image',
-			f,
+			this._fabric,
 		'pnw',
-			vzone.pnw
+			this.view.point( zone.pnw )
 	);
 
-	if( sbary.visible ) // FIXME maybe just set sbary null
+	// FIXME maybe just set sbary null
+	if( sbary.visible )
 	{
 		sbary.draw(
 			fabric,
-			view
+			this.view
 		);
 	}
 };

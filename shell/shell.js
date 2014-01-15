@@ -1392,31 +1392,20 @@ Shell.prototype.setUser =
 
 
 /*
-| Sets the space zoom factor.
+| Sets the current view ( of the space )
 */
-Shell.prototype.setSpaceZoom =
+Shell.prototype.setView =
 	function(
-		zf
+		view
 	)
 {
-	this._$discJockey.setSpaceZoom( zf );
-};
-
-
-/*
-| Changes the space zoom factor (around center)
-*/
-Shell.prototype.changeSpaceZoom =
-	function(
-		df
-	)
-{
-	if( !this.$space )
-	{
-		return;
-	}
-
-	this.$space.changeZoom( df );
+	this.$space =
+		Visual.Space.create(
+			'inherit',
+				this.$space,
+			'view',
+				view
+		);
 };
 
 
@@ -1604,7 +1593,12 @@ Shell.prototype.onAquireSpace =
 			'hover',
 				Path.empty,
 			'mark',
-				Mark.Vacant.create( )
+				Mark.Vacant.create( ),
+			'view',
+				new Euclid.View(
+					Euclid.Point.zero,
+					0
+				)
 		);
 
 	this.arrivedAtSpace(
@@ -1612,8 +1606,6 @@ Shell.prototype.onAquireSpace =
 		spaceTag,
 		access
 	);
-
-	this._$discJockey.setSpaceZoom( 0 );
 
 	this._draw( );
 };

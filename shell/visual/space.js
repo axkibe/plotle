@@ -63,6 +63,7 @@ Visual.Space =
 		access,
 		hover,
 		mark,
+		view,
 		traitSet
 	)
 {
@@ -120,20 +121,14 @@ Visual.Space =
 	this.access =
 		access;
 
-	this.$view =
-		inherit ?
-			inherit.$view
-			:
-			new Euclid.View(   // FIXME make this a singleton
-				Euclid.Point.zero,
-				0
-			);
-
 	this.hover =
 		hover;
 
 	this.mark =
 		mark;
+
+	this.view =
+		view;
 
 	var
 		sub =
@@ -200,6 +195,9 @@ Space.create =
 			null,
 
 		tree =
+			null,
+
+		view =
 			null;
 
 	var
@@ -308,12 +306,20 @@ Space.create =
 
 				break;
 
-		default :
+			case 'view' :
 
-			throw new Error(
-				'invalid argument: ' + arguments[ a ]
-			);
+				view =
+					arguments[ a + 1 ];
 
+				a += 2;
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: ' + arguments[ a ]
+				);
 		}
 	}
 
@@ -363,6 +369,12 @@ Space.create =
 				inherit.tree;
 		}
 
+		if( view === null )
+		{
+			view =
+				inherit.view;
+		}
+
 		if(
 			access === inherit.access
 			&&
@@ -375,6 +387,8 @@ Space.create =
 			spaceUser === inherit.spaceUser
 			&&
 			tree === inherit.tree
+			&&
+			view.equals( inherit.view )
 			&&
 			(
 				traitSet === null
@@ -397,6 +411,7 @@ Space.create =
 			access,
 			hover,
 			mark,
+			view,
 			traitSet
 		)
 	);
@@ -570,7 +585,9 @@ Space.prototype._createItem =
 			'mark',
 				this.mark,
 			'traitSet',
-				traitSet
+				traitSet,
+			'view',
+				this.view
 		)
 	);
 };
@@ -590,7 +607,7 @@ Space.prototype.draw =
 			this.tree,
 
 		view =
-			this.$view,
+			this.view,
 
 		action =
 			shell.action;
@@ -606,6 +623,7 @@ Space.prototype.draw =
 	)
 	{
 		// FIXME, maybe overload this.atRank
+		// TODO dont give view here
 		this.getItem( this.tree.ranks[ r ] )
 			.draw(
 				fabric,
@@ -728,7 +746,7 @@ Space.prototype.mousewheel =
 {
 	var
 		view =
-			this.$view,
+			this.view,
 
 		tree =
 			this.tree;
@@ -758,16 +776,16 @@ Space.prototype.mousewheel =
 
 	if ( dir > 0 )
 	{
-		this.$view =
-			this.$view.review(  1, p );
+		shell.setView(
+			this.view.review(  1, p )
+		);
 	}
 	else
 	{
-		this.$view =
-			this.$view.review( -1, p );
+		shell.setView(
+			this.view.review( -1, p )
+		);
 	}
-
-	shell.setSpaceZoom( this.$view.fact );
 
 	shell.redraw =
 		true;
@@ -790,7 +808,7 @@ Space.prototype.pointingHover =
 {
 	var
 		view =
-			this.$view,
+			this.view,
 
 		focus =
 			this.focusedItem( );
@@ -912,7 +930,7 @@ Space.prototype.dragStart =
 {
 	var
 		view =
-			this.$view,
+			this.view,
 
 		focus =
 			this.focusedItem( );
@@ -999,7 +1017,9 @@ Space.prototype.dragStart =
 				'mark',
 					Mark.Vacant.create( ),
 				'path',
-					Path.empty
+					Path.empty,
+				'view',
+					view
 			);
 
 		shell.setAction(
@@ -1049,7 +1069,9 @@ Space.prototype.dragStart =
 				'mark',
 					Mark.Vacant.create( ),
 				'path',
-					Path.empty
+					Path.empty,
+				'view',
+					view
 			);
 
 		shell.setAction(
@@ -1083,6 +1105,8 @@ Space.prototype.dragStart =
 					Mark.Vacant.create( ),
 				'path',
 					Path.empty,
+				'view',
+					view,
 				'zone',
 					Euclid.Rect.create(
 						'pnw/pse',
@@ -1143,10 +1167,10 @@ Space.prototype.dragStart =
 						action,
 					'pan',
 						view.pan,
-					'start',
-						p,
 					'relationState',
-						'pan'
+						'pan',
+					'start',
+						p
 				)
 			);
 
@@ -1177,8 +1201,9 @@ Space.prototype.click =
 		ctrl
 	)
 {
-	var view =
-		this.$view;
+	var
+		view =
+			this.view;
 
 	// clicked some item?
 	for(
@@ -1233,7 +1258,7 @@ Space.prototype.dragStop =
 			shell.action,
 
 		view =
-			this.$view,
+			this.view,
 
 		key,
 		result,
@@ -1659,7 +1684,7 @@ Space.prototype.dragMove =
 {
 	var
 		view =
-			this.$view,
+			this.view,
 
 		action =
 			shell.action,
@@ -1770,8 +1795,6 @@ Space.prototype.dragMove =
 
 		case 'CreateRelation' :
 
-			// XXX
-
 			if( action.relationState === 'pan' )
 			{
 				// panning while creating a relation
@@ -1779,15 +1802,15 @@ Space.prototype.dragMove =
 				pd =
 					p.sub( action.start );
 
-				this.$view =
-				view =
+				shell.setView(
 					new Euclid.View(
 						action.pan.add(
 							pd.x / view.zoom,
 							pd.y / view.zoom
 						),
 						view.fact
-					);
+					)
+				);
 
 				shell.redraw =
 					true;
@@ -1834,16 +1857,15 @@ Space.prototype.dragMove =
 			pd =
 				p.sub( action.start );
 
-			// TODO let shell worry about this
-			view =
-			this.$view =
+			shell.setView(
 				new Euclid.View(
 					action.pan.add(
 						Math.round( pd.x / view.zoom ),
 						Math.round( pd.y / view.zoom )
 					),
 					view.fact
-				);
+				)
+			);
 
 			shell.redraw =
 				true;
@@ -2066,7 +2088,7 @@ Space.prototype.pointingStart =
 {
 	var
 		view =
-			this.$view;
+			this.view;
 
 	/*
 	if( this.access == 'ro' )
@@ -2153,16 +2175,13 @@ Space.prototype.changeZoom =
 {
 	var
 		pm =
-			this.$view.depoint( this._center ); // TODO
+			this.view.depoint( this._center ); // TODO
 
-	this.$view =
-		this.$view.review(
+	shell.setView(
+		this.view.review(
 			df,
 			pm
-		);
-
-	shell.setSpaceZoom(
-		this.$view.fact
+		)
 	);
 
 	shell.redraw =

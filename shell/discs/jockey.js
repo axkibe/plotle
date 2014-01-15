@@ -569,19 +569,6 @@ Jockey.prototype.pushButton =
 
 
 /*
-| Displays the current space zoom level
-*/
-Jockey.prototype.setSpaceZoom =
-	function(
-		// zf
-	)
-{
-	// nothing
-};
-
-
-
-/*
 | TODO remove
 */
 Jockey.prototype.setActive =

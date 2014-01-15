@@ -248,6 +248,12 @@ Portal.create =
 
 				break;
 
+			case 'view' :
+
+				// ignore
+
+				break;
+
 			case 'zone' :
 
 				var

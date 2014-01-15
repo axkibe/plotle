@@ -96,7 +96,13 @@ if( JOOBJ )
 							'x-position of the caret kept',
 
 						type :
-							'Number'
+							'Number',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
 					}
 			}
 	};

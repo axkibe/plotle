@@ -80,13 +80,18 @@ Euclid.View =
 /*
 | Returns true if this view equals another
 */
-View.prototype.eq =
-	function( a1 )
+View.prototype.equals =
+	function( o )
 {
+	if( this === o )
+	{
+		return true;
+	}
+
 	return (
-		(a1 instanceof View) &&
-		this.zoom === a1.zoom &&
-		this.pan.eq(a1.pan)
+		this.zoom === o.zoom
+		&&
+		this.pan.equals( o.pan )
 	);
 };
 

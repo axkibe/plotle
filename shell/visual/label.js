@@ -230,6 +230,12 @@ Label.create =
 
 				break;
 
+			case 'view' :
+
+				// ignore
+
+				break;
+
 			default :
 
 				throw new Error(
