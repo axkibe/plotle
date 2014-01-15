@@ -53,7 +53,10 @@ if( JOOBJ )
 							'the transient item in creation',
 
 						type :
-							'Item'
+							'Item',
+
+						allowNull :
+							true
 					},
 
 				model :
@@ -62,7 +65,10 @@ if( JOOBJ )
 							'a transient item used as model',
 
 						type :
-							'Item'
+							'Item',
+
+						allowNull :
+							true
 					},
 
 				start :
@@ -71,7 +77,10 @@ if( JOOBJ )
 							'mouse down point on drag creation',
 
 						type :
-							'Point'
+							'Point',
+
+						allowNull :
+							true
 					}
 			}
 	};

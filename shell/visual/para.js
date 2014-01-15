@@ -1383,7 +1383,8 @@ Para.prototype._keyDown =
 			),
 			x,
 			bPath,
-			bAt
+			bAt,
+			doc
 		);
 
 		return;
@@ -1407,7 +1408,8 @@ Para.prototype._keyDown =
 			at,
 			x,
 			bPath,
-			bAt
+			bAt,
+			doc
 		);
 	}
 };
@@ -1430,7 +1432,8 @@ Para.prototype._keyEnd =
 		this.text.length,
 		null,
 		bPath,
-		bAt
+		bAt,
+		doc
 	);
 };
 
@@ -1474,7 +1477,8 @@ Para.prototype._keyLeft =
 			at - 1,
 			null,
 			bPath,
-			bAt
+			bAt,
+			doc
 		);
 
 		return;
@@ -1494,7 +1498,8 @@ Para.prototype._keyLeft =
 			ve.text.length,
 			null,
 			bPath,
-			bAt
+			bAt,
+			doc
 		);
 
 		return;
@@ -1505,7 +1510,8 @@ Para.prototype._keyLeft =
 			at,
 			null,
 			bPath,
-			bAt
+			bAt,
+			doc
 		);
 	}
 };
@@ -1528,7 +1534,8 @@ Para.prototype._keyPos1 =
 		0,
 		null,
 		bPath,
-		bAt
+		bAt,
+		doc
 	);
 };
 
@@ -1552,14 +1559,16 @@ Para.prototype._keyRight =
 			at + 1,
 			null,
 			bPath,
-			bAt
+			bAt,
+			doc
 		);
 
 		return;
 	}
 
-	var r =
-		doc.tree.rankOf( this.key );
+	var
+		r =
+			doc.tree.rankOf( this.key );
 
 	if( r < doc.tree.length - 1 )
 	{
@@ -1571,7 +1580,8 @@ Para.prototype._keyRight =
 			0,
 			null,
 			bPath,
-			bAt
+			bAt,
+			doc
 		);
 	}
 };
@@ -1614,7 +1624,8 @@ Para.prototype._keyUp =
 			at,
 			x,
 			bPath,
-			bAt
+			bAt,
+			doc
 		);
 
 		return;
@@ -1641,7 +1652,8 @@ Para.prototype._keyUp =
 			at,
 			x,
 			bPath,
-			bAt
+			bAt,
+			doc
 		);
 	}
 };
@@ -1652,10 +1664,11 @@ Para.prototype._keyUp =
 */
 Para.prototype._setMark =
 	function(
-		at,     // position to mark caret (or end of range)
+		at,      // position to mark caret (or end of range)
 		retainx, // retains this x position when moving up/down
 		bPath,   // begin path when marking a range
-		bAt      // begin at   when marking a range
+		bAt,     // begin at   when marking a range
+		doc      // range marks need this
 	)
 {
 	if( !bPath )
@@ -1673,12 +1686,10 @@ Para.prototype._setMark =
 	}
 	else
 	{
-		if( retainx )
-		{
-			return shell.userMark(
-				'set',
-				'type',
-					'range',
+		return shell.setMark(
+			Mark.Range.create(
+				'docTree',
+					doc.tree,
 				'bPath',
 					bPath,
 				'bAt',
@@ -1689,24 +1700,8 @@ Para.prototype._setMark =
 					at,
 				'retainx',
 					retainx
-			);
-		}
-		else
-		{
-			return shell.userMark(
-				'set',
-				'type',
-					'range',
-				'bPath',
-					bPath,
-				'bAt',
-					bAt,
-				'ePath',
-					this.textPath,
-				'eAt',
-					at
-			);
-		}
+			)
+		);
 	}
 };
 

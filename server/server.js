@@ -975,13 +975,16 @@ Server.prototype.prepareResources =
 				'shell/mark/mark.js',
 					'fbj',
 
-				'shell/mark/vacant.js',
-					'fbj',
-
 				'shell/mark/caret.js',
 					'fbj',
 
+				'shell/mark/item.js',
+					'fbj',
+
 				'shell/mark/range.js',
+					'fbj',
+
+				'shell/mark/vacant.js',
 					'fbj',
 
 				'shell/action/action.js',

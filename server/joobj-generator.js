@@ -12,11 +12,6 @@
 
 
 var
-	nullAttributes =
-		false;
-
-
-var
 	Jools =
 		require( '../shared/jools' );
 
@@ -99,7 +94,10 @@ var
 			{
 				switch( aoname )
 				{
+					case 'allowNull' :
 					case 'comment' :
+					case 'defaultVal' :
+					case 'refuse' :
 					case 'type' :
 
 						break;
@@ -426,44 +424,167 @@ generateConstructor =
 
 	if( aList )
 	{
-		if( !nullAttributes )
+		r.push(
+			'/**/if( CHECK )',
+			'/**/{'
+		);
+
+		for(
+			a = 0, aZ = aList.length;
+			a < aZ;
+			a++
+		)
 		{
+			aName =
+				aList[ a ];
+
+			var
+				attr =
+					joobj.attributes[ aName ];
+
 			r.push(
-				'/**/if( CHECK )',
-				'/**/{'
+				'/**/\tif( ' + aName + ' === undefined )',
+				'/**/\t{',
+				'/**/\t\tthrow new Error(',
+				'/**/\t\t\t\'undefined attribute ' + aName + '\'',
+				'/**/\t\t);',
+				'/**/\t}'
 			);
 
-			for(
-				a = 0, aZ = aList.length;
-				a < aZ;
-				a++
-			)
+			if( !attr.allowNull )
 			{
-				aName =
-					aList[ a ];
-
 				r.push(
-					'/**/\tif( ' + aName + ' === undefined )',
+					'/**/',
+					'/**/\tif( ' + aName + ' === null )',
 					'/**/\t{',
 					'/**/\t\tthrow new Error(',
-					'/**/\t\t\t\'undefined attribute ' + aName + '\'',
+					'/**/\t\t\t\'' + aName + ' must not be null\'',
 					'/**/\t\t);',
 					'/**/\t}'
 				);
-
-				if( a + 1 < aZ )
-				{
-					r.push(
-						'/**/'
-					);
-				}
 			}
 
 			r.push(
-				'/**/}',
-				''
+				'/**/',
+				'/**/\tif( ' + aName + ' !== null )',
+				'/**/\t{'
 			);
+
+			switch( attr.type )
+			{
+				case 'Integer' :
+
+					r.push(
+						'/**/\t\tif(',
+						'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'number\' ||',
+						'/**/\t\t\tMath.floor( ' + aName + ' ) !== ' + aName,
+						'/**/\t\t)'
+					);
+
+					break;
+
+				case 'String' :
+
+					r.push(
+						'/**/\t\tif(',
+						'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'string\' &&',
+						'/**/\t\t\t!( ' + aName + ' instanceof String )',
+						'/**/\t\t)'
+					);
+
+					break;
+
+				case 'Number' :
+
+					r.push(
+						'/**/\t\tif(',
+						'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'number\'',
+						'/**/\t\t)'
+					);
+
+					break;
+
+				case 'Item' :
+				case 'Tree' :
+
+					// FIXME
+					r.push(
+						'/**/\t\tif( false )'
+					);
+
+					break;
+
+				default :
+
+					r.push(
+						'/**/\t\tif( ' +
+							aName + '.reflect !== \'' + attr.type + '\'' +
+							' )'
+					);
+			}
+
+			r.push(
+				'/**/\t\t{',
+				'/**/\t\t\tthrow new Error(',
+				'/**/\t\t\t\t\'type mismatch\'',
+				'/**/\t\t\t);',
+				'/**/\t\t}'
+			);
+
+			if( attr.refuse )
+			{
+				r.push(
+					'/**/',
+					'/**/\t\tif('
+				);
+
+				for(
+					var b = 0, bZ = attr.refuse.length;
+					b < bZ;
+					b++
+				)
+				{
+					r.push(
+						'/**/\t\t\t( ' +
+							aName + ' ' +
+							attr.refuse[ b ] +
+							' )'
+						);
+
+					if( b + 1 < bZ )
+					{
+						r.push(
+							'/**/\t\t\t||'
+						);
+					}
+				}
+
+				r.push(
+					'/**/\t\t)',
+					'/**/\t\t{',
+					'/**/\t\t\tthrow new Error(',
+					'/**/\t\t\t\t\'refusing value\'',
+					'/**/\t\t\t);',
+					'/**/\t\t}'
+				);
+			}
+
+			r.push(
+				'/**/\t}'
+			);
+
+			if( a + 1 < aZ )
+			{
+				r.push(
+					'/**/'
+				);
+			}
 		}
+
+		r.push(
+			'/**/}',
+			''
+		);
 
 		for(
 			a = 0, aZ = aList.length;
@@ -558,6 +679,9 @@ generateCreator =
 		// attribute name
 		aName,
 
+		// the attribute
+		attr,
+
 		// alphabetical sorted attribute names
 		// including 'inherit'
 		aListPlus =
@@ -609,9 +733,8 @@ generateCreator =
 				aListPlus[ a ];
 
 			r.push(
-				'\t\t' + aName + ' =',
-				'\t\t\tundefined' + ( a + 1 >= aListPlus.length ? ';' : ',' ),
-				''
+				'\t\t' + aName +
+					( a + 1 >= aListPlus.length ? ';' : ',' )
 			);
 		}
 
@@ -660,6 +783,7 @@ generateCreator =
 			''
 		);
 
+		// generates inheritance
 		r.push(
 			'\tif( inherit )',
 			'\t{'
@@ -674,18 +798,63 @@ generateCreator =
 			aName =
 				aList[ a ];
 
+			if( a > 0 )
+			{
+				r.push(
+					''
+				);
+			}
+
 			r.push(
 				'\t\tif( ' + aName + ' === undefined )',
 				'\t\t{',
 				'\t\t\t' + aName + ' =',
 				'\t\t\t\tinherit.' + aName + ';',
-				'\t\t}',
-				''
+				'\t\t}'
 			);
 		}
 
 		r.push(
-			'\t\tif('
+			'\t}',
+			''
+		);
+
+		// generates default values
+
+		if( aList )
+		{
+			for(
+				a = 0, aZ = aList.length;
+				a < aZ;
+				a++
+			)
+			{
+				aName =
+					aList[ a ];
+
+				attr =
+					joobj.attributes[ aName ];
+
+				if( attr.defaultVal )
+				{
+					r.push(
+						'\tif( ' + aName + ' === undefined )',
+						'\t{',
+						'\t\t' + aName + ' =',
+						'\t\t\t' + attr.defaultVal + ';',
+						'\t}',
+						''
+					);
+				}
+			}
+		}
+
+		// generates the full inheritance shortcut check
+
+		r.push(
+			'\tif(',
+			'\t\tinherit',
+			'\t\t&&'
 		);
 
 
@@ -701,7 +870,7 @@ generateCreator =
 			if( a > 0 )
 			{
 				r.push(
-					'\t\t\t&&'
+					'\t\t&&'
 				);
 			}
 
@@ -713,7 +882,7 @@ generateCreator =
 				case 'Tree' :
 
 					r.push(
-						'\t\t\t' + aName + ' === inherit.' + aName
+						'\t\t' + aName + ' === inherit.' + aName
 					);
 
 					break;
@@ -721,7 +890,7 @@ generateCreator =
 				default :
 
 					r.push(
-						'\t\t\t' + aName +
+						'\t\t' + aName +
 							'.equals( inherit.' + aName + ' )'
 					);
 
@@ -730,10 +899,9 @@ generateCreator =
 		}
 
 		r.push(
-			'\t\t)',
-			'\t\t{',
-			'\t\t\treturn inherit;',
-			'\t\t}',
+			'\t)',
+			'\t{',
+			'\t\treturn inherit;',
 			'\t}',
 			''
 		);
@@ -754,6 +922,9 @@ generateCreator =
 			''
 		);
 	}
+
+	// fills in default values
+
 
 	if( joobj.singleton )
 	{
@@ -903,6 +1074,11 @@ generateEqualsCheck =
 		'\tif( this === obj )',
 		'\t{',
 		'\t\treturn true;',
+		'\t}',
+		'',
+		'\tif( !obj )',
+		'\t{',
+		'\t\treturn false;',
 		'\t}',
 		'',
 		'\treturn ('

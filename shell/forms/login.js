@@ -22,6 +22,7 @@ Forms =
 var
 	Design,
 	Jools,
+	Mark,
 	shell,
 	shellverse,
 	TraitSet;
@@ -169,14 +170,15 @@ Login.prototype.login =
 			)
 		);
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				sub.userInput.path,
-			'at',
-				user.length
+		shell.setMark(
+			Mark.Caret.create(
+				'path',
+					sub.userInput.path,
+				'at',
+					user.length,
+				'retainx',
+					null
+			)
 		);
 
 		return;
@@ -193,14 +195,15 @@ Login.prototype.login =
 			)
 		);
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				sub.userInput.path,
-			'at',
-				0
+		shell.setMark(
+			Mark.Caret.create(
+				'path',
+					sub.userInput.path,
+				'at',
+					0,
+				'retainx',
+					null
+			)
 		);
 
 		return;
@@ -218,13 +221,14 @@ Login.prototype.login =
 		);
 
 		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'path',
-				sub.passwordInput.path,
-			'at',
-				pass.length
+			Mark.Caret.create(
+				'path',
+					sub.passwordInput.path,
+				'at',
+					pass.length,
+				'retainx',
+					null
+			)
 		);
 
 		return;

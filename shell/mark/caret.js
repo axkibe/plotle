@@ -51,7 +51,12 @@ if( JOOBJ )
 							'path of the caret',
 
 						type :
-							'Path'
+							'Path',
+
+						refuse :
+							[
+								'.isEmpty'
+							]
 					},
 
 				at :
@@ -60,7 +65,12 @@ if( JOOBJ )
 							'offset of the caret',
 
 						type :
-							'Integer'
+							'Integer',
+
+						refuse :
+							[
+								'< 0'
+							]
 					},
 
 				retainx :
@@ -69,9 +79,14 @@ if( JOOBJ )
 							'x-position of the caret kept',
 
 						type :
-							'Number'
-					}
+							'Number',
 
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					}
 			}
 	};
 }
@@ -80,15 +95,6 @@ if( JOOBJ )
 var
 	Caret =
 		Mark.Caret;
-
-/*
-| If true uses getImageData() to cache the image
-| without the caret to achieve blinking.
-| Without it uses drawImage() for the whole canvas.
-| On firefox this is paradoxically way faster.
-*/
-Caret.useGetImageData =
-	true;
 
 
 /*
@@ -177,35 +183,6 @@ Caret.prototype.containsPath =
 /**/}
 
 	return path.subPathOf( this.path );
-};
-
-
-/*
-| Returns true if this mark equals another.
-*/
-Caret.prototype.equals =
-	function(
-		mark
-	)
-{
-	if( !mark )
-	{
-		return false;
-	}
-
-	return (
-		this === mark
-		||
-		(
-			this.reflect === mark.reflect
-			&&
-			this.path.equals( mark.path )
-			&&
-			this.at === mark.at
-			&&
-			this.retainx === mark.retainx
-		)
-	);
 };
 
 

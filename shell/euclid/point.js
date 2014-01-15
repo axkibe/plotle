@@ -82,6 +82,12 @@ Jools.subclass(
 );
 
 
+/*
+| Reflection.
+*/
+Point.prototype.reflect =
+	'Point';
+
 
 /*
 | Returns true if this point is equal to another.

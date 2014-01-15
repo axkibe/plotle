@@ -623,12 +623,11 @@ Item.prototype.dragStart =
 		// take focus
 		if( shell.space.focusedItem() !== this )
 		{
-			shell.userMark(
-				'set',
-				'type',
-					'item',
-				'path',
-					this.path
+			shell.setMark(
+				Mark.Item.create(
+					'path',
+						this.path
+				)
 			);
 		}
 

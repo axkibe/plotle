@@ -24,6 +24,7 @@ var
 	Euclid,
 	HoverReply,
 	Jools,
+	Mark,
 	shell,
 	shellverse,
 	Style,
@@ -658,17 +659,16 @@ Portal.prototype.click =
 		)
 		{
 			mark =
-				shell.userMark(
-					'set',
-					'type',
-						'caret',
-					'path',
-						this.subPaths[ field ],
-					'at',
-						this._getOffsetAt(
-							field,
-							pp.x
-						)
+				shell.setMark(
+					Mark.Caret.create(
+						'path',
+							this.subPaths[ field ],
+						'at',
+							this._getOffsetAt(
+								field,
+								pp.x
+							)
+					)
 				);
 
 			break;
@@ -682,12 +682,11 @@ Portal.prototype.click =
 		shell.space.focusedItem( ) !== this
 	)
 	{
-		shell.userMark(
-			'set',
-			'type',
-				'item',
-			'path',
-				this.path
+		shell.setMark(
+			Mark.Item.create(
+				'path',
+					this.path
+			)
 		);
 	}
 
@@ -1344,58 +1343,55 @@ Portal.prototype._keyDown =
 					mark.caretAt
 				);
 
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path',
-					// FIXME use this paths
-					mark.caretPath.set(
-						mark.caretPath.length - 1,
-						'spaceTag'
-					),
-				'at',
-					this._getOffsetAt(
-						'spaceTag',
-						cpos.x +
-							this._$spaceFields.spaceUser.pnw.x
-					)
+			shell.setMark(
+				Mark.Caret.create(
+					'path',
+						// FIXME use this paths
+						mark.caretPath.set(
+							mark.caretPath.length - 1,
+							'spaceTag'
+						),
+					'at',
+						this._getOffsetAt(
+							'spaceTag',
+							cpos.x +
+								this._$spaceFields.spaceUser.pnw.x
+						)
+				)
 			);
 
 			break;
 
 		case 'spaceTag' :
 
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path',
-					// FIXME use this paths
-					mark.caretPath.set(
-						mark.caretPath.length - 1,
-						'moveToButton'
-					),
-				'at',
-					0
+			shell.setMark(
+				Mark.Caret.create(
+					'path',
+						// FIXME use this paths
+						mark.caretPath.set(
+							mark.caretPath.length - 1,
+							'moveToButton'
+						),
+					'at',
+						0
+				)
 			);
 
 			break;
 
 		case 'moveToButton' :
 
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'path',
-					// FIXME use this paths
-					mark.caretPath.set(
-						mark.caretPath.length - 1,
-						'spaceUser'
-					),
-				'at',
-					0
+			shell.setMark(
+				Mark.Caret.create(
+					'path',
+						// FIXME use this paths
+						mark.caretPath.set(
+							mark.caretPath.length - 1,
+							'spaceUser'
+						),
+					'at',
+						0
+				)
 			);
 
 			break;
