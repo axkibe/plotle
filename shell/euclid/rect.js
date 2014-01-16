@@ -154,22 +154,10 @@ Rect.create =
 			)
 			{
 				pnw =
-					shellverse.grow(
-						'Point',
-						'x',
-							a1.x,
-						'y',
-							a2.y
-					);
+					Euclid.Point.create( 'x', a1.x, 'y', a2.y );
 
 				pse =
-					shellverse.grow(
-						'Point',
-						'x',
-							a2.x,
-						'y',
-							a1.y
-					);
+					Euclid.Point.create( 'x', a2.x, 'y', a1.y );
 			}
 			else if (
 				a1.x >= a2.x &&
@@ -177,22 +165,10 @@ Rect.create =
 			)
 			{
 				pnw =
-					shellverse.grow(
-						'Point',
-						'x',
-							a2.x,
-						'y',
-							a1.y
-					);
+					Euclid.Point.create( 'x', a2.x, 'y', a1.y );
 
 				pse =
-					shellverse.grow(
-						'Point',
-						'x',
-							a1.x,
-						'y',
-							a2.y
-					);
+					Euclid.Point.create( 'x', a1.x, 'y', a2.y );
 			}
 			else
 			{
@@ -296,8 +272,7 @@ Rect.prototype.computePoint =
 		case 'c'  :
 
 			return (
-				shellverse.grow(
-					'Point',
+				Euclid.Point.create(
 					'x',
 						half( pnw.x + pse.x ) + twig.x,
 					'y',
@@ -308,8 +283,7 @@ Rect.prototype.computePoint =
 		case 'n'  :
 
 			return (
-				shellverse.grow(
-					'Point',
+				Euclid.Point.create(
 					'x',
 						half( pnw.x + pse.x ) + twig.x,
 					'y',
@@ -320,9 +294,7 @@ Rect.prototype.computePoint =
 		case 'ne' :
 
 			return (
-				shellverse.grow(
-					'Point',
-					shellverse,
+				Euclid.Point.create(
 					'x',
 						pse.x + twig.x,
 					'y',
@@ -333,9 +305,7 @@ Rect.prototype.computePoint =
 		case 'e'  :
 
 			return (
-				shellverse.grow(
-					'Point',
-					shellverse,
+				Euclid.Point.create(
 					'x',
 						pse.x + twig.x,
 					'y',
@@ -355,9 +325,7 @@ Rect.prototype.computePoint =
 		case 's'  :
 
 			return (
-				shellverse.grow(
-					'Point',
-					shellverse,
+				Euclid.Point.create(
 					'x',
 						half( pnw.x + pse.x ) + twig.x,
 					'y',
@@ -368,8 +336,7 @@ Rect.prototype.computePoint =
 		case 'sw' :
 
 			return (
-				shellverse.grow(
-					'Point',
+				Euclid.Point.create(
 					'x',
 						pnw.x + twig.x,
 					'y',
@@ -380,8 +347,7 @@ Rect.prototype.computePoint =
 		case 'w'  :
 
 			return (
-				shellverse.grow(
-					'Point',
+				Euclid.Point.create(
 					'x',
 						pnw.x + twig.x,
 					'y',
@@ -690,8 +656,7 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					Jools.half( this.pse.x + this.pnw.x ),
 				'y',
@@ -711,8 +676,7 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					Jools.half( this.pse.x + this.pnw.x ),
 				'y',
@@ -732,8 +696,7 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					this.pnw.x,
 				'y',
@@ -753,8 +716,7 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					this.pse.x,
 				'y',
@@ -880,25 +842,13 @@ Rect.renew =
 	if( !pnw )
 	{
 		pnw =
-			shellverse.grow(
-				'Point',
-				'x',
-					wx,
-				'y',
-					ny
-			);
+			Euclid.Point.create( 'x', wx, 'y', ny );
 	}
 
 	if( !pse )
 	{
 		pse =
-			shellverse.grow(
-				'Point',
-				'x',
-					ex,
-				'y',
-					sy
-			);
+			Euclid.Point.create( 'x', ex, 'y', sy );
 	}
 
 	return Rect.create(
@@ -1077,15 +1027,7 @@ Rect.prototype.getProjection =
 
 		if ( x >= wx && x <= ex )
 		{
-			return (
-				shellverse.grow(
-					'Point',
-					'x',
-						x,
-					'y',
-						ny
-				)
-			);
+			return Euclid.Point.create( 'x', x, 'y', ny );
 		}
 	}
 
@@ -1096,15 +1038,7 @@ Rect.prototype.getProjection =
 
 		if( x >= wx && x <= ex )
 		{
-			return (
-				shellverse.grow(
-					'Point',
-					'x',
-						x,
-					'y',
-						sy
-				)
-			);
+			return Euclid.Point.create( 'x', x, 'y', sy );
 		}
 	}
 
@@ -1115,15 +1049,7 @@ Rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return (
-				shellverse.grow(
-					'Point',
-					'x',
-						ex,
-					'y',
-						y
-				)
-			);
+			return Euclid.Point.create( 'x', ex, 'y', y );
 		}
 	}
 
@@ -1134,15 +1060,7 @@ Rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return (
-				shellverse.grow(
-					'Point',
-					'x',
-						wx,
-					'y',
-						y
-				)
-			);
+			return Euclid.Point.create( 'x', wx, 'y', y );
 		}
 	}
 

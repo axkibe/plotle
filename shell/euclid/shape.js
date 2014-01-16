@@ -22,7 +22,6 @@ var
 	Curve,
 	Euclid,
 	Jools,
-	shellverse,
 	swatch;
 
 
@@ -383,8 +382,7 @@ Shape.prototype.getProjection =
 					)
 					{
 						return (
-							shellverse.grow(
-								'Point',
+							Euclid.Point.create(
 								'x',
 									pix,
 								'y',
@@ -424,8 +422,7 @@ Shape.prototype.getProjection =
 					if( p.y > cy )
 					{
 						return (
-							shellverse.grow(
-								'Point',
+							Euclid.Point.create(
 								'x',
 									cx,
 								'y',
@@ -436,8 +433,7 @@ Shape.prototype.getProjection =
 					else if( p.y < cy )
 					{
 						return (
-							shellverse.grow(
-								'Point',
+							Euclid.Point.create(
 								'x',
 									cx,
 								'y',
@@ -448,8 +444,7 @@ Shape.prototype.getProjection =
 					else
 					{
 						return (
-							shellverse.grow(
-								'Point',
+							Euclid.Point.create(
 								'x',
 									cx,
 								'y',
@@ -509,15 +504,7 @@ Shape.prototype.getProjection =
 						)
 					)
 					{
-						return (
-							shellverse.grow(
-								'Point',
-								'x',
-									x,
-								'y',
-									y
-							)
-						);
+						return Euclid.Point.create( 'x', x, 'y', y );
 					}
 				}
 

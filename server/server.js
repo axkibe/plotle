@@ -497,19 +497,20 @@ Server.prototype.loadSpace =
 
 		space.$seqZ++;
 
-		try{
+//		XXX
+//		try{
 			space.$tree =
 				change.chgX.changeTree(
 					space.$tree,
 					meshverse
 				).tree;
-		}
-		catch( err )
-		{
-			console.log( 'error playing back changes' );
-
-			throw err;
-		}
+//		}
+//		catch( err )
+//		{
+//			console.log( 'error playing back changes' );
+//
+//			throw err;
+//		}
 	}
 };
 
@@ -777,7 +778,7 @@ Server.prototype.prepareResources =
 				'shell/euclid/compass.js',
 					'fb',
 
-				'shell/euclid/point.js',
+				'shared/euclid/point.js',
 					'fb',
 
 				'shell/euclid/rect.js',

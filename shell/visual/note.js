@@ -24,7 +24,6 @@ var
 	Euclid,
 	Jools,
 	shell,
-	shellverse,
 	Style,
 	system,
 	theme,
@@ -102,8 +101,7 @@ Visual.Note =
 			scrolly,
 			zone.height - this.innerMargin.y,
 			this.sub.doc.height,
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					zone.pse.x,
 				'y',
@@ -788,8 +786,7 @@ Jools.lazyFixate(
 		return (
 			new Euclid.RoundRect(
 				Euclid.Point.zero,
-				shellverse.grow(
-					'Point',
+				Euclid.Point.create(
 					'x',
 						zone.width,
 					'y',

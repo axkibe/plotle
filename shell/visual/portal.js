@@ -25,7 +25,6 @@ var
 	Jools,
 	Mark,
 	shell,
-	shellverse,
 	Style,
 	theme;
 
@@ -543,8 +542,7 @@ Jools.lazyFixate(
 		return (
 			new Euclid.Ellipse(
 				Euclid.Point.zero,
-				shellverse.grow(
-					'Point',
+				Euclid.Point.create(
 					'x',
 						this.zone.width,
 					'y',
@@ -1115,8 +1113,7 @@ Portal.prototype._locateOffset =
 		text =
 			this.tree.twig[ section ];
 
-	return shellverse.grow(
-		'Point',
+	return Euclid.Point.create(
 		'x',
 			Math.round(
 				Euclid.Measure.width(
@@ -1940,8 +1937,7 @@ Portal.prototype._prepareMoveToButton =
 			theme.portal.moveTo.rounding,
 
 		pnw =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					Jools.half( zone.width - width ),
 				'y',
@@ -1964,8 +1960,7 @@ Portal.prototype._prepareMoveToButton =
 			),
 
 		textCenter :
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					Jools.half( pnw.x + pse.x ),
 				'y',
@@ -2009,8 +2004,7 @@ Portal.prototype._prepareField =
 			basePNW === null
 			?
 			(
-				shellverse.grow(
-					'Point',
+				Euclid.Point.create(
 					'x',
 						Jools.half( zone.width - width ),
 					'y',
@@ -2021,8 +2015,7 @@ Portal.prototype._prepareField =
 			)
 			:
 			(
-				shellverse.grow(
-					'Point',
+				Euclid.Point.create(
 					'x',
 						Jools.half( zone.width - width ),
 					'y',

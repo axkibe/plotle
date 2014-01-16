@@ -302,7 +302,20 @@ Tree.getType =
 			return 'String';
 
 		default :
-			return o.type ? o.type : o.twig.type;
+
+			if( o.reflect )
+			{
+				return o.reflect;
+			}
+
+			if( o.type )
+			{
+				// TODO remove
+				return o.type;
+			}
+
+
+			return o.twig.type ;
 	}
 };
 

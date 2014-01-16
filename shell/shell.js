@@ -31,7 +31,6 @@ var
 	MeshMashine,
 	Path,
 	Peer,
-	shellverse,
 	Sign,
 	system,
 	swatch,
@@ -193,8 +192,7 @@ Shell =
 	var
 		screensize =
 		this.screensize =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					fabric.width,
 				'y',
@@ -1267,8 +1265,7 @@ Shell.prototype.resize =
 	var
 		screensize =
 		this.screensize =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					width,
 				'y',

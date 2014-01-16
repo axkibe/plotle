@@ -9,6 +9,7 @@
 | Imports
 */
 var
+	Euclid,
 	Jools,
 	Tree;
 
@@ -35,6 +36,12 @@ if( typeof( window ) === 'undefined')
 
 	Tree =
 		require( './tree' );
+
+	Euclid =
+		{ };
+
+	Euclid.Point =
+		require( './euclid/point' );
 }
 
 /*
@@ -51,7 +58,8 @@ Meshverse =
 | Returns true if the pattern specifier
 | allows a value of type.
 */
-var allowsType =
+var
+allowsType =
 	function(
 		pattern,
 		type
@@ -164,6 +172,23 @@ Meshverse.prototype.grow =
 				model,
 				{ }
 			);
+	}
+
+	if( pattern === 'joobj' )
+	{
+		switch( type )
+		{
+			case 'Point' :
+
+				return Euclid.Point.create(
+					'json',
+						model.twig
+				);
+
+			default :
+
+				throw new Error( 'unknown joobj in meshverse' );
+		}
 	}
 
 	if( pattern.ranks )
@@ -631,25 +656,13 @@ Meshverse.prototype.Rect =
 
 
 Meshverse.prototype.Point =
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-
-				'x' :
-					'Number',
-
-				'y' :
-					'Number'
-
-			} )
-
-	} );
+	'joobj';
 
 
 /*
 | Some sanity tests on the patterns.
 */
+/*
 if( CHECK )
 {
 	for( var k in Meshverse.prototype )
@@ -676,6 +689,7 @@ if( CHECK )
 		}
 	}
 }
+*/
 
 meshverse =
 	new Meshverse( );

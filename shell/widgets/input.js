@@ -26,7 +26,6 @@ var
 	Jools,
 	Mark,
 	shell,
-	shellverse,
 	theme,
 	TraitSet;
 
@@ -469,20 +468,8 @@ Input.create =
 | Default distance of text
 */
 Input._pitch =
-	new Euclid.Point(
-		'TREE',
-		{
-			type :
-				'Point',
+	Euclid.Point.create( 'x', 8, 'y', 3 );
 
-			x :
-				8,
-
-			y :
-				3
-		},
-		null
-	);
 
 /*
 | Returns the offset nearest to point p.
@@ -827,8 +814,7 @@ Input.prototype.locateOffset =
 	if( this.tree.twig.password )
 	{
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					pitch.x +
 					(
@@ -847,8 +833,7 @@ Input.prototype.locateOffset =
 	else
 	{
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					Math.round(
 						pitch.x +

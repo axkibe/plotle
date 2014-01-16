@@ -14,8 +14,7 @@ var
 	config,
 	Euclid,
 	Jools,
-	Shell,
-	shellverse;
+	Shell;
 
 
 /*
@@ -814,8 +813,7 @@ System.prototype._onMouseDown =
 			this._canvas,
 
 		p =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -967,8 +965,7 @@ System.prototype._onMouseMove =
 			this._canvas,
 
 		p =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -1084,8 +1081,7 @@ System.prototype._onMouseUp =
 			this._canvas,
 
 		p =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -1176,8 +1172,7 @@ System.prototype._onMouseWheel =
 			this._canvas,
 
 		p =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -1236,8 +1231,7 @@ System.prototype._onTouchStart =
 			this._canvas,
 
 		p =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -1321,8 +1315,7 @@ System.prototype._onTouchMove =
 			this._canvas,
 
 		p =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -1440,8 +1433,7 @@ System.prototype._onTouchEnd =
 			this._canvas,
 
 		p =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					event.changedTouches[ 0 ].pageX -
 					canvas.offsetLeft,

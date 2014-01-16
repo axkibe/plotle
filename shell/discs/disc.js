@@ -91,8 +91,7 @@ Discs.Disc =
 	this.frame =
 		Euclid.Rect.create(
 			'pnw/size',
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					0,
 				'y',
@@ -109,23 +108,20 @@ Discs.Disc =
 
 	this.silhoutte =
 		new Euclid.Ellipse(
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					width - 1 - ew,
 				'y',
 					0 - Jools.half( eh - height )
 			),
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					width - 1,
 				'y',
 					height + Jools.half( eh - height )
 			),
 			'gradientPC',
-				shellverse.grow(
-					'Point',
+				Euclid.Point.create(
 					'x',
 						-600,
 					'y',

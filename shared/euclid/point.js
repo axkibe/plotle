@@ -1,8 +1,6 @@
 /*
 | A Point in a 2D plane.
 |
-| Points are pseudo immutable objects.
-|
 | Authors: Axel Kittenberger
 */
 
@@ -13,6 +11,7 @@
 var
 	Euclid;
 
+
 Euclid =
 	Euclid ||
 	{ };
@@ -22,9 +21,7 @@ Euclid =
 | Imports
 */
 var
-	Jools,
-	shellverse,
-	Tree;
+	Jools;
 
 
 /*
@@ -35,51 +32,177 @@ var
 
 
 /*
+| Node includes.
+*/
+if( typeof( window ) === 'undefined' )
+{
+	Jools =
+		require( '../jools' );
+}
+
+
+var
+	_tag =
+		'enemenemu';
+
+/*
 | Constructor.
-|
-| Point(x, y) or
-| Point(p)
 */
 var
 	Point =
 	Euclid.Point =
 		function(
 			tag,
-			twig
+			x,
+			y
 		)
 {
-	if( tag !== 'TREE' )
+	if( tag !== _tag )
 	{
 		throw new Error(
 			'argument fail'
 		);
 	}
 
-	Tree.call(
-		this,
-		'TREE',
-		'Point',
-		twig,
-		null
-	);
+	if( CHECK )
+	{
+		if( x === undefined )
+		{
+			throw new Error( 'invalid x' );
+		}
+
+		if( y === undefined )
+		{
+			throw new Error( 'invalid y' );
+		}
+	}
 
 	this.x =
-		twig.x;
+		x;
 
 	this.y =
-		twig.y;
+		y;
 
 	Jools.immute( this );
 };
 
 
 /*
-| Points are tree nodes.
+| Reflection.
 */
-Jools.subclass(
-	Point,
-	Tree
-);
+Point.prototype.reflect =
+	'Point';
+
+/*
+| TODO Workaround this is an evil.
+*/
+Point.prototype._$grown =
+	true;
+
+
+
+/*
+| Creator
+*/
+Point.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+		x,
+		y,
+		json;
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'json' :
+
+				json =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'x' :
+
+				x =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'y' :
+
+				y =
+					arguments[ a + 1 ];
+
+				break;
+
+		}
+	}
+
+	if( json )
+	{
+		if( x === undefined )
+		{
+			x =
+				json.x;
+		}
+
+		if( y === undefined )
+		{
+			y =
+				json.y;
+		}
+	}
+
+	if( inherit )
+	{
+		if( x === undefined )
+		{
+			x =
+				inherit.x;
+		}
+
+		if( y === undefined )
+		{
+			y =
+				inherit.y;
+		}
+	}
+
+	if(
+		inherit
+		&&
+		x === inherit.x
+		&&
+		y === inherit.y
+	)
+	{
+		return inherit;
+	}
+
+	return (
+		new Point(
+			_tag,
+			x,
+			y
+		)
+	);
+};
 
 
 /*
@@ -125,8 +248,7 @@ Point.prototype.add =
 			return this;
 		}
 
-		return shellverse.grow(
-			'Point',
+		return Point.create(
 			'x',
 				this.x + a1.x,
 			'y',
@@ -140,8 +262,7 @@ Point.prototype.add =
 			return this;
 		}
 
-		return shellverse.grow(
-			'Point',
+		return Point.create(
 			'x',
 				this.x + a1,
 			'y',
@@ -167,8 +288,7 @@ Point.prototype.sub =
 			return this;
 		}
 
-		return shellverse.grow(
-			'Point',
+		return Point.create(
 			'x',
 				this.x - a1.x,
 			'y',
@@ -182,8 +302,7 @@ Point.prototype.sub =
 			return this;
 		}
 
-		return shellverse.grow(
-			'Point',
+		return Point.create(
 			'x',
 				this.x - a1,
 			'y',
@@ -192,6 +311,30 @@ Point.prototype.sub =
 	}
 };
 
+
+/*
+| Turns the Point into a JSON.
+| TODO this is a workarond only.
+*/
+Point.prototype.toJSON =
+	function(
+
+	)
+{
+	return {
+		type :
+			'Point',
+
+		twig :
+			{
+				'x' :
+					this.x,
+
+				'y' :
+					this.y
+			}
+	};
+};
 
 
 /*
@@ -228,8 +371,7 @@ Point.renew =
 		}
 	}
 
-	return shellverse.grow(
-		'Point',
+	return Point.create(
 		'x',
 			x,
 		'y',
@@ -240,20 +382,23 @@ Point.renew =
 /*
 | Shortcut for point at 0/0.
 */
-Euclid.Point.zero =
-	new Point(
-		'TREE',
-		{
-			type :
-				'Point',
-			x :
-				0,
-
-			y :
-				0
-		},
-		null
+Point.zero =
+	Point.create(
+		'x',
+			0,
+		'y',
+			0
 	);
+
+
+/*
+| Exports
+*/
+if( typeof( window ) === 'undefined' )
+{
+	module.exports =
+	        Point;
+}
 
 
 

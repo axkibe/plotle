@@ -17,8 +17,7 @@ Euclid =
 | Imports
 */
 var
-	Jools,
-	shellverse;
+	Jools;
 
 
 /*
@@ -74,40 +73,16 @@ Euclid.Ellipse =
 
 		// cardinal points
 		pw =
-			shellverse.grow(
-				'Point',
-				'x',
-					wx,
-				'y',
-					my
-			),
+			Euclid.Point.create( 'x', wx, 'y', my ),
 
 		pn =
-			shellverse.grow(
-				'Point',
-				'x',
-					mx,
-				'y',
-					ny
-			),
+			Euclid.Point.create( 'x', mx, 'y', ny ),
 
 		pe =
-			shellverse.grow(
-				'Point',
-				'x',
-					ex,
-				'y',
-					my
-			),
+			Euclid.Point.create( 'x', ex, 'y', my ),
 
 		ps =
-			shellverse.grow(
-				'Point',
-				'x',
-					mx,
-				'y',
-					sy
-			);
+			Euclid.Point.create( 'x', mx, 'y', sy );
 
 
 	Euclid.Shape.call(
@@ -183,17 +158,14 @@ Jools.lazyFixate(
 	function()
 	{
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					Jools.half(
-						this.pnw.x +
-						this.pse.x
+						this.pnw.x + this.pse.x
 					),
 				'y',
 					Jools.half(
-						this.pnw.y +
-						this.pse.y
+						this.pnw.y + this.pse.y
 					)
 			)
 		);
@@ -210,17 +182,14 @@ Jools.lazyFixate(
 	function()
 	{
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					Jools.half(
-						this.pnw.x +
-						this.pse.x
+						this.pnw.x + this.pse.x
 					),
 				'y',
 					Jools.half(
-						this.pnw.y +
-						this.pse.y
+						this.pnw.y + this.pse.y
 					)
 			)
 		);

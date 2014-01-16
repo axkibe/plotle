@@ -21,7 +21,6 @@ Euclid =
 */
 var
 	Jools,
-	shellverse,
 	theme;
 
 
@@ -309,8 +308,7 @@ View.prototype.point =
 		}
 
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					this.x( a1 ),
 				'y',
@@ -320,8 +318,7 @@ View.prototype.point =
 	}
 
 	return (
-		shellverse.grow(
-			'Point',
+		Euclid.Point.create(
 			'x',
 				this.x( a1, a2 ),
 			'y',
@@ -341,8 +338,7 @@ View.prototype.depoint =
 	)
 {
 	return (
-		shellverse.grow(
-			'Point',
+		Euclid.Point.create(
 			'x',
 				this.dex( a1, a2 ),
 			'y',
@@ -457,8 +453,7 @@ View.prototype.review =
 	var f = 1 / z1  - 1 / this.zoom;
 
 	return new View(
-		shellverse.grow(
-			'Point',
+		Euclid.Point.create(
 			'x',
 				Math.round( pan.x + p.x * f ),
 			'y',

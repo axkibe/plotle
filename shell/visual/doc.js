@@ -19,9 +19,9 @@ Visual =
 | Imports
 */
 var
+	Euclid,
 	fontPool,
 	Jools,
-	shellverse,
 	theme;
 
 
@@ -486,8 +486,7 @@ Doc.prototype.getPNWs =
 				vpara.flow;
 
 		pnws[ ranks[ r ] ] =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					innerMargin.w,
 				'y',
@@ -812,11 +811,10 @@ Doc.prototype.sketchRange =
 		lx =
 			innerMargin.w;
 
-	// FIXME do not grow points
+	// FIXME do not create points
 
 	fp =
-		shellverse.grow(
-			'Point',
+		Euclid.Point.create(
 			'x',
 				Math.round( fp.x + frontPnw.x - sp.x ),
 			'y',
@@ -824,8 +822,7 @@ Doc.prototype.sketchRange =
 		);
 
 	bp =
-		shellverse.grow(
-			'Point',
+		Euclid.Point.create(
 			'x',
 				Math.round( bp.x + backPnw.x - sp.x ),
 			'y',

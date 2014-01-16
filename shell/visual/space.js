@@ -27,7 +27,6 @@ var
 	Mark,
 	Path,
 	shell,
-	shellverse,
 	Stubs,
 	theme;
 
@@ -1371,8 +1370,7 @@ Space.prototype.dragStop =
 									( p.x > action.start.x ) ?
 										zone.pnw
 										:
-										shellverse.grow(
-											'Point',
+										Euclid.Point.create(
 											'x',
 												zone.pse.x - resized.zone.width,
 											'y',
@@ -1757,8 +1755,7 @@ Space.prototype.dragMove =
 								( p.x > action.start.x ) ?
 									zone.pnw
 									:
-									shellverse.grow(
-										'Point',
+									Euclid.Point.create(
 										'x',
 											zone.pse.x - resized.zone.width,
 										'y',

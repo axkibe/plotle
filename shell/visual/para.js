@@ -25,7 +25,6 @@ var
 	Jools,
 	Mark,
 	shell,
-	shellverse,
 	theme;
 
 
@@ -851,8 +850,7 @@ Para.prototype.locateOffset =
 	if( token )
 	{
 		p =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					Math.round(
 						token.x +
@@ -867,8 +865,7 @@ Para.prototype.locateOffset =
 	else
 	{
 		p =
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					Math.round(
 						Euclid.Measure.width( font, text )

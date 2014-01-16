@@ -29,7 +29,6 @@ Euclid =
 */
 var
 	Jools,
-	shellverse,
 	swatch;
 
 /*
@@ -91,22 +90,10 @@ Euclid.RoundRect =
 
 	var
 		pne =
-			shellverse.grow(
-				'Point',
-				'x',
-					pse.x,
-				'y',
-					pnw.y
-			),
+			Euclid.Point.create( 'x', pse.x, 'y', pnw.y ),
 
 		psw =
-			shellverse.grow(
-				'Point',
-				'x',
-					pnw.x,
-				'y',
-					pse.y
-			);
+			Euclid.Point.create( 'x', pnw.x, 'y', pse.y );
 
 	Euclid.Shape.call(
 		this,
@@ -152,8 +139,7 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
 					Jools.half( this.pse.x + this.pnw.x ),
 				'y',

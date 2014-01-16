@@ -10,6 +10,7 @@
 */
 var Euclid;
 
+
 Euclid =
 	Euclid || { };
 
@@ -18,8 +19,7 @@ Euclid =
 | Imports
 */
 var
-	Jools,
-	shellverse;
+	Jools;
 
 
 /*
@@ -840,6 +840,8 @@ Fabric.prototype.fillRect =
 
 /*
 | Returns the center point of the fabric.
+|
+| TODO lazyFixate
 */
 Fabric.prototype.getCenter =
 	function( )
@@ -862,13 +864,7 @@ Fabric.prototype.getCenter =
 	{
 		c =
 		this._$center =
-			shellverse.grow(
-				'Point',
-				'x',
-					x,
-				'y',
-					y
-			);
+			Euclid.Point.create( 'x', x, 'y', y );
 
 		return c;
 	}
@@ -1626,8 +1622,7 @@ Object.defineProperty(
 			function( )
 			{
 				return (
-					shellverse.grow(
-						'Point',
+					Euclid.Point.create(
 						'x',
 							this.width,
 						'y',

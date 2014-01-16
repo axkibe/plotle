@@ -137,11 +137,12 @@ config.debug.weinre =
 */
 config.log  = {
 	all :
-		false &&
+		false
+		&&
 		true,
 
 	ajax :
-		false,
+		true,
 
 	change :
 		false,

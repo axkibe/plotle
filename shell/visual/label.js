@@ -22,7 +22,6 @@ var
 	Euclid,
 	Jools,
 	shell,
-	shellverse,
 	Style,
 	theme,
 	Visual;
@@ -514,8 +513,7 @@ Jools.lazyFixate(
 		return (
 			Euclid.Rect.create(
 				'pse',
-				shellverse.grow(
-					'Point',
+				Euclid.Point.create(
 					'x',
 						Math.max( zone.width  - 1, 0 ),
 					'y',
