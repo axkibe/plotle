@@ -58,7 +58,10 @@ Visual.Relation =
 		doc,
 		item1key,
 		item2key,
-		mark
+		mark,
+		view,
+		iview,
+		ifabric
 	)
 {
 	Visual.Label.call(
@@ -69,7 +72,10 @@ Visual.Relation =
 		pnw,
 		fontsize,
 		doc,
-		mark
+		mark,
+		view,
+		iview,
+		ifabric
 	);
 
 	this.item1key =
@@ -139,6 +145,15 @@ Relation.create =
 			null,
 
 		tree =
+			null,
+
+		view =
+			null,
+
+		iview =
+			null,
+
+		ifabric =
 			null;
 
 
@@ -227,7 +242,8 @@ Relation.create =
 
 			case 'view' :
 
-				// ignore
+				view =
+					arguments[ a + 1 ];
 
 				break;
 
@@ -346,6 +362,12 @@ Relation.create =
 			tree =
 				inherit.tree;
 		}
+
+		if( view === null )
+		{
+			view =
+				inherit.view;
+		}
 	}
 
 	doc =
@@ -385,7 +407,10 @@ Relation.create =
 			doc,
 			item1key,
 			item2key,
-			mark
+			mark,
+			view,
+			iview,
+			ifabric
 		)
 	);
 };

@@ -464,25 +464,17 @@ Note.create =
 		}
 
 		if(
-			(
-				inherit.tree === tree
-			)
+			inherit.tree === tree
 			&&
-			(
-				inherit.path.equals( path )
-			)
+			inherit.path.equals( path )
 			&&
-			(
-				inherit.zone.equals( zone )
-			)
+			inherit.zone.equals( zone )
 			&&
-			(
-				inherit.sub.doc === doc
-			)
+			inherit.sub.doc === doc
 			&&
-			(
-				inherit.scrollbarY.pos === scrolly
-			)
+			inherit.scrollbarY.pos === scrolly
+			&&
+			inherit.mark.equals( mark )
 		)
 		{
 			if( inherit.view.equals( view ) )

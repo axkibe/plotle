@@ -60,7 +60,10 @@ Visual.Label =
 		pnw,
 		fontsize,
 		doc,
-		mark
+		mark,
+		view,
+		iview,
+		ifabric
 	)
 {
 	Jools.logNew(
@@ -88,6 +91,13 @@ Visual.Label =
 		{
 			throw new Error(
 				'invalid mark'
+			);
+		}
+
+		if( !view )
+		{
+			throw new Error(
+				'invalid view'
 			);
 		}
 	}
@@ -128,6 +138,15 @@ Visual.Label =
 
 	this.mark =
 		mark;
+
+	this.view =
+		view;
+
+	this._ifabric =
+		ifabric;
+
+	this._iview =
+		iview;
 };
 
 
@@ -158,7 +177,16 @@ Label.create =
 		pnw =
 			null,
 
+		view =
+			null,
+
 		tree =
+			null,
+
+		ifabric =
+			null,
+
+		iview =
 			null;
 
 	for(
@@ -232,7 +260,8 @@ Label.create =
 
 			case 'view' :
 
-				// ignore
+				view =
+					arguments[ a + 1 ];
 
 				break;
 
@@ -317,7 +346,7 @@ Label.create =
 				inherit.mark;
 		}
 
-		if( pnw  === null )
+		if( pnw === null )
 		{
 			pnw =
 				inherit.pnw;
@@ -327,6 +356,12 @@ Label.create =
 		{
 			tree =
 				inherit.tree;
+		}
+
+		if( view === null )
+		{
+			view =
+				inherit.view;
 		}
 	}
 
@@ -365,7 +400,10 @@ Label.create =
 			pnw,
 			fontsize,
 			doc,
-			mark
+			mark,
+			view,
+			iview,
+			ifabric
 		)
 	);
 
@@ -549,51 +587,29 @@ Label.prototype.dragStop =
 
 
 /*
-| Draws the label.
-|
-| FIXME: move the common stuff into Visual.Item.draw()
-|        and make the specific into weave()
+| Creates the items fabric.
 */
-Label.prototype.draw =
-	function(
-		fabric,
-		view
-	)
-{
-	var
-		f =
-			this.$fabric,
-
-		zone =
-			view.rect( this.zone );
-
-	// no buffer hit?
-	if (
-		true || // TODO, without there are issues with selection
-		!f ||
-		view.zoom !== f.$zoom
-	)
+Jools.lazyFixate(
+	Label.prototype,
+	'_fabric',
+	function( )
 	{
-		f =
-		this.$fabric =
-			new Euclid.Fabric(
-				zone.width,
-				zone.height
-			);
-
-		f.$zoom =
-			view.zoom;
-
 		var
+			f =
+				new Euclid.Fabric( this.zone ),
+
 			doc =
-				this.sub.doc;
+				this.sub.doc,
+
+			hview =
+				this.view.home( );
 
 		// draws selection and text
 		doc.draw(
 			f,
-			view.home( ),
+			hview,
 			this,
-			zone.width,
+			this.zone.width,
 			Euclid.Point.zero
 		);
 
@@ -605,15 +621,29 @@ Label.prototype.draw =
 			),
 			this.zeroSilhoutte,
 			'sketch',
-			view.home( )
+			hview
 		);
-	}
 
+		return f;
+	}
+);
+
+
+/*
+| Draws the label.
+|
+| FIXME: move the common stuff into Visual.Item.draw()
+*/
+Label.prototype.draw =
+	function(
+		fabric
+	)
+{
 	fabric.drawImage(
 		'image',
-			f,
+			this._fabric,
 		'pnw',
-			zone.pnw
+			this.view.point( this.zone.pnw )
 	);
 };
 

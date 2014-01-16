@@ -936,9 +936,6 @@ Server.prototype.prepareResources =
 				'shell/forms/jockey.js',
 					'fb',
 
-				'shell/visual/base.js',
-					'fb',
-
 				'shell/visual/para.js',
 					'fb',
 

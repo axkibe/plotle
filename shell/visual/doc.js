@@ -83,10 +83,8 @@ Visual.Doc =
 		ranks,
 		sub;
 
-	Visual.Base.call(
-		this,
-		tree
-	);
+	this.tree =
+		tree;
 
 	this.fontsize =
 		fontsize;
@@ -177,12 +175,6 @@ Visual.Doc =
 			);
 	}
 };
-
-
-Jools.subclass(
-	Doc,
-	Visual.Base
-);
 
 
 /*

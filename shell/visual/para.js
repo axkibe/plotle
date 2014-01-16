@@ -97,10 +97,8 @@ Visual.Para =
 		}
 	}
 
-	Visual.Base.call(
-		this,
-		tree
-	);
+	this.tree =
+		tree;
 
 	this.path =
 		path;
@@ -121,15 +119,6 @@ Visual.Para =
 	this.$fabric =
 		null;
 };
-
-
-/*
-| Paras extend visual base
-*/
-Jools.subclass(
-	Para,
-	Visual.Base
-);
 
 
 /*

@@ -107,10 +107,8 @@ Visual.Space =
 		}
 	}
 
-	Visual.Base.call(
-		this,
-		tree
-	);
+	this.tree =
+		tree;
 
 	this.spaceUser =
 		spaceUser;
@@ -155,12 +153,6 @@ Visual.Space =
 
 	Jools.immute( this );
 };
-
-
-Jools.subclass(
-	Space,
-	Visual.Base
-);
 
 
 /*
@@ -539,6 +531,18 @@ Space.prototype.getItem =
 
 
 /*
+| Returns the visual item by a given tree-rank.
+*/
+Space.prototype.atRank =
+	function(
+		rank
+	)
+{
+	return this.getItem( this.tree.ranks[ rank ] );
+};
+
+
+/*
 | Creates a new visual representation of an item.
 */
 Space.prototype._createItem =
@@ -622,10 +626,8 @@ Space.prototype.draw =
 		r--
 	)
 	{
-		// FIXME, maybe overload this.atRank
 		// TODO dont give view here
-		this.getItem( this.tree.ranks[ r ] )
-			.draw(
+		this.atRank( r ).draw(
 				fabric,
 				view
 			);

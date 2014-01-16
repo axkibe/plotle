@@ -52,20 +52,15 @@ Visual.Item =
 		tree
 	)
 {
-	Visual.Base.call(
-		this,
-		tree
-	);
-
 	this.$fabric =
 		null;
+
+	this.tree =
+		tree;
+
+	this.sub =
+		null;
 };
-
-
-Jools.subclass(
-	Item,
-	Visual.Base
-);
 
 
 /*
@@ -823,6 +818,23 @@ Item.prototype.equals =
 {
 	return this === obj;
 };
+
+
+/*
+| Returns the visual with a given tree-rank.
+|
+| FIXME remove
+*/
+/*
+Item.prototype.atRank =
+	function(
+		rank
+	)
+{
+	return this.sub[ this.tree.ranks[ rank ] ];
+};
+*/
+
 
 
 } )( );
