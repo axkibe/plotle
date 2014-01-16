@@ -21,7 +21,8 @@ Euclid =
 | Imports
 */
 var
-	Jools;
+	Jools,
+	JOOBJ;
 
 
 /*
@@ -29,6 +30,48 @@ var
 */
 ( function( ) {
 'use strict';
+
+/*
+| The joobj definition
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Point',
+
+		unit :
+			'Euclid',
+
+		attributes :
+			{
+				x :
+					{
+						comment :
+							'x coordinate',
+
+						type :
+							'Number'
+					},
+
+				y :
+					{
+						comment :
+							'y coordinate',
+
+						type :
+							'Number'
+					}
+			},
+
+		node :
+			true,
+
+		hasJSON :
+			true
+	};
+}
 
 
 /*
@@ -38,179 +81,17 @@ if( typeof( window ) === 'undefined' )
 {
 	Jools =
 		require( '../jools' );
+
+	Euclid.Point =
+		require(
+			'../../' + require( '../../server/joobj-node' )( module )
+		);
 }
 
 
 var
-	_tag =
-		'enemenemu';
-
-/*
-| Constructor.
-*/
-var
 	Point =
-	Euclid.Point =
-		function(
-			tag,
-			x,
-			y
-		)
-{
-	if( tag !== _tag )
-	{
-		throw new Error(
-			'argument fail'
-		);
-	}
-
-	if( CHECK )
-	{
-		if( x === undefined )
-		{
-			throw new Error( 'invalid x' );
-		}
-
-		if( y === undefined )
-		{
-			throw new Error( 'invalid y' );
-		}
-	}
-
-	this.x =
-		x;
-
-	this.y =
-		y;
-
-	Jools.immute( this );
-};
-
-
-/*
-| Reflection.
-*/
-Point.prototype.reflect =
-	'Point';
-
-/*
-| TODO Workaround this is an evil.
-*/
-Point.prototype._$grown =
-	true;
-
-
-
-/*
-| Creator
-*/
-Point.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		x,
-		y,
-		json;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'json' :
-
-				json =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'x' :
-
-				x =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'y' :
-
-				y =
-					arguments[ a + 1 ];
-
-				break;
-
-		}
-	}
-
-	if( json )
-	{
-		if( x === undefined )
-		{
-			x =
-				json.x;
-		}
-
-		if( y === undefined )
-		{
-			y =
-				json.y;
-		}
-	}
-
-	if( inherit )
-	{
-		if( x === undefined )
-		{
-			x =
-				inherit.x;
-		}
-
-		if( y === undefined )
-		{
-			y =
-				inherit.y;
-		}
-	}
-
-	if(
-		inherit
-		&&
-		x === inherit.x
-		&&
-		y === inherit.y
-	)
-	{
-		return inherit;
-	}
-
-	return (
-		new Point(
-			_tag,
-			x,
-			y
-		)
-	);
-};
-
-
-/*
-| Reflection.
-*/
-Point.prototype.reflect =
-	'Point';
-
+		Euclid.Point;
 
 /*
 | Returns true if this point is equal to another.
@@ -313,31 +194,6 @@ Point.prototype.sub =
 
 
 /*
-| Turns the Point into a JSON.
-| TODO this is a workarond only.
-*/
-Point.prototype.toJSON =
-	function(
-
-	)
-{
-	return {
-		type :
-			'Point',
-
-		twig :
-			{
-				'x' :
-					this.x,
-
-				'y' :
-					this.y
-			}
-	};
-};
-
-
-/*
 | Creates a new point.
 |
 | However, this will look through a list of points to see if
@@ -379,6 +235,7 @@ Point.renew =
 	);
 };
 
+
 /*
 | Shortcut for point at 0/0.
 */
@@ -397,9 +254,8 @@ Point.zero =
 if( typeof( window ) === 'undefined' )
 {
 	module.exports =
-	        Point;
+		Point;
 }
-
 
 
 } )( );

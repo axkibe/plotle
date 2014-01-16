@@ -501,6 +501,7 @@ Jools.ensureArgs =
 /*
 | Fixates a value to an object (not changeable)
 */
+/*
 Jools.fixate =
 	function(
 		obj,
@@ -508,7 +509,7 @@ Jools.fixate =
 		value
 	)
 {
-    Object.defineProperty(
+	Object.defineProperty(
 		obj,
 		key,
 		{
@@ -517,8 +518,9 @@ Jools.fixate =
 		}
 	);
 
-    return value;
+	return value;
 };
+*/
 
 
 /*
@@ -534,7 +536,7 @@ Jools.innumerable =
 		writable
 	)
 {
-    Object.defineProperty(
+	Object.defineProperty(
 		obj,
 		key,
 		{
@@ -543,12 +545,14 @@ Jools.innumerable =
 		}
 	);
 
-    return value;
+	return value;
 };
 
 
 /*
-* A value is computed and fixated only when needed.
+| A value is computed and fixated only when needed.
+|
+| FIXME call lazyValue
 */
 Jools.lazyFixate =
 	function(
@@ -580,6 +584,59 @@ Jools.lazyFixate =
 	);
 };
 
+
+/*
+| A function that will always result in the same thing.
+*/
+Jools.lazyFunction =
+	function(
+		proto,
+		key,
+		getter
+	)
+{
+	Object.defineProperty(
+		proto,
+		key,
+		{
+			get : function( )
+			{
+				var
+					ckey =
+						'_lazy_' + key,
+
+					cFuncKey =
+						'_lazyFunc_' + key;
+
+				if( Jools.is( this[ cFuncKey ] ) )
+				{
+					return this[ cFuncKey ];
+				}
+
+				Jools.innumerable(
+					this,
+					ckey,
+					getter.call( this )
+				);
+
+				var
+					cFunc =
+						function( )
+						{
+							return this[ ckey ];
+						};
+
+				Jools.innumerable(
+					this,
+					cFuncKey,
+					cFunc
+				);
+
+				return cFunc;
+			}
+		}
+	);
+};
 
 /*
 | Copies one object (not deep!)

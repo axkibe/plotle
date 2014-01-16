@@ -142,7 +142,7 @@ config.log  = {
 		true,
 
 	ajax :
-		true,
+		false,
 
 	change :
 		false,

@@ -42,7 +42,9 @@ var
 		{
 			case 'abstract' :
 			case 'attributes' :
+			case 'hasJSON' :
 			case 'name' :
+			case 'node' :
 			case 'notag' :
 			case 'equals' :
 			case 'subclass' :
@@ -87,6 +89,13 @@ var
 			{
 				throw new Error(
 					'attribute must not be named "inherit"'
+				);
+			}
+
+			if( aName === 'json' )
+			{
+				throw new Error(
+					'attribute must not be named "json"'
 				);
 			}
 
@@ -286,6 +295,53 @@ generateCapsuleFooter =
 		''
 	);
 };
+
+
+/*
+| Generates the node include section.
+*/
+var
+generateNodeIncludesSection =
+	function(
+		r // result array
+	)
+{
+	r.push(
+		'/*',
+		'| Node includes',
+		'*/',
+		'if( typeof( module ) !== \'undefined\' )',
+		'{',
+		'\tJools =',
+		'\t\trequire( \'../shared/jools\' );',
+		'}'
+	);
+};
+
+
+/*
+| Generates the node export section.
+*/
+var
+generateNodeExportSection =
+	function(
+		r,        // result array
+		reference // the joobj reference name
+	)
+{
+	r.push(
+		'/*',
+		'| Node export',
+		'*/',
+		'if( typeof( module ) !== \'undefined\' )',
+		'{',
+		'\tmodule.exports =',
+		'\t\t' + reference + ';',
+		'}'
+	);
+};
+
+
 
 
 /*
@@ -694,6 +750,11 @@ generateCreator =
 
 		aListPlus.push( 'inherit' );
 
+		if( joobj.hasJSON )
+		{
+			aListPlus.push( 'json' );
+		}
+
 		aListPlus.sort( );
 	}
 
@@ -739,6 +800,7 @@ generateCreator =
 		}
 
 		r.push(
+			'',
 			'\tfor(',
 			'\t\tvar a = 0, aZ = arguments.length;',
 			'\t\ta < aZ;',
@@ -782,6 +844,45 @@ generateCreator =
 			'\t}',
 			''
 		);
+
+		// generates JSON data aquisition
+		if( joobj.hasJSON )
+		{
+			r.push(
+				'\tif( json )',
+				'\t{'
+			);
+
+			for(
+				a = 0, aZ = aList.length;
+				a < aZ;
+				a++
+			)
+			{
+				aName =
+					aList[ a ];
+
+				if( a > 0 )
+				{
+					r.push(
+						''
+					);
+				}
+
+				r.push(
+					'\t\tif( ' + aName + ' === undefined )',
+					'\t\t{',
+					'\t\t\t' + aName + ' =',
+					'\t\t\t\tjson.' + aName + ';',
+					'\t\t}'
+				);
+			}
+
+			r.push(
+				'\t}',
+				''
+			);
+		}
 
 		// generates inheritance
 		r.push(
@@ -1014,7 +1115,85 @@ generateReflectionSection =
 		reference + '.prototype.reflect =',
 		'\t\'' + joobj.name + '\';'
 	);
+
+	// FIXME this is some workaround
+	if( joobj.hasJSON )
+	{
+		r.push(
+			'',
+			'',
+			'/*',
+			'| Workaround meshverse growing',
+			'*/',
+			reference + '.prototype._$grown =',
+			'\ttrue;'
+		);
+	}
 };
+
+
+/*
+| Generates the toJSON section.
+*/
+var
+generateToJSONSection =
+	function(
+		r,         // result array
+		joobj,     // the joobj definition
+		reference, // the reference name for the joobj
+		aList      // attribute name list
+	)
+{
+	var
+		a,
+		aZ,
+		aName;
+
+	r.push(
+		'/*',
+		'| Convers the object into a JSON.',
+		'*/',
+		'Jools.lazyFunction(',
+		'\t' + reference + '.prototype,',
+		'\t\'toJSON\',',
+		'\tfunction( )',
+		'\t{',
+		'\t\treturn Object.freeze( {',
+		'',
+		'\t\t\ttype :',
+		'\t\t\t\t\'' + joobj.name + '\',',
+		'',
+		'\t\t\ttwig :',
+		'\t\t\t\tObject.freeze( {',
+		''
+	);
+
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			aList[ a ];
+
+		r.push(
+			'\t\t\t\t\t\'' + aName + '\' :',
+			'\t\t\t\t\t\tthis.' + aName +
+				( a + 1 < aZ ? ',' : '' ),
+			''
+		);
+	}
+
+
+	r.push(
+		'\t\t\t\t} )',
+		'\t\t} );',
+		'\t}',
+		');'
+	);
+};
+
 
 
 /*
@@ -1191,6 +1370,13 @@ joobjGenerator =
 
 	generateSeperator( r );
 
+	if( joobj.node )
+	{
+		generateNodeIncludesSection( r );
+
+		generateSeperator( r );
+	}
+
 	generateConstructor( r, joobj, reference, aList );
 
 	generateSeperator( r );
@@ -1221,6 +1407,13 @@ joobjGenerator =
 
 	generateSeperator( r );
 
+	if( joobj.hasJSON )
+	{
+		generateToJSONSection( r, joobj, reference, aList );
+
+		generateSeperator( r );
+	}
+
 	switch( joobj.equals )
 	{
 		case false :
@@ -1249,6 +1442,13 @@ joobjGenerator =
 			throw new Error(
 				'invalid equals value: ' + joobj.equals
 			);
+	}
+
+	if( joobj.node )
+	{
+		generateNodeExportSection( r, reference );
+
+		generateSeperator( r );
 	}
 
 	generateCapsuleFooter( r );

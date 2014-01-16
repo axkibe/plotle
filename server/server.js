@@ -779,7 +779,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shared/euclid/point.js',
-					'fb',
+					'fbj',
 
 				'shell/euclid/rect.js',
 					'fb',

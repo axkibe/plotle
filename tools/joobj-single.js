@@ -34,7 +34,7 @@ var
 	input =
 		null,
 
-	idef =
+	joobj =
 		null,
 
 	output =
@@ -68,7 +68,7 @@ try
 			readOptions
 		);
 
-	idef =
+	joobj =
 		vm.runInNewContext(
 			input,
 			{
@@ -79,7 +79,7 @@ try
 		);
 
 	output =
-		joobjGenerator( idef );
+		joobjGenerator( joobj );
 
 	var
 		outFilename =
