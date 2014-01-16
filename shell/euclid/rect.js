@@ -37,7 +37,8 @@ var Rect =
 Euclid.Rect =
 	function(
 		tag,
-		twig
+		pnw,
+		pse
 	)
 {
 	if( tag !== 'XXXREE' )
@@ -50,12 +51,12 @@ Euclid.Rect =
 	var
 		pnw =
 		this.pnw =
-			twig.pnw;
+			pnw;
 
 	var
 		pse =
 		this.pse =
-			twig.pse;
+			pse;
 
 	if(
 		pnw.x > pse.x ||
