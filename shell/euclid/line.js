@@ -19,8 +19,7 @@ Euclid =
 | Imports
 */
 var
-	Jools,
-	shellverse;
+	Jools;
 
 
 /*
@@ -158,19 +157,20 @@ Jools.lazyFixate(
 				this.p2;
 
 		return Euclid.Rect.create(
-			'pnw/pse',
-			Euclid.Point.renew(
-				Math.min( p1.x, p2.x ),
-				Math.min( p1.y, p2.y ),
-				p1,
-				p2
-			),
-			Euclid.Point.renew(
-				Math.max( p1.x, p2.x ),
-				Math.max( p1.y, p2.y ),
-				p1,
-				p2
-			)
+			'pnw',
+				Euclid.Point.renew(
+					Math.min( p1.x, p2.x ),
+					Math.min( p1.y, p2.y ),
+					p1,
+					p2
+				),
+			'pse',
+				Euclid.Point.renew(
+					Math.max( p1.x, p2.x ),
+					Math.max( p1.y, p2.y ),
+					p1,
+					p2
+				)
 		);
 	}
 );
@@ -191,12 +191,11 @@ Jools.lazyFixate(
 				this.p2;
 
 		return (
-			shellverse.grow(
-				'Point',
+			Euclid.Point.create(
 				'x',
-					Jools.half(p1.x + p2.x),
+					Jools.half( p1.x + p2.x ),
 				'y',
-					Jools.half(p1.y + p2.y)
+					Jools.half( p1.y + p2.y )
 			)
 		);
 	}

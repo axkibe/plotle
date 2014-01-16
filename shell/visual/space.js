@@ -988,9 +988,10 @@ Space.prototype.dragStart =
 			Visual[ action.itemType ].create(
 				'zone',
 					Euclid.Rect.create(
-						'pnw/pse',
-						p, //TODO depoint?
-						p
+						'pnw',
+							p,  // TODO why no depoint?
+						'pse',
+							p
 					),
 				'doc',
 					Visual.Doc.create(
@@ -1104,9 +1105,10 @@ Space.prototype.dragStart =
 					view,
 				'zone',
 					Euclid.Rect.create(
-						'pnw/pse',
-						p, //TODO depoint?
-						p
+						'pnw',
+							p, //TODO depoint?
+						'pse',
+							p
 					)
 			);
 
@@ -1286,8 +1288,7 @@ Space.prototype.dragStop =
 								'inherit',
 									action.transItem,
 								'zone',
-									Euclid.Rect.create(
-										'arbitrary',
+									Euclid.Rect.createArbitrary(
 										view.depoint( action.start ),
 										view.depoint( p )
 									)
@@ -1335,8 +1336,7 @@ Space.prototype.dragStop =
 							action.model,
 
 						zone =
-							Euclid.Rect.create(
-								'arbitrary',
+							Euclid.Rect.createArbitrary(
 								view.depoint( action.start ),
 								view.depoint( p )
 							),
@@ -1421,8 +1421,7 @@ Space.prototype.dragStop =
 								'inherit',
 									action.transItem,
 								'zone',
-									Euclid.Rect.create(
-										'arbitrary',
+									Euclid.Rect.createArbitrary(
 										view.depoint( action.start ),
 										view.depoint( p )
 									)
@@ -1707,8 +1706,7 @@ Space.prototype.dragMove =
 
 			var
 				zone =
-					Euclid.Rect.create(
-						'arbitrary',
+					Euclid.Rect.createArbitrary(
 						view.depoint( action.start ),
 						view.depoint( p )
 					);

@@ -78,8 +78,10 @@ Forms.Form =
 
 	this.frame =
 		Euclid.Rect.create(
+			'pnw',
+				Euclid.Point.zero,
 			'pse',
-			screensize
+				screensize
 		);
 
 	this.mark =

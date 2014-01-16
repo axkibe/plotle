@@ -86,19 +86,27 @@ Discs.Disc =
 			style.ellipse.width,
 
 		eh =
-			style.ellipse.height;
+			style.ellipse.height,
+
+		ny =
+			Jools.half( screensize.y - height );
 
 	this.frame =
 		Euclid.Rect.create(
-			'pnw/size',
-			Euclid.Point.create(
-				'x',
-					0,
-				'y',
-					Jools.half( screensize.y - height )
-			),
-			width,
-			height
+			'pnw',
+				Euclid.Point.create(
+					'x',
+						0,
+					'y',
+						ny
+				),
+			'pse',
+				Euclid.Point.create(
+					'x',
+						width,
+					'y',
+						ny + height
+				)
 		);
 
 	this._tree =

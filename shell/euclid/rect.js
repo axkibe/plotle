@@ -20,8 +20,7 @@ Euclid =
 */
 var
 	Euclid,
-	Jools,
-	shellverse;
+	Jools;
 
 
 /*
@@ -41,7 +40,7 @@ Euclid.Rect =
 		twig
 	)
 {
-	if( tag !== 'TREE' )
+	if( tag !== 'XXXREE' )
 	{
 		throw new Error(
 			'invalid tag'
@@ -78,115 +77,112 @@ Euclid.Rect =
 
 Rect.create =
 	function(
-		overload,
-		a1,
-		a2,
-		a3
+		// free strings
 	)
 {
 	var
 		pnw,
 		pse;
 
-	switch( overload )
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a +=2
+	)
 	{
-		case 'pnw/pse' :
+		switch( arguments[ a ] )
+		{
+			case 'pnw' :
 
-			pnw =
-				a1;
-
-			pse =
-				a2;
-
-			break;
-
-		case 'pnw/size' :
-
-			pnw =
-				a1;
-
-			pse =
-				a1.add( a2, a3 );
-
-			break;
-
-		case 'pse' :
-
-			pnw =
-				Euclid.Point.zero;
-
-			pse =
-				a1;
-
-			break;
-
-		case 'o' :
-
-			pnw =
-				a1.pnw;
-
-			pse =
-				a1.pse;
-
-			break;
-
-		case 'arbitrary' :
-
-			if(
-				a2.x >= a1.x &&
-				a2.y >= a1.y
-			)
-			{
-				pnw = a1;
-				pse = a2;
-			}
-			else if (
-				a1.x >= a2.x &&
-				a1.y >= a2.y
-			)
-			{
-				pnw = a2;
-				pse = a1;
-			}
-			else if(
-				a2.x >= a1.x &&
-				a1.y >= a2.y
-			)
-			{
 				pnw =
-					Euclid.Point.create( 'x', a1.x, 'y', a2.y );
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'pse' :
 
 				pse =
-					Euclid.Point.create( 'x', a2.x, 'y', a1.y );
-			}
-			else if (
-				a1.x >= a2.x &&
-				a2.y >= a1.y
-			)
-			{
-				pnw =
-					Euclid.Point.create( 'x', a2.x, 'y', a1.y );
+					arguments[ a + 1 ];
 
-				pse =
-					Euclid.Point.create( 'x', a1.x, 'y', a2.y );
-			}
-			else
-			{
-				throw new Error(
-					'this is not possible'
-				);
-			}
-			break;
+				break;
 
-		default :
-
-			throw new Error(
-				'invalid overload'
-			);
+		}
 	}
 
-	return shellverse.grow(
-		'Rect',
+	return new Rect(
+		'XXXREE',
+		pnw,
+		pse
+	);
+};
+
+
+/*
+| Creates a rect by two arbitrary corner points
+*/
+Rect.createArbitrary =
+	function(
+		p1,
+		p2
+	)
+{
+	var
+		pnw,
+		pse;
+
+	if(
+		p2.x >= p1.x &&
+		p2.y >= p1.y
+	)
+	{
+		pnw =
+			p1;
+
+		pse =
+			p2;
+	}
+	else if (
+		p1.x >= p2.x &&
+		p1.y >= p2.y
+	)
+	{
+		pnw =
+			p2;
+
+		pse =
+			p1;
+	}
+	else if(
+		p2.x >= p1.x &&
+		p1.y >= p2.y
+	)
+	{
+		pnw =
+			Euclid.Point.create( 'x', p1.x, 'y', p2.y );
+
+		pse =
+			Euclid.Point.create( 'x', p2.x, 'y', p1.y );
+	}
+	else if (
+		p1.x >= p2.x &&
+		p2.y >= p1.y
+	)
+	{
+		pnw =
+			Euclid.Point.create( 'x', p2.x, 'y', p1.y );
+
+		pse =
+			Euclid.Point.create( 'x', p1.x, 'y', p2.y );
+	}
+	else
+	{
+		throw new Error(
+			'this is not possible'
+		);
+	}
+
+	return Euclid.Rect.create(
 		'pnw',
 			pnw,
 		'pse',

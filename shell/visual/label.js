@@ -119,16 +119,19 @@ Visual.Label =
 
 	this.zone =
 		Euclid.Rect.create(
-			'pnw/size',
-			pnw,
-			Math.round(
-				Math.max(
-					doc.spread + 3,
-					height / 4
-				)
-			),
-			Math.round(
-				height + 2
+			'pnw',
+				pnw,
+			'pse',
+				pnw.add(
+					Math.round(
+						Math.max(
+							doc.spread + 3,
+							height / 4
+						)
+					),
+					Math.round(
+						height + 2
+					)
 			)
 		);
 
@@ -489,9 +492,10 @@ Jools.lazyFixate(
 	{
 		return (
 			Euclid.Rect.create(
-				'pnw/pse',
-				this.zone.pnw,
-				this.zone.pse.sub( 1, 1 )
+				'pnw',
+					this.zone.pnw,
+				'pse',
+					this.zone.pse.sub( 1, 1 )
 			)
 		);
 	}
@@ -512,13 +516,15 @@ Jools.lazyFixate(
 
 		return (
 			Euclid.Rect.create(
+				'pnw',
+					Euclid.Point.zero,
 				'pse',
-				Euclid.Point.create(
-					'x',
-						Math.max( zone.width  - 1, 0 ),
-					'y',
-						Math.max( zone.height - 1, 0 )
-				)
+					Euclid.Point.create(
+						'x',
+							Math.max( zone.width  - 1, 0 ),
+						'y',
+							Math.max( zone.height - 1, 0 )
+					)
 			)
 		);
 	}

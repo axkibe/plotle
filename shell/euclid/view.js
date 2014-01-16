@@ -364,9 +364,10 @@ View.prototype.rect =
 				(a1 instanceof Euclid.Rect) ?
 					a1 :
 					Euclid.Rect.create(
-						'pnw/pse',
-						a1,
-						a2
+						'pnw',
+							a1,
+						'pse',
+							a2
 					);
 
 		return (
@@ -400,9 +401,10 @@ View.prototype.rect =
 	}
 
 	return Euclid.Rect.create(
-		'pnw/pse',
-		this.point( pnw ),
-		this.point( pse )
+		'pnw',
+			this.point( pnw ),
+		'pse',
+			this.point( pse )
 	);
 };
 

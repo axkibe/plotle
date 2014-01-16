@@ -257,10 +257,19 @@ Note.create =
 				{
 					zone =
 						Euclid.Rect.create(
-							'pnw/size',
-							zone.pnw,
-							Math.max( minWidth,  zone.width  ),
-							Math.max( minHeight, zone.height )
+							'pnw',
+								zone.pnw,
+							'pse',
+								zone.pnw.add(
+									Math.max(
+										minWidth,
+										zone.width
+									),
+									Math.max(
+										minHeight,
+										zone.height
+									)
+								)
 						);
 				}
 
