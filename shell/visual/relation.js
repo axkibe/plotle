@@ -470,8 +470,7 @@ Relation.spawn =
 */
 Relation.prototype.draw =
 	function(
-		fabric,
-		view
+		fabric
 	)
 {
 	var
@@ -502,7 +501,7 @@ Relation.prototype.draw =
 			theme.relation.style,
 			l1,
 			'sketch',
-			view
+			this.view
 		);
 	}
 
@@ -520,14 +519,13 @@ Relation.prototype.draw =
 			theme.relation.style,
 			l2,
 			'sketch',
-			view
+			this.view
 		);
 	}
 
 	Visual.Label.prototype.draw.call(
 		this,
-		fabric,
-		view
+		fabric
 	);
 };
 

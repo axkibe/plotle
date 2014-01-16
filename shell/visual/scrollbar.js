@@ -51,9 +51,6 @@ Visual.Scrollbar =
 		size      // size
 	)
 {
-	this.visible =
-		false;
-
 	this._aperture =
 		aperture;
 

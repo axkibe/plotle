@@ -627,10 +627,7 @@ Space.prototype.draw =
 	)
 	{
 		// TODO dont give view here
-		this.atRank( r ).draw(
-				fabric,
-				view
-			);
+		this.atRank( r ).draw( fabric );
 	}
 
 	var
@@ -651,10 +648,7 @@ Space.prototype.draw =
 
 			if( action.start )
 			{
-				action.transItem.draw(
-					fabric,
-					view
-				);
+				action.transItem.draw( fabric );
 			}
 
 			break;

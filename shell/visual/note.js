@@ -642,20 +642,15 @@ Jools.lazyFixate(
 		);
 
 		// draws selection and text
-		// TODO this looks evil
-		sbary.point =
-			Euclid.Point.renew(
-				0,
-				sbary.pos,
-				sbary.point
-			);
-
 		doc.draw(
 			f,
 			hview,
 			this,
 			this.zone.width,
-			sbary.point
+			Euclid.Point.renew( // TODO
+				0,
+				sbary.pos
+			)
 		);
 
 		// draws the border

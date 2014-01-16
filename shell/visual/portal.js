@@ -19,7 +19,6 @@ Visual =
 */
 var
 	Accent,
-	config,
 	fontPool,
 	Euclid,
 	HoverReply,
@@ -738,8 +737,7 @@ Portal.prototype.click =
 */
 Portal.prototype.draw =
 	function(
-		fabric,
-		view
+		fabric
 	)
 {
 	fabric.drawImage(
