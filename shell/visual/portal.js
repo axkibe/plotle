@@ -61,7 +61,10 @@ Visual.Portal =
 		path,
 		hover,
 		mark,
-		zone
+		zone,
+		view,
+		iview,
+		ifabric
 	)
 {
 	Jools.logNew(
@@ -136,6 +139,14 @@ Visual.Portal =
 	this.zone =
 		zone;
 
+	this.view =
+		view;
+
+	this.iview =
+		iview;
+
+	this.ifabric =
+		ifabric;
 
 	// the prepared space fields
 	// FIXME lazy evaluate
@@ -168,6 +179,12 @@ Portal.create =
 		inherit =
 			null,
 
+		iview =
+			null,
+
+		ifabric =
+			null,
+
 		hover =
 			null,
 
@@ -181,6 +198,9 @@ Portal.create =
 			null,
 
 		tree =
+			null,
+
+		view =
 			null,
 
 		zone =
@@ -250,7 +270,8 @@ Portal.create =
 
 			case 'view' :
 
-				// ignore
+				view =
+					arguments[ a + 1 ];
 
 				break;
 
@@ -369,29 +390,36 @@ Portal.create =
 				inherit.tree;
 		}
 
+		if( !view )
+		{
+			view =
+				inherit.view;
+		}
+
 		if(
-			(
-				inherit.tree === tree
-			)
+			inherit.tree === tree
 			&&
-			(
-				inherit.hover.equals( hover )
-			)
+			inherit.hover.equals( hover )
 			&&
-			(
-				inherit.mark.equals( mark )
-			)
+			inherit.mark.equals( mark )
 			&&
-			(
-				inherit.path.equals( path )
-			)
+			inherit.path.equals( path )
 			&&
-			(
-				inherit.zone.equals( zone )
-			)
+			inherit.zone.equals( zone )
 		)
 		{
-			return inherit;
+			if( inherit.view.equals( view ) )
+			{
+				return inherit;
+			}
+			else
+			{
+				ifabric =
+					inherit._ifabric;
+
+				iview =
+					inherit.view;
+			}
 		}
 	}
 
@@ -402,7 +430,10 @@ Portal.create =
 			path,
 			hover,
 			mark,
-			zone
+			zone,
+			view,
+			iview,
+			ifabric
 		)
 	);
 };
@@ -711,37 +742,11 @@ Portal.prototype.draw =
 		view
 	)
 {
-	var
-		zone =
-			this.zone,
-
-		vzone =
-			view.rect( zone ),
-
-		f =
-			this.$fabric;
-
-	// no buffer hit?
-	if (
-		config.debug.noCache ||
-		!f ||
-		vzone.width !== f.width ||
-		vzone.height !== f.height
-	)
-	{
-		f =
-			this._weave(
-				zone,
-				vzone,
-				view.home( )
-			);
-	}
-
 	fabric.drawImage(
 		'image',
-			f,
+			this._fabric,
 		'pnw',
-			vzone.pnw
+			this.view.point( this.zone.pnw )
 	);
 };
 
@@ -857,171 +862,168 @@ Portal.prototype.pointingHover =
 
 
 /*
-| Returns the fabric for the input field.
+| Creates the items fabric.
 */
-Portal.prototype._weave =
-	function(
-		zone,
-		vzone,
-		view
-	)
-{
-	var
-		f =
-		this.$fabric =
-			new Euclid.Fabric(
-				vzone.width + 2,
-				vzone.height + 2
-			),
-
-		mark =
-			this.mark,
-
-		section =
-			mark &&
-			mark.hasCaret && // TODO hasWidget
-			mark.caretPath.get( -1 );
-
-	f.fill(
-		Style.getStyle(
-			theme.portal.style,
-			'normal'
-		),
-		this.zeroSilhoutte,
-		'sketch',
-		view.home( )
-	);
-
-	if( this.subPaths )
+Jools.lazyFixate(
+	Portal.prototype,
+	'_fabric',
+	function( )
 	{
-		f.clip(
+		var
+			vzone =
+				this.view.rect( this.zone ),
+
+			f =
+				new Euclid.Fabric(
+					vzone.width + 2,
+					vzone.height + 2
+				),
+
+			hview =
+				this.view.home( ),
+
+			mark =
+				this.mark,
+
+			section =
+				mark &&
+				mark.hasCaret && // TODO hasWidget
+				mark.caretPath.get( -1 );
+
+		f.fill(
+			Style.getStyle(
+				theme.portal.style,
+				'normal'
+			),
 			this.zeroSilhoutte,
 			'sketch',
-			view.home( ),
-			0
+			hview
 		);
 
-		var
-			spaceUser =
-			this._$spaceFields.spaceUser =
-				this._prepareField(
-					'spaceUser',
-					zone,
-					null
-				);
-
-		var
-			spaceTag =
-			this._$spaceFields.spaceTag =
-				this._prepareField(
-					'spaceTag',
-					zone,
-					spaceUser.pnw
-				);
-
-		var
-			moveToButton =
-			this._$moveToButton =
-				this._prepareMoveToButton(
-					zone
-				);
-
-		f.paint(
-			Style.getStyle(
-				theme.portal.moveTo.style,
-				Accent.state(
-					this.hover.equals(  this.subPaths.moveToButton ),
-					section === 'moveToButton'
-				)
-			),
-			moveToButton.shape,
-			'sketch',
-			view
-		);
-
-		f.paint(
-			Style.getStyle(
-				theme.portal.input.style,
-				'normal'
-			),
-			spaceUser.silhoutte,
-			'sketch',
-			view
-		);
-
-		f.paint(
-			Style.getStyle(
-				theme.portal.input.style,
-				'normal'
-			),
-			spaceTag.silhoutte,
-			'sketch',
-			view
-		);
-
-		f.scale( view.zoom );
-
-		f.paintText(
-			'text',
-				spaceUser.text,
-			'p',
-				spaceUser.pnw,
-			'font',
-				this._fonts.spaceUser
-		);
-
-		f.paintText(
-			'text',
-				spaceTag.text,
-			'p',
-				spaceTag.pnw,
-			'font',
-				this._fonts.spaceTag
-		);
-
-		f.paintText(
-			'text',
-				'move to',
-			'p',
-				moveToButton.textCenter,
-			'font',
-				this._fonts.moveTo
-		);
-
-
-		if(
-			mark &&
-			mark.reflect === 'Caret' &&
-			mark.itemPath.equals( this.path )
-		)
+		if( this.subPaths )
 		{
-			this._drawCaret(
-				f,
-				view,
-				mark
+			f.clip(
+				this.zeroSilhoutte,
+				'sketch',
+				hview,
+				0
 			);
+
+			var
+				spaceUser =
+				this._$spaceFields.spaceUser =
+					this._prepareField(
+						'spaceUser',
+						null
+					),
+
+				spaceTag =
+				this._$spaceFields.spaceTag =
+					this._prepareField(
+						'spaceTag',
+						spaceUser.pnw
+					),
+
+				moveToButton =
+				this._$moveToButton =
+					this._prepareMoveToButton( );
+
+			f.paint(
+				Style.getStyle(
+					theme.portal.moveTo.style,
+					Accent.state(
+						this.hover.equals(  this.subPaths.moveToButton ),
+						section === 'moveToButton'
+					)
+				),
+				moveToButton.shape,
+				'sketch',
+				hview
+			);
+
+			f.paint(
+				Style.getStyle(
+					theme.portal.input.style,
+					'normal'
+				),
+				spaceUser.silhoutte,
+				'sketch',
+				hview
+			);
+
+			f.paint(
+				Style.getStyle(
+					theme.portal.input.style,
+					'normal'
+				),
+				spaceTag.silhoutte,
+				'sketch',
+				hview
+			);
+
+			f.scale( hview.zoom );
+
+			f.paintText(
+				'text',
+					spaceUser.text,
+				'p',
+					spaceUser.pnw,
+				'font',
+					this._fonts.spaceUser
+			);
+
+			f.paintText(
+				'text',
+					spaceTag.text,
+				'p',
+					spaceTag.pnw,
+				'font',
+					this._fonts.spaceTag
+			);
+
+			f.paintText(
+				'text',
+					'move to',
+				'p',
+					moveToButton.textCenter,
+				'font',
+					this._fonts.moveTo
+			);
+
+
+			if(
+				mark &&
+				mark.reflect === 'Caret' &&
+				mark.itemPath.equals( this.path )
+			)
+			{
+				this._drawCaret(
+					f,
+					mark
+				);
+			}
+
+			f.scale( 1 / hview.zoom );
+
+			f.deClip( );
 		}
 
-		f.scale( 1 / view.zoom );
+		// redraws the edge on the end to top
+		// everything else
 
-		f.deClip( );
+		f.edge(
+			Style.getStyle(
+				theme.portal.style,
+				'normal'
+			),
+			this.zeroSilhoutte,
+			'sketch',
+			hview
+		);
+
+		return f;
 	}
-
-	// redraws the edge on the end to top
-	// everything else
-
-	f.edge(
-		Style.getStyle(
-			theme.portal.style,
-			'normal'
-		),
-		this.zeroSilhoutte,
-		'sketch',
-		view.home( )
-	);
-
-	return f;
-};
+);
 
 
 /*
@@ -1139,7 +1141,6 @@ Portal.prototype._locateOffset =
 Portal.prototype._drawCaret =
 	function(
 		fabric,
-		view,
 		mark
 	)
 {
@@ -1925,11 +1926,12 @@ Portal.prototype._isSection =
 | Prepares the moveTo button.
 */
 Portal.prototype._prepareMoveToButton =
-	function(
-		zone
-	)
+	function( )
 {
 	var
+		zone =
+			this.zone,
+
 		width =
 			theme.portal.moveTo.width,
 
@@ -1980,11 +1982,13 @@ Portal.prototype._prepareMoveToButton =
 Portal.prototype._prepareField =
 	function(
 		section,
-		zone,
 		basePNW
 	)
 {
 	var
+		zone =
+			this.zone,
+
 		pitch =
 			theme.portal.input.pitch,
 

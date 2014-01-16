@@ -596,7 +596,7 @@ Jools.lazyFixate(
 	{
 		var
 			f =
-				new Euclid.Fabric( this.zone ),
+				new Euclid.Fabric( this.view.rect( this.zone ) ),
 
 			doc =
 				this.sub.doc,
