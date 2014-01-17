@@ -181,8 +181,9 @@ for(
 
 console.log( '* copying src.changes.* -> trg.changes.*' );
 
-var translateChange =
-	function( o )
+var
+	translateChange =
+		function( o )
 {
 	if(
 		Jools.isString( o ) ||
@@ -203,6 +204,37 @@ var translateChange =
 	{
 		t[ k === 'copse' ? 'twig' : k ] =
 			translateChange( o[ k ] );
+	}
+
+	if( t.type === 'Point' && t.twig )
+	{
+		if( t.x )
+		{
+			if( t.x !== t.twig.x )
+			{
+				throw new Error( 'x mismatch' );
+			}
+		}
+		else
+		{
+			t.x =
+				t.twig.x;
+		}
+
+		if( t.y )
+		{
+			if( t.y !== t.twig.y )
+			{
+				throw new Error( 'y mismatch' );
+			}
+		}
+		else
+		{
+			t.y =
+				t.twig.y;
+		}
+
+		delete t.twig;
 	}
 
 	return t;

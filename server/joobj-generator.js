@@ -1012,7 +1012,7 @@ generateCreator =
 
 						r.push(
 							'\t\t\t\t\t\'json\',',
-							'\t\t\t\t\t\tjson.' + aName + '.twig', // XXX
+							'\t\t\t\t\t\tjson.' + aName,
 							'\t\t\t\t);'
 						);
 
@@ -1295,95 +1295,45 @@ generateToJSONSection =
 		aZ,
 		aName;
 
-	if( joobj.name === 'Point' ) // XXX
+	r.push(
+		'/*',
+		'| Convers the object into a JSON.',
+		'*/',
+		'Jools.lazyFunction(',
+		'\t' + reference + '.prototype,',
+		'\t\'toJSON\',',
+		'\tfunction( )',
+		'\t{',
+		'\t\treturn Object.freeze( {',
+		'',
+		'\t\t\ttype :',
+		'\t\t\t\t\'' + joobj.name + '\',',
+		''
+	);
+
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
 	{
+		aName =
+			aList[ a ];
+
 		r.push(
-			'/*',
-			'| Convers the object into a JSON.',
-			'*/',
-			'Jools.lazyFunction(',
-			'\t' + reference + '.prototype,',
-			'\t\'toJSON\',',
-			'\tfunction( )',
-			'\t{',
-			'\t\treturn Object.freeze( {',
-			'',
-			'\t\t\ttype :',
-			'\t\t\t\t\'' + joobj.name + '\',',
-			'',
-			'\t\t\ttwig :',
-			'\t\t\t\tObject.freeze( {',
+			'\t\t\t\'' + aName + '\' :',
+			'\t\t\t\tthis.' + aName +
+				( a + 1 < aZ ? ',' : '' ),
 			''
 		);
-
-		for(
-			a = 0, aZ = aList.length;
-			a < aZ;
-			a++
-		)
-		{
-			aName =
-				aList[ a ];
-
-			r.push(
-				'\t\t\t\t\t\'' + aName + '\' :',
-				'\t\t\t\t\t\tthis.' + aName +
-					( a + 1 < aZ ? ',' : '' ),
-				''
-			);
-		}
-
-
-		r.push(
-			'\t\t\t\t} )',
-			'\t\t} );',
-			'\t}',
-			');'
-		);
 	}
-	else
-	{
-		r.push(
-			'/*',
-			'| Convers the object into a JSON.',
-			'*/',
-			'Jools.lazyFunction(',
-			'\t' + reference + '.prototype,',
-			'\t\'toJSON\',',
-			'\tfunction( )',
-			'\t{',
-			'\t\treturn Object.freeze( {',
-			'',
-			'\t\t\ttype :',
-			'\t\t\t\t\'' + joobj.name + '\',',
-			''
-		);
-
-		for(
-			a = 0, aZ = aList.length;
-			a < aZ;
-			a++
-		)
-		{
-			aName =
-				aList[ a ];
-
-			r.push(
-				'\t\t\t\'' + aName + '\' :',
-				'\t\t\t\tthis.' + aName +
-					( a + 1 < aZ ? ',' : '' ),
-				''
-			);
-		}
 
 
-		r.push(
-			'\t\t} );',
-			'\t}',
-			');'
-		);
-
-	}
+	r.push(
+		'\t\t} );',
+		'\t}',
+		');'
+	);
 };
 
 

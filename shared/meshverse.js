@@ -185,7 +185,7 @@ Meshverse.prototype.grow =
 
 				return Euclid.Point.create(
 					'json',
-						model.twig
+						model
 				);
 
 			case 'Rect' :
