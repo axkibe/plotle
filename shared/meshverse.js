@@ -42,6 +42,9 @@ if( typeof( window ) === 'undefined')
 
 	Euclid.Point =
 		require( './euclid/point' );
+
+	Euclid.Rect =
+		require( './euclid/rect' );
 }
 
 /*
@@ -183,6 +186,13 @@ Meshverse.prototype.grow =
 				return Euclid.Point.create(
 					'json',
 						model.twig
+				);
+
+			case 'Rect' :
+
+				return Euclid.Rect.create(
+					'json',
+						model
 				);
 
 			default :
@@ -639,21 +649,7 @@ Meshverse.prototype.Para =
 
 
 Meshverse.prototype.Rect =
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-
-				'pnw' :
-					'Point',
-
-				'pse' :
-					'Point'
-
-			} )
-
-	} );
-
+	'joobj';
 
 Meshverse.prototype.Point =
 	'joobj';

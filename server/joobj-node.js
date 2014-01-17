@@ -28,6 +28,9 @@ var
 	joobjGenerator =
 		require( './joobj-generator' ),
 
+	Jools =
+		require( '../shared/jools' ),
+
 	input =
 		null,
 
@@ -105,7 +108,6 @@ joobjNodeGenerator =
 	output =
 		joobjGenerator( joobj );
 
-
 	var
 		outFilename =
 			'joobj/'
@@ -113,7 +115,10 @@ joobjNodeGenerator =
 			inFilename
 				.replace( /\//g, '-' );
 
-	console.log( 'outFilename', outFilename );
+	Jools.log(
+		'start',
+		'generating ' + outFilename
+	);
 
 	fs.writeFileSync(
 		outFilename,

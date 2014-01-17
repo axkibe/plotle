@@ -13,7 +13,8 @@ var
 
 
 Euclid =
-	Euclid ||
+	Euclid
+	||
 	{ };
 
 
@@ -30,6 +31,7 @@ var
 */
 ( function( ) {
 'use strict';
+
 
 /*
 | The joobj definition
@@ -77,7 +79,7 @@ if( JOOBJ )
 /*
 | Node includes.
 */
-if( typeof( window ) === 'undefined' )
+if( typeof( module ) !== 'undefined' )
 {
 	Jools =
 		require( '../jools' );
@@ -249,9 +251,9 @@ Point.zero =
 
 
 /*
-| Exports
+| Node exports
 */
-if( typeof( window ) === 'undefined' )
+if( typeof( module ) !== 'undefined' )
 {
 	module.exports =
 		Point;

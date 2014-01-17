@@ -106,8 +106,10 @@ var
 					case 'allowNull' :
 					case 'comment' :
 					case 'defaultVal' :
+					case 'locate' :
 					case 'refuse' :
 					case 'type' :
+					case 'unit' :
 
 						break;
 
@@ -237,7 +239,8 @@ generateExportSection =
 var
 generateImportsSection =
 	function(
-		r // result array
+		r,       // result array
+		unitList // list of units
 	)
 {
 	r.push(
@@ -245,8 +248,24 @@ generateImportsSection =
 		'| Imports',
 		'*/',
 		'var',
-		'\tJools;'
+		'\tJools' +
+			( unitList && unitList.length > 0 ? ',' : ';' )
 	);
+
+	if( unitList )
+	{
+		for(
+			var a = 0, aZ = unitList.length;
+			a < aZ;
+			a++
+		)
+		{
+			r.push(
+				'\t' + unitList[ a ] +
+					( a + 1 < aZ ? ',' : ';' )
+			);
+		}
+	}
 };
 
 
@@ -303,9 +322,19 @@ generateCapsuleFooter =
 var
 generateNodeIncludesSection =
 	function(
-		r // result array
+		r,         // result array
+		joobj,     // the joobj definition
+		aList,     // attribute name list
+		unitList   // unit list
 	)
 {
+	var
+		a,
+		aZ,
+		aName,
+		attr,
+		ref;
+
 	r.push(
 		'/*',
 		'| Node includes',
@@ -313,7 +342,80 @@ generateNodeIncludesSection =
 		'if( typeof( module ) !== \'undefined\' )',
 		'{',
 		'\tJools =',
-		'\t\trequire( \'../shared/jools\' );',
+		'\t\trequire( \'../shared/jools\' );'
+	);
+
+	for(
+		a = 0, aZ = unitList.length;
+		a < aZ;
+		a++
+	)
+	{
+		r.push(
+			'',
+			'\t' + unitList[ a ] + ' =',
+			'\t\t{ };'
+		);
+	}
+
+	var
+		// a list of stuff already generated
+		generated =
+			{ };
+
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			aList[ a ];
+
+		attr =
+			joobj.attributes[ aName ];
+
+		switch( attr.type )
+		{
+			case 'Integer' :
+			case 'Number' :
+			case 'String' :
+
+				break;
+
+			default :
+
+				ref =
+					attr.unit + '.' + attr.type;
+
+				if( generated[ ref ] )
+				{
+					continue;
+				}
+
+				generated[ ref ] =
+					true;
+
+				if( attr.unit )
+				{
+					r.push(
+						'',
+						'\t' + ref + ' =',
+						'\t\trequire( \'../' +
+							attr.locate + '/' +
+							attr.unit.toLowerCase( ) + '/' +
+							attr.type.toLowerCase( ) +
+							'\' );'
+					);
+				}
+				else
+				{
+					// TODO
+				}
+		}
+	}
+
+	r.push(
 		'}'
 	);
 };
@@ -860,7 +962,10 @@ generateCreator =
 			)
 			{
 				aName =
-					aList[ a ];
+					aList[ a ],
+
+				attr =
+					joobj.attributes[ aName ];
 
 				if( a > 0 )
 				{
@@ -872,8 +977,49 @@ generateCreator =
 				r.push(
 					'\t\tif( ' + aName + ' === undefined )',
 					'\t\t{',
-					'\t\t\t' + aName + ' =',
-					'\t\t\t\tjson.' + aName + ';',
+					'\t\t\t' + aName + ' ='
+				);
+
+				switch( attr.type )
+				{
+					case 'Integer' :
+					case 'Number' :
+					case 'String' :
+
+						r.push(
+							'\t\t\t\tjson.' + aName + ';'
+						);
+
+						break;
+
+					default :
+
+						if( attr.unit )
+						{
+							r.push(
+								'\t\t\t\t' +
+									attr.unit + '.' +
+									attr.type + '.create('
+							);
+						}
+						else
+						{
+							r.push(
+								'\t\t\t\t' +
+									attr.type + '.create('
+							);
+						}
+
+						r.push(
+							'\t\t\t\t\t\'json\',',
+							'\t\t\t\t\t\tjson.' + aName + '.twig', // XXX
+							'\t\t\t\t);'
+						);
+
+						break;
+				}
+
+				r.push(
 					'\t\t}'
 				);
 			}
@@ -1149,49 +1295,95 @@ generateToJSONSection =
 		aZ,
 		aName;
 
-	r.push(
-		'/*',
-		'| Convers the object into a JSON.',
-		'*/',
-		'Jools.lazyFunction(',
-		'\t' + reference + '.prototype,',
-		'\t\'toJSON\',',
-		'\tfunction( )',
-		'\t{',
-		'\t\treturn Object.freeze( {',
-		'',
-		'\t\t\ttype :',
-		'\t\t\t\t\'' + joobj.name + '\',',
-		'',
-		'\t\t\ttwig :',
-		'\t\t\t\tObject.freeze( {',
-		''
-	);
-
-	for(
-		a = 0, aZ = aList.length;
-		a < aZ;
-		a++
-	)
+	if( joobj.name === 'Point' ) // XXX
 	{
-		aName =
-			aList[ a ];
-
 		r.push(
-			'\t\t\t\t\t\'' + aName + '\' :',
-			'\t\t\t\t\t\tthis.' + aName +
-				( a + 1 < aZ ? ',' : '' ),
+			'/*',
+			'| Convers the object into a JSON.',
+			'*/',
+			'Jools.lazyFunction(',
+			'\t' + reference + '.prototype,',
+			'\t\'toJSON\',',
+			'\tfunction( )',
+			'\t{',
+			'\t\treturn Object.freeze( {',
+			'',
+			'\t\t\ttype :',
+			'\t\t\t\t\'' + joobj.name + '\',',
+			'',
+			'\t\t\ttwig :',
+			'\t\t\t\tObject.freeze( {',
 			''
 		);
+
+		for(
+			a = 0, aZ = aList.length;
+			a < aZ;
+			a++
+		)
+		{
+			aName =
+				aList[ a ];
+
+			r.push(
+				'\t\t\t\t\t\'' + aName + '\' :',
+				'\t\t\t\t\t\tthis.' + aName +
+					( a + 1 < aZ ? ',' : '' ),
+				''
+			);
+		}
+
+
+		r.push(
+			'\t\t\t\t} )',
+			'\t\t} );',
+			'\t}',
+			');'
+		);
 	}
+	else
+	{
+		r.push(
+			'/*',
+			'| Convers the object into a JSON.',
+			'*/',
+			'Jools.lazyFunction(',
+			'\t' + reference + '.prototype,',
+			'\t\'toJSON\',',
+			'\tfunction( )',
+			'\t{',
+			'\t\treturn Object.freeze( {',
+			'',
+			'\t\t\ttype :',
+			'\t\t\t\t\'' + joobj.name + '\',',
+			''
+		);
+
+		for(
+			a = 0, aZ = aList.length;
+			a < aZ;
+			a++
+		)
+		{
+			aName =
+				aList[ a ];
+
+			r.push(
+				'\t\t\t\'' + aName + '\' :',
+				'\t\t\t\tthis.' + aName +
+					( a + 1 < aZ ? ',' : '' ),
+				''
+			);
+		}
 
 
-	r.push(
-		'\t\t\t\t} )',
-		'\t\t} );',
-		'\t}',
-		');'
-	);
+		r.push(
+			'\t\t} );',
+			'\t}',
+			');'
+		);
+
+	}
 };
 
 
@@ -1320,13 +1512,26 @@ joobjGenerator =
 	)
 {
 	var
+		a,
+		aZ,
+		aName,
+		attr,
+
 		// alphabetical sorted attribute names
 		aList =
 			null,
 
 		// the result array
 		r =
-			[ ];
+			[ ],
+
+		// units used
+		units =
+			{ },
+
+		// units sorted alphabetically
+		unitList =
+			null;
 
 	// tests if the joobj looks ok
 	checkJoobj( joobj );
@@ -1352,7 +1557,31 @@ joobjGenerator =
 	{
 		aList =
 			Object.keys( joobj.attributes ).sort( );
+
+		for(
+			a = 0, aZ = aList.length;
+			a < aZ;
+			a++
+		)
+		{
+			aName =
+				aList[ a ];
+
+			attr =
+				joobj.attributes[ aName ];
+
+			if( attr.unit )
+			{
+				units[ attr.unit ] =
+					true;
+			}
+		}
+
+		unitList =
+			Object.keys( units ).sort( );
+
 	}
+
 
 	generateFileHeader( r );
 
@@ -1362,7 +1591,7 @@ joobjGenerator =
 
 	generateSeperator( r );
 
-	generateImportsSection( r );
+	generateImportsSection( r, unitList );
 
 	generateSeperator( r );
 
@@ -1372,7 +1601,7 @@ joobjGenerator =
 
 	if( joobj.node )
 	{
-		generateNodeIncludesSection( r );
+		generateNodeIncludesSection( r, joobj, aList, unitList );
 
 		generateSeperator( r );
 	}

@@ -12,15 +12,17 @@ var
 	Euclid;
 
 Euclid =
-	Euclid || { };
+	Euclid
+	||
+	{ };
 
 
 /*
 | Imports
 */
 var
-	Euclid,
-	Jools;
+	Jools,
+	JOOBJ;
 
 
 /*
@@ -31,92 +33,81 @@ var
 
 
 /*
-| Constructor.
+| The joobj definition
 */
-var Rect =
-Euclid.Rect =
-	function(
-		tag,
-		pnw,
-		pse
-	)
+if( JOOBJ )
 {
-	if( tag !== 'XXXREE' )
-	{
-		throw new Error(
-			'invalid tag'
-		);
-	}
+	return {
 
-	var
-		pnw =
-		this.pnw =
-			pnw;
+		name :
+			'Rect',
 
-	var
-		pse =
-		this.pse =
-			pse;
+		unit :
+			'Euclid',
 
-	if(
-		pnw.x > pse.x ||
-		pnw.y > pse.y
-	)
-	{
-		throw Jools.reject(
-			'not a rectangle.'
-		);
-	}
+		attributes :
+			{
+				pnw :
+					{
+						comment :
+							'point in north west',
 
-	this.type =
-		'Rect'; // FIXME - can this be circumvented?
+						locate :
+							'shared',
 
-	Jools.immute( this );
-};
+						unit :
+							'Euclid',
+
+						type :
+							'Point',
+					},
+
+				pse :
+					{
+						comment :
+							'point in south east',
+
+						locate :
+							'shared',
+
+						unit :
+							'Euclid',
+
+						type :
+							'Point'
+					}
+			},
+
+		node :
+			true,
+
+		hasJSON :
+			true
+	};
+}
 
 
-
-Rect.create =
-	function(
-		// free strings
-	)
+/*
+| Node includes.
+*/
+if( typeof( module ) !== 'undefined' )
 {
-	var
-		pnw,
-		pse;
+	Jools =
+		require( '../jools' );
+
+	Euclid.Point =
+		require( './point' );
+
+	Euclid.Rect =
+		require(
+			'../../' + require( '../../server/joobj-node' )( module )
+		);
+}
 
 
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a +=2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'pnw' :
-
-				pnw =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'pse' :
-
-				pse =
-					arguments[ a + 1 ];
-
-				break;
-
-		}
-	}
-
-	return new Rect(
-		'XXXREE',
-		pnw,
-		pse
-	);
-};
+var
+	Rect =
+		Euclid.Rect;
 
 
 /*
@@ -183,11 +174,13 @@ Rect.createArbitrary =
 		);
 	}
 
-	return Euclid.Rect.create(
-		'pnw',
-			pnw,
-		'pse',
-			pse
+	return (
+		Rect.create(
+			'pnw',
+				pnw,
+			'pse',
+				pse
+		)
 	);
 };
 
@@ -203,6 +196,7 @@ Jools.lazyFixate(
 		return this.pse.x - this.pnw.x;
 	}
 );
+
 
 /*
 | Rectangle height.
@@ -234,9 +228,13 @@ Jools.lazyFixate(
 		}
 		else
 		{
-			return Rect.create(
-				'pse',
-				this.pse.sub( this.pnw )
+			return (
+				Rect.create(
+					'pnw',
+						Euclid.Point.zero,
+					'pse',
+						this.pse.sub( this.pnw )
+				)
 			);
 		}
 	}
@@ -381,9 +379,10 @@ Rect.prototype.computeRect =
 	)
 {
 	return Rect.create(
-		'pnw/pse',
-		this.computePoint( model.pnw ),
-		this.computePoint( model.pse )
+		'pnw',
+			this.computePoint( model.pnw ),
+		'pse',
+			this.computePoint( model.pse )
 	);
 };
 
@@ -417,19 +416,22 @@ Rect.prototype.reduce =
 
 	// allows margins to reduce the rect to zero size without erroring.
 
-	return Rect.create(
-		'pnw/pse',
-		Euclid.Point.renew(
-			this.pnw.x + margin.e,
-			this.pnw.y + margin.n,
-			this.pnw,
-			this.pse
-		),
-		Euclid.Point.renew(
-			this.pse.x - margin.w,
-			this.pse.y - margin.s,
-			this.pnw,
-			this.pse
+	return (
+		Rect.create(
+			'pnw',
+				Euclid.Point.renew(
+					this.pnw.x + margin.e,
+					this.pnw.y + margin.n,
+					this.pnw,
+					this.pse
+				),
+			'pse',
+				Euclid.Point.renew(
+					this.pse.x - margin.w,
+					this.pse.y - margin.s,
+					this.pnw,
+					this.pse
+				)
 		)
 	);
 };
@@ -736,10 +738,13 @@ Rect.prototype.add =
 		a2
 	)
 {
-	return Rect.create(
-		'pnw/pse',
-		this.pnw.add( a1, a2 ),
-		this.pse.add( a1, a2 )
+	return (
+		Rect.create(
+			'pnw',
+				this.pnw.add( a1, a2 ),
+			'pse',
+				this.pse.add( a1, a2 )
+		)
 	);
 };
 
@@ -848,10 +853,13 @@ Rect.renew =
 			Euclid.Point.create( 'x', ex, 'y', sy );
 	}
 
-	return Rect.create(
-		'pnw/pse',
-		pnw,
-		pse
+	return (
+		Rect.create(
+			'pnw',
+				pnw,
+			'pse',
+				pse
+		)
 	);
 };
 
@@ -868,10 +876,13 @@ Rect.prototype.sub =
 		a2
 	)
 {
-	return Rect.create(
-		'pnw/pse',
-		this.pnw.sub( a1, a2 ),
-		this.pse.sub( a1, a2 )
+	return (
+		Rect.create(
+			'pnw',
+				this.pnw.sub( a1, a2 ),
+			'pse',
+				this.pse.sub( a1, a2 )
+		)
 	);
 };
 
@@ -1064,5 +1075,14 @@ Rect.prototype.getProjection =
 	return pc;
 };
 
+
+/*
+| Node exports.
+*/
+if( typeof( module ) !== 'undefined' )
+{
+	module.exports =
+		Rect;
+}
 
 })( );

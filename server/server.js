@@ -781,8 +781,8 @@ Server.prototype.prepareResources =
 				'shared/euclid/point.js',
 					'fbj',
 
-				'shell/euclid/rect.js',
-					'fb',
+				'shared/euclid/rect.js',
+					'fbj',
 
 				'shell/euclid/margin.js',
 					'fb',
