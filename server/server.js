@@ -497,20 +497,19 @@ Server.prototype.loadSpace =
 
 		space.$seqZ++;
 
-//		XXX
-//		try{
+		try{
 			space.$tree =
 				change.chgX.changeTree(
 					space.$tree,
 					meshverse
 				).tree;
-//		}
-//		catch( err )
-//		{
-//			console.log( 'error playing back changes' );
-//
-//			throw err;
-//		}
+		}
+		catch( err )
+		{
+			console.log( 'error playing back changes' );
+
+			throw err;
+		}
 	}
 };
 
@@ -2858,10 +2857,14 @@ Server.prototype.generateJoobj =
 	data =
 		joobjGenerator( joobj );
 
+	Jools.log(
+		'start',
+		'generating ' + 'joobj/' + r.alias
+	);
+
 	// updates the generated file
 	yield fs.writeFile(
-		'joobj/' +
-		r.alias,
+		'joobj/' + r.alias,
 		data,
 		resume( )
 	);

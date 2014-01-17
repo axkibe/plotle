@@ -603,9 +603,6 @@ Portal.prototype.dragStop =
 				zone
 			);
 
-			shell.redraw =
-				true;
-
 			return true;
 
 		default :
@@ -677,9 +674,6 @@ Portal.prototype.click =
 	{
 		return false;
 	}
-
-	shell.redraw =
-		true;
 
 	var
 		pp =
@@ -781,10 +775,7 @@ Portal.prototype.mousewheel =
 | Highlights the portal.
 */
 Portal.prototype.highlight =
-	function(
-		fabric,
-		view
-	)
+	function( fabric )
 {
 	fabric.edge(
 		Style.getStyle(
@@ -793,7 +784,7 @@ Portal.prototype.highlight =
 		),
 		this.silhoutte,
 		'sketch',
-		view
+		this.view
 	);
 };
 
@@ -1314,9 +1305,6 @@ Portal.prototype._keyBackspace =
 		at - 1,
 		1
 	);
-
-	shell.redraw =
-		true;
 };
 
 
@@ -1407,9 +1395,6 @@ Portal.prototype._keyDown =
 
 			break;
 	}
-
-	shell.redraw =
-		true;
 };
 
 
@@ -1478,9 +1463,6 @@ Portal.prototype._keyLeft =
 			)
 		);
 
-		shell.redraw =
-			true;
-
 		return;
 	}
 
@@ -1492,9 +1474,6 @@ Portal.prototype._keyLeft =
 				mark.caretAt - 1
 		)
 	);
-
-	shell.redraw =
-		true;
 
 	return;
 };
@@ -1556,9 +1535,6 @@ Portal.prototype._keyTab =
 				0
 		)
 	);
-
-	shell.redraw =
-		true;
 };
 
 /*
@@ -1644,9 +1620,6 @@ Portal.prototype._keyUp =
 
 			break;
 	}
-
-	shell.redraw =
-		true;
 };
 
 /*
@@ -1718,9 +1691,6 @@ Portal.prototype._keyRight =
 			)
 		);
 
-		shell.redraw =
-			true;
-
 		return;
 	}
 
@@ -1732,9 +1702,6 @@ Portal.prototype._keyRight =
 				mark.caretAt + 1
 		)
 	);
-
-	shell.redraw =
-		true;
 
 	return;
 };
@@ -1778,9 +1745,6 @@ Portal.prototype._keyDel =
 		at,
 		1
 	);
-
-	shell.redraw =
-		true;
 };
 
 
@@ -1825,9 +1789,6 @@ Portal.prototype._keyEnd =
 				value.length
 		)
 	);
-
-	shell.redraw =
-		true;
 };
 
 
@@ -1896,9 +1857,6 @@ Portal.prototype._keyEnter =
 
 		this._moveTo( );
 	}
-
-	shell.redraw =
-		true;
 };
 
 
@@ -2079,9 +2037,6 @@ Portal.prototype._keyPos1 =
 				0
 		)
 	);
-
-	shell.redraw =
-		true;
 };
 
 

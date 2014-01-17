@@ -141,11 +141,6 @@ DocItem.prototype.click =
 	}
 
 
-	shell.redraw =
-		true;
-
-//	shell.d_eselect( ); TODO
-
 	var
 		pnw =
 			this.zone.pnw,

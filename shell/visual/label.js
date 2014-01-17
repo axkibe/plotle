@@ -466,8 +466,7 @@ Label.prototype.handles =
 */
 Label.prototype.highlight =
 	function(
-		fabric,
-		view
+		fabric
 	)
 {
 	fabric.edge(
@@ -477,7 +476,7 @@ Label.prototype.highlight =
 		),
 		this.silhoutte,
 		'sketch',
-		view
+		this.view
 	);
 };
 
@@ -573,9 +572,6 @@ Label.prototype.dragStop =
 					fontsize
 				);
 			}
-
-			shell.redraw =
-				true;
 
 			break;
 

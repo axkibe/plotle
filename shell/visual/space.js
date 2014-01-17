@@ -662,10 +662,7 @@ Space.prototype.draw =
 							action.fromItemPath.get( -1 )
 						);
 
-				fromItem.highlight(
-					fabric,
-					view
-				);
+				fromItem.highlight( fabric );
 
 				var toItem = null;
 
@@ -676,10 +673,7 @@ Space.prototype.draw =
 							action.toItemPath.get( -1 )
 						);
 
-					toItem.highlight(
-						fabric,
-						view
-					);
+					toItem.highlight( fabric );
 				}
 
 				var
@@ -782,9 +776,6 @@ Space.prototype.mousewheel =
 		);
 	}
 
-	shell.redraw =
-		true;
-
 	return true;
 };
 
@@ -870,9 +861,6 @@ Space.prototype.pointingHover =
 					{
 						action.fromItemPath =
 							item.path;
-
-						shell.redraw =
-							true;
 					}
 
 					break;
@@ -892,9 +880,6 @@ Space.prototype.pointingHover =
 				{
 					action.fromItemPath =
 						null;
-
-					shell.redraw =
-						true;
 				}
 
 				break;
@@ -1233,9 +1218,6 @@ Space.prototype.click =
 		Mark.Vacant.create( )
 	);
 
-	shell.redraw =
-		true;
-
 	return true;
 };
 
@@ -1316,9 +1298,6 @@ Space.prototype.dragStop =
 								0
 						)
 					);
-
-					shell.redraw =
-						true;
 
 					if( !ctrl )
 					{
@@ -1401,9 +1380,6 @@ Space.prototype.dragStop =
 						)
 					);
 
-					shell.redraw =
-						true;
-
 					if( !ctrl )
 					{
 						shell.setAction(
@@ -1449,9 +1425,6 @@ Space.prototype.dragStop =
 								0
 						)
 					);
-
-					shell.redraw =
-						true;
 
 					if( !ctrl )
 					{
@@ -1506,9 +1479,6 @@ Space.prototype.dragStop =
 							p
 						);
 					}
-
-					shell.redraw =
-						true;
 
 					shell.setAction(
 						Action.None.create( )
@@ -1575,9 +1545,6 @@ Space.prototype.dragStop =
 /**/						);
 /**/					}
 				}
-
-				shell.redraw =
-					true;
 			}
 
 			shell.setAction(
@@ -1623,9 +1590,6 @@ Space.prototype.dragStop =
 								action.transItem.positioning
 						);
 				}
-
-				shell.redraw =
-					true;
 			}
 
 			shell.setAction(
@@ -1648,9 +1612,6 @@ Space.prototype.dragStop =
 			shell.setAction(
 				Action.None.create( )
 			);
-
-			shell.redraw =
-				true;
 
 			break;
 
@@ -1779,9 +1740,6 @@ Space.prototype.dragMove =
 				)
 			);
 
-			shell.redraw =
-				true;
-
 			return 'pointer';
 
 		case 'CreateRelation' :
@@ -1802,9 +1760,6 @@ Space.prototype.dragMove =
 						view.fact
 					)
 				);
-
-				shell.redraw =
-					true;
 
 				return 'pointer';
 			}
@@ -1838,9 +1793,6 @@ Space.prototype.dragMove =
 				}
 			}
 
-			shell.redraw =
-				true;
-
 			return 'pointer';
 
 		case 'Pan' :
@@ -1857,9 +1809,6 @@ Space.prototype.dragMove =
 					view.fact
 				)
 			);
-
-			shell.redraw =
-				true;
 
 			return 'pointer';
 
@@ -1907,9 +1856,6 @@ Space.prototype.dragMove =
 						transItem
 				)
 			);
-
-			shell.redraw =
-				true;
 
 			return true;
 
@@ -2038,9 +1984,6 @@ Space.prototype.dragMove =
 						transItem
 				)
 			);
-
-			shell.redraw =
-				true;
 
 			return true;
 
@@ -2174,9 +2117,6 @@ Space.prototype.changeZoom =
 			pm
 		)
 	);
-
-	shell.redraw =
-		true;
 };
 
 
@@ -2195,19 +2135,27 @@ Space.prototype.specialKey =
 		switch( key )
 		{
 			case 'z' :
+
 				shell.peer.undo( );
+
 				return;
 
 			case 'y' :
+
 				shell.peer.redo( );
+
 				return;
 
 			case ',' :
+
 				this.changeZoom(  1 );
+
 				return;
 
 			case '.' :
+
 				this.changeZoom( -1 );
+
 				return;
 		}
 	}

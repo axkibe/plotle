@@ -1114,6 +1114,9 @@ generateCreator =
 			aName =
 				aList[ a ];
 
+			attr =
+				joobj.attributes[ aName ];
+
 			if( a > 0 )
 			{
 				r.push(
@@ -1121,7 +1124,7 @@ generateCreator =
 				);
 			}
 
-			switch( joobj.attributes[ aName ].type )
+			switch( attr.type )
 			{
 				case 'Integer' :
 				case 'Number' :
@@ -1136,10 +1139,28 @@ generateCreator =
 
 				default :
 
-					r.push(
-						'\t\t' + aName +
-							'.equals( inherit.' + aName + ' )'
-					);
+					if( !attr.allowNull )
+					{
+						r.push(
+							'\t\t' + aName +
+								'.equals( inherit.' + aName + ' )'
+						);
+					}
+					else
+					{
+						r.push(
+							'\t\t(',
+							'\t\t\t' + aName + ' === inherit.' + aName,
+							'\t\t\t||',
+							'\t\t\t(',
+							'\t\t\t\t' + aName + ' !== null',
+							'\t\t\t\t&&',
+							'\t\t\t\t' + aName +
+								'.equals( inherit.' + aName + ' )',
+							'\t\t\t)',
+							'\t\t)'
+						);
+					}
 
 					break;
 			}
@@ -1381,7 +1402,8 @@ generateEqualsCheck =
 		aZ,
 
 		// attribute name
-		aName;
+		aName,
+		attr;
 
 	r.push(
 		'/*',
@@ -1412,7 +1434,10 @@ generateEqualsCheck =
 	)
 	{
 		aName =
-			aList[ a ];
+			aList[ a ],
+
+		attr =
+			joobj.attributes[ aName ];
 
 		if( a > 0 )
 		{
@@ -1421,7 +1446,7 @@ generateEqualsCheck =
 			);
 		}
 
-		switch( joobj.attributes[ aName ].type )
+		switch( attr.type )
 		{
 			case 'Integer' :
 			case 'Number' :
@@ -1436,10 +1461,29 @@ generateEqualsCheck =
 
 			default :
 
-				r.push(
-					'\t\tthis.' + aName +
-						'.equals( obj.' + aName + ' )'
-				);
+				if( !attr.allowNull )
+				{
+					r.push(
+						'\t\tthis.' + aName +
+							'.equals( obj.' + aName + ' )'
+					);
+				}
+				else
+				{
+					r.push(
+						'\t\t(',
+						'\t\t\tthis.' + aName +
+							' === inherit.' + aName + ' ||',
+						'\t\t\t(',
+						'\t\t\t\t' + aName + ' !== null',
+						'\t\t\t\t&&',
+						'\t\t\t\tthis.' + aName +
+							'.equals( obj.' + aName + ' )',
+						'\t\t\t)',
+						'\t\t)'
+					);
+				}
+
 
 				break;
 		}

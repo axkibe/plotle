@@ -552,7 +552,9 @@ Item.prototype.dragStart =
 					'fromItemPath',
 						this.path,
 					'relationState',
-						'hadSelect'
+						'hadSelect',
+					'toPoint',
+						p
 				)
 			);
 
@@ -562,9 +564,6 @@ Item.prototype.dragStart =
 	if( ctrl && access == 'rw' )
 	{
 		// relation binding
-		shell.redraw =
-			true;
-
 		/*
 
 		XXX REPAIR
@@ -597,9 +596,6 @@ Item.prototype.dragStart =
 				)
 			);
 		}
-
-		shell.redraw =
-			true;
 
 		shell.setAction(
 			Action.ItemDrag.create(
@@ -659,9 +655,6 @@ Item.prototype.dragMove =
 				)
 			);
 
-			shell.redraw =
-				true;
-
 			return true;
 
 		case 'ScrollY' :
@@ -687,9 +680,6 @@ Item.prototype.dragMove =
 						spos
 				)
 			);
-
-			shell.redraw =
-				true;
 
 			return true;
 
@@ -741,9 +731,6 @@ Item.prototype.dragStop =
 				),
 				this
 			);
-
-			shell.redraw =
-				true;
 
 			return true;
 

@@ -511,9 +511,6 @@ MainDisc.prototype.pushButton =
 	{
 		shell.setMode( buttonName );
 	}
-
-	shell.redraw =
-		true;
 };
 
 

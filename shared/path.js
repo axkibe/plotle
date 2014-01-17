@@ -2,8 +2,6 @@
 | Paths describe entities in a tree.
 |
 | Authors: Axel Kittenberger
-|
-| XXX isPath
 */
 
 
@@ -351,8 +349,6 @@ Path.prototype.prepend =
 	var
 		p =
 			this._path.slice( );
-
-	if( p[ 0 ] === 'space' ) throw new Error( 'XXX' );
 
 	p.unshift( key );
 

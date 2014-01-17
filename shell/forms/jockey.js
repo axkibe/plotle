@@ -22,8 +22,7 @@ Forms =
 var
 	Jools,
 	Mark,
-	Path,
-	shell;
+	Path;
 
 /*
 | Capsule
@@ -284,9 +283,6 @@ Jockey.create =
 			return inherit;
 		}
 	}
-
-	shell.redraw =
-		true;
 
 	return (
 		new Jockey(

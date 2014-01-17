@@ -1045,9 +1045,6 @@ Para.prototype.specialKey =
 					)
 				);
 
-				shell.redraw =
-					true;
-
 				return true;
 		}
 	}
@@ -1193,9 +1190,6 @@ Para.prototype.specialKey =
 	}
 
 	item.scrollMarkIntoView( );
-
-	shell.redraw =
-		true;
 };
 
 

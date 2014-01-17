@@ -431,9 +431,6 @@ CreateDisc.prototype.pushButton =
 		buttonName =
 			path.get( 2 );
 
-	shell.redraw =
-		true;
-
 	switch( buttonName )
 	{
 		case 'CreateLabel' :
@@ -497,10 +494,6 @@ CreateDisc.prototype.pushButton =
 						Euclid.Point.zero,
 					'relationState',
 						'start',
-					'start',
-						Euclid.Point.zero,
-					'toPoint',
-						Euclid.Point.zero,
 					'toItemPath',
 						Path.empty
 				)

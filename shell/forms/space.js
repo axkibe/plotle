@@ -206,9 +206,6 @@ Space.prototype.pushButton =
 
 			throw new Error( 'unknown button pushed: ' + buttonName );
 	}
-
-	shell.redraw =
-		true;
 };
 
 

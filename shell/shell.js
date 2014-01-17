@@ -231,6 +231,11 @@ Shell =
 	this._$greenscreen =
 		null;
 
+	Jools.keyNonGrata(
+		this,
+		'redraw'
+	);
+
 	this._draw( );
 };
 
@@ -335,7 +340,7 @@ Shell.prototype.setMode =
 				mode
 		);
 
-	this.redraw =
+	this._$redraw =
 		true;
 };
 
@@ -370,6 +375,9 @@ Shell.prototype.setAction =
 			'action',
 				action
 		);
+
+	this._$redraw =
+		true;
 };
 
 
@@ -601,7 +609,7 @@ Shell.prototype._draw =
 		);
 	}
 
-	this.redraw =
+	this._$redraw =
 		false;
 };
 
@@ -629,7 +637,7 @@ Shell.prototype.click =
 		);
 	}
 
-	if( this.redraw )
+	if( this._$redraw )
 	{
 		this._draw( );
 	}
@@ -718,7 +726,7 @@ Shell.prototype.pointingHover =
 
 			shell._setHover( reply.path );
 
-			if( this.redraw )
+			if( this._$redraw )
 			{
 				this._draw( );
 			}
@@ -753,7 +761,7 @@ Shell.prototype.pointingHover =
 
 		shell._setHover( reply.path );
 
-		if( this.redraw )
+		if( this._$redraw )
 		{
 			this._draw( );
 		}
@@ -761,9 +769,7 @@ Shell.prototype.pointingHover =
 		return reply.cursor;
 	}
 
-	// FIXME this should be called $redraw
-
-	if( this.redraw )
+	if( this._$redraw )
 	{
 		this._draw( );
 	}
@@ -781,7 +787,7 @@ Shell.prototype.greenscreen =
 	if( !message )
 	{
 		message =
-			'unknown error.';
+			'unknown error';
 	}
 
 	if( !this._$greenscreen )
@@ -839,7 +845,7 @@ Shell.prototype.pointingStart =
 			);
 	}
 
-	if( this.redraw )
+	if( this._$redraw )
 	{
 		this._draw( );
 	}
@@ -890,7 +896,7 @@ Shell.prototype.dragStart =
 		}
 	}
 
-	if( this.redraw )
+	if( this._$redraw )
 	{
 		this._draw( );
 	}
@@ -934,7 +940,7 @@ Shell.prototype.dragMove =
 			);
 	}
 
-	if( this.redraw )
+	if( this._$redraw )
 	{
 		this._draw( );
 	}
@@ -978,7 +984,7 @@ Shell.prototype.dragStop =
 		);
 	}
 
-	if( this.redraw )
+	if( this._$redraw )
 	{
 		this._draw( );
 	}
@@ -1012,7 +1018,7 @@ Shell.prototype.mousewheel =
 		);
 	}
 
-	if( this.redraw )
+	if( this._$redraw )
 	{
 		this._draw( );
 	}
@@ -1053,7 +1059,7 @@ Shell.prototype.setMark =
 				mark
 		);
 
-	this.redraw =
+	this._$redraw =
 		true;
 };
 
@@ -1154,7 +1160,7 @@ Shell.prototype._setHover =
 	this._$hover =
 		path;
 
-	shell.redraw =
+	shell._$redraw =
 		true;
 };
 
@@ -1194,7 +1200,7 @@ Shell.prototype.setTraits =
 				traitSet
 		);
 
-	shell.redraw =
+	shell._$redraw =
 		true;
 };
 
@@ -1222,7 +1228,7 @@ Shell.prototype.specialKey =
 		);
 	}
 
-	if( this.redraw )
+	if( this._$redraw )
 	{
 		this._draw( );
 	}
@@ -1246,7 +1252,7 @@ Shell.prototype.input =
 		display.input( text );
 	}
 
-	if( this.redraw )
+	if( this._$redraw )
 	{
 		this._draw( );
 	}
@@ -1403,6 +1409,9 @@ Shell.prototype.setView =
 			'view',
 				view
 		);
+
+	this._$redraw =
+		true;
 };
 
 
@@ -1743,13 +1752,15 @@ Shell.prototype.arrivedAtSpace =
 
 /*
 | Removes the a (text) range.
+|
+| TODO hmmm
 */
 Shell.prototype.removeRange =
 	function(
 		range
 	)
 {
-	this.redraw =
+	this._$redraw =
 		true;
 
 	if( !range.empty )

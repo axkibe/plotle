@@ -42,18 +42,6 @@ if( JOOBJ )
 							'Path'
 					},
 
-				/*
-				item :
-					{
-						comment :
-							'the transient item in creation',
-
-						type :
-							'Item'
-					},
-				*/
-
-
 				pan :
 					{
 						comment :
@@ -78,7 +66,13 @@ if( JOOBJ )
 							'the arrow destination while its floating',
 
 						type :
-							'Point'
+							'Point',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
 					},
 
 				// FIXME rename
@@ -99,7 +93,13 @@ if( JOOBJ )
 							'mouse down point on drag creation',
 
 						type :
-							'Point'
+							'Point',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
 					}
 			}
 	};

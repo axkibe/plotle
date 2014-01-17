@@ -569,8 +569,6 @@ Note.prototype.dragStop =
 				zone
 			);
 
-			shell.redraw = true;
-
 			return true;
 
 		default :
@@ -814,8 +812,7 @@ Jools.lazyFixate(
 */
 Note.prototype.highlight =
 	function(
-		fabric,
-		view
+		fabric
 	)
 {
 	fabric.edge(
@@ -825,7 +822,7 @@ Note.prototype.highlight =
 		),
 		this.silhoutte,
 		'sketch',
-		view
+		this.view
 	);
 };
 
@@ -979,9 +976,6 @@ Note.prototype.mousewheel =
 				this.scrollbarY.pos - dir * system.settings.textWheelSpeed
 		)
 	);
-
-	shell.redraw =
-		true;
 
 	return true;
 };

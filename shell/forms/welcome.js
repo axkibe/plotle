@@ -201,9 +201,6 @@ Welcome.prototype.pushButton =
 				'unknown button pushed: ' + buttonName
 			);
 	}
-
-	shell.redraw =
-		true;
 };
 
 
