@@ -20,8 +20,7 @@ Euclid =
 | Imports
 */
 var
-	Jools,
-	Tree;
+	Jools;
 
 
 /*
@@ -32,54 +31,81 @@ var
 
 
 /*
-| Constructor.
+| The joobj definition
 */
-var Font =
-Euclid.Font =
-	function(
-		tag,
-		twig,
-		ranks
-	)
+if( JOOBJ )
 {
-	if( tag !== 'TREE' )
-	{
-		throw new Error(
-			'Argument fail'
-		);
-	}
+	return {
 
-	Tree.call(
-		this,
-		'TREE',
-		'Font',
-		twig,
-		ranks
-	);
+		name :
+			'Font',
 
-	this.size =
-		twig.size;
+		unit :
+			'Euclid',
 
-	Jools.immute( this );
-};
+		attributes :
+			{
+				size :
+					{
+						comment :
+							'font size',
 
+						type :
+							'Number'
+					},
 
-/*
-| MeshMashine type
-*/
-Font.prototype.type =
-	'Font';
+				family :
+					{
+						comment :
+							'font family',
+
+						type :
+							'String'
+					},
+
+				align :
+					{
+						comment :
+							'horizonal alignment',
+
+						type :
+							'String'
+					},
+
+				fill :
+					{
+						comment :
+							'font color',
+
+						type :
+							'String'
+					},
+
+				base :
+					{
+						comment :
+							'vertical alignment',
+
+						type :
+							'String'
+					}
+			},
+
+		hasJSON :
+			true
+	};
+}
 
 
 /*
 | The CSS-string for this font.
 */
 Jools.lazyFixate(
-	Font.prototype,
+	Euclid.Font.prototype,
 	'css',
 	function( )
 	{
-		return this.twig.size + 'px ' + this.twig.family;
+		return this.size + 'px ' + this.family;
 	}
 );
 

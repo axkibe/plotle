@@ -1,8 +1,6 @@
 /*
 | Creates font objects by size and code
 |
-| FIXME return meshmashine grown Font objects.
-|
 | Authors: Axel Kittenberger
 */
 
@@ -11,12 +9,13 @@
 | Imports
 */
 var
-	shellverse;
+	Euclid;
 
 /*
 | Exports
 */
-var fontPool;
+var
+	fontPool;
 
 /*
 | Capsule
@@ -245,8 +244,15 @@ FontPool.prototype.get =
 
 	f =
 	c[ size ] =
-		shellverse.grow(
-			style,
+		Euclid.Font.create(
+			'family',
+				style.family,
+			'fill',
+				style.fill,
+			'align',
+				style.align,
+			'base',
+				style.base,
 			'size',
 				size
 		);

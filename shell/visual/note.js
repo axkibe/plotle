@@ -868,7 +868,7 @@ Note.prototype.scrollMarkIntoView =
 			this.innerMargin,
 
 		fs =
-			this.sub.doc.font.twig.size,
+			this.sub.doc.font.size,
 
 		descend =
 			fs * theme.bottombox,
@@ -932,7 +932,7 @@ Note.prototype.scrollPage =
 			up ? -1 : 1,
 
 		fs =
-			this.sub.doc.font.twig.size;
+			this.sub.doc.font.size;
 
 	shell.setTraits(
 		TraitSet.create(

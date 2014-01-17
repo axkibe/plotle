@@ -458,7 +458,7 @@ Para.prototype._drawCaret =
 {
 	var
 		fs =
-			item.sub.doc.font.twig.size,
+			item.sub.doc.font.size,
 
 		descend =
 			fs * theme.bottombox,

@@ -553,7 +553,7 @@ Label.prototype.dragStop =
 					this.zone,
 
 				fontsize =
-					this.sub.doc.font.twig.size;
+					this.sub.doc.font.size;
 
 			if(
 				!this.tree.twig.pnw.equals( zone.pnw )

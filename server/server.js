@@ -742,6 +742,12 @@ Server.prototype.prepareResources =
 				'shared/sha1.js',
 					'fb',
 
+				'shared/euclid/point.js',
+					'fbj',
+
+				'shared/euclid/rect.js',
+					'fbj',
+
 				'shared/meshverse.js',
 					'fb',
 
@@ -769,17 +775,11 @@ Server.prototype.prepareResources =
 				'shell/euclid/compass.js',
 					'fb',
 
-				'shared/euclid/point.js',
-					'fbj',
-
-				'shared/euclid/rect.js',
-					'fbj',
-
 				'shell/euclid/margin.js',
 					'fb',
 
 				'shell/euclid/font.js',
-					'fb',
+					'fbj',
 
 				'shell/euclid/fabric.js',
 					'fb',

@@ -1156,7 +1156,7 @@ Portal.prototype._drawCaret =
 			this._fonts[ section ],
 
 		fs =
-			font.twig.size,
+			font.size,
 
 		descend =
 			fs * theme.bottombox,

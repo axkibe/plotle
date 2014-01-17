@@ -191,29 +191,7 @@ Shellverse.prototype.Ellipse =
 
 
 Shellverse.prototype.Font =
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-
-				size :
-					'Number',
-
-				family :
-					'String',
-
-				align :
-					'String',
-
-				fill :
-					'String',
-
-				base :
-					'String'
-
-			} )
-
-	} );
+	Euclid.Font;
 
 
 Shellverse.prototype.Frame =

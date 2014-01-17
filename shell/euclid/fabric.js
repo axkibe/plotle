@@ -1296,13 +1296,13 @@ Fabric.prototype._setFont =
 
 	var
 		fill =
-			font.twig.fill,
+			font.fill,
 
 		align =
-			font.twig.align,
+			font.align,
 
 		base =
-			font.twig.base;
+			font.base;
 
 	if( !Jools.is( fill ) )
 	{

@@ -864,7 +864,7 @@ Input.prototype._drawCaret =
 	// draws the caret
 	var
 		fs =
-			this.tree.twig.font.twig.size,
+			this.tree.twig.font.size,
 
 		descend =
 			fs * theme.bottombox,
