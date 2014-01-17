@@ -687,62 +687,6 @@ MainDisc.prototype.specialKey =
 
 
 /*
-| An action started or stoped or changed
-*/
-/*
-XXX remove
-MainDisc.prototype.setMode =
-	function(
-		mode
-	)
-{
-	if( this.mode === mode )
-	{
-		return;
-	}
-
-	this.$fabric =
-		null;
-
-	var
-		buttonName =
-			mode;
-
-	if( this.buttons[ buttonName ] )
-	{
-		this.buttons[ buttonName ] =
-			Widgets.Button.create(
-				'inherit',
-					this.buttons[ buttonName ],
-				'focusAccent',
-					false
-			);
-	}
-
-	this.$mode =
-		mode;
-
-	buttonName =
-		mode;
-
-	if( this.buttons[ buttonName ] )
-	{
-		this.buttons[ buttonName ] =
-			Widgets.Button.create(
-				'inherit',
-					this.buttons[ buttonName ],
-				'focusAccent',
-					true
-			);
-	}
-
-	shell.redraw =
-		true;
-};
-*/
-
-
-/*
 | Displays a message
 */
 MainDisc.prototype.message =
