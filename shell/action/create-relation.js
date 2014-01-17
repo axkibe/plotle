@@ -48,7 +48,13 @@ if( JOOBJ )
 							'starting pan when panning during creation',
 
 						type :
-							'Point'
+							'Point',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
 					},
 
 				toItemPath :

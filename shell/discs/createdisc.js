@@ -490,8 +490,6 @@ CreateDisc.prototype.pushButton =
 				Action.CreateRelation.create(
 					'fromItemPath',
 						Path.empty,
-					'pan',
-						Euclid.Point.zero,
 					'relationState',
 						'start',
 					'toItemPath',

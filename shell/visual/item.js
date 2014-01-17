@@ -540,7 +540,6 @@ Item.prototype.dragStart =
 		return false;
 	}
 
-	// XXX
 	switch( action && action.reflect )
 	{
 		case 'CreateRelation' :
@@ -564,21 +563,19 @@ Item.prototype.dragStart =
 	if( ctrl && access == 'rw' )
 	{
 		// relation binding
-		/*
-
-		XXX REPAIR
 
 		shell.setAction(
-			Action.RelBind.create(
-				'itemPath',
+			Action.CreateRelation.create(
+				'fromItemPath',
 					this.path,
-				'start',
-					p,
-				'move',
+				'toItemPath',
+					Path.empty,
+				'relationState',
+					'hadSelect',
+				'toPoint',
 					p
 			)
 		);
-		*/
 
 		return true;
 	}

@@ -664,7 +664,9 @@ Space.prototype.draw =
 
 				fromItem.highlight( fabric );
 
-				var toItem = null;
+				var
+					toItem =
+						null;
 
 				if( !action.toItemPath.isEmpty )
 				{
@@ -714,6 +716,15 @@ Space.prototype.draw =
 						view,
 						theme.relation.style
 					);
+				}
+			}
+			else
+			{
+				if( !this.hover.isEmpty )
+				{
+					this
+						.getItem( this.hover.get( 1 ) )
+						.highlight( fabric );
 				}
 			}
 
@@ -841,51 +852,7 @@ Space.prototype.pointingHover =
 		{
 			return reply;
 		}
-
-		/* XXX TODO
-		if( cu )
-		{
-			cursor =
-				cu;
-
-			switch( action && action.reflect )
-			{
-
-				case 'CreateRelation' :
-
-					if(
-						action.relationState === 'start'
-						&&
-						!item.path.equals( action.fromItemPath )
-					)
-					{
-						action.fromItemPath =
-							item.path;
-					}
-
-					break;
-			}
-		}
-		*/
 	}
-
-	/*
-	if( !cursor )
-	{
-		switch( action && action.reflect )
-		{
-			case 'CreateRelation' :
-
-				if( action.fromItemPath )
-				{
-					action.fromItemPath =
-						null;
-				}
-
-				break;
-		}
-	}
-	*/
 
 	return (
 		HoverReply.create(
@@ -962,7 +929,7 @@ Space.prototype.dragStart =
 		transItem =
 			null;
 
-	// XXX simplify
+	// FIXME simplify
 	if(
 		action &&
 		action.reflect === 'CreateGeneric' &&
