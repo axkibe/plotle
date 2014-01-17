@@ -177,28 +177,13 @@ Meshverse.prototype.grow =
 			);
 	}
 
-	if( pattern === 'joobj' )
+	// new style creation
+	if( pattern.create && pattern.prototype.reflect === type )
 	{
-		switch( type )
-		{
-			case 'Point' :
-
-				return Euclid.Point.create(
-					'json',
-						model
-				);
-
-			case 'Rect' :
-
-				return Euclid.Rect.create(
-					'json',
-						model
-				);
-
-			default :
-
-				throw new Error( 'unknown joobj in meshverse' );
-		}
+		return pattern.create(
+			'json',
+				model
+		);
 	}
 
 	if( pattern.ranks )
@@ -649,10 +634,11 @@ Meshverse.prototype.Para =
 
 
 Meshverse.prototype.Rect =
-	'joobj';
+	Euclid.Rect;
+
 
 Meshverse.prototype.Point =
-	'joobj';
+	Euclid.Point;
 
 
 /*

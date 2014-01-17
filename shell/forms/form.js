@@ -60,7 +60,8 @@ Forms.Form =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	)
 {
 	// TODO use tag
@@ -89,6 +90,9 @@ Forms.Form =
 
 	this.hover =
 		hover;
+
+	this.username =
+		username;
 
 	if( CHECK )
 	{
@@ -220,6 +224,9 @@ Form.create =
 			null,
 
 		traitSet =
+			null,
+
+		username =
 			null;
 
 	while( a < aZ )
@@ -280,6 +287,13 @@ Form.create =
 
 				break;
 
+			case 'username' :
+
+				username =
+					arguments[ a++ ];
+
+				break;
+
 			default :
 
 				throw new Error(
@@ -320,6 +334,12 @@ Form.create =
 				inherit.mark;
 		}
 
+		if( username === null )
+		{
+			username =
+				inherit.username;
+		}
+
 		// TODO return inherit
 	}
 
@@ -331,7 +351,8 @@ Form.create =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	);
 };
 

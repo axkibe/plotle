@@ -52,7 +52,8 @@ Forms.Welcome =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	)
 {
 	if( CHECK )
@@ -137,7 +138,8 @@ Forms.Welcome =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	);
 };
 

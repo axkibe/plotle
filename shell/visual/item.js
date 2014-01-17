@@ -24,6 +24,7 @@ var
 	HoverReply,
 	Jools,
 	Mark,
+	Path,
 	shell,
 	theme,
 	TraitSet;

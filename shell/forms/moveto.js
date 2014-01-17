@@ -50,7 +50,8 @@ Forms.MoveTo =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	)
 {
 	if( CHECK )
@@ -145,7 +146,8 @@ Forms.MoveTo =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	);
 };
 
@@ -221,7 +223,7 @@ MoveTo.prototype.pushButton =
 		case 'userHomeButton' :
 
 			shell.moveToSpace(
-				shell.username, // XXX
+				this.username,
 				'home',
 				false
 			);

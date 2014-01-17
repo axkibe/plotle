@@ -51,7 +51,8 @@ var
 			screensize,
 			traitSet,
 			mark,
-			hover
+			hover,
+			username
 		)
 {
 	if( CHECK )
@@ -82,7 +83,8 @@ var
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	);
 };
 

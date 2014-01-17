@@ -61,7 +61,8 @@ Forms.Jockey =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	)
 {
 
@@ -91,6 +92,9 @@ Forms.Jockey =
 
 	this.mark =
 		mark;
+
+	this.username =
+		username;
 
 	this.hover =
 		hover;
@@ -136,19 +140,21 @@ Forms.Jockey =
 						hover.isEmpty || !path.subPathOf( hover ) ?
 							Path.empty
 							:
-							hover
+							hover,
+					'username',
+						username
 				);
 
-		if( CHECK )
-		{
-			if( forms[ name ].reflect !== name )
-			{
-				throw new Error(
-					'form reflextion mismatch: ' +
-						forms[ name ].reflect + ' !== ' + name
-				);
-			}
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if( forms[ name ].reflect !== name )
+/**/		{
+/**/			throw new Error(
+/**/				'form reflexion mismatch: ' +
+/**/					forms[ name ].reflect + ' !== ' + name
+/**/			);
+/**/		}
+/**/	}
 	}
 
 	this._forms =

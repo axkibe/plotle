@@ -47,7 +47,8 @@ Forms.User =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	)
 {
 	if( CHECK )
@@ -178,7 +179,8 @@ Forms.User =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	);
 };
 

@@ -10,7 +10,9 @@
 /*
 | Export
 */
-var Euclid;
+var
+	Euclid;
+
 Euclid =
 	Euclid || { };
 
@@ -97,14 +99,15 @@ Shape.prototype.sketch =
 		view
 	)
 {
-	var hull =
-		this.hull;
+	var
+		hull =
+			this.hull,
 
-	var h =
-		0;
+		h =
+			0,
 
-	var hZ =
-		hull.length;
+		hZ =
+			hull.length;
 
 	if( hull[ h++ ] !== 'start' )
 	{
@@ -113,11 +116,12 @@ Shape.prototype.sketch =
 		);
 	}
 
-	var pstart =
-		view.point( hull [ h++ ] );
+	var
+		pstart =
+			view.point( hull [ h++ ] ),
 
-	var pc =
-		view.point( this.pc );
+		pc =
+			view.point( this.pc );
 
 
 	pstart =

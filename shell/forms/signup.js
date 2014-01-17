@@ -52,7 +52,8 @@ Forms.SignUp =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	)
 {
 	if( CHECK )
@@ -74,7 +75,8 @@ Forms.SignUp =
 		screensize,
 		traitSet,
 		mark,
-		hover
+		hover,
+		username
 	);
 };
 

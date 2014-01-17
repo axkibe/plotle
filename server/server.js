@@ -497,19 +497,11 @@ Server.prototype.loadSpace =
 
 		space.$seqZ++;
 
-		try{
-			space.$tree =
-				change.chgX.changeTree(
-					space.$tree,
-					meshverse
-				).tree;
-		}
-		catch( err )
-		{
-			console.log( 'error playing back changes' );
-
-			throw err;
-		}
+		space.$tree =
+			change.chgX.changeTree(
+				space.$tree,
+				meshverse
+			).tree;
 	}
 };
 

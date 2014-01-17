@@ -205,11 +205,13 @@ Jools.lazyFixate(
 	'gradientR1',
 	function( )
 	{
-		var dx =
-			this.pse.x - this.pnw.x;
+		var
+			dx =
+				this.pse.x - this.pnw.x;
 
-		var dy =
-			this.pse.y - this.pnw.y;
+		var
+			dy =
+				this.pse.y - this.pnw.y;
 
 		return Math.max(
 			dx,
