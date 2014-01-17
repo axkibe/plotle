@@ -172,10 +172,16 @@ Welcome.prototype.pushButton =
 		// ctrl
 	)
 {
-	if( CHECK )
-	{
-		// TODO
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.get( 1 ) !== this.reflect )
+/**/	{
+/**/		throw new Error(
+/**/			'path mismatch'
+/**/		);
+/**/	}
+/**/}
 
 	var
 		buttonName =
