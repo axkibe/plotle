@@ -34,14 +34,6 @@ var
 'use strict';
 
 
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
-
-
 var
 	_tag =
 		'LABEL-30268594';

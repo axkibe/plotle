@@ -29,7 +29,7 @@ var
 /*
 | Node imports.
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	Jools =
 		require( './jools' );
@@ -530,7 +530,7 @@ Path.prototype.toJSON =
 
 
 /*
-| Returns true is this path is empty
+| Returns true is this path is empty.
 */
 Jools.lazyFixate(
 	Path.prototype,
@@ -543,7 +543,7 @@ Jools.lazyFixate(
 
 
 /*
-| An empty path
+| An empty path.
 */
 Path.empty =
 	new Path(
@@ -552,9 +552,9 @@ Path.empty =
 	);
 
 /*
-| Node export
+| Node export.
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	module.exports =
 		Path;

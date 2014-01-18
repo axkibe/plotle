@@ -25,13 +25,6 @@ var
 ( function( ) {
 'use strict';
 
-if( !SHELL )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
-
 
 Accent =
 	{

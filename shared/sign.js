@@ -29,7 +29,7 @@ var
 /*
 | Node includes.
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	Jools =
 		require('./jools');
@@ -172,9 +172,9 @@ Sign.prototype.affix =
 
 
 /*
-| Node
+| Node export.
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	module.exports =
 		Sign;

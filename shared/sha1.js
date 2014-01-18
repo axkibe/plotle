@@ -15,18 +15,26 @@ authors: [Christopher Pitt, Enrique Erne]
 * restructured code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Exports
 */
-var sha1hex = null;
+var
+	sha1hex =
+		null;
 
-/**
+/*
 | Capsule
 */
-(function(){
-"use strict";
+(function( ) {
+'use strict';
 
-var toUTF8 = function(str) {
+
+var toUTF8 =
+	function(
+		str
+	)
+{
 	var a, b;
 	var result = '';
 	var code = String.fromCharCode;
@@ -49,19 +57,27 @@ var toUTF8 = function(str) {
 	return result;
 };
 
-var rotateLeft = function(a, b) {
-	return (a << b) | (a >>> (32 - b));
+var rotateLeft =
+	function( a, b )
+{
+	return ( a << b ) | ( a >>> ( 32 - b ) );
 };
 
-var tohex = function(a){
+var tohex =
+	function( a )
+{
 	var r = '';
-	for (var b = 7; b >= 0; b--) {
+	for (var b = 7; b >= 0; b--)
+	{
 		r += ((a >>> (b * 4)) & 0x0f).toString(16);
 	}
+
 	return r;
 };
 
-sha1hex = function(str) {
+sha1hex =
+	function( str )
+{
 	var a, b;
 	var h1 = 0x67452301;
 	var h2 = 0xEFCDAB89;
@@ -144,10 +160,13 @@ sha1hex = function(str) {
 /**
 | Node exports
 */
-if (typeof(window) === 'undefined') {
-	module.exports = {
-		sha1hex : sha1hex
+if( SERVER )
+{
+	module.exports =
+	{
+		sha1hex :
+			sha1hex
 	};
 }
 
-})();
+})( );

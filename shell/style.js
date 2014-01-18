@@ -23,12 +23,8 @@ var
 | Capsule
 */
 ( function( ) {
-"use strict";
+'use strict';
 
-if( typeof( window ) === 'undefined' )
-{
-	throw new Error( 'this code needs a browser!' );
-}
 
 Style =
 	{ };

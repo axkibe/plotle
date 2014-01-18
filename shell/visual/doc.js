@@ -32,14 +32,6 @@ var
 'use strict';
 
 
-if ( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code requires a browser!'
-	);
-}
-
-
 var
 	_tag =
 		'DOC-15472002';

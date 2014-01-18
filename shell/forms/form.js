@@ -42,14 +42,6 @@ var
 		'FORM-39606038';
 
 
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
-
-
 /*
 | Constructor
 */

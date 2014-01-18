@@ -80,6 +80,9 @@ var
 	sha1 =
 		require( '../shared/sha1' ),
 
+	util =
+		require( 'util' ),
+
 	url =
 		require( 'url' ),
 
@@ -1491,6 +1494,24 @@ Server.prototype.prepareResources =
 };
 
 
+/*
+| Prepends the flags to cconfig
+| Used by development.
+*/
+Server.prototype.prependConfigFlags =
+	function(
+		cconfig
+	)
+{
+	cconfig.data =
+		'var JOOBJ = false;\n' +
+		'var CHECK = true;\n' +
+		'var SERVER = false;\n' +
+		'var SHELL = true;\n' +
+		cconfig.data;
+};
+
+
 // returns a string with a base64 counting
 var b64Count =
 	function(
@@ -1511,28 +1532,10 @@ var b64Count =
 		c =
 			c >> 6;
 	}
-	while( c > 0 )
+	while( c > 0 );
 
 	return result;
 };
-
-
-/*
-| Prepends the flags to cconfig
-| Used by development.
-*/
-Server.prototype.prependConfigFlags =
-	function(
-		cconfig
-	)
-{
-	cconfig.data =
-		'var JOOBJ = false;\n' +
-		'var CHECK = true;\n' +
-		'var SERVER = false;\n' +
-		'var SHELL = true;\n' +
-		cconfig.data;
-}
 
 /*
 | Makes additional mangles
@@ -1673,7 +1676,10 @@ Server.prototype.extraMangle =
 			'$$' + b64Count( a );
 	}
 
-	// console.log( 'mangle-map', mangle );
+	fs.writeFileSync(
+		'manglemap.txt',
+		util.inspect( mangle )
+	);
 
 	// marks all mangles and no-mangles as unused so far
 	for( a in mangle )
@@ -3614,4 +3620,4 @@ var run =
 
 suspend( run )( );
 
-} ) ();
+} )( );

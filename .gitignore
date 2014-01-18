@@ -3,4 +3,5 @@ todo
 node_modules/
 bundle.js
 compact.js
+manglemap.txt
 joobj/*

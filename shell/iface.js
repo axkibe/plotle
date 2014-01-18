@@ -32,15 +32,7 @@ var
 | Capsule
 */
 ( function( ) {
-"use strict";
-
-
-if( CHECK && typeof ( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code nees a browser!'
-	);
-}
+'use strict';
 
 
 /*

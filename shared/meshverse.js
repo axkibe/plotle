@@ -28,8 +28,11 @@ var
 ( function( ) {
 "use strict";
 
-// node imports
-if( typeof( window ) === 'undefined')
+
+/*
+| Node imports.
+*/
+if( SERVER )
 {
 	Jools =
 		require( './jools' );
@@ -46,6 +49,8 @@ if( typeof( window ) === 'undefined')
 	Euclid.Rect =
 		require( './euclid/rect' );
 }
+
+
 
 /*
 | The meshcraft universe
@@ -680,7 +685,7 @@ meshverse =
 /*
 | Node export
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	module.exports =
 		meshverse;

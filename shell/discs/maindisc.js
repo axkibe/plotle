@@ -31,14 +31,6 @@ var
 'use strict';
 
 
-/**/if( CHECK && typeof( window ) === 'undefined' )
-/**/{
-/**/	throw new Error(
-/**/		'this code needs a browser!'
-/**/	);
-/**/}
-
-
 var
 	_tag =
 		'DISC-11692648';

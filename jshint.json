@@ -15,7 +15,9 @@
 	"unused"    : true,
 	"globals"   :
 		{
-			"CHECK" : true,
-			"JOOBJ" : true
+			"CHECK"  : true,
+			"JOOBJ"  : true,
+			"SHELL"  : true,
+			"SERVER" : true
 		}
 }

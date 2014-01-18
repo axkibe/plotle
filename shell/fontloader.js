@@ -18,14 +18,6 @@ var
 'use strict';
 
 
-if( !SHELL )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
-
-
 window.onload =
 	function( )
 {

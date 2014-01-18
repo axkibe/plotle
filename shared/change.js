@@ -33,7 +33,7 @@ var
 /*
 | Node includes.
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	Jools =
 		require( './jools' );
@@ -1112,7 +1112,7 @@ Change.prototype.rank =
 /*
 | Exports
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	module.exports =
 		Change;

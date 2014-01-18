@@ -29,13 +29,6 @@ var
 (function( ) {
 'use strict';
 
-if( typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
-
 
 /*
 | Gets a style by its name.

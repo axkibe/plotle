@@ -32,14 +32,6 @@ var
 'use strict';
 
 
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
-
-
 /*
 | Catches all errors a function throws if config.devel is set.
 */

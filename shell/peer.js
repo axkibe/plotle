@@ -25,15 +25,7 @@ var
 | Capsule
 */
 (function( ) {
-
-
-"use strict";
-if( typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code nees a browser!'
-	);
-}
+'use strict';
 
 
 /*

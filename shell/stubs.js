@@ -26,13 +26,6 @@ var
 
 'use strict';
 
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
-
 
 /*
 | Constructor.
