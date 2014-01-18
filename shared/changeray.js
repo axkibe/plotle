@@ -32,7 +32,7 @@ var
 /*
 | Node includes.
 */
-if (typeof(window) === 'undefined')
+if( SERVER )
 {
 	Jools =
 		require( './jools'  );
@@ -253,7 +253,7 @@ ChangeRay.prototype.changeTree =
 /*
 | Exports
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	module.exports =
 		ChangeRay;

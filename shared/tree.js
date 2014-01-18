@@ -31,7 +31,7 @@ var
 /*
 | Node imports
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	Jools =
 		require( './jools' );
@@ -323,7 +323,7 @@ Tree.getType =
 /*
 | Node export
 */
-if( typeof( window ) === 'undefined')
+if( SERVER )
 {
 	module.exports =
 		Tree;

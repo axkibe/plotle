@@ -180,7 +180,7 @@ var checkValidPathArc =
 /*
 | Returns the arc at index i.
 |
-| TODO remove array base
+| FIXME base indizes on strings instead of numbers
 */
 Path.prototype.get =
 	function(
@@ -208,7 +208,7 @@ Path.prototype.get =
 /*
 | Returns a path with key appended
 |
-| TODO cache
+| FIXME cache
 */
 Path.prototype.append =
 	function(
@@ -236,7 +236,7 @@ Path.prototype.appendNC =
 /*
 | Returns a path with the first item chopped of.
 |
-| TODO cache
+| FIXME cache
 */
 Path.prototype.chop =
 	function( )
@@ -255,7 +255,7 @@ Path.prototype.chop =
 /*
 | Returns a path with the last item(s) removed.
 |
-| TODO cache
+| FIXME cache
 */
 Path.prototype.shorten =
 	function(
@@ -339,7 +339,7 @@ Path.prototype.limit =
 /*
 | Returns a path with the first item prepended.
 |
-| TODO cache
+| FIXME cache
 */
 Path.prototype.prepend =
 	function(

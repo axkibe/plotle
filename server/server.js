@@ -10,14 +10,8 @@
 | (to make jshint happy)
 */
 ( function( ) {
+'use strict';
 
-"use strict";
-
-/*
-| Turn on checking on server side by default.
-*/
-GLOBAL.CHECK =
-	true;
 
 if( typeof( require ) === 'undefined' )
 {
@@ -25,6 +19,22 @@ if( typeof( require ) === 'undefined' )
 		'this code requires node!'
 	);
 }
+
+
+/*
+| Turn on checking on server side by default.
+*/
+GLOBAL.CHECK =
+	true;
+
+GLOBAL.JOOBJ =
+	false;
+
+GLOBAL.SERVER =
+	true;
+
+GLOBAL.SHELL =
+	false;
 
 
 /*
@@ -80,7 +90,7 @@ var
 		require( 'zlib' ),
 
 	uglify =
-		config.uglify ?
+		config.uglify || config.extraMangle ?
 			require( 'uglify-js' ) :
 			null;
 
@@ -1169,6 +1179,14 @@ Server.prototype.prepareResources =
 		devels =
 			[ ];
 
+	// if uglify is turned off
+	// the flags are added before bundle
+	// creation, otherwise afterwards
+	if( !config.uglify )
+	{
+		this.prependConfigFlags( cconfig );
+	}
+
 	// loads the files to be bundled
 	for(
 		a = 0, aZ = rBundle.length;
@@ -1219,52 +1237,119 @@ Server.prototype.prepareResources =
 		bundle.join( '\n' );
 
 	//writes the bundle( for debugging )
-	//yield fs.writeFile(
-	//	'bundle.js',
-	//	bundle,
-	//  resume( )
-	//);
+	yield fs.writeFile(
+		'bundle.js',
+		bundle,
+		resume( )
+	);
 
+
+	Jools.log(
+		'start',
+		'compressing bundle'
+	);
 
 	// uglifies the bundle if configured so
-	if( config.uglify )
+	if( config.uglify || config.extraMangle )
 	{
 		var
+			ast;
+
+		try{
 			ast =
 				uglify.parse(
 					bundle,
 					{
 						filename :
-							'bundle.js'
+							'bundle.js',
+
+						strict :
+							true
 					}
 				);
+		}
+		catch ( e )
+		{
+			console.log( 'parse error', 'bundle.js line', e.line );
 
-		ast.figure_out_scope( );
+			throw e;
+		}
 
-		var
-			compressor =
-				uglify.Compressor(
-					{
-						dead_code :
-							true,
+		if( config.extraMangle )
+		{
+			this.extraMangle( ast );
+		}
 
-						global_defs :
+		if( config.uglify )
+		{
+			ast.figure_out_scope( );
+
+			var
+				compressor =
+					uglify.Compressor(
 						{
-							'CHECK' :
-								false
+							dead_code :
+								true,
+
+							hoist_vars :
+								true,
+
+							warnings :
+								false,
+
+							negate_iife :
+								true,
+
+							global_defs :
+							{
+								'CHECK' :
+									false,
+
+								'JOOBJ' :
+									false,
+
+								'SERVER' :
+									false,
+
+								'SHELL' :
+									true,
+							}
 						}
-					}
-				);
+					);
 
-		ast =
-			ast.transform( compressor );
+			ast =
+				ast.transform( compressor );
 
-		ast.compute_char_frequency( );
+			ast.figure_out_scope( );
 
-		ast.mangle_names( );
+			ast.compute_char_frequency( );
+
+			ast.mangle_names(
+				{
+					toplevel :
+						true,
+
+					except :
+						[
+							'WebFont'
+						]
+				}
+			);
+		}
 
 		bundle =
-			ast.print_to_string( { } );
+			ast.print_to_string(
+				{
+					beautify :
+						config.beautify
+				}
+			);
+
+		yield fs.writeFile(
+			'compact.js',
+			bundle,
+			resume( )
+		);
 	}
 
 	// calculates the hash for the bundle
@@ -1291,12 +1376,13 @@ Server.prototype.prepareResources =
 		bsha1
 	);
 
-	// Prepends the CHECK and JOOBJ flags after
-	// the bundle has been created.
-	cconfig.data =
-		'var JOOBJ = false;\n' +
-		'var CHECK = true;\n' +
-		cconfig.data;
+	// if uglify is turned on
+	// the flags are added after bundle
+	// creation, otherwise before
+	if( config.uglify )
+	{
+		this.prependConfigFlags( cconfig );
+	}
 
 	// the devel.html file
 	if(
@@ -1402,6 +1488,282 @@ Server.prototype.prepareResources =
 		'  compressed bundle size is ',
 		br.gzip.length
 	);
+};
+
+
+// returns a string with a base64 counting
+var b64Count =
+	function(
+		c
+	)
+{
+	var
+		mask = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_',
+
+		result =
+			'';
+
+	do
+	{
+		result =
+			mask[ c & 0x3F ] + result;
+
+		c =
+			c >> 6;
+	}
+	while( c > 0 )
+
+	return result;
+};
+
+
+/*
+| Prepends the flags to cconfig
+| Used by development.
+*/
+Server.prototype.prependConfigFlags =
+	function(
+		cconfig
+	)
+{
+	cconfig.data =
+		'var JOOBJ = false;\n' +
+		'var CHECK = true;\n' +
+		'var SERVER = false;\n' +
+		'var SHELL = true;\n' +
+		cconfig.data;
+}
+
+/*
+| Makes additional mangles
+*/
+Server.prototype.extraMangle =
+	function(
+		ast
+	)
+{
+	var
+		a,
+		aZ,
+		at,
+		e,
+
+		// unknown properties / keys
+		// that are missed in both lists
+		missed =
+			{ },
+
+		// mangle definitions:
+		// a file that looks like this
+		// ". value"  <-- this will be mangled
+		// "> value"  <-- this will not be mangled
+		mangleDefs =
+			(
+				fs.readFileSync(
+					'./mangle.txt'
+				) + ''
+			).split( '\n' ),
+
+		// an array of all mangles
+		mangleList,
+
+		// associative of all mangles
+		mangle =
+			{ },
+
+		// associative of all no-mangles
+		noMangle =
+			{ },
+
+		// associative of all mangles not used
+		useMangle =
+			{ },
+
+		// associative of all no-mangles not used
+		useNoMangle =
+			{ },
+
+		// ast properties mangled
+		astProps =
+			{
+				'property' :
+					'p',
+
+				'key' :
+					'p',
+
+				// string values are mangled
+				// but do not flag properties missed
+				'value' :
+					's'
+			};
+
+	// cuts away empty lines
+	while( mangleDefs.indexOf( '' ) >= 0 )
+	{
+		mangleDefs.splice( mangleDefs.indexOf( '' ), 1 );
+	}
+
+	// creates associativs and lists
+	for(
+		a = 0, aZ = mangleDefs.length;
+		a < aZ;
+		a++
+	)
+	{
+		at =
+			mangleDefs[ a ];
+
+		e =
+			at.substring( 2 );
+
+		if(
+			e.length === 0 ||
+			e.indexOf( ' ' ) >= 0 ||
+			at[ 1 ] !== ' ' ||
+			( at[ 0 ] !== '.' && at[ 0 ] !== '>' )
+		)
+		{
+			throw new Error(
+				'malformed mangle entry "' + at + '"'
+			);
+		}
+
+		if(
+			mangle[ e ] || noMangle[ e ]
+		)
+		{
+			throw new Error(
+				'double entry' + e
+			);
+		}
+
+		switch( at[ 0 ] )
+		{
+			case '.' :
+
+				mangle[ e ] =
+					true;
+
+				break;
+
+			case '>' :
+
+				noMangle[ e ] =
+					true;
+
+				break;
+		}
+	}
+
+	mangleList =
+		Object.keys( mangle ).sort( );
+
+	// allots all mangles an value
+	for(
+		a = 0, aZ = mangleList.length;
+		a < aZ;
+		a++
+	)
+	{
+		at =
+			mangleList[ a ];
+
+		mangle[ at ] =
+			'$$' + b64Count( a );
+	}
+
+	// console.log( 'mangle-map', mangle );
+
+	// marks all mangles and no-mangles as unused so far
+	for( a in mangle )
+	{
+		useMangle[ a ] =
+			true;
+	}
+
+	for( a in noMangle )
+	{
+		useNoMangle[ a ] =
+			true;
+	}
+
+	// walks the syntax tree
+	ast.walk( new uglify.TreeWalker(
+		function( node )
+		{
+			var k, p;
+
+			for( k in astProps )
+			{
+				p =
+					node[ k ];
+
+				if( p !== undefined )
+				{
+					break;
+				}
+			}
+
+			if( !k )
+			{
+				return false;
+			}
+
+			// checks if this property will not be mangled
+			if( noMangle[ p ] !== undefined )
+			{
+				delete useNoMangle[ p ];
+
+				return false;
+			}
+
+			// checks if this property will be mangled
+			if( mangle[ p ] !== undefined )
+			{
+				delete useMangle[ p ];
+
+				node[ k ] =
+					mangle[ p ];
+
+				return false;
+			}
+
+			// if this is a property it is marked as missed
+			if( astProps[ k ] === 'p' )
+			{
+				missed[ p ] =
+					true;
+			}
+
+			return false;
+		}
+	));
+
+	// turns check lists into arrays and sorts them
+	missed =
+		Object.keys( missed ).sort( );
+
+	useMangle =
+		Object.keys( useMangle ).sort( );
+
+	useNoMangle =
+		Object.keys( useNoMangle ).sort( );
+
+	if( missed.length > 0 )
+	{
+		console.log( 'extraMangle missed properties: ', missed );
+	}
+
+	if( useMangle.length > 0 )
+	{
+		console.log( 'extraMangle not used mangles: ', useMangle );
+	}
+
+	if( useNoMangle.length > 0 )
+	{
+		console.log( 'extraMangle not used no-mangles: ', useNoMangle );
+	}
 };
 
 

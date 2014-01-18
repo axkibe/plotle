@@ -42,93 +42,67 @@ var
 | Capsule
 */
 ( function() {
-
 'use strict';
-
-if( CHECK && typeof( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code needs a browser!'
-	);
-}
 
 
 /*
 | Valid modes
-|
-| TODO remove when not CHECK
 */
 var
-	_modes =
-		Jools.immute( {
+	_modes;
 
-			/*
-			| Creating a new item.
-			*/
-			'Create' :
-				true,
-
-			/*
-			| Help.
-			*/
-			'Help' :
-				true,
-
-			/*
-			| Logging in.
-			*/
-			'Login' :
-				true,
-
-			/*
-			| Moveing To another space.
-			*/
-			'MoveTo' :
-				true,
-
-			/*
-			| Standard selection, moving stuff around.
-			*/
-			'Normal' :
-				true,
-
-			/*
-			| User does not have access to a space.
-			*/
-			'NoAccessToSpace' :
-				true,
-
-			/*
-			| Space does not exist, but user is allowed to create it.
-			*/
-			'NonExistingSpace' :
-				true,
-
-			/*
-			| Signing up
-			*/
-			'SignUp' :
-				true,
-
-			/*
-			| Space view
-			*/
-			'Space' :
-				true,
-
-			/*
-			| User view
-			*/
-			'User' :
-				true,
-
-			/*
-			| Welcome view
-			*/
-			'Welcome' :
-				true
-
-		} );
+/**/if( CHECK )
+/**/{
+/**/	_modes =
+/**/		Object.freeze( {
+/**/
+/**/			// Creating a new item.
+/**/			'Create' :
+/**/				true,
+/**/
+/**/			// Help.
+/**/			'Help' :
+/**/				true,
+/**/
+/**/			// Logging in.
+/**/			'Login' :
+/**/				true,
+/**/
+/**/			// Moveing To another space.
+/**/			'MoveTo' :
+/**/				true,
+/**/
+/**/			// Standard selection, moving stuff around.
+/**/			'Normal' :
+/**/				true,
+/**/
+/**/			// User does not have access to a space.
+/**/			'NoAccessToSpace' :
+/**/				true,
+/**/
+/**/			// Space does not exist,
+/**/			// but user is allowed to create it.
+/**/			'NonExistingSpace' :
+/**/				true,
+/**/
+/**/			// Signing up
+/**/			'SignUp' :
+/**/				true,
+/**/
+/**/			// Space view
+/**/			'Space' :
+/**/				true,
+/**/
+/**/			// User view
+/**/			'User' :
+/**/				true,
+/**/
+/**/			// Welcome view
+/**/			'Welcome' :
+/**/				true
+/**/
+/**/		} );
+/**/}
 
 
 /*
@@ -358,7 +332,6 @@ Shell.prototype.setAction =
 /**/{
 /**/	if( !action || !Action.isAction( action.reflect ) )
 /**/	{
-/**/		console.log( 'TODO', '/:(', action );
 /**/		throw new Error(
 /**/			'invalid action'
 /**/		);
@@ -1307,10 +1280,6 @@ Shell.prototype.setUser =
 		passhash
 	)
 {
-	// TODO this $user and this.username
-	this.$user =
-		username;
-
 	this.peer.setUser(
 		username,
 		passhash

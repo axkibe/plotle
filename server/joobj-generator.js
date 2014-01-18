@@ -339,7 +339,7 @@ generateNodeIncludesSection =
 		'/*',
 		'| Node includes',
 		'*/',
-		'if( typeof( module ) !== \'undefined\' )',
+		'if( SERVER )',
 		'{',
 		'\tJools =',
 		'\t\trequire( \'../shared/jools\' );'
@@ -435,7 +435,7 @@ generateNodeExportSection =
 		'/*',
 		'| Node export',
 		'*/',
-		'if( typeof( module ) !== \'undefined\' )',
+		'if( SERVER )',
 		'{',
 		'\tmodule.exports =',
 		'\t\t' + reference + ';',

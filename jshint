@@ -1,3 +1,3 @@
 #!/bin/bash
 #../node-jshint/bin/hint --config jshint.json XXX | head -n 20
-jshint --config ./jshint.json *.js shell/*.js shell/action/*.js shell/forms/*.js shell/mark/*.js shell/widgets/*.js shell/discs/*.js shell/visual/*.js server/*.js shared/*.js shared/euclid/*.js shared/meshverse/*.js shell/euclid/*.js testpad/*.js tools/*.js joobj/*.js | head -n 20
+jshint --config ./jshint.json shell/*.js shell/action/*.js shell/forms/*.js shell/mark/*.js shell/widgets/*.js shell/discs/*.js shell/visual/*.js server/*.js shared/*.js shared/euclid/*.js shared/meshverse/*.js shell/euclid/*.js testpad/*.js tools/*.js joobj/*.js | head -n 20

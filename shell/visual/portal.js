@@ -118,7 +118,7 @@ Visual.Portal =
 						this.path.append( 'spaceUser' ),
 
 					spaceTag :
-						this.path.append( 'spaceTag' ),
+						this.path.append( 'spaceTag' )
 				}
 			);
 	}

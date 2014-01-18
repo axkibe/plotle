@@ -20,9 +20,7 @@ Euclid =
 | Imports
 */
 var
-	Jools,
-	JOOBJ;
-
+	Jools;
 
 /*
 | Capsule

@@ -58,7 +58,7 @@ Jools.configSwitch =
 /*
 | Running in node or browser?
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	// in node
 	config =
@@ -1229,7 +1229,7 @@ Jools.half =
 /*
 | Node export
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	module.exports =
 		Jools;

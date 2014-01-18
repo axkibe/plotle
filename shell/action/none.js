@@ -32,7 +32,8 @@ if( JOOBJ )
 			'Action.Action',
 
 		equals :
-			'primitive',
+			'primitive'
+
 	};
 }
 

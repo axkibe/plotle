@@ -21,8 +21,7 @@ Euclid =
 | Imports
 */
 var
-	Jools,
-	JOOBJ;
+	Jools;
 
 
 /*
@@ -59,7 +58,7 @@ if( JOOBJ )
 							'Euclid',
 
 						type :
-							'Point',
+							'Point'
 					},
 
 				pse :

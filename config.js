@@ -86,6 +86,20 @@ config.uglify =
 
 
 /*
+| If true does extra mangles on output compression
+*/
+config.extraMangle =
+	true;
+
+
+/*
+| If true "beautifies" uglify output.
+*/
+config.beautify =
+	true;
+
+
+/*
 | Max. number of undo events queued.
 */
 config.maxUndo =

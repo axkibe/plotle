@@ -18,7 +18,7 @@ var
 'use strict';
 
 
-if( typeof( window ) === 'undefined' )
+if( !SHELL )
 {
 	throw new Error(
 		'this code needs a browser!'

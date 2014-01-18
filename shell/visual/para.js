@@ -1242,7 +1242,7 @@ var
 				'_keyRight',
 
 			'up' :
-				'_keyUp',
+				'_keyUp'
 		};
 
 

@@ -33,7 +33,7 @@ var
 /*
 | Node includes.
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	Change =
 		require('./change');
@@ -51,9 +51,10 @@ if( typeof( window ) === 'undefined' )
 		require('./sign');
 }
 
-
-var is =
-	Jools.is; // TODO remove
+// FIXME remove
+var
+	is =
+		Jools.is;
 
 /*
 | Transformation.
@@ -1018,7 +1019,7 @@ MeshMashine =
 /*
 | Node export
 */
-if( typeof( window ) === 'undefined' )
+if( SERVER )
 {
 	module.exports =
 		MeshMashine;

@@ -25,9 +25,11 @@ var
 ( function( ) {
 'use strict';
 
-if( CHECK && typeof( window ) === 'undefined' )
+if( !SHELL )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 

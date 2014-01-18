@@ -23,11 +23,14 @@ var
 (function() {
 'use strict';
 
-var FontPool = function()
-{
-	this.$pool =
-		{ };
-};
+
+var
+	FontPool =
+		function( )
+	{
+		this.$pool =
+			{ };
+	};
 
 
 FontPool.styles =
