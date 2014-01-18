@@ -98,9 +98,6 @@ Shellverse.prototype.ButtonWidget =
 
 				shape :
 					Jools.immute( {
-						'Curve' :
-							true,
-
 						'Ellipse' :
 							true
 					} ),
@@ -147,26 +144,6 @@ Shellverse.prototype.CheckBoxWidget =
 
 				style :
 					'String'
-
-			} )
-
-	} );
-
-
-Shellverse.prototype.Curve =
-	Jools.immute( {
-
-		twig :
-			Jools.immute( {
-
-				MoveTo :
-					true,
-
-				LineTo :
-					true,
-
-				BeziTo :
-					true
 
 			} )
 

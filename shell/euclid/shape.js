@@ -13,6 +13,7 @@
 var
 	Euclid;
 
+
 Euclid =
 	Euclid || { };
 
@@ -350,11 +351,13 @@ Shape.prototype.getProjection =
 
 			case 'bezier' :
 
-				throw new Error(' cannot yet do projections for beziers ');
+				throw new Error(
+					'cannot yet do projections for beziers '
+				);
 
 			case 'line' :
 
-				var la1 =  p.y - pc.y;
+				var la1 = p.y - pc.y;
 				var lb1 = pc.x -  p.x;
 				var lc1 = la1 * pc.x + lb1 * pc.y;
 

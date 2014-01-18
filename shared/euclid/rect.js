@@ -11,10 +11,9 @@
 var
 	Euclid;
 
+
 Euclid =
-	Euclid
-	||
-	{ };
+	Euclid || { };
 
 
 /*
