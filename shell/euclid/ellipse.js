@@ -177,24 +177,26 @@ Ellipse.prototype._init =
 			Euclid.Point.create( 'x', mx, 'y', sy );
 
 	this.shape =
-		new Euclid.Shape(
-			[
-				'start',
-					pw,
-				'round',
-					'clockwise',
-					pn,
-				'round',
-					'clockwise',
-					pe,
-				'round',
-					'clockwise',
-					ps,
-				'round',
-					'clockwise',
-					'close'
-			],
-			this.pc
+		Euclid.Shape.create(
+			'hull',
+				[
+					'start',
+						pw,
+					'round',
+						'clockwise',
+						pn,
+					'round',
+						'clockwise',
+						pe,
+					'round',
+						'clockwise',
+						ps,
+					'round',
+						'clockwise',
+						'close'
+				],
+			'pc',
+				this.pc
 		);
 };
 
@@ -302,6 +304,9 @@ Jools.lazyFixate(
 );
 
 
+/*
+| Draws the ellipse.
+*/
 Ellipse.prototype.sketch =
 	function
 	(
@@ -315,6 +320,9 @@ Ellipse.prototype.sketch =
 };
 
 
+/*
+| Returns true if point is within the ellipse.
+*/
 Ellipse.prototype.within =
 	function
 	(
@@ -322,10 +330,6 @@ Ellipse.prototype.within =
 		p
 	)
 {
-	var
-		pp =
-			view.depoint( p );
-
 	if(
 		p.x < this.pnw.x ||
 		p.y < this.pnw.y ||
@@ -343,6 +347,9 @@ Ellipse.prototype.within =
 };
 
 
+/*
+| Gets the source of a projection to p.
+*/
 Ellipse.prototype.getProjection =
 	function
 	(

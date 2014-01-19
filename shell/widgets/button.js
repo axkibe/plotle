@@ -122,11 +122,27 @@ Widgets.Button =
 	this.frame =
 		frame;
 
-	this._shape =
-		Euclid.Shape.create(
-			tree.twig.shape.twig,
-			this.frame.zeropnw
-		);
+	// MAYBE move the whole switch to rect
+	switch( tree.twig.shape.twig.type )
+	{
+		case 'Ellipse' :
+
+			this._shape =
+				this.frame.zeropnw.computeEllipse(
+					tree.twig.shape.twig
+				);
+
+			break;
+
+		default :
+
+/**/		if( CHECK )
+/**/		{
+/**/			throw new Error(
+/**/				'unknown model'
+/**/			);
+/**/		}
+	}
 
 	// if true repeats the push action if held down
 	this.repeating =

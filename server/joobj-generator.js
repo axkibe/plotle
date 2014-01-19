@@ -666,6 +666,7 @@ generateConstructor =
 
 				case 'Item' :
 				case 'Tree' :
+				case 'Array' :
 
 					// FIXME
 					r.push(
@@ -1169,6 +1170,7 @@ generateCreator =
 				case 'Number' :
 				case 'String' :
 				case 'Tree' :
+				case 'Array' : // FIXME
 
 					r.push(
 						'\t\t' + aName + ' === inherit.' + aName
@@ -1524,11 +1526,12 @@ generateEqualsCheck =
 						'\t\t(',
 						'\t\t\tthis.' +
 							( attr.assign || aName ) +
-							' === inherit.' +
+							' === obj.' +
 							( attr.assign || aName ) +
 							' ||',
 						'\t\t\t(',
-						'\t\t\t\t' + aName + ' !== null',
+						'\t\t\t\tthis.' + ( attr.assign || aName ) +
+							' !== null',
 						'\t\t\t\t&&',
 						'\t\t\t\tthis.' +
 							( attr.assign || aName ) +

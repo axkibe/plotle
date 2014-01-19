@@ -1,7 +1,7 @@
 /*
 | A geometric shape.
 |
-| Base of Ellipse, RoundRect
+| Used by Ellipse, RoundRect
 |
 | Authors: Axel Kittenberger
 */
@@ -23,7 +23,6 @@ Euclid =
 */
 var
 	Euclid,
-	Jools,
 	swatch;
 
 
@@ -35,55 +34,52 @@ var
 
 
 /*
-| Constructor.
+| The joobj definition
 */
-var Shape =
-Euclid.Shape =
-	function(
-		hull,
-		pc
-	)
+if( JOOBJ )
 {
-	this.hull =
-		Jools.immute( hull );
+	return {
 
-	if( pc )
-	{
-		this.pc =
-			pc;
-	}
+		name :
+			'Shape',
 
-	Jools.immute( this );
-};
+		unit :
+			'Euclid',
 
+		attributes :
+			{
+				hull :
+					{
+						comment :
+							'hull definition',
+
+						type :
+							'Array'
+					},
+
+				pc :
+					{
+						comment :
+							'center point',
+
+						type :
+							'Point'
+					}
+			},
+
+		equals :
+			'primitive'
+	};
+}
+
+
+var
+	Shape =
+		Euclid.Shape;
 
 
 /*
-| Creates a shape from a model
-*/
-Shape.create =
-	function(
-		model,
-		frame
-	)
-{
-	switch( model.type )
-	{
-		case 'Ellipse' :
-
-			return frame.computeEllipse( model );
-
-		default :
-
-			throw new Error(
-				'unknown shape: ' + model.type
-			);
-	}
-};
-
-
-/*
-| Draws the shape
+| Draws the shape.
 */
 Shape.prototype.sketch =
 	function(
@@ -205,8 +201,24 @@ Shape.prototype.sketch =
 			if( border !== 0 )
 			{
 				pn = pn.add(
-					pn.x > pc.x ? -border : ( pn.x < pc.x ? border : 0 ),
-					pn.y > pc.y ? -border : ( pn.y < pc.y ? border : 0 )
+					pn.x > pc.x ?
+						-border
+						:
+						(
+							pn.x < pc.x ?
+								border
+								:
+								0
+						),
+					pn.y > pc.y ?
+						-border
+						:
+						(
+							pn.y < pc.y ?
+								border
+								:
+								0
+						)
 				);
 			}
 		}
@@ -216,14 +228,17 @@ Shape.prototype.sketch =
 
 			case 'bezier' :
 
-				dx = pn.x - pp.x;
-				dy = pn.y - pp.y;
+				dx =
+					pn.x - pp.x;
+
+				dy =
+					pn.y - pp.y;
 
 				fabric.beziTo(
 					hull[ h + 1 ] * dx,
 					hull[ h + 2 ] * dy,
-					- hull[ h + 3 ] * dx,
-					- hull[ h + 4 ] * dy,
+					-hull[ h + 3 ] * dx,
+					-hull[ h + 4 ] * dy,
 					pn
 				);
 
@@ -297,7 +312,9 @@ Shape.prototype.sketch =
 /**/{
 /**/	if( pstart !== null )
 /**/	{
-/**/		throw new Error( 'hull did not close' );
+/**/		throw new Error(
+/**/			'hull did not close'
+/**/		);
 /**/	}
 /**/}
 
@@ -312,63 +329,97 @@ Shape.prototype.getProjection =
 		p
 	)
 {
-	var hull = this.hull;
+	var
+		hull =
+			this.hull,
 
-	var h    = 0;
+		h =
+			0,
 
-	var hZ   = hull.length;
+		hZ =
+			hull.length,
 
-	if( hull[ h++ ] !== 'start' )
-	{
-		throw new Error( 'hull must have start at [0]' );
-	}
+		pc =
+			this.pc;
 
-	var pstart = hull [ h++ ] ;
-	var pc     = this.pc;
-	var pp     = pstart;
-	var pn     = null;
+/**/if( CHECK )
+/**/{
+/**/	if( hull[ h++ ] !== 'start' )
+/**/	{
+/**/		throw new Error(
+/**/			'hull must have start at [0]'
+/**/		);
+/**/	}
+/**/}
 
-	var dx, dy, dxy;
-	var cx, cy;
-	var a, b;
+	var
+		pstart =
+			hull [ h++ ],
+
+		pp =
+			pstart,
+
+		pn =
+			null,
+
+		dx,
+		dy,
+		dxy,
+		cx,
+		cy,
+		a,
+		b;
 
 	while( h < hZ )
 	{
-		if( !pstart )
-			{ throw new Error( 'hull closed prematurely'); }
+/**/	if( CHECK )
+/**/	{
+/**/		if( !pstart )
+/**/		{
+/**/			throw new Error(
+/**/				'hull closed prematurely'
+/**/			);
+/**/		}
+/**/	}
 
-		switch( hull[h] )
+		switch( hull[ h ] )
 		{
 
 			case 'bezier' :
 
-				pn = hull[ h + 5 ];
+				pn =
+					hull[ h + 5 ];
 
 				break;
 
 			case 'line' :
 
-				pn = hull[ h + 1 ];
+				pn =
+					hull[ h + 1 ];
 
 				break;
 
 			case 'round' :
 
-				pn = hull[ h + 2 ];
+				pn =
+					hull[ h + 2 ];
 
 				break;
 
 			default :
+
 				throw new Error(
 					'unknown hull section: ' + hull[h]
 				);
-
 		}
 
 		if( pn === 'close')
 		{
-			pn = pstart;
-			pstart = null;
+			pn =
+				pstart;
+
+			pstart =
+				null;
 		}
 
 		switch( hull[h] )
@@ -376,26 +427,47 @@ Shape.prototype.getProjection =
 
 			case 'bezier' :
 
-				throw new Error(
-					'cannot yet do projections for beziers '
-				);
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error(
+/**/					'cannot yet do projections for beziers '
+/**/				);
+/**/			}
+
+				break;
 
 			case 'line' :
 
-				var la1 = p.y - pc.y;
-				var lb1 = pc.x -  p.x;
-				var lc1 = la1 * pc.x + lb1 * pc.y;
+				var
+					la1 =
+						p.y - pc.y,
 
-				var la2 = pn.y - pp.y;
-				var lb2 = pp.x - pn.x;
-				var lc2 = la2 * pp.x + lb2 * pp.y;
+					lb1 =
+						pc.x -  p.x,
 
-				var det = la1 * lb2 - la2 * lb1;
+					lc1 =
+						la1 * pc.x + lb1 * pc.y,
+
+					la2 =
+						pn.y - pp.y,
+
+					lb2 =
+						pp.x - pn.x,
+
+					lc2 =
+						la2 * pp.x + lb2 * pp.y,
+
+					det =
+						la1 * lb2 - la2 * lb1;
 
 				if( det !== 0 )
 				{
-					var pix = ( lb2 * lc1 - lb1 * lc2 ) / det;
-					var piy = ( la1 * lc2 - la2 * lc1 ) / det;
+					var
+						pix =
+							( lb2 * lc1 - lb1 * lc2 ) / det,
+
+						piy =
+							( la1 * lc2 - la2 * lc1 ) / det;
 
 					if(
 						Math.min( pp.x, pn.x ) <= pix &&
@@ -421,31 +493,50 @@ Shape.prototype.getProjection =
 				}
 
 				h += 2;
+
 				break;
 
 			case 'round' :
 
-				dx = pn.x - pp.x;
-				dy = pn.y - pp.y;
+				dx =
+					pn.x - pp.x;
 
-				dxy = dx * dy;
+				dy =
+					pn.y - pp.y;
+
+				dxy =
+					dx * dy;
 
 				if( dxy > 0 )
 				{
-					cx = pp.x;
-					cy = pn.y;
-					a  = Math.abs( pn.x - cx );
-					b  = Math.abs( pp.y - cy );
+					cx =
+						pp.x;
+
+					cy =
+						pn.y;
+
+					a  =
+						Math.abs( pn.x - cx );
+
+					b  =
+						Math.abs( pp.y - cy );
 				}
 				else
 				{
-					cx = pn.x;
-					cy = pp.y;
-					a  = Math.abs( pp.x - cx );
-					b  = Math.abs( pn.y - cy );
+					cx =
+						pn.x;
+
+					cy =
+						pp.y;
+
+					a =
+						Math.abs( pp.x - cx );
+
+					b =
+						Math.abs( pn.y - cy );
 				}
 
-				if( p.x === cx )
+				if( p.x === pc.x )
 				{
 					if( p.y > cy )
 					{
@@ -469,7 +560,7 @@ Shape.prototype.getProjection =
 							)
 						);
 					}
-					else
+					else if( p.y === cy )
 					{
 						return (
 							Euclid.Point.create(
@@ -482,40 +573,58 @@ Shape.prototype.getProjection =
 					}
 				}
 				else if(
-					( ( p.x >= cx && dy > 0 ) || ( p.x <= cx && dy < 0 ) ) &&
-					( ( p.y >= cy && dx < 0 ) || ( p.y <= cy && dx > 0 ) )
+					(
+						( p.x >= cx && dy > 0 )
+						||
+						( p.x <= cx && dy < 0 )
+					)
+					&&
+					(
+						( p.y >= cy && dx < 0 )
+						||
+						( p.y <= cy && dx > 0 )
+					)
 				)
 				{
-					var k = ( p.y - pc.y ) / ( p.x - pc.x );
+					var
+						k =
+							( p.y - pc.y ) / ( p.x - pc.x ),
 
-					var d = (pc.y - cy) - k * (pc.x - cx);
+						d =
+							(pc.y - cy) - k * (pc.x - cx),
 
 					// x^2 / a^2 + y^2 / b^2 = 1
-
 					// y = k * x + d
-
 					// x^2 / a^2 + ( k * x + d )^2 / b^2 = 1
-
 					// x^2 / a^2 + k^2 * x^2 / b^2 + 2 * k * x * d / b^2 + d^2 / b^2 = 1
-
 					// x^2 ( 1 / a^2 + k^2 / b^2 ) + x ( 2 * k * d / b^2 ) + d^2 / b^2 - 1 = 0
 
-					var qa = 1 / (a * a) + k * k / ( b * b );
-					var qb = 2 * k * d / ( b * b );
-					var qc = d * d / ( b * b ) - 1;
+						qa =
+							1 / (a * a) + k * k / ( b * b ),
 
-					var x;
+						qb =
+							2 * k * d / ( b * b ),
+
+						qc =
+							d * d / ( b * b ) - 1,
+
+						x;
+
 					if ( p.x > cx )
 					{
-						x = ( -qb + Math.sqrt ( qb * qb - 4 * qa * qc ) ) / ( 2 * qa );
+						x =
+							( -qb + Math.sqrt ( qb * qb - 4 * qa * qc ) ) / ( 2 * qa );
 					}
 					else
 					{
-						x = ( -qb - Math.sqrt ( qb * qb - 4 * qa * qc ) ) / ( 2 * qa );
+						x =
+							( -qb - Math.sqrt ( qb * qb - 4 * qa * qc ) ) / ( 2 * qa );
 					}
 					// var x = Math.sqrt( 1 / ( 1 / ( a * a ) + k * k / ( b * b ) ) );
 
-					var y = k * x + d;
+					var
+						y =
+							k * x + d;
 
 					x += cx;
 					y += cy;
@@ -537,6 +646,7 @@ Shape.prototype.getProjection =
 				}
 
 				h += 3;
+
 				break;
 
 			default :

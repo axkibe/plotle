@@ -31,8 +31,8 @@ Euclid =
 | Imports
 */
 var
-	Jools,
-	swatch;
+	Jools;
+
 
 /*
 | Capsule
@@ -98,39 +98,37 @@ Euclid.RoundRect =
 		psw =
 			Euclid.Point.create( 'x', pnw.x, 'y', pse.y );
 
-	Euclid.Shape.call(
-		this,
-		[
-			'start',
-				pnw.add( 0 , b ),
-			'round',
-				'clockwise',
-				pnw.add( a , 0 ),
-			'line',
-				pne.sub( a , 0 ),
-			'round',
-				'clockwise',
-				pne.add( 0 , b ),
-			'line',
-				pse.sub( 0 , b ),
-			'round',
-				'clockwise',
-				pse.sub( a , 0 ),
-			'line',
-				psw.add( a , 0 ),
-			'round',
-				'clockwise',
-				psw.sub( 0 , b ),
-			'line',
-				'close'
-		]
-	);
+	this.shape =
+		Euclid.Shape.create(
+			'hull',
+				[
+					'start',
+						pnw.add( 0 , b ),
+					'round',
+						'clockwise',
+						pnw.add( a , 0 ),
+					'line',
+						pne.sub( a , 0 ),
+					'round',
+						'clockwise',
+						pne.add( 0 , b ),
+					'line',
+						pse.sub( 0 , b ),
+					'round',
+						'clockwise',
+						pse.sub( a , 0 ),
+					'line',
+						psw.add( a , 0 ),
+					'round',
+						'clockwise',
+						psw.sub( 0 , b ),
+					'line',
+						'close'
+				],
+			'pc',
+				this.pc
+		);
 };
-
-Jools.subclass(
-	RoundRect,
-	Euclid.Shape
-);
 
 
 /*
@@ -192,21 +190,62 @@ RoundRect.prototype.equals =
 
 
 /*
-| returns true if point p is within the round-rect
-| TODO put into Shape
+| Draws the round-rect.
+*/
+RoundRect.prototype.sketch =
+	function
+	(
+		// ...
+	)
+{
+	return this.shape.sketch.apply(
+		this.shape,
+		arguments
+	);
+};
+
+
+/*
+| Returns true if point is within the ellipse.
 */
 RoundRect.prototype.within =
-	function(
+	function
+	(
 		view,
 		p
 	)
 {
-	return swatch.withinSketch(
-		this,
-		'sketch',
+	if(
+		p.x < this.pnw.x ||
+		p.y < this.pnw.y ||
+		p.x > this.pse.x ||
+		p.y > this.pse.y
+	)
+	{
+		return false;
+	}
+
+	return this.shape.within(
 		view,
 		p
 	);
 };
+
+
+/*
+| Gets the source of a projection to p.
+*/
+RoundRect.prototype.getProjection =
+	function
+	(
+		// ...
+	)
+{
+	return this.shape.getProjection.apply(
+		this.shape,
+		arguments
+	);
+};
+
 
 } )( );
