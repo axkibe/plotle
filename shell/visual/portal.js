@@ -73,8 +73,6 @@ Visual.Portal =
 
 		if( !hover || hover.reflect !== 'Path' )
 		{
-			console.log( hover );
-
 			throw new Error(
 				'invalid hover'
 			);
@@ -523,9 +521,11 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			new Euclid.Ellipse(
-				this.zone.pnw,
-				this.zone.pse
+			Euclid.Ellipse.create(
+				'pnw',
+					this.zone.pnw,
+				'pse',
+					this.zone.pse
 			)
 		);
 	}
@@ -541,13 +541,15 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			new Euclid.Ellipse(
-				Euclid.Point.zero,
-				Euclid.Point.create(
-					'x',
-						this.zone.width,
-					'y',
-						this.zone.height
+			Euclid.Ellipse.create(
+				'pnw',
+					Euclid.Point.zero,
+				'pse',
+					Euclid.Point.create(
+						'x',
+							this.zone.width,
+						'y',
+							this.zone.height
 				)
 			)
 		);

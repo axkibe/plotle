@@ -22,7 +22,6 @@ Euclid =
 | Imports
 */
 var
-	Curve,
 	Euclid,
 	Jools,
 	swatch;
@@ -41,11 +40,18 @@ var
 var Shape =
 Euclid.Shape =
 	function(
-		hull
+		hull,
+		pc
 	)
 {
 	this.hull =
 		Jools.immute( hull );
+
+	if( pc )
+	{
+		this.pc =
+			pc;
+	}
 
 	Jools.immute( this );
 };
@@ -63,15 +69,6 @@ Shape.create =
 {
 	switch( model.type )
 	{
-		case 'Curve' :
-
-			return (
-				new Curve(
-					model,
-					frame
-				)
-			);
-
 		case 'Ellipse' :
 
 			return frame.computeEllipse( model );
@@ -106,12 +103,15 @@ Shape.prototype.sketch =
 		hZ =
 			hull.length;
 
-	if( hull[ h++ ] !== 'start' )
-	{
-		throw new Error(
-			'hull must have start at [0]'
-		);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( hull[ h++ ] !== 'start' )
+/**/	{
+/**/		throw new Error(
+/**/			'hull must have start at [  0]'
+/**/		);
+/**/	}
+/**/}
 
 	var
 		pstart =
@@ -120,11 +120,14 @@ Shape.prototype.sketch =
 		pc =
 			view.point( this.pc );
 
-
 	pstart =
 		pstart.add(
-			pstart.x > pc.x ? -border : ( pstart.x < pc.x ? border : 0 ),
-			pstart.y > pc.y ? -border : ( pstart.y < pc.y ? border : 0 )
+			pstart.x > pc.x ?
+				-border :
+				( pstart.x < pc.x ? border : 0 ),
+			pstart.y > pc.y ?
+				-border :
+				( pstart.y < pc.y ? border : 0 )
 		);
 
 	var
@@ -142,10 +145,14 @@ Shape.prototype.sketch =
 
 	while( h < hZ )
 	{
-		if( !pstart )
-		{
-			throw new Error( 'hull closed prematurely' );
-		}
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( !pstart )
+/**/		{
+/**/			throw new Error( 'hull closed prematurely' );
+/**/		}
+/**/	}
 
 		switch( hull[ h ] )
 		{
@@ -192,7 +199,8 @@ Shape.prototype.sketch =
 		}
 		else
 		{
-			pn = view.point( pn );
+			pn =
+				view.point( pn );
 
 			if( border !== 0 )
 			{
@@ -236,8 +244,12 @@ Shape.prototype.sketch =
 				dx = pn.x - pp.x;
 				dy = pn.y - pp.y;
 
-				var rotation = hull[ h + 1 ];
-				var dxy = dx * dy;
+				var
+					rotation =
+						hull[ h + 1 ],
+
+					dxy =
+						dx * dy;
 
 				switch( rotation )
 				{
@@ -255,7 +267,12 @@ Shape.prototype.sketch =
 
 					default :
 
-						throw new Error('unknown rotation');
+/**/					if( CHECK )
+/**/					{
+/**/						throw new Error(
+/**/							'unknown rotation'
+/**/						);
+/**/					}
 				}
 
 				h += 3;
@@ -263,18 +280,26 @@ Shape.prototype.sketch =
 				break;
 
 			default :
-				throw new Error(
-					'unknown hull section: ' + hull[h]
-				);
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error(
+/**/					'unknown hull section: ' + hull[h]
+/**/				);
+/**/			}
 		}
 
-		pp = pn;
+		pp =
+			pn;
 	}
 
-	if( pstart !== null )
-	{
-		throw new Error( 'hull did not close' );
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( pstart !== null )
+/**/	{
+/**/		throw new Error( 'hull did not close' );
+/**/	}
+/**/}
 
 };
 

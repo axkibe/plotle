@@ -393,11 +393,14 @@ Rect.prototype.computeEllipse =
 		model
 	)
 {
-	return new Euclid.Ellipse(
-		this.computePoint( model.pnw ),
-		this.computePoint( model.pse )
+	return Euclid.Ellipse.create(
+		'pnw',
+			this.computePoint( model.pnw ),
+		'pse',
+			this.computePoint( model.pse )
 	);
 };
+
 
 /*
 | Returns a rectangle thats reduced on every side by a margin object

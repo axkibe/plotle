@@ -807,7 +807,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/euclid/ellipse.js',
-					'fb',
+					'fbj',
 
 				'shell/euclid/line.js',
 					'fb',

@@ -107,19 +107,21 @@ Discs.Disc =
 			shellverse.grow( Design[ this.reflect ] );
 
 	this.silhoutte =
-		new Euclid.Ellipse(
-			Euclid.Point.create(
-				'x',
-					width - 1 - ew,
-				'y',
-					0 - Jools.half( eh - height )
-			),
-			Euclid.Point.create(
-				'x',
-					width - 1,
-				'y',
-					height + Jools.half( eh - height )
-			),
+		Euclid.Ellipse.create(
+			'pnw',
+				Euclid.Point.create(
+					'x',
+						width - 1 - ew,
+					'y',
+						0 - Jools.half( eh - height )
+				),
+			'pse',
+				Euclid.Point.create(
+					'x',
+						width - 1,
+					'y',
+						height + Jools.half( eh - height )
+				),
 			'gradientPC',
 				Euclid.Point.create(
 					'x',
@@ -127,8 +129,6 @@ Discs.Disc =
 					'y',
 						Jools.half( height )
 				),
-			'gradientR0',
-				0,
 			'gradientR1',
 				650
 		);

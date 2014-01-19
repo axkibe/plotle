@@ -9,6 +9,8 @@
 | Export
 */
 var Euclid;
+
+
 Euclid =
 	Euclid || { };
 
@@ -28,22 +30,118 @@ var
 
 
 /*
-| Constructor.
+| The joobj definition
 */
-var Ellipse =
-Euclid.Ellipse =
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Ellipse',
+
+		unit :
+			'Euclid',
+
+		attributes :
+			{
+				pnw :
+					{
+						comment :
+							'point in north west',
+
+						type :
+							'Point'
+					},
+
+				pse :
+					{
+						comment :
+							'point in south east',
+
+						type :
+							'Point'
+					},
+
+				// FIXME make proper optionals
+				gradientPC :
+					{
+						comment :
+							'center for gradient',
+
+						type :
+							'Point',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							'_gradientPC'
+					},
+
+
+				gradientR0 :
+					{
+						comment :
+							'inner radius for circle gradients',
+
+						type :
+							'Number',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							'_gradientR0'
+					},
+
+				gradientR1 :
+					{
+						comment :
+							'outer radius for circle gradients',
+
+						type :
+							'Number',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							'_gradientR1'
+					}
+			},
+
+		init :
+			[
+				'pnw',
+				'pse'
+			]
+	};
+}
+
+
+var
+	Ellipse =
+		Euclid.Ellipse;
+
+
+/*
+| Initialization.
+*/
+Ellipse.prototype._init =
 	function(
-		pnw, // point in north-west
-		pse  // point in south-east
-		// ...
+		pnw,
+		pse
 	)
 {
-	this.pnw =
-		pnw;
-
-	this.pse =
-		pse;
-
 	// cardinal coords
 	var
 		wx =
@@ -78,69 +176,27 @@ Euclid.Ellipse =
 		ps =
 			Euclid.Point.create( 'x', mx, 'y', sy );
 
-
-	Euclid.Shape.call(
-		this,
-		[
-			'start', pw,
-			'round', 'clockwise', pn,
-			'round', 'clockwise', pe,
-			'round', 'clockwise', ps,
-			'round', 'clockwise', 'close'
-		]
-	);
-
-	for(
-		var a = 2, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		var
-			arg =
-				arguments[ a ],
-
-			val =
-				arguments[ a + 1 ];
-
-		switch( arg )
-		{
-			case 'gradientPC' :
-
-				this._lazy_gradientPC =
-					val;
-
-				break;
-
-			case 'gradientR0' :
-
-				this._lazy_gradientR0 =
-					val;
-
-				break;
-
-			case 'gradientR1' :
-
-				this._lazy_gradientR1 =
-					val;
-
-				break;
-
-			default :
-				throw new Error(
-					'invalid argument: ' + arg
-				);
-		}
-	}
-
-	Jools.immute( this );
+	this.shape =
+		new Euclid.Shape(
+			[
+				'start',
+					pw,
+				'round',
+					'clockwise',
+					pn,
+				'round',
+					'clockwise',
+					pe,
+				'round',
+					'clockwise',
+					ps,
+				'round',
+					'clockwise',
+					'close'
+			],
+			this.pc
+		);
 };
-
-
-Jools.subclass(
-	Ellipse,
-	Euclid.Shape
-);
 
 
 /*
@@ -173,8 +229,14 @@ Jools.lazyFixate(
 Jools.lazyFixate(
 	Ellipse.prototype,
 	'gradientPC',
-	function()
+	function( )
 	{
+		// FIXME this is just a workaround
+		if( this._gradientPC )
+		{
+			return this._gradientPC;
+		}
+
 		return (
 			Euclid.Point.create(
 				'x',
@@ -199,6 +261,12 @@ Jools.lazyFixate(
 	'gradientR1',
 	function( )
 	{
+		// FIXME this is just a workaround
+		if( this._gradientR1 )
+		{
+			return this._gradientR1;
+		}
+
 		var
 			dx =
 				this.pse.x - this.pnw.x;
@@ -216,16 +284,74 @@ Jools.lazyFixate(
 
 
 /*
-| Returns true if this ellipse is the same as another
+| Gradient radius
 */
-Ellipse.prototype.equals =
-	function(
-		r
+Jools.lazyFixate(
+	Ellipse.prototype,
+	'gradientR0',
+	function( )
+	{
+		// FIXME this is just a workaround
+		if( this._gradientR0 )
+		{
+			return this._gradientR0;
+		}
+
+		return 0;
+	}
+);
+
+
+Ellipse.prototype.sketch =
+	function
+	(
+		// ...
 	)
 {
-	return (
-		this.pnw.equals( r.pnw ) &&
-		this.pse.equals( r.pse )
+	return this.shape.sketch.apply(
+		this.shape,
+		arguments
+	);
+};
+
+
+Ellipse.prototype.within =
+	function
+	(
+		view,
+		p
+	)
+{
+	var
+		pp =
+			view.depoint( p );
+
+	if(
+		p.x < this.pnw.x ||
+		p.y < this.pnw.y ||
+		p.x > this.pse.x ||
+		p.y > this.pse.y
+	)
+	{
+		return false;
+	}
+
+	return this.shape.within(
+		view,
+		p
+	);
+};
+
+
+Ellipse.prototype.getProjection =
+	function
+	(
+		// ...
+	)
+{
+	return this.shape.getProjection.apply(
+		this.shape,
+		arguments
 	);
 };
 

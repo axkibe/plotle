@@ -43,6 +43,7 @@ var
 			case 'abstract' :
 			case 'attributes' :
 			case 'hasJSON' :
+			case 'init' :
 			case 'name' :
 			case 'node' :
 			case 'notag' :
@@ -104,6 +105,7 @@ var
 				switch( aoname )
 				{
 					case 'allowNull' :
+					case 'assign' :
 					case 'comment' :
 					case 'defaultVal' :
 					case 'locate' :
@@ -461,6 +463,7 @@ generateConstructor =
 	var
 		a,
 		aZ,
+		attr,
 
 		// attribute name
 		aName,
@@ -596,9 +599,8 @@ generateConstructor =
 			aName =
 				aList[ a ];
 
-			var
-				attr =
-					joobj.attributes[ aName ];
+			attr =
+				joobj.attributes[ aName ];
 
 			r.push(
 				'/**/\tif( ' + aName + ' === undefined )',
@@ -751,12 +753,49 @@ generateConstructor =
 		)
 		{
 			aName =
-				aList[ a ];
+				aList[ a ],
+
+			attr =
+				joobj.attributes[ aName ];
 
 			r.push(
-				'\tthis.' + aName + ' =',
+				'\tthis.' +
+					( attr.assign || aName ) +
+					' =',
 				'\t\t' + aName + ';',
 				''
+			);
+		}
+	}
+
+	if( joobj.init )
+	{
+		if( joobj.init.length === 0 )
+		{
+			r.push(
+				'\tthis._init( );'
+			);
+		}
+		else
+		{
+			r.push(
+				'\tthis._init('
+			);
+
+			for(
+				a = 0, aZ = joobj.init.length;
+				a < aZ;
+				a++
+			)
+			{
+				r.push(
+					'\t\t' + joobj.init[ a ] +
+						( a + 1 < aZ ? ',' : '' )
+				);
+			}
+
+			r.push(
+				'\t);'
 			);
 		}
 	}
@@ -1143,20 +1182,25 @@ generateCreator =
 					{
 						r.push(
 							'\t\t' + aName +
-								'.equals( inherit.' + aName + ' )'
+								'.equals( inherit.' +
+								( attr.assign || aName ) +
+								' )'
 						);
 					}
 					else
 					{
 						r.push(
 							'\t\t(',
-							'\t\t\t' + aName + ' === inherit.' + aName,
+							'\t\t\t' + aName + ' === inherit.' +
+								( attr.assign || aName ),
 							'\t\t\t||',
 							'\t\t\t(',
 							'\t\t\t\t' + aName + ' !== null',
 							'\t\t\t\t&&',
 							'\t\t\t\t' + aName +
-								'.equals( inherit.' + aName + ' )',
+								'.equals( inherit.' +
+								( attr.assign || aName ) +
+								' )',
 							'\t\t\t)',
 							'\t\t)'
 						);
@@ -1454,7 +1498,10 @@ generateEqualsCheck =
 			case 'Tree' :
 
 				r.push(
-					'\t\tthis.' + aName + ' === obj.' + aName
+					'\t\tthis.' +
+						( attr.assign || aName ) +
+						' === obj.' +
+						( attr.assign || aName )
 				);
 
 				break;
@@ -1464,21 +1511,30 @@ generateEqualsCheck =
 				if( !attr.allowNull )
 				{
 					r.push(
-						'\t\tthis.' + aName +
-							'.equals( obj.' + aName + ' )'
+						'\t\tthis.' +
+							( attr.assign || aName ) +
+							'.equals( obj.' +
+							( attr.assign || aName ) +
+							' )'
 					);
 				}
 				else
 				{
 					r.push(
 						'\t\t(',
-						'\t\t\tthis.' + aName +
-							' === inherit.' + aName + ' ||',
+						'\t\t\tthis.' +
+							( attr.assign || aName ) +
+							' === inherit.' +
+							( attr.assign || aName ) +
+							' ||',
 						'\t\t\t(',
 						'\t\t\t\t' + aName + ' !== null',
 						'\t\t\t\t&&',
-						'\t\t\t\tthis.' + aName +
-							'.equals( obj.' + aName + ' )',
+						'\t\t\t\tthis.' +
+							( attr.assign || aName ) +
+							'.equals( obj.' +
+							( attr.assign || aName ) +
+							' )',
 						'\t\t\t)',
 						'\t\t)'
 					);
