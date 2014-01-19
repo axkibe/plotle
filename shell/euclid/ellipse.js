@@ -330,11 +330,15 @@ Ellipse.prototype.within =
 		p
 	)
 {
+	var
+		pp =
+			view.point( p );
+
 	if(
-		p.x < this.pnw.x ||
-		p.y < this.pnw.y ||
-		p.x > this.pse.x ||
-		p.y > this.pse.y
+		pp.x < this.pnw.x ||
+		pp.y < this.pnw.y ||
+		pp.x > this.pse.x ||
+		pp.y > this.pse.y
 	)
 	{
 		return false;
