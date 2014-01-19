@@ -217,7 +217,7 @@ RoundRect.prototype.within =
 {
 	var
 		pp =
-			view.point( p );
+			view.depoint( p );
 
 	if(
 		pp.x < this.pnw.x ||
