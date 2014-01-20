@@ -180,7 +180,9 @@ Shell =
 			'mark',
 				Mark.Vacant.create( ),
 			'screensize',
-				screensize
+				screensize,
+			'username',
+				''
 		);
 
 	this._$discJockey =
@@ -245,22 +247,6 @@ Object.defineProperty(
 	}
 );
 
-
-/*
-| Positions the caret.
-*/
-Shell.prototype.positionCaret =
-	function( )
-{
-	var
-		display =
-			this._getCurrentDisplay( );
-
-	if( display )
-	{
-		display.positionCaret( );
-	}
-};
 
 /*
 | Peer received a message.
@@ -1358,7 +1344,9 @@ Shell.prototype.setUser =
 						this._$formJockey.get( 'MoveTo' ).path,
 						'user',
 						username
-				)
+				),
+			'username',
+				username
 		);
 };
 

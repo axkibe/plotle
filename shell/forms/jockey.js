@@ -194,6 +194,9 @@ Jockey.create =
 			null,
 
 		traitSet =
+			null,
+
+		username =
 			null;
 
 
@@ -236,6 +239,13 @@ Jockey.create =
 			case 'traitSet' :
 
 				traitSet =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'username' :
+
+				username =
 					arguments[ a + 1 ];
 
 				break;
@@ -297,7 +307,8 @@ Jockey.create =
 			screensize,
 			traitSet,
 			mark,
-			hover
+			hover,
+			username
 		)
 	);
 };

@@ -140,9 +140,13 @@ ChangeRay.prototype.append =
 		chg
 	)
 {
-	return new ChangeRay(
-		this._$ray.slice( ).push( chg )
-	);
+	var
+		ray =
+			this._$ray.slice( );
+
+	ray.push( chg );
+
+	return new ChangeRay( ray );
 };
 
 
