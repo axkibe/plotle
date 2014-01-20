@@ -911,7 +911,8 @@ System.prototype._pointingHover =
 
 	if( cursor !== null )
 	{
-		this._canvas.style.cursor = cursor;
+		this._canvas.style.cursor =
+			cursor;
 	}
 };
 
@@ -939,7 +940,8 @@ System.prototype._repeatHover =
 
 	if( cursor !== null )
 	{
-		this._canvas.style.cursor = cursor;
+		this._canvas.style.cursor =
+			cursor;
 	}
 };
 

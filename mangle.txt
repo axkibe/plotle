@@ -239,6 +239,7 @@
 > abs
 . abstract
 > access
+. action
 > active
 . add
 > addColorStop
@@ -246,6 +247,7 @@
 . affix
 > ajax
 > alert
+. align
 . allowNull
 . anchor
 . append
@@ -339,6 +341,7 @@
 . dir8CWCF
 . docTree
 > documentElement
+. down
 . dragMove
 . dragStart
 . dragStop
@@ -357,6 +360,7 @@
 . emailLabel
 . empty
 . emptyDoc
+. end
 . ensureArgs
 . ensureInt
 . equals
@@ -456,6 +460,7 @@
 . labelDoc
 . lazyFixate
 . lazyFunction
+. left
 > length
 . limit
 > lineNumber
@@ -576,8 +581,10 @@
 > push
 . pushButton
 > putImageData
+> px
 > random
 . randomPassword
+> rank
 . rankOf
 > readyState
 . redo
@@ -605,6 +612,7 @@
 . retainx
 . reverseClip
 . review
+. right
 . rotate
 > round
 . rounding
@@ -680,11 +688,13 @@
 . sw
 . systemBlur
 . systemFocus
+> text
 > textAlign
 > textBaseline
 . textCenter
 . textPath
 . textWheelSpeed
+. tfx
 . tfxChg
 . tfxChgX
 . tfxSign
@@ -696,12 +706,18 @@
 > toJSON
 > toLowerCase
 . toPoint
+> top
 > touches
 . transItem
+> tree
+> trg
 > twig
 > type
+. uid
 . undo
+. unit
 > unshift
+. up
 > update
 > user
 . userHomeButton
