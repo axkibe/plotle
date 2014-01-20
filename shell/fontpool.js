@@ -134,15 +134,6 @@ FontPool.styles =
 		base   : 'alphabetic'
 	},
 
-	cadr       :
-	{
-		type   : 'Font',
-		family : '(default)',
-		fill   : 'rgb(160, 0, 0)',
-		align  : 'center',
-		base   : 'alphabetic'
-	},
-
 	ra         :
 	{
 		type   : 'Font',

@@ -122,7 +122,7 @@ Path.create =
 				[ ];
 
 			for(
-				a = 1, aZ = arguments.legnth;
+				a = 1, aZ = arguments.length;
 				a < aZ;
 				a++
 			)

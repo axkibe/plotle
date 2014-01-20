@@ -1270,7 +1270,11 @@ Server.prototype.prepareResources =
 		}
 		catch ( e )
 		{
-			console.log( 'parse error', 'bundle.js line', e.line );
+			console.log(
+				'parse error',
+				'bundle.js line',
+				e.line
+			);
 
 			throw e;
 		}
@@ -1755,17 +1759,31 @@ Server.prototype.extraMangle =
 
 	if( missed.length > 0 )
 	{
-		console.log( 'extraMangle missed properties: ', missed );
+		console.log(
+			'extraMangle missed properties: ',
+			missed
+		);
+		
+		console.log(
+			'extraMangle missed properties that are: ',
+			missed.length
+		);
 	}
 
 	if( useMangle.length > 0 )
 	{
-		console.log( 'extraMangle not used mangles: ', useMangle );
+		console.log(
+			'extraMangle not used mangles: ',
+			useMangle
+		);
 	}
 
 	if( useNoMangle.length > 0 )
 	{
-		console.log( 'extraMangle not used no-mangles: ', useNoMangle );
+		console.log(
+			'extraMangle not used no-mangles: ',
+			useNoMangle
+		);
 	}
 };
 

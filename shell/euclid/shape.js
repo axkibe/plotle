@@ -536,6 +536,25 @@ Shape.prototype.getProjection =
 						Math.abs( pn.y - cy );
 				}
 
+				if(
+					(
+						( p.x < cx || dy <= 0 )
+						&&
+						( p.x > cx || dy >= 0 )
+					)
+					||
+					(
+						( p.y < cy || dx >= 0 )
+						&&
+						( p.y > cy || dx <= 0 )
+					)
+				)
+				{
+					h += 3;
+
+					break;
+				}
+
 				if( p.x === pc.x )
 				{
 					if( p.y > cy )
@@ -572,19 +591,7 @@ Shape.prototype.getProjection =
 						);
 					}
 				}
-				else if(
-					(
-						( p.x >= cx && dy > 0 )
-						||
-						( p.x <= cx && dy < 0 )
-					)
-					&&
-					(
-						( p.y >= cy && dx < 0 )
-						||
-						( p.y <= cy && dx > 0 )
-					)
-				)
+				else
 				{
 					var
 						k =

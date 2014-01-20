@@ -68,12 +68,6 @@ theme =
 	},
 
 	/*
-	| Alpha level of hovering on remove operations.
-	*/
-	removeAlpha :
-		0.55,
-
-	/*
 	| Standard note in space.
 	*/
 	note :

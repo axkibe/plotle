@@ -1445,13 +1445,16 @@ Fabric.prototype._colorStyle =
 
 	else if( !style.gradient )
 	{
-		throw new Error( 'unknown style' );
+		throw new Error(
+			'unknown style'
+		);
 	}
 
 	var grad;
 	switch( style.gradient )
 	{
 		case 'askew' :
+
 			// FIXME use gradientPNW
 			if( !shape.pnw || !shape.pse )
 			{
@@ -1460,12 +1463,14 @@ Fabric.prototype._colorStyle =
 				);
 			}
 
-			grad = this._cx.createLinearGradient(
-				view.x( shape.pnw ),
-				view.y( shape.pnw ),
-				view.x( shape.pnw ) + view.scale( shape.width / 10 ),
-				view.y( shape.pse )
-			);
+			grad =
+				this._cx.createLinearGradient(
+					view.x( shape.pnw ),
+					view.y( shape.pnw ),
+					view.x( shape.pnw ) + view.scale( shape.width / 10 ),
+					view.y( shape.pse )
+				);
+
 			break;
 
 		case 'horizontal' :
@@ -1484,13 +1489,14 @@ Fabric.prototype._colorStyle =
 				);
 			}
 
-			grad = this._cx.createLinearGradient(
-				0,
-				pnw.y,
-				0,
-				pse.y
-			);
-
+			grad =
+				this._cx.createLinearGradient(
+					0,
+					pnw.y,
+					0,
+					pse.y
+				);
+	
 			break;
 
 		case 'radial' :
@@ -1506,19 +1512,23 @@ Fabric.prototype._colorStyle =
 				);
 			}
 
-			grad = this._cx.createRadialGradient(
-				pc.x,
-				pc.y,
-				r0,
-				pc.x,
-				pc.y,
-				r1
-			);
+			grad =
+				this._cx.createRadialGradient(
+					pc.x,
+					pc.y,
+					r0,
+					pc.x,
+					pc.y,
+					r1
+				);
 
 			break;
 
 		default :
-			throw new Error('unknown gradient');
+
+			throw new Error(
+				'unknown gradient'
+			);
 	}
 
 	var steps = style.steps;
