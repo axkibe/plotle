@@ -316,31 +316,33 @@ Jools.uid =
 		mime =
 			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
 
-			ua =
-				[ ];
+		ua =
+			[ ];
 
-		for(
-			var a = 0;
-			a < 3;
-			a++
-		)
+	for(
+		var a = 0;
+		a < 3;
+		a++
+	)
+	{
+		var
+			r32 =
+				Math.floor( 0x100000000 * Math.random( ) );
+
+		for( var b = 0; b < 6; b++ )
 		{
-			var
-				r32 =
-					Math.floor( 0x100000000 * Math.random( ) );
+			ua.push( mime[ r32 & 0x3F ] );
 
-			for( var b = 0; b < 6; b++ )
-			{
-				ua.push( mime[ r32 & 0x3F ] );
-
-				r32 = r32 >>> 6;
-			}
+			r32 = r32 >>> 6;
 		}
+	}
 
-		return ua.join( '' );
-	},
+	return ua.join( '' );
+};
 
 
+if( SERVER )
+{
 /*
 | Creates a random password with only numbers and lower case alphas.
 */
@@ -367,6 +369,7 @@ Jools.randomPassword =
 
 	return ua.join( '' );
 };
+}
 
 
 /*
