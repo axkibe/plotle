@@ -75,6 +75,7 @@ config.database.name =
 */
 config.devel =
 	'shell';
+	//'both';
 	// 'none';
 
 

@@ -1,3 +1,9 @@
+. all
+> alter
+> arc
+. assign
+> auth
+. base
 . $abort
 . $action
 . $aquireAjax
@@ -664,6 +670,7 @@
 > setTimer
 . setTraits
 > setTransform
+> set
 . setUser
 . setView
 . setZone
