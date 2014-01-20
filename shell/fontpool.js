@@ -71,24 +71,6 @@ FontPool.styles =
 		base   : 'alphabetic'
 	},
 
-	lah        :
-	{
-		type   : 'Font',
-		family : '(default)',
-		fill   : 'rgb(128, 44, 0)',
-		align  : 'start',
-		base   : 'alphabetic'
-	},
-
-	lahb       :
-	{
-		type   : 'Font',
-		family : '(bold)',
-		fill   : 'rgb(128, 44, 0)',
-		align  : 'start',
-		base   : 'alphabetic'
-	},
-
 	lm         :
 	{
 		type   : 'Font',
@@ -96,15 +78,6 @@ FontPool.styles =
 		fill   : 'black',
 		align  : 'start',
 		base   : 'middle'
-	},
-
-	lar        :
-	{
-		type   : 'Font',
-		family : '(default)',
-		fill   : 'red',
-		align  : 'left',
-		base   : 'alphabetic'
 	},
 
 	ra         :

@@ -1717,6 +1717,11 @@ Server.prototype.extraMangle =
 				return false;
 			}
 
+			if( !Jools.isString( node[ k ] ) )
+			{
+				return false;
+			}
+
 			// checks if this property will not be mangled
 			if( noMangle[ p ] !== undefined )
 			{
@@ -1760,13 +1765,10 @@ Server.prototype.extraMangle =
 	if( missed.length > 0 )
 	{
 		console.log(
-			'extraMangle missed properties: ',
+			'extraMangle missed ' +
+				missed.length +
+				' properties: ',
 			missed
-		);
-		
-		console.log(
-			'extraMangle missed properties that are: ',
-			missed.length
 		);
 	}
 

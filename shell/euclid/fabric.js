@@ -1478,8 +1478,11 @@ Fabric.prototype._colorStyle =
 			var pnw, pse;
 
 			// TODO remove frame lessness
-			pnw = shape.pnw || shape.frame.pnw;
-			pse = shape.pse || shape.frame.pse;
+			pnw =
+				shape.pnw || shape.frame.pnw;
+
+			pse =
+				shape.pse || shape.frame.pse;
 
 			// FIXME use gradientPNW
 			if( !pnw || !pse )
@@ -1531,9 +1534,18 @@ Fabric.prototype._colorStyle =
 			);
 	}
 
-	var steps = style.steps;
-	for(var i = 0; i < steps.length; i++)
-		{ grad.addColorStop(steps[i][0], steps[i][1]); }
+	var
+		steps =
+			style.steps;
+
+	for(
+		var i = 0;
+		i < steps.length;
+		i++
+	)
+	{
+		grad.addColorStop(steps[i][0], steps[i][1]);
+	}
 
 	return grad;
 };
