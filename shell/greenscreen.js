@@ -185,6 +185,7 @@ GreenScreen.prototype.draw =
 GreenScreen.prototype.click =
 	function( )
 {
+	console.log( 'XXX' );
 	location.reload( );
 };
 
@@ -216,7 +217,7 @@ GreenScreen.prototype.pointingHover =
 GreenScreen.prototype.pointingStart =
 	function( )
 {
-	return false;
+	return 'atween';
 };
 
 

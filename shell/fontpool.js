@@ -107,15 +107,6 @@ FontPool.styles =
 		base   : 'alphabetic'
 	},
 
-	lahr       :
-	{
-		type   : 'Font',
-		family : '(default)',
-		fill   : 'red',
-		align  : 'start',
-		base   : 'alphabetic'
-	},
-
 	lm         :
 	{
 		type   : 'Font',
