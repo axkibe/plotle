@@ -683,7 +683,7 @@ Form.prototype.cycleFocus =
 
 		if( rank === rs )
 		{
-			shell.dropFocus( );
+			break;
 		}
 
 		name =
@@ -754,6 +754,7 @@ Form.prototype.specialKey =
 
 	item.specialKey(
 		key,
+		this,
 		shift,
 		ctrl
 	);

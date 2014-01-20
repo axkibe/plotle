@@ -794,26 +794,23 @@ Button.prototype.pointingStart =
 */
 Button.prototype.specialKey =
 	function(
-		key
+		key,
+		owner
+		// shift
+		// ctrl
 	)
 {
 	switch( key )
 	{
 		case 'down' :
 
-			shell.cycleFormFocus(
-				this.path.get( 0 ),
-				1
-			);
+			owner.cycleFocus( 1 );
 
 			return;
 
 		case 'up' :
 
-			shell.cycleFormFocus(
-				this.path.get( 0 ),
-				-1
-			);
+			owner.cycleFocus( -1 );
 
 			return;
 

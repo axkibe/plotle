@@ -542,20 +542,23 @@ CheckBox.prototype.pointingStart =
 */
 CheckBox.prototype.specialKey =
 	function(
-		key
+		key,
+		owner
+		// shift
+		// ctrl
 	)
 {
 	switch( key )
 	{
 		case 'down' :
 
-			this.parent.cycleFocus( +1 );
+			owner.cycleFocus( +1 );
 
 			return;
 
 		case 'up' :
 
-			this.parent.cycleFocus( -1 );
+			owner.cycleFocus( -1 );
 
 			return;
 

@@ -942,7 +942,7 @@ Input.prototype.input =
 /*
 | User pressed backspace.
 */
-Input.prototype.keyBackspace =
+Input.prototype._keyBackspace =
 	function( )
 {
 	var
@@ -981,7 +981,7 @@ Input.prototype.keyBackspace =
 /*
 | User pressed del.
 */
-Input.prototype.keyDel =
+Input.prototype._keyDel =
 	function( )
 {
 	var
@@ -1008,11 +1008,11 @@ Input.prototype.keyDel =
 /*
 | User pressed return key.
 */
-Input.prototype.keyEnter =
+Input.prototype._keyEnter =
 	function( )
 {
 	shell.cycleFormFocus(
-		this.path.get( 0 ),
+		this.path.get( 1 ),
 		1
 	);
 };
@@ -1021,20 +1021,19 @@ Input.prototype.keyEnter =
 /*
 | User pressed down key.
 */
-Input.prototype.keyDown =
-	function( )
+Input.prototype._keyDown =
+	function(
+		owner
+	)
 {
-	shell.cycleFormFocus(
-		this.path.get( 0 ),
-		1
-	);
+	owner.cycleFocus( 1 );
 };
 
 
 /*
 | User pressed end key.
 */
-Input.prototype.keyEnd =
+Input.prototype._keyEnd =
 	function( )
 {
 	var
@@ -1063,7 +1062,7 @@ Input.prototype.keyEnd =
 /*
 | User pressed left key.
 */
-Input.prototype.keyLeft =
+Input.prototype._keyLeft =
 	function( )
 {
 	var
@@ -1090,7 +1089,7 @@ Input.prototype.keyLeft =
 /*
 | User pressed pos1 key
 */
-Input.prototype.keyPos1 =
+Input.prototype._keyPos1 =
 	function( )
 {
 	var
@@ -1116,7 +1115,7 @@ Input.prototype.keyPos1 =
 /*
 | User pressed right key
 */
-Input.prototype.keyRight =
+Input.prototype._keyRight =
 	function( )
 {
 	var
@@ -1142,13 +1141,12 @@ Input.prototype.keyRight =
 /*
 | User pressed up key.
 */
-Input.prototype.keyUp =
-	function( )
+Input.prototype._keyUp =
+	function(
+		owner
+	)
 {
-	shell.cycleFormFocus(
-		this.path.get( 0 ),
-		-1
-	);
+	owner.cycleFocus( -1 );
 
 	return;
 };
@@ -1159,62 +1157,65 @@ Input.prototype.keyUp =
 */
 Input.prototype.specialKey =
 	function(
-		key
+		key,
+		owner
+		// shift
+		// ctrl
 	)
 {
 	switch( key )
 	{
 		case 'backspace' :
 
-			this.keyBackspace( );
+			this._keyBackspace( owner );
 
 			break;
 
 		case 'del' :
 
-			this.keyDel( );
+			this._keyDel( owner );
 
 			break;
 
 		case 'down' :
 
-			this.keyDown( );
+			this._keyDown( owner );
 
 			break;
 
 		case 'end' :
 
-			this.keyEnd( );
+			this._keyEnd( owner );
 
 			break;
 
 		case 'enter' :
 
-			this.keyEnter( );
+			this._keyEnter( owner );
 
 			break;
 
 		case 'left' :
 
-			this.keyLeft( );
+			this._keyLeft( owner );
 
 			break;
 
 		case 'pos1' :
 
-			this.keyPos1( );
+			this._keyPos1( owner );
 
 			break;
 
 		case 'right' :
 
-			this.keyRight( );
+			this._keyRight( owner );
 
 			break;
 
 		case 'up' :
 
-			this.keyUp( );
+			this._keyUp( owner );
 
 			break;
 	}

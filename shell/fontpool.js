@@ -80,15 +80,6 @@ FontPool.styles =
 		base   : 'alphabetic'
 	},
 
-	lac        :
-	{
-		type   : 'Font',
-		family : '(default)',
-		fill   : 'rgb(128, 44, 0)',
-		align  : 'start',
-		base   : 'alphabetic'
-	},
-
 	lah        :
 	{
 		type   : 'Font',

@@ -1638,7 +1638,7 @@ Server.prototype.extraMangle =
 		)
 		{
 			throw new Error(
-				'double entry' + e
+				'double entry: "' + e + '"'
 			);
 		}
 

@@ -368,7 +368,7 @@ Jockey.prototype.cycleFocus =
 /**/	}
 /**/}
 
-	return this._forms.cycleFocus( dir );
+	return this._forms[ formname ].cycleFocus( dir );
 };
 
 

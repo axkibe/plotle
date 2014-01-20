@@ -296,6 +296,9 @@
 . computeRect
 . concernsMark
 . configSwitch
+. containsPath
+. copy
+. cornerRadius
 > cos
 . create
 . createArbitrary
@@ -306,8 +309,10 @@
 . creators
 > ctrlKey
 > cursor
+. cycleFocus
 . cycleFormFocus
 . deClip
+. defaultVal
 > defineProperty
 . depoint
 > detail
@@ -326,6 +331,7 @@
 > drawImage
 . eAt
 . ePath
+. edistance
 . ellipse
 . ellipseA
 . ellipseB
@@ -334,6 +340,7 @@
 . emptyDoc
 . ensureArgs
 . ensureInt
+. equals
 . errorLabel
 > fileName
 > fill
@@ -355,8 +362,10 @@
 . genericButton
 . getByPathKey
 . getCenter
+> getContext
 > getDate
 > getElementById
+. getFocusedItem
 > getHours
 > getImageData
 > getMinutes
@@ -370,6 +379,7 @@
 . getPath
 . getPointOffset
 . getProjection
+> getSeconds
 . getWidgetPrototype
 > globalAlpha
 > globalCompositeOperation
@@ -383,11 +393,14 @@
 . greeting3
 . grow
 . half
+. handles
+. hasCaret
 . hasJSON
 . headline
 . highlight
 . hofoc
 . hoverAccent
+. iconNormal
 . iconRemove
 . iconStyle
 . ifabric
@@ -413,17 +426,8 @@
 . itemType
 . iview
 > join
-. keyBackspace
 > keyCode
-. keyDel
-. keyDown
-. keyEnd
-. keyEnter
-. keyLeft
 . keyNonGrata
-. keyPos1
-. keyRight
-. keyUp
 . labelDoc
 . lazyFixate
 . lazyFunction
@@ -453,7 +457,9 @@
 . messageRCV
 > metaKey
 > min
+. minHeight
 . minWidth
+. model
 . mousewheel
 > moveTo
 . moveToButton
@@ -512,7 +518,7 @@
 . paintText
 . paraSep
 > passhash
-. password
+> password
 . password2Input
 . password2Label
 . passwordInput
@@ -577,6 +583,7 @@
 . scrollPage
 . scrollbar
 . scrollbarY
+. se
 > selectionEnd
 > selectionStart
 > send
@@ -624,8 +631,10 @@
 . spawn
 . spawnOffset
 > specialKey
+. spread
 > sqrt
 > stack
+. startPos
 > status
 > stopPropagation
 > stringify
@@ -636,6 +645,7 @@
 > subclass
 > substr
 > substring
+. sw
 . systemBlur
 . systemFocus
 > textAlign
@@ -653,6 +663,8 @@
 . toItemPath
 > toJSON
 > toLowerCase
+. toPoint
+> touches
 . transItem
 > twig
 > type

@@ -962,12 +962,6 @@ var _inspect =
 				if (puffed) _pushindent(indent + 1, array);
 				array.push(k, ': ');
 
-				if ( k === 'parent' )
-				{
-					array.push('###');
-					continue;
-				}
-
 				_inspect(o[k], array, indent + 1, circle);
 			}
 
