@@ -1134,8 +1134,9 @@ Jools.immute =
 		return obj;
 	}
 
-	var names =
-		Object.getOwnPropertyNames( obj );
+	var
+		names =
+			Object.getOwnPropertyNames( obj );
 
 	for(
 		var a = 0, aZ = names.length;

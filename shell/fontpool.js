@@ -44,15 +44,6 @@ FontPool.styles =
 		base   : 'alphabetic'
 	},
 
-	cab        :
-	{
-		type   : 'Font',
-		family : '(bold)',
-		fill   : 'black',
-		align  : 'center',
-		base   : 'alphabetic'
-	},
-
 	car        :
 	{
 		type   : 'Font',

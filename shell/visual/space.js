@@ -2065,7 +2065,7 @@ Space.prototype.input =
 /*
 | Changes the zoom factor ( around center )
 */
-Space.prototype.changeZoom =
+Space.prototype._changeZoom =
 	function( df )
 {
 	var
@@ -2109,13 +2109,13 @@ Space.prototype.specialKey =
 
 			case ',' :
 
-				this.changeZoom(  1 );
+				this._changeZoom(  1 );
 
 				return;
 
 			case '.' :
 
-				this.changeZoom( -1 );
+				this._changeZoom( -1 );
 
 				return;
 		}

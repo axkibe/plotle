@@ -52,7 +52,7 @@ Euclid.Measure =
 				Measure._cx;
 
 		if(
-			cx.foont !== font.css
+			cx.font !== font.css
 		)
 		{
 			cx.font =

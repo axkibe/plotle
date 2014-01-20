@@ -145,6 +145,7 @@
 . _canvas
 . _captureEvents
 . _center
+. _changeZoom
 . _colorStyle
 . _createItem
 . _cx
@@ -252,15 +253,18 @@
 > at
 > at1
 > at2
+. atRank
 > atan2
 . bAt
 . bPath
 . backAt
 . backPath
+. backspace
 . bb
 > beginPath
 . beziTo
 > bezierCurveTo
+. blink
 . bottombox
 . bx
 . by
@@ -270,6 +274,7 @@
 . c2y
 > call
 . cancelTimer
+. car
 . cardinalResize
 . caretAt
 . caretBlinkSpeed
@@ -296,6 +301,7 @@
 . computeRect
 . concernsMark
 . configSwitch
+> configurable
 . containsPath
 . copy
 . cornerRadius
@@ -309,6 +315,7 @@
 . creators
 > ctrlKey
 > cursor
+> custom
 . cycleFocus
 . cycleFormFocus
 . deClip
@@ -325,6 +332,7 @@
 . dragMove
 . dragStart
 . dragStop
+. dragbox
 . dragtime
 . drawBoxes
 . drawHandles
@@ -342,8 +350,10 @@
 . ensureInt
 . equals
 . errorLabel
+> families
 > fileName
 > fill
+> fillRect
 > fillStyle
 > fillText
 . firstTimer
@@ -360,6 +370,7 @@
 . frontPath
 . generic
 . genericButton
+. getArea
 . getByPathKey
 . getCenter
 > getContext
@@ -399,6 +410,7 @@
 . headline
 . highlight
 . hofoc
+. hover
 . hoverAccent
 . iconNormal
 . iconRemove
@@ -413,6 +425,7 @@
 > innerWidth
 . innumerable
 . insertText
+. inspect
 . is
 . isAction
 > isArray
@@ -443,11 +456,13 @@
 . login
 . loginButton
 . logout
+. magic
 > mail
 . mainButton
 . maskKern
 . maskWidth
 > max
+. maxSize
 . maxUndo
 > measureText
 . meshcraftHomeButton
@@ -458,6 +473,7 @@
 > metaKey
 > min
 . minHeight
+. minSize
 . minWidth
 . model
 . mousewheel
