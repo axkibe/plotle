@@ -125,6 +125,7 @@ Forms.Jockey =
 			switch( name ) // TODO remove
 			{
 			case 'Login' :
+			case 'MoveTo' :
 			case 'SignUp' :
 
 			forms[ name ] =
@@ -317,6 +318,12 @@ Jockey.create =
 				inherit.hover;
 		}
 
+		if( username === null )
+		{
+			username =
+				inherit.username;
+		}
+
 		if(
 			traitSet === null
 			&&
@@ -325,6 +332,8 @@ Jockey.create =
 			mark.equals( inherit.mark )
 			&&
 			hover.equals( inherit.hover )
+			&&
+			username === inherit.username
 		)
 		{
 			return inherit;

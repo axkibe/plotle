@@ -739,7 +739,6 @@
 . setPath
 > setRequestHeader
 . setSpaceZoom
-. setText
 > setTimeout
 > setTimer
 . setTraits

@@ -921,7 +921,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/forms/moveto.js',
-					'fb',
+					'fbj',
 
 				'shell/forms/user.js',
 					'fb',

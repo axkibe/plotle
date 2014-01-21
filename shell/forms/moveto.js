@@ -34,45 +34,122 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'MoveTo',
+
+		unit :
+			'Forms',
+
+		attributes :
+			{
+				path :
+					{
+						comment :
+							'the path of the form',
+
+						type :
+							'Path'
+					},
+
+				screensize :
+					{
+						comment :
+							'the screensize the form is made for',
+
+						type :
+							'Point'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark'
+					},
+
+				hover :
+					{
+						comment :
+							'the widget hovered upon',
+
+						type :
+							'Path'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				username :
+					{
+						comment :
+							'currently logged in user',
+
+						type :
+							'String',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null'
+					}
+			},
+
+		subclass :
+			'Forms.Form',
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+	};
+}
+
 var
-	_tag =
-		'FORM-39606038';
+	MoveTo =
+		Forms.MoveTo;
+
 
 /*
-| The login form
+| The moveto form.
 */
-var MoveTo =
-Forms.MoveTo =
+MoveTo.prototype._init =
 	function(
-		tag,
 		inherit,
-		path,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		traitSet
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'invalid tag'
-			);
-		}
-	}
-
-	this.path =
-		path;
-
-	this.username =
-		username;
-
 	var
 		isGuest =
-			username.substr( 0, 7 ) === 'visitor';
+			this.username === null ?
+				false
+				:
+				this.username.substr( 0, 7 ) === 'visitor';
 
 	traitSet =
 		TraitSet.create(
@@ -85,39 +162,16 @@ Forms.MoveTo =
 			'trait',
 				this._widgetPath( 'userHomeButton' ),
 				'text',
-				username + '\n' + 'home'
+				this.username + '\n' + 'home'
 		);
 
-	Forms.Form.call(
+	Forms.Form.init.call(
 		this,
 		inherit,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		Design.MoveToForm,
+		traitSet
 	);
 };
-
-
-Jools.subclass(
-	MoveTo,
-	Forms.Form
-);
-
-
-/*
-| Name of the form.
-*/
-MoveTo.prototype.reflect =
-	'MoveTo';
-
-
-/*
-| The forms tree.
-*/
-MoveTo.prototype.tree =
-	shellverse.grow( Design.MoveToForm );
 
 
 /*

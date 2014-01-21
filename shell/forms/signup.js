@@ -227,9 +227,13 @@ SignUp.prototype.signup =
 
 	if( user.length < 4 )
 	{
-		this.setText(
-			'errorLabel',
-			'Username too short, min. 4 characters'
+		shell.setTraits(
+			TraitSet.create(
+			'trait',
+				this._widgetPath( 'errorLabel' ),
+				'text',
+				'Username too short, min. 4 characters'
+			)
 		);
 
 		shell.setMark(
@@ -246,9 +250,13 @@ SignUp.prototype.signup =
 
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		this.setText(
-			'errorLabel',
-			'Username must not start with "visit"'
+		shell.setTraits(
+			TraitSet.create(
+			'trait',
+				this._widgetPath( 'errorLabel' ),
+				'text',
+				'Username must not start with "visit"'
+			)
 		);
 
 		shell.setMark(
@@ -265,9 +273,13 @@ SignUp.prototype.signup =
 
 	if( pass.length < 5 )
 	{
-		this.setText(
-			'errorLabel',
-			'Password too short, min. 5 characters'
+		shell.setTraits(
+			TraitSet.create(
+			'trait',
+				this._widgetPath( 'errorLabel' ),
+				'text',
+				'Password too short, min. 5 characters'
+			)
 		);
 
 		shell.setMark(
@@ -284,9 +296,13 @@ SignUp.prototype.signup =
 
 	if( pass !== pass2 )
 	{
-		this.setText(
-			'errorLabel',
-			'Passwords do not match'
+		shell.setTraits(
+			TraitSet.create(
+			'trait',
+				this._widgetPath( 'errorLabel' ),
+				'text',
+				'Passwords do not match'
+			)
 		);
 
 		shell.setMark(
@@ -327,9 +343,13 @@ SignUp.prototype.onRegister =
 
 	if( !res.ok )
 	{
-		this.setText(
-			'errorLabel',
-			res.message
+		shell.setTraits(
+			TraitSet.create(
+			'trait',
+				this._widgetPath( 'errorLabel' ),
+				'text',
+				res.message
+			)
 		);
 
 		if( res.message.search( /Username/ ) >= 0 )
