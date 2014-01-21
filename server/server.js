@@ -915,7 +915,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/forms/signup.js',
-					'fb',
+					'fbj',
 
 				'shell/forms/space.js',
 					'fb',

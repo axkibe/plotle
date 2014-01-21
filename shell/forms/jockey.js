@@ -125,6 +125,7 @@ Forms.Jockey =
 			switch( name ) // TODO remove
 			{
 			case 'Login' :
+			case 'SignUp' :
 
 			forms[ name ] =
 				Forms[ name ].create(

@@ -138,6 +138,73 @@ var
 
 
 /*
+| Creates the data structures to work with.
+*/
+var
+buildJJ =
+	function(
+		joobj
+	)
+{
+	var
+		reference;
+
+	// in case unit and joobj are named identically
+	// the shortcut will be renamed
+	if( joobj.unit === joobj.name )
+	{
+		reference =
+			joobj.name + 'Obj';
+	}
+	else
+	{
+		reference =
+			joobj.name;
+	}
+
+	return Object.freeze(
+		{
+			abstract :
+				joobj.abstract,
+
+			attributes :
+				joobj.attributes,
+
+			equals :
+				joobj.equals,
+
+			hasJSON :
+				joobj.hasJSON,
+
+			init :
+				joobj.init,
+
+			name :
+				joobj.name,
+
+			node :
+				joobj.node,
+
+			notag :
+				joobj.notag,
+
+			reference :
+				reference,
+
+			singleton :
+				joobj.singleton,
+
+			subclass :
+				joobj.subclass,
+
+			unit :
+				joobj.unit
+		}
+	);
+};
+
+
+/*
 | Returns a white spaced string with the 'len' length.
 */
 var
@@ -204,13 +271,13 @@ generateSeperator =
 var
 generateExportSection =
 	function(
-		r,     // result array
-		joobj  // the joobj definition
+		r,   // result array
+		jj   // the jj working object
 	)
 {
 	var
 		unit =
-			joobj.unit;
+			jj.unit;
 
 	r.push(
 		'/*',
@@ -229,7 +296,7 @@ generateExportSection =
 	else
 	{
 		r.push(
-			'\t' + joobj.name + ';'
+			'\t' + jj.name + ';'
 		);
 	}
 };
@@ -277,8 +344,8 @@ generateImportsSection =
 var
 generateCapsuleHeader =
 	function(
-		r,     // result array
-		joobj  // the joobj definition
+		r,   // result array
+		jj   // the joobj working object
 	)
 {
 	r.push(
@@ -289,7 +356,7 @@ generateCapsuleHeader =
 		'\'use strict\';'
 	);
 
-	if( !joobj.notag )
+	if( !jj.notag )
 	{
 		r.push(
 			'',
@@ -324,8 +391,8 @@ generateCapsuleFooter =
 var
 generateNodeIncludesSection =
 	function(
-		r,         // result array
-		joobj,     // the joobj definition
+		r,      // result array
+		jj,     // the joobj working object
 		aList,     // attribute name list
 		unitList   // unit list
 	)
@@ -375,7 +442,7 @@ generateNodeIncludesSection =
 			aList[ a ];
 
 		attr =
-			joobj.attributes[ aName ];
+			jj.attributes[ aName ];
 
 		switch( attr.type )
 		{
@@ -429,8 +496,8 @@ generateNodeIncludesSection =
 var
 generateNodeExportSection =
 	function(
-		r,        // result array
-		reference // the joobj reference name
+		r,  // result array
+		jj  // the joobj working object
 	)
 {
 	r.push(
@@ -440,7 +507,7 @@ generateNodeExportSection =
 		'if( SERVER )',
 		'{',
 		'\tmodule.exports =',
-		'\t\t' + reference + ';',
+		'\t\t' + jj.reference + ';',
 		'}'
 	);
 };
@@ -454,11 +521,10 @@ generateNodeExportSection =
 var
 generateConstructor =
 	function(
-		r,         // result array
-		joobj,     // the joobj definition
-		reference, // the joobj reference name
-		aList,     // attribute name list
-		conList    // variables passed to constructor
+		r,       // result array
+		jj,      // the joobj working object
+		aList,   // attribute name list
+		conList  // variables passed to constructor
 	)
 {
 	var
@@ -501,17 +567,17 @@ generateConstructor =
 		'*/'
 	);
 
-	if( joobj.unit )
+	if( jj.unit )
 	{
 		r.push(
-			'var ' + reference + ' =',
-			joobj.unit + '.' + joobj.name + ' ='
+			'var ' + jj.reference + ' =',
+			jj.unit + '.' + jj.name + ' ='
 		);
 	}
 	else
 	{
 		r.push(
-			reference + ' ='
+			jj.reference + ' ='
 		);
 	}
 
@@ -519,7 +585,7 @@ generateConstructor =
 		'\tfunction('
 	);
 
-	if( !joobj.notag )
+	if( !jj.notag )
 	{
 		r.push(
 			'\t\ttag' +
@@ -560,7 +626,7 @@ generateConstructor =
 			default :
 
 				comment =
-					joobj.attributes[ aName ].comment;
+					jj.attributes[ aName ].comment;
 
 				break;
 		}
@@ -585,7 +651,7 @@ generateConstructor =
 		'{'
 	);
 
-	if( !joobj.notag )
+	if( !jj.notag )
 	{
 		r.push(
 			'',
@@ -613,7 +679,7 @@ generateConstructor =
 			aList[ a ];
 
 		attr =
-			joobj.attributes[ aName ];
+			jj.attributes[ aName ];
 
 		if( attr.assign === null )
 		{
@@ -629,9 +695,9 @@ generateConstructor =
 		);
 	}
 
-	if( joobj.init )
+	if( jj.init )
 	{
-		if( joobj.init.length === 0 )
+		if( jj.init.length === 0 )
 		{
 			r.push(
 				'\tthis._init( );'
@@ -644,13 +710,13 @@ generateConstructor =
 			);
 
 			for(
-				a = 0, aZ = joobj.init.length;
+				a = 0, aZ = jj.init.length;
 				a < aZ;
 				a++
 			)
 			{
 				r.push(
-					'\t\t' + joobj.init[ a ] +
+					'\t\t' + jj.init[ a ] +
 						( a + 1 < aZ ? ',' : '' )
 				);
 			}
@@ -663,10 +729,10 @@ generateConstructor =
 	}
 
 	// FIXME remove subclass calls all together
-	if( joobj.subclass && ! joobj.init )
+	if( jj.subclass && ! jj.init )
 	{
 		r.push(
-			'\t' + joobj.subclass + '.call( this );',
+			'\t' + jj.subclass + '.call( this );',
 			'};',
 			''
 		);
@@ -707,15 +773,14 @@ generateSingletonSection =
 var
 generateSubclassSection =
 	function(
-		r,        // result array
-		joobj,    // the joobj definition
-		reference // the reference name for the joobj
+		r,  // result array
+		jj  // the joobj working object
 	)
 {
 	r.push(
 		'Jools.subclass(',
-		'\t' + reference + ',',
-		'\t' + joobj.subclass,
+		'\t' + jj.reference + ',',
+		'\t' + jj.subclass,
 		');'
 	);
 };
@@ -728,10 +793,10 @@ generateSubclassSection =
 var
 generateCreatorFreeStringsParser =
 	function(
-		r,         // result array
-		joobj,     // the joobj definition
-		aList,     // attribute name list
-		creList    // free strings allowed by creator
+		r,       // result array
+		jj,      // the joobj working object
+		aList,   // attribute name list
+		creList  // free strings allowed by creator
 	)
 {
 	var
@@ -804,7 +869,7 @@ generateCreatorFreeStringsParser =
 	);
 
 	// generates JSON data aquisition
-	if( joobj.hasJSON )
+	if( jj.hasJSON )
 	{
 		r.push(
 			'\tif( json )',
@@ -821,7 +886,7 @@ generateCreatorFreeStringsParser =
 				aList[ a ],
 
 			attr =
-				joobj.attributes[ aName ];
+				jj.attributes[ aName ];
 
 			if( a > 0 )
 			{
@@ -897,7 +962,7 @@ generateCreatorInheritance =
 	function
 	(
 		r,     // result array
-		joobj,  // the joobj definition
+		jj,    // the joobj working object
 		aList  // attribute name list
 	)
 {
@@ -925,7 +990,7 @@ generateCreatorInheritance =
 			aList[ a ];
 
 		attr =
-			joobj.attributes[ aName ];
+			jj.attributes[ aName ];
 
 		if( attr.assign === null )
 		{
@@ -966,9 +1031,9 @@ var
 generateCreatorDefaultValues =
 	function
 	(
-		r,      // result array
-		joobj,  // the joobj definition
-		aList   // attribute name list
+		r,     // result array
+		jj,    // the joobj working object
+		aList  // attribute name list
 	)
 {
 	var
@@ -985,7 +1050,7 @@ generateCreatorDefaultValues =
 			aList[ a ];
 
 		attr =
-			joobj.attributes[ aName ];
+			jj.attributes[ aName ];
 
 		if( attr.defaultVal )
 		{
@@ -1009,9 +1074,9 @@ var
 generateCreatorChecks =
 	function
 	(
-		r,      // result array
-		joobj,  // the joobj definition
-		aList   // attribute name list
+		r,     // result array
+		jj,    // the joobj working object
+		aList  // attribute name list
 	)
 {
 	var
@@ -1041,7 +1106,7 @@ generateCreatorChecks =
 			aList[ a ];
 
 		attr =
-			joobj.attributes[ aName ];
+			jj.attributes[ aName ];
 
 		r.push(
 			'/**/\tif( ' + aName + ' === undefined )',
@@ -1198,9 +1263,9 @@ var
 generateCreatorFullInheritance =
 	function
 	(
-		r,      // result array
-		joobj,  // the joobj definition
-		aList   // attribute name list
+		r,     // result array
+		jj,    // the joobj working object
+		aList  // attribute name list
 	)
 {
 	var
@@ -1242,7 +1307,7 @@ generateCreatorFullInheritance =
 			aList[ a ];
 
 		attr =
-			joobj.attributes[ aName ];
+			jj.attributes[ aName ];
 
 		if( a > 0 )
 		{
@@ -1326,16 +1391,15 @@ generateCreatorFullInheritance =
 var
 generateCreatorReturn =
 	function(
-		r,         // result array
-		joobj,     // the joobj definition
-		reference, // the reference name for the joobj
+		r,        // result array
+		jj,       // the joobj working object
 		conList    // constructor list
 	)
 {
 	var
 		aName;
 
-	if( joobj.singleton )
+	if( jj.singleton )
 	{
 		r.push(
 			'\tif( !_singleton )',
@@ -1343,16 +1407,16 @@ generateCreatorReturn =
 			'\t\t_singleton ='
 		);
 
-		if( joobj.notag )
+		if( jj.notag )
 		{
 			r.push(
-				'\t\t\tnew ' + reference + '( );'
+				'\t\t\tnew ' + jj.reference + '( );'
 			);
 		}
 		else
 		{
 			r.push(
-				'\t\t\tnew ' + reference + '(',
+				'\t\t\tnew ' + jj.reference + '(',
 				'\t\t\t\t_tag',
 				'\t\t\t);'
 			);
@@ -1368,10 +1432,10 @@ generateCreatorReturn =
 	{
 		r.push(
 			'\treturn (',
-			'\t\tnew ' + reference + '('
+			'\t\tnew ' + jj.reference + '('
 		);
 
-		if( !joobj.notag )
+		if( !jj.notag )
 		{
 			r.push(
 				'\t\t\t_tag,'
@@ -1407,19 +1471,18 @@ generateCreatorReturn =
 var
 generateCreator =
 	function(
-		r,         // result array
-		joobj,     // the joobj definition
-		reference, // the reference name for the joobj
-		aList,     // attribute name list
-		conList,   // variables passed to constructor
-		creList    // free strings allowed by creator
+		r,       // result array
+		jj,      // the joobj working object
+		aList,   // attribute name list
+		conList, // variables passed to constructor
+		creList  // free strings allowed by creator
 	)
 {
 	r.push(
 		'/*',
-		'| Creates a new ' + joobj.name + ' object.',
+		'| Creates a new ' + jj.name + ' object.',
 		'*/',
-		reference + '.create =',
+		jj.reference + '.create =',
 		'\tfunction('
 	);
 
@@ -1439,7 +1502,7 @@ generateCreator =
 	{
 		generateCreatorFreeStringsParser(
 			r,
-			joobj,
+			jj,
 			aList,
 			creList
 		);
@@ -1447,32 +1510,31 @@ generateCreator =
 
 	generateCreatorInheritance(
 		r,
-		joobj,
+		jj,
 		aList
 	);
 
 	generateCreatorDefaultValues(
 		r,
-		joobj,
+		jj,
 		aList
 	);
 
 	generateCreatorChecks(
 		r,
-		joobj,
+		jj,
 		aList
 	);
 
 	generateCreatorFullInheritance(
 		r,
-		joobj,
+		jj,
 		aList
 	);
 
 	generateCreatorReturn(
 		r,
-		joobj,
-		reference,
+		jj,
 		conList
 	);
 
@@ -1488,21 +1550,20 @@ generateCreator =
 var
 generateReflectionSection =
 	function(
-		r,        // result array
-		joobj,    // the joobj definition
-		reference // the reference name for the joobj
+		r,   // result array
+		jj   // the joobj working object
 	)
 {
 	r.push(
 		'/*',
 		'| Reflection.',
 		'*/',
-		reference + '.prototype.reflect =',
-		'\t\'' + joobj.name + '\';'
+		jj.reference + '.prototype.reflect =',
+		'\t\'' + jj.name + '\';'
 	);
 
 	// FIXME this is some workaround
-	if( joobj.hasJSON )
+	if( jj.hasJSON )
 	{
 		r.push(
 			'',
@@ -1510,7 +1571,7 @@ generateReflectionSection =
 			'/*',
 			'| Workaround meshverse growing',
 			'*/',
-			reference + '.prototype._$grown =',
+			jj.reference + '.prototype._$grown =',
 			'\ttrue;'
 		);
 	}
@@ -1523,10 +1584,9 @@ generateReflectionSection =
 var
 generateToJSONSection =
 	function(
-		r,         // result array
-		joobj,     // the joobj definition
-		reference, // the reference name for the joobj
-		aList      // attribute name list
+		r,    // result array
+		jj,   // the joobj working object
+		aList // attribute name list
 	)
 {
 	var
@@ -1539,14 +1599,14 @@ generateToJSONSection =
 		'| Convers the object into a JSON.',
 		'*/',
 		'Jools.lazyFunction(',
-		'\t' + reference + '.prototype,',
+		'\t' + jj.reference + '.prototype,',
 		'\t\'toJSON\',',
 		'\tfunction( )',
 		'\t{',
 		'\t\treturn Object.freeze( {',
 		'',
 		'\t\t\ttype :',
-		'\t\t\t\t\'' + joobj.name + '\',',
+		'\t\t\t\t\'' + jj.name + '\',',
 		''
 	);
 
@@ -1583,16 +1643,15 @@ generateToJSONSection =
 var
 generatePrimitiveEqualsCheck =
 	function(
-		r,        // result array
-		joobj,    // the joobj definition
-		reference // the reference name for the joobj
+		r,   // result array
+		jj   // the joobj working object
 	)
 {
 	r.push(
 		'/*',
 		'| Checks for equal objects.',
 		'*/',
-		reference + '.prototype.equals =',
+		jj.reference + '.prototype.equals =',
 		'\tfunction(',
 		'\t\tobj',
 		'\t)',
@@ -1610,8 +1669,7 @@ var
 generateEqualsCheck =
 	function(
 		r,         // result array
-		joobj,     // the joobj definition
-		reference, // the reference name for the joobj
+		jj,        // the joobj working object
 		aList      // attribute name list
 	)
 {
@@ -1627,7 +1685,7 @@ generateEqualsCheck =
 		'/*',
 		'| Checks for equal objects.',
 		'*/',
-		reference + '.prototype.equals =',
+		jj.reference + '.prototype.equals =',
 		'\tfunction(',
 		'\t\tobj',
 		'\t)',
@@ -1655,7 +1713,7 @@ generateEqualsCheck =
 			aList[ a ],
 
 		attr =
-			joobj.attributes[ aName ];
+			jj.attributes[ aName ];
 
 		if( attr.assign === null )
 		{
@@ -1776,27 +1834,15 @@ joobjGenerator =
 	// tests if the joobj looks ok
 	checkJoobj( joobj );
 
+	// create joobj the datastructures to work with
 	var
-		reference =
-			null;
+		jj =
+			buildJJ( joobj );
 
-	// in case unit and joobj are named identically
-	// the shortcut will be renamed
-	if( joobj.unit === joobj.name )
-	{
-		reference =
-			joobj.name + 'Obj';
-	}
-	else
-	{
-		reference =
-			joobj.name;
-	}
-
-	if( joobj.attributes )
+	if( jj.attributes )
 	{
 		aList =
-			Object.keys( joobj.attributes ).sort( );
+			Object.keys( jj.attributes ).sort( );
 
 		for(
 			a = 0, aZ = aList.length;
@@ -1808,7 +1854,7 @@ joobjGenerator =
 				aList[ a ];
 
 			attr =
-				joobj.attributes[ aName ];
+				jj.attributes[ aName ];
 
 			if( attr.unit )
 			{
@@ -1830,7 +1876,7 @@ joobjGenerator =
 		creList.push( 'inherit' );
 	}
 
-	if( joobj.hasJSON )
+	if( jj.hasJSON )
 	{
 		creList.push( 'json' );
 	}
@@ -1842,10 +1888,10 @@ joobjGenerator =
 	conList =
 		aList.slice( );
 
-	if( joobj.init )
+	if( jj.init )
 	{
 		if(
-			joobj.init.indexOf( 'inherit' ) >= 0
+			jj.init.indexOf( 'inherit' ) >= 0
 		)
 		{
 			conList.push( 'inherit' );
@@ -1860,7 +1906,7 @@ joobjGenerator =
 
 	generateExportSection(
 		r,
-		joobj
+		jj
 	);
 
 	generateSeperator( r );
@@ -1874,16 +1920,16 @@ joobjGenerator =
 
 	generateCapsuleHeader(
 		r,
-		joobj
+		jj
 	);
 
 	generateSeperator( r );
 
-	if( joobj.node )
+	if( jj.node )
 	{
 		generateNodeIncludesSection(
 			r,
-			joobj,
+			jj,
 			aList,
 			unitList
 		);
@@ -1893,15 +1939,14 @@ joobjGenerator =
 
 	generateConstructor(
 		r,
-		joobj,
-		reference,
+		jj,
 		aList,
 		conList
 	);
 
 	generateSeperator( r );
 
-	if( joobj.singleton )
+	if( jj.singleton )
 	{
 		generateSingletonSection( r );
 
@@ -1909,23 +1954,18 @@ joobjGenerator =
 	}
 
 
-	if( joobj.subclass )
+	if( jj.subclass )
 	{
-		generateSubclassSection(
-			r,
-			joobj,
-			reference
-		);
+		generateSubclassSection( r, jj );
 
 		generateSeperator( r );
 	}
 
-	if( !joobj.abstract )
+	if( !jj.abstract )
 	{
 		generateCreator(
 			r,
-			joobj,
-			reference,
+			jj,
 			aList,
 			conList,
 			creList
@@ -1934,18 +1974,18 @@ joobjGenerator =
 		generateSeperator( r );
 	}
 
-	generateReflectionSection( r, joobj, reference );
+	generateReflectionSection( r, jj );
 
 	generateSeperator( r );
 
-	if( joobj.hasJSON )
+	if( jj.hasJSON )
 	{
-		generateToJSONSection( r, joobj, reference, aList );
+		generateToJSONSection( r, jj, aList );
 
 		generateSeperator( r );
 	}
 
-	switch( joobj.equals )
+	switch( jj.equals )
 	{
 		case false :
 
@@ -1954,7 +1994,7 @@ joobjGenerator =
 		case undefined :
 		case true :
 
-			generateEqualsCheck( r, joobj, reference, aList );
+			generateEqualsCheck( r, jj, aList );
 
 			generateSeperator( r );
 
@@ -1962,7 +2002,7 @@ joobjGenerator =
 
 		case 'primitive' :
 
-			generatePrimitiveEqualsCheck( r, joobj, reference );
+			generatePrimitiveEqualsCheck( r, jj );
 
 			generateSeperator( r );
 
@@ -1971,13 +2011,13 @@ joobjGenerator =
 		default :
 
 			throw new Error(
-				'invalid equals value: ' + joobj.equals
+				'invalid equals value: ' + jj.equals
 			);
 	}
 
-	if( joobj.node )
+	if( jj.node )
 	{
-		generateNodeExportSection( r, reference );
+		generateNodeExportSection( r, jj );
 
 		generateSeperator( r );
 	}
