@@ -223,7 +223,36 @@ buildJJ =
 	// constructor list
 
 	conList =
-		aList.slice( );
+		[ ];
+
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			aList[ a ];
+
+		attr =
+			joobj.attributes[ aName ];
+
+		// skips unused attributes
+		if(
+			attr.assign === null
+			&&
+			!(
+				joobj.init
+				&&
+				joobj.init.indexOf( aName ) >= 0
+			)
+		)
+		{
+			continue;
+		}
+
+		conList.push( aName );
+	}
 
 	if( joobj.init )
 	{
