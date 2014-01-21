@@ -457,35 +457,39 @@ generateConstructor =
 		r,         // result array
 		joobj,     // the joobj definition
 		reference, // the joobj reference name
-		aList      // attribute name list
+		aList,     // attribute name list
+		conList    // variables passed to constructor
 	)
 {
 	var
 		a,
 		aZ,
-		attr,
 
 		// attribute name
 		aName,
 
-		// longest attribute name
-		maxANameLen =
+		// the attribute
+		attr,
+
+		// longest attribute name in
+		// the constructor list
+		maxConNameLen =
 			0;
 
 	if( aList )
 	{
 		for(
-			a = 0, aZ = aList.length;
+			a = 0, aZ = conList.length;
 			a < aZ;
 			a++
 		)
 		{
 			aName =
-				aList[ a ];
+				conList[ a ];
 
-			if( aName.length > maxANameLen )
+			if( aName.length > maxConNameLen )
 			{
-				maxANameLen =
+				maxConNameLen =
 					aName.length;
 			}
 		}
@@ -520,7 +524,7 @@ generateConstructor =
 		r.push(
 			'\t\ttag' +
 				(
-					aList && aList.length > 0
+					conList.length > 0
 					?
 					','
 					:
@@ -529,36 +533,51 @@ generateConstructor =
 		);
 	}
 
-	if( aList )
+	for(
+		a = 0, aZ = conList.length;
+		a < aZ;
+		a++
+	)
 	{
-		for(
-			a = 0, aZ = aList.length;
-			a < aZ;
-			a++
-		)
+		aName =
+			conList[ a ];
+
+		var
+			comment,
+
+			comma =
+				a + 1 < aZ;
+
+		switch( aName )
 		{
-			aName =
-				aList[ a ];
+			case 'inherit' :
 
-			var
 				comment =
-					joobj.attributes[ aName ].comment,
+					'inheritance';
 
-				comma =
-					a + 1 < aZ;
+				break;
 
-			r.push(
-				'\t\t' + aName +
-					( comma ? ',' : '' ) +
-					( comment ?
-						whiteSpace(
-							maxANameLen - aName.length + (comma ? 0 : 1 )
-						) + ' // ' + comment
-						:
-						''
-					)
-			);
+			default :
+
+				comment =
+					joobj.attributes[ aName ].comment;
+
+				break;
 		}
+
+		r.push(
+			'\t\t' + aName +
+				( comma ? ',' : '' ) +
+				( comment ?
+					whiteSpace(
+						maxConNameLen -
+							aName.length +
+							(comma ? 0 : 1 )
+					) + ' // ' + comment
+					:
+					''
+				)
+		);
 	}
 
 	r.push(
@@ -583,190 +602,31 @@ generateConstructor =
 		);
 	}
 
-	if( aList )
+	// creates assigns for all assignable attributes
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
 	{
-		r.push(
-			'/**/if( CHECK )',
-			'/**/{'
-		);
+		aName =
+			aList[ a ];
 
-		for(
-			a = 0, aZ = aList.length;
-			a < aZ;
-			a++
-		)
+		attr =
+			joobj.attributes[ aName ];
+
+		if( attr.assign === null )
 		{
-			aName =
-				aList[ a ];
-
-			attr =
-				joobj.attributes[ aName ];
-
-			r.push(
-				'/**/\tif( ' + aName + ' === undefined )',
-				'/**/\t{',
-				'/**/\t\tthrow new Error(',
-				'/**/\t\t\t\'undefined attribute ' + aName + '\'',
-				'/**/\t\t);',
-				'/**/\t}'
-			);
-
-			if( !attr.allowNull )
-			{
-				r.push(
-					'/**/',
-					'/**/\tif( ' + aName + ' === null )',
-					'/**/\t{',
-					'/**/\t\tthrow new Error(',
-					'/**/\t\t\t\'' + aName + ' must not be null\'',
-					'/**/\t\t);',
-					'/**/\t}'
-				);
-			}
-
-			r.push(
-				'/**/',
-				'/**/\tif( ' + aName + ' !== null )',
-				'/**/\t{'
-			);
-
-			switch( attr.type )
-			{
-				case 'Integer' :
-
-					r.push(
-						'/**/\t\tif(',
-						'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'number\' ||',
-						'/**/\t\t\tMath.floor( ' + aName + ' ) !== ' + aName,
-						'/**/\t\t)'
-					);
-
-					break;
-
-				case 'String' :
-
-					r.push(
-						'/**/\t\tif(',
-						'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'string\' &&',
-						'/**/\t\t\t!( ' + aName + ' instanceof String )',
-						'/**/\t\t)'
-					);
-
-					break;
-
-				case 'Number' :
-
-					r.push(
-						'/**/\t\tif(',
-						'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'number\'',
-						'/**/\t\t)'
-					);
-
-					break;
-
-				case 'Item' :
-				case 'Tree' :
-				case 'Array' :
-
-					// FIXME
-					r.push(
-						'/**/\t\tif( false )'
-					);
-
-					break;
-
-				default :
-
-					r.push(
-						'/**/\t\tif( ' +
-							aName + '.reflect !== \'' + attr.type + '\'' +
-							' )'
-					);
-			}
-
-			r.push(
-				'/**/\t\t{',
-				'/**/\t\t\tthrow new Error(',
-				'/**/\t\t\t\t\'type mismatch\'',
-				'/**/\t\t\t);',
-				'/**/\t\t}'
-			);
-
-			if( attr.refuse )
-			{
-				r.push(
-					'/**/',
-					'/**/\t\tif('
-				);
-
-				for(
-					var b = 0, bZ = attr.refuse.length;
-					b < bZ;
-					b++
-				)
-				{
-					r.push(
-						'/**/\t\t\t( ' +
-							aName + ' ' +
-							attr.refuse[ b ] +
-							' )'
-						);
-
-					if( b + 1 < bZ )
-					{
-						r.push(
-							'/**/\t\t\t||'
-						);
-					}
-				}
-
-				r.push(
-					'/**/\t\t)',
-					'/**/\t\t{',
-					'/**/\t\t\tthrow new Error(',
-					'/**/\t\t\t\t\'refusing value\'',
-					'/**/\t\t\t);',
-					'/**/\t\t}'
-				);
-			}
-
-			r.push(
-				'/**/\t}'
-			);
-
-			if( a + 1 < aZ )
-			{
-				r.push(
-					'/**/'
-				);
-			}
+			continue;
 		}
 
 		r.push(
-			'/**/}',
+			'\tthis.' +
+				( attr.assign || aName ) +
+				' =',
+			'\t\t' + aName + ';',
 			''
 		);
-
-		for(
-			a = 0, aZ = aList.length;
-			a < aZ;
-			a++
-		)
-		{
-			aName =
-				aList[ a ],
-
-			attr =
-				joobj.attributes[ aName ];
-
-			r.push(
-				'\tthis.' +
-					( attr.assign || aName ) +
-					' =',
-				'\t\t' + aName + ';',
-				''
-			);
-		}
 	}
 
 	if( joobj.init )
@@ -796,16 +656,19 @@ generateConstructor =
 			}
 
 			r.push(
-				'\t);'
+				'\t);',
+				''
 			);
 		}
 	}
 
-	if( joobj.subclass )
+	// FIXME remove subclass calls all together
+	if( joobj.subclass && ! joobj.init )
 	{
 		r.push(
 			'\t' + joobj.subclass + '.call( this );',
-			'};'
+			'};',
+			''
 		);
 	}
 	else
@@ -859,220 +722,92 @@ generateSubclassSection =
 
 
 /*
-| Generates the creator.
+| Generates the free strings parser
+| of the creator.
 */
 var
-generateCreator =
+generateCreatorFreeStringsParser =
 	function(
 		r,         // result array
 		joobj,     // the joobj definition
-		reference, // the reference name for the joobj
-		aList      // attribute name list
+		aList,     // attribute name list
+		creList    // free strings allowed by creator
 	)
 {
 	var
-		a,
-		aZ,
-
-		// attribute name
 		aName,
-
-		// the attribute
-		attr,
-
-		// alphabetical sorted attribute names
-		// including 'inherit'
-		aListPlus =
-			null;
-
-	if( aList )
-	{
-		aListPlus =
-			aList.slice( );
-
-		aListPlus.push( 'inherit' );
-
-		if( joobj.hasJSON )
-		{
-			aListPlus.push( 'json' );
-		}
-
-		aListPlus.sort( );
-	}
+		attr;
 
 	r.push(
-		'/*',
-		'| Creates a new ' + joobj.name + ' object.',
-		'*/',
-		reference + '.create =',
-		'\tfunction('
+		'\tvar'
 	);
 
-	if( aList )
+	for(
+		var a = 0, aZ = creList.length;
+		a < aZ;
+		a++
+	)
 	{
+		aName =
+			creList[ a ];
+
 		r.push(
-			'\t\t// free strings'
+			'\t\t' + aName +
+				( a + 1 >= creList.length ? ';' : ',' )
 		);
 	}
 
 	r.push(
+		'',
+		'\tfor(',
+		'\t\tvar a = 0, aZ = arguments.length;',
+		'\t\ta < aZ;',
+		'\t\ta += 2',
 		'\t)',
-		'{'
+		'\t{',
+		'\t\tswitch( arguments[ a ] )',
+		'\t\t{'
 	);
 
-	if( aListPlus )
+	for(
+		a = 0, aZ = creList.length;
+		a < aZ;
+		a++
+	)
 	{
-		r.push(
-			'\tvar'
-		);
-
-		for(
-			a = 0, aZ = aListPlus.length;
-			a < aZ;
-			a++
-		)
-		{
-			aName =
-				aListPlus[ a ];
-
-			r.push(
-				'\t\t' + aName +
-					( a + 1 >= aListPlus.length ? ';' : ',' )
-			);
-		}
+		aName =
+			creList[ a ];
 
 		r.push(
+			'\t\t\tcase \'' + aName + '\' :',
 			'',
-			'\tfor(',
-			'\t\tvar a = 0, aZ = arguments.length;',
-			'\t\ta < aZ;',
-			'\t\ta += 2',
-			'\t)',
-			'\t{',
-			'\t\tswitch( arguments[ a ] )',
-			'\t\t{'
-		);
-
-		for(
-			a = 0, aZ = aListPlus.length;
-			a < aZ;
-			a++
-		)
-		{
-			aName =
-				aListPlus[ a ];
-
-			r.push(
-				'\t\t\tcase \'' + aName + '\' :',
-				'',
-				'\t\t\t\t' + aName + ' =',
-				'\t\t\t\t\targuments[ a + 1 ];',
-				'',
-				'\t\t\t\tbreak;',
-				''
-			);
-		}
-
-		r.push(
-			'\t\t\tdefault :',
+			'\t\t\t\t' + aName + ' =',
+			'\t\t\t\t\targuments[ a + 1 ];',
 			'',
-			'/**/\t\t\tif( CHECK )',
-			'/**/\t\t\t{',
-			'/**/\t\t\t\tthrow new Error(',
-			'/**/\t\t\t\t\t\'invalid argument: \' + arguments[ a ]',
-			'/**/\t\t\t\t);',
-			'/**/\t\t\t}',
-			'\t\t}',
-			'\t}',
+			'\t\t\t\tbreak;',
 			''
 		);
+	}
 
-		// generates JSON data aquisition
-		if( joobj.hasJSON )
-		{
-			r.push(
-				'\tif( json )',
-				'\t{'
-			);
+	r.push(
+		'\t\t\tdefault :',
+		'',
+		'/**/\t\t\tif( CHECK )',
+		'/**/\t\t\t{',
+		'/**/\t\t\t\tthrow new Error(',
+		'/**/\t\t\t\t\t\'invalid argument: \' + arguments[ a ]',
+		'/**/\t\t\t\t);',
+		'/**/\t\t\t}',
+		'\t\t}',
+		'\t}',
+		''
+	);
 
-			for(
-				a = 0, aZ = aList.length;
-				a < aZ;
-				a++
-			)
-			{
-				aName =
-					aList[ a ],
-
-				attr =
-					joobj.attributes[ aName ];
-
-				if( a > 0 )
-				{
-					r.push(
-						''
-					);
-				}
-
-				r.push(
-					'\t\tif( ' + aName + ' === undefined )',
-					'\t\t{',
-					'\t\t\t' + aName + ' ='
-				);
-
-				switch( attr.type )
-				{
-					case 'Integer' :
-					case 'Number' :
-					case 'String' :
-
-						r.push(
-							'\t\t\t\tjson.' + aName + ';'
-						);
-
-						break;
-
-					default :
-
-						if( attr.unit )
-						{
-							r.push(
-								'\t\t\t\t' +
-									attr.unit + '.' +
-									attr.type + '.create('
-							);
-						}
-						else
-						{
-							r.push(
-								'\t\t\t\t' +
-									attr.type + '.create('
-							);
-						}
-
-						r.push(
-							'\t\t\t\t\t\'json\',',
-							'\t\t\t\t\t\tjson.' + aName,
-							'\t\t\t\t);'
-						);
-
-						break;
-				}
-
-				r.push(
-					'\t\t}'
-				);
-			}
-
-			r.push(
-				'\t}',
-				''
-			);
-		}
-
-		// generates inheritance
+	// generates JSON data aquisition
+	if( joobj.hasJSON )
+	{
 		r.push(
-			'\tif( inherit )',
+			'\tif( json )',
 			'\t{'
 		);
 
@@ -1083,7 +818,10 @@ generateCreator =
 		)
 		{
 			aName =
-				aList[ a ];
+				aList[ a ],
+
+			attr =
+				joobj.attributes[ aName ];
 
 			if( a > 0 )
 			{
@@ -1095,8 +833,49 @@ generateCreator =
 			r.push(
 				'\t\tif( ' + aName + ' === undefined )',
 				'\t\t{',
-				'\t\t\t' + aName + ' =',
-				'\t\t\t\tinherit.' + aName + ';',
+				'\t\t\t' + aName + ' ='
+			);
+
+			switch( attr.type )
+			{
+				case 'Integer' :
+				case 'Number' :
+				case 'String' :
+
+					r.push(
+						'\t\t\t\tjson.' + aName + ';'
+					);
+
+					break;
+
+				default :
+
+					if( attr.unit )
+					{
+						r.push(
+							'\t\t\t\t' +
+								attr.unit + '.' +
+								attr.type + '.create('
+						);
+					}
+					else
+					{
+						r.push(
+							'\t\t\t\t' +
+								attr.type + '.create('
+						);
+					}
+
+					r.push(
+						'\t\t\t\t\t\'json\',',
+						'\t\t\t\t\t\tjson.' + aName,
+						'\t\t\t\t);'
+					);
+
+					break;
+			}
+
+			r.push(
 				'\t\t}'
 			);
 		}
@@ -1105,122 +884,330 @@ generateCreator =
 			'\t}',
 			''
 		);
+	}
+};
 
-		// generates default values
 
-		if( aList )
+/*
+| Generates the inheritance passer
+| of the creator.
+*/
+var
+generateCreatorInheritance =
+	function
+	(
+		r,     // result array
+		joobj,  // the joobj definition
+		aList  // attribute name list
+	)
+{
+	var
+		aName,
+		attr;
+
+	if( aList.length === 0 )
+	{
+		return;
+	}
+
+	r.push(
+		'\tif( inherit )',
+		'\t{'
+	);
+
+	for(
+		var a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			aList[ a ];
+
+		attr =
+			joobj.attributes[ aName ];
+
+		if( attr.assign === null )
 		{
+			continue;
+		}
+
+		if( a > 0 )
+		{
+			r.push(
+				''
+			);
+		}
+
+		r.push(
+			'\t\tif( ' +
+				aName +
+				' === undefined )',
+			'\t\t{',
+			'\t\t\t' + aName + ' =',
+			'\t\t\t\tinherit.' +
+				( attr.asign || aName ) +
+				';',
+			'\t\t}'
+		);
+	}
+
+	r.push(
+		'\t}',
+		''
+	);
+};
+
+
+/*
+| Generates the creators default values filler.
+*/
+var
+generateCreatorDefaultValues =
+	function
+	(
+		r,      // result array
+		joobj,  // the joobj definition
+		aList   // attribute name list
+	)
+{
+	var
+		aName,
+		attr;
+
+	for(
+		var a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			aList[ a ];
+
+		attr =
+			joobj.attributes[ aName ];
+
+		if( attr.defaultVal )
+		{
+			r.push(
+				'\tif( ' + aName + ' === undefined )',
+				'\t{',
+				'\t\t' + aName + ' =',
+				'\t\t\t' + attr.defaultVal + ';',
+				'\t}',
+				''
+			);
+		}
+	}
+};
+
+
+/*
+| Generates the creators checks.
+*/
+var
+generateCreatorChecks =
+	function
+	(
+		r,      // result array
+		joobj,  // the joobj definition
+		aList   // attribute name list
+	)
+{
+	var
+		a,
+		aZ,
+		aName,
+		attr;
+
+	// generates checks
+	if( aList.length === 0 )
+	{
+		return;
+	}
+
+	r.push(
+		'/**/if( CHECK )',
+		'/**/{'
+	);
+
+	for(
+		a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			aList[ a ];
+
+		attr =
+			joobj.attributes[ aName ];
+
+		r.push(
+			'/**/\tif( ' + aName + ' === undefined )',
+			'/**/\t{',
+			'/**/\t\tthrow new Error(',
+			'/**/\t\t\t\'undefined attribute ' + aName + '\'',
+			'/**/\t\t);',
+			'/**/\t}'
+		);
+
+		if( !attr.allowNull )
+		{
+			r.push(
+				'/**/',
+				'/**/\tif( ' + aName + ' === null )',
+				'/**/\t{',
+				'/**/\t\tthrow new Error(',
+				'/**/\t\t\t\'' + aName + ' must not be null\'',
+				'/**/\t\t);',
+				'/**/\t}'
+			);
+		}
+
+		r.push(
+			'/**/',
+			'/**/\tif( ' + aName + ' !== null )',
+			'/**/\t{'
+		);
+
+		switch( attr.type )
+		{
+			case 'Integer' :
+
+				r.push(
+					'/**/\t\tif(',
+					'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'number\' ||',
+					'/**/\t\t\tMath.floor( ' + aName + ' ) !== ' + aName,
+					'/**/\t\t)'
+				);
+
+				break;
+
+			case 'String' :
+
+				r.push(
+					'/**/\t\tif(',
+					'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'string\' &&',
+					'/**/\t\t\t!( ' + aName + ' instanceof String )',
+					'/**/\t\t)'
+				);
+
+				break;
+
+			case 'Number' :
+
+				r.push(
+					'/**/\t\tif(',
+					'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'number\'',
+					'/**/\t\t)'
+				);
+
+				break;
+
+			case 'Array' :
+			case 'Mark' :
+			case 'Item' :
+			case 'Tree' :
+
+				// FIXME
+				r.push(
+					'/**/\t\tif( false )'
+				);
+
+				break;
+
+			default :
+
+				r.push(
+					'/**/\t\tif( ' +
+						aName + '.reflect !== \'' + attr.type + '\'' +
+						' )'
+				);
+		}
+
+		r.push(
+			'/**/\t\t{',
+			'/**/\t\t\tthrow new Error(',
+			'/**/\t\t\t\t\'type mismatch\'',
+			'/**/\t\t\t);',
+			'/**/\t\t}'
+		);
+
+		if( attr.refuse )
+		{
+			r.push(
+				'/**/',
+				'/**/\t\tif('
+			);
+
 			for(
-				a = 0, aZ = aList.length;
-				a < aZ;
-				a++
+				var b = 0, bZ = attr.refuse.length;
+				b < bZ;
+				b++
 			)
 			{
-				aName =
-					aList[ a ];
+				r.push(
+					'/**/\t\t\t( ' +
+						aName + ' ' +
+						attr.refuse[ b ] +
+						' )'
+					);
 
-				attr =
-					joobj.attributes[ aName ];
-
-				if( attr.defaultVal )
+				if( b + 1 < bZ )
 				{
 					r.push(
-						'\tif( ' + aName + ' === undefined )',
-						'\t{',
-						'\t\t' + aName + ' =',
-						'\t\t\t' + attr.defaultVal + ';',
-						'\t}',
-						''
+						'/**/\t\t\t||'
 					);
 				}
 			}
+
+			r.push(
+				'/**/\t\t)',
+				'/**/\t\t{',
+				'/**/\t\t\tthrow new Error(',
+				'/**/\t\t\t\t\'refusing value\'',
+				'/**/\t\t\t);',
+				'/**/\t\t}'
+			);
 		}
 
-		// generates the full inheritance shortcut check
-
 		r.push(
-			'\tif(',
-			'\t\tinherit',
-			'\t\t&&'
+			'/**/\t}'
 		);
 
-
-		for(
-			a = 0, aZ = aList.length;
-			a < aZ;
-			a++
-		)
+		if( a + 1 < aZ )
 		{
-			aName =
-				aList[ a ];
-
-			attr =
-				joobj.attributes[ aName ];
-
-			if( a > 0 )
-			{
-				r.push(
-					'\t\t&&'
-				);
-			}
-
-			switch( attr.type )
-			{
-				case 'Integer' :
-				case 'Number' :
-				case 'String' :
-				case 'Tree' :
-				case 'Array' : // FIXME
-
-					r.push(
-						'\t\t' + aName + ' === inherit.' + aName
-					);
-
-					break;
-
-				default :
-
-					if( !attr.allowNull )
-					{
-						r.push(
-							'\t\t' + aName +
-								'.equals( inherit.' +
-								( attr.assign || aName ) +
-								' )'
-						);
-					}
-					else
-					{
-						r.push(
-							'\t\t(',
-							'\t\t\t' + aName + ' === inherit.' +
-								( attr.assign || aName ),
-							'\t\t\t||',
-							'\t\t\t(',
-							'\t\t\t\t' + aName + ' !== null',
-							'\t\t\t\t&&',
-							'\t\t\t\t' + aName +
-								'.equals( inherit.' +
-								( attr.assign || aName ) +
-								' )',
-							'\t\t\t)',
-							'\t\t)'
-						);
-					}
-
-					break;
-			}
+			r.push(
+				'/**/'
+			);
 		}
-
-		r.push(
-			'\t)',
-			'\t{',
-			'\t\treturn inherit;',
-			'\t}',
-			''
-		);
 	}
-	else
+
+	r.push(
+		'/**/}',
+		''
+	);
+};
+
+
+/*
+| Generates the creators full inheritance shortcut.
+*/
+var
+generateCreatorFullInheritance =
+	function
+	(
+		r,      // result array
+		joobj,  // the joobj definition
+		aList   // attribute name list
+	)
+{
+	var
+		aName,
+		attr;
+
+	if( aList.length === 0 )
 	{
 		r.push(
 			'',
@@ -1235,10 +1222,118 @@ generateCreator =
 			'/**/}',
 			''
 		);
+
+		return;
 	}
 
-	// fills in default values
+	r.push(
+		'\tif(',
+		'\t\tinherit',
+		'\t\t&&'
+	);
 
+	for(
+		var a = 0, aZ = aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			aList[ a ];
+
+		attr =
+			joobj.attributes[ aName ];
+
+		if( a > 0 )
+		{
+			r.push(
+				'\t\t&&'
+			);
+		}
+
+		if( attr.assign === null )
+		{
+			r.push(
+				'\t\t' + aName + ' === null'
+			);
+
+			continue;
+		}
+
+		switch( attr.type )
+		{
+			case 'Array' : // FIXME
+			case 'Integer' :
+			case 'Mark' : // FIXME
+			case 'Number' :
+			case 'String' :
+			case 'Tree' : // FIXME
+
+				r.push(
+					'\t\t' + aName + ' === inherit.' +
+						( attr.assign || aName )
+				);
+
+				break;
+
+			default :
+
+				if( !attr.allowNull )
+				{
+					r.push(
+						'\t\t' + aName +
+							'.equals( inherit.' +
+							( attr.assign || aName ) +
+							' )'
+					);
+				}
+				else
+				{
+					r.push(
+						'\t\t(',
+						'\t\t\t' + aName + ' === inherit.' +
+							( attr.assign || aName ),
+						'\t\t\t||',
+						'\t\t\t(',
+						'\t\t\t\t' + aName + ' !== null',
+						'\t\t\t\t&&',
+						'\t\t\t\t' + aName +
+							'.equals( inherit.' +
+							( attr.assign || aName ) +
+							' )',
+						'\t\t\t)',
+						'\t\t)'
+					);
+				}
+
+				break;
+		}
+	}
+
+	r.push(
+		'\t)',
+		'\t{',
+		'\t\treturn inherit;',
+		'\t}',
+		''
+	);
+};
+
+
+/*
+| Generates the creators final return statement.
+*/
+var
+generateCreatorReturn =
+	function(
+		r,         // result array
+		joobj,     // the joobj definition
+		reference, // the reference name for the joobj
+		conList    // constructor list
+	)
+{
+	var
+		aName;
 
 	if( joobj.singleton )
 	{
@@ -1284,17 +1379,17 @@ generateCreator =
 		}
 
 		for(
-			a = 0, aZ = aList.length;
+			var a = 0, aZ = conList.length;
 			a < aZ;
 			a++
 		)
 		{
 			aName =
-				aList[ a ];
+				conList[ a ];
 
 			r.push(
 				'\t\t\t' + aName +
-					( a + 1 < aList.length ? ',' : '' )
+					( a + 1 < conList.length ? ',' : '' )
 			);
 		}
 
@@ -1303,6 +1398,83 @@ generateCreator =
 			'\t);'
 		);
 	}
+};
+
+
+/*
+| Generates the creator.
+*/
+var
+generateCreator =
+	function(
+		r,         // result array
+		joobj,     // the joobj definition
+		reference, // the reference name for the joobj
+		aList,     // attribute name list
+		conList,   // variables passed to constructor
+		creList    // free strings allowed by creator
+	)
+{
+	r.push(
+		'/*',
+		'| Creates a new ' + joobj.name + ' object.',
+		'*/',
+		reference + '.create =',
+		'\tfunction('
+	);
+
+	if( aList )
+	{
+		r.push(
+			'\t\t// free strings'
+		);
+	}
+
+	r.push(
+		'\t)',
+		'{'
+	);
+
+	if( creList.length > 0 )
+	{
+		generateCreatorFreeStringsParser(
+			r,
+			joobj,
+			aList,
+			creList
+		);
+	}
+
+	generateCreatorInheritance(
+		r,
+		joobj,
+		aList
+	);
+
+	generateCreatorDefaultValues(
+		r,
+		joobj,
+		aList
+	);
+
+	generateCreatorChecks(
+		r,
+		joobj,
+		aList
+	);
+
+	generateCreatorFullInheritance(
+		r,
+		joobj,
+		aList
+	);
+
+	generateCreatorReturn(
+		r,
+		joobj,
+		reference,
+		conList
+	);
 
 	r.push(
 		'};'
@@ -1485,6 +1657,11 @@ generateEqualsCheck =
 		attr =
 			joobj.attributes[ aName ];
 
+		if( attr.assign === null )
+		{
+			continue;
+		}
+
 		if( a > 0 )
 		{
 			r.push(
@@ -1495,9 +1672,10 @@ generateEqualsCheck =
 		switch( attr.type )
 		{
 			case 'Integer' :
+			case 'Mark' : // FIXME
 			case 'Number' :
 			case 'String' :
-			case 'Tree' :
+			case 'Tree' : // FIXME
 
 				r.push(
 					'\t\tthis.' +
@@ -1543,7 +1721,6 @@ generateEqualsCheck =
 					);
 				}
 
-
 				break;
 		}
 	}
@@ -1572,7 +1749,7 @@ joobjGenerator =
 
 		// alphabetical sorted attribute names
 		aList =
-			null,
+			[ ],
 
 		// the result array
 		r =
@@ -1584,6 +1761,16 @@ joobjGenerator =
 
 		// units sorted alphabetically
 		unitList =
+			null,
+
+		// list of all arguments accepted
+		// by the creator
+		creList =
+			null,
+
+		// list of all arguments passed to
+		// constructor
+		conList =
 			null;
 
 	// tests if the joobj looks ok
@@ -1635,31 +1822,82 @@ joobjGenerator =
 
 	}
 
+	creList =
+		aList.slice( );
+
+	if( aList.length > 0 )
+	{
+		creList.push( 'inherit' );
+	}
+
+	if( joobj.hasJSON )
+	{
+		creList.push( 'json' );
+	}
+
+	creList.sort( );
+
+	// ----
+
+	conList =
+		aList.slice( );
+
+	if( joobj.init )
+	{
+		if(
+			joobj.init.indexOf( 'inherit' ) >= 0
+		)
+		{
+			conList.push( 'inherit' );
+		}
+	}
+
+	conList.sort( );
 
 	generateFileHeader( r );
 
 	generateSeperator( r );
 
-	generateExportSection( r, joobj );
+	generateExportSection(
+		r,
+		joobj
+	);
 
 	generateSeperator( r );
 
-	generateImportsSection( r, unitList );
+	generateImportsSection(
+		r,
+		unitList
+	);
 
 	generateSeperator( r );
 
-	generateCapsuleHeader( r, joobj );
+	generateCapsuleHeader(
+		r,
+		joobj
+	);
 
 	generateSeperator( r );
 
 	if( joobj.node )
 	{
-		generateNodeIncludesSection( r, joobj, aList, unitList );
+		generateNodeIncludesSection(
+			r,
+			joobj,
+			aList,
+			unitList
+		);
 
 		generateSeperator( r );
 	}
 
-	generateConstructor( r, joobj, reference, aList );
+	generateConstructor(
+		r,
+		joobj,
+		reference,
+		aList,
+		conList
+	);
 
 	generateSeperator( r );
 
@@ -1673,14 +1911,25 @@ joobjGenerator =
 
 	if( joobj.subclass )
 	{
-		generateSubclassSection( r, joobj, reference );
+		generateSubclassSection(
+			r,
+			joobj,
+			reference
+		);
 
 		generateSeperator( r );
 	}
 
 	if( !joobj.abstract )
 	{
-		generateCreator( r, joobj, reference, aList );
+		generateCreator(
+			r,
+			joobj,
+			reference,
+			aList,
+			conList,
+			creList
+		);
 
 		generateSeperator( r );
 	}

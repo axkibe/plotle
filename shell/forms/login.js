@@ -24,7 +24,6 @@ var
 	Jools,
 	Mark,
 	shell,
-	shellverse,
 	TraitSet;
 
 
@@ -35,69 +34,126 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Login',
+
+		unit :
+			'Forms',
+
+		attributes :
+			{
+				path :
+					{
+						comment :
+							'the path of the form',
+
+						type :
+							'Path'
+					},
+
+				screensize :
+					{
+						comment :
+							'the screensize the form is made for',
+
+						type :
+							'Point'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark'
+					},
+
+				hover :
+					{
+						comment :
+							'the widget hovered upon',
+
+						type :
+							'Path'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				username :
+					{
+						comment :
+							'currently logged in user',
+
+						type :
+							'String',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					}
+			},
+
+		subclass :
+			'Forms.Form',
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+	};
+}
+
 var
-	_tag =
-		'FORM-39606038';
+	Login =
+		Forms.Login;
+
 
 /*
 | The login form.
 */
-var Login =
-Forms.Login =
+Login.prototype._init =
 	function(
-		tag,
 		inherit,
-		path,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		traitSet
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'invalid tag'
-			);
-		}
-	}
-
-	this.path =
-		path;
-
-	Forms.Form.call(
+	Forms.Form.init.call(
 		this,
 		inherit,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		Design.LoginForm,
+		traitSet
 	);
 };
-
-
-Jools.subclass(
-	Login,
-	Forms.Form
-);
-
-
-/*
-| Reflexion.
-*/
-Login.prototype.reflect =
-	'Login';
-
-
-/*
-| The forms tree
-*/
-Login.prototype.tree =
-	shellverse.grow( Design.LoginForm );
 
 
 /*

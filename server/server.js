@@ -912,7 +912,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/forms/login.js',
-					'fb',
+					'fbj',
 
 				'shell/forms/signup.js',
 					'fb',

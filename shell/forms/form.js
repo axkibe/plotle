@@ -26,6 +26,7 @@ var
 	Mark,
 	Path,
 	shell,
+	shellverse,
 	theme,
 	Widgets;
 
@@ -132,7 +133,7 @@ Forms.Form =
 				twig[ name ],
 
 			Proto =
-				this.getWidgetPrototype( tree ),
+				Form.getWidgetPrototype( tree ),
 
 			focusAccent = null;
 
@@ -183,7 +184,106 @@ Forms.Form =
 
 
 /*
+| Constructor
+*/
+Form.init =
+	function(
+		inherit,
+		design,
+		traitSet
+	)
+{
+	this.frame =
+		Euclid.Rect.create(
+			'pnw',
+				Euclid.Point.zero,
+			'pse',
+				this.screensize
+		);
+
+	var
+		tree =
+		this.tree = // TODO needed?
+			// inherit
+			shellverse.grow( design );
+
+	// all components of the form
+	var
+		sub =
+			{ },
+
+		twig =
+			tree.twig,
+
+		ranks =
+			tree.ranks;
+
+	for(
+		var a = 0, aZ = ranks.length;
+		a < aZ;
+		a++
+	)
+	{
+		var
+			name =
+				ranks[ a ],
+
+			subtree =
+				twig[ name ],
+
+			Proto =
+				Form.getWidgetPrototype( subtree ),
+
+			focusAccent = null;
+
+		if( Proto.prototype.focusable )
+		{
+			if( this.mark.widgetPath.isEmpty )
+			{
+				focusAccent =
+					false;
+			}
+			else
+			{
+				focusAccent =
+					this.mark.widgetPath.get( 2 ) === name;
+			}
+		}
+
+		var
+			path =
+				this.path.append( name );
+
+		sub[ name ] =
+			Proto.create(
+				'path',
+					path,
+				'tree',
+					subtree,
+				'superFrame',
+					this.frame,
+				'inherit',
+					inherit && inherit.sub[ name ],
+				'focusAccent',
+					focusAccent,
+				'hoverAccent',
+					path.equals( this.hover ),
+				'traitSet',
+					traitSet,
+				'mark',
+					this.mark
+			);
+	}
+
+	this.sub =
+		Jools.immute( sub );
+};
+
+
+/*
 | (Re)Creates a new form.
+|
+| TODO remove
 */
 Form.create =
 	function(
@@ -389,7 +489,7 @@ Form.prototype.showDisc =
 /*
 | Returns the widgets prototype matching type
 */
-Form.prototype.getWidgetPrototype =
+Form.getWidgetPrototype =
 	function( tree )
 {
 

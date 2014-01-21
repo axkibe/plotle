@@ -122,6 +122,35 @@ Forms.Jockey =
 					:
 					this.path.append( name );
 
+			switch( name ) // TODO remove
+			{
+			case 'Login' :
+
+			forms[ name ] =
+				Forms[ name ].create(
+					'inherit',
+						inherit && inherit._forms[ name ],
+					'path',
+						path,
+					'screensize',
+						screensize,
+					'traitSet',
+						traitSet,
+					'mark',
+						mark,
+					'hover',
+						hover.isEmpty || !path.subPathOf( hover ) ?
+							Path.empty
+							:
+							hover,
+					'username',
+						username
+				);
+
+			break;
+
+			default :
+
 			forms[ name ] =
 				Forms.Form.create(
 					'name',
@@ -144,6 +173,7 @@ Forms.Jockey =
 					'username',
 						username
 				);
+			}
 
 /**/	if( CHECK )
 /**/	{

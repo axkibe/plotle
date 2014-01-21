@@ -825,6 +825,7 @@
 . toPoint
 > top
 > touches
+. traitSet
 . transItem
 > tree
 > trg
