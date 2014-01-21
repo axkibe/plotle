@@ -33,89 +33,127 @@ var
 'use strict';
 
 
-var
-	_tag =
-		'FORM-39606038';
-
-
 /*
-| The login form
+| The joobj definition.
 */
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'NoAccessToSpace',
+
+		unit :
+			'Forms',
+
+		attributes :
+			{
+				path :
+					{
+						comment :
+							'the path of the form',
+
+						type :
+							'Path'
+					},
+
+				screensize :
+					{
+						comment :
+							'the screensize the form is made for',
+
+						type :
+							'Point'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark'
+					},
+
+				hover :
+					{
+						comment :
+							'the widget hovered upon',
+
+						type :
+							'Path'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				username :
+					{
+						comment :
+							'currently logged in user',
+
+						type :
+							'String',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					}
+			},
+
+		subclass :
+			'Forms.Form',
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+	};
+}
+
+
 var
 	NoAccessToSpace =
-	Forms.NoAccessToSpace =
-		function(
-			tag,
-			inherit,
-			path,
-			screensize,
-			traitSet,
-			mark,
-			hover,
-			username
-		)
+		Forms.NoAccessToSpace;
+
+
+/*
+| The no access to space form.
+*/
+NoAccessToSpace.prototype._init =
+	function(
+		inherit,
+		traitSet
+	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'invalid tag'
-			);
-		}
-	}
-
-	/*
-	this.setText(
-		'headline',
-			'no access to ' +
-			spaceUser +
-			':' +
-			spaceTag
-	);
-	*/
-	this.path =
-		path;
-
-	Forms.Form.call(
+	Forms.Form.init.call(
 		this,
 		inherit,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		Design.NoAccessToSpaceForm,
+		traitSet
 	);
 };
-
-
-Jools.subclass(
-	NoAccessToSpace,
-	Forms.Form
-);
-
-
-/*
-| Name of the form.
-*/
-NoAccessToSpace.prototype.reflect =
-	'NoAccessToSpace';
-
-
-/*
-| Form path.
-*/
-NoAccessToSpace.prototype.path =
-	Path.empty.append(
-		NoAccessToSpace.prototype.reflect
-	);
-
-
-/*
-| The forms tree.
-*/
-NoAccessToSpace.prototype.tree =
-	shellverse.grow( Design.NoAccessToSpaceForm );
 
 
 /*

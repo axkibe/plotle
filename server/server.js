@@ -930,7 +930,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/forms/no-access-to-space.js',
-					'fb',
+					'fbj',
 
 				'shell/forms/non-existing-space.js',
 					'fb',

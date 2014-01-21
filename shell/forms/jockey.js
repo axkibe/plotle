@@ -126,6 +126,7 @@ Forms.Jockey =
 			{
 			case 'Login' :
 			case 'MoveTo' :
+			case 'NoAccessToSpace' :
 			case 'SignUp' :
 
 			forms[ name ] =
