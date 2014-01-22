@@ -181,8 +181,8 @@ Shell =
 				Mark.Vacant.create( ),
 			'screensize',
 				screensize,
-			'username',
-				''
+			'path',
+				Path.empty.append( 'forms' )
 		);
 
 	this._$discJockey =

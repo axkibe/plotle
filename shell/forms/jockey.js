@@ -21,8 +21,7 @@ Forms =
 */
 var
 	Jools,
-	Mark,
-	Path;
+	Mark;
 
 /*
 | Capsule
@@ -32,9 +31,6 @@ var
 
 
 var
-	_tag =
-		'FORM-JOCKEY-42381321',
-
 	_formList =
 		Object.freeze(
 			[
@@ -51,60 +47,112 @@ var
 
 
 /*
-| The master of forms.
+| The joobj definition.
 */
-var Jockey =
-Forms.Jockey =
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Jockey',
+
+		unit :
+			'Forms',
+
+		attributes :
+			{
+				path :
+					{
+						comment :
+							'the path of the form jockey',
+
+						type :
+							'Path'
+					},
+
+				screensize :
+					{
+						comment :
+							'the screensize all forms are to be made',
+
+						type :
+							'Point'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark'
+					},
+
+				hover :
+					{
+						comment :
+							'the widget hovered upon',
+
+						type :
+							'Path'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				username :
+					{
+						comment :
+							'currently logged in user',
+
+						type :
+							'String',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null'
+					}
+			},
+
+		subclass :
+			'Forms.Form',
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+	};
+}
+
+var
+	Jockey =
+		Forms.Jockey;
+
+
+Jockey.prototype._init =
 	function(
-		tag,
 		inherit,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		traitSet
 	)
 {
-
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'tag mismatch'
-/**/		);
-/**/	}
-/**/
-/**/	if( !hover || hover.reflect !== 'Path' )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid hover'
-/**/		);
-/**/	}
-/**/
-/**/	if( !mark )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid mark'
-/**/		);
-/**/	}
-/**/}
-
-	this.mark =
-		mark;
-
-	this.username =
-		username;
-
-	this.hover =
-		hover;
-
-	this.path =
-		Path.empty.append( 'forms' );
-
-	this.screensize =
-		screensize;
-
 	var
 		forms =
 			{ };
@@ -114,7 +162,6 @@ Forms.Jockey =
 		var
 			name =
 				_formList[ i ],
-
 
 			path =
 				this.path.append( name );
@@ -126,18 +173,15 @@ Forms.Jockey =
 				'path',
 					path,
 				'screensize',
-					screensize,
+					this.screensize,
 				'traitSet',
 					traitSet,
 				'mark',
-					mark,
+					this.mark,
 				'hover',
-					hover.isEmpty || !path.subPathOf( hover ) ?
-						Path.empty
-						:
-						hover,
+					this.hover,
 				'username',
-					username
+					this.username
 			);
 
 /**/	if( CHECK )
@@ -154,166 +198,6 @@ Forms.Jockey =
 
 	this._forms =
 		Jools.immute( forms );
-
-	Jools.immute( this );
-};
-
-
-/*
-| The forms path
-*/
-Jockey.path =
-Jockey.prototype.path =
-	Path.empty.append( 'forms' );
-
-
-/*
-| Creates a new form jockey.
-*/
-Jockey.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit =
-			null,
-
-		hover =
-			null,
-
-		mark =
-			null,
-
-		screensize =
-			null,
-
-		traitSet =
-			null,
-
-		username =
-			null;
-
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'hover' :
-
-				hover =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'traitSet' :
-
-				traitSet =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'username' :
-
-				username =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument'
-				);
-		}
-	}
-
-	if( mark )
-	{
-		mark =
-			Jockey.concernsMark(
-				mark
-			);
-	}
-
-	if( inherit )
-	{
-		if( screensize === null )
-		{
-			screensize =
-				inherit.screensize;
-		}
-
-		if( mark === null )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( hover === null )
-		{
-			hover =
-				inherit.hover;
-		}
-
-		if( username === null )
-		{
-			username =
-				inherit.username;
-		}
-
-		if(
-			traitSet === null
-			&&
-			screensize.equals( inherit.screensize )
-			&&
-			mark.equals( inherit.mark )
-			&&
-			hover.equals( inherit.hover )
-			&&
-			username === inherit.username
-		)
-		{
-			return inherit;
-		}
-	}
-
-	return (
-		new Jockey(
-			_tag,
-			inherit,
-			screensize,
-			traitSet,
-			mark,
-			hover,
-			username
-		)
-	);
 };
 
 
