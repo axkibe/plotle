@@ -918,22 +918,22 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/forms/space.js',
-					'fb',
+					'fbj',
 
 				'shell/forms/moveto.js',
 					'fbj',
 
 				'shell/forms/user.js',
-					'fb',
+					'fbj',
 
 				'shell/forms/welcome.js',
-					'fb',
+					'fbj',
 
 				'shell/forms/no-access-to-space.js',
 					'fbj',
 
 				'shell/forms/non-existing-space.js',
-					'fb',
+					'fbj',
 
 				'shell/forms/jockey.js',
 					'fb',

@@ -117,17 +117,18 @@ Forms.Jockey =
 
 
 			path =
-				inherit ?
-					inherit._forms[ name ].path
-					:
-					this.path.append( name );
+				this.path.append( name );
 
 			switch( name ) // TODO remove
 			{
 			case 'Login' :
 			case 'MoveTo' :
 			case 'NoAccessToSpace' :
+			case 'NonExistingSpace' :
 			case 'SignUp' :
+			case 'Space' :
+			case 'User' :
+			case 'Welcome' :
 
 			forms[ name ] =
 				Forms[ name ].create(

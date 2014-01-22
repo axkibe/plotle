@@ -1682,6 +1682,7 @@ Shell.prototype.arrivedAtSpace =
 		spaceTag
 	);
 
+	// TODO make spaceUser spaceTag normal attributes
 	var
 		spaceFormPath =
 			this._$formJockey.get( 'Space' ).path; // TODO

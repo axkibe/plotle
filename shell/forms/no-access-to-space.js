@@ -20,10 +20,7 @@ Forms =
 */
 var
 	Design,
-	Jools,
-	Path,
-	shell,
-	shellverse;
+	shell;
 
 
 /*

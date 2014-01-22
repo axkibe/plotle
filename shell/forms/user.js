@@ -1,5 +1,5 @@
 /*
-| The user's form.
+| The user form.
 |
 | Authors: Axel Kittenberger
 */
@@ -18,9 +18,7 @@ Forms =
 */
 var
 	Design,
-	Jools,
 	shell,
-	shellverse,
 	TraitSet;
 
 
@@ -31,109 +29,129 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'User',
+
+		unit :
+			'Forms',
+
+		attributes :
+			{
+				path :
+					{
+						comment :
+							'the path of the form',
+
+						type :
+							'Path'
+					},
+
+				screensize :
+					{
+						comment :
+							'the screensize the form is made for',
+
+						type :
+							'Point'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark'
+					},
+
+				hover :
+					{
+						comment :
+							'the widget hovered upon',
+
+						type :
+							'Path'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				username :
+					{
+						comment :
+							'currently logged in user',
+
+						type :
+							'String',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null'
+					}
+			},
+
+		subclass :
+			'Forms.Form',
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+	};
+}
+
 var
-	_tag =
-		'FORM-39606038';
+	User =
+		Forms.User;
+
 
 /*
-| The login form
+| The space form.
 */
-var User =
-Forms.User =
+User.prototype._init =
 	function(
-		tag,
 		inherit,
-		path,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		traitSet
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'invalid tag'
-			);
-		}
-	}
-
-	this.path =
-		path;
-
-	var
-		user;
-
-	if( inherit )
-	{
-		user =
-		this.user =
-			inherit.user;
-	}
-	else
-	{
-		user =
-		this.user =
-			null;
-	}
-
-	if( traitSet )
-	{
-		for(
-			var a = 0, aZ = traitSet.length;
-			a < aZ;
-			a++
-		)
-		{
-			var
-				t =
-					traitSet.get( a );
-
-			if(
-				t.path.equals( this.path )
-			)
-			{
-				switch( t.key )
-				{
-
-					case 'user' :
-
-						this.user =
-						user =
-							t.val;
-
-						break;
-
-					default :
-
-						throw new Error(
-							'unknown trait: ' + t.key
-						);
-				}
-			}
-		}
-	}
-
 	var
 		isGuest;
 
-	if( user )
+	if( this.username )
 	{
 		isGuest =
-			user.substr( 0, 7 ) === 'visitor';
+			this.username.substr( 0, 7 ) === 'visitor';
 	}
 	else
 	{
 		isGuest =
 			true;
 	}
-
-
-	// appends new traits
-	// FIXME only if changed
 
 	traitSet =
 		TraitSet.create(
@@ -142,7 +160,7 @@ Forms.User =
 			'trait',
 				this._widgetPath( 'headline' ),
 				'text',
-				'hello ' + ( user || '' ),
+				'hello ' + ( this.username || '' ),
 			'trait',
 				this._widgetPath( 'visitor1' ),
 				'visible',
@@ -173,36 +191,13 @@ Forms.User =
 				!isGuest
 		);
 
-	Forms.Form.call(
+	Forms.Form.init.call(
 		this,
 		inherit,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		Design.UserForm,
+		traitSet
 	);
 };
-
-
-Jools.subclass(
-	User,
-	Forms.Form
-);
-
-
-/*
-| Name of the form.
-*/
-User.prototype.reflect =
-	'User';
-
-
-/*
-| The forms tree.
-*/
-User.prototype.tree =
-	shellverse.grow( Design.UserForm );
 
 
 /*

@@ -1,6 +1,9 @@
 /*
 | User has no access to a space he tried to port to.
 |
+| FIXME spaceUser and spaceTag are phony
+|       yet are not looked at by joobj
+|
 | Authors: Axel Kittenberger
 */
 
@@ -21,10 +24,7 @@ Forms =
 */
 var
 	Design,
-	Jools,
-	Path,
 	shell,
-	shellverse,
 	TraitSet;
 
 
@@ -35,47 +35,122 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'NonExistingSpace',
+
+		unit :
+			'Forms',
+
+		attributes :
+			{
+				path :
+					{
+						comment :
+							'the path of the form',
+
+						type :
+							'Path'
+					},
+
+				screensize :
+					{
+						comment :
+							'the screensize the form is made for',
+
+						type :
+							'Point'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark'
+					},
+
+				hover :
+					{
+						comment :
+							'the widget hovered upon',
+
+						type :
+							'Path'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				username :
+					{
+						comment :
+							'currently logged in user',
+
+						type :
+							'String',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					}
+			},
+
+		subclass :
+			'Forms.Form',
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+	};
+}
+
 var
-	_tag =
-		'FORM-39606038';
+	NonExistingSpace =
+		Forms.NonExistingSpace;
 
 
 /*
 | The space does not exist form.
 */
-var
-	NonExistingSpace =
-	Forms.NonExistingSpace =
-		function(
-			tag,
-			inherit,
-			path,
-			screensize,
-			traitSet,
-			mark,
-			hover,
-			username
-		)
+NonExistingSpace.prototype._init =
+	function(
+		inherit,
+		traitSet
+	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'invalid tag'
-			);
-		}
-	}
-
-	this.path =
-		path;
-
 	var
-		spaceUser =
-			null,
-
-		spaceTag =
-			null;
+		spaceUser,
+		spaceTag;
 
 	if( traitSet )
 	{
@@ -122,13 +197,13 @@ var
 
 	if( inherit )
 	{
-		if( spaceUser === null )
+		if( spaceUser === undefined )
 		{
 			spaceUser =
 				inherit.spaceUser;
 		}
 
-		if( spaceTag === null )
+		if( spaceTag === undefined )
 		{
 			spaceTag =
 				inherit.spaceTag;
@@ -154,45 +229,13 @@ var
 					' does not exist.'
 		);
 
-	Forms.Form.call(
+	Forms.Form.init.call(
 		this,
 		inherit,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		Design.NonExistingSpaceForm,
+		traitSet
 	);
 };
-
-
-Jools.subclass(
-	NonExistingSpace,
-	Forms.Form
-);
-
-
-/*
-| Reflection.
-*/
-NonExistingSpace.prototype.reflect =
-	'NonExistingSpace';
-
-
-/*
-| Path of the form.
-*/
-NonExistingSpace.prototype.path =
-	Path.empty.append(
-		NonExistingSpace.prototype.reflect
-	);
-
-
-/*
-| The forms tree.
-*/
-NonExistingSpace.prototype.tree =
-	shellverse.grow( Design.NonExistingSpaceForm );
 
 
 /*

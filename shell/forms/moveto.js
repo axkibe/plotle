@@ -21,9 +21,7 @@ Forms =
 */
 var
 	Design,
-	Jools,
 	shell,
-	shellverse,
 	TraitSet;
 
 

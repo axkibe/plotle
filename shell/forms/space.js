@@ -1,5 +1,5 @@
 /*
-| The user's form.
+| The space form.
 |
 | Authors: Axel Kittenberger
 */
@@ -20,9 +20,7 @@ Forms =
 */
 var
 	Design,
-	Jools,
 	shell,
-	shellverse,
 	TraitSet;
 
 
@@ -33,55 +31,122 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Space',
+
+		unit :
+			'Forms',
+
+		attributes :
+			{
+				path :
+					{
+						comment :
+							'the path of the form',
+
+						type :
+							'Path'
+					},
+
+				screensize :
+					{
+						comment :
+							'the screensize the form is made for',
+
+						type :
+							'Point'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark'
+					},
+
+				hover :
+					{
+						comment :
+							'the widget hovered upon',
+
+						type :
+							'Path'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				username :
+					{
+						comment :
+							'currently logged in user',
+
+						type :
+							'String',
+
+						allowNull:
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					}
+			},
+
+		subclass :
+			'Forms.Form',
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+	};
+}
+
 var
-	_tag =
-		'FORM-39606038';
+	Space =
+		Forms.Space;
+
 
 /*
-| The login form
+| The space form.
 */
-var Space =
-Forms.Space =
+Space.prototype._init =
 	function(
-		tag,
 		inherit,
-		path,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		traitSet
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'invalid tag'
-			);
-		}
-	}
-
-	this.path =
-		path;
-
-	if( inherit )
-	{
-		this.spaceUser =
-			inherit.spaceUser;
-
-		this.spaceTag =
-			inherit.spaceTag;
-	}
-	else
-	{
-		this.spaceUser =
-			null;
-
-		this.spaceTag =
-			null;
-	}
+	var
+		spaceUser,
+		spaceTag;
 
 	if( traitSet )
 	{
@@ -104,14 +169,14 @@ Forms.Space =
 
 					case 'spaceUser' :
 
-						this.spaceUser =
+						spaceUser =
 							t.val;
 
 						break;
 
 					case 'spaceTag' :
 
-						this.spaceTag =
+						spaceTag =
 							t.val;
 
 						break;
@@ -126,49 +191,45 @@ Forms.Space =
 		}
 	}
 
-	// appends new traits
-	// FIXME only if changed
+	if( inherit )
+	{
+		if( spaceUser === undefined )
+		{
+			spaceUser =
+				inherit.spaceUser;
+		}
+
+		if( spaceTag === undefined )
+		{
+			spaceTag =
+				inherit.spaceTag;
+		}
+	}
+
+	this.spaceUser =
+		spaceUser;
+
+	this.spaceTag =
+		spaceTag;
 
 	traitSet =
 		TraitSet.create(
 			'set',
 				traitSet,
 			'trait',
-				this._widgetPath( 'headline '),
+				this._widgetPath( 'headline' ),
 				'text',
 				this.spaceUser + ':' + this.spaceTag
 		);
 
-	Forms.Form.call(
+
+	Forms.Form.init.call(
 		this,
 		inherit,
-		screensize,
-		traitSet,
-		mark,
-		hover,
-		username
+		Design.SpaceForm,
+		traitSet
 	);
 };
-
-
-Jools.subclass(
-	Space,
-	Forms.Form
-);
-
-
-/*
-| Name of the form.
-*/
-Space.prototype.reflect =
-	'Space';
-
-
-/*
-| The forms tree.
-*/
-Space.prototype.tree =
-	shellverse.grow( Design.SpaceForm );
 
 
 /*
@@ -206,10 +267,11 @@ Space.prototype.pushButton =
 
 		default :
 
-			throw new Error( 'unknown button pushed: ' + buttonName );
+			throw new Error(
+				'unknown button pushed: ' + buttonName
+			);
 	}
 };
 
 
 } )( );
-
