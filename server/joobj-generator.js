@@ -40,13 +40,11 @@ var
 	{
 		switch( aName )
 		{
-			case 'abstract' :
 			case 'attributes' :
 			case 'hasJSON' :
 			case 'init' :
 			case 'name' :
 			case 'node' :
-			case 'notag' :
 			case 'equals' :
 			case 'subclass' :
 			case 'singleton' :
@@ -285,9 +283,6 @@ buildJJ =
 
 	return Object.freeze(
 		{
-			abstract :
-				joobj.abstract,
-
 			aList :
 				aList,
 
@@ -314,9 +309,6 @@ buildJJ =
 
 			node :
 				joobj.node,
-
-			notag :
-				joobj.notag,
 
 			reference :
 				reference,
@@ -477,8 +469,8 @@ generateImportsSection =
 var
 generateCapsuleHeader =
 	function(
-		r,   // result array
-		jj   // the joobj working object
+		r      // result array
+		// jj  // the joobj working object
 	)
 {
 	r.push(
@@ -489,16 +481,13 @@ generateCapsuleHeader =
 		'\'use strict\';'
 	);
 
-	if( !jj.notag )
-	{
-		r.push(
-			'',
-			'',
-			'var',
-			'\t_tag =',
-			'\t\t' + Math.floor( Math.random( ) * 1000000000 ) + ';'
-		);
-	}
+	r.push(
+		'',
+		'',
+		'var',
+		'\t_tag =',
+		'\t\t' + Math.floor( Math.random( ) * 1000000000 ) + ';'
+	);
 };
 
 
@@ -711,18 +700,12 @@ generateConstructor =
 	}
 
 	r.push(
-		'\tfunction('
+		'\tfunction(',
+		'\t\ttag' +
+			(
+				jj.conList.length > 0 ?  ',' : ''
+			)
 	);
-
-	if( !jj.notag )
-	{
-		r.push(
-			'\t\ttag' +
-				(
-					jj.conList.length > 0 ?  ',' : ''
-				)
-		);
-	}
 
 	for(
 		a = 0, aZ = jj.conList.length;
@@ -776,22 +759,19 @@ generateConstructor =
 		'{'
 	);
 
-	if( !jj.notag )
-	{
-		r.push(
-			'',
-			'/**/if( CHECK )',
-			'/**/{',
-			'/**/\tif( tag !== _tag )',
-			'/**/\t{',
-			'/**/\t\tthrow new Error(',
-			'/**/\t\t\t\'tag mismatch\'',
-			'/**/\t\t);',
-			'/**/\t}',
-			'/**/}',
-			''
-		);
-	}
+	r.push(
+		'',
+		'/**/if( CHECK )',
+		'/**/{',
+		'/**/\tif( tag !== _tag )',
+		'/**/\t{',
+		'/**/\t\tthrow new Error(',
+		'/**/\t\t\t\'tag mismatch\'',
+		'/**/\t\t);',
+		'/**/\t}',
+		'/**/}',
+		''
+	);
 
 	// creates assigns for all assignable attributes
 	for(
@@ -853,22 +833,10 @@ generateConstructor =
 		}
 	}
 
-	// FIXME remove subclass calls all together
-	if( jj.subclass && ! jj.init )
-	{
-		r.push(
-			'\t' + jj.subclass + '.call( this );',
-			'};',
-			''
-		);
-	}
-	else
-	{
-		r.push(
-			'\tJools.immute( this );',
-			'};'
-		);
-	}
+	r.push(
+		'\tJools.immute( this );',
+		'};'
+	);
 };
 
 
@@ -1522,25 +1490,10 @@ generateCreatorReturn =
 		r.push(
 			'\tif( !_singleton )',
 			'\t{',
-			'\t\t_singleton ='
-		);
-
-		if( jj.notag )
-		{
-			r.push(
-				'\t\t\tnew ' + jj.reference + '( );'
-			);
-		}
-		else
-		{
-			r.push(
-				'\t\t\tnew ' + jj.reference + '(',
-				'\t\t\t\t_tag',
-				'\t\t\t);'
-			);
-		}
-
-		r.push(
+			'\t\t_singleton =',
+			'\t\t\tnew ' + jj.reference + '(',
+			'\t\t\t\t_tag',
+			'\t\t\t);',
 			'\t}',
 			'',
 			'\treturn _singleton;'
@@ -1550,15 +1503,9 @@ generateCreatorReturn =
 	{
 		r.push(
 			'\treturn (',
-			'\t\tnew ' + jj.reference + '('
+			'\t\tnew ' + jj.reference + '(',
+			'\t\t\t_tag,'
 		);
-
-		if( !jj.notag )
-		{
-			r.push(
-				'\t\t\t_tag,'
-			);
-		}
 
 		for(
 			var a = 0, aZ = jj.conList.length;
@@ -1948,12 +1895,9 @@ joobjGenerator =
 		generateSeperator( r );
 	}
 
-	if( !jj.abstract )
-	{
-		generateCreator( r, jj );
+	generateCreator( r, jj );
 
-		generateSeperator( r );
-	}
+	generateSeperator( r );
 
 	generateReflectionSection( r, jj );
 

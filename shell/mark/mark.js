@@ -8,6 +8,14 @@
 |     nothing (vacant)
 */
 
+
+/*
+| Export
+*/
+var
+	Mark =
+		Mark || { };
+
 /*
 | Capsule
 */
@@ -15,29 +23,13 @@
 'use strict';
 
 
-/*
-| The joobj definition.
-*/
-if( JOOBJ )
+Mark.Mark =
+function( )
 {
-	return {
-
-		name :
-			'Mark',
-
-		unit :
-			'Mark',
-
-		abstract :
-			true,
-
-		equals :
-			false,
-
-		notag :
-			true
-	};
-}
+	throw new Error(
+		CHECK && 'initializing abstract'
+	);
+};
 
 
 } )( );

@@ -241,7 +241,6 @@
 > a
 > abort
 > abs
-. abstract
 > access
 . action
 > active
@@ -598,7 +597,6 @@
 . noCache
 > node
 . normal
-. notag
 . note
 > null
 > nw

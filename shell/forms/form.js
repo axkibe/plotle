@@ -38,13 +38,12 @@ var
 'use strict';
 
 
-var
-	Form =
-	Forms.Form =
-		function( )
+var Form =
+Forms.Form =
+	function( )
 {
 	throw new Error(
-		CHECK && 'initialized abstract function'
+		CHECK && 'initializing abstract'
 	);
 };
 

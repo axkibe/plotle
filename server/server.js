@@ -972,7 +972,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/mark/mark.js',
-					'fbj',
+					'fb',
 
 				'shell/mark/caret.js',
 					'fbj',
@@ -990,7 +990,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/action/action.js',
-					'fbj',
+					'fb',
 
 				'shell/action/none.js',
 					'fbj',

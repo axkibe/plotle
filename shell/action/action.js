@@ -23,29 +23,13 @@ var
 'use strict';
 
 
-/*
-| The joobj definition.
-*/
-if( JOOBJ )
+Action.Action =
+	function( )
 {
-	return {
-
-		name :
-			'Action',
-
-		unit :
-			'Action',
-
-		abstract :
-			true,
-
-		equals :
-			false,
-
-		notag :
-			true
-	};
-}
+	throw new Error(
+		CHECK && 'initializing abstract'
+	);
+};
 
 
 /**/if( CHECK )
