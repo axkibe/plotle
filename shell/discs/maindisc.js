@@ -110,7 +110,8 @@ Discs.MainDisc =
 			wname =
 				ranks[ r ],
 
-			text,
+			text =
+				undefined,
 
 			tree =
 				twig[ wname ],

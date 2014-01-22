@@ -159,9 +159,9 @@ Form.concernsMark =
 			mark.widgetPath;
 
 	if(
-		mip
+		mip.length !== 0
 		&&
-		mip.subPathOf( path )
+		path.subPathOf( mip )
 	)
 	{
 		return mark;

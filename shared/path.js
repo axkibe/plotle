@@ -496,7 +496,7 @@ Jools.lazyFixate(
 				this._path,
 
 			b =
-				[ '[ '[0] ]; // FIXME jshint bug
+				[ '[ '[ 0 ] ]; // FIXME jshint bug
 
 		for(
 			var a = 0, aZ = this.length;

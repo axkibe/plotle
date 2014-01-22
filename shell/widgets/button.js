@@ -170,7 +170,7 @@ if( JOOBJ )
 							'Boolean',
 
 						allowNull :
-						 	true,
+							true,
 
 						defaultVal :
 							'null'

@@ -72,6 +72,18 @@ if( JOOBJ )
 						comment :
 							'the users mark',
 
+						concerns :
+							{
+								func :
+									'Forms.Form.concernsMark',
+
+								args :
+									[
+										'mark',
+										'path'
+									]
+							},
+
 						type :
 							'Mark'
 					},

@@ -98,9 +98,9 @@ var
 				);
 			}
 
-			for( var aoname in attr[ aName ] )
+			for( var aoName in attr[ aName ] )
 			{
-				switch( aoname )
+				switch( aoName )
 				{
 					case 'allowNull' :
 					case 'assign' :
@@ -113,13 +113,36 @@ var
 
 						break;
 
+					case 'concerns' :
+
+						for( var aooName in attr[ aName ][ aoName ] )
+						{
+							switch( aooName )
+							{
+								case 'func' :
+								case 'args' :
+
+									break;
+
+								default :
+
+									throw new Error(
+										'invalid spec: "' +
+											aoName +
+											'"'
+									);
+							}
+						}
+
+						break;
+
 					default :
 
 						throw new Error(
 							'attribute ' +
 								'"' + aName + '"' +
 								' has invalid specifier: ' +
-								'"' + aoname + '"'
+								'"' + aoName + '"'
 						);
 				}
 			}
@@ -1357,6 +1380,83 @@ generateCreatorChecks =
 
 
 /*
+| Generates the creators concers section
+*/
+var
+generateCreatorConcerns =
+	function
+	(
+		r,  // result array
+		jj  // the joobj working object
+	)
+{
+	var
+		a,
+		aZ,
+		aName,
+		attr;
+
+	for(
+		a = 0, aZ = jj.aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			jj.aList[ a ];
+
+		attr =
+			jj.attributes[ aName ];
+
+		if( !attr.concerns )
+		{
+			continue;
+		}
+
+		var
+			func =
+				attr.concerns.func,
+
+			args =
+				attr.concerns.args;
+
+		r.push(
+			'\t' + ( attr.assign  || aName ) + ' ='
+		);
+
+		if( args.length === 0 )
+		{
+			r.push(
+				'\t\t' + func + '( );'
+			);
+		}
+		else
+		{
+			r.push(
+				'\t\t' + func + '('
+			);
+
+			for(
+				var b = 0, bZ = args.length;
+				b < bZ;
+				b++
+			)
+			{
+				r.push(
+					'\t\t\t' + args[ b ] +
+						( b + 1 < bZ ? ',' : '' )
+				);
+			}
+
+			r.push(
+				'\t\t);',
+				''
+			);
+		}
+	}
+};
+
+/*
 | Generates the creators full inheritance shortcut.
 */
 var
@@ -1584,16 +1684,13 @@ generateCreator =
 
 	generateCreatorChecks( r, jj );
 
+	generateCreatorConcerns( r, jj );
+
 	generateCreatorFullInheritance( r, jj );
 
-	generateCreatorReturn(
-		r,
-		jj
-	);
+	generateCreatorReturn( r, jj );
 
-	r.push(
-		'};'
-	);
+	r.push( '};' );
 };
 
 

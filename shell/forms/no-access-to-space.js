@@ -69,7 +69,19 @@ if( JOOBJ )
 							'the users mark',
 
 						type :
-							'Mark'
+							'Mark',
+
+						concerns :
+							{
+								func :
+									'Forms.Form.concernsMark',
+
+								args :
+									[
+										'mark',
+										'path'
+									]
+							}
 					},
 
 				hover :
