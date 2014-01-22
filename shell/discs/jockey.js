@@ -554,7 +554,9 @@ Jockey.prototype.pushButton =
 		default :
 
 			throw new Error(
-				'invalid discname: ' + discname
+				CHECK
+				&&
+				( 'invalid discname: ' + discname )
 			);
 	}
 };

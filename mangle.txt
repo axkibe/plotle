@@ -1,3 +1,7 @@
+. hadSelect
+. inherit
+. arrow
+. clockwise
 . $abort
 . $action
 . $aquireAjax
@@ -718,7 +722,7 @@
 . scrollPage
 . scrollbar
 . scrollbarY
-. se
+> se
 > search
 . selection
 > selectionEnd
@@ -800,7 +804,7 @@
 > subclass
 > substr
 > substring
-. sw
+> sw
 . systemBlur
 . systemFocus
 > t
@@ -851,7 +855,7 @@
 . visitor2
 . visitor3
 . visitor4
-. w
+> w
 . warn
 . web
 . weinre

@@ -38,6 +38,16 @@ var
 'use strict';
 
 
+var
+	Form =
+	Forms.Form =
+		function( )
+{
+	throw new Error(
+		CHECK && 'initialized abstract function'
+	);
+};
+
 /*
 | Constructor
 */
@@ -200,8 +210,8 @@ Form.getWidgetPrototype =
 		default :
 
 			throw new Error(
-				'Invalid component type: ' +
-				tree.twig.type
+				CHECK &&
+				( 'Invalid component type: ' + tree.twig.type )
 			);
 	}
 };
@@ -556,6 +566,8 @@ Form.prototype.pushButton =
 	)
 {
 	throw new Error(
+		CHECK
+		&&
 		'pushButton should be overloaded!'
 	);
 };

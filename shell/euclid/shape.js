@@ -94,14 +94,14 @@ Shape.prototype.sketch =
 			this.hull,
 
 		h =
-			0,
+			1,
 
 		hZ =
 			hull.length;
 
 /**/if( CHECK )
 /**/{
-/**/	if( hull[ h++ ] !== 'start' )
+/**/	if( hull[ 0 ] !== 'start' )
 /**/	{
 /**/		throw new Error(
 /**/			'hull must have start at [  0]'
@@ -180,7 +180,11 @@ Shape.prototype.sketch =
 			default :
 
 				throw new Error(
-					'unknown hull section: ' + hull[ h ]
+					CHECK
+					&&
+					(
+						'unknown hull section: ' + hull[ h ]
+					)
 				);
 
 		}
@@ -282,12 +286,11 @@ Shape.prototype.sketch =
 
 					default :
 
-/**/					if( CHECK )
-/**/					{
-/**/						throw new Error(
-/**/							'unknown rotation'
-/**/						);
-/**/					}
+						throw new Error(
+							CHECK
+							&&
+							'unknown rotation'
+						);
 				}
 
 				h += 3;
@@ -296,12 +299,11 @@ Shape.prototype.sketch =
 
 			default :
 
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'unknown hull section: ' + hull[h]
-/**/				);
-/**/			}
+				throw new Error(
+					CHECK
+					&&
+					( 'unknown hull section: ' + hull[ h ] )
+				);
 		}
 
 		pp =
@@ -334,7 +336,7 @@ Shape.prototype.getProjection =
 			this.hull,
 
 		h =
-			0,
+			1,
 
 		hZ =
 			hull.length,
@@ -344,7 +346,7 @@ Shape.prototype.getProjection =
 
 /**/if( CHECK )
 /**/{
-/**/	if( hull[ h++ ] !== 'start' )
+/**/	if( hull[ 0 ] !== 'start' )
 /**/	{
 /**/		throw new Error(
 /**/			'hull must have start at [0]'
@@ -409,7 +411,9 @@ Shape.prototype.getProjection =
 			default :
 
 				throw new Error(
-					'unknown hull section: ' + hull[h]
+					CHECK
+					&&
+					( 'unknown hull section: ' + hull[ h ] )
 				);
 		}
 
@@ -427,12 +431,14 @@ Shape.prototype.getProjection =
 
 			case 'bezier' :
 
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'cannot yet do projections for beziers '
-/**/				);
-/**/			}
+				if( CHECK )
+				{
+					throw new Error(
+						CHECK
+						&&
+						'cannot yet do projections for beziers '
+					);
+				}
 
 				break;
 
@@ -659,7 +665,9 @@ Shape.prototype.getProjection =
 			default :
 
 				throw new Error(
-					'unknown hull section: ' + hull[h]
+					CHECK
+					&&
+					( 'unknown hull section: ' + hull[ h ] )
 				);
 
 		}
@@ -668,6 +676,8 @@ Shape.prototype.getProjection =
 	}
 
 	throw new Error(
+		CHECK
+		&&
 		'no hull section created a projection'
 	);
 };

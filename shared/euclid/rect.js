@@ -88,7 +88,7 @@ if( JOOBJ )
 /*
 | Node includes.
 */
-if( typeof( module ) !== 'undefined' )
+if( SERVER )
 {
 	Jools =
 		require( '../jools' );
@@ -168,6 +168,8 @@ Rect.createArbitrary =
 	else
 	{
 		throw new Error(
+			CHECK
+			&&
 			'this is not possible'
 		);
 	}
@@ -361,8 +363,12 @@ Rect.prototype.computePoint =
 		default :
 
 			throw new Error(
-				'Invalid anchor: ' +
-				twig.anchor
+				CHECK
+				&&
+				(
+					'Invalid anchor: ' +
+					twig.anchor
+				)
 			);
 	}
 };
@@ -632,7 +638,11 @@ Rect.prototype.cardinalResize =
 			break;
 
 		default  :
-			throw new Error( 'unknown cardinal' );
+			throw new Error(
+				CHECK
+				&&
+				'unknown cardinal'
+			);
 	}
 
 	return (
@@ -1080,7 +1090,7 @@ Rect.prototype.getProjection =
 /*
 | Node exports.
 */
-if( typeof( module ) !== 'undefined' )
+if( SERVER )
 {
 	module.exports =
 		Rect;

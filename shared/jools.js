@@ -37,15 +37,18 @@ Jools.configSwitch =
 		side    // 'shell' or 'server'
 	)
 {
-	if(
-		side !== 'shell' &&
-		side !== 'server'
-	)
-	{
-		throw new Error(
-			'configSwitch side must be shell or server'
-		);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		side !== 'shell' &&
+/**/		side !== 'server'
+/**/	)
+/**/	{
+/**/		throw new Error(
+/**/			'configSwitch side must be shell or server'
+/**/		);
+/**/	}
+/**/}
 
 	return (
 		param === true ||
@@ -422,6 +425,7 @@ Jools.subclass =
 	if( base.constructor === Object )
 	{
 		// multiple inheritance
+		// FIXME remove
 		for( var name in base )
 		{
 			for( var k in base[name].prototype )
@@ -432,7 +436,10 @@ Jools.subclass =
 				if( Inherit.prototype[ k ] )
 				{
 					throw new Error(
-						'Multiple inheritance clash for ' + sub + ' :' + k
+						CHECK &&
+						(
+							'Multiple inheritance clash for ' + sub + ' :' + k
+						)
 					);
 				}
 				Inherit.prototype[ k ] = base[ name ].prototype[ k ];
@@ -467,7 +474,13 @@ Jools.ensureInt =
 
 		if( Math.floor( arg ) - arg !== 0 )
 		{
-			throw new Error( arg + ' not an integer' );
+			throw new Error(
+				CHECK
+				&&
+				(
+					arg + ' not an integer'
+				)
+			);
 		}
 	}
 };
@@ -495,7 +508,11 @@ Jools.ensureArgs =
 		if(! Jools.is( arg ) )
 		{
 			throw new Error(
-				'Argument missing: ' + arguments[ a ]
+				CHECK
+				&&
+				(
+					'argument missing: ' + arguments[ a ]
+				)
 			);
 		}
 	}
@@ -1201,7 +1218,13 @@ Jools.keyNonGrata =
 			get :
 				function( )
 				{
-					throw new Error( 'accessed key non grata! ' + key );
+					throw new Error(
+						CHECK
+						&&
+						(
+							'accessed key non grata! ' + key
+						)
+					);
 				},
 
 			set :
@@ -1209,7 +1232,13 @@ Jools.keyNonGrata =
 					// v
 				)
 				{
-					throw new Error( 'accessed key non grata! ' + key );
+					throw new Error(
+						CHECK
+						&&
+						(
+							'accessed key non grata! ' + key
+						)
+					);
 				}
 		}
 	);

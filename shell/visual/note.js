@@ -540,16 +540,22 @@ Note.prototype.dragStop =
 
 		case 'ItemResize' :
 
-			var zone =
-				this.zone;
+			var
+				zone =
+					this.zone;
 
-			if(
-				zone.width  < theme.note.minWidth ||
-				zone.height < theme.note.minHeight
-			)
-			{
-				throw new Error( 'Note under minimum size!' );
-			}
+/**/		if( CHECK )
+/**/		{
+/**/			if(
+/**/				zone.width  < theme.note.minWidth ||
+/**/				zone.height < theme.note.minHeight
+/**/			)
+/**/			{
+/**/				throw new Error(
+/**/					'Note under minimum size!'
+/**/				);
+/**/			}
+/**/		}
 
 			if( this.tree.twig.zone.equals( zone ) )
 			{

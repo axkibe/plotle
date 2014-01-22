@@ -75,7 +75,7 @@ if( JOOBJ )
 /*
 | Node includes.
 */
-if( typeof( module ) !== 'undefined' )
+if( SERVER )
 {
 	Jools =
 		require( '../jools' );
@@ -249,7 +249,7 @@ Point.zero =
 /*
 | Node exports
 */
-if( typeof( module ) !== 'undefined' )
+if( SERVER )
 {
 	module.exports =
 		Point;

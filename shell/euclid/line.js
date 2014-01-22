@@ -66,14 +66,22 @@ Line.connect =
 		end2     // 'normal' or 'arrow'
 	)
 {
-	if( !shape1 || !shape2 )
-	{
-		throw new Error( 'Line.connect() missing shape1 or shape2' );
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( !shape1 || !shape2 )
+/**/	{
+/**/		throw new Error(
+/**/			'Line.connect() missing shape1 or shape2'
+/**/		);
+/**/	}
+/**/}
 
 	// the center points
 
-	var pc1, pc2;
+	var
+		pc1,
+		pc2;
 
 	if( shape1 instanceof Euclid.Point )
 	{
@@ -230,7 +238,10 @@ Line.prototype.sketch =
 			break;
 
 		default :
-			throw new Error('unknown line end');
+			throw new Error(
+				CHECK &&
+				'unknown line end'
+			);
 	}
 
 	switch(this.p2end)
@@ -292,11 +303,6 @@ Line.prototype.draw =
 		style
 	)
 {
-	if( !style )
-	{
-		throw new Error('Line.draw misses style');
-	}
-
 	fabric.paint(
 		style,
 		this,
