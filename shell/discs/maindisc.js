@@ -97,7 +97,11 @@ Discs.MainDisc =
 			this._tree.ranks,
 
 		isGuest =
-			username.substr( 0, 5 ) === 'visit';
+			username.substr( 0, 5 ) === 'visit',
+
+		text,
+
+		visible;
 
 
 	for(
@@ -110,16 +114,18 @@ Discs.MainDisc =
 			wname =
 				ranks[ r ],
 
-			text =
-				undefined,
-
 			tree =
 				twig[ wname ],
 
 			path =
-				this.path.append( wname ),
+				this.path.append( wname );
 
-			visible;
+		text =
+			undefined;
+
+		visible =
+			undefined;
+
 
 		switch( wname )
 		{

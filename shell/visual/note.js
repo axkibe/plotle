@@ -621,8 +621,8 @@ Jools.lazyFixate(
 		var
 			f =
 				new Euclid.Fabric(
-					vzone.width,
-					vzone.height
+					vzone.width + 1,
+					vzone.height + 1
 				),
 
 			doc =
