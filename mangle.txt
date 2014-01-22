@@ -1,3 +1,4 @@
+. superFrame
 . hadSelect
 . inherit
 . arrow
@@ -129,7 +130,6 @@
 . _$ray
 . _$redo
 . _$redraw
-. _$retimer
 . _$rof
 . _$spaceFields
 . _$suggestingKeyboard

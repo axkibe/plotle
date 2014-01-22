@@ -9,12 +9,8 @@
 | Export
 */
 var
-	Widgets;
-
-
-Widgets =
-	Widgets || { };
-
+	Widgets =
+		Widgets || { };
 
 /*
 | Imports
@@ -24,8 +20,7 @@ var
 	Euclid,
 	HoverReply,
 	Jools,
-	shell,
-	system;
+	shell;
 
 
 /*
@@ -35,310 +30,223 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Button',
+
+		unit :
+			'Widgets',
+
+		attributes :
+			{
+				// FIXME deduce from mark
+				focusAccent :
+					{
+						comment :
+							'true if the widget got focus',
+
+						type :
+							'Boolean'
+					},
+
+				// FIXME deduce from hoverPath
+				hoverAccent :
+					{
+						comment :
+							'true if the widget is hovered on',
+
+						type :
+							'Boolean'
+					},
+
+				// MAYBE find a more elegent solution
+				icons :
+					{
+						comment :
+							'class used to sketch icons if applicable',
+
+						type :
+							'Icons',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark',
+
+						// FIXME do not allow null
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				path :
+					{
+						comment :
+							'the path of the widget',
+
+						type :
+							'Path'
+					},
+
+				superFrame :
+					{
+						comment :
+							'the frame the widget resides in',
+
+						type :
+							'Rect'
+					},
+
+
+				text :
+					{
+						comment :
+							'the text written in the button',
+
+						type :
+							'String',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					},
+
+				tree :
+					{
+						comment :
+							'the shellverse tree',
+
+						type :
+							'Tree'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				visible :
+					{
+						comment :
+							'if false the button is hidden',
+
+						type :
+							'Boolean',
+
+						allowNull :
+						 	true,
+
+						defaultVal :
+							'null'
+					}
+			},
+
+		subclass :
+			'Widgets.Widget',
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+
+//		FIXME
+//		refuse :
+//			[
+//				'defaultVal === null && text === null'
+//			]
+	};
+}
+
+
 var
-	_tag =
-		'WIDGET-52212713';
+	Button =
+		Widgets.Button;
 
 
-/*
-| Constructor.
-*/
-var Button =
-Widgets.Button =
+Button.prototype._init =
 	function(
-		tag,
 		inherit,
-		tree,
-		path,
-		frame,
-		focusAccent,
-		hoverAccent,
-		icons,
-		text,
-		visible
-		// mark
+		traitSet
 	)
 {
-	if( CHECK )
-	{
-		if( frame === null )
-		{
-			throw new Error(
-				'frame missing'
-			);
-		}
-
-		if( path === null )
-		{
-			throw new Error(
-				'path missing'
-			);
-		}
-
-		if( tree === null )
-		{
-			throw new Error(
-				'tree missing'
-			);
-		}
-
-		if( typeof( focusAccent ) !== 'boolean' )
-		{
-			throw new Error(
-				'invalid focusAccent'
-			);
-		}
-
-		if( typeof( hoverAccent ) !== 'boolean' )
-		{
-			throw new Error(
-				'invalid hoverAccent'
-			);
-		}
-	}
-
-	// class used to sketch icons if applicable
-	this.icons =
-		icons;
-
-	this.focusAccent =
-		focusAccent;
-
-	this.hoverAccent =
-		hoverAccent;
-
-	this.path =
-		path;
-
-	this.text =
-		text;
-
-	this.tree =
-		tree;
-
-	this.visible =
-		visible;
-
 	this.frame =
-		frame;
+		this.superFrame.computeRect(
+			this.tree.twig.frame.twig
+		);
 
-	// MAYBE move the whole switch to rect
-	switch( tree.twig.shape.twig.type )
-	{
-		case 'Ellipse' :
-
-			this._shape =
-				this.frame.zeropnw.computeEllipse(
-					tree.twig.shape.twig
-				);
-
-			break;
-
-		default :
-
-/**/		if( CHECK )
-/**/		{
-/**/			throw new Error(
-/**/				'unknown model'
-/**/			);
-/**/		}
-	}
-
-	// if true repeats the push action if held down
-	this.repeating =
-		false;
-
-	this._$retimer =
-		null;
-
-	this._$fabric =
-		null;
-
-	Widgets.Widget.call(
-		this,
-		tag
-	);
-};
-
-
-Jools.subclass(
-	Button,
-	Widgets.Widget
-);
-
-
-/*
-| Creates a button.
-*/
-Button.create =
-	function(
-		// free strings
-	)
-{
-	var
-		focusAccent =
-			null,
-
-		frame =
-			null,
-
-		hoverAccent =
-			null,
-
-		icons =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		path =
-			null,
-
-		superFrame =
-			null,
-
-		text =
-			null,
-
-		traitSet =
-			null,
-
-		tree =
-			null,
-
-		visible =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'focusAccent' :
-
-				focusAccent =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'hoverAccent' :
-
-				hoverAccent =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'icons' :
-
-				icons =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'superFrame' :
-
-				superFrame =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'text' :
-
-				text =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'traitSet' :
-
-				traitSet =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'visible' :
-
-				visible =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument: ' + arguments[ a ]
-				);
-		}
-	}
-
+	/* TODO
 	if( mark && mark.reflect !== 'Vacant' )
 	{
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'mark needs path'
-/**/			);
-/**/		}
-/**/	}
-
 		mark =
 			Widgets.Widget.concernsMark(
 				mark,
 				path
 			);
 	}
+	*/
+
+	// MAYBE move the whole switch to rect
+	switch( this.tree.twig.shape.twig.type )
+	{
+		case 'Ellipse' :
+
+			this._shape =
+				this.frame.zeropnw.computeEllipse(
+					this.tree.twig.shape.twig
+				);
+
+			break;
+
+		default :
+
+			throw new Error(
+				CHECK
+				&&
+				'unknown model'
+			);
+	}
 
 	if( traitSet )
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'traitSet needs path'
-/**/			);
-/**/		}
-/**/	}
-
 		for(
-			a = 0, aZ = traitSet.length;
+			var a = 0, aZ = traitSet.length;
 			a < aZ;
 			a++
 		)
@@ -348,21 +256,21 @@ Button.create =
 					traitSet.get( a );
 
 			if(
-				t.path.equals( path )
+				t.path.equals( this.path )
 			)
 			{
 				switch( t.key )
 				{
 					case 'text' :
 
-						text =
+						this.text =
 							t.val;
 
 						break;
 
 					case 'visible' :
 
-						visible =
+						this.visible =
 							t.val;
 
 						break;
@@ -370,114 +278,28 @@ Button.create =
 					default :
 
 						throw new Error(
-							'unknown trait: ' + t.key
+							CHECK
+							&&
+							( 'unknown trait: ' + t.key )
 						);
 				}
 			}
 		}
 	}
 
-	if( inherit )
+	if( this.visible === null )
 	{
-		if( focusAccent === null )
-		{
-			focusAccent =
-				inherit.focusAccent;
-		}
-
-		if( hoverAccent === null )
-		{
-			hoverAccent =
-				inherit.hoverAccent;
-		}
-
-		if( frame === null && superFrame === null )
-		{
-			frame =
-				inherit.frame;
-		}
-
-		if( icons === null )
-		{
-			icons =
-				inherit.icons;
-		}
-
-		if( path === null )
-		{
-			path =
-				inherit.path;
-		}
-
-		if( text === null )
-		{
-			text =
-				inherit.text;
-		}
-
-		if( tree === null )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( visible === null )
-		{
-			visible =
-				inherit.visible;
-		}
-	}
-
-	if( focusAccent === null )
-	{
-		focusAccent =
-			false;
-	}
-
-	if( hoverAccent === null )
-	{
-		hoverAccent =
-			false;
-	}
-
-	if( visible === null )
-	{
-		visible =
-			Jools.is( tree.visible ) ?
-				tree.visible :
+		this.visible =
+			Jools.is( this.tree.visible ) ?
+				this.tree.visible
+				:
 				true;
 	}
 
-	if( frame === null )
-	{
-		if( superFrame === null )
-		{
-			throw new Error(
-				'superFrame and frame === null'
-			);
-		}
-
-		frame =
-			superFrame.computeRect(
-				tree.twig.frame.twig
-			);
-	}
-
-	// FIXME inherit cache
-
-	return new Button(
-		_tag,
-		inherit,
-		tree,
-		path,
-		frame,
-		focusAccent,
-		hoverAccent,
-		icons,
-		text,
-		visible,
-		mark
-	);
+	// if true repeats the push action if held down
+	// FIXME
+	this.repeating =
+		false;
 };
 
 
@@ -510,161 +332,158 @@ Button.prototype.sketch =
 /*
 | Returns the fabric for the button.
 */
-Button.prototype._weave =
+Jools.lazyFixate(
+	Button.prototype,
+	'_fabric',
 	function( )
-{
-	var
-		fabric =
-			this._$fabric,
-
-		accent =
-			Accent.state(
-				this.hoverAccent,
-				this.focusAccent
-			);
-
-	if( fabric )
-	{
-		return fabric;
-	}
-
-	fabric =
-	this._$fabric =
-		new Euclid.Fabric( this.frame.zeropnw );
-
-	var
-		tree =
-			this.tree,
-
-		style =
-			Widgets.getStyle(
-				tree.twig.style,
-				accent
-			);
-
-	fabric.paint(
-		style,
-		this,
-		'sketch',
-		Euclid.View.proper
-	);
-
-	var
-		caption =
-			tree.twig.caption;
-
-	if( caption )
 	{
 		var
-			text =
-				this.text ||
-				caption.twig.text,
+			accent =
+				Accent.state(
+					this.hoverAccent,
+					this.focusAccent
+				),
 
-			newline =
-				caption.twig.newline,
+			f =
+				new Euclid.Fabric(
+					this.frame.zeropnw
+				),
 
-			font =
-				caption.twig.font,
+			tree =
+				this.tree,
 
-			pos =
-				this.frame.zeropnw.computePoint(
-					caption.twig.pos
+			style =
+				Widgets.getStyle(
+					tree.twig.style,
+					accent
 				);
 
-		if( !Jools.is( newline ) )
-		{
-			if( !Jools.is( caption.twig.rotate ) )
-			{
-				fabric.paintText(
-					'text',
-						caption.twig.text,
-					'p',
-						pos,
-					'font',
-						font
-				);
-			}
-			else
-			{
-				fabric.paintText(
-					'text',
-						text,
-					'p',
-						pos,
-					'font',
-						font,
-					'rotate',
-						caption.twig.rotate
-				);
-			}
-		}
-		else
-		{
-			var
-				x =
-					pos.x,
-
-				y =
-					pos.y;
-
-			text =
-				text.split( '\n' );
-
-			var
-				tZ =
-					text.length;
-
-			y -=
-				Math.round( ( tZ - 1 ) / 2 * newline );
-
-			for(
-				var a = 0;
-				a < tZ;
-				a++, y += newline
-			)
-			{
-				fabric.paintText(
-					'text',
-						text[ a ],
-					'xy',
-						x,
-						y,
-					'font',
-						font
-				);
-			}
-		}
-	}
-
-	var
-		icon =
-			tree.twig.icon;
-
-	if( icon )
-	{
-		style =
-			Widgets.getStyle(
-				tree.twig.iconStyle,
-				Accent.NORMA
-			);
-
-		fabric.paint(
+		f.paint(
 			style,
-			this.icons,
-			icon,
+			this,
+			'sketch',
 			Euclid.View.proper
 		);
-	}
 
-	return fabric;
-};
+		var
+			caption =
+				tree.twig.caption;
+
+		if( caption )
+		{
+			var
+				text =
+					this.text ||
+					caption.twig.text,
+
+				newline =
+					caption.twig.newline,
+
+				font =
+					caption.twig.font,
+
+				pos =
+					this.frame.zeropnw.computePoint(
+						caption.twig.pos
+					);
+
+			if( !Jools.is( newline ) )
+			{
+				if( !Jools.is( caption.twig.rotate ) )
+					{
+					f.paintText(
+						'text',
+							caption.twig.text,
+						'p',
+							pos,
+						'font',
+							font
+					);
+				}
+				else
+				{
+					f.paintText(
+						'text',
+							text,
+						'p',
+							pos,
+						'font',
+							font,
+						'rotate',
+							caption.twig.rotate
+					);
+				}
+			}
+			else
+				{
+				var
+					x =
+						pos.x,
+
+					y =
+						pos.y;
+
+				text =
+					text.split( '\n' );
+
+				var
+					tZ =
+						text.length;
+
+				y -=
+					Math.round( ( tZ - 1 ) / 2 * newline );
+
+				for(
+					var a = 0;
+					a < tZ;
+					a++, y += newline
+				)
+				{
+					f.paintText(
+						'text',
+							text[ a ],
+						'xy',
+							x,
+							y,
+						'font',
+							font
+					);
+				}
+			}
+		}
+
+		var
+			icon =
+				tree.twig.icon;
+
+		if( icon )
+		{
+			style =
+				Widgets.getStyle(
+					tree.twig.iconStyle,
+					Accent.NORMA
+				);
+
+			f.paint(
+				style,
+				this.icons,
+				icon,
+				Euclid.View.proper
+			);
+		}
+
+		return f;
+	}
+);
 
 
 /*
 | Mouse hover.
 */
 Button.prototype.pointingHover =
-	function( p )
+	function(
+		p
+	)
 {
 	if(
 		!this.visible
@@ -679,14 +498,11 @@ Button.prototype.pointingHover =
 	}
 
 	var
-		fabric =
-			this._weave( ),
-
 		pp =
 			p.sub( this.frame.pnw );
 
 	if(
-		!fabric.withinSketch(
+		!this._fabric.withinSketch(
 			this,
 			'sketch',
 			Euclid.View.proper,
@@ -730,14 +546,11 @@ Button.prototype.pointingStart =
 	}
 
 	var
-		fabric =
-			this._weave( ),
-
 		pp =
 			p.sub( this.frame.pnw );
 
 	if(!
-		fabric.withinSketch(
+		this._fabric.withinSketch(
 			this,
 			'sketch',
 			Euclid.View.proper,
@@ -852,7 +665,7 @@ Button.prototype.draw =
 
 	fabric.drawImage(
 		'image',
-			this._weave( ),
+			this._fabric,
 		'pnw',
 			this.frame.pnw
 	);
@@ -867,12 +680,14 @@ Button.prototype.draw =
 Button.prototype.dragStop =
 	function( )
 {
+	/*
 	system.cancelTimer(
 		this._$retimer
 	);
 
 	this._$retimer =
 		null;
+	*/
 
 	shell.setAction( null );
 };

@@ -110,8 +110,7 @@ Discs.MainDisc =
 			wname =
 				ranks[ r ],
 
-			text =
-				null,
+			text,
 
 			tree =
 				twig[ wname ],
@@ -119,8 +118,7 @@ Discs.MainDisc =
 			path =
 				this.path.append( wname ),
 
-			visible =
-				null;
+			visible;
 
 		switch( wname )
 		{

@@ -41,6 +41,12 @@ Discs.Icons =
 
 
 /*
+| Reflection.
+*/
+Icons.prototype.reflect =
+	'Icons';
+
+/*
 | Sketches the normal button's icon.
 */
 Icons.prototype.normal =

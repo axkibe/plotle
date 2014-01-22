@@ -566,6 +566,7 @@ generateNodeIncludesSection =
 
 		switch( attr.type )
 		{
+			case 'Boolean' :
 			case 'Integer' :
 			case 'Number' :
 			case 'String' :
@@ -994,6 +995,7 @@ generateCreatorFreeStringsParser =
 
 			switch( attr.type )
 			{
+				case 'Boolean' :
 				case 'Integer' :
 				case 'Number' :
 				case 'String' :
@@ -1226,6 +1228,16 @@ generateCreatorChecks =
 
 		switch( attr.type )
 		{
+			case 'Boolean' :
+
+				r.push(
+					'/**/\t\tif(',
+					'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'boolean\'',
+					'/**/\t\t)'
+				);
+
+				break;
+
 			case 'Integer' :
 
 				r.push(
@@ -1415,6 +1427,7 @@ generateCreatorFullInheritance =
 		switch( attr.type )
 		{
 			case 'Array' : // FIXME
+			case 'Boolean' :
 			case 'Integer' :
 			case 'Mark' : // FIXME
 			case 'Number' :
@@ -1767,6 +1780,7 @@ generateEqualsCheck =
 
 		switch( attr.type )
 		{
+			case 'Boolean' :
 			case 'Integer' :
 			case 'Mark' : // FIXME
 			case 'Number' :

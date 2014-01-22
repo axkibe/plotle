@@ -897,7 +897,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/widgets/button.js',
-					'fb',
+					'fbj',
 
 				'shell/widgets/input.js',
 					'fb',
