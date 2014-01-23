@@ -112,7 +112,6 @@
 . _$atween
 . _$center
 . _$discJockey
-. _$fabric
 . _$font
 . _$fontWatch
 . _$formJockey

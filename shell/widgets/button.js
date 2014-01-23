@@ -203,6 +203,9 @@ var
 		Widgets.Button;
 
 
+/*
+| Initializes the widget.
+*/
 Button.prototype._init =
 	function(
 		inherit,
@@ -213,17 +216,6 @@ Button.prototype._init =
 		this.superFrame.computeRect(
 			this.tree.twig.frame.twig
 		);
-
-	/* TODO
-	if( mark && mark.reflect !== 'Vacant' )
-	{
-		mark =
-			Widgets.Widget.concernsMark(
-				mark,
-				path
-			);
-	}
-	*/
 
 	// MAYBE move the whole switch to rect
 	switch( this.tree.twig.shape.twig.type )

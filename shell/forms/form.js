@@ -154,15 +154,7 @@ Form.concernsMark =
 		path
 	)
 {
-	var
-		mip =
-			mark.widgetPath;
-
-	if(
-		mip.length !== 0
-		&&
-		path.subPathOf( mip )
-	)
+	if( mark.containsPath( path ) )
 	{
 		return mark;
 	}

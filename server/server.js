@@ -900,7 +900,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/widgets/input.js',
-					'fb',
+					'fbj',
 
 				'shell/widgets/checkbox.js',
 					'fbj',

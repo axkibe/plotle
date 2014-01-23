@@ -37,84 +37,169 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Input',
+
+		unit :
+			'Widgets',
+
+		attributes :
+			{
+				// FIXME deduce from mark
+				focusAccent :
+					{
+						comment :
+							'true if the widget got focus',
+
+						type :
+							'Boolean'
+					},
+
+				// FIXME deduce from hoverPath
+				hoverAccent :
+					{
+						comment :
+							'true if the widget is hovered on',
+
+						type :
+							'Boolean'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						concerns :
+							{
+								func :
+									'Widgets.Widget.concernsMark',
+
+								args :
+									[
+										'mark',
+										'path'
+									]
+							},
+
+						type :
+							'Mark'
+					},
+
+				path :
+					{
+						comment :
+							'the path of the widget',
+
+						type :
+							'Path'
+					},
+
+				superFrame :
+					{
+						comment :
+							'the frame the widget resides in',
+
+						type :
+							'Rect'
+					},
+
+
+				value :
+					{
+						comment :
+							'the value in the input box',
+
+						type :
+							'String',
+
+						defaultVal :
+							"''"
+					},
+
+				tree :
+					{
+						comment :
+							'the shellverse tree',
+
+						type :
+							'Tree'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				visible :
+					{
+						comment :
+							'if false the button is hidden',
+
+						type :
+							'Boolean',
+
+						allowNull :
+							true,
+
+						// default taken from tree
+						defaultVal :
+							'null'
+					}
+			},
+
+		subclass :
+			'Widgets.Widget',
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+	};
+}
+
+
 var
-	_tag =
-		'WIDGET-52212713';
+	Input =
+		Widgets.Input;
 
 
 /*
-| Constructor.
+| Initializes the widget.
 */
-var Input =
-Widgets.Input =
+Input.prototype._init =
 	function(
-		tag,
 		inherit,
-		tree,
-		path,
-		frame,
-		focusAccent,
-		hoverAccent,
-		visible,
-		value,
-		mark
+		traitSet
 	)
 {
-	if( CHECK )
-	{
-		if( !path )
-		{
-			throw new Error(
-				'path missing'
+	var
+		frame =
+		this.frame =
+			this.superFrame.computeRect(
+				this.tree.twig.frame.twig
 			);
-		}
-
-		if( !frame )
-		{
-			throw new Error(
-				'frame missing'
-			);
-		}
-
-		if( !tree )
-		{
-			throw new Error(
-				'tree missing'
-			);
-		}
-
-		if( typeof( focusAccent ) !== 'boolean' )
-		{
-			throw new Error(
-				'invalid focusAccent.'
-			);
-		}
-
-		if( typeof( hoverAccent ) !== 'boolean' )
-		{
-			throw new Error(
-				'invalid hoverAccent.'
-			);
-		}
-	}
-
-	this.path =
-		path;
-
-	this.tree =
-		tree;
-
-	this.focusAccent =
-		focusAccent;
-
-	this.hoverAccent =
-		hoverAccent;
-
-	this.visible =
-		visible;
-
-	this.frame =
-		frame;
 
 	this._shape =
 		new Euclid.RoundRect(
@@ -127,198 +212,10 @@ Widgets.Input =
 	this._pitch =
 		Input._pitch;
 
-	this.value =
-		value;
-
-	this.mark =
-		mark;
-
-	this.focusAccent =
-		focusAccent;
-
-	this.hoverAccent =
-		hoverAccent;
-
-	Widgets.Widget.call(
-		this,
-		tag
-	);
-};
-
-
-Jools.subclass(
-	Input,
-	Widgets.Widget
-);
-
-
-/*
-| Creates an input.
-*/
-Input.create =
-	function(
-		// free strings
-	)
-{
-	var
-		focusAccent =
-			null,
-
-		frame =
-			null,
-
-		hoverAccent =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		path =
-			null,
-
-		superFrame =
-			null,
-
-		traitSet =
-			null,
-
-		tree =
-			null,
-
-		value =
-			null,
-
-		visible =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'focusAccent' :
-
-				focusAccent =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'hoverAccent' :
-
-				hoverAccent =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'superFrame' :
-
-				superFrame =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'traitSet' :
-
-				traitSet =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'visible' :
-
-				visible =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument: ' + arguments[ a ]
-				);
-		}
-	}
-
-
-	if( inherit )
-	{
-		if( !path )
-		{
-			path =
-				inherit.path;
-		}
-	}
-
-
-	if( mark && mark.reflect !== 'Vacant' )
-	{
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'mark needs path'
-/**/			);
-/**/		}
-/**/	}
-
-		mark =
-			Widgets.Widget.concernsMark(
-				mark,
-				path
-			);
-	}
-
-
 	if( traitSet )
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'traitSet needs path'
-/**/			);
-/**/		}
-/**/	}
-
 		for(
-			a = 0, aZ = traitSet.length;
+			var a = 0, aZ = traitSet.length;
 			a < aZ;
 			a++
 		)
@@ -328,14 +225,14 @@ Input.create =
 					traitSet.get( a );
 
 			if(
-				t.path.equals( path )
+				t.path.equals( this.path )
 			)
 			{
 				switch( t.key )
 				{
 					case 'value' :
 
-						value =
+						this.value =
 							t.val;
 
 						break;
@@ -343,117 +240,23 @@ Input.create =
 					default :
 
 						throw new Error(
-							'unknown trait: ' + t.key
+							CHECK
+							&&
+							( 'unknown trait: ' + t.key )
 						);
 				}
 			}
 		}
 	}
 
-	if( inherit )
+	if( this.visible === null )
 	{
-		if( focusAccent === null )
-		{
-			focusAccent =
-				inherit.focusAccent;
-		}
-
-		if( hoverAccent === null )
-		{
-			hoverAccent =
-				inherit.hoverAccent;
-		}
-
-		if( frame === null && superFrame === null )
-		{
-			frame =
-				inherit.frame;
-		}
-
-		if( mark === null )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( path === null )
-		{
-			path =
-				inherit.path;
-		}
-
-		if( tree === null )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( value === null )
-		{
-			value =
-				inherit.value;
-		}
-
-		if( visible === null )
-		{
-			visible =
-				inherit.visible;
-		}
+		this.visible =
+			Jools.is( this.tree.visible ) ?
+				this.tree.visible
+				:
+				true;
 	}
-
-	if( focusAccent === null )
-	{
-		focusAccent =
-			false;
-	}
-
-	if( hoverAccent === null )
-	{
-		hoverAccent =
-			false;
-	}
-
-	if( visible === null )
-	{
-		visible =
-			true;
-	}
-
-	if( value === null )
-	{
-		value =
-			'';
-	}
-
-	if( frame === null )
-	{
-		if( superFrame === null )
-		{
-			throw new Error(
-				'superFrame and frame === null'
-			);
-		}
-
-		frame =
-			superFrame.computeRect(
-				tree.twig.frame.twig
-			);
-	}
-
-	// FIXME inherit cache
-
-	return new Input(
-		_tag,
-		inherit,
-		tree,
-		path,
-		frame,
-		focusAccent,
-		hoverAccent,
-		visible,
-		value,
-		mark
-	);
 };
 
 
@@ -670,99 +473,91 @@ Input.prototype.sketchMask =
 /*
 | Returns the fabric for the input field.
 */
-Input.prototype._weave =
+Jools.lazyFixate(
+	Input.prototype,
+	'_fabric',
 	function( )
-{
-	var
-		fabric =
-			this._$fabric;
-
-	if( fabric )
 	{
-		return fabric;
-	}
+		var
+			value =
+				this.value,
 
-	var
-		value =
-			this.value,
+			shape =
+				this._shape,
 
-		shape =
-			this._shape,
+			pitch =
+				this._pitch,
 
-		pitch =
-			this._pitch;
+			f =
+				new Euclid.Fabric(
+					shape
+				),
 
-	fabric =
-	this._$fabric =
-		new Euclid.Fabric(
-			shape
+			style =
+				Widgets.getStyle(
+					this.tree.twig.style,
+					Accent.state(
+						false && this.hoverAccent, // FIXME
+						this.focusAccent
+					)
+				),
+
+			font =
+				this.tree.twig.font;
+
+		f.fill(
+			style,
+			shape,
+			'sketch',
+			Euclid.View.proper
 		);
 
-	var
-		style =
-			Widgets.getStyle(
-				this.tree.twig.style,
-				Accent.state(
-					false && this.hoverAccent, // TODO
-					this.focusAccent
-				)
-			),
+		if( this.tree.twig.password )
+		{
+			f.fill(
+				{
+					fill:
+						'black'
+				},
+				this,
+				'sketchMask',
+				Euclid.View.proper,
+				value.length,
+				font.size
+			);
+		}
+		else
+		{
+			f.paintText(
+				'text',
+					value,
+				'xy',
+					pitch.x,
+					font.size + pitch.y,
+				'font',
+					font
+			);
+		}
 
-		font =
-			this.tree.twig.font;
 
-	fabric.fill(
-		style,
-		shape,
-		'sketch',
-		Euclid.View.proper
-	);
+		if(
+			this.mark.reflect === 'Caret'
+		)
+		{
+			this._drawCaret( f );
+		}
 
-	if( this.tree.twig.password )
-	{
-		fabric.fill(
-			{
-				fill:
-					'black'
-			},
-			this,
-			'sketchMask',
-			Euclid.View.proper,
-			value.length,
-			font.size
+
+		f.edge(
+			style,
+			shape,
+			'sketch',
+			Euclid.View.proper
 		);
+
+		return f;
 	}
-	else
-	{
-		fabric.paintText(
-			'text',
-				value,
-			'xy',
-				pitch.x,
-				font.size + pitch.y,
-			'font',
-				font
-		);
-	}
-
-
-	if(
-		this.mark.reflect === 'Caret'
-	)
-	{
-		this._drawCaret( fabric );
-	}
-
-
-	fabric.edge(
-		style,
-		shape,
-		'sketch',
-		Euclid.View.proper
-	);
-
-	return fabric;
-};
+);
 
 
 /*
@@ -775,7 +570,7 @@ Input.prototype.draw =
 {
 	fabric.drawImage(
 		'image',
-			this._weave( ),
+			this._fabric,
 		'pnw',
 			this.frame.pnw
 	);
