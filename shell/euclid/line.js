@@ -83,54 +83,75 @@ Line.connect =
 		pc1,
 		pc2;
 
-	if( shape1 instanceof Euclid.Point )
+	if( shape1.reflect === 'Point' )
 	{
-		pc1 = shape1;
+		pc1 =
+			shape1;
 	}
 	else
 	{
-		pc1 = shape1.pc;
-
+		pc1 =
+			shape1.pc;
 	}
 
-	if( shape2 instanceof Euclid.Point )
+	if( shape2.reflect === 'Point' )
 	{
-		pc2 = shape2;
+		pc2 =
+			shape2;
 	}
 	else
 	{
-		pc2 = shape2.pc;
-
+		pc2 =
+			shape2.pc;
 	}
 
 	// the projection points
+	var
+		p1,
+		p2;
 
-	var p1, p2;
-
-	if( shape1 instanceof Euclid.Point )
+	if
+	(
+		shape1.reflect === 'Point'
+	)
 	{
-		p1 = shape1;
+		p1 =
+			shape1;
 	}
-	else if( shape1.within( Euclid.View.proper, pc2 ) )
+	else if
+	(
+		shape1.within( Euclid.View.proper, pc2 )
+	)
 	{
-		p1 = pc1;
+		p1 =
+			pc1;
 	}
 	else
 	{
-		p1 = shape1.getProjection( pc2 );
+		p1 =
+			shape1.getProjection( pc2 );
 	}
 
-	if( shape2 instanceof Euclid.Point )
+	if
+	(
+		shape2.reflect === 'Point'
+	)
 	{
-		p2 = shape2;
+		p2 =
+			shape2;
 	}
-	else if( shape2.within( Euclid.View.proper, pc1 ) )
+	else if
+	(
+		shape2.within( Euclid.View.proper, pc1 )
+	)
 	{
-		p2 = pc2;
+		p2 =
+			pc2;
 	}
 	else
 	{
-		p2 = shape2.getProjection( pc1 );
+		p2 =
+			shape2.getProjection( pc1 );
 	}
 
 	return new Line(
@@ -256,39 +277,76 @@ Line.prototype.sketch =
 
 		case 'arrow' :
 
-			var cos = Math.cos;
-			var sin = Math.sin;
-			var ro  = Math.round;
+			var
+				cos =
+					Math.cos,
 
-			// arrow size
-			var as = 12;
+				sin =
+					Math.sin,
 
-			// degree of arrow tail
-			var d = Math.atan2(p2y - p1y, p2x - p1x);
+				ro =
+					Math.round,
 
-			// degree of arrow head
-			var ad = Math.PI/12;
+				// arrow size
+				as =
+					12,
 
-			// arrow span, the arrow is formed as hexagon piece
-			var ms = 2 / Math.sqrt(3) * as;
+				// degree of arrow tail
+				d =
+					Math.atan2(p2y - p1y, p2x - p1x),
+
+				// degree of arrow head
+				ad =
+					Math.PI/12,
+
+				// arrow span
+				// the arrow is formed as hexagon piece
+				ms =
+					2 / Math.sqrt(3) * as;
 
 			if (twist)
 			{
-				fabric.lineTo(p2x - ro(ms * cos(d)), p2y - ro(ms * sin(d)));
+				fabric.lineTo(
+					p2x - ro( ms * cos( d ) ),
+					p2y - ro( ms * sin( d ) )
+				);
 			}
 			else
 			{
-				fabric.moveTo(p2x - ro(ms * cos(d)), p2y - ro(ms * sin(d)));
+				fabric.moveTo(
+					p2x - ro( ms * cos( d ) ),
+					p2y - ro( ms * sin( d ) )
+				);
 			}
 
-			fabric.lineTo(p2x - ro(as * cos(d - ad)), p2y - ro(as * sin(d - ad)));
-			fabric.lineTo(p2x, p2y);
-			fabric.lineTo(p2x - ro(as * cos(d + ad)), p2y - ro(as * sin(d + ad)));
-			fabric.lineTo(p2x - ro(ms * cos(d)), p2y - ro(ms * sin(d)));
+			fabric.lineTo(
+				p2x - ro( as * cos( d - ad ) ),
+				p2y - ro( as * sin( d - ad ) )
+			);
+
+			fabric.lineTo(
+				p2x,
+				p2y
+			);
+
+			fabric.lineTo(
+				p2x - ro( as * cos( d + ad ) ),
+				p2y - ro( as * sin( d + ad ) )
+			);
+
+			fabric.lineTo(
+				p2x - ro( ms * cos( d ) ),
+				p2y - ro( ms * sin( d ) )
+			);
+
 			break;
 
 		default :
-			throw new Error('unknown line end');
+			throw new Error(
+				CHECK
+				&&
+				'unknown line end'
+			);
 	}
 };
 
