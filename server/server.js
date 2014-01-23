@@ -906,7 +906,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/widgets/label.js',
-					'fb',
+					'fbj',
 
 				'shell/forms/form.js',
 					'fb',

@@ -244,8 +244,8 @@ CheckBox.prototype._init =
 	if( this.visible === null )
 	{
 		this.visible =
-			Jools.is( this.tree.visible ) ?
-				this.tree.visible
+			Jools.is( this.tree.twig.visible ) ?
+				this.tree.twig.visible
 				:
 				true;
 	}

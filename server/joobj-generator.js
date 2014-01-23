@@ -1851,6 +1851,10 @@ generateEqualsCheck =
 		'\treturn ('
 	);
 
+	var
+		first =
+			true;
+
 	for(
 		a = 0, aZ = jj.aList.length;
 		a < aZ;
@@ -1868,11 +1872,16 @@ generateEqualsCheck =
 			continue;
 		}
 
-		if( a > 0 )
+		if( !first )
 		{
 			r.push(
 				'\t\t&&'
 			);
+		}
+		else
+		{
+			first =
+				false;
 		}
 
 		switch( attr.type )

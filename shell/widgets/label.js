@@ -29,227 +29,180 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Label',
+
+		unit :
+			'Widgets',
+
+		attributes :
+			{
+				// FIXME deduce from mark
+				focusAccent :
+					{
+						comment :
+							'true if the widget got focus',
+
+						type :
+							'Boolean',
+
+						allowNull :
+							true,
+
+						assign :
+							null
+					},
+
+				// FIXME deduce from hoverPath
+				hoverAccent :
+					{
+						comment :
+							'true if the widget is hovered on',
+
+						type :
+							'Boolean',
+
+						allowNull :
+							true,
+
+						assign :
+							null
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark',
+
+						// FIXME do not allow null
+						allowNull :
+							true,
+
+						assign :
+							null
+					},
+
+				path :
+					{
+						comment :
+							'the path of the widget',
+
+						type :
+							'Path'
+					},
+
+				superFrame :
+					{
+						comment :
+							'the frame the widget resides in',
+
+						type :
+							'Rect'
+					},
+
+
+				text :
+					{
+						comment :
+							'the text written in the button',
+
+						type :
+							'String',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					},
+
+				tree :
+					{
+						comment :
+							'the shellverse tree',
+
+						type :
+							'Tree'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				visible :
+					{
+						comment :
+							'if false the button is hidden',
+
+						type :
+							'Boolean',
+
+						allowNull :
+							true,
+
+						// default taken from tree
+						defaultVal :
+							'null'
+					}
+			},
+
+		subclass :
+			'Widgets.Widget',
+
+		init :
+			[
+				'traitSet'
+			]
+	};
+}
+
+
 var
-	_tag =
-		'WIDGET-52212713';
+	Label =
+		Widgets.Label;
 
 
 /*
-| Constructor.
+| Initializes the widget.
 */
-var Label =
-Widgets.Label =
+Label.prototype._init =
 	function(
-		tag,
-		inherit,
-		tree,
-		path,
-		pos,
-		visible,
-		text
+		traitSet
 	)
 {
-	if( CHECK )
-	{
-		if( path === null )
-		{
-			throw new Error(
-				'path missing'
-			);
-		}
-
-		if( tree === null )
-		{
-			throw new Error(
-				'tree missing'
-			);
-		}
-	}
-
-	this.path =
-		path;
-
 	this.pos =
-		pos;
-
-	this.text =
-		text !== null ?
-			text :
-			tree.twig.text;
-
-	this.tree =
-		tree;
-
-	this.visible =
-		visible;
-
-	Widgets.Widget.call(
-		this,
-		tag
-	);
-};
-
-
-Jools.subclass(
-	Label,
-	Widgets.Widget
-);
-
-
-/*
-| Creates a label.
-*/
-Label.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit =
-			null,
-
-		path =
-			null,
-
-		pos =
-			null,
-
-		superFrame =
-			null,
-
-		text =
-			null,
-
-		traitSet =
-			null,
-
-		tree =
-			null,
-
-		visible =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'focusAccent' :
-
-				if( CHECK && arguments[ a + 1 ] !== null )
-				{
-					throw new Error(
-						'Labels must not have a focusAccent'
-					);
-				}
-
-				break;
-
-			case 'hoverAccent' :
-
-				if( CHECK && arguments[ a + 1 ] )
-				{
-					throw new Error(
-						'Labels must not have a hoverAccent'
-					);
-				}
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				// ignore
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'pos' :
-
-				pos =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'superFrame' :
-
-				superFrame =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'text' :
-
-				text =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'traitSet' :
-
-				traitSet =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'visible' :
-
-				visible =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument: ' + arguments[ a ]
-				);
-		}
-	}
+		this.superFrame.computePoint(
+			this.tree.twig.pos
+		);
 
 	if( traitSet )
 	{
-		if( CHECK )
-		{
-			if( !path )
-			{
-				throw new Error(
-					'traitSet needs path'
-				);
-			}
-
-			if( traitSet.reflect !== 'TraitSet' )
-			{
-				throw new Error(
-					'invalid traitset'
-				);
-			}
-		}
-
 		for(
-			a = 0, aZ = traitSet.length;
+			var a = 0, aZ = traitSet.length;
 			a < aZ;
 			a++
 		)
@@ -259,21 +212,21 @@ Label.create =
 					traitSet.get( a );
 
 			if(
-				t.path.equals( path )
+				t.path.equals( this.path )
 			)
 			{
 				switch( t.key )
 				{
 					case 'text' :
 
-						text =
+						this.text =
 							t.val;
 
 						break;
 
 					case 'visible' :
 
-						visible =
+						this.visible =
 							t.val;
 
 						break;
@@ -281,85 +234,36 @@ Label.create =
 					default :
 
 						throw new Error(
-							'unknown trait: ' + t.key
+							CHECK
+							&&
+							( 'unknown trait: ' + t.key )
 						);
 				}
 			}
 		}
 	}
 
-	// TODO use concernsMark
-
-	if( inherit )
+	if( this.visible === null )
 	{
-		if( path === null )
-		{
-			path =
-				inherit.path;
-		}
-
-		if( pos === null && superFrame === null )
-		{
-			pos =
-				inherit.pos;
-		}
-
-		if( tree === null )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( text === null )
-		{
-			text =
-				inherit.text;
-		}
-
-		if( visible === null )
-		{
-			visible =
-				inherit.visible;
-		}
+		this.visible =
+			Jools.is( this.tree.twig.visible ) ?
+				this.tree.twig.visible
+				:
+				true;
 	}
 
-	if( visible === null )
+	if( this.text === null )
 	{
-		visible =
-			true;
+		this.text =
+			this.tree.twig.text;
 	}
-
-	if( pos === null )
-	{
-		if( superFrame === null )
-		{
-			throw new Error(
-				'superFrame and pos === null'
-			);
-		}
-
-		pos =
-			superFrame.computePoint(
-				tree.twig.pos
-			);
-	}
-
-	// FIXME inherit cache
-
-	return new Label(
-		_tag,
-		inherit,
-		tree,
-		path,
-		pos,
-		visible,
-		text
-	);
 };
 
 
 /*
 | Draws the label on the fabric.
+|
+| FIXME use _fabric
 */
 Label.prototype.draw =
 	function(
