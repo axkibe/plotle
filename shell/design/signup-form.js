@@ -315,7 +315,7 @@ Design.SignUpForm =
 						130,
 
 					y :
-						-94
+						-95
 				}
 			}
 		},
@@ -369,7 +369,7 @@ Design.SignUpForm =
 						130,
 
 					y :
-						-54
+						-55
 				}
 			}
 		},
@@ -423,7 +423,7 @@ Design.SignUpForm =
 						130,
 
 					y :
-						-14
+						-15
 				}
 			}
 		},
@@ -478,7 +478,7 @@ Design.SignUpForm =
 						130,
 
 					y :
-						26
+						25
 				}
 			}
 		},
@@ -525,7 +525,7 @@ Design.SignUpForm =
 						-59,
 
 					y :
-						61
+						60
 				}
 			}
 		},

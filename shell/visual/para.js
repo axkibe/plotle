@@ -417,14 +417,14 @@ Para.prototype.draw =
 				this.mark;
 
 		if(
-			mark &&
-			mark.reflect === 'Caret' &&
-			this.path.subPathOf( mark.caretPath )
+			mark.reflect === 'Caret'
+			&&
+			mark.focus
 		)
 		{
 			this._drawCaret(
 				f,
-				view,
+				view, // TODO is part of object
 				item
 			);
 		}

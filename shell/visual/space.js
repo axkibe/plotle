@@ -596,7 +596,6 @@ Space.prototype._createItem =
 Space.prototype.draw =
 	function(
 		fabric
-		// haveSystemFocus
 	)
 {
 	var

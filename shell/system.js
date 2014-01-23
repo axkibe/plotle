@@ -602,7 +602,7 @@ System.prototype._onSystemBlur =
 		// event
 	)
 {
-	this.shell.systemBlur( );
+	this.shell.setFocus( false );
 };
 
 
@@ -614,7 +614,7 @@ System.prototype._onSystemFocus =
 		// event
 	)
 {
-	this.shell.systemFocus( );
+	this.shell.setFocus( true );
 };
 
 

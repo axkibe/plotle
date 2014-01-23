@@ -141,9 +141,6 @@ Shell =
 			'meshcraft$8833'
 		);
 
-	this._$haveSystemFocus =
-		true;
-
 	this.fabric =
 		fabric;
 
@@ -207,10 +204,8 @@ Shell =
 	this._$greenscreen =
 		null;
 
-	Jools.keyNonGrata(
-		this,
-		'redraw'
-	);
+	this.mark =
+		Mark.Vacant.create( );
 
 	this._draw( );
 };
@@ -511,28 +506,33 @@ Shell.prototype.update =
 
 
 /*
-| The shell got the systems focus.
+| The shell got or lost the systems focus.
 */
-Shell.prototype.systemFocus =
-	function( )
+Shell.prototype.setFocus =
+	function(
+		focus
+	)
 {
-	this._$haveSystemFocus =
-		true;
+	switch( this.mark.reflect )
+	{
+		case 'Caret' :
 
-	this._draw( );
-};
+			this.setMark(
+				Mark.Caret.create(
+					'inherit',
+						this.mark,
+					'focus',
+						focus
+				)
+			);
 
+			break;
+	}
 
-/*
-| The shell lost the systems focus.
-*/
-Shell.prototype.systemBlur =
-	function( )
-{
-	this._$haveSystemFocus =
-		false;
-
-	this._draw( );
+	if( this._$redraw )
+	{
+		this._draw( );
+	}
 };
 
 
@@ -554,18 +554,12 @@ Shell.prototype._draw =
 
 	if( display )
 	{
-		display.draw(
-			fabric,
-			this._$haveSystemFocus
-		);
+		display.draw( fabric );
 	}
 
 	if( display && display.showDisc )
 	{
-		this._$discJockey.draw(
-			fabric,
-			this._$haveSystemFocus
-		);
+		this._$discJockey.draw( fabric );
 	}
 
 	this._$redraw =
@@ -993,6 +987,9 @@ Shell.prototype.setMark =
 	)
 {
 	system.setInput( mark.clipboard );
+
+	this.mark =
+		mark;
 
 	this.$space =
 		Visual.Space.create(

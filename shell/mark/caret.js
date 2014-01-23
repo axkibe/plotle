@@ -86,6 +86,18 @@ if( JOOBJ )
 
 						defaultVal :
 							'null'
+					},
+
+				focus :
+					{
+						comment :
+							'the shell has the system focus',
+
+						type :
+							'Boolean',
+
+						defaultVal :
+							'true'
 					}
 			}
 	};

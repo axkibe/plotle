@@ -236,7 +236,7 @@ Design.LoginForm =
 						130,
 
 					y :
-						-41
+						-42
 				}
 			}
 		},
@@ -290,7 +290,7 @@ Design.LoginForm =
 						130,
 
 					y :
-						-1
+						-2
 				}
 			}
 		},

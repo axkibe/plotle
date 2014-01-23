@@ -494,7 +494,8 @@ Jools.lazyFixate(
 
 			f =
 				new Euclid.Fabric(
-					shape
+					shape.width + 1,
+					shape.height + 1
 				),
 
 			style =
@@ -546,6 +547,8 @@ Jools.lazyFixate(
 
 		if(
 			this.mark.reflect === 'Caret'
+			&&
+			this.mark.focus
 		)
 		{
 			this._drawCaret( f );

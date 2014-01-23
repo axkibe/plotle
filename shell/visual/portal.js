@@ -971,9 +971,9 @@ Jools.lazyFixate(
 
 
 			if(
-				mark &&
-				mark.reflect === 'Caret' &&
-				mark.itemPath.equals( this.path )
+				mark.reflect === 'Caret'
+				&&
+				mark.focus
 			)
 			{
 				this._drawCaret(
