@@ -9,8 +9,10 @@
 | Export
 */
 var
-	Widgets =
-		Widgets || { };
+	Widgets;
+
+Widgets =
+	Widgets || { };
 
 /*
 | Imports
@@ -172,6 +174,7 @@ if( JOOBJ )
 						allowNull :
 							true,
 
+						// default taken from tree
 						defaultVal :
 							'null'
 					}

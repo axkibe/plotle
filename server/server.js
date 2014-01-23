@@ -903,7 +903,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/widgets/checkbox.js',
-					'fb',
+					'fbj',
 
 				'shell/widgets/label.js',
 					'fb',

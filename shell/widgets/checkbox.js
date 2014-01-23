@@ -33,257 +33,174 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'CheckBox',
+
+		unit :
+			'Widgets',
+
+		attributes :
+			{
+				checked :
+					{
+						comment :
+							'true if the checkbox is checked',
+
+						type :
+							'Boolean',
+
+						allowNull :
+							true,
+
+						// default taken from tree
+						defaultVal :
+							'null'
+					},
+
+				// FIXME deduce from mark
+				focusAccent :
+					{
+						comment :
+							'true if the widget got focus',
+
+						type :
+							'Boolean'
+					},
+
+				// FIXME deduce from hoverPath
+				hoverAccent :
+					{
+						comment :
+							'true if the widget is hovered on',
+
+						type :
+							'Boolean'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark',
+
+						// FIXME do not allow null
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				path :
+					{
+						comment :
+							'the path of the widget',
+
+						type :
+							'Path'
+					},
+
+				superFrame :
+					{
+						comment :
+							'the frame the widget resides in',
+
+						type :
+							'Rect'
+					},
+
+
+				tree :
+					{
+						comment :
+							'the shellverse tree',
+
+						type :
+							'Tree'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits being set',
+
+						type :
+							'TraitSet',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				visible :
+					{
+						comment :
+							'if false the button is hidden',
+
+						type :
+							'Boolean',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					}
+			},
+
+		subclass :
+			'Widgets.Widget',
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+	};
+}
+
+
 var
-	_tag =
-		'WIDGET-52212713';
+	CheckBox =
+		Widgets.CheckBox;
 
 
 /*
-| Constructor.
+| Initializes the widget.
 */
-var CheckBox =
-Widgets.CheckBox =
+CheckBox.prototype._init =
 	function(
-		tag,
 		inherit,
-		tree,
-		path,
-		frame,
-		focusAccent,
-		hoverAccent,
-		visible,
-		checked
-		// mark
+		traitSet
 	)
 {
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-
-		if( !frame )
-		{
-			throw new Error(
-				'frame missing'
-			);
-		}
-
-		if( !path )
-		{
-			throw new Error(
-				'path missing'
-			);
-		}
-
-		if( typeof( focusAccent ) !== 'boolean' )
-		{
-			throw new Error(
-				'invalid focusAccent'
-			);
-		}
-
-		if( typeof( hoverAccent ) !== 'boolean' )
-		{
-			throw new Error(
-				'invalid hoverAccent'
-			);
-		}
-	}
-
-	this.path =
-		path;
-
-	this.tree =
-		tree;
-
-	this.focusAccent =
-		focusAccent;
-
-	this.hoverAccent =
-		hoverAccent;
-
-	this.visible =
-		visible;
-
 	this.frame =
-		frame;
+		this.superFrame.computeRect(
+			this.tree.twig.frame.twig
+		);
 
-	this.checked =
-		checked;
-
-	Widgets.Widget.call(
-		this,
-		tag
-	);
-};
-
-
-Jools.subclass(
-	CheckBox,
-	Widgets.Widget
-);
-
-
-/*
-| Creates an input.
-*/
-CheckBox.create =
-	function(
-		// free strings
-	)
-{
-	var
-		checked =
-			null,
-
-		focusAccent =
-			null,
-
-		frame =
-			null,
-
-		hoverAccent =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		path =
-			null,
-
-		superFrame =
-			null,
-
-		traitSet =
-			null,
-
-		tree =
-			null,
-
-		visible =
-			null;
-
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'focusAccent' :
-
-				focusAccent =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'hoverAccent' :
-
-				hoverAccent =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'superFrame' :
-
-				superFrame =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'traitSet' :
-
-				traitSet =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'visible' :
-
-				visible =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument: ' + arguments[ a ]
-				);
-		}
-	}
-
-	if( mark && mark.reflect !== 'Vacant' )
-	{
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'mark needs path'
-/**/			);
-/**/		}
-/**/	}
-
-		mark =
-			Widgets.Widget.concernsMark(
-				mark,
-				path
-			);
-	}
 
 	if( traitSet )
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'traitSet needs path'
-/**/			);
-/**/		}
-/**/	}
-
 		for(
-			a = 0, aZ = traitSet.length;
+			var a = 0, aZ = traitSet.length;
 			a < aZ;
 			a++
 		)
@@ -293,14 +210,21 @@ CheckBox.create =
 					traitSet.get( a );
 
 			if(
-				t.path.equals( path )
+				t.path.equals( this.path )
 			)
 			{
 				switch( t.key )
 				{
 					case 'checked' :
 
-						checked =
+						this.checked =
+							t.val;
+
+						break;
+
+					case 'visible' :
+
+						this.visible =
 							t.val;
 
 						break;
@@ -308,113 +232,31 @@ CheckBox.create =
 					default :
 
 						throw new Error(
-							'unknown trait: ' + t.key
+							CHECK
+							&&
+							( 'unknown trait: ' + t.key )
 						);
 				}
 			}
 		}
 	}
 
-
-	if( inherit )
+	if( this.visible === null )
 	{
-		if( checked === null )
-		{
-			checked =
-				inherit.checked;
-		}
-
-		if( focusAccent === null )
-		{
-			focusAccent =
-				inherit.focusAccent;
-		}
-
-		if( hoverAccent === null )
-		{
-			hoverAccent =
-				inherit.hoverAccent;
-		}
-
-		if( frame === null && superFrame === null )
-		{
-			frame =
-				inherit.frame;
-		}
-
-		if( path === null )
-		{
-			path =
-				inherit.path;
-		}
-
-		if( tree === null )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( visible === null )
-		{
-			visible =
-				inherit.visible;
-		}
+		this.visible =
+			Jools.is( this.tree.visible ) ?
+				this.tree.visible
+				:
+				true;
 	}
 
-	if( focusAccent === null )
+	if( this.checked === null )
 	{
-		focusAccent =
-			false;
-	}
-
-	if( hoverAccent === null )
-	{
-		hoverAccent =
-			false;
-	}
-
-	if( visible === null )
-	{
-		visible =
-			true;
-	}
-
-	if( checked === null )
-	{
-		checked =
-			Jools.is( tree.twig.checked ) ?
-				tree.twig.checked :
+		this.checked =
+			Jools.is( this.tree.twig.checked ) ?
+				this.tree.twig.checked :
 				false;
 	}
-
-	if( frame === null )
-	{
-		if( superFrame === null )
-		{
-			throw new Error(
-				'superFrame and frame === null'
-			);
-		}
-
-		frame =
-			superFrame.computeRect(
-				tree.twig.frame.twig
-			);
-	}
-
-	// FIXME inherit cache
-
-	return new CheckBox(
-		_tag,
-		inherit,
-		tree,
-		path,
-		frame,
-		focusAccent,
-		hoverAccent,
-		visible,
-		checked
-	);
 };
 
 
@@ -601,7 +443,7 @@ CheckBox.prototype.input =
 
 /*
 | Draws the checkbox.
-| FIXME _weave caching
+| FIXME _fabric caching
 */
 CheckBox.prototype.draw =
 	function(
