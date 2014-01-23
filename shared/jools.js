@@ -94,6 +94,7 @@ var
 
 /*
 | Returns true if o is defined
+| FIXME remove
 */
 Jools.is =
 	function( o )

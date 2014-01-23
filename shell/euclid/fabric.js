@@ -182,12 +182,16 @@ Fabric.prototype.arc =
 Fabric.prototype.beziTo =
 	function( )
 {
-	var a =
+	var
+		a =
 			0,
+
 		aZ =
 			arguments.length,
+
 		tw =
 			this._$twist,
+
 		cp1x,
 		cp1y,
 		cp2x,
@@ -195,15 +199,22 @@ Fabric.prototype.beziTo =
 		x,
 		y;
 
-	if( this._$posx === null || this._$posy === null )
-	{
-		throw new Error( 'beziTo: pFail' );
-	}
-
-	if( a >= aZ )
-	{
-		throw new Error( 'beziTo: aFail' );
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( this._$posx === null || this._$posy === null )
+/**/	{
+/**/		throw new Error(
+/**/			'beziTo: pFail'
+/**/		);
+/**/	}
+/**/
+/**/	if( a >= aZ )
+/**/	{
+/**/		throw new Error(
+/**/			'beziTo: aFail'
+/**/		);
+/**/	}
+/**/}
 
 	if( typeof( arguments[ a ] ) === 'object' )
 	{
@@ -218,19 +229,29 @@ Fabric.prototype.beziTo =
 		cp1x =
 			arguments[ a++ ];
 
-		if (a >= aZ)
-		{
-			throw new Error( 'beziTo: aFail' );
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if (a >= aZ)
+/**/		{
+/**/			throw new Error(
+/**/				'beziTo: aFail'
+/**/			);
+/**/		}
+/**/	}
 
 		cp1y =
 			arguments[ a++ ];
 	}
 
-	if( a >= aZ )
-	{
-		throw new Error('beziTo: aFail');
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( a >= aZ )
+/**/	{
+/**/		throw new Error(
+/**/			'beziTo: aFail'
+/**/		);
+/**/	}
+/**/}
 
 
 	if( typeof( arguments[ a ] ) === 'object' )
@@ -246,19 +267,29 @@ Fabric.prototype.beziTo =
 		cp2x =
 			arguments[ a++ ];
 
-		if(a >= aZ)
-		{
-			throw new Error( 'beziTo: aFail' );
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if(a >= aZ)
+/**/		{
+/**/			throw new Error(
+/**/				'beziTo: aFail'
+/**/			);
+/**/		}
+/**/	}
 
 		cp2y =
 			arguments[ a++ ];
 	}
 
-	if(a >= aZ)
-	{
-		throw new Error( 'beziTo: aFail' );
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( a >= aZ )
+/**/	{
+/**/		throw new Error(
+/**/			'beziTo: aFail'
+/**/		);
+/**/	}
+/**/}
 
 	if( typeof(arguments[ a ]) === 'object' )
 	{
@@ -289,6 +320,7 @@ Fabric.prototype.beziTo =
 
 	this._$posx =
 		x;
+
 	this._$posy =
 		y;
 
@@ -321,8 +353,9 @@ Fabric.prototype.clip =
 		a4
 	)
 {
-	var cx =
-		this._cx;
+	var
+		cx =
+			this._cx;
 
 	if( !this.$clip )
 	{
@@ -354,10 +387,16 @@ Fabric.prototype.clip =
 Fabric.prototype.deClip =
 	function( )
 {
-	if( !this.$clip )
-	{
-		throw new Error( 'not clipping!' );
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( !this.$clip )
+/**/	{
+/**/		throw new Error(
+/**/			'not clipping!'
+/**/		);
+/**/	}
+/**/}
 
 	this.$clip =
 		false;
@@ -383,23 +422,24 @@ Fabric.prototype.drawImage =
 		// free strings
 	)
 {
-	var image;
+	var
+		a =
+			0,
 
-	var x, y, composite, alpha;
+		aZ =
+			arguments.length,
 
-	var is =
-		Jools.is;
-
-	var a =
-		0;
-
-	var aZ =
-		arguments.length;
+		image,
+		x,
+		y,
+		composite,
+		alpha;
 
 	while( a < aZ )
 	{
-		var arg =
-			arguments[ a++ ];
+		var
+			arg =
+				arguments[ a++ ];
 
 		switch( arg )
 		{
@@ -470,33 +510,44 @@ Fabric.prototype.drawImage =
 			image._canvas;
 	}
 
-	if( !is( image ) )
+/**/if( CHECK )
+/**/{
+/**/	if( image === undefined )
+/**/	{
+/**/		throw new Error(
+/**/			'image missing'
+/**/		);
+/**/	}
+/**/
+/**/	if( x === undefined || y === undefined )
+/**/	{
+/**/		throw new Error(
+/**/			'x/y missing'
+/**/		);
+/**/	}
+/**/
+/**/	Jools.ensureInt(
+/**/		x,
+/**/		y
+/**/	);
+/**/}
+
+	if( composite !== undefined )
 	{
-		throw new Error( 'image missing' );
+		this._cx.globalCompositeOperation =
+			composite;
 	}
 
-	if( !is( x ) || !is( y ) )
+	var
+		saveAlpha;
+
+	if( alpha !== undefined )
 	{
-		throw new Error( 'x/y missing' );
-	}
+		saveAlpha =
+			this._cx.globalAlpha;
 
-	Jools.ensureInt(
-		x,
-		y
-	);
-
-	if( is( composite ) )
-	{
-		this._cx.globalCompositeOperation = composite;
-	}
-
-	var saveAlpha;
-
-	if( is( alpha ) )
-	{
-		saveAlpha = this._cx.globalAlpha;
-
-		this._cx.globalAlpha = alpha;
+		this._cx.globalAlpha =
+			alpha;
 	}
 
 	this._cx.drawImage(
@@ -505,14 +556,16 @@ Fabric.prototype.drawImage =
 		y
 	);
 
-	if( is( composite ) )
+	if( composite !== undefined )
 	{
-		this._cx.globalCompositeOperation = 'source-over';
+		this._cx.globalCompositeOperation =
+			'source-over';
 	}
 
-	if( is( alpha ) )
+	if( alpha !== undefined )
 	{
-		this._cx.globalAlpha = saveAlpha;
+		this._cx.globalAlpha =
+			saveAlpha;
 	}
 };
 
