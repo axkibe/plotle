@@ -810,7 +810,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/euclid/line.js',
-					'fb',
+					'fbj',
 
 				'shell/shellverse.js',
 					'fb',

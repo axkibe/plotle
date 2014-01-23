@@ -30,33 +30,67 @@ var
 
 
 /*
-| Constructor.
-|
-| p1: point 1
-| p1end: 'normal' or 'arrow'
-| p2: point 1
-| p2end: 'normal' or 'arrow'
+| The joobj definition
 */
-var Line =
-Euclid.Line =
-	function(
-		p1,
-		p1end,
-		p2,
-		p2end
-	)
+if( JOOBJ )
 {
-	this.p1    = p1;
-	this.p1end = p1end;
-	this.p2    = p2,
-	this.p2end = p2end;
+	return {
 
-	Jools.immute(this);
-};
+		name :
+			'Line',
+
+		unit :
+			'Euclid',
+
+		attributes :
+			{
+				p1 :
+					{
+						comment :
+							'first point',
+
+						type :
+							'Point'
+					},
+
+				p1end :
+					{
+						comment :
+							'end style of first point',
+
+						type :
+							'String'
+					},
+
+				p2 :
+					{
+						comment :
+							'second point',
+
+						type :
+							'Point'
+					},
+
+				p2end :
+					{
+						comment :
+							'end style of second point',
+
+						type :
+							'String'
+					}
+			}
+	};
+}
+
+
+var
+	Line =
+		Euclid.Line;
 
 
 /*
-| Returns the line connecting entity1 to entity2
+| Returns the line connecting shape1 to shape2
 */
 Line.connect =
 	function(
@@ -154,11 +188,15 @@ Line.connect =
 			shape2.getProjection( pc1 );
 	}
 
-	return new Line(
-		p1,
-		end1,
-		p2,
-		end2
+	return Line.create(
+		'p1',
+			p1,
+		'p1end',
+			end1,
+		'p2',
+			p2,
+		'p2end',
+			end2
 	);
 };
 

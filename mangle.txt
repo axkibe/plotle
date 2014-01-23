@@ -1,3 +1,5 @@
+. setFocus
+> b
 . args
 . concerns
 . func
@@ -117,7 +119,6 @@
 . _$formJockey
 . _$greenscreen
 . _$grown
-. _$haveSystemFocus
 . _$home
 . _$hover
 . _$invert
@@ -805,8 +806,6 @@
 > substr
 > substring
 > sw
-. systemBlur
-. systemFocus
 > t
 > text
 > textAlign
