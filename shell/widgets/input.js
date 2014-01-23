@@ -202,11 +202,15 @@ Input.prototype._init =
 			);
 
 	this._shape =
-		new Euclid.RoundRect(
-			Euclid.Point.zero,
-			frame.pse.sub( frame.pnw ),
-			7,
-			3
+		Euclid.RoundRect.create(
+			'pnw',
+				Euclid.Point.zero,
+			'pse',
+				frame.pse.sub( frame.pnw ),
+			'a',
+				7,
+			'b',
+				3
 		),
 
 	this._pitch =

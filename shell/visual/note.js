@@ -762,11 +762,15 @@ Jools.lazyFixate(
 				theme.note.cornerRadius;
 
 			return (
-				new Euclid.RoundRect(
-					zone.pnw,
-					zone.pse,
-					cr,
-					cr
+				Euclid.RoundRect.create(
+					'pnw',
+						zone.pnw,
+					'pse',
+						zone.pse,
+					'a',
+						cr,
+					'b',
+						cr
 				)
 			);
 	}
@@ -789,16 +793,20 @@ Jools.lazyFixate(
 				theme.note.cornerRadius;
 
 		return (
-			new Euclid.RoundRect(
-				Euclid.Point.zero,
-				Euclid.Point.create(
-					'x',
-						zone.width,
-					'y',
-						zone.height
-				),
-				cr,
-				cr
+			Euclid.RoundRect.create(
+				'pnw',
+					Euclid.Point.zero,
+				'pse',
+					Euclid.Point.create(
+						'x',
+							zone.width,
+						'y',
+							zone.height
+					),
+				'a',
+					cr,
+				'b',
+					cr
 			)
 		);
 	}

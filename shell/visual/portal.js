@@ -1902,11 +1902,15 @@ Portal.prototype._prepareMoveToButton =
 
 	return {
 		shape :
-			new Euclid.RoundRect(
-				pnw,
-				pse,
-				rounding,
-				rounding
+			Euclid.RoundRect.create(
+				'pnw',
+					pnw,
+				'pse',
+					pse,
+				'a',
+					rounding,
+				'b',
+					rounding
 			),
 
 		textCenter :
@@ -1974,17 +1978,21 @@ Portal.prototype._prepareField =
 			),
 
 		silhoutte =
-			new Euclid.RoundRect(
-				pnw.sub(
-					pitch,
-					height
-				),
-				pnw.add(
-					Math.round( width ) + pitch,
-					pitch
-				),
-				rounding,
-				rounding
+			Euclid.RoundRect.create(
+				'pnw',
+					pnw.sub(
+						pitch,
+						height
+					),
+				'pse',
+					pnw.add(
+						Math.round( width ) + pitch,
+						pitch
+					),
+				'a',
+					rounding,
+				'b',
+					rounding
 			);
 
 	return {

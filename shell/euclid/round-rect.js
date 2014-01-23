@@ -14,14 +14,14 @@
 |      '.                  .'
 |        `----------------' + pse
 |
-|
 */
 
 
 /*
 | Export
 */
-var Euclid;
+var
+	Euclid;
 
 Euclid =
 	Euclid || { };
@@ -42,55 +42,83 @@ var
 
 
 /*
-| Constructor.
-|
-| RoundRect(rect, a, b)      -or-
-| RoundRect(pnw, pse, a, b)
+| The joobj definition
 */
-var RoundRect =
-Euclid.RoundRect =
-	function( a1, a2, a3, a4 )
+if( JOOBJ )
 {
-	var
+	return {
+
+		name :
+			'RoundRect',
+
+		unit :
+			'Euclid',
+
+		attributes :
+			{
+				pnw :
+					{
+						comment :
+							'point in north west',
+
+						type :
+							'Point'
+					},
+
+				pse :
+					{
+						comment :
+							'point in south east',
+
+						type :
+							'Point'
+					},
+
+				a :
+					{
+						comment :
+							'horizontal rounding',
+
+						type :
+							'Number'
+					},
+
+				b :
+					{
+						comment :
+							'vertical rounding',
+
+						type :
+							'Number'
+					}
+			},
+
+		init :
+			[
+				'pnw',
+				'pse',
+				'a',
+				'b'
+			]
+	};
+}
+
+
+var
+	RoundRect =
+		Euclid.RoundRect;
+
+/*
+| Initializes the round rect.
+*/
+RoundRect.prototype._init =
+	function(
 		pnw,
 		pse,
 		a,
-		b;
-
-	if( a1.constructor === Euclid.Point )
-	{
-		this.pnw =
-		pnw =
-			a1;
-
-		this.pse =
-		pse =
-			a2;
-
-		a =
-			a3;
-		b =
-			a4;
-	}
-	else
-	{
-		this.pnw =
-		pnw =
-			a1.pnw;
-
-		this.pse =
-		pse =
-			a1.pse;
-
-		a =
-			a2;
-
-		b =
-			a3;
-	}
-
-	pse = pse.sub( 1, 1 );
-
+		b
+	)
+{
 	var
 		pne =
 			Euclid.Point.create( 'x', pse.x, 'y', pnw.y ),
@@ -174,19 +202,6 @@ Jools.lazyFixate(
 		return this.pse.y - this.pnw.y;
 	}
 );
-
-
-/*
-| Returns true if this rectangle is the same as another
-*/
-RoundRect.prototype.equals =
-	function( r )
-{
-	return (
-		this.pnw.equals( r.pnw ) &&
-		this.pse.equals( r.pse )
-	);
-};
 
 
 /*

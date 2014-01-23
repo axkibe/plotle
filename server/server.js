@@ -804,7 +804,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/euclid/round-rect.js',
-					'fb',
+					'fbj',
 
 				'shell/euclid/ellipse.js',
 					'fbj',

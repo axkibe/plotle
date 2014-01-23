@@ -8,8 +8,8 @@
 /*
 | Export
 */
-var Euclid;
-
+var
+	Euclid;
 
 Euclid =
 	Euclid || { };

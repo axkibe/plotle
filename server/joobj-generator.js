@@ -940,12 +940,12 @@ generateCreatorFreeStringsParser =
 	r.push(
 		'',
 		'\tfor(',
-		'\t\tvar a = 0, aZ = arguments.length;',
-		'\t\ta < aZ;',
-		'\t\ta += 2',
+		'\t\tvar _a_ = 0, _aZ_ = arguments.length;',
+		'\t\t_a_ < _aZ_;',
+		'\t\t_a_ += 2',
 		'\t)',
 		'\t{',
-		'\t\tswitch( arguments[ a ] )',
+		'\t\tswitch( arguments[ _a_ ] )',
 		'\t\t{'
 	);
 
@@ -962,7 +962,7 @@ generateCreatorFreeStringsParser =
 			'\t\t\tcase \'' + aName + '\' :',
 			'',
 			'\t\t\t\t' + aName + ' =',
-			'\t\t\t\t\targuments[ a + 1 ];',
+			'\t\t\t\t\targuments[ _a_ + 1 ];',
 			'',
 			'\t\t\t\tbreak;',
 			''
@@ -975,7 +975,7 @@ generateCreatorFreeStringsParser =
 		'/**/\t\t\tif( CHECK )',
 		'/**/\t\t\t{',
 		'/**/\t\t\t\tthrow new Error(',
-		'/**/\t\t\t\t\t\'invalid argument: \' + arguments[ a ]',
+		'/**/\t\t\t\t\t\'invalid argument: \' + arguments[ _a_ ]',
 		'/**/\t\t\t\t);',
 		'/**/\t\t\t}',
 		'\t\t}',

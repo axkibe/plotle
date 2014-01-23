@@ -20,7 +20,6 @@ Widgets =
 | Imports
 */
 var
-	Jools,
 	Mark;
 
 
@@ -31,32 +30,16 @@ var
 'use strict';
 
 
-var
-	_tag =
-		'WIDGET-52212713';
-
-
 /*
 | Constructor.
 */
 var Widget =
 Widgets.Widget =
-	function(
-		tag
-	)
+	function( )
 {
-
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'tag mismatch'
-/**/		);
-/**/	}
-/**/}
-
-	Jools.immute( this );
+	throw new Error(
+		CHECK && 'initializing abstract'
+	);
 };
 
 

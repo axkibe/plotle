@@ -150,23 +150,27 @@ Scrollbar.prototype.getArea =
 			Jools.half( ths.strength );
 
 	return (
-		new Euclid.RoundRect(
-			view.point(
-				pnw.x,
-				pnw.y + sy
-			).add(
-				-s05,
-				0
-			),
-			view.point(
-				pnw.x,
-				pnw.y + sy + map
-			).add(
-				s05,
-				0
-			),
-			ths.ellipseA,
-			ths.ellipseB
+		Euclid.RoundRect.create(
+			'pnw',
+				view.point(
+					pnw.x,
+					pnw.y + sy
+				).add(
+					-s05,
+					0
+				),
+			'pse',
+				view.point(
+					pnw.x,
+					pnw.y + sy + map
+				).add(
+					s05,
+					0
+				),
+			'a',
+				ths.ellipseA,
+			'b',
+				ths.ellipseB
 		)
 	);
 };
