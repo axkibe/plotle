@@ -632,18 +632,17 @@ System.prototype._onResize =
 
 		w =
 		c.width =
-			document.documentElement.clientWidth - 1,
+			window.innerWidth - 1;
 
 		h =
 		c.height =
-			document.documentElement.clientHeight - 1;
+			window.innerHeight - 1;
+
+
 
 	if( this.shell )
 	{
-		this.shell.resize(
-			w,
-			h
-		);
+		this.shell.resize( w, h );
 	}
 };
 
