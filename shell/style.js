@@ -284,22 +284,7 @@ Style.styles =
 		{
 
 			fill :
-			{
-				gradient :
-					'horizontal',
-
-				steps :
-				[
-					[
-						0,
-						'rgba( 255, 237, 210, 0.5 )'
-					],
-					[
-						1,
-						'rgba( 255, 185, 81,  0.5 )'
-					]
-				]
-			},
+				'rgba( 255, 255, 240, 0.7 )',
 
 			edge :
 			[
@@ -308,20 +293,10 @@ Style.styles =
 						1,
 
 					width :
-						1.5,
+						2,
 
 					color :
-						'rgb( 255, 141, 66 )'
-				},
-				{
-					border :
-						0,
-
-					width  :
-						1,
-
-					color :
-						'rgb( 94,  94,  0 )'
+						'rgba( 196, 94, 44, 0.7 )'
 				}
 			]
 		},
@@ -332,55 +307,7 @@ Style.styles =
 		hover :
 		{
 			fill :
-				'rgb( 255, 188, 88 )',
-
-			edge :
-			[
-				{
-					border :
-						1,
-
-					width :
-						2,
-
-					color :
-						'rgb( 255, 188, 87 )'
-				},
-				{
-					border :
-						0,
-
-					width :
-						1,
-
-					color :
-						'rgb( 128, 128, 0 )'
-				}
-			]
-		},
-
-		/*
-		| The widget got currently the focus.
-		*/
-		focus :
-		{
-			fill :
-			{
-				gradient :
-					'horizontal',
-
-				steps :
-				[
-					[
-						0,
-						'rgba( 255, 237, 210, 0.5 )'
-					],
-					[
-						1,
-						'rgba( 255, 185, 81,  0.5 )'
-					]
-				]
-			},
+				'rgba( 255, 235, 210, 0.7 )',
 
 			edge :
 			[
@@ -392,29 +319,31 @@ Style.styles =
 						2,
 
 					color :
-						'rgb( 255, 99, 188 )'
-				},
-				{
-					border :
-						0,
-
-					width :
-						1,
-
-					color :
-						'black'
+						'rgba( 196, 94, 44, 0.7 )'
 				}
 			]
 		},
 
-
-		hofoc :
+		/*
+		| The widget got currently the focus.
+		*/
+		focus :
 		{
 			fill :
-				'rgb( 255, 188, 88 )',
+				'rgba( 255, 255, 240, 0.7 )',
 
 			edge :
 			[
+				{
+					border :
+						2,
+
+					width :
+						1.5,
+
+					color :
+						'rgb( 255, 99, 188 )'
+				},
 				{
 					border :
 						1,
@@ -423,17 +352,38 @@ Style.styles =
 						2,
 
 					color :
+						'rgba( 196, 94, 44, 0.7 )'
+				}
+			]
+		},
+
+
+		hofoc :
+		{
+			fill :
+				'rgba( 255, 235, 210, 0.7 )',
+
+			edge :
+			[
+				{
+					border :
+						2,
+
+					width :
+						1.5,
+
+					color :
 						'rgb( 255, 99, 188 )'
 				},
 				{
 					border :
-						0,
-
-					width :
 						1,
 
+					width :
+						2,
+
 					color :
-						'black'
+						'rgba( 196, 94, 44, 0.7 )'
 				}
 			]
 		}
