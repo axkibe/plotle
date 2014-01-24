@@ -251,6 +251,12 @@ CreateDisc.create =
 
 				break;
 
+			case 'path' :
+
+				a++;
+
+				break;
+
 			case 'mode' :
 
 				mode =

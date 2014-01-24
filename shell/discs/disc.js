@@ -35,6 +35,8 @@ var
 
 /*
 | Constructor
+|
+| TODO remove
 */
 Discs.Disc =
 	function(
@@ -143,5 +145,94 @@ Discs.Disc =
 
 };
 
+
+
+/*
+| Common initializer.
+*/
+Discs.Disc._init =
+	function(
+		inherit
+	)
+{
+	var
+		style =
+		this.style =
+			theme.disc[ this.reflect ],
+
+		width =
+			style.width,
+
+		height =
+			style.height,
+
+		ew =
+			style.ellipse.width,
+
+		eh =
+			style.ellipse.height,
+
+		ny =
+			Jools.half( this.screensize.y - height );
+
+	this.frame =
+		Euclid.Rect.create(
+			'pnw',
+				Euclid.Point.create(
+					'x',
+						0,
+					'y',
+						ny
+				),
+			'pse',
+				Euclid.Point.create(
+					'x',
+						width,
+					'y',
+						ny + height
+				)
+		);
+
+	this._tree =
+		inherit
+		?
+		inherit._tree
+		:
+		shellverse.grow( Design[ this.reflect ] );
+
+	this.silhoutte =
+		Euclid.Ellipse.create(
+			'pnw',
+				Euclid.Point.create(
+					'x',
+						width - 1 - ew,
+					'y',
+						0 - Jools.half( eh - height )
+				),
+			'pse',
+				Euclid.Point.create(
+					'x',
+						width - 1,
+					'y',
+						height + Jools.half( eh - height )
+				),
+			'gradientPC',
+				Euclid.Point.create(
+					'x',
+						-600,
+					'y',
+						Jools.half( height )
+				),
+			'gradientR1',
+				650
+		);
+
+	this._icons =
+		inherit
+		?
+		inherit._icons
+		:
+		new Discs.Icons( );
+};
 
 } )( );

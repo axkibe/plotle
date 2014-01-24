@@ -61,7 +61,7 @@ if( JOOBJ )
 				screensize :
 					{
 						comment :
-							'the screensize the form is made for',
+							'the current screensize',
 
 						type :
 							'Point'

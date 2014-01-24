@@ -743,7 +743,6 @@
 . setPNW
 . setPath
 > setRequestHeader
-. setSpaceZoom
 > setTimeout
 > setTimer
 . setTraits

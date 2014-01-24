@@ -20,7 +20,6 @@ Discs =
 */
 var
 	Euclid,
-	Jools,
 	shell,
 	Widgets;
 
@@ -31,59 +30,153 @@ var
 'use strict';
 
 
-var
-	_tag =
-		'DISC-11692648';
-
-
 /*
-| Constructor
+| The joobj definition.
 */
-var MainDisc =
-Discs.MainDisc =
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'MainDisc',
+
+		unit :
+			'Discs',
+
+		attributes :
+			{
+				access :
+					{
+						comment :
+							'users access to current space',
+
+						type :
+							'String'
+					},
+
+				action :
+					{
+						comment :
+							'currently active action',
+
+						type :
+							'Action'
+					},
+
+				hover :
+					{
+						comment :
+							'the widget hovered upon',
+
+						type :
+							'Path'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark'
+					},
+
+				mode :
+					{
+						comment :
+							'current mode the UI is in',
+
+						type :
+							'String'
+					},
+
+				path :
+					{
+						comment :
+							'path of the disc',
+
+						type :
+							'Path'
+					},
+
+				screensize :
+					{
+						comment :
+							'the current screensize',
+
+						type :
+							'Point'
+					},
+
+				spaceUser :
+					{
+						comment :
+							'owner of currently loaded space',
+
+						type :
+							'String',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					},
+
+				spaceTag :
+					{
+						comment :
+							'name of currently loaded space',
+
+						type :
+							'String',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					},
+
+				username :
+					{
+						comment :
+							'currently logged in user',
+
+						type :
+							'String',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					}
+			},
+
+		subclass :
+			'Discs.Disc',
+
+		init :
+			[
+				'inherit'
+			]
+	};
+}
+
+var
+	MainDisc =
+		Discs.MainDisc;
+
+
+MainDisc.prototype._init =
 	function(
-		tag,
-		inherit,
-		access,
-		action,
-		hover,
-		mark,
-		mode,
-		screensize,
-		username
+		inherit
 	)
 {
-
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'tag mismatch'
-/**/		);
-/**/	}
-/**/}
-
-	this.access =
-		access;
-
-	this.action =
-		action;
-
-	this.mark =
-		mark;
-
-	this.mode =
-		mode;
-
-	this.username =
-		username;
-
-	Discs.Disc.call(
+	Discs.Disc._init.call(
 		this,
-		inherit,
-		hover,
-		screensize
+		inherit
 	);
 
 	var
@@ -97,7 +190,11 @@ Discs.MainDisc =
 			this._tree.ranks,
 
 		isGuest =
-			username.substr( 0, 5 ) === 'visit',
+			this.username === null
+				?
+				true
+				:
+				this.username.substr( 0, 5 ) === 'visit',
 
 		text,
 
@@ -126,7 +223,6 @@ Discs.MainDisc =
 		visible =
 			undefined;
 
-
 		switch( wname )
 		{
 			case 'Login' :
@@ -144,16 +240,16 @@ Discs.MainDisc =
 			case 'Remove' :
 
 				visible =
-					access === 'rw'
+					this.access === 'rw'
 					&&
-					mark.itemPath.length > 0;
+					this.mark.itemPath.length > 0;
 
 				break;
 
 			case 'Create' :
 
 				visible =
-					access === 'rw';
+					this.access === 'rw';
 
 				break;
 
@@ -161,6 +257,26 @@ Discs.MainDisc =
 
 				visible =
 					isGuest;
+
+				break;
+
+			case 'Space' :
+
+				text =
+					this.spaceUser + ':' + this.spaceTag;
+
+				visible =
+					true;
+
+				break;
+
+			case 'User' :
+
+				text =
+					this.username;
+
+				visible =
+					true;
 
 				break;
 
@@ -185,9 +301,9 @@ Discs.MainDisc =
 						'inherit',
 							inherit && inherit.buttons[ wname ],
 						'hoverAccent',
-							path.equals( hover ),
+							path.equals( this.hover ),
 						'focusAccent',
-							mode === wname,
+							this.mode === wname,
 						'text',
 							text,
 						'tree',
@@ -203,218 +319,29 @@ Discs.MainDisc =
 			default :
 
 				throw new Error(
-					'Cannot create widget of type: ' +
+					CHECK
+					&&
+					(
+						'Cannot create widget of type: ' +
 						tree.twig.type
+					)
 				);
 		}
 	}
 
-	// TODO remove
-
 	this.buttons =
 		buttons;
 
+	// TODO remove
 	this._loggedIn =
 		!isGuest;
-
-	Jools.immute( this );
 };
-
-
-/*
-| The MainDisc is a Disc.
-*/
-Jools.subclass(
-	MainDisc,
-	Discs.Disc
-);
-
-
-/*
-| (Re)Creates a new disc.
-*/
-MainDisc.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		access =
-			null,
-
-		action =
-			null,
-
-		hover =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		mode =
-			null,
-
-		screensize =
-			null,
-
-		username =
-			null;
-
-	while( a < aZ )
-	{
-		var
-			arg =
-				arguments[ a++ ];
-
-		switch( arg )
-		{
-			case 'access' :
-
-				access =
-					arguments[ a++ ];
-
-				break;
-
-			case 'action' :
-
-				action =
-					arguments[ a++ ];
-
-				break;
-
-			case 'hover' :
-
-				hover =
-					arguments[ a++ ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a++ ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a++ ];
-
-				break;
-
-			case 'mode' :
-
-				mode =
-					arguments[ a++ ];
-
-				break;
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a++ ];
-
-				break;
-
-			case 'username' :
-
-				username =
-					arguments[ a++ ];
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'invalid argument: ' + arguments[ a ]
-/**/				);
-/**/			}
-		}
-	}
-
-	if( inherit )
-	{
-		if( access === null )
-		{
-			hover =
-				inherit.access;
-		}
-
-		if( action === null )
-		{
-			action =
-				inherit.action;
-		}
-
-		if( hover === null )
-		{
-			hover =
-				inherit.hover;
-		}
-
-		if( mark === null )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( mode === null )
-		{
-			mode =
-				inherit.mode;
-		}
-
-		if( screensize === null )
-		{
-			screensize =
-				inherit.screensize;
-		}
-
-		if( username === null )
-		{
-			username =
-				inherit.username;
-		}
-
-		// TODO use the discs equals mode
-	}
-
-	return new MainDisc(
-		_tag,
-		inherit,
-		access,
-		action,
-		hover,
-		mark,
-		mode,
-		screensize,
-		username
-	);
-};
-
-
-
-/*
-| Reflection.
-*/
-MainDisc.prototype.reflect =
-	'MainDisc';
 
 
 /*
 | Prepares the disc panels contents.
+|
+| TODO _fabric
 */
 MainDisc.prototype._weave =
 	function( )
@@ -681,22 +608,11 @@ MainDisc.prototype.specialKey =
 
 
 /*
-| Displays a message
-*/
-MainDisc.prototype.message =
-	function(
-		// message
-	)
-{
-	// nothing
-};
-
-
-/*
 | Displays a current space
 |
 | TODO remove
 */
+/*
 MainDisc.prototype.arrivedAtSpace =
 	function(
 		spaceUser,
@@ -714,18 +630,7 @@ MainDisc.prototype.arrivedAtSpace =
 				spaceUser + ':' + spaceTag
 		);
 };
-
-
-/*
-| Displays the current space zoom level
 */
-MainDisc.prototype.setSpaceZoom =
-	function(
-		// zf
-	)
-{
-	// nothing
-};
 
 
 /*

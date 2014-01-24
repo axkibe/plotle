@@ -139,6 +139,8 @@ Discs.Jockey =
 					mark,
 				'mode',
 					mode,
+				'path',
+					this.path.append( name ),
 				'screensize',
 					screensize,
 				'username',
@@ -308,6 +310,12 @@ Jockey.create =
 				inherit.screensize;
 		}
 
+		if( username === null )
+		{
+			username =
+				inherit.username;
+		}
+
 		// FIXME recreate on interesting action only
 
 		if(
@@ -380,6 +388,8 @@ Jockey.prototype.path =
 
 /*
 | Displays a current space
+|
+| TODO renmove
 */
 Jockey.prototype.arrivedAtSpace =
 	function(
@@ -387,12 +397,15 @@ Jockey.prototype.arrivedAtSpace =
 		spaceTag
 	)
 {
-	return (
-		this._discs.MainDisc.arrivedAtSpace(
-			spaceUser,
-			spaceTag
-		)
-	);
+	this._discs.MainDisc =
+		Discs.MainDisc.create(
+			'inherit',
+				this._discs.MainDisc,
+			'spaceUser',
+				spaceUser,
+			'spaceTag',
+				spaceTag
+		);
 };
 
 

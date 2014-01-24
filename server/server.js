@@ -882,7 +882,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/discs/maindisc.js',
-					'fb',
+					'fbj',
 
 				'shell/discs/jockey.js',
 					'fb',

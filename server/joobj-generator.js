@@ -1293,9 +1293,10 @@ generateCreatorChecks =
 
 				break;
 
+			case 'Action' :
 			case 'Array' :
-			case 'Mark' :
 			case 'Item' :
+			case 'Mark' :
 			case 'Tree' :
 
 				// FIXME
