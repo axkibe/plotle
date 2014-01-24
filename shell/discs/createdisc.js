@@ -33,59 +33,161 @@ var
 'use strict';
 
 
-var
-	_tag =
-		'DISC-11692648';
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
 
+		name :
+			'CreateDisc',
+
+		unit :
+			'Discs',
+
+		attributes :
+			{
+				access :
+					{
+						comment :
+							'users access to current space',
+
+						type :
+							'String'
+					},
+
+				action :
+					{
+						comment :
+							'currently active action',
+
+						type :
+							'Action'
+					},
+
+				hover :
+					{
+						comment :
+							'the widget hovered upon',
+
+						type :
+							'Path'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark'
+					},
+
+				mode :
+					{
+						comment :
+							'current mode the UI is in',
+
+						type :
+							'String'
+					},
+
+				path :
+					{
+						comment :
+							'path of the disc',
+
+						type :
+							'Path'
+					},
+
+				screensize :
+					{
+						comment :
+							'the current screensize',
+
+						type :
+							'Point'
+					},
+
+				spaceUser :
+					{
+						comment :
+							'owner of currently loaded space',
+
+						type :
+							'String',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				spaceTag :
+					{
+						comment :
+							'name of currently loaded space',
+
+						type :
+							'String',
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null',
+
+						assign :
+							null
+					},
+
+				username :
+					{
+						comment :
+							'currently logged in user',
+
+						type :
+							'String',
+
+						allowNull :
+							true,
+
+						assign :
+							null
+					}
+			},
+
+		subclass :
+			'Discs.Disc',
+
+		init :
+			[
+				'inherit'
+			]
+	};
+}
+
+var
+	CreateDisc =
+		Discs.CreateDisc;
 
 /*
-| Constructor
+| Initializes the create disc.
 */
-var CreateDisc =
-Discs.CreateDisc =
+CreateDisc.prototype._init =
 	function(
-		tag,
-		inherit,
-		access,
-		action,
-		hover,
-		mark,
-		mode,
-		screensize,
-		username
+		inherit
 	)
 {
-
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'tag mismatch'
-/**/		);
-/**/	}
-/**/}
-
-	this.access =
-		access;
-
-	this.action =
-		action;
-
-	this.mark =
-		mark;
-
-	this.mode =
-		mode;
-
-	this.username =
-		username;
-
-	Discs.Disc.call(
+	Discs.Disc._init.call(
 		this,
-		inherit,
-		hover,
-		screensize
+		inherit
 	);
 
 	var
@@ -116,7 +218,7 @@ Discs.CreateDisc =
 
 			focusAccent =
 				CreateDisc._isActiveButton(
-					action,
+					this.action,
 					wname
 				);
 
@@ -133,7 +235,7 @@ Discs.CreateDisc =
 						'inherit',
 							inherit && inherit.buttons[ wname ],
 						'hoverAccent',
-							path.equals( hover ),
+							path.equals( this.hover ),
 						'focusAccent',
 							focusAccent,
 						'tree',
@@ -155,213 +257,13 @@ Discs.CreateDisc =
 
 	this.buttons =
 		buttons;
-
-	Jools.immute( this );
 };
-
-
-/*
-| The CreateDisc is a Disc.
-*/
-Jools.subclass(
-	CreateDisc,
-	Discs.Disc
-);
-
-
-/*
-| (Re)Creates a new disc.
-*/
-CreateDisc.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		access =
-			null,
-
-		action =
-			null,
-
-		hover =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		mode =
-			null,
-
-		screensize =
-			null,
-
-		username =
-			null;
-
-	while( a < aZ )
-	{
-		var
-			arg =
-				arguments[ a++ ];
-
-		switch( arg )
-		{
-			case 'access' :
-
-				access =
-					arguments[ a++ ];
-
-				break;
-
-			case 'action' :
-
-				action =
-					arguments[ a++ ];
-
-				break;
-
-			case 'hover' :
-
-				hover =
-					arguments[ a++ ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a++ ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a++ ];
-
-				break;
-
-			case 'path' :
-
-				a++;
-
-				break;
-
-			case 'mode' :
-
-				mode =
-					arguments[ a++ ];
-
-				break;
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a++ ];
-
-				break;
-
-			case 'username' :
-
-				username =
-					arguments[ a++ ];
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'invalid argument: ' + arguments[ a ]
-/**/				);
-/**/			}
-		}
-	}
-
-	if( inherit )
-	{
-		if( access === null )
-		{
-			hover =
-				inherit.access;
-		}
-
-		if( action === null )
-		{
-			action =
-				inherit.action;
-		}
-
-		if( hover === null )
-		{
-			hover =
-				inherit.hover;
-		}
-
-		if( mark === null )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( mode === null )
-		{
-			mode =
-				inherit.mode;
-		}
-
-		if( screensize === null )
-		{
-			screensize =
-				inherit.screensize;
-		}
-
-		if( username === null )
-		{
-			username =
-				inherit.username;
-		}
-
-		// TODO use the discs equals mode
-	}
-
-	return new CreateDisc(
-		_tag,
-		inherit,
-		access,
-		action,
-		hover,
-		mark,
-		mode,
-		screensize,
-		username
-	);
-};
-
-
-
-
-/*
-| Reflection.
-*/
-CreateDisc.prototype.reflect =
-	'CreateDisc';
-
 
 
 /*
 | Prepares the disc panels contents.
+|
+| TODO make _fabric
 */
 CreateDisc.prototype._weave =
 	function( )
@@ -682,6 +584,8 @@ CreateDisc.prototype.cycleFocus =
 	)
 {
 	throw new Error(
+		CHECK
+		&&
 		'not implemented'
 	);
 };

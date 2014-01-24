@@ -879,7 +879,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/discs/createdisc.js',
-					'fb',
+					'fbj',
 
 				'shell/discs/maindisc.js',
 					'fbj',
