@@ -169,6 +169,9 @@ var
 		Discs.MainDisc;
 
 
+/*
+| Initializes the main disc.
+*/
 MainDisc.prototype._init =
 	function(
 		inherit

@@ -885,7 +885,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/discs/jockey.js',
-					'fb',
+					'fbj',
 
 				'shell/hover-reply.js',
 					'fbj',

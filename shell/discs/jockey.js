@@ -19,7 +19,6 @@ Discs =
 | Imports
 */
 var
-	Jools,
 	Path;
 
 /*
@@ -29,10 +28,149 @@ var
 'use strict';
 
 
-var
-	_tag =
-		'DISC-JOCKEY-76533526',
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
 
+		name :
+			'Jockey',
+
+		unit :
+			'Discs',
+
+		attributes :
+			{
+				access :
+					{
+						comment :
+							'users access to current space',
+
+						type :
+							'String'
+					},
+
+				action :
+					{
+						comment :
+							'currently active action',
+
+						type :
+							'Action'
+					},
+
+				hover :
+					{
+						comment :
+							'the widget hovered upon',
+
+						type :
+							'Path'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						concerns :
+							{
+								func :
+									'Discs.Jockey.concernsMark',
+
+								args :
+									[
+										'mark'
+									]
+							},
+
+						type :
+							'Mark'
+
+					},
+
+				mode :
+					{
+						comment :
+							'current mode the UI is in',
+
+						type :
+							'String'
+					},
+
+				path :
+					{
+						comment :
+							'path of the disc',
+
+						type :
+							'Path'
+					},
+
+				screensize :
+					{
+						comment :
+							'the current screensize',
+
+						type :
+							'Point'
+					},
+
+				spaceUser :
+					{
+						comment :
+							'owner of currently loaded space',
+
+						type :
+							'String',
+
+						allowNull :
+							true
+					},
+
+				spaceTag :
+					{
+						comment :
+							'name of currently loaded space',
+
+						type :
+							'String',
+
+						allowNull :
+							true
+					},
+
+				username :
+					{
+						comment :
+							'currently logged in user',
+
+						type :
+							'String',
+
+						allowNull :
+							true
+					}
+			},
+
+		subclass :
+			'Discs.Disc',
+
+		init :
+			[
+				'inherit'
+			]
+	};
+}
+
+var
+	Jockey =
+		Discs.Jockey;
+
+
+var
 	_discList =
 		Object.freeze(
 			[
@@ -42,66 +180,15 @@ var
 		);
 
 
+
 /*
-| Constructor
+| Initializes the disc jockey.
 */
-var Jockey =
-Discs.Jockey =
+Jockey.prototype._init =
 	function(
-		tag,
-		inherit,
-		access,
-		action,
-		hover,
-		mark,
-		mode,
-		screensize,
-		username
+		inherit
 	)
 {
-	Jools.logNew(
-		this,
-		this.path
-	);
-
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'tag mismatch'
-/**/		);
-/**/	}
-/**/
-/**/	if( !hover || hover.reflect !== 'Path' )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid hover'
-/**/		);
-/**/	}
-/**/}
-
-	this.screensize =
-		screensize;
-
-	this.access =
-		access;
-
-	this.action =
-		action;
-
-	this.hover =
-		hover;
-
-	this.mark =
-		mark;
-
-	this.mode =
-		mode;
-
-	this.username =
-		username;
-
 	var
 		discs =
 			{ };
@@ -127,238 +214,35 @@ Discs.Jockey =
 				'inherit',
 					inherit && inherit._discs[ name ],
 				'access',
-					access,
+					this.access,
 				'action',
-					action,
+					this.action,
 				'hover',
-					hover.isEmpty || hover.get( 1 ) !== name ?
+					// FIXME make a concernsHover in the disc
+					this.hover.isEmpty || this.hover.get( 1 ) !== name ?
 						Path.empty
 						:
-						hover,
+						this.hover,
 				'mark',
-					mark,
+					this.mark,
 				'mode',
-					mode,
+					this.mode,
 				'path',
 					this.path.append( name ),
 				'screensize',
-					screensize,
+					this.screensize,
+				'spaceUser',
+					this.spaceUser,
+				'spaceTag',
+					this.spaceTag,
 				'username',
-					username
+					this.username
 			);
 	}
 
 	this._discs =
-		Jools.immute( discs );
-
-	Jools.immute( this );
+		Object.freeze( discs );
 };
-
-
-/*
-| Creates a new disc jockey.
-*/
-Jockey.create =
-	function(
-		// free strings
-	)
-{
-	var
-		access =
-			null,
-
-		action =
-			null,
-
-		hover =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		mode =
-			null,
-
-		screensize =
-			null,
-
-		username =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'access' :
-
-				access =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'action' :
-
-				action =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'hover' :
-
-				hover =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mode' :
-
-				mode =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'screensize' :
-
-				screensize =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'username' :
-
-				username =
-					arguments[ a + 1 ];
-
-				break;
-
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'invalid argument: ' + arguments[ a ]
-/**/				);
-/**/			}
-		}
-	}
-
-	if( mark )
-	{
-		mark =
-			Jockey.concernsMark(
-				mark
-			);
-	}
-
-	if( inherit )
-	{
-		if( access === null )
-		{
-			access =
-				inherit.access;
-		}
-
-		if( action === null )
-		{
-			action =
-				inherit.action;
-		}
-
-		if( hover === null )
-		{
-			hover =
-				inherit.hover;
-		}
-
-		if( mark === null )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( mode === null )
-		{
-			mode =
-				inherit.mode;
-		}
-
-		if( screensize === null )
-		{
-			screensize =
-				inherit.screensize;
-		}
-
-		if( username === null )
-		{
-			username =
-				inherit.username;
-		}
-
-		// FIXME recreate on interesting action only
-
-		if(
-			inherit.access === access
-			&&
-			inherit.action.equals( action )
-			&&
-			inherit.hover.equals( hover )
-			&&
-			inherit.mark.equals( mark )
-			&&
-			inherit.mode === mode
-			&&
-			inherit.screensize.equals( screensize )
-			&&
-			inherit.username === username
-		)
-		{
-			return inherit;
-		}
-	}
-
-	return (
-		new Jockey(
-			_tag,
-			inherit,
-			access,
-			action,
-			hover,
-			mark,
-			mode,
-			screensize,
-			username
-		)
-	);
-};
-
-
-/*
-| Reflection.
-*/
-Jockey.prototype.reflect =
-	'Jockey';
 
 
 /*
@@ -372,40 +256,6 @@ Jockey.concernsMark =
 	)
 {
 	return mark;
-};
-
-
-
-/*
-| Disc jockey path
-|
-| TODO rename 'discs'
-*/
-Jockey.path =
-Jockey.prototype.path =
-	Path.empty.append( 'disc' );
-
-
-/*
-| Displays a current space
-|
-| TODO renmove
-*/
-Jockey.prototype.arrivedAtSpace =
-	function(
-		spaceUser,
-		spaceTag
-	)
-{
-	this._discs.MainDisc =
-		Discs.MainDisc.create(
-			'inherit',
-				this._discs.MainDisc,
-			'spaceUser',
-				spaceUser,
-			'spaceTag',
-				spaceTag
-		);
 };
 
 

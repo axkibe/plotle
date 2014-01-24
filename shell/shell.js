@@ -194,10 +194,16 @@ Shell =
 				Mark.Vacant.create( ),
 			'mode',
 				this._$mode,
+			'path',
+				Path.empty.append( 'discs' ),
 			'screensize',
 				screensize,
 			'username',
-				''
+				null,
+			'spaceUser',
+				null,
+			'spaceTag',
+				null
 		);
 
 	// greenscreen display if not null
@@ -1044,7 +1050,7 @@ Shell.prototype.pushButton =
 {
 	switch( path.get( 0 ) )
 	{
-		case 'disc' :
+		case 'discs' :
 
 			return this._$discJockey.pushButton(
 				path,
@@ -1084,8 +1090,9 @@ Shell.prototype._setHover =
 		Discs.Jockey.create(
 			'inherit',
 				this._$discJockey,
+				// FIXME make concernsHover
 			'hover',
-				path.isEmpty || path.get( 0 ) !== 'disc' ?
+				path.isEmpty || path.get( 0 ) !== 'discs' ?
 					Path.empty
 					:
 					path
@@ -1096,6 +1103,7 @@ Shell.prototype._setHover =
 			'inherit',
 				this._$formJockey,
 			'hover',
+				// FIXME make a concernsHover
 				path.isEmpty || path.get( 0 ) !== 'forms' ?
 					Path.empty
 					:
@@ -1665,24 +1673,22 @@ Shell.prototype.arrivedAtSpace =
 		access
 	)
 {
-	// TODO
 	this._$discJockey =
 		Discs.Jockey.create(
 			'inherit',
 				this._$discJockey,
 			'access',
-				access
+				access,
+			'spaceUser',
+				spaceUser,
+			'spaceTag',
+				spaceTag
 		);
 
-	this._$discJockey.arrivedAtSpace(
-		spaceUser,
-		spaceTag
-	);
-
-	// TODO make spaceUser spaceTag normal attributes
+	// FIXME make spaceUser spaceTag normal attributes
 	var
 		spaceFormPath =
-			this._$formJockey.get( 'Space' ).path; // TODO
+			this._$formJockey.get( 'Space' ).path; // FIXME
 
 	this._$formJockey =
 		Forms.Jockey.create(
