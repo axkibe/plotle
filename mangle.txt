@@ -1,13 +1,4 @@
-. setFocus
-> b
-. args
-. concerns
-. func
-. superFrame
-. hadSelect
-. inherit
-. arrow
-. clockwise
+. _userIsGuest
 . $abort
 . $action
 . $aquireAjax
@@ -195,7 +186,6 @@
 . _keyUp
 . _lazy_
 . _locateOffset
-. _loggedIn
 . _max
 . _messageRCV
 . _moveTo
@@ -263,7 +253,9 @@
 > apply
 . aquireSpace
 > arc
+. args
 . arrivedAtSpace
+. arrow
 . assign
 . asyncEvent
 > at
@@ -273,6 +265,7 @@
 > atan2
 . attributes
 > auth
+> b
 . bAt
 . bPath
 . backAt
@@ -325,10 +318,9 @@
 > clearRect
 > clearTimeout
 . click
-> clientHeight
-> clientWidth
 > clip
 . clipboard
+. clockwise
 . closeButton
 > cm
 > cmd
@@ -337,6 +329,7 @@
 . computeEllipse
 . computePoint
 . computeRect
+. concerns
 . concernsMark
 . configSwitch
 > configurable
@@ -373,7 +366,6 @@
 . disc
 > doc
 . docTree
-> documentElement
 . down
 . dragMove
 . dragStart
@@ -433,6 +425,7 @@
 . fromItemPath
 . frontAt
 . frontPath
+. func
 > function
 . generic
 . genericButton
@@ -473,6 +466,7 @@
 . greeting2
 . greeting3
 . grow
+. hadSelect
 . half
 . handle
 . handles
@@ -497,6 +491,7 @@
 . immute
 > index
 > indexOf
+. inherit
 . init
 > innerHeight
 . innerMargin
@@ -735,6 +730,7 @@
 . setActive
 . setCapture
 . setDefaultFonts
+. setFocus
 . setFontSize
 . setInput
 > setItem
@@ -804,6 +800,7 @@
 > subclass
 > substr
 > substring
+. superFrame
 > sw
 > t
 > text

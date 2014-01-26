@@ -67,7 +67,7 @@ Form.init =
 
 	var
 		tree =
-		this.tree = // TODO needed?
+		this.tree =
 			// inherit
 			shellverse.grow( design );
 
@@ -237,13 +237,10 @@ Form.prototype.getFocusedItem =
 | Draws the form.
 */
 Form.prototype.draw =
-	function(  )
+	function(
+		fabric
+	)
 {
-	// TODO hand down fabric
-	var
-		fabric =
-			shell.fabric;
-
 	fabric.paint(
 		theme.forms.style,
 		fabric,

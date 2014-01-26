@@ -192,13 +192,6 @@ MainDisc.prototype._init =
 		ranks =
 			this._tree.ranks,
 
-		isGuest =
-			this.username === null
-				?
-				true
-				:
-				this.username.substr( 0, 5 ) === 'visit',
-
 		text,
 
 		visible;
@@ -234,8 +227,10 @@ MainDisc.prototype._init =
 					true;
 
 				text =
-					isGuest ?
-						'log\nin' :
+					this._userIsGuest
+						?
+						'log\nin'
+						:
 						'log\nout';
 
 				break;
@@ -259,7 +254,7 @@ MainDisc.prototype._init =
 			case 'SignUp' :
 
 				visible =
-					isGuest;
+					this._userIsGuest;
 
 				break;
 
@@ -333,12 +328,28 @@ MainDisc.prototype._init =
 	}
 
 	this.buttons =
-		buttons;
-
-	// TODO remove
-	this._loggedIn =
-		!isGuest;
+		Object.freeze( buttons );
 };
+
+
+/*
+| Returns true if current user is a guest.
+|
+| MAYBE make User an own object.
+*/
+Jools.lazyFixate(
+	MainDisc.prototype,
+	'_userIsGuest',
+	function( )
+	{
+		if( this.username === null )
+		{
+			return true;
+		}
+
+		return this.username.substr( 0, 5 ) === 'visit';
+	}
+);
 
 
 /*
@@ -422,7 +433,7 @@ MainDisc.prototype.pushButton =
 
 	if(
 		buttonName === 'Login' &&
-		this._loggedIn
+		!this._userIsGuest
 	)
 	{
 		shell.logout( );

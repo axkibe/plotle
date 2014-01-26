@@ -716,8 +716,6 @@ Portal.prototype.click =
 
 /*
 | Draws the portal.
-|
-| TODO move draw to visual item.
 */
 Portal.prototype.draw =
 	function(
@@ -866,7 +864,7 @@ Jools.lazyFixate(
 
 			section =
 				mark &&
-				mark.hasCaret && // TODO hasWidget
+				mark.hasCaret &&
 				mark.caretPath.get( -1 );
 
 		f.fill(
@@ -1158,17 +1156,6 @@ Portal.prototype._drawCaret =
 
 		n =
 			s - Math.round( fs + descend );
-
-	// TODO
-	/*
-	system.focusCenter(
-		'p',
-			view.point(
-				cx + zone.pnw.x,
-				cn + zone.pnw.y
-			)
-	);
-	*/
 
 	// draws the caret
 	fabric.fillRect(
