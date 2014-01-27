@@ -533,7 +533,8 @@ Button.prototype.pointingStart =
 	)
 {
 	if(
-		!this.visible ||
+		!this.visible
+		||
 		!this.frame.within(
 			Euclid.View.proper,
 			p

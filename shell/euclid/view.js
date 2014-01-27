@@ -131,33 +131,22 @@ View.prototype.scale =
 */
 View.prototype.x =
 	function(
-		a1,
-		a2
+		x
 	)
 {
-	var x, y;
-
-	if( a1 instanceof Euclid.Point )
-	{
-		x =
-			a1.x;
-
-		y =
-			a1.y;
-	}
-	else
-	{
-		if(
-			typeof( a1 ) !== 'number' ||
-			typeof( a2 ) !== 'number'
-		)
-		{
-			throw new Error( 'not a number' );
-		}
-
-		x = a1;
-		y = a2;
-	}
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		typeof( x ) !== 'number'
+/**/		||
+/**/		arguments.length !== 1
+/**/	)
+/**/	{
+/**/		throw new Error(
+/**/			'arg fail'
+/**/		);
+/**/	}
+/**/}
 
 	return Math.round(
 		( x + this.pan.x ) * this.zoom
@@ -170,28 +159,23 @@ View.prototype.x =
 */
 View.prototype.dex =
 	function(
-		a1,
-		a2
+		x
 	)
 {
-	var x, y;
 
-	if( a1 instanceof Euclid.Point )
-	{
-		x =
-			a1.x;
-
-		y =
-			a1.y;
-	}
-	else
-	{
-		if (typeof(a1) !== 'number' || typeof(a2) !== 'number')
-			{ throw new Error('not a number'); }
-
-		x = a1;
-		y = a2;
-	}
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		typeof( x ) !== 'number'
+/**/		||
+/**/		arguments.length !== 1
+/**/	)
+/**/	{
+/**/		throw new Error(
+/**/			'arg fail'
+/**/		);
+/**/	}
+/**/}
 
 	return Math.round(
 		x / this.zoom - this.pan.x
@@ -204,38 +188,23 @@ View.prototype.dex =
 */
 View.prototype.y =
 	function(
-		a1,
-		a2
+		y
 	)
 {
-	var x, y;
 
-	if( a1 instanceof Euclid.Point )
-	{
-		x =
-			a1.x;
-
-		y =
-			a1.y;
-	}
-	else
-	{
-		if(
-			typeof( a1 ) !== 'number' ||
-			typeof( a2 ) !== 'number'
-		)
-		{
-			throw new Error(
-				'not a number'
-			);
-		}
-
-		x =
-			a1;
-
-		y =
-			a2;
-	}
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		typeof( y ) !== 'number'
+/**/		||
+/**/		arguments.length !== 1
+/**/	)
+/**/	{
+/**/		throw new Error(
+/**/			'arg fail'
+/**/		);
+/**/	}
+/**/}
 
 	return Math.round(
 		( y + this.pan.y ) * this.zoom
@@ -248,39 +217,23 @@ View.prototype.y =
 */
 View.prototype.dey =
 	function(
-		a1,
-		a2
+		y
 	)
 {
-	var
-		x, y;
 
-	if( a1 instanceof Euclid.Point )
-	{
-		x =
-			a1.x;
-
-		y =
-			a1.y;
-	}
-	else
-	{
-		if(
-			typeof( a1 ) !== 'number' ||
-			typeof( a2 ) !== 'number'
-		)
-		{
-			throw new Error(
-				'not a number'
-			);
-		}
-
-		x =
-			a1;
-
-		y =
-			a2;
-	}
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		typeof( y ) !== 'number'
+/**/		||
+/**/		arguments.length !== 1
+/**/	)
+/**/	{
+/**/		throw new Error(
+/**/			'arg fail'
+/**/		);
+/**/	}
+/**/}
 
 	return Math.round(
 		y / this.zoom - this.pan.y
@@ -336,37 +289,37 @@ Jools.lazyFixate(
 */
 View.prototype.point =
 	function(
-		a1,
-		a2
+		p
 	)
 {
-	if( a1 instanceof Euclid.Point )
-	{
-		if (
-			this.zoom === 1 &&
-			this.pan.x === 0 &&
-			this.pan.y === 0
-		)
-		{
-			return a1;
-		}
 
-		return (
-			Euclid.Point.create(
-				'x',
-					this.x( a1 ),
-				'y',
-					this.y( a1 )
-			)
-		);
+/**/if( CHECK )
+/**/{
+/**/	if( p.reflect !== 'Point' )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid arg'
+/**/		);
+/**/	}
+/**/}
+
+	if (
+		this.zoom === 1
+		&&
+		this.pan.x === 0
+		&&
+		this.pan.y === 0
+	)
+	{
+		return p;
 	}
 
 	return (
 		Euclid.Point.create(
 			'x',
-				this.x( a1, a2 ),
+				this.x( p.x ),
 			'y',
-				this.y( a1, a2 )
+				this.y( p.y )
 		)
 	);
 };
@@ -377,16 +330,26 @@ View.prototype.point =
 */
 View.prototype.depoint =
 	function(
-		a1,
-		a2
+		p
 	)
 {
+
+/**/if( CHECK )
+/**/{
+/**/	if( p.reflect !== 'Point' )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid arg'
+/**/		);
+/**/	}
+/**/}
+
 	return (
 		Euclid.Point.create(
 			'x',
-				this.dex( a1, a2 ),
+				this.dex( p.x ),
 			'y',
-				this.dey( a1, a2 )
+				this.dey( p.y )
 		)
 	);
 };

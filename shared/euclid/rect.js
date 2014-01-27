@@ -930,19 +930,16 @@ Rect.prototype.sketch =
 {
 	var
 		wx =
-			view.x( this.pnw );
+			view.x( this.pnw.x ),
 
-	var
 		ny =
-			view.y( this.pnw );
+			view.y( this.pnw.y ),
 
-	var
 		ex =
-			view.x( this.pse );
+			view.x( this.pse.x ),
 
-	var
 		sy =
-			view.y( this.pse );
+			view.y( this.pse.y );
 
 	fabric.moveTo(
 		wx + border,
@@ -982,13 +979,17 @@ Rect.prototype.within =
 {
 	var
 		x =
-			view ?
-				view.dex( p ) :
+			view
+				?
+				view.dex( p.x )
+				:
 				p.x,
 
 		y =
-			view ?
-				view.dey( p ) :
+			view
+				?
+				view.dey( p.y )
+				:
 				p.y,
 
 		pnw =

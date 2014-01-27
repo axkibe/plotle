@@ -480,17 +480,6 @@ Para.prototype._drawCaret =
 		n =
 			s - Math.round( fs + descend );
 
-	// TODO
-	/*
-	system.focusCenter(
-		'p',
-			view.point(
-				cx + zone.pnw.x,
-				cn + zone.pnw.y
-			)
-	);
-	*/
-
 	// draws the caret
 	fabric.fillRect(
 		'black',

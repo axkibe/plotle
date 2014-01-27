@@ -153,20 +153,14 @@ Scrollbar.prototype.getArea =
 		Euclid.RoundRect.create(
 			'pnw',
 				view.point(
-					pnw.x,
-					pnw.y + sy
-				).add(
-					-s05,
-					0
-				),
+					pnw.add( 0, sy )
+				)
+				.add( -s05, 0 ),
 			'pse',
 				view.point(
-					pnw.x,
-					pnw.y + sy + map
-				).add(
-					s05,
-					0
-				),
+					pnw.add( 0, sy + map )
+				)
+				.add( s05, 0 ),
 			'a',
 				ths.ellipseA,
 			'b',
@@ -195,10 +189,10 @@ Scrollbar.prototype.within =
 			this._pnw,
 
 		dex =
-			view.dex( p ),
+			view.dex( p.x ),
 
 		dey =
-			view.dey( p );
+			view.dey( p.y );
 
 	return (
 		dex >= pnw.x &&

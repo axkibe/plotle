@@ -1031,23 +1031,36 @@ Fabric.prototype.lineTo =
 
 	if( typeof( a1 ) === 'object' )
 	{
-		x = a1.x;
-		y = a1.y;
-		v = a2;
+		x =
+			a1.x;
+
+		y =
+			a1.y;
+
+		v =
+			a2;
 	}
 	else
 	{
-		x = a1;
-		y = a2;
-		v = a3;
+		x =
+			a1;
+
+		y =
+			a2;
+
+		v =
+			a3;
 	}
+
 	Jools.ensureInt( x, y );
 
 	if( v )
 	{
-		var x1 = x;
-		x = v.x( x,  y );
-		y = v.y( x1, y );
+		x =
+			v.x( x );
+
+		y =
+			v.y( y );
 	}
 
 	this._$posx = x;
@@ -1107,14 +1120,11 @@ Fabric.prototype.moveTo =
 
 	if( v )
 	{
-		var
-			x1 =
-				x;
 		x =
-			v.x( x,  y );
+			v.x( x );
 
 		y =
-			v.y( x1, y );
+			v.y( y );
 	}
 
 	this._$posx = x;
@@ -1450,10 +1460,10 @@ Fabric.prototype._colorStyle =
 
 			grad =
 				this._cx.createLinearGradient(
-					view.x( shape.pnw ),
-					view.y( shape.pnw ),
-					view.x( shape.pnw ) + view.scale( shape.width / 10 ),
-					view.y( shape.pse )
+					view.x( shape.pnw.x ),
+					view.y( shape.pnw.y ),
+					view.x( shape.pnw.x ) + view.scale( shape.width / 10 ),
+					view.y( shape.pse.y )
 				);
 
 			break;
@@ -1462,10 +1472,10 @@ Fabric.prototype._colorStyle =
 
 			var
 				pnw =
-					shape.frame.pnw,
+					shape.pnw,
 
 				pse =
-					shape.frame.pse;
+					shape.pse;
 
 			// FIXME use gradientPNW
 /**/		if( CHECK )

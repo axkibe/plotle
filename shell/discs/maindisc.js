@@ -495,7 +495,8 @@ MainDisc.prototype.pointingHover =
 		pp =
 			p.sub( this.frame.pnw );
 
-	if( !fabric.withinSketch(
+	if(
+		!fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
 			Euclid.View.proper,

@@ -543,6 +543,8 @@ Jools.lazyFixate(
 	'attentionCenter',
 	function( )
 	{
+		return 0;
+		/*
 		var
 			focus =
 				this.focusedItem( );
@@ -552,7 +554,11 @@ Jools.lazyFixate(
 			return null;
 		}
 
-		return focus.attentionCenter( );
+		return (
+			this.view.y(
+				focus.attentionCenter
+			)
+		);*/
 	}
 );
 
@@ -1807,8 +1813,8 @@ Space.prototype.dragMove =
 								origin,
 							'zone',
 								origin.zone.add(
-									view.dex( p ) - action.start.x,
-									view.dey( p ) - action.start.y
+									view.dex( p.x ) - action.start.x,
+									view.dey( p.y ) - action.start.y
 								)
 					);
 
@@ -1822,8 +1828,8 @@ Space.prototype.dragMove =
 								origin,
 							'pnw',
 								origin.pnw.add(
-									view.dex( p ) - action.start.x,
-									view.dey( p ) - action.start.y
+									view.dex( p.x ) - action.start.x,
+									view.dey( p.y ) - action.start.y
 								)
 					);
 			}
@@ -1860,8 +1866,8 @@ Space.prototype.dragMove =
 							'zone',
 								origin.zone.cardinalResize(
 									align,
-									view.dex( p ) - action.start.x,
-									view.dey( p ) - action.start.y,
+									view.dex( p.x ) - action.start.x,
+									view.dey( p.y ) - action.start.y,
 									origin.minHeight,
 									origin.minWidth
 								)
@@ -1874,7 +1880,8 @@ Space.prototype.dragMove =
 					oheight =
 						origin.zone.height;
 
-					var dy;
+					var
+						dy;
 
 					switch( action.align )
 					{
@@ -1882,7 +1889,8 @@ Space.prototype.dragMove =
 						case 'nw' :
 
 							dy =
-								action.start.y - view.dey( p );
+								action.start.y -
+								view.dey( p.y );
 
 							break;
 
@@ -1890,18 +1898,19 @@ Space.prototype.dragMove =
 						case 'sw' :
 
 							dy =
-								view.dey( p ) - action.start.y;
+								view.dey( p.y ) -
+								action.start.y;
 
 							break;
 
 						default :
 
-							if( CHECK )
-							{
-								throw new Error(
-									'unknown align'
-								);
-							}
+/**/						if( CHECK )
+/**/						{
+/**/							throw new Error(
+/**/								'unknown align'
+/**/							);
+/**/						}
 					}
 
 					fs =

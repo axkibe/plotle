@@ -281,16 +281,16 @@ Line.prototype.sketch =
 {
 	var
 		p1x =
-			view.x( this.p1 ),
+			view.x( this.p1.x ),
 
 		p1y =
-			view.y( this.p1 ),
+			view.y( this.p1.y ),
 
 		p2x =
-			view.x( this.p2 ),
+			view.x( this.p2.x ),
 
 		p2y =
-			view.y( this.p2 );
+			view.y( this.p2.y );
 
 	// @@, multiple line end types
 	switch(this.p1end)

@@ -391,10 +391,10 @@ Input.prototype.sketchMask =
 			this._pitch,
 
 		x =
-			view.x( pitch ),
+			view.x( pitch.x ),
 
 		y =
-			view.y( pitch ) +
+			view.y( pitch.y ) +
 			Math.round( size * 0.7 ),
 
 		h =

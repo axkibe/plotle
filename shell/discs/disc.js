@@ -22,8 +22,7 @@ var
 	Euclid,
 	Jools,
 	shellverse,
-	theme,
-	Path;
+	theme;
 
 
 /*
