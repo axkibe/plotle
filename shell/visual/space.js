@@ -608,10 +608,6 @@ Space.prototype.draw =
 		action =
 			shell.action;
 
-	// TODO
-	this._center =
-		fabric.pc;
-
 	for(
 		var r = tree.length - 1;
 		r >= 0;
@@ -2067,7 +2063,9 @@ Space.prototype._changeZoom =
 {
 	var
 		pm =
-			this.view.depoint( this._center ); // TODO
+			this.view.depoint(
+				this.view.baseFrame.pc
+			);
 
 	shell.setView(
 		this.view.review(

@@ -455,7 +455,7 @@ View.prototype.rect =
 
 /*
 | Returns a view with changed zoom level and
-| a pnw so p stays in the same spot.
+| a pan so p stays in the same spot.
 |
 | new pnw (k1) calculates as:
 |
