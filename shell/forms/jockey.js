@@ -61,22 +61,13 @@ if( JOOBJ )
 
 		attributes :
 			{
-				path :
+				hover :
 					{
 						comment :
-							'the path of the form jockey',
+							'the widget hovered upon',
 
 						type :
 							'Path'
-					},
-
-				screensize :
-					{
-						comment :
-							'the current screensize',
-
-						type :
-							'Point'
 					},
 
 				mark :
@@ -88,10 +79,10 @@ if( JOOBJ )
 							'Mark'
 					},
 
-				hover :
+				path :
 					{
 						comment :
-							'the widget hovered upon',
+							'the path of the form jockey',
 
 						type :
 							'Path'
@@ -128,6 +119,24 @@ if( JOOBJ )
 
 						defaultVal :
 							'null'
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View',
+
+						concerns :
+							{
+								func :
+									'view.sizeOnly',
+
+								args :
+									null
+							}
 					}
 			},
 
@@ -170,18 +179,18 @@ Jockey.prototype._init =
 			Forms[ name ].create(
 				'inherit',
 					inherit && inherit._forms[ name ],
-				'path',
-					path,
-				'screensize',
-					this.screensize,
-				'traitSet',
-					traitSet,
-				'mark',
-					this.mark,
 				'hover',
 					this.hover,
+				'mark',
+					this.mark,
+				'path',
+					path,
+				'traitSet',
+					traitSet,
 				'username',
-					this.username
+					this.username,
+				'view',
+					this.view
 			);
 
 /**/	if( CHECK )

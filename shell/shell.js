@@ -181,17 +181,6 @@ Shell =
 					fabric.height
 			);
 
-	// TODO remove screensize
-	var
-		screensize =
-		this.screensize =
-			Euclid.Point.create(
-				'x',
-					fabric.width,
-				'y',
-					fabric.height
-			);
-
 	this._$formJockey =
 		Forms.Jockey.create(
 			'hover',
@@ -200,8 +189,8 @@ Shell =
 				Mark.Vacant.create( ),
 			'path',
 				Path.empty.append( 'forms' ),
-			'screensize',
-				screensize
+			'view',
+				view
 		);
 
 	this._$discJockey =
@@ -1261,30 +1250,11 @@ Shell.prototype.resize =
 			'inherit',
 				this.$view,
 			'height',
-				this.fabric.height,
+				fabric.height,
 			'width',
-				this.fabric.width
+				fabric.width
 		)
 	);
-
-	// FIXME create a fabric.size point;
-	var
-		screensize =
-		this.screensize =
-			Euclid.Point.create(
-				'x',
-					fabric.width,
-				'y',
-					fabric.height
-			);
-
-	this._$formJockey =
-		Forms.Jockey.create(
-			'inherit',
-				this._$formJockey,
-			'screensize',
-				screensize
-		);
 
 	this._draw( );
 };
@@ -1407,6 +1377,14 @@ Shell.prototype.setView =
 		Discs.Jockey.create(
 			'inherit',
 				this._$discJockey,
+			'view',
+				view
+		);
+
+	this._$formJockey =
+		Forms.Jockey.create(
+			'inherit',
+				this._$formJockey,
 			'view',
 				view
 		);

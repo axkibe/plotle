@@ -45,22 +45,13 @@ if( JOOBJ )
 
 		attributes :
 			{
-				path :
+				hover :
 					{
 						comment :
-							'the path of the form',
+							'the widget hovered upon',
 
 						type :
 							'Path'
-					},
-
-				screensize :
-					{
-						comment :
-							'the current screensize',
-
-						type :
-							'Point'
 					},
 
 				mark :
@@ -84,10 +75,10 @@ if( JOOBJ )
 							}
 					},
 
-				hover :
+				path :
 					{
 						comment :
-							'the widget hovered upon',
+							'the path of the form',
 
 						type :
 							'Path'
@@ -127,6 +118,24 @@ if( JOOBJ )
 
 						assign :
 							null
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View',
+
+						concerns :
+							{
+								func :
+									'view.sizeOnly',
+
+								args :
+									null
+							}
 					}
 			},
 

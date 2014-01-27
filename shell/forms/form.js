@@ -58,12 +58,7 @@ Form.init =
 	)
 {
 	this.frame =
-		Euclid.Rect.create(
-			'pnw',
-				Euclid.Point.zero,
-			'pse',
-				this.screensize
-		);
+		this.view.baseFrame;
 
 	var
 		tree =

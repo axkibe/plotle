@@ -522,6 +522,31 @@ View.prototype.review =
 
 
 /*
+| The zero based frame of this view.
+*/
+Jools.lazyFixate(
+	View.prototype,
+	'baseFrame',
+	function( )
+	{
+		return (
+			Euclid.Rect.create(
+				'pnw',
+					Euclid.Point.zero,
+				'pse',
+					Euclid.Point.create(
+						'x',
+							this.width,
+						'y',
+							this.height
+					)
+			)
+		);
+	}
+);
+
+
+/*
 | Proper is the view at point zero with zero zoom.
 |
 | TODO remove

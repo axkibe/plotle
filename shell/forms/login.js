@@ -58,15 +58,6 @@ if( JOOBJ )
 							'Path'
 					},
 
-				screensize :
-					{
-						comment :
-							'the current screensize',
-
-						type :
-							'Point'
-					},
-
 				mark :
 					{
 						comment :
@@ -131,6 +122,24 @@ if( JOOBJ )
 
 						assign :
 							null
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View',
+
+						concerns :
+							{
+								func :
+									'view.sizeOnly',
+
+								args :
+									null
+							}
 					}
 			},
 
