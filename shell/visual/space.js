@@ -610,7 +610,7 @@ Space.prototype.draw =
 
 	// TODO
 	this._center =
-		fabric.getCenter( );
+		fabric.pc;
 
 	for(
 		var r = tree.length - 1;
@@ -618,7 +618,6 @@ Space.prototype.draw =
 		r--
 	)
 	{
-		// TODO dont give view here
 		this.atRank( r ).draw( fabric );
 	}
 
@@ -770,7 +769,7 @@ Space.prototype.mousewheel =
 	if ( dir > 0 )
 	{
 		shell.setView(
-			this.view.review(  1, p )
+			this.view.review( 1, p )
 		);
 	}
 	else
@@ -1246,7 +1245,6 @@ Space.prototype.dragStop =
 					key =
 						result.chgX.trg.path.get( -1 );
 
-					// TODO why does this reference shell.sub
 					shell.setMark(
 						Mark.Caret.create(
 							'path',

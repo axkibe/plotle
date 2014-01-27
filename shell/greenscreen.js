@@ -121,8 +121,8 @@ GreenScreen.prototype.draw =
 	)
 {
 	var
-		ce =
-			fabric.getCenter( );
+		pc =
+			fabric.pc;
 
 	fabric.fillRect(
 		'rgb(170, 255, 170)',
@@ -146,7 +146,7 @@ GreenScreen.prototype.draw =
 		this,
 		'sketchFrowny',
 		Euclid.View.proper,
-		ce.add(
+		pc.add(
 			0,
 			-80
 		)
@@ -156,7 +156,7 @@ GreenScreen.prototype.draw =
 		'text',
 			this.message,
 		'p',
-			ce,
+			pc,
 		'font',
 			fontPool.get(
 				26,
@@ -168,8 +168,8 @@ GreenScreen.prototype.draw =
 		'text',
 			'Please refresh the page to reconnect.',
 		'xy',
-			ce.x,
-			ce.y + 50,
+			pc.x,
+			pc.y + 50,
 		'font',
 			fontPool.get(
 				20,

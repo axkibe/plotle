@@ -555,7 +555,7 @@ Shell.prototype._draw =
 		fabric =
 			this.fabric;
 
-	fabric.reset( );
+	fabric.clear( );
 
 	var
 		display =

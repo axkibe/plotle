@@ -103,7 +103,6 @@
 . WelcomeForm
 . Widget
 . _$atween
-. _$center
 . _$discJockey
 . _$font
 . _$fontWatch
@@ -432,13 +431,11 @@
 > get
 . getArea
 . getByPathKey
-. getCenter
 > getContext
 > getDate
 > getElementById
 . getFocusedItem
 > getHours
-> getImageData
 > getItem
 > getMinutes
 > getMonth
@@ -668,7 +665,6 @@
 . puffed
 > push
 . pushButton
-> putImageData
 > px
 > ra
 > random

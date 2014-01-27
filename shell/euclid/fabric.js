@@ -8,7 +8,8 @@
 /*
 | Exports
 */
-var Euclid;
+var
+	Euclid;
 
 
 Euclid =
@@ -31,16 +32,10 @@ var
 
 var
 	_tag =
-		'TODO-828293';
+		86062371;
 
 /*
 | Constructor.
-|
-| TODO: change to free strings
-|
-| Fabric( )         -or-    creates a new fabric
-| Fabric( canvas )  -or-    encloses an existing HTML5 canvas
-| Fabric( width, height )   creates a new fabric and sets its size;
 */
 var Fabric =
 Euclid.Fabric =
@@ -963,83 +958,24 @@ Fabric.prototype.fillRect =
 
 /*
 | Returns the center point of the fabric.
-|
-| TODO lazyFixate
 */
-Fabric.prototype.getCenter =
+Jools.lazyFixate(
+	Fabric.prototype,
+	'pc',
 	function( )
-{
-	var
-		x =
-			Jools.half( this.width ),
-
-		y =
-			Jools.half( this.height ),
-
-		c =
-			this._$center;
-
-	if( c && c.x === x && c.y === y )
 	{
-		return c;
+		var
+			x =
+				Jools.half( this.width ),
+
+			y =
+				Jools.half( this.height );
+
+		return (
+			Euclid.Point.create( 'x', x, 'y', y )
+		);
 	}
-	else
-	{
-		c =
-		this._$center =
-			Euclid.Point.create( 'x', x, 'y', y );
-
-		return c;
-	}
-};
-
-
-/*
-| getImageData(rect)     -or-
-| getImageData(pnw, pse) -or-
-| getImageData(x1, y1, x2, y2)
-*/
-Fabric.prototype.getImageData =
-	function(
-		a1,
-		a2,
-		a3,
-		a4
-	)
-{
-	var x1, y1, x2, y2;
-
-	if( typeof( a1 ) === 'object' )
-	{
-		if( a1 instanceof Euclid.Rect )
-		{
-			x1 = a1.pnw.x;
-			y1 = a1.pnw.y;
-			x2 = a1.pse.x;
-			y2 = a1.pse.y;
-		}
-		else if( a1 instanceof Euclid.Point )
-		{
-			x1 = a1.x; y1 = a1.y;
-			x2 = a2.x; y2 = a2.y;
-		}
-		else
-		{
-			throw new Error('getImageData not a rectangle');
-		}
-	}
-	else
-	{
-		x1 = a1;
-		y1 = a2;
-		x2 = a3;
-		y2 = a4;
-	}
-
-	Jools.ensureInt( x1, y2, x1, y2 );
-
-	return this._cx.getImageData( a1, a2, a3, a4 );
-};
+);
 
 
 /*
@@ -1175,88 +1111,17 @@ Fabric.prototype.moveTo =
 
 
 /*
-| putImageData( imagedata, p ) -or-
-| putImageData( imagedata, x, y )
+| The canvas is cleared.
 */
-Fabric.prototype.putImageData =
-	function(
-		imagedata,
-		a1,
-		a2
-	)
+Fabric.prototype.clear =
+	function( )
 {
-	var x, y;
-	if( typeof( a1 ) === 'object' )
-	{
-		x = a1.x;
-		y = a1.y;
-	}
-	else
-	{
-		x = a1;
-		y = a2;
-	}
-
-	Jools.ensureInt( x, y );
-
-	this._cx.putImageData( imagedata, x, y );
-};
-
-
-/*
-| The canvas is cleared and resized to width/height (of rect).
-|
-| reset()               -or-
-| reset(rect)           -or-
-| reset(width, height)
-*/
-Fabric.prototype.reset =
-	function(
-		a1,
-		a2
-	)
-{
-	var c = this._canvas;
-	var w, h;
-
-	switch( typeof( a1 ) )
-	{
-		case 'undefined' :
-			this._cx.clearRect(
-				0,
-				0,
-				c.width,
-				c.height
-			);
-			return;
-
-		case 'object' :
-			w  = a1.width;
-			h  = a1.height;
-			break;
-
-		default :
-			w  = a1;
-			h  = a2;
-			break;
-	}
-
-	if( c.width === w &&
-		c.height === h
-	)
-	{
-		// no size change, clearRect() is faster
-		this._cx.clearRect(0, 0, c.width, c.height);
-	}
-	else
-	{
-		// setting width or height clears the contents
-		if( c.width  !== w )
-			{ c.width  = w; }
-
-		if( c.height !== h )
-			{ c.height = h; }
-	}
+	this._cx.clearRect(
+		0,
+		0,
+		this.width,
+		this.height
+	);
 };
 
 
@@ -1537,7 +1402,9 @@ Fabric.prototype.withinSketch =
 | Begins a sketch
 */
 Fabric.prototype._begin =
-	function( twist )
+	function(
+		twist
+	)
 {
 	// lines are targed at .5 coords.
 	this._$twist =
@@ -1622,7 +1489,7 @@ Fabric.prototype._colorStyle =
 					0,
 					pse.y
 				);
-	
+
 			break;
 
 		case 'radial' :
@@ -1751,30 +1618,29 @@ Fabric.prototype.sketch =
 
 
 /*
-| pnw
+| Point in north-west
+| is always considered zero.
 */
 Fabric.prototype.pnw =
 	Euclid.Point.zero;
 
+
 /*
-| pse
+| Point in south east.
 */
-Object.defineProperty(
+Jools.lazyFixate(
 	Fabric.prototype,
 	'pse',
+	function( )
 	{
-		get :
-			function( )
-			{
-				return (
-					Euclid.Point.create(
-						'x',
-							this.width,
-						'y',
-							this.height
-					)
-				);
-			}
+		return (
+			Euclid.Point.create(
+				'x',
+					this.width,
+				'y',
+					this.height
+			)
+		);
 	}
 );
 
