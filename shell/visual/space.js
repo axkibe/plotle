@@ -1711,13 +1711,13 @@ Space.prototype.dragMove =
 
 				shell.setView(
 					Euclid.View.create(
+						'inherit',
+							view,
 						'pan',
 							action.pan.add(
 								pd.x / view.zoom,
 								pd.y / view.zoom
-							),
-						'fact',
-							view.fact
+							)
 					)
 				);
 
@@ -1744,7 +1744,7 @@ Space.prototype.dragMove =
 			{
 				if(
 					this.atRank( r ).dragMove(
-						view,
+						view, // TODO dont
 						p
 					)
 				)
@@ -1762,13 +1762,13 @@ Space.prototype.dragMove =
 
 			shell.setView(
 				Euclid.View.create(
+					'inherit',
+						view,
 					'pan',
 						action.pan.add(
 							Math.round( pd.x / view.zoom ),
 							Math.round( pd.y / view.zoom )
-						),
-					'fact',
-						view.fact
+						)
 				)
 			);
 
@@ -1954,7 +1954,7 @@ Space.prototype.dragMove =
 			this.getItem(
 				action.itemPath.get( -1 )
 			).dragMove(
-				view,
+				view, // TODO dont
 				p
 			);
 
@@ -1982,10 +1982,6 @@ Space.prototype.pointingStart =
 		// ctrl
 	)
 {
-	var
-		view =
-			this.view;
-
 	/*
 	if( this.access == 'ro' )
 	{
@@ -2017,7 +2013,7 @@ Space.prototype.pointingStart =
 		var
 			com =
 				focus.checkHandles(
-					view,
+					this.view,
 					p
 				);
 

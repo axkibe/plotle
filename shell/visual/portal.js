@@ -859,7 +859,7 @@ Jools.lazyFixate(
 				),
 
 			hview =
-				this.view.home( ),
+				this.view.home,
 
 			mark =
 				this.mark,

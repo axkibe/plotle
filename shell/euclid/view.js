@@ -46,6 +46,24 @@ if( JOOBJ )
 
 		attributes :
 			{
+				fact :
+					{
+						comment :
+							'zooming factor of view',
+
+						type :
+							'Number'
+					},
+
+				height :
+					{
+						comment :
+							'current height of screen',
+
+						type :
+							'Integer'
+					},
+
 				pan :
 					{
 						comment :
@@ -55,13 +73,13 @@ if( JOOBJ )
 							'Point'
 					},
 
-				fact :
+				width :
 					{
 						comment :
-							'zooming factor of view',
+							'current width of screen',
 
 						type :
-							'Number'
+							'Integer'
 					}
 			},
 
@@ -160,8 +178,11 @@ View.prototype.dex =
 
 	if( a1 instanceof Euclid.Point )
 	{
-		x = a1.x;
-		y = a1.y;
+		x =
+			a1.x;
+
+		y =
+			a1.y;
 	}
 	else
 	{
@@ -269,28 +290,22 @@ View.prototype.dey =
 
 /*
 | Returns a view with pan zero, but same fact level
-| TODO lazy
 */
-View.prototype.home =
+Jools.lazyFixate(
+	View.prototype,
+	'home',
 	function( )
-{
-	if( this._$home )
 	{
-		return this._$home;
-	}
-
-	var
-		home =
-		this._$home =
+		return (
 			View.create(
+				'inherit',
+					this,
 				'pan',
-					Euclid.Point.zero,
-				'fact',
-					this.fact
-			);
-
-	return home;
-};
+					Euclid.Point.zero
+			)
+		);
+	}
+);
 
 
 /*
@@ -468,27 +483,35 @@ View.prototype.review =
 			1 / this.zoom;
 
 	return View.create(
+		'inherit',
+			this,
+		'fact',
+			f1,
 		'pan',
 			Euclid.Point.create(
 				'x',
 					Math.round( pan.x + p.x * f ),
 				'y',
 					Math.round( pan.y + p.y * f )
-			),
-		'fact',
-			f1
+			)
 	);
 };
 
 
 /*
 | Proper is the view at point zero with zero zoom.
+|
+| TODO remove
 */
 View.proper =
 	View.create(
+		'height',
+			0,
+		'fact',
+			0,
 		'pan',
 			Euclid.Point.zero,
-		'fact',
+		'width',
 			0
 	);
 

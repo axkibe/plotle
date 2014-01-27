@@ -607,7 +607,7 @@ Jools.lazyFixate(
 				this.view.rect( this.zone ),
 
 			hview =
-				this.view.home( );
+				this.view.home;
 
 		if(
 			this._ifabric

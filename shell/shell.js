@@ -113,12 +113,16 @@ Shell =
 		fabric
 	)
 {
-	if( shell !== null )
-	{
-		throw new Error(
-			'Singleton not single'
-		);
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( shell !== null )
+/**/	{
+/**/		throw new Error(
+/**/			'Singleton not single'
+/**/		);
+/**/	}
+/**/}
 
 	shell =
 		this;
@@ -163,6 +167,21 @@ Shell =
 	this._$hover =
 		Path.empty;
 
+	// var
+		// view =
+		this.$view =
+			Euclid.View.create(
+				'pan',
+					Euclid.Point.zero,
+				'fact',
+					0,
+				'width',
+					fabric.width,
+				'height',
+					fabric.height
+			);
+
+	// TODO remove screensize
 	var
 		screensize =
 		this.screensize =
@@ -1237,6 +1256,17 @@ Shell.prototype.resize =
 	this.fabric =
 		fabric;
 
+	this.setView(
+		Euclid.View.create(
+			'inherit',
+				this.$view,
+			'height',
+				this.fabric.height,
+			'width',
+				this.fabric.width
+		)
+	);
+
 	// FIXME create a fabric.size point;
 	var
 		screensize =
@@ -1370,6 +1400,9 @@ Shell.prototype.setView =
 		view
 	)
 {
+	this.$view =
+		view;
+
 	this.$space =
 		Visual.Space.create(
 			'inherit',
@@ -1570,10 +1603,14 @@ Shell.prototype.onAquireSpace =
 				Mark.Vacant.create( ),
 			'view',
 				Euclid.View.create(
+					'fact',
+						0,
+					'height',
+						this.fabric.height,
 					'pan',
 						Euclid.Point.zero,
-					'fact',
-						0
+					'width',
+						this.fabric.width
 				)
 		);
 

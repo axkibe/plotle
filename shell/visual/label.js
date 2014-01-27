@@ -602,7 +602,7 @@ Jools.lazyFixate(
 				this.sub.doc,
 
 			hview =
-				this.view.home( );
+				this.view.home;
 
 		// draws selection and text
 		doc.draw(
