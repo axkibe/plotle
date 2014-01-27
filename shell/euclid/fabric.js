@@ -29,6 +29,10 @@ var
 'use strict';
 
 
+var
+	_tag =
+		'TODO-828293';
+
 /*
 | Constructor.
 |
@@ -41,78 +45,68 @@ var
 var Fabric =
 Euclid.Fabric =
 	function(
-		a1,
-		a2
+		tag,
+		canvas,
+		height,
+		inherit,
+		width
 	)
 {
-	switch( typeof( a1 ) )
+
+/**/if( CHECK )
+/**/{
+/**/	if( tag !== _tag )
+/**/	{
+/**/		throw new Error(
+/**/			'tag mismatch'
+/**/		);
+/**/	}
+/**/}
+
+	if( inherit )
 	{
-		case 'undefined' :
-
-			this._canvas =
-				document.createElement( 'canvas' );
-
-			break;
-
-		case 'object' :
-
-			switch( a1.constructor )
-			{
-				case Fabric :
-
-					this._canvas =
-						a1._canvas;
-
-					break;
-
-				case Euclid.RoundRect :
-				case Euclid.Rect :
-
-					this._canvas =
-						document.createElement( 'canvas' );
-
-					this._canvas.width =
-						a1.width;
-
-					this._canvas.height =
-						a1.height;
-
-					break;
-
-				default :
-					if( !a1.getContext )
-					{
-						throw new Error( 'Invalid parameter to new Fabric: ' + a1 );
-					}
-
-					this._canvas =
-						a1;
-
-					break;
-
-			}
-
-			break;
-
-		case 'number' :
-
-			this._canvas =
-				document.createElement( 'canvas' );
-
-			this._canvas.width =
-				a1;
-
-			this._canvas.height =
-				a2;
-
-			break;
-
-		default :
-			throw new Error( 'Invalid parameter to new Fabric: ' + a1 );
+		canvas =
+			inherit._canvas;
+	}
+	else if( canvas === undefined )
+	{
+		canvas =
+			document.createElement( 'canvas' );
 	}
 
+	if( width === undefined )
+	{
+		width =
+			canvas.width;
+	}
+	else
+	{
+		canvas.width =
+			width;
+	}
+
+	if( height === undefined )
+	{
+		height =
+			canvas.height;
+	}
+	else
+	{
+		canvas.height =
+			height;
+	}
+
+	this.width =
+		width;
+
+	this.height =
+		height;
+
+	this._canvas =
+		canvas;
+
 	this._cx =
-		this._canvas.getContext( '2d' );
+		canvas.getContext( '2d' );
 
 	// curren positiont ( without twist )
 	this._$posx =
@@ -121,7 +115,83 @@ Euclid.Fabric =
 
 	this.$clip =
 		false;
+
+	Jools.immute( this );
 };
+
+
+/*
+| Creator.
+*/
+Fabric.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+
+		canvas,
+		inherit,
+		height,
+		width;
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'canvas' :
+
+				canvas =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'height' :
+
+				height =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'width' :
+
+				width =
+					arguments[ a + 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					CHECK
+					&&
+					'invalid argument'
+				);
+		}
+	}
+
+	return new Fabric(
+		_tag,
+		canvas,
+		height,
+		inherit,
+		width
+	);
+};
+
 
 
 /*
@@ -1707,39 +1777,6 @@ Object.defineProperty(
 			}
 	}
 );
-
-
-/*
-| Fabric width.
-*/
-Object.defineProperty(
-	Fabric.prototype,
-	'width',
-	{
-		get :
-			function( )
-			{
-				return this._canvas.width;
-			}
-	}
-);
-
-
-/*
-| Fabric height.
-*/
-Object.defineProperty(
-	Fabric.prototype,
-	'height',
-	{
-		get :
-			function( )
-			{
-				return this._canvas.height;
-			}
-	}
-);
-
 
 
 } )( );

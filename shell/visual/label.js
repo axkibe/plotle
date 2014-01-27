@@ -587,8 +587,16 @@ Jools.lazyFixate(
 	function( )
 	{
 		var
+			vzone =
+				this.view.rect( this.zone ),
+
 			f =
-				new Euclid.Fabric( this.view.rect( this.zone ) ),
+				Euclid.Fabric.create(
+					'width',
+						vzone.width,
+					'height',
+						vzone.height
+				),
 
 			doc =
 				this.sub.doc,

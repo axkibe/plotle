@@ -268,12 +268,15 @@ CreateDisc.prototype._init =
 CreateDisc.prototype._weave =
 	function( )
 {
-	var fabric =
-	this.$fabric =
-		new Euclid.Fabric(
-			this.style.width,
-			this.style.height
-		);
+	var
+		fabric =
+		this.$fabric =
+			Euclid.Fabric.create(
+				'width',
+					this.style.width,
+				'height',
+					this.style.height
+			);
 
 	fabric.fill(
 		this.style,

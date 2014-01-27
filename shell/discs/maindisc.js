@@ -20,6 +20,7 @@ Discs =
 */
 var
 	Euclid,
+	Jools,
 	shell,
 	Widgets;
 
@@ -374,9 +375,11 @@ MainDisc.prototype._weave =
 
 	fabric =
 	this.$fabric =
-		new Euclid.Fabric(
-			this.style.width,
-			this.style.height
+		Euclid.Fabric.create(
+			'width',
+				this.style.width,
+			'height',
+				this.style.height
 		);
 
 	fabric.fill(

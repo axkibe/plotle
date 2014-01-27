@@ -851,9 +851,11 @@ Jools.lazyFixate(
 				this.view.rect( this.zone ),
 
 			f =
-				new Euclid.Fabric(
-					vzone.width + 2,
-					vzone.height + 2
+				Euclid.Fabric.create(
+					'width',
+						vzone.width + 2,
+					'height',
+						vzone.height + 2
 				),
 
 			hview =

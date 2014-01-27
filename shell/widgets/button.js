@@ -340,8 +340,11 @@ Jools.lazyFixate(
 				),
 
 			f =
-				new Euclid.Fabric(
-					this.frame.zeropnw
+				Euclid.Fabric.create(
+					'width',
+						this.frame.width,
+					'height',
+						this.frame.height
 				),
 
 			tree =

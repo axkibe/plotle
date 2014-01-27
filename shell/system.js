@@ -107,14 +107,15 @@ var System =
 		this._canvas =
 			document.getElementById( 'canvas' );
 
-	canvas.width =
-		window.innerWidth - 1;
-
-	canvas.height =
-		window.innerHeight - 1;
-
-	this.fabric =
-		new Euclid.Fabric(canvas);
+	this._fabric =
+		Euclid.Fabric.create(
+			'canvas',
+				this._canvas,
+			'width',
+				window.innerWidth - 1,
+			'height',
+				window.innerHeight - 1
+		);
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
@@ -627,22 +628,22 @@ System.prototype._onResize =
 	)
 {
 	var
-		c =
-			this._canvas,
-
-		w =
-		c.width =
-			window.innerWidth - 1;
-
-		h =
-		c.height =
-			window.innerHeight - 1;
-
-
+		fabric =
+		this._fabric =
+			Euclid.Fabric.create(
+				'inherit',
+					this._fabric,
+				'width',
+					window.innerWidth - 1,
+				'height',
+					window.innerHeight - 1
+			);
 
 	if( this.shell )
 	{
-		this.shell.resize( w, h );
+		this.shell.resize(
+			fabric
+		);
 	}
 };
 
@@ -656,6 +657,7 @@ System.prototype._captureEvents =
 	if( this._useCapture )
 	{
 		this._canvas.setCapture( this._canvas );
+
 		return;
 	}
 
@@ -1739,7 +1741,7 @@ startup =
 					new System( );
 
 				system.shell =
-					new Shell( system.fabric );
+					new Shell( system._fabric );
 
 				system.shell.onload( );
 

@@ -128,7 +128,10 @@ Shell =
 			document.createElement( 'canvas' );
 
 	swatch =
-		new Euclid.Fabric( canvas );
+		Euclid.Fabric.create(
+			'canvas',
+				canvas
+		);
 
 	Euclid.Measure.init( canvas );
 
@@ -1228,18 +1231,21 @@ Shell.prototype.input =
 */
 Shell.prototype.resize =
 	function(
-		width,
-		height
+		fabric
 	)
 {
+	this.fabric =
+		fabric;
+
+	// FIXME create a fabric.size point;
 	var
 		screensize =
 		this.screensize =
 			Euclid.Point.create(
 				'x',
-					width,
+					fabric.width,
 				'y',
-					height
+					fabric.height
 			);
 
 	this._$discJockey =
