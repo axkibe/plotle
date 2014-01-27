@@ -108,22 +108,6 @@ config.maxUndo =
 
 
 /*
-| Disables all caching in the client.
-| Used for debugging.
-*/
-config.debug.noCache =
-	false;
-
-
-/*
-| If true draws boxes around all cockpits frames, to see if
-| their size is just right.
-*/
-config.debug.drawBoxes =
-	false;
-
-
-/*
 | If true formats messages and JSON with whitespace/newlines
 */
 config.debug.puffed =

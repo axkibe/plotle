@@ -169,7 +169,7 @@ if( JOOBJ )
 								args :
 									null
 							}
-				},
+				}
 			},
 
 		subclass :

@@ -229,7 +229,6 @@
 . _update
 . _updateRCV
 . _useCapture
-. _weave
 . _widgetPath
 > a
 > abort
