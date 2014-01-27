@@ -493,7 +493,7 @@ Jools.lazyFixate(
 				this._pitch,
 
 			f =
-				Euclid.Fabric(
+				Euclid.Fabric.create(
 					'width',
 						shape.width + 1,
 					'height',

@@ -1365,57 +1365,28 @@ Fabric.prototype.withinSketch =
 		shape,
 		sketch,
 		view,
+		p,
 		a1,
 		a2,
-		a3,
-		a4,
-		a5
+		a3
 	)
 {
-	var
-		px,
-		py,
-		pobj;
-
-	if( typeof( a1 ) === 'object' )
-	{
-		px   = a1.x;
-		py   = a1.y;
-		pobj = true;
-	}
-	else
-	{
-		px   = a1;
-		py   = a2;
-		pobj = false;
-	}
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		typeof( px ) !== 'number'
-/**/		||
-/**/		typeof( py ) !== 'number'
-/**/	)
+/**/	if( p.reflect !== 'Point' )
 /**/	{
 /**/		throw new Error(
-/**/			'px|py not a number ' + px + ' ' + py
+/**/			'p not a point'
 /**/		);
 /**/	}
 /**/}
 
 	this._begin( true );
 
-	if( pobj )
-	{
-		shape[ sketch ]( this, 0, true, view, a2, a3, a4 );
-	}
-	else
-	{
-		shape[ sketch ]( this, 0, true, view, a3, a4, a5 );
-	}
+	shape[ sketch ]( this, 0, true, view, a1, a2, a3 );
 
-	return this._cx.isPointInPath( px, py );
+	return this._cx.isPointInPath( p.x, p.y );
 };
 
 
