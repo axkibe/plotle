@@ -326,6 +326,17 @@ Jools.lazyFixate(
 
 
 /*
+| Returns the attention center.
+*/
+Para.prototype.attentionCenter =
+	function( )
+{
+	return 0;
+	// TODO
+};
+
+
+/*
 | Draws the paragraph in its cache and returns it.
 */
 Para.prototype.draw =

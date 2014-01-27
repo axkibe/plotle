@@ -359,6 +359,38 @@ Doc.prototype.atRank =
 
 
 /*
+| Returns the attention center.
+*/
+Doc.prototype.attentionCenter =
+	function(
+		item
+	)
+{
+	if( !this.mark.hasCaret )
+	{
+		return 0;
+	}
+
+	var
+		path =
+			this.mark.caretPath,
+
+		key =
+			path.get( 3 );
+
+	return (
+		this.getPNW(
+			item,
+			key
+		).y
+		+
+		this
+			.sub[ key ]
+			.attentionCenter( )
+	);
+};
+
+/*
 | Draws the document on a fabric.
 */
 Doc.prototype.draw =
@@ -727,15 +759,15 @@ Doc.prototype.sketchRange =
 		mark =
 			this.mark;
 
-	if( CHECK )
-	{
-		if( mark.reflect !== 'Range' )
-		{
-			throw new Error(
-				'wrong mark'
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( mark.reflect !== 'Range' )
+/**/	{
+/**/		throw new Error(
+/**/			'wrong mark'
+/**/		);
+/**/	}
+/**/}
 
 	var
 		tree =

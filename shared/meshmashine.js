@@ -342,10 +342,7 @@ var tfxChg =
 		}
 
 
-		return new Change(
-			srcX,
-			trgX
-		);
+		return new Change( srcX, trgX );
 	}
 	else if( !srcA && trgA )
 	{

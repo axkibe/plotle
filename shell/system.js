@@ -1119,6 +1119,8 @@ System.prototype._onMouseUp =
 				ctrl
 			);
 
+			this._steerAttention( );
+
 			this._$pointingState =
 				false;
 
@@ -1137,6 +1139,8 @@ System.prototype._onMouseUp =
 				shift,
 				ctrl
 			);
+
+			this._steerAttention( );
 
 			this._$pointingState =
 				false;
@@ -1473,6 +1477,8 @@ System.prototype._onTouchEnd =
 				ctrl
 			);
 
+			this._steerAttention( );
+
 			this._$pointingState =
 				false;
 
@@ -1491,6 +1497,8 @@ System.prototype._onTouchEnd =
 				shift,
 				ctrl
 			);
+
+			this._steerAttention( );
 
 			this._$pointingState =
 				false;
@@ -1687,6 +1695,8 @@ System.prototype._specialKey =
 		ctrl
 	);
 
+	this._steerAttention( );
+
 	return false;
 };
 
@@ -1724,6 +1734,27 @@ System.prototype._testInput =
 		0;
 
 	this.shell.input( text );
+
+	this._steerAttention( );
+};
+
+
+/*
+| This is mainly used on the iPad.
+|
+| Checks if the virtual keyboard should be suggested
+| and if takes care the caret is scrolled into
+| visible screen area
+*/
+System.prototype._steerAttention =
+	function( )
+{
+	var
+		ac =
+			this.shell.attentionCenter;
+
+	this._hiddenInput.style.top =
+		ac + 'px';
 };
 
 

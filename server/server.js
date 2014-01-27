@@ -500,7 +500,10 @@ Server.prototype.loadSpace =
 		if ( !Jools.isArray( o.chgX ) )
 		{
 			change.chgX =
-				new MeshMashine.Change( o.chgX );
+				new MeshMashine.Change(
+					o.chgX.src,
+					o.chgX.trg
+				);
 		}
 		else
 		{
@@ -1906,12 +1909,15 @@ Server.prototype.cmdAlter =
 			);
 		}
 
-		chgX = new MeshMashine.Change( chgX );
+		chgX =
+			new MeshMashine.Change( chgX.src, chgX.trg );
 
 	}
 	catch( err )
 	{
-		throw Jools.reject( 'invalid cmd: ' + err.message );
+		throw Jools.reject(
+			'invalid cmd: ' + err.message
+		);
 	}
 
 	// translates the changes if not most recent

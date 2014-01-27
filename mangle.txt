@@ -1,3 +1,6 @@
+. _steerAttention
+. attentionCenter
+. baseFrame
 . $view
 . sizeOnly
 . _userIsGuest
@@ -142,7 +145,6 @@
 . _blinkTimer
 . _canvas
 . _captureEvents
-. _center
 . _changeZoom
 . _colorStyle
 . _createItem
@@ -372,7 +374,6 @@
 . dragbox
 . dragtime
 . draw
-. drawBoxes
 . drawHandles
 > drawImage
 > e
@@ -589,7 +590,6 @@
 . newsletterCheckBox
 . newsletterLabel
 . noButton
-. noCache
 > node
 . normal
 . note
@@ -708,7 +708,6 @@
 > s
 > save
 > scale
-. screensize
 . scrollMarkIntoView
 . scrollPage
 . scrollbar
@@ -722,7 +721,6 @@
 . sendMessage
 > set
 . setAction
-. setActive
 . setCapture
 . setDefaultFonts
 . setFocus

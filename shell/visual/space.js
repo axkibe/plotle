@@ -536,6 +536,28 @@ Space.prototype.atRank =
 
 
 /*
+| Returns the attention center.
+*/
+Jools.lazyFixate(
+	Space.prototype,
+	'attentionCenter',
+	function( )
+	{
+		var
+			focus =
+				this.focusedItem( );
+
+		if( !focus )
+		{
+			return null;
+		}
+
+		return focus.attentionCenter( );
+	}
+);
+
+
+/*
 | Creates a new visual representation of an item.
 */
 Space.prototype._createItem =

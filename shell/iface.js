@@ -725,10 +725,14 @@ IFace.prototype._update =
 			)
 			{
 				chgX =
-					new Change( chgs[a].chgX );
+					new Change(
+						chgs[ a ].chgX.src,
+						chgs[ a ].chgX.trg
+					);
 
-				var cid =
-					chgs[ a ].cid;
+				var
+					cid =
+						chgs[ a ].cid;
 
 				// changes the clients understanding of the server tree
 				self.$rSpace =
@@ -738,14 +742,16 @@ IFace.prototype._update =
 					).tree;
 
 				if(
-					postbox.length > 0 &&
-					postbox[0].cid === cid
+					postbox.length > 0
+					&&
+					postbox[ 0 ].cid === cid
 				)
 				{
 					postbox.splice( 0, 1 );
 
 					gotOwnChgs =
 						true;
+
 					continue;
 				}
 

@@ -549,7 +549,7 @@ Jools.lazyFixate(
 /*
 | Proper is the view at point zero with zero zoom.
 |
-| TODO remove
+| FIXME remove
 */
 View.proper =
 	View.create(

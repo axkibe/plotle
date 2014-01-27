@@ -54,42 +54,20 @@ if( SERVER )
 */
 Change =
 	function(
-		a1, // src   -or-   obj ( with o.src and o.trg)
-		a2  // trg   -or-   -
+		src,
+		trg
 	)
 {
-	var
-		src,
-		trg;
 
-	switch( arguments.length )
-	{
-		case 2:
-
-			src =
-				a1;
-
-			trg =
-				a2;
-
-			break;
-
-		case 1:
-
-			src =
-				a1.src;
-
-			trg =
-				a1.trg;
-
-			break;
-
-		default :
-
-			throw new Error(
-				'Change Constructor: argument fail'
-			);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 )
+/**/	{
+/**/		throw new Error(
+/**/			'argFail'
+/**/		);
+/**/	}
+/**/}
 
 	if( src.constructor === Sign )
 	{

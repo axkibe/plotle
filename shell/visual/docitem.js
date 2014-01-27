@@ -84,6 +84,23 @@ DocItem.prototype.dragStop =
 
 
 /*
+| Returns the attention center.
+*/
+Jools.lazyFixate(
+	DocItem.prototype,
+	'attentionCenter',
+	function( )
+	{
+		return (
+			this.zone.pnw.y
+			+
+			this.sub.doc.attentionCenter( this )
+		);
+	}
+);
+
+
+/*
 | Returns the para at point. FIXME, honor scroll here.
 */
 DocItem.prototype.getParaAtPoint =

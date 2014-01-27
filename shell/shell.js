@@ -318,6 +318,30 @@ Shell.prototype.setMode =
 
 
 /*
+| Returns the attention center.
+|
+| That is the horiziontal offset of the caret.
+|
+| Used for example on the iPad so
+| the caret is scrolled into view
+| when the keyboard is visible.
+*/
+Object.defineProperty(
+	Shell.prototype,
+	'attentionCenter',
+	{
+		get :
+			function( )
+			{
+				return (
+					this._getCurrentDisplay( ).attentionCenter
+				);
+			}
+	}
+);
+
+
+/*
 | Sets the current action.
 */
 Shell.prototype.setAction =
