@@ -102,15 +102,6 @@ if( JOOBJ )
 							'Path'
 					},
 
-				screensize :
-					{
-						comment :
-							'the current screensize',
-
-						type :
-							'Point'
-					},
-
 				spaceUser :
 					{
 						comment :
@@ -160,7 +151,25 @@ if( JOOBJ )
 
 						assign :
 							null
-					}
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View',
+
+						concerns :
+							{
+								func :
+									'view.sizeOnly',
+
+								args :
+									null
+							}
+				},
 			},
 
 		subclass :
@@ -262,47 +271,46 @@ CreateDisc.prototype._init =
 
 /*
 | Prepares the disc panels contents.
-|
-| TODO make _fabric
 */
-CreateDisc.prototype._weave =
+Jools.lazyFixate(
+	CreateDisc.prototype,
+	'_fabric',
 	function( )
-{
-	var
-		fabric =
-		this.$fabric =
-			Euclid.Fabric.create(
-				'width',
-					this.style.width,
-				'height',
-					this.style.height
-			);
-
-	fabric.fill(
-		this.style,
-		this.silhoutte,
-		'sketch',
-		Euclid.View.proper
-	);
-
-	var
-		buttons =
-			this.buttons;
-
-	for( var buttonName in this.buttons )
 	{
-		buttons[ buttonName ].draw( fabric );
+		var
+			buttons =
+				this.buttons,
+
+			fabric =
+				Euclid.Fabric.create(
+					'width',
+						this.style.width,
+					'height',
+						this.style.height
+				);
+
+		fabric.fill(
+			this.style,
+			this.silhoutte,
+			'sketch',
+			Euclid.View.proper
+		);
+
+		for( var buttonName in this.buttons )
+		{
+			buttons[ buttonName ].draw( fabric );
+		}
+
+		fabric.edge(
+			this.style,
+			this.silhoutte,
+			'sketch',
+			Euclid.View.proper
+		);
+
+		return fabric;
 	}
-
-	fabric.edge(
-		this.style,
-		this.silhoutte,
-		'sketch',
-		Euclid.View.proper
-	);
-
-	return fabric;
-};
+);
 
 
 /*
@@ -422,12 +430,12 @@ CreateDisc.prototype.draw =
 {
 	fabric.drawImage(
 		'image',
-			this._weave( ),
+			this._fabric,
 		'x',
 			0,
 		'y',
 			Jools.half(
-				this.screensize.y - this.style.height
+				this.view.height - this.style.height
 			)
 	);
 };
@@ -456,7 +464,7 @@ CreateDisc.prototype.pointingHover =
 
 	var
 		fabric =
-			this._weave( ),
+			this._fabric,
 
 		pp =
 			p.sub( this.frame.pnw );
@@ -523,7 +531,7 @@ CreateDisc.prototype.pointingStart =
 
 	var
 		fabric =
-			this._weave( ),
+			this._fabric,
 
 		pp =
 			p.sub( this.frame.pnw );

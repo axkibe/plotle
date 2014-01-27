@@ -109,13 +109,13 @@ if( JOOBJ )
 							'Path'
 					},
 
-				screensize :
+				view :
 					{
 						comment :
-							'the current screensize',
+							'the current view',
 
 						type :
-							'Point'
+							'View'
 					},
 
 				spaceUser :
@@ -229,8 +229,8 @@ Jockey.prototype._init =
 					this.mode,
 				'path',
 					this.path.append( name ),
-				'screensize',
-					this.screensize,
+				'view',
+					this.view,
 				'spaceUser',
 					this.spaceUser,
 				'spaceTag',

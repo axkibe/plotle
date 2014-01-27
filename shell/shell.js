@@ -167,8 +167,8 @@ Shell =
 	this._$hover =
 		Path.empty;
 
-	// var
-		// view =
+	var
+		view =
 		this.$view =
 			Euclid.View.create(
 				'pan',
@@ -198,10 +198,10 @@ Shell =
 				Path.empty,
 			'mark',
 				Mark.Vacant.create( ),
-			'screensize',
-				screensize,
 			'path',
-				Path.empty.append( 'forms' )
+				Path.empty.append( 'forms' ),
+			'screensize',
+				screensize
 		);
 
 	this._$discJockey =
@@ -218,14 +218,14 @@ Shell =
 				this._$mode,
 			'path',
 				Path.empty.append( 'discs' ),
-			'screensize',
-				screensize,
-			'username',
-				null,
 			'spaceUser',
 				null,
 			'spaceTag',
-				null
+				null,
+			'username',
+				null,
+			'view',
+				view
 		);
 
 	// greenscreen display if not null
@@ -1278,14 +1278,6 @@ Shell.prototype.resize =
 					fabric.height
 			);
 
-	this._$discJockey =
-		Discs.Jockey.create(
-			'inherit',
-				this._$discJockey,
-			'screensize',
-				screensize
-		);
-
 	this._$formJockey =
 		Forms.Jockey.create(
 			'inherit',
@@ -1407,6 +1399,14 @@ Shell.prototype.setView =
 		Visual.Space.create(
 			'inherit',
 				this.$space,
+			'view',
+				view
+		);
+
+	this._$discJockey =
+		Discs.Jockey.create(
+			'inherit',
+				this._$discJockey,
 			'view',
 				view
 		);

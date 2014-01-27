@@ -308,6 +308,29 @@ Jools.lazyFixate(
 );
 
 
+
+/*
+| Returns a view with pan zero and fact zero
+*/
+Jools.lazyFixate(
+	View.prototype,
+	'sizeOnly',
+	function( )
+	{
+		return (
+			View.create(
+				'inherit',
+					this,
+				'pan',
+					Euclid.Point.zero,
+				'fact',
+					0
+			)
+		);
+	}
+);
+
+
 /*
 | Returns a point repositioned to the current view.
 */

@@ -1425,10 +1425,18 @@ generateCreatorConcerns =
 			'\t' + ( attr.assign  || aName ) + ' ='
 		);
 
-		if( args.length === 0 )
+		if( args === null )
 		{
 			r.push(
-				'\t\t' + func + '( );'
+				'\t\t' + func + ';',
+				''
+			);
+		}
+		else if( args.length === 0 )
+		{
+			r.push(
+				'\t\t' + func + '( );',
+				''
 			);
 		}
 		else

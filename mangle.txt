@@ -1,3 +1,5 @@
+. $view
+. sizeOnly
 . _userIsGuest
 . $abort
 . $action
@@ -109,7 +111,6 @@
 . _$formJockey
 . _$greenscreen
 . _$grown
-. _$home
 . _$hover
 . _$invert
 . _$lastSpecialKey

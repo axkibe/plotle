@@ -173,7 +173,7 @@ Discs.Disc._init =
 			style.ellipse.height,
 
 		ny =
-			Jools.half( this.screensize.y - height );
+			Jools.half( this.view.height - height );
 
 	this.frame =
 		Euclid.Rect.create(
@@ -234,5 +234,6 @@ Discs.Disc._init =
 		:
 		new Discs.Icons( );
 };
+
 
 } )( );

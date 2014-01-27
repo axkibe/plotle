@@ -100,13 +100,22 @@ if( JOOBJ )
 							'Path'
 					},
 
-				screensize :
+				view :
 					{
 						comment :
-							'the current screensize',
+							'the current view',
 
 						type :
-							'Point'
+							'View',
+
+						concerns :
+							{
+								func :
+									'view.sizeOnly',
+
+								args :
+									null
+							}
 					},
 
 				spaceUser :
@@ -322,14 +331,14 @@ MainDisc.prototype._init =
 					&&
 					(
 						'Cannot create widget of type: ' +
-						tree.twig.type
+							tree.twig.type
 					)
 				);
 		}
 	}
 
 	this.buttons =
-		Object.freeze( buttons );
+		Jools.immute( buttons );
 };
 
 
@@ -355,58 +364,47 @@ Jools.lazyFixate(
 
 /*
 | Prepares the disc panels contents.
-|
-| TODO _fabric
 */
-MainDisc.prototype._weave =
+Jools.lazyFixate(
+	MainDisc.prototype,
+	'_fabric',
 	function( )
-{
-	var
-		fabric =
-			this.$fabric;
+	{
+		var
+			fabric =
+				Euclid.Fabric.create(
+					'width',
+						this.style.width,
+					'height',
+						this.style.height
+				);
 
-//  TODO reenable caching once
-//       disc recreation is fixed
-//
-//	if( fabric && !config.debug.noCache )
-//	{
-//		return fabric;
-//	}
-
-	fabric =
-	this.$fabric =
-		Euclid.Fabric.create(
-			'width',
-				this.style.width,
-			'height',
-				this.style.height
+		fabric.fill(
+			this.style,
+			this.silhoutte,
+			'sketch',
+			Euclid.View.proper
 		);
 
-	fabric.fill(
-		this.style,
-		this.silhoutte,
-		'sketch',
-		Euclid.View.proper
-	);
+		var
+			buttons =
+				this.buttons;
 
-	var
-		buttons =
-			this.buttons;
+		for( var name in this.buttons )
+		{
+			buttons[ name ].draw( fabric );
+		}
 
-	for( var name in this.buttons )
-	{
-		buttons[ name ].draw( fabric );
+		fabric.edge(
+			this.style,
+			this.silhoutte,
+			'sketch',
+			Euclid.View.proper
+		);
+
+		return fabric;
 	}
-
-	fabric.edge(
-		this.style,
-		this.silhoutte,
-		'sketch',
-		Euclid.View.proper
-	);
-
-	return fabric;
-};
+);
 
 
 /*
@@ -465,7 +463,7 @@ MainDisc.prototype.draw =
 {
 	fabric.drawImage(
 		'image',
-			this._weave( ),
+			this._fabric,
 		'pnw',
 			this.frame.pnw
 	);
@@ -492,7 +490,7 @@ MainDisc.prototype.pointingHover =
 
 	var
 		fabric =
-			this._weave( ),
+			this._fabric,
 
 		pp =
 			p.sub( this.frame.pnw );
@@ -556,7 +554,7 @@ MainDisc.prototype.pointingStart =
 
 	var
 		fabric =
-			this._weave( ),
+			this._fabric,
 
 		pp =
 			p.sub( this.frame.pnw );
