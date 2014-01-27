@@ -1569,9 +1569,11 @@ Shell.prototype.onAquireSpace =
 			'mark',
 				Mark.Vacant.create( ),
 			'view',
-				new Euclid.View(
-					Euclid.Point.zero,
-					0
+				Euclid.View.create(
+					'pan',
+						Euclid.Point.zero,
+					'fact',
+						0
 				)
 		);
 

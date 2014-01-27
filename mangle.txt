@@ -694,7 +694,6 @@
 . repeating
 > replace
 . report
-> reset
 . resize
 > responseText
 . restartBlinker

@@ -861,7 +861,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/euclid/view.js',
-					'fb',
+					'fbj',
 
 				'shell/iface.js',
 					'fb',

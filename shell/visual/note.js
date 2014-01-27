@@ -622,9 +622,9 @@ Jools.lazyFixate(
 			f =
 				Euclid.Fabric.create(
 					'width',
-						vzone.width + 1,
+						vzone.width + 2,
 					'height',
-						vzone.height + 1
+						vzone.height + 2
 				),
 
 			doc =

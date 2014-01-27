@@ -1,6 +1,6 @@
 /*
-| A view on a space determines the current pan,
-| zooming and a possible ongoing pan/zooming motion.
+| A view on a space determines the current
+| pan, zooming and viewport (size of screen)
 |
 | Authors: Axel Kittenberger
 */
@@ -32,37 +32,59 @@ var
 
 
 /*
-| Constructor.
+| The joobj definition.
 */
-var View =
-Euclid.View =
-	function(
-		pan,
-		fact
-	)
+if( JOOBJ )
 {
-	if( CHECK )
-	{
-		if( !(pan instanceof Euclid.Point) )
-		{
-			throw new Error(
-				'pan not a point'
-			);
-		}
+	return {
 
-		Jools.ensureInt(
-			pan.x,
-			pan.y
-		);
-	}
+		name :
+			'View',
 
-	this.pan =
-		pan;
+		unit :
+			'Euclid',
 
+		attributes :
+			{
+				pan :
+					{
+						comment :
+							'point in north west (equals panning)',
+
+						type :
+							'Point'
+					},
+
+				fact :
+					{
+						comment :
+							'zooming factor of view',
+
+						type :
+							'Number'
+					}
+			},
+
+		init :
+			[ ]
+	};
+}
+
+
+var
+	View =
+		Euclid.View;
+
+/*
+| Initializer.
+*/
+View.prototype._init =
+	function( )
+{
 	this.fact =
 		Jools.limit(
 			theme.zoom.min,
-			fact,
+			this.fact,
 			theme.zoom.max
 		);
 
@@ -71,27 +93,6 @@ Euclid.View =
 			theme.zoom.base,
 			this.fact
 		);
-
-	Jools.immute( this );
-};
-
-
-/*
-| Returns true if this view equals another
-*/
-View.prototype.equals =
-	function( o )
-{
-	if( this === o )
-	{
-		return true;
-	}
-
-	return (
-		this.zoom === o.zoom
-		&&
-		this.pan.equals( o.pan )
-	);
 };
 
 
@@ -99,7 +100,9 @@ View.prototype.equals =
 | Returns the scaled distance of d
 */
 View.prototype.scale =
-	function( d )
+	function(
+		d
+	)
 {
 	return this.zoom * d;
 };
@@ -139,7 +142,7 @@ View.prototype.x =
 	}
 
 	return Math.round(
-		(x + this.pan.x) * this.zoom
+		( x + this.pan.x ) * this.zoom
 	);
 };
 
@@ -265,7 +268,8 @@ View.prototype.dey =
 
 
 /*
-| Returns a view with pan zero, but same zero level
+| Returns a view with pan zero, but same fact level
+| TODO lazy
 */
 View.prototype.home =
 	function( )
@@ -278,9 +282,11 @@ View.prototype.home =
 	var
 		home =
 		this._$home =
-			new View(
-				Euclid.Point.zero,
-				this.fact
+			View.create(
+				'pan',
+					Euclid.Point.zero,
+				'fact',
+					this.fact
 			);
 
 	return home;
@@ -410,9 +416,10 @@ View.prototype.rect =
 
 
 /*
-| Returns a view with changes zoom level and a pan so p stays in the same spot.
+| Returns a view with changed zoom level and
+| a pnw so p stays in the same spot.
 |
-| new pan (k1) calculates as:
+| new pnw (k1) calculates as:
 |
 | A: p = (y0 + k1) * z1
 | B: p = (y0 + k0) * z0
@@ -451,17 +458,25 @@ View.prototype.review =
 			);
 	}
 
-	var z1 = Math.pow(1.1, f1);
-	var f = 1 / z1  - 1 / this.zoom;
+	var
+		z1 =
+			Math.pow( 1.1, f1 ),
 
-	return new View(
-		Euclid.Point.create(
-			'x',
-				Math.round( pan.x + p.x * f ),
-			'y',
-				Math.round( pan.y + p.y * f )
-		),
-		f1
+		f =
+			1 / z1
+			-
+			1 / this.zoom;
+
+	return View.create(
+		'pan',
+			Euclid.Point.create(
+				'x',
+					Math.round( pan.x + p.x * f ),
+				'y',
+					Math.round( pan.y + p.y * f )
+			),
+		'fact',
+			f1
 	);
 };
 
@@ -470,9 +485,12 @@ View.prototype.review =
 | Proper is the view at point zero with zero zoom.
 */
 View.proper =
-	new View(
-		Euclid.Point.zero,
-		0
+	View.create(
+		'pan',
+			Euclid.Point.zero,
+		'fact',
+			0
 	);
+
 
 } )( );

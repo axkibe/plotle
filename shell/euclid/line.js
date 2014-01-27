@@ -30,7 +30,7 @@ var
 
 
 /*
-| The joobj definition
+| The joobj definition.
 */
 if( JOOBJ )
 {

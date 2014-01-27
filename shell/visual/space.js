@@ -1710,12 +1710,14 @@ Space.prototype.dragMove =
 					p.sub( action.start );
 
 				shell.setView(
-					new Euclid.View(
-						action.pan.add(
-							pd.x / view.zoom,
-							pd.y / view.zoom
-						),
-						view.fact
+					Euclid.View.create(
+						'pan',
+							action.pan.add(
+								pd.x / view.zoom,
+								pd.y / view.zoom
+							),
+						'fact',
+							view.fact
 					)
 				);
 
@@ -1759,12 +1761,14 @@ Space.prototype.dragMove =
 				p.sub( action.start );
 
 			shell.setView(
-				new Euclid.View(
-					action.pan.add(
-						Math.round( pd.x / view.zoom ),
-						Math.round( pd.y / view.zoom )
-					),
-					view.fact
+				Euclid.View.create(
+					'pan',
+						action.pan.add(
+							Math.round( pd.x / view.zoom ),
+							Math.round( pd.y / view.zoom )
+						),
+					'fact',
+						view.fact
 				)
 			);
 
