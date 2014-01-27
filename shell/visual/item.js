@@ -578,7 +578,7 @@ Item.prototype.dragStart =
 	if( access == 'rw' )
 	{
 		// take focus
-		if( shell.space.focusedItem() !== this )
+		if( shell.space.focusedItem( ) !== this )
 		{
 			shell.setMark(
 				Mark.Item.create(

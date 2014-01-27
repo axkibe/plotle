@@ -147,7 +147,6 @@ Visual.Doc =
 				ranks[ r ],
 
 			paraPath =
-				path &&  // TODO is this ever null?
 				path.appendNC( k );
 
 		sub[ k ] =

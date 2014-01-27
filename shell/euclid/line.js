@@ -59,7 +59,10 @@ if( JOOBJ )
 							'end style of first point',
 
 						type :
-							'String'
+							'String',
+
+						allowNull :
+							true
 					},
 
 				p2 :
@@ -77,7 +80,10 @@ if( JOOBJ )
 							'end style of second point',
 
 						type :
-							'String'
+							'String',
+
+						allowNull :
+							true
 					}
 			}
 	};

@@ -652,9 +652,11 @@ Jools.lazyFixate(
 			hview,
 			this,
 			this.zone.width,
-			Euclid.Point.renew( // TODO
-				0,
-				sbary.pos
+			Euclid.Point.create(
+				'x',
+					0,
+				'y',
+					sbary.pos
 			)
 		);
 

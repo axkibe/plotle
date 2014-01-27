@@ -623,32 +623,6 @@ MainDisc.prototype.specialKey =
 
 
 /*
-| Displays a current space
-|
-| TODO remove
-*/
-/*
-MainDisc.prototype.arrivedAtSpace =
-	function(
-		spaceUser,
-		spaceTag
-	)
-{
-	var buttons =
-		this.buttons;
-
-	buttons.Space =
-		Widgets.Button.create(
-			'inherit',
-				buttons.Space,
-			'text',
-				spaceUser + ':' + spaceTag
-		);
-};
-*/
-
-
-/*
 | Start of a dragging operation.
 */
 MainDisc.prototype.dragStart =
