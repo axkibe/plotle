@@ -425,16 +425,4 @@ Jockey.prototype.pushButton =
 };
 
 
-/*
-| TODO remove
-*/
-Jockey.prototype.setActive =
-	function(
-		active
-	)
-{
-	return this._discs.CreateDisc.setActive( active );
-};
-
-
 } )( );

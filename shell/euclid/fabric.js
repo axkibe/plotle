@@ -369,10 +369,13 @@ Fabric.prototype.beziTo =
 		x =
 			arguments[ a++ ];
 
-		if( a >= aZ )
-		{
-			throw new Error( 'beziTo: aFail' );
-		}
+/**/	if( CHECK )
+/**/	{
+/**/		if( a >= aZ )
+/**/		{
+/**/			throw new Error( 'beziTo: aFail' );
+/**/		}
+/**/	}
 
 		y =
 			arguments[ a++ ];
@@ -555,7 +558,11 @@ Fabric.prototype.drawImage =
 
 			default :
 
-				throw new Error( 'unknown argument: ' + arg );
+				throw new Error(
+					CHECK
+					&&
+					( 'unknown argument: ' + arg )
+				);
 		}
 	}
 
@@ -731,12 +738,15 @@ Fabric.prototype.fill =
 			view
 		);
 
-	if( this._$twist !== 0 )
-	{
-		throw new Error(
-			'wrong twist'
-		);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( this._$twist !== 0 )
+/**/	{
+/**/		throw new Error(
+/**/			'wrong twist'
+/**/		);
+/**/	}
+/**/}
 
 	cx.fill( );
 };
@@ -824,7 +834,12 @@ Fabric.prototype.paintText =
 			default :
 
 				throw new Error(
-					'unknown argument:' + arguments[ a ]
+					CHECK
+					&&
+					(
+						'unknown argument:' +
+							arguments[ a ]
+					)
 				);
 		}
 	}
@@ -944,7 +959,9 @@ Fabric.prototype.fillRect =
 			);
 		}
 
-		throw new Error( 'fillRect not a rectangle' );
+		throw new Error(
+			CHECK && 'fillRect not a rectangle'
+		);
 	}
 
 	return this._cx.fillRect(
@@ -1292,26 +1309,29 @@ Fabric.prototype._setFont =
 		base =
 			font.base;
 
-	if( !Jools.is( fill ) )
-	{
-		throw new Error(
-			'fontstyle misses fill'
-		);
-	}
-
-	if( !Jools.is( align ) )
-	{
-		throw new Error(
-			'fontstyle misses align'
-		);
-	}
-
-	if( !Jools.is( base ) )
-	{
-		throw new Error(
-			'fontstyle misses base'
-		);
-	}
+/**/	if( CHECK )
+/**/	{
+/**/		if( !Jools.is( fill ) )
+/**/		{
+/**/			throw new Error(
+/**/				'fontstyle misses fill'
+/**/			);
+/**/		}
+/**/
+/**/		if( !Jools.is( align ) )
+/**/		{
+/**/			throw new Error(
+/**/				'fontstyle misses align'
+/**/			);
+/**/		}
+/**/
+/**/		if( !Jools.is( base ) )
+/**/		{
+/**/			throw new Error(
+/**/				'fontstyle misses base'
+/**/			);
+/**/		}
+/**/	}
 
 	var
 		cx =
@@ -1352,8 +1372,10 @@ Fabric.prototype.withinSketch =
 		a5
 	)
 {
-	var px, py;
-	var pobj;
+	var
+		px,
+		py,
+		pobj;
 
 	if( typeof( a1 ) === 'object' )
 	{
@@ -1368,20 +1390,19 @@ Fabric.prototype.withinSketch =
 		pobj = false;
 	}
 
-	if(
-		typeof( px ) !== 'number' ||
-		typeof( py ) !== 'number'
-	)
-	{
-		throw new Error( 'px|py not a number ' + px + ' ' + py );
-	}
-
-	/*
-	var tw = this._$twist;
-
-	px += tw;
-	py += tw;
-	*/
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		typeof( px ) !== 'number'
+/**/		||
+/**/		typeof( py ) !== 'number'
+/**/	)
+/**/	{
+/**/		throw new Error(
+/**/			'px|py not a number ' + px + ' ' + py
+/**/		);
+/**/	}
+/**/}
 
 	this._begin( true );
 
@@ -1436,7 +1457,7 @@ Fabric.prototype._colorStyle =
 	else if( !style.gradient )
 	{
 		throw new Error(
-			'unknown style'
+			CHECK && 'unknown style'
 		);
 	}
 
@@ -1446,12 +1467,15 @@ Fabric.prototype._colorStyle =
 		case 'askew' :
 
 			// FIXME use gradientPNW
-			if( !shape.pnw || !shape.pse )
-			{
-				throw new Error(
-					style.gradient + 'gradiend misses pnw/pse'
-				);
-			}
+/**/		if( CHECK )
+/**/		{
+/**/			if( !shape.pnw || !shape.pse )
+/**/			{
+/**/				throw new Error(
+/**/					style.gradient + 'gradiend misses pnw/pse'
+/**/				);
+/**/			}
+/**/		}
 
 			grad =
 				this._cx.createLinearGradient(
@@ -1465,22 +1489,23 @@ Fabric.prototype._colorStyle =
 
 		case 'horizontal' :
 
-			var pnw, pse;
+			var
+				pnw =
+					shape.frame.pnw,
 
-			// TODO remove frame lessness
-			pnw =
-				shape.pnw || shape.frame.pnw;
-
-			pse =
-				shape.pse || shape.frame.pse;
+				pse =
+					shape.frame.pse;
 
 			// FIXME use gradientPNW
-			if( !pnw || !pse )
-			{
-				throw new Error(
-					style.gradient + ': gradient misses pnw/pse'
-				);
-			}
+/**/		if( CHECK )
+/**/		{
+/**/			if( !pnw || !pse )
+/**/			{
+/**/				throw new Error(
+/**/					style.gradient + ': gradient misses pnw/pse'
+/**/				);
+/**/			}
+/**/		}
 
 			grad =
 				this._cx.createLinearGradient(
@@ -1494,16 +1519,26 @@ Fabric.prototype._colorStyle =
 
 		case 'radial' :
 
-			var r0 = shape.gradientR0 || 0;
-			var r1 = shape.gradientR1;
-			var pc = shape.gradientPC;
+			var
+				r0 =
+					shape.gradientR0 || 0,
 
-			if( !pc || !r1 )
-			{
-				throw new Error(
-					style.gradient + 'gradient misses gradient[PC|R0|R1]'
-				);
-			}
+				r1 =
+					shape.gradientR1,
+
+				pc =
+					shape.gradientPC;
+
+/**/		if( CHECK )
+/**/		{
+/**/			if( !pc || !r1 )
+/**/			{
+/**/				throw new Error(
+/**/					style.gradient +
+/**/						'gradient misses gradient[PC|R0|R1]'
+/**/				);
+/**/			}
+/**/		}
 
 			grad =
 				this._cx.createRadialGradient(
@@ -1520,7 +1555,7 @@ Fabric.prototype._colorStyle =
 		default :
 
 			throw new Error(
-				'unknown gradient'
+				CHECK && 'unknown gradient'
 			);
 	}
 
@@ -1534,7 +1569,10 @@ Fabric.prototype._colorStyle =
 		i++
 	)
 	{
-		grad.addColorStop(steps[i][0], steps[i][1]);
+		grad.addColorStop(
+			steps[ i ][ 0 ],
+			steps[ i ][ 1 ]
+		);
 	}
 
 	return grad;
@@ -1583,12 +1621,15 @@ Fabric.prototype._edge =
 	cx.lineWidth =
 		style.width;
 
-	if( this._$twist !== 0.5 )
-	{
-		throw new Error(
-			'wrong twist'
-		);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( this._$twist !== 0.5 )
+/**/	{
+/**/		throw new Error(
+/**/			'wrong twist'
+/**/		);
+/**/	}
+/**/}
 
 	cx.stroke( );
 };
