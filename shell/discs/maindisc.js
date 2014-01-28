@@ -247,8 +247,6 @@ MainDisc.prototype._init =
 
 			case 'Remove' :
 
-				console.log( this.mark.itemPath._path );
-
 				visible =
 					this.access === 'rw'
 					&&
