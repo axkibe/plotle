@@ -340,9 +340,9 @@ CheckBox.prototype.change =
 
 
 /*
-| User is starting to point something ( mouse down, touch start )
+| User clicked.
 */
-CheckBox.prototype.pointingStart =
+CheckBox.prototype.click =
 	function(
 		p
 		// shift,

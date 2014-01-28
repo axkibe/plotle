@@ -543,8 +543,6 @@ Jools.lazyFixate(
 	'attentionCenter',
 	function( )
 	{
-		return 0;
-		/*
 		var
 			focus =
 				this.focusedItem( );
@@ -558,7 +556,7 @@ Jools.lazyFixate(
 			this.view.y(
 				focus.attentionCenter
 			)
-		);*/
+		);
 	}
 );
 
@@ -1997,60 +1995,6 @@ Space.prototype.dragMove =
 /**/			);
 /**/		}
 	}
-};
-
-/*
-| Pointing device starts pointing ( mouse down, touch start )
-*/
-Space.prototype.pointingStart =
-	function(
-		p
-		// shift,
-		// ctrl
-	)
-{
-	/*
-	if( this.access == 'ro' )
-	{
-		return 'drag';
-	}
-	*/
-
-	var
-		action =
-			shell.action;
-
-	switch( action && action.reflect )
-	{
-		case 'CreateRelation' :
-
-			// this is either a pan or creates the relation
-			// anyway its a drag.
-
-			return 'drag';
-	}
-
-
-	var
-		focus =
-			this.focusedItem( );
-
-	if( focus )
-	{
-		var
-			com =
-				focus.checkHandles(
-					this.view,
-					p
-				);
-
-		if( com )
-		{
-			return 'drag';
-		}
-	}
-
-	return 'atween';
 };
 
 

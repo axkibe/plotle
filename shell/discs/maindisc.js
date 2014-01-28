@@ -247,6 +247,8 @@ MainDisc.prototype._init =
 
 			case 'Remove' :
 
+				console.log( this.mark.itemPath._path );
+
 				visible =
 					this.access === 'rw'
 					&&
@@ -533,9 +535,9 @@ MainDisc.prototype.pointingHover =
 
 
 /*
-| Returns true if point is on this panel.
+| Checks if the user clicked something on the panel
 */
-MainDisc.prototype.pointingStart =
+MainDisc.prototype.click =
 	function(
 		p,
 		shift,
@@ -581,7 +583,7 @@ MainDisc.prototype.pointingStart =
 	{
 		var r =
 			buttons[ name ]
-				.pointingStart(
+				.click(
 					pp,
 					shift,
 					ctrl

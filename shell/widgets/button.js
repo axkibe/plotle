@@ -523,9 +523,9 @@ Button.prototype.pointingHover =
 
 
 /*
-| User is starting to point something ( mouse down, touch start )
+| User clicked.
 */
-Button.prototype.pointingStart =
+Button.prototype.click =
 	function(
 		p
 		// shift,

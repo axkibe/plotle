@@ -207,12 +207,17 @@ Form.getWidgetPrototype =
 /*
 | Returns the focused item.
 */
-Form.prototype.getFocusedItem =
+Form.prototype._focusedWidget =
 	function( )
 {
 	var
 		path =
 			this.mark.widgetPath;
+
+	if( path.length === 0 )
+	{
+		return null;
+	}
 
 /**/if( CHECK )
 /**/{
@@ -224,7 +229,7 @@ Form.prototype.getFocusedItem =
 /**/	}
 /**/}
 
-	return this.sub[ path.get( 2 ) ] || null;
+	return this.sub[ path.get( 2 ) ];
 };
 
 
@@ -327,40 +332,6 @@ Form.prototype.pointingHover =
 */
 Form.prototype.click =
 	function(
-		// p,
-		// shift,
-		// ctrl
-	)
-{
-	// nada
-};
-
-
-/*
-| Starts an operation with the pointing device active.
-|
-| Mouse down or finger on screen.
-*/
-Form.prototype.dragStart =
-	function(
-		// p,
-		// shift,
-		// ctrl
-	)
-{
-	return false;
-};
-
-
-/*
-| Pointing device starts pointing
-| ( mouse down, touch start )
-|
-| Returns the pointing state code,
-| wheter this is a click/drag or yet undecided.
-*/
-Form.prototype.pointingStart =
-	function(
 		p,
 		shift,
 		ctrl
@@ -387,7 +358,7 @@ Form.prototype.pointingStart =
 				this.sub[ name ],
 
 			r =
-				ce.pointingStart(
+				ce.click(
 					p,
 					shift,
 					ctrl
@@ -404,6 +375,22 @@ Form.prototype.pointingStart =
 
 
 /*
+| Starts an operation with the pointing device active.
+|
+| Mouse down or finger on screen.
+*/
+Form.prototype.dragStart =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return false;
+};
+
+
+/*
 | User is inputing text.
 */
 Form.prototype.input =
@@ -413,7 +400,7 @@ Form.prototype.input =
 {
 	var
 		item =
-			this.getFocusedItem( );
+			this._focusedWidget( );
 
 	if( !item )
 	{
@@ -515,7 +502,7 @@ Form.prototype.specialKey =
 {
 	var
 		item =
-			this.getFocusedItem( );
+			this._focusedWidget( );
 
 	if( !item )
 	{
@@ -589,6 +576,30 @@ Form.prototype._widgetPath =
 		return this.path.append( widgetName );
 	}
 };
+
+
+/*
+| Returns the attention center.
+*/
+Jools.lazyFixate(
+	Form.prototype,
+	'attentionCenter',
+	function( )
+	{
+		var
+			focus =
+				this._focusedWidget( );
+
+		if( !focus )
+		{
+			return null;
+		}
+
+		return (
+			focus.attentionCenter
+		);
+	}
+);
 
 
 })( );

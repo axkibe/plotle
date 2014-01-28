@@ -222,6 +222,9 @@ var System =
 		false
 	);
 
+	// iPad sometimes starts just somewhere
+	window.scrollTo( 0, 0 );
+
 	window.onresize =
 		makeCatcher(
 			this,
@@ -238,6 +241,12 @@ var System =
 		makeCatcher(
 			this,
 			this._onSystemBlur
+		);
+
+	this._hiddenInput.onblur =
+		makeCatcher(
+			this,
+			this._onHiddenInputBlur
 		);
 
 	document.onkeyup =
@@ -285,6 +294,8 @@ var System =
 	// the blink (and check input) timer
 	this._blinkTimer =
 		null;
+
+	this._canvas.focus( );
 
 	this.restartBlinker( );
 };
@@ -392,122 +403,6 @@ System.prototype.setTimer =
 };
 
 
-/*
-| Sets the "focus center"
-| This is most likely the caret.
-|
-| On the iPad with keyboard, scrolling can become active again
-| an thus the caret should be kept in the screen
-|
-| Moves the hidden input vertically so the iPad keeps the caret in view
-*/
-System.prototype.focusCenter =
-	function(
-		// ...
-	)
-{
-	var
-		x =
-			null,
-
-		y =
-			null;
-
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a++
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'x' :
-
-				x =
-					arguments[ ++a ];
-
-				break;
-
-			case 'y' :
-
-				y =
-					arguments[ ++a ];
-
-				break;
-
-			case 'p' :
-
-				x =
-					arguments[ a + 1 ].x;
-
-				y =
-					arguments[ ++a ].y;
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument'
-				);
-		}
-	}
-
-	if(
-		CHECK &&
-		( x !== null || y !== null )
-	)
-	{
-		throw new Error(
-			'x/y missing'
-		);
-	}
-
-
-	var
-		input =
-			this._hiddenInput;
-
-	input.style.top =
-		y + 'px';
-
-	if( true || !this._$suggestingKeyboard ) // TODO
-	{
-		input.focus( );
-
-		var
-			self =
-				this;
-
-		// works around ctrl+click bug in safari/OSX
-		this.setTimer(
-			0,
-			function( )
-			{
-				self._hiddenInput.selectionStart = 1;
-			}
-		);
-
-		this._$suggestingKeyboard =
-			true;
-	}
-
-	/*
-	else
-	{
-		if( this._$suggestingKeyboard )
-		{
-			this._hiddenInput.blur( );
-
-			this._$suggestingKeyboard =
-				false;
-		}
-	}
-	*/
-
-};
-
 
 /*
 | An asyncronous event happened
@@ -526,6 +421,8 @@ System.prototype.asyncEvent =
 	);
 
 	this._repeatHover( );
+
+	this._steerAttention( );
 };
 
 
@@ -604,6 +501,15 @@ System.prototype._onSystemBlur =
 	)
 {
 	this.shell.setFocus( false );
+};
+
+System.prototype._onHiddenInputBlur =
+	function(
+		// event
+	)
+{
+	// resets the view on ipad
+	window.scrollTo( 0, 0 );
 };
 
 
@@ -819,54 +725,29 @@ System.prototype._onMouseDown =
 		ctrl =
 			event.ctrlKey || event.metaKey;
 
-	// asks the shell if it forces this to be a drag or click
-	// or the state is yet unknown.
 	this._$pointingState =
-		this.shell.pointingStart(
-			p,
-			shift,
-			ctrl
-		);
+		'atween';
 
-	switch( this._$pointingState )
-	{
-		case 'atween' :
-
-			this._$atween =
-				Jools.immute({
-					pos :
-						p,
-
-					$move :
-						p,
-
-					shift :
-						shift,
-
-					ctrl :
-						ctrl,
-
-					timer :
-						this.setTimer(
-							this.settings.dragtime,
-							this._onAtweenTimeCatcher
-						)
-				});
-
-			break;
-
-		case 'drag' :
-
-			this.shell.dragStart(
+	this._$atween =
+		Jools.immute({
+			pos :
 				p,
+
+			$move :
+				p,
+
+			shift :
 				shift,
-				ctrl
-			);
 
-			this._captureEvents( );
+			ctrl :
+				ctrl,
 
-			break;
-	}
+			timer :
+				this.setTimer(
+					this.settings.dragtime,
+					this._onAtweenTimeCatcher
+				)
+		});
 
 	this._pointingHover(
 		p,
@@ -1243,53 +1124,29 @@ System.prototype._onTouchStart =
 		ctrl =
 			event.ctrlKey || event.metaKey;
 
-	// asks the shell if it forces this to be a drag or click, or yet unknown.
 	this._$pointingState =
-		this.shell.pointingStart(
-			p,
-			shift,
-			ctrl
-		);
+		'atween';
 
-	switch( this._$pointingState )
-	{
-		case 'atween' :
-
-			this._$atween =
-				Jools.immute({
-					pos :
-						p,
-
-					$move :
-						p,
-
-					shift :
-						shift,
-
-					ctrl :
-						ctrl,
-
-					timer :
-						this.setTimer(
-							this.settings.dragtime,
-							this._onAtweenTimeCatcher
-						)
-				});
-
-			break;
-
-		case 'drag' :
-
-			this.shell.dragStart(
+	this._$atween =
+		Jools.immute({
+			pos :
 				p,
+
+			$move :
+				p,
+
+			shift :
 				shift,
-				ctrl
-			);
 
-			this._captureEvents( );
+			ctrl :
+				ctrl,
 
-			break;
-	}
+			timer :
+				this.setTimer(
+					this.settings.dragtime,
+					this._onAtweenTimeCatcher
+				)
+		});
 
 	return false;
 };
@@ -1299,7 +1156,9 @@ System.prototype._onTouchStart =
 | The use is moving the touch ( on mobile devices )
 */
 System.prototype._onTouchMove =
-	function( event )
+	function(
+		event
+	)
 {
 	event.preventDefault();
 
@@ -1334,7 +1193,7 @@ System.prototype._onTouchMove =
 	{
 		case false:
 
-			this.pointingHover(
+			this._pointingHover(
 				p,
 				shift,
 				ctrl
@@ -1402,7 +1261,7 @@ System.prototype._onTouchMove =
 		default :
 
 			throw new Error(
-				'invalid pointingState'
+				CHECK && 'invalid pointingState'
 			);
 
 	}
@@ -1753,8 +1612,30 @@ System.prototype._steerAttention =
 		ac =
 			this.shell.attentionCenter;
 
-	this._hiddenInput.style.top =
-		ac + 'px';
+	if( ac === null )
+	{
+		this._hiddenInput.style.top =
+			'0';
+	}
+	else
+	{
+		this._hiddenInput.style.top =
+			ac + 'px';
+	}
+
+	if( shell.suggestingKeyboard( ) )
+	{
+		this._hiddenInput.focus( );
+
+		if( this._hiddenInput.scrollIntoViewIfNeeded )
+		{
+			this._hiddenInput.scrollIntoViewIfNeeded( true );
+		}
+	}
+	else
+	{
+		this._canvas.focus( );
+	}
 };
 
 

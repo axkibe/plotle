@@ -343,7 +343,7 @@ Jockey.prototype.message =
 /*
 | Returns true if point is on this panel.
 */
-Jockey.prototype.pointingStart =
+Jockey.prototype.click =
 	function(
 		p,
 		shift,
@@ -352,7 +352,7 @@ Jockey.prototype.pointingStart =
 {
 	var
 		start =
-			this._discs.MainDisc.pointingStart(
+			this._discs.MainDisc.click(
 				p,
 				shift,
 				ctrl
@@ -366,7 +366,7 @@ Jockey.prototype.pointingStart =
 	if( this.mode === 'Create' )
 	{
 		return (
-			this._discs.CreateDisc.pointingStart(
+			this._discs.CreateDisc.click(
 				p,
 				shift,
 				ctrl

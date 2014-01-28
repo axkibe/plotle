@@ -386,7 +386,7 @@ Doc.prototype.attentionCenter =
 		+
 		this
 			.sub[ key ]
-			.attentionCenter( )
+			.attentionCenter( item )
 	);
 };
 

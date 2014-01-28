@@ -180,17 +180,6 @@ GreenScreen.prototype.draw =
 
 
 /*
-| User clicked
-*/
-GreenScreen.prototype.click =
-	function( )
-{
-	console.log( 'XXX' );
-	location.reload( );
-};
-
-
-/*
 | User is hovering his/her point ( mouse move )
 */
 GreenScreen.prototype.pointingHover =
@@ -208,16 +197,12 @@ GreenScreen.prototype.pointingHover =
 
 
 /*
-| Pointing device starts pointing
-| ( mouse down, touch start )
-|
-| Returns the pointing state code,
-| wheter this is a click/drag or yet undecided.
+| User clicked.
 */
-GreenScreen.prototype.pointingStart =
+GreenScreen.prototype.click =
 	function( )
 {
-	return 'atween';
+	location.reload( );
 };
 
 

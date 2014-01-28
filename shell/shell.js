@@ -609,7 +609,7 @@ Shell.prototype._draw =
 
 
 /*
-| User clicked
+| User clicked.
 */
 Shell.prototype.click =
 	function(
@@ -620,16 +620,27 @@ Shell.prototype.click =
 {
 	var
 		display =
-			this._getCurrentDisplay( );
+			this._getCurrentDisplay( ),
 
-	if( display )
+		click =
+			this._$discJockey.click(
+				p,
+				shift,
+				ctrl
+			);
+
+	if( click === null )
 	{
-		display.click(
-			p,
-			shift,
-			ctrl
-		);
+		if( display )
+		{
+			display.click(
+				p,
+				shift,
+				ctrl
+			);
+		}
 	}
+
 
 	if( this._$redraw )
 	{
@@ -791,60 +802,6 @@ Shell.prototype.greenscreen =
 	}
 
 	this._draw( );
-};
-
-
-/*
-| Pointing device starts pointing
-| ( mouse down, touch start )
-|
-| Returns the pointing state code,
-| wheter this is a click/drag or yet undecided.
-*/
-Shell.prototype.pointingStart =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	var
-		pointingState =
-			null;
-
-	if( pointingState === null )
-	{
-		pointingState =
-			this._$discJockey.pointingStart(
-				p,
-				shift,
-				ctrl
-			);
-	}
-
-	var
-		display =
-			this._getCurrentDisplay( );
-
-	if(
-		pointingState === null &&
-		display
-	)
-	{
-		pointingState =
-			display.pointingStart(
-				p,
-				shift,
-				ctrl
-			);
-	}
-
-	if( this._$redraw )
-	{
-		this._draw( );
-	}
-
-	return pointingState || false;
 };
 
 
@@ -1016,6 +973,17 @@ Shell.prototype.mousewheel =
 	{
 		this._draw( );
 	}
+};
+
+
+/*
+| Returns true if the iPad ought to display
+| the virtual keyboard
+*/
+Shell.prototype.suggestingKeyboard =
+	function( )
+{
+	return this.mark.hasCaret;
 };
 
 

@@ -301,9 +301,9 @@ Label.prototype.pointingHover =
 
 
 /*
-| User is starting to point at something ( mouse down, touch start )
+| User clicked.
 */
-Label.prototype.pointingStart =
+Label.prototype.click =
 	function(
 		// p,
 		// shift,

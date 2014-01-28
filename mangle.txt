@@ -1,9 +1,7 @@
-. _steerAttention
-. attentionCenter
-. baseFrame
-. $view
-. sizeOnly
-. _userIsGuest
+. suggestingKeyboard
+. _onHiddenInputBlur
+> scrollIntoViewIfNeeded
+> scrollTo
 . $abort
 . $action
 . $aquireAjax
@@ -24,6 +22,7 @@
 . $spaceTag
 . $spaceUser
 . $user
+. $view
 > 1
 . Action
 . AnchorPoint
@@ -129,7 +128,6 @@
 . _$redraw
 . _$rof
 . _$spaceFields
-. _$suggestingKeyboard
 . _$twist
 . _$undo
 . _$updateAjax
@@ -154,6 +152,7 @@
 . _drawCaret
 . _edge
 . _fabric
+. _focusedWidget
 . _fontWFont
 . _fonts
 . _forms
@@ -224,6 +223,7 @@
 . _shape
 . _size
 . _specialKey
+. _steerAttention
 . _testInput
 . _testInputCatcher
 . _tree
@@ -231,6 +231,7 @@
 . _update
 . _updateRCV
 . _useCapture
+. _userIsGuest
 . _widgetPath
 > a
 > abort
@@ -264,6 +265,7 @@
 > at2
 . atRank
 > atan2
+. attentionCenter
 . attributes
 > auth
 > b
@@ -273,6 +275,7 @@
 . backPath
 . backspace
 . base
+. baseFrame
 . bb
 > beginPath
 . beziTo
@@ -413,7 +416,6 @@
 . flowWidth
 > focus
 . focusAccent
-. focusCenter
 . focusable
 . focusedItem
 > font
@@ -435,7 +437,6 @@
 > getContext
 > getDate
 > getElementById
-. getFocusedItem
 > getHours
 > getItem
 > getMinutes
@@ -646,7 +647,6 @@
 > pnw
 . point
 . pointingHover
-. pointingStart
 > pop
 . portal
 . portalButton
@@ -753,6 +753,7 @@
 > sin
 . singleton
 . size
+. sizeOnly
 . sketch
 . sketchAllHandles
 . sketchCheck

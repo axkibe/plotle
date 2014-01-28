@@ -509,9 +509,9 @@ CreateDisc.prototype.pointingHover =
 
 
 /*
-| Returns true if point is on this panel.
+| Checks if the user clicked something on the panel.
 */
-CreateDisc.prototype.pointingStart =
+CreateDisc.prototype.click =
 	function(
 		p,
 		shift,
@@ -558,7 +558,7 @@ CreateDisc.prototype.pointingStart =
 	{
 		var r =
 			buttons[ buttonName ]
-				.pointingStart(
+				.click(
 					pp,
 					shift,
 					ctrl

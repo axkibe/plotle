@@ -329,10 +329,29 @@ Jools.lazyFixate(
 | Returns the attention center.
 */
 Para.prototype.attentionCenter =
-	function( )
+	function(
+		item
+	)
 {
-	return 0;
-	// TODO
+	var
+		fs =
+			item.sub.doc.font.size,
+
+		descend =
+			fs * theme.bottombox,
+
+		p =
+			this.locateOffset(
+				this.mark.caretAt
+			).p,
+
+		s =
+			Math.round( p.y + descend ),
+
+		n =
+			s - Math.round( fs + descend );
+
+	return n;
 };
 
 

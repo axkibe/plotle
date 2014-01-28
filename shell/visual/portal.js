@@ -715,6 +715,71 @@ Portal.prototype.click =
 
 
 /*
+| Returns the attention center.
+*/
+Jools.lazyFixate(
+	Portal.prototype,
+	'attentionCenter',
+	function( )
+	{
+		var
+			ac =
+				this.zone.pnw.y,
+
+			mark =
+				this.mark;
+
+		if( !mark.hasCaret )
+		{
+			return ac;
+		}
+
+		var
+
+			section =
+				mark.caretPath.get( -1 );
+
+		if( !this._isSection( section ) )
+		{
+			return ac;
+		}
+
+		if( section === 'moveToButton' )
+		{
+			return ac + this._$moveToButton.shape.pnw.y;
+		}
+
+		var
+			font =
+				this._fonts[ section ],
+
+			fs =
+				font.size,
+
+			descend =
+				fs * theme.bottombox,
+
+			fieldPNW =
+				this._$spaceFields[ section ].pnw,
+
+			p =
+				this._locateOffset(
+					section,
+					mark.caretAt
+				),
+
+			s =
+				Math.round( p.y + descend ) + fieldPNW.y,
+
+			n =
+				s - Math.round( fs + descend );
+
+			return ac + n;
+	}
+);
+
+
+/*
 | Draws the portal.
 */
 Portal.prototype.draw =
@@ -976,10 +1041,7 @@ Jools.lazyFixate(
 				mark.focus
 			)
 			{
-				this._drawCaret(
-					f,
-					mark
-				);
+				this._drawCaret( f );
 			}
 
 			f.scale( 1 / hview.zoom );
@@ -1118,11 +1180,13 @@ Portal.prototype._locateOffset =
 */
 Portal.prototype._drawCaret =
 	function(
-		fabric,
-		mark
+		fabric
 	)
 {
 	var
+		mark =
+			this.mark,
+
 		section =
 			mark.caretPath.get( -1 );
 

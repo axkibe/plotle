@@ -1088,12 +1088,12 @@ Input.prototype.pointingHover =
 
 
 /*
-| pointing device is starting a point ( mouse down, touch start )
+| User clicked.
 */
-Input.prototype.pointingStart =
+Input.prototype.click =
 	function(
 		p
-		// shift,
+		// shift
 		// ctrl
 	)
 {
@@ -1133,6 +1133,36 @@ Input.prototype.pointingStart =
 
 	return false;
 };
+
+
+/*
+| Returns the attention center.
+*/
+Jools.lazyFixate(
+	Input.prototype,
+	'attentionCenter',
+	function( )
+	{
+		var
+			fs =
+				this.tree.twig.font.size,
+
+			descend =
+				fs * theme.bottombox,
+
+			p =
+				this.locateOffset(
+					this.mark.caretAt
+				),
+
+			s =
+				Math.round( p.y + descend + 1 );
+
+		return (
+			this.frame.pnw.y + s - Math.round( fs + descend )
+		);
+	}
+);
 
 
 })( );
