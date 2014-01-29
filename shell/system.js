@@ -107,6 +107,9 @@ var System =
 		this._canvas =
 			document.getElementById( 'canvas' );
 
+	this._$height =
+		window.innerHeight - 1;
+
 	this._fabric =
 		Euclid.Fabric.create(
 			'canvas',
@@ -114,7 +117,7 @@ var System =
 			'width',
 				window.innerWidth - 1,
 			'height',
-				window.innerHeight - 1
+				this._$height
 		);
 
 	// if true browser supports the setCapture() call
@@ -533,6 +536,9 @@ System.prototype._onResize =
 		// event
 	)
 {
+	this._$height =
+		window.innerHeight - 1;
+
 	var
 		fabric =
 		this._fabric =
@@ -542,7 +548,7 @@ System.prototype._onResize =
 				'width',
 					window.innerWidth - 1,
 				'height',
-					window.innerHeight - 1
+					this._$height
 			);
 
 	if( this.shell )
@@ -1619,6 +1625,13 @@ System.prototype._steerAttention =
 	}
 	else
 	{
+		ac =
+			Jools.limit(
+				0,
+				ac,
+				this._$height - 15
+			);
+
 		this._hiddenInput.style.top =
 			ac + 'px';
 	}

@@ -39,10 +39,7 @@ var
 | Constructor.
 */
 IFace =
-	function(
-		updateRCV,
-		messageRCV
-	)
+	function( )
 {
 	// the current space;
 	this.$cSpace =
@@ -68,14 +65,6 @@ IFace =
 	// changes that are currently on the way to the server
 	this.$postbox =
 		null;
-
-	// reports updates to this object.
-	this._updateRCV =
-		updateRCV;
-
-	// reports messages to this object.
-	this._messageRCV =
-		messageRCV;
 
 	// current update request
 	this._$updateAjax =
@@ -678,7 +667,9 @@ IFace.prototype._update =
 				'update.status == ' + ajax.status
 			);
 
-			shell.greenscreen( 'Connection with server failed.' );
+			shell.greenscreen(
+				'Connection with server failed.'
+			);
 
 			return;
 		}
@@ -689,28 +680,34 @@ IFace.prototype._update =
 		}
 		catch( e )
 		{
-			throw new Error( 'Server answered no JSON!' );
+			throw new Error(
+				'Server answered no JSON!'
+			);
 		}
 
 		Jools.log('iface', '<-u', asw);
 
 		if( !asw.ok )
 		{
-			shell.greenscreen( 'Server not OK: ' + asw.message );
+			shell.greenscreen(
+				'Server not OK: ' + asw.message
+			);
+
 			return;
 		}
 
-		var chgs =
-			asw.chgs;
+		var
+			chgs =
+				asw.chgs,
 
-		var report =
-			new ChangeRay( );
+			report =
+				new ChangeRay( ),
 
-		var gotOwnChgs =
-			false;
+			gotOwnChgs =
+				false,
 
-		var time =
-			asw.time;
+			time =
+				asw.time;
 
 		// this wasn't an empty timeout?
 		if( chgs && chgs.length > 0 )
@@ -953,7 +950,7 @@ IFace.prototype._update =
 			{
 				var m = msgs[ a ];
 
-				self._messageRCV.messageRCV(
+				shell.message(
 					m.space,
 					m.user,
 					m.message
@@ -964,8 +961,9 @@ IFace.prototype._update =
 		self.$remoteTime =
 			asw.timeZ;
 
-		var mseqZ =
-			asw.mseqZ;
+		var
+			mseqZ =
+				asw.mseqZ;
 
 		if( Jools.is( mseqZ ) )
 		{
@@ -973,9 +971,9 @@ IFace.prototype._update =
 				mseqZ;
 		}
 
-		if( report.length > 0 && self._updateRCV )
+		if( report.length > 0 )
 		{
-			self._updateRCV.update(
+			shell.update(
 				self.$cSpace,
 				report
 			);
@@ -1085,13 +1083,10 @@ IFace.prototype.alter =
 
 	this._sendChanges( );
 
-	if( this._updateRCV )
-	{
-		this._updateRCV.update(
-			result.tree,
-			chgX
-		);
-	}
+	shell.update(
+		result.tree,
+		chgX
+	);
 
 	return result;
 };
@@ -1277,13 +1272,10 @@ IFace.prototype.undo =
 
 	this._sendChanges( );
 
-    if( this._updateRCV )
-	{
-		this._updateRCV.update(
-			result.tree,
-			chgX
-		);
-	}
+	shell.update(
+		result.tree,
+		chgX
+	);
 
     return chgX;
 };
@@ -1339,13 +1331,10 @@ IFace.prototype.redo =
 
 	this._sendChanges( );
 
-    if( this._updateRCV )
-	{
-		this._updateRCV.update(
-			this.$cSpace,
-			chgX
-		);
-	}
+	shell.update(
+		this.$cSpace,
+		chgX
+	);
 
     return chgX;
 };

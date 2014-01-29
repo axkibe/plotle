@@ -983,7 +983,7 @@ Para.prototype.input =
 		if( rx[ 2 ] )
 		{
 			// FIXME, somehow use changes
-			// over return values
+			// over return values more elegantly
 			var
 				r =
 					shell.peer.split(
@@ -1057,40 +1057,6 @@ Para.prototype.specialKey =
 						'eAt',
 							v1.text.length
 					)
-				);
-
-				return true;
-		}
-	}
-
-	// TODO move to Doc
-	if( mark.reflect === 'Range' )
-	{
-		switch( key )
-		{
-			case 'backspace' :
-			case 'del' :
-
-				shell.removeRange( mark );
-
-				mark =
-					shell.space.mark;
-
-				key =
-					null;
-
-				return true;
-
-			case 'enter' :
-
-				shell.removeRange( mark );
-
-				mark =
-					shell.space.mark;
-
-				shell.peer.split(
-					this.textPath,
-					this.mark.caretAt
 				);
 
 				return true;

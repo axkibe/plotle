@@ -664,10 +664,8 @@ Peer.prototype.removeText =
 
 /*
 | Removes a text spawning over several entities.
-|
-| FIXME call removeRange for consistency
 */
-Peer.prototype.removeSpan =
+Peer.prototype.removeRange =
 	function(
 		path1,
 		at1,
@@ -675,19 +673,20 @@ Peer.prototype.removeSpan =
 		at2
 	)
 {
-	if( path1.get( -1 ) !== 'text' )
-	{
-		throw new Error(
-			'removeSpan invalid path'
-		);
-	}
 
-	if( path2.get( -1 ) !== 'text' )
-	{
-		throw new Error(
-			'removeSpan invalid path'
-		);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		path1.get( -1 ) !== 'text'
+/**/		||
+/**/		path2.get( -1 ) !== 'text'
+/**/	)
+/**/	{
+/**/		throw new Error(
+/**/			'invalid path'
+/**/		);
+/**/	}
+/**/}
 
 	if ( path1.equals( path2 ) )
 	{
@@ -708,7 +707,7 @@ Peer.prototype.removeSpan =
 			path2.get( -2 ),
 
 		pivot =
-			this._iface.get( path1, -2 ),
+			this._iface.get( path1.chop( 1 ), -2 ),
 
 		r1 =
 			pivot.rankOf( k1 ),
@@ -720,13 +719,13 @@ Peer.prototype.removeSpan =
 	{
 		this.join(
 			path1,
-			this._iface.get( path1 ).length
+			this._iface.get( path1.chop( 1 ) ).length
 		);
 	}
 
 	var
 		len2 =
-			this._iface.get( path1 ).length;
+			this._iface.get( path1.chop( 1 ) ).length;
 
 	this.join(
 		path1,

@@ -263,23 +263,14 @@ Object.defineProperty(
 /*
 | Peer received a message.
 */
-Shell.prototype.messageRCV =
+Shell.prototype.message =
 	function(
 		// space,
 		// user,
 		// message
 	)
 {
-	/*
-	if( user )
-	{
-		this._$d_isc.message( user + ': ' + message );
-	}
-	else
-	{
-		this._$d_isc.message( message );
-	}
-	*/
+	// FIXME
 };
 
 
@@ -475,7 +466,7 @@ Shell.prototype.update =
 							new Sign(
 								{
 									path :
-										mark.bPath.chop( ),
+										mark.ePath.chop( ),
 
 									at1 :
 										mark.eAt
@@ -1393,12 +1384,7 @@ Shell.prototype.onload =
 	function( )
 {
 	this.peer =
-		new Peer(
-			new IFace(
-				this,
-				this
-			)
-		);
+		new Peer( new IFace( ) );
 
 	var
 		username =
@@ -1723,34 +1709,6 @@ Shell.prototype.arrivedAtSpace =
 		);
 
 	shell.setMode( 'Normal' );
-};
-
-
-/*
-| Removes the a (text) range.
-|
-| TODO hmmm
-*/
-Shell.prototype.removeRange =
-	function(
-		range
-	)
-{
-	this._$redraw =
-		true;
-
-	if( !range.empty )
-	{
-		this.peer.removeSpan(
-			range.frontPath,
-			range.frontAt,
-
-			range.backPath,
-			range.backAt
-		);
-	}
-
-	return;
 };
 
 

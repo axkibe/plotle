@@ -683,6 +683,10 @@ Doc.prototype.input =
 		item
 	)
 {
+	var
+		mark =
+			this.mark;
+
 	if( !this.mark.hasCaret )
 	{
 		return false;
@@ -691,6 +695,26 @@ Doc.prototype.input =
 	var
 		path =
 			this.mark.caretPath;
+
+	if(
+		mark.reflect === 'Range'
+		&&
+		!mark.empty
+	)
+	{
+		shell.peer.removeRange(
+			mark.frontPath,
+			mark.frontAt,
+			mark.backPath,
+			mark.backAt
+		);
+
+		// FIXME this is an akward workaround
+
+		shell.input( text );
+
+		return true;
+	}
 
 	return (
 		this
@@ -714,18 +738,60 @@ Doc.prototype.specialKey =
 		ctrl
 	)
 {
-	if( !this.mark.hasCaret )
+	var
+		mark =
+			this.mark;
+
+	if( !mark.hasCaret )
 	{
 		return false;
 	}
 
-	var
-		path =
-			this.mark.caretPath;
+	if( mark.reflect === 'Range' )
+	{
+		switch( key )
+		{
+			case 'backspace' :
+			case 'del' :
+
+				if( !mark.empty )
+				{
+					shell.peer.removeRange(
+						mark.frontPath,
+						mark.frontAt,
+						mark.backPath,
+						mark.backAt
+					);
+				}
+
+				return true;
+
+			case 'enter' :
+
+				if( !mark.empty )
+				{
+					shell.peer.removeRange(
+						mark.frontPath,
+						mark.frontAt,
+						mark.backPath,
+						mark.backAt
+					);
+				}
+
+				shell.specialKey(
+					key,
+					shift,
+					ctrl
+				);
+
+				return true;
+		}
+	}
+
 
 	return (
 		this
-			.sub[ path.get( 3 ) ]
+			.sub[ mark.caretPath.get( 3 ) ]
 			.specialKey(
 				key,
 				item,
@@ -804,14 +870,10 @@ Doc.prototype.sketchRange =
 			this.sub[ backKey ],
 
 		fo =
-			frontPara.locateOffset(
-				frontAt
-			),
+			frontPara.locateOffset( frontAt ),
 
 		bo =
-			backPara.locateOffset(
-				backAt
-			),
+			backPara.locateOffset( backAt ),
 
 		fp =
 			fo.p,
@@ -837,19 +899,15 @@ Doc.prototype.sketchRange =
 	// FIXME do not create points
 
 	fp =
-		Euclid.Point.create(
-			'x',
-				Math.round( fp.x + frontPnw.x - sp.x ),
-			'y',
-				Math.round( fp.y + frontPnw.y - sp.y )
+		fp.add(
+			frontPnw.x - sp.x,
+			frontPnw.y - sp.y
 		);
 
 	bp =
-		Euclid.Point.create(
-			'x',
-				Math.round( bp.x + backPnw.x - sp.x ),
-			'y',
-				Math.round( bp.y + backPnw.y - sp.y )
+		bp.add(
+			backPnw.x - sp.x,
+			backPnw.y - sp.y
 		);
 
 	var
@@ -920,12 +978,12 @@ Doc.prototype.sketchRange =
 	}
 	else
 	{
-		//          6 7            8
-		//        fp o*************
-		// fp2  x******************
-		//    5 *******************
-		//      ******************x  bp2
-		//      ************o bp   1
+		//          6/7            8
+		//        fp o------------+
+		// fp2  +----+:::::::::::::
+		//    5 :::::::::::::::::::
+		//      ::::::::::::+-----+  bp2
+		//      +-----------o bp   1
 		//      4          2/3
 
 		var
@@ -988,17 +1046,28 @@ Doc.prototype.sketchRange =
 		fabric.lineTo( bp.x,   bp.y + descend, view ); // 3
 		fabric.lineTo( lx,     bp.y + descend, view ); // 4
 
-		if( twist )
+		if( frontAt > 0 )
 		{
-			fabric.moveTo( lx, f2y - ascend, view ); // 5
+			if( twist )
+			{
+				fabric.moveTo( lx, f2y - ascend, view ); // 5
+			}
+			else
+			{
+				fabric.lineTo( lx, f2y - ascend, view ); // 5
+			}
+			fabric.lineTo( fp.x, f2y  - ascend, view );  // 6
+		}
+
+		if( frontAt > 0 || !twist )
+		{
+			fabric.lineTo( fp.x, fp.y -  ascend, view ); // 7
 		}
 		else
 		{
-			fabric.lineTo( lx, f2y - ascend, view ); // 5
+			fabric.moveTo( fp.x, fp.y -  ascend, view ); // 7
 		}
-		fabric.lineTo( fp.x, f2y  - ascend, view );   // 6
 
-		fabric.lineTo( fp.x, fp.y -  ascend, view );   // 7
 		fabric.lineTo( rx,   fp.y -  ascend, view );   // 8
 
 		if( !twist )

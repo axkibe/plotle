@@ -94,7 +94,19 @@ Jools.lazyFixate(
 		return (
 			this.zone.pnw.y
 			+
-			this.sub.doc.attentionCenter( this )
+			Jools.limit(
+				0,
+				this.sub.doc.attentionCenter( this )
+				-
+				(
+					this.scrollbarY
+						?
+						this.scrollbarY.pos
+						:
+						0
+				),
+				this.zone.height
+			)
 		);
 	}
 );
@@ -162,7 +174,8 @@ DocItem.prototype.click =
 				pnw.x,
 				pnw.y -
 					(
-						this.scrollbarY ?
+						this.scrollbarY
+							?
 							this.scrollbarY.pos
 							:
 							0
