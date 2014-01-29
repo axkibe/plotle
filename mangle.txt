@@ -322,7 +322,7 @@
 > clip
 . clipboard
 . clockwise
-. close
+> close
 . closeButton
 > cm
 > cmd

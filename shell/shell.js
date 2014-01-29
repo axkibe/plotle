@@ -863,19 +863,22 @@ Shell.prototype.dragMove =
 
 	if( !action )
 	{
-		throw new Error( 'no action on dragMove' );
+		throw new Error(
+			CHECK && 'no action on dragMove'
+		);
 	}
 
 	var
 		cursor =
-			null;
+			null,
+	
+		display =
+			this._getCurrentDisplay( );
 
-	// FIXME dragging for discs / forms
-
-	if( this.$space )
+	if( display )
 	{
 		cursor =
-			this.$space.dragMove(
+			display.dragMove(
 				p,
 				shift,
 				ctrl
@@ -901,25 +904,24 @@ Shell.prototype.dragStop =
 		ctrl
 	)
 {
-	if( this._$greenscreen )
-	{
-		return;
-	}
-
 	var
 		action =
 			this.action;
 
 	if( !action )
 	{
-		throw new Error( 'no action on dragStop' );
+		throw new Error(
+			CHECK && 'no action on dragStop'
+		);
 	}
 
-	// FIXME dragging for discs / forms
+	var
+		display =
+			this._getCurrentDisplay( );
 
-	if( this.$space )
+	if( display )
 	{
-		this.$space.dragStop(
+		display.dragStop(
 			p,
 			shift,
 			ctrl

@@ -271,6 +271,34 @@ Form.prototype.draw =
 
 
 /*
+| Moving during an operation with the mouse button held down.
+*/
+Form.prototype.dragMove =
+	function(
+		// p
+		// shift,
+		// ctrl
+	)
+{
+	return true;
+};
+
+
+/*
+| Stops an operation with the mouse button held down.
+*/
+Form.prototype.dragStop =
+	function(
+		//p,
+		//shift,
+		//ctrl
+	)
+{
+	return true;
+};
+
+
+/*
 | Returns true if point is on this panel.
 */
 Form.prototype.pointingHover =
