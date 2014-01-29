@@ -1,3 +1,4 @@
+. _$height
 . suggestingKeyboard
 . _onHiddenInputBlur
 > scrollIntoViewIfNeeded
@@ -188,7 +189,6 @@
 . _lazy_
 . _locateOffset
 . _max
-. _messageRCV
 . _moveTo
 . _normalize
 . _onAtweenTime
@@ -227,9 +227,7 @@
 . _testInput
 . _testInputCatcher
 . _tree
-. _type
 . _update
-. _updateRCV
 . _useCapture
 . _userIsGuest
 . _widgetPath
@@ -557,7 +555,6 @@
 . meshcraftSandboxButton
 > message
 . message1
-. messageRCV
 > metaKey
 > middle
 > min
@@ -686,8 +683,7 @@
 > reload
 . remove
 . removeItem
-> removeRange
-> removeSpan
+. removeRange
 . removeText
 . renew
 . repeatTimer

@@ -2683,7 +2683,7 @@ Server.prototype.expireSleep =
 
 	delete self.$upsleep[ sleepID ];
 
-	//TODO call it sleep.username
+	//FIXME call it sleep.username
 	self.destablishPresence(
 		sleep.user,
 		sleep.spaceUser,
@@ -2991,7 +2991,7 @@ Server.prototype.cmdGet =
 		throw Jools.reject( 'wrong user/password' );
 	}
 
-	// TODO dont call it "time"
+	// FIXME dont call it "time"
 	if( !Jools.is( cmd.time ) )
 	{
 		throw Jools.reject( 'time missing' );
@@ -3002,7 +3002,7 @@ Server.prototype.cmdGet =
 		throw Jools.reject( 'path missing' );
 	}
 
-	// TODO test spaceUser/Tag
+	// FIXME test spaceUser/Tag
 
 	var
 		spaceName =
@@ -3594,7 +3594,7 @@ Server.prototype.webAjax =
 	/*
 	req.on( 'end', function( )
 		{
-			setTimeout( handler, 1880 ); // TODO
+			setTimeout( handler, 1880 );
 		});
 	*/
 };

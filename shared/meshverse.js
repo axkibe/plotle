@@ -340,7 +340,7 @@ Meshverse.prototype.grow =
 	for( k in twig )
 	{
 		if(
-			// TODO does not own property ever happen?
+			// FIXME does not own property ever happen?
 			!Object.hasOwnProperty.call( twig, k ) ||
 			k === 'type'
 		)
@@ -384,7 +384,7 @@ Meshverse.prototype.grow =
 			);
 		}
 
-		// TODO fix in getType
+		// FIXME fix in getType
 		if(
 			vtype === 'Number' &&
 			Jools.isInteger( val )
@@ -470,22 +470,6 @@ Meshverse.prototype.grow =
 				);
 			}
 		}
-	}
-
-	var
-		creator =
-			this.creators &&
-			this.creators[ type ];
-
-	if( creator )
-	{
-		return (
-			new creator(
-				'TREE', // TODO remove
-				twig,
-				ranks
-			)
-		);
 	}
 
 	return (

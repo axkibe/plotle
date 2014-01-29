@@ -152,7 +152,7 @@ ChangeRay.prototype.append =
 
 /*
 | Returns the length of the changeray
-| TODO once ChangeRay is immutable this can be fixed as well
+| FIXME once ChangeRay is immutable this can be fixed as well
 */
 Object.defineProperty (
 	ChangeRay.prototype,

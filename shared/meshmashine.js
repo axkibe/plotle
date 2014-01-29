@@ -86,7 +86,7 @@ var tfxSign1 =
 	if( chg.length !== 1 )
 	{
 		throw new Error(
-			'tfxSign1 chg.length !== 1'
+			CHECK && 'tfxSign1 chg.length !== 1'
 		);
 	}
 
@@ -95,13 +95,14 @@ var tfxSign1 =
 		return sign;
 	}
 
-	var op =
-		TFXOps[ chg.type( ) ];
+	var
+		op =
+			TFXOps[ chg.type ];
 
 	if( !op )
 	{
 		throw new Error(
-			'tfxSign1, no op'
+			CHECK && 'tfxSign1, no op'
 		);
 	}
 
@@ -123,12 +124,12 @@ var tfxSign =
 		chgX
 	)
 {
-	Jools.log(
-		'tfx',
-		'tfxSign',
-		sign,
-		chgX
-	);
+//	Jools.log(
+//		'tfx',
+//		'tfxSign',
+//		sign,
+//		chgX
+//	);
 
 	switch( chgX.constructor )
 	{
@@ -138,21 +139,21 @@ var tfxSign =
 
 		default :
 			throw new Error(
-				'invalid chgX'
+				CHECK && 'invalid chgX'
 			);
 	}
 
 	if( arguments.length !== 2 )
 	{
 		throw new Error(
-			'tfxSign argument fail (n)'
+			CHECK && 'tfxSign argument fail (n)'
 		);
 	}
 
 	if( sign.constructor !== Sign )
 	{
 		throw new Error(
-			'tfxSign argument fail (1)'
+			CHECK && 'tfxSign argument fail (1)'
 		);
 	}
 
@@ -161,11 +162,11 @@ var tfxSign =
 		sign.path.length === 0
 	)
 	{
-		Jools.log(
-			'tfx',
-			'out',
-			sign
-		);
+//		Jools.log(
+//			'tfx',
+//			'out',
+//			sign
+//		);
 
 		return sign;
 	}
@@ -242,7 +243,7 @@ var tfxSign =
 						default :
 
 							throw new Error(
-								'Invalid fs'
+								CHECK && 'Invalid fs'
 							);
 					}
 				}
@@ -252,16 +253,16 @@ var tfxSign =
 			default :
 
 				throw new Error(
-					'Invalid signX'
+					CHECK && 'Invalid signX'
 				);
 		}
 	}
 
-	Jools.log(
-		'tfx',
-		'out',
-		signX
-	);
+//	Jools.log(
+//		'tfx',
+//		'out',
+//		signX
+//	);
 
 	return signX;
 };
@@ -275,16 +276,19 @@ var tfxChg =
 		chgX
 	)
 {
-	Jools.log(
-		'tfx',
-		'tfxChg',
-		chg,
-		chgX
-	);
+
+//	Jools.log(
+//		'tfx',
+//		'tfxChg',
+//		chg,
+//		chgX
+//	);
 
 	if( chg.constructor !== Change )
 	{
-		throw new Error('tfxChg param error');
+		throw new Error(
+			CHECK && 'tfxChg param error'
+		);
 	}
 
 	var srcX =
@@ -304,10 +308,10 @@ var tfxChg =
 		trgX === null
 	)
 	{
-		Jools.log(
-			'tfx',
-			'transformed to null'
-		);
+//		Jools.log(
+//			'tfx',
+//			'transformed to null'
+//		);
 
 		return null;
 	}
@@ -333,10 +337,10 @@ var tfxChg =
 			( srcX.path.equals( trgX.path ) )
 		)
 		{
-			Jools.log(
-				'tfx',
-				'splice transformed to equalness'
-			);
+//			Jools.log(
+//				'tfx',
+//				'splice transformed to equalness'
+//			);
 
 			return null;
 		}
@@ -391,7 +395,7 @@ var tfxChg =
 	else
 	{
 		throw new Error(
-			'srcX and trgX arrays :-('
+			CHECK && 'srcX and trgX arrays :-('
 		);
 	}
 
@@ -488,10 +492,10 @@ TFXOps.split =
 		!is( sign.at2 )
 	)
 	{
-		Jools.log(
-			'tfx',
-			'split (simple)'
-		);
+//		Jools.log(
+//			'tfx',
+//			'split (simple)'
+//		);
 
 		if( sign.at1 < src.at1 )
 		{
@@ -514,20 +518,20 @@ TFXOps.split =
 
 	if( sign.at2 <= src.at1 )
 	{
-		Jools.log(
-			'tfx',
-			'split (span, case 1)'
-		);
+//		Jools.log(
+//			'tfx',
+//			'split (span, case 1)'
+//		);
 
 		return sign;
 	}
 
 	if( sign.at1 >= src.at1 )
 	{
-		Jools.log(
-			'tfx',
-			'split (span, case 2)'
-		);
+//		Jools.log(
+//			'tfx',
+//			'split (span, case 2)'
+//		);
 
 		// signature goes into splitted line instead
 		return new Sign(
@@ -541,10 +545,11 @@ TFXOps.split =
 		);
 	}
 
-	Jools.log(
-		'tfx',
-		'split (span, case 3'
-	);
+//	Jools.log(
+//		'tfx',
+//		'split (span, case 3'
+//	);
+
 	// the signature is splited into a part that stays and one that goes to next line.
 
 	return [
@@ -589,16 +594,18 @@ TFXOps.join =
 
 	if( !trg.path )
 	{
-		throw new Error('join missing trg.path');
+		throw new Error(
+			CHECK && 'join missing trg.path'
+		);
 	}
 
 	// FIXME tfx ranks
 
-	Jools.log(
-		'tfx',
-		'join',
-		sign
-	);
+//	Jools.log(
+//		'tfx',
+//		'join',
+//		sign
+//	);
 
 	if (!is(sign.at2))
 	{
@@ -647,10 +654,10 @@ TFXOps.rank =
 		return sign;
 	}
 
-	Jools.log(
-		'tfx',
-		'rank'
-	);
+//	Jools.log(
+//		'tfx',
+//		'rank'
+//	);
 
 	if(
 		src.rank <= sign.rank &&
@@ -699,10 +706,10 @@ TFXOps.set =
 		return sign;
 	}
 
-	Jools.log(
-		'tfx',
-		'set'
-	);
+//	Jools.log(
+//		'tfx',
+//		'set'
+//	);
 
 	if( trg.rank === null )
 	{
@@ -772,10 +779,10 @@ TFXOps.insert =
 		return sign;
 	}
 
-	Jools.log(
-		'tfx',
-		'insert'
-	);
+//	Jools.log(
+//		'tfx',
+//		'insert'
+//	);
 
 	if(
 		!is( trg.at1 ) ||
@@ -783,7 +790,7 @@ TFXOps.insert =
 	)
 	{
 		throw new Error(
-			'history mangled'
+			CHECK && 'history mangled'
 		);
 	}
 
@@ -840,7 +847,7 @@ TFXOps.remove =
 	)
 	{
 		throw new Error(
-			'history mangled'
+			CHECK && 'history mangled'
 		);
 	}
 
@@ -857,20 +864,20 @@ TFXOps.remove =
 
 		if( sign.at1 <= src.at1 )
 		{
-			Jools.log(
-				'tfx',
-				'remove (case s0)'
-			);
+//			Jools.log(
+//				'tfx',
+//				'remove (case s0)'
+//			);
 
 			return sign;
 		}
 
 		if( sign.at1 <= src.at2 )
 		{
-			Jools.log(
-				'tfx',
-				'remove (case s1)'
-			);
+//			Jools.log(
+//				'tfx',
+//				'remove (case s1)'
+//			);
 
 			return new Sign(
 				sign,
@@ -879,10 +886,10 @@ TFXOps.remove =
 			);
 		}
 
-		Jools.log(
-			'tfx',
-			'remove (case s2)'
-		);
+//		Jools.log(
+//			'tfx',
+//			'remove (case s2)'
+//		);
 
 		return new Sign(
 			sign,
@@ -905,19 +912,19 @@ TFXOps.remove =
 
 	if( sign.at2 <= src.at1 )
 	{
-		Jools.log(
-			'tfx',
-			'remove (case 0)'
-		);
+//		Jools.log(
+//			'tfx',
+//			'remove (case 0)'
+//		);
 
 		return sign;
 	}
 	else if( sign.at1 >= src.at2 )
 	{
-		Jools.log(
-			'tfx',
-			'remove (case 1)'
-		);
+//		Jools.log(
+//			'tfx',
+//			'remove (case 1)'
+//		);
 
 		return new Sign(
 			sign,
@@ -932,10 +939,10 @@ TFXOps.remove =
 		sign.at2 > src.at2
 	)
 	{
-		Jools.log(
-			'tfx',
-			'remove (case 2)'
-		);
+//		Jools.log(
+//			'tfx',
+//			'remove (case 2)'
+//		);
 
 		return new Sign(
 			sign,
@@ -948,10 +955,10 @@ TFXOps.remove =
 		sign.at2 <= src.at2
 	)
 	{
-		Jools.log(
-			'tfx',
-			'remove (case 3)'
-		);
+//		Jools.log(
+//			'tfx',
+//			'remove (case 3)'
+//		);
 
 		return null;
 	}
@@ -960,10 +967,10 @@ TFXOps.remove =
 		sign.at2 <= src.at2
 	)
 	{
-		Jools.log(
-			'tfx',
-			'remove (case 4)'
-		);
+//		Jools.log(
+//			'tfx',
+//			'remove (case 4)'
+//		);
 
 		return new Sign(
 			sign,
@@ -976,10 +983,10 @@ TFXOps.remove =
 		sign.at2 > src.at2
 	)
 	{
-		Jools.log(
-			'tfx',
-			'remove (case 5)'
-		);
+//		Jools.log(
+//			'tfx',
+//			'remove (case 5)'
+//		);
 
 		return new Sign(
 			sign,
@@ -990,9 +997,12 @@ TFXOps.remove =
 	else
 	{
 		throw new Error(
-			'remove, no case fitted! ' +
-				sign.at1 + '-' + sign.at2 + ' ' +
-				src.at1 + '-' + src.at2
+			CHECK &&
+			(
+				'remove, no case fitted! ' +
+					sign.at1 + '-' + sign.at2 + ' ' +
+					src.at1 + '-' + src.at2
+			)
 		);
 	}
 };

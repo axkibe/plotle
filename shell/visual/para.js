@@ -456,7 +456,7 @@ Para.prototype.draw =
 		{
 			this._drawCaret(
 				f,
-				view, // TODO is part of object
+				view, // FIXME is part of object
 				item
 			);
 		}

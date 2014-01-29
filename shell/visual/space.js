@@ -192,7 +192,7 @@ Space.create =
 		aZ =
 			arguments.length;
 
-	// TODO change to for loop
+	// FIXME change to for loop
 	while( a < aZ )
 	{
 		switch( arguments[ a ] )
@@ -452,7 +452,7 @@ Space.concernsMark =
 /*
 | Returns the focused item.
 |
-| TODO handle this more gracefully
+| FIXME handle this more gracefully
 */
 Space.prototype.focusedItem =
 	function( )
@@ -955,7 +955,7 @@ Space.prototype.dragStart =
 				'zone',
 					Euclid.Rect.create(
 						'pnw',
-							p,  // TODO why no depoint?
+							p,  // FIXME why no depoint?
 						'pse',
 							p
 					),
@@ -1072,7 +1072,7 @@ Space.prototype.dragStart =
 				'zone',
 					Euclid.Rect.create(
 						'pnw',
-							p, //TODO depoint?
+							p, //FIXME depoint?
 						'pse',
 							p
 					)
@@ -1388,7 +1388,7 @@ Space.prototype.dragStop =
 							this.spaceUser,
 							this.spaceTag,
 							portal.zone,
-							shell.username, // TODO
+							shell.username, // FIXME
 							'home'
 						);
 
@@ -1757,7 +1757,7 @@ Space.prototype.dragMove =
 				)
 			);
 
-			// TODO why is this?
+			// FIXME why is this?
 			for(
 				var r = 0, rZ = this.tree.length;
 				r < rZ;
@@ -1766,7 +1766,7 @@ Space.prototype.dragMove =
 			{
 				if(
 					this.atRank( r ).dragMove(
-						view, // TODO dont
+						view, // FIXME dont
 						p
 					)
 				)
@@ -1979,7 +1979,7 @@ Space.prototype.dragMove =
 			this.getItem(
 				action.itemPath.get( -1 )
 			).dragMove(
-				view, // TODO dont
+				view, // FIXME dont
 				p
 			);
 

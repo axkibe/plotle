@@ -229,7 +229,7 @@ Shell =
 
 
 /*
-| TODO, workaround until $space is gone
+| FIXME, workaround until $space is gone
 */
 Object.defineProperty(
 	Shell.prototype,
@@ -245,7 +245,7 @@ Object.defineProperty(
 
 
 /*
-| TODO, workaround until $action is gone
+| FIXME, workaround until $action is gone
 */
 Object.defineProperty(
 	Shell.prototype,
@@ -1141,7 +1141,7 @@ Shell.prototype.setTraits =
 		}
 	}
 
-	// TODO precheck which traitSet affect
+	// FIXME precheck which traitSet affect
 	this._$formJockey =
 		Forms.Jockey.create(
 			'inherit',
@@ -1300,7 +1300,6 @@ Shell.prototype.setUser =
 		);
 	}
 
-	// TODO
 	this.username =
 		username;
 
@@ -1424,10 +1423,11 @@ Shell.prototype.moveToSpace =
 		create
 	)
 {
-	// TODO make message a function of shell
-	this._$discJockey.message(
+	/*
+	message(
 		'Moving to ' + spaceUser + ':' + spaceTag + ' ...'
 	);
+	*/
 
 	this.peer.aquireSpace(
 		spaceUser,
@@ -1484,7 +1484,7 @@ Shell.prototype.onAquireSpace =
 
 		case 'no access' :
 
-			// TODO remove get
+			// FIXME remove get
 			path =
 				this._$formJockey.get( 'NoAccessToSpace' ).path;
 

@@ -76,7 +76,7 @@ Change =
 	}
 	else
 	{
-		// TODO do not change callee object
+		// FIXME do not change callee object
 		if( src.path && src.path.reflect !== 'Path' )
 		{
 			src.path =
@@ -97,7 +97,7 @@ Change =
 	}
 	else
 	{
-		// TODO do not change callee object
+		// FIXME do not change callee object
 		if( trg.path && trg.path.reflect !== 'Path' )
 		{
 			trg.path =
@@ -117,83 +117,74 @@ Change =
 
 /*
 | Returns the type of this change.
-|
-| TODO use lazyFixate
 */
-Change.prototype.type =
+Jools.lazyFixate(
+	Change.prototype,
+	'type',
 	function( )
-{
-	var
-		is =
-			Jools.is;
+	{
+		var
+			is =
+				Jools.is,
 
-	// checks if the answer is cached
-	if( is( this._type ) )
-	{
-		return this._type;
-	}
+			src =
+				this.src,
 
-	var
-		src =
-			this.src,
+			trg =
+				this.trg,
 
-		trg =
-			this.trg,
+			type;
 
-		type;
-
-	if( trg.proc === 'splice' )
-	{
-		type =
-			'split';
-	}
-	else if( src.proc === 'splice' )
-	{
-		type =
-			'join';
-	}
-	else if( is( src.val ) && !is( trg.at1 ) )
-	{
-		type =
-			'set';
-	}
-	else if( is( src.val ) && is( trg.at1 ) )
-	{
-		type =
-			'insert';
-	}
-	else if( is( src.at1 ) && is( src.at2 ) && !is( trg.at1 ) )
-	{
-		type =
-			'remove';
-	}
-	else if( is( trg.rank ) )
-	{
-		type =
-			'rank';
-	}
-	else
-	{
-		type =
-			null;
-
-		if( Jools.prissy )
+		if( trg.proc === 'splice' )
 		{
-			Jools.log( 'fail', this );
-			throw new Error( 'invalid type' );
+			type =
+				'split';
 		}
+		else if( src.proc === 'splice' )
+		{
+			type =
+				'join';
+		}
+		else if( is( src.val ) && !is( trg.at1 ) )
+		{
+			type =
+				'set';
+		}
+		else if( is( src.val ) && is( trg.at1 ) )
+		{
+			type =
+				'insert';
+		}
+		else if( is( src.at1 ) && is( src.at2 ) && !is( trg.at1 ) )
+		{
+			type =
+				'remove';
+		}
+		else if( is( trg.rank ) )
+		{
+			type =
+				'rank';
+		}
+		else
+		{
+			type =
+				null;
+
+			if( Jools.prissy )
+			{
+				Jools.log( 'fail', this );
+				throw new Error( 'invalid type' );
+			}
+		}
+
+		return type;
 	}
-
-	// caches the type for further queries
-	Jools.innumerable( this, '_type', type );
-
-	return type;
-};
+);
 
 
 /*
 | Returns the inversion to this change.
-| TODO use lazy fixate
+| FIXME use lazy fixate
 */
 Change.prototype.invert =
 	function( )
@@ -238,10 +229,6 @@ Change.prototype.changeTree =
 		universe
 	)
 {
-	var
-		type =
-			this.type( );
-
 	Jools.log(
 		'change',
 		'src:',
@@ -249,14 +236,14 @@ Change.prototype.changeTree =
 		'trg:',
 			this.trg,
 		'type:',
-			type
+			this.type
 	);
 
 	// executes the op-handler
-	// TODO make a switch call around this
+	// FIXME make a switch call around this
 	var
 		r =
-			this[ type ]( tree, universe );
+			this[ this.type ]( tree, universe );
 
 	Jools.log(
 		'change',
@@ -285,7 +272,7 @@ Change.prototype.changeTree =
 
 /*
 | Change emulates a ChangeRay with the length of 1.
-| TODO check if needed
+| FIXME check if needed
 */
 Change.prototype.length =
 	1;
@@ -293,7 +280,7 @@ Change.prototype.length =
 
 /*
 | Change emulates a ChangeRay with the length of 1.
-| TODO check if needed
+| FIXME check if needed
 */
 Change.prototype.get =
 	function(
@@ -396,7 +383,7 @@ Change.prototype.set =
 				trg.path
 		);
 
-	// TODO simplify
+	// FIXME simplify
 	if( !Jools.is( trg.rank ) )
 	{
 		tree =

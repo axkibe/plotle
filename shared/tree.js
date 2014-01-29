@@ -81,13 +81,16 @@ Tree.prototype.getPath =
 		shorten
 	)
 {
-	// TODO CHECK
-	if( path.reflect !== 'Path' )
-	{
-		throw new Error(
-			'not a path.'
-		);
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.reflect !== 'Path' )
+/**/	{
+/**/		throw new Error(
+/**/			'not a path.'
+/**/		);
+/**/	}
+/**/}
 
 	if( shorten < 0 )
 	{
@@ -308,12 +311,11 @@ Tree.getType =
 				return o.reflect;
 			}
 
+			// FIXME remove
 			if( o.type )
 			{
-				// TODO remove
 				return o.type;
 			}
-
 
 			return o.twig.type ;
 	}

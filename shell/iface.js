@@ -944,7 +944,7 @@ IFace.prototype._update =
 		var msgs =
 			asw.msgs;
 
-		if( msgs && self._messageRCV )
+		if( msgs )
 		{
 			for( a = 0, aZ = msgs.length; a < aZ; a++ )
 			{
