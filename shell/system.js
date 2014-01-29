@@ -98,7 +98,7 @@ var System =
 	if( system )
 	{
 		throw new Error(
-			'System not a singleton'
+			CHECK && 'System not a singleton'
 		);
 	}
 
@@ -932,7 +932,9 @@ System.prototype._onMouseMove =
 			break;
 
 		default :
-			throw new Error( 'invalid pointingState' );
+			throw new Error(
+				CHECK && 'invalid pointingState'
+			);
 
 	}
 
@@ -1037,7 +1039,7 @@ System.prototype._onMouseUp =
 		default :
 
 			throw new Error(
-				'invalid pointingState'
+				CHECK && 'invalid pointingState'
 			);
 	}
 
@@ -1372,7 +1374,9 @@ System.prototype._onTouchEnd =
 
 		default :
 
-			throw new Error( 'invalid pointingState' );
+			throw new Error(
+				CHECK && 'invalid pointingState'
+			);
 	}
 
 	return false;
@@ -1636,7 +1640,7 @@ System.prototype._steerAttention =
 			ac + 'px';
 	}
 
-	if( shell.suggestingKeyboard( ) )
+	if( this.shell.suggestingKeyboard( ) )
 	{
 		this._hiddenInput.focus( );
 

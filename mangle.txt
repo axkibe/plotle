@@ -1,8 +1,4 @@
-. _$height
-. suggestingKeyboard
-. _onHiddenInputBlur
-> scrollIntoViewIfNeeded
-> scrollTo
+. atween
 . $abort
 . $action
 . $aquireAjax
@@ -114,6 +110,7 @@
 . _$formJockey
 . _$greenscreen
 . _$grown
+. _$height
 . _$hover
 . _$invert
 . _$lastSpecialKey
@@ -194,6 +191,7 @@
 . _onAtweenTime
 . _onAtweenTimeCatcher
 . _onContextMenu
+. _onHiddenInputBlur
 . _onHiddenKeyDown
 . _onHiddenKeyPress
 . _onHiddenKeyUp
@@ -256,6 +254,7 @@
 . args
 . arrivedAtSpace
 . arrow
+. askew
 . assign
 . asyncEvent
 > at
@@ -323,6 +322,7 @@
 > clip
 . clipboard
 . clockwise
+. close
 . closeButton
 > cm
 > cmd
@@ -474,6 +474,7 @@
 . highlight
 . hofoc
 > home
+. horizontal
 . hover
 . hoverAccent
 . hull
@@ -704,8 +705,10 @@
 > s
 > save
 > scale
+> scrollIntoViewIfNeeded
 . scrollMarkIntoView
 . scrollPage
+> scrollTo
 . scrollbar
 . scrollbarY
 > se
@@ -787,9 +790,10 @@
 . sub
 . subPathOf
 . subPaths
-> subclass
+. subclass
 > substr
 > substring
+. suggestingKeyboard
 . superFrame
 > sw
 > t
@@ -813,6 +817,7 @@
 . toPoint
 > top
 > touches
+. trait
 . traitSet
 . transItem
 > tree

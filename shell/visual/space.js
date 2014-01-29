@@ -303,7 +303,9 @@ Space.create =
 			default :
 
 				throw new Error(
-					'invalid argument: ' + arguments[ a ]
+					CHECK && (
+						'invalid argument: ' + arguments[ a ]
+					)
 				);
 		}
 	}
@@ -1418,7 +1420,7 @@ Space.prototype.dragStop =
 				default :
 
 					throw new Error(
-						'invalid itemtype'
+						CHECK && 'invalid itemtype'
 					);
 			}
 
@@ -1479,14 +1481,11 @@ Space.prototype.dragStop =
 
 					break;
 
-/**/			default :
-/**/
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'unknown relation state'
-/**/					);
-/**/				}
+				default :
+
+					throw new Error(
+						CHECK && 'unknown relation state'
+					);
 			}
 
 			break;
@@ -1517,13 +1516,13 @@ Space.prototype.dragStop =
 
 					default :
 
-/**/					if( CHECK )
-/**/					{
-/**/						throw new Error(
-/**/							'invalid positioning' +
-/**/							action.transItem.positioning
-/**/						);
-/**/					}
+						throw new Error(
+							CHECK &&
+							(
+								'invalid positioning' +
+								action.transItem.positioning
+							)
+						);
 				}
 			}
 
@@ -1566,8 +1565,11 @@ Space.prototype.dragStop =
 					default :
 
 						throw new Error(
-							'invalid positioning' +
-								action.transItem.positioning
+							CHECK &&
+							(
+								'invalid positioning' +
+									action.transItem.positioning
+							)
 						);
 				}
 			}
@@ -1598,7 +1600,10 @@ Space.prototype.dragStop =
 		default :
 
 			throw new Error(
-				'Do not know how to handle action: ' + action.reflect
+				CHECK &&
+				(
+					'Do not know how to handle action: ' + action.reflect
+				)
 			);
 	}
 
@@ -1707,7 +1712,7 @@ Space.prototype.dragMove =
 				default :
 
 					throw new Error(
-						'invalid positioning'
+						CHECK && 'invalid positioning'
 					);
 			}
 
@@ -1903,12 +1908,9 @@ Space.prototype.dragMove =
 
 						default :
 
-/**/						if( CHECK )
-/**/						{
-/**/							throw new Error(
-/**/								'unknown align'
-/**/							);
-/**/						}
+							throw new Error(
+								CHECK && 'unknown align'
+							);
 					}
 
 					fs =
@@ -1953,14 +1955,11 @@ Space.prototype.dragMove =
 
 					break;
 
-/**/			default :
-/**
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error(
-/**/					'invalid positioning'
-/**/				);
-/**/			}
+				default :
+
+					throw new Error(
+						CHECK && 'invalid positioning'
+					);
 			}
 
 			shell.setAction(
@@ -1988,12 +1987,13 @@ Space.prototype.dragMove =
 
 		default :
 
-/**/		if( CHECK )
-/**/		{
-/**/			throw new Error(
-/**/				'unknown action: ' + action.reflect
-/**/			);
-/**/		}
+			throw new Error(
+				CHECK
+				&&
+				(
+					'unknown action: ' + action.reflect
+				)
+			);
 	}
 };
 

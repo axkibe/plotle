@@ -258,8 +258,11 @@ CreateDisc.prototype._init =
 			default :
 
 				throw new Error(
-					'Cannot create widget of type: ' +
-						tree.twig.type
+					CHECK &&
+					(
+						'Cannot create widget of type: ' +
+							tree.twig.type
+					)
 				);
 		}
 	}
@@ -413,7 +416,10 @@ CreateDisc.prototype.pushButton =
 		default :
 
 			throw new Error(
-				'unknown button:' + buttonName
+				CHECK &&
+				(
+					'unknown button:' + buttonName
+				)
 			);
 	}
 

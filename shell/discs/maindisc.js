@@ -421,12 +421,15 @@ MainDisc.prototype.pushButton =
 		discname =
 			path.get( 1 );
 
-	if( discname !== this.reflect )
-	{
-		throw new Error(
-			'invalid discname: ' + discname
-		);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( discname !== this.reflect )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid discname: ' + discname
+/**/		);
+/**/	}
+/**/}
 
 	var
 		buttonName =

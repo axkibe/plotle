@@ -22,6 +22,7 @@ var
 	Euclid,
 	fontPool,
 	Jools,
+	shell,
 	theme;
 
 

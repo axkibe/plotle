@@ -219,7 +219,11 @@ Login.prototype.pushButton =
 		default :
 
 			throw new Error(
-				'unknown button pushed: ' + buttonName
+				CHECK
+				&&
+				(
+					'unknown button pushed: ' + buttonName
+				)
 			);
 	}
 };

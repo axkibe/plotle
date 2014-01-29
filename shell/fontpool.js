@@ -103,7 +103,7 @@ FontPool.prototype.setDefaultFonts =
 	if( this.$settedDefaultFonts )
 	{
 		throw new Error(
-			'multiple calls to setDefaultFont.'
+			CHECK && 'multiple calls to setDefaultFont'
 		);
 	}
 
@@ -128,7 +128,11 @@ FontPool.prototype.setDefaultFonts =
 
 			default :
 				throw new Error(
-					'unknown font family tag in styles (' + s.family + ')'
+					CHECK &&
+					(
+						'unknown font family tag in styles (' +
+							s.family + ')'
+					)
 				);
 		}
 	}
@@ -144,12 +148,16 @@ FontPool.prototype.get =
 		code
 	)
 {
-	if( !this.$settedDefaultFonts )
-	{
-		throw new Error(
-			'not setted default fonts'
-		);
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( !this.$settedDefaultFonts )
+/**/	{
+/**/		throw new Error(
+/**/			'not setted default fonts'
+/**/		);
+/**/	}
+/**/}
 
 	var
 		style =
@@ -158,7 +166,7 @@ FontPool.prototype.get =
 	if( !style )
 	{
 		throw new Error(
-			'Invalid font style'
+			CHECK && 'Invalid font style'
 		);
 	}
 
