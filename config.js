@@ -74,16 +74,16 @@ config.database.name =
 | it will die on a command it considers unacceptable.
 */
 config.devel =
-	//'shell';
+	'shell';
 	//'both';
-	'none';
+	//'none';
 
 
 /*
 | If true "uglifies" the javascript pack, minimizing its size.
 */
 config.uglify =
-	true;
+	false;
 
 
 /*

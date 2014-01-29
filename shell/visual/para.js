@@ -557,7 +557,7 @@ Jools.lazyFixate(
 				0,
 
 			y =
-				font.size,
+				Math.round( font.size ),
 
 			space =
 				Euclid.Measure.width( font, ' ' ),
