@@ -74,9 +74,9 @@ config.database.name =
 | it will die on a command it considers unacceptable.
 */
 config.devel =
-	'shell';
+	//'shell';
 	//'both';
-	// 'none';
+	'none';
 
 
 /*
@@ -97,7 +97,7 @@ config.extraMangle =
 | If true "beautifies" uglify output.
 */
 config.beautify =
-	true;
+	false;
 
 
 /*
