@@ -667,7 +667,7 @@ IFace.prototype._update =
 				'update.status == ' + ajax.status
 			);
 
-			shell.greenscreen(
+			system.failScreen(
 				'Connection with server failed.'
 			);
 
@@ -689,7 +689,7 @@ IFace.prototype._update =
 
 		if( !asw.ok )
 		{
-			shell.greenscreen(
+			system.failScreen(
 				'Server not OK: ' + asw.message
 			);
 
@@ -1136,7 +1136,7 @@ IFace.prototype._sendChanges =
 
 			if( ajax.status !== 200 )
 			{
-				shell.greenscreen(
+				system.failScreen(
 					'Cannot send changes, error code ' + ajax.status
 				);
 				return;
@@ -1149,7 +1149,7 @@ IFace.prototype._sendChanges =
 			}
 			catch( e )
 			{
-				shell.greenscreen(
+				system.failScreen(
 					'Server answered no JSON!'
 				);
 
@@ -1164,7 +1164,7 @@ IFace.prototype._sendChanges =
 
 			if( !asw.ok )
 			{
-				shell.greenscreen(
+				system.failScreen(
 					'Server not OK: ' + asw.message
 				);
 

@@ -1,4 +1,7 @@
 . $abort
+. failScreen
+> parentElement
+> removeChild
 . $action
 . $aquireAjax
 . $authActive
@@ -109,7 +112,6 @@
 . _$formJockey
 . _$greenscreen
 . _$grown
-. _$height
 . _$hover
 . _$invert
 . _$lastSpecialKey
@@ -161,12 +163,10 @@
 . _gradientR0
 . _gradientR1
 . _handles
-. _hiddenInput
 . _icons
 . _ifabric
 . _iface
 . _init
-. _inputVal
 . _invert
 . _isActiveButton
 . _isSection
@@ -239,7 +239,6 @@
 > addEventListener
 . affix
 > ajax
-> alert
 . align
 . all
 . allowNull

@@ -1016,9 +1016,6 @@ Server.prototype.prepareResources =
 				'shell/action/scrolly.js',
 					'fbj',
 
-				'shell/greenscreen.js',
-					'fb',
-
 				'shell/shell.js',
 					'fb',
 
@@ -1443,7 +1440,7 @@ Server.prototype.prepareResources =
 			'shell/meshcraft.html',
 			resume( )
 		) ) + '';
-
+	
 	main.data =
 		main.data.replace(
 			/<!--COPACK.*>/,

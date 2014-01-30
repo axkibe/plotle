@@ -217,10 +217,6 @@ Shell =
 				view
 		);
 
-	// greenscreen display if not null
-	this._$greenscreen =
-		null;
-
 	this.mark =
 		Mark.Vacant.create( );
 
@@ -427,6 +423,22 @@ Shell.prototype.update =
 						'retainx',
 							mark.retainx
 					);
+			}
+
+			break;
+
+		case 'Item' :
+
+			mItemTree =
+				tree.twig[ mark.path.get( 1 ) ];
+
+			if (
+				!Jools.is( mItemTree )
+			)
+			{
+				// the item holding the caret was removed
+				mark =
+					Mark.Vacant.create( );
 			}
 
 			break;
@@ -652,11 +664,6 @@ Shell.prototype._getCurrentDisplay =
 		name =
 			this._$mode;
 
-	if( this._$greenscreen )
-	{
-		return this._$greenscreen;
-	}
-
 	switch( name )
 	{
 		case 'Create' :
@@ -771,28 +778,6 @@ Shell.prototype.pointingHover =
 	}
 
 	return 'default';
-};
-
-
-/*
-| Switches to a green error screen.
-*/
-Shell.prototype.greenscreen =
-	function( message )
-{
-	if( !message )
-	{
-		message =
-			'unknown error';
-	}
-
-	if( !this._$greenscreen )
-	{
-		this._$greenscreen =
-			new GreenScreen( message );
-	}
-
-	this._draw( );
 };
 
 
@@ -1515,7 +1500,7 @@ Shell.prototype.onAquireSpace =
 
 		case 'connection fail' :
 
-			this.greenscreen(
+			system.failScreen(
 				'Connection failed: ' +
 				asw.message
 			);
@@ -1524,7 +1509,7 @@ Shell.prototype.onAquireSpace =
 
 		default :
 
-			this.greenscreen(
+			system.failScreen(
 				'Unknown aquireSpace() status: ' +
 				asw.status + ': ' + asw.message
 			);
@@ -1607,8 +1592,8 @@ Shell.prototype.onAuth =
 			return;
 		}
 
-		// if even that failed, bailing to greenscreen
-		this.greenscreen( res.message );
+		// if even that failed, bailing to failScreen
+		system.failScreen( res.message );
 
 		return;
 	}
@@ -1644,7 +1629,7 @@ Shell.prototype.logout =
 		{
 			if(! res.ok )
 			{
-				self.greenscreen(
+				system.failScreen(
 					'Cannot logout: ' + res.message
 				);
 

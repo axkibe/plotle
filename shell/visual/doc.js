@@ -899,8 +899,6 @@ Doc.prototype.sketchRange =
 
 	// FIXME do not create points
 
-	console.log( fp.x, fp.y );
-
 	fp =
 		fp.add(
 			frontPnw.x - sp.x,

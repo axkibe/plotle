@@ -8,21 +8,22 @@
 
 
 /*
+| Export
+*/
+var
+	system,
+	startup;
+
+
+/*
 | Imports
 */
 var
 	config,
 	Euclid,
 	Jools,
-	Shell;
-
-
-/*
-| Export
-*/
-var
-	system,
-	startup;
+	Shell,
+	shell;
 
 
 /*
@@ -60,20 +61,18 @@ var makeCatcher =
 			try {
 				var message =
 					[
-						'Internal failure, ',
+						'OOPS! Internal failure, ',
 							e.name, ': ',
 							e.message, '\n\n',
-						'file: ',
-							e.fileName, '\n',
-						'line: ',
-							e.lineNumber, '\n',
 						'stack: ',
-							e.stack
+							e.stack,
+						'\n\n',
+						'Please report to axkibe@gmail.com'
 					].join('');
 
-				if( !config.debug.weinre )
+				if( true || !config.debug.weinre ) // TODO
 				{
-					window.alert( message );
+					system.failScreen( message );
 				}
 				else
 				{
@@ -89,6 +88,27 @@ var makeCatcher =
 };
 
 
+
+var
+	_failScreen =
+		false,
+
+	// the main canvas everything is
+	// drawn upon
+	_canvas,
+	
+	// The value expected to be in input.
+	// either nothing or the text selection.
+	// if it changes the user did something.
+	_inputVal =
+		'',
+
+	// the hidden input taking text input
+	_hiddenInput,
+
+	// current height of the main window
+	_height;
+
 /*
 | The system.
 */
@@ -102,28 +122,26 @@ var System =
 		);
 	}
 
-	var
-		canvas =
-		this._canvas =
-			document.getElementById( 'canvas' );
+	_canvas =
+		document.getElementById( 'canvas' );
 
-	this._$height =
+	_height =
 		window.innerHeight - 1;
 
 	this._fabric =
 		Euclid.Fabric.create(
 			'canvas',
-				this._canvas,
+				_canvas,
 			'width',
 				window.innerWidth - 1,
 			'height',
-				this._$height
+				_height
 		);
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
 	this._useCapture =
-		!!canvas.setCapture;
+		!!_canvas.setCapture;
 
 	// false, 'atween' or 'drag'
 	this._$pointingState =
@@ -158,7 +176,7 @@ var System =
 		});
 
 	// hidden input that forwards all events
-	this._hiddenInput =
+	_hiddenInput =
 		document.getElementById( 'input' );
 
 	// remembers last special key pressed, to hinder double events.
@@ -170,58 +188,52 @@ var System =
 	this._$hover =
 		null;
 
-	// The value expected to be in input.
-	// either nothing or the text selection.
-	// if it changes the user did something.
-	this._inputVal =
-		'';
-
-	canvas.onmousedown =
+	_canvas.onmousedown =
 		makeCatcher(
 			this,
 			this._onMouseDown
 		);
 
-	canvas.onmousemove =
+	_canvas.onmousemove =
 		makeCatcher(
 			this,
 			this._onMouseMove
 		);
 
-	canvas.onmouseup =
+	_canvas.onmouseup =
 		makeCatcher(
 			this,
 			this._onMouseUp
 		);
 
-	canvas.ontouchstart =
+	_canvas.ontouchstart =
 		makeCatcher(
 			this,
 			this._onTouchStart
 		);
 
-	canvas.ontouchmove =
+	_canvas.ontouchmove =
 		makeCatcher(
 			this,
 			this._onTouchMove
 		);
 
-	canvas.ontouchend =
+	_canvas.ontouchend =
 		makeCatcher(
 			this,
 			this._onTouchEnd
 		);
 
-	canvas.onmousewheel =
+	_canvas.onmousewheel =
 		makeCatcher(
 			this,
 			this._onMouseWheel
 		);
 
 	// firefox wheel listening
-	canvas.addEventListener(
+	_canvas.addEventListener(
 		'DOMMouseScroll',
-		canvas.onmousewheel,
+		_canvas.onmousewheel,
 		false
 	);
 
@@ -246,7 +258,7 @@ var System =
 			this._onSystemBlur
 		);
 
-	this._hiddenInput.onblur =
+	_hiddenInput.onblur =
 		makeCatcher(
 			this,
 			this._onHiddenInputBlur
@@ -298,7 +310,7 @@ var System =
 	this._blinkTimer =
 		null;
 
-	this._canvas.focus( );
+	_canvas.focus( );
 
 	this.restartBlinker( );
 };
@@ -307,23 +319,103 @@ var System =
 /*
 | Default system behavior settings
 */
-System.prototype.settings =
+var _settings =
+	Jools.immute(
+		{
+			// pixels to scroll for a wheel event
+			textWheelSpeed :
+				12 * 5,
+
+			// blink speed of the caret.
+			caretBlinkSpeed :
+				530,
+
+			// milliseconds after mouse down, dragging starts
+			dragtime :
+				400,
+
+			// pixels after mouse down and move, dragging starts
+			dragbox :
+				10
+		}
+	);
+
+
+/*
+| Replaces the shell by a failscreen
+*/
+System.prototype.failScreen =
+	function(
+		message
+	)
 {
-	// pixels to scroll for a wheel event
-	textWheelSpeed :
-		12 * 5,
+	if( console )
+	{
+		console.log(
+			'failScreen',
+			message
+		);
+	}
 
-	// blink speed of the caret.
-	caretBlinkSpeed :
-		530,
+	if( _failScreen )
+	{
+		return;
+	}
 
-	// milliseconds after mouse down, dragging starts
-	dragtime :
-		400,
+	_failScreen =
+		true;
 
-	// pixels after mouse down and move, dragging starts
-	dragbox :
-		10
+	var
+		body =
+			document.body;
+
+	body.removeChild( _canvas );
+	body.removeChild( _hiddenInput );
+
+	var
+		divWrap =
+			document.createElement( 'div' ),
+
+		divContent =
+			document.createElement( 'div' ),
+
+		divMessage =
+			document.createElement( 'div' ),
+
+		butReload =
+			document.createElement( 'button' );
+			
+
+	body.appendChild( divWrap );
+	body.style.backgroundColor = 'rgb(250, 245, 206)';
+
+	document.getElementById( 'viewport' ).content = 
+		"width=device-width, initial-scale=1, maximum-scale=1";
+
+	divWrap.appendChild( divContent );
+	divContent.appendChild( divMessage );
+	divContent.appendChild( butReload );
+
+	divWrap.style.display = 'table';
+	divWrap.style.height = '100%';
+	divWrap.style.marginLeft = 'auto';
+	divWrap.style.marginRight = 'auto';
+	
+	divContent.style.display = 'table-cell';
+	divContent.style.verticalAlign = 'middle';
+
+	divMessage.textContent = message;
+	divMessage.style.whiteSpace = 'pre-wrap';
+
+	butReload.textContent = 'Reload';
+	butReload.style.width = '100%';
+	butReload.style.marginTop = '20px';
+
+	butReload.onclick =
+		function( )
+		{
+			location.reload( );
+		};
 };
 
 
@@ -355,7 +447,7 @@ System.prototype.restartBlinker =
 
 	this._blinkTimer = setInterval(
 		this._blinkCatcher,
-		this.settings.caretBlinkSpeed
+		_settings.caretBlinkSpeed
 	);
 };
 
@@ -368,12 +460,13 @@ System.prototype.setInput =
 		text
 	)
 {
+	// TODO
 	var
 		hi =
-			this._hiddenInput;
+			_hiddenInput;
 
 	hi.value =
-	this._inputVal =
+	_inputVal =
 		'' + text;
 
 	hi.selectionStart =
@@ -419,7 +512,12 @@ System.prototype.asyncEvent =
 		asw
 	)
 {
-	this.shell[ eventName ](
+	if( _failScreen )
+	{
+		return;
+	}
+
+	shell[ eventName ](
 		asw
 	);
 
@@ -438,11 +536,14 @@ System.prototype.asyncEvent =
 System.prototype._blink =
 	function( )
 {
+	if( _failScreen )
+	{
+		return;
+	}
+
 	// also looks into the hidden input field,
 	// maybe the user pasted something using the browser menu
 	this._testInput( );
-
-	// this.shell.blink( );
 };
 
 
@@ -471,14 +572,14 @@ System.prototype._onAtweenTime =
 		cursor =
 			null;
 
-	this.shell.dragStart(
+	shell.dragStart(
 		atween.pos,
 		atween.shift,
 		atween.ctrl
 	);
 
 	cursor =
-		this.shell.dragMove(
+		shell.dragMove(
 			atween.$move,
 			atween.shift,
 			atween.ctrl
@@ -489,7 +590,7 @@ System.prototype._onAtweenTime =
 
 	if( cursor !== null )
 	{
-		this._canvas.style.cursor =
+		_canvas.style.cursor =
 			cursor;
 	}
 };
@@ -503,8 +604,9 @@ System.prototype._onSystemBlur =
 		// event
 	)
 {
-	this.shell.setFocus( false );
+	shell.setFocus( false );
 };
+
 
 System.prototype._onHiddenInputBlur =
 	function(
@@ -524,7 +626,7 @@ System.prototype._onSystemFocus =
 		// event
 	)
 {
-	this.shell.setFocus( true );
+	shell.setFocus( true );
 };
 
 
@@ -536,7 +638,7 @@ System.prototype._onResize =
 		// event
 	)
 {
-	this._$height =
+	_height =
 		window.innerHeight - 1;
 
 	var
@@ -548,14 +650,12 @@ System.prototype._onResize =
 				'width',
 					window.innerWidth - 1,
 				'height',
-					this._$height
+					_height
 			);
 
-	if( this.shell )
+	if( shell )
 	{
-		this.shell.resize(
-			fabric
-		);
+		shell.resize( fabric );
 	}
 };
 
@@ -568,16 +668,16 @@ System.prototype._captureEvents =
 {
 	if( this._useCapture )
 	{
-		this._canvas.setCapture( this._canvas );
+		_canvas.setCapture( _canvas );
 
 		return;
 	}
 
 	document.onmouseup =
-		this._canvas.onmouseup;
+		_canvas.onmouseup;
 
 	document.onmousemove =
-		this._canvas.onmousemove;
+		_canvas.onmousemove;
 };
 
 
@@ -715,7 +815,7 @@ System.prototype._onMouseDown =
 
 	var
 		canvas =
-			this._canvas,
+			_canvas,
 
 		p =
 			Euclid.Point.create(
@@ -750,7 +850,7 @@ System.prototype._onMouseDown =
 
 			timer :
 				this.setTimer(
-					this.settings.dragtime,
+					_settings.dragtime,
 					this._onAtweenTimeCatcher
 				)
 		});
@@ -791,7 +891,7 @@ System.prototype._pointingHover =
 
 	var
 		cursor =
-			this.shell.pointingHover(
+			shell.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -799,7 +899,7 @@ System.prototype._pointingHover =
 
 	if( cursor !== null )
 	{
-		this._canvas.style.cursor =
+		_canvas.style.cursor =
 			cursor;
 	}
 };
@@ -820,7 +920,7 @@ System.prototype._repeatHover =
 
 	var
 		cursor =
-			this.shell.pointingHover(
+			shell.pointingHover(
 				this._$hover.p,
 				this._$hover.shift,
 				this._$hover.ctrl
@@ -828,7 +928,7 @@ System.prototype._repeatHover =
 
 	if( cursor !== null )
 	{
-		this._canvas.style.cursor =
+		_canvas.style.cursor =
 			cursor;
 	}
 };
@@ -844,7 +944,7 @@ System.prototype._onMouseMove =
 {
 	var
 		canvas =
-			this._canvas,
+			_canvas,
 
 		p =
 			Euclid.Point.create(
@@ -878,7 +978,7 @@ System.prototype._onMouseMove =
 		case 'atween' :
 
 			var dragbox =
-				this.settings.dragbox;
+				_settings.dragbox;
 
 			var atween =
 				this._$atween;
@@ -897,14 +997,14 @@ System.prototype._onMouseMove =
 				this._$pointingState =
 					'drag';
 
-				this.shell.dragStart(
+				shell.dragStart(
 					atween.pos,
 					shift,
 					ctrl
 				);
 
 				cursor =
-					this.shell.dragMove(
+					shell.dragMove(
 						p,
 						shift,
 						ctrl
@@ -923,7 +1023,7 @@ System.prototype._onMouseMove =
 		case 'drag':
 
 			cursor =
-				this.shell.dragMove(
+				shell.dragMove(
 					p,
 					shift,
 					ctrl
@@ -962,7 +1062,7 @@ System.prototype._onMouseUp =
 
 	var
 		canvas =
-			this._canvas,
+			_canvas,
 
 		p =
 			Euclid.Point.create(
@@ -996,7 +1096,7 @@ System.prototype._onMouseUp =
 			this._$atween =
 				null;
 
-			this.shell.click(
+			shell.click(
 				p,
 				shift,
 				ctrl
@@ -1017,7 +1117,7 @@ System.prototype._onMouseUp =
 
 		case 'drag' :
 
-			this.shell.dragStop(
+			shell.dragStop(
 				p,
 				shift,
 				ctrl
@@ -1057,7 +1157,7 @@ System.prototype._onMouseWheel =
 {
 	var
 		canvas =
-			this._canvas,
+			_canvas,
 
 		p =
 			Euclid.Point.create(
@@ -1089,7 +1189,7 @@ System.prototype._onMouseWheel =
 		return;
 	}
 
-	this.shell.mousewheel(
+	shell.mousewheel(
 		p,
 		dir,
 		event.shiftKey,
@@ -1116,7 +1216,7 @@ System.prototype._onTouchStart =
 
 	var
 		canvas =
-			this._canvas,
+			_canvas,
 
 		p =
 			Euclid.Point.create(
@@ -1151,7 +1251,7 @@ System.prototype._onTouchStart =
 
 			timer :
 				this.setTimer(
-					this.settings.dragtime,
+					_settings.dragtime,
 					this._onAtweenTimeCatcher
 				)
 		});
@@ -1178,7 +1278,7 @@ System.prototype._onTouchMove =
 
 	var
 		canvas =
-			this._canvas,
+			_canvas,
 
 		p =
 			Euclid.Point.create(
@@ -1211,11 +1311,12 @@ System.prototype._onTouchMove =
 
 		case 'atween':
 
-			var dragbox =
-				this.settings.dragbox;
+			var
+				dragbox =
+					_settings.dragbox,
 
-			var atween =
-				this._$atween;
+				atween =
+					this._$atween;
 
 			if(
 				( Math.abs( p.x - atween.pos.x ) > dragbox ) ||
@@ -1231,14 +1332,14 @@ System.prototype._onTouchMove =
 				this._$pointingState =
 					'drag';
 
-				this.shell.dragStart(
+				shell.dragStart(
 					atween.pos,
 					shift,
 					ctrl
 				);
 
 				cursor =
-					this.shell.dragMove(
+					shell.dragMove(
 						p,
 						shift,
 						ctrl
@@ -1258,7 +1359,7 @@ System.prototype._onTouchMove =
 		case 'drag':
 
 			cursor =
-				this.shell.dragMove(
+				shell.dragMove(
 					p,
 					shift,
 					ctrl
@@ -1296,7 +1397,7 @@ System.prototype._onTouchEnd =
 
 	var
 		canvas =
-			this._canvas,
+			_canvas,
 
 		p =
 			Euclid.Point.create(
@@ -1332,7 +1433,7 @@ System.prototype._onTouchEnd =
 			this._$atween =
 				null;
 
-			this.shell.click(
+			shell.click(
 				p,
 				shift,
 				ctrl
@@ -1353,7 +1454,7 @@ System.prototype._onTouchEnd =
 
 		case 'drag' :
 
-			this.shell.dragStop(
+			shell.dragStop(
 				p,
 				shift,
 				ctrl
@@ -1390,7 +1491,7 @@ System.prototype._releaseEvents =
 {
 	if ( this._useCapture )
 	{
-		document.releaseCapture( this._canvas );
+		document.releaseCapture( _canvas );
 
 		return;
 	}
@@ -1558,7 +1659,7 @@ System.prototype._specialKey =
 		return true;
 	}
 
-	this.shell.specialKey(
+	shell.specialKey(
 		key,
 		shift,
 		ctrl
@@ -1578,7 +1679,7 @@ System.prototype._testInput =
 {
 	var
 		hi =
-			this._hiddenInput,
+			_hiddenInput,
 
 		text =
 			hi.value;
@@ -1588,21 +1689,22 @@ System.prototype._testInput =
 		text.replace( /\r/g, '' );
 
 	if(
-		text === this._inputVal ||
-		!this.shell
+		text === _inputVal
+		||
+		!shell
 	)
 	{
 		return;
 	}
 
 	hi.value =
-	this._inputVal =
+	_inputVal =
 		'';
 
 	hi.selectionStart =
 		0;
 
-	this.shell.input( text );
+	shell.input( text );
 
 	this._steerAttention( );
 };
@@ -1620,11 +1722,11 @@ System.prototype._steerAttention =
 {
 	var
 		ac =
-			this.shell.attentionCenter;
+			shell.attentionCenter;
 
 	if( ac === null )
 	{
-		this._hiddenInput.style.top =
+		_hiddenInput.style.top =
 			'0';
 	}
 	else
@@ -1633,25 +1735,25 @@ System.prototype._steerAttention =
 			Jools.limit(
 				0,
 				ac,
-				this._$height - 15
+				_height - 15
 			);
 
-		this._hiddenInput.style.top =
+		_hiddenInput.style.top =
 			ac + 'px';
 	}
 
-	if( this.shell.suggestingKeyboard( ) )
+	if( shell.suggestingKeyboard( ) )
 	{
-		this._hiddenInput.focus( );
+		_hiddenInput.focus( );
 
-		if( this._hiddenInput.scrollIntoViewIfNeeded )
+		if( _hiddenInput.scrollIntoViewIfNeeded )
 		{
-			this._hiddenInput.scrollIntoViewIfNeeded( true );
+			_hiddenInput.scrollIntoViewIfNeeded( true );
 		}
 	}
 	else
 	{
-		this._canvas.focus( );
+		_canvas.focus( );
 	}
 };
 
@@ -1669,13 +1771,12 @@ startup =
 				system =
 					new System( );
 
-				system.shell =
-					new Shell( system._fabric );
-
-				system.shell.onload( );
+				(
+					new Shell( system._fabric )
+				).onload( );
 
 				// FIXME work on IOS
-				system._hiddenInput.focus( );
+				_hiddenInput.focus( );
 			}
 		);
 
