@@ -1,7 +1,4 @@
 . $abort
-. failScreen
-> parentElement
-> removeChild
 . $action
 . $aquireAjax
 . $authActive
@@ -110,7 +107,6 @@
 . _$font
 . _$fontWatch
 . _$formJockey
-. _$greenscreen
 . _$grown
 . _$hover
 . _$invert
@@ -245,6 +241,7 @@
 > alter
 . anchor
 . append
+> appendChild
 . appendNC
 > apply
 . aquireSpace
@@ -269,6 +266,7 @@
 . bPath
 . backAt
 . backPath
+> backgroundColor
 . backspace
 . base
 . baseFrame
@@ -276,7 +274,7 @@
 > beginPath
 . beziTo
 > bezierCurveTo
-. blink
+> body
 . border
 . bottombox
 > button
@@ -336,6 +334,7 @@
 > configurable
 . connect
 . containsPath
+> content
 . copy
 . cornerRadius
 > cos
@@ -365,6 +364,7 @@
 . dey
 . dir8CWCF
 . disc
+> display
 > doc
 . docTree
 . down
@@ -399,10 +399,10 @@
 . fabric
 . fact
 . fail
+. failScreen
 > families
 . family
 . field
-> fileName
 > fill
 > fillRect
 > fillStyle
@@ -457,7 +457,6 @@
 . gradientPC
 . gradientR0
 . gradientR1
-. greenscreen
 . greeting1
 . greeting2
 . greeting3
@@ -526,7 +525,6 @@
 > length
 . limit
 . line
-> lineNumber
 > lineTo
 > lineWidth
 > lm
@@ -542,6 +540,9 @@
 . magic
 > mail
 . mainButton
+> marginLeft
+> marginRight
+> marginTop
 . mark
 . maskKern
 . maskWidth
@@ -602,6 +603,7 @@
 . onAuth
 . onRegister
 > onblur
+> onclick
 > oncontextmenu
 > onfocus
 > onkeydown
@@ -682,6 +684,7 @@
 > releaseCapture
 > reload
 . remove
+> removeChild
 . removeItem
 . removeRange
 . removeText
@@ -755,7 +758,6 @@
 . sketch
 . sketchAllHandles
 . sketchCheck
-. sketchFrowny
 . sketchHandle
 . sketchMask
 . sketchRange
@@ -800,6 +802,7 @@
 > textAlign
 > textBaseline
 . textCenter
+> textContent
 . textPath
 . textWheelSpeed
 . tfx
@@ -838,6 +841,7 @@
 > val
 > value
 . vdis
+> verticalAlign
 . view
 . visible
 . visitor1
@@ -850,6 +854,7 @@
 . weinre
 > wheelDelta
 > which
+> whiteSpace
 . widgetPath
 > width
 . within
