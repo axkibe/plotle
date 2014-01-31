@@ -342,7 +342,9 @@ var _settings =
 | An asyncronous event happened
 |
 | For example:
-|   onArriveAtSpace
+|   message
+|   onArriveAtSpace,
+|   update
 */
 System.prototype.asyncEvent =
 	function(
@@ -357,11 +359,7 @@ System.prototype.asyncEvent =
 		return;
 	}
 
-	shell[ eventName ](
-		a1,
-		a2,
-		a3
-	);
+	shell[ eventName ]( a1, a2, a3 );
 
 	this._repeatHover( );
 
