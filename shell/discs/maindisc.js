@@ -345,7 +345,7 @@ MainDisc.prototype._init =
 /*
 | Returns true if current user is a guest.
 |
-| MAYBE make User an own object.
+| FUTURE make user an own object.
 */
 Jools.lazyFixate(
 	MainDisc.prototype,

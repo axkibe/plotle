@@ -931,12 +931,14 @@ Note.prototype.scrollMarkIntoView =
 /*
 | Scrolls the note so the caret comes into view.
 */
+/*
+TODO remove:q
+
 Note.prototype.scrollPage =
 	function(
 		up
 	)
 {
-	/*
 	var
 		zone =
 			this.zone,
@@ -955,30 +957,15 @@ Note.prototype.scrollPage =
 				this.scrollbarY.pos + dir * zone.height - fs * 2
 		)
 	);
+
 	var
 		ac =
 			this.sub.doc.attentionCenter( this );
 
 	console.log( 'AC', ac );
 
-	var
-		pnw =
-			this.zone.pnw,
-
-		pi =
-			vp.sub(
-				pnw.x,
-				pnw.y -
-					(
-						this.scrollbarY
-							?
-							this.scrollbarY.pos
-							:
-							0
-					)
-			);
-	*/
 };
+*/
 
 
 /*

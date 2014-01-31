@@ -479,7 +479,6 @@ Para.prototype.draw =
 		{
 			this._drawCaret(
 				f,
-				view, // FIXME is part of object
 				item
 			);
 		}
@@ -500,11 +499,13 @@ Para.prototype.draw =
 Para.prototype._drawCaret =
 	function(
 		fabric,
-		view,
 		item
 	)
 {
 	var
+		view =
+			this.view,
+
 		fs =
 			item.sub.doc.font.size,
 
@@ -1032,8 +1033,6 @@ Para.prototype.input =
 				0;
 		}
 	}
-
-	item.scrollMarkIntoView( );
 };
 
 
@@ -1174,25 +1173,6 @@ Para.prototype.specialKey =
 			bAt
 		);
 	}
-	else
-	{
-		switch( key )
-		{
-			case 'pageup' :
-
-				item.scrollPage( true );
-
-				break;
-
-			case 'pagedown' :
-
-				item.scrollPage( false );
-
-				break;
-		}
-	}
-
-	item.scrollMarkIntoView( );
 };
 
 
@@ -1237,6 +1217,12 @@ var
 
 			'left' :
 				'_keyLeft',
+
+			'pagedown' :
+				'_keyPageDown',
+
+			'pageup' :
+				'_keyPageUp',
 
 			'pos1' :
 				'_keyPos1',
@@ -1497,6 +1483,131 @@ Para.prototype._keyLeft =
 			doc
 		);
 	}
+};
+
+
+/*
+| User pressed page up or down
+|
+| FUTURE maintain relative scroll pos
+*/
+Para.prototype._pageUpDown =
+	function(
+		dir,      // +1 for down, -1 for up
+		item,
+		doc,
+		at,
+		retainx,
+		bPath,
+		bAt
+	)
+{
+
+
+/**/if( CHECK )
+/**/{
+/**/	if( dir !== +1 && dir !== -1 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+
+	var
+		p =
+			this.locateOffset( at ).p,
+
+		zone =
+			item.zone,
+
+		pnw =
+			doc.getPNW( item, this.key ),
+
+		tp =
+			p.add(
+				pnw.x,
+				pnw.y + zone.height * dir
+			),
+
+		tpara =
+			doc.getParaAtPoint(
+				item,
+				tp
+			);
+
+	if( tpara === null )
+	{
+		tpara =
+			doc.atRank( doc.tree.length - 1 );
+	}
+
+	var
+		tpnw =
+			doc.getPNW( item, tpara.key );
+
+	at =
+		tpara.getPointOffset(
+			item,
+			tp.sub( tpnw )
+		);
+
+	tpara._setMark(
+		at,
+		retainx,
+		bPath,
+		bAt,
+		doc
+	);
+};
+
+
+/*
+| PageDown key pressed.
+*/
+Para.prototype._keyPageDown =
+	function(
+		item,
+		doc,
+		at,
+		retainx,
+		bPath,
+		bAt
+	)
+{
+	this._pageUpDown(
+		+1,
+		item,
+		doc,
+		at,
+		retainx,
+		bPath,
+		bAt
+	);
+};
+
+
+/*
+| PageUp key pressed.
+*/
+Para.prototype._keyPageUp =
+	function(
+		item,
+		doc,
+		at,
+		retainx,
+		bPath,
+		bAt
+	)
+{
+	this._pageUpDown(
+		-1,
+		item,
+		doc,
+		at,
+		retainx,
+		bPath,
+		bAt
+	);
 };
 
 

@@ -1172,6 +1172,15 @@ Shell.prototype.specialKey =
 		);
 	}
 
+	var
+		focusItem =
+			this.$space.focusedItem( );
+
+	if( focusItem )
+	{
+		focusItem.scrollMarkIntoView( );
+	}
+
 	if( this._$redraw )
 	{
 		this._draw( );
@@ -1194,6 +1203,15 @@ Shell.prototype.input =
 	if( display )
 	{
 		display.input( text );
+	
+		var
+			focusItem =
+				this.$space.focusedItem( );
+
+		if( focusItem )
+		{
+			focusItem.scrollMarkIntoView( );
+		}
 	}
 
 	if( this._$redraw )

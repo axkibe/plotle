@@ -67,7 +67,7 @@ if( JOOBJ )
 							'Boolean'
 					},
 
-				// MAYBE find a more elegent solution
+				// FUTURE find a more elegent solution
 				icons :
 					{
 						comment :
@@ -217,7 +217,7 @@ Button.prototype._init =
 			this.tree.twig.frame.twig
 		);
 
-	// MAYBE move the whole switch to rect
+	// FUTURE move the whole switch to rect
 	switch( this.tree.twig.shape.twig.type )
 	{
 		case 'Ellipse' :
