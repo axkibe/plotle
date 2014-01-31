@@ -24,7 +24,6 @@ var
 	Euclid,
 	fontPool,
 	Forms,
-	GreenScreen,
 	IFace,
 	Jools,
 	Mark,

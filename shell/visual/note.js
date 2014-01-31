@@ -983,7 +983,8 @@ Note.prototype.mousewheel =
 			'trait',
 				this.path,
 				'scrolly',
-				this.scrollbarY.pos - dir * system.settings.textWheelSpeed
+				this.scrollbarY.pos -
+					dir * system.textWheelSpeed
 		)
 	);
 

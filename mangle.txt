@@ -115,7 +115,6 @@
 . _$moveToButton
 . _$outbox
 . _$pnws
-. _$pointingState
 . _$posx
 . _$posy
 . _$ray

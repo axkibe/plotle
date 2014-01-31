@@ -23,7 +23,6 @@ var
 	Sign,
 	Jools,
 	config,
-	shell,
 	shellverse,
 	system;
 
@@ -948,12 +947,9 @@ IFace.prototype._update =
 		{
 			for( a = 0, aZ = msgs.length; a < aZ; a++ )
 			{
-				var m = msgs[ a ];
-
-				shell.message(
-					m.space,
-					m.user,
-					m.message
+				system.asyncEvent(
+					'message',
+					msgs[ a ]
 				);
 			}
 		}
@@ -973,7 +969,8 @@ IFace.prototype._update =
 
 		if( report.length > 0 )
 		{
-			shell.update(
+			system.asyncEvent(
+				'update',
 				self.$cSpace,
 				report
 			);
@@ -1083,7 +1080,8 @@ IFace.prototype.alter =
 
 	this._sendChanges( );
 
-	shell.update(
+	system.asyncEvent(
+		'update',
 		result.tree,
 		chgX
 	);
@@ -1272,7 +1270,8 @@ IFace.prototype.undo =
 
 	this._sendChanges( );
 
-	shell.update(
+	system.asyncEvent(
+		'update',
 		result.tree,
 		chgX
 	);
@@ -1331,7 +1330,8 @@ IFace.prototype.redo =
 
 	this._sendChanges( );
 
-	shell.update(
+	system.asyncEvent(
+		'update',
 		this.$cSpace,
 		chgX
 	);

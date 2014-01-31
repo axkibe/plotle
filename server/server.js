@@ -1341,17 +1341,32 @@ Server.prototype.prepareResources =
 			);
 		}
 
+		var
+			sourceMap =
+				uglify.SourceMap(
+					{
+					}
+				),
+
+			stream =
+				uglify.OutputStream(
+					{
+						beautify :
+							config.beautify,
+
+						source_map:
+							sourceMap
+					}
+				);
+
+		ast.print( stream );
+
 		bundle =
-			ast.print_to_string(
-				{
-					beautify :
-						config.beautify
-				}
-			);
+			stream.toString( );
 
 		yield fs.writeFile(
-			'compact.js',
-			bundle,
+			'source.map',
+			sourceMap.toString( ),
 			resume( )
 		);
 	}

@@ -96,7 +96,7 @@ var
 	// the main canvas everything is
 	// drawn upon
 	_canvas,
-	
+
 	// The value expected to be in input.
 	// either nothing or the text selection.
 	// if it changes the user did something.
@@ -107,7 +107,12 @@ var
 	_hiddenInput,
 
 	// current height of the main window
-	_height;
+	_height,
+
+	// false, 'atween' or 'drag'
+	_pointingState =
+		false;
+
 
 /*
 | The system.
@@ -142,10 +147,6 @@ var System =
 	// if false needs work around
 	this._useCapture =
 		!!_canvas.setCapture;
-
-	// false, 'atween' or 'drag'
-	this._$pointingState =
-		false;
 
 	// atween is the state where the mouse button went down,
 	// and its yet unsure if this is a click or drag.
@@ -322,10 +323,6 @@ var System =
 var _settings =
 	Jools.immute(
 		{
-			// pixels to scroll for a wheel event
-			textWheelSpeed :
-				12 * 5,
-
 			// blink speed of the caret.
 			caretBlinkSpeed :
 				530,
@@ -339,6 +336,37 @@ var _settings =
 				10
 		}
 	);
+
+
+/*
+| An asyncronous event happened
+|
+| For example:
+|   onArriveAtSpace
+*/
+System.prototype.asyncEvent =
+	function(
+		eventName,
+		a1,
+		a2,
+		a3
+	)
+{
+	if( _failScreen )
+	{
+		return;
+	}
+
+	shell[ eventName ](
+		a1,
+		a2,
+		a3
+	);
+
+	this._repeatHover( );
+
+	this._steerAttention( );
+};
 
 
 /*
@@ -384,13 +412,13 @@ System.prototype.failScreen =
 
 		butReload =
 			document.createElement( 'button' );
-			
+
 
 	body.appendChild( divWrap );
 	body.style.backgroundColor = 'rgb(250, 245, 206)';
 
-	document.getElementById( 'viewport' ).content = 
-		"width=device-width, initial-scale=1, maximum-scale=1";
+	document.getElementById( 'viewport' ).content =
+		'width=device-width, initial-scale=1, maximum-scale=1';
 
 	divWrap.appendChild( divContent );
 	divContent.appendChild( divMessage );
@@ -400,7 +428,7 @@ System.prototype.failScreen =
 	divWrap.style.height = '100%';
 	divWrap.style.marginLeft = 'auto';
 	divWrap.style.marginRight = 'auto';
-	
+
 	divContent.style.display = 'table-cell';
 	divContent.style.verticalAlign = 'middle';
 
@@ -499,32 +527,11 @@ System.prototype.setTimer =
 };
 
 
-
 /*
-| An asyncronous event happened
-|
-| For example:
-|   onArriveAtSpace
+| Pixels to scroll on a wheel event
 */
-System.prototype.asyncEvent =
-	function(
-		eventName,
-		asw
-	)
-{
-	if( _failScreen )
-	{
-		return;
-	}
-
-	shell[ eventName ](
-		asw
-	);
-
-	this._repeatHover( );
-
-	this._steerAttention( );
-};
+System.prototype.textWheelSpeed =
+	12 * 5;
 
 
 // ---------------------------
@@ -553,19 +560,25 @@ System.prototype._blink =
 System.prototype._onAtweenTime =
 	function( )
 {
-	if(
-		this._$pointingState !== 'atween'
-	)
-	{
-		Jools.log('warn', 'dragTime() in wrong action mode');
-		return;
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( _pointingState !== 'atween' )
+/**/	{
+/**/		Jools.log(
+/**/			'warn',
+/**/			'dragTime() in wrong action mode'
+/**/	);
+/**/
+/**/		return;
+/**/	}
+/**/}
 
 	var
 		atween =
 			this._$atween;
 
-	this._$pointingState =
+	_pointingState =
 		'drag';
 
 	var
@@ -831,7 +844,7 @@ System.prototype._onMouseDown =
 		ctrl =
 			event.ctrlKey || event.metaKey;
 
-	this._$pointingState =
+	_pointingState =
 		'atween';
 
 	this._$atween =
@@ -963,7 +976,7 @@ System.prototype._onMouseMove =
 		cursor =
 			null;
 
-	switch( this._$pointingState )
+	switch( _pointingState )
 	{
 		case false :
 
@@ -994,7 +1007,7 @@ System.prototype._onMouseMove =
 				this._$atween =
 					null;
 
-				this._$pointingState =
+				_pointingState =
 					'drag';
 
 				shell.dragStart(
@@ -1078,7 +1091,7 @@ System.prototype._onMouseUp =
 		ctrl =
 			event.ctrlKey || event.metaKey;
 
-	switch( this._$pointingState )
+	switch( _pointingState )
 	{
 		case false :
 
@@ -1110,7 +1123,7 @@ System.prototype._onMouseUp =
 
 			this._steerAttention( );
 
-			this._$pointingState =
+			_pointingState =
 				false;
 
 			break;
@@ -1131,7 +1144,7 @@ System.prototype._onMouseUp =
 
 			this._steerAttention( );
 
-			this._$pointingState =
+			_pointingState =
 				false;
 
 			break;
@@ -1232,7 +1245,7 @@ System.prototype._onTouchStart =
 		ctrl =
 			event.ctrlKey || event.metaKey;
 
-	this._$pointingState =
+	_pointingState =
 		'atween';
 
 	this._$atween =
@@ -1297,7 +1310,7 @@ System.prototype._onTouchMove =
 		cursor =
 			null;
 
-	switch( this._$pointingState )
+	switch( _pointingState )
 	{
 		case false:
 
@@ -1329,7 +1342,7 @@ System.prototype._onTouchMove =
 				this._$atween =
 					null;
 
-				this._$pointingState =
+				_pointingState =
 					'drag';
 
 				shell.dragStart(
@@ -1415,7 +1428,7 @@ System.prototype._onTouchEnd =
 		ctrl =
 			event.ctrlKey || event.metaKey;
 
-	switch( this._$pointingState )
+	switch( _pointingState )
 	{
 		case false :
 
@@ -1447,7 +1460,7 @@ System.prototype._onTouchEnd =
 
 			this._steerAttention( );
 
-			this._$pointingState =
+			_pointingState =
 				false;
 
 			break;
@@ -1468,7 +1481,7 @@ System.prototype._onTouchEnd =
 
 			this._steerAttention( );
 
-			this._$pointingState =
+			_pointingState =
 				false;
 
 			break;
@@ -1482,6 +1495,7 @@ System.prototype._onTouchEnd =
 
 	return false;
 };
+
 
 /*
 | Stops capturing all mouseevents
