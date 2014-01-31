@@ -2,5 +2,5 @@ node_modules/
 bundle.js
 compact.js
 manglemap.txt
-sourcemap
+source.map
 joobj/*

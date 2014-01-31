@@ -976,7 +976,9 @@ Space.prototype.dragStart =
 								theme.note.fontsize
 							),
 						'path',
-							Path.empty
+							Path.empty,
+						'view',
+							view
 					),
 				'mark',
 					Mark.Vacant.create( ),
@@ -1028,7 +1030,9 @@ Space.prototype.dragStart =
 						'path',
 							Path.empty,
 						'mark',
-							Mark.Vacant.create( )
+							Mark.Vacant.create( ),
+						'view',
+							view
 					),
 				'mark',
 					Mark.Vacant.create( ),

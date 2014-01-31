@@ -1333,13 +1333,16 @@ Shell.prototype.setView =
 	this.$view =
 		view;
 
-	this.$space =
-		Visual.Space.create(
-			'inherit',
-				this.$space,
-			'view',
-				view
-		);
+	if( this.$space )
+	{
+		this.$space =
+			Visual.Space.create(
+				'inherit',
+					this.$space,
+				'view',
+					view
+			);
+	}
 
 	this._$discJockey =
 		Discs.Jockey.create(

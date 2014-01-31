@@ -51,7 +51,8 @@ Visual.Doc =
 		fontsize,
 		flowWidth,
 		paraSep,
-		mark
+		mark,
+		view
 	)
 {
 	Jools.logNew(
@@ -93,6 +94,9 @@ Visual.Doc =
 
 	this.mark =
 		mark;
+
+	this.view =
+		view;
 
 	if( CHECK )
 	{
@@ -163,7 +167,9 @@ Visual.Doc =
 				'flowWidth',
 					flowWidth,
 				'mark',
-					mark
+					mark,
+				'view',
+					view
 			);
 	}
 };
@@ -197,6 +203,9 @@ Doc.create =
 			null,
 
 		paraSep =
+			null,
+
+		view =
 			null;
 
 	for(
@@ -256,6 +265,13 @@ Doc.create =
 
 				break;
 
+			case 'view' :
+
+				view =
+					arguments[ a + 1 ];
+
+				break;
+
 			default :
 
 				throw new Error(
@@ -304,6 +320,12 @@ Doc.create =
 				inherit.paraSep;
 		}
 
+		if( view === null )
+		{
+			view =
+				inherit.view;
+		}
+
 		if(
 			inherit.tree === tree &&
 			(
@@ -317,6 +339,8 @@ Doc.create =
 			inherit.paraSep === paraSep
 			&&
 			inherit.mark.equals( mark )
+			&&
+			inherit.view.equals( view )
 		)
 		{
 			return inherit;
@@ -332,7 +356,8 @@ Doc.create =
 			fontsize,
 			flowWidth,
 			paraSep,
-			mark
+			mark,
+			view
 		)
 	);
 };
@@ -397,7 +422,7 @@ Doc.prototype.attentionCenter =
 Doc.prototype.draw =
 	function(
 		fabric,      // to draw upon
-		view,        // current pan/zoom/motion
+		view,        // current pan/zoom/motion TODO
 		item,        // the item the doc belongs to
 		width,       // the width to draw the document with
 		scrollp      // scroll position

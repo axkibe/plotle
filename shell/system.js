@@ -396,6 +396,7 @@ System.prototype.failScreen =
 			document.body;
 
 	body.removeChild( _canvas );
+
 	body.removeChild( _hiddenInput );
 
 	var

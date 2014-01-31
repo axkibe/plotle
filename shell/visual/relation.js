@@ -385,7 +385,9 @@ Relation.create =
 			'paraSep',
 				Math.round( fontsize / 20 ),
 			'mark',
-				mark
+				mark,
+			'view',
+				view
 		);
 
 	// FIXME return inherit

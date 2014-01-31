@@ -50,7 +50,8 @@ Visual.Para =
 		path,
 		fontsize,
 		flowWidth,
-		mark
+		mark,
+		view
 	)
 {
 	Jools.logNew(
@@ -106,6 +107,9 @@ Visual.Para =
 
 	this.mark =
 		mark;
+
+	this.view =
+		view;
 
 	// caching
 	this.$fabric =
@@ -182,6 +186,9 @@ Para.create =
 			null,
 
 		tree =
+			null,
+
+		view =
 			null;
 
 	for(
@@ -234,6 +241,13 @@ Para.create =
 
 				break;
 
+			case 'view' :
+
+				view =
+					arguments[ a + 1 ];
+
+				break;
+
 			default :
 
 				throw new Error(
@@ -282,6 +296,12 @@ Para.create =
 				inherit.tree;
 		}
 
+		if( view === null )
+		{
+			view =
+				inherit.view;
+		}
+
 		if(
 			inherit.tree === tree
 			&&
@@ -292,6 +312,8 @@ Para.create =
 			inherit.flowWidth === flowWidth
 			&&
 			inherit.mark.equals( mark )
+			&&
+			inherit.view.equals( view )
 		)
 		{
 			return inherit;
@@ -305,7 +327,8 @@ Para.create =
 			path,
 			fontsize,
 			flowWidth,
-			mark
+			mark,
+			view
 		)
 	);
 };
