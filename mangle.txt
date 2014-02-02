@@ -1,3 +1,8 @@
+. _keyPageDown
+. _keyPageUp
+. pagedown
+. pageup
+. _pageUpDown
 . $abort
 . $action
 . $aquireAjax
@@ -739,7 +744,6 @@
 . setUser
 . setView
 . setZone
-. settings
 . sha1hex
 . shape
 . shell

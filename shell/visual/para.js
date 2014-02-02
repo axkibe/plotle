@@ -35,85 +35,112 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Para',
+
+		unit :
+			'Visual',
+
+		attributes :
+			{
+				flowWidth :
+					{
+						comment :
+							'width of the para its flow',
+
+						type :
+							'Number'
+					},
+
+				fontsize :
+					{
+						comment :
+							'size of the font',
+
+						type :
+							'Number'
+					},
+
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						concerns :
+							{
+								func :
+									'Para.concernsMark',
+
+								args :
+									[
+										'mark',
+										'path'
+									]
+							},
+
+						type :
+							'Mark'
+					},
+
+				path :
+					{
+						comment :
+							'the path of the widget',
+
+						type :
+							'Path'
+					},
+
+				tree :
+					{
+						comment :
+							'the data tree',
+
+						type :
+							'Tree'
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View'
+					}
+			},
+
+		init :
+			[
+				'inherit'
+			]
+	};
+}
+
+
 var
-	_tag =
-		'PARA-35155849';
+	Para =
+		Visual.Para;
+
+
 
 /*
-| Constructor.
+| Initializer.
 */
-var Para =
-Visual.Para =
+Para.prototype._init =
 	function(
-		tag,
-		tree,
-		path,
-		fontsize,
-		flowWidth,
-		mark,
-		view
+		// inherit
 	)
 {
-	Jools.logNew(
-		this,
-		path
-	);
-
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-
-		if( !tree )
-		{
-			throw new Error(
-				'tree missing'
-			);
-		}
-
-		if( tree.twig.type !== 'Para' )
-		{
-			throw new Error(
-				'type error'
-			);
-		}
-
-		if( !Jools.is( flowWidth ) )
-		{
-			throw new Error(
-				'no flowWidth'
-			);
-		}
-	}
-
-	this.tree =
-		tree;
-
-	this.path =
-		path;
-
-	this.fontsize =
-		fontsize;
-
-	this.flowWidth =
-		flowWidth;
-
-	this.text =
-		tree.twig.text;
-
-	this.mark =
-		mark;
-
-	this.view =
-		view;
-
-	// caching
-	this.$fabric =
-		null;
+	// FIXME inherit fabric if zoom equal
 };
 
 
@@ -151,186 +178,6 @@ Para.concernsMark =
 	{
 		return Mark.Vacant.create( );
 	}
-};
-
-
-/*
-| Reflection
-*/
-Para.prototype.reflect =
-	'Para';
-
-
-/*
-| Creates a new para
-*/
-Para.create =
-	function(
-		// free strings
-	)
-{
-	var
-		flowWidth =
-			null,
-
-		fontsize =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		path =
-			null,
-
-		tree =
-			null,
-
-		view =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'flowWidth' :
-
-				flowWidth =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'fontsize' :
-
-				fontsize =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'view' :
-
-				view =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument: ' + arguments[ a ]
-				);
-		}
-	}
-
-
-	if( inherit )
-	{
-		if( path === null )
-		{
-			path =
-				inherit.path;
-		}
-	}
-
-
-	if( mark )
-	{
-		mark =
-			Para.concernsMark(
-				mark,
-				path
-			);
-	}
-
-	if( inherit )
-	{
-		if( !flowWidth )
-		{
-			flowWidth =
-				inherit.flowWidth;
-		}
-
-		if( !fontsize )
-		{
-			fontsize =
-				inherit.fontsize;
-		}
-
-		if( !tree )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( view === null )
-		{
-			view =
-				inherit.view;
-		}
-
-		if(
-			inherit.tree === tree
-			&&
-			inherit.path.equals( path )
-			&&
-			inherit.fontsize === fontsize
-			&&
-			inherit.flowWidth === flowWidth
-			&&
-			inherit.mark.equals( mark )
-			&&
-			inherit.view.equals( view )
-		)
-		{
-			return inherit;
-		}
-	}
-
-	return (
-		new Para(
-			_tag,
-			tree,
-			path,
-			fontsize,
-			flowWidth,
-			mark,
-			view
-		)
-	);
 };
 
 
@@ -379,28 +226,12 @@ Para.prototype.attentionCenter =
 
 
 /*
-| Draws the paragraph in its cache and returns it.
+| Weaves the para's fabric.
 */
-Para.prototype.draw =
-	function(
-		fabric, // the fabric to draw upon
-		view,   // the current vient,
-		item,   // the item the para belongs to.
-		pnw     // pnw of this para
-	)
-{
-	var
-		f =
-			this.$fabric,
-
-		zoom =
-			view.zoom;
-
-	// FIXME, zoom level should be part of the object.
-	if(
-		!f ||
-		f.zoom !== zoom
-	)
+Jools.lazyFixate(
+	Para.prototype,
+	'_fabric',
+	function( )
 	{
 		// no cache
 
@@ -411,15 +242,23 @@ Para.prototype.draw =
 			font =
 				this.font,
 
-			width =
-				flow.spread * zoom,
+			mark =
+				this.mark,
+
+			view =
+				this.view,
+
+			zoom =
+				view.zoom,
 
 			height =
-				this.height * zoom;
+				this.height * zoom,
+
+			width =
+				flow.spread * zoom;
 
 		// adds to width so the caret gets visible.
-		f =
-		this.$fabric =
+		var f =
 			Euclid.Fabric.create(
 				'width',
 					width + 7,
@@ -428,9 +267,6 @@ Para.prototype.draw =
 			);
 
 		f.scale( zoom );
-
-		f.zoom =
-			zoom;
 
 		// draws text into the fabric
 		for(
@@ -467,26 +303,34 @@ Para.prototype.draw =
 
 		f.scale( 1 / zoom );
 
-		var
-			mark =
-				this.mark;
-
 		if(
 			mark.reflect === 'Caret'
 			&&
 			mark.focus
 		)
 		{
-			this._drawCaret(
-				f,
-				item
-			);
+			this._drawCaret( f );
 		}
-	}
 
+		return f;
+	}
+);
+
+
+/*
+| Draws the paragraph in its cache and returns it.
+*/
+Para.prototype.draw =
+	function(
+		fabric, // the fabric to draw upon
+		view,   // the current vient             TODO remove
+		item,   // the item the para belongs to. TODO remove
+		pnw     // pnw of this para
+	)
+{
 	fabric.drawImage(
 		'image',
-			f,
+			this._fabric,
 		'pnw',
 			pnw
 	);
@@ -498,19 +342,15 @@ Para.prototype.draw =
 */
 Para.prototype._drawCaret =
 	function(
-		fabric,
-		item
+		fabric
 	)
 {
 	var
 		view =
 			this.view,
 
-		fs =
-			item.sub.doc.font.size,
-
 		descend =
-			fs * theme.bottombox,
+			this.fontsize * theme.bottombox,
 
 		p =
 			this.locateOffset(
@@ -521,7 +361,7 @@ Para.prototype._drawCaret =
 			Math.round( p.y + descend ),
 
 		n =
-			s - Math.round( fs + descend );
+			s - Math.round( this.fontsize + descend );
 
 	// draws the caret
 	fabric.fillRect(
@@ -701,6 +541,21 @@ Jools.lazyFixate(
 			spread;
 
 		return flow;
+	}
+);
+
+
+/*
+| Shortcut to the text in the para.
+*/
+Jools.lazyFixate(
+	Para.prototype,
+	'text',
+	function( )
+	{
+		return (
+			this.tree.twig.text
+		);
 	}
 );
 

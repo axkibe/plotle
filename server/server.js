@@ -942,7 +942,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/visual/para.js',
-					'fb',
+					'fbj',
 
 				'shell/visual/scrollbar.js',
 					'fb',
