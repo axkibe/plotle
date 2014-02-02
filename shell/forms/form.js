@@ -607,9 +607,9 @@ Form.prototype._widgetPath =
 
 
 /*
-| Returns the attention center.
+| The attention center.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Form.prototype,
 	'attentionCenter',
 	function( )

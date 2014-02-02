@@ -538,9 +538,9 @@ Space.prototype.atRank =
 
 
 /*
-| Returns the attention center.
+| The attention center.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Space.prototype,
 	'attentionCenter',
 	function( )

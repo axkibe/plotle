@@ -476,9 +476,9 @@ Label.prototype.highlight =
 
 
 /*
-| Returns the labels silhoutte.
+| The label's silhoutte.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Label.prototype,
 	'silhoutte',
 	function( )
@@ -496,9 +496,9 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the items silhoutte anchored at zero.
+| The items silhoutte anchored at zero.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Label.prototype,
 	'zeroSilhoutte',
 	function( )
@@ -581,9 +581,9 @@ Label.prototype.dragStop =
 
 
 /*
-| Creates the items fabric.
+| The label's fabric.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Label.prototype,
 	'_fabric',
 	function( )

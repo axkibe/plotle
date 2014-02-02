@@ -343,11 +343,11 @@ MainDisc.prototype._init =
 
 
 /*
-| Returns true if current user is a guest.
+| True if current user is a guest.
 |
 | FUTURE make user an own object.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	MainDisc.prototype,
 	'_userIsGuest',
 	function( )
@@ -363,9 +363,9 @@ Jools.lazyFixate(
 
 
 /*
-| Prepares the disc panels contents.
+| The disc panel's fabric.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	MainDisc.prototype,
 	'_fabric',
 	function( )

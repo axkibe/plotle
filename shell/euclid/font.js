@@ -100,7 +100,7 @@ if( JOOBJ )
 /*
 | The CSS-string for this font.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Euclid.Font.prototype,
 	'css',
 	function( )

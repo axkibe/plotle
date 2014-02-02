@@ -208,9 +208,9 @@ Line.connect =
 
 
 /*
-| Returns the zone of the arrow.
+| The zone of the arrow.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Line.prototype,
 	'zone',
 	function()
@@ -243,9 +243,9 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the point at center.
+| The point at center.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Line.prototype,
 	'pc',
 	function() {

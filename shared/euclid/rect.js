@@ -188,7 +188,7 @@ Rect.createArbitrary =
 /*
 | Rectangle width.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Rect.prototype,
 	'width',
 	function( )
@@ -201,7 +201,7 @@ Jools.lazyFixate(
 /*
 | Rectangle height.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Rect.prototype,
 	'height',
 	function( )
@@ -214,7 +214,7 @@ Jools.lazyFixate(
 /*
 | A rectangle of same size with pnw at 0/0
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Rect.prototype,
 	'zeropnw',
 	function( )
@@ -660,7 +660,7 @@ Rect.prototype.cardinalResize =
 /*
 | Point in the center.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Rect.prototype,
 	'pc',
 	function( )
@@ -680,7 +680,7 @@ Jools.lazyFixate(
 /*
 | Point in the north.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Rect.prototype,
 	'pn',
 	function( )
@@ -700,7 +700,7 @@ Jools.lazyFixate(
 /*
 | West point.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Rect.prototype,
 	'w',
 	function( )
@@ -720,7 +720,7 @@ Jools.lazyFixate(
 /*
 | East point.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Rect.prototype,
 	'e',
 	function( )

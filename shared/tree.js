@@ -253,9 +253,9 @@ Tree.prototype.rankOf =
 
 
 /*
-| Returns length of the twig
+| The length of the twig.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Tree.prototype,
 	'length',
 	function( )

@@ -84,7 +84,7 @@ Item.concernsMark =
 | Shortcut to the item's key.
 | It is the last path entry.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Item.prototype,
 	'key',
 	function( )
@@ -156,9 +156,9 @@ Item.prototype.checkHandles =
 
 
 /*
-| Creates the handle object to plan where to sketch the handles to
+| The handle object to plan where to sketch the handles to
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Item.prototype,
 	'_handles',
 	function( )

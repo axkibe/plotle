@@ -116,9 +116,9 @@ Change =
 
 
 /*
-| Returns the type of this change.
+| The type of this change.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Change.prototype,
 	'type',
 	function( )

@@ -273,9 +273,9 @@ CreateDisc.prototype._init =
 
 
 /*
-| Prepares the disc panels contents.
+| The disc panel's fabric.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	CreateDisc.prototype,
 	'_fabric',
 	function( )

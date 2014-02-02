@@ -325,9 +325,9 @@ Button.prototype.sketch =
 
 
 /*
-| Returns the fabric for the button.
+| The button's fabric.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Button.prototype,
 	'_fabric',
 	function( )

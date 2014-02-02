@@ -550,9 +550,9 @@ Doc.prototype.getPNWs =
 };
 
 /*
-| Returns the height of the document.
+| The height of the document.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Doc.prototype,
 	'height',
 	function( )
@@ -615,9 +615,9 @@ Doc.prototype.getPNW =
 
 
 /*
-| Returns the width actually used by the document.
+| The width actually used by the document.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Doc.prototype,
 	'spread',
 	function( )
@@ -647,9 +647,9 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the default font for the document.
+| The default font for the document.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Doc.prototype,
 	'font',
 	function( )

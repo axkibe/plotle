@@ -204,7 +204,7 @@ Ellipse.prototype._init =
 /*
 | Center point of an ellipse.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Ellipse.prototype,
 	'pc',
 	function()
@@ -226,9 +226,9 @@ Jools.lazyFixate(
 
 
 /*
-| gradient's center point
+| Gradient's center point.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Ellipse.prototype,
 	'gradientPC',
 	function( )
@@ -256,9 +256,9 @@ Jools.lazyFixate(
 
 
 /*
-| Gradient radius
+| Gradient inner radius.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Ellipse.prototype,
 	'gradientR1',
 	function( )
@@ -286,9 +286,9 @@ Jools.lazyFixate(
 
 
 /*
-| Gradient radius
+| Gradient inner radius.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Ellipse.prototype,
 	'gradientR0',
 	function( )

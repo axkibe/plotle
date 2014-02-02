@@ -96,7 +96,7 @@ Margin.prototype.toJSON = function()
 /*
 | East + west margin = x
 */
-Jools.lazyFixate(Margin.prototype, 'x',
+Jools.lazyValue(Margin.prototype, 'x',
 	function( )
 	{
 		return this.e + this.w;
@@ -107,7 +107,7 @@ Jools.lazyFixate(Margin.prototype, 'x',
 /*
 | North + south margin = y
 */
-Jools.lazyFixate(Margin.prototype, 'y',
+Jools.lazyValue(Margin.prototype, 'y',
 	function( )
 	{
 		return this.n + this.s;

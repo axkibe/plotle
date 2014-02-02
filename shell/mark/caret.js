@@ -120,9 +120,9 @@ Caret.prototype.hasCaret =
 
 
 /*
-| Returns the items path.
+| The item's path.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Caret.prototype,
 	'itemPath',
 	function( )
@@ -142,9 +142,9 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the items path.
+| The widget's path.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Caret.prototype,
 	'widgetPath',
 	function( )
@@ -164,11 +164,11 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the caret path.
+| The caret's path.
 |
 | This allows a common interface with text range.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Caret.prototype,
 	'caretPath',
 	function( )
@@ -179,11 +179,11 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the caret offset.
+| The caret's offset.
 |
 | This allows a common interface with text range.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Caret.prototype,
 	'caretAt',
 	function( )

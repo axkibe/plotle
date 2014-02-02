@@ -502,9 +502,9 @@ Portal.prototype.handles =
 
 
 /*
-| Returns the portals silhoutte.
+| The portal's silhoutte.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Portal.prototype,
 	'silhoutte',
 	function( )
@@ -522,9 +522,9 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the portals silhoutte.
+| The portal's silhoutte at zero.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Portal.prototype,
 	'zeroSilhoutte',
 	function( )
@@ -717,7 +717,7 @@ Portal.prototype.click =
 /*
 | Returns the attention center.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Portal.prototype,
 	'attentionCenter',
 	function( )
@@ -904,9 +904,9 @@ Portal.prototype.pointingHover =
 
 
 /*
-| Creates the items fabric.
+| The protal's fabric.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Portal.prototype,
 	'_fabric',
 	function( )

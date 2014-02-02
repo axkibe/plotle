@@ -974,9 +974,9 @@ Fabric.prototype.fillRect =
 
 
 /*
-| Returns the center point of the fabric.
+| The center point of the fabric.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Fabric.prototype,
 	'pc',
 	function( )
@@ -1650,7 +1650,7 @@ Fabric.prototype.pnw =
 /*
 | Point in south east.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Fabric.prototype,
 	'pse',
 	function( )

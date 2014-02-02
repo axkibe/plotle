@@ -162,7 +162,7 @@ RoundRect.prototype._init =
 /*
 | point in the center
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	RoundRect.prototype,
 	'pc',
 	function( )
@@ -182,7 +182,7 @@ Jools.lazyFixate(
 /*
 | Rectangle width.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	RoundRect.prototype,
 	'width',
 	function( )
@@ -194,7 +194,7 @@ Jools.lazyFixate(
 /*
 | Rectangle height.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	RoundRect.prototype,
 	'height',
 	function( )

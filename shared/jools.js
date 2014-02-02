@@ -519,30 +519,6 @@ Jools.ensureArgs =
 	}
 };
 
-/*
-| Fixates a value to an object (not changeable)
-*/
-/*
-Jools.fixate =
-	function(
-		obj,
-		key,
-		value
-	)
-{
-	Object.defineProperty(
-		obj,
-		key,
-		{
-			enumerable: true,
-			value: value
-		}
-	);
-
-	return value;
-};
-*/
-
 
 /*
 | Sets an not enumerable value
@@ -572,10 +548,8 @@ Jools.innumerable =
 
 /*
 | A value is computed and fixated only when needed.
-|
-| FIXME call lazyValue
 */
-Jools.lazyFixate =
+Jools.lazyValue =
 	function(
 		proto,
 		key,

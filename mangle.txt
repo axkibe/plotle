@@ -523,7 +523,7 @@
 > la
 . label
 . labelDoc
-. lazyFixate
+. lazyValue
 . lazyFunction
 > left
 > length

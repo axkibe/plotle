@@ -57,9 +57,9 @@ var
 
 
 /*
-| Returns the items path.
+| The item's path.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Vacant.prototype,
 	'itemPath',
 	function( )
@@ -69,9 +69,9 @@ Jools.lazyFixate(
 );
 
 /*
-| Returns the widgets path.
+| The widget's path.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Vacant.prototype,
 	'widgetPath',
 	function( )

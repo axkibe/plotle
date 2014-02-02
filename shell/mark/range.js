@@ -114,10 +114,10 @@ var
 		Mark.Range;
 
 /*
-| Returns begin or end path,
+| The begin or end path,
 | dependening on which comes first in docTree.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Range.prototype,
 	'frontPath',
 	function( )
@@ -133,10 +133,10 @@ Jools.lazyFixate(
 
 
 /*
-| Returns begin or end offset,
+| The begin or end offset,
 | dependening on which comes first in docTree.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Range.prototype,
 	'frontAt',
 	function( )
@@ -152,10 +152,10 @@ Jools.lazyFixate(
 
 
 /*
-| Returns begin or end path,
+| The begin or end path,
 | dependening on which comes last in docTree.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Range.prototype,
 	'backPath',
 	function( )
@@ -171,10 +171,10 @@ Jools.lazyFixate(
 
 
 /*
-| Returns begin or end path,
+| The begin or end path,
 | dependening on which comes last in docTree.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Range.prototype,
 	'backAt',
 	function( )
@@ -200,11 +200,11 @@ Range.prototype.hasCaret =
 
 
 /*
-| Returns the caret path.
+| The caret's path.
 |
 | This allows a common interface with text range.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Range.prototype,
 	'caretPath',
 	function( )
@@ -215,11 +215,11 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the caret offset.
+| The caret's offset.
 |
 | This allows a common interface with text range.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Range.prototype,
 	'caretAt',
 	function( )
@@ -230,9 +230,9 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the items path.
+| The item's path.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Range.prototype,
 	'itemPath',
 	function( )
@@ -279,7 +279,7 @@ Range.prototype.containsPath =
 /*
 | The content the mark puts into the clipboard.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Range.prototype,
 	'clipboard',
 	function( )
@@ -355,9 +355,9 @@ Jools.lazyFixate(
 
 
 /*
-| Return true if begin equals end
+| True if begin equals end
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Range.prototype,
 	'empty',
 	function( )

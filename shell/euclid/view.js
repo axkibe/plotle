@@ -242,9 +242,11 @@ View.prototype.dey =
 
 
 /*
-| Returns a view with pan zero, but same fact level
+| A view with pan zero, but same fact level
+|
+| FUTURE remove?
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	View.prototype,
 	'home',
 	function( )
@@ -263,9 +265,9 @@ Jools.lazyFixate(
 
 
 /*
-| Returns a view with pan zero and fact zero
+| A view with pan zero and fact zero
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	View.prototype,
 	'sizeOnly',
 	function( )
@@ -487,7 +489,7 @@ View.prototype.review =
 /*
 | The zero based frame of this view.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	View.prototype,
 	'baseFrame',
 	function( )

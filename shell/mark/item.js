@@ -73,9 +73,9 @@ Item.prototype.hasCaret =
 
 
 /*
-| Returns the items path.
+| The item's path.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Item.prototype,
 	'itemPath',
 	function( )
@@ -86,9 +86,9 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the widgets path.
+| The widget's path.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Item.prototype,
 	'widgetPath',
 	function( )

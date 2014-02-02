@@ -84,9 +84,9 @@ DocItem.prototype.dragStop =
 
 
 /*
-| Returns the attention center.
+| The attention center.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	DocItem.prototype,
 	'attentionCenter',
 	function( )

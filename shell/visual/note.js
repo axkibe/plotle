@@ -597,9 +597,9 @@ Note.prototype.minWidth =
 
 
 /*
-| Creates the items fabric.
+| The notes fabric.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Note.prototype,
 	'_fabric',
 	function( )
@@ -753,9 +753,9 @@ Note.prototype.handles =
 
 
 /*
-| Returns the notes silhoutte.
+| The notes silhoutte.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Note.prototype,
 	'silhoutte',
 	function( )
@@ -784,9 +784,9 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the notes silhoutte anchored at zero.
+| The notes silhoutte anchored at zero.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Note.prototype,
 	'zeroSilhoutte',
 	function( )

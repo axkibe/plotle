@@ -185,7 +185,7 @@ Para.concernsMark =
 | Shortcut to the para's key.
 | It is the last path entry.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Para.prototype,
 	'key',
 	function( )
@@ -226,9 +226,9 @@ Para.prototype.attentionCenter =
 
 
 /*
-| Weaves the para's fabric.
+| The para's fabric.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Para.prototype,
 	'_fabric',
 	function( )
@@ -375,9 +375,9 @@ Para.prototype._drawCaret =
 
 
 /*
-| Returns the font for this para.
+| The font for this para.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Para.prototype,
 	'font',
 	function( )
@@ -391,9 +391,9 @@ Jools.lazyFixate(
 
 
 /*
-| Flows the paragraph, positioning all chunks.
+| The para's flow, the position of all chunks.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Para.prototype,
 	'flow',
 	function( )
@@ -548,7 +548,7 @@ Jools.lazyFixate(
 /*
 | Shortcut to the text in the para.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Para.prototype,
 	'text',
 	function( )
@@ -561,9 +561,9 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the height of the para.
+| The height of the para.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Para.prototype,
 	'height',
 	function( )
@@ -1032,9 +1032,9 @@ Para.prototype.specialKey =
 
 
 /*
-| Returns the path to the .text attribute
+| The path to the .text attribute
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Para.prototype,
 	'textPath',
 	function( )

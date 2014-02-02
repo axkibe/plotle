@@ -477,7 +477,7 @@ Input.prototype.sketchMask =
 /*
 | Returns the fabric for the input field.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Input.prototype,
 	'_fabric',
 	function( )
@@ -1136,9 +1136,9 @@ Input.prototype.click =
 
 
 /*
-| Returns the attention center.
+| The attention center.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Input.prototype,
 	'attentionCenter',
 	function( )

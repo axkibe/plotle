@@ -486,7 +486,7 @@ Path.prototype.subPathOf =
 /*
 | Turns the path to a string.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Path.prototype,
 	'string',
 	function( )
@@ -532,7 +532,7 @@ Path.prototype.toJSON =
 /*
 | Returns true is this path is empty.
 */
-Jools.lazyFixate(
+Jools.lazyValue(
 	Path.prototype,
 	'isEmpty',
 	function( )
