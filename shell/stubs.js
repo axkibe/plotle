@@ -16,7 +16,9 @@ var
 | Imports
 */
 var
-	shellverse;
+	Euclid,
+	shellverse,
+	theme;
 
 
 /*
@@ -33,28 +35,40 @@ var
 Stubs = { };
 
 
-Stubs.labelDoc =
+Stubs.emptyLabel =
 	shellverse.grow(
 		{
-			type:
-				'Doc',
+			'type' :
+				'Label',
 
-			twig :
-				{
-					'1' :
-						{
-							type :
-								'Para',
+			'pnw' :
+				Euclid.Point.zero,
 
-							text :
-								'Label'
-						}
-				},
+			'fontsize' :
+				theme.note.fontsize, // FIXME
 
-			ranks :
-				[
-					'1'
-				]
+			'doc' :
+			{
+				type:
+					'Doc',
+
+				twig :
+					{
+						'1' :
+							{
+								type :
+									'Para',
+
+								text :
+									'Label'
+							}
+					},
+
+				ranks :
+					[
+						'1'
+					]
+			}
 		}
 	);
 

@@ -34,80 +34,194 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Label',
+
+		unit :
+			'Visual',
+
+		attributes :
+			{
+				hover :
+					{
+						comment :
+							'node currently hover on',
+
+						type :
+							'Path',
+
+						assign :
+							null,
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					},
+
+				path :
+					{
+						comment :
+							'the path of the doc',
+
+						type :
+							'Path'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						concerns :
+							{
+								func :
+									'Visual.Item.concernsMark',
+
+								args :
+									[
+										'mark',
+										'path'
+									]
+							},
+
+						type :
+							'Mark'
+					},
+
+				/*
+				pnw :
+					{
+						comment :
+							'point in north west',
+
+						type :
+							'Point',
+
+						// FIXME include tree
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					},
+				*/
+
+				traitSet :
+					{
+						comment :
+							'traits set',
+
+						type :
+							'TraitSet',
+
+						allowNull :
+							true,
+
+						assign :
+							null,
+
+						defaultVal :
+							'null'
+					},
+
+				tree :
+					{
+						comment :
+							'the data tree',
+
+						type :
+							'Tree'
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View'
+					}
+			},
+
+		init :
+			[
+				'inherit'
+			],
+
+
+		subclass :
+			'Visual.DocItem'
+	};
+}
+
+
 var
-	_tag =
-		'LABEL-30268594';
+	Label =
+		Visual.Label;
 
 
 /*
-| Constructor.
+| Initializer.
 */
-var Label =
-Visual.Label =
+Label.prototype._init =
 	function(
-		tag,
-		tree,
-		path,
-		pnw,
-		fontsize,
-		doc,
-		mark,
-		view,
-		iview,
-		ifabric
+		inherit
 	)
 {
-	Jools.logNew(
-		this,
-		path
-	);
+	var
+		twig =
+			this.tree.twig;
 
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
+	// FIXME remove shortcut
+	this.fontsize =
+		twig.fontsize;
 
-		if( fontsize !== doc.fontsize )
-		{
-			throw new Error(
-				'fontsize mismatch'
-			);
-		}
-
-		if( !mark )
-		{
-			throw new Error(
-				'invalid mark'
-			);
-		}
-
-		if( !view )
-		{
-			throw new Error(
-				'invalid view'
-			);
-		}
-	}
-
-	this.path =
-		path;
-
-	Visual.DocItem.call(
-		this,
-		tree,
-		doc
-	);
-
+	// FIXME remove shortcut
 	this.pnw =
-		pnw;
+		twig.pnw;
+
+	this.sub =
+		{ };
 
 	var
+		doc =
+		this.sub.doc =
+			Visual.Doc.create(
+				'inherit',
+					inherit && inherit.sub.doc,
+				'path',
+					inherit ?
+						undefined
+						:
+						this.path.append( 'doc' ),
+				'tree',
+					twig.doc,
+				'fontsize',
+					this.fontsize,
+				'flowWidth',
+					0,
+				'paraSep',
+					Math.round( this.fontsize / 20 ),
+				'mark',
+					this.mark,
+				'view',
+					this.view
+			),
+
 		height =
-			doc.height;
+			doc.height,
+
+		pnw =
+			this.pnw;
 
 	this.zone =
 		Euclid.Rect.create(
@@ -126,297 +240,16 @@ Visual.Label =
 					)
 			)
 		);
-
-	this.fontsize =
-		fontsize;
-
-	this.mark =
-		mark;
-
-	this.view =
-		view;
-
-	this._ifabric =
-		ifabric;
-
-	this._iview =
-		iview;
 };
 
-
-/*
-| Creates a new Label
-*/
-Label.create =
-	function(
-		// free strings
-	)
-{
-	var
-		doc =
-			null,
-
-		fontsize =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		path =
-			null,
-
-		pnw =
-			null,
-
-		view =
-			null,
-
-		tree =
-			null,
-
-		ifabric =
-			null,
-
-		iview =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'doc' :
-
-				doc =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'fontsize' :
-
-				fontsize =
-					arguments[ a + 1 ];
-
-				break;
-
+/* TODO
 			case 'hover' :
-
 				// ignored
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'pnw' :
-
-				pnw =
-					arguments[ a + 1 ];
-
 				break;
 
 			case 'traitSet' :
-
-				// FIXME ignoring
-
 				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'view' :
-
-				view =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument: ' + arguments[ a ]
-				);
-		}
-	}
-
-	if( inherit )
-	{
-		if( !path )
-		{
-			path =
-				inherit.path;
-		}
-	}
-
-
-	if( mark && mark.reflect !== 'Vacant' )
-	{
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'mark needs path'
-/**/			);
-/**/		}
-/**/	}
-
-		mark =
-			Visual.Item.concernsMark(
-				mark,
-				path
-			);
-	}
-
-	if( tree )
-	{
-		if( CHECK && !path )
-		{
-			throw new Error(
-				'tree needs path'
-			);
-		}
-
-		if( fontsize === null )
-		{
-			fontsize =
-				tree.twig.fontsize;
-		}
-
-		if( pnw === null )
-		{
-			pnw =
-				tree.twig.pnw;
-		}
-	}
-
-
-	if( inherit )
-	{
-		if( doc === null )
-		{
-			doc =
-				inherit.sub.doc;
-		}
-
-		if( fontsize === null )
-		{
-			fontsize =
-				inherit.fontsize;
-		}
-
-		if( !mark )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( pnw === null )
-		{
-			pnw =
-				inherit.pnw;
-		}
-
-		if( tree === null )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( view === null )
-		{
-			view =
-				inherit.view;
-		}
-	}
-
-	doc =
-		Visual.Doc.create(
-			'inherit',
-				doc,
-			'tree',
-				tree && tree.twig.doc,
-			'path',
-				inherit ?
-					inherit.sub.doc.path
-					:
-					(
-						path
-						&&
-						path.append( 'doc' )
-					),
-			'fontsize',
-				fontsize,
-			'flowWidth',
-				0,
-			'paraSep',
-				Math.round( fontsize / 20 ),
-			'mark',
-				mark,
-			'view',
-				view
-		);
-
-	// FIXME return inherit
-
-	return (
-		new Label(
-			_tag,
-			tree,
-			path,
-			pnw,
-			fontsize,
-			doc,
-			mark,
-			view,
-			iview,
-			ifabric
-		)
-	);
-
-};
-
-
-Jools.subclass(
-	Label,
-	Visual.DocItem
-);
-
-
-/*
-| Reflection.
 */
-Label.prototype.reflect =
-	'Label';
 
 
 /*
@@ -446,6 +279,7 @@ Label.prototype.handles =
 
 			se :
 				true,
+
 			sw :
 				true,
 
@@ -685,5 +519,6 @@ Label.prototype.scrollPage =
 {
 	// nada
 };
+
 
 } )( );

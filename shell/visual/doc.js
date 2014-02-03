@@ -11,6 +11,7 @@
 var
 	Visual;
 
+
 Visual =
 	Visual || { };
 
@@ -33,116 +34,121 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Doc',
+
+		unit :
+			'Visual',
+
+		attributes :
+			{
+				flowWidth :
+					{
+						comment :
+							'width of the para its flow',
+
+						type :
+							'Number'
+					},
+
+				fontsize :
+					{
+						comment :
+							'size of the font',
+
+						type :
+							'Number'
+					},
+
+				paraSep :
+					{
+						comment :
+							'vertical seperation of paragraphs',
+
+						type :
+							'Number'
+					},
+
+				path :
+					{
+						comment :
+							'the path of the doc',
+
+						type :
+							'Path'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark'
+					},
+
+				tree :
+					{
+						comment :
+							'the data tree',
+
+						type :
+							'Tree'
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View'
+					}
+			},
+
+		init :
+			[
+				'inherit'
+			]
+	};
+}
+
+
 var
-	_tag =
-		'DOC-15472002';
+	Doc =
+		Visual.Doc;
 
 
 /*
-| Constructor.
+| Initializer.
 */
-var Doc =
-Visual.Doc =
+Doc.prototype._init =
 	function(
-		tag,
-		inherit,
-		tree,
-		path,
-		fontsize,
-		flowWidth,
-		paraSep,
-		mark,
-		view
+		inherit
 	)
 {
-	Jools.logNew(
-		this,
-		path
-	);
-
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'tag mismatch'
-/**/		);
-/**/	}
-/**/}
-
-	this.path =
-		path;
-
 	var
-		ranks,
-		sub;
+		sub =
+			[ ],
 
-	this.tree =
-		tree;
+		ranks =
+			this.tree.ranks,
 
-	this.fontsize =
-		fontsize;
-
-	this.flowWidth =
-		flowWidth;
-
-	this.paraSep =
-		paraSep;
+		twig =
+			this.tree.twig;
 
 	this._$pnws =
 		null;
 
-	this.mark =
-		mark;
-
-	this.view =
-		view;
-
-	if( CHECK )
-	{
-		if( !tree )
-		{
-			throw new Error(
-				'tree missing.'
-			);
-		}
-
-		if( !fontsize )
-		{
-			throw new Error(
-				'fontsize missing'
-			);
-		}
-
-		if( !Jools.is( this.flowWidth ) )
-		{
-			throw new Error(
-				'flowWidth missing'
-			);
-		}
-
-		if( typeof( paraSep ) !== 'number' )
-		{
-			throw new Error(
-				'paraSep missing'
-			);
-		}
-	}
-
-	sub =
-	this.sub =
-		[ ];
-
-	ranks =
-	this.ranks =
-		tree.ranks;
-
-	var
-		twig =
-			tree.twig;
-
 	for(
-		var r = 0, rZ = tree.length;
+		var r = 0, rZ = this.tree.length;
 		r < rZ;
 		r++
 	)
@@ -151,8 +157,9 @@ Visual.Doc =
 			k =
 				ranks[ r ],
 
+			// TODO only when not inheriting
 			paraPath =
-				path.appendNC( k );
+				this.path.appendNC( k );
 
 		sub[ k ] =
 			Visual.Para.create(
@@ -163,215 +170,23 @@ Visual.Doc =
 				'path',
 					paraPath,
 				'fontsize',
-					fontsize,
+					this.fontsize,
 				'flowWidth',
-					flowWidth,
+					this.flowWidth,
 				'mark',
-					mark,
+					this.mark,
 				'view',
-					view
+					this.view
 			);
 	}
+
+	this.sub =
+		sub;
 };
 
 
 /*
-| Creates a new doc.
-*/
-Doc.create =
-	function(
-		// free strings
-	)
-{
-	var
-		tree =
-			null,
-
-		fontsize =
-			null,
-
-		flowWidth =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		path =
-			null,
-
-		paraSep =
-			null,
-
-		view =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'flowWidth' :
-
-				flowWidth =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'fontsize' :
-
-				fontsize =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'paraSep' :
-
-				paraSep =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'view' :
-
-				view =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument: ' + arguments[ a ]
-				);
-		}
-	}
-
-
-	if( inherit )
-	{
-		if( tree === null )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( path === null )
-		{
-			path =
-				inherit.path;
-		}
-
-
-		if( fontsize === null )
-		{
-			fontsize =
-				inherit.fontsize;
-		}
-
-		if( flowWidth === null )
-		{
-			flowWidth =
-				inherit.flowWidth;
-		}
-
-		if( mark === null )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( paraSep === null )
-		{
-			paraSep =
-				inherit.paraSep;
-		}
-
-		if( view === null )
-		{
-			view =
-				inherit.view;
-		}
-
-		if(
-			inherit.tree === tree &&
-			(
-				inherit.path && inherit.path.equals( path )
-			)
-			&&
-			inherit.fontsize === fontsize
-			&&
-			inherit.flowWidth === flowWidth
-			&&
-			inherit.paraSep === paraSep
-			&&
-			inherit.mark.equals( mark )
-			&&
-			inherit.view.equals( view )
-		)
-		{
-			return inherit;
-		}
-	}
-
-	return (
-		new Doc(
-			_tag,
-			inherit,
-			tree,
-			path,
-			fontsize,
-			flowWidth,
-			paraSep,
-			mark,
-			view
-		)
-	);
-};
-
-
-/*
-| Reflection.
-*/
-Doc.prototype.reflect =
-	'Doc';
-
-
-/*
-| Returns the tree at rank 'rank'.
+| Returns the para at rank 'rank'.
 */
 Doc.prototype.atRank =
 	function(
@@ -379,7 +194,7 @@ Doc.prototype.atRank =
 	)
 {
 	return (
-		this.sub[ this.ranks[ rank ] ]
+		this.sub[ this.tree.ranks[ rank ] ]
 	);
 };
 
@@ -412,7 +227,7 @@ Doc.prototype.attentionCenter =
 		+
 		this
 			.sub[ key ]
-			.attentionCenter( item )
+			.attentionCenter
 	);
 };
 
@@ -460,7 +275,7 @@ Doc.prototype.draw =
 			this.getPNWs( item ),
 
 		ranks =
-			this.ranks;
+			this.tree.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -483,8 +298,6 @@ Doc.prototype.draw =
 
 		vpara.draw(
 			fabric,
-			view,
-			item,
 			view.point( p )
 		);
 	}
@@ -519,7 +332,7 @@ Doc.prototype.getPNWs =
 			innerMargin.n,
 
 		ranks =
-			this.ranks;
+			this.tree.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -565,7 +378,7 @@ Jools.lazyValue(
 				this.paraSep,
 
 			ranks =
-				this.ranks,
+				this.tree.ranks,
 
 			height =
 				0;
@@ -670,7 +483,7 @@ Doc.prototype.getParaAtPoint =
 {
 	var
 		ranks =
-			this.ranks,
+			this.tree.ranks,
 
 		sub =
 			this.sub,

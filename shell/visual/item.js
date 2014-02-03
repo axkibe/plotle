@@ -67,6 +67,11 @@ Item.concernsMark =
 		path
 	)
 {
+	if( path.isEmpty )
+	{
+		return Mark.Vacant.create( );
+	}
+
 	if(
 		mark.containsPath( path )
 	)

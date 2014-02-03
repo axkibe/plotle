@@ -490,6 +490,8 @@ Jools.ensureInt =
 /*
 | Checks the definedness of a list of variables
 | and throws an arguments error if not.
+|
+| TODO remove
 */
 Jools.ensureArgs =
 	function(
@@ -506,7 +508,7 @@ Jools.ensureArgs =
 		var arg =
 			arguments[ a + 1 ];
 
-		if(! Jools.is( arg ) )
+		if( arg === undefined )
 		{
 			throw new Error(
 				CHECK
@@ -565,17 +567,75 @@ Jools.lazyValue =
 
 			get : function( )
 			{
-				var ckey = '_lazy_' + key;
+				var
+					ckey =
+						'_lazy_' + key;
 
-				return Jools.is( this[ ckey ] ) ?
-					this[ ckey ] :
+				if( this[ ckey ] !== undefined )
+				{
+					return this[ ckey ];
+				}
+
+				return (
 					Jools.innumerable(
 						this,
 						ckey,
 						getter.call( this )
-					);
+					)
+				);
 			}
 		}
+	);
+};
+
+
+/*
+| A lazy value is computed and fixated before it is needed.
+*/
+Jools.aheadValue =
+	function(
+		obj,
+		key,
+		value
+	)
+{
+	var
+		ckey =
+			'_lazy_' + key;
+
+/**/if( CHECK )
+/**/{
+/**/	var
+/**/		proto =
+/**/			Object.getPrototypeOf( obj ),
+/**/
+/**/		desc =
+/**/			Object.getOwnPropertyDescriptor(
+/**/				proto,
+/**/				key
+/**/			);
+/**/
+/**/	if( !desc || typeof( desc.get ) !== 'function' )
+/**/	{
+/**/		throw new Error(
+/**/			'aheadValue not a lazyValue'
+/**/		);
+/**/	}
+/**/
+/**/	if( obj[ ckey ] )
+/**/	{
+/**/		throw new Error(
+/**/			'aheadValue already computed'
+/**/		);
+/**/	}
+/**/}
+
+	return (
+		Jools.innumerable(
+			obj,
+			ckey,
+			value
+		)
 	);
 };
 

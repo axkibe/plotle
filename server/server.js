@@ -948,7 +948,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/visual/doc.js',
-					'fb',
+					'fbj',
 
 				'shell/visual/item.js',
 					'fb',
@@ -960,7 +960,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/visual/label.js',
-					'fb',
+					'fbj',
 
 				'shell/visual/relation.js',
 					'fb',

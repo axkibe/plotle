@@ -1,3 +1,5 @@
+. aheadValue
+> getPrototypeOf
 . _keyPageDown
 . _keyPageUp
 . pagedown
@@ -522,7 +524,7 @@
 > keys
 > la
 . label
-. labelDoc
+. emptyLabel
 . lazyValue
 . lazyFunction
 > left

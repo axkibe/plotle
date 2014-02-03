@@ -11,9 +11,9 @@
 var
 	Visual;
 
+
 Visual =
-	Visual ||
-	{ };
+	Visual || { };
 
 
 /*
@@ -93,7 +93,7 @@ if( JOOBJ )
 				path :
 					{
 						comment :
-							'the path of the widget',
+							'the path of the para',
 
 						type :
 							'Path'
@@ -131,16 +131,43 @@ var
 		Visual.Para;
 
 
-
 /*
 | Initializer.
 */
 Para.prototype._init =
 	function(
-		// inherit
+		inherit
 	)
 {
-	// FIXME inherit fabric if zoom equal
+	// TODO make general equal builder
+	if(
+		inherit
+		&&
+		inherit.flowWidth === this.flowWidth
+		&&
+		inherit.fontsize === this.fontsize
+		&&
+		inherit.mark.equals( this.mark )
+		&&
+		inherit.path.equals( this.path )
+		&&
+		inherit.tree === this.tree
+		&&
+		inherit.view.zoom === this.view.zoom
+	)
+	{
+		Jools.aheadValue(
+			this,
+			'flow',
+			inherit.flow
+		);
+
+		Jools.aheadValue(
+			this,
+			'_fabric',
+			inherit._fabric
+		);
+	}
 };
 
 
@@ -196,33 +223,34 @@ Jools.lazyValue(
 
 
 /*
-| Returns the attention center.
+| The attention center.
 */
-Para.prototype.attentionCenter =
-	function(
-		item
-	)
-{
-	var
-		fs =
-			item.sub.doc.font.size,
+Jools.lazyValue(
+	Para.prototype,
+	'attentionCenter',
+	function( )
+	{
+		var
+			fs =
+				this.fontsize,
 
-		descend =
-			fs * theme.bottombox,
+			descend =
+				fs * theme.bottombox,
 
-		p =
-			this.locateOffset(
-				this.mark.caretAt
-			).p,
+			p =
+				this.locateOffset(
+					this.mark.caretAt
+				).p,
 
-		s =
-			Math.round( p.y + descend ),
+			s =
+				Math.round( p.y + descend ),
 
-		n =
-			s - Math.round( fs + descend );
+			n =
+				s - Math.round( fs + descend );
 
-	return n;
-};
+		return n;
+	}
+);
 
 
 /*
@@ -233,8 +261,6 @@ Jools.lazyValue(
 	'_fabric',
 	function( )
 	{
-		// no cache
-
 		var
 			flow =
 				this.flow,
@@ -323,8 +349,6 @@ Jools.lazyValue(
 Para.prototype.draw =
 	function(
 		fabric, // the fabric to draw upon
-		view,   // the current vient             TODO remove
-		item,   // the item the para belongs to. TODO remove
 		pnw     // pnw of this para
 	)
 {
@@ -338,7 +362,7 @@ Para.prototype.draw =
 
 
 /*
-| Draws the caret
+| Draws the caret.
 */
 Para.prototype._drawCaret =
 	function(
@@ -1048,9 +1072,11 @@ Jools.lazyValue(
 	}
 );
 
+
 /*
 +----------- private --------------
 */
+
 
 var
 	_keyMap =

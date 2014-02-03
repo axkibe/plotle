@@ -1015,25 +1015,8 @@ Space.prototype.dragStart =
 			Visual[ action.itemType ].create(
 				'pnw',
 					view.depoint( p ),
-				'fontsize',
-					theme.note.fontsize, // FIXME
-				'doc',
-					Visual.Doc.create(
-						'tree',
-							Stubs.labelDoc,
-						'fontsize',
-							theme.note.fontsize, // FIXME
-						'flowWidth',
-							0,
-						'paraSep',
-							0,
-						'path',
-							Path.empty,
-						'mark',
-							Mark.Vacant.create( ),
-						'view',
-							view
-					),
+				'tree',
+					Stubs.emptyLabel,
 				'mark',
 					Mark.Vacant.create( ),
 				'path',
@@ -1833,10 +1816,15 @@ Space.prototype.dragMove =
 						Visual[ origin.reflect ].create(
 							'inherit',
 								origin,
-							'pnw',
-								origin.pnw.add(
-									view.dex( p.x ) - action.start.x,
-									view.dey( p.y ) - action.start.y
+							'tree',
+								// FUTURE make this more elegant
+								origin.tree.setPath(
+									Path.empty.append( 'pnw' ),
+									origin.pnw.add(
+										view.dex( p.x ) - action.start.x,
+										view.dey( p.y ) - action.start.y
+									),
+									meshverse
 								)
 					);
 			}
@@ -1928,32 +1916,40 @@ Space.prototype.dragMove =
 						Visual[ action.origin.reflect ].create(
 							'inherit',
 								origin,
-							'fontsize',
-								fs
+							'tree',
+								// FUTURE do more elegantly
+								origin.tree.setPath(
+									Path.empty.append( 'fontsize' ),
+									fs,
+									meshverse
+								)
 						);
 
 					transItem =
 						Visual[ resized.reflect ].create(
 							'inherit',
 								resized,
-							'fontsize',
-								fs,
-							'pnw',
-								origin.pnw.add(
-									align === 'sw' || align === 'nw' ?
-										Math.round(
-											origin.zone.width -
-												resized.zone.width
-										)
-										:
-										0,
-									align === 'ne' || align === 'nw' ?
-										Math.round(
-											origin.zone.height -
-												resized.zone.height
-										)
-										:
-										0
+							'tree',
+								resized.tree.setPath(
+									Path.empty.append( 'pnw' ),
+									// FUTURE do more elegantly
+									resized.pnw.add(
+										align === 'sw' || align === 'nw' ?
+											Math.round(
+												origin.zone.width -
+													resized.zone.width
+											)
+											:
+											0,
+										align === 'ne' || align === 'nw' ?
+											Math.round(
+												origin.zone.height -
+													resized.zone.height
+											)
+											:
+											0
+									),
+									meshverse
 								)
 						);
 

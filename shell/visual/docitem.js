@@ -218,7 +218,7 @@ DocItem.prototype.click =
 	else
 	{
 		para =
-			doc.atRank( doc.ranks.length - 1 );
+			doc.atRank( doc.tree.ranks.length - 1 );
 
 		shell.setMark(
 			Mark.Caret.create(
