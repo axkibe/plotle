@@ -73,6 +73,33 @@ Stubs.emptyLabel =
 	);
 
 
+Stubs.emptyPortal =
+	shellverse.grow(
+		{
+			'type' :
+				'Portal',
+
+			'zone' :
+				{
+					type :
+						'Rect',
+
+					pnw :
+						Euclid.Point.zero,
+
+					pse :
+						Euclid.Point.zero
+				},
+
+			'spaceUser' :
+				'',
+
+			'spaceTag' :
+				''
+		}
+	);
+
+
 Stubs.emptyDoc =
 	shellverse.grow(
 		{

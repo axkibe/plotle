@@ -196,29 +196,29 @@ Note.prototype._init =
 		minHeight =
 			theme.note.minHeight;
 
-		if(
-			zone.width  < minWidth ||
-			zone.height < minHeight
-		)
-		{
-			zone =
-			this.zone =
-				Euclid.Rect.create(
-					'pnw',
-						zone.pnw,
-					'pse',
-						zone.pnw.add(
-							Math.max(
-								minWidth,
-								zone.width
-							),
-							Math.max(
-								minHeight,
-								zone.height
-							)
+	if(
+		zone.width  < minWidth ||
+		zone.height < minHeight
+	)
+	{
+		zone =
+		this.zone =
+			Euclid.Rect.create(
+				'pnw',
+					zone.pnw,
+				'pse',
+					zone.pnw.add(
+						Math.max(
+							minWidth,
+							zone.width
+						),
+						Math.max(
+							minHeight,
+							zone.height
 						)
-				);
-		}
+					)
+			);
+	}
 
 	this.sub =
 		{ };

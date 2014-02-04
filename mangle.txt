@@ -167,13 +167,11 @@
 . _gradientR1
 . _handles
 . _icons
-. _ifabric
 . _iface
 . _init
 . _invert
 . _isActiveButton
 . _isSection
-. _iview
 . _json
 . _keyBackspace
 . _keyDel

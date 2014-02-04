@@ -966,7 +966,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/visual/portal.js',
-					'fb',
+					'fbj',
 
 				'shell/visual/space.js',
 					'fb',

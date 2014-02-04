@@ -1062,12 +1062,17 @@ Space.prototype.dragStart =
 					Path.empty,
 				'view',
 					view,
-				'zone',
-					Euclid.Rect.create(
-						'pnw',
-							p, //FIXME depoint?
-						'pse',
-							p
+				'tree',
+					Stubs.emptyPortal.setPath(
+						// TODO elegance
+						Path.empty.append( 'zone' ),
+						Euclid.Rect.create(
+							'pnw',
+								p, //FIXME depoint?
+							'pse',
+								p
+						),
+						meshverse
 					)
 			);
 
@@ -1379,10 +1384,15 @@ Space.prototype.dragStop =
 							Visual.Portal.create(
 								'inherit',
 									action.transItem,
-								'zone',
-									Euclid.Rect.createArbitrary(
-										view.depoint( action.start ),
-										view.depoint( p )
+								'tree',
+									// TODO elegance
+									action.transItem.tree.setPath(
+										Path.empty.append( 'zone' ),
+										Euclid.Rect.createArbitrary(
+											view.depoint( action.start ),
+											view.depoint( p )
+										),
+										meshverse
 									)
 							);
 
@@ -1666,8 +1676,13 @@ Space.prototype.dragMove =
 						Visual[ model.reflect ].create(
 							'inherit',
 								model,
-							'zone',
-								zone
+							'tree',
+								// FIXME elegance
+								model.tree.setPath(
+									Path.empty.append( 'zone' ),
+									zone,
+									meshverse
+								)
 						);
 
 					break;

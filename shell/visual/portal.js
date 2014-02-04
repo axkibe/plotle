@@ -36,65 +36,178 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Portal',
+
+		unit :
+			'Visual',
+
+		attributes :
+			{
+				hover :
+					{
+						comment :
+							'node currently hovered upon',
+
+						type :
+							'Path',
+
+						// FIXME maybe not allow null
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					},
+
+				path :
+					{
+						comment :
+							'the path of the doc',
+
+						type :
+							'Path'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						concerns :
+							{
+								func :
+									'Visual.Item.concernsMark',
+
+								args :
+									[
+										'mark',
+										'path'
+									]
+							},
+
+						type :
+							'Mark'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits set',
+
+						type :
+							'TraitSet',
+
+						allowNull :
+							true,
+
+						assign :
+							null,
+
+						defaultVal :
+							'null'
+					},
+
+				tree :
+					{
+						comment :
+							'the data tree',
+
+						type :
+							'Tree'
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View'
+					}
+			},
+
+		init :
+			[
+			],
+
+
+		subclass :
+			'Visual.Item'
+	};
+}
+
+
 var
-	_tag =
-		'PORTAL-9357879';
+	Portal =
+		Visual.Portal;
+
 
 /*
-| Constructor.
+| Initializer.
 */
-var Portal =
-Visual.Portal =
-	function(
-		tag,
-		tree,
-		path,
-		hover,
-		mark,
-		zone,
-		view,
-		iview,
-		ifabric
-	)
+Portal.prototype._init =
+	function( )
 {
-	Jools.logNew(
-		this,
-		path
-	);
+	var
+		twig =
+			this.tree.twig,
 
-	if( CHECK )
+		zone =
+		this.zone =
+			twig.zone,
+
+		minWidth =
+			theme.portal.minWidth,
+
+		minHeight =
+			theme.portal.minHeight;
+
+	if(
+		zone.width  < minWidth
+		||
+		zone.height < minHeight
+	)
 	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
+		zone =
+		this.zone =
+			Euclid.Rect.create(
+				'pnw',
+					zone.pnw,
+				'pse',
+					zone.pnw.add(
+						Math.max(
+							minWidth,
+							zone.width
+						),
+						Math.max(
+							minHeight,
+							zone.height
+						)
+					)
 			);
-		}
-
-		if( !hover || hover.reflect !== 'Path' )
-		{
-			throw new Error(
-				'invalid hover'
-			);
-		}
-
-		if( !mark )
-		{
-			throw new Error(
-				'invalid mark'
-			);
-		}
 	}
 
-	this.path =
-		path;
+	// the prepared space fields
+	// FIXME lazy evaluate
+	this._$spaceFields =
+		{
+			spaceUser :
+				null,
 
-	Visual.Item.call(
-		this,
-		tree
-	);
+			spaceTag :
+				null
+		};
 
-	if( !path.isEmpty )
+	// FIXME once path caching is here this can go
+	if( !this.path.isEmpty )
 	{
 		// paths to spaceUser and spaceTag
 
@@ -117,311 +230,6 @@ Visual.Portal =
 		this.subPaths =
 			null;
 	}
-
-	this.hover =
-		hover;
-
-	this.mark =
-		mark;
-
-	this.zone =
-		zone;
-
-	this.view =
-		view;
-
-	this.iview =
-		iview;
-
-	this.ifabric =
-		ifabric;
-
-	// the prepared space fields
-	// FIXME lazy evaluate
-	this._$spaceFields =
-		{
-			spaceUser :
-				null,
-
-			spaceTag :
-				null
-		};
-};
-
-
-Jools.subclass(
-	Portal,
-	Visual.Item
-);
-
-
-Portal.create =
-	function(
-		// free strings
-	)
-{
-	var
-		fontsize =
-			null,
-
-		inherit =
-			null,
-
-		iview =
-			null,
-
-		ifabric =
-			null,
-
-		hover =
-			null,
-
-		mark =
-			null,
-
-		path =
-			null,
-
-		traitSet =
-			null,
-
-		tree =
-			null,
-
-		view =
-			null,
-
-		zone =
-			null;
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-
-		switch( arguments[ a ] )
-		{
-			case 'hover' :
-
-				hover =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'traitSet' :
-
-				traitSet =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'view' :
-
-				view =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'zone' :
-
-				var
-					minWidth =
-						theme.portal.minWidth,
-
-					minHeight =
-						theme.portal.minHeight;
-
-				zone =
-					arguments[ a + 1 ];
-
-				if(
-					zone.width  < minWidth ||
-					zone.height < minHeight
-				)
-				{
-					zone =
-						Euclid.Rect.create(
-							'pnw',
-								zone.pnw,
-							'pse',
-								zone.pnw.add(
-									Math.max(
-										minWidth,
-										zone.width
-									),
-									Math.max(
-										minHeight,
-										zone.height
-									)
-								)
-						);
-				}
-
-				break;
-
-		default :
-
-			throw new Error(
-				'invalid argument: ' + arguments[ a ]
-			);
-
-		}
-	}
-
-	if( inherit )
-	{
-		if( !path )
-		{
-			path =
-				inherit.path;
-		}
-	}
-
-	if( mark && mark.reflect !== 'Vacant' )
-	{
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'mark needs path'
-/**/			);
-/**/		}
-/**/	}
-
-		mark =
-			Visual.Item.concernsMark(
-				mark,
-				path
-			);
-	}
-
-	if( tree )
-	{
-		if( !path )
-		{
-			throw new Error(
-				'tree needs path'
-			);
-		}
-
-		if( !fontsize )
-		{
-			fontsize =
-				theme.note.fontsize;
-				// tree.fontsize; FIXME
-		}
-
-		if( !zone )
-		{
-			zone =
-				tree.twig.zone;
-		}
-	}
-
-	if( inherit )
-	{
-		if( !fontsize )
-		{
-			fontsize =
-				inherit.fontsize;
-		}
-
-		if( !hover )
-		{
-			hover =
-				inherit.hover;
-		}
-
-		if( !mark )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( !tree )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( !view )
-		{
-			view =
-				inherit.view;
-		}
-
-		if(
-			inherit.tree === tree
-			&&
-			inherit.hover.equals( hover )
-			&&
-			inherit.mark.equals( mark )
-			&&
-			inherit.path.equals( path )
-			&&
-			inherit.zone.equals( zone )
-		)
-		{
-			if( inherit.view.equals( view ) )
-			{
-				return inherit;
-			}
-			else
-			{
-				ifabric =
-					inherit._ifabric;
-
-				iview =
-					inherit.view;
-			}
-		}
-	}
-
-	return (
-		new Portal(
-			_tag,
-			tree,
-			path,
-			hover,
-			mark,
-			zone,
-			view,
-			iview,
-			ifabric
-		)
-	);
 };
 
 
@@ -445,13 +253,6 @@ Portal.spaceFields =
 */
 Portal.prototype.positioning =
 	'zone';
-
-
-/*
-| Reflection.
-*/
-Portal.prototype.reflect =
-	'Portal';
 
 
 /*
