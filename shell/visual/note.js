@@ -13,9 +13,6 @@
 var
 	Visual;
 
-Visual =
-	Visual || { };
-
 
 /*
 | Imports

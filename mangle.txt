@@ -137,7 +137,7 @@
 . _$visitPasshash
 . _$visitUser
 . _ajax
-. _aperture
+. aperture
 . _backAt
 . _backPath
 . _begin
@@ -186,7 +186,6 @@
 . _keyUp
 . _lazy_
 . _locateOffset
-. _max
 . _moveTo
 . _normalize
 . _onAtweenTime
@@ -208,7 +207,6 @@
 . _onTouchStart
 . _path
 . _pitch
-. _pnw
 . _pointingHover
 . _prepareField
 . _prepareMoveToButton
@@ -220,7 +218,6 @@
 . _setHover
 . _setMark
 . _shape
-. _size
 . _specialKey
 . _steerAttention
 . _testInput

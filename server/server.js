@@ -969,7 +969,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/visual/space.js',
-					'fb',
+					'fbj',
 
 				'shell/system.js',
 					'fb',

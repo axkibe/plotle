@@ -1564,6 +1564,8 @@ Shell.prototype.onAquireSpace =
 				Path.empty,
 			'mark',
 				Mark.Vacant.create( ),
+			'path',
+				Path.empty.append( 'space' ),
 			'view',
 				Euclid.View.create(
 					'fact',

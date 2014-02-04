@@ -12,10 +12,6 @@ var
 	Visual;
 
 
-Visual =
-	Visual || { };
-
-
 /*
 | Imports
 */
@@ -39,94 +35,150 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Space',
+
+		unit :
+			'Visual',
+
+		attributes :
+			{
+				access :
+					{
+						comment :
+							'rights the current user has for this space',
+
+						type :
+							'String'
+					},
+
+				hover :
+					{
+						comment :
+							'node currently hovered upon',
+
+						type :
+							'Path',
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						type :
+							'Mark',
+
+						concerns :
+							{
+								func :
+									'Space.concernsMark',
+
+								args :
+									[
+										'mark'
+									]
+							}
+					},
+
+				path :
+					{
+						comment :
+							'the path of the space',
+
+						type :
+							'Path'
+					},
+
+				spaceUser :
+					{
+						comment :
+							'owner of the space',
+
+						type :
+							'String'
+					},
+
+				spaceTag :
+					{
+						comment :
+							'name of the space',
+
+						type :
+							'String'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traitSet',
+
+						type :
+							'TraitSet',
+
+						allowNull :
+							true,
+
+						assign :
+							null,
+
+						defaultVal :
+							'null'
+					},
+
+				tree :
+					{
+						comment :
+							'the data tree',
+
+						type :
+							'Tree'
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View'
+					}
+			},
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			]
+	};
+}
+
+
 var
-	_tag =
-		'SPACE-38170216';
+	Space =
+		Visual.Space;
 
 /*
-| Constructor
+| Initializer.
 */
-var Space =
-Visual.Space =
+Space.prototype._init =
 	function(
-		tag,
-		tree,
 		inherit,
-		spaceUser,
-		spaceTag,
-		access,
-		hover,
-		mark,
-		view,
 		traitSet
 	)
 {
-	Jools.logNew(
-		this,
-		this.path
-	);
-
-	if( CHECK )
-	{
-		if( tag !== _tag )
-		{
-			throw new Error(
-				'tag mismatch'
-			);
-		}
-
-		if(
-			!hover
-			||
-			hover.reflect !== 'Path'
-		)
-		{
-			throw new Error(
-				'invalid hover'
-			);
-		}
-
-		if( !mark )
-		{
-			throw new Error(
-				'mark must be valid'
-			);
-		}
-
-		if( !tree )
-		{
-			throw new Error(
-				'tree must be valid'
-			);
-		}
-	}
-
-	this.tree =
-		tree;
-
-	this.spaceUser =
-		spaceUser;
-
-	this.spaceTag =
-		spaceTag;
-
-	this.access =
-		access;
-
-	this.hover =
-		hover;
-
-	this.mark =
-		mark;
-
-	this.view =
-		view;
-
 	var
 		sub =
 			{ };
 
-	for( var k in tree.twig )
+	for( var k in this.tree.twig )
 	{
 		if( k === 'type' )
 		{
@@ -135,7 +187,7 @@ Visual.Space =
 
 		sub[ k ] =
 			this._createItem(
-				tree.twig[ k ],
+				this.tree.twig[ k ],
 				k,
 				inherit && inherit.sub[ k ],
 				traitSet
@@ -144,267 +196,7 @@ Visual.Space =
 
 	this.sub =
 		sub;
-
-	Jools.immute( this );
 };
-
-
-/*
-| Creates a space.
-*/
-Space.create =
-	function
-	(
-		// free strings
-	)
-{
-	var
-		access =
-			null,
-
-		hover =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		spaceTag =
-			null,
-
-		spaceUser =
-			null,
-
-		traitSet =
-			null,
-
-		tree =
-			null,
-
-		view =
-			null;
-
-	var
-		a =
-			0,
-
-		aZ =
-			arguments.length;
-
-	// FIXME change to for loop
-	while( a < aZ )
-	{
-		switch( arguments[ a ] )
-		{
-			case 'access' :
-
-				access =
-					arguments[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			case 'hover' :
-
-				hover =
-					arguments[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			case 'traitSet' :
-
-				// sets a (set of) attributes
-
-				if( CHECK )
-				{
-					if( arguments[ a + 1 ] )
-					{
-						if( arguments[ a + 1].reflect !== 'TraitSet' )
-						{
-							throw new Error(
-								'traitSet not a traitSet'
-							);
-						}
-
-						if( traitSet !== null )
-						{
-							throw new Error(
-								'traitSet already set'
-							);
-						}
-					}
-				}
-
-				traitSet =
-					arguments[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			case 'spaceTag' :
-
-				spaceTag =
-					arguments[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			case 'spaceUser' :
-
-				spaceUser =
-					arguments[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			case 'view' :
-
-				view =
-					arguments[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			default :
-
-				throw new Error(
-					CHECK && (
-						'invalid argument: ' + arguments[ a ]
-					)
-				);
-		}
-	}
-
-	if( mark )
-	{
-		mark =
-			Space.concernsMark(
-				mark
-			);
-	}
-
-	if( inherit )
-	{
-		if( access === null )
-		{
-			access =
-				inherit.access;
-		}
-
-		if( hover === null )
-		{
-			hover =
-				inherit.hover;
-		}
-
-		if( mark === null )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( spaceTag === null )
-		{
-			spaceTag =
-				inherit.spaceTag;
-		}
-
-		if( spaceUser === null )
-		{
-			spaceUser =
-				inherit.spaceUser;
-		}
-
-		if( tree === null )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( view === null )
-		{
-			view =
-				inherit.view;
-		}
-
-		if(
-			access === inherit.access
-			&&
-			hover.equals( inherit.hover )
-			&&
-			mark.equals( inherit.mark )
-			&&
-			spaceTag === inherit.spaceTag
-			&&
-			spaceUser === inherit.spaceUser
-			&&
-			tree === inherit.tree
-			&&
-			view.equals( inherit.view )
-			&&
-			(
-				traitSet === null
-				||
-				!traitSet.containsPath( this.path )
-			)
-		)
-		{
-			return inherit;
-		}
-	}
-
-	return (
-		new Space(
-			_tag,
-			tree,
-			inherit,
-			spaceUser,
-			spaceTag,
-			access,
-			hover,
-			mark,
-			view,
-			traitSet
-		)
-	);
-};
-
 
 
 /*
@@ -415,19 +207,11 @@ Space.prototype.showDisc =
 
 
 /*
-| The spaces path ( in the shell )
+| FIXME remove
 */
-Space.path =
-Space.prototype.path =
-	Path.empty.append( 'space' );
-
-
-/*
-| Reflection.
-*/
-Space.prototype.reflect =
-	'Space';
-
+var
+	_spacePath =
+		Path.empty.append( 'space' );
 
 /*
 | Returns the mark if the form jockey concerns a mark.
@@ -439,7 +223,7 @@ Space.concernsMark =
 {
 	if(
 		mark.containsPath(
-			Space.path
+			_spacePath
 		)
 	)
 	{
@@ -498,7 +282,7 @@ Space.prototype.focusedItem =
 
 
 /*
-| Returns an item by its key
+| Returns an item by its key.
 */
 Space.prototype.getItem =
 	function(
