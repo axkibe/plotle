@@ -37,60 +37,259 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Note',
+
+		unit :
+			'Visual',
+
+		attributes :
+			{
+				hover :
+					{
+						comment :
+							'node currently hovered upon',
+
+						type :
+							'Path',
+
+						assign :
+							null,
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					},
+
+				path :
+					{
+						comment :
+							'the path of the doc',
+
+						type :
+							'Path'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						concerns :
+							{
+								func :
+									'Visual.Item.concernsMark',
+
+								args :
+									[
+										'mark',
+										'path'
+									]
+							},
+
+						type :
+							'Mark'
+					},
+
+				scrolly :
+					{
+						comment :
+							'vertical scroll position',
+
+						type :
+							'Number',
+
+						defaultVal :
+							'0'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits set',
+
+						type :
+							'TraitSet',
+
+						allowNull :
+							true,
+
+						assign :
+							null,
+
+						defaultVal :
+							'null'
+					},
+
+				tree :
+					{
+						comment :
+							'the data tree',
+
+						type :
+							'Tree'
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View'
+					}
+			},
+
+		init :
+			[
+				'inherit',
+				'traitSet'
+			],
+
+
+		subclass :
+			'Visual.DocItem'
+	};
+}
+
+
 var
-	_tag =
-		'NOTE-69907604';
+	Note =
+		Visual.Note;
 
 
 /*
-| Constructor.
+| Initializer.
 */
-var Note =
-Visual.Note =
+Note.prototype._init =
 	function(
-		tag,
-		tree,
-		path,
-		view,
-		zone,
-		doc,
-		scrolly,
-		mark,
-		ifabric,
-		iview
+		inherit,
+		traitSet
 	)
 {
-	Jools.logNew(
-		this,
-		path
-	);
+	var
+		twig =
+			this.tree.twig;
 
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'tag mismatch'
-/**/		);
-/**/	}
-/**/}
+	// FIXME remove shortcut
+	this.fontsize =
+		twig.fontsize;
 
-	Visual.DocItem.call(
-		this,
-		tree,
-		doc,
-		mark
-	);
+	// FIXME remove shortcut
+	var
+		zone =
+		this.zone =
+			twig.zone,
 
-	this.path =
-		path;
+		minWidth =
+			theme.note.minWidth,
 
-	this.zone =
-		zone;
+		minHeight =
+			theme.note.minHeight;
+
+		if(
+			zone.width  < minWidth ||
+			zone.height < minHeight
+		)
+		{
+			zone =
+			this.zone =
+				Euclid.Rect.create(
+					'pnw',
+						zone.pnw,
+					'pse',
+						zone.pnw.add(
+							Math.max(
+								minWidth,
+								zone.width
+							),
+							Math.max(
+								minHeight,
+								zone.height
+							)
+						)
+				);
+		}
+
+	this.sub =
+		{ };
+
+	this.sub.doc =
+		Visual.Doc.create(
+			'inherit',
+				inherit && inherit.sub.doc,
+			'path',
+				inherit ?
+					undefined
+					:
+					this.path.append( 'doc' ),
+			'tree',
+				twig.doc,
+			'fontsize',
+				this.fontsize,
+			'flowWidth',
+				zone.width - Note.innerMargin.x,
+			'paraSep',
+				Jools.half( this.fontsize ),
+			'mark',
+				this.mark,
+			'view',
+				this.view
+		);
+
+	if( traitSet )
+	{
+		for(
+			var a = 0, aZ = traitSet.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				t =
+					traitSet.get( a );
+
+			if(
+				t.path.equals( this.path )
+			)
+			{
+				switch( t.key )
+				{
+					case 'scrolly' :
+
+						this.scrolly =
+							t.val;
+
+						break;
+
+					default :
+
+						throw new Error(
+							CHECK
+							&&
+							( 'unknown trait: ' + t.key )
+						);
+				}
+			}
+		}
+	}
+
+	// tree.fontsize; FIXME
+	this.fontsize =
+		theme.note.fontsize;
 
 	this.scrollbarY =
 		new Visual.Scrollbar(
-			scrolly,
+			this.scrolly,
 			zone.height - this.innerMargin.y,
 			this.sub.doc.height,
 			Euclid.Point.create(
@@ -102,419 +301,7 @@ Visual.Note =
 			zone.height - theme.scrollbar.vdis * 2
 		);
 
-	this.view =
-		view;
-
-	this._ifabric =
-		ifabric;
-
-	this._iview =
-		iview;
 };
-
-
-Jools.subclass(
-	Note,
-	Visual.DocItem
-);
-
-
-/*
-| Creates a note.
-*/
-Note.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a,
-		aZ,
-
-		doc =
-			null,
-
-		fontsize =
-			null,
-
-		inherit =
-			null,
-
-		mark =
-			null,
-
-		path =
-			null,
-
-		scrolly =
-			null,
-
-		traitSet =
-			null,
-
-		tree =
-			null,
-
-		view =
-			null,
-
-		zone =
-			null,
-
-		ifabric =
-			null,
-
-		iview =
-			null;
-
-	for(
-		a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'doc' :
-
-				doc =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'hover' :
-
-				// ignored
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'scrolly' :
-
-				scrolly =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'traitSet' :
-
-				traitSet =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'view' :
-
-				view =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'zone' :
-
-				var
-					minWidth =
-						theme.note.minWidth,
-
-					minHeight =
-						theme.note.minHeight;
-
-				zone =
-					arguments[ a + 1 ];
-
-				if(
-					zone.width  < minWidth ||
-					zone.height < minHeight
-				)
-				{
-					zone =
-						Euclid.Rect.create(
-							'pnw',
-								zone.pnw,
-							'pse',
-								zone.pnw.add(
-									Math.max(
-										minWidth,
-										zone.width
-									),
-									Math.max(
-										minHeight,
-										zone.height
-									)
-								)
-						);
-				}
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				break;
-
-		default :
-
-			throw new Error(
-				'invalid argument: ' + arguments[ a ]
-			);
-
-		}
-	}
-
-	if( inherit )
-	{
-		if( !path )
-		{
-			path =
-				inherit.path;
-		}
-	}
-
-
-	if( mark && mark.reflect !== 'Vacant' )
-	{
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'mark needs path'
-/**/			);
-/**/		}
-/**/	}
-
-		mark =
-			Visual.Item.concernsMark(
-				mark,
-				path
-			);
-	}
-
-
-	if( traitSet )
-	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'traitSet needs path'
-/**/			);
-/**/		}
-/**/	}
-
-		for(
-			a = 0, aZ = traitSet.length;
-			a < aZ;
-			a++
-		)
-		{
-			var
-				t =
-					traitSet.get( a );
-
-			if(
-				t.path.equals( path )
-			)
-			{
-				switch( t.key )
-				{
-					case 'scrolly' :
-
-						scrolly =
-							t.val;
-
-						break;
-
-					default :
-
-						throw new Error(
-							'unknown trait: ' + t.key
-						);
-				}
-			}
-		}
-	}
-
-	if( tree )
-	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'tree needs path'
-/**/			);
-/**/		}
-/**/	}
-
-		if( !fontsize )
-		{
-			fontsize =
-				theme.note.fontsize;
-				// tree.fontsize; FIXME
-		}
-
-		if( !zone )
-		{
-			zone =
-				tree.twig.zone;
-		}
-
-		if( !doc )
-		{
-			doc =
-				Visual.Doc.create(
-					'inherit',
-						inherit && inherit.sub.doc,
-					'tree',
-						tree.twig.doc,
-					'path',
-						path.append( 'doc' ),
-					'fontsize',
-						fontsize,
-					'flowWidth',
-						zone.width - Note.innerMargin.x,
-					'paraSep',
-						Jools.half( fontsize ),
-					'mark',
-						mark,
-					'view',
-						view
-				);
-		}
-	}
-
-
-	if( inherit )
-	{
-		if( !doc )
-		{
-			doc =
-				Visual.Doc.create(
-					'inherit',
-						inherit.sub.doc,
-					'flowWidth',
-						(
-							zone
-						)
-						&&
-						(
-							zone.width - Note.innerMargin.x
-						)
-				);
-		}
-
-		if( !fontsize )
-		{
-			fontsize =
-				inherit.fontsize;
-		}
-
-		if( !view )
-		{
-			view =
-				inherit.view;
-		}
-
-		if( !mark )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( !path )
-		{
-			path =
-				inherit.path;
-		}
-
-		if( scrolly === null )
-		{
-			scrolly =
-				inherit.scrollbarY.pos;
-		}
-
-		if( !tree )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if(
-			inherit.tree === tree
-			&&
-			inherit.path.equals( path )
-			&&
-			inherit.zone.equals( zone )
-			&&
-			inherit.sub.doc === doc
-			&&
-			inherit.scrollbarY.pos === scrolly
-			&&
-			inherit.mark.equals( mark )
-		)
-		{
-			if( inherit.view.equals( view ) )
-			{
-				return inherit;
-			}
-			else
-			{
-				ifabric =
-					inherit._fabric;
-
-				iview =
-					inherit.view;
-			}
-		}
-	}
-
-	return (
-		new Note(
-			_tag,
-			tree,
-			path,
-			view,
-			zone,
-			doc,
-			scrolly || 0,
-			mark,
-			ifabric,
-			iview
-		)
-	);
-};
-
-
-/*
-| Reflection.
-*/
-Note.prototype.reflect =
-	'Note';
 
 
 /*

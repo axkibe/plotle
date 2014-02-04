@@ -957,7 +957,7 @@ Server.prototype.prepareResources =
 					'fb',
 
 				'shell/visual/note.js',
-					'fb',
+					'fbj',
 
 				'shell/visual/label.js',
 					'fbj',

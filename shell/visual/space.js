@@ -23,6 +23,7 @@ var
 	Action,
 	Euclid,
 	HoverReply,
+	Jools,
 	Mark,
 	meshverse,
 	Path,
@@ -1824,10 +1825,15 @@ Space.prototype.dragMove =
 						Visual[ origin.reflect ].create(
 							'inherit',
 								origin,
-							'zone',
-								origin.zone.add(
-									view.dex( p.x ) - action.start.x,
-									view.dey( p.y ) - action.start.y
+							'tree',
+								// FIXME elegance
+								origin.tree.setPath(
+									Path.empty.append( 'zone' ),
+									origin.zone.add(
+										view.dex( p.x ) - action.start.x,
+										view.dey( p.y ) - action.start.y
+									),
+									meshverse
 								)
 					);
 
@@ -1881,13 +1887,18 @@ Space.prototype.dragMove =
 						Visual[ action.origin.reflect ].create(
 							'inherit',
 								origin,
-							'zone',
-								origin.zone.cardinalResize(
-									align,
-									view.dex( p.x ) - action.start.x,
-									view.dey( p.y ) - action.start.y,
-									origin.minHeight,
-									origin.minWidth
+							// FIXME elegance
+							'tree',
+								origin.tree.setPath(
+									Path.empty.append( 'zone' ),
+									origin.zone.cardinalResize(
+										align,
+										view.dex( p.x ) - action.start.x,
+											view.dey( p.y ) - action.start.y,
+										origin.minHeight,
+										origin.minWidth
+									),
+									meshverse
 								)
 						);
 

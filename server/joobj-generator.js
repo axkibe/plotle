@@ -102,10 +102,20 @@ var
 			{
 				switch( aoName )
 				{
+					case 'defaultVal' :
+
+						if ( !Jools.isString( attr[ aName ][ aoName ] ) )
+						{
+							throw new Error(
+								'defaultVal must be a string literal'
+							);
+						}
+
+						break;
+
 					case 'allowNull' :
 					case 'assign' :
 					case 'comment' :
-					case 'defaultVal' :
 					case 'locate' :
 					case 'refuse' :
 					case 'type' :
@@ -1146,8 +1156,8 @@ var
 generateCreatorDefaultValues =
 	function
 	(
-		r,   // result array
-		jj   // the joobj working object
+		r,  // result array
+		jj  // the joobj working object
 	)
 {
 	var

@@ -20,7 +20,6 @@ Visual =
 */
 var
 	Euclid,
-	Jools,
 	Mark,
 	shell,
 	theme;

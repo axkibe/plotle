@@ -11,6 +11,7 @@
 var
 	Visual;
 
+
 Visual =
 	Visual || { };
 
