@@ -38,25 +38,11 @@ var
 */
 var DocItem =
 Visual.DocItem =
-	function(
-		tree,
-		doc,
-		mark
-	)
+	function( )
 {
-	Visual.Item.call(
-		this,
-		tree
+	throw new Error(
+		CHECK && 'initializing abstract'
 	);
-
-	this.sub =
-		{
-			doc :
-				doc
-		};
-
-	this.mark =
-		mark;
 };
 
 

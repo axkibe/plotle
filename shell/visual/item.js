@@ -42,18 +42,11 @@ var
 */
 var Item =
 Visual.Item =
-	function(
-		tree
-	)
+	function( )
 {
-	this.$fabric =
-		null;
-
-	this.tree =
-		tree;
-
-	this.sub =
-		null;
+	throw new Error(
+		CHECK && 'initializing abstract'
+	);
 };
 
 

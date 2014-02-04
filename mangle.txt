@@ -1,3 +1,5 @@
+. emptyNote
+. emptyPortal
 . scrolly
 . aheadValue
 > getPrototypeOf
@@ -12,7 +14,6 @@
 . $authActive
 . $cSpace
 . $clip
-. $fabric
 . $move
 . $mseq
 . $passhash
@@ -392,7 +393,6 @@
 . emailInput
 . emailLabel
 . empty
-. emptyDoc
 > end
 . ensureArgs
 . ensureInt
@@ -486,7 +486,6 @@
 . iconRemove
 . iconStyle
 . icons
-. ifabric
 . iface
 . immute
 > index
@@ -514,7 +513,6 @@
 > item2key
 . itemPath
 . itemType
-. iview
 > join
 . key
 > keyCode

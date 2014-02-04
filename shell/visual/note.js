@@ -288,19 +288,25 @@ Note.prototype._init =
 		theme.note.fontsize;
 
 	this.scrollbarY =
-		new Visual.Scrollbar(
-			this.scrolly,
-			zone.height - this.innerMargin.y,
-			this.sub.doc.height,
-			Euclid.Point.create(
-				'x',
-					zone.pse.x,
-				'y',
-					zone.pnw.y + theme.scrollbar.vdis
-			),
-			zone.height - theme.scrollbar.vdis * 2
+		Visual.Scrollbar.create(
+			'pos',
+				this.scrolly,
+			'aperture',
+				zone.height - this.innerMargin.y,
+			'max',
+				this.sub.doc.height,
+			'pnw',
+				Euclid.Point.create(
+					'x',
+						zone.pse.x,
+					'y',
+						zone.pnw.y + theme.scrollbar.vdis
+				),
+			'size',
+				zone.height - theme.scrollbar.vdis * 2
 		);
 
+	// TODO ahead _fabric if only view changed
 };
 
 
@@ -396,18 +402,8 @@ Jools.lazyValue(
 				this.view.rect( this.zone ),
 
 			hview =
-				this.view.home;
+				this.view.home,
 
-		if(
-			this._ifabric
-			&&
-			this._iview.zoom === this.view.zoom
-		)
-		{
-			return this._ifabric;
-		}
-
-		var
 			f =
 				Euclid.Fabric.create(
 					'width',

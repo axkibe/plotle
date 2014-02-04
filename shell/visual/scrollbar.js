@@ -31,60 +31,106 @@ var
 
 
 /*
-| Constructor.
+| The joobj definition.
 */
-var
-Scrollbar =
-Visual.Scrollbar =
-	function(
-		pos,      // position
-		aperture, // the size of the bar
-		max,      // maximum position
-		pnw,      // pnw
-		size      // size
-	)
+if( JOOBJ )
 {
-	this._aperture =
-		aperture;
+	return {
 
-	this._pnw =
-		pnw;
+		name :
+			'Scrollbar',
 
-	this._max =
-		max;
+		unit :
+			'Visual',
 
-	this._size =
-		size;
+		attributes :
+			{
+				pos :
+					{
+						comment :
+							'position of the scrollbar',
 
+						type :
+							'Number'
+					},
+
+				aperture :
+					{
+						comment :
+							'the size of the bar',
+
+						type :
+							'Number'
+					},
+
+				max :
+					{
+						comment :
+							'maximum position',
+
+						type :
+							'Number'
+					},
+
+				pnw :
+					{
+						comment :
+							'point in north west',
+
+						type :
+							'Point'
+					},
+
+				size :
+					{
+						comment :
+							'size',
+
+						type :
+							'Number'
+					}
+			},
+
+		init :
+			[ ]
+	};
+}
+
+
+var
+	Scrollbar =
+		Visual.Scrollbar;
+
+
+/*
+| Initializer.
+*/
+Scrollbar.prototype._init =
+	function( )
+{
 	this.visible =
-		max > aperture;
+		this.max > this.aperture;
 
-	if( max - aperture >= 0 )
+	// FIXME this look more complicated than it needs to be
+	if( this.max - this.aperture >= 0 )
 	{
-		pos =
+		this.pos =
 			Jools.limit(
 				0,
-				pos,
-				max - aperture
+				this.pos,
+				this.max - this.aperture
 			);
 	}
 	else
 	{
-		pos =
+		this.pos =
 			0;
 	}
 
-	if( pos < 0 )
+	if( this.pos < 0 )
 	{
-		throw new Error(
-			'Scrollbar pos < 0'
-		);
+		throw new Error( );
 	}
-
-	this.pos =
-		pos;
-
-	Jools.immute( this );
 };
 
 
@@ -126,19 +172,19 @@ Scrollbar.prototype.getArea =
 			theme.scrollbar,
 
 		pnw =
-			this._pnw,
+			this.pnw,
 
 		size =
-			this._size,
+			this.size,
 
 		pos =
 			this.pos,
 
 		max =
-			this._max,
+			this.max,
 
 		ap =
-			Math.round( this._aperture * size / max ),
+			Math.round( this.aperture * size / max ),
 
 		map =
 			Math.max( ap, ths.minSize ),
@@ -186,7 +232,7 @@ Scrollbar.prototype.within =
 
 	var
 		pnw =
-			this._pnw,
+			this.pnw,
 
 		dex =
 			view.dex( p.x ),
@@ -198,7 +244,7 @@ Scrollbar.prototype.within =
 		dex >= pnw.x &&
 		dey >= pnw.y &&
 		dex <= pnw.x + theme.scrollbar.strength &&
-		dey <= pnw.y + this._size
+		dey <= pnw.y + this.size
 	);
 };
 
@@ -211,7 +257,7 @@ Scrollbar.prototype.scale =
 		d
 	)
 {
-	return d * this._max / this._size;
+	return d * this.max / this.size;
 };
 
 
