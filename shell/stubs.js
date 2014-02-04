@@ -73,6 +73,53 @@ Stubs.emptyLabel =
 	);
 
 
+Stubs.emptyNote =
+	shellverse.grow(
+		{
+			'type' :
+				'Note',
+
+			'fontsize' :
+				theme.note.fontsize, // FIXME
+
+			'zone' :
+				{
+					type :
+						'Rect',
+
+					pnw :
+						Euclid.Point.zero,
+
+					pse :
+						Euclid.Point.zero
+				},
+
+			'doc' :
+			{
+				type:
+					'Doc',
+
+				twig :
+					{
+						'1' :
+							{
+								type :
+									'Para',
+
+								text :
+									''
+							}
+					},
+
+				ranks :
+					[
+						'1'
+					]
+			}
+		}
+	);
+
+
 Stubs.emptyPortal =
 	shellverse.grow(
 		{
@@ -96,32 +143,6 @@ Stubs.emptyPortal =
 
 			'spaceTag' :
 				''
-		}
-	);
-
-
-Stubs.emptyDoc =
-	shellverse.grow(
-		{
-			type:
-				'Doc',
-
-			twig :
-				{
-					'1' :
-						{
-							type :
-								'Para',
-
-							text :
-								''
-						}
-				},
-
-			ranks :
-				[
-					'1'
-				]
 		}
 	);
 

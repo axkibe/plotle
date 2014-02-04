@@ -955,31 +955,17 @@ Space.prototype.dragStart =
 	{
 		transItem =
 			Visual[ action.itemType ].create(
-				'zone',
-					Euclid.Rect.create(
-						'pnw',
-							p,  // FIXME why no depoint?
-						'pse',
-							p
-					),
-				'doc',
-					Visual.Doc.create(
-						'tree',
-							Stubs.emptyDoc,
-						'fontsize',
-							theme.note.fontsize,
-						'flowWidth',
-							0,
-						'mark',
-							Mark.Vacant.create( ),
-						'paraSep',
-							Jools.half(
-								theme.note.fontsize
-							),
-						'path',
-							Path.empty,
-						'view',
-							view
+				'tree',
+					Stubs.emptyNote.setPath(
+						// FIXME elegance
+						Path.empty.append( 'zone' ),
+						Euclid.Rect.create(
+							'pnw',
+								p,  // FIXME why no depoint?
+							'pse',
+								p
+						),
+						meshverse
 					),
 				'mark',
 					Mark.Vacant.create( ),
@@ -1248,10 +1234,15 @@ Space.prototype.dragStop =
 							Visual.Note.create(
 								'inherit',
 									action.transItem,
-								'zone',
-									Euclid.Rect.createArbitrary(
-										view.depoint( action.start ),
-										view.depoint( p )
+								'tree',
+									// FIXME elegance
+									action.transItem.tree.setPath(
+										Path.empty.append( 'zone' ),
+										Euclid.Rect.createArbitrary(
+											view.depoint( action.start ),
+											view.depoint( p )
+										),
+										meshverse
 									)
 							);
 
