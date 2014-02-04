@@ -1013,10 +1013,13 @@ Space.prototype.dragStart =
 	{
 		transItem =
 			Visual[ action.itemType ].create(
-				'pnw',
-					view.depoint( p ),
 				'tree',
-					Stubs.emptyLabel,
+					// FIXME elegance
+					Stubs.emptyLabel.setPath(
+						Path.empty.append( 'pnw' ),
+						view.depoint( p ),
+						meshverse
+					),
 				'mark',
 					Mark.Vacant.create( ),
 				'path',
@@ -1306,24 +1309,34 @@ Space.prototype.dragStop =
 							Visual[ action.transItem.reflect ].create(
 								'inherit',
 									model,
-								'fontsize',
-									fs
+								'tree',
+									// FIXME elegance
+									action.transItem.tree.setPath(
+										Path.empty.append( 'fontsize' ),
+										fs,
+										meshverse
+									)
 							),
 
 						label =
 							Visual[ resized.reflect ].create(
 								'inherit',
 									resized,
-								'pnw',
-									( p.x > action.start.x ) ?
-										zone.pnw
-										:
-										Euclid.Point.create(
-											'x',
-												zone.pse.x - resized.zone.width,
-											'y',
-												zone.pnw.y
-										)
+								'tree',
+									// FIXME elegance
+									resized.tree.setPath(
+										Path.empty.append( 'pnw' ),
+										( p.x > action.start.x ) ?
+											zone.pnw
+											:
+											Euclid.Point.create(
+												'x',
+													zone.pse.x - resized.zone.width,
+												'y',
+													zone.pnw.y
+											),
+										meshverse
+									)
 							);
 
 					result =
@@ -1674,24 +1687,34 @@ Space.prototype.dragMove =
 						Visual[ action.transItem.reflect ].create(
 							'inherit',
 								model,
-							'fontsize',
-								fs
+							'tree',
+								// FIXME elegance
+								model.tree.setPath(
+									Path.empty.append( 'fontsize' ),
+									fs,
+									meshverse
+								)
 						);
 
 					transItem =
 						Visual[ action.transItem.reflect ].create(
 							'inherit',
 								resized,
-							'pnw',
-								( p.x > action.start.x ) ?
-									zone.pnw
-									:
-									Euclid.Point.create(
-										'x',
-											zone.pse.x - resized.zone.width,
-										'y',
-											zone.pnw.y
-									)
+							'tree',
+								// FIXME elegance
+								resized.tree.setPath(
+									Path.empty.append( 'pnw' ),
+									( p.x > action.start.x ) ?
+										zone.pnw
+										:
+										Euclid.Point.create(
+											'x',
+												zone.pse.x - resized.zone.width,
+											'y',
+												zone.pnw.y
+										),
+									meshverse
+								)
 						);
 
 					break;
