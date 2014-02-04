@@ -33,381 +33,145 @@ var
 'use strict';
 
 
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+
+		name :
+			'Relation',
+
+		unit :
+			'Visual',
+
+		attributes :
+			{
+				hover :
+					{
+						comment :
+							'node currently hovered upon',
+
+						type :
+							'Path',
+
+						assign :
+							null,
+
+						allowNull :
+							true,
+
+						defaultVal :
+							'null'
+					},
+
+				path :
+					{
+						comment :
+							'the path of the doc',
+
+						type :
+							'Path'
+					},
+
+				mark :
+					{
+						comment :
+							'the users mark',
+
+						concerns :
+							{
+								func :
+									'Visual.Item.concernsMark',
+
+								args :
+									[
+										'mark',
+										'path'
+									]
+							},
+
+						type :
+							'Mark'
+					},
+
+				traitSet :
+					{
+						comment :
+							'traits set',
+
+						type :
+							'TraitSet',
+
+						allowNull :
+							true,
+
+						assign :
+							null,
+
+						defaultVal :
+							'null'
+					},
+
+				tree :
+					{
+						comment :
+							'the data tree',
+
+						type :
+							'Tree'
+					},
+
+				view :
+					{
+						comment :
+							'the current view',
+
+						type :
+							'View'
+					}
+			},
+
+		init :
+			[
+				'inherit'
+			],
+
+
+		subclass :
+			'Visual.Label'
+	};
+}
+
+
 var
-	_tag =
-		'LABEL-30268594';
+	Relation =
+		Visual.Relation;
+
 
 /*
-| Constructor.
+| Initializer.
 */
-var Relation =
-Visual.Relation =
+Relation.prototype._init =
 	function(
-		tag,
-		tree,
-		path,
-		pnw,
-		fontsize,
-		doc,
-		item1key,
-		item2key,
-		mark,
-		view,
-		iview,
-		ifabric
+		inherit
 	)
 {
-	Visual.Label.call(
+	Visual.Label.prototype._init.call(
 		this,
-		tag,
-		tree,
-		path,
-		pnw,
-		fontsize,
-		doc,
-		mark,
-		view,
-		iview,
-		ifabric
+		inherit
 	);
+
+	var
+		tree =
+			this.tree;
 
 	this.item1key =
-		item1key;
+		tree.twig.item1key;
 
 	this.item2key =
-		item2key;
-};
-
-
-/*
-| Relations extend labels.
-*/
-Jools.subclass(
-	Relation,
-	Visual.Label
-);
-
-
-/*
-| Reflection.
-*/
-Relation.prototype.reflect =
-	'Relation';
-
-
-/*
-| Default margin for all relations.
-*/
-Relation.imargin =
-	new Euclid.Margin(
-		theme.relation.imargin
-	);
-
-
-/*
-| Creates a new Relation
-*/
-Relation.create =
-	function(
-		// free strings
-	)
-{
-	var
-		doc =
-			null,
-
-		fontsize =
-			null,
-
-		inherit =
-			null,
-
-		item1key =
-			null,
-
-		item2key =
-			null,
-
-		mark =
-			null,
-
-		path =
-			null,
-
-		pnw =
-			null,
-
-		tree =
-			null,
-
-		view =
-			null,
-
-		iview =
-			null,
-
-		ifabric =
-			null;
-
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'doc' :
-
-				doc =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'fontsize' :
-
-				fontsize =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'hover' :
-
-				// ignored
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'item1key ' :
-
-				item1key =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'item2key' :
-
-				item2key =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'mark' :
-
-				mark =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'pnw' :
-
-				pnw =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'traitSet' :
-
-				// FIXME ignoring
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'view' :
-
-				view =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid argument: ' + arguments[ a ]
-				);
-		}
-	}
-
-	if( inherit )
-	{
-		if( !path )
-		{
-			path =
-				inherit.path;
-		}
-	}
-
-	if( mark && mark.reflect !== 'Vacant' )
-	{
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( !path )
-/**/		{
-/**/			throw new Error(
-/**/				'mark needs path'
-/**/			);
-/**/		}
-/**/	}
-
-		mark =
-			Visual.Item.concernsMark(
-				mark,
-				path
-			);
-	}
-
-	if( tree )
-	{
-		if( CHECK && !path )
-		{
-			throw new Error(
-				'tree needs path'
-			);
-		}
-
-		if( fontsize === null )
-		{
-			fontsize =
-				tree.twig.fontsize;
-		}
-
-		if( item1key === null )
-		{
-			item1key =
-				tree.twig.item1key;
-		}
-
-		if( item2key === null )
-		{
-			item2key =
-				tree.twig.item2key;
-		}
-
-		if( pnw === null )
-		{
-			pnw =
-				tree.twig.pnw;
-		}
-
-	}
-
-	if( inherit )
-	{
-		if( doc === null )
-		{
-			doc =
-				inherit.sub.doc;
-		}
-
-		if( fontsize === null )
-		{
-			fontsize =
-				inherit.fontsize;
-		}
-
-		if( item1key === null )
-		{
-			item1key =
-				inherit.item1key;
-		}
-
-		if( item2key === null )
-		{
-			item2key =
-				inherit.item2key;
-		}
-
-		if( !mark )
-		{
-			mark =
-				inherit.mark;
-		}
-
-		if( pnw === null )
-		{
-			pnw =
-				inherit.pnw;
-		}
-
-		if( tree === null )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( view === null )
-		{
-			view =
-				inherit.view;
-		}
-	}
-
-	doc =
-		Visual.Doc.create(
-			'inherit',
-				doc,
-			'tree',
-				tree && tree.twig.doc,
-			'path',
-				inherit ?
-					inherit.sub.doc.path
-					:
-					(
-						path
-						&&
-						path.append( 'doc' )
-					),
-			'fontsize',
-				fontsize,
-			'flowWidth',
-				0,
-			'paraSep',
-				Math.round( fontsize / 20 ),
-			'mark',
-				mark,
-			'view',
-				view
-		);
-
-	// FIXME return inherit
-
-	return (
-		new Relation(
-			_tag,
-			tree,
-			path,
-			pnw,
-			fontsize,
-			doc,
-			item1key,
-			item2key,
-			mark,
-			view,
-			iview,
-			ifabric
-		)
-	);
+		tree.twig.item2key;
 };
 
 

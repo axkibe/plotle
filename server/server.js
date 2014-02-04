@@ -963,7 +963,7 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/visual/relation.js',
-					'fb',
+					'fbj',
 
 				'shell/visual/portal.js',
 					'fb',

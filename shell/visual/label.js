@@ -52,7 +52,7 @@ if( JOOBJ )
 				hover :
 					{
 						comment :
-							'node currently hover on',
+							'node currently hovered upon',
 
 						type :
 							'Path',
@@ -96,24 +96,6 @@ if( JOOBJ )
 						type :
 							'Mark'
 					},
-
-				/*
-				pnw :
-					{
-						comment :
-							'point in north west',
-
-						type :
-							'Point',
-
-						// FIXME include tree
-						allowNull :
-							true,
-
-						defaultVal :
-							'null'
-					},
-				*/
 
 				traitSet :
 					{
