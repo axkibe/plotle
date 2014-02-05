@@ -1,13 +1,3 @@
-. emptyNote
-. emptyPortal
-. scrolly
-. aheadValue
-> getPrototypeOf
-. _keyPageDown
-. _keyPageUp
-. pagedown
-. pageup
-. _pageUpDown
 . $abort
 . $action
 . $aquireAjax
@@ -137,7 +127,6 @@
 . _$visitPasshash
 . _$visitUser
 . _ajax
-. aperture
 . _backAt
 . _backPath
 . _begin
@@ -180,6 +169,8 @@
 . _keyEnd
 . _keyEnter
 . _keyLeft
+. _keyPageDown
+. _keyPageUp
 . _keyPos1
 . _keyRight
 . _keyTab
@@ -192,9 +183,9 @@
 . _onAtweenTimeCatcher
 . _onContextMenu
 . _onHiddenInputBlur
-. _onHiddenKeyDown
-. _onHiddenKeyPress
-. _onHiddenKeyUp
+. _onKeyDown
+. _onKeyPress
+. _onKeyUp
 . _onMouseDown
 . _onMouseMove
 . _onMouseUp
@@ -205,6 +196,7 @@
 . _onTouchEnd
 . _onTouchMove
 . _onTouchStart
+. _pageUpDown
 . _path
 . _pitch
 . _pointingHover
@@ -237,12 +229,14 @@
 > addColorStop
 > addEventListener
 . affix
+. aheadValue
 > ajax
 . align
 . all
 . allowNull
 > alter
 . anchor
+. aperture
 . append
 > appendChild
 . appendNC
@@ -390,6 +384,9 @@
 . emailInput
 . emailLabel
 . empty
+. emptyLabel
+. emptyNote
+. emptyPortal
 > end
 . ensureArgs
 . ensureInt
@@ -449,6 +446,7 @@
 . getPath
 . getPointOffset
 . getProjection
+> getPrototypeOf
 > getSeconds
 . getStyle
 . getType
@@ -517,9 +515,8 @@
 > keys
 > la
 . label
-. emptyLabel
-. lazyValue
 . lazyFunction
+. lazyValue
 > left
 > length
 . limit
@@ -627,6 +624,8 @@
 . p2end
 > pageX
 > pageY
+. pagedown
+. pageup
 . paint
 . paintText
 . pan
@@ -712,6 +711,7 @@
 > scrollTo
 . scrollbar
 . scrollbarY
+. scrolly
 > se
 > search
 . selection

@@ -90,12 +90,25 @@ Form.init =
 			subtree =
 				twig[ name ],
 
-			Proto =
-				Form.getWidgetPrototype( subtree ),
+			widgetProto =
+				inherit && inherit.sub[ name ],
 
-			focusAccent = null;
+			path,
 
-		if( Proto.prototype.focusable )
+			focusAccent =
+				false;
+
+		if( !widgetProto )
+		{
+			widgetProto =
+				Form.getWidgetPrototype( subtree );
+		}
+
+		// FIXME only when not having widgetProto
+		path =
+			this.path.append( name );
+
+		if( widgetProto.focusable )
 		{
 			if( this.mark.widgetPath.isEmpty )
 			{
@@ -109,20 +122,14 @@ Form.init =
 			}
 		}
 
-		var
-			path =
-				this.path.append( name );
-
 		sub[ name ] =
-			Proto.create(
+			widgetProto.create(
 				'path',
 					path,
 				'tree',
 					subtree,
 				'superFrame',
 					this.frame,
-				'inherit',
-					inherit && inherit.sub[ name ],
 				'focusAccent',
 					focusAccent,
 				'hoverAccent',

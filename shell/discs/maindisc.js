@@ -218,10 +218,7 @@ MainDisc.prototype._init =
 				ranks[ r ],
 
 			tree =
-				twig[ wname ],
-
-			path =
-				this.path.append( wname );
+				twig[ wname ];
 
 		text =
 			undefined;
@@ -296,28 +293,40 @@ MainDisc.prototype._init =
 				break;
 		}
 
+		var
+			widgetProto =
+				inherit && inherit.buttons[ wname ],
+
+			// FIXME only when no proto
+			path =
+				this.path.append( wname );
+
+		if( !widgetProto )
+		{
+			widgetProto =
+				Widgets.Button;
+		}
+
 		switch( tree.twig.type )
 		{
 			case 'ButtonWidget' :
 
 				buttons[ wname ] =
-					Widgets.Button.create(
-						'path',
-							path,
-						'superFrame',
-							this.frame.zeropnw,
-						'inherit',
-							inherit && inherit.buttons[ wname ],
+					widgetProto.create(
 						'hoverAccent',
 							path.equals( this.hover ),
 						'focusAccent',
 							this.mode === wname,
+						'icons',
+							this._icons,
+						'path',
+							path,
+						'superFrame',
+							this.frame.zeropnw,
 						'text',
 							text,
 						'tree',
 							tree,
-						'icons',
-							this._icons,
 						'visible',
 							visible
 					);

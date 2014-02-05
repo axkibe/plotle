@@ -197,29 +197,37 @@ Jockey.prototype._init =
 	{
 		var
 			name =
-				_discList[ i ];
+				_discList[ i ],
 
-/**/	if( CHECK )
-/**/	{
-/**/		if( !Discs[ name ] )
-/**/		{
-/**/			throw new Error(
-/**/				'invalid disc'
-/**/			);
-/**/		}
-/**/	}
+			discProto =
+				inherit && inherit._discs[ name ],
+
+			path;
+
+		if( !discProto )
+		{
+			discProto =
+				Discs[ name ];
+
+			path =
+				this.path.append( name );
+		}
+		else
+		{
+			path =
+				undefined; // inherit
+		}
 
 		discs[ name ] =
-			Discs[ name ].create(
-				'inherit',
-					inherit && inherit._discs[ name ],
+			discProto.create(
 				'access',
 					this.access,
 				'action',
 					this.action,
 				'hover',
 					// FIXME make a concernsHover in the disc
-					this.hover.isEmpty || this.hover.get( 1 ) !== name ?
+					( this.hover.isEmpty || this.hover.get( 1 ) !== name )
+						?
 						Path.empty
 						:
 						this.hover,
@@ -228,7 +236,7 @@ Jockey.prototype._init =
 				'mode',
 					this.mode,
 				'path',
-					this.path.append( name ),
+					path,
 				'view',
 					this.view,
 				'spaceUser',

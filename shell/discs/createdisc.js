@@ -229,20 +229,27 @@ CreateDisc.prototype._init =
 				CreateDisc._isActiveButton(
 					this.action,
 					wname
-				);
+				),
+
+			widgetProto =
+				inherit && inherit.buttons[ wname ];
+
+		if( !widgetProto )
+		{
+			widgetProto =
+				Widgets.Button;
+		}
 
 		switch( tree.twig.type )
 		{
 			case 'ButtonWidget' :
 
 				buttons[ wname ] =
-					Widgets.Button.create(
+					widgetProto.create(
 						'path',
 							path,
 						'superFrame',
 							this.frame.zeropnw,
-						'inherit',
-							inherit && inherit.buttons[ wname ],
 						'hoverAccent',
 							path.equals( this.hover ),
 						'focusAccent',

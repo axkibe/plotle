@@ -164,7 +164,9 @@ Jockey.prototype._init =
 {
 	var
 		forms =
-			{ };
+			{ },
+
+		path;
 
 	for( var i in _formList )
 	{
@@ -172,13 +174,25 @@ Jockey.prototype._init =
 			name =
 				_formList[ i ],
 
+			formProto =
+				inherit && inherit._forms[ name ];
+
+		if( !formProto )
+		{
+			formProto =
+				Forms[ name ];
+
 			path =
 				this.path.append( name );
+		}
+		else
+		{
+			path =
+				undefined; // inherit
+		}
 
 		forms[ name ] =
-			Forms[ name ].create(
-				'inherit',
-					inherit && inherit._forms[ name ],
+			formProto.create(
 				'hover',
 					this.hover,
 				'mark',
