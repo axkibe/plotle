@@ -4,15 +4,16 @@
 | Authors: Axel Kittenberger
 */
 
+
 /*
 | Export
 */
 var
-	Design;
+	Gruga;
 
 
-Design =
-	Design || { };
+Gruga =
+	Gruga || { };
 
 
 /*
@@ -32,7 +33,9 @@ var
 /*
 | All important design variables for convenience
 */
-var design = {
+var
+	design =
+{
 
 	generic :
 	{
@@ -83,7 +86,7 @@ var design = {
 	}
 };
 
-Design.CreateDisc =
+Gruga.CreateDisc =
 {
 	type :
 		'Layout',

@@ -21,7 +21,7 @@ Forms =
 | Imports
 */
 var
-	Design,
+	Gruga,
 	shell,
 	TraitSet;
 
@@ -176,7 +176,7 @@ Welcome.prototype._init =
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Design.WelcomeForm,
+		Gruga.WelcomeForm,
 		traitSet
 	);
 };

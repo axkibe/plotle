@@ -9,11 +9,11 @@
 | Export
 */
 var
-	Design;
+	Gruga;
 
 
-Design =
-	Design || { };
+Gruga =
+	Gruga || { };
 
 
 /*
@@ -72,7 +72,7 @@ var
 /*
 | Layout
 */
-Design.NonExistingSpaceForm =
+Gruga.NonExistingSpaceForm =
 {
 	type :
 		'Layout',

@@ -9,11 +9,11 @@
 | Export
 */
 var
-	Design;
+	Gruga;
 
 
-Design =
-	Design || { };
+Gruga =
+	Gruga || { };
 
 
 /*
@@ -81,7 +81,7 @@ var
 /*
 | Layout
 */
-Design.MoveToForm =
+Gruga.MoveToForm =
 {
 	type :
 		'Layout',

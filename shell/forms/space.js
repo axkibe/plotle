@@ -19,7 +19,7 @@ Forms =
 | Imports
 */
 var
-	Design,
+	Gruga,
 	shell,
 	TraitSet;
 
@@ -247,7 +247,7 @@ Space.prototype._init =
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Design.SpaceForm,
+		Gruga.SpaceForm,
 		traitSet
 	);
 };

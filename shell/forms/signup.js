@@ -20,7 +20,7 @@ Forms =
 | Imports
 */
 var
-	Design,
+	Gruga,
 	Jools,
 	Mark,
 	shell,
@@ -170,7 +170,7 @@ SignUp.prototype._init =
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Design.SignUpForm,
+		Gruga.SignUpForm,
 		traitSet
 	);
 };

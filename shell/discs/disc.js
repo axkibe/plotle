@@ -18,7 +18,7 @@ Discs =
 | Imports
 */
 var
-	Design,
+	Gruga,
 	Euclid,
 	Jools,
 	shellverse,
@@ -95,7 +95,7 @@ Discs.Disc._init =
 		?
 		inherit._tree
 		:
-		shellverse.grow( Design[ this.reflect ] );
+		shellverse.grow( Gruga[ this.reflect ] );
 
 	this.silhoutte =
 		Euclid.Ellipse.create(

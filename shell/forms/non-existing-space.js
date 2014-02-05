@@ -23,7 +23,7 @@ Forms =
 | Imports
 */
 var
-	Design,
+	Gruga,
 	shell,
 	TraitSet;
 
@@ -253,7 +253,7 @@ NonExistingSpace.prototype._init =
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Design.NonExistingSpaceForm,
+		Gruga.NonExistingSpaceForm,
 		traitSet
 	);
 };

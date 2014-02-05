@@ -833,34 +833,34 @@ Server.prototype.prepareResources =
 				'shell/theme.js',
 					'fb',
 
-				'shell/design/maindisc.js',
+				'shell/gruga/maindisc.js',
 					'fb',
 
-				'shell/design/createdisc.js',
+				'shell/gruga/createdisc.js',
 					'fb',
 
-				'shell/design/login-form.js',
+				'shell/gruga/login-form.js',
 					'fb',
 
-				'shell/design/moveto-form.js',
+				'shell/gruga/moveto-form.js',
 					'fb',
 
-				'shell/design/no-access-to-space-form.js',
+				'shell/gruga/no-access-to-space-form.js',
 					'fb',
 
-				'shell/design/non-existing-space-form.js',
+				'shell/gruga/non-existing-space-form.js',
 					'fb',
 
-				'shell/design/signup-form.js',
+				'shell/gruga/signup-form.js',
 					'fb',
 
-				'shell/design/space-form.js',
+				'shell/gruga/space-form.js',
 					'fb',
 
-				'shell/design/user-form.js',
+				'shell/gruga/user-form.js',
 					'fb',
 
-				'shell/design/welcome-form.js',
+				'shell/gruga/welcome-form.js',
 					'fb',
 
 				'shell/euclid/view.js',

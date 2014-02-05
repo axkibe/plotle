@@ -19,7 +19,7 @@ Forms =
 | Imports
 */
 var
-	Design,
+	Gruga,
 	shell;
 
 
@@ -168,7 +168,7 @@ NoAccessToSpace.prototype._init =
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Design.NoAccessToSpaceForm,
+		Gruga.NoAccessToSpaceForm,
 		traitSet
 	);
 };

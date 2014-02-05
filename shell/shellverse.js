@@ -303,20 +303,6 @@ Shellverse.prototype.MoveTo =
 	} );
 
 
-Shellverse.prototype.creators =
-	Jools.immute( {
-
-		'Font' :
-			Euclid.Font,
-
-		'Point' :
-			Euclid.Point,
-
-		'Rect' :
-			Euclid.Rect
-	} );
-
-
 shellverse =
 	new Shellverse( );
 

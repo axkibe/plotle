@@ -20,7 +20,7 @@ Forms =
 | Imports
 */
 var
-	Design,
+	Gruga,
 	shell,
 	TraitSet;
 
@@ -187,7 +187,7 @@ MoveTo.prototype._init =
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Design.MoveToForm,
+		Gruga.MoveToForm,
 		traitSet
 	);
 };

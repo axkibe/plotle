@@ -9,11 +9,11 @@
 | Export
 */
 var
-	Design;
+	Gruga;
 
 
-Design =
-	Design || { };
+Gruga =
+	Gruga || { };
 
 
 /*
@@ -142,7 +142,7 @@ var design =
 };
 
 
-Design.MainDisc =
+Gruga.MainDisc =
 {
 	type :
 		'Layout',

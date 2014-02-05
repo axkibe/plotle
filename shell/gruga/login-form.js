@@ -1,5 +1,5 @@
 /*
-| Default design for the signup form.
+| Default design for the login form.
 |
 | Authors: Axel Kittenberger
 */
@@ -9,11 +9,11 @@
 | Export
 */
 var
-	Design;
+	Gruga;
 
 
-Design =
-	Design || { };
+Gruga =
+	Gruga || { };
 
 
 /*
@@ -29,10 +29,11 @@ var
 'use strict';
 
 var
+
 	/*
-	| Signup control
+	| Login control
 	*/
-	signupButton =
+	loginButton =
 	{
 		width :
 			70,
@@ -44,7 +45,7 @@ var
 			95,
 
 		n :
-			95
+			28
 	},
 
 
@@ -63,14 +64,14 @@ var
 			180,
 
 		n :
-			105
+			38
 	};
 
 
 /*
 | Layout
 */
-Design.SignUpForm =
+Gruga.LoginForm =
 {
 	type :
 		'Layout',
@@ -83,7 +84,8 @@ Design.SignUpForm =
 				'LabelWidget',
 
 			text :
-				'Sign Up',
+				'Log In',
+
 			font :
 				fontPool.get( 22, 'la' ),
 
@@ -96,10 +98,10 @@ Design.SignUpForm =
 					'c',
 
 				x :
-					-245,
+					-225,
 
 				y :
-					-165
+					-112
 			}
 		},
 
@@ -112,7 +114,7 @@ Design.SignUpForm =
 				'username',
 
 			font :
-				fontPool.get( 16, 'ra' ),
+				fontPool.get( 16, 'la' ),
 
 			pos :
 			{
@@ -123,37 +125,10 @@ Design.SignUpForm =
 					'c',
 
 				x :
-					-98,
+					-175,
 
 				y :
-					-102
-			}
-		},
-
-		'emailLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'email',
-
-			font :
-				fontPool.get( 16, 'ra' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-98,
-
-				y :
-					-62
+					-49
 			}
 		},
 
@@ -166,7 +141,7 @@ Design.SignUpForm =
 				'password',
 
 			font :
-				fontPool.get( 16, 'ra' ),
+				fontPool.get( 16, 'la' ),
 
 			pos :
 			{
@@ -177,64 +152,10 @@ Design.SignUpForm =
 					'c',
 
 				x :
-					-98,
+					-175,
 
 				y :
-					-22
-			}
-		},
-
-		'password2Label' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'repeat password',
-
-			font :
-				fontPool.get( 16, 'ra' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-98,
-
-				y :
-					18
-			}
-		},
-
-		'newsletterLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'newsletter',
-
-			font :
-				fontPool.get( 16, 'ra' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-98,
-
-				y :
-					58
+					-9
 			}
 		},
 
@@ -262,7 +183,7 @@ Design.SignUpForm =
 					-20,
 
 				y :
-					-136
+					-83
 			}
 		},
 
@@ -300,7 +221,7 @@ Design.SignUpForm =
 						-80,
 
 					y :
-						-120
+						-67
 				},
 
 				pse :
@@ -315,61 +236,7 @@ Design.SignUpForm =
 						130,
 
 					y :
-						-95
-				}
-			}
-		},
-
-		'emailInput' :
-		{
-			type :
-				'InputWidget',
-
-			password :
-				false,
-
-			style :
-				'input',
-
-			font :
-				fontPool.get( 14, 'la' ),
-
-			maxlen :
-				100,
-
-			frame  :
-			{
-				type :
-					'Frame',
-
-				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-80,
-
-					y :
-						-80
-				},
-
-				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						130,
-
-					y :
-						-55
+						-42
 				}
 			}
 		},
@@ -408,7 +275,7 @@ Design.SignUpForm =
 						-80,
 
 					y :
-						-40
+						-27
 				},
 
 				pse :
@@ -423,168 +290,13 @@ Design.SignUpForm =
 						130,
 
 					y :
-						-15
+						-2
 				}
 			}
 		},
 
 
-		'password2Input' :
-		{
-			type :
-				'InputWidget',
-
-			password :
-				true,
-
-			style :
-				'input',
-
-			font :
-				fontPool.get( 14, 'la' ),
-
-			maxlen :
-				100,
-
-			frame  :
-			{
-				type :
-					'Frame',
-
-				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-80,
-
-					y :
-						0
-				},
-
-				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						130,
-
-					y :
-						25
-				}
-			}
-		},
-
-		'newsletterCheckBox' :
-		{
-			type :
-				'CheckBoxWidget',
-
-			style :
-				'checkbox',
-
-			checked :
-				true,
-
-			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-75,
-					y :
-						45
-				},
-
-				pse  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						-59,
-
-					y :
-						60
-				}
-			}
-		},
-
-		'newsletter2Label' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Updates and News',
-
-			font :
-				fontPool.get( 12, 'la' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor:
-					'c',
-
-				x :
-					-45,
-
-				y :
-					57
-			}
-		},
-
-		'newsletter3Label' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Never going to be more than an email a month. For sure!',
-
-			font :
-				fontPool.get( 12, 'la' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-45,
-
-				y :
-					77
-			}
-		},
-
-		'signupButton' :
+		'loginButton' :
 		{
 			type :
 				'ButtonWidget',
@@ -606,10 +318,10 @@ Design.SignUpForm =
 						'c',
 
 					x :
-						signupButton.w,
+						loginButton.w,
 
 					y :
-						signupButton.n
+						loginButton.n
 				},
 
 				pse  :
@@ -621,10 +333,10 @@ Design.SignUpForm =
 						'c',
 
 					x :
-						signupButton.w + signupButton.width,
+						loginButton.w + loginButton.width,
 
 					y :
-						signupButton.n + signupButton.height
+						loginButton.n + loginButton.height
 				}
 			},
 
@@ -634,7 +346,7 @@ Design.SignUpForm =
 					'LabelWidget',
 
 				text :
-					'sign up',
+					'log in',
 
 				font :
 					fontPool.get( 14, 'cm' ),
@@ -807,19 +519,11 @@ Design.SignUpForm =
 	[
 		'headline',
 		'usernameLabel',
-		'emailLabel',
 		'passwordLabel',
-		'password2Label',
-		'newsletterLabel',
 		'errorLabel',
 		'userInput',
-		'emailInput',
 		'passwordInput',
-		'password2Input',
-		'newsletterCheckBox',
-		'newsletter2Label',
-		'newsletter3Label',
-		'signupButton',
+		'loginButton',
 		'closeButton'
 	]
 };
