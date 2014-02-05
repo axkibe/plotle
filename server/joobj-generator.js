@@ -16,14 +16,6 @@ var
 		require( '../shared/jools' );
 
 
-if( typeof( require ) === 'undefined' )
-{
-	throw new Error(
-		'this code requires node!'
-	);
-}
-
-
 /*
 | Checks if a joobj definition looks ok.
 */
@@ -60,9 +52,7 @@ var
 		}
 	}
 
-	if(
-		!Jools.isString( joobj.name )
-	)
+	if( !Jools.isString( joobj.name ) )
 	{
 		throw new Error(
 			'name missing'
@@ -1101,6 +1091,25 @@ generateCreatorInheritance =
 	}
 
 	r.push(
+		'\tif( this !== ' + jj.reference + ' )',
+		'\t{',
+		'/**/\tif( CHECK )',
+		'/**/\t{',
+		'/**/\t\tif( inherit !== undefined )',
+		'/**/\t\t{',
+		'/**/\t\t\tthrow new Error(',
+		'/**/\t\t\t\t\'double inherit\'',
+		'/**/\t\t\t);',
+		'/**/\t\t}',
+		'/**/\t}',
+		'',
+		'\t\tinherit =',
+		'\t\t\tthis;',
+		'\t}',
+		''
+	);
+
+	r.push(
 		'\tif( inherit )',
 		'\t{'
 	);
@@ -1677,6 +1686,7 @@ generateCreator =
 		'| Creates a new ' + jj.name + ' object.',
 		'*/',
 		jj.reference + '.create =',
+		jj.reference + '.prototype.create =',
 		'\tfunction('
 	);
 

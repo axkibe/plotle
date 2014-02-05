@@ -291,9 +291,7 @@ Shell.prototype.setMode =
 		mode;
 
 	this._$discJockey =
-		Discs.Jockey.create(
-			'inherit',
-				this._$discJockey,
+		this._$discJockey.create(
 			'mode',
 				mode
 		);
@@ -350,9 +348,7 @@ Shell.prototype.setAction =
 		action;
 
 	this._$discJockey =
-		Discs.Jockey.create(
-			'inherit',
-				this._$discJockey,
+		this._$discJockey.create(
 			'action',
 				action
 		);
@@ -527,19 +523,15 @@ Shell.prototype.update =
 	}
 
 	this.$space =
-		Visual.Space.create(
+		this.$space.create(
 			'tree',
 				tree,
-			'inherit',
-				this.$space,
 			'mark',
 				mark
 		);
 
 	this._$discJockey =
-		Discs.Jockey.create(
-			'inherit',
-				this._$discJockey,
+		this._$discJockey.create(
 			'mark',
 				mark
 		);
@@ -561,9 +553,7 @@ Shell.prototype.setFocus =
 		case 'Caret' :
 
 			this.setMark(
-				Mark.Caret.create(
-					'inherit',
-						this.mark,
+				this.mark.create(
 					'focus',
 						focus
 				)
@@ -978,25 +968,19 @@ Shell.prototype.setMark =
 		mark;
 
 	this.$space =
-		Visual.Space.create(
-			'inherit',
-				this.$space,
+		this.$space.create(
 			'mark',
 				mark
 		);
 
 	this._$formJockey =
-		Forms.Jockey.create(
-			'inherit',
-				this._$formJockey,
+		this._$formJockey.create(
 			'mark',
 				mark
 		);
 
 	this._$discJockey =
-		Discs.Jockey.create(
-			'inherit',
-				this._$discJockey,
+		this._$discJockey.create(
 			'mark',
 				mark
 		);
@@ -1067,10 +1051,8 @@ Shell.prototype._setHover =
 	}
 
 	this._$discJockey =
-		Discs.Jockey.create(
-			'inherit',
-				this._$discJockey,
-				// FIXME make concernsHover
+		this._$discJockey.create(
+			// FIXME make concernsHover
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'discs' ?
 					Path.empty
@@ -1079,9 +1061,7 @@ Shell.prototype._setHover =
 		);
 
 	this._$formJockey =
-		Forms.Jockey.create(
-			'inherit',
-				this._$formJockey,
+		this._$formJockey.create(
 			'hover',
 				// FIXME make a concernsHover
 				path.isEmpty || path.get( 0 ) !== 'forms' ?
@@ -1091,9 +1071,7 @@ Shell.prototype._setHover =
 		);
 
 	this.$space =
-		Visual.Space.create(
-			'inherit',
-				this.$space,
+		this.$space.create(
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'space' ?
 					Path.empty
@@ -1129,17 +1107,13 @@ Shell.prototype.setTraits =
 
 	// FIXME precheck which traitSet affect
 	this._$formJockey =
-		Forms.Jockey.create(
-			'inherit',
-				this._$formJockey,
+		this._$formJockey.create(
 			'traitSet',
 				traitSet
 		);
 
 	this.$space =
-		Visual.Space.create(
-			'inherit',
-				this.$space,
+		this.$space.create(
 			'traitSet',
 				traitSet
 		);
@@ -1176,7 +1150,7 @@ Shell.prototype.specialKey =
 		focusItem =
 			this.$space.focusedItem( );
 
-	if( focusItem )
+	if( focusItem && focusItem.scrollMarkIntoView )
 	{
 		focusItem.scrollMarkIntoView( );
 	}
@@ -1203,12 +1177,12 @@ Shell.prototype.input =
 	if( display )
 	{
 		display.input( text );
-	
+
 		var
 			focusItem =
 				this.$space.focusedItem( );
 
-		if( focusItem )
+		if( focusItem && focusItem.scrollMarkIntoView )
 		{
 			focusItem.scrollMarkIntoView( );
 		}
@@ -1233,9 +1207,7 @@ Shell.prototype.resize =
 		fabric;
 
 	this.setView(
-		Euclid.View.create(
-			'inherit',
-				this.$view,
+		this.$view.create(
 			'height',
 				fabric.height,
 			'width',
@@ -1308,17 +1280,13 @@ Shell.prototype.setUser =
 		username;
 
 	this._$discJockey =
-		Discs.Jockey.create(
-			'inherit',
-				this._$discJockey,
+		this._$discJockey.create(
 			'username',
 				username
 		);
 
 	this._$formJockey =
-		Forms.Jockey.create(
-			'inherit',
-				this._$formJockey,
+		this._$formJockey.create(
 			'traitSet',
 				TraitSet.create(
 					'trait',
@@ -1354,26 +1322,20 @@ Shell.prototype.setView =
 	if( this.$space )
 	{
 		this.$space =
-			Visual.Space.create(
-				'inherit',
-					this.$space,
+			this.$space.create(
 				'view',
 					view
 			);
 	}
 
 	this._$discJockey =
-		Discs.Jockey.create(
-			'inherit',
-				this._$discJockey,
+		this._$discJockey.create(
 			'view',
 				view
 		);
 
 	this._$formJockey =
-		Forms.Jockey.create(
-			'inherit',
-				this._$formJockey,
+		this._$formJockey.create(
 			'view',
 				view
 		);
@@ -1467,9 +1429,7 @@ Shell.prototype.onAquireSpace =
 				this._$formJockey.get( 'NonExistingSpace' ).path;
 
 			this._$formJockey =
-				Forms.Jockey.create(
-					'inherit',
-						this._$formJockey,
+				this._$formJockey.create(
 					'traitSet',
 						TraitSet.create(
 							'trait',
@@ -1496,9 +1456,7 @@ Shell.prototype.onAquireSpace =
 				this._$formJockey.get( 'NoAccessToSpace' ).path;
 
 			this._$formJockey =
-				Forms.Jockey.create(
-					'inherit',
-						this._$formJockey,
+				this._$formJockey.create(
 					'traitSet',
 						TraitSet.create(
 							'trait',
@@ -1684,9 +1642,7 @@ Shell.prototype.arrivedAtSpace =
 	)
 {
 	this._$discJockey =
-		Discs.Jockey.create(
-			'inherit',
-				this._$discJockey,
+		this._$discJockey.create(
 			'access',
 				access,
 			'spaceUser',
@@ -1701,9 +1657,7 @@ Shell.prototype.arrivedAtSpace =
 			this._$formJockey.get( 'Space' ).path; // FIXME
 
 	this._$formJockey =
-		Forms.Jockey.create(
-			'inherit',
-				this._$formJockey,
+		this._$formJockey.create(
 			'traitSet',
 				TraitSet.create(
 					'trait',

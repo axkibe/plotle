@@ -178,6 +178,20 @@ Fabric.create =
 		}
 	}
 
+	if( this !== Fabric )
+	{
+/**/	if( CHECK )
+/**/	{
+/**/		if( inherit )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+
+		inherit =
+			this;
+	}
+
 	return new Fabric(
 		_tag,
 		canvas,

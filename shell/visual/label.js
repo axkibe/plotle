@@ -172,26 +172,41 @@ Label.prototype._init =
 		{ };
 
 	var
+		protoDoc =
+			inherit && inherit.sub.doc,
+
+		docPath;
+
+	if( !protoDoc )
+	{
+		protoDoc =
+			Visual.Doc;
+
+		docPath =
+			this.path.append( 'doc' );
+	}
+	else
+	{
+		docPath =
+			undefined; // inherit
+	}
+
+	var
 		doc =
 		this.sub.doc =
-			Visual.Doc.create(
-				'inherit',
-					inherit && inherit.sub.doc,
-				'path',
-					inherit ?
-						undefined
-						:
-						this.path.append( 'doc' ),
-				'tree',
-					twig.doc,
-				'fontsize',
-					this.fontsize,
+			protoDoc.create(
 				'flowWidth',
 					0,
-				'paraSep',
-					Math.round( this.fontsize / 20 ),
+				'fontsize',
+					this.fontsize,
 				'mark',
 					this.mark,
+				'paraSep',
+					Math.round( this.fontsize / 20 ),
+				'path',
+					docPath,
+				'tree',
+					twig.doc,
 				'view',
 					this.view
 			),

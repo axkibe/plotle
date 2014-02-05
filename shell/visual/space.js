@@ -65,7 +65,7 @@ if( JOOBJ )
 							'node currently hovered upon',
 
 						type :
-							'Path',
+							'Path'
 					},
 
 				mark :
@@ -187,7 +187,6 @@ Space.prototype._init =
 
 		sub[ k ] =
 			this._createItem(
-				this.tree.twig[ k ],
 				k,
 				inherit && inherit.sub[ k ],
 				traitSet
@@ -353,45 +352,46 @@ Jools.lazyValue(
 */
 Space.prototype._createItem =
 	function(
-		tree,
 		key,
-		inherit,
+		proto,
 		traitSet
 	)
 {
 	var
-		Proto =
+		// default undefined -> inherit
+		path,
+
+		tree =
+			this.tree.twig[ key ];
+
+	if( !proto )
+	{
+		proto =
 			Visual[ tree.twig.type ];
 
-
-/**/if( CHECK )
-/**/{
-/**/	if( !Proto )
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error(
-/**/			'unknown type: ' + tree.twig.type
-/**/		);
+/**/		if( !proto )
+/**/		{
+/**/			throw new Error(
+/**/				'unknown type: ' + tree.twig.type
+/**/			);
+/**/		}
 /**/	}
-/**/}
 
-	// FIXME; dont create a new path here
-	var
 		path =
 			this.path.appendNC( key );
+	}
+
 
 	return (
-		Proto.create(
-			'inherit',
-				inherit,
+		proto.create(
 			'tree',
 				tree,
 			'path',
 				path,
 			'hover',
-				path.subPathOf( this.hover ) ?
-					this.hover
-					:
-					Path.empty,
+				this.hover,
 			'mark',
 				this.mark,
 			'traitSet',
@@ -760,9 +760,7 @@ Space.prototype.dragStart =
 			);
 
 		shell.setAction(
-			Action.CreateGeneric.create(
-				'inherit',
-					action,
+			action.create(
 				'start',
 					p,
 				'model',
@@ -800,9 +798,7 @@ Space.prototype.dragStart =
 			);
 
 		shell.setAction(
-			Action.CreateGeneric.create(
-				'inherit',
-					action,
+			action.create(
 				'start',
 					p,
 				'model',
@@ -847,9 +843,7 @@ Space.prototype.dragStart =
 			);
 
 		shell.setAction(
-			Action.CreateGeneric.create(
-				'inherit',
-					action,
+			action.create(
 				'start',
 					p,
 				'model',
@@ -893,9 +887,7 @@ Space.prototype.dragStart =
 		case 'CreateRelation' :
 
 			shell.setAction(
-				Action.CreateRelation.create(
-					'inherit',
-						action,
+				action.create(
 					'pan',
 						view.pan,
 					'relationState',
@@ -1015,9 +1007,7 @@ Space.prototype.dragStop =
 
 					var
 						note =
-							Visual.Note.create(
-								'inherit',
-									action.transItem,
+							action.transItem.create(
 								'tree',
 									// FIXME elegance
 									action.transItem.tree.setPath(
@@ -1087,9 +1077,7 @@ Space.prototype.dragStop =
 						),
 
 						resized =
-							Visual[ action.transItem.reflect ].create(
-								'inherit',
-									model,
+							model.create(
 								'tree',
 									// FIXME elegance
 									action.transItem.tree.setPath(
@@ -1100,9 +1088,7 @@ Space.prototype.dragStop =
 							),
 
 						label =
-							Visual[ resized.reflect ].create(
-								'inherit',
-									resized,
+							resized.create(
 								'tree',
 									// FIXME elegance
 									resized.tree.setPath(
@@ -1448,9 +1434,7 @@ Space.prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						Visual[ model.reflect ].create(
-							'inherit',
-								model,
+						model.create(
 							'tree',
 								// FIXME elegance
 								model.tree.setPath(
@@ -1475,9 +1459,7 @@ Space.prototype.dragMove =
 						);
 
 					resized =
-						Visual[ action.transItem.reflect ].create(
-							'inherit',
-								model,
+						model.create(
 							'tree',
 								// FIXME elegance
 								model.tree.setPath(
@@ -1488,9 +1470,7 @@ Space.prototype.dragMove =
 						);
 
 					transItem =
-						Visual[ action.transItem.reflect ].create(
-							'inherit',
-								resized,
+						resized.create(
 							'tree',
 								// FIXME elegance
 								resized.tree.setPath(
@@ -1518,9 +1498,7 @@ Space.prototype.dragMove =
 			}
 
 			shell.setAction(
-				Action.CreateGeneric.create(
-					'inherit',
-						action,
+				action.create(
 					'transItem',
 						transItem
 				)
@@ -1538,9 +1516,7 @@ Space.prototype.dragMove =
 					p.sub( action.start );
 
 				shell.setView(
-					Euclid.View.create(
-						'inherit',
-							view,
+					view.create(
 						'pan',
 							action.pan.add(
 								pd.x / view.zoom,
@@ -1553,9 +1529,7 @@ Space.prototype.dragMove =
 			}
 
 			shell.setAction(
-				Action.CreateRelation.create(
-					'inherit',
-						action,
+				action.create(
 					'toItemPath',
 						Path.empty,
 					'toPoint',
@@ -1589,9 +1563,7 @@ Space.prototype.dragMove =
 				p.sub( action.start );
 
 			shell.setView(
-				Euclid.View.create(
-					'inherit',
-						view,
+				view.create(
 					'pan',
 						action.pan.add(
 							Math.round( pd.x / view.zoom ),
@@ -1612,9 +1584,7 @@ Space.prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						Visual[ origin.reflect ].create(
-							'inherit',
-								origin,
+						origin.create(
 							'tree',
 								// FIXME elegance
 								origin.tree.setPath(
@@ -1632,9 +1602,7 @@ Space.prototype.dragMove =
 				case 'pnw/fontsize' :
 
 					transItem =
-						Visual[ origin.reflect ].create(
-							'inherit',
-								origin,
+						origin.create(
 							'tree',
 								// FUTURE make this more elegant
 								origin.tree.setPath(
@@ -1649,9 +1617,7 @@ Space.prototype.dragMove =
 			}
 
 			shell.setAction(
-				Action.ItemDrag.create(
-					'inherit',
-						action,
+				action.create(
 					'transItem',
 						transItem
 				)

@@ -252,9 +252,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			View.create(
-				'inherit',
-					this,
+			this.create(
 				'pan',
 					Euclid.Point.zero
 			)
@@ -273,9 +271,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			View.create(
-				'inherit',
-					this,
+			this.create(
 				'pan',
 					Euclid.Point.zero,
 				'fact',
@@ -470,9 +466,7 @@ View.prototype.review =
 			-
 			1 / this.zoom;
 
-	return View.create(
-		'inherit',
-			this,
+	return this.create(
 		'fact',
 			f1,
 		'pan',
