@@ -195,8 +195,8 @@ Label.prototype._init =
 	)
 {
 	this.pos =
-		this.superFrame.computePoint(
-			this.tree.twig.pos
+		this.tree.twig.pos.compute(
+			this.superFrame
 		);
 
 	if( traitSet )

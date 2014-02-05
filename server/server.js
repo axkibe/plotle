@@ -815,6 +815,9 @@ Server.prototype.prepareResources =
 				'shell/euclid/line.js',
 					'fbj',
 
+				'shell/design/anchor-point.js',
+					'fbj',
+
 				'shell/shellverse.js',
 					'fb',
 

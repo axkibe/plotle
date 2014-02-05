@@ -381,8 +381,8 @@ Jools.lazyValue(
 					caption.twig.font,
 
 				pos =
-					this.frame.zeropnw.computePoint(
-						caption.twig.pos
+					caption.twig.pos.compute(
+						this.frame.zeropnw
 					);
 
 			if( !Jools.is( newline ) )

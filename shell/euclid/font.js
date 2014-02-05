@@ -1,16 +1,16 @@
 /*
-|
 | A font face style.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
 /*
 | Export
 */
-var Euclid;
+var
+	Euclid;
+
 
 Euclid =
 	Euclid || { };
@@ -31,7 +31,7 @@ var
 
 
 /*
-| The joobj definition
+| The joobj definition.
 */
 if( JOOBJ )
 {

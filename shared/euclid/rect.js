@@ -242,139 +242,6 @@ Jools.lazyValue(
 
 
 /*
-| Computes a point modelled relative to this rect.
-*/
-Rect.prototype.computePoint =
-	function(
-		model
-	)
-{
-	var
-		half =
-			Jools.half,
-
-		twig =
-			model.twig,
-
-		pnw =
-			this.pnw,
-
-		pse =
-			this.pse;
-
-	switch( twig.anchor )
-	{
-		case 'c'  :
-
-			return (
-				Euclid.Point.create(
-					'x',
-						half( pnw.x + pse.x ) + twig.x,
-					'y',
-						half( pnw.y + pse.y ) + twig.y
-				)
-			);
-
-		case 'n'  :
-
-			return (
-				Euclid.Point.create(
-					'x',
-						half( pnw.x + pse.x ) + twig.x,
-					'y',
-						twig.y + twig.y
-				)
-			);
-
-		case 'ne' :
-
-			return (
-				Euclid.Point.create(
-					'x',
-						pse.x + twig.x,
-					'y',
-						pnw.y + twig.y
-				)
-			);
-
-		case 'e'  :
-
-			return (
-				Euclid.Point.create(
-					'x',
-						pse.x + twig.x,
-					'y',
-						half( pnw.y + pse.y ) + twig.y
-				)
-			);
-
-		case 'se' :
-
-			return (
-				pse.add(
-					twig.x,
-					twig.y
-				)
-			);
-
-		case 's'  :
-
-			return (
-				Euclid.Point.create(
-					'x',
-						half( pnw.x + pse.x ) + twig.x,
-					'y',
-						pse.y + twig.y
-				)
-			);
-
-		case 'sw' :
-
-			return (
-				Euclid.Point.create(
-					'x',
-						pnw.x + twig.x,
-					'y',
-						pse.y + twig.y
-				)
-			);
-
-		case 'w'  :
-
-			return (
-				Euclid.Point.create(
-					'x',
-						pnw.x + twig.x,
-					'y',
-						half( pnw.y + pse.y ) +
-						twig.y
-				)
-			);
-
-		case 'nw' :
-
-			return (
-				pnw.add(
-					twig.x,
-					twig.y
-				)
-			);
-
-		default :
-
-			throw new Error(
-				CHECK
-				&&
-				(
-					'Invalid anchor: ' +
-					twig.anchor
-				)
-			);
-	}
-};
-
-
-/*
 | Computes a rect modelled relative to this rect.
 */
 Rect.prototype.computeRect =
@@ -384,9 +251,9 @@ Rect.prototype.computeRect =
 {
 	return Rect.create(
 		'pnw',
-			this.computePoint( model.pnw ),
+			model.pnw.compute( this ),
 		'pse',
-			this.computePoint( model.pse )
+			model.pse.compute( this )
 	);
 };
 
@@ -401,9 +268,9 @@ Rect.prototype.computeEllipse =
 {
 	return Euclid.Ellipse.create(
 		'pnw',
-			this.computePoint( model.pnw ),
+			model.pnw.compute( this ),
 		'pse',
-			this.computePoint( model.pse )
+			model.pse.compute( this )
 	);
 };
 

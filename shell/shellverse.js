@@ -9,6 +9,7 @@
 | Imports
 */
 var
+	Design,
 	Euclid,
 	Jools,
 	Meshverse;
@@ -43,21 +44,7 @@ Jools.subclass(
 
 
 Shellverse.prototype.AnchorPoint =
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-				anchor :
-					'String',
-
-				x :
-					'Number',
-
-				y :
-					'Number'
-			} )
-
-	} );
+	Design.AnchorPoint;
 
 
 Shellverse.prototype.BeziTo =
