@@ -1,3 +1,7 @@
+. PC
+. PNW
+. PSE
+. PSE_M1
 . $abort
 . $action
 . $aquireAjax

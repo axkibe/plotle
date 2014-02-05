@@ -20,6 +20,7 @@ Gruga =
 | Imports
 */
 var
+	Design,
 	fontPool;
 
 /*
@@ -90,19 +91,14 @@ Gruga.LoginForm =
 				fontPool.get( 22, 'la' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-225,
-
-				y :
-					-112
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-225,
+					'y',
+						-112
+				)
 		},
 
 		'usernameLabel' :
@@ -117,19 +113,14 @@ Gruga.LoginForm =
 				fontPool.get( 16, 'la' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-175,
-
-				y :
-					-49
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-175,
+					'y',
+						-49
+				)
 		},
 
 		'passwordLabel' :
@@ -144,19 +135,14 @@ Gruga.LoginForm =
 				fontPool.get( 16, 'la' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-175,
-
-				y :
-					-9
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-175,
+					'y',
+						-9
+				)
 		},
 
 		'errorLabel' :
@@ -172,19 +158,14 @@ Gruga.LoginForm =
 				fontPool.get( 14, 'car' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-20,
-
-				y :
-					-83
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-20,
+					'y',
+						-83
+				)
 		},
 
 		'userInput' :
@@ -210,34 +191,24 @@ Gruga.LoginForm =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-80,
-
-					y :
-						-67
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-80,
+						'y',
+							-67
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						130,
-
-					y :
-						-42
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							130,
+						'y',
+							-42
+					)
 			}
 		},
 
@@ -264,34 +235,24 @@ Gruga.LoginForm =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-80,
-
-					y :
-						-27
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-80,
+						'y',
+							-27
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						130,
-
-					y :
-						-2
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							130,
+						'y',
+							-2
+					)
 			}
 		},
 
@@ -309,35 +270,27 @@ Gruga.LoginForm =
 				type :
 					'Frame',
 
-				pnw  :
-				{
-					type :
-						'AnchorPoint',
+				pnw :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							loginButton.w,
+						'y',
+							loginButton.n
+					),
 
-					anchor :
-						'c',
-
-					x :
-						loginButton.w,
-
-					y :
-						loginButton.n
-				},
-
-				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						loginButton.w + loginButton.width,
-
-					y :
-						loginButton.n + loginButton.height
-				}
+				pse :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							loginButton.w +
+							loginButton.width,
+						'y',
+							loginButton.n +
+							loginButton.height
+					),
 			},
 
 			caption :
@@ -352,19 +305,7 @@ Gruga.LoginForm =
 					fontPool.get( 14, 'cm' ),
 
 				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.PC
 			},
 
 			shape :
@@ -373,34 +314,10 @@ Gruga.LoginForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		},
 
@@ -418,35 +335,27 @@ Gruga.LoginForm =
 				type :
 					'Frame',
 
-				pnw  :
-				{
-					type :
-						'AnchorPoint',
+				pnw :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							closeButton.w,
+						'y',
+							closeButton.n
+					),
 
-					anchor :
-						'c',
-
-					x :
-						closeButton.w,
-
-					y :
-						closeButton.n
-				},
-
-				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						closeButton.w + closeButton.width,
-
-					y :
-						closeButton.n + closeButton.height
-				}
+				pse :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							closeButton.w +
+							closeButton.width,
+						'y',
+							closeButton.n +
+							closeButton.height
+					)
 			},
 
 			caption :
@@ -460,20 +369,8 @@ Gruga.LoginForm =
 				font :
 					fontPool.get( 14, 'cm' ),
 
-				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+				pos :
+					Design.AnchorPoint.PC
 			},
 
 			shape :
@@ -482,34 +379,10 @@ Gruga.LoginForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		}
 	},

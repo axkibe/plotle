@@ -136,7 +136,7 @@ Gruga.SpaceForm =
 						'y',
 							closeButton.n +
 							closeButton.height
-					),
+					)
 			},
 
 			caption :

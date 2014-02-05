@@ -388,34 +388,24 @@ Gruga.SignUpForm =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-80,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-80,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						130,
-
-					y :
-						25
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							130,
+						'y',
+							25
+					)
 			}
 		},
 
@@ -436,33 +426,24 @@ Gruga.SignUpForm =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-75,
-					y :
-						45
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-75,
+						'y',
+							45
+					),
 
 				pse  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						-59,
-
-					y :
-						60
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-59,
+						'y',
+							60
+					)
 			}
 		},
 
@@ -478,19 +459,14 @@ Gruga.SignUpForm =
 				fontPool.get( 12, 'la' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor:
-					'c',
-
-				x :
-					-45,
-
-				y :
-					57
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-45,
+					'y',
+						57
+				)
 		},
 
 		'newsletter3Label' :
@@ -505,19 +481,14 @@ Gruga.SignUpForm =
 				fontPool.get( 12, 'la' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-45,
-
-				y :
-					77
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-45,
+					'y',
+						77
+				)
 		},
 
 		'signupButton' :
@@ -534,34 +505,26 @@ Gruga.SignUpForm =
 					'Frame',
 
 				pnw  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						signupButton.w,
-
-					y :
-						signupButton.n
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							signupButton.w,
+						'y',
+							signupButton.n
+					),
 
 				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						signupButton.w + signupButton.width,
-
-					y :
-						signupButton.n + signupButton.height
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							signupButton.w +
+							signupButton.width,
+						'y',
+							signupButton.n +
+							signupButton.height
+					)
 			},
 
 			caption :
@@ -576,19 +539,7 @@ Gruga.SignUpForm =
 					fontPool.get( 14, 'cm' ),
 
 				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.PC
 			},
 
 			shape :
@@ -597,34 +548,10 @@ Gruga.SignUpForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		},
 
@@ -643,34 +570,26 @@ Gruga.SignUpForm =
 					'Frame',
 
 				pnw  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						closeButton.w,
-
-					y :
-						closeButton.n
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							closeButton.w,
+						'y',
+							closeButton.n
+					),
 
 				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						closeButton.w + closeButton.width,
-
-					y :
-						closeButton.n + closeButton.height
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							closeButton.w +
+							closeButton.width,
+						'y',
+							closeButton.n +
+							closeButton.height
+					)
 			},
 
 			caption :
@@ -685,19 +604,7 @@ Gruga.SignUpForm =
 					fontPool.get( 14, 'cm' ),
 
 				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.PC
 			},
 
 			shape :
@@ -706,34 +613,10 @@ Gruga.SignUpForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		}
 	},

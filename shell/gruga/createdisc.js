@@ -361,9 +361,8 @@ Gruga.CreateDisc =
 					design.generic.font,
 
 				pos :
-					Design.AnchorPoint.PC,
+					Design.AnchorPoint.PC
 			},
-
 
 			frame :
 			{

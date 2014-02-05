@@ -20,6 +20,7 @@ Gruga =
 | Imports
 */
 var
+	Design,
 	fontPool;
 
 /*
@@ -71,19 +72,14 @@ Gruga.NoAccessToSpaceForm =
 				fontPool.get( 22, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-120
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-120
+				)
 		},
 
 		'message1' :
@@ -98,19 +94,14 @@ Gruga.NoAccessToSpaceForm =
 				fontPool.get( 16, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-50
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-50
+				)
 		},
 
 		'okButton' :
@@ -127,34 +118,26 @@ Gruga.NoAccessToSpaceForm =
 					'Frame',
 
 				pnw  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						okButton.w,
-
-					y :
-						okButton.n
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							okButton.w,
+						'y',
+							okButton.n
+					),
 
 				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						okButton.w + okButton.width,
-
-					y :
-						okButton.n + okButton.height
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							okButton.w +
+							okButton.width,
+						'y',
+							okButton.n +
+							okButton.height
+					)
 			},
 
 			caption :
@@ -169,19 +152,7 @@ Gruga.NoAccessToSpaceForm =
 					fontPool.get( 14, 'cm' ),
 
 				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.PC
 			},
 
 			shape :
@@ -190,34 +161,10 @@ Gruga.NoAccessToSpaceForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		}
 	},
