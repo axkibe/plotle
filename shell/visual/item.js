@@ -537,9 +537,7 @@ Item.prototype.dragStart =
 		case 'CreateRelation' :
 
 			shell.setAction(
-				Action.CreateRelation.create(
-					'inherit',
-						action,
+				action.create(
 					'fromItemPath',
 						this.path,
 					'relationState',
@@ -636,9 +634,7 @@ Item.prototype.dragMove =
 			}
 
 			shell.setAction(
-				Action.CreateRelation.create(
-					'inherit',
-						action,
+				action.create(
 					'toItemPath',
 						this.path
 				)

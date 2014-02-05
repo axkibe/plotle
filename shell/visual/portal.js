@@ -1875,9 +1875,7 @@ Portal.prototype._keyPos1 =
 	function( )
 {
 	shell.setMark(
-		Mark.Caret.create(
-			'inherit',
-				this.mark,
+		this.mark.create(
 			'at',
 				0
 		)

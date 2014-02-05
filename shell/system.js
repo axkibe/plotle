@@ -268,19 +268,19 @@ var System =
 	document.onkeyup =
 		makeCatcher(
 			this,
-			this._onHiddenKeyUp
+			this._onKeyUp
 		);
 
 	document.onkeydown =
 		makeCatcher(
 			this,
-			this._onHiddenKeyDown
+			this._onKeyDown
 		);
 
 	document.onkeypress =
 		makeCatcher(
 			this,
-			this._onHiddenKeyPress
+			this._onKeyPress
 		);
 
 	this._testInputCatcher =
@@ -697,14 +697,15 @@ System.prototype._captureEvents =
 | Key down on hidden input field.
 | Used when suggesting a keyboard.
 */
-System.prototype._onHiddenKeyDown =
+System.prototype._onKeyDown =
 	function(
 		event
 	)
 {
 	var
 		kcode =
-			this._$lastSpecialKey = event.keyCode;
+		this._$lastSpecialKey =
+			event.keyCode;
 
 	if(
 		!this._specialKey(
@@ -722,7 +723,7 @@ System.prototype._onHiddenKeyDown =
 /*
 | Hidden input key press.
 */
-System.prototype._onHiddenKeyPress =
+System.prototype._onKeyPress =
 	function(
 		event
 	)
@@ -761,6 +762,13 @@ System.prototype._onHiddenKeyPress =
 			ctrl
 		);
 	}
+	else
+	{
+		if( !shell.suggestingKeyboard( ) )
+		{
+			shell.input( String.fromCharCode( kcode ) );
+		}
+	}
 
 	this._$lastSpecialKey =
 		-1;
@@ -779,7 +787,7 @@ System.prototype._onHiddenKeyPress =
 /*
 | Hidden input key up.
 */
-System.prototype._onHiddenKeyUp =
+System.prototype._onKeyUp =
 	function(
 		// event
 	)

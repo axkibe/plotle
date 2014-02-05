@@ -220,25 +220,36 @@ Note.prototype._init =
 	this.sub =
 		{ };
 
+	var
+		protoDoc =
+			inherit && inherit.sub.doc,
+
+		// default undefined -> inherit
+		docPath;
+
+	if( !protoDoc )
+	{
+		protoDoc =
+			Visual.Doc;
+
+		docPath =
+			this.path.append( 'doc' );
+	}
+
 	this.sub.doc =
-		Visual.Doc.create(
-			'inherit',
-				inherit && inherit.sub.doc,
-			'path',
-				inherit ?
-					undefined
-					:
-					this.path.append( 'doc' ),
-			'tree',
-				twig.doc,
-			'fontsize',
-				this.fontsize,
+		protoDoc.create(
 			'flowWidth',
 				zone.width - Note.innerMargin.x,
-			'paraSep',
-				Jools.half( this.fontsize ),
+			'fontsize',
+				this.fontsize,
 			'mark',
 				this.mark,
+			'paraSep',
+				Jools.half( this.fontsize ),
+			'path',
+				docPath,
+			'tree',
+				twig.doc,
 			'view',
 				this.view
 		);
@@ -286,8 +297,6 @@ Note.prototype._init =
 
 	this.scrollbarY =
 		Visual.Scrollbar.create(
-			'pos',
-				this.scrolly,
 			'aperture',
 				zone.height - this.innerMargin.y,
 			'max',
@@ -299,6 +308,8 @@ Note.prototype._init =
 					'y',
 						zone.pnw.y + theme.scrollbar.vdis
 				),
+			'pos',
+				this.scrolly,
 			'size',
 				zone.height - theme.scrollbar.vdis * 2
 		);

@@ -170,7 +170,6 @@ if( JOOBJ )
 
 		init :
 			[
-				'inherit',
 				'traitSet'
 			]
 	};
@@ -187,7 +186,6 @@ var
 */
 CheckBox.prototype._init =
 	function(
-		inherit,
 		traitSet
 	)
 {

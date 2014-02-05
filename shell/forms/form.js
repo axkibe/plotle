@@ -427,15 +427,15 @@ Form.prototype.input =
 	)
 {
 	var
-		item =
+		widget =
 			this._focusedWidget( );
 
-	if( !item )
+	if( !widget )
 	{
 		return;
 	}
 
-	item.input( text );
+	widget.input( text );
 };
 
 

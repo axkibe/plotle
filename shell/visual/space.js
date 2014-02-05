@@ -1142,9 +1142,7 @@ Space.prototype.dragStop =
 
 					var
 						portal =
-							Visual.Portal.create(
-								'inherit',
-									action.transItem,
+							action.transItem.create(
 								'tree',
 									// TODO elegance
 									action.transItem.tree.setPath(
@@ -1243,9 +1241,7 @@ Space.prototype.dragStop =
 				case 'pan' :
 
 					shell.setAction(
-						Action.CreateRelation.create(
-							'inherit',
-								action,
+						action.create(
 							'relationState',
 								'start'
 						)
@@ -1640,9 +1636,7 @@ Space.prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						Visual[ action.origin.reflect ].create(
-							'inherit',
-								origin,
+						origin.create(
 							// FIXME elegance
 							'tree',
 								origin.tree.setPath(
@@ -1703,9 +1697,7 @@ Space.prototype.dragMove =
 						);
 
 					resized =
-						Visual[ action.origin.reflect ].create(
-							'inherit',
-								origin,
+						origin.create(
 							'tree',
 								// FUTURE do more elegantly
 								origin.tree.setPath(
@@ -1716,9 +1708,7 @@ Space.prototype.dragMove =
 						);
 
 					transItem =
-						Visual[ resized.reflect ].create(
-							'inherit',
-								resized,
+						resized.create(
 							'tree',
 								resized.tree.setPath(
 									Path.empty.append( 'pnw' ),
@@ -1753,9 +1743,7 @@ Space.prototype.dragMove =
 			}
 
 			shell.setAction(
-				Action.ItemResize.create(
-					'inherit',
-						action,
+				action.create(
 					'transItem',
 						transItem
 				)
