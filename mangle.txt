@@ -323,7 +323,7 @@
 . color
 . comment
 . computeEllipse
-. computePoint
+. compute
 . computeRect
 . concerns
 . concernsMark

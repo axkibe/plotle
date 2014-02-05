@@ -20,6 +20,7 @@ Gruga =
 | Imports
 */
 var
+	Design,
 	fontPool;
 
 
@@ -113,19 +114,14 @@ Gruga.CreateDisc =
 					design.generic.font,
 
 				pos :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					)
 			},
 
 
@@ -135,36 +131,26 @@ Gruga.CreateDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.note.x,
-
-					y :
-						design.note.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.note.x,
+						'y',
+							design.note.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.note.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.note.x +
 							design.generic.width,
-
-					y :
-						design.note.y +
+						'y',
+							design.note.y +
 							design.generic.height
-				}
+					)
 			},
 
 			shape :
@@ -173,34 +159,24 @@ Gruga.CreateDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -224,19 +200,14 @@ Gruga.CreateDisc =
 					design.generic.font,
 
 				pos :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					)
 			},
 
 
@@ -246,36 +217,26 @@ Gruga.CreateDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.label.x,
-
-					y :
-						design.label.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.label.x,
+						'y',
+							design.label.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.label.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.label.x +
 							design.generic.width,
-
-					y :
-						design.label.y +
+						'y',
+							design.label.y +
 							design.generic.height
-				}
+					)
 			},
 
 			shape :
@@ -284,34 +245,24 @@ Gruga.CreateDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -338,19 +289,14 @@ Gruga.CreateDisc =
 					design.generic.font,
 
 				pos :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					)
 			},
 
 
@@ -360,36 +306,26 @@ Gruga.CreateDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.relation.x,
-
-					y :
-						design.relation.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.relation.x,
+						'y',
+							design.relation.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.relation.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.relation.x +
 							design.generic.width,
-
-					y :
-						design.relation.y +
+						'y',
+							design.relation.y +
 							design.generic.height
-				}
+					)
 			},
 
 			shape :

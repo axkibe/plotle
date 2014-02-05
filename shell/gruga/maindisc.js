@@ -20,6 +20,7 @@ Gruga =
 | Imports
 */
 var
+	Design,
 	fontPool;
 
 /*
@@ -169,36 +170,26 @@ Gruga.MainDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.normal.x,
-
-					y :
-						design.normal.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.normal.x,
+						'y',
+							design.normal.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.normal.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.normal.x +
 							design.generic.width,
-
-					y :
-						design.normal.y +
+						'y',
+							design.normal.y +
 							design.generic.height
-				}
+					)
 			},
 
 			shape :
@@ -207,34 +198,24 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -261,19 +242,14 @@ Gruga.MainDisc =
 					design.generic.font,
 
 				pos :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					)
 			},
 
 			frame :
@@ -282,36 +258,26 @@ Gruga.MainDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.create.x,
-
-					y :
-						design.create.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.create.x,
+						'y',
+							design.create.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.create.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.create.x +
 							design.generic.width,
-
-					y :
-						design.create.y +
+						'y',
+							design.create.y +
 							design.generic.height
-				}
+					)
 			},
 
 			shape :
@@ -320,34 +286,24 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -374,36 +330,26 @@ Gruga.MainDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.remove.x,
-
-					y :
-						design.remove.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.remove.x,
+						'y',
+							design.remove.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.remove.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.remove.x +
 							design.generic.width,
-
-					y :
-						design.remove.y +
+						'y',
+							design.remove.y +
 							design.generic.height
-				}
+					)
 			},
 
 			shape :
@@ -412,34 +358,24 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -466,36 +402,26 @@ Gruga.MainDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.moveto.x,
-
-					y :
-						design.moveto.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.moveto.x,
+						'y',
+							design.moveto.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.moveto.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.moveto.x +
 							design.generic.width,
-
-					y :
-						design.moveto.y +
+						'y',
+							design.moveto.y +
 							design.generic.height
-				}
+					)
 			},
 
 			shape :
@@ -504,34 +430,24 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -550,36 +466,26 @@ Gruga.MainDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.space.x,
-
-					y :
-						design.space.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.space.x,
+						'y',
+							design.space.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.space.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.space.x +
 							design.space.width,
-
-					y :
-						design.space.y +
+						'y',
+							design.space.y +
 							design.space.height
-				}
+					)
 			},
 
 			caption :
@@ -594,19 +500,14 @@ Gruga.MainDisc =
 					fontPool.get( 12, 'cm' ),
 
 				pos :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				rotate :
 					- Math.PI / 2
@@ -618,34 +519,25 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						-60,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							-60,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
 
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -663,36 +555,26 @@ Gruga.MainDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.user.x,
-
-					y :
-						design.user.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.user.x,
+						'y',
+							design.user.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.user.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.user.x +
 							design.user.width,
-
-					y :
-						design.user.y +
+						'y',
+							design.user.y +
 							design.user.height
-				}
+					)
 			},
 
 			caption :
@@ -707,19 +589,14 @@ Gruga.MainDisc =
 					fontPool.get( 12, 'cm' ),
 
 				pos :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				rotate :
 					- Math.PI / 2
@@ -731,34 +608,24 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						-70,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							-70,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -788,19 +655,14 @@ Gruga.MainDisc =
 					fontPool.get( 13, 'cm' ),
 
 				pos :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					)
 			},
 
 			frame :
@@ -809,36 +671,26 @@ Gruga.MainDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.login.x,
-
-					y :
-						design.login.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.login.x,
+						'y',
+							design.login.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.login.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.login.x +
 							design.generic.width,
-
-					y :
-						design.login.y +
+						'y',
+							design.login.y +
 							design.generic.height
-				}
+					)
 			},
 
 			shape :
@@ -847,34 +699,24 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -904,19 +746,14 @@ Gruga.MainDisc =
 					fontPool.get( 13, 'cm' ),
 
 				pos :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					)
 			},
 
 			frame :
@@ -925,36 +762,26 @@ Gruga.MainDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.signup.x,
-
-					y :
-						design.signup.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.signup.x,
+						'y',
+							design.signup.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.signup.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.signup.x +
 							design.generic.width,
-
-					y :
-						design.signup.y +
+						'y',
+							design.signup.y +
 							design.generic.height
-				}
+					)
 			},
 
 			shape :
@@ -963,148 +790,26 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		}
-
-		/*
-		'Help' :
-		{
-			type :
-				'ButtonWidget',
-
-			style :
-				'mainButton',
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'help',
-
-				font :
-					fontPool.get( 13, 'cm' ),
-
-				pos :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
-			},
-
-			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.help.x,
-
-					y :
-						design.help.y
-				},
-
-				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.help.x +
-							design.generic.width,
-
-					y :
-						design.help.y +
-							design.generic.height
-				}
-			},
-
-			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
-
-				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
-			}
-		}
-		*/
 	},
 
 	ranks :
@@ -1117,7 +822,6 @@ Gruga.MainDisc =
 		'User',
 		'Login',
 		'SignUp'
-		// 'help'
 	]
 };
 

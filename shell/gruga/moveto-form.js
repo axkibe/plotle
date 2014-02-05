@@ -20,6 +20,7 @@ Gruga =
 | Imports
 */
 var
+	Design,
 	fontPool;
 
 /*
@@ -100,19 +101,14 @@ Gruga.MoveToForm =
 				fontPool.get( 22, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-150
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-150
+				)
 		},
 
 		'meshcraftHomeButton' :
@@ -129,36 +125,26 @@ Gruga.MoveToForm =
 					'Frame',
 
 				pnw  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						meshcraftHomeButton.w,
-
-					y :
-						meshcraftHomeButton.n
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							meshcraftHomeButton.w,
+						'y',
+							meshcraftHomeButton.n
+					),
 
 				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						meshcraftHomeButton.w +
-						meshcraftHomeButton.width,
-
-					y :
-						meshcraftHomeButton.n +
-						meshcraftHomeButton.height
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							meshcraftHomeButton.w +
+							meshcraftHomeButton.width,
+						'y',
+							meshcraftHomeButton.n +
+							meshcraftHomeButton.height
+					)
 			},
 
 			caption :
@@ -176,19 +162,14 @@ Gruga.MoveToForm =
 					fontPool.get( 14, 'cm' ),
 
 				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					)
 			},
 
 			shape :
@@ -197,34 +178,24 @@ Gruga.MoveToForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -241,37 +212,27 @@ Gruga.MoveToForm =
 				type :
 					'Frame',
 
-				pnw  :
-				{
-					type :
-						'AnchorPoint',
+				pnw :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							meshcraftSandboxButton.w,
+						'y',
+							meshcraftSandboxButton.n
+					),
 
-					anchor :
-						'c',
-
-					x :
-						meshcraftSandboxButton.w,
-
-					y :
-						meshcraftSandboxButton.n
-				},
-
-				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						meshcraftSandboxButton.w +
-						meshcraftSandboxButton.width,
-
-					y :
-						meshcraftSandboxButton.n +
-						meshcraftSandboxButton.height
-				}
+				pse :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							meshcraftSandboxButton.w +
+							meshcraftSandboxButton.width,
+						'y',
+							meshcraftSandboxButton.n +
+							meshcraftSandboxButton.height
+					)
 			},
 
 			caption :
@@ -289,19 +250,14 @@ Gruga.MoveToForm =
 					fontPool.get( 14, 'cm' ),
 
 				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					)
 			},
 
 			shape :
@@ -310,34 +266,24 @@ Gruga.MoveToForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		},
 
@@ -354,35 +300,27 @@ Gruga.MoveToForm =
 				type :
 					'Frame',
 
-				pnw  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						userHomeButton.w,
-
-					y :
-						userHomeButton.n
-				},
+				pnw :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							userHomeButton.w,
+						'y',
+							userHomeButton.n
+					),
 
 				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						userHomeButton.w + userHomeButton.width,
-
-					y :
-						userHomeButton.n + userHomeButton.height
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							userHomeButton.w +
+							userHomeButton.width,
+						'y',
+							userHomeButton.n +
+							userHomeButton.height
+					)
 			},
 
 			caption :
@@ -400,19 +338,14 @@ Gruga.MoveToForm =
 					fontPool.get( 14, 'cm' ),
 
 				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					)
 			},
 
 			shape :
@@ -421,34 +354,24 @@ Gruga.MoveToForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							0,
+						'y',
+							0
+					),
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'se',
+						'x',
+							-1,
+						'y',
+							-1
+					)
 			}
 		}
 	},
