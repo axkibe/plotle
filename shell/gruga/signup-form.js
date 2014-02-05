@@ -20,6 +20,7 @@ Gruga =
 | Imports
 */
 var
+	Design,
 	fontPool;
 
 /*
@@ -88,19 +89,14 @@ Gruga.SignUpForm =
 				fontPool.get( 22, 'la' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-245,
-
-				y :
-					-165
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-245,
+					'y',
+						-165
+				)
 		},
 
 		'usernameLabel' :
@@ -115,19 +111,14 @@ Gruga.SignUpForm =
 				fontPool.get( 16, 'ra' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-98,
-
-				y :
-					-102
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-98,
+					'y',
+						-102
+				)
 		},
 
 		'emailLabel' :
@@ -142,19 +133,14 @@ Gruga.SignUpForm =
 				fontPool.get( 16, 'ra' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-98,
-
-				y :
-					-62
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-98,
+					'y',
+						-62
+				)
 		},
 
 		'passwordLabel' :
@@ -169,19 +155,14 @@ Gruga.SignUpForm =
 				fontPool.get( 16, 'ra' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-98,
-
-				y :
-					-22
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-98,
+					'y',
+						-22
+				)
 		},
 
 		'password2Label' :
@@ -196,19 +177,14 @@ Gruga.SignUpForm =
 				fontPool.get( 16, 'ra' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-98,
-
-				y :
-					18
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-98,
+					'y',
+						18
+				)
 		},
 
 		'newsletterLabel' :
@@ -223,19 +199,14 @@ Gruga.SignUpForm =
 				fontPool.get( 16, 'ra' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-98,
-
-				y :
-					58
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-98,
+					'y',
+						58
+				)
 		},
 
 		'errorLabel' :
@@ -251,19 +222,14 @@ Gruga.SignUpForm =
 				fontPool.get( 14, 'car' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-20,
-
-				y :
-					-136
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						-20,
+					'y',
+						-136
+				)
 		},
 
 		'userInput' :
@@ -289,34 +255,24 @@ Gruga.SignUpForm =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-80,
-
-					y :
-						-120
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-80,
+						'y',
+							-120
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						130,
-
-					y :
-						-95
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							130,
+						'y',
+							-95
+					)
 			}
 		},
 
@@ -343,34 +299,24 @@ Gruga.SignUpForm =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-80,
-
-					y :
-						-80
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-80,
+						'y',
+							-80
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						130,
-
-					y :
-						-55
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							130,
+						'y',
+							-55
+					)
 			}
 		},
 
@@ -397,34 +343,24 @@ Gruga.SignUpForm =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-80,
-
-					y :
-						-40
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-80,
+						'y',
+							-40
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						130,
-
-					y :
-						-15
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							130,
+						'y',
+							-15
+					)
 			}
 		},
 

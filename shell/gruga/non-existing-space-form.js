@@ -20,6 +20,7 @@ Gruga =
 | Imports
 */
 var
+	Design,
 	fontPool;
 
 /*
@@ -91,19 +92,14 @@ Gruga.NonExistingSpaceForm =
 				fontPool.get( 22, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-120
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-120
+				)
 		},
 
 		'message1' :
@@ -118,19 +114,14 @@ Gruga.NonExistingSpaceForm =
 				fontPool.get( 16, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-50
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-50
+				)
 		},
 
 		'noButton' :
@@ -147,34 +138,26 @@ Gruga.NonExistingSpaceForm =
 					'Frame',
 
 				pnw  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						noButton.w,
-
-					y :
-						noButton.n
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							noButton.w,
+						'y',
+							noButton.n
+					),
 
 				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						noButton.w + noButton.width,
-
-					y :
-						noButton.n + noButton.height
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							noButton.w +
+							noButton.width,
+						'y',
+							noButton.n +
+							noButton.height
+					)
 			},
 
 			caption :
@@ -189,19 +172,7 @@ Gruga.NonExistingSpaceForm =
 					fontPool.get( 14, 'cm' ),
 
 				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.PC
 			},
 
 			shape :
@@ -210,34 +181,10 @@ Gruga.NonExistingSpaceForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		},
 
@@ -255,34 +202,26 @@ Gruga.NonExistingSpaceForm =
 					'Frame',
 
 				pnw  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						yesButton.w,
-
-					y :
-						yesButton.n
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							yesButton.w,
+						'y',
+							yesButton.n
+					),
 
 				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						yesButton.w + yesButton.width,
-
-					y :
-						yesButton.n + yesButton.height
-				}
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							yesButton.w +
+							yesButton.width,
+						'y',
+							yesButton.n +
+							yesButton.height
+					)
 			},
 
 			caption :
@@ -297,19 +236,7 @@ Gruga.NonExistingSpaceForm =
 					fontPool.get( 14, 'cm' ),
 
 				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.PC
 			},
 
 			shape :
@@ -318,34 +245,10 @@ Gruga.NonExistingSpaceForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		}
 	},

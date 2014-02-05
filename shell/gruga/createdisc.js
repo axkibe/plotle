@@ -334,34 +334,10 @@ Gruga.CreateDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		},
 
@@ -385,19 +361,7 @@ Gruga.CreateDisc =
 					design.generic.font,
 
 				pos :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.PC,
 			},
 
 
@@ -407,36 +371,26 @@ Gruga.CreateDisc =
 					'Frame',
 
 				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.portal.x,
-
-					y :
-						design.portal.y
-				},
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.portal.x,
+						'y',
+							design.portal.y
+					),
 
 				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'nw',
-
-					x :
-						design.portal.x +
+					Design.AnchorPoint.create(
+						'anchor',
+							'nw',
+						'x',
+							design.portal.x +
 							design.generic.width,
-
-					y :
-						design.portal.y +
+						'y',
+							design.portal.y +
 							design.generic.height
-				}
+					)
 			},
 
 			shape :
@@ -445,34 +399,10 @@ Gruga.CreateDisc =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		}
 	},

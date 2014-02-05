@@ -20,6 +20,7 @@ Gruga =
 | Imports
 */
 var
+	Design,
 	fontPool;
 
 /*
@@ -70,19 +71,14 @@ Gruga.UserForm =
 				fontPool.get( 22, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-120
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-120
+				)
 		},
 
 		'visitor1' :
@@ -97,19 +93,14 @@ Gruga.UserForm =
 				fontPool.get( 16, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-50
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-50
+				)
 		},
 
 		'visitor2' :
@@ -124,19 +115,7 @@ Gruga.UserForm =
 				fontPool.get( 16, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					0
-			}
+				Design.AnchorPoint.PC
 		},
 
 		'visitor3' :
@@ -151,19 +130,14 @@ Gruga.UserForm =
 				fontPool.get( 16, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					20
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						20
+				)
 		},
 
 		'visitor4' :
@@ -178,19 +152,14 @@ Gruga.UserForm =
 				fontPool.get( 16, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					40
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						40
+				)
 		},
 
 		'greeting1' :
@@ -205,19 +174,14 @@ Gruga.UserForm =
 				fontPool.get( 16, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-50
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-50
+				)
 		},
 
 		'greeting2' :
@@ -232,19 +196,14 @@ Gruga.UserForm =
 				fontPool.get( 16, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-10
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-10
+				)
 		},
 
 		'greeting3' :
@@ -259,19 +218,14 @@ Gruga.UserForm =
 				fontPool.get( 16, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					10
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						10
+				)
 		},
 
 		'closeButton' :
@@ -287,35 +241,27 @@ Gruga.UserForm =
 				type :
 					'Frame',
 
-				pnw  :
-				{
-					type :
-						'AnchorPoint',
+				pnw :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							closeButton.w,
+						'y',
+							closeButton.n
+					),
 
-					anchor :
-						'c',
-
-					x :
-						closeButton.w,
-
-					y :
-						closeButton.n
-				},
-
-				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						closeButton.w + closeButton.width,
-
-					y :
-						closeButton.n + closeButton.height
-				}
+				pse :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							closeButton.w +
+							closeButton.width,
+						'y',
+							closeButton.n +
+							closeButton.height
+					)
 			},
 
 			caption :
@@ -329,20 +275,15 @@ Gruga.UserForm =
 				font :
 					fontPool.get( 14, 'cm' ),
 
-				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+				pos :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					)
 			},
 
 			shape :
@@ -351,34 +292,10 @@ Gruga.UserForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		}
 	},

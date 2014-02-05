@@ -20,6 +20,7 @@ Gruga =
 | Imports
 */
 var
+	Design,
 	fontPool;
 
 
@@ -72,19 +73,14 @@ Gruga.WelcomeForm =
 				fontPool.get( 22, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-120
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-120
+				)
 		},
 
 		'message1' :
@@ -99,19 +95,14 @@ Gruga.WelcomeForm =
 				fontPool.get( 16, 'ca' ),
 
 			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					0,
-
-				y :
-					-50
-			}
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						-50
+				)
 		},
 
 		'closeButton' :
@@ -127,35 +118,27 @@ Gruga.WelcomeForm =
 				type :
 					'Frame',
 
-				pnw  :
-				{
-					type :
-						'AnchorPoint',
+				pnw :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							closeButton.w,
+						'y',
+							closeButton.n
+					),
 
-					anchor :
-						'c',
-
-					x :
-						closeButton.w,
-
-					y :
-						closeButton.n
-				},
-
-				pse  :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						closeButton.w + closeButton.width,
-
-					y :
-						closeButton.n + closeButton.height
-				}
+				pse :
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							closeButton.w +
+							closeButton.width,
+						'y',
+							closeButton.n +
+							closeButton.height
+					)
 			},
 
 			caption :
@@ -170,19 +153,7 @@ Gruga.WelcomeForm =
 					fontPool.get( 14, 'cm' ),
 
 				pos  :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
+					Design.AnchorPoint.PC
 			},
 
 			shape :
@@ -191,34 +162,10 @@ Gruga.WelcomeForm =
 					'Ellipse',
 
 				pnw :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'nw',
-
-					x :
-						0,
-
-					y :
-						0
-				},
+					Design.AnchorPoint.PNW,
 
 				pse :
-				{
-					type:
-						'AnchorPoint',
-
-					anchor:
-						'se',
-
-					x :
-						-1,
-
-					y :
-						-1
-				}
+					Design.AnchorPoint.PSE_M1
 			}
 		}
 	},
