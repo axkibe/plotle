@@ -292,10 +292,6 @@ buildJJ =
 	creList =
 		aList.slice( );
 
-	if( aList.length > 0 )
-	{
-		creList.push( 'inherit' );
-	}
 
 	if( joobj.hasJSON )
 	{
@@ -919,7 +915,9 @@ generateCreatorFreeStringsParser =
 		attr;
 
 	r.push(
-		'\tvar'
+		'\tvar',
+		'\t\tinherit' +
+			( jj.creList.length > 0 ? ',' : ';' )
 	);
 
 	for(
