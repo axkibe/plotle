@@ -119,6 +119,7 @@ Euclid.Fabric =
 | Creator.
 */
 Fabric.create =
+Fabric.prototype.create =
 	function(
 		// free strings
 	)

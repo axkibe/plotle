@@ -656,9 +656,7 @@ System.prototype._onResize =
 	var
 		fabric =
 		this._fabric =
-			Euclid.Fabric.create(
-				'inherit',
-					this._fabric,
+			this._fabric.create(
 				'width',
 					window.innerWidth - 1,
 				'height',
