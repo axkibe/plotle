@@ -47,36 +47,6 @@ Shellverse.prototype.AnchorPoint =
 	Design.AnchorPoint;
 
 
-Shellverse.prototype.BeziTo =
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-				to :
-					'AnchorPoint',
-
-				bx :
-					'Number',
-
-				by :
-					'Number',
-
-				// FIXME Maybe replace with "Tangent"
-				c1x :
-					'Number',
-
-				c1y :
-					'Number',
-
-				c2x :
-					'Number',
-
-				c2y :
-					'Number'
-			} )
-	} );
-
-
 Shellverse.prototype.ButtonWidget =
 	Jools.immute( {
 
@@ -89,7 +59,7 @@ Shellverse.prototype.ButtonWidget =
 							true
 					} ),
 
-				frame :
+				designFrame :
 					'AnchorRect',
 
 				style :
@@ -123,7 +93,7 @@ Shellverse.prototype.CheckBoxWidget =
 		must :
 			Jools.immute( {
 
-				frame :
+				designFrame :
 					'AnchorRect',
 
 				checked :
@@ -167,7 +137,7 @@ Shellverse.prototype.InputWidget =
 		must :
 			Jools.immute( {
 
-				frame :
+				designFrame :
 					'AnchorRect',
 
 				password :
@@ -240,41 +210,6 @@ Shellverse.prototype.Layout =
 
 	} );
 
-
-Shellverse.prototype.LineTo =
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-				to :
-					'AnchorPoint',
-
-				bx :
-					'Number',
-
-				by :
-					'Number'
-			} )
-
-	} );
-
-
-Shellverse.prototype.MoveTo =
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-				to :
-					'AnchorPoint',
-
-				bx :
-					'Number',
-
-				by :
-					'Number'
-			} )
-
-	} );
 
 
 shellverse =

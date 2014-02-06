@@ -197,7 +197,7 @@ Input.prototype._init =
 	var
 		frame =
 		this.frame =
-			this.tree.twig.frame.compute(
+			this.tree.twig.designFrame.compute(
 				this.superFrame
 			);
 

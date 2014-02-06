@@ -39,135 +39,102 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'CheckBox',
-
 		unit :
 			'Widgets',
-
 		attributes :
 			{
 				checked :
 					{
 						comment :
 							'true if the checkbox is checked',
-
 						type :
 							'Boolean',
-
 						allowNull :
 							true,
-
 						// default taken from tree
 						defaultVal :
 							'null'
 					},
-
 				// FIXME deduce from mark
 				focusAccent :
 					{
 						comment :
 							'true if the widget got focus',
-
 						type :
 							'Boolean'
 					},
-
 				// FIXME deduce from hoverPath
 				hoverAccent :
 					{
 						comment :
 							'true if the widget is hovered on',
-
 						type :
 							'Boolean'
 					},
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						type :
 							'Mark',
-
 						// FIXME do not allow null
 						allowNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
-
 				path :
 					{
 						comment :
 							'the path of the widget',
-
 						type :
 							'Path'
 					},
-
 				superFrame :
 					{
 						comment :
 							'the frame the widget resides in',
-
 						type :
 							'Rect'
 					},
-
-
 				tree :
 					{
 						comment :
 							'the shellverse tree',
-
 						type :
 							'Tree'
 					},
-
 				traitSet :
 					{
 						comment :
 							'traits being set',
-
 						type :
 							'TraitSet',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
-
 				visible :
 					{
 						comment :
 							'if false the button is hidden',
-
 						type :
 							'Boolean',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null'
 					}
 			},
-
 		subclass :
 			'Widgets.Widget',
-
 		init :
 			[
 				'traitSet'
@@ -190,7 +157,7 @@ CheckBox.prototype._init =
 	)
 {
 	this.frame =
-		this.tree.twig.frame.compute(
+		this.tree.twig.designFrame.compute(
 			this.superFrame
 		);
 

@@ -164,7 +164,7 @@ Gruga.MainDisc =
 			iconStyle :
 				'iconNormal',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -227,7 +227,7 @@ Gruga.MainDisc =
 					Design.AnchorPoint.PC
 			},
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -281,7 +281,7 @@ Gruga.MainDisc =
 			visible :
 				false,
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -335,7 +335,7 @@ Gruga.MainDisc =
 			visible :
 				false,
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -381,7 +381,7 @@ Gruga.MainDisc =
 			style :
 				'mainButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -459,7 +459,7 @@ Gruga.MainDisc =
 			style :
 				'mainButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -557,7 +557,7 @@ Gruga.MainDisc =
 					Design.AnchorPoint.PC
 			},
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -623,7 +623,7 @@ Gruga.MainDisc =
 					Design.AnchorPoint.PC
 			},
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(

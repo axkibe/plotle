@@ -249,7 +249,7 @@ Gruga.SignUpForm =
 			maxlen :
 				100,
 
-			frame  :
+			designFrame  :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -289,7 +289,7 @@ Gruga.SignUpForm =
 			maxlen :
 				100,
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -329,7 +329,7 @@ Gruga.SignUpForm =
 			maxlen :
 				100,
 
-			frame  :
+			designFrame  :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -369,7 +369,7 @@ Gruga.SignUpForm =
 			maxlen :
 				100,
 
-			frame  :
+			designFrame  :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -403,7 +403,7 @@ Gruga.SignUpForm =
 			checked :
 				true,
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -479,7 +479,7 @@ Gruga.SignUpForm =
 			style :
 				'genericButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -540,7 +540,7 @@ Gruga.SignUpForm =
 			style :
 				'genericButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(

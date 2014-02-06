@@ -113,7 +113,7 @@ Gruga.WelcomeForm =
 			style :
 				'genericButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(

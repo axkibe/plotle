@@ -328,7 +328,6 @@
 . comment
 . computeEllipse
 . compute
-. computeRect
 . concerns
 . concernsMark
 . configSwitch

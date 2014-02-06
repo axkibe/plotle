@@ -132,7 +132,7 @@ Gruga.NonExistingSpaceForm =
 			style :
 				'genericButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -192,7 +192,7 @@ Gruga.NonExistingSpaceForm =
 			style :
 				'genericButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(

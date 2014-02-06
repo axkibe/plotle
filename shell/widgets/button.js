@@ -213,7 +213,7 @@ Button.prototype._init =
 	)
 {
 	this.frame =
-		this.tree.twig.frame.compute(
+		this.tree.twig.designFrame.compute(
 			this.superFrame
 		);
 

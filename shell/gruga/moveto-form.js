@@ -119,7 +119,7 @@ Gruga.MoveToForm =
 			style :
 				'portalButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -203,7 +203,7 @@ Gruga.MoveToForm =
 			style :
 				'portalButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -287,7 +287,7 @@ Gruga.MoveToForm =
 			style :
 				'portalButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(

@@ -125,7 +125,7 @@ Gruga.CreateDisc =
 			},
 
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -207,7 +207,7 @@ Gruga.CreateDisc =
 			},
 
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -292,7 +292,7 @@ Gruga.CreateDisc =
 			},
 
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -352,7 +352,7 @@ Gruga.CreateDisc =
 					Design.AnchorPoint.PC
 			},
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(

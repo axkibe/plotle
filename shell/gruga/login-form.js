@@ -185,7 +185,7 @@ Gruga.LoginForm =
 			maxlen :
 				100,
 
-			frame  :
+			designFrame  :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -225,7 +225,7 @@ Gruga.LoginForm =
 			maxlen :
 				100,
 
-			frame  :
+			designFrame  :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -257,7 +257,7 @@ Gruga.LoginForm =
 			style :
 				'genericButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
@@ -318,7 +318,7 @@ Gruga.LoginForm =
 			style :
 				'genericButton',
 
-			frame :
+			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
 						Design.AnchorPoint.create(
