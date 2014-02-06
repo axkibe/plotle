@@ -11,6 +11,7 @@
 var
 	Design;
 
+
 Design =
 	Design || { };
 
@@ -71,9 +72,6 @@ if( JOOBJ )
 							'Integer'
 					}
 			}
-
-//		hasJSON :
-//			true
 	};
 }
 

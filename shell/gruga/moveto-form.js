@@ -120,32 +120,28 @@ Gruga.MoveToForm =
 				'portalButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							meshcraftHomeButton.w,
-						'y',
-							meshcraftHomeButton.n
-					),
-
-				pse  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							meshcraftHomeButton.w +
-							meshcraftHomeButton.width,
-						'y',
-							meshcraftHomeButton.n +
-							meshcraftHomeButton.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								meshcraftHomeButton.w,
+							'y',
+								meshcraftHomeButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								meshcraftHomeButton.w +
+								meshcraftHomeButton.width,
+							'y',
+								meshcraftHomeButton.n +
+								meshcraftHomeButton.height
+						)
+				),
 
 			caption :
 			{
@@ -208,32 +204,28 @@ Gruga.MoveToForm =
 				'portalButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							meshcraftSandboxButton.w,
-						'y',
-							meshcraftSandboxButton.n
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							meshcraftSandboxButton.w +
-							meshcraftSandboxButton.width,
-						'y',
-							meshcraftSandboxButton.n +
-							meshcraftSandboxButton.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								meshcraftSandboxButton.w,
+							'y',
+								meshcraftSandboxButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								meshcraftSandboxButton.w +
+								meshcraftSandboxButton.width,
+							'y',
+								meshcraftSandboxButton.n +
+								meshcraftSandboxButton.height
+						)
+				),
 
 			caption :
 			{
@@ -296,32 +288,28 @@ Gruga.MoveToForm =
 				'portalButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							userHomeButton.w,
-						'y',
-							userHomeButton.n
-					),
-
-				pse  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							userHomeButton.w +
-							userHomeButton.width,
-						'y',
-							userHomeButton.n +
-							userHomeButton.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								userHomeButton.w,
+							'y',
+								userHomeButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								userHomeButton.w +
+								userHomeButton.width,
+							'y',
+								userHomeButton.n +
+								userHomeButton.height
+						)
+				),
 
 			caption :
 			{

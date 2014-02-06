@@ -126,32 +126,28 @@ Gruga.CreateDisc =
 
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.note.x,
-						'y',
-							design.note.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.note.x +
-							design.generic.width,
-						'y',
-							design.note.y +
-							design.generic.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.note.x,
+							'y',
+								design.note.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.note.x +
+								design.generic.width,
+							'y',
+								design.note.y +
+								design.generic.height
+						)
+				),
 
 			shape :
 			{
@@ -212,32 +208,28 @@ Gruga.CreateDisc =
 
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.label.x,
-						'y',
-							design.label.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.label.x +
-							design.generic.width,
-						'y',
-							design.label.y +
-							design.generic.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.label.x,
+							'y',
+								design.label.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.label.x +
+								design.generic.width,
+							'y',
+								design.label.y +
+								design.generic.height
+						)
+				),
 
 			shape :
 			{
@@ -301,32 +293,28 @@ Gruga.CreateDisc =
 
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.relation.x,
-						'y',
-							design.relation.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.relation.x +
-							design.generic.width,
-						'y',
-							design.relation.y +
-							design.generic.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.relation.x,
+							'y',
+								design.relation.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.relation.x +
+								design.generic.width,
+							'y',
+								design.relation.y +
+								design.generic.height
+						)
+				),
 
 			shape :
 			{
@@ -365,32 +353,28 @@ Gruga.CreateDisc =
 			},
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.portal.x,
-						'y',
-							design.portal.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.portal.x +
-							design.generic.width,
-						'y',
-							design.portal.y +
-							design.generic.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.portal.x,
+							'y',
+								design.portal.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.portal.x +
+								design.generic.width,
+							'y',
+								design.portal.y +
+								design.generic.height
+						)
+				),
 
 			shape :
 			{

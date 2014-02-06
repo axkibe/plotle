@@ -197,8 +197,8 @@ Input.prototype._init =
 	var
 		frame =
 		this.frame =
-			this.superFrame.computeRect(
-				this.tree.twig.frame.twig
+			this.tree.twig.frame.compute(
+				this.superFrame
 			);
 
 	this._shape =

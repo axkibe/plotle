@@ -90,7 +90,7 @@ Shellverse.prototype.ButtonWidget =
 					} ),
 
 				frame :
-					'Frame',
+					'AnchorRect',
 
 				style :
 					'String'
@@ -124,7 +124,7 @@ Shellverse.prototype.CheckBoxWidget =
 			Jools.immute( {
 
 				frame :
-					'Frame',
+					'AnchorRect',
 
 				checked :
 					'Boolean',
@@ -158,21 +158,8 @@ Shellverse.prototype.Font =
 	Euclid.Font;
 
 
-Shellverse.prototype.Frame =
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-
-				pnw :
-					'AnchorPoint',
-
-				pse :
-					'AnchorPoint'
-			} )
-
-	} );
-
+Shellverse.prototype.AnchorRect =
+	Design.AnchorRect;
 
 Shellverse.prototype.InputWidget =
 	Jools.immute( {
@@ -181,7 +168,7 @@ Shellverse.prototype.InputWidget =
 			Jools.immute( {
 
 				frame :
-					'Frame',
+					'AnchorRect',
 
 				password :
 					'Boolean',

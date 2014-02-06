@@ -242,23 +242,6 @@ Jools.lazyValue(
 
 
 /*
-| Computes a rect modelled relative to this rect.
-*/
-Rect.prototype.computeRect =
-	function(
-		model
-	)
-{
-	return Rect.create(
-		'pnw',
-			model.pnw.compute( this ),
-		'pse',
-			model.pse.compute( this )
-	);
-};
-
-
-/*
 | Computes an ellipse modelled relative to this rect.
 */
 Rect.prototype.computeEllipse =

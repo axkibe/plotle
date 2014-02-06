@@ -186,30 +186,26 @@ Gruga.LoginForm =
 				100,
 
 			frame  :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-80,
-						'y',
-							-67
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							130,
-						'y',
-							-42
-					)
-			}
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								-80,
+							'y',
+								-67
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								130,
+							'y',
+								-42
+						)
+				)
 		},
 
 		'passwordInput' :
@@ -230,30 +226,26 @@ Gruga.LoginForm =
 				100,
 
 			frame  :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-80,
-						'y',
-							-27
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							130,
-						'y',
-							-2
-					)
-			}
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								-80,
+							'y',
+								-27
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								130,
+							'y',
+								-2
+						)
+				)
 		},
 
 
@@ -266,32 +258,28 @@ Gruga.LoginForm =
 				'genericButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							loginButton.w,
-						'y',
-							loginButton.n
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							loginButton.w +
-							loginButton.width,
-						'y',
-							loginButton.n +
-							loginButton.height
-					),
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								loginButton.w,
+							'y',
+								loginButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								loginButton.w +
+								loginButton.width,
+							'y',
+								loginButton.n +
+								loginButton.height
+						)
+				),
 
 			caption :
 			{
@@ -331,32 +319,28 @@ Gruga.LoginForm =
 				'genericButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							closeButton.w,
-						'y',
-							closeButton.n
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							closeButton.w +
-							closeButton.width,
-						'y',
-							closeButton.n +
-							closeButton.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								closeButton.w,
+							'y',
+								closeButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								closeButton.w +
+								closeButton.width,
+							'y',
+								closeButton.n +
+								closeButton.height
+						)
+				),
 
 			caption :
 			{

@@ -213,8 +213,8 @@ Button.prototype._init =
 	)
 {
 	this.frame =
-		this.superFrame.computeRect(
-			this.tree.twig.frame.twig
+		this.tree.twig.frame.compute(
+			this.superFrame
 		);
 
 	// FUTURE move the whole switch to rect

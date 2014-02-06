@@ -133,32 +133,28 @@ Gruga.NonExistingSpaceForm =
 				'genericButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							noButton.w,
-						'y',
-							noButton.n
-					),
-
-				pse  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							noButton.w +
-							noButton.width,
-						'y',
-							noButton.n +
-							noButton.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								noButton.w,
+							'y',
+								noButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								noButton.w +
+								noButton.width,
+							'y',
+								noButton.n +
+								noButton.height
+						)
+				),
 
 			caption :
 			{
@@ -197,32 +193,28 @@ Gruga.NonExistingSpaceForm =
 				'genericButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							yesButton.w,
-						'y',
-							yesButton.n
-					),
-
-				pse  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							yesButton.w +
-							yesButton.width,
-						'y',
-							yesButton.n +
-							yesButton.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								yesButton.w,
+							'y',
+								yesButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								yesButton.w +
+								yesButton.width,
+							'y',
+								yesButton.n +
+								yesButton.height
+						)
+				),
 
 			caption :
 			{

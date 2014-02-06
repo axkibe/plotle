@@ -165,32 +165,28 @@ Gruga.MainDisc =
 				'iconNormal',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.normal.x,
-						'y',
-							design.normal.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.normal.x +
-							design.generic.width,
-						'y',
-							design.normal.y +
-							design.generic.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.normal.x,
+							'y',
+								design.normal.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.normal.x +
+								design.generic.width,
+							'y',
+								design.normal.y +
+								design.generic.height
+						)
+				),
 
 			shape :
 			{
@@ -198,24 +194,10 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
+					Design.AnchorPoint.PNW,
 
 				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
+					Design.AnchorPoint.PSE_M1
 			}
 		},
 
@@ -242,43 +224,32 @@ Gruga.MainDisc =
 					design.generic.font,
 
 				pos :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					)
+					Design.AnchorPoint.PC
 			},
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.create.x,
-						'y',
-							design.create.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.create.x +
-							design.generic.width,
-						'y',
-							design.create.y +
-							design.generic.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.create.x,
+							'y',
+								design.create.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.create.x +
+								design.generic.width,
+							'y',
+								design.create.y +
+								design.generic.height
+						)
+				),
 
 			shape :
 			{
@@ -286,24 +257,10 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
+					Design.AnchorPoint.PNW,
 
 				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
+					Design.AnchorPoint.PSE_M1
 			}
 		},
 
@@ -325,32 +282,28 @@ Gruga.MainDisc =
 				false,
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.remove.x,
-						'y',
-							design.remove.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.remove.x +
-							design.generic.width,
-						'y',
-							design.remove.y +
-							design.generic.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.remove.x,
+							'y',
+								design.remove.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.remove.x +
+								design.generic.width,
+							'y',
+								design.remove.y +
+								design.generic.height
+						)
+				),
 
 			shape :
 			{
@@ -358,24 +311,10 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
+					Design.AnchorPoint.PNW,
 
 				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
+					Design.AnchorPoint.PSE_M1
 			}
 		},
 
@@ -397,32 +336,28 @@ Gruga.MainDisc =
 				false,
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.moveto.x,
-						'y',
-							design.moveto.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.moveto.x +
-							design.generic.width,
-						'y',
-							design.moveto.y +
-							design.generic.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.moveto.x,
+							'y',
+								design.moveto.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.moveto.x +
+								design.generic.width,
+							'y',
+								design.moveto.y +
+								design.generic.height
+						)
+				),
 
 			shape :
 			{
@@ -430,24 +365,10 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
+					Design.AnchorPoint.PNW,
 
 				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
+					Design.AnchorPoint.PSE_M1
 			}
 		},
 
@@ -461,32 +382,28 @@ Gruga.MainDisc =
 				'mainButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.space.x,
-						'y',
-							design.space.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.space.x +
-							design.space.width,
-						'y',
-							design.space.y +
-							design.space.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.space.x,
+							'y',
+								design.space.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.space.x +
+								design.space.width,
+							'y',
+								design.space.y +
+								design.space.height
+						)
+				),
 
 			caption :
 			{
@@ -500,14 +417,7 @@ Gruga.MainDisc =
 					fontPool.get( 12, 'cm' ),
 
 				pos :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					),
+					Design.AnchorPoint.PC,
 
 				rotate :
 					- Math.PI / 2
@@ -550,32 +460,28 @@ Gruga.MainDisc =
 				'mainButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.user.x,
-						'y',
-							design.user.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.user.x +
-							design.user.width,
-						'y',
-							design.user.y +
-							design.user.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.user.x,
+							'y',
+								design.user.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.user.x +
+								design.user.width,
+							'y',
+								design.user.y +
+								design.user.height
+						)
+				),
 
 			caption :
 			{
@@ -589,14 +495,7 @@ Gruga.MainDisc =
 					fontPool.get( 12, 'cm' ),
 
 				pos :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					),
+					Design.AnchorPoint.PC,
 
 				rotate :
 					- Math.PI / 2
@@ -655,43 +554,32 @@ Gruga.MainDisc =
 					fontPool.get( 13, 'cm' ),
 
 				pos :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					)
+					Design.AnchorPoint.PC
 			},
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.login.x,
-						'y',
-							design.login.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.login.x +
-							design.generic.width,
-						'y',
-							design.login.y +
-							design.generic.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.login.x,
+							'y',
+								design.login.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.login.x +
+								design.generic.width,
+							'y',
+								design.login.y +
+								design.generic.height
+						)
+				),
 
 			shape :
 			{
@@ -699,24 +587,10 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
+					Design.AnchorPoint.PNW,
 
 				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
+					Design.AnchorPoint.PSE_M1
 			}
 		},
 
@@ -746,43 +620,32 @@ Gruga.MainDisc =
 					fontPool.get( 13, 'cm' ),
 
 				pos :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					)
+					Design.AnchorPoint.PC
 			},
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.signup.x,
-						'y',
-							design.signup.y
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							design.signup.x +
-							design.generic.width,
-						'y',
-							design.signup.y +
-							design.generic.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.signup.x,
+							'y',
+								design.signup.y
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								design.signup.x +
+								design.generic.width,
+							'y',
+								design.signup.y +
+								design.generic.height
+						)
+				),
 
 			shape :
 			{
@@ -790,24 +653,10 @@ Gruga.MainDisc =
 					'Ellipse',
 
 				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
+					Design.AnchorPoint.PNW,
 
 				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
+					Design.AnchorPoint.PSE_M1
 			}
 		}
 	},

@@ -237,32 +237,28 @@ Gruga.UserForm =
 				'genericButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							closeButton.w,
-						'y',
-							closeButton.n
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							closeButton.w +
-							closeButton.width,
-						'y',
-							closeButton.n +
-							closeButton.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								closeButton.w,
+							'y',
+								closeButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								closeButton.w +
+								closeButton.width,
+							'y',
+								closeButton.n +
+								closeButton.height
+						)
+				),
 
 			caption :
 			{

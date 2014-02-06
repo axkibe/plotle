@@ -250,30 +250,26 @@ Gruga.SignUpForm =
 				100,
 
 			frame  :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-80,
-						'y',
-							-120
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							130,
-						'y',
-							-95
-					)
-			}
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								-80,
+							'y',
+								-120
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								130,
+							'y',
+								-95
+						)
+				)
 		},
 
 		'emailInput' :
@@ -293,31 +289,27 @@ Gruga.SignUpForm =
 			maxlen :
 				100,
 
-			frame  :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-80,
-						'y',
-							-80
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							130,
-						'y',
-							-55
-					)
-			}
+			frame :
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								-80,
+							'y',
+								-80
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								130,
+							'y',
+								-55
+						)
+				)
 		},
 
 		'passwordInput' :
@@ -338,32 +330,27 @@ Gruga.SignUpForm =
 				100,
 
 			frame  :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-80,
-						'y',
-							-40
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							130,
-						'y',
-							-15
-					)
-			}
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								-80,
+							'y',
+								-40
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								130,
+							'y',
+								-15
+						)
+				)
 		},
-
 
 		'password2Input' :
 		{
@@ -383,30 +370,26 @@ Gruga.SignUpForm =
 				100,
 
 			frame  :
-			{
-				type :
-					'Frame',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-80,
-						'y',
-							0
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							130,
-						'y',
-							25
-					)
-			}
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								-80,
+							'y',
+								0
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								130,
+							'y',
+								25
+						)
+				)
 		},
 
 		'newsletterCheckBox' :
@@ -421,30 +404,27 @@ Gruga.SignUpForm =
 				true,
 
 			frame :
-			{
-				type :
-					'Frame',
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								-75,
+							'y',
+								45
+						),
 
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-75,
-						'y',
-							45
-					),
-
-				pse  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-59,
-						'y',
-							60
-					)
-			}
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								-59,
+							'y',
+								60
+						)
+				)
 		},
 
 		'newsletter2Label' :
@@ -500,32 +480,28 @@ Gruga.SignUpForm =
 				'genericButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							signupButton.w,
-						'y',
-							signupButton.n
-					),
-
-				pse  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							signupButton.w +
-							signupButton.width,
-						'y',
-							signupButton.n +
-							signupButton.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								signupButton.w,
+							'y',
+								signupButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								signupButton.w +
+								signupButton.width,
+							'y',
+								signupButton.n +
+								signupButton.height
+						)
+				),
 
 			caption :
 			{
@@ -565,32 +541,28 @@ Gruga.SignUpForm =
 				'genericButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							closeButton.w,
-						'y',
-							closeButton.n
-					),
-
-				pse  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							closeButton.w +
-							closeButton.width,
-						'y',
-							closeButton.n +
-							closeButton.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								closeButton.w,
+							'y',
+								closeButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+									'c',
+							'x',
+								closeButton.w +
+								closeButton.width,
+							'y',
+								closeButton.n +
+								closeButton.height
+						)
+				),
 
 			caption :
 			{

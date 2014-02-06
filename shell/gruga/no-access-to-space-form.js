@@ -113,32 +113,28 @@ Gruga.NoAccessToSpaceForm =
 				'genericButton',
 
 			frame :
-			{
-				type :
-					'Frame',
-
-				pnw  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							okButton.w,
-						'y',
-							okButton.n
-					),
-
-				pse  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							okButton.w +
-							okButton.width,
-						'y',
-							okButton.n +
-							okButton.height
-					)
-			},
+				Design.AnchorRect.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								okButton.w,
+							'y',
+								okButton.n
+						),
+					'pse',
+						Design.AnchorPoint.create(
+							'anchor',
+								'c',
+							'x',
+								okButton.w +
+								okButton.width,
+							'y',
+								okButton.n +
+								okButton.height
+						)
+				),
 
 			caption :
 			{
