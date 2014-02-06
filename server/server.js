@@ -821,6 +821,9 @@ Server.prototype.prepareResources =
 				'shell/design/anchor-rect.js',
 					'fbj',
 
+				'shell/design/anchor-ellipse.js',
+					'fbj',
+
 				'shell/shellverse.js',
 					'fb',
 

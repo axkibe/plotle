@@ -1,4 +1,7 @@
+. AnchorEllipse
 . AnchorRect
+. designFrame
+. fullSkewNW
 . PC
 . PNW
 . PSE
@@ -26,7 +29,6 @@
 > 1
 . Action
 . AnchorPoint
-. BeziTo
 . Button
 . ButtonWidget
 . Caret
@@ -64,7 +66,6 @@
 . LabelWidget
 . Layout
 . Line
-. LineTo
 . Login
 . LoginForm
 . MainDisc
@@ -280,12 +281,6 @@
 . bottombox
 > button
 . buttons
-. bx
-. by
-. c1x
-. c1y
-. c2x
-. c2y
 > ca
 > call
 . can
@@ -812,7 +807,6 @@
 > time
 > timeZ
 . timer
-. to
 . toItemPath
 > toJSON
 > toLowerCase

@@ -1,5 +1,5 @@
 /*
-| A rectangle (or a frame)
+| An ellipse.
 |
 | Authors: Axel Kittenberger
 */
@@ -35,29 +35,23 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
-			'AnchorRect',
-
+			'AnchorEllipse',
 		unit :
 			'Design',
-
 		attributes :
 			{
 				pnw :
 					{
 						comment :
 							'point in north-west',
-
 						type :
 							'AnchorPoint'
 					},
-
 				pse :
 					{
 						comment :
 							'point in south-east',
-
 						type :
 							'AnchorPoint'
 					}
@@ -67,19 +61,32 @@ if( JOOBJ )
 
 
 var
-	AnchorRect =
-		Design.AnchorRect;
+	AnchorEllipse =
+		Design.AnchorEllipse;
+
+
+/*
+| Ellipse filling the full frame
+| skewed a little to north west
+*/
+AnchorEllipse.fullSkewNW =
+	AnchorEllipse.create(
+		'pnw',
+			Design.AnchorPoint.PNW,
+		'pse',
+			Design.AnchorPoint.PSE_M1
+	);
 
 
 /*
 | Computes a rect modelled relative to this rect.
 */
-AnchorRect.prototype.compute =
+AnchorEllipse.prototype.compute =
 	function(
 		frame
 	)
 {
-	return Euclid.Rect.create(
+	return Euclid.Ellipse.create(
 		'pnw',
 			this.pnw.compute( frame ),
 		'pse',
@@ -91,7 +98,7 @@ AnchorRect.prototype.compute =
 /*
 | FIXME Workaround meshverse growing
 */
-AnchorRect.prototype._$grown =
+AnchorEllipse.prototype._$grown =
 	true;
 
 

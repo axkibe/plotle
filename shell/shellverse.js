@@ -55,7 +55,7 @@ Shellverse.prototype.ButtonWidget =
 
 				shape :
 					Jools.immute( {
-						'Ellipse' :
+						'AnchorEllipse' :
 							true
 					} ),
 
@@ -106,27 +106,11 @@ Shellverse.prototype.CheckBoxWidget =
 
 	} );
 
-
-Shellverse.prototype.Ellipse =
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-
-				pnw :
-					'AnchorPoint',
-
-				pse :
-					'AnchorPoint'
-
-			} )
-
-	} );
-
+Shellverse.prototype.AnchorEllipse =
+	Design.AnchorEllipse;
 
 Shellverse.prototype.Font =
 	Euclid.Font;
-
 
 Shellverse.prototype.AnchorRect =
 	Design.AnchorRect;

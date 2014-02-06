@@ -217,26 +217,10 @@ Button.prototype._init =
 			this.superFrame
 		);
 
-	// FUTURE move the whole switch to rect
-	switch( this.tree.twig.shape.twig.type )
-	{
-		case 'Ellipse' :
-
-			this._shape =
-				this.frame.zeropnw.computeEllipse(
-					this.tree.twig.shape.twig
-				);
-
-			break;
-
-		default :
-
-			throw new Error(
-				CHECK
-				&&
-				'unknown model'
-			);
-	}
+	this._shape =
+		this.tree.twig.shape.compute(
+			this.frame.zeropnw
+		);
 
 	if( traitSet )
 	{

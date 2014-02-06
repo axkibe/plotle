@@ -189,16 +189,7 @@ Gruga.MainDisc =
 				),
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.PNW,
-
-				pse :
-					Design.AnchorPoint.PSE_M1
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 		'Create' :
@@ -252,16 +243,7 @@ Gruga.MainDisc =
 				),
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.PNW,
-
-				pse :
-					Design.AnchorPoint.PSE_M1
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 		'Remove' :
@@ -306,16 +288,7 @@ Gruga.MainDisc =
 				),
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.PNW,
-
-				pse :
-					Design.AnchorPoint.PSE_M1
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 		'MoveTo' :
@@ -360,16 +333,7 @@ Gruga.MainDisc =
 				),
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.PNW,
-
-				pse :
-					Design.AnchorPoint.PSE_M1
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 
@@ -424,31 +388,19 @@ Gruga.MainDisc =
 			},
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							-60,
-						'y',
-							0
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-
-						'x',
-							-1,
-						'y',
-							-1
-					)
-			}
+				Design.AnchorEllipse.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								-60,
+							'y',
+								0
+						),
+					'pse',
+						Design.AnchorPoint.PSE_M1
+				)
 		},
 
 		'User' :
@@ -502,30 +454,19 @@ Gruga.MainDisc =
 			},
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							-70,
-						'y',
-							0
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
-			}
+				Design.AnchorEllipse.create(
+					'pnw',
+						Design.AnchorPoint.create(
+							'anchor',
+								'nw',
+							'x',
+								-70,
+							'y',
+								0
+						),
+					'pse',
+						Design.AnchorPoint.PSE_M1
+				)
 		},
 
 		'Login' :
@@ -582,16 +523,7 @@ Gruga.MainDisc =
 				),
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.PNW,
-
-				pse :
-					Design.AnchorPoint.PSE_M1
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 		'SignUp' :
@@ -648,16 +580,7 @@ Gruga.MainDisc =
 				),
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.PNW,
-
-				pse :
-					Design.AnchorPoint.PSE_M1
-			}
+				Design.AnchorEllipse.fullSkewNW
 		}
 	},
 

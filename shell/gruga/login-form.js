@@ -297,16 +297,7 @@ Gruga.LoginForm =
 			},
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.PNW,
-
-				pse :
-					Design.AnchorPoint.PSE_M1
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 
@@ -358,16 +349,7 @@ Gruga.LoginForm =
 			},
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.PNW,
-
-				pse :
-					Design.AnchorPoint.PSE_M1
-			}
+				Design.AnchorEllipse.fullSkewNW
 		}
 	},
 

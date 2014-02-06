@@ -150,30 +150,7 @@ Gruga.CreateDisc =
 				),
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 		'CreateLabel' :
@@ -232,30 +209,7 @@ Gruga.CreateDisc =
 				),
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 		'CreateRelation' :
@@ -317,16 +271,7 @@ Gruga.CreateDisc =
 				),
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.PNW,
-
-				pse :
-					Design.AnchorPoint.PSE_M1
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 		'CreatePortal' :
@@ -377,16 +322,7 @@ Gruga.CreateDisc =
 				),
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.PNW,
-
-				pse :
-					Design.AnchorPoint.PSE_M1
-			}
+				Design.AnchorEllipse.fullSkewNW
 		}
 	},
 

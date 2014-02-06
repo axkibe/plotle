@@ -169,30 +169,7 @@ Gruga.MoveToForm =
 			},
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 		'meshcraftSandboxButton' :
@@ -253,30 +230,7 @@ Gruga.MoveToForm =
 			},
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
-			}
+				Design.AnchorEllipse.fullSkewNW
 		},
 
 		'userHomeButton' :
@@ -337,30 +291,7 @@ Gruga.MoveToForm =
 			},
 
 			shape :
-			{
-				type :
-					'Ellipse',
-
-				pnw :
-					Design.AnchorPoint.create(
-						'anchor',
-							'nw',
-						'x',
-							0,
-						'y',
-							0
-					),
-
-				pse :
-					Design.AnchorPoint.create(
-						'anchor',
-							'se',
-						'x',
-							-1,
-						'y',
-							-1
-					)
-			}
+				Design.AnchorEllipse.fullSkewNW
 		}
 	},
 
