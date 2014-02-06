@@ -52,36 +52,35 @@ Shellverse.prototype.ButtonWidget =
 
 		must :
 			Jools.immute( {
-
 				shape :
 					Jools.immute( {
 						'AnchorEllipse' :
 							true
 					} ),
-
 				designFrame :
 					'AnchorRect',
-
 				style :
 					'String'
-
 			} ),
 
 		can :
 			Jools.immute( {
-
+				font :
+					'Font',
 				icon :
 					'String',
-
 				iconStyle :
 					'String',
-
-				caption :
-					'LabelWidget',
-
 				visible :
-					'Boolean'
-
+					'Boolean',
+				text :
+					'String',
+				textNewline :
+					'Number',
+				textRotation :
+					'Number',
+				textDesignPos :
+					'AnchorPoint',
 			} )
 
 	} );
@@ -120,19 +119,14 @@ Shellverse.prototype.InputWidget =
 
 		must :
 			Jools.immute( {
-
 				designFrame :
 					'AnchorRect',
-
 				password :
 					'Boolean',
-
 				style :
 					'String',
-
 				font :
 					'Font',
-
 				maxlen :
 					'Number'
 			} )
@@ -142,30 +136,20 @@ Shellverse.prototype.InputWidget =
 
 Shellverse.prototype.LabelWidget =
 	Jools.immute( {
-
 		must :
 			Jools.immute( {
-
 				text :
 					'String',
-
 				pos  :
 					'AnchorPoint',
-
 				font :
 					'Font'
-
 			} ),
 
 		can :
 			Jools.immute( {
-
-				rotate :
-					'Number',
-
 				newline :
 					'Integer'
-
 			} )
 	} );
 

@@ -280,22 +280,12 @@ Gruga.LoginForm =
 								loginButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'log in',
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'log in',
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos  :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		},
@@ -305,10 +295,8 @@ Gruga.LoginForm =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'genericButton',
-
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -332,22 +320,12 @@ Gruga.LoginForm =
 								closeButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'close',
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'close',
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		}

@@ -502,22 +502,12 @@ Gruga.SignUpForm =
 								signupButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'sign up',
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'sign up',
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		},
@@ -554,22 +544,12 @@ Gruga.SignUpForm =
 								closeButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'close',
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'close',
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		}

@@ -136,22 +136,12 @@ Gruga.WelcomeForm =
 								closeButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'close',
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'close',
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		}

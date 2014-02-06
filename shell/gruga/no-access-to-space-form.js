@@ -135,22 +135,12 @@ Gruga.NoAccessToSpaceForm =
 								okButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'ok',
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'ok',
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos  :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		}

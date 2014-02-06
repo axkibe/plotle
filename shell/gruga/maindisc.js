@@ -196,28 +196,16 @@ Gruga.MainDisc =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'mainButton',
-
 			visible :
 				false,
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'new',
-
-				font :
-					design.generic.font,
-
-				pos :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'new',
+			font :
+				design.generic.font,
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -368,25 +356,12 @@ Gruga.MainDisc =
 								design.space.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'',
-
-				font :
-					fontPool.get( 12, 'cm' ),
-
-				pos :
-					Design.AnchorPoint.PC,
-
-				rotate :
-					- Math.PI / 2
-			},
-
+			text :
+				'',
+			font :
+				fontPool.get( 12, 'cm' ),
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.create(
 					'pnw',
@@ -400,7 +375,9 @@ Gruga.MainDisc =
 						),
 					'pse',
 						Design.AnchorPoint.PSE_M1
-				)
+				),
+			textRotation :
+				- Math.PI / 2
 		},
 
 		'User' :
@@ -434,25 +411,12 @@ Gruga.MainDisc =
 								design.user.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'',
-
-				font :
-					fontPool.get( 12, 'cm' ),
-
-				pos :
-					Design.AnchorPoint.PC,
-
-				rotate :
-					- Math.PI / 2
-			},
-
+			text :
+				'',
+			font :
+				fontPool.get( 12, 'cm' ),
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.create(
 					'pnw',
@@ -466,38 +430,27 @@ Gruga.MainDisc =
 						),
 					'pse',
 						Design.AnchorPoint.PSE_M1
-				)
+				),
+			textRotation :
+					- Math.PI / 2
 		},
 
 		'Login' :
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'mainButton',
-
 			visible :
 				false,
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'log\nin',
-
-				newline :
-					14,
-
-				font :
-					fontPool.get( 13, 'cm' ),
-
-				pos :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'log\nin',
+			textNewline :
+				14,
+			font :
+				fontPool.get( 13, 'cm' ),
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -521,7 +474,6 @@ Gruga.MainDisc =
 								design.generic.height
 						)
 				),
-
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		},
@@ -530,31 +482,18 @@ Gruga.MainDisc =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'mainButton',
-
 			visible :
 				false,
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'sign\nup',
-
-				newline :
-					14,
-
-				font :
-					fontPool.get( 13, 'cm' ),
-
-				pos :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'sign\nup',
+			textNewline :
+				14,
+			font :
+				fontPool.get( 13, 'cm' ),
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -578,7 +517,6 @@ Gruga.MainDisc =
 								design.generic.height
 						)
 				),
-
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		}

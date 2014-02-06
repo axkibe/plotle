@@ -98,33 +98,14 @@ Gruga.CreateDisc =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'createButton',
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'Note',
-
-				font :
-					design.generic.font,
-
-				pos :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					)
-			},
-
-
+			text :
+				'Note',
+			font :
+				design.generic.font,
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -148,7 +129,6 @@ Gruga.CreateDisc =
 								design.generic.height
 						)
 				),
-
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		},
@@ -157,33 +137,14 @@ Gruga.CreateDisc =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'createButton',
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'Label',
-
-				font :
-					design.generic.font,
-
-				pos :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					)
-			},
-
-
+			text :
+				'Label',
+			font :
+				design.generic.font,
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -216,36 +177,16 @@ Gruga.CreateDisc =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'createButton',
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'Rela-\ntion',
-
-				newline :
-					20,
-
-				font :
-					design.generic.font,
-
-				pos :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					)
-			},
-
-
+			text :
+				'Rela-\ntion',
+			textNewline :
+				20,
+			font :
+				design.generic.font,
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -269,7 +210,6 @@ Gruga.CreateDisc =
 								design.generic.height
 						)
 				),
-
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		},
@@ -278,25 +218,14 @@ Gruga.CreateDisc =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'createButton',
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'Portal',
-
-				font :
-					design.generic.font,
-
-				pos :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'Portal',
+			font :
+				design.generic.font,
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',

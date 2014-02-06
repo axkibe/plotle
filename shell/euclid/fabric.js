@@ -786,23 +786,27 @@ Fabric.prototype.paintText =
 		// free strings
 	)
 {
-	var text;
-	var x;
-	var y;
-	var font;
-	var rotate = null;
+	var
+		text,
+		x,
+		y,
+		font,
+		rotate,
+		a =
+			0,
+		aZ =
+			arguments.length,
+		p;
 
-	var a = 0;
-	var aZ = arguments.length;
-	var p;
-
+// FIXME make a loop
 	while( a < aZ )
 	{
 		switch( arguments[ a ] )
 		{
 			case 'text' :
 
-				text = arguments[ a + 1 ];
+				text =
+					arguments[ a + 1 ];
 
 				a += 2;
 
@@ -810,9 +814,11 @@ Fabric.prototype.paintText =
 
 			case 'xy' :
 
-				x = arguments[ a + 1 ];
+				x =
+					arguments[ a + 1 ];
 
-				y = arguments[ a + 2 ];
+				y =
+					arguments[ a + 2 ];
 
 				a += 3;
 
@@ -820,11 +826,14 @@ Fabric.prototype.paintText =
 
 			case 'p' :
 
-				p = arguments[ a + 1 ];
+				p =
+					arguments[ a + 1 ];
 
-				x = p.x;
+				x =
+					p.x;
 
-				y = p.y;
+				y =
+					p.y;
 
 				a += 2;
 
@@ -832,7 +841,8 @@ Fabric.prototype.paintText =
 
 			case 'font' :
 
-				font = arguments[ a + 1 ];
+				font =
+					arguments[ a + 1 ];
 
 				a += 2;
 
@@ -840,7 +850,8 @@ Fabric.prototype.paintText =
 
 			case 'rotate' :
 
-				rotate = arguments[ a + 1 ];
+				rotate =
+					arguments[ a + 1 ];
 
 				a += 2;
 
@@ -872,9 +883,11 @@ Fabric.prototype.paintText =
 
 	this._setFont( font );
 
-	var cx = this._cx;
+	var
+		cx =
+			this._cx;
 
-	if( rotate === null )
+	if( rotate === undefined )
 	{
 		cx.fillText(
 			text,
@@ -884,24 +897,19 @@ Fabric.prototype.paintText =
 	}
 	else
 	{
-		var t1 =
-			Math.cos( rotate );
-
-		var t2 =
-			Math.sin( rotate );
-
-		var det =
-			t1 * t1 + t2 * t2;
-
-		//x += radius * t2;
-		//y -= radius * t1;
+		var
+			t1 =
+				Math.cos( rotate ),
+			t2 =
+				Math.sin( rotate ),
+			det =
+				t1 * t1 + t2 * t2;
 
 		cx.setTransform(
 			t1,  t2,
 			-t2, t1,
 			0, 0
 		);
-
 
 		cx.fillText(
 			text,

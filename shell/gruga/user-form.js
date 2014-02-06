@@ -259,29 +259,12 @@ Gruga.UserForm =
 								closeButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'close',
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					)
-			},
-
+			text :
+				'close',
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		}

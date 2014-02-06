@@ -35,13 +35,10 @@ var
 	{
 		w :
 			-145,
-
 		n :
 			-100,
-
 		width :
 			130,
-
 		height :
 			130
 	},
@@ -51,13 +48,10 @@ var
 	{
 		w :
 			15,
-
 		n :
 			-100,
-
 		width :
 			130,
-
 		height :
 			130
 	},
@@ -67,13 +61,10 @@ var
 	{
 		w :
 			-145,
-
 		n :
 			60,
-
 		width :
 			130,
-
 		height :
 			130
 	};
@@ -93,13 +84,10 @@ Gruga.MoveToForm =
 		{
 			type :
 				'LabelWidget',
-
 			text :
 				'move to another space',
-
 			font :
 				fontPool.get( 22, 'ca' ),
-
 			pos :
 				Design.AnchorPoint.create(
 					'anchor',
@@ -115,10 +103,8 @@ Gruga.MoveToForm =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'portalButton',
-
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -142,32 +128,21 @@ Gruga.MoveToForm =
 								meshcraftHomeButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'meshraft\nhome',
-
-				newline :
-					25,
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					)
-			},
-
+			text :
+				'meshraft\nhome',
+			textNewline :
+				25,
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos  :
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						0
+				),
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		},
@@ -176,10 +151,8 @@ Gruga.MoveToForm =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'portalButton',
-
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -203,32 +176,21 @@ Gruga.MoveToForm =
 								meshcraftSandboxButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'meshraft\nsandbox',
-
-				newline :
-					25,
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					)
-			},
-
+			text :
+				'meshraft\nsandbox',
+			textNewline :
+				25,
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos  :
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						0
+				),
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		},
@@ -237,10 +199,8 @@ Gruga.MoveToForm =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'portalButton',
-
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -264,32 +224,21 @@ Gruga.MoveToForm =
 								userHomeButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'your\nhome',
-
-				newline :
-					25,
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-					Design.AnchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
-					)
-			},
-
+			text :
+				'your\nhome',
+			textNewline :
+				25,
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos  :
+				Design.AnchorPoint.create(
+					'anchor',
+						'c',
+					'x',
+						0,
+					'y',
+						0
+				),
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		}

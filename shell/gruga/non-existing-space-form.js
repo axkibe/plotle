@@ -84,13 +84,10 @@ Gruga.NonExistingSpaceForm =
 		{
 			type :
 				'LabelWidget',
-
 			text :
 				'',
-
 			font :
 				fontPool.get( 22, 'ca' ),
-
 			pos :
 				Design.AnchorPoint.create(
 					'anchor',
@@ -106,13 +103,10 @@ Gruga.NonExistingSpaceForm =
 		{
 			type :
 				'LabelWidget',
-
 			text :
 				'Do you want to create it?',
-
 			font :
 				fontPool.get( 16, 'ca' ),
-
 			pos :
 				Design.AnchorPoint.create(
 					'anchor',
@@ -128,10 +122,8 @@ Gruga.NonExistingSpaceForm =
 		{
 			type :
 				'ButtonWidget',
-
 			style :
 				'genericButton',
-
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -155,22 +147,12 @@ Gruga.NonExistingSpaceForm =
 								noButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'No',
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'No',
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos  :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		},
@@ -206,27 +188,16 @@ Gruga.NonExistingSpaceForm =
 								yesButton.height
 						)
 				),
-
-			caption :
-			{
-				type :
-					'LabelWidget',
-
-				text :
-					'Yes',
-
-				font :
-					fontPool.get( 14, 'cm' ),
-
-				pos  :
-					Design.AnchorPoint.PC
-			},
-
+			text :
+				'Yes',
+			font :
+				fontPool.get( 14, 'cm' ),
+			textDesignPos  :
+				Design.AnchorPoint.PC,
 			shape :
 				Design.AnchorEllipse.fullSkewNW
 		}
 	},
-
 
 	ranks :
 	[

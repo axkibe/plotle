@@ -1,3 +1,4 @@
+. textRotation
 . AnchorEllipse
 . AnchorRect
 . designFrame

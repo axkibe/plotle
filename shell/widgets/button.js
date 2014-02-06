@@ -38,13 +38,10 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Button',
-
 		unit :
 			'Widgets',
-
 		attributes :
 			{
 				// FIXME deduce from mark
@@ -52,147 +49,123 @@ if( JOOBJ )
 					{
 						comment :
 							'true if the widget got focus',
-
 						type :
 							'Boolean'
 					},
-
 				// FIXME deduce from hoverPath
 				hoverAccent :
 					{
 						comment :
 							'true if the widget is hovered on',
-
 						type :
 							'Boolean'
 					},
-
 				// FUTURE find a more elegent solution
 				icons :
 					{
 						comment :
 							'class used to sketch icons if applicable',
-
 						type :
 							'Icons',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null'
 					},
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						type :
 							'Mark',
-
 						// FIXME do not allow null
 						allowNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
-
 				path :
 					{
 						comment :
 							'the path of the widget',
-
 						type :
 							'Path'
 					},
-
+				textRotation :
+					{
+						comment :
+							'rotation of the text',
+						type :
+							'Number',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
+					},
 				superFrame :
 					{
 						comment :
 							'the frame the widget resides in',
-
 						type :
 							'Rect'
 					},
-
-
 				text :
 					{
 						comment :
 							'the text written in the button',
-
 						type :
 							'String',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null'
 					},
-
 				tree :
 					{
 						comment :
 							'the shellverse tree',
-
 						type :
 							'Tree'
 					},
-
 				traitSet :
 					{
 						comment :
 							'traits being set',
-
 						type :
 							'TraitSet',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
-
 				visible :
 					{
 						comment :
 							'if false the button is hidden',
-
 						type :
 							'Boolean',
-
 						allowNull :
 							true,
-
 						// default taken from tree
 						defaultVal :
 							'null'
 					}
 			},
-
 		subclass :
 			'Widgets.Widget',
-
 		init :
 			[
 				'inherit',
 				'traitSet'
 			]
-
 //		FIXME
 //		refuse :
 //			[
-//				'defaultVal === null && text === null'
+//				'icon === null && text === null'
 //			]
 	};
 }
@@ -217,10 +190,20 @@ Button.prototype._init =
 			this.superFrame
 		);
 
+	// FIXME remove
+	this.text =
+		this.text
+		||
+		this.tree.twig.text;
+
 	this._shape =
 		this.tree.twig.shape.compute(
 			this.frame.zeropnw
 		);
+
+	// TODO remove
+	this.textRotation =
+		this.tree.twig.textRotation;
 
 	if( traitSet )
 	{
@@ -347,68 +330,43 @@ Jools.lazyValue(
 			Euclid.View.proper
 		);
 
-		var
-			caption =
-				tree.twig.caption;
-
-		if( caption )
+		if( this.text )
 		{
 			var
-				text =
-					this.text ||
-					caption.twig.text,
-
+				// FIXME put into _init
 				newline =
-					caption.twig.newline,
+					this.tree.twig.textNewline,
 
 				font =
-					caption.twig.font,
+					this.tree.twig.font,
 
-				pos =
-					caption.twig.pos.compute(
+				textPos =
+					this.tree.twig.textDesignPos.compute(
 						this.frame.zeropnw
 					);
 
 			if( !Jools.is( newline ) )
 			{
-				if( !Jools.is( caption.twig.rotate ) )
-					{
-					f.paintText(
-						'text',
-							caption.twig.text,
-						'p',
-							pos,
-						'font',
-							font
-					);
-				}
-				else
-				{
-					f.paintText(
-						'text',
-							text,
-						'p',
-							pos,
-						'font',
-							font,
-						'rotate',
-							caption.twig.rotate
-					);
-				}
+				f.paintText(
+					'text',
+						this.text,
+					'p',
+						textPos,
+					'font',
+						font,
+					'rotate',
+						this.textRotation
+				);
 			}
 			else
 				{
 				var
 					x =
-						pos.x,
-
+						textPos.x,
 					y =
-						pos.y;
-
-				text =
-					text.split( '\n' );
-
-				var
+						textPos.y,
+					text =
+						this.text.split( '\n' ),
 					tZ =
 						text.length;
 

@@ -35,13 +35,10 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Label',
-
 		unit :
 			'Widgets',
-
 		attributes :
 			{
 				// FIXME deduce from mark
@@ -49,130 +46,97 @@ if( JOOBJ )
 					{
 						comment :
 							'true if the widget got focus',
-
 						type :
 							'Boolean',
-
 						allowNull :
 							true,
-
 						assign :
 							null
 					},
-
 				// FIXME deduce from hoverPath
 				hoverAccent :
 					{
 						comment :
 							'true if the widget is hovered on',
-
 						type :
 							'Boolean',
-
 						allowNull :
 							true,
-
 						assign :
 							null
 					},
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						type :
 							'Mark',
-
 						// FIXME do not allow null
 						allowNull :
 							true,
-
 						assign :
 							null
 					},
-
 				path :
 					{
 						comment :
 							'the path of the widget',
-
 						type :
 							'Path'
 					},
-
 				superFrame :
 					{
 						comment :
 							'the frame the widget resides in',
-
 						type :
 							'Rect'
 					},
-
-
 				text :
 					{
 						comment :
 							'the text written in the button',
-
 						type :
 							'String',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null'
 					},
-
 				tree :
 					{
 						comment :
 							'the shellverse tree',
-
 						type :
 							'Tree'
 					},
-
 				traitSet :
 					{
 						comment :
 							'traits being set',
-
 						type :
 							'TraitSet',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
-
 				visible :
 					{
 						comment :
 							'if false the button is hidden',
-
 						type :
 							'Boolean',
-
 						allowNull :
 							true,
-
 						// default taken from tree
 						defaultVal :
 							'null'
 					}
 			},
-
 		subclass :
 			'Widgets.Widget',
-
 		init :
 			[
 				'traitSet'
