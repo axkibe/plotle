@@ -21,7 +21,8 @@ Gruga =
 */
 var
 	Design,
-	fontPool;
+	fontPool,
+	Widgets;
 
 /*
 | Capsule
@@ -100,148 +101,142 @@ Gruga.MoveToForm =
 		},
 
 		'meshcraftHomeButton' :
-		{
-			type :
-				'ButtonWidget',
-			style :
-				'portalButton',
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								meshcraftHomeButton.w,
-							'y',
-								meshcraftHomeButton.n
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								meshcraftHomeButton.w +
-								meshcraftHomeButton.width,
-							'y',
-								meshcraftHomeButton.n +
-								meshcraftHomeButton.height
-						)
-				),
-			text :
-				'meshraft\nhome',
-			textNewline :
-				25,
-			font :
-				fontPool.get( 14, 'cm' ),
-			textDesignPos  :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						0
-				),
-			shape :
-				Design.AnchorEllipse.fullSkewNW
-		},
+			Widgets.Button.create(
+				'style',
+					'portalButton',
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									meshcraftHomeButton.w,
+								'y',
+									meshcraftHomeButton.n
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									meshcraftHomeButton.w +
+									meshcraftHomeButton.width,
+								'y',
+									meshcraftHomeButton.n +
+									meshcraftHomeButton.height
+							)
+					),
+				'text',
+					'meshraft\nhome',
+				'textNewline',
+					25,
+				'font',
+					fontPool.get( 14, 'cm' ),
+				'textDesignPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					),
+				'shape',
+					Design.AnchorEllipse.fullSkewNW
+			),
 
 		'meshcraftSandboxButton' :
-		{
-			type :
-				'ButtonWidget',
-			style :
-				'portalButton',
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								meshcraftSandboxButton.w,
-							'y',
-								meshcraftSandboxButton.n
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								meshcraftSandboxButton.w +
-								meshcraftSandboxButton.width,
-							'y',
-								meshcraftSandboxButton.n +
-								meshcraftSandboxButton.height
-						)
-				),
-			text :
-				'meshraft\nsandbox',
-			textNewline :
-				25,
-			font :
-				fontPool.get( 14, 'cm' ),
-			textDesignPos  :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						0
-				),
-			shape :
-				Design.AnchorEllipse.fullSkewNW
-		},
+			Widgets.Button.create(
+				'style',
+					'portalButton',
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									meshcraftSandboxButton.w,
+								'y',
+									meshcraftSandboxButton.n
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									meshcraftSandboxButton.w +
+									meshcraftSandboxButton.width,
+								'y',
+									meshcraftSandboxButton.n +
+									meshcraftSandboxButton.height
+							)
+					),
+				'text',
+					'meshraft\nsandbox',
+				'textNewline',
+					25,
+				'font',
+					fontPool.get( 14, 'cm' ),
+				'textDesignPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					),
+				'shape',
+					Design.AnchorEllipse.fullSkewNW
+			),
 
 		'userHomeButton' :
-		{
-			type :
-				'ButtonWidget',
-			style :
-				'portalButton',
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								userHomeButton.w,
-							'y',
-								userHomeButton.n
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								userHomeButton.w +
-								userHomeButton.width,
-							'y',
-								userHomeButton.n +
-								userHomeButton.height
-						)
-				),
-			text :
-				'your\nhome',
-			textNewline :
-				25,
-			font :
-				fontPool.get( 14, 'cm' ),
-			textDesignPos  :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						0
-				),
-			shape :
-				Design.AnchorEllipse.fullSkewNW
-		}
+			Widgets.Button.create(
+				'style',
+					'portalButton',
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									userHomeButton.w,
+								'y',
+									userHomeButton.n
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									userHomeButton.w +
+									userHomeButton.width,
+								'y',
+									userHomeButton.n +
+									userHomeButton.height
+							)
+					),
+				'text',
+					'your\nhome',
+				'textNewline',
+					25,
+				'font',
+					fontPool.get( 14, 'cm' ),
+				'textDesignPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							0
+					),
+				'shape',
+					Design.AnchorEllipse.fullSkewNW
+			)
 	},
 
 

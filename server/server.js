@@ -824,6 +824,24 @@ Server.prototype.prepareResources =
 				'shell/design/anchor-ellipse.js',
 					'fbj',
 
+				'shell/widgets/widget.js',
+					'fb',
+
+				'shell/widgets/getstyle.js',
+					'fb',
+
+				'shell/widgets/button.js',
+					'fbj',
+
+				'shell/widgets/input.js',
+					'fbj',
+
+				'shell/widgets/checkbox.js',
+					'fbj',
+
+				'shell/widgets/label.js',
+					'fbj',
+
 				'shell/shellverse.js',
 					'fb',
 
@@ -900,24 +918,6 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/hover-reply.js',
-					'fbj',
-
-				'shell/widgets/widget.js',
-					'fb',
-
-				'shell/widgets/getstyle.js',
-					'fb',
-
-				'shell/widgets/button.js',
-					'fbj',
-
-				'shell/widgets/input.js',
-					'fbj',
-
-				'shell/widgets/checkbox.js',
-					'fbj',
-
-				'shell/widgets/label.js',
 					'fbj',
 
 				'shell/forms/form.js',

@@ -1,6 +1,8 @@
 /*
 | Sketches of the icons on the discs.
 |
+| FIXME make this static
+|
 | Authors: Axel Kittenberger
 */
 
@@ -196,6 +198,18 @@ Icons.prototype.remove =
 	fabric.lineTo( wx      , ny      );  // A
 
 };
+
+
+/*
+| Compares this to another icons object
+*/
+Icons.prototype.equals =
+	function(
+		o
+	)
+{
+	return this === o;
+}
 
 
 } )( );

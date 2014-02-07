@@ -122,6 +122,29 @@ Form.init =
 			}
 		}
 
+		// TODO
+		if(
+			( widgetProto.reflect && widgetProto.reflect === 'Button' )
+		)
+		{
+		sub[ name ] =
+			widgetProto.create(
+				'path',
+					path,
+				'superFrame',
+					this.frame,
+				'focusAccent',
+					focusAccent,
+				'hoverAccent',
+					path.equals( this.hover ),
+				'traitSet',
+					traitSet,
+				'mark',
+					this.mark
+			);
+		}
+		else
+		{
 		sub[ name ] =
 			widgetProto.create(
 				'path',
@@ -139,6 +162,7 @@ Form.init =
 				'mark',
 					this.mark
 			);
+		}
 	}
 
 	this.sub =
@@ -181,6 +205,11 @@ Form.prototype.showDisc =
 Form.getWidgetPrototype =
 	function( tree )
 {
+	// TODO
+	if( tree._$grown )
+	{
+		return tree;
+	}
 
 	switch( tree.twig.type )
 	{

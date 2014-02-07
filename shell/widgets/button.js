@@ -44,13 +44,33 @@ if( JOOBJ )
 			'Widgets',
 		attributes :
 			{
+				designFrame :
+					{
+						comment :
+							'designed frame (using anchors',
+						type :
+							'AnchorRect'
+					},
 				// FIXME deduce from mark
 				focusAccent :
 					{
 						comment :
 							'true if the widget got focus',
 						type :
-							'Boolean'
+							'Boolean',
+						defaultVal :
+							'false'
+					},
+				font :
+					{
+						comment :
+							'font of the text',
+						type :
+							'Font',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				// FIXME deduce from hoverPath
 				hoverAccent :
@@ -58,7 +78,31 @@ if( JOOBJ )
 						comment :
 							'true if the widget is hovered on',
 						type :
-							'Boolean'
+							'Boolean',
+						defaultVal :
+							'false'
+					},
+				icon :
+					{
+						comment :
+							'icon to display',
+						type :
+							'String',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
+					},
+				iconStyle :
+					{
+						comment :
+							'icon style to display',
+						type :
+							'String',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				// FUTURE find a more elegent solution
 				icons :
@@ -91,25 +135,38 @@ if( JOOBJ )
 						comment :
 							'the path of the widget',
 						type :
-							'Path'
-					},
-				textRotation :
-					{
-						comment :
-							'rotation of the text',
-						type :
-							'Number',
+							'Path',
 						allowNull :
 							true,
 						defaultVal :
 							'null'
+					},
+				shape :
+					{
+						comment :
+							'shape of the button',
+						type :
+							// FUTURE allow other types
+							'AnchorEllipse'
 					},
 				superFrame :
 					{
 						comment :
 							'the frame the widget resides in',
 						type :
-							'Rect'
+							'Rect',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
+					},
+				style :
+					{
+						// FIXME put in a real object instead
+						comment :
+							'name of the style used',
+						type :
+							'String'
 					},
 				text :
 					{
@@ -122,12 +179,38 @@ if( JOOBJ )
 						defaultVal :
 							'null'
 					},
-				tree :
+				textDesignPos :
 					{
 						comment :
-							'the shellverse tree',
+							'designed position of the text',
 						type :
-							'Tree'
+							'AnchorPoint',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
+					},
+				textNewline :
+					{
+						comment :
+							'vertical distance of newline',
+						type :
+							'Number',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
+					},
+				textRotation :
+					{
+						comment :
+							'rotation of the text',
+						type :
+							'Number',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				traitSet :
 					{
@@ -148,11 +231,8 @@ if( JOOBJ )
 							'if false the button is hidden',
 						type :
 							'Boolean',
-						allowNull :
-							true,
-						// default taken from tree
 						defaultVal :
-							'null'
+							'true'
 					}
 			},
 		subclass :
@@ -185,25 +265,26 @@ Button.prototype._init =
 		traitSet
 	)
 {
-	this.frame =
-		this.tree.twig.designFrame.compute(
-			this.superFrame
-		);
+	if( this.superFrame )
+	{
+		this.frame =
+			this.designFrame.compute(
+				this.superFrame
+			);
 
-	// FIXME remove
-	this.text =
-		this.text
-		||
-		this.tree.twig.text;
+		this._shape =
+			this.shape.compute(
+				this.frame.zeropnw
+			);
+	}
+	else
+	{
+		this.frame =
+			null;
 
-	this._shape =
-		this.tree.twig.shape.compute(
-			this.frame.zeropnw
-		);
-
-	// TODO remove
-	this.textRotation =
-		this.tree.twig.textRotation;
+		this._shape =
+			null;
+	}
 
 	if( traitSet )
 	{
@@ -247,15 +328,6 @@ Button.prototype._init =
 				}
 			}
 		}
-	}
-
-	if( this.visible === null )
-	{
-		this.visible =
-			Jools.is( this.tree.twig.visible ) ?
-				this.tree.twig.visible
-				:
-				true;
 	}
 
 	// if true repeats the push action if held down
@@ -314,12 +386,9 @@ Jools.lazyValue(
 						this.frame.height
 				),
 
-			tree =
-				this.tree,
-
 			style =
 				Widgets.getStyle(
-					tree.twig.style,
+					this.style,
 					accent
 				);
 
@@ -333,19 +402,19 @@ Jools.lazyValue(
 		if( this.text )
 		{
 			var
-				// FIXME put into _init
 				newline =
-					this.tree.twig.textNewline,
+					this.textNewline,
 
 				font =
-					this.tree.twig.font,
+					this.font,
 
+				// FIXME put into _init
 				textPos =
-					this.tree.twig.textDesignPos.compute(
+					this.textDesignPos.compute(
 						this.frame.zeropnw
 					);
 
-			if( !Jools.is( newline ) )
+			if( newline === null )
 			{
 				f.paintText(
 					'text',
@@ -392,22 +461,18 @@ Jools.lazyValue(
 			}
 		}
 
-		var
-			icon =
-				tree.twig.icon;
-
-		if( icon )
+		if( this.icon )
 		{
 			style =
 				Widgets.getStyle(
-					tree.twig.iconStyle,
+					this.iconStyle,
 					Accent.NORMA
 				);
 
 			f.paint(
 				style,
 				this.icons,
-				icon,
+				this.icon,
 				Euclid.View.proper
 			);
 		}
@@ -633,5 +698,11 @@ Button.prototype.dragStop =
 	shell.setAction( null );
 };
 
+
+/*
+| FIXME remove
+*/
+Button.prototype._$grown =
+	true;
 
 } )( );

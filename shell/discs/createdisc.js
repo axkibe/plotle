@@ -39,56 +39,44 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'CreateDisc',
-
 		unit :
 			'Discs',
-
 		attributes :
 			{
 				access :
 					{
 						comment :
 							'users access to current space',
-
 						type :
 							'String'
 					},
-
 				action :
 					{
 						comment :
 							'currently active action',
-
 						type :
 							'Action'
 					},
-
 				hover :
 					{
 						comment :
 							'the widget hovered upon',
-
 						type :
 							'Path'
 					},
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						type :
 							'Mark'
 					},
-
 				mode :
 					{
 						comment :
 							'current mode the UI is in',
-
 						type :
 							'String'
 					},
@@ -97,7 +85,6 @@ if( JOOBJ )
 					{
 						comment :
 							'path of the disc',
-
 						type :
 							'Path'
 					},
@@ -106,16 +93,12 @@ if( JOOBJ )
 					{
 						comment :
 							'owner of currently loaded space',
-
 						type :
 							'String',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
@@ -124,16 +107,12 @@ if( JOOBJ )
 					{
 						comment :
 							'name of currently loaded space',
-
 						type :
 							'String',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
@@ -142,13 +121,10 @@ if( JOOBJ )
 					{
 						comment :
 							'currently logged in user',
-
 						type :
 							'String',
-
 						allowNull :
 							true,
-
 						assign :
 							null
 					},
@@ -157,21 +133,17 @@ if( JOOBJ )
 					{
 						comment :
 							'the current view',
-
 						type :
 							'View',
-
 						concerns :
 							{
 								func :
 									'view.sizeOnly',
-
 								args :
 									null
 							}
-				}
+					}
 			},
-
 		subclass :
 			'Discs.Disc',
 
@@ -237,41 +209,22 @@ CreateDisc.prototype._init =
 		if( !widgetProto )
 		{
 			widgetProto =
-				Widgets.Button;
+				twig[ wname ];
 		}
 
-		switch( tree.twig.type )
-		{
-			case 'ButtonWidget' :
-
-				buttons[ wname ] =
-					widgetProto.create(
-						'path',
-							path,
-						'superFrame',
-							this.frame.zeropnw,
-						'hoverAccent',
-							path.equals( this.hover ),
-						'focusAccent',
-							focusAccent,
-						'tree',
-							tree,
-						'icons',
-							this._icons
-					);
-
-					break;
-
-			default :
-
-				throw new Error(
-					CHECK &&
-					(
-						'Cannot create widget of type: ' +
-							tree.twig.type
-					)
-				);
-		}
+		buttons[ wname ] =
+			widgetProto.create(
+				'path',
+					path,
+				'superFrame',
+					this.frame.zeropnw,
+				'hoverAccent',
+					path.equals( this.hover ),
+				'focusAccent',
+					focusAccent,
+				'icons',
+					this._icons
+			);
 	}
 
 	this.buttons =

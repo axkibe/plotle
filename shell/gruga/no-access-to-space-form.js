@@ -21,7 +21,8 @@ Gruga =
 */
 var
 	Design,
-	fontPool;
+	fontPool,
+	Widgets;
 
 /*
 | Capsule
@@ -105,45 +106,41 @@ Gruga.NoAccessToSpaceForm =
 		},
 
 		'okButton' :
-		{
-			type :
-				'ButtonWidget',
-
-			style :
-				'genericButton',
-
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								okButton.w,
-							'y',
-								okButton.n
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								okButton.w +
-								okButton.width,
-							'y',
-								okButton.n +
-								okButton.height
-						)
-				),
-			text :
-				'ok',
-			font :
-				fontPool.get( 14, 'cm' ),
-			textDesignPos  :
-				Design.AnchorPoint.PC,
-			shape :
-				Design.AnchorEllipse.fullSkewNW
-		}
+			Widgets.Button.create(
+				'style',
+					'genericButton',
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									okButton.w,
+								'y',
+									okButton.n
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									okButton.w +
+									okButton.width,
+								'y',
+									okButton.n +
+									okButton.height
+							)
+					),
+				'text',
+					'ok',
+				'font',
+					fontPool.get( 14, 'cm' ),
+				'textDesignPos',
+					Design.AnchorPoint.PC,
+				'shape',
+					Design.AnchorEllipse.fullSkewNW
+			)
 	},
 
 

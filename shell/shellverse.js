@@ -12,7 +12,8 @@ var
 	Design,
 	Euclid,
 	Jools,
-	Meshverse;
+	Meshverse,
+	Widgets;
 
 
 /*
@@ -48,6 +49,8 @@ Shellverse.prototype.AnchorPoint =
 
 
 Shellverse.prototype.ButtonWidget =
+	Widgets.Button;
+	/*
 	Jools.immute( {
 
 		must :
@@ -84,6 +87,7 @@ Shellverse.prototype.ButtonWidget =
 			} )
 
 	} );
+	*/
 
 
 Shellverse.prototype.CheckBoxWidget =

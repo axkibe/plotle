@@ -21,7 +21,8 @@ Gruga =
 */
 var
 	Design,
-	fontPool;
+	fontPool,
+	Widgets;
 
 /*
 | Capsule
@@ -472,87 +473,78 @@ Gruga.SignUpForm =
 		},
 
 		'signupButton' :
-		{
-			type :
-				'ButtonWidget',
-
-			style :
-				'genericButton',
-
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								signupButton.w,
-							'y',
-								signupButton.n
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								signupButton.w +
-								signupButton.width,
-							'y',
-								signupButton.n +
-								signupButton.height
-						)
-				),
-			text :
-				'sign up',
-			font :
-				fontPool.get( 14, 'cm' ),
-			textDesignPos :
-				Design.AnchorPoint.PC,
-			shape :
-				Design.AnchorEllipse.fullSkewNW
-		},
-
+			Widgets.Button.create(
+				'style',
+					'genericButton',
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									signupButton.w,
+								'y',
+									signupButton.n
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									signupButton.w +
+									signupButton.width,
+								'y',
+									signupButton.n +
+									signupButton.height
+							)
+					),
+				'text',
+					'sign up',
+				'font',
+					fontPool.get( 14, 'cm' ),
+				'textDesignPos',
+					Design.AnchorPoint.PC,
+				'shape',
+					Design.AnchorEllipse.fullSkewNW
+			),
 
 		'closeButton' :
-		{
-			type :
-				'ButtonWidget',
-
-			style :
-				'genericButton',
-
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								closeButton.w,
-							'y',
-								closeButton.n
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
+			Widgets.Button.create(
+				'style',
+					'genericButton',
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
 									'c',
-							'x',
-								closeButton.w +
-								closeButton.width,
-							'y',
-								closeButton.n +
-								closeButton.height
-						)
-				),
-			text :
-				'close',
-			font :
-				fontPool.get( 14, 'cm' ),
-			textDesignPos :
-				Design.AnchorPoint.PC,
-			shape :
-				Design.AnchorEllipse.fullSkewNW
-		}
+								'x',
+									closeButton.w,
+								'y',
+									closeButton.n
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									closeButton.w +
+									closeButton.width,
+								'y',
+									closeButton.n +
+									closeButton.height
+							)
+					),
+				'text',
+					'close',
+				'font',
+					fontPool.get( 14, 'cm' ),
+				'textDesignPos',
+					Design.AnchorPoint.PC,
+				'shape',
+					Design.AnchorEllipse.fullSkewNW
+			)
 	},
 
 

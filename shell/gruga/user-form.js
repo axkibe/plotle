@@ -21,7 +21,8 @@ Gruga =
 */
 var
 	Design,
-	fontPool;
+	fontPool,
+	Widgets;
 
 /*
 | Capsule
@@ -229,45 +230,41 @@ Gruga.UserForm =
 		},
 
 		'closeButton' :
-		{
-			type :
-				'ButtonWidget',
-
-			style :
-				'genericButton',
-
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								closeButton.w,
-							'y',
-								closeButton.n
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								closeButton.w +
-								closeButton.width,
-							'y',
-								closeButton.n +
-								closeButton.height
-						)
-				),
-			text :
-				'close',
-			font :
-				fontPool.get( 14, 'cm' ),
-			textDesignPos :
-				Design.AnchorPoint.PC,
-			shape :
-				Design.AnchorEllipse.fullSkewNW
-		}
+			Widgets.Button.create(
+				'style',
+					'genericButton',
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									closeButton.w,
+								'y',
+									closeButton.n
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									closeButton.w +
+									closeButton.width,
+								'y',
+									closeButton.n +
+									closeButton.height
+							)
+					),
+				'text',
+					'close',
+				'font',
+					fontPool.get( 14, 'cm' ),
+				'textDesignPos',
+					Design.AnchorPoint.PC,
+				'shape',
+					Design.AnchorEllipse.fullSkewNW
+			)
 	},
 
 

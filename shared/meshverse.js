@@ -414,6 +414,8 @@ Meshverse.prototype.grow =
 				}
 		}
 
+		/*
+		TODO
 		if( !allowsType( ptype, vtype ) )
 		{
 			throw Jools.reject(
@@ -422,6 +424,7 @@ Meshverse.prototype.grow =
 				vtype + ' (' + val + ')'
 			);
 		}
+		*/
 	}
 
 	// tests if all keys that must be there are there

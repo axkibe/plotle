@@ -21,7 +21,8 @@ Gruga =
 */
 var
 	Design,
-	fontPool;
+	fontPool,
+	Widgets;
 
 /*
 | Capsule
@@ -117,86 +118,78 @@ Gruga.NonExistingSpaceForm =
 						-50
 				)
 		},
-
 		'noButton' :
-		{
-			type :
-				'ButtonWidget',
-			style :
-				'genericButton',
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								noButton.w,
-							'y',
-								noButton.n
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								noButton.w +
-								noButton.width,
-							'y',
-								noButton.n +
-								noButton.height
-						)
-				),
-			text :
-				'No',
-			font :
-				fontPool.get( 14, 'cm' ),
-			textDesignPos  :
-				Design.AnchorPoint.PC,
-			shape :
-				Design.AnchorEllipse.fullSkewNW
-		},
-
+			Widgets.Button.create(
+				'style',
+					'genericButton',
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									noButton.w,
+								'y',
+									noButton.n
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									noButton.w +
+									noButton.width,
+								'y',
+									noButton.n +
+									noButton.height
+							)
+					),
+				'text',
+					'No',
+				'font',
+					fontPool.get( 14, 'cm' ),
+				'textDesignPos',
+					Design.AnchorPoint.PC,
+				'shape',
+					Design.AnchorEllipse.fullSkewNW
+			),
 		'yesButton' :
-		{
-			type :
-				'ButtonWidget',
-
-			style :
-				'genericButton',
-
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								yesButton.w,
-							'y',
-								yesButton.n
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								yesButton.w +
-								yesButton.width,
-							'y',
-								yesButton.n +
-								yesButton.height
-						)
-				),
-			text :
-				'Yes',
-			font :
-				fontPool.get( 14, 'cm' ),
-			textDesignPos  :
-				Design.AnchorPoint.PC,
-			shape :
-				Design.AnchorEllipse.fullSkewNW
-		}
+			Widgets.Button.create(
+				'style',
+					'genericButton',
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									yesButton.w,
+								'y',
+									yesButton.n
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									yesButton.w +
+									yesButton.width,
+								'y',
+									yesButton.n +
+									yesButton.height
+							)
+					),
+				'text',
+					'Yes',
+				'font',
+					fontPool.get( 14, 'cm' ),
+				'textDesignPos',
+					Design.AnchorPoint.PC,
+				'shape',
+					Design.AnchorEllipse.fullSkewNW
+			)
 	},
 
 	ranks :
