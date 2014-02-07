@@ -22,8 +22,7 @@ var
 	Euclid,
 	Jools,
 	Path,
-	shell,
-	Widgets;
+	shell;
 
 
 /*
@@ -190,9 +189,6 @@ CreateDisc.prototype._init =
 		var
 			wname =
 				ranks[ r ],
-
-			tree =
-				twig[ wname ],
 
 			path =
 				this.path.append( wname ),

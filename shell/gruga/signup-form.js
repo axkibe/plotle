@@ -38,17 +38,13 @@ var
 	{
 		width :
 			70,
-
 		height :
 			70,
-
 		w :
 			95,
-
 		n :
 			95
 	},
-
 
 	/*
 	| Close control
@@ -57,13 +53,10 @@ var
 	{
 		width :
 			50,
-
 		height :
 			50,
-
 		w :
 			180,
-
 		n :
 			105
 	};
@@ -76,180 +69,132 @@ Gruga.SignUpForm =
 {
 	type :
 		'Layout',
-
 	twig :
 	{
 		'headline' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Sign Up',
-			font :
-				fontPool.get( 22, 'la' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-245,
-					'y',
-						-165
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'Sign Up',
+				'font',
+					fontPool.get( 22, 'la' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-245,
+						'y',
+							-165
+					)
+			),
 		'usernameLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'username',
-
-			font :
-				fontPool.get( 16, 'ra' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-98,
-					'y',
-						-102
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'username',
+				'font',
+					fontPool.get( 16, 'ra' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-98,
+						'y',
+							-102
+					)
+			),
 		'emailLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'email',
-
-			font :
-				fontPool.get( 16, 'ra' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-98,
-					'y',
-						-62
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'email',
+				'font',
+					fontPool.get( 16, 'ra' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-98,
+						'y',
+							-62
+					)
+			),
 		'passwordLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'password',
-
-			font :
-				fontPool.get( 16, 'ra' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-98,
-					'y',
-						-22
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'password',
+				'font',
+					fontPool.get( 16, 'ra' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-98,
+						'y',
+							-22
+					)
+			),
 		'password2Label' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'repeat password',
-
-			font :
-				fontPool.get( 16, 'ra' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-98,
-					'y',
-						18
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'repeat password',
+				'font',
+					fontPool.get( 16, 'ra' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-98,
+						'y',
+							18
+					)
+			),
 		'newsletterLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'newsletter',
-
-			font :
-				fontPool.get( 16, 'ra' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-98,
-					'y',
-						58
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'newsletter',
+				'font',
+					fontPool.get( 16, 'ra' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-98,
+						'y',
+							58
+					)
+			),
 		'errorLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'',
-				// 'username/password not accepted',
-
-			font :
-				fontPool.get( 14, 'car' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-20,
-					'y',
-						-136
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'',
+				'font',
+					fontPool.get( 14, 'car' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-20,
+						'y',
+							-136
+					)
+			),
 		'userInput' :
 		{
 			type :
 				'InputWidget',
-
 			password :
 				false,
-
 			style :
 				'input',
-
 			font :
 				fontPool.get( 14, 'la' ),
-
 			maxlen :
 				100,
-
 			designFrame  :
 				Design.AnchorRect.create(
 					'pnw',
@@ -272,24 +217,18 @@ Gruga.SignUpForm =
 						)
 				)
 		},
-
 		'emailInput' :
 		{
 			type :
 				'InputWidget',
-
 			password :
 				false,
-
 			style :
 				'input',
-
 			font :
 				fontPool.get( 14, 'la' ),
-
 			maxlen :
 				100,
-
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -312,24 +251,18 @@ Gruga.SignUpForm =
 						)
 				)
 		},
-
 		'passwordInput' :
 		{
 			type :
 				'InputWidget',
-
 			password :
 				true,
-
 			style :
 				'input',
-
 			font :
 				fontPool.get( 14, 'la' ),
-
 			maxlen :
 				100,
-
 			designFrame  :
 				Design.AnchorRect.create(
 					'pnw',
@@ -352,24 +285,18 @@ Gruga.SignUpForm =
 						)
 				)
 		},
-
 		'password2Input' :
 		{
 			type :
 				'InputWidget',
-
 			password :
 				true,
-
 			style :
 				'input',
-
 			font :
 				fontPool.get( 14, 'la' ),
-
 			maxlen :
 				100,
-
 			designFrame  :
 				Design.AnchorRect.create(
 					'pnw',
@@ -392,18 +319,14 @@ Gruga.SignUpForm =
 						)
 				)
 		},
-
 		'newsletterCheckBox' :
 		{
 			type :
 				'CheckBoxWidget',
-
 			style :
 				'checkbox',
-
 			checked :
 				true,
-
 			designFrame :
 				Design.AnchorRect.create(
 					'pnw',
@@ -427,51 +350,38 @@ Gruga.SignUpForm =
 						)
 				)
 		},
-
 		'newsletter2Label' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Updates and News',
-
-			font :
-				fontPool.get( 12, 'la' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-45,
-					'y',
-						57
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'Updates and News',
+				'font',
+					fontPool.get( 12, 'la' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-45,
+						'y',
+							57
+					)
+			),
 		'newsletter3Label' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Never going to be more than an email a month. For sure!',
-
-			font :
-				fontPool.get( 12, 'la' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-45,
-					'y',
-						77
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'Never going to be more than an email a month. For sure!',
+				'font',
+					fontPool.get( 12, 'la' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-45,
+						'y',
+							77
+					)
+			),
 		'signupButton' :
 			Widgets.Button.create(
 				'style',
@@ -508,7 +418,6 @@ Gruga.SignUpForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-
 		'closeButton' :
 			Widgets.Button.create(
 				'style',
@@ -546,7 +455,6 @@ Gruga.SignUpForm =
 					Design.AnchorEllipse.fullSkewNW
 			)
 	},
-
 
 	ranks :
 	[

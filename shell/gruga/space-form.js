@@ -61,49 +61,37 @@ Gruga.SpaceForm =
 	twig :
 	{
 		'headline' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'',
-
-			font :
-				fontPool.get( 22, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-120
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'',
+				'font',
+					fontPool.get( 22, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-120
+					)
+			),
 		'message1' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'In future space settings can be altered here.',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-50
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'In future space settings can be altered here.',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-50
+					)
+			),
 		'closeButton' :
 			Widgets.Button.create(
 				'style',

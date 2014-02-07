@@ -30,8 +30,8 @@ var
 ( function( ) {
 'use strict';
 
-var
 
+var
 	/*
 	| Login control
 	*/
@@ -39,17 +39,13 @@ var
 	{
 		width :
 			70,
-
 		height :
 			70,
-
 		w :
 			95,
-
 		n :
 			28
 	},
-
 
 	/*
 	| Close control
@@ -58,13 +54,10 @@ var
 	{
 		width :
 			50,
-
 		height :
 			50,
-
 		w :
 			180,
-
 		n :
 			38
 	};
@@ -81,94 +74,69 @@ Gruga.LoginForm =
 	twig :
 	{
 		'headline' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Log In',
-
-			font :
-				fontPool.get( 22, 'la' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-225,
-					'y',
-						-112
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'Log In',
+				'font',
+					fontPool.get( 22, 'la' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-225,
+						'y',
+							-112
+					)
+			),
 		'usernameLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'username',
-
-			font :
-				fontPool.get( 16, 'la' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-175,
-					'y',
-						-49
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'username',
+				'font',
+					fontPool.get( 16, 'la' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-175,
+						'y',
+							-49
+					)
+			),
 		'passwordLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'password',
-
-			font :
-				fontPool.get( 16, 'la' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-175,
-					'y',
-						-9
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'password',
+				'font',
+					fontPool.get( 16, 'la' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-175,
+						'y',
+							-9
+					)
+			),
 		'errorLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'',
-				// 'username/password not accepted',
-
-			font :
-				fontPool.get( 14, 'car' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						-20,
-					'y',
-						-83
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'',
+				'font',
+					fontPool.get( 14, 'car' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							-20,
+						'y',
+							-83
+					)
+			),
 		'userInput' :
 		{
 			type :
@@ -208,7 +176,6 @@ Gruga.LoginForm =
 						)
 				)
 		},
-
 		'passwordInput' :
 		{
 			type :

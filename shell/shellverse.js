@@ -50,45 +50,6 @@ Shellverse.prototype.AnchorPoint =
 
 Shellverse.prototype.ButtonWidget =
 	Widgets.Button;
-	/*
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-				shape :
-					Jools.immute( {
-						'AnchorEllipse' :
-							true
-					} ),
-				designFrame :
-					'AnchorRect',
-				style :
-					'String'
-			} ),
-
-		can :
-			Jools.immute( {
-				font :
-					'Font',
-				icon :
-					'String',
-				iconStyle :
-					'String',
-				visible :
-					'Boolean',
-				text :
-					'String',
-				textNewline :
-					'Number',
-				textRotation :
-					'Number',
-				textDesignPos :
-					'AnchorPoint',
-			} )
-
-	} );
-	*/
-
 
 Shellverse.prototype.CheckBoxWidget =
 	Jools.immute( {
@@ -139,6 +100,8 @@ Shellverse.prototype.InputWidget =
 
 
 Shellverse.prototype.LabelWidget =
+	Widgets.Label;
+	/*
 	Jools.immute( {
 		must :
 			Jools.immute( {
@@ -156,6 +119,7 @@ Shellverse.prototype.LabelWidget =
 					'Integer'
 			} )
 	} );
+	*/
 
 
 Shellverse.prototype.Layout =

@@ -82,24 +82,21 @@ Gruga.MoveToForm =
 	twig :
 	{
 		'headline' :
-		{
-			type :
-				'LabelWidget',
-			text :
-				'move to another space',
-			font :
-				fontPool.get( 22, 'ca' ),
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-150
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'move to another space',
+				'font',
+					fontPool.get( 22, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-150
+					)
+			),
 		'meshcraftHomeButton' :
 			Widgets.Button.create(
 				'style',
@@ -145,7 +142,6 @@ Gruga.MoveToForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-
 		'meshcraftSandboxButton' :
 			Widgets.Button.create(
 				'style',
@@ -191,7 +187,6 @@ Gruga.MoveToForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-
 		'userHomeButton' :
 			Widgets.Button.create(
 				'style',

@@ -62,49 +62,37 @@ Gruga.NoAccessToSpaceForm =
 	twig :
 	{
 		'headline' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'',
-
-			font :
-				fontPool.get( 22, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-120
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'',
+				'font',
+					fontPool.get( 22, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-120
+					)
+			),
 		'message1' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Sorry, you cannot port to this space or create it.',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-50
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'Sorry, you cannot port to this space or create it.',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-50
+					)
+			),
 		'okButton' :
 			Widgets.Button.create(
 				'style',

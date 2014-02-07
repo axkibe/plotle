@@ -50,8 +50,17 @@ if( JOOBJ )
 							'Boolean',
 						allowNull :
 							true,
+						defaultVal :
+							'null',
 						assign :
 							null
+					},
+				designPos :
+					{
+						comment :
+							'designed position of the text',
+						type :
+							'AnchorPoint'
 					},
 				// FIXME deduce from hoverPath
 				hoverAccent :
@@ -62,8 +71,21 @@ if( JOOBJ )
 							'Boolean',
 						allowNull :
 							true,
+						defaultVal :
+							'null',
 						assign :
 							null
+					},
+				font :
+					{
+						comment :
+							'font of the text',
+						type :
+							'Font',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				mark :
 					{
@@ -71,43 +93,52 @@ if( JOOBJ )
 							'the users mark',
 						type :
 							'Mark',
-						// FIXME do not allow null
 						allowNull :
 							true,
+						defaultVal :
+							'null',
 						assign :
 							null
+					},
+				newline :
+					{
+						comment :
+							'vertical distance of newline',
+						type :
+							'Number',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				path :
 					{
 						comment :
 							'the path of the widget',
 						type :
-							'Path'
+							'Path',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				superFrame :
 					{
 						comment :
 							'the frame the widget resides in',
 						type :
-							'Rect'
-					},
-				text :
-					{
-						comment :
-							'the text written in the button',
-						type :
-							'String',
+							'Rect',
 						allowNull :
 							true,
 						defaultVal :
 							'null'
 					},
-				tree :
+				text :
 					{
 						comment :
-							'the shellverse tree',
+							'the label text',
 						type :
-							'Tree'
+							'String'
 					},
 				traitSet :
 					{
@@ -128,11 +159,8 @@ if( JOOBJ )
 							'if false the button is hidden',
 						type :
 							'Boolean',
-						allowNull :
-							true,
-						// default taken from tree
 						defaultVal :
-							'null'
+							'true'
 					}
 			},
 		subclass :
@@ -158,10 +186,18 @@ Label.prototype._init =
 		traitSet
 	)
 {
-	this.pos =
-		this.tree.twig.pos.compute(
-			this.superFrame
-		);
+	if( this.superFrame )
+	{
+		this.pos =
+			this.designPos.compute(
+				this.superFrame
+			);
+	}
+	else
+	{
+		this.pos =
+			null;
+	}
 
 	if( traitSet )
 	{
@@ -206,21 +242,6 @@ Label.prototype._init =
 			}
 		}
 	}
-
-	if( this.visible === null )
-	{
-		this.visible =
-			Jools.is( this.tree.twig.visible ) ?
-				this.tree.twig.visible
-				:
-				true;
-	}
-
-	if( this.text === null )
-	{
-		this.text =
-			this.tree.twig.text;
-	}
 };
 
 
@@ -245,7 +266,7 @@ Label.prototype.draw =
 		'p',
 			this.pos,
 		'font',
-			this.tree.twig.font
+			this.font
 	);
 };
 
@@ -276,5 +297,13 @@ Label.prototype.click =
 {
 	return null;
 };
+
+
+/*
+| FIXME remove
+*/
+Label.prototype._$grown =
+	true;
+
 
 } ) ( );

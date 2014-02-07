@@ -38,13 +38,10 @@ var closeButton =
 {
 	width :
 		50,
-
 	height :
 		50,
-
 	w :
 		180,
-
 	n :
 		38
 };
@@ -57,178 +54,129 @@ Gruga.UserForm =
 {
 	type :
 		'Layout',
-
 	twig :
 	{
 		'headline' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Hello',
-
-			font :
-				fontPool.get( 22, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-120
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'Hello',
+				'font',
+					fontPool.get( 22, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-120
+					)
+			),
 		'visitor1' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'You\'re currently an anonymous visitor!',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-50
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'You\'re currently an anonymous visitor!',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-50
+					)
+			),
 		'visitor2' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Click on "sign up" or "log in"',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.PC
-		},
-
+			Widgets.Label.create(
+				'text',
+					'Click on "sign up" or "log in"',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.PC
+			),
 		'visitor3' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'on the control disc to the left',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						20
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'on the control disc to the left',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							20
+					)
+			),
 		'visitor4' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				' to register as an user.',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						40
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'to register as an user.',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							40
+					)
+			),
 		'greeting1' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'This is your profile page!',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-50
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'This is your profile page!',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-50
+					)
+			),
 		'greeting2' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'In future you will be able to do stuff here,',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-10
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'In future you will be able to do stuff here,',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-10
+					)
+			),
 		'greeting3' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'like for example change your password.',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						10
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'like for example change your password.',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							10
+					)
+			),
 		'closeButton' :
 			Widgets.Button.create(
 				'style',
@@ -266,7 +214,6 @@ Gruga.UserForm =
 					Design.AnchorEllipse.fullSkewNW
 			)
 	},
-
 
 	ranks :
 	[

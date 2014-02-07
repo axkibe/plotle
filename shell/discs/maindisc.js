@@ -21,8 +21,7 @@ Discs =
 var
 	Euclid,
 	Jools,
-	shell,
-	Widgets;
+	shell;
 
 /*
 | Capsule
@@ -184,7 +183,7 @@ MainDisc.prototype._init =
 	{
 		var
 			wname =
-				ranks[ r ],
+				ranks[ r ];
 
 		text =
 			undefined;

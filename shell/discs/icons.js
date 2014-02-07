@@ -209,7 +209,7 @@ Icons.prototype.equals =
 	)
 {
 	return this === o;
-}
+};
 
 
 } )( );

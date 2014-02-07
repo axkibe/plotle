@@ -24,6 +24,7 @@ var
 	fontPool,
 	Widgets;
 
+
 /*
 | Capsule
 */
@@ -39,13 +40,10 @@ var
 	{
 		width :
 			75,
-
 		height :
 			75,
-
 		w :
 			-100,
-
 		n :
 			28
 	},
@@ -58,13 +56,10 @@ var
 	{
 		width :
 			75,
-
 		height :
 			75,
-
 		w :
 			25,
-
 		n :
 			28
 	};
@@ -82,42 +77,37 @@ Gruga.NonExistingSpaceForm =
 	twig :
 	{
 		'headline' :
-		{
-			type :
-				'LabelWidget',
-			text :
-				'',
-			font :
-				fontPool.get( 22, 'ca' ),
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-120
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'',
+				'font',
+					fontPool.get( 22, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-120
+					)
+			),
 		'message1' :
-		{
-			type :
-				'LabelWidget',
-			text :
-				'Do you want to create it?',
-			font :
-				fontPool.get( 16, 'ca' ),
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-50
-				)
-		},
+			Widgets.Label.create(
+				'text',
+					'Do you want to create it?',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+								'c',
+						'x',
+							0,
+						'y',
+							-50
+					)
+			),
 		'noButton' :
 			Widgets.Button.create(
 				'style',

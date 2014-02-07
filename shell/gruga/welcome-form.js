@@ -60,49 +60,37 @@ Gruga.WelcomeForm =
 	twig :
 	{
 		'headline' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Welcome',
-
-			font :
-				fontPool.get( 22, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-120
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'Welcome',
+				'font',
+					fontPool.get( 22, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-120
+					)
+			),
 		'message1' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'Your registration was successful :-)',
-
-			font :
-				fontPool.get( 16, 'ca' ),
-
-			pos :
-				Design.AnchorPoint.create(
-					'anchor',
-						'c',
-					'x',
-						0,
-					'y',
-						-50
-				)
-		},
-
+			Widgets.Label.create(
+				'text',
+					'Your registration was successful :-)',
+				'font',
+					fontPool.get( 16, 'ca' ),
+				'designPos',
+					Design.AnchorPoint.create(
+						'anchor',
+							'c',
+						'x',
+							0,
+						'y',
+							-50
+					)
+			),
 		'closeButton' :
 			Widgets.Button.create(
 				'style',
@@ -140,7 +128,6 @@ Gruga.WelcomeForm =
 					Design.AnchorEllipse.fullSkewNW
 			)
 	},
-
 
 	ranks :
 	[
