@@ -80,6 +80,8 @@ Shellverse.prototype.AnchorRect =
 	Design.AnchorRect;
 
 Shellverse.prototype.InputWidget =
+	Widgets.Input;
+	/*
 	Jools.immute( {
 
 		must :
@@ -97,30 +99,11 @@ Shellverse.prototype.InputWidget =
 			} )
 
 	} );
+	*/
 
 
 Shellverse.prototype.LabelWidget =
 	Widgets.Label;
-	/*
-	Jools.immute( {
-		must :
-			Jools.immute( {
-				text :
-					'String',
-				pos  :
-					'AnchorPoint',
-				font :
-					'Font'
-			} ),
-
-		can :
-			Jools.immute( {
-				newline :
-					'Integer'
-			} )
-	} );
-	*/
-
 
 Shellverse.prototype.Layout =
 	Jools.immute( {

@@ -138,83 +138,67 @@ Gruga.LoginForm =
 					)
 			),
 		'userInput' :
-		{
-			type :
-				'InputWidget',
-
-			password :
-				false,
-
-			style :
-				'input',
-
-			font :
-				fontPool.get( 14, 'la' ),
-
-			maxlen :
-				100,
-
-			designFrame  :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								-80,
-							'y',
-								-67
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								130,
-							'y',
-								-42
-						)
-				)
-		},
+			Widgets.Input.create(
+				'style',
+					'input',
+				'font',
+					fontPool.get( 14, 'la' ),
+				'maxlen',
+					100,
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									-80,
+								'y',
+									-67
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									130,
+								'y',
+									-42
+							)
+					)
+			),
 		'passwordInput' :
-		{
-			type :
-				'InputWidget',
-
-			password :
-				true,
-
-			style :
-				'input',
-
-			font :
-				fontPool.get( 14, 'la' ),
-
-			maxlen :
-				100,
-
-			designFrame  :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								-80,
-							'y',
-								-27
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								130,
-							'y',
-								-2
-						)
-				)
-		},
+			Widgets.Input.create(
+				'password',
+					true,
+				'style',
+					'input',
+				'font',
+					fontPool.get( 14, 'la' ),
+				'maxlen',
+					100,
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									-80,
+								'y',
+									-27
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									130,
+								'y',
+									-2
+							)
+					)
+			),
 		'loginButton' :
 			Widgets.Button.create(
 				'style',

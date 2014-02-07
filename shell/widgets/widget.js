@@ -53,6 +53,11 @@ Widget.concernsMark =
 		path
 	)
 {
+	if( !mark )
+	{
+		return null;
+	}
+
 	if(
 		mark.containsPath( path )
 	)

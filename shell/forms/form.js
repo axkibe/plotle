@@ -127,6 +127,8 @@ Form.init =
 			( widgetProto.reflect && widgetProto.reflect === 'Button' )
 			||
 			( widgetProto.reflect && widgetProto.reflect === 'Label' )
+			||
+			( widgetProto.reflect && widgetProto.reflect === 'Input' )
 		)
 		{
 		sub[ name ] =

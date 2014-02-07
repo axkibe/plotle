@@ -184,141 +184,129 @@ Gruga.SignUpForm =
 					)
 			),
 		'userInput' :
-		{
-			type :
-				'InputWidget',
-			password :
-				false,
-			style :
-				'input',
-			font :
-				fontPool.get( 14, 'la' ),
-			maxlen :
-				100,
-			designFrame  :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								-80,
-							'y',
-								-120
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								130,
-							'y',
-								-95
-						)
-				)
-		},
+			Widgets.Input.create(
+				'style',
+					'input',
+				'font',
+					fontPool.get( 14, 'la' ),
+				'maxlen',
+					100,
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									-80,
+								'y',
+									-120
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									130,
+								'y',
+									-95
+							)
+					)
+			),
 		'emailInput' :
-		{
-			type :
-				'InputWidget',
-			password :
-				false,
-			style :
-				'input',
-			font :
-				fontPool.get( 14, 'la' ),
-			maxlen :
-				100,
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								-80,
-							'y',
-								-80
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								130,
-							'y',
-								-55
-						)
-				)
-		},
+			Widgets.Input.create(
+				'style',
+					'input',
+				'font',
+					fontPool.get( 14, 'la' ),
+				'maxlen',
+					100,
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									-80,
+								'y',
+									-80
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									130,
+								'y',
+									-55
+							)
+					)
+			),
 		'passwordInput' :
-		{
-			type :
-				'InputWidget',
-			password :
-				true,
-			style :
-				'input',
-			font :
-				fontPool.get( 14, 'la' ),
-			maxlen :
-				100,
-			designFrame  :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								-80,
-							'y',
-								-40
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								130,
-							'y',
-								-15
-						)
-				)
-		},
+			Widgets.Input.create(
+				'password',
+					true,
+				'style',
+					'input',
+				'font',
+					fontPool.get( 14, 'la' ),
+				'maxlen',
+					100,
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									-80,
+								'y',
+									-40
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									130,
+								'y',
+									-15
+							)
+					)
+			),
 		'password2Input' :
-		{
-			type :
-				'InputWidget',
-			password :
-				true,
-			style :
-				'input',
-			font :
-				fontPool.get( 14, 'la' ),
-			maxlen :
-				100,
-			designFrame  :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								-80,
-							'y',
-								0
-						),
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								130,
-							'y',
-								25
-						)
-				)
-		},
+			Widgets.Input.create(
+				'password',
+					true,
+				'style',
+					'input',
+				'font',
+					fontPool.get( 14, 'la' ),
+				'maxlen',
+					100,
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									-80,
+								'y',
+									0
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									130,
+								'y',
+									25
+							)
+					)
+			),
 		'newsletterCheckBox' :
 		{
 			type :

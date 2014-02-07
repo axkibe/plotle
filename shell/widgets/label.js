@@ -16,13 +16,6 @@ Widgets =
 
 
 /*
-| Imports
-*/
-var
-	Jools;
-
-
-/*
 | Capsule
 */
 ( function( ) {

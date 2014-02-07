@@ -52,119 +52,137 @@ if( JOOBJ )
 
 		attributes :
 			{
+				designFrame :
+					{
+						comment :
+							'designed frame (using anchors',
+						type :
+							'AnchorRect'
+					},
 				// FIXME deduce from mark
 				focusAccent :
 					{
 						comment :
 							'true if the widget got focus',
-
 						type :
-							'Boolean'
+							'Boolean',
+						defaultVal :
+							'false'
 					},
-
 				// FIXME deduce from hoverPath
 				hoverAccent :
 					{
 						comment :
 							'true if the widget is hovered on',
-
 						type :
-							'Boolean'
+							'Boolean',
+						defaultVal :
+							'false'
 					},
-
+				font :
+					{
+						comment :
+							'font of the text',
+						type :
+							'Font'
+					},
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						concerns :
 							{
 								func :
 									'Widgets.Widget.concernsMark',
-
 								args :
 									[
 										'mark',
 										'path'
 									]
 							},
-
 						type :
-							'Mark'
+							'Mark',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
-
+				maxlen :
+					{
+						comment :
+							'maximum input length',
+						type :
+							'Integer'
+					},
+				password :
+					{
+						comment :
+							'true for password input',
+						type :
+							'Boolean',
+						defaultVal :
+							'false'
+					},
 				path :
 					{
 						comment :
 							'the path of the widget',
-
 						type :
-							'Path'
+							'Path',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
-
 				superFrame :
 					{
 						comment :
 							'the frame the widget resides in',
-
 						type :
-							'Rect'
-					},
-
-
-				value :
-					{
-						comment :
-							'the value in the input box',
-
-						type :
-							'String',
-
+							'Rect',
+						allowNull :
+							true,
 						defaultVal :
-							"''"
+							'null'
 					},
-
-				tree :
+				style :
 					{
+						// FIXME put in a real object instead
 						comment :
-							'the shellverse tree',
-
+							'name of the style used',
 						type :
-							'Tree'
+							'String'
 					},
-
 				traitSet :
 					{
 						comment :
 							'traits being set',
-
 						type :
 							'TraitSet',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
-
+				value :
+					{
+						comment :
+							'the value in the input box',
+						type :
+							'String',
+						defaultVal :
+							"''"
+					},
 				visible :
 					{
 						comment :
 							'if false the button is hidden',
-
 						type :
 							'Boolean',
-
-						allowNull :
-							true,
-
-						// default taken from tree
 						defaultVal :
-							'null'
+							'true'
 					}
 			},
 
@@ -195,23 +213,36 @@ Input.prototype._init =
 	)
 {
 	var
+		frame;
+
+	if( this.superFrame )
+	{
 		frame =
 		this.frame =
-			this.tree.twig.designFrame.compute(
+			this.designFrame.compute(
 				this.superFrame
 			);
 
-	this._shape =
-		Euclid.RoundRect.create(
-			'pnw',
-				Euclid.Point.zero,
-			'pse',
-				frame.pse.sub( frame.pnw ),
-			'a',
-				7,
-			'b',
-				3
-		),
+		this._shape =
+			Euclid.RoundRect.create(
+				'pnw',
+					Euclid.Point.zero,
+				'pse',
+					frame.pse.sub( frame.pnw ),
+				'a',
+					7,
+				'b',
+					3
+			);
+	}
+	else
+	{
+		frame =
+		this.frame =
+		this._shape =
+			null;
+	}
+
 
 	this._pitch =
 		Input._pitch;
@@ -252,15 +283,6 @@ Input.prototype._init =
 			}
 		}
 	}
-
-	if( this.visible === null )
-	{
-		this.visible =
-			Jools.is( this.tree.twig.visible ) ?
-				this.tree.twig.visible
-				:
-				true;
-	}
 };
 
 
@@ -298,10 +320,10 @@ Input.prototype.getOffsetAt =
 		a,
 
 		password =
-			this.tree.twig.password,
+			this.password,
 
 		font =
-			this.tree.twig.font,
+			this.font,
 
 		mw;
 
@@ -502,7 +524,7 @@ Jools.lazyValue(
 
 			style =
 				Widgets.getStyle(
-					this.tree.twig.style,
+					this.style,
 					Accent.state(
 						false && this.hoverAccent, // FIXME
 						this.focusAccent
@@ -510,7 +532,7 @@ Jools.lazyValue(
 				),
 
 			font =
-				this.tree.twig.font;
+				this.font;
 
 		f.fill(
 			style,
@@ -519,7 +541,7 @@ Jools.lazyValue(
 			Euclid.View.proper
 		);
 
-		if( this.tree.twig.password )
+		if( this.password )
 		{
 			f.fill(
 				{
@@ -596,11 +618,8 @@ Input.prototype.locateOffset =
 {
 	// FIXME cache position
 	var
-		tree =
-			this.tree,
-
 		font =
-			tree.twig.font,
+			this.font,
 
 		pitch =
 			this._pitch,
@@ -608,7 +627,7 @@ Input.prototype.locateOffset =
 		value =
 			this.value;
 
-	if( this.tree.twig.password )
+	if( this.password )
 	{
 		return (
 			Euclid.Point.create(
@@ -661,7 +680,7 @@ Input.prototype._drawCaret =
 	// draws the caret
 	var
 		fs =
-			this.tree.twig.font.size,
+			this.font.size,
 
 		descend =
 			fs * theme.bottombox,
@@ -706,7 +725,7 @@ Input.prototype.input =
 			mark.caretAt,
 
 		maxlen =
-			this.tree.twig.maxlen;
+			this.maxlen;
 
 	// cuts of text if larger than this maxlen
 	if(
@@ -1145,7 +1164,7 @@ Jools.lazyValue(
 	{
 		var
 			fs =
-				this.tree.twig.font.size,
+				this.font.size,
 
 			descend =
 				fs * theme.bottombox,
@@ -1163,6 +1182,13 @@ Jools.lazyValue(
 		);
 	}
 );
+
+
+/*
+| FIXME remove
+*/
+Input.prototype._$grown =
+	true;
 
 
 })( );
