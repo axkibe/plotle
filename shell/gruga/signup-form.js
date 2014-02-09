@@ -308,36 +308,33 @@ Gruga.SignUpForm =
 					)
 			),
 		'newsletterCheckBox' :
-		{
-			type :
-				'CheckBoxWidget',
-			style :
-				'checkbox',
-			checked :
-				true,
-			designFrame :
-				Design.AnchorRect.create(
-					'pnw',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								-75,
-							'y',
-								45
-						),
-
-					'pse',
-						Design.AnchorPoint.create(
-							'anchor',
-								'c',
-							'x',
-								-59,
-							'y',
-								60
-						)
-				)
-		},
+			Widgets.CheckBox.create(
+				'style',
+					'checkbox',
+				'checked',
+					true,
+				'designFrame',
+					Design.AnchorRect.create(
+						'pnw',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									-75,
+								'y',
+									45
+							),
+						'pse',
+							Design.AnchorPoint.create(
+								'anchor',
+									'c',
+								'x',
+									-59,
+								'y',
+									60
+							)
+					)
+			),
 		'newsletter2Label' :
 			Widgets.Label.create(
 				'text',

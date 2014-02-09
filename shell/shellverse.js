@@ -52,23 +52,7 @@ Shellverse.prototype.ButtonWidget =
 	Widgets.Button;
 
 Shellverse.prototype.CheckBoxWidget =
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-
-				designFrame :
-					'AnchorRect',
-
-				checked :
-					'Boolean',
-
-				style :
-					'String'
-
-			} )
-
-	} );
+	Widgets.CheckBox;
 
 Shellverse.prototype.AnchorEllipse =
 	Design.AnchorEllipse;
@@ -81,26 +65,6 @@ Shellverse.prototype.AnchorRect =
 
 Shellverse.prototype.InputWidget =
 	Widgets.Input;
-	/*
-	Jools.immute( {
-
-		must :
-			Jools.immute( {
-				designFrame :
-					'AnchorRect',
-				password :
-					'Boolean',
-				style :
-					'String',
-				font :
-					'Font',
-				maxlen :
-					'Number'
-			} )
-
-	} );
-	*/
-
 
 Shellverse.prototype.LabelWidget =
 	Widgets.Label;

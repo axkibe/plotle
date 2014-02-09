@@ -101,7 +101,7 @@ Form.init =
 		if( !widgetProto )
 		{
 			widgetProto =
-				Form.getWidgetPrototype( subtree );
+				subtree;
 		}
 
 		// FIXME only when not having widgetProto
@@ -122,15 +122,6 @@ Form.init =
 			}
 		}
 
-		// TODO
-		if(
-			( widgetProto.reflect && widgetProto.reflect === 'Button' )
-			||
-			( widgetProto.reflect && widgetProto.reflect === 'Label' )
-			||
-			( widgetProto.reflect && widgetProto.reflect === 'Input' )
-		)
-		{
 		sub[ name ] =
 			widgetProto.create(
 				'path',
@@ -146,27 +137,6 @@ Form.init =
 				'mark',
 					this.mark
 			);
-		}
-		else
-		{
-		sub[ name ] =
-			widgetProto.create(
-				'path',
-					path,
-				'tree',
-					subtree,
-				'superFrame',
-					this.frame,
-				'focusAccent',
-					focusAccent,
-				'hoverAccent',
-					path.equals( this.hover ),
-				'traitSet',
-					traitSet,
-				'mark',
-					this.mark
-			);
-		}
 	}
 
 	this.sub =
@@ -200,48 +170,6 @@ Form.concernsMark =
 */
 Form.prototype.showDisc =
 	true;
-
-
-
-/*
-| Returns the widgets prototype matching type
-*/
-Form.getWidgetPrototype =
-	function( tree )
-{
-	// TODO
-	if( tree._$grown )
-	{
-		return tree;
-	}
-
-	switch( tree.twig.type )
-	{
-		case 'ButtonWidget' :
-
-			return Widgets.Button;
-
-		case 'CheckBoxWidget' :
-
-			return Widgets.CheckBox;
-
-		case 'InputWidget' :
-
-			return Widgets.Input;
-
-		case 'LabelWidget' :
-
-			return Widgets.Label;
-
-		default :
-
-			throw new Error(
-				CHECK &&
-				( 'Invalid component type: ' + tree.twig.type )
-			);
-	}
-};
-
 
 
 /*

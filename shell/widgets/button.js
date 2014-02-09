@@ -11,8 +11,10 @@
 var
 	Widgets;
 
+
 Widgets =
 	Widgets || { };
+
 
 /*
 | Imports
@@ -242,11 +244,6 @@ if( JOOBJ )
 				'inherit',
 				'traitSet'
 			]
-//		FIXME
-//		refuse :
-//			[
-//				'icon === null && text === null'
-//			]
 	};
 }
 

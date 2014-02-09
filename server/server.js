@@ -3258,13 +3258,13 @@ Server.prototype.generateJoobj =
 				r.path
 			);
 
-	data =
-		joobjGenerator( joobj );
-
 	Jools.log(
 		'start',
 		'generating ' + 'joobj/' + r.alias
 	);
+
+	data =
+		joobjGenerator( joobj );
 
 	// updates the generated file
 	yield fs.writeFile(

@@ -21,7 +21,6 @@ Widgets =
 var
 	Accent,
 	Euclid,
-	Jools,
 	shell,
 	TraitSet;
 
@@ -51,11 +50,15 @@ if( JOOBJ )
 							'true if the checkbox is checked',
 						type :
 							'Boolean',
-						allowNull :
-							true,
-						// default taken from tree
 						defaultVal :
-							'null'
+							'false'
+					},
+				designFrame :
+					{
+						comment :
+							'designed frame (using anchors',
+						type :
+							'AnchorRect'
 					},
 				// FIXME deduce from mark
 				focusAccent :
@@ -63,7 +66,9 @@ if( JOOBJ )
 						comment :
 							'true if the widget got focus',
 						type :
-							'Boolean'
+							'Boolean',
+						defaultVal :
+							'false'
 					},
 				// FIXME deduce from hoverPath
 				hoverAccent :
@@ -71,7 +76,9 @@ if( JOOBJ )
 						comment :
 							'true if the widget is hovered on',
 						type :
-							'Boolean'
+							'Boolean',
+						defaultVal :
+							'false'
 					},
 				mark :
 					{
@@ -92,21 +99,30 @@ if( JOOBJ )
 						comment :
 							'the path of the widget',
 						type :
-							'Path'
+							'Path',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				superFrame :
 					{
 						comment :
 							'the frame the widget resides in',
 						type :
-							'Rect'
+							'Rect',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
-				tree :
+				style :
 					{
+						// FIXME put in a real object instead
 						comment :
-							'the shellverse tree',
+							'name of the style used',
 						type :
-							'Tree'
+							'String'
 					},
 				traitSet :
 					{
@@ -127,10 +143,8 @@ if( JOOBJ )
 							'if false the button is hidden',
 						type :
 							'Boolean',
-						allowNull :
-							true,
 						defaultVal :
-							'null'
+							'true'
 					}
 			},
 		subclass :
@@ -156,11 +170,18 @@ CheckBox.prototype._init =
 		traitSet
 	)
 {
-	this.frame =
-		this.tree.twig.designFrame.compute(
-			this.superFrame
-		);
-
+	if( this.superFrame )
+	{
+		this.frame =
+			this.designFrame.compute(
+				this.superFrame
+			);
+	}
+	else
+	{
+		this.frame =
+			null;
+	}
 
 	if( traitSet )
 	{
@@ -204,23 +225,6 @@ CheckBox.prototype._init =
 				}
 			}
 		}
-	}
-
-	if( this.visible === null )
-	{
-		this.visible =
-			Jools.is( this.tree.twig.visible ) ?
-				this.tree.twig.visible
-				:
-				true;
-	}
-
-	if( this.checked === null )
-	{
-		this.checked =
-			Jools.is( this.tree.twig.checked ) ?
-				this.tree.twig.checked :
-				false;
 	}
 };
 
@@ -423,7 +427,7 @@ CheckBox.prototype.draw =
 	var
 		style =
 			Widgets.getStyle(
-				this.tree.twig.style,
+				this.style,
 				Accent.state(
 					this.hoverAccent,
 					this.focusAccent
@@ -450,6 +454,14 @@ CheckBox.prototype.draw =
 		);
 	}
 };
+
+
+/*
+| FIXME remove
+*/
+CheckBox.prototype._$grown =
+	true;
+
 
 
 } )( );
