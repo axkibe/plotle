@@ -899,18 +899,22 @@ generateSubclassSection =
 };
 
 
+
 /*
-| Generates the free strings parser
+| Generates the inheritance receiver
 | of the creator.
 */
 var
-generateCreatorFreeStringsParser =
-	function(
+generateCreatorInheritanceReceiver =
+	function
+	(
 		r,  // result array
 		jj  // the joobj working object
 	)
 {
 	var
+		a,
+		aZ,
 		aName,
 		attr;
 
@@ -937,12 +941,80 @@ generateCreatorFreeStringsParser =
 
 	r.push(
 		'',
+		'\tif( this !== ' + jj.reference + ' )',
+		'\t{',
+		'\t\tinherit =',
+		'\t\t\tthis;',
+		''
+	);
+
+	for(
+		a = 0, aZ = jj.aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			jj.aList[ a ];
+
+		attr =
+			jj.attributes[ aName ];
+
+		if( attr.assign === null )
+		{
+			continue;
+		}
+
+		if( a > 0 )
+		{
+			r.push(
+				''
+			);
+		}
+
+		r.push(
+			'\t\t' + aName + ' =',
+			'\t\t\tthis.' +
+				( attr.asign || aName ) +
+				';'
+		);
+	}
+
+	r.push(
+		'\t}'
+	);
+};
+
+
+/*
+| Generates the free strings parser
+| of the creator.
+*/
+var
+generateCreatorFreeStringsParser =
+	function(
+		r,  // result array
+		jj  // the joobj working object
+	)
+{
+	var
+		a,
+		aZ,
+		aName,
+		attr;
+
+	r.push(
+		'',
 		'\tfor(',
 		'\t\tvar _a_ = 0, _aZ_ = arguments.length;',
 		'\t\t_a_ < _aZ_;',
 		'\t\t_a_ += 2',
 		'\t)',
 		'\t{',
+		'\t\tvar',
+		'\t\t\t_arg_ =',
+		'\t\t\t\targuments[ _a_ + 1 ];',
+		'',
 		'\t\tswitch( arguments[ _a_ ] )',
 		'\t\t{'
 	);
@@ -959,8 +1031,11 @@ generateCreatorFreeStringsParser =
 		r.push(
 			'\t\t\tcase \'' + aName + '\' :',
 			'',
-			'\t\t\t\t' + aName + ' =',
-			'\t\t\t\t\targuments[ _a_ + 1 ];',
+			'\t\t\t\tif( _arg_ !== undefined )',
+			'\t\t\t\t{',
+			'\t\t\t\t\t' + aName + ' =',
+			'\t\t\t\t\t\t_arg_;',
+			'\t\t\t\t}',
 			'',
 			'\t\t\t\tbreak;',
 			''
@@ -1064,95 +1139,6 @@ generateCreatorFreeStringsParser =
 			''
 		);
 	}
-};
-
-
-/*
-| Generates the inheritance passer
-| of the creator.
-*/
-var
-generateCreatorInheritance =
-	function
-	(
-		r,  // result array
-		jj  // the joobj working object
-	)
-{
-	var
-		aName,
-		attr;
-
-	if( jj.aList.length === 0 )
-	{
-		return;
-	}
-
-	r.push(
-		'\tif( this !== ' + jj.reference + ' )',
-		'\t{',
-		'/**/\tif( CHECK )',
-		'/**/\t{',
-		'/**/\t\tif( inherit !== undefined )',
-		'/**/\t\t{',
-		'/**/\t\t\tthrow new Error(',
-		'/**/\t\t\t\t\'double inherit\'',
-		'/**/\t\t\t);',
-		'/**/\t\t}',
-		'/**/\t}',
-		'',
-		'\t\tinherit =',
-		'\t\t\tthis;',
-		'\t}',
-		''
-	);
-
-	r.push(
-		'\tif( inherit )',
-		'\t{'
-	);
-
-	for(
-		var a = 0, aZ = jj.aList.length;
-		a < aZ;
-		a++
-	)
-	{
-		aName =
-			jj.aList[ a ];
-
-		attr =
-			jj.attributes[ aName ];
-
-		if( attr.assign === null )
-		{
-			continue;
-		}
-
-		if( a > 0 )
-		{
-			r.push(
-				''
-			);
-		}
-
-		r.push(
-			'\t\tif( ' +
-				aName +
-				' === undefined )',
-			'\t\t{',
-			'\t\t\t' + aName + ' =',
-			'\t\t\t\tinherit.' +
-				( attr.asign || aName ) +
-				';',
-			'\t\t}'
-		);
-	}
-
-	r.push(
-		'\t}',
-		''
-	);
 };
 
 
@@ -1702,10 +1688,13 @@ generateCreator =
 
 	if( jj.creList.length > 0 )
 	{
+		generateCreatorInheritanceReceiver( r, jj );
+
 		generateCreatorFreeStringsParser( r, jj );
 	}
 
-	generateCreatorInheritance( r, jj );
+	// TODO remove
+	//generateCreatorInheritance( r, jj );
 
 	generateCreatorDefaultValues( r, jj );
 

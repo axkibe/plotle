@@ -450,7 +450,6 @@
 > getSeconds
 . getStyle
 . getType
-. getWidgetPrototype
 > globalAlpha
 > globalCompositeOperation
 . gradient

@@ -27,8 +27,7 @@ var
 	Path,
 	shell,
 	shellverse,
-	theme,
-	Widgets;
+	theme;
 
 
 /*
