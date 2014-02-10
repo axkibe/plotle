@@ -138,7 +138,18 @@ if( JOOBJ )
 		init :
 			[
 				'inherit'
-			]
+			],
+		twig :
+			{
+				'Button' :
+					true,
+				'CheckBox' :
+					true,
+				'Label' :
+					true,
+				'Input' :
+					true
+			}
 	};
 }
 

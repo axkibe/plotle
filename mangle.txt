@@ -1,3 +1,4 @@
+. createFromJSON
 . designPos
 . textDesignPos
 . textNewline

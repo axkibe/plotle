@@ -183,12 +183,13 @@ Meshverse.prototype.grow =
 	}
 
 	// new style creation
-	if( pattern.create && pattern.prototype.reflect === type )
+	if(
+		pattern.create
+		&&
+		pattern.prototype.reflect === type
+	)
 	{
-		return pattern.create(
-			'json',
-				model
-		);
+		return pattern.createFromJSON( model );
 	}
 
 	if( pattern.ranks )

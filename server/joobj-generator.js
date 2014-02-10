@@ -40,6 +40,7 @@ var
 			case 'equals' :
 			case 'subclass' :
 			case 'singleton' :
+			case 'twig' :
 			case 'unit' :
 
 				break;
@@ -74,17 +75,16 @@ var
 	{
 		for( aName in attr )
 		{
-			if( aName === 'inherit' )
+			if(
+				aName === 'create'
+				||
+				aName === 'inherit'
+				||
+				aName === 'type'
+			)
 			{
 				throw new Error(
-					'attribute must not be named "inherit"'
-				);
-			}
-
-			if( aName === 'json' )
-			{
-				throw new Error(
-					'attribute must not be named "json"'
+					'attribute must not be named "' + aName + '"'
 				);
 			}
 
@@ -187,11 +187,6 @@ buildJJ =
 		unitList =
 			null,
 
-		// list of all arguments accepted
-		// by the creator
-		creList =
-			null,
-
 		// units used
 		units =
 			{ };
@@ -287,19 +282,6 @@ buildJJ =
 
 	conList.sort( );
 
-	// creator List
-
-	creList =
-		aList.slice( );
-
-
-	if( joobj.hasJSON )
-	{
-		creList.push( 'json' );
-	}
-
-	creList.sort( );
-
 	return Object.freeze(
 		{
 			aList :
@@ -310,9 +292,6 @@ buildJJ =
 
 			conList :
 				conList,
-
-			creList :
-				creList,
 
 			equals :
 				joobj.equals,
@@ -919,34 +898,17 @@ generateCreatorInheritanceReceiver =
 		attr;
 
 	r.push(
-		'\tvar',
-		'\t\tinherit' +
-			( jj.creList.length > 0 ? ',' : ';' )
-	);
-
-	for(
-		var a = 0, aZ = jj.creList.length;
-		a < aZ;
-		a++
-	)
-	{
-		aName =
-			jj.creList[ a ];
-
-		r.push(
-			'\t\t' + aName +
-				( a + 1 >= jj.creList.length ? ';' : ',' )
-		);
-	}
-
-	r.push(
-		'',
 		'\tif( this !== ' + jj.reference + ' )',
 		'\t{',
 		'\t\tinherit =',
 		'\t\t\tthis;',
 		''
 	);
+
+	if( jj.twig )
+	{
+		// TODO
+	}
 
 	for(
 		a = 0, aZ = jj.aList.length;
@@ -981,7 +943,8 @@ generateCreatorInheritanceReceiver =
 	}
 
 	r.push(
-		'\t}'
+		'\t}',
+		''
 	);
 };
 
@@ -1000,8 +963,7 @@ generateCreatorFreeStringsParser =
 	var
 		a,
 		aZ,
-		aName,
-		attr;
+		aName;
 
 	r.push(
 		'',
@@ -1020,13 +982,13 @@ generateCreatorFreeStringsParser =
 	);
 
 	for(
-		a = 0, aZ = jj.creList.length;
+		a = 0, aZ = jj.aList.length;
 		a < aZ;
 		a++
 	)
 	{
 		aName =
-			jj.creList[ a ];
+			jj.aList[ a ];
 
 		r.push(
 			'\t\t\tcase \'' + aName + '\' :',
@@ -1056,89 +1018,6 @@ generateCreatorFreeStringsParser =
 		''
 	);
 
-	// generates JSON data aquisition
-	if( jj.hasJSON )
-	{
-		r.push(
-			'\tif( json )',
-			'\t{'
-		);
-
-		for(
-			a = 0, aZ = jj.aList.length;
-			a < aZ;
-			a++
-		)
-		{
-			aName =
-				jj.aList[ a ],
-
-			attr =
-				jj.attributes[ aName ];
-
-			if( a > 0 )
-			{
-				r.push(
-					''
-				);
-			}
-
-			r.push(
-				'\t\tif( ' + aName + ' === undefined )',
-				'\t\t{',
-				'\t\t\t' + aName + ' ='
-			);
-
-			switch( attr.type )
-			{
-				case 'Boolean' :
-				case 'Integer' :
-				case 'Number' :
-				case 'String' :
-
-					r.push(
-						'\t\t\t\tjson.' + aName + ';'
-					);
-
-					break;
-
-				default :
-
-					if( attr.unit )
-					{
-						r.push(
-							'\t\t\t\t' +
-								attr.unit + '.' +
-								attr.type + '.create('
-						);
-					}
-					else
-					{
-						r.push(
-							'\t\t\t\t' +
-								attr.type + '.create('
-						);
-					}
-
-					r.push(
-						'\t\t\t\t\t\'json\',',
-						'\t\t\t\t\t\tjson.' + aName,
-						'\t\t\t\t);'
-					);
-
-					break;
-			}
-
-			r.push(
-				'\t\t}'
-			);
-		}
-
-		r.push(
-			'\t}',
-			''
-		);
-	}
 };
 
 
@@ -1146,7 +1025,7 @@ generateCreatorFreeStringsParser =
 | Generates the creators default values filler.
 */
 var
-generateCreatorDefaultValues =
+generateDefaultValues =
 	function
 	(
 		r,  // result array
@@ -1188,7 +1067,7 @@ generateCreatorDefaultValues =
 | Generates the creators checks.
 */
 var
-generateCreatorChecks =
+generateChecks =
 	function
 	(
 		r,  // result array
@@ -1656,6 +1535,48 @@ generateCreatorReturn =
 
 
 /*
+| Generates the attribute variables for the creators.
+*/
+var
+generateAttributeVariables =
+	function(
+		r,  // result array
+		jj  // the joobj working object
+	)
+{
+	var
+		a,
+		aZ,
+		aName;
+
+	r.push(
+		'\tvar',
+		'\t\tinherit' +
+			( jj.aList.length > 0 ? ',' : ';' )
+	);
+
+	for(
+		a = 0, aZ = jj.aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			jj.aList[ a ];
+
+		r.push(
+			'\t\t' + aName +
+				( a + 1 >= jj.aList.length ? ';' : ',' )
+		);
+	}
+
+	r.push(
+		''
+	);
+};
+
+
+/*
 | Generates the creator.
 */
 var
@@ -1686,19 +1607,18 @@ generateCreator =
 		'{'
 	);
 
-	if( jj.creList.length > 0 )
+	generateAttributeVariables( r, jj );
+
+	if( jj.aList.length > 0 )
 	{
 		generateCreatorInheritanceReceiver( r, jj );
 
 		generateCreatorFreeStringsParser( r, jj );
 	}
 
-	// TODO remove
-	//generateCreatorInheritance( r, jj );
+	generateDefaultValues( r, jj );
 
-	generateCreatorDefaultValues( r, jj );
-
-	generateCreatorChecks( r, jj );
+	generateChecks( r, jj );
 
 	generateCreatorConcerns( r, jj );
 
@@ -1707,6 +1627,176 @@ generateCreator =
 	generateCreatorReturn( r, jj );
 
 	r.push( '};' );
+};
+
+
+/*
+| Generates the from JSON create
+*/
+var
+generateFromJSONCreator =
+	function(
+		r,  // result array
+		jj  // the joobj working object
+	)
+{
+	var
+		a,
+		aZ,
+		aName,
+		attr;
+
+	r.push(
+		'/*',
+		'| Creates a new ' + jj.name + ' object from JSON',
+		'*/',
+		jj.reference + '.createFromJSON =',
+		'\tfunction(',
+		'\t\t_json_ // the json object',
+		'\t)',
+		'{'
+	);
+
+	// XXX TODO remove
+	r.push(
+		'\tif( _json_._$grown ) return _json_;'
+	);
+
+	generateAttributeVariables( r, jj );
+
+	r.push(
+		'\tfor( var _aName_ in _json_ )',
+		'\t{',
+		'\t\tvar',
+		'\t\t\t_arg_ =',
+		'\t\t\t\t_json_[ _aName_ ];',
+		'',
+		'\t\tswitch( _aName_ )',
+		'\t\t{',
+		'\t\t\tcase \'type\' :',
+		'',
+		'\t\t\t\tif( _arg_ !== \'' + jj.name + '\')',
+		'\t\t\t\t{',
+		'\t\t\t\t\tthrow new Error(',
+		'\t\t\t\t\t\t\'invalid JSON\'',
+		'\t\t\t\t\t);',
+		'\t\t\t\t}',
+		'',
+		'\t\t\t\tbreak;',
+		''
+	);
+
+	for(
+		a = 0, aZ = jj.aList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			jj.aList[ a ],
+
+		attr =
+			jj.attributes[ aName ];
+
+		if( attr.assign === null )
+		{
+			continue;
+		}
+
+		r.push(
+			'\t\t\tcase \'' + aName + '\' :',
+			'',
+			'\t\t\t\t' + aName + ' ='
+		);
+
+		switch( attr.type )
+		{
+			case 'Boolean' :
+			case 'Integer' :
+			case 'Number' :
+			case 'String' :
+
+				r.push(
+					'\t\t\t\t\t_arg_;'
+				);
+
+				break;
+
+			default :
+
+				r.push(
+					'\t\t\t\t\t' +
+						(
+							attr.unit ?
+							( attr.unit + '.' )
+							:
+							''
+						) +
+						attr.type + '.createFromJSON(',
+					'\t\t\t\t\t\t_arg_',
+					'\t\t\t\t\t);'
+				);
+
+				break;
+		}
+
+		r.push(
+			'',
+			'\t\t\t\tbreak;',
+			''
+		);
+	}
+
+	r.push(
+		'\t\t\tdefault :',
+		'',
+		'\t\t\t\tthrow new Error(',
+		'\t\t\t\t\t\'invalid JSON: \' + _aName_',
+		'\t\t\t\t);',
+		'\t\t}',
+		'\t}',
+		''
+	);
+
+	generateDefaultValues( r, jj );
+
+	generateChecks( r, jj );
+
+	r.push(
+		'\treturn (',
+		'\t\tnew ' + jj.reference + '(',
+		'\t\t\t_tag,'
+	);
+
+	for(
+		var a = 0, aZ = jj.conList.length;
+		a < aZ;
+		a++
+	)
+	{
+		aName =
+			jj.conList[ a ];
+
+		if( aName === 'inherit' )
+		{
+			r.push(
+				'\t\t\tnull'
+			);
+
+			continue;
+		}
+
+		r.push(
+			'\t\t\t' + aName +
+				( a + 1 < jj.conList.length ? ',' : '' )
+		);
+	}
+
+	r.push(
+		'\t\t)',
+		'\t);',
+		'};'
+	);
 };
 
 
@@ -1783,6 +1873,11 @@ generateToJSONSection =
 	{
 		aName =
 			jj.aList[ a ];
+
+		if( aName === 'create' )
+		{
+			continue;
+		}
 
 		r.push(
 			'\t\t\t\'' + aName + '\' :',
@@ -2034,6 +2129,13 @@ joobjGenerator =
 	generateCreator( r, jj );
 
 	generateSeperator( r );
+
+	if( jj.hasJSON )
+	{
+		generateFromJSONCreator( r, jj );
+
+		generateSeperator( r );
+	}
 
 	generateReflectionSection( r, jj );
 
