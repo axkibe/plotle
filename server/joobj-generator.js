@@ -73,14 +73,25 @@ var
 
 	if( attr )
 	{
+		var
+			blacklist =
+				{
+					'create' :
+						true,
+					'inherit' :
+						true,
+					'ranks' :
+						true,
+					'type' :
+						true,
+					'twig' :
+						true
+				};
+
 		for( aName in attr )
 		{
 			if(
-				aName === 'create'
-				||
-				aName === 'inherit'
-				||
-				aName === 'type'
+				blacklist[ aName ]
 			)
 			{
 				throw new Error(
@@ -270,14 +281,21 @@ buildJJ =
 		conList.push( aName );
 	}
 
-	if( joobj.init )
+	if(
+		joobj.init
+		&&
+		joobj.init.indexOf( 'inherit' ) >= 0
+	)
 	{
-		if(
-			joobj.init.indexOf( 'inherit' ) >= 0
-		)
-		{
-			conList.push( 'inherit' );
-		}
+		conList.push( 'inherit' );
+	}
+
+	if( joobj.twig )
+	{
+		conList.push(
+			'twig',
+			'ranks'
+		);
 	}
 
 	conList.sort( );
@@ -286,40 +304,30 @@ buildJJ =
 		{
 			aList :
 				aList,
-
 			attributes :
 				joobj.attributes,
-
 			conList :
 				conList,
-
 			equals :
 				joobj.equals,
-
 			hasJSON :
 				joobj.hasJSON,
-
 			init :
 				joobj.init,
-
 			name :
 				joobj.name,
-
 			node :
 				joobj.node,
-
 			reference :
 				reference,
-
 			singleton :
 				joobj.singleton,
-
 			subclass :
 				joobj.subclass,
-
+			twig :
+				joobj.twig,
 			unit :
 				joobj.unit,
-
 			unitList :
 				unitList
 		}
@@ -723,6 +731,20 @@ generateConstructor =
 
 		switch( aName )
 		{
+			case 'ranks' :
+
+				comment =
+					'twig order, set upon change';
+
+				break;
+
+			case 'twig' :
+
+				comment =
+					'twig, set upon change';
+
+				break;
+
 			case 'inherit' :
 
 				comment =
@@ -1387,6 +1409,16 @@ generateCreatorFullInheritance =
 		'\t\t&&'
 	);
 
+	if( jj.twig )
+	{
+		r.push(
+			'\t\t!twig',
+			'\t\t&&',
+			'\t\t!ranks',
+			'\t\t&&'
+		);
+	}
+
 	for(
 		var a = 0, aZ = jj.aList.length;
 		a < aZ;
@@ -1520,10 +1552,33 @@ generateCreatorReturn =
 			aName =
 				jj.conList[ a ];
 
-			r.push(
-				'\t\t\t' + aName +
-					( a + 1 < jj.conList.length ? ',' : '' )
-			);
+			var
+				sep =
+					a + 1 < jj.conList.length
+					?  ',' : '';
+
+			switch( aName )
+			{
+				case 'ranks' :
+				case 'twig' :
+
+					r.push(
+						'\t\t\t' +
+							aName +
+							' || ( inherit && inherit.' +
+							aName + ' )' + sep
+					);
+
+					break;
+
+				default :
+
+					r.push(
+						'\t\t\t' + aName + sep
+					);
+
+					break;
+			}
 		}
 
 		r.push(
@@ -1540,8 +1595,9 @@ generateCreatorReturn =
 var
 generateAttributeVariables =
 	function(
-		r,  // result array
-		jj  // the joobj working object
+		r,   // result array
+		jj,  // the joobj working object
+		add  // addtional to variable list ( 'inherit' )
 	)
 {
 	var
@@ -1549,24 +1605,46 @@ generateAttributeVariables =
 		aZ,
 		aName;
 
-	r.push(
-		'\tvar',
-		'\t\tinherit' +
-			( jj.aList.length > 0 ? ',' : ';' )
-	);
+	var
+		list =
+			jj.aList.slice( );
+
+	if( add )
+	{
+		list.push(
+			'inherit'
+		);
+	}
+
+	if( jj.twig )
+	{
+		list.push(
+			'twig',
+			'ranks'
+		);
+	}
+
+	list.sort( );
+
+	if( list.length > 0 )
+	{
+		r.push(
+			'\tvar'
+		);
+	}
 
 	for(
-		a = 0, aZ = jj.aList.length;
+		a = 0, aZ = list.length;
 		a < aZ;
 		a++
 	)
 	{
 		aName =
-			jj.aList[ a ];
+			list[ a ];
 
 		r.push(
 			'\t\t' + aName +
-				( a + 1 >= jj.aList.length ? ';' : ',' )
+				( a + 1 >= list.length ? ';' : ',' )
 		);
 	}
 
@@ -1607,13 +1685,18 @@ generateCreator =
 		'{'
 	);
 
-	generateAttributeVariables( r, jj );
 
 	if( jj.aList.length > 0 )
 	{
+		generateAttributeVariables( r, jj, 'inherit' );
+
 		generateCreatorInheritanceReceiver( r, jj );
 
 		generateCreatorFreeStringsParser( r, jj );
+	}
+	else
+	{
+		generateAttributeVariables( r, jj, null );
 	}
 
 	generateDefaultValues( r, jj );
@@ -1662,7 +1745,7 @@ generateFromJSONCreator =
 		'\tif( _json_._$grown ) return _json_;'
 	);
 
-	generateAttributeVariables( r, jj );
+	generateAttributeVariables( r, jj, null );
 
 	r.push(
 		'\tfor( var _aName_ in _json_ )',
@@ -1769,7 +1852,7 @@ generateFromJSONCreator =
 	);
 
 	for(
-		var a = 0, aZ = jj.conList.length;
+		a = 0, aZ = jj.conList.length;
 		a < aZ;
 		a++
 	)
