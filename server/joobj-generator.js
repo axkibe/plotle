@@ -190,6 +190,9 @@ buildJJ =
 		aList =
 			[ ],
 
+		attributes =
+			{ },
+
 		// list of all arguments passed to
 		// constructor
 		conList,
@@ -204,26 +207,56 @@ buildJJ =
 
 	// in case unit and joobj are named identically
 	// the shortcut will be renamed
-	if( joobj.unit === joobj.name )
-	{
-		reference =
-			joobj.name + 'Obj';
-	}
-	else
-	{
-		reference =
-			joobj.name;
-	}
+	reference =
+		( joobj.unit === joobj.name )
+		?
+		joobj.name + 'Obj'
+		:
+		joobj.name;
 
-	// attribute list
-
+	// list of attributes
 	if( joobj.attributes )
 	{
+		for( aName in joobj.attributes )
+		{
+			attr =
+				joobj.attributes[ aName ];
+
+			attributes[ aName ] =
+				Object.freeze(
+					{
+						defaultVal :
+							attr.defaultVal,
+						allowNull :
+							attr.allowNull,
+						assign :
+							attr.assign !== undefined
+								?
+								attr.assign
+								:
+								aName,
+						comment :
+							attr.comment,
+						locate :
+							attr.locate,
+						refuse :
+							attr.refuse,
+						type :
+							attr.type,
+						unit :
+							attr.unit,
+						concerns :
+							attr.concerns
+					}
+				);
+		}
+
 		aList =
-			Object.keys( joobj.attributes ).sort( );
+			Object
+				.keys( joobj.attributes )
+				.sort( );
 
 		// unitList
-
 		for(
 			a = 0, aZ = aList.length;
 			a < aZ;
@@ -247,7 +280,7 @@ buildJJ =
 			Object.keys( units ).sort( );
 	}
 
-	// constructor list
+	// constructors variable list
 
 	conList =
 		[ ];
@@ -290,6 +323,7 @@ buildJJ =
 		conList.push( 'inherit' );
 	}
 
+
 	if( joobj.twig )
 	{
 		conList.push(
@@ -305,7 +339,7 @@ buildJJ =
 			aList :
 				aList,
 			attributes :
-				joobj.attributes,
+				attributes,
 			conList :
 				conList,
 			equals :
@@ -813,9 +847,7 @@ generateConstructor =
 		}
 
 		r.push(
-			'\tthis.' +
-				( attr.assign || aName ) +
-				' =',
+			'\tthis.' + attr.assign + ' =',
 			'\t\t' + aName + ';',
 			''
 		);
@@ -1326,7 +1358,7 @@ generateCreatorConcerns =
 				attr.concerns.args;
 
 		r.push(
-			'\t' + ( attr.assign  || aName ) + ' ='
+			'\t' + attr.assign + ' ='
 		);
 
 		if( args === null )
@@ -1458,8 +1490,8 @@ generateCreatorFullInheritance =
 			case 'Tree' : // FIXME
 
 				r.push(
-					'\t\t' + aName + ' === inherit.' +
-						( attr.assign || aName )
+					'\t\t' + aName +
+						' === inherit.' + attr.assign
 				);
 
 				break;
@@ -1470,24 +1502,20 @@ generateCreatorFullInheritance =
 				{
 					r.push(
 						'\t\t' + aName +
-							'.equals( inherit.' +
-							( attr.assign || aName ) +
-							' )'
+							'.equals( inherit.' + attr.assign + ' )'
 					);
 				}
 				else
 				{
 					r.push(
 						'\t\t(',
-						'\t\t\t' + aName + ' === inherit.' +
-							( attr.assign || aName ),
+						'\t\t\t' + aName + ' === inherit.' + attr.assign,
 						'\t\t\t||',
 						'\t\t\t(',
 						'\t\t\t\t' + aName + ' !== null',
 						'\t\t\t\t&&',
 						'\t\t\t\t' + aName +
-							'.equals( inherit.' +
-							( attr.assign || aName ) +
+							'.equals( inherit.' + attr.assign +
 							' )',
 						'\t\t\t)',
 						'\t\t)'
@@ -2088,10 +2116,8 @@ generateEqualsCheck =
 			case 'Tree' : // FIXME
 
 				r.push(
-					'\t\tthis.' +
-						( attr.assign || aName ) +
-						' === obj.' +
-						( attr.assign || aName )
+					'\t\tthis.' + attr.assign +
+						' === obj.' + attr.assign
 				);
 
 				break;
@@ -2101,31 +2127,22 @@ generateEqualsCheck =
 				if( !attr.allowNull )
 				{
 					r.push(
-						'\t\tthis.' +
-							( attr.assign || aName ) +
-							'.equals( obj.' +
-							( attr.assign || aName ) +
-							' )'
+						'\t\tthis.' + attr.assign +
+							'.equals( obj.' + attr.assign + ' )'
 					);
 				}
 				else
 				{
 					r.push(
 						'\t\t(',
-						'\t\t\tthis.' +
-							( attr.assign || aName ) +
-							' === obj.' +
-							( attr.assign || aName ) +
+						'\t\t\tthis.' + attr.assign +
+							' === obj.' + attr.assign +
 							' ||',
 						'\t\t\t(',
-						'\t\t\t\tthis.' + ( attr.assign || aName ) +
-							' !== null',
+						'\t\t\t\tthis.' + attr.assign + ' !== null',
 						'\t\t\t\t&&',
-						'\t\t\t\tthis.' +
-							( attr.assign || aName ) +
-							'.equals( obj.' +
-							( attr.assign || aName ) +
-							' )',
+						'\t\t\t\tthis.' + attr.assign +
+							'.equals( obj.' + attr.assign + ' )',
 						'\t\t\t)',
 						'\t\t)'
 					);
