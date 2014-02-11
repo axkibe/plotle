@@ -41,37 +41,29 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'NonExistingSpace',
-
 		unit :
 			'Forms',
-
 		attributes :
 			{
 				hover :
 					{
 						comment :
 							'the widget hovered upon',
-
 						type :
 							'Path'
 					},
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						type :
 							'Mark',
-
 						concerns :
 							{
 								func :
 									'Forms.Form.concernsMark',
-
 								args :
 									[
 										'mark',
@@ -79,7 +71,6 @@ if( JOOBJ )
 									]
 							}
 					},
-
 				path :
 					{
 						comment :
@@ -88,65 +79,47 @@ if( JOOBJ )
 						type :
 							'Path'
 					},
-
 				traitSet :
 					{
 						comment :
 							'traits being set',
-
 						type :
 							'TraitSet',
-
 						allowNull:
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
-
 				username :
 					{
 						comment :
 							'currently logged in user',
-
 						type :
 							'String',
-
 						allowNull:
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
-
 				view :
 					{
 						comment :
 							'the current view',
-
 						type :
 							'View',
-
 						concerns :
 							{
-								func :
-									'view.sizeOnly',
-
-								args :
-									null
+								member :
+									'sizeOnly'
 							}
 					}
 			},
-
 		subclass :
 			'Forms.Form',
-
 		init :
 			[
 				'inherit',
@@ -154,6 +127,7 @@ if( JOOBJ )
 			]
 	};
 }
+
 
 var
 	NonExistingSpace =

@@ -118,7 +118,7 @@ var
 					case 'assign' :
 					case 'comment' :
 					case 'locate' :
-					case 'refuse' :
+					case 'refuse' : // TODO XXX REMOVE
 					case 'type' :
 					case 'unit' :
 
@@ -131,6 +131,7 @@ var
 							switch( aooName )
 							{
 								case 'func' :
+								case 'member' :
 								case 'args' :
 
 									break;
@@ -179,15 +180,11 @@ buildJJ =
 	)
 {
 	var
-		a,
-		aZ,
 		aName,
 		attr,
 
-		reference,
-
 		// alphabetical sorted attribute names
-		aList =
+		attrList =
 			[ ],
 
 		attributes =
@@ -195,7 +192,8 @@ buildJJ =
 
 		// list of all arguments passed to
 		// constructor
-		conList,
+		conVars =
+			{ },
 
 		// units sorted alphabetically
 		unitList =
@@ -204,15 +202,6 @@ buildJJ =
 		// units used
 		units =
 			{ };
-
-	// in case unit and joobj are named identically
-	// the shortcut will be renamed
-	reference =
-		( joobj.unit === joobj.name )
-		?
-		joobj.name + 'Obj'
-		:
-		joobj.name;
 
 	// list of attributes
 	if( joobj.attributes )
@@ -225,8 +214,8 @@ buildJJ =
 			attributes[ aName ] =
 				Object.freeze(
 					{
-						defaultVal :
-							attr.defaultVal,
+						aName :
+							aName,
 						allowNull :
 							attr.allowNull,
 						assign :
@@ -237,82 +226,62 @@ buildJJ =
 								aName,
 						comment :
 							attr.comment,
+						concerns :
+							attr.concerns,
+						defaultVal :
+							attr.defaultVal,
 						locate :
 							attr.locate,
-						refuse :
+						refuse :  // TODO XXX
 							attr.refuse,
 						type :
 							attr.type,
 						unit :
 							attr.unit,
-						concerns :
-							attr.concerns
+						vName :
+							'v_' + aName
 					}
 				);
-		}
-
-		aList =
-			Object
-				.keys( joobj.attributes )
-				.sort( );
-
-		// unitList
-		for(
-			a = 0, aZ = aList.length;
-			a < aZ;
-			a++
-		)
-		{
-			aName =
-				aList[ a ];
-
-			attr =
-				joobj.attributes[ aName ];
 
 			if( attr.unit )
 			{
 				units[ attr.unit ] =
 					true;
 			}
-		}
 
-		unitList =
-			Object.keys( units ).sort( );
-	}
-
-	// constructors variable list
-
-	conList =
-		[ ];
-
-	for(
-		a = 0, aZ = aList.length;
-		a < aZ;
-		a++
-	)
-	{
-		aName =
-			aList[ a ];
-
-		attr =
-			joobj.attributes[ aName ];
-
-		// skips unused attributes
-		if(
-			attr.assign === null
-			&&
-			!(
-				joobj.init
-				&&
-				joobj.init.indexOf( aName ) >= 0
+			// skips unused attributes
+			if(
+				attr.assign !== null
+				||
+				(
+					joobj.init
+					&&
+					joobj.init.indexOf( aName ) >= 0
+				)
 			)
-		)
-		{
-			continue;
+			{
+				conVars[ aName ] =
+					Object.freeze(
+						{
+							aName :
+								aName,
+							comment :
+								attr.comment,
+							vName :
+								attributes[ aName ].vName
+						}
+					);
+			}
 		}
 
-		conList.push( aName );
+		attrList =
+			Object
+				.keys( joobj.attributes )
+				.sort( );
 	}
+
+	unitList =
+		Object.keys( units ).sort( );
 
 	if(
 		joobj.init
@@ -320,28 +289,62 @@ buildJJ =
 		joobj.init.indexOf( 'inherit' ) >= 0
 	)
 	{
-		conList.push( 'inherit' );
+		conVars.inherit =
+			Object.freeze(
+				{
+					aName :
+						'inherit',
+					comment :
+						'inheritance',
+					vName :
+						'inherit'
+				}
+			);
 	}
-
 
 	if( joobj.twig )
 	{
-		conList.push(
-			'twig',
-			'ranks'
-		);
+		conVars.twig =
+			Object.freeze(
+					{
+					aName :
+						'twig',
+					comment :
+						'twig, set upon change',
+					vName :
+						'twig'
+				}
+			);
+
+		conVars.ranks =
+			Object.freeze(
+				{
+					aName :
+						'ranks',
+					comment :
+						'twig order, set upon change',
+					vName :
+						'ranks'
+				}
+			);
 	}
+
+	var
+		conList =
+			Object.keys( conVars ).sort( );
 
 	conList.sort( );
 
 	return Object.freeze(
 		{
-			aList :
-				aList,
+			attrList :
+				attrList,
 			attributes :
 				attributes,
 			conList :
 				conList,
+			conVars :
+				conVars,
 			equals :
 				joobj.equals,
 			hasJSON :
@@ -352,8 +355,14 @@ buildJJ =
 				joobj.name,
 			node :
 				joobj.node,
+			// in case unit and joobj are named identically
+			// the shortcut will be renamed
 			reference :
-				reference,
+				( joobj.unit === joobj.name )
+				?
+				joobj.name + 'Obj'
+				:
+				joobj.name,
 			singleton :
 				joobj.singleton,
 			subclass :
@@ -593,13 +602,13 @@ generateNodeIncludesSection =
 			{ };
 
 	for(
-		a = 0, aZ = jj.aList.length;
+		a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
 		aName =
-			jj.aList[ a ];
+			jj.attrList[ a ];
 
 		attr =
 			jj.attributes[ aName ];
@@ -675,7 +684,6 @@ generateNodeExportSection =
 
 
 
-
 /*
 | Generates the constructor.
 */
@@ -696,12 +704,17 @@ generateConstructor =
 		// the attribute
 		attr,
 
+		con,
+		comma,
+
 		// longest attribute name in
 		// the constructor list
-		maxConNameLen =
-			0;
+		maxVNameLen =
+			0,
 
-	if( jj.aList )
+		vName;
+
+	if( jj.attrList )
 	{
 		for(
 			a = 0, aZ = jj.conList.length;
@@ -709,13 +722,16 @@ generateConstructor =
 			a++
 		)
 		{
-			aName =
-				jj.conList[ a ];
+			con =
+				jj.conVars[ jj.conList[ a ] ];
 
-			if( aName.length > maxConNameLen )
+			vName =
+				con.vName;
+
+			if( vName.length > maxVNameLen )
 			{
-				maxConNameLen =
-					aName.length;
+				maxVNameLen =
+					vName.length;
 			}
 		}
 	}
@@ -743,9 +759,7 @@ generateConstructor =
 	r.push(
 		'\tfunction(',
 		'\t\ttag' +
-			(
-				jj.conList.length > 0 ?  ',' : ''
-			)
+			( jj.conList.length > 0 ?  ',' : '' )
 	);
 
 	for(
@@ -754,55 +768,21 @@ generateConstructor =
 		a++
 	)
 	{
-		aName =
-			jj.conList[ a ];
+		con =
+			jj.conVars[ jj.conList[ a ] ];
 
-		var
-			comment,
-
-			comma =
-				a + 1 < aZ;
-
-		switch( aName )
-		{
-			case 'ranks' :
-
-				comment =
-					'twig order, set upon change';
-
-				break;
-
-			case 'twig' :
-
-				comment =
-					'twig, set upon change';
-
-				break;
-
-			case 'inherit' :
-
-				comment =
-					'inheritance';
-
-				break;
-
-			default :
-
-				comment =
-					jj.attributes[ aName ].comment;
-
-				break;
-		}
+		comma =
+			a + 1 < aZ;
 
 		r.push(
-			'\t\t' + aName +
+			'\t\t' + con.vName +
 				( comma ? ',' : '' ) +
-				( comment ?
+				( con.comment ?
 					whiteSpace(
-						maxConNameLen -
-							aName.length +
+						maxVNameLen -
+							con.vName.length +
 							(comma ? 0 : 1 )
-					) + ' // ' + comment
+					) + ' // ' + con.comment
 					:
 					''
 				)
@@ -830,13 +810,13 @@ generateConstructor =
 
 	// creates assigns for all assignable attributes
 	for(
-		a = 0, aZ = jj.aList.length;
+		a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
 		aName =
-			jj.aList[ a ];
+			jj.attrList[ a ];
 
 		attr =
 			jj.attributes[ aName ];
@@ -848,7 +828,7 @@ generateConstructor =
 
 		r.push(
 			'\tthis.' + attr.assign + ' =',
-			'\t\t' + aName + ';',
+			'\t\t' + attr.vName + ';',
 			''
 		);
 	}
@@ -873,8 +853,19 @@ generateConstructor =
 				a++
 			)
 			{
+				attr =
+					jj.conVars[ jj.init[ a ] ];
+
+				if( !attr )
+				{
+					throw new Error(
+						'unknown constructor variable: ' +
+							jj.init[ a ]
+					);
+				}
+
 				r.push(
-					'\t\t' + jj.init[ a ] +
+					'\t\t' + attr.vName +
 						( a + 1 < aZ ? ',' : '' )
 				);
 			}
@@ -965,13 +956,13 @@ generateCreatorInheritanceReceiver =
 	}
 
 	for(
-		a = 0, aZ = jj.aList.length;
+		a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
 		aName =
-			jj.aList[ a ];
+			jj.attrList[ a ];
 
 		attr =
 			jj.attributes[ aName ];
@@ -989,9 +980,9 @@ generateCreatorInheritanceReceiver =
 		}
 
 		r.push(
-			'\t\t' + aName + ' =',
+			'\t\t' + attr.vName + ' =',
 			'\t\t\tthis.' +
-				( attr.asign || aName ) +
+				attr.assign +
 				';'
 		);
 	}
@@ -1017,7 +1008,7 @@ generateCreatorFreeStringsParser =
 	var
 		a,
 		aZ,
-		aName;
+		attr;
 
 	r.push(
 		'',
@@ -1028,7 +1019,7 @@ generateCreatorFreeStringsParser =
 		'\t)',
 		'\t{',
 		'\t\tvar',
-		'\t\t\t_arg_ =',
+		'\t\t\targ =',
 		'\t\t\t\targuments[ _a_ + 1 ];',
 		'',
 		'\t\tswitch( arguments[ _a_ ] )',
@@ -1036,21 +1027,21 @@ generateCreatorFreeStringsParser =
 	);
 
 	for(
-		a = 0, aZ = jj.aList.length;
+		a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
-		aName =
-			jj.aList[ a ];
+		attr =
+			jj.attributes[ jj.attrList[ a ] ];
 
 		r.push(
-			'\t\t\tcase \'' + aName + '\' :',
+			'\t\t\tcase \'' + attr.aName + '\' :',
 			'',
-			'\t\t\t\tif( _arg_ !== undefined )',
+			'\t\t\t\tif( arg !== undefined )',
 			'\t\t\t\t{',
-			'\t\t\t\t\t' + aName + ' =',
-			'\t\t\t\t\t\t_arg_;',
+			'\t\t\t\t\t' + attr.vName + ' =',
+			'\t\t\t\t\t\targ;',
 			'\t\t\t\t}',
 			'',
 			'\t\t\t\tbreak;',
@@ -1087,27 +1078,23 @@ generateDefaultValues =
 	)
 {
 	var
-		aName,
 		attr;
 
 	for(
-		var a = 0, aZ = jj.aList.length;
+		var a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
-		aName =
-			jj.aList[ a ];
-
 		attr =
-			jj.attributes[ aName ];
+			jj.attributes[ jj.attrList[ a ] ];
 
 		if( attr.defaultVal )
 		{
 			r.push(
-				'\tif( ' + aName + ' === undefined )',
+				'\tif( ' + attr.vName + ' === undefined )',
 				'\t{',
-				'\t\t' + aName + ' =',
+				'\t\t' + attr.vName + ' =',
 				'\t\t\t' + attr.defaultVal + ';',
 				'\t}',
 				''
@@ -1131,11 +1118,9 @@ generateChecks =
 	var
 		a,
 		aZ,
-		aName,
 		attr;
 
-	// generates checks
-	if( jj.aList.length === 0 )
+	if( jj.attrList.length === 0 )
 	{
 		return;
 	}
@@ -1146,22 +1131,19 @@ generateChecks =
 	);
 
 	for(
-		a = 0, aZ = jj.aList.length;
+		a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
-		aName =
-			jj.aList[ a ];
-
 		attr =
-			jj.attributes[ aName ];
+			jj.attributes[ jj.attrList[ a ] ];
 
 		r.push(
-			'/**/\tif( ' + aName + ' === undefined )',
+			'/**/\tif( ' + attr.vName + ' === undefined )',
 			'/**/\t{',
 			'/**/\t\tthrow new Error(',
-			'/**/\t\t\t\'undefined attribute ' + aName + '\'',
+			'/**/\t\t\t\'undefined attribute ' + attr.aName + '\'',
 			'/**/\t\t);',
 			'/**/\t}'
 		);
@@ -1170,10 +1152,10 @@ generateChecks =
 		{
 			r.push(
 				'/**/',
-				'/**/\tif( ' + aName + ' === null )',
+				'/**/\tif( ' + attr.vName + ' === null )',
 				'/**/\t{',
 				'/**/\t\tthrow new Error(',
-				'/**/\t\t\t\'' + aName + ' must not be null\'',
+				'/**/\t\t\t\'' + attr.aName + ' must not be null\'',
 				'/**/\t\t);',
 				'/**/\t}'
 			);
@@ -1181,7 +1163,7 @@ generateChecks =
 
 		r.push(
 			'/**/',
-			'/**/\tif( ' + aName + ' !== null )',
+			'/**/\tif( ' + attr.vName + ' !== null )',
 			'/**/\t{'
 		);
 
@@ -1191,7 +1173,7 @@ generateChecks =
 
 				r.push(
 					'/**/\t\tif(',
-					'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'boolean\'',
+					'/**/\t\t\ttypeof( ' + attr.vName  + ' ) !== \'boolean\'',
 					'/**/\t\t)'
 				);
 
@@ -1201,8 +1183,11 @@ generateChecks =
 
 				r.push(
 					'/**/\t\tif(',
-					'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'number\' ||',
-					'/**/\t\t\tMath.floor( ' + aName + ' ) !== ' + aName,
+					'/**/\t\t\ttypeof( ' + attr.vName  + ' )' +
+						' !== \'number\'',
+					'/**/\t\t\t||',
+					'/**/\t\t\tMath.floor( ' + attr.vName + ' )' +
+						' !== ' + attr.vName,
 					'/**/\t\t)'
 				);
 
@@ -1212,8 +1197,10 @@ generateChecks =
 
 				r.push(
 					'/**/\t\tif(',
-					'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'string\' &&',
-					'/**/\t\t\t!( ' + aName + ' instanceof String )',
+					'/**/\t\t\ttypeof( ' + attr.vName  + ' )' +
+						' !== \'string\'',
+					'/**/\t\t\t&&',
+					'/**/\t\t\t!( ' + attr.vName + ' instanceof String )',
 					'/**/\t\t)'
 				);
 
@@ -1223,7 +1210,8 @@ generateChecks =
 
 				r.push(
 					'/**/\t\tif(',
-					'/**/\t\t\ttypeof( ' + aName  + ' ) !== \'number\'',
+					'/**/\t\t\ttypeof( ' + attr.vName  + ' )' +
+						' !== \'number\'',
 					'/**/\t\t)'
 				);
 
@@ -1246,8 +1234,8 @@ generateChecks =
 
 				r.push(
 					'/**/\t\tif( ' +
-						aName + '.reflect !== \'' + attr.type + '\'' +
-						' )'
+						attr.vName + '.reflect !==' +
+						' \'' + attr.type + '\'' + ' )'
 				);
 		}
 
@@ -1258,44 +1246,6 @@ generateChecks =
 			'/**/\t\t\t);',
 			'/**/\t\t}'
 		);
-
-		if( attr.refuse )
-		{
-			r.push(
-				'/**/',
-				'/**/\t\tif('
-			);
-
-			for(
-				var b = 0, bZ = attr.refuse.length;
-				b < bZ;
-				b++
-			)
-			{
-				r.push(
-					'/**/\t\t\t( ' +
-						aName + ' ' +
-						attr.refuse[ b ] +
-						' )'
-					);
-
-				if( b + 1 < bZ )
-				{
-					r.push(
-						'/**/\t\t\t||'
-					);
-				}
-			}
-
-			r.push(
-				'/**/\t\t)',
-				'/**/\t\t{',
-				'/**/\t\t\tthrow new Error(',
-				'/**/\t\t\t\t\'refusing value\'',
-				'/**/\t\t\t);',
-				'/**/\t\t}'
-			);
-		}
 
 		r.push(
 			'/**/\t}'
@@ -1327,23 +1277,15 @@ generateCreatorConcerns =
 		jj  // the joobj working object
 	)
 {
-	var
-		a,
-		aZ,
-		aName,
-		attr;
-
 	for(
-		a = 0, aZ = jj.aList.length;
+		var a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
-		aName =
-			jj.aList[ a ];
-
-		attr =
-			jj.attributes[ aName ];
+		var
+			attr =
+				jj.attributes[ jj.attrList[ a ] ];
 
 		if( !attr.concerns )
 		{
@@ -1351,44 +1293,76 @@ generateCreatorConcerns =
 		}
 
 		var
+			args =
+				attr.concerns.args,
+
+			b,
+			bZ,
+
 			func =
 				attr.concerns.func,
 
-			args =
-				attr.concerns.args;
+			member =
+				attr.concerns.member;
 
 		r.push(
-			'\t' + attr.assign + ' ='
+			'\t' + attr.vName + ' ='
 		);
 
-		if( args === null )
+		if( func )
 		{
-			r.push(
-				'\t\t' + func + ';',
-				''
-			);
-		}
-		else if( args.length === 0 )
-		{
-			r.push(
-				'\t\t' + func + '( );',
-				''
-			);
+			if( args.length === 0 )
+			{
+				r.push(
+					'\t\t' + func + '( );',
+					''
+				);
+			}
+			else
+			{
+				r.push(
+					'\t\t' + func + '('
+				);
+
+			}
 		}
 		else
 		{
-			r.push(
-				'\t\t' + func + '('
-			);
+			if( !args )
+			{
+				r.push(
+					'\t\t' + attr.vName + '.' + member + ';'
+				);
+			}
+			else
+			{
+				r.push(
+					'\t\t' + attr.vName + '.' + member + '('
+				);
 
+			}
+		}
+
+		if( args && args.length > 0 )
+		{
 			for(
-				var b = 0, bZ = args.length;
+				b = 0, bZ = args.length;
 				b < bZ;
 				b++
 			)
 			{
+				attr =
+					jj.attributes[ args[ b ] ];
+
+				if( !attr )
+				{
+					throw new Error(
+						'unknown attribute: ' + args[ b ]
+					);
+				}
+
 				r.push(
-					'\t\t\t' + args[ b ] +
+					'\t\t\t' + attr.vName +
 						( b + 1 < bZ ? ',' : '' )
 				);
 			}
@@ -1413,10 +1387,9 @@ generateCreatorFullInheritance =
 	)
 {
 	var
-		aName,
 		attr;
 
-	if( jj.aList.length === 0 )
+	if( jj.attrList.length === 0 )
 	{
 		r.push(
 			'',
@@ -1452,16 +1425,13 @@ generateCreatorFullInheritance =
 	}
 
 	for(
-		var a = 0, aZ = jj.aList.length;
+		var a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
-		aName =
-			jj.aList[ a ];
-
 		attr =
-			jj.attributes[ aName ];
+			jj.attributes[ jj.attrList[ a ] ];
 
 		if( a > 0 )
 		{
@@ -1473,7 +1443,7 @@ generateCreatorFullInheritance =
 		if( attr.assign === null )
 		{
 			r.push(
-				'\t\t' + aName + ' === null'
+				'\t\t' + attr.vName + ' === null'
 			);
 
 			continue;
@@ -1490,7 +1460,7 @@ generateCreatorFullInheritance =
 			case 'Tree' : // FIXME
 
 				r.push(
-					'\t\t' + aName +
+					'\t\t' + attr.vName +
 						' === inherit.' + attr.assign
 				);
 
@@ -1501,7 +1471,7 @@ generateCreatorFullInheritance =
 				if( !attr.allowNull )
 				{
 					r.push(
-						'\t\t' + aName +
+						'\t\t' + attr.vName +
 							'.equals( inherit.' + attr.assign + ' )'
 					);
 				}
@@ -1509,12 +1479,12 @@ generateCreatorFullInheritance =
 				{
 					r.push(
 						'\t\t(',
-						'\t\t\t' + aName + ' === inherit.' + attr.assign,
+						'\t\t\t' + attr.vName + ' === inherit.' + attr.assign,
 						'\t\t\t||',
 						'\t\t\t(',
-						'\t\t\t\t' + aName + ' !== null',
+						'\t\t\t\t' + attr.vName + ' !== null',
 						'\t\t\t\t&&',
-						'\t\t\t\t' + aName +
+						'\t\t\t\t' + attr.vName +
 							'.equals( inherit.' + attr.assign +
 							' )',
 						'\t\t\t)',
@@ -1546,9 +1516,6 @@ generateCreatorReturn =
 		jj    // the joobj working object
 	)
 {
-	var
-		aName;
-
 	if( jj.singleton )
 	{
 		r.push(
@@ -1577,24 +1544,23 @@ generateCreatorReturn =
 			a++
 		)
 		{
-			aName =
-				jj.conList[ a ];
-
 			var
-				sep =
-					a + 1 < jj.conList.length
-					?  ',' : '';
+				con =
+					jj.conVars[ jj.conList[ a ] ],
 
-			switch( aName )
+				sep =
+					a + 1 < aZ ?  ',' : '';
+
+			switch( con.aName )
 			{
 				case 'ranks' :
 				case 'twig' :
 
 					r.push(
 						'\t\t\t' +
-							aName +
+							con.vName +
 							' || ( inherit && inherit.' +
-							aName + ' )' + sep
+							con.vName + ' )' + sep
 					);
 
 					break;
@@ -1602,7 +1568,7 @@ generateCreatorReturn =
 				default :
 
 					r.push(
-						'\t\t\t' + aName + sep
+						'\t\t\t' + con.vName + sep
 					);
 
 					break;
@@ -1631,11 +1597,17 @@ generateAttributeVariables =
 	var
 		a,
 		aZ,
-		aName;
+		aName,
 
-	var
 		list =
-			jj.aList.slice( );
+			[ ];
+
+	for( aName in jj.attributes )
+	{
+		list.push(
+			jj.attributes[ aName ].vName
+		);
+	}
 
 	if( add )
 	{
@@ -1667,11 +1639,8 @@ generateAttributeVariables =
 		a++
 	)
 	{
-		aName =
-			list[ a ];
-
 		r.push(
-			'\t\t' + aName +
+			'\t\t' + list[ a ] +
 				( a + 1 >= list.length ? ';' : ',' )
 		);
 	}
@@ -1701,7 +1670,7 @@ generateCreator =
 		'\tfunction('
 	);
 
-	if( jj.aList )
+	if( jj.attrList )
 	{
 		r.push(
 			'\t\t// free strings'
@@ -1714,7 +1683,7 @@ generateCreator =
 	);
 
 
-	if( jj.aList.length > 0 )
+	if( jj.attrList.length > 0 )
 	{
 		generateAttributeVariables( r, jj, 'inherit' );
 
@@ -1754,7 +1723,6 @@ generateFromJSONCreator =
 	var
 		a,
 		aZ,
-		aName,
 		attr;
 
 	r.push(
@@ -1763,30 +1731,30 @@ generateFromJSONCreator =
 		'*/',
 		jj.reference + '.createFromJSON =',
 		'\tfunction(',
-		'\t\t_json_ // the json object',
+		'\t\tjson // the json object',
 		'\t)',
 		'{'
 	);
 
 	// XXX TODO remove
 	r.push(
-		'\tif( _json_._$grown ) return _json_;'
+		'\tif( json._$grown ) return json;'
 	);
 
 	generateAttributeVariables( r, jj, null );
 
 	r.push(
-		'\tfor( var _aName_ in _json_ )',
+		'\tfor( var aName in json )',
 		'\t{',
 		'\t\tvar',
-		'\t\t\t_arg_ =',
-		'\t\t\t\t_json_[ _aName_ ];',
+		'\t\t\targ =',
+		'\t\t\t\tjson[ aName ];',
 		'',
-		'\t\tswitch( _aName_ )',
+		'\t\tswitch( aName )',
 		'\t\t{',
 		'\t\t\tcase \'type\' :',
 		'',
-		'\t\t\t\tif( _arg_ !== \'' + jj.name + '\')',
+		'\t\t\t\tif( arg !== \'' + jj.name + '\')',
 		'\t\t\t\t{',
 		'\t\t\t\t\tthrow new Error(',
 		'\t\t\t\t\t\t\'invalid JSON\'',
@@ -1798,16 +1766,13 @@ generateFromJSONCreator =
 	);
 
 	for(
-		a = 0, aZ = jj.aList.length;
+		a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
-		aName =
-			jj.aList[ a ],
-
 		attr =
-			jj.attributes[ aName ];
+			jj.attributes[ jj.attrList[ a ] ];
 
 		if( attr.assign === null )
 		{
@@ -1815,9 +1780,9 @@ generateFromJSONCreator =
 		}
 
 		r.push(
-			'\t\t\tcase \'' + aName + '\' :',
+			'\t\t\tcase \'' + attr.aName + '\' :',
 			'',
-			'\t\t\t\t' + aName + ' ='
+			'\t\t\t\t' + attr.vName + ' ='
 		);
 
 		switch( attr.type )
@@ -1828,7 +1793,7 @@ generateFromJSONCreator =
 			case 'String' :
 
 				r.push(
-					'\t\t\t\t\t_arg_;'
+					'\t\t\t\t\targ;'
 				);
 
 				break;
@@ -1844,7 +1809,7 @@ generateFromJSONCreator =
 							''
 						) +
 						attr.type + '.createFromJSON(',
-					'\t\t\t\t\t\t_arg_',
+					'\t\t\t\t\t\targ',
 					'\t\t\t\t\t);'
 				);
 
@@ -1862,7 +1827,7 @@ generateFromJSONCreator =
 		'\t\t\tdefault :',
 		'',
 		'\t\t\t\tthrow new Error(',
-		'\t\t\t\t\t\'invalid JSON: \' + _aName_',
+		'\t\t\t\t\t\'invalid JSON: \' + aName',
 		'\t\t\t\t);',
 		'\t\t}',
 		'\t}',
@@ -1885,10 +1850,11 @@ generateFromJSONCreator =
 		a++
 	)
 	{
-		aName =
-			jj.conList[ a ];
+		var
+			con =
+				jj.conVars[ jj.conList[ a ] ];
 
-		if( aName === 'inherit' )
+		if( con.aName === 'inherit' )
 		{
 			r.push(
 				'\t\t\tnull'
@@ -1898,7 +1864,7 @@ generateFromJSONCreator =
 		}
 
 		r.push(
-			'\t\t\t' + aName +
+			'\t\t\t' + con.vName +
 				( a + 1 < jj.conList.length ? ',' : '' )
 		);
 	}
@@ -1977,13 +1943,13 @@ generateToJSONSection =
 	);
 
 	for(
-		a = 0, aZ = jj.aList.length;
+		a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
 		aName =
-			jj.aList[ a ];
+			jj.attrList[ a ];
 
 		if( aName === 'create' )
 		{
@@ -2078,13 +2044,13 @@ generateEqualsCheck =
 			true;
 
 	for(
-		a = 0, aZ = jj.aList.length;
+		a = 0, aZ = jj.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
 		aName =
-			jj.aList[ a ],
+			jj.attrList[ a ],
 
 		attr =
 			jj.attributes[ aName ];

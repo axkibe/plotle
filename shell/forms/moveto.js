@@ -38,37 +38,29 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'MoveTo',
-
 		unit :
 			'Forms',
-
 		attributes :
 			{
 				hover :
 					{
 						comment :
 							'the widget hovered upon',
-
 						type :
 							'Path'
 					},
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						type :
 							'Mark',
-
 						concerns :
 							{
 								func :
 									'Forms.Form.concernsMark',
-
 								args :
 									[
 										'mark',
@@ -76,71 +68,52 @@ if( JOOBJ )
 									]
 							}
 					},
-
 				path :
 					{
 						comment :
 							'the path of the form',
-
 						type :
 							'Path'
 					},
-
 				traitSet :
 					{
 						comment :
 							'traits being set',
-
 						type :
 							'TraitSet',
-
 						allowNull:
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							null
 					},
-
 				username :
 					{
 						comment :
 							'currently logged in user',
-
 						type :
 							'String',
-
 						allowNull:
 							true,
-
 						defaultVal :
 							'null'
 					},
-
 				view :
 					{
 						comment :
 							'the current view',
-
 						type :
 							'View',
-
 						concerns :
 							{
-								func :
-									'view.sizeOnly',
-
-								args :
-									null
+								member :
+									'sizeOnly'
 							}
 					}
 			},
-
 		subclass :
 			'Forms.Form',
-
 		init :
 			[
 				'inherit',

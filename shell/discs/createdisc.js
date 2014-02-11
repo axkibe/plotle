@@ -79,7 +79,6 @@ if( JOOBJ )
 						type :
 							'String'
 					},
-
 				path :
 					{
 						comment :
@@ -87,7 +86,6 @@ if( JOOBJ )
 						type :
 							'Path'
 					},
-
 				spaceUser :
 					{
 						comment :
@@ -101,7 +99,6 @@ if( JOOBJ )
 						assign :
 							null
 					},
-
 				spaceTag :
 					{
 						comment :
@@ -115,7 +112,6 @@ if( JOOBJ )
 						assign :
 							null
 					},
-
 				username :
 					{
 						comment :
@@ -127,7 +123,6 @@ if( JOOBJ )
 						assign :
 							null
 					},
-
 				view :
 					{
 						comment :
@@ -136,10 +131,8 @@ if( JOOBJ )
 							'View',
 						concerns :
 							{
-								func :
-									'view.sizeOnly',
-								args :
-									null
+								member :
+									'sizeOnly'
 							}
 					}
 			},

@@ -92,13 +92,10 @@ if( JOOBJ )
 							'View',
 						concerns :
 							{
-								func :
-									'view.sizeOnly',
-								args :
-									null
+								member :
+									'sizeOnly'
 							}
 					},
-
 				spaceUser :
 					{
 						comment :
