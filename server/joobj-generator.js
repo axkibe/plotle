@@ -118,7 +118,6 @@ var
 					case 'assign' :
 					case 'comment' :
 					case 'locate' :
-					case 'refuse' : // TODO XXX REMOVE
 					case 'type' :
 					case 'unit' :
 
@@ -232,8 +231,6 @@ buildJJ =
 							attr.defaultVal,
 						locate :
 							attr.locate,
-						refuse :  // TODO XXX
-							attr.refuse,
 						type :
 							attr.type,
 						unit :
@@ -331,9 +328,19 @@ buildJJ =
 
 	var
 		conList =
-			Object.keys( conVars ).sort( );
+			Object.keys( conVars );
 
-	conList.sort( );
+	conList.sort(
+		function( o, p )
+		{
+			return (
+				Jools.compare(
+					conVars[ o ].vName,
+					conVars[ p ].vName
+				)
+			);
+		}
+	);
 
 	return Object.freeze(
 		{
@@ -804,8 +811,7 @@ generateConstructor =
 		'/**/\t\t\t\'tag mismatch\'',
 		'/**/\t\t);',
 		'/**/\t}',
-		'/**/}',
-		''
+		'/**/}'
 	);
 
 	// creates assigns for all assignable attributes
@@ -827,9 +833,21 @@ generateConstructor =
 		}
 
 		r.push(
+			'',
 			'\tthis.' + attr.assign + ' =',
-			'\t\t' + attr.vName + ';',
-			''
+			'\t\t' + attr.vName + ';'
+		);
+	}
+
+	if( jj.twig )
+	{
+		r.push(
+			'',
+			'\tthis.twig =',
+			'\t\ttwig;',
+			'',
+			'\tthis.ranks =',
+			'\t\tranks;'
 		);
 	}
 
@@ -838,12 +856,14 @@ generateConstructor =
 		if( jj.init.length === 0 )
 		{
 			r.push(
+				'',
 				'\tthis._init( );'
 			);
 		}
 		else
 		{
 			r.push(
+				'',
 				'\tthis._init('
 			);
 
@@ -871,13 +891,13 @@ generateConstructor =
 			}
 
 			r.push(
-				'\t);',
-				''
+				'\t);'
 			);
 		}
 	}
 
 	r.push(
+		'',
 		'\tJools.immute( this );',
 		'};'
 	);
@@ -952,7 +972,17 @@ generateCreatorInheritanceReceiver =
 
 	if( jj.twig )
 	{
-		// TODO
+		r.push(
+			'\t\ttwig =',
+			'\t\t\tinherit.twig;',
+			'',
+			'\t\tranks =',
+			'\t\t\tinherit.ranks;',
+			'',
+			'\t\ttwigdup =',
+			'\t\t\tfalse;',
+			''
+		);
 	}
 
 	for(
@@ -988,9 +1018,25 @@ generateCreatorInheritanceReceiver =
 	}
 
 	r.push(
-		'\t}',
-		''
+		'\t}'
 	);
+
+	if( jj.twig )
+	{
+		r.push(
+			'\telse',
+			'\t{',
+			'\t\ttwig =',
+			'\t\t\t{ };',
+			'',
+			'\t\tranks =',
+			'\t\t\t[ ];',
+			'',
+			'\t\ttwigdup =',
+			'\t\t\ttrue;',
+			'\t}'
+		);
+	}
 };
 
 
@@ -1013,16 +1059,16 @@ generateCreatorFreeStringsParser =
 	r.push(
 		'',
 		'\tfor(',
-		'\t\tvar _a_ = 0, _aZ_ = arguments.length;',
-		'\t\t_a_ < _aZ_;',
-		'\t\t_a_ += 2',
+		'\t\tvar a = 0, aZ = arguments.length;',
+		'\t\ta < aZ;',
+		'\t\ta += 2',
 		'\t)',
 		'\t{',
 		'\t\tvar',
 		'\t\t\targ =',
-		'\t\t\t\targuments[ _a_ + 1 ];',
+		'\t\t\t\targuments[ a + 1 ];',
 		'',
-		'\t\tswitch( arguments[ _a_ ] )',
+		'\t\tswitch( arguments[ a ] )',
 		'\t\t{'
 	);
 
@@ -1049,20 +1095,62 @@ generateCreatorFreeStringsParser =
 		);
 	}
 
+	if( jj.twig )
+	{
+		r.push(
+			'\t\t\tcase \'twig:add\' :',
+			'',
+			'\t\t\t\tif( !twigdup )',
+			'\t\t\t\t{',
+			'\t\t\t\t\ttwig =',
+			'\t\t\t\t\t\tJools.copy( twig );',
+			'',
+			'\t\t\t\t\tranks =',
+			'\t\t\t\t\t\tranks.slice( );',
+			'',
+			'\t\t\t\t\tranks =',
+			'\t\t\t\t\t\tranks.slice( );',
+			'',
+			'\t\t\t\t\ttwigdup =',
+			'\t\t\t\t\t\ttrue;',
+			'\t\t\t\t}',
+			'',
+			'\t\t\t\tkey =',
+			'\t\t\t\t\targ;',
+			'',
+			'\t\t\t\targ =',
+			'\t\t\t\t\targuments[ ++a + 1 ];',
+			'',
+			'\t\t\t\tif( twig[ key ] !== undefined )',
+			'\t\t\t\t{',
+			'\t\t\t\t\tthrow new Error(',
+			'\t\t\t\t\t\t\'key "\' + key + \'" already in use\'',
+			'\t\t\t\t\t);',
+			'\t\t\t\t}',
+			'',
+			// TODO check if arg is of correct type
+			'\t\t\t\ttwig[ key ] =',
+			'\t\t\t\t\targ;',
+			'',
+			'\t\t\t\tranks.push( key );',
+			'',
+			'\t\t\t\tbreak;',
+			''
+		);
+	}
+
 	r.push(
 		'\t\t\tdefault :',
 		'',
 		'/**/\t\t\tif( CHECK )',
 		'/**/\t\t\t{',
 		'/**/\t\t\t\tthrow new Error(',
-		'/**/\t\t\t\t\t\'invalid argument: \' + arguments[ _a_ ]',
+		'/**/\t\t\t\t\t\'invalid argument: \' + arguments[ a ]',
 		'/**/\t\t\t\t);',
 		'/**/\t\t\t}',
 		'\t\t}',
-		'\t}',
-		''
+		'\t}'
 	);
-
 };
 
 
@@ -1244,10 +1332,7 @@ generateChecks =
 			'/**/\t\t\tthrow new Error(',
 			'/**/\t\t\t\t\'type mismatch\'',
 			'/**/\t\t\t);',
-			'/**/\t\t}'
-		);
-
-		r.push(
+			'/**/\t\t}',
 			'/**/\t}'
 		);
 
@@ -1328,11 +1413,23 @@ generateCreatorConcerns =
 		}
 		else
 		{
+			// member
 			if( !args )
 			{
-				r.push(
-					'\t\t' + attr.vName + '.' + member + ';'
-				);
+				if( attr.allowNull )
+				{
+					r.push(
+						'\t\t' + attr.vName + ' !== null ?',
+						'\t\t\t' + attr.vName + '.' + member + ':',
+						'\t\t\tnull;'
+					);
+				}
+				else
+				{
+					r.push(
+						'\t\t' + attr.vName + '.' + member + ';'
+					);
+				}
 			}
 			else
 			{
@@ -1401,14 +1498,14 @@ generateCreatorFullInheritance =
 			'/**/\t\t\t\'invalid argument\'',
 			'/**/\t\t);',
 			'/**/\t}',
-			'/**/}',
-			''
+			'/**/}'
 		);
 
 		return;
 	}
 
 	r.push(
+		'',
 		'\tif(',
 		'\t\tinherit',
 		'\t\t&&'
@@ -1417,9 +1514,7 @@ generateCreatorFullInheritance =
 	if( jj.twig )
 	{
 		r.push(
-			'\t\t!twig',
-			'\t\t&&',
-			'\t\t!ranks',
+			'\t\t!twigdup',
 			'\t\t&&'
 		);
 	}
@@ -1551,28 +1646,9 @@ generateCreatorReturn =
 				sep =
 					a + 1 < aZ ?  ',' : '';
 
-			switch( con.aName )
-			{
-				case 'ranks' :
-				case 'twig' :
-
-					r.push(
-						'\t\t\t' +
-							con.vName +
-							' || ( inherit && inherit.' +
-							con.vName + ' )' + sep
-					);
-
-					break;
-
-				default :
-
-					r.push(
-						'\t\t\t' + con.vName + sep
-					);
-
-					break;
-			}
+				r.push(
+					'\t\t\t' + con.vName + sep
+				);
 		}
 
 		r.push(
@@ -1590,8 +1666,8 @@ var
 generateAttributeVariables =
 	function(
 		r,   // result array
-		jj,  // the joobj working object
-		add  // addtional to variable list ( 'inherit' )
+		jj   // the joobj working object
+		// ...  addtional to variable list ( 'inherit' )
 	)
 {
 	var
@@ -1609,19 +1685,18 @@ generateAttributeVariables =
 		);
 	}
 
-	if( add )
+	for(
+		a = 2, aZ = arguments.length;
+		a < aZ;
+		a++
+	)
 	{
-		list.push(
-			'inherit'
-		);
-	}
-
-	if( jj.twig )
-	{
-		list.push(
-			'twig',
-			'ranks'
-		);
+		if( arguments[ a ] )
+		{
+			list.push(
+				arguments[ a ]
+			);
+		}
 	}
 
 	list.sort( );
@@ -1685,7 +1760,15 @@ generateCreator =
 
 	if( jj.attrList.length > 0 )
 	{
-		generateAttributeVariables( r, jj, 'inherit' );
+		generateAttributeVariables(
+			r,
+			jj,
+			'inherit',
+			jj.twig ? 'twig' : null,
+			jj.twig ? 'ranks' : null,
+			jj.twig ? 'twigdup' : null,
+			jj.twig ? 'key' : null
+		);
 
 		generateCreatorInheritanceReceiver( r, jj );
 
@@ -1693,7 +1776,7 @@ generateCreator =
 	}
 	else
 	{
-		generateAttributeVariables( r, jj, null );
+		generateAttributeVariables( r, jj );
 	}
 
 	generateDefaultValues( r, jj );
@@ -1741,7 +1824,7 @@ generateFromJSONCreator =
 		'\tif( json._$grown ) return json;'
 	);
 
-	generateAttributeVariables( r, jj, null );
+	generateAttributeVariables( r, jj );
 
 	r.push(
 		'\tfor( var aName in json )',

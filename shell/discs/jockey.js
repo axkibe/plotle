@@ -19,6 +19,7 @@ Discs =
 | Imports
 */
 var
+	Gruga,
 	Path;
 
 /*
@@ -206,8 +207,17 @@ Jockey.prototype._init =
 
 		if( !discProto )
 		{
-			discProto =
-				Discs[ name ];
+			switch ( name ) // TODO
+			{
+			case 'MainDisc' :
+				discProto =
+					Gruga.MainDisc;
+				break;
+			default :
+				discProto =
+					Discs[ name ];
+				break;
+			}
 
 			path =
 				this.path.append( name );

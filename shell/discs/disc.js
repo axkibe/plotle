@@ -90,12 +90,15 @@ Discs.Disc._init =
 				)
 		);
 
+	if( this.reflect !== 'MainDisc' ) // TODO
+	{
 	this._tree =
 		inherit
 		?
 		inherit._tree
 		:
 		shellverse.grow( Gruga[ this.reflect ] );
+	}
 
 	this.silhoutte =
 		Euclid.Ellipse.create(
@@ -124,11 +127,14 @@ Discs.Disc._init =
 				650
 		);
 
+	// TODO this is ouch.
 	this._icons =
-		inherit
-		?
-		inherit._icons
-		:
+		(
+			inherit
+			&&
+			inherit._icons
+		)
+		||
 		new Discs.Icons( );
 };
 

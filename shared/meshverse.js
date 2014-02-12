@@ -168,18 +168,12 @@ Meshverse.prototype.grow =
 	else if( model.twig )
 	{
 		twig =
-			Jools.copy(
-				model.twig,
-				{ }
-			);
+			Jools.copy( model.twig );
 	}
 	else
 	{
 		twig =
-			Jools.copy(
-				model,
-				{ }
-			);
+			Jools.copy( model );
 	}
 
 	// new style creation

@@ -1,3 +1,4 @@
+. compare
 . member
 . createFromJSON
 . designPos
@@ -675,7 +676,6 @@
 . redo
 . reduce
 . reflect
-. refuse
 > register
 . reject
 . relation

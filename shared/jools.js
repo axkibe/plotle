@@ -93,6 +93,26 @@ var
 
 
 /*
+| Compares two things.
+*/
+Jools.compare =
+	function( o, p )
+{
+	if( o > p )
+	{
+		return 1;
+	}
+
+	if( o < p )
+	{
+		return -1;
+	}
+
+	return 0;
+};
+
+
+/*
 | Returns true if o is defined
 | FIXME remove
 */
@@ -698,16 +718,22 @@ Jools.lazyFunction =
 */
 Jools.copy =
 	function(
-		o,  // the object to copy from
-		c   // the object to copy into
+		o  // the object to copy from
 	)
 {
+	var
+		c =
+			{ };
+
 	for( var k in o )
 	{
 		if( !Object.hasOwnProperty.call( o, k ) )
-			{ continue; }
+		{
+			continue;
+		}
 
-		c[ k ] = o[ k ];
+		c[ k ] =
+			o[ k ];
 	}
 
 	return c;

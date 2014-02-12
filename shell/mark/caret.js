@@ -33,73 +33,51 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Caret',
-
 		unit :
 			'Mark',
-
 		subclass :
 			'Mark.Mark',
-
 		attributes :
 			{
 				path :
 					{
 						comment :
 							'path of the caret',
-
 						type :
-							'Path',
-
-						refuse :
-							[
-								'.isEmpty'
-							]
+							'Path'
 					},
-
 				at :
 					{
 						comment :
 							'offset of the caret',
-
 						type :
-							'Integer',
-
-						refuse :
-							[
-								'< 0'
-							]
+							'Integer'
 					},
-
 				retainx :
 					{
 						comment :
 							'x-position of the caret kept',
-
 						type :
 							'Number',
-
 						allowNull :
 							true,
-
 						defaultVal :
 							'null'
 					},
-
 				focus :
 					{
 						comment :
 							'the shell has the system focus',
-
 						type :
 							'Boolean',
-
 						defaultVal :
 							'true'
 					}
-			}
+			},
+		init :
+			[ ]
 	};
 }
 
@@ -108,6 +86,28 @@ var
 	Caret =
 		Mark.Caret;
 
+
+/*
+| Initializer.
+*/
+Caret.prototype._init =
+	function( )
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.path.isEmpty )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( this.at < 0 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+};
 
 /*
 | A caret mark has a caret.

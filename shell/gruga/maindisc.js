@@ -21,6 +21,7 @@ Gruga =
 */
 var
 	Design,
+	Discs,
 	fontPool,
 	Widgets;
 
@@ -40,118 +41,81 @@ var design =
 	{
 		width :
 			44,
-
 		height :
 			44,
-
 		font :
 			fontPool.get( 14, 'cm' )
 	},
-
 	normal :
 	{
 		x :
 			4,
-
 		y :
 			120
 	},
-
 	create :
 	{
 		x :
 			20,
-
 		y :
 			169
 	},
-
 	remove :
 	{
 		x :
 			32,
-
 		y :
 			218
 	},
-
 	moveto :
 	{
 		x :
 			47,
-
 		y :
 			326
 	},
-
 	space :
 	{
 		width :
 			28,
-
 		height :
 			290,
-
 		x :
 			0,
-
 		y :
 			170
 	},
-
 	user :
 	{
 		width :
 			24,
-
 		height :
 			180,
-
 		x :
 			0,
 		y :
 			440
 	},
-
 	login :
 	{
 		x :
 			30,
-
 		y :
 			535
 	},
-
 	signup :
 	{
 		x :
 			19,
-
 		y :
 			585
 	}
-
-	/*
-	help :
-	{
-		x :
-			4,
-
-		y :
-			635
-	}
-	*/
 };
 
-
 Gruga.MainDisc =
-{
-	type :
-		'Layout',
-
-	twig :
-	{
-		'Normal' :
+	Discs.MainDisc.create(
+		'twig:add',
+			'Normal',
 			Widgets.Button.create(
 				'style',
 					'mainButton',
@@ -185,8 +149,8 @@ Gruga.MainDisc =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-
-		'Create' :
+		'twig:add',
+			'Create',
 			Widgets.Button.create(
 				'style',
 					'mainButton',
@@ -224,7 +188,8 @@ Gruga.MainDisc =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-		'Remove' :
+		'twig:add',
+			'Remove',
 			Widgets.Button.create(
 				'style',
 					'mainButton',
@@ -260,8 +225,8 @@ Gruga.MainDisc =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-
-		'MoveTo' :
+		'twig:add',
+			'MoveTo',
 			Widgets.Button.create(
 				'style',
 					'mainButton',
@@ -297,8 +262,8 @@ Gruga.MainDisc =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-
-		'Space' :
+		'twig:add',
+			'Space',
 			Widgets.Button.create(
 				'style',
 					'mainButton',
@@ -348,8 +313,8 @@ Gruga.MainDisc =
 				'textRotation',
 					- Math.PI / 2
 			),
-
-		'User' :
+		'twig:add',
+			'User',
 			Widgets.Button.create(
 				'style',
 					'mainButton',
@@ -399,8 +364,8 @@ Gruga.MainDisc =
 				'textRotation',
 						( -Math.PI / 2 )
 			),
-
-		'Login' :
+		'twig:add',
+			'Login',
 			Widgets.Button.create(
 				'style',
 					'mainButton',
@@ -440,8 +405,8 @@ Gruga.MainDisc =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-
-		'SignUp' :
+		'twig:add',
+			'SignUp',
 			Widgets.Button.create(
 				'style',
 					'mainButton',
@@ -481,20 +446,6 @@ Gruga.MainDisc =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			)
-	},
-
-	ranks :
-	[
-		'Normal',
-		'Create',
-		'Remove',
-		'MoveTo',
-		'Space',
-		'User',
-		'Login',
-		'SignUp'
-	]
-};
-
+	);
 
 } )( );
