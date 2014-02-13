@@ -76,12 +76,9 @@ var
 };
 
 Gruga.CreateDisc =
-{
-	type :
-		'Layout',
-	twig :
-	{
-		'CreateNote' :
+	Discs.CreateDisc.create(
+		'twig:add',
+		'CreateNote',
 			Widgets.Button.create(
 				'style',
 					'createButton',
@@ -117,8 +114,8 @@ Gruga.CreateDisc =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-
-		'CreateLabel' :
+		'twig:add',
+		'CreateLabel',
 			Widgets.Button.create(
 				'style',
 					'createButton',
@@ -154,8 +151,8 @@ Gruga.CreateDisc =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-
-		'CreateRelation' :
+		'twig:add',
+		'CreateRelation',
 			Widgets.Button.create(
 				'style',
 					'createButton',
@@ -193,8 +190,8 @@ Gruga.CreateDisc =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-
-		'CreatePortal' :
+		'twig:add',
+		'CreatePortal',
 			Widgets.Button.create(
 				'style',
 					'createButton',
@@ -230,15 +227,7 @@ Gruga.CreateDisc =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			)
-	},
-	ranks :
-	[
-		'CreateNote',
-		'CreateLabel',
-		'CreateRelation',
-		'CreatePortal'
-	]
-};
+	);
 
 
 } )( );

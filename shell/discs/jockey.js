@@ -207,17 +207,8 @@ Jockey.prototype._init =
 
 		if( !discProto )
 		{
-			switch ( name ) // TODO
-			{
-			case 'MainDisc' :
-				discProto =
-					Gruga.MainDisc;
-				break;
-			default :
-				discProto =
-					Discs[ name ];
-				break;
-			}
+			discProto =
+				Gruga[ name ];
 
 			path =
 				this.path.append( name );
@@ -434,11 +425,7 @@ Jockey.prototype.pushButton =
 
 		default :
 
-			throw new Error(
-				CHECK
-				&&
-				( 'invalid discname: ' + discname )
-			);
+			throw new Error( );
 	}
 };
 

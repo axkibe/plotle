@@ -49,42 +49,66 @@ if( JOOBJ )
 						comment :
 							'users access to current space',
 						type :
-							'String'
+							'String',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				action :
 					{
 						comment :
 							'currently active action',
 						type :
-							'Action'
+							'Action',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				hover :
 					{
 						comment :
 							'the widget hovered upon',
 						type :
-							'Path'
+							'Path',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				mark :
 					{
 						comment :
 							'the users mark',
 						type :
-							'Mark'
+							'Mark',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				mode :
 					{
 						comment :
 							'current mode the UI is in',
 						type :
-							'String'
+							'String',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				path :
 					{
 						comment :
 							'path of the disc',
 						type :
-							'Path'
+							'Path',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					},
 				spaceUser :
 					{
@@ -120,6 +144,8 @@ if( JOOBJ )
 							'String',
 						allowNull :
 							true,
+						defaultVal :
+							'null',
 						assign :
 							null
 					},
@@ -133,22 +159,38 @@ if( JOOBJ )
 							{
 								member :
 									'sizeOnly'
-							}
+							},
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					}
 			},
 		subclass :
 			'Discs.Disc',
-
 		init :
 			[
 				'inherit'
-			]
+			],
+		twig :
+			{
+				'Button' :
+					'Widgets.Button',
+				'CheckBox' :
+					'Widgets.Checkbox',
+				'Input' :
+					'Widgets.Input',
+				'Label' :
+					'Widgets.Label'
+			}
 	};
 }
+
 
 var
 	CreateDisc =
 		Discs.CreateDisc;
+
 
 /*
 | Initializes the create disc.
@@ -158,6 +200,12 @@ CreateDisc.prototype._init =
 		inherit
 	)
 {
+	if( this.view === null )
+	{
+		// this is an abstract disc in design mode
+		return;
+	}
+
 	Discs.Disc._init.call(
 		this,
 		inherit
@@ -168,10 +216,10 @@ CreateDisc.prototype._init =
 			{ },
 
 		twig =
-			this._tree.twig,
+			this.twig,
 
 		ranks =
-			this._tree.ranks;
+			this.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -193,7 +241,11 @@ CreateDisc.prototype._init =
 				),
 
 			widgetProto =
-				inherit && inherit.buttons[ wname ];
+				inherit
+				&&
+				inherit.buttons
+				&&
+				inherit.buttons[ wname ];
 
 		if( !widgetProto )
 		{

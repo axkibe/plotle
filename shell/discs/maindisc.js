@@ -108,22 +108,6 @@ if( JOOBJ )
 						defaultVal :
 							'null'
 					},
-				view :
-					{
-						comment :
-							'the current view',
-						type :
-							'View',
-						concerns :
-							{
-								member :
-									'sizeOnly'
-							},
-						allowNull :
-							true,
-						defaultVal :
-							'null'
-					},
 				spaceUser :
 					{
 						comment :
@@ -156,6 +140,22 @@ if( JOOBJ )
 							true,
 						defaultVal :
 							'null'
+					},
+				view :
+					{
+						comment :
+							'the current view',
+						type :
+							'View',
+						concerns :
+							{
+								member :
+									'sizeOnly'
+							},
+						allowNull :
+							true,
+						defaultVal :
+							'null'
 					}
 			},
 		subclass :
@@ -167,16 +167,17 @@ if( JOOBJ )
 		twig :
 			{
 				'Button' :
-					true,
+					'Widgets.Button',
 				'CheckBox' :
-					true,
-				'Label' :
-					true,
+					'Widgets.Checkbox',
 				'Input' :
-					true
+					'Widgets.Input',
+				'Label' :
+					'Widgets.Label'
 			}
 	};
 }
+
 
 var
 	MainDisc =

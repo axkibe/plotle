@@ -860,9 +860,6 @@ Server.prototype.prepareResources =
 				'shell/theme.js',
 					'fb',
 
-				'shell/gruga/createdisc.js',
-					'fb',
-
 				'shell/gruga/login-form.js',
 					'fb',
 
@@ -948,6 +945,9 @@ Server.prototype.prepareResources =
 					'fbj',
 
 				'shell/gruga/maindisc.js', // TODO sort all
+					'fb',
+
+				'shell/gruga/createdisc.js',
 					'fb',
 
 				'shell/visual/para.js',

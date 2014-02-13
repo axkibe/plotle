@@ -1,18 +1,3 @@
-. compare
-. member
-. createFromJSON
-. designPos
-. textDesignPos
-. textNewline
-. textRotation
-. AnchorEllipse
-. AnchorRect
-. designFrame
-. fullSkewNW
-. PC
-. PNW
-. PSE
-. PSE_M1
 . $abort
 . $action
 . $aquireAjax
@@ -35,7 +20,9 @@
 . $view
 > 1
 . Action
+. AnchorEllipse
 . AnchorPoint
+. AnchorRect
 . Button
 . ButtonWidget
 . Caret
@@ -89,7 +76,11 @@
 . None
 . Normal
 > Note
+. PC
 > PI
+. PNW
+. PSE
+. PSE_M1
 . Pan
 > Para
 > Point
@@ -226,7 +217,6 @@
 . _steerAttention
 . _testInput
 . _testInputCatcher
-. _tree
 . _update
 . _useCapture
 . _userIsGuest
@@ -327,8 +317,9 @@
 > cmd
 . color
 . comment
-. computeEllipse
+. compare
 . compute
+. computeEllipse
 . concerns
 . concernsMark
 . configSwitch
@@ -343,6 +334,7 @@
 . createArbitrary
 . createButton
 > createElement
+. createFromJSON
 > createLinearGradient
 > createRadialGradient
 . css
@@ -358,6 +350,8 @@
 > defineProperty
 . del
 . depoint
+. designFrame
+. designPos
 > detail
 . devel
 . dex
@@ -426,6 +420,7 @@
 . fromItemPath
 . frontAt
 . frontPath
+. fullSkewNW
 . func
 > function
 . generic
@@ -550,6 +545,7 @@
 . maxUndo
 . maxlen
 > measureText
+. member
 . meshcraftHomeButton
 . meshcraftSandboxButton
 > message
@@ -802,7 +798,10 @@
 > textBaseline
 . textCenter
 > textContent
+. textDesignPos
+. textNewline
 . textPath
+. textRotation
 . textWheelSpeed
 . tfx
 . tfxChg

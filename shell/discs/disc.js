@@ -35,6 +35,8 @@ var
 /*
 | Constructor
 */
+var
+Disc =
 Discs.Disc =
 	function( )
 {
@@ -47,7 +49,7 @@ Discs.Disc =
 /*
 | Common initializer.
 */
-Discs.Disc._init =
+Disc._init =
 	function(
 		inherit
 	)
@@ -89,16 +91,6 @@ Discs.Disc._init =
 						ny + height
 				)
 		);
-
-	if( this.reflect !== 'MainDisc' ) // TODO
-	{
-	this._tree =
-		inherit
-		?
-		inherit._tree
-		:
-		shellverse.grow( Gruga[ this.reflect ] );
-	}
 
 	this.silhoutte =
 		Euclid.Ellipse.create(
