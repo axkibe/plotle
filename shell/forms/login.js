@@ -20,7 +20,6 @@ Forms =
 | Imports
 */
 var
-	Gruga,
 	Jools,
 	Mark,
 	shell,
@@ -46,12 +45,16 @@ if( JOOBJ )
 			'Forms',
 		attributes :
 			{
-				path :
+				hover :
 					{
 						comment :
-							'the path of the form',
+							'the widget hovered upon',
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				mark :
 					{
@@ -68,15 +71,22 @@ if( JOOBJ )
 									]
 							},
 						type :
-							'Mark'
+							'Mark',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
-
-				hover :
+				path :
 					{
 						comment :
-							'the widget hovered upon',
+							'the path of the form',
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				traitSet :
 					{
@@ -114,18 +124,31 @@ if( JOOBJ )
 							{
 								member :
 									'sizeOnly'
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					}
 			},
-
 		subclass :
 			'Forms.Form',
-
 		init :
 			[
 				'inherit',
 				'traitSet'
-			]
+			],
+		twig :
+			{
+				'Button' :
+					'Widgets.Button',
+				'CheckBox' :
+					'Widgets.Checkbox',
+				'Input' :
+					'Widgets.Input',
+				'Label' :
+					'Widgets.Label'
+			}
 	};
 }
 
@@ -146,7 +169,7 @@ Login.prototype._init =
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Gruga.LoginForm,
+		null,
 		traitSet
 	);
 };

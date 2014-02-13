@@ -52,18 +52,33 @@ Forms.Form =
 Form.init =
 	function(
 		inherit,
-		design,
+		design, // TODO
 		traitSet
 	)
 {
+	if( this.view === null )
+	{
+		// abstract in design mode
+
+		return;
+	}
+
 	this.frame =
 		this.view.baseFrame;
 
-	var
-		tree =
-		this.tree =
-			// inherit
-			shellverse.grow( design );
+	if( design )  // TODO remove
+	{
+		var
+			tree =
+				// inherit
+				shellverse.grow( design );
+
+		this.twig =
+			tree.twig;
+
+		this.ranks =
+			tree.ranks;
+	}
 
 	// all components of the form
 	var
@@ -71,10 +86,11 @@ Form.init =
 			{ },
 
 		twig =
-			tree.twig,
+			this.twig,
 
 		ranks =
-			tree.ranks;
+			this.ranks;
+
 
 	for(
 		var a = 0, aZ = ranks.length;
@@ -90,7 +106,11 @@ Form.init =
 				twig[ name ],
 
 			widgetProto =
-				inherit && inherit.sub[ name ],
+				inherit
+				&&
+				inherit.sub
+				&&
+				inherit.sub[ name ],
 
 			path,
 
@@ -153,6 +173,11 @@ Form.concernsMark =
 		path
 	)
 {
+	if( !mark )
+	{
+		return mark;
+	}
+
 	if( mark.containsPath( path ) )
 	{
 		return mark;
@@ -217,7 +242,7 @@ Form.prototype.draw =
 
 	var
 		ranks =
-			this.tree.ranks;
+			this.ranks;
 
 	for(
 		var a = ranks.length - 1;
@@ -279,11 +304,8 @@ Form.prototype.pointingHover =
 		a,
 		aZ,
 
-		layout =
-			this.tree,
-
 		ranks =
-			layout.ranks;
+			this.ranks;
 
 	for(
 		a = 0, aZ = ranks.length;
@@ -333,11 +355,8 @@ Form.prototype.click =
 	)
 {
 	var
-		layout =
-			this.tree,
-
 		ranks =
-			layout.ranks;
+			this.ranks;
 
 	for(
 		var a = 0, aZ = ranks.length;
@@ -415,9 +434,6 @@ Form.prototype.cycleFocus =
 	)
 {
 	var
-		tree =
-			this.tree,
-
 		path =
 			this.mark.widgetPath;
 
@@ -427,8 +443,15 @@ Form.prototype.cycleFocus =
 	}
 
 	var
+		ranks =
+			this.ranks,
+
 		rank =
-			tree.rankOf( path.get( 2 ) ),
+			// tree.rankOf( path.get( 2 ) ), TODO
+			ranks.indexOf( path.get( 2 ) ),
+
+		length =
+			ranks.length, // TODO
 
 		rs =
 			rank,
@@ -440,7 +463,7 @@ Form.prototype.cycleFocus =
 	while( true )
 	{
 		rank =
-			( rank + dir + tree.length ) % tree.length;
+			( rank + dir + length ) % length;
 
 		if( rank === rs )
 		{
@@ -448,13 +471,14 @@ Form.prototype.cycleFocus =
 		}
 
 		name =
-			tree.ranks[ rank ];
+			ranks[ rank ];
 
 		ve =
 			this.sub[ name ];
 
 		if(
-			ve.focusable &&
+			ve.focusable
+			&&
 			ve.visible !== false
 		)
 		{

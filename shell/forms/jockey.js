@@ -20,6 +20,7 @@ Forms =
 | Imports
 */
 var
+	Gruga,
 	Jools,
 	Mark;
 
@@ -156,8 +157,21 @@ Jockey.prototype._init =
 
 		if( !formProto )
 		{
+			switch( name ) // TODO
+			{
+			case 'Login' :
+
+			formProto =
+				Gruga[ name ];
+
+			break;
+
+			default :
+
 			formProto =
 				Forms[ name ];
+			break;
+			}
 
 			path =
 				this.path.append( name );

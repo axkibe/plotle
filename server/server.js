@@ -860,30 +860,6 @@ Server.prototype.prepareResources =
 				'shell/theme.js',
 					'fb',
 
-				'shell/gruga/login-form.js',
-					'fb',
-
-				'shell/gruga/moveto-form.js',
-					'fb',
-
-				'shell/gruga/no-access-to-space-form.js',
-					'fb',
-
-				'shell/gruga/non-existing-space-form.js',
-					'fb',
-
-				'shell/gruga/signup-form.js',
-					'fb',
-
-				'shell/gruga/space-form.js',
-					'fb',
-
-				'shell/gruga/user-form.js',
-					'fb',
-
-				'shell/gruga/welcome-form.js',
-					'fb',
-
 				'shell/euclid/view.js',
 					'fbj',
 
@@ -944,11 +920,36 @@ Server.prototype.prepareResources =
 				'shell/forms/jockey.js',
 					'fbj',
 
-				'shell/gruga/maindisc.js', // TODO sort all
+				'shell/gruga/maindisc.js',
 					'fb',
 
 				'shell/gruga/createdisc.js',
 					'fb',
+
+				'shell/gruga/login.js',
+					'fb',
+
+				'shell/gruga/moveto-form.js',
+					'fb',
+
+				'shell/gruga/no-access-to-space-form.js',
+					'fb',
+
+				'shell/gruga/non-existing-space-form.js',
+					'fb',
+
+				'shell/gruga/signup-form.js',
+					'fb',
+
+				'shell/gruga/space-form.js',
+					'fb',
+
+				'shell/gruga/user-form.js',
+					'fb',
+
+				'shell/gruga/welcome-form.js',
+					'fb',
+
 
 				'shell/visual/para.js',
 					'fbj',

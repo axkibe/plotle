@@ -21,6 +21,7 @@ Gruga =
 */
 var
 	Design,
+	Forms,
 	fontPool,
 	Widgets;
 
@@ -32,9 +33,7 @@ var
 
 
 var
-	/*
-	| Login control
-	*/
+	// Login control
 	loginButton =
 	{
 		width :
@@ -46,10 +45,7 @@ var
 		n :
 			28
 	},
-
-	/*
-	| Close control
-	*/
+	// Close control
 	closeButton =
 	{
 		width :
@@ -66,14 +62,10 @@ var
 /*
 | Layout
 */
-Gruga.LoginForm =
-{
-	type :
-		'Layout',
-
-	twig :
-	{
-		'headline' :
+Gruga.Login =
+	Forms.Login.create(
+		'twig:add',
+		'headline',
 			Widgets.Label.create(
 				'text',
 					'Log In',
@@ -89,7 +81,8 @@ Gruga.LoginForm =
 							-112
 					)
 			),
-		'usernameLabel' :
+		'twig:add',
+		'usernameLabel',
 			Widgets.Label.create(
 				'text',
 					'username',
@@ -105,7 +98,8 @@ Gruga.LoginForm =
 							-49
 					)
 			),
-		'passwordLabel' :
+		'twig:add',
+		'passwordLabel',
 			Widgets.Label.create(
 				'text',
 					'password',
@@ -121,7 +115,8 @@ Gruga.LoginForm =
 							-9
 					)
 			),
-		'errorLabel' :
+		'twig:add',
+		'errorLabel',
 			Widgets.Label.create(
 				'text',
 					'',
@@ -137,7 +132,8 @@ Gruga.LoginForm =
 							-83
 					)
 			),
-		'userInput' :
+		'twig:add',
+		'userInput',
 			Widgets.Input.create(
 				'style',
 					'input',
@@ -167,7 +163,8 @@ Gruga.LoginForm =
 							)
 					)
 			),
-		'passwordInput' :
+		'twig:add',
+		'passwordInput',
 			Widgets.Input.create(
 				'password',
 					true,
@@ -199,7 +196,8 @@ Gruga.LoginForm =
 							)
 					)
 			),
-		'loginButton' :
+		'twig:add',
+		'loginButton',
 			Widgets.Button.create(
 				'style',
 					'genericButton',
@@ -235,7 +233,8 @@ Gruga.LoginForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-		'closeButton' :
+		'twig:add',
+		'closeButton',
 			Widgets.Button.create(
 				'style',
 					'genericButton',
@@ -271,20 +270,7 @@ Gruga.LoginForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			)
-	},
-
-	ranks :
-	[
-		'headline',
-		'usernameLabel',
-		'passwordLabel',
-		'errorLabel',
-		'userInput',
-		'passwordInput',
-		'loginButton',
-		'closeButton'
-	]
-};
+	);
 
 
 } )( );

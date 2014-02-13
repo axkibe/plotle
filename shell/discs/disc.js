@@ -18,10 +18,8 @@ Discs =
 | Imports
 */
 var
-	Gruga,
 	Euclid,
 	Jools,
-	shellverse,
 	theme;
 
 
