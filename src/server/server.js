@@ -749,7 +749,7 @@ Server.prototype.prepareResources =
 				'testpad/iface-sym.js',
 					'f',
 
-				'shell/fonts/webfont.js',
+				'src/fonts/webfont.js',
 					'mc',
 
 				'src/jools/jools.js',
@@ -815,31 +815,31 @@ Server.prototype.prepareResources =
 				'src/euclid/line.js',
 					'fbj',
 
-				'shell/design/anchor-point.js',
+				'src/design/anchor-point.js',
 					'fbj',
 
-				'shell/design/anchor-rect.js',
+				'src/design/anchor-rect.js',
 					'fbj',
 
-				'shell/design/anchor-ellipse.js',
+				'src/design/anchor-ellipse.js',
 					'fbj',
 
-				'shell/widgets/widget.js',
+				'src/widgets/widget.js',
 					'fb',
 
-				'shell/widgets/getstyle.js',
+				'src/widgets/getstyle.js',
 					'fb',
 
-				'shell/widgets/button.js',
+				'src/widgets/button.js',
 					'fbj',
 
-				'shell/widgets/input.js',
+				'src/widgets/input.js',
 					'fbj',
 
-				'shell/widgets/checkbox.js',
+				'src/widgets/checkbox.js',
 					'fbj',
 
-				'shell/widgets/label.js',
+				'src/widgets/label.js',
 					'fbj',
 
 				'shell/fontpool.js',
@@ -869,52 +869,52 @@ Server.prototype.prepareResources =
 				'shell/stubs.js',
 					'fb',
 
-				'shell/discs/icons.js',
+				'src/discs/icons.js',
 					'fb',
 
-				'shell/discs/disc.js',
+				'src/discs/disc.js',
 					'fb',
 
-				'shell/discs/createdisc.js',
+				'src/discs/createdisc.js',
 					'fbj',
 
-				'shell/discs/maindisc.js',
+				'src/discs/maindisc.js',
 					'fbj',
 
-				'shell/discs/jockey.js',
+				'src/discs/jockey.js',
 					'fbj',
 
 				'shell/hover-reply.js',
 					'fbj',
 
-				'shell/forms/form.js',
+				'src/forms/form.js',
 					'fb',
 
-				'shell/forms/login.js',
+				'src/forms/login.js',
 					'fbj',
 
-				'shell/forms/signup.js',
+				'src/forms/signup.js',
 					'fbj',
 
-				'shell/forms/space.js',
+				'src/forms/space.js',
 					'fbj',
 
-				'shell/forms/moveto.js',
+				'src/forms/moveto.js',
 					'fbj',
 
-				'shell/forms/user.js',
+				'src/forms/user.js',
 					'fbj',
 
-				'shell/forms/welcome.js',
+				'src/forms/welcome.js',
 					'fbj',
 
-				'shell/forms/no-access-to-space.js',
+				'src/forms/no-access-to-space.js',
 					'fbj',
 
-				'shell/forms/non-existing-space.js',
+				'src/forms/non-existing-space.js',
 					'fbj',
 
-				'shell/forms/jockey.js',
+				'src/forms/jockey.js',
 					'fbj',
 
 				'src/gruga/maindisc.js',
@@ -947,79 +947,79 @@ Server.prototype.prepareResources =
 				'src/gruga/welcome.js',
 					'fb',
 
-				'shell/visual/para.js',
+				'src/visual/para.js',
 					'fbj',
 
-				'shell/visual/scrollbar.js',
+				'src/visual/scrollbar.js',
 					'fbj',
 
-				'shell/visual/doc.js',
+				'src/visual/doc.js',
 					'fbj',
 
-				'shell/visual/item.js',
+				'src/visual/item.js',
 					'fb',
 
-				'shell/visual/docitem.js',
+				'src/visual/docitem.js',
 					'fb',
 
-				'shell/visual/note.js',
+				'src/visual/note.js',
 					'fbj',
 
-				'shell/visual/label.js',
+				'src/visual/label.js',
 					'fbj',
 
-				'shell/visual/relation.js',
+				'src/visual/relation.js',
 					'fbj',
 
-				'shell/visual/portal.js',
+				'src/visual/portal.js',
 					'fbj',
 
-				'shell/visual/space.js',
+				'src/visual/space.js',
 					'fbj',
 
 				'shell/system.js',
 					'fb',
 
-				'shell/mark/mark.js',
+				'src/mark/mark.js',
 					'fb',
 
-				'shell/mark/caret.js',
+				'src/mark/caret.js',
 					'fbj',
 
-				'shell/mark/item.js',
+				'src/mark/item.js',
 					'fbj',
 
-				'shell/mark/range.js',
+				'src/mark/range.js',
 					'fbj',
 
-				'shell/mark/vacant.js',
+				'src/mark/vacant.js',
 					'fbj',
 
-				'shell/mark/widget.js',
+				'src/mark/widget.js',
 					'fbj',
 
-				'shell/action/action.js',
+				'src/action/action.js',
 					'fb',
 
-				'shell/action/none.js',
+				'src/action/none.js',
 					'fbj',
 
-				'shell/action/create-generic.js',
+				'src/action/create-generic.js',
 					'fbj',
 
-				'shell/action/create-relation.js',
+				'src/action/create-relation.js',
 					'fbj',
 
-				'shell/action/item-drag.js',
+				'src/action/item-drag.js',
 					'fbj',
 
-				'shell/action/item-resize.js',
+				'src/action/item-resize.js',
 					'fbj',
 
-				'shell/action/pan.js',
+				'src/action/pan.js',
 					'fbj',
 
-				'shell/action/scrolly.js',
+				'src/action/scrolly.js',
 					'fbj',
 
 				'shell/shell.js',
@@ -1028,55 +1028,55 @@ Server.prototype.prepareResources =
 				'shell/fontloader.js',
 					'fb',
 
-				'shell/fonts/dejavu.css',
+				'media/dejavu/dejavu.css',
 					'mc',
 
-				'shell/fonts/dejavusans-boldoblique-webfont.eot',
+				'media/dejavu/dejavusans-boldoblique-webfont.eot',
 					'mc',
 
-				'shell/fonts/dejavusans-boldoblique-webfont.svg',
+				'media/dejavu/dejavusans-boldoblique-webfont.svg',
 					'mc',
 
-				'shell/fonts/dejavusans-boldoblique-webfont.ttf',
+				'media/dejavu/dejavusans-boldoblique-webfont.ttf',
 					'mc',
 
-				'shell/fonts/dejavusans-boldoblique-webfont.woff',
+				'media/dejavu/dejavusans-boldoblique-webfont.woff',
 					'mc',
 
-				'shell/fonts/dejavusans-bold-webfont.eot',
+				'media/dejavu/dejavusans-bold-webfont.eot',
 					'mc',
 
-				'shell/fonts/dejavusans-bold-webfont.svg',
+				'media/dejavu/dejavusans-bold-webfont.svg',
 					'mc',
 
-				'shell/fonts/dejavusans-bold-webfont.ttf',
+				'media/dejavu/dejavusans-bold-webfont.ttf',
 					'mc',
 
-				'shell/fonts/dejavusans-bold-webfont.woff',
+				'media/dejavu/dejavusans-bold-webfont.woff',
 					'mc',
 
-				'shell/fonts/dejavusans-oblique-webfont.eot',
+				'media/dejavu/dejavusans-oblique-webfont.eot',
 					'mc',
 
-				'shell/fonts/dejavusans-oblique-webfont.svg',
+				'media/dejavu/dejavusans-oblique-webfont.svg',
 					'mc',
 
-				'shell/fonts/dejavusans-oblique-webfont.ttf',
+				'media/dejavu/dejavusans-oblique-webfont.ttf',
 					'mc',
 
-				'shell/fonts/dejavusans-oblique-webfont.woff',
+				'media/dejavu/dejavusans-oblique-webfont.woff',
 					'mc',
 
-				'shell/fonts/dejavusans-webfont.eot',
+				'media/dejavu/dejavusans-webfont.eot',
 					'mc',
 
-				'shell/fonts/dejavusans-webfont.svg',
+				'media/dejavu/dejavusans-webfont.svg',
 					'mc',
 
-				'shell/fonts/dejavusans-webfont.ttf',
+				'media/dejavu/dejavusans-webfont.ttf',
 					'mc',
 
-				'shell/fonts/dejavusans-webfont.woff',
+				'media/dejavu/dejavusans-webfont.woff',
 					'mc'
 		];
 
@@ -1417,13 +1417,13 @@ Server.prototype.prepareResources =
 	{
 		var devel =
 			new Resource(
-				'shell/devel.html',
+				'media/devel.html',
 				'm'
 			);
 
 		devel.data =
 			(yield fs.readFile(
-				'shell/devel.html',
+				'media/devel.html',
 				resume( )
 			)) + '';
 
@@ -1452,13 +1452,13 @@ Server.prototype.prepareResources =
 	var
 		main =
 			new Resource(
-				'shell/meshcraft.html',
+				'media/meshcraft.html',
 				'm'
 			);
 
 	main.data =
 		( yield fs.readFile(
-			'shell/meshcraft.html',
+			'media/meshcraft.html',
 			resume( )
 		) ) + '';
 	
@@ -1477,7 +1477,7 @@ Server.prototype.prepareResources =
 	var
 		testpad =
 			new Resource(
-				'testpad/testpad.html',
+				'media/testpad.html',
 				'f'
 			);
 
