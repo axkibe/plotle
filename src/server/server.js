@@ -752,7 +752,7 @@ Server.prototype.prepareResources =
 				'testpad/iface-sym.js',
 					'f',
 
-				'src/fonts/webfont.js',
+				'webfont/webfont.js',
 					'mc',
 
 				'src/jools/jools.js',
