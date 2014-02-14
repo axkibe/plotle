@@ -169,7 +169,6 @@ SignUp.prototype._init =
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Gruga.SignUpForm,
 		traitSet
 	);
 };

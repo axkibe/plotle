@@ -26,7 +26,6 @@ var
 	Mark,
 	Path,
 	shell,
-	shellverse,
 	theme;
 
 
@@ -52,7 +51,6 @@ Forms.Form =
 Form.init =
 	function(
 		inherit,
-		design, // TODO
 		traitSet
 	)
 {
@@ -65,20 +63,6 @@ Form.init =
 
 	this.frame =
 		this.view.baseFrame;
-
-	if( design )  // TODO remove
-	{
-		var
-			tree =
-				// inherit
-				shellverse.grow( design );
-
-		this.twig =
-			tree.twig;
-
-		this.ranks =
-			tree.ranks;
-	}
 
 	// all components of the form
 	var

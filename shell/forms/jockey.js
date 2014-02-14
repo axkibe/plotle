@@ -157,28 +157,8 @@ Jockey.prototype._init =
 
 		if( !formProto )
 		{
-			switch( name ) // TODO
-			{
-			case 'Login' :
-			case 'MoveTo' :
-			case 'SignUp' :
-			case 'Space' :
-			case 'User' :
-			case 'Welcome' :
-			case 'NoAccessToSpace' :
-			case 'NonExistingSpace' :
-
 			formProto =
 				Gruga[ name ];
-
-			break;
-
-			default :
-
-			formProto =
-				Forms[ name ];
-			break;
-			}
 
 			path =
 				this.path.append( name );

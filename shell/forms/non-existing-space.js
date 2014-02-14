@@ -259,7 +259,6 @@ NonExistingSpace.prototype._init =
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Gruga.NonExistingSpaceForm,
 		traitSet
 	);
 };
