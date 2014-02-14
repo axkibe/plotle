@@ -842,31 +842,31 @@ Server.prototype.prepareResources =
 				'src/widgets/label.js',
 					'fbj',
 
-				'shell/fontpool.js',
+				'src/shell/fontpool.js',
 					'fb',
 
-				'shell/style.js',
+				'src/shell/style.js',
 					'fb',
 
-				'shell/accent.js',
+				'src/shell/accent.js',
 					'fb',
 
-				'shell/traitset.js',
+				'src/shell/traitset.js',
 					'fb',
 
-				'shell/theme.js',
+				'src/shell/theme.js',
 					'fb',
 
 				'src/euclid/view.js', // TODO put to other euclids
 					'fbj',
 
-				'shell/iface.js',
+				'src/shell/iface.js',
 					'fb',
 
-				'shell/peer.js',
+				'src/shell/peer.js',
 					'fb',
 
-				'shell/stubs.js',
+				'src/shell/stubs.js',
 					'fb',
 
 				'src/discs/icons.js',
@@ -884,7 +884,7 @@ Server.prototype.prepareResources =
 				'src/discs/jockey.js',
 					'fbj',
 
-				'shell/hover-reply.js',
+				'src/shell/hover-reply.js',
 					'fbj',
 
 				'src/forms/form.js',
@@ -977,7 +977,7 @@ Server.prototype.prepareResources =
 				'src/visual/space.js',
 					'fbj',
 
-				'shell/system.js',
+				'src/shell/system.js',
 					'fb',
 
 				'src/mark/mark.js',
@@ -1022,10 +1022,10 @@ Server.prototype.prepareResources =
 				'src/action/scrolly.js',
 					'fbj',
 
-				'shell/shell.js',
+				'src/shell/shell.js',
 					'fb',
 
-				'shell/fontloader.js',
+				'src/shell/fontloader.js',
 					'fb',
 
 				'media/dejavu/dejavu.css',
