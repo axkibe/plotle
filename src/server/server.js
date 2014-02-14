@@ -48,22 +48,22 @@ var
 		suspend.resume,
 
 	Jools =
-		require( '../src/jools/jools' ),
+		require( '../jools/jools' ),
 
 	MeshMashine =
-		require( '../src/mm/meshmashine' ),
+		require( '../mm/meshmashine' ),
 
 	meshverse =
-		require( '../src/mm/meshverse' ),
+		require( '../mm/meshverse' ),
 
 	Path =
-		require( '../src/mm/path' ),
+		require( '../mm/path' ),
 
 	Resource =
 		require( './resource' ),
 
 	config =
-		require( '../config' ),
+		require( '../../config' ),
 
 	fs =
 		require( 'fs' ),
@@ -72,13 +72,13 @@ var
 		require( 'http' ),
 
 	joobjGenerator =
-		require( '../src/joobj/generator' ),
+		require( '../joobj/generator' ),
 
 	mongodb =
 		require( 'mongodb' ),
 
 	sha1 =
-		require( '../src/jools/sha1' ),
+		require( '../jools/sha1' ),
 
 	util =
 		require( 'util' ),

@@ -26,10 +26,10 @@ var
 		require( 'vm' ),
 
 	joobjGenerator =
-		require( '../src/joobj/generator' ),
+		require( './generator' ),
 
 	Jools =
-		require( '../src/jools/jools' ),
+		require( '../jools/jools' ),
 
 	input =
 		null,
@@ -48,14 +48,17 @@ var
 
 var
 joobjNodeGenerator =
-	function( mod )
+	function(
+		mod,
+		prefix
+	)
 {
 	var
 		server =
 			mod,
 
 		serverName =
-			'server/server.js',
+			'src/server/server.js',
 
 		inFilename,
 
@@ -125,7 +128,11 @@ joobjNodeGenerator =
 		output
 	);
 
-	return outFilename.substr( 0, outFilename.length - 3 );
+	return (
+		( prefix || '../../' )
+		+
+		outFilename.substr( 0, outFilename.length - 3 )
+	);
 };
 
 

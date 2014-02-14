@@ -91,8 +91,8 @@ if( SERVER )
 		require( './point' );
 
 	Euclid.Rect =
-		require(
-			'../../' + require( '../../server/joobj-node' )( module )
+		require( // FIXME require in joobj/node
+			require( '../joobj/node' )( module )
 		);
 }
 
