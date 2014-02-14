@@ -35,7 +35,7 @@ var
 if( SERVER )
 {
 	Jools =
-		require( '../src/jools/jools' );
+		require( '../jools/jools' );
 
 	Tree =
 		require( './tree' );
@@ -44,10 +44,10 @@ if( SERVER )
 		{ };
 
 	Euclid.Point =
-		require( '../src/euclid/point' ); // FIXME
+		require( '../euclid/point' );
 
 	Euclid.Rect =
-		require( '../src/euclid/rect' ); // FIXME
+		require( '../euclid/rect' );
 }
 
 
@@ -627,38 +627,6 @@ Meshverse.prototype.Rect =
 Meshverse.prototype.Point =
 	Euclid.Point;
 
-
-/*
-| Some sanity tests on the patterns.
-*/
-/*
-if( CHECK )
-{
-	for( var k in Meshverse.prototype )
-	{
-		var
-			p =
-				Meshverse.prototype[ k ];
-
-		if( p.must )
-		{
-			if( p.twig )
-			{
-				throw new Error(
-					'Patterns must not have .must and .twig'
-				);
-			}
-		}
-
-		if( p.ranks && !p.twig )
-		{
-			throw new Error(
-				'Patterns must not have .ranks without .twig'
-			);
-		}
-	}
-}
-*/
 
 meshverse =
 	new Meshverse( );

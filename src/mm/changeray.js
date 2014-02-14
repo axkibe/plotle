@@ -35,7 +35,7 @@ var
 if( SERVER )
 {
 	Jools =
-		require( '../src/jools/jools'  );
+		require( '../jools/jools'  );
 
 	Change =
 		require( './change' );

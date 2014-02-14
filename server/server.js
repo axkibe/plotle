@@ -51,13 +51,13 @@ var
 		require( '../src/jools/jools' ),
 
 	MeshMashine =
-		require( '../shared/meshmashine' ),
+		require( '../src/mm/meshmashine' ),
 
 	meshverse =
-		require( '../shared/meshverse' ),
+		require( '../src/mm/meshverse' ),
 
 	Path =
-		require( '../shared/path' ),
+		require( '../src/mm/path' ),
 
 	Resource =
 		require( './resource' ),
@@ -764,25 +764,25 @@ Server.prototype.prepareResources =
 				'src/euclid/rect.js',
 					'fbj',
 
-				'shared/meshverse.js',
+				'src/mm/meshverse.js',
 					'fb',
 
-				'shared/path.js',
+				'src/mm/path.js',
 					'fb',
 
-				'shared/tree.js',
+				'src/mm/tree.js',
 					'fb',
 
-				'shared/sign.js',
+				'src/mm/sign.js',
 					'fb',
 
-				'shared/change.js',
+				'src/mm/change.js',
 					'fb',
 
-				'shared/changeray.js',
+				'src/mm/changeray.js',
 					'fb',
 
-				'shared/meshmashine.js',
+				'src/mm/meshmashine.js',
 					'fb',
 
 				'src/euclid/const.js',

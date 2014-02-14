@@ -42,7 +42,7 @@ if( SERVER )
 		require( './changeray' );
 
 	Jools =
-		require( '../src/jools/jools' );
+		require( '../jools/jools' );
 
 	Path =
 		require( './path' );
