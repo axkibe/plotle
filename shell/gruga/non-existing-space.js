@@ -22,6 +22,7 @@ Gruga =
 var
 	Design,
 	fontPool,
+	Forms,
 	Widgets;
 
 
@@ -32,10 +33,7 @@ var
 'use strict';
 
 var
-
-	/*
-	| 'no' control
-	*/
+	// 'no' control
 	noButton =
 	{
 		width :
@@ -48,10 +46,7 @@ var
 			28
 	},
 
-
-	/*
-	| yes control
-	*/
+	// yes control
 	yesButton =
 	{
 		width :
@@ -65,18 +60,13 @@ var
 	};
 
 
-
 /*
 | Layout
 */
-Gruga.NonExistingSpaceForm =
-{
-	type :
-		'Layout',
-
-	twig :
-	{
-		'headline' :
+Gruga.NonExistingSpace =
+	Forms.NonExistingSpace.create(
+		'twig:add',
+		'headline',
 			Widgets.Label.create(
 				'text',
 					'',
@@ -92,7 +82,8 @@ Gruga.NonExistingSpaceForm =
 							-120
 					)
 			),
-		'message1' :
+		'twig:add',
+		'message1',
 			Widgets.Label.create(
 				'text',
 					'Do you want to create it?',
@@ -108,7 +99,8 @@ Gruga.NonExistingSpaceForm =
 							-50
 					)
 			),
-		'noButton' :
+		'twig:add',
+		'noButton',
 			Widgets.Button.create(
 				'style',
 					'genericButton',
@@ -144,7 +136,8 @@ Gruga.NonExistingSpaceForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-		'yesButton' :
+		'twig:add',
+		'yesButton',
 			Widgets.Button.create(
 				'style',
 					'genericButton',
@@ -180,15 +173,6 @@ Gruga.NonExistingSpaceForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			)
-	},
-
-	ranks :
-	[
-		'headline',
-		'message1',
-		'noButton',
-		'yesButton'
-	]
-};
+	);
 
 } )( );

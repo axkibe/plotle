@@ -52,7 +52,11 @@ if( JOOBJ )
 						comment :
 							'the widget hovered upon',
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				mark :
 					{
@@ -69,7 +73,11 @@ if( JOOBJ )
 										'mark',
 										'path'
 									]
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				path :
 					{
@@ -77,7 +85,11 @@ if( JOOBJ )
 							'the path of the form',
 
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				traitSet :
 					{
@@ -115,7 +127,11 @@ if( JOOBJ )
 							{
 								member :
 									'sizeOnly'
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					}
 			},
 		subclass :
@@ -124,7 +140,18 @@ if( JOOBJ )
 			[
 				'inherit',
 				'traitSet'
-			]
+			],
+		twig :
+			{
+				'Button' :
+					'Widgets.Button',
+				'CheckBox' :
+					'Widgets.Checkbox',
+				'Input' :
+					'Widgets.Input',
+				'Label' :
+					'Widgets.Label'
+			}
 	};
 }
 
@@ -143,6 +170,11 @@ NonExistingSpace.prototype._init =
 		traitSet
 	)
 {
+	if( !this.path )
+	{
+		return;
+	}
+
 	var
 		spaceUser,
 		spaceTag;

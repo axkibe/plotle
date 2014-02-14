@@ -935,7 +935,7 @@ Server.prototype.prepareResources =
 				'shell/gruga/no-access-to-space.js',
 					'fb',
 
-				'shell/gruga/non-existing-space-form.js',
+				'shell/gruga/non-existing-space.js',
 					'fb',
 
 				'shell/gruga/signup.js',
