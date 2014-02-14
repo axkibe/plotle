@@ -43,7 +43,7 @@ Jools.subclass(
 	Meshverse
 );
 
-
+/*
 Shellverse.prototype.AnchorPoint =
 	Design.AnchorPoint;
 
@@ -92,7 +92,7 @@ Shellverse.prototype.Layout =
 			true
 
 	} );
-
+*/
 
 
 shellverse =
