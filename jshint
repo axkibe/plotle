@@ -1,2 +1,0 @@
-#!/bin/bash
-jshint --config ./jshint.json src/*.js joobj/*.js | head -n 20
