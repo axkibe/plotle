@@ -4,3 +4,4 @@ compact.js
 manglemap.txt
 source.map
 joobj/*
+src/.jshint.stamp

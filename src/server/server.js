@@ -328,8 +328,10 @@ Server.prototype.initRepository =
 
 	yield global.insert(
 		{
-			_id     : 'version',
-			version : 4
+			_id :
+				'version',
+			version :
+				4
 		},
 		resume( )
 	);
@@ -351,7 +353,8 @@ Server.prototype.ensureMeshcraftUser =
 		mUser =
 			yield this.$db.users.findOne(
 				{
-					_id : 'meshcraft'
+					_id :
+						'meshcraft'
 				},
 				resume( )
 			);

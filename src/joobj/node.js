@@ -49,8 +49,7 @@ var
 var
 joobjNodeGenerator =
 	function(
-		mod,
-		prefix
+		mod
 	)
 {
 	var
@@ -128,8 +127,8 @@ joobjNodeGenerator =
 		output
 	);
 
-	return (
-		( prefix || '../../' )
+	return require(
+		'../../'
 		+
 		outFilename.substr( 0, outFilename.length - 3 )
 	);

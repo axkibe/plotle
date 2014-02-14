@@ -81,9 +81,7 @@ if( SERVER )
 		require( '../jools/jools' );
 
 	Euclid.Point =
-		require(
-			require( '../joobj/node' )( module )
-		);
+		require( '../joobj/node' )( module );
 }
 
 

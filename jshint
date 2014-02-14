@@ -1,2 +1,2 @@
 #!/bin/bash
-jshint --config ./jshint.json shell/*.js shell/action/*.js shell/design/*.js shell/gruga/*.js shell/forms/*.js shell/mark/*.js shell/widgets/*.js shell/discs/*.js shell/visual/*.js server/*.js shared/*.js shared/euclid/*.js shell/euclid/*.js testpad/*.js tools/*.js joobj/*.js | head -n 20
+jshint --config ./jshint.json src/*.js joobj/*.js | head -n 20
