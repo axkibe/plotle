@@ -45,7 +45,6 @@ var
 		n :
 			95
 	},
-
 	/*
 	| Close control
 	*/
@@ -65,13 +64,10 @@ var
 /*
 | Layout
 */
-Gruga.SignUpForm =
-{
-	type :
-		'Layout',
-	twig :
-	{
-		'headline' :
+Gruga.SignUp =
+	Forms.SignUp.create(
+		'twig:add',
+		'headline',
 			Widgets.Label.create(
 				'text',
 					'Sign Up',
@@ -87,7 +83,8 @@ Gruga.SignUpForm =
 							-165
 					)
 			),
-		'usernameLabel' :
+		'twig:add',
+		'usernameLabel',
 			Widgets.Label.create(
 				'text',
 					'username',
@@ -103,7 +100,8 @@ Gruga.SignUpForm =
 							-102
 					)
 			),
-		'emailLabel' :
+		'twig:add',
+		'emailLabel',
 			Widgets.Label.create(
 				'text',
 					'email',
@@ -119,7 +117,8 @@ Gruga.SignUpForm =
 							-62
 					)
 			),
-		'passwordLabel' :
+		'twig:add',
+		'passwordLabel',
 			Widgets.Label.create(
 				'text',
 					'password',
@@ -135,7 +134,8 @@ Gruga.SignUpForm =
 							-22
 					)
 			),
-		'password2Label' :
+		'twig:add',
+		'password2Label',
 			Widgets.Label.create(
 				'text',
 					'repeat password',
@@ -151,7 +151,8 @@ Gruga.SignUpForm =
 							18
 					)
 			),
-		'newsletterLabel' :
+		'twig:add',
+		'newsletterLabel',
 			Widgets.Label.create(
 				'text',
 					'newsletter',
@@ -167,7 +168,8 @@ Gruga.SignUpForm =
 							58
 					)
 			),
-		'errorLabel' :
+		'twig:add',
+		'errorLabel',
 			Widgets.Label.create(
 				'text',
 					'',
@@ -183,7 +185,8 @@ Gruga.SignUpForm =
 							-136
 					)
 			),
-		'userInput' :
+		'twig:add',
+		'userInput',
 			Widgets.Input.create(
 				'style',
 					'input',
@@ -213,7 +216,8 @@ Gruga.SignUpForm =
 							)
 					)
 			),
-		'emailInput' :
+		'twig:add',
+		'emailInput',
 			Widgets.Input.create(
 				'style',
 					'input',
@@ -243,7 +247,8 @@ Gruga.SignUpForm =
 							)
 					)
 			),
-		'passwordInput' :
+		'twig:add',
+		'passwordInput',
 			Widgets.Input.create(
 				'password',
 					true,
@@ -275,7 +280,8 @@ Gruga.SignUpForm =
 							)
 					)
 			),
-		'password2Input' :
+		'twig:add',
+		'password2Input',
 			Widgets.Input.create(
 				'password',
 					true,
@@ -307,7 +313,8 @@ Gruga.SignUpForm =
 							)
 					)
 			),
-		'newsletterCheckBox' :
+		'twig:add',
+		'newsletterCheckBox',
 			Widgets.CheckBox.create(
 				'style',
 					'checkbox',
@@ -335,7 +342,8 @@ Gruga.SignUpForm =
 							)
 					)
 			),
-		'newsletter2Label' :
+		'twig:add',
+		'newsletter2Label',
 			Widgets.Label.create(
 				'text',
 					'Updates and News',
@@ -351,7 +359,8 @@ Gruga.SignUpForm =
 							57
 					)
 			),
-		'newsletter3Label' :
+		'twig:add',
+		'newsletter3Label',
 			Widgets.Label.create(
 				'text',
 					'Never going to be more than an email a month. For sure!',
@@ -367,7 +376,8 @@ Gruga.SignUpForm =
 							77
 					)
 			),
-		'signupButton' :
+		'twig:add',
+		'signupButton',
 			Widgets.Button.create(
 				'style',
 					'genericButton',
@@ -403,7 +413,8 @@ Gruga.SignUpForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-		'closeButton' :
+		'twig:add',
+		'closeButton',
 			Widgets.Button.create(
 				'style',
 					'genericButton',
@@ -439,28 +450,6 @@ Gruga.SignUpForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			)
-	},
-
-	ranks :
-	[
-		'headline',
-		'usernameLabel',
-		'emailLabel',
-		'passwordLabel',
-		'password2Label',
-		'newsletterLabel',
-		'errorLabel',
-		'userInput',
-		'emailInput',
-		'passwordInput',
-		'password2Input',
-		'newsletterCheckBox',
-		'newsletter2Label',
-		'newsletter3Label',
-		'signupButton',
-		'closeButton'
-	]
-};
-
+	);
 
 } )( );

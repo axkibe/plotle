@@ -50,8 +50,12 @@ if( JOOBJ )
 						comment :
 							'the widget hovered upon',
 						type :
-							'Path'
-					},
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
+			},
 				mark :
 					{
 						comment :
@@ -67,14 +71,22 @@ if( JOOBJ )
 										'mark',
 										'path'
 									]
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				path :
 					{
 						comment :
 							'the path of the form',
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				traitSet :
 					{
@@ -112,17 +124,31 @@ if( JOOBJ )
 							{
 								member :
 									'sizeOnly'
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					}
 			},
 		subclass :
 			'Forms.Form',
-
 		init :
 			[
 				'inherit',
 				'traitSet'
-			]
+			],
+		twig :
+			{
+				'Button' :
+					'Widgets.Button',
+				'CheckBox' :
+					'Widgets.Checkbox',
+				'Input' :
+					'Widgets.Input',
+				'Label' :
+					'Widgets.Label'
+			}
 	};
 }
 

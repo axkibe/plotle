@@ -160,6 +160,8 @@ Jockey.prototype._init =
 			switch( name ) // TODO
 			{
 			case 'Login' :
+			case 'MoveTo' :
+			case 'SignUp' :
 
 			formProto =
 				Gruga[ name ];

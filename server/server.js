@@ -929,7 +929,7 @@ Server.prototype.prepareResources =
 				'shell/gruga/login.js',
 					'fb',
 
-				'shell/gruga/moveto-form.js',
+				'shell/gruga/moveto.js',
 					'fb',
 
 				'shell/gruga/no-access-to-space-form.js',
@@ -938,7 +938,7 @@ Server.prototype.prepareResources =
 				'shell/gruga/non-existing-space-form.js',
 					'fb',
 
-				'shell/gruga/signup-form.js',
+				'shell/gruga/signup.js',
 					'fb',
 
 				'shell/gruga/space-form.js',

@@ -49,7 +49,11 @@ if( JOOBJ )
 						comment :
 							'the widget hovered upon',
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				mark :
 					{
@@ -66,14 +70,22 @@ if( JOOBJ )
 										'mark',
 										'path'
 									]
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				path :
 					{
 						comment :
 							'the path of the form',
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				traitSet :
 					{
@@ -94,7 +106,7 @@ if( JOOBJ )
 							'currently logged in user',
 						type :
 							'String',
-						allowNull:
+						allowNull :
 							true,
 						defaultVal :
 							'null'
@@ -109,7 +121,11 @@ if( JOOBJ )
 							{
 								member :
 									'sizeOnly'
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					}
 			},
 		subclass :
@@ -118,7 +134,18 @@ if( JOOBJ )
 			[
 				'inherit',
 				'traitSet'
-			]
+			],
+		twig :
+			{
+				'Button' :
+					'Widgets.Button',
+				'CheckBox' :
+					'Widgets.Checkbox',
+				'Input' :
+					'Widgets.Input',
+				'Label' :
+					'Widgets.Label'
+			}
 	};
 }
 
@@ -136,31 +163,34 @@ MoveTo.prototype._init =
 		traitSet
 	)
 {
-	var
-		isGuest =
-			this.username === null ?
-				false
-				:
-				this.username.substr( 0, 7 ) === 'visitor';
+	if( this.path )
+	{
+		var
+			isGuest =
+				this.username === null ?
+					false
+					:
+					this.username.substr( 0, 7 ) === 'visitor';
 
-	traitSet =
-		TraitSet.create(
-			'set',
-				traitSet,
-			'trait',
-				this._widgetPath( 'userHomeButton' ),
-				'visible',
-				!isGuest,
-			'trait',
-				this._widgetPath( 'userHomeButton' ),
-				'text',
-				this.username + '\n' + 'home'
-		);
+		traitSet =
+			TraitSet.create(
+				'set',
+					traitSet,
+				'trait',
+					this._widgetPath( 'userHomeButton' ),
+					'visible',
+					!isGuest,
+				'trait',
+					this._widgetPath( 'userHomeButton' ),
+					'text',
+					this.username + '\n' + 'home'
+			);
+	}
 
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Gruga.MoveToForm,
+		null,
 		traitSet
 	);
 };

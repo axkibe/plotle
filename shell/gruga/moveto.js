@@ -43,8 +43,6 @@ var
 		height :
 			130
 	},
-
-
 	meshcraftSandboxButton =
 	{
 		w :
@@ -56,8 +54,6 @@ var
 		height :
 			130
 	},
-
-
 	userHomeButton =
 	{
 		w :
@@ -74,14 +70,10 @@ var
 /*
 | Layout
 */
-Gruga.MoveToForm =
-{
-	type :
-		'Layout',
-
-	twig :
-	{
-		'headline' :
+Gruga.MoveTo =
+	Forms.MoveTo.create(
+		'twig:add',
+		'headline',
 			Widgets.Label.create(
 				'text',
 					'move to another space',
@@ -97,7 +89,8 @@ Gruga.MoveToForm =
 							-150
 					)
 			),
-		'meshcraftHomeButton' :
+		'twig:add',
+		'meshcraftHomeButton',
 			Widgets.Button.create(
 				'style',
 					'portalButton',
@@ -142,7 +135,8 @@ Gruga.MoveToForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-		'meshcraftSandboxButton' :
+		'twig:add',
+		'meshcraftSandboxButton',
 			Widgets.Button.create(
 				'style',
 					'portalButton',
@@ -187,7 +181,8 @@ Gruga.MoveToForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			),
-		'userHomeButton' :
+		'twig:add',
+		'userHomeButton',
 			Widgets.Button.create(
 				'style',
 					'portalButton',
@@ -232,17 +227,6 @@ Gruga.MoveToForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			)
-	},
-
-
-	ranks :
-	[
-		'headline',
-		'meshcraftHomeButton',
-		'meshcraftSandboxButton',
-		'userHomeButton'
-	]
-};
-
+	);
 
 } )( );
