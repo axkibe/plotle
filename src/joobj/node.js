@@ -127,10 +127,12 @@ joobjNodeGenerator =
 		output
 	);
 
-	return require(
-		'../../'
-		+
-		outFilename.substr( 0, outFilename.length - 3 )
+	return (
+		require(
+			'../../'
+			+
+			outFilename.substr( 0, outFilename.length - 3 )
+		)
 	);
 };
 

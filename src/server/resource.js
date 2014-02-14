@@ -1,8 +1,6 @@
 /*
 | Something to be REST-served.
 |
-| FIXME: immute
-|
 | Authors: Axel Kittenberger
 */
 
@@ -13,18 +11,51 @@
 'use strict';
 
 
-if( typeof( require ) === 'undefined' )
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
 {
-	throw new Error(
-		'this code requires node!'
-	);
+	return {
+		name :
+			'Resource',
+		attributes :
+			{
+				path :
+					{
+						comment :
+							'path of the resource',
+						type :
+							'String'
+					},
+				opstr :
+					{
+						comment :
+							'options string',
+						type :
+							'String',
+						assign :
+							null
+					}
+			},
+		node :
+			true,
+		init :
+			[
+				'opstr'
+			]
+	};
 }
+
+var
+	Resource =
+		require( '../joobj/node' )( module );
 
 
 /*
-| Constructor.
+| Initializer
 |
-| opts ... a string, a letter including says:
+| opstr ... a string, a letter including says:
 |
 |   b ... included in the bundle
 |   c ... serve as cached
@@ -32,16 +63,14 @@ if( typeof( require ) === 'undefined' )
 |   j ... includes a joobj definition
 |   m ... keep in memory
 */
-var
-Resource =
+Resource.prototype._init =
 	function(
-		path,
-		opts
+		opstr
 	)
 {
-	// the resource's path
-	this.path =
-		path;
+	var
+		path =
+			this.path;
 
 	// served as binary or utf-u8
 	this.code =
@@ -64,26 +93,25 @@ Resource =
 	{
 		// this resource is part of the bunlde
 		bundle :
-			opts.indexOf( 'b' ) >= 0,
+			opstr.indexOf( 'b' ) >= 0,
 
 		// tells the client to cache the resource
 		cache :
-			opts.indexOf( 'c' ) >= 0,
+			opstr.indexOf( 'c' ) >= 0,
 
 		// the server reads this resource from the file on every access
 		// (used for debugging resources)
 		file :
-			opts.indexOf( 'f' ) >= 0,
+			opstr.indexOf( 'f' ) >= 0,
 
 		// this file includes a joobj definition
 		// so the joobj-generator is ran for it
 		joobj :
-			opts.indexOf( 'j' ) >= 0,
+			opstr.indexOf( 'j' ) >= 0,
 
 		// the servers hold this resource in memory
 		memory :
-			opts.indexOf( 'm' ) >= 0
-
+			opstr.indexOf( 'm' ) >= 0
 	};
 
 	if( this.opts.file )
@@ -121,7 +149,6 @@ Resource =
 		this.joobjPath =
 			null;
 	}
-
 
 	if( !this.opts.memory && !this.opts.file )
 	{
@@ -248,5 +275,6 @@ Resource =
 */
 module.exports =
 	Resource;
+
 
 } )( );

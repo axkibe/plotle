@@ -1096,9 +1096,11 @@ Server.prototype.prepareResources =
 	)
 	{
 		r =
-			new Resource(
-				rlist[ a ],
-				rlist[ a + 1 ]
+			Resource.create(
+				'path',
+					rlist[ a ],
+				'opstr',
+					rlist[ a + 1 ]
 			);
 
 		if( r.opts.bundle )
@@ -1165,9 +1167,11 @@ Server.prototype.prepareResources =
 	// autogenerator the shell config as resource
 	var
 		cconfig =
-			new Resource(
-				'shell/config.js',
-				'mb'
+			Resource.create(
+				'path',
+					'shell/config.js',
+				'opstr',
+					'mb'
 			);
 
 	// puts the config on top of the rBundle
@@ -1387,9 +1391,11 @@ Server.prototype.prepareResources =
 
 		// registers the bundle as resource
 		br =
-			new Resource(
-				'meshcraft-' + bsha1 + '.js',
-				'mc'
+			Resource.create(
+				'path',
+					'meshcraft-' + bsha1 + '.js',
+				'opstr',
+					'mc'
 			);
 
 	br.data =
@@ -1419,9 +1425,11 @@ Server.prototype.prepareResources =
 	)
 	{
 		var devel =
-			new Resource(
-				'media/devel.html',
-				'm'
+			Resource.create(
+				'path',
+					'media/devel.html',
+				'opstr',
+					'm'
 			);
 
 		devel.data =
@@ -1454,9 +1462,11 @@ Server.prototype.prepareResources =
 	// the index.html file
 	var
 		main =
-			new Resource(
-				'media/meshcraft.html',
-				'm'
+			Resource.create(
+				'path',
+					'media/meshcraft.html',
+				'opstr',
+					'm'
 			);
 
 	main.data =
@@ -1464,7 +1474,7 @@ Server.prototype.prepareResources =
 			'media/meshcraft.html',
 			resume( )
 		) ) + '';
-	
+
 	main.data =
 		main.data.replace(
 			/<!--COPACK.*>/,
@@ -1479,9 +1489,11 @@ Server.prototype.prepareResources =
 	// the testpad html file
 	var
 		testpad =
-			new Resource(
-				'media/testpad.html',
-				'f'
+			Resource.create(
+				'path',
+					'media/testpad.html',
+				'opstr',
+					'f'
 			);
 
 	this.$resources[ 'testpad.html' ] =
