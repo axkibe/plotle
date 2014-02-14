@@ -24,6 +24,7 @@ var
 	fontPool,
 	Widgets;
 
+
 /*
 | Capsule
 */
@@ -38,13 +39,10 @@ var
 	{
 		width :
 			50,
-
 		height :
 			50,
-
 		w :
 			180,
-
 		n :
 			38
 	};
@@ -53,14 +51,10 @@ var
 /*
 | Layout
 */
-Gruga.SpaceForm =
-{
-	type :
-		'Layout',
-
-	twig :
-	{
-		'headline' :
+Gruga.Space =
+	Forms.Space.create(
+		'twig:add',
+		'headline',
 			Widgets.Label.create(
 				'text',
 					'',
@@ -76,7 +70,8 @@ Gruga.SpaceForm =
 							-120
 					)
 			),
-		'message1' :
+		'twig:add',
+		'message1',
 			Widgets.Label.create(
 				'text',
 					'In future space settings can be altered here.',
@@ -92,7 +87,8 @@ Gruga.SpaceForm =
 							-50
 					)
 			),
-		'closeButton' :
+		'twig:add',
+		'closeButton',
 			Widgets.Button.create(
 				'style',
 					'genericButton',
@@ -128,15 +124,6 @@ Gruga.SpaceForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			)
-	},
-
-	ranks :
-	[
-		'headline',
-		'message1',
-		'closeButton'
-	]
-};
-
+	);
 
 } )( );

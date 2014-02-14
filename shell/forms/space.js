@@ -48,7 +48,11 @@ if( JOOBJ )
 						comment :
 							'the widget hovered upon',
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				mark :
 					{
@@ -65,14 +69,22 @@ if( JOOBJ )
 										'mark',
 										'path'
 									]
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				path :
 					{
 						comment :
 							'the path of the form',
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				traitSet :
 					{
@@ -110,7 +122,11 @@ if( JOOBJ )
 							{
 								member :
 									'sizeOnly'
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					}
 			},
 		subclass :
@@ -119,7 +135,18 @@ if( JOOBJ )
 			[
 				'inherit',
 				'traitSet'
-			]
+			],
+		twig :
+			{
+				'Button' :
+					'Widgets.Button',
+				'CheckBox' :
+					'Widgets.Checkbox',
+				'Input' :
+					'Widgets.Input',
+				'Label' :
+					'Widgets.Label'
+			}
 	};
 }
 
@@ -206,21 +233,23 @@ Space.prototype._init =
 	this.spaceTag =
 		spaceTag;
 
-	traitSet =
-		TraitSet.create(
-			'set',
-				traitSet,
-			'trait',
-				this._widgetPath( 'headline' ),
-				'text',
-				this.spaceUser + ':' + this.spaceTag
-		);
-
+	if( this.path )
+	{
+		traitSet =
+			TraitSet.create(
+				'set',
+					traitSet,
+				'trait',
+					this._widgetPath( 'headline' ),
+					'text',
+					this.spaceUser + ':' + this.spaceTag
+			);
+	}
 
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Gruga.SpaceForm,
+		null,
 		traitSet
 	);
 };

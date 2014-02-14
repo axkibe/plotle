@@ -941,7 +941,7 @@ Server.prototype.prepareResources =
 				'shell/gruga/signup.js',
 					'fb',
 
-				'shell/gruga/space-form.js',
+				'shell/gruga/space.js',
 					'fb',
 
 				'shell/gruga/user-form.js',
