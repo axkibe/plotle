@@ -85,7 +85,7 @@ if( JOOBJ )
 if( SERVER )
 {
 	Jools =
-		require( '../../shared/jools' );
+		require( '../jools/jools' );
 
 	Euclid.Point =
 		require( './point' );

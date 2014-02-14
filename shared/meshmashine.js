@@ -36,19 +36,19 @@ var
 if( SERVER )
 {
 	Change =
-		require('./change');
+		require( './change' );
 
 	ChangeRay =
-		require('./changeray');
+		require( './changeray' );
 
 	Jools =
-		require('./jools');
+		require( '../src/jools/jools' );
 
 	Path =
-		require('./path');
+		require( './path' );
 
 	Sign =
-		require('./sign');
+		require( './sign' );
 }
 
 // FIXME remove

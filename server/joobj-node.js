@@ -29,7 +29,7 @@ var
 		require( './joobj-generator' ),
 
 	Jools =
-		require( '../shared/jools' ),
+		require( '../src/jools/jools' ),
 
 	input =
 		null,

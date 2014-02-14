@@ -48,7 +48,7 @@ var
 		suspend.resume,
 
 	Jools =
-		require( '../shared/jools' ),
+		require( '../src/jools/jools' ),
 
 	MeshMashine =
 		require( '../shared/meshmashine' ),
@@ -78,7 +78,7 @@ var
 		require( 'mongodb' ),
 
 	sha1 =
-		require( '../shared/sha1' ),
+		require( '../src/jools/sha1' ),
 
 	util =
 		require( 'util' ),
@@ -752,10 +752,10 @@ Server.prototype.prepareResources =
 				'shell/fonts/webfont.js',
 					'mc',
 
-				'shared/jools.js',
+				'src/jools/jools.js',
 					'fb',
 
-				'shared/sha1.js',
+				'src/jools/sha1.js',
 					'fb',
 
 				'src/euclid/point.js',
@@ -917,34 +917,34 @@ Server.prototype.prepareResources =
 				'shell/forms/jockey.js',
 					'fbj',
 
-				'shell/gruga/maindisc.js',
+				'src/gruga/maindisc.js',
 					'fb',
 
-				'shell/gruga/createdisc.js',
+				'src/gruga/createdisc.js',
 					'fb',
 
-				'shell/gruga/login.js',
+				'src/gruga/login.js',
 					'fb',
 
-				'shell/gruga/moveto.js',
+				'src/gruga/moveto.js',
 					'fb',
 
-				'shell/gruga/no-access-to-space.js',
+				'src/gruga/no-access-to-space.js',
 					'fb',
 
-				'shell/gruga/non-existing-space.js',
+				'src/gruga/non-existing-space.js',
 					'fb',
 
-				'shell/gruga/signup.js',
+				'src/gruga/signup.js',
 					'fb',
 
-				'shell/gruga/space.js',
+				'src/gruga/space.js',
 					'fb',
 
-				'shell/gruga/user.js',
+				'src/gruga/user.js',
 					'fb',
 
-				'shell/gruga/welcome.js',
+				'src/gruga/welcome.js',
 					'fb',
 
 				'shell/visual/para.js',

@@ -65,7 +65,7 @@ if( SERVER )
 {
 	// in node
 	config =
-		require( '../config' );
+		require( '../../config' );
 
 	sha1hex =
 		require( './sha1' ).sha1hex;

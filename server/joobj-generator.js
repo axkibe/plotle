@@ -13,7 +13,7 @@
 
 var
 	Jools =
-		require( '../shared/jools' );
+		require( '../src/jools/jools' );
 
 
 /*
@@ -584,7 +584,7 @@ generateNodeIncludesSection =
 		'if( SERVER )',
 		'{',
 		'\tJools =',
-		'\t\trequire( \'../shared/jools\' );' // TODO
+		'\t\trequire( \'../src/jools/jools\' );'
 	);
 
 	for(
