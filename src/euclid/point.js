@@ -78,7 +78,7 @@ if( JOOBJ )
 if( SERVER )
 {
 	Jools =
-		require( '../jools' );
+		require( '../../shared/jools' ); // FIXME
 
 	Euclid.Point =
 		require(

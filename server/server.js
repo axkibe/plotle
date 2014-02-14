@@ -758,10 +758,10 @@ Server.prototype.prepareResources =
 				'shared/sha1.js',
 					'fb',
 
-				'shared/euclid/point.js',
+				'src/euclid/point.js',
 					'fbj',
 
-				'shared/euclid/rect.js',
+				'src/euclid/rect.js',
 					'fbj',
 
 				'shared/meshverse.js',
@@ -785,34 +785,34 @@ Server.prototype.prepareResources =
 				'shared/meshmashine.js',
 					'fb',
 
-				'shell/euclid/const.js',
+				'src/euclid/const.js',
 					'fb',
 
-				'shell/euclid/compass.js',
+				'src/euclid/compass.js',
 					'fb',
 
-				'shell/euclid/margin.js',
+				'src/euclid/margin.js',
 					'fb',
 
-				'shell/euclid/font.js',
+				'src/euclid/font.js',
 					'fbj',
 
-				'shell/euclid/fabric.js',
+				'src/euclid/fabric.js',
 					'fb',
 
-				'shell/euclid/measure.js',
+				'src/euclid/measure.js',
 					'fb',
 
-				'shell/euclid/shape.js',
+				'src/euclid/shape.js',
 					'fbj',
 
-				'shell/euclid/round-rect.js',
+				'src/euclid/round-rect.js',
 					'fbj',
 
-				'shell/euclid/ellipse.js',
+				'src/euclid/ellipse.js',
 					'fbj',
 
-				'shell/euclid/line.js',
+				'src/euclid/line.js',
 					'fbj',
 
 				'shell/design/anchor-point.js',
@@ -842,9 +842,6 @@ Server.prototype.prepareResources =
 				'shell/widgets/label.js',
 					'fbj',
 
-				'shell/shellverse.js',
-					'fb',
-
 				'shell/fontpool.js',
 					'fb',
 
@@ -860,7 +857,7 @@ Server.prototype.prepareResources =
 				'shell/theme.js',
 					'fb',
 
-				'shell/euclid/view.js',
+				'src/euclid/view.js', // TODO put to other euclids
 					'fbj',
 
 				'shell/iface.js',

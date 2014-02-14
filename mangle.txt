@@ -28,7 +28,6 @@
 . Caret
 . Change
 . CheckBox
-. CheckBoxWidget
 . Compass
 . Const
 . Create
@@ -57,8 +56,6 @@
 . ItemResize
 . Jockey
 > Label
-. LabelWidget
-. Layout
 . Line
 . Login
 . MainDisc
@@ -68,9 +65,7 @@
 . MoveTo
 . NORMA
 . NoAccessToSpace
-. NoAccessToSpaceForm
 . NonExistingSpace
-. NonExistingSpaceForm
 . None
 . Normal
 > Note
@@ -92,13 +87,11 @@
 . Scrollbar
 . Shape
 . SignUp
-. SignUpForm
 > Space
 . User
 . Vacant
 . View
 . Welcome
-. WelcomeForm
 . Widget
 . _$atween
 . _$discJockey

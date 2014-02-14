@@ -17,7 +17,7 @@ var
 */
 var
 	Euclid,
-	shellverse,
+	meshverse,
 	theme;
 
 
@@ -36,7 +36,7 @@ Stubs = { };
 
 
 Stubs.emptyLabel =
-	shellverse.grow(
+	meshverse.grow(
 		{
 			'type' :
 				'Label',
@@ -74,7 +74,7 @@ Stubs.emptyLabel =
 
 
 Stubs.emptyNote =
-	shellverse.grow(
+	meshverse.grow(
 		{
 			'type' :
 				'Note',
@@ -121,7 +121,7 @@ Stubs.emptyNote =
 
 
 Stubs.emptyPortal =
-	shellverse.grow(
+	meshverse.grow(
 		{
 			'type' :
 				'Portal',

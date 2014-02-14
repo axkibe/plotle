@@ -117,7 +117,6 @@ var
 					case 'allowNull' :
 					case 'assign' :
 					case 'comment' :
-					case 'locate' :
 					case 'type' :
 					case 'unit' :
 
@@ -229,8 +228,6 @@ buildJJ =
 							attr.concerns,
 						defaultVal :
 							attr.defaultVal,
-						locate :
-							attr.locate,
 						type :
 							attr.type,
 						unit :
@@ -587,7 +584,7 @@ generateNodeIncludesSection =
 		'if( SERVER )',
 		'{',
 		'\tJools =',
-		'\t\trequire( \'../shared/jools\' );'
+		'\t\trequire( \'../shared/jools\' );' // TODO
 	);
 
 	for(
@@ -647,8 +644,7 @@ generateNodeIncludesSection =
 					r.push(
 						'',
 						'\t' + ref + ' =',
-						'\t\trequire( \'../' +
-							attr.locate + '/' +
+						'\t\trequire( \'../src/' +
 							attr.unit.toLowerCase( ) + '/' +
 							attr.type.toLowerCase( ) +
 							'\' );'

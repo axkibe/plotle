@@ -44,10 +44,10 @@ if( SERVER )
 		{ };
 
 	Euclid.Point =
-		require( './euclid/point' );
+		require( '../src/euclid/point' ); // FIXME
 
 	Euclid.Rect =
-		require( './euclid/rect' );
+		require( '../src/euclid/rect' ); // FIXME
 }
 
 

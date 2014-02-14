@@ -50,9 +50,6 @@ if( JOOBJ )
 						comment :
 							'point in north west',
 
-						locate :
-							'shared',
-
 						unit :
 							'Euclid',
 
@@ -64,9 +61,6 @@ if( JOOBJ )
 					{
 						comment :
 							'point in south east',
-
-						locate :
-							'shared',
 
 						unit :
 							'Euclid',
@@ -91,7 +85,7 @@ if( JOOBJ )
 if( SERVER )
 {
 	Jools =
-		require( '../jools' );
+		require( '../../shared/jools' );
 
 	Euclid.Point =
 		require( './point' );
