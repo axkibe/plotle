@@ -22,6 +22,7 @@ Gruga =
 var
 	Design,
 	fontPool,
+	Forms,
 	Widgets;
 
 /*

@@ -22,6 +22,7 @@ Gruga =
 var
 	Design,
 	fontPool,
+	Forms,
 	Widgets;
 
 /*
@@ -50,13 +51,10 @@ var closeButton =
 /*
 | Layout
 */
-Gruga.UserForm =
-{
-	type :
-		'Layout',
-	twig :
-	{
-		'headline' :
+Gruga.User =
+	Forms.User.create(
+		'twig:add',
+		'headline',
 			Widgets.Label.create(
 				'text',
 					'Hello',
@@ -72,7 +70,8 @@ Gruga.UserForm =
 							-120
 					)
 			),
-		'visitor1' :
+		'twig:add',
+		'visitor1',
 			Widgets.Label.create(
 				'text',
 					'You\'re currently an anonymous visitor!',
@@ -88,7 +87,8 @@ Gruga.UserForm =
 							-50
 					)
 			),
-		'visitor2' :
+		'twig:add',
+		'visitor2',
 			Widgets.Label.create(
 				'text',
 					'Click on "sign up" or "log in"',
@@ -97,7 +97,8 @@ Gruga.UserForm =
 				'designPos',
 					Design.AnchorPoint.PC
 			),
-		'visitor3' :
+		'twig:add',
+		'visitor3',
 			Widgets.Label.create(
 				'text',
 					'on the control disc to the left',
@@ -113,7 +114,8 @@ Gruga.UserForm =
 							20
 					)
 			),
-		'visitor4' :
+		'twig:add',
+		'visitor4',
 			Widgets.Label.create(
 				'text',
 					'to register as an user.',
@@ -129,7 +131,8 @@ Gruga.UserForm =
 							40
 					)
 			),
-		'greeting1' :
+		'twig:add',
+		'greeting1',
 			Widgets.Label.create(
 				'text',
 					'This is your profile page!',
@@ -145,7 +148,8 @@ Gruga.UserForm =
 							-50
 					)
 			),
-		'greeting2' :
+		'twig:add',
+		'greeting2',
 			Widgets.Label.create(
 				'text',
 					'In future you will be able to do stuff here,',
@@ -161,7 +165,8 @@ Gruga.UserForm =
 							-10
 					)
 			),
-		'greeting3' :
+		'twig:add',
+		'greeting3',
 			Widgets.Label.create(
 				'text',
 					'like for example change your password.',
@@ -177,7 +182,8 @@ Gruga.UserForm =
 							10
 					)
 			),
-		'closeButton' :
+		'twig:add',
+		'closeButton',
 			Widgets.Button.create(
 				'style',
 					'genericButton',
@@ -213,21 +219,6 @@ Gruga.UserForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			)
-	},
-
-	ranks :
-	[
-		'headline',
-		'visitor1',
-		'visitor2',
-		'visitor3',
-		'visitor4',
-		'greeting1',
-		'greeting2',
-		'greeting3',
-		'closeButton'
-	]
-};
-
+	);
 
 } )( );

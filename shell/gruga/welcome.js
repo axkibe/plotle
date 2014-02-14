@@ -22,6 +22,7 @@ Gruga =
 var
 	Design,
 	fontPool,
+	Forms,
 	Widgets;
 
 
@@ -52,14 +53,10 @@ var
 /*
 | Layout
 */
-Gruga.WelcomeForm =
-{
-	type :
-		'Layout',
-
-	twig :
-	{
-		'headline' :
+Gruga.Welcome =
+	Forms.Welcome.create(
+		'twig:add',
+		'headline',
 			Widgets.Label.create(
 				'text',
 					'Welcome',
@@ -75,7 +72,8 @@ Gruga.WelcomeForm =
 							-120
 					)
 			),
-		'message1' :
+		'twig:add',
+		'message1',
 			Widgets.Label.create(
 				'text',
 					'Your registration was successful :-)',
@@ -91,7 +89,8 @@ Gruga.WelcomeForm =
 							-50
 					)
 			),
-		'closeButton' :
+		'twig:add',
+		'closeButton',
 			Widgets.Button.create(
 				'style',
 					'genericButton',
@@ -127,15 +126,7 @@ Gruga.WelcomeForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			)
-	},
-
-	ranks :
-	[
-		'headline',
-		'message1',
-		'closeButton'
-	]
-};
+	);
 
 
 } )( );

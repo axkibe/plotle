@@ -17,7 +17,6 @@ Forms =
 | Imports
 */
 var
-	Gruga,
 	shell,
 	TraitSet;
 
@@ -46,7 +45,11 @@ if( JOOBJ )
 						comment :
 							'the widget hovered upon',
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				mark :
 					{
@@ -63,14 +66,22 @@ if( JOOBJ )
 										'mark',
 										'path'
 									]
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				path :
 					{
 						comment :
 							'the path of the form',
 						type :
-							'Path'
+							'Path',
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					},
 				traitSet :
 					{
@@ -106,7 +117,11 @@ if( JOOBJ )
 							{
 								member :
 									'sizeOnly'
-							}
+							},
+						defaultVal :
+							'null',
+						allowNull :
+							true
 					}
 			},
 
@@ -117,7 +132,18 @@ if( JOOBJ )
 			[
 				'inherit',
 				'traitSet'
-			]
+			],
+		twig :
+			{
+				'Button' :
+					'Widgets.Button',
+				'CheckBox' :
+					'Widgets.Checkbox',
+				'Input' :
+					'Widgets.Input',
+				'Label' :
+					'Widgets.Label'
+			}
 	};
 }
 
@@ -137,6 +163,11 @@ User.prototype._init =
 {
 	var
 		isGuest;
+	
+	if( !this.path )
+	{
+		return;
+	}
 
 	if( this.username )
 	{
@@ -190,7 +221,7 @@ User.prototype._init =
 	Forms.Form.init.call(
 		this,
 		inherit,
-		Gruga.UserForm,
+		null,
 		traitSet
 	);
 };
