@@ -165,6 +165,7 @@ Jockey.prototype._init =
 			case 'Space' :
 			case 'User' :
 			case 'Welcome' :
+			case 'NoAccessToSpace' :
 
 			formProto =
 				Gruga[ name ];

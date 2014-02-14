@@ -39,13 +39,10 @@ var
 	{
 		width :
 			50,
-
 		height :
 			50,
-
 		w :
 			180,
-
 		n :
 			38
 	};
@@ -54,14 +51,10 @@ var
 /*
 | Layout
 */
-Gruga.NoAccessToSpaceForm =
-{
-	type :
-		'Layout',
-
-	twig :
-	{
-		'headline' :
+Gruga.NoAccessToSpace =
+	Forms.NoAccessToSpace.create(
+		'twig:add',
+		'headline',
 			Widgets.Label.create(
 				'text',
 					'',
@@ -77,7 +70,8 @@ Gruga.NoAccessToSpaceForm =
 							-120
 					)
 			),
-		'message1' :
+		'twig:add',
+		'message1',
 			Widgets.Label.create(
 				'text',
 					'Sorry, you cannot port to this space or create it.',
@@ -93,7 +87,8 @@ Gruga.NoAccessToSpaceForm =
 							-50
 					)
 			),
-		'okButton' :
+		'twig:add',
+		'okButton',
 			Widgets.Button.create(
 				'style',
 					'genericButton',
@@ -129,16 +124,7 @@ Gruga.NoAccessToSpaceForm =
 				'shape',
 					Design.AnchorEllipse.fullSkewNW
 			)
-	},
-
-
-	ranks :
-	[
-		'headline',
-		'message1',
-		'okButton'
-	]
-};
+	);
 
 
 } )( );
