@@ -72,7 +72,7 @@ var
 		require( 'http' ),
 
 	joobjGenerator =
-		require( './joobj-generator' ),
+		require( '../src/joobj/generator' ),
 
 	mongodb =
 		require( 'mongodb' ),

@@ -26,7 +26,7 @@ var
 		require( 'vm' ),
 
 	joobjGenerator =
-		require( './joobj-generator' ),
+		require( '../src/joobj/generator' ),
 
 	Jools =
 		require( '../src/jools/jools' ),

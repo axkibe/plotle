@@ -13,7 +13,7 @@
 
 var
 	Jools =
-		require( '../src/jools/jools' );
+		require( '../jools/jools' );
 
 
 /*
