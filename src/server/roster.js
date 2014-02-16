@@ -19,7 +19,7 @@ var
 		require( './resource' );
 
 
-module.export =
+module.exports =
 [
 	Resource.create(
 		'filepath',
