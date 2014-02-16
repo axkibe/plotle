@@ -61,7 +61,7 @@ module.exports =
 		'filepath',
 			'src/euclid/point.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -69,7 +69,7 @@ module.exports =
 		'filepath',
 			'src/euclid/rect.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -137,7 +137,7 @@ module.exports =
 		'filepath',
 			'src/euclid/font.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -157,7 +157,7 @@ module.exports =
 		'filepath',
 			'src/euclid/shape.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -165,7 +165,7 @@ module.exports =
 		'filepath',
 			'src/euclid/round-rect.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -173,7 +173,7 @@ module.exports =
 		'filepath',
 			'src/euclid/ellipse.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -181,7 +181,7 @@ module.exports =
 		'filepath',
 			'src/euclid/line.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -189,7 +189,7 @@ module.exports =
 		'filepath',
 			'src/design/anchor-point.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -197,7 +197,7 @@ module.exports =
 		'filepath',
 			'src/design/anchor-rect.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -205,7 +205,7 @@ module.exports =
 		'filepath',
 			'src/design/anchor-ellipse.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -225,7 +225,7 @@ module.exports =
 		'filepath',
 			'src/widgets/button.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -233,7 +233,7 @@ module.exports =
 		'filepath',
 			'src/widgets/input.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -241,7 +241,7 @@ module.exports =
 		'filepath',
 			'src/widgets/checkbox.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -249,7 +249,7 @@ module.exports =
 		'filepath',
 			'src/widgets/label.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -287,7 +287,7 @@ module.exports =
 		'filepath',
 			'src/euclid/view.js', // TODO put to other euclids
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -325,7 +325,7 @@ module.exports =
 		'filepath',
 			'src/discs/createdisc.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -333,7 +333,7 @@ module.exports =
 		'filepath',
 			'src/discs/maindisc.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -341,7 +341,7 @@ module.exports =
 		'filepath',
 			'src/discs/jockey.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -349,7 +349,7 @@ module.exports =
 		'filepath',
 			'src/shell/hover-reply.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -363,7 +363,7 @@ module.exports =
 		'filepath',
 			'src/forms/login.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -371,7 +371,7 @@ module.exports =
 		'filepath',
 			'src/forms/signup.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -379,7 +379,7 @@ module.exports =
 		'filepath',
 			'src/forms/space.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -387,7 +387,7 @@ module.exports =
 		'filepath',
 			'src/forms/moveto.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -395,7 +395,7 @@ module.exports =
 		'filepath',
 			'src/forms/user.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -403,7 +403,7 @@ module.exports =
 		'filepath',
 			'src/forms/welcome.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -411,7 +411,7 @@ module.exports =
 		'filepath',
 			'src/forms/no-access-to-space.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -419,7 +419,7 @@ module.exports =
 		'filepath',
 			'src/forms/non-existing-space.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -427,7 +427,7 @@ module.exports =
 		'filepath',
 			'src/forms/jockey.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -495,7 +495,7 @@ module.exports =
 		'filepath',
 			'src/visual/para.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -503,7 +503,7 @@ module.exports =
 		'filepath',
 			'src/visual/scrollbar.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -511,7 +511,7 @@ module.exports =
 		'filepath',
 			'src/visual/doc.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -531,7 +531,7 @@ module.exports =
 		'filepath',
 			'src/visual/note.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -539,7 +539,7 @@ module.exports =
 		'filepath',
 			'src/visual/label.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -547,7 +547,7 @@ module.exports =
 		'filepath',
 			'src/visual/relation.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -555,7 +555,7 @@ module.exports =
 		'filepath',
 			'src/visual/portal.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -563,7 +563,7 @@ module.exports =
 		'filepath',
 			'src/visual/space.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -583,7 +583,7 @@ module.exports =
 		'filepath',
 			'src/mark/caret.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -591,7 +591,7 @@ module.exports =
 		'filepath',
 			'src/mark/item.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -599,7 +599,7 @@ module.exports =
 		'filepath',
 			'src/mark/range.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -607,7 +607,7 @@ module.exports =
 		'filepath',
 			'src/mark/vacant.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -615,7 +615,7 @@ module.exports =
 		'filepath',
 			'src/mark/widget.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -629,7 +629,7 @@ module.exports =
 		'filepath',
 			'src/action/none.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -637,7 +637,7 @@ module.exports =
 		'filepath',
 			'src/action/create-generic.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -645,7 +645,7 @@ module.exports =
 		'filepath',
 			'src/action/create-relation.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -653,7 +653,7 @@ module.exports =
 		'filepath',
 			'src/action/item-drag.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -661,7 +661,7 @@ module.exports =
 		'filepath',
 			'src/action/item-resize.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -669,7 +669,7 @@ module.exports =
 		'filepath',
 			'src/action/pan.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),
@@ -677,7 +677,7 @@ module.exports =
 		'filepath',
 			'src/action/scrolly.js',
 		'opstr',
-			'fbj',
+			'fb',
 		'hasJoobj',
 			true
 	),

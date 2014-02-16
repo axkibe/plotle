@@ -773,7 +773,7 @@ Server.prototype.prepareResources =
 			);
 		}
 
-		if( r.opts.joobj )
+		if( r.hasJoobj )
 		{
 			this.$resources[ r.joobjAlias ] =
 				r;
@@ -866,7 +866,7 @@ Server.prototype.prepareResources =
 		r =
 			rBundle[ a ];
 
-		if( r.opts.joobj )
+		if( r.hasJoobj )
 		{
 			devels.push(
 				'<script src="' +

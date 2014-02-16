@@ -113,11 +113,6 @@ Resource.prototype._init =
 		file :
 			opstr.indexOf( 'f' ) >= 0,
 
-		// this file includes a joobj definition
-		// so the joobj-generator is ran for it
-		joobj :
-			opstr.indexOf( 'j' ) >= 0,
-
 		// the servers hold this resource in memory
 		memory :
 			opstr.indexOf( 'm' ) >= 0
@@ -142,7 +137,7 @@ Resource.prototype._init =
 	// it will serve two files, the file itself
 	// and its joobj-generation
 	//
-	if( this.opts.joobj )
+	if( this.hasJoobj )
 	{
 		this.joobjAlias =
 			'joobj-' + this.alias;
