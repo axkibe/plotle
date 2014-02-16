@@ -36,6 +36,15 @@ if( JOOBJ )
 							'String',
 						assign :
 							null
+					},
+				hasJoobj :
+					{
+						comment :
+							'true if this resource has a joobj def.',
+						type :
+							'Boolean',
+						defaultVal :
+							false
 					}
 			},
 		node :
