@@ -44,7 +44,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultVal :
-							false
+							'false'
 					}
 			},
 		node :

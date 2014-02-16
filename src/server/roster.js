@@ -61,13 +61,17 @@ module.exports =
 		'filepath',
 			'src/euclid/point.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/euclid/rect.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -133,7 +137,9 @@ module.exports =
 		'filepath',
 			'src/euclid/font.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -151,43 +157,57 @@ module.exports =
 		'filepath',
 			'src/euclid/shape.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/euclid/round-rect.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/euclid/ellipse.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/euclid/line.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/design/anchor-point.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/design/anchor-rect.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/design/anchor-ellipse.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -205,25 +225,33 @@ module.exports =
 		'filepath',
 			'src/widgets/button.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/widgets/input.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/widgets/checkbox.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/widgets/label.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -259,7 +287,9 @@ module.exports =
 		'filepath',
 			'src/euclid/view.js', // TODO put to other euclids
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -295,25 +325,33 @@ module.exports =
 		'filepath',
 			'src/discs/createdisc.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/discs/maindisc.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/discs/jockey.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/hover-reply.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -325,55 +363,73 @@ module.exports =
 		'filepath',
 			'src/forms/login.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/forms/signup.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/forms/space.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/forms/moveto.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/forms/user.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/forms/welcome.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/forms/no-access-to-space.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/forms/non-existing-space.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/forms/jockey.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -439,19 +495,25 @@ module.exports =
 		'filepath',
 			'src/visual/para.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/visual/scrollbar.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/visual/doc.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -469,31 +531,41 @@ module.exports =
 		'filepath',
 			'src/visual/note.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/visual/label.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/visual/relation.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/visual/portal.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/visual/space.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -511,31 +583,41 @@ module.exports =
 		'filepath',
 			'src/mark/caret.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mark/item.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mark/range.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mark/vacant.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mark/widget.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -547,43 +629,57 @@ module.exports =
 		'filepath',
 			'src/action/none.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/action/create-generic.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/action/create-relation.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/action/item-drag.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/action/item-resize.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/action/pan.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/action/scrolly.js',
 		'opstr',
-			'fbj'
+			'fbj',
+		'hasJoobj',
+			true
 	),
 	Resource.create(
 		'filepath',
