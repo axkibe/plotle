@@ -21,10 +21,10 @@ if( JOOBJ )
 			'Resource',
 		attributes :
 			{
-				path :
+				filepath :
 					{
 						comment :
-							'path of the resource',
+							'path of the resources file',
 						type :
 							'String'
 					},
@@ -69,8 +69,8 @@ Resource.prototype._init =
 	)
 {
 	var
-		path =
-			this.path;
+		filepath =
+			this.filepath;
 
 	// served as binary or utf-u8
 	this.code =
@@ -120,12 +120,12 @@ Resource.prototype._init =
 		// this replaces directories with hypens to ease
 		// debugging
 		this.alias =
-			path.replace( /\//g, '-' );
+			filepath.replace( /\//g, '-' );
 	}
 	else
 	{
 		this.alias =
-			path;
+			filepath;
 	}
 
 
@@ -139,7 +139,7 @@ Resource.prototype._init =
 			'joobj-' + this.alias;
 
 		this.joobjPath =
-			'joobj-' + this.path;
+			'joobj-' + this.filepath;
 	}
 	else
 	{
@@ -159,7 +159,7 @@ Resource.prototype._init =
 
 	var
 		type =
-			path.split( '.' )[ 1 ];
+			filepath.split( '.' )[ 1 ];
 
 	switch( type )
 	{

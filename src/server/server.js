@@ -1097,7 +1097,7 @@ Server.prototype.prepareResources =
 	{
 		r =
 			Resource.create(
-				'path',
+				'filepath',
 					rlist[ a ],
 				'opstr',
 					rlist[ a + 1 ]
@@ -1113,7 +1113,7 @@ Server.prototype.prepareResources =
 			throw new Error(
 				'double resource: ' +
 					r.alias +
-					' ( ' + r.path + ' ) '
+					' ( ' + r.filepath + ' ) '
 			);
 		}
 
@@ -1155,7 +1155,7 @@ Server.prototype.prepareResources =
 
 		r.data =
 			yield fs.readFile(
-				r.path,
+				r.filepath,
 				resume( )
 			);
 	}
@@ -1168,7 +1168,7 @@ Server.prototype.prepareResources =
 	var
 		cconfig =
 			Resource.create(
-				'path',
+				'filepath',
 					'shell/config.js',
 				'opstr',
 					'mb'
@@ -1233,7 +1233,7 @@ Server.prototype.prepareResources =
 		{
 			bundle.push(
 				yield fs.readFile(
-					r.path,
+					r.filepath,
 					resume( )
 				)
 			);
@@ -1392,7 +1392,7 @@ Server.prototype.prepareResources =
 		// registers the bundle as resource
 		br =
 			Resource.create(
-				'path',
+				'filepath',
 					'meshcraft-' + bsha1 + '.js',
 				'opstr',
 					'mc'
@@ -1426,7 +1426,7 @@ Server.prototype.prepareResources =
 	{
 		var devel =
 			Resource.create(
-				'path',
+				'filepath',
 					'media/devel.html',
 				'opstr',
 					'm'
@@ -1463,7 +1463,7 @@ Server.prototype.prepareResources =
 	var
 		main =
 			Resource.create(
-				'path',
+				'filepath',
 					'media/meshcraft.html',
 				'opstr',
 					'm'
@@ -1490,7 +1490,7 @@ Server.prototype.prepareResources =
 	var
 		testpad =
 			Resource.create(
-				'path',
+				'filepath',
 					'media/testpad.html',
 				'opstr',
 					'f'
@@ -3256,7 +3256,7 @@ Server.prototype.generateJoobj =
 	var
 		data =
 			yield fs.readFile(
-				r.path,
+				r.filepath,
 				resume( )
 			),
 
@@ -3267,7 +3267,7 @@ Server.prototype.generateJoobj =
 					JOOBJ :
 						true
 				},
-				r.path
+				r.filepath
 			);
 
 	Jools.log(
@@ -3434,7 +3434,7 @@ Server.prototype.requestListener =
 		try {
 			data =
 				yield fs.readFile(
-					r.path,
+					r.filepath,
 					resume( )
 				);
 		}
@@ -3448,7 +3448,7 @@ Server.prototype.requestListener =
 
 			Jools.log(
 				'fail',
-				'Missing file: ' + r.path
+				'Missing file: ' + r.filepath
 			);
 
 			return;
