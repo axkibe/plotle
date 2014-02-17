@@ -48,12 +48,16 @@ module.exports =
 	Resource.create(
 		'filepath',
 			'src/jools/jools.js',
+		'inBundle',
+			true,
 		'opstr',
 			'fb'
 	),
 	Resource.create(
 		'filepath',
 			'src/jools/sha1.js',
+		'inBundle',
+			true,
 		'opstr',
 			'fb'
 	),
@@ -63,6 +67,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -71,67 +77,89 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/meshverse.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/path.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/tree.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/sign.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/change.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/changeray.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/meshmashine.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/euclid/const.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/euclid/compass.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/euclid/margin.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -139,19 +167,25 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/euclid/fabric.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/euclid/measure.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -159,6 +193,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -167,6 +203,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -175,6 +213,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -183,6 +223,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -191,6 +233,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -199,6 +243,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -207,19 +253,25 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/widgets/widget.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/widgets/getstyle.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -227,6 +279,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -235,6 +289,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -243,6 +299,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -251,37 +309,49 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/fontpool.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/style.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/accent.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/traitset.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/theme.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -289,37 +359,49 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/iface.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/peer.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/stubs.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/discs/icons.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/discs/disc.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -327,6 +409,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -335,6 +419,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -343,6 +429,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -351,13 +439,17 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/forms/form.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -365,6 +457,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -373,6 +467,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -381,6 +477,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -389,6 +487,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -397,6 +497,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -405,6 +507,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -413,6 +517,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -421,6 +527,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -429,67 +537,89 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/gruga/maindisc.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/gruga/createdisc.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/gruga/login.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/gruga/moveto.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/gruga/no-access-to-space.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/gruga/non-existing-space.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/gruga/signup.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/gruga/space.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/gruga/user.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/gruga/welcome.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -497,6 +627,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -505,6 +637,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -513,19 +647,25 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/visual/item.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/visual/docitem.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -533,6 +673,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -541,6 +683,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -549,6 +693,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -557,6 +703,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -565,19 +713,25 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/system.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mark/mark.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -585,6 +739,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -593,6 +749,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -601,6 +759,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -609,6 +769,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -617,13 +779,17 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/action/action.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
@@ -631,6 +797,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -639,6 +807,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -647,6 +817,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -655,6 +827,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -663,6 +837,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -671,6 +847,8 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
@@ -679,19 +857,25 @@ module.exports =
 		'opstr',
 			'fb',
 		'hasJoobj',
+			true,
+		'inBundle',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/shell.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',
 			'src/shell/fontloader.js',
 		'opstr',
-			'fb'
+			'fb',
+		'inBundle',
+			true
 	),
 	Resource.create(
 		'filepath',

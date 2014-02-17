@@ -45,6 +45,15 @@ if( JOOBJ )
 							'Boolean',
 						defaultVal :
 							'false'
+					},
+				inBundle :
+					{
+						comment :
+							'true if this resource is in the bundle',
+						type :
+							'Boolean',
+						defaultVal :
+							'false'
 					}
 			},
 		node :
