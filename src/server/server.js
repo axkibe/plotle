@@ -4,21 +4,12 @@
 | Authors: Axel Kittenberger
 */
 
+
 /*
 | Capsule
-|
-| (to make jshint happy)
 */
 ( function( ) {
 'use strict';
-
-
-if( typeof( require ) === 'undefined' )
-{
-	throw new Error(
-		'this code requires node!'
-	);
-}
 
 
 /*
@@ -49,6 +40,9 @@ var
 
 	Jools =
 		require( '../jools/jools' ),
+
+	MaxAge =
+		require( './maxage' ),
 
 	MeshMashine =
 		require( '../mm/meshmashine' ),
@@ -826,8 +820,10 @@ Server.prototype.prepareResources =
 			Resource.create(
 				'filepath',
 					'shell/config.js',
+				'inBundle',
+					true,
 				'opstr',
-					'mb'
+					'm'
 			);
 
 	// puts the config on top of the rBundle
@@ -1050,8 +1046,10 @@ Server.prototype.prepareResources =
 			Resource.create(
 				'filepath',
 					'meshcraft-' + bsha1 + '.js',
+				'maxage',
+					'long',
 				'opstr',
-					'mc'
+					'm'
 			);
 
 	br.data =
@@ -1121,6 +1119,7 @@ Server.prototype.prepareResources =
 			Resource.create(
 				'filepath',
 					'media/meshcraft.html',
+				// TODO maxage short
 				'opstr',
 					'm'
 			);
@@ -2403,10 +2402,8 @@ Server.prototype.expireSleep =
 		{
 			'Content-Type' :
 				'application/json',
-
 			'Cache-Control' :
 				'no-cache',
-
 			'Date' :
 				new Date().toUTCString()
 		}
@@ -2574,10 +2571,8 @@ Server.prototype.wake =
 			{
 				'Content-Type' :
 					'application/json',
-
 				'Cache-Control' :
 					'no-cache',
-
 				'Date' :
 					new Date().toUTCString()
 			}
@@ -2838,66 +2833,18 @@ Server.prototype.webError =
 	res.writeHead(code, {
 		'Content-Type' :
 			'text/plain',
-
 		'Cache-Control' :
 			'no-cache',
-
 		'Date' :
 			new Date().toUTCString()
 	});
 
-	message = code+' '+message;
+	message =
+		code + ' ' + message;
 
 	Jools.log( 'web', 'error', code, message );
 
 	res.end( message );
-};
-
-
-/*
-| Checks if the request should be proxied
-| Returns true if the proxy applies, false otherwise.
-*/
-Server.prototype.webRedirect =
-	function(
-		req,
-		res
-	)
-{
-	if( !config.redirect )
-	{
-		return false;
-	}
-
-	var host = req.headers.host;
-	var loc  = config.redirect[host];
-
-	if( !loc )
-	{
-		return false;
-	}
-
-	var locp = loc + req.url;
-
-	Jools.log( 'web', 'redirect', '->', locp );
-
-	res.writeHead(307, {
-		'Content-Type' :
-			'text/plain',
-
-		'Cache-Control' :
-			'max-age=86400',
-
-		'Date' :
-			new Date().toUTCString(),
-
-		'Location' :
-			locp
-	});
-
-	res.end( );
-
-	return true;
 };
 
 
@@ -2958,16 +2905,6 @@ Server.prototype.requestListener =
 		red =
 			url.parse( req.url );
 
-	if(
-		this.webRedirect(
-			req,
-			res
-		)
-	)
-	{
-		return;
-	}
-
 	Jools.log(
 		'web',
 		req.connection.remoteAddress,
@@ -3009,7 +2946,7 @@ Server.prototype.requestListener =
 						r.mime,
 
 					'Cache-Control' :
-						r.opts.cache ? 'max-age=7884000' : 'no-cache',
+						MaxAge.map( r.maxage ),
 
 					'Date' :
 						new Date().toUTCString()
@@ -3118,7 +3055,7 @@ Server.prototype.requestListener =
 				r.mime,
 
 			'Cache-Control' :
-				r.opts.cache ? 'max-age=7884000' : 'no-cache',
+				MaxAge.map( r.maxage ),
 
 			'Date' :
 				new Date().toUTCString()

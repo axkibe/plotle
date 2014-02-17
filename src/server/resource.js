@@ -21,13 +21,6 @@ if( JOOBJ )
 			'Resource',
 		attributes :
 			{
-				filepath :
-					{
-						comment :
-							'path of the resources file',
-						type :
-							'String'
-					},
 				opstr :
 					{
 						comment :
@@ -36,6 +29,22 @@ if( JOOBJ )
 							'String',
 						assign :
 							null
+					},
+				maxage :
+					{
+						comment :
+							'"none", "short" or "long"',
+						type :
+							'String',
+						defaultVal :
+							'\'none\''
+					},
+				filepath :
+					{
+						comment :
+							'path of the resources file',
+						type :
+							'String'
 					},
 				hasJoobj :
 					{
@@ -54,7 +63,16 @@ if( JOOBJ )
 							'Boolean',
 						defaultVal :
 							'false'
-					}
+					},
+				permanent :
+					{
+						comment :
+							'if true tells browser to cache for a while',
+						type :
+							'Boolean',
+						defaultVal :
+							'false'
+					},
 			},
 		node :
 			true,
@@ -116,10 +134,6 @@ Resource.prototype._init =
 	// the options for this resource
 	this.opts   =
 	{
-		// tells the client to cache the resource
-		cache :
-			opstr.indexOf( 'c' ) >= 0,
-
 		// the server reads this resource from the file on every access
 		// (used for debugging resources)
 		file :

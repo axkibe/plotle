@@ -1,5 +1,5 @@
 /*
-| the roster of all resources.
+| The roster of all resources.
 |
 | Authors: Axel Kittenberger
 */
@@ -24,8 +24,10 @@ module.exports =
 	Resource.create(
 		'filepath',
 			'media/favicon.ico',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
@@ -42,8 +44,10 @@ module.exports =
 	Resource.create(
 		'filepath',
 			'webfont/webfont.js',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
@@ -880,104 +884,138 @@ module.exports =
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavu.css',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-boldoblique-webfont.eot',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-boldoblique-webfont.svg',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-boldoblique-webfont.ttf',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-boldoblique-webfont.woff',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-bold-webfont.eot',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-bold-webfont.svg',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-bold-webfont.ttf',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-bold-webfont.woff',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-oblique-webfont.eot',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-oblique-webfont.svg',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-oblique-webfont.ttf',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-oblique-webfont.woff',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-webfont.eot',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-webfont.svg',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-webfont.ttf',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 	Resource.create(
 		'filepath',
 			'media/dejavu/dejavusans-webfont.woff',
+		'maxage',
+			'long',
 		'opstr',
-			'mc'
+			'm'
 	),
 ];
 
