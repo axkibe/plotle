@@ -30,14 +30,29 @@ if( JOOBJ )
 						assign :
 							null
 					},
-				maxage :
+				aliases :
 					{
 						comment :
-							'"none", "short" or "long"',
+							'the list of aliases this is server under',
+						type :
+							'Array',
+						allowNull :
+							true,
+						defaultVal :
+							// by default determined from filepath
+							'null'
+					},
+				coding :
+					{
+						comment :
+							'"binary" or "utf-8"',
 						type :
 							'String',
+						allowNull :
+							true,
 						defaultVal :
-							'\'none\''
+							// by default determined from file extension
+							'null'
 					},
 				filepath :
 					{
@@ -64,14 +79,26 @@ if( JOOBJ )
 						defaultVal :
 							'false'
 					},
-				permanent :
+				maxage :
 					{
 						comment :
-							'if true tells browser to cache for a while',
+							'"none", "short" or "long"',
 						type :
-							'Boolean',
+							'String',
 						defaultVal :
-							'false'
+							'\'none\''
+					},
+				mime :
+					{
+						comment :
+							'mime type',
+						type :
+							'String',
+						allowNull :
+							true,
+						defaultVal :
+							// by default determined from file extension
+							'null'
 					},
 			},
 		node :
@@ -88,6 +115,9 @@ if( JOOBJ )
 | Imports
 */
 var
+	FileTypes =
+		require( './file-types' ),
+
 	Jools =
 		require( '../jools/jools' ),
 
@@ -98,12 +128,7 @@ var
 /*
 | Initializer
 |
-| opstr ... a string, a letter including says:
-|
-|   b ... included in the bundle
-|   c ... serve as cached
 |   f ... serve from file
-|   j ... includes a joobj definition
 |   m ... keep in memory
 */
 Resource.prototype._init =
@@ -115,16 +140,8 @@ Resource.prototype._init =
 		filepath =
 			this.filepath;
 
-	// served as binary or utf-u8
-	this.code =
-		null;
-
 	// the compressed version of this code (if supported)
 	this.gzip =
-		null;
-
-	// the mime-code of the resource
-	this.mime =
 		null;
 
 	// the content to be served if held in memory
@@ -149,13 +166,13 @@ Resource.prototype._init =
 		// the alias is the path the file is served as
 		// this replaces directories with hypens to ease
 		// debugging
-		this.alias =
-			filepath.replace( /\//g, '-' );
+		this.aliases =
+			[ filepath.replace( /\//g, '-' ) ];
 	}
 	else
 	{
-		this.alias =
-			filepath;
+		this.aliases =
+			[ filepath ];
 	}
 
 
@@ -167,115 +184,22 @@ Resource.prototype._init =
 	}
 
 	var
-		type =
+		filetype =
 			filepath.split( '.' )[ 1 ];
 
-	switch( type )
+	if( !this.coding )
 	{
-		case 'css' :
-			// cascading style sheet
-
-			this.code =
-				'utf-8';
-
-			this.mime =
-				'text/css';
-
-			break;
-
-		case 'eot' :
-			// some font
-
-			this.code =
-				'binary';
-
-			this.mime =
-				'font/eot';
-
-			break;
-
-		case 'html' :
-			// hypertext
-
-			this.code =
-				'utf-8';
-
-			this.mime =
-				'text/html';
-
-			break;
-
-		case 'ico' :
-			// icon
-
-			this.code =
-				'binary';
-
-			this.mime =
-				'image/x-icon';
-
-			break;
-
-		case 'js' :
-			// javascript
-
-			this.code =
-				'utf-8';
-
-			this.mime =
-				'text/javascript';
-
-			break;
-
-		case 'otf'  :
-			// some font
-
-			this.code =
-				'binary';
-
-			this.mime =
-				'font/otf';
-
-			break;
-
-		case 'svg'  :
-			// some font
-
-			this.code =
-				'utf-8';
-
-			this.mime =
-				'image/svg+xml';
-
-			break;
-
-		case 'ttf'  :
-			// some font
-
-			this.code =
-				'binary';
-
-			this.mime =
-				'font/ttf';
-
-			break;
-
-		case 'woff' :
-			// some font
-
-			this.code =
-				'binary';
-
-			this.mime =
-				'application/font-woff';
-
-			break;
-
-		default :
-			throw new Error(
-				'unknown file type: ' + type
-			);
+		this.coding =
+			FileTypes.mapCoding( filetype );
 	}
+
+	if( !this.mime )
+	{
+		this.mime =
+			FileTypes.mapMime( filetype );
+	}
+
+
 };
 
 
@@ -290,7 +214,11 @@ Jools.lazyValue(
 		return (
 			this.hasJoobj
 				?
-				( 'joobj-' + this.alias )
+				(
+					'joobj-'
+					+
+					this.filepath.replace( /\//g, '-' )
+				)
 				:
 				null
 		);

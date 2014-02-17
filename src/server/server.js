@@ -736,10 +736,10 @@ Server.prototype.prepareResources =
 	function* ( )
 {
 	var
-		r;
+		alias,
+		r,
 
-	// resources served in the bundle
-	var
+		// resources served in the bundle
 		rBundle =
 			[ ];
 
@@ -758,13 +758,27 @@ Server.prototype.prepareResources =
 			rBundle.push( r );
 		}
 
-		if( this.$resources[ r.alias ] )
+
+		for(
+			var b = 0, bZ = r.aliases.length;
+			b < bZ;
+			b++
+		)
 		{
-			throw new Error(
-				'double resource: ' +
-					r.alias +
-					' ( ' + r.filepath + ' ) '
-			);
+			alias =
+				r.aliases[ b ];
+
+			if( this.$resources[ alias ] )
+			{
+				throw new Error(
+					'double alias: ' +
+						alias +
+						' ( ' + r.filepath + ' ) '
+				);
+			}
+
+			this.$resources[ alias ] =
+				r;
 		}
 
 		if( r.hasJoobj )
@@ -772,13 +786,7 @@ Server.prototype.prepareResources =
 			this.$resources[ r.joobjAlias ] =
 				r;
 		}
-
-		this.$resources[ r.alias ] =
-			r;
 	}
-
-	var
-		alias;
 
 	Jools.log(
 		'start',
@@ -829,7 +837,7 @@ Server.prototype.prepareResources =
 	// puts the config on top of the rBundle
 	rBundle.unshift( cconfig );
 
-	this.$resources[ cconfig.alias ] =
+	this.$resources[ cconfig.aliases[ 0 ] ] =
 		cconfig;
 
 	cconfig.data =
@@ -877,7 +885,7 @@ Server.prototype.prepareResources =
 
 		devels.push(
 			'<script src="' +
-				r.alias +
+				r.aliases[ 0 ] +
 				'" type="text/javascript"></script>'
 		);
 
@@ -1055,7 +1063,7 @@ Server.prototype.prepareResources =
 	br.data =
 		bundle;
 
-	this.$resources[ br.alias ] =
+	this.$resources[ br.aliases[ 0 ]  ] =
 		br;
 
 	Jools.log(
@@ -1133,7 +1141,9 @@ Server.prototype.prepareResources =
 	main.data =
 		main.data.replace(
 			/<!--COPACK.*>/,
-			'<script src="' + br.alias + '" type="text/javascript"></script>'
+			'<script src="' +
+				br.aliases[ 0 ] +
+				'" type="text/javascript"></script>'
 		);
 
 	this.$resources[ 'meshcraft.html' ] =
@@ -2875,7 +2885,7 @@ Server.prototype.generateJoobj =
 
 	Jools.log(
 		'start',
-		'generating ' + 'joobj/' + r.alias
+		'generating ' + 'joobj/' + r.aliases[ 0 ]
 	);
 
 	data =
@@ -2883,7 +2893,7 @@ Server.prototype.generateJoobj =
 
 	// updates the generated file
 	yield fs.writeFile(
-		'joobj/' + r.alias,
+		'joobj/' + r.aliases[ 0 ],
 		data,
 		resume( )
 	);
@@ -2978,7 +2988,7 @@ Server.prototype.requestListener =
 
 			res.end(
 				r.data,
-				r.code
+				r.coding
 			);
 		}
 		return;
@@ -3078,7 +3088,7 @@ Server.prototype.requestListener =
 
 	res.end(
 		data,
-		r.code
+		r.coding
 	);
 };
 
