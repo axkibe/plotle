@@ -26,9 +26,7 @@ if( JOOBJ )
 						comment :
 							'options string',
 						type :
-							'String',
-						assign :
-							null
+							'String'
 					},
 				aliases :
 					{
@@ -52,6 +50,28 @@ if( JOOBJ )
 							true,
 						defaultVal :
 							// by default determined from file extension
+							'null'
+					},
+				data :
+					{
+						comment :
+							'cached or auto generated data',
+						type :
+							'Buffer',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
+					},
+				gzip :
+					{
+						comment :
+							'cached or auto generated zip data',
+						type :
+							'Buffer',
+						allowNull :
+							true,
+						defaultVal :
 							'null'
 					},
 				filepath :

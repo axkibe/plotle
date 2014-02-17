@@ -1300,6 +1300,7 @@ generateChecks =
 
 			case 'Action' :
 			case 'Array' :
+			case 'Buffer' :
 			case 'Item' :
 			case 'Mark' :
 			case 'Tree' :
@@ -1540,6 +1541,7 @@ generateCreatorFullInheritance =
 		switch( attr.type )
 		{
 			case 'Array' : // FIXME
+			case 'Buffer' :
 			case 'Boolean' :
 			case 'Integer' :
 			case 'Mark' : // FIXME

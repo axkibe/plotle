@@ -186,20 +186,3 @@ config.log  = {
 		true
 };
 
-
-/*
-| redirects for VHOSTS
-*/
-config.redirect = {
-	'twitterpolitik.net' :
-		'http://www.univie.ac.at/twitterpolitik',
-
-	'www.twitterpolitik.net' :
-		'http://www.univie.ac.at/twitterpolitik',
-
-	'twitterpolitik.net:80' :
-		'http://www.univie.ac.at/twitterpolitik',
-
-	'www.twitterpolitik.net:80' :
-		'http://www.univie.ac.at/twitterpolitik'
-};

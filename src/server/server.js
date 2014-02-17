@@ -811,10 +811,13 @@ Server.prototype.prepareResources =
 			continue;
 		}
 
-		r.data =
-			yield fs.readFile(
-				r.filepath,
-				resume( )
+		this.$resources[ alias ] =
+			r.create(
+				'data',
+					yield fs.readFile(
+						r.filepath,
+						resume( )
+					)
 			);
 	}
 
