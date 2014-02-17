@@ -91,7 +91,7 @@ if( SERVER )
 		require( './point' );
 
 	Euclid.Rect =
-		require( '../joobj/node' )( module );
+		require( '../joobj/this' )( module );
 }
 
 

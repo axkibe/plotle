@@ -759,7 +759,7 @@ Server.prototype.prepareResources =
 		r =
 			roster[ a ];
 
-		if( r.opts.bundle )
+		if( r.inBundle )
 		{
 			rBundle.push( r );
 		}

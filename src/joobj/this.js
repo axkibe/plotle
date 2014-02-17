@@ -1,5 +1,6 @@
 /*
-| Runs the joobj generator for a node module
+| Runs the joobj generator from node for the
+| module that requires this.
 |
 | Authors: Axel Kittenberger
 */

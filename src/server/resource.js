@@ -65,9 +65,16 @@ if( JOOBJ )
 	};
 }
 
+
+/*
+| Imports
+*/
 var
+	Jools =
+		require( '../jools/jools' ),
+
 	Resource =
-		require( '../joobj/node' )( module );
+		require( '../joobj/this' )( module );
 
 
 /*
@@ -109,10 +116,6 @@ Resource.prototype._init =
 	// the options for this resource
 	this.opts   =
 	{
-		// this resource is part of the bunlde
-		bundle :
-			opstr.indexOf( 'b' ) >= 0,
-
 		// tells the client to cache the resource
 		cache :
 			opstr.indexOf( 'c' ) >= 0,
@@ -141,27 +144,6 @@ Resource.prototype._init =
 			filepath;
 	}
 
-
-	// if this resource contains a joobj
-	// it will serve two files, the file itself
-	// and its joobj-generation
-	//
-	if( this.hasJoobj )
-	{
-		this.joobjAlias =
-			'joobj-' + this.alias;
-
-		this.joobjPath =
-			'joobj-' + this.filepath;
-	}
-	else
-	{
-		this.joobjAlias =
-			null;
-
-		this.joobjPath =
-			null;
-	}
 
 	if( !this.opts.memory && !this.opts.file )
 	{
@@ -284,10 +266,30 @@ Resource.prototype._init =
 
 
 /*
+| The alias the joobj is served under (if)
+*/
+Jools.lazyValue(
+	Resource.prototype,
+	'joobjAlias',
+	function( )
+	{
+		return (
+			this.hasJoobj
+				?
+				( 'joobj-' + this.alias )
+				:
+				null
+		);
+	}
+);
+
+
+/*
 | Node export
 */
 module.exports =
 	Resource;
+
 
 
 } )( );
