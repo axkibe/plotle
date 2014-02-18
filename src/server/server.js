@@ -831,9 +831,7 @@ Server.prototype.prepareInventory =
 				'inBundle',
 					true,
 				'mime',
-					FileTypes.mime( 'js' ),
-				'opstr',
-					'm'
+					FileTypes.mime( 'js' )
 			);
 
 	// puts the config on top of the rBundle
@@ -1056,8 +1054,6 @@ Server.prototype.prepareInventory =
 					bundleFilepath,
 				'maxage',
 					'long',
-				'opstr',
-					'm',
 				'data',
 					bundle
 			);
@@ -1114,9 +1110,7 @@ Server.prototype.prepareInventory =
 					'data',
 						data,
 					'filepath',
-						'media/devel.html',
-					'opstr',
-						'm'
+						'media/devel.html'
 				);
 
 		this.inventory =
@@ -1150,10 +1144,8 @@ Server.prototype.prepareInventory =
 				'data',
 					data,
 				'filepath',
-					'media/meshcraft.html',
+					'media/meshcraft.html'
 				// TODO maxage short
-				'opstr',
-					'm'
 			);
 
 
@@ -1171,7 +1163,7 @@ Server.prototype.prepareInventory =
 		r =
 			inv.list[ a ];
 
-		if( !r.opts.memory )
+		if( r.inBundle )
 		{
 			continue;
 		}

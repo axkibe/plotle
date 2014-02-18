@@ -83,7 +83,7 @@ config.devel =
 | If true "uglifies" the javascript pack, minimizing its size.
 */
 config.uglify =
-	true;
+	false;
 
 
 /*

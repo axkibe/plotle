@@ -21,13 +21,6 @@ if( JOOBJ )
 			'Resource',
 		attributes :
 			{
-				opstr :
-					{
-						comment :
-							'options string',
-						type :
-							'String'
-					},
 				aliases :
 					{
 						comment :
@@ -135,9 +128,7 @@ if( JOOBJ )
 		node :
 			true,
 		init :
-			[
-				'opstr'
-			]
+			[ ]
 	};
 }
 
@@ -163,26 +154,11 @@ var
 |   m ... keep in memory
 */
 Resource.prototype._init =
-	function(
-		opstr
-	)
+	function( )
 {
 	var
 		filepath =
 			this.filepath;
-
-	// the options for this resource
-	this.opts   =
-	{
-		// the server reads this resource from the file on every access
-		// (used for debugging resources)
-		file :
-			opstr.indexOf( 'f' ) >= 0,
-
-		// the servers hold this resource in memory
-		memory :
-			opstr.indexOf( 'm' ) >= 0
-	};
 
 	// the alias is are the paths the file is served as
 	// directories are replaced with hypens to ease debugging
