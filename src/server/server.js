@@ -1154,8 +1154,6 @@ Server.prototype.prepareResources =
 	this.inventory =
 		this.inventory.addResource( main );
 
-	console.log( 'AZ', inv.list );
-
 	// prepares the zipped versions
 	for(
 		a = 0, aZ = inv.list.length;
@@ -1171,8 +1169,6 @@ Server.prototype.prepareResources =
 			continue;
 		}
 
-		console.log( 'PRESS', r.filepath );
-
 		this.inventory =
 			this.inventory.updateResource(
 				a,
@@ -1185,8 +1181,6 @@ Server.prototype.prepareResources =
 				)
 			);
 	}
-
-//	console.log( this.inventory.map[ bundleFilepath ] );
 
 	Jools.log(
 		'start',
