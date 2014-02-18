@@ -177,16 +177,8 @@ Resource.prototype._init =
 	// directories are replaced with hypens to ease debugging
 	if( !this.aliases )
 	{
-		if( this.opts.file )
-		{
-			this.aliases =
-				[ filepath.replace( /\//g, '-' ) ];
-		}
-		else
-		{
-			this.aliases =
-				[ filepath ];
-		}
+		this.aliases =
+			[ filepath.replace( /\//g, '-' ) ];
 	}
 
 	if( !this.coding )

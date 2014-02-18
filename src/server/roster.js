@@ -883,7 +883,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavu.css',
+			'media/dejavusans/style.css',
 		'maxage',
 			'long',
 		'opstr',
@@ -891,7 +891,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-boldoblique-webfont.eot',
+			'media/dejavusans/boldoblique-webfont.eot',
 		'maxage',
 			'long',
 		'opstr',
@@ -899,7 +899,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-boldoblique-webfont.svg',
+			'media/dejavusans/boldoblique-webfont.svg',
 		'maxage',
 			'long',
 		'opstr',
@@ -907,7 +907,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-boldoblique-webfont.ttf',
+			'media/dejavusans/boldoblique-webfont.ttf',
 		'maxage',
 			'long',
 		'opstr',
@@ -915,7 +915,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-boldoblique-webfont.woff',
+			'media/dejavusans/boldoblique-webfont.woff',
 		'maxage',
 			'long',
 		'opstr',
@@ -923,7 +923,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-bold-webfont.eot',
+			'media/dejavusans/bold-webfont.eot',
 		'maxage',
 			'long',
 		'opstr',
@@ -931,7 +931,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-bold-webfont.svg',
+			'media/dejavusans/bold-webfont.svg',
 		'maxage',
 			'long',
 		'opstr',
@@ -939,7 +939,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-bold-webfont.ttf',
+			'media/dejavusans/bold-webfont.ttf',
 		'maxage',
 			'long',
 		'opstr',
@@ -947,7 +947,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-bold-webfont.woff',
+			'media/dejavusans/bold-webfont.woff',
 		'maxage',
 			'long',
 		'opstr',
@@ -955,7 +955,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-oblique-webfont.eot',
+			'media/dejavusans/oblique-webfont.eot',
 		'maxage',
 			'long',
 		'opstr',
@@ -963,7 +963,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-oblique-webfont.svg',
+			'media/dejavusans/oblique-webfont.svg',
 		'maxage',
 			'long',
 		'opstr',
@@ -971,7 +971,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-oblique-webfont.ttf',
+			'media/dejavusans/oblique-webfont.ttf',
 		'maxage',
 			'long',
 		'opstr',
@@ -979,7 +979,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-oblique-webfont.woff',
+			'media/dejavusans/oblique-webfont.woff',
 		'maxage',
 			'long',
 		'opstr',
@@ -987,7 +987,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-webfont.eot',
+			'media/dejavusans/webfont.eot',
 		'maxage',
 			'long',
 		'opstr',
@@ -995,7 +995,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-webfont.svg',
+			'media/dejavusans/webfont.svg',
 		'maxage',
 			'long',
 		'opstr',
@@ -1003,7 +1003,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-webfont.ttf',
+			'media/dejavusans/webfont.ttf',
 		'maxage',
 			'long',
 		'opstr',
@@ -1011,7 +1011,7 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'media/dejavu/dejavusans-webfont.woff',
+			'media/dejavusans/webfont.woff',
 		'maxage',
 			'long',
 		'opstr',

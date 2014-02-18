@@ -822,8 +822,9 @@ Server.prototype.prepareResources =
 	}
 
 	// alternative alias for favicon
+	// XXX
 	this.$resources[ 'favicon.ico' ] =
-		this.$resources[ 'media/favicon.ico' ];
+		this.$resources[ 'media-favicon.ico' ];
 
 	// autogenerator the shell config as resource
 	var
