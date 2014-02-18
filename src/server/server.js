@@ -795,13 +795,13 @@ Server.prototype.prepareResources =
 		{
 			this.$resources[ r.joobjAlias ] =
 				r.asJoobj;
+
+			this.inventory =
+				this.inventory.addResource( r.asJoobj );
 		}
 	}
 
-	Jools.log(
-		'start',
-		'preparing resources'
-	);
+	Jools.log( 'start', 'preparing resources' );
 
 	/*
 	| Reads in all files to be cached

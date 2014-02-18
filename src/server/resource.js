@@ -206,6 +206,8 @@ Resource.prototype._init =
 
 /*
 | The alias the joobj is served under (if)
+|
+| TODO remove
 */
 Jools.lazyValue(
 	Resource.prototype,
@@ -242,9 +244,11 @@ Jools.lazyValue(
 
 		return this.create(
 			'aliases',
-				'joobj-'
-				+
-				this.filepath.replace( /\//g, '-' ),
+				[
+					'joobj-'
+					+
+					this.filepath.replace( /\//g, '-' )
+				],
 			'hasJoobj',
 				false,
 			'isJoobj',
