@@ -106,6 +106,8 @@ Inventory.prototype.addResource =
 			res;
 	}
 	
+	list.push( res );
+
 	return (
 		new Inventory(
 			_tag,

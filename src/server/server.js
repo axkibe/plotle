@@ -113,10 +113,6 @@ var Server =
 Server.prototype.startup =
 	function*( )
 {
-	// files served
-	this.$resources =
-		{ };
-
 	// the servers inventory
 	this.inventory =
 		Inventory.create( );
@@ -743,16 +739,20 @@ Server.prototype.prepareResources =
 	function* ( )
 {
 	var
-		alias,
+		a,
+		aZ,
+		data,
 		r,
 
 		// resources served in the bundle
 		rBundle =
 			[ ];
+	
+	Jools.log( 'start', 'preparing inventory' );
 
 	// creates the resources
 	for(
-		var a = 0, aZ = roster.length;
+		a = 0, aZ = roster.length;
 		a < aZ;
 		a++
 	)
@@ -769,69 +769,55 @@ Server.prototype.prepareResources =
 		this.inventory =
 			this.inventory.addResource( r );
 
-		for(
-			var b = 0, bZ = r.aliases.length;
-			b < bZ;
-			b++
-		)
-		{
-			alias =
-				r.aliases[ b ];
-
-			if( this.$resources[ alias ] )
-			{
-				throw new Error(
-					'double alias: ' +
-						alias +
-						' ( ' + r.filepath + ' ) '
-				);
-			}
-
-			this.$resources[ alias ] =
-				r;
-		}
-
 		if( r.hasJoobj )
 		{
-			this.$resources[ r.joobjAlias ] =
-				r.asJoobj;
-
 			this.inventory =
 				this.inventory.addResource( r.asJoobj );
 		}
 	}
 
-	Jools.log( 'start', 'preparing resources' );
-
 	/*
 	| Reads in all files to be cached
 	| in memory
 	*/
-	for( alias in this.$resources )
+	var
+		inv =
+			this.inventory;
+
+	for(
+		a = 0, aZ = inv.list.length;
+		a < aZ;
+		a++
+	)
 	{
 		r =
-			this.$resources[ alias ];
+			inv.list[ a ];
 
 		if(
 			r.data !== null
 			||
 			!r.opts.memory
+			||
+			r.isJoobj
 		)
 		{
 			continue;
 		}
 
-		this.$resources[ alias ] =
-			r.create(
-				'data',
-					yield fs.readFile(
-						r.filepath,
-						resume( )
-					)
+		this.inventory =
+			this.inventory.updateResource(
+				a,
+				r.create(
+					'data',
+						yield fs.readFile(
+							r.filepath,
+							resume( )
+						)
+				)
 			);
 	}
 
-	// autogenerator the shell config as resource
+	// autogenerates the shell config as resource
 	var
 		cconfig =
 			Resource.create(
@@ -848,8 +834,8 @@ Server.prototype.prepareResources =
 	// puts the config on top of the rBundle
 	rBundle.unshift( cconfig );
 
-	this.$resources[ cconfig.aliases[ 0 ] ] =
-		cconfig;
+	this.inventory =
+		this.inventory.addResource( cconfig );
 
 	var
 		// the bundle itself
@@ -865,6 +851,7 @@ Server.prototype.prepareResources =
 	// creation, otherwise afterwards
 	if( !config.uglify )
 	{
+		// XXX
 		this.prependConfigFlags( cconfig );
 	}
 
@@ -1054,14 +1041,14 @@ Server.prototype.prepareResources =
 
 	// calculates the hash for the bundle
 	var
-		bsha1 =
-			sha1.sha1hex( bundle ),
+		bundleFilepath =
+			'meshcraft-' + sha1.sha1hex( bundle ) + '.js',
 
 		// registers the bundle as resource
 		br =
 			Resource.create(
 				'filepath',
-					'meshcraft-' + bsha1 + '.js',
+					bundleFilepath,
 				'maxage',
 					'long',
 				'opstr',
@@ -1070,14 +1057,10 @@ Server.prototype.prepareResources =
 					bundle
 			);
 
-	this.$resources[ br.aliases[ 0 ]  ] =
-		br;
+	this.inventory =
+		this.inventory.addResource( br );
 
-	Jools.log(
-		'start',
-		'bundle:',
-		bsha1
-	);
+	Jools.log( 'start', 'bundle:', bundleFilepath );
 
 	// if uglify is turned on
 	// the flags are added after bundle
@@ -1093,30 +1076,22 @@ Server.prototype.prepareResources =
 		config.devel === 'both'
 	)
 	{
-		var devel =
-			Resource.create(
-				'filepath',
-					'media/devel.html',
-				'opstr',
-					'm'
-			);
-
-		devel.data =
+		data =
 			(yield fs.readFile(
 				'media/devel.html',
 				resume( )
 			)) + '';
 
-		devel.data =
-			devel.data.replace(
+		data =
+			data.replace(
 				/<!--DEVELPACK.*>/,
 				devels.join( '\n' )
 			);
 
 		if( config.debug.weinre )
 		{
-			devel.data =
-				devel.data.replace(
+			data =
+				data.replace(
 					/<!--WEINRE.*>/,
 					'<script src="http://' +
 						config.debug.weinre +
@@ -1124,14 +1099,49 @@ Server.prototype.prepareResources =
 				);
 		}
 
-		this.$resources[ 'devel.html' ] =
-			devel;
+		var
+			devel =
+				Resource.create(
+					'aliases',
+						[ 'devel.html' ],
+					'data',
+						data,
+					'filepath',
+						'media/devel.html',
+					'opstr',
+						'm'
+				);
+
+		this.inventory =
+			this.inventory.addResource( devel );
 	}
 
 	// the index.html file
+
+	data =
+		( yield fs.readFile(
+			'media/meshcraft.html',
+			resume( )
+		) ) + '';
+
+	data =
+		data.replace(
+			/<!--COPACK.*>/,
+			'<script src="' +
+				br.aliases[ 0 ] +
+				'" type="text/javascript"></script>'
+		);
 	var
 		main =
 			Resource.create(
+				'aliases',
+					[
+						'meshcraft.html',
+						'index.html',
+						''
+					],
+				'data',
+					data,
 				'filepath',
 					'media/meshcraft.html',
 				// TODO maxage short
@@ -1139,53 +1149,55 @@ Server.prototype.prepareResources =
 					'm'
 			);
 
-	main.data =
-		( yield fs.readFile(
-			'media/meshcraft.html',
-			resume( )
-		) ) + '';
 
-	main.data =
-		main.data.replace(
-			/<!--COPACK.*>/,
-			'<script src="' +
-				br.aliases[ 0 ] +
-				'" type="text/javascript"></script>'
-		);
+	inv =
+	this.inventory =
+		this.inventory.addResource( main );
 
-	this.$resources[ 'meshcraft.html' ] =
-	this.$resources[ 'index.html' ] =
-	this.$resources[ '' ] =
-		main;
+	console.log( 'AZ', inv.list );
 
 	// prepares the zipped versions
-	for( alias in this.$resources )
+	for(
+		a = 0, aZ = inv.list.length;
+		a < aZ;
+		a++
+	)
 	{
 		r =
-			this.$resources[ alias ];
+			inv.list[ a ];
 
 		if( !r.opts.memory )
 		{
 			continue;
 		}
 
-		r.gzip =
-			yield zlib.gzip(
-				r.data,
-				resume( )
+		console.log( 'PRESS', r.filepath );
+
+		this.inventory =
+			this.inventory.updateResource(
+				a,
+				r.create(
+					'gzip',
+						yield zlib.gzip(
+							r.data,
+							resume( )
+						)
+				)
 			);
 	}
+
+//	console.log( this.inventory.map[ bundleFilepath ] );
 
 	Jools.log(
 		'start',
 		'uncompressed bundle size is ',
-		br.data.length
+		this.inventory.map[ bundleFilepath ].data.length
 	);
 
 	Jools.log(
 		'start',
 		'  compressed bundle size is ',
-		br.gzip.length
+		this.inventory.map[ bundleFilepath ].gzip.length
 	);
 };
 
@@ -2926,7 +2938,7 @@ Server.prototype.requestListener =
 
 	var
 		r =
-			this.$resources[ pathname ];
+			this.inventory.map[ pathname ];
 
 	if( !r )
 	{
