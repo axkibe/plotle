@@ -19,7 +19,7 @@ var
 	/*
 	| coding mappings for file types
 	*/
-	_mapCoding =
+	_codings =
 		{
 			'css' :
 				// cascading style sheet
@@ -61,7 +61,7 @@ var
 	/*
 	| mime mappings for file types
 	*/
-	_mapMime =
+	_mimes =
 		{
 		'css' :
 			// cascading style sheet
@@ -105,14 +105,14 @@ var
 /*
 | Maps a file extension to a coding.
 */
-FileTypes.mapCoding =
+FileTypes.coding =
 	function(
 		ext
 	)
 {
 	var
 		coding =
-			_mapCoding[ ext ];
+			_codings[ ext ];
 
 	if( !coding )
 	{
@@ -128,14 +128,14 @@ FileTypes.mapCoding =
 /*
 | Maps a file type to a mime.
 */
-FileTypes.mapMime =
+FileTypes.mime =
 	function(
 		ext
 	)
 {
 	var
 		mime =
-			_mapMime[ ext ];
+			_mimes[ ext ];
 
 	if( !mime )
 	{

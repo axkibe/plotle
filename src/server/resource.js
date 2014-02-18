@@ -79,7 +79,9 @@ if( JOOBJ )
 						comment :
 							'path of the resources file',
 						type :
-							'String'
+							'String',
+						allowNull :
+							true
 					},
 				hasJoobj :
 					{
@@ -193,13 +195,13 @@ Resource.prototype._init =
 	if( !this.coding )
 	{
 		this.coding =
-			FileTypes.mapCoding( this.fileext );
+			FileTypes.coding( this.fileext );
 	}
 
 	if( !this.mime )
 	{
 		this.mime =
-			FileTypes.mapMime( this.fileext );
+			FileTypes.mime( this.fileext );
 	}
 };
 
@@ -214,16 +216,15 @@ Jools.lazyValue(
 	'joobjAlias',
 	function( )
 	{
+		if( !this.hasJoobj )
+		{
+			return null;
+		}
+
 		return (
-			this.hasJoobj
-				?
-				(
-					'joobj-'
-					+
-					this.filepath.replace( /\//g, '-' )
-				)
-				:
-				null
+			'joobj-'
+			+
+			this.filepath.replace( /\//g, '-' )
 		);
 	}
 );

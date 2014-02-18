@@ -31,18 +31,6 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'testpad/testpad.js',
-		'opstr',
-			'f'
-	),
-	Resource.create(
-		'filepath',
-			'testpad/iface-sym.js',
-		'opstr',
-			'f'
-	),
-	Resource.create(
-		'filepath',
 			'webfont/webfont.js',
 		'maxage',
 			'long',

@@ -38,6 +38,9 @@ var
 	resume =
 		suspend.resume,
 
+	FileTypes =
+		require( './file-types' ),
+
 	Inventory =
 		require( './inventory' ),
 
@@ -93,9 +96,8 @@ var
 		require( 'zlib' ),
 
 	uglify =
-		config.uglify || config.extraMangle ?
-			require( 'uglify-js' ) :
-			null;
+		require( 'uglify-js' );
+
 
 /*
 | Server
@@ -169,7 +171,7 @@ Server.prototype.startup =
 	this.$presences =
 		{ };
 
-	yield* this.prepareResources( );
+	yield* this.prepareInventory( );
 
 	Jools.log(
 		'start',
@@ -732,10 +734,10 @@ Server.prototype.buildShellConfig =
 
 
 /*
-| Registers and prepares the resource.
-| also builds the bundle for fast-loading.
+| Registers and prepares the inventory.
+| also builds the bundle.
 */
-Server.prototype.prepareResources =
+Server.prototype.prepareInventory =
 	function* ( )
 {
 	var
@@ -747,10 +749,10 @@ Server.prototype.prepareResources =
 		// resources served in the bundle
 		rBundle =
 			[ ];
-	
+
 	Jools.log( 'start', 'preparing inventory' );
 
-	// creates the resources
+	// takes resource from the the roster
 	for(
 		a = 0, aZ = roster.length;
 		a < aZ;
@@ -776,10 +778,7 @@ Server.prototype.prepareResources =
 		}
 	}
 
-	/*
-	| Reads in all files to be cached
-	| in memory
-	*/
+	// Reads in all files to be cached
 	var
 		inv =
 			this.inventory;
@@ -796,7 +795,7 @@ Server.prototype.prepareResources =
 		if(
 			r.data !== null
 			||
-			!r.opts.memory
+			r.inBundle
 			||
 			r.isJoobj
 		)
@@ -821,14 +820,20 @@ Server.prototype.prepareResources =
 	var
 		cconfig =
 			Resource.create(
+				'aliases',
+					[ 'shell-config.js' ],
+				'coding',
+					FileTypes.coding( 'js' ),
+				'data',
+					this.buildShellConfig( ),
 				'filepath',
-					'shell/config.js',
+					null,
 				'inBundle',
 					true,
+				'mime',
+					FileTypes.mime( 'js' ),
 				'opstr',
-					'm',
-				'data',
-					this.buildShellConfig( )
+					'm'
 			);
 
 	// puts the config on top of the rBundle
@@ -1069,6 +1074,8 @@ Server.prototype.prepareResources =
 	{
 		this.prependConfigFlags( cconfig );
 	}
+
+ 	// the devel.html file
 
 	// the devel.html file
 	if(
