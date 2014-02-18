@@ -834,7 +834,9 @@ Server.prototype.prepareResources =
 				'inBundle',
 					true,
 				'opstr',
-					'm'
+					'm',
+				'data',
+					this.buildShellConfig( )
 			);
 
 	// puts the config on top of the rBundle
@@ -842,9 +844,6 @@ Server.prototype.prepareResources =
 
 	this.$resources[ cconfig.aliases[ 0 ] ] =
 		cconfig;
-
-	cconfig.data =
-		this.buildShellConfig( );
 
 	var
 		// the bundle itself
@@ -1060,11 +1059,10 @@ Server.prototype.prepareResources =
 				'maxage',
 					'long',
 				'opstr',
-					'm'
+					'm',
+				'data',
+					bundle
 			);
-
-	br.data =
-		bundle;
 
 	this.$resources[ br.aliases[ 0 ]  ] =
 		br;
@@ -1153,19 +1151,6 @@ Server.prototype.prepareResources =
 	this.$resources[ 'index.html' ] =
 	this.$resources[ '' ] =
 		main;
-
-	// the testpad html file
-	var
-		testpad =
-			Resource.create(
-				'filepath',
-					'media/testpad.html',
-				'opstr',
-					'f'
-			);
-
-	this.$resources[ 'testpad.html' ] =
-		testpad;
 
 	// prepares the zipped versions
 	for( alias in this.$resources )

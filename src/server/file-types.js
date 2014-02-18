@@ -103,21 +103,21 @@ var
 
 
 /*
-| Maps a file type to a coding.
+| Maps a file extension to a coding.
 */
 FileTypes.mapCoding =
 	function(
-		filetype
+		ext
 	)
 {
 	var
 		coding =
-			_mapCoding[ filetype ];
+			_mapCoding[ ext ];
 
 	if( !coding )
 	{
 		throw new Error(
-			'unknown file filetype: ' + filetype
+			'unknown file extension: .' + ext
 		);
 	}
 
@@ -130,17 +130,17 @@ FileTypes.mapCoding =
 */
 FileTypes.mapMime =
 	function(
-		filetype
+		ext
 	)
 {
 	var
 		mime =
-			_mapMime[ filetype ];
+			_mapMime[ ext ];
 
 	if( !mime )
 	{
 		throw new Error(
-			'unknown file filetype: ' + filetype
+			'unknown file extension: ' + ext
 		);
 	}
 

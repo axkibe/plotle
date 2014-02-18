@@ -160,14 +160,6 @@ Resource.prototype._init =
 		filepath =
 			this.filepath;
 
-	// the compressed version of this code (if supported)
-	this.gzip =
-		null;
-
-	// the content to be served if held in memory
-	this.data  =
-		null;
-
 	// the options for this resource
 	this.opts   =
 	{
@@ -181,42 +173,32 @@ Resource.prototype._init =
 			opstr.indexOf( 'm' ) >= 0
 	};
 
-	if( this.opts.file )
+	// the alias is are the paths the file is served as
+	// directories are replaced with hypens to ease debugging
+	if( !this.aliases )
 	{
-		// the alias is the path the file is served as
-		// this replaces directories with hypens to ease
-		// debugging
-		this.aliases =
-			[ filepath.replace( /\//g, '-' ) ];
+		if( this.opts.file )
+		{
+			this.aliases =
+				[ filepath.replace( /\//g, '-' ) ];
+		}
+		else
+		{
+			this.aliases =
+				[ filepath ];
+		}
 	}
-	else
-	{
-		this.aliases =
-			[ filepath ];
-	}
-
-
-	if( !this.opts.memory && !this.opts.file )
-	{
-		throw new Error(
-			'resource "' + '" has neither memory or file set'
-		);
-	}
-
-	var
-		filetype =
-			filepath.split( '.' )[ 1 ];
 
 	if( !this.coding )
 	{
 		this.coding =
-			FileTypes.mapCoding( filetype );
+			FileTypes.mapCoding( this.fileext );
 	}
 
 	if( !this.mime )
 	{
 		this.mime =
-			FileTypes.mapMime( filetype );
+			FileTypes.mapMime( this.fileext );
 	}
 
 
@@ -242,6 +224,28 @@ Jools.lazyValue(
 				:
 				null
 		);
+	}
+);
+
+
+/*
+| The file extension
+*/
+Jools.lazyValue(
+	Resource.prototype,
+	'fileext',
+	function( )
+	{
+		var
+			fp =
+				this.filepath;
+
+		if( !fp )
+		{
+			return null;
+		};
+
+		return fp.split( '.' )[ 1 ];
 	}
 );
 
