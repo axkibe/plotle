@@ -38,6 +38,9 @@ var
 	resume =
 		suspend.resume,
 
+	Inventory =
+		require( './inventory' ),
+
 	Jools =
 		require( '../jools/jools' ),
 
@@ -113,6 +116,10 @@ Server.prototype.startup =
 	// files served
 	this.$resources =
 		{ };
+
+	// the servers inventory
+	this.inventory =
+		Inventory.create( );
 
 	// initializes the database
 	var
@@ -759,6 +766,9 @@ Server.prototype.prepareResources =
 		}
 
 
+		this.inventory =
+			this.inventory.addResource( r );
+
 		for(
 			var b = 0, bZ = r.aliases.length;
 			b < bZ;
@@ -784,7 +794,7 @@ Server.prototype.prepareResources =
 		if( r.hasJoobj )
 		{
 			this.$resources[ r.joobjAlias ] =
-				r;
+				r.asJoobj;
 		}
 	}
 
@@ -820,11 +830,6 @@ Server.prototype.prepareResources =
 					)
 			);
 	}
-
-	// alternative alias for favicon
-	// XXX
-	this.$resources[ 'favicon.ico' ] =
-		this.$resources[ 'media-favicon.ico' ];
 
 	// autogenerator the shell config as resource
 	var
@@ -2986,7 +2991,8 @@ Server.prototype.requestListener =
 	if (
 		config.devel !== 'shell' &&
 		config.devel !== 'both'
-	) {
+	)
+	{
 		this.webError(
 			res,
 			'404 Bad Request'
@@ -2997,9 +3003,7 @@ Server.prototype.requestListener =
 		data;
 
 	// if the joobj is requested generate that one from the file
-	if(
-		pathname.substr( 0, 'joobj-'.length ) === 'joobj-'
-	)
+	if( r.isJoobj )
 	{
 		try{
 			data =

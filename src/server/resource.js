@@ -99,6 +99,15 @@ if( JOOBJ )
 						defaultVal :
 							'false'
 					},
+				isJoobj :
+					{
+						comment :
+							'true if this resource is a joobj.',
+						type :
+							'Boolean',
+						defaultVal :
+							'false'
+					},
 				maxage :
 					{
 						comment :
@@ -192,8 +201,6 @@ Resource.prototype._init =
 		this.mime =
 			FileTypes.mapMime( this.fileext );
 	}
-
-
 };
 
 
@@ -221,6 +228,33 @@ Jools.lazyValue(
 
 
 /*
+| This resource as generated joobj.
+*/
+Jools.lazyValue(
+	Resource.prototype,
+	'asJoobj',
+	function( )
+	{
+		if( !this.hasJoobj )
+		{
+			return null;
+		}
+
+		return this.create(
+			'aliases',
+				'joobj-'
+				+
+				this.filepath.replace( /\//g, '-' ),
+			'hasJoobj',
+				false,
+			'isJoobj',
+				true
+		);
+	}
+);
+
+
+/*
 | The file extension
 */
 Jools.lazyValue(
@@ -235,7 +269,7 @@ Jools.lazyValue(
 		if( !fp )
 		{
 			return null;
-		};
+		}
 
 		return fp.split( '.' )[ 1 ];
 	}
@@ -247,7 +281,6 @@ Jools.lazyValue(
 */
 module.exports =
 	Resource;
-
 
 
 } )( );
