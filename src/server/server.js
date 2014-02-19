@@ -842,7 +842,7 @@ Server.prototype.prepareInventory =
 	// creation, otherwise afterwards
 	if( !config.uglify )
 	{
-		this.prependConfigFlags( cconfig );
+		this.prependConfigFlags( );
 	}
 
 	// loads the files to be bundled
@@ -1057,7 +1057,7 @@ Server.prototype.prepareInventory =
 	// creation, otherwise before
 	if( config.uglify )
 	{
-		this.prependConfigFlags( cconfig );
+		this.prependConfigFlags( );
 	}
 
 	// the devel.html file
@@ -1187,16 +1187,24 @@ Server.prototype.prepareInventory =
 | Used by development.
 */
 Server.prototype.prependConfigFlags =
-	function(
-		cconfig
-	)
+	function( )
 {
-	cconfig.data =
-		'var JOOBJ = false;\n' +
-		'var CHECK = true;\n' +
-		'var SERVER = false;\n' +
-		'var SHELL = true;\n' +
-		cconfig.data;
+	var
+		res =
+			this.inventory.map[ 'config.js' ];
+
+	this.inventory =
+		this.inventory.updateResource(
+			res,
+			res.create(
+				'data',
+					'var JOOBJ = false;\n' +
+					'var CHECK = true;\n' +
+					'var SERVER = false;\n' +
+					'var SHELL = true;\n' +
+					res.data
+				)
+		);
 };
 
 
