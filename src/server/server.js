@@ -744,11 +744,8 @@ Server.prototype.prepareInventory =
 		a,
 		aZ,
 		data,
-		r,
+		r;
 
-		// resources served in the bundle
-		rBundle =
-			[ ];
 
 	Jools.log( 'start', 'preparing inventory' );
 
@@ -773,8 +770,6 @@ Server.prototype.prepareInventory =
 	this.inventory =
 		this.inventory.addResource( cconfig );
 
-	rBundle.push( cconfig );
-
 	// takes resource from the the roster
 	for(
 		a = 0, aZ = roster.length;
@@ -785,20 +780,14 @@ Server.prototype.prepareInventory =
 		r =
 			roster[ a ];
 
-		if( r.inBundle )
-		{
-			rBundle.push( r );
-		}
-
-
-		this.inventory =
-			this.inventory.addResource( r );
-
 		if( r.hasJoobj )
 		{
 			this.inventory =
 				this.inventory.addResource( r.asJoobj );
 		}
+
+		this.inventory =
+			this.inventory.addResource( r );
 	}
 
 	// Reads in all files to be cached
@@ -858,25 +847,17 @@ Server.prototype.prepareInventory =
 
 	// loads the files to be bundled
 	for(
-		a = 0, aZ = rBundle.length;
+		a = 0, aZ = this.inventory.list.length;
 		a < aZ;
 		a++
 	)
 	{
 		r =
-			rBundle[ a ];
+			this.inventory.list[ a ];
 
-		if( r.hasJoobj )
+		if( !r.inBundle )
 		{
-			devels.push(
-				'<script src="' +
-					r.joobjAlias +
-					'" type="text/javascript"></script>'
-			);
-
-			bundle.push(
-				yield* this.generateJoobj( r )
-			);
+			continue;
 		}
 
 		devels.push(
@@ -885,20 +866,30 @@ Server.prototype.prepareInventory =
 				'" type="text/javascript"></script>'
 		);
 
-		if( r.data === null )
+		if( r.isJoobj )
 		{
+
 			bundle.push(
-				yield fs.readFile(
-					r.filepath,
-					resume( )
-				)
+				yield* this.generateJoobj( r )
 			);
 		}
 		else
 		{
-			bundle.push(
-				r.data
-			);
+			if( r.data === null )
+			{
+				bundle.push(
+					yield fs.readFile(
+						r.filepath,
+						resume( )
+					)
+				);
+			}
+			else
+			{
+				bundle.push(
+					r.data
+				);
+			}
 		}
 	}
 
