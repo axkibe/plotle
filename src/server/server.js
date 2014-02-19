@@ -32,14 +32,23 @@ GLOBAL.SHELL =
 | Imports
 */
 var
-	suspend =
-		require( 'suspend' ),
+	config =
+		require( '../../config' ),
 
-	resume =
-		suspend.resume,
+	fs =
+		require( 'fs' ),
+
+	GenerateJoobj =
+		require( './generate-joobj' ),
+
+	http =
+		require( 'http' ),
 
 	Inventory =
 		require( './inventory' ),
+
+	joobjGenerator =
+		require( '../joobj/generator' ),
 
 	Jools =
 		require( '../jools/jools' ),
@@ -53,6 +62,9 @@ var
 	meshverse =
 		require( '../mm/meshverse' ),
 
+	mongodb =
+		require( 'mongodb' ),
+
 	Path =
 		require( '../mm/path' ),
 
@@ -62,38 +74,29 @@ var
 	roster =
 		require( './roster' ),
 
-	config =
-		require( '../../config' ),
-
-	fs =
-		require( 'fs' ),
-
-	http =
-		require( 'http' ),
-
-	joobjGenerator =
-		require( '../joobj/generator' ),
-
-	mongodb =
-		require( 'mongodb' ),
-
 	sha1 =
 		require( '../jools/sha1' ),
 
-	util =
-		require( 'util' ),
+	suspend =
+		require( 'suspend' ),
+
+	resume =
+		suspend.resume,
+
+	uglify =
+		require( 'uglify-js' ),
 
 	url =
 		require( 'url' ),
+
+	util =
+		require( 'util' ),
 
 	vm =
 		require( 'vm' ),
 
 	zlib =
-		require( 'zlib' ),
-
-	uglify =
-		require( 'uglify-js' );
+		require( 'zlib' );
 
 
 /*
@@ -833,9 +836,9 @@ Server.prototype.prepareInventory =
 	{
 		this.prependConfigFlags( );
 	}
-	
+
 	Jools.log( 'start', 'building bundle' );
-	
+
 	var
 		ast,
 		code,
@@ -865,7 +868,10 @@ Server.prototype.prepareInventory =
 		if( r.isJoobj )
 		{
 			code =
-				yield* this.generateJoobj( r );
+				yield GenerateJoobj.run(
+					r,
+					resume( )
+				);
 		}
 		else
 		{
@@ -2796,50 +2802,6 @@ Server.prototype.webError =
 	Jools.log( 'web', 'error', code, message );
 
 	res.end( message );
-};
-
-
-/*
-| iGenerates the Joobj for a resource
-*/
-Server.prototype.generateJoobj =
-	function*(
-		r
-	)
-{
-	var
-		data =
-			yield fs.readFile(
-				r.filepath,
-				resume( )
-			),
-
-		joobj =
-			vm.runInNewContext(
-				data,
-				{
-					JOOBJ :
-						true
-				},
-				r.filepath
-			);
-
-	Jools.log(
-		'start',
-		'generating ' + 'joobj/' + r.aliases[ 0 ]
-	);
-
-	data =
-		joobjGenerator( joobj );
-
-	// updates the generated file
-	yield fs.writeFile(
-		'joobj/' + r.aliases[ 0 ],
-		data,
-		resume( )
-	);
-
-	return data;
 };
 
 
