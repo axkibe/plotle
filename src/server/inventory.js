@@ -31,7 +31,8 @@ var
 		function(
 			tag,
 			list, // the list of all resources
-			map   // a global mapping of their aliases
+			map,  // global mapping of aliases to resources
+			idx   // global mapping of aliases to index in list
 		)
 {
 	if( tag !== _tag )
@@ -44,6 +45,9 @@ var
 
 	this.map =
 		Jools.immute( map );
+
+	this.idx =
+		Jools.immute( idx );
 
 	Jools.immute( this );
 };
@@ -61,6 +65,7 @@ Inventory.create =
 		new Inventory(
 			_tag,
 			[ ],
+			{ },
 			{ }
 		)
 	);
@@ -68,8 +73,7 @@ Inventory.create =
 
 
 /*
-| Returns an inventory with 
-| a resource appended
+| Returns an inventory with a resource appended.
 */
 Inventory.prototype.addResource =
 	function(
@@ -81,7 +85,16 @@ Inventory.prototype.addResource =
 			this.list.slice( ),
 
 		map =
-			Jools.copy( this.map );
+			Jools.copy( this.map ),
+
+		idx =
+			Jools.copy( this.idx ),
+
+		llen =
+			list.length;
+
+	list[ llen ] =
+		res;
 
 	for(
 		var a = 0, aZ = res.aliases.length;
@@ -104,28 +117,29 @@ Inventory.prototype.addResource =
 
 		map[ alias ] =
 			res;
+
+		idx[ alias ] =
+			llen;
 	}
-	
-	list.push( res );
 
 	return (
 		new Inventory(
 			_tag,
 			list,
-			map
+			map,
+			idx
 		)
 	);
 };
 
 
 /*
-| Returns an inventory with 
-| a resource updated.
+| Returns an inventory with a resource updated.
 */
 Inventory.prototype.updateResource =
 	function(
-		index,
-		res
+		oldRes,
+		newRes
 	)
 {
 	var
@@ -135,21 +149,41 @@ Inventory.prototype.updateResource =
 		map =
 			Jools.copy( this.map ),
 
-		oldRes =
-			list[ index ];
+		index =
+			this.idx[ oldRes.aliases[ 0 ] ];
+
+	if( index === undefined )
+	{
+		throw new Error(
+			'invalid oldRes'
+		);
+	}
+
+	if( list[ index ] !== oldRes )
+	{
+		console.log(
+			index,
+			list[ index ],
+			oldRes
+		);
+
+		throw new Error(
+			'inventory damaged'
+		);
+	}
 
 	list[ index ] =
-		res;
-	
+		newRes;
+
 	for(
-		var a = 0, aZ = res.aliases.length;
+		var a = 0, aZ = newRes.aliases.length;
 		a < aZ;
 		a++
 	)
 	{
 		var
 			alias =
-				res.aliases[ a ];
+				newRes.aliases[ a ];
 
 		if( map[ alias ] !== oldRes )
 		{
@@ -159,14 +193,15 @@ Inventory.prototype.updateResource =
 		}
 
 		map[ alias ] =
-			res;
+			newRes;
 	}
-	
+
 	return (
 		new Inventory(
 			_tag,
 			list,
-			map
+			map,
+			this.idx
 		)
 	);
 };

@@ -752,6 +752,29 @@ Server.prototype.prepareInventory =
 
 	Jools.log( 'start', 'preparing inventory' );
 
+	// autogenerates the shell config as resource
+	var
+		cconfig =
+			Resource.create(
+				'aliases',
+					[ 'config.js' ],
+				'coding',
+					FileTypes.coding( 'js' ),
+				'data',
+					this.buildShellConfig( ),
+				'filepath',
+					null,
+				'inBundle',
+					true,
+				'mime',
+					FileTypes.mime( 'js' )
+			);
+
+	this.inventory =
+		this.inventory.addResource( cconfig );
+
+	rBundle.push( cconfig );
+
 	// takes resource from the the roster
 	for(
 		a = 0, aZ = roster.length;
@@ -805,7 +828,7 @@ Server.prototype.prepareInventory =
 
 		this.inventory =
 			this.inventory.updateResource(
-				a,
+				r,
 				r.create(
 					'data',
 						yield fs.readFile(
@@ -815,30 +838,6 @@ Server.prototype.prepareInventory =
 				)
 			);
 	}
-
-	// autogenerates the shell config as resource
-	var
-		cconfig =
-			Resource.create(
-				'aliases',
-					[ 'shell-config.js' ],
-				'coding',
-					FileTypes.coding( 'js' ),
-				'data',
-					this.buildShellConfig( ),
-				'filepath',
-					null,
-				'inBundle',
-					true,
-				'mime',
-					FileTypes.mime( 'js' )
-			);
-
-	// puts the config on top of the rBundle
-	rBundle.unshift( cconfig );
-
-	this.inventory =
-		this.inventory.addResource( cconfig );
 
 	var
 		// the bundle itself
@@ -854,7 +853,6 @@ Server.prototype.prepareInventory =
 	// creation, otherwise afterwards
 	if( !config.uglify )
 	{
-		// XXX
 		this.prependConfigFlags( cconfig );
 	}
 
@@ -1071,8 +1069,6 @@ Server.prototype.prepareInventory =
 		this.prependConfigFlags( cconfig );
 	}
 
- 	// the devel.html file
-
 	// the devel.html file
 	if(
 		config.devel === 'shell' ||
@@ -1170,7 +1166,7 @@ Server.prototype.prepareInventory =
 
 		this.inventory =
 			this.inventory.updateResource(
-				a,
+				r,
 				r.create(
 					'gzip',
 						yield zlib.gzip(
