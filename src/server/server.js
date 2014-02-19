@@ -38,9 +38,6 @@ var
 	resume =
 		suspend.resume,
 
-	FileTypes =
-		require( './file-types' ),
-
 	Inventory =
 		require( './inventory' ),
 
@@ -755,16 +752,12 @@ Server.prototype.prepareInventory =
 			Resource.create(
 				'aliases',
 					[ 'config.js' ],
-				'coding',
-					FileTypes.coding( 'js' ),
 				'data',
 					this.buildShellConfig( ),
 				'filepath',
-					null,
+					'config.js',
 				'inBundle',
-					true,
-				'mime',
-					FileTypes.mime( 'js' )
+					true
 			);
 
 	this.inventory =
@@ -844,6 +837,12 @@ Server.prototype.prepareInventory =
 	{
 		this.prependConfigFlags( );
 	}
+	
+	Jools.log( 'start', 'building bundle' );
+	
+	var
+		ast,
+		code;
 
 	// loads the files to be bundled
 	for(
@@ -868,63 +867,37 @@ Server.prototype.prepareInventory =
 
 		if( r.isJoobj )
 		{
-
-			bundle.push(
-				yield* this.generateJoobj( r )
-			);
+			code =
+				yield* this.generateJoobj( r );
 		}
 		else
 		{
 			if( r.data === null )
 			{
-				bundle.push(
-					yield fs.readFile(
+				code =
+					(yield fs.readFile(
 						r.filepath,
 						resume( )
-					)
-				);
+					)) + '';
 			}
 			else
 			{
-				bundle.push(
-					r.data
-				);
+				code =
+					r.data;
 			}
 		}
-	}
-
-	bundle =
-		bundle.join( '\n' );
-
-	//writes the bundle( for debugging )
-	yield fs.writeFile(
-		'bundle.js',
-		bundle,
-		resume( )
-	);
-
-
-	Jools.log(
-		'start',
-		'compressing bundle'
-	);
-
-	// uglifies the bundle if configured so
-	if( config.uglify || config.extraMangle )
-	{
-		var
-			ast;
 
 		try{
 			ast =
 				uglify.parse(
-					bundle,
+					code,
 					{
 						filename :
-							'bundle.js',
-
+							r.filepath,
 						strict :
-							true
+							true,
+						toplevel :
+							ast
 					}
 				);
 		}
@@ -932,104 +905,98 @@ Server.prototype.prepareInventory =
 		{
 			console.log(
 				'parse error',
-				'bundle.js line',
+				r.filepath,
+				'line',
 				e.line
 			);
 
 			throw e;
 		}
+	}
 
-		if( config.extraMangle )
-		{
-			this.extraMangle( ast );
-		}
+	if( config.extraMangle )
+	{
+		this.extraMangle( ast );
+	}
 
-		if( config.uglify )
-		{
-			ast.figure_out_scope( );
+	if( config.uglify )
+	{
+		Jools.log( 'start', 'uglifying bundle' );
 
-			var
-				compressor =
-					uglify.Compressor(
-						{
-							dead_code :
-								true,
-
-							hoist_vars :
-								true,
-
-							warnings :
-								false,
-
-							negate_iife :
-								true,
-
-							global_defs :
-							{
-								'CHECK' :
-									false,
-
-								'JOOBJ' :
-									false,
-
-								'SERVER' :
-									false,
-
-								'SHELL' :
-									true,
-							}
-						}
-					);
-
-			ast =
-				ast.transform( compressor );
-
-			ast.figure_out_scope( );
-
-			ast.compute_char_frequency( );
-
-			ast.mangle_names(
-				{
-					toplevel :
-						true,
-
-					except :
-						[
-							'WebFont'
-						]
-				}
-			);
-		}
+		ast.figure_out_scope( );
 
 		var
-			sourceMap =
-				uglify.SourceMap(
+			compressor =
+				uglify.Compressor(
 					{
-					}
-				),
-
-			stream =
-				uglify.OutputStream(
-					{
-						beautify :
-							config.beautify,
-
-						source_map:
-							sourceMap
+						dead_code :
+							true,
+						hoist_vars :
+							true,
+						warnings :
+							false,
+						negate_iife :
+							true,
+						global_defs :
+						{
+							'CHECK' :
+								false,
+							'JOOBJ' :
+								false,
+							'SERVER' :
+								false,
+							'SHELL' :
+								true,
+						}
 					}
 				);
 
-		ast.print( stream );
+		ast =
+			ast.transform( compressor );
 
-		bundle =
-			stream.toString( );
+		ast.figure_out_scope( );
 
-		yield fs.writeFile(
-			'source.map',
-			sourceMap.toString( ),
-			resume( )
+		ast.compute_char_frequency( );
+
+		ast.mangle_names(
+			{
+				toplevel :
+					true,
+				except :
+					[ 'WebFont' ]
+			}
 		);
 	}
+
+	var
+		sourceMap =
+			uglify.SourceMap(
+				{
+				}
+			),
+
+		stream =
+			uglify.OutputStream(
+				{
+					beautify :
+						config.beautify,
+
+					source_map:
+						sourceMap
+				}
+			);
+
+	ast.print( stream );
+
+	bundle =
+		stream.toString( );
+
+	yield fs.writeFile(
+		'source.map',
+		sourceMap.toString( ),
+		resume( )
+	);
+	
 
 	// calculates the hash for the bundle
 	var

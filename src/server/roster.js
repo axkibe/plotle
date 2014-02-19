@@ -105,6 +105,18 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
+			'src/shell/fontpool.js',
+		'inBundle',
+			true
+	),
+	Resource.create(
+		'filepath',
+			'src/shell/theme.js',
+		'inBundle',
+			true
+	),
+	Resource.create(
+		'filepath',
 			'src/euclid/const.js',
 		'inBundle',
 			true
@@ -243,12 +255,6 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
-			'src/shell/fontpool.js',
-		'inBundle',
-			true
-	),
-	Resource.create(
-		'filepath',
 			'src/shell/style.js',
 		'inBundle',
 			true
@@ -262,12 +268,6 @@ module.exports =
 	Resource.create(
 		'filepath',
 			'src/shell/traitset.js',
-		'inBundle',
-			true
-	),
-	Resource.create(
-		'filepath',
-			'src/shell/theme.js',
 		'inBundle',
 			true
 	),
