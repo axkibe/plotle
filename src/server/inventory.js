@@ -161,12 +161,6 @@ Inventory.prototype.updateResource =
 
 	if( list[ index ] !== oldRes )
 	{
-		console.log(
-			index,
-			list[ index ],
-			oldRes
-		);
-
 		throw new Error(
 			'inventory damaged'
 		);
@@ -188,7 +182,7 @@ Inventory.prototype.updateResource =
 		if( map[ alias ] !== oldRes )
 		{
 			throw new Error(
-				'invalid update '
+				'invalid update'
 			);
 		}
 
@@ -202,6 +196,80 @@ Inventory.prototype.updateResource =
 			list,
 			map,
 			this.idx
+		)
+	);
+};
+
+
+/*
+| Returns an inventory with a resource remove.
+*/
+Inventory.prototype.removeResource =
+	function(
+		res
+	)
+{
+	var
+		a,
+		aZ,
+		alias,
+
+		list =
+			this.list.slice( ),
+
+		map =
+			Jools.copy( this.map ),
+
+		idx =
+			Jools.copy( this.idx ),
+
+		index =
+			idx[ res.aliases[ 0 ] ];
+
+	if( index === undefined )
+	{
+		throw new Error(
+			'invalid res'
+		);
+	}
+
+	for(
+		a = 0, aZ = res.aliases.length;
+		a < aZ;
+		a++
+	)
+	{
+		alias =
+			res.aliases[ a ];
+
+		if( map[ alias ] !== res )
+		{
+			throw new Error(
+				'invalid remove'
+			);
+		}
+
+		delete map[ alias ];
+
+		delete idx[ alias ];
+	}
+
+	list.splice( index, 1 );
+
+	for( alias in idx )
+	{
+		if( idx[ alias ] > index )
+		{
+			idx[ alias ]--;
+		}
+	}
+
+	return (
+		new Inventory(
+			_tag,
+			list,
+			map,
+			idx
 		)
 	);
 };

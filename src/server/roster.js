@@ -22,6 +22,23 @@ var
 module.exports =
 [
 	Resource.create(
+		'aliases',
+			[
+				'meshcraft.html',
+				'index.html',
+				''
+			],
+		'filepath',
+			'media/meshcraft.html'
+		// TODO maxage short
+	),
+	Resource.create(
+		'aliases',
+			[ 'devel.html' ],
+		'filepath',
+			'media/devel.html'
+	),
+	Resource.create(
 		'filepath',
 			'media/favicon.ico',
 		'maxage',
@@ -187,6 +204,14 @@ module.exports =
 	),
 	Resource.create(
 		'filepath',
+			'src/euclid/view.js',
+		'hasJoobj',
+			true,
+		'inBundle',
+			true
+	),
+	Resource.create(
+		'filepath',
 			'src/design/anchor-point.js',
 		'hasJoobj',
 			true,
@@ -268,14 +293,6 @@ module.exports =
 	Resource.create(
 		'filepath',
 			'src/shell/traitset.js',
-		'inBundle',
-			true
-	),
-	Resource.create(
-		'filepath',
-			'src/euclid/view.js', // TODO put to other euclids
-		'hasJoobj',
-			true,
 		'inBundle',
 			true
 	),

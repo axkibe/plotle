@@ -576,16 +576,12 @@ Server.prototype.cmdMessage =
 	var
 		spaceUser =
 			cmd.spaceUser,
-
 		spaceTag =
 			cmd.spaceTag,
-
 		message =
 			cmd.message,
-
 		username =
 			cmd.user,
-
 		passhash =
 			cmd.passhash;
 
@@ -813,10 +809,10 @@ Server.prototype.prepareInventory =
 				r,
 				r.create(
 					'data',
-						yield fs.readFile(
+						( yield fs.readFile(
 							r.filepath,
 							resume( )
-						)
+						) )
 				)
 			);
 	}
@@ -842,7 +838,8 @@ Server.prototype.prepareInventory =
 	
 	var
 		ast,
-		code;
+		code,
+		res;
 
 	// loads the files to be bundled
 	for(
@@ -875,10 +872,10 @@ Server.prototype.prepareInventory =
 			if( r.data === null )
 			{
 				code =
-					(yield fs.readFile(
+					( yield fs.readFile(
 						r.filepath,
 						resume( )
-					)) + '';
+					) ) + '';
 			}
 			else
 			{
@@ -1028,16 +1025,16 @@ Server.prototype.prepareInventory =
 	}
 
 	// the devel.html file
+	res =
+		this.inventory.map[ 'devel.html' ];
+
 	if(
 		config.devel === 'shell' ||
 		config.devel === 'both'
 	)
 	{
 		data =
-			(yield fs.readFile(
-				'media/devel.html',
-				resume( )
-			)) + '';
+			res.data + '';
 
 		data =
 			data.replace(
@@ -1056,56 +1053,39 @@ Server.prototype.prepareInventory =
 				);
 		}
 
-		var
-			devel =
-				Resource.create(
-					'aliases',
-						[ 'devel.html' ],
-					'data',
-						data,
-					'filepath',
-						'media/devel.html'
-				);
-
 		this.inventory =
-			this.inventory.addResource( devel );
+			this.inventory.updateResource(
+				res,
+				res.create(
+					'data',
+						data
+			)
+		);
+	}
+	else
+	{
+		this.inventory =
+			this.inventory.removeResource( res );
 	}
 
 	// the index.html file
-
-	data =
-		( yield fs.readFile(
-			'media/meshcraft.html',
-			resume( )
-		) ) + '';
-
-	data =
-		data.replace(
-			/<!--COPACK.*>/,
-			'<script src="' +
-				br.aliases[ 0 ] +
-				'" type="text/javascript"></script>'
-		);
-	var
-		main =
-			Resource.create(
-				'aliases',
-					[
-						'meshcraft.html',
-						'index.html',
-						''
-					],
-				'data',
-					data,
-				'filepath',
-					'media/meshcraft.html'
-				// TODO maxage short
-			);
-
+	res =
+		this.inventory.map[ 'meshcraft.html' ];
 
 	inv =
 	this.inventory =
-		this.inventory.addResource( main );
+		this.inventory.updateResource(
+			res,
+			res.create(
+				'data',
+					(res.data + '').replace(
+						/<!--COPACK.*>/,
+						'<script src="' +
+							br.aliases[ 0 ] +
+							'" type="text/javascript"></script>'
+					)
+			)
+		);
 
 	// prepares the zipped versions
 	for(
