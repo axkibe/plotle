@@ -1300,9 +1300,11 @@ generateChecks =
 
 			case 'Action' :
 			case 'Array' :
-			case 'Buffer' :
+			case 'Buffer' : // TODO
+			case 'Function' :
 			case 'Item' :
 			case 'Mark' :
+			case 'Object' :
 			case 'Tree' :
 
 				// FIXME
@@ -1543,9 +1545,11 @@ generateCreatorFullInheritance =
 			case 'Array' : // FIXME
 			case 'Buffer' :
 			case 'Boolean' :
+			case 'Function' :
 			case 'Integer' :
 			case 'Mark' : // FIXME
 			case 'Number' :
+			case 'Object' :
 			case 'String' :
 			case 'Tree' : // FIXME
 

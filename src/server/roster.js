@@ -36,7 +36,9 @@ module.exports =
 		'aliases',
 			[ 'devel.html' ],
 		'filepath',
-			'media/devel.html'
+			'media/devel.html',
+		'devel',
+			true
 	),
 	Resource.create(
 		'filepath',

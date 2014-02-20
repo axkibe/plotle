@@ -56,6 +56,15 @@ if( JOOBJ )
 						defaultVal :
 							'null'
 					},
+				devel :
+					{
+						comment :
+							'if true is only loaded in devel mode',
+						type :
+							'Boolean',
+						defaultVal :
+							'false'
+					},
 				gzip :
 					{
 						comment :

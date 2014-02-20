@@ -12,8 +12,59 @@
 'use strict';
 
 
-var
-	_tag = 'TODO';
+/*
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+		name :
+			'GenerateJoobj',
+		attributes :
+			{
+				resource :
+					{
+						comment :
+							'the resource containing the def',
+						type :
+							'Resource'
+					},
+				callback :
+					{
+						comment :
+							'the callback',
+						type :
+							'Function'
+					},
+				data :
+					{
+						comment :
+							'the generated joobj',
+						type :
+							'Buffer',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
+					},
+				defFileStat :
+					{
+						comment :
+							'the file status of the def',
+						type :
+							'Object',
+						allowNull :
+							true,
+						defaultVal :
+							'null'
+					}
+			},
+		node :
+			true,
+	};
+}
+
+
 
 /*
 | Imports
@@ -21,6 +72,9 @@ var
 var
 	fs =
 		require( 'fs' ),
+
+	GenerateJoobj =
+		require( '../joobj/this' )( module ),
 
 	joobjGenerator =
 		require( '../joobj/generator' ),
@@ -30,36 +84,6 @@ var
 
 	vm =
 		require( 'vm' );
-
-
-/*
-| Constructor.
-*/
-var
-GenerateJoobj =
-	function(
-		tag,
-		resource,
-		callback,
-		data
-	)
-{
-	if( tag !== _tag )
-	{
-		throw new Error( );
-	}
-
-	this.resource =
-		resource;
-
-	this.callback =
-		callback;
-
-	this.data =
-		data;
-
-	Jools.immute( this );
-};
 
 
 /*
@@ -74,35 +98,104 @@ GenerateJoobj.run =
 	var
 		t;
 
-	Jools.log(
-		'start',
-		'generating ' + resource.aliases[ 0 ]
-	);
-
 	t =
-		new GenerateJoobj(
-			_tag,
-			resource,
-			callback,
-			null
+		GenerateJoobj.create(
+			'resource',
+				resource,
+			'callback',
+				callback
 		);
 
-	fs.readFile(
+	fs.stat(
 		resource.filepath,
-		t._fileRead.bind( t )
+		t._gotDefFileStat.bind( t )
 	);
+};
+
+/*
+| Got the file stats for the resource file.
+*/
+GenerateJoobj.prototype._gotDefFileStat =
+	function(
+		err,
+		defFileStat
+	)
+{
+	if( err )
+	{
+		this.callback( err );
+
+		return;
+	}
+
+	var
+		t =
+			this.create(
+				'defFileStat',
+					defFileStat
+			);
+
+	fs.stat(
+		'joobj/' + this.resource.aliases[ 0 ],
+		t._gotJoobjFileStat.bind( t )
+	);
+};
+
+
+/*
+| Got the file stats for the resource file.
+*/
+GenerateJoobj.prototype._gotJoobjFileStat =
+	function(
+		err,
+		joobjFileStat
+	)
+{
+	if(
+		err
+		||
+		this.defFileStat.mtime >= joobjFileStat.mtime
+	)
+	{
+		Jools.log(
+			'start',
+			'generating ' +
+				this.resource.aliases[ 0 ]
+		);
+
+		fs.readFile(
+			this.resource.filepath,
+			this._readDefFile.bind( this )
+		);
+	}
+	else
+	{
+		// just read in the already generated Joobj
+		fs.readFile(
+			'joobj/' + this.resource.aliases[ 0 ],
+			this._readJoobjFile.bind( this )
+		);
+
+	}
 };
 
 
 /*
 | The file containing the joobj definition has been read.
 */
-GenerateJoobj.prototype._fileRead =
+GenerateJoobj.prototype._readDefFile =
 	function(
 		err,
 		data
 	)
 {
+	if( err )
+	{
+		this.callback( err );
+
+		return;
+	}
+
 	var
 		joobj,
 		t;
@@ -121,43 +214,57 @@ GenerateJoobj.prototype._fileRead =
 		joobjGenerator( joobj );
 
 	t =
-		new GenerateJoobj(
-			_tag,
-			this.resource,
-			this.callback,
-			data
+		this.create(
+			'data',
+				data
 		);
 
 	fs.writeFile(
 		'joobj/' + this.resource.aliases[ 0 ],
 		data,
-		t._fileWritten.bind( t )
+		t._wroteJoobjFile.bind( t )
 	);
 };
 
 
 /*
 | The joobj has been written.
+| ( had to be generated )
 */
-GenerateJoobj.prototype._fileWritten =
+GenerateJoobj.prototype._wroteJoobjFile =
 	function(
 		err
 	)
 {
 	if( err )
 	{
-		this.callback(
-			err,
-			null
-		);
+		this.callback( err );
+
+		return;
 	}
-	else
+
+	this.callback( null, this.data );
+};
+
+
+/*
+| The joobj has been read.
+| ( had not to be generated )
+*/
+GenerateJoobj.prototype._readJoobjFile =
+	function(
+		err,
+		data
+	)
+{
+	if( err )
 	{
-		this.callback(
-			null,
-			this.data
-		);
+		this.callback( err );
+
+		return;
 	}
+
+	this.callback( null, data + '' );
 };
 
 

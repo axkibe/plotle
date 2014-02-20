@@ -47,9 +47,6 @@ var
 	Inventory =
 		require( './inventory' ),
 
-	joobjGenerator =
-		require( '../joobj/generator' ),
-
 	Jools =
 		require( '../jools/jools' ),
 
@@ -91,9 +88,6 @@ var
 
 	util =
 		require( 'util' ),
-
-	vm =
-		require( 'vm' ),
 
 	zlib =
 		require( 'zlib' );
@@ -658,7 +652,7 @@ Server.prototype.buildShellConfig =
 	cconfig.push(
 		'var config = {\n',
 		'\tdevel   : ',
-			Jools.configSwitch( config.devel, 'shell' ),
+			config.develShell,
 			',\n',
 		'\tmaxUndo : ',
 			config.maxUndo, ',\n',
@@ -716,7 +710,7 @@ Server.prototype.buildShellConfig =
 
 		cconfig.push(
 			'\t\t', k, ' : ',
-			Jools.configSwitch(config.log[k], 'shell')
+			config.log[k]
 		);
 	}
 
@@ -771,6 +765,11 @@ Server.prototype.prepareInventory =
 	{
 		r =
 			roster[ a ];
+
+		if( r.devel && !config.develShell )
+		{
+			continue;
+		}
 
 		if( r.hasJoobj )
 		{
@@ -999,7 +998,6 @@ Server.prototype.prepareInventory =
 		sourceMap.toString( ),
 		resume( )
 	);
-	
 
 	// calculates the hash for the bundle
 	var
@@ -1034,10 +1032,7 @@ Server.prototype.prepareInventory =
 	res =
 		this.inventory.map[ 'devel.html' ];
 
-	if(
-		config.devel === 'shell' ||
-		config.devel === 'both'
-	)
+	if( config.develShell )
 	{
 		data =
 			res.data + '';
@@ -1067,11 +1062,6 @@ Server.prototype.prepareInventory =
 						data
 			)
 		);
-	}
-	else
-	{
-		this.inventory =
-			this.inventory.removeResource( res );
 	}
 
 	// the index.html file
@@ -2897,10 +2887,7 @@ Server.prototype.requestListener =
 		return;
 	}
 
-	if (
-		config.devel !== 'shell' &&
-		config.devel !== 'both'
-	)
+	if( !config.develShell )
 	{
 		this.webError(
 			res,
@@ -2916,7 +2903,10 @@ Server.prototype.requestListener =
 	{
 		try{
 			data =
-				yield* this.generateJoobj( r );
+				yield GenerateJoobj.run(
+					r,
+					resume( )
+				);
 		}
 		catch( e )
 		{

@@ -28,39 +28,6 @@ var
 'use strict';
 
 
-/*
-| Returns boolean parameter for shell or server.
-*/
-Jools.configSwitch =
-	function(
-		param,  // the parameter
-		side    // 'shell' or 'server'
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if(
-/**/		side !== 'shell' &&
-/**/		side !== 'server'
-/**/	)
-/**/	{
-/**/		throw new Error(
-/**/			'configSwitch side must be shell or server'
-/**/		);
-/**/	}
-/**/}
-
-	return (
-		param === true ||
-		param === 'both' ||
-		param === side
-	);
-};
-
-
-/*
-| Running in node or browser?
-*/
 if( SERVER )
 {
 	// in node
@@ -71,19 +38,13 @@ if( SERVER )
 		require( './sha1' ).sha1hex;
 
 	Jools.devel =
-		Jools.configSwitch(
-			config.devel,
-			'server'
-		);
+		config.develServer;
 }
 else
 {
-	// in browser
+	// in shell
 	Jools.devel =
-		Jools.configSwitch(
-			config.devel,
-			'shell'
-		);
+		config.develShell;
 }
 
 
@@ -309,7 +270,7 @@ Jools.reject =
 	)
 {
 	// in devel mode any failure is fatal.{
-	if ( Jools.devel )
+	if( Jools.devel )
 	{
 		throw new Error( message );
 	}
