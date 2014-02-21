@@ -115,6 +115,17 @@ var
 						break;
 
 					case 'allowsNull' :
+
+						if( attr[ aName ].defaultVal === 'null' )
+						{
+							throw new Error(
+								joobj.unit + '.' + joobj.name + ': ' +
+								'defaultVal \"null\" implies allowsNull'
+							);
+						}
+
+						break;
+
 					case 'assign' :
 					case 'comment' :
 					case 'type' :
@@ -215,7 +226,9 @@ buildJJ =
 						aName :
 							aName,
 						allowsNull :
-							attr.allowsNull,
+							attr.allowsNull
+							||
+							attr.defaultVal === 'null',
 						assign :
 							attr.assign !== undefined
 								?

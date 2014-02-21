@@ -42,8 +42,6 @@ if( JOOBJ )
 							'the generated joobj',
 						type :
 							'Object',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -53,8 +51,6 @@ if( JOOBJ )
 							'the file status of the def',
 						type :
 							'Object',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					}

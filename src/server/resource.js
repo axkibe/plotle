@@ -27,8 +27,6 @@ if( JOOBJ )
 							'the list of aliases this is server under',
 						type :
 							'Array',
-						allowsNull :
-							true,
 						defaultVal :
 							// by default determined from filepath
 							'null'
@@ -39,8 +37,6 @@ if( JOOBJ )
 							'"binary" or "utf-8"',
 						type :
 							'String',
-						allowsNull :
-							true,
 						defaultVal :
 							// by default determined from file extension
 							'null'
@@ -51,8 +47,6 @@ if( JOOBJ )
 							'cached or auto generated data',
 						type :
 							'Object',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -71,8 +65,6 @@ if( JOOBJ )
 							'cached or auto generated zip data',
 						type :
 							'Object',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -127,8 +119,6 @@ if( JOOBJ )
 							'mime type',
 						type :
 							'String',
-						allowsNull :
-							true,
 						defaultVal :
 							// by default determined from file extension
 							'null'
