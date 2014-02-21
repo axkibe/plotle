@@ -60,22 +60,33 @@ GenerateJoobj.run =
 		joobjFileStat;
 
 	defFileStat =
-		yield fs.stat(
+		fs.stat(
 			resource.filepath,
-			sus.resume( )
+			sus.fork( )
+		);
+
+	joobjFileStat =
+		fs.stat(
+			'joobj/' + resource.aliases[ 0 ],
+			sus.fork( )
 		);
 
 	try
 	{
+		var
+			joi =
+				yield sus.join( );
+
+		defFileStat =
+			joi[ 0 ];
+
 		joobjFileStat =
-			yield fs.stat(
-				'joobj/' + resource.aliases[ 0 ],
-				sus.resume( )
-			);
+			joi[ 1 ];
 	}
 	catch( err )
 	{
 		joobjFileStat =
+		defFileStat =
 			null;
 	}
 
