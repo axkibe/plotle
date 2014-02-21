@@ -222,7 +222,7 @@
 > ajax
 . align
 . all
-. allowNull
+. allowsNull
 > alter
 . anchor
 . aperture
@@ -309,7 +309,8 @@
 . computeEllipse
 . concerns
 . concernsMark
-. configSwitch
+. develShell
+. develServer
 > configurable
 . connect
 . containsPath

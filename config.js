@@ -65,18 +65,17 @@ config.database.name =
 
 
 /*
-| development mode
-|    none, shell, server or both.
-|
-| determines the amound of checking and complaining if things go wrong.
-|
-| For example, if the server is in devel mode,
+| Determines the amound of checking and complaining if things go wrong.
+*/
+config.develShell =
+	true;
+
+/*
+| If the server is in devel mode,
 | it will die on a command it considers unacceptable.
 */
-config.devel =
-	'shell';
-	//'both';
-	//'none';
+config.develServer =
+	false;
 
 
 /*
@@ -138,50 +137,35 @@ config.log  = {
 		false
 		&&
 		true,
-
 	ajax :
 		false,
-
 	change :
 		false,
-
 	news :
 //		true ||
 		false,
-
 	debug :
 		true,
-
 	fail :
 		true,
-
 	twig :
 		false,
-
 	iface :
 		false,
-
 	peer :
 		false,
-
 	report :
 		false,
-
 	start :
 		true,
-
 	shell :
 		true,
-
 	tfx :
 		false,
-
 	tree :
 		false,
-
 	web :
 		true,
-
 	warn :
 		true
 };
