@@ -73,11 +73,8 @@ var
 	sha1 =
 		require( '../jools/sha1' ),
 
-	suspend =
+	sus =
 		require( 'suspend' ),
-
-	resume =
-		suspend.resume,
 
 	uglify =
 		require( 'uglify-js' ),
@@ -174,13 +171,13 @@ Server.prototype.startup =
 	);
 
 	db.connection =
-		yield db.connector.open( resume( ) );
+		yield db.connector.open( sus.resume( ) );
 
 	db.users =
-		yield db.connection.collection( 'users', resume( ) );
+		yield db.connection.collection( 'users', sus.resume( ) );
 
 	db.spaces =
-		yield db.connection.collection( 'spaces', resume( ) );
+		yield db.connection.collection( 'spaces', sus.resume( ) );
 
 	yield* this.checkRepositorySchemaVersion( );
 
@@ -208,12 +205,12 @@ Server.prototype.startup =
 	yield http.createServer(
 		function( req, res )
 		{
-			suspend( requestListener )( req, res );
+			sus( requestListener )( req, res );
 		}
 	).listen(
 		config.port,
 		config.ip,
-		resume( )
+		sus.resume( )
 	);
 
 	Jools.log(
@@ -238,7 +235,7 @@ Server.prototype.checkRepositorySchemaVersion =
 		global =
 			yield this.$db.connection.collection(
 				'global',
-				resume( )
+				sus.resume( )
 			),
 
 		version =
@@ -247,7 +244,7 @@ Server.prototype.checkRepositorySchemaVersion =
 					_id :
 						'version'
 				},
-				resume( )
+				sus.resume( )
 			);
 
 	if( version )
@@ -305,7 +302,7 @@ Server.prototype.initRepository =
 			{
 				_id : space
 			},
-			resume( )
+			sus.resume( )
 		);
 	}
 
@@ -318,7 +315,7 @@ Server.prototype.initRepository =
 		global =
 			yield this.$db.connection.collection(
 				'global',
-				resume( )
+				sus.resume( )
 			);
 
 	yield global.insert(
@@ -328,7 +325,7 @@ Server.prototype.initRepository =
 			version :
 				4
 		},
-		resume( )
+		sus.resume( )
 	);
 };
 
@@ -351,7 +348,7 @@ Server.prototype.ensureMeshcraftUser =
 					_id :
 						'meshcraft'
 				},
-				resume( )
+				sus.resume( )
 			);
 
 	if( !mUser )
@@ -382,7 +379,7 @@ Server.prototype.ensureMeshcraftUser =
 
 		yield this.$db.users.insert(
 			mUser,
-			resume( )
+			sus.resume( )
 		);
 	}
 
@@ -413,13 +410,13 @@ Server.prototype.loadSpaces =
 			yield this.$db.spaces.find(
 				{ },
 				{ sort: '_id'},
-				resume( )
+				sus.resume( )
 			);
 
 	for(
-		var o = yield cursor.nextObject( resume( ) );
+		var o = yield cursor.nextObject( sus.resume( ) );
 		o !== null;
-		o = yield cursor.nextObject( resume( ) )
+		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
 		yield* this.loadSpace( o._id );
@@ -446,7 +443,7 @@ Server.prototype.loadSpace =
 			$changesDB :
 				yield this.$db.connection.collection(
 					'changes:' + spaceName,
-					resume( )
+					sus.resume( )
 				),
 
 			$changes :
@@ -469,13 +466,13 @@ Server.prototype.loadSpace =
 					sort :
 						'_id'
 				},
-				resume( )
+				sus.resume( )
 			);
 
 	for(
-		var o = yield cursor.nextObject( resume( ) );
+		var o = yield cursor.nextObject( sus.resume( ) );
 		o !== null;
-		o = yield cursor.nextObject( resume( ) )
+		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
 		if( o._id !== space.$seqZ )
@@ -812,7 +809,7 @@ Server.prototype.prepareInventory =
 					'data',
 						( yield fs.readFile(
 							r.filepath,
-							resume( )
+							sus.resume( )
 						) )
 				)
 			);
@@ -866,10 +863,7 @@ Server.prototype.prepareInventory =
 		if( r.isJoobj )
 		{
 			code =
-				yield GenerateJoobj.run(
-					r,
-					resume( )
-				);
+				yield* GenerateJoobj.run( r );
 		}
 		else
 		{
@@ -878,7 +872,7 @@ Server.prototype.prepareInventory =
 				code =
 					( yield fs.readFile(
 						r.filepath,
-						resume( )
+						sus.resume( )
 					) ) + '';
 			}
 			else
@@ -997,7 +991,7 @@ Server.prototype.prepareInventory =
 		yield fs.writeFile(
 			'source.map',
 			sourceMap.toString( ),
-			resume( )
+			sus.resume( )
 		);
 	}
 
@@ -1107,7 +1101,7 @@ Server.prototype.prepareInventory =
 					'gzip',
 						yield zlib.gzip(
 							r.data,
-							resume( )
+							sus.resume( )
 						)
 				)
 			);
@@ -1732,7 +1726,7 @@ Server.prototype.cmdAuth =
 			val =
 				yield this.$db.users.findOne(
 					{ _id : cmd.user },
-					resume( )
+					sus.resume( )
 				);
 
 		if( val === null )
@@ -1778,7 +1772,7 @@ Server.prototype.createSpace =
 			$changesDB :
 				yield this.$db.connection.collection(
 					'changes:' + spaceName,
-					resume( )
+					sus.resume( )
 				),
 
 			$changes :
@@ -1796,7 +1790,7 @@ Server.prototype.createSpace =
 		{
 			_id : spaceName
 		},
-		resume( )
+		sus.resume( )
 	);
 
 	return space;
@@ -1866,7 +1860,7 @@ Server.prototype.cmdRegister =
 		user =
 			yield this.$db.users.findOne(
 				{ _id : username },
-				resume( )
+				sus.resume( )
 			);
 
 	if( user !== null )
@@ -1890,7 +1884,7 @@ Server.prototype.cmdRegister =
 
 	yield this.$db.users.insert(
 		user,
-		resume( )
+		sus.resume( )
 	);
 
 	this.$users[ username ] =
@@ -2906,10 +2900,7 @@ Server.prototype.requestListener =
 	{
 		try{
 			data =
-				yield GenerateJoobj.run(
-					r,
-					resume( )
-				);
+				yield* GenerateJoobj.run( r );
 		}
 		catch( e )
 		{
@@ -2933,7 +2924,7 @@ Server.prototype.requestListener =
 			data =
 				yield fs.readFile(
 					r.filepath,
-					resume( )
+					sus.resume( )
 				);
 		}
 		catch( e )
@@ -3116,7 +3107,7 @@ Server.prototype.webAjax =
 		'end',
 		function( )
 		{
-			suspend( handler )( );
+			sus( handler )( );
 		}
 	);
 
@@ -3170,6 +3161,6 @@ var run =
 	yield* server.startup( );
 };
 
-suspend( run )( );
+sus( run )( );
 
 } )( );

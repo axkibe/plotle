@@ -36,43 +36,33 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Rect',
-
 		unit :
 			'Euclid',
-
 		attributes :
 			{
 				pnw :
 					{
 						comment :
 							'point in north west',
-
 						unit :
 							'Euclid',
-
 						type :
 							'Point'
 					},
-
 				pse :
 					{
 						comment :
 							'point in south east',
-
 						unit :
 							'Euclid',
-
 						type :
 							'Point'
 					}
 			},
-
 		node :
 			true,
-
 		hasJSON :
 			true
 	};

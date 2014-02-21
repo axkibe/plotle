@@ -48,16 +48,13 @@ if( JOOBJ )
 					{
 						comment :
 							'x coordinate',
-
 						type :
 							'Number'
 					},
-
 				y :
 					{
 						comment :
 							'y coordinate',
-
 						type :
 							'Number'
 					}

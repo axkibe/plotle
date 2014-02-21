@@ -28,6 +28,11 @@ var
 	var
 		aName;
 
+	if( !joobj )
+	{
+		throw new Error( );
+	}
+
 	for( aName in joobj )
 	{
 		switch( aName )
