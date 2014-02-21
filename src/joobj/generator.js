@@ -118,10 +118,10 @@ var
 
 						if( attr[ aName ].defaultVal === 'null' )
 						{
-							throw new Error(
+							/*throw new Error(
 								joobj.unit + '.' + joobj.name + ': ' +
 								'defaultVal \"null\" implies allowsNull'
-							);
+							);*/
 						}
 
 						break;

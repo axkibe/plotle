@@ -62,8 +62,6 @@ if( JOOBJ )
 							'center for gradient',
 						type :
 							'Point',
-						allowsNull :
-							true,
 						defaultVal :
 							'null',
 						assign :
@@ -75,8 +73,6 @@ if( JOOBJ )
 							'inner radius for circle gradients',
 						type :
 							'Number',
-						allowsNull :
-							true,
 						defaultVal :
 							'null',
 						assign :
@@ -88,8 +84,6 @@ if( JOOBJ )
 							'outer radius for circle gradients',
 						type :
 							'Number',
-						allowsNull :
-							true,
 						defaultVal :
 							'null',
 						assign :
