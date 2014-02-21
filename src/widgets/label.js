@@ -41,8 +41,6 @@ if( JOOBJ )
 							'true if the widget got focus',
 						type :
 							'Boolean',
-						allowsNull :
-							true,
 						defaultVal :
 							'null',
 						assign :
@@ -62,8 +60,6 @@ if( JOOBJ )
 							'true if the widget is hovered on',
 						type :
 							'Boolean',
-						allowsNull :
-							true,
 						defaultVal :
 							'null',
 						assign :
@@ -75,8 +71,6 @@ if( JOOBJ )
 							'font of the text',
 						type :
 							'Font',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -86,8 +80,6 @@ if( JOOBJ )
 							'the users mark',
 						type :
 							'Mark',
-						allowsNull :
-							true,
 						defaultVal :
 							'null',
 						assign :
@@ -99,8 +91,6 @@ if( JOOBJ )
 							'vertical distance of newline',
 						type :
 							'Number',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -110,8 +100,6 @@ if( JOOBJ )
 							'the path of the widget',
 						type :
 							'Path',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -121,8 +109,6 @@ if( JOOBJ )
 							'the frame the widget resides in',
 						type :
 							'Rect',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -139,8 +125,6 @@ if( JOOBJ )
 							'traits being set',
 						type :
 							'TraitSet',
-						allowsNull :
-							true,
 						defaultVal :
 							'null',
 						assign :

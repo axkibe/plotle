@@ -55,8 +55,6 @@ if( JOOBJ )
 						type :
 							'Path',
 						// FIXME maybe not allow null
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -90,8 +88,6 @@ if( JOOBJ )
 							'traits set',
 						type :
 							'TraitSet',
-						allowsNull :
-							true,
 						assign :
 							null,
 						defaultVal :

@@ -52,8 +52,6 @@ if( JOOBJ )
 							'Path',
 						assign :
 							null,
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -87,8 +85,6 @@ if( JOOBJ )
 							'traits set',
 						type :
 							'TraitSet',
-						allowsNull :
-							true,
 						assign :
 							null,
 						defaultVal :

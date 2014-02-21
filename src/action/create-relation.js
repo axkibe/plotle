@@ -41,8 +41,6 @@ if( JOOBJ )
 							'starting pan when panning during creation',
 						type :
 							'Point',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -59,8 +57,6 @@ if( JOOBJ )
 							'the arrow destination while its floating',
 						type :
 							'Point',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -79,8 +75,6 @@ if( JOOBJ )
 							'mouse down point on drag creation',
 						type :
 							'Point',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					}

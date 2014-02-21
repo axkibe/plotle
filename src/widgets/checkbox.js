@@ -87,8 +87,6 @@ if( JOOBJ )
 						type :
 							'Mark',
 						// FIXME do not allow null
-						allowsNull :
-							true,
 						defaultVal :
 							'null',
 						assign :
@@ -100,8 +98,6 @@ if( JOOBJ )
 							'the path of the widget',
 						type :
 							'Path',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -111,8 +107,6 @@ if( JOOBJ )
 							'the frame the widget resides in',
 						type :
 							'Rect',
-						allowsNull :
-							true,
 						defaultVal :
 							'null'
 					},
@@ -130,8 +124,6 @@ if( JOOBJ )
 							'traits being set',
 						type :
 							'TraitSet',
-						allowsNull :
-							true,
 						defaultVal :
 							'null',
 						assign :

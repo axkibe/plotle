@@ -87,8 +87,6 @@ if( JOOBJ )
 							'traits being set',
 						type :
 							'TraitSet',
-						allowsNull:
-							true,
 						defaultVal :
 							'null',
 						assign :
@@ -100,8 +98,6 @@ if( JOOBJ )
 							'currently logged in user',
 						type :
 							'String',
-						allowsNull:
-							true,
 						defaultVal :
 							'null'
 					},

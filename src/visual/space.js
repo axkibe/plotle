@@ -102,12 +102,8 @@ if( JOOBJ )
 					{
 						comment :
 							'traitSet',
-
 						type :
 							'TraitSet',
-
-						allowsNull :
-							true,
 						assign :
 							null,
 						defaultVal :
