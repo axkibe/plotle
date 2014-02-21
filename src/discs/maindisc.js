@@ -94,7 +94,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultVal :
-							'null'
+							'undefined'
 					},
 				spaceUser :
 					{

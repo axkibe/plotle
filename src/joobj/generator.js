@@ -126,6 +126,19 @@ var
 
 						break;
 
+					case 'allowsUndefined' :
+
+						if( attr[ aName ].defaultVal === 'undefined' )
+						{
+							throw new Error(
+								joobj.unit + '.' + joobj.name + ': ' +
+								'defaultVal \"undefined\" implies allowsUndefined'
+							);
+						}
+
+						break;
+
+
 					case 'assign' :
 					case 'comment' :
 					case 'type' :
@@ -229,6 +242,10 @@ buildJJ =
 							attr.allowsNull
 							||
 							attr.defaultVal === 'null',
+						allowsUndefined :
+							attr.allowsUndefined
+							||
+							attr.defaultVal === 'undefined',
 						assign :
 							attr.assign !== undefined
 								?
@@ -841,11 +858,25 @@ generateConstructor =
 			continue;
 		}
 
-		r.push(
-			'',
-			'\tthis.' + attr.assign + ' =',
-			'\t\t' + attr.vName + ';'
-		);
+		if( !attr.allowsUndefined )
+		{
+			r.push(
+				'',
+				'\tthis.' + attr.assign + ' =',
+				'\t\t' + attr.vName + ';'
+			);
+		}
+		else
+		{
+			r.push(
+				'',
+				'\tif( ' + attr.vName + ' !== undefined )',
+				'\t{',
+				'\t\tthis.' + attr.assign + ' =',
+				'\t\t\t' + attr.vName + ';',
+				'\t}'
+			);
+		}
 	}
 
 	if( jj.twig )
@@ -1186,12 +1217,12 @@ generateDefaultValues =
 		if( attr.defaultVal )
 		{
 			r.push(
+				'',
 				'\tif( ' + attr.vName + ' === undefined )',
 				'\t{',
 				'\t\t' + attr.vName + ' =',
 				'\t\t\t' + attr.defaultVal + ';',
-				'\t}',
-				''
+				'\t}'
 			);
 		}
 	}
@@ -1220,6 +1251,7 @@ generateChecks =
 	}
 
 	r.push(
+		'',
 		'/**/if( CHECK )',
 		'/**/{'
 	);
@@ -1233,14 +1265,18 @@ generateChecks =
 		attr =
 			jj.attributes[ jj.attrList[ a ] ];
 
-		r.push(
-			'/**/\tif( ' + attr.vName + ' === undefined )',
-			'/**/\t{',
-			'/**/\t\tthrow new Error(',
-			'/**/\t\t\t\'undefined attribute ' + attr.aName + '\'',
-			'/**/\t\t);',
-			'/**/\t}'
-		);
+		if( !attr.allowsUndefined )
+		{
+			r.push(
+				'/**/',
+				'/**/\tif( ' + attr.vName + ' === undefined )',
+				'/**/\t{',
+				'/**/\t\tthrow new Error(',
+				'/**/\t\t\t\'undefined attribute ' + attr.aName + '\'',
+				'/**/\t\t);',
+				'/**/\t}'
+			);
+		}
 
 		if( !attr.allowsNull )
 		{
@@ -1255,62 +1291,12 @@ generateChecks =
 			);
 		}
 
-		r.push(
-			'/**/',
-			'/**/\tif( ' + attr.vName + ' !== null )',
-			'/**/\t{'
-		);
+		var
+			skip =
+				false;
 
 		switch( attr.type )
 		{
-			case 'Boolean' :
-
-				r.push(
-					'/**/\t\tif(',
-					'/**/\t\t\ttypeof( ' + attr.vName  + ' ) !== \'boolean\'',
-					'/**/\t\t)'
-				);
-
-				break;
-
-			case 'Integer' :
-
-				r.push(
-					'/**/\t\tif(',
-					'/**/\t\t\ttypeof( ' + attr.vName  + ' )' +
-						' !== \'number\'',
-					'/**/\t\t\t||',
-					'/**/\t\t\tMath.floor( ' + attr.vName + ' )' +
-						' !== ' + attr.vName,
-					'/**/\t\t)'
-				);
-
-				break;
-
-			case 'String' :
-
-				r.push(
-					'/**/\t\tif(',
-					'/**/\t\t\ttypeof( ' + attr.vName  + ' )' +
-						' !== \'string\'',
-					'/**/\t\t\t&&',
-					'/**/\t\t\t!( ' + attr.vName + ' instanceof String )',
-					'/**/\t\t)'
-				);
-
-				break;
-
-			case 'Number' :
-
-				r.push(
-					'/**/\t\tif(',
-					'/**/\t\t\ttypeof( ' + attr.vName  + ' )' +
-						' !== \'number\'',
-					'/**/\t\t)'
-				);
-
-				break;
-
 			case 'Action' :
 			case 'Array' :
 			case 'Function' :
@@ -1319,42 +1305,148 @@ generateChecks =
 			case 'Object' :
 			case 'Tree' :
 
-				// FIXME
-				r.push(
-					'/**/\t\tif( false )'
-				);
-
-				break;
-
-			default :
-
-				r.push(
-					'/**/\t\tif( ' +
-						attr.vName + '.reflect !==' +
-						' \'' + attr.type + '\'' + ' )'
-				);
+				skip =
+					true;
 		}
 
-		r.push(
-			'/**/\t\t{',
-			'/**/\t\t\tthrow new Error(',
-			'/**/\t\t\t\t\'type mismatch\'',
-			'/**/\t\t\t);',
-			'/**/\t\t}',
-			'/**/\t}'
-		);
-
-		if( a + 1 < aZ )
+		if( !skip )
 		{
+			var
+				indent =
+					'/**/\t',
+
+				defCheck =
+					false;
+
+			if( attr.allowsNull && !attr.allowsUndefined )
+			{
+				r.push(
+					'/**/',
+					'/**/\tif( ' + attr.vName + ' !== null )',
+					'/**/\t{'
+				);
+
+				indent += '\t';
+
+				defCheck =
+					true;
+			}
+			else if( !attr.allowsNull && attr.allowsUndefined )
+			{
+				r.push(
+					'/**/',
+					'/**/\tif( ' + attr.vName + ' !== undefined )',
+					'/**/\t{'
+				);
+
+				indent += '\t';
+
+				defCheck =
+					true;
+			}
+			else if( attr.allowsNull && attr.allowsUndefined )
+			{
+				r.push(
+					'/**/',
+					'/**/\tif(',
+					'/**/\t\t' + attr.vName + ' !== null',
+					'/**/\t\t&&',
+					'/**/\t\t' + attr.vName + ' !== undefined',
+					'/**/\t)',
+					'/**/\t{'
+				);
+
+				indent += '\t';
+
+				defCheck =
+					true;
+			}
+
+			switch( attr.type )
+			{
+				case 'Boolean' :
+
+					r.push(
+						indent + 'if(',
+						indent +
+							'\ttypeof( ' + attr.vName  + ' )' +
+							' !== \'boolean\'',
+						indent + ')'
+					);
+
+					break;
+
+				case 'Integer' :
+
+					r.push(
+						indent +
+							'if(',
+						indent +
+							'\ttypeof( ' + attr.vName  + ' )' +
+							' !== \'number\'',
+						indent +
+							'\t||',
+						indent +
+							'\tMath.floor( ' + attr.vName + ' )' +
+							' !== ' + attr.vName,
+						indent +
+							')'
+					);
+
+					break;
+
+				case 'String' :
+
+					r.push(
+						indent + 'if(',
+						indent + '\ttypeof( ' + attr.vName  + ' )' +
+							' !== \'string\'',
+						indent + '\t&&',
+						indent + '\t!( ' + attr.vName + ' instanceof String )',
+						indent + ')'
+				);
+
+					break;
+
+				case 'Number' :
+
+					r.push(
+						indent + 'if(',
+						indent + '\ttypeof( ' + attr.vName  + ' )' +
+							' !== \'number\'',
+						indent + ')'
+					);
+
+					break;
+
+				default :
+
+					r.push(
+						indent + 'if( ' +
+							attr.vName + '.reflect !==' +
+							' \'' + attr.type + '\'' + ' )'
+					);
+			}
+
 			r.push(
-				'/**/'
+				indent + '{',
+				indent + '\tthrow new Error(',
+				indent + '\t\t\'type mismatch\'',
+				indent + '\t);',
+				indent + '}'
 			);
+
+			if( defCheck )
+			{
+				r.push(
+					'/**/\t}'
+				);
+			}
 		}
 	}
 
 	r.push(
-		'/**/}',
-		''
+		'/**/}'
 	);
 };
 
@@ -1684,15 +1776,17 @@ generateAttributeVariables =
 		a,
 		aZ,
 		aName,
+		attr,
 
 		list =
 			[ ];
 
 	for( aName in jj.attributes )
 	{
-		list.push(
-			jj.attributes[ aName ].vName
-		);
+		attr =
+			jj.attributes[ aName ];
+
+		list.push( attr.vName );
 	}
 
 	for(

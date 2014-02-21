@@ -81,19 +81,15 @@ if( JOOBJ )
 						type :
 							'Mark'
 					},
-
 				scrolly :
 					{
 						comment :
 							'vertical scroll position',
-
 						type :
 							'Number',
-
 						defaultVal :
 							'0'
 					},
-
 				traitSet :
 					{
 						comment :
@@ -125,8 +121,6 @@ if( JOOBJ )
 				'inherit',
 				'traitSet'
 			],
-
-
 		subclass :
 			'Visual.DocItem'
 	};
