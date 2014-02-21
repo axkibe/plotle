@@ -66,6 +66,9 @@ if( JOOBJ )
 | Imports
 */
 var
+	config =
+		require( '../../config' ),
+
 	fs =
 		require( 'fs' ),
 
@@ -215,11 +218,18 @@ GenerateJoobj.prototype._readDefFile =
 				data
 		);
 
-	fs.writeFile(
-		'joobj/' + this.resource.aliases[ 0 ],
-		data,
-		t._wroteJoobjFile.bind( t )
-	);
+	if( !config.noWrite )
+	{
+		fs.writeFile(
+			'joobj/' + this.resource.aliases[ 0 ],
+			data,
+			t._wroteJoobjFile.bind( t )
+		);
+	}
+	else
+	{
+		t._wroteJoobjFile( );
+	}
 };
 
 

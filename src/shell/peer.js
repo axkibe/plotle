@@ -78,10 +78,8 @@ Peer.prototype.logout =
 			{
 				ok :
 					true,
-
 				user :
 					this._$visitUser,
-
 				passhash :
 					this._$visitPasshash
 			}
@@ -255,42 +253,34 @@ Peer.prototype.newNote =
 				{
 					type :
 						'Note',
-
 					fontsize :
 						13,
-
 					zone :
 						zone,
-
 					doc  :
 					{
 						type :
 							'Doc',
-
 						twig :
 							{
 								'1' :
 								{
 									type :
 										'Para',
-
 									text :
 										''
 								}
 							},
-
 						ranks :
 							[ '1' ]
 					}
 				},
-
 				rank :
 					null
 			},
 			{
 				path :
 					Path.empty.append( '$new' ),
-
 				rank :
 					0
 			}
@@ -318,24 +308,19 @@ Peer.prototype.newPortal =
 				{
 					type :
 						'Portal',
-
 					zone :
 						zone,
-
 					spaceUser :
 						destSpaceUser,
-
 					spaceTag :
 						destSpaceTag
 				},
-
 				rank :
 					null
 			},
 			{
 				path :
 					Path.empty.append( '$new' ),
-
 				rank :
 					0
 			}
@@ -435,25 +420,20 @@ Peer.prototype.newLabel =
 				{
 					type :
 						'Label',
-
 					fontsize :
 						fontsize,
-
 					pnw :
 						pnw,
-
 					doc :
 					{
 						type :
 							'Doc',
-
 						twig :
 						{
 							'1' :
 							{
 								type :
 									'Para',
-
 								text :
 									text
 							}
@@ -467,11 +447,9 @@ Peer.prototype.newLabel =
 				rank :
 					null
 			},
-
 			{
 				path :
 					Path.empty.append( '$new' ),
-
 				rank :
 					0
 			}
@@ -521,36 +499,28 @@ Peer.prototype.newRelation =
 				{
 					type :
 						'Relation',
-
 					item1key :
 						item1key,
-
 					item2key :
 						item2key,
-
 					pnw :
 						pnw,
-
 					fontsize :
 						fontsize,
-
 					doc :
 					{
 						type :
 							'Doc',
-
 						twig :
 						{
 							'1' :
 							{
 								type :
 									'Para',
-
 								text :
 									text
 							}
 						},
-
 						ranks :
 							[ '1' ]
 					}
@@ -561,7 +531,6 @@ Peer.prototype.newRelation =
 			{
 				path :
 					Path.empty.append( '$new' ),
-
 				rank :
 					0
 			}
@@ -646,10 +615,8 @@ Peer.prototype.removeText =
 			{
 				path :
 					path.chop( 1 ),
-
 				at1 :
 					at1,
-
 				at2 :
 					at1 + len
 			},
@@ -756,7 +723,6 @@ Peer.prototype.split =
 			{
 				path :
 					path.chop( 1 ),
-
 				at1 :
 					offset
 			},
@@ -787,7 +753,6 @@ Peer.prototype.join =
 			{
 				path :
 					path.chop( 1 ),
-
 				at1 :
 					at1
 			}
@@ -822,14 +787,12 @@ Peer.prototype.removeItem =
 			{
 				val :
 					null,
-
 				rank :
 					r1
 			},
 			{
 				path :
 					path.chop( 1 ),
-
 				rank :
 					null
 			}

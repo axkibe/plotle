@@ -27,7 +27,6 @@ GLOBAL.SERVER =
 GLOBAL.SHELL =
 	false;
 
-
 /*
 | Imports
 */
@@ -993,11 +992,14 @@ Server.prototype.prepareInventory =
 	bundle =
 		stream.toString( );
 
-	yield fs.writeFile(
-		'source.map',
-		sourceMap.toString( ),
-		resume( )
-	);
+	if( !config.noWrite )
+	{
+		yield fs.writeFile(
+			'source.map',
+			sourceMap.toString( ),
+			resume( )
+		);
+	}
 
 	// calculates the hash for the bundle
 	var
@@ -1315,10 +1317,13 @@ Server.prototype.extraMangle =
 			'$$' + b64Count( a );
 	}
 
-	fs.writeFileSync(
-		'manglemap.txt',
-		util.inspect( mangle )
-	);
+	if( !config.noWrite )
+	{
+		fs.writeFileSync(
+			'manglemap.txt',
+			util.inspect( mangle )
+		);
+	}
 
 	// marks all mangles and no-mangles as unused so far
 	for( a in mangle )
@@ -2847,10 +2852,8 @@ Server.prototype.requestListener =
 				{
 					'Content-Type' :
 						r.mime,
-
 					'Cache-Control' :
 						MaxAge.map( r.maxage ),
-
 					'Date' :
 						new Date().toUTCString()
 				};
@@ -2955,10 +2958,8 @@ Server.prototype.requestListener =
 		{
 			'Content-Type' :
 				r.mime,
-
 			'Cache-Control' :
-				MaxAge.map( r.maxage ),
-
+				'no-cache',
 			'Date' :
 				new Date().toUTCString()
 		}

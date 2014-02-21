@@ -20,6 +20,9 @@ if( typeof( require ) === 'undefined' )
 }
 
 var
+	config =
+		require( '../../config' ),
+
 	fs =
 		require( 'fs' ),
 
@@ -123,10 +126,13 @@ joobjNodeGenerator =
 		'generating ' + outFilename
 	);
 
-	fs.writeFileSync(
-		outFilename,
-		output
-	);
+	if( !config.noWrite )
+	{
+		fs.writeFileSync(
+			outFilename,
+			output
+		);
+	}
 
 	return (
 		require(

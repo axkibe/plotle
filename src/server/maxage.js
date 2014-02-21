@@ -23,10 +23,8 @@ var
 		{
 			none :
 				'no-cache',
-
 			short :
 				'max-age=' + ( 60 * 60 ),
-
 			long :
 				'max-age=' + ( 60 * 60 * 24 * 365 )
 		};
