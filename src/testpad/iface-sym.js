@@ -3,7 +3,6 @@
 | talking to one. Used for debugging.
 |
 | Authors: Axel Kittenberger
-| License: MIT(Expat), see accompanying 'License'-file
 */
 
 
@@ -224,8 +223,6 @@ IFaceSym.prototype.get =
 
 /*
 | Alters the tree
-|
-| TODO why doesnt this get a change?
 */
 IFaceSym.prototype.alter =
 	function( src, trg )

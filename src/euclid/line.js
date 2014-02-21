@@ -35,54 +35,42 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Line',
-
 		unit :
 			'Euclid',
-
 		attributes :
 			{
 				p1 :
 					{
 						comment :
 							'first point',
-
 						type :
 							'Point'
 					},
-
 				p1end :
 					{
 						comment :
 							'end style of first point',
-
 						type :
 							'String',
-
-						allowNull :
+						allowsNull :
 							true
 					},
-
 				p2 :
 					{
 						comment :
 							'second point',
-
 						type :
 							'Point'
 					},
-
 				p2end :
 					{
 						comment :
 							'end style of second point',
-
 						type :
 							'String',
-
-						allowNull :
+						allowsNull :
 							true
 					}
 			}

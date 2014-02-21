@@ -35,130 +35,101 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Jockey',
-
 		unit :
 			'Discs',
-
 		attributes :
 			{
 				access :
 					{
 						comment :
 							'users access to current space',
-
 						type :
 							'String'
 					},
-
 				action :
 					{
 						comment :
 							'currently active action',
-
 						type :
 							'Action'
 					},
-
 				hover :
 					{
 						comment :
 							'the widget hovered upon',
-
 						type :
 							'Path'
 					},
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						concerns :
 							{
 								func :
 									'Discs.Jockey.concernsMark',
-
 								args :
 									[
 										'mark'
 									]
 							},
-
 						type :
 							'Mark'
 
 					},
-
 				mode :
 					{
 						comment :
 							'current mode the UI is in',
-
 						type :
 							'String'
 					},
-
 				path :
 					{
 						comment :
 							'path of the disc',
-
 						type :
 							'Path'
 					},
-
 				view :
 					{
 						comment :
 							'the current view',
-
 						type :
 							'View'
 					},
-
 				spaceUser :
 					{
 						comment :
 							'owner of currently loaded space',
-
 						type :
 							'String',
-
-						allowNull :
+						allowsNull :
 							true
 					},
-
 				spaceTag :
 					{
 						comment :
 							'name of currently loaded space',
-
 						type :
 							'String',
-
-						allowNull :
+						allowsNull :
 							true
 					},
-
 				username :
 					{
 						comment :
 							'currently logged in user',
-
 						type :
 							'String',
-
-						allowNull :
+						allowsNull :
 							true
 					}
 			},
-
 		subclass :
 			'Discs.Disc',
-
 		init :
 			[
 				'inherit'

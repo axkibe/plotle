@@ -114,7 +114,7 @@ var
 
 						break;
 
-					case 'allowNull' :
+					case 'allowsNull' :
 					case 'assign' :
 					case 'comment' :
 					case 'type' :
@@ -214,8 +214,8 @@ buildJJ =
 					{
 						aName :
 							aName,
-						allowNull :
-							attr.allowNull,
+						allowsNull :
+							attr.allowsNull,
 						assign :
 							attr.assign !== undefined
 								?
@@ -1229,7 +1229,7 @@ generateChecks =
 			'/**/\t}'
 		);
 
-		if( !attr.allowNull )
+		if( !attr.allowsNull )
 		{
 			r.push(
 				'/**/',
@@ -1300,7 +1300,6 @@ generateChecks =
 
 			case 'Action' :
 			case 'Array' :
-			case 'Buffer' : // TODO
 			case 'Function' :
 			case 'Item' :
 			case 'Mark' :
@@ -1412,7 +1411,7 @@ generateCreatorConcerns =
 			// member
 			if( !args )
 			{
-				if( attr.allowNull )
+				if( attr.allowsNull )
 				{
 					r.push(
 						'\t\t' + attr.vName + ' !== null ?',
@@ -1543,7 +1542,6 @@ generateCreatorFullInheritance =
 		switch( attr.type )
 		{
 			case 'Array' : // FIXME
-			case 'Buffer' :
 			case 'Boolean' :
 			case 'Function' :
 			case 'Integer' :
@@ -1562,7 +1560,7 @@ generateCreatorFullInheritance =
 
 			default :
 
-				if( !attr.allowNull )
+				if( !attr.allowsNull )
 				{
 					r.push(
 						'\t\t' + attr.vName +
@@ -2172,7 +2170,7 @@ generateEqualsCheck =
 
 			default :
 
-				if( !attr.allowNull )
+				if( !attr.allowsNull )
 				{
 					r.push(
 						'\t\tthis.' + attr.assign +

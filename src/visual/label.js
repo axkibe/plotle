@@ -37,52 +37,40 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Label',
-
 		unit :
 			'Visual',
-
 		attributes :
 			{
 				hover :
 					{
 						comment :
 							'node currently hovered upon',
-
 						type :
 							'Path',
-
 						assign :
 							null,
-
-						allowNull :
+						allowsNull :
 							true,
-
 						defaultVal :
 							'null'
 					},
-
 				path :
 					{
 						comment :
 							'the path of the doc',
-
 						type :
 							'Path'
 					},
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						concerns :
 							{
 								func :
 									'Visual.Item.concernsMark',
-
 								args :
 									[
 										'mark',
@@ -93,50 +81,38 @@ if( JOOBJ )
 						type :
 							'Mark'
 					},
-
 				traitSet :
 					{
 						comment :
 							'traits set',
-
 						type :
 							'TraitSet',
-
-						allowNull :
+						allowsNull :
 							true,
-
 						assign :
 							null,
-
 						defaultVal :
 							'null'
 					},
-
 				tree :
 					{
 						comment :
 							'the data tree',
-
 						type :
 							'Tree'
 					},
-
 				view :
 					{
 						comment :
 							'the current view',
-
 						type :
 							'View'
 					}
 			},
-
 		init :
 			[
 				'inherit'
 			],
-
-
 		subclass :
 			'Visual.DocItem'
 	};
@@ -235,15 +211,6 @@ Label.prototype._init =
 			)
 		);
 };
-
-/* TODO
-			case 'hover' :
-				// ignored
-				break;
-
-			case 'traitSet' :
-				break;
-*/
 
 
 /*

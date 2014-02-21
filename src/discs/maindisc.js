@@ -48,7 +48,7 @@ if( JOOBJ )
 							'users access to current space',
 						type :
 							'String',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -59,7 +59,7 @@ if( JOOBJ )
 							'currently active action',
 						type :
 							'Action',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -70,7 +70,7 @@ if( JOOBJ )
 							'the widget hovered upon',
 						type :
 							'Path',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -81,7 +81,7 @@ if( JOOBJ )
 							'the users mark',
 						type :
 							'Mark',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -92,7 +92,7 @@ if( JOOBJ )
 							'current mode the UI is in',
 						type :
 							'String',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -103,7 +103,7 @@ if( JOOBJ )
 							'path of the disc',
 						type :
 							'Path',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -114,7 +114,7 @@ if( JOOBJ )
 							'owner of currently loaded space',
 						type :
 							'String',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -125,7 +125,7 @@ if( JOOBJ )
 							'name of currently loaded space',
 						type :
 							'String',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -136,7 +136,7 @@ if( JOOBJ )
 							'currently logged in user',
 						type :
 							'String',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -152,7 +152,7 @@ if( JOOBJ )
 								member :
 									'sizeOnly'
 							},
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'

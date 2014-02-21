@@ -29,14 +29,23 @@ module.exports =
 				''
 			],
 		'filepath',
-			'media/meshcraft.html'
-		// TODO maxage short
+			'media/meshcraft.html',
+		'maxage',
+			'short'
 	),
 	Resource.create(
 		'aliases',
 			[ 'devel.html' ],
 		'filepath',
 			'media/devel.html',
+		'devel',
+			true
+	),
+	Resource.create(
+		'aliases',
+			[ 'testpad.html' ],
+		'filepath',
+			'media/testpad.html',
 		'devel',
 			true
 	),
@@ -802,6 +811,18 @@ module.exports =
 		'maxage',
 			'long'
 	),
+	Resource.create(
+		'filepath',
+			'src/testpad/testpad.js',
+		'devel',
+			true
+	),
+	Resource.create(
+		'filepath',
+			'src/testpad/iface-sym.js',
+		'devel',
+			true
+	)
 ];
 
 

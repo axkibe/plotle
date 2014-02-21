@@ -33,74 +33,57 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Range',
-
 		unit :
 			'Mark',
-
 		subclass :
 			'Mark.Mark',
-
 		attributes :
 			{
 				bPath :
 					{
 						comment :
 							'path of the begin of the range',
-
 						type :
 							'Path'
 					},
-
 				bAt :
 					{
 						comment :
 							'offset of the begin of the range',
-
 						type :
 							'Integer'
 					},
-
 				docTree :
 					{
 						comment :
 							'the document tree the range belongs to',
-
 						type :
 							'Tree'
 					},
-
 				ePath :
 					{
 						comment :
 							'path of the end of the range',
-
 						type :
 							'Path'
 					},
-
 				eAt :
 					{
 						comment :
 							'offset of the end of the range',
-
 						type :
 							'Integer'
 					},
-
 				retainx :
 					{
 						comment :
 							'x-position of the caret kept',
-
 						type :
 							'Number',
-
-						allowNull :
+						allowsNull :
 							true,
-
 						defaultVal :
 							'null'
 					}

@@ -41,8 +41,8 @@ if( JOOBJ )
 						comment :
 							'the generated joobj',
 						type :
-							'Buffer',
-						allowNull :
+							'Object',
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -53,7 +53,7 @@ if( JOOBJ )
 							'the file status of the def',
 						type :
 							'Object',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'

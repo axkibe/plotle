@@ -27,7 +27,7 @@ if( JOOBJ )
 							'the list of aliases this is server under',
 						type :
 							'Array',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							// by default determined from filepath
@@ -39,7 +39,7 @@ if( JOOBJ )
 							'"binary" or "utf-8"',
 						type :
 							'String',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							// by default determined from file extension
@@ -50,8 +50,8 @@ if( JOOBJ )
 						comment :
 							'cached or auto generated data',
 						type :
-							'Buffer',
-						allowNull :
+							'Object',
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -70,8 +70,8 @@ if( JOOBJ )
 						comment :
 							'cached or auto generated zip data',
 						type :
-							'Buffer',
-						allowNull :
+							'Object',
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -82,7 +82,7 @@ if( JOOBJ )
 							'path of the resources file',
 						type :
 							'String',
-						allowNull :
+						allowsNull :
 							true
 					},
 				hasJoobj :
@@ -127,7 +127,7 @@ if( JOOBJ )
 							'mime type',
 						type :
 							'String',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							// by default determined from file extension
@@ -189,30 +189,6 @@ Resource.prototype._init =
 			FileTypes.mime( this.fileext );
 	}
 };
-
-
-/*
-| The alias the joobj is served under (if)
-|
-| TODO remove
-*/
-Jools.lazyValue(
-	Resource.prototype,
-	'joobjAlias',
-	function( )
-	{
-		if( !this.hasJoobj )
-		{
-			return null;
-		}
-
-		return (
-			'joobj-'
-			+
-			this.filepath.replace( /\//g, '-' )
-		);
-	}
-);
 
 
 /*

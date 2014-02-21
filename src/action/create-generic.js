@@ -55,7 +55,7 @@ if( JOOBJ )
 						type :
 							'Item',
 
-						allowNull :
+						allowsNull :
 							true
 					},
 
@@ -67,7 +67,7 @@ if( JOOBJ )
 						type :
 							'Item',
 
-						allowNull :
+						allowsNull :
 							true
 					},
 
@@ -79,7 +79,7 @@ if( JOOBJ )
 						type :
 							'Point',
 
-						allowNull :
+						allowsNull :
 							true
 					}
 			}

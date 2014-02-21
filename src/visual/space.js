@@ -41,80 +41,63 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Space',
-
 		unit :
 			'Visual',
-
 		attributes :
 			{
 				access :
 					{
 						comment :
 							'rights the current user has for this space',
-
 						type :
 							'String'
 					},
-
 				hover :
 					{
 						comment :
 							'node currently hovered upon',
-
 						type :
 							'Path'
 					},
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						type :
 							'Mark',
-
 						concerns :
 							{
 								func :
 									'Space.concernsMark',
-
 								args :
 									[
 										'mark'
 									]
 							}
 					},
-
 				path :
 					{
 						comment :
 							'the path of the space',
-
 						type :
 							'Path'
 					},
-
 				spaceUser :
 					{
 						comment :
 							'owner of the space',
-
 						type :
 							'String'
 					},
-
 				spaceTag :
 					{
 						comment :
 							'name of the space',
-
 						type :
 							'String'
 					},
-
 				traitSet :
 					{
 						comment :
@@ -123,35 +106,28 @@ if( JOOBJ )
 						type :
 							'TraitSet',
 
-						allowNull :
+						allowsNull :
 							true,
-
 						assign :
 							null,
-
 						defaultVal :
 							'null'
 					},
-
 				tree :
 					{
 						comment :
 							'the data tree',
-
 						type :
 							'Tree'
 					},
-
 				view :
 					{
 						comment :
 							'the current view',
-
 						type :
 							'View'
 					}
 			},
-
 		init :
 			[
 				'inherit',

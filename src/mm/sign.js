@@ -105,22 +105,16 @@ Sign.field =
 	Jools.immute({
 		'at1' :
 			true,
-
 		'at2' :
 			true,
-
 		'path' :
 			true,
-
 		'proc' :
 			true,
-
 		'rank' :
 			true,
-
 		'space' :
 			true,
-
 		'val' :
 			true
 	});
@@ -147,15 +141,10 @@ Sign.prototype.affix =
 		{
 			throw new Jools.reject(
 				[
-					cm,
-					' ',
-					base,
-					'.',
-					key,
+					cm, ' ',
+					base, '.', key,
 					' faulty preset ',
-					val,
-					' !== ',
-					this[ key ]
+					val, ' !== ', this[ key ]
 				].join( '' )
 			);
 		}

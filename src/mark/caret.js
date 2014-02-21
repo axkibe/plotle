@@ -61,7 +61,7 @@ if( JOOBJ )
 							'x-position of the caret kept',
 						type :
 							'Number',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'

@@ -48,7 +48,7 @@ if( JOOBJ )
 							'Path',
 						defaultVal :
 							'null',
-						allowNull :
+						allowsNull :
 							true
 					},
 				mark :
@@ -69,7 +69,7 @@ if( JOOBJ )
 							},
 						defaultVal :
 							'null',
-						allowNull :
+						allowsNull :
 							true
 					},
 				path :
@@ -80,7 +80,7 @@ if( JOOBJ )
 							'Path',
 						defaultVal :
 							'null',
-						allowNull :
+						allowsNull :
 							true
 					},
 				traitSet :
@@ -89,7 +89,7 @@ if( JOOBJ )
 							'traits being set',
 						type :
 							'TraitSet',
-						allowNull:
+						allowsNull:
 							true,
 						defaultVal :
 							'null',
@@ -102,7 +102,7 @@ if( JOOBJ )
 							'currently logged in user',
 						type :
 							'String',
-						allowNull:
+						allowsNull:
 							true,
 						defaultVal :
 							'null'
@@ -120,7 +120,7 @@ if( JOOBJ )
 							},
 						defaultVal :
 							'null',
-						allowNull :
+						allowsNull :
 							true
 					}
 			},

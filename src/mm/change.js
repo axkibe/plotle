@@ -619,7 +619,8 @@ Change.prototype.remove =
 	trg =
 		trg.affix(
 			Jools.isnon,
-			cm, 'trg',
+			cm,
+			'trg',
 			'val',
 				val
 		);

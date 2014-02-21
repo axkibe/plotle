@@ -2,17 +2,18 @@
 | A testing pad for meshcraft.
 |
 | Authors: Axel Kittenberger
-| License: MIT(Expat), see accompanying 'License'-file
 */
 
 
 /*
 | Imports
 */
-var IFaceSym;
-var Jools;
-var Path;
-var Peer;
+var
+	IFaceSym,
+	Jools,
+	Path,
+	Peer;
+
 
 /*
 | Capsule
@@ -20,24 +21,13 @@ var Peer;
 ( function( ) {
 'use strict';
 
-if( typeof( window ) === 'undefined')
-	{ throw new Error( 'testpad needs a browser!' ); }
-
-
-/*
-| Utility function, binds obj as this to func
-*/
-var bind = function( obj, func )
-{
-	return function( ) {
-		func.apply( obj, arguments );
-	};
-};
 
 /*
 | Constructor
 */
-var Testpad = function( )
+var
+Testpad =
+	function( )
 {
 	// current action
 	this.$action    = null;
@@ -48,20 +38,29 @@ var Testpad = function( )
 	/*
 	| References to the pages html elements
 	*/
-	var elements = this.elements =
+	var elements =
+	this.elements =
 	{
-		measure : null,
-		pad     : null,
-		input   : null,
-		beep    : null,
-
-		send    : null,
-		cancel  : null,
-
-		upnow   : null,
-		up      : null,
-		now     : null,
-		down    : null
+		measure :
+			null,
+		pad :
+			null,
+		input :
+			null,
+		beep :
+			null,
+		send :
+			null,
+		cancel :
+			null,
+		upnow :
+			null,
+		up :
+			null,
+		now :
+			null,
+		down :
+			null
 	};
 
 	for( var id in elements )
@@ -69,30 +68,61 @@ var Testpad = function( )
 		elements[ id ] = document.getElementById( id );
 	}
 
-	var pad = elements.pad;
-	pad.onmousedown   = bind( this, this.onmousedown  );
-	pad.onmousemove   = bind( this, this.onmousemove  );
-	pad.onmouseup     = bind( this, this.onmouseup    );
-	pad.onclick       = bind( this, this.onmouseclick );
+	var
+		pad =
+			elements.pad;
 
-	var input = elements.input;
-	input.onkeypress  = bind( this, this.onkeypress );
-	input.onkeydown   = bind( this, this.onkeydown  );
-	input.onkeyup     = bind( this, this.onkeyup    );
-	input.onfocus     = bind( this, this.onfocus    );
-	input.onblur      = bind( this, this.onblur     );
+	pad.onmousedown =
+		this.onmousedown.bind( this );
 
-	elements.send.disabled    = true;
-	elements.send.onclick     = bind( this, this.send );
+	pad.onmousemove =
+		this.onmousemove.bind( this );
 
-	elements.cancel.disabled  = true;
-	elements.cancel.onclick   = bind( this, this.cancel );
+	pad.onmouseup =
+		this.onmouseup.bind( this );
 
-	elements.upnow.onclick     = bind( this, this.onButtonUpToNow );
+	pad.onclick =
+		this.onmouseclick.bind( this );
 
-	elements.up.onclick        = bind( this, this.onButtonUpClick );
+	var
+		input =
+			elements.input;
 
-	elements.down.onclick      = bind( this, this.onButtonDownClick );
+	input.onkeypress =
+		this.onkeypress.bind( this );
+
+	input.onkeydown =
+		this.onkeydown.bind( this );
+
+	input.onkeyup =
+		this.onkeyup.bind( this );
+
+	input.onfocus =
+		this.onfocus.bind( this );
+
+	input.onblur =
+		this.onblur.bind( this );
+
+	elements.send.disabled =
+		true;
+
+	elements.send.onclick =
+		this.send.bind( this );
+
+	elements.cancel.disabled =
+		true;
+
+	elements.cancel.onclick =
+		this.cancel.bind( this );
+
+	elements.upnow.onclick =
+		this.onButtonUpToNow.bind( this );
+
+	elements.up.onclick =
+		this.onButtonUpClick.bind( this );
+
+	elements.down.onclick =
+		this.onButtonDownClick.bind( this );
 
 	this.$ranks = null;
 	this.$copse = null;
@@ -253,8 +283,11 @@ Testpad.prototype.captureEvents =
 	}
 	else
 	{
-		document.onmouseup   = bind( this, this.onmouseup   );
-		document.onmousemove = bind( this, this.onmousemove );
+		document.onmouseup =
+			this.onmouseup.bind( this );
+
+		document.onmousemove =
+			this.onmousemove.bind( this );
 	}
 };
 
@@ -298,7 +331,6 @@ Testpad.prototype.onmouseup =
 
 /*
 | Mouse clicked on pad.
-| TODO remove?
 */
 Testpad.prototype.onmouseclick =
 	function( event )

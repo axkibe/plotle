@@ -35,90 +35,67 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Ellipse',
-
 		unit :
 			'Euclid',
-
 		attributes :
 			{
 				pnw :
 					{
 						comment :
 							'point in north west',
-
 						type :
 							'Point'
 					},
-
 				pse :
 					{
 						comment :
 							'point in south east',
-
 						type :
 							'Point'
 					},
-
 				// FIXME make proper optionals
 				gradientPC :
 					{
 						comment :
 							'center for gradient',
-
 						type :
 							'Point',
-
-						allowNull :
+						allowsNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							'_gradientPC'
 					},
-
-
 				gradientR0 :
 					{
 						comment :
 							'inner radius for circle gradients',
-
 						type :
 							'Number',
-
-						allowNull :
+						allowsNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							'_gradientR0'
 					},
-
 				gradientR1 :
 					{
 						comment :
 							'outer radius for circle gradients',
-
 						type :
 							'Number',
-
-						allowNull :
+						allowsNull :
 							true,
-
 						defaultVal :
 							'null',
-
 						assign :
 							'_gradientR1'
 					}
 			},
-
 		init :
 			[
 				'pnw',

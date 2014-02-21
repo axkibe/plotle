@@ -102,7 +102,7 @@ if( JOOBJ )
 							},
 						type :
 							'Mark',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -129,7 +129,7 @@ if( JOOBJ )
 							'the path of the widget',
 						type :
 							'Path',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -140,7 +140,7 @@ if( JOOBJ )
 							'the frame the widget resides in',
 						type :
 							'Rect',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null'
@@ -159,7 +159,7 @@ if( JOOBJ )
 							'traits being set',
 						type :
 							'TraitSet',
-						allowNull :
+						allowsNull :
 							true,
 						defaultVal :
 							'null',
