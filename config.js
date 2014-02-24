@@ -5,6 +5,7 @@
 
 /*
 | Config infrastructure.
+|
 | Don't change this.
 */
 var config =
@@ -82,7 +83,7 @@ config.develServer =
 | Does not write stuff on server startup
 */
 config.noWrite =
-	false;
+	true;
 
 /*
 | If true "uglifies" the javascript pack, minimizing its size.
