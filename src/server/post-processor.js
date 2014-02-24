@@ -88,6 +88,65 @@ PostProcessor.develHtml =
 
 
 /*
+| PostProcessor for testpad.html
+*/
+PostProcessor.testPadHtml =
+	function(
+		data,        // the data
+		inventory    // the server inventory
+		// bundleRes // the resource of the bundle
+	)
+{
+	var
+		devels =
+			[ ];
+
+	data =
+		data + '';
+
+	for(
+		var a = 0, aZ = inventory.list.length;
+		a < aZ;
+		a++
+	)
+	{
+		var
+			resource =
+				inventory.list[ a ];
+
+		if( resource.inTestPad )
+		{
+			devels.push(
+				'<script src="' +
+					resource.aliases[ 0 ] +
+					'" type="text/javascript"></script>'
+			);
+		}
+	}
+
+
+	data =
+		data.replace(
+			/<!--TESTPAD.*>/,
+			devels.join( '\n' )
+		);
+
+	if( config.debug.weinre )
+	{
+		data =
+			data.replace(
+				/<!--WEINRE.*>/,
+				'<script src="http://' +
+					config.debug.weinre +
+					'/target/target-script-min.js"></script>'
+			);
+	}
+
+	return data;
+};
+
+
+/*
 | PostProcessor for index.html
 */
 PostProcessor.indexHtml =

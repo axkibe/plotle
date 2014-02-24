@@ -95,7 +95,7 @@ if( JOOBJ )
 						defaultVal :
 							'false'
 					},
-				inTestpad :
+				inTestPad :
 					{
 						comment :
 							'true if this resource is in the testpad',

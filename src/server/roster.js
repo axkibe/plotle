@@ -61,6 +61,8 @@ module.exports =
 		'filepath',
 			'src/jools/jools.js',
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
@@ -75,6 +77,8 @@ module.exports =
 		'hasJoobj',
 			true,
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
@@ -83,36 +87,48 @@ module.exports =
 		'hasJoobj',
 			true,
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/meshverse.js',
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/path.js',
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/tree.js',
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/sign.js',
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
 		'filepath',
 			'src/mm/change.js',
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
@@ -125,6 +141,8 @@ module.exports =
 		'filepath',
 			'src/mm/meshmashine.js',
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
@@ -313,6 +331,8 @@ module.exports =
 		'filepath',
 			'src/shell/peer.js',
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
@@ -815,12 +835,16 @@ module.exports =
 		'filepath',
 			'media/testpad.html',
 		'devel',
-			true
+			true,
+		'postProcessor',
+			'testPadHtml'
 	),
 	Resource.create(
 		'filepath',
 			'src/testpad/iface-sym.js',
 		'devel',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
@@ -829,6 +853,8 @@ module.exports =
 		'devel',
 			true,
 		'hasJoobj',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(
@@ -837,6 +863,8 @@ module.exports =
 		'devel',
 			true,
 		'hasJoobj',
+			true,
+		'inTestPad',
 			true
 	),
 ];

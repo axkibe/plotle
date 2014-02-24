@@ -762,6 +762,8 @@ Server.prototype.prepareInventory =
 				'filepath',
 					'config.js',
 				'inBundle',
+					true,
+				'inTestPad',
 					true
 			);
 
