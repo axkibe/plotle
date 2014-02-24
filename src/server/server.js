@@ -199,17 +199,30 @@ Server.prototype.startup =
 		self =
 			this;
 
+	// FIXME this might go simpler
 	var
 		requestListener =
-			function*( request, res )
+			function*(
+				request,
+				result
+			)
 			{
-				yield* self.requestListener( request, res );
+				yield* self.requestListener(
+					request,
+					result
+				);
 			};
 
 	yield http.createServer(
-		function( request, res )
+		function(
+			request,
+			result
+		)
 		{
-			sus( requestListener )( request, res );
+			sus( requestListener )(
+				request,
+				result
+			);
 		}
 	).listen(
 		config.port,
@@ -734,8 +747,7 @@ Server.prototype.prepareInventory =
 		a,
 		aZ,
 		r,  // TODO remove
-		res;
-
+		resource;
 
 	Jools.log( 'start', 'preparing inventory' );
 
@@ -1030,33 +1042,33 @@ Server.prototype.prepareInventory =
 		a++
 	)
 	{
-		res =
+		resource =
 			inv.list[ a ];
 
 		if(
-			!res.postProcessor
+			!resource.postProcessor
 			||
-			!res.data
+			!resource.data
 		)
 		{
 			continue;
 		}
 
-		if( !PostProcessor[ res.postProcessor ] )
+		if( !PostProcessor[ resource.postProcessor ] )
 		{
 			throw new Error(
 				'invalid postProcessor: ' +
-					res.postProcessor
+					resource.postProcessor
 			);
 		}
 
 		this.inventory =
 			this.inventory.updateResource(
-				res,
-				res.create(
+				resource,
+				resource.create(
 					'data',
-						PostProcessor[ res.postProcessor ](
-							res.data,
+						PostProcessor[ resource.postProcessor ](
+							resource.data,
 							this.inventory,
 							bundleFilePath
 						)
@@ -1117,19 +1129,19 @@ Server.prototype.prependConfigFlags =
 	function( )
 {
 	var
-		res =
+		resource =
 			this.inventory.map[ 'config.js' ];
 
 	this.inventory =
 		this.inventory.updateResource(
-			res,
-			res.create(
+			resource,
+			resource.create(
 				'data',
 					'var JOOBJ = false;\n' +
 					'var CHECK = true;\n' +
 					'var SERVER = false;\n' +
 					'var SHELL = true;\n' +
-					res.data
+					resource.data
 				)
 		);
 };
@@ -2124,7 +2136,7 @@ Server.prototype.expirePresence =
 Server.prototype.cmdUpdate =
 	function (
 		cmd,
-		res
+		result
 	)
 {
 	var user =
@@ -2241,27 +2253,21 @@ Server.prototype.cmdUpdate =
 		{
 			user :
 				user,
-
 			time :
 				time,
-
 			mseq :
 				mseq,
-
 			timerID :
 				timerID,
-
-			res :
-				res,
-
+			result :
+				result,
 			spaceUser :
 				spaceUser,
-
 			spaceTag :
 				spaceTag
 		};
 
-	res.sleepID =
+	result.sleepID =
 		sleepID;
 
 	this.establishPresence(
@@ -2316,13 +2322,10 @@ Server.prototype.expireSleep =
 		{
 			ok :
 				true,
-
 			time :
 				sleep.time,
-
 			timeZ :
 				seqZ,
-
 			chgs :
 				null
 		};
@@ -2330,10 +2333,10 @@ Server.prototype.expireSleep =
 	Jools.log( 'ajax', '->', asw );
 
 	var
-		res =
-			sleep.res;
+		result =
+			sleep.result;
 
-	res.writeHead(
+	result.writeHead(
 		200,
 		{
 			'Content-Type' :
@@ -2345,10 +2348,9 @@ Server.prototype.expireSleep =
 		}
 	);
 
-	res.end(
+	result.end(
 		JSON.stringify( asw )
 	);
-
 };
 
 
@@ -2499,12 +2501,12 @@ Server.prototype.wake =
 					sleep.spaceTag
 				),
 
-			res =
-				sleep.res;
+			result =
+				sleep.result;
 
 		Jools.log( 'ajax', '->', asw );
 
-		res.writeHead(200,
+		result.writeHead(200,
 			{
 				'Content-Type' :
 					'application/json',
@@ -2515,7 +2517,7 @@ Server.prototype.wake =
 			}
 		);
 
-		res.end(JSON.stringify(asw));
+		result.end( JSON.stringify( asw ) );
 	}
 };
 
@@ -2762,26 +2764,29 @@ Server.prototype.cmdGet =
 */
 Server.prototype.webError =
 	function(
-		res,
+		result,
 		code,
 		message
 	)
 {
-	res.writeHead(code, {
-		'Content-Type' :
-			'text/plain',
-		'Cache-Control' :
-			'no-cache',
-		'Date' :
-			new Date().toUTCString()
-	});
+	result.writeHead(
+		code,
+		{
+			'Content-Type' :
+				'text/plain',
+			'Cache-Control' :
+				'no-cache',
+			'Date' :
+				new Date().toUTCString()
+		}
+	);
 
 	message =
 		code + ' ' + message;
 
 	Jools.log( 'web', 'error', code, message );
 
-	res.end( message );
+	result.end( message );
 };
 
 
@@ -2791,7 +2796,7 @@ Server.prototype.webError =
 Server.prototype.requestListener =
 	function*(
 		request,
-		res
+		result
 	)
 {
 	var
@@ -2810,7 +2815,7 @@ Server.prototype.requestListener =
 
 	if( pathname === 'mm' )
 	{
-		return this.webAjax( request, red, res );
+		return this.webAjax( request, red, result );
 	}
 
 	var
@@ -2820,7 +2825,7 @@ Server.prototype.requestListener =
 	if( !r )
 	{
 		this.webError(
-			res,
+			result,
 			'404 Bad Request'
 		);
 
@@ -2849,12 +2854,12 @@ Server.prototype.requestListener =
 			header[ 'Content-Encoding' ] =
 				'gzip';
 
-			res.writeHead(
+			result.writeHead(
 				200,
 				header
 			);
 
-			res.end(
+			result.end(
 				r.gzip,
 				'binary'
 			);
@@ -2862,12 +2867,12 @@ Server.prototype.requestListener =
 		else
 		{
 			// delivers uncompressed
-			res.writeHead(
+			result.writeHead(
 				200,
 				header
 			);
 
-			res.end(
+			result.end(
 				r.data,
 				r.coding
 			);
@@ -2878,7 +2883,7 @@ Server.prototype.requestListener =
 	if( !config.develShell )
 	{
 		this.webError(
-			res,
+			result,
 			'404 Bad Request'
 		);
 	}
@@ -2896,7 +2901,7 @@ Server.prototype.requestListener =
 		catch( e )
 		{
 			this.webError(
-				res,
+				result,
 				500,
 				'Internal Server Error'
 			);
@@ -2921,7 +2926,7 @@ Server.prototype.requestListener =
 		catch( e )
 		{
 			this.webError(
-				res,
+				result,
 				500,
 				'Internal Server Error'
 			);
@@ -2953,7 +2958,7 @@ Server.prototype.requestListener =
 			);
 	}
 
-	res.writeHead(
+	result.writeHead(
 		200,
 		{
 			'Content-Type' :
@@ -2979,7 +2984,7 @@ Server.prototype.requestListener =
 			);
 	}
 
-	res.end(
+	result.end(
 		data,
 		r.coding
 	);
@@ -2993,7 +2998,7 @@ Server.prototype.webAjax =
 	function(
 		request,
 		red,
-		res
+		result
 	)
 {
 	var
@@ -3006,7 +3011,7 @@ Server.prototype.webAjax =
 	if( request.method !== 'POST' )
 	{
 		this.webError(
-			res,
+			result,
 			400,
 			'Must use POST'
 		);
@@ -3018,9 +3023,9 @@ Server.prototype.webAjax =
 		'close',
 		function( )
 		{
-			if( res.sleepID )
+			if( result.sleepID )
 			{
-				self.closeSleep( res.sleepID );
+				self.closeSleep( result.sleepID );
 			}
 		}
 	);
@@ -3053,7 +3058,7 @@ Server.prototype.webAjax =
 			catch( err )
 			{
 				self.webError(
-					res,
+					result,
 					400,
 					'Not valid JSON'
 				);
@@ -3064,7 +3069,7 @@ Server.prototype.webAjax =
 			try
 			{
 				asw =
-					yield* self.ajaxCmd( cmd, res );
+					yield* self.ajaxCmd( cmd, result );
 			}
 			catch( err )
 			{
@@ -3094,7 +3099,7 @@ Server.prototype.webAjax =
 
 			Jools.log( 'ajax', '->', asw );
 
-			res.writeHead( 200,
+			result.writeHead( 200,
 				{
 					'Content-Type' :
 						'application/json',
@@ -3107,7 +3112,7 @@ Server.prototype.webAjax =
 				}
 			);
 
-			res.end(
+			result.end(
 				JSON.stringify( asw )
 			);
 		};
@@ -3133,7 +3138,7 @@ Server.prototype.webAjax =
 | Executes an ajaxCmd
 */
 Server.prototype.ajaxCmd =
-	function*( cmd, res )
+	function*( cmd, result )
 {
 	switch ( cmd.cmd )
 	{
@@ -3153,7 +3158,7 @@ Server.prototype.ajaxCmd =
 			return yield* this.cmdRegister( cmd );
 
 		case 'update' :
-			return this.cmdUpdate( cmd, res );
+			return this.cmdUpdate( cmd, result );
 
 		default:
 			return Jools.reject('unknown command');
