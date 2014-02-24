@@ -10,9 +10,14 @@
 */
 var
 	IFaceSym,
-	Jools,
 	Path,
 	Peer;
+
+/*
+| Export
+*/
+var
+	TestPad;
 
 
 /*
@@ -23,141 +28,284 @@ var
 
 
 /*
-| Constructor
+| The joobj definition.
+*/
+if( JOOBJ )
+{
+	return {
+		name :
+			'TestPad',
+		attributes :
+			{
+				action :
+					{
+						comment :
+							'the action the user is prepariing',
+						type :
+							'Action',
+						defaultVal :
+							'null'
+					},
+				elements :
+					{
+						comment :
+							'DOM elements',
+						type :
+							'Object',
+						defaultVal :
+							'undefined'
+					},
+				cursorAt :
+					{
+						comment :
+							'offset cursor is at',
+						type :
+							'Integer',
+						defaultVal :
+							'0'
+					},
+				cursorLine :
+					{
+						comment :
+							'line cursor is in',
+						type :
+							'Integer',
+						defaultVal :
+							'0'
+					},
+				haveFocus :
+					{
+						comment :
+							'true when having focus',
+						type :
+							'Boolean',
+						defaultVal :
+							'false'
+					},
+				iface :
+					{
+						comment :
+							'the interface',
+						type :
+							'Object',
+						defaultVal:
+							'undefined'
+					},
+				mouseDown :
+					{
+						comment :
+							'true when mouse button is held down',
+						type :
+							'Boolean',
+						defaultVal :
+							'true'
+					},
+				peer :
+					{
+						comment :
+							'the peer',
+						type :
+							'Object',
+						defaultVal:
+							'undefined'
+					},
+				seq :
+					{
+						comment :
+							'current sequence pos',
+						type :
+							'Integer',
+						defaultVal :
+							'-1'
+					}
+			},
+		init :
+			[ ]
+	};
+}
+
+var
+	testPad =
+		null,
+
+	_notePath =
+		Path.empty.append( 'testnote' );
+
+/*
+| Binds an event handler to the
+| latest instance of testPad.
 */
 var
-Testpad =
+	_bind =
+function(
+	handler  // the handler of testPad
+)
+{
+	return (
+		function( )
+		{
+			testPad[ handler ].apply(
+				testPad,
+				arguments
+			);
+		}
+	);
+};
+
+
+/*
+| Initializer.
+*/
+TestPad.prototype._init =
 	function( )
 {
-	// current action
-	this.$action    = null;
+	var
+		elements =
+			this.elements;
 
-	// true when mouse is down
-	this.$mousedown = false;
-
-	/*
-	| References to the pages html elements
-	*/
-	var elements =
-	this.elements =
+	if( !elements )
 	{
-		measure :
-			null,
-		pad :
-			null,
-		input :
-			null,
-		beep :
-			null,
-		send :
-			null,
-		cancel :
-			null,
-		upnow :
-			null,
-		up :
-			null,
-		now :
-			null,
-		down :
-			null
-	};
+		elements =
+		this.elements =
+			{
+				measure :
+					null,
+				pad :
+					null,
+				input :
+					null,
+				beep :
+					null,
+				send :
+					null,
+				cancel :
+					null,
+				upnow :
+					null,
+				up :
+					null,
+				now :
+					null,
+				down :
+					null
+			};
 
-	for( var id in elements )
+		for( var id in elements )
+		{
+			elements[ id ] =
+				document.getElementById( id );
+		}
+
+		var
+			pad =
+				elements.pad,
+			input =
+				elements.input,
+			send =
+				elements.send,
+			cancel =
+				elements.cancel,
+			down =
+				elements.down,
+			up =
+				elements.up,
+			upnow =
+				elements.upnow;
+
+		pad.onmousedown =
+			_bind( 'onMouseDown' );
+
+		pad.onmousemove =
+			_bind( 'onMouseMove' );
+
+		pad.onmouseup =
+			_bind( 'onMouseUp' );
+
+		pad.onclick =
+			_bind( 'onMouseClick' );
+
+		input.onkeypress =
+			_bind( 'onKeyPress' );
+
+		input.onkeydown =
+			_bind( 'onKeyDown' );
+
+		input.onkeyup =
+			_bind( 'onKeyUp' );
+
+		input.onfocus =
+			_bind( 'onFocus' );
+
+		input.onblur =
+			_bind( 'onBlur' );
+
+		send.disabled =
+			true;
+
+		send.onclick =
+			_bind( 'onSendButton' );
+
+		cancel.disabled =
+			true;
+
+		cancel.onclick =
+			_bind( 'onCancelButton' );
+
+		down.onclick =
+			_bind( 'onDownButton' );
+
+		up.onclick =
+			_bind( 'onUpButton' );
+
+		upnow.onclick =
+			_bind( 'onUpNowButton' );
+	}
+
+	if( !this.iface )
 	{
-		elements[ id ] = document.getElementById( id );
+		this.iface =
+			new IFaceSym( );
+	}
+	else
+	{
+		this.iface.goToSeq( this.seq );
+	}
+
+	if( !this.peer )
+	{
+		this.peer =
+			new Peer( this.iface );
 	}
 
 	var
-		pad =
-			elements.pad;
+		note =
+			this.peer.get( _notePath );
 
-	pad.onmousedown =
-		this.onmousedown.bind( this );
+	elements.now.innerHTML =
+		'' + this.seq;
 
-	pad.onmousemove =
-		this.onmousemove.bind( this );
+	//if( !ranks )
+	if( true || !note )
+	{
 
-	pad.onmouseup =
-		this.onmouseup.bind( this );
+		elements.pad.innerHTML =
+			TestPad.noDataScreen( );
+	}
+	else
+	{
+		elements.pad.innerHtml =
+			this.makeScreen( note );
+	}
 
-	pad.onclick =
-		this.onmouseclick.bind( this );
-
-	var
-		input =
-			elements.input;
-
-	input.onkeypress =
-		this.onkeypress.bind( this );
-
-	input.onkeydown =
-		this.onkeydown.bind( this );
-
-	input.onkeyup =
-		this.onkeyup.bind( this );
-
-	input.onfocus =
-		this.onfocus.bind( this );
-
-	input.onblur =
-		this.onblur.bind( this );
-
-	elements.send.disabled =
-		true;
-
-	elements.send.onclick =
-		this.send.bind( this );
-
-	elements.cancel.disabled =
-		true;
-
-	elements.cancel.onclick =
-		this.cancel.bind( this );
-
-	elements.upnow.onclick =
-		this.onButtonUpToNow.bind( this );
-
-	elements.up.onclick =
-		this.onButtonUpClick.bind( this );
-
-	elements.down.onclick =
-		this.onButtonDownClick.bind( this );
-
-	this.$ranks = null;
-	this.$copse = null;
-
-	// The current cursor position and blinking state
-	this.$cursor = {
-		line   : 0,
-		offset : 0,
-		blink  : false
-	};
-
-	// the blink timer.
-	this.$blinkTimer = null;
-
-	// true when having focus
-	this.$haveFocus = false;
-
-	this.notepath = new Path( [ 'testnote' ] );
-
-	this.iface = new IFaceSym();
-	this.peer  = new Peer( this.iface );
-
-	this.update( -1 );
-	this.updatePad( );
-	this.resetBlink( );
-
-	input.focus( );
+	testPad =
+		this;
 };
-
 
 
 /*
 | Returns true if a keyCode is known to be a "special key".
 */
-Testpad.prototype.isSpecialKey =
+var _isSpecialKey =
 	function( keyCode )
 {
 	switch( keyCode )
@@ -173,109 +321,139 @@ Testpad.prototype.isSpecialKey =
 		case 40 : // down
 		case 46 : // del
 			return true;
+
 		default :
 			return false;
 	}
 };
 
 
-
 /*
 | Blinks the cursor on/off.
 */
-Testpad.prototype.blink =
+/*
+TestPad.prototype.blink =
 	function( self )
 {
-	self.$cursor.blink = !self.$cursor.blink;
-
-	self.testinput( self );
-	self.updatePad( );
-
-	self.elements.beep.innerHTML = '';
+	$cursor.blink = !self.$cursor.blink;
+	testinput( );
+	elements.beep.innerHTML = '';
 };
+*/
 
 
 /*
 | Resets the blink timer
 */
-Testpad.prototype.resetBlink =
+/*
+TestPad.prototype.resetBlink =
 	function( )
 {
-	this.$cursor.blink = false;
-	this.elements.beep.innerHTML = '';
+	testPad.$cursor.blink =
+		false;
 
-	if( this.$blinkTimer )
+	elements.beep.innerHTML =
+		'';
+
+	if( testPad.$blinkTimer )
 	{
-		clearInterval( this.$blinkTimer );
-		this.$blinkTimer = null;
+		clearInterval( testPad.$blinkTimer );
+		testPad.$blinkTimer = null;
 	}
 
-	if( this.$haveFocus )
+	if( testPad.$haveFocus )
 	{
-		this.$blinkTimer = setInterval( this.blink, 540, this );
+		testPad.$blinkTimer = setInterval( testPad.blink, 540, testPad );
 	}
 };
+*/
 
 
 /*
 | Mouse down event on pad -> focuses the hidden input,
 */
-Testpad.prototype.onmousedown =
-	function( event )
+TestPad.prototype.onMouseDown =
+	function(
+		event
+	)
 {
 	if( event.button !== 0 )
-		{ return; }
-
-	event.preventDefault( );
-	this.captureEvents( );
-
-	this.$mousedown = true;
-	this.elements.input.focus( );
-
-	var pad     = this.elements.pad;
-	var measure = this.elements.measure;
-	var cursor  = this.$cursor;
-	var copse   = this.$copse;
-	var ranks   = this.$ranks;
-
-	var x = event.pageX - pad.offsetLeft;
-	var y = event.pageY - pad.offsetTop;
-
-	if( !ranks )
 	{
-		this.beep( );
 		return;
 	}
 
+	event.preventDefault( );
 
-	cursor.line =
-		Jools.limit(
-			0,
-			Math.floor( y / measure.offsetHeight ),
-			ranks.length - 1
-		);
+	/*
 
-	var text = copse[ ranks[ cursor.line ] ].text;
+	testPad.captureEvents( );
 
-	cursor.offset =
-		Jools.limit(
-			0,
-			Math.floor( x / measure.offsetWidth ),
-			text.length
-		);
+	testPad.create(
+		'mouseDown',
+			true
+	);
 
-	this.resetBlink( );
-	this.updatePad( );
+	this.elements.input.focus( );
+
+	var
+		pad =
+			this.elements.pad,
+		measure =
+			this.elements.measure,
+		cursor =
+			testPad.$cursor,
+		copse =
+			testPad.$copse,
+		ranks =
+			testPad.$ranks,
+		x =
+			event.pageX - pad.offsetLeft,
+		y =
+			event.pageY - pad.offsetTop;
+
+	if( !ranks )
+	{
+		testPad.beep( );
+
+		return;
+	}
+
+	testPad.create(
+		'cursorLine',
+			Jools.limit(
+				0,
+				Math.floor( y / measure.offsetHeight ),
+				ranks.length - 1
+			)
+	);
+
+	var
+		text =
+			copse[ ranks[ cursor.line ] ].text;
+
+	testPad.create(
+		'cursorAt',
+			Jools.limit(
+				0,
+				Math.floor( x / measure.offsetWidth ),
+				text.length
+			)
+	);
+
+	testPad.resetBlink( );
+	*/
 };
 
 
 /*
 | Captures all mouse events.
 */
-Testpad.prototype.captureEvents =
+TestPad.prototype.captureEvents =
 	function( )
 {
-	var pad = this.elements.pad;
+	var
+		pad =
+			testPad.elements.pad;
 
 	if( pad.setCapture )
 	{
@@ -284,21 +462,23 @@ Testpad.prototype.captureEvents =
 	else
 	{
 		document.onmouseup =
-			this.onmouseup.bind( this );
+			_bind( 'onMouseUp' );
 
 		document.onmousemove =
-			this.onmousemove.bind( this );
+			_bind( 'onMouseMove' );
 	}
 };
 
 
 /*
-| Stops capturing all mouse events
+| Stops capturing all mouse events.
 */
-Testpad.prototype.releaseEvents =
+TestPad.prototype.releaseEvents =
 	function( )
 {
-	var pad = this.elements.pad;
+	var
+		pad =
+			this.elements.pad;
 
     if( pad.setCapture )
 	{
@@ -306,25 +486,34 @@ Testpad.prototype.releaseEvents =
     }
 	else
 	{
-        document.onmouseup = null;
-        document.onmousemove = null;
+        document.onmouseup =
+        document.onmousemove =
+			null;
     }
 };
 
 
 /*
-| Mouse button released
+| Mouse button released.
 */
-Testpad.prototype.onmouseup =
-	function( event )
+TestPad.prototype.onMouseUp =
+	function(
+		event
+	)
 {
 	if( event.button !==  0)
-		{ return; }
+	{
+		return;
+	}
 
 	event.preventDefault( );
 
-	this.$mousedown = false;
-	this.releaseEvents( );
+	testPad.create(
+		'mouseDown',
+			false
+	);
+
+	testPad.releaseEvents( );
 };
 
 
@@ -332,44 +521,49 @@ Testpad.prototype.onmouseup =
 /*
 | Mouse clicked on pad.
 */
-Testpad.prototype.onmouseclick =
-	function( event )
+TestPad.prototype.onMouseClick =
+	function(
+		event
+	)
 {
 	event.preventDefault( );
 };
 
 
 /*
-| Mouse moved over pad (or while dragging around it);
+| Mouse moved over pad
+| (or while dragging around it).
 */
-Testpad.prototype.onmousemove =
-	function( event )
+TestPad.prototype.onMouseMove =
+	function(
+		event
+	)
 {
-	if( this.$mousedown )
+	if( testPad.mouseDown )
 	{
-		this.onmousedown( event );
+		testPad.onMouseDown( event );
 	}
 };
 
 
 /*
-| Down event to (hidden) input.
+| Key down event to ( hidden ) input.
 */
-Testpad.prototype.onkeydown =
+TestPad.prototype.onKeyDown =
 	function( event )
 {
-	if( this.isSpecialKey( event.keyCode ) )
+	if( _isSpecialKey( event.keyCode ) )
 	{
 		event.preventDefault( );
 
-		this.inputSpecialKey(
+		testPad.inputSpecialKey(
 			event.keyCode,
 			event.ctrlKey
 		);
 	}
 	else
 	{
-		this.testinput( this );
+		testPad.testinput( );
 	}
 };
 
@@ -377,76 +571,81 @@ Testpad.prototype.onkeydown =
 /*
 | Press event to (hidden) input.
 */
-Testpad.prototype.onkeypress =
+TestPad.prototype.onKeyPress =
 	function(
 		// event
 	)
 {
+	/*
 	setTimeout(
-		this.testinput,
+		testinput,
 		0,
 		this
 	);
+	*/
 };
 
 
 /*
 | Up event to (hidden) input.
 */
-Testpad.prototype.onkeyup =
+TestPad.prototype.onKeyUp =
 	function(
 		// event
 	)
 {
-	this.testinput( this );
+	testPad.testinput( );
 };
 
 
 /*
 | Hidden input got focus.
 */
-Testpad.prototype.onfocus =
+TestPad.prototype.onFocus =
 	function( )
 {
-	this.$haveFocus = true;
-	this.resetBlink( );
-	this.updatePad( );
+	testPad.create(
+		'haveFocus',
+			true
+	);
 };
 
 
 /*
 | Hidden input lost focus.
 */
-Testpad.prototype.onblur =
+TestPad.prototype.onBlur =
 	function( )
 {
-	this.$haveFocus = false;
-	this.resetBlink( );
-	this.updatePad( );
+	testPad.create(
+		'haveFocus',
+			false
+	);
 };
 
 
 /*
 | Clears the current action
 */
-Testpad.prototype.clearAction =
+/*
+TestPad.prototype.clearAction =
 	function( )
 {
-	var elements = this.elements;
-
 	elements.cancel.disabled = true;
 	elements.send.disabled   = true;
 
 	this.$action = null;
 };
+*/
 
 
 /*
 | Sends the current action to server.
 */
-Testpad.prototype.send =
+TestPad.prototype.onSendButton =
 	function( )
 {
+	/*
 	var path;
 	var action   = this.$action;
 	var copse    = this.$copse;
@@ -544,60 +743,68 @@ Testpad.prototype.send =
 
 	this.resetBlink( );
 
-	this.updatePad( );
-
-	this.elements.input.focus( );
+	elements.input.focus( );
+	*/
 };
 
 
 /*
 | Cancels the current action
 */
-Testpad.prototype.cancel =
+TestPad.prototype.onCancelButton =
 	function( )
 {
+	/*
 	this.clearAction( );
 	this.resetBlink( );
-	this.updatePad( );
-	this.elements.input.focus( );
+	elements.input.focus( );
+	*/
 };
 
 
 /*
 | Displays a beep message.
 */
-Testpad.prototype.beep =
+TestPad.prototype.beep =
 	function( )
 {
+	/*
 	this.resetBlink( );
-	this.elements.beep.innerHTML = 'BEEP!';
+	elements.beep.innerHTML = 'BEEP!';
+	*/
 };
 
 
 /*
 | Starts an action.
 */
-Testpad.prototype.startAction =
+/*
+TestPad.prototype.startAction =
 	function( newAction )
 {
 	if (this.$action)
-		{ throw new Error('double action'); }
+	{
+		throw new Error('double action');
+	}
 
 	this.$action = newAction;
 
-	var elements = this.elements;
+	elements.send.disabled =
+		false;
 
-	elements.send.disabled = false;
-	elements.cancel.disabled = false;
+	elements.cancel.disabled =
+		false;
 };
+*/
 
 
 /*
 | Aquires non-special input from (hidden) input.
 */
-Testpad.prototype.testinput =
-	function( self )
+TestPad.prototype.testinput =
+	function( )
 {
+	/*
 	var action   = self.$action;
 	var cursor   = self.$cursor;
 
@@ -607,7 +814,9 @@ Testpad.prototype.testinput =
 	elements.input.value = '';
 
 	if( text === '' )
-		{ return; }
+	{
+		return;
+	}
 
 	if( !self.$ranks )
 	{
@@ -627,7 +836,6 @@ Testpad.prototype.testinput =
 		);
 
 		self.resetBlink( );
-		self.updatePad( );
 		return;
 	}
 
@@ -639,24 +847,32 @@ Testpad.prototype.testinput =
 		{
 			action.val = action.val + text;
 			self.resetBlink( );
-			self.updatePad( );
 			return;
 		}
 	}
 
 	self.beep( );
+	*/
 };
 
 
 /*
 | Handles all kind of special keys.
 */
-Testpad.prototype.inputSpecialKey =
-	function( keyCode, ctrlKey )
+TestPad.prototype.inputSpecialKey =
+	function(
+//		keyCode,
+//		ctrlKey
+	)
 {
-	var action = this.$action;
-	var cursor = this.$cursor;
-	var ranks  = this.$ranks;
+	/*
+	var
+		action =
+			this.action,
+		cursorLine =
+			this.cursorLine,
+		cursorAt =
+			this.cursorAt;
 
 	switch( keyCode )
 	{
@@ -891,23 +1107,21 @@ Testpad.prototype.inputSpecialKey =
 			break;
 	}
 
-	this.resetBlink( );
-	this.updatePad( );
+	*/
 };
 
 
 /*
-| Updates data from server
+| Updates data from server.
+|
+| TODO remove
 */
-Testpad.prototype.update =
-	function( time )
+/*
+TestPad.prototype.update =
+	function(
+		seq
+	)
 {
-	this.$time = this.iface.goToTime( time );
-
-	var space = this.peer.get( new Path( [ ] ) );
-
-	this.elements.now.innerHTML = '' + this.$time;
-
 	if( space )
 	{
 		var note  = space.copse.testnote;
@@ -920,86 +1134,62 @@ Testpad.prototype.update =
 		this.$copse = null;
 	}
 };
+*/
 
 
 /*
-| Button update-to-now has been clicked
+| Button update-to-now has been clicked.
 */
-Testpad.prototype.onButtonUpToNow =
+TestPad.prototype.onButtonUpToNow =
 	function( )
 {
-	this.update( -1 );
-	this.resetBlink( );
-	this.updatePad( );
+	testPad.create(
+		'seq',
+			-1
+	);
 
 	this.elements.input.focus( );
 };
 
 
 /*
-| Button one-up-the-timeline has been clicked.
+| Button one-up-the-sequence has been clicked.
 */
-Testpad.prototype.onButtonUpClick =
+TestPad.prototype.onUpButton =
 	function( )
 {
-	this.update( this.$time + 1 );
+	testPad.create(
+		'seq',
+			this.seq + 1
+	);
 
-	this.resetBlink( );
-	this.updatePad( );
 	this.elements.input.focus( );
 };
 
 
 /*
-| Button one-down-the-timeline has been clicked.
+| Button one-down-the-sequence has been clicked.
 */
-Testpad.prototype.onButtonDownClick =
+TestPad.prototype.onDownButton =
 	function( )
 {
-	this.update( this.$time - 1 );
+	testPad.create(
+		'seq',
+			testPad.seq - 1
+	);
 
-	this.resetBlink( );
-	this.updatePad( );
 	this.elements.input.focus( );
 };
 
 
 /*
-| (Re)Computes the pads contents to match the current data and action.
+| Cretes a screen for current data.
 */
-Testpad.prototype.updatePad =
+TestPad.prototype.makeScreen =
 	function( )
 {
-	var action   = this.$action;
-	var cursor   = this.$cursor;
-	var elements = this.elements;
-	var pad      = elements.pad;
-	var copse    = this.$copse;
-	var ranks    = this.$ranks;
-
-	var lines = [ ];
-	var a, aZ, b, bZ, line;
-
-	if( !ranks )
-	{
-		// no data
-		line = [ ];
-		for(a = 0; a < 100; a++)
-		{
-			line.push('{}  ');
-		}
-		line = line.join('');
-
-		var line2 = '  ' + line;
-
-		for(a = 0; a < 50; a++)
-		{
-			lines.push(line, line2);
-		}
-		pad.innerHTML = lines.join( '\n' );
-		return;
-	}
-
+	return '';
+	/*
 	for(a = 0, aZ = ranks.length; a < aZ; a++)
 	{
 		lines.push(
@@ -1035,19 +1225,14 @@ Testpad.prototype.updatePad =
 	}
 
 	// inserts the cursor
-	if( focus && !cursor.blink )
+	if( focus )
 	{
-		var cline = cursor.line;
-
-		if( cline < 0 )
-			{ cline = cursor.line = 0; }
-
-		if( cline > ranks.length - 1 )
-			{ cline = cursor.line = ranks.length - 1; }
-
-		var ctext = lines[ cline ];
-		var coff  = cursor.offset;
-		var clen  = lines[ cline ].length;
+		var
+			cLine =
+				this.cursorLine;
+			ctext = lines[ cline ];
+			coff  = cursor.offset;
+			clen  = lines[ cline ].length;
 
 		if( coff >= ctext.length )
 		{
@@ -1123,7 +1308,59 @@ Testpad.prototype.updatePad =
 		lines[ a ] = lines[ a ].join( '' );
 	}
 
-	pad.innerHTML = lines.join( '\n' );
+	return (
+		lines.join( '\n' )
+	);
+	*/
+};
+
+
+/*
+| Generates the noDataScreen.
+| FIXME lazyFixate
+*/
+TestPad.noDataScreen =
+	function( )
+{
+	// no data
+	var
+		a,
+		line =
+			[ ],
+		lines =
+			[ ];
+
+	for(
+		a = 0;
+		a < 100;
+		a++
+	)
+	{
+		line.push( '{}  ' );
+	}
+
+	line =
+		line.join( '' );
+
+	var
+		line2 =
+			'  ' + line;
+
+	for(
+		a = 0;
+		a < 50;
+		a++
+	)
+	{
+		lines.push(
+			line,
+			line2
+		);
+	}
+
+	return (
+		lines.join( '\n' )
+	);
 };
 
 
@@ -1133,7 +1370,10 @@ Testpad.prototype.updatePad =
 window.onload =
 	function( )
 {
-	new Testpad();
+	TestPad.create( );
+
+//	testPad.update( -1 ); TODO
+//	testPad.elements.input.focus( );
 };
 
 } )( );

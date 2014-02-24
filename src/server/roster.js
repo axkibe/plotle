@@ -31,7 +31,9 @@ module.exports =
 		'filepath',
 			'media/meshcraft.html',
 		'maxage',
-			'short'
+			'short',
+		'postProcessor',
+			'indexHtml'
 	),
 	Resource.create(
 		'aliases',
@@ -39,15 +41,9 @@ module.exports =
 		'filepath',
 			'media/devel.html',
 		'devel',
-			true
-	),
-	Resource.create(
-		'aliases',
-			[ 'testpad.html' ],
-		'filepath',
-			'media/testpad.html',
-		'devel',
-			true
+			true,
+		'postProcessor',
+			'develHtml'
 	),
 	Resource.create(
 		'filepath',
@@ -811,9 +807,13 @@ module.exports =
 		'maxage',
 			'long'
 	),
+
+	// --- TestPad ---
 	Resource.create(
+		'aliases',
+			[ 'testpad.html' ],
 		'filepath',
-			'src/testpad/testpad.js',
+			'media/testpad.html',
 		'devel',
 			true
 	),
@@ -822,7 +822,23 @@ module.exports =
 			'src/testpad/iface-sym.js',
 		'devel',
 			true
-	)
+	),
+	Resource.create(
+		'filepath',
+			'src/testpad/action.js',
+		'devel',
+			true,
+		'hasJoobj',
+			true
+	),
+	Resource.create(
+		'filepath',
+			'src/testpad/testpad.js',
+		'devel',
+			true,
+		'hasJoobj',
+			true
+	),
 ];
 
 

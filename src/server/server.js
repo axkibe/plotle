@@ -64,6 +64,9 @@ var
 	Path =
 		require( '../mm/path' ),
 
+	PostProcessor =
+		require( './post-processor' ),
+
 	Resource =
 		require( './resource' ),
 
@@ -92,8 +95,9 @@ var
 /*
 | Server
 */
-var Server =
-	function( )
+var
+	Server =
+function( )
 {
 	// pass
 };
@@ -729,8 +733,8 @@ Server.prototype.prepareInventory =
 	var
 		a,
 		aZ,
-		data,
-		r;
+		r,  // TODO remove
+		res;
 
 
 	Jools.log( 'start', 'preparing inventory' );
@@ -796,6 +800,8 @@ Server.prototype.prepareInventory =
 			||
 			r.inBundle
 			||
+			( r.devel && !r.postProcessor )
+			||
 			r.isJoobj
 		)
 		{
@@ -836,8 +842,7 @@ Server.prototype.prepareInventory =
 
 	var
 		ast,
-		code,
-		res;
+		code;
 
 	// loads the files to be bundled
 	for(
@@ -1024,41 +1029,58 @@ Server.prototype.prepareInventory =
 		this.prependConfigFlags( );
 	}
 
-	// the devel.html file
-	res =
-		this.inventory.map[ 'devel.html' ];
+	// post processing
+	inv =
+		this.inventory;
 
-	if( config.develShell )
+	// loads the files to be bundled
+	for(
+		a = 0, aZ = inv.list.length;
+		a < aZ;
+		a++
+	)
 	{
-		data =
-			res.data + '';
+		res =
+			inv.list[ a ];
 
-		data =
-			data.replace(
-				/<!--DEVELPACK.*>/,
-				devels.join( '\n' )
-			);
-
-		if( config.debug.weinre )
+		if( !res.postProcessor )
 		{
-			data =
-				data.replace(
-					/<!--WEINRE.*>/,
-					'<script src="http://' +
-						config.debug.weinre +
-						'/target/target-script-min.js"></script>'
-				);
+			continue;
 		}
+
+		if( !PostProcessor[ res.postProcessor ] )
+		{
+			throw new Error(
+				'invalid postProcessor: ' +
+					res.postProcessor
+			);
+		}
+
+		console.log( 'XXXX', res.postProcessor );
+		console.log( res.data );
+		console.log( '------------------' );
 
 		this.inventory =
 			this.inventory.updateResource(
 				res,
-				res.create(
-					'data',
-						data
-			)
-		);
+				PostProcessor[ res.postProcessor ](
+					res,
+					devels,
+					br
+				)
+			);
+
+		console.log( this.inventory.list[ a ].data );
 	}
+
+	//this.inventory =
+	//		this.inventory.updateResource(
+	//			res,
+	//			res.create(
+	//				'data',
+	//					data
+	//		)
+	//	);
 
 	// the index.html file
 	res =
@@ -1089,7 +1111,7 @@ Server.prototype.prepareInventory =
 		r =
 			inv.list[ a ];
 
-		if( r.inBundle )
+		if( r.inBundle || r.devel )
 		{
 			continue;
 		}
@@ -2341,7 +2363,9 @@ Server.prototype.expireSleep =
 
 	Jools.log( 'ajax', '->', asw );
 
-	var res = sleep.res;
+	var
+		res =
+			sleep.res;
 
 	res.writeHead(
 		200,
@@ -2500,16 +2524,17 @@ Server.prototype.wake =
 			sleep.spaceTag
 		);
 
-		var asw =
-			this.conveyUpdate(
-				sleep.time,
-				sleep.mseq,
-				sleep.spaceUser,
-				sleep.spaceTag
-			);
+		var
+			asw =
+				this.conveyUpdate(
+					sleep.time,
+					sleep.mseq,
+					sleep.spaceUser,
+					sleep.spaceTag
+				),
 
-		var res =
-			sleep.res;
+			res =
+				sleep.res;
 
 		Jools.log( 'ajax', '->', asw );
 

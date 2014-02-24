@@ -9,7 +9,8 @@
 /*
 | Export
 */
-var IFaceSym;
+var
+	IFaceSym;
 
 
 /*
@@ -20,8 +21,7 @@ var
 	MeshMashine,
 	Meshverse,
 	Sign,
-	Tree,
-	Jools;
+	Tree;
 
 
 /*
@@ -30,12 +30,6 @@ var
 ( function( ) {
 "use strict";
 
-if( typeof ( window ) === 'undefined' )
-{
-	throw new Error(
-		'this code nees a browser!'
-	);
-}
 
 /*
 | Constructor.
@@ -45,27 +39,28 @@ IFaceSym =
 {
 	// the current space;
 	this.$space  =
-		new Tree(
+		meshverse.grow(
 			{
-				type  : 'Space',
-
-				copse :
+				type :
+					'Space',
+				twig :
 				{
 					'testnote' :
 					{
-						type     : 'Note',
-
-						doc      :
+						type :
+							'Note',
+						doc :
 						{
-							type  : 'Doc',
-
-							copse :
+							type :
+								'Doc',
+							twig :
 							{
 								'1' :
 								{
-									type : 'Para',
-
-									text : 'muhkuh'
+									type :
+										'Para',
+									text :
+										'muhkuh'
 								}
 							},
 							ranks :
@@ -75,37 +70,43 @@ IFaceSym =
 						},
 						zone     :
 						{
-							type : 'Rect',
-
+							type :
+								'Rect',
 							pnw  :
 							{
-								type : 'Point',
-								x    : 0,
-								y    : 0
+								type :
+									'Point',
+								x :
+									0,
+								y :
+									0
 							},
-
 							pse  :
 							{
-								type : 'Point',
-								x    : 100,
-								y    : 100
+								type :
+									'Point',
+								x :
+									100,
+								y :
+									100
 							}
 						},
-
-						fontsize : 13
+						fontsize :
+							13
 					}
 				},
-				ranks : [
+				ranks :
+				[
 					'testnote'
 				]
-			},
-			Meshverse
+			}
 		);
 
 	// current update request
-	this.$changes = [ ];
+	this.$changes =
+		[ ];
 
-	this.$time = 0;
+	this.$seq = 0;
 };
 
 
@@ -127,46 +128,6 @@ IFaceSym.prototype.setUser =
 
 
 /*
-| Aquires a space.
-*/
-IFaceSym.prototype.aquireSpace =
-	function(
-		spacename,
-		callback
-	)
-{
-	var self =
-		this;
-
-	if( spacename !== 'testpad' )
-	{
-		throw new Error(
-			'IFaceSym only has the space "testpad"'
-		);
-	}
-
-	self.$spacename = spacename;
-
-	callback(
-		null,
-		Jools.immute(
-			{
-				tree :
-					self.$space,
-
-				name :
-					spacename,
-
-				access :
-					'rw'
-			}
-		)
-	);
-
-};
-
-
-/*
 | Gets a twig.
 */
 IFaceSym.prototype.get =
@@ -178,27 +139,25 @@ IFaceSym.prototype.get =
 	var
 		changes =
 			this.$changes,
-
 		cZ =
 			changes.length,
-
-		time =
-			this.$time,
-
+		seq =
+			this.$seq,
 		space =
 			this.$space;
 
-	if( time < 0 || time > cZ )
+	if( seq < 0 || seq > cZ )
 	{
 		throw new Error(
-			'invalid time'
+			'invalid seq'
 		);
 	}
 
-	// if the requested tree is not the latest, replay it backwards
+	// if the requested tree is not the latest,
+	// it is replayed backwards
 	for(
 		var a = cZ - 1;
-		a >= time;
+		a >= seq;
 		a--
 	)
 	{
@@ -206,7 +165,11 @@ IFaceSym.prototype.get =
 			chgX =
 				changes[ a ];
 
-		for (var b = 0; b < chgX.length; b++)
+		for (
+			var b = 0;
+			b < chgX.length;
+			b++
+		)
 		{
 			space = chgX.
 				get( 0 ).
@@ -225,29 +188,52 @@ IFaceSym.prototype.get =
 | Alters the tree
 */
 IFaceSym.prototype.alter =
-	function( src, trg )
+	function(
+		src,
+		trg
+	)
 {
-    var chgX = new Change(
-		new Sign( src ),
-		new Sign( trg )
-	);
+    var
+		chgX =
+			new Change(
+				new Sign( src ),
+				new Sign( trg )
+			),
 
-	var changes = this.$changes;
-	var cZ      = changes.length;
-	var time    = this.$time;
+		changes =
+			this.$changes,
+		cZ =
+			changes.length,
+		seq =
+			this.$seq;
 
-	for(var t = time; t < cZ; t++) {
-		chgX = MeshMashine.tfxChgX( chgX, changes[t] );
-		if (chgX === null)
+	for(
+		var s = seq;
+		s < cZ;
+		s++
+	)
+	{
+		chgX =
+			MeshMashine.tfxChgX( chgX, changes[ s ] );
+
+		if( chgX === null )
 		{
 			return null;
 		}
 	}
 
-	var r = chgX.changeTree( this.$space );
-	chgX  = r.chgX;
+	var
+		r =
+			chgX.changeTree( this.$space );
 
-	for(var a = 0; a < chgX.length; a++)
+	chgX =
+		r.chgX;
+
+	for(
+		var a = 0;
+		a < chgX.length;
+		a++
+	)
 	{
 		this.$changes.push( chgX.get( a ) );
 	}
@@ -260,34 +246,26 @@ IFaceSym.prototype.alter =
 
 
 /*
-| Sets the time 'alter' and 'get' will react on
+| Sets the seq 'alter' and 'get' will react on
 */
-IFaceSym.prototype.goToTime =
-	function( time )
+IFaceSym.prototype.goToSeq =
+	function(
+		seq
+	)
 {
 	var
 		cZ =
 			this.$changes.length;
 
-	if( time > cZ || time < 0 )
+	if( seq > cZ || seq < 0 )
 	{
-		time = cZ;
+		seq = cZ;
 	}
 
-	this.$time =
-		time;
+	this.$seq =
+		seq;
 
-	return time;
-};
-
-
-/*
-| gets the maximum time
-*/
-IFaceSym.prototype.getMaxTime =
-	function( )
-{
-	return this.$changes.length;
+	return seq;
 };
 
 

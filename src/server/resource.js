@@ -95,6 +95,15 @@ if( JOOBJ )
 						defaultVal :
 							'false'
 					},
+				inTestpad :
+					{
+						comment :
+							'true if this resource is in the testpad',
+						type :
+							'Boolean',
+						defaultVal :
+							'false'
+					},
 				isJoobj :
 					{
 						comment :
@@ -123,6 +132,15 @@ if( JOOBJ )
 							// by default determined from file extension
 							'null'
 					},
+				postProcessor :
+					{
+						comment :
+							'post processor replacing stuff',
+						type :
+							'String',
+						defaultVal :
+							'undefined'
+					}
 			},
 		node :
 			true,
@@ -170,13 +188,13 @@ Resource.prototype._init =
 	if( !this.coding )
 	{
 		this.coding =
-			FileTypes.coding( this.fileext );
+			FileTypes.coding( this.fileExt );
 	}
 
 	if( !this.mime )
 	{
 		this.mime =
-			FileTypes.mime( this.fileext );
+			FileTypes.mime( this.fileExt );
 	}
 };
 
@@ -215,7 +233,7 @@ Jools.lazyValue(
 */
 Jools.lazyValue(
 	Resource.prototype,
-	'fileext',
+	'fileExt',
 	function( )
 	{
 		var
