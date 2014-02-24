@@ -19,9 +19,8 @@ var
 var
 	Change,
 	MeshMashine,
-	Meshverse,
-	Sign,
-	Tree;
+	meshverse,
+	Sign;
 
 
 /*

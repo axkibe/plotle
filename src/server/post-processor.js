@@ -33,14 +33,38 @@ var
 */
 PostProcessor.develHtml =
 	function(
-		res,         // the resource
-		devels       // list of development resources
+		data,        // the data
+		inventory    // the server inventory
 		// bundleRes // the resource of the bundle
 	)
 {
 	var
-		data =
-			res.data + '';
+		devels =
+			[ ];
+
+	data =
+		data + '';
+
+	for(
+		var a = 0, aZ = inventory.list.length;
+		a < aZ;
+		a++
+	)
+	{
+		var
+			resource =
+				inventory.list[ a ];
+
+		if( resource.inBundle )
+		{
+			devels.push(
+				'<script src="' +
+					resource.aliases[ 0 ] +
+					'" type="text/javascript"></script>'
+			);
+		}
+	}
+
 
 	data =
 		data.replace(
@@ -59,40 +83,29 @@ PostProcessor.develHtml =
 			);
 	}
 
-	return (
-		res.create(
-			'data',
-				data
-		)
-	);
+	return data;
 };
+
 
 /*
 | PostProcessor for index.html
 */
 PostProcessor.indexHtml =
 	function(
-		res,       // the resource
-		devels,    // list of development resources
-		bundleRes  // the resource of the bundle
+		data,          // the data
+		inventory,     // the server inventory
+		bundleFilePath // the file path of the bundle resource
 	)
 {
-	var
-		data =
-			res.data + '';
-
 	data =
+		data + '';
+
+	return (
 		data.replace(
 			/<!--COPACK.*>/,
 			'<script src="' +
-				bundleRes.aliases[ 0 ] +
+				bundleFilePath +
 				'" type="text/javascript"></script>'
-		);
-
-	return (
-		res.create(
-			'data',
-				data
 		)
 	);
 };

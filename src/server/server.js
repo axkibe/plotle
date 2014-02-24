@@ -201,15 +201,15 @@ Server.prototype.startup =
 
 	var
 		requestListener =
-			function*( req, res )
+			function*( request, res )
 			{
-				yield* self.requestListener( req, res );
+				yield* self.requestListener( request, res );
 			};
 
 	yield http.createServer(
-		function( req, res )
+		function( request, res )
 		{
-			sus( requestListener )( req, res );
+			sus( requestListener )( request, res );
 		}
 	).listen(
 		config.port,
@@ -800,7 +800,7 @@ Server.prototype.prepareInventory =
 			||
 			r.inBundle
 			||
-			( r.devel && !r.postProcessor )
+			r.devel
 			||
 			r.isJoobj
 		)
@@ -824,10 +824,6 @@ Server.prototype.prepareInventory =
 	var
 		// the bundle itself
 		bundle =
-			[ ],
-
-		// file listing for devel.html
-		devels =
 			[ ];
 
 	// if uglify is turned off
@@ -858,12 +854,6 @@ Server.prototype.prepareInventory =
 		{
 			continue;
 		}
-
-		devels.push(
-			'<script src="' +
-				r.aliases[ 0 ] +
-				'" type="text/javascript"></script>'
-		);
 
 		if( r.isJoobj )
 		{
@@ -1002,24 +992,24 @@ Server.prototype.prepareInventory =
 
 	// calculates the hash for the bundle
 	var
-		bundleFilepath =
-			'meshcraft-' + sha1.sha1hex( bundle ) + '.js',
+		bundleFilePath =
+		this.bundleFilePath =
+			'meshcraft-' + sha1.sha1hex( bundle ) + '.js';
 
-		// registers the bundle as resource
-		br =
+	// registers the bundle as resource
+	this.inventory =
+		this.inventory.addResource(
 			Resource.create(
 				'filepath',
-					bundleFilepath,
+					bundleFilePath,
 				'maxage',
 					'long',
 				'data',
 					bundle
-			);
+			)
+		);
 
-	this.inventory =
-		this.inventory.addResource( br );
-
-	Jools.log( 'start', 'bundle:', bundleFilepath );
+	Jools.log( 'start', 'bundle:', bundleFilePath );
 
 	// if uglify is turned on
 	// the flags are added after bundle
@@ -1043,7 +1033,11 @@ Server.prototype.prepareInventory =
 		res =
 			inv.list[ a ];
 
-		if( !res.postProcessor )
+		if(
+			!res.postProcessor
+			||
+			!res.data
+		)
 		{
 			continue;
 		}
@@ -1056,50 +1050,22 @@ Server.prototype.prepareInventory =
 			);
 		}
 
-		console.log( 'XXXX', res.postProcessor );
-		console.log( res.data );
-		console.log( '------------------' );
-
 		this.inventory =
 			this.inventory.updateResource(
 				res,
-				PostProcessor[ res.postProcessor ](
-					res,
-					devels,
-					br
+				res.create(
+					'data',
+						PostProcessor[ res.postProcessor ](
+							res.data,
+							this.inventory,
+							bundleFilePath
+						)
 				)
 			);
-
-		console.log( this.inventory.list[ a ].data );
 	}
 
-	//this.inventory =
-	//		this.inventory.updateResource(
-	//			res,
-	//			res.create(
-	//				'data',
-	//					data
-	//		)
-	//	);
-
-	// the index.html file
-	res =
-		this.inventory.map[ 'meshcraft.html' ];
-
 	inv =
-	this.inventory =
-		this.inventory.updateResource(
-			res,
-			res.create(
-				'data',
-					(res.data + '').replace(
-						/<!--COPACK.*>/,
-						'<script src="' +
-							br.aliases[ 0 ] +
-							'" type="text/javascript"></script>'
-					)
-			)
-		);
+		this.inventory;
 
 	// prepares the zipped versions
 	for(
@@ -1132,13 +1098,13 @@ Server.prototype.prepareInventory =
 	Jools.log(
 		'start',
 		'uncompressed bundle size is ',
-		this.inventory.map[ bundleFilepath ].data.length
+		this.inventory.map[ bundleFilePath ].data.length
 	);
 
 	Jools.log(
 		'start',
 		'  compressed bundle size is ',
-		this.inventory.map[ bundleFilepath ].gzip.length
+		this.inventory.map[ bundleFilePath ].gzip.length
 	);
 };
 
@@ -2824,17 +2790,17 @@ Server.prototype.webError =
 */
 Server.prototype.requestListener =
 	function*(
-		req,
+		request,
 		res
 	)
 {
 	var
 		red =
-			url.parse( req.url );
+			url.parse( request.url );
 
 	Jools.log(
 		'web',
-		req.connection.remoteAddress,
+		request.connection.remoteAddress,
 		red.href
 	);
 
@@ -2844,7 +2810,7 @@ Server.prototype.requestListener =
 
 	if( pathname === 'mm' )
 	{
-		return this.webAjax( req, red, res );
+		return this.webAjax( request, red, res );
 	}
 
 	var
@@ -2865,7 +2831,7 @@ Server.prototype.requestListener =
 	{
 		var
 			aenc =
-				r.gzip && req.headers[ 'accept-encoding' ],
+				r.gzip && request.headers[ 'accept-encoding' ],
 
 			header =
 				{
@@ -2969,6 +2935,24 @@ Server.prototype.requestListener =
 		}
 	}
 
+	if( r.postProcessor )
+	{
+		if( !PostProcessor[ r.postProcessor ] )
+		{
+			throw new Error(
+				'invalid postProcessor: ' +
+					r.postProcessor
+			);
+		}
+
+		data =
+			PostProcessor[ r.postProcessor ](
+				data,
+				this.inventory,
+				this.bundleFilePath
+			);
+	}
+
 	res.writeHead(
 		200,
 		{
@@ -3007,7 +2991,7 @@ Server.prototype.requestListener =
 */
 Server.prototype.webAjax =
 	function(
-		req,
+		request,
 		red,
 		res
 	)
@@ -3019,7 +3003,7 @@ Server.prototype.webAjax =
 		data =
 			[ ];
 
-	if( req.method !== 'POST' )
+	if( request.method !== 'POST' )
 	{
 		this.webError(
 			res,
@@ -3030,7 +3014,7 @@ Server.prototype.webAjax =
 		return;
 	}
 
-	req.on(
+	request.on(
 		'close',
 		function( )
 		{
@@ -3041,7 +3025,7 @@ Server.prototype.webAjax =
 		}
 	);
 
-	req.on(
+	request.on(
 		'data',
 		function( chunk )
 		{
@@ -3128,7 +3112,7 @@ Server.prototype.webAjax =
 			);
 		};
 
-	req.on(
+	request.on(
 		'end',
 		function( )
 		{
@@ -3137,7 +3121,7 @@ Server.prototype.webAjax =
 	);
 
 	/*
-	req.on( 'end', function( )
+	request.on( 'end', function( )
 		{
 			setTimeout( handler, 1880 );
 		});
