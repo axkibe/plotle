@@ -127,7 +127,7 @@ if( JOOBJ )
 						type :
 							'Integer',
 						defaultVal :
-							'-1'
+							'0'
 					}
 			},
 		init :
@@ -144,6 +144,7 @@ var
 			.append( 'space' )
 			.append( 'testnote' )
 			.append( 'doc' );
+
 
 /*
 | Binds an event handler to the
@@ -280,7 +281,8 @@ TestPad.prototype._init =
 	}
 	else
 	{
-		this.iface.goToSeq( this.seq );
+		this.seq =
+			this.iface.goToSeq( this.seq );
 	}
 
 	if( !this.peer )
@@ -296,6 +298,20 @@ TestPad.prototype._init =
 
 	elements.now.innerHTML =
 		'' + this.seq;
+
+	this.cursorLine =
+		Jools.limit(
+			0,
+			this.cursorLine,
+			doc.ranks.length - 1
+		);
+
+	this.cursorAt =
+		Jools.limit(
+			0,
+			this.cursorAt,
+			doc.twig[ doc.ranks[ this.cursorLine ] ].twig.text.length // TODO
+		);
 
 	if( !doc )
 	{
@@ -648,62 +664,63 @@ TestPad.prototype.send =
 
 			break;
 
-	/*
 		case 'remove' :
 
-			path = new Path(
-				notepath,
-				'++',
-				'doc',
-				ranks[action.line],
-				'text'
-			);
+			path =
+				_noteDocPath
+					.append( doc.ranks[ action.line ] )
+					.append( 'text' );
 
 			this.peer.removeText(
 				path,
-				action.at1,
-				action.at2 - action.at1
+				action.at,
+				action.at2 - action.at
 			);
 
-			if( cursor.offset >= action.at2 )
+			if( this.cursorLine == action.line
+				&&
+				this.cursorAt >= action.at2
+			)
 			{
-				cursor.offset -= action.at2 - action.at1;
+				cursorAt =
+					this.cursorAt - ( action.at2 - action.at );
 			}
+
 			break;
 
 		case 'split' :
 
-			path = new Path(
-				notepath,
-				'++',
-				'doc',
-				ranks[ action.line ],
-				'text'
+			path =
+				_noteDocPath
+					.append( doc.ranks[ action.line ] )
+					.append( 'text' );
+
+			this.peer.split(
+				path,
+				action.at
 			);
 
-			this.peer.split( path, action.at1 );
 			break;
 
 		case 'join' :
 
-			path = new Path(
-				notepath,
-				'++',
-				'doc',
-				ranks[ action.line - 1 ],
-				'text'
-			);
+			path =
+				_noteDocPath
+					.append( doc.ranks[ action.line - 1] )
+					.append( 'text' );
 
 			this.peer.join(
 				path,
-				copse[ ranks[ action.line - 1 ] ].text.length
+				doc.twig[ doc.ranks[ action.line - 1 ] ].twig.text.length
 			);
 
 			break;
 
 		default :
-			throw new Error( 'invalid action.type' );
-	*/
+
+			throw new Error(
+				'invalid action.command'
+			);
 	}
 
 	testPad.create(
@@ -712,22 +729,21 @@ TestPad.prototype.send =
 		'cursorAt',
 			cursorAt,
 		'seq',
-			-1
+			Jools.MAX_INTEGER
 	);
 };
 
 
 /*
-| Cancels the current action
+| Cancels the current action.
 */
 TestPad.prototype.onCancelButton =
 	function( )
 {
-	/*
-	this.clearAction( );
-	this.resetBlink( );
-	elements.input.focus( );
-	*/
+	testPad.create(
+		'action',
+			null
+	);
 };
 
 
@@ -768,29 +784,6 @@ TestPad.prototype.clearBeep =
 			null
 	);
 };
-
-
-/*
-| Starts an action.
-*/
-/*
-TestPad.prototype.startAction =
-	function( newAction )
-{
-	if (this.$action)
-	{
-		throw new Error('double action');
-	}
-
-	this.$action = newAction;
-
-	elements.send.disabled =
-		false;
-
-	elements.cancel.disabled =
-		false;
-};
-*/
 
 
 /*
@@ -943,7 +936,7 @@ TestPad.prototype.inputSpecialKey =
 						cursorAt - 1
 				);
 
-				break;
+				return;
 			}
 
 			if(
@@ -967,7 +960,7 @@ TestPad.prototype.inputSpecialKey =
 					cursorAt - 1
 			);
 
-			break;
+			return;
 
 		case 13 :
 			// return
@@ -1015,32 +1008,43 @@ TestPad.prototype.inputSpecialKey =
 					null
 			);
 
-			break;
+			return;
 
-		/*
 		case 35 :
 			// end
 
-			if( !ranks )
+			if( !doc )
 			{
 				this.beep( );
+
 				return;
 			}
-			cursor.offset =
-				this.$copse[ ranks[ cursor.line ] ].text.length;
-			break;
+
+			testPad.create(
+				'cursorAt',
+//TODO				doc.twig[ doc.ranks[ cursorLine ] ].twig.text.length
+					doc.twig[ doc.ranks[ cursorLine ] ].twig.text.length
+			);
+
+			return;
 
 		case 36 :
 			// pos1
 
-			if( !ranks )
+			if( !doc )
 			{
 				this.beep( );
+
 				return;
 			}
-			cursor.offset = 0;
-			break;
-*/
+
+			testPad.create(
+				'cursorAt',
+					0
+			);
+
+			return;
+
 		case 37 :
 			// left
 
@@ -1063,24 +1067,28 @@ TestPad.prototype.inputSpecialKey =
 					cursorAt - 1
 			);
 
-			break;
-/*
+			return;
+
 		case 38 :
 			// up
 
-			if( cursor.line <= 0 )
+			if(
+				!doc
+				||
+				cursorLine <= 0
+			)
 			{
 				this.beep( );
+
 				return;
 			}
-			if( !ranks )
-			{
-				this.beep( );
-				return;
-			}
-			cursor.line--;
-			break;
-*/
+
+			testPad.create(
+				'cursorLine',
+					cursorLine - 1
+			);
+
+			return;
 
 		case 39 :
 			// right
@@ -1097,74 +1105,94 @@ TestPad.prototype.inputSpecialKey =
 					cursorAt + 1
 			);
 
-			break;
+			return;
 
-/*
 		case 40 :
 			// down
 
-			if( !ranks )
+			if(
+				!doc
+				||
+				cursorLine >= doc.ranks.length - 1
+			)
 			{
 				this.beep( );
+
 				return;
 			}
 
-			if (cursor.line >= ranks.length)
-			{
-				this.beep( );
-				return;
-			}
+			testPad.create(
+				'cursorLine',
+					cursorLine + 1
+			);
 
-			cursor.line++;
-			break;
+			return;
 
 		case 46 :
 			// del
 
-			if( !ranks )
+			if( !doc )
 			{
 				this.beep( );
+
 				return;
 			}
 
-			var text =
-				this.$copse[ ranks[ cursor.line ] ].text;
+			var
+				text =
+					//doc.twig[ doc.ranks[ cursorLine ] ].twig.text; TODO
+					doc.twig[ doc.ranks[ cursorLine ] ].twig.text;
 
-			if (cursor.offset >= text.length)
+			if( cursorAt >= text.length )
 			{
 				this.beep( );
+
 				return;
 			}
 
-			if (!action )
+			if( !action )
 			{
-				this.startAction(
-					{
-						type : 'remove',
-						line : cursor.line,
-						at1  : cursor.offset,
-						at2  : cursor.offset + 1
-					}
+				testPad.create(
+					'action',
+						Action.create(
+							'command',
+								'remove',
+							'line',
+								cursorLine,
+							'at',
+								cursorAt,
+							'at2',
+								cursorAt + 1
+						),
+					'cursorAt',
+						cursorAt + 1
 				);
-				cursor.offset++;
-				break;
-			}
 
-			if( action.type !== 'remove' )
-			{
-				this.beep( );
 				return;
 			}
 
-			if( cursor.offset !== action.at2 )
+			if(
+				action.command !== 'remove'
+				||
+				cursorAt !== action.at2
+			)
 			{
 				this.beep( );
+
 				return;
 			}
-			action.at2++;
-			cursor.offset++;
-			break;
-		*/
+
+			testPad.create(
+				'action',
+					action.create(
+						'at2',
+							action.at2 + 1
+					),
+				'cursorAt',
+					cursorAt + 1
+			);
+
+			return;
 	}
 };
 
@@ -1198,12 +1226,12 @@ TestPad.prototype.update =
 /*
 | Button update-to-now has been clicked.
 */
-TestPad.prototype.onButtonUpToNow =
+TestPad.prototype.onUpNowButton =
 	function( )
 {
 	testPad.create(
 		'seq',
-			-1
+			Jools.MAX_INTEGER
 	);
 
 	this.elements.input.focus( );

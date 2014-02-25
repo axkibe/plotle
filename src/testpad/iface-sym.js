@@ -59,12 +59,29 @@ IFaceSym =
 									type :
 										'Para',
 									text :
-										'muhkuh'
+										'Why would I want to know that?'
+								},
+								'2' :
+								{
+									type :
+										'Para',
+									text :
+										'Can we have Bender Burgers again?'
+								},
+								'3' :
+								{
+									type :
+										'Para',
+									text :
+										'And so we say goodbye to ' +
+										'our beloved pet, Nibbler.'
 								}
 							},
 							ranks :
 							[
-								'1'
+								'1',
+								'2',
+								'3'
 							]
 						},
 						zone     :
@@ -258,13 +275,13 @@ IFaceSym.prototype.goToSeq =
 		cZ =
 			this.$changes.length;
 
-	if( seq > cZ || seq < 0 )
-	{
-		seq = cZ;
-	}
-
+	seq =
 	this.$seq =
-		seq;
+		Jools.limit(
+			0,
+			seq,
+			cZ
+		);
 
 	return seq;
 };

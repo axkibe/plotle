@@ -54,6 +54,13 @@ var
 
 
 /*
+| Largest integer value.
+*/
+Jools.MAX_INTEGER =
+	9007199254740992;
+
+
+/*
 | Compares two things.
 */
 Jools.compare =
