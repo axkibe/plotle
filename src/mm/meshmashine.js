@@ -1011,13 +1011,10 @@ MeshMashine =
 {
 	Change :
 		Change,
-
 	tfxChg :
 		tfxChg,
-
 	tfxChgX :
 		tfxChgX,
-
 	tfxSign :
 		tfxSign
 };

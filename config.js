@@ -83,7 +83,7 @@ config.develServer =
 | Does not write stuff on server startup
 */
 config.noWrite =
-	true;
+	false;
 
 /*
 | If true "uglifies" the javascript pack, minimizing its size.

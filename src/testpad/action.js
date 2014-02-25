@@ -18,7 +18,6 @@
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Action',
 		attributes :
@@ -42,14 +41,27 @@ if( JOOBJ )
 						comment :
 							'action affects offset',
 						type :
-							'Integer'
+							'Integer',
+						defaultVal :
+							'undefined',
 					},
-				val :
+				at2 :
+					{
+						comment :
+							'action affects offset (span end)',
+						type :
+							'Integer',
+						defaultVal :
+							'undefined',
+					},
+				value :
 					{
 						comment :
 							'action carries value',
 						type :
-							'String'
+							'String',
+						defaultVal :
+							'undefined'
 					}
 			}
 	};

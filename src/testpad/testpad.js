@@ -140,7 +140,10 @@ var
 		null,
 
 	_noteDocPath =
-		Path.empty.append( 'testnote' ).append( 'doc' );
+		Path.empty
+			.append( 'space' )
+			.append( 'testnote' )
+			.append( 'doc' );
 
 /*
 | Binds an event handler to the
@@ -250,14 +253,8 @@ TestPad.prototype._init =
 		input.onblur =
 			_bind( 'onBlur' );
 
-		send.disabled =
-			true;
-
 		send.onclick =
-			_bind( 'onSendButton' );
-
-		cancel.disabled =
-			true;
+			_bind( 'send' );
 
 		cancel.onclick =
 			_bind( 'onCancelButton' );
@@ -271,6 +268,10 @@ TestPad.prototype._init =
 		upnow.onclick =
 			_bind( 'onUpNowButton' );
 	}
+
+	elements.send.disabled =
+	elements.cancel.disabled =
+		!this.action;
 
 	if( !this.iface )
 	{
@@ -337,47 +338,6 @@ var _isSpecialKey =
 			return false;
 	}
 };
-
-
-/*
-| Blinks the cursor on/off.
-*/
-/*
-TestPad.prototype.blink =
-	function( self )
-{
-	$cursor.blink = !self.$cursor.blink;
-	testInput( );
-	elements.beep.innerHTML = '';
-};
-*/
-
-
-/*
-| Resets the blink timer
-*/
-/*
-TestPad.prototype.resetBlink =
-	function( )
-{
-	testPad.$cursor.blink =
-		false;
-
-	elements.beep.innerHTML =
-		'';
-
-	if( testPad.$blinkTimer )
-	{
-		clearInterval( testPad.$blinkTimer );
-		testPad.$blinkTimer = null;
-	}
-
-	if( testPad.$haveFocus )
-	{
-		testPad.$blinkTimer = setInterval( testPad.blink, 540, testPad );
-	}
-};
-*/
 
 
 /*
@@ -552,7 +512,9 @@ TestPad.prototype.onMouseMove =
 | Key down event to ( hidden ) input.
 */
 TestPad.prototype.onKeyDown =
-	function( event )
+	function(
+		event
+	)
 {
 	if( _isSpecialKey( event.keyCode ) )
 	{
@@ -639,47 +601,54 @@ TestPad.prototype.clearAction =
 
 
 /*
-| Sends the current action to server.
+| Sends the current action to the meshmashine.
 */
-TestPad.prototype.onSendButton =
+TestPad.prototype.send =
 	function( )
 {
+	var
+		action =
+			this.action,
+		cursorAt,
+		doc =
+			this._doc,
+		path;
+
 	/*
-	var path;
-	var action   = this.$action;
 	var copse    = this.$copse;
 	var cursor   = this.$cursor;
 	var ranks    = this.$ranks;
 	var notepath = this.notepath;
+	*/
 
 	if( !action )
 	{
 		this.beep( );
+
 		return;
 	}
 
-	switch( action.type )
+	switch( action.command )
 	{
 		case 'insert' :
 
-			path = new Path(
-				this.notepath,
-				'++',
-				'doc',
-				ranks[ action.line ],
-				'text'
-			);
+			path =
+				_noteDocPath
+					.append( doc.ranks[ action.line ] )
+					.append( 'text' );
 
 			this.peer.insertText(
 				path,
-				action.at1,
-				action.val
+				action.at,
+				action.value
 			);
 
-			cursor.offset += action.val.length;
+			cursorAt =
+				this.cursorAt + action.value.length;
 
 			break;
 
+	/*
 		case 'remove' :
 
 			path = new Path(
@@ -734,16 +703,17 @@ TestPad.prototype.onSendButton =
 
 		default :
 			throw new Error( 'invalid action.type' );
+	*/
 	}
 
-	this.clearAction( );
-
-	this.update( -1 );
-
-	this.resetBlink( );
-
-	elements.input.focus( );
-	*/
+	testPad.create(
+		'action',
+			null,
+		'cursorAt',
+			cursorAt,
+		'seq',
+			-1
+	);
 };
 
 
@@ -867,7 +837,7 @@ TestPad.prototype.testInput =
 					cursorLine,
 				'at',
 					cursorAt,
-				'val',
+				'value',
 					text
 			)
 		);
@@ -875,24 +845,23 @@ TestPad.prototype.testInput =
 		return;
 	}
 
-	if( action.type === 'insert' )
+	if(
+		action.command === 'insert'
+		&&
+		cursorLine === action.line
+		&&
+		cursorAt === action.at
+	)
 	{
-		if(
-			cursorLine === action.line
-			&&
-			cursorAt === action.At
-		)
-		{
-			testPad.create(
-				'action',
-				action.create(
-					'val',
-						action.val + text
-				)
-			);
+		testPad.create(
+			'action',
+			action.create(
+				'value',
+					action.value + text
+			)
+		);
 
-			return;
-		}
+		return;
 	}
 
 	testPad.beep( );
@@ -910,109 +879,134 @@ TestPad.prototype.inputSpecialKey =
 {
 	var
 		action =
-			this.action,
+			testPad.action,
 		cursorLine =
-			this.cursorLine,
+			testPad.cursorLine,
 		cursorAt =
-			this.cursorAt,
+			testPad.cursorAt,
 		doc =
-			this._doc;
+			testPad._doc;
 
 	switch( keyCode )
 	{
-	/*
 		case  8 :
 			// backspace
 
-			if( !ranks )
+			if( !doc )
 			{
-				this.beep( );
+				testPad.beep( );
+
 				return;
 			}
 
-			if( cursor.offset <= 0 )
+			if( cursorAt <= 0 )
 			{
-				if( action )
+				if(
+					action
+					||
+					cursorLine <= 0
+				)
 				{
-					this.beep( );
+					testPad.beep( );
+
 					return;
 				}
 
-				if( cursor.line <= 0 )
-				{
-					this.beep( );
-					return;
-				}
-
-				this.startAction(
-					{
-						type : 'join',
-						line : cursor.line
-					}
+				testPad.create(
+					'action',
+						Action.create(
+							'command',
+								'join',
+							'line',
+								cursorLine
+						)
 				);
-				break;
+
+				return;
 			}
 
 			if( !action )
 			{
-				this.startAction(
-					{
-						type : 'remove',
-						line : cursor.line,
-						at1  : cursor.offset - 1,
-						at2  : cursor.offset
-					}
+				testPad.create(
+					'action',
+						Action.create(
+							'command',
+								'remove',
+							'line',
+								cursorLine,
+						'at',
+							cursorAt - 1,
+						'at2',
+							cursorAt
+					),
+					'cursorAt',
+						cursorAt - 1
 				);
 
-				cursor.offset--;
 				break;
 			}
 
-			if( action.type !== 'remove' )
+			if(
+				action.command !== 'remove'
+				||
+				cursorAt !== action.at
+			)
 			{
-				this.beep( );
+				testPad.beep( );
+
 				return;
 			}
 
-			if( cursor.offset !== action.at1 )
-			{
-				this.beep();
-				return;
-			}
-			action.at1--;
-			cursor.offset--;
+			testPad.create(
+				'action',
+					testPad.action.create(
+						'at',
+							testPad.action.at - 1
+					),
+				'cursorAt',
+					cursorAt - 1
+			);
+
 			break;
 
 		case 13 :
 			// return
 
-			if( !ranks )
+			if( !doc )
 			{
-				this.beep();
+				testPad.beep( );
+
 				return;
 			}
 
-			if( ctrlKey )
+			if( ctrl )
 			{
-				this.send( );
-				break;
+				testPad.send( );
+
+				return;
 			}
 
 			if( action )
 			{
-				this.beep( );
+				testPad.beep( );
+
 				return;
 			}
 
-			this.startAction(
-				{
-					type : 'split',
-					line : cursor.line,
-					at1  : cursor.offset
-				}
+			testPad.create(
+				'action',
+					Action.create(
+						'command',
+							'split',
+						'line',
+							cursorLine,
+						'at',
+							cursorAt
+					)
 			);
-			break;
-*/
+
+			return;
+
 		case 27 :
 			// esc
 
@@ -1372,19 +1366,23 @@ TestPad.prototype.makeScreen =
 
 			break;
 
-		/*
 		case 'join' :
+
 			lines[ action.line ].
 				unshift( '<span id="join">↰</span>' );
+
 			break;
 
 		case 'split' :
+
 			lines[ action.line ].
 				splice(
-					action.at1, 0, '<span id="split">⤶</span>'
+					action.at,
+					0,
+					'<span id="split">⤶</span>'
 				);
+
 			break;
-		*/
 
 		case 'insert' :
 
@@ -1393,21 +1391,23 @@ TestPad.prototype.makeScreen =
 					action.at,
 					0,
 					'<span id="insert">',
-					action.val,
+					action.value,
 					'</span>'
 				);
 
 			break;
 
-		/*
 		case 'remove' :
-			if( action.at1 > action.at2 )
+
+			if( action.at > action.at2 )
 			{
-				throw new Error( 'Invalid remove action' );
+				throw new Error(
+					'Invalid remove action'
+				);
 			}
 
 			lines[ action.line ].splice(
-				action.at1,
+				action.at,
 				0,
 				'<span id="remove">'
 			);
@@ -1417,10 +1417,11 @@ TestPad.prototype.makeScreen =
 				0,
 				'</span>'
 			);
+
 			break;
-		*/
 
 		default :
+
 			throw new Error(
 				'Unknown action.command: ' + action.command
 			);

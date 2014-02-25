@@ -37,7 +37,7 @@ IFaceSym =
 	function( )
 {
 	// the current space;
-	this.$space  =
+	this.space  =
 		meshverse.grow(
 			{
 				type :
@@ -143,7 +143,7 @@ IFaceSym.prototype.get =
 		seq =
 			this.$seq,
 		space =
-			this.$space;
+			this.space;
 
 	if( seq < 0 || seq > cZ )
 	{
@@ -152,8 +152,8 @@ IFaceSym.prototype.get =
 		);
 	}
 
-	// if the requested tree is not the latest,
-	// it is replayed backwards
+	// if the requested seq is not latest,
+	// rewinds stuff
 	for(
 		var a = cZ - 1;
 		a >= seq;
@@ -173,7 +173,7 @@ IFaceSym.prototype.get =
 			space = chgX.
 				get( 0 ).
 				invert( ).
-				changeTree( space ).
+				changeTree( space, meshverse ).
 				tree;
 		}
 	}
@@ -192,22 +192,24 @@ IFaceSym.prototype.alter =
 		trg
 	)
 {
-    var
+	var
+		a,
+		aZ,
 		chgX =
 			new Change(
 				new Sign( src ),
 				new Sign( trg )
 			),
-
 		changes =
 			this.$changes,
 		cZ =
 			changes.length,
+		s,
 		seq =
 			this.$seq;
 
 	for(
-		var s = seq;
+		s = seq;
 		s < cZ;
 		s++
 	)
@@ -223,24 +225,24 @@ IFaceSym.prototype.alter =
 
 	var
 		r =
-			chgX.changeTree( this.$space );
+			chgX.changeTree( this.space, meshverse );
 
 	chgX =
 		r.chgX;
 
 	for(
-		var a = 0;
-		a < chgX.length;
+		a = 0, aZ = chgX.length;
+		a < aZ;
 		a++
 	)
 	{
 		this.$changes.push( chgX.get( a ) );
 	}
 
-    this.$space =
+	this.space =
 		r.tree;
 
-    return r.chgX;
+	return r.chgX;
 };
 
 

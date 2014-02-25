@@ -230,7 +230,7 @@ Peer.prototype.get =
 	)
 {
 	return this._iface.get(
-		path,
+		path.chop( 1 ) ,
 		len
 	);
 };
@@ -579,7 +579,6 @@ Peer.prototype.insertText =
 			{
 				path :
 					path.chop( 1 ),
-
 				at1 :
 					offset
 			}
