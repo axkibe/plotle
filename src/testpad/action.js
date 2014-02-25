@@ -21,28 +21,35 @@ if( JOOBJ )
 
 		name :
 			'Action',
-
-		equals :
-			'primitive',
-
 		attributes :
 			{
-				start :
+				command :
 					{
 						comment :
-							'mouse down point on start of scrolling',
-
+							'action command',
 						type :
-							'Point'
+							'String'
 					},
-
-				pan :
+				line :
 					{
 						comment :
-							'pan position on start',
-
+							'action affects at line',
 						type :
-							'Point'
+							'Integer'
+					},
+				at :
+					{
+						comment :
+							'action affects offset',
+						type :
+							'Integer'
+					},
+				val :
+					{
+						comment :
+							'action carries value',
+						type :
+							'String'
 					}
 			}
 	};

@@ -9,7 +9,9 @@
 | Imports
 */
 var
+	Action,
 	IFaceSym,
+	Jools,
 	Path,
 	Peer;
 
@@ -40,20 +42,20 @@ if( JOOBJ )
 				action :
 					{
 						comment :
-							'the action the user is prepariing',
+							'the action the user is preparing',
 						type :
 							'Action',
 						defaultVal :
 							'null'
 					},
-				elements :
+				beepTimer :
 					{
 						comment :
-							'DOM elements',
+							'removed the beep',
 						type :
 							'Object',
 						defaultVal :
-							'undefined'
+							'null'
 					},
 				cursorAt :
 					{
@@ -72,6 +74,15 @@ if( JOOBJ )
 							'Integer',
 						defaultVal :
 							'0'
+					},
+				elements :
+					{
+						comment :
+							'DOM elements',
+						type :
+							'Object',
+						defaultVal :
+							'undefined'
 					},
 				haveFocus :
 					{
@@ -98,7 +109,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultVal :
-							'true'
+							'false'
 					},
 				peer :
 					{
@@ -128,8 +139,8 @@ var
 	testPad =
 		null,
 
-	_notePath =
-		Path.empty.append( 'testnote' );
+	_noteDocPath =
+		Path.empty.append( 'testnote' ).append( 'doc' );
 
 /*
 | Binds an event handler to the
@@ -278,14 +289,14 @@ TestPad.prototype._init =
 	}
 
 	var
-		note =
-			this.peer.get( _notePath );
+		doc =
+		this._doc =
+			this.peer.get( _noteDocPath );
 
 	elements.now.innerHTML =
 		'' + this.seq;
 
-	//if( !ranks )
-	if( true || !note )
+	if( !doc )
 	{
 
 		elements.pad.innerHTML =
@@ -293,8 +304,8 @@ TestPad.prototype._init =
 	}
 	else
 	{
-		elements.pad.innerHtml =
-			this.makeScreen( note );
+		elements.pad.innerHTML =
+			this.makeScreen( doc );
 	}
 
 	testPad =
@@ -336,7 +347,7 @@ TestPad.prototype.blink =
 	function( self )
 {
 	$cursor.blink = !self.$cursor.blink;
-	testinput( );
+	testInput( );
 	elements.beep.innerHTML = '';
 };
 */
@@ -384,8 +395,6 @@ TestPad.prototype.onMouseDown =
 
 	event.preventDefault( );
 
-	/*
-
 	testPad.captureEvents( );
 
 	testPad.create(
@@ -393,55 +402,48 @@ TestPad.prototype.onMouseDown =
 			true
 	);
 
-	this.elements.input.focus( );
+	testPad.elements.input.focus( );
 
 	var
 		pad =
-			this.elements.pad,
+			testPad.elements.pad,
 		measure =
-			this.elements.measure,
-		cursor =
-			testPad.$cursor,
-		copse =
-			testPad.$copse,
-		ranks =
-			testPad.$ranks,
+			testPad.elements.measure,
+		doc =
+			testPad._doc,
 		x =
 			event.pageX - pad.offsetLeft,
 		y =
 			event.pageY - pad.offsetTop;
 
-	if( !ranks )
+	if( !doc )
 	{
 		testPad.beep( );
 
 		return;
 	}
 
-	testPad.create(
-		'cursorLine',
+	var
+		cLine =
 			Jools.limit(
 				0,
 				Math.floor( y / measure.offsetHeight ),
-				ranks.length - 1
-			)
-	);
-
-	var
-		text =
-			copse[ ranks[ cursor.line ] ].text;
+				doc.ranks.length - 1
+			),
+		cText =
+//			doc.twig[ doc.ranks[ cLine ] ].text; // TODO
+			doc.twig[ doc.ranks[ cLine ] ].twig.text;
 
 	testPad.create(
+		'cursorLine',
+			cLine,
 		'cursorAt',
 			Jools.limit(
 				0,
 				Math.floor( x / measure.offsetWidth ),
-				text.length
+				cText.length
 			)
 	);
-
-	testPad.resetBlink( );
-	*/
 };
 
 
@@ -480,16 +482,16 @@ TestPad.prototype.releaseEvents =
 		pad =
 			this.elements.pad;
 
-    if( pad.setCapture )
+	if( pad.setCapture )
 	{
-        pad.releaseCapture( pad );
-    }
+		pad.releaseCapture( pad );
+	}
 	else
 	{
-        document.onmouseup =
-        document.onmousemove =
+		document.onmouseup =
+		document.onmousemove =
 			null;
-    }
+	}
 };
 
 
@@ -563,7 +565,7 @@ TestPad.prototype.onKeyDown =
 	}
 	else
 	{
-		testPad.testinput( );
+		testPad.testInput( );
 	}
 };
 
@@ -576,13 +578,10 @@ TestPad.prototype.onKeyPress =
 		// event
 	)
 {
-	/*
 	setTimeout(
-		testinput,
-		0,
-		this
+		_bind( 'testInput' ),
+		0
 	);
-	*/
 };
 
 
@@ -594,7 +593,7 @@ TestPad.prototype.onKeyUp =
 		// event
 	)
 {
-	testPad.testinput( );
+	testPad.testInput( );
 };
 
 
@@ -768,10 +767,36 @@ TestPad.prototype.onCancelButton =
 TestPad.prototype.beep =
 	function( )
 {
-	/*
-	this.resetBlink( );
-	elements.beep.innerHTML = 'BEEP!';
-	*/
+	testPad.elements.beep.innerHTML =
+		'BEEP!';
+
+	if( testPad.beepTimer )
+	{
+		clearInterval( testPad.beepTimer );
+	}
+
+	testPad.create(
+		'beepTimer',
+			setInterval( _bind( 'clearBeep' ), 540 )
+	);
+};
+
+
+/*
+| Clears the beep message.
+*/
+TestPad.prototype.clearBeep =
+	function( )
+{
+	testPad.elements.beep.innerHTML =
+		'';
+
+	clearInterval( testPad.beepTimer );
+
+	testPad.create(
+		'beepTimer',
+			null
+	);
 };
 
 
@@ -801,58 +826,76 @@ TestPad.prototype.startAction =
 /*
 | Aquires non-special input from (hidden) input.
 */
-TestPad.prototype.testinput =
+TestPad.prototype.testInput =
 	function( )
 {
-	/*
-	var action   = self.$action;
-	var cursor   = self.$cursor;
+	var
+		action =
+			testPad.action,
+		cursorLine =
+			testPad.cursorLine,
+		cursorAt =
+			testPad.cursorAt,
+		elements =
+			testPad.elements,
+		text =
+			elements.input.value;
 
-	var elements = self.elements;
-	var text     = elements.input.value;
-
-	elements.input.value = '';
+	elements.input.value =
+		'';
 
 	if( text === '' )
 	{
 		return;
 	}
 
-	if( !self.$ranks )
+	if( !testPad._doc )
 	{
-		this.beep( );
+		testPad.beep( );
+
 		return;
 	}
 
 	if( action === null )
 	{
-		self.startAction(
-			{
-				type : 'insert',
-				line : cursor.line,
-				at1  : cursor.offset,
-				val  : text
-			}
+		testPad.create(
+			'action',
+			Action.create(
+				'command',
+					'insert',
+				'line',
+					cursorLine,
+				'at',
+					cursorAt,
+				'val',
+					text
+			)
 		);
 
-		self.resetBlink( );
 		return;
 	}
 
 	if( action.type === 'insert' )
 	{
-		if( cursor.line === action.line &&
-			cursor.offset === action.at1
+		if(
+			cursorLine === action.line
+			&&
+			cursorAt === action.At
 		)
 		{
-			action.val = action.val + text;
-			self.resetBlink( );
+			testPad.create(
+				'action',
+				action.create(
+					'val',
+						action.val + text
+				)
+			);
+
 			return;
 		}
 	}
 
-	self.beep( );
-	*/
+	testPad.beep( );
 };
 
 
@@ -861,21 +904,23 @@ TestPad.prototype.testinput =
 */
 TestPad.prototype.inputSpecialKey =
 	function(
-//		keyCode,
-//		ctrlKey
+		keyCode,
+		ctrl
 	)
 {
-	/*
 	var
 		action =
 			this.action,
 		cursorLine =
 			this.cursorLine,
 		cursorAt =
-			this.cursorAt;
+			this.cursorAt,
+		doc =
+			this._doc;
 
 	switch( keyCode )
 	{
+	/*
 		case  8 :
 			// backspace
 
@@ -967,13 +1012,18 @@ TestPad.prototype.inputSpecialKey =
 				}
 			);
 			break;
-
+*/
 		case 27 :
 			// esc
 
-			this.cancel( );
+			testPad.create(
+				'action',
+					null
+			);
+
 			break;
 
+		/*
 		case 35 :
 			// end
 
@@ -996,23 +1046,31 @@ TestPad.prototype.inputSpecialKey =
 			}
 			cursor.offset = 0;
 			break;
-
+*/
 		case 37 :
 			// left
 
-			if( !ranks )
+			if( !doc )
 			{
 				this.beep( );
-				return;
-			}
-			if( cursor.offset <= 0 )
-			{
-				this.beep( );
-				return;
-			}
-			cursor.offset--;
-			break;
 
+				return;
+			}
+
+			if( cursorAt <= 0 )
+			{
+				this.beep( );
+
+				return;
+			}
+
+			testPad.create(
+				'cursorAt',
+					cursorAt - 1
+			);
+
+			break;
+/*
 		case 38 :
 			// up
 
@@ -1028,19 +1086,26 @@ TestPad.prototype.inputSpecialKey =
 			}
 			cursor.line--;
 			break;
+*/
 
 		case 39 :
 			// right
 
-			if( !ranks )
+			if( !doc )
 			{
 				this.beep( );
+
 				return;
 			}
 
-			cursor.offset ++;
+			testPad.create(
+				'cursorAt',
+					cursorAt + 1
+			);
+
 			break;
 
+/*
 		case 40 :
 			// down
 
@@ -1105,9 +1170,8 @@ TestPad.prototype.inputSpecialKey =
 			action.at2++;
 			cursor.offset++;
 			break;
+		*/
 	}
-
-	*/
 };
 
 
@@ -1186,76 +1250,129 @@ TestPad.prototype.onDownButton =
 | Cretes a screen for current data.
 */
 TestPad.prototype.makeScreen =
-	function( )
+	function(
+		doc
+	)
 {
-	return '';
-	/*
-	for(a = 0, aZ = ranks.length; a < aZ; a++)
+	var
+		a,
+		action =
+			this.action,
+		aZ,
+		b,
+		bZ,
+		line,
+		lines =
+			[ ],
+		ranks =
+			doc.ranks,
+		twig =
+			doc.twig;
+
+	// splits up the doc into
+	// an array of lines which are
+	// an array of chars
+	for(
+		a = 0, aZ = ranks.length;
+		a < aZ;
+		a++
+	)
 	{
 		lines.push(
-			copse[ ranks[ a ] ].text.split( '' )
+//			twig[ ranks[ a ] ].text.split( '' ) TODO no twig
+			twig[ ranks[ a ] ].twig.text.split( '' )
 		);
 	}
 
 	// replaces HTML entities
-	for( a = 0, aZ = lines.length; a < aZ; a++ )
+	for(
+		a = 0, aZ = lines.length;
+		a < aZ;
+		a++
+	)
 	{
-		line = lines[ a ];
-		for( b = 0, bZ = line.length; b < bZ; b++ )
+		line =
+			lines[ a ];
+
+		for(
+			b = 0, bZ = line.length;
+			b < bZ;
+			b++
+		)
 		{
 			switch( line[ b ] )
 			{
 				case '&' :
-					line[ b ] = '&amp;';
+
+					line[ b ] =
+						'&amp;';
+
 					break;
 
 				case '"' :
-					line[ b ] = '&quot;';
+
+					line[ b ] =
+						'&quot;';
+
 					break;
 
 				case '<' :
-					line[ b ] = '&lt;';
+
+					line[ b ] =
+						'&lt;';
+
 					break;
 
 				case '>' :
-					line[ b ] = '&gt;';
+
+					line[ b ] =
+						'&gt;';
+
 					break;
 			}
 		}
 	}
 
 	// inserts the cursor
-	if( focus )
+	if( this.haveFocus )
 	{
 		var
 			cLine =
-				this.cursorLine;
-			ctext = lines[ cline ];
-			coff  = cursor.offset;
-			clen  = lines[ cline ].length;
+				this.cursorLine,
+			cText =
+				lines[ cLine ],
+			cAt =
+				this.cursorAt,
+			cLen =
+				lines[ cLine ].length;
 
-		if( coff >= ctext.length )
+		if( cAt >= cText.length )
 		{
-			coff = cursor.offset = ctext.length;
-			lines[ cline ][ coff ] = ' ';
+			cAt =
+				cText.length;
+
+			lines[ cLine ][ cAt ] = ' ';
 		}
 
-		lines[ cline ][ coff ] =
-			'<span id="cursor">'+lines[ cline ][ coff ] +
+		lines[ cLine ][ cAt ] =
+			'<span id="cursor">'
+				+ lines[ cLine ][ cAt ] +
 			'</span>';
 
-		if( coff === clen )
+		if( cAt === cLen )
 		{
-			lines[ cline ].push( ' ' );
+			lines[ cLine ].push( ' ' );
 		}
 	}
 
 	// inserts the action
-	switch( action && action.type )
+	switch( action && action.command )
 	{
 		case null :
+
 			break;
 
+		/*
 		case 'join' :
 			lines[ action.line ].
 				unshift( '<span id="join">↰</span>' );
@@ -1267,18 +1384,22 @@ TestPad.prototype.makeScreen =
 					action.at1, 0, '<span id="split">⤶</span>'
 				);
 			break;
+		*/
 
 		case 'insert' :
+
 			lines[ action.line ].
 				splice(
-					action.at1,
+					action.at,
 					0,
 					'<span id="insert">',
 					action.val,
 					'</span>'
 				);
+
 			break;
 
+		/*
 		case 'remove' :
 			if( action.at1 > action.at2 )
 			{
@@ -1297,21 +1418,27 @@ TestPad.prototype.makeScreen =
 				'</span>'
 			);
 			break;
+		*/
 
 		default :
-			throw new Error( 'Unknown action.type' );
+			throw new Error(
+				'Unknown action.command: ' + action.command
+			);
 	}
 
-	// transforms to HTML
-	for( a = 0, aZ = lines.length; a < aZ; a++ )
+	// transforms lines to a HTML string
+
+	for(
+		a = 0, aZ = lines.length;
+		a < aZ;
+		a++
+	)
 	{
-		lines[ a ] = lines[ a ].join( '' );
+		lines[ a ] =
+			lines[ a ].join( '' );
 	}
 
-	return (
-		lines.join( '\n' )
-	);
-	*/
+	return lines.join( '\n' );
 };
 
 
