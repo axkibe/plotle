@@ -24,6 +24,7 @@ var
 	Euclid,
 	fontPool,
 	Forms,
+	Gruga,
 	IFace,
 	Jools,
 	Mark,
@@ -54,52 +55,40 @@ var
 /**/{
 /**/	_modes =
 /**/		Object.freeze( {
-/**/
 /**/			// Creating a new item.
 /**/			'Create' :
 /**/				true,
-/**/
 /**/			// Help.
 /**/			'Help' :
 /**/				true,
-/**/
 /**/			// Logging in.
 /**/			'Login' :
 /**/				true,
-/**/
 /**/			// Moveing To another space.
 /**/			'MoveTo' :
 /**/				true,
-/**/
 /**/			// Standard selection, moving stuff around.
 /**/			'Normal' :
 /**/				true,
-/**/
 /**/			// User does not have access to a space.
 /**/			'NoAccessToSpace' :
 /**/				true,
-/**/
 /**/			// Space does not exist,
 /**/			// but user is allowed to create it.
 /**/			'NonExistingSpace' :
 /**/				true,
-/**/
 /**/			// Signing up
 /**/			'SignUp' :
 /**/				true,
-/**/
 /**/			// Space view
 /**/			'Space' :
 /**/				true,
-/**/
 /**/			// User view
 /**/			'User' :
 /**/				true,
-/**/
 /**/			// Welcome view
 /**/			'Welcome' :
 /**/				true
-/**/
 /**/		} );
 /**/}
 
@@ -189,7 +178,31 @@ Shell =
 			'path',
 				Path.empty.append( 'forms' ),
 			'view',
-				view
+				view,
+			'twig:add',
+			'Login',
+				Gruga.Login,
+			'twig:add',
+			'MoveTo',
+				Gruga.MoveTo,
+			'twig:add',
+			'NoAccessToSpace',
+				Gruga.NoAccessToSpace,
+			'twig:add',
+			'NonExistingSpace',
+				Gruga.NonExistingSpace,
+			'twig:add',
+			'SignUp',
+				Gruga.SignUp,
+			'twig:add',
+			'Space',
+				Gruga.Space,
+			'twig:add',
+			'User',
+				Gruga.User,
+			'twig:add',
+			'Welcome',
+				Gruga.Welcome
 		);
 
 	this._$discJockey =
@@ -845,7 +858,6 @@ Shell.prototype.dragMove =
 	var
 		cursor =
 			null,
-	
 		display =
 			this._getCurrentDisplay( );
 
@@ -1089,6 +1101,7 @@ Shell.prototype._setHover =
 
 /*
 | Sets the trait(s) of item(s).
+| TODO remove
 */
 Shell.prototype.setTraits =
 	function(
@@ -1120,6 +1133,44 @@ Shell.prototype.setTraits =
 
 	shell._$redraw =
 		true;
+};
+
+
+
+/*
+| Sets the trait(s) of item(s).
+*/
+Shell.prototype.setPath =
+	function(
+		path,
+		value
+	)
+{
+	switch( path.get( 0 ) )
+	{
+		case 'discs' :
+
+			throw new Error( 'FIXME' );
+
+		case 'forms' :
+
+			this._$formJockey =
+				this._$formJockey.setPath(
+					path,
+					value,
+					1
+				);
+
+			break;
+
+		case 'space ' :
+
+			throw new Error( 'FIXME' );
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 

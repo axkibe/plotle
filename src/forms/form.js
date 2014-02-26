@@ -68,13 +68,10 @@ Form.init =
 	var
 		sub =
 			{ },
-
 		twig =
 			this.twig,
-
 		ranks =
 			this.ranks;
-
 
 	for(
 		var a = 0, aZ = ranks.length;
@@ -85,19 +82,15 @@ Form.init =
 		var
 			name =
 				ranks[ a ],
-
 			subtree =
 				twig[ name ],
-
 			widgetProto =
 				inherit
 				&&
 				inherit.sub
 				&&
 				inherit.sub[ name ],
-
 			path,
-
 			focusAccent =
 				false;
 

@@ -32,22 +32,6 @@ var
 'use strict';
 
 
-var
-	_formList =
-		Object.freeze(
-			[
-				'Login',
-				'MoveTo',
-				'NoAccessToSpace',
-				'NonExistingSpace',
-				'SignUp',
-				'Space',
-				'User',
-				'Welcome'
-			]
-		);
-
-
 /*
 | The joobj definition.
 */
@@ -138,7 +122,26 @@ if( JOOBJ )
 			[
 				'inherit',
 				'traitSet'
-			]
+			],
+		twig :
+			{
+				'Login' :
+					Forms.Login,
+				'MoveTo' :
+					Forms.MoveTo,
+				'NoAccessToSpace' :
+					Forms.NoAccessToSpace,
+				'NonExistingSpace' :
+					Forms.NonExistingSpace,
+				'SignUp' :
+					Forms.SignUp,
+				'Space' :
+					Forms.Space,
+				'User' :
+					Forms.User,
+				'Welcome' :
+					Forms.Welcome
+			}
 	};
 }
 
@@ -148,6 +151,27 @@ var
 		Forms.Jockey;
 
 
+/*
+| A list of all forms there is
+*/
+Jockey.formList =
+	Object.freeze(
+		[
+			'Login',
+			'MoveTo',
+			'NoAccessToSpace',
+			'NonExistingSpace',
+			'SignUp',
+			'Space',
+			'User',
+			'Welcome'
+		]
+	);
+
+
+/*
+| Initializer.
+*/
 Jockey.prototype._init =
 	function(
 		inherit,
@@ -160,11 +184,11 @@ Jockey.prototype._init =
 
 		path;
 
-	for( var i in _formList )
+	for( var i in Jockey.formList )
 	{
 		var
 			name =
-				_formList[ i ],
+				Jockey.formList[ i ],
 
 			formProto =
 				inherit && inherit._forms[ name ];

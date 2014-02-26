@@ -544,6 +544,7 @@ generateImportsSection =
 		'| Imports',
 		'*/',
 		'var',
+		'\tJoobjProto,',
 		'\tJools' +
 			( jj.unitList && jj.unitList.length > 0 ? ',' : ';' )
 	);
@@ -632,6 +633,9 @@ generateNodeIncludesSection =
 		'*/',
 		'if( SERVER )',
 		'{',
+		'\tJoobjProto =',
+		'\t\trequire( \'../src/joobj/proto\' );',
+		'',
 		'\tJools =',
 		'\t\trequire( \'../src/jools/jools\' );'
 	);
@@ -2131,6 +2135,26 @@ generateReflectionSection =
 
 
 /*
+| Generates the addition of JoobjProto stuff.
+*/
+var
+generateProtoSection =
+	function(
+		r,   // result array
+		jj   // the joobj working object
+	)
+{
+	r.push(
+		'/*',
+		'| Sets values by path.',
+		'*/',
+		jj.reference + '.prototype.setPath =',
+		'\tJoobjProto.setPath;'
+	);
+};
+
+
+/*
 | Generates the toJSON section.
 */
 var
@@ -2423,6 +2447,10 @@ joobjGenerator =
 	}
 
 	generateReflectionSection( r, jj );
+
+	generateSeperator( r );
+
+	generateProtoSection( r, jj );
 
 	generateSeperator( r );
 

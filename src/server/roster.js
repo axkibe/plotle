@@ -59,6 +59,14 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
+			'src/joobj/proto.js',
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.create(
+		'filePath',
 			'src/jools/jools.js',
 		'inBundle',
 			true,
