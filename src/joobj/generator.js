@@ -142,9 +142,19 @@ var
 
 						break;
 
+					case 'json' :
+
+						if( attr[ aName].assign === null )
+						{
+							throw new Error(
+								'json attributes most not has null assignment'
+							);
+						}
+
+						break;
+
 					case 'assign' :
 					case 'comment' :
-					case 'json' :
 					case 'type' :
 					case 'unit' :
 
@@ -208,26 +218,20 @@ buildJJ =
 	var
 		aName,
 		attr,
-
 		// alphabetical sorted attribute names
 		attrList =
 			[ ],
-
 		attributes =
 			{ },
-
 		// list of all arguments passed to
 		// constructor
 		conVars =
 			{ },
-
 		hasJSON =
 			false,
-
 		// units sorted alphabetically
 		unitList =
 			null,
-
 		// units used
 		units =
 			{ };
@@ -1213,8 +1217,9 @@ var
 generateDefaultValues =
 	function
 	(
-		r,  // result array
-		jj  // the joobj working object
+		r,   // result array
+		jj,  // the joobj working object
+		json // if true only generate json vars
 	)
 {
 	var
@@ -1228,6 +1233,11 @@ generateDefaultValues =
 	{
 		attr =
 			jj.attributes[ jj.attrList[ a ] ];
+
+		if( json && !attr.json )
+		{
+			continue;
+		}
 
 		if( attr.defaultVal )
 		{
@@ -1251,8 +1261,9 @@ var
 generateChecks =
 	function
 	(
-		r,  // result array
-		jj  // the joobj working object
+		r,   // result array
+		jj,  // the joobj working object
+		json // if true only generator json checks
 	)
 {
 	var
@@ -1279,6 +1290,11 @@ generateChecks =
 	{
 		attr =
 			jj.attributes[ jj.attrList[ a ] ];
+
+		if( json && !attr.json )
+		{
+			continue;
+		}
 
 		if( !attr.allowsUndefined )
 		{
@@ -1898,9 +1914,9 @@ generateCreator =
 		generateAttributeVariables( r, jj );
 	}
 
-	generateDefaultValues( r, jj );
+	generateDefaultValues( r, jj, false );
 
-	generateChecks( r, jj );
+	generateChecks( r, jj, false );
 
 	generateCreatorConcerns( r, jj );
 
@@ -1976,7 +1992,7 @@ generateFromJSONCreator =
 		attr =
 			jj.attributes[ jj.attrList[ a ] ];
 
-		if( attr.assign === null )
+		if( !attr.json )
 		{
 			continue;
 		}
@@ -2036,9 +2052,9 @@ generateFromJSONCreator =
 		''
 	);
 
-	generateDefaultValues( r, jj );
+	generateDefaultValues( r, jj, true );
 
-	generateChecks( r, jj );
+	generateChecks( r, jj, true );
 
 	r.push(
 		'\treturn (',
