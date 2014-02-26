@@ -36,63 +36,48 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Font',
-
 		unit :
 			'Euclid',
-
 		attributes :
 			{
 				size :
 					{
 						comment :
 							'font size',
-
 						type :
 							'Number'
 					},
-
 				family :
 					{
 						comment :
 							'font family',
-
 						type :
 							'String'
 					},
-
 				align :
 					{
 						comment :
 							'horizonal alignment',
-
 						type :
 							'String'
 					},
-
 				fill :
 					{
 						comment :
 							'font color',
-
 						type :
 							'String'
 					},
-
 				base :
 					{
 						comment :
 							'vertical alignment',
-
 						type :
 							'String'
 					}
-			},
-
-		hasJSON :
-			true
+			}
 	};
 }
 

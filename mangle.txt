@@ -452,7 +452,7 @@
 . handle
 . handles
 . hasCaret
-. hasJSON
+. json
 . headline
 > height
 . highlight

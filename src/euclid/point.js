@@ -45,6 +45,8 @@ if( JOOBJ )
 					{
 						comment :
 							'x coordinate',
+						json :
+							true,
 						type :
 							'Number'
 					},
@@ -52,13 +54,13 @@ if( JOOBJ )
 					{
 						comment :
 							'y coordinate',
+						json :
+							true,
 						type :
 							'Number'
 					}
 			},
 		node :
-			true,
-		hasJSON :
 			true
 	};
 }

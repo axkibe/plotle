@@ -46,24 +46,26 @@ if( JOOBJ )
 					{
 						comment :
 							'point in north west',
-						unit :
-							'Euclid',
+						json :
+							'true',
 						type :
-							'Point'
+							'Point',
+						unit :
+							'Euclid'
 					},
 				pse :
 					{
 						comment :
 							'point in south east',
-						unit :
-							'Euclid',
+						json :
+							'true',
 						type :
-							'Point'
+							'Point',
+						unit :
+							'Euclid'
 					}
 			},
 		node :
-			true,
-		hasJSON :
 			true
 	};
 }

@@ -38,7 +38,6 @@ var
 		switch( aName )
 		{
 			case 'attributes' :
-			case 'hasJSON' :
 			case 'init' :
 			case 'name' :
 			case 'node' :
@@ -143,9 +142,9 @@ var
 
 						break;
 
-
 					case 'assign' :
 					case 'comment' :
+					case 'json' :
 					case 'type' :
 					case 'unit' :
 
@@ -222,6 +221,9 @@ buildJJ =
 		conVars =
 			{ },
 
+		hasJSON =
+			false,
+
 		// units sorted alphabetically
 		unitList =
 			null,
@@ -263,6 +265,8 @@ buildJJ =
 							attr.concerns,
 						defaultVal :
 							attr.defaultVal,
+						json :
+							attr.json,
 						type :
 							attr.type,
 						unit :
@@ -275,6 +279,12 @@ buildJJ =
 			if( attr.unit )
 			{
 				units[ attr.unit ] =
+					true;
+			}
+
+			if( attr.json )
+			{
+				hasJSON =
 					true;
 			}
 
@@ -335,7 +345,7 @@ buildJJ =
 	{
 		conVars.twig =
 			Object.freeze(
-					{
+				{
 					aName :
 						'twig',
 					comment :
@@ -387,7 +397,7 @@ buildJJ =
 			equals :
 				joobj.equals,
 			hasJSON :
-				joobj.hasJSON,
+				hasJSON,
 			init :
 				joobj.init,
 			name :
@@ -2049,7 +2059,8 @@ generateFromJSONCreator =
 		if( con.aName === 'inherit' )
 		{
 			r.push(
-				'\t\t\tnull'
+				'\t\t\tnull' +
+					( a + 1 < aZ ? ',' : '' )
 			);
 
 			continue;
@@ -2057,7 +2068,7 @@ generateFromJSONCreator =
 
 		r.push(
 			'\t\t\t' + con.vName +
-				( a + 1 < jj.conList.length ? ',' : '' )
+				( a + 1 < aZ ? ',' : '' )
 		);
 	}
 

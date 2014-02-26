@@ -99,7 +99,9 @@ if( JOOBJ )
 		init :
 			[
 				'inherit'
-			]
+			],
+		node :
+			true
 	};
 }
 
