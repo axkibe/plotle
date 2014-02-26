@@ -746,7 +746,6 @@ Server.prototype.prepareInventory =
 	var
 		a,
 		aZ,
-		r,  // TODO remove
 		resource;
 
 	Jools.log( 'start', 'preparing inventory' );
@@ -777,22 +776,22 @@ Server.prototype.prepareInventory =
 		a++
 	)
 	{
-		r =
+		resource =
 			roster[ a ];
 
-		if( r.devel && !config.develShell )
+		if( resource.devel && !config.develShell )
 		{
 			continue;
 		}
 
-		if( r.hasJoobj )
+		if( resource.hasJoobj )
 		{
 			this.inventory =
-				this.inventory.addResource( r.asJoobj );
+				this.inventory.addResource( resource.asJoobj );
 		}
 
 		this.inventory =
-			this.inventory.addResource( r );
+			this.inventory.addResource( resource );
 	}
 
 	// Reads in all files to be cached
@@ -806,17 +805,17 @@ Server.prototype.prepareInventory =
 		a++
 	)
 	{
-		r =
+		resource =
 			inv.list[ a ];
 
 		if(
-			r.data !== null
+			resource.data !== null
 			||
-			r.inBundle
+			resource.inBundle
 			||
-			r.devel
+			resource.devel
 			||
-			r.isJoobj
+			resource.isJoobj
 		)
 		{
 			continue;
@@ -824,11 +823,11 @@ Server.prototype.prepareInventory =
 
 		this.inventory =
 			this.inventory.updateResource(
-				r,
-				r.create(
+				resource,
+				resource.create(
 					'data',
 						( yield fs.readFile(
-							r.filePath,
+							resource.filePath,
 							sus.resume( )
 						) )
 				)
@@ -861,33 +860,33 @@ Server.prototype.prepareInventory =
 		a++
 	)
 	{
-		r =
+		resource =
 			this.inventory.list[ a ];
 
-		if( !r.inBundle )
+		if( !resource.inBundle )
 		{
 			continue;
 		}
 
-		if( r.isJoobj )
+		if( resource.isJoobj )
 		{
 			code =
-				yield* GenerateJoobj.run( r );
+				yield* GenerateJoobj.run( resource );
 		}
 		else
 		{
-			if( !r.data )
+			if( !resource.data )
 			{
 				code =
 					( yield fs.readFile(
-						r.filePath,
+						resource.filePath,
 						sus.resume( )
 					) ) + '';
 			}
 			else
 			{
 				code =
-					r.data;
+					resource.data;
 			}
 		}
 
@@ -897,7 +896,7 @@ Server.prototype.prepareInventory =
 					code,
 					{
 						filename :
-							r.filePath,
+							resource.filePath,
 						strict :
 							true,
 						toplevel :
@@ -909,7 +908,7 @@ Server.prototype.prepareInventory =
 		{
 			console.log(
 				'parse error',
-				r.filePath,
+				resource.filePath,
 				'line',
 				e.line
 			);
@@ -1088,21 +1087,21 @@ Server.prototype.prepareInventory =
 		a++
 	)
 	{
-		r =
+		resource =
 			inv.list[ a ];
 
-		if( r.inBundle || r.devel )
+		if( resource.inBundle || resource.devel )
 		{
 			continue;
 		}
 
 		this.inventory =
 			this.inventory.updateResource(
-				r,
-				r.create(
+				resource,
+				resource.create(
 					'gzip',
 						yield zlib.gzip(
-							r.data,
+							resource.data,
 							sus.resume( )
 						)
 				)
@@ -1591,17 +1590,17 @@ Server.prototype.cmdAlter =
 
 	// applies the changes
 	var
-		r =
+		result =
 			chgX.changeTree(
 				space.$tree,
 				meshverse
 			);
 
 	space.$tree =
-		r.tree;
+		result.tree;
 
 	chgX =
-		r.chgX;
+		result.chgX;
 
 	changes[ seqZ ] =
 		{
@@ -2823,10 +2822,10 @@ Server.prototype.requestListener =
 	}
 
 	var
-		r =
+		resource =
 			this.inventory.map[ pathname ];
 
-	if( !r )
+	if( !resource )
 	{
 		this.webError(
 			result,
@@ -2836,18 +2835,18 @@ Server.prototype.requestListener =
 		return;
 	}
 
-	if( r.data )
+	if( resource.data )
 	{
 		var
 			aenc =
-				r.gzip && request.headers[ 'accept-encoding' ],
+				resource.gzip && request.headers[ 'accept-encoding' ],
 
 			header =
 				{
 					'Content-Type' :
-						r.mime,
+						resource.mime,
 					'Cache-Control' :
-						MaxAge.map( r.maxage ),
+						MaxAge.map( resource.maxage ),
 					'Date' :
 						new Date().toUTCString()
 				};
@@ -2864,7 +2863,7 @@ Server.prototype.requestListener =
 			);
 
 			result.end(
-				r.gzip,
+				resource.gzip,
 				'binary'
 			);
 		}
@@ -2877,8 +2876,8 @@ Server.prototype.requestListener =
 			);
 
 			result.end(
-				r.data,
-				r.coding
+				resource.data,
+				resource.coding
 			);
 		}
 		return;
@@ -2896,11 +2895,11 @@ Server.prototype.requestListener =
 		data;
 
 	// if the joobj is requested generate that one from the file
-	if( r.isJoobj )
+	if( resource.isJoobj )
 	{
 		try{
 			data =
-				yield* GenerateJoobj.run( r );
+				yield* GenerateJoobj.run( resource );
 		}
 		catch( e )
 		{
@@ -2923,7 +2922,7 @@ Server.prototype.requestListener =
 		try {
 			data =
 				yield fs.readFile(
-					r.filePath,
+					resource.filePath,
 					sus.resume( )
 				);
 		}
@@ -2937,25 +2936,25 @@ Server.prototype.requestListener =
 
 			Jools.log(
 				'fail',
-				'Missing file: ' + r.filePath
+				'Missing file: ' + resource.filePath
 			);
 
 			return;
 		}
 	}
 
-	if( r.postProcessor )
+	if( resource.postProcessor )
 	{
-		if( !PostProcessor[ r.postProcessor ] )
+		if( !PostProcessor[ resource.postProcessor ] )
 		{
 			throw new Error(
 				'invalid postProcessor: ' +
-					r.postProcessor
+					resource.postProcessor
 			);
 		}
 
 		data =
-			PostProcessor[ r.postProcessor ](
+			PostProcessor[ resource.postProcessor ](
 				data,
 				this.inventory,
 				this.bundleFilePath
@@ -2966,7 +2965,7 @@ Server.prototype.requestListener =
 		200,
 		{
 			'Content-Type' :
-				r.mime,
+				resource.mime,
 			'Cache-Control' :
 				'no-cache',
 			'Date' :
@@ -2990,7 +2989,7 @@ Server.prototype.requestListener =
 
 	result.end(
 		data,
-		r.coding
+		resource.coding
 	);
 };
 
