@@ -81,6 +81,24 @@ if( JOOBJ )
 						type :
 							'Path'
 					},
+				spaceUser :
+					{
+						comment :
+							'the user of the current space',
+						type :
+							'String',
+						defaultValue :
+							'undefined'
+					},
+				spaceTag :
+					{
+						comment :
+							'tag of the current space',
+						type :
+							'String',
+						defaultValue :
+							'undefined'
+					},
 				traitSet :
 					{
 						comment :
@@ -173,6 +191,10 @@ Jockey.prototype._init =
 					this.mark,
 				'path',
 					path,
+				'spaceUser',
+					this.spaceUser,
+				'spaceTag',
+					this.spaceTag,
 				'traitSet',
 					traitSet,
 				'username',

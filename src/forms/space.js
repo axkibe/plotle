@@ -68,7 +68,7 @@ if( JOOBJ )
 									]
 							},
 						defaultValue :
-							'null'
+							'undefined'
 					},
 				path :
 					{
@@ -77,7 +77,25 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							'undefined'
+					},
+				spaceUser :
+					{
+						comment :
+							'the user of the current space',
+						type :
+							'String',
+						defaultValue :
+							'undefined'
+					},
+				spaceTag :
+					{
+						comment :
+							'tag of the current space',
+						type :
+							'String',
+						defaultValue :
+							'undefined'
 					},
 				traitSet :
 					{
@@ -152,74 +170,6 @@ Space.prototype._init =
 		traitSet
 	)
 {
-	var
-		spaceUser,
-		spaceTag;
-
-	if( traitSet )
-	{
-		for(
-			var a = 0, aZ = traitSet.length;
-			a < aZ;
-			a++
-		)
-		{
-			var
-				t =
-					traitSet.get( a );
-
-			if(
-				t.path.equals( this.path )
-			)
-			{
-				switch( t.key )
-				{
-
-					case 'spaceUser' :
-
-						spaceUser =
-							t.val;
-
-						break;
-
-					case 'spaceTag' :
-
-						spaceTag =
-							t.val;
-
-						break;
-
-					default :
-
-						throw new Error(
-							'unknown trait: ' + t.key
-						);
-				}
-			}
-		}
-	}
-
-	if( inherit )
-	{
-		if( spaceUser === undefined )
-		{
-			spaceUser =
-				inherit.spaceUser;
-		}
-
-		if( spaceTag === undefined )
-		{
-			spaceTag =
-				inherit.spaceTag;
-		}
-	}
-
-	this.spaceUser =
-		spaceUser;
-
-	this.spaceTag =
-		spaceTag;
-
 	if( this.path )
 	{
 		traitSet =

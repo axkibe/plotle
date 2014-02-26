@@ -75,7 +75,29 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							'undefined'
+					},
+				spaceUser :
+					{
+						comment :
+							'the user of the current space',
+						type :
+							'String',
+						defaultValue :
+							'undefined',
+						assign :
+							null
+					},
+				spaceTag :
+					{
+						comment :
+							'tag of the current space',
+						type :
+							'String',
+						defaultValue :
+							'undefined',
+						assign :
+							null
 					},
 				traitSet :
 					{
@@ -151,7 +173,7 @@ User.prototype._init =
 {
 	var
 		isGuest;
-	
+
 	if( !this.path )
 	{
 		return;

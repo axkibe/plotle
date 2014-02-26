@@ -1651,24 +1651,12 @@ Shell.prototype.arrivedAtSpace =
 				spaceTag
 		);
 
-	// FIXME make spaceUser spaceTag normal attributes
-	var
-		spaceFormPath =
-			this._$formJockey.get( 'Space' ).path; // FIXME
-
 	this._$formJockey =
 		this._$formJockey.create(
-			'traitSet',
-				TraitSet.create(
-					'trait',
-						spaceFormPath,
-						'spaceUser',
-						spaceUser,
-					'trait',
-						spaceFormPath,
-						'spaceTag',
-						spaceTag
-				)
+			'spaceUser',
+				spaceUser,
+			'spaceTag',
+				spaceTag
 		);
 
 	shell.setMode( 'Normal' );
