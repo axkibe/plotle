@@ -755,8 +755,8 @@ Server.prototype.prepareInventory =
 	var
 		cconfig =
 			Resource.create(
-				'aliases',
-					[ 'config.js' ],
+//				'aliases',
+//					[ 'config.js' ],
 				'data',
 					this.buildShellConfig( ),
 				'filepath',
@@ -876,7 +876,7 @@ Server.prototype.prepareInventory =
 		}
 		else
 		{
-			if( r.data === null )
+			if( !r.data )
 			{
 				code =
 					( yield fs.readFile(
@@ -1565,7 +1565,8 @@ Server.prototype.cmdAlter =
 		);
 
 		if(
-			chgX === null ||
+			chgX === null
+			||
 			chgX.length === 0
 		)
 		{
@@ -1577,7 +1578,8 @@ Server.prototype.cmdAlter =
 	}
 
 	if(
-		chgX === null ||
+		chgX === null
+		||
 		chgX.length === 0
 	)
 	{

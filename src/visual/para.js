@@ -37,83 +37,65 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Para',
-
 		unit :
 			'Visual',
-
 		attributes :
 			{
 				flowWidth :
 					{
 						comment :
 							'width of the para its flow',
-
 						type :
 							'Number'
 					},
-
 				fontsize :
 					{
 						comment :
 							'size of the font',
-
 						type :
 							'Number'
 					},
-
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						concerns :
 							{
 								func :
 									'Para.concernsMark',
-
 								args :
 									[
 										'mark',
 										'path'
 									]
 							},
-
 						type :
 							'Mark'
 					},
-
 				path :
 					{
 						comment :
 							'the path of the para',
-
 						type :
 							'Path'
 					},
-
 				tree :
 					{
 						comment :
 							'the data tree',
-
 						type :
 							'Tree'
 					},
-
 				view :
 					{
 						comment :
 							'the current view',
-
 						type :
 							'View'
 					}
 			},
-
 		init :
 			[
 				'inherit'

@@ -27,9 +27,11 @@ if( JOOBJ )
 							'the list of aliases this is server under',
 						type :
 							'Array',
+						allowsNull :
+							true,
 						defaultVal :
 							// by default determined from filepath
-							'null'
+							'undefined'
 					},
 				coding :
 					{
@@ -39,7 +41,7 @@ if( JOOBJ )
 							'String',
 						defaultVal :
 							// by default determined from file extension
-							'null'
+							'undefined'
 					},
 				data :
 					{
@@ -48,7 +50,7 @@ if( JOOBJ )
 						type :
 							'Object',
 						defaultVal :
-							'null'
+							'undefined'
 					},
 				devel :
 					{
@@ -59,6 +61,15 @@ if( JOOBJ )
 						defaultVal :
 							'false'
 					},
+				joobjSrcPath :
+					{
+						comment :
+							'source file of a joobj',
+						type :
+							'String',
+						defaultVal :
+							'undefined'
+					},
 				gzip :
 					{
 						comment :
@@ -66,7 +77,7 @@ if( JOOBJ )
 						type :
 							'Object',
 						defaultVal :
-							'null'
+							'undefined'
 					},
 				filepath :
 					{
@@ -130,7 +141,7 @@ if( JOOBJ )
 							'String',
 						defaultVal :
 							// by default determined from file extension
-							'null'
+							'undefined'
 					},
 				postProcessor :
 					{
@@ -214,11 +225,12 @@ Jools.lazyValue(
 
 		return this.create(
 			'aliases',
-				[
-					'joobj-'
-					+
-					this.filepath.replace( /\//g, '-' )
-				],
+				null,
+			'joobjSrcPath',
+				this.filepath,
+			'filepath',
+				'joobj/' +
+					this.filepath.replace( /\//g, '-' ),
 			'hasJoobj',
 				false,
 			'isJoobj',

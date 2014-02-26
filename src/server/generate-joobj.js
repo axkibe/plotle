@@ -61,13 +61,13 @@ GenerateJoobj.run =
 
 	defFileStat =
 		fs.stat(
-			resource.filepath,
+			resource.joobjSrcPath,
 			sus.fork( )
 		);
 
 	joobjFileStat =
 		fs.stat(
-			'joobj/' + resource.aliases[ 0 ],
+			resource.filepath,
 			sus.fork( )
 		);
 
@@ -104,7 +104,7 @@ GenerateJoobj.run =
 
 		def =
 			yield fs.readFile(
-				resource.filepath,
+				resource.joobjSrcPath,
 				sus.resume( )
 			);
 
@@ -115,7 +115,7 @@ GenerateJoobj.run =
 					JOOBJ :
 						true
 				},
-				resource.filepath
+				resource.joobjSrcPath
 			);
 
 		data =
@@ -124,7 +124,7 @@ GenerateJoobj.run =
 		if( !config.noWrite )
 		{
 			yield fs.writeFile(
-				'joobj/' + resource.aliases[ 0 ],
+				resource.filepath,
 				data,
 				sus.resume( )
 			);
@@ -136,7 +136,7 @@ GenerateJoobj.run =
 		data =
 			(
 				yield fs.readFile(
-					'joobj/' + resource.aliases[ 0 ],
+					resource.filepath,
 					sus.resume( )
 				)
 			) + '';

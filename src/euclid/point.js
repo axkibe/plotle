@@ -35,13 +35,10 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Point',
-
 		unit :
 			'Euclid',
-
 		attributes :
 			{
 				x :
@@ -59,10 +56,8 @@ if( JOOBJ )
 							'Number'
 					}
 			},
-
 		node :
 			true,
-
 		hasJSON :
 			true
 	};

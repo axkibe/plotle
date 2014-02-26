@@ -36,79 +36,62 @@ var
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'Doc',
-
 		unit :
 			'Visual',
-
 		attributes :
 			{
 				flowWidth :
 					{
 						comment :
 							'width of the para its flow',
-
 						type :
 							'Number'
 					},
-
 				fontsize :
 					{
 						comment :
 							'size of the font',
-
 						type :
 							'Number'
 					},
-
 				paraSep :
 					{
 						comment :
 							'vertical seperation of paragraphs',
-
 						type :
 							'Number'
 					},
-
 				path :
 					{
 						comment :
 							'the path of the doc',
-
 						type :
 							'Path'
 					},
-
 				mark :
 					{
 						comment :
 							'the users mark',
-
 						type :
 							'Mark'
 					},
-
 				tree :
 					{
 						comment :
 							'the data tree',
-
 						type :
 							'Tree'
 					},
-
 				view :
 					{
 						comment :
 							'the current view',
-
 						type :
 							'View'
 					}
 			},
-
 		init :
 			[
 				'inherit'
