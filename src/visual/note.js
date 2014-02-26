@@ -54,7 +54,7 @@ if( JOOBJ )
 							'Path',
 						assign :
 							null,
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				path :
@@ -87,7 +87,7 @@ if( JOOBJ )
 							'vertical scroll position',
 						type :
 							'Number',
-						defaultVal :
+						defaultValue :
 							'0'
 					},
 				traitSet :
@@ -98,7 +98,7 @@ if( JOOBJ )
 							'TraitSet',
 						assign :
 							null,
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				tree :

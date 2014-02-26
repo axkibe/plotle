@@ -61,7 +61,7 @@ if( JOOBJ )
 							'x-position of the caret kept',
 						type :
 							'Number',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				focus :
@@ -70,7 +70,7 @@ if( JOOBJ )
 							'the shell has the system focus',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'true'
 					}
 			},

@@ -66,7 +66,7 @@ if( JOOBJ )
 							'true if the widget got focus',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				// FIXME deduce from hoverPath
@@ -76,7 +76,7 @@ if( JOOBJ )
 							'true if the widget is hovered on',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				font :
@@ -102,7 +102,7 @@ if( JOOBJ )
 							},
 						type :
 							'Mark',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				maxlen :
@@ -118,7 +118,7 @@ if( JOOBJ )
 							'true for password input',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				path :
@@ -127,7 +127,7 @@ if( JOOBJ )
 							'the path of the widget',
 						type :
 							'Path',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				superFrame :
@@ -136,7 +136,7 @@ if( JOOBJ )
 							'the frame the widget resides in',
 						type :
 							'Rect',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				style :
@@ -153,7 +153,7 @@ if( JOOBJ )
 							'traits being set',
 						type :
 							'TraitSet',
-						defaultVal :
+						defaultValue :
 							'null',
 						assign :
 							null
@@ -164,7 +164,7 @@ if( JOOBJ )
 							'the value in the input box',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							"''"
 					},
 				visible :
@@ -173,7 +173,7 @@ if( JOOBJ )
 							'if false the button is hidden',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'true'
 					}
 			},

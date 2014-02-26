@@ -81,6 +81,17 @@ if( JOOBJ )
 						type :
 							'Path'
 					},
+				/*
+				text :
+					{
+						comment :
+							'the paragraphs text',
+						json :
+							true,
+						type :
+							'String'
+					}
+				*/
 				tree :
 					{
 						comment :

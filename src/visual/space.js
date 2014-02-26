@@ -106,7 +106,7 @@ if( JOOBJ )
 							'TraitSet',
 						assign :
 							null,
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				tree :

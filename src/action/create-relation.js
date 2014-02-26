@@ -41,7 +41,7 @@ if( JOOBJ )
 							'starting pan when panning during creation',
 						type :
 							'Point',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				toItemPath :
@@ -57,7 +57,7 @@ if( JOOBJ )
 							'the arrow destination while its floating',
 						type :
 							'Point',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				// FIXME rename
@@ -75,7 +75,7 @@ if( JOOBJ )
 							'mouse down point on drag creation',
 						type :
 							'Point',
-						defaultVal :
+						defaultValue :
 							'null'
 					}
 			}

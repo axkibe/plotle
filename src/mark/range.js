@@ -82,7 +82,7 @@ if( JOOBJ )
 							'x-position of the caret kept',
 						type :
 							'Number',
-						defaultVal :
+						defaultValue :
 							'null'
 					}
 			}

@@ -48,7 +48,7 @@ if( JOOBJ )
 							'users access to current space',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				action :
@@ -57,7 +57,7 @@ if( JOOBJ )
 							'currently active action',
 						type :
 							'Action',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				hover :
@@ -66,7 +66,7 @@ if( JOOBJ )
 							'the widget hovered upon',
 						type :
 							'Path',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				mark :
@@ -75,7 +75,7 @@ if( JOOBJ )
 							'the users mark',
 						type :
 							'Mark',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				mode :
@@ -84,7 +84,7 @@ if( JOOBJ )
 							'current mode the UI is in',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				path :
@@ -93,7 +93,7 @@ if( JOOBJ )
 							'path of the disc',
 						type :
 							'Path',
-						defaultVal :
+						defaultValue :
 							'undefined'
 					},
 				spaceUser :
@@ -102,7 +102,7 @@ if( JOOBJ )
 							'owner of currently loaded space',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				spaceTag :
@@ -111,7 +111,7 @@ if( JOOBJ )
 							'name of currently loaded space',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				username :
@@ -120,7 +120,7 @@ if( JOOBJ )
 							'currently logged in user',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				view :
@@ -134,7 +134,7 @@ if( JOOBJ )
 								member :
 									'sizeOnly'
 							},
-						defaultVal :
+						defaultValue :
 							'null'
 					}
 			},

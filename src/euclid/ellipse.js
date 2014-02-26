@@ -62,7 +62,7 @@ if( JOOBJ )
 							'center for gradient',
 						type :
 							'Point',
-						defaultVal :
+						defaultValue :
 							'null',
 						assign :
 							'_gradientPC'
@@ -73,7 +73,7 @@ if( JOOBJ )
 							'inner radius for circle gradients',
 						type :
 							'Number',
-						defaultVal :
+						defaultValue :
 							'null',
 						assign :
 							'_gradientR0'
@@ -84,7 +84,7 @@ if( JOOBJ )
 							'outer radius for circle gradients',
 						type :
 							'Number',
-						defaultVal :
+						defaultValue :
 							'null',
 						assign :
 							'_gradientR1'

@@ -45,7 +45,7 @@ if( JOOBJ )
 							'the action the user is preparing',
 						type :
 							'Action',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				beepTimer :
@@ -54,7 +54,7 @@ if( JOOBJ )
 							'removed the beep',
 						type :
 							'Object',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				cursorAt :
@@ -63,7 +63,7 @@ if( JOOBJ )
 							'offset cursor is at',
 						type :
 							'Integer',
-						defaultVal :
+						defaultValue :
 							'0'
 					},
 				cursorLine :
@@ -72,7 +72,7 @@ if( JOOBJ )
 							'line cursor is in',
 						type :
 							'Integer',
-						defaultVal :
+						defaultValue :
 							'0'
 					},
 				elements :
@@ -81,7 +81,7 @@ if( JOOBJ )
 							'DOM elements',
 						type :
 							'Object',
-						defaultVal :
+						defaultValue :
 							'undefined'
 					},
 				haveFocus :
@@ -90,7 +90,7 @@ if( JOOBJ )
 							'true when having focus',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				iface :
@@ -99,7 +99,7 @@ if( JOOBJ )
 							'the interface',
 						type :
 							'Object',
-						defaultVal:
+						defaultValue :
 							'undefined'
 					},
 				mouseDown :
@@ -108,7 +108,7 @@ if( JOOBJ )
 							'true when mouse button is held down',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				peer :
@@ -117,7 +117,7 @@ if( JOOBJ )
 							'the peer',
 						type :
 							'Object',
-						defaultVal:
+						defaultValue :
 							'undefined'
 					},
 				seq :
@@ -126,7 +126,7 @@ if( JOOBJ )
 							'current sequence pos',
 						type :
 							'Integer',
-						defaultVal :
+						defaultValue :
 							'0'
 					}
 			},

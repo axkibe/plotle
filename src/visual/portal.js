@@ -55,7 +55,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						// FIXME maybe not allow null
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				path :
@@ -90,7 +90,7 @@ if( JOOBJ )
 							'TraitSet',
 						assign :
 							null,
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				tree :

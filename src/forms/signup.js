@@ -50,7 +50,7 @@ if( JOOBJ )
 							'the widget hovered upon',
 						type :
 							'Path',
-						defaultVal :
+						defaultValue :
 							'null'
 			},
 				mark :
@@ -69,7 +69,7 @@ if( JOOBJ )
 										'path'
 									]
 							},
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				path :
@@ -78,7 +78,7 @@ if( JOOBJ )
 							'the path of the form',
 						type :
 							'Path',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				traitSet :
@@ -87,7 +87,7 @@ if( JOOBJ )
 							'traits being set',
 						type :
 							'TraitSet',
-						defaultVal :
+						defaultValue :
 							'null',
 						assign :
 							null
@@ -98,7 +98,7 @@ if( JOOBJ )
 							'currently logged in user',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'null',
 						assign :
 							null
@@ -114,7 +114,7 @@ if( JOOBJ )
 								member :
 									'sizeOnly'
 							},
-						defaultVal :
+						defaultValue :
 							'null'
 					}
 			},

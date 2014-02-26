@@ -42,7 +42,7 @@ if( JOOBJ )
 							'action affects offset',
 						type :
 							'Integer',
-						defaultVal :
+						defaultValue :
 							'undefined',
 					},
 				at2 :
@@ -51,7 +51,7 @@ if( JOOBJ )
 							'action affects offset (span end)',
 						type :
 							'Integer',
-						defaultVal :
+						defaultValue :
 							'undefined',
 					},
 				value :
@@ -60,7 +60,7 @@ if( JOOBJ )
 							'action carries value',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'undefined'
 					}
 			}

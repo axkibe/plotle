@@ -107,12 +107,12 @@ var
 			{
 				switch( aoName )
 				{
-					case 'defaultVal' :
+					case 'defaultValue' :
 
 						if ( !Jools.isString( attr[ aName ][ aoName ] ) )
 						{
 							throw new Error(
-								'defaultVal must be a string literal'
+								'defaultValue must be a string literal'
 							);
 						}
 
@@ -120,11 +120,11 @@ var
 
 					case 'allowsNull' :
 
-						if( attr[ aName ].defaultVal === 'null' )
+						if( attr[ aName ].defaultValue === 'null' )
 						{
 							throw new Error(
 								joobj.unit + '.' + joobj.name + ': ' +
-								'defaultVal \"null\" implies allowsNull'
+								'defaultValue \"null\" implies allowsNull'
 							);
 						}
 
@@ -132,11 +132,11 @@ var
 
 					case 'allowsUndefined' :
 
-						if( attr[ aName ].defaultVal === 'undefined' )
+						if( attr[ aName ].defaultValue === 'undefined' )
 						{
 							throw new Error(
 								joobj.unit + '.' + joobj.name + ': ' +
-								'defaultVal \"undefined\" implies allowsUndefined'
+								'defaultValue \"undefined\" implies allowsUndefined'
 							);
 						}
 
@@ -252,11 +252,11 @@ buildJJ =
 						allowsNull :
 							attr.allowsNull
 							||
-							attr.defaultVal === 'null',
+							attr.defaultValue === 'null',
 						allowsUndefined :
 							attr.allowsUndefined
 							||
-							attr.defaultVal === 'undefined',
+							attr.defaultValue === 'undefined',
 						assign :
 							attr.assign !== undefined
 								?
@@ -267,8 +267,8 @@ buildJJ =
 							attr.comment,
 						concerns :
 							attr.concerns,
-						defaultVal :
-							attr.defaultVal,
+						defaultValue :
+							attr.defaultValue,
 						json :
 							attr.json,
 						type :
@@ -1239,14 +1239,14 @@ generateDefaultValues =
 			continue;
 		}
 
-		if( attr.defaultVal )
+		if( attr.defaultValue )
 		{
 			r.push(
 				'',
 				'\tif( ' + attr.vName + ' === undefined )',
 				'\t{',
 				'\t\t' + attr.vName + ' =',
-				'\t\t\t' + attr.defaultVal + ';',
+				'\t\t\t' + attr.defaultValue + ';',
 				'\t}'
 			);
 		}

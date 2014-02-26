@@ -50,7 +50,7 @@ if( JOOBJ )
 							'true if the checkbox is checked',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				designFrame :
@@ -67,7 +67,7 @@ if( JOOBJ )
 							'true if the widget got focus',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				// FIXME deduce from hoverPath
@@ -77,7 +77,7 @@ if( JOOBJ )
 							'true if the widget is hovered on',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				mark :
@@ -87,7 +87,7 @@ if( JOOBJ )
 						type :
 							'Mark',
 						// FIXME do not allow null
-						defaultVal :
+						defaultValue :
 							'null',
 						assign :
 							null
@@ -98,7 +98,7 @@ if( JOOBJ )
 							'the path of the widget',
 						type :
 							'Path',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				superFrame :
@@ -107,7 +107,7 @@ if( JOOBJ )
 							'the frame the widget resides in',
 						type :
 							'Rect',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				style :
@@ -124,7 +124,7 @@ if( JOOBJ )
 							'traits being set',
 						type :
 							'TraitSet',
-						defaultVal :
+						defaultValue :
 							'null',
 						assign :
 							null
@@ -135,7 +135,7 @@ if( JOOBJ )
 							'if false the button is hidden',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'true'
 					}
 			},

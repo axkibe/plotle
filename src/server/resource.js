@@ -27,7 +27,7 @@ if( JOOBJ )
 							'the list of aliases this is server under',
 						type :
 							'Array',
-						defaultVal :
+						defaultValue :
 							// by default determined from filePath
 							'null'
 					},
@@ -37,7 +37,7 @@ if( JOOBJ )
 							'"binary" or "utf-8"',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							// by default determined from file extension
 							'undefined'
 					},
@@ -47,7 +47,7 @@ if( JOOBJ )
 							'cached or auto generated data',
 						type :
 							'Object',
-						defaultVal :
+						defaultValue :
 							'undefined'
 					},
 				devel :
@@ -56,7 +56,7 @@ if( JOOBJ )
 							'if true is only loaded in devel mode',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				joobjSrcPath :
@@ -65,7 +65,7 @@ if( JOOBJ )
 							'source file of a joobj',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'undefined'
 					},
 				gzip :
@@ -74,7 +74,7 @@ if( JOOBJ )
 							'cached or auto generated zip data',
 						type :
 							'Object',
-						defaultVal :
+						defaultValue :
 							'undefined'
 					},
 				filePath :
@@ -92,7 +92,7 @@ if( JOOBJ )
 							'true if this resource has a joobj def.',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				inBundle :
@@ -101,7 +101,7 @@ if( JOOBJ )
 							'true if this resource is in the bundle',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				inTestPad :
@@ -110,7 +110,7 @@ if( JOOBJ )
 							'true if this resource is in the testpad',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				isJoobj :
@@ -119,7 +119,7 @@ if( JOOBJ )
 							'true if this resource is a joobj.',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				maxage :
@@ -128,7 +128,7 @@ if( JOOBJ )
 							'"none", "short" or "long"',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'\'none\''
 					},
 				mime :
@@ -137,7 +137,7 @@ if( JOOBJ )
 							'mime type',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							// by default determined from file extension
 							'undefined'
 					},
@@ -147,7 +147,7 @@ if( JOOBJ )
 							'post processor replacing stuff',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'undefined'
 					}
 			},

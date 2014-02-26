@@ -60,7 +60,7 @@ if( JOOBJ )
 							'true if the widget got focus',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				font :
@@ -69,7 +69,7 @@ if( JOOBJ )
 							'font of the text',
 						type :
 							'Font',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				// FIXME deduce from hoverPath
@@ -79,7 +79,7 @@ if( JOOBJ )
 							'true if the widget is hovered on',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'false'
 					},
 				icon :
@@ -88,7 +88,7 @@ if( JOOBJ )
 							'icon to display',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				iconStyle :
@@ -97,7 +97,7 @@ if( JOOBJ )
 							'icon style to display',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				// FUTURE find a more elegent solution
@@ -107,7 +107,7 @@ if( JOOBJ )
 							'class used to sketch icons if applicable',
 						type :
 							'Icons',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				mark :
@@ -117,7 +117,7 @@ if( JOOBJ )
 						type :
 							'Mark',
 						// FIXME do not allow null
-						defaultVal :
+						defaultValue :
 							'null',
 						assign :
 							null
@@ -128,7 +128,7 @@ if( JOOBJ )
 							'the path of the widget',
 						type :
 							'Path',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				shape :
@@ -145,7 +145,7 @@ if( JOOBJ )
 							'the frame the widget resides in',
 						type :
 							'Rect',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				style :
@@ -162,7 +162,7 @@ if( JOOBJ )
 							'the text written in the button',
 						type :
 							'String',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				textDesignPos :
@@ -171,7 +171,7 @@ if( JOOBJ )
 							'designed position of the text',
 						type :
 							'AnchorPoint',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				textNewline :
@@ -180,7 +180,7 @@ if( JOOBJ )
 							'vertical distance of newline',
 						type :
 							'Number',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				textRotation :
@@ -189,7 +189,7 @@ if( JOOBJ )
 							'rotation of the text',
 						type :
 							'Number',
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				traitSet :
@@ -198,7 +198,7 @@ if( JOOBJ )
 							'traits being set',
 						type :
 							'TraitSet',
-						defaultVal :
+						defaultValue :
 							'null',
 						assign :
 							null
@@ -209,7 +209,7 @@ if( JOOBJ )
 							'if false the button is hidden',
 						type :
 							'Boolean',
-						defaultVal :
+						defaultValue :
 							'true'
 					}
 			},

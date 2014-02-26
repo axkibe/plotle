@@ -333,7 +333,7 @@
 . cycleFormFocus
 . deClip
 . debug
-. defaultVal
+. defaultValue
 > defineProperty
 . del
 . depoint

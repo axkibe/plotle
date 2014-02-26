@@ -51,7 +51,7 @@ if( JOOBJ )
 							'Path',
 						assign :
 							null,
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				path :
@@ -87,7 +87,7 @@ if( JOOBJ )
 							'TraitSet',
 						assign :
 							null,
-						defaultVal :
+						defaultValue :
 							'null'
 					},
 				tree :
