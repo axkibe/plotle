@@ -67,7 +67,7 @@ GenerateJoobj.run =
 
 	joobjFileStat =
 		fs.stat(
-			resource.filepath,
+			resource.filePath,
 			sus.fork( )
 		);
 
@@ -124,7 +124,7 @@ GenerateJoobj.run =
 		if( !config.noWrite )
 		{
 			yield fs.writeFile(
-				resource.filepath,
+				resource.filePath,
 				data,
 				sus.resume( )
 			);
@@ -136,7 +136,7 @@ GenerateJoobj.run =
 		data =
 			(
 				yield fs.readFile(
-					resource.filepath,
+					resource.filePath,
 					sus.resume( )
 				)
 			) + '';

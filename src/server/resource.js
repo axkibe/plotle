@@ -27,11 +27,9 @@ if( JOOBJ )
 							'the list of aliases this is server under',
 						type :
 							'Array',
-						allowsNull :
-							true,
 						defaultVal :
-							// by default determined from filepath
-							'undefined'
+							// by default determined from filePath
+							'null'
 					},
 				coding :
 					{
@@ -79,7 +77,7 @@ if( JOOBJ )
 						defaultVal :
 							'undefined'
 					},
-				filepath :
+				filePath :
 					{
 						comment :
 							'path of the resources file',
@@ -185,15 +183,15 @@ Resource.prototype._init =
 	function( )
 {
 	var
-		filepath =
-			this.filepath;
+		filePath =
+			this.filePath;
 
 	// the alias is are the paths the file is served as
 	// directories are replaced with hypens to ease debugging
 	if( !this.aliases )
 	{
 		this.aliases =
-			[ filepath.replace( /\//g, '-' ) ];
+			[ filePath.replace( /\//g, '-' ) ];
 	}
 
 	if( !this.coding )
@@ -227,10 +225,10 @@ Jools.lazyValue(
 			'aliases',
 				null,
 			'joobjSrcPath',
-				this.filepath,
-			'filepath',
+				this.filePath,
+			'filePath',
 				'joobj/' +
-					this.filepath.replace( /\//g, '-' ),
+					this.filePath.replace( /\//g, '-' ),
 			'hasJoobj',
 				false,
 			'isJoobj',
@@ -250,7 +248,7 @@ Jools.lazyValue(
 	{
 		var
 			fp =
-				this.filepath;
+				this.filePath;
 
 		if( !fp )
 		{

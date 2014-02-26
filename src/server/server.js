@@ -759,7 +759,7 @@ Server.prototype.prepareInventory =
 //					[ 'config.js' ],
 				'data',
 					this.buildShellConfig( ),
-				'filepath',
+				'filePath',
 					'config.js',
 				'inBundle',
 					true,
@@ -828,7 +828,7 @@ Server.prototype.prepareInventory =
 				r.create(
 					'data',
 						( yield fs.readFile(
-							r.filepath,
+							r.filePath,
 							sus.resume( )
 						) )
 				)
@@ -880,7 +880,7 @@ Server.prototype.prepareInventory =
 			{
 				code =
 					( yield fs.readFile(
-						r.filepath,
+						r.filePath,
 						sus.resume( )
 					) ) + '';
 			}
@@ -897,7 +897,7 @@ Server.prototype.prepareInventory =
 					code,
 					{
 						filename :
-							r.filepath,
+							r.filePath,
 						strict :
 							true,
 						toplevel :
@@ -909,7 +909,7 @@ Server.prototype.prepareInventory =
 		{
 			console.log(
 				'parse error',
-				r.filepath,
+				r.filePath,
 				'line',
 				e.line
 			);
@@ -1014,7 +1014,7 @@ Server.prototype.prepareInventory =
 	this.inventory =
 		this.inventory.addResource(
 			Resource.create(
-				'filepath',
+				'filePath',
 					bundleFilePath,
 				'maxage',
 					'long',
@@ -2923,7 +2923,7 @@ Server.prototype.requestListener =
 		try {
 			data =
 				yield fs.readFile(
-					r.filepath,
+					r.filePath,
 					sus.resume( )
 				);
 		}
@@ -2937,7 +2937,7 @@ Server.prototype.requestListener =
 
 			Jools.log(
 				'fail',
-				'Missing file: ' + r.filepath
+				'Missing file: ' + r.filePath
 			);
 
 			return;

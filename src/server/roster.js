@@ -28,7 +28,7 @@ module.exports =
 				'index.html',
 				''
 			],
-		'filepath',
+		'filePath',
 			'media/meshcraft.html',
 		'maxage',
 			'short',
@@ -38,7 +38,7 @@ module.exports =
 	Resource.create(
 		'aliases',
 			[ 'devel.html' ],
-		'filepath',
+		'filePath',
 			'media/devel.html',
 		'devel',
 			true,
@@ -46,19 +46,19 @@ module.exports =
 			'develHtml'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/favicon.ico',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'webfont/webfont.js',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/jools/jools.js',
 		'inBundle',
 			true,
@@ -66,13 +66,13 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/jools/sha1.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/point.js',
 		'hasJoobj',
 			true,
@@ -82,7 +82,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/rect.js',
 		'hasJoobj',
 			true,
@@ -92,7 +92,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mm/meshverse.js',
 		'inBundle',
 			true,
@@ -100,7 +100,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mm/path.js',
 		'inBundle',
 			true,
@@ -108,7 +108,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mm/tree.js',
 		'inBundle',
 			true,
@@ -116,7 +116,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mm/sign.js',
 		'inBundle',
 			true,
@@ -124,7 +124,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mm/change.js',
 		'inBundle',
 			true,
@@ -132,13 +132,13 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mm/changeray.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mm/meshmashine.js',
 		'inBundle',
 			true,
@@ -146,37 +146,37 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/fontpool.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/theme.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/const.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/compass.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/margin.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/font.js',
 		'hasJoobj',
 			true,
@@ -184,19 +184,19 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/fabric.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/measure.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/shape.js',
 		'hasJoobj',
 			true,
@@ -204,7 +204,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/round-rect.js',
 		'hasJoobj',
 			true,
@@ -212,7 +212,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/ellipse.js',
 		'hasJoobj',
 			true,
@@ -220,7 +220,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/line.js',
 		'hasJoobj',
 			true,
@@ -228,7 +228,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/euclid/view.js',
 		'hasJoobj',
 			true,
@@ -236,7 +236,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/design/anchor-point.js',
 		'hasJoobj',
 			true,
@@ -244,7 +244,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/design/anchor-rect.js',
 		'hasJoobj',
 			true,
@@ -252,7 +252,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/design/anchor-ellipse.js',
 		'hasJoobj',
 			true,
@@ -260,19 +260,19 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/widgets/widget.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/widgets/getstyle.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/widgets/button.js',
 		'hasJoobj',
 			true,
@@ -280,7 +280,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/widgets/input.js',
 		'hasJoobj',
 			true,
@@ -288,7 +288,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/widgets/checkbox.js',
 		'hasJoobj',
 			true,
@@ -296,7 +296,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/widgets/label.js',
 		'hasJoobj',
 			true,
@@ -304,31 +304,31 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/style.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/accent.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/traitset.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/iface.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/peer.js',
 		'inBundle',
 			true,
@@ -336,25 +336,25 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/stubs.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/discs/icons.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/discs/disc.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/discs/createdisc.js',
 		'hasJoobj',
 			true,
@@ -362,7 +362,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/discs/maindisc.js',
 		'hasJoobj',
 			true,
@@ -370,7 +370,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/discs/jockey.js',
 		'hasJoobj',
 			true,
@@ -378,7 +378,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/hover-reply.js',
 		'hasJoobj',
 			true,
@@ -386,13 +386,13 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/forms/form.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/forms/login.js',
 		'hasJoobj',
 			true,
@@ -400,7 +400,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/forms/signup.js',
 		'hasJoobj',
 			true,
@@ -408,7 +408,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/forms/space.js',
 		'hasJoobj',
 			true,
@@ -416,7 +416,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/forms/moveto.js',
 		'hasJoobj',
 			true,
@@ -424,7 +424,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/forms/user.js',
 		'hasJoobj',
 			true,
@@ -432,7 +432,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/forms/welcome.js',
 		'hasJoobj',
 			true,
@@ -440,7 +440,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/forms/no-access-to-space.js',
 		'hasJoobj',
 			true,
@@ -448,7 +448,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/forms/non-existing-space.js',
 		'hasJoobj',
 			true,
@@ -456,7 +456,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/forms/jockey.js',
 		'hasJoobj',
 			true,
@@ -464,67 +464,67 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/gruga/maindisc.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/gruga/createdisc.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/gruga/login.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/gruga/moveto.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/gruga/no-access-to-space.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/gruga/non-existing-space.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/gruga/signup.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/gruga/space.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/gruga/user.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/gruga/welcome.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/visual/para.js',
 		'hasJoobj',
 			true,
@@ -532,7 +532,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/visual/scrollbar.js',
 		'hasJoobj',
 			true,
@@ -540,7 +540,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/visual/doc.js',
 		'hasJoobj',
 			true,
@@ -548,19 +548,19 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/visual/item.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/visual/docitem.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/visual/note.js',
 		'hasJoobj',
 			true,
@@ -568,7 +568,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/visual/label.js',
 		'hasJoobj',
 			true,
@@ -576,7 +576,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/visual/relation.js',
 		'hasJoobj',
 			true,
@@ -584,7 +584,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/visual/portal.js',
 		'hasJoobj',
 			true,
@@ -592,7 +592,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/visual/space.js',
 		'hasJoobj',
 			true,
@@ -600,19 +600,19 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/system.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mark/mark.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mark/caret.js',
 		'hasJoobj',
 			true,
@@ -620,7 +620,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mark/item.js',
 		'hasJoobj',
 			true,
@@ -628,7 +628,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mark/range.js',
 		'hasJoobj',
 			true,
@@ -636,7 +636,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mark/vacant.js',
 		'hasJoobj',
 			true,
@@ -644,7 +644,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/mark/widget.js',
 		'hasJoobj',
 			true,
@@ -652,13 +652,13 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/action/action.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/action/none.js',
 		'hasJoobj',
 			true,
@@ -666,7 +666,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/action/create-generic.js',
 		'hasJoobj',
 			true,
@@ -674,7 +674,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/action/create-relation.js',
 		'hasJoobj',
 			true,
@@ -682,7 +682,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/action/item-drag.js',
 		'hasJoobj',
 			true,
@@ -690,7 +690,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/action/item-resize.js',
 		'hasJoobj',
 			true,
@@ -698,7 +698,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/action/pan.js',
 		'hasJoobj',
 			true,
@@ -706,7 +706,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/action/scrolly.js',
 		'hasJoobj',
 			true,
@@ -714,115 +714,115 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/shell.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/shell/fontloader.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/style.css',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/boldoblique-webfont.eot',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/boldoblique-webfont.svg',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/boldoblique-webfont.ttf',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/boldoblique-webfont.woff',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/bold-webfont.eot',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/bold-webfont.svg',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/bold-webfont.ttf',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/bold-webfont.woff',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/oblique-webfont.eot',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/oblique-webfont.svg',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/oblique-webfont.ttf',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/oblique-webfont.woff',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/webfont.eot',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/webfont.svg',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/webfont.ttf',
 		'maxage',
 			'long'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'media/dejavusans/webfont.woff',
 		'maxage',
 			'long'
@@ -832,7 +832,7 @@ module.exports =
 	Resource.create(
 		'aliases',
 			[ 'testpad.html' ],
-		'filepath',
+		'filePath',
 			'media/testpad.html',
 		'devel',
 			true,
@@ -840,7 +840,7 @@ module.exports =
 			'testPadHtml'
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/testpad/iface-sym.js',
 		'devel',
 			true,
@@ -848,7 +848,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/testpad/action.js',
 		'devel',
 			true,
@@ -858,7 +858,7 @@ module.exports =
 			true
 	),
 	Resource.create(
-		'filepath',
+		'filePath',
 			'src/testpad/testpad.js',
 		'devel',
 			true,
