@@ -398,7 +398,7 @@ MainDisc.prototype.pushButton =
 {
 	var
 		discname =
-			path.get( 1 );
+			path.get( 2 );
 
 /**/if( CHECK )
 /**/{
@@ -412,7 +412,7 @@ MainDisc.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 2 );
+			path.get( 3 );
 
 	if(
 		buttonName === 'Login' &&

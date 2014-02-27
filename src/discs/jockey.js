@@ -177,7 +177,9 @@ Jockey.prototype._init =
 		if( !proto.path )
 		{
 			path =
-				this.path.append( name );
+				this.path
+					.append( 'twig' )
+					.append( name );
 		}
 		else
 		{
@@ -193,7 +195,7 @@ Jockey.prototype._init =
 					this.action,
 				'hover',
 					// FIXME make a concernsHover in the disc
-					( this.hover.isEmpty || this.hover.get( 1 ) !== name )
+					( this.hover.isEmpty || this.hover.get( 2 ) !== name )
 						?
 						Path.empty
 						:
@@ -363,11 +365,7 @@ Jockey.prototype.pushButton =
 		ctrl
 	)
 {
-	var
-		discname =
-			path.get( 1 );
-
-	switch( discname )
+	switch( path.get( 2 ) )
 	{
 		case 'CreateDisc' :
 

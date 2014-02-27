@@ -310,21 +310,15 @@ CreateDisc.prototype.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	var
-/**/		discname =
-/**/			path.get( 1 );
-/**/
-/**/	if( discname !== this.reflect )
+/**/	if( path.get( 2 ) !== this.reflect )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid discname: ' + discname
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
 	var
 		buttonName =
-			path.get( 2 );
+			path.get( 3 );
 
 	switch( buttonName )
 	{
@@ -456,7 +450,7 @@ CreateDisc.prototype.pointingHover =
 		pp =
 			p.sub( this.frame.pnw );
 
-	// ENHANCE optimize by reusing the latest path of this.$fabric
+	// FUTURE optimize by reusing the latest path of this.$fabric
 	if(
 		!fabric.withinSketch(
 			this.silhoutte,
