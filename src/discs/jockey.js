@@ -19,7 +19,7 @@ Discs =
 | Imports
 */
 var
-	Gruga,
+	Jools,
 	Path;
 
 /*
@@ -106,8 +106,8 @@ if( JOOBJ )
 							'owner of currently loaded space',
 						type :
 							'String',
-						allowsNull :
-							true
+						defaultValue :
+							'null'
 					},
 				spaceTag :
 					{
@@ -115,8 +115,8 @@ if( JOOBJ )
 							'name of currently loaded space',
 						type :
 							'String',
-						allowsNull :
-							true
+						defaultValue :
+							'null'
 					},
 				username :
 					{
@@ -124,16 +124,21 @@ if( JOOBJ )
 							'currently logged in user',
 						type :
 							'String',
-						allowsNull :
-							true
+						defaultValue :
+							'null'
 					}
 			},
 		subclass :
 			'Discs.Disc',
 		init :
-			[
-				'inherit'
-			]
+			[ ],
+		twig :
+			{
+				'MainDisc' :
+					Discs.MainDisc,
+				'CreateDisc' :
+					Discs.CreateDisc
+			}
 	};
 }
 
@@ -142,55 +147,46 @@ var
 		Discs.Jockey;
 
 
-var
-	_discList =
-		Object.freeze(
-			[
-				'MainDisc',
-				'CreateDisc'
-			]
-		);
-
-
 /*
 | Initializes the disc jockey.
 */
 Jockey.prototype._init =
-	function(
-		inherit
-	)
+	function( )
 {
 	var
-		discs =
-			{ };
+		path,
+		ranks =
+			this.ranks,
+		twig =
+			// FIXME do not copy when inherit.twig !== this.twig
+			Jools.copy( this.twig );
 
-	for( var i in _discList )
+	for(
+		var a = 0, aZ = ranks.length;
+		a < aZ;
+		a++
+	)
 	{
 		var
 			name =
-				_discList[ i ],
+				ranks[ a ],
 
-			discProto =
-				inherit && inherit._discs[ name ],
+			proto =
+				twig[ name ];
 
-			path;
-
-		if( !discProto )
+		if( !proto.path )
 		{
-			discProto =
-				Gruga[ name ];
-
 			path =
 				this.path.append( name );
 		}
 		else
 		{
 			path =
-				undefined; // inherit
+				undefined;
 		}
 
-		discs[ name ] =
-			discProto.create(
+		twig[ name ] =
+			proto.create(
 				'access',
 					this.access,
 				'action',
@@ -219,8 +215,8 @@ Jockey.prototype._init =
 			);
 	}
 
-	this._discs =
-		Object.freeze( discs );
+	this.twig =
+		twig;
 };
 
 
@@ -262,10 +258,10 @@ Jockey.prototype.draw =
 {
 	if( this.mode === 'Create' )
 	{
-		this._discs.CreateDisc.draw( fabric );
+		this.twig.CreateDisc.draw( fabric );
 	}
 
-	this._discs.MainDisc.draw( fabric );
+	this.twig.MainDisc.draw( fabric );
 };
 
 
@@ -281,7 +277,7 @@ Jockey.prototype.pointingHover =
 {
 	var
 		hover =
-			this._discs.MainDisc.pointingHover(
+			this.twig.MainDisc.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -295,7 +291,7 @@ Jockey.prototype.pointingHover =
 	if( this.mode === 'Create' )
 	{
 		return (
-			this._discs.CreateDisc.pointingHover(
+			this.twig.CreateDisc.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -331,7 +327,7 @@ Jockey.prototype.click =
 {
 	var
 		start =
-			this._discs.MainDisc.click(
+			this.twig.MainDisc.click(
 				p,
 				shift,
 				ctrl
@@ -345,7 +341,7 @@ Jockey.prototype.click =
 	if( this.mode === 'Create' )
 	{
 		return (
-			this._discs.CreateDisc.click(
+			this.twig.CreateDisc.click(
 				p,
 				shift,
 				ctrl
@@ -376,7 +372,7 @@ Jockey.prototype.pushButton =
 		case 'CreateDisc' :
 
 			return (
-				this._discs.CreateDisc.pushButton(
+				this.twig.CreateDisc.pushButton(
 					path,
 					shift,
 					ctrl
@@ -386,7 +382,7 @@ Jockey.prototype.pushButton =
 		case 'MainDisc' :
 
 			return (
-				this._discs.MainDisc.pushButton(
+				this.twig.MainDisc.pushButton(
 					path,
 					shift,
 					ctrl

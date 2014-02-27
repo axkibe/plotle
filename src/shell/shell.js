@@ -219,14 +219,14 @@ Shell =
 				this._$mode,
 			'path',
 				Path.empty.append( 'discs' ),
-			'spaceUser',
-				null,
-			'spaceTag',
-				null,
-			'username',
-				null,
 			'view',
-				view
+				view,
+			'twig:add',
+			'MainDisc',
+				Gruga.MainDisc,
+			'twig:add',
+			'CreateDisc',
+				Gruga.CreateDisc
 		);
 
 	this.mark =

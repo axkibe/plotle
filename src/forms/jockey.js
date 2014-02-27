@@ -175,8 +175,9 @@ Jockey.prototype._init =
 		if( !form.path )
 		{
 			path =
-				// TODO one append
-				this.path.append( 'twig' ).append( name );
+				this.path
+					.append( 'twig' )
+					.append( name );
 		}
 		else
 		{
