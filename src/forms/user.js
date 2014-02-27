@@ -131,7 +131,7 @@ if( JOOBJ )
 									'sizeOnly'
 							},
 						defaultValue :
-							'null'
+							'undefined'
 					}
 			},
 
@@ -257,7 +257,7 @@ User.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 3 );
+			path.get( 4 );
 
 	switch( buttonName )
 	{

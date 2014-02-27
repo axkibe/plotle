@@ -54,10 +54,10 @@ Form.init =
 		traitSet
 	)
 {
-	if( this.view === null )
+	if( !this.path )
 	{
-		// abstract in design mode
-
+		// this is an abstract
+		// design mode form
 		return;
 	}
 
@@ -102,7 +102,7 @@ Form.init =
 
 		// FIXME only when not having widgetProto
 		path =
-			this.path.append( name );
+			this.path.append( 'twig' ).append( name );
 
 		if( widgetProto.focusable )
 		{
@@ -114,7 +114,7 @@ Form.init =
 			else
 			{
 				focusAccent =
-					this.mark.widgetPath.get( 3 ) === name;
+					this.mark.widgetPath.get( 4 ) === name;
 			}
 		}
 
@@ -196,7 +196,7 @@ Form.prototype._focusedWidget =
 /**/	}
 /**/}
 
-	return this.sub[ path.get( 3 ) ];
+	return this.sub[ path.get( 4 ) ];
 };
 
 
@@ -423,7 +423,7 @@ Form.prototype.cycleFocus =
 
 		rank =
 			// tree.rankOf( path.get( 3 ) ), TODO
-			ranks.indexOf( path.get( 3 ) ),
+			ranks.indexOf( path.get( 4 ) ),
 
 		length =
 			ranks.length, // TODO
@@ -563,7 +563,7 @@ Form.prototype._widgetPath =
 	else
 	{
 		// in form creation sub might not exist yet.
-		return this.path.append( widgetName );
+		return this.path.append( 'twig' ).append( widgetName );
 	}
 };
 

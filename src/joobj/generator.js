@@ -1551,10 +1551,22 @@ generateCreatorConcerns =
 			// member
 			if( !args )
 			{
-				if( attr.allowsNull )
+				if( attr.allowsNull && attr.allowsUndefiend )
+				{
+					throw new Error( 'FIXME' );
+				}
+				else if( attr.allowsNull )
 				{
 					r.push(
 						'\t\t' + attr.vName + ' !== null ?',
+						'\t\t\t' + attr.vName + '.' + member + ':',
+						'\t\t\tnull;'
+					);
+				}
+				else if( attr.allowsUndefined )
+				{
+					r.push(
+						'\t\t' + attr.vName + ' !== undefined ?',
 						'\t\t\t' + attr.vName + '.' + member + ':',
 						'\t\t\tnull;'
 					);

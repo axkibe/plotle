@@ -134,7 +134,7 @@ if( JOOBJ )
 									'sizeOnly'
 							},
 						defaultValue :
-							'null'
+							'undefined'
 					}
 			},
 		subclass :
@@ -225,7 +225,7 @@ MoveTo.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 3 );
+			path.get( 4 );
 
 	switch( buttonName )
 	{

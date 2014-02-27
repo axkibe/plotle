@@ -148,7 +148,7 @@ Jools.lazyValue(
 	function( )
 	{
 		if(
-			this.path.length < 3
+			this.path.length < 5
 			||
 			this.path.get( 0 ) !== 'forms'
 		)
@@ -156,7 +156,7 @@ Jools.lazyValue(
 			return Path.empty;
 		}
 
-		return this.path.limit( 4 );
+		return this.path.limit( 5 );
 	}
 );
 
