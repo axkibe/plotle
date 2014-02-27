@@ -239,23 +239,23 @@ SignUp.prototype.signup =
 	function( )
 {
 	var
-		sub =
-			this.sub,
+		twig =
+			this.twig,
 
 		user =
-			sub.userInput.value,
+			twig.userInput.value,
 
 		email =
-			sub.emailInput.value,
+			twig.emailInput.value,
 
 		pass =
-			sub.passwordInput.value,
+			twig.passwordInput.value,
 
 		pass2 =
-			sub.password2Input.value,
+			twig.password2Input.value,
 
 		newsletter =
-			sub.newsletterCheckBox.checked;
+			twig.newsletterCheckBox.checked;
 
 	if( user.length < 4 )
 	{
@@ -278,7 +278,7 @@ SignUp.prototype.signup =
 		shell.setMark(
 			Mark.Caret.create(
 				'path',
-					sub.userInput.path,
+					twig.userInput.path,
 				'at',
 					user.length
 			)
@@ -301,7 +301,7 @@ SignUp.prototype.signup =
 		shell.setMark(
 			Mark.Caret.create(
 				'path',
-					sub.userInput.path,
+					twig.userInput.path,
 				'at',
 					0
 			)
@@ -324,7 +324,7 @@ SignUp.prototype.signup =
 		shell.setMark(
 			Mark.Caret.create(
 				'path',
-					sub.passwordInput.path,
+					twig.passwordInput.path,
 				'at',
 					pass.length
 			)
@@ -347,7 +347,7 @@ SignUp.prototype.signup =
 		shell.setMark(
 			Mark.Caret.create(
 				'path',
-					sub.password2Input.path,
+					twig.password2Input.path,
 				'at',
 					pass2.length
 			)
@@ -377,8 +377,8 @@ SignUp.prototype.onRegister =
 	)
 {
 	var
-		sub =
-			this.sub;
+		twig =
+			this.twig;
 
 	if( !res.ok )
 	{
@@ -396,9 +396,9 @@ SignUp.prototype.onRegister =
 			shell.setMark(
 				Mark.Caret.create(
 					'path',
-						sub.userInput.path,
+						twig.userInput.path,
 					'at',
-						sub.userInput.value.length
+						twig.userInput.value.length
 				)
 			);
 		}
@@ -424,29 +424,29 @@ SignUp.prototype.clear =
 	function( )
 {
 	var
-		sub =
-			this.sub;
+		twig =
+			this.twig;
 
 	shell.setTraits(
 		TraitSet.create(
 			'trait',
-				sub.userInput.path,
+				twig.userInput.path,
 				'value',
 				'',
 			'trait',
-				sub.emailInput.path,
+				twig.emailInput.path,
 				'value',
 				'',
 			'trait',
-				sub.passwordInput.path,
+				twig.passwordInput.path,
 				'value',
 				'',
 			'trait',
-				sub.password2Input.path,
+				twig.password2Input.path,
 				'value',
 				'',
 			'trait',
-				sub.newsletterCheckBox.path,
+				twig.newsletterCheckBox.path,
 				'checked',
 				true
 		)

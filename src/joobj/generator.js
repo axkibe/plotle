@@ -961,7 +961,18 @@ generateConstructor =
 
 	r.push(
 		'',
-		'\tJools.immute( this );',
+		'\tJools.immute( this );'
+	);
+
+	if( jj.twig )
+	{
+		r.push(
+			'Jools.immute( ranks );',
+			'Jools.immute( twig );'
+		);
+	}
+
+	r.push(
 		'};'
 	);
 };
@@ -1193,6 +1204,39 @@ generateCreatorFreeStringsParser =
 			'\t\t\t\t\targ;',
 			'',
 			'\t\t\t\tranks.push( key );',
+			'',
+			'\t\t\t\tbreak;',
+			'',
+			'\t\t\tcase \'twig:set\' :',
+			'',
+			'\t\t\t\tif( !twigdup )',
+			'\t\t\t\t{',
+			'\t\t\t\t\ttwig =',
+			'\t\t\t\t\t\tJools.copy( twig );',
+			'',
+			'\t\t\t\t\tranks =',
+			'\t\t\t\t\t\tranks.slice( );',
+			'',
+			'\t\t\t\t\ttwigdup =',
+			'\t\t\t\t\t\ttrue;',
+			'\t\t\t\t}',
+			'',
+			'\t\t\t\tkey =',
+			'\t\t\t\t\targ;',
+			'',
+			'\t\t\t\targ =',
+			'\t\t\t\t\targuments[ ++a + 1 ];',
+			'',
+			'\t\t\t\tif( twig[ key ] === undefined )',
+			'\t\t\t\t{',
+			'\t\t\t\t\tthrow new Error(',
+			'\t\t\t\t\t\t\'key "\' + key + \'" not in use\'',
+			'\t\t\t\t\t);',
+			'\t\t\t\t}',
+			'',
+			// TODO check if arg is of correct type
+			'\t\t\t\ttwig[ key ] =',
+			'\t\t\t\t\targ;',
 			'',
 			'\t\t\t\tbreak;',
 			''

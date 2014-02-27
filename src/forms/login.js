@@ -242,14 +242,14 @@ Login.prototype.login =
 	function( )
 {
 	var
-		sub =
-			this.sub,
+		twig =
+			this.twig,
 
 		user =
-			sub.userInput.value,
+			twig.userInput.value,
 
 		pass =
-			sub.passwordInput.value;
+			twig.passwordInput.value;
 
 	if( user.length < 4 )
 	{
@@ -265,7 +265,7 @@ Login.prototype.login =
 		shell.setMark(
 			Mark.Caret.create(
 				'path',
-					sub.userInput.path,
+					twig.userInput.path,
 				'at',
 					user.length,
 				'retainx',
@@ -290,7 +290,7 @@ Login.prototype.login =
 		shell.setMark(
 			Mark.Caret.create(
 				'path',
-					sub.userInput.path,
+					twig.userInput.path,
 				'at',
 					0,
 				'retainx',
@@ -315,7 +315,7 @@ Login.prototype.login =
 		shell.setMark(
 			Mark.Caret.create(
 				'path',
-					sub.passwordInput.path,
+					twig.passwordInput.path,
 				'at',
 					pass.length
 			)
@@ -378,8 +378,8 @@ Login.prototype.onAuth =
 	)
 {
 	var
-		sub =
-			this.sub;
+		twig =
+			this.twig;
 
 	if( !res.ok )
 	{
@@ -397,7 +397,7 @@ Login.prototype.onAuth =
 			shell.setMark(
 				Mark.Caret.create(
 					'path',
-						sub.userInput.path,
+						twig.userInput.path,
 					'at',
 						user.length
 				)
@@ -408,7 +408,7 @@ Login.prototype.onAuth =
 			shell.setMark(
 				Mark.Caret.create(
 					'path',
-						sub.passwordInput.path,
+						twig.passwordInput.path,
 					'at',
 						pass.length
 				)
@@ -442,17 +442,17 @@ Login.prototype.clear =
 	function( )
 {
 	var
-		sub =
-			this.sub;
+		twig =
+			this.twig;
 
 	shell.setTraits(
 		TraitSet.create(
 			'trait',
-				sub.userInput.path,
+				twig.userInput.path,
 				'value',
 				'',
 			'trait',
-				sub.passwordInput.path,
+				twig.passwordInput.path,
 				'value',
 				''
 		)

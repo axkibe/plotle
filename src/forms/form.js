@@ -66,10 +66,9 @@ Form.init =
 
 	// all components of the form
 	var
-		sub =
-			{ },
 		twig =
-			this.twig,
+			// FIXME do not copy if this.twig !== inherit.twig
+			Jools.copy( this.twig ),
 		ranks =
 			this.ranks;
 
@@ -82,23 +81,11 @@ Form.init =
 		var
 			name =
 				ranks[ a ],
-			subtree =
-				twig[ name ],
 			widgetProto =
-				inherit
-				&&
-				inherit.sub
-				&&
-				inherit.sub[ name ],
+				twig[ name ],
 			path,
 			focusAccent =
 				false;
-
-		if( !widgetProto )
-		{
-			widgetProto =
-				subtree;
-		}
 
 		// FIXME only when not having widgetProto
 		path =
@@ -118,7 +105,7 @@ Form.init =
 			}
 		}
 
-		sub[ name ] =
+		twig[ name ] =
 			widgetProto.create(
 				'path',
 					path,
@@ -135,8 +122,8 @@ Form.init =
 			);
 	}
 
-	this.sub =
-		Jools.immute( sub );
+	this.twig =
+		twig;
 };
 
 
@@ -196,7 +183,7 @@ Form.prototype._focusedWidget =
 /**/	}
 /**/}
 
-	return this.sub[ path.get( 4 ) ];
+	return this.twig[ path.get( 4 ) ];
 };
 
 
@@ -227,12 +214,10 @@ Form.prototype.draw =
 	{
 		var
 			name =
-				ranks[ a ],
+				ranks[ a ];
 
-			comp =
-				this.sub[ name ];
-
-		comp.draw( fabric );
+		// FIXME just create a atRank
+		this.twig[ name ].draw( fabric );
 	}
 };
 
@@ -292,11 +277,9 @@ Form.prototype.pointingHover =
 			name =
 				ranks[ a ],
 
-			comp =
-				this.sub[ name ],
-
+			// FIXME atRank
 			reply =
-				comp.pointingHover(
+				this.twig[ name ].pointingHover(
 					p,
 					shift,
 					ctrl
@@ -343,19 +326,17 @@ Form.prototype.click =
 			name =
 				ranks[ a ],
 
-			ce =
-				this.sub[ name ],
-
-			r =
-				ce.click(
+			// TODO atRank
+			result =
+				this.twig[ name ].click(
 					p,
 					shift,
 					ctrl
 				);
 
-		if( r !== null )
+		if( result !== null )
 		{
-			return r;
+			return result;
 		}
 	}
 
@@ -449,7 +430,7 @@ Form.prototype.cycleFocus =
 			ranks[ rank ];
 
 		ve =
-			this.sub[ name ];
+			this.twig[ name ];
 
 		if(
 			ve.focusable
@@ -550,21 +531,25 @@ Form.prototype.mousewheel =
 
 /*
 | Returns the path of a widget
+|
+| FIXME make this go away.
 */
 Form.prototype._widgetPath =
 	function(
 		widgetName
 	)
 {
-	if( this.sub )
+	var
+		path =
+			this.twig[ widgetName ].path;
+
+	if( !path )
 	{
-		return this.sub[ widgetName ].path;
-	}
-	else
-	{
-		// in form creation sub might not exist yet.
+		// at startup the path might still be null
 		return this.path.append( 'twig' ).append( widgetName );
 	}
+
+	return path;
 };
 
 
