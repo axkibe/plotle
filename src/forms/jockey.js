@@ -20,8 +20,6 @@ Forms =
 | Imports
 */
 var
-	Gruga,
-	Jools,
 	Mark;
 
 
@@ -120,7 +118,6 @@ if( JOOBJ )
 			'Forms.Form',
 		init :
 			[
-				'inherit',
 				'traitSet'
 			],
 		twig :
@@ -152,54 +149,34 @@ var
 
 
 /*
-| A list of all forms there is
-*/
-Jockey.formList =
-	Object.freeze(
-		[
-			'Login',
-			'MoveTo',
-			'NoAccessToSpace',
-			'NonExistingSpace',
-			'SignUp',
-			'Space',
-			'User',
-			'Welcome'
-		]
-	);
-
-
-/*
 | Initializer.
 */
 Jockey.prototype._init =
 	function(
-		inherit,
 		traitSet
 	)
 {
 	var
-		forms =
-			{ },
-
 		path;
 
-	for( var i in Jockey.formList )
+	for(
+		var a = 0, aZ = this.ranks.length;
+		a < aZ;
+		a++
+	)
 	{
 		var
 			name =
-				Jockey.formList[ i ],
+				this.ranks[ a ],
 
-			formProto =
-				inherit && inherit._forms[ name ];
+			form =
+				this.twig[ name ];
 
-		if( !formProto )
+		if( !form.path )
 		{
-			formProto =
-				Gruga[ name ];
-
 			path =
-				this.path.append( name );
+				// TODO one append
+				this.path.append( 'twig' ).append( name );
 		}
 		else
 		{
@@ -207,8 +184,8 @@ Jockey.prototype._init =
 				undefined; // inherit
 		}
 
-		forms[ name ] =
-			formProto.create(
+		this.twig[ name ] =
+			form.create(
 				'hover',
 					this.hover,
 				'mark',
@@ -229,18 +206,14 @@ Jockey.prototype._init =
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( forms[ name ].reflect !== name )
+/**/		if( this.twig[ name ].reflect !== name )
 /**/		{
 /**/			throw new Error(
-/**/				'form reflexion mismatch: ' +
-/**/					forms[ name ].reflect + ' !== ' + name
+/**/				'reflection mismatch'
 /**/			);
 /**/		}
 /**/	}
 	}
-
-	this._forms =
-		Jools.immute( forms );
 };
 
 
@@ -275,7 +248,7 @@ Jockey.prototype.get =
 		name
 	)
 {
-	return this._forms[ name ];
+	return this.twig[ name ];
 };
 
 
@@ -290,15 +263,13 @@ Jockey.prototype.cycleFocus =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( !this._forms[ formname ] )
+/**/	if( !this.twig[ formname ] )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid formname: ' + formname
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
-	return this._forms[ formname ].cycleFocus( dir );
+	return this.twig[ formname ].cycleFocus( dir );
 };
 
 
@@ -311,24 +282,26 @@ Jockey.prototype.pushButton =
 	)
 {
 
-	var
-		formname =
-			path.get( 1 );
-
 /**/if( CHECK )
 /**/{
-/**/	if( !this._forms[ formname ] )
+/**/	if(
+/**/		path.length < 3
+/**/		||
+/**/		path.get( 0 ) !== 'forms'
+/**/		||
+/**/		path.get( 1 ) !== 'twig'
+/**/		||
+/**/		!this.twig[ path.get( 2 ) ]
+/**/	)
 /**/	{
-/**/		throw new Error(
-/**/			'invalid formname: ' + formname
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
 	return (
-		this._forms[ formname ].pushButton(
+		this.twig[ path.get( 2 ) ].pushButton(
 			path,
-			false, // FIXME honor shift / ctrl states
+			false, // FUTURE honor shift / ctrl states
 			false
 		)
 	);

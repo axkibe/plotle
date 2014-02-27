@@ -209,17 +209,15 @@ Welcome.prototype.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 1 ) !== this.reflect )
+/**/	if( path.get( 2 ) !== this.reflect )
 /**/	{
-/**/		throw new Error(
-/**/			'path mismatch'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
 	var
 		buttonName =
-			path.get( 2 );
+			path.get( 3 );
 
 	switch( buttonName )
 	{
@@ -231,13 +229,7 @@ Welcome.prototype.pushButton =
 
 		default :
 
-			throw new Error(
-				CHECK
-				&&
-				(
-					'unknown button pushed: ' + buttonName
-				)
-			);
+			throw new Error( );
 	}
 };
 

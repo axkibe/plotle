@@ -114,7 +114,7 @@ Form.init =
 			else
 			{
 				focusAccent =
-					this.mark.widgetPath.get( 2 ) === name;
+					this.mark.widgetPath.get( 3 ) === name;
 			}
 		}
 
@@ -190,15 +190,13 @@ Form.prototype._focusedWidget =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 1 ) !== this.reflect )
+/**/	if( path.get( 2 ) !== this.reflect )
 /**/	{
-/**/		throw new Error(
-/**/			'the mark is not on this form!'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
-	return this.sub[ path.get( 2 ) ];
+	return this.sub[ path.get( 3 ) ];
 };
 
 
@@ -424,8 +422,8 @@ Form.prototype.cycleFocus =
 			this.ranks,
 
 		rank =
-			// tree.rankOf( path.get( 2 ) ), TODO
-			ranks.indexOf( path.get( 2 ) ),
+			// tree.rankOf( path.get( 3 ) ), TODO
+			ranks.indexOf( path.get( 3 ) ),
 
 		length =
 			ranks.length, // TODO
@@ -531,11 +529,7 @@ Form.prototype.pushButton =
 		// buttonName
 	)
 {
-	throw new Error(
-		CHECK
-		&&
-		'pushButton should be overloaded!'
-	);
+	throw new Error( );
 };
 
 

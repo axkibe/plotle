@@ -156,7 +156,7 @@ Jools.lazyValue(
 			return Path.empty;
 		}
 
-		return this.path.limit( 3 );
+		return this.path.limit( 4 );
 	}
 );
 

@@ -139,7 +139,6 @@
 . _focusedWidget
 . _fontWFont
 . _fonts
-. _forms
 . _frontAt
 . _frontPath
 . _getCurrentDisplay
