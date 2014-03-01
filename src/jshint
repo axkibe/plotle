@@ -2,4 +2,4 @@
 if [ ! -f .jshint.stamp ]; then
     touch -d 19700101 .jshint.stamp
 fi
-( jshint --config ../jshint.json `find . -name \*.js -newer .jshint.stamp` | head -n 10 ) && touch .jshint.stamp
+( jshint --config ../jshint.json `find . -name \*.js -newer .jshint.stamp` && touch .jshint.stamp ) | head -n 10

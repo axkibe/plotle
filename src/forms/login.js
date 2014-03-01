@@ -22,8 +22,7 @@ Forms =
 var
 	Jools,
 	Mark,
-	shell,
-	TraitSet;
+	shell;
 
 
 /*
@@ -253,13 +252,10 @@ Login.prototype.login =
 
 	if( user.length < 4 )
 	{
-		shell.setTraits(
-			TraitSet.create(
-				'trait',
-					this._widgetPath( 'errorLabel' ),
-					'text',
-					'Username too short, min. 4 characters'
-			)
+		shell.setPath(
+			this._widgetPath( 'errorLabel' )
+				.append( 'text' ),
+			'Username too short, min. 4 characters'
 		);
 
 		shell.setMark(
@@ -278,13 +274,10 @@ Login.prototype.login =
 
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		shell.setTraits(
-			TraitSet.create(
-				'trait',
-					this._widgetPath( 'errorLabel' ),
-					'text',
-					'Username must not start with "visit"'
-			)
+		shell.setPath(
+			this._widgetPath( 'errorLabel' )
+				.append( 'text' ),
+			'Username must not start with "visit"'
 		);
 
 		shell.setMark(
@@ -303,13 +296,10 @@ Login.prototype.login =
 
 	if( pass.length < 5 )
 	{
-		shell.setTraits(
-			TraitSet.create(
-				'trait',
-					this._widgetPath( 'errorLabel' ),
-					'text',
-					'Password too short, min. 5 characters'
-			)
+		shell.setPath(
+			this._widgetPath( 'errorLabel' )
+				.append( 'text' ),
+			'Password too short, min. 5 characters'
 		);
 
 		shell.setMark(
@@ -383,13 +373,10 @@ Login.prototype.onAuth =
 
 	if( !res.ok )
 	{
-		shell.setTraits(
-			TraitSet.create(
-				'trait',
-					this._widgetPath( 'errorLabel' ),
-					'text',
-					res.message
-			)
+		shell.setPath(
+			this._widgetPath( 'errorLabel' )
+				.append( 'text' ),
+			res.message
 		);
 
 		if( res.message.search(/Username/) >= 0 )
@@ -441,21 +428,15 @@ Login.prototype.onAuth =
 Login.prototype.clear =
 	function( )
 {
-	var
-		twig =
-			this.twig;
+	// FUTURE combine calls
+	shell.setPath(
+		this._widgetPath( 'userInput' ).append( 'value' ),
+		''
+	);
 
-	shell.setTraits(
-		TraitSet.create(
-			'trait',
-				twig.userInput.path,
-				'value',
-				'',
-			'trait',
-				twig.passwordInput.path,
-				'value',
-				''
-		)
+	shell.setPath(
+		this._widgetPath( 'passwordInput' ).append( 'value' ),
+		''
 	);
 
 	shell.setMark(
