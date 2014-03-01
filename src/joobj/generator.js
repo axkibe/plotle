@@ -2213,6 +2213,19 @@ generateProtoSection =
 		jj.reference + '.prototype.setPath =',
 		'\tJoobjProto.setPath;'
 	);
+
+	if( jj.twig )
+	{
+		generateSeperator( r );
+
+		r.push(
+			'/*',
+			'| .',
+			'*/',
+			jj.reference + '.prototype.atRank =',
+			'\tJoobjProto.atRank;'
+		);
+	}
 };
 
 

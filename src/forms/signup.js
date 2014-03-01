@@ -278,13 +278,10 @@ SignUp.prototype.signup =
 
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		shell.setTraits(
-			TraitSet.create(
-			'trait',
-				this._widgetPath( 'errorLabel' ),
-				'text',
-				'Username must not start with "visit"'
-			)
+		shell.setPath(
+			this._widgetPath( 'errorLabel' )
+				.append( 'text' ),
+			'Username must not start with "visit"'
 		);
 
 		shell.setMark(
@@ -301,13 +298,10 @@ SignUp.prototype.signup =
 
 	if( pass.length < 5 )
 	{
-		shell.setTraits(
-			TraitSet.create(
-			'trait',
-				this._widgetPath( 'errorLabel' ),
-				'text',
-				'Password too short, min. 5 characters'
-			)
+		shell.setPath(
+			this._widgetPath( 'errorLabel' ).
+				append( 'text' ),
+			'Password too short, min. 5 characters'
 		);
 
 		shell.setMark(
@@ -324,13 +318,10 @@ SignUp.prototype.signup =
 
 	if( pass !== pass2 )
 	{
-		shell.setTraits(
-			TraitSet.create(
-			'trait',
-				this._widgetPath( 'errorLabel' ),
-				'text',
-				'Passwords do not match'
-			)
+		shell.setPath(
+			this._widgetPath( 'errorLabel' )
+				.append( 'text' ),
+			'Passwords do not match'
 		);
 
 		shell.setMark(
@@ -371,13 +362,10 @@ SignUp.prototype.onRegister =
 
 	if( !res.ok )
 	{
-		shell.setTraits(
-			TraitSet.create(
-			'trait',
-				this._widgetPath( 'errorLabel' ),
-				'text',
-				res.message
-			)
+		shell.setPath(
+			this._widgetPath( 'errorLabel' )
+				.append( 'text' ),
+			res.message
 		);
 
 		if( res.message.search( /Username/ ) >= 0 )
@@ -416,29 +404,31 @@ SignUp.prototype.clear =
 		twig =
 			this.twig;
 
-	shell.setTraits(
-		TraitSet.create(
-			'trait',
-				twig.userInput.path,
-				'value',
-				'',
-			'trait',
-				twig.emailInput.path,
-				'value',
-				'',
-			'trait',
-				twig.passwordInput.path,
-				'value',
-				'',
-			'trait',
-				twig.password2Input.path,
-				'value',
-				'',
-			'trait',
-				twig.newsletterCheckBox.path,
-				'checked',
-				true
-		)
+	// FUTURE make this in one call, somehow
+
+	shell.setPath(
+		twig.userInput.path.append( 'value' ),
+		''
+	);
+
+	shell.setPath(
+		twig.emailInput.path.append( 'value' ),
+		''
+	);
+
+	shell.setPath(
+		twig.passwordInput.path.append( 'value' ),
+		''
+	);
+
+	shell.setPath(
+		twig.password2Input.path.append( 'value' ),
+		''
+	);
+
+	shell.setPath(
+		twig.newsletterCheckBox.path.append( 'checked' ),
+		true
 	);
 
 	shell.setMark(

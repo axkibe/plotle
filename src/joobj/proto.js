@@ -15,6 +15,9 @@ var
 'use strict';
 
 
+/*
+| Sets a key of a sub node described by a path.
+*/
 JoobjProto.setPath =
 	function(
 		path,  // path to set
@@ -84,6 +87,18 @@ JoobjProto.setPath =
 			)
 		)
 	);
+};
+
+
+/*
+| Returns a twig node by its rank.
+*/
+JoobjProto.atRank =
+	function(
+		rank
+	)
+{
+	return this.twig[ this.ranks[ rank ] ];
 };
 
 

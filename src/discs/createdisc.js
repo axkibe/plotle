@@ -272,13 +272,13 @@ Jools.lazyValue(
 		);
 
 		for(
-			var a = 0, aZ = this.ranks.length;
-			a < aZ;
-			a++
+			var r = 0, rZ = this.ranks.length;
+			r < rZ;
+			r++
 		)
 		{
-			// TODO this.atRank
-			this.twig[ this.ranks[ a ] ].draw( fabric );
+			this.atRank( r )
+				.draw( fabric );
 		}
 
 		fabric.edge(
@@ -461,15 +461,14 @@ CreateDisc.prototype.pointingHover =
 
 	// it's on the disc
 	for(
-		var a = 0, aZ = this.ranks.length;
-		a < aZ;
-		a++
+		var r = 0, rZ = this.ranks.length;
+		r < rZ;
+		r++
 	)
 	{
 		var
 			reply =
-				// TODO this.atRank
-				this.twig[ this.ranks[ a ] ]
+				this.atRank( r )
 					.pointingHover(
 						pp,
 						shift,
@@ -529,15 +528,14 @@ CreateDisc.prototype.click =
 
 	// this is on the disc
 	for(
-		var a = 0, aZ = this.ranks.length;
-		a < aZ;
-		a++
+		var r = 0, rZ = this.ranks.length;
+		r < rZ;
+		r++
 	)
 	{
 		var
 			reply =
-				// TODO this atRank
-				this.twig[ this.ranks[ a ] ]
+				this.atRank( r )
 					.click(
 						pp,
 						shift,
