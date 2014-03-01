@@ -80,11 +80,17 @@ var
 		var
 			blacklist =
 				{
+					'atRank' :
+						true,
 					'create' :
+						true,
+					'getPath' :
 						true,
 					'inherit' :
 						true,
 					'ranks' :
+						true,
+					'setPath' :
 						true,
 					'type' :
 						true,
@@ -2229,16 +2235,19 @@ generateToJSONSection =
 		'/*',
 		'| Convers the object into a JSON.',
 		'*/',
-		'Jools.lazyFunction(',
+		//'Jools.lazyFunction(',XXX
+		'Jools.lazyValue(',
 		'\t' + jj.reference + '.prototype,',
 		'\t\'toJSON\',',
 		'\tfunction( )',
 		'\t{',
-		'\t\treturn Object.freeze( {',
+		'\t\tvar',
+		'\t\t\t json;',
 		'',
-		'\t\t\ttype :',
-		'\t\t\t\t\'' + jj.name + '\',',
-		''
+		'\t\tjson =',
+		'\t\t\t Object.freeze( {',
+		'\t\t\t\ttype :',
+		'\t\t\t\t\t\'' + jj.name + '\','
 	);
 
 	for(
@@ -2256,16 +2265,17 @@ generateToJSONSection =
 		}
 
 		r.push(
-			'\t\t\t\'' + aName + '\' :',
-			'\t\t\t\tthis.' + aName +
-				( a + 1 < aZ ? ',' : '' ),
-			''
+			'\t\t\t\t\'' + aName + '\' :',
+			'\t\t\t\t\tthis.' + aName +
+				( a + 1 < aZ ? ',' : '' )
 		);
 	}
 
 
 	r.push(
 		'\t\t} );',
+		'',
+		'\t\treturn function( ) { return json; };',
 		'\t}',
 		');'
 	);

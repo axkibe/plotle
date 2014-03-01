@@ -1,3 +1,4 @@
+. concernsHover
 . $abort
 . $action
 . $aquireAjax
@@ -130,7 +131,6 @@
 . _colorStyle
 . _createItem
 . _cx
-. _discs
 . _draw
 . _drawCaret
 . _edge
@@ -264,7 +264,6 @@
 . border
 . bottombox
 > button
-. buttons
 > ca
 > call
 . can
@@ -459,7 +458,6 @@
 > home
 . horizontal
 . hover
-. hoverAccent
 . hull
 . icon
 . iconNormal

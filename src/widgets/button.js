@@ -72,15 +72,24 @@ if( JOOBJ )
 						defaultValue :
 							'null'
 					},
-				// FIXME deduce from hoverPath
-				hoverAccent :
+				hover :
 					{
 						comment :
-							'true if the widget is hovered on',
+							'component hovered upon',
 						type :
-							'Boolean',
+							'Path',
 						defaultValue :
-							'false'
+							'null',
+						concerns :
+							{
+								func :
+									'Widgets.Widget.concernsHover',
+								args :
+									[
+										'hover',
+										'path'
+									]
+							}
 					},
 				icon :
 					{
@@ -89,6 +98,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
+							// TODO undefiend
 							'null'
 					},
 				iconStyle :
@@ -347,10 +357,11 @@ Jools.lazyValue(
 		var
 			accent =
 				Accent.state(
-					this.hoverAccent,
+					this.hover
+						&&
+						this.hover.equals( this.path ),
 					this.focusAccent
 				),
-
 			f =
 				Euclid.Fabric.create(
 					'width',
@@ -358,7 +369,6 @@ Jools.lazyValue(
 					'height',
 						this.frame.height
 				),
-
 			style =
 				Widgets.getStyle(
 					this.style,

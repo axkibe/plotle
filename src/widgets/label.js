@@ -53,13 +53,12 @@ if( JOOBJ )
 						type :
 							'AnchorPoint'
 					},
-				// FIXME deduce from hoverPath
-				hoverAccent :
+				hover :
 					{
 						comment :
-							'true if the widget is hovered on',
+							'component hovered upon',
 						type :
-							'Boolean',
+							'Path',
 						defaultValue :
 							'null',
 						assign :

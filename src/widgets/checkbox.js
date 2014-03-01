@@ -70,15 +70,24 @@ if( JOOBJ )
 						defaultValue :
 							'false'
 					},
-				// FIXME deduce from hoverPath
-				hoverAccent :
+				hover :
 					{
 						comment :
-							'true if the widget is hovered on',
+							'component hovered upon',
 						type :
-							'Boolean',
+							'Path',
 						defaultValue :
-							'false'
+							'null',
+						concerns :
+							{
+								func :
+									'Widgets.Widget.concernsHover',
+								args :
+									[
+										'hover',
+										'path'
+									]
+							}
 					},
 				mark :
 					{
@@ -421,7 +430,9 @@ CheckBox.prototype.draw =
 			Widgets.getStyle(
 				this.style,
 				Accent.state(
-					this.hoverAccent,
+					this.hover
+						&&
+						this.hover.equals( this.path ),
 					this.focusAccent
 				)
 			);

@@ -152,32 +152,6 @@ Path.prototype.reflect =
 
 
 /*
-| Returns true is arc is a valid path arc.
-*/
-/*
-var checkValidPathArc =
-	function(
-		arc
-	)
-{
-	if( !Jools.isString( arc ) )
-	{
-		throw new Error(
-			'Path arc not a string'
-		);
-	}
-
-	if( arc[ 0 ] === '_' )
-	{
-		throw new Error(
-			'Path arcs must not begin with "_"'
-		);
-	}
-};
-*/
-
-
-/*
 | Returns the arc at index i.
 |
 | FIXME base indizes on strings instead of numbers

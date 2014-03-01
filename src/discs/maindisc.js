@@ -184,19 +184,13 @@ MainDisc.prototype._init =
 	);
 
 	var
-		buttons =
-			{ },
-
 		twig =
-			this.twig,
-
+			Jools.copy( this.twig ), // FIXME only if needed
+		path,
 		ranks =
 			this.ranks,
-
 		text,
-
 		visible;
-
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -210,7 +204,6 @@ MainDisc.prototype._init =
 
 		text =
 			undefined;
-
 		visible =
 			undefined;
 
@@ -281,26 +274,23 @@ MainDisc.prototype._init =
 				break;
 		}
 
-		var
-			widgetProto =
-				inherit &&
-				inherit.buttons &&
-				inherit.buttons[ wname ],
-
-			// FIXME only when no proto
-			path =
-				this.path.append( wname );
-
-		if( !widgetProto )
+		if( twig[ wname ].path )
 		{
-			widgetProto =
-				twig[ wname ];
+			path =
+				undefined;
+		}
+		else
+		{
+			path =
+				this.path
+					.append( 'twig' )
+					.append( wname );
 		}
 
-		buttons[ wname ] =
-			widgetProto.create(
-				'hoverAccent',
-					path.equals( this.hover ),
+		twig[ wname ] =
+			twig[ wname ].create(
+				'hover',
+					this.hover,
 				'focusAccent',
 					this.mode === wname,
 				'icons',
@@ -316,8 +306,8 @@ MainDisc.prototype._init =
 			);
 	}
 
-	this.buttons =
-		Jools.immute( buttons );
+	this.twig =
+		twig;
 };
 
 
@@ -365,13 +355,14 @@ Jools.lazyValue(
 			Euclid.View.proper
 		);
 
-		var
-			buttons =
-				this.buttons;
-
-		for( var name in this.buttons )
+		for(
+			var a = 0, aZ = this.ranks.length;
+			a < aZ;
+			a++
+		)
 		{
-			buttons[ name ].draw( fabric );
+			// TODO this.atRank
+			this.twig[ this.ranks[ a ] ].draw( fabric );
 		}
 
 		fabric.edge(
@@ -412,7 +403,7 @@ MainDisc.prototype.pushButton =
 
 	var
 		buttonName =
-			path.get( 3 );
+			path.get( 4 );
 
 	if(
 		buttonName === 'Login' &&
@@ -490,15 +481,16 @@ MainDisc.prototype.pointingHover =
 	}
 
 	// this is on the disc
-	var
-		buttons =
-			this.buttons;
-
-	for( var name in buttons )
+	for(
+		var a = 0, aZ = this.ranks.length;
+		a < aZ;
+		a++
+	)
 	{
 		var
 			reply =
-				buttons[ name ].pointingHover(
+				// TODO this.atRanks
+				this.twig[ this.ranks[ a ] ].pointingHover(
 					pp,
 					shift,
 					ctrl
@@ -555,23 +547,25 @@ MainDisc.prototype.click =
 	}
 
 	// this is on the disc
-	var
-		buttons =
-			this.buttons;
-
-	for( var name in buttons )
+	for(
+		var a = 0, aZ = this.ranks.length;
+		a < aZ;
+		a++
+	)
 	{
-		var r =
-			buttons[ name ]
-				.click(
-					pp,
-					shift,
-					ctrl
-				);
+		var
+			reply =
+				// TODO this.atRank
+				this.twig[ this.ranks[ a ] ]
+					.click(
+						pp,
+						shift,
+						ctrl
+					);
 
-		if( r )
+		if( reply )
 		{
-			return r;
+			return reply;
 		}
 	}
 

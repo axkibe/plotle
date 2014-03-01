@@ -1240,7 +1240,7 @@ IFace.prototype.undo =
 		return;
 	}
 
-    this.$cSpace =
+	this.$cSpace =
 		result.tree;
 
 	chgX =
@@ -1276,7 +1276,7 @@ IFace.prototype.undo =
 		chgX
 	);
 
-    return chgX;
+	return chgX;
 };
 
 
@@ -1299,7 +1299,7 @@ IFace.prototype.redo =
 				meshverse
 			);
 
-    this.$cSpace =
+	this.$cSpace =
 		result.tree;
 
 	chgX =
@@ -1336,7 +1336,7 @@ IFace.prototype.redo =
 		chgX
 	);
 
-    return chgX;
+	return chgX;
 };
 
 

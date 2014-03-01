@@ -259,17 +259,6 @@ SignUp.prototype.signup =
 
 	if( user.length < 4 )
 	{
-/*		XXX
-		shell.setTraits(
-			TraitSet.create(
-			'trait',
-				this._widgetPath( 'errorLabel' ),
-				'text',
-				'Username too short, min. 4 characters'
-			)
-		);
-*/
-
 		shell.setPath(
 			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			'Username too short, min. 4 characters'

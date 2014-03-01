@@ -44,8 +44,8 @@ Widgets.Widget =
 
 
 /*
-| Returns the mark if an item with 'path' concerns about
-| the mark.
+| Returns the mark if an item with
+| 'path' concerns about the mark.
 */
 Widget.concernsMark =
 	function(
@@ -68,6 +68,29 @@ Widget.concernsMark =
 	{
 		return Mark.Vacant.create( );
 	}
+};
+
+
+/*
+| Returns the hover path if an item with
+| 'path' concerns about the hover.
+*/
+Widget.concernsHover =
+	function(
+		hover,
+		path
+	)
+{
+	if(
+		!hover
+		||
+		!hover.equals( path )
+	)
+	{
+		return null;
+	}
+
+	return hover;
 };
 
 

@@ -631,6 +631,7 @@ Jools.aheadValue =
 /*
 | A function that will always result in the same thing.
 */
+/*
 Jools.lazyFunction =
 	function(
 		proto,
@@ -680,6 +681,7 @@ Jools.lazyFunction =
 		}
 	);
 };
+*/
 
 /*
 | Copies one object (not deep!)

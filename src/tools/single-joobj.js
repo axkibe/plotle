@@ -10,6 +10,17 @@
 (function( ) {
 'use strict';
 
+GLOBAL.CHECK =
+	true;
+
+GLOBAL.JOOBJ =
+	false;
+
+GLOBAL.SERVER =
+	true;
+
+GLOBAL.SHELL =
+	false;
 
 if( typeof( require ) === 'undefined' )
 {
@@ -29,7 +40,7 @@ var
 		require( 'vm' ),
 
 	joobjGenerator =
-		require( '../server/joobj-generator' ),
+		require( '../joobj/generator' ),
 
 	input =
 		null,
@@ -60,47 +71,40 @@ var
 	inFilename =
 		argv[ 2 ];
 
-try
-{
-	input =
-		fs.readFileSync(
-			inFilename,
-			readOptions
-		);
-
-	joobj =
-		vm.runInNewContext(
-			input,
-			{
-				JOOBJ :
-					true
-			},
-			inFilename
-		);
-
-	output =
-		joobjGenerator( joobj );
-
-	var
-		outFilename =
-			'joobj/'
-			+
-			inFilename
-				.replace( /\//g, '-' );
-
-	fs.writeFileSync(
-		outFilename,
-		output
-	);
-}
-catch ( e )
-{
-	console.log(
-		e.toString( )
+input =
+	fs.readFileSync(
+		inFilename,
+		readOptions
 	);
 
-	process.exit( -1 );
-}
+joobj =
+	vm.runInNewContext(
+		input,
+		{
+			JOOBJ :
+				true
+		},
+		inFilename
+	);
+
+output =
+	joobjGenerator( joobj );
+
+/*
+var
+	outFilename =
+		'../joobj/'
+		+
+		inFilename
+			.replace( /\//g, '-' );
+
+fs.writeFileSync(
+	outFilename,
+	output
+);
+*/
+
+console.log( output + '' );
 
 
 } )( );

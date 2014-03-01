@@ -69,15 +69,24 @@ if( JOOBJ )
 						defaultValue :
 							'false'
 					},
-				// FIXME deduce from hoverPath
-				hoverAccent :
+				hover :
 					{
 						comment :
-							'true if the widget is hovered on',
+							'component hovered upon',
 						type :
-							'Boolean',
+							'Path',
 						defaultValue :
-							'false'
+							'null',
+						concerns :
+							{
+								func :
+									'Widgets.Widget.concernsHover',
+								args :
+									[
+										'hover',
+										'path'
+									]
+							}
 					},
 				font :
 					{
@@ -518,7 +527,7 @@ Jools.lazyValue(
 				Widgets.getStyle(
 					this.style,
 					Accent.state(
-						false && this.hoverAccent, // FIXME
+						false, // FIXME
 						this.focusAccent
 					)
 				),
