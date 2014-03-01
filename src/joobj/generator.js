@@ -2255,10 +2255,10 @@ generateToJSONSection =
 		'\tfunction( )',
 		'\t{',
 		'\t\tvar',
-		'\t\t\t json;',
+		'\t\t\tjson;',
 		'',
 		'\t\tjson =',
-		'\t\t\t Object.freeze( {',
+		'\t\t\tObject.freeze( {',
 		'\t\t\t\ttype :',
 		'\t\t\t\t\t\'' + jj.name + '\','
 	);
@@ -2364,6 +2364,16 @@ generateEqualsCheck =
 	var
 		first =
 			true;
+
+	if( jj.twig )
+	{
+		r.push(
+			'\t\tthis.twig === obj.twig'
+		);
+
+		first =
+			false;
+	}
 
 	for(
 		a = 0, aZ = jj.attrList.length;

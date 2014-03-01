@@ -21,8 +21,7 @@ Widgets =
 var
 	Accent,
 	Euclid,
-	shell,
-	TraitSet;
+	shell;
 
 
 /*
@@ -331,13 +330,10 @@ CheckBox.prototype.click =
 		)
 	)
 	{
-		shell.setTraits(
-			TraitSet.create(
-				'trait',
-					this.path,
-					'checked',
-					!this.checked
-			)
+		shell.setPath(
+			this.path
+				.append( 'checked' ),
+			!this.checked
 		);
 
 		return false;
@@ -376,13 +372,10 @@ CheckBox.prototype.specialKey =
 
 		case 'enter' :
 
-			shell.setTraits(
-				TraitSet.create(
-					'trait',
-						this.path,
-						'checked',
-						!this.checked
-				)
+			shell.setPath(
+				this.path
+					.append( 'checked' ),
+				!this.checked
 			);
 
 			return;
@@ -398,13 +391,10 @@ CheckBox.prototype.input =
 		// text
 	)
 {
-	shell.setTraits(
-		TraitSet.create(
-			'trait',
-				this.path,
-				'checked',
-				!this.checked
-		)
+	shell.setPath(
+		this.path
+			.append( 'checked' ),
+		!this.checked
 	);
 
 	return true;

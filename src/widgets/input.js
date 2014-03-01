@@ -26,8 +26,7 @@ var
 	Jools,
 	Mark,
 	shell,
-	theme,
-	TraitSet;
+	theme;
 
 
 /*

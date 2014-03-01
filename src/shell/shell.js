@@ -1171,6 +1171,9 @@ Shell.prototype.setPath =
 
 			throw new Error( );
 	}
+
+	shell._$redraw =
+		true;
 };
 
 
