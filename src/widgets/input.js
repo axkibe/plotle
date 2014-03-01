@@ -741,15 +741,12 @@ Input.prototype.input =
 			);
 	}
 
-	shell.setTraits(
-		TraitSet.create(
-			'trait',
-				this.path,
-				'value',
-				value.substring( 0, at ) +
-					text +
-					value.substring( at )
-		)
+	shell.setPath(
+		this.path
+			.append( 'value' ),
+		value.substring( 0, at ) +
+			text +
+			value.substring( at )
 	);
 
 	shell.setMark(
@@ -781,14 +778,11 @@ Input.prototype._keyBackspace =
 		return;
 	}
 
-	shell.setTraits(
-		TraitSet.create(
-			'trait',
-				this.path,
-				'value',
-				this.value.substring( 0, at - 1 ) +
-					this.value.substring( at )
-			)
+	shell.setPath(
+		this.path
+			.append( 'value' ),
+		this.value.substring( 0, at - 1 ) +
+			this.value.substring( at )
 	);
 
 	shell.setMark(
@@ -817,14 +811,11 @@ Input.prototype._keyDel =
 		return;
 	}
 
-	shell.setTraits(
-		TraitSet.create(
-			'trait',
-				this.path,
-				'value',
-				this.value.substring( 0, at ) +
-					this.value.substring( at + 1 )
-			)
+	shell.setPath(
+		this.path
+			.append( 'value' ),
+		this.value.substring( 0, at ) +
+			this.value.substring( at + 1 )
 	);
 };
 
