@@ -19,8 +19,7 @@ Forms =
 | Imports
 */
 var
-	shell,
-	TraitSet;
+	shell;
 
 
 /*
@@ -172,13 +171,9 @@ Space.prototype._init =
 {
 	if( this.path )
 	{
-		traitSet =
-			TraitSet.create(
-				'set',
-					traitSet,
-				'trait',
-					this._widgetPath( 'headline' ),
-					'text',
+		this.twig.headline =
+			this.twig.headline.create(
+				'text',
 					this.spaceUser + ':' + this.spaceTag
 			);
 	}
