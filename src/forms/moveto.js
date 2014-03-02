@@ -181,17 +181,11 @@ MoveTo.prototype._init =
 					:
 					this.username.substr( 0, 7 ) === 'visitor';
 
-		traitSet =
-			TraitSet.create(
-				'set',
-					traitSet,
-				'trait',
-					this._widgetPath( 'userHomeButton' ),
-					'visible',
+		this.twig.userHomeButton =
+			this.twig.userHomeButton.create(
+				'visible',
 					!isGuest,
-				'trait',
-					this._widgetPath( 'userHomeButton' ),
-					'text',
+				'text',
 					this.username + '\n' + 'home'
 			);
 	}
