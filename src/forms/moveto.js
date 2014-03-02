@@ -101,17 +101,6 @@ if( JOOBJ )
 						assign :
 							null
 					},
-				traitSet :
-					{
-						comment :
-							'traits being set',
-						type :
-							'TraitSet',
-						defaultValue :
-							'null',
-						assign :
-							null
-					},
 				username :
 					{
 						comment :
@@ -140,8 +129,7 @@ if( JOOBJ )
 			'Forms.Form',
 		init :
 			[
-				'inherit',
-				'traitSet'
+				'inherit'
 			],
 		twig :
 			{
@@ -167,8 +155,7 @@ var
 */
 MoveTo.prototype._init =
 	function(
-		inherit,
-		traitSet
+		inherit
 	)
 {
 	if( this.path )
@@ -191,8 +178,7 @@ MoveTo.prototype._init =
 
 	Forms.Form.init.call(
 		this,
-		inherit,
-		traitSet
+		inherit
 	);
 };
 

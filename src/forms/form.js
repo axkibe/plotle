@@ -50,8 +50,7 @@ Forms.Form =
 */
 Form.init =
 	function(
-		inherit,
-		traitSet
+		// inherit
 	)
 {
 	if( !this.path )
@@ -115,8 +114,6 @@ Form.init =
 					focusAccent,
 				'hover',
 					this.hover,
-				'traitSet',
-					traitSet,
 				'mark',
 					this.mark
 			);

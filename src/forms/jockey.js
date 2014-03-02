@@ -81,17 +81,6 @@ if( JOOBJ )
 						defaultValue :
 							'undefined'
 					},
-				traitSet :
-					{
-						comment :
-							'traits being set',
-						type :
-							'TraitSet',
-						defaultValue :
-							'null',
-						assign :
-							null
-					},
 				username :
 					{
 						comment :
@@ -117,9 +106,7 @@ if( JOOBJ )
 		subclass :
 			'Forms.Form',
 		init :
-			[
-				'traitSet'
-			],
+			[ ],
 		twig :
 			{
 				'Login' :
@@ -152,9 +139,7 @@ var
 | Initializer.
 */
 Jockey.prototype._init =
-	function(
-		traitSet
-	)
+	function( )
 {
 	var
 		path;
@@ -197,8 +182,6 @@ Jockey.prototype._init =
 					this.spaceUser,
 				'spaceTag',
 					this.spaceTag,
-				'traitSet',
-					traitSet,
 				'username',
 					this.username,
 				'view',

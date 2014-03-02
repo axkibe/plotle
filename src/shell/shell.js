@@ -1118,13 +1118,6 @@ Shell.prototype.setTraits =
 		}
 	}
 
-	// FIXME precheck which traitSet affect
-	this._$formJockey =
-		this._$formJockey.create(
-			'traitSet',
-				traitSet
-		);
-
 	this.$space =
 		this.$space.create(
 			'traitSet',
@@ -1341,21 +1334,6 @@ Shell.prototype.setUser =
 
 	this._$formJockey =
 		this._$formJockey.create(
-			'traitSet',
-				TraitSet.create(
-					'trait',
-						this._$formJockey.get( 'User' ).path,
-						'user',
-						username,
-					'trait',
-						this._$formJockey.get( 'Welcome' ).path,
-						'user',
-						username,
-					'trait',
-						this._$formJockey.get( 'MoveTo' ).path,
-						'user',
-						username
-				),
 			'username',
 				username
 		);
@@ -1505,17 +1483,10 @@ Shell.prototype.onAquireSpace =
 
 			this._$formJockey =
 				this._$formJockey.create(
-					'traitSet',
-						TraitSet.create(
-							'trait',
-								path,
-								'spaceUser',
-								asw.spaceUser,
-							'trait',
-								path,
-								'spaceTag',
-								asw.spaceTag
-						)
+					'spaceUser',
+						asw.spaceUser,
+					'spaceTag',
+						asw.spaceTag
 				);
 
 			shell.setMode( 'NoAccessToSpace' );

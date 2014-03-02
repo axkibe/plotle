@@ -96,17 +96,6 @@ if( JOOBJ )
 						defaultValue :
 							'undefined'
 					},
-				traitSet :
-					{
-						comment :
-							'traits being set',
-						type :
-							'TraitSet',
-						defaultValue :
-							'null',
-						assign :
-							null
-					},
 				username :
 					{
 						comment :
@@ -137,8 +126,7 @@ if( JOOBJ )
 			'Forms.Form',
 		init :
 			[
-				'inherit',
-				'traitSet'
+				'inherit'
 			],
 		twig :
 			{
@@ -165,8 +153,7 @@ var
 */
 Space.prototype._init =
 	function(
-		inherit,
-		traitSet
+		inherit
 	)
 {
 	if( this.path )
@@ -180,8 +167,7 @@ Space.prototype._init =
 
 	Forms.Form.init.call(
 		this,
-		inherit,
-		traitSet
+		inherit
 	);
 };
 
