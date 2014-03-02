@@ -2020,7 +2020,7 @@ generateFromJSONCreator =
 		'{'
 	);
 
-	// XXX TODO remove
+	// TODO remove
 	r.push(
 		'\tif( json._$grown ) return json;'
 	);
@@ -2248,7 +2248,6 @@ generateToJSONSection =
 		'/*',
 		'| Convers the object into a JSON.',
 		'*/',
-		//'Jools.lazyFunction(',XXX
 		'Jools.lazyValue(',
 		'\t' + jj.reference + '.prototype,',
 		'\t\'toJSON\',',
