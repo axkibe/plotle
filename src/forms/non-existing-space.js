@@ -23,8 +23,7 @@ Forms =
 | Imports
 */
 var
-	shell,
-	TraitSet;
+	shell;
 
 
 /*
@@ -73,6 +72,24 @@ if( JOOBJ )
 							},
 						defaultValue :
 							'null'
+					},
+				nonSpaceUser :
+					{
+						comment :
+							'the user part of the non-existing-space',
+						type :
+							'String',
+						defaultValue :
+							'undefined'
+					},
+				nonSpaceTag :
+					{
+						comment :
+							'the tag part of the non-existing-space',
+						type :
+							'String',
+						defaultValue :
+							'undefined'
 					},
 				path :
 					{
@@ -184,85 +201,13 @@ NonExistingSpace.prototype._init =
 		return;
 	}
 
-	var
-		spaceUser,
-		spaceTag;
-
-	if( traitSet )
-	{
-		for(
-			var a = 0, aZ = traitSet.length;
-			a < aZ;
-			a++
-		)
-		{
-			var
-				t =
-					traitSet.get( a );
-
-			if(
-				t.path.equals( this.path )
-			)
-			{
-				switch( t.key )
-				{
-
-					case 'spaceUser' :
-
-						spaceUser =
-							t.val;
-
-						break;
-
-					case 'spaceTag' :
-
-						spaceTag =
-							t.val;
-
-						break;
-
-					default :
-
-						throw new Error(
-							'unknown trait: ' + t.key
-						);
-				}
-			}
-		}
-	}
-
-	if( inherit )
-	{
-		if( spaceUser === undefined )
-		{
-			spaceUser =
-				inherit.spaceUser;
-		}
-
-		if( spaceTag === undefined )
-		{
-			spaceTag =
-				inherit.spaceTag;
-		}
-	}
-
-	this.spaceUser =
-		spaceUser;
-
-	this.spaceTag =
-		spaceTag;
-
-	traitSet =
-		TraitSet.create(
-			'set',
-				traitSet,
-			'trait',
-				this._widgetPath( 'headline' ),
-				'text',
-				spaceUser +
-					':' +
-					spaceTag +
-					' does not exist.'
+	this.twig.headline =
+		this.twig.headline.create(
+			'text',
+				this.nonSpaceUser +
+				':' +
+				this.nonSpaceTag +
+				' does not exist.'
 		);
 
 	Forms.Form.init.call(
@@ -307,8 +252,8 @@ NonExistingSpace.prototype.pushButton =
 		case 'yesButton' :
 
 			shell.moveToSpace(
-				this.spaceUser,
-				this.spaceTag,
+				this.nonSpaceUser,
+				this.nonSpaceTag,
 				true
 			);
 

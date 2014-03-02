@@ -17,8 +17,7 @@ Forms =
 | Imports
 */
 var
-	shell,
-	TraitSet;
+	shell;
 
 
 /*

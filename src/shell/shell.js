@@ -1479,23 +1479,17 @@ Shell.prototype.onAquireSpace =
 
 		case 'nonexistent' :
 
-			path =
-				this._$formJockey.get( 'NonExistingSpace' ).path;
+			shell.setPath(
+				shell._$formJockey.twig.NonExistingSpace.path
+					.append( 'nonSpaceUser' ),
+					asw.spaceUser
+			);
 
-			this._$formJockey =
-				this._$formJockey.create(
-					'traitSet',
-						TraitSet.create(
-							'trait',
-								path,
-								'spaceUser',
-								asw.spaceUser,
-							'trait',
-								path,
-								'spaceTag',
-								asw.spaceTag
-							)
-				);
+			shell.setPath(
+				shell._$formJockey.twig.NonExistingSpace.path
+					.append( 'nonSpaceTag' ),
+					asw.spaceTag
+			);
 
 			shell.setMode( 'NonExistingSpace' );
 
