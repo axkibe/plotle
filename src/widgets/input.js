@@ -155,17 +155,6 @@ if( JOOBJ )
 						type :
 							'String'
 					},
-				traitSet :
-					{
-						comment :
-							'traits being set',
-						type :
-							'TraitSet',
-						defaultValue :
-							'null',
-						assign :
-							null
-					},
 				value :
 					{
 						comment :
@@ -190,10 +179,7 @@ if( JOOBJ )
 			'Widgets.Widget',
 
 		init :
-			[
-				'inherit',
-				'traitSet'
-			]
+			[ ]
 	};
 }
 
@@ -207,10 +193,7 @@ var
 | Initializes the widget.
 */
 Input.prototype._init =
-	function(
-		inherit,
-		traitSet
-	)
+	function( )
 {
 	var
 		frame;
@@ -246,43 +229,6 @@ Input.prototype._init =
 
 	this._pitch =
 		Input._pitch;
-
-	if( traitSet )
-	{
-		for(
-			var a = 0, aZ = traitSet.length;
-			a < aZ;
-			a++
-		)
-		{
-			var
-				t =
-					traitSet.get( a );
-
-			if(
-				t.path.equals( this.path )
-			)
-			{
-				switch( t.key )
-				{
-					case 'value' :
-
-						this.value =
-							t.val;
-
-						break;
-
-					default :
-
-						throw new Error(
-							CHECK
-							&&
-							( 'unknown trait: ' + t.key )
-						);
-				}
-			}
-		}
-	}
 };
 
 

@@ -34,7 +34,6 @@ var
 	Sign,
 	system,
 	swatch,
-	TraitSet,
 	Visual;
 
 

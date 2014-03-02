@@ -202,17 +202,6 @@ if( JOOBJ )
 						defaultValue :
 							'null'
 					},
-				traitSet :
-					{
-						comment :
-							'traits being set',
-						type :
-							'TraitSet',
-						defaultValue :
-							'null',
-						assign :
-							null
-					},
 				visible :
 					{
 						comment :
@@ -226,10 +215,7 @@ if( JOOBJ )
 		subclass :
 			'Widgets.Widget',
 		init :
-			[
-				'inherit',
-				'traitSet'
-			]
+			[ ]
 	};
 }
 
@@ -243,10 +229,7 @@ var
 | Initializes the widget.
 */
 Button.prototype._init =
-	function(
-		inherit,
-		traitSet
-	)
+	function( )
 {
 	if( this.superFrame )
 	{
@@ -267,50 +250,6 @@ Button.prototype._init =
 
 		this._shape =
 			null;
-	}
-
-	if( traitSet )
-	{
-		for(
-			var a = 0, aZ = traitSet.length;
-			a < aZ;
-			a++
-		)
-		{
-			var
-				t =
-					traitSet.get( a );
-
-			if(
-				t.path.equals( this.path )
-			)
-			{
-				switch( t.key )
-				{
-					case 'text' :
-
-						this.text =
-							t.val;
-
-						break;
-
-					case 'visible' :
-
-						this.visible =
-							t.val;
-
-						break;
-
-					default :
-
-						throw new Error(
-							CHECK
-							&&
-							( 'unknown trait: ' + t.key )
-						);
-				}
-			}
-		}
 	}
 
 	// if true repeats the push action if held down

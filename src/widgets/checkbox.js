@@ -126,17 +126,6 @@ if( JOOBJ )
 						type :
 							'String'
 					},
-				traitSet :
-					{
-						comment :
-							'traits being set',
-						type :
-							'TraitSet',
-						defaultValue :
-							'null',
-						assign :
-							null
-					},
 				visible :
 					{
 						comment :
@@ -150,9 +139,7 @@ if( JOOBJ )
 		subclass :
 			'Widgets.Widget',
 		init :
-			[
-				'traitSet'
-			]
+			[ ]
 	};
 }
 
@@ -166,9 +153,7 @@ var
 | Initializes the widget.
 */
 CheckBox.prototype._init =
-	function(
-		traitSet
-	)
+	function( )
 {
 	if( this.superFrame )
 	{
@@ -181,50 +166,6 @@ CheckBox.prototype._init =
 	{
 		this.frame =
 			null;
-	}
-
-	if( traitSet )
-	{
-		for(
-			var a = 0, aZ = traitSet.length;
-			a < aZ;
-			a++
-		)
-		{
-			var
-				t =
-					traitSet.get( a );
-
-			if(
-				t.path.equals( this.path )
-			)
-			{
-				switch( t.key )
-				{
-					case 'checked' :
-
-						this.checked =
-							t.val;
-
-						break;
-
-					case 'visible' :
-
-						this.visible =
-							t.val;
-
-						break;
-
-					default :
-
-						throw new Error(
-							CHECK
-							&&
-							( 'unknown trait: ' + t.key )
-						);
-				}
-			}
-		}
 	}
 };
 
