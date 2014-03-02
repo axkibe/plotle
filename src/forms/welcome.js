@@ -21,8 +21,8 @@ Forms =
 | Imports
 */
 var
-	shell,
-	TraitSet;
+	shell;
+
 
 /*
 | Capsule
@@ -178,13 +178,9 @@ Welcome.prototype._init =
 		return;
 	}
 
-	traitSet =
-		TraitSet.create(
-			'set',
-				traitSet,
-			'trait',
-				this._widgetPath( 'headline' ),
-				'text',
+	this.twig.headline =
+		this.twig.headline.create(
+			'text',
 				'Welcome ' + ( this.username || '' ) + '!'
 		);
 
