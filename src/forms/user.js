@@ -190,41 +190,51 @@ User.prototype._init =
 			true;
 	}
 
-	traitSet =
-		TraitSet.create(
-			'set',
-				traitSet,
-			'trait',
-				this._widgetPath( 'headline' ),
-				'text',
-				'hello ' + ( this.username || '' ),
-			'trait',
-				this._widgetPath( 'visitor1' ),
-				'visible',
-				isGuest,
-			'trait',
-				this._widgetPath( 'visitor2' ),
-				'visible',
-				isGuest,
-			'trait',
-				this._widgetPath( 'visitor3' ),
-				'visible',
-				isGuest,
-			'trait',
-				this._widgetPath( 'visitor4' ),
-				'visible',
-				isGuest,
-			'trait',
-				this._widgetPath( 'greeting1' ),
-				'visible',
-				!isGuest,
-			'trait',
-				this._widgetPath( 'greeting2' ),
-				'visible',
-				!isGuest,
-			'trait',
-				this._widgetPath( 'greeting3' ),
-				'visible',
+	this.twig.headline =
+		this.twig.headline.create(
+			'text',
+				'hello ' + ( this.username || '' )
+		);
+
+	this.twig.visitor1 =
+		this.twig.visitor1.create(
+			'visible',
+				isGuest
+		);
+
+	this.twig.visitor2 =
+		this.twig.visitor2.create(
+			'visible',
+				isGuest
+		);
+
+	this.twig.visitor3 =
+		this.twig.visitor3.create(
+			'visible',
+				isGuest
+		);
+
+	this.twig.visitor4 =
+		this.twig.visitor4.create(
+			'visible',
+				isGuest
+		);
+
+	this.twig.greeting1 =
+		this.twig.greeting1.create(
+			'visible',
+				!isGuest
+		);
+
+	this.twig.greeting2 =
+		this.twig.greeting2.create(
+			'visible',
+				!isGuest
+		);
+
+	this.twig.greeting3 =
+		this.twig.greeting3.create(
+			'visible',
 				!isGuest
 		);
 
