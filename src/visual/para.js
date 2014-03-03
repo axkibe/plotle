@@ -12,6 +12,10 @@ var
 	Visual;
 
 
+Visual =
+	Visual || { };
+
+
 /*
 | Imports
 */
@@ -98,7 +102,7 @@ if( JOOBJ )
 							true,
 						type :
 							'String'
-					}
+					},
 				*/
 				// TODO remove
 				tree :

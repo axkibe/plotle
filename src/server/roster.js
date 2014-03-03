@@ -81,6 +81,14 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
+			'src/mm/path.js',
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.create(
+		'filePath',
 			'src/euclid/point.js',
 		'hasJoobj',
 			true,
@@ -94,60 +102,6 @@ module.exports =
 			'src/euclid/rect.js',
 		'hasJoobj',
 			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.create(
-		'filePath',
-			'src/mm/meshverse.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.create(
-		'filePath',
-			'src/mm/path.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.create(
-		'filePath',
-			'src/mm/tree.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.create(
-		'filePath',
-			'src/mm/sign.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.create(
-		'filePath',
-			'src/mm/change.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.create(
-		'filePath',
-			'src/mm/changeray.js',
-		'inBundle',
-			true
-	),
-	Resource.create(
-		'filePath',
-			'src/mm/meshmashine.js',
 		'inBundle',
 			true,
 		'inTestPad',
@@ -341,12 +295,6 @@ module.exports =
 		'inBundle',
 			true,
 		'inTestPad',
-			true
-	),
-	Resource.create(
-		'filePath',
-			'src/shell/stubs.js',
-		'inBundle',
 			true
 	),
 	Resource.create(
@@ -604,6 +552,58 @@ module.exports =
 			'src/visual/space.js',
 		'hasJoobj',
 			true,
+		'inBundle',
+			true
+	),
+	Resource.create(
+		'filePath',
+			'src/mm/meshverse.js',
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.create(
+		'filePath',
+			'src/mm/tree.js',
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.create(
+		'filePath',
+			'src/mm/sign.js',
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.create(
+		'filePath',
+			'src/mm/change.js',
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.create(
+		'filePath',
+			'src/mm/changeray.js',
+		'inBundle',
+			true
+	),
+	Resource.create(
+		'filePath',
+			'src/mm/meshmashine.js',
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.create(
+		'filePath',
+			'src/shell/stubs.js',
 		'inBundle',
 			true
 	),

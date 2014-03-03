@@ -11,7 +11,8 @@
 var
 	Euclid,
 	Jools,
-	Tree;
+	Tree,
+	Visual;
 
 
 /*
@@ -41,15 +42,22 @@ if( SERVER )
 		require( './tree' );
 
 	Euclid =
-		{ };
+		{
+			Point :
+				require( '../euclid/point' ),
 
-	Euclid.Point =
-		require( '../euclid/point' );
+			Rect :
+				require( '../euclid/rect' )
+		};
 
-	Euclid.Rect =
-		require( '../euclid/rect' );
+	/*
+	Visual =
+		{
+			Para :
+				require( '../visual/para' )
+		};
+		*/
 }
-
 
 
 /*
@@ -607,16 +615,13 @@ Meshverse.prototype.Doc =
 
 
 Meshverse.prototype.Para =
+//	Visual.Para;
 	Jools.immute( {
-
 		must :
 			Jools.immute( {
-
 				'text' :
 					'String'
-
 			} )
-
 	} );
 
 
