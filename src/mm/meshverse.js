@@ -50,13 +50,11 @@ if( SERVER )
 				require( '../euclid/rect' )
 		};
 
-	/*
 	Visual =
 		{
 			Para :
 				require( '../visual/para' )
 		};
-		*/
 }
 
 

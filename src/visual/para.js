@@ -134,6 +134,19 @@ if( JOOBJ )
 }
 
 
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	Jools =
+		require( '../jools/jools' );
+
+	Visual.Para =
+		require( '../joobj/this' )( module );
+}
+
+
 var
 	Para =
 		Visual.Para;
@@ -275,29 +288,24 @@ Jools.lazyValue(
 	function( )
 	{
 		var
+			f,
 			flow =
 				this.flow,
-
 			font =
 				this.font,
-
 			mark =
 				this.mark,
-
 			view =
 				this.view,
-
 			zoom =
 				view.zoom,
-
 			height =
 				this.height * zoom,
-
 			width =
 				flow.spread * zoom;
 
 		// adds to width so the caret gets visible.
-		var f =
+		f =
 			Euclid.Fabric.create(
 				'width',
 					width + 7,
