@@ -48,14 +48,18 @@ if( JOOBJ )
 						comment :
 							'width of the para its flow',
 						type :
-							'Number'
+							'Number',
+						defaultValue :
+							'undefined'
 					},
 				fontsize :
 					{
 						comment :
 							'size of the font',
 						type :
-							'Number'
+							'Number',
+						defaultValue :
+							'undefined'
 					},
 				mark :
 					{
@@ -72,14 +76,18 @@ if( JOOBJ )
 									]
 							},
 						type :
-							'Mark'
+							'Mark',
+						defaultValue :
+							'undefined'
 					},
 				path :
 					{
 						comment :
 							'the path of the para',
 						type :
-							'Path'
+							'Path',
+						defaultValue :
+							'undefined'
 					},
 				/*
 				text :
@@ -92,19 +100,24 @@ if( JOOBJ )
 							'String'
 					}
 				*/
+				// TODO remove
 				tree :
 					{
 						comment :
 							'the data tree',
 						type :
-							'Tree'
+							'Tree',
+						defaultValue :
+							'undefined'
 					},
 				view :
 					{
 						comment :
 							'the current view',
 						type :
-							'View'
+							'View',
+						defaultValue :
+							'undefined'
 					}
 			},
 		init :
@@ -130,6 +143,11 @@ Para.prototype._init =
 		inherit
 	)
 {
+	if( !this.path )
+	{
+		return;
+	}
+
 	// TODO make general equal builder
 	if(
 		inherit
