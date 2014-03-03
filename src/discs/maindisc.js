@@ -172,9 +172,8 @@ MainDisc.prototype._init =
 		inherit
 	)
 {
-	if( this.view === null )
+	if( !this.path )
 	{
-		// this is an abstrace disc in design mode
 		return;
 	}
 

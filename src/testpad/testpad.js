@@ -1527,9 +1527,7 @@ window.onload =
 	function( )
 {
 	TestPad.create( );
-
-//	testPad.update( -1 ); TODO
-//	testPad.elements.input.focus( );
+	testPad.elements.input.focus( );
 };
 
 } )( );

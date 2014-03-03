@@ -96,7 +96,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							'undefined'
 					},
 				spaceUser :
 					{
@@ -180,10 +180,8 @@ CreateDisc.prototype._init =
 		inherit
 	)
 {
-	if( this.view === null )
+	if( !this.path )
 	{
-		// TODO use this.path instead
-		// this is an abstract disc in design mode
 		return;
 	}
 
