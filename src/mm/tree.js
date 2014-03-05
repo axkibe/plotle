@@ -123,6 +123,12 @@ Tree.prototype.getPath =
 			return null;
 		}
 
+		if( tree.reflect )
+		{
+			// switches to new style
+			return tree.getPath( path.chop( a ) );
+		}
+
 		tree =
 			tree.twig[ path.get( a ) ];
 	}
@@ -144,9 +150,7 @@ Tree.prototype.setPath =
 {
 	if( path.reflect !== 'Path' )
 	{
-		throw new Error(
-			'no path'
-		);
+		throw new Error( );
 	}
 
 	if( shorten < 0 )
@@ -164,7 +168,7 @@ Tree.prototype.setPath =
 
 	var
 		aZ =
-		Jools.is( shorten ) ? shorten : path.length;
+			Jools.is( shorten ) ? shorten : path.length;
 
 	for(
 		var a = aZ - 1;
@@ -206,9 +210,7 @@ Tree.prototype.rankOf =
 
 	if( !Jools.isArray( ranks ) )
 	{
-		throw new Error(
-			'tree has no ranks'
-		);
+		throw new Error( );
 	}
 
 	if( !Jools.isString( key ) )

@@ -310,7 +310,7 @@ TestPad.prototype._init =
 		Jools.limit(
 			0,
 			this.cursorAt,
-			doc.twig[ doc.ranks[ this.cursorLine ] ].twig.text.length // TODO
+			doc.twig[ doc.ranks[ this.cursorLine ] ].text.length
 		);
 
 	if( !doc )
@@ -407,8 +407,7 @@ TestPad.prototype.onMouseDown =
 				doc.ranks.length - 1
 			),
 		cText =
-//			doc.twig[ doc.ranks[ cLine ] ].text; // TODO
-			doc.twig[ doc.ranks[ cLine ] ].twig.text;
+			doc.twig[ doc.ranks[ cLine ] ].text;
 
 	testPad.create(
 		'cursorLine',
@@ -711,7 +710,7 @@ TestPad.prototype.send =
 
 			this.peer.join(
 				path,
-				doc.twig[ doc.ranks[ action.line - 1 ] ].twig.text.length
+				doc.twig[ doc.ranks[ action.line - 1 ] ].text.length
 			);
 
 			break;
@@ -1022,8 +1021,7 @@ TestPad.prototype.inputSpecialKey =
 
 			testPad.create(
 				'cursorAt',
-//TODO				doc.twig[ doc.ranks[ cursorLine ] ].twig.text.length
-					doc.twig[ doc.ranks[ cursorLine ] ].twig.text.length
+					doc.twig[ doc.ranks[ cursorLine ] ].text.length
 			);
 
 			return;
@@ -1140,8 +1138,7 @@ TestPad.prototype.inputSpecialKey =
 
 			var
 				text =
-					//doc.twig[ doc.ranks[ cursorLine ] ].twig.text; TODO
-					doc.twig[ doc.ranks[ cursorLine ] ].twig.text;
+					doc.twig[ doc.ranks[ cursorLine ] ].text;
 
 			if( cursorAt >= text.length )
 			{
@@ -1301,8 +1298,7 @@ TestPad.prototype.makeScreen =
 	)
 	{
 		lines.push(
-//			twig[ ranks[ a ] ].text.split( '' ) TODO no twig
-			twig[ ranks[ a ] ].twig.text.split( '' )
+			twig[ ranks[ a ] ].text.split( '' )
 		);
 	}
 

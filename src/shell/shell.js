@@ -1448,6 +1448,8 @@ Shell.prototype.onAquireSpace =
 	var
 		path;
 
+	console.log( asw );
+
 	switch( asw.status )
 	{
 		case 'served' :

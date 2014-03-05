@@ -93,7 +93,6 @@ if( JOOBJ )
 						defaultValue :
 							'undefined'
 					},
-				/*
 				text :
 					{
 						comment :
@@ -101,18 +100,9 @@ if( JOOBJ )
 						json :
 							true,
 						type :
-							'String'
-					},
-				*/
-				// TODO remove
-				tree :
-					{
-						comment :
-							'the data tree',
-						type :
-							'Tree',
-						defaultValue :
-							'undefined'
+							'String',
+						defaultValue : // TODO
+							'null'
 					},
 				view :
 					{
@@ -177,7 +167,7 @@ Para.prototype._init =
 		&&
 		inherit.path.equals( this.path )
 		&&
-		inherit.tree === this.tree
+		inherit.text === this.text
 		&&
 		inherit.view.zoom === this.view.zoom
 	)
@@ -207,6 +197,11 @@ Para.concernsMark =
 		path
 	)
 {
+	if( mark === undefined )
+	{
+		return undefined;
+	}
+
 	if( mark.reflect === 'Range' )
 	{
 		if(
@@ -586,21 +581,6 @@ Jools.lazyValue(
 			spread;
 
 		return flow;
-	}
-);
-
-
-/*
-| Shortcut to the text in the para.
-*/
-Jools.lazyValue(
-	Para.prototype,
-	'text',
-	function( )
-	{
-		return (
-			this.tree.twig.text
-		);
 	}
 );
 
@@ -1700,6 +1680,16 @@ Para.prototype._setMark =
 		);
 	}
 };
+
+
+/*
+| Node exports
+*/
+if( SERVER )
+{
+	module.exports =
+		Para;
+}
 
 
 } )( );

@@ -161,7 +161,7 @@ Meshverse.prototype.grow =
 
 	if( !pattern )
 	{
-		throw Jools.reject(
+		throw new Error(
 			'cannot create tree of type: ' + type
 		);
 	}
@@ -189,7 +189,28 @@ Meshverse.prototype.grow =
 		pattern.prototype.reflect === type
 	)
 	{
-		return pattern.createFromJSON( model );
+		if( !model.create )
+		{
+			model =
+				pattern.createFromJSON( model );
+		}
+
+		if( arguments.length > 1 )
+		{
+			var
+				args =
+					Array.prototype.slice.call( arguments );
+
+			args.splice( 0, 1 );
+
+			model =
+				model.create.apply(
+					model,
+					args
+				);
+		}
+
+		return model;
 	}
 
 	if( pattern.ranks )
@@ -217,7 +238,7 @@ Meshverse.prototype.grow =
 
 				if( !pattern.ranks )
 				{
-					throw Jools.reject(
+					throw new Error(
 						'"+": ' + type + ' has no ranks'
 					);
 				}
@@ -227,14 +248,14 @@ Meshverse.prototype.grow =
 
 				if( !Jools.isInteger( k1 ) )
 				{
-					throw Jools.reject(
+					throw new Error(
 						'"+": key must be an Integer'
 					);
 				}
 
 				if( !Jools.isString( k2 ) )
 				{
-					throw Jools.reject(
+					throw new Error(
 						'"+": value must be a String'
 					);
 				}
@@ -249,14 +270,14 @@ Meshverse.prototype.grow =
 
 				if( !pattern.ranks )
 				{
-					throw Jools.reject(
+					throw new Error(
 						'"-": ' + type + ' has no ranks'
 					);
 				}
 
 				if( !Jools.isInteger( k1 ) )
 				{
-					throw Jools.reject(
+					throw new Error(
 						'"-": key must be an Integer'
 					);
 				}
@@ -273,7 +294,7 @@ Meshverse.prototype.grow =
 				{
 					if( !pattern.ranks )
 					{
-						throw Jools.reject(
+						throw new Error(
 							'"' + k + '": ' +
 							type + ' has no ranks'
 						);
@@ -286,7 +307,7 @@ Meshverse.prototype.grow =
 				{
 					if( !Jools.isString( k ) )
 					{
-						throw Jools.reject(
+						throw new Error(
 							'"' + k +'": ' +
 							'is neither String or Integer'
 						);
@@ -306,7 +327,7 @@ Meshverse.prototype.grow =
 	{
 		if( !pattern.ranks )
 		{
-			throw Jools.reject(
+			throw new Error(
 				'"' + arguments[a] + '": ' +
 				type + ' has no ranks'
 			);
@@ -351,7 +372,7 @@ Meshverse.prototype.grow =
 
 		if( !Jools.isString( k ) )
 		{
-			throw Jools.reject(
+			throw new Error(
 				'key of twig no String: ' + k
 			);
 		}
@@ -373,14 +394,15 @@ Meshverse.prototype.grow =
 				Tree.getType( val ),
 
 			ptype =
-				pattern.twig ||
+				pattern.twig
+				||
 				( pattern.must && pattern.must[ k ] )
 				||
 				( pattern.can && pattern.can[ k ] );
 
 		if( !ptype )
 		{
-			throw Jools.reject(
+			throw new Error(
 				type + ' does not allow key: ' + k
 			);
 		}
@@ -419,7 +441,7 @@ Meshverse.prototype.grow =
 		TODO
 		if( !allowsType( ptype, vtype ) )
 		{
-			throw Jools.reject(
+			throw new Error(
 				type + '.' + k + ' must be ' + ptype +
 				' but is ' +
 				vtype + ' (' + val + ')'
@@ -435,7 +457,7 @@ Meshverse.prototype.grow =
 		{
 			if( !Jools.isnon( twig[ k ] ) )
 			{
-				throw Jools.reject(
+				throw new Error(
 					type + ' requires "' + k + '"'
 				);
 			}
@@ -450,14 +472,14 @@ Meshverse.prototype.grow =
 
 		if( aZ !== Object.keys( ranks ).length )
 		{
-			throw Jools.reject(
+			throw new Error(
 				'ranks not a sequence'
 			);
 		}
 
 		if( aZ !== klen )
 		{
-			throw Jools.reject(
+			throw new Error(
 				'ranks length does not match to twig'
 			);
 		}
@@ -489,23 +511,17 @@ Meshverse.prototype.grow =
 
 Meshverse.prototype.Space =
 	Jools.immute( {
-
 		twig :
 			Jools.immute ( {
-
 				'Label' :
 					true,
-
 				'Note' :
 					true,
-
 				'Portal' :
 					true,
-
 				'Relation' :
 					true
 		} ),
-
 		ranks :
 			true
 	} );
@@ -513,40 +529,28 @@ Meshverse.prototype.Space =
 
 Meshverse.prototype.Note =
 	Jools.immute( {
-
 		must :
 			Jools.immute( {
-
 				'doc' :
 					'Doc',
-
 				'zone' :
 					'Rect',
-
 				'fontsize' :
 					'Number'
-
 			} )
-
 	} );
 
 Meshverse.prototype.Portal =
 	Jools.immute( {
-
 		must :
 			Jools.immute( {
-
 				'zone' :
 					'Rect',
-
 				'spaceUser' :
 					'String',
-
 				'spaceTag' :
 					'String'
-
 			} )
-
 	} );
 
 
@@ -572,48 +576,39 @@ Meshverse.prototype.Label =
 
 Meshverse.prototype.Relation =
 	Jools.immute( {
-
 		must :
 			Jools.immute( {
-
 				'doc' :
 					'Doc',
-
 				'pnw' :
 					'Point',
-
 				'item1key' :
 					// 'Key', FIXME
 					'String',
-
 				'item2key' :
 					// 'Key', FIXME
 					'String',
-
 				'fontsize' :
 					'Number'
 			} )
-
 	} );
 
 
 Meshverse.prototype.Doc =
 	Jools.immute( {
-
 		twig :
 			Jools.immute( {
 				'Para' :
 					true
 			} ),
-
 		ranks :
 			true
-
 	} );
 
 
 Meshverse.prototype.Para =
-//	Visual.Para;
+	Visual.Para;
+	/*
 	Jools.immute( {
 		must :
 			Jools.immute( {
@@ -621,7 +616,7 @@ Meshverse.prototype.Para =
 					'String'
 			} )
 	} );
-
+	*/
 
 Meshverse.prototype.Rect =
 	Euclid.Rect;

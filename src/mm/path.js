@@ -208,18 +208,31 @@ Path.prototype.appendNC =
 
 
 /*
-| Returns a path with the first item chopped of.
+| Returns a path with the first items chopped of.
 |
 | FIXME cache
 */
 Path.prototype.chop =
-	function( )
+	function(
+		n // if not undefined chop this amount of items;
+		//// defaults to 1
+	)
 {
+	if( n === 0 )
+	{
+		return this;
+	}
+
 	var
 		p =
 			this._path.slice( );
 
 	p.shift( );
+
+	if( n > 0 )
+	{
+		return new Path( _tag, p ).chop( n - 1 );
+	}
 
 	return new Path( _tag, p );
 };

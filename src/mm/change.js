@@ -37,13 +37,10 @@ if( SERVER )
 {
 	Jools =
 		require( '../jools/jools' );
-
 	Path =
 		require( './path'  );
-
 	Sign =
 		require( './sign'  );
-
 	Tree =
 		require( './tree' );
 }
@@ -488,11 +485,10 @@ Change.prototype.insert =
 	)
 {
 	var
-		cm = 'change.insert',
-
+		cm =
+			'change.insert',
 		src =
 			this.src,
-
 		trg =
 			this.trg;
 
@@ -513,8 +509,9 @@ Change.prototype.insert =
 	);
 
 	// where trg span should end
-	var tat2 =
-		trg.at1 + src.val.length;
+	var
+		tat2 =
+			trg.at1 + src.val.length;
 
 	trg =
 		trg.affix(
@@ -524,19 +521,23 @@ Change.prototype.insert =
 				tat2
 		);
 
-	var nstr = (
-		str.substring( 0, trg.at1 ) +
-		src.val +
-		str.substring( trg.at1 )
-	);
+	var
+		nstr =
+			str.substring( 0, trg.at1 ) +
+			src.val +
+			str.substring( trg.at1 );
 
-	tree = tree.setPath(
-		trg.path,
-		nstr,
-		universe
-	);
+	tree =
+		tree.setPath(
+			trg.path,
+			nstr,
+			universe
+		);
 
-	var chg;
+	var
+		chg;
+
+	// FIXME use equals
 	if( src === this.src && trg === this.trg )
 	{
 		chg =
@@ -544,6 +545,7 @@ Change.prototype.insert =
 	}
 	else
 	{
+		// FIXME create
 		chg =
 			new Change(
 				src,
@@ -767,8 +769,8 @@ Change.prototype.join =
 		universe.grow(
 			para1,
 			'text',
-				para1.twig.text +
-				para2.twig.text
+				para1.text +
+				para2.text
 		);
 
 	pivot =

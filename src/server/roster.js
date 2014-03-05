@@ -485,6 +485,8 @@ module.exports =
 		'hasJoobj',
 			true,
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.create(

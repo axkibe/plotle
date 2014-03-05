@@ -270,6 +270,8 @@ Jools.passhash =
 
 /*
 | Returns a rejection error.
+|
+| TODO remove
 */
 Jools.reject =
 	function(

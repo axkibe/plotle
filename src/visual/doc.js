@@ -136,29 +136,14 @@ Doc.prototype._init =
 			k =
 				ranks[ r ],
 
-			paraPath,
+			paraPath =
+				this.path.appendNC( k ),
 
 			paraProto =
-				inherit && inherit.sub[ k ];
-
-		if( !paraProto )
-		{
-			paraProto =
-				Visual.Para;
-
-			paraPath =
-				this.path.appendNC( k );
-		}
-		else
-		{
-			paraPath =
-				undefined;
-		}
+				twig[ k ];
 
 		sub[ k ] =
 			paraProto.create(
-				'tree',
-					twig[ k ],
 				'path',
 					paraPath,
 				'fontsize',

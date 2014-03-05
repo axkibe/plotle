@@ -291,7 +291,7 @@ Jools.lazyValue(
 		{
 			var
 				text =
-					tree.twig[ frontKey ].twig.text;
+					tree.twig[ frontKey ].text;
 
 			return text.substring(
 				frontAt,
@@ -301,10 +301,10 @@ Jools.lazyValue(
 
 		var
 			frontText =
-				tree.twig[ frontKey ].twig.text,
+				tree.twig[ frontKey ].text,
 
 			backText =
-				tree.twig[ backKey ].twig.text,
+				tree.twig[ backKey ].text,
 
 			buf = [
 				frontText.substring(
@@ -321,7 +321,7 @@ Jools.lazyValue(
 		{
 			buf.push(
 				'\n',
-				tree.twig[ tree.ranks[ r ] ].twig.text
+				tree.twig[ tree.ranks[ r ] ].text
 			);
 		}
 

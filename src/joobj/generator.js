@@ -233,8 +233,8 @@ buildJJ =
 		// constructor
 		conVars =
 			{ },
-		hasJSON =
-			false,
+		jsonList =
+			null,
 		// units sorted alphabetically
 		unitList =
 			null,
@@ -294,8 +294,13 @@ buildJJ =
 
 			if( attr.json )
 			{
-				hasJSON =
-					true;
+				if( jsonList === null )
+				{
+					jsonList =
+						[ ];
+				}
+
+				jsonList.push( aName );
 			}
 
 			// skips unused attributes
@@ -406,10 +411,10 @@ buildJJ =
 				conVars,
 			equals :
 				joobj.equals,
-			hasJSON :
-				hasJSON,
 			init :
 				joobj.init,
+			jsonList :
+				jsonList,
 			name :
 				joobj.name,
 			node :
@@ -1762,7 +1767,7 @@ generateCreatorFullInheritance =
 
 			default :
 
-				if( !attr.allowsNull )
+				if( !attr.allowsNull && !attr.allowsUndefined )
 				{
 					r.push(
 						'\t\t' + attr.vName +
@@ -1776,11 +1781,10 @@ generateCreatorFullInheritance =
 						'\t\t\t' + attr.vName + ' === inherit.' + attr.assign,
 						'\t\t\t||',
 						'\t\t\t(',
-						'\t\t\t\t' + attr.vName + ' !== null',
+						'\t\t\t\t' + attr.vName,
 						'\t\t\t\t&&',
 						'\t\t\t\t' + attr.vName +
-							'.equals( inherit.' + attr.assign +
-							' )',
+							'.equals( inherit.' + attr.assign + ' )',
 						'\t\t\t)',
 						'\t\t)'
 					);
@@ -2181,7 +2185,7 @@ generateReflectionSection =
 	);
 
 	// FIXME this is some workaround
-	if( jj.hasJSON )
+	if( jj.jsonList )
 	{
 		r.push(
 			'',
@@ -2214,6 +2218,16 @@ generateProtoSection =
 		'\tJoobjProto.setPath;'
 	);
 
+	generateSeperator( r );
+
+	r.push(
+		'/*',
+		'| Gets values by path.',
+		'*/',
+		jj.reference + '.prototype.getPath =',
+		'\tJoobjProto.getPath;'
+	);
+
 	if( jj.twig )
 	{
 		generateSeperator( r );
@@ -2242,6 +2256,7 @@ generateToJSONSection =
 	var
 		a,
 		aZ,
+		attr,
 		aName;
 
 	r.push(
@@ -2263,18 +2278,13 @@ generateToJSONSection =
 	);
 
 	for(
-		a = 0, aZ = jj.attrList.length;
+		a = 0, aZ = jj.jsonList.length;
 		a < aZ;
 		a++
 	)
 	{
 		aName =
-			jj.attrList[ a ];
-
-		if( aName === 'create' )
-		{
-			continue;
-		}
+			jj.jsonList[ a ];
 
 		r.push(
 			'\t\t\t\t\'' + aName + '\' :',
@@ -2527,7 +2537,7 @@ joobjGenerator =
 
 	generateSeperator( r );
 
-	if( jj.hasJSON )
+	if( jj.jsonList )
 	{
 		generateFromJSONCreator( r, jj );
 
@@ -2542,7 +2552,7 @@ joobjGenerator =
 
 	generateSeperator( r );
 
-	if( jj.hasJSON )
+	if( jj.jsonList )
 	{
 		generateToJSONSection( r, jj );
 
