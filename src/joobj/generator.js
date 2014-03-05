@@ -2256,7 +2256,6 @@ generateToJSONSection =
 	var
 		a,
 		aZ,
-		attr,
 		aName;
 
 	r.push(

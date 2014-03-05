@@ -93,9 +93,7 @@ if( JOOBJ )
 					}
 			},
 		init :
-			[
-				'inherit'
-			]
+			[ ]
 	};
 }
 
@@ -109,9 +107,7 @@ var
 | Initializer.
 */
 Doc.prototype._init =
-	function(
-		inherit
-	)
+	function( )
 {
 	var
 		sub =

@@ -5,7 +5,7 @@
 */
 
 /*
-| Capsule (to make jshint happy)
+| Capsule.
 */
 (function( ) {
 'use strict';
