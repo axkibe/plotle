@@ -19,7 +19,7 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'File',
+			'Function',
 		unit :
 			'Code',
 		attributes :

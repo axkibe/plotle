@@ -23,7 +23,7 @@ var
 /*
 | Returns a string indented by indent
 */
-var _indent =
+var tab =
 	function(
 		indent
 	)
@@ -44,7 +44,7 @@ var _indent =
 /*
 | Formats the header section.
 */
-var _formatComment =
+var formatComment =
 	function(
 		lines,
 		comment,
@@ -71,12 +71,12 @@ var _formatComment =
 
 		if( c === '' )
 		{
-			lines.push( _indent( indent ) + '|' );
+			lines.push( tab( indent ) + '|' );
 		}
 		else
 		{
 			lines.push(
-				_indent( indent ) + '| ' + c
+				tab( indent ) + '| ' + c
 			);
 		}
 	}
@@ -87,11 +87,85 @@ var _formatComment =
 };
 
 
+/*
+| Formats a block.
+*/
+var formatBlock =
+	function(
+		lines,
+		block,
+		indent,
+		semicolon
+	)
+{
+	lines.push(
+		tab( indent ) +
+			'{'
+	);
+
+	lines.push(
+		tab( indent ) +
+			'}' +
+			semicolon
+	);
+};
+
+
+/*
+| Formats a function.
+*/
+var formatFunction =
+	function(
+		lines,
+		func,
+		indent
+	)
+{
+	var
+		arg;
+
+	lines.push(
+		tab( indent ) + 'function('
+	);
+
+	for(
+		var a = 0, aZ = func.args.length;
+		a < aZ;
+		a++
+	)
+	{
+		arg =
+			func.args[ a ];
+
+		lines.push(
+			tab( indent + 1 ) +
+				arg.name +
+				(
+					arg.comment ?
+						' // ' + arg.comment
+						:
+						''
+				)
+		);
+	}
+
+	lines.push(
+		tab( indent ) + ')'
+	);
+
+	formatBlock(
+		lines,
+		func.block,
+		indent - 1,
+		';'
+	);
+};
+
 
 /*
 | Formats an assignment.
 */
-var _formatAssign =
+var formatAssign =
 	function(
 		lines,
 		assign,
@@ -102,9 +176,9 @@ var _formatAssign =
 		a,
 		aZ,
 		left =
-			assign.left;
-//		right =
-//			assign.right;
+			assign.left,
+		right =
+			assign.right;
 
 	if( left.constructor === Array )
 	{
@@ -115,7 +189,7 @@ var _formatAssign =
 		)
 		{
 			lines.push(
-				_indent( indent ) +
+				tab( indent ) +
 					left[ a ] +
 					' ='
 			);
@@ -124,10 +198,25 @@ var _formatAssign =
 	else
 	{
 		lines.push(
-			_indent( indent ) +
+			tab( indent ) +
 				left +
 				' ='
 		);
+	}
+
+	console.log( right.reflect );
+
+	if( right.reflect === 'Function' )
+	{
+		formatFunction(
+			lines,
+			right,
+			indent + 1
+		);
+	}
+	else
+	{
+		throw new Error( );
 	}
 };
 
@@ -135,7 +224,7 @@ var _formatAssign =
 /*
 | Formats a separator.
 */
-var _formatSeparator =
+var formatSeparator =
 	function(
 		lines
 	)
@@ -150,7 +239,7 @@ var _formatSeparator =
 /*
 | Formats an expression.
 */
-var _formatExpression =
+var formatExpression =
 	function(
 		lines,
 		expr,
@@ -161,7 +250,7 @@ var _formatExpression =
 	{
 		case 'Assign' :
 
-			_formatAssign(
+			formatAssign(
 				lines,
 				expr,
 				indent
@@ -171,7 +260,7 @@ var _formatExpression =
 
 		case 'Comment' :
 
-			_formatComment(
+			formatComment(
 				lines,
 				expr,
 				indent
@@ -189,7 +278,7 @@ var _formatExpression =
 /*
 | Formats the capsule.
 */
-var _formatCapsule =
+var formatCapsule =
 	function(
 		lines,
 		file
@@ -209,7 +298,7 @@ var _formatCapsule =
 		'\'use strict\';'
 	);
 
-	_formatSeparator( lines );
+	formatSeparator( lines );
 
 	for(
 		var a = 0, aZ = content.length;
@@ -217,7 +306,7 @@ var _formatCapsule =
 		a++
 	)
 	{
-		_formatExpression(
+		formatExpression(
 			lines,
 			content[ a ],
 			0
@@ -225,6 +314,8 @@ var _formatCapsule =
 	}
 
 	lines.push(
+		'',
+		'',
 		'} )( );'
 	);
 };
@@ -234,7 +325,9 @@ var _formatCapsule =
 | Formats a file.
 */
 Formatter.format =
-	function( file )
+	function(
+		file
+	)
 {
 	var
 		lines =
@@ -242,17 +335,17 @@ Formatter.format =
 
 	if( file.header )
 	{
-		_formatComment( lines, file.header, 0 );
+		formatComment( lines, file.header, 0 );
 	}
 
 	if( file.capsule )
 	{
 		if( lines.length > 0 )
 		{
-			_formatSeparator( lines );
+			formatSeparator( lines );
 		}
 
-		_formatCapsule( lines, file );
+		formatCapsule( lines, file );
 	}
 
 	return lines.join( '\n' );

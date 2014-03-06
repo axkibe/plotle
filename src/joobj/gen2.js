@@ -65,7 +65,7 @@ if( SERVER )
 /*
 | Generates the constructor.
 */
-var _generateConstructor =
+var generateConstructor =
 	function(
 		joobj,  // the joobj definition
 		content
@@ -98,7 +98,9 @@ var _generateConstructor =
 							),
 							Code.FuncArg.create(
 								'name',
-									'v_content'
+									'v_content',
+								'comment',
+									'content'
 							)
 						],
 					'block',
@@ -118,7 +120,7 @@ var _generateConstructor =
 /*
 | Generates the capsule.
 */
-var _generateCapsule =
+var generateCapsule =
 	function(
 		joobj // the joobj definition
 	)
@@ -127,7 +129,7 @@ var _generateCapsule =
 		content =
 			[ ];
 
-	_generateConstructor( joobj, content );
+	generateConstructor( joobj, content );
 
 	return (
 		Code.Block.create(
@@ -170,7 +172,7 @@ Generator.generate =
 		);
 
 	capsule =
-		_generateCapsule( joobj );
+		generateCapsule( joobj );
 
 
 	file =
