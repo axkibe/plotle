@@ -29,14 +29,14 @@ if( JOOBJ )
 						comment :
 							'left-hand side',
 						type :
-							'Expression'
+							'Object'
 					},
 				right :
 					{
 						comment :
 							'right-hand side',
 						type :
-							'Expression'
+							'Object'
 					}
 			},
 		node :

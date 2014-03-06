@@ -21,12 +21,34 @@ var
 
 
 /*
+| Returns a string indented by indent
+*/
+var _indent =
+	function(
+		indent
+	)
+{
+	var
+		str =
+			'';
+
+	for( var a = 0; a < indent; a++ )
+	{
+		str += '\t';
+	}
+
+	return str;
+};
+
+
+/*
 | Formats the header section.
 */
 var _formatComment =
 	function(
 		lines,
-		comment
+		comment,
+		indent
 	)
 {
 	var
@@ -49,12 +71,12 @@ var _formatComment =
 
 		if( c === '' )
 		{
-			lines.push( '|' );
+			lines.push( _indent( indent ) + '|' );
 		}
 		else
 		{
 			lines.push(
-				'| ' + c
+				_indent( indent ) + '| ' + c
 			);
 		}
 	}
@@ -62,6 +84,51 @@ var _formatComment =
 	lines.push(
 		'*/'
 	);
+};
+
+
+
+/*
+| Formats an assignment.
+*/
+var _formatAssign =
+	function(
+		lines,
+		assign,
+		indent
+	)
+{
+	var
+		a,
+		aZ,
+		left =
+			assign.left;
+//		right =
+//			assign.right;
+
+	if( left.constructor === Array )
+	{
+		for(
+			a = 0, aZ = left.length;
+			a < aZ;
+			a++
+		)
+		{
+			lines.push(
+				_indent( indent ) +
+					left[ a ] +
+					' ='
+			);
+		}
+	}
+	else
+	{
+		lines.push(
+			_indent( indent ) +
+				left +
+				' ='
+		);
+	}
 };
 
 
@@ -81,18 +148,41 @@ var _formatSeparator =
 
 
 /*
-| Formats an expression
+| Formats an expression.
 */
 var _formatExpression =
 	function(
-		file,
 		lines,
-		expr
+		expr,
+		indent
 	)
 {
-	lines.push(
-		expr ? '' : ''
-	);
+	switch( expr.reflect )
+	{
+		case 'Assign' :
+
+			_formatAssign(
+				lines,
+				expr,
+				indent
+			);
+
+			break;
+
+		case 'Comment' :
+
+			_formatComment(
+				lines,
+				expr,
+				indent
+			);
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 
@@ -127,7 +217,11 @@ var _formatCapsule =
 		a++
 	)
 	{
-		_formatExpression( file, lines, content[ a ] );
+		_formatExpression(
+			lines,
+			content[ a ],
+			0
+		);
 	}
 
 	lines.push(
@@ -148,7 +242,7 @@ Formatter.format =
 
 	if( file.header )
 	{
-		_formatComment( lines, file.header );
+		_formatComment( lines, file.header, 0 );
 	}
 
 	if( file.capsule )

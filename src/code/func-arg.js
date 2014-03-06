@@ -36,7 +36,9 @@ if( JOOBJ )
 						comment :
 							'argument comment',
 						type :
-							'String'
+							'String',
+						defaultValue :
+							'null'
 					}
 			},
 		node :

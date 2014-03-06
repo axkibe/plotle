@@ -40,12 +40,18 @@ if( SERVER )
 {
 	Code =
 		{
+			Assign :
+				require( '../code/assign' ),
 			Block :
 				require( '../code/block' ),
 			Comment :
 				require( '../code/comment' ),
 			File :
-				require( '../code/file' )
+				require( '../code/file' ),
+			FuncArg :
+				require( '../code/func-arg' ),
+			Function :
+				require( '../code/function' )
 		};
 
 	Jools =
@@ -65,11 +71,46 @@ var _generateConstructor =
 		content
 	)
 {
+	var
+		assign;
+
 	content.push(
 		Code.Comment.create(
 			'content',
 				[ 'Constructor.' ]
 		)
+	);
+
+	assign =
+		Code.Assign.create(
+			'left',
+				[
+					'var Comment',
+					'Code.Comment'
+				],
+			'right',
+				Code.Function.create(
+					'args',
+						[
+							Code.FuncArg.create(
+								'name',
+									'tag'
+							),
+							Code.FuncArg.create(
+								'name',
+									'v_content'
+							)
+						],
+					'block',
+						Code.Block.create(
+							'content',
+								[ ]
+						)
+				)
+		);
+
+	content.push(
+		assign
 	);
 };
 
