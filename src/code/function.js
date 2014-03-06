@@ -24,21 +24,19 @@ if( JOOBJ )
 			'Code',
 		attributes :
 			{
-				header :
+				args :
 					{
 						comment :
-							'header comment',
+							'function arguments',
 						type :
-							'Comment'
+							'Array'
 					},
-				capsule :
+				block :
 					{
 						comment :
-							'the capsule',
+							'function code',
 						type :
-							'Block',
-						defaultValue :
-							'undefined'
+							'Block'
 					}
 			},
 		node :

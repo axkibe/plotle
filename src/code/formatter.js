@@ -23,26 +23,40 @@ var
 /*
 | Formats the header section.
 */
-var _formatHeader =
-	function( file, lines )
+var _formatComment =
+	function(
+		lines,
+		comment
+	)
 {
 	var
 		a,
-		aZ;
+		aZ,
+		c;
 
 	lines.push(
 		'/*'
 	);
 
 	for(
-		a = 0, aZ = file.header.length;
+		a = 0, aZ = comment.content.length;
 		a < aZ;
 		a++
 	)
 	{
-		lines.push(
-			'| ' + file.header[ a ]
-		);
+		c =
+			comment.content[ a ];
+
+		if( c === '' )
+		{
+			lines.push( '|' );
+		}
+		else
+		{
+			lines.push(
+				'| ' + c
+			);
+		}
 	}
 
 	lines.push(
@@ -55,7 +69,9 @@ var _formatHeader =
 | Formats a separator.
 */
 var _formatSeparator =
-	function( lines )
+	function(
+		lines
+	)
 {
 	lines.push(
 		'',
@@ -65,11 +81,36 @@ var _formatSeparator =
 
 
 /*
+| Formats an expression
+*/
+var _formatExpression =
+	function(
+		file,
+		lines,
+		expr
+	)
+{
+	lines.push(
+		expr ? '' : ''
+	);
+};
+
+
+/*
 | Formats the capsule.
 */
 var _formatCapsule =
-	function( file, lines )
+	function(
+		lines,
+		file
+	)
 {
+	var
+		capsule =
+			file.capsule,
+		content =
+			capsule.content;
+
 	lines.push(
 		'/*',
 		'| Capulse.',
@@ -79,6 +120,15 @@ var _formatCapsule =
 	);
 
 	_formatSeparator( lines );
+
+	for(
+		var a = 0, aZ = content.length;
+		a < aZ;
+		a++
+	)
+	{
+		_formatExpression( file, lines, content[ a ] );
+	}
 
 	lines.push(
 		'} )( );'
@@ -96,11 +146,20 @@ Formatter.format =
 		lines =
 			[ ];
 
-	_formatHeader( file, lines );
+	if( file.header )
+	{
+		_formatComment( lines, file.header );
+	}
 
-	_formatSeparator( lines );
+	if( file.capsule )
+	{
+		if( lines.length > 0 )
+		{
+			_formatSeparator( lines );
+		}
 
-	_formatCapsule( file, lines );
+		_formatCapsule( lines, file );
+	}
 
 	return lines.join( '\n' );
 };

@@ -1,5 +1,5 @@
 /*
-| A file to be generated
+| A file to be generated.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,27 +19,18 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'File',
+			'Comment',
 		unit :
 			'Code',
 		attributes :
 			{
-				header :
+				content :
 					{
 						comment :
-							'header comment',
+							'comment content',
 						type :
-							'Comment'
+							'Array'
 					},
-				capsule :
-					{
-						comment :
-							'the capsule',
-						type :
-							'Block',
-						defaultValue :
-							'undefined'
-					}
 			},
 		node :
 			true
