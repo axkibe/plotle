@@ -74,7 +74,6 @@ var _formatCapsule =
 		'/*',
 		'| Capulse.',
 		'*/',
-		'',
 		'( function( ) {',
 		'\'use strict\';'
 	);
