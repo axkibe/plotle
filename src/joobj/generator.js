@@ -17,6 +17,30 @@ var
 
 
 /*
+| Attributes must not be named like these.
+*/
+var
+	attributeBlacklist =
+		Object.freeze( {
+			'atRank' :
+				true,
+			'create' :
+				true,
+			'getPath' :
+				true,
+			'inherit' :
+				true,
+			'ranks' :
+				true,
+			'setPath' :
+				true,
+			'type' :
+				true,
+			'twig' :
+				true
+		} );
+
+/*
 | Checks if a joobj definition looks ok.
 */
 var
@@ -37,8 +61,10 @@ var
 	{
 		switch( aName )
 		{
+			// FIXME make a whiteListObject
 			case 'attributes' :
 			case 'init' :
+			case 'json' :
 			case 'name' :
 			case 'node' :
 			case 'equals' :
@@ -77,32 +103,10 @@ var
 
 	if( attr )
 	{
-		var
-			blacklist =
-				{
-					'atRank' :
-						true,
-					'create' :
-						true,
-					'getPath' :
-						true,
-					'inherit' :
-						true,
-					'ranks' :
-						true,
-					'setPath' :
-						true,
-					'type' :
-						true,
-					'twig' :
-						true
-				};
 
 		for( aName in attr )
 		{
-			if(
-				blacklist[ aName ]
-			)
+			if( attributeBlacklist[ aName ] )
 			{
 				throw new Error(
 					'attribute must not be named "' + aName + '"'
@@ -233,8 +237,10 @@ buildJJ =
 		// constructor
 		conVars =
 			{ },
+		hasJSON =
+			!!joobj.json,
 		jsonList =
-			null,
+			[ ],
 		// units sorted alphabetically
 		unitList =
 			null,
@@ -294,11 +300,8 @@ buildJJ =
 
 			if( attr.json )
 			{
-				if( jsonList === null )
-				{
-					jsonList =
-						[ ];
-				}
+				hasJSON =
+					true;
 
 				jsonList.push( aName );
 			}
@@ -381,6 +384,12 @@ buildJJ =
 						'ranks'
 				}
 			);
+
+		if( hasJSON )
+		{
+			jsonList.push( 'twig' );
+			jsonList.push( 'ranks' );
+		}
 	}
 
 	var
@@ -399,6 +408,8 @@ buildJJ =
 		}
 	);
 
+	jsonList.sort( );
+
 	return Object.freeze(
 		{
 			attrList :
@@ -413,6 +424,8 @@ buildJJ =
 				joobj.equals,
 			init :
 				joobj.init,
+			hasJSON :
+				hasJSON,
 			jsonList :
 				jsonList,
 			name :
@@ -1868,9 +1881,10 @@ generateCreatorReturn =
 var
 generateAttributeVariables =
 	function(
-		r,   // result array
-		jj   // the joobj working object
-		// ...  addtional to variable list ( 'inherit' )
+		r,       // result array
+		jj,      // the joobj working object
+		jsonOnly // generate only attributes that are in json
+		// ...   // addtional to variable list ( 'inherit' )
 	)
 {
 	var
@@ -1887,11 +1901,17 @@ generateAttributeVariables =
 		attr =
 			jj.attributes[ aName ];
 
+//		FIXME
+//		if( jsonOnly && !attr.json )
+//		{
+//			continue;
+//		}
+
 		list.push( attr.vName );
 	}
 
 	for(
-		a = 2, aZ = arguments.length;
+		a = 3, aZ = arguments.length;
 		a < aZ;
 		a++
 	)
@@ -1968,6 +1988,7 @@ generateCreator =
 		generateAttributeVariables(
 			r,
 			jj,
+			false,
 			'inherit',
 			jj.twig ? 'twig' : null,
 			jj.twig ? 'ranks' : null,
@@ -1981,7 +2002,7 @@ generateCreator =
 	}
 	else
 	{
-		generateAttributeVariables( r, jj );
+		generateAttributeVariables( r, jj, false );
 	}
 
 	generateDefaultValues( r, jj, false );
@@ -2011,7 +2032,8 @@ generateFromJSONCreator =
 	var
 		a,
 		aZ,
-		attr;
+		attr,
+		name;
 
 	r.push(
 		'/*',
@@ -2026,10 +2048,17 @@ generateFromJSONCreator =
 
 	// TODO remove
 	r.push(
-		'\tif( json._$grown ) return json;'
+		'\tif( json._$grown ) return json;',
+		''
 	);
 
-	generateAttributeVariables( r, jj );
+	generateAttributeVariables(
+		r,
+		jj,
+		true,
+		jj.twig ? 'twig' : null,
+		jj.twig ? 'ranks' : null
+	);
 
 	r.push(
 		'\tfor( var aName in json )',
@@ -2049,25 +2078,42 @@ generateFromJSONCreator =
 		'\t\t\t\t\t);',
 		'\t\t\t\t}',
 		'',
-		'\t\t\t\tbreak;',
-		''
+		'\t\t\t\tbreak;'
 	);
 
 	for(
-		a = 0, aZ = jj.attrList.length;
+		a = 0, aZ = jj.jsonList.length;
 		a < aZ;
 		a++
 	)
 	{
-		attr =
-			jj.attributes[ jj.attrList[ a ] ];
+		name =
+			jj.jsonList[ a ];
 
-		if( !attr.json )
+		if(
+			name === 'twig'
+			||
+			name === 'ranks'
+		)
 		{
+			r.push(
+				'',
+				'\t\t\tcase \''+ name +'\' :',
+				'',
+				'\t\t\t\t' + name + ' =',
+				'\t\t\t\t\tjson.' + name + ';',
+				'',
+				'\t\t\t\tbreak;'
+			);
+
 			continue;
 		}
 
+		attr =
+			jj.attributes[ jj.jsonList[ a ] ];
+
 		r.push(
+			'',
 			'\t\t\tcase \'' + attr.aName + '\' :',
 			'',
 			'\t\t\t\t' + attr.vName + ' ='
@@ -2121,6 +2167,8 @@ generateFromJSONCreator =
 		'\t}',
 		''
 	);
+
+//	XXX
 
 	generateDefaultValues( r, jj, true );
 
@@ -2185,7 +2233,7 @@ generateReflectionSection =
 	);
 
 	// FIXME this is some workaround
-	if( jj.jsonList )
+	if( jj.hasJSON )
 	{
 		r.push(
 			'',
@@ -2256,7 +2304,7 @@ generateToJSONSection =
 	var
 		a,
 		aZ,
-		aName;
+		name;
 
 	r.push(
 		'/*',
@@ -2282,16 +2330,15 @@ generateToJSONSection =
 		a++
 	)
 	{
-		aName =
+		name =
 			jj.jsonList[ a ];
 
 		r.push(
-			'\t\t\t\t\'' + aName + '\' :',
-			'\t\t\t\t\tthis.' + aName +
+			'\t\t\t\t\'' + name + '\' :',
+			'\t\t\t\t\tthis.' + name +
 				( a + 1 < aZ ? ',' : '' )
 		);
 	}
-
 
 	r.push(
 		'\t\t} );',
@@ -2536,7 +2583,7 @@ joobjGenerator =
 
 	generateSeperator( r );
 
-	if( jj.jsonList )
+	if( jj.hasJSON )
 	{
 		generateFromJSONCreator( r, jj );
 
@@ -2551,7 +2598,7 @@ joobjGenerator =
 
 	generateSeperator( r );
 
-	if( jj.jsonList )
+	if( jj.hasJSON )
 	{
 		generateToJSONSection( r, jj );
 

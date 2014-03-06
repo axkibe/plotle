@@ -6,7 +6,7 @@
 
 
 /*
-| Capsule
+| Capsule.
 */
 ( function( ) {
 'use strict';
@@ -17,77 +17,60 @@
 */
 GLOBAL.CHECK =
 	true;
-
 GLOBAL.JOOBJ =
 	false;
-
 GLOBAL.SERVER =
 	true;
-
 GLOBAL.SHELL =
 	false;
 
 /*
-| Imports
+| Constants.
+*/
+var MESHCRAFT_DB_VERSION = 4;
+
+/*
+| Imports.
 */
 var
 	config =
 		require( '../../config' ),
-
 	fs =
 		require( 'fs' ),
-
 	GenerateJoobj =
 		require( './generate-joobj' ),
-
 	http =
 		require( 'http' ),
-
 	Inventory =
 		require( './inventory' ),
-
 	Jools =
 		require( '../jools/jools' ),
-
 	MaxAge =
 		require( './maxage' ),
-
 	MeshMashine =
 		require( '../mm/meshmashine' ),
-
 	meshverse =
 		require( '../mm/meshverse' ),
-
 	mongodb =
 		require( 'mongodb' ),
-
 	Path =
 		require( '../mm/path' ),
-
 	PostProcessor =
 		require( './post-processor' ),
-
 	Resource =
 		require( './resource' ),
-
 	roster =
 		require( './roster' ),
-
 	sha1 =
 		require( '../jools/sha1' ),
-
 	sus =
 		require( 'suspend' ),
-
 	uglify =
 		require( 'uglify-js' ),
-
 	url =
 		require( 'url' ),
-
 	util =
 		require( 'util' ),
-
 	zlib =
 		require( 'zlib' );
 
@@ -266,10 +249,12 @@ Server.prototype.checkRepositorySchemaVersion =
 
 	if( version )
 	{
-		if( version.version !== 4 )
+		if( version.version !== MESHCRAFT_DB_VERSION )
 		{
 			throw new Error(
-				'Wrong repository schema version, expected 4, got ' +
+				'Wrong repository schema version, expected '
+					+ MESHCRAFT_DB_VERSION +
+				', got ' +
 				version.version
 			);
 		}

@@ -45,13 +45,14 @@ if( SERVER )
 		{
 			Point :
 				require( '../euclid/point' ),
-
 			Rect :
 				require( '../euclid/rect' )
 		};
 
 	Visual =
 		{
+			Doc :
+				require( '../visual/doc' ),
 			Para :
 				require( '../visual/para' )
 		};
@@ -216,8 +217,10 @@ Meshverse.prototype.grow =
 	if( pattern.ranks )
 	{
 		ranks =
-			model.ranks ?
-				model.ranks.slice( ) :
+			model.ranks
+				?
+				model.ranks.slice( )
+				:
 				[ ];
 	}
 
@@ -595,6 +598,7 @@ Meshverse.prototype.Relation =
 
 
 Meshverse.prototype.Doc =
+//	Visual.Doc;
 	Jools.immute( {
 		twig :
 			Jools.immute( {
@@ -605,26 +609,14 @@ Meshverse.prototype.Doc =
 			true
 	} );
 
-
 Meshverse.prototype.Para =
 	Visual.Para;
-	/*
-	Jools.immute( {
-		must :
-			Jools.immute( {
-				'text' :
-					'String'
-			} )
-	} );
-	*/
 
 Meshverse.prototype.Rect =
 	Euclid.Rect;
 
-
 Meshverse.prototype.Point =
 	Euclid.Point;
-
 
 meshverse =
 	new Meshverse( );

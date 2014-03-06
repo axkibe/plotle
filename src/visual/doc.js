@@ -93,9 +93,29 @@ if( JOOBJ )
 					}
 			},
 		init :
-			[ ]
+			[ ],
+		node :
+			true
 	};
 }
+
+
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	Jools =
+		require( '../jools/jools' );
+
+	Visual =
+		{
+			Doc :
+				require( '../joobj/this' )( module )
+		};
+}
+
+
 
 
 var
@@ -888,6 +908,16 @@ Doc.prototype.sketchRange =
 		}
 	}
 };
+
+
+/*
+| Node exports
+*/
+if( SERVER )
+{
+	module.exports =
+		Doc;
+}
 
 
 } )( );

@@ -43,13 +43,10 @@ var
 */
 GLOBAL.CHECK =
 	true;
-
 GLOBAL.JOOBJ =
 	false;
-
 GLOBAL.SERVER =
 	true;
-
 GLOBAL.SHELL =
 	false;
 
@@ -58,8 +55,6 @@ GLOBAL.SHELL =
 | Imports
 */
 var
-	Jools =
-		require( '../jools/jools' ),
 	mongodb =
 		require( 'mongodb' ),
 	sus =
@@ -71,61 +66,33 @@ var
 */
 var
 	translateChange =
-		function( o )
+		function( chg )
 {
-	if(
-		Jools.isString( o ) ||
-		typeof( o ) === 'number' ||
-		o === null
-	)
-	{
-		return o;
-	}
+	console.log( chg );
 
 	var
-		t =
-			o instanceof Array ?
-			[ ] :
-			{ };
+		src =
+			chg.chgX.src,
+		trg =
+			chg.chgX.trg;
 
-	for( var k in o )
+	if( src.path )
 	{
-		t[ k === 'copse' ? 'twig' : k ] =
-			translateChange( o[ k ] );
+		if( src.path[ 1 ] === 'doc' )
+		{
+			src.path.splice( 2, 0, 'twig' );
+		}
 	}
 
-	if( t.type === 'Point' && t.twig )
+	if( trg.path )
 	{
-		if( t.x )
+		if( trg.path[ 1 ] === 'doc' )
 		{
-			if( t.x !== t.twig.x )
-			{
-				throw new Error( 'x mismatch' );
-			}
+			trg.path.splice( 2, 0, 'twig' );
 		}
-		else
-		{
-			t.x =
-				t.twig.x;
-		}
-
-		if( t.y )
-		{
-			if( t.y !== t.twig.y )
-			{
-				throw new Error( 'y mismatch' );
-			}
-		}
-		else
-		{
-			t.y =
-				t.twig.y;
-		}
-
-		delete t.twig;
 	}
 
-	return t;
+	return chg;
 };
 
 
@@ -313,8 +280,8 @@ var run =
 			o = yield cursor.nextObject( sus.resume( ) )
 		)
 		{
-			// o =
-			//	translateChange( o );
+			o =
+				translateChange( o );
 
 			yield tc.insert( o, sus.resume( ) );
 		}
