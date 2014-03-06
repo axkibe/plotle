@@ -1,6 +1,8 @@
 /*
 | Generates jools like objects from a jools definition.
 |
+| Version 2
+|
 | Authors: Axel Kittenberger
 */
 
@@ -1882,7 +1884,7 @@ var
 generateAttributeVariables =
 	function(
 		r,       // result array
-		jj       // the joobj working object
+		jj      // the joobj working object
 		//jsonOnly // generate only attributes that are in json
 		// ...   // addtional to variable list ( 'inherit' )
 	)
