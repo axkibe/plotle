@@ -982,7 +982,7 @@ Server.prototype.prepareInventory =
 	if( !config.noWrite )
 	{
 		yield fs.writeFile(
-			'source.map',
+			'report/source.map',
 			sourceMap.toString( ),
 			sus.resume( )
 		);
@@ -1300,7 +1300,7 @@ Server.prototype.extraMangle =
 	if( !config.noWrite )
 	{
 		fs.writeFileSync(
-			'manglemap.txt',
+			'report/manglemap.txt',
 			util.inspect( mangle )
 		);
 	}

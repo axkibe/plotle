@@ -1,6 +1,4 @@
 node_modules/
-compact.js
-manglemap.txt
-source.map
+report/*
 joobj/*
 src/.jshint.stamp
