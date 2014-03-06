@@ -30,7 +30,7 @@ var
 		require( 'vm' ),
 	formatter =
 		require( '../code/formatter' ),
-	generator =
+	Generator =
 		require( '../joobj/gen2' ),
 	file =
 		null,
@@ -78,7 +78,7 @@ joobj =
 	);
 
 file =
-	generator( joobj );
+	Generator.generate( joobj );
 
 output =
 	formatter.format( file );

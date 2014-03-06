@@ -11,6 +11,9 @@
 var
 	Code;
 
+Code =
+	Code || { };
+
 
 /*
 | Capsule
@@ -44,6 +47,15 @@ if( JOOBJ )
 	};
 }
 
+
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	Code.File =
+		require( '../joobj/this' )( module );
+}
 
 var
 	File =

@@ -9,7 +9,8 @@
 | Export
 */
 var
-	Formatter;
+	Formatter =
+		{ };
 
 
 /*
@@ -34,7 +35,7 @@ var _formatHeader =
 	);
 
 	for(
-		a = 0, aZ = file.header.lenght;
+		a = 0, aZ = file.header.length;
 		a < aZ;
 		a++
 	)

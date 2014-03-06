@@ -5,45 +5,32 @@
 | Authors: Axel Kittenberger
 */
 
+
 /*
-| Capsule (to make jshint happy)
+| Capsule.
 */
 (function( ) {
 'use strict';
 
 
-if( typeof( require ) === 'undefined' )
-{
-	throw new Error(
-		'this code requires node!'
-	);
-}
 
 var
 	config =
 		require( '../../config' ),
-
 	fs =
 		require( 'fs' ),
-
 	vm =
 		require( 'vm' ),
-
 	joobjGenerator =
 		require( './generator' ),
-
 	Jools =
 		require( '../jools/jools' ),
-
 	input =
 		null,
-
 	joobj =
 		null,
-
 	output =
 		null,
-
 	readOptions =
 		{
 			encoding :
@@ -53,20 +40,16 @@ var
 var
 joobjNodeGenerator =
 	function(
-		mod
+		module
 	)
 {
 	var
 		server =
-			mod,
-
-		serverName =
-			'src/server/server.js',
-
+			module,
 		inFilename,
-
-		serverDir;
-
+		si,
+		separator =
+			'/src/';
 
 	// gets the server module
 	while( server.parent )
@@ -75,25 +58,18 @@ joobjNodeGenerator =
 			server.parent;
 	}
 
-	if(
-		server.filename.substring(
-			server.filename.length - serverName.length
-		) !== serverName
-	)
+	si =
+		server.filename.indexOf( separator );
+
+	if( si < 0 )
 	{
 		throw new Error(
-			'root module is not called "' + serverName + '"'
+			'root module has no "' + separator + '" separator'
 		);
 	}
 
-	// the server directory
-	serverDir =
-		server.filename.substring(
-			0, server.filename.length - serverName.length
-		);
-
 	inFilename =
-		mod.filename.substring( serverDir.length );
+		module.filename.substring( si + 1 );
 
 	input =
 		fs.readFileSync(
