@@ -1,6 +1,8 @@
 /*
 | Generates jools like objects from a jools definition.
 |
+| FIXME remove all mutable pushes
+|
 | Version 2
 |
 | Authors: Axel Kittenberger
@@ -55,6 +57,47 @@ if( SERVER )
 
 
 /*
+| Generates the constructor.
+*/
+var _generateConstructor =
+	function(
+		joobj,  // the joobj definition
+		content
+	)
+{
+	content.push(
+		Code.Comment.create(
+			'content',
+				[ 'Constructor.' ]
+		)
+	);
+};
+
+
+/*
+| Generates the capsule.
+*/
+var _generateCapsule =
+	function(
+		joobj // the joobj definition
+	)
+{
+	var
+		content =
+			[ ];
+
+	_generateConstructor( joobj, content );
+
+	return (
+		Code.Block.create(
+			'content',
+				content
+		)
+	);
+};
+
+
+/*
 | Generates code from a jools object definition.
 */
 Generator.generate =
@@ -86,10 +129,8 @@ Generator.generate =
 		);
 
 	capsule =
-		Code.Block.create(
-			'content',
-				[ ]
-		);
+		_generateCapsule( joobj );
+
 
 	file =
 		file.create(

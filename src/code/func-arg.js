@@ -19,7 +19,7 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'Argument',
+			'FuncArg',
 		unit :
 			'Code',
 		attributes :
