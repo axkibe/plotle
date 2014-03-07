@@ -21,32 +21,11 @@ var
 
 
 /*
-| Returns a string indented by indent
+| Node imports.
 */
-var tab =
-	function(
-		indent,
-		check
-	)
-{
-	var
-		str =
-			'';
-
-	if( check )
-	{
-		indent--;
-
-		str += '/**/';
-	}
-
-	for( var a = 0; a < indent; a++ )
-	{
-		str += '\t';
-	}
-
-	return str;
-};
+var
+	Context =
+		require( './context' );
 
 
 /*
@@ -56,7 +35,7 @@ var formatComment =
 	function(
 		lines,
 		comment,
-		indent
+		context
 	)
 {
 	var
@@ -79,13 +58,11 @@ var formatComment =
 
 		if( c === '' )
 		{
-			lines.push( tab( indent ) + '|' );
+			lines.push( context.tab + '|' );
 		}
 		else
 		{
-			lines.push(
-				tab( indent ) + '| ' + c
-			);
+			lines.push( context.tab + '| ' + c );
 		}
 	}
 
@@ -102,19 +79,16 @@ var formatBlock =
 	function(
 		lines,
 		block,
-		indent,
+		context,
 		semicolon
 	)
 {
 	lines.push(
-		tab( indent ) +
-			'{'
+		context.tab + '{'
 	);
 
 	lines.push(
-		tab( indent ) +
-			'}' +
-			semicolon
+		context.tab + '}' + semicolon
 	);
 };
 
@@ -126,7 +100,7 @@ var formatFunction =
 	function(
 		lines,
 		func,
-		indent
+		context
 	)
 {
 	var
@@ -134,7 +108,7 @@ var formatFunction =
 		comma;
 
 	lines.push(
-		tab( indent ) + 'function('
+		context.tab + 'function('
 	);
 
 	for(
@@ -153,7 +127,7 @@ var formatFunction =
 				'';
 
 		lines.push(
-			tab( indent + 1 ) +
+			context.tab +
 				arg.name +
 				comma +
 				(
@@ -166,13 +140,16 @@ var formatFunction =
 	}
 
 	lines.push(
-		tab( indent ) + ')'
+		context.tab + ')'
 	);
 
 	formatBlock(
 		lines,
 		func.block,
-		indent - 1,
+		context.create(
+			'indent',
+				context.indent - 1
+		),
 		';'
 	);
 };
@@ -185,7 +162,7 @@ var formatAssign =
 	function(
 		lines,
 		assign,
-		indent
+		context
 	)
 {
 	var
@@ -205,7 +182,7 @@ var formatAssign =
 		)
 		{
 			lines.push(
-				tab( indent ) +
+				context.tab +
 					left[ a ] +
 					' ='
 			);
@@ -214,9 +191,7 @@ var formatAssign =
 	else
 	{
 		lines.push(
-			tab( indent ) +
-				left +
-				' ='
+			context.tab + left + ' ='
 		);
 	}
 
@@ -225,7 +200,10 @@ var formatAssign =
 		formatFunction(
 			lines,
 			right,
-			indent + 1
+			context.create(
+				'indent',
+					context.indent + 1
+			)
 		);
 	}
 	else
@@ -257,7 +235,7 @@ var formatExpression =
 	function(
 		lines,
 		expr,
-		indent
+		context
 	)
 {
 	switch( expr.reflect )
@@ -267,7 +245,7 @@ var formatExpression =
 			formatAssign(
 				lines,
 				expr,
-				indent
+				context
 			);
 
 			break;
@@ -277,7 +255,7 @@ var formatExpression =
 			formatComment(
 				lines,
 				expr,
-				indent
+				context
 			);
 
 			break;
@@ -295,7 +273,8 @@ var formatExpression =
 var formatCapsule =
 	function(
 		lines,
-		file
+		file,
+		context
 	)
 {
 	var
@@ -323,7 +302,7 @@ var formatCapsule =
 		formatExpression(
 			lines,
 			content[ a ],
-			0
+			context
 		);
 	}
 
@@ -344,12 +323,18 @@ Formatter.format =
 	)
 {
 	var
+		context =
+			Context.create( ),
 		lines =
 			[ ];
 
 	if( file.header )
 	{
-		formatComment( lines, file.header, 0 );
+		formatComment(
+			lines,
+			file.header,
+			context
+		);
 	}
 
 	if( file.capsule )
@@ -359,7 +344,11 @@ Formatter.format =
 			formatSeparator( lines );
 		}
 
-		formatCapsule( lines, file );
+		formatCapsule(
+			lines,
+			file,
+			context
+		);
 	}
 
 	return lines.join( '\n' );
@@ -367,7 +356,7 @@ Formatter.format =
 
 
 /*
-| Node exports
+| Node export.
 */
 if( SERVER )
 {
