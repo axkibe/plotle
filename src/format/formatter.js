@@ -25,12 +25,20 @@ var
 */
 var tab =
 	function(
-		indent
+		indent,
+		check
 	)
 {
 	var
 		str =
 			'';
+
+	if( check )
+	{
+		indent--;
+
+		str += '/**/';
+	}
 
 	for( var a = 0; a < indent; a++ )
 	{
@@ -122,7 +130,8 @@ var formatFunction =
 	)
 {
 	var
-		arg;
+		arg,
+		comma;
 
 	lines.push(
 		tab( indent ) + 'function('
@@ -137,9 +146,16 @@ var formatFunction =
 		arg =
 			func.args[ a ];
 
+		comma =
+			a + 1 < aZ ?
+				','
+				:
+				'';
+
 		lines.push(
 			tab( indent + 1 ) +
 				arg.name +
+				comma +
 				(
 					arg.comment ?
 						' // ' + arg.comment
@@ -203,8 +219,6 @@ var formatAssign =
 				' ='
 		);
 	}
-
-	console.log( right.reflect );
 
 	if( right.reflect === 'Function' )
 	{

@@ -50,8 +50,6 @@ JoobjProto.setPath =
 
 		if( pos + 2 === pZ )
 		{
-			console.log( 'SP1', key, value );
-
 			return (
 				this.create(
 					'twig:set',
@@ -60,8 +58,6 @@ JoobjProto.setPath =
 				)
 			);
 		}
-
-		console.log( 'SP2', key, path, value, pos + 2);
 
 		return (
 			this.create(
@@ -78,8 +74,6 @@ JoobjProto.setPath =
 
 	if( pos + 1 === pZ )
 	{
-		console.log( 'SP3', key, value );
-
 		return (
 			this.create(
 				key,
@@ -87,8 +81,6 @@ JoobjProto.setPath =
 			)
 		);
 	}
-
-	console.log( 'SP4', path, value, pos + 1 );
 
 	return (
 		this.create(
@@ -152,11 +144,6 @@ JoobjProto.getPath =
 	{
 		return this[ key ];
 	}
-
-	console.log( '1', this );
-	console.log( '2', key );
-	console.log( '3', this[ key ] );
-
 
 	return (
 		this[ key ].getPath(

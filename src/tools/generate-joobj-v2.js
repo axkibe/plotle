@@ -28,8 +28,8 @@ var
 		require( 'fs' ),
 	vm =
 		require( 'vm' ),
-	formatter =
-		require( '../code/formatter' ),
+	Formatter =
+		require( '../format/formatter' ),
 	Generator =
 		require( '../joobj/gen2' ),
 	file =
@@ -81,7 +81,7 @@ file =
 	Generator.generate( joobj );
 
 output =
-	formatter.format( file );
+	Formatter.format( file );
 
 /*
 var

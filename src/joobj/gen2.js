@@ -63,16 +63,261 @@ if( SERVER )
 
 
 /*
+| Creates the joobj data structures to work with.
+*/
+var
+buildJD =
+	function(
+		joobj
+	)
+{
+	var
+		attr,
+		// alphabetical sorted attribute names
+		attrList =
+			[ ],
+		attributes =
+			{ },
+		// list of all arguments passed to
+		// constructor
+		conVars =
+			{ },
+		hasJSON =
+			!!joobj.json,
+		name,
+		jsonList =
+			[ ],
+		// units sorted alphabetically
+		unitList =
+			null,
+		// units used
+		units =
+			{ };
+
+	// list of attributes
+	if( joobj.attributes )
+	{
+		for( name in joobj.attributes )
+		{
+			attr =
+				joobj.attributes[ name ];
+
+			attributes[ name ] =
+				Object.freeze(
+					{
+						allowsNull :
+							attr.allowsNull
+							||
+							attr.defaultValue === 'null',
+						allowsUndefined :
+							attr.allowsUndefined
+							||
+							attr.defaultValue === 'undefined',
+						assign :
+							attr.assign !== undefined
+								?
+								attr.assign
+								:
+								name,
+						comment :
+							attr.comment,
+						concerns :
+							attr.concerns,
+						defaultValue :
+							attr.defaultValue,
+						json :
+							attr.json,
+						name :
+							name,
+						type :
+							attr.type,
+						unit :
+							attr.unit,
+						vName :
+							'v_' + name
+					}
+				);
+
+			if( attr.unit )
+			{
+				units[ attr.unit ] =
+					true;
+			}
+
+			if( attr.json )
+			{
+				hasJSON =
+					true;
+
+				jsonList.push( name );
+			}
+
+			if(
+				attr.assign !== null
+				||
+				(
+					joobj.init
+					&&
+					joobj.init.indexOf( name ) >= 0
+				)
+			)
+			{
+				conVars[ name ] =
+					Object.freeze(
+						{
+							name :
+								name,
+							comment :
+								attr.comment,
+							vName :
+								attributes[ name ].vName
+						}
+					);
+			}
+		}
+
+		attrList =
+			Object
+				.keys( joobj.attributes )
+				.sort( );
+	}
+
+	unitList =
+		Object.keys( units ).sort( );
+
+	if(
+		joobj.init
+		&&
+		joobj.init.indexOf( 'inherit' ) >= 0
+	)
+	{
+		conVars.inherit =
+			Object.freeze(
+				{
+					name :
+						'inherit',
+					comment :
+						'inheritance',
+					vName :
+						'inherit'
+				}
+			);
+	}
+
+	if( joobj.twig )
+	{
+		conVars.twig =
+			Object.freeze(
+				{
+					name :
+						'twig',
+					comment :
+						'twig, set upon change',
+					vName :
+						'twig'
+				}
+			);
+
+		conVars.ranks =
+			Object.freeze(
+				{
+					name :
+						'ranks',
+					comment :
+						'twig order, set upon change',
+					vName :
+						'ranks'
+				}
+			);
+
+		if( hasJSON )
+		{
+			jsonList.push( 'twig' );
+			jsonList.push( 'ranks' );
+		}
+	}
+
+	var
+		conList =
+			Object.keys( conVars );
+
+	conList.sort(
+		function( o, p )
+		{
+			return (
+				Jools.compare(
+					conVars[ o ].vName,
+					conVars[ p ].vName
+				)
+			);
+		}
+	);
+
+	jsonList.sort( );
+
+	return Object.freeze(
+		{
+			attrList :
+				attrList,
+			attributes :
+				attributes,
+			conList :
+				conList,
+			conVars :
+				conVars,
+			equals :
+				joobj.equals,
+			init :
+				joobj.init,
+			hasJSON :
+				hasJSON,
+			jsonList :
+				jsonList,
+			name :
+				joobj.name,
+			node :
+				joobj.node,
+			// in case unit and joobj are named identically
+			// the shortcut will be renamed
+			reference :
+				( joobj.unit === joobj.name )
+				?
+				joobj.name + 'Obj'
+				:
+				joobj.name,
+			singleton :
+				joobj.singleton,
+			subclass :
+				joobj.subclass,
+			twig :
+				joobj.twig,
+			unit :
+				joobj.unit,
+			unitList :
+				unitList
+		}
+	);
+};
+
+
+
+/*
 | Generates the constructor.
 */
 var generateConstructor =
 	function(
-		joobj,  // the joobj definition
-		content
+		jd,      // the joobj data
+		content  // content to append to
 	)
 {
 	var
-		assign;
+		a,
+		aZ,
+		args,
+		assign,
+		left,
+		name,
+		right;
 
 	content.push(
 		Code.Comment.create(
@@ -81,34 +326,65 @@ var generateConstructor =
 		)
 	);
 
+	if( jd.unit )
+	{
+		left =
+			[
+				'var ' + jd.reference,
+				jd.unit + '.' + jd.name
+			];
+	}
+	else
+	{
+		left =
+			jd.refrence;
+	}
+
+	args =
+		[
+			Code.FuncArg.create(
+				'name',
+					'tag'
+			)
+		];
+
+	for(
+		a = 0, aZ = jd.conList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			jd.conList[ a ];
+
+		args.push(
+			Code.FuncArg.create(
+				'name',
+					jd.conVars[ name ].vName,
+				'comment',
+					jd.conVars[ name ].comment
+			)
+		);
+	}
+
+	right =
+		Code.Function.create(
+			'args',
+				args,
+			'block',
+				Code.Block.create(
+					'content',
+						[ ]
+				)
+		);
+
+
 	assign =
 		Code.Assign.create(
 			'left',
-				[
-					'var Comment',
-					'Code.Comment'
-				],
+				left,
 			'right',
-				Code.Function.create(
-					'args',
-						[
-							Code.FuncArg.create(
-								'name',
-									'tag'
-							),
-							Code.FuncArg.create(
-								'name',
-									'v_content',
-								'comment',
-									'content'
-							)
-						],
-					'block',
-						Code.Block.create(
-							'content',
-								[ ]
-						)
-				)
+				right
 		);
 
 	content.push(
@@ -122,14 +398,14 @@ var generateConstructor =
 */
 var generateCapsule =
 	function(
-		joobj // the joobj definition
+		jd // the joobj data
 	)
 {
 	var
 		content =
 			[ ];
 
-	generateConstructor( joobj, content );
+	generateConstructor( jd, content );
 
 	return (
 		Code.Block.create(
@@ -151,9 +427,13 @@ Generator.generate =
 	var
 		capsule,
 		header,
-		file;
+		file,
+		jd;
 
 	Validator.check( joobj );
+
+	jd =
+		buildJD( joobj );
 
 	header =
 		Code.Comment.create(
@@ -172,7 +452,7 @@ Generator.generate =
 		);
 
 	capsule =
-		generateCapsule( joobj );
+		generateCapsule( jd );
 
 
 	file =
