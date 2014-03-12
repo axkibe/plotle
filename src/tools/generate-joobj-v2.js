@@ -31,7 +31,7 @@ var
 	Formatter =
 		require( '../format/formatter' ),
 	Generator =
-		require( '../joobj/gen2' ),
+		require( '../joobj/genv2' ),
 	file =
 		null,
 	input =

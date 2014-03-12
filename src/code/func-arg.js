@@ -26,6 +26,7 @@ if( JOOBJ )
 			{
 				name :
 					{
+						// FIXME this is doubled
 						comment :
 							'argument name',
 						type :

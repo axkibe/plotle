@@ -1,4 +1,4 @@
 node_modules/
 report/*
 joobj/*
-src/.jshint.stamp
+.jshint.stamp

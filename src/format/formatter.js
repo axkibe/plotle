@@ -25,17 +25,20 @@ var
 */
 var
 	Context =
-		require( './context' );
+		require( './context' ),
+	Jools =
+		require( '../jools/jools' );
 
 
 /*
 | Formats the header section.
 */
-var formatComment =
+var
+formatComment =
 	function(
 		lines,
-		comment,
-		context
+		context,
+		comment
 	)
 {
 	var
@@ -71,21 +74,88 @@ var formatComment =
 	);
 };
 
+/*
+| Formats a block.
+*/
+var
+formatCheck =
+	function(
+		lines,
+		context,
+		check
+	)
+{
+	if( context.check )
+	{
+		throw new Error( );
+	}
+
+	context =
+		context.create(
+			'check',
+				true
+		);
+
+	lines.push(
+		context.tab + 'if( CHECK )'
+	);
+
+	formatBlock(
+		lines,
+		context,
+		check.block,
+		''
+	);
+};
+
 
 /*
 | Formats a block.
 */
-var formatBlock =
+var
+formatBlock =
 	function(
 		lines,
-		block,
 		context,
+		block,
 		semicolon
 	)
 {
+	var
+		a,
+		aZ,
+		expr;
+
 	lines.push(
 		context.tab + '{'
 	);
+
+	for(
+		a = 0, aZ = block.ranks.length;
+		a < aZ;
+		a++
+	)
+	{
+		expr =
+			block.twig[ block.ranks[ a ] ];
+
+		switch( expr.reflect )
+		{
+			case 'Check' :
+
+				formatCheck(
+					lines,
+					context,
+					expr
+				);
+
+				break;
+
+			default :
+
+				throw new Error( );
+		}
+	}
 
 	lines.push(
 		context.tab + '}' + semicolon
@@ -96,7 +166,8 @@ var formatBlock =
 /*
 | Formats a function.
 */
-var formatFunction =
+var
+formatFunction =
 	function(
 		lines,
 		func,
@@ -105,20 +176,24 @@ var formatFunction =
 {
 	var
 		arg,
+		argContext,
 		comma;
 
 	lines.push(
 		context.tab + 'function('
 	);
 
+	argContext =
+		context.increment;
+
 	for(
-		var a = 0, aZ = func.args.length;
+		var a = 0, aZ = func.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
 		arg =
-			func.args[ a ];
+			func.twig[ func.ranks[ a ] ];
 
 		comma =
 			a + 1 < aZ ?
@@ -127,15 +202,15 @@ var formatFunction =
 				'';
 
 		lines.push(
-			context.tab +
-				arg.name +
-				comma +
-				(
-					arg.comment ?
-						' // ' + arg.comment
-						:
-						''
-				)
+			argContext.tab +
+			arg.name +
+			comma +
+			(
+				arg.comment ?
+					' // ' + arg.comment
+					:
+					''
+			)
 		);
 	}
 
@@ -145,11 +220,8 @@ var formatFunction =
 
 	formatBlock(
 		lines,
+		context.decrement,
 		func.block,
-		context.create(
-			'indent',
-				context.indent - 1
-		),
 		';'
 	);
 };
@@ -158,11 +230,12 @@ var formatFunction =
 /*
 | Formats an assignment.
 */
-var formatAssign =
+var
+formatAssign =
 	function(
 		lines,
-		assign,
-		context
+		context,
+		assign
 	)
 {
 	var
@@ -195,20 +268,37 @@ var formatAssign =
 		);
 	}
 
+	switch( right.reflect )
+	{
+		case 'Function' :
+
+			formatFunction(
+				lines,
+				right,
+				context.increment
+			);
+
+			break;
+
+		default :
+
+			if( !Jools.isString( right ) )
+			{
+				throw new Error( );
+			}
+
+			lines.push(
+				context.increment.tab + right + ';'
+			);
+
+			break;
+	}
+
 	if( right.reflect === 'Function' )
 	{
-		formatFunction(
-			lines,
-			right,
-			context.create(
-				'indent',
-					context.indent + 1
-			)
-		);
 	}
 	else
 	{
-		throw new Error( );
 	}
 };
 
@@ -216,7 +306,8 @@ var formatAssign =
 /*
 | Formats a separator.
 */
-var formatSeparator =
+var
+formatSeparator =
 	function(
 		lines
 	)
@@ -231,11 +322,12 @@ var formatSeparator =
 /*
 | Formats an expression.
 */
-var formatExpression =
+var
+formatExpression =
 	function(
 		lines,
-		expr,
-		context
+		context,
+		expr
 	)
 {
 	switch( expr.reflect )
@@ -244,8 +336,8 @@ var formatExpression =
 
 			formatAssign(
 				lines,
-				expr,
-				context
+				context,
+				expr
 			);
 
 			break;
@@ -254,8 +346,8 @@ var formatExpression =
 
 			formatComment(
 				lines,
-				expr,
-				context
+				context,
+				expr
 			);
 
 			break;
@@ -270,18 +362,17 @@ var formatExpression =
 /*
 | Formats the capsule.
 */
-var formatCapsule =
+var
+formatCapsule =
 	function(
 		lines,
-		file,
-		context
+		context,
+		file
 	)
 {
 	var
 		capsule =
-			file.capsule,
-		content =
-			capsule.content;
+			file.capsule;
 
 	lines.push(
 		'/*',
@@ -294,15 +385,15 @@ var formatCapsule =
 	formatSeparator( lines );
 
 	for(
-		var a = 0, aZ = content.length;
+		var a = 0, aZ = capsule.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
 		formatExpression(
 			lines,
-			content[ a ],
-			context
+			context,
+			capsule.atRank( a )
 		);
 	}
 
@@ -332,8 +423,8 @@ Formatter.format =
 	{
 		formatComment(
 			lines,
-			file.header,
-			context
+			context,
+			file.header
 		);
 	}
 
@@ -346,8 +437,8 @@ Formatter.format =
 
 		formatCapsule(
 			lines,
-			file,
-			context
+			context,
+			file
 		);
 	}
 

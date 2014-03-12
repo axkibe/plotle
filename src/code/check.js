@@ -24,10 +24,10 @@ if( JOOBJ )
 			'Code',
 		attributes :
 			{
-				code :
+				'block' :
 					{
 						comment :
-							'the code',
+							'the code block',
 						type :
 							'Block'
 					}

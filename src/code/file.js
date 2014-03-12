@@ -29,7 +29,9 @@ if( JOOBJ )
 						comment :
 							'header comment',
 						type :
-							'Comment'
+							'Comment',
+						defaultValue :
+							'null'
 					},
 				capsule :
 					{
@@ -38,7 +40,7 @@ if( JOOBJ )
 						type :
 							'Block',
 						defaultValue :
-							'undefined'
+							'null'
 					}
 			},
 		node :
@@ -47,8 +49,62 @@ if( JOOBJ )
 }
 
 
+var
+	Comment =
+		require( './comment' ),
+	File =
+		require( '../joobj/this' )( module );
+
+
+/*
+| Returns the file with the capsule set.
+*/
+File.prototype.Capsule =
+	function(
+		capsule
+	)
+{
+	return (
+		this.create(
+			'capsule',
+				capsule
+		)
+	);
+};
+
+
+/*
+| Returns the file with the header set.
+*/
+File.prototype.Header =
+	function(
+		header
+	)
+{
+	if( header.reflect !== 'Comment' )
+	{
+		// arguments have to be a list of strings otherwise
+		header =
+			Comment.create(
+				'content',
+					Array.prototype.slice.call( arguments )
+			);
+	}
+
+	return (
+		this.create(
+			'header',
+				header
+		)
+	);
+};
+
+
+/*
+| Node export.
+*/
 module.exports =
-	require( '../joobj/this' )( module );
+	File;
 
 
 } )( );

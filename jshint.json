@@ -10,6 +10,7 @@
 	"undef"     : true,
 	"onecase"   : true,
 	"laxbreak"  : true,
+	"laxcomma"  : true,
 	"strict"    : true,
 	"undef"     : true,
 	"unused"    : true,

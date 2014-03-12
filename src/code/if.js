@@ -24,6 +24,14 @@ if( JOOBJ )
 			'Code',
 		attributes :
 			{
+				condition :
+					{
+						comment :
+							'the if condition',
+						type :
+							// FUTURE String or Array of Strings
+							'Object'
+					},
 				then :
 					{
 						comment :

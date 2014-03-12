@@ -89,6 +89,63 @@ Jools.lazyValue(
 
 
 /*
+| Increases the indentation.
+*/
+Jools.lazyValue(
+	Context.prototype,
+	'increment',
+	function( )
+	{
+		var
+			inc =
+				this.create(
+					'indent',
+						this.indent + 1
+				);
+
+		Jools.aheadValue(
+			inc,
+			'decrement',
+			this
+		);
+
+		return inc;
+	}
+);
+
+
+/*
+| Decreases the indentation.
+*/
+Jools.lazyValue(
+	Context.prototype,
+	'decrement',
+	function( )
+	{
+		if( this.indent <= 0 )
+		{
+			throw new Error( );
+		}
+
+		var
+			dec =
+				this.create(
+					'indent',
+						this.indent - 1
+				);
+
+		Jools.aheadValue(
+			dec,
+			'increment',
+			this
+		);
+
+		return dec;
+	}
+);
+
+
+/*
 | Node export.
 */
 module.exports =

@@ -24,23 +24,23 @@ if( JOOBJ )
 			'Code',
 		attributes :
 			{
-				args :
-					{
-						comment :
-							'function arguments',
-						type :
-							'Array'
-					},
 				block :
 					{
 						comment :
 							'function code',
 						type :
-							'Block'
+							'Block',
+						defaultValue :
+							'null'
 					}
 			},
 		node :
-			true
+			true,
+		twig :
+			{
+				'FuncArg' :
+					'Code.FuncArg'
+			}
 	};
 }
 
