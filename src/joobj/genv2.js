@@ -69,6 +69,28 @@ var
 	Validator =
 		require( './validator' );
 
+
+/*
+| Shortcut for creating assignments.
+*/
+var
+Assign =
+	function(
+		left,
+		right
+	)
+{
+	return (
+		Code.Assign.create(
+			'left',
+				left,
+			'right',
+				right
+		)
+	);
+};
+
+
 /*
 | Shortcut for creating blocks.
 */
@@ -511,24 +533,16 @@ Generator.prototype.genConstructor =
 
 	if( this.unit )
 	{
-		/*
 		capsule =
 			capsule.VarDec(
 				this.reference,
+				//constructor
 				Assign(
 					Term(
 						this.unit + '.' + this.name
 					),
 					constructor
 				)
-			);
-		*/
-		capsule =
-			capsule.Assign(
-				Term(
-					this.unit + '.' + this.name
-				),
-				constructor
 			);
 	}
 	else

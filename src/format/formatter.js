@@ -512,11 +512,56 @@ formatVarDec =
 		varDec
 	)
 {
-	text =
-		text.append(
-			context.tab + 'var' + '\n',
-			context.increment.tab + varDec.name
-		);
+	var
+		// true when this is a root function
+		isRootFunc =
+			false;
+
+	Jools.log( true, context.root, varDec.assign.reflect === 'Assign' );
+
+	if(
+		context.root
+		&&
+		varDec.assign
+	)
+	{
+		if(
+			varDec.assign.reflect === 'Function'
+		)
+		{
+			isRootFunc =
+				true;
+		}
+		else if(
+			varDec.assign.reflect === 'Assign'
+			&&
+			varDec.assign.right.reflect === 'Function'
+		)
+		{
+			// FUTURUE allow abitrary amount of assignments
+			isRootFunc =
+				true;
+		}
+	}
+
+	Jools.log( true, isRootFunc );
+
+	if( !isRootFunc )
+	{
+		text =
+			text.append(
+				context.tab + 'var' + '\n',
+				context.increment.tab + varDec.name
+			);
+
+	}
+	else
+	{
+		text =
+			text.append(
+				context.tab + 'var ' + varDec.name
+			);
+	}
 
 	if( varDec.assign )
 	{
