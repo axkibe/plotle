@@ -44,11 +44,6 @@ formatAssign =
 	)
 {
 	text =
-		text.append(
-			context.tab
-		);
-
-	text =
 		formatTerm(
 			text,
 			context,
@@ -60,13 +55,9 @@ formatAssign =
 			' =\n'
 		);
 
+	// TODO only if assign.right not an assign
 	context =
 		context.increment;
-
-	text =
-		text.append(
-			context.tab
-		);
 
 	text =
 		formatExpression(
@@ -309,7 +300,7 @@ formatFunction =
 
 	text =
 		text.append(
-			'function(' + '\n'
+			context.tab + 'function(' + '\n'
 		);
 
 	for(
@@ -493,6 +484,7 @@ formatTerm =
 
 	return (
 		text.append(
+			context.tab,
 			term.term
 		)
 	);
@@ -516,8 +508,6 @@ formatVarDec =
 		// true when this is a root function
 		isRootFunc =
 			false;
-
-	Jools.log( true, context.root, varDec.assign.reflect === 'Assign' );
 
 	if(
 		context.root
@@ -544,8 +534,6 @@ formatVarDec =
 		}
 	}
 
-	Jools.log( true, isRootFunc );
-
 	if( !isRootFunc )
 	{
 		text =
@@ -570,10 +558,16 @@ formatVarDec =
 				' =' + '\n'
 			);
 
+		if( varDec.assign.reflect !== 'Assign' )
+		{
+			context =
+				context.increment;
+		}
+
 		text =
 			formatExpression(
 				text,
-				context.increment,
+				context,
 				varDec.assign
 			);
 	}
