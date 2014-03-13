@@ -28,15 +28,6 @@ if( JOOBJ )
 			true,
 		attributes :
 			{
-				'jd' :
-					{
-						comment :
-							'the data structure',
-						type :
-							'Object',
-						defaultValue :
-							'undefined'
-					},
 				'joobj' :
 					{
 						comment :
@@ -179,6 +170,9 @@ Generator.prototype._init =
 
 	this.hasJSON =
 		!!joobj.json;
+
+	this.tag =
+		Math.floor( Math.random( ) * 1000000000 );
 
 	for( name in joobj.attributes || { } )
 	{
@@ -472,41 +466,6 @@ buildJD =
 
 
 /*
-| Generates the constructors content.
-*/
-/*
-Generator.prototype.genConstructorBlock =
-	function(
-		constructorBlockPath
-	)
-{
-	var
-		gen =
-			this;
-
-	console.log( constructorBlockPath );
-	console.log( gen.getPath( constructorBlockPath ) );
-
-	/*
-	gen =
-		gen.setPath(
-			constructorBlockPath,
-			gen.getPath( constructorBlockPath ).create(
-				'twig:add',
-				Jools.uid( ), // FIXME
-				Code.Check.create(
-					'block',
-						Code.Block.create( )
-				)
-			)
-		);
-
-	return gen;
-};
-*/
-
-
-/*
 | Generates the constructor.
 */
 Generator.prototype.genConstructor =
@@ -514,19 +473,38 @@ Generator.prototype.genConstructor =
 		capsule // block to append to
 	)
 {
+	var
+		block;
+
 	capsule =
 		capsule.Comment(
 			'Constructor.'
 		);
 
-	Jools.log( true, this.constructArgs );
+	block =
+		Block( )
+		.Check(
+			Block( )
+		);
 
 	var
-		block =
-			Block( ),
 		constructor =
 			Func( this.constructArgs, block );
 
+	if( this.unit )
+	{
+		capsule =
+			capsule.VarDec(
+				this.reference,
+				constructor
+			);
+	}
+	else
+	{
+		throw new Error( 'TODO' );
+	}
+
+	/*
 	capsule =
 		capsule.Assign(
 			this.unit ?
@@ -539,87 +517,9 @@ Generator.prototype.genConstructor =
 			,
 			constructor
 		);
+	*/
 
 	return capsule;
-
-	/*
-	var
-		a,
-		aZ,
-		assign,
-		args,
-		capsule,
-		jd =
-			this.jd,
-		gen =
-			this,
-		left,
-		name,
-		func;
-
-	args =
-		[
-			Code.FuncArg.create(
-				'name',
-					'tag'
-			)
-		];
-
-
-	func =
-		Code.Func.create(
-			'block',
-				Code.Block.create( ) // FIXME defaultValue
-		);
-
-	for(
-		a = 0, aZ = jd.conList.length;
-		a < aZ;
-		a++
-	)
-	{
-		name =
-			jd.conList[ a ];
-
-		func =
-			func.create(
-				'twig:add',
-				jd.conVars[ name ].vName,
-				Code.FuncArg.create(
-					'name',
-						jd.conVars[ name ].vName,
-					'comment',
-						jd.conVars[ name ].comment
-				)
-			);
-	}
-
-	assign =
-		Code.Assign.create(
-			'left',
-				left,
-			'right',
-				func
-		);
-
-	gen =
-		gen.setPath(
-			capsulePath,
-			gen.getPath( capsulePath ).create(
-				'twig:add',
-				Jools.uid( ), // FIXME
-					assign
-			)
-		);
-
-	capsule =
-		gen.getPath( capsulePath );
-
-	gen =
-		gen.genConstructorBlock( constructorBlockPath );
-
-	return gen;
-	*/
 };
 
 

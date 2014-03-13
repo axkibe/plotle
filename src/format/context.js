@@ -40,6 +40,13 @@ if( JOOBJ )
 						defaultValue :
 							'false'
 					},
+				root :
+					{
+						comment :
+							'true if in root context',
+						type :
+							'Boolean'
+					},
 			},
 		node :
 			true
@@ -100,7 +107,9 @@ Jools.lazyValue(
 			inc =
 				this.create(
 					'indent',
-						this.indent + 1
+						this.indent + 1,
+					'root',
+						false
 				);
 
 		Jools.aheadValue(
@@ -126,6 +135,9 @@ Jools.lazyValue(
 		{
 			throw new Error( );
 		}
+
+		// root stays false, even if it goes back to
+		// zero indent its not the root context
 
 		var
 			dec =

@@ -27,204 +27,9 @@ var
 	Context =
 		require( './context' ),
 	Jools =
-		require( '../jools/jools' );
-
-
-/*
-| Formats the header section.
-*/
-var
-formatComment =
-	function(
-		lines,
-		context,
-		comment
-	)
-{
-	var
-		a,
-		aZ,
-		c;
-
-	lines.push(
-		'/*'
-	);
-
-	for(
-		a = 0, aZ = comment.content.length;
-		a < aZ;
-		a++
-	)
-	{
-		c =
-			comment.content[ a ];
-
-		if( c === '' )
-		{
-			lines.push( context.tab + '|' );
-		}
-		else
-		{
-			lines.push( context.tab + '| ' + c );
-		}
-	}
-
-	lines.push(
-		'*/'
-	);
-};
-
-/*
-| Formats a block.
-*/
-var
-formatCheck =
-	function(
-		lines,
-		context,
-		check
-	)
-{
-	if( context.check )
-	{
-		throw new Error( );
-	}
-
-	context =
-		context.create(
-			'check',
-				true
-		);
-
-	lines.push(
-		context.tab + 'if( CHECK )'
-	);
-
-	formatBlock(
-		lines,
-		context,
-		check.block,
-		''
-	);
-};
-
-
-/*
-| Formats a block.
-*/
-var
-formatBlock =
-	function(
-		lines,
-		context,
-		block,
-		semicolon
-	)
-{
-	var
-		a,
-		aZ,
-		expr;
-
-	lines.push(
-		context.tab + '{'
-	);
-
-	for(
-		a = 0, aZ = block.ranks.length;
-		a < aZ;
-		a++
-	)
-	{
-		expr =
-			block.twig[ block.ranks[ a ] ];
-
-		switch( expr.reflect )
-		{
-			case 'Check' :
-
-				formatCheck(
-					lines,
-					context,
-					expr
-				);
-
-				break;
-
-			default :
-
-				throw new Error( );
-		}
-	}
-
-	lines.push(
-		context.tab + '}' + semicolon
-	);
-};
-
-
-/*
-| Formats a function.
-*/
-var
-formatFunction =
-	function(
-		lines,
-		func,
-		context
-	)
-{
-	var
-		arg,
-		argContext,
-		comma;
-
-	lines.push(
-		context.tab + 'function('
-	);
-
-	argContext =
-		context.increment;
-
-	for(
-		var a = 0, aZ = func.ranks.length;
-		a < aZ;
-		a++
-	)
-	{
-		arg =
-			func.twig[ func.ranks[ a ] ];
-
-		comma =
-			a + 1 < aZ ?
-				','
-				:
-				'';
-
-		lines.push(
-			argContext.tab +
-			arg.name +
-			comma +
-			(
-				arg.comment ?
-					' // ' + arg.comment
-					:
-					''
-			)
-		);
-	}
-
-	lines.push(
-		context.tab + ')'
-	);
-
-	formatBlock(
-		lines,
-		context.decrement,
-		func.block,
-		';'
-	);
-};
+		require( '../jools/jools' ),
+	TextFile =
+		require( './text-file' );
 
 
 /*
@@ -233,7 +38,7 @@ formatFunction =
 var
 formatAssign =
 	function(
-		lines,
+		text,
 		context,
 		assign
 	)
@@ -254,29 +59,32 @@ formatAssign =
 			a++
 		)
 		{
-			lines.push(
-				context.tab +
-					left[ a ] +
-					' ='
-			);
+			text =
+				text.line(
+					context,
+					left[ a ] + ' ='
+				);
 		}
 	}
 	else
 	{
-		lines.push(
-			context.tab + left + ' ='
-		);
+		text =
+			text.line(
+				context,
+				left + ' ='
+			);
 	}
 
 	switch( right.reflect )
 	{
 		case 'Function' :
 
-			formatFunction(
-				lines,
-				right,
-				context.increment
-			);
+			text =
+				formatFunction(
+					text,
+					context.increment,
+					right
+				);
 
 			break;
 
@@ -287,9 +95,11 @@ formatAssign =
 				throw new Error( );
 			}
 
-			lines.push(
-				context.increment.tab + right + ';'
-			);
+			text =
+				text.line(
+					context.increment,
+					right + ';'
+				);
 
 			break;
 	}
@@ -300,21 +110,271 @@ formatAssign =
 	else
 	{
 	}
+
+	return text;
+};
+
+
+
+/*
+| Formats a comment.
+*/
+var
+formatComment =
+	function(
+		text,
+		context,
+		comment
+	)
+{
+	var
+		a,
+		aZ,
+		c;
+
+	text =
+		text.line(
+			context,
+			'/*'
+		);
+
+	for(
+		a = 0, aZ = comment.content.length;
+		a < aZ;
+		a++
+	)
+	{
+		c =
+			comment.content[ a ];
+
+
+		if( c === '' )
+		{
+			text =
+				text.line(
+					context,
+					'|'
+				);
+		}
+		else
+		{
+			text =
+				text.line(
+					context,
+					'| ' + c
+				);
+		}
+	}
+
+	text =
+		text.line(
+			context,
+			'*/'
+		);
+
+	return text;
 };
 
 
 /*
-| Formats a separator.
+| Formats a conditional checking code.
 */
 var
-formatSeparator =
+formatCheck =
 	function(
-		lines
+		text,
+		context,
+		check
 	)
 {
-	lines.push(
-		'',
-		''
+	if( context.check )
+	{
+		throw new Error( );
+	}
+
+	context =
+		context.create(
+			'check',
+				true
+		);
+
+	text =
+		text.line(
+			context,
+			'if( CHECK )'
+		);
+
+	text =
+		formatBlock(
+			text,
+			context,
+			check.block,
+			''
+		);
+};
+
+
+/*
+| Formats a block.
+*/
+var
+formatBlock =
+	function(
+		text,
+		context,
+		block,
+		semicolon
+	)
+{
+	var
+		a,
+		aZ,
+		expr;
+
+	text =
+		text.line(
+			context,
+			'{'
+		);
+
+	for(
+		a = 0, aZ = block.ranks.length;
+		a < aZ;
+		a++
+	)
+	{
+		expr =
+			block.twig[ block.ranks[ a ] ];
+
+		switch( expr.reflect )
+		{
+			case 'Check' :
+
+				formatCheck(
+					text,
+					context,
+					expr
+				);
+
+				break;
+
+			default :
+
+				throw new Error( );
+		}
+	}
+
+	return (
+		text.line(
+			context,
+			'}' + semicolon
+		)
+	);
+};
+
+
+/*
+| Formats a function.
+*/
+var
+formatFunction =
+	function(
+		text,
+		context,
+		func
+	)
+{
+	var
+		arg,
+		comma;
+
+	text =
+		text.line(
+			context,
+			'function('
+		);
+
+	for(
+		var a = 0, aZ = func.ranks.length;
+		a < aZ;
+		a++
+	)
+	{
+		arg =
+			func.twig[ func.ranks[ a ] ];
+
+		comma =
+			a + 1 < aZ ?
+				','
+				:
+				'';
+
+		text =
+			text.line(
+				context.increment,
+				arg.name +
+					comma +
+					(
+						arg.comment ?
+							' // ' + arg.comment
+							:
+							''
+					)
+			);
+	}
+
+	text =
+		text.line(
+			context, ')'
+		);
+
+	return (
+		formatBlock(
+			text,
+			context.decrement,
+			func.block,
+			';'
+		)
+	);
+};
+
+
+/*
+| Formats an entry.
+|
+| An entry is an expression on its own.
+*/
+var
+formatEntry =
+	function(
+		text,
+		context,
+		entry,
+		lookBehind
+	)
+{
+	if(
+		!lookBehind
+		||
+		lookBehind.reflect !== 'Comment'
+	)
+	{
+		text =
+			text.newline( 1 );
+
+		if( context.root )
+		{
+			text =
+				text.newline( 1 );
+		}
+	}
+
+	return(
+		formatExpression(
+			text,
+			context,
+			entry
+		)
 	);
 };
 
@@ -325,7 +385,7 @@ formatSeparator =
 var
 formatExpression =
 	function(
-		lines,
+		text,
 		context,
 		expr
 	)
@@ -334,28 +394,114 @@ formatExpression =
 	{
 		case 'Assign' :
 
-			formatAssign(
-				lines,
-				context,
-				expr
+			return (
+				formatAssign(
+					text,
+					context,
+					expr
+				)
 			);
-
-			break;
 
 		case 'Comment' :
 
-			formatComment(
-				lines,
-				context,
-				expr
+			return (
+				formatComment(
+					text,
+					context,
+					expr
+				)
 			);
 
-			break;
+		case 'Function' :
+
+			return (
+				formatFunction(
+					text,
+					context,
+					expr
+				)
+			);
+
+		case 'VarDec' :
+
+			return (
+				formatVarDec(
+					text,
+					context,
+					expr
+				)
+			);
 
 		default :
 
-			throw new Error( );
+			throw new Error( expr.reflect );
 	}
+};
+
+
+/*
+| Formats an term.
+*/
+/*
+var
+formatTerm =
+	function(
+		text,
+		context,
+		term
+	)
+{
+	return (
+		text.line(
+			context
+		)
+	);
+};
+*/
+
+/*
+| Formats a variable decleration.
+|
+| FIXME combine multiple var-decs
+*/
+var
+formatVarDec =
+	function(
+		text,
+		context,
+		varDec
+	)
+{
+	text =
+		text.line(
+			context,
+			'var'
+		);
+
+	if( varDec.assign )
+	{
+		text =
+			text.line(
+				context.increment,
+				varDec.name + ' ='
+			);
+
+		text =
+			formatExpression(
+				text,
+				context.increment,
+				varDec.assign
+			);
+	}
+	else
+	{
+		text =
+			text.line(
+				context.increment.tab + varDec.name + ';'
+			);
+	}
+
+	return text;
 };
 
 
@@ -365,7 +511,7 @@ formatExpression =
 var
 formatCapsule =
 	function(
-		lines,
+		text,
 		context,
 		file
 	)
@@ -374,15 +520,15 @@ formatCapsule =
 		capsule =
 			file.capsule;
 
-	lines.push(
-		'/*',
-		'| Capulse.',
-		'*/',
-		'( function( ) {',
-		'\'use strict\';'
-	);
-
-	formatSeparator( lines );
+	text =
+		text.line(
+			context,
+			'/*',
+			'| Capulse.',
+			'*/',
+			'( function( ) {',
+			'\'use strict\';'
+		);
 
 	for(
 		var a = 0, aZ = capsule.ranks.length;
@@ -390,17 +536,25 @@ formatCapsule =
 		a++
 	)
 	{
-		formatExpression(
-			lines,
-			context,
-			capsule.atRank( a )
-		);
+		text =
+			formatEntry(
+				text,
+				context,
+				capsule.atRank( a ),
+				a > 0 ?
+					capsule.atRank( a - 1 ) :
+					null
+			);
 	}
 
-	lines.push(
-		'',
-		'',
-		'} )( );'
+	text =
+		text.newline( 2 );
+
+	return (
+		text.line(
+			context,
+			'} )( );'
+		)
 	);
 };
 
@@ -415,34 +569,40 @@ Formatter.format =
 {
 	var
 		context =
-			Context.create( ),
-		lines =
-			[ ];
+			Context.create(
+				'root',
+					true
+			),
+		text =
+			TextFile.create( );
 
 	if( file.header )
 	{
-		formatComment(
-			lines,
-			context,
-			file.header
-		);
+		text =
+			formatComment(
+				text,
+				context,
+				file.header
+			);
 	}
 
 	if( file.capsule )
 	{
-		if( lines.length > 0 )
+		if( file.header )
 		{
-			formatSeparator( lines );
+			text =
+				text.newline( 2 );
 		}
 
-		formatCapsule(
-			lines,
-			context,
-			file
-		);
+		text =
+			formatCapsule(
+				text,
+				context,
+				file
+			);
 	}
 
-	return lines.join( '\n' );
+	return text.text;
 };
 
 

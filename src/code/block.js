@@ -59,8 +59,12 @@ var
 		{
 			Assign :
 				require( './assign' ),
+			Check :
+				require( './check' ),
 			Comment :
 				require( './comment' ),
+			VarDec :
+				require( './var-dec' ),
 		},
 	Jools =
 		require( '../jools/jools' );
@@ -94,6 +98,26 @@ Block.prototype.Assign =
 };
 
 
+/*
+| Returns the block with a check appended.
+*/
+Block.prototype.Check =
+	function(
+		block
+	)
+{
+	return (
+		this.create(
+			'twig:add',
+			Jools.uid( ), // FIXME
+			Code.Check.create(
+				'block',
+					block
+			)
+		)
+	);
+};
+
 
 /*
 | Returns the block with a comment appended.
@@ -118,6 +142,34 @@ Block.prototype.Comment =
 			'twig:add',
 			Jools.uid( ), // FIXME
 			header
+		)
+	);
+};
+
+
+/*
+| Returns the block with a variable decleration appended.
+*/
+Block.prototype.VarDec =
+	function(
+		name,   // variable name
+		assign  // variable assignment
+	)
+{
+	var
+		varDec =
+			Code.VarDec.create(
+				'name',
+					name,
+				'assign',
+					assign || null
+			);
+
+	return (
+		this.create(
+			'twig:add',
+			Jools.uid( ), // FIXME
+			varDec
 		)
 	);
 };
