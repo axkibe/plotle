@@ -43,13 +43,43 @@ formatAssign =
 		assign
 	)
 {
-	var
-		a,
-		aZ,
-		left =
-			assign.left,
-		right =
-			assign.right;
+	text =
+		text.append(
+			context.tab
+		);
+
+	text =
+		formatTerm(
+			text,
+			context,
+			assign.left
+		);
+
+	text =
+		text.append(
+			' =\n'
+		);
+
+	context =
+		context.increment;
+
+	text =
+		text.append(
+			context.tab
+		);
+
+	text =
+		formatTerm(
+			text,
+			context,
+			assign.left
+		);
+
+	return text;
+
+	/*
+		text.append(
+			assign.left
 
 	if( left.constructor === Array )
 	{
@@ -112,6 +142,7 @@ formatAssign =
 	}
 
 	return text;
+	*/
 };
 
 
@@ -369,6 +400,17 @@ formatEntry =
 		}
 	}
 
+	if( entry.reflect === 'Comment' )
+	{
+		return (
+			formatComment(
+				text,
+				context,
+				entry
+			)
+		);
+	}
+
 	return(
 		formatExpression(
 			text,
@@ -402,20 +444,20 @@ formatExpression =
 				)
 			);
 
-		case 'Comment' :
+		case 'Function' :
 
 			return (
-				formatComment(
+				formatFunction(
 					text,
 					context,
 					expr
 				)
 			);
 
-		case 'Function' :
+		case 'Term' :
 
 			return (
-				formatFunction(
+				formatTerm(
 					text,
 					context,
 					expr
@@ -442,7 +484,6 @@ formatExpression =
 /*
 | Formats an term.
 */
-/*
 var
 formatTerm =
 	function(
@@ -451,13 +492,21 @@ formatTerm =
 		term
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( term.reflect !== 'Term' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	return (
-		text.line(
-			context
+		text.append(
+			term.term
 		)
 	);
 };
-*/
+
 
 /*
 | Formats a variable decleration.

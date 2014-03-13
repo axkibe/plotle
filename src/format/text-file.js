@@ -104,7 +104,7 @@ TextFile.prototype.append =
 	)
 	{
 		text =
-			text + arguments[ a ] + '\n';
+			text + arguments[ a ];
 	}
 
 	return (
@@ -141,6 +141,7 @@ TextFile.prototype.newline =
 		)
 	);
 };
+
 
 /*
 | Node export.

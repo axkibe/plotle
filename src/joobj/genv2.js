@@ -58,7 +58,9 @@ var
 			Func :
 				require( '../code/func' ),
 			FuncArg :
-				require( '../code/func-arg' )
+				require( '../code/func-arg' ),
+			Term :
+				require( '../code/term' )
 		},
 	Generator =
 		require( '../joobj/this' )( module ),
@@ -145,6 +147,22 @@ Func =
 	}
 
 	return func;
+};
+
+
+/*
+| Shortcut for creating terms.
+*/
+var
+Term =
+	function( term )
+{
+	return (
+		Code.Term.create(
+			'term',
+				term
+		)
+	);
 };
 
 
@@ -493,10 +511,24 @@ Generator.prototype.genConstructor =
 
 	if( this.unit )
 	{
+		/*
 		capsule =
 			capsule.VarDec(
 				this.reference,
-				constructor
+				Assign(
+					Term(
+						this.unit + '.' + this.name
+					),
+					constructor
+				)
+			);
+		*/
+		capsule =
+			capsule.Assign(
+				Term(
+					this.unit + '.' + this.name
+				),
+				Term( 'hallo' )
 			);
 	}
 	else
