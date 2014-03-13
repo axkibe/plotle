@@ -69,10 +69,10 @@ formatAssign =
 		);
 
 	text =
-		formatTerm(
+		formatExpression(
 			text,
 			context,
-			assign.left
+			assign.right
 		);
 
 	return text;
@@ -90,18 +90,16 @@ formatAssign =
 		)
 		{
 			text =
-				text.line(
-					context,
-					left[ a ] + ' ='
+				text.append(
+					context.tab + left[ a ] + ' ='
 				);
 		}
 	}
 	else
 	{
 		text =
-			text.line(
-				context,
-				left + ' ='
+			text.append(
+				context.tab + left + ' ='
 			);
 	}
 
@@ -126,9 +124,8 @@ formatAssign =
 			}
 
 			text =
-				text.line(
-					context.increment,
-					right + ';'
+				text.append(
+					context.increment.tab + right + ';'
 				);
 
 			break;
@@ -164,9 +161,8 @@ formatComment =
 		c;
 
 	text =
-		text.line(
-			context,
-			'/*'
+		text.append(
+			'/*' + '\n'
 		);
 
 	for(
@@ -182,25 +178,22 @@ formatComment =
 		if( c === '' )
 		{
 			text =
-				text.line(
-					context,
-					'|'
+				text.append(
+					'|' + '\n'
 				);
 		}
 		else
 		{
 			text =
-				text.line(
-					context,
-					'| ' + c
+				text.append(
+					'| ' + c + '\n'
 				);
 		}
 	}
 
 	text =
-		text.line(
-			context,
-			'*/'
+		text.append(
+			'*/' + '\n'
 		);
 
 	return text;
@@ -230,17 +223,15 @@ formatCheck =
 		);
 
 	text =
-		text.line(
-			context,
-			'if( CHECK )'
+		text.append(
+			context.tab + 'if( CHECK )' + '\n'
 		);
 
 	text =
 		formatBlock(
 			text,
 			context,
-			check.block,
-			''
+			check.block
 		);
 };
 
@@ -253,8 +244,7 @@ formatBlock =
 	function(
 		text,
 		context,
-		block,
-		semicolon
+		block
 	)
 {
 	var
@@ -263,9 +253,8 @@ formatBlock =
 		expr;
 
 	text =
-		text.line(
-			context,
-			'{'
+		text.append(
+			context.tab + '{' + '\n'
 		);
 
 	for(
@@ -296,9 +285,8 @@ formatBlock =
 	}
 
 	return (
-		text.line(
-			context,
-			'}' + semicolon
+		text.append(
+			context.tab + '}'
 		)
 	);
 };
@@ -320,9 +308,8 @@ formatFunction =
 		comma;
 
 	text =
-		text.line(
-			context,
-			'function('
+		text.append(
+			'function(' + '\n'
 		);
 
 	for(
@@ -341,30 +328,30 @@ formatFunction =
 				'';
 
 		text =
-			text.line(
-				context.increment,
+			text.append(
+				context.increment.tab +
 				arg.name +
-					comma +
-					(
-						arg.comment ?
-							' // ' + arg.comment
-							:
-							''
-					)
+				comma +
+				(
+					arg.comment ?
+						' // ' + arg.comment
+						:
+						''
+				) +
+				'\n'
 			);
 	}
 
 	text =
-		text.line(
-			context, ')'
+		text.append(
+			context.tab + ')\n'
 		);
 
 	return (
 		formatBlock(
 			text,
 			context.decrement,
-			func.block,
-			';'
+			func.block
 		)
 	);
 };
@@ -411,13 +398,17 @@ formatEntry =
 		);
 	}
 
-	return(
+	text =
 		formatExpression(
 			text,
 			context,
 			entry
-		)
-	);
+		);
+
+	text =
+		text.append( ';' );
+
+	return text;
 };
 
 
@@ -522,17 +513,16 @@ formatVarDec =
 	)
 {
 	text =
-		text.line(
-			context,
-			'var'
+		text.append(
+			context.tab + 'var' + '\n',
+			context.increment.tab + varDec.name
 		);
 
 	if( varDec.assign )
 	{
 		text =
-			text.line(
-				context.increment,
-				varDec.name + ' ='
+			text.append(
+				' =' + '\n'
 			);
 
 		text =
@@ -545,9 +535,7 @@ formatVarDec =
 	else
 	{
 		text =
-			text.line(
-				context.increment.tab + varDec.name + ';'
-			);
+			text.append( ';\n' );
 	}
 
 	return text;
@@ -570,13 +558,12 @@ formatCapsule =
 			file.capsule;
 
 	text =
-		text.line(
-			context,
-			'/*',
-			'| Capulse.',
-			'*/',
-			'( function( ) {',
-			'\'use strict\';'
+		text.append(
+			'/*\n',
+			'| Capulse.\n',
+			'*/\n',
+			'( function( ) {\n',
+			'\'use strict\';\n'
 		);
 
 	for(
@@ -600,8 +587,7 @@ formatCapsule =
 		text.newline( 2 );
 
 	return (
-		text.line(
-			context,
+		text.append(
 			'} )( );'
 		)
 	);

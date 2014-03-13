@@ -112,11 +112,17 @@ Jools.lazyValue(
 						false
 				);
 
-		Jools.aheadValue(
-			inc,
-			'decrement',
-			this
-		);
+		if( !this.root )
+		{
+			// when this is the root context
+			// a decrement is not identical to this.
+
+			Jools.aheadValue(
+				inc,
+				'decrement',
+				this
+			);
+		}
 
 		return inc;
 	}

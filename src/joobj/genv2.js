@@ -528,7 +528,7 @@ Generator.prototype.genConstructor =
 				Term(
 					this.unit + '.' + this.name
 				),
-				Term( 'hallo' )
+				constructor
 			);
 	}
 	else

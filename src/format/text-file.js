@@ -49,6 +49,7 @@ var
 /*
 | Returns a text file with a or more line(s) append
 */
+/*
 TextFile.prototype.line =
 	function(
 		context // the lines context
@@ -83,6 +84,7 @@ TextFile.prototype.line =
 		)
 	);
 };
+*/
 
 
 /*
