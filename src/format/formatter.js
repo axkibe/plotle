@@ -25,11 +25,9 @@ var
 */
 var
 	Context =
-		require( './context' ),
-	Jools =
-		require( '../jools/jools' ),
-	Text =
-		require( './text' );
+		require( './context' );
+//	Jools =
+//		require( '../jools/jools' );
 
 
 /*
@@ -43,18 +41,16 @@ formatAssign =
 		assign
 	)
 {
-	text =
-		text.append(
-			formatTerm(
-				context,
-				assign.left
-			)
+	text +=
+		formatTerm(
+			context,
+			assign.left
 		);
 
-	text =
-		text.append(
-			' =\n'
-		);
+	// TODO
+	text +=
+		' =\n',
+
 
 	// TODO only if assign.right not an assign
 	context =
@@ -68,70 +64,6 @@ formatAssign =
 		);
 
 	return text;
-
-	/*
-		text.append(
-			assign.left
-
-	if( left.constructor === Array )
-	{
-		for(
-			a = 0, aZ = left.length;
-			a < aZ;
-			a++
-		)
-		{
-			text =
-				text.append(
-					context.tab + left[ a ] + ' ='
-				);
-		}
-	}
-	else
-	{
-		text =
-			text.append(
-				context.tab + left + ' ='
-			);
-	}
-
-	switch( right.reflect )
-	{
-		case 'Function' :
-
-			text =
-				formatFunction(
-					text,
-					context.increment,
-					right
-				);
-
-			break;
-
-		default :
-
-			if( !Jools.isString( right ) )
-			{
-				throw new Error( );
-			}
-
-			text =
-				text.append(
-					context.increment.tab + right + ';'
-				);
-
-			break;
-	}
-
-	if( right.reflect === 'Function' )
-	{
-	}
-	else
-	{
-	}
-
-	return text;
-	*/
 };
 
 
@@ -152,10 +84,8 @@ formatComment =
 		aZ,
 		c;
 
-	text =
-		text.append(
-			'/*' + '\n'
-		);
+	text +=
+		'/*' + '\n';
 
 	for(
 		a = 0, aZ = comment.content.length;
@@ -169,24 +99,18 @@ formatComment =
 
 		if( c === '' )
 		{
-			text =
-				text.append(
-					'|' + '\n'
-				);
+			text +=
+				'|' + '\n';
 		}
 		else
 		{
-			text =
-				text.append(
-					'| ' + c + '\n'
-				);
+			text +=
+				'| ' + c + '\n';
 		}
 	}
 
-	text =
-		text.append(
-			'*/' + '\n'
-		);
+	text +=
+		'*/' + '\n';
 
 	return text;
 };
@@ -214,10 +138,8 @@ formatCheck =
 				true
 		);
 
-	text =
-		text.append(
-			context.tab + 'if( CHECK )' + '\n'
-		);
+	text +=
+		context.tab + 'if( CHECK )' + '\n';
 
 	text =
 		formatBlock(
@@ -241,10 +163,8 @@ formatBlock =
 		block
 	)
 {
-	text =
-		text.append(
-			context.tab + '{' + '\n'
-		);
+	text +=
+		context.tab + '{' + '\n';
 
 	for(
 		var a = 0, aZ = block.ranks.length;
@@ -255,7 +175,7 @@ formatBlock =
 		text =
 			formatEntry(
 				text,
-				context,
+				context.increment,
 				block.twig[ block.ranks[ a ] ],
 				a > 0 ?
 					block.twig[ block.ranks[ a - 1 ] ] :
@@ -263,17 +183,15 @@ formatBlock =
 			);
 	}
 
-	text =
-		text.append(
-			context.tab + '}'
-		);
+	text +=
+		context.tab + '}';
 
 	return text;
 };
 
 
 /*
-| Formats a conditional checking code.
+| Formats an if statement.
 */
 var
 formatIf =
@@ -289,24 +207,13 @@ formatIf =
 
 	if( cond.reflect === 'Term' )
 	{
-		text =
-			text.append(
-				context.tab +
-				'if( '
-			);
-
-		text =
-			text.append(
-				formatTerm(
-					context,
-					cond
-				)
-			);
-
-		text =
-			text.append(
-				' )' + '\n'
-			);
+		text +=
+			context.tab +
+			'if( '
+			+
+			formatTerm( context, cond )
+			+
+			' )\n';
 	}
 	else
 	{
@@ -339,10 +246,8 @@ formatFunction =
 		arg,
 		comma;
 
-	text =
-		text.append(
-			context.tab + 'function(' + '\n'
-		);
+	text +=
+		context.tab + 'function(\n';
 
 	for(
 		var a = 0, aZ = func.ranks.length;
@@ -359,25 +264,25 @@ formatFunction =
 				:
 				'';
 
-		text =
-			text.append(
-				context.increment.tab +
-				arg.name +
-				comma +
-				(
-					arg.comment ?
-						' // ' + arg.comment
-						:
-						''
-				) +
-				'\n'
-			);
+		text +=
+			context.increment.tab
+			+
+			arg.name
+			+
+			comma
+			+
+			(
+				arg.comment ?
+					' // ' + arg.comment
+					:
+					''
+			)
+			+
+			'\n';
 	}
 
-	text =
-		text.append(
-			context.tab + ')\n'
-		);
+	text +=
+		context.tab + ')\n';
 
 	text =
 		formatBlock(
@@ -410,13 +315,13 @@ formatEntry =
 		lookBehind.reflect !== 'Comment'
 	)
 	{
-		text =
-			text.newline( 1 );
+		text +=
+			'\n';
 
 		if( context.root )
 		{
-			text =
-				text.newline( 1 );
+			text +=
+				'\n';
 		}
 	}
 
@@ -442,12 +347,12 @@ formatEntry =
 	{
 		case 'VarDec' :
 
-			return text.append( ';\n' );
+			return text += ';\n';
 
 		case 'Check' :
 		case 'If' :
 
-			return text.append( '\n' );
+			return text += '\n';
 
 		default :
 
@@ -511,14 +416,13 @@ formatExpression =
 
 		case 'Term' :
 
-			return (
-				text.append(
-					formatTerm(
-						context,
-						expr
-					)
-				)
-			);
+			text +=
+				formatTerm(
+					context,
+					expr
+				);
+
+			return text;
 
 		case 'VarDec' :
 
@@ -604,27 +508,20 @@ formatVarDec =
 
 	if( !isRootFunc )
 	{
-		text =
-			text.append(
-				context.tab + 'var' + '\n',
-				context.increment.tab + varDec.name
-			);
-
+		text +=
+			context.tab + 'var' + '\n',
+			context.increment.tab + varDec.name;
 	}
 	else
 	{
-		text =
-			text.append(
-				context.tab + 'var ' + varDec.name
-			);
+		text +=
+			context.tab + 'var ' + varDec.name;
 	}
 
 	if( varDec.assign )
 	{
-		text =
-			text.append(
-				' =' + '\n'
-			);
+		text +=
+			' =\n';
 
 		if( varDec.assign.reflect !== 'Assign' )
 		{
@@ -641,8 +538,8 @@ formatVarDec =
 	}
 	else
 	{
-		text =
-			text.append( ';\n' );
+		text +=
+			';\n';
 	}
 
 	return text;
@@ -664,15 +561,13 @@ formatCapsule =
 		capsule =
 			file.capsule;
 
-	text =
-		text.append(
-			'/*\n',
-			'| Capulse.\n',
-			'*/\n',
-			'( function( ) {\n',
-			'\'use strict\';\n',
-			'\n\n'
-		);
+	text +=
+		'/*\n' +
+		'| Capulse.\n' +
+		'*/\n' +
+		'( function( ) {\n' +
+		'\'use strict\';\n' +
+		'\n\n';
 
 	for(
 		var a = 0, aZ = capsule.ranks.length;
@@ -691,14 +586,10 @@ formatCapsule =
 			);
 	}
 
-	text =
-		text.newline( 2 );
+	text +=
+		'\n\n} )( );\n';
 
-	return (
-		text.append(
-			'} )( );\n'
-		)
-	);
+	return text;
 };
 
 
@@ -717,7 +608,7 @@ Formatter.format =
 					true
 			),
 		text =
-			Text.create( );
+			'';
 
 	if( file.header )
 	{
@@ -733,8 +624,8 @@ Formatter.format =
 	{
 		if( file.header )
 		{
-			text =
-				text.newline( 2 );
+			text +=
+				'\n\n';
 		}
 
 		text =
@@ -745,7 +636,7 @@ Formatter.format =
 			);
 	}
 
-	return text.text;
+	return text;
 };
 
 

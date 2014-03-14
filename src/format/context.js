@@ -55,6 +55,15 @@ if( JOOBJ )
 
 
 /*
+| Tabbing format.
+*/
+var
+	_tab =
+		'    ';
+//		'\t'; FIXME
+
+
+/*
 | Node imports.
 */
 var
@@ -82,12 +91,14 @@ Jools.lazyValue(
 		{
 			indent--;
 
-			tab += '/**/';
+			tab +=
+				'/**/';
 		}
 
 		for( var a = 0; a < indent; a++ )
 		{
-			tab += '\t';
+			tab +=
+				_tab;
 		}
 
 		return tab;

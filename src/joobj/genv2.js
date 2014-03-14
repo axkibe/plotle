@@ -528,7 +528,7 @@ Generator.prototype.genConstructor =
 		.Check(
 			Block( ).
 			If(
-				Term( 'tag !== 0815' ),
+				Term( 'tag !== ' + this.tag ),
 				Block ( )
 			)
 		);
