@@ -200,6 +200,10 @@ Generator.prototype._init =
 {
 	var
 		attr,
+		attributes =
+			{ },
+		attrList,
+		jAttr,
 		joobj =
 			this.joobj,
 		name,
@@ -220,15 +224,29 @@ Generator.prototype._init =
 
 	for( name in joobj.attributes || { } )
 	{
-		attr =
+		jAttr =
 			joobj.attributes[ name ];
 
-		if( attr.json )
+		if( jAttr.json )
 		{
 			this.hasJSON =
 				true;
-			//jsonList.push( name );
 		}
+
+		attr =
+		attributes[ name ] =
+			Object.freeze( {
+				assign :
+					jAttr.assign,
+				comment :
+					jAttr.comment,
+				json :
+					jAttr.json,
+				name :
+					name,
+				vName :
+					'v_' + name
+			} );
 
 		if(
 			attr.assign !== null
@@ -240,13 +258,9 @@ Generator.prototype._init =
 			)
 		)
 		{
-			var
-				argName =
-					'v_' + name;
-
 			constructArgs.push(
 				FuncArg(
-					argName,
+					attr.vName,
 					attr.comment
 				)
 			);
@@ -259,6 +273,14 @@ Generator.prototype._init =
 			return Jools.compare( o.name, p.name );
 		}
 	);
+
+	attrList =
+		Object.keys( attributes );
+
+	attrList.sort( );
+
+	this.attrList =
+		attrList;
 
 	constructArgs.unshift(
 		FuncArg(
@@ -518,7 +540,8 @@ Generator.prototype.genConstructor =
 	)
 {
 	var
-		block;
+		block,
+		constructor;
 
 	capsule =
 		capsule.Comment(
@@ -536,9 +559,17 @@ Generator.prototype.genConstructor =
 			)
 		);
 
-	var
-		constructor =
-			Func( this.constructArgs, block );
+	/*
+	for(
+		var a = 0, aZ = this.argXX
+	this.args
+	*/
+
+	constructor =
+		Func(
+			this.constructArgs,
+			block
+		);
 
 	if( this.unit )
 	{

@@ -83,19 +83,20 @@ file =
 output =
 	Formatter.format( file );
 
-/*
 var
 	outFilename =
+		'jv2.js';
+		/*
 		'../joobj/'
 		+
 		inFilename
 			.replace( /\//g, '-' );
+		*/
 
 fs.writeFileSync(
 	outFilename,
 	output
 );
-*/
 
 console.log( output + '' );
 
