@@ -56,9 +56,8 @@ formatAssign =
 	context =
 		context.increment;
 
-	text =
+	text +=
 		formatExpression(
-			text,
 			context,
 			assign.right
 		);
@@ -168,9 +167,8 @@ formatBlock =
 		a++
 	)
 	{
-		text =
+		text +=
 			formatEntry(
-				text,
 				context.increment,
 				block.twig[ block.ranks[ a ] ],
 				a > 0 ?
@@ -296,12 +294,15 @@ formatFunction =
 var
 formatEntry =
 	function(
-		text,
 		context,
 		entry,
 		lookBehind
 	)
 {
+	var
+		text =
+			'';
+
 	if(
 		lookBehind
 		&&
@@ -329,13 +330,11 @@ formatEntry =
 		return text;
 	}
 
-	text =
+	text +=
 		formatExpression(
-			text,
 			context,
 			entry
 		);
-
 
 	switch( entry.reflect )
 	{
@@ -362,7 +361,6 @@ formatEntry =
 var
 formatExpression =
 	function(
-		text,
 		context,
 		expr
 	)
@@ -371,73 +369,66 @@ formatExpression =
 	{
 		case 'Assign' :
 
-			text +=
+			return (
 				formatAssign(
 					context,
 					expr
-				);
-
-			return text;
+				)
+			);
 
 		case 'Check' :
 
-			text +=
+			return (
 				formatCheck(
 					context,
 					expr
-				);
-
-			return text;
+				)
+			);
 
 		case 'If' :
 
-			text +=
+			return (
 				formatIf(
 					context,
 					expr
-				);
-
-			return text;
+				)
+			);
 
 		case 'Fail' :
 
-			text +=
+			return (
 				formatFail(
 					context,
 					expr
-				);
-
-			return text;
+				)
+			);
 
 		case 'Function' :
 
-			text +=
+			return (
 				formatFunction(
 					context,
 					expr
-				);
-
-			return text;
+				)
+			);
 
 		case 'Term' :
 
-			text +=
+			return (
 				formatTerm(
 					context,
 					expr
-				);
-
-			return text;
+				)
+			);
 
 		case 'VarDec' :
 
-			text +=
+			return (
 				formatVarDec(
 					context,
 					expr
-				);
-
-			return text;
+				)
+			);
 
 		default :
 
@@ -572,9 +563,8 @@ formatVarDec =
 				context.increment;
 		}
 
-		text =
+		text +=
 			formatExpression(
-				text,
 				context,
 				varDec.assign
 			);
@@ -618,9 +608,8 @@ formatCapsule =
 		a++
 	)
 	{
-		text =
+		text +=
 			formatEntry(
-				text,
 				context,
 				capsule.atRank( a ),
 				a > 0 ?
