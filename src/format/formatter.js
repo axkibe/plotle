@@ -44,10 +44,11 @@ formatAssign =
 	)
 {
 	text =
-		formatTerm(
-			text,
-			context,
-			assign.left
+		text.append(
+			formatTerm(
+				context,
+				assign.left
+			)
 		);
 
 	text =
@@ -272,6 +273,58 @@ formatBlock =
 
 
 /*
+| Formats a conditional checking code.
+*/
+var
+formatIf =
+	function(
+		text,
+		context,
+		ifExpr
+	)
+{
+	var
+		cond =
+			ifExpr.condition;
+
+	if( cond.reflect === 'Term' )
+	{
+		text =
+			text.append(
+				context.tab +
+				'if( '
+			);
+
+		text =
+			text.append(
+				formatTerm(
+					context,
+					cond
+				)
+			);
+
+		text =
+			text.append(
+				' )' + '\n'
+			);
+	}
+	else
+	{
+		throw new Error( 'TODO' );
+	}
+
+	text =
+		formatBlock(
+			text,
+			context,
+			ifExpr.then
+		);
+
+	return text;
+};
+
+
+/*
 | Formats a function.
 */
 var
@@ -436,6 +489,16 @@ formatExpression =
 				)
 			);
 
+		case 'If' :
+
+			return (
+				formatIf(
+					text,
+					context,
+					expr
+				)
+			);
+
 		case 'Function' :
 
 			return (
@@ -449,10 +512,11 @@ formatExpression =
 		case 'Term' :
 
 			return (
-				formatTerm(
-					text,
-					context,
-					expr
+				text.append(
+					formatTerm(
+						context,
+						expr
+					)
 				)
 			);
 
@@ -479,7 +543,6 @@ formatExpression =
 var
 formatTerm =
 	function(
-		text,
 		context,
 		term
 	)
@@ -492,12 +555,7 @@ formatTerm =
 /**/	}
 /**/}
 
-	return (
-		text.append(
-			context.tab,
-			term.term
-		)
-	);
+	return term.term;
 };
 
 

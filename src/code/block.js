@@ -63,6 +63,8 @@ var
 				require( './check' ),
 			Comment :
 				require( './comment' ),
+			If :
+				require( './if' ),
 			VarDec :
 				require( './var-dec' ),
 		},
@@ -145,6 +147,39 @@ Block.prototype.Comment =
 		)
 	);
 };
+
+
+/*
+| Returns the block with an if appended.
+*/
+Block.prototype.If =
+	function(
+		condition,
+		then,
+		elsewise
+	)
+{
+	var
+		entry =
+			Code.If.create(
+				'condition',
+					condition,
+				'then',
+					then,
+				'elsewise',
+					elsewise || null
+			);
+
+	return (
+		this.create(
+			'twig:add',
+			Jools.uid( ), // FIXME
+			entry
+		)
+	);
+};
+
+
 
 
 /*

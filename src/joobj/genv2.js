@@ -53,6 +53,8 @@ var
 				require( '../code/check' ),
 			Comment :
 				require( '../code/comment' ),
+			If :
+				require( '../code/if' ),
 			File :
 				require( '../code/file' ),
 			Func :
@@ -524,7 +526,11 @@ Generator.prototype.genConstructor =
 	block =
 		Block( )
 		.Check(
-			Block( )
+			Block( ).
+			If(
+				Term( 'tag !== 0815' ),
+				Block ( )
+			)
 		);
 
 	var
