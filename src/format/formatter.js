@@ -120,7 +120,6 @@ formatComment =
 var
 formatCheck =
 	function(
-		text,
 		context,
 		check
 	)
@@ -136,15 +135,14 @@ formatCheck =
 				true
 		);
 
-	text +=
+	return (
 		context.tab + 'if( CHECK )\n'
 		+
 		formatBlock(
 			context,
 			check.block
-		);
-
-	return text;
+		)
+	);
 };
 
 
@@ -194,18 +192,18 @@ formatBlock =
 var
 formatIf =
 	function(
-		text,
 		context,
 		ifExpr
 	)
 {
 	var
 		cond =
-			ifExpr.condition;
+			ifExpr.condition,
+		text;
 
 	if( cond.reflect === 'Term' )
 	{
-		text +=
+		text =
 			context.tab +
 			'if( '
 			+
@@ -234,16 +232,16 @@ formatIf =
 var
 formatFunction =
 	function(
-		text,
 		context,
 		func
 	)
 {
 	var
 		arg,
-		comma;
+		comma,
+		text;
 
-	text +=
+	text =
 		context.tab + 'function(\n';
 
 	for(
@@ -383,23 +381,23 @@ formatExpression =
 
 		case 'Check' :
 
-			return (
+			text +=
 				formatCheck(
-					text,
 					context,
 					expr
-				)
-			);
+				);
+
+			return text;
 
 		case 'If' :
 
-			return (
+			text +=
 				formatIf(
-					text,
 					context,
 					expr
-				)
-			);
+				);
+
+			return text;
 
 		case 'Fail' :
 
@@ -413,13 +411,13 @@ formatExpression =
 
 		case 'Function' :
 
-			return (
+			text +=
 				formatFunction(
-					text,
 					context,
 					expr
-				)
-			);
+				);
+
+			return text;
 
 		case 'Term' :
 
@@ -433,13 +431,13 @@ formatExpression =
 
 		case 'VarDec' :
 
-			return (
+			text +=
 				formatVarDec(
-					text,
 					context,
 					expr
-				)
-			);
+				);
+
+			return text;
 
 		default :
 
@@ -516,7 +514,6 @@ formatTerm =
 var
 formatVarDec =
 	function(
-		text,
 		context,
 		varDec
 	)
@@ -524,7 +521,8 @@ formatVarDec =
 	var
 		// true when this is a root function
 		isRootFunc =
-			false;
+			false,
+		text;
 
 	if(
 		context.root
@@ -553,13 +551,13 @@ formatVarDec =
 
 	if( !isRootFunc )
 	{
-		text +=
+		text =
 			context.tab + 'var' + '\n',
 			context.increment.tab + varDec.name;
 	}
 	else
 	{
-		text +=
+		text =
 			context.tab + 'var ' + varDec.name;
 	}
 
