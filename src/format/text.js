@@ -1,5 +1,5 @@
 /*
-| Used to construct a text file.
+| Used to construct a text.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'TextFile',
+			'Text',
 		attributes :
 			{
 				text :
@@ -42,55 +42,14 @@ if( JOOBJ )
 | Node imports.
 */
 var
-	TextFile =
+	Text =
 		require( '../joobj/this' )( module );
-
-
-/*
-| Returns a text file with a or more line(s) append
-*/
-/*
-TextFile.prototype.line =
-	function(
-		context // the lines context
-		// line(s)
-	)
-{
-	var
-		line,
-		text =
-			this.text;
-
-	for(
-		var a = 1, aZ = arguments.length;
-		a < aZ;
-		a++
-	)
-	{
-		line =
-			arguments[ a ];
-
-		text =
-			text +
-				( line !== '' ? context.tab : '' ) +
-				line +
-				'\n';
-	}
-
-	return (
-		this.create(
-			'text',
-				text
-		)
-	);
-};
-*/
 
 
 /*
 | Returns a text file with one or more strings appended
 */
-TextFile.prototype.append =
+Text.prototype.append =
 	function(
 		// stuff
 	)
@@ -121,9 +80,9 @@ TextFile.prototype.append =
 /*
 | Returns a text file with n newlines appended.
 */
-TextFile.prototype.newline =
+Text.prototype.newline =
 	function(
-		n
+		n  /// amount of new lines
 	)
 {
 	var
@@ -149,7 +108,7 @@ TextFile.prototype.newline =
 | Node export.
 */
 module.exports =
-	TextFile;
+	Text;
 
 
 } )( );

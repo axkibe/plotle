@@ -28,8 +28,8 @@ var
 		require( './context' ),
 	Jools =
 		require( '../jools/jools' ),
-	TextFile =
-		require( './text-file' );
+	Text =
+		require( './text' );
 
 
 /*
@@ -224,6 +224,8 @@ formatCheck =
 			context,
 			check.block
 		);
+
+	return text;
 };
 
 
@@ -238,48 +240,34 @@ formatBlock =
 		block
 	)
 {
-	var
-		a,
-		aZ,
-		expr;
-
 	text =
 		text.append(
 			context.tab + '{' + '\n'
 		);
 
 	for(
-		a = 0, aZ = block.ranks.length;
+		var a = 0, aZ = block.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		expr =
-			block.twig[ block.ranks[ a ] ];
-
-		switch( expr.reflect )
-		{
-			case 'Check' :
-
-				formatCheck(
-					text,
-					context,
-					expr
-				);
-
-				break;
-
-			default :
-
-				throw new Error( );
-		}
+		text =
+			formatEntry(
+				text,
+				context,
+				block.twig[ block.ranks[ a ] ],
+				a > 0 ?
+					block.twig[ block.ranks[ a - 1 ] ] :
+					null
+			);
 	}
 
-	return (
+	text =
 		text.append(
 			context.tab + '}'
-		)
-	);
+		);
+
+	return text;
 };
 
 
@@ -338,13 +326,14 @@ formatFunction =
 			context.tab + ')\n'
 		);
 
-	return (
+	text =
 		formatBlock(
 			text,
 			context.decrement,
 			func.block
-		)
-	);
+		);
+
+	return text;
 };
 
 
@@ -363,8 +352,8 @@ formatEntry =
 	)
 {
 	if(
-		!lookBehind
-		||
+		lookBehind
+		&&
 		lookBehind.reflect !== 'Comment'
 	)
 	{
@@ -396,10 +385,21 @@ formatEntry =
 			entry
 		);
 
-	text =
-		text.append( ';' );
+	switch( entry.reflect )
+	{
+		case 'VarDec' :
 
-	return text;
+			return text.append( ';\n' );
+
+		case 'Check' :
+		case 'If' :
+
+			return text.append( '\n' );
+
+		default :
+
+			throw new Error( entry.reflect );
+	}
 };
 
 
@@ -420,6 +420,16 @@ formatExpression =
 
 			return (
 				formatAssign(
+					text,
+					context,
+					expr
+				)
+			);
+
+		case 'Check' :
+
+			return (
+				formatCheck(
 					text,
 					context,
 					expr
@@ -602,7 +612,8 @@ formatCapsule =
 			'| Capulse.\n',
 			'*/\n',
 			'( function( ) {\n',
-			'\'use strict\';\n'
+			'\'use strict\';\n',
+			'\n\n'
 		);
 
 	for(
@@ -627,7 +638,7 @@ formatCapsule =
 
 	return (
 		text.append(
-			'} )( );'
+			'} )( );\n'
 		)
 	);
 };
@@ -648,7 +659,7 @@ Formatter.format =
 					true
 			),
 		text =
-			TextFile.create( );
+			Text.create( );
 
 	if( file.header )
 	{
