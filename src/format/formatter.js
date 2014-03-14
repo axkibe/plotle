@@ -36,16 +36,16 @@ var
 var
 formatAssign =
 	function(
-		text,
 		context,
 		assign
 	)
 {
-	text +=
-		formatTerm(
-			context,
-			assign.left
-		);
+	var
+		text =
+			formatTerm(
+				context,
+				assign.left
+			);
 
 	// TODO
 	text +=
@@ -74,7 +74,6 @@ formatAssign =
 var
 formatComment =
 	function(
-		text,
 		context,
 		comment
 	)
@@ -82,10 +81,9 @@ formatComment =
 	var
 		a,
 		aZ,
-		c;
-
-	text +=
-		'/*' + '\n';
+		c,
+		text =
+			'/*' + '\n';
 
 	for(
 		a = 0, aZ = comment.content.length;
@@ -139,11 +137,9 @@ formatCheck =
 		);
 
 	text +=
-		context.tab + 'if( CHECK )' + '\n';
-
-	text =
+		context.tab + 'if( CHECK )\n'
+		+
 		formatBlock(
-			text,
 			context,
 			check.block
 		);
@@ -158,13 +154,15 @@ formatCheck =
 var
 formatBlock =
 	function(
-		text,
 		context,
 		block
 	)
 {
-	text +=
-		context.tab + '{' + '\n';
+	var
+		text;
+
+	text =
+		context.tab + '{\n';
 
 	for(
 		var a = 0, aZ = block.ranks.length;
@@ -220,9 +218,8 @@ formatIf =
 		throw new Error( 'TODO' );
 	}
 
-	text =
+	text +=
 		formatBlock(
-			text,
 			context,
 			ifExpr.then
 		);
@@ -282,11 +279,9 @@ formatFunction =
 	}
 
 	text +=
-		context.tab + ')\n';
-
-	text =
+		context.tab + ')\n'
+		+
 		formatBlock(
-			text,
 			context.decrement,
 			func.block
 		);
@@ -327,13 +322,13 @@ formatEntry =
 
 	if( entry.reflect === 'Comment' )
 	{
-		return (
+		text +=
 			formatComment(
-				text,
 				context,
 				entry
-			)
-		);
+			);
+
+		return text;
 	}
 
 	text =
@@ -378,13 +373,13 @@ formatExpression =
 	{
 		case 'Assign' :
 
-			return (
+			text +=
 				formatAssign(
-					text,
 					context,
 					expr
-				)
-			);
+				);
+
+			return text;
 
 		case 'Check' :
 
@@ -662,9 +657,8 @@ Formatter.format =
 
 	if( file.header )
 	{
-		text =
+		text +=
 			formatComment(
-				text,
 				context,
 				file.header
 			);
