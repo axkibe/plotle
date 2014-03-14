@@ -673,6 +673,46 @@ Generator.prototype.genConstructor =
 
 
 /*
+| Generates the creator.
+*/
+Generator.prototype.genCreator =
+	function(
+		capsule // block to append to
+	)
+{
+	var
+		block,
+		creator;
+
+	capsule =
+		capsule.Comment(
+			'Creates a new ' + this.name + ' object.'
+		);
+
+	block =
+		Block( );
+
+	capsule =
+		capsule
+		.Assign(
+			Term( this.reference + '.create' ),
+			Assign(
+				Term( this.reference + '.prototype.create' ),
+				Func(
+					[
+						FuncArg( null, 'free strings' )
+					],
+					block
+				)
+			)
+		);
+
+	return capsule;
+};
+
+
+
+/*
 | Returns generator with the capsule generated.
 */
 Generator.prototype.genCapsule =
@@ -694,6 +734,11 @@ Generator.prototype.genCapsule =
 
 	capsule =
 		this.genConstructor(
+			capsule
+		);
+
+	capsule =
+		this.genCreator(
 			capsule
 		);
 

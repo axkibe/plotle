@@ -30,7 +30,9 @@ if( JOOBJ )
 						comment :
 							'argument name',
 						type :
-							'String'
+							'String',
+						allowsNull :
+							true
 					},
 				comment :
 					{

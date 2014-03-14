@@ -51,12 +51,13 @@ formatAssign =
 			assign.left
 		)
 		+
-		' =\n',
+		' =\n';
 
-
-	// TODO only if assign.right not an assign
-	context =
-		context.increment;
+	if( assign.right.reflect !== 'Assign' )
+	{
+		context =
+			context.increment;
+	}
 
 	text +=
 		formatExpression(
@@ -233,7 +234,7 @@ formatIf =
 | Formats a function.
 */
 var
-formatFunction =
+formatFunc =
 	function(
 		context,
 		func
@@ -265,7 +266,7 @@ formatFunction =
 		text +=
 			context.increment.tab
 			+
-			arg.name
+			( arg.name || '' )
 			+
 			comma
 			+
@@ -435,10 +436,10 @@ formatExpression =
 				)
 			);
 
-		case 'Function' :
+		case 'Func' :
 
 			return (
-				formatFunction(
+				formatFunc(
 					context,
 					expr
 				)
@@ -559,7 +560,7 @@ formatVarDec =
 	)
 	{
 		if(
-			varDec.assign.reflect === 'Function'
+			varDec.assign.reflect === 'Func'
 		)
 		{
 			isRootFunc =
@@ -568,7 +569,7 @@ formatVarDec =
 		else if(
 			varDec.assign.reflect === 'Assign'
 			&&
-			varDec.assign.right.reflect === 'Function'
+			varDec.assign.right.reflect === 'Func'
 		)
 		{
 			// FUTURUE allow abitrary amount of assignments
