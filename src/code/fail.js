@@ -19,7 +19,7 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'Error',
+			'Fail',
 		unit :
 			'Code',
 		attributes :
@@ -29,7 +29,9 @@ if( JOOBJ )
 						comment :
 							'the error message',
 						type :
-							'String'
+							'String',
+						defaultValue :
+							'null'
 					}
 			},
 		node :

@@ -343,8 +343,10 @@ formatEntry =
 			entry
 		);
 
+
 	switch( entry.reflect )
 	{
+		case 'Fail' :
 		case 'VarDec' :
 
 			return text += ';\n';
@@ -404,6 +406,16 @@ formatExpression =
 				)
 			);
 
+		case 'Fail' :
+
+			text +=
+				formatFail(
+					context,
+					expr
+				);
+
+			return text;
+
 		case 'Function' :
 
 			return (
@@ -439,6 +451,44 @@ formatExpression =
 			throw new Error( expr.reflect );
 	}
 };
+
+
+/*
+| Formats a fail.
+*/
+var
+formatFail =
+	function(
+		context,
+		fail
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( fail.reflect !== 'Fail' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( fail.message === null )
+	{
+		return (
+			context.tab + 'throw new Error( )'
+		);
+	}
+	else
+	{
+		return (
+			context.tab + 'throw new Error(\n'
+			+
+			context.increment.tab + '\'' + fail.message + '\'\n'
+			+
+			context.tab + ')'
+		);
+	}
+};
+
 
 
 /*

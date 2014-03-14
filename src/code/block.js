@@ -63,6 +63,8 @@ var
 				require( './check' ),
 			Comment :
 				require( './comment' ),
+			Fail :
+				require( './fail' ),
 			If :
 				require( './if' ),
 			VarDec :
@@ -180,6 +182,29 @@ Block.prototype.If =
 };
 
 
+/*
+| Returns the block with a error throwing appended.
+*/
+Block.prototype.Fail =
+	function(
+		message
+	)
+{
+	var
+		fail =
+			Code.Fail.create(
+				'message',
+					message || null
+			);
+
+	return (
+		this.create(
+			'twig:add',
+			Jools.uid( ), // FIXME
+			fail
+		)
+	);
+};
 
 
 /*

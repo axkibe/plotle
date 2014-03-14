@@ -55,6 +55,8 @@ var
 				require( '../code/comment' ),
 			If :
 				require( '../code/if' ),
+			Fail :
+				require( '../code/fail' ),
 			File :
 				require( '../code/file' ),
 			Func :
@@ -529,7 +531,8 @@ Generator.prototype.genConstructor =
 			Block( ).
 			If(
 				Term( 'tag !== ' + this.tag ),
-				Block ( )
+				Block( )
+					.Fail( )
 			)
 		);
 
@@ -542,7 +545,6 @@ Generator.prototype.genConstructor =
 		capsule =
 			capsule.VarDec(
 				this.reference,
-				//constructor
 				Assign(
 					Term(
 						this.unit + '.' + this.name
