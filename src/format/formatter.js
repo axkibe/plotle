@@ -41,14 +41,16 @@ formatAssign =
 	)
 {
 	var
-		text =
-			formatTerm(
-				context,
-				assign.left
-			);
+		text;
 
-	// TODO
-	text +=
+	text =
+		context.tab
+		+
+		formatTerm(
+			context,
+			assign.left
+		)
+		+
 		' =\n',
 
 
@@ -170,9 +172,12 @@ formatBlock =
 		text +=
 			formatEntry(
 				context.increment,
-				block.twig[ block.ranks[ a ] ],
+				block.atRank( a ),
 				a > 0 ?
-					block.twig[ block.ranks[ a - 1 ] ] :
+					block.atRank( a - 1 ) :
+					null,
+				a + 1 < aZ ?
+					block.atRank( a + 1 ) :
 					null
 			);
 	}
@@ -294,9 +299,10 @@ formatFunction =
 var
 formatEntry =
 	function(
-		context,
-		entry,
-		lookBehind
+		context,    // the indent in the text
+		entry,      // the entry to be formated
+		lookBehind, // the previous entry (or null)
+		lookAhead   // the next entry (or null)
 	)
 {
 	var
@@ -307,6 +313,12 @@ formatEntry =
 		lookBehind
 		&&
 		lookBehind.reflect !== 'Comment'
+		&&
+		!(
+			lookBehind.reflect === 'VarDec'
+			&&
+			entry.reflect === 'VarDec'
+		)
 	)
 	{
 		text +=
@@ -333,13 +345,32 @@ formatEntry =
 	text +=
 		formatExpression(
 			context,
-			entry
+			entry,
+			lookBehind
 		);
 
 	switch( entry.reflect )
 	{
-		case 'Fail' :
 		case 'VarDec' :
+
+			if(
+				lookAhead
+				&&
+				lookAhead.reflect === 'VarDec'
+			)
+			{
+				return text += ',\n';
+			}
+			else
+			{
+				return text += ';\n';
+			}
+
+			break;
+
+		case 'Assign' :
+		case 'Fail' :
+		case 'Term' :
 
 			return text += ';\n';
 
@@ -362,7 +393,8 @@ var
 formatExpression =
 	function(
 		context,
-		expr
+		expr,
+		lookBehind
 	)
 {
 	switch( expr.reflect )
@@ -415,6 +447,8 @@ formatExpression =
 		case 'Term' :
 
 			return (
+				context.tab
+				+
 				formatTerm(
 					context,
 					expr
@@ -426,7 +460,8 @@ formatExpression =
 			return (
 				formatVarDec(
 					context,
-					expr
+					expr,
+					lookBehind
 				)
 			);
 
@@ -506,14 +541,16 @@ var
 formatVarDec =
 	function(
 		context,
-		varDec
+		varDec,
+		lookBehind
 	)
 {
 	var
 		// true when this is a root function
 		isRootFunc =
 			false,
-		text;
+		text =
+			'';
 
 	if(
 		context.root
@@ -542,12 +579,22 @@ formatVarDec =
 
 	if( !isRootFunc )
 	{
-		text =
-			context.tab + 'var' + '\n',
+		if(
+			!lookBehind
+			||
+			lookBehind.reflect !== 'VarDec'
+		)
+		{
+			text +=
+				context.tab + 'var' + '\n';
+		}
+
+		text +=
 			context.increment.tab + varDec.name;
 	}
 	else
 	{
+		// root functions are not to be combined VarDecs
 		text =
 			context.tab + 'var ' + varDec.name;
 	}
@@ -568,11 +615,6 @@ formatVarDec =
 				context,
 				varDec.assign
 			);
-	}
-	else
-	{
-		text +=
-			';\n';
 	}
 
 	return text;
@@ -614,6 +656,9 @@ formatCapsule =
 				capsule.atRank( a ),
 				a > 0 ?
 					capsule.atRank( a - 1 ) :
+					null,
+				a + 1 < aZ ?
+					capsule.atRank( a + 1 ) :
 					null
 			);
 	}

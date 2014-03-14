@@ -67,6 +67,8 @@ var
 				require( './fail' ),
 			If :
 				require( './if' ),
+			Term :
+				require( './term' ),
 			VarDec :
 				require( './var-dec' ),
 		},
@@ -205,6 +207,34 @@ Block.prototype.Fail =
 		)
 	);
 };
+
+
+/*
+| Returns the block with a term appended.
+*/
+Block.prototype.Term =
+	function(
+		term
+	)
+{
+	if( term.reflect !== 'Term' )
+	{
+		term =
+			Code.Term.create(
+				'term',
+					term
+			);
+	}
+
+	return (
+		this.create(
+			'twig:add',
+			Jools.uid( ), // FIXME
+			term
+		)
+	);
+};
+
 
 
 /*

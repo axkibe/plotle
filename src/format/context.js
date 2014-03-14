@@ -59,7 +59,8 @@ if( JOOBJ )
 */
 var
 	_tab =
-		'\t';
+		'    '; // FIXME
+//		'\t';
 
 
 /*

@@ -237,7 +237,10 @@ Generator.prototype._init =
 		attributes[ name ] =
 			Object.freeze( {
 				assign :
-					jAttr.assign,
+					jAttr.assign !== undefined ?
+						jAttr.assign
+						:
+						name,
 				comment :
 					jAttr.comment,
 				json :
@@ -281,6 +284,9 @@ Generator.prototype._init =
 
 	this.attrList =
 		attrList;
+
+	this.attributes =
+		Object.freeze( attributes );
 
 	constructArgs.unshift(
 		FuncArg(
@@ -351,14 +357,6 @@ buildJD =
 							attr.allowsUndefined
 							||
 							attr.defaultValue === 'undefined',
-						assign :
-							attr.assign !== undefined
-								?
-								attr.assign
-								:
-								name,
-						comment :
-							attr.comment,
 						concerns :
 							attr.concerns,
 						defaultValue :
@@ -532,6 +530,64 @@ buildJD =
 
 
 /*
+| Generates the imports section.
+*/
+Generator.prototype.genImportsSection =
+	function(
+		capsule // block to append to
+	)
+{
+	capsule =
+		capsule.Comment(
+			'Imports.'
+		);
+
+	capsule =
+		capsule
+			.VarDec( 'JoobjProto' )
+			.VarDec( 'Jools' );
+
+	return capsule;
+};
+
+/*
+| Generates the node include section.
+*/
+Generator.prototype.genNodeIncludesSection =
+	function(
+		capsule // block to append to
+	)
+{
+	var
+		block;
+
+	capsule =
+		capsule.Comment(
+			'Node includes.'
+		);
+
+	block =
+		Block( )
+		.Assign(
+			Term( 'JoobjProto' ),
+			Term( 'require( \'../src/joobj/proto\' )' )
+		)
+		.Assign(
+			Term( 'Jools' ),
+			Term( 'require( \'../src/jools/jools\' )' )
+		);
+
+	capsule =
+		capsule.If(
+			Term( 'SERVER' ),
+			block
+		);
+
+	return capsule;
+};
+
+
+/*
 | Generates the constructor.
 */
 Generator.prototype.genConstructor =
@@ -559,11 +615,34 @@ Generator.prototype.genConstructor =
 			)
 		);
 
-	/*
 	for(
-		var a = 0, aZ = this.argXX
-	this.args
-	*/
+		var a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		var
+			name =
+				this.attrList[ a ],
+			attr =
+				this.attributes[ name ];
+
+		if( attr.assign === null )
+		{
+			continue;
+		}
+
+		block =
+			block.Assign(
+				Term( 'this.' + attr.assign ),
+				Term( attr.vName )
+			);
+	}
+
+	block =
+		block.Term(
+			'Jools.immute( this )'
+		);
 
 	constructor =
 		Func(
@@ -589,21 +668,6 @@ Generator.prototype.genConstructor =
 		throw new Error( 'TODO' );
 	}
 
-	/*
-	capsule =
-		capsule.Assign(
-			this.unit ?
-				[
-					'var ' + this.reference,
-					this.unit + '.' + this.name
-				]
-				:
-				this.reference
-			,
-			constructor
-		);
-	*/
-
 	return capsule;
 };
 
@@ -619,7 +683,19 @@ Generator.prototype.genCapsule =
 			Block( );
 
 	capsule =
-		this.genConstructor( capsule );
+		this.genImportsSection(
+			capsule
+		);
+
+	capsule =
+		this.genNodeIncludesSection(
+			capsule
+		);
+
+	capsule =
+		this.genConstructor(
+			capsule
+		);
 
 	return capsule;
 };
