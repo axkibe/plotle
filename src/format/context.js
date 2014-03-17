@@ -40,6 +40,15 @@ if( JOOBJ )
 						defaultValue :
 							'false'
 					},
+				inline :
+					{
+						comment :
+							'true if to be formated inline',
+						type :
+							'Boolean',
+						defaultValue :
+							'false'
+					},
 				root :
 					{
 						comment :
@@ -170,6 +179,29 @@ Jools.lazyValue(
 		);
 
 		return dec;
+	}
+);
+
+
+/*
+| Sets the for loop context
+*/
+Jools.lazyValue(
+	Context.prototype,
+	'setInline',
+	function( )
+	{
+		if( this.inline )
+		{
+			return this;
+		}
+
+		return (
+			this.create(
+				'inline',
+					true
+			)
+		);
 	}
 );
 

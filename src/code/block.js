@@ -65,6 +65,8 @@ var
 				require( './comment' ),
 			Fail :
 				require( './fail' ),
+			For :
+				require( './for' ),
 			If :
 				require( './if' ),
 			Term :
@@ -204,6 +206,40 @@ Block.prototype.Fail =
 			'twig:add',
 			Jools.uid( ), // FIXME
 			fail
+		)
+	);
+};
+
+
+/*
+| Returns the block with a classical for loop appended.
+*/
+Block.prototype.For =
+	function(
+		init,
+		condition,
+		iterate,
+		block
+	)
+{
+	var
+		entry =
+			Code.For.create(
+				'init',
+					init,
+				'condition',
+					condition,
+				'iterate',
+					iterate,
+				'block',
+					block
+			);
+
+	return (
+		this.create(
+			'twig:add',
+			Jools.uid( ), // FIXME
+			entry
 		)
 	);
 };

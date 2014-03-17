@@ -64,7 +64,11 @@ var
 			FuncArg :
 				require( '../code/func-arg' ),
 			Term :
-				require( '../code/term' )
+				require( '../code/term' ),
+			VarDec :
+				require( '../code/var-dec' ),
+			VList :
+				require( '../code/vlist' )
 		},
 	Generator =
 		require( '../joobj/this' )( module ),
@@ -190,6 +194,41 @@ Term =
 		)
 	);
 };
+
+
+/*
+| Shortcut for variable declerations.
+*/
+/*
+var
+VarDec =
+	function(
+		name,   // variable name
+		assign  // variable assignment
+	)
+{
+	return (
+		Code.VarDec.create(
+			'name',
+				name,
+			'assign',
+				assign || null
+		)
+	);
+};
+*/
+
+
+/*
+| Shortcut for creating vlists.
+*/
+var
+VList =
+	function( )
+{
+	return Code.VList.create( );
+};
+
 
 
 /*
@@ -673,6 +712,95 @@ Generator.prototype.genConstructor =
 
 
 /*
+| Generates the creators inheritance receiver.
+*/
+Generator.prototype.genCreatorInheritance =
+	function(
+		block // block to append to
+	)
+{
+	var
+		a,
+		aZ,
+		attr,
+		name,
+		receiver =
+			Block( )
+			.Assign(
+				Term( 'inherit' ),
+				Term( 'this' )
+			);
+
+	if( this.twig )
+	{
+		throw new Error( 'TODO' );
+	}
+
+	for(
+		a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		if( attr.assign === null )
+		{
+			continue;
+		}
+
+		receiver =
+			receiver.Assign(
+				Term( attr.vName ),
+				Term( 'this.' + attr.assign )
+			);
+	}
+
+	return (
+		block.If(
+			Term( 'this !== ' + this.reference ),
+			receiver
+		)
+	);
+};
+
+
+/*
+| Generates the creators free strings parser.
+*/
+Generator.prototype.genCreatorFreeStrings =
+	function(
+		block // block to append to
+	)
+{
+	var
+		loop =
+			Block( ).
+			VarDec(
+				'arg',
+				Term( 'arguments[ a + 1 ]' )
+			);
+
+	block =
+		block.For(
+			VList( )
+				.VarDec( 'a', Term( '0' ) )
+				.VarDec( 'aZ', Term( 'arguments.length' ) ),
+			Term( 'a < aZ' ),
+			Term( 'a += 2' ),
+			loop
+		);
+
+	return block;
+};
+
+
+
+/*
 | Generates the creator.
 */
 Generator.prototype.genCreator =
@@ -681,8 +809,10 @@ Generator.prototype.genCreator =
 	)
 {
 	var
+		a,
+		aZ,
 		block,
-		creator;
+		name;
 
 	capsule =
 		capsule.Comment(
@@ -691,6 +821,35 @@ Generator.prototype.genCreator =
 
 	block =
 		Block( );
+
+	// generates the variable list
+	var
+		varList =
+			[ ];
+
+	for( name in this.attributes )
+	{
+		varList.push( this.attributes[ name ].vName );
+	}
+
+	varList.push( 'inherit' );
+	varList.sort( );
+
+	for(
+		a = 0, aZ = varList.length;
+		a < aZ;
+		a++
+	)
+	{
+		block =
+			block.VarDec( varList[ a ] );
+	}
+
+	block =
+		this.genCreatorInheritance( block );
+
+	block =
+		this.genCreatorFreeStrings( block );
 
 	capsule =
 		capsule

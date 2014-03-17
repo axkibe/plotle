@@ -26,6 +26,8 @@ var
 var
 	Context =
 		require( './context' );
+
+//var
 //	Jools =
 //		require( '../jools/jools' );
 
@@ -211,7 +213,10 @@ formatIf =
 			context.tab +
 			'if( '
 			+
-			formatTerm( context, cond )
+			formatTerm(
+				context,
+				cond
+			)
 			+
 			' )\n';
 	}
@@ -228,6 +233,55 @@ formatIf =
 
 	return text;
 };
+
+
+/*
+| Formats a classical for loop.
+*/
+var
+formatFor =
+	function(
+		context,
+		forExpr
+	)
+{
+	var
+		forContext =
+			context.increment.setInline,
+		text;
+
+	text =
+		context.tab +
+		'for(\n' +
+		forContext.tab +
+		formatExpression(
+			forContext,
+			forExpr.init
+		) +
+		';\n' +
+		forContext.tab +
+		formatExpression(
+			forContext,
+			forExpr.condition
+		) +
+		';\n' +
+		forContext.tab +
+		formatExpression(
+			forContext,
+			forExpr.iterate
+		) +
+		'\n' +
+		context.tab +
+		')\n'
+		+
+		formatBlock(
+			context,
+			forExpr.block
+		);
+
+	return text;
+};
+
 
 
 /*
@@ -376,6 +430,7 @@ formatEntry =
 			return text += ';\n';
 
 		case 'Check' :
+		case 'For' :
 		case 'If' :
 
 			return text += '\n';
@@ -436,6 +491,15 @@ formatExpression =
 				)
 			);
 
+		case 'For' :
+
+			return (
+				formatFor(
+					context,
+					expr
+				)
+			);
+
 		case 'Func' :
 
 			return (
@@ -448,7 +512,7 @@ formatExpression =
 		case 'Term' :
 
 			return (
-				context.tab
+				( !context.inline ? context.tab : '' )
 				+
 				formatTerm(
 					context,
@@ -465,6 +529,16 @@ formatExpression =
 					lookBehind
 				)
 			);
+
+		case 'VList' :
+
+			return (
+				formatVList(
+					context,
+					expr
+				)
+			);
+
 
 		default :
 
@@ -534,9 +608,7 @@ formatTerm =
 
 
 /*
-| Formats a variable decleration.
-|
-| FIXME combine multiple var-decs
+| Formats a variable declaration.
 */
 var
 formatVarDec =
@@ -586,12 +658,29 @@ formatVarDec =
 			lookBehind.reflect !== 'VarDec'
 		)
 		{
+			if( !context.inline )
+			{
+				text +=
+					context.tab + 'var' + '\n';
+			}
+			else
+			{
+				text +=
+					'var ';
+			}
+		}
+
+		if( !context.inline )
+		{
+			context =
+				context.increment;
+
 			text +=
-				context.tab + 'var' + '\n';
+				context.tab;
 		}
 
 		text +=
-			context.increment.tab + varDec.name;
+			varDec.name;
 	}
 	else
 	{
@@ -603,7 +692,18 @@ formatVarDec =
 	if( varDec.assign )
 	{
 		text +=
-			' =\n';
+			' =';
+
+		if( !context.inline )
+		{
+			text +=
+				'\n';
+		}
+		else
+		{
+			text +=
+				' ';
+		}
 
 		if( varDec.assign.reflect !== 'Assign' )
 		{
@@ -620,6 +720,72 @@ formatVarDec =
 
 	return text;
 };
+
+
+/*
+| Formats a variable list
+|
+| Used in for-loop initializers only.
+*/
+var
+formatVList =
+	function(
+		context,
+		vList
+	)
+{
+	var
+		text =
+			'var ',
+		varDec;
+
+/**/if( CHECK )
+/**/{
+/**/	if( !context.inline )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	for(
+		var a = 0, aZ = vList.ranks.length;
+		a < aZ;
+		a++
+	)
+	{
+		varDec =
+			vList.atRank( a );
+
+		if( CHECK )
+		{
+			if( varDec.reflect !== 'VarDec' )
+			{
+				throw new Error( );
+			}
+		}
+
+		text +=
+			varDec.name;
+
+		if( varDec.assign )
+		{
+			text +=
+				' = ' +
+				formatTerm(
+					context,
+					varDec.assign
+				);
+		}
+
+		if( a + 1 < aZ )
+		{
+			text += ', ';
+		}
+	}
+
+	return text;
+};
+
 
 
 /*
