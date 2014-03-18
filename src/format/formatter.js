@@ -156,15 +156,29 @@ formatCheck =
 var
 formatBlock =
 	function(
-		context,
-		block
+		context,   // the context to format in
+		block,     // the block to format to
+		noBrackets // omit brackets
 	)
 {
 	var
-		text;
+		blockContext,
+		text =
+			'';
 
-	text =
-		context.tab + '{\n';
+	if( !noBrackets )
+	{
+		text =
+			context.tab + '{\n';
+
+		blockContext =
+			context.increment;
+	}
+	else
+	{
+		blockContext =
+			context;
+	}
 
 	for(
 		var a = 0, aZ = block.ranks.length;
@@ -174,7 +188,7 @@ formatBlock =
 	{
 		text +=
 			formatEntry(
-				context.increment,
+				blockContext,
 				block.atRank( a ),
 				a > 0 ?
 					block.atRank( a - 1 ) :
@@ -185,8 +199,11 @@ formatBlock =
 			);
 	}
 
-	text +=
-		context.tab + '}';
+	if( !noBrackets )
+	{
+		text +=
+			context.tab + '}';
+	}
 
 	return text;
 };
@@ -283,6 +300,107 @@ formatFor =
 };
 
 
+/*
+| Formats a switch statement
+*/
+var
+formatSwitch =
+	function(
+		context,
+		switchExpr
+	)
+{
+	var
+		caseContext =
+			context.increment,
+		caseExpr,
+		text;
+
+	text =
+		context.tab
+		+
+		'switch( '
+		+
+		formatTerm(
+			context.inline,
+			switchExpr.statement
+		)
+		+
+		' )\n'
+		+
+		context.tab + '{\n';
+
+	for(
+		var a = 0, aZ = switchExpr.ranks.length;
+		a < aZ;
+		a++
+	)
+	{
+		caseExpr =
+			switchExpr.atRank( a );
+
+		if( a > 0 )
+		{
+			text +=
+				'\n';
+		}
+
+		for(
+			var b = 0, bZ = caseExpr.ranks.length;
+			b < bZ;
+			b++
+		)
+		{
+			text +=
+				caseContext.tab
+				+
+				'case '
+				+
+				formatTerm(
+					caseContext.inline,
+					caseExpr.atRank( b )
+				)
+				+
+				' :\n\n'
+				+
+				formatBlock(
+					caseContext.increment,
+					caseExpr.block,
+					true
+				)
+				+
+				'\n'
+				+
+				caseContext.increment.tab + 'break;\n';
+		}
+	}
+
+	if( switchExpr.defaultCase )
+	{
+		if( switchExpr.ranks.length > 0 )
+		{
+			text +=
+				'\n';
+		}
+
+		text +=
+			caseContext.tab +
+			'default :\n\n'
+			+
+			formatBlock(
+				caseContext.increment,
+				switchExpr.defaultCase,
+				true
+			);
+	}
+
+	text +=
+		context.tab +
+		'}';
+
+	return text;
+};
+
 
 /*
 | Formats a function.
@@ -377,12 +495,18 @@ formatEntry =
 	)
 	{
 		text +=
-			'\n';
+			context.check ?
+				'/**/\n'
+				:
+				'\n';
 
 		if( context.root )
 		{
 			text +=
-				'\n';
+				context.check ?
+					'/**/\n'
+					:
+					'\n';
 		}
 	}
 
@@ -432,6 +556,7 @@ formatEntry =
 		case 'Check' :
 		case 'For' :
 		case 'If' :
+		case 'Switch' :
 
 			return text += '\n';
 
@@ -504,6 +629,15 @@ formatExpression =
 
 			return (
 				formatFunc(
+					context,
+					expr
+				)
+			);
+
+		case 'Switch' :
+
+			return (
+				formatSwitch(
 					context,
 					expr
 				)

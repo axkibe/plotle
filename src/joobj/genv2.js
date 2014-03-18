@@ -63,6 +63,8 @@ var
 				require( '../code/func' ),
 			FuncArg :
 				require( '../code/func-arg' ),
+			Switch :
+				require( '../code/switch' ),
 			Term :
 				require( '../code/term' ),
 			VarDec :
@@ -181,11 +183,31 @@ Func =
 
 
 /*
+| Shortcut for creating switch statements.
+*/
+var
+Switch =
+	function(
+		statement
+	)
+{
+	return (
+		Code.Switch.create(
+			'statement',
+				statement
+		)
+	);
+};
+
+
+/*
 | Shortcut for creating terms.
 */
 var
 Term =
-	function( term )
+	function(
+		term
+	)
 {
 	return (
 		Code.Term.create(
@@ -275,6 +297,14 @@ Generator.prototype._init =
 		attr =
 		attributes[ name ] =
 			Object.freeze( {
+				allowsNull :
+					jAttr.allowsNull
+					||
+					jAttr.defaultValue === 'null',
+				allowsUndefined :
+					jAttr.allowsUndefined
+					||
+					jAttr.defaultValue === 'undefined',
 				assign :
 					jAttr.assign !== undefined ?
 						jAttr.assign
@@ -286,6 +316,8 @@ Generator.prototype._init =
 					jAttr.json,
 				name :
 					name,
+				type :
+					jAttr.type,
 				vName :
 					'v_' + name
 			} );
@@ -388,14 +420,6 @@ buildJD =
 			attributes[ name ] =
 				Object.freeze(
 					{
-						allowsNull :
-							attr.allowsNull
-							||
-							attr.defaultValue === 'null',
-						allowsUndefined :
-							attr.allowsUndefined
-							||
-							attr.defaultValue === 'undefined',
 						concerns :
 							attr.concerns,
 						defaultValue :
@@ -404,8 +428,6 @@ buildJD =
 							attr.json,
 						name :
 							name,
-						type :
-							attr.type,
 						unit :
 							attr.unit,
 						vName :
@@ -712,9 +734,46 @@ Generator.prototype.genConstructor =
 
 
 /*
+| Generates the creators variable list.
+*/
+Generator.prototype.genCreatorVariables =
+	function(
+		block // block to append to
+	)
+{
+	var
+		a,
+		aZ,
+		name,
+		varList =
+			[ ];
+
+	for( name in this.attributes )
+	{
+		varList.push( this.attributes[ name ].vName );
+	}
+
+	varList.push( 'inherit' );
+	varList.sort( );
+
+	for(
+		a = 0, aZ = varList.length;
+		a < aZ;
+		a++
+	)
+	{
+		block =
+			block.VarDec( varList[ a ] );
+	}
+
+	return block;
+};
+
+
+/*
 | Generates the creators inheritance receiver.
 */
-Generator.prototype.genCreatorInheritance =
+Generator.prototype.genCreatorInheritanceReceiver =
 	function(
 		block // block to append to
 	)
@@ -778,12 +837,60 @@ Generator.prototype.genCreatorFreeStrings =
 	)
 {
 	var
-		loop =
-			Block( ).
-			VarDec(
-				'arg',
-				Term( 'arguments[ a + 1 ]' )
+		attr,
+		loop,
+		name,
+		switchExpr;
+
+	loop =
+		Block( ).
+		VarDec(
+			'arg',
+			Term( 'arguments[ a + 1 ]' )
+		);
+
+	switchExpr =
+		Switch( Term( 'arguments[ a ]' ) );
+
+	for(
+		var a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		switchExpr =
+			switchExpr
+			.Case(
+				Term( '\'' + name + '\'' ),
+				Block( )
+				.If(
+					Term( 'arg !== undefined' ),
+					Block( )
+					.Assign(
+						Term( attr.vName ),
+						Term( 'arg' )
+					)
+				)
 			);
+	}
+
+	switchExpr =
+		switchExpr.Default(
+			Block( )
+			.Check(
+				Block( )
+				.Fail( 'invalid argument' )
+			)
+		);
+
+	loop =
+		loop.Switch( switchExpr );
 
 	block =
 		block.For(
@@ -799,6 +906,198 @@ Generator.prototype.genCreatorFreeStrings =
 };
 
 
+/*
+| Generates the creators checks
+*/
+Generator.prototype.genCreatorChecks =
+	function(
+		block // block to append to
+	)
+{
+	var
+		attr,
+		check,
+		cond,
+		name,
+		skip,
+		tcheck,
+		tfail;
+
+	check =
+		Block( );
+
+	for(
+		var a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		if( !attr.allowsUndefined )
+		{
+			check =
+				check.If(
+					Term( attr.vName + ' === undefined' ),
+					Block( )
+					.Fail( 'undefined attribute ' + name )
+				);
+		}
+
+		if( !attr.allowsNull )
+		{
+			check =
+				check.If(
+					Term( attr.vName + ' === null' ),
+					Block( )
+					.Fail( 'attribute ' + name + ' must not be null.' )
+				);
+		}
+
+		switch( attr.type )
+		{
+			case 'Action' :
+			case 'Array' :
+			case 'Function' :
+			case 'Item' :
+			case 'Mark' :
+			case 'Object' :
+			case 'Tree' :
+
+				skip =
+					true;
+
+				break;
+
+			default :
+
+				skip =
+					false;
+		}
+
+		if( !skip )
+		{
+			if( attr.allowsNull && !attr.allowsUndefined )
+			{
+				cond =
+					Term( attr.vName + ' !== null' );
+			}
+			else if( !attr.allowsNull && attr.allowsUndefined )
+			{
+				cond =
+					Term( attr.vName + ' !== undefined' );
+			}
+			else if( attr.allowsNull && attr.allowsUndefine )
+			{
+				// FUTURE multilined
+				cond =
+					Term(
+						attr.vName + ' !== null' +
+						' && ' +
+						attr.vName + ' !== undefined'
+					);
+			}
+			else
+			{
+				cond =
+					null;
+			}
+		}
+
+		switch( attr.type )
+		{
+			case 'Boolean' :
+
+				tcheck =
+					Term(
+						'typeof( ' + attr.vName + ' ) !== \'boolean\''
+					);
+
+				break;
+
+			case 'Integer' :
+
+				tcheck =
+					Term(
+						'typeof( ' + attr.vName  + ' ) !== \'number\'' +
+						' || ' +
+						'Math.floor( ' + attr.vName + ' ) !== ' + attr.vNae
+					);
+
+				break;
+
+			case 'Number' :
+
+				tcheck =
+					Term(
+						'typeof( ' + attr.vName  + ' ) !== \'number\''
+					);
+
+				break;
+
+
+			case 'String' :
+
+				tcheck =
+					Term(
+						'typeof( ' + attr.vName  + ' )' + ' !== \'string\'' +
+						' && ' +
+						'!( ' + attr.vName + ' instanceof String )'
+					);
+
+				break;
+
+			default :
+
+				tcheck =
+					Term(
+						attr.vName + '.reflect !== \'' + attr.type + '\''
+					);
+
+				break;
+		}
+
+		tfail =
+			Block( ).
+			Fail( 'type mismtach' );
+
+		if( cond )
+		{
+			check =
+				check.If(
+					cond,
+					Block.If(
+						tcheck,
+						tfail
+					)
+				);
+		}
+		else
+		{
+			check =
+				check.If(
+					tcheck,
+					tfail
+				);
+		}
+	}
+
+
+	// FIXME, in case of check is empty
+	//        do not append
+
+	block =
+		block.Check(
+			check
+		);
+
+	return block;
+};
+
 
 /*
 | Generates the creator.
@@ -809,10 +1108,7 @@ Generator.prototype.genCreator =
 	)
 {
 	var
-		a,
-		aZ,
-		block,
-		name;
+		block;
 
 	capsule =
 		capsule.Comment(
@@ -822,34 +1118,17 @@ Generator.prototype.genCreator =
 	block =
 		Block( );
 
-	// generates the variable list
-	var
-		varList =
-			[ ];
-
-	for( name in this.attributes )
-	{
-		varList.push( this.attributes[ name ].vName );
-	}
-
-	varList.push( 'inherit' );
-	varList.sort( );
-
-	for(
-		a = 0, aZ = varList.length;
-		a < aZ;
-		a++
-	)
-	{
-		block =
-			block.VarDec( varList[ a ] );
-	}
+	block =
+		this.genCreatorVariables( block );
 
 	block =
-		this.genCreatorInheritance( block );
+		this.genCreatorInheritanceReceiver( block );
 
 	block =
 		this.genCreatorFreeStrings( block );
+
+	block =
+		this.genCreatorChecks( block );
 
 	capsule =
 		capsule

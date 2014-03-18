@@ -248,6 +248,32 @@ Block.prototype.For =
 /*
 | Returns the block with a term appended.
 */
+Block.prototype.Switch =
+	function(
+		switchExpr
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( switchExpr.reflect !== 'Switch' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return (
+		this.create(
+			'twig:add',
+			Jools.uid( ), // FIXME
+			switchExpr
+		)
+	);
+};
+
+
+/*
+| Returns the block with a term appended.
+*/
 Block.prototype.Term =
 	function(
 		term
