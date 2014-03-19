@@ -67,6 +67,8 @@ var
 				require( '../code/switch' ),
 			Term :
 				require( '../code/term' ),
+			TList :
+				require( '../code/tlist' ),
 			VarDec :
 				require( '../code/var-dec' ),
 			VList :
@@ -216,6 +218,18 @@ Term =
 		)
 	);
 };
+
+
+/*
+| Shortcut for creating term lists.
+*/
+var
+TList =
+	function( )
+{
+	return Code.TList.create( );
+};
+
 
 
 /*
@@ -1100,6 +1114,123 @@ Generator.prototype.genCreatorChecks =
 
 
 /*
+| Generates the creators unchanged detection,
+| returning this.
+*/
+Generator.prototype.genCreatorUnchanged =
+	function(
+		block // block to append to
+	)
+{
+	var
+		attr,
+		name,
+		tList;
+
+	tList =
+		TList( )
+		.Term( 'inherit' );
+
+
+	if( this.twig )
+	{
+		tList =
+			tList
+			.Term( '&&' )
+			.Term(' !twigDup' );
+	}
+
+	for(
+		var a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		if( attr.assign === null )
+		{
+			tList =
+				tList
+				.Term( '&&' )
+				.Term( attr.vName + ' === null' );
+		}
+
+		switch( attr.type )
+		{
+
+			case 'Array' : // FIXME
+			case 'Boolean' :
+			case 'Function' :
+			case 'Integer' :
+			case 'Mark' : // FIXME
+			case 'Number' :
+			case 'Object' :
+			case 'String' :
+			case 'Tree' : // FIXME
+
+				tList =
+					tList
+					.Term( '&&' )
+					.Term(
+						attr.vName +
+						' === inherit.' + attr.assign
+					);
+
+				break;
+
+			default :
+
+				if( !attr.allowsNull && !attr.allowsUndefined )
+				{
+					tList =
+						tList
+						.Term( '&&' )
+						.Term(
+							attr.vName +
+							'.equals( inherit.' + attr.assign
+						);
+				}
+				else
+				{
+					tList =
+						tList
+						.Term( '&&' )
+						.Term( '(' )
+						.Term(
+							attr.vName + ' === inherit.' + attr.assign
+						)
+						.Term( '||' )
+						.Term( '(' )
+						.Term( attr.vName )
+						.Term( '&&' )
+						.Term(
+							attr.vName +
+							'.equals( inherit.' + attr.assign
+						)
+						.Term( ')' )
+						.Term( ')' );
+				}
+		}
+	}
+
+	block =
+		block.If(
+			tList,
+			Block( )
+			.Return( Term( 'inherit' ) )
+		);
+
+	return block;
+};
+
+
+
+/*
 | Generates the creator.
 */
 Generator.prototype.genCreator =
@@ -1129,6 +1260,9 @@ Generator.prototype.genCreator =
 
 	block =
 		this.genCreatorChecks( block );
+
+	block =
+		this.genCreatorUnchanged( block );
 
 	capsule =
 		capsule

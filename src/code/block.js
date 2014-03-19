@@ -69,6 +69,8 @@ var
 				require( './for' ),
 			If :
 				require( './if' ),
+			Return :
+				require( './return' ),
 			Term :
 				require( './term' ),
 			VarDec :
@@ -248,14 +250,53 @@ Block.prototype.For =
 /*
 | Returns the block with a term appended.
 */
+Block.prototype.Return =
+	function(
+		expr
+	)
+{
+	switch( expr.reflect )
+	{
+		case 'Return' :
+
+			break;
+
+		case 'Term' :
+
+			expr =
+				Code.Return.create(
+					'expr',
+						expr
+				);
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
+
+	return (
+		this.create(
+			'twig:add',
+			Jools.uid( ), // FIXME
+			expr
+		)
+	);
+};
+
+
+/*
+| Returns the block with a term appended.
+*/
 Block.prototype.Switch =
 	function(
-		switchExpr
+		expr
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( switchExpr.reflect !== 'Switch' )
+/**/	if( expr.reflect !== 'Switch' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -265,7 +306,7 @@ Block.prototype.Switch =
 		this.create(
 			'twig:add',
 			Jools.uid( ), // FIXME
-			switchExpr
+			expr
 		)
 	);
 };

@@ -224,22 +224,53 @@ formatIf =
 			ifExpr.condition,
 		text;
 
-	if( cond.reflect === 'Term' )
+	switch( cond.reflect )
 	{
-		text =
-			context.tab +
-			'if( '
-			+
-			formatTerm(
-				context,
-				cond
+		case 'Term' :
+
+			text =
+				context.tab +
+				'if( '
+				+
+				formatTerm(
+					context,
+					cond
+				)
+				+
+				' )\n';
+
+			break;
+
+		case 'TList' :
+
+			text =
+				context.tab + 'if(\n';
+
+			for(
+				var a = 0, aZ = cond.ranks.length;
+				a < aZ;
+				a++
 			)
-			+
-			' )\n';
-	}
-	else
-	{
-		throw new Error( 'TODO' );
+			{
+				text +=
+					context.increment.tab
+					+
+					formatTerm(
+						context.increment,
+						cond.atRank( a )
+					)
+					+
+					'\n';
+			}
+
+			text +=
+				context.tab + ')\n';
+
+			break;
+
+		default :
+
+			throw new Error( );
 	}
 
 	text +=
@@ -294,6 +325,33 @@ formatFor =
 		formatBlock(
 			context,
 			forExpr.block
+		);
+
+	return text;
+};
+
+
+/*
+| Formats a return statement.
+*/
+var
+formatReturn =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+	text =
+		context.tab
+		+
+		'return '
+		+
+		formatTerm(
+			context.inline,
+			expr.expr
 		);
 
 	return text;
@@ -549,6 +607,7 @@ formatEntry =
 
 		case 'Assign' :
 		case 'Fail' :
+		case 'Return' :
 		case 'Term' :
 
 			return text += ';\n';
@@ -629,6 +688,15 @@ formatExpression =
 
 			return (
 				formatFunc(
+					context,
+					expr
+				)
+			);
+
+		case 'Return' :
+
+			return (
+				formatReturn(
 					context,
 					expr
 				)
