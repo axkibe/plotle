@@ -821,6 +821,7 @@ formatCall =
 	)
 {
 	var
+		arg,
 		text;
 
 /**/if( CHECK )
@@ -845,10 +846,32 @@ formatCall =
 	else
 	{
 		text +=
-			'(';
+			'( ';
+
+		for(
+			var a = 0, aZ = call.ranks.length;
+			a < aZ;
+			a++
+		)
+		{
+			arg =
+				call.atRank( a );
+
+			text +=
+				formatExpression(
+					context,
+					arg
+				);
+
+			if( a + 1 < aZ )
+			{
+				text +=
+					', ';
+			}
+		}
 
 		text +=
-			'...)';
+			' )';
 	}
 	
 	return text;

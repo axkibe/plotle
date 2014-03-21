@@ -44,9 +44,63 @@ if( JOOBJ )
 	};
 }
 
+/*
+| Node imports.
+*/
+var
+	FuncArg =
+		require( './func-arg' ),
+	Func =
+		require( '../joobj/this' )( module ),
+	Jools =
+		require( '../jools/jools' );
 
+
+/*
+| Returns the function with a an argument appended.
+*/
+Func.prototype.append =
+	function(
+		arg
+	)
+{
+	return (
+		this.create(
+			'twig:add',
+			Jools.uid( ), // FIXME
+			arg
+		)
+	);
+};
+
+
+/*
+| Convenience shortcut.
+| Returns the function with a an argument appended.
+*/
+Func.prototype.Arg =
+	function(
+		name,
+		comment
+	)
+{
+	return (
+		this.append(
+			FuncArg.create(
+				'name',
+					name,
+				'comment',
+					comment
+			)
+		)
+	);
+};
+
+/*
+| Node export.
+*/
 module.exports =
-	require( '../joobj/this' )( module );
+	Func;
 
 
 } )( );

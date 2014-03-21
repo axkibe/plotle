@@ -78,8 +78,8 @@ var
 		},
 	Generator =
 		require( '../joobj/this' )( module ),
-	Jools =
-		require( '../jools/jools' ),
+//	Jools =
+//		require( '../jools/jools' ),
 	Validator =
 		require( './validator' );
 
@@ -146,33 +146,11 @@ File =
 
 
 /*
-| Shortcut for creating function arguments.
-*/
-var
-FuncArg =
-	function(
-		name,
-		comment
-	)
-{
-	return (
-		Code.FuncArg.create(
-			'name',
-				name,
-			'comment',
-				comment
-		)
-	);
-};
-
-
-/*
 | Shortcut for creating functions.
 */
 var
 Func =
 	function(
-		argList,
 		block
 	)
 {
@@ -182,23 +160,6 @@ Func =
 				'block',
 					block || null
 			);
-
-	if( argList )
-	{
-		for(
-			var a = 0, aZ = argList.length;
-			a < aZ;
-			a++
-		)
-		{
-			func =
-				func.create(
-					'twig:add',
-					Jools.uid( ), // FIXME
-					argList[ a ]
-				);
-		}
-	}
 
 	return func;
 };
@@ -301,9 +262,11 @@ Generator.prototype._init =
 		jAttr,
 		joobj =
 			this.joobj,
-		name,
-		constructArgs =
-			[ ];
+		name;
+			
+			
+	this.init =
+		joobj.init;
 
 	this.unit =
 		joobj.unit;
@@ -357,32 +320,7 @@ Generator.prototype._init =
 				vName :
 					'v_' + name
 			} );
-
-		if(
-			attr.assign !== null
-			||
-			(
-				joobj.init
-				&&
-				joobj.init.indexOf( name ) >= 0
-			)
-		)
-		{
-			constructArgs.push(
-				FuncArg(
-					attr.vName,
-					attr.comment
-				)
-			);
-		}
 	}
-
-	constructArgs.sort(
-		function( o, p )
-		{
-			return Jools.compare( o.name, p.name );
-		}
-	);
 
 	attrList =
 		Object.keys( attributes );
@@ -394,16 +332,6 @@ Generator.prototype._init =
 
 	this.attributes =
 		Object.freeze( attributes );
-
-	constructArgs.unshift(
-		FuncArg(
-			'tag',
-			'magic cookie'
-		)
-	);
-
-	this.constructArgs =
-		Object.freeze( constructArgs );
 
 	this.reference =
 		( joobj.unit === joobj.name ) ?
@@ -596,8 +524,6 @@ buildJD =
 				conVars,
 			equals :
 				joobj.equals,
-			init :
-				joobj.init,
 			hasJSON :
 				hasJSON,
 			jsonList :
@@ -689,8 +615,12 @@ Generator.prototype.genConstructor =
 	)
 {
 	var
+		a,
+		aZ,
+		attr,
 		block,
-		constructor;
+		constructor,
+		name;
 
 	capsule =
 		capsule.Comment(
@@ -709,16 +639,15 @@ Generator.prototype.genConstructor =
 		);
 
 	for(
-		var a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
-		var
-			name =
-				this.attrList[ a ],
-			attr =
-				this.attributes[ name ];
+		name =
+			this.attrList[ a ],
+		attr =
+			this.attributes[ name ];
 
 		if( attr.assign === null )
 		{
@@ -738,10 +667,44 @@ Generator.prototype.genConstructor =
 		);
 
 	constructor =
-		Func(
-			this.constructArgs,
-			block
+		Func( block )
+		.Arg(
+			'tag',
+			'magic cookie'
 		);
+
+	for(
+		a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		if(
+			attr.assign === null
+			&&
+			!(
+				this.init
+				&&
+				this.init.indexOf( name ) >= 0
+			)
+		)
+		{
+			continue;
+		}
+
+		constructor =
+			constructor.Arg(
+				attr.vName,
+				attr.comment
+			);
+	}
+	// XXX
 
 	if( this.unit )
 	{
@@ -1306,14 +1269,31 @@ Generator.prototype.genCreatorReturn =
 		block // block to append to
 	)
 {
-	block =
-		block.Return(
+	var
+		call =
 			Call(
-				Term( 'Jooo' )
+				Term( this.reference )
 			)
-		);
+			.append(
+				Term( '' + this.tag )
+			);
 
-	return block;
+	/*
+	for(
+		var a = 1, aZ = this.constructArgs.length;
+		a < aZ;
+		a++
+	)
+	{
+		call =
+			call
+			.append(
+				Term( '' + this.constructArgs[ a ].vName )
+			);
+	}
+	*/
+
+	return block.Return( call );
 };
 
 
@@ -1363,11 +1343,10 @@ Generator.prototype.genCreator =
 			Term( this.reference + '.create' ),
 			Assign(
 				Term( this.reference + '.prototype.create' ),
-				Func(
-					[
-						FuncArg( null, 'free strings' )
-					],
-					block
+				Func( block )
+				.Arg(
+					null,
+					'free strings'
 				)
 			)
 		);
@@ -1603,11 +1582,10 @@ Generator.prototype.genFromJSONCreator =
 		capsule
 		.Assign(
 			Term( this.reference + '.createFromJSON' ),
-			Func(
-				[
-					FuncArg( 'json', 'the JSON object' )
-				],
-				funcBlock
+			Func( funcBlock )
+			.Arg(
+				'json',
+				'the JSON object'
 			)
 		);
 
