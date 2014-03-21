@@ -29,7 +29,7 @@ if( JOOBJ )
 						comment :
 							'the expression to return',
 						type :
-							'Term'
+							'Object'
 					}
 			},
 		node :

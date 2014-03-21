@@ -49,6 +49,8 @@ var
 				require( '../code/assign' ),
 			Block :
 				require( '../code/block' ),
+			Call :
+				require( '../code/call' ),
 			Check :
 				require( '../code/check' ),
 			Comment :
@@ -111,6 +113,24 @@ Block =
 	function( )
 {
 	return Code.Block.create( );
+};
+
+
+/*
+| Shortcut for creating calls
+*/
+var
+Call =
+	function(
+		func
+	)
+{
+	return (
+		Code.Call.create(
+			'func',
+				func
+		)
+	);
 };
 
 
@@ -902,7 +922,7 @@ Generator.prototype.genCreatorFreeStringsParser =
 		);
 
 	loop =
-		loop.Switch( switchExpr );
+		loop.append( switchExpr );
 
 	block =
 		block.For(
@@ -1286,6 +1306,13 @@ Generator.prototype.genCreatorReturn =
 		block // block to append to
 	)
 {
+	block =
+		block.Return(
+			Call(
+				Term( 'Jooo' )
+			)
+		);
+
 	return block;
 };
 
@@ -1487,7 +1514,7 @@ Generator.prototype.genFromJSONCreatorParser =
 			'name',
 			Term( 'json' ),
 			Block( )
-			.Switch(
+			.append(
 				switchExpr
 			)
 		);
@@ -1618,6 +1645,7 @@ Generator.prototype.genCapsule =
 			capsule
 		);
 
+/*TODO
 	if( this.hasJSON )
 	{
 		capsule =
@@ -1625,6 +1653,7 @@ Generator.prototype.genCapsule =
 				capsule
 			);
 	}
+*/
 
 	return capsule;
 };

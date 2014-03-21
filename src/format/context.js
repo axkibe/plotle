@@ -96,6 +96,13 @@ Jools.lazyValue(
 			tab =
 				'';
 
+		if( this.inline )
+		{
+			throw new Error(
+				'inline context has not tab'
+			);
+		}
+
 		if( this.check )
 		{
 			indent--;

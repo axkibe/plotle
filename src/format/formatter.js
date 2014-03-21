@@ -46,8 +46,6 @@ formatAssign =
 		text;
 
 	text =
-		context.tab
-		+
 		formatTerm(
 			context,
 			assign.left
@@ -187,7 +185,7 @@ formatBlock =
 	)
 	{
 		text +=
-			formatEntry(
+			formatStatement(
 				blockContext,
 				block.atRank( a ),
 				a > 0 ?
@@ -233,7 +231,7 @@ formatIf =
 				'if( '
 				+
 				formatTerm(
-					context,
+					context.setInline,
 					cond
 				)
 				+
@@ -253,8 +251,6 @@ formatIf =
 			)
 			{
 				text +=
-					context.increment.tab
-					+
 					formatTerm(
 						context.increment,
 						cond.atRank( a )
@@ -295,7 +291,7 @@ formatFor =
 {
 	var
 		forContext =
-			context.increment.setInline,
+			context.increment,
 		text;
 
 	text =
@@ -303,19 +299,19 @@ formatFor =
 		'for(\n' +
 		forContext.tab +
 		formatExpression(
-			forContext,
+			forContext.setInline,
 			forExpr.init
 		) +
 		';\n' +
 		forContext.tab +
 		formatExpression(
-			forContext,
+			forContext.setInline,
 			forExpr.condition
 		) +
 		';\n' +
 		forContext.tab +
 		formatExpression(
-			forContext,
+			forContext.setInline,
 			forExpr.iterate
 		) +
 		'\n' +
@@ -354,7 +350,7 @@ formatForIn =
 		' in '
 		+
 		formatTerm(
-			context.inline,
+			context.setInline,
 			expr.object
 		)
 		+
@@ -388,8 +384,8 @@ formatReturn =
 		+
 		'return '
 		+
-		formatTerm(
-			context.inline,
+		formatExpression(
+			context.setInline,
 			expr.expr
 		);
 
@@ -419,7 +415,7 @@ formatSwitch =
 		'switch( '
 		+
 		formatTerm(
-			context.inline,
+			context.setInline,
 			switchExpr.statement
 		)
 		+
@@ -454,7 +450,7 @@ formatSwitch =
 				'case '
 				+
 				formatTerm(
-					caseContext.inline,
+					caseContext.setInline,
 					caseExpr.atRank( b )
 				)
 				+
@@ -562,17 +558,15 @@ formatFunc =
 
 
 /*
-| Formats an entry.
-|
-| An entry is an expression on its own.
+| Formats a statement.
 */
 var
-formatEntry =
+formatStatement =
 	function(
 		context,    // the indent in the text
-		entry,      // the entry to be formated
-		lookBehind, // the previous entry (or null)
-		lookAhead   // the next entry (or null)
+		statement,  // the statement to be formated
+		lookBehind, // the previous statement (or null)
+		lookAhead   // the next statement (or null)
 	)
 {
 	var
@@ -587,7 +581,7 @@ formatEntry =
 		!(
 			lookBehind.reflect === 'VarDec'
 			&&
-			entry.reflect === 'VarDec'
+			statement.reflect === 'VarDec'
 		)
 	)
 	{
@@ -607,25 +601,90 @@ formatEntry =
 		}
 	}
 
-	if( entry.reflect === 'Comment' )
+	if( statement.reflect === 'Comment' )
 	{
 		text +=
 			formatComment(
 				context,
-				entry
+				statement
 			);
 
 		return text;
 	}
 
-	text +=
-		formatExpression(
-			context,
-			entry,
-			lookBehind
-		);
+	switch( statement.reflect )
+	{
+		case 'Check' :
 
-	switch( entry.reflect )
+			text +=
+				formatCheck(
+					context,
+					statement
+				);
+
+			break;
+
+		case 'If' :
+
+			text +=
+				formatIf(
+					context,
+					statement
+				);
+
+			break;
+		
+		case 'For' :
+
+			text +=
+				formatFor(
+					context,
+					statement
+				);
+
+			break;
+
+		case 'ForIn' :
+
+			text +=
+				formatForIn(
+					context,
+					statement
+			);
+
+			break;
+		
+		case 'VarDec' :
+
+			text +=
+				formatVarDec(
+					context,
+					statement,
+					lookBehind
+				);
+
+			break;
+
+		case 'Switch' :
+			
+			text +=
+				formatSwitch(
+					context,
+					statement
+				);
+
+			break;
+
+		default :
+
+			text +=
+				formatExpression(
+					context,
+					statement
+				);
+	}
+
+	switch( statement.reflect )
 	{
 		case 'VarDec' :
 
@@ -661,7 +720,7 @@ formatEntry =
 
 		default :
 
-			throw new Error( entry.reflect );
+			throw new Error( statement.reflect );
 	}
 };
 
@@ -673,8 +732,7 @@ var
 formatExpression =
 	function(
 		context,
-		expr,
-		lookBehind
+		expr
 	)
 {
 	switch( expr.reflect )
@@ -683,25 +741,13 @@ formatExpression =
 
 			return formatAssign( context, expr );
 
-		case 'Check' :
+		case 'Call' :
 
-			return formatCheck( context, expr );
-
-		case 'If' :
-
-			return formatIf( context, expr );
+			return formatCall( context, expr );
 
 		case 'Fail' :
 
 			return formatFail( context, expr );
-
-		case 'For' :
-
-			return formatFor( context, expr );
-
-		case 'ForIn' :
-
-			return formatForIn( context, expr );
 
 		case 'Func' :
 
@@ -711,21 +757,9 @@ formatExpression =
 
 			return formatReturn( context, expr );
 
-		case 'Switch' :
-
-			return formatSwitch( context, expr );
-
 		case 'Term' :
 
-			return (
-				( !context.inline ? context.tab : '' )
-				+
-				formatTerm( context, expr )
-			);
-
-		case 'VarDec' :
-
-			return formatVarDec( context, expr, lookBehind );
+			return formatTerm( context, expr );
 
 		case 'VList' :
 
@@ -777,6 +811,50 @@ formatFail =
 
 
 /*
+| Formats a call.
+*/
+var
+formatCall =
+	function(
+		context,
+		call
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( call.reflect !== 'Call' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			context,
+			call.func
+		);
+
+	if( call.ranks.length === 0 )
+	{
+		text +=
+			'( )';
+	}
+	else
+	{
+		text +=
+			'(';
+
+		text +=
+			'...)';
+	}
+	
+	return text;
+};
+
+/*
 | Formats an term.
 */
 var
@@ -786,6 +864,7 @@ formatTerm =
 		term
 	)
 {
+
 /**/if( CHECK )
 /**/{
 /**/	if( term.reflect !== 'Term' )
@@ -793,8 +872,12 @@ formatTerm =
 /**/		throw new Error( );
 /**/	}
 /**/}
-
-	return term.term;
+	
+	return (
+		( !context.inline ? context.tab : '' )
+		+
+		term.term
+	);
 };
 
 
@@ -1009,7 +1092,7 @@ formatCapsule =
 	)
 	{
 		text +=
-			formatEntry(
+			formatStatement(
 				context,
 				capsule.atRank( a ),
 				a > 0 ?

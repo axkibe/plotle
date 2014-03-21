@@ -272,7 +272,7 @@ Block.prototype.Return =
 
 			break;
 
-		case 'Term' :
+		default :
 
 			expr =
 				Code.Return.create(
@@ -281,33 +281,8 @@ Block.prototype.Return =
 				);
 
 			break;
-
-		default :
-
-			throw new Error( );
 	}
 
-	return this.append( expr );
-};
-
-
-/*
-| Returns the block with a term appended.
-*/
-Block.prototype.Switch =
-	function(
-		expr
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'Switch' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-// TODO remove
 	return this.append( expr );
 };
 
