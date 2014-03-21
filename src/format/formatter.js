@@ -373,21 +373,58 @@ var
 formatReturn =
 	function(
 		context,
-		expr
+		statement
 	)
 {
 	var
 		text;
 
+/**/if( CHECK )
+/**/{
+/**/	if( context.inline )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid inline'
+/**/		);
+/**/	}
+/**/}
+
+	try
+	{
+		// first tries to inline the
+		// return expression.
+		text =
+			context.tab
+			+
+			'return '
+			+
+			formatExpression(
+				context.setInline,
+				statement.expr
+			);
+	
+		return text;
+	}
+	catch( e )
+	{
+		if( e !== 'noinline' )
+		{
+			throw e;
+		}
+	}
+
+	// no inline mode
 	text =
-		context.tab
-		+
-		'return '
+		context.tab + 'return (\n'
 		+
 		formatExpression(
-			context.setInline,
-			expr.expr
-		);
+			context.increment,
+			statement.expr
+		)
+		+
+		'\n'
+		+
+		context.tab + ')';
 
 	return text;
 };
@@ -832,6 +869,15 @@ formatCall =
 /**/	}
 /**/}
 
+	if(
+		context.inline
+		&&
+		call.ranks.length > 1
+	)
+	{
+		throw 'noinline';
+	}
+
 	text =
 		formatExpression(
 			context,
@@ -846,7 +892,10 @@ formatCall =
 	else
 	{
 		text +=
-			'( ';
+			context.inline ?
+				'( '
+				:
+				'(\n';
 
 		for(
 			var a = 0, aZ = call.ranks.length;
@@ -859,19 +908,34 @@ formatCall =
 
 			text +=
 				formatExpression(
-					context,
+					context.increment,
 					arg
 				);
 
 			if( a + 1 < aZ )
 			{
 				text +=
-					', ';
+					context.inline ?
+						', '
+						:
+						',\n';
+			}
+			else
+			{
+				text +=
+					context.inline ?
+						' '
+						:
+						'\n';
+
 			}
 		}
 
 		text +=
-			' )';
+			context.inline ?
+				')'
+				:
+				context.tab + ')'
 	}
 	
 	return text;

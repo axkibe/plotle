@@ -1635,7 +1635,6 @@ Generator.prototype.genCapsule =
 			capsule
 		);
 
-/*TODO
 	if( this.hasJSON )
 	{
 		capsule =
@@ -1643,7 +1642,6 @@ Generator.prototype.genCapsule =
 				capsule
 			);
 	}
-*/
 
 	return capsule;
 };
