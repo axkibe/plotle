@@ -255,6 +255,7 @@ Generator.prototype._init =
 	function( )
 {
 	var
+		assign,
 		attr,
 		attributes =
 			{ },
@@ -291,6 +292,12 @@ Generator.prototype._init =
 				true;
 		}
 
+		assign =
+			jAttr.assign !== undefined ?
+				jAttr.assign
+				:
+				name;
+
 		attr =
 		attributes[ name ] =
 			Object.freeze( {
@@ -303,12 +310,17 @@ Generator.prototype._init =
 					||
 					jAttr.defaultValue === 'undefined',
 				assign :
-					jAttr.assign !== undefined ?
-						jAttr.assign
-						:
-						name,
+					assign,
 				comment :
 					jAttr.comment,
+				inConstructor :
+					assign !== null
+					||
+					(
+						this.init
+						&&
+						this.init.indexOf( name ) >= 0
+					),
 				json :
 					jAttr.json,
 				name :
@@ -685,15 +697,7 @@ Generator.prototype.genConstructor =
 		attr =
 			this.attributes[ name ];
 
-		if(
-			attr.assign === null
-			&&
-			!(
-				this.init
-				&&
-				this.init.indexOf( name ) >= 0
-			)
-		)
+		if( !attr.inConstructor )
 		{
 			continue;
 		}
@@ -1270,28 +1274,36 @@ Generator.prototype.genCreatorReturn =
 	)
 {
 	var
-		call =
-			Call(
-				Term( this.reference )
-			)
-			.append(
-				Term( '' + this.tag )
-			);
+		attr,
+		call,
+		name;
 
-	/*
+	call =
+		Call(
+			Term( this.reference )
+		)
+		.append(
+			Term( '' + this.tag )
+		);
+
 	for(
-		var a = 1, aZ = this.constructArgs.length;
+		var a = 0, aZ = this.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+			
 		call =
 			call
 			.append(
-				Term( '' + this.constructArgs[ a ].vName )
+				Term( attr.vName )
 			);
 	}
-	*/
 
 	return block.Return( call );
 };
