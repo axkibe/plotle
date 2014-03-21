@@ -332,6 +332,45 @@ formatFor =
 
 
 /*
+| Formats a for-in loop.
+*/
+var
+formatForIn =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+	text =
+		context.tab
+		+
+		'for( var '
+		+
+		expr.variable
+		+
+		' in '
+		+
+		formatTerm(
+			context.inline,
+			expr.object
+		)
+		+
+		' )\n'
+		+
+		formatBlock(
+			context,
+			expr.block
+		);
+
+	return text;
+};
+
+
+
+/*
 | Formats a return statement.
 */
 var
@@ -614,6 +653,7 @@ formatEntry =
 
 		case 'Check' :
 		case 'For' :
+		case 'ForIn' :
 		case 'If' :
 		case 'Switch' :
 
@@ -641,106 +681,55 @@ formatExpression =
 	{
 		case 'Assign' :
 
-			return (
-				formatAssign(
-					context,
-					expr
-				)
-			);
+			return formatAssign( context, expr );
 
 		case 'Check' :
 
-			return (
-				formatCheck(
-					context,
-					expr
-				)
-			);
+			return formatCheck( context, expr );
 
 		case 'If' :
 
-			return (
-				formatIf(
-					context,
-					expr
-				)
-			);
+			return formatIf( context, expr );
 
 		case 'Fail' :
 
-			return (
-				formatFail(
-					context,
-					expr
-				)
-			);
+			return formatFail( context, expr );
 
 		case 'For' :
 
-			return (
-				formatFor(
-					context,
-					expr
-				)
-			);
+			return formatFor( context, expr );
+
+		case 'ForIn' :
+
+			return formatForIn( context, expr );
 
 		case 'Func' :
 
-			return (
-				formatFunc(
-					context,
-					expr
-				)
-			);
+			return formatFunc( context, expr );
 
 		case 'Return' :
 
-			return (
-				formatReturn(
-					context,
-					expr
-				)
-			);
+			return formatReturn( context, expr );
 
 		case 'Switch' :
 
-			return (
-				formatSwitch(
-					context,
-					expr
-				)
-			);
+			return formatSwitch( context, expr );
 
 		case 'Term' :
 
 			return (
 				( !context.inline ? context.tab : '' )
 				+
-				formatTerm(
-					context,
-					expr
-				)
+				formatTerm( context, expr )
 			);
 
 		case 'VarDec' :
 
-			return (
-				formatVarDec(
-					context,
-					expr,
-					lookBehind
-				)
-			);
+			return formatVarDec( context, expr, lookBehind );
 
 		case 'VList' :
 
-			return (
-				formatVList(
-					context,
-					expr
-				)
-			);
-
+			return formatVList( context, expr );
 
 		default :
 

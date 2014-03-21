@@ -67,6 +67,8 @@ var
 				require( './fail' ),
 			For :
 				require( './for' ),
+			ForIn :
+				require( './for-in' ),
 			If :
 				require( './if' ),
 			Return :
@@ -79,6 +81,22 @@ var
 	Jools =
 		require( '../jools/jools' );
 
+/*
+| Returns the block with a statement appended;
+*/
+Block.prototype.append =
+	function(
+		statement
+	)
+{
+	return (
+		this.create(
+			'twig:add',
+			Jools.uid( ), // FIXME
+			statement
+		)
+	);
+};
 
 /*
 | Returns the block with an assignment appended.
@@ -98,13 +116,7 @@ Block.prototype.Assign =
 					right
 			);
 
-	return (
-		this.create(
-			'twig:add',
-			Jools.uid( ), // FIXME
-			assign
-		)
-	);
+	return this.append( assign );
 };
 
 
@@ -117,9 +129,7 @@ Block.prototype.Check =
 	)
 {
 	return (
-		this.create(
-			'twig:add',
-			Jools.uid( ), // FIXME
+		this.append(
 			Code.Check.create(
 				'block',
 					block
@@ -147,13 +157,7 @@ Block.prototype.Comment =
 			);
 	}
 
-	return (
-		this.create(
-			'twig:add',
-			Jools.uid( ), // FIXME
-			header
-		)
-	);
+	return this.append( header );
 };
 
 
@@ -168,7 +172,7 @@ Block.prototype.If =
 	)
 {
 	var
-		entry =
+		statement =
 			Code.If.create(
 				'condition',
 					condition,
@@ -178,13 +182,7 @@ Block.prototype.If =
 					elsewise || null
 			);
 
-	return (
-		this.create(
-			'twig:add',
-			Jools.uid( ), // FIXME
-			entry
-		)
-	);
+	return this.append( statement );
 };
 
 
@@ -203,13 +201,7 @@ Block.prototype.Fail =
 					message || null
 			);
 
-	return (
-		this.create(
-			'twig:add',
-			Jools.uid( ), // FIXME
-			fail
-		)
-	);
+	return this.append( fail );
 };
 
 
@@ -225,7 +217,7 @@ Block.prototype.For =
 	)
 {
 	var
-		entry =
+		statement =
 			Code.For.create(
 				'init',
 					init,
@@ -237,13 +229,32 @@ Block.prototype.For =
 					block
 			);
 
-	return (
-		this.create(
-			'twig:add',
-			Jools.uid( ), // FIXME
-			entry
-		)
-	);
+	return this.append( statement );
+};
+
+
+/*
+| Returns the block with a for-in loop appended.
+*/
+Block.prototype.ForIn =
+	function(
+		variable,
+		object,
+		block
+	)
+{
+	var
+		statement =
+			Code.ForIn.create(
+				'variable',
+					variable,
+				'object',
+					object,
+				'block',
+					block
+			);
+
+	return this.append( statement );
 };
 
 
@@ -276,13 +287,7 @@ Block.prototype.Return =
 			throw new Error( );
 	}
 
-	return (
-		this.create(
-			'twig:add',
-			Jools.uid( ), // FIXME
-			expr
-		)
-	);
+	return this.append( expr );
 };
 
 
@@ -302,13 +307,8 @@ Block.prototype.Switch =
 /**/	}
 /**/}
 
-	return (
-		this.create(
-			'twig:add',
-			Jools.uid( ), // FIXME
-			expr
-		)
-	);
+// TODO remove
+	return this.append( expr );
 };
 
 
@@ -329,13 +329,7 @@ Block.prototype.Term =
 			);
 	}
 
-	return (
-		this.create(
-			'twig:add',
-			Jools.uid( ), // FIXME
-			term
-		)
-	);
+	return this.append( term );
 };
 
 
@@ -358,13 +352,7 @@ Block.prototype.VarDec =
 					assign || null
 			);
 
-	return (
-		this.create(
-			'twig:add',
-			Jools.uid( ), // FIXME
-			varDec
-		)
-	);
+	return this.append( varDec );
 };
 
 

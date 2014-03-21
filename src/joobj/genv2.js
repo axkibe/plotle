@@ -332,6 +332,8 @@ Generator.prototype._init =
 					name,
 				type :
 					jAttr.type,
+				unit :
+					jAttr.unit,
 				vName :
 					'v_' + name
 			} );
@@ -414,8 +416,6 @@ buildJD =
 		conVars =
 			{ },
 		name,
-		jsonList =
-			[ ],
 		// units sorted alphabetically
 		unitList =
 			null,
@@ -442,8 +442,6 @@ buildJD =
 							attr.json,
 						name :
 							name,
-						unit :
-							attr.unit,
 						vName :
 							'v_' + name
 					}
@@ -845,7 +843,7 @@ Generator.prototype.genCreatorInheritanceReceiver =
 /*
 | Generates the creators free strings parser.
 */
-Generator.prototype.genCreatorFreeStrings =
+Generator.prototype.genCreatorFreeStringsParser =
 	function(
 		block // block to append to
 	)
@@ -915,6 +913,57 @@ Generator.prototype.genCreatorFreeStrings =
 			Term( 'a += 2' ),
 			loop
 		);
+
+	return block;
+};
+
+
+/*
+| Generates the creators default values
+*/
+Generator.prototype.genCreatorDefaults =
+	function(
+		block,   // block to append to
+		json     // only do jsons
+	)
+{
+	var
+		a,
+		aZ,
+		attr,
+		name;
+
+	for(
+		a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		if( json && !attr.json )
+		{
+			continue;
+		}
+
+		if( attr.defaultValue )
+		{
+			block =
+				block
+				.If(
+					Term( attr.vName + ' === undefined' ),
+					Block( )
+					.Assign(
+						Term( attr.vName ),
+						Term( attr.defaultValue )
+					)
+				);
+		}
+	}
 
 	return block;
 };
@@ -1229,6 +1278,17 @@ Generator.prototype.genCreatorUnchanged =
 };
 
 
+/*
+| Generates the creators return statement
+*/
+Generator.prototype.genCreatorReturn =
+	function(
+		block // block to append to
+	)
+{
+	return block;
+};
+
 
 /*
 | Generates the creator.
@@ -1256,13 +1316,19 @@ Generator.prototype.genCreator =
 		this.genCreatorInheritanceReceiver( block );
 
 	block =
-		this.genCreatorFreeStrings( block );
+		this.genCreatorFreeStringsParser( block );
+
+	block =
+		this.genCreatorDefaults( block, false );
 
 	block =
 		this.genCreatorChecks( block );
 
 	block =
 		this.genCreatorUnchanged( block );
+
+	block =
+		this.genCreatorReturn( block );
 
 	capsule =
 		capsule
@@ -1282,6 +1348,244 @@ Generator.prototype.genCreator =
 	return capsule;
 };
 
+
+/*
+| Generates the from JSON creators variable list.
+*/
+Generator.prototype.genFromJSONCreatorVariables =
+	function(
+		block // block to append to
+	)
+{
+	var
+		a,
+		aZ,
+		name,
+		varList =
+			[ ];
+
+	for( name in this.attributes )
+	{
+		varList.push( this.attributes[ name ].vName );
+	}
+
+	varList.push( 'arg' );
+
+	varList.sort( );
+
+	for(
+		a = 0, aZ = varList.length;
+		a < aZ;
+		a++
+	)
+	{
+		block =
+			block.VarDec( varList[ a ] );
+	}
+
+	return block;
+};
+
+/*
+| Generates the from JSON creators JSON parser.
+*/
+Generator.prototype.genFromJSONCreatorParser =
+	function(
+		block,   // block to append
+		jsonList
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		attr,
+		// block built for cases
+		caseBlock,
+		name,
+		// the switch
+		switchExpr;
+
+	switchExpr =
+		Switch(
+			Term( 'name' )
+		)
+		.Case(
+			Term( '\'type\'' ),
+			Block( )
+			.If(
+				Term( 'arg !== \'' + this.name + '\'' ),
+				Block( )
+				.Fail( 'invalid JSON ' )
+			)
+		);
+
+	for(
+		a = 0, aZ = jsonList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			jsonList[ a ];
+
+		if( name === 'twig' || name === 'ranks' )
+		{
+			throw new Error( 'TODO' );
+		}
+
+		attr =
+			this.attributes[ name ];
+
+		switch( attr.type )
+		{
+			case 'Boolean' :
+			case 'Integer' :
+			case 'Number' :
+			case 'String' :
+
+				arg =
+					Term( 'arg' );
+
+				break;
+
+			default :
+
+				arg =
+					Term(
+						(
+							attr.unit ?
+							( attr.unit + '.' )
+							:
+							''
+						)
+						+
+						attr.type
+						+
+						'.createFromJSON( arg )'
+					);
+		}
+
+		caseBlock =
+			Block( )
+			.Assign(
+				Term( attr.vName ),
+				arg
+			);
+
+		switchExpr =
+			switchExpr
+			.Case(
+				Term( '\'' + name + '\'' ),
+				caseBlock
+			);
+	}
+
+	block =
+		block
+		.ForIn(
+			'name',
+			Term( 'json' ),
+			Block( )
+			.Switch(
+				switchExpr
+			)
+		);
+
+	return block;
+};
+
+
+/*
+| Generates the from JSON creator.
+*/
+Generator.prototype.genFromJSONCreator =
+	function(
+		capsule // block to append to
+	)
+{
+	var
+		a,
+		aZ,
+		attr,
+		// function contents
+		funcBlock,
+		// all attributes expected from JSON
+		name,
+		jsonList =
+			[ ];
+
+	//generateChecks( r, jj, true );
+
+	for(
+		a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		if( attr.json )
+		{
+			jsonList.push( name );
+		}
+	}
+
+	if( this.twig )
+	{
+		jsonList.push( 'twig', 'ranks' );
+	}
+
+	jsonList.sort( );
+
+	capsule =
+		capsule.Comment(
+			'Creates a new ' + this.name + ' object from JSON.'
+		);
+
+	funcBlock =
+		this.genFromJSONCreatorVariables(
+			Block( )
+		);
+
+	// TODO remove
+	funcBlock =
+		funcBlock
+		.If(
+			Term( 'json._$grown' ),
+			Block( )
+			.Return(
+				Term( 'json' )
+			)
+		);
+
+	funcBlock =
+		this.genFromJSONCreatorParser( funcBlock, jsonList );
+
+	funcBlock =
+		this.genCreatorDefaults( funcBlock, true );
+
+	funcBlock =
+		this.genCreatorChecks( funcBlock );
+
+	capsule =
+		capsule
+		.Assign(
+			Term( this.reference + '.createFromJSON' ),
+			Func(
+				[
+					FuncArg( 'json', 'the JSON object' )
+				],
+				funcBlock
+			)
+		);
+
+	return capsule;
+};
 
 
 /*
@@ -1313,6 +1617,14 @@ Generator.prototype.genCapsule =
 		this.genCreator(
 			capsule
 		);
+
+	if( this.hasJSON )
+	{
+		capsule =
+			this.genFromJSONCreator(
+				capsule
+			);
+	}
 
 	return capsule;
 };
