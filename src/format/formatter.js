@@ -43,9 +43,10 @@ formatAssign =
 	)
 {
 	var
-		text;
+		text =
+			'';
 
-	text =
+	text +=
 		formatTerm(
 			context,
 			assign.left
@@ -57,6 +58,12 @@ formatAssign =
 	{
 		context =
 			context.increment;
+	}
+
+	if( !context.inline )
+	{
+		text +=
+			context.tab;
 	}
 
 	text +=
@@ -251,6 +258,12 @@ formatIf =
 			)
 			{
 				text +=
+					(
+						context.inline ?
+						'' :
+						context.increment.tab
+					)
+					+
 					formatTerm(
 						context.increment,
 						cond.atRank( a )
@@ -670,7 +683,7 @@ formatStatement =
 				);
 
 			break;
-		
+
 		case 'For' :
 
 			text +=
@@ -690,7 +703,17 @@ formatStatement =
 			);
 
 			break;
-		
+
+		case 'Return' :
+
+			text +=
+				formatReturn(
+					context,
+					statement
+				);
+
+			break;
+
 		case 'VarDec' :
 
 			text +=
@@ -703,7 +726,7 @@ formatStatement =
 			break;
 
 		case 'Switch' :
-			
+
 			text +=
 				formatSwitch(
 					context,
@@ -713,6 +736,9 @@ formatStatement =
 			break;
 
 		default :
+
+			text +=
+				context.tab;
 
 			text +=
 				formatExpression(
@@ -790,9 +816,9 @@ formatExpression =
 
 			return formatFunc( context, expr );
 
-		case 'Return' :
+		case 'New' :
 
-			return formatReturn( context, expr );
+			return formatNew( context, expr );
 
 		case 'Term' :
 
@@ -830,13 +856,13 @@ formatFail =
 	if( fail.message === null )
 	{
 		return (
-			context.tab + 'throw new Error( )'
+			'throw new Error( )'
 		);
 	}
 	else
 	{
 		return (
-			context.tab + 'throw new Error(\n'
+			'throw new Error(\n'
 			+
 			context.increment.tab + '\'' + fail.message + '\'\n'
 			+
@@ -844,7 +870,6 @@ formatFail =
 		);
 	}
 };
-
 
 
 /*
@@ -906,6 +931,12 @@ formatCall =
 			arg =
 				call.atRank( a );
 
+			if( !context.inline )
+			{
+				text +=
+					context.increment.tab;
+			}
+
 			text +=
 				formatExpression(
 					context.increment,
@@ -935,9 +966,50 @@ formatCall =
 			context.inline ?
 				')'
 				:
-				context.tab + ')'
+				context.tab + ')';
 	}
-	
+
+	return text;
+};
+
+
+/*
+| Formats a new statement.
+*/
+var
+formatNew =
+	function(
+		context,
+		newexpr
+	)
+{
+	var
+		text =
+			'';
+
+/**/if( CHECK )
+/**/{
+/**/	if( newexpr.reflect !== 'New' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !context.inline )
+	{
+		text +=
+			context.tab;
+	}
+
+	text +=
+		'new ';
+
+	text +=
+		formatCall(
+			context,
+			newexpr.call
+		);
+
 	return text;
 };
 
@@ -959,12 +1031,8 @@ formatTerm =
 /**/		throw new Error( );
 /**/	}
 /**/}
-	
-	return (
-		( !context.inline ? context.tab : '' )
-		+
-		term.term
-	);
+
+	return term.term;
 };
 
 
@@ -1058,7 +1126,9 @@ formatVarDec =
 		if( !context.inline )
 		{
 			text +=
-				'\n';
+				'\n'
+				+
+				context.tab;
 		}
 		else
 		{

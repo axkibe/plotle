@@ -65,6 +65,8 @@ var
 				require( '../code/func' ),
 			FuncArg :
 				require( '../code/func-arg' ),
+			New :
+				require( '../code/new' ),
 			Switch :
 				require( '../code/switch' ),
 			Term :
@@ -162,6 +164,24 @@ Func =
 			);
 
 	return func;
+};
+
+
+/*
+| Shortcut for creating new calls.
+*/
+var
+New =
+	function(
+		call
+	)
+{
+	return (
+		Code.New.create(
+			'call',
+				call
+		)
+	);
 };
 
 
@@ -264,8 +284,7 @@ Generator.prototype._init =
 		joobj =
 			this.joobj,
 		name;
-			
-			
+
 	this.init =
 		joobj.init;
 
@@ -1297,7 +1316,7 @@ Generator.prototype.genCreatorReturn =
 
 		attr =
 			this.attributes[ name ];
-			
+
 		call =
 			call
 			.append(
@@ -1305,7 +1324,11 @@ Generator.prototype.genCreatorReturn =
 			);
 	}
 
-	return block.Return( call );
+	return (
+		block.Return(
+			New( call )
+		)
+	);
 };
 
 
@@ -1635,6 +1658,7 @@ Generator.prototype.genCapsule =
 			capsule
 		);
 
+/*TODO
 	if( this.hasJSON )
 	{
 		capsule =
@@ -1642,6 +1666,7 @@ Generator.prototype.genCapsule =
 				capsule
 			);
 	}
+*/
 
 	return capsule;
 };
