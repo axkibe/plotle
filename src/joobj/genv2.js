@@ -1671,7 +1671,7 @@ Generator.prototype.genToJSON =
 			olit
 			.add(
 				name,
-				Code.Term( 'this.' + name )
+				Code.Term( 'this.' + attr.assign )
 			);
 	}
 
@@ -1684,7 +1684,16 @@ Generator.prototype.genToJSON =
 			).append(
 				olit
 			)
-		);
+		)
+		.Return(
+			Code.Func(
+				Code
+				.Block( )
+				.Return(
+					Code.Term( 'json' )
+				)
+			)
+		)
 
 	capsule =
 		capsule
@@ -1834,6 +1843,31 @@ Generator.prototype.genEquals =
 };
 
 
+/*
+| Generates the export.
+*/
+Generator.prototype.genExport =
+	function(
+		capsule // block to append to
+	)
+{
+	return (
+		capsule
+		.Comment( 'Node export.' )
+		.If(
+			Code.Term( 'SERVER' ),
+			Code
+			.Block( )
+			.Assign(
+				Code.Term( 'module.exports' ),
+				Code.Term( this.reference )
+			)
+		)
+	)
+};
+
+
+
 
 /*
 | Returns generator with the capsule generated.
@@ -1880,6 +1914,9 @@ Generator.prototype.genCapsule =
 	capsule =
 		this.genEquals( capsule );
 
+	capsule =
+		this.genExport( capsule );
+
 	return capsule;
 };
 
@@ -1920,7 +1957,7 @@ Generator.generate =
 
 
 /*
-| Node export
+| Node export.
 */
 if( SERVER )
 {

@@ -59,27 +59,19 @@ formatAnd =
 	}
 
 	text =
-		context.tab
-		+
-		'(\n'
-		+
 		formatExpression(
-			context.Inc,
+			context,
 			expr.left
 		)
 		+
 		'\n'
 		+
-		context.Inc.tab + '&&\n'
+		context.tab + '&&\n'
 		+
 		formatExpression(
-			context.Inc,
+			context,
 			expr.right
-		)
-		+
-		'\n'
-		+
-		context.tab + ')';
+		);
 
 	return text;
 };
@@ -217,11 +209,19 @@ formatBlock =
 		blockContext,
 		text =
 			'';
+	if(
+		context.inline 
+		&&
+		block.ranks.length > 1
+	)
+	{
+		throw 'noinline';
+	}
 
 	if( !noBrackets )
 	{
 		text =
-			context.tab + '{\n';
+			context.tab + '{' + context.sep;
 
 		blockContext =
 			context.Inc;
@@ -439,13 +439,18 @@ formatReturn =
 	var
 		text;
 
-/**/if( CHECK )
-/**/{
-/**/	if( context.inline )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
+	if( context.inline )
+	{
+		text =
+			'return '
+			+
+			formatExpression(
+				context,
+				statement.expr
+			);
+
+		return text;
+	}
 
 	try
 	{
@@ -611,12 +616,12 @@ formatFunc =
 	if( func.ranks.length == 0 )
 	{
 		text +=
-			'function( )\n';
+			'function( )' + context.sep;
 	}
 	else
 	{
 		text +=
-			'function(\n';
+			'function(' + context.sep;
 
 		for(
 			var a = 0, aZ = func.ranks.length;
@@ -651,9 +656,7 @@ formatFunc =
 		}
 	
 		text +=
-			context.tab
-			+
-			')\n';
+			context.tab + ')' + context.sep;
 	}
 
 	// In VarDecs function bodies are decremented.
@@ -835,7 +838,7 @@ formatStatement =
 		case 'Return' :
 		case 'Term' :
 
-			return text += ';\n';
+			return text += ';' + context.sep;
 
 		case 'Check' :
 		case 'For' :
@@ -843,7 +846,7 @@ formatStatement =
 		case 'If' :
 		case 'Switch' :
 
-			return text += '\n';
+			return text += context.sep;
 
 		default :
 

@@ -68,8 +68,8 @@ if( JOOBJ )
 */
 var
 	_tab =
-		'    '; // FIXME
-//		'\t';
+//		'    '; // FIXME
+		'\t';
 
 
 /*
@@ -80,6 +80,19 @@ var
 		require( '../joobj/this' )( module ),
 	Jools =
 		require( '../jools/jools' );
+
+
+/*
+| Seperator is a space when inline otherwise a newline.
+*/
+Jools.lazyValue(
+	Context.prototype,
+	'sep',
+	function( )
+	{
+		return this.inline ? ' ' : '\n';
+	}
+);
 
 
 /*
