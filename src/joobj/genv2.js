@@ -41,207 +41,16 @@ if( JOOBJ )
 
 
 var
-	Code =
-		{
-			Assign :
-				require( '../code/assign' ),
-			Block :
-				require( '../code/block' ),
-			Call :
-				require( '../code/call' ),
-			Check :
-				require( '../code/check' ),
-			Comment :
-				require( '../code/comment' ),
-			If :
-				require( '../code/if' ),
-			Fail :
-				require( '../code/fail' ),
-			File :
-				require( '../code/file' ),
-			Func :
-				require( '../code/func' ),
-			FuncArg :
-				require( '../code/func-arg' ),
-			New :
-				require( '../code/new' ),
-			ObjLiteral :
-				require( '../code/obj-literal' ),
-			Switch :
-				require( '../code/switch' ),
-			Term :
-				require( '../code/term' ),
-			TList :
-				require( '../code/tlist' ),
-			VarDec :
-				require( '../code/var-dec' ),
-			VList :
-				require( '../code/vlist' )
-		},
 	Generator =
 		require( '../joobj/this' )( module ),
-//	Jools =
-//		require( '../jools/jools' ),
+	Code =
+		require( '../code/shorthand' ),
 	Validator =
 		require( './validator' );
 
-
-/*
-| Shortcut for creating assignments.
-*/
-var
-Assign =
-	function(
-		left,
-		right
-	)
-{
-	return (
-		Code.Assign.create(
-			'left',
-				left,
-			'right',
-				right
-		)
-	);
-};
-
-
-/*
-| Shortcut for creating blocks.
-*/
-var
-Block =
-	function( )
-{
-	return Code.Block.create( );
-};
-
-
-/*
-| Shortcut for creating calls
-*/
-var
-Call =
-	function(
-		func
-	)
-{
-	return (
-		Code.Call.create(
-			'func',
-				func
-		)
-	);
-};
-
-
-/*
-| Shortcut for creating files.
-*/
-var
-File =
-	function( )
-{
-	return Code.File.create( );
-};
-
-
-/*
-| Shortcut for creating functions.
-*/
-var
-Func =
-	function(
-		block
-	)
-{
-	var
-		func =
-			Code.Func.create(
-				'block',
-					block || null
-			);
-
-	return func;
-};
-
-
-/*
-| Shortcut for creating new calls.
-*/
-var
-New =
-	function(
-		call
-	)
-{
-	return (
-		Code.New.create(
-			'call',
-				call
-		)
-	);
-};
-
-
-/*
-| Shortcut for creating new object literals.
-*/
-var
-ObjLiteral =
-	function( )
-{
-	return Code.ObjLiteral.create( );
-};
-
-
-/*
-| Shortcut for creating switch statements.
-*/
-var
-Switch =
-	function(
-		statement
-	)
-{
-	return (
-		Code.Switch.create(
-			'statement',
-				statement
-		)
-	);
-};
-
-
-/*
-| Shortcut for creating terms.
-*/
-var
-Term =
-	function(
-		term
-	)
-{
-	return (
-		Code.Term.create(
-			'term',
-				term
-		)
-	);
-};
-
-
-/*
-| Shortcut for creating term lists.
-*/
-var
-TList =
-	function( )
-{
-	return Code.TList.create( );
-};
-
+// FIXME remove
+//	Jools =
+//		require( '../jools/jools' ),
 
 
 /*
@@ -265,18 +74,6 @@ VarDec =
 	);
 };
 */
-
-
-/*
-| Shortcut for creating vlists.
-*/
-var
-VList =
-	function( )
-{
-	return Code.VList.create( );
-};
-
 
 
 /*
@@ -643,19 +440,20 @@ Generator.prototype.genNodeIncludesSection =
 		);
 
 	block =
-		Block( )
+		Code
+		.Block( )
 		.Assign(
-			Term( 'JoobjProto' ),
-			Term( 'require( \'../src/joobj/proto\' )' )
+			Code.Term( 'JoobjProto' ),
+			Code.Term( 'require( \'../src/joobj/proto\' )' )
 		)
 		.Assign(
-			Term( 'Jools' ),
-			Term( 'require( \'../src/jools/jools\' )' )
+			Code.Term( 'Jools' ),
+			Code.Term( 'require( \'../src/jools/jools\' )' )
 		);
 
 	capsule =
 		capsule.If(
-			Term( 'SERVER' ),
+			Code.Term( 'SERVER' ),
 			block
 		);
 
@@ -685,13 +483,16 @@ Generator.prototype.genConstructor =
 		);
 
 	block =
-		Block( )
+		Code
+		.Block( )
 		.Check(
-			Block( ).
+			Code
+			.Block( ).
 			If(
-				Term( 'tag !== ' + this.tag ),
-				Block( )
-					.Fail( )
+				Code.Term( 'tag !== ' + this.tag ),
+				Code
+				.Block( )
+				.Fail( )
 			)
 		);
 
@@ -713,8 +514,8 @@ Generator.prototype.genConstructor =
 
 		block =
 			block.Assign(
-				Term( 'this.' + attr.assign ),
-				Term( attr.vName )
+				Code.Term( 'this.' + attr.assign ),
+				Code.Term( attr.vName )
 			);
 	}
 
@@ -724,7 +525,7 @@ Generator.prototype.genConstructor =
 		);
 
 	constructor =
-		Func( block );
+		Code.Func( block );
 
 	for(
 		a = 0, aZ = this.constructorList.length;
@@ -765,8 +566,9 @@ Generator.prototype.genConstructor =
 		capsule =
 			capsule.VarDec(
 				this.reference,
-				Assign(
-					Term(
+				Code
+				.Assign(
+					Code.Term(
 						this.unit + '.' + this.name
 					),
 					constructor
@@ -833,10 +635,11 @@ Generator.prototype.genCreatorInheritanceReceiver =
 		attr,
 		name,
 		receiver =
-			Block( )
+			Code
+			.Block( )
 			.Assign(
-				Term( 'inherit' ),
-				Term( 'this' )
+				Code.Term( 'inherit' ),
+				Code.Term( 'this' )
 			);
 
 	if( this.twig )
@@ -863,14 +666,14 @@ Generator.prototype.genCreatorInheritanceReceiver =
 
 		receiver =
 			receiver.Assign(
-				Term( attr.vName ),
-				Term( 'this.' + attr.assign )
+				Code.Term( attr.vName ),
+				Code.Term( 'this.' + attr.assign )
 			);
 	}
 
 	return (
 		block.If(
-			Term( 'this !== ' + this.reference ),
+			Code.Term( 'this !== ' + this.reference ),
 			receiver
 		)
 	);
@@ -892,14 +695,18 @@ Generator.prototype.genCreatorFreeStringsParser =
 		switchExpr;
 
 	loop =
-		Block( ).
-		VarDec(
+		Code
+		.Block( )
+		.VarDec(
 			'arg',
-			Term( 'arguments[ a + 1 ]' )
+			Code.Term( 'arguments[ a + 1 ]' )
 		);
 
 	switchExpr =
-		Switch( Term( 'arguments[ a ]' ) );
+		Code
+		.Switch(
+			Code.Term( 'arguments[ a ]' )
+		);
 
 	for(
 		var a = 0, aZ = this.attrList.length;
@@ -916,14 +723,16 @@ Generator.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.Case(
-				Term( '\'' + name + '\'' ),
-				Block( )
+				Code.Term( '\'' + name + '\'' ),
+				Code
+				.Block( )
 				.If(
-					Term( 'arg !== undefined' ),
-					Block( )
+					Code.Term( 'arg !== undefined' ),
+					Code
+					.Block( )
 					.Assign(
-						Term( attr.vName ),
-						Term( 'arg' )
+						Code.Term( attr.vName ),
+						Code.Term( 'arg' )
 					)
 				)
 			);
@@ -931,9 +740,11 @@ Generator.prototype.genCreatorFreeStringsParser =
 
 	switchExpr =
 		switchExpr.Default(
-			Block( )
+			Code
+			.Block( )
 			.Check(
-				Block( )
+				Code
+				.Block( )
 				.Fail( 'invalid argument' )
 			)
 		);
@@ -943,11 +754,18 @@ Generator.prototype.genCreatorFreeStringsParser =
 
 	block =
 		block.For(
-			VList( )
-				.VarDec( 'a', Term( '0' ) )
-				.VarDec( 'aZ', Term( 'arguments.length' ) ),
-			Term( 'a < aZ' ),
-			Term( 'a += 2' ),
+			Code
+			.VList( )
+			.VarDec(
+				'a',
+				Code.Term( '0' )
+			)
+			.VarDec(
+				'aZ',
+				Code.Term( 'arguments.length' )
+			),
+			Code.Term( 'a < aZ' ),
+			Code.Term( 'a += 2' ),
 			loop
 		);
 
@@ -992,11 +810,12 @@ Generator.prototype.genCreatorDefaults =
 			block =
 				block
 				.If(
-					Term( attr.vName + ' === undefined' ),
-					Block( )
+					Code.Term( attr.vName + ' === undefined' ),
+					Code
+					.Block( )
 					.Assign(
-						Term( attr.vName ),
-						Term( attr.defaultValue )
+						Code.Term( attr.vName ),
+						Code.Term( attr.defaultValue )
 					)
 				);
 		}
@@ -1024,7 +843,8 @@ Generator.prototype.genCreatorChecks =
 		tfail;
 
 	check =
-		Block( );
+		Code
+		.Block( );
 
 	for(
 		var a = 0, aZ = this.attrList.length;
@@ -1042,8 +862,9 @@ Generator.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Term( attr.vName + ' === undefined' ),
-					Block( )
+					Code.Term( attr.vName + ' === undefined' ),
+					Code
+					.Block( )
 					.Fail( 'undefined attribute ' + name )
 				);
 		}
@@ -1052,8 +873,9 @@ Generator.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Term( attr.vName + ' === null' ),
-					Block( )
+					Code.Term( attr.vName + ' === null' ),
+					Code
+					.Block( )
 					.Fail( 'attribute ' + name + ' must not be null.' )
 				);
 		}
@@ -1084,18 +906,18 @@ Generator.prototype.genCreatorChecks =
 			if( attr.allowsNull && !attr.allowsUndefined )
 			{
 				cond =
-					Term( attr.vName + ' !== null' );
+					Code.Term( attr.vName + ' !== null' );
 			}
 			else if( !attr.allowsNull && attr.allowsUndefined )
 			{
 				cond =
-					Term( attr.vName + ' !== undefined' );
+					Code.Term( attr.vName + ' !== undefined' );
 			}
 			else if( attr.allowsNull && attr.allowsUndefine )
 			{
 				// FUTURE multilined
 				cond =
-					Term(
+					Code.Term(
 						attr.vName + ' !== null' +
 						' && ' +
 						attr.vName + ' !== undefined'
@@ -1113,7 +935,7 @@ Generator.prototype.genCreatorChecks =
 			case 'Boolean' :
 
 				tcheck =
-					Term(
+					Code.Term(
 						'typeof( ' + attr.vName + ' ) !== \'boolean\''
 					);
 
@@ -1122,7 +944,7 @@ Generator.prototype.genCreatorChecks =
 			case 'Integer' :
 
 				tcheck =
-					Term(
+					Code.Term(
 						'typeof( ' + attr.vName  + ' ) !== \'number\'' +
 						' || ' +
 						'Math.floor( ' + attr.vName + ' ) !== ' + attr.vNae
@@ -1133,7 +955,7 @@ Generator.prototype.genCreatorChecks =
 			case 'Number' :
 
 				tcheck =
-					Term(
+					Code.Term(
 						'typeof( ' + attr.vName  + ' ) !== \'number\''
 					);
 
@@ -1143,7 +965,7 @@ Generator.prototype.genCreatorChecks =
 			case 'String' :
 
 				tcheck =
-					Term(
+					Code.Term(
 						'typeof( ' + attr.vName  + ' )' + ' !== \'string\'' +
 						' && ' +
 						'!( ' + attr.vName + ' instanceof String )'
@@ -1154,7 +976,7 @@ Generator.prototype.genCreatorChecks =
 			default :
 
 				tcheck =
-					Term(
+					Code.Term(
 						attr.vName + '.reflect !== \'' + attr.type + '\''
 					);
 
@@ -1162,15 +984,19 @@ Generator.prototype.genCreatorChecks =
 		}
 
 		tfail =
-			Block( ).
-			Fail( 'type mismtach' );
+			Code
+			.Block( )
+			.Fail( 'type mismtach' );
 
 		if( cond )
 		{
 			check =
-				check.If(
+				check
+				.If(
 					cond,
-					Block.If(
+					Code
+					.Block
+					.If(
 						tcheck,
 						tfail
 					)
@@ -1214,7 +1040,7 @@ Generator.prototype.genCreatorUnchanged =
 		tList;
 
 	tList =
-		TList( )
+		Code.TList( )
 		.Term( 'inherit' );
 
 
@@ -1307,8 +1133,11 @@ Generator.prototype.genCreatorUnchanged =
 	block =
 		block.If(
 			tList,
-			Block( )
-			.Return( Term( 'inherit' ) )
+			Code
+			.Block( )
+			.Return(
+				Code.Term( 'inherit' )
+			)
 		);
 
 	return block;
@@ -1329,11 +1158,11 @@ Generator.prototype.genCreatorReturn =
 		name;
 
 	call =
-		Call(
-			Term( this.reference )
+		Code.Call(
+			Code.Term( this.reference )
 		)
 		.append(
-			Term( '' + this.tag )
+			Code.Term( '' + this.tag )
 		);
 
 	for(
@@ -1352,7 +1181,7 @@ Generator.prototype.genCreatorReturn =
 				call =
 					call
 					.append(
-						Term( name )
+						Code.Term( name )
 					);
 
 				break;
@@ -1365,14 +1194,14 @@ Generator.prototype.genCreatorReturn =
 				call =
 					call
 					.append(
-						Term( attr.vName )
+						Code.Term( attr.vName )
 					);
 		}
 	}
 
 	return (
 		block.Return(
-			New( call )
+			Code.New( call )
 		)
 	);
 };
@@ -1395,7 +1224,8 @@ Generator.prototype.genCreator =
 		);
 
 	block =
-		Block( );
+		Code
+		.Block( );
 
 	block =
 		this.genCreatorVariables( block );
@@ -1421,10 +1251,10 @@ Generator.prototype.genCreator =
 	capsule =
 		capsule
 		.Assign(
-			Term( this.reference + '.create' ),
-			Assign(
-				Term( this.reference + '.prototype.create' ),
-				Func( block )
+			Code.Term( this.reference + '.create' ),
+			Code.Assign(
+				Code.Term( this.reference + '.prototype.create' ),
+				Code.Func( block )
 				.Arg(
 					null,
 					'free strings'
@@ -1494,15 +1324,17 @@ Generator.prototype.genFromJSONCreatorParser =
 		switchExpr;
 
 	switchExpr =
-		Switch(
-			Term( 'name' )
+		Code.Switch(
+			Code.Term( 'name' )
 		)
 		.Case(
-			Term( '\'type\'' ),
-			Block( )
+			Code.Term( '\'type\'' ),
+			Code
+			.Block( )
 			.If(
-				Term( 'arg !== \'' + this.name + '\'' ),
-				Block( )
+				Code.Term( 'arg !== \'' + this.name + '\'' ),
+				Code
+				.Block( )
 				.Fail( 'invalid JSON ' )
 			)
 		);
@@ -1532,14 +1364,14 @@ Generator.prototype.genFromJSONCreatorParser =
 			case 'String' :
 
 				arg =
-					Term( 'arg' );
+					Code.Term( 'arg' );
 
 				break;
 
 			default :
 
 				arg =
-					Term(
+					Code.Term(
 						(
 							attr.unit ?
 							( attr.unit + '.' )
@@ -1554,16 +1386,17 @@ Generator.prototype.genFromJSONCreatorParser =
 		}
 
 		caseBlock =
-			Block( )
+			Code
+			.Block( )
 			.Assign(
-				Term( attr.vName ),
+				Code.Term( attr.vName ),
 				arg
 			);
 
 		switchExpr =
 			switchExpr
 			.Case(
-				Term( '\'' + name + '\'' ),
+				Code.Term( '\'' + name + '\'' ),
 				caseBlock
 			);
 	}
@@ -1572,8 +1405,9 @@ Generator.prototype.genFromJSONCreatorParser =
 		block
 		.ForIn(
 			'name',
-			Term( 'json' ),
-			Block( )
+			Code.Term( 'json' ),
+			Code
+			.Block( )
 			.append(
 				switchExpr
 			)
@@ -1597,11 +1431,11 @@ Generator.prototype.genFromJSONCreatorReturn =
 		name;
 
 	call =
-		Call(
-			Term( this.reference )
+		Code.Call(
+			Code.Term( this.reference )
 		)
 		.append(
-			Term( '' + this.tag )
+			Code.Term( '' + this.tag )
 		);
 
 	for(
@@ -1620,7 +1454,7 @@ Generator.prototype.genFromJSONCreatorReturn =
 				call =
 					call
 					.append(
-						Term( name )
+						Code.Term( name )
 					);
 
 				break;
@@ -1633,14 +1467,14 @@ Generator.prototype.genFromJSONCreatorReturn =
 				call =
 					call
 					.append(
-						Term( attr.vName )
+						Code.Term( attr.vName )
 					);
 		}
 	}
 
 	return (
 		block.Return(
-			New( call )
+			Code.New( call )
 		)
 	);
 };
@@ -1699,17 +1533,19 @@ Generator.prototype.genFromJSONCreator =
 
 	funcBlock =
 		this.genFromJSONCreatorVariables(
-			Block( )
+			Code
+			.Block( )
 		);
 
 	// TODO remove
 	funcBlock =
 		funcBlock
 		.If(
-			Term( 'json._$grown' ),
-			Block( )
+			Code.Term( 'json._$grown' ),
+			Code
+			.Block( )
 			.Return(
-				Term( 'json' )
+				Code.Term( 'json' )
 			)
 		);
 
@@ -1728,8 +1564,8 @@ Generator.prototype.genFromJSONCreator =
 	capsule =
 		capsule
 		.Assign(
-			Term( this.reference + '.createFromJSON' ),
-			Func( funcBlock )
+			Code.Term( this.reference + '.createFromJSON' ),
+			Code.Func( funcBlock )
 			.Arg(
 				'json',
 				'the JSON object'
@@ -1752,8 +1588,8 @@ Generator.prototype.genReflection =
 		capsule
 		.Comment( 'Reflection.' )
 		.Assign(
-			Term( this.reference + '.prototype.reflect' ),
-			Term( '\'' + this.name + '\'' )
+			Code.Term( this.reference + '.prototype.reflect' ),
+			Code.Term( '\'' + this.name + '\'' )
 		);
 
 	// TODO remove workaround
@@ -1763,8 +1599,8 @@ Generator.prototype.genReflection =
 			capsule
 			.Comment( 'Workaround old meshverse growing.' )
 			.Assign(
-				Term( this.reference + '.prototype._grown' ),
-				Term( 'true' )
+				Code.Term( this.reference + '.prototype._grown' ),
+				Code.Term( 'true' )
 			);
 	}
 
@@ -1784,13 +1620,13 @@ Generator.prototype.genJoobjProto =
 		capsule
 		.Comment( 'Sets values by path.' )
 		.Assign(
-			Term( this.reference + '.prototype.setPath' ),
-			Term( 'JoobjProto.setPath' )
+			Code.Term( this.reference + '.prototype.setPath' ),
+			Code.Term( 'JoobjProto.setPath' )
 		)
 		.Comment( 'Gets values by path' )
 		.Assign(
-			Term( this.reference + '.prototype.getPath' ),
-			Term( 'JoobjProto.getPath' )
+			Code.Term( this.reference + '.prototype.getPath' ),
+			Code.Term( 'JoobjProto.getPath' )
 		);
 
 	if( this.twig )
@@ -1799,8 +1635,8 @@ Generator.prototype.genJoobjProto =
 			capsule
 			.Comment( 'Returns a twig by rank.' )
 			.Assign(
-				Term( this.reference + '.prototype.atRank' ),
-				Term( 'JoobjProto.atRank' )
+				Code.Term( this.reference + '.prototype.atRank' ),
+				Code.Term( 'JoobjProto.atRank' )
 			);
 	}
 
@@ -1823,13 +1659,14 @@ Generator.prototype.genToJSON =
 		olit;
 
 	block =
-		Block( )
+		Code
+		.Block( )
 		.VarDec(
 			'json'
 		);
 
 	olit =
-		ObjLiteral( );
+		Code.ObjLiteral( );
 
 	for(
 		var a = 0, aZ = this.attrList.length;
@@ -1852,16 +1689,16 @@ Generator.prototype.genToJSON =
 			olit
 			.add(
 				name,
-				Term( 'this.' + name )
+				Code.Term( 'this.' + name )
 			);
 	}
 
 	block =
 		block
 		.Assign(
-			Term( 'json' ),
-			Call(
-				Term( 'Object.freeze' )
+			Code.Term( 'json' ),
+			Code.Call(
+				Code.Term( 'Object.freeze' )
 			).append(
 				olit
 			)
@@ -1871,11 +1708,17 @@ Generator.prototype.genToJSON =
 		capsule
 		.Comment( 'Converts a ' + this.name + ' into JSON.' )
 		.append(
-			Call( Term( 'Jools.lazyValue' ) )
-			.append( Term( this.reference + '.prototype' ) )
-			.append( Term( '\'toJSON\'' ) )
+			Code.Call(
+				Code.Term( 'Jools.lazyValue' )
+			)
 			.append(
-				Func( block )
+				Code.Term( this.reference + '.prototype' )
+			)
+			.append(
+				Code.Term( '\'toJSON\'' )
+			)
+			.append(
+				Code.Func( block )
 			)
 		);
 
@@ -1926,22 +1769,25 @@ Generator.prototype.genEquals =
 		.Comment( 'Tests equality of object.' );
 
 	block =
-		Block( );
+		Code
+		.Block( );
 
 	block =
 		block
 		.If(
-			Term( 'this === obj' ),
-			Block( )
+			Code.Term( 'this === obj' ),
+			Code
+			.Block( )
 			.Return(
-				Term( 'true' )
+				Code.Term( 'true' )
 			)
 		)
 		.If(
-			Term( '!obj' ),
-			Block( )
+			Code.Term( '!obj' ),
+			Code
+			.Block( )
 			.Return(
-				Term( 'false' )
+				Code.Term( 'false' )
 			)
 		);
 
@@ -1965,7 +1811,7 @@ Generator.prototype.genEquals =
 		if( cond === null )
 		{
 			cond =
-				Term(
+				Code.Term(
 					'this.' + attr.assign +
 					' === obj.' + attr.assign
 				);
@@ -1981,8 +1827,8 @@ Generator.prototype.genEquals =
 	capsule =
 		capsule
 		.Assign(
-			Term( this.reference + '.prototype.equals' ),
-			Func(
+			Code.Term( this.reference + '.prototype.equals' ),
+			Code.Func(
 				block
 			).Arg(
 				'obj',
@@ -2003,7 +1849,8 @@ Generator.prototype.genCapsule =
 {
 	var
 		capsule =
-			Block( );
+			Code
+			.Block( );
 
 // XXX
 	capsule =
@@ -2065,7 +1912,7 @@ Generator.generate =
 
 
 	file =
-		File( )
+		Code.File( )
 		.Header(
 			'This is an auto generated file.',
 			'',
