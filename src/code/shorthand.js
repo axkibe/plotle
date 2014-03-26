@@ -55,8 +55,6 @@ var
 				require( '../code/switch' ),
 			Term :
 				require( '../code/term' ),
-			TList :
-				require( '../code/tlist' ),
 			VarDec :
 				require( '../code/var-dec' ),
 			VList :
@@ -218,18 +216,6 @@ ShortHand.Term =
 				term
 		)
 	);
-};
-
-
-/*
-| Shorthand for creating term lists.
-|
-| FIXME remove
-*/
-ShortHand.TList =
-	function( )
-{
-	return Code.TList.create( );
 };
 
 

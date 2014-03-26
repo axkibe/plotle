@@ -98,9 +98,7 @@ Jools.lazyValue(
 
 		if( this.inline )
 		{
-			throw new Error(
-				'inline context has not tab'
-			);
+			return '';
 		}
 
 		if( this.check )

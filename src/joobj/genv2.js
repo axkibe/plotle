@@ -1012,20 +1012,21 @@ Generator.prototype.genCreatorUnchanged =
 {
 	var
 		attr,
-		name,
-		tList;
+		ceq,
+		cond,
+		name;
 
-	tList =
-		Code.TList( )
-		.Term( 'inherit' );
+	cond =
+		Code.Term( 'inherit' );
 
 
 	if( this.twig )
 	{
-		tList =
-			tList
-			.Term( '&&' )
-			.Term(' !twigDup' );
+		cond =
+			Code.And(
+				cond,
+				Code.Term(' !twigDup' )
+			);
 	}
 
 	for(
@@ -1042,15 +1043,15 @@ Generator.prototype.genCreatorUnchanged =
 
 		if( attr.assign === null )
 		{
-			tList =
-				tList
-				.Term( '&&' )
-				.Term( attr.vName + ' === null' );
+			cond =
+				Code.And(
+					cond,
+					Code.Term( attr.vName + ' === null' )
+				);
 		}
 
 		switch( attr.type )
 		{
-
 			case 'Array' : // FIXME
 			case 'Boolean' :
 			case 'Function' :
@@ -1061,10 +1062,8 @@ Generator.prototype.genCreatorUnchanged =
 			case 'String' :
 			case 'Tree' : // FIXME
 
-				tList =
-					tList
-					.Term( '&&' )
-					.Term(
+				ceq =
+					Code.Term(
 						attr.vName +
 						' === inherit.' + attr.assign
 					);
@@ -1075,40 +1074,47 @@ Generator.prototype.genCreatorUnchanged =
 
 				if( !attr.allowsNull && !attr.allowsUndefined )
 				{
-					tList =
-						tList
-						.Term( '&&' )
-						.Term(
+					ceq =
+						Code.Term(
 							attr.vName +
 							'.equals( inherit.' + attr.assign
 						);
 				}
 				else
 				{
-					tList =
-						tList
-						.Term( '&&' )
-						.Term( '(' )
-						.Term(
+					// FIXME this is ugly
+					ceq =
+						Code.Term(
+							'('
+							+
 							attr.vName + ' === inherit.' + attr.assign
-						)
-						.Term( '||' )
-						.Term( '(' )
-						.Term( attr.vName )
-						.Term( '&&' )
-						.Term(
+							+
+							'||'
+							+
+							'('
+							+
+							attr.vName
+							+
+							'&&'
+							+
 							attr.vName +
-							'.equals( inherit.' + attr.assign
-						)
-						.Term( ')' )
-						.Term( ')' );
+							'.equals( inherit.' + attr.assign + ')'
+							+
+							')'
+						);
 				}
 		}
+
+		cond =
+			Code.And(
+				cond,
+				ceq
+			);
 	}
 
 	block =
 		block.If(
-			tList,
+			cond,
 			Code
 			.Block( )
 			.Return(

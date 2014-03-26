@@ -61,23 +61,25 @@ formatAnd =
 	text =
 		context.tab
 		+
+		'(\n'
+		+
 		formatExpression(
-			context,
+			context.Inc,
 			expr.left
 		)
 		+
 		'\n'
 		+
-		context.tab
-		+
-		'&&\n'
-		+
-		context.tab
+		context.Inc.tab + '&&\n'
 		+
 		formatExpression(
-			context,
+			context.Inc,
 			expr.right
-		);
+		)
+		+
+		'\n'
+		+
+		context.tab + ')';
 
 	return text;
 };
@@ -109,12 +111,6 @@ formatAssign =
 	{
 		context =
 			context.IncSame;
-	}
-
-	if( !context.inline )
-	{
-		text +=
-			context.tab;
 	}
 
 	text +=
@@ -272,71 +268,71 @@ var
 formatIf =
 	function(
 		context,
-		ifExpr
+		statement
 	)
 {
 	var
 		cond =
-			ifExpr.condition,
-		text;
+			statement.condition,
+		text =
+			null;
 
-	switch( cond.reflect )
-	{
-		case 'Term' :
+/**/if( CHECK )
+/**/{
+/**/	if( statement.reflect !== 'If' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( context.inline )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
-			text =
-				context.tab +
-				'if( '
-				+
-				formatTerm(
-					context.Inline,
-					cond
-				)
-				+
-				' )\n';
-
-			break;
-
-		case 'TList' :
-
-			text =
-				context.tab + 'if(\n';
-
-			for(
-				var a = 0, aZ = cond.ranks.length;
-				a < aZ;
-				a++
+	try {
+		text =
+			context.tab +
+			'if( '
+			+
+			formatExpression(
+				context.Inline,
+				cond
 			)
-			{
-				text +=
-					(
-						context.inline ?
-						'' :
-						context.Inc.tab
-					)
-					+
-					formatTerm(
-						context.Inc,
-						cond.atRank( a )
-					)
-					+
-					'\n';
-			}
+			+
+			' )\n';
+	}
+	catch ( e )
+	{
+		if( e !== 'noinline' )
+		{
+			throw e;
+		}
+	}
 
-			text +=
-				context.tab + ')\n';
-
-			break;
-
-		default :
-
-			throw new Error( );
+	if( text === null )
+	{
+		text =
+			context.tab
+			+
+			'if(\n'
+			+
+			formatExpression(
+				context.Inc,
+				cond
+			)
+			+
+			'\n'
+			+
+			context.tab
+			+
+			')\n';
 	}
 
 	text +=
 		formatBlock(
 			context,
-			ifExpr.then
+			statement.then
 		);
 
 	return text;
@@ -447,9 +443,7 @@ formatReturn =
 /**/{
 /**/	if( context.inline )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid inline'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -612,42 +606,55 @@ formatFunc =
 		text;
 
 	text =
-		'function(\n';
-
-	for(
-		var a = 0, aZ = func.ranks.length;
-		a < aZ;
-		a++
-	)
-	{
-		arg =
-			func.twig[ func.ranks[ a ] ];
-
-		comma =
-			a + 1 < aZ ?
-				','
-				:
-				'';
-
-		text +=
-			context.Inc.tab
-			+
-			( arg.name || '' )
-			+
-			comma
-			+
-			(
-				arg.comment ?
-					' // ' + arg.comment
-					:
-					''
-			)
-			+
-			'\n';
-	}
-
-	text +=
 		context.tab;
+
+	if( func.ranks.length == 0 )
+	{
+		text +=
+			'function( )\n';
+	}
+	else
+	{
+		text +=
+			'function(\n';
+
+		for(
+			var a = 0, aZ = func.ranks.length;
+			a < aZ;
+			a++
+		)
+		{
+			arg =
+				func.twig[ func.ranks[ a ] ];
+
+			comma =
+				a + 1 < aZ ?
+					','
+					:
+					'';
+
+			text +=
+				context.Inc.tab
+				+
+				( arg.name || '' )
+				+
+				comma
+				+
+				(
+					arg.comment ?
+						' // ' + arg.comment
+						:
+						''
+				)
+				+
+				'\n';
+		}
+	
+		text +=
+			context.tab
+			+
+			')\n';
+	}
 
 	// In VarDecs function bodies are decremented.
 	if( context.root )
@@ -656,10 +663,7 @@ formatFunc =
 			context.Dec;
 	}
 
-
 	text +=
-		')\n'
-		+
 		formatBlock(
 			context,
 			func.block
@@ -800,9 +804,6 @@ formatStatement =
 		default :
 
 			text +=
-				context.tab;
-
-			text +=
 				formatExpression(
 					context,
 					statement
@@ -873,7 +874,7 @@ formatExpression =
 
 		case 'Call' :
 
-			return formatCall( context, expr );
+			return formatCall( context, expr, false );
 
 		case 'Fail' :
 
@@ -927,12 +928,14 @@ formatFail =
 	if( fail.message === null )
 	{
 		return (
-			'throw new Error( )'
+			context.tab + 'throw new Error( )'
 		);
 	}
 	else
 	{
 		return (
+			context.tab
+			+
 			'throw new Error(\n'
 			+
 			context.Inc.tab + '\'' + fail.message + '\'\n'
@@ -950,7 +953,8 @@ var
 formatCall =
 	function(
 		context,
-		call
+		call,
+		snuggle
 	)
 {
 	var
@@ -976,7 +980,7 @@ formatCall =
 
 	text =
 		formatExpression(
-			context,
+			snuggle ? context.Inline : context,
 			call.func
 		);
 
@@ -1001,12 +1005,6 @@ formatCall =
 		{
 			arg =
 				call.atRank( a );
-
-			if( !context.inline )
-			{
-				text +=
-					context.Inc.tab;
-			}
 
 			text +=
 				formatExpression(
@@ -1034,10 +1032,7 @@ formatCall =
 		}
 
 		text +=
-			context.inline ?
-				')'
-				:
-				context.tab + ')';
+			context.tab + ')';
 	}
 
 	return text;
@@ -1078,7 +1073,8 @@ formatNew =
 	text +=
 		formatCall(
 			context,
-			newexpr.call
+			newexpr.call,
+			true
 		);
 
 	return text;
@@ -1115,9 +1111,8 @@ formatObjLiteral =
 		throw 'noinline';
 	}
 
-
 	text +=
-		'{\n';
+		context.tab + '{\n';
 
 	for(
 		var a = 0, aZ = objliteral.ranks.length;
@@ -1134,8 +1129,6 @@ formatObjLiteral =
 			key + ' :\n';
 
 		text +=
-			context.Inc.Inc.tab
-			+
 			formatExpression(
 				context.Inc.Inc,
 				objliteral.twig[ key ]
@@ -1179,7 +1172,7 @@ formatTerm =
 /**/	}
 /**/}
 
-	return term.term;
+	return context.tab + term.term;
 };
 
 
@@ -1273,9 +1266,7 @@ formatVarDec =
 		if( !context.inline )
 		{
 			text +=
-				'\n'
-				+
-				context.tab;
+				'\n';
 		}
 		else
 		{
