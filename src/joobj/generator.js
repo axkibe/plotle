@@ -2437,7 +2437,7 @@ generateEqualsCheck =
 	)
 	{
 		aName =
-			jj.attrList[ a ],
+			jj.attrList[ a ];
 
 		attr =
 			jj.attributes[ aName ];

@@ -127,29 +127,18 @@ Jools.lazyValue(
 */
 Jools.lazyValue(
 	Context.prototype,
-	'increment',
+	'Inc',
 	function( )
 	{
 		var
+			incSame =
+				this.IncSame,
+
 			inc =
-				this.create(
-					'indent',
-						this.indent + 1,
+				incSame.create(
 					'root',
 						false
 				);
-
-		if( !this.root )
-		{
-			// when this is the root context
-			// a decrement is not identical to this.
-
-			Jools.aheadValue(
-				inc,
-				'decrement',
-				this
-			);
-		}
 
 		return inc;
 	}
@@ -157,11 +146,39 @@ Jools.lazyValue(
 
 
 /*
+| Increases the indentation.
+| But keeps root context.
+*/
+Jools.lazyValue(
+	Context.prototype,
+	'IncSame',
+	function( )
+	{
+		var
+			inc =
+				this.create(
+					'indent',
+						this.indent + 1
+				);
+
+		Jools.aheadValue(
+			inc,
+			'Dec',
+			this
+		);
+
+		return inc;
+	}
+);
+
+
+
+/*
 | Decreases the indentation.
 */
 Jools.lazyValue(
 	Context.prototype,
-	'decrement',
+	'Dec',
 	function( )
 	{
 		if( this.indent <= 0 )
@@ -181,7 +198,7 @@ Jools.lazyValue(
 
 		Jools.aheadValue(
 			dec,
-			'increment',
+			'Inc',
 			this
 		);
 
@@ -191,11 +208,11 @@ Jools.lazyValue(
 
 
 /*
-| Sets the for loop context
+| Sets the context to be inline.
 */
 Jools.lazyValue(
 	Context.prototype,
-	'setInline',
+	'Inline',
 	function( )
 	{
 		if( this.inline )

@@ -1,8 +1,6 @@
 /*
 | Generates jooled objects from a jools definition.
 |
-| FIXME remove all mutable pushes
-|
 | Version 2
 |
 | Authors: Axel Kittenberger
@@ -67,6 +65,8 @@ var
 				require( '../code/func-arg' ),
 			New :
 				require( '../code/new' ),
+			ObjLiteral :
+				require( '../code/obj-literal' ),
 			Switch :
 				require( '../code/switch' ),
 			Term :
@@ -186,6 +186,17 @@ New =
 
 
 /*
+| Shortcut for creating new object literals.
+*/
+var
+ObjLiteral =
+	function( )
+{
+	return Code.ObjLiteral.create( );
+};
+
+
+/*
 | Shortcut for creating switch statements.
 */
 var
@@ -280,6 +291,8 @@ Generator.prototype._init =
 		attributes =
 			{ },
 		attrList,
+		constructorList =
+			[ ],
 		jAttr,
 		joobj =
 			this.joobj,
@@ -317,6 +330,19 @@ Generator.prototype._init =
 				:
 				name;
 
+		if(
+			assign !== null
+			||
+			(
+				this.init
+				&&
+				this.init.indexOf( name ) >= 0
+			)
+		)
+		{
+			constructorList.push( name );
+		}
+
 		attr =
 		attributes[ name ] =
 			Object.freeze( {
@@ -332,14 +358,6 @@ Generator.prototype._init =
 					assign,
 				comment :
 					jAttr.comment,
-				inConstructor :
-					assign !== null
-					||
-					(
-						this.init
-						&&
-						this.init.indexOf( name ) >= 0
-					),
 				json :
 					jAttr.json,
 				name :
@@ -364,12 +382,21 @@ Generator.prototype._init =
 	this.attributes =
 		Object.freeze( attributes );
 
+	constructorList.sort( );
+
+	constructorList.unshift( 'tag' );
+
+	this.constructorList =
+		Object.freeze( constructorList );
+
 	this.reference =
 		( joobj.unit === joobj.name ) ?
 			joobj.name + 'Obj'
 			:
 			joobj.name;
 
+	this.equals =
+		joobj.equals;
 };
 
 
@@ -553,8 +580,6 @@ buildJD =
 				conList,
 			conVars :
 				conVars,
-			equals :
-				joobj.equals,
 			hasJSON :
 				hasJSON,
 			jsonList :
@@ -599,6 +624,7 @@ Generator.prototype.genImportsSection =
 
 	return capsule;
 };
+
 
 /*
 | Generates the node include section.
@@ -698,36 +724,41 @@ Generator.prototype.genConstructor =
 		);
 
 	constructor =
-		Func( block )
-		.Arg(
-			'tag',
-			'magic cookie'
-		);
+		Func( block );
 
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.constructorList.length;
 		a < aZ;
 		a++
 	)
 	{
 		name =
-			this.attrList[ a ];
+			this.constructorList[ a ];
 
-		attr =
-			this.attributes[ name ];
-
-		if( !attr.inConstructor )
+		switch( name )
 		{
-			continue;
-		}
+			case 'tag' :
 
-		constructor =
-			constructor.Arg(
-				attr.vName,
-				attr.comment
-			);
+				constructor =
+					constructor.Arg(
+						'tag',
+						'magic cookie'
+					);
+
+				break;
+
+			default :
+
+				attr =
+					this.attributes[ name ];
+
+				constructor =
+					constructor.Arg(
+						attr.vName,
+						attr.comment
+					);
+		}
 	}
-	// XXX
 
 	if( this.unit )
 	{
@@ -1306,22 +1337,37 @@ Generator.prototype.genCreatorReturn =
 		);
 
 	for(
-		var a = 0, aZ = this.attrList.length;
+		var a = 0, aZ = this.constructorList.length;
 		a < aZ;
 		a++
 	)
 	{
 		name =
-			this.attrList[ a ];
+			this.constructorList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		switch( name )
+		{
+			case 'tag' :
 
-		call =
-			call
-			.append(
-				Term( attr.vName )
-			);
+				call =
+					call
+					.append(
+						Term( name )
+					);
+
+				break;
+
+			default :
+
+				attr =
+					this.attributes[ name ];
+
+				call =
+					call
+					.append(
+						Term( attr.vName )
+					);
+		}
 	}
 
 	return (
@@ -1538,6 +1584,69 @@ Generator.prototype.genFromJSONCreatorParser =
 
 
 /*
+| Generates the from JSON creators return statement
+*/
+Generator.prototype.genFromJSONCreatorReturn =
+	function(
+		block // block to append to
+	)
+{
+	var
+		attr,
+		call,
+		name;
+
+	call =
+		Call(
+			Term( this.reference )
+		)
+		.append(
+			Term( '' + this.tag )
+		);
+
+	for(
+		var a = 0, aZ = this.constructorList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.constructorList[ a ];
+
+		switch( name )
+		{
+			case 'tag' :
+
+				call =
+					call
+					.append(
+						Term( name )
+					);
+
+				break;
+
+			default :
+
+				attr =
+					this.attributes[ name ];
+
+				call =
+					call
+					.append(
+						Term( attr.vName )
+					);
+		}
+	}
+
+	return (
+		block.Return(
+			New( call )
+		)
+	);
+};
+
+
+/*
 | Generates the from JSON creator.
 */
 Generator.prototype.genFromJSONCreator =
@@ -1613,6 +1722,9 @@ Generator.prototype.genFromJSONCreator =
 	funcBlock =
 		this.genCreatorChecks( funcBlock );
 
+	funcBlock =
+		this.genFromJSONCreatorReturn( funcBlock );
+
 	capsule =
 		capsule
 		.Assign(
@@ -1629,6 +1741,261 @@ Generator.prototype.genFromJSONCreator =
 
 
 /*
+| Generates the node include section.
+*/
+Generator.prototype.genReflection =
+	function(
+		capsule // block to append to
+	)
+{
+	capsule =
+		capsule
+		.Comment( 'Reflection.' )
+		.Assign(
+			Term( this.reference + '.prototype.reflect' ),
+			Term( '\'' + this.name + '\'' )
+		);
+
+	// TODO remove workaround
+	if( this.hasJSON )
+	{
+		capsule =
+			capsule
+			.Comment( 'Workaround old meshverse growing.' )
+			.Assign(
+				Term( this.reference + '.prototype._grown' ),
+				Term( 'true' )
+			);
+	}
+
+	return capsule;
+};
+
+
+/*
+| Generates the JoobjProto stuff.
+*/
+Generator.prototype.genJoobjProto =
+	function(
+		capsule // block to append to
+	)
+{
+	capsule =
+		capsule
+		.Comment( 'Sets values by path.' )
+		.Assign(
+			Term( this.reference + '.prototype.setPath' ),
+			Term( 'JoobjProto.setPath' )
+		)
+		.Comment( 'Gets values by path' )
+		.Assign(
+			Term( this.reference + '.prototype.getPath' ),
+			Term( 'JoobjProto.getPath' )
+		);
+
+	if( this.twig )
+	{
+		capsule =
+			capsule
+			.Comment( 'Returns a twig by rank.' )
+			.Assign(
+				Term( this.reference + '.prototype.atRank' ),
+				Term( 'JoobjProto.atRank' )
+			);
+	}
+
+	return capsule;
+};
+
+
+/*
+| Generates the toJSON converter.
+*/
+Generator.prototype.genToJSON =
+	function(
+		capsule // block to append to
+	)
+{
+	var
+		attr,
+		block,
+		name,
+		olit;
+
+	block =
+		Block( )
+		.VarDec(
+			'json'
+		);
+
+	olit =
+		ObjLiteral( );
+
+	for(
+		var a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		if( !attr.json )
+		{
+			continue;
+		}
+
+		olit =
+			olit
+			.add(
+				name,
+				Term( 'this.' + name )
+			);
+	}
+
+	block =
+		block
+		.Assign(
+			Term( 'json' ),
+			Call(
+				Term( 'Object.freeze' )
+			).append(
+				olit
+			)
+		);
+
+	capsule =
+		capsule
+		.Comment( 'Converts a ' + this.name + ' into JSON.' )
+		.append(
+			Call( Term( 'Jools.lazyValue' ) )
+			.append( Term( this.reference + '.prototype' ) )
+			.append( Term( '\'toJSON\'' ) )
+			.append(
+				Func( block )
+			)
+		);
+
+	return capsule;
+};
+
+
+/*
+| Generates the equals test.
+*/
+Generator.prototype.genEquals =
+	function(
+		capsule // block to append to
+	)
+{
+	var
+		attr,
+		block,
+		cond =
+			null,
+		name;
+
+	if( this.equals === false )
+	{
+		return capsule;
+	}
+
+	if( this.equals === 'primitive' )
+	{
+		return capsule;
+	}
+
+	console.log( this.equals );
+
+	if(
+		this.equals !== true
+		&&
+		this.equals !== undefined
+	)
+	{
+		throw new Error(
+			'invalid equals value'
+		);
+	}
+
+	capsule =
+		capsule
+		.Comment( 'Tests equality of object.' );
+
+	block =
+		Block( );
+
+	block =
+		block
+		.If(
+			Term( 'this === obj' ),
+			Block( )
+			.Return(
+				Term( 'true' )
+			)
+		)
+		.If(
+			Term( '!obj' ),
+			Block( )
+			.Return(
+				Term( 'false' )
+			)
+		);
+
+	for(
+		var a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		if( attr.assign === null )
+		{
+			continue;
+		}
+
+		if( cond === null )
+		{
+			cond =
+				Term(
+					'this.' + attr.assign +
+					' === obj.' + attr.assign
+				);
+		}
+	}
+
+	block =
+		block
+		.Return(
+			cond
+		);
+
+	capsule =
+		capsule
+		.Assign(
+			Term( this.reference + '.prototype.equals' ),
+			Func(
+				block
+			).Arg(
+				'obj',
+				'object to compare to'
+			)
+		);
+
+	return capsule;
+};
+
+
+
+/*
 | Returns generator with the capsule generated.
 */
 Generator.prototype.genCapsule =
@@ -1638,35 +2005,39 @@ Generator.prototype.genCapsule =
 		capsule =
 			Block( );
 
+// XXX
 	capsule =
-		this.genImportsSection(
-			capsule
-		);
+		this.genImportsSection( capsule );
 
 	capsule =
-		this.genNodeIncludesSection(
-			capsule
-		);
+		this.genNodeIncludesSection( capsule );
 
 	capsule =
-		this.genConstructor(
-			capsule
-		);
+		this.genConstructor( capsule );
 
 	capsule =
-		this.genCreator(
-			capsule
-		);
+		this.genCreator( capsule );
 
-/*TODO
 	if( this.hasJSON )
 	{
 		capsule =
-			this.genFromJSONCreator(
-				capsule
-			);
+			this.genFromJSONCreator( capsule );
 	}
-*/
+
+	capsule =
+		this.genReflection( capsule );
+
+	capsule =
+		this.genJoobjProto( capsule );
+
+	if( this.hasJSON )
+	{
+		capsule =
+			this.genToJSON( capsule );
+	}
+
+	capsule =
+		this.genEquals( capsule );
 
 	return capsule;
 };

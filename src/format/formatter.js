@@ -57,7 +57,7 @@ formatAssign =
 	if( assign.right.reflect !== 'Assign' )
 	{
 		context =
-			context.increment;
+			context.IncSame;
 	}
 
 	if( !context.inline )
@@ -177,7 +177,7 @@ formatBlock =
 			context.tab + '{\n';
 
 		blockContext =
-			context.increment;
+			context.Inc;
 	}
 	else
 	{
@@ -238,7 +238,7 @@ formatIf =
 				'if( '
 				+
 				formatTerm(
-					context.setInline,
+					context.Inline,
 					cond
 				)
 				+
@@ -261,11 +261,11 @@ formatIf =
 					(
 						context.inline ?
 						'' :
-						context.increment.tab
+						context.Inc.tab
 					)
 					+
 					formatTerm(
-						context.increment,
+						context.Inc,
 						cond.atRank( a )
 					)
 					+
@@ -304,7 +304,7 @@ formatFor =
 {
 	var
 		forContext =
-			context.increment,
+			context.Inc,
 		text;
 
 	text =
@@ -312,19 +312,19 @@ formatFor =
 		'for(\n' +
 		forContext.tab +
 		formatExpression(
-			forContext.setInline,
+			forContext.Inline,
 			forExpr.init
 		) +
 		';\n' +
 		forContext.tab +
 		formatExpression(
-			forContext.setInline,
+			forContext.Inline,
 			forExpr.condition
 		) +
 		';\n' +
 		forContext.tab +
 		formatExpression(
-			forContext.setInline,
+			forContext.Inline,
 			forExpr.iterate
 		) +
 		'\n' +
@@ -363,7 +363,7 @@ formatForIn =
 		' in '
 		+
 		formatTerm(
-			context.setInline,
+			context.Inline,
 			expr.object
 		)
 		+
@@ -412,10 +412,10 @@ formatReturn =
 			'return '
 			+
 			formatExpression(
-				context.setInline,
+				context.Inline,
 				statement.expr
 			);
-	
+
 		return text;
 	}
 	catch( e )
@@ -431,7 +431,7 @@ formatReturn =
 		context.tab + 'return (\n'
 		+
 		formatExpression(
-			context.increment,
+			context.Inc,
 			statement.expr
 		)
 		+
@@ -455,7 +455,7 @@ formatSwitch =
 {
 	var
 		caseContext =
-			context.increment,
+			context.Inc,
 		caseExpr,
 		text;
 
@@ -465,7 +465,7 @@ formatSwitch =
 		'switch( '
 		+
 		formatTerm(
-			context.setInline,
+			context.Inline,
 			switchExpr.statement
 		)
 		+
@@ -500,21 +500,21 @@ formatSwitch =
 				'case '
 				+
 				formatTerm(
-					caseContext.setInline,
+					caseContext.Inline,
 					caseExpr.atRank( b )
 				)
 				+
 				' :\n\n'
 				+
 				formatBlock(
-					caseContext.increment,
+					caseContext.Inc,
 					caseExpr.block,
 					true
 				)
 				+
 				'\n'
 				+
-				caseContext.increment.tab + 'break;\n';
+				caseContext.Inc.tab + 'break;\n';
 		}
 	}
 
@@ -531,7 +531,7 @@ formatSwitch =
 			'default :\n\n'
 			+
 			formatBlock(
-				caseContext.increment,
+				caseContext.Inc,
 				switchExpr.defaultCase,
 				true
 			);
@@ -561,7 +561,7 @@ formatFunc =
 		text;
 
 	text =
-		context.tab + 'function(\n';
+		'function(\n';
 
 	for(
 		var a = 0, aZ = func.ranks.length;
@@ -579,7 +579,7 @@ formatFunc =
 				'';
 
 		text +=
-			context.increment.tab
+			context.Inc.tab
 			+
 			( arg.name || '' )
 			+
@@ -596,10 +596,21 @@ formatFunc =
 	}
 
 	text +=
-		context.tab + ')\n'
+		context.tab;
+
+	// In VarDecs function bodies are decremented.
+	if( context.root )
+	{
+		context =
+			context.Dec;
+	}
+
+
+	text +=
+		')\n'
 		+
 		formatBlock(
-			context.decrement,
+			context,
 			func.block
 		);
 
@@ -767,6 +778,7 @@ formatStatement =
 			break;
 
 		case 'Assign' :
+		case 'Call' :
 		case 'Fail' :
 		case 'Return' :
 		case 'Term' :
@@ -794,8 +806,8 @@ formatStatement =
 var
 formatExpression =
 	function(
-		context,
-		expr
+		context, // context to be formated in
+		expr     // the expression to format
 	)
 {
 	switch( expr.reflect )
@@ -819,6 +831,10 @@ formatExpression =
 		case 'New' :
 
 			return formatNew( context, expr );
+
+		case 'ObjLiteral' :
+
+			return formatObjLiteral( context, expr );
 
 		case 'Term' :
 
@@ -864,7 +880,7 @@ formatFail =
 		return (
 			'throw new Error(\n'
 			+
-			context.increment.tab + '\'' + fail.message + '\'\n'
+			context.Inc.tab + '\'' + fail.message + '\'\n'
 			+
 			context.tab + ')'
 		);
@@ -934,12 +950,12 @@ formatCall =
 			if( !context.inline )
 			{
 				text +=
-					context.increment.tab;
+					context.Inc.tab;
 			}
 
 			text +=
 				formatExpression(
-					context.increment,
+					context.Inc,
 					arg
 				);
 
@@ -1009,6 +1025,79 @@ formatNew =
 			context,
 			newexpr.call
 		);
+
+	return text;
+};
+
+
+/*
+| Formats an object literal.
+|
+| MAYBE format also inline
+*/
+var
+formatObjLiteral =
+	function(
+		context,
+		objliteral
+	)
+{
+	var
+		key,
+		text =
+			'';
+
+/**/if( CHECK )
+/**/{
+/**/	if( objliteral.reflect !== 'ObjLiteral' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( context.inline )
+	{
+		throw 'noinline';
+	}
+
+
+	text +=
+		'{\n';
+
+	for(
+		var a = 0, aZ = objliteral.ranks.length;
+		a < aZ;
+		a++
+	)
+	{
+		key =
+			objliteral.ranks[ a ];
+
+		text +=
+			context.Inc.tab
+			+
+			key + ' :\n';
+
+		text +=
+			context.Inc.Inc.tab
+			+
+			formatExpression(
+				context.Inc.Inc,
+				objliteral.twig[ key ]
+			)
+			+
+			(
+				a + 1 < aZ ?
+				',\n'
+				:
+				'\n'
+			);
+	}
+
+	text +=
+		context.tab
+		+
+		'}';
 
 	return text;
 };
@@ -1102,7 +1191,7 @@ formatVarDec =
 		if( !context.inline )
 		{
 			context =
-				context.increment;
+				context.Inc;
 
 			text +=
 				context.tab;
@@ -1113,7 +1202,7 @@ formatVarDec =
 	}
 	else
 	{
-		// root functions are not to be combined VarDecs
+		// root functions are not combined in VarDecs
 		text =
 			context.tab + 'var ' + varDec.name;
 	}
@@ -1139,7 +1228,7 @@ formatVarDec =
 		if( varDec.assign.reflect !== 'Assign' )
 		{
 			context =
-				context.increment;
+				context.Inc;
 		}
 
 		text +=
