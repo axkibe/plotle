@@ -51,6 +51,13 @@ joobjNodeGenerator =
 		separator =
 			'/src/';
 
+	if( !APP )
+	{
+		throw new Error(
+			'GLOBAL.APP not set'
+		);
+	}
+
 	// gets the server module
 	while( server.parent )
 	{
@@ -94,8 +101,11 @@ joobjNodeGenerator =
 		outFilename =
 			'joobj/'
 			+
-			inFilename
-				.replace( /\//g, '-' );
+			APP
+			+
+			'/'
+			+
+			inFilename.replace( /\//g, '-' );
 
 	Jools.log(
 		'start',

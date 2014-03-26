@@ -11,6 +11,8 @@
 'use strict';
 
 
+GLOBAL.APP =
+	'genjoobj';
 GLOBAL.CHECK =
 	true;
 GLOBAL.JOOBJ =

@@ -242,11 +242,11 @@ Generator.prototype.genNodeIncludes =
 		.Block( )
 		.Assign(
 			Code.Term( 'JoobjProto' ),
-			Code.Term( 'require( \'../src/joobj/proto\' )' )
+			Code.Term( 'require( \'../../src/joobj/proto\' )' )
 		)
 		.Assign(
 			Code.Term( 'Jools' ),
-			Code.Term( 'require( \'../src/jools/jools\' )' )
+			Code.Term( 'require( \'../../src/jools/jools\' )' )
 		);
 
 	capsule =

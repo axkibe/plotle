@@ -658,10 +658,10 @@ generateNodeIncludesSection =
 		'if( SERVER )',
 		'{',
 		'\tJoobjProto =',
-		'\t\trequire( \'../src/joobj/proto\' );',
+		'\t\trequire( \'../../src/joobj/proto\' );',
 		'',
 		'\tJools =',
-		'\t\trequire( \'../src/jools/jools\' );'
+		'\t\trequire( \'../../src/jools/jools\' );'
 	);
 
 	for(
