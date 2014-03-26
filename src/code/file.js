@@ -33,6 +33,15 @@ if( JOOBJ )
 						defaultValue :
 							'null'
 					},
+				preamble :
+					{
+						comment :
+							'preamble to capsule',
+						type :
+							'Block',
+						defaultValue :
+							'null'
+					},
 				capsule :
 					{
 						comment :
@@ -95,6 +104,23 @@ File.prototype.Header =
 		this.create(
 			'header',
 				header
+		)
+	);
+};
+
+
+/*
+| Returns the file with the preamble set.
+*/
+File.prototype.Preamble =
+	function(
+		preamble
+	)
+{
+	return (
+		this.create(
+			'preamble',
+				preamble
 		)
 	);
 };

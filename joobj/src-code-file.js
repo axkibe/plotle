@@ -30,7 +30,7 @@ var
 
 var
 	_tag =
-		628309902;
+		852664585;
 
 
 /*
@@ -53,8 +53,9 @@ var File =
 Code.File =
 	function(
 		tag,
-		v_capsule, // the capsule
-		v_header   // header comment
+		v_capsule,  // the capsule
+		v_header,   // header comment
+		v_preamble  // preamble to capsule
 	)
 {
 
@@ -74,6 +75,9 @@ Code.File =
 	this.header =
 		v_header;
 
+	this.preamble =
+		v_preamble;
+
 	Jools.immute( this );
 };
 
@@ -90,7 +94,8 @@ File.prototype.create =
 	var
 		inherit,
 		v_capsule,
-		v_header;
+		v_header,
+		v_preamble;
 
 	if( this !== File )
 	{
@@ -102,6 +107,9 @@ File.prototype.create =
 
 		v_header =
 			this.header;
+
+		v_preamble =
+			this.preamble;
 	}
 
 	for(
@@ -136,6 +144,16 @@ File.prototype.create =
 
 				break;
 
+			case 'preamble' :
+
+				if( arg !== undefined )
+				{
+					v_preamble =
+						arg;
+				}
+
+				break;
+
 			default :
 
 /**/			if( CHECK )
@@ -156,6 +174,12 @@ File.prototype.create =
 	if( v_header === undefined )
 	{
 		v_header =
+			null;
+	}
+
+	if( v_preamble === undefined )
+	{
+		v_preamble =
 			null;
 	}
 
@@ -195,6 +219,23 @@ File.prototype.create =
 /**/			);
 /**/		}
 /**/	}
+/**/
+/**/	if( v_preamble === undefined )
+/**/	{
+/**/		throw new Error(
+/**/			'undefined attribute preamble'
+/**/		);
+/**/	}
+/**/
+/**/	if( v_preamble !== null )
+/**/	{
+/**/		if( v_preamble.reflect !== 'Block' )
+/**/		{
+/**/			throw new Error(
+/**/				'type mismatch'
+/**/			);
+/**/		}
+/**/	}
 /**/}
 
 	if(
@@ -219,6 +260,16 @@ File.prototype.create =
 				v_header.equals( inherit.header )
 			)
 		)
+		&&
+		(
+			v_preamble === inherit.preamble
+			||
+			(
+				v_preamble
+				&&
+				v_preamble.equals( inherit.preamble )
+			)
+		)
 	)
 	{
 		return inherit;
@@ -228,7 +279,8 @@ File.prototype.create =
 		new File(
 			_tag,
 			v_capsule,
-			v_header
+			v_header,
+			v_preamble
 		)
 	);
 };
@@ -289,6 +341,15 @@ File.prototype.equals =
 				this.header !== null
 				&&
 				this.header.equals( obj.header )
+			)
+		)
+		&&
+		(
+			this.preamble === obj.preamble ||
+			(
+				this.preamble !== null
+				&&
+				this.preamble.equals( obj.preamble )
 			)
 		)
 	);

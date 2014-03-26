@@ -125,6 +125,7 @@ config.debug.puffed =
 | are made immutable. Turned off on releases for performance.
 */
 config.debug.immute =
+	false &&
 	true;
 
 

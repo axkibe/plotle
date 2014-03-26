@@ -69,7 +69,13 @@ Generator.prototype._init =
 		jAttr,
 		joobj =
 			this.joobj,
-		name;
+		name,
+		// units sorted alphabetically
+		unitList =
+			null,
+		// units used
+		units =
+			{ };
 
 	this.init =
 		joobj.init;
@@ -94,6 +100,12 @@ Generator.prototype._init =
 		if( jAttr.json )
 		{
 			this.hasJSON =
+				true;
+		}
+
+		if( jAttr.unit )
+		{
+			units[ attr.unit ] =
 				true;
 		}
 
@@ -145,12 +157,10 @@ Generator.prototype._init =
 	}
 
 	attrList =
-		Object.keys( attributes );
-
-	attrList.sort( );
+		Object.keys( attributes ).sort ( );
 
 	this.attrList =
-		attrList;
+		Object.freeze( attrList );
 
 	this.attributes =
 		Object.freeze( attributes );
@@ -161,6 +171,12 @@ Generator.prototype._init =
 
 	this.constructorList =
 		Object.freeze( constructorList );
+
+	unitList =
+		Object.keys( units ).sort( );
+
+	this.unitList =
+		Object.freeze( unitList );
 
 	this.reference =
 		( joobj.unit === joobj.name ) ?
@@ -174,235 +190,41 @@ Generator.prototype._init =
 
 
 /*
-| Creates the joobj data structures to work with.
+| Generates the imports.
 */
-/*
-var
-buildJD =
-	function(
-		joobj
-	)
-{
-	var
-		attr,
-		// alphabetical sorted attribute names
-		attrList =
-			[ ],
-		attributes =
-			{ },
-		// list of all arguments passed to
-		// constructor
-		conVars =
-			{ },
-		name,
-		// units sorted alphabetically
-		unitList =
-			null,
-		// units used
-		units =
-			{ };
-
-	// list of attributes
-	if( joobj.attributes )
-	{
-		for( name in joobj.attributes )
-		{
-			attr =
-				joobj.attributes[ name ];
-
-			attributes[ name ] =
-				Object.freeze(
-					{
-						concerns :
-							attr.concerns,
-						defaultValue :
-							attr.defaultValue,
-						json :
-							attr.json,
-						name :
-							name,
-						vName :
-							'v_' + name
-					}
-				);
-
-			if( attr.unit )
-			{
-				units[ attr.unit ] =
-					true;
-			}
-
-			if( attr.json )
-			{
-				hasJSON =
-					true;
-
-				jsonList.push( name );
-			}
-
-			if(
-				attr.assign !== null
-				||
-				(
-					joobj.init
-					&&
-					joobj.init.indexOf( name ) >= 0
-				)
-			)
-			{
-				conVars[ name ] =
-					Object.freeze(
-						{
-							name :
-								name,
-							comment :
-								attr.comment,
-							vName :
-								attributes[ name ].vName
-						}
-					);
-			}
-		}
-
-		attrList =
-			Object
-				.keys( joobj.attributes )
-				.sort( );
-	}
-
-	unitList =
-		Object.keys( units ).sort( );
-
-	if(
-		joobj.init
-		&&
-		joobj.init.indexOf( 'inherit' ) >= 0
-	)
-	{
-		conVars.inherit =
-			Object.freeze(
-				{
-					name :
-						'inherit',
-					comment :
-						'inheritance',
-					vName :
-						'inherit'
-				}
-			);
-	}
-
-	if( joobj.twig )
-	{
-		conVars.twig =
-			Object.freeze(
-				{
-					name :
-						'twig',
-					comment :
-						'twig, set upon change',
-					vName :
-						'twig'
-				}
-			);
-
-		conVars.ranks =
-			Object.freeze(
-				{
-					name :
-						'ranks',
-					comment :
-						'twig order, set upon change',
-					vName :
-						'ranks'
-				}
-			);
-
-		if( hasJSON )
-		{
-			jsonList.push( 'twig' );
-			jsonList.push( 'ranks' );
-		}
-	}
-
-	var
-		conList =
-			Object.keys( conVars );
-
-	conList.sort(
-		function( o, p )
-		{
-			return (
-				Jools.compare(
-					conVars[ o ].vName,
-					conVars[ p ].vName
-				)
-			);
-		}
-	);
-
-	jsonList.sort( );
-
-	return Object.freeze(
-		{
-			attrList :
-				attrList,
-			attributes :
-				attributes,
-			conList :
-				conList,
-			conVars :
-				conVars,
-			hasJSON :
-				hasJSON,
-			jsonList :
-				jsonList,
-			name :
-				joobj.name,
-			node :
-				joobj.node,
-			// in case unit and joobj are named identically
-			// the shortcut will be renamed
-			singleton :
-				joobj.singleton,
-			subclass :
-				joobj.subclass,
-			twig :
-				joobj.twig,
-			unitList :
-				unitList
-		}
-	);
-};
-*/
-
-
-/*
-| Generates the imports section.
-*/
-Generator.prototype.genImportsSection =
+Generator.prototype.genImports =
 	function(
 		capsule // block to append to
 	)
 {
 	capsule =
-		capsule.Comment(
-			'Imports.'
-		);
+		capsule
+		.Comment( 'Imports.' );
 
 	capsule =
 		capsule
-			.VarDec( 'JoobjProto' )
-			.VarDec( 'Jools' );
+		.VarDec( 'JoobjProto' )
+		.VarDec( 'Jools' );
+
+	for(
+		var a = 0, aZ = this.unitList.length;
+		a < aZ;
+		a++
+	)
+	{
+		capsule =
+			capsule
+			.VarDec( this.unitList[ a ] );
+	}
 
 	return capsule;
 };
 
 
 /*
-| Generates the node include section.
+| Generates the node include.
 */
-Generator.prototype.genNodeIncludesSection =
+Generator.prototype.genNodeIncludes =
 	function(
 		capsule // block to append to
 	)
@@ -1142,9 +964,6 @@ Generator.prototype.genCreatorReturn =
 	call =
 		Code.Call(
 			Code.Term( this.reference )
-		)
-		.append(
-			Code.Term( '' + this.tag )
 		);
 
 	for(
@@ -1163,7 +982,7 @@ Generator.prototype.genCreatorReturn =
 				call =
 					call
 					.append(
-						Code.Term( name )
+						Code.Term( '' + this.tag )
 					);
 
 				break;
@@ -1390,6 +1209,10 @@ Generator.prototype.genFromJSONCreatorParser =
 			Code.Term( 'json' ),
 			Code
 			.Block( )
+			.Assign(
+				Code.Term( 'arg' ),
+				Code.Term( 'json[ name ]' )
+			)
 			.append(
 				switchExpr
 			)
@@ -1415,9 +1238,6 @@ Generator.prototype.genFromJSONCreatorReturn =
 	call =
 		Code.Call(
 			Code.Term( this.reference )
-		)
-		.append(
-			Code.Term( '' + this.tag )
 		);
 
 	for(
@@ -1436,7 +1256,7 @@ Generator.prototype.genFromJSONCreatorReturn =
 				call =
 					call
 					.append(
-						Code.Term( name )
+						Code.Term( '' + this.tag )
 					);
 
 				break;
@@ -1648,7 +1468,12 @@ Generator.prototype.genToJSON =
 		);
 
 	olit =
-		Code.ObjLiteral( );
+		Code
+		.ObjLiteral( )
+		.add(
+			'type',
+			Code.Term( '\'' + this.name + '\'' )
+		);
 
 	for(
 		var a = 0, aZ = this.attrList.length;
@@ -1693,7 +1518,7 @@ Generator.prototype.genToJSON =
 					Code.Term( 'json' )
 				)
 			)
-		)
+		);
 
 	capsule =
 		capsule
@@ -1846,7 +1671,7 @@ Generator.prototype.genEquals =
 /*
 | Generates the export.
 */
-Generator.prototype.genExport =
+Generator.prototype.genNodeExport =
 	function(
 		capsule // block to append to
 	)
@@ -1863,14 +1688,69 @@ Generator.prototype.genExport =
 				Code.Term( this.reference )
 			)
 		)
-	)
+	);
 };
 
 
+/*
+| Returns the generated export block.
+*/
+Generator.prototype.genExport =
+	function( block )
+{
+	block =
+		block
+		.Comment(
+			'Export.'
+		);
+
+	if( this.unit )
+	{
+		block =
+			block
+			.VarDec(
+				this.unit,
+				Code.Term( this.unit + ' || { }' )
+			);
+	}
+	else
+	{
+		block =
+			block
+			.VarDec(
+				this.name
+			);
+	}
+
+	return block;
+};
 
 
 /*
-| Returns generator with the capsule generated.
+| Returns the generated preamble.
+*/
+Generator.prototype.genPreamble =
+	function( )
+{
+	var
+		block;
+
+	block =
+		Code
+		.Block( );
+
+	block =
+		this.genExport( block );
+
+	block =
+		this.genImports( block );
+
+	return block;
+};
+
+
+/*
+| Returns the generated capsule block.
 */
 Generator.prototype.genCapsule =
 	function( )
@@ -1880,12 +1760,8 @@ Generator.prototype.genCapsule =
 			Code
 			.Block( );
 
-// XXX
 	capsule =
-		this.genImportsSection( capsule );
-
-	capsule =
-		this.genNodeIncludesSection( capsule );
+		this.genNodeIncludes( capsule );
 
 	capsule =
 		this.genConstructor( capsule );
@@ -1915,7 +1791,7 @@ Generator.prototype.genCapsule =
 		this.genEquals( capsule );
 
 	capsule =
-		this.genExport( capsule );
+		this.genNodeExport( capsule );
 
 	return capsule;
 };
@@ -1941,14 +1817,17 @@ Generator.generate =
 				joobj
 		);
 
-
 	file =
 		Code.File( )
 		.Header(
 			'This is an auto generated file.',
 			'',
 			'DO NOT EDIT!'
-		).Capsule(
+		)
+		.Preamble(
+			gen.genPreamble( )
+		)
+		.Capsule(
 			gen.genCapsule( )
 		);
 

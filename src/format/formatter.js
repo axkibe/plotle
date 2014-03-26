@@ -210,7 +210,7 @@ formatBlock =
 		text =
 			'';
 	if(
-		context.inline 
+		context.inline
 		&&
 		block.ranks.length > 1
 	)
@@ -613,7 +613,7 @@ formatFunc =
 	text =
 		context.tab;
 
-	if( func.ranks.length == 0 )
+	if( func.ranks.length === 0 )
 	{
 		text +=
 			'function( )' + context.sep;
@@ -654,7 +654,7 @@ formatFunc =
 				+
 				'\n';
 		}
-	
+
 		text +=
 			context.tab + ')' + context.sep;
 	}
@@ -1366,16 +1366,14 @@ formatVList =
 var
 formatCapsule =
 	function(
-		text,
 		context,
-		file
+		capsule
 	)
 {
 	var
-		capsule =
-			file.capsule;
+		text;
 
-	text +=
+	text =
 		'/*\n' +
 		'| Capulse.\n' +
 		'*/\n' +
@@ -1424,7 +1422,10 @@ Formatter.format =
 					true
 			),
 		text =
-			'';
+			'',
+		// do a seperator?
+		doSep =
+			false;
 
 	if( file.header )
 	{
@@ -1433,21 +1434,42 @@ Formatter.format =
 				context,
 				file.header
 			);
+
+		doSep =
+			true;
 	}
 
-	if( file.capsule )
+	if( file.preamble )
 	{
-		if( file.header )
+		if( doSep )
 		{
 			text +=
 				'\n\n';
 		}
 
-		text =
-			formatCapsule(
-				text,
+		text +=
+			formatBlock(
 				context,
-				file
+				file.preamble,
+				true
+			);
+
+		doSep =
+			true;
+	}
+
+	if( file.capsule )
+	{
+		if( doSep )
+		{
+			text +=
+				'\n\n';
+		}
+
+		text +=
+			formatCapsule(
+				context,
+				file.capsule
 			);
 	}
 
