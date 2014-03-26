@@ -33,6 +33,57 @@ var
 
 
 /*
+| Formats an And.
+*/
+var
+formatAnd =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'And' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( context.inline )
+	{
+		throw 'noinline';
+	}
+
+	text =
+		context.tab
+		+
+		formatExpression(
+			context,
+			expr.left
+		)
+		+
+		'\n'
+		+
+		context.tab
+		+
+		'&&\n'
+		+
+		context.tab
+		+
+		formatExpression(
+			context,
+			expr.right
+		);
+
+	return text;
+};
+
+
+/*
 | Formats an assignment.
 */
 var
@@ -812,6 +863,10 @@ formatExpression =
 {
 	switch( expr.reflect )
 	{
+		case 'And' :
+
+			return formatAnd( context, expr );
+
 		case 'Assign' :
 
 			return formatAssign( context, expr );
@@ -1102,8 +1157,11 @@ formatObjLiteral =
 	return text;
 };
 
+
 /*
 | Formats an term.
+|
+| FIXME remove
 */
 var
 formatTerm =

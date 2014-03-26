@@ -52,30 +52,6 @@ var
 //	Jools =
 //		require( '../jools/jools' ),
 
-
-/*
-| Shortcut for variable declerations.
-*/
-/*
-var
-VarDec =
-	function(
-		name,   // variable name
-		assign  // variable assignment
-	)
-{
-	return (
-		Code.VarDec.create(
-			'name',
-				name,
-			'assign',
-				assign || null
-		)
-	);
-};
-*/
-
-
 /*
 | Initialized a generator
 */
@@ -1739,6 +1715,7 @@ Generator.prototype.genEquals =
 		block,
 		cond =
 			null,
+		ceq,
 		name;
 
 	if( this.equals === false )
@@ -1808,12 +1785,23 @@ Generator.prototype.genEquals =
 			continue;
 		}
 
+		ceq =
+			Code.Term(
+				'this.' + attr.assign +
+				' === obj.' + attr.assign
+			);
+
 		if( cond === null )
 		{
 			cond =
-				Code.Term(
-					'this.' + attr.assign +
-					' === obj.' + attr.assign
+				ceq;
+		}
+		else
+		{
+			cond =
+				Code.And(
+					cond,
+					ceq
 				);
 		}
 	}

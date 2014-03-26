@@ -25,6 +25,8 @@ var
 var
 	Code =
 		{
+			And :
+				require( '../code/and' ),
 			Assign :
 				require( '../code/assign' ),
 			Block :
@@ -60,6 +62,26 @@ var
 			VList :
 				require( '../code/vlist' )
 		};
+
+
+/*
+| Shorthand for creating ands.
+*/
+ShortHand.And =
+	function(
+		left,
+		right
+	)
+{
+	return (
+		Code.And.create(
+			'left',
+				left,
+			'right',
+				right
+		)
+	);
+};
 
 
 /*
@@ -209,6 +231,28 @@ ShortHand.TList =
 {
 	return Code.TList.create( );
 };
+
+
+/*
+| Shorthand for variable declerations.
+*/
+/*
+ShortHand.VarDec =
+	function(
+		name,   // variable name
+		assign  // variable assignment
+	)
+{
+	return (
+		Code.VarDec.create(
+			'name',
+				name,
+			'assign',
+				assign || null
+		)
+	);
+};
+*/
 
 
 /*
