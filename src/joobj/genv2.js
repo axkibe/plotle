@@ -77,20 +77,29 @@ Generator.prototype._init =
 		units =
 			{ };
 
+	this.hasJSON =
+		!!joobj.json;
+
 	this.init =
 		joobj.init;
-
-	this.unit =
-		joobj.unit;
 
 	this.name =
 		joobj.name;
 
-	this.hasJSON =
-		!!joobj.json;
+	this.node =
+		!!joobj.node;
+
+	this.subclass =
+		joobj.subclass;
 
 	this.tag =
 		Math.floor( Math.random( ) * 1000000000 );
+
+	this.twig =
+		joobj.twig;
+
+	this.unit =
+		joobj.unit;
 
 	for( name in joobj.attributes || { } )
 	{
@@ -166,6 +175,51 @@ Generator.prototype._init =
 		Object.freeze( attributes );
 
 	constructorList.sort( );
+
+	if( this.twig )
+	{
+		constructorList.unshift( 'ranks' );
+
+		constructorList.unshift( 'twig' );
+	}
+
+	if( joobj.init )
+	{
+		var
+			// sorted init list
+			inits =
+				joobj.init.slice( ).sort( );
+
+		for(
+			var a = inits.length - 1;
+			a >= 0;
+			a--
+		)
+		{
+			name =
+				joobj.init[ a ];
+
+			if( attributes[ name ] )
+			{
+				continue;
+			}
+
+			switch( name )
+			{
+				case 'inherit' :
+
+					constructorList.unshift( name );
+
+					break;
+
+				default :
+
+					throw new Error(
+						'invalid init value: ' + name
+					);
+			}
+		}
+	}
 
 	constructorList.unshift( 'tag' );
 
@@ -269,6 +323,7 @@ Generator.prototype.genConstructor =
 {
 	var
 		a,
+		assign,
 		aZ,
 		attr,
 		block,
@@ -310,17 +365,61 @@ Generator.prototype.genConstructor =
 			continue;
 		}
 
-		block =
-			block.Assign(
+		assign =
+			Code.Assign(
 				Code.Term( 'this.' + attr.assign ),
 				Code.Term( attr.vName )
 			);
+
+		if( !attr.allowsUndefined )
+		{
+			block =
+				block.Append(
+					assign
+				);
+		}
+		else
+		{
+			block =
+				block.If(
+					Code.Term( attr.vName + ' !== undefined' ),
+					Code
+					.Block( )
+					.Append(
+						assign
+					)
+				);
+		}
 	}
 
 	block =
-		block.Term(
-			'Jools.immute( this )'
+		block.Append(
+			Code.Call(
+				Code.Term( 'Jools.immute' )
+			).Append(
+				Code.Term( 'this' )
+			)
 		);
+
+	if( this.twig )
+	{
+		block =
+			block
+			.Append(
+				Code.Call(
+					Code.Term( 'Jools.immute' )
+				).Append(
+					Code.Term( 'twig' )
+				)
+			)
+			.Append(
+				Code.Call(
+					Code.Term( 'Jools.immute' )
+				).Append(
+					Code.Term( 'ranks' )
+				)
+			);
+	}
 
 	constructor =
 		Code.Func( block );
@@ -336,12 +435,42 @@ Generator.prototype.genConstructor =
 
 		switch( name )
 		{
+			case 'inherit' :
+
+				constructor =
+					constructor.Arg(
+						'inherit',
+						'inheritance'
+					);
+
+				break;
+
+			case 'ranks' :
+
+				constructor =
+					constructor.Arg(
+						'ranks',
+						'twig ranks'
+					);
+
+				break;
+
 			case 'tag' :
 
 				constructor =
 					constructor.Arg(
 						'tag',
 						'magic cookie'
+					);
+
+				break;
+
+			case 'twig' :
+
+				constructor =
+					constructor.Arg(
+						'twig',
+						'twig'
 					);
 
 				break;
@@ -380,6 +509,34 @@ Generator.prototype.genConstructor =
 
 	return capsule;
 };
+
+
+/*
+| Generates the subclass.
+*/
+Generator.prototype.genSubclass =
+	function(
+		capsule // block to append to
+	)
+{
+	return (
+		capsule
+		.Comment(
+			'Subclass.'
+		)
+		.Append(
+			Code
+			.Call(
+				Code.Term( 'Jools.subclass' )
+			).Append(
+				Code.Term( this.reference )
+			).Append(
+				Code.Term( this.subclass )
+			)
+		)
+	);
+};
+
 
 
 /*
@@ -442,7 +599,8 @@ Generator.prototype.genCreatorInheritanceReceiver =
 
 	if( this.twig )
 	{
-		throw new Error( 'TODO' );
+//		throw new Error( 'TODO' );
+//		XXX
 	}
 
 	for(
@@ -548,7 +706,7 @@ Generator.prototype.genCreatorFreeStringsParser =
 		);
 
 	loop =
-		loop.append( switchExpr );
+		loop.Append( switchExpr );
 
 	block =
 		block.For(
@@ -763,10 +921,14 @@ Generator.prototype.genCreatorChecks =
 			case 'String' :
 
 				tcheck =
-					Code.Term(
-						'typeof( ' + attr.vName  + ' )' + ' !== \'string\'' +
-						' && ' +
-						'!( ' + attr.vName + ' instanceof String )'
+					Code.And(
+						Code.Term(
+							'typeof( ' + attr.vName  + ' )' +
+							' !== \'string\''
+						),
+						Code.Term(
+							'!( ' + attr.vName + ' instanceof String )'
+						)
 					);
 
 				break;
@@ -793,7 +955,7 @@ Generator.prototype.genCreatorChecks =
 				.If(
 					cond,
 					Code
-					.Block
+					.Block( )
 					.If(
 						tcheck,
 						tfail
@@ -977,11 +1139,23 @@ Generator.prototype.genCreatorReturn =
 
 		switch( name )
 		{
+			case 'inherit' :
+			case 'twig' :
+			case 'ranks' :
+
+				call =
+					call
+					.Append(
+						Code.Term( name )
+					);
+
+				break;
+
 			case 'tag' :
 
 				call =
 					call
-					.append(
+					.Append(
 						Code.Term( '' + this.tag )
 					);
 
@@ -994,7 +1168,7 @@ Generator.prototype.genCreatorReturn =
 
 				call =
 					call
-					.append(
+					.Append(
 						Code.Term( attr.vName )
 					);
 		}
@@ -1213,7 +1387,7 @@ Generator.prototype.genFromJSONCreatorParser =
 				Code.Term( 'arg' ),
 				Code.Term( 'json[ name ]' )
 			)
-			.append(
+			.Append(
 				switchExpr
 			)
 		);
@@ -1255,7 +1429,7 @@ Generator.prototype.genFromJSONCreatorReturn =
 
 				call =
 					call
-					.append(
+					.Append(
 						Code.Term( '' + this.tag )
 					);
 
@@ -1268,7 +1442,7 @@ Generator.prototype.genFromJSONCreatorReturn =
 
 				call =
 					call
-					.append(
+					.Append(
 						Code.Term( attr.vName )
 					);
 		}
@@ -1506,7 +1680,7 @@ Generator.prototype.genToJSON =
 			Code.Term( 'json' ),
 			Code.Call(
 				Code.Term( 'Object.freeze' )
-			).append(
+			).Append(
 				olit
 			)
 		)
@@ -1523,17 +1697,17 @@ Generator.prototype.genToJSON =
 	capsule =
 		capsule
 		.Comment( 'Converts a ' + this.name + ' into JSON.' )
-		.append(
+		.Append(
 			Code.Call(
 				Code.Term( 'Jools.lazyValue' )
 			)
-			.append(
+			.Append(
 				Code.Term( this.reference + '.prototype' )
 			)
-			.append(
+			.Append(
 				Code.Term( '\'toJSON\'' )
 			)
-			.append(
+			.Append(
 				Code.Func( block )
 			)
 		);
@@ -1760,11 +1934,20 @@ Generator.prototype.genCapsule =
 			Code
 			.Block( );
 
-	capsule =
-		this.genNodeIncludes( capsule );
+	if( this.node )
+	{
+		capsule =
+			this.genNodeIncludes( capsule );
+	}
 
 	capsule =
 		this.genConstructor( capsule );
+
+	if( this.subclass )
+	{
+		capsule =
+			this.genSubclass( capsule );
+	}
 
 	capsule =
 		this.genCreator( capsule );
@@ -1790,8 +1973,11 @@ Generator.prototype.genCapsule =
 	capsule =
 		this.genEquals( capsule );
 
-	capsule =
-		this.genNodeExport( capsule );
+	if( this.node )
+	{
+		capsule =
+			this.genNodeExport( capsule );
+	}
 
 	return capsule;
 };

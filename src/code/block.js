@@ -84,7 +84,7 @@ var
 /*
 | Returns the block with a statement appended;
 */
-Block.prototype.append =
+Block.prototype.Append =
 	function(
 		statement
 	)
@@ -116,7 +116,7 @@ Block.prototype.Assign =
 					right
 			);
 
-	return this.append( assign );
+	return this.Append( assign );
 };
 
 
@@ -129,7 +129,7 @@ Block.prototype.Check =
 	)
 {
 	return (
-		this.append(
+		this.Append(
 			Code.Check.create(
 				'block',
 					block
@@ -157,7 +157,7 @@ Block.prototype.Comment =
 			);
 	}
 
-	return this.append( header );
+	return this.Append( header );
 };
 
 
@@ -182,7 +182,7 @@ Block.prototype.If =
 					elsewise || null
 			);
 
-	return this.append( statement );
+	return this.Append( statement );
 };
 
 
@@ -201,7 +201,7 @@ Block.prototype.Fail =
 					message || null
 			);
 
-	return this.append( fail );
+	return this.Append( fail );
 };
 
 
@@ -229,7 +229,7 @@ Block.prototype.For =
 					block
 			);
 
-	return this.append( statement );
+	return this.Append( statement );
 };
 
 
@@ -254,7 +254,7 @@ Block.prototype.ForIn =
 					block
 			);
 
-	return this.append( statement );
+	return this.Append( statement );
 };
 
 
@@ -283,7 +283,7 @@ Block.prototype.Return =
 			break;
 	}
 
-	return this.append( expr );
+	return this.Append( expr );
 };
 
 
@@ -304,7 +304,7 @@ Block.prototype.Term =
 			);
 	}
 
-	return this.append( term );
+	return this.Append( term );
 };
 
 
@@ -327,7 +327,7 @@ Block.prototype.VarDec =
 					assign || null
 			);
 
-	return this.append( varDec );
+	return this.Append( varDec );
 };
 
 

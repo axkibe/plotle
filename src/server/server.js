@@ -13,8 +13,12 @@
 
 
 /*
-| Turn on checking on server side by default.
+| Globals.
 */
+GLOBAL.APP=
+	'server';
+GLOBAL.SHELLAPP=
+	'shell';
 GLOBAL.CHECK =
 	true;
 GLOBAL.JOOBJ =

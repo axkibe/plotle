@@ -1,24 +1,45 @@
 // configuration for jshint
 //	"unused"    : "paramsignore"
 {
-	"esnext"    : true,
-	"newcap"    : false,
-	"node"      : true,
-	"browser"   : true,
-	"expr"      : true,
-	"trailing"  : true,
-	"undef"     : true,
-	"onecase"   : true,
-	"laxbreak"  : true,
-	"laxcomma"  : true,
-	"strict"    : true,
-	"undef"     : true,
-	"unused"    : true,
-	"globals"   :
+	"esnext" :
+		true,
+	"newcap" :
+		false,
+	"node" :
+		true,
+	"browser" :
+		true,
+	"expr" :
+		true,
+	"trailing" :
+		true,
+	"undef" :
+		true,
+	"onecase" :
+		true,
+	"laxbreak" :
+		true,
+	"laxcomma" :
+		true,
+	"strict" :
+		true,
+	"undef" :
+		true,
+	"unused" :
+		true,
+	"globals"  :
 		{
-			"CHECK"  : true,
-			"JOOBJ"  : true,
-			"SHELL"  : true,
-			"SERVER" : true
+			"APP" :
+				true,
+			"CHECK" :
+				true,
+			"JOOBJ" :
+				true,
+			"SHELL" :
+				true,
+			"SHELLAPP" :
+				true,
+			"SERVER" :
+				true
 		}
 }

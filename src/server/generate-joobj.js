@@ -1,5 +1,5 @@
 /*
-| Generates the joobj of a resource.
+| Generates the joobj of a resource for the shell.
 |
 | Authors: Axel Kittenberger
 */
@@ -41,7 +41,6 @@ var
 
 	vm =
 		require( 'vm' );
-
 
 
 /*

@@ -59,7 +59,7 @@ var
 /*
 | Returns the function with a an argument appended.
 */
-Func.prototype.append =
+Func.prototype.Append =
 	function(
 		arg
 	)
@@ -85,7 +85,7 @@ Func.prototype.Arg =
 	)
 {
 	return (
-		this.append(
+		this.Append(
 			FuncArg.create(
 				'name',
 					name,

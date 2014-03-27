@@ -160,7 +160,7 @@ if( JOOBJ )
 
 
 /*
-| Imports
+| Imports.
 */
 var
 	FileTypes =
@@ -174,10 +174,7 @@ var
 
 
 /*
-| Initializer
-|
-|   f ... serve from file
-|   m ... keep in memory
+| Initializer.
 */
 Resource.prototype._init =
 	function( )
@@ -227,8 +224,13 @@ Jools.lazyValue(
 			'joobjSrcPath',
 				this.filePath,
 			'filePath',
-				'joobj/' +
-					this.filePath.replace( /\//g, '-' ),
+				'joobj/'
+				+
+				SHELLAPP
+				+
+				'/'
+				+
+				this.filePath.replace( /\//g, '-' ),
 			'hasJoobj',
 				false,
 			'isJoobj',

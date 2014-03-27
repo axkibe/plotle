@@ -721,7 +721,7 @@ generateNodeIncludesSection =
 					r.push(
 						'',
 						'\t' + ref + ' =',
-						'\t\trequire( \'../src/' +
+						'\t\trequire( \'../../src/' +
 							attr.unit.toLowerCase( ) + '/' +
 							attr.type.toLowerCase( ) +
 							'\' );'

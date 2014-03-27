@@ -19,6 +19,12 @@ var
 (function() {
 'use strict';
 
+/*
+| Constants.
+*/
+var
+	MAX_TEXT_WIDTH =
+		80;
 
 /*
 | Node imports.
@@ -30,6 +36,19 @@ var
 //var
 //	Jools =
 //		require( '../jools/jools' );
+
+
+/*
+| Returns the length of a text
+*/
+var
+textLen =
+	function(
+		txt
+	)
+{
+	return txt.replace( '\t', '    ' ).length;
+};
 
 
 /*
@@ -87,6 +106,11 @@ formatAssign =
 		assign
 	)
 {
+	if( context.inline )
+	{
+		throw 'noinline';
+	}
+
 	var
 		text =
 			'';
@@ -689,6 +713,7 @@ formatStatement =
 	)
 {
 	var
+		etxt,
 		text =
 			'';
 
@@ -806,11 +831,37 @@ formatStatement =
 
 		default :
 
-			text +=
-				formatExpression(
-					context,
-					statement
-				);
+			try
+			{
+				etxt =
+					context.tab
+					+
+					formatExpression(
+						context.Inline,
+						statement
+					);
+
+				if( textLen( etxt ) >= MAX_TEXT_WIDTH )
+				{
+					throw 'noinline';
+				}
+
+				text +=
+					etxt;
+			}
+			catch( e )
+			{
+				if( e !== 'noinline' )
+				{
+					throw e;
+				}
+
+				text +=
+					formatExpression(
+						context,
+						statement
+					);
+			}
 	}
 
 	switch( statement.reflect )
@@ -934,18 +985,16 @@ formatFail =
 			context.tab + 'throw new Error( )'
 		);
 	}
-	else
-	{
-		return (
-			context.tab
-			+
-			'throw new Error(\n'
-			+
-			context.Inc.tab + '\'' + fail.message + '\'\n'
-			+
-			context.tab + ')'
-		);
-	}
+
+	return (
+		context.tab
+		+
+		'throw new Error(' + context.sep
+		+
+		context.Inc.tab + '\'' + fail.message + '\'' + context.sep
+		+
+		context.tab + ')'
+	);
 };
 
 

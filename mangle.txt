@@ -500,7 +500,6 @@
 > keys
 > la
 . label
-. lazyFunction
 . lazyValue
 > left
 > length
