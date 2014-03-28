@@ -55,8 +55,35 @@ if( JOOBJ )
 }
 
 
+/*
+| Node includes.
+*/
+var
+	If =
+		require( '../joobj/this' )( module );
+
+/*
+| Creates an if with the Elsewise block set.
+*/
+If.prototype.Elsewise =
+	function(
+		block
+	)
+{
+	return (
+		this.create(
+			'elsewise',
+				block
+		)
+	);
+};
+
+
+/*
+| Node export.
+*/
 module.exports =
-	require( '../joobj/this' )( module );
+	If;
 
 
 } )( );

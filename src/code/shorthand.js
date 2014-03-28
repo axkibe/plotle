@@ -130,6 +130,29 @@ ShortHand.Call =
 
 
 /*
+| Shorthand for creatings ifs.
+*/
+ShortHand.If =
+	function(
+		condition,
+		then,
+		elsewise
+	)
+{
+	return (
+		Code.If.create(
+			'condition',
+				condition,
+			'then',
+				then,
+			'elsewise',
+				elsewise || null
+		)
+	);
+};
+
+
+/*
 | Shorthand for creating files.
 */
 ShortHand.File =

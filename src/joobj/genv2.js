@@ -328,6 +328,7 @@ Generator.prototype.genConstructor =
 		attr,
 		block,
 		constructor,
+		initCall,
 		name;
 
 	capsule =
@@ -335,6 +336,7 @@ Generator.prototype.genConstructor =
 			'Constructor.'
 		);
 
+	// checks the tag
 	block =
 		Code
 		.Block( )
@@ -349,6 +351,7 @@ Generator.prototype.genConstructor =
 			)
 		);
 
+	// assigns the variables
 	for(
 		a = 0, aZ = this.attrList.length;
 		a < aZ;
@@ -374,14 +377,14 @@ Generator.prototype.genConstructor =
 		if( !attr.allowsUndefined )
 		{
 			block =
-				block.Append(
-					assign
-				);
+				block
+				.Append( assign );
 		}
 		else
 		{
 			block =
-				block.If(
+				block
+				.If(
 					Code.Term( attr.vName + ' !== undefined' ),
 					Code
 					.Block( )
@@ -392,8 +395,52 @@ Generator.prototype.genConstructor =
 		}
 	}
 
+	if( this.twig )
+	{
+		block =
+			block
+			.Assign(
+				Code.Term( 'this.twig' ),
+				Code.Term( 'twig' )
+			)
+			.Assign(
+				Code.Term( 'this.ranks' ),
+				Code.Term( 'ranks' )
+			);
+	}
+
+	// calls the initializer
+	if( this.init )
+	{
+		initCall =
+			Code.Call(
+				Code.Term( 'this._init' )
+			);
+
+		for(
+			a = 0, aZ = this.init.length;
+			a < aZ;
+			a++
+		)
+		{
+			initCall =
+				initCall
+				.Append(
+					Code.Term( this.init[ a ] )
+				);
+		}
+
+		block =
+			block
+			.Append(
+				initCall
+			);
+	}
+
+	// immutes the new object
 	block =
-		block.Append(
+		block
+		.Append(
 			Code.Call(
 				Code.Term( 'Jools.immute' )
 			).Append(
@@ -560,6 +607,17 @@ Generator.prototype.genCreatorVariables =
 	}
 
 	varList.push( 'inherit' );
+
+	if( this.twig )
+	{
+		varList.push(
+			'twig',
+			'ranks',
+			'twigDup',
+			'key'
+		);
+	}
+
 	varList.sort( );
 
 	for(
@@ -588,6 +646,7 @@ Generator.prototype.genCreatorInheritanceReceiver =
 		a,
 		aZ,
 		attr,
+		thisCheck,
 		name,
 		receiver =
 			Code
@@ -599,8 +658,20 @@ Generator.prototype.genCreatorInheritanceReceiver =
 
 	if( this.twig )
 	{
-//		throw new Error( 'TODO' );
-//		XXX
+		receiver =
+			receiver
+			.Assign(
+				Code.Term( 'twig' ),
+				Code.Term( 'inherit.twig' )
+			)
+			.Assign(
+				Code.Term( 'ranks' ),
+				Code.Term( 'inherit.ranks' )
+			)
+			.Assign(
+				Code.Term( 'twigDup' ),
+				Code.Term( 'false' )
+			);
 	}
 
 	for(
@@ -621,18 +692,31 @@ Generator.prototype.genCreatorInheritanceReceiver =
 		}
 
 		receiver =
-			receiver.Assign(
+			receiver
+			.Assign(
 				Code.Term( attr.vName ),
 				Code.Term( 'this.' + attr.assign )
 			);
 	}
 
-	return (
-		block.If(
+	thisCheck =
+		Code
+		.If(
 			Code.Term( 'this !== ' + this.reference ),
 			receiver
-		)
-	);
+		);
+
+	if( this.twig )
+	{
+		thisCheck =
+			thisCheck
+			.Elsewise(
+				Code
+				.Block( )
+			);
+	}
+
+	return block.Append( thisCheck );
 };
 
 
@@ -709,7 +793,8 @@ Generator.prototype.genCreatorFreeStringsParser =
 		loop.Append( switchExpr );
 
 	block =
-		block.For(
+		block
+		.For(
 			Code
 			.VList( )
 			.VarDec(

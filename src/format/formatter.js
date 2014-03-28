@@ -337,20 +337,14 @@ formatIf =
 	if( text === null )
 	{
 		text =
-			context.tab
-			+
-			'if(\n'
+			context.tab + 'if(\n'
 			+
 			formatExpression(
 				context.Inc,
 				cond
-			)
+			) + '\n'
 			+
-			'\n'
-			+
-			context.tab
-			+
-			')\n';
+			context.tab + ')\n';
 	}
 
 	text +=
@@ -358,6 +352,19 @@ formatIf =
 			context,
 			statement.then
 		);
+
+	if( statement.elsewise )
+	{
+		text +=
+			'\n'
+			+
+			context.tab + 'else\n'
+			+
+			formatBlock(
+				context,
+				statement.elsewise
+			);
+	}
 
 	return text;
 };
