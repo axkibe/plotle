@@ -816,7 +816,7 @@ Generator.prototype.genCreatorFreeStringsParser =
 				)
 				.Call(
 					Code.Term( 'ranks.push' ),
-					Code.Term( 'arg' )
+					Code.Term( 'key' )
 				)
 			)
 			.Case(
@@ -1015,8 +1015,11 @@ Generator.prototype.genCreatorChecks =
 			case 'Object' :
 			case 'Tree' :
 
+				// FIXME skip is always false
 				skip =
 					true;
+
+				continue;
 
 				break;
 
@@ -1047,11 +1050,6 @@ Generator.prototype.genCreatorChecks =
 						' && ' +
 						attr.vName + ' !== undefined'
 					);
-			}
-			else
-			{
-				cond =
-					null;
 			}
 		}
 
@@ -1119,8 +1117,7 @@ Generator.prototype.genCreatorChecks =
 		if( cond )
 		{
 			check =
-				check
-				.If(
+				check.If(
 					cond,
 					Code.Block( )
 					.If(
@@ -1251,7 +1248,7 @@ Generator.prototype.genCreatorUnchanged =
 							attr.vName +
 							'.equals( inherit.' + attr.assign + ')'
 							+
-							')'
+							'))'
 						);
 				}
 		}
@@ -1979,8 +1976,7 @@ Generator.prototype.genEquals =
 							' && ' +
 							'this.' + attr.assign +
 							'.equals( obj.' + attr.assign + ' )' +
-							')' +
-							')'
+							'))'
 						);
 				}
 		}
