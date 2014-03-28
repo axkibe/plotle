@@ -998,7 +998,12 @@ formatFail =
 		+
 		'throw new Error(' + context.sep
 		+
-		context.Inc.tab + '\'' + fail.message + '\'' + context.sep
+		formatExpression(
+			context.Inc,
+			fail.message
+		)
+		+
+		context.sep
 		+
 		context.tab + ')'
 	);
@@ -1164,6 +1169,12 @@ formatObjLiteral =
 /**/		throw new Error( );
 /**/	}
 /**/}
+
+
+	if( objliteral.ranks.length === 0 )
+	{
+		return context.tab + '{ }';
+	}
 
 	if( context.inline )
 	{

@@ -29,7 +29,7 @@ if( JOOBJ )
 						comment :
 							'the error message',
 						type :
-							'String',
+							'Term',
 						defaultValue :
 							'null'
 					}

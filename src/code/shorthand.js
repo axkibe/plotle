@@ -39,8 +39,6 @@ var
 				require( '../code/comment' ),
 			If :
 				require( '../code/if' ),
-			Fail :
-				require( '../code/fail' ),
 			File :
 				require( '../code/file' ),
 			Func :
@@ -118,14 +116,27 @@ ShortHand.Block =
 ShortHand.Call =
 	function(
 		func
+		// args
 	)
 {
-	return (
-		Code.Call.create(
-			'func',
-				func
-		)
-	);
+	var
+		call =
+			Code.Call.create(
+				'func',
+					func
+			);
+
+	for(
+		var a = 1, aZ = arguments.length;
+		a < aZ;
+		a++
+	)
+	{
+		call =
+			call.Append( arguments[ a ] );
+	}
+
+	return call;
 };
 
 

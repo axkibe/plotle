@@ -30,7 +30,7 @@ var
 
 var
 	_tag =
-		737438173;
+		161534916;
 
 
 /*
@@ -147,11 +147,7 @@ Fail.prototype.create =
 /**/
 /**/	if( v_message !== null )
 /**/	{
-/**/		if(
-/**/			typeof( v_message ) !== 'string'
-/**/			&&
-/**/			!( v_message instanceof String )
-/**/		)
+/**/		if( v_message.reflect !== 'Term' )
 /**/		{
 /**/			throw new Error(
 /**/				'type mismatch'
@@ -163,7 +159,15 @@ Fail.prototype.create =
 	if(
 		inherit
 		&&
-		v_message === inherit.message
+		(
+			v_message === inherit.message
+			||
+			(
+				v_message
+				&&
+				v_message.equals( inherit.message )
+			)
+		)
 	)
 	{
 		return inherit;
@@ -218,7 +222,14 @@ Fail.prototype.equals =
 	}
 
 	return (
-		this.message === obj.message
+		(
+			this.message === obj.message ||
+			(
+				this.message !== null
+				&&
+				this.message.equals( obj.message )
+			)
+		)
 	);
 };
 

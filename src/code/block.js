@@ -1,6 +1,9 @@
 /*
 | A code block to be generated
 |
+| FIXME: use shorthand calls when cycle require
+|        is no longer an issue.
+|
 | Authors: Axel Kittenberger
 */
 
@@ -59,6 +62,8 @@ var
 		{
 			Assign :
 				require( './assign' ),
+			Call :
+				require( './call' ),
 			Check :
 				require( './check' ),
 			Comment :
@@ -119,6 +124,35 @@ Block.prototype.Assign =
 	return this.Append( assign );
 };
 
+
+/*
+| Recreates the block with a call appended.
+*/
+Block.prototype.Call =
+	function(
+		func
+		// args
+	)
+{
+	var
+		call =
+			Code.Call.create(
+				'func',
+					func
+			);
+
+	for(
+		var a = 1, aZ = arguments.length;
+		a < aZ;
+		a++
+	)
+	{
+		call =
+			call.Append( arguments[ a ] );
+	}
+
+	return this.Append( call );
+};
 
 /*
 | Returns the block with a check appended.
@@ -194,14 +228,28 @@ Block.prototype.Fail =
 		message
 	)
 {
-	var
-		fail =
+	if( !message )
+	{
+		message =
+			null;
+	}
+	else if( Jools.isString( message ) )
+	{
+		message =
+			Code.Term.create(
+				'term',
+					'\'' + message + '\''
+			);
+	}
+
+	return (
+		this.Append(
 			Code.Fail.create(
 				'message',
-					message || null
-			);
-
-	return this.Append( fail );
+					message
+			)
+		)
+	);
 };
 
 

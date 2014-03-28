@@ -292,8 +292,7 @@ Generator.prototype.genNodeIncludes =
 		);
 
 	block =
-		Code
-		.Block( )
+		Code.Block( )
 		.Assign(
 			Code.Term( 'JoobjProto' ),
 			Code.Term( 'require( \'../../src/joobj/proto\' )' )
@@ -338,15 +337,12 @@ Generator.prototype.genConstructor =
 
 	// checks the tag
 	block =
-		Code
-		.Block( )
+		Code.Block( )
 		.Check(
-			Code
-			.Block( ).
+			Code.Block( ).
 			If(
 				Code.Term( 'tag !== ' + this.tag ),
-				Code
-				.Block( )
+				Code.Block( )
 				.Fail( )
 			)
 		);
@@ -377,8 +373,7 @@ Generator.prototype.genConstructor =
 		if( !attr.allowsUndefined )
 		{
 			block =
-				block
-				.Append( assign );
+				block.Append( assign );
 		}
 		else
 		{
@@ -386,8 +381,7 @@ Generator.prototype.genConstructor =
 				block
 				.If(
 					Code.Term( attr.vName + ' !== undefined' ),
-					Code
-					.Block( )
+					Code.Block( )
 					.Append(
 						assign
 					)
@@ -424,15 +418,13 @@ Generator.prototype.genConstructor =
 		)
 		{
 			initCall =
-				initCall
-				.Append(
+				initCall.Append(
 					Code.Term( this.init[ a ] )
 				);
 		}
 
 		block =
-			block
-			.Append(
+			block.Append(
 				initCall
 			);
 	}
@@ -440,31 +432,22 @@ Generator.prototype.genConstructor =
 	// immutes the new object
 	block =
 		block
-		.Append(
-			Code.Call(
-				Code.Term( 'Jools.immute' )
-			).Append(
-				Code.Term( 'this' )
-			)
+		.Call(
+			Code.Term( 'Jools.immute' ),
+			Code.Term( 'this' )
 		);
 
 	if( this.twig )
 	{
 		block =
 			block
-			.Append(
-				Code.Call(
-					Code.Term( 'Jools.immute' )
-				).Append(
-					Code.Term( 'twig' )
-				)
+			.Call(
+				Code.Term( 'Jools.immute' ),
+				Code.Term( 'twig' )
 			)
-			.Append(
-				Code.Call(
-					Code.Term( 'Jools.immute' )
-				).Append(
-					Code.Term( 'ranks' )
-				)
+			.Call(
+				Code.Term( 'Jools.immute' ),
+				Code.Term( 'ranks' )
 			);
 	}
 
@@ -571,15 +554,10 @@ Generator.prototype.genSubclass =
 		.Comment(
 			'Subclass.'
 		)
-		.Append(
-			Code
-			.Call(
-				Code.Term( 'Jools.subclass' )
-			).Append(
-				Code.Term( this.reference )
-			).Append(
-				Code.Term( this.subclass )
-			)
+		.Call(
+			Code.Term( 'Jools.subclass' ),
+			Code.Term( this.reference ),
+			Code.Term( this.subclass )
 		)
 	);
 };
@@ -649,8 +627,7 @@ Generator.prototype.genCreatorInheritanceReceiver =
 		thisCheck,
 		name,
 		receiver =
-			Code
-			.Block( )
+			Code.Block( )
 			.Assign(
 				Code.Term( 'inherit' ),
 				Code.Term( 'this' )
@@ -711,8 +688,19 @@ Generator.prototype.genCreatorInheritanceReceiver =
 		thisCheck =
 			thisCheck
 			.Elsewise(
-				Code
-				.Block( )
+				Code.Block( )
+				.Assign(
+					Code.Term( 'twig' ),
+					Code.ObjLiteral( )
+				)
+				.Assign(
+					Code.Term( 'ranks' ),
+					Code.Term( '[ ]' )
+				)
+				.Assign(
+					Code.Term( 'twigDup' ),
+					Code.Term( 'true' )
+				)
 			);
 	}
 
@@ -735,8 +723,7 @@ Generator.prototype.genCreatorFreeStringsParser =
 		switchExpr;
 
 	loop =
-		Code
-		.Block( )
+		Code.Block( )
 		.VarDec(
 			'arg',
 			Code.Term( 'arguments[ a + 1 ]' )
@@ -764,12 +751,10 @@ Generator.prototype.genCreatorFreeStringsParser =
 			switchExpr
 			.Case(
 				Code.Term( '\'' + name + '\'' ),
-				Code
-				.Block( )
+				Code.Block( )
 				.If(
 					Code.Term( 'arg !== undefined' ),
-					Code
-					.Block( )
+					Code.Block( )
 					.Assign(
 						Code.Term( attr.vName ),
 						Code.Term( 'arg' )
@@ -778,13 +763,114 @@ Generator.prototype.genCreatorFreeStringsParser =
 			);
 	}
 
+	if( this.twig )
+	{
+		switchExpr =
+			switchExpr
+			.Case(
+				Code.Term ( '\'twig:add\'' ),
+				Code.Block( )
+				.If(
+					Code.Term( '!twigDup' ),
+					Code.Block( )
+					.Assign(
+						Code.Term( 'twig' ),
+						Code.Call(
+							Code.Term( 'Jools.copy' ),
+							Code.Term( 'twig' )
+						)
+					)
+					.Assign(
+						Code.Term( 'ranks' ),
+						Code.Call(
+							Code.Term( 'ranks.slice' )
+						)
+					)
+					.Assign(
+						Code.Term( 'twigDup' ),
+						Code.Term( 'true' )
+					)
+				)
+				.Assign(
+					Code.Term( 'key' ),
+					Code.Term( 'arg' )
+				)
+				.Assign(
+					Code.Term( 'arg' ),
+					Code.Term( 'arguments[ ++a + 1 ]' )
+				)
+				.If(
+					Code.Term( 'twig[ key ] !== undefined ' ),
+					Code.Block( )
+					.Fail(
+						Code.Term(
+							'\'key "\' + key + \'" already in use\''
+						)
+					)
+				)
+				.Assign(
+					Code.Term( 'twig[ key ]'),
+					Code.Term( 'arg' )
+				)
+				.Call(
+					Code.Term( 'ranks.push' ),
+					Code.Term( 'arg' )
+				)
+			)
+			.Case(
+				Code.Term ( '\'twig:set\'' ),
+				Code.Block( )
+				.If(
+					Code.Term( '!twigDup' ),
+					Code.Block( )
+					.Assign(
+						Code.Term( 'twig' ),
+						Code.Call(
+							Code.Term( 'Jools.copy' ),
+							Code.Term( 'twig' )
+						)
+					)
+					.Assign(
+						Code.Term( 'ranks' ),
+						Code.Call(
+							Code.Term( 'ranks.slice' )
+						)
+					)
+					.Assign(
+						Code.Term( 'twigDup' ),
+						Code.Term( 'true' )
+					)
+				)
+				.Assign(
+					Code.Term( 'key' ),
+					Code.Term( 'arg' )
+				)
+				.Assign(
+					Code.Term( 'arg' ),
+					Code.Term( 'arguments[ ++a + 1 ]' )
+				)
+				.If(
+					Code.Term( 'twig[ key ] === undefined ' ),
+					Code.Block( )
+					.Fail(
+						Code.Term(
+							'\'key "\' + key + \'" not in use\''
+						)
+					)
+				)
+				.Assign(
+					Code.Term( 'twig[ key ]'),
+					Code.Term( 'arg' )
+				)
+			);
+	}
+
 	switchExpr =
-		switchExpr.Default(
-			Code
-			.Block( )
+		switchExpr
+		.Default(
+			Code.Block( )
 			.Check(
-				Code
-				.Block( )
+				Code.Block( )
 				.Fail( 'invalid argument' )
 			)
 		);
@@ -852,8 +938,7 @@ Generator.prototype.genCreatorDefaults =
 				block
 				.If(
 					Code.Term( attr.vName + ' === undefined' ),
-					Code
-					.Block( )
+					Code.Block( )
 					.Assign(
 						Code.Term( attr.vName ),
 						Code.Term( attr.defaultValue )
@@ -884,8 +969,7 @@ Generator.prototype.genCreatorChecks =
 		tfail;
 
 	check =
-		Code
-		.Block( );
+		Code.Block( );
 
 	for(
 		var a = 0, aZ = this.attrList.length;
@@ -904,8 +988,7 @@ Generator.prototype.genCreatorChecks =
 			check =
 				check.If(
 					Code.Term( attr.vName + ' === undefined' ),
-					Code
-					.Block( )
+					Code.Block( )
 					.Fail( 'undefined attribute ' + name )
 				);
 		}
@@ -915,8 +998,7 @@ Generator.prototype.genCreatorChecks =
 			check =
 				check.If(
 					Code.Term( attr.vName + ' === null' ),
-					Code
-					.Block( )
+					Code.Block( )
 					.Fail( 'attribute ' + name + ' must not be null.' )
 				);
 		}
@@ -1029,8 +1111,7 @@ Generator.prototype.genCreatorChecks =
 		}
 
 		tfail =
-			Code
-			.Block( )
+			Code.Block( )
 			.Fail( 'type mismtach' );
 
 		if( cond )
@@ -1039,8 +1120,7 @@ Generator.prototype.genCreatorChecks =
 				check
 				.If(
 					cond,
-					Code
-					.Block( )
+					Code.Block( )
 					.If(
 						tcheck,
 						tfail
@@ -1184,8 +1264,7 @@ Generator.prototype.genCreatorUnchanged =
 	block =
 		block.If(
 			cond,
-			Code
-			.Block( )
+			Code.Block( )
 			.Return(
 				Code.Term( 'inherit' )
 			)
@@ -1229,8 +1308,7 @@ Generator.prototype.genCreatorReturn =
 			case 'ranks' :
 
 				call =
-					call
-					.Append(
+					call.Append(
 						Code.Term( name )
 					);
 
@@ -1239,8 +1317,7 @@ Generator.prototype.genCreatorReturn =
 			case 'tag' :
 
 				call =
-					call
-					.Append(
+					call.Append(
 						Code.Term( '' + this.tag )
 					);
 
@@ -1252,8 +1329,7 @@ Generator.prototype.genCreatorReturn =
 					this.attributes[ name ];
 
 				call =
-					call
-					.Append(
+					call.Append(
 						Code.Term( attr.vName )
 					);
 		}
@@ -1284,8 +1360,7 @@ Generator.prototype.genCreator =
 		);
 
 	block =
-		Code
-		.Block( );
+		Code.Block( );
 
 	block =
 		this.genCreatorVariables( block );
@@ -1389,12 +1464,10 @@ Generator.prototype.genFromJSONCreatorParser =
 		)
 		.Case(
 			Code.Term( '\'type\'' ),
-			Code
-			.Block( )
+			Code.Block( )
 			.If(
 				Code.Term( 'arg !== \'' + this.name + '\'' ),
-				Code
-				.Block( )
+				Code.Block( )
 				.Fail( 'invalid JSON ' )
 			)
 		);
@@ -1446,8 +1519,7 @@ Generator.prototype.genFromJSONCreatorParser =
 		}
 
 		caseBlock =
-			Code
-			.Block( )
+			Code.Block( )
 			.Assign(
 				Code.Term( attr.vName ),
 				arg
@@ -1466,8 +1538,7 @@ Generator.prototype.genFromJSONCreatorParser =
 		.ForIn(
 			'name',
 			Code.Term( 'json' ),
-			Code
-			.Block( )
+			Code.Block( )
 			.Assign(
 				Code.Term( 'arg' ),
 				Code.Term( 'json[ name ]' )
@@ -1513,8 +1584,7 @@ Generator.prototype.genFromJSONCreatorReturn =
 			case 'tag' :
 
 				call =
-					call
-					.Append(
+					call.Append(
 						Code.Term( '' + this.tag )
 					);
 
@@ -1526,8 +1596,7 @@ Generator.prototype.genFromJSONCreatorReturn =
 					this.attributes[ name ];
 
 				call =
-					call
-					.Append(
+					call.Append(
 						Code.Term( attr.vName )
 					);
 		}
@@ -1594,8 +1663,7 @@ Generator.prototype.genFromJSONCreator =
 
 	funcBlock =
 		this.genFromJSONCreatorVariables(
-			Code
-			.Block( )
+			Code.Block( )
 		);
 
 	// TODO remove
@@ -1603,8 +1671,7 @@ Generator.prototype.genFromJSONCreator =
 		funcBlock
 		.If(
 			Code.Term( 'json._$grown' ),
-			Code
-			.Block( )
+			Code.Block( )
 			.Return(
 				Code.Term( 'json' )
 			)
@@ -1720,8 +1787,7 @@ Generator.prototype.genToJSON =
 		olit;
 
 	block =
-		Code
-		.Block( )
+		Code.Block( )
 		.VarDec(
 			'json'
 		);
@@ -1764,15 +1830,13 @@ Generator.prototype.genToJSON =
 		.Assign(
 			Code.Term( 'json' ),
 			Code.Call(
-				Code.Term( 'Object.freeze' )
-			).Append(
+				Code.Term( 'Object.freeze' ),
 				olit
 			)
 		)
 		.Return(
 			Code.Func(
-				Code
-				.Block( )
+				Code.Block( )
 				.Return(
 					Code.Term( 'json' )
 				)
@@ -1782,19 +1846,11 @@ Generator.prototype.genToJSON =
 	capsule =
 		capsule
 		.Comment( 'Converts a ' + this.name + ' into JSON.' )
-		.Append(
-			Code.Call(
-				Code.Term( 'Jools.lazyValue' )
-			)
-			.Append(
-				Code.Term( this.reference + '.prototype' )
-			)
-			.Append(
-				Code.Term( '\'toJSON\'' )
-			)
-			.Append(
-				Code.Func( block )
-			)
+		.Call(
+			Code.Term( 'Jools.lazyValue' ),
+			Code.Term( this.reference + '.prototype' ),
+			Code.Term( '\'toJSON\'' ),
+			Code.Func( block )
 		);
 
 	return capsule;
@@ -1845,23 +1901,20 @@ Generator.prototype.genEquals =
 		.Comment( 'Tests equality of object.' );
 
 	block =
-		Code
-		.Block( );
+		Code.Block( );
 
 	block =
 		block
 		.If(
 			Code.Term( 'this === obj' ),
-			Code
-			.Block( )
+			Code.Block( )
 			.Return(
 				Code.Term( 'true' )
 			)
 		)
 		.If(
 			Code.Term( '!obj' ),
-			Code
-			.Block( )
+			Code.Block( )
 			.Return(
 				Code.Term( 'false' )
 			)
@@ -1940,8 +1993,7 @@ Generator.prototype.genNodeExport =
 		.Comment( 'Node export.' )
 		.If(
 			Code.Term( 'SERVER' ),
-			Code
-			.Block( )
+			Code.Block( )
 			.Assign(
 				Code.Term( 'module.exports' ),
 				Code.Term( this.reference )
@@ -1995,8 +2047,7 @@ Generator.prototype.genPreamble =
 		block;
 
 	block =
-		Code
-		.Block( );
+		Code.Block( );
 
 	block =
 		this.genExport( block );
@@ -2016,8 +2067,7 @@ Generator.prototype.genCapsule =
 {
 	var
 		capsule =
-			Code
-			.Block( );
+			Code.Block( );
 
 	if( this.node )
 	{
