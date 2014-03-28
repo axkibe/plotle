@@ -152,6 +152,8 @@ Generator.prototype._init =
 					assign,
 				comment :
 					jAttr.comment,
+				defaultValue :
+					jAttr.defaultValue,
 				json :
 					jAttr.json,
 				name :
@@ -1873,27 +1875,27 @@ Generator.prototype.genEquals =
 		ceq,
 		name;
 
-	if( this.equals === false )
+	switch( this.equals )
 	{
-		return capsule;
-	}
+		case false :
 
-	if( this.equals === 'primitive' )
-	{
-		return capsule;
-	}
+			return capsule;
 
-	console.log( this.equals );
+		case 'primitive' :
 
-	if(
-		this.equals !== true
-		&&
-		this.equals !== undefined
-	)
-	{
-		throw new Error(
-			'invalid equals value'
-		);
+			// FIXME
+			return capsule;
+
+		case true :
+		case undefined :
+
+			break;
+
+		default :
+
+			throw new Error(
+				'invalid equals value'
+			);
 	}
 
 	capsule =
@@ -1937,25 +1939,59 @@ Generator.prototype.genEquals =
 			continue;
 		}
 
-		ceq =
-			Code.Term(
-				'this.' + attr.assign +
-				' === obj.' + attr.assign
-			);
+		switch( attr.type )
+		{
+			case 'Boolean' :
+			case 'Integer' :
+			case 'Mark' : // FIXME
+			case 'Number' :
+			case 'String' :
+			case 'Tree' : // FIXME
 
-		if( cond === null )
-		{
-			cond =
-				ceq;
+				ceq =
+					Code.Term(
+						'this.' + attr.assign +
+						' === obj.' + attr.assign
+					);
+
+				break;
+
+			default :
+
+				if( !attr.allowsNull )
+				{
+					ceq =
+						Code.Term(
+							'this.' + attr.assign +
+							' === obj.' + attr.assign
+						);
+				}
+				else
+				{
+					ceq =
+						// FIXME
+						Code.Term(
+							'(this.' + attr.assign +
+							' === obj.' + attr.assign +
+							' ||' +
+							'(' +
+							'this.' + attr.assign + ' !== null' +
+							' && ' +
+							'this.' + attr.assign +
+							'.equals( obj.' + attr.assign + ' )' +
+							')' +
+							')'
+						);
+				}
 		}
-		else
-		{
-			cond =
-				Code.And(
-					cond,
-					ceq
-				);
-		}
+
+		cond =
+			cond === null ?
+			ceq :
+			Code.And(
+				cond,
+				ceq
+			);
 	}
 
 	block =
