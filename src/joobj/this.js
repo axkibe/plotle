@@ -2,6 +2,8 @@
 | Runs the joobj generator from node for the
 | module that requires this.
 |
+| FIXME cleanup this file
+|
 | Authors: Axel Kittenberger
 */
 
@@ -15,27 +17,25 @@
 
 
 var
-	config =
-		require( '../../config' ),
 	fs =
-		require( 'fs' ),
-	vm =
-		require( 'vm' ),
-	joobjGenerator =
-		require( './generator' ),
-	Jools =
-		require( '../jools/jools' ),
-	input =
-		null,
-	joobj =
-		null,
-	output =
-		null,
-	readOptions =
-		{
-			encoding :
-				'utf8'
-		};
+		require( 'fs' );
+//	vm =
+//		require( 'vm' ),
+//	joobjGenerator =
+//		require( './generator' ),
+//	Jools =
+//		require( '../jools/jools' ),
+//	input =
+//		null,
+//	joobj =
+//		null,
+//	output =
+//		null,
+//	readOptions =
+//		{
+//			encoding :
+//				'utf8'
+//		};
 
 var
 joobjNodeGenerator =
@@ -47,6 +47,8 @@ joobjNodeGenerator =
 		server =
 			module,
 		inFilename,
+		inStat,
+		outStat,
 		si,
 		separator =
 			'/src/';
@@ -78,6 +80,7 @@ joobjNodeGenerator =
 	inFilename =
 		module.filename.substring( si + 1 );
 
+/*
 	input =
 		fs.readFileSync(
 			inFilename,
@@ -96,6 +99,7 @@ joobjNodeGenerator =
 
 	output =
 		joobjGenerator( joobj );
+*/
 
 	var
 		outFilename =
@@ -107,10 +111,11 @@ joobjNodeGenerator =
 			+
 			inFilename.replace( /\//g, '-' );
 
-	Jools.log(
+/*	Jools.log(
 		'start',
 		'generating ' + outFilename
 	);
+
 
 	if( !config.noWrite )
 	{
@@ -118,6 +123,28 @@ joobjNodeGenerator =
 			outFilename,
 			output
 		);
+	}
+*/
+
+	inStat =
+		fs.statSync( inFilename );
+
+	outStat =
+		fs.statSync( outFilename );
+
+	if( inStat.mtime > outStat.mtime )
+	{
+		if( !FORCE )
+		{
+			throw new Error(
+				'Out of date joobj: ' +
+					inFilename
+					+
+					' -> '
+					+
+					outFilename
+			);
+		}
 	}
 
 	return (

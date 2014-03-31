@@ -33,6 +33,8 @@
 				true,
 			"CHECK" :
 				true,
+			"FORCE" :
+				true,
 			"JOOBJ" :
 				true,
 			"SHELL" :
