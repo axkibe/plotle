@@ -1188,7 +1188,7 @@ Generator.prototype.genCreatorChecks =
 					Code.Term(
 						'typeof( ' + attr.vName  + ' ) !== \'number\'' +
 						' || ' +
-						'Math.floor( ' + attr.vName + ' ) !== ' + attr.vNae
+						'Math.floor( ' + attr.vName + ' ) !== ' + attr.vName
 					);
 
 				break;

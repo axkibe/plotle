@@ -156,6 +156,8 @@ config.log  = {
 		true,
 	fail :
 		true,
+	genjoobj :
+		true,
 	twig :
 		false,
 	iface :

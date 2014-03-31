@@ -31,6 +31,8 @@ var
 	arg,
 	argV =
 		process.argv,
+	didSomething =
+		false,
 	fs =
 		require( 'fs' ),
 	vm =
@@ -39,6 +41,8 @@ var
 		require( '../format/formatter' ),
 	Generator =
 		require( '../joobj/genv2' ),
+	Jools =
+		require( '../jools/jools' ),
 	ast =
 		null,
 	file,
@@ -49,6 +53,8 @@ var
 	input =
 		null,
 	listing =
+		null,
+	listingName =
 		null,
 	list =
 		[ ],
@@ -78,7 +84,8 @@ for(
 	{
 		if( arg[ 1 ] !== '-' )
 		{
-			console.log(
+			Jools.log(
+				fail,
 				'Invalid argument: ' + arg
 			);
 
@@ -104,7 +111,7 @@ for(
 		}
 	}
 
-	if( listing )
+	if( listingName )
 	{
 		console.log(
 			'Cannot handle more than one listing.'
@@ -113,11 +120,11 @@ for(
 		process.exit( -1 );
 	}
 
-	listing =
+	listingName =
 		arg;
 }
 
-if( !listing )
+if( !listingName )
 {
 	console.log(
 		'Listing missing.'
@@ -127,7 +134,7 @@ if( !listing )
 }
 
 listing =
-	require( '../../' + listing );
+	require( '../../' + listingName );
 
 for(
 	a = 0, aZ = listing.list.length;
@@ -205,26 +212,41 @@ for(
 	}
 
 	if(
-		!all
-		&&
-		outStat
-		&&
-		outStat.mtime > inStat.mtime
+		all
+		||
+		!outStat
+		||
+		outStat.mtime <= inStat.mtime
 	)
 	{
-		console.log( 'Skipping ' + file.outFilename );
-	}
-	else
-	{
-		console.log( 'Writing ' + file.outFilename );
+		Jools.log(
+			'genjoobj',
+			'Writing ' + file.outFilename
+		);
 
 		fs.writeFileSync(
-			outFilename,
+			file.outFilename,
 			file.output
 		);
+
+		didSomething =
+			true;
 	}
 }
 
-console.log( 'Done' );
+if (didSomething )
+{
+	Jools.log(
+		'genjoobj',
+		'done updating ' + listingName
+	);
+}
+else
+{
+	Jools.log(
+		'genjoobj',
+		'nothing to be done for ' + listingName
+	);
+}
 
 } )( );

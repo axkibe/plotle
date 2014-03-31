@@ -17,6 +17,8 @@
 */
 GLOBAL.APP=
 	'server';
+GLOBAL.FORCE=
+	false;
 GLOBAL.SHELLAPP=
 	'shell';
 GLOBAL.CHECK =
