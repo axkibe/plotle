@@ -26,19 +26,16 @@ var
 var
 	config =
 		require( '../../config' ),
-
 	fs =
 		require( 'fs' ),
-
-	joobjGenerator =
-		require( '../joobj/generator' ),
-
+	Formatter =
+		require( '../format/formatter' ),
+	Generator =
+		require( '../joobj/genv2' ),
 	Jools =
 		require( '../jools/jools' ),
-
 	sus =
 		require( 'suspend' ),
-
 	vm =
 		require( 'vm' );
 
@@ -52,23 +49,22 @@ GenerateJoobj.run =
 	)
 {
 	var
-		data,
-		def,
-		defFileStat,
+		ast,
+		input,
+		inputFileStat,
 		joobj,
-		joobjFileStat;
+		output,
+		outputFileStat;
 
-	defFileStat =
-		fs.stat(
-			resource.joobjSrcPath,
-			sus.fork( )
-		);
+	fs.stat(
+		resource.joobjSrcPath,
+		sus.fork( )
+	);
 
-	joobjFileStat =
-		fs.stat(
-			resource.filePath,
-			sus.fork( )
-		);
+	fs.stat(
+		resource.filePath,
+		sus.fork( )
+	);
 
 	try
 	{
@@ -76,23 +72,25 @@ GenerateJoobj.run =
 			joi =
 				yield sus.join( );
 
-		defFileStat =
+		inputFileStat =
 			joi[ 0 ];
 
-		joobjFileStat =
+		outputFileStat =
 			joi[ 1 ];
 	}
 	catch( err )
 	{
-		joobjFileStat =
-		defFileStat =
+		inputFileStat =
+		outputFileStat =
 			null;
 	}
 
 	if(
-		!joobjFileStat
+		!inputFileStat
 		||
-		defFileStat.mtime >= joobjFileStat.mtime
+		!outputFileStat
+		||
+		inputFileStat.mtime > outputFileStat.mtime
 	)
 	{
 		Jools.log(
@@ -101,7 +99,7 @@ GenerateJoobj.run =
 				resource.aliases[ 0 ]
 		);
 
-		def =
+		input =
 			yield fs.readFile(
 				resource.joobjSrcPath,
 				sus.resume( )
@@ -109,7 +107,7 @@ GenerateJoobj.run =
 
 		joobj =
 			vm.runInNewContext(
-				def,
+				input,
 				{
 					JOOBJ :
 						true
@@ -117,14 +115,17 @@ GenerateJoobj.run =
 				resource.joobjSrcPath
 			);
 
-		data =
-			joobjGenerator( joobj );
+		ast =
+			Generator.generate( joobj );
+
+		output =
+			Formatter.format( ast );
 
 		if( !config.noWrite )
 		{
 			yield fs.writeFile(
 				resource.filePath,
-				data,
+				output,
 				sus.resume( )
 			);
 		}
@@ -132,7 +133,7 @@ GenerateJoobj.run =
 	else
 	{
 		// just read in the already generated Joobj
-		data =
+		output =
 			(
 				yield fs.readFile(
 					resource.filePath,
@@ -141,7 +142,7 @@ GenerateJoobj.run =
 			) + '';
 	}
 
-	return data;
+	return output;
 };
 
 

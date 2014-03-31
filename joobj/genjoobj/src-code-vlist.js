@@ -55,7 +55,7 @@ Code.VList =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 784227679 )
+/**/	if( tag !== 855642983 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -256,7 +256,7 @@ VList.prototype.create =
 
 	return (
 		new VList(
-			784227679,
+			855642983,
 			twig,
 			ranks,
 			v_path

@@ -54,7 +54,7 @@ Code.VarDec =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 353263696 )
+/**/	if( tag !== 540745107 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -183,7 +183,7 @@ VarDec.prototype.create =
 
 	return (
 		new VarDec(
-			353263696,
+			540745107,
 			v_assign,
 			v_name
 		)

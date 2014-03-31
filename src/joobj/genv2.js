@@ -522,9 +522,34 @@ Generator.prototype.genConstructor =
 			a++
 		)
 		{
+			name =
+				this.init[ a ];
+
+			switch( name )
+			{
+				case 'inherit' :
+
+					initCall =
+						initCall.Append(
+							Code.Term( this.init[ a ] )
+						);
+
+					continue;
+			}
+
+			attr =
+				this.attributes[ name ];
+
+			if( !attr )
+			{
+				throw new Error(
+					'invalid parameter to init: ' + name
+				);
+			}
+
 			initCall =
 				initCall.Append(
-					Code.Term( this.init[ a ] )
+					Code.Term( attr.vName )
 				);
 		}
 
@@ -1881,7 +1906,7 @@ Generator.prototype.genReflection =
 			capsule
 			.Comment( 'Workaround old meshverse growing.' )
 			.Assign(
-				Code.Term( this.reference + '.prototype._grown' ),
+				Code.Term( this.reference + '.prototype._$grown' ),
 				Code.Term( 'true' )
 			);
 	}

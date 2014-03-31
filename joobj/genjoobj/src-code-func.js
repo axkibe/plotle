@@ -55,7 +55,7 @@ Code.Func =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 464382587 )
+/**/	if( tag !== 739904318 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -256,7 +256,7 @@ Func.prototype.create =
 
 	return (
 		new Func(
-			464382587,
+			739904318,
 			twig,
 			ranks,
 			v_block

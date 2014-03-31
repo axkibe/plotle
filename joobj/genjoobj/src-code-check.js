@@ -53,7 +53,7 @@ Code.Check =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 591170578 )
+/**/	if( tag !== 630777055 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -150,7 +150,7 @@ Check.prototype.create =
 
 	return (
 		new Check(
-			591170578,
+			630777055,
 			v_block
 		)
 	);

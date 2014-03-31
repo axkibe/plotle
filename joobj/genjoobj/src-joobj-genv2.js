@@ -51,7 +51,7 @@ GenV2 =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 815202645 )
+/**/	if( tag !== 190337159 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -143,7 +143,7 @@ GenV2.prototype.create =
 
 	return (
 		new GenV2(
-			815202645,
+			190337159,
 			v_joobj
 		)
 	);

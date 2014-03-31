@@ -85,7 +85,7 @@ for(
 		if( arg[ 1 ] !== '-' )
 		{
 			Jools.log(
-				fail,
+				'fail',
 				'Invalid argument: ' + arg
 			);
 
@@ -103,7 +103,8 @@ for(
 
 			default :
 
-				console.log(
+				Jools.log(
+					'fail',
 					'Invalid argument: ' + arg
 				);
 
@@ -113,7 +114,8 @@ for(
 
 	if( listingName )
 	{
-		console.log(
+		Jools.log(
+			'fail',
 			'Cannot handle more than one listing.'
 		);
 
@@ -126,7 +128,8 @@ for(
 
 if( !listingName )
 {
-	console.log(
+	Jools.log(
+		'fail',
 		'Listing missing.'
 	);
 
