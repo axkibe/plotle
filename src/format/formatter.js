@@ -893,6 +893,7 @@ formatStatement =
 		case 'Assign' :
 		case 'Call' :
 		case 'Fail' :
+		case 'New' :
 		case 'Return' :
 		case 'Term' :
 

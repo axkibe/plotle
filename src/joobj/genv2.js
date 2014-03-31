@@ -89,6 +89,9 @@ Generator.prototype._init =
 	this.node =
 		!!joobj.node;
 
+	this.singleton =
+		!!joobj.singleton;
+
 	this.subclass =
 		joobj.subclass;
 
@@ -543,6 +546,29 @@ Generator.prototype.genConstructor =
 };
 
 
+
+/*
+| Generates the singleton decleration.
+*/
+Generator.prototype.genSingleton =
+	function(
+		capsule // block to append to
+	)
+{
+	return (
+		capsule
+		.Comment(
+			'Singleton'
+		)
+		.VarDec(
+			'_singleton',
+			Code.Term( 'null' )
+		)
+	);
+};
+
+
+
 /*
 | Generates the subclass.
 */
@@ -966,7 +992,6 @@ Generator.prototype.genCreatorChecks =
 		check,
 		cond,
 		name,
-		skip,
 		tcheck,
 		tfail;
 
@@ -1015,42 +1040,28 @@ Generator.prototype.genCreatorChecks =
 			case 'Object' :
 			case 'Tree' :
 
-				// FIXME skip is always false
-				skip =
-					true;
-
 				continue;
-
-				break;
-
-			default :
-
-				skip =
-					false;
 		}
 
-		if( !skip )
+		if( attr.allowsNull && !attr.allowsUndefined )
 		{
-			if( attr.allowsNull && !attr.allowsUndefined )
-			{
-				cond =
-					Code.Term( attr.vName + ' !== null' );
-			}
-			else if( !attr.allowsNull && attr.allowsUndefined )
-			{
-				cond =
-					Code.Term( attr.vName + ' !== undefined' );
-			}
-			else if( attr.allowsNull && attr.allowsUndefine )
-			{
-				// FUTURE multilined
-				cond =
-					Code.Term(
-						attr.vName + ' !== null' +
-						' && ' +
-						attr.vName + ' !== undefined'
-					);
-			}
+			cond =
+				Code.Term( attr.vName + ' !== null' );
+		}
+		else if( !attr.allowsNull && attr.allowsUndefined )
+		{
+			cond =
+				Code.Term( attr.vName + ' !== undefined' );
+		}
+		else if( attr.allowsNull && attr.allowsUndefine )
+		{
+			// FUTURE multilined
+			cond =
+				Code.Term(
+					attr.vName + ' !== null' +
+					' && ' +
+					attr.vName + ' !== undefined'
+				);
 		}
 
 		switch( attr.type )
@@ -1112,7 +1123,7 @@ Generator.prototype.genCreatorChecks =
 
 		tfail =
 			Code.Block( )
-			.Fail( 'type mismtach' );
+			.Fail( 'type mismatch' );
 
 		if( cond )
 		{
@@ -1285,6 +1296,29 @@ Generator.prototype.genCreatorReturn =
 		attr,
 		call,
 		name;
+
+	if( this.singleton )
+	{
+		return (
+			block
+			.If(
+				Code.Term( '!_singleton' ),
+				Code.Block( )
+				.Assign(
+					Code.Term( '_singleton' ),
+					Code.New(
+						Code.Call(
+							Code.Term( this.reference ),
+							Code.Term( '' + this.tag )
+						)
+					)
+				)
+			)
+			.Return(
+				Code.Term( '_singleton' )
+			)
+		);
+	}
 
 	call =
 		Code.Call(
@@ -1880,8 +1914,25 @@ Generator.prototype.genEquals =
 
 		case 'primitive' :
 
-			// FIXME
-			return capsule;
+			// FUTURE remove
+
+			return (
+				capsule
+				.Comment( 'Tests equality of object.' )
+				.Assign(
+					Code.Term( this.reference + '.prototype.equals' ),
+					Code.Func(
+						Code.Block( )
+						.Return(
+							Code.Term( 'this === obj' )
+						)
+					)
+					.Arg(
+						'obj',
+						'object to compare to'
+					)
+				)
+			);
 
 		case true :
 		case undefined :
@@ -2109,6 +2160,12 @@ Generator.prototype.genCapsule =
 
 	capsule =
 		this.genConstructor( capsule );
+
+	if( this.singleton )
+	{
+		capsule =
+			this.genSingleton( capsule );
+	}
 
 	if( this.subclass )
 	{

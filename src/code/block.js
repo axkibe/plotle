@@ -76,6 +76,8 @@ var
 				require( './for-in' ),
 			If :
 				require( './if' ),
+			New :
+				require( './new' ),
 			Return :
 				require( './return' ),
 			Term :
@@ -303,6 +305,24 @@ Block.prototype.ForIn =
 			);
 
 	return this.Append( statement );
+};
+
+/*
+| Shorthand for creating new calls.
+*/
+Block.prototype.New =
+	function(
+		call
+	)
+{
+	return (
+		this.Append(
+			Code.New.create(
+				'call',
+					call
+			)
+		)
+	);
 };
 
 
