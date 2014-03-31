@@ -205,7 +205,11 @@ for(
 	}
 
 	if(
-		outStat && outStat.mtime > inStat.mtime
+		!all
+		&&
+		outStat
+		&&
+		outStat.mtime > inStat.mtime
 	)
 	{
 		console.log( 'Skipping ' + file.outFilename );

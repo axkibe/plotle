@@ -5,5 +5,6 @@ module.exports =
 	list :
 		[
 			'src/mark/vacant.js',
+			'src/action/create-generic.js'
 		]
 };

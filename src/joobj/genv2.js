@@ -117,7 +117,7 @@ Generator.prototype._init =
 
 		if( jAttr.unit )
 		{
-			units[ attr.unit ] =
+			units[ jAttr.unit ] =
 				true;
 		}
 
@@ -289,7 +289,14 @@ Generator.prototype.genNodeIncludes =
 	)
 {
 	var
-		block;
+		a,
+		aZ,
+		attr,
+		block,
+		// stuff already generated
+		generated =
+			{ },
+		name;
 
 	capsule =
 		capsule.Comment(
@@ -306,6 +313,84 @@ Generator.prototype.genNodeIncludes =
 			Code.Term( 'Jools' ),
 			Code.Term( 'require( \'../../src/jools/jools\' )' )
 		);
+
+	// generates the unit objects
+
+	for(
+		a = 0, aZ = this.unitList.length;
+		a < aZ;
+		a++
+	)
+	{
+		block =
+			block
+			.Assign(
+				Code.Term( this.unitList[ a ] ),
+				Code.ObjLiteral( )
+			);
+	}
+
+	// includes the used types from the units
+
+	for(
+		a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		switch( attr.type )
+		{
+			case 'Boolean' :
+			case 'Integer' :
+			case 'Number' :
+			case 'String' :
+
+				continue;
+		}
+
+		if( generated[ attr.unit ] )
+		{
+			if( generated[ attr.unit ][ attr.type ] )
+			{
+				continue;
+			}
+			else
+			{
+				generated[ attr.unit ][ attr.type ] =
+					true;
+			}
+		}
+		else
+		{
+			generated[ attr.unit ] =
+				{ };
+
+			generated[ attr.unit ][ attr.type ] =
+				true;
+		}
+
+		block =
+			block
+			.Assign(
+				Code.Term( attr.unit + '.' + attr.type ),
+				Code.Call(
+					Code.Term( 'require' ),
+					Code.Term(
+						'\'../../src/' +
+							attr.unit.toLowerCase( ) +
+							'/' +
+							attr.type.toLowerCase( ) +
+							'\''
+					)
+				)
+			);
+	}
 
 	capsule =
 		capsule.If(
@@ -1234,9 +1319,14 @@ Generator.prototype.genCreatorUnchanged =
 				if( !attr.allowsNull && !attr.allowsUndefined )
 				{
 					ceq =
-						Code.Term(
-							attr.vName +
-							'.equals( inherit.' + attr.assign
+// TODO clean
+//						Code.Term(
+//							attr.vName +
+//							'.equals( inherit.' + attr.assign + ' )'
+//						);
+						Code.Call(
+							Code.Term( attr.vName + '.equals' ),
+							Code.Term( 'inherit.' + attr.assign )
 						);
 				}
 				else
