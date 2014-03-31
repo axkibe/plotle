@@ -53,7 +53,7 @@ Code.Comment =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 756262056 )
+/**/	if( tag !== 564647640 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -143,7 +143,7 @@ Comment.prototype.create =
 
 	return (
 		new Comment(
-			756262056,
+			564647640,
 			v_content
 		)
 	);

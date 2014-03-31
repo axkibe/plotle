@@ -31,7 +31,7 @@ var
 	Formatter =
 		require( '../format/formatter' ),
 	Generator =
-		require( '../joobj/genv2' ),
+		require( '../joobj/gen' ),
 	Jools =
 		require( '../jools/jools' ),
 	sus =

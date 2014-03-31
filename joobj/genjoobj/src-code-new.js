@@ -53,7 +53,7 @@ Code.New =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 386981734 )
+/**/	if( tag !== 898416288 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -150,7 +150,7 @@ New.prototype.create =
 
 	return (
 		new New(
-			386981734,
+			898416288,
 			v_call
 		)
 	);

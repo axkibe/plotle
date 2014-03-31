@@ -28,6 +28,6 @@ module.exports =
 			'src/code/var-dec.js',
 			'src/code/vlist.js',
 			'src/format/context.js',
-			'src/joobj/genv2.js'
+			'src/joobj/gen.js'
 		]
 };

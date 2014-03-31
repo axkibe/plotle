@@ -55,7 +55,7 @@ Code.File =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 61673328 )
+/**/	if( tag !== 966143711 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -230,7 +230,7 @@ File.prototype.create =
 
 	return (
 		new File(
-			61673328,
+			966143711,
 			v_capsule,
 			v_header,
 			v_preamble

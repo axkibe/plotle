@@ -55,7 +55,7 @@ Code.ObjLiteral =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 985436860 )
+/**/	if( tag !== 947439607 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -256,7 +256,7 @@ ObjLiteral.prototype.create =
 
 	return (
 		new ObjLiteral(
-			985436860,
+			947439607,
 			twig,
 			ranks,
 			v_path
