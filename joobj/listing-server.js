@@ -7,6 +7,7 @@ module.exports =
 			'src/euclid/point.js',
 			'src/euclid/rect.js',
 			'src/server/resource.js',
+			'src/visual/doc.js',
 			'src/visual/para.js'
 		]
 };
