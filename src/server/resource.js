@@ -26,7 +26,7 @@ if( JOOBJ )
 						comment :
 							'the list of aliases this is server under',
 						type :
-							'Array',
+							'Object',
 						defaultValue :
 							// by default determined from filePath
 							'null'

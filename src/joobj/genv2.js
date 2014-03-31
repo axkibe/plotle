@@ -349,6 +349,7 @@ Generator.prototype.genNodeIncludes =
 			case 'Boolean' :
 			case 'Integer' :
 			case 'Number' :
+			case 'Object' :
 			case 'String' :
 
 				continue;
@@ -373,6 +374,20 @@ Generator.prototype.genNodeIncludes =
 
 			generated[ attr.unit ][ attr.type ] =
 				true;
+		}
+
+		if( !attr.unit )
+		{
+			continue;
+			// FIXME?
+			/*
+			throw new Error(
+				'Unit missing from: ' +
+					this.name +
+					'.' +
+					name
+			);
+			*/
 		}
 
 		block =
@@ -624,7 +639,14 @@ Generator.prototype.genConstructor =
 	}
 	else
 	{
-		throw new Error( 'TODO' );
+		capsule =
+			capsule
+			.Assign(
+				Code.Term(
+					this.name
+				),
+				constructor
+			);
 	}
 
 	return capsule;
@@ -1704,6 +1726,15 @@ Generator.prototype.genFromJSONCreatorReturn =
 
 		switch( name )
 		{
+			case 'inherit' :
+
+				call =
+					call.Append(
+						Code.Term( 'null' )
+					);
+
+				break;
+
 			case 'tag' :
 
 				call =
