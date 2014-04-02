@@ -18,7 +18,8 @@ var
 */
 var
 	JoobjProto,
-	Jools;
+	Jools,
+	Code;
 
 
 /*
@@ -38,6 +39,24 @@ if( SERVER )
 
 	Jools =
 		require( '../../src/jools/jools' );
+
+	Code =
+		{ };
+
+	Code.Assign =
+		require(
+			'../../src/code/assign'
+		);
+
+	Code.Check =
+		require(
+			'../../src/code/check'
+		);
+
+	Code.Comment =
+		require(
+			'../../src/code/comment'
+		);
 }
 
 
@@ -55,7 +74,7 @@ Code.Block =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 524137861 )
+/**/	if( tag !== 931673230 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -256,7 +275,7 @@ Block.prototype.create =
 
 	return (
 		new Block(
-			524137861,
+			931673230,
 			twig,
 			ranks,
 			v_path

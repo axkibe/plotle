@@ -18,7 +18,8 @@ var
 */
 var
 	JoobjProto,
-	Jools;
+	Jools,
+	Code;
 
 
 /*
@@ -38,6 +39,14 @@ if( SERVER )
 
 	Jools =
 		require( '../../src/jools/jools' );
+
+	Code =
+		{ };
+
+	Code.Term =
+		require(
+			'../../src/code/term'
+		);
 }
 
 
@@ -55,7 +64,7 @@ Code.Case =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 574800809 )
+/**/	if( tag !== 500958339 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -254,7 +263,7 @@ Case.prototype.create =
 
 	return (
 		new Case(
-			574800809,
+			500958339,
 			twig,
 			ranks,
 			v_block

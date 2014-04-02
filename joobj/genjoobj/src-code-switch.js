@@ -18,7 +18,8 @@ var
 */
 var
 	JoobjProto,
-	Jools;
+	Jools,
+	Code;
 
 
 /*
@@ -38,6 +39,14 @@ if( SERVER )
 
 	Jools =
 		require( '../../src/jools/jools' );
+
+	Code =
+		{ };
+
+	Code.Case =
+		require(
+			'../../src/code/case'
+		);
 }
 
 
@@ -56,7 +65,7 @@ Code.Switch =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 19762770 )
+/**/	if( tag !== 71619561 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -296,7 +305,7 @@ Switch.prototype.create =
 
 	return (
 		new Switch(
-			19762770,
+			71619561,
 			twig,
 			ranks,
 			v_defaultCase,

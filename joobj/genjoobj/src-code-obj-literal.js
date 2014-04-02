@@ -18,7 +18,8 @@ var
 */
 var
 	JoobjProto,
-	Jools;
+	Jools,
+	Code;
 
 
 /*
@@ -38,6 +39,14 @@ if( SERVER )
 
 	Jools =
 		require( '../../src/jools/jools' );
+
+	Code =
+		{ };
+
+	Code.Term =
+		require(
+			'../../src/code/term'
+		);
 }
 
 
@@ -55,7 +64,7 @@ Code.ObjLiteral =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 947439607 )
+/**/	if( tag !== 226020995 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -256,7 +265,7 @@ ObjLiteral.prototype.create =
 
 	return (
 		new ObjLiteral(
-			947439607,
+			226020995,
 			twig,
 			ranks,
 			v_path

@@ -45,7 +45,7 @@ if( JOOBJ )
 				flowWidth :
 					{
 						comment :
-							'width of the para its flow',
+							'maxmimum width for flows',
 						type :
 							'Number'
 					},
@@ -59,7 +59,7 @@ if( JOOBJ )
 				paraSep :
 					{
 						comment :
-							'vertical seperation of paragraphs',
+							'vertical paragraph separation',
 						type :
 							'Number'
 					},
@@ -73,7 +73,7 @@ if( JOOBJ )
 				mark :
 					{
 						comment :
-							'the users mark',
+							'the user\'s mark',
 						type :
 							'Mark'
 					},
@@ -94,6 +94,13 @@ if( JOOBJ )
 			},
 		init :
 			[ ],
+		json :
+			true,
+		twig :
+			{
+				'Para' :
+					'Visual.Para'
+			},
 		node :
 			true
 	};

@@ -21,7 +21,7 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'GenV2',
+			'Gen',
 		node :
 			true,
 		attributes :
@@ -41,21 +41,29 @@ if( JOOBJ )
 
 
 var
-	Generator =
+	Gen =
 		require( '../joobj/this' )( module ),
 	Code =
 		require( '../code/shorthand' ),
 	Validator =
 		require( './validator' );
 
-// FIXME remove
-//	Jools =
-//		require( '../jools/jools' ),
+
+/*
+| Converts a camel case string to a dash seperated string.
+*/
+var
+camelCaseToDash =
+	function( s )
+{
+	return s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase( );
+};
+
 
 /*
 | Initialized a generator
 */
-Generator.prototype._init =
+Gen.prototype._init =
 	function( )
 {
 	var
@@ -69,7 +77,11 @@ Generator.prototype._init =
 		jAttr,
 		joobj =
 			this.joobj,
+		ut,
 		name,
+		// twigs to be recognized
+		twig =
+			{ },
 		// units sorted alphabetically
 		unitList =
 			null,
@@ -98,9 +110,6 @@ Generator.prototype._init =
 	this.tag =
 		Math.floor( Math.random( ) * 1000000000 );
 
-	this.twig =
-		joobj.twig;
-
 	this.unit =
 		joobj.unit;
 
@@ -117,7 +126,13 @@ Generator.prototype._init =
 
 		if( jAttr.unit )
 		{
-			units[ jAttr.unit ] =
+			if( !units[ jAttr.unit ] )
+			{
+				units[ jAttr.unit ] =
+					{ };
+			}
+
+			units[ jAttr.unit ][ jAttr.type ] =
 				true;
 		}
 
@@ -181,7 +196,7 @@ Generator.prototype._init =
 
 	constructorList.sort( );
 
-	if( this.twig )
+	if( joobj.twig )
 	{
 		constructorList.unshift( 'ranks' );
 
@@ -231,11 +246,57 @@ Generator.prototype._init =
 	this.constructorList =
 		Object.freeze( constructorList );
 
+	if( joobj.twig )
+	{
+		for( name in joobj.twig )
+		{
+			ut =
+				joobj.twig[ name ].split( '.' );
+
+			if( ut.length !== 2 )
+			{
+				throw new Error(
+					'invalid twig unit.type: ' + name
+				);
+			}
+
+			if( !units[ ut[ 0 ] ] )
+			{
+				units[ ut[ 0 ] ] =
+					{ };
+			}
+
+			units[ ut[ 0 ] ][ ut[ 1 ] ] =
+				true;
+
+			twig[ name ] =
+				Object.freeze( {
+					unit :
+						ut[ 0 ],
+					type :
+						ut[ 1 ]
+				} );
+		}
+
+		this.twig =
+			Object.freeze( twig );
+	}
+	else
+	{
+		twig =
+		this.twig =
+			null;
+	}
+
+
 	unitList =
 		Object.keys( units ).sort( );
 
 	this.unitList =
 		Object.freeze( unitList );
+
+	this.units =
+		Object.freeze( units );
 
 	this.reference =
 		( joobj.unit === joobj.name ) ?
@@ -251,7 +312,7 @@ Generator.prototype._init =
 /*
 | Generates the imports.
 */
-Generator.prototype.genImports =
+Gen.prototype.genImports =
 	function(
 		capsule // block to append to
 	)
@@ -283,7 +344,7 @@ Generator.prototype.genImports =
 /*
 | Generates the node include.
 */
-Generator.prototype.genNodeIncludes =
+Gen.prototype.genNodeIncludes =
 	function(
 		capsule // block to append to
 	)
@@ -291,12 +352,13 @@ Generator.prototype.genNodeIncludes =
 	var
 		a,
 		aZ,
-		attr,
+		b,
+		bZ,
 		block,
-		// stuff already generated
-		generated =
-			{ },
-		name;
+		typeName,
+		types,
+		unitName,
+		unit;
 
 	capsule =
 		capsule.Comment(
@@ -330,81 +392,48 @@ Generator.prototype.genNodeIncludes =
 			);
 	}
 
-	// includes the used types from the units
-
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.unitList.length;
 		a < aZ;
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ];
+		unitName =
+			this.unitList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		unit =
+			this.units[ this.unitList[ a ] ];
 
-		switch( attr.type )
+		types =
+			Object.keys( unit );
+
+		types.sort( );
+
+		for(
+			b = 0, bZ = types.length;
+			b < bZ;
+			b++
+		)
 		{
-			case 'Boolean' :
-			case 'Integer' :
-			case 'Number' :
-			case 'Object' :
-			case 'String' :
+			typeName =
+				types[ b ];
 
-				continue;
-		}
-
-		if( generated[ attr.unit ] )
-		{
-			if( generated[ attr.unit ][ attr.type ] )
-			{
-				continue;
-			}
-			else
-			{
-				generated[ attr.unit ][ attr.type ] =
-					true;
-			}
-		}
-		else
-		{
-			generated[ attr.unit ] =
-				{ };
-
-			generated[ attr.unit ][ attr.type ] =
-				true;
-		}
-
-		if( !attr.unit )
-		{
-			continue;
-			// FIXME?
-			/*
-			throw new Error(
-				'Unit missing from: ' +
-					this.name +
-					'.' +
-					name
-			);
-			*/
-		}
-
-		block =
-			block
-			.Assign(
-				Code.Term( attr.unit + '.' + attr.type ),
-				Code.Call(
-					Code.Term( 'require' ),
-					Code.Term(
-						'\'../../src/' +
-							attr.unit.toLowerCase( ) +
-							'/' +
-							attr.type.toLowerCase( ) +
-							'\''
+			block =
+				block
+				.Assign(
+					Code.Term( unitName + '.' + typeName ),
+					Code.Call(
+						Code.Term( 'require' ),
+						Code.Term(
+							'\'../../src/' +
+								camelCaseToDash( unitName ) +
+								'/' +
+								camelCaseToDash( typeName ) +
+								'\''
+						)
 					)
-				)
-			);
+				);
+		}
 	}
 
 	capsule =
@@ -420,7 +449,7 @@ Generator.prototype.genNodeIncludes =
 /*
 | Generates the constructor.
 */
-Generator.prototype.genConstructor =
+Gen.prototype.genConstructor =
 	function(
 		capsule // block to append to
 	)
@@ -682,7 +711,7 @@ Generator.prototype.genConstructor =
 /*
 | Generates the singleton decleration.
 */
-Generator.prototype.genSingleton =
+Gen.prototype.genSingleton =
 	function(
 		capsule // block to append to
 	)
@@ -704,7 +733,7 @@ Generator.prototype.genSingleton =
 /*
 | Generates the subclass.
 */
-Generator.prototype.genSubclass =
+Gen.prototype.genSubclass =
 	function(
 		capsule // block to append to
 	)
@@ -727,7 +756,7 @@ Generator.prototype.genSubclass =
 /*
 | Generates the creators variable list.
 */
-Generator.prototype.genCreatorVariables =
+Gen.prototype.genCreatorVariables =
 	function(
 		block // block to append to
 	)
@@ -775,7 +804,7 @@ Generator.prototype.genCreatorVariables =
 /*
 | Generates the creators inheritance receiver.
 */
-Generator.prototype.genCreatorInheritanceReceiver =
+Gen.prototype.genCreatorInheritanceReceiver =
 	function(
 		block // block to append to
 	)
@@ -871,7 +900,7 @@ Generator.prototype.genCreatorInheritanceReceiver =
 /*
 | Generates the creators free strings parser.
 */
-Generator.prototype.genCreatorFreeStringsParser =
+Gen.prototype.genCreatorFreeStringsParser =
 	function(
 		block // block to append to
 	)
@@ -1063,7 +1092,7 @@ Generator.prototype.genCreatorFreeStringsParser =
 /*
 | Generates the creators default values
 */
-Generator.prototype.genCreatorDefaults =
+Gen.prototype.genCreatorDefaults =
 	function(
 		block,   // block to append to
 		json     // only do jsons
@@ -1114,7 +1143,7 @@ Generator.prototype.genCreatorDefaults =
 /*
 | Generates the creators checks
 */
-Generator.prototype.genCreatorChecks =
+Gen.prototype.genCreatorChecks =
 	function(
 		block // block to append to
 	)
@@ -1296,7 +1325,7 @@ Generator.prototype.genCreatorChecks =
 | Generates the creators unchanged detection,
 | returning this.
 */
-Generator.prototype.genCreatorUnchanged =
+Gen.prototype.genCreatorUnchanged =
 	function(
 		block // block to append to
 	)
@@ -1424,7 +1453,7 @@ Generator.prototype.genCreatorUnchanged =
 /*
 | Generates the creators return statement
 */
-Generator.prototype.genCreatorReturn =
+Gen.prototype.genCreatorReturn =
 	function(
 		block // block to append to
 	)
@@ -1516,7 +1545,7 @@ Generator.prototype.genCreatorReturn =
 /*
 | Generates the creator.
 */
-Generator.prototype.genCreator =
+Gen.prototype.genCreator =
 	function(
 		capsule // block to append to
 	)
@@ -1574,7 +1603,7 @@ Generator.prototype.genCreator =
 /*
 | Generates the from JSON creators variable list.
 */
-Generator.prototype.genFromJSONCreatorVariables =
+Gen.prototype.genFromJSONCreatorVariables =
 	function(
 		block // block to append to
 	)
@@ -1592,6 +1621,14 @@ Generator.prototype.genFromJSONCreatorVariables =
 	}
 
 	varList.push( 'arg' );
+
+	if( this.hasJSON )
+	{
+		varList.push(
+			'ranks',
+			'twig'
+		);
+	}
 
 	varList.sort( );
 
@@ -1611,7 +1648,7 @@ Generator.prototype.genFromJSONCreatorVariables =
 /*
 | Generates the from JSON creators JSON parser.
 */
-Generator.prototype.genFromJSONCreatorParser =
+Gen.prototype.genFromJSONCreatorParser =
 	function(
 		block,   // block to append
 		jsonList
@@ -1653,7 +1690,7 @@ Generator.prototype.genFromJSONCreatorParser =
 
 		if( name === 'twig' || name === 'ranks' )
 		{
-			throw new Error( 'TODO' );
+			continue;
 		}
 
 		attr =
@@ -1725,7 +1762,7 @@ Generator.prototype.genFromJSONCreatorParser =
 /*
 | Generates the from JSON creators return statement
 */
-Generator.prototype.genFromJSONCreatorReturn =
+Gen.prototype.genFromJSONCreatorReturn =
 	function(
 		block // block to append to
 	)
@@ -1769,6 +1806,18 @@ Generator.prototype.genFromJSONCreatorReturn =
 
 				break;
 
+			case 'twig' :
+
+				// XXX
+
+				break;
+
+			case 'ranks' :
+
+				// XXX
+
+				break;
+
 			default :
 
 				attr =
@@ -1792,7 +1841,7 @@ Generator.prototype.genFromJSONCreatorReturn =
 /*
 | Generates the from JSON creator.
 */
-Generator.prototype.genFromJSONCreator =
+Gen.prototype.genFromJSONCreator =
 	function(
 		capsule // block to append to
 	)
@@ -1886,7 +1935,7 @@ Generator.prototype.genFromJSONCreator =
 /*
 | Generates the node include section.
 */
-Generator.prototype.genReflection =
+Gen.prototype.genReflection =
 	function(
 		capsule // block to append to
 	)
@@ -1918,7 +1967,7 @@ Generator.prototype.genReflection =
 /*
 | Generates the JoobjProto stuff.
 */
-Generator.prototype.genJoobjProto =
+Gen.prototype.genJoobjProto =
 	function(
 		capsule // block to append to
 	)
@@ -1954,7 +2003,7 @@ Generator.prototype.genJoobjProto =
 /*
 | Generates the toJSON converter.
 */
-Generator.prototype.genToJSON =
+Gen.prototype.genToJSON =
 	function(
 		capsule // block to append to
 	)
@@ -1974,7 +2023,7 @@ Generator.prototype.genToJSON =
 	olit =
 		Code
 		.ObjLiteral( )
-		.add(
+		.Add(
 			'type',
 			Code.Term( '\'' + this.name + '\'' )
 		);
@@ -1998,9 +2047,23 @@ Generator.prototype.genToJSON =
 
 		olit =
 			olit
-			.add(
+			.Add(
 				name,
 				Code.Term( 'this.' + attr.assign )
+			);
+	}
+
+	if( this.hasJSON )
+	{
+		olit =
+			olit
+			.Add(
+				'ranks',
+				Code.Term( 'this.ranks' )
+			)
+			.Add(
+				'twig',
+				Code.Term( 'this.twig' )
 			);
 	}
 
@@ -2039,7 +2102,7 @@ Generator.prototype.genToJSON =
 /*
 | Generates the equals test.
 */
-Generator.prototype.genEquals =
+Gen.prototype.genEquals =
 	function(
 		capsule // block to append to
 	)
@@ -2212,7 +2275,7 @@ Generator.prototype.genEquals =
 /*
 | Generates the export.
 */
-Generator.prototype.genNodeExport =
+Gen.prototype.genNodeExport =
 	function(
 		capsule // block to append to
 	)
@@ -2235,7 +2298,7 @@ Generator.prototype.genNodeExport =
 /*
 | Returns the generated export block.
 */
-Generator.prototype.genExport =
+Gen.prototype.genExport =
 	function( block )
 {
 	block =
@@ -2269,7 +2332,7 @@ Generator.prototype.genExport =
 /*
 | Returns the generated preamble.
 */
-Generator.prototype.genPreamble =
+Gen.prototype.genPreamble =
 	function( )
 {
 	var
@@ -2291,7 +2354,7 @@ Generator.prototype.genPreamble =
 /*
 | Returns the generated capsule block.
 */
-Generator.prototype.genCapsule =
+Gen.prototype.genCapsule =
 	function( )
 {
 	var
@@ -2356,7 +2419,7 @@ Generator.prototype.genCapsule =
 /*
 | Generates code from a jools object definition.
 */
-Generator.generate =
+Gen.generate =
 	function(
 		joobj // the joobj definition
 	)
@@ -2368,7 +2431,7 @@ Generator.generate =
 		gen;
 
 	gen =
-		Generator.create(
+		Gen.create(
 			'joobj',
 				joobj
 		);
@@ -2397,7 +2460,7 @@ Generator.generate =
 if( SERVER )
 {
 	module.exports =
-		Generator;
+		Gen;
 }
 
 

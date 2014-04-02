@@ -58,7 +58,7 @@ var
 /*
 | Returns the object literal function with a key value pair added.
 */
-ObjLiteral.prototype.add =
+ObjLiteral.prototype.Add =
 	function(
 		key,
 		value

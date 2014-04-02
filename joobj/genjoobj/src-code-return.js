@@ -53,7 +53,7 @@ Code.Return =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 338516423 )
+/**/	if( tag !== 221743368 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -143,7 +143,7 @@ Return.prototype.create =
 
 	return (
 		new Return(
-			338516423,
+			221743368,
 			v_expr
 		)
 	);

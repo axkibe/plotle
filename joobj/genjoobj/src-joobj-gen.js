@@ -9,8 +9,7 @@
 | Export.
 */
 var
-	Code =
-		Code || { };
+	Gen;
 
 
 /*
@@ -44,48 +43,49 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Check =
-Code.Check =
+Gen =
 	function(
 		tag, // magic cookie
-		v_block // the code block
+		v_joobj // the joobj definition
 	)
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 704856945 )
+/**/	if( tag !== 677308909 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	this.block =
-		v_block;
+	this.joobj =
+		v_joobj;
+
+	this._init( );
 
 	Jools.immute( this );
 };
 
 
 /*
-| Creates a new Check object.
+| Creates a new Gen object.
 */
-Check.create =
-Check.prototype.create =
+Gen.create =
+Gen.prototype.create =
 	function(
 		 // free strings
 	)
 {
 	var
 		inherit,
-		v_block;
+		v_joobj;
 
-	if( this !== Check )
+	if( this !== Gen )
 	{
 		inherit =
 			this;
 
-		v_block =
-			this.block;
+		v_joobj =
+			this.joobj;
 	}
 
 	for(
@@ -100,11 +100,11 @@ Check.prototype.create =
 
 		switch( arguments[ a ] )
 		{
-			case 'block' :
+			case 'joobj' :
 
 				if( arg !== undefined )
 				{
-					v_block =
+					v_joobj =
 						arg;
 				}
 
@@ -121,37 +121,30 @@ Check.prototype.create =
 
 /**/if( CHECK )
 /**/{
-/**/	if( v_block === undefined )
+/**/	if( v_joobj === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute block' );
+/**/		throw new Error( 'undefined attribute joobj' );
 /**/	}
 /**/
-/**/	if( v_block === null )
+/**/	if( v_joobj === null )
 /**/	{
-/**/		throw new Error( 'attribute block must not be null.' );
-/**/	}
-/**/
-/**/	if( v_block.reflect !== 'Block' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( 'attribute joobj must not be null.' );
 /**/	}
 /**/}
 
 	if(
 		inherit
 		&&
-		v_block.equals(
-			inherit.block
-		)
+		v_joobj === inherit.joobj
 	)
 	{
 		return inherit;
 	}
 
 	return (
-		new Check(
-			704856945,
-			v_block
+		new Gen(
+			677308909,
+			v_joobj
 		)
 	);
 };
@@ -160,28 +153,28 @@ Check.prototype.create =
 /*
 | Reflection.
 */
-Check.prototype.reflect =
-	'Check';
+Gen.prototype.reflect =
+	'Gen';
 
 
 /*
 | Sets values by path.
 */
-Check.prototype.setPath =
+Gen.prototype.setPath =
 	JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Check.prototype.getPath =
+Gen.prototype.getPath =
 	JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Check.prototype.equals =
+Gen.prototype.equals =
 	function(
 		obj // object to compare to
 	)
@@ -196,7 +189,7 @@ Check.prototype.equals =
 		return false;
 	}
 
-	return this.block === obj.block;
+	return this.joobj === obj.joobj;
 };
 
 
@@ -206,7 +199,7 @@ Check.prototype.equals =
 if( SERVER )
 {
 	module.exports =
-		Check;
+		Gen;
 }
 
 

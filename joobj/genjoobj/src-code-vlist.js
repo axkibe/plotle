@@ -18,7 +18,8 @@ var
 */
 var
 	JoobjProto,
-	Jools;
+	Jools,
+	Code;
 
 
 /*
@@ -38,6 +39,14 @@ if( SERVER )
 
 	Jools =
 		require( '../../src/jools/jools' );
+
+	Code =
+		{ };
+
+	Code.VarDec =
+		require(
+			'../../src/code/var-dec'
+		);
 }
 
 
@@ -55,7 +64,7 @@ Code.VList =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 218600045 )
+/**/	if( tag !== 603167183 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -256,7 +265,7 @@ VList.prototype.create =
 
 	return (
 		new VList(
-			218600045,
+			603167183,
 			twig,
 			ranks,
 			v_path

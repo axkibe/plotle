@@ -18,7 +18,8 @@ var
 */
 var
 	JoobjProto,
-	Jools;
+	Jools,
+	Code;
 
 
 /*
@@ -38,6 +39,14 @@ if( SERVER )
 
 	Jools =
 		require( '../../src/jools/jools' );
+
+	Code =
+		{ };
+
+	Code.Term =
+		require(
+			'../../src/code/term'
+		);
 }
 
 
@@ -55,7 +64,7 @@ Code.Call =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 199695006 )
+/**/	if( tag !== 204905197 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -254,7 +263,7 @@ Call.prototype.create =
 
 	return (
 		new Call(
-			199695006,
+			204905197,
 			twig,
 			ranks,
 			v_func

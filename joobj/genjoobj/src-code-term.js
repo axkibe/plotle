@@ -53,7 +53,7 @@ Code.Term =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 655329863 )
+/**/	if( tag !== 658234892 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -152,7 +152,7 @@ Term.prototype.create =
 
 	return (
 		new Term(
-			655329863,
+			658234892,
 			v_term
 		)
 	);

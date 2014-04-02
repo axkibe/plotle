@@ -18,7 +18,8 @@ var
 */
 var
 	JoobjProto,
-	Jools;
+	Jools,
+	Code;
 
 
 /*
@@ -38,6 +39,14 @@ if( SERVER )
 
 	Jools =
 		require( '../../src/jools/jools' );
+
+	Code =
+		{ };
+
+	Code.FuncArg =
+		require(
+			'../../src/code/func-arg'
+		);
 }
 
 
@@ -55,7 +64,7 @@ Code.Func =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 955059474 )
+/**/	if( tag !== 849375919 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -256,7 +265,7 @@ Func.prototype.create =
 
 	return (
 		new Func(
-			955059474,
+			849375919,
 			twig,
 			ranks,
 			v_block
