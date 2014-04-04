@@ -439,10 +439,9 @@ Change.prototype.set =
 
 		tree =
 			tree.setPath(
-				trg.path,
+				trg.path.shorten( 1 ),
 				pivot,
-				universe,
-				-1
+				universe
 			);
 	}
 
@@ -786,10 +785,9 @@ Change.prototype.join =
 
 	tree =
 		tree.setPath(
-			path,
+			path.shorten( 2 ),
 			pivot,
-			universe,
-			-2
+			universe
 		);
 
 	var chg;
@@ -939,10 +937,9 @@ Change.prototype.split =
 
 	tree =
 		tree.setPath(
-			path,
+			path.shorten( 2 ),
 			pivot,
-			universe,
-			-2
+			universe
 		);
 
 	var
@@ -1046,10 +1043,9 @@ Change.prototype.rank =
 
 	tree =
 		tree.setPath(
-			src.path,
+			src.path.shorten( 1 ),
 			pivot,
-			universe,
-			-1
+			universe
 		);
 
 	var chg;

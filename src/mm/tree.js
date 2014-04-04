@@ -81,7 +81,6 @@ Tree.prototype.getPath =
 		shorten
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( path.reflect !== 'Path' )
@@ -153,25 +152,18 @@ Tree.prototype.setPath =
 		throw new Error( );
 	}
 
-	if( shorten < 0 )
+	if( arguments.length > 3 )
 	{
-		shorten +=
-			path.length;
-	}
-
-	if( shorten < 0 )
-	{
-		throw new Error(
-			'invalid shorten'
-		);
+		throw new Error( 'arg mismatch' );
 	}
 
 	var
+		a,
 		aZ =
-			Jools.is( shorten ) ? shorten : path.length;
+			path.length;
 
 	for(
-		var a = aZ - 1;
+		a = aZ - 1;
 		a >= 0;
 		a--
 	)
