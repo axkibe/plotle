@@ -118,6 +118,7 @@ Meshverse.prototype.grow =
 			arguments.length;
 
 	// nothing to do?
+	/*
 	if(
 		( model instanceof Tree ) &&
 		aZ === 1
@@ -125,6 +126,7 @@ Meshverse.prototype.grow =
 	{
 		return model;
 	}
+	*/
 
 	var
 		twig =
@@ -598,7 +600,6 @@ Meshverse.prototype.Relation =
 
 
 Meshverse.prototype.Doc =
-//	Visual.Doc;
 	Jools.immute( {
 		twig :
 			Jools.immute( {

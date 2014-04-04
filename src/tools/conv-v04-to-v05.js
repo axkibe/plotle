@@ -1,5 +1,5 @@
 /*
-| Converts a v03 repository to v04
+| Converts a v04 repository to v05
 |
 | Authors: Axel Kittenberger
 */

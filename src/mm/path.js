@@ -240,7 +240,7 @@ Path.prototype.chop =
 
 
 /*
-| Returns a path with the last item(s) removed.
+| Returns a path with the last 'n' item(s) removed.
 |
 | FIXME cache
 */

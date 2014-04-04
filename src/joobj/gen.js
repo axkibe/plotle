@@ -82,9 +82,10 @@ Gen.prototype._init =
 		// twigs to be recognized
 		twig =
 			{ },
+		// twigs sorted alphabetically
+		twigList,
 		// units sorted alphabetically
-		unitList =
-			null,
+		unitList,
 		// units used
 		units =
 			{ };
@@ -299,6 +300,15 @@ Gen.prototype._init =
 
 	this.units =
 		Object.freeze( units );
+
+	if( twig )
+	{
+		twigList =
+			Object.keys( twig ).sort( );
+
+		this.twigList =
+			twigList;
+	}
 
 	this.reference =
 		( joobj.unit === joobj.name ) ?
@@ -1975,15 +1985,89 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 	)
 {
 	var
-		loop =
-			Code.Block( );
+		loop,
+		name,
+		switchExpr,
+		ut;
+
+	switchExpr =
+		Code.Switch(
+			Code.Term( 'jval.type' )
+		);
+
+	for(
+		var a = 0, aZ = this.twigList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.twigList[ a ];
+
+		ut =
+			this.twig[ name ];
+
+		switchExpr =
+			switchExpr
+			.Case(
+				Code.Term( '\'' + name + '\'' ),
+				Code.Block( )
+				.Assign(
+					Code.Term( 'twig[ key ]' ),
+					Code.Call(
+						Code.Term(
+							(
+								ut.unit
+								?
+								( ut.unit + '.' + ut.type )
+								:
+								ut.type
+							)
+							+
+							'.createFromJSON'
+						),
+						Code.Term( 'jval' )
+					)
+				)
+			);
+	}
+
+	switchExpr =
+		switchExpr
+		.Default(
+			Code.Block( )
+			.Fail( 'invalid twig type' )
+		);
+
+	loop =
+		Code.Block( )
+		.Assign(
+			Code.Term( 'key' ),
+			Code.Term( 'ranks[ a ]' )
+		)
+		.If(
+			Code.Term( '!jwig[ key ]' ),
+			Code.Block( )
+			.Fail( 'JSON ranks/twig mismatch' )
+		)
+		.Assign(
+			Code.Term( 'jval' ),
+			Code.Term( 'jwig[ key ] ' )
+		)
+		.Append(
+			switchExpr
+		);
 
 	block =
 		block
+		.Assign(
+			Code.Term( 'twig' ),
+			Code.ObjLiteral( )
+		)
 		.If(
 			Code.Term( '!jwig || !ranks ' ),
 			Code.Block( )
-			.Fail( 'ranks/twig information missing ')
+			.Fail( 'ranks/twig information missing' )
 		)
 		.For(
 			Code.Term( 'a = 0, aZ = ranks.length' ),
@@ -1991,8 +2075,6 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			Code.Term( 'a++' ),
 			loop
 		);
-
-	// XXX
 
 	return block;
 };
