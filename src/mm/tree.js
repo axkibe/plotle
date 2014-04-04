@@ -77,8 +77,7 @@ Tree =
 */
 Tree.prototype.getPath =
 	function(
-		path,
-		shorten
+		path
 	)
 {
 /**/if( CHECK )
@@ -91,28 +90,19 @@ Tree.prototype.getPath =
 /**/	}
 /**/}
 
-	if( shorten < 0 )
-	{
-		shorten +=
-			path.length;
-	}
-
-	if( shorten < 0 )
+	if( arguments.length > 1 )
 	{
 		throw new Error(
-			'getPath invalid shorten'
+			'arg mismatch'
 		);
 	}
 
 	var
-		aZ =
-			Jools.is( shorten ) ? shorten : path.length,
-
 		tree =
 			this;
 
 	for(
-		var a = 0;
+		var a = 0, aZ = path.length;
 		a < aZ;
 		a++
 	)
@@ -143,8 +133,7 @@ Tree.prototype.setPath =
 	function(
 		path,
 		val,
-		universe,
-		shorten
+		universe
 	)
 {
 	if( path.reflect !== 'Path' )
@@ -171,8 +160,7 @@ Tree.prototype.setPath =
 		var
 			tree =
 				this.getPath(
-					path,
-					a
+					path.shorten( aZ - a )
 				);
 
 		val =

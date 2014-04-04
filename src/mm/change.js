@@ -338,7 +338,7 @@ Change.prototype.set =
 	if( trg.path.get( -1 ) === '$new' )
 	{
 		pivot =
-			tree.getPath( trg.path, -1 );
+			tree.getPath( trg.path.shorten( 1 ) );
 
 		key =
 			pivot.newUID( );
@@ -393,7 +393,9 @@ Change.prototype.set =
 	else
 	{
 		pivot =
-			pivot || tree.getPath( trg.path, -1 );
+			pivot
+			||
+			tree.getPath( trg.path.shorten( 1 ) );
 
 		if( key === null )
 		{
@@ -713,7 +715,7 @@ Change.prototype.join =
 			path.get( -2 ),
 
 		pivot =
-			tree.getPath( path, -2 ),
+			tree.getPath( path.shorten( 2 ) ),
 
 		pattern =
 			universe[ pivot.type ];
@@ -850,7 +852,7 @@ Change.prototype.split =
 			tree.getPath( path ),
 
 		pivot =
-			tree.getPath( path, -2 ),
+			tree.getPath( path.shorten( 2 ) ),
 
 		pattern =
 			universe[ pivot.type ],
@@ -996,10 +998,7 @@ Change.prototype.rank =
 
 	var
 		pivot =
-			tree.getPath(
-				src.path,
-				-1
-			);
+			tree.getPath( src.path.shorten( 1 ) );
 
 	Jools.check(
 		Jools.is( pivot.ranks ),
