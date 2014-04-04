@@ -135,9 +135,9 @@ if( JOOBJ )
 		twig :
 			{
 				'MainDisc' :
-					Discs.MainDisc,
+					'Discs.MainDisc',
 				'CreateDisc' :
-					Discs.CreateDisc
+					'Discs.CreateDisc'
 			}
 	};
 }

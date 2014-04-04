@@ -170,6 +170,8 @@ Gen.prototype._init =
 					assign,
 				comment :
 					jAttr.comment,
+				concerns :
+					jAttr.concerns,
 				defaultValue :
 					jAttr.defaultValue,
 				json :
@@ -1141,11 +1143,12 @@ Gen.prototype.genCreatorDefaults =
 
 
 /*
-| Generates the creators checks
+| Generates the creators checks.
 */
 Gen.prototype.genCreatorChecks =
 	function(
-		block // block to append to
+		block, // block to append to
+		checkin  // do checks only when CHECKin
 	)
 {
 	var
@@ -1156,8 +1159,16 @@ Gen.prototype.genCreatorChecks =
 		tcheck,
 		tfail;
 
-	check =
-		Code.Block( );
+	if( checkin )
+	{
+		check =
+			Code.Block( );
+	}
+	else
+	{
+		check =
+			block;
+	}
 
 	for(
 		var a = 0, aZ = this.attrList.length;
@@ -1312,10 +1323,181 @@ Gen.prototype.genCreatorChecks =
 	// FIXME, in case of check is empty
 	//        do not append
 
-	block =
-		block.Check(
-			check
-		);
+	if( checkin )
+	{
+		block =
+			block.Check(
+				check
+			);
+	}
+
+	return block;
+};
+
+
+/*
+| Generates the creators concerns.
+*/
+Gen.prototype.genCreatorConcerns =
+	function(
+		block // block to append to
+	)
+{
+	var
+		a,
+		aZ,
+		attr,
+		args,
+		b,
+		bZ,
+		bAttr,
+		cExpr,
+		func,
+		member,
+		name;
+
+	for(
+		a = 0, aZ = this.attrList.length;
+		a < aZ;
+		a++
+	)
+	{
+		name =
+			this.attrList[ a ];
+
+		attr =
+			this.attributes[ name ];
+
+		if( !attr.concerns )
+		{
+			continue;
+		}
+
+		args =
+			attr.concerns.args;
+
+		func =
+			attr.concerns.func;
+
+		member =
+			attr.concerns.member;
+
+		if( func )
+		{
+			cExpr =
+				Code.Call(
+					Code.Term( func )
+				);
+
+			for(
+				b = 0, bZ = args.length;
+				b < bZ;
+				b++
+			)
+			{
+				// FIXME, make a gen.getCreatorVarName func
+
+				bAttr =
+					this.attributes[ args[ b ] ];
+
+				if( !bAttr )
+				{
+					throw new Error(
+						'unknown attribute: ' + args[ b ]
+					);
+				}
+
+				cExpr =
+					cExpr.Append(
+						Code.Term( bAttr.vName )
+					);
+			}
+		}
+		else
+		{
+			if( !member )
+			{
+				throw new Error(
+					'concerns neither func or member'
+				);
+			}
+
+			if( !args )
+			{
+				if( attr.allowsNull && attr.allowsUndefined )
+				{
+					throw new Error( 'FIXME' );
+				}
+				else if( attr.allowsNull )
+				{
+					cExpr =
+						Code.Term(
+							attr.vName + ' !== null ? '
+							+
+							attr.vName + '.' + member + ' : '
+							+
+							'null;'
+						);
+				}
+				else if( attr.allowsUndefined )
+				{
+					cExpr =
+						Code.Term(
+							attr.vName + ' !== undefined ? '
+							+
+							attr.vName + '.' + member + ' : '
+							+
+							'null;'
+						);
+				}
+				else
+				{
+					cExpr =
+						Code.Term(
+							attr.vName + '.' + member + ';'
+						);
+				}
+			}
+			else
+			{
+				cExpr =
+					Code.Call(
+						Code.Term(
+							attr.vName + '.' + member
+						)
+					);
+
+				for(
+					b = 0, bZ = args.length;
+					b < bZ;
+					b++
+				)
+				{
+					bAttr =
+						this.attributes[ args[ b ] ];
+
+					if( !bAttr )
+					{
+						throw new Error(
+							'unknown attribute: ' + args[ b ]
+						);
+					}
+
+					cExpr =
+						cExpr.Append(
+							Code.Term( bAttr.vName )
+						);
+				}
+			}
+		}
+
+		block =
+			block
+			.Assign(
+				Code.Term( attr.vName  ),
+				cExpr
+			);
+	}
 
 	return block;
 };
@@ -1574,7 +1756,10 @@ Gen.prototype.genCreator =
 		this.genCreatorDefaults( block, false );
 
 	block =
-		this.genCreatorChecks( block );
+		this.genCreatorChecks( block, true );
+
+	block =
+		this.genCreatorConcerns( block );
 
 	block =
 		this.genCreatorUnchanged( block );
@@ -1601,7 +1786,7 @@ Gen.prototype.genCreator =
 
 
 /*
-| Generates the from JSON creators variable list.
+| Generates the fromJSONCreator's variable list.
 */
 Gen.prototype.genFromJSONCreatorVariables =
 	function(
@@ -1625,7 +1810,12 @@ Gen.prototype.genFromJSONCreatorVariables =
 	if( this.hasJSON )
 	{
 		varList.push(
+			'a',
+			'aZ',
+			'key',
 			'ranks',
+			'jval',
+			'jwig',
 			'twig'
 		);
 	}
@@ -1646,7 +1836,7 @@ Gen.prototype.genFromJSONCreatorVariables =
 };
 
 /*
-| Generates the from JSON creators JSON parser.
+| Generates the fromJSONCreator's JSON parser.
 */
 Gen.prototype.genFromJSONCreatorParser =
 	function(
@@ -1676,6 +1866,22 @@ Gen.prototype.genFromJSONCreatorParser =
 				Code.Term( 'arg !== \'' + this.name + '\'' ),
 				Code.Block( )
 				.Fail( 'invalid JSON ' )
+			)
+		)
+		.Case(
+			Code.Term( '\'twig\'' ),
+			Code.Block( )
+			.Assign(
+				Code.Term( 'jwig' ),
+				Code.Term( 'arg' )
+			)
+		)
+		.Case(
+			Code.Term( '\'ranks\'' ),
+			Code.Block( )
+			.Assign(
+				Code.Term( 'ranks' ),
+				Code.Term( 'arg' )
 			)
 		);
 
@@ -1713,7 +1919,8 @@ Gen.prototype.genFromJSONCreatorParser =
 				arg =
 					Code.Term(
 						(
-							attr.unit ?
+							attr.unit
+							?
 							( attr.unit + '.' )
 							:
 							''
@@ -1760,7 +1967,38 @@ Gen.prototype.genFromJSONCreatorParser =
 
 
 /*
-| Generates the from JSON creators return statement
+| Generates the fromJSONCreator's twig processing.
+*/
+Gen.prototype.genFromJSONCreatorTwigProcessing =
+	function(
+		block // block to append to
+	)
+{
+	var
+		loop =
+			Code.Block( );
+
+	block =
+		block
+		.If(
+			Code.Term( '!jwig || !ranks ' ),
+			Code.Block( )
+			.Fail( 'ranks/twig information missing ')
+		)
+		.For(
+			Code.Term( 'a = 0, aZ = ranks.length' ),
+			Code.Term( 'a < aZ' ),
+			Code.Term( 'a++' ),
+			loop
+		);
+
+	// XXX
+
+	return block;
+};
+
+/*
+| Generates the fromJSONCreator's return statement
 */
 Gen.prototype.genFromJSONCreatorReturn =
 	function(
@@ -1806,15 +2044,13 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 				break;
 
+			case 'ranks' :
 			case 'twig' :
 
-				// XXX
-
-				break;
-
-			case 'ranks' :
-
-				// XXX
+				call =
+					call.Append(
+						Code.Term( name )
+					);
 
 				break;
 
@@ -1839,7 +2075,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 
 /*
-| Generates the from JSON creator.
+| Generates the fromJSONCreator.
 */
 Gen.prototype.genFromJSONCreator =
 	function(
@@ -1856,8 +2092,6 @@ Gen.prototype.genFromJSONCreator =
 		name,
 		jsonList =
 			[ ];
-
-	//generateChecks( r, jj, true );
 
 	for(
 		a = 0, aZ = this.attrList.length;
@@ -1912,7 +2146,13 @@ Gen.prototype.genFromJSONCreator =
 		this.genCreatorDefaults( funcBlock, true );
 
 	funcBlock =
-		this.genCreatorChecks( funcBlock );
+		this.genCreatorChecks( funcBlock, false );
+
+	if( this.twig )
+	{
+		funcBlock =
+			this.genFromJSONCreatorTwigProcessing( funcBlock );
+	}
 
 	funcBlock =
 		this.genFromJSONCreatorReturn( funcBlock );

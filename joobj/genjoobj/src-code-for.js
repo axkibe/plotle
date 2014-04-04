@@ -56,7 +56,7 @@ Code.For =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 734066132 )
+/**/	if( tag !== 945727835 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -254,7 +254,7 @@ For.prototype.create =
 
 	return (
 		new For(
-			734066132,
+			945727835,
 			v_block,
 			v_condition,
 			v_init,

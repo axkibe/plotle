@@ -64,7 +64,7 @@ Code.Case =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 500958339 )
+/**/	if( tag !== 689610842 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -263,7 +263,7 @@ Case.prototype.create =
 
 	return (
 		new Case(
-			500958339,
+			689610842,
 			twig,
 			ranks,
 			v_block

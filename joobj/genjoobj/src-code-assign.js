@@ -54,7 +54,7 @@ Code.Assign =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 393506207 )
+/**/	if( tag !== 841785153 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -173,7 +173,7 @@ Assign.prototype.create =
 
 	return (
 		new Assign(
-			393506207,
+			841785153,
 			v_left,
 			v_right
 		)

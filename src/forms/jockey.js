@@ -110,21 +110,21 @@ if( JOOBJ )
 		twig :
 			{
 				'Login' :
-					Forms.Login,
+					'Forms.Login',
 				'MoveTo' :
-					Forms.MoveTo,
+					'Forms.MoveTo',
 				'NoAccessToSpace' :
-					Forms.NoAccessToSpace,
+					'Forms.NoAccessToSpace',
 				'NonExistingSpace' :
-					Forms.NonExistingSpace,
+					'Forms.NonExistingSpace',
 				'SignUp' :
-					Forms.SignUp,
+					'Forms.SignUp',
 				'Space' :
-					Forms.Space,
+					'Forms.Space',
 				'User' :
-					Forms.User,
+					'Forms.User',
 				'Welcome' :
-					Forms.Welcome
+					'Forms.Welcome'
 			}
 	};
 }

@@ -54,7 +54,7 @@ Code.FuncArg =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 932441010 )
+/**/	if( tag !== 383158829 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -193,7 +193,7 @@ FuncArg.prototype.create =
 
 	return (
 		new FuncArg(
-			932441010,
+			383158829,
 			v_comment,
 			v_name
 		)

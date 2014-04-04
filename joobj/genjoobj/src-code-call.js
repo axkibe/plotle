@@ -64,7 +64,7 @@ Code.Call =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 204905197 )
+/**/	if( tag !== 129335932 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -263,7 +263,7 @@ Call.prototype.create =
 
 	return (
 		new Call(
-			204905197,
+			129335932,
 			twig,
 			ranks,
 			v_func

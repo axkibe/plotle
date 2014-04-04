@@ -47,49 +47,63 @@ if( JOOBJ )
 						comment :
 							'maxmimum width for flows',
 						type :
-							'Number'
+							'Number',
+						defaultValue :
+							'undefined'
 					},
 				fontsize :
 					{
 						comment :
 							'size of the font',
 						type :
-							'Number'
+							'Number',
+						defaultValue :
+							'undefined'
 					},
 				paraSep :
 					{
 						comment :
 							'vertical paragraph separation',
 						type :
-							'Number'
+							'Number',
+						defaultValue :
+							'undefined'
 					},
 				path :
 					{
 						comment :
 							'the path of the doc',
 						type :
-							'Path'
+							'Path',
+						defaultValue :
+							'undefined'
 					},
 				mark :
 					{
 						comment :
 							'the user\'s mark',
 						type :
-							'Mark'
+							'Mark',
+						defaultValue :
+							'undefined'
 					},
 				tree :
 					{
 						comment :
 							'the data tree',
 						type :
-							'Tree'
+							'Tree',
+						defaultValue :
+							'undefined'
 					},
 				view :
 					{
 						comment :
 							'the current view',
 						type :
-							'View'
+							'View',
+						defaultValue :
+							'undefined'
 					}
 			},
 		init :
