@@ -40,30 +40,24 @@ Stubs.emptyLabel =
 		{
 			'type' :
 				'Label',
-
 			'pnw' :
 				Euclid.Point.zero,
-
 			'fontsize' :
 				theme.note.fontsize, // FIXME
-
 			'doc' :
 			{
 				type:
 					'Doc',
-
 				twig :
 					{
 						'1' :
 							{
 								type :
 									'Para',
-
 								text :
 									'Label'
 							}
 					},
-
 				ranks :
 					[
 						'1'
@@ -78,39 +72,29 @@ Stubs.emptyNote =
 		{
 			'type' :
 				'Note',
-
 			'fontsize' :
 				theme.note.fontsize, // FIXME
-
 			'zone' :
-				{
-					type :
-						'Rect',
-
-					pnw :
+				Euclid.Rect.create(
+					'pnw',
 						Euclid.Point.zero,
-
-					pse :
+					'pse',
 						Euclid.Point.zero
-				},
-
+				),
 			'doc' :
 			{
 				type:
 					'Doc',
-
 				twig :
 					{
 						'1' :
 							{
 								type :
 									'Para',
-
 								text :
 									''
 							}
 					},
-
 				ranks :
 					[
 						'1'
@@ -125,22 +109,15 @@ Stubs.emptyPortal =
 		{
 			'type' :
 				'Portal',
-
 			'zone' :
-				{
-					type :
-						'Rect',
-
-					pnw :
+				Euclid.Rect.create(
+					'pnw',
 						Euclid.Point.zero,
-
-					pse :
+					'pse',
 						Euclid.Point.zero
-				},
-
+				),
 			'spaceUser' :
 				'',
-
 			'spaceTag' :
 				''
 		}

@@ -33,7 +33,7 @@ GLOBAL.SHELL =
 /*
 | Constants.
 */
-var MESHCRAFT_DB_VERSION = 4;
+var MESHCRAFT_DB_VERSION = 5;
 
 /*
 | Imports.
@@ -331,7 +331,7 @@ Server.prototype.initRepository =
 			_id :
 				'version',
 			version :
-				4
+				MESHCRAFT_DB_VERSION
 		},
 		sus.resume( )
 	);

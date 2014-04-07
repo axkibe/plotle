@@ -146,6 +146,12 @@ Tree.prototype.setPath =
 		throw new Error( 'arg mismatch' );
 	}
 
+	if( path.length === 0 )
+	{
+		return val;
+//		throw new Error( 'WTF?');
+	}
+
 	var
 		a,
 		aZ =
