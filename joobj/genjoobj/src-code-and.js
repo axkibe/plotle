@@ -54,7 +54,7 @@ Code.And =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 77765232 )
+/**/	if( tag !== 755538749 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -76,7 +76,7 @@ Code.And =
 And.create =
 And.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -173,7 +173,7 @@ And.prototype.create =
 
 	return (
 		new And(
-			77765232,
+			755538749,
 			v_left,
 			v_right
 		)

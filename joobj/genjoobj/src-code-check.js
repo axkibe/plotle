@@ -53,7 +53,7 @@ Code.Check =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 899038522 )
+/**/	if( tag !== 167038176 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -72,7 +72,7 @@ Code.Check =
 Check.create =
 Check.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -150,7 +150,7 @@ Check.prototype.create =
 
 	return (
 		new Check(
-			899038522,
+			167038176,
 			v_block
 		)
 	);

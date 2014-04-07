@@ -53,7 +53,7 @@ Code.New =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 979731374 )
+/**/	if( tag !== 50660476 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -72,7 +72,7 @@ Code.New =
 New.create =
 New.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -150,7 +150,7 @@ New.prototype.create =
 
 	return (
 		new New(
-			979731374,
+			50660476,
 			v_call
 		)
 	);

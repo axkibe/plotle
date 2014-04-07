@@ -55,7 +55,7 @@ Code.File =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 863697830 )
+/**/	if( tag !== 33152566 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -80,7 +80,7 @@ Code.File =
 File.create =
 File.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -230,7 +230,7 @@ File.prototype.create =
 
 	return (
 		new File(
-			863697830,
+			33152566,
 			v_capsule,
 			v_header,
 			v_preamble

@@ -51,7 +51,7 @@ Gen =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 672164712 )
+/**/	if( tag !== 226556860 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -72,7 +72,7 @@ Gen =
 Gen.create =
 Gen.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -143,7 +143,7 @@ Gen.prototype.create =
 
 	return (
 		new Gen(
-			672164712,
+			226556860,
 			v_joobj
 		)
 	);

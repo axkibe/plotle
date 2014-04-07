@@ -206,8 +206,6 @@ Tree.prototype.setPath =
 			);
 	}
 	*/
-
-	return val;
 };
 
 

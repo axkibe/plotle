@@ -45,65 +45,44 @@ if( JOOBJ )
 				flowWidth :
 					{
 						comment :
-							'maxmimum width for flows',
+							'width of the para its flow',
 						type :
-							'Number',
-						defaultValue :
-							'undefined'
+							'Number'
 					},
 				fontsize :
 					{
 						comment :
 							'size of the font',
 						type :
-							'Number',
-						defaultValue :
-							'undefined'
+							'Number'
 					},
 				paraSep :
 					{
 						comment :
-							'vertical paragraph separation',
+							'vertical seperation of paragraphs',
 						type :
-							'Number',
-						defaultValue :
-							'undefined'
+							'Number'
 					},
 				path :
 					{
 						comment :
 							'the path of the doc',
 						type :
-							'Path',
-						defaultValue :
-							'undefined'
+							'Path'
 					},
 				mark :
 					{
 						comment :
-							'the user\'s mark',
+							'the users mark',
 						type :
-							'Mark',
-						defaultValue :
-							'undefined'
-					},
-				tree :
-					{
-						comment :
-							'the data tree',
-						type :
-							'Tree',
-						defaultValue :
-							'undefined'
+							'Mark'
 					},
 				view :
 					{
 						comment :
 							'the current view',
 						type :
-							'View',
-						defaultValue :
-							'undefined'
+							'View'
 					}
 			},
 		init :
@@ -137,8 +116,6 @@ if( SERVER )
 }
 
 
-
-
 var
 	Doc =
 		Visual.Doc;
@@ -150,39 +127,39 @@ var
 Doc.prototype._init =
 	function( )
 {
-	var
-		sub =
-			[ ],
+	if( !path )
+	{
+		// if abstract don't initialize anything
+		return;
+	}
 
+	var
 		ranks =
-			this.tree.ranks,
+			this.ranks,
 
 		twig =
-			this.tree.twig;
+			Jools.copy( this.twig ); // TODO only when not copied
 
 	this._$pnws =
 		null;
 
 	for(
-		var r = 0, rZ = this.tree.length;
+		var r = 0, rZ = this.ranks.length;
 		r < rZ;
 		r++
 	)
 	{
 		var
-			k =
+			key =
 				ranks[ r ],
 
-			paraPath =
-				this.path.appendNC( k ),
+			path =
+				this.path.appendNC( key );
 
-			paraProto =
-				twig[ k ];
-
-		sub[ k ] =
-			paraProto.create(
+		twig[ key ] =
+			twig[ key ].create(
 				'path',
-					paraPath,
+					path,
 				'fontsize',
 					this.fontsize,
 				'flowWidth',
@@ -194,22 +171,8 @@ Doc.prototype._init =
 			);
 	}
 
-	this.sub =
-		sub;
-};
-
-
-/*
-| Returns the para at rank 'rank'.
-*/
-Doc.prototype.atRank =
-	function(
-		rank
-	)
-{
-	return (
-		this.sub[ this.tree.ranks[ rank ] ]
-	);
+	this.twig =
+		twig;
 };
 
 
@@ -240,7 +203,7 @@ Doc.prototype.attentionCenter =
 		).y
 		+
 		this
-			.sub[ key ]
+			.twig[ key ]
 			.attentionCenter
 	);
 };
@@ -289,7 +252,7 @@ Doc.prototype.draw =
 			this.getPNWs( item ),
 
 		ranks =
-			this.tree.ranks;
+			this.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -300,10 +263,8 @@ Doc.prototype.draw =
 		var
 			vpara =
 				this.atRank( r ),
-
 			pnw =
 				pnws[ ranks[ r ] ],
-
 			p =
 				pnw.sub(
 					0,
@@ -346,7 +307,7 @@ Doc.prototype.getPNWs =
 			innerMargin.n,
 
 		ranks =
-			this.tree.ranks;
+			this.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -392,7 +353,7 @@ Jools.lazyValue(
 				this.paraSep,
 
 			ranks =
-				this.tree.ranks,
+				this.ranks,
 
 			height =
 				0;
@@ -452,19 +413,17 @@ Jools.lazyValue(
 		var
 			spread =
 				0,
-
-			sub =
-				this.sub,
-
+			twig =
+				this.twig,
 			max =
 				Math.max;
 
-		for( var k in sub )
+		for( var key in twig )
 		{
 			spread =
 				max(
 					spread,
-					sub[ k ].flow.spread
+					twig[ key ].flow.spread
 				);
 		}
 
@@ -496,14 +455,12 @@ Doc.prototype.getParaAtPoint =
 	)
 {
 	var
-		ranks =
-			this.tree.ranks,
-
-		sub =
-			this.sub,
-
 		pnws =
-			this.getPNWs( item );
+			this.getPNWs( item ),
+		ranks =
+			this.ranks,
+		twig =
+			this.twig;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -514,9 +471,8 @@ Doc.prototype.getParaAtPoint =
 		var
 			k =
 				ranks[ r ],
-
 			vpara =
-				sub[ k ];
+				twig[ k ];
 
 		if( p.y < pnws[ k ].y + vpara.flow.height )
 		{
@@ -571,7 +527,7 @@ Doc.prototype.input =
 
 	return (
 		this
-			.sub[ path.get( 3 ) ]
+			.twig[ path.get( 3 ) ]
 			.input(
 				text,
 				item
@@ -644,7 +600,7 @@ Doc.prototype.specialKey =
 
 	return (
 		this
-			.sub[ mark.caretPath.get( 3 ) ]
+			.twig[ mark.caretPath.get( 3 ) ]
 			.specialKey(
 				key,
 				item,
@@ -689,63 +645,42 @@ Doc.prototype.sketchRange =
 /**/}
 
 	var
-		tree =
-			this.tree,
-
 		frontPath =
 			mark.frontPath,
-
 		frontAt =
 			mark.frontAt,
-
 		backPath =
 			mark.backPath,
-
 		backAt =
 			mark.backAt,
-
 		frontKey =
 			frontPath.get( -2 ),
-
 		backKey =
 			backPath.get( -2 ),
-
 		frontPnw =
 			this.getPNW( item, frontKey ),
-
 		backPnw =
 			this.getPNW( item, backKey ),
-
 		frontPara =
-			this.sub[ frontKey ],
-
+			this.twig[ frontKey ],
 		backPara =
-			this.sub[ backKey ],
-
+			this.twig[ backKey ],
 		fo =
 			frontPara.locateOffset( frontAt ),
-
 		bo =
 			backPara.locateOffset( backAt ),
-
 		fp =
 			fo.p,
-
 		bp =
 			bo.p,
-
 		fontsize =
 			this.fontsize,
-
 		descend =
 			Math.round( fontsize * theme.bottombox ),
-
 		ascend =
 			Math.round( fontsize ),
-
 		rx =
 			width - innerMargin.e,
-
 		lx =
 			innerMargin.w;
 
@@ -766,25 +701,20 @@ Doc.prototype.sketchRange =
 	var
 		frontFlow =
 			frontPara.flow,
-
 		backFlow =
 			backPara.flow,
-
 		frontRank =
-			tree.rankOf( frontKey ),
-
+			this.rankOf( frontKey ),
 		f2Key =
-			( frontRank + 1 < tree.length )
+			( frontRank + 1 < this.length )
 				?
-				( tree.ranks[ frontRank + 1 ] )
+				( this.ranks[ frontRank + 1 ] )
 				:
 				( null ),
-
 		f2Para =
 			f2Key
 			&&
-			this.sub[ f2Key ];
-
+			this.twig[ f2Key ];
 
 	if(
 		frontKey === backKey &&
@@ -842,7 +772,6 @@ Doc.prototype.sketchRange =
 		var
 			f2y =
 				null,
-
 			b2y =
 				null;
 
@@ -878,13 +807,11 @@ Doc.prototype.sketchRange =
 		{
 			var
 				backRank =
-					tree.rankOf( backKey ),
-
+					this.rankOf( backKey ),
 				b2Key =
-					tree.ranks[ backRank - 1 ],
-
+					this.ranks[ backRank - 1 ],
 				b2Para =
-					this.sub[ b2Key ];
+					this.twig[ b2Key ];
 
 			b2y =
 				Math.round(

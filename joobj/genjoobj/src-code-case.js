@@ -64,7 +64,7 @@ Code.Case =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 689610842 )
+/**/	if( tag !== 702701733 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -93,7 +93,7 @@ Code.Case =
 Case.create =
 Case.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -251,7 +251,7 @@ Case.prototype.create =
 	if(
 		inherit
 		&&
-		 !twigDup
+		!twigDup
 		&&
 		v_block.equals(
 			inherit.block
@@ -263,7 +263,7 @@ Case.prototype.create =
 
 	return (
 		new Case(
-			689610842,
+			702701733,
 			twig,
 			ranks,
 			v_block

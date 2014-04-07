@@ -638,6 +638,7 @@ formatFunc =
 {
 	var
 		arg,
+		argSpace,
 		comma,
 		text;
 
@@ -669,6 +670,12 @@ formatFunc =
 					:
 					'';
 
+			argSpace =
+				arg.name ?
+					' '
+					:
+					'';
+
 			text +=
 				context.Inc.tab
 				+
@@ -678,7 +685,7 @@ formatFunc =
 				+
 				(
 					arg.comment ?
-						' // ' + arg.comment
+						argSpace + '// ' + arg.comment
 						:
 						''
 				)

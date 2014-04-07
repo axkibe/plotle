@@ -64,7 +64,7 @@ Code.Call =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 129335932 )
+/**/	if( tag !== 117997382 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -93,7 +93,7 @@ Code.Call =
 Call.create =
 Call.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -251,7 +251,7 @@ Call.prototype.create =
 	if(
 		inherit
 		&&
-		 !twigDup
+		!twigDup
 		&&
 		v_func.equals(
 			inherit.func
@@ -263,7 +263,7 @@ Call.prototype.create =
 
 	return (
 		new Call(
-			129335932,
+			117997382,
 			twig,
 			ranks,
 			v_func

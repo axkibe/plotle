@@ -54,7 +54,7 @@ Code.Assign =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 841785153 )
+/**/	if( tag !== 238901970 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -76,7 +76,7 @@ Code.Assign =
 Assign.create =
 Assign.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -173,7 +173,7 @@ Assign.prototype.create =
 
 	return (
 		new Assign(
-			841785153,
+			238901970,
 			v_left,
 			v_right
 		)

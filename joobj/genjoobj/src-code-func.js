@@ -64,7 +64,7 @@ Code.Func =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 286576824 )
+/**/	if( tag !== 393474854 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -93,7 +93,7 @@ Code.Func =
 Func.create =
 Func.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -255,7 +255,7 @@ Func.prototype.create =
 	if(
 		inherit
 		&&
-		 !twigDup
+		!twigDup
 		&&
 		(v_block === inherit.block||(v_block&&v_block.equals( inherit.block)))
 	)
@@ -265,7 +265,7 @@ Func.prototype.create =
 
 	return (
 		new Func(
-			286576824,
+			393474854,
 			twig,
 			ranks,
 			v_block

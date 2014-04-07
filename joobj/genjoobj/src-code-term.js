@@ -53,7 +53,7 @@ Code.Term =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 620663869 )
+/**/	if( tag !== 392458981 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -72,7 +72,7 @@ Code.Term =
 Term.create =
 Term.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -152,7 +152,7 @@ Term.prototype.create =
 
 	return (
 		new Term(
-			620663869,
+			392458981,
 			v_term
 		)
 	);

@@ -64,7 +64,7 @@ Code.ObjLiteral =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 313947109 )
+/**/	if( tag !== 34024298 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -93,7 +93,7 @@ Code.ObjLiteral =
 ObjLiteral.create =
 ObjLiteral.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -255,7 +255,7 @@ ObjLiteral.prototype.create =
 	if(
 		inherit
 		&&
-		 !twigDup
+		!twigDup
 		&&
 		(v_path === inherit.path||(v_path&&v_path.equals( inherit.path)))
 	)
@@ -265,7 +265,7 @@ ObjLiteral.prototype.create =
 
 	return (
 		new ObjLiteral(
-			313947109,
+			34024298,
 			twig,
 			ranks,
 			v_path

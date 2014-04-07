@@ -338,15 +338,20 @@ Gen.prototype.genImports =
 		.VarDec( 'JoobjProto' )
 		.VarDec( 'Jools' );
 
-	for(
-		var a = 0, aZ = this.unitList.length;
-		a < aZ;
-		a++
-	)
+	// FUTURE when type checking is there this might become needed
+	// wihtout jsons
+	if( this.hasJSON )
 	{
-		capsule =
-			capsule
-			.VarDec( this.unitList[ a ] );
+		for(
+			var a = 0, aZ = this.unitList.length;
+			a < aZ;
+			a++
+		)
+		{
+			capsule =
+				capsule
+				.VarDec( this.unitList[ a ] );
+		}
 	}
 
 	return capsule;
@@ -923,6 +928,13 @@ Gen.prototype.genCreatorFreeStringsParser =
 		name,
 		switchExpr;
 
+	if( !this.twig && this.attrList.length === 0 )
+	{
+		// no free strings parses needed
+		// FIXME check for no arguments
+		return block;
+	}
+
 	loop =
 		Code.Block( )
 		.VarDec(
@@ -1446,7 +1458,7 @@ Gen.prototype.genCreatorConcerns =
 							+
 							attr.vName + '.' + member + ' : '
 							+
-							'null;'
+							'null'
 						);
 				}
 				else if( attr.allowsUndefined )
@@ -1457,14 +1469,14 @@ Gen.prototype.genCreatorConcerns =
 							+
 							attr.vName + '.' + member + ' : '
 							+
-							'null;'
+							'null'
 						);
 				}
 				else
 				{
 					cExpr =
 						Code.Term(
-							attr.vName + '.' + member + ';'
+							attr.vName + '.' + member
 						);
 				}
 			}
@@ -1537,7 +1549,7 @@ Gen.prototype.genCreatorUnchanged =
 		cond =
 			Code.And(
 				cond,
-				Code.Term(' !twigDup' )
+				Code.Term( '!twigDup' )
 			);
 	}
 
@@ -1819,15 +1831,20 @@ Gen.prototype.genFromJSONCreatorVariables =
 
 	if( this.hasJSON )
 	{
-		varList.push(
-			'a',
-			'aZ',
-			'key',
-			'ranks',
-			'jval',
-			'jwig',
-			'twig'
-		);
+		// FIXME cleanup ifs
+
+		if( this.twig )
+		{
+			varList.push(
+				'a',
+				'aZ',
+				'key',
+				'jval',
+				'jwig',
+				'ranks',
+				'twig'
+			);
+		}
 	}
 
 	varList.sort( );
@@ -1877,23 +1894,29 @@ Gen.prototype.genFromJSONCreatorParser =
 				Code.Block( )
 				.Fail( 'invalid JSON ' )
 			)
-		)
-		.Case(
-			Code.Term( '\'twig\'' ),
-			Code.Block( )
-			.Assign(
-				Code.Term( 'jwig' ),
-				Code.Term( 'arg' )
-			)
-		)
-		.Case(
-			Code.Term( '\'ranks\'' ),
-			Code.Block( )
-			.Assign(
-				Code.Term( 'ranks' ),
-				Code.Term( 'arg' )
-			)
 		);
+
+	if( this.twig )
+	{
+		switchExpr =
+			switchExpr
+			.Case(
+				Code.Term( '\'twig\'' ),
+				Code.Block( )
+				.Assign(
+					Code.Term( 'jwig' ),
+					Code.Term( 'arg' )
+				)
+			)
+			.Case(
+				Code.Term( '\'ranks\'' ),
+				Code.Block( )
+				.Assign(
+					Code.Term( 'ranks' ),
+					Code.Term( 'arg' )
+				)
+			);
+	}
 
 	for(
 		a = 0, aZ = jsonList.length;

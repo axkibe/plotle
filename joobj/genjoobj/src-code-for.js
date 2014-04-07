@@ -56,7 +56,7 @@ Code.For =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 945727835 )
+/**/	if( tag !== 476815717 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -84,7 +84,7 @@ Code.For =
 For.create =
 For.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -254,7 +254,7 @@ For.prototype.create =
 
 	return (
 		new For(
-			945727835,
+			476815717,
 			v_block,
 			v_condition,
 			v_init,

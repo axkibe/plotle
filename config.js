@@ -148,6 +148,7 @@ config.log  = {
 	ajax :
 		false,
 	change :
+		true ||
 		false,
 	news :
 //		true ||

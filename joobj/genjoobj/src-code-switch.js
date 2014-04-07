@@ -65,7 +65,7 @@ Code.Switch =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 184343033 )
+/**/	if( tag !== 185598981 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -97,7 +97,7 @@ Code.Switch =
 Switch.create =
 Switch.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -291,7 +291,7 @@ Switch.prototype.create =
 	if(
 		inherit
 		&&
-		 !twigDup
+		!twigDup
 		&&
 		(v_defaultCase === inherit.defaultCase||(v_defaultCase&&v_defaultCase.equals( inherit.defaultCase)))
 		&&
@@ -305,7 +305,7 @@ Switch.prototype.create =
 
 	return (
 		new Switch(
-			184343033,
+			185598981,
 			twig,
 			ranks,
 			v_defaultCase,

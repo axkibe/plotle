@@ -74,7 +74,7 @@ Code.Block =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 531578710 )
+/**/	if( tag !== 120223244 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -103,7 +103,7 @@ Code.Block =
 Block.create =
 Block.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -265,7 +265,7 @@ Block.prototype.create =
 	if(
 		inherit
 		&&
-		 !twigDup
+		!twigDup
 		&&
 		(v_path === inherit.path||(v_path&&v_path.equals( inherit.path)))
 	)
@@ -275,7 +275,7 @@ Block.prototype.create =
 
 	return (
 		new Block(
-			531578710,
+			120223244,
 			twig,
 			ranks,
 			v_path

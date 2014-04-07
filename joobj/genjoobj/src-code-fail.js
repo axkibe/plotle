@@ -53,7 +53,7 @@ Code.Fail =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 674596353 )
+/**/	if( tag !== 817753732 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -72,7 +72,7 @@ Code.Fail =
 Fail.create =
 Fail.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -152,7 +152,7 @@ Fail.prototype.create =
 
 	return (
 		new Fail(
-			674596353,
+			817753732,
 			v_message
 		)
 	);

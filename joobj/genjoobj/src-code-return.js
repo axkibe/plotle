@@ -53,7 +53,7 @@ Code.Return =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 461678699 )
+/**/	if( tag !== 61385284 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -72,7 +72,7 @@ Code.Return =
 Return.create =
 Return.prototype.create =
 	function(
-		 // free strings
+		// free strings
 	)
 {
 	var
@@ -143,7 +143,7 @@ Return.prototype.create =
 
 	return (
 		new Return(
-			461678699,
+			61385284,
 			v_expr
 		)
 	);
