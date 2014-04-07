@@ -97,6 +97,21 @@ Tree.prototype.getPath =
 		);
 	}
 
+	if( path.length === 0 )
+	{
+		return this;
+	}
+
+	if( path.length === 1 )
+	{
+		return this.twig[ path.get( 0 ) ];
+	}
+
+	return (
+		this.twig[ path.get( 0 ) ].getPath( path.chop( 1 ) )
+	);
+
+	/*
 	var
 		tree =
 			this;
@@ -123,6 +138,7 @@ Tree.prototype.getPath =
 	}
 
 	return tree;
+	*/
 };
 
 
