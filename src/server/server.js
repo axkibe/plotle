@@ -33,7 +33,7 @@ GLOBAL.SHELL =
 /*
 | Constants.
 */
-var MESHCRAFT_DB_VERSION = 5;
+var MESHCRAFT_DB_VERSION = 4;
 
 /*
 | Imports.

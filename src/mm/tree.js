@@ -148,11 +148,40 @@ Tree.prototype.setPath =
 
 	if( path.length === 0 )
 	{
-		return val;
-//		throw new Error( 'WTF?');
+		return (
+			universe.grow(
+				val
+			)
+		);
 	}
 
-	var
+	if( path.length === 1 )
+	{
+		return (
+			universe.grow(
+				this,
+				path.get( 0 ),
+				val
+			)
+		);
+	}
+
+	return (
+		universe.grow(
+			this,
+			path.get( 0 ),
+			this.twig[ path.get( 0 ) ].setPath(
+				path.chop( 1 ),
+				val,
+				this.twig[ path.get( 0 ) ].setPath === Tree.prototype.setPath ?
+					universe
+					:
+					undefined
+			)
+		)
+	);
+
+	/*var
 		a,
 		aZ =
 			path.length;
@@ -176,6 +205,7 @@ Tree.prototype.setPath =
 				val
 			);
 	}
+	*/
 
 	return val;
 };

@@ -62,7 +62,7 @@ config.database.port =
 | Name of the mongodb database
 */
 config.database.name =
-	'meshcraft05';
+	'meshcraft04';
 
 
 /*
