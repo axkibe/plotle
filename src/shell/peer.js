@@ -639,6 +639,14 @@ Peer.prototype.removeRange =
 		at2
 	)
 {
+	var
+		k1,
+		k2,
+		len2,
+		pivot,
+		r,
+		r1,
+		r2;
 
 /**/if( CHECK )
 /**/{
@@ -648,9 +656,7 @@ Peer.prototype.removeRange =
 /**/		path2.get( -1 ) !== 'text'
 /**/	)
 /**/	{
-/**/		throw new Error(
-/**/			'invalid path'
-/**/		);
+/**/		throw new Error( 'invalid path' );
 /**/	}
 /**/}
 
@@ -665,23 +671,26 @@ Peer.prototype.removeRange =
 		);
 	}
 
-	var
-		k1 =
-			path1.get( -2 ),
+	k1 =
+		path1.get( -2 );
 
-		k2 =
-			path2.get( -2 ),
+	k2 =
+		path2.get( -2 );
 
-		pivot =
-			this._iface.get( path1.chop( 1 ), -2 ),
+	pivot =
+		this._iface.get( path1.chop( 1 ).shorten( 3 ) );
 
-		r1 =
-			pivot.rankOf( k1 ),
+	r1 =
+		pivot.rankOf( k1 );
 
-		r2 =
-			pivot.rankOf( k2 );
+	r2 =
+		pivot.rankOf( k2 );
 
-	for( var r = r1; r < r2 - 1; r++ )
+	for(
+		r = r1;
+		r < r2 - 1;
+		r++
+	)
 	{
 		this.join(
 			path1,
@@ -689,9 +698,8 @@ Peer.prototype.removeRange =
 		);
 	}
 
-	var
-		len2 =
-			this._iface.get( path1.chop( 1 ) ).length;
+	len2 =
+		this._iface.get( path1.chop( 1 ) ).length;
 
 	this.join(
 		path1,

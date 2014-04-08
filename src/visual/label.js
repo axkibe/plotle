@@ -106,9 +106,7 @@ if( JOOBJ )
 					}
 			},
 		init :
-			[
-				'inherit'
-			],
+			[ ],
 		subclass :
 			'Visual.DocItem'
 	};
@@ -124,65 +122,45 @@ var
 | Initializer.
 */
 Label.prototype._init =
-	function(
-		inherit
-	)
+	function( )
 {
 	var
+		doc,
+		docPath,
 		twig =
 			this.tree.twig;
 
-	// FIXME remove shortcut
 	this.fontsize =
 		twig.fontsize;
 
-	// FIXME remove shortcut
 	this.pnw =
 		twig.pnw;
 
 	this.sub =
 		{ };
 
+	docPath =
+		// FIXME not if inherited
+		this.path.append( 'doc' );
+
+	doc =
+	this.sub.doc =
+		this.tree.twig.doc.create(
+			'flowWidth',
+				0,
+			'fontsize',
+				this.fontsize,
+			'mark',
+				this.mark,
+			'paraSep',
+				Math.round( this.fontsize / 20 ),
+			'path',
+				docPath,
+			'view',
+				this.view
+		);
+
 	var
-		protoDoc =
-			inherit && inherit.sub.doc,
-
-		docPath;
-
-	if( !protoDoc )
-	{
-		protoDoc =
-			Visual.Doc;
-
-		docPath =
-			this.path.append( 'doc' );
-	}
-	else
-	{
-		docPath =
-			undefined; // inherit
-	}
-
-	var
-		doc =
-		this.sub.doc =
-			protoDoc.create(
-				'flowWidth',
-					0,
-				'fontsize',
-					this.fontsize,
-				'mark',
-					this.mark,
-				'paraSep',
-					Math.round( this.fontsize / 20 ),
-				'path',
-					docPath,
-				'tree',
-					twig.doc,
-				'view',
-					this.view
-			),
-
 		height =
 			doc.height,
 

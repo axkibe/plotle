@@ -514,7 +514,7 @@ Shell.prototype.update =
 					{
 						mark =
 							Mark.Range.create(
-								'docTree',
+								'doc',
 									mItemTree.twig.doc,
 								'bPath',
 									bSign.path.prepend( 'space' ),

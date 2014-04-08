@@ -634,11 +634,38 @@ Doc.prototype.sketchRange =
 	)
 {
 	var
-		sp =
-			scrollp,
+		ascend,
+		backAt,
+		backFlow,
+		backKey,
+		backPath,
+		backPara,
+		backPnw,
+		bo,
+		bp,
+		descend,
+		f2Key,
+		f2Para,
+		fo,
+		fontsize,
+		fp,
+		frontAt,
+		frontFlow,
+		frontKey,
+		frontPara,
+		frontPath,
+		frontPnw,
+		frontRank,
+		lx,
+		mark,
+		rx,
+		sp;
 
-		mark =
-			this.mark;
+	sp =
+		scrollp,
+
+	mark =
+		this.mark;
 
 /**/if( CHECK )
 /**/{
@@ -650,45 +677,62 @@ Doc.prototype.sketchRange =
 /**/	}
 /**/}
 
-	var
-		frontPath =
-			mark.frontPath,
-		frontAt =
-			mark.frontAt,
-		backPath =
-			mark.backPath,
-		backAt =
-			mark.backAt,
-		frontKey =
-			frontPath.get( -2 ),
-		backKey =
-			backPath.get( -2 ),
-		frontPnw =
-			this.getPNW( item, frontKey ),
-		backPnw =
-			this.getPNW( item, backKey ),
-		frontPara =
-			this.twig[ frontKey ],
-		backPara =
-			this.twig[ backKey ],
-		fo =
-			frontPara.locateOffset( frontAt ),
-		bo =
-			backPara.locateOffset( backAt ),
-		fp =
-			fo.p,
-		bp =
-			bo.p,
-		fontsize =
-			this.fontsize,
-		descend =
-			Math.round( fontsize * theme.bottombox ),
-		ascend =
-			Math.round( fontsize ),
-		rx =
-			width - innerMargin.e,
-		lx =
-			innerMargin.w;
+	frontPath =
+		mark.frontPath;
+
+	frontAt =
+		mark.frontAt;
+
+	backPath =
+		mark.backPath;
+
+	backAt =
+		mark.backAt;
+
+	frontKey =
+		frontPath.get( -2 );
+
+	backKey =
+		backPath.get( -2 );
+
+	frontPnw =
+		this.getPNW( item, frontKey );
+
+	backPnw =
+		this.getPNW( item, backKey );
+
+	frontPara =
+		this.twig[ frontKey ];
+
+	backPara =
+		this.twig[ backKey ];
+
+	fo =
+		frontPara.locateOffset( frontAt );
+
+	bo =
+		backPara.locateOffset( backAt );
+
+	fp =
+		fo.p;
+
+	bp =
+		bo.p;
+
+	fontsize =
+		this.fontsize;
+
+	descend =
+		Math.round( fontsize * theme.bottombox );
+
+	ascend =
+		Math.round( fontsize );
+
+	rx =
+		width - innerMargin.e;
+
+	lx =
+		innerMargin.w;
 
 	// FIXME do not create points
 
@@ -704,23 +748,26 @@ Doc.prototype.sketchRange =
 			backPnw.y - sp.y
 		);
 
-	var
-		frontFlow =
-			frontPara.flow,
-		backFlow =
-			backPara.flow,
-		frontRank =
-			this.rankOf( frontKey ),
-		f2Key =
-			( frontRank + 1 < this.length )
-				?
-				( this.ranks[ frontRank + 1 ] )
-				:
-				( null ),
-		f2Para =
-			f2Key
-			&&
-			this.twig[ f2Key ];
+	frontFlow =
+		frontPara.flow;
+
+	backFlow =
+		backPara.flow;
+
+	frontRank =
+		this.rankOf( frontKey );
+
+	f2Key =
+		( frontRank + 1 < this.ranks.length )
+			?
+			this.ranks[ frontRank + 1 ]
+			:
+			null;
+
+	f2Para =
+		f2Key
+		&&
+		this.twig[ f2Key ];
 
 	if(
 		frontKey === backKey &&

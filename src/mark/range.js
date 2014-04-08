@@ -268,62 +268,68 @@ Jools.lazyValue(
 	function( )
 	{
 		var
-			frontPath =
-				this.frontPath,
+			backAt,
+			backKey,
+			backText,
+			backPath,
+			buf,
+			doc,
+			frontAt,
+			frontKey,
+			frontText,
+			frontPath,
+			r, rZ,
+			text;
 
-			frontAt =
-				this.frontAt,
+		frontPath =
+			this.frontPath;
 
-			backPath =
-				this.backPath,
+		frontAt =
+			this.frontAt;
 
-			backAt =
-				this.backAt,
+		backPath =
+			this.backPath;
 
-			tree =
-				this.docTree,
+		backAt =
+			this.backAt;
 
-			frontKey =
-				frontPath.get( -2 ),
+		doc =
+			this.doc;
 
-			backKey =
-				backPath.get( -2 );
+		frontKey =
+			frontPath.get( -2 );
+
+		backKey =
+			backPath.get( -2 );
 
 		if( frontPath.equals( backPath ) )
 		{
-			var
-				text =
-					tree.twig[ frontKey ].text;
+			text =
+				doc.twig[ frontKey ].text;
 
-			return text.substring(
-				frontAt,
-				backAt
-			);
+			return text.substring( frontAt, backAt );
 		}
 
-		var
-			frontText =
-				tree.twig[ frontKey ].text,
+		frontText =
+			doc.twig[ frontKey ].text;
 
-			backText =
-				tree.twig[ backKey ].text,
+		backText =
+			doc.twig[ backKey ].text;
 
-			buf = [
-				frontText.substring(
-					frontAt,
-					frontText.length
-				)
+		buf =
+			[
+				frontText.substring( frontAt, frontText.length )
 			];
 
 		for(
-			var r = tree.rankOf( frontKey ), rZ = tree.rankOf( backKey );
+			r = doc.rankOf( frontKey ), rZ = doc.rankOf( backKey );
 			r < rZ - 1;
 			r++
 		)
 		{
 			buf.push(
 				'\n',
-				tree.twig[ tree.ranks[ r ] ].text
+				doc.twig[ doc.ranks[ r ] ].text
 			);
 		}
 
@@ -363,17 +369,26 @@ Range.prototype._normalize =
 	function( )
 {
 	var
-		bPath =
-			this.bPath,
+		bAt,
+		bPath,
+		bk,
+		br,
+		eAt,
+		ePath,
+		ek,
+		er;
 
-		bAt =
-			this.bAt,
+	bPath =
+		this.bPath,
 
-		ePath =
-			this.ePath,
+	bAt =
+		this.bAt,
 
-		eAt =
-			this.eAt;
+	ePath =
+		this.ePath,
+
+	eAt =
+		this.eAt;
 
 
 	if( bPath.equals( ePath ) )
@@ -410,12 +425,11 @@ Range.prototype._normalize =
 		return;
 	}
 
-	var
-		bk =
-			bPath.get( -2 ),
+	bk =
+		bPath.get( -2 ),
 
-		ek =
-			ePath.get( -2 );
+	ek =
+		ePath.get( -2 );
 
 	if( CHECK )
 	{
@@ -427,12 +441,11 @@ Range.prototype._normalize =
 		}
 	}
 
-	var
-		br =
-			this.docTree.rankOf( bk ),
+	br =
+		this.doc.rankOf( bk );
 
-		er =
-			this.docTree.rankOf( ek );
+	er =
+		this.doc.rankOf( ek );
 
 	if( br < er )
 	{

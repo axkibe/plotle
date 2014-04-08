@@ -603,11 +603,18 @@ IFace.prototype.aquireSpace =
 */
 IFace.prototype.get =
 	function(
-		path,
-		len
+		path
 	)
 {
-	return this.$cSpace.getPath( path, len );
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length > 1 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return this.$cSpace.getPath( path );
 };
 
 
