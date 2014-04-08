@@ -60,9 +60,11 @@ if( JOOBJ )
 				path :
 					{
 						comment :
-							'the path of the doc',
+							'the path of the note',
 						type :
-							'Path'
+							'Path',
+						defaultValue :
+							'undefined'
 					},
 				mark :
 					{
@@ -79,7 +81,9 @@ if( JOOBJ )
 									]
 							},
 						type :
-							'Mark'
+							'Mark',
+						defaultValue :
+							'undefined'
 					},
 				scrolly :
 					{
@@ -88,7 +92,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'0'
+							'undefined'
 					},
 				traitSet :
 					{
@@ -113,7 +117,9 @@ if( JOOBJ )
 						comment :
 							'the current view',
 						type :
-							'View'
+							'View',
+						defaultValue :
+							'undefined'
 					}
 			},
 		init :
@@ -142,24 +148,26 @@ Note.prototype._init =
 	)
 {
 	var
-		twig =
-			this.tree.twig;
+		twig,
+		zone,
+		minHeight,
+		minWidth;
 
-	// FIXME remove shortcut
+	twig =
+		this.tree.twig;
+
 	this.fontsize =
 		twig.fontsize;
 
-	// FIXME remove shortcut
-	var
-		zone =
-		this.zone =
-			twig.zone,
+	zone =
+	this.zone =
+		twig.zone,
 
-		minWidth =
-			theme.note.minWidth,
+	minWidth =
+		theme.note.minWidth,
 
-		minHeight =
-			theme.note.minHeight;
+	minHeight =
+		theme.note.minHeight;
 
 	if(
 		zone.width  < minWidth ||
@@ -213,6 +221,11 @@ Note.prototype._init =
 				this.view
 		);
 
+	if( this.scrolly === undefined )
+	{
+		this.scrolly = 0;
+	}
+
 	if( traitSet )
 	{
 		for(
@@ -225,9 +238,7 @@ Note.prototype._init =
 				t =
 					traitSet.get( a );
 
-			if(
-				t.path.equals( this.path )
-			)
+			if( t.path.equals( this.path ) )
 			{
 				switch( t.key )
 				{
@@ -240,11 +251,7 @@ Note.prototype._init =
 
 					default :
 
-						throw new Error(
-							CHECK
-							&&
-							( 'unknown trait: ' + t.key )
-						);
+						throw new Error( );
 				}
 			}
 		}

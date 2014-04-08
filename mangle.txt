@@ -350,7 +350,6 @@
 . disc
 > display
 > doc
-. docTree
 . down
 . dragMove
 . dragStart
