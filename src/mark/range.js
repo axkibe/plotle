@@ -2,6 +2,8 @@
 | A text range.
 |
 | Authors: Axel Kittenberger
+|
+| XXX TODO DocTree
 */
 
 
@@ -55,12 +57,12 @@ if( JOOBJ )
 						type :
 							'Integer'
 					},
-				docTree :
+				doc :
 					{
 						comment :
-							'the document tree the range belongs to',
+							'the document the range belongs to',
 						type :
-							'Tree'
+							'Doc'
 					},
 				ePath :
 					{
@@ -96,7 +98,7 @@ var
 
 /*
 | The begin or end path,
-| dependening on which comes first in docTree.
+| dependening on which comes first in the doc.
 */
 Jools.lazyValue(
 	Range.prototype,
@@ -115,7 +117,7 @@ Jools.lazyValue(
 
 /*
 | The begin or end offset,
-| dependening on which comes first in docTree.
+| dependening on which comes first in the doc.
 */
 Jools.lazyValue(
 	Range.prototype,
@@ -134,7 +136,7 @@ Jools.lazyValue(
 
 /*
 | The begin or end path,
-| dependening on which comes last in docTree.
+| dependening on which comes last in the doc.
 */
 Jools.lazyValue(
 	Range.prototype,
@@ -153,7 +155,7 @@ Jools.lazyValue(
 
 /*
 | The begin or end path,
-| dependening on which comes last in docTree.
+| dependening on which comes last in the doc.
 */
 Jools.lazyValue(
 	Range.prototype,

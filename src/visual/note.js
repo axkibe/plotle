@@ -189,23 +189,16 @@ Note.prototype._init =
 		{ };
 
 	var
-		protoDoc =
-			inherit && inherit.sub.doc,
-
-		// default undefined -> inherit
-		docPath;
-
-	if( !protoDoc )
-	{
-		protoDoc =
-			Visual.Doc;
-
 		docPath =
+			// FIXME not if inherited
 			this.path.append( 'doc' );
-	}
+
+	// tree.fontsize; FIXME
+	this.fontsize =
+		theme.note.fontsize;
 
 	this.sub.doc =
-		protoDoc.create(
+		this.tree.twig.doc.create(
 			'flowWidth',
 				zone.width - Note.innerMargin.x,
 			'fontsize',
@@ -216,8 +209,6 @@ Note.prototype._init =
 				Jools.half( this.fontsize ),
 			'path',
 				docPath,
-			'tree',
-				twig.doc,
 			'view',
 				this.view
 		);
@@ -258,10 +249,6 @@ Note.prototype._init =
 			}
 		}
 	}
-
-	// tree.fontsize; FIXME
-	this.fontsize =
-		theme.note.fontsize;
 
 	this.scrollbarY =
 		Visual.Scrollbar.create(
@@ -619,7 +606,7 @@ Note.prototype.scrollMarkIntoView =
 
 		para =
 			// FIXME, more elegant path getting
-			this.sub.doc.sub[ mark.caretPath.get( 3 )  ];
+			this.sub.doc.twig[ mark.caretPath.get( 4 )  ];
 
 /**/if( CHECK )
 /**/{

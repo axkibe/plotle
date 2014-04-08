@@ -169,7 +169,6 @@ Jools.lazyValue(
 
 			if( Jools.prissy )
 			{
-				Jools.log( 'fail', this );
 				throw new Error( 'invalid type' );
 			}
 		}
@@ -490,6 +489,7 @@ Change.prototype.insert =
 			'change.insert',
 		src =
 			this.src,
+		str,
 		trg =
 			this.trg;
 
@@ -499,9 +499,8 @@ Change.prototype.insert =
 		'trg.path missing'
 	);
 
-	var
-		str =
-			tree.getPath( trg.path );
+	str =
+		tree.getPath( trg.path );
 
 	Jools.check(
 		Jools.isString( str ),
@@ -679,30 +678,40 @@ Change.prototype.join =
 	)
 {
 	var
-		cm =
-			'change.join',
+		cm,
+		key2,
+		src,
+		text,
+		trg,
+		para1,
+		para2,
+		path,
+		path2,
+		at1;
 
-		src =
-			this.src,
+	cm =
+		'change.join';
 
-		trg =
-			this.trg,
+	src =
+		this.src;
 
-		path =
-			trg.path,
+	trg =
+		this.trg;
 
-		at1 =
-			trg.at1;
+	path =
+		trg.path;
+
+	at1 =
+		trg.at1;
 
 	Jools.check(
-		Jools.is( at1 ),
+		at1 !== undefined,
 		cm,
 		'trg.at1 missing'
 	);
 
-	var
-		text =
-			tree.getPath( path );
+	text =
+		tree.getPath( path );
 
 	Jools.check(
 		Jools.isString( text ),
@@ -715,25 +724,15 @@ Change.prototype.join =
 			path.get( -2 ),
 
 		pivot =
-			tree.getPath( path.shorten( 2 ) ),
+			tree.getPath( path.shorten( 3 ) );
 
-		pattern =
-			universe[ pivot.type ];
+	Jools.check( pivot.ranks, cm, 'pivot has no ranks' );
 
-	Jools.check(
-		pattern.ranks,
-		cm,
-		'pivot has no ranks'
-	);
+	var
+		kn =
+			pivot.rankOf( key );
 
-	var kn =
-		pivot.rankOf( key );
-
-	Jools.check(
-		kn >= 0,
-		cm,
-		'invalid line key'
-	);
+	Jools.check( kn >= 0, cm, 'invalid line key (1)' );
 
 	Jools.check(
 		kn < pivot.ranks.length,
@@ -741,13 +740,11 @@ Change.prototype.join =
 		'cannot join last line'
 	);
 
-	var
-		key2 =
-			pivot.ranks[ kn + 1 ];
+	key2 =
+		pivot.ranks[ kn + 1 ];
 
-	var
-		path2 =
-			path.set( -2, key2 );
+	path2 =
+		path.set( -2, key2 );
 
 	src =
 		src.affix(
@@ -757,43 +754,39 @@ Change.prototype.join =
 			path2
 		);
 
-	var
-		para1 =
-			pivot.twig[ key  ],
+	para1 =
+		pivot.twig[ key  ];
 
-		para2 =
-			pivot.twig[ key2 ];
+	para2 =
+		pivot.twig[ key2 ];
 
 	// FIXME check other keys to be equal
 
 	para1 =
-		universe.grow(
-			para1,
+		para1.create(
 			'text',
-				para1.text +
-				para2.text
+				para1.text + para2.text
 		);
 
 	pivot =
-		universe.grow(
-			pivot,
-			key,
+		pivot.create(
+			'twig:set',
+				key,
 				para1,
-			key2,
-				null,
-			'-',
-				kn + 1
+			'twig:remove',
+				key2
 		);
 
 	tree =
 		tree.setPath(
-			path.shorten( 2 ),
+			path.shorten( 3 ),
 			pivot,
 			universe
 		);
 
 	var chg;
 
+	// FIXME make a JOOBJ
 	if(
 		src === this.src &&
 		trg === this.trg
@@ -811,10 +804,10 @@ Change.prototype.join =
 			);
 	}
 
+	// FIXME make a JOOBJ
 	return {
 		tree :
 			tree,
-
 		chg :
 			chg
 	};
@@ -835,40 +828,23 @@ Change.prototype.split =
 	var
 		cm =
 			'change.split',
-
 		src =
 			this.src,
-
 		trg =
 			this.trg,
-
 		path =
 			src.path,
-
 		at1 =
 			src.at1,
-
 		text =
 			tree.getPath( path ),
-
 		pivot =
-			tree.getPath( path.shorten( 2 ) ),
-
-		pattern =
-			universe[ pivot.type ],
-
+			tree.getPath( path.shorten( 3 ) ),
 		vKey;
 
-	Jools.check(
-		Jools.isString( text ),
-		cm,
-		'src signates no text'
-	);
+	Jools.check( Jools.isString( text ), cm, 'src signates no text' );
 
-	Jools.check(
-		pattern.ranks,
-		cm, 'pivot has no ranks'
-	);
+	Jools.check( pivot.ranks, cm, 'pivot has no ranks' );
 
 	if( Jools.is( trg.path ) )
 	{
@@ -898,48 +874,40 @@ Change.prototype.split =
 	var
 		key =
 			path.get( -2 ),
-
 		kn =
 			pivot.rankOf( key );
 
-	Jools.check(
-		kn >= 0,
-		cm,
-		'invalid line key'
-	);
+	Jools.check( kn >= 0, cm, 'invalid line key ( 2 )' );
 
 	var
 		para1 =
 			pivot.twig[ key ],
-
 		para2 =
-			universe.grow(
-				para1,
+			para1.create(
 				'text',
 					text.substring( at1, text.length )
 			);
 
 	para1 =
-		universe.grow(
-			para1,
+		para1.create(
 			'text',
 				text.substring( 0, at1 )
 		);
 
 	pivot =
-		universe.grow(
-			pivot,
-			key,
+		pivot.create(
+			'twig:set',
+				key,
 				para1,
-			vKey,
-				para2,
-			'+',
-				kn + 1, vKey
+			'twig:insert',
+				vKey,
+				kn + 1,
+				para2
 		);
 
 	tree =
 		tree.setPath(
-			path.shorten( 2 ),
+			path.shorten( 3 ),
 			pivot,
 			universe
 		);
@@ -947,6 +915,7 @@ Change.prototype.split =
 	var
 		chg;
 
+	// FIXME make a proper joobj
 	if( src === this.src && trg === this.trg )
 	{
 		chg =
@@ -961,10 +930,10 @@ Change.prototype.split =
 			);
 	}
 
+	// FIXME make a proper joobj
 	return {
 		tree :
 			tree,
-
 		chg :
 			chg
 	};

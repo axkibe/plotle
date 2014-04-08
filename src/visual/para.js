@@ -438,47 +438,44 @@ Jools.lazyValue(
 	'flow',
 	function( )
 	{
+/**/	if( CHECK )
+/**/	{
+/**/		if( !this.fontsize )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+
 		var
 			flowWidth =
 				this.flowWidth,
-
 			font =
 				this.font,
-
 			// FIXME go into subnodes instead
 			text =
 				this.text,
-
 			// width really used.
 			spread =
 				0,
-
 			// current x positon, and current x including last tokens width
 			x =
 				0,
-
 			xw =
 				0,
-
 			y =
 				Math.round( font.size ),
-
 			space =
 				Euclid.Measure.width( font, ' ' ),
-
 			line =
 				0,
-
 			flow =
 				[ ];
 
 		flow[ line ] = {
 			a :
 				[ ],
-
 			y :
 				y,
-
 			o :
 				0
 		};
@@ -498,7 +495,6 @@ Jools.lazyValue(
 			var
 				token =
 					ca[ 1 ] + ca[ 2 ],
-
 				w =
 					Euclid.Measure.width( font, token );
 
@@ -516,24 +512,19 @@ Jools.lazyValue(
 							xw;
 					}
 
-					x =
-						0;
+					x = 0;
 
-					xw =
-						x + w;
+					xw = x + w;
 
-					y +=
-						Math.round( font.size * ( 1 + theme.bottombox ) );
+					y += Math.round( font.size * ( 1 + theme.bottombox ) );
 
 					line++;
 
 					flow[ line ] = {
 						a :
 							[ ],
-
 						y :
 							y,
-
 						o :
 							ca.index
 					};
@@ -549,36 +540,28 @@ Jools.lazyValue(
 				{
 					x :
 						x,
-
 					w :
 						w,
-
 					o :
 						ca.index,
-
 					t :
 						token
 				}
 			);
 
-			x =
-				xw + space;
+			x = xw + space;
 		}
 
 		if( spread < xw )
 		{
-			spread =
-				xw;
+			spread = xw;
 		}
 
-		flow.height =
-			y;
+		flow.height = y;
 
-		flow.flowWidth =
-			flowWidth;
+		flow.flowWidth = flowWidth;
 
-		flow.spread =
-			spread;
+		flow.spread = spread;
 
 		return flow;
 	}
@@ -944,12 +927,12 @@ Para.prototype.specialKey =
 					v0 =
 						doc.atRank( 0 ),
 					v1 =
-						doc.atRank( doc.tree.length - 1 );
+						doc.atRank( doc.ranks.length - 1 );
 
 				shell.setMark(
 					Mark.Range.create(
-						'docTree',
-							doc.tree,
+						'doc',
+							doc,
 						'bPath',
 							v0.textPath,
 						'bAt',
@@ -1143,7 +1126,7 @@ Para.prototype._keyBackspace =
 
 	var
 		r =
-			doc.tree.rankOf( this.key );
+			doc.rankOf( this.key );
 
 	if( r > 0 )
 	{
@@ -1185,9 +1168,9 @@ Para.prototype._keyDel =
 
 	var
 		r =
-			doc.tree.rankOf( this.key );
+			doc.rankOf( this.key );
 
-	if( r < doc.tree.length - 1 )
+	if( r < doc.ranks.length - 1 )
 	{
 		shell.peer.join(
 			this.textPath,
@@ -1244,9 +1227,9 @@ Para.prototype._keyDown =
 	// goto next para
 	var
 		r =
-			doc.tree.rankOf( this.key );
+			doc.rankOf( this.key );
 
-	if( r < doc.tree.length - 1 )
+	if( r < doc.ranks.length - 1 )
 	{
 		var
 			ve =
@@ -1337,7 +1320,7 @@ Para.prototype._keyLeft =
 
 	var
 		r =
-			doc.tree.rankOf( this.key );
+			doc.rankOf( this.key );
 
 	if( r > 0 )
 	{
@@ -1420,7 +1403,7 @@ Para.prototype._pageUpDown =
 	if( tpara === null )
 	{
 		tpara =
-			doc.atRank( doc.tree.length - 1 );
+			doc.atRank( doc.ranks.length - 1 );
 	}
 
 	var
@@ -1544,9 +1527,9 @@ Para.prototype._keyRight =
 
 	var
 		r =
-			doc.tree.rankOf( this.key );
+			doc.rankOf( this.key );
 
-	if( r < doc.tree.length - 1 )
+	if( r < doc.ranks.length - 1 )
 	{
 		var
 			ve =
@@ -1610,7 +1593,7 @@ Para.prototype._keyUp =
 	// goto prev para
 	var
 		r =
-			doc.tree.rankOf( this.key );
+			doc.rankOf( this.key );
 
 	if( r > 0 )
 	{
@@ -1664,8 +1647,8 @@ Para.prototype._setMark =
 	{
 		return shell.setMark(
 			Mark.Range.create(
-				'docTree',
-					doc.tree,
+				'doc',
+					doc,
 				'bPath',
 					bPath,
 				'bAt',

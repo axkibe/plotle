@@ -62,7 +62,7 @@ config.database.port =
 | Name of the mongodb database
 */
 config.database.name =
-	'meshcraft04';
+	'meshcraft05';
 
 
 /*
@@ -148,7 +148,7 @@ config.log  = {
 	ajax :
 		false,
 	change :
-		true ||
+//		true ||
 		false,
 	news :
 //		true ||

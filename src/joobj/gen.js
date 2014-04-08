@@ -61,7 +61,7 @@ camelCaseToDash =
 
 
 /*
-| Initialized a generator
+| Initializes a generator.
 */
 Gen.prototype._init =
 	function( )
@@ -795,10 +795,11 @@ Gen.prototype.genCreatorVariables =
 	if( this.twig )
 	{
 		varList.push(
-			'twig',
+			'key',
+			'rank',
 			'ranks',
-			'twigDup',
-			'key'
+			'twig',
+			'twigDup'
 		);
 	}
 
@@ -978,6 +979,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 
 	if( this.twig )
 	{
+		// FIXME make a sub-function to add the twigDup stuff
 		switchExpr =
 			switchExpr
 			.Case(
@@ -1074,6 +1076,118 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.Assign(
 					Code.Term( 'twig[ key ]'),
 					Code.Term( 'arg' )
+				)
+			)
+			.Case(
+				Code.Term ( '\'twig:insert\'' ),
+				Code.Block( )
+				.If(
+					Code.Term( '!twigDup' ),
+					Code.Block( )
+					.Assign(
+						Code.Term( 'twig' ),
+						Code.Call(
+							Code.Term( 'Jools.copy' ),
+							Code.Term( 'twig' )
+						)
+					)
+					.Assign(
+						Code.Term( 'ranks' ),
+						Code.Call(
+							Code.Term( 'ranks.slice' )
+						)
+					)
+					.Assign(
+						Code.Term( 'twigDup' ),
+						Code.Term( 'true' )
+					)
+				)
+				.Assign(
+					Code.Term( 'key' ),
+					Code.Term( 'arg' )
+				)
+				.Assign(
+					Code.Term( 'rank' ),
+					Code.Term( 'arguments[ a + 2 ]' )
+				)
+				.Assign(
+					Code.Term( 'arg' ),
+					Code.Term( 'arguments[ a + 3 ]' )
+				)
+				.Append(
+					Code.Term( 'a += 2' )
+				)
+				.If(
+					Code.Term( 'twig[ key ] !== undefined ' ),
+					Code.Block( )
+					.Fail(
+						Code.Term(
+							'\'key "\' + key + \'" already in use\''
+						)
+					)
+				)
+				.If(
+					Code.Term( 'rank < 0 || rank > ranks.length' ),
+					Code.Block( )
+					.Fail(
+						Code.Term( '\'invalid rank\'' )
+					)
+				)
+				.Assign(
+					Code.Term( 'twig[ key ]'),
+					Code.Term( 'arg' )
+				)
+				.Append(
+					Code.Call(
+						Code.Term( 'ranks.splice' ),
+						Code.Term( 'rank' ),
+						Code.Term( '0' ),
+						Code.Term( 'key' )
+					)
+				)
+			)
+			.Case(
+				Code.Term ( '\'twig:remove\'' ),
+				Code.Block( )
+				.If(
+					Code.Term( '!twigDup' ),
+					Code.Block( )
+					.Assign(
+						Code.Term( 'twig' ),
+						Code.Call(
+							Code.Term( 'Jools.copy' ),
+							Code.Term( 'twig' )
+						)
+					)
+					.Assign(
+						Code.Term( 'ranks' ),
+						Code.Call(
+							Code.Term( 'ranks.slice' )
+						)
+					)
+					.Assign(
+						Code.Term( 'twigDup' ),
+						Code.Term( 'true' )
+					)
+				)
+				.If(
+					Code.Term( 'twig[ arg ] === undefined ' ),
+					Code.Block( )
+					.Fail(
+						Code.Term(
+							'\'key "\' + arg + \'" not in use\''
+						)
+					)
+				)
+				.Append(
+					Code.Term( 'delete twig[ arg ]' )
+				)
+				.Append(
+					Code.Call(
+						Code.Term( 'ranks.splice' ),
+						Code.Term( 'ranks.indexOf( arg )' ),
+						Code.Term( '1' )
+					)
 				)
 			);
 	}
@@ -2338,6 +2452,16 @@ Gen.prototype.genJoobjProto =
 			.Assign(
 				Code.Term( this.reference + '.prototype.atRank' ),
 				Code.Term( 'JoobjProto.atRank' )
+			)
+			.Comment( 'Gets the rank of a key.' )
+			.Assign(
+				Code.Term( this.reference + '.prototype.rankOf' ),
+				Code.Term( 'JoobjProto.rankOf' )
+			)
+			.Comment( 'Creates a new unique identifier.' )
+			.Assign(
+				Code.Term( this.reference + '.prototype.newUID' ),
+				Code.Term( 'JoobjProto.newUID' )
 			);
 	}
 

@@ -50,7 +50,11 @@ var _attributeBlacklist =
 			true,
 		'inherit' :
 			true,
+		'newUID' :
+			true,
 		'ranks' :
+			true,
+		'rankOf' :
 			true,
 		'setPath' :
 			true,
@@ -59,6 +63,7 @@ var _attributeBlacklist =
 		'twig' :
 			true
 	} );
+
 
 /*
 | A joobj definition may have these.

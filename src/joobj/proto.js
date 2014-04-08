@@ -5,14 +5,26 @@
 */
 
 var
+	Jools,
 	JoobjProto =
 		{ };
+
 
 /*
 | Capsule.
 */
 (function( ) {
 'use strict';
+
+
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	Jools =
+		require( '../jools/jools' );
+}
 
 
 /*
@@ -163,6 +175,92 @@ JoobjProto.atRank =
 	)
 {
 	return this.twig[ this.ranks[ rank ] ];
+};
+
+
+/*
+| Creates a new unique identifier.
+*/
+JoobjProto.newUID =
+	function( )
+{
+	var
+		u;
+
+	u =
+		Jools.uid( );
+
+	return (
+		( this.twig[ u ] === undefined )
+			?
+			u
+			:
+			this.newUID( )
+	);
+};
+
+
+/*
+| Returns the rank of the key
+|
+| This means it returns the index of key in the ranks array.
+|
+| FIXME make a joolsLazyfunc
+*/
+JoobjProto.rankOf =
+	function(
+		key
+	)
+{
+	var
+		ranks =
+			this.ranks;
+
+/**/if( CHECK )
+/**/{
+/**/	if( !Jools.isArray( ranks ) )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( !Jools.isString( key ) )
+/**/	{
+/**/		throw new Error(
+/**/			'key no string'
+/**/		);
+/**/	}
+/**/}
+
+	// checks ranking cache
+	var
+		rof =
+			this._$rof;
+
+	if( !rof )
+	{
+		Object.defineProperty(
+			this,
+			'_$rof',
+			rof = { }
+		);
+	}
+
+	var
+		rank =
+			rof[ key ];
+
+	if( rank !== undefined )
+	{
+		return rank;
+	}
+
+	rank =
+	rof[ key ] =
+		this.twig[ key ] !== undefined ?
+			ranks.indexOf( key ) :
+			-1;
+
+	return rank;
 };
 
 

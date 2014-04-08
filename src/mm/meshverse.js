@@ -600,6 +600,9 @@ Meshverse.prototype.Relation =
 
 
 Meshverse.prototype.Doc =
+	Visual.Doc;
+
+	/*
 	Jools.immute( {
 		twig :
 			Jools.immute( {
@@ -609,6 +612,7 @@ Meshverse.prototype.Doc =
 		ranks :
 			true
 	} );
+	*/
 
 Meshverse.prototype.Para =
 	Visual.Para;
