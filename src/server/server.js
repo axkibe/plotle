@@ -2575,27 +2575,42 @@ Server.prototype.cmdGet =
 	)
 {
 	var
-		time =
-			cmd.time,
+		a,
+		b,
+		access,
+		changes,
+		chgX,
+		node,
+		passhash,
+		seqZ,
+		spaceName,
+		spaceTag,
+		spaceUser,
+		time,
+		tree,
+		user;
 
-		user =
-			cmd.user,
+	passhash =
+		cmd.passhash;
 
-		passhash =
-			cmd.passhash,
+	spaceTag =
+		cmd.spaceTag;
 
-		spaceUser =
-			cmd.spaceUser,
+	spaceUser =
+		cmd.spaceUser;
 
-		spaceTag =
-			cmd.spaceTag;
+	time =
+		cmd.time;
 
-	if( !Jools.is( cmd.user ) )
+	user =
+		cmd.user;
+
+	if( !cmd.user )
 	{
 		throw Jools.reject('user missing');
 	}
 
-	if( !Jools.is( cmd.passhash ) )
+	if( !cmd.passhash )
 	{
 		throw Jools.reject( 'passhash missing' );
 	}
@@ -2621,26 +2636,23 @@ Server.prototype.cmdGet =
 
 	// FIXME test spaceUser/Tag
 
-	var
-		spaceName =
-			cmd.spaceUser + ':'  + cmd.spaceTag,
+	spaceName =
+		cmd.spaceUser + ':'  + cmd.spaceTag;
 
-		access =
-			this.testAccess(
-				cmd.user,
-				spaceUser,
-				spaceTag
-			);
+	access =
+		this.testAccess(
+			cmd.user,
+			spaceUser,
+			spaceTag
+		);
 
 	if( access == 'no' )
 	{
 		return {
 			ok :
 				true,
-
 			access :
 				access,
-
 			status :
 				'no access'
 		};
@@ -2665,22 +2677,19 @@ Server.prototype.cmdGet =
 			return {
 				ok :
 					true,
-
 				access :
 					access,
-
 				status :
 					'nonexistent'
 			};
 		}
 	}
 
-	var
-		changes =
-			space.$changes,
+	changes =
+		space.$changes,
 
-		seqZ =
-			space.$seqZ;
+	seqZ =
+		space.$seqZ;
 
 	if( time === -1 )
 	{
@@ -2691,18 +2700,27 @@ Server.prototype.cmdGet =
 		throw Jools.reject( 'invalid time' );
 	}
 
-	var tree =
+	tree =
 		space.$tree;
 
 	// if the requested tree is not the latest, replay it backwards
-	for( var a = seqZ - 1; a >= time; a-- )
+	for(
+		a = seqZ - 1;
+		a >= time;
+		a--
+	)
 	{
-		var chgX =
+		chgX =
 			changes[ a ].chgX;
 
-		for( var b = 0; b < chgX.length; b++ )
+		for(
+			b = 0;
+			b < chgX.length;
+			b++
+		)
 		{
-			tree = chgX
+			tree =
+				chgX
 				.get( b )
 				.invert( )
 				.changeTree(
@@ -2714,8 +2732,6 @@ Server.prototype.cmdGet =
 	}
 
 	// returns the path requested
-	var
-		node;
 
 	try
 	{
@@ -2734,19 +2750,17 @@ Server.prototype.cmdGet =
 		);
 	}
 
+Jools.log( true, 'NODE', node );
+
 	return {
 		ok :
 			true,
-
 		status :
 			'served',
-
 		access :
 			access,
-
 		time :
 			time,
-
 		node :
 			node
 	};

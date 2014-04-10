@@ -1,8 +1,6 @@
 /*
 | Generates jooled objects from a jools definition.
 |
-| Version 2
-|
 | Authors: Axel Kittenberger
 */
 
@@ -80,6 +78,7 @@ Gen.prototype._init =
 		ut,
 		name,
 		// twigs to be recognized
+		subParts,
 		twig =
 			{ },
 		// twigs sorted alphabetically
@@ -107,6 +106,24 @@ Gen.prototype._init =
 
 	this.subclass =
 		joobj.subclass;
+
+	if( this.subclass )
+	{
+		subParts =
+			this.subclass.split( '.' );
+
+		if( subParts.length >=  2 )
+		{
+			if( !units[ subParts[ 0 ] ] )
+			{
+				units[ subParts[ 0 ] ] =
+					{ };
+			}
+
+			units[ subParts[ 0 ] ][ subParts[ 1 ] ] =
+				true;
+		}
+	}
 
 	this.tag =
 		Math.floor( Math.random( ) * 1000000000 );
@@ -291,7 +308,6 @@ Gen.prototype._init =
 			null;
 	}
 
-
 	unitList =
 		Object.keys( units ).sort( );
 
@@ -339,7 +355,7 @@ Gen.prototype.genImports =
 		.VarDec( 'Jools' );
 
 	// FUTURE when type checking is there this might become needed
-	// wihtout jsons
+	// without jsons
 	if( this.hasJSON )
 	{
 		for(
@@ -1361,7 +1377,7 @@ Gen.prototype.genCreatorChecks =
 			cond =
 				Code.Term( attr.vName + ' !== undefined' );
 		}
-		else if( attr.allowsNull && attr.allowsUndefine )
+		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			// FUTURE multilined
 			cond =
@@ -1370,6 +1386,11 @@ Gen.prototype.genCreatorChecks =
 					' && ' +
 					attr.vName + ' !== undefined'
 				);
+		}
+		else
+		{
+			cond =
+				null;
 		}
 
 		switch( attr.type )
@@ -2522,7 +2543,7 @@ Gen.prototype.genToJSON =
 			);
 	}
 
-	if( this.hasJSON )
+	if( this.twig )
 	{
 		olit =
 			olit

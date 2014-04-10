@@ -53,6 +53,8 @@ if( SERVER )
 		{
 			Doc :
 				require( '../visual/doc' ),
+			Note :
+				require( '../visual/note' ),
 			Para :
 				require( '../visual/para' )
 		};
@@ -115,26 +117,11 @@ Meshverse.prototype.grow =
 	var
 		a,
 		aZ =
-			arguments.length;
-
-	// nothing to do?
-	/*
-	if(
-		( model instanceof Tree ) &&
-		aZ === 1
-	)
-	{
-		return model;
-	}
-	*/
-
-	var
+			arguments.length,
 		twig =
 			null,
-
 		ranks =
 			null,
-
 		type,
 		k,
 		k1,
@@ -396,8 +383,9 @@ Meshverse.prototype.grow =
 
 		var
 			vtype =
-				Tree.getType( val ),
+				Tree.getType( val );
 
+		/*
 			ptype =
 				pattern.twig
 				||
@@ -411,6 +399,7 @@ Meshverse.prototype.grow =
 				type + ' does not allow key: ' + k
 			);
 		}
+		*/
 
 		// FIXME fix in getType
 		if(
@@ -441,18 +430,6 @@ Meshverse.prototype.grow =
 						this.grow( twig[ k ] );
 				}
 		}
-
-		/*
-		TODO
-		if( !allowsType( ptype, vtype ) )
-		{
-			throw new Error(
-				type + '.' + k + ' must be ' + ptype +
-				' but is ' +
-				vtype + ' (' + val + ')'
-			);
-		}
-		*/
 	}
 
 	// tests if all keys that must be there are there
@@ -533,6 +510,9 @@ Meshverse.prototype.Space =
 
 
 Meshverse.prototype.Note =
+	Visual.Note;
+
+	/*
 	Jools.immute( {
 		must :
 			Jools.immute( {
@@ -544,6 +524,7 @@ Meshverse.prototype.Note =
 					'Number'
 			} )
 	} );
+	*/
 
 Meshverse.prototype.Portal =
 	Jools.immute( {
@@ -561,7 +542,6 @@ Meshverse.prototype.Portal =
 
 Meshverse.prototype.Label =
 	Jools.immute( {
-
 		must :
 			Jools.immute( {
 
@@ -575,7 +555,6 @@ Meshverse.prototype.Label =
 					'Number'
 
 			} )
-
 	} );
 
 
@@ -601,18 +580,6 @@ Meshverse.prototype.Relation =
 
 Meshverse.prototype.Doc =
 	Visual.Doc;
-
-	/*
-	Jools.immute( {
-		twig :
-			Jools.immute( {
-				'Para' :
-					true
-			} ),
-		ranks :
-			true
-	} );
-	*/
 
 Meshverse.prototype.Para =
 	Visual.Para;

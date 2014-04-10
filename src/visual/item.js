@@ -60,6 +60,11 @@ Item.concernsMark =
 		path
 	)
 {
+	if( !path )
+	{
+		return undefined;
+	}
+
 	if( path.isEmpty )
 	{
 		return Mark.Vacant.create( );
@@ -790,23 +795,6 @@ Item.prototype.equals =
 {
 	return this === obj;
 };
-
-
-/*
-| Returns the visual with a given tree-rank.
-|
-| FIXME remove
-*/
-/*
-Item.prototype.atRank =
-	function(
-		rank
-	)
-{
-	return this.sub[ this.tree.ranks[ rank ] ];
-};
-*/
-
 
 
 } )( );

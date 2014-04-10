@@ -239,7 +239,7 @@ Point.zero =
 
 
 /*
-| Node exports
+| Node export.
 */
 if( SERVER )
 {

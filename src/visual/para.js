@@ -833,33 +833,42 @@ Para.prototype.input =
 	)
 {
 	var
-		reg  =
-			/([^\n]+)(\n?)/g,
+		caretAt,
+		doc,
+		line,
+		paraKey,
+		path,
+		reg,
+		r,
+		rx,
+		textPath;
 
-		path =
-			this.path,
+	reg =
+		/([^\n]+)(\n?)/g;
 
-		paraKey =
-			this.key,
+	path =
+		this.path;
 
-		textPath =
-			this.textPath,
+	paraKey =
+		this.key;
 
-		doc =
-			item.sub.doc,
+	textPath =
+		this.textPath;
 
-		caretAt =
-			this.mark.caretAt;
+	doc =
+		item.doc;
+
+	caretAt =
+		this.mark.caretAt;
 
 	for(
-		var rx = reg.exec( text );
+		rx = reg.exec( text );
 		rx !== null;
 		rx = reg.exec( text )
 	)
 	{
-		var
-			line =
-				rx[ 1 ];
+		line =
+			rx[ 1 ];
 
 		shell.peer.insertText(
 			textPath,
@@ -871,12 +880,11 @@ Para.prototype.input =
 		{
 			// FIXME, somehow use changes
 			// over return values more elegantly
-			var
-				r =
-					shell.peer.split(
-						textPath,
-						caretAt + line.length
-					);
+			r =
+				shell.peer.split(
+					textPath,
+					caretAt + line.length
+				);
 
 			doc =
 				r.tree.getPath( path.chop( ).limit( 2 ) );
@@ -912,7 +920,7 @@ Para.prototype.specialKey =
 {
 	var
 		doc =
-			item.sub.doc,
+			item.doc,
 
 		mark =
 			this.mark;
@@ -1666,7 +1674,7 @@ Para.prototype._setMark =
 
 
 /*
-| Node exports
+| Node export.
 */
 if( SERVER )
 {

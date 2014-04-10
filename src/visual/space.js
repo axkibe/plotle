@@ -157,12 +157,33 @@ Space.prototype._init =
 			continue;
 		}
 
+		switch( this.tree.twig[ k ].reflect ) // XXX
+		{
+		case 'Note' :
+		sub[ k ] =
+			this.tree.twig[ k ].create(
+				'path',
+					this.path.appendNC( k ), // FIXME inherit
+				'hover',
+					this.hover,
+				'mark',
+					this.mark,
+				'traitSet',
+					traitSet,
+				'view',
+					this.view
+			);
+
+		break;
+
+		default :
 		sub[ k ] =
 			this._createItem(
 				k,
 				inherit && inherit.sub[ k ],
 				traitSet
 			);
+		}
 	}
 
 	this.sub =
@@ -216,14 +237,18 @@ Space.prototype.focusedItem =
 	function( )
 {
 	var
-		action =
-			shell.action,
+		action,
+		mark,
+		path;
 
-		mark =
-			this.mark,
+	action =
+		shell.action;
 
-		path =
-			mark.itemPath;
+	mark =
+		this.mark;
+
+	path =
+		mark.itemPath;
 
 	if( action )
 	{
@@ -354,7 +379,6 @@ Space.prototype._createItem =
 		path =
 			this.path.appendNC( key );
 	}
-
 
 	return (
 		proto.create(
@@ -1553,17 +1577,12 @@ Space.prototype.dragMove =
 
 					transItem =
 						origin.create(
-							'tree',
-								// FIXME elegance
-								origin.tree.setPath(
-									Path.empty.append( 'zone' ),
-									origin.zone.add(
-										view.dex( p.x ) - action.start.x,
-										view.dey( p.y ) - action.start.y
-									),
-									meshverse
+							'zone',
+								origin.zone.add(
+									view.dex( p.x ) - action.start.x,
+									view.dey( p.y ) - action.start.y
 								)
-					);
+						);
 
 					break;
 
@@ -1609,18 +1628,13 @@ Space.prototype.dragMove =
 
 					transItem =
 						origin.create(
-							// FIXME elegance
-							'tree',
-								origin.tree.setPath(
-									Path.empty.append( 'zone' ),
-									origin.zone.cardinalResize(
-										align,
-										view.dex( p.x ) - action.start.x,
-											view.dey( p.y ) - action.start.y,
-										origin.minHeight,
-										origin.minWidth
-									),
-									meshverse
+							'zone',
+								origin.zone.cardinalResize(
+									align,
+									view.dex( p.x ) - action.start.x,
+										view.dey( p.y ) - action.start.y,
+									origin.minHeight,
+									origin.minWidth
 								)
 						);
 

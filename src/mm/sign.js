@@ -16,7 +16,8 @@ var
 | Imports
 */
 var
-	Jools;
+	Jools,
+	meshverse;
 
 
 /*
@@ -33,6 +34,8 @@ if( SERVER )
 {
 	Jools =
 		require( '../jools/jools' );
+	meshverse =
+		require( '../mm/meshverse' );
 }
 
 
@@ -92,6 +95,12 @@ Sign =
 
 		this[ k ] =
 			arguments[ a + 1 ];
+	}
+
+	if( this.val && this.val.type )
+	{
+		this.val =
+			meshverse.grow( this.val );
 	}
 
 	Jools.immute( this );

@@ -34,22 +34,35 @@ var
 
 
 /*
+| Node includes.
+*/
+if( SERVER )
+{
+	Jools =
+		require( '../jools/jools' );
+}
+
+
+/*
 | Constructor
 */
 var DocItem =
 Visual.DocItem =
 	function( )
 {
-	throw new Error(
-		CHECK && 'initializing abstract'
-	);
+	// initializing abstract.
+	throw new Error( );
 };
 
 
-Jools.subclass(
-	DocItem,
-	Visual.Item
-);
+// FIXME this is ugly
+if( !SERVER )
+{
+	Jools.subclass(
+		DocItem,
+		Visual.Item
+	);
+}
 
 
 /*
@@ -82,7 +95,7 @@ Jools.lazyValue(
 			+
 			Jools.limit(
 				0,
-				this.sub.doc.attentionCenter( this )
+				this.doc.attentionCenter( this )
 				-
 				(
 					this.scrollbarY
@@ -111,7 +124,7 @@ DocItem.prototype.getParaAtPoint =
 		return null;
 	}
 
-	return this.sub.doc.getParaAtPoint(
+	return this.doc.getParaAtPoint(
 		this,
 		p
 	);
@@ -131,14 +144,22 @@ DocItem.prototype.click =
 		access
 	)
 {
+	var
+		at,
+		doc,
+		para,
+		ppnw,
+		pnw,
+		pi,
+		vp;
+
 	if( access != 'rw' )
 	{
 		return false;
 	}
 
-	var
-		vp =
-			view.depoint( p );
+	vp =
+		view.depoint( p );
 
 	if(
 		!this.zone.within(
@@ -151,46 +172,42 @@ DocItem.prototype.click =
 	}
 
 
-	var
-		pnw =
-			this.zone.pnw,
+	pnw =
+		this.zone.pnw;
 
-		pi =
-			vp.sub(
-				pnw.x,
-				pnw.y -
-					(
-						this.scrollbarY
-							?
-							this.scrollbarY.pos
-							:
-							0
-					)
-			),
+	pi =
+		vp.sub(
+			pnw.x,
+			pnw.y -
+				(
+					this.scrollbarY
+						?
+						this.scrollbarY.pos
+						:
+						0
+				)
+		);
 
-		doc =
-			this.sub.doc,
+	doc =
+		this.doc;
 
-		para =
-			this.getParaAtPoint(
-				pi
-			);
+	para =
+		this.getParaAtPoint( pi );
 
 	// FIXME move into para
 	if( para )
 	{
-		var
-			ppnw =
-				doc.getPNW(
-					this,
-					para.key
-				),
+		ppnw =
+			doc.getPNW(
+				this,
+				para.key
+			);
 
-			at =
-				para.getPointOffset(
-					this,
-					pi.sub( ppnw )
-				);
+		at =
+			para.getPointOffset(
+				this,
+				pi.sub( ppnw )
+			);
 
 		shell.setMark(
 			Mark.Caret.create(
@@ -229,7 +246,7 @@ DocItem.prototype.input =
 	)
 {
 	return (
-		this.sub.doc.input(
+		this.doc.input(
 			text,
 			this
 		)
@@ -247,7 +264,7 @@ DocItem.prototype.specialKey =
 		ctrl
 	)
 {
-	return this.sub.doc.specialKey(
+	return this.doc.specialKey(
 		key,
 		this,
 		shift,

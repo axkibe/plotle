@@ -912,7 +912,7 @@ Doc.prototype.sketchRange =
 
 
 /*
-| Node exports
+| Node export.
 */
 if( SERVER )
 {

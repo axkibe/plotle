@@ -180,23 +180,25 @@ Jools.lazyValue(
 
 /*
 | Returns the inversion to this change.
-| FIXME use lazy fixate
+| FIXME use lazyValue
 */
 Change.prototype.invert =
 	function( )
 {
+	var
+		r;
+
 	// checks if the inversion is cached.
-	if( Jools.is( this._invert ) )
+	if( this._invert !== undefined )
 	{
 		return this._invert;
 	}
 
-	var
-		r =
-			new Change(
-				this.trg,
-				this.src
-			);
+	r =
+		new Change(
+			this.trg,
+			this.src
+		);
 
 	// caches the inversion for both changies
 
@@ -306,20 +308,27 @@ Change.prototype.set =
 	)
 {
 	var
-		cm =
-			'change.set',
+		cm,
+		key,
+		pivot,
+		save,
+		src,
+		trg;
 
-		src =
-			this.src,
+	cm =
+		'change.set',
 
-		trg =
-			this.trg,
+	src =
+		this.src,
 
-		pivot =
-			null,
+	trg =
+		this.trg,
 
-		key =
-			null;
+	pivot =
+		null,
+
+	key =
+		null;
 
 	Jools.check(
 		!Jools.is( trg.at1 ),
@@ -351,9 +360,8 @@ Change.prototype.set =
 	}
 
 	// Stores the old value for history tracking.
-	var
-		save =
-			tree.getPath( trg.path );
+	save =
+		tree.getPath( trg.path );
 
 	if( !Jools.is( save ) )
 	{

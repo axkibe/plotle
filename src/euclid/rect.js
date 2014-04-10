@@ -924,7 +924,7 @@ Rect.prototype.getProjection =
 
 
 /*
-| Node exports.
+| Node export.
 */
 if( SERVER )
 {

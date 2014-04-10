@@ -46,6 +46,27 @@ if( JOOBJ )
 			'Visual',
 		attributes :
 			{
+				doc :
+					{
+						comment :
+							'the notes document',
+						// FUTURE make this type: 'Visual.Doc'
+						type :
+							'Doc',
+						unit :
+							'Visual',
+						json :
+							true
+					},
+				fontsize :
+					{
+						comment :
+							'the fontsize of the note',
+						type :
+							'Number',
+						json :
+							true
+					},
 				hover :
 					{
 						comment :
@@ -57,15 +78,6 @@ if( JOOBJ )
 						defaultValue :
 							'null'
 					},
-				path :
-					{
-						comment :
-							'the path of the note',
-						type :
-							'Path',
-						defaultValue :
-							'undefined'
-					},
 				mark :
 					{
 						comment :
@@ -73,7 +85,8 @@ if( JOOBJ )
 						concerns :
 							{
 								func :
-									'Visual.Item.concernsMark',
+									// FUTURE this is kinda not nice
+									'Visual.Item && Visual.Item.concernsMark',
 								args :
 									[
 										'mark',
@@ -82,6 +95,15 @@ if( JOOBJ )
 							},
 						type :
 							'Mark',
+						defaultValue :
+							'undefined'
+					},
+				path :
+					{
+						comment :
+							'the path of the note',
+						type :
+							'Path',
 						defaultValue :
 							'undefined'
 					},
@@ -105,13 +127,6 @@ if( JOOBJ )
 						defaultValue :
 							'null'
 					},
-				tree :
-					{
-						comment :
-							'the data tree',
-						type :
-							'Tree'
-					},
 				view :
 					{
 						comment :
@@ -120,6 +135,17 @@ if( JOOBJ )
 							'View',
 						defaultValue :
 							'undefined'
+					},
+				zone :
+					{
+						comment :
+							'the notes zone',
+						type :
+							'Rect',
+						unit :
+							'Euclid',
+						json :
+							true
 					}
 			},
 		init :
@@ -127,11 +153,27 @@ if( JOOBJ )
 				'inherit',
 				'traitSet'
 			],
+		node :
+			true,
 		subclass :
 			'Visual.DocItem'
 	};
 }
 
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	Jools =
+		require( '../jools/jools' );
+
+	Visual =
+		{
+			Note :
+				require( '../joobj/this' )( module )
+		};
+}
 
 var
 	Note =
@@ -148,23 +190,24 @@ Note.prototype._init =
 	)
 {
 	var
-		twig,
-		zone,
+		a,
+		aZ,
 		minHeight,
-		minWidth;
+		minWidth,
+		t,
+		zone;
 
-	twig =
-		this.tree.twig;
-
-	this.fontsize =
-		twig.fontsize;
+	if( !this.view )
+	{
+		// abstract
+		return;
+	}
 
 	zone =
-	this.zone =
-		twig.zone,
+		this.zone;
 
 	minWidth =
-		theme.note.minWidth,
+		theme.note.minWidth;
 
 	minHeight =
 		theme.note.minHeight;
@@ -193,20 +236,13 @@ Note.prototype._init =
 			);
 	}
 
-	this.sub =
-		{ };
-
 	var
 		docPath =
 			// FIXME not if inherited
 			this.path.append( 'doc' );
 
-	// tree.fontsize; FIXME
-	this.fontsize =
-		theme.note.fontsize;
-
-	this.sub.doc =
-		this.tree.twig.doc.create(
+	this.doc =
+		this.doc.create(
 			'flowWidth',
 				zone.width - Note.innerMargin.x,
 			'fontsize',
@@ -229,14 +265,13 @@ Note.prototype._init =
 	if( traitSet )
 	{
 		for(
-			var a = 0, aZ = traitSet.length;
+			a = 0, aZ = traitSet.length;
 			a < aZ;
 			a++
 		)
 		{
-			var
-				t =
-					traitSet.get( a );
+			t =
+				traitSet.get( a );
 
 			if( t.path.equals( this.path ) )
 			{
@@ -262,7 +297,7 @@ Note.prototype._init =
 			'aperture',
 				zone.height - this.innerMargin.y,
 			'max',
-				this.sub.doc.height,
+				this.doc.height,
 			'pnw',
 				Euclid.Point.create(
 					'x',
@@ -322,7 +357,7 @@ Note.prototype.dragStop =
 /**/			}
 /**/		}
 
-			if( this.tree.twig.zone.equals( zone ) )
+			if( this.zone.equals( zone ) )
 			{
 				return;
 			}
@@ -345,18 +380,21 @@ Note.prototype.dragStop =
 };
 
 
-/*
-| Minimum height.
-*/
-Note.prototype.minHeight =
-	theme.note.minHeight;
+if( SHELL )
+{
+	/*
+	| Minimum height.
+	*/
+	Note.prototype.minHeight =
+		theme.note.minHeight;
 
 
-/*
-| Minimum width.
-*/
-Note.prototype.minWidth =
-	theme.note.minWidth;
+	/*
+	| Minimum width.
+	*/
+	Note.prototype.minWidth =
+		theme.note.minWidth;
+}
 
 
 /*
@@ -383,7 +421,7 @@ Jools.lazyValue(
 				),
 
 			doc =
-				this.sub.doc,
+				this.doc,
 
 			style =
 				Style.getStyle(
@@ -461,15 +499,17 @@ Note.prototype.draw =
 };
 
 
-
-/*
-| Default margin for all notes.
-*/
-Note.innerMargin =
-Note.prototype.innerMargin =
-	new Euclid.Margin(
-		theme.note.innerMargin
-	);
+if( SHELL )
+{
+	/*
+	| Default margin for all notes.
+	*/
+	Note.innerMargin =
+	Note.prototype.innerMargin =
+		new Euclid.Margin(
+			theme.note.innerMargin
+		);
+}
 
 
 /*
@@ -480,25 +520,18 @@ Note.prototype.handles =
 		{
 			n :
 				true,
-
 			ne :
 				true,
-
 			e :
 				true,
-
 			se :
 				true,
-
 			s :
 				true,
-
 			sw :
 				true,
-
 			w :
 				true,
-
 			nw :
 				true
 		}
@@ -613,7 +646,7 @@ Note.prototype.scrollMarkIntoView =
 
 		para =
 			// FIXME, more elegant path getting
-			this.sub.doc.twig[ mark.caretPath.get( 4 )  ];
+			this.doc.twig[ mark.caretPath.get( 4 )  ];
 
 /**/if( CHECK )
 /**/{
@@ -633,7 +666,7 @@ Note.prototype.scrollMarkIntoView =
 			this.innerMargin,
 
 		fs =
-			this.sub.doc.font.size,
+			this.doc.font.size,
 
 		descend =
 			fs * theme.bottombox,
@@ -644,7 +677,7 @@ Note.prototype.scrollMarkIntoView =
 			).p,
 
 		pnw =
-			this.sub.doc.getPNW(
+			this.doc.getPNW(
 				this,
 				para.key
 			),
@@ -700,7 +733,7 @@ Note.prototype.scrollPage =
 			up ? -1 : 1,
 
 		fs =
-			this.sub.doc.font.size;
+			this.doc.font.size;
 
 	shell.setTraits(
 		TraitSet.create(
@@ -713,7 +746,7 @@ Note.prototype.scrollPage =
 
 	var
 		ac =
-			this.sub.doc.attentionCenter( this );
+			this.doc.attentionCenter( this );
 
 	console.log( 'AC', ac );
 
@@ -756,6 +789,16 @@ Note.prototype.mousewheel =
 
 	return true;
 };
+
+
+/*
+| Node export.
+*/
+if( SERVER )
+{
+	module.exports =
+		Note;
+}
 
 
 } )( );

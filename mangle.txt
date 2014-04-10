@@ -269,7 +269,6 @@
 > button
 > ca
 > call
-. can
 . cancelTimer
 . car
 . cardinalResize

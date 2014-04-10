@@ -321,19 +321,29 @@ Tree.prototype.newUID =
 Tree.getType =
 	function( o )
 {
+	switch( typeof( o ) )
+	{
+		case 'string' :
+
+			return 'String';
+	}
+
 	switch( o.constructor )
 	{
-
 		case Array :
+
 			return 'Array';
 
 		case Boolean :
+
 			return 'Boolean';
 
 		case Number :
+
 			return 'Number';
 
 		case String :
+
 			return 'String';
 
 		default :
@@ -349,7 +359,7 @@ Tree.getType =
 				return o.type;
 			}
 
-			return o.twig.type ;
+			return o.twig.type;
 	}
 };
 

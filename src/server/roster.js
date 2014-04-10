@@ -513,7 +513,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/visual/docitem.js',
+			'src/visual/doc-item.js',
 		'inBundle',
 			true
 	),

@@ -157,8 +157,9 @@ sha1hex =
 	).toLowerCase();
 };
 
-/**
-| Node exports
+
+/*
+| Node export.
 */
 if( SERVER )
 {
