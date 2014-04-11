@@ -53,12 +53,14 @@ if( SERVER )
 		{
 			Doc :
 				require( '../visual/doc' ),
+			Label :
+				require( '../visual/label' ),
 			Note :
 				require( '../visual/note' ),
 			Para :
 				require( '../visual/para' ),
-			Label :
-				require( '../visual/label' ),
+			Portal :
+				require( '../visual/portal' ),
 			Relation :
 				require( '../visual/relation' )
 		};
@@ -517,63 +519,13 @@ Meshverse.prototype.Note =
 	Visual.Note;
 
 Meshverse.prototype.Portal =
-	Jools.immute( {
-		must :
-			Jools.immute( {
-				'zone' :
-					'Rect',
-				'spaceUser' :
-					'String',
-				'spaceTag' :
-					'String'
-			} )
-	} );
-
+	Visual.Portal;
 
 Meshverse.prototype.Label =
 	Visual.Label;
 
-	/*
-	Jools.immute( {
-		must :
-			Jools.immute( {
-
-				'doc' :
-					'Doc',
-
-				'pnw' :
-					'Point',
-
-				'fontsize' :
-					'Number'
-
-			} )
-	} );
-	*/
-
-
 Meshverse.prototype.Relation =
 	Visual.Relation;
-	/*
-	Jools.immute( {
-		must :
-			Jools.immute( {
-				'doc' :
-					'Doc',
-				'pnw' :
-					'Point',
-				'item1key' :
-					// 'Key', FIXME
-					'String',
-				'item2key' :
-					// 'Key', FIXME
-					'String',
-				'fontsize' :
-					'Number'
-			} )
-	} );
-	*/
-
 
 Meshverse.prototype.Doc =
 	Visual.Doc;

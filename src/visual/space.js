@@ -156,7 +156,6 @@ Space.prototype._init =
 			continue;
 		}
 
-		// TODO XXX remove _createItem
 		sub[ k ] =
 			this.tree.twig[ k ].create(
 				'path',
@@ -791,7 +790,7 @@ Space.prototype.dragStart =
 	)
 	{
 		transItem =
-			Visual[ action.itemType ].create(
+			Stubs.emptyPortal.create(
 				'hover',
 					Path.empty,
 				'mark',

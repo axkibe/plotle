@@ -11,6 +11,7 @@ module.exports =
 			'src/visual/label.js',
 			'src/visual/note.js',
 			'src/visual/para.js',
+			'src/visual/portal.js',
 			'src/visual/relation.js',
 
 			// built in genjoobj

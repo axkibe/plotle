@@ -54,16 +54,9 @@ if( JOOBJ )
 							'node currently hovered upon',
 						type :
 							'Path',
-						// FIXME maybe not allow null
+						// FIXME undefined
 						defaultValue :
 							'null'
-					},
-				path :
-					{
-						comment :
-							'the path of the doc',
-						type :
-							'Path'
 					},
 				mark :
 					{
@@ -80,8 +73,38 @@ if( JOOBJ )
 									]
 							},
 						type :
-							'Mark'
+							'Mark',
+						defaultValue :
+							'undefined'
 					},
+				path :
+					{
+						comment :
+							'the path of the doc',
+						type :
+							'Path',
+						defaultValue :
+							'undefined'
+					},
+				spaceUser :
+					{
+						comment :
+							'owner of the space the portal goes to',
+						type :
+							'String',
+						json :
+							true
+					},
+				spaceTag :
+					{
+						comment :
+							'tag of the space the portal goes to',
+						type :
+							'String',
+						json :
+							true
+					},
+				// FIXME remove
 				traitSet :
 					{
 						comment :
@@ -93,28 +116,49 @@ if( JOOBJ )
 						defaultValue :
 							'null'
 					},
-				tree :
-					{
-						comment :
-							'the data tree',
-						type :
-							'Tree'
-					},
 				view :
 					{
 						comment :
 							'the current view',
-
 						type :
-							'View'
+							'View',
+						defaultValue :
+							'undefined'
+					},
+				zone :
+					{
+						comment :
+							'the portals zone',
+						type :
+							'Rect',
+						unit :
+							'Euclid',
+						json :
+							true
 					}
 			},
 		init :
-			[
-			],
+			[ ],
+		node :
+			true,
 		subclass :
 			'Visual.Item'
 	};
+}
+
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	Jools =
+		require( '../jools/jools' );
+
+	Visual =
+		{
+			Portal :
+				require( '../joobj/this' )( module )
+		};
 }
 
 
@@ -130,18 +174,24 @@ Portal.prototype._init =
 	function( )
 {
 	var
-		twig =
-			this.tree.twig,
+		minHeight,
+		minWidth,
+		zone;
 
-		zone =
-		this.zone =
-			twig.zone,
+	if( !this.view )
+	{
+		// abstract
+		return;
+	}
 
-		minWidth =
-			theme.portal.minWidth,
+	zone =
+		this.zone;
 
-		minHeight =
-			theme.portal.minHeight;
+	minWidth =
+		theme.portal.minWidth,
+
+	minHeight =
+		theme.portal.minHeight;
 
 	if(
 		zone.width  < minWidth
@@ -214,7 +264,6 @@ Portal.spaceFields =
 		{
 			spaceUser :
 				true,
-
 			spaceTag :
 				true
 		}
@@ -228,18 +277,21 @@ Portal.prototype.positioning =
 	'zone';
 
 
-/*
-| Minimum height.
-*/
-Portal.prototype.minHeight =
-	theme.portal.minHeight;
+if( SHELL )
+{
+	/*
+	| Minimum height.
+	*/
+	Portal.prototype.minHeight =
+		theme.portal.minHeight;
 
 
-/*
-| Minimum width.
-*/
-Portal.prototype.minWidth =
-	theme.portal.minWidth;
+	/*
+	| Minimum width.
+	*/
+	Portal.prototype.minWidth =
+		theme.portal.minWidth;
+}
 
 
 /*
@@ -250,25 +302,18 @@ Portal.prototype.handles =
 		{
 			n :
 				true,
-
 			ne :
 				true,
-
 			e :
 				true,
-
 			se :
 				true,
-
 			s :
 				true,
-
 			sw :
 				true,
-
 			w :
 				true,
-
 			nw :
 				true
 		}
@@ -330,17 +375,19 @@ Portal.prototype.dragStop =
 	)
 {
 	var
-		action =
-			shell.action;
+		action,
+		zone;
+
+	action =
+		shell.action;
 
 	switch( action.reflect )
 	{
 		case 'ItemDrag' :
 		case 'ItemResize' :
 
-			var
-				zone =
-					this.zone;
+			zone =
+				this.zone;
 
 			if(
 				zone.width < theme.portal.minWidth ||
@@ -350,7 +397,7 @@ Portal.prototype.dragStop =
 				throw new Error( 'Portal under minimum size!' );
 			}
 
-			if( this.tree.twig.zone.equals( zone ) )
+			if( this.zone.equals( zone ) )
 			{
 				return;
 			}
@@ -387,11 +434,16 @@ Portal.prototype.click =
 	)
 {
 	var
-		zone =
-			this.zone,
+		mark,
+		moveToButton,
+		pp,
+		zone;
 
-		mark =
-			null;
+	mark =
+		null;
+
+	zone =
+		this.zone;
 
 	// not clicked on the portal?
 	if(
@@ -405,21 +457,20 @@ Portal.prototype.click =
 		return false;
 	}
 
-	var
-		moveToButton =
-			this._$moveToButton;
+	moveToButton =
+		this._$moveToButton;
 
-		pp =
-			view
-				.depoint( p )
-				.sub( zone.pnw );
+	pp =
+		view
+		.depoint( p )
+		.sub( zone.pnw );
 
 	if(
 		moveToButton.shape
-			.within(
-				Euclid.View.proper,
-				pp
-			)
+		.within(
+			Euclid.View.proper,
+			pp
+		)
 	)
 	{
 		this._moveTo( );
@@ -432,11 +483,10 @@ Portal.prototype.click =
 		return false;
 	}
 
-	var
-		pp =
-			view
-				.depoint( p )
-				.sub( zone.pnw );
+	pp =
+		view
+		.depoint( p )
+		.sub( zone.pnw );
 
 	for( var field in Portal.spaceFields )
 	{
@@ -497,21 +547,25 @@ Jools.lazyValue(
 	function( )
 	{
 		var
-			ac =
-				this.zone.pnw.y,
+			ac,
+			font,
+			fs,
+			mark,
+			section;
 
-			mark =
-				this.mark;
+		ac =
+			this.zone.pnw.y,
+
+		mark =
+			this.mark;
 
 		if( !mark.hasCaret )
 		{
 			return ac;
 		}
 
-		var
-
-			section =
-				mark.caretPath.get( -1 );
+		section =
+			mark.caretPath.get( -1 );
 
 		if( !this._isSection( section ) )
 		{
@@ -523,13 +577,13 @@ Jools.lazyValue(
 			return ac + this._$moveToButton.shape.pnw.y;
 		}
 
+		font =
+			this._fonts[ section ];
+
+		fs =
+			font.size;
+
 		var
-			font =
-				this._fonts[ section ],
-
-			fs =
-				font.size,
-
 			descend =
 				fs * theme.bottombox,
 
@@ -621,8 +675,12 @@ Portal.prototype.pointingHover =
 	)
 {
 	var
-		zone =
-			this.zone;
+		moveToButton,
+		pp,
+		zone;
+
+	zone =
+		this.zone;
 
 	// not clicked on the portal?
 	if(
@@ -636,14 +694,13 @@ Portal.prototype.pointingHover =
 		return null;
 	}
 
-	var
-		moveToButton =
-			this._$moveToButton,
+	moveToButton =
+		this._$moveToButton;
 
-		pp =
-			view
-				.depoint( p )
-				.sub( zone.pnw );
+	pp =
+		view
+		.depoint( p )
+		.sub( zone.pnw );
 
 	if(
 		moveToButton.shape
@@ -889,64 +946,69 @@ Portal.prototype.input =
 };
 
 
-/*
-| Font for spacesUser/Tag
-*/
-Portal.prototype._fonts =
-	Jools.immute( {
-		spaceUser :
-			fontPool.get(
-				13,
-				'la'
-			),
-
-		spaceTag :
-			fontPool.get(
-				13,
-				'la'
-			),
-
-		moveTo :
-			fontPool.get(
-				13,
-				'cm'
-			)
-	} );
-
-
-
-/*
-| Returns the point of a given offset.
-*/
-Portal.prototype._locateOffset =
-	function(
-		section,   // 'spaceUser' or 'spaceTag'
-		offset     // the offset to get the point from.
-	)
+if( SHELL )
 {
-	// FIXME cache position
-	var
+	/*
+	| Font for spacesUser/Tag
+	*/
+	Portal.prototype._fonts =
+		Jools.immute( {
+			spaceUser :
+				fontPool.get(
+					13,
+					'la'
+				),
+
+			spaceTag :
+				fontPool.get(
+					13,
+					'la'
+				),
+
+			moveTo :
+				fontPool.get(
+					13,
+					'cm'
+				)
+		} );
+
+
+	/*
+	| Returns the point of a given offset.
+	*/
+	Portal.prototype._locateOffset =
+		function(
+			section,   // 'spaceUser' or 'spaceTag'
+			offset     // the offset to get the point from.
+		)
+	{
+		var
+			font,
+			text;
+
+		// FIXME cache position
 		font =
-			this._fonts[ section ],
+			this._fonts[ section ];
 
 		text =
-			this.tree.twig[ section ];
+			this[ section ];
 
-	return Euclid.Point.create(
-		'x',
-			Math.round(
-				Euclid.Measure.width(
-					font,
-					text.substring(
-						0,
-						offset
+		return Euclid.Point.create(
+			'x',
+				Math.round(
+					Euclid.Measure.width(
+						font,
+						text.substring(
+							0,
+							offset
+						)
 					)
-				)
-			),
-		'y',
-			0
-	);
-};
+				),
+			'y',
+				0
+		);
+	};
+}
 
 
 /*
@@ -1269,7 +1331,7 @@ Portal.prototype._keyLeft =
 					cycle === 'moveToButton' ?
 						0
 						:
-						this.tree.twig[ cycle ].length
+						this[ cycle ].length
 			)
 		);
 
@@ -1439,20 +1501,23 @@ Portal.prototype._keyRight =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		mark,
+		section,
+		value;
 
-		section =
-			mark.caretPath.get( -1 );
+	mark =
+		this.mark;
+
+	section =
+		mark.caretPath.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
 		return false;
 	}
 
-	var
-		value =
-			this.tree.twig[ section ];
+	value =
+		this[ section ];
 
 	// FIXME make true circulation
 	if(
@@ -1531,7 +1596,7 @@ Portal.prototype._keyDel =
 			mark.caretPath.get( -1 ),
 
 		value =
-			this.tree.twig[ section ];
+			this[ section ];
 
 	if(
 		!this._isSection( section ) ||
@@ -1584,7 +1649,7 @@ Portal.prototype._keyEnd =
 			mark.caretAt,
 
 		value =
-			this.tree.twig[ section ];
+			this[ section ];
 
 	if( at >= value.length )
 	{
@@ -1770,7 +1835,7 @@ Portal.prototype._prepareField =
 			theme.portal.input.rounding,
 
 		text =
-			this.tree.twig[ section ],
+			this[ section ],
 
 		width =
 			Euclid.Measure.width(
@@ -1870,7 +1935,7 @@ Portal.prototype._getOffsetAt =
 			x - this._$spaceFields[ section ].pnw.x,
 
 		value =
-			this.tree.twig[ section ],
+			this[ section ],
 
 		x1 =
 			0,
@@ -1925,10 +1990,21 @@ Portal.prototype._moveTo =
 	function( )
 {
 	shell.moveToSpace(
-		this.tree.twig.spaceUser,
-		this.tree.twig.spaceTag,
+		this.spaceUser,
+		this.spaceTag,
 		false
 	);
 };
+
+
+/*
+| Node export.
+*/
+if( SERVER )
+{
+	module.exports =
+		Portal;
+}
+
 
 } )( );

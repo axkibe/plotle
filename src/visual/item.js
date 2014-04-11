@@ -38,15 +38,24 @@ var
 
 
 /*
+| Node includes.
+*/
+if( SERVER )
+{
+	Jools =
+		require( '../jools/jools' );
+}
+
+
+/*
 | Constructor
 */
 var Item =
 Visual.Item =
 	function( )
 {
-	throw new Error(
-		CHECK && 'initializing abstract'
-	);
+	// this is an abstract class
+	throw new Error( );
 };
 
 
@@ -796,5 +805,14 @@ Item.prototype.equals =
 	return this === obj;
 };
 
+
+/*
+| Node export.
+*/
+if( SERVER )
+{
+	module.exports =
+		Item;
+}
 
 } )( );
