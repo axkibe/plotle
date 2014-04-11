@@ -21,7 +21,6 @@ var
 	HoverReply,
 	Jools,
 	Mark,
-	meshverse,
 	Path,
 	shell,
 	Stubs,
@@ -157,9 +156,7 @@ Space.prototype._init =
 			continue;
 		}
 
-		switch( this.tree.twig[ k ].reflect ) // XXX
-		{
-		case 'Note' :
+		// TODO XXX remove _createItem
 		sub[ k ] =
 			this.tree.twig[ k ].create(
 				'path',
@@ -173,17 +170,6 @@ Space.prototype._init =
 				'view',
 					this.view
 			);
-
-		break;
-
-		default :
-		sub[ k ] =
-			this._createItem(
-				k,
-				inherit && inherit.sub[ k ],
-				traitSet
-			);
-		}
 	}
 
 	this.sub =
@@ -734,18 +720,13 @@ Space.prototype.dragStart =
 	)
 	{
 		transItem =
-			Visual[ action.itemType ].create(
-				'tree',
-					Stubs.emptyNote.setPath(
-						// FIXME elegance
-						Path.empty.append( 'zone' ),
-						Euclid.Rect.create(
-							'pnw',
-								p,  // FIXME why no depoint?
-							'pse',
-								p
-						),
-						meshverse
+			Stubs.emptyNote.create(
+				'zone',
+					Euclid.Rect.create(
+						'pnw',
+							p,  // FIXME why no depoint?
+						'pse',
+							p
 					),
 				'mark',
 					Mark.Vacant.create( ),
@@ -777,14 +758,9 @@ Space.prototype.dragStart =
 	)
 	{
 		transItem =
-			Visual[ action.itemType ].create(
-				'tree',
-					// FIXME elegance
-					Stubs.emptyLabel.setPath(
-						Path.empty.append( 'pnw' ),
-						view.depoint( p ),
-						meshverse
-					),
+			Stubs.emptyLabel.create(
+				'pnw',
+					view.depoint( p ),
 				'mark',
 					Mark.Vacant.create( ),
 				'path',
@@ -824,17 +800,12 @@ Space.prototype.dragStart =
 					Path.empty,
 				'view',
 					view,
-				'tree',
-					Stubs.emptyPortal.setPath(
-						// TODO elegance
-						Path.empty.append( 'zone' ),
-						Euclid.Rect.create(
-							'pnw',
-								p, //FIXME depoint?
-							'pse',
-								p
-						),
-						meshverse
+				'zone',
+					Euclid.Rect.create(
+						'pnw',
+							p, //FIXME depoint?
+						'pse',
+							p
 					)
 			);
 
@@ -1004,15 +975,10 @@ Space.prototype.dragStop =
 					var
 						note =
 							action.transItem.create(
-								'tree',
-									// FIXME elegance
-									action.transItem.tree.setPath(
-										Path.empty.append( 'zone' ),
-										Euclid.Rect.createArbitrary(
-											view.depoint( action.start ),
-											view.depoint( p )
-										),
-										meshverse
+								'zone',
+									Euclid.Rect.createArbitrary(
+										view.depoint( action.start ),
+										view.depoint( p )
 									)
 							);
 
@@ -1031,7 +997,7 @@ Space.prototype.dragStop =
 							'path',
 								shell.
 									space.sub[ key ].
-									sub.doc.
+									doc.
 									atRank( 0 ).textPath,
 							'at',
 								0
@@ -1067,39 +1033,29 @@ Space.prototype.dragStop =
 
 						fs =
 							Math.max(
-								model.sub.doc.fontsize *
+								model.doc.fontsize *
 									( oheight + dy ) / oheight,
 								theme.label.minSize
 						),
 
 						resized =
-							model.create(
-								'tree',
-									// FIXME elegance
-									action.transItem.tree.setPath(
-										Path.empty.append( 'fontsize' ),
-										fs,
-										meshverse
-									)
+							action.transItem.create(
+								'fontsize',
+									fs
 							),
 
 						label =
 							resized.create(
-								'tree',
-									// FIXME elegance
-									resized.tree.setPath(
-										Path.empty.append( 'pnw' ),
-										( p.x > action.start.x ) ?
-											zone.pnw
-											:
-											Euclid.Point.create(
-												'x',
-													zone.pse.x - resized.zone.width,
-												'y',
-													zone.pnw.y
-											),
-										meshverse
-									)
+								'pnw',
+									( p.x > action.start.x ) ?
+										zone.pnw
+										:
+										Euclid.Point.create(
+											'x',
+												zone.pse.x - resized.zone.width,
+											'y',
+												zone.pnw.y
+										)
 							);
 
 					result =
@@ -1108,7 +1064,7 @@ Space.prototype.dragStop =
 							this.spaceTag,
 							label.pnw,
 							'Label',
-							label.sub.doc.fontsize
+							label.doc.fontsize
 						);
 
 					key =
@@ -1119,7 +1075,7 @@ Space.prototype.dragStop =
 							'path',
 								shell.space
 									.sub[ key ]
-									.sub.doc.atRank( 0 ).textPath,
+									.doc.atRank( 0 ).textPath,
 							'at',
 								0
 						)
@@ -1137,19 +1093,16 @@ Space.prototype.dragStop =
 				case 'Portal' :
 
 					var
-						portal =
-							action.transItem.create(
-								'tree',
-									// TODO elegance
-									action.transItem.tree.setPath(
-										Path.empty.append( 'zone' ),
-										Euclid.Rect.createArbitrary(
-											view.depoint( action.start ),
-											view.depoint( p )
-										),
-										meshverse
-									)
-							);
+						portal;
+
+					portal =
+						action.transItem.create(
+							'zone',
+								Euclid.Rect.createArbitrary(
+									view.depoint( action.start ),
+									view.depoint( p )
+								)
+						);
 
 					result =
 						shell.peer.newPortal(
@@ -1321,7 +1274,7 @@ Space.prototype.dragStop =
 
 						shell.peer.setFontSize(
 							action.transItem.path,
-							action.transItem.sub.doc.fontsize
+							action.transItem.doc.fontsize
 						);
 
 						break;
@@ -1427,13 +1380,8 @@ Space.prototype.dragMove =
 
 					transItem =
 						model.create(
-							'tree',
-								// FIXME elegance
-								model.tree.setPath(
-									Path.empty.append( 'zone' ),
-									zone,
-									meshverse
-								)
+							'zone',
+								zone
 						);
 
 					break;
@@ -1445,39 +1393,29 @@ Space.prototype.dragMove =
 
 					fs =
 						Math.max(
-							model.sub.doc.fontsize *
+							model.doc.fontsize *
 								zone.height / oheight,
 							theme.label.minSize
 						);
 
 					resized =
 						model.create(
-							'tree',
-								// FIXME elegance
-								model.tree.setPath(
-									Path.empty.append( 'fontsize' ),
-									fs,
-									meshverse
-								)
+							'fontsize',
+								fs
 						);
 
 					transItem =
 						resized.create(
-							'tree',
-								// FIXME elegance
-								resized.tree.setPath(
-									Path.empty.append( 'pnw' ),
-									( p.x > action.start.x ) ?
-										zone.pnw
-										:
-										Euclid.Point.create(
-											'x',
-												zone.pse.x - resized.zone.width,
-											'y',
-												zone.pnw.y
-										),
-									meshverse
-								)
+							'pnw',
+								( p.x > action.start.x ) ?
+									zone.pnw
+									:
+									Euclid.Point.create(
+										'x',
+											zone.pse.x - resized.zone.width,
+										'y',
+											zone.pnw.y
+									)
 						);
 
 					break;
@@ -1590,17 +1528,12 @@ Space.prototype.dragMove =
 
 					transItem =
 						origin.create(
-							'tree',
-								// FUTURE make this more elegant
-								origin.tree.setPath(
-									Path.empty.append( 'pnw' ),
-									origin.pnw.add(
-										view.dex( p.x ) - action.start.x,
-										view.dey( p.y ) - action.start.y
-									),
-									meshverse
+							'pnw',
+								origin.pnw.add(
+									view.dex( p.x ) - action.start.x,
+									view.dey( p.y ) - action.start.y
 								)
-					);
+						);
 			}
 
 			shell.setAction(
@@ -1677,45 +1610,35 @@ Space.prototype.dragMove =
 
 					fs =
 						Math.max(
-							origin.sub.doc.fontsize *
+							origin.doc.fontsize *
 								( oheight + dy ) / oheight,
 							theme.label.minSize
 						);
 
 					resized =
 						origin.create(
-							'tree',
-								// FUTURE do more elegantly
-								origin.tree.setPath(
-									Path.empty.append( 'fontsize' ),
-									fs,
-									meshverse
-								)
+							'fontsize',
+								fs
 						);
 
 					transItem =
 						resized.create(
-							'tree',
-								resized.tree.setPath(
-									Path.empty.append( 'pnw' ),
-									// FUTURE do more elegantly
-									resized.pnw.add(
-										align === 'sw' || align === 'nw' ?
-											Math.round(
-												origin.zone.width -
-													resized.zone.width
-											)
-											:
-											0,
-										align === 'ne' || align === 'nw' ?
-											Math.round(
-												origin.zone.height -
-													resized.zone.height
-											)
-											:
-											0
-									),
-									meshverse
+							'pnw',
+								resized.pnw.add(
+									align === 'sw' || align === 'nw' ?
+										Math.round(
+											origin.zone.width -
+												resized.zone.width
+										)
+										:
+										0,
+									align === 'ne' || align === 'nw' ?
+										Math.round(
+											origin.zone.height -
+												resized.zone.height
+										)
+										:
+										0
 								)
 						);
 
@@ -1723,9 +1646,7 @@ Space.prototype.dragMove =
 
 				default :
 
-					throw new Error(
-						CHECK && 'invalid positioning'
-					);
+					throw new Error( );
 			}
 
 			shell.setAction(
@@ -1751,13 +1672,7 @@ Space.prototype.dragMove =
 
 		default :
 
-			throw new Error(
-				CHECK
-				&&
-				(
-					'unknown action: ' + action.reflect
-				)
-			);
+			throw new Error( );
 	}
 };
 

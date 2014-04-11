@@ -1953,13 +1953,22 @@ Gen.prototype.genFromJSONCreatorVariables =
 	var
 		a,
 		aZ,
+		attr,
 		name,
 		varList =
 			[ ];
 
 	for( name in this.attributes )
 	{
-		varList.push( this.attributes[ name ].vName );
+		attr =
+			this.attributes[ name ];
+
+		if( attr.assign === null )
+		{
+			continue;
+		}
+
+		varList.push( attr.vName );
 	}
 
 	varList.push( 'arg' );
@@ -2299,15 +2308,28 @@ Gen.prototype.genFromJSONCreatorReturn =
 				attr =
 					this.attributes[ name ];
 
-				call =
-					call.Append(
-						Code.Term( attr.vName )
-					);
+				if( attr.assign === null )
+				{
+					call =
+						call
+						.Append(
+							Code.Term( 'null' )
+						);
+				}
+				else
+				{
+					call =
+						call
+						.Append(
+							Code.Term( attr.vName )
+						);
+				}
 		}
 	}
 
 	return (
-		block.Return(
+		block
+		.Return(
 			Code.New( call )
 		)
 	);
@@ -2330,8 +2352,10 @@ Gen.prototype.genFromJSONCreator =
 		funcBlock,
 		// all attributes expected from JSON
 		name,
-		jsonList =
-			[ ];
+		jsonList;
+
+	jsonList =
+		[ ];
 
 	for(
 		a = 0, aZ = this.attrList.length;

@@ -20,6 +20,7 @@ Visual =
 */
 var
 	Euclid,
+	Jools,
 	Mark,
 	shell,
 	theme;
@@ -44,6 +45,27 @@ if( JOOBJ )
 			'Visual',
 		attributes :
 			{
+				doc :
+					{
+						comment :
+							'the labels document',
+						// FUTURE make this type: 'Visual.Doc'
+						type :
+							'Doc',
+						unit :
+							'Visual',
+						json :
+							true
+					},
+				fontsize :
+					{
+						comment :
+							'the fontsize of the label',
+						type :
+							'Number',
+						json :
+							true
+					},
 				hover :
 					{
 						comment :
@@ -53,14 +75,46 @@ if( JOOBJ )
 						assign :
 							null,
 						defaultValue :
+							// FIXME undefined
 							'null'
+					},
+				item1key :
+					{
+						comment :
+							'item the relation goes from',
+						type :
+							'String',
+						json :
+							true
+					},
+				item2key :
+					{
+						comment :
+							'item the relation goes to',
+						type :
+							'String',
+						json :
+							true
 					},
 				path :
 					{
 						comment :
 							'the path of the doc',
 						type :
-							'Path'
+							'Path',
+						defaultValue :
+							'undefined'
+					},
+				pnw :
+					{
+						comment :
+							'point in the north-west',
+						type :
+							'Point',
+						unit :
+							'Euclid',
+						json :
+							true
 					},
 				mark :
 					{
@@ -69,7 +123,8 @@ if( JOOBJ )
 						concerns :
 							{
 								func :
-									'Visual.Item.concernsMark',
+									// FUTURE this is kinda not nice
+									'Visual.Item && Visual.Item.concernsMark',
 								args :
 									[
 										'mark',
@@ -77,8 +132,11 @@ if( JOOBJ )
 									]
 							},
 						type :
-							'Mark'
+							'Mark',
+						defaultValue :
+							'undefined'
 					},
+				// FIXME remove
 				traitSet :
 					{
 						comment :
@@ -90,30 +148,44 @@ if( JOOBJ )
 						defaultValue :
 							'null'
 					},
-				tree :
-					{
-						comment :
-							'the data tree',
-						type :
-							'Tree'
-					},
 				view :
 					{
 						comment :
 							'the current view',
 						type :
-							'View'
+							'View',
+						defaultValue :
+							'undefined'
 					}
 			},
 		init :
 			[
 				'inherit'
 			],
+		node :
+			true,
 		subclass :
 			'Visual.Label'
 	};
 }
 
+
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	Jools =
+		require( '../jools/jools' );
+
+	Visual =
+		{
+			Label :
+				require( './label' ),
+			Relation :
+				require( '../joobj/this' )( module )
+		};
+}
 
 var
 	Relation =
@@ -132,16 +204,6 @@ Relation.prototype._init =
 		this,
 		inherit
 	);
-
-	var
-		tree =
-			this.tree;
-
-	this.item1key =
-		tree.twig.item1key;
-
-	this.item2key =
-		tree.twig.item2key;
 };
 
 
@@ -186,7 +248,12 @@ Relation.spawn =
 	shell.setMark(
 		Mark.Caret.create(
 			'path',
-				shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
+				shell
+				.space
+				.sub[ key ]
+				.doc
+				.atRank( 0 )
+				.textPath,
 			'at',
 				0
 		)
@@ -203,28 +270,34 @@ Relation.prototype.draw =
 	)
 {
 	var
-		space =
-			shell.$space,
+		item1,
+		item2,
+		l1,
+		l2,
+		space,
+		zone;
 
-		item1 =
-			space.getItem( this.item1key ),
+	space =
+		shell.$space;
 
-		item2 =
-			space.getItem( this.item2key ),
+	item1 =
+		space.getItem( this.item1key );
 
-		zone =
-			this.zone;
+	item2 =
+		space.getItem( this.item2key );
+
+	zone =
+		this.zone;
 
 	if( item1 )
 	{
-		var
-			l1 =
-				Euclid.Line.connect(
-					item1.silhoutte,
-					'normal',
-					zone,
-					'normal'
-				);
+		l1 =
+			Euclid.Line.connect(
+				item1.silhoutte,
+				'normal',
+				zone,
+				'normal'
+			);
 
 		fabric.paint(
 			theme.relation.style,
@@ -236,7 +309,7 @@ Relation.prototype.draw =
 
 	if( item2 )
 	{
-		var l2 =
+		l2 =
 			Euclid.Line.connect(
 				zone,
 				'normal',
@@ -257,6 +330,17 @@ Relation.prototype.draw =
 		fabric
 	);
 };
+
+
+/*
+| Node export.
+*/
+if( SERVER )
+{
+	module.exports =
+		Relation;
+}
+
 
 } )( );
 

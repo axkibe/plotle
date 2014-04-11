@@ -2750,8 +2750,6 @@ Server.prototype.cmdGet =
 		);
 	}
 
-Jools.log( true, 'NODE', node );
-
 	return {
 		ok :
 			true,

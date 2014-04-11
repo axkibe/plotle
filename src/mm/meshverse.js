@@ -56,7 +56,11 @@ if( SERVER )
 			Note :
 				require( '../visual/note' ),
 			Para :
-				require( '../visual/para' )
+				require( '../visual/para' ),
+			Label :
+				require( '../visual/label' ),
+			Relation :
+				require( '../visual/relation' )
 		};
 }
 
@@ -512,20 +516,6 @@ Meshverse.prototype.Space =
 Meshverse.prototype.Note =
 	Visual.Note;
 
-	/*
-	Jools.immute( {
-		must :
-			Jools.immute( {
-				'doc' :
-					'Doc',
-				'zone' :
-					'Rect',
-				'fontsize' :
-					'Number'
-			} )
-	} );
-	*/
-
 Meshverse.prototype.Portal =
 	Jools.immute( {
 		must :
@@ -541,6 +531,9 @@ Meshverse.prototype.Portal =
 
 
 Meshverse.prototype.Label =
+	Visual.Label;
+
+	/*
 	Jools.immute( {
 		must :
 			Jools.immute( {
@@ -556,9 +549,12 @@ Meshverse.prototype.Label =
 
 			} )
 	} );
+	*/
 
 
 Meshverse.prototype.Relation =
+	Visual.Relation;
+	/*
 	Jools.immute( {
 		must :
 			Jools.immute( {
@@ -576,6 +572,7 @@ Meshverse.prototype.Relation =
 					'Number'
 			} )
 	} );
+	*/
 
 
 Meshverse.prototype.Doc =

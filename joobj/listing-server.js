@@ -8,8 +8,10 @@ module.exports =
 			'src/euclid/rect.js',
 			'src/server/resource.js',
 			'src/visual/doc.js',
+			'src/visual/label.js',
 			'src/visual/note.js',
 			'src/visual/para.js',
+			'src/visual/relation.js',
 
 			// built in genjoobj
 			'src/code/and.js',

@@ -43,6 +43,27 @@ if( JOOBJ )
 			'Visual',
 		attributes :
 			{
+				doc :
+					{
+						comment :
+							'the labels document',
+						// FUTURE make this type: 'Visual.Doc'
+						type :
+							'Doc',
+						unit :
+							'Visual',
+						json :
+							true
+					},
+				fontsize :
+					{
+						comment :
+							'the fontsize of the label',
+						type :
+							'Number',
+						json :
+							true
+					},
 				hover :
 					{
 						comment :
@@ -51,6 +72,7 @@ if( JOOBJ )
 							'Path',
 						assign :
 							null,
+						// FIXME make defaultValue undefined for server
 						defaultValue :
 							'null'
 					},
@@ -59,7 +81,20 @@ if( JOOBJ )
 						comment :
 							'the path of the doc',
 						type :
-							'Path'
+							'Path',
+						defaultValue :
+							'undefined'
+					},
+				pnw :
+					{
+						comment :
+							'point in the north-west',
+						type :
+							'Point',
+						unit :
+							'Euclid',
+						json :
+							true
 					},
 				mark :
 					{
@@ -68,7 +103,8 @@ if( JOOBJ )
 						concerns :
 							{
 								func :
-									'Visual.Item.concernsMark',
+									// FUTURE this is kinda not nice
+									'Visual.Item && Visual.Item.concernsMark',
 								args :
 									[
 										'mark',
@@ -77,7 +113,9 @@ if( JOOBJ )
 							},
 
 						type :
-							'Mark'
+							'Mark',
+						defaultValue :
+							'undefined'
 					},
 				traitSet :
 					{
@@ -87,29 +125,43 @@ if( JOOBJ )
 							'TraitSet',
 						assign :
 							null,
+						// FIXME make defaultValue undefined for server
 						defaultValue :
 							'null'
-					},
-				tree :
-					{
-						comment :
-							'the data tree',
-						type :
-							'Tree'
 					},
 				view :
 					{
 						comment :
 							'the current view',
 						type :
-							'View'
+							'View',
+						defaultValue :
+							'undefined'
 					}
 			},
 		init :
 			[ ],
+		node :
+			true,
 		subclass :
 			'Visual.DocItem'
 	};
+}
+
+
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	Jools =
+		require( '../jools/jools' ),
+
+	Visual =
+		{
+			Label :
+				require( '../joobj/this' )( module )
+		};
 }
 
 
@@ -127,25 +179,22 @@ Label.prototype._init =
 	var
 		doc,
 		docPath,
-		twig =
-			this.tree.twig;
+		height,
+		pnw;
 
-	this.fontsize =
-		twig.fontsize;
-
-	this.pnw =
-		twig.pnw;
-
-	this.sub =
-		{ };
+	if( !this.view )
+	{
+		// abstract
+		return;
+	}
 
 	docPath =
 		// FIXME not if inherited
 		this.path.append( 'doc' );
 
 	doc =
-	this.sub.doc =
-		this.tree.twig.doc.create(
+	this.doc =
+		this.doc.create(
 			'flowWidth',
 				0,
 			'fontsize',
@@ -160,12 +209,11 @@ Label.prototype._init =
 				this.view
 		);
 
-	var
-		height =
-			doc.height,
+	height =
+		doc.height,
 
-		pnw =
-			this.pnw;
+	pnw =
+		this.pnw;
 
 	this.zone =
 		Euclid.Rect.create(
@@ -194,13 +242,16 @@ Label.prototype.positioning =
 	'pnw/fontsize';
 
 
-/*
-| Default margin for all labels.
-*/
-Label.prototype.innerMargin =
-	new Euclid.Margin(
-		theme.label.innerMargin
-	);
+if( SHELL )
+{
+	/*
+	| Default margin for all labels.
+	*/
+	Label.prototype.innerMargin =
+		new Euclid.Margin(
+			theme.label.innerMargin
+		);
+}
 
 
 /*
@@ -211,13 +262,10 @@ Label.prototype.handles =
 		{
 			ne :
 				true,
-
 			se :
 				true,
-
 			sw :
 				true,
-
 			nw :
 				true
 		}
@@ -303,23 +351,26 @@ Label.prototype.dragStop =
 	)
 {
 	var
-		action =
-			shell.action;
+		action,
+		fontsize,
+		zone;
+
+	action =
+		shell.action;
 
 	switch( action.reflect )
 	{
 		case 'ItemDrag' :
 		case 'ItemResize' :
 
-			var
-				zone =
-					this.zone,
+			zone =
+				this.zone,
 
-				fontsize =
-					this.sub.doc.font.size;
+			fontsize =
+				this.doc.font.size;
 
 			if(
-				!this.tree.twig.pnw.equals( zone.pnw )
+				!this.pnw.equals( zone.pnw )
 			)
 			{
 				shell.peer.setPNW(
@@ -328,7 +379,7 @@ Label.prototype.dragStop =
 				);
 			}
 
-			if( fontsize !== this.tree.twig.fontsize )
+			if( fontsize !== this.fontsize )
 			{
 				shell.peer.setFontSize(
 					this.path,
@@ -358,22 +409,27 @@ Jools.lazyValue(
 	function( )
 	{
 		var
-			vzone =
-				this.view.rect( this.zone ),
+			doc,
+			f,
+			hview,
+			vzone;
 
-			f =
-				Euclid.Fabric.create(
-					'width',
-						vzone.width,
-					'height',
-						vzone.height
-				),
+		vzone =
+			this.view.rect( this.zone );
 
-			doc =
-				this.sub.doc,
+		f =
+			Euclid.Fabric.create(
+				'width',
+					vzone.width,
+				'height',
+					vzone.height
+			);
 
-			hview =
-				this.view.home;
+		doc =
+			this.doc;
+
+		hview =
+			this.view.home;
 
 		// draws selection and text
 		doc.draw(
@@ -454,6 +510,16 @@ Label.prototype.scrollPage =
 {
 	// nada
 };
+
+
+/*
+| Node export.
+*/
+if( SERVER )
+{
+	module.exports =
+		Label;
+}
 
 
 } )( );
