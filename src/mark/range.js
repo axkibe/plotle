@@ -222,12 +222,12 @@ Jools.lazyValue(
 	'itemPath',
 	function( )
 	{
-		if( this.bPath.length < 2 )
+		if( this.bPath.length < 3 )
 		{
 			return Path.empty;
 		}
 
-		return this.bPath.limit( 2 );
+		return this.bPath.limit( 3 );
 	}
 );
 
@@ -285,22 +285,16 @@ Jools.lazyValue(
 
 		frontPath =
 			this.frontPath;
-
 		frontAt =
 			this.frontAt;
-
 		backPath =
 			this.backPath;
-
 		backAt =
 			this.backAt;
-
 		doc =
 			this.doc;
-
 		frontKey =
 			frontPath.get( -2 );
-
 		backKey =
 			backPath.get( -2 );
 
@@ -314,10 +308,8 @@ Jools.lazyValue(
 
 		frontText =
 			doc.twig[ frontKey ].text;
-
 		backText =
 			doc.twig[ backKey ].text;
-
 		buf =
 			[
 				frontText.substring( frontAt, frontText.length )
@@ -399,13 +391,10 @@ Range.prototype._normalize =
 		{
 			this._frontPath =
 				bPath;
-
 			this._frontAt =
 				bAt;
-
 			this._backPath =
 				ePath;
-
 			this._backAt =
 				eAt;
 		}
@@ -413,13 +402,10 @@ Range.prototype._normalize =
 		{
 			this._frontPath =
 				ePath;
-
 			this._frontAt =
 				eAt;
-
 			this._backPath =
 				bPath;
-
 			this._backAt =
 				bAt;
 		}
@@ -429,7 +415,6 @@ Range.prototype._normalize =
 
 	bk =
 		bPath.get( -2 ),
-
 	ek =
 		ePath.get( -2 );
 
@@ -437,15 +422,12 @@ Range.prototype._normalize =
 	{
 		if( bk === ek )
 		{
-			throw new Error(
-				'bk === ek'
-			);
+			throw new Error( 'bk === ek' );
 		}
 	}
 
 	br =
 		this.doc.rankOf( bk );
-
 	er =
 		this.doc.rankOf( ek );
 
@@ -453,13 +435,10 @@ Range.prototype._normalize =
 	{
 		this._frontPath =
 			bPath;
-
 		this._frontAt =
 			bAt;
-
 		this._backPath =
 			ePath;
-
 		this._backAt =
 			eAt;
 	}
@@ -467,13 +446,10 @@ Range.prototype._normalize =
 	{
 		this._frontPath =
 			ePath;
-
 		this._frontAt =
 			eAt;
-
 		this._backPath =
 			bPath;
-
 		this._backAt =
 			bAt;
 	}

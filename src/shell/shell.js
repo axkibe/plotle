@@ -505,7 +505,7 @@ Shell.prototype.update =
 					mark =
 						Mark.Range.create(
 							'doc',
-								item.twig.doc,
+								item.doc,
 							'bPath',
 								bSign.path.prepend( 'space' ),
 							'bAt',
