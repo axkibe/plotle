@@ -415,16 +415,6 @@ Change.prototype.set =
 					trg.rank,
 					src.val
 				);
-
-				/*
-				universe.grow(
-					pivot,
-					key,
-						src.val,
-					'+',
-						trg.rank, key
-				);
-				*/
 		}
 		else
 		{
@@ -438,16 +428,6 @@ Change.prototype.set =
 						orank
 				);
 
-			/*
-			pivot =
-				universe.grow(
-					pivot,
-					key,
-						src.val,
-					'-',
-						orank
-				);
-			*/
 			pivot =
 				pivot.create(
 					'twig:remove',
@@ -1047,17 +1027,6 @@ Change.prototype.rank =
 			'path',
 				src.path
 		);
-
-	/*
-	pivot =
-		universe.grow(
-			pivot,
-			'-',
-				orank,
-			'+',
-				trg.rank, key
-		);
-	*/
 
 	// FUTURE make a twig:rerank
 	pivot =

@@ -559,14 +559,6 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/mm/meshverse.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.create(
-		'filePath',
 			'src/mm/tree.js',
 		'inBundle',
 			true,

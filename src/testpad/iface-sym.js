@@ -20,7 +20,7 @@ var
 	Change,
 	Jools,
 	MeshMashine,
-	meshverse,
+	meshnoverse,
 	Sign;
 
 
@@ -39,7 +39,8 @@ IFaceSym =
 {
 	// the current space;
 	this.space  =
-		meshverse.grow(
+		// FUTURE FIX
+		meshnoverse.crow(
 			{
 				type :
 					'Space',
@@ -188,11 +189,12 @@ IFaceSym.prototype.get =
 			b++
 		)
 		{
-			space = chgX.
-				get( 0 ).
-				invert( ).
-				changeTree( space, meshverse ).
-				tree;
+			space =
+				chgX
+				.get( 0 )
+				.invert( )
+				.changeTree( space )
+				.tree;
 		}
 	}
 
@@ -243,7 +245,8 @@ IFaceSym.prototype.alter =
 
 	var
 		r =
-			chgX.changeTree( this.space, meshverse );
+			chgX
+			.changeTree( this.space );
 
 	chgX =
 		r.chgX;

@@ -55,8 +55,6 @@ var
 		require( './maxage' ),
 	MeshMashine =
 		require( '../mm/meshmashine' ),
-	meshverse =
-		require( '../mm/meshverse' ),
 	mongodb =
 		require( 'mongodb' ),
 	Path =
@@ -521,8 +519,7 @@ Server.prototype.loadSpace =
 
 		space.$tree =
 			change.chgX.changeTree(
-				space.$tree,
-				meshverse
+				space.$tree
 			).tree;
 	}
 };
@@ -1586,8 +1583,7 @@ Server.prototype.cmdAlter =
 	var
 		result =
 			chgX.changeTree(
-				space.$tree,
-				meshverse
+				space.$tree
 			);
 
 	space.$tree =
@@ -1776,7 +1772,7 @@ Server.prototype.createSpace =
 				[ ],
 
 			$tree :
-				meshverse.grow( 'Space' ),
+				Visual.Space.create( ),
 
 			$seqZ :
 				1
@@ -2726,10 +2722,7 @@ Server.prototype.cmdGet =
 				chgX
 				.get( b )
 				.invert( )
-				.changeTree(
-					tree,
-					meshverse
-				)
+				.changeTree( tree )
 				.tree;
 		}
 	}

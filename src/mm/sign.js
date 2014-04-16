@@ -18,7 +18,6 @@ var
 var
 	Euclid,
 	Jools,
-	meshverse,
 	Visual;
 
 
@@ -36,8 +35,6 @@ if( SERVER )
 {
 	Jools =
 		require( '../jools/jools' );
-	meshverse =
-		require( '../mm/meshverse' );
 	Euclid =
 		{
 			Point :
@@ -172,9 +169,6 @@ Sign =
 
 				throw new Error( 'invalid val type: ' + this.val.type );
 		}
-
-//		this.val =
-//			meshverse.grow( this.val );
 	}
 
 	Jools.immute( this );

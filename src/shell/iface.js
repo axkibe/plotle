@@ -21,10 +21,10 @@ var
 	config,
 	Jools,
 	MeshMashine,
-	meshverse,
 	Path,
 	Sign,
-	system;
+	system,
+	Visual;
 
 
 /*
@@ -490,7 +490,7 @@ IFace.prototype.aquireSpace =
 
 		self.$cSpace =
 		self.$rSpace =
-			meshverse.grow( asw.node );
+			Visual.Space.createFromJSON( asw.node );
 		self.$spaceUser =
 			spaceUser;
 		self.$spaceTag =
@@ -725,10 +725,9 @@ IFace.prototype._update =
 
 				// changes the clients understanding of the server tree
 				self.$rSpace =
-					chgX.changeTree(
-						self.$rSpace,
-						meshverse
-					).tree;
+					chgX
+					.changeTree( self.$rSpace)
+					.tree;
 
 				if(
 					postbox.length > 0
@@ -875,10 +874,9 @@ IFace.prototype._update =
 				}
 
 				space =
-					chgX.changeTree(
-						space,
-						meshverse
-					).tree;
+					chgX
+					.changeTree( space )
+					.tree;
 			}
 
 			// transforms the outbox
@@ -923,10 +921,9 @@ IFace.prototype._update =
 					);
 
 				space =
-					chgX.changeTree(
-						space,
-						meshverse
-					).tree;
+					chgX
+					.changeTree( space )
+					.tree;
 			}
 
 			self.$cSpace =
@@ -1032,8 +1029,7 @@ IFace.prototype.alter =
 				new Sign( src ),
 				new Sign( trg )
 			).changeTree(
-				this.$cSpace,
-				meshverse
+				this.$cSpace
 			);
 
 	this.$cSpace =
@@ -1223,10 +1219,8 @@ IFace.prototype.undo =
 			this._$undo.pop( ).chgX.invert( ),
 
 		result =
-			chgX.changeTree(
-				this.$cSpace,
-				meshverse
-			);
+			chgX
+			.changeTree( this.$cSpace );
 
 	if( result === null )
 	{
@@ -1287,10 +1281,8 @@ IFace.prototype.redo =
 			this._$redo.pop( ).chgX.invert( ),
 
 		result =
-			chgX.changeTree(
-				this.$cSpace,
-				meshverse
-			);
+			chgX
+			.changeTree( this.$cSpace );
 
 	this.$cSpace =
 		result.tree;
