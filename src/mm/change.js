@@ -11,8 +11,7 @@
 var
 	Jools,
 	Path,
-	Sign,
-	Tree;
+	Sign;
 
 
 /*
@@ -41,8 +40,6 @@ if( SERVER )
 		require( './path'  );
 	Sign =
 		require( './sign'  );
-	Tree =
-		require( './tree' );
 }
 
 

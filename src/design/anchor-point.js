@@ -264,11 +264,5 @@ AnchorPoint.prototype.compute =
 	}
 };
 
-/*
-| FIXME Workaround meshverse growing
-*/
-AnchorPoint.prototype._$grown =
-	true;
-
 
 })( );

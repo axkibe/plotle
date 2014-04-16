@@ -216,11 +216,4 @@ Label.prototype.click =
 };
 
 
-/*
-| FIXME remove
-*/
-Label.prototype._$grown =
-	true;
-
-
 } ) ( );

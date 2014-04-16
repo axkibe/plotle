@@ -390,12 +390,4 @@ CheckBox.prototype.draw =
 };
 
 
-/*
-| FIXME remove
-*/
-CheckBox.prototype._$grown =
-	true;
-
-
-
 } )( );

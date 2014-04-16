@@ -434,7 +434,6 @@
 > getPrototypeOf
 > getSeconds
 . getStyle
-. getType
 > globalAlpha
 > globalCompositeOperation
 . gradient
@@ -444,7 +443,6 @@
 . greeting1
 . greeting2
 . greeting3
-. grow
 . hadSelect
 . half
 . handle

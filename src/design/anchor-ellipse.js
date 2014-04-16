@@ -95,11 +95,4 @@ AnchorEllipse.prototype.compute =
 };
 
 
-/*
-| FIXME Workaround meshverse growing
-*/
-AnchorEllipse.prototype._$grown =
-	true;
-
-
 })( );

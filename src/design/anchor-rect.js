@@ -88,11 +88,4 @@ AnchorRect.prototype.compute =
 };
 
 
-/*
-| FIXME Workaround meshverse growing
-*/
-AnchorRect.prototype._$grown =
-	true;
-
-
 })( );

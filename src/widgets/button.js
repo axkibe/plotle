@@ -621,10 +621,4 @@ Button.prototype.dragStop =
 };
 
 
-/*
-| FIXME remove
-*/
-Button.prototype._$grown =
-	true;
-
 } )( );

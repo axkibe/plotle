@@ -1121,11 +1121,4 @@ Jools.lazyValue(
 );
 
 
-/*
-| FIXME remove
-*/
-Input.prototype._$grown =
-	true;
-
-
 })( );

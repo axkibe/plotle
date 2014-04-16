@@ -2392,17 +2392,6 @@ Gen.prototype.genFromJSONCreator =
 			Code.Block( )
 		);
 
-	// TODO remove
-	funcBlock =
-		funcBlock
-		.If(
-			Code.Term( 'json._$grown' ),
-			Code.Block( )
-			.Return(
-				Code.Term( 'json' )
-			)
-		);
-
 	funcBlock =
 		this.genFromJSONCreatorParser( funcBlock, jsonList );
 
@@ -2451,18 +2440,6 @@ Gen.prototype.genReflection =
 			Code.Term( this.reference + '.prototype.reflect' ),
 			Code.Term( '\'' + this.name + '\'' )
 		);
-
-	// TODO remove workaround
-	if( this.hasJSON )
-	{
-		capsule =
-			capsule
-			.Comment( 'Workaround old meshverse growing.' )
-			.Assign(
-				Code.Term( this.reference + '.prototype._$grown' ),
-				Code.Term( 'true' )
-			);
-	}
 
 	return capsule;
 };
