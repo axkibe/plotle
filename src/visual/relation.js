@@ -217,40 +217,44 @@ Relation.spawn =
 	)
 {
 	var
-		cline =
-			Euclid.Line.connect(
-				item1.silhoutte,
-				null,
-				item2.silhoutte,
-				null
-			),
+		cline,
+		key,
+		pnw,
+		result;
 
-		pnw =
-			cline.pc.sub(
-				theme.relation.spawnOffset
-			),
+	cline =
+		Euclid.Line.connect(
+			item1.silhoutte,
+			null,
+			item2.silhoutte,
+			null
+		);
 
-		result =
-			shell.peer.newRelation(
-				shell.space.spaceUser,
-				shell.space.spaceTag,
-				pnw,
-				'relates to',
-				20,
-				item1.key,
-				item2.key
-			),
+	pnw =
+		cline.pc.sub(
+			theme.relation.spawnOffset
+		);
 
-		key =
-			result.chgX.trg.path.get( -1 );
+	result =
+		shell.peer.newRelation(
+			shell.space.spaceUser,
+			shell.space.spaceTag,
+			pnw,
+			'relates to',
+			20,
+			item1.key,
+			item2.key
+		);
 
+	key =
+		result.chgX.trg.path.get( -1 );
 
 	shell.setMark(
 		Mark.Caret.create(
 			'path',
 				shell
 				.space
-				.sub[ key ]
+				.twig[ key ]
 				.doc
 				.atRank( 0 )
 				.textPath,

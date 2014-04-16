@@ -17,8 +17,8 @@ var
 */
 var
 	Euclid,
-	meshverse,
-	theme;
+	theme,
+	Visual;
 
 
 /*
@@ -36,91 +36,59 @@ Stubs = { };
 
 
 Stubs.emptyLabel =
-	meshverse.grow(
-		{
-			'type' :
-				'Label',
-			'pnw' :
-				Euclid.Point.zero,
-			'fontsize' :
-				theme.note.fontsize, // FIXME
-			'doc' :
-			{
-				type:
-					'Doc',
-				twig :
-					{
-						'1' :
-							{
-								type :
-									'Para',
-								text :
-									'Label'
-							}
-					},
-				ranks :
-					[
-						'1'
-					]
-			}
-		}
+	Visual.Label.create(
+		'pnw',
+			Euclid.Point.zero,
+		'fontsize',
+			theme.note.fontsize, // FIXME
+		'doc',
+			Visual.Doc.create(
+				'twig:add',
+				'1',
+				Visual.Para.create(
+					'text',
+						'Label'
+				)
+			)
 	);
 
 
 Stubs.emptyNote =
-	meshverse.grow(
-		{
-			'type' :
-				'Note',
-			'fontsize' :
-				theme.note.fontsize, // FIXME
-			'zone' :
-				Euclid.Rect.create(
-					'pnw',
-						Euclid.Point.zero,
-					'pse',
-						Euclid.Point.zero
-				),
-			'doc' :
-			{
-				type:
-					'Doc',
-				twig :
-					{
-						'1' :
-							{
-								type :
-									'Para',
-								text :
-									''
-							}
-					},
-				ranks :
-					[
-						'1'
-					]
-			}
-		}
+	Visual.Note.create(
+		'fontsize',
+			theme.note.fontsize, // FIXME
+		'zone',
+			Euclid.Rect.create(
+				'pnw',
+					Euclid.Point.zero,
+				'pse',
+					Euclid.Point.zero
+			),
+		'doc',
+			Visual.Doc.create(
+				'twig:add',
+				'1',
+				Visual.Para.create(
+					'text',
+						''
+				)
+			)
 	);
 
 
 Stubs.emptyPortal =
-	meshverse.grow(
-		{
-			'type' :
-				'Portal',
-			'zone' :
-				Euclid.Rect.create(
-					'pnw',
-						Euclid.Point.zero,
-					'pse',
-						Euclid.Point.zero
-				),
-			'spaceUser' :
-				'',
-			'spaceTag' :
-				''
-		}
+	Visual.Portal.create(
+		'zone',
+			Euclid.Rect.create(
+				'pnw',
+					Euclid.Point.zero,
+				'pse',
+					Euclid.Point.zero
+			),
+		'spaceUser',
+			'',
+		'spaceTag',
+			''
 	);
 
 

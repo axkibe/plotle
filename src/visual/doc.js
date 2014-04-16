@@ -206,7 +206,7 @@ Doc.prototype.attentionCenter =
 			this.mark.caretPath,
 
 		key =
-			path.get( 4 ); // FIXME
+			path.get( 5 ); // FIXME
 
 	return (
 		this.getPNW( item, key ).y
@@ -533,11 +533,11 @@ Doc.prototype.input =
 
 	return (
 		this
-			.twig[ path.get( 4 ) ]
-			.input(
-				text,
-				item
-			)
+		.twig[ path.get( 5 ) ]
+		.input(
+			text,
+			item
+		)
 	);
 };
 
@@ -606,7 +606,7 @@ Doc.prototype.specialKey =
 
 	return (
 		this
-			.twig[ mark.caretPath.get( 4 ) ]
+			.twig[ mark.caretPath.get( 5 ) ]
 			.specialKey(
 				key,
 				item,

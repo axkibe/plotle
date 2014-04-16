@@ -77,6 +77,11 @@ var
 		require( 'url' ),
 	util =
 		require( 'util' ),
+	Visual =
+		{
+			Space :
+				require( '../visual/space' )
+		},
 	zlib =
 		require( 'zlib' );
 
@@ -84,8 +89,7 @@ var
 /*
 | Server
 */
-var
-	Server =
+var Server =
 function( )
 {
 	// pass
@@ -440,62 +444,61 @@ Server.prototype.loadSpace =
 		spaceName
 	)
 {
+	var
+		change,
+		cursor,
+		o,
+		space;
+
 	Jools.log(
 		'start',
 		'loading and replaying all "' + spaceName + '"'
 	);
 
-	var space =
-	this.$spaces[ spaceName ] =
-		{
-			$changesDB :
-				yield this.$db.connection.collection(
-					'changes:' + spaceName,
-					sus.resume( )
-				),
+	space =
+		this.$spaces[ spaceName ] =
+			{
+				$changesDB :
+					yield this.$db.connection.collection(
+						'changes:' + spaceName,
+						sus.resume( )
+					),
+				$changes :
+					[ ],
+				$tree :
+					Visual.Space.create( ),
+				$seqZ :
+					1
+			};
 
-			$changes :
-				[ ],
-
-			$tree :
-				meshverse.grow( 'Space' ),
-
-			$seqZ :
-				1
-		};
-
-	var
-		cursor =
-			yield space.$changesDB.find(
-				{
-					// ...
-				},
-				{
-					sort :
-						'_id'
-				},
-				sus.resume( )
-			);
+	cursor =
+		yield space.$changesDB.find(
+			{
+				// ...
+			},
+			{
+				sort :
+					'_id'
+			},
+			sus.resume( )
+		);
 
 	for(
-		var o = yield cursor.nextObject( sus.resume( ) );
+		o = yield cursor.nextObject( sus.resume( ) );
 		o !== null;
 		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
 		if( o._id !== space.$seqZ )
 		{
-			throw new Error(
-				'sequence mismatch'
-			);
+			throw new Error( 'sequence mismatch' );
 		}
 
 		// FIXME there is something quirky, why isn't *this* a "Change"?
-		var change =
+		change =
 			{
 				cid :
 					o.cid,
-
 				chgX :
 					null
 			};

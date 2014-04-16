@@ -416,10 +416,8 @@ IFace.prototype.aquireSpace =
 					{
 						status :
 							'connection fail',
-
 						message :
-							'connection fail: ' +
-								ajax.status
+							'connection fail: ' + ajax.status
 					}
 				)
 			);
@@ -470,10 +468,8 @@ IFace.prototype.aquireSpace =
 						{
 							status :
 								asw.status,
-
 							spaceUser :
 								spaceUser,
-
 							spaceTag :
 								spaceTag
 						}
@@ -495,30 +491,24 @@ IFace.prototype.aquireSpace =
 		self.$cSpace =
 		self.$rSpace =
 			meshverse.grow( asw.node );
-
 		self.$spaceUser =
 			spaceUser;
-
 		self.$spaceTag =
 			spaceTag;
-
 		self._$outbox =
 			[ ];
-
 		self.$postbox =
 			[ ];
-
 		self.$mseq =
 			-1;
-
 		self.$remoteTime =
 			asw.time;
-
 		self._$undo =
 			[ ];
-
 		self._$redo =
 			[ ];
+
+		// FIXME check if $cSpace is a space
 
 		system.asyncEvent(
 			'onAquireSpace',
@@ -526,16 +516,12 @@ IFace.prototype.aquireSpace =
 				{
 					status :
 						asw.status,
-
 					spaceUser :
 						spaceUser,
-
 					spaceTag :
 						spaceTag,
-
-					tree :
+					space :
 						self.$cSpace,
-
 					access :
 						asw.access
 				}

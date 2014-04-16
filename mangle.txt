@@ -132,7 +132,6 @@
 . _captureEvents
 . _changeZoom
 . _colorStyle
-. _createItem
 . _cx
 . _draw
 . _drawCaret

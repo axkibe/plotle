@@ -26,15 +26,13 @@ var
 	Forms,
 	Gruga,
 	IFace,
-	Jools,
 	Mark,
 	MeshMashine,
 	Path,
 	Peer,
 	Sign,
 	system,
-	swatch,
-	Visual;
+	swatch;
 
 
 /*
@@ -375,27 +373,27 @@ Shell.prototype.setAction =
 */
 Shell.prototype.update =
 	function(
-		tree,
+		space,
 		chgX
 	)
 {
 	var
-		mark =
-			this.space.mark,
+		bSign,
+		eSign,
+		mark,
+		item;
 
-		mItemTree;
-
+	mark =
+		this.space.mark;
 
 	switch( mark.reflect )
 	{
 		case 'Caret' :
 
-			mItemTree =
-				tree.twig[ mark.path.get( 1 ) ];
+			item =
+				space.twig[ mark.path.get( 2 ) ];
 
-			if (
-				!Jools.is( mItemTree )
-			)
+			if( item === undefined )
 			{
 				// the item holding the caret was removed
 				mark =
@@ -410,7 +408,6 @@ Shell.prototype.update =
 								{
 									path :
 										mark.path.chop( ),
-
 									at1 :
 										mark.at
 								}
@@ -436,12 +433,10 @@ Shell.prototype.update =
 
 		case 'Item' :
 
-			mItemTree =
-				tree.twig[ mark.path.get( 1 ) ];
+			item =
+				space.twig[ mark.path.get( 2 ) ];
 
-			if (
-				!Jools.is( mItemTree )
-			)
+			if( item === undefined )
 			{
 				// the item holding the caret was removed
 				mark =
@@ -452,94 +447,100 @@ Shell.prototype.update =
 
 		case 'Range' :
 
-			mItemTree =
-				tree.twig[ mark.bPath.get( 1 ) ];
+			item =
+				space.twig[ mark.bPath.get( 2 ) ];
 
 			// tests if the owning item was removed
-			if(
-				!Jools.is( mItemTree )
-			)
+			if( item === undefined )
 			{
 				mark =
 					Mark.Vacant.create( );
 			}
 			else
 			{
-				var
-					bSign =
-						MeshMashine.tfxSign(
-							new Sign(
-								{
-									path :
-										mark.bPath.chop( ),
-
-									at1 :
-										mark.bAt
-								}
-							),
-							chgX
+				bSign =
+					MeshMashine.tfxSign(
+						new Sign(
+							{
+								path :
+									mark.bPath.chop( ),
+								at1 :
+									mark.bAt
+							}
 						),
+						chgX
+					),
 
-					eSign =
-						MeshMashine.tfxSign(
-							new Sign(
-								{
-									path :
-										mark.ePath.chop( ),
+				eSign =
+					MeshMashine.tfxSign(
+						new Sign(
+							{
+								path :
+									mark.ePath.chop( ),
+								at1 :
+									mark.eAt
+							}
+						),
+						chgX
+					);
 
-									at1 :
-										mark.eAt
-								}
-							),
-							chgX
+				// tests if the range collapsed to a simple caret.
+				if(
+					bSign.path.equals( eSign.path ) &&
+					bSign.at1 === eSign.at1
+				)
+				{
+					mark =
+						Mark.Caret.create(
+							'path',
+								bSign.path.prepend( 'space' ),
+							'at',
+								bSign.at1,
+							'retainx',
+								mark.retainx
 						);
-
-					// tests if the range collapsed to a simple caret.
-					if(
-						bSign.path.equals( eSign.path ) &&
-						bSign.at1 === eSign.at1
-					)
-					{
-						mark =
-							Mark.Caret.create(
-								'path',
-									bSign.path.prepend( 'space' ),
-								'at',
-									bSign.at1,
-								'retainx',
-									mark.retainx
-							);
-					}
-					else
-					{
-						mark =
-							Mark.Range.create(
-								'doc',
-									mItemTree.twig.doc,
-								'bPath',
-									bSign.path.prepend( 'space' ),
-								'bAt',
-									bSign.at1,
-								'ePath',
-									eSign.path.prepend( 'space' ),
-								'eAt',
-									eSign.at1,
-								'retainx',
-									mark.retainx
-							);
-					}
+				}
+				else
+				{
+					mark =
+						Mark.Range.create(
+							'doc',
+								item.twig.doc,
+							'bPath',
+								bSign.path.prepend( 'space' ),
+							'bAt',
+								bSign.at1,
+							'ePath',
+								eSign.path.prepend( 'space' ),
+							'eAt',
+								eSign.at1,
+							'retainx',
+								mark.retainx
+						);
+				}
 			}
 
 			break;
 
 	}
 
+	// FIXME let the iface do the real stuff
 	this.$space =
-		this.$space.create(
-			'tree',
-				tree,
+		space.create(
+			'spaceUser',
+				this.$space.spaceUser,
+			'spaceTag',
+				this.$space.spaceTag,
+			'access',
+				this.$space.access,
+			'hover',
+				this.$space.hover,
 			'mark',
-				mark
+				mark,
+			'path',
+				this.$space.path,
+			'view',
+				this.$space.view
 		);
 
 	this._$discJockey =
@@ -1180,8 +1181,11 @@ Shell.prototype.specialKey =
 	)
 {
 	var
-		display =
-			this._getCurrentDisplay( );
+		display,
+		focusItem;
+
+	display =
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -1191,10 +1195,9 @@ Shell.prototype.specialKey =
 			ctrl
 		);
 	}
-
-	var
-		focusItem =
-			this.$space.focusedItem( );
+	
+	focusItem =
+		this.$space.focusedItem( );
 
 	if( focusItem && focusItem.scrollMarkIntoView )
 	{
@@ -1217,16 +1220,18 @@ Shell.prototype.input =
 	)
 {
 	var
-		display =
-			this._getCurrentDisplay( );
+		display,
+		focusItem;
+
+	display =
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
 		display.input( text );
 
-		var
-			focusItem =
-				this.$space.focusedItem( );
+		focusItem =
+			this.$space.focusedItem( );
 
 		if( focusItem && focusItem.scrollMarkIntoView )
 		{
@@ -1446,7 +1451,10 @@ Shell.prototype.onAquireSpace =
 	)
 {
 	var
-		path;
+		access,
+		path,
+		spaceTag,
+		spaceUser;
 
 	switch( asw.status )
 	{
@@ -1513,23 +1521,20 @@ Shell.prototype.onAquireSpace =
 			return;
 	}
 
-	var
-		spaceUser =
-			asw.spaceUser,
+	spaceUser =
+		asw.spaceUser,
 
-		spaceTag =
-			asw.spaceTag,
+	spaceTag =
+		asw.spaceTag,
 
-		tree =
-			asw.tree,
+	//tree =
+	//	asw.tree;
 
-		access =
-			asw.access;
+	access =
+		asw.access;
 
 	this.$space =
-		Visual.Space.create(
-			'tree',
-				tree,
+		asw.space.create(
 			'spaceUser',
 				spaceUser,
 			'spaceTag',

@@ -223,10 +223,12 @@ Change.prototype.invert =
 */
 Change.prototype.changeTree =
 	function(
-		tree,
-		universe
+		tree
 	)
 {
+	var
+		r;
+
 	Jools.log(
 		'change',
 		'src:',
@@ -239,9 +241,8 @@ Change.prototype.changeTree =
 
 	// executes the op-handler
 	// FIXME make a switch call around this
-	var
-		r =
-			this[ this.type ]( tree, universe );
+	r =
+		this[ this.type ]( tree );
 
 	Jools.log(
 		'change',
@@ -259,7 +260,6 @@ Change.prototype.changeTree =
 		{
 			tree :
 				r.tree,
-
 			chgX :
 				r.chg
 		}
@@ -303,11 +303,11 @@ Change.prototype.get =
 */
 Change.prototype.set =
 	function(
-		tree,
-		universe
+		tree
 	)
 {
 	var
+		chg,
 		cm,
 		key,
 		pivot,
@@ -316,17 +316,13 @@ Change.prototype.set =
 		trg;
 
 	cm =
-		'change.set',
-
+		'change.set';
 	src =
-		this.src,
-
+		this.src;
 	trg =
-		this.trg,
-
+		this.trg;
 	pivot =
-		null,
-
+		null;
 	key =
 		null;
 
@@ -346,11 +342,9 @@ Change.prototype.set =
 	if( trg.path.get( -1 ) === '$new' )
 	{
 		pivot =
-			tree.getPath( trg.path.shorten( 1 ) );
-
+			tree.getPath( trg.path.shorten( 2 ) );
 		key =
 			pivot.newUID( );
-
 		trg =
 			new Sign(
 				trg,
@@ -393,8 +387,7 @@ Change.prototype.set =
 		tree =
 			tree.setPath(
 				trg.path,
-				src.val,
-				universe
+				src.val
 			);
 	}
 	else
@@ -402,7 +395,7 @@ Change.prototype.set =
 		pivot =
 			pivot
 			||
-			tree.getPath( trg.path.shorten( 1 ) );
+			tree.getPath( trg.path.shorten( 2 ) );
 
 		if( key === null )
 		{
@@ -416,6 +409,14 @@ Change.prototype.set =
 		if( src.val !== null )
 		{
 			pivot =
+				pivot.create(
+					'twig:insert',
+					key,
+					trg.rank,
+					src.val
+				);
+
+				/*
 				universe.grow(
 					pivot,
 					key,
@@ -423,6 +424,7 @@ Change.prototype.set =
 					'+',
 						trg.rank, key
 				);
+				*/
 		}
 		else
 		{
@@ -436,6 +438,7 @@ Change.prototype.set =
 						orank
 				);
 
+			/*
 			pivot =
 				universe.grow(
 					pivot,
@@ -444,17 +447,29 @@ Change.prototype.set =
 					'-',
 						orank
 				);
+			*/
+			pivot =
+				pivot.create(
+					'twig:remove',
+					key
+				);
 		}
 
-		tree =
-			tree.setPath(
-				trg.path.shorten( 1 ),
-				pivot,
-				universe
-			);
+		if( trg.path.length > 2 )
+		{
+			tree =
+				tree.setPath(
+					trg.path.shorten( 2 ),
+					pivot
+				);
+		}
+		else
+		{
+			tree =
+				pivot;
+		}
 	}
 
-	var chg;
 	if(
 		src === this.src &&
 		trg === this.trg
@@ -488,8 +503,7 @@ Change.prototype.set =
 */
 Change.prototype.insert =
 	function(
-		tree,
-		universe
+		tree
 	)
 {
 	var
@@ -538,8 +552,7 @@ Change.prototype.insert =
 	tree =
 		tree.setPath(
 			trg.path,
-			nstr,
-			universe
+			nstr
 		);
 
 	var
@@ -577,19 +590,24 @@ Change.prototype.insert =
 */
 Change.prototype.remove =
 	function(
-		tree,
-		universe
+		tree
 	)
 {
 	var
-		cm =
-			'change.remove',
+		chg,
+		cm,
+		nstr,
+		str,
+		src,
+		trg,
+		val;
 
-		src =
-			this.src,
-
-		trg =
-			this.trg;
+	cm =
+		'change.remove';
+	src =
+		this.src;
+	trg =
+		this.trg;
 
 	Jools.check(
 		src.path.reflect === 'Path',
@@ -597,7 +615,7 @@ Change.prototype.remove =
 		'src.path missing'
 	);
 
-	var str =
+	str =
 		tree.getPath( src.path );
 
 	if( !Jools.isString( str ) )
@@ -620,7 +638,7 @@ Change.prototype.remove =
 		return null;
 	}
 
-	var val =
+	val =
 		str.substring(
 			src.at1,
 			src.at2
@@ -635,7 +653,7 @@ Change.prototype.remove =
 				val
 		);
 
-	var nstr = (
+	nstr = (
 		str.substring( 0, src.at1 ) +
 		str.substring( src.at2 )
 	);
@@ -643,11 +661,9 @@ Change.prototype.remove =
 	tree =
 		tree.setPath(
 			src.path,
-			nstr,
-			universe
+			nstr
 		);
 
-	var chg;
 	if(
 		src === this.src &&
 		trg === this.trg
@@ -681,13 +697,15 @@ Change.prototype.remove =
 */
 Change.prototype.join =
 	function(
-		tree,
-		universe
+		tree
 	)
 {
 	var
 		cm,
+		key,
 		key2,
+		kn,
+		pivot,
 		src,
 		text,
 		trg,
@@ -727,18 +745,16 @@ Change.prototype.join =
 		'trg signates no text'
 	);
 
-	var
-		key =
-			path.get( -2 ),
+	key =
+		path.get( -2 );
 
-		pivot =
-			tree.getPath( path.shorten( 3 ) );
+	pivot =
+		tree.getPath( path.shorten( 3 ) );
 
 	Jools.check( pivot.ranks, cm, 'pivot has no ranks' );
 
-	var
-		kn =
-			pivot.rankOf( key );
+	kn =
+		pivot.rankOf( key );
 
 	Jools.check( kn >= 0, cm, 'invalid line key (1)' );
 
@@ -788,8 +804,7 @@ Change.prototype.join =
 	tree =
 		tree.setPath(
 			path.shorten( 3 ),
-			pivot,
-			universe
+			pivot
 		);
 
 	var chg;
@@ -829,26 +844,37 @@ Change.prototype.join =
 */
 Change.prototype.split =
 	function(
-		tree,
-		universe
+		tree
 	)
 {
 	var
-		cm =
-			'change.split',
-		src =
-			this.src,
-		trg =
-			this.trg,
-		path =
-			src.path,
-		at1 =
-			src.at1,
-		text =
-			tree.getPath( path ),
-		pivot =
-			tree.getPath( path.shorten( 3 ) ),
+		cm,
+		key,
+		kn,
+		src,
+		trg,
+		para1,
+		para2,
+		path,
+		at1,
+		text,
+		pivot,
 		vKey;
+
+	cm =
+		'change.split';
+	src =
+		this.src;
+	trg =
+		this.trg;
+	path =
+		src.path;
+	at1 =
+		src.at1;
+	text =
+		tree.getPath( path );
+	pivot =
+		tree.getPath( path.shorten( 3 ) );
 
 	Jools.check( Jools.isString( text ), cm, 'src signates no text' );
 
@@ -879,22 +905,20 @@ Change.prototype.split =
 		vKey
 	);
 
-	var
-		key =
-			path.get( -2 ),
-		kn =
-			pivot.rankOf( key );
+	key =
+		path.get( -2 ),
+	kn =
+		pivot.rankOf( key );
 
 	Jools.check( kn >= 0, cm, 'invalid line key ( 2 )' );
 
-	var
-		para1 =
-			pivot.twig[ key ],
-		para2 =
-			para1.create(
-				'text',
-					text.substring( at1, text.length )
-			);
+	para1 =
+		pivot.twig[ key ];
+	para2 =
+		para1.create(
+			'text',
+				text.substring( at1, text.length )
+		);
 
 	para1 =
 		para1.create(
@@ -916,8 +940,7 @@ Change.prototype.split =
 	tree =
 		tree.setPath(
 			path.shorten( 3 ),
-			pivot,
-			universe
+			pivot
 		);
 
 	var
@@ -955,13 +978,24 @@ Change.prototype.split =
 */
 Change.prototype.rank =
 	function(
-		tree,
-		universe
+		tree
 	)
 {
-	var cm  = 'change.rank';
-	var src = this.src;
-	var trg = this.trg;
+	var
+		chg,
+		cm,
+		key,
+		orank,
+		pivot,
+		src,
+		trg;
+
+	cm =
+		'change.rank';
+	src =
+		this.src;
+	trg =
+		this.trg;
 
 	Jools.check(
 		Jools.is(src.path),
@@ -973,17 +1007,19 @@ Change.prototype.rank =
 		cm, 'trg.rank not present'
 	);
 
-	var
-		pivot =
-			tree.getPath( src.path.shorten( 1 ) );
+	pivot =
+		tree.getPath( src.path.shorten( 2 ) );
 
 	Jools.check(
 		Jools.is( pivot.ranks ),
-		cm, 'pivot not an ranks'
+		cm,
+		'pivot has no ranks'
 	);
 
-	var key = src.path.get( -1 );
-	var orank = pivot.rankOf( key );
+	key =
+		src.path.get( -1 );
+	orank =
+		pivot.rankOf( key );
 
 	if ( orank < 0 )
 	{
@@ -997,17 +1033,22 @@ Change.prototype.rank =
 	src =
 		src.affix(
 			Jools.is,
-			cm, 'src',
-			'rank', orank
+			cm,
+			'src',
+			'rank',
+				orank
 		);
 
 	trg =
 		trg.affix(
 			Jools.is,
-			cm, 'trg',
-			'path', src.path
+			cm,
+			'trg',
+			'path',
+				src.path
 		);
 
+	/*
 	pivot =
 		universe.grow(
 			pivot,
@@ -1016,15 +1057,41 @@ Change.prototype.rank =
 			'+',
 				trg.rank, key
 		);
+	*/
 
-	tree =
-		tree.setPath(
-			src.path.shorten( 1 ),
-			pivot,
-			universe
+	// FUTURE make a twig:rerank
+	pivot =
+		pivot.create(
+			'twig:remove',
+				key,
+			'twig:insert',
+				key,
+				trg.rank,
+				pivot.twig[ key ]
 		);
 
-	var chg;
+	if( src.path.length > 2 )
+	{
+		tree =
+			tree.setPath(
+				src.path.shorten( 2 ),
+				pivot
+			);
+	}
+	else
+	{
+/**/	if( CHECK )
+/**/	{
+/**/		if( src.path.length !== 2 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+
+		tree =
+			pivot;
+	}
+
 	if( src === this.src && trg === this.trg )
 	{
 		chg =
@@ -1042,7 +1109,6 @@ Change.prototype.rank =
 	return {
 		tree :
 			tree,
-
 		chg :
 			chg
 	};

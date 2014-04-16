@@ -126,7 +126,7 @@ Jools.lazyValue(
 	function( )
 	{
 		if(
-			this.path.length < 2
+			this.path.length < 3
 			||
 			this.path.get( 0 ) !== 'space'
 		)
@@ -134,7 +134,7 @@ Jools.lazyValue(
 			return Path.empty;
 		}
 
-		return this.path.limit( 2 );
+		return this.path.limit( 3 );
 	}
 );
 

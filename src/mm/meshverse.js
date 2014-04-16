@@ -62,7 +62,9 @@ if( SERVER )
 			Portal :
 				require( '../visual/portal' ),
 			Relation :
-				require( '../visual/relation' )
+				require( '../visual/relation' ),
+			Space :
+				require( '../visual/space' )
 		};
 }
 
@@ -498,6 +500,8 @@ Meshverse.prototype.grow =
 
 
 Meshverse.prototype.Space =
+	Visual.Space;
+	/*
 	Jools.immute( {
 		twig :
 			Jools.immute ( {
@@ -513,6 +517,7 @@ Meshverse.prototype.Space =
 		ranks :
 			true
 	} );
+	*/
 
 
 Meshverse.prototype.Note =

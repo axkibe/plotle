@@ -64,12 +64,11 @@ var
 /*
 | Change translation.
 */
-var
-	translateChange =
-		function( chg )
+var translateChange =
+	function(
+		chg
+	)
 {
-	console.log( chg );
-
 	var
 		src =
 			chg.chgX.src,
@@ -82,6 +81,8 @@ var
 		{
 			src.path.splice( 2, 0, 'twig' );
 		}
+
+		src.path.splice( 0, 0, 'twig' );
 	}
 
 	if( trg.path )
@@ -90,6 +91,8 @@ var
 		{
 			trg.path.splice( 2, 0, 'twig' );
 		}
+
+		trg.path.splice( 0, 0, 'twig' );
 	}
 
 	return chg;

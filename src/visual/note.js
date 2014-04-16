@@ -332,17 +332,19 @@ Note.prototype.dragStop =
 	)
 {
 	var
-		action =
-			shell.action;
+		action,
+		zone;
+
+	action =
+		shell.action;
 
 	switch( action.reflect )
 	{
 
 		case 'ItemResize' :
 
-			var
-				zone =
-					this.zone;
+			zone =
+				this.zone;
 
 /**/		if( CHECK )
 /**/		{
@@ -646,7 +648,7 @@ Note.prototype.scrollMarkIntoView =
 
 		para =
 			// FIXME, more elegant path getting
-			this.doc.twig[ mark.caretPath.get( 4 )  ];
+			this.doc.twig[ mark.caretPath.get( 5 )  ];
 
 /**/if( CHECK )
 /**/{

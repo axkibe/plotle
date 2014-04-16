@@ -83,6 +83,7 @@ config.develServer =
 | Does not write stuff on server startup
 */
 config.noWrite =
+//	true ||
 	false;
 
 /*

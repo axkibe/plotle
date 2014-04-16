@@ -37,18 +37,33 @@ JoobjProto.setPath =
 		pos    // position in the path
 	)
 {
+	var
+		key,
+		pZ;
+
 	if( pos === undefined )
 	{
 		pos =
 			0;
 	}
 
-	var
-		pZ =
-			path.length,
+/**/if( CHECK )
+/**/{
+/**/	if( typeof( pos ) !== 'number' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( path.length === pos )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
-		key =
-			path.get( pos );
+	pZ =
+		path.length;
+	key =
+		path.get( pos );
 
 	if( key === 'twig' )
 	{
@@ -116,18 +131,26 @@ JoobjProto.getPath =
 		pos    // position in the path
 	)
 {
+	var
+		key,
+		pZ;
+
 	if( pos === undefined )
 	{
 		pos =
 			0;
 	}
 
-	var
-		pZ =
-			path.length,
+	if( path.length === pos )
+	{
+		return this;
+	}
 
-		key =
-			path.get( pos );
+	pZ =
+		path.length,
+
+	key =
+		path.get( pos );
 
 	if( key === 'twig' )
 	{

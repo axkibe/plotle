@@ -51,14 +51,18 @@ if( JOOBJ )
 						comment :
 							'rights the current user has for this space',
 						type :
-							'String'
+							'String',
+						defaultValue :
+							'undefined'
 					},
 				hover :
 					{
 						comment :
 							'node currently hovered upon',
 						type :
-							'Path'
+							'Path',
+						defaultValue :
+							'undefined'
 					},
 				mark :
 					{
@@ -71,32 +75,39 @@ if( JOOBJ )
 								func :
 									'Space.concernsMark',
 								args :
-									[
-										'mark'
-									]
-							}
+									[ 'mark' ]
+							},
+						defaultValue :
+							'undefined'
 					},
 				path :
 					{
 						comment :
 							'the path of the space',
 						type :
-							'Path'
+							'Path',
+						defaultValue :
+							'undefined'
 					},
 				spaceUser :
 					{
 						comment :
 							'owner of the space',
 						type :
-							'String'
+							'String',
+						defaultValue :
+							'undefined'
 					},
 				spaceTag :
 					{
 						comment :
 							'name of the space',
 						type :
-							'String'
+							'String',
+						defaultValue :
+							'undefined'
 					},
+				// FIXME remove
 				traitSet :
 					{
 						comment :
@@ -108,27 +119,52 @@ if( JOOBJ )
 						defaultValue :
 							'null'
 					},
-				tree :
-					{
-						comment :
-							'the data tree',
-						type :
-							'Tree'
-					},
 				view :
 					{
 						comment :
 							'the current view',
 						type :
-							'View'
+							'View',
+						defaultValue :
+							'undefined'
 					}
 			},
 		init :
 			[
 				'inherit',
 				'traitSet'
-			]
+			],
+		node :
+			true,
+		json :
+			true,
+		twig :
+			{
+				'Note' :
+					'Visual.Note',
+				'Label' :
+					'Visual.Label',
+				'Relation' :
+					'Visual.Relation',
+				'Portal' :
+					'Visual.Portal'
+			}
 	};
+}
+
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	Jools =
+		require( '../jools/jools' );
+
+	Visual =
+		{
+			Space :
+				require( '../joobj/this' )( module )
+		};
 }
 
 
@@ -145,21 +181,21 @@ Space.prototype._init =
 		traitSet
 	)
 {
-	var
-		sub =
-			{ };
-
-	for( var k in this.tree.twig )
+	if( !this.view )
 	{
-		if( k === 'type' )
-		{
-			continue;
-		}
+		// abstract
+		return;
+	}
 
-		sub[ k ] =
-			this.tree.twig[ k ].create(
+	for( var k in this.twig )
+	{
+		this.twig[ k ] =
+			this.twig[ k ].create(
 				'path',
-					this.path.appendNC( k ), // FIXME inherit
+					this
+					.path
+					.append( 'twig' )
+					.appendNC( k ), // FIXME inherit
 				'hover',
 					this.hover,
 				'mark',
@@ -170,9 +206,6 @@ Space.prototype._init =
 					this.view
 			);
 	}
-
-	this.sub =
-		sub;
 };
 
 
@@ -184,13 +217,6 @@ Space.prototype.showDisc =
 
 
 /*
-| FIXME remove
-*/
-var
-	_spacePath =
-		Path.empty.append( 'space' );
-
-/*
 | Returns the mark if the form jockey concerns a mark.
 */
 Space.concernsMark =
@@ -198,9 +224,13 @@ Space.concernsMark =
 		mark
 	)
 {
+	// returns an undefined mark if it was undefined
+	// or the mark itself if it has a space path
 	if(
+		!mark
+		||
 		mark.containsPath(
-			_spacePath
+			Path.empty.append( 'space' )
 		)
 	)
 	{
@@ -228,10 +258,8 @@ Space.prototype.focusedItem =
 
 	action =
 		shell.action;
-
 	mark =
 		this.mark;
-
 	path =
 		mark.itemPath;
 
@@ -251,9 +279,9 @@ Space.prototype.focusedItem =
 		}
 	}
 
-	if( path.length > 1 )
+	if( path.length > 2 )
 	{
-		return this.getItem( path.get( 1 ) );
+		return this.getItem( path.get( 2 ) );
 	}
 	else
 	{
@@ -287,7 +315,7 @@ Space.prototype.getItem =
 			break;
 	}
 
-	return this.sub[ key ];
+	return this.twig[ key ];
 };
 
 
@@ -299,7 +327,7 @@ Space.prototype.atRank =
 		rank
 	)
 {
-	return this.getItem( this.tree.ranks[ rank ] );
+	return this.getItem( this.ranks[ rank ] );
 };
 
 
@@ -332,6 +360,7 @@ Jools.lazyValue(
 /*
 | Creates a new visual representation of an item.
 */
+/*
 Space.prototype._createItem =
 	function(
 		key,
@@ -351,15 +380,15 @@ Space.prototype._createItem =
 		proto =
 			Visual[ tree.twig.type ];
 
-/**/	if( CHECK )
-/**/	{
-/**/		if( !proto )
-/**/		{
-/**/			throw new Error(
-/**/				'unknown type: ' + tree.twig.type
-/**/			);
-/**/		}
-/**/	}
+**	if( CHECK )
+**	{
+**		if( !proto )
+**		{
+**			throw new Error(
+**				'unknown type: ' + tree.twig.type
+**			);
+**		}
+**	}
 
 		path =
 			this.path.appendNC( key );
@@ -382,6 +411,7 @@ Space.prototype._createItem =
 		)
 	);
 };
+*/
 
 
 /*
@@ -393,17 +423,19 @@ Space.prototype.draw =
 	)
 {
 	var
-		tree =
-			this.tree,
+		action,
+		focus,
+		r,
+		view;
 
-		view =
-			this.view,
+	view =
+		this.view,
 
-		action =
-			shell.action;
+	action =
+		shell.action;
 
 	for(
-		var r = tree.length - 1;
+		r = this.ranks.length - 1;
 		r >= 0;
 		r--
 	)
@@ -411,9 +443,8 @@ Space.prototype.draw =
 		this.atRank( r ).draw( fabric );
 	}
 
-	var
-		focus =
-			this.focusedItem( );
+	focus =
+		this.focusedItem( );
 
 	if( focus )
 	{
@@ -505,7 +536,7 @@ Space.prototype.draw =
 				if( !this.hover.isEmpty )
 				{
 					this
-						.getItem( this.hover.get( 1 ) )
+						.getItem( this.hover.get( 2 ) )
 						.highlight( fabric );
 				}
 			}
@@ -527,19 +558,21 @@ Space.prototype.mousewheel =
 	)
 {
 	var
-		view =
-			this.view,
+		item,
+		r,
+		rZ,
+		view;
 
-		tree =
-			this.tree;
+	view =
+		this.view;
 
 	for(
-		var r = 0, rZ = tree.length;
+		r = 0, rZ = this.ranks.length;
 		r < rZ;
 		r++
 	)
 	{
-		var item =
+		item =
 			this.atRank(r);
 
 		if (
@@ -586,11 +619,18 @@ Space.prototype.pointingHover =
 	)
 {
 	var
-		view =
-			this.view,
+		a,
+		aZ,
+		item,
+		focus,
+		reply,
+		view;
 
-		focus =
-			this.focusedItem( );
+	view =
+		this.view,
+
+	focus =
+		this.focusedItem( );
 
 	if( focus )
 	{
@@ -615,20 +655,19 @@ Space.prototype.pointingHover =
 	}
 
 	for(
-		var a = 0, aZ = this.tree.length;
+		a = 0, aZ = this.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		var
-			item =
-				this.atRank( a ),
+		item =
+			this.atRank( a ),
 
-			reply =
-				item.pointingHover(
-					view,
-					p
-				);
+		reply =
+			item.pointingHover(
+				view,
+				p
+			);
 
 		if( reply )
 		{
@@ -658,11 +697,16 @@ Space.prototype.dragStart =
 	)
 {
 	var
-		view =
-			this.view,
+		a,
+		aZ,
+		focus,
+		view;
 
-		focus =
-			this.focusedItem( );
+	view =
+		this.view,
+
+	focus =
+		this.focusedItem( );
 
 	// see if the handles were targeted
 	if(
@@ -824,7 +868,7 @@ Space.prototype.dragStart =
 
 	// see if one item was targeted
 	for(
-		var a = 0, aZ = this.tree.length;
+		a = 0, aZ = this.ranks.length;
 		a < aZ;
 		a++
 	)
@@ -891,17 +935,22 @@ Space.prototype.click =
 	)
 {
 	var
-		view =
-			this.view;
+		a,
+		aZ,
+		item,
+		view;
+
+	view =
+		this.view;
 
 	// clicked some item?
 	for(
-		var a = 0, aZ = this.tree.length;
+		a = 0, aZ = this.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		var item =
+		item =
 			this.atRank( a );
 
 		if(
@@ -940,15 +989,17 @@ Space.prototype.dragStop =
 	)
 {
 	var
-		action =
-			shell.action,
-
-		view =
-			this.view,
-
+		action,
+		item,
 		key,
 		result,
-		item;
+		view;
+
+	action =
+		shell.action;
+
+	view =
+		this.view;
 
 /**/if( CHECK )
 /**/{
@@ -995,7 +1046,7 @@ Space.prototype.dragStop =
 						Mark.Caret.create(
 							'path',
 								shell.
-									space.sub[ key ].
+									space.twig[ key ].
 									doc.
 									atRank( 0 ).textPath,
 							'at',
@@ -1073,8 +1124,8 @@ Space.prototype.dragStop =
 						Mark.Caret.create(
 							'path',
 								shell.space
-									.sub[ key ]
-									.doc.atRank( 0 ).textPath,
+								.twig[ key ]
+								.doc.atRank( 0 ).textPath,
 							'at',
 								0
 						)
@@ -1118,9 +1169,11 @@ Space.prototype.dragStop =
 					shell.setMark(
 						Mark.Caret.create(
 							'path',
-								shell.space
-									.sub[ key ]
-									.subPaths.spaceUser,
+								shell
+								.space
+								.twig[ key ]
+								.subPaths
+								.spaceUser,
 							'at',
 								0
 						)
@@ -1137,9 +1190,7 @@ Space.prototype.dragStop =
 
 				default :
 
-					throw new Error(
-						CHECK && 'invalid itemtype'
-					);
+					throw new Error( );
 			}
 
 			break;
@@ -1199,9 +1250,7 @@ Space.prototype.dragStop =
 
 				default :
 
-					throw new Error(
-						CHECK && 'unknown relation state'
-					);
+					throw new Error( );
 			}
 
 			break;
@@ -1232,13 +1281,7 @@ Space.prototype.dragStop =
 
 					default :
 
-						throw new Error(
-							CHECK &&
-							(
-								'invalid positioning' +
-								action.transItem.positioning
-							)
-						);
+						throw new Error( );
 				}
 			}
 
@@ -1280,13 +1323,7 @@ Space.prototype.dragStop =
 
 					default :
 
-						throw new Error(
-							CHECK &&
-							(
-								'invalid positioning' +
-									action.transItem.positioning
-							)
-						);
+						throw new Error( );
 				}
 			}
 
@@ -1315,12 +1352,7 @@ Space.prototype.dragStop =
 
 		default :
 
-			throw new Error(
-				CHECK &&
-				(
-					'Do not know how to handle action: ' + action.reflect
-				)
-			);
+			throw new Error( );
 	}
 
 	return true;
@@ -1338,26 +1370,26 @@ Space.prototype.dragMove =
 	)
 {
 	var
-		view =
-			this.view,
-
-		action =
-			shell.action,
-
-		transItem =
-			null,
-
+		action,
+		view,
+		transItem,
 		fs,
-
 		model,
-
 		origin,
-
 		oheight,
-
 		pd,
-
+		r,
+		rZ,
 		resized;
+
+	action =
+		shell.action;
+
+	view =
+		this.view;
+
+	transItem =
+		null;
 
 	switch( action.reflect )
 	{
@@ -1421,9 +1453,7 @@ Space.prototype.dragMove =
 
 				default :
 
-					throw new Error(
-						CHECK && 'invalid positioning'
-					);
+					throw new Error( );
 			}
 
 			shell.setAction(
@@ -1468,7 +1498,7 @@ Space.prototype.dragMove =
 
 			// FIXME why is this?
 			for(
-				var r = 0, rZ = this.tree.length;
+				r = 0, rZ = this.ranks.length;
 				r < rZ;
 				r++
 			)
@@ -1602,9 +1632,7 @@ Space.prototype.dragMove =
 
 						default :
 
-							throw new Error(
-								CHECK && 'unknown align'
-							);
+							throw new Error( );
 					}
 
 					fs =
@@ -1685,21 +1713,23 @@ Space.prototype.input =
 	)
 {
 	var
-		mark =
-			this.mark;
+		item,
+		mark,
+		path;
+
+	mark =
+		this.mark;
 
 	if( !mark.hasCaret )
 	{
 		return false;
 	}
 
+	path =
+		mark.caretPath;
 
-	var
-		path =
-			mark.caretPath,
-
-		item =
-			this.sub[ path.get( 1 ) ];
+	item =
+		this.twig[ path.get( 2 ) ];
 
 	if( item )
 	{
@@ -1739,6 +1769,11 @@ Space.prototype.specialKey =
 		ctrl
 	)
 {
+	var
+		item,
+		mark,
+		path;
+
 	if( ctrl )
 	{
 		switch( key )
@@ -1769,21 +1804,19 @@ Space.prototype.specialKey =
 		}
 	}
 
-	var
-		mark =
-			this.mark;
+	mark =
+		this.mark;
 
 	if( !mark.hasCaret )
 	{
 		return;
 	}
 
-	var
-		path =
-			mark.caretPath,
+	path =
+		mark.caretPath;
 
-		item =
-			this.sub[ path.get( 1 ) ];
+	item =
+		this.twig[ path.get( 2 ) ];
 
 	if( item )
 	{
@@ -1794,6 +1827,16 @@ Space.prototype.specialKey =
 		);
 	}
 };
+
+
+/*
+| Node export.
+*/
+if( SERVER )
+{
+	module.exports =
+		Space;
+}
 
 
 } )( );

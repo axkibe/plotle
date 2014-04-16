@@ -171,7 +171,7 @@ Path.prototype.get =
 /**/{
 /**/	if( idx < 0 || idx >= this.length )
 /**/	{
-/**/		throw new Error( 'invalid get' );
+/**/		throw new Error( 'invalid get: ' + idx );
 /**/	}
 /**/}
 

@@ -13,6 +13,7 @@ module.exports =
 			'src/visual/para.js',
 			'src/visual/portal.js',
 			'src/visual/relation.js',
+			'src/visual/space.js',
 
 			// built in genjoobj
 			'src/code/and.js',

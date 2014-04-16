@@ -16,8 +16,10 @@ var
 | Imports
 */
 var
+	Euclid,
 	Jools,
-	meshverse;
+	meshverse,
+	Visual;
 
 
 /*
@@ -36,6 +38,24 @@ if( SERVER )
 		require( '../jools/jools' );
 	meshverse =
 		require( '../mm/meshverse' );
+	Euclid =
+		{
+			Point :
+				require( '../euclid/point' ),
+			Rect :
+				require( '../euclid/rect' )
+		};
+	Visual =
+		{
+			Label :
+				require( '../visual/label' ),
+			Note :
+				require( '../visual/note' ),
+			Portal :
+				require( '../visual/portal' ),
+			Relation :
+				require( '../visual/relation' )
+		};
 }
 
 
@@ -97,10 +117,64 @@ Sign =
 			arguments[ a + 1 ];
 	}
 
+	// FUTURE:
+	//    somehow have position depended twig creation
+	//    handle this
+	//
 	if( this.val && this.val.type )
 	{
-		this.val =
-			meshverse.grow( this.val );
+		switch( this.val.type )
+		{
+			case 'Label' :
+
+				this.val =
+					Visual.Label.createFromJSON( this.val );
+
+				break;
+
+			case 'Note' :
+
+				this.val =
+					Visual.Note.createFromJSON( this.val );
+
+				break;
+
+			case 'Point' :
+
+				this.val =
+					Euclid.Point.createFromJSON( this.val );
+
+				break;
+
+			case 'Portal' :
+
+				this.val =
+					Visual.Portal.createFromJSON( this.val );
+
+				break;
+
+
+			case 'Rect' :
+
+				this.val =
+					Euclid.Rect.createFromJSON( this.val );
+
+				break;
+
+			case 'Relation' :
+
+				this.val =
+					Visual.Relation.createFromJSON( this.val );
+
+				break;
+
+			default :
+
+				throw new Error( 'invalid val type: ' + this.val.type );
+		}
+
+//		this.val =
+//			meshverse.grow( this.val );
 	}
 
 	Jools.immute( this );

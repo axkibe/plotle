@@ -280,7 +280,10 @@ Peer.prototype.newNote =
 			},
 			{
 				path :
-					Path.empty.append( '$new' ),
+					Path
+					.empty
+					.append( 'twig' )
+					.append( '$new' ),
 				rank :
 					0
 			}
@@ -320,7 +323,10 @@ Peer.prototype.newPortal =
 			},
 			{
 				path :
-					Path.empty.append( '$new' ),
+					Path
+					.empty
+					.append( 'twig' )
+					.append( '$new' ),
 				rank :
 					0
 			}
@@ -449,7 +455,10 @@ Peer.prototype.newLabel =
 			},
 			{
 				path :
-					Path.empty.append( '$new' ),
+					Path
+					.empty
+					.append( 'twig' )
+					.append( '$new' ),
 				rank :
 					0
 			}
@@ -530,7 +539,10 @@ Peer.prototype.newRelation =
 			},
 			{
 				path :
-					Path.empty.append( '$new' ),
+					Path
+					.empty
+					.append( 'twig' )
+					.append( '$new' ),
 				rank :
 					0
 			}
@@ -777,17 +789,20 @@ Peer.prototype.removeItem =
 	)
 {
 	var
-		key =
-			path.get( -1 ),
+		key,
+		pivot,
+		r1;
 
-		pivot =
-			this._iface.get(
-				path.chop( 1 ),
-				-1
-			),
+	key =
+		path.get( -1 );
 
-		r1 =
-			pivot.rankOf( key );
+	pivot =
+		this._iface.get(
+			path.chop( 1 ).shorten( 2 )
+		);
+
+	r1 =
+		pivot.rankOf( key );
 
 	return (
 		this._iface.alter(
