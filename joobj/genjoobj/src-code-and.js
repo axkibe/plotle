@@ -54,7 +54,7 @@ Code.And =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 755538749 )
+/**/	if( tag !== 339527984 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -173,7 +173,7 @@ And.prototype.create =
 
 	return (
 		new And(
-			755538749,
+			339527984,
 			v_left,
 			v_right
 		)

@@ -95,6 +95,30 @@ var translateChange =
 		trg.path.splice( 0, 0, 'twig' );
 	}
 
+	if(
+		src.val
+		&&
+		src.val.type === 'Note'
+		&&
+		src.val.twig
+	)
+	{
+		console.log( 'Fixing malformed ' + src.val.type + ' src' );
+
+		if( src.val.twig.type !== src.val.type )
+		{
+			throw new Error( 'what the ?' );
+		}
+
+		for( var k in src.val.twig )
+		{
+			src.val[ k ] =
+				src.val.twig[ k ];
+		}
+
+		delete src.val.twig;
+	}
+
 	return chg;
 };
 

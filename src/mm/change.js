@@ -120,13 +120,10 @@ Jools.lazyValue(
 		var
 			is =
 				Jools.is,
-
 			src =
 				this.src,
-
 			trg =
 				this.trg,
-
 			type;
 
 		if( trg.proc === 'splice' )
@@ -377,6 +374,8 @@ Change.prototype.set =
 			'path',
 				trg.path
 		);
+
+//Jools.log( true, 'XXXSETXXX', 'TYPE\n', this.type, 'TREE\n', tree, 'SRC\n', src, 'TRG\n', trg );
 
 	// FIXME simplify
 	if( !Jools.is( trg.rank ) )

@@ -93,8 +93,10 @@ if( JOOBJ )
 
 
 var
-	Range =
-		Mark.Range;
+	Range;
+
+Range =
+	Mark.Range;
 
 /*
 | The begin or end path,

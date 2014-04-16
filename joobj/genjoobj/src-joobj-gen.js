@@ -51,7 +51,7 @@ Gen =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 240526434 )
+/**/	if( tag !== 497112019 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -143,7 +143,7 @@ Gen.prototype.create =
 
 	return (
 		new Gen(
-			240526434,
+			497112019,
 			v_joobj
 		)
 	);

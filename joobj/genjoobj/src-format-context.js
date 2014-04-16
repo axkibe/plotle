@@ -54,7 +54,7 @@ Context =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 985042159 )
+/**/	if( tag !== 353768414 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -269,7 +269,7 @@ Context.prototype.create =
 
 	return (
 		new Context(
-			985042159,
+			353768414,
 			v_check,
 			v_indent,
 			v_inline,

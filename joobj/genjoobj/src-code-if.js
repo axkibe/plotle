@@ -55,7 +55,7 @@ Code.If =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 437778983 )
+/**/	if( tag !== 216552332 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -196,12 +196,9 @@ If.prototype.create =
 /**/		throw new Error( 'attribute then must not be null.' );
 /**/	}
 /**/
-/**/	if( v_elsewise !== null )
+/**/	if( v_then.reflect !== 'Block' )
 /**/	{
-/**/		if( v_then.reflect !== 'Block' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
+/**/		throw new Error( 'type mismatch' );
 /**/	}
 /**/}
 
@@ -222,7 +219,7 @@ If.prototype.create =
 
 	return (
 		new If(
-			437778983,
+			216552332,
 			v_condition,
 			v_elsewise,
 			v_then

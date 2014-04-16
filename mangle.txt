@@ -101,7 +101,6 @@
 . _$font
 . _$fontWatch
 . _$formJockey
-. _$grown
 . _$hover
 . _$invert
 . _$lastSpecialKey

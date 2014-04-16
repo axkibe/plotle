@@ -53,7 +53,7 @@ Code.Fail =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 817753732 )
+/**/	if( tag !== 925929591 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -152,7 +152,7 @@ Fail.prototype.create =
 
 	return (
 		new Fail(
-			817753732,
+			925929591,
 			v_message
 		)
 	);

@@ -149,10 +149,9 @@ config.log  = {
 	ajax :
 		false,
 	change :
-//		true ||
 		false,
 	news :
-//		true ||
+		true ||
 		false,
 	debug :
 		true,

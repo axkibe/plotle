@@ -18,8 +18,7 @@ var
 */
 var
 	JoobjProto,
-	Jools,
-	Code;
+	Jools;
 
 
 /*
@@ -65,7 +64,7 @@ Code.Switch =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 185598981 )
+/**/	if( tag !== 9281630 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -103,6 +102,7 @@ Switch.prototype.create =
 	var
 		inherit,
 		key,
+		rank,
 		ranks,
 		twig,
 		twigDup,
@@ -239,6 +239,84 @@ Switch.prototype.create =
 
 				break;
 
+			case 'twig:insert' :
+
+				if( !twigDup )
+				{
+					twig =
+						Jools.copy(
+							twig
+						);
+
+					ranks =
+						ranks.slice( );
+
+					twigDup =
+						true;
+				}
+
+				key =
+					arg;
+
+				rank =
+					arguments[ a + 2 ];
+
+				arg =
+					arguments[ a + 3 ];
+
+				a += 2;
+
+				if( twig[ key ] !== undefined  )
+				{
+					throw new Error( 'key "' + key + '" already in use' );
+				}
+
+				if( rank < 0 || rank > ranks.length )
+				{
+					throw new Error( 'invalid rank' );
+				}
+
+				twig[ key ] =
+					arg;
+
+				ranks.splice(
+					rank,
+					0,
+					key
+				);
+
+				break;
+
+			case 'twig:remove' :
+
+				if( !twigDup )
+				{
+					twig =
+						Jools.copy(
+							twig
+						);
+
+					ranks =
+						ranks.slice( );
+
+					twigDup =
+						true;
+				}
+
+				if( twig[ arg ] === undefined  )
+				{
+					throw new Error( 'key "' + arg + '" not in use' );
+				}
+
+				delete twig[ arg ];
+
+				ranks.splice(
+					ranks.indexOf( arg ),
+					1
+				);
+
+				break;
+
 			default :
 
 /**/			if( CHECK )
@@ -279,12 +357,9 @@ Switch.prototype.create =
 /**/		throw new Error( 'attribute statement must not be null.' );
 /**/	}
 /**/
-/**/	if( v_defaultCase !== null )
+/**/	if( v_statement.reflect !== 'Term' )
 /**/	{
-/**/		if( v_statement.reflect !== 'Term' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
+/**/		throw new Error( 'type mismatch' );
 /**/	}
 /**/}
 
@@ -305,7 +380,7 @@ Switch.prototype.create =
 
 	return (
 		new Switch(
-			185598981,
+			9281630,
 			twig,
 			ranks,
 			v_defaultCase,
@@ -341,6 +416,20 @@ Switch.prototype.getPath =
 */
 Switch.prototype.atRank =
 	JoobjProto.atRank;
+
+
+/*
+| Gets the rank of a key.
+*/
+Switch.prototype.rankOf =
+	JoobjProto.rankOf;
+
+
+/*
+| Creates a new unique identifier.
+*/
+Switch.prototype.newUID =
+	JoobjProto.newUID;
 
 
 /*
