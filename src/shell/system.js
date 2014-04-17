@@ -122,9 +122,7 @@ var System =
 {
 	if( system )
 	{
-		throw new Error(
-			CHECK && 'System not a singleton'
-		);
+		throw new Error( );
 	}
 
 	_canvas =
@@ -559,6 +557,9 @@ System.prototype._blink =
 System.prototype._onAtweenTime =
 	function( )
 {
+	var
+		atween,
+		cursor;
 
 /**/if( CHECK )
 /**/{
@@ -573,16 +574,11 @@ System.prototype._onAtweenTime =
 /**/	}
 /**/}
 
-	var
-		atween =
-			this._$atween;
+	atween =
+		this._$atween;
 
 	_pointingState =
 		'drag';
-
-	var
-		cursor =
-			null;
 
 	shell.dragStart(
 		atween.pos,
@@ -961,25 +957,26 @@ System.prototype._onMouseMove =
 	)
 {
 	var
-		canvas =
-			_canvas,
+		atween,
+		ctrl,
+		cursor,
+		dragbox,
+		p,
+		shift;
 
-		p =
-			Euclid.Point.create(
-				'x',
-					event.pageX - canvas.offsetLeft,
-				'y',
-					event.pageY - canvas.offsetTop
-			),
-
-		shift =
-			event.shiftKey,
-
-		ctrl =
-			event.ctrlKey || event.metaKey,
-
-		cursor =
-			null;
+	p =
+		Euclid.Point.create(
+			'x',
+				event.pageX - _canvas.offsetLeft,
+			'y',
+				event.pageY - _canvas.offsetTop
+		);
+	shift =
+		event.shiftKey;
+	ctrl =
+		event.ctrlKey || event.metaKey;
+	cursor =
+		null;
 
 	switch( _pointingState )
 	{
@@ -995,10 +992,10 @@ System.prototype._onMouseMove =
 
 		case 'atween' :
 
-			var dragbox =
+			dragbox =
 				_settings.dragbox;
 
-			var atween =
+			atween =
 				this._$atween;
 
 			if(
@@ -1050,15 +1047,14 @@ System.prototype._onMouseMove =
 			break;
 
 		default :
-			throw new Error(
-				CHECK && 'invalid pointingState'
-			);
+
+			throw new Error( );
 
 	}
 
 	if( cursor !== null )
 	{
-		canvas.style.cursor =
+		_canvas.style.cursor =
 			cursor;
 	}
 
@@ -1074,27 +1070,27 @@ System.prototype._onMouseUp =
 		event
 	)
 {
+	var
+		atween,
+		ctrl,
+		p,
+		shift;
+
 	event.preventDefault( );
 
 	this._releaseEvents( );
 
-	var
-		canvas =
-			_canvas,
-
-		p =
-			Euclid.Point.create(
-				'x',
-					event.pageX - canvas.offsetLeft,
-				'y',
-					event.pageY - canvas.offsetTop
-			),
-
-		shift =
-			event.shiftKey,
-
-		ctrl =
-			event.ctrlKey || event.metaKey;
+	p =
+		Euclid.Point.create(
+			'x',
+				event.pageX - _canvas.offsetLeft,
+			'y',
+				event.pageY - _canvas.offsetTop
+		);
+	shift =
+		event.shiftKey;
+	ctrl =
+		event.ctrlKey || event.metaKey;
 
 	switch( _pointingState )
 	{
@@ -1106,7 +1102,7 @@ System.prototype._onMouseUp =
 
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
-			var atween =
+			atween =
 				this._$atween;
 
 			clearTimeout( atween.timer );
@@ -1156,9 +1152,7 @@ System.prototype._onMouseUp =
 
 		default :
 
-			throw new Error(
-				CHECK && 'invalid pointingState'
-			);
+			throw new Error( );
 	}
 
 	return false;
@@ -1174,15 +1168,12 @@ System.prototype._onMouseWheel =
 	)
 {
 	var
-		canvas =
-			_canvas,
-
 		p =
 			Euclid.Point.create(
 				'x',
-					event.pageX - canvas.offsetLeft,
+					event.pageX - _canvas.offsetLeft,
 				'y',
-					event.pageY - canvas.offsetTop
+					event.pageY - _canvas.offsetTop
 			);
 
 	var dir;
@@ -1233,15 +1224,12 @@ System.prototype._onTouchStart =
 	}
 
 	var
-		canvas =
-			_canvas,
-
 		p =
 			Euclid.Point.create(
 				'x',
-					event.pageX - canvas.offsetLeft,
+					event.pageX - _canvas.offsetLeft,
 				'y',
-					event.pageY - canvas.offsetTop
+					event.pageY - _canvas.offsetTop
 			),
 
 		shift =
@@ -1295,15 +1283,12 @@ System.prototype._onTouchMove =
 	}
 
 	var
-		canvas =
-			_canvas,
-
 		p =
 			Euclid.Point.create(
 				'x',
-					event.pageX - canvas.offsetLeft,
+					event.pageX - _canvas.offsetLeft,
 				'y',
-					event.pageY - canvas.offsetTop
+					event.pageY - _canvas.offsetTop
 			),
 
 		shift =
@@ -1387,9 +1372,7 @@ System.prototype._onTouchMove =
 
 		default :
 
-			throw new Error(
-				CHECK && 'invalid pointingState'
-			);
+			throw new Error( );
 
 	}
 
@@ -1414,17 +1397,14 @@ System.prototype._onTouchEnd =
 	this._releaseEvents( );
 
 	var
-		canvas =
-			_canvas,
-
 		p =
 			Euclid.Point.create(
 				'x',
 					event.changedTouches[ 0 ].pageX -
-					canvas.offsetLeft,
+					_canvas.offsetLeft,
 				'y',
 					event.changedTouches[ 0 ].pageY -
-					canvas.offsetTop
+					_canvas.offsetTop
 			),
 
 		shift =
@@ -1493,9 +1473,7 @@ System.prototype._onTouchEnd =
 
 		default :
 
-			throw new Error(
-				CHECK && 'invalid pointingState'
-			);
+			throw new Error( );
 	}
 
 	return false;
@@ -1517,7 +1495,6 @@ System.prototype._releaseEvents =
 
 	document.onmouseup =
 		null;
-
 	document.onmousemove =
 		null;
 };

@@ -22,63 +22,48 @@
 if( JOOBJ )
 {
 	return {
-
 		name :
 			'CreateGeneric',
-
 		unit :
 			'Action',
-
 		subclass :
 			'Action.Action',
-
 		equals :
 			'primitive',
-
 		attributes :
 			{
 				itemType :
 					{
 						comment :
 							'item type to be created',
-
 						// FIXME make list of possibilities
 						type :
 							'String'
 					},
-
 				transItem :
 					{
 						comment :
 							'the transient item in creation',
-
 						type :
 							'Item',
-
 						allowsNull :
 							true
 					},
-
 				model :
 					{
 						comment :
 							'a transient item used as model',
-
 						type :
 							'Item',
-
 						allowsNull :
 							true
 					},
-
 				start :
 					{
 						comment :
 							'mouse down point on drag creation',
-
 						type :
 							'Point',
-
 						allowsNull :
 							true
 					}

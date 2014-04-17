@@ -375,8 +375,6 @@ Change.prototype.set =
 				trg.path
 		);
 
-//Jools.log( true, 'XXXSETXXX', 'TYPE\n', this.type, 'TREE\n', tree, 'SRC\n', src, 'TRG\n', trg );
-
 	// FIXME simplify
 	if( !Jools.is( trg.rank ) )
 	{

@@ -487,7 +487,6 @@ Server.prototype.loadSpace =
 		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
-//Jools.log( true, 'XXX', 'CID', o._id );
 		if( o._id !== space.$seqZ )
 		{
 			throw new Error( 'sequence mismatch' );

@@ -241,11 +241,37 @@ Jockey.concernsMark =
 */
 Jockey.prototype.dragStart =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
+	var
+		bubble;
+
+	bubble =
+		this.twig.MainDisc.dragStart(
+			p,
+			shift,
+			ctrl
+		);
+
+	if( bubble !== null )
+	{
+		return bubble;
+	}
+
+	if( this.mode === 'Create' )
+	{
+		return (
+			this.twig.CreateDisc.dragStart(
+				p,
+				shift,
+				ctrl
+			)
+		);
+	}
+
 	return null;
 };
 
@@ -278,12 +304,14 @@ Jockey.prototype.pointingHover =
 	)
 {
 	var
-		hover =
-			this.twig.MainDisc.pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+		hover;
+
+	hover =
+		this.twig.MainDisc.pointingHover(
+			p,
+			shift,
+			ctrl
+		);
 
 	if( hover !== null )
 	{
@@ -328,12 +356,14 @@ Jockey.prototype.click =
 	)
 {
 	var
-		start =
-			this.twig.MainDisc.click(
-				p,
-				shift,
-				ctrl
-			);
+		start;
+
+	start =
+		this.twig.MainDisc.click(
+			p,
+			shift,
+			ctrl
+		);
 
 	if( start !== null )
 	{

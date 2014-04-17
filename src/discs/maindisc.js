@@ -515,6 +515,10 @@ MainDisc.prototype.click =
 		ctrl
 	)
 {
+	var
+		fabric,
+		pp;
+
 	// shortcut if p is not near the panel
 	if(
 		!this.frame.within(
@@ -526,12 +530,11 @@ MainDisc.prototype.click =
 		return null;
 	}
 
-	var
-		fabric =
-			this._fabric,
+	fabric =
+		this._fabric;
 
-		pp =
-			p.sub( this.frame.pnw );
+	pp =
+		p.sub( this.frame.pnw );
 
 	if(
 		!fabric.withinSketch(
@@ -602,12 +605,35 @@ MainDisc.prototype.specialKey =
 */
 MainDisc.prototype.dragStart =
 	function(
-		// p,
+		p
 		// shift,
 		// ctrl
 	)
 {
-	return null;
+	// shortcut if p is not near the panel
+	if(
+		!this.frame.within(
+			null,
+			p
+		)
+	)
+	{
+		return null;
+	}
+
+	if(
+		!this._fabric.withinSketch(
+			this.silhoutte,
+			'sketch',
+			Euclid.View.proper,
+			p.sub( this.frame.pnw )
+		)
+	)
+	{
+		return null;
+	}
+
+	return true;
 };
 
 

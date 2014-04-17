@@ -593,6 +593,43 @@ CreateDisc.prototype.specialKey =
 
 
 /*
+| Start of a dragging operation.
+*/
+CreateDisc.prototype.dragStart =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
+{
+	// shortcut if p is not near the panel
+	if(
+		!this.frame.within(
+			null,
+			p
+		)
+	)
+	{
+		return null;
+	}
+
+	if(
+		!this._fabric.withinSketch(
+			this.silhoutte,
+			'sketch',
+			Euclid.View.proper,
+			p.sub( this.frame.pnw )
+		)
+	)
+	{
+		return null;
+	}
+
+	return true;
+};
+
+
+/*
 | Returns true if the button called 'wname'
 | should be highlighted for current 'action'
 */

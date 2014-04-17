@@ -2,8 +2,6 @@
 | A text range.
 |
 | Authors: Axel Kittenberger
-|
-| XXX TODO DocTree
 */
 
 

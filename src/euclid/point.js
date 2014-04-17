@@ -80,27 +80,10 @@ if( SERVER )
 
 
 var
-	Point =
-		Euclid.Point;
+	Point;
 
-/*
-| Returns true if this point is equal to another.
-*/
-Point.prototype.equals =
-	function(
-		p
-	)
-{
-	return (
-		this === p
-		||
-		(
-			this.x === p.x
-			&&
-			this.y === p.y
-		)
-	);
-};
+Point =
+	Euclid.Point;
 
 
 /*
@@ -112,7 +95,7 @@ Point.prototype.add =
 		a2
 	)
 {
-	if( typeof(a1) === 'object' )
+	if( typeof( a1 ) === 'object' )
 	{
 		if( a1.x === 0 && a1.y === 0 )
 		{

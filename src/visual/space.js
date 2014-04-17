@@ -1195,6 +1195,10 @@ Space.prototype.dragStop =
 
 			break;
 
+		case 'None' :
+
+			break;
+
 		case 'Pan' :
 
 			shell.setAction(
@@ -1380,16 +1384,15 @@ Space.prototype.dragMove =
 		pd,
 		r,
 		rZ,
-		resized;
+		resized,
+		zone;
 
 	action =
 		shell.action;
-
-	view =
-		this.view;
-
 	transItem =
 		null;
+	view =
+		this.view;
 
 	switch( action.reflect )
 	{
@@ -1397,13 +1400,11 @@ Space.prototype.dragMove =
 
 			model =
 				action.model;
-
-			var
-				zone =
-					Euclid.Rect.createArbitrary(
-						view.depoint( action.start ),
-						view.depoint( p )
-					);
+			zone =
+				Euclid.Rect.createArbitrary(
+					view.depoint( action.start ),
+					view.depoint( p )
+				);
 
 			switch( model.positioning )
 			{
@@ -1513,6 +1514,10 @@ Space.prototype.dragMove =
 					return 'pointer';
 				}
 			}
+
+			return 'pointer';
+
+		case 'None' :
 
 			return 'pointer';
 

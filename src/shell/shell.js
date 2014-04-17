@@ -11,7 +11,6 @@
 var
 	shell =
 		null,
-
 	Shell =
 		null;
 
@@ -624,15 +623,18 @@ Shell.prototype.click =
 	)
 {
 	var
-		display =
-			this._getCurrentDisplay( ),
+		click,
+		display;
 
-		click =
-			this._$discJockey.click(
-				p,
-				shift,
-				ctrl
-			);
+	display =
+		this._getCurrentDisplay( ),
+
+	click =
+		this._$discJockey.click(
+			p,
+			shift,
+			ctrl
+		);
 
 	if( click === null )
 	{
@@ -796,15 +798,17 @@ Shell.prototype.dragStart =
 	)
 {
 	var
-		cursor =
-			null,
+		bubble,
+		display;
 
-		display =
-			this._getCurrentDisplay( );
+	bubble =
+		null;
+	display =
+		this._getCurrentDisplay( );
 
 	if( display && display.showDisc )
 	{
-		cursor =
+		bubble =
 			this._$discJockey.dragStart(
 				p,
 				shift,
@@ -812,11 +816,11 @@ Shell.prototype.dragStart =
 			);
 	}
 
-	if( cursor === null )
+	if( bubble === null )
 	{
 		if( display )
 		{
-			cursor =
+			bubble =
 				display.dragStart(
 					p,
 					shift,
@@ -829,8 +833,6 @@ Shell.prototype.dragStart =
 	{
 		this._draw( );
 	}
-
-	return cursor;
 };
 
 
@@ -845,8 +847,12 @@ Shell.prototype.dragMove =
 	)
 {
 	var
-		action =
-			this.action;
+		action,
+		cursor,
+		display;
+
+	action =
+		this.action;
 
 	if( !action )
 	{
@@ -855,11 +861,10 @@ Shell.prototype.dragMove =
 		);
 	}
 
-	var
-		cursor =
-			null,
-		display =
-			this._getCurrentDisplay( );
+	cursor =
+		null;
+	display =
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
