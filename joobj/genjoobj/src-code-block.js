@@ -73,7 +73,7 @@ Code.Block =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 598117823 )
+/**/	if( tag !== 106183175 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -99,8 +99,8 @@ Code.Block =
 /*
 | Creates a new Block object.
 */
-Block.create =
-Block.prototype.create =
+Block.Create =
+Block.prototype.Create =
 	function(
 		// free strings
 	)
@@ -353,7 +353,7 @@ Block.prototype.create =
 
 	return (
 		new Block(
-			598117823,
+			106183175,
 			twig,
 			ranks,
 			v_path

@@ -95,7 +95,7 @@ var
 /*
 | Creates a rect by two arbitrary corner points
 */
-Rect.createArbitrary =
+Rect.CreateArbitrary =
 	function(
 		p1,
 		p2
@@ -113,7 +113,6 @@ Rect.createArbitrary =
 	{
 		pnw =
 			p1;
-
 		pse =
 			p2;
 	}
@@ -124,7 +123,6 @@ Rect.createArbitrary =
 	{
 		pnw =
 			p2;
-
 		pse =
 			p1;
 	}
@@ -134,10 +132,9 @@ Rect.createArbitrary =
 	)
 	{
 		pnw =
-			Euclid.Point.create( 'x', p1.x, 'y', p2.y );
-
+			Euclid.Point.Create( 'x', p1.x, 'y', p2.y );
 		pse =
-			Euclid.Point.create( 'x', p2.x, 'y', p1.y );
+			Euclid.Point.Create( 'x', p2.x, 'y', p1.y );
 	}
 	else if (
 		p1.x >= p2.x &&
@@ -145,10 +142,9 @@ Rect.createArbitrary =
 	)
 	{
 		pnw =
-			Euclid.Point.create( 'x', p2.x, 'y', p1.y );
-
+			Euclid.Point.Create( 'x', p2.x, 'y', p1.y );
 		pse =
-			Euclid.Point.create( 'x', p1.x, 'y', p2.y );
+			Euclid.Point.Create( 'x', p1.x, 'y', p2.y );
 	}
 	else
 	{
@@ -160,7 +156,7 @@ Rect.createArbitrary =
 	}
 
 	return (
-		Rect.create(
+		Rect.Create(
 			'pnw',
 				pnw,
 			'pse',
@@ -214,7 +210,7 @@ Jools.lazyValue(
 		else
 		{
 			return (
-				Rect.create(
+				Rect.Create(
 					'pnw',
 						Euclid.Point.zero,
 					'pse',
@@ -234,7 +230,7 @@ Rect.prototype.computeEllipse =
 		model
 	)
 {
-	return Euclid.Ellipse.create(
+	return Euclid.Ellipse.Create(
 		'pnw',
 			model.pnw.compute( this ),
 		'pse',
@@ -259,7 +255,7 @@ Rect.prototype.reduce =
 	// allows margins to reduce the rect to zero size without erroring.
 
 	return (
-		Rect.create(
+		Rect.Create(
 			'pnw',
 				Euclid.Point.renew(
 					this.pnw.x + margin.e,
@@ -501,7 +497,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					Jools.half( this.pse.x + this.pnw.x ),
 				'y',
@@ -521,7 +517,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					Jools.half( this.pse.x + this.pnw.x ),
 				'y',
@@ -541,7 +537,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					this.pnw.x,
 				'y',
@@ -561,7 +557,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					this.pse.x,
 				'y',
@@ -585,7 +581,7 @@ Rect.prototype.add =
 	)
 {
 	return (
-		Rect.create(
+		Rect.Create(
 			'pnw',
 				this.pnw.add( a1, a2 ),
 			'pse',
@@ -690,17 +686,17 @@ Rect.renew =
 	if( !pnw )
 	{
 		pnw =
-			Euclid.Point.create( 'x', wx, 'y', ny );
+			Euclid.Point.Create( 'x', wx, 'y', ny );
 	}
 
 	if( !pse )
 	{
 		pse =
-			Euclid.Point.create( 'x', ex, 'y', sy );
+			Euclid.Point.Create( 'x', ex, 'y', sy );
 	}
 
 	return (
-		Rect.create(
+		Rect.Create(
 			'pnw',
 				pnw,
 			'pse',
@@ -723,7 +719,7 @@ Rect.prototype.sub =
 	)
 {
 	return (
-		Rect.create(
+		Rect.Create(
 			'pnw',
 				this.pnw.sub( a1, a2 ),
 			'pse',
@@ -882,7 +878,7 @@ Rect.prototype.getProjection =
 
 		if ( x >= wx && x <= ex )
 		{
-			return Euclid.Point.create( 'x', x, 'y', ny );
+			return Euclid.Point.Create( 'x', x, 'y', ny );
 		}
 	}
 
@@ -893,7 +889,7 @@ Rect.prototype.getProjection =
 
 		if( x >= wx && x <= ex )
 		{
-			return Euclid.Point.create( 'x', x, 'y', sy );
+			return Euclid.Point.Create( 'x', x, 'y', sy );
 		}
 	}
 
@@ -904,7 +900,7 @@ Rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return Euclid.Point.create( 'x', ex, 'y', y );
+			return Euclid.Point.Create( 'x', ex, 'y', y );
 		}
 	}
 
@@ -915,7 +911,7 @@ Rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return Euclid.Point.create( 'x', wx, 'y', y );
+			return Euclid.Point.Create( 'x', wx, 'y', y );
 		}
 	}
 

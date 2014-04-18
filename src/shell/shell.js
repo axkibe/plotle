@@ -116,7 +116,7 @@ Shell =
 			document.createElement( 'canvas' );
 
 	swatch =
-		Euclid.Fabric.create(
+		Euclid.Fabric.Create(
 			'canvas',
 				canvas
 		);
@@ -142,7 +142,7 @@ Shell =
 		null;
 
 	this.$action =
-		Action.None.create( );
+		Action.None.Create( );
 
 	this._$mode =
 		'Normal';
@@ -154,7 +154,7 @@ Shell =
 	var
 		view =
 		this.$view =
-			Euclid.View.create(
+			Euclid.View.Create(
 				'pan',
 					Euclid.Point.zero,
 				'fact',
@@ -166,11 +166,11 @@ Shell =
 			);
 
 	this._$formJockey =
-		Forms.Jockey.create(
+		Forms.Jockey.Create(
 			'hover',
 				Path.empty,
 			'mark',
-				Mark.Vacant.create( ),
+				Mark.Vacant.Create( ),
 			'path',
 				Path.empty.append( 'forms' ),
 			'view',
@@ -202,15 +202,15 @@ Shell =
 		);
 
 	this._$discJockey =
-		Discs.Jockey.create(
+		Discs.Jockey.Create(
 			'access',
 				'',
 			'action',
-				Action.None.create( ),
+				Action.None.Create( ),
 			'hover',
 				Path.empty,
 			'mark',
-				Mark.Vacant.create( ),
+				Mark.Vacant.Create( ),
 			'mode',
 				this._$mode,
 			'path',
@@ -226,7 +226,7 @@ Shell =
 		);
 
 	this.mark =
-		Mark.Vacant.create( );
+		Mark.Vacant.Create( );
 
 	this._draw( );
 };
@@ -300,7 +300,7 @@ Shell.prototype.setMode =
 		mode;
 
 	this._$discJockey =
-		this._$discJockey.create(
+		this._$discJockey.Create(
 			'mode',
 				mode
 		);
@@ -357,7 +357,7 @@ Shell.prototype.setAction =
 		action;
 
 	this._$discJockey =
-		this._$discJockey.create(
+		this._$discJockey.Create(
 			'action',
 				action
 		);
@@ -396,7 +396,7 @@ Shell.prototype.update =
 			{
 				// the item holding the caret was removed
 				mark =
-					Mark.Vacant.create( );
+					Mark.Vacant.Create( );
 			}
 			else
 			{
@@ -418,7 +418,7 @@ Shell.prototype.update =
 				//   keeping retainx might not be correct
 				//   in some cases
 				mark =
-					Mark.Caret.create(
+					Mark.Caret.Create(
 						'path',
 							sign.path.prepend( 'space' ),
 						'at',
@@ -439,7 +439,7 @@ Shell.prototype.update =
 			{
 				// the item holding the caret was removed
 				mark =
-					Mark.Vacant.create( );
+					Mark.Vacant.Create( );
 			}
 
 			break;
@@ -453,7 +453,7 @@ Shell.prototype.update =
 			if( item === undefined )
 			{
 				mark =
-					Mark.Vacant.create( );
+					Mark.Vacant.Create( );
 			}
 			else
 			{
@@ -490,7 +490,7 @@ Shell.prototype.update =
 				)
 				{
 					mark =
-						Mark.Caret.create(
+						Mark.Caret.Create(
 							'path',
 								bSign.path.prepend( 'space' ),
 							'at',
@@ -502,7 +502,7 @@ Shell.prototype.update =
 				else
 				{
 					mark =
-						Mark.Range.create(
+						Mark.Range.Create(
 							'doc',
 								item.doc,
 							'bPath',
@@ -525,7 +525,7 @@ Shell.prototype.update =
 
 	// FIXME let the iface do the real stuff
 	this.$space =
-		space.create(
+		space.Create(
 			'spaceUser',
 				this.$space.spaceUser,
 			'spaceTag',
@@ -543,7 +543,7 @@ Shell.prototype.update =
 		);
 
 	this._$discJockey =
-		this._$discJockey.create(
+		this._$discJockey.Create(
 			'mark',
 				mark
 		);
@@ -565,7 +565,7 @@ Shell.prototype.setFocus =
 		case 'Caret' :
 
 			this.setMark(
-				this.mark.create(
+				this.mark.Create(
 					'focus',
 						focus
 				)
@@ -985,19 +985,19 @@ Shell.prototype.setMark =
 		mark;
 
 	this.$space =
-		this.$space.create(
+		this.$space.Create(
 			'mark',
 				mark
 		);
 
 	this._$formJockey =
-		this._$formJockey.create(
+		this._$formJockey.Create(
 			'mark',
 				mark
 		);
 
 	this._$discJockey =
-		this._$discJockey.create(
+		this._$discJockey.Create(
 			'mark',
 				mark
 		);
@@ -1068,7 +1068,7 @@ Shell.prototype._setHover =
 	}
 
 	this._$discJockey =
-		this._$discJockey.create(
+		this._$discJockey.Create(
 			// FIXME make concernsHover
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'discs' ?
@@ -1078,7 +1078,7 @@ Shell.prototype._setHover =
 		);
 
 	this._$formJockey =
-		this._$formJockey.create(
+		this._$formJockey.Create(
 			'hover',
 				// FIXME make a concernsHover
 				path.isEmpty || path.get( 0 ) !== 'forms' ?
@@ -1088,7 +1088,7 @@ Shell.prototype._setHover =
 		);
 
 	this.$space =
-		this.$space.create(
+		this.$space.Create(
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'space' ?
 					Path.empty
@@ -1124,7 +1124,7 @@ Shell.prototype.setTraits =
 	}
 
 	this.$space =
-		this.$space.create(
+		this.$space.Create(
 			'traitSet',
 				traitSet
 		);
@@ -1263,7 +1263,7 @@ Shell.prototype.resize =
 		fabric;
 
 	this.setView(
-		this.$view.create(
+		this.$view.Create(
 			'height',
 				fabric.height,
 			'width',
@@ -1336,13 +1336,13 @@ Shell.prototype.setUser =
 		username;
 
 	this._$discJockey =
-		this._$discJockey.create(
+		this._$discJockey.Create(
 			'username',
 				username
 		);
 
 	this._$formJockey =
-		this._$formJockey.create(
+		this._$formJockey.Create(
 			'username',
 				username
 		);
@@ -1363,20 +1363,20 @@ Shell.prototype.setView =
 	if( this.$space )
 	{
 		this.$space =
-			this.$space.create(
+			this.$space.Create(
 				'view',
 					view
 			);
 	}
 
 	this._$discJockey =
-		this._$discJockey.create(
+		this._$discJockey.Create(
 			'view',
 				view
 		);
 
 	this._$formJockey =
-		this._$formJockey.create(
+		this._$formJockey.Create(
 			'view',
 				view
 		);
@@ -1494,7 +1494,7 @@ Shell.prototype.onAquireSpace =
 				this._$formJockey.get( 'NoAccessToSpace' ).path;
 
 			this._$formJockey =
-				this._$formJockey.create(
+				this._$formJockey.Create(
 					'spaceUser',
 						asw.spaceUser,
 					'spaceTag',
@@ -1539,7 +1539,7 @@ Shell.prototype.onAquireSpace =
 		asw.access;
 
 	this.$space =
-		asw.space.create(
+		asw.space.Create(
 			'spaceUser',
 				spaceUser,
 			'spaceTag',
@@ -1549,11 +1549,11 @@ Shell.prototype.onAquireSpace =
 			'hover',
 				Path.empty,
 			'mark',
-				Mark.Vacant.create( ),
+				Mark.Vacant.Create( ),
 			'path',
 				Path.empty.append( 'space' ),
 			'view',
-				Euclid.View.create(
+				Euclid.View.Create(
 					'fact',
 						0,
 					'height',
@@ -1670,7 +1670,7 @@ Shell.prototype.arrivedAtSpace =
 	)
 {
 	this._$discJockey =
-		this._$discJockey.create(
+		this._$discJockey.Create(
 			'access',
 				access,
 			'spaceUser',
@@ -1680,7 +1680,7 @@ Shell.prototype.arrivedAtSpace =
 		);
 
 	this._$formJockey =
-		this._$formJockey.create(
+		this._$formJockey.Create(
 			'spaceUser',
 				spaceUser,
 			'spaceTag',

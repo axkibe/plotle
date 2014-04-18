@@ -64,16 +64,16 @@ var
 | Layout
 */
 Gruga.NonExistingSpace =
-	Forms.NonExistingSpace.create(
+	Forms.NonExistingSpace.Create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'',
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -84,13 +84,13 @@ Gruga.NonExistingSpace =
 			),
 		'twig:add',
 		'message1',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'Do you want to create it?',
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 								'c',
 						'x',
@@ -101,13 +101,13 @@ Gruga.NonExistingSpace =
 			),
 		'twig:add',
 		'noButton',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -116,7 +116,7 @@ Gruga.NonExistingSpace =
 									noButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -138,13 +138,13 @@ Gruga.NonExistingSpace =
 			),
 		'twig:add',
 		'yesButton',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -153,7 +153,7 @@ Gruga.NonExistingSpace =
 									yesButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',

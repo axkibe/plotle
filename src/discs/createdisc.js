@@ -226,7 +226,7 @@ CreateDisc.prototype._init =
 		}
 
 		twig[ wname ] =
-			twig[ wname ].create(
+			twig[ wname ].Create(
 				'path',
 					path,
 				'superFrame',
@@ -255,7 +255,7 @@ Jools.lazyValue(
 	{
 		var
 			fabric =
-				Euclid.Fabric.create(
+				Euclid.Fabric.Create(
 					'width',
 						this.style.width,
 					'height',
@@ -319,7 +319,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreateLabel' :
 
 			shell.setAction(
-				Action.CreateGeneric.create(
+				Action.CreateGeneric.Create(
 					'itemType',
 						'Label',
 					'model',
@@ -336,7 +336,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreateNote' :
 
 			shell.setAction(
-				Action.CreateGeneric.create(
+				Action.CreateGeneric.Create(
 					'itemType',
 						'Note',
 					'model',
@@ -353,7 +353,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreatePortal' :
 
 			shell.setAction(
-				Action.CreateGeneric.create(
+				Action.CreateGeneric.Create(
 					'itemType',
 						'Portal',
 					'model',
@@ -370,7 +370,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreateRelation' :
 
 			shell.setAction(
-				Action.CreateRelation.create(
+				Action.CreateRelation.Create(
 					'fromItemPath',
 						Path.empty,
 					'relationState',

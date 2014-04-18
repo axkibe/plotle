@@ -490,7 +490,7 @@ IFace.prototype.aquireSpace =
 
 		self.$cSpace =
 		self.$rSpace =
-			Visual.Space.createFromJSON( asw.node );
+			Visual.Space.CreateFromJSON( asw.node );
 		self.$spaceUser =
 			spaceUser;
 		self.$spaceTag =

@@ -194,7 +194,7 @@ Label.prototype._init =
 
 	doc =
 	this.doc =
-		this.doc.create(
+		this.doc.Create(
 			'flowWidth',
 				0,
 			'fontsize',
@@ -216,7 +216,7 @@ Label.prototype._init =
 		this.pnw;
 
 	this.zone =
-		Euclid.Rect.create(
+		Euclid.Rect.Create(
 			'pnw',
 				pnw,
 			'pse',
@@ -301,7 +301,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Rect.create(
+			Euclid.Rect.Create(
 				'pnw',
 					this.zone.pnw,
 				'pse',
@@ -325,11 +325,11 @@ Jools.lazyValue(
 				this.zone;
 
 		return (
-			Euclid.Rect.create(
+			Euclid.Rect.Create(
 				'pnw',
 					Euclid.Point.zero,
 				'pse',
-					Euclid.Point.create(
+					Euclid.Point.Create(
 						'x',
 							Math.max( zone.width  - 1, 0 ),
 						'y',
@@ -418,7 +418,7 @@ Jools.lazyValue(
 			this.view.rect( this.zone );
 
 		f =
-			Euclid.Fabric.create(
+			Euclid.Fabric.Create(
 				'width',
 					vzone.width,
 				'height',

@@ -52,16 +52,16 @@ var closeButton =
 | Layout
 */
 Gruga.User =
-	Forms.User.create(
+	Forms.User.Create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'Hello',
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -72,13 +72,13 @@ Gruga.User =
 			),
 		'twig:add',
 		'visitor1',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'You\'re currently an anonymous visitor!',
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -89,7 +89,7 @@ Gruga.User =
 			),
 		'twig:add',
 		'visitor2',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'Click on "sign up" or "log in"',
 				'font',
@@ -99,13 +99,13 @@ Gruga.User =
 			),
 		'twig:add',
 		'visitor3',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'on the control disc to the left',
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -116,13 +116,13 @@ Gruga.User =
 			),
 		'twig:add',
 		'visitor4',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'to register as an user.',
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -133,13 +133,13 @@ Gruga.User =
 			),
 		'twig:add',
 		'greeting1',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'This is your profile page!',
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -150,13 +150,13 @@ Gruga.User =
 			),
 		'twig:add',
 		'greeting2',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'In future you will be able to do stuff here,',
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -167,13 +167,13 @@ Gruga.User =
 			),
 		'twig:add',
 		'greeting3',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'like for example change your password.',
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -184,13 +184,13 @@ Gruga.User =
 			),
 		'twig:add',
 		'closeButton',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -199,7 +199,7 @@ Gruga.User =
 									closeButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',

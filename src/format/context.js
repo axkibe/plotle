@@ -146,7 +146,7 @@ Jools.lazyValue(
 				this.IncSame,
 
 			inc =
-				incSame.create(
+				incSame.Create(
 					'root',
 						false
 				);
@@ -166,11 +166,13 @@ Jools.lazyValue(
 	function( )
 	{
 		var
-			inc =
-				this.create(
-					'indent',
-						this.indent + 1
-				);
+			inc;
+			
+		inc =
+			this.Create(
+				'indent',
+					this.indent + 1
+			);
 
 		Jools.aheadValue(
 			inc,
@@ -201,11 +203,13 @@ Jools.lazyValue(
 		// zero indent its not the root context
 
 		var
-			dec =
-				this.create(
-					'indent',
-						this.indent - 1
-				);
+			dec;
+
+		dec =
+			this.Create(
+				'indent',
+					this.indent - 1
+			);
 
 		Jools.aheadValue(
 			dec,
@@ -232,7 +236,7 @@ Jools.lazyValue(
 		}
 
 		return (
-			this.create(
+			this.Create(
 				'inline',
 					true
 			)

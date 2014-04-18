@@ -54,16 +54,16 @@ var
 | Layout
 */
 Gruga.Welcome =
-	Forms.Welcome.create(
+	Forms.Welcome.Create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'Welcome',
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -74,13 +74,13 @@ Gruga.Welcome =
 			),
 		'twig:add',
 		'message1',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'Your registration was successful :-)',
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -91,13 +91,13 @@ Gruga.Welcome =
 			),
 		'twig:add',
 		'closeButton',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -106,7 +106,7 @@ Gruga.Welcome =
 									closeButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',

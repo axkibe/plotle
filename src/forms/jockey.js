@@ -171,7 +171,7 @@ Jockey.prototype._init =
 		}
 
 		this.twig[ name ] =
-			form.create(
+			form.Create(
 				'hover',
 					this.hover,
 				'mark',
@@ -219,7 +219,7 @@ Jockey.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.create( );
+		return Mark.Vacant.Create( );
 	}
 };
 

@@ -53,7 +53,7 @@ Code.New =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 100475993 )
+/**/	if( tag !== 501581984 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -69,8 +69,8 @@ Code.New =
 /*
 | Creates a new New object.
 */
-New.create =
-New.prototype.create =
+New.Create =
+New.prototype.Create =
 	function(
 		// free strings
 	)
@@ -150,7 +150,7 @@ New.prototype.create =
 
 	return (
 		new New(
-			100475993,
+			501581984,
 			v_call
 		)
 	);

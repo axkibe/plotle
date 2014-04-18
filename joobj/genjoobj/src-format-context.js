@@ -54,7 +54,7 @@ Context =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 353768414 )
+/**/	if( tag !== 148592857 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -79,8 +79,8 @@ Context =
 /*
 | Creates a new Context object.
 */
-Context.create =
-Context.prototype.create =
+Context.Create =
+Context.prototype.Create =
 	function(
 		// free strings
 	)
@@ -269,7 +269,7 @@ Context.prototype.create =
 
 	return (
 		new Context(
-			353768414,
+			148592857,
 			v_check,
 			v_indent,
 			v_inline,

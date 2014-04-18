@@ -177,49 +177,49 @@ User.prototype._init =
 	}
 
 	this.twig.headline =
-		this.twig.headline.create(
+		this.twig.headline.Create(
 			'text',
 				'hello ' + ( this.username || '' )
 		);
 
 	this.twig.visitor1 =
-		this.twig.visitor1.create(
+		this.twig.visitor1.Create(
 			'visible',
 				isGuest
 		);
 
 	this.twig.visitor2 =
-		this.twig.visitor2.create(
+		this.twig.visitor2.Create(
 			'visible',
 				isGuest
 		);
 
 	this.twig.visitor3 =
-		this.twig.visitor3.create(
+		this.twig.visitor3.Create(
 			'visible',
 				isGuest
 		);
 
 	this.twig.visitor4 =
-		this.twig.visitor4.create(
+		this.twig.visitor4.Create(
 			'visible',
 				isGuest
 		);
 
 	this.twig.greeting1 =
-		this.twig.greeting1.create(
+		this.twig.greeting1.Create(
 			'visible',
 				!isGuest
 		);
 
 	this.twig.greeting2 =
-		this.twig.greeting2.create(
+		this.twig.greeting2.Create(
 			'visible',
 				!isGuest
 		);
 
 	this.twig.greeting3 =
-		this.twig.greeting3.create(
+		this.twig.greeting3.Create(
 			'visible',
 				!isGuest
 		);

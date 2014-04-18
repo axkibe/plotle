@@ -60,7 +60,7 @@ Call.prototype.Append =
 	)
 {
 	return (
-		this.create(
+		this.Create(
 			'twig:add',
 			Jools.uid( ), // FIXME
 			expr

@@ -488,7 +488,7 @@ Shape.prototype.getProjection =
 					)
 					{
 						return (
-							Euclid.Point.create(
+							Euclid.Point.Create(
 								'x',
 									pix,
 								'y',
@@ -566,7 +566,7 @@ Shape.prototype.getProjection =
 					if( p.y > cy )
 					{
 						return (
-							Euclid.Point.create(
+							Euclid.Point.Create(
 								'x',
 									cx,
 								'y',
@@ -577,7 +577,7 @@ Shape.prototype.getProjection =
 					else if( p.y < cy )
 					{
 						return (
-							Euclid.Point.create(
+							Euclid.Point.Create(
 								'x',
 									cx,
 								'y',
@@ -588,7 +588,7 @@ Shape.prototype.getProjection =
 					else if( p.y === cy )
 					{
 						return (
-							Euclid.Point.create(
+							Euclid.Point.Create(
 								'x',
 									cx,
 								'y',
@@ -654,7 +654,7 @@ Shape.prototype.getProjection =
 						)
 					)
 					{
-						return Euclid.Point.create( 'x', x, 'y', y );
+						return Euclid.Point.Create( 'x', x, 'y', y );
 					}
 				}
 

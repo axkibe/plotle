@@ -53,7 +53,7 @@ Code.Return =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 234344061 )
+/**/	if( tag !== 465572060 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -69,8 +69,8 @@ Code.Return =
 /*
 | Creates a new Return object.
 */
-Return.create =
-Return.prototype.create =
+Return.Create =
+Return.prototype.Create =
 	function(
 		// free strings
 	)
@@ -143,7 +143,7 @@ Return.prototype.create =
 
 	return (
 		new Return(
-			234344061,
+			465572060,
 			v_expr
 		)
 	);

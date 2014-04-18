@@ -250,7 +250,7 @@ Relation.spawn =
 		result.chgX.trg.path.get( -1 );
 
 	shell.setMark(
-		Mark.Caret.create(
+		Mark.Caret.Create(
 			'path',
 				shell
 				.space

@@ -66,7 +66,7 @@ Widget.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.create( );
+		return Mark.Vacant.Create( );
 	}
 };
 

@@ -55,7 +55,7 @@ Code.ForIn =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 819210701 )
+/**/	if( tag !== 415252646 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -77,8 +77,8 @@ Code.ForIn =
 /*
 | Creates a new ForIn object.
 */
-ForIn.create =
-ForIn.prototype.create =
+ForIn.Create =
+ForIn.prototype.Create =
 	function(
 		// free strings
 	)
@@ -226,7 +226,7 @@ ForIn.prototype.create =
 
 	return (
 		new ForIn(
-			819210701,
+			415252646,
 			v_block,
 			v_object,
 			v_variable

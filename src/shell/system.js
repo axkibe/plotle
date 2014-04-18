@@ -132,7 +132,7 @@ var System =
 		window.innerHeight - 1;
 
 	this._fabric =
-		Euclid.Fabric.create(
+		Euclid.Fabric.Create(
 			'canvas',
 				_canvas,
 			'width',
@@ -652,7 +652,7 @@ System.prototype._onResize =
 	var
 		fabric =
 		this._fabric =
-			this._fabric.create(
+			this._fabric.Create(
 				'width',
 					window.innerWidth - 1,
 				'height',
@@ -832,7 +832,7 @@ System.prototype._onMouseDown =
 			_canvas,
 
 		p =
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -965,7 +965,7 @@ System.prototype._onMouseMove =
 		shift;
 
 	p =
-		Euclid.Point.create(
+		Euclid.Point.Create(
 			'x',
 				event.pageX - _canvas.offsetLeft,
 			'y',
@@ -1081,7 +1081,7 @@ System.prototype._onMouseUp =
 	this._releaseEvents( );
 
 	p =
-		Euclid.Point.create(
+		Euclid.Point.Create(
 			'x',
 				event.pageX - _canvas.offsetLeft,
 			'y',
@@ -1168,15 +1168,16 @@ System.prototype._onMouseWheel =
 	)
 {
 	var
-		p =
-			Euclid.Point.create(
-				'x',
-					event.pageX - _canvas.offsetLeft,
-				'y',
-					event.pageY - _canvas.offsetTop
-			);
+		dir,
+		p;
 
-	var dir;
+	p =
+		Euclid.Point.Create(
+			'x',
+				event.pageX - _canvas.offsetLeft,
+			'y',
+				event.pageY - _canvas.offsetTop
+		);
 
 	if( Jools.is( event.wheelDelta ) )
 	{
@@ -1225,7 +1226,7 @@ System.prototype._onTouchStart =
 
 	var
 		p =
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					event.pageX - _canvas.offsetLeft,
 				'y',
@@ -1284,7 +1285,7 @@ System.prototype._onTouchMove =
 
 	var
 		p =
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					event.pageX - _canvas.offsetLeft,
 				'y',
@@ -1398,7 +1399,7 @@ System.prototype._onTouchEnd =
 
 	var
 		p =
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					event.changedTouches[ 0 ].pageX -
 					_canvas.offsetLeft,

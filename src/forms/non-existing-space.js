@@ -189,7 +189,7 @@ NonExistingSpace.prototype._init =
 	}
 
 	this.twig.headline =
-		this.twig.headline.create(
+		this.twig.headline.Create(
 			'text',
 				this.nonSpaceUser +
 				':' +

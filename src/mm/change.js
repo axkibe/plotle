@@ -74,7 +74,7 @@ Change =
 		if( src.path && src.path.reflect !== 'Path' )
 		{
 			src.path =
-				Path.create(
+				Path.Create(
 					'array',
 					src.path
 				);
@@ -95,7 +95,7 @@ Change =
 		if( trg.path && trg.path.reflect !== 'Path' )
 		{
 			trg.path =
-				Path.create(
+				Path.Create(
 					'array',
 					trg.path
 				);
@@ -403,7 +403,7 @@ Change.prototype.set =
 		if( src.val !== null )
 		{
 			pivot =
-				pivot.create(
+				pivot.Create(
 					'twig:insert',
 					key,
 					trg.rank,
@@ -423,7 +423,7 @@ Change.prototype.set =
 				);
 
 			pivot =
-				pivot.create(
+				pivot.Create(
 					'twig:remove',
 					key
 				);
@@ -761,13 +761,13 @@ Change.prototype.join =
 	// FIXME check other keys to be equal
 
 	para1 =
-		para1.create(
+		para1.Create(
 			'text',
 				para1.text + para2.text
 		);
 
 	pivot =
-		pivot.create(
+		pivot.Create(
 			'twig:set',
 				key,
 				para1,
@@ -889,19 +889,19 @@ Change.prototype.split =
 	para1 =
 		pivot.twig[ key ];
 	para2 =
-		para1.create(
+		para1.Create(
 			'text',
 				text.substring( at1, text.length )
 		);
 
 	para1 =
-		para1.create(
+		para1.Create(
 			'text',
 				text.substring( 0, at1 )
 		);
 
 	pivot =
-		pivot.create(
+		pivot.Create(
 			'twig:set',
 				key,
 				para1,
@@ -1024,7 +1024,7 @@ Change.prototype.rank =
 
 	// FUTURE make a twig:rerank
 	pivot =
-		pivot.create(
+		pivot.Create(
 			'twig:remove',
 				key,
 			'twig:insert',

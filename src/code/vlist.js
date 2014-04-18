@@ -77,7 +77,7 @@ VList.prototype.VarDec =
 {
 	var
 		varDec =
-			Code.VarDec.create(
+			Code.VarDec.Create(
 				'name',
 					name,
 				'assign',
@@ -85,7 +85,7 @@ VList.prototype.VarDec =
 			);
 
 	return (
-		this.create(
+		this.Create(
 			'twig:add',
 			Jools.uid( ), // FIXME
 			varDec

@@ -252,7 +252,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			this.create(
+			this.Create(
 				'pan',
 					Euclid.Point.zero
 			)
@@ -271,7 +271,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			this.create(
+			this.Create(
 				'pan',
 					Euclid.Point.zero,
 				'fact',
@@ -313,7 +313,7 @@ View.prototype.point =
 	}
 
 	return (
-		Euclid.Point.create(
+		Euclid.Point.Create(
 			'x',
 				this.x( p.x ),
 			'y',
@@ -343,7 +343,7 @@ View.prototype.depoint =
 /**/}
 
 	return (
-		Euclid.Point.create(
+		Euclid.Point.Create(
 			'x',
 				this.dex( p.x ),
 			'y',
@@ -368,7 +368,7 @@ View.prototype.rect =
 			r =
 				(a1 instanceof Euclid.Rect) ?
 					a1 :
-					Euclid.Rect.create(
+					Euclid.Rect.Create(
 						'pnw',
 							a1,
 						'pse',
@@ -405,7 +405,7 @@ View.prototype.rect =
 			a2;
 	}
 
-	return Euclid.Rect.create(
+	return Euclid.Rect.Create(
 		'pnw',
 			this.point( pnw ),
 		'pse',
@@ -466,11 +466,11 @@ View.prototype.review =
 			-
 			1 / this.zoom;
 
-	return this.create(
+	return this.Create(
 		'fact',
 			f1,
 		'pan',
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					Math.round( pan.x + p.x * f ),
 				'y',
@@ -489,11 +489,11 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Rect.create(
+			Euclid.Rect.Create(
 				'pnw',
 					Euclid.Point.zero,
 				'pse',
-					Euclid.Point.create(
+					Euclid.Point.Create(
 						'x',
 							this.width,
 						'y',
@@ -511,7 +511,7 @@ Jools.lazyValue(
 | FIXME remove
 */
 View.proper =
-	View.create(
+	View.Create(
 		'height',
 			0,
 		'fact',

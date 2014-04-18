@@ -84,7 +84,7 @@ var
 | Point in center
 */
 AnchorPoint.PC =
-	AnchorPoint.create(
+	AnchorPoint.Create(
 		'anchor',
 			'c',
 		'x',
@@ -98,7 +98,7 @@ AnchorPoint.PC =
 | Point in north west
 */
 AnchorPoint.PNW =
-	AnchorPoint.create(
+	AnchorPoint.Create(
 		'anchor',
 			'nw',
 		'x',
@@ -111,7 +111,7 @@ AnchorPoint.PNW =
 | Point in south east
 */
 AnchorPoint.PSE =
-	AnchorPoint.create(
+	AnchorPoint.Create(
 		'anchor',
 			'se',
 		'x',
@@ -124,7 +124,7 @@ AnchorPoint.PSE =
 | Point in south east minus 1
 */
 AnchorPoint.PSE_M1 =
-	AnchorPoint.create(
+	AnchorPoint.Create(
 		'anchor',
 			'se',
 		'x',
@@ -165,7 +165,7 @@ AnchorPoint.prototype.compute =
 		case 'c'  :
 
 			return (
-				Euclid.Point.create(
+				Euclid.Point.Create(
 					'x',
 						half( pnw.x + pse.x ) + this.x,
 					'y',
@@ -176,7 +176,7 @@ AnchorPoint.prototype.compute =
 		case 'n'  :
 
 			return (
-				Euclid.Point.create(
+				Euclid.Point.Create(
 					'x',
 						half( pnw.x + pse.x ) + this.x,
 					'y',
@@ -187,7 +187,7 @@ AnchorPoint.prototype.compute =
 		case 'ne' :
 
 			return (
-				Euclid.Point.create(
+				Euclid.Point.Create(
 					'x',
 						pse.x + this.x,
 					'y',
@@ -198,7 +198,7 @@ AnchorPoint.prototype.compute =
 		case 'e'  :
 
 			return (
-				Euclid.Point.create(
+				Euclid.Point.Create(
 					'x',
 						pse.x + this.x,
 					'y',
@@ -218,7 +218,7 @@ AnchorPoint.prototype.compute =
 		case 's'  :
 
 			return (
-				Euclid.Point.create(
+				Euclid.Point.Create(
 					'x',
 						half( pnw.x + pse.x ) + this.x,
 					'y',
@@ -229,7 +229,7 @@ AnchorPoint.prototype.compute =
 		case 'sw' :
 
 			return (
-				Euclid.Point.create(
+				Euclid.Point.Create(
 					'x',
 						pnw.x + this.x,
 					'y',
@@ -240,7 +240,7 @@ AnchorPoint.prototype.compute =
 		case 'w'  :
 
 			return (
-				Euclid.Point.create(
+				Euclid.Point.Create(
 					'x',
 						pnw.x + this.x,
 					'y',

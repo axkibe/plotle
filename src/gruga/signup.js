@@ -66,16 +66,16 @@ var
 | Layout
 */
 Gruga.SignUp =
-	Forms.SignUp.create(
+	Forms.SignUp.Create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'Sign Up',
 				'font',
 					fontPool.get( 22, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -86,13 +86,13 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'usernameLabel',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'username',
 				'font',
 					fontPool.get( 16, 'ra' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -103,13 +103,13 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'emailLabel',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'email',
 				'font',
 					fontPool.get( 16, 'ra' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -120,13 +120,13 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'passwordLabel',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'password',
 				'font',
 					fontPool.get( 16, 'ra' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -137,13 +137,13 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'password2Label',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'repeat password',
 				'font',
 					fontPool.get( 16, 'ra' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -154,13 +154,13 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'newsletterLabel',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'newsletter',
 				'font',
 					fontPool.get( 16, 'ra' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -171,13 +171,13 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'errorLabel',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'',
 				'font',
 					fontPool.get( 14, 'car' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -188,7 +188,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'userInput',
-			Widgets.Input.create(
+			Widgets.Input.Create(
 				'style',
 					'input',
 				'font',
@@ -196,9 +196,9 @@ Gruga.SignUp =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -207,7 +207,7 @@ Gruga.SignUp =
 									-120
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -219,7 +219,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'emailInput',
-			Widgets.Input.create(
+			Widgets.Input.Create(
 				'style',
 					'input',
 				'font',
@@ -227,9 +227,9 @@ Gruga.SignUp =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -238,7 +238,7 @@ Gruga.SignUp =
 									-80
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -250,7 +250,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'passwordInput',
-			Widgets.Input.create(
+			Widgets.Input.Create(
 				'password',
 					true,
 				'style',
@@ -260,9 +260,9 @@ Gruga.SignUp =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -271,7 +271,7 @@ Gruga.SignUp =
 									-40
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -283,7 +283,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'password2Input',
-			Widgets.Input.create(
+			Widgets.Input.Create(
 				'password',
 					true,
 				'style',
@@ -293,9 +293,9 @@ Gruga.SignUp =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -304,7 +304,7 @@ Gruga.SignUp =
 									0
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -316,15 +316,15 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'newsletterCheckBox',
-			Widgets.CheckBox.create(
+			Widgets.CheckBox.Create(
 				'style',
 					'checkbox',
 				'checked',
 					true,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -333,7 +333,7 @@ Gruga.SignUp =
 									45
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -345,13 +345,13 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'newsletter2Label',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'Updates and News',
 				'font',
 					fontPool.get( 12, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -362,13 +362,13 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'newsletter3Label',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'Never going to be more than an email a month. For sure!',
 				'font',
 					fontPool.get( 12, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -379,13 +379,13 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'signupButton',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -394,7 +394,7 @@ Gruga.SignUp =
 									signupButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -416,13 +416,13 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'closeButton',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -431,7 +431,7 @@ Gruga.SignUp =
 									closeButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',

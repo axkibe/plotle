@@ -2,6 +2,8 @@
 | The TraitSet is a (set of) attribute changes
 | which are to be applied on the shell tree.
 |
+| FIXME remove
+|
 | Authors: Axel Kittenberger
 */
 
@@ -200,7 +202,7 @@ TraitSet =
 /*
 | Creates a TraitSet.
 */
-TraitSet.create =
+TraitSet.Create =
 	function(
 		// free strings
 	)

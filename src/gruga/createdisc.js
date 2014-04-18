@@ -77,10 +77,10 @@ var
 };
 
 Gruga.CreateDisc =
-	Discs.CreateDisc.create(
+	Discs.CreateDisc.Create(
 		'twig:add',
 		'CreateNote',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'createButton',
 				'text',
@@ -90,9 +90,9 @@ Gruga.CreateDisc =
 				'textDesignPos',
 					Design.AnchorPoint.PC,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -101,7 +101,7 @@ Gruga.CreateDisc =
 									design.note.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -117,7 +117,7 @@ Gruga.CreateDisc =
 			),
 		'twig:add',
 		'CreateLabel',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'createButton',
 				'text',
@@ -127,9 +127,9 @@ Gruga.CreateDisc =
 				'textDesignPos',
 					Design.AnchorPoint.PC,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -138,7 +138,7 @@ Gruga.CreateDisc =
 									design.label.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -154,7 +154,7 @@ Gruga.CreateDisc =
 			),
 		'twig:add',
 		'CreateRelation',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'createButton',
 				'text',
@@ -166,9 +166,9 @@ Gruga.CreateDisc =
 				'textDesignPos',
 					Design.AnchorPoint.PC,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -177,7 +177,7 @@ Gruga.CreateDisc =
 									design.relation.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -193,7 +193,7 @@ Gruga.CreateDisc =
 			),
 		'twig:add',
 		'CreatePortal',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'createButton',
 				'text',
@@ -203,9 +203,9 @@ Gruga.CreateDisc =
 				'textDesignPos',
 					Design.AnchorPoint.PC,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -214,7 +214,7 @@ Gruga.CreateDisc =
 									design.portal.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',

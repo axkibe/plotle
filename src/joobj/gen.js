@@ -1927,9 +1927,9 @@ Gen.prototype.genCreator =
 	capsule =
 		capsule
 		.Assign(
-			Code.Term( this.reference + '.create' ),
+			Code.Term( this.reference + '.Create' ),
 			Code.Assign(
-				Code.Term( this.reference + '.prototype.create' ),
+				Code.Term( this.reference + '.prototype.Create' ),
 				Code.Func( block )
 				.Arg(
 					null,
@@ -2105,7 +2105,7 @@ Gen.prototype.genFromJSONCreatorParser =
 						+
 						attr.type
 						+
-						'.createFromJSON( arg )'
+						'.CreateFromJSON( arg )'
 					);
 		}
 
@@ -2191,7 +2191,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 								ut.type
 							)
 							+
-							'.createFromJSON'
+							'.CreateFromJSON'
 						),
 						Code.Term( 'jval' )
 					)
@@ -2413,7 +2413,7 @@ Gen.prototype.genFromJSONCreator =
 	capsule =
 		capsule
 		.Assign(
-			Code.Term( this.reference + '.createFromJSON' ),
+			Code.Term( this.reference + '.CreateFromJSON' ),
 			Code.Func( funcBlock )
 			.Arg(
 				'json',
@@ -2922,7 +2922,7 @@ Gen.generate =
 		gen;
 
 	gen =
-		Gen.create(
+		Gen.Create(
 			'joobj',
 				joobj
 		);

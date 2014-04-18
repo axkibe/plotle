@@ -64,7 +64,7 @@ Code.Switch =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 9281630 )
+/**/	if( tag !== 45583408 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -93,8 +93,8 @@ Code.Switch =
 /*
 | Creates a new Switch object.
 */
-Switch.create =
-Switch.prototype.create =
+Switch.Create =
+Switch.prototype.Create =
 	function(
 		// free strings
 	)
@@ -380,7 +380,7 @@ Switch.prototype.create =
 
 	return (
 		new Switch(
-			9281630,
+			45583408,
 			twig,
 			ranks,
 			v_defaultCase,

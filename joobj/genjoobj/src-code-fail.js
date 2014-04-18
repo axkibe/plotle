@@ -53,7 +53,7 @@ Code.Fail =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 925929591 )
+/**/	if( tag !== 782186043 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -69,8 +69,8 @@ Code.Fail =
 /*
 | Creates a new Fail object.
 */
-Fail.create =
-Fail.prototype.create =
+Fail.Create =
+Fail.prototype.Create =
 	function(
 		// free strings
 	)
@@ -152,7 +152,7 @@ Fail.prototype.create =
 
 	return (
 		new Fail(
-			925929591,
+			782186043,
 			v_message
 		)
 	);

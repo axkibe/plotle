@@ -219,7 +219,7 @@ Note.prototype._init =
 	{
 		zone =
 		this.zone =
-			Euclid.Rect.create(
+			Euclid.Rect.Create(
 				'pnw',
 					zone.pnw,
 				'pse',
@@ -242,7 +242,7 @@ Note.prototype._init =
 			this.path.append( 'doc' );
 
 	this.doc =
-		this.doc.create(
+		this.doc.Create(
 			'flowWidth',
 				zone.width - Note.innerMargin.x,
 			'fontsize',
@@ -293,13 +293,13 @@ Note.prototype._init =
 	}
 
 	this.scrollbarY =
-		Visual.Scrollbar.create(
+		Visual.Scrollbar.Create(
 			'aperture',
 				zone.height - this.innerMargin.y,
 			'max',
 				this.doc.height,
 			'pnw',
-				Euclid.Point.create(
+				Euclid.Point.Create(
 					'x',
 						zone.pse.x,
 					'y',
@@ -414,7 +414,7 @@ Jools.lazyValue(
 				this.view.home,
 
 			f =
-				Euclid.Fabric.create(
+				Euclid.Fabric.Create(
 					'width',
 						vzone.width + 2,
 					'height',
@@ -446,7 +446,7 @@ Jools.lazyValue(
 			hview,
 			this,
 			this.zone.width,
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					0,
 				'y',
@@ -555,7 +555,7 @@ Jools.lazyValue(
 				theme.note.cornerRadius;
 
 			return (
-				Euclid.RoundRect.create(
+				Euclid.RoundRect.Create(
 					'pnw',
 						zone.pnw,
 					'pse',
@@ -586,11 +586,11 @@ Jools.lazyValue(
 				theme.note.cornerRadius;
 
 		return (
-			Euclid.RoundRect.create(
+			Euclid.RoundRect.Create(
 				'pnw',
 					Euclid.Point.zero,
 				'pse',
-					Euclid.Point.create(
+					Euclid.Point.Create(
 						'x',
 							zone.width,
 						'y',
@@ -693,7 +693,7 @@ Note.prototype.scrollMarkIntoView =
 	if( n + pnw.y - imargin.n < sy )
 	{
 		shell.setTraits(
-			TraitSet.create(
+			TraitSet.Create(
 				'trait',
 					this.path,
 					'scrolly',
@@ -704,7 +704,7 @@ Note.prototype.scrollMarkIntoView =
 	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
 		shell.setTraits(
-			TraitSet.create(
+			TraitSet.Create(
 				'trait',
 					this.path,
 					'scrolly',
@@ -737,7 +737,7 @@ Note.prototype.scrollPage =
 			this.doc.font.size;
 
 	shell.setTraits(
-		TraitSet.create(
+		TraitSet.Create(
 			'trait',
 				this.path,
 				'scrolly',
@@ -779,7 +779,7 @@ Note.prototype.mousewheel =
 	}
 
 	shell.setTraits(
-		TraitSet.create(
+		TraitSet.Create(
 			'trait',
 				this.path,
 				'scrolly',

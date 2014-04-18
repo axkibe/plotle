@@ -102,7 +102,7 @@ Server.prototype.startup =
 {
 	// the servers inventory
 	this.inventory =
-		Inventory.create( );
+		Inventory.Create( );
 
 	// initializes the database
 	var
@@ -464,7 +464,7 @@ Server.prototype.loadSpace =
 				$changes :
 					[ ],
 				$tree :
-					Visual.Space.create( ),
+					Visual.Space.Create( ),
 				$seqZ :
 					1
 			};
@@ -744,7 +744,7 @@ Server.prototype.prepareInventory =
 	// autogenerates the shell config as resource
 	var
 		cconfig =
-			Resource.create(
+			Resource.Create(
 //				'aliases',
 //					[ 'config.js' ],
 				'data',
@@ -815,7 +815,7 @@ Server.prototype.prepareInventory =
 		this.inventory =
 			this.inventory.updateResource(
 				resource,
-				resource.create(
+				resource.Create(
 					'data',
 						( yield fs.readFile(
 							resource.filePath,
@@ -1003,7 +1003,7 @@ Server.prototype.prepareInventory =
 	// registers the bundle as resource
 	this.inventory =
 		this.inventory.addResource(
-			Resource.create(
+			Resource.Create(
 				'filePath',
 					bundleFilePath,
 				'maxage',
@@ -1057,7 +1057,7 @@ Server.prototype.prepareInventory =
 		this.inventory =
 			this.inventory.updateResource(
 				resource,
-				resource.create(
+				resource.Create(
 					'data',
 						PostProcessor[ resource.postProcessor ](
 							resource.data,
@@ -1089,7 +1089,7 @@ Server.prototype.prepareInventory =
 		this.inventory =
 			this.inventory.updateResource(
 				resource,
-				resource.create(
+				resource.Create(
 					'gzip',
 						yield zlib.gzip(
 							resource.data,
@@ -1127,7 +1127,7 @@ Server.prototype.prependConfigFlags =
 	this.inventory =
 		this.inventory.updateResource(
 			resource,
-			resource.create(
+			resource.Create(
 				'data',
 					'var JOOBJ = false;\n' +
 					'var CHECK = true;\n' +
@@ -1693,13 +1693,10 @@ Server.prototype.cmdAuth =
 			{
 				user :
 					uid,
-
 				pass :
 					cmd.passhash,
-
 				created :
 					Date.now( ),
-
 				use :
 					Date.now( )
 			};
@@ -1748,6 +1745,7 @@ Server.prototype.cmdAuth =
 
 /*
 | Creates a new space.
+| FIXME uppercase
 */
 Server.prototype.createSpace =
 	function* (
@@ -1772,7 +1770,7 @@ Server.prototype.createSpace =
 				[ ],
 
 			$tree :
-				Visual.Space.create( ),
+				Visual.Space.Create( ),
 
 			$seqZ :
 				1
@@ -2733,7 +2731,7 @@ Server.prototype.cmdGet =
 	{
 		node =
 			tree.getPath(
-				Path.create(
+				Path.Create(
 					'array',
 					cmd.path
 				)

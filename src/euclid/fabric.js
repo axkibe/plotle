@@ -117,9 +117,11 @@ Euclid.Fabric =
 
 /*
 | Creator.
+|
+| FUTURE make a joobj
 */
-Fabric.create =
-Fabric.prototype.create =
+Fabric.Create =
+Fabric.prototype.Create =
 	function(
 		// free strings
 	)
@@ -1012,7 +1014,7 @@ Jools.lazyValue(
 				Jools.half( this.height );
 
 		return (
-			Euclid.Point.create( 'x', x, 'y', y )
+			Euclid.Point.Create( 'x', x, 'y', y )
 		);
 	}
 );
@@ -1679,7 +1681,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					this.width,
 				'y',

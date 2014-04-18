@@ -168,7 +168,7 @@ MoveTo.prototype._init =
 					this.username.substr( 0, 7 ) === 'visitor';
 
 		this.twig.userHomeButton =
-			this.twig.userHomeButton.create(
+			this.twig.userHomeButton.Create(
 				'visible',
 					!isGuest,
 				'text',

@@ -1,6 +1,8 @@
 /*
 | Paths describe entities in a tree.
 |
+| FIXME make it a joobj
+|
 | Authors: Axel Kittenberger
 */
 
@@ -86,7 +88,7 @@ Path =
 /*
 | Creates a new Array from an array
 */
-Path.create =
+Path.Create =
 	function(
 		// free strings
 	)

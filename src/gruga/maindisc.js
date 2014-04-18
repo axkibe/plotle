@@ -113,10 +113,10 @@ var design =
 };
 
 Gruga.MainDisc =
-	Discs.MainDisc.create(
+	Discs.MainDisc.Create(
 		'twig:add',
 			'Normal',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'mainButton',
 				'icon',
@@ -124,9 +124,9 @@ Gruga.MainDisc =
 				'iconStyle',
 					'iconNormal',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -135,7 +135,7 @@ Gruga.MainDisc =
 									design.normal.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -151,7 +151,7 @@ Gruga.MainDisc =
 			),
 		'twig:add',
 			'Create',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'mainButton',
 				'visible',
@@ -163,9 +163,9 @@ Gruga.MainDisc =
 				'textDesignPos',
 					Design.AnchorPoint.PC,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -174,7 +174,7 @@ Gruga.MainDisc =
 									design.create.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -190,7 +190,7 @@ Gruga.MainDisc =
 			),
 		'twig:add',
 			'Remove',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'mainButton',
 				'icon',
@@ -200,9 +200,9 @@ Gruga.MainDisc =
 				'visible',
 					false,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -211,7 +211,7 @@ Gruga.MainDisc =
 									design.remove.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -227,7 +227,7 @@ Gruga.MainDisc =
 			),
 		'twig:add',
 			'MoveTo',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'mainButton',
 				'icon',
@@ -237,9 +237,9 @@ Gruga.MainDisc =
 				'visible',
 					false,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -248,7 +248,7 @@ Gruga.MainDisc =
 									design.moveto.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -264,13 +264,13 @@ Gruga.MainDisc =
 			),
 		'twig:add',
 			'Space',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'mainButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -279,7 +279,7 @@ Gruga.MainDisc =
 									design.space.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -297,9 +297,9 @@ Gruga.MainDisc =
 				'textDesignPos',
 					Design.AnchorPoint.PC,
 				'shape',
-					Design.AnchorEllipse.create(
+					Design.AnchorEllipse.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -315,13 +315,13 @@ Gruga.MainDisc =
 			),
 		'twig:add',
 			'User',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'mainButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -330,7 +330,7 @@ Gruga.MainDisc =
 									design.user.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -348,9 +348,9 @@ Gruga.MainDisc =
 				'textDesignPos',
 					Design.AnchorPoint.PC,
 				'shape',
-					Design.AnchorEllipse.create(
+					Design.AnchorEllipse.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -366,7 +366,7 @@ Gruga.MainDisc =
 			),
 		'twig:add',
 			'Login',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'mainButton',
 				'visible',
@@ -380,9 +380,9 @@ Gruga.MainDisc =
 				'textDesignPos',
 					Design.AnchorPoint.PC,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -391,7 +391,7 @@ Gruga.MainDisc =
 									design.login.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -407,7 +407,7 @@ Gruga.MainDisc =
 			),
 		'twig:add',
 			'SignUp',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'mainButton',
 				'visible',
@@ -421,9 +421,9 @@ Gruga.MainDisc =
 				'textDesignPos',
 					Design.AnchorPoint.PC,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',
@@ -432,7 +432,7 @@ Gruga.MainDisc =
 									design.signup.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'nw',
 								'x',

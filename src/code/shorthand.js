@@ -70,7 +70,7 @@ ShortHand.And =
 	)
 {
 	return (
-		Code.And.create(
+		Code.And.Create(
 			'left',
 				left,
 			'right',
@@ -90,7 +90,7 @@ ShortHand.Assign =
 	)
 {
 	return (
-		Code.Assign.create(
+		Code.Assign.Create(
 			'left',
 				left,
 			'right',
@@ -106,7 +106,7 @@ ShortHand.Assign =
 ShortHand.Block =
 	function( )
 {
-	return Code.Block.create( );
+	return Code.Block.Create( );
 };
 
 
@@ -121,7 +121,7 @@ ShortHand.Call =
 {
 	var
 		call =
-			Code.Call.create(
+			Code.Call.Create(
 				'func',
 					func
 			);
@@ -151,7 +151,7 @@ ShortHand.If =
 	)
 {
 	return (
-		Code.If.create(
+		Code.If.Create(
 			'condition',
 				condition,
 			'then',
@@ -169,7 +169,7 @@ ShortHand.If =
 ShortHand.File =
 	function( )
 {
-	return Code.File.create( );
+	return Code.File.Create( );
 };
 
 
@@ -183,7 +183,7 @@ ShortHand.Func =
 {
 	var
 		func =
-			Code.Func.create(
+			Code.Func.Create(
 				'block',
 					block || null
 			);
@@ -201,7 +201,7 @@ ShortHand.New =
 	)
 {
 	return (
-		Code.New.create(
+		Code.New.Create(
 			'call',
 				call
 		)
@@ -215,7 +215,7 @@ ShortHand.New =
 ShortHand.ObjLiteral =
 	function( )
 {
-	return Code.ObjLiteral.create( );
+	return Code.ObjLiteral.Create( );
 };
 
 
@@ -228,7 +228,7 @@ ShortHand.Switch =
 	)
 {
 	return (
-		Code.Switch.create(
+		Code.Switch.Create(
 			'statement',
 				statement
 		)
@@ -245,7 +245,7 @@ ShortHand.Term =
 	)
 {
 	return (
-		Code.Term.create(
+		Code.Term.Create(
 			'term',
 				term
 		)
@@ -264,7 +264,7 @@ ShortHand.VarDec =
 	)
 {
 	return (
-		Code.VarDec.create(
+		Code.VarDec.Create(
 			'name',
 				name,
 			'assign',
@@ -281,7 +281,7 @@ ShortHand.VarDec =
 ShortHand.VList =
 	function( )
 {
-	return Code.VList.create( );
+	return Code.VList.Create( );
 };
 
 

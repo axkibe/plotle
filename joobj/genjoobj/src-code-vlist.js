@@ -63,7 +63,7 @@ Code.VList =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 349136353 )
+/**/	if( tag !== 362337066 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -89,8 +89,8 @@ Code.VList =
 /*
 | Creates a new VList object.
 */
-VList.create =
-VList.prototype.create =
+VList.Create =
+VList.prototype.Create =
 	function(
 		// free strings
 	)
@@ -343,7 +343,7 @@ VList.prototype.create =
 
 	return (
 		new VList(
-			349136353,
+			362337066,
 			twig,
 			ranks,
 			v_path

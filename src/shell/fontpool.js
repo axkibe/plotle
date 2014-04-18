@@ -192,7 +192,7 @@ FontPool.prototype.get =
 
 	f =
 	c[ size ] =
-		Euclid.Font.create(
+		Euclid.Font.Create(
 			'family',
 				style.family,
 			'fill',

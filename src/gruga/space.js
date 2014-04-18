@@ -53,16 +53,16 @@ var
 | Layout
 */
 Gruga.Space =
-	Forms.Space.create(
+	Forms.Space.Create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'',
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -73,13 +73,13 @@ Gruga.Space =
 			),
 		'twig:add',
 		'message1',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'In future space settings can be altered here.',
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -90,13 +90,13 @@ Gruga.Space =
 			),
 		'twig:add',
 		'closeButton',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -105,7 +105,7 @@ Gruga.Space =
 									closeButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',

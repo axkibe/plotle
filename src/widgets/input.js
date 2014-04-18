@@ -207,7 +207,7 @@ Input.prototype._init =
 			);
 
 		this._shape =
-			Euclid.RoundRect.create(
+			Euclid.RoundRect.Create(
 				'pnw',
 					Euclid.Point.zero,
 				'pse',
@@ -236,7 +236,7 @@ Input.prototype._init =
 | Default distance of text
 */
 Input._pitch =
-	Euclid.Point.create( 'x', 8, 'y', 3 );
+	Euclid.Point.Create( 'x', 8, 'y', 3 );
 
 
 /*
@@ -461,7 +461,7 @@ Jools.lazyValue(
 				this._pitch,
 
 			f =
-				Euclid.Fabric.create(
+				Euclid.Fabric.Create(
 					'width',
 						shape.width + 1,
 					'height',
@@ -576,7 +576,7 @@ Input.prototype.locateOffset =
 	if( this.password )
 	{
 		return (
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					pitch.x +
 					(
@@ -595,7 +595,7 @@ Input.prototype.locateOffset =
 	else
 	{
 		return (
-			Euclid.Point.create(
+			Euclid.Point.Create(
 				'x',
 					Math.round(
 						pitch.x +
@@ -695,7 +695,7 @@ Input.prototype.input =
 	);
 
 	shell.setMark(
-		Mark.Caret.create(
+		Mark.Caret.Create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -731,7 +731,7 @@ Input.prototype._keyBackspace =
 	);
 
 	shell.setMark(
-		Mark.Caret.create(
+		Mark.Caret.Create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -809,7 +809,7 @@ Input.prototype._keyEnd =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		Mark.Caret.Create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -836,7 +836,7 @@ Input.prototype._keyLeft =
 
 
 	shell.setMark(
-		Mark.Caret.create(
+		Mark.Caret.Create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -862,7 +862,7 @@ Input.prototype._keyPos1 =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		Mark.Caret.Create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -888,7 +888,7 @@ Input.prototype._keyRight =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		Mark.Caret.Create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1033,7 +1033,7 @@ Input.prototype.pointingHover =
 	}
 
 	return (
-		HoverReply.create(
+		HoverReply.Create(
 			'path',
 				this.path,
 			'cursor',
@@ -1079,7 +1079,7 @@ Input.prototype.click =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		Mark.Caret.Create(
 			'path',
 				this.path,
 			'at',

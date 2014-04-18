@@ -65,7 +65,7 @@ ObjLiteral.prototype.Add =
 	)
 {
 	return (
-		this.create(
+		this.Create(
 			'twig:add',
 			key,
 			value

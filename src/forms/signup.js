@@ -251,7 +251,7 @@ SignUp.prototype.signup =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			Mark.Caret.Create(
 				'path',
 					twig.userInput.path,
 				'at',
@@ -271,7 +271,7 @@ SignUp.prototype.signup =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			Mark.Caret.Create(
 				'path',
 					twig.userInput.path,
 				'at',
@@ -291,7 +291,7 @@ SignUp.prototype.signup =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			Mark.Caret.Create(
 				'path',
 					twig.passwordInput.path,
 				'at',
@@ -311,7 +311,7 @@ SignUp.prototype.signup =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			Mark.Caret.Create(
 				'path',
 					twig.password2Input.path,
 				'at',
@@ -357,7 +357,7 @@ SignUp.prototype.onRegister =
 		if( res.message.search( /Username/ ) >= 0 )
 		{
 			shell.setMark(
-				Mark.Caret.create(
+				Mark.Caret.Create(
 					'path',
 						twig.userInput.path,
 					'at',
@@ -418,7 +418,7 @@ SignUp.prototype.clear =
 	);
 
 	shell.setMark(
-		Mark.Vacant.create( )
+		Mark.Vacant.Create( )
 	);
 };
 

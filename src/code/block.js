@@ -97,7 +97,7 @@ Block.prototype.Append =
 	)
 {
 	return (
-		this.create(
+		this.Create(
 			'twig:add',
 			Jools.uid( ), // FIXME
 			statement
@@ -116,7 +116,7 @@ Block.prototype.Assign =
 {
 	var
 		assign =
-			Code.Assign.create(
+			Code.Assign.Create(
 				'left',
 					left,
 				'right',
@@ -138,7 +138,7 @@ Block.prototype.Call =
 {
 	var
 		call =
-			Code.Call.create(
+			Code.Call.Create(
 				'func',
 					func
 			);
@@ -166,7 +166,7 @@ Block.prototype.Check =
 {
 	return (
 		this.Append(
-			Code.Check.create(
+			Code.Check.Create(
 				'block',
 					block
 			)
@@ -187,7 +187,7 @@ Block.prototype.Comment =
 	{
 		// arguments have to be a list of strings otherwise
 		header =
-			Code.Comment.create(
+			Code.Comment.Create(
 				'content',
 					Array.prototype.slice.call( arguments )
 			);
@@ -209,7 +209,7 @@ Block.prototype.If =
 {
 	var
 		statement =
-			Code.If.create(
+			Code.If.Create(
 				'condition',
 					condition,
 				'then',
@@ -238,7 +238,7 @@ Block.prototype.Fail =
 	else if( Jools.isString( message ) )
 	{
 		message =
-			Code.Term.create(
+			Code.Term.Create(
 				'term',
 					'\'' + message + '\''
 			);
@@ -246,7 +246,7 @@ Block.prototype.Fail =
 
 	return (
 		this.Append(
-			Code.Fail.create(
+			Code.Fail.Create(
 				'message',
 					message
 			)
@@ -268,7 +268,7 @@ Block.prototype.For =
 {
 	var
 		statement =
-			Code.For.create(
+			Code.For.Create(
 				'init',
 					init,
 				'condition',
@@ -295,7 +295,7 @@ Block.prototype.ForIn =
 {
 	var
 		statement =
-			Code.ForIn.create(
+			Code.ForIn.Create(
 				'variable',
 					variable,
 				'object',
@@ -317,7 +317,7 @@ Block.prototype.New =
 {
 	return (
 		this.Append(
-			Code.New.create(
+			Code.New.Create(
 				'call',
 					call
 			)
@@ -343,7 +343,7 @@ Block.prototype.Return =
 		default :
 
 			expr =
-				Code.Return.create(
+				Code.Return.Create(
 					'expr',
 						expr
 				);
@@ -366,7 +366,7 @@ Block.prototype.Term =
 	if( term.reflect !== 'Term' )
 	{
 		term =
-			Code.Term.create(
+			Code.Term.Create(
 				'term',
 					term
 			);
@@ -388,7 +388,7 @@ Block.prototype.VarDec =
 {
 	var
 		varDec =
-			Code.VarDec.create(
+			Code.VarDec.Create(
 				'name',
 					name,
 				'assign',

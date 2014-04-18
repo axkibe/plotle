@@ -55,7 +55,7 @@ Code.If =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 216552332 )
+/**/	if( tag !== 762541115 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -77,8 +77,8 @@ Code.If =
 /*
 | Creates a new If object.
 */
-If.create =
-If.prototype.create =
+If.Create =
+If.prototype.Create =
 	function(
 		// free strings
 	)
@@ -219,7 +219,7 @@ If.prototype.create =
 
 	return (
 		new If(
-			216552332,
+			762541115,
 			v_condition,
 			v_elsewise,
 			v_then

@@ -53,7 +53,7 @@ Code.Comment =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 884290700 )
+/**/	if( tag !== 405562340 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -69,8 +69,8 @@ Code.Comment =
 /*
 | Creates a new Comment object.
 */
-Comment.create =
-Comment.prototype.create =
+Comment.Create =
+Comment.prototype.Create =
 	function(
 		// free strings
 	)
@@ -143,7 +143,7 @@ Comment.prototype.create =
 
 	return (
 		new Comment(
-			884290700,
+			405562340,
 			v_content
 		)
 	);

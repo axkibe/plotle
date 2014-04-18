@@ -36,16 +36,16 @@ Stubs = { };
 
 
 Stubs.emptyLabel =
-	Visual.Label.create(
+	Visual.Label.Create(
 		'pnw',
 			Euclid.Point.zero,
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'doc',
-			Visual.Doc.create(
+			Visual.Doc.Create(
 				'twig:add',
 				'1',
-				Visual.Para.create(
+				Visual.Para.Create(
 					'text',
 						'Label'
 				)
@@ -54,21 +54,21 @@ Stubs.emptyLabel =
 
 
 Stubs.emptyNote =
-	Visual.Note.create(
+	Visual.Note.Create(
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'zone',
-			Euclid.Rect.create(
+			Euclid.Rect.Create(
 				'pnw',
 					Euclid.Point.zero,
 				'pse',
 					Euclid.Point.zero
 			),
 		'doc',
-			Visual.Doc.create(
+			Visual.Doc.Create(
 				'twig:add',
 				'1',
-				Visual.Para.create(
+				Visual.Para.Create(
 					'text',
 						''
 				)
@@ -77,9 +77,9 @@ Stubs.emptyNote =
 
 
 Stubs.emptyPortal =
-	Visual.Portal.create(
+	Visual.Portal.Create(
 		'zone',
-			Euclid.Rect.create(
+			Euclid.Rect.Create(
 				'pnw',
 					Euclid.Point.zero,
 				'pse',

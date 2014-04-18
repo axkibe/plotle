@@ -55,8 +55,10 @@ var
 
 /*
 | Creator.
+|
+| FIXME make it a joobj
 */
-Inventory.create =
+Inventory.Create =
 	function(
 		// ...
 	)

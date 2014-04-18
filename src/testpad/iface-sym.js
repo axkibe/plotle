@@ -20,8 +20,8 @@ var
 	Change,
 	Jools,
 	MeshMashine,
-	meshnoverse,
-	Sign;
+	Sign,
+	Visual;
 
 
 /*
@@ -40,84 +40,52 @@ IFaceSym =
 	// the current space;
 	this.space  =
 		// FUTURE FIX
-		meshnoverse.crow(
-			{
-				type :
-					'Space',
-				twig :
-				{
-					'testnote' :
-					{
-						type :
-							'Note',
-						doc :
-						{
-							type :
-								'Doc',
-							twig :
-							{
-								'1' :
-								{
-									type :
-										'Para',
-									text :
-										'Why would I want to know that?'
-								},
-								'2' :
-								{
-									type :
-										'Para',
-									text :
-										'Can we have Bender Burgers again?'
-								},
-								'3' :
-								{
-									type :
-										'Para',
-									text :
-										'And so we say goodbye to ' +
-										'our beloved pet, Nibbler.'
-								}
-							},
-							ranks :
-							[
-								'1',
-								'2',
-								'3'
-							]
-						},
-						zone     :
-						{
-							type :
-								'Rect',
-							pnw  :
-							{
-								type :
-									'Point',
-								x :
+		Visual.Space.create(
+			'twig:add',
+			'testnote',
+			Visual.Note.create(
+				'doc',
+					Visual.Doc.create(
+						'twig:add',
+						'1',
+							Visual.Para.create(
+								'text',
+									'Why would I want to know that?'
+							),
+						'twig:add',
+						'$new',
+							Visual.Para.create(
+								'text',
+									'Can we have Bender Burgers again?'
+							),
+						'twig:add',
+						'$new',
+							Visual.Para.create(
+								'text',
+									'And so we say goodbye to ' +
+									'our beloved pet, Nibbler.'
+							)
+					),
+				'zone',
+					Visual.Rect.create(
+						'pnw',
+							Visual.Point.create(
+								'x',
 									0,
-								y :
+								'y',
 									0
-							},
-							pse  :
-							{
-								type :
-									'Point',
-								x :
+							),
+						'pse',
+							Visual.Point.create(
+								'x',
 									100,
-								y :
+								'y',
 									100
-							}
-						},
-						fontsize :
-							13
-					}
-				},
-				ranks :
-				[
-					'testnote'
-				]
-			}
+							)
+					),
+				'fontsize',
+					13
+			)
 		);
 
 	// current update request

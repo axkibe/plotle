@@ -70,7 +70,7 @@ var
 | skewed a little to north west
 */
 AnchorEllipse.fullSkewNW =
-	AnchorEllipse.create(
+	AnchorEllipse.Create(
 		'pnw',
 			Design.AnchorPoint.PNW,
 		'pse',
@@ -86,7 +86,7 @@ AnchorEllipse.prototype.compute =
 		frame
 	)
 {
-	return Euclid.Ellipse.create(
+	return Euclid.Ellipse.Create(
 		'pnw',
 			this.pnw.compute( frame ),
 		'pse',

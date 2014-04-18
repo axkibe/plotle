@@ -316,10 +316,10 @@
 . cornerRadius
 > cos
 > create
-. createArbitrary
+. CreateArbitrary
 . createButton
 > createElement
-. createFromJSON
+. CreateFromJSON
 > createLinearGradient
 > createRadialGradient
 . css

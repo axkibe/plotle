@@ -63,16 +63,16 @@ var
 | Layout
 */
 Gruga.Login =
-	Forms.Login.create(
+	Forms.Login.Create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'Log In',
 				'font',
 					fontPool.get( 22, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -83,13 +83,13 @@ Gruga.Login =
 			),
 		'twig:add',
 		'usernameLabel',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'username',
 				'font',
 					fontPool.get( 16, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -100,13 +100,13 @@ Gruga.Login =
 			),
 		'twig:add',
 		'passwordLabel',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'password',
 				'font',
 					fontPool.get( 16, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -117,13 +117,13 @@ Gruga.Login =
 			),
 		'twig:add',
 		'errorLabel',
-			Widgets.Label.create(
+			Widgets.Label.Create(
 				'text',
 					'',
 				'font',
 					fontPool.get( 14, 'car' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					Design.AnchorPoint.Create(
 						'anchor',
 							'c',
 						'x',
@@ -134,7 +134,7 @@ Gruga.Login =
 			),
 		'twig:add',
 		'userInput',
-			Widgets.Input.create(
+			Widgets.Input.Create(
 				'style',
 					'input',
 				'font',
@@ -142,9 +142,9 @@ Gruga.Login =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -153,7 +153,7 @@ Gruga.Login =
 									-67
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -165,7 +165,7 @@ Gruga.Login =
 			),
 		'twig:add',
 		'passwordInput',
-			Widgets.Input.create(
+			Widgets.Input.Create(
 				'password',
 					true,
 				'style',
@@ -175,9 +175,9 @@ Gruga.Login =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -186,7 +186,7 @@ Gruga.Login =
 									-27
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -198,13 +198,13 @@ Gruga.Login =
 			),
 		'twig:add',
 		'loginButton',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -213,7 +213,7 @@ Gruga.Login =
 									loginButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -235,13 +235,13 @@ Gruga.Login =
 			),
 		'twig:add',
 		'closeButton',
-			Widgets.Button.create(
+			Widgets.Button.Create(
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					Design.AnchorRect.Create(
 						'pnw',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',
@@ -250,7 +250,7 @@ Gruga.Login =
 									closeButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							Design.AnchorPoint.Create(
 								'anchor',
 									'c',
 								'x',

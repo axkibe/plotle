@@ -125,28 +125,28 @@ Sign =
 			case 'Label' :
 
 				this.val =
-					Visual.Label.createFromJSON( this.val );
+					Visual.Label.CreateFromJSON( this.val );
 
 				break;
 
 			case 'Note' :
 
 				this.val =
-					Visual.Note.createFromJSON( this.val );
+					Visual.Note.CreateFromJSON( this.val );
 
 				break;
 
 			case 'Point' :
 
 				this.val =
-					Euclid.Point.createFromJSON( this.val );
+					Euclid.Point.CreateFromJSON( this.val );
 
 				break;
 
 			case 'Portal' :
 
 				this.val =
-					Visual.Portal.createFromJSON( this.val );
+					Visual.Portal.CreateFromJSON( this.val );
 
 				break;
 
@@ -154,14 +154,14 @@ Sign =
 			case 'Rect' :
 
 				this.val =
-					Euclid.Rect.createFromJSON( this.val );
+					Euclid.Rect.CreateFromJSON( this.val );
 
 				break;
 
 			case 'Relation' :
 
 				this.val =
-					Visual.Relation.createFromJSON( this.val );
+					Visual.Relation.CreateFromJSON( this.val );
 
 				break;
 
