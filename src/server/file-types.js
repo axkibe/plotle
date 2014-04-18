@@ -48,6 +48,10 @@ var
 			'svg' :
 				// some font
 				'utf-8',
+		
+			'torrent'  :
+				// torrents
+				'binary',
 
 			'ttf' :
 				// some font
@@ -90,6 +94,10 @@ var
 		'svg' :
 			// some font
 			'image/svg+xml',
+
+		'torrent'  :
+			// torrents
+			'application/x-bittorrent',
 
 		'ttf'  :
 			// some font

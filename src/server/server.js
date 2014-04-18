@@ -737,25 +737,25 @@ Server.prototype.prepareInventory =
 	var
 		a,
 		aZ,
+		bundleFilePath,
+		cconfig,
+		inv,
 		resource;
 
 	Jools.log( 'start', 'preparing inventory' );
 
 	// autogenerates the shell config as resource
-	var
-		cconfig =
-			Resource.Create(
-//				'aliases',
-//					[ 'config.js' ],
-				'data',
-					this.buildShellConfig( ),
-				'filePath',
-					'config.js',
-				'inBundle',
-					true,
-				'inTestPad',
-					true
-			);
+	cconfig =
+		Resource.Create(
+			'data',
+				this.buildShellConfig( ),
+			'filePath',
+				'config.js',
+			'inBundle',
+				true,
+			'inTestPad',
+				true
+		);
 
 	this.inventory =
 		this.inventory.addResource( cconfig );
@@ -786,9 +786,8 @@ Server.prototype.prepareInventory =
 	}
 
 	// Reads in all files to be cached
-	var
-		inv =
-			this.inventory;
+	inv =
+		this.inventory;
 
 	for(
 		a = 0, aZ = inv.list.length;
@@ -800,7 +799,7 @@ Server.prototype.prepareInventory =
 			inv.list[ a ];
 
 		if(
-			resource.data !== null
+			resource.data
 			||
 			resource.inBundle
 			||
@@ -995,10 +994,9 @@ Server.prototype.prepareInventory =
 	}
 
 	// calculates the hash for the bundle
-	var
-		bundleFilePath =
-		this.bundleFilePath =
-			'meshcraft-' + sha1.sha1hex( bundle ) + '.js';
+	bundleFilePath =
+	this.bundleFilePath =
+		'meshcraft-' + sha1.sha1hex( bundle ) + '.js';
 
 	// registers the bundle as resource
 	this.inventory =
@@ -2800,8 +2798,14 @@ Server.prototype.requestListener =
 	)
 {
 	var
-		red =
-			url.parse( request.url );
+		aenc,
+		header,
+		pathname,
+		resource,
+		red;
+
+	red =
+		url.parse( request.url );
 
 	Jools.log(
 		'web',
@@ -2809,21 +2813,22 @@ Server.prototype.requestListener =
 		red.href
 	);
 
-	var
-		pathname =
-			red.pathname.replace( /^[\/]+/g, '' );
+	pathname =
+		red.pathname.replace( /^[\/]+/g, '' );
 
 	if( pathname === 'mm' )
 	{
 		return this.webAjax( request, red, result );
 	}
 
-	var
-		resource =
-			this.inventory.map[ pathname ];
+console.log( 'XXX', pathname );
+
+	resource =
+		this.inventory.map[ pathname ];
 
 	if( !resource )
 	{
+
 		this.webError(
 			result,
 			'404 Bad Request'
@@ -2834,19 +2839,18 @@ Server.prototype.requestListener =
 
 	if( resource.data )
 	{
-		var
-			aenc =
-				resource.gzip && request.headers[ 'accept-encoding' ],
+		aenc =
+			resource.gzip && request.headers[ 'accept-encoding' ],
 
-			header =
-				{
-					'Content-Type' :
-						resource.mime,
-					'Cache-Control' :
-						MaxAge.map( resource.maxage ),
-					'Date' :
-						new Date().toUTCString()
-				};
+		header =
+			{
+				'Content-Type' :
+					resource.mime,
+				'Cache-Control' :
+					MaxAge.map( resource.maxage ),
+				'Date' :
+					new Date().toUTCString()
+			};
 
 		if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
 		{
@@ -2877,6 +2881,7 @@ Server.prototype.requestListener =
 				resource.coding
 			);
 		}
+
 		return;
 	}
 

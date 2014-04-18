@@ -875,6 +875,12 @@ module.exports =
 		'inTestPad',
 			true
 	),
+	Resource.Create(
+		'aliases',
+			[ 'torrent/PeridexisErrant%20LNP%20r53.torrent' ],
+		'filePath',
+			'torrent/PeridexisErrant%20LNP%20r53.torrent'
+	),
 ];
 
 

@@ -126,8 +126,7 @@ config.debug.puffed =
 | are made immutable. Turned off on releases for performance.
 */
 config.debug.immute =
-	false &&
-	true;
+	false;
 
 
 /*
@@ -143,15 +142,12 @@ config.debug.weinre =
 */
 config.log  = {
 	all :
-		false
-		&&
-		true,
+		false,
 	ajax :
 		false,
 	change :
 		false,
 	news :
-		true ||
 		false,
 	debug :
 		true,
