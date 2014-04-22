@@ -1155,7 +1155,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.If(
-					Code.Term( 'rank < 0 || rank > ranks.length' ),
+					Code.Or(
+						Code.Term( 'rank < 0' ),
+						Code.Term( 'rank > ranks.length' )
+					),
 					Code.Block( )
 					.Fail(
 						Code.Term( '\'invalid rank\'' )
