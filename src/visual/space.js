@@ -132,6 +132,7 @@ if( JOOBJ )
 		init :
 			[
 				'inherit',
+				'twigDup',
 				'traitSet'
 			],
 		node :
@@ -178,6 +179,7 @@ var
 Space.prototype._init =
 	function(
 		inherit,
+		twigDup,
 		traitSet
 	)
 {
@@ -185,6 +187,12 @@ Space.prototype._init =
 	{
 		// abstract
 		return;
+	}
+
+	if( !twigDup )
+	{
+		this.twig =
+			Jools.copy( this.twig );
 	}
 
 	for( var k in this.twig )

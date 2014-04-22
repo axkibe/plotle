@@ -9,8 +9,7 @@
 | Export
 */
 var
-	Forms,
-
+	Forms;
 
 Forms =
 	Forms || { };
@@ -106,7 +105,9 @@ if( JOOBJ )
 		subclass :
 			'Forms.Form',
 		init :
-			[ ],
+			[
+				'twigDup'
+			],
 		twig :
 			{
 				'Login' :
@@ -131,18 +132,30 @@ if( JOOBJ )
 
 
 var
-	Jockey =
-		Forms.Jockey;
+	Jockey;
+
+Jockey =
+	Forms.Jockey;
 
 
 /*
 | Initializer.
 */
 Jockey.prototype._init =
-	function( )
+	function(
+		twigDup
+	)
 {
 	var
+		form,
+		name,
 		path;
+
+	if( !twigDup )
+	{
+		this.twig =
+			Jools.copy( this.twig );
+	}
 
 	for(
 		var a = 0, aZ = this.ranks.length;
@@ -150,12 +163,11 @@ Jockey.prototype._init =
 		a++
 	)
 	{
-		var
-			name =
-				this.ranks[ a ],
+		name =
+			this.ranks[ a ],
 
-			form =
-				this.twig[ name ];
+		form =
+			this.twig[ name ];
 
 		if( !form.path )
 		{

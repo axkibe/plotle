@@ -247,6 +247,7 @@ Gen.prototype._init =
 			switch( name )
 			{
 				case 'inherit' :
+				case 'twigDup' :
 
 					constructorList.unshift( name );
 
@@ -590,6 +591,7 @@ Gen.prototype.genConstructor =
 			switch( name )
 			{
 				case 'inherit' :
+				case 'twigDup' :
 
 					initCall =
 						initCall.Append(
@@ -697,6 +699,15 @@ Gen.prototype.genConstructor =
 
 				break;
 
+			case 'twigDup' :
+
+				constructor =
+					constructor.Arg(
+						'twigDup',
+						'true if twig is already been duplicated'
+					);
+
+				break;
 			default :
 
 				attr =
@@ -1843,6 +1854,7 @@ Gen.prototype.genCreatorReturn =
 		{
 			case 'inherit' :
 			case 'twig' :
+			case 'twigDup' :
 			case 'ranks' :
 
 				call =
@@ -2289,6 +2301,15 @@ Gen.prototype.genFromJSONCreatorReturn =
 				call =
 					call.Append(
 						Code.Term( '' + this.tag )
+					);
+
+				break;
+
+			case 'twigDup' :
+
+				call =
+					call.Append(
+						Code.Term( 'true' )
 					);
 
 				break;

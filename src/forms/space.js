@@ -126,7 +126,8 @@ if( JOOBJ )
 			'Forms.Form',
 		init :
 			[
-				'inherit'
+				'inherit',
+				'twigDup'
 			],
 		twig :
 			{
@@ -153,11 +154,18 @@ var
 */
 Space.prototype._init =
 	function(
-		inherit
+		inherit,
+		twigDup
 	)
 {
 	if( this.path )
 	{
+		if( !twigDup )
+		{
+			this.twig =
+				Jools.copy( this.twig );
+		}
+
 		this.twig.headline =
 			this.twig.headline.Create(
 				'text',

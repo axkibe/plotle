@@ -130,7 +130,8 @@ if( JOOBJ )
 			'Forms.Form',
 		init :
 			[
-				'inherit'
+				'inherit',
+				'twigDup'
 			],
 		twig :
 			{
@@ -148,8 +149,10 @@ if( JOOBJ )
 
 
 var
-	Welcome =
-		Forms.Welcome;
+	Welcome;
+
+Welcome =
+	Forms.Welcome;
 
 
 /*
@@ -157,12 +160,19 @@ var
 */
 Welcome.prototype._init =
 	function(
-		inherit
+		inherit,
+		twigDup
 	)
 {
 	if( !this.path )
 	{
 		return;
+	}
+
+	if( !twigDup )
+	{
+		this.twig =
+			Jools.copy( this.twig );
 	}
 
 	this.twig.headline =

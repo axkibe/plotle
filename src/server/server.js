@@ -2821,8 +2821,6 @@ Server.prototype.requestListener =
 		return this.webAjax( request, red, result );
 	}
 
-console.log( 'XXX', pathname );
-
 	resource =
 		this.inventory.map[ pathname ];
 

@@ -128,7 +128,8 @@ if( JOOBJ )
 
 		init :
 			[
-				'inherit'
+				'inherit',
+				'twigDup'
 			],
 		twig :
 			{
@@ -154,7 +155,8 @@ var
 */
 User.prototype._init =
 	function(
-		inherit
+		inherit,
+		twigDup
 	)
 {
 	var
@@ -174,6 +176,12 @@ User.prototype._init =
 	{
 		isGuest =
 			true;
+	}
+
+	if( !twigDup )
+	{
+		this.twig =
+			Jools.copy( this.twig );
 	}
 
 	this.twig.headline =

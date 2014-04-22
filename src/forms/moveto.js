@@ -20,6 +20,7 @@ Forms =
 | Imports
 */
 var
+	Jools,
 	shell;
 
 
@@ -129,7 +130,8 @@ if( JOOBJ )
 			'Forms.Form',
 		init :
 			[
-				'inherit'
+				'inherit',
+				'twigDup'
 			],
 		twig :
 			{
@@ -155,17 +157,26 @@ var
 */
 MoveTo.prototype._init =
 	function(
-		inherit
+		inherit,
+		twigDup
 	)
 {
+	var
+		isGuest;
+
 	if( this.path )
 	{
-		var
-			isGuest =
-				this.username === null ?
-					false
-					:
-					this.username.substr( 0, 7 ) === 'visitor';
+		isGuest =
+			this.username === null ?
+				false
+				:
+				this.username.substr( 0, 7 ) === 'visitor';
+
+		if( !twigDup )
+		{
+			this.twig =
+				Jools.copy( this.twig );
+		}
 
 		this.twig.userHomeButton =
 			this.twig.userHomeButton.Create(

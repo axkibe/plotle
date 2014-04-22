@@ -611,14 +611,12 @@ Peer.prototype.removeText =
 {
 	if( len === 0 )
 	{
-		return;
+		return null;
 	}
 
 	if( len < 0 )
 	{
-		throw new Error(
-			'malformed removeText'
-		);
+		throw new Error( 'malformed removeText' );
 	}
 
 	return (
@@ -674,13 +672,13 @@ Peer.prototype.removeRange =
 
 	if ( path1.equals( path2 ) )
 	{
-		return (
-			this.removeText(
-				path1,
-				at1,
-				at2 - at1
-			).tree
+		this.removeText(
+			path1,
+			at1,
+			at2 - at1
 		);
+
+		return;
 	}
 
 	k1 =
@@ -718,12 +716,15 @@ Peer.prototype.removeRange =
 		len2
 	);
 
-	return (
-		this.removeText(
-			path1,
-			at1,
-			len2 - at1 + at2
-		).tree
+	if( len2 - at1 + at2 === 0 )
+	{
+		return;
+	}
+
+	this.removeText(
+		path1,
+		at1,
+		len2 - at1 + at2
 	);
 };
 

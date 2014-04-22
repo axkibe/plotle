@@ -610,14 +610,19 @@ IFace.prototype.get =
 IFace.prototype._update =
 	function( )
 {
-	var self = this;
+	var
+		ajax,
+		self;
+
+	self =
+		this;
 
 	if( self._$updateAjax )
 	{
 		throw new Error( 'double update?' );
 	}
 
-	var ajax =
+	ajax =
 	self._$updateAjax =
 		new XMLHttpRequest( );
 
@@ -677,7 +682,7 @@ IFace.prototype._update =
 			);
 		}
 
-		Jools.log('iface', '<-u', asw);
+		Jools.log( 'iface', '<-u', asw );
 
 		if( !asw.ok )
 		{
@@ -1024,41 +1029,44 @@ IFace.prototype.alter =
 	)
 {
 	var
-		result =
-			new Change(
-				new Sign( src ),
-				new Sign( trg )
-			).changeTree(
-				this.$cSpace
-			);
+		c,
+		chgX,
+		result,
+		undo;
+
+	result =
+		new Change(
+			new Sign( src ),
+			new Sign( trg )
+		).changeTree(
+			this.$cSpace
+		);
 
 	this.$cSpace =
 		result.tree;
 
-	var
-		chgX =
-			result.chgX,
+	chgX =
+		result.chgX,
 
-		c =
-			Jools.immute( {
-				cid :
-					Jools.uid( ),
+	c =
+		Jools.immute( {
+			cid :
+				Jools.uid( ),
 
-				chgX :
-					chgX,
+			chgX :
+				chgX,
 
-				time :
-					this.$remoteTime
-			} );
+			time :
+				this.$remoteTime
+		} );
 
 	this._$outbox.push( c );
 
 	this._$redo =
 		[ ];
 
-	var
-		undo =
-			this._$undo;
+	undo =
+		this._$undo;
 
 	undo.push( c );
 
