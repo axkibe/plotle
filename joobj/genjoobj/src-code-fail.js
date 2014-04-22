@@ -53,7 +53,7 @@ Code.Fail =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 782186043 )
+/**/	if( tag !== 8833 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -152,7 +152,7 @@ Fail.prototype.Create =
 
 	return (
 		new Fail(
-			782186043,
+			8833,
 			v_message
 		)
 	);

@@ -39,6 +39,37 @@ var
 
 
 /*
+| Expression precedence table.
+*/
+var
+	precTable;
+
+precTable =
+	{
+		'And' :
+			13,
+		'Assign' :
+			17,
+		'Call' :
+			2,
+		'Fail' :
+			-1, // TODO why is an expression after all?
+		'Func' :
+			-1,
+		'New' :
+			2,
+		'ObjLiteral' :
+			-1,
+		'Or' :
+			14,
+		'Term' :
+			-1,
+		'VList' :
+			-1
+	};
+
+
+/*
 | Returns the length of a text
 */
 var
@@ -80,7 +111,8 @@ formatAnd =
 	text =
 		formatExpression(
 			context,
-			expr.left
+			expr.left,
+			precTable.And
 		)
 		+
 		'\n'
@@ -89,7 +121,8 @@ formatAnd =
 		+
 		formatExpression(
 			context,
-			expr.right
+			expr.right,
+			precTable.And
 		);
 
 	return text;
@@ -132,7 +165,8 @@ formatAssign =
 	text +=
 		formatExpression(
 			context,
-			assign.right
+			assign.right,
+			precTable.Assign
 		);
 
 	return text;
@@ -321,7 +355,8 @@ formatIf =
 			+
 			formatExpression(
 				context.Inline,
-				cond
+				cond,
+				null
 			)
 			+
 			' )\n';
@@ -341,7 +376,8 @@ formatIf =
 			+
 			formatExpression(
 				context.Inc,
-				cond
+				cond,
+				null
 			) + '\n'
 			+
 			context.tab + ')\n';
@@ -391,19 +427,22 @@ formatFor =
 		forContext.tab +
 		formatExpression(
 			forContext.Inline,
-			forExpr.init
+			forExpr.init,
+			null
 		) +
 		';\n' +
 		forContext.tab +
 		formatExpression(
 			forContext.Inline,
-			forExpr.condition
+			forExpr.condition,
+			null
 		) +
 		';\n' +
 		forContext.tab +
 		formatExpression(
 			forContext.Inline,
-			forExpr.iterate
+			forExpr.iterate,
+			null
 		) +
 		'\n' +
 		context.tab +
@@ -485,7 +524,8 @@ formatOr =
 	text =
 		formatExpression(
 			context,
-			expr.left
+			expr.left,
+			precTable.Or
 		)
 		+
 		'\n'
@@ -494,7 +534,8 @@ formatOr =
 		+
 		formatExpression(
 			context,
-			expr.right
+			expr.right,
+			precTable.Or
 		);
 
 	return text;
@@ -522,7 +563,8 @@ formatReturn =
 			+
 			formatExpression(
 				context,
-				statement.expr
+				statement.expr,
+				null
 			);
 
 		return text;
@@ -539,7 +581,8 @@ formatReturn =
 			+
 			formatExpression(
 				context.Inline,
-				statement.expr
+				statement.expr,
+				null
 			);
 
 		return text;
@@ -558,7 +601,8 @@ formatReturn =
 		+
 		formatExpression(
 			context.Inc,
-			statement.expr
+			statement.expr,
+			null
 		)
 		+
 		'\n'
@@ -765,7 +809,7 @@ formatFunc =
 var
 formatStatement =
 	function(
-		context,    // the indent in the text
+		context,    // context to be formated in
 		statement,  // the statement to be formated
 		lookBehind, // the previous statement (or null)
 		lookAhead   // the next statement (or null)
@@ -897,7 +941,8 @@ formatStatement =
 					+
 					formatExpression(
 						context.Inline,
-						statement
+						statement,
+						null
 					);
 
 				if( textLen( etxt ) >= MAX_TEXT_WIDTH )
@@ -918,7 +963,8 @@ formatStatement =
 				text +=
 					formatExpression(
 						context,
-						statement
+						statement,
+						null
 					);
 			}
 	}
@@ -967,51 +1013,43 @@ formatStatement =
 
 
 /*
-| Expression precedence table.
-*/
-var
-	_precTable;
-
-_precTable =
-	{
-		'And' :
-			13,
-		'Assign' :
-			17,
-		'Call' :
-			2,
-		'Fail' :
-			99, // TODO why is an expression after all?
-		'Func' :
-			99,
-		'New' :
-			2,
-		'ObjLiteral' :
-			99,
-		'Or' :
-			14,
-		'Term' :
-			99,
-		'VList' :
-			99
-	};
-
-/*
 | Formats an expression.
 */
 var
 formatExpression =
 	function(
 		context, // context to be formated in
-		expr    // the expression to format
-//		ppre     // the operator precedence of the parenting expresson
+		expr,    // the expression to format
+		pprec    // the operator precedence of the parenting expresson
 	)
 {
 	var
-		prec;
+		bracket,
+		prec,
+		subcontext,
+		text;
 
 	prec =
-		_precTable[ expr.reflect ];
+		precTable[ expr.reflect ];
+
+	bracket =
+		pprec !== null && prec > pprec;
+		
+
+	subcontext =
+		context;
+
+	text =
+		'';
+
+	if( bracket )
+	{
+		text =
+			context.tab + '(' + context.sep;
+
+		subcontext =
+			context.Inc;
+	}
 
 	if( prec === undefined )
 	{
@@ -1022,48 +1060,86 @@ formatExpression =
 	{
 		case 'And' :
 
-			return formatAnd( context, expr );
+			text +=
+				formatAnd( subcontext, expr );
+
+			break;
 
 		case 'Assign' :
 
-			return formatAssign( context, expr );
+			text +=
+				formatAssign( subcontext, expr );
+
+			break;
 
 		case 'Call' :
 
-			return formatCall( context, expr, false );
+			text +=
+				formatCall( subcontext, expr, false );
+
+			break;
 
 		case 'Fail' :
 
-			return formatFail( context, expr );
+			text +=
+				formatFail( subcontext, expr );
+
+			break;
 
 		case 'Func' :
 
-			return formatFunc( context, expr );
+			text +=
+				formatFunc( subcontext, expr );
+
+			break;
 
 		case 'New' :
 
-			return formatNew( context, expr );
+			text +=
+				formatNew( subcontext, expr );
+
+			break;
 
 		case 'ObjLiteral' :
 
-			return formatObjLiteral( context, expr );
+			text +=
+				formatObjLiteral( subcontext, expr );
+
+			break;
 
 		case 'Or' :
 
-			return formatOr( context, expr );
+			text +=
+				formatOr( subcontext, expr );
+
+			break;
 
 		case 'Term' :
 
-			return formatTerm( context, expr );
+			text +=
+				formatTerm( subcontext, expr );
+
+			break;
 
 		case 'VList' :
 
-			return formatVList( context, expr );
+			text +=
+				formatVList( subcontext, expr );
+
+			break;
 
 		default :
 
 			throw new Error( expr.reflect );
 	}
+
+	if( bracket )
+	{
+		text +=
+			context.sep + context.tab + ')';
+	}
+
+	return text;
 };
 
 
@@ -1099,7 +1175,8 @@ formatFail =
 		+
 		formatExpression(
 			context.Inc,
-			fail.message
+			fail.message,
+			null
 		)
 		+
 		context.sep
@@ -1111,6 +1188,8 @@ formatFail =
 
 /*
 | Formats a call.
+|
+| FIXME, put snuggle into context
 */
 var
 formatCall =
@@ -1144,7 +1223,8 @@ formatCall =
 	text =
 		formatExpression(
 			snuggle ? context.Inline : context,
-			call.func
+			call.func,
+			null
 		);
 
 	if( call.ranks.length === 0 )
@@ -1172,7 +1252,8 @@ formatCall =
 			text +=
 				formatExpression(
 					context.Inc,
-					arg
+					arg,
+					null
 				);
 
 			if( a + 1 < aZ )
@@ -1213,9 +1294,8 @@ formatNew =
 	)
 {
 	var
-		text =
-			'';
-
+		text;
+		
 /**/if( CHECK )
 /**/{
 /**/	if( newexpr.reflect !== 'New' )
@@ -1223,6 +1303,9 @@ formatNew =
 /**/		throw new Error( );
 /**/	}
 /**/}
+
+	text =
+		'';
 
 	if( !context.inline )
 	{
@@ -1300,7 +1383,8 @@ formatObjLiteral =
 		text +=
 			formatExpression(
 				context.Inc.Inc,
-				objliteral.twig[ key ]
+				objliteral.twig[ key ],
+				null
 			)
 			+
 			(
@@ -1452,7 +1536,8 @@ formatVarDec =
 		text +=
 			formatExpression(
 				context,
-				varDec.assign
+				varDec.assign,
+				null
 			);
 	}
 

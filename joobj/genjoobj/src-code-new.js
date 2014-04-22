@@ -53,7 +53,7 @@ Code.New =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 501581984 )
+/**/	if( tag !== 8833 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -150,7 +150,7 @@ New.prototype.Create =
 
 	return (
 		new New(
-			501581984,
+			8833,
 			v_call
 		)
 	);

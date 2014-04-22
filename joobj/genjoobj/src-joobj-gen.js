@@ -51,7 +51,7 @@ Gen =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 474898738 )
+/**/	if( tag !== 8833 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -143,7 +143,7 @@ Gen.prototype.Create =
 
 	return (
 		new Gen(
-			474898738,
+			8833,
 			v_joobj
 		)
 	);

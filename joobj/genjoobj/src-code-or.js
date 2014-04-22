@@ -54,7 +54,7 @@ Code.Or =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 186772581 )
+/**/	if( tag !== 8833 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -173,7 +173,7 @@ Or.prototype.Create =
 
 	return (
 		new Or(
-			186772581,
+			8833,
 			v_left,
 			v_right
 		)

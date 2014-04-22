@@ -64,7 +64,7 @@ Code.Switch =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 45583408 )
+/**/	if( tag !== 8833 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -380,7 +380,7 @@ Switch.prototype.Create =
 
 	return (
 		new Switch(
-			45583408,
+			8833,
 			twig,
 			ranks,
 			v_defaultCase,

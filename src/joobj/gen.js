@@ -126,7 +126,8 @@ Gen.prototype._init =
 	}
 
 	this.tag =
-		Math.floor( Math.random( ) * 1000000000 );
+		8833; // XXX TODO
+//		Math.floor( Math.random( ) * 1000000000 );
 
 	this.unit =
 		joobj.unit;

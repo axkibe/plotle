@@ -54,7 +54,7 @@ Code.Assign =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 532456387 )
+/**/	if( tag !== 8833 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -173,7 +173,7 @@ Assign.prototype.Create =
 
 	return (
 		new Assign(
-			532456387,
+			8833,
 			v_left,
 			v_right
 		)

@@ -55,7 +55,7 @@ Code.ForIn =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 415252646 )
+/**/	if( tag !== 8833 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -226,7 +226,7 @@ ForIn.prototype.Create =
 
 	return (
 		new ForIn(
-			415252646,
+			8833,
 			v_block,
 			v_object,
 			v_variable

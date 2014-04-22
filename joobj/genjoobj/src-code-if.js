@@ -55,7 +55,7 @@ Code.If =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 762541115 )
+/**/	if( tag !== 8833 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -219,7 +219,7 @@ If.prototype.Create =
 
 	return (
 		new If(
-			762541115,
+			8833,
 			v_condition,
 			v_elsewise,
 			v_then

@@ -63,7 +63,7 @@ Code.ObjLiteral =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 458098681 )
+/**/	if( tag !== 8833 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -343,7 +343,7 @@ ObjLiteral.prototype.Create =
 
 	return (
 		new ObjLiteral(
-			458098681,
+			8833,
 			twig,
 			ranks,
 			v_path

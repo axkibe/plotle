@@ -53,7 +53,7 @@ Code.Comment =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 405562340 )
+/**/	if( tag !== 8833 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -143,7 +143,7 @@ Comment.prototype.Create =
 
 	return (
 		new Comment(
-			405562340,
+			8833,
 			v_content
 		)
 	);
