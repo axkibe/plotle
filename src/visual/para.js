@@ -114,6 +114,18 @@ if( JOOBJ )
 							'undefined'
 					}
 			},
+/* TODO
+		alike :
+			{
+				alikeIgnoringView :
+					{
+						ignores :
+							[
+								'view'
+							]
+					}
+			},
+*/
 		init :
 			[
 				'inherit'

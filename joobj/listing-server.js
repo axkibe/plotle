@@ -15,7 +15,7 @@ module.exports =
 			'src/visual/relation.js',
 			'src/visual/space.js',
 
-			// built in genjoobj
+			// built-in genjoobj
 			'src/code/and.js',
 			'src/code/assign.js',
 			'src/code/block.js',
@@ -32,6 +32,7 @@ module.exports =
 			'src/code/if.js',
 			'src/code/new.js',
 			'src/code/obj-literal.js',
+			'src/code/or.js',
 			'src/code/return.js',
 			'src/code/switch.js',
 			'src/code/term.js',

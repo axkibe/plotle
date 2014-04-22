@@ -22,6 +22,7 @@ module.exports =
 			'src/code/if.js',
 			'src/code/new.js',
 			'src/code/obj-literal.js',
+			'src/code/or.js',
 			'src/code/return.js',
 			'src/code/switch.js',
 			'src/code/term.js',

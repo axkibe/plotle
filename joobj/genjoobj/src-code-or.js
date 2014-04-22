@@ -44,8 +44,8 @@ if( SERVER )
 /*
 | Constructor.
 */
-var And =
-Code.And =
+var Or =
+Code.Or =
 	function(
 		tag, // magic cookie
 		v_left, // left expression
@@ -54,7 +54,7 @@ Code.And =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== 470356451 )
+/**/	if( tag !== 186772581 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -71,10 +71,10 @@ Code.And =
 
 
 /*
-| Creates a new And object.
+| Creates a new Or object.
 */
-And.Create =
-And.prototype.Create =
+Or.Create =
+Or.prototype.Create =
 	function(
 		// free strings
 	)
@@ -84,7 +84,7 @@ And.prototype.Create =
 		v_left,
 		v_right;
 
-	if( this !== And )
+	if( this !== Or )
 	{
 		inherit =
 			this;
@@ -172,8 +172,8 @@ And.prototype.Create =
 	}
 
 	return (
-		new And(
-			470356451,
+		new Or(
+			186772581,
 			v_left,
 			v_right
 		)
@@ -184,28 +184,28 @@ And.prototype.Create =
 /*
 | Reflection.
 */
-And.prototype.reflect =
-	'And';
+Or.prototype.reflect =
+	'Or';
 
 
 /*
 | Sets values by path.
 */
-And.prototype.setPath =
+Or.prototype.setPath =
 	JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-And.prototype.getPath =
+Or.prototype.getPath =
 	JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-And.prototype.equals =
+Or.prototype.equals =
 	function(
 		obj // object to compare to
 	)
@@ -234,7 +234,7 @@ And.prototype.equals =
 if( SERVER )
 {
 	module.exports =
-		And;
+		Or;
 }
 
 
