@@ -368,7 +368,15 @@ Switch.prototype.Create =
 		&&
 		!twigDup
 		&&
-		(v_defaultCase === inherit.defaultCase||(v_defaultCase&&v_defaultCase.equals( inherit.defaultCase)))
+		(
+			v_defaultCase === inherit.defaultCase
+			||
+			v_defaultCase
+			&&
+			v_defaultCase.equals(
+				inherit.defaultCase
+			)
+		)
 		&&
 		v_statement.equals(
 			inherit.statement
@@ -451,7 +459,13 @@ Switch.prototype.equals =
 	}
 
 	return (
-		(this.defaultCase === obj.defaultCase ||(this.defaultCase !== null && this.defaultCase.equals( obj.defaultCase )))
+		(
+			this.defaultCase === obj.defaultCase
+			||
+			this.defaultCase !== null
+			&&
+			this.defaultCase.equals( obj.defaultCase )
+		)
 		&&
 		this.statement === obj.statement
 	);

@@ -144,7 +144,15 @@ Fail.prototype.Create =
 	if(
 		inherit
 		&&
-		(v_message === inherit.message||(v_message&&v_message.equals( inherit.message)))
+		(
+			v_message === inherit.message
+			||
+			v_message
+			&&
+			v_message.equals(
+				inherit.message
+			)
+		)
 	)
 	{
 		return inherit;
@@ -198,7 +206,13 @@ Fail.prototype.equals =
 		return false;
 	}
 
-	return (this.message === obj.message ||(this.message !== null && this.message.equals( obj.message )));
+	return (
+		this.message === obj.message
+		||
+		this.message !== null
+		&&
+		this.message.equals( obj.message )
+	);
 };
 
 

@@ -216,7 +216,11 @@ Context.prototype.Create =
 /**/		throw new Error( 'attribute indent must not be null.' );
 /**/	}
 /**/
-/**/	if( typeof( v_indent ) !== 'number' || Math.floor( v_indent ) !== v_indent )
+/**/	if(
+/**/		typeof( v_indent ) !== 'number'
+/**/		||
+/**/		Math.floor( v_indent ) !== v_indent
+/**/	)
 /**/	{
 /**/		throw new Error( 'type mismatch' );
 /**/	}

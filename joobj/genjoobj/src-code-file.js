@@ -218,11 +218,35 @@ File.prototype.Create =
 	if(
 		inherit
 		&&
-		(v_capsule === inherit.capsule||(v_capsule&&v_capsule.equals( inherit.capsule)))
+		(
+			v_capsule === inherit.capsule
+			||
+			v_capsule
+			&&
+			v_capsule.equals(
+				inherit.capsule
+			)
+		)
 		&&
-		(v_header === inherit.header||(v_header&&v_header.equals( inherit.header)))
+		(
+			v_header === inherit.header
+			||
+			v_header
+			&&
+			v_header.equals(
+				inherit.header
+			)
+		)
 		&&
-		(v_preamble === inherit.preamble||(v_preamble&&v_preamble.equals( inherit.preamble)))
+		(
+			v_preamble === inherit.preamble
+			||
+			v_preamble
+			&&
+			v_preamble.equals(
+				inherit.preamble
+			)
+		)
 	)
 	{
 		return inherit;
@@ -279,11 +303,29 @@ File.prototype.equals =
 	}
 
 	return (
-		(this.capsule === obj.capsule ||(this.capsule !== null && this.capsule.equals( obj.capsule )))
+		(
+			this.capsule === obj.capsule
+			||
+			this.capsule !== null
+			&&
+			this.capsule.equals( obj.capsule )
+		)
 		&&
-		(this.header === obj.header ||(this.header !== null && this.header.equals( obj.header )))
+		(
+			this.header === obj.header
+			||
+			this.header !== null
+			&&
+			this.header.equals( obj.header )
+		)
 		&&
-		(this.preamble === obj.preamble ||(this.preamble !== null && this.preamble.equals( obj.preamble )))
+		(
+			this.preamble === obj.preamble
+			||
+			this.preamble !== null
+			&&
+			this.preamble.equals( obj.preamble )
+		)
 	);
 };
 

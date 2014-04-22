@@ -335,7 +335,15 @@ VList.prototype.Create =
 		&&
 		!twigDup
 		&&
-		(v_path === inherit.path||(v_path&&v_path.equals( inherit.path)))
+		(
+			v_path === inherit.path
+			||
+			v_path
+			&&
+			v_path.equals(
+				inherit.path
+			)
+		)
 	)
 	{
 		return inherit;
@@ -412,7 +420,13 @@ VList.prototype.equals =
 		return false;
 	}
 
-	return (this.path === obj.path ||(this.path !== null && this.path.equals( obj.path )));
+	return (
+		this.path === obj.path
+		||
+		this.path !== null
+		&&
+		this.path.equals( obj.path )
+	);
 };
 
 
