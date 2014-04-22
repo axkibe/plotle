@@ -363,13 +363,14 @@ formatIf =
 	}
 	catch ( e )
 	{
+		// rethrows any real error
 		if( e !== 'noinline' )
 		{
 			throw e;
 		}
 	}
 
-	if( text === null )
+	if( text === null || text.length > MAX_TEXT_WIDTH )
 	{
 		text =
 			context.tab + 'if(\n'
@@ -516,11 +517,6 @@ formatOr =
 /**/	}
 /**/}
 
-	if( context.inline )
-	{
-		throw 'noinline';
-	}
-
 	text =
 		formatExpression(
 			context,
@@ -528,9 +524,9 @@ formatOr =
 			precTable.Or
 		)
 		+
-		'\n'
+		context.sep
 		+
-		context.tab + '||\n'
+		context.tab + '||' + context.sep
 		+
 		formatExpression(
 			context,
@@ -589,6 +585,7 @@ formatReturn =
 	}
 	catch( e )
 	{
+		// rethrows any real error
 		if( e !== 'noinline' )
 		{
 			throw e;
@@ -955,6 +952,7 @@ formatStatement =
 			}
 			catch( e )
 			{
+				// rethrows any real error
 				if( e !== 'noinline' )
 				{
 					throw e;
@@ -1441,11 +1439,16 @@ formatVarDec =
 	)
 {
 	var
-		// true when this is a root function
-		isRootFunc =
-			false,
-		text =
-			'';
+		aText,       // formated assignment
+		isRootFunc,
+		text;
+
+	// true when this is a root function
+	isRootFunc =
+		false;
+
+	text =
+		'';
 
 	if(
 		context.root
@@ -1514,18 +1517,7 @@ formatVarDec =
 	if( varDec.assign )
 	{
 		text +=
-			' =';
-
-		if( !context.inline )
-		{
-			text +=
-				'\n';
-		}
-		else
-		{
-			text +=
-				' ';
-		}
+			' =' + context.sep;
 
 		if( varDec.assign.reflect !== 'Assign' )
 		{
@@ -1533,12 +1525,41 @@ formatVarDec =
 				context.Inc;
 		}
 
+		aText =
+			null;
+
+		try
+		{
+			aText =
+				context.tab
+				+
+				formatExpression(
+					context.Inline,
+					varDec.assign,
+					null
+				);
+		}
+		catch ( e )
+		{
+			// rethrows any real error
+			if( e !== 'noinline' )
+			{
+				throw e;
+			}
+		}
+
+		if( aText === null || aText > MAX_TEXT_WIDTH )
+		{
+			aText =
+				formatExpression(
+					context,
+					varDec.assign,
+					null
+				);
+		}
+
 		text +=
-			formatExpression(
-				context,
-				varDec.assign,
-				null
-			);
+			aText;
 	}
 
 	return text;

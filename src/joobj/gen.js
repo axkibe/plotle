@@ -1762,8 +1762,6 @@ Gen.prototype.genCreatorUnchanged =
 				}
 				else
 				{
-					// FIXME this is ugly
-					// XXX
 					ceq =
 						Code.Or(
 							Code.Term(
@@ -1771,32 +1769,12 @@ Gen.prototype.genCreatorUnchanged =
 							),
 							Code.And(
 								Code.Term( attr.vName ),
-								Code.Term(
-									attr.vName + '.equals( inherit.' + attr.assign + ' )'
+								Code.Call(
+									Code.Term( attr.vName + '.equals' ),
+									Code.Term( 'inherit.' + attr.assign )
 								)
 							)
 						);
-					/*
-					ceq =
-						Code.Term(
-							'('
-							+
-							attr.vName + ' === inherit.' + attr.assign
-							+
-							'||'
-							+
-							'('
-							+
-							attr.vName
-							+
-							'&&'
-							+
-							attr.vName +
-							'.equals( inherit.' + attr.assign + ')'
-							+
-							'))'
-						);
-					*/
 				}
 		}
 
@@ -2264,7 +2242,10 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			Code.ObjLiteral( )
 		)
 		.If(
-			Code.Term( '!jwig || !ranks ' ),
+			Code.Or(
+				Code.Term( '!jwig' ),
+				Code.Term( '!ranks' )
+			),
 			Code.Block( )
 			.Fail( 'ranks/twig information missing' )
 		)
@@ -2758,17 +2739,20 @@ Gen.prototype.genEquals =
 				else
 				{
 					ceq =
-						// FIXME
-						Code.Term(
-							'(this.' + attr.assign +
-							' === obj.' + attr.assign +
-							' ||' +
-							'(' +
-							'this.' + attr.assign + ' !== null' +
-							' && ' +
-							'this.' + attr.assign +
-							'.equals( obj.' + attr.assign + ' )' +
-							'))'
+						// FIXME XXX
+						Code.Or(
+							Code.Term(
+								'this.' + attr.assign + ' === obj.' + attr.assign
+							),
+							Code.And(
+								Code.Term(
+									'this.' + attr.assign + ' !== null'
+								),
+								Code.Term(
+									'this.' + attr.assign +
+									'.equals( obj.' + attr.assign + ' )'
+								)
+							)
 						);
 				}
 		}
@@ -2845,7 +2829,10 @@ Gen.prototype.genExport =
 			block
 			.VarDec(
 				this.unit,
-				Code.Term( this.unit + ' || { }' )
+				Code.Or(
+					Code.Term( this.unit ),
+					Code.ObjLiteral( )
+				)
 			);
 	}
 	else
