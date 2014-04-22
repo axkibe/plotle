@@ -1419,10 +1419,14 @@ Gen.prototype.genCreatorChecks =
 			case 'Integer' :
 
 				tcheck =
-					Code.Term(
-						'typeof( ' + attr.vName  + ' ) !== \'number\'' +
-						' || ' +
-						'Math.floor( ' + attr.vName + ' ) !== ' + attr.vName
+					Code.Or(
+						Code.Term(
+							'typeof( ' + attr.vName  + ' ) !== \'number\''
+						),
+						Code.Term(
+							'Math.floor( ' + attr.vName + ' ) !== ' +
+							attr.vName
+						)
 					);
 
 				break;
@@ -1759,6 +1763,20 @@ Gen.prototype.genCreatorUnchanged =
 				else
 				{
 					// FIXME this is ugly
+					// XXX
+					ceq =
+						Code.Or(
+							Code.Term(
+								attr.vName + ' === inherit.' + attr.assign
+							),
+							Code.And(
+								Code.Term( attr.vName ),
+								Code.Term(
+									attr.vName + '.equals( inherit.' + attr.assign + ' )'
+								)
+							)
+						);
+					/*
 					ceq =
 						Code.Term(
 							'('
@@ -1778,6 +1796,7 @@ Gen.prototype.genCreatorUnchanged =
 							+
 							'))'
 						);
+					*/
 				}
 		}
 
