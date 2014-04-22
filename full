@@ -1,0 +1,6 @@
+#!/bin/bash
+rm joobj/server/*
+rm joobj/shell/*
+node --harmony src/tools/genjoobj.js --all joobj/listing-genjoobj.js
+node --harmony src/tools/genjoobj.js joobj/listing-server.js
+node --harmony src/server/server.js

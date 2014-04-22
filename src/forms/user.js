@@ -17,6 +17,7 @@ Forms =
 | Imports
 */
 var
+	Jools,
 	shell;
 
 

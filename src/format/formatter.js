@@ -456,6 +456,51 @@ formatForIn =
 };
 
 
+/*
+| Formats a logical or.
+*/
+var
+formatOr =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Or' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( context.inline )
+	{
+		throw 'noinline';
+	}
+
+	text =
+		formatExpression(
+			context,
+			expr.left
+		)
+		+
+		'\n'
+		+
+		context.tab + '||\n'
+		+
+		formatExpression(
+			context,
+			expr.right
+		);
+
+	return text;
+};
+
+
 
 /*
 | Formats a return statement.
@@ -922,15 +967,57 @@ formatStatement =
 
 
 /*
+| Expression precedence table.
+*/
+var
+	_precTable;
+
+_precTable =
+	{
+		'And' :
+			13,
+		'Assign' :
+			17,
+		'Call' :
+			2,
+		'Fail' :
+			99, // TODO why is an expression after all?
+		'Func' :
+			99,
+		'New' :
+			2,
+		'ObjLiteral' :
+			99,
+		'Or' :
+			14,
+		'Term' :
+			99,
+		'VList' :
+			99
+	};
+
+/*
 | Formats an expression.
 */
 var
 formatExpression =
 	function(
 		context, // context to be formated in
-		expr     // the expression to format
+		expr    // the expression to format
+//		ppre     // the operator precedence of the parenting expresson
 	)
 {
+	var
+		prec;
+
+	prec =
+		_precTable[ expr.reflect ];
+
+	if( prec === undefined )
+	{
+		throw new Error( expr.reflect );
+	}
+
 	switch( expr.reflect )
 	{
 		case 'And' :
@@ -960,6 +1047,10 @@ formatExpression =
 		case 'ObjLiteral' :
 
 			return formatObjLiteral( context, expr );
+
+		case 'Or' :
+
+			return formatOr( context, expr );
 
 		case 'Term' :
 
