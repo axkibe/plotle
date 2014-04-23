@@ -34,7 +34,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -191,13 +193,7 @@ FuncArg.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new FuncArg(
-			8833,
-			v_comment,
-			v_name
-		)
-	);
+	return new FuncArg( 8833, v_comment, v_name );
 };
 
 

@@ -34,7 +34,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -224,14 +226,7 @@ ForIn.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new ForIn(
-			8833,
-			v_block,
-			v_object,
-			v_variable
-		)
-	);
+	return new ForIn( 8833, v_block, v_object, v_variable );
 };
 
 

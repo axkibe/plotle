@@ -34,7 +34,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -252,15 +254,7 @@ For.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new For(
-			8833,
-			v_block,
-			v_condition,
-			v_init,
-			v_iterate
-		)
-	);
+	return new For( 8833, v_block, v_condition, v_init, v_iterate );
 };
 
 

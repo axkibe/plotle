@@ -34,7 +34,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -171,13 +173,7 @@ Or.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new Or(
-			8833,
-			v_left,
-			v_right
-		)
-	);
+	return new Or( 8833, v_left, v_right );
 };
 
 

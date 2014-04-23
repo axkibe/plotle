@@ -435,7 +435,10 @@ Gen.prototype.genNodeIncludes =
 		Code.Block( )
 		.Assign(
 			Code.Var( 'JoobjProto' ),
-			Code.Term( 'require( \'../../src/joobj/proto\' )' )
+			Code.Call(
+				Code.Var( 'require' ),
+				Code.Term( '\'../../src/joobj/proto\'' )
+			)
 		)
 		.Assign(
 			Code.Var( 'Jools' ),
@@ -489,7 +492,7 @@ Gen.prototype.genNodeIncludes =
 				.Assign(
 					Code.Term( unitName + '.' + typeName ),
 					Code.Call(
-						Code.Term( 'require' ),
+						Code.Var( 'require' ),
 						Code.Term(
 							'\'../../src/' +
 								camelCaseToDash( unitName ) +

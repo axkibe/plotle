@@ -34,7 +34,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -252,14 +254,7 @@ File.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new File(
-			8833,
-			v_capsule,
-			v_header,
-			v_preamble
-		)
-	);
+	return new File( 8833, v_capsule, v_header, v_preamble );
 };
 
 

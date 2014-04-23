@@ -34,7 +34,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -279,11 +281,7 @@ Switch.prototype.Create =
 				twig[ key ] =
 					arg;
 
-				ranks.splice(
-					rank,
-					0,
-					key
-				);
+				ranks.splice( rank, 0, key );
 
 				break;
 
@@ -310,10 +308,7 @@ Switch.prototype.Create =
 
 				delete twig[ arg ];
 
-				ranks.splice(
-					ranks.indexOf( arg ),
-					1
-				);
+				ranks.splice( ranks.indexOf( arg ), 1 );
 
 				break;
 
@@ -386,15 +381,7 @@ Switch.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new Switch(
-			8833,
-			twig,
-			ranks,
-			v_defaultCase,
-			v_statement
-		)
-	);
+	return new Switch( 8833, twig, ranks, v_defaultCase, v_statement );
 };
 
 

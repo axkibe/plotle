@@ -33,7 +33,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -271,15 +273,7 @@ Context.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new Context(
-			8833,
-			v_check,
-			v_indent,
-			v_inline,
-			v_root
-		)
-	);
+	return new Context( 8833, v_check, v_indent, v_inline, v_root );
 };
 
 

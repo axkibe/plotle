@@ -34,7 +34,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -261,11 +263,7 @@ ObjLiteral.prototype.Create =
 				twig[ key ] =
 					arg;
 
-				ranks.splice(
-					rank,
-					0,
-					key
-				);
+				ranks.splice( rank, 0, key );
 
 				break;
 
@@ -292,10 +290,7 @@ ObjLiteral.prototype.Create =
 
 				delete twig[ arg ];
 
-				ranks.splice(
-					ranks.indexOf( arg ),
-					1
-				);
+				ranks.splice( ranks.indexOf( arg ), 1 );
 
 				break;
 
@@ -349,14 +344,7 @@ ObjLiteral.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new ObjLiteral(
-			8833,
-			twig,
-			ranks,
-			v_path
-		)
-	);
+	return new ObjLiteral( 8833, twig, ranks, v_path );
 };
 
 

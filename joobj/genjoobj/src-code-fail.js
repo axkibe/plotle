@@ -34,7 +34,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -158,12 +160,7 @@ Fail.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new Fail(
-			8833,
-			v_message
-		)
-	);
+	return new Fail( 8833, v_message );
 };
 
 

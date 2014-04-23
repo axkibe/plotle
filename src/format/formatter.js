@@ -52,8 +52,6 @@ precTable =
 			17,
 		'Call' :
 			2,
-		'Fail' :
-			-1, // TODO why is an expression after all?
 		'Func' :
 			-1,
 		'In' :
@@ -558,24 +556,21 @@ formatReturn =
 	var
 		text;
 
-	if( context.inline )
-	{
-		text =
-			'return '
-			+
-			formatExpression(
-				context,
-				statement.expr,
-				null
-			);
-
-		return text;
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( statement.reflect !== 'Return' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	try
 	{
 		// first tries to inline the
 		// return expression.
+		text =
+			null;
+
 		text =
 			context.tab
 			+
@@ -586,8 +581,6 @@ formatReturn =
 				statement.expr,
 				null
 			);
-
-		return text;
 	}
 	catch( e )
 	{
@@ -596,6 +589,17 @@ formatReturn =
 		{
 			throw e;
 		}
+	}
+
+	if( text !== null && textLen( text ) < MAX_TEXT_WIDTH )
+	{
+		return text;
+	}
+
+	// caller requested inline, but cannot do.
+	if( context.inline )
+	{
+		throw 'noinline'
 	}
 
 	// no inline mode
@@ -821,9 +825,14 @@ formatStatement =
 	)
 {
 	var
-		etxt,
-		text =
-			'';
+		text,
+		subtext;
+
+	text =
+		'';
+
+	subtext =
+		null;
 
 	if(
 		lookBehind
@@ -869,94 +878,25 @@ formatStatement =
 		case 'Check' :
 
 			text +=
-				formatCheck(
-					context,
-					statement
-				);
+				formatCheck( context, statement );
 
 			break;
 
 		case 'If' :
 
 			text +=
-				formatIf(
-					context,
-					statement
-				);
+				formatIf( context, statement );
 
 			break;
 
-		case 'For' :
-
-			text +=
-				formatFor(
-					context,
-					statement
-				);
-
-			break;
-
-		case 'ForIn' :
-
-			text +=
-				formatForIn(
-					context,
-					statement
-			);
-
-			break;
-
-		case 'Return' :
-
-			text +=
-				formatReturn(
-					context,
-					statement
-				);
-
-			break;
-
-		case 'VarDec' :
-
-			text +=
-				formatVarDec(
-					context,
-					statement,
-					lookBehind
-				);
-
-			break;
-
-		case 'Switch' :
-
-			text +=
-				formatSwitch(
-					context,
-					statement
-				);
-
-			break;
-
-		default :
+		case 'Fail' :
 
 			try
 			{
-				etxt =
+				subtext =
 					context.tab
 					+
-					formatExpression(
-						context.Inline,
-						statement,
-						null
-					);
-
-				if( textLen( etxt ) >= MAX_TEXT_WIDTH )
-				{
-					throw 'noinline';
-				}
-
-				text +=
-					etxt;
+					formatFail( context.Inline, statement );
 			}
 			catch( e )
 			{
@@ -965,7 +905,85 @@ formatStatement =
 				{
 					throw e;
 				}
+			}
 
+			if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
+			{
+				text +=
+					subtext;
+			}
+			else
+			{
+				text +=
+					formatFail( context, statement );
+			}
+			break;
+
+
+		case 'For' :
+
+			text +=
+				formatFor( context, statement );
+
+			break;
+
+		case 'ForIn' :
+
+			text +=
+				formatForIn( context, statement );
+
+			break;
+
+		case 'Return' :
+
+			text +=
+				formatReturn( context, statement );
+
+			break;
+
+		case 'VarDec' :
+
+			text +=
+				formatVarDec( context, statement, lookBehind );
+
+			break;
+
+		case 'Switch' :
+
+			text +=
+				formatSwitch( context, statement );
+
+			break;
+
+		default :
+
+			try
+			{
+				subtext =
+					context.tab
+					+
+					formatExpression(
+						context.Inline,
+						statement,
+						null
+					);
+			}
+			catch( e )
+			{
+				// rethrows any real error
+				if( e !== 'noinline' )
+				{
+					throw e;
+				}
+			}
+
+			if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
+			{
+				text +=
+					subtext;
+			}
+			else
+			{
 				text +=
 					formatExpression(
 						context,
@@ -1002,7 +1020,7 @@ formatStatement =
 		case 'Term' :
 		case 'Var' :
 
-			return text += ';' + context.sep;
+			return text + ';' + context.sep;
 
 		case 'Check' :
 		case 'For' :
@@ -1010,7 +1028,7 @@ formatStatement =
 		case 'If' :
 		case 'Switch' :
 
-			return text += context.sep;
+			return text + context.sep;
 
 		default :
 
@@ -1083,13 +1101,6 @@ formatExpression =
 
 			text +=
 				formatCall( subcontext, expr, false );
-
-			break;
-
-		case 'Fail' :
-
-			text +=
-				formatFail( subcontext, expr );
 
 			break;
 
@@ -1225,15 +1236,6 @@ formatCall =
 /**/	}
 /**/}
 
-	if(
-		context.inline
-		&&
-		call.ranks.length > 1
-	)
-	{
-		throw 'noinline';
-	}
-
 	text =
 		formatExpression(
 			snuggle ? context.Inline : context,
@@ -1249,10 +1251,7 @@ formatCall =
 	else
 	{
 		text +=
-			context.inline ?
-				'( '
-				:
-				'(\n';
+			'(' + context.sep;
 
 		for(
 			var a = 0, aZ = call.ranks.length;
@@ -1273,19 +1272,12 @@ formatCall =
 			if( a + 1 < aZ )
 			{
 				text +=
-					context.inline ?
-						', '
-						:
-						',\n';
+					',' + context.sep;
 			}
 			else
 			{
 				text +=
-					context.inline ?
-						' '
-						:
-						'\n';
-
+					context.sep;
 			}
 		}
 

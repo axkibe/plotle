@@ -52,7 +52,7 @@ var
 	Jools =
 		require( '../jools/jools' ),
 	MaxAge =
-		require( './maxage' ),
+		require( './max-age' ),
 	MeshMashine =
 		require( '../mm/meshmashine' ),
 	mongodb =

@@ -34,7 +34,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -181,13 +183,7 @@ VarDec.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new VarDec(
-			8833,
-			v_assign,
-			v_name
-		)
-	);
+	return new VarDec( 8833, v_assign, v_name );
 };
 
 

@@ -34,7 +34,9 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require( '../../src/joobj/proto' );
+		require(
+			'../../src/joobj/proto'
+		);
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -261,11 +263,7 @@ Func.prototype.Create =
 				twig[ key ] =
 					arg;
 
-				ranks.splice(
-					rank,
-					0,
-					key
-				);
+				ranks.splice( rank, 0, key );
 
 				break;
 
@@ -292,10 +290,7 @@ Func.prototype.Create =
 
 				delete twig[ arg ];
 
-				ranks.splice(
-					ranks.indexOf( arg ),
-					1
-				);
+				ranks.splice( ranks.indexOf( arg ), 1 );
 
 				break;
 
@@ -349,14 +344,7 @@ Func.prototype.Create =
 		return inherit;
 	}
 
-	return (
-		new Func(
-			8833,
-			twig,
-			ranks,
-			v_block
-		)
-	);
+	return new Func( 8833, twig, ranks, v_block );
 };
 
 
