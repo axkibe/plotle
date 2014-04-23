@@ -56,6 +56,8 @@ precTable =
 			-1, // TODO why is an expression after all?
 		'Func' :
 			-1,
+		'In' :
+			8,
 		'New' :
 			2,
 		'ObjLiteral' :
@@ -63,6 +65,8 @@ precTable =
 		'Or' :
 			14,
 		'Term' :
+			-1,
+		'Var' :
 			-1,
 		'VList' :
 			-1
@@ -149,9 +153,10 @@ formatAssign =
 			'';
 
 	text +=
-		formatTerm(
+		formatExpression(
 			context,
-			assign.left
+			assign.left,
+			precTable.Assign
 		)
 		+
 		' =\n';
@@ -480,9 +485,10 @@ formatForIn =
 		+
 		' in '
 		+
-		formatTerm(
+		formatExpression(
 			context.Inline,
-			expr.object
+			expr.object,
+			precTable.In
 		)
 		+
 		' )\n'
@@ -631,9 +637,10 @@ formatSwitch =
 		+
 		'switch( '
 		+
-		formatTerm(
+		formatExpression(
 			context.Inline,
-			switchExpr.statement
+			switchExpr.statement,
+			null
 		)
 		+
 		' )\n'
@@ -666,9 +673,10 @@ formatSwitch =
 				+
 				'case '
 				+
-				formatTerm(
+				formatExpression(
 					caseContext.Inline,
-					caseExpr.atRank( b )
+					caseExpr.atRank( b ),
+					null
 				)
 				+
 				' :\n\n'
@@ -992,6 +1000,7 @@ formatStatement =
 		case 'New' :
 		case 'Return' :
 		case 'Term' :
+		case 'Var' :
 
 			return text += ';' + context.sep;
 
@@ -1116,6 +1125,13 @@ formatExpression =
 
 			text +=
 				formatTerm( subcontext, expr );
+
+			break;
+
+		case 'Var' :
+
+			text +=
+				formatVar( subcontext, expr );
 
 			break;
 
@@ -1403,7 +1419,7 @@ formatObjLiteral =
 
 
 /*
-| Formats an term.
+| Formats a term.
 |
 | FIXME remove
 */
@@ -1424,6 +1440,29 @@ formatTerm =
 /**/}
 
 	return context.tab + term.term;
+};
+
+
+/*
+| Formats a variable use.
+*/
+var
+formatVar =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Var' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return context.tab + expr.name;
 };
 
 
@@ -1615,9 +1654,10 @@ formatVList =
 		{
 			text +=
 				' = ' +
-				formatTerm(
+				formatExpression(
 					context,
-					varDec.assign
+					varDec.assign,
+					precTable.Assign
 				);
 		}
 

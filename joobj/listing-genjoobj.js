@@ -26,6 +26,7 @@ module.exports =
 			'src/code/return.js',
 			'src/code/switch.js',
 			'src/code/term.js',
+			'src/code/var.js',
 			'src/code/var-dec.js',
 			'src/code/vlist.js',
 			'src/format/context.js',

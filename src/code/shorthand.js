@@ -55,6 +55,8 @@ var
 				require( '../code/switch' ),
 			Term :
 				require( '../code/term' ),
+			Var :
+				require( '../code/var' ),
 			VarDec :
 				require( '../code/var-dec' ),
 			VList :
@@ -269,6 +271,23 @@ ShortHand.Term =
 		Code.Term.Create(
 			'term',
 				term
+		)
+	);
+};
+
+
+/*
+| Shorthand for creating variable uses.
+*/
+ShortHand.Var =
+	function(
+		name
+	)
+{
+	return (
+		Code.Var.Create(
+			'name',
+				name
 		)
 	);
 };
