@@ -24,6 +24,7 @@ module.exports =
 			'src/code/obj-literal.js',
 			'src/code/or.js',
 			'src/code/return.js',
+			'src/code/string-literal.js',
 			'src/code/switch.js',
 			'src/code/term.js',
 			'src/code/var.js',

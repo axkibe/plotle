@@ -64,6 +64,8 @@ precTable =
 			14,
 		'Term' :
 			-1,
+		'StringLiteral' :
+			-1,
 		'Var' :
 			-1,
 		'VList' :
@@ -599,7 +601,7 @@ formatReturn =
 	// caller requested inline, but cannot do.
 	if( context.inline )
 	{
-		throw 'noinline'
+		throw 'noinline';
 	}
 
 	// no inline mode
@@ -1017,6 +1019,7 @@ formatStatement =
 		case 'Fail' :
 		case 'New' :
 		case 'Return' :
+		case 'StringLiteral' :
 		case 'Term' :
 		case 'Var' :
 
@@ -1129,6 +1132,13 @@ formatExpression =
 
 			text +=
 				formatOr( subcontext, expr );
+
+			break;
+
+		case 'StringLiteral' :
+
+			text +=
+				formatStringLiteral( subcontext, expr );
 
 			break;
 
@@ -1457,6 +1467,28 @@ formatVar =
 	return context.tab + expr.name;
 };
 
+
+/*
+| Formats a string literal use.
+*/
+var
+formatStringLiteral =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'StringLiteral' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return context.tab + '\'' + expr.string + '\'';
+};
 
 /*
 | Formats a variable declaration.

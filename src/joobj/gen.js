@@ -437,7 +437,7 @@ Gen.prototype.genNodeIncludes =
 			Code.Var( 'JoobjProto' ),
 			Code.Call(
 				Code.Var( 'require' ),
-				Code.Term( '\'../../src/joobj/proto\'' )
+				Code.StringLiteral( '../../src/joobj/proto' )
 			)
 		)
 		.Assign(

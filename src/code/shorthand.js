@@ -51,6 +51,8 @@ var
 				require( '../code/obj-literal' ),
 			Or :
 				require( '../code/or' ),
+			StringLiteral :
+				require( '../code/string-literal' ),
 			Switch :
 				require( '../code/switch' ),
 			Term :
@@ -241,6 +243,24 @@ ShortHand.Or =
 		)
 	);
 };
+
+
+/*
+| Shorthand for creating string literals.
+*/
+ShortHand.StringLiteral =
+	function(
+		string
+	)
+{
+	return (
+		Code.StringLiteral.Create(
+			'string',
+				string
+		)
+	);
+};
+
 
 /*
 | Shorthand for creating switch statements.
