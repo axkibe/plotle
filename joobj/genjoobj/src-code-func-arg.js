@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -183,9 +181,7 @@ FuncArg.prototype.Create =
 /**/}
 
 	if(
-		inherit
-		&&
-		v_comment === inherit.comment
+		inherit && v_comment === inherit.comment
 		&&
 		v_name === inherit.name
 	)
@@ -236,11 +232,7 @@ FuncArg.prototype.equals =
 		return false;
 	}
 
-	return (
-		this.comment === obj.comment
-		&&
-		this.name === obj.name
-	);
+	return this.comment === obj.comment && this.name === obj.name;
 };
 
 

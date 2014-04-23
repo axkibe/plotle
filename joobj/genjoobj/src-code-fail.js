@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -151,9 +149,7 @@ Fail.prototype.Create =
 			||
 			v_message
 			&&
-			v_message.equals(
-				inherit.message
-			)
+			v_message.equals( inherit.message )
 		)
 	)
 	{

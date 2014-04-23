@@ -24,7 +24,7 @@ var
 */
 var
 	MAX_TEXT_WIDTH =
-		80;
+		79;
 
 /*
 | Node imports.
@@ -52,6 +52,8 @@ precTable =
 			17,
 		'Call' :
 			2,
+		'Equals' :
+			9,
 		'Func' :
 			-1,
 		'In' :
@@ -82,7 +84,7 @@ textLen =
 		txt
 	)
 {
-	return txt.replace( '\t', '    ' ).length;
+	return txt.replace( '\t', '        ' ).length;
 };
 
 
@@ -97,6 +99,7 @@ formatAnd =
 	)
 {
 	var
+		subtext,
 		text;
 
 /**/if( CHECK )
@@ -107,27 +110,96 @@ formatAnd =
 /**/	}
 /**/}
 
-	if( context.inline )
+	try
 	{
-		throw 'noinline';
+		subtext =
+			null;
+
+		subtext =
+			context.tab
+			+
+			formatExpression(
+				context.Inline,
+				expr.left,
+				precTable.And
+			);
+	}
+	catch( e )
+	{
+		// rethrows any real error
+		if( e !== 'noinline' )
+		{
+			throw e;
+		}
 	}
 
-	text =
-		formatExpression(
-			context,
-			expr.left,
-			precTable.And
-		)
+	if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
+	{
+		text =
+			subtext;
+	}
+	else
+	{
+		if( context.inline )
+		{
+			throw 'noinline';
+		}
+
+		text =
+			formatExpression(
+				context,
+				expr.left,
+				precTable.And
+			);
+	}
+
+	text +=
+		context.sep
 		+
-		'\n'
-		+
-		context.tab + '&&\n'
-		+
-		formatExpression(
-			context,
-			expr.right,
-			precTable.And
-		);
+		context.tab + '&&' + context.sep;
+
+	try
+	{
+		subtext =
+			null;
+
+		subtext =
+			context.tab
+			+
+			formatExpression(
+				context.Inline,
+				expr.right,
+				precTable.And
+			);
+	}
+	catch( e )
+	{
+		// rethrows any real error
+		if( e !== 'noinline' )
+		{
+			throw e;
+		}
+	}
+
+	if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
+	{
+		text +=
+			subtext;
+	}
+	else
+	{
+		if( context.inline )
+		{
+			throw 'noinline';
+		}
+
+		text +=
+			formatExpression(
+				context,
+				expr.right,
+				precTable.And
+			);
+	}
 
 	return text;
 };
@@ -143,14 +215,17 @@ formatAssign =
 		assign
 	)
 {
+	var
+		subtext,
+		text;
+
 	if( context.inline )
 	{
 		throw 'noinline';
 	}
 
-	var
-		text =
-			'';
+	text =
+		'';
 
 	text +=
 		formatExpression(
@@ -167,12 +242,43 @@ formatAssign =
 			context.IncSame;
 	}
 
-	text +=
-		formatExpression(
-			context,
-			assign.right,
-			precTable.Assign
-		);
+	try
+	{
+		subtext =
+			null;
+
+		subtext =
+			context.tab
+			+
+			formatExpression(
+				context.Inline,
+				assign.right,
+				precTable.Assign
+			);
+	}
+	catch( e )
+	{
+		// rethrows any real error
+		if( e !== 'noinline' )
+		{
+			throw e;
+		}
+	}
+
+	if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
+	{
+		text +=
+			subtext;
+	}
+	else
+	{
+		text +=
+			formatExpression(
+				context,
+				assign.right,
+				precTable.Assign
+			);
+	}
 
 	return text;
 };
@@ -325,6 +431,48 @@ formatBlock =
 
 
 /*
+| Formats an equality check.
+*/
+var
+formatEquals =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Equals' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			context,
+			expr.left,
+			precTable.Equals
+		)
+		+
+		context.sep
+		+
+		context.tab + '===' + context.sep
+		+
+		formatExpression(
+			context,
+			expr.right,
+			precTable.Equals
+		);
+
+	return text;
+};
+
+
+/*
 | Formats an if statement.
 */
 var
@@ -375,7 +523,7 @@ formatIf =
 		}
 	}
 
-	if( text === null || text.length > MAX_TEXT_WIDTH )
+	if( text === null || textLen( text ) > MAX_TEXT_WIDTH )
 	{
 		text =
 			context.tab + 'if(\n'
@@ -919,8 +1067,8 @@ formatStatement =
 				text +=
 					formatFail( context, statement );
 			}
-			break;
 
+			break;
 
 		case 'For' :
 
@@ -1062,7 +1210,6 @@ formatExpression =
 
 	bracket =
 		pprec !== null && prec > pprec;
-		
 
 	subcontext =
 		context;
@@ -1104,6 +1251,13 @@ formatExpression =
 
 			text +=
 				formatCall( subcontext, expr, false );
+
+			break;
+
+		case 'Equals' :
+
+			text +=
+				formatEquals( subcontext, expr );
 
 			break;
 
@@ -1611,7 +1765,7 @@ formatVarDec =
 			}
 		}
 
-		if( aText === null || aText > MAX_TEXT_WIDTH )
+		if( aText === null || textLen( aText ) > MAX_TEXT_WIDTH )
 		{
 			aText =
 				formatExpression(

@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -173,9 +171,7 @@ VarDec.prototype.Create =
 /**/}
 
 	if(
-		inherit
-		&&
-		v_assign === inherit.assign
+		inherit && v_assign === inherit.assign
 		&&
 		v_name === inherit.name
 	)

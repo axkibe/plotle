@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -45,9 +43,7 @@ if( SERVER )
 		{ };
 
 	Code.Case =
-		require(
-			'../../src/code/case'
-		);
+		require( '../../src/code/case' );
 }
 
 
@@ -180,9 +176,7 @@ Switch.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -214,9 +208,7 @@ Switch.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -231,7 +223,7 @@ Switch.prototype.Create =
 				arg =
 					arguments[ ++a + 1 ];
 
-				if( twig[ key ] === undefined  )
+				if( twig[ key ] === undefined )
 				{
 					throw new Error( 'key "' + key + '" not in use' );
 				}
@@ -246,9 +238,7 @@ Switch.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -290,9 +280,7 @@ Switch.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -301,7 +289,7 @@ Switch.prototype.Create =
 						true;
 				}
 
-				if( twig[ arg ] === undefined  )
+				if( twig[ arg ] === undefined )
 				{
 					throw new Error( 'key "' + arg + '" not in use' );
 				}
@@ -359,23 +347,17 @@ Switch.prototype.Create =
 /**/}
 
 	if(
-		inherit
-		&&
-		!twigDup
+		inherit && !twigDup
 		&&
 		(
 			v_defaultCase === inherit.defaultCase
 			||
 			v_defaultCase
 			&&
-			v_defaultCase.equals(
-				inherit.defaultCase
-			)
+			v_defaultCase.equals( inherit.defaultCase )
 		)
 		&&
-		v_statement.equals(
-			inherit.statement
-		)
+		v_statement.equals( inherit.statement )
 	)
 	{
 		return inherit;

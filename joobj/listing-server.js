@@ -23,6 +23,7 @@ module.exports =
 			'src/code/case.js',
 			'src/code/check.js',
 			'src/code/comment.js',
+			'src/code/equals.js',
 			'src/code/fail.js',
 			'src/code/file.js',
 			'src/code/for-in.js',

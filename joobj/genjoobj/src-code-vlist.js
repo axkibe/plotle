@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -45,9 +43,7 @@ if( SERVER )
 		{ };
 
 	Code.VarDec =
-		require(
-			'../../src/code/var-dec'
-		);
+		require( '../../src/code/var-dec' );
 }
 
 
@@ -162,9 +158,7 @@ VList.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -196,9 +190,7 @@ VList.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -213,7 +205,7 @@ VList.prototype.Create =
 				arg =
 					arguments[ ++a + 1 ];
 
-				if( twig[ key ] === undefined  )
+				if( twig[ key ] === undefined )
 				{
 					throw new Error( 'key "' + key + '" not in use' );
 				}
@@ -228,9 +220,7 @@ VList.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -272,9 +262,7 @@ VList.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -283,7 +271,7 @@ VList.prototype.Create =
 						true;
 				}
 
-				if( twig[ arg ] === undefined  )
+				if( twig[ arg ] === undefined )
 				{
 					throw new Error( 'key "' + arg + '" not in use' );
 				}
@@ -326,18 +314,14 @@ VList.prototype.Create =
 /**/}
 
 	if(
-		inherit
-		&&
-		!twigDup
+		inherit && !twigDup
 		&&
 		(
 			v_path === inherit.path
 			||
 			v_path
 			&&
-			v_path.equals(
-				inherit.path
-			)
+			v_path.equals( inherit.path )
 		)
 	)
 	{

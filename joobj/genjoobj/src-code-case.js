@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -45,9 +43,7 @@ if( SERVER )
 		{ };
 
 	Code.Term =
-		require(
-			'../../src/code/term'
-		);
+		require( '../../src/code/term' );
 }
 
 
@@ -162,9 +158,7 @@ Case.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -196,9 +190,7 @@ Case.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -213,7 +205,7 @@ Case.prototype.Create =
 				arg =
 					arguments[ ++a + 1 ];
 
-				if( twig[ key ] === undefined  )
+				if( twig[ key ] === undefined )
 				{
 					throw new Error( 'key "' + key + '" not in use' );
 				}
@@ -228,9 +220,7 @@ Case.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -272,9 +262,7 @@ Case.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -283,7 +271,7 @@ Case.prototype.Create =
 						true;
 				}
 
-				if( twig[ arg ] === undefined  )
+				if( twig[ arg ] === undefined )
 				{
 					throw new Error( 'key "' + arg + '" not in use' );
 				}
@@ -321,15 +309,7 @@ Case.prototype.Create =
 /**/	}
 /**/}
 
-	if(
-		inherit
-		&&
-		!twigDup
-		&&
-		v_block.equals(
-			inherit.block
-		)
-	)
+	if( inherit && !twigDup && v_block.equals( inherit.block ) )
 	{
 		return inherit;
 	}

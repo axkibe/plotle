@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -162,13 +160,7 @@ And.prototype.Create =
 /**/	}
 /**/}
 
-	if(
-		inherit
-		&&
-		v_left === inherit.left
-		&&
-		v_right === inherit.right
-	)
+	if( inherit && v_left === inherit.left && v_right === inherit.right )
 	{
 		return inherit;
 	}
@@ -216,11 +208,7 @@ And.prototype.equals =
 		return false;
 	}
 
-	return (
-		this.left === obj.left
-		&&
-		this.right === obj.right
-	);
+	return this.left === obj.left && this.right === obj.right;
 };
 
 

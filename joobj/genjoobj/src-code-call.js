@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -45,19 +43,13 @@ if( SERVER )
 		{ };
 
 	Code.Or =
-		require(
-			'../../src/code/or'
-		);
+		require( '../../src/code/or' );
 
 	Code.Term =
-		require(
-			'../../src/code/term'
-		);
+		require( '../../src/code/term' );
 
 	Code.Var =
-		require(
-			'../../src/code/var'
-		);
+		require( '../../src/code/var' );
 }
 
 
@@ -172,9 +164,7 @@ Call.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -206,9 +196,7 @@ Call.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -223,7 +211,7 @@ Call.prototype.Create =
 				arg =
 					arguments[ ++a + 1 ];
 
-				if( twig[ key ] === undefined  )
+				if( twig[ key ] === undefined )
 				{
 					throw new Error( 'key "' + key + '" not in use' );
 				}
@@ -238,9 +226,7 @@ Call.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -282,9 +268,7 @@ Call.prototype.Create =
 				if( !twigDup )
 				{
 					twig =
-						Jools.copy(
-							twig
-						);
+						Jools.copy( twig );
 
 					ranks =
 						ranks.slice( );
@@ -293,7 +277,7 @@ Call.prototype.Create =
 						true;
 				}
 
-				if( twig[ arg ] === undefined  )
+				if( twig[ arg ] === undefined )
 				{
 					throw new Error( 'key "' + arg + '" not in use' );
 				}
@@ -326,13 +310,7 @@ Call.prototype.Create =
 /**/	}
 /**/}
 
-	if(
-		inherit
-		&&
-		!twigDup
-		&&
-		v_func === inherit.func
-	)
+	if( inherit && !twigDup && v_func === inherit.func )
 	{
 		return inherit;
 	}

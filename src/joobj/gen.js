@@ -442,7 +442,10 @@ Gen.prototype.genNodeIncludes =
 		)
 		.Assign(
 			Code.Var( 'Jools' ),
-			Code.Term( 'require( \'../../src/jools/jools\' )' )
+			Code.Call(
+				Code.Var( 'require' ),
+				Code.StringLiteral( '../../src/jools/jools' )
+			)
 		);
 
 	// generates the unit objects
@@ -493,12 +496,11 @@ Gen.prototype.genNodeIncludes =
 					Code.Term( unitName + '.' + typeName ),
 					Code.Call(
 						Code.Var( 'require' ),
-						Code.Term(
-							'\'../../src/' +
+						Code.StringLiteral(
+							'../../src/' +
 								camelCaseToDash( unitName ) +
 								'/' +
-								camelCaseToDash( typeName ) +
-								'\''
+								camelCaseToDash( typeName )
 						)
 					)
 				);
@@ -648,7 +650,7 @@ Gen.prototype.genConstructor =
 
 			initCall =
 				initCall.Append(
-					Code.Term( attr.vName )
+					Code.Var( attr.vName )
 				);
 		}
 
@@ -663,7 +665,7 @@ Gen.prototype.genConstructor =
 		block
 		.Call(
 			Code.Term( 'Jools.immute' ),
-			Code.Term( 'this' )
+			Code.Var( 'this' )
 		);
 
 	if( this.twig )
@@ -672,11 +674,11 @@ Gen.prototype.genConstructor =
 			block
 			.Call(
 				Code.Term( 'Jools.immute' ),
-				Code.Term( 'twig' )
+				Code.Var( 'twig' )
 			)
 			.Call(
 				Code.Term( 'Jools.immute' ),
-				Code.Term( 'ranks' )
+				Code.Var( 'ranks' )
 			);
 	}
 
@@ -775,9 +777,7 @@ Gen.prototype.genConstructor =
 		capsule =
 			capsule
 			.Assign(
-				Code.Term(
-					this.name
-				),
+				Code.Var( this.name ),
 				constructor
 			);
 	}
@@ -802,7 +802,7 @@ Gen.prototype.genSingleton =
 		)
 		.VarDec(
 			'_singleton',
-			Code.Term( 'null' )
+			Code.Var( 'null' )
 		)
 	);
 };
@@ -899,7 +899,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 			Code.Block( )
 			.Assign(
 				Code.Term( 'inherit' ),
-				Code.Term( 'this' )
+				Code.Var( 'this' )
 			);
 
 	if( this.twig )
@@ -907,11 +907,11 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		receiver =
 			receiver
 			.Assign(
-				Code.Term( 'twig' ),
+				Code.Var( 'twig' ),
 				Code.Term( 'inherit.twig' )
 			)
 			.Assign(
-				Code.Term( 'ranks' ),
+				Code.Var( 'ranks' ),
 				Code.Term( 'inherit.ranks' )
 			)
 			.Assign(
@@ -1127,7 +1127,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Code.Term( 'arguments[ ++a + 1 ]' )
 				)
 				.If(
-					Code.Term( 'twig[ key ] === undefined ' ),
+					Code.Equals(
+						Code.Term( 'twig[ key ]' ),
+						Code.Var( 'undefined' )
+					),
 					Code.Block( )
 					.Fail(
 						Code.Term(
@@ -1236,7 +1239,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.If(
-					Code.Term( 'twig[ arg ] === undefined ' ),
+					Code.Equals(
+						Code.Term( 'twig[ arg ]' ),
+						Code.Var( 'undefined' )
+					),
 					Code.Block( )
 					.Fail(
 						Code.Term(
@@ -1329,7 +1335,10 @@ Gen.prototype.genCreatorDefaults =
 			block =
 				block
 				.If(
-					Code.Term( attr.vName + ' === undefined' ),
+					Code.Equals(
+						Code.Var( attr.vName ),
+						Code.Var( 'undefined' )
+					),
 					Code.Block( )
 					.Assign(
 						Code.Term( attr.vName ),
@@ -1387,7 +1396,10 @@ Gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Code.Term( attr.vName + ' === undefined' ),
+					Code.Equals(
+						Code.Var( attr.vName ),
+						Code.Var( 'undefined' )
+					),
 					Code.Block( )
 					.Fail( 'undefined attribute ' + name )
 				);
@@ -1397,7 +1409,10 @@ Gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Code.Term( attr.vName + ' === null' ),
+					Code.Equals(
+						Code.Var( attr.vName ),
+						Code.Var( 'null' )
+					),
 					Code.Block( )
 					.Fail( 'attribute ' + name + ' must not be null.' )
 				);
@@ -1758,7 +1773,10 @@ Gen.prototype.genCreatorUnchanged =
 			cond =
 				Code.And(
 					cond,
-					Code.Term( attr.vName + ' === null' )
+					Code.Equals(
+						Code.Var( attr.vName ),
+						Code.Var( 'null' )
+					)
 				);
 		}
 
@@ -1775,9 +1793,9 @@ Gen.prototype.genCreatorUnchanged =
 			case 'Tree' : // FIXME
 
 				ceq =
-					Code.Term(
-						attr.vName +
-						' === inherit.' + attr.assign
+					Code.Equals(
+						Code.Var( attr.vName ),
+						Code.Term( 'inherit.' + attr.assign )
 					);
 
 				break;

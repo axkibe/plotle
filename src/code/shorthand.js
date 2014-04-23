@@ -39,6 +39,8 @@ var
 				require( '../code/comment' ),
 			If :
 				require( '../code/if' ),
+			Equals :
+				require( '../code/equals' ),
 			File :
 				require( '../code/file' ),
 			Func :
@@ -143,6 +145,26 @@ ShortHand.Call =
 	}
 
 	return call;
+};
+
+
+/*
+| Shorthand for creating equals.
+*/
+ShortHand.Equals =
+	function(
+		left,
+		right
+	)
+{
+	return (
+		Code.Equals.Create(
+			'left',
+				left,
+			'right',
+				right
+		)
+	);
 };
 
 

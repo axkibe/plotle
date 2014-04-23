@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -210,15 +208,9 @@ ForIn.prototype.Create =
 /**/}
 
 	if(
-		inherit
+		inherit && v_block.equals( inherit.block )
 		&&
-		v_block.equals(
-			inherit.block
-		)
-		&&
-		v_object.equals(
-			inherit.object
-		)
+		v_object.equals( inherit.object )
 		&&
 		v_variable === inherit.variable
 	)
@@ -270,9 +262,7 @@ ForIn.prototype.equals =
 	}
 
 	return (
-		this.block === obj.block
-		&&
-		this.object === obj.object
+		this.block === obj.block && this.object === obj.object
 		&&
 		this.variable === obj.variable
 	);

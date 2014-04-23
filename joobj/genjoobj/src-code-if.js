@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -205,23 +203,17 @@ If.prototype.Create =
 /**/}
 
 	if(
-		inherit
-		&&
-		v_condition === inherit.condition
+		inherit && v_condition === inherit.condition
 		&&
 		(
 			v_elsewise === inherit.elsewise
 			||
 			v_elsewise
 			&&
-			v_elsewise.equals(
-				inherit.elsewise
-			)
+			v_elsewise.equals( inherit.elsewise )
 		)
 		&&
-		v_then.equals(
-			inherit.then
-		)
+		v_then.equals( inherit.then )
 	)
 	{
 		return inherit;

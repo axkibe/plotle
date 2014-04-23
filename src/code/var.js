@@ -63,6 +63,14 @@ Var.prototype._init =
 /**/	{
 /**/		throw new Error( 'invalid variable name' );
 /**/	}
+/**/
+/**/	switch( this.name )
+/**/	{
+/**/		case 'true' :
+/**/		case 'false' :
+/**/
+/**/			throw new Error( 'var cannot be a literal' );
+/**/	}
 /**/}
 };
 

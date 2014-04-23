@@ -34,9 +34,7 @@ var
 if( SERVER )
 {
 	JoobjProto =
-		require(
-			'../../src/joobj/proto'
-		);
+		require( '../../src/joobj/proto' );
 
 	Jools =
 		require( '../../src/jools/jools' );
@@ -225,9 +223,7 @@ File.prototype.Create =
 			||
 			v_capsule
 			&&
-			v_capsule.equals(
-				inherit.capsule
-			)
+			v_capsule.equals( inherit.capsule )
 		)
 		&&
 		(
@@ -235,9 +231,7 @@ File.prototype.Create =
 			||
 			v_header
 			&&
-			v_header.equals(
-				inherit.header
-			)
+			v_header.equals( inherit.header )
 		)
 		&&
 		(
@@ -245,9 +239,7 @@ File.prototype.Create =
 			||
 			v_preamble
 			&&
-			v_preamble.equals(
-				inherit.preamble
-			)
+			v_preamble.equals( inherit.preamble )
 		)
 	)
 	{
