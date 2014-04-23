@@ -133,16 +133,7 @@ if( JOOBJ )
 				'inherit'
 			],
 		twig :
-			{
-				'Button' :
-					'Widgets.Button',
-				'CheckBox' :
-					'Widgets.Checkbox',
-				'Input' :
-					'Widgets.Input',
-				'Label' :
-					'Widgets.Label'
-			}
+			'form-widgets'
 	};
 }
 

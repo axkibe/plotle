@@ -42,9 +42,19 @@ if( SERVER )
 	Code =
 		{ };
 
+	Code.Or =
+		require(
+			'../../src/code/or'
+		);
+
 	Code.Term =
 		require(
 			'../../src/code/term'
+		);
+
+	Code.Var =
+		require(
+			'../../src/code/var'
 		);
 }
 
@@ -319,11 +329,6 @@ Call.prototype.Create =
 /**/	{
 /**/		throw new Error( 'attribute func must not be null.' );
 /**/	}
-/**/
-/**/	if( v_func.reflect !== 'Term' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
-/**/	}
 /**/}
 
 	if(
@@ -331,9 +336,7 @@ Call.prototype.Create =
 		&&
 		!twigDup
 		&&
-		v_func.equals(
-			inherit.func
-		)
+		v_func === inherit.func
 	)
 	{
 		return inherit;

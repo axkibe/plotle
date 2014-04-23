@@ -31,13 +31,18 @@ if( JOOBJ )
 						comment :
 							'the function to call',
 						type :
-							'Term'
+							'Object' // Expression
 					},
 			},
+		// FIXME
 		twig :
 			{
 				'Term' :
-					'Code.Term'
+					'Code.Term',
+				'Or' :
+					'Code.Or', //XXX
+				'Var' :
+					'Code.Var',
 			}
 	};
 }

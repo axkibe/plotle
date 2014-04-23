@@ -43,6 +43,8 @@ var
 		require( '../joobj/this' )( module ),
 	Code =
 		require( '../code/shorthand' ),
+	Jools =
+		require( '../jools/jools' ),
 	Validator =
 		require( './validator' );
 
@@ -79,8 +81,10 @@ Gen.prototype._init =
 		name,
 		// twigs to be recognized
 		subParts,
-		twig =
-			{ },
+		// processed twig table for generator use
+		twig,
+		// twig map to be used (the definition)
+		twigMap,
 		// twigs sorted alphabetically
 		twigList,
 		// units sorted alphabetically
@@ -88,6 +92,12 @@ Gen.prototype._init =
 		// units used
 		units =
 			{ };
+
+	twig =
+		null;
+
+	twigMap =
+		null;
 
 	this.hasJSON =
 		!!joobj.json;
@@ -270,10 +280,31 @@ Gen.prototype._init =
 
 	if( joobj.twig )
 	{
-		for( name in joobj.twig )
+		twig = { };
+
+		if( Jools.isString( joobj.twig ) )
+		{
+/**/		if( CHECK )
+/**/		{
+/**/			if( !/[a-zA-Z_-]+/.test( joobj.twig ) )
+/**/			{
+/**/				throw new Error( 'invalid typemap reference' );
+/**/			}
+/**/		}
+
+			twigMap =
+				require( '../typemaps/' + joobj.twig );
+		}
+		else
+		{
+			twigMap =
+				joobj.twig;
+		}
+
+		for( name in twigMap )
 		{
 			ut =
-				joobj.twig[ name ].split( '.' );
+				twigMap[ name ].split( '.' );
 
 			if( ut.length !== 2 )
 			{
@@ -325,7 +356,7 @@ Gen.prototype._init =
 			Object.keys( twig ).sort( );
 
 		this.twigList =
-			twigList;
+			Object.freeze( twigList );
 	}
 
 	this.reference =
@@ -403,11 +434,11 @@ Gen.prototype.genNodeIncludes =
 	block =
 		Code.Block( )
 		.Assign(
-			Code.Term( 'JoobjProto' ),
+			Code.Var( 'JoobjProto' ),
 			Code.Term( 'require( \'../../src/joobj/proto\' )' )
 		)
 		.Assign(
-			Code.Term( 'Jools' ),
+			Code.Var( 'Jools' ),
 			Code.Term( 'require( \'../../src/jools/jools\' )' )
 		);
 
@@ -422,7 +453,7 @@ Gen.prototype.genNodeIncludes =
 		block =
 			block
 			.Assign(
-				Code.Term( this.unitList[ a ] ),
+				Code.Var( this.unitList[ a ] ),
 				Code.ObjLiteral( )
 			);
 	}
@@ -473,7 +504,7 @@ Gen.prototype.genNodeIncludes =
 
 	capsule =
 		capsule.If(
-			Code.Term( 'SERVER' ),
+			Code.Var( 'SERVER' ),
 			block
 		);
 
@@ -536,7 +567,7 @@ Gen.prototype.genConstructor =
 		assign =
 			Code.Assign(
 				Code.Term( 'this.' + attr.assign ),
-				Code.Term( attr.vName )
+				Code.Var( attr.vName )
 			);
 
 		if( !attr.allowsUndefined )
@@ -564,11 +595,11 @@ Gen.prototype.genConstructor =
 			block
 			.Assign(
 				Code.Term( 'this.twig' ),
-				Code.Term( 'twig' )
+				Code.Var( 'twig' )
 			)
 			.Assign(
 				Code.Term( 'this.ranks' ),
-				Code.Term( 'ranks' )
+				Code.Var( 'ranks' )
 			);
 	}
 
