@@ -181,7 +181,9 @@ FuncArg.prototype.Create =
 /**/}
 
 	if(
-		inherit && v_comment === inherit.comment
+		inherit
+		&&
+		v_comment === inherit.comment
 		&&
 		v_name === inherit.name
 	)

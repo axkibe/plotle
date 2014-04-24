@@ -347,14 +347,14 @@ Switch.prototype.Create =
 /**/}
 
 	if(
-		inherit && !twigDup
+		inherit
+		&&
+		!twigDup
 		&&
 		(
 			v_defaultCase === inherit.defaultCase
 			||
-			v_defaultCase
-			&&
-			v_defaultCase.equals( inherit.defaultCase )
+			v_defaultCase && v_defaultCase.equals( inherit.defaultCase )
 		)
 		&&
 		v_statement.equals( inherit.statement )

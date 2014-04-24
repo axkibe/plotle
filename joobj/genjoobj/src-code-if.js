@@ -203,14 +203,14 @@ If.prototype.Create =
 /**/}
 
 	if(
-		inherit && v_condition === inherit.condition
+		inherit
+		&&
+		v_condition === inherit.condition
 		&&
 		(
 			v_elsewise === inherit.elsewise
 			||
-			v_elsewise
-			&&
-			v_elsewise.equals( inherit.elsewise )
+			v_elsewise && v_elsewise.equals( inherit.elsewise )
 		)
 		&&
 		v_then.equals( inherit.then )
@@ -268,9 +268,7 @@ If.prototype.equals =
 		(
 			this.elsewise === obj.elsewise
 			||
-			this.elsewise !== null
-			&&
-			this.elsewise.equals( obj.elsewise )
+			this.elsewise !== null && this.elsewise.equals( obj.elsewise )
 		)
 		&&
 		this.then === obj.then

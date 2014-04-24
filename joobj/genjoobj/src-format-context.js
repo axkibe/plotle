@@ -257,7 +257,11 @@ Context.prototype.Create =
 /**/}
 
 	if(
-		inherit && v_check === inherit.check && v_indent === inherit.indent
+		inherit
+		&&
+		v_check === inherit.check
+		&&
+		v_indent === inherit.indent
 		&&
 		v_inline === inherit.inline
 		&&
@@ -311,7 +315,9 @@ Context.prototype.equals =
 	}
 
 	return (
-		this.check === obj.check && this.indent === obj.indent
+		this.check === obj.check
+		&&
+		this.indent === obj.indent
 		&&
 		this.inline === obj.inline
 		&&

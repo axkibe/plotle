@@ -208,7 +208,9 @@ ForIn.prototype.Create =
 /**/}
 
 	if(
-		inherit && v_block.equals( inherit.block )
+		inherit
+		&&
+		v_block.equals( inherit.block )
 		&&
 		v_object.equals( inherit.object )
 		&&
@@ -262,7 +264,9 @@ ForIn.prototype.equals =
 	}
 
 	return (
-		this.block === obj.block && this.object === obj.object
+		this.block === obj.block
+		&&
+		this.object === obj.object
 		&&
 		this.variable === obj.variable
 	);

@@ -314,14 +314,14 @@ Func.prototype.Create =
 /**/}
 
 	if(
-		inherit && !twigDup
+		inherit
+		&&
+		!twigDup
 		&&
 		(
 			v_block === inherit.block
 			||
-			v_block
-			&&
-			v_block.equals( inherit.block )
+			v_block && v_block.equals( inherit.block )
 		)
 	)
 	{
@@ -395,9 +395,7 @@ Func.prototype.equals =
 	return (
 		this.block === obj.block
 		||
-		this.block !== null
-		&&
-		this.block.equals( obj.block )
+		this.block !== null && this.block.equals( obj.block )
 	);
 };
 

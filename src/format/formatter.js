@@ -44,8 +44,6 @@ var
 | Expression precedence table.
 */
 var
-	precTable;
-
 precTable =
 	{
 		'And' :
@@ -76,36 +74,6 @@ precTable =
 			-1
 	};
 
-/*
-exprFormatter =
-	{
-		'And' :
-			formatAnd,
-		'Assign' :
-			formatAssign,
-		'Call' :
-			formatCall,
-		'Equals' :
-			formatEquals,
-		'Func' :
-			formatFunc,
-		'New' :
-			formatNew,
-		'ObjLiteral' :
-			formatObjLiteral,
-		'Or' :
-			formatOr,
-		'StringLiteral' :
-			formatStringLiteral,
-		'Term' :
-			formatTerm,
-		'Var' :
-			formatVar,
-		'VList' :
-			formatVList
-	};
-*/
-
 
 /*
 | Returns the length of a text
@@ -131,7 +99,6 @@ formatAnd =
 	)
 {
 	var
-		subtext,
 		text;
 
 /**/if( CHECK )
@@ -142,96 +109,22 @@ formatAnd =
 /**/	}
 /**/}
 
-	try
-	{
-		subtext =
-			null;
-
-		subtext =
-			context.tab
-			+
-			formatExpression(
-				context.Inline,
-				expr.left,
-				precTable.And
-			);
-	}
-	catch( e )
-	{
-		// rethrows any real error
-		if( e !== 'noinline' )
-		{
-			throw e;
-		}
-	}
-
-	if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
-	{
-		text =
-			subtext;
-	}
-	else
-	{
-		if( context.inline )
-		{
-			throw 'noinline';
-		}
-
-		text =
-			formatExpression(
-				context,
-				expr.left,
-				precTable.And
-			);
-	}
-
-	text +=
+	text =
+		formatExpression(
+			context,
+			expr.left,
+			precTable.And
+		)
+		+
 		context.sep
 		+
-		context.tab + '&&' + context.sep;
-
-	try
-	{
-		subtext =
-			null;
-
-		subtext =
-			context.tab
-			+
-			formatExpression(
-				context.Inline,
-				expr.right,
-				precTable.And
-			);
-	}
-	catch( e )
-	{
-		// rethrows any real error
-		if( e !== 'noinline' )
-		{
-			throw e;
-		}
-	}
-
-	if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
-	{
-		text +=
-			subtext;
-	}
-	else
-	{
-		if( context.inline )
-		{
-			throw 'noinline';
-		}
-
-		text +=
-			formatExpression(
-				context,
-				expr.right,
-				precTable.And
-			);
-	}
+		context.tab + '&&' + context.sep
+		+
+		formatExpression(
+			context,
+			expr.right,
+			precTable.And
+		);
 
 	return text;
 };
@@ -1233,12 +1126,27 @@ formatExpression =
 {
 	var
 		bracket,
+		formatter,
 		prec,
 		subcontext,
+		subtext,
 		text;
 
 	prec =
 		precTable[ expr.reflect ];
+
+	if( prec === undefined )
+	{
+		throw new Error( expr.reflect );
+	}
+
+	formatter =
+		exprFormatter[ expr.reflect ];
+
+	if( !formatter )
+	{
+		throw new Error( expr.reflect );
+	}
 
 	bracket =
 		pprec !== null && prec > pprec;
@@ -1258,101 +1166,42 @@ formatExpression =
 			context.Inc;
 	}
 
-	if( prec === undefined )
+	subtext =
+		null;
+
+	if(
+		!subcontext.inline
+		&&
+		!bracket
+		&&
+		pprec !== null && prec < pprec
+	)
 	{
-		throw new Error( expr.reflect );
+		// tries to go inline
+		try
+		{
+			subtext =
+				subcontext.tab
+				+
+				formatter( subcontext.Inline, expr );
+		}
+		catch( e )
+		{
+			// rethrows any real error
+			if( e !== 'noinline' )
+			{
+				throw e;
+			}
+		}
 	}
 
-	switch( expr.reflect )
+	if( subtext === null || textLen( subtext ) > MAX_TEXT_WIDTH )
 	{
-		case 'And' :
-
-			text +=
-				formatAnd( subcontext, expr );
-
-			break;
-
-		case 'Assign' :
-
-			text +=
-				formatAssign( subcontext, expr );
-
-			break;
-
-		case 'Call' :
-
-			text +=
-				formatCall( subcontext, expr, false );
-
-			break;
-
-		case 'Equals' :
-
-			text +=
-				formatEquals( subcontext, expr );
-
-			break;
-
-		case 'Func' :
-
-			text +=
-				formatFunc( subcontext, expr );
-
-			break;
-
-		case 'New' :
-
-			text +=
-				formatNew( subcontext, expr );
-
-			break;
-
-		case 'ObjLiteral' :
-
-			text +=
-				formatObjLiteral( subcontext, expr );
-
-			break;
-
-		case 'Or' :
-
-			text +=
-				formatOr( subcontext, expr );
-
-			break;
-
-		case 'StringLiteral' :
-
-			text +=
-				formatStringLiteral( subcontext, expr );
-
-			break;
-
-		case 'Term' :
-
-			text +=
-				formatTerm( subcontext, expr );
-
-			break;
-
-		case 'Var' :
-
-			text +=
-				formatVar( subcontext, expr );
-
-			break;
-
-		case 'VList' :
-
-			text +=
-				formatVList( subcontext, expr );
-
-			break;
-
-		default :
-
-			throw new Error( expr.reflect );
+		subtext =
+			formatter( subcontext, expr );
 	}
+
+	text += subtext;
 
 	if( bracket )
 	{
@@ -1415,7 +1264,7 @@ formatCall =
 	function(
 		context,
 		call,
-		snuggle //XXX
+		snuggle
 	)
 {
 	var
@@ -1518,7 +1367,7 @@ formatNew =
 
 	text +=
 		formatCall(
-			context, // XXX
+			context,
 			newexpr.call,
 			true
 		);
@@ -1995,6 +1844,39 @@ Formatter.format =
 
 	return text;
 };
+
+
+/*
+| Table of all expression formatters.
+*/
+var
+exprFormatter =
+	{
+		'And' :
+			formatAnd,
+		'Assign' :
+			formatAssign,
+		'Call' :
+			formatCall,
+		'Equals' :
+			formatEquals,
+		'Func' :
+			formatFunc,
+		'New' :
+			formatNew,
+		'ObjLiteral' :
+			formatObjLiteral,
+		'Or' :
+			formatOr,
+		'StringLiteral' :
+			formatStringLiteral,
+		'Term' :
+			formatTerm,
+		'Var' :
+			formatVar,
+		'VList' :
+			formatVList
+	};
 
 
 /*

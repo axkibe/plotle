@@ -171,7 +171,9 @@ VarDec.prototype.Create =
 /**/}
 
 	if(
-		inherit && v_assign === inherit.assign
+		inherit
+		&&
+		v_assign === inherit.assign
 		&&
 		v_name === inherit.name
 	)
@@ -226,9 +228,7 @@ VarDec.prototype.equals =
 		(
 			this.assign === obj.assign
 			||
-			this.assign !== null
-			&&
-			this.assign.equals( obj.assign )
+			this.assign !== null && this.assign.equals( obj.assign )
 		)
 		&&
 		this.name === obj.name

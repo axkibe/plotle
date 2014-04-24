@@ -1819,8 +1819,9 @@ Gen.prototype.genCreatorUnchanged =
 				{
 					ceq =
 						Code.Or(
-							Code.Term(
-								attr.vName + ' === inherit.' + attr.assign
+							Code.Equals(
+								Code.Var( attr.vName ),
+								Code.Term( 'inherit.' + attr.assign )
 							),
 							Code.And(
 								Code.Term( attr.vName ),
@@ -2701,7 +2702,10 @@ Gen.prototype.genEquals =
 					Code.Func(
 						Code.Block( )
 						.Return(
-							Code.Term( 'this === obj' )
+							Code.Equals(
+								Code.Var( 'this' ),
+								Code.Var( 'obj' )
+							)
 						)
 					)
 					.Arg(
@@ -2733,7 +2737,10 @@ Gen.prototype.genEquals =
 	block =
 		block
 		.If(
-			Code.Term( 'this === obj' ),
+			Code.Equals(
+				Code.Var( 'this' ),
+				Code.Var( 'obj' )
+			),
 			Code.Block( )
 			.Return(
 				Code.Term( 'true' )
@@ -2774,9 +2781,9 @@ Gen.prototype.genEquals =
 			case 'Tree' : // FIXME
 
 				ceq =
-					Code.Term(
-						'this.' + attr.assign +
-						' === obj.' + attr.assign
+					Code.Equals(
+						Code.Term( 'this.' + attr.assign ),
+						Code.Term( 'obj.' + attr.assign )
 					);
 
 				break;
@@ -2786,9 +2793,9 @@ Gen.prototype.genEquals =
 				if( !attr.allowsNull )
 				{
 					ceq =
-						Code.Term(
-							'this.' + attr.assign +
-							' === obj.' + attr.assign
+						Code.Equals(
+							Code.Term( 'this.' + attr.assign ),
+							Code.Term( 'obj.' + attr.assign )
 						);
 				}
 				else
@@ -2796,8 +2803,9 @@ Gen.prototype.genEquals =
 					ceq =
 						// FIXME XXX
 						Code.Or(
-							Code.Term(
-								'this.' + attr.assign + ' === obj.' + attr.assign
+							Code.Equals(
+								Code.Term( 'this.' + attr.assign ),
+								Code.Term( 'obj.' + attr.assign )
 							),
 							Code.And(
 								Code.Term(

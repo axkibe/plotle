@@ -232,7 +232,9 @@ For.prototype.Create =
 /**/}
 
 	if(
-		inherit && v_block.equals( inherit.block )
+		inherit
+		&&
+		v_block.equals( inherit.block )
 		&&
 		v_condition.equals( inherit.condition )
 		&&
@@ -288,7 +290,9 @@ For.prototype.equals =
 	}
 
 	return (
-		this.block === obj.block && this.condition === obj.condition
+		this.block === obj.block
+		&&
+		this.condition === obj.condition
 		&&
 		this.init === obj.init
 		&&
