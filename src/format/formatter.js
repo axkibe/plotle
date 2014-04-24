@@ -1,5 +1,5 @@
 /*
-| Formats a code structure into a js file
+| Formats an AST into a .js file
 |
 | Authors: Axel Kittenberger
 */
@@ -9,7 +9,9 @@
 | Export
 */
 var
-	Formatter =
+	Formatter;
+
+Formatter =
 		{ };
 
 
@@ -73,6 +75,36 @@ precTable =
 		'VList' :
 			-1
 	};
+
+/*
+exprFormatter =
+	{
+		'And' :
+			formatAnd,
+		'Assign' :
+			formatAssign,
+		'Call' :
+			formatCall,
+		'Equals' :
+			formatEquals,
+		'Func' :
+			formatFunc,
+		'New' :
+			formatNew,
+		'ObjLiteral' :
+			formatObjLiteral,
+		'Or' :
+			formatOr,
+		'StringLiteral' :
+			formatStringLiteral,
+		'Term' :
+			formatTerm,
+		'Var' :
+			formatVar,
+		'VList' :
+			formatVList
+	};
+*/
 
 
 /*
@@ -1377,15 +1409,13 @@ formatFail =
 
 /*
 | Formats a call.
-|
-| FIXME, put snuggle into context
 */
 var
 formatCall =
 	function(
 		context,
 		call,
-		snuggle
+		snuggle //XXX
 	)
 {
 	var
@@ -1465,7 +1495,7 @@ formatNew =
 {
 	var
 		text;
-		
+
 /**/if( CHECK )
 /**/{
 /**/	if( newexpr.reflect !== 'New' )
@@ -1488,7 +1518,7 @@ formatNew =
 
 	text +=
 		formatCall(
-			context,
+			context, // XXX
 			newexpr.call,
 			true
 		);
