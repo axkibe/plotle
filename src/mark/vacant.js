@@ -35,16 +35,12 @@ if( JOOBJ )
 	return {
 		name :
 			'Vacant',
-
 		unit :
 			'Mark',
-
 		singleton :
 			true,
-
 		subclass :
 			'Mark.Mark',
-
 		equals :
 			'primitive'
 	};

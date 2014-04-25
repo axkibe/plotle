@@ -1505,9 +1505,9 @@ Gen.prototype.genCreatorChecks =
 							Code.Term( 'typeof( ' + attr.vName  + ' )' ),
 							Code.StringLiteral( 'number' )
 						),
-						Code.Term(
-							'Math.floor( ' + attr.vName + ' ) !== ' +
-							attr.vName
+						Code.Differs(
+							Code.Term( 'Math.floor( ' + attr.vName + ' )' ),
+							Code.Var( attr.vName )
 						)
 					);
 
@@ -2132,7 +2132,10 @@ Gen.prototype.genFromJSONCreatorParser =
 			Code.Term( '\'type\'' ),
 			Code.Block( )
 			.If(
-				Code.Term( 'arg !== \'' + this.name + '\'' ),
+				Code.Differs(
+					Code.Var( 'arg' ),
+					Code.StringLiteral( this.name )
+				),
 				Code.Block( )
 				.Fail( 'invalid JSON ' )
 			)
@@ -2863,17 +2866,14 @@ Gen.prototype.genEquals =
 
 	block =
 		block
-		.Return(
-			cond
-		);
+		.Return( cond );
 
 	capsule =
 		capsule
 		.Assign(
 			Code.Term( this.reference + '.prototype.equals' ),
-			Code.Func(
-				block
-			).Arg(
+			Code.Func( block )
+			.Arg(
 				'obj',
 				'object to compare to'
 			)
