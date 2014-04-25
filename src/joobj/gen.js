@@ -1490,8 +1490,9 @@ Gen.prototype.genCreatorChecks =
 			case 'Boolean' :
 
 				tcheck =
-					Code.Term(
-						'typeof( ' + attr.vName + ' ) !== \'boolean\''
+					Code.Differs(
+						Code.Term( 'typeof( ' + attr.vName + ' )' ),
+						Code.StringLiteral( 'boolean' )
 					);
 
 				break;
@@ -1500,8 +1501,9 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					Code.Or(
-						Code.Term(
-							'typeof( ' + attr.vName  + ' ) !== \'number\''
+						Code.Differs(
+							Code.Term( 'typeof( ' + attr.vName  + ' )' ),
+							Code.StringLiteral( 'number' )
 						),
 						Code.Term(
 							'Math.floor( ' + attr.vName + ' ) !== ' +
@@ -1514,8 +1516,9 @@ Gen.prototype.genCreatorChecks =
 			case 'Number' :
 
 				tcheck =
-					Code.Term(
-						'typeof( ' + attr.vName  + ' ) !== \'number\''
+					Code.Differs(
+						Code.Term( 'typeof( ' + attr.vName  + ' )' ),
+						Code.StringLiteral( 'number' )
 					);
 
 				break;
@@ -1525,9 +1528,9 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					Code.And(
-						Code.Term(
-							'typeof( ' + attr.vName  + ' )' +
-							' !== \'string\''
+						Code.Differs(
+							Code.Term('typeof( ' + attr.vName  + ' )' ),
+							Code.StringLiteral( 'string' )
 						),
 						Code.Term(
 							'!( ' + attr.vName + ' instanceof String )'
@@ -1539,8 +1542,9 @@ Gen.prototype.genCreatorChecks =
 			default :
 
 				tcheck =
-					Code.Term(
-						attr.vName + '.reflect !== \'' + attr.type + '\''
+					Code.Differs(
+						Code.Term( attr.vName + '.reflect' ),
+						Code.StringLiteral( attr.type )
 					);
 
 				break;
