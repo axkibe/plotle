@@ -546,7 +546,10 @@ Gen.prototype.genConstructor =
 		.Check(
 			Code.Block( ).
 			If(
-				Code.Term( 'tag !== ' + this.tag ),
+				Code.Differs(
+					Code.Var( 'tag' ),
+					Code.Term( '' + this.tag )
+				),
 				Code.Block( )
 				.Fail( )
 			)
@@ -585,7 +588,10 @@ Gen.prototype.genConstructor =
 			block =
 				block
 				.If(
-					Code.Term( attr.vName + ' !== undefined' ),
+					Code.Differs(
+						Code.Var( attr.vName ),
+						Code.Var( 'undefined' )
+					),
 					Code.Block( )
 					.Append(
 						assign
@@ -948,7 +954,10 @@ Gen.prototype.genCreatorInheritanceReceiver =
 	thisCheck =
 		Code
 		.If(
-			Code.Term( 'this !== ' + this.reference ),
+			Code.Differs(
+				Code.Var( 'this' ),
+				Code.Term( this.reference )
+			),
 			receiver
 		);
 
@@ -1029,7 +1038,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 				Code.Term( '\'' + name + '\'' ),
 				Code.Block( )
 				.If(
-					Code.Term( 'arg !== undefined' ),
+					Code.Differs(
+						Code.Var( 'arg' ),
+						Code.Var( 'undefined' )
+					),
 					Code.Block( )
 					.Assign(
 						Code.Term( attr.vName ),
@@ -1077,7 +1089,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Code.Term( 'arguments[ ++a + 1 ]' )
 				)
 				.If(
-					Code.Term( 'twig[ key ] !== undefined ' ),
+					Code.Differs(
+						Code.Term( 'twig[ key ]' ),
+						Code.Var( 'undefined' )
+					),
 					Code.Block( )
 					.Fail(
 						Code.Term(
@@ -1183,7 +1198,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Code.Term( 'a += 2' )
 				)
 				.If(
-					Code.Term( 'twig[ key ] !== undefined ' ),
+					Code.Differs(
+						Code.Term( 'twig[ key ]' ),
+						Code.Var( 'undefined' )
+					),
 					Code.Block( )
 					.Fail(
 						Code.Term(
@@ -1434,21 +1452,31 @@ Gen.prototype.genCreatorChecks =
 		if( attr.allowsNull && !attr.allowsUndefined )
 		{
 			cond =
-				Code.Term( attr.vName + ' !== null' );
+				Code.Differs(
+					Code.Var( attr.vName ),
+					Code.Term( 'null' )
+				);
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				Code.Term( attr.vName + ' !== undefined' );
+				Code.Differs(
+					Code.Var( attr.vName ),
+					Code.Var( 'undefined' )
+				);
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
-			// FUTURE multilined
 			cond =
-				Code.Term(
-					attr.vName + ' !== null' +
-					' && ' +
-					attr.vName + ' !== undefined'
+				Code.And(
+					Code.Differs(
+						Code.Var( attr.vName ),
+						Code.Term( 'null' )
+					),
+					Code.Differs(
+						Code.Var( attr.vName ),
+						Code.Var( 'undefined' )
+					)
 				);
 		}
 		else

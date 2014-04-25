@@ -179,7 +179,7 @@ Call.prototype.Create =
 				arg =
 					arguments[ ++a + 1 ];
 
-				if( twig[ key ] !== undefined  )
+				if( twig[ key ] !== undefined )
 				{
 					throw new Error( 'key "' + key + '" already in use' );
 				}
@@ -246,7 +246,7 @@ Call.prototype.Create =
 
 				a += 2;
 
-				if( twig[ key ] !== undefined  )
+				if( twig[ key ] !== undefined )
 				{
 					throw new Error( 'key "' + key + '" already in use' );
 				}

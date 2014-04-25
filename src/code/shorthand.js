@@ -19,53 +19,57 @@ var
 'use strict';
 
 
+var
+	Code;
+
 /*
 | Import
 */
-var
-	Code =
-		{
-			And :
-				require( '../code/and' ),
-			Assign :
-				require( '../code/assign' ),
-			Block :
-				require( '../code/block' ),
-			Call :
-				require( '../code/call' ),
-			Check :
-				require( '../code/check' ),
-			Comment :
-				require( '../code/comment' ),
-			If :
-				require( '../code/if' ),
-			Equals :
-				require( '../code/equals' ),
-			File :
-				require( '../code/file' ),
-			Func :
-				require( '../code/func' ),
-			FuncArg :
-				require( '../code/func-arg' ),
-			New :
-				require( '../code/new' ),
-			ObjLiteral :
-				require( '../code/obj-literal' ),
-			Or :
-				require( '../code/or' ),
-			StringLiteral :
-				require( '../code/string-literal' ),
-			Switch :
-				require( '../code/switch' ),
-			Term :
-				require( '../code/term' ),
-			Var :
-				require( '../code/var' ),
-			VarDec :
-				require( '../code/var-dec' ),
-			VList :
-				require( '../code/vlist' )
-		};
+Code =
+	{
+		And :
+			require( '../code/and' ),
+		Assign :
+			require( '../code/assign' ),
+		Block :
+			require( '../code/block' ),
+		Call :
+			require( '../code/call' ),
+		Check :
+			require( '../code/check' ),
+		Comment :
+			require( '../code/comment' ),
+		Differs :
+			require( '../code/differs' ),
+		If :
+			require( '../code/if' ),
+		Equals :
+			require( '../code/equals' ),
+		File :
+			require( '../code/file' ),
+		Func :
+			require( '../code/func' ),
+		FuncArg :
+			require( '../code/func-arg' ),
+		New :
+			require( '../code/new' ),
+		ObjLiteral :
+			require( '../code/obj-literal' ),
+		Or :
+			require( '../code/or' ),
+		StringLiteral :
+			require( '../code/string-literal' ),
+		Switch :
+			require( '../code/switch' ),
+		Term :
+			require( '../code/term' ),
+		Var :
+			require( '../code/var' ),
+		VarDec :
+			require( '../code/var-dec' ),
+		VList :
+			require( '../code/vlist' )
+	};
 
 
 /*
@@ -145,6 +149,26 @@ ShortHand.Call =
 	}
 
 	return call;
+};
+
+
+/*
+| Shorthand for creating differs.
+*/
+ShortHand.Differs =
+	function(
+		left,
+		right
+	)
+{
+	return (
+		Code.Differs.Create(
+			'left',
+				left,
+			'right',
+				right
+		)
+	);
 };
 
 

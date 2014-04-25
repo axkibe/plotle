@@ -52,6 +52,8 @@ precTable =
 			17,
 		'Call' :
 			2,
+		'Differs' :
+			9,
 		'Equals' :
 			9,
 		'Func' :
@@ -353,6 +355,49 @@ formatBlock =
 
 	return text;
 };
+
+
+/*
+| Formats a difference check.
+*/
+var
+formatDiffers =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Differs' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			context,
+			expr.left,
+			precTable.Differs
+		)
+		+
+		context.sep
+		+
+		context.tab + '!==' + context.sep
+		+
+		formatExpression(
+			context,
+			expr.right,
+			precTable.Differs
+		);
+
+	return text;
+};
+
 
 
 /*
@@ -1858,6 +1903,8 @@ exprFormatter =
 			formatAssign,
 		'Call' :
 			formatCall,
+		'Differs' :
+			formatDiffers,
 		'Equals' :
 			formatEquals,
 		'Func' :
