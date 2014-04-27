@@ -39,6 +39,8 @@ Code =
 			require( '../code/check' ),
 		Comment :
 			require( '../code/comment' ),
+		Condition :
+			require( '../code/condition' ),
 		Differs :
 			require( '../code/differs' ),
 		If :
@@ -53,6 +55,8 @@ Code =
 			require( '../code/func-arg' ),
 		New :
 			require( '../code/new' ),
+		Null :
+			require( '../code/null' ),
 		ObjLiteral :
 			require( '../code/obj-literal' ),
 		Or :
@@ -153,6 +157,29 @@ ShortHand.Call =
 
 
 /*
+| Shorthand for creating conditions.
+*/
+ShortHand.Condition =
+	function(
+		condition,
+		then,
+		elsewise
+	)
+{
+	return (
+		Code.Condition.Create(
+			'condition',
+				condition,
+			'then',
+				then,
+			'elsewise',
+				elsewise || null
+		)
+	);
+};
+
+
+/*
 | Shorthand for creating differs.
 */
 ShortHand.Differs =
@@ -193,7 +220,7 @@ ShortHand.Equals =
 
 
 /*
-| Shorthand for creatings ifs.
+| Shorthand for creating ifs.
 */
 ShortHand.If =
 	function(
@@ -258,6 +285,16 @@ ShortHand.New =
 				call
 		)
 	);
+};
+
+
+/*
+| Shorthand for creating nulls.
+*/
+ShortHand.Null =
+	function( )
+{
+	return Code.Null.Create( );
 };
 
 

@@ -13,6 +13,7 @@ module.exports =
 			'src/code/case.js',
 			'src/code/check.js',
 			'src/code/comment.js',
+			'src/code/condition.js',
 			'src/code/differs.js',
 			'src/code/equals.js',
 			'src/code/fail.js',

@@ -1,5 +1,6 @@
 /*
-| Code for optional checks.
+| Code for conditional expressions.
+| In other words the questionmark semicolon operator.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +20,7 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'If',
+			'Condition',
 		unit :
 			'Code',
 		attributes :
@@ -27,23 +28,23 @@ if( JOOBJ )
 				condition :
 					{
 						comment :
-							'the if condition',
+							'the condition',
 						type :
 							'Object'
 					},
 				then :
 					{
 						comment :
-							'the then code',
+							'the then expression',
 						type :
-							'Block'
+							'Object'
 					},
 				elsewise :
 					{
 						comment :
-							'the else wise',
+							'the else condition',
 						type :
-							'Block',
+							'Object',
 						defaultValue :
 							'null'
 					}
@@ -58,21 +59,25 @@ if( JOOBJ )
 | Node includes.
 */
 var
-	If =
-		require( '../joobj/this' )( module );
+	Condition;
+
+Condition =
+	require( '../joobj/this' )( module );
 
 /*
-| Creates an if with the Elsewise block set.
+| Creates a condition with the elsewise expression set.
+|
+| FUTURE create this single recreators with joobj-gen.
 */
-If.prototype.Elsewise =
+Condition.prototype.Elsewise =
 	function(
-		block
+		expr
 	)
 {
 	return (
 		this.Create(
 			'elsewise',
-				block
+				expr
 		)
 	);
 };
@@ -82,7 +87,7 @@ If.prototype.Elsewise =
 | Node export.
 */
 module.exports =
-	If;
+	Condition;
 
 
 } )( );

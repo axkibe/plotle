@@ -808,7 +808,7 @@ Gen.prototype.genSingleton =
 		)
 		.VarDec(
 			'_singleton',
-			Code.Var( 'null' )
+			Code.Null( )
 		)
 	);
 };
@@ -1429,7 +1429,7 @@ Gen.prototype.genCreatorChecks =
 				check.If(
 					Code.Equals(
 						Code.Var( attr.vName ),
-						Code.Var( 'null' )
+						Code.Null( )
 					),
 					Code.Block( )
 					.Fail( 'attribute ' + name + ' must not be null.' )
@@ -1454,7 +1454,7 @@ Gen.prototype.genCreatorChecks =
 			cond =
 				Code.Differs(
 					Code.Var( attr.vName ),
-					Code.Term( 'null' )
+					Code.Null( )
 				);
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
@@ -1471,7 +1471,7 @@ Gen.prototype.genCreatorChecks =
 				Code.And(
 					Code.Differs(
 						Code.Var( attr.vName ),
-						Code.Term( 'null' )
+						Code.Null( )
 					),
 					Code.Differs(
 						Code.Var( attr.vName ),
@@ -1807,7 +1807,7 @@ Gen.prototype.genCreatorUnchanged =
 					cond,
 					Code.Equals(
 						Code.Var( attr.vName ),
-						Code.Var( 'null' )
+						Code.Null( )
 					)
 				);
 		}
@@ -2383,7 +2383,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 				call =
 					call.Append(
-						Code.Term( 'null' )
+						Code.Null( )
 					);
 
 				break;
@@ -2426,7 +2426,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 					call =
 						call
 						.Append(
-							Code.Term( 'null' )
+							Code.Null( )
 						);
 				}
 				else
@@ -2843,8 +2843,9 @@ Gen.prototype.genEquals =
 								Code.Term( 'obj.' + attr.assign )
 							),
 							Code.And(
-								Code.Term(
-									'this.' + attr.assign + ' !== null'
+								Code.Differs(
+									Code.Term( 'this.' + attr.assign ),
+									Code.Null( )
 								),
 								Code.Term(
 									'this.' + attr.assign +

@@ -52,6 +52,8 @@ precTable =
 			17,
 		'Call' :
 			2,
+		'Condition' :
+			15,
 		'Differs' :
 			9,
 		'Equals' :
@@ -62,6 +64,8 @@ precTable =
 			8,
 		'New' :
 			2,
+		'Null' :
+			-1,
 		'ObjLiteral' :
 			-1,
 		'Or' :
@@ -440,6 +444,72 @@ formatEquals =
 
 	return text;
 };
+
+
+/*
+| Formats a condition expression.
+|
+| The ? : thing.
+*/
+var
+formatCondition =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+	text =
+		null;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Condition' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		context.tab
+		+
+		formatExpression(
+			context,
+			expr.condition,
+			precTable.Condition
+		)
+		+
+		context.sep
+		+
+		'?'
+		+
+		context.sep
+		+
+		formatExpression(
+			context,
+			expr.then,
+			precTable.Condition
+		);
+
+	if( expr.otherwise )
+	{
+		text +=
+			context.sep
+			+
+			':'
+			+
+			formatExpression(
+				context,
+				expr.otherwise,
+				precTable.Condition
+			);
+	}
+
+	return text;
+};
+
 
 
 /*
@@ -1422,6 +1492,28 @@ formatNew =
 
 
 /*
+| Formats a null.
+*/
+var
+formatNull =
+	function(
+		context,
+		expr
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Null' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return context.tab + 'null';
+};
+
+
+/*
 | Formats an object literal.
 |
 | MAYBE format also inline
@@ -1903,6 +1995,8 @@ exprFormatter =
 			formatAssign,
 		'Call' :
 			formatCall,
+		'Condition' :
+			formatCondition,
 		'Differs' :
 			formatDiffers,
 		'Equals' :
@@ -1911,6 +2005,8 @@ exprFormatter =
 			formatFunc,
 		'New' :
 			formatNew,
+		'Null' :
+			formatNull,
 		'ObjLiteral' :
 			formatObjLiteral,
 		'Or' :
