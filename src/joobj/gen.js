@@ -212,6 +212,7 @@ Gen.prototype._init =
 					jAttr.type,
 				unit :
 					jAttr.unit,
+				// FIXME make this a Code.Var
 				vName :
 					'v_' + name
 			} );
@@ -1691,7 +1692,10 @@ Gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						Code.Condition(
-							Code.Term( attr.vName + ' !== null' ),
+							Code.Differs(
+								Code.Var( attr.vName ),
+								Code.Null( )
+							),
 							Code.Term( attr.vName + '.' + member ),
 							Code.Null( )
 						);
@@ -1701,7 +1705,10 @@ Gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						Code.Condition(
-							Code.Term( attr.vName + ' !== undefined' ),
+							Code.Differs(
+								Code.Var( attr.vName ),
+								Code.Var( 'undefined' )
+							),
 							Code.Term( attr.vName + '.' + member ),
 							Code.Null( )
 						);
