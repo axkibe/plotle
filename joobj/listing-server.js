@@ -35,6 +35,7 @@ module.exports =
 			'src/code/if.js',
 			'src/code/new.js',
 			'src/code/null.js',
+			'src/code/number-literal.js',
 			'src/code/obj-literal.js',
 			'src/code/or.js',
 			'src/code/return.js',

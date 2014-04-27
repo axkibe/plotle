@@ -57,6 +57,8 @@ Code =
 			require( '../code/new' ),
 		Null :
 			require( '../code/null' ),
+		NumberLiteral :
+			require( '../code/number-literal' ),
 		ObjLiteral :
 			require( '../code/obj-literal' ),
 		Or :
@@ -326,6 +328,24 @@ ShortHand.Or =
 		)
 	);
 };
+
+
+/*
+| Shorthand for creating number literals.
+*/
+ShortHand.NumberLiteral =
+	function(
+		number
+	)
+{
+	return (
+		Code.NumberLiteral.Create(
+			'number',
+				number
+		)
+	);
+};
+
 
 
 /*

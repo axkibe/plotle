@@ -66,6 +66,8 @@ precTable =
 			2,
 		'Null' :
 			-1,
+		'NumberLiteral' :
+			-1,
 		'ObjLiteral' :
 			-1,
 		'Or' :
@@ -1198,6 +1200,7 @@ formatStatement =
 		case 'Call' :
 		case 'Fail' :
 		case 'New' :
+		case 'NumberLiteral' :
 		case 'Return' :
 		case 'StringLiteral' :
 		case 'Term' :
@@ -1634,6 +1637,29 @@ formatVar =
 | Formats a string literal use.
 */
 var
+formatNumberLiteral =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'NumberLiteral' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return context.tab + '' + expr.number;
+};
+
+
+/*
+| Formats a string literal use.
+*/
+var
 formatStringLiteral =
 	function(
 		context,
@@ -1999,6 +2025,8 @@ exprFormatter =
 			formatNew,
 		'Null' :
 			formatNull,
+		'NumberLiteral' :
+			formatNumberLiteral,
 		'ObjLiteral' :
 			formatObjLiteral,
 		'Or' :

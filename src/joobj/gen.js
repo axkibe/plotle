@@ -136,8 +136,9 @@ Gen.prototype._init =
 	}
 
 	this.tag =
-		8833; // XXX TODO
-//		Math.floor( Math.random( ) * 1000000000 );
+		// FIXME
+		Code.NumberLiteral( 8833 );
+//		Code.NumberLiteral( Math.floor( Math.random( ) * 1000000000 ) );
 
 	this.unit =
 		joobj.unit;
@@ -551,7 +552,7 @@ Gen.prototype.genConstructor =
 			If(
 				Code.Differs(
 					Code.Var( 'tag' ),
-					Code.Term( '' + this.tag )
+					this.tag
 				),
 				Code.Block( )
 				.Fail( )
@@ -1913,7 +1914,7 @@ Gen.prototype.genCreatorReturn =
 					Code.New(
 						Code.Call(
 							Code.Term( this.reference ),
-							Code.Term( '' + this.tag )
+							this.tag
 						)
 					)
 				)
@@ -1955,9 +1956,7 @@ Gen.prototype.genCreatorReturn =
 			case 'tag' :
 
 				call =
-					call.Append(
-						Code.Term( '' + this.tag )
-					);
+					call.Append( this.tag );
 
 				break;
 
@@ -2393,9 +2392,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 			case 'tag' :
 
 				call =
-					call.Append(
-						Code.Term( '' + this.tag )
-					);
+					call.Append( this.tag );
 
 				break;
 
