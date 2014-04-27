@@ -173,7 +173,7 @@ ShortHand.Condition =
 			'then',
 				then,
 			'elsewise',
-				elsewise || null
+				elsewise
 		)
 	);
 };

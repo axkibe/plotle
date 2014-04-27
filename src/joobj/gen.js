@@ -166,7 +166,8 @@ Gen.prototype._init =
 		}
 
 		assign =
-			jAttr.assign !== undefined ?
+			jAttr.assign !== undefined
+				?
 				jAttr.assign
 				:
 				name;
@@ -360,7 +361,8 @@ Gen.prototype._init =
 	}
 
 	this.reference =
-		( joobj.unit === joobj.name ) ?
+		( joobj.unit === joobj.name )
+			?
 			joobj.name + 'Obj'
 			:
 			joobj.name;
@@ -1688,40 +1690,33 @@ Gen.prototype.genCreatorConcerns =
 				else if( attr.allowsNull )
 				{
 					cExpr =
-						Code.Term(
-							attr.vName + ' !== null ? '
-							+
-							attr.vName + '.' + member + ' : '
-							+
-							'null'
+						Code.Condition(
+							Code.Term( attr.vName + ' !== null' ),
+							Code.Term( attr.vName + '.' + member ),
+							Code.Null( )
 						);
+
 				}
 				else if( attr.allowsUndefined )
 				{
 					cExpr =
-						Code.Term(
-							attr.vName + ' !== undefined ? '
-							+
-							attr.vName + '.' + member + ' : '
-							+
-							'null'
+						Code.Condition(
+							Code.Term( attr.vName + ' !== undefined' ),
+							Code.Term( attr.vName + '.' + member ),
+							Code.Null( )
 						);
 				}
 				else
 				{
 					cExpr =
-						Code.Term(
-							attr.vName + '.' + member
-						);
+						Code.Term( attr.vName + '.' + member );
 				}
 			}
 			else
 			{
 				cExpr =
 					Code.Call(
-						Code.Term(
-							attr.vName + '.' + member
-						)
+						Code.Term( attr.vName + '.' + member )
 					);
 
 				for(
@@ -2857,8 +2852,10 @@ Gen.prototype.genEquals =
 		}
 
 		cond =
-			cond === null ?
-			ceq :
+			cond === null
+			?
+			ceq
+			:
 			Code.And(
 				cond,
 				ceq

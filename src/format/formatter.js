@@ -458,11 +458,6 @@ formatCondition =
 		expr
 	)
 {
-	var
-		text;
-
-	text =
-		null;
 
 /**/if( CHECK )
 /**/{
@@ -472,7 +467,7 @@ formatCondition =
 /**/	}
 /**/}
 
-	text =
+	return (
 		context.tab
 		+
 		formatExpression(
@@ -491,23 +486,20 @@ formatCondition =
 			context,
 			expr.then,
 			precTable.Condition
-		);
-
-	if( expr.otherwise )
-	{
-		text +=
-			context.sep
-			+
-			':'
-			+
-			formatExpression(
-				context,
-				expr.otherwise,
-				precTable.Condition
-			);
-	}
-
-	return text;
+		)
+		+
+		context.sep
+		+
+		':'
+		+
+		context.sep
+		+
+		formatExpression(
+			context,
+			expr.elsewise,
+			precTable.Condition
+		)
+	);
 };
 
 

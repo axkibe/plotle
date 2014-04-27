@@ -155,12 +155,6 @@ Condition.prototype.Create =
 		}
 	}
 
-	if( v_elsewise === undefined )
-	{
-		v_elsewise =
-			null;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_condition === undefined )
@@ -176,6 +170,11 @@ Condition.prototype.Create =
 /**/	if( v_elsewise === undefined )
 /**/	{
 /**/		throw new Error( 'undefined attribute elsewise' );
+/**/	}
+/**/
+/**/	if( v_elsewise === null )
+/**/	{
+/**/		throw new Error( 'attribute elsewise must not be null.' );
 /**/	}
 /**/
 /**/	if( v_then === undefined )
@@ -248,11 +247,7 @@ Condition.prototype.equals =
 	return (
 		this.condition === obj.condition
 		&&
-		(
-			this.elsewise === obj.elsewise
-			||
-			this.elsewise !== null && this.elsewise.equals( obj.elsewise )
-		)
+		this.elsewise === obj.elsewise
 		&&
 		this.then === obj.then
 	);

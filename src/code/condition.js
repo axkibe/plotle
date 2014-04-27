@@ -44,9 +44,7 @@ if( JOOBJ )
 						comment :
 							'the else condition',
 						type :
-							'Object',
-						defaultValue :
-							'null'
+							'Object'
 					}
 			},
 		node :
