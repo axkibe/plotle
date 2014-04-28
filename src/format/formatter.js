@@ -50,6 +50,8 @@ precTable =
 			13,
 		'Assign' :
 			17,
+		'BooleanLiteral' :
+			-1,
 		'Call' :
 			2,
 		'Condition' :
@@ -1229,6 +1231,7 @@ formatStatement =
 			break;
 
 		case 'Assign' :
+		case 'BooleanLiteral' :
 		case 'Call' :
 		case 'Fail' :
 		case 'New' :
@@ -1394,6 +1397,38 @@ formatFail =
 		context.sep
 		+
 		context.tab + ')'
+	);
+};
+
+
+/*
+| Formats a boolean literal use.
+*/
+var
+formatBooleanLiteral =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'BooleanLiteral' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return (
+		context.tab +
+		(
+			expr.boolean
+			?
+			'true'
+			:
+			'false'
+		)
 	);
 };
 
@@ -2043,6 +2078,8 @@ exprFormatter =
 			formatAnd,
 		'Assign' :
 			formatAssign,
+		'BooleanLiteral' :
+			formatBooleanLiteral,
 		'Call' :
 			formatCall,
 		'Condition' :

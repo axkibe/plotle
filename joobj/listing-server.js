@@ -19,6 +19,7 @@ module.exports =
 			'src/code/and.js',
 			'src/code/assign.js',
 			'src/code/block.js',
+			'src/code/boolean-literal.js',
 			'src/code/call.js',
 			'src/code/case.js',
 			'src/code/check.js',

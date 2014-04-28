@@ -33,6 +33,8 @@ Code =
 			require( '../code/assign' ),
 		Block :
 			require( '../code/block' ),
+		BooleanLiteral :
+			require( '../code/boolean-literal' ),
 		Call :
 			require( '../code/call' ),
 		Check :
@@ -244,6 +246,21 @@ ShortHand.Equals =
 
 
 /*
+| Shorthand for creating number false boolean literal.
+*/
+ShortHand.False =
+	function( )
+{
+	return (
+		Code.BooleanLiteral.Create(
+			'boolean',
+				false
+		)
+	);
+};
+
+
+/*
 | Shorthand for creating ifs.
 */
 ShortHand.If =
@@ -369,7 +386,6 @@ ShortHand.NumberLiteral =
 };
 
 
-
 /*
 | Shorthand for creating string literals.
 */
@@ -416,6 +432,21 @@ ShortHand.Term =
 		Code.Term.Create(
 			'term',
 				term
+		)
+	);
+};
+
+
+/*
+| Shorthand for creating number true boolean literal.
+*/
+ShortHand.True =
+	function( )
+{
+	return (
+		Code.BooleanLiteral.Create(
+			'boolean',
+				true
 		)
 	);
 };

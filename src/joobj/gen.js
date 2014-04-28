@@ -973,7 +973,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 			)
 			.Assign(
 				Code.Var( 'twigDup' ),
-				Code.Term( 'false' )
+				Code.False( )
 			);
 	}
 
@@ -1028,7 +1028,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 				)
 				.Assign(
 					Code.Var( 'twigDup' ),
-					Code.Term( 'true' )
+					Code.True( )
 				)
 			);
 	}
@@ -1128,7 +1128,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 					.Assign(
 						Code.Term( 'twigDup' ),
-						Code.Term( 'true' )
+						Code.True( )
 					)
 				)
 				.Assign(
@@ -1181,7 +1181,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 					.Assign(
 						Code.Term( 'twigDup' ),
-						Code.Term( 'true' )
+						Code.True( )
 					)
 				)
 				.Assign(
@@ -1230,7 +1230,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 					.Assign(
 						Code.Term( 'twigDup' ),
-						Code.Term( 'true' )
+						Code.True( )
 					)
 				)
 				.Assign(
@@ -1304,7 +1304,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 					.Assign(
 						Code.Term( 'twigDup' ),
-						Code.Term( 'true' )
+						Code.True( )
 					)
 				)
 				.If(
@@ -2450,7 +2450,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 				call =
 					call.Append(
-						Code.Term( 'true' )
+						Code.True( )
 					);
 
 				break;
@@ -2830,14 +2830,14 @@ Gen.prototype.genEquals =
 			),
 			Code.Block( )
 			.Return(
-				Code.Term( 'true' )
+				Code.True( )
 			)
 		)
 		.If(
 			Code.Term( '!obj' ),
 			Code.Block( )
 			.Return(
-				Code.Term( 'false' )
+				Code.False( )
 			)
 		);
 
