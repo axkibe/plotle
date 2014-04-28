@@ -1361,7 +1361,7 @@ formatExpression =
 
 
 /*
-| Formats a fail.
+| Formats a fail statement.
 */
 var
 formatFail =
@@ -1388,7 +1388,9 @@ formatFail =
 	return (
 		context.tab
 		+
-		'throw new Error(' + context.sep
+		'throw new Error('
+		+
+		context.sep
 		+
 		formatExpression(
 			context.Inc,
@@ -1398,7 +1400,9 @@ formatFail =
 		+
 		context.sep
 		+
-		context.tab + ')'
+		context.tab
+		+
+		')'
 	);
 };
 

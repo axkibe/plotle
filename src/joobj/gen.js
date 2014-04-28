@@ -1297,43 +1297,51 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					Code.Block( )
 					.Fail(
-						Code.Term( '\'invalid rank\'' )
+						Code.StringLiteral( 'invalid rank' )
 					)
 				)
 				.Assign(
 					Code.Term( 'twig[ key ]'),
-					Code.Term( 'arg' )
+					Code.Var( 'arg' )
 				)
 				.Append(
 					Code.Call(
 						Code.Term( 'ranks.splice' ),
-						Code.Term( 'rank' ),
-						Code.Term( '0' ),
-						Code.Term( 'key' )
+						Code.Var( 'rank' ),
+						Code.NumberLiteral( 0 ),
+						Code.Var( 'key' )
 					)
 				)
 			)
 			.Case(
-				Code.Term ( '\'twig:remove\'' ),
+				Code.StringLiteral( 'twig:remove' ),
 				Code.Block( )
 				.If(
-					Code.Term( '!twigDup' ),
+					Code.Not(
+						Code.Var( 'twigDup' )
+					),
 					Code.Block( )
 					.Assign(
-						Code.Term( 'twig' ),
+						Code.Var( 'twig' ),
 						Code.Call(
-							Code.Term( 'Jools.copy' ),
-							Code.Term( 'twig' )
+							Code.Dot(
+								Code.Var( 'Jools' ),
+								'copy'
+							),
+							Code.Var( 'twig' )
 						)
 					)
 					.Assign(
-						Code.Term( 'ranks' ),
+						Code.Var( 'ranks' ),
 						Code.Call(
-							Code.Term( 'ranks.slice' )
+							Code.Dot(
+								Code.Var( 'ranks' ),
+								'slice'
+							)
 						)
 					)
 					.Assign(
-						Code.Term( 'twigDup' ),
+						Code.Var( 'twigDup' ),
 						Code.True( )
 					)
 				)
@@ -1356,7 +1364,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Code.Call(
 						Code.Term( 'ranks.splice' ),
 						Code.Term( 'ranks.indexOf( arg )' ),
-						Code.Term( '1' )
+						Code.NumberLiteral( 1 )
 					)
 				)
 			);
@@ -1382,7 +1390,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			.VList( )
 			.VarDec(
 				'a',
-				Code.Term( '0' )
+				Code.NumberLiteral( 0 )
 			)
 			.VarDec(
 				'aZ',
@@ -1440,7 +1448,7 @@ Gen.prototype.genCreatorDefaults =
 					),
 					Code.Block( )
 					.Assign(
-						Code.Term( attr.vName ),
+						Code.Var( attr.vName ),
 						Code.Term( attr.defaultValue )
 					)
 				);
