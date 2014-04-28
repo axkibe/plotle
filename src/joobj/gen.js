@@ -114,16 +114,18 @@ Gen.prototype._init =
 	this.singleton =
 		!!joobj.singleton;
 
-	this.subclass =
-		joobj.subclass;
-
-	if( this.subclass )
+	if( joobj.subclass )
 	{
 		subParts =
-			this.subclass.split( '.' );
+			joobj.subclass.split( '.' );
 
 		if( subParts.length >=  2 )
 		{
+			if( subParts.length > 2 )
+			{
+				throw new Error( 'subclass can only have one dot' );
+			}
+
 			if( !units[ subParts[ 0 ] ] )
 			{
 				units[ subParts[ 0 ] ] =
@@ -132,6 +134,17 @@ Gen.prototype._init =
 
 			units[ subParts[ 0 ] ][ subParts[ 1 ] ] =
 				true;
+
+			this.subclass =
+				Code.Dot(
+					Code.Var( subParts[ 0 ] ),
+					subParts[ 1 ]
+				);
+		}
+		else
+		{
+			this.subclass =
+				Code.Var( joobj.subclass );
 		}
 	}
 
@@ -858,9 +871,12 @@ Gen.prototype.genSubclass =
 			'Subclass.'
 		)
 		.Call(
-			Code.Term( 'Jools.subclass' ),
-			Code.Term( this.reference ),
-			Code.Term( this.subclass )
+			Code.Dot(
+				Code.Var( 'Jools' ),
+				'subclass'
+			),
+			Code.Var( this.reference ),
+			this.subclass
 		)
 	);
 };
@@ -985,7 +1001,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		.If(
 			Code.Differs(
 				Code.Var( 'this' ),
-				Code.Term( this.reference )
+				Code.Var( this.reference )
 			),
 			receiver
 		);
@@ -1938,7 +1954,7 @@ Gen.prototype.genCreatorReturn =
 					Code.Term( '_singleton' ),
 					Code.New(
 						Code.Call(
-							Code.Term( this.reference ),
+							Code.Var( this.reference ),
 							this.tag
 						)
 					)
@@ -1952,7 +1968,7 @@ Gen.prototype.genCreatorReturn =
 
 	call =
 		Code.Call(
-			Code.Term( this.reference )
+			Code.Var( this.reference )
 		);
 
 	for(
@@ -2051,7 +2067,10 @@ Gen.prototype.genCreator =
 	capsule =
 		capsule
 		.Assign(
-			Code.Term( this.reference + '.Create' ),
+			Code.Dot(
+				Code.Var( this.reference ),
+				'Create'
+			),
 			Code.Assign(
 				Code.Term( this.reference + '.prototype.Create' ),
 				Code.Func( block )
@@ -2391,7 +2410,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 	call =
 		Code.Call(
-			Code.Term( this.reference )
+			Code.Var( this.reference )
 		);
 
 	for(
@@ -2550,7 +2569,10 @@ Gen.prototype.genFromJSONCreator =
 	capsule =
 		capsule
 		.Assign(
-			Code.Term( this.reference + '.CreateFromJSON' ),
+			Code.Dot(
+				Code.Var( this.reference ),
+				'CreateFromJSON'
+			),
 			Code.Func( funcBlock )
 			.Arg(
 				'json',
@@ -2860,7 +2882,6 @@ Gen.prototype.genEquals =
 				else
 				{
 					ceq =
-						// FIXME XXX
 						Code.Or(
 							Code.Equals(
 								Code.Term( 'this.' + attr.assign ),
