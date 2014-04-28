@@ -1,5 +1,5 @@
 /*
-| Code for optional checks.
+| A negation expression.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,19 +19,17 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'Fail',
+			'Not',
 		unit :
 			'Code',
 		attributes :
 			{
-				message :
+				expr :
 					{
 						comment :
-							'the error message expression',
+							'the expression to negate',
 						type :
-							'Object',
-						defaultValue :
-							'null'
+							'Object'
 					}
 			},
 		node :
@@ -40,8 +38,18 @@ if( JOOBJ )
 }
 
 
-module.exports =
+var
+	Not;
+
+Not =
 	require( '../joobj/this' )( module );
+
+
+/*
+| Node export.
+*/
+module.exports =
+	Not;
 
 
 } )( );

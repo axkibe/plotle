@@ -59,6 +59,8 @@ Code =
 			require( '../code/func-arg' ),
 		New :
 			require( '../code/new' ),
+		Not :
+			require( '../code/not' ),
 		Null :
 			require( '../code/null' ),
 		NumberLiteral :
@@ -328,6 +330,22 @@ ShortHand.New =
 	);
 };
 
+
+/*
+| Shorthand for creating negations.
+*/
+ShortHand.Not =
+	function(
+		expr
+	)
+{
+	return (
+		Code.Not.Create(
+			'expr',
+				expr
+		)
+	);
+};
 
 /*
 | Shorthand for creating nulls.

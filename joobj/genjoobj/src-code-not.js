@@ -44,11 +44,11 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Fail =
-Code.Fail =
+var Not =
+Code.Not =
 	function(
 		tag, // magic cookie
-		v_message // the error message expression
+		v_expr // the expression to negate
 	)
 {
 /**/if( CHECK )
@@ -59,33 +59,33 @@ Code.Fail =
 /**/	}
 /**/}
 
-	this.message =
-		v_message;
+	this.expr =
+		v_expr;
 
 	Jools.immute( this );
 };
 
 
 /*
-| Creates a new Fail object.
+| Creates a new Not object.
 */
-Fail.Create =
-Fail.prototype.Create =
+Not.Create =
+Not.prototype.Create =
 	function(
 		// free strings
 	)
 {
 	var
 		inherit,
-		v_message;
+		v_expr;
 
-	if( this !== Fail )
+	if( this !== Not )
 	{
 		inherit =
 			this;
 
-		v_message =
-			this.message;
+		v_expr =
+			this.expr;
 	}
 
 	for(
@@ -100,11 +100,11 @@ Fail.prototype.Create =
 
 		switch( arguments[ a ] )
 		{
-			case 'message' :
+			case 'expr' :
 
 				if( arg !== undefined )
 				{
-					v_message =
+					v_expr =
 						arg;
 				}
 
@@ -119,54 +119,53 @@ Fail.prototype.Create =
 		}
 	}
 
-	if( v_message === undefined )
-	{
-		v_message =
-			null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_message === undefined )
+/**/	if( v_expr === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute message' );
+/**/		throw new Error( 'undefined attribute expr' );
+/**/	}
+/**/
+/**/	if( v_expr === null )
+/**/	{
+/**/		throw new Error( 'attribute expr must not be null.' );
 /**/	}
 /**/}
 
-	if( inherit && v_message === inherit.message )
+	if( inherit && v_expr === inherit.expr )
 	{
 		return inherit;
 	}
 
-	return new Fail( 8833, v_message );
+	return new Not( 8833, v_expr );
 };
 
 
 /*
 | Reflection.
 */
-Fail.prototype.reflect =
-	'Fail';
+Not.prototype.reflect =
+	'Not';
 
 
 /*
 | Sets values by path.
 */
-Fail.prototype.setPath =
+Not.prototype.setPath =
 	JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Fail.prototype.getPath =
+Not.prototype.getPath =
 	JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Fail.prototype.equals =
+Not.prototype.equals =
 	function(
 		obj // object to compare to
 	)
@@ -181,11 +180,7 @@ Fail.prototype.equals =
 		return false;
 	}
 
-	return (
-		this.message === obj.message
-		||
-		this.message !== null && this.message.equals( obj.message )
-	);
+	return this.expr === obj.expr;
 };
 
 
@@ -195,7 +190,7 @@ Fail.prototype.equals =
 if( SERVER )
 {
 	module.exports =
-		Fail;
+		Not;
 }
 
 

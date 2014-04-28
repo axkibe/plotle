@@ -68,6 +68,8 @@ precTable =
 			8,
 		'New' :
 			2,
+		'Not' :
+			4,
 		'Null' :
 			-1,
 		'NumberLiteral' :
@@ -1510,46 +1512,68 @@ formatCall =
 
 
 /*
-| Formats a new statement.
+| Formats a new expression.
 */
 var
 formatNew =
 	function(
 		context,
-		newexpr
+		expr
 	)
 {
-	var
-		text;
 
 /**/if( CHECK )
 /**/{
-/**/	if( newexpr.reflect !== 'New' )
+/**/	if( expr.reflect !== 'New' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	text =
-		'';
-
-	if( !context.inline )
-	{
-		text +=
-			context.tab;
-	}
-
-	text +=
-		'new ';
-
-	text +=
+	return(
+		context.tab
+		+
+		'new '
+		+
 		formatCall(
 			context,
-			newexpr.call,
+			expr.call,
 			true
-		);
+		)
+	);
+};
 
-	return text;
+
+/*
+| Formats a not expression.
+*/
+var
+formatNot =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Not' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return(
+		context.tab
+		+
+		'!'
+		+
+		formatExpression(
+			context,
+			expr.expr,
+			precTable.Not
+		)
+	);
 };
 
 
@@ -2094,6 +2118,8 @@ exprFormatter =
 			formatFunc,
 		'New' :
 			formatNew,
+		'Not' :
+			formatNot,
 		'Null' :
 			formatNull,
 		'NumberLiteral' :
