@@ -657,7 +657,7 @@ Gen.prototype.genConstructor =
 
 					initCall =
 						initCall.Append(
-							Code.Term( this.init[ a ] )
+							Code.Var( this.init[ a ] )
 						);
 
 					continue;
@@ -689,7 +689,10 @@ Gen.prototype.genConstructor =
 	block =
 		block
 		.Call(
-			Code.Term( 'Jools.immute' ),
+			Code.Dot(
+				Code.Var( 'Jools' ),
+				'immute'
+			),
 			Code.Var( 'this' )
 		);
 
@@ -698,11 +701,17 @@ Gen.prototype.genConstructor =
 		block =
 			block
 			.Call(
-				Code.Term( 'Jools.immute' ),
+				Code.Dot(
+					Code.Var( 'Jools' ),
+					'immute'
+				),
 				Code.Var( 'twig' )
 			)
 			.Call(
-				Code.Term( 'Jools.immute' ),
+				Code.Dot(
+					Code.Var( 'Jools' ),
+					'immute'
+				),
 				Code.Var( 'ranks' )
 			);
 	}
@@ -790,8 +799,9 @@ Gen.prototype.genConstructor =
 				this.reference,
 				Code
 				.Assign(
-					Code.Term(
-						this.unit + '.' + this.name
+					Code.Dot(
+						Code.Var( this.unit ),
+						this.name
 					),
 					constructor
 				)
