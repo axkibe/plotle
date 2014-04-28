@@ -15,6 +15,7 @@ module.exports =
 			'src/code/comment.js',
 			'src/code/condition.js',
 			'src/code/differs.js',
+			'src/code/dot.js',
 			'src/code/equals.js',
 			'src/code/fail.js',
 			'src/code/file.js',

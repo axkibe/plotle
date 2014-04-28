@@ -1,5 +1,5 @@
 /*
-| A variable reference to be generated
+| Gets a member of a table specified by a literal.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,36 +19,42 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'Var',
+			'Dot',
 		unit :
 			'Code',
-		node :
-			true,
 		attributes :
 			{
-				'name' :
+				expr :
 					{
 						comment :
-							'the variable name',
+							'the expression to get the member of',
+						type :
+							'Object'
+					},
+				member :
+					{
+						comment :
+							'the members name',
 						type :
 							'String'
 					}
 			},
-		init :
-			[ ]
+		node :
+			true
 	};
 }
 
-var
-	Var;
 
-Var =
+var
+	Dot;
+
+Dot =
 	require( '../joobj/this' )( module );
 
 /*
 | Initializer.
 */
-Var.prototype._init =
+Dot.prototype._init =
 	function( )
 {
 	var
@@ -59,9 +65,9 @@ Var.prototype._init =
 /**/	regex =
 /**/		/^([a-zA-Z_])([a-zA-Z0-9_])*$/;
 /**/
-/**/	if( !regex.test( this.name ) )
+/**/	if( !regex.test( this.member ) )
 /**/	{
-/**/		throw new Error( 'invalid variable name' );
+/**/		throw new Error( 'invalid member name' );
 /**/	}
 /**/
 /**/	switch( this.name )
@@ -69,7 +75,7 @@ Var.prototype._init =
 /**/		case 'true' :
 /**/		case 'false' :
 /**/
-/**/			throw new Error( 'var must not be a literal' );
+/**/			throw new Error( 'member must not be a literal' );
 /**/	}
 /**/}
 };
@@ -79,7 +85,7 @@ Var.prototype._init =
 | Node export.
 */
 module.exports =
-	Var;
+	Dot;
 
 
 } )( );

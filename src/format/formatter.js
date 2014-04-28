@@ -56,6 +56,8 @@ precTable =
 			15,
 		'Differs' :
 			9,
+		'Dot' :
+			1,
 		'Equals' :
 			9,
 		'Func' :
@@ -405,6 +407,36 @@ formatDiffers =
 };
 
 
+/*
+| Formats a Dot.
+*/
+var
+formatDot =
+	function(
+		context,
+		expr
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Dot' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return (
+		formatExpression(
+			context,
+			expr.expr,
+			precTable.Dot
+		)
+		+
+		'.'
+		+
+		expr.member
+	);
+};
 
 /*
 | Formats an equality check.
@@ -2017,6 +2049,8 @@ exprFormatter =
 			formatCondition,
 		'Differs' :
 			formatDiffers,
+		'Dot' :
+			formatDot,
 		'Equals' :
 			formatEquals,
 		'Func' :

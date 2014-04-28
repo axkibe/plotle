@@ -43,6 +43,8 @@ Code =
 			require( '../code/condition' ),
 		Differs :
 			require( '../code/differs' ),
+		Dot :
+			require( '../code/dot' ),
 		If :
 			require( '../code/if' ),
 		Equals :
@@ -196,6 +198,26 @@ ShortHand.Differs =
 				left,
 			'right',
 				right
+		)
+	);
+};
+
+
+/*
+| Shorthand for creating dots.
+*/
+ShortHand.Dot =
+	function(
+		expr,
+		member
+	)
+{
+	return (
+		Code.Dot.Create(
+			'expr',
+				expr,
+			'member',
+				member
 		)
 	);
 };

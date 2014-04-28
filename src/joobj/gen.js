@@ -497,7 +497,10 @@ Gen.prototype.genNodeIncludes =
 			block =
 				block
 				.Assign(
-					Code.Term( unitName + '.' + typeName ),
+					Code.Dot(
+						Code.Var( unitName ),
+						typeName
+					),
 					Code.Call(
 						Code.Var( 'require' ),
 						Code.StringLiteral(
@@ -578,7 +581,10 @@ Gen.prototype.genConstructor =
 
 		assign =
 			Code.Assign(
-				Code.Term( 'this.' + attr.assign ),
+				Code.Dot(
+					Code.Var( 'this' ),
+					attr.assign
+				),
 				Code.Var( attr.vName )
 			);
 
@@ -609,11 +615,17 @@ Gen.prototype.genConstructor =
 		block =
 			block
 			.Assign(
-				Code.Term( 'this.twig' ),
+				Code.Dot(
+					Code.Var( 'this' ),
+					'twig'
+				),
 				Code.Var( 'twig' )
 			)
 			.Assign(
-				Code.Term( 'this.ranks' ),
+				Code.Dot(
+					Code.Var( 'this' ),
+					'ranks'
+				),
 				Code.Var( 'ranks' )
 			);
 	}
@@ -623,7 +635,10 @@ Gen.prototype.genConstructor =
 	{
 		initCall =
 			Code.Call(
-				Code.Term( 'this._init' )
+				Code.Dot(
+					Code.Var( 'this' ),
+					'_init'
+				)
 			);
 
 		for(
