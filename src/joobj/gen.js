@@ -949,7 +949,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		receiver =
 			Code.Block( )
 			.Assign(
-				Code.Term( 'inherit' ),
+				Code.Var( 'inherit' ),
 				Code.Var( 'this' )
 			);
 
@@ -959,14 +959,20 @@ Gen.prototype.genCreatorInheritanceReceiver =
 			receiver
 			.Assign(
 				Code.Var( 'twig' ),
-				Code.Term( 'inherit.twig' )
+				Code.Dot(
+					Code.Var( 'inherit' ),
+					'twig'
+				)
 			)
 			.Assign(
 				Code.Var( 'ranks' ),
-				Code.Term( 'inherit.ranks' )
+				Code.Dot(
+					Code.Var( 'inherit' ),
+					'ranks'
+				)
 			)
 			.Assign(
-				Code.Term( 'twigDup' ),
+				Code.Var( 'twigDup' ),
 				Code.Term( 'false' )
 			);
 	}
@@ -1013,15 +1019,15 @@ Gen.prototype.genCreatorInheritanceReceiver =
 			.Elsewise(
 				Code.Block( )
 				.Assign(
-					Code.Term( 'twig' ),
+					Code.Var( 'twig' ),
 					Code.ObjLiteral( )
 				)
 				.Assign(
-					Code.Term( 'ranks' ),
+					Code.Var( 'ranks' ),
 					Code.Term( '[ ]' )
 				)
 				.Assign(
-					Code.Term( 'twigDup' ),
+					Code.Var( 'twigDup' ),
 					Code.Term( 'true' )
 				)
 			);
@@ -1080,7 +1086,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.Case(
-				Code.Term( '\'' + name + '\'' ),
+				Code.StringLiteral( name  ),
 				Code.Block( )
 				.If(
 					Code.Differs(
@@ -1089,8 +1095,8 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					Code.Block( )
 					.Assign(
-						Code.Term( attr.vName ),
-						Code.Term( 'arg' )
+						Code.Var( attr.vName ),
+						Code.Var( 'arg' )
 					)
 				)
 			);
@@ -1102,20 +1108,20 @@ Gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.Case(
-				Code.Term ( '\'twig:add\'' ),
+				Code.StringLiteral( 'twig:add' ),
 				Code.Block( )
 				.If(
 					Code.Term( '!twigDup' ),
 					Code.Block( )
 					.Assign(
-						Code.Term( 'twig' ),
+						Code.Var( 'twig' ),
 						Code.Call(
 							Code.Term( 'Jools.copy' ),
-							Code.Term( 'twig' )
+							Code.Var( 'twig' )
 						)
 					)
 					.Assign(
-						Code.Term( 'ranks' ),
+						Code.Var( 'ranks' ),
 						Code.Call(
 							Code.Term( 'ranks.slice' )
 						)
@@ -1147,15 +1153,15 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.Assign(
 					Code.Term( 'twig[ key ]'),
-					Code.Term( 'arg' )
+					Code.Var( 'arg' )
 				)
 				.Call(
 					Code.Term( 'ranks.push' ),
-					Code.Term( 'key' )
+					Code.Var( 'key' )
 				)
 			)
 			.Case(
-				Code.Term ( '\'twig:set\'' ),
+				Code.StringLiteral( 'twig:set' ),
 				Code.Block( )
 				.If(
 					Code.Term( '!twigDup' ),
@@ -1179,11 +1185,11 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Assign(
-					Code.Term( 'key' ),
-					Code.Term( 'arg' )
+					Code.Var( 'key' ),
+					Code.Var( 'arg' )
 				)
 				.Assign(
-					Code.Term( 'arg' ),
+					Code.Var( 'arg' ),
 					Code.Term( 'arguments[ ++a + 1 ]' )
 				)
 				.If(
