@@ -1606,7 +1606,7 @@ formatNull =
 /*
 | Formats an object literal.
 |
-| MAYBE format also inline
+| FUTURE format also inline
 */
 var
 formatObjLiteral =

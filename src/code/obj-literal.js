@@ -1,5 +1,5 @@
 /*
-| An object literal to be generated
+| An object literal.
 |
 | Authors: Axel Kittenberger
 */
@@ -49,26 +49,27 @@ if( JOOBJ )
 | Node imports.
 */
 var
-	ObjLiteral =
+	ObjLiteral;
+
+
+ObjLiteral =
 		require( '../joobj/this' )( module );
-//	Jools =
-//		require( '../jools/jools' );
 
 
 /*
-| Returns the object literal function with a key value pair added.
+| Returns an object literal with a key-expr pair added.
 */
 ObjLiteral.prototype.Add =
 	function(
 		key,
-		value
+		expr
 	)
 {
 	return (
 		this.Create(
 			'twig:add',
 			key,
-			value
+			expr
 		)
 	);
 };

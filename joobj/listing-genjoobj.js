@@ -7,6 +7,7 @@ module.exports =
 	list :
 		[
 			'src/code/and.js',
+			'src/code/array-literal.js',
 			'src/code/assign.js',
 			'src/code/block.js',
 			'src/code/boolean-literal.js',
