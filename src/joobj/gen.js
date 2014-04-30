@@ -2819,9 +2819,15 @@ Gen.prototype.genToJSON =
 		capsule
 		.Comment( 'Converts a ' + this.name + ' into JSON.' )
 		.Call(
-			Code.Term( 'Jools.lazyValue' ),
-			Code.Term( this.reference + '.prototype' ),
-			Code.Term( '\'toJSON\'' ),
+			Code.Dot(
+				Code.Var( 'Jools' ),
+				'lazyValue'
+			),
+			Code.Dot(
+				Code.Var( this.reference ),
+				'prototype'
+			),
+			Code.StringLiteral( 'toJSON' ),
 			Code.Func( block )
 		);
 
@@ -2908,7 +2914,9 @@ Gen.prototype.genEquals =
 			)
 		)
 		.If(
-			Code.Term( '!obj' ),
+			Code.Not(
+				Code.Var( 'obj' )
+			),
 			Code.Block( )
 			.Return(
 				Code.False( )
@@ -2987,7 +2995,10 @@ Gen.prototype.genEquals =
 							),
 							Code.And(
 								Code.Differs(
-									Code.Term( 'this.' + attr.assign ),
+									Code.Dot(
+										Code.Var( 'this' ),
+										attr.assign
+									),
 									Code.Null( )
 								),
 								Code.Term(
@@ -3017,7 +3028,13 @@ Gen.prototype.genEquals =
 	capsule =
 		capsule
 		.Assign(
-			Code.Term( this.reference + '.prototype.equals' ),
+			Code.Dot(
+				Code.Dot(
+					Code.Var( this.reference ),
+					'prototype'
+				),
+				'equals'
+			),
 			Code.Func( block )
 			.Arg(
 				'obj',
@@ -3041,7 +3058,7 @@ Gen.prototype.genNodeExport =
 		capsule
 		.Comment( 'Node export.' )
 		.If(
-			Code.Term( 'SERVER' ),
+			Code.Var( 'SERVER' ),
 			Code.Block( )
 			.Assign(
 				Code.Dot(
