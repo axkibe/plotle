@@ -1155,7 +1155,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.If(
 					Code.Differs(
-						Code.Term( 'twig[ key ]' ),
+						Code.Member(
+							Code.Var( 'twig' ),
+							Code.Var( 'key' )
+						),
 						Code.Var( 'undefined' )
 					),
 					Code.Block( )
@@ -1166,7 +1169,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Assign(
-					Code.Term( 'twig[ key ]'),
+					Code.Member(
+						Code.Var( 'twig' ),
+						Code.Var( 'key' )
+					),
 					Code.Var( 'arg' )
 				)
 				.Call(
@@ -1219,7 +1225,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.If(
 					Code.Equals(
-						Code.Term( 'twig[ key ]' ),
+						Code.Member(
+							Code.Var( 'twig' ),
+							Code.Var( 'key' )
+						),
 						Code.Var( 'undefined' )
 					),
 					Code.Block( )
@@ -1230,7 +1239,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Assign(
-					Code.Term( 'twig[ key ]'),
+					Code.Member(
+						Code.Var( 'twig' ),
+						Code.Var( 'key' )
+					),
 					Code.Var( 'arg' )
 				)
 			)
@@ -1283,7 +1295,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.If(
 					Code.Differs(
-						Code.Term( 'twig[ key ]' ),
+						Code.Member(
+							Code.Var( 'twig' ),
+							Code.Var( 'key' )
+						),
 						Code.Var( 'undefined' )
 					),
 					Code.Block( )
@@ -1304,12 +1319,18 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Assign(
-					Code.Term( 'twig[ key ]'),
+					Code.Member(
+						Code.Var( 'twig' ),
+						Code.Var( 'key' )
+					),
 					Code.Var( 'arg' )
 				)
 				.Append(
 					Code.Call(
-						Code.Term( 'ranks.splice' ),
+						Code.Dot(
+							Code.Var( 'ranks' ),
+							'splice'
+						),
 						Code.Var( 'rank' ),
 						Code.NumberLiteral( 0 ),
 						Code.Var( 'key' )
@@ -1350,7 +1371,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.If(
 					Code.Equals(
-						Code.Term( 'twig[ arg ]' ),
+						Code.Member(
+							Code.Var( 'twig' ),
+							Code.Var( 'arg' )
+						),
 						Code.Var( 'undefined' )
 					),
 					Code.Block( )
