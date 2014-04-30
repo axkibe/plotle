@@ -2943,8 +2943,14 @@ Gen.prototype.genEquals =
 
 				ceq =
 					Code.Equals(
-						Code.Term( 'this.' + attr.assign ),
-						Code.Term( 'obj.' + attr.assign )
+						Code.Dot(
+							Code.Var( 'this' ),
+							attr.assign
+						),
+						Code.Dot(
+							Code.Var( 'obj' ),
+							attr.assign
+						)
 					);
 
 				break;
@@ -2955,8 +2961,14 @@ Gen.prototype.genEquals =
 				{
 					ceq =
 						Code.Equals(
-							Code.Term( 'this.' + attr.assign ),
-							Code.Term( 'obj.' + attr.assign )
+							Code.Dot(
+								Code.Var( 'this' ),
+								attr.assign
+							),
+							Code.Dot(
+								Code.Var( 'obj' ),
+								attr.assign
+							)
 						);
 				}
 				else
@@ -2964,8 +2976,14 @@ Gen.prototype.genEquals =
 					ceq =
 						Code.Or(
 							Code.Equals(
-								Code.Term( 'this.' + attr.assign ),
-								Code.Term( 'obj.' + attr.assign )
+								Code.Dot(
+									Code.Var( 'this' ),
+									attr.assign
+								),
+								Code.Dot(
+									Code.Var( 'obj' ),
+									attr.assign
+								)
 							),
 							Code.And(
 								Code.Differs(
@@ -3026,8 +3044,11 @@ Gen.prototype.genNodeExport =
 			Code.Term( 'SERVER' ),
 			Code.Block( )
 			.Assign(
-				Code.Term( 'module.exports' ),
-				Code.Term( this.reference )
+				Code.Dot(
+					Code.Var( 'module' ),
+					'exports'
+				),
+				Code.Var( this.reference )
 			)
 		)
 	);
@@ -3053,7 +3074,7 @@ Gen.prototype.genExport =
 			.VarDec(
 				this.unit,
 				Code.Or(
-					Code.Term( this.unit ),
+					Code.Var( this.unit ),
 					Code.ObjLiteral( )
 				)
 			);
