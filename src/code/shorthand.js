@@ -29,8 +29,8 @@ Code =
 	{
 		And :
 			require( '../code/and' ),
-//		ArrayLiteral :
-//			require( '../code/array-literal' ),
+		ArrayLiteral :
+			require( '../code/array-literal' ),
 		Assign :
 			require( '../code/assign' ),
 		Block :

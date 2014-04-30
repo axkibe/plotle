@@ -1027,7 +1027,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 				)
 				.Assign(
 					Code.Var( 'ranks' ),
-					Code.Term( '[ ]' )
+					Code.ArrayLiteral( )
 				)
 				.Assign(
 					Code.Var( 'twigDup' ),
