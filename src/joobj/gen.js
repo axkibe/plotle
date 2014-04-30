@@ -2793,16 +2793,22 @@ Gen.prototype.genToJSON =
 			)
 			.Add(
 				'twig',
-				Code.Term( 'this.twig' )
+				Code.Dot(
+					Code.Var( 'this' ),
+					'twig'
+				)
 			);
 	}
 
 	block =
 		block
 		.Assign(
-			Code.Term( 'json' ),
+			Code.Var( 'json' ),
 			Code.Call(
-				Code.Term( 'Object.freeze' ),
+				Code.Dot(
+					Code.Var( 'Object' ),
+					'freeze'
+				),
 				olit
 			)
 		)
@@ -2810,7 +2816,7 @@ Gen.prototype.genToJSON =
 			Code.Func(
 				Code.Block( )
 				.Return(
-					Code.Term( 'json' )
+					Code.Var( 'json' )
 				)
 			)
 		);
@@ -2865,7 +2871,13 @@ Gen.prototype.genEquals =
 				capsule
 				.Comment( 'Tests equality of object.' )
 				.Assign(
-					Code.Term( this.reference + '.prototype.equals' ),
+					Code.Dot(
+						Code.Dot(
+							Code.Var( this.reference ),
+							'prototype'
+						),
+						'equals'
+					),
 					Code.Func(
 						Code.Block( )
 						.Return(
@@ -3001,9 +3013,13 @@ Gen.prototype.genEquals =
 									),
 									Code.Null( )
 								),
-								Code.Term(
-									'this.' + attr.assign +
-									'.equals( obj.' + attr.assign + ' )'
+								Code.Call(
+									Code.Term(
+										'this.' + attr.assign + '.equals'
+									),
+									Code.Term(
+										'obj.' + attr.assign
+									)
 								)
 							)
 						);
