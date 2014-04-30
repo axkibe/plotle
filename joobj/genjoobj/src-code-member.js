@@ -44,12 +44,12 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Dot =
-Code.Dot =
+var Member =
+Code.Member =
 	function(
 		tag, // magic cookie
 		v_expr, // the expression to get the member of
-		v_member // the members name
+		v_member // the members expression
 	)
 {
 /**/if( CHECK )
@@ -66,17 +66,15 @@ Code.Dot =
 	this.member =
 		v_member;
 
-	this._init( );
-
 	Jools.immute( this );
 };
 
 
 /*
-| Creates a new Dot object.
+| Creates a new Member object.
 */
-Dot.Create =
-Dot.prototype.Create =
+Member.Create =
+Member.prototype.Create =
 	function(
 		// free strings
 	)
@@ -86,7 +84,7 @@ Dot.prototype.Create =
 		v_expr,
 		v_member;
 
-	if( this !== Dot )
+	if( this !== Member )
 	{
 		inherit =
 			this;
@@ -160,15 +158,6 @@ Dot.prototype.Create =
 /**/	{
 /**/		throw new Error( 'attribute member must not be null.' );
 /**/	}
-/**/
-/**/	if(
-/**/		typeof( v_member ) !== 'string'
-/**/		&&
-/**/		!( v_member instanceof String )
-/**/	)
-/**/	{
-/**/		throw new Error( 'type mismatch' );
-/**/	}
 /**/}
 
 	if(
@@ -182,35 +171,35 @@ Dot.prototype.Create =
 		return inherit;
 	}
 
-	return new Dot( 8833, v_expr, v_member );
+	return new Member( 8833, v_expr, v_member );
 };
 
 
 /*
 | Reflection.
 */
-Dot.prototype.reflect =
-	'Dot';
+Member.prototype.reflect =
+	'Member';
 
 
 /*
 | Sets values by path.
 */
-Dot.prototype.setPath =
+Member.prototype.setPath =
 	JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Dot.prototype.getPath =
+Member.prototype.getPath =
 	JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Dot.prototype.equals =
+Member.prototype.equals =
 	function(
 		obj // object to compare to
 	)
@@ -235,7 +224,7 @@ Dot.prototype.equals =
 if( SERVER )
 {
 	module.exports =
-		Dot;
+		Member;
 }
 
 

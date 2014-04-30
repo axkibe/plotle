@@ -36,6 +36,7 @@ module.exports =
 			'src/code/func-arg.js',
 			'src/code/func.js',
 			'src/code/if.js',
+			'src/code/member.js',
 			'src/code/new.js',
 			'src/code/not.js',
 			'src/code/null.js',

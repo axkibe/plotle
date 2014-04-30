@@ -27,9 +27,9 @@ if( JOOBJ )
 				statement :
 					{
 						comment :
-							'the statement',
+							'the statement expression',
 						type :
-							'Term'
+							'Object'
 					},
 				defaultCase :
 					{

@@ -59,6 +59,8 @@ Code =
 			require( '../code/func' ),
 		FuncArg :
 			require( '../code/func-arg' ),
+		Member :
+			require( '../code/member' ),
 		New :
 			require( '../code/new' ),
 		Not :
@@ -323,6 +325,26 @@ ShortHand.Func =
 			);
 
 	return func;
+};
+
+
+/*
+| Shorthand for creating members.
+*/
+ShortHand.Member =
+	function(
+		expr,
+		member
+	)
+{
+	return (
+		Code.Member.Create(
+			'expr',
+				expr,
+			'member',
+				member
+		)
+	);
 };
 
 

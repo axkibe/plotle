@@ -68,6 +68,8 @@ precTable =
 			-1,
 		'In' :
 			8,
+		'Member' :
+			1,
 		'New' :
 			2,
 		'Not' :
@@ -444,6 +446,51 @@ formatDot =
 	);
 };
 
+
+/*
+| Formats a Member.
+*/
+var
+formatMember =
+	function(
+		context,
+		expr
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Member' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return (
+		formatExpression(
+			context,
+			expr.expr,
+			precTable.Member
+		)
+		+
+		'['
+		+
+		context.sep
+		+
+		formatExpression(
+			context.Inc,
+			expr.member,
+			null
+		)
+		+
+		context.sep
+		+
+		context.tab
+		+
+		']'
+	);
+};
+
+
 /*
 | Formats an equality check.
 */
@@ -474,7 +521,11 @@ formatEquals =
 		+
 		context.sep
 		+
-		context.tab + '===' + context.sep
+		context.tab
+		+
+		'==='
+		+
+		context.sep
 		+
 		formatExpression(
 			context,
@@ -2196,6 +2247,8 @@ exprFormatter =
 			formatEquals,
 		'Func' :
 			formatFunc,
+		'Member' :
+			formatMember,
 		'New' :
 			formatNew,
 		'Not' :

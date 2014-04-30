@@ -40,7 +40,9 @@ if( JOOBJ )
 					}
 			},
 		node :
-			true
+			true,
+		init :
+			[ ]
 	};
 }
 

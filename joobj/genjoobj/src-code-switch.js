@@ -57,7 +57,7 @@ Code.Switch =
 		twig, // twig
 		ranks, // twig ranks
 		v_defaultCase, // the default block
-		v_statement // the statement
+		v_statement // the statement expression
 	)
 {
 /**/if( CHECK )
@@ -339,11 +339,6 @@ Switch.prototype.Create =
 /**/	{
 /**/		throw new Error( 'attribute statement must not be null.' );
 /**/	}
-/**/
-/**/	if( v_statement.reflect !== 'Term' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
-/**/	}
 /**/}
 
 	if(
@@ -357,7 +352,7 @@ Switch.prototype.Create =
 			v_defaultCase && v_defaultCase.equals( inherit.defaultCase )
 		)
 		&&
-		v_statement.equals( inherit.statement )
+		v_statement === inherit.statement
 	)
 	{
 		return inherit;

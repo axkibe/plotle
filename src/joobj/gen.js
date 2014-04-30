@@ -1071,7 +1071,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 	switchExpr =
 		Code
 		.Switch(
-			Code.Term( 'arguments[ a ]' )
+			Code.Member(
+				Code.Var( 'arguments' ),
+				Code.Var( 'a' )
+			)
 		);
 
 	for(
@@ -1362,8 +1365,17 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.Append(
 					Code.Call(
-						Code.Term( 'ranks.splice' ),
-						Code.Term( 'ranks.indexOf( arg )' ),
+						Code.Dot(
+							Code.Var( 'ranks' ),
+							'splice'
+						),
+						Code.Call(
+							Code.Dot(
+								Code.Var( 'ranks' ),
+								'indexOf'
+							),
+							Code.Var( 'arg' )
+						),
 						Code.NumberLiteral( 1 )
 					)
 				)
