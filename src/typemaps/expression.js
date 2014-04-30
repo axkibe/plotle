@@ -11,8 +11,6 @@ module.exports =
 		'Code.Call',
 	'Func' :
 		'Code.Func',
-	'In' :
-		'Code.In',
 	'New' :
 		'Code.New',
 	'ObjLiteral' :

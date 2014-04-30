@@ -48,6 +48,8 @@ precTable =
 	{
 		'And' :
 			13,
+		'ArrayLiteral' :
+			-1,
 		'Assign' :
 			17,
 		'BooleanLiteral' :
@@ -1604,6 +1606,78 @@ formatNull =
 
 
 /*
+| Formats an array literal.
+|
+| FUTURE format also inline
+*/
+var
+formatArrayLiteral =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		key,
+		text =
+			'';
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ArrayLiteral' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+
+	if( expr.ranks.length === 0 )
+	{
+		return context.tab + '[ ]';
+	}
+
+	if( context.inline )
+	{
+		throw 'noinline';
+	}
+
+	text +=
+		context.tab + '[\n';
+
+	for(
+		var a = 0, aZ = expr.ranks.length;
+		a < aZ;
+		a++
+	)
+	{
+		key =
+			expr.ranks[ a ];
+
+		text +=
+			formatExpression(
+				context.Inc,
+				expr.twig[ key ],
+				precTable.ArrayLiteral
+			)
+			+
+			(
+				a + 1 < aZ ?
+				',\n'
+				:
+				'\n'
+			);
+	}
+
+	text +=
+		context.tab
+		+
+		']';
+
+	return text;
+};
+
+
+/*
 | Formats an object literal.
 |
 | FUTURE format also inline
@@ -1612,7 +1686,7 @@ var
 formatObjLiteral =
 	function(
 		context,
-		objliteral
+		objliteral  // FIXME call expr
 	)
 {
 	var
@@ -1660,7 +1734,7 @@ formatObjLiteral =
 			formatExpression(
 				context.Inc.Inc,
 				objliteral.twig[ key ],
-				null
+				null // FIXME precTable.Objliteral
 			)
 			+
 			(
@@ -2104,6 +2178,8 @@ exprFormatter =
 	{
 		'And' :
 			formatAnd,
+		'ArrayLiteral' :
+			formatArrayLiteral,
 		'Assign' :
 			formatAssign,
 		'BooleanLiteral' :

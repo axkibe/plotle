@@ -29,6 +29,8 @@ Code =
 	{
 		And :
 			require( '../code/and' ),
+//		ArrayLiteral :
+//			require( '../code/array-literal' ),
 		Assign :
 			require( '../code/assign' ),
 		Block :
@@ -101,6 +103,16 @@ ShortHand.And =
 				right
 		)
 	);
+};
+
+
+/*
+| Shorthand for creating array literals.
+*/
+ShortHand.ArrayLiteral =
+	function( )
+{
+	return Code.ArrayLiteral.Create( );
 };
 
 
