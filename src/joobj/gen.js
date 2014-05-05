@@ -1241,8 +1241,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					Code.Block( )
 					.Fail(
-						Code.Term(
-							'\'key "\' + key + \'" not in use\''
+						Code.Plus(
+							Code.StringLiteral( 'key "' ),
+							Code.Var( 'key' ),
+							Code.StringLiteral( '" not in use' )
 						)
 					)
 				)
@@ -1387,8 +1389,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					Code.Block( )
 					.Fail(
-						Code.Term(
-							'\'key "\' + arg + \'" not in use\''
+						Code.Plus(
+							Code.StringLiteral( 'key "' ),
+							Code.Var( 'key' ),
+							Code.StringLiteral( '" not in use' )
 						)
 					)
 				)
