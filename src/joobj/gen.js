@@ -1169,8 +1169,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					Code.Block( )
 					.Fail(
-						Code.Term(
-							'\'key "\' + key + \'" already in use\''
+						Code.Plus(
+							Code.StringLiteral( 'key "' ),
+							Code.Var( 'key' ),
+							Code.StringLiteral( '" already in use' )
 						)
 					)
 				)
