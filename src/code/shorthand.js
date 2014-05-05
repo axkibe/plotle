@@ -73,6 +73,8 @@ Code =
 			require( '../code/obj-literal' ),
 		Or :
 			require( '../code/or' ),
+		Plus :
+			require( '../code/plus' ),
 		StringLiteral :
 			require( '../code/string-literal' ),
 		Switch :
@@ -381,6 +383,7 @@ ShortHand.Not =
 	);
 };
 
+
 /*
 | Shorthand for creating nulls.
 */
@@ -388,6 +391,23 @@ ShortHand.Null =
 	function( )
 {
 	return Code.Null.Create( );
+};
+
+
+/*
+| Shorthand for creating number literals.
+*/
+ShortHand.NumberLiteral =
+	function(
+		number
+	)
+{
+	return (
+		Code.NumberLiteral.Create(
+			'number',
+				number
+		)
+	);
 };
 
 
@@ -422,20 +442,24 @@ ShortHand.Or =
 
 
 /*
-| Shorthand for creating number literals.
+| Shorthand for creating pluses.
 */
-ShortHand.NumberLiteral =
+ShortHand.Plus =
 	function(
-		number
+		left,
+		right
 	)
 {
 	return (
-		Code.NumberLiteral.Create(
-			'number',
-				number
+		Code.Plus.Create(
+			'left',
+				left,
+			'right',
+				right
 		)
 	);
 };
+
 
 
 /*

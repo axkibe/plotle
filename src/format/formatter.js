@@ -82,6 +82,8 @@ precTable =
 			-1,
 		'Or' :
 			14,
+		'Plus' :
+			6,
 		'Term' :
 			-1,
 		'StringLiteral' :
@@ -413,6 +415,49 @@ formatDiffers =
 
 	return text;
 };
+
+
+/*
+| Formats a Plus.
+*/
+var
+formatPlus =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Plus' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			context,
+			expr.left,
+			precTable.Plus
+		)
+		+
+		context.sep
+		+
+		context.tab + '+' + context.sep
+		+
+		formatExpression(
+			context,
+			expr.right,
+			precTable.Plus
+		);
+
+	return text;
+};
+
 
 
 /*
@@ -2261,6 +2306,8 @@ exprFormatter =
 			formatObjLiteral,
 		'Or' :
 			formatOr,
+		'Plus' :
+			formatPlus,
 		'StringLiteral' :
 			formatStringLiteral,
 		'Term' :

@@ -1065,7 +1065,13 @@ Gen.prototype.genCreatorFreeStringsParser =
 		Code.Block( )
 		.VarDec(
 			'arg',
-			Code.Term( 'arguments[ a + 1 ]' )
+			Code.Member(
+				Code.Var( 'arguments' ),
+				Code.Plus(
+					Code.Var( 'a' ),
+					Code.NumberLiteral( 1 )
+				)
+			)
 		);
 
 	switchExpr =

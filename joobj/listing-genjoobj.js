@@ -33,6 +33,7 @@ module.exports =
 			'src/code/null.js',
 			'src/code/obj-literal.js',
 			'src/code/or.js',
+			'src/code/plus.js',
 			'src/code/return.js',
 			'src/code/string-literal.js',
 			'src/code/switch.js',
