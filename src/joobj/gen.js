@@ -1391,7 +1391,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.Fail(
 						Code.Plus(
 							Code.StringLiteral( 'key "' ),
-							Code.Var( 'key' ),
+							Code.Var( 'arg' ),
 							Code.StringLiteral( '" not in use' )
 						)
 					)

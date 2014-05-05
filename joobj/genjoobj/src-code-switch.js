@@ -291,7 +291,7 @@ Switch.prototype.Create =
 
 				if( twig[ arg ] === undefined )
 				{
-					throw new Error( 'key "' + key + '" not in use' );
+					throw new Error( 'key "' + arg + '" not in use' );
 				}
 
 				delete twig[ arg ];
