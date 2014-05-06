@@ -1294,11 +1294,23 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.Assign(
 					Code.Var( 'rank' ),
-					Code.Term( 'arguments[ a + 2 ]' )
+					Code.Member(
+						Code.Var( 'arguments' ),
+						Code.Plus(
+							Code.Var( 'a' ),
+							Code.NumberLiteral( 2 )
+						)
+					)
 				)
 				.Assign(
 					Code.Var( 'arg' ),
-					Code.Term( 'arguments[ a + 3 ]' )
+					Code.Member(
+						Code.Var( 'arguments' ),
+						Code.Plus(
+							Code.Var( 'a' ),
+							Code.NumberLiteral( 3 )
+						)
+					)
 				)
 				.Append(
 					Code.Term( 'a += 2' )
@@ -1313,8 +1325,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					Code.Block( )
 					.Fail(
-						Code.Term(
-							'\'key "\' + key + \'" already in use\''
+						Code.Plus(
+							Code.StringLiteral( 'key "' ),
+							Code.Var( 'key' ),
+							Code.StringLiteral( '" already in use' )
 						)
 					)
 				)
@@ -1442,7 +1456,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 			)
 			.VarDec(
 				'aZ',
-				Code.Term( 'arguments.length' )
+				Code.Dot(
+					Code.Var( 'arguments' ),
+					'length'
+				)
 			),
 			Code.Term( 'a < aZ' ),
 			Code.Term( 'a += 2' ),
@@ -1643,7 +1660,13 @@ Gen.prototype.genCreatorChecks =
 							Code.StringLiteral( 'number' )
 						),
 						Code.Differs(
-							Code.Term( 'Math.floor( ' + attr.vName + ' )' ),
+							Code.Call(
+								Code.Dot(
+									Code.Var( 'Math' ),
+									'floor'
+								),
+								Code.Var( attr.vName )
+							),
 							Code.Var( attr.vName )
 						)
 					);
