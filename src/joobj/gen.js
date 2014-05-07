@@ -1157,7 +1157,15 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.Assign(
 					Code.Var( 'arg' ),
-					Code.Term( 'arguments[ ++a + 1 ]' )
+					Code.Member(
+						Code.Var( 'arguments' ),
+						Code.Plus(
+							Code.PreIncrement(
+								Code.Var( 'a' )
+							),
+							Code.NumberLiteral( 1 )
+						)
+					)
 				)
 				.If(
 					Code.Differs(
@@ -1229,7 +1237,15 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.Assign(
 					Code.Var( 'arg' ),
-					Code.Term( 'arguments[ ++a + 1 ]' )
+					Code.Member(
+						Code.Var( 'arguments' ),
+						Code.Plus(
+							Code.PreIncrement(
+								Code.Var( 'a' )
+							),
+							Code.NumberLiteral( 1 )
+						)
+					)
 				)
 				.If(
 					Code.Equals(
@@ -1313,7 +1329,13 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Append(
-					Code.Term( 'a += 2' )
+					Code.Assign(
+						Code.Var( 'a' ),
+						Code.Plus(
+							Code.Var( 'a' ),
+							Code.NumberLiteral( 2 )
+						)
+					)
 				)
 				.If(
 					Code.Differs(
@@ -1703,7 +1725,10 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					Code.Differs(
-						Code.Term( attr.vName + '.reflect' ),
+						Code.Dot(
+							Code.Var( attr.vName ),
+							'reflect'
+						),
 						Code.StringLiteral( attr.type )
 					);
 
@@ -1826,7 +1851,7 @@ Gen.prototype.genCreatorConcerns =
 
 				cExpr =
 					cExpr.Append(
-						Code.Term( bAttr.vName )
+						Code.Var( bAttr.vName )
 					);
 			}
 		}

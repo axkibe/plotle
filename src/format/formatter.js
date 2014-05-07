@@ -84,6 +84,8 @@ precTable =
 			14,
 		'Plus' :
 			6,
+		'PreIncrement' :
+			3,
 		'Term' :
 			-1,
 		'StringLiteral' :
@@ -1851,6 +1853,41 @@ formatObjLiteral =
 
 
 /*
+| Formats a pre-increment.
+*/
+var
+formatPreIncrement =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'PreIncrement' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return(
+		context.tab
+		+
+		'++'
+		+
+		formatExpression(
+			context,
+			expr.expr,
+			precTable.PreIncrement
+		)
+	);
+};
+
+
+
+
+/*
 | Formats a term.
 |
 | FIXME remove
@@ -2308,6 +2345,8 @@ exprFormatter =
 			formatOr,
 		'Plus' :
 			formatPlus,
+		'PreIncrement' :
+			formatPreIncrement,
 		'StringLiteral' :
 			formatStringLiteral,
 		'Term' :

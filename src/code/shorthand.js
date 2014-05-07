@@ -75,6 +75,8 @@ Code =
 			require( '../code/or' ),
 		Plus :
 			require( '../code/plus' ),
+		PreIncrement :
+			require( '../code/pre-increment' ),
 		StringLiteral :
 			require( '../code/string-literal' ),
 		Switch :
@@ -488,6 +490,22 @@ ShortHand.Plus =
 	);
 };
 
+
+/*
+| Shorthand for creating pre-increments.
+*/
+ShortHand.PreIncrement =
+	function(
+		expr
+	)
+{
+	return (
+		Code.PreIncrement.Create(
+			'expr',
+				expr
+		)
+	);
+};
 
 
 /*
