@@ -1360,7 +1360,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 							Code.Var( 'rank' ),
 							Code.NumberLiteral( 0 )
 						),
-						Code.MoreThan(
+						Code.GreaterThan(
 							Code.Var( 'rank' ),
 							Code.Dot(
 								Code.Var( 'ranks' ),

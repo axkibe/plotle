@@ -19,7 +19,7 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'MoreThan',
+			'GreaterThan',
 		unit :
 			'Code',
 		attributes :

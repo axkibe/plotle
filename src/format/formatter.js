@@ -70,7 +70,7 @@ precTable =
 			8,
 		'In' :
 			8,
-		'MoreThan' :
+		'GreaterThan' :
 			8,
 		'Member' :
 			1,
@@ -874,7 +874,7 @@ formatLessThan =
 | Formats a more-than check.
 */
 var
-formatMoreThan =
+formatGreaterThan =
 	function(
 		context,
 		expr
@@ -885,7 +885,7 @@ formatMoreThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'MoreThan' )
+/**/	if( expr.reflect !== 'GreaterThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -895,7 +895,7 @@ formatMoreThan =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.MoreThan
+			precTable.GreaterThan
 		)
 		+
 		context.sep
@@ -909,7 +909,7 @@ formatMoreThan =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.MoreThan
+			precTable.GreaterThan
 		);
 
 	return text;
@@ -2429,8 +2429,8 @@ exprFormatter =
 			formatLessThan,
 		'Member' :
 			formatMember,
-		'MoreThan' :
-			formatMoreThan,
+		'GreaterThan' :
+			formatGreaterThan,
 		'New' :
 			formatNew,
 		'Not' :

@@ -63,8 +63,8 @@ Code =
 			require( '../code/less-than' ),
 		Member :
 			require( '../code/member' ),
-		MoreThan :
-			require( '../code/more-than' ),
+		GreaterThan :
+			require( '../code/greater-than' ),
 		New :
 			require( '../code/new' ),
 		Not :
@@ -290,16 +290,16 @@ ShortHand.LessThan =
 
 
 /*
-| Shorthand for creating more-than comparisons.
+| Shorthand for creating greater-than comparisons.
 */
-ShortHand.MoreThan =
+ShortHand.GreaterThan =
 	function(
 		left,
 		right
 	)
 {
 	return (
-		Code.MoreThan.Create(
+		Code.GreaterThan.Create(
 			'left',
 				left,
 			'right',

@@ -44,8 +44,8 @@ if( SERVER )
 /*
 | Constructor.
 */
-var MoreThan =
-Code.MoreThan =
+var GreaterThan =
+Code.GreaterThan =
 	function(
 		tag, // magic cookie
 		v_left, // left expression
@@ -71,10 +71,10 @@ Code.MoreThan =
 
 
 /*
-| Creates a new MoreThan object.
+| Creates a new GreaterThan object.
 */
-MoreThan.Create =
-MoreThan.prototype.Create =
+GreaterThan.Create =
+GreaterThan.prototype.Create =
 	function(
 		// free strings
 	)
@@ -84,7 +84,7 @@ MoreThan.prototype.Create =
 		v_left,
 		v_right;
 
-	if( this !== MoreThan )
+	if( this !== GreaterThan )
 	{
 		inherit =
 			this;
@@ -165,35 +165,35 @@ MoreThan.prototype.Create =
 		return inherit;
 	}
 
-	return new MoreThan( 8833, v_left, v_right );
+	return new GreaterThan( 8833, v_left, v_right );
 };
 
 
 /*
 | Reflection.
 */
-MoreThan.prototype.reflect =
-	'MoreThan';
+GreaterThan.prototype.reflect =
+	'GreaterThan';
 
 
 /*
 | Sets values by path.
 */
-MoreThan.prototype.setPath =
+GreaterThan.prototype.setPath =
 	JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-MoreThan.prototype.getPath =
+GreaterThan.prototype.getPath =
 	JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-MoreThan.prototype.equals =
+GreaterThan.prototype.equals =
 	function(
 		obj // object to compare to
 	)
@@ -218,7 +218,7 @@ MoreThan.prototype.equals =
 if( SERVER )
 {
 	module.exports =
-		MoreThan;
+		GreaterThan;
 }
 
 

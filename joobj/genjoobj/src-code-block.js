@@ -252,7 +252,7 @@ Block.prototype.Create =
 					throw new Error( 'key "' + key + '" already in use' );
 				}
 
-				if( rank < 0 || rank < ranks.length )
+				if( rank < 0 || rank > ranks.length )
 				{
 					throw new Error( 'invalid rank' );
 				}
