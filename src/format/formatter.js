@@ -66,7 +66,11 @@ precTable =
 			9,
 		'Func' :
 			-1,
+		'LessThan' :
+			8,
 		'In' :
+			8,
+		'MoreThan' :
 			8,
 		'Member' :
 			1,
@@ -814,6 +818,98 @@ formatForIn =
 		formatBlock(
 			context,
 			expr.block
+		);
+
+	return text;
+};
+
+
+/*
+| Formats a less-than check.
+*/
+var
+formatLessThan =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'LessThan' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			context,
+			expr.left,
+			precTable.LessThan
+		)
+		+
+		context.sep
+		+
+		context.tab
+		+
+		'<'
+		+
+		context.sep
+		+
+		formatExpression(
+			context,
+			expr.right,
+			precTable.LessThan
+		);
+
+	return text;
+};
+
+
+/*
+| Formats a more-than check.
+*/
+var
+formatMoreThan =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'MoreThan' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			context,
+			expr.left,
+			precTable.MoreThan
+		)
+		+
+		context.sep
+		+
+		context.tab
+		+
+		'>'
+		+
+		context.sep
+		+
+		formatExpression(
+			context,
+			expr.right,
+			precTable.MoreThan
 		);
 
 	return text;
@@ -2329,8 +2425,12 @@ exprFormatter =
 			formatEquals,
 		'Func' :
 			formatFunc,
+		'LessThan' :
+			formatLessThan,
 		'Member' :
 			formatMember,
+		'MoreThan' :
+			formatMoreThan,
 		'New' :
 			formatNew,
 		'Not' :
