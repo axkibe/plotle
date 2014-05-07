@@ -1,5 +1,5 @@
 /*
-| Code for classical for loops.
+| A plus assignment ( += )
 |
 | Authors: Axel Kittenberger
 */
@@ -19,38 +19,24 @@ if( JOOBJ )
 {
 	return {
 		name :
-			'For',
+			'PlusAssign',
 		unit :
 			'Code',
 		attributes :
 			{
-				init :
+				left :
 					{
 						comment :
-							'the initialization',
+							'left-hand side',
 						type :
 							'Object'
 					},
-				condition :
+				right :
 					{
 						comment :
-							'the continue condition',
+							'right-hand side',
 						type :
 							'Object'
-					},
-				iterate :
-					{
-						comment :
-							'the iteration expression',
-						type :
-							'Object'
-					},
-				block :
-					{
-						comment :
-							'the for block',
-						type :
-							'Block'
 					}
 			},
 		node :

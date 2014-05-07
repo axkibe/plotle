@@ -49,9 +49,9 @@ Code.For =
 	function(
 		tag, // magic cookie
 		v_block, // the for block
-		v_condition, // the continue conditoin
+		v_condition, // the continue condition
 		v_init, // the initialization
-		v_iterate // the iteration term
+		v_iterate // the iteration expression
 	)
 {
 /**/if( CHECK )
@@ -200,11 +200,6 @@ For.prototype.Create =
 /**/		throw new Error( 'attribute condition must not be null.' );
 /**/	}
 /**/
-/**/	if( v_condition.reflect !== 'Term' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
-/**/	}
-/**/
 /**/	if( v_init === undefined )
 /**/	{
 /**/		throw new Error( 'undefined attribute init' );
@@ -224,11 +219,6 @@ For.prototype.Create =
 /**/	{
 /**/		throw new Error( 'attribute iterate must not be null.' );
 /**/	}
-/**/
-/**/	if( v_iterate.reflect !== 'Term' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
-/**/	}
 /**/}
 
 	if(
@@ -236,11 +226,11 @@ For.prototype.Create =
 		&&
 		v_block.equals( inherit.block )
 		&&
-		v_condition.equals( inherit.condition )
+		v_condition === inherit.condition
 		&&
 		v_init === inherit.init
 		&&
-		v_iterate.equals( inherit.iterate )
+		v_iterate === inherit.iterate
 	)
 	{
 		return inherit;

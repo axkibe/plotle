@@ -47,6 +47,7 @@ module.exports =
 			'src/code/obj-literal.js',
 			'src/code/or.js',
 			'src/code/plus.js',
+			'src/code/plus-assign.js',
 			'src/code/pre-increment.js',
 			'src/code/return.js',
 			'src/code/string-literal.js',

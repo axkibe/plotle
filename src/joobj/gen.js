@@ -1498,6 +1498,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 			),
 			Code.Term( 'a < aZ' ),
+//			Code.LessThan(
+//				Code.Var( 'a' ),
+//				Code.Var( 'aZ' )
+//			),
 			Code.Term( 'a += 2' ),
 			loop
 		);
