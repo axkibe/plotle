@@ -1356,8 +1356,17 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.If(
 					Code.Or(
-						Code.Term( 'rank < 0' ),
-						Code.Term( 'rank > ranks.length' )
+						Code.LessThan(
+							Code.Var( 'rank' ),
+							Code.NumberLiteral( 0 )
+						),
+						Code.MoreThan(
+							Code.Var( 'rank' ),
+							Code.Dot(
+								Code.Var( 'ranks' ),
+								'length'
+							)
+						)
 					),
 					Code.Block( )
 					.Fail(

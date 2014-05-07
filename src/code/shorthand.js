@@ -59,8 +59,12 @@ Code =
 			require( '../code/func' ),
 		FuncArg :
 			require( '../code/func-arg' ),
+		LessThan :
+			require( '../code/less-than' ),
 		Member :
 			require( '../code/member' ),
+		MoreThan :
+			require( '../code/more-than' ),
 		New :
 			require( '../code/new' ),
 		Not :
@@ -256,6 +260,46 @@ ShortHand.Equals =
 {
 	return (
 		Code.Equals.Create(
+			'left',
+				left,
+			'right',
+				right
+		)
+	);
+};
+
+
+/*
+| Shorthand for creating less-than comparisons.
+*/
+ShortHand.LessThan =
+	function(
+		left,
+		right
+	)
+{
+	return (
+		Code.LessThan.Create(
+			'left',
+				left,
+			'right',
+				right
+		)
+	);
+};
+
+
+/*
+| Shorthand for creating more-than comparisons.
+*/
+ShortHand.MoreThan =
+	function(
+		left,
+		right
+	)
+{
+	return (
+		Code.MoreThan.Create(
 			'left',
 				left,
 			'right',
