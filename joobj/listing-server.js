@@ -26,6 +26,7 @@ module.exports =
 			'src/code/check.js',
 			'src/code/comment.js',
 			'src/code/condition.js',
+			'src/code/delete.js',
 			'src/code/differs.js',
 			'src/code/dot.js',
 			'src/code/equals.js',
