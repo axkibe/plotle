@@ -1442,7 +1442,12 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Append(
-					Code.Term( 'delete twig[ arg ]' )
+					Code.Delete(
+						Code.Member(
+							Code.Var( 'twig' ),
+							Code.Var( 'arg' )
+						)
+					)
 				)
 				.Append(
 					Code.Call(

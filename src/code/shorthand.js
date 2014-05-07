@@ -45,6 +45,8 @@ Code =
 			require( '../code/comment' ),
 		Condition :
 			require( '../code/condition' ),
+		Delete :
+			require( '../code/delete' ),
 		Differs :
 			require( '../code/differs' ),
 		Dot :
@@ -224,6 +226,23 @@ ShortHand.Differs =
 				left,
 			'right',
 				right
+		)
+	);
+};
+
+
+/*
+| Shorthand for creating delete calls.
+*/
+ShortHand.Delete =
+	function(
+		expr
+	)
+{
+	return (
+		Code.Delete.Create(
+			'expr',
+				expr
 		)
 	);
 };

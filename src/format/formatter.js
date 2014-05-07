@@ -58,6 +58,8 @@ precTable =
 			2,
 		'Condition' :
 			15,
+		'Delete' :
+			4,
 		'Differs' :
 			9,
 		'Dot' :
@@ -1431,6 +1433,7 @@ formatStatement =
 		case 'Assign' :
 		case 'BooleanLiteral' :
 		case 'Call' :
+		case 'Delete' :
 		case 'Fail' :
 		case 'New' :
 		case 'NumberLiteral' :
@@ -1709,6 +1712,40 @@ formatCall =
 
 	return text;
 };
+
+
+/*
+| Formats a delete expression.
+*/
+var
+formatDelete =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Delete' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return(
+		context.tab
+		+
+		'delete '
+		+
+		formatExpression(
+			context,
+			expr.expr,
+			precTable.Delete
+		)
+	);
+};
+
 
 
 /*
@@ -2417,6 +2454,8 @@ exprFormatter =
 			formatCall,
 		'Condition' :
 			formatCondition,
+		'Delete' :
+			formatDelete,
 		'Differs' :
 			formatDiffers,
 		'Dot' :
