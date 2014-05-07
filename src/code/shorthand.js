@@ -81,6 +81,8 @@ Code =
 			require( '../code/or' ),
 		Plus :
 			require( '../code/plus' ),
+		PlusAssign :
+			require( '../code/plus-assign' ),
 		PreIncrement :
 			require( '../code/pre-increment' ),
 		StringLiteral :
@@ -552,6 +554,27 @@ ShortHand.Plus =
 		)
 	);
 };
+
+
+/*
+| Shorthand for creating plus-assignments.
+*/
+ShortHand.PlusAssign =
+	function(
+		left,
+		right
+	)
+{
+	return (
+		Code.PlusAssign.Create(
+			'left',
+				left,
+			'right',
+				right
+		)
+	);
+};
+
 
 
 /*

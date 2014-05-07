@@ -1329,12 +1329,9 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Append(
-					Code.Assign(
+					Code.PlusAssign(
 						Code.Var( 'a' ),
-						Code.Plus(
-							Code.Var( 'a' ),
-							Code.NumberLiteral( 2 )
-						)
+						Code.NumberLiteral( 2 )
 					)
 				)
 				.If(
@@ -1497,11 +1494,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 					'length'
 				)
 			),
-			Code.Term( 'a < aZ' ),
-//			Code.LessThan(
-//				Code.Var( 'a' ),
-//				Code.Var( 'aZ' )
-//			),
+			Code.LessThan(
+				Code.Var( 'a' ),
+				Code.Var( 'aZ' )
+			),
 			Code.Term( 'a += 2' ),
 			loop
 		);

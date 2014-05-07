@@ -90,6 +90,8 @@ precTable =
 			14,
 		'Plus' :
 			6,
+		'PlusAssign' :
+			17,
 		'PreIncrement' :
 			3,
 		'Term' :
@@ -466,6 +468,81 @@ formatPlus =
 	return text;
 };
 
+
+/*
+| Formats a plus-assignment.
+*/
+var
+formatPlusAssign =
+	function(
+		context,
+		assign
+	)
+{
+	var
+		subtext,
+		text;
+
+	if( context.inline )
+	{
+		throw 'noinline';
+	}
+
+	text =
+		'';
+
+	text +=
+		formatExpression(
+			context,
+			assign.left,
+			precTable.Assign
+		)
+		+
+		' +=\n';
+
+	context =
+		context.IncSame;
+
+	try
+	{
+		subtext =
+			null;
+
+		subtext =
+			context.tab
+			+
+			formatExpression(
+				context.Inline,
+				assign.right,
+				precTable.Assign
+			);
+	}
+	catch( e )
+	{
+		// rethrows any real error
+		if( e !== 'noinline' )
+		{
+			throw e;
+		}
+	}
+
+	if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
+	{
+		text +=
+			subtext;
+	}
+	else
+	{
+		text +=
+			formatExpression(
+				context,
+				assign.right,
+				precTable.Assign
+			);
+	}
+
+	return text;
+};
 
 
 /*
@@ -1437,6 +1514,7 @@ formatStatement =
 		case 'Fail' :
 		case 'New' :
 		case 'NumberLiteral' :
+		case 'PlusAssign' :
 		case 'Return' :
 		case 'StringLiteral' :
 		case 'Term' :
@@ -2484,6 +2562,8 @@ exprFormatter =
 			formatOr,
 		'Plus' :
 			formatPlus,
+		'PlusAssign' :
+			formatPlusAssign,
 		'PreIncrement' :
 			formatPreIncrement,
 		'StringLiteral' :
