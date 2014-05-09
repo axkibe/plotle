@@ -483,33 +483,28 @@ formatPlusAssign =
 		subtext,
 		text;
 
-	if( context.inline )
-	{
-		throw 'noinline';
-	}
-
 	text =
 		'';
 
-	text +=
-		formatExpression(
-			context,
-			assign.left,
-			precTable.Assign
-		)
-		+
-		' +=\n';
 
 	context =
 		context.IncSame;
 
 	try
 	{
-		subtext =
+		// first tries to inline the
+		// return expression.
+		text =
 			null;
 
-		subtext =
-			context.tab
+		text =
+			formatExpression(
+				context.Inline,
+				assign.left,
+				precTable.Assign
+			)
+			+
+			' += '
 			+
 			formatExpression(
 				context.Inline,
@@ -526,22 +521,18 @@ formatPlusAssign =
 		}
 	}
 
-	if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
+	if( text !== null && textLen( text ) < MAX_TEXT_WIDTH )
 	{
-		text +=
-			subtext;
-	}
-	else
-	{
-		text +=
-			formatExpression(
-				context,
-				assign.right,
-				precTable.Assign
-			);
+		return text;
 	}
 
-	return text;
+	// caller requested inline, but cannot do.
+	if( context.inline )
+	{
+		throw 'noinline';
+	}
+
+	throw 'FUTURE: implement noinline +='
 };
 
 

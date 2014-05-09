@@ -244,8 +244,7 @@ Call.prototype.Create =
 				arg =
 					arguments[ a + 3 ];
 
-				a +=
-					2;
+				a += 2;
 
 				if( twig[ key ] !== undefined )
 				{

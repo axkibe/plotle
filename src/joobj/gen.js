@@ -1498,7 +1498,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 				Code.Var( 'a' ),
 				Code.Var( 'aZ' )
 			),
-			Code.Term( 'a += 2' ),
+			Code.PlusAssign(
+				Code.Var( 'a' ),
+				Code.NumberLiteral( 2 )
+			),
 			loop
 		);
 
@@ -1892,7 +1895,10 @@ Gen.prototype.genCreatorConcerns =
 								Code.Var( attr.vName ),
 								Code.Null( )
 							),
-							Code.Term( attr.vName + '.' + member ),
+							Code.Dot(
+								Code.Var( attr.vName ),
+								member
+							),
 							Code.Null( )
 						);
 
@@ -1905,21 +1911,30 @@ Gen.prototype.genCreatorConcerns =
 								Code.Var( attr.vName ),
 								Code.Var( 'undefined' )
 							),
-							Code.Term( attr.vName + '.' + member ),
+							Code.Dot(
+								Code.Var( attr.vName ),
+								member
+							),
 							Code.Null( )
 						);
 				}
 				else
 				{
 					cExpr =
-						Code.Term( attr.vName + '.' + member );
+						Code.Dot(
+							Code.Var( attr.vName ),
+							member
+						);
 				}
 			}
 			else
 			{
 				cExpr =
 					Code.Call(
-						Code.Term( attr.vName + '.' + member )
+						Code.Dot(
+							Code.Var( attr.vName ),
+							member
+						)
 					);
 
 				for(
