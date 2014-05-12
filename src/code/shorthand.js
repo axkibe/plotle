@@ -91,6 +91,8 @@ Code =
 			require( '../code/switch' ),
 		Term :
 			require( '../code/term' ),
+		Typeof :
+			require( '../code/typeof' ),
 		Var :
 			require( '../code/var' ),
 		VarDec :
@@ -658,6 +660,24 @@ ShortHand.True =
 		)
 	);
 };
+
+
+/*
+| Shorthand for creating typeofs.
+*/
+ShortHand.Typeof =
+	function(
+		expr
+	)
+{
+	return (
+		Code.Typeof.Create(
+			'expr',
+				expr
+		)
+	);
+};
+
 
 
 /*

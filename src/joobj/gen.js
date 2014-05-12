@@ -1684,7 +1684,9 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					Code.Differs(
-						Code.Term( 'typeof( ' + attr.vName + ' )' ),
+						Code.Typeof(
+							Code.Var( attr.vName )
+						),
 						Code.StringLiteral( 'boolean' )
 					);
 

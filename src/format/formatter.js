@@ -96,6 +96,8 @@ precTable =
 			3,
 		'Term' :
 			-1,
+		'Typeof' :
+			4,
 		'StringLiteral' :
 			-1,
 		'Var' :
@@ -480,7 +482,6 @@ formatPlusAssign =
 	)
 {
 	var
-		subtext,
 		text;
 
 	text =
@@ -532,7 +533,7 @@ formatPlusAssign =
 		throw 'noinline';
 	}
 
-	throw 'FUTURE: implement noinline +='
+	throw 'FUTURE: implement noinline +=';
 };
 
 
@@ -2115,6 +2116,47 @@ formatTerm =
 
 
 /*
+| Formats a typeof expression.
+*/
+var
+formatTypeof =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Typeof' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return(
+		context.tab
+		+
+		'typeof('
+		+
+		context.sep
+		+
+		formatExpression(
+			context.Inc,
+			expr.expr,
+			precTable.Typeof
+		)
+		+
+		context.sep
+		+
+		')'
+	);
+};
+
+
+
+
+/*
 | Formats a variable use.
 */
 var
@@ -2561,6 +2603,8 @@ exprFormatter =
 			formatStringLiteral,
 		'Term' :
 			formatTerm,
+		'Typeof' :
+			formatTypeof,
 		'Var' :
 			formatVar,
 		'VList' :
