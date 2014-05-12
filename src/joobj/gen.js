@@ -1983,7 +1983,8 @@ Gen.prototype.genCreatorConcerns =
 
 /*
 | Generates the creators unchanged detection,
-| returning this.
+|
+| returning this object if so.
 */
 Gen.prototype.genCreatorUnchanged =
 	function(
@@ -2028,11 +2029,14 @@ Gen.prototype.genCreatorUnchanged =
 			cond =
 				Code.And(
 					cond,
+//					Code.False( )
 					Code.Equals(
 						Code.Var( attr.vName ),
 						Code.Null( )
 					)
 				);
+
+			continue;
 		}
 
 		switch( attr.type )
@@ -3033,6 +3037,33 @@ Gen.prototype.genEquals =
 				Code.False( )
 			)
 		);
+
+	if( this.twig )
+	{
+		cond =
+			Code.And(
+				Code.Equals(
+					Code.Dot(
+						Code.Var( 'this' ),
+						'tree'
+					),
+					Code.Dot(
+						Code.Var( 'obj' ),
+						'tree'
+					)
+				),
+				Code.Equals(
+					Code.Dot(
+						Code.Var( 'this' ),
+						'ranks'
+					),
+					Code.Dot(
+						Code.Var( 'obj' ),
+						'ranks'
+					)
+				)
+			);
+	}
 
 	for(
 		var a = 0, aZ = this.attrList.length;

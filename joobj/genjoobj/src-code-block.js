@@ -399,9 +399,15 @@ Block.prototype.equals =
 	}
 
 	return (
-		this.path === obj.path
-		||
-		this.path !== null && this.path.equals( obj.path )
+		this.tree === obj.tree
+		&&
+		this.ranks === obj.ranks
+		&&
+		(
+			this.path === obj.path
+			||
+			this.path !== null && this.path.equals( obj.path )
+		)
 	);
 };
 

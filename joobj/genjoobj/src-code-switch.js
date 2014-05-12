@@ -423,6 +423,10 @@ Switch.prototype.equals =
 	}
 
 	return (
+		this.tree === obj.tree
+		&&
+		this.ranks === obj.ranks
+		&&
 		(
 			this.defaultCase === obj.defaultCase
 			||

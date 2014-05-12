@@ -379,7 +379,13 @@ Call.prototype.equals =
 		return false;
 	}
 
-	return this.func === obj.func;
+	return (
+		this.tree === obj.tree
+		&&
+		this.ranks === obj.ranks
+		&&
+		this.func === obj.func
+	);
 };
 
 

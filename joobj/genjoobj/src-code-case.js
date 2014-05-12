@@ -378,7 +378,13 @@ Case.prototype.equals =
 		return false;
 	}
 
-	return this.block === obj.block;
+	return (
+		this.tree === obj.tree
+		&&
+		this.ranks === obj.ranks
+		&&
+		this.block === obj.block
+	);
 };
 
 

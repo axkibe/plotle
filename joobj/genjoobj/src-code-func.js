@@ -393,9 +393,15 @@ Func.prototype.equals =
 	}
 
 	return (
-		this.block === obj.block
-		||
-		this.block !== null && this.block.equals( obj.block )
+		this.tree === obj.tree
+		&&
+		this.ranks === obj.ranks
+		&&
+		(
+			this.block === obj.block
+			||
+			this.block !== null && this.block.equals( obj.block )
+		)
 	);
 };
 
