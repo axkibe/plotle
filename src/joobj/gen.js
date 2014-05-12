@@ -2073,8 +2073,14 @@ Gen.prototype.genCreatorUnchanged =
 //							'.equals( inherit.' + attr.assign + ' )'
 //						);
 						Code.Call(
-							Code.Term( attr.vName + '.equals' ),
-							Code.Term( 'inherit.' + attr.assign )
+							Code.Dot(
+								Code.Var( attr.vName ),
+								'equals'
+							),
+							Code.Dot(
+								Code.Var( 'inherit' ),
+								attr.assign
+							)
 						);
 				}
 				else
@@ -2083,10 +2089,13 @@ Gen.prototype.genCreatorUnchanged =
 						Code.Or(
 							Code.Equals(
 								Code.Var( attr.vName ),
-								Code.Term( 'inherit.' + attr.assign )
+								Code.Dot(
+									Code.Var( 'inherit' ),
+									attr.assign
+								)
 							),
 							Code.And(
-								Code.Term( attr.vName ),
+								Code.Var( attr.vName ),
 								Code.Call(
 									Code.Dot(
 										Code.Var( attr.vName ),
