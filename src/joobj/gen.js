@@ -2005,7 +2005,9 @@ Gen.prototype.genCreatorUnchanged =
 		cond =
 			Code.And(
 				cond,
-				Code.Term( '!twigDup' )
+				Code.Not(
+					Code.Var( 'twigDup' )
+				)
 			);
 	}
 
