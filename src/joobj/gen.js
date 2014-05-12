@@ -1697,7 +1697,9 @@ Gen.prototype.genCreatorChecks =
 				tcheck =
 					Code.Or(
 						Code.Differs(
-							Code.Term( 'typeof( ' + attr.vName  + ' )' ),
+							Code.Typeof(
+								Code.Var( attr.vName )
+							),
 							Code.StringLiteral( 'number' )
 						),
 						Code.Differs(
@@ -1718,7 +1720,9 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					Code.Differs(
-						Code.Term( 'typeof( ' + attr.vName  + ' )' ),
+						Code.Typeof(
+							Code.Var( attr.vName )
+						),
 						Code.StringLiteral( 'number' )
 					);
 
@@ -1730,7 +1734,9 @@ Gen.prototype.genCreatorChecks =
 				tcheck =
 					Code.And(
 						Code.Differs(
-							Code.Term('typeof( ' + attr.vName  + ' )' ),
+							Code.Typeof(
+								Code.Var( attr.vName )
+							),
 							Code.StringLiteral( 'string' )
 						),
 						Code.Term(
@@ -1957,7 +1963,7 @@ Gen.prototype.genCreatorConcerns =
 
 					cExpr =
 						cExpr.Append(
-							Code.Term( bAttr.vName )
+							Code.Var( bAttr.vName )
 						);
 				}
 			}
@@ -1966,7 +1972,7 @@ Gen.prototype.genCreatorConcerns =
 		block =
 			block
 			.Assign(
-				Code.Term( attr.vName  ),
+				Code.Var( attr.vName  ),
 				cExpr
 			);
 	}
@@ -1991,7 +1997,7 @@ Gen.prototype.genCreatorUnchanged =
 		name;
 
 	cond =
-		Code.Term( 'inherit' );
+		Code.Var( 'inherit' );
 
 
 	if( this.twig )
@@ -2122,7 +2128,7 @@ Gen.prototype.genCreatorReturn =
 				Code.Term( '!_singleton' ),
 				Code.Block( )
 				.Assign(
-					Code.Term( '_singleton' ),
+					Code.Var( '_singleton' ),
 					Code.New(
 						Code.Call(
 							Code.Var( this.reference ),
@@ -2132,7 +2138,7 @@ Gen.prototype.genCreatorReturn =
 				)
 			)
 			.Return(
-				Code.Term( '_singleton' )
+				Code.Var( '_singleton' )
 			)
 		);
 	}
