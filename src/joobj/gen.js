@@ -2054,7 +2054,10 @@ Gen.prototype.genCreatorUnchanged =
 				ceq =
 					Code.Equals(
 						Code.Var( attr.vName ),
-						Code.Term( 'inherit.' + attr.assign )
+						Code.Dot(
+							Code.Var( 'inherit' ),
+							attr.assign
+						)
 					);
 
 				break;
@@ -2085,8 +2088,14 @@ Gen.prototype.genCreatorUnchanged =
 							Code.And(
 								Code.Term( attr.vName ),
 								Code.Call(
-									Code.Term( attr.vName + '.equals' ),
-									Code.Term( 'inherit.' + attr.assign )
+									Code.Dot(
+										Code.Var( attr.vName ),
+										'equals'
+									),
+									Code.Dot(
+										Code.Var( 'inherit' ),
+										attr.assign
+									)
 								)
 							)
 						);
@@ -2105,7 +2114,7 @@ Gen.prototype.genCreatorUnchanged =
 			cond,
 			Code.Block( )
 			.Return(
-				Code.Term( 'inherit' )
+				Code.Var( 'inherit' )
 			)
 		);
 
@@ -2131,7 +2140,9 @@ Gen.prototype.genCreatorReturn =
 		return (
 			block
 			.If(
-				Code.Term( '!_singleton' ),
+				Code.Not(
+					Code.Var( '_singleton' )
+				),
 				Code.Block( )
 				.Assign(
 					Code.Var( '_singleton' ),
@@ -2191,7 +2202,7 @@ Gen.prototype.genCreatorReturn =
 
 				call =
 					call.Append(
-						Code.Term( attr.vName )
+						Code.Var( attr.vName )
 					);
 		}
 	}
