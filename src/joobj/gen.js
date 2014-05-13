@@ -2070,11 +2070,6 @@ Gen.prototype.genCreatorUnchanged =
 				if( !attr.allowsNull && !attr.allowsUndefined )
 				{
 					ceq =
-// TODO clean
-//						Code.Term(
-//							attr.vName +
-//							'.equals( inherit.' + attr.assign + ' )'
-//						);
 						Code.Call(
 							Code.Dot(
 								Code.Var( attr.vName ),
@@ -2195,7 +2190,7 @@ Gen.prototype.genCreatorReturn =
 
 				call =
 					call.Append(
-						Code.Term( name )
+						Code.Var( name )
 					);
 
 				break;
@@ -2278,7 +2273,13 @@ Gen.prototype.genCreator =
 				'Create'
 			),
 			Code.Assign(
-				Code.Term( this.reference + '.prototype.Create' ),
+				Code.Dot(
+					Code.Dot(
+						Code.Var( this.reference ),
+						'prototype'
+					),
+					'Create'
+				),
 				Code.Func( block )
 				.Arg(
 					null,
@@ -2377,10 +2378,10 @@ Gen.prototype.genFromJSONCreatorParser =
 
 	switchExpr =
 		Code.Switch(
-			Code.Term( 'name' )
+			Code.Var( 'name' )
 		)
 		.Case(
-			Code.Term( '\'type\'' ),
+			Code.StringLiteral( 'type' ),
 			Code.Block( )
 			.If(
 				Code.Differs(
@@ -2397,19 +2398,19 @@ Gen.prototype.genFromJSONCreatorParser =
 		switchExpr =
 			switchExpr
 			.Case(
-				Code.Term( '\'twig\'' ),
+				Code.StringLiteral( 'twig' ),
 				Code.Block( )
 				.Assign(
-					Code.Term( 'jwig' ),
-					Code.Term( 'arg' )
+					Code.Var( 'jwig' ),
+					Code.Var( 'arg' )
 				)
 			)
 			.Case(
-				Code.Term( '\'ranks\'' ),
+				Code.StringLiteral( 'ranks' ),
 				Code.Block( )
 				.Assign(
-					Code.Term( 'ranks' ),
-					Code.Term( 'arg' )
+					Code.Var( 'ranks' ),
+					Code.Var( 'arg' )
 				)
 			);
 	}
