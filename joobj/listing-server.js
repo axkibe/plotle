@@ -38,6 +38,7 @@ module.exports =
 			'src/code/func.js',
 			'src/code/greater-than.js',
 			'src/code/if.js',
+			'src/code/instanceof.js',
 			'src/code/less-than.js',
 			'src/code/member.js',
 			'src/code/new.js',
