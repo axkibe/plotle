@@ -2515,7 +2515,10 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 
 	switchExpr =
 		Code.Switch(
-			Code.Term( 'jval.type' )
+			Code.Dot(
+				Code.Var( 'jval' ),
+				'type'
+			)
 		);
 
 	for(
@@ -2533,7 +2536,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		switchExpr =
 			switchExpr
 			.Case(
-				Code.Term( '\'' + name + '\'' ),
+				Code.StringLiteral( name ),
 				Code.Block( )
 				.Assign(
 					Code.Term( 'twig[ key ]' ),
