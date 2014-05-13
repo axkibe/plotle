@@ -68,11 +68,13 @@ precTable =
 			9,
 		'Func' :
 			-1,
-		'LessThan' :
-			8,
 		'In' :
 			8,
+		'Instanceof' :
+			8,
 		'GreaterThan' :
+			8,
+		'LessThan' :
 			8,
 		'Member' :
 			1,
@@ -986,6 +988,51 @@ formatGreaterThan =
 	return text;
 };
 
+
+/*
+| Formats an instanceof expression.
+*/
+var
+formatInstanceof =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'Instanceof' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			context,
+			expr.left,
+			precTable.Instanceof
+		)
+		+
+		context.sep
+		+
+		context.tab
+		+
+		'instanceof'
+		+
+		context.sep
+		+
+		formatExpression(
+			context,
+			expr.right,
+			precTable.Instanceof
+		);
+
+	return text;
+};
 
 /*
 | Formats a logical or.
@@ -2575,12 +2622,14 @@ exprFormatter =
 			formatEquals,
 		'Func' :
 			formatFunc,
+		'GreaterThan' :
+			formatGreaterThan,
+		'Instanceof' :
+			formatInstanceof,
 		'LessThan' :
 			formatLessThan,
 		'Member' :
 			formatMember,
-		'GreaterThan' :
-			formatGreaterThan,
 		'New' :
 			formatNew,
 		'Not' :

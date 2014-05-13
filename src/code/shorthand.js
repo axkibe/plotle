@@ -61,12 +61,14 @@ Code =
 			require( '../code/func' ),
 		FuncArg :
 			require( '../code/func-arg' ),
+		GreaterThan :
+			require( '../code/greater-than' ),
+		Instanceof :
+			require( '../code/instanceof' ),
 		LessThan :
 			require( '../code/less-than' ),
 		Member :
 			require( '../code/member' ),
-		GreaterThan :
-			require( '../code/greater-than' ),
 		New :
 			require( '../code/new' ),
 		Not :
@@ -397,6 +399,27 @@ ShortHand.Func =
 
 	return func;
 };
+
+
+/*
+| Shorthand for creating instanceof expressions.
+*/
+ShortHand.Instanceof =
+	function(
+		left,
+		right
+	)
+{
+	return (
+		Code.Instanceof.Create(
+			'left',
+				left,
+			'right',
+				right
+		)
+	);
+};
+
 
 
 /*

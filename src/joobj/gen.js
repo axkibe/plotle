@@ -1739,8 +1739,11 @@ Gen.prototype.genCreatorChecks =
 							),
 							Code.StringLiteral( 'string' )
 						),
-						Code.Term(
-							'!( ' + attr.vName + ' instanceof String )'
+						Code.Not(
+							Code.Instanceof(
+								Code.Var( attr.vName ),
+								Code.Var( 'String' )
+							)
 						)
 					);
 
