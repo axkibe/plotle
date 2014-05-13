@@ -49,7 +49,7 @@ Code.ForIn =
 	function(
 		tag, // magic cookie
 		v_block, // the for block
-		v_object, // the object to iterate over
+		v_object, // the object expression to iterate over
 		v_variable // the loop variable
 	)
 {
@@ -182,11 +182,6 @@ ForIn.prototype.Create =
 /**/		throw new Error( 'attribute object must not be null.' );
 /**/	}
 /**/
-/**/	if( v_object.reflect !== 'Term' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
-/**/	}
-/**/
 /**/	if( v_variable === undefined )
 /**/	{
 /**/		throw new Error( 'undefined attribute variable' );
@@ -212,7 +207,7 @@ ForIn.prototype.Create =
 		&&
 		v_block.equals( inherit.block )
 		&&
-		v_object.equals( inherit.object )
+		v_object === inherit.object
 		&&
 		v_variable === inherit.variable
 	)

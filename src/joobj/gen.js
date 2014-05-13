@@ -2440,7 +2440,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			case 'String' :
 
 				arg =
-					Code.Term( 'arg' );
+					Code.Var( 'arg' );
 
 				break;
 
@@ -2465,14 +2465,14 @@ Gen.prototype.genFromJSONCreatorParser =
 		caseBlock =
 			Code.Block( )
 			.Assign(
-				Code.Term( attr.vName ),
+				Code.Var( attr.vName ),
 				arg
 			);
 
 		switchExpr =
 			switchExpr
 			.Case(
-				Code.Term( '\'' + name + '\'' ),
+				Code.StringLiteral( name ),
 				caseBlock
 			);
 	}
@@ -2481,11 +2481,14 @@ Gen.prototype.genFromJSONCreatorParser =
 		block
 		.ForIn(
 			'name',
-			Code.Term( 'json' ),
+			Code.Var( 'json' ),
 			Code.Block( )
 			.Assign(
-				Code.Term( 'arg' ),
-				Code.Term( 'json[ name ]' )
+				Code.Var( 'arg' ),
+				Code.Member(
+					Code.Var( 'json' ),
+					Code.Var( 'name' )
+				)
 			)
 			.Append(
 				switchExpr

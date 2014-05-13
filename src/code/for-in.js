@@ -34,9 +34,9 @@ if( JOOBJ )
 				object :
 					{
 						comment :
-							'the object to iterate over',
+							'the object expression to iterate over',
 						type :
-							'Term'
+							'Object'
 					},
 				block :
 					{
