@@ -2623,8 +2623,12 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		)
 		.If(
 			Code.Or(
-				Code.Term( '!jwig' ),
-				Code.Term( '!ranks' )
+				Code.Not(
+					Code.Var( 'jwig' )
+				),
+				Code.Not(
+					Code.Var( 'ranks' )
+				)
 			),
 			Code.Block( )
 			.Fail( 'ranks/twig information missing' )
@@ -2698,7 +2702,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 				call =
 					call.Append(
-						Code.Term( name )
+						Code.Var( name )
 					);
 
 				break;
@@ -2721,7 +2725,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 					call =
 						call
 						.Append(
-							Code.Term( attr.vName )
+							Code.Var( attr.vName )
 						);
 				}
 		}
@@ -2841,7 +2845,7 @@ Gen.prototype.genReflection =
 		.Comment( 'Reflection.' )
 		.Assign(
 			Code.Term( this.reference + '.prototype.reflect' ),
-			Code.Term( '\'' + this.name + '\'' )
+			Code.StringLiteral( this.name )
 		);
 
 	return capsule;
@@ -2919,7 +2923,7 @@ Gen.prototype.genToJSON =
 		.ObjLiteral( )
 		.Add(
 			'type',
-			Code.Term( '\'' + this.name + '\'' )
+			Code.StringLiteral( this.name )
 		);
 
 	for(
