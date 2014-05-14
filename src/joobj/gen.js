@@ -2370,6 +2370,7 @@ Gen.prototype.genFromJSONCreatorParser =
 		aZ,
 		arg,
 		attr,
+		base,
 		// block built for cases
 		caseBlock,
 		name,
@@ -2446,19 +2447,27 @@ Gen.prototype.genFromJSONCreatorParser =
 
 			default :
 
+				if( attr.unit )
+				{
+					base =
+						Code.Dot(
+							Code.Var( attr.unit ),
+							attr.type
+						);
+				}
+				else
+				{
+					base =
+						Code.Var( attr.type );
+				}
+
 				arg =
-					Code.Term(
-						(
-							attr.unit
-							?
-							( attr.unit + '.' )
-							:
-							''
-						)
-						+
-						attr.type
-						+
-						'.CreateFromJSON( arg )'
+					Code.Call(
+						Code.Dot(
+							base,
+							'CreateFromJSON'
+						),
+						Code.Var( 'arg' )
 					);
 		}
 
@@ -2539,7 +2548,10 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 				Code.StringLiteral( name ),
 				Code.Block( )
 				.Assign(
-					Code.Term( 'twig[ key ]' ),
+					Code.Member(
+						Code.Var( 'twig' ),
+						Code.Var( 'key' )
+					),
 					Code.Call(
 						Code.Term(
 							(
@@ -2552,7 +2564,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 							+
 							'.CreateFromJSON'
 						),
-						Code.Term( 'jval' )
+						Code.Var( 'jval' )
 					)
 				)
 			);
@@ -2568,8 +2580,11 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 	loop =
 		Code.Block( )
 		.Assign(
-			Code.Term( 'key' ),
-			Code.Term( 'ranks[ a ]' )
+			Code.Var( 'key' ),
+			Code.Member(
+				Code.Var( 'ranks' ),
+				Code.Var( 'a' )
+			)
 		)
 		.If(
 			Code.Term( '!jwig[ key ]' ),
