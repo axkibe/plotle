@@ -2635,8 +2635,13 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		)
 		.For(
 			Code.Term( 'a = 0, aZ = ranks.length' ),
-			Code.Term( 'a < aZ' ),
-			Code.Term( 'a++' ),
+			Code.LessThan(
+				Code.Var( 'a' ),
+				Code.Var( 'aZ' )
+			),
+			Code.PreIncrement(
+				Code.Var( 'a' )
+			),
 			loop
 		);
 
