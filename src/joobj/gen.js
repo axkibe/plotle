@@ -2595,13 +2595,21 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			)
 		)
 		.If(
-			Code.Term( '!jwig[ key ]' ),
+			Code.Not(
+				Code.Member(
+					Code.Var( 'jwig' ),
+					Code.Var( 'key' )
+				)
+			),
 			Code.Block( )
 			.Fail( 'JSON ranks/twig mismatch' )
 		)
 		.Assign(
-			Code.Term( 'jval' ),
-			Code.Term( 'jwig[ key ] ' )
+			Code.Var( 'jval' ),
+			Code.Member(
+				Code.Var( 'jwig' ),
+				Code.Var( 'key' )
+			)
 		)
 		.Append(
 			switchExpr
@@ -2610,7 +2618,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 	block =
 		block
 		.Assign(
-			Code.Term( 'twig' ),
+			Code.Var( 'twig' ),
 			Code.ObjLiteral( )
 		)
 		.If(
