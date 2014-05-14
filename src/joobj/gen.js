@@ -2517,6 +2517,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 	)
 {
 	var
+		base,
 		loop,
 		name,
 		switchExpr,
@@ -2542,6 +2543,20 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		ut =
 			this.twig[ name ];
 
+		if( ut.unit )
+		{
+			base =
+				Code.Dot(
+					Code.Var( ut.unit ),
+					ut.type
+				);
+		}
+		else
+		{
+			base =
+				Code.Var( ut.type );
+		}
+
 		switchExpr =
 			switchExpr
 			.Case(
@@ -2553,16 +2568,9 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 						Code.Var( 'key' )
 					),
 					Code.Call(
-						Code.Term(
-							(
-								ut.unit
-								?
-								( ut.unit + '.' + ut.type )
-								:
-								ut.type
-							)
-							+
-							'.CreateFromJSON'
+						Code.Dot(
+							base,
+							'CreateFromJSON'
 						),
 						Code.Var( 'jval' )
 					)
