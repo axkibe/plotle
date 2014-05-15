@@ -24,6 +24,7 @@ module.exports =
 			'src/code/call.js',
 			'src/code/case.js',
 			'src/code/check.js',
+			'src/code/comma-list.js',
 			'src/code/comment.js',
 			'src/code/condition.js',
 			'src/code/delete.js',

@@ -56,6 +56,8 @@ precTable =
 			-1,
 		'Call' :
 			2,
+		'Comma' :
+			18,
 		'Condition' :
 			15,
 		'Delete' :
@@ -2411,6 +2413,46 @@ formatVarDec =
 
 
 /*
+| Formats a comma list operator
+*/
+var
+formatCommaList =
+	function(
+		context,
+		list
+	)
+{
+	var
+		expr,
+		text;
+
+	text =
+		'';
+
+	for(
+		var a = 0, aZ = list.ranks.length;
+		a < aZ;
+		a++
+	)
+	{
+		expr =
+			list.atRank( a );
+
+		text +=
+			formatExpression(
+				context.Inc,
+				expr,
+				precTable.Comma
+			)
+			+ ','
+			+ context.sep;
+	}
+
+	return text;
+};
+
+
+/*
 | Formats a variable list
 |
 | Used in for-loop initializers only.
@@ -2610,6 +2652,8 @@ exprFormatter =
 			formatBooleanLiteral,
 		'Call' :
 			formatCall,
+		'CommaList' :
+			formatCommaList,
 		'Condition' :
 			formatCondition,
 		'Delete' :
