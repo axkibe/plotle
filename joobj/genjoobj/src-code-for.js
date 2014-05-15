@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -62,17 +60,13 @@ Code.For =
 /**/	}
 /**/}
 
-	this.block =
-		v_block;
+	this.block = v_block;
 
-	this.condition =
-		v_condition;
+	this.condition = v_condition;
 
-	this.init =
-		v_init;
+	this.init = v_init;
 
-	this.iterate =
-		v_iterate;
+	this.iterate = v_iterate;
 
 	Jools.immute( this );
 };
@@ -96,20 +90,15 @@ For.prototype.Create =
 
 	if( this !== For )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_block =
-			this.block;
+		v_block = this.block;
 
-		v_condition =
-			this.condition;
+		v_condition = this.condition;
 
-		v_init =
-			this.init;
+		v_init = this.init;
 
-		v_iterate =
-			this.iterate;
+		v_iterate = this.iterate;
 	}
 
 	for(
@@ -128,8 +117,7 @@ For.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_block =
-						arg;
+					v_block = arg;
 				}
 
 				break;
@@ -138,8 +126,7 @@ For.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_condition =
-						arg;
+					v_condition = arg;
 				}
 
 				break;
@@ -148,8 +135,7 @@ For.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_init =
-						arg;
+					v_init = arg;
 				}
 
 				break;
@@ -158,8 +144,7 @@ For.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_iterate =
-						arg;
+					v_iterate = arg;
 				}
 
 				break;
@@ -243,22 +228,19 @@ For.prototype.Create =
 /*
 | Reflection.
 */
-For.prototype.reflect =
-	'For';
+For.prototype.reflect = 'For';
 
 
 /*
 | Sets values by path.
 */
-For.prototype.setPath =
-	JoobjProto.setPath;
+For.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-For.prototype.getPath =
-	JoobjProto.getPath;
+For.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -296,8 +278,7 @@ For.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		For;
+	module.exports = For;
 }
 
 

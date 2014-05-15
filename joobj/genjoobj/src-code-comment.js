@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.Comment =
 /**/	}
 /**/}
 
-	this.content =
-		v_content;
+	this.content = v_content;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ Comment.prototype.Create =
 
 	if( this !== Comment )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_content =
-			this.content;
+		v_content = this.content;
 	}
 
 	for(
@@ -104,8 +99,7 @@ Comment.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_content =
-						arg;
+					v_content = arg;
 				}
 
 				break;
@@ -144,22 +138,19 @@ Comment.prototype.Create =
 /*
 | Reflection.
 */
-Comment.prototype.reflect =
-	'Comment';
+Comment.prototype.reflect = 'Comment';
 
 
 /*
 | Sets values by path.
 */
-Comment.prototype.setPath =
-	JoobjProto.setPath;
+Comment.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Comment.prototype.getPath =
-	JoobjProto.getPath;
+Comment.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -189,8 +180,7 @@ Comment.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Comment;
+	module.exports = Comment;
 }
 
 

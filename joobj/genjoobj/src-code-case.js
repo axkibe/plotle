@@ -33,17 +33,13 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 
-	Code =
-		{ };
+	Code = { };
 
-	Code.Term =
-		require( '../../src/code/term' );
+	Code.Term = require( '../../src/code/term' );
 }
 
 
@@ -67,14 +63,11 @@ Code.Case =
 /**/	}
 /**/}
 
-	this.block =
-		v_block;
+	this.block = v_block;
 
-	this.twig =
-		twig;
+	this.twig = twig;
 
-	this.ranks =
-		ranks;
+	this.ranks = ranks;
 
 	Jools.immute( this );
 
@@ -104,31 +97,23 @@ Case.prototype.Create =
 
 	if( this !== Case )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		twig =
-			inherit.twig;
+		twig = inherit.twig;
 
-		ranks =
-			inherit.ranks;
+		ranks = inherit.ranks;
 
-		twigDup =
-			false;
+		twigDup = false;
 
-		v_block =
-			this.block;
+		v_block = this.block;
 	}
 	else
 	{
-		twig =
-			{ };
+		twig = { };
 
-		ranks =
-			[ ];
+		ranks = [ ];
 
-		twigDup =
-			true;
+		twigDup = true;
 	}
 
 	for(
@@ -147,8 +132,7 @@ Case.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_block =
-						arg;
+					v_block = arg;
 				}
 
 				break;
@@ -157,29 +141,23 @@ Case.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] !== undefined )
 				{
 					throw new Error( 'key "' + key + '" already in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.push( key );
 
@@ -189,29 +167,23 @@ Case.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] === undefined )
 				{
 					throw new Error( 'key "' + key + '" not in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				break;
 
@@ -219,24 +191,18 @@ Case.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				rank =
-					arguments[ a + 2 ];
+				rank = arguments[ a + 2 ];
 
-				arg =
-					arguments[ a + 3 ];
+				arg = arguments[ a + 3 ];
 
 				a += 2;
 
@@ -250,8 +216,7 @@ Case.prototype.Create =
 					throw new Error( 'invalid rank' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.splice( rank, 0, key );
 
@@ -261,14 +226,11 @@ Case.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
 				if( twig[ arg ] === undefined )
@@ -321,43 +283,37 @@ Case.prototype.Create =
 /*
 | Reflection.
 */
-Case.prototype.reflect =
-	'Case';
+Case.prototype.reflect = 'Case';
 
 
 /*
 | Sets values by path.
 */
-Case.prototype.setPath =
-	JoobjProto.setPath;
+Case.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Case.prototype.getPath =
-	JoobjProto.getPath;
+Case.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-Case.prototype.atRank =
-	JoobjProto.atRank;
+Case.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-Case.prototype.rankOf =
-	JoobjProto.rankOf;
+Case.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-Case.prototype.newUID =
-	JoobjProto.newUID;
+Case.prototype.newUID = JoobjProto.newUID;
 
 
 /*
@@ -393,8 +349,7 @@ Case.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Case;
+	module.exports = Case;
 }
 
 

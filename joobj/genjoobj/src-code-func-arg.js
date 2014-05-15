@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -60,11 +58,9 @@ Code.FuncArg =
 /**/	}
 /**/}
 
-	this.comment =
-		v_comment;
+	this.comment = v_comment;
 
-	this.name =
-		v_name;
+	this.name = v_name;
 
 	Jools.immute( this );
 };
@@ -86,14 +82,11 @@ FuncArg.prototype.Create =
 
 	if( this !== FuncArg )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_comment =
-			this.comment;
+		v_comment = this.comment;
 
-		v_name =
-			this.name;
+		v_name = this.name;
 	}
 
 	for(
@@ -112,8 +105,7 @@ FuncArg.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_comment =
-						arg;
+					v_comment = arg;
 				}
 
 				break;
@@ -122,8 +114,7 @@ FuncArg.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_name =
-						arg;
+					v_name = arg;
 				}
 
 				break;
@@ -139,8 +130,7 @@ FuncArg.prototype.Create =
 
 	if( v_comment === undefined )
 	{
-		v_comment =
-			null;
+		v_comment = null;
 	}
 
 /**/if( CHECK )
@@ -198,22 +188,19 @@ FuncArg.prototype.Create =
 /*
 | Reflection.
 */
-FuncArg.prototype.reflect =
-	'FuncArg';
+FuncArg.prototype.reflect = 'FuncArg';
 
 
 /*
 | Sets values by path.
 */
-FuncArg.prototype.setPath =
-	JoobjProto.setPath;
+FuncArg.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-FuncArg.prototype.getPath =
-	JoobjProto.getPath;
+FuncArg.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -243,8 +230,7 @@ FuncArg.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		FuncArg;
+	module.exports = FuncArg;
 }
 
 

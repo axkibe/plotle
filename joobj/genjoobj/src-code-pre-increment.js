@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.PreIncrement =
 /**/	}
 /**/}
 
-	this.expr =
-		v_expr;
+	this.expr = v_expr;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ PreIncrement.prototype.Create =
 
 	if( this !== PreIncrement )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_expr =
-			this.expr;
+		v_expr = this.expr;
 	}
 
 	for(
@@ -104,8 +99,7 @@ PreIncrement.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_expr =
-						arg;
+					v_expr = arg;
 				}
 
 				break;
@@ -144,22 +138,19 @@ PreIncrement.prototype.Create =
 /*
 | Reflection.
 */
-PreIncrement.prototype.reflect =
-	'PreIncrement';
+PreIncrement.prototype.reflect = 'PreIncrement';
 
 
 /*
 | Sets values by path.
 */
-PreIncrement.prototype.setPath =
-	JoobjProto.setPath;
+PreIncrement.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-PreIncrement.prototype.getPath =
-	JoobjProto.getPath;
+PreIncrement.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -189,8 +180,7 @@ PreIncrement.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		PreIncrement;
+	module.exports = PreIncrement;
 }
 
 

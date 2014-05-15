@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -61,14 +59,11 @@ Code.If =
 /**/	}
 /**/}
 
-	this.condition =
-		v_condition;
+	this.condition = v_condition;
 
-	this.elsewise =
-		v_elsewise;
+	this.elsewise = v_elsewise;
 
-	this.then =
-		v_then;
+	this.then = v_then;
 
 	Jools.immute( this );
 };
@@ -91,17 +86,13 @@ If.prototype.Create =
 
 	if( this !== If )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_condition =
-			this.condition;
+		v_condition = this.condition;
 
-		v_elsewise =
-			this.elsewise;
+		v_elsewise = this.elsewise;
 
-		v_then =
-			this.then;
+		v_then = this.then;
 	}
 
 	for(
@@ -120,8 +111,7 @@ If.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_condition =
-						arg;
+					v_condition = arg;
 				}
 
 				break;
@@ -130,8 +120,7 @@ If.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_elsewise =
-						arg;
+					v_elsewise = arg;
 				}
 
 				break;
@@ -140,8 +129,7 @@ If.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_then =
-						arg;
+					v_then = arg;
 				}
 
 				break;
@@ -157,8 +145,7 @@ If.prototype.Create =
 
 	if( v_elsewise === undefined )
 	{
-		v_elsewise =
-			null;
+		v_elsewise = null;
 	}
 
 /**/if( CHECK )
@@ -226,22 +213,19 @@ If.prototype.Create =
 /*
 | Reflection.
 */
-If.prototype.reflect =
-	'If';
+If.prototype.reflect = 'If';
 
 
 /*
 | Sets values by path.
 */
-If.prototype.setPath =
-	JoobjProto.setPath;
+If.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-If.prototype.getPath =
-	JoobjProto.getPath;
+If.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -281,8 +265,7 @@ If.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		If;
+	module.exports = If;
 }
 
 

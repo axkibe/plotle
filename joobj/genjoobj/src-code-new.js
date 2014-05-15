@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.New =
 /**/	}
 /**/}
 
-	this.call =
-		v_call;
+	this.call = v_call;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ New.prototype.Create =
 
 	if( this !== New )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_call =
-			this.call;
+		v_call = this.call;
 	}
 
 	for(
@@ -104,8 +99,7 @@ New.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_call =
-						arg;
+					v_call = arg;
 				}
 
 				break;
@@ -149,22 +143,19 @@ New.prototype.Create =
 /*
 | Reflection.
 */
-New.prototype.reflect =
-	'New';
+New.prototype.reflect = 'New';
 
 
 /*
 | Sets values by path.
 */
-New.prototype.setPath =
-	JoobjProto.setPath;
+New.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-New.prototype.getPath =
-	JoobjProto.getPath;
+New.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -194,8 +185,7 @@ New.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		New;
+	module.exports = New;
 }
 
 

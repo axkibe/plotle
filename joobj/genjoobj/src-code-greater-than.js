@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -60,11 +58,9 @@ Code.GreaterThan =
 /**/	}
 /**/}
 
-	this.left =
-		v_left;
+	this.left = v_left;
 
-	this.right =
-		v_right;
+	this.right = v_right;
 
 	Jools.immute( this );
 };
@@ -86,14 +82,11 @@ GreaterThan.prototype.Create =
 
 	if( this !== GreaterThan )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_left =
-			this.left;
+		v_left = this.left;
 
-		v_right =
-			this.right;
+		v_right = this.right;
 	}
 
 	for(
@@ -112,8 +105,7 @@ GreaterThan.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_left =
-						arg;
+					v_left = arg;
 				}
 
 				break;
@@ -122,8 +114,7 @@ GreaterThan.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_right =
-						arg;
+					v_right = arg;
 				}
 
 				break;
@@ -172,22 +163,19 @@ GreaterThan.prototype.Create =
 /*
 | Reflection.
 */
-GreaterThan.prototype.reflect =
-	'GreaterThan';
+GreaterThan.prototype.reflect = 'GreaterThan';
 
 
 /*
 | Sets values by path.
 */
-GreaterThan.prototype.setPath =
-	JoobjProto.setPath;
+GreaterThan.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-GreaterThan.prototype.getPath =
-	JoobjProto.getPath;
+GreaterThan.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -217,8 +205,7 @@ GreaterThan.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		GreaterThan;
+	module.exports = GreaterThan;
 }
 
 

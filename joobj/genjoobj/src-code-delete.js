@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.Delete =
 /**/	}
 /**/}
 
-	this.expr =
-		v_expr;
+	this.expr = v_expr;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ Delete.prototype.Create =
 
 	if( this !== Delete )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_expr =
-			this.expr;
+		v_expr = this.expr;
 	}
 
 	for(
@@ -104,8 +99,7 @@ Delete.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_expr =
-						arg;
+					v_expr = arg;
 				}
 
 				break;
@@ -144,22 +138,19 @@ Delete.prototype.Create =
 /*
 | Reflection.
 */
-Delete.prototype.reflect =
-	'Delete';
+Delete.prototype.reflect = 'Delete';
 
 
 /*
 | Sets values by path.
 */
-Delete.prototype.setPath =
-	JoobjProto.setPath;
+Delete.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Delete.prototype.getPath =
-	JoobjProto.getPath;
+Delete.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -189,8 +180,7 @@ Delete.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Delete;
+	module.exports = Delete;
 }
 
 

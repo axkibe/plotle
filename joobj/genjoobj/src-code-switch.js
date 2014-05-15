@@ -33,17 +33,13 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 
-	Code =
-		{ };
+	Code = { };
 
-	Code.Case =
-		require( '../../src/code/case' );
+	Code.Case = require( '../../src/code/case' );
 }
 
 
@@ -68,17 +64,13 @@ Code.Switch =
 /**/	}
 /**/}
 
-	this.defaultCase =
-		v_defaultCase;
+	this.defaultCase = v_defaultCase;
 
-	this.statement =
-		v_statement;
+	this.statement = v_statement;
 
-	this.twig =
-		twig;
+	this.twig = twig;
 
-	this.ranks =
-		ranks;
+	this.ranks = ranks;
 
 	Jools.immute( this );
 
@@ -109,34 +101,25 @@ Switch.prototype.Create =
 
 	if( this !== Switch )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		twig =
-			inherit.twig;
+		twig = inherit.twig;
 
-		ranks =
-			inherit.ranks;
+		ranks = inherit.ranks;
 
-		twigDup =
-			false;
+		twigDup = false;
 
-		v_defaultCase =
-			this.defaultCase;
+		v_defaultCase = this.defaultCase;
 
-		v_statement =
-			this.statement;
+		v_statement = this.statement;
 	}
 	else
 	{
-		twig =
-			{ };
+		twig = { };
 
-		ranks =
-			[ ];
+		ranks = [ ];
 
-		twigDup =
-			true;
+		twigDup = true;
 	}
 
 	for(
@@ -155,8 +138,7 @@ Switch.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_defaultCase =
-						arg;
+					v_defaultCase = arg;
 				}
 
 				break;
@@ -165,8 +147,7 @@ Switch.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_statement =
-						arg;
+					v_statement = arg;
 				}
 
 				break;
@@ -175,29 +156,23 @@ Switch.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] !== undefined )
 				{
 					throw new Error( 'key "' + key + '" already in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.push( key );
 
@@ -207,29 +182,23 @@ Switch.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] === undefined )
 				{
 					throw new Error( 'key "' + key + '" not in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				break;
 
@@ -237,24 +206,18 @@ Switch.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				rank =
-					arguments[ a + 2 ];
+				rank = arguments[ a + 2 ];
 
-				arg =
-					arguments[ a + 3 ];
+				arg = arguments[ a + 3 ];
 
 				a += 2;
 
@@ -268,8 +231,7 @@ Switch.prototype.Create =
 					throw new Error( 'invalid rank' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.splice( rank, 0, key );
 
@@ -279,14 +241,11 @@ Switch.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
 				if( twig[ arg ] === undefined )
@@ -311,8 +270,7 @@ Switch.prototype.Create =
 
 	if( v_defaultCase === undefined )
 	{
-		v_defaultCase =
-			null;
+		v_defaultCase = null;
 	}
 
 /**/if( CHECK )
@@ -365,43 +323,37 @@ Switch.prototype.Create =
 /*
 | Reflection.
 */
-Switch.prototype.reflect =
-	'Switch';
+Switch.prototype.reflect = 'Switch';
 
 
 /*
 | Sets values by path.
 */
-Switch.prototype.setPath =
-	JoobjProto.setPath;
+Switch.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Switch.prototype.getPath =
-	JoobjProto.getPath;
+Switch.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-Switch.prototype.atRank =
-	JoobjProto.atRank;
+Switch.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-Switch.prototype.rankOf =
-	JoobjProto.rankOf;
+Switch.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-Switch.prototype.newUID =
-	JoobjProto.newUID;
+Switch.prototype.newUID = JoobjProto.newUID;
 
 
 /*
@@ -445,8 +397,7 @@ Switch.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Switch;
+	module.exports = Switch;
 }
 
 

@@ -2634,7 +2634,23 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			.Fail( 'ranks/twig information missing' )
 		)
 		.For(
-			Code.Term( 'a = 0, aZ = ranks.length' ),
+			// FIXME, put into the commalist call
+			Code.CommaList( )
+			.Append(
+				Code.Assign(
+					Code.Var( 'a' ),
+					Code.NumberLiteral( 0 )
+				)
+			)
+			.Append(
+				Code.Assign(
+					Code.Var( 'aZ' ),
+					Code.Dot(
+						Code.Var( 'ranks' ),
+						'length'
+					)
+				)
+			),
 			Code.LessThan(
 				Code.Var( 'a' ),
 				Code.Var( 'aZ' )

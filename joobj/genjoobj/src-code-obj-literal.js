@@ -33,17 +33,13 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 
-	Code =
-		{ };
+	Code = { };
 
-	Code.Term =
-		require( '../../src/code/term' );
+	Code.Term = require( '../../src/code/term' );
 }
 
 
@@ -67,14 +63,11 @@ Code.ObjLiteral =
 /**/	}
 /**/}
 
-	this.path =
-		v_path;
+	this.path = v_path;
 
-	this.twig =
-		twig;
+	this.twig = twig;
 
-	this.ranks =
-		ranks;
+	this.ranks = ranks;
 
 	Jools.immute( this );
 
@@ -104,31 +97,23 @@ ObjLiteral.prototype.Create =
 
 	if( this !== ObjLiteral )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		twig =
-			inherit.twig;
+		twig = inherit.twig;
 
-		ranks =
-			inherit.ranks;
+		ranks = inherit.ranks;
 
-		twigDup =
-			false;
+		twigDup = false;
 
-		v_path =
-			this.path;
+		v_path = this.path;
 	}
 	else
 	{
-		twig =
-			{ };
+		twig = { };
 
-		ranks =
-			[ ];
+		ranks = [ ];
 
-		twigDup =
-			true;
+		twigDup = true;
 	}
 
 	for(
@@ -147,8 +132,7 @@ ObjLiteral.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_path =
-						arg;
+					v_path = arg;
 				}
 
 				break;
@@ -157,29 +141,23 @@ ObjLiteral.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] !== undefined )
 				{
 					throw new Error( 'key "' + key + '" already in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.push( key );
 
@@ -189,29 +167,23 @@ ObjLiteral.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] === undefined )
 				{
 					throw new Error( 'key "' + key + '" not in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				break;
 
@@ -219,24 +191,18 @@ ObjLiteral.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				rank =
-					arguments[ a + 2 ];
+				rank = arguments[ a + 2 ];
 
-				arg =
-					arguments[ a + 3 ];
+				arg = arguments[ a + 3 ];
 
 				a += 2;
 
@@ -250,8 +216,7 @@ ObjLiteral.prototype.Create =
 					throw new Error( 'invalid rank' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.splice( rank, 0, key );
 
@@ -261,14 +226,11 @@ ObjLiteral.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
 				if( twig[ arg ] === undefined )
@@ -293,8 +255,7 @@ ObjLiteral.prototype.Create =
 
 	if( v_path === undefined )
 	{
-		v_path =
-			null;
+		v_path = null;
 	}
 
 /**/if( CHECK )
@@ -335,43 +296,37 @@ ObjLiteral.prototype.Create =
 /*
 | Reflection.
 */
-ObjLiteral.prototype.reflect =
-	'ObjLiteral';
+ObjLiteral.prototype.reflect = 'ObjLiteral';
 
 
 /*
 | Sets values by path.
 */
-ObjLiteral.prototype.setPath =
-	JoobjProto.setPath;
+ObjLiteral.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-ObjLiteral.prototype.getPath =
-	JoobjProto.getPath;
+ObjLiteral.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-ObjLiteral.prototype.atRank =
-	JoobjProto.atRank;
+ObjLiteral.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-ObjLiteral.prototype.rankOf =
-	JoobjProto.rankOf;
+ObjLiteral.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-ObjLiteral.prototype.newUID =
-	JoobjProto.newUID;
+ObjLiteral.prototype.newUID = JoobjProto.newUID;
 
 
 /*
@@ -411,8 +366,7 @@ ObjLiteral.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		ObjLiteral;
+	module.exports = ObjLiteral;
 }
 
 

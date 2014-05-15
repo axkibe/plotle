@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.StringLiteral =
 /**/	}
 /**/}
 
-	this.string =
-		v_string;
+	this.string = v_string;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ StringLiteral.prototype.Create =
 
 	if( this !== StringLiteral )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_string =
-			this.string;
+		v_string = this.string;
 	}
 
 	for(
@@ -104,8 +99,7 @@ StringLiteral.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_string =
-						arg;
+					v_string = arg;
 				}
 
 				break;
@@ -153,22 +147,19 @@ StringLiteral.prototype.Create =
 /*
 | Reflection.
 */
-StringLiteral.prototype.reflect =
-	'StringLiteral';
+StringLiteral.prototype.reflect = 'StringLiteral';
 
 
 /*
 | Sets values by path.
 */
-StringLiteral.prototype.setPath =
-	JoobjProto.setPath;
+StringLiteral.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-StringLiteral.prototype.getPath =
-	JoobjProto.getPath;
+StringLiteral.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -198,8 +189,7 @@ StringLiteral.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		StringLiteral;
+	module.exports = StringLiteral;
 }
 
 

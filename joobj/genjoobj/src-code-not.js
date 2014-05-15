@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.Not =
 /**/	}
 /**/}
 
-	this.expr =
-		v_expr;
+	this.expr = v_expr;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ Not.prototype.Create =
 
 	if( this !== Not )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_expr =
-			this.expr;
+		v_expr = this.expr;
 	}
 
 	for(
@@ -104,8 +99,7 @@ Not.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_expr =
-						arg;
+					v_expr = arg;
 				}
 
 				break;
@@ -144,22 +138,19 @@ Not.prototype.Create =
 /*
 | Reflection.
 */
-Not.prototype.reflect =
-	'Not';
+Not.prototype.reflect = 'Not';
 
 
 /*
 | Sets values by path.
 */
-Not.prototype.setPath =
-	JoobjProto.setPath;
+Not.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Not.prototype.getPath =
-	JoobjProto.getPath;
+Not.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -189,8 +180,7 @@ Not.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Not;
+	module.exports = Not;
 }
 
 

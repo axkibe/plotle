@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -61,14 +59,11 @@ Code.File =
 /**/	}
 /**/}
 
-	this.capsule =
-		v_capsule;
+	this.capsule = v_capsule;
 
-	this.header =
-		v_header;
+	this.header = v_header;
 
-	this.preamble =
-		v_preamble;
+	this.preamble = v_preamble;
 
 	Jools.immute( this );
 };
@@ -91,17 +86,13 @@ File.prototype.Create =
 
 	if( this !== File )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_capsule =
-			this.capsule;
+		v_capsule = this.capsule;
 
-		v_header =
-			this.header;
+		v_header = this.header;
 
-		v_preamble =
-			this.preamble;
+		v_preamble = this.preamble;
 	}
 
 	for(
@@ -120,8 +111,7 @@ File.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_capsule =
-						arg;
+					v_capsule = arg;
 				}
 
 				break;
@@ -130,8 +120,7 @@ File.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_header =
-						arg;
+					v_header = arg;
 				}
 
 				break;
@@ -140,8 +129,7 @@ File.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_preamble =
-						arg;
+					v_preamble = arg;
 				}
 
 				break;
@@ -157,20 +145,17 @@ File.prototype.Create =
 
 	if( v_capsule === undefined )
 	{
-		v_capsule =
-			null;
+		v_capsule = null;
 	}
 
 	if( v_header === undefined )
 	{
-		v_header =
-			null;
+		v_header = null;
 	}
 
 	if( v_preamble === undefined )
 	{
-		v_preamble =
-			null;
+		v_preamble = null;
 	}
 
 /**/if( CHECK )
@@ -247,22 +232,19 @@ File.prototype.Create =
 /*
 | Reflection.
 */
-File.prototype.reflect =
-	'File';
+File.prototype.reflect = 'File';
 
 
 /*
 | Sets values by path.
 */
-File.prototype.setPath =
-	JoobjProto.setPath;
+File.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-File.prototype.getPath =
-	JoobjProto.getPath;
+File.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -310,8 +292,7 @@ File.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		File;
+	module.exports = File;
 }
 
 

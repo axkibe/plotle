@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -60,11 +58,9 @@ Code.VarDec =
 /**/	}
 /**/}
 
-	this.assign =
-		v_assign;
+	this.assign = v_assign;
 
-	this.name =
-		v_name;
+	this.name = v_name;
 
 	Jools.immute( this );
 };
@@ -86,14 +82,11 @@ VarDec.prototype.Create =
 
 	if( this !== VarDec )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_assign =
-			this.assign;
+		v_assign = this.assign;
 
-		v_name =
-			this.name;
+		v_name = this.name;
 	}
 
 	for(
@@ -112,8 +105,7 @@ VarDec.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_assign =
-						arg;
+					v_assign = arg;
 				}
 
 				break;
@@ -122,8 +114,7 @@ VarDec.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_name =
-						arg;
+					v_name = arg;
 				}
 
 				break;
@@ -139,8 +130,7 @@ VarDec.prototype.Create =
 
 	if( v_assign === undefined )
 	{
-		v_assign =
-			null;
+		v_assign = null;
 	}
 
 /**/if( CHECK )
@@ -188,22 +178,19 @@ VarDec.prototype.Create =
 /*
 | Reflection.
 */
-VarDec.prototype.reflect =
-	'VarDec';
+VarDec.prototype.reflect = 'VarDec';
 
 
 /*
 | Sets values by path.
 */
-VarDec.prototype.setPath =
-	JoobjProto.setPath;
+VarDec.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-VarDec.prototype.getPath =
-	JoobjProto.getPath;
+VarDec.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -241,8 +228,7 @@ VarDec.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		VarDec;
+	module.exports = VarDec;
 }
 
 

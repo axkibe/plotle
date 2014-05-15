@@ -33,23 +33,17 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 
-	Code =
-		{ };
+	Code = { };
 
-	Code.Assign =
-		require( '../../src/code/assign' );
+	Code.Assign = require( '../../src/code/assign' );
 
-	Code.Check =
-		require( '../../src/code/check' );
+	Code.Check = require( '../../src/code/check' );
 
-	Code.Comment =
-		require( '../../src/code/comment' );
+	Code.Comment = require( '../../src/code/comment' );
 }
 
 
@@ -73,14 +67,11 @@ Code.Block =
 /**/	}
 /**/}
 
-	this.path =
-		v_path;
+	this.path = v_path;
 
-	this.twig =
-		twig;
+	this.twig = twig;
 
-	this.ranks =
-		ranks;
+	this.ranks = ranks;
 
 	Jools.immute( this );
 
@@ -110,31 +101,23 @@ Block.prototype.Create =
 
 	if( this !== Block )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		twig =
-			inherit.twig;
+		twig = inherit.twig;
 
-		ranks =
-			inherit.ranks;
+		ranks = inherit.ranks;
 
-		twigDup =
-			false;
+		twigDup = false;
 
-		v_path =
-			this.path;
+		v_path = this.path;
 	}
 	else
 	{
-		twig =
-			{ };
+		twig = { };
 
-		ranks =
-			[ ];
+		ranks = [ ];
 
-		twigDup =
-			true;
+		twigDup = true;
 	}
 
 	for(
@@ -153,8 +136,7 @@ Block.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_path =
-						arg;
+					v_path = arg;
 				}
 
 				break;
@@ -163,29 +145,23 @@ Block.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] !== undefined )
 				{
 					throw new Error( 'key "' + key + '" already in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.push( key );
 
@@ -195,29 +171,23 @@ Block.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] === undefined )
 				{
 					throw new Error( 'key "' + key + '" not in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				break;
 
@@ -225,24 +195,18 @@ Block.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				rank =
-					arguments[ a + 2 ];
+				rank = arguments[ a + 2 ];
 
-				arg =
-					arguments[ a + 3 ];
+				arg = arguments[ a + 3 ];
 
 				a += 2;
 
@@ -256,8 +220,7 @@ Block.prototype.Create =
 					throw new Error( 'invalid rank' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.splice( rank, 0, key );
 
@@ -267,14 +230,11 @@ Block.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
 				if( twig[ arg ] === undefined )
@@ -299,8 +259,7 @@ Block.prototype.Create =
 
 	if( v_path === undefined )
 	{
-		v_path =
-			null;
+		v_path = null;
 	}
 
 /**/if( CHECK )
@@ -341,43 +300,37 @@ Block.prototype.Create =
 /*
 | Reflection.
 */
-Block.prototype.reflect =
-	'Block';
+Block.prototype.reflect = 'Block';
 
 
 /*
 | Sets values by path.
 */
-Block.prototype.setPath =
-	JoobjProto.setPath;
+Block.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Block.prototype.getPath =
-	JoobjProto.getPath;
+Block.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-Block.prototype.atRank =
-	JoobjProto.atRank;
+Block.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-Block.prototype.rankOf =
-	JoobjProto.rankOf;
+Block.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-Block.prototype.newUID =
-	JoobjProto.newUID;
+Block.prototype.newUID = JoobjProto.newUID;
 
 
 /*
@@ -417,8 +370,7 @@ Block.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Block;
+	module.exports = Block;
 }
 
 

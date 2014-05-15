@@ -32,11 +32,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -60,17 +58,13 @@ Context =
 /**/	}
 /**/}
 
-	this.check =
-		v_check;
+	this.check = v_check;
 
-	this.indent =
-		v_indent;
+	this.indent = v_indent;
 
-	this.inline =
-		v_inline;
+	this.inline = v_inline;
 
-	this.root =
-		v_root;
+	this.root = v_root;
 
 	Jools.immute( this );
 };
@@ -94,20 +88,15 @@ Context.prototype.Create =
 
 	if( this !== Context )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_check =
-			this.check;
+		v_check = this.check;
 
-		v_indent =
-			this.indent;
+		v_indent = this.indent;
 
-		v_inline =
-			this.inline;
+		v_inline = this.inline;
 
-		v_root =
-			this.root;
+		v_root = this.root;
 	}
 
 	for(
@@ -126,8 +115,7 @@ Context.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_check =
-						arg;
+					v_check = arg;
 				}
 
 				break;
@@ -136,8 +124,7 @@ Context.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_indent =
-						arg;
+					v_indent = arg;
 				}
 
 				break;
@@ -146,8 +133,7 @@ Context.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_inline =
-						arg;
+					v_inline = arg;
 				}
 
 				break;
@@ -156,8 +142,7 @@ Context.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_root =
-						arg;
+					v_root = arg;
 				}
 
 				break;
@@ -173,20 +158,17 @@ Context.prototype.Create =
 
 	if( v_check === undefined )
 	{
-		v_check =
-			false;
+		v_check = false;
 	}
 
 	if( v_indent === undefined )
 	{
-		v_indent =
-			0;
+		v_indent = 0;
 	}
 
 	if( v_inline === undefined )
 	{
-		v_inline =
-			false;
+		v_inline = false;
 	}
 
 /**/if( CHECK )
@@ -278,22 +260,19 @@ Context.prototype.Create =
 /*
 | Reflection.
 */
-Context.prototype.reflect =
-	'Context';
+Context.prototype.reflect = 'Context';
 
 
 /*
 | Sets values by path.
 */
-Context.prototype.setPath =
-	JoobjProto.setPath;
+Context.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Context.prototype.getPath =
-	JoobjProto.getPath;
+Context.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -331,8 +310,7 @@ Context.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Context;
+	module.exports = Context;
 }
 
 

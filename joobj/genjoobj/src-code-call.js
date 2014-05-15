@@ -33,23 +33,17 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 
-	Code =
-		{ };
+	Code = { };
 
-	Code.Or =
-		require( '../../src/code/or' );
+	Code.Or = require( '../../src/code/or' );
 
-	Code.Term =
-		require( '../../src/code/term' );
+	Code.Term = require( '../../src/code/term' );
 
-	Code.Var =
-		require( '../../src/code/var' );
+	Code.Var = require( '../../src/code/var' );
 }
 
 
@@ -73,14 +67,11 @@ Code.Call =
 /**/	}
 /**/}
 
-	this.func =
-		v_func;
+	this.func = v_func;
 
-	this.twig =
-		twig;
+	this.twig = twig;
 
-	this.ranks =
-		ranks;
+	this.ranks = ranks;
 
 	Jools.immute( this );
 
@@ -110,31 +101,23 @@ Call.prototype.Create =
 
 	if( this !== Call )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		twig =
-			inherit.twig;
+		twig = inherit.twig;
 
-		ranks =
-			inherit.ranks;
+		ranks = inherit.ranks;
 
-		twigDup =
-			false;
+		twigDup = false;
 
-		v_func =
-			this.func;
+		v_func = this.func;
 	}
 	else
 	{
-		twig =
-			{ };
+		twig = { };
 
-		ranks =
-			[ ];
+		ranks = [ ];
 
-		twigDup =
-			true;
+		twigDup = true;
 	}
 
 	for(
@@ -153,8 +136,7 @@ Call.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_func =
-						arg;
+					v_func = arg;
 				}
 
 				break;
@@ -163,29 +145,23 @@ Call.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] !== undefined )
 				{
 					throw new Error( 'key "' + key + '" already in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.push( key );
 
@@ -195,29 +171,23 @@ Call.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] === undefined )
 				{
 					throw new Error( 'key "' + key + '" not in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				break;
 
@@ -225,24 +195,18 @@ Call.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				rank =
-					arguments[ a + 2 ];
+				rank = arguments[ a + 2 ];
 
-				arg =
-					arguments[ a + 3 ];
+				arg = arguments[ a + 3 ];
 
 				a += 2;
 
@@ -256,8 +220,7 @@ Call.prototype.Create =
 					throw new Error( 'invalid rank' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.splice( rank, 0, key );
 
@@ -267,14 +230,11 @@ Call.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
 				if( twig[ arg ] === undefined )
@@ -322,43 +282,37 @@ Call.prototype.Create =
 /*
 | Reflection.
 */
-Call.prototype.reflect =
-	'Call';
+Call.prototype.reflect = 'Call';
 
 
 /*
 | Sets values by path.
 */
-Call.prototype.setPath =
-	JoobjProto.setPath;
+Call.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Call.prototype.getPath =
-	JoobjProto.getPath;
+Call.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-Call.prototype.atRank =
-	JoobjProto.atRank;
+Call.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-Call.prototype.rankOf =
-	JoobjProto.rankOf;
+Call.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-Call.prototype.newUID =
-	JoobjProto.newUID;
+Call.prototype.newUID = JoobjProto.newUID;
 
 
 /*
@@ -394,8 +348,7 @@ Call.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Call;
+	module.exports = Call;
 }
 
 

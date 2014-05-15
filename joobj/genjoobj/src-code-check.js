@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.Check =
 /**/	}
 /**/}
 
-	this.block =
-		v_block;
+	this.block = v_block;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ Check.prototype.Create =
 
 	if( this !== Check )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_block =
-			this.block;
+		v_block = this.block;
 	}
 
 	for(
@@ -104,8 +99,7 @@ Check.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_block =
-						arg;
+					v_block = arg;
 				}
 
 				break;
@@ -149,22 +143,19 @@ Check.prototype.Create =
 /*
 | Reflection.
 */
-Check.prototype.reflect =
-	'Check';
+Check.prototype.reflect = 'Check';
 
 
 /*
 | Sets values by path.
 */
-Check.prototype.setPath =
-	JoobjProto.setPath;
+Check.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Check.prototype.getPath =
-	JoobjProto.getPath;
+Check.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -194,8 +185,7 @@ Check.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Check;
+	module.exports = Check;
 }
 
 

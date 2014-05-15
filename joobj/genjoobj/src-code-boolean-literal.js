@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.BooleanLiteral =
 /**/	}
 /**/}
 
-	this.boolean =
-		v_boolean;
+	this.boolean = v_boolean;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ BooleanLiteral.prototype.Create =
 
 	if( this !== BooleanLiteral )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_boolean =
-			this.boolean;
+		v_boolean = this.boolean;
 	}
 
 	for(
@@ -104,8 +99,7 @@ BooleanLiteral.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_boolean =
-						arg;
+					v_boolean = arg;
 				}
 
 				break;
@@ -149,22 +143,19 @@ BooleanLiteral.prototype.Create =
 /*
 | Reflection.
 */
-BooleanLiteral.prototype.reflect =
-	'BooleanLiteral';
+BooleanLiteral.prototype.reflect = 'BooleanLiteral';
 
 
 /*
 | Sets values by path.
 */
-BooleanLiteral.prototype.setPath =
-	JoobjProto.setPath;
+BooleanLiteral.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-BooleanLiteral.prototype.getPath =
-	JoobjProto.getPath;
+BooleanLiteral.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -194,8 +185,7 @@ BooleanLiteral.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		BooleanLiteral;
+	module.exports = BooleanLiteral;
 }
 
 

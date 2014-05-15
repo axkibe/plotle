@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.Fail =
 /**/	}
 /**/}
 
-	this.message =
-		v_message;
+	this.message = v_message;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ Fail.prototype.Create =
 
 	if( this !== Fail )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_message =
-			this.message;
+		v_message = this.message;
 	}
 
 	for(
@@ -104,8 +99,7 @@ Fail.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_message =
-						arg;
+					v_message = arg;
 				}
 
 				break;
@@ -121,8 +115,7 @@ Fail.prototype.Create =
 
 	if( v_message === undefined )
 	{
-		v_message =
-			null;
+		v_message = null;
 	}
 
 /**/if( CHECK )
@@ -145,22 +138,19 @@ Fail.prototype.Create =
 /*
 | Reflection.
 */
-Fail.prototype.reflect =
-	'Fail';
+Fail.prototype.reflect = 'Fail';
 
 
 /*
 | Sets values by path.
 */
-Fail.prototype.setPath =
-	JoobjProto.setPath;
+Fail.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Fail.prototype.getPath =
-	JoobjProto.getPath;
+Fail.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -194,8 +184,7 @@ Fail.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Fail;
+	module.exports = Fail;
 }
 
 

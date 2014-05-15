@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -61,14 +59,11 @@ Code.Condition =
 /**/	}
 /**/}
 
-	this.condition =
-		v_condition;
+	this.condition = v_condition;
 
-	this.elsewise =
-		v_elsewise;
+	this.elsewise = v_elsewise;
 
-	this.then =
-		v_then;
+	this.then = v_then;
 
 	Jools.immute( this );
 };
@@ -91,17 +86,13 @@ Condition.prototype.Create =
 
 	if( this !== Condition )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_condition =
-			this.condition;
+		v_condition = this.condition;
 
-		v_elsewise =
-			this.elsewise;
+		v_elsewise = this.elsewise;
 
-		v_then =
-			this.then;
+		v_then = this.then;
 	}
 
 	for(
@@ -120,8 +111,7 @@ Condition.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_condition =
-						arg;
+					v_condition = arg;
 				}
 
 				break;
@@ -130,8 +120,7 @@ Condition.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_elsewise =
-						arg;
+					v_elsewise = arg;
 				}
 
 				break;
@@ -140,8 +129,7 @@ Condition.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_then =
-						arg;
+					v_then = arg;
 				}
 
 				break;
@@ -208,22 +196,19 @@ Condition.prototype.Create =
 /*
 | Reflection.
 */
-Condition.prototype.reflect =
-	'Condition';
+Condition.prototype.reflect = 'Condition';
 
 
 /*
 | Sets values by path.
 */
-Condition.prototype.setPath =
-	JoobjProto.setPath;
+Condition.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Condition.prototype.getPath =
-	JoobjProto.getPath;
+Condition.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -259,8 +244,7 @@ Condition.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Condition;
+	module.exports = Condition;
 }
 
 

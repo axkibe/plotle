@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.NumberLiteral =
 /**/	}
 /**/}
 
-	this.number =
-		v_number;
+	this.number = v_number;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ NumberLiteral.prototype.Create =
 
 	if( this !== NumberLiteral )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_number =
-			this.number;
+		v_number = this.number;
 	}
 
 	for(
@@ -104,8 +99,7 @@ NumberLiteral.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_number =
-						arg;
+					v_number = arg;
 				}
 
 				break;
@@ -149,22 +143,19 @@ NumberLiteral.prototype.Create =
 /*
 | Reflection.
 */
-NumberLiteral.prototype.reflect =
-	'NumberLiteral';
+NumberLiteral.prototype.reflect = 'NumberLiteral';
 
 
 /*
 | Sets values by path.
 */
-NumberLiteral.prototype.setPath =
-	JoobjProto.setPath;
+NumberLiteral.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-NumberLiteral.prototype.getPath =
-	JoobjProto.getPath;
+NumberLiteral.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -194,8 +185,7 @@ NumberLiteral.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		NumberLiteral;
+	module.exports = NumberLiteral;
 }
 
 

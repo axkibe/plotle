@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.Var =
 /**/	}
 /**/}
 
-	this.name =
-		v_name;
+	this.name = v_name;
 
 	this._init( );
 
@@ -83,11 +80,9 @@ Var.prototype.Create =
 
 	if( this !== Var )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_name =
-			this.name;
+		v_name = this.name;
 	}
 
 	for(
@@ -106,8 +101,7 @@ Var.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_name =
-						arg;
+					v_name = arg;
 				}
 
 				break;
@@ -155,22 +149,19 @@ Var.prototype.Create =
 /*
 | Reflection.
 */
-Var.prototype.reflect =
-	'Var';
+Var.prototype.reflect = 'Var';
 
 
 /*
 | Sets values by path.
 */
-Var.prototype.setPath =
-	JoobjProto.setPath;
+Var.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Var.prototype.getPath =
-	JoobjProto.getPath;
+Var.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -200,8 +191,7 @@ Var.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Var;
+	module.exports = Var;
 }
 
 

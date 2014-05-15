@@ -41,6 +41,8 @@ Code =
 			require( '../code/call' ),
 		Check :
 			require( '../code/check' ),
+		CommaList :
+			require( '../code/comma-list' ),
 		Comment :
 			require( '../code/comment' ),
 		Condition :
@@ -740,6 +742,17 @@ ShortHand.VarDec =
 	);
 };
 */
+
+
+/*
+| Shorthand for creating comma lists.
+*/
+ShortHand.CommaList =
+	function( )
+{
+	return Code.CommaList.Create( );
+};
+
 
 
 /*

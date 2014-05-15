@@ -56,7 +56,7 @@ precTable =
 			-1,
 		'Call' :
 			2,
-		'Comma' :
+		'CommaList' :
 			18,
 		'Condition' :
 			15,
@@ -180,13 +180,7 @@ formatAssign =
 		subtext,
 		text;
 
-	if( context.inline )
-	{
-		throw 'noinline';
-	}
-
-	text =
-		'';
+	text = '';
 
 	text +=
 		formatExpression(
@@ -194,8 +188,8 @@ formatAssign =
 			assign.left,
 			precTable.Assign
 		)
-		+
-		' =\n';
+		+ ' ='
+		+ context.sep;
 
 	if( assign.right.reflect !== 'Assign' )
 	{
@@ -205,8 +199,7 @@ formatAssign =
 
 	try
 	{
-		subtext =
-			null;
+		subtext = null;
 
 		subtext =
 			context.tab
@@ -224,12 +217,17 @@ formatAssign =
 		{
 			throw e;
 		}
+
+		// forwards noinline if this was a noinline
+		if( context.inline )
+		{
+			throw 'noinline';
+		}
 	}
 
 	if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
 	{
-		text +=
-			subtext;
+		text += subtext;
 	}
 	else
 	{
@@ -269,9 +267,7 @@ formatComment =
 		a++
 	)
 	{
-		c =
-			comment.content[ a ];
-
+		c = comment.content[ a ];
 
 		if( c === '' )
 		{
@@ -285,8 +281,7 @@ formatComment =
 		}
 	}
 
-	text +=
-		'*/' + '\n';
+	text += '*/' + '\n';
 
 	return text;
 };
@@ -353,13 +348,11 @@ formatBlock =
 		text =
 			context.tab + '{' + context.sep;
 
-		blockContext =
-			context.Inc;
+		blockContext = context.Inc;
 	}
 	else
 	{
-		blockContext =
-			context;
+		blockContext = context;
 	}
 
 	for(
@@ -383,8 +376,7 @@ formatBlock =
 
 	if( !noBrackets )
 	{
-		text +=
-			context.tab + '}';
+		text += context.tab + '}';
 	}
 
 	return text;
@@ -418,12 +410,9 @@ formatDiffers =
 			expr.left,
 			precTable.Differs
 		)
-		+
-		context.sep
-		+
-		context.tab + '!==' + context.sep
-		+
-		formatExpression(
+		+ context.sep
+		+ context.tab + '!==' + context.sep
+		+ formatExpression(
 			context,
 			expr.right,
 			precTable.Differs
@@ -460,12 +449,11 @@ formatPlus =
 			expr.left,
 			precTable.Plus
 		)
-		+
-		context.sep
-		+
-		context.tab + '+' + context.sep
-		+
-		formatExpression(
+		+ context.sep
+		+ context.tab
+		+ '+'
+		+ context.sep
+		+ formatExpression(
 			context,
 			expr.right,
 			precTable.Plus
@@ -508,10 +496,8 @@ formatPlusAssign =
 				assign.left,
 				precTable.Assign
 			)
-			+
-			' += '
-			+
-			formatExpression(
+			+ ' += '
+			+ formatExpression(
 				context.Inline,
 				assign.right,
 				precTable.Assign
@@ -565,10 +551,8 @@ formatDot =
 			expr.expr,
 			precTable.Dot
 		)
-		+
-		'.'
-		+
-		expr.member
+		+ '.'
+		+ expr.member
 	);
 };
 
@@ -597,22 +581,16 @@ formatMember =
 			expr.expr,
 			precTable.Member
 		)
-		+
-		'['
-		+
-		context.sep
-		+
-		formatExpression(
+		+ '['
+		+ context.sep
+		+ formatExpression(
 			context.Inc,
 			expr.member,
 			null
 		)
-		+
-		context.sep
-		+
-		context.tab
-		+
-		']'
+		+ context.sep
+		+ context.tab
+		+ ']'
 	);
 };
 
@@ -644,16 +622,11 @@ formatEquals =
 			expr.left,
 			precTable.Equals
 		)
-		+
-		context.sep
-		+
-		context.tab
-		+
-		'==='
-		+
-		context.sep
-		+
-		formatExpression(
+		+ context.sep
+		+ context.tab
+		+ '==='
+		+ context.sep
+		+ formatExpression(
 			context,
 			expr.right,
 			precTable.Equals
@@ -686,32 +659,23 @@ formatCondition =
 
 	return (
 		context.tab
-		+
-		formatExpression(
+		+ formatExpression(
 			context,
 			expr.condition,
 			precTable.Condition
 		)
-		+
-		context.sep
-		+
-		'?'
-		+
-		context.sep
-		+
-		formatExpression(
+		+ context.sep
+		+ '?'
+		+ context.sep
+		+ formatExpression(
 			context,
 			expr.then,
 			precTable.Condition
 		)
-		+
-		context.sep
-		+
-		':'
-		+
-		context.sep
-		+
-		formatExpression(
+		+ context.sep
+		+ ':'
+		+ context.sep
+		+ formatExpression(
 			context,
 			expr.elsewise,
 			precTable.Condition
@@ -732,10 +696,9 @@ formatIf =
 	)
 {
 	var
-		cond =
-			statement.condition,
-		text =
-			null;
+		cond = statement.condition,
+
+		text = null;
 
 /**/if( CHECK )
 /**/{
@@ -752,16 +715,14 @@ formatIf =
 
 	try {
 		text =
-			context.tab +
-			'if( '
-			+
-			formatExpression(
+			context.tab
+			+ 'if( '
+			+ formatExpression(
 				context.Inline,
 				cond,
 				null
 			)
-			+
-			' )\n';
+			+ ' )\n';
 	}
 	catch ( e )
 	{
@@ -796,10 +757,9 @@ formatIf =
 	{
 		text +=
 			'\n'
-			+
-			context.tab + 'else\n'
-			+
-			formatBlock(
+			+ context.tab
+			+ 'else\n'
+			+ formatBlock(
 				context,
 				statement.elsewise
 			);
@@ -2439,13 +2399,16 @@ formatCommaList =
 			list.atRank( a );
 
 		text +=
-			formatExpression(
+			(
+				a > 0
+				? ( ',' + context.sep )
+				: ''
+			)
+			+ formatExpression(
 				context.Inc,
 				expr,
-				precTable.Comma
-			)
-			+ ','
-			+ context.sep;
+				precTable.CommaList
+			);
 	}
 
 	return text;

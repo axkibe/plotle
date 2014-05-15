@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -59,8 +57,7 @@ Code.Typeof =
 /**/	}
 /**/}
 
-	this.expr =
-		v_expr;
+	this.expr = v_expr;
 
 	Jools.immute( this );
 };
@@ -81,11 +78,9 @@ Typeof.prototype.Create =
 
 	if( this !== Typeof )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_expr =
-			this.expr;
+		v_expr = this.expr;
 	}
 
 	for(
@@ -104,8 +99,7 @@ Typeof.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_expr =
-						arg;
+					v_expr = arg;
 				}
 
 				break;
@@ -144,22 +138,19 @@ Typeof.prototype.Create =
 /*
 | Reflection.
 */
-Typeof.prototype.reflect =
-	'Typeof';
+Typeof.prototype.reflect = 'Typeof';
 
 
 /*
 | Sets values by path.
 */
-Typeof.prototype.setPath =
-	JoobjProto.setPath;
+Typeof.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Typeof.prototype.getPath =
-	JoobjProto.getPath;
+Typeof.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -189,8 +180,7 @@ Typeof.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Typeof;
+	module.exports = Typeof;
 }
 
 

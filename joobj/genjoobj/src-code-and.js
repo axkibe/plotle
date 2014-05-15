@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -60,11 +58,9 @@ Code.And =
 /**/	}
 /**/}
 
-	this.left =
-		v_left;
+	this.left = v_left;
 
-	this.right =
-		v_right;
+	this.right = v_right;
 
 	Jools.immute( this );
 };
@@ -86,14 +82,11 @@ And.prototype.Create =
 
 	if( this !== And )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_left =
-			this.left;
+		v_left = this.left;
 
-		v_right =
-			this.right;
+		v_right = this.right;
 	}
 
 	for(
@@ -112,8 +105,7 @@ And.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_left =
-						arg;
+					v_left = arg;
 				}
 
 				break;
@@ -122,8 +114,7 @@ And.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_right =
-						arg;
+					v_right = arg;
 				}
 
 				break;
@@ -172,22 +163,19 @@ And.prototype.Create =
 /*
 | Reflection.
 */
-And.prototype.reflect =
-	'And';
+And.prototype.reflect = 'And';
 
 
 /*
 | Sets values by path.
 */
-And.prototype.setPath =
-	JoobjProto.setPath;
+And.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-And.prototype.getPath =
-	JoobjProto.getPath;
+And.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -217,8 +205,7 @@ And.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		And;
+	module.exports = And;
 }
 
 

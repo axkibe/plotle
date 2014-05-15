@@ -32,11 +32,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -57,8 +55,7 @@ Gen =
 /**/	}
 /**/}
 
-	this.joobj =
-		v_joobj;
+	this.joobj = v_joobj;
 
 	this._init( );
 
@@ -81,11 +78,9 @@ Gen.prototype.Create =
 
 	if( this !== Gen )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_joobj =
-			this.joobj;
+		v_joobj = this.joobj;
 	}
 
 	for(
@@ -104,8 +99,7 @@ Gen.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_joobj =
-						arg;
+					v_joobj = arg;
 				}
 
 				break;
@@ -144,22 +138,19 @@ Gen.prototype.Create =
 /*
 | Reflection.
 */
-Gen.prototype.reflect =
-	'Gen';
+Gen.prototype.reflect = 'Gen';
 
 
 /*
 | Sets values by path.
 */
-Gen.prototype.setPath =
-	JoobjProto.setPath;
+Gen.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Gen.prototype.getPath =
-	JoobjProto.getPath;
+Gen.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -189,8 +180,7 @@ Gen.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Gen;
+	module.exports = Gen;
 }
 
 

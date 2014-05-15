@@ -33,41 +33,29 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 
-	Code =
-		{ };
+	Code = { };
 
-	Code.And =
-		require( '../../src/code/and' );
+	Code.And = require( '../../src/code/and' );
 
-	Code.Assign =
-		require( '../../src/code/assign' );
+	Code.Assign = require( '../../src/code/assign' );
 
-	Code.Call =
-		require( '../../src/code/call' );
+	Code.Call = require( '../../src/code/call' );
 
-	Code.Func =
-		require( '../../src/code/func' );
+	Code.Func = require( '../../src/code/func' );
 
-	Code.New =
-		require( '../../src/code/new' );
+	Code.New = require( '../../src/code/new' );
 
-	Code.ObjLiteral =
-		require( '../../src/code/obj-literal' );
+	Code.ObjLiteral = require( '../../src/code/obj-literal' );
 
-	Code.Or =
-		require( '../../src/code/or' );
+	Code.Or = require( '../../src/code/or' );
 
-	Code.Term =
-		require( '../../src/code/term' );
+	Code.Term = require( '../../src/code/term' );
 
-	Code.Var =
-		require( '../../src/code/var' );
+	Code.Var = require( '../../src/code/var' );
 }
 
 
@@ -90,11 +78,9 @@ Code.CommaList =
 /**/	}
 /**/}
 
-	this.twig =
-		twig;
+	this.twig = twig;
 
-	this.ranks =
-		ranks;
+	this.ranks = ranks;
 
 	Jools.immute( this );
 
@@ -123,28 +109,21 @@ CommaList.prototype.Create =
 
 	if( this !== CommaList )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		twig =
-			inherit.twig;
+		twig = inherit.twig;
 
-		ranks =
-			inherit.ranks;
+		ranks = inherit.ranks;
 
-		twigDup =
-			false;
+		twigDup = false;
 	}
 	else
 	{
-		twig =
-			{ };
+		twig = { };
 
-		ranks =
-			[ ];
+		ranks = [ ];
 
-		twigDup =
-			true;
+		twigDup = true;
 	}
 
 	for(
@@ -163,29 +142,23 @@ CommaList.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] !== undefined )
 				{
 					throw new Error( 'key "' + key + '" already in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.push( key );
 
@@ -195,29 +168,23 @@ CommaList.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				arg =
-					arguments[ ++a + 1 ];
+				arg = arguments[ ++a + 1 ];
 
 				if( twig[ key ] === undefined )
 				{
 					throw new Error( 'key "' + key + '" not in use' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				break;
 
@@ -225,24 +192,18 @@ CommaList.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
-				key =
-					arg;
+				key = arg;
 
-				rank =
-					arguments[ a + 2 ];
+				rank = arguments[ a + 2 ];
 
-				arg =
-					arguments[ a + 3 ];
+				arg = arguments[ a + 3 ];
 
 				a += 2;
 
@@ -256,8 +217,7 @@ CommaList.prototype.Create =
 					throw new Error( 'invalid rank' );
 				}
 
-				twig[ key ] =
-					arg;
+				twig[ key ] = arg;
 
 				ranks.splice( rank, 0, key );
 
@@ -267,14 +227,11 @@ CommaList.prototype.Create =
 
 				if( !twigDup )
 				{
-					twig =
-						Jools.copy( twig );
+					twig = Jools.copy( twig );
 
-					ranks =
-						ranks.slice( );
+					ranks = ranks.slice( );
 
-					twigDup =
-						true;
+					twigDup = true;
 				}
 
 				if( twig[ arg ] === undefined )
@@ -313,43 +270,37 @@ CommaList.prototype.Create =
 /*
 | Reflection.
 */
-CommaList.prototype.reflect =
-	'CommaList';
+CommaList.prototype.reflect = 'CommaList';
 
 
 /*
 | Sets values by path.
 */
-CommaList.prototype.setPath =
-	JoobjProto.setPath;
+CommaList.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-CommaList.prototype.getPath =
-	JoobjProto.getPath;
+CommaList.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-CommaList.prototype.atRank =
-	JoobjProto.atRank;
+CommaList.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-CommaList.prototype.rankOf =
-	JoobjProto.rankOf;
+CommaList.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-CommaList.prototype.newUID =
-	JoobjProto.newUID;
+CommaList.prototype.newUID = JoobjProto.newUID;
 
 
 /*
@@ -379,8 +330,7 @@ CommaList.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		CommaList;
+	module.exports = CommaList;
 }
 
 

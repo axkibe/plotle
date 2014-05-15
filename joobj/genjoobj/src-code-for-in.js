@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -61,14 +59,11 @@ Code.ForIn =
 /**/	}
 /**/}
 
-	this.block =
-		v_block;
+	this.block = v_block;
 
-	this.object =
-		v_object;
+	this.object = v_object;
 
-	this.variable =
-		v_variable;
+	this.variable = v_variable;
 
 	Jools.immute( this );
 };
@@ -91,17 +86,13 @@ ForIn.prototype.Create =
 
 	if( this !== ForIn )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_block =
-			this.block;
+		v_block = this.block;
 
-		v_object =
-			this.object;
+		v_object = this.object;
 
-		v_variable =
-			this.variable;
+		v_variable = this.variable;
 	}
 
 	for(
@@ -120,8 +111,7 @@ ForIn.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_block =
-						arg;
+					v_block = arg;
 				}
 
 				break;
@@ -130,8 +120,7 @@ ForIn.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_object =
-						arg;
+					v_object = arg;
 				}
 
 				break;
@@ -140,8 +129,7 @@ ForIn.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_variable =
-						arg;
+					v_variable = arg;
 				}
 
 				break;
@@ -222,22 +210,19 @@ ForIn.prototype.Create =
 /*
 | Reflection.
 */
-ForIn.prototype.reflect =
-	'ForIn';
+ForIn.prototype.reflect = 'ForIn';
 
 
 /*
 | Sets values by path.
 */
-ForIn.prototype.setPath =
-	JoobjProto.setPath;
+ForIn.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-ForIn.prototype.getPath =
-	JoobjProto.getPath;
+ForIn.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -273,8 +258,7 @@ ForIn.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		ForIn;
+	module.exports = ForIn;
 }
 
 

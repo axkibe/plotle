@@ -33,11 +33,9 @@ var
 */
 if( SERVER )
 {
-	JoobjProto =
-		require( '../../src/joobj/proto' );
+	JoobjProto = require( '../../src/joobj/proto' );
 
-	Jools =
-		require( '../../src/jools/jools' );
+	Jools = require( '../../src/jools/jools' );
 }
 
 
@@ -60,11 +58,9 @@ Code.Assign =
 /**/	}
 /**/}
 
-	this.left =
-		v_left;
+	this.left = v_left;
 
-	this.right =
-		v_right;
+	this.right = v_right;
 
 	Jools.immute( this );
 };
@@ -86,14 +82,11 @@ Assign.prototype.Create =
 
 	if( this !== Assign )
 	{
-		inherit =
-			this;
+		inherit = this;
 
-		v_left =
-			this.left;
+		v_left = this.left;
 
-		v_right =
-			this.right;
+		v_right = this.right;
 	}
 
 	for(
@@ -112,8 +105,7 @@ Assign.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_left =
-						arg;
+					v_left = arg;
 				}
 
 				break;
@@ -122,8 +114,7 @@ Assign.prototype.Create =
 
 				if( arg !== undefined )
 				{
-					v_right =
-						arg;
+					v_right = arg;
 				}
 
 				break;
@@ -172,22 +163,19 @@ Assign.prototype.Create =
 /*
 | Reflection.
 */
-Assign.prototype.reflect =
-	'Assign';
+Assign.prototype.reflect = 'Assign';
 
 
 /*
 | Sets values by path.
 */
-Assign.prototype.setPath =
-	JoobjProto.setPath;
+Assign.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Assign.prototype.getPath =
-	JoobjProto.getPath;
+Assign.prototype.getPath = JoobjProto.getPath;
 
 
 /*
@@ -217,8 +205,7 @@ Assign.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Assign;
+	module.exports = Assign;
 }
 
 
