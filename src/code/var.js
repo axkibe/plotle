@@ -39,11 +39,22 @@ if( JOOBJ )
 	};
 }
 
+
+/*
+| Import
+*/
 var
+	Code,
 	Var;
 
-Var =
-	require( '../joobj/this' )( module );
+Code =
+	{
+		Dot :
+			require( '../code/dot' )
+	};
+
+Var = require( '../joobj/this' )( module );
+
 
 /*
 | Initializer.
@@ -72,6 +83,26 @@ Var.prototype._init =
 /**/			throw new Error( 'var must not be a literal' );
 /**/	}
 /**/}
+};
+
+
+/*
+| Creates a dot member access of variable
+*/
+Var.prototype.Dot =
+	function(
+		member // member string
+	)
+{
+	// checking if member is a string is done in 'Dot'
+	return (
+		Code.Dot.Create(
+			'expr',
+				this,
+			'member',
+				member
+		)
+	);
 };
 
 

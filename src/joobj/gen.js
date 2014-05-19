@@ -41,12 +41,34 @@ if( JOOBJ )
 var
 	Gen =
 		require( '../joobj/this' )( module ),
-	Code =
+	Shorthand =
 		require( '../code/shorthand' ),
 	Jools =
 		require( '../jools/jools' ),
 	Validator =
 		require( './validator' );
+
+// Code
+/*
+| Shorthanding Shorthands.
+*/
+var
+	Assign = Shorthand.Assign,
+	Block = Shorthand.Block,
+	Call = Shorthand.Call,
+	Differs = Shorthand.Differs,
+	Dot = Shorthand.Dot, // FUTURE only from expr
+	NumberLiteral = Shorthand.NumberLiteral,
+	ObjLiteral = Shorthand.ObjLiteral,
+	StringLiteral = Shorthand.StringLiteral,
+	Var = Shorthand.Var,
+
+	Code = Shorthand; // FIXME remove
+
+// FIXME
+//   make shorthands for
+//   This, Ranks
+
 
 
 /*
@@ -136,22 +158,20 @@ Gen.prototype._init =
 				true;
 
 			this.subclass =
-				Code.Dot(
-					Code.Var( subParts[ 0 ] ),
-					subParts[ 1 ]
-				);
+				Var( subParts[ 0 ] )
+				.Dot( subParts[ 1 ] );
 		}
 		else
 		{
 			this.subclass =
-				Code.Var( joobj.subclass );
+				Var( joobj.subclass );
 		}
 	}
 
 	this.tag =
 		// FIXME
-		Code.NumberLiteral( 8833 );
-//		Code.NumberLiteral( Math.floor( Math.random( ) * 1000000000 ) );
+		NumberLiteral( 8833 );
+//		NumberLiteral( Math.floor( Math.random( ) * 1000000000 ) );
 
 	this.unit =
 		joobj.unit;
@@ -226,7 +246,7 @@ Gen.prototype._init =
 					jAttr.type,
 				unit :
 					jAttr.unit,
-				// FIXME make this a Code.Var
+				// FIXME make this a Var
 				vName :
 					'v_' + name
 			} );
@@ -449,19 +469,19 @@ Gen.prototype.genNodeIncludes =
 		);
 
 	block =
-		Code.Block( )
+		Block( )
 		.Assign(
-			Code.Var( 'JoobjProto' ),
-			Code.Call(
-				Code.Var( 'require' ),
-				Code.StringLiteral( '../../src/joobj/proto' )
+			Var( 'JoobjProto' ),
+			Call(
+				Var( 'require' ),
+				StringLiteral( '../../src/joobj/proto' )
 			)
 		)
 		.Assign(
-			Code.Var( 'Jools' ),
-			Code.Call(
-				Code.Var( 'require' ),
-				Code.StringLiteral( '../../src/jools/jools' )
+			Var( 'Jools' ),
+			Call(
+				Var( 'require' ),
+				StringLiteral( '../../src/jools/jools' )
 			)
 		);
 
@@ -476,8 +496,8 @@ Gen.prototype.genNodeIncludes =
 		block =
 			block
 			.Assign(
-				Code.Var( this.unitList[ a ] ),
-				Code.ObjLiteral( )
+				Var( this.unitList[ a ] ),
+				ObjLiteral( )
 			);
 	}
 
@@ -510,13 +530,13 @@ Gen.prototype.genNodeIncludes =
 			block =
 				block
 				.Assign(
-					Code.Dot(
-						Code.Var( unitName ),
+					Dot(
+						Var( unitName ),
 						typeName
 					),
-					Code.Call(
-						Code.Var( 'require' ),
-						Code.StringLiteral(
+					Call(
+						Var( 'require' ),
+						StringLiteral(
 							'../../src/' +
 								camelCaseToDash( unitName ) +
 								'/' +
@@ -529,7 +549,7 @@ Gen.prototype.genNodeIncludes =
 
 	capsule =
 		capsule.If(
-			Code.Var( 'SERVER' ),
+			Var( 'SERVER' ),
 			block
 		);
 
@@ -562,15 +582,15 @@ Gen.prototype.genConstructor =
 
 	// checks the tag
 	block =
-		Code.Block( )
+		Block( )
 		.Check(
-			Code.Block( ).
+			Block( ).
 			If(
-				Code.Differs(
-					Code.Var( 'tag' ),
+				Differs(
+					Var( 'tag' ),
 					this.tag
 				),
-				Code.Block( )
+				Block( )
 				.Fail( )
 			)
 		);
@@ -593,12 +613,12 @@ Gen.prototype.genConstructor =
 		}
 
 		assign =
-			Code.Assign(
-				Code.Dot(
-					Code.Var( 'this' ),
+			Assign(
+				Dot(
+					Var( 'this' ),
 					attr.assign
 				),
-				Code.Var( attr.vName )
+				Var( attr.vName )
 			);
 
 		if( !attr.allowsUndefined )
@@ -611,11 +631,11 @@ Gen.prototype.genConstructor =
 			block =
 				block
 				.If(
-					Code.Differs(
-						Code.Var( attr.vName ),
-						Code.Var( 'undefined' )
+					Differs(
+						Var( attr.vName ),
+						Var( 'undefined' )
 					),
-					Code.Block( )
+					Block( )
 					.Append(
 						assign
 					)
@@ -628,18 +648,18 @@ Gen.prototype.genConstructor =
 		block =
 			block
 			.Assign(
-				Code.Dot(
-					Code.Var( 'this' ),
+				Dot(
+					Var( 'this' ),
 					'twig'
 				),
-				Code.Var( 'twig' )
+				Var( 'twig' )
 			)
 			.Assign(
-				Code.Dot(
-					Code.Var( 'this' ),
+				Dot(
+					Var( 'this' ),
 					'ranks'
 				),
-				Code.Var( 'ranks' )
+				Var( 'ranks' )
 			);
 	}
 
@@ -647,9 +667,9 @@ Gen.prototype.genConstructor =
 	if( this.init )
 	{
 		initCall =
-			Code.Call(
-				Code.Dot(
-					Code.Var( 'this' ),
+			Call(
+				Dot(
+					Var( 'this' ),
 					'_init'
 				)
 			);
@@ -670,7 +690,7 @@ Gen.prototype.genConstructor =
 
 					initCall =
 						initCall.Append(
-							Code.Var( this.init[ a ] )
+							Var( this.init[ a ] )
 						);
 
 					continue;
@@ -688,7 +708,7 @@ Gen.prototype.genConstructor =
 
 			initCall =
 				initCall.Append(
-					Code.Var( attr.vName )
+					Var( attr.vName )
 				);
 		}
 
@@ -702,8 +722,8 @@ Gen.prototype.genConstructor =
 	block =
 		block
 		.Call(
-			Code.Dot(
-				Code.Var( 'Jools' ),
+			Dot(
+				Var( 'Jools' ),
 				'immute'
 			),
 			Code.Var( 'this' )
@@ -2912,7 +2932,10 @@ Gen.prototype.genJoobjProto =
 				),
 				'getPath'
 			),
-			Code.Term( 'JoobjProto.getPath' )
+			Code.Dot(
+				Code.Var( 'JoobjProto' ),
+				'getPath'
+			)
 		);
 
 	if( this.twig )
