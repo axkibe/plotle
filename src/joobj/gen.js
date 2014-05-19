@@ -53,24 +53,38 @@ var
 | Shorthanding Shorthands.
 */
 var
-	Assign = Shorthand.Assign,
-	Block = Shorthand.Block,
-	Call = Shorthand.Call,
-	Differs = Shorthand.Differs,
-	Dot = Shorthand.Dot, // FUTURE only from expr
-	False = Shorthand.False( ),
-	Func = Shorthand.Func,
-	Null = Shorthand.Null( ),
-	NumberLiteral = Shorthand.NumberLiteral,
-	ObjLiteral = Shorthand.ObjLiteral,
-	StringLiteral = Shorthand.StringLiteral,
-	Var = Shorthand.Var,
+	Assign =
+		Shorthand.Assign,
+	Block =
+		Shorthand.Block,
+	Call =
+		Shorthand.Call,
+	Differs =
+		Shorthand.Differs,
+	Dot =
+		Shorthand.Dot, // FUTURE only from expr
+	False =
+		Shorthand.False( ),
+	Func =
+		Shorthand.Func,
+	Null =
+		Shorthand.Null( ),
+	NumberLiteral =
+		Shorthand.NumberLiteral,
+	ObjLiteral =
+		Shorthand.ObjLiteral,
+	StringLiteral =
+		Shorthand.StringLiteral,
+	This =
+		Shorthand.Var( 'this' ),
+	Var =
+		Shorthand.Var,
 
 	Code = Shorthand; // FIXME remove
 
 // FIXME
 //   make shorthands for
-//   This, Ranks
+//   Ranks
 
 
 
@@ -617,10 +631,7 @@ Gen.prototype.genConstructor =
 
 		assign =
 			Assign(
-				Dot(
-					Var( 'this' ),
-					attr.assign
-				),
+				This.Dot( attr.assign ),
 				Var( attr.vName )
 			);
 
@@ -1008,8 +1019,8 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		receiver =
 			receiver
 			.Assign(
-				Code.Var( attr.vName ),
-				Code.Dot(
+				Var( attr.vName ),
+				Dot(
 					Code.Var( 'this' ),
 					attr.assign
 				)
