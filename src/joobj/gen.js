@@ -2865,7 +2865,13 @@ Gen.prototype.genReflection =
 		capsule
 		.Comment( 'Reflection.' )
 		.Assign(
-			Code.Term( this.reference + '.prototype.reflect' ),
+			Code.Dot(
+				Code.Dot(
+					Code.Var( this.reference ),
+					'prototype'
+				),
+				'reflect'
+			),
 			Code.StringLiteral( this.name )
 		);
 
@@ -2885,12 +2891,27 @@ Gen.prototype.genJoobjProto =
 		capsule
 		.Comment( 'Sets values by path.' )
 		.Assign(
-			Code.Term( this.reference + '.prototype.setPath' ),
-			Code.Term( 'JoobjProto.setPath' )
+			Code.Dot(
+				Code.Dot(
+					Code.Var( this.reference ),
+					'prototype'
+				),
+				'setPath'
+			),
+			Code.Dot(
+				Code.Var( 'JoobjProto' ),
+				'setPath'
+			)
 		)
 		.Comment( 'Gets values by path' )
 		.Assign(
-			Code.Term( this.reference + '.prototype.getPath' ),
+			Code.Dot(
+				Code.Dot(
+					Code.Var( this.reference ),
+					'prototype'
+				),
+				'getPath'
+			),
 			Code.Term( 'JoobjProto.getPath' )
 		);
 
@@ -2968,7 +2989,10 @@ Gen.prototype.genToJSON =
 			olit
 			.Add(
 				name,
-				Code.Term( 'this.' + attr.assign )
+				Code.Dot(
+					Code.Var( 'this' ),
+					attr.assign
+				)
 			);
 	}
 
