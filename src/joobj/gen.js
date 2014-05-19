@@ -67,6 +67,8 @@ var
 		Shorthand.False( ),
 	Func =
 		Shorthand.Func,
+	If =
+		Shorthand.If,
 	Null =
 		Shorthand.Null( ),
 	NumberLiteral =
@@ -1020,19 +1022,15 @@ Gen.prototype.genCreatorInheritanceReceiver =
 			receiver
 			.Assign(
 				Var( attr.vName ),
-				Dot(
-					Code.Var( 'this' ),
-					attr.assign
-				)
+				This.Dot ( attr.assign )
 			);
 	}
 
 	thisCheck =
-		Code
-		.If(
-			Code.Differs(
-				Code.Var( 'this' ),
-				Code.Var( this.reference )
+		If(
+			Differs(
+				This,
+				Var( this.reference )
 			),
 			receiver
 		);
@@ -1123,8 +1121,8 @@ Gen.prototype.genCreatorFreeStringsParser =
 				Code.StringLiteral( name  ),
 				Code.Block( )
 				.If(
-					Code.Differs(
-						Code.Var( 'arg' ),
+					Differs(
+						Var( 'arg' ),
 						Code.Var( 'undefined' )
 					),
 					Code.Block( )
