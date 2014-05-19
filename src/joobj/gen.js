@@ -58,6 +58,7 @@ var
 	Call = Shorthand.Call,
 	Differs = Shorthand.Differs,
 	Dot = Shorthand.Dot, // FUTURE only from expr
+	False = Shorthand.False( ),
 	Func = Shorthand.Func,
 	Null = Shorthand.Null( ),
 	NumberLiteral = Shorthand.NumberLiteral,
@@ -890,11 +891,8 @@ Gen.prototype.genSubclass =
 			'Subclass.'
 		)
 		.Call(
-			Code.Dot(
-				Code.Var( 'Jools' ),
-				'subclass'
-			),
-			Code.Var( this.reference ),
+			Var( 'Jools' ).Dot( 'subclass' ),
+			Var( this.reference ),
 			this.subclass
 		)
 	);
@@ -966,10 +964,10 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		thisCheck,
 		name,
 		receiver =
-			Code.Block( )
+			Block( )
 			.Assign(
-				Code.Var( 'inherit' ),
-				Code.Var( 'this' )
+				Var( 'inherit' ),
+				Var( 'this' )
 			);
 
 	if( this.twig )
@@ -977,22 +975,16 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		receiver =
 			receiver
 			.Assign(
-				Code.Var( 'twig' ),
-				Code.Dot(
-					Code.Var( 'inherit' ),
-					'twig'
-				)
+				Var( 'twig' ),
+				Var( 'inherit' ).Dot( 'twig' )
 			)
 			.Assign(
-				Code.Var( 'ranks' ),
-				Code.Dot(
-					Code.Var( 'inherit' ),
-					'ranks'
-				)
+				Var( 'ranks' ),
+				Var( 'inherit' ).Dot( 'ranks' )
 			)
 			.Assign(
-				Code.Var( 'twigDup' ),
-				Code.False( )
+				Var( 'twigDup' ),
+				False
 			);
 	}
 
