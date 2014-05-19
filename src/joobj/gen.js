@@ -58,6 +58,8 @@ var
 	Call = Shorthand.Call,
 	Differs = Shorthand.Differs,
 	Dot = Shorthand.Dot, // FUTURE only from expr
+	Func = Shorthand.Func,
+	Null = Shorthand.Null( ),
 	NumberLiteral = Shorthand.NumberLiteral,
 	ObjLiteral = Shorthand.ObjLiteral,
 	StringLiteral = Shorthand.StringLiteral,
@@ -726,7 +728,7 @@ Gen.prototype.genConstructor =
 				Var( 'Jools' ),
 				'immute'
 			),
-			Code.Var( 'this' )
+			Var( 'this' )
 		);
 
 	if( this.twig )
@@ -734,23 +736,21 @@ Gen.prototype.genConstructor =
 		block =
 			block
 			.Call(
-				Code.Dot(
-					Code.Var( 'Jools' ),
+				Dot(
+					Var( 'Jools' ),
 					'immute'
 				),
-				Code.Var( 'twig' )
+				Var( 'twig' )
 			)
 			.Call(
-				Code.Dot(
-					Code.Var( 'Jools' ),
-					'immute'
-				),
-				Code.Var( 'ranks' )
+				Var( 'Jools' )
+				.Dot( 'immute' ),
+				Var( 'ranks' )
 			);
 	}
 
 	constructor =
-		Code.Func( block );
+		Func( block );
 
 	for(
 		a = 0, aZ = this.constructorList.length;
@@ -830,10 +830,9 @@ Gen.prototype.genConstructor =
 		capsule =
 			capsule.VarDec(
 				this.reference,
-				Code
-				.Assign(
-					Code.Dot(
-						Code.Var( this.unit ),
+				Assign(
+					Dot(
+						Var( this.unit ),
 						this.name
 					),
 					constructor
@@ -845,7 +844,7 @@ Gen.prototype.genConstructor =
 		capsule =
 			capsule
 			.Assign(
-				Code.Var( this.name ),
+				Var( this.name ),
 				constructor
 			);
 	}
@@ -870,7 +869,7 @@ Gen.prototype.genSingleton =
 		)
 		.VarDec(
 			'_singleton',
-			Code.Null( )
+			Null
 		)
 	);
 };
@@ -1642,7 +1641,7 @@ Gen.prototype.genCreatorChecks =
 				check.If(
 					Code.Equals(
 						Code.Var( attr.vName ),
-						Code.Null( )
+						Null
 					),
 					Code.Block( )
 					.Fail( 'attribute ' + name + ' must not be null.' )
@@ -1667,7 +1666,7 @@ Gen.prototype.genCreatorChecks =
 			cond =
 				Code.Differs(
 					Code.Var( attr.vName ),
-					Code.Null( )
+					Null
 				);
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
@@ -1684,7 +1683,7 @@ Gen.prototype.genCreatorChecks =
 				Code.And(
 					Code.Differs(
 						Code.Var( attr.vName ),
-						Code.Null( )
+						Null
 					),
 					Code.Differs(
 						Code.Var( attr.vName ),
@@ -1924,13 +1923,13 @@ Gen.prototype.genCreatorConcerns =
 						Code.Condition(
 							Code.Differs(
 								Code.Var( attr.vName ),
-								Code.Null( )
+								Null
 							),
 							Code.Dot(
 								Code.Var( attr.vName ),
 								member
 							),
-							Code.Null( )
+							Null
 						);
 
 				}
@@ -1946,7 +1945,7 @@ Gen.prototype.genCreatorConcerns =
 								Code.Var( attr.vName ),
 								member
 							),
-							Code.Null( )
+							Null
 						);
 				}
 				else
@@ -2055,7 +2054,7 @@ Gen.prototype.genCreatorUnchanged =
 //					Code.False( )
 					Code.Equals(
 						Code.Var( attr.vName ),
-						Code.Null( )
+						Null
 					)
 				);
 
@@ -2716,9 +2715,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 			case 'inherit' :
 
 				call =
-					call.Append(
-						Code.Null( )
-					);
+					call.Append( Null );
 
 				break;
 
@@ -2757,9 +2754,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 				{
 					call =
 						call
-						.Append(
-							Code.Null( )
-						);
+						.Append( Null );
 				}
 				else
 				{
@@ -3274,7 +3269,7 @@ Gen.prototype.genEquals =
 										Code.Var( 'this' ),
 										attr.assign
 									),
-									Code.Null( )
+									Null
 								),
 								Code.Call(
 									Code.Term(
