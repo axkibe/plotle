@@ -1175,8 +1175,8 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 					.Assign(
 						Var( 'ranks' ),
-						Code.Call(
-							Code.Var( 'ranks' ).Dot( 'slice' )
+						Call(
+							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
 					.Assign(
@@ -1199,75 +1199,63 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.If(
-					Code.Differs(
-						Code.Member(
-							Code.Var( 'twig' ),
-							Code.Var( 'key' )
+					Differs(
+						Var( 'twig' ).Member(
+							Var( 'key' )
 						),
 						Undefined
 					),
-					Code.Block( )
+					Block( )
 					.Fail(
-						Code.Plus(
-							Code.StringLiteral( 'key "' ),
-							Code.Var( 'key' ),
-							Code.StringLiteral( '" already in use' )
+						Plus(
+							StringLiteral( 'key "' ),
+							Var( 'key' ),
+							StringLiteral( '" already in use' )
 						)
 					)
 				)
 				.Assign(
-					Code.Member(
-						Code.Var( 'twig' ),
-						Code.Var( 'key' )
+					Var( 'twig' )
+					.Member(
+						Var( 'key' )
 					),
-					Code.Var( 'arg' )
+					Var( 'arg' )
 				)
 				.Call(
-					Code.Dot(
-						Code.Var( 'ranks' ),
-						'push'
-					),
+					Var( 'ranks' ).Dot( 'push' ),
 					Code.Var( 'key' )
 				)
 			)
 			.Case(
-				Code.StringLiteral( 'twig:set' ),
-				Code.Block( )
+				StringLiteral( 'twig:set' ),
+				Block( )
 				.If(
-					Code.Not(
-						Code.Var( 'twigDup' )
-					),
-					Code.Block( )
+					Not( Var( 'twigDup' ) ),
+					Block( )
 					.Assign(
-						Code.Var( 'twig' ),
+						Var( 'twig' ),
 						Code.Call(
-							Code.Dot(
-								Code.Var( 'Jools' ),
-								'copy'
-							),
+							Var( 'Jools' ).Dot( 'copy' ),
 							Code.Var( 'twig' )
 						)
 					)
 					.Assign(
 						Code.Var( 'ranks' ),
 						Code.Call(
-							Code.Dot(
-								Code.Var( 'ranks' ),
-								'slice'
-							)
+							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
 					.Assign(
-						Code.Var( 'twigDup' ),
+						Var( 'twigDup' ),
 						True
 					)
 				)
 				.Assign(
-					Code.Var( 'key' ),
-					Code.Var( 'arg' )
+					Var( 'key' ),
+					Var( 'arg' )
 				)
 				.Assign(
-					Code.Var( 'arg' ),
+					Var( 'arg' ),
 					Code.Member(
 						Code.Var( 'arguments' ),
 						Code.Plus(
