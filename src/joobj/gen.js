@@ -65,6 +65,8 @@ var
 		Shorthand.Differs,
 	Dot =
 		Shorthand.Dot, // FUTURE only from expr
+	Equals =
+		Shorthand.Equals,
 	False =
 		Shorthand.False( ),
 	Func =
@@ -667,7 +669,7 @@ Gen.prototype.genConstructor =
 				.If(
 					Differs(
 						Var( attr.vName ),
-						Var( 'undefined' )
+						Undefined
 					),
 					Block( )
 					.Append(
@@ -1191,9 +1193,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Var( 'arguments' )
 					.Member(
 						Plus(
-							PreIncrement(
-								Var( 'a' )
-							),
+							PreIncrement( Var( 'a' ) ),
 							NumberLiteral( 1 )
 						)
 					)
@@ -1204,7 +1204,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 							Code.Var( 'twig' ),
 							Code.Var( 'key' )
 						),
-						Code.Var( 'undefined' )
+						Undefined
 					),
 					Code.Block( )
 					.Fail(
@@ -1271,20 +1271,17 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Code.Member(
 						Code.Var( 'arguments' ),
 						Code.Plus(
-							PreIncrement(
-								Code.Var( 'a' )
-							),
-							Code.NumberLiteral( 1 )
+							PreIncrement( Code.Var( 'a' ) ),
+							NumberLiteral( 1 )
 						)
 					)
 				)
 				.If(
-					Code.Equals(
-						Code.Member(
-							Code.Var( 'twig' ),
-							Code.Var( 'key' )
+					Equals(
+						Var( 'twig' ).Member(
+							Var( 'key' )
 						),
-						Code.Var( 'undefined' )
+						Undefined
 					),
 					Code.Block( )
 					.Fail(
@@ -1371,7 +1368,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 							Code.Var( 'twig' ),
 							Code.Var( 'key' )
 						),
-						Code.Var( 'undefined' )
+						Undefined
 					),
 					Code.Block( )
 					.Fail(
@@ -1458,7 +1455,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 							Code.Var( 'twig' ),
 							Code.Var( 'arg' )
 						),
-						Code.Var( 'undefined' )
+						Undefined
 					),
 					Code.Block( )
 					.Fail(
@@ -1579,7 +1576,7 @@ Gen.prototype.genCreatorDefaults =
 				.If(
 					Code.Equals(
 						Code.Var( attr.vName ),
-						Code.Var( 'undefined' )
+						Undefined
 					),
 					Code.Block( )
 					.Assign(
@@ -1640,7 +1637,7 @@ Gen.prototype.genCreatorChecks =
 				check.If(
 					Code.Equals(
 						Code.Var( attr.vName ),
-						Code.Var( 'undefined' )
+						Undefined
 					),
 					Code.Block( )
 					.Fail( 'undefined attribute ' + name )
@@ -1686,7 +1683,7 @@ Gen.prototype.genCreatorChecks =
 			cond =
 				Code.Differs(
 					Code.Var( attr.vName ),
-					Code.Var( 'undefined' )
+					Undefined
 				);
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
@@ -1699,7 +1696,7 @@ Gen.prototype.genCreatorChecks =
 					),
 					Code.Differs(
 						Code.Var( attr.vName ),
-						Code.Var( 'undefined' )
+						Undefined
 					)
 				);
 		}
@@ -1951,7 +1948,7 @@ Gen.prototype.genCreatorConcerns =
 						Code.Condition(
 							Code.Differs(
 								Code.Var( attr.vName ),
-								Code.Var( 'undefined' )
+								Undefined
 							),
 							Code.Dot(
 								Code.Var( attr.vName ),
