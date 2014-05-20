@@ -50,7 +50,9 @@ var
 Code =
 	{
 		Dot :
-			require( '../code/dot' )
+			require( '../code/dot' ),
+		Member :
+			require( '../code/member' )
 	};
 
 Var = require( '../joobj/this' )( module );
@@ -87,7 +89,7 @@ Var.prototype._init =
 
 
 /*
-| Creates a dot member access of variable
+| Creates a dot member access of a variable.
 */
 Var.prototype.Dot =
 	function(
@@ -97,6 +99,25 @@ Var.prototype.Dot =
 	// checking if member is a string is done in 'Dot'
 	return (
 		Code.Dot.Create(
+			'expr',
+				this,
+			'member',
+				member
+		)
+	);
+};
+
+
+/*
+| Creates a generic member access of a variable.
+*/
+Var.prototype.Member =
+	function(
+		member // member expression
+	)
+{
+	return (
+		Code.Member.Create(
 			'expr',
 				this,
 			'member',

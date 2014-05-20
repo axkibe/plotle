@@ -71,8 +71,8 @@ var
 		Shorthand.Func,
 	If =
 		Shorthand.If,
-	Member =
-		Shorthand.Member,
+//	Member =
+//		Shorthand.Member,
 	Null =
 		Shorthand.Null( ),
 	NumberLiteral =
@@ -1095,8 +1095,8 @@ Gen.prototype.genCreatorFreeStringsParser =
 		Block( )
 		.VarDec(
 			'arg',
-			Member(
-				Var( 'arguments' ),
+			Var( 'arguments' )
+			.Member(
 				Plus(
 					Var( 'a' ),
 					NumberLiteral( 1 )
@@ -1106,9 +1106,9 @@ Gen.prototype.genCreatorFreeStringsParser =
 
 	switchExpr =
 		Switch(
-			Code.Member(
-				Code.Var( 'arguments' ),
-				Code.Var( 'a' )
+			Var( 'arguments' )
+			.Member(
+				Var( 'a' )
 			)
 		);
 
@@ -2634,10 +2634,10 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			.Fail( 'JSON ranks/twig mismatch' )
 		)
 		.Assign(
-			Code.Var( 'jval' ),
-			Code.Member(
-				Code.Var( 'jwig' ),
-				Code.Var( 'key' )
+			Var( 'jval' ),
+			Var( 'jwig' )
+			.Member(
+				Var( 'key' )
 			)
 		)
 		.Append(
