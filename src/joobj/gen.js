@@ -1372,34 +1372,28 @@ Gen.prototype.genCreatorFreeStringsParser =
 							NumberLiteral( 0 )
 						),
 						GreaterThan(
-							Code.Var( 'rank' ),
-							Code.Dot(
-								Code.Var( 'ranks' ),
-								'length'
-							)
+							Var( 'rank' ),
+							Var( 'ranks' ).Dot( 'length' )
 						)
 					),
-					Code.Block( )
+					Block( )
 					.Fail(
-						Code.StringLiteral( 'invalid rank' )
+						StringLiteral( 'invalid rank' )
 					)
 				)
 				.Assign(
-					Code.Member(
-						Code.Var( 'twig' ),
-						Code.Var( 'key' )
+					Var( 'twig' )
+					.Member(
+						Var( 'key' )
 					),
-					Code.Var( 'arg' )
+					Var( 'arg' )
 				)
 				.Append(
-					Code.Call(
-						Code.Dot(
-							Code.Var( 'ranks' ),
-							'splice'
-						),
-						Code.Var( 'rank' ),
-						Code.NumberLiteral( 0 ),
-						Code.Var( 'key' )
+					Call(
+						Var( 'ranks' ).Dot( 'splice' ),
+						Var( 'rank' ),
+						NumberLiteral( 0 ),
+						Var( 'key' )
 					)
 				)
 			)
