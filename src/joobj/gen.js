@@ -71,14 +71,20 @@ var
 		Shorthand.Func,
 	If =
 		Shorthand.If,
+	Member =
+		Shorthand.Member,
 	Null =
 		Shorthand.Null( ),
 	NumberLiteral =
 		Shorthand.NumberLiteral,
 	ObjLiteral =
 		Shorthand.ObjLiteral,
+	Plus =
+		Shorthand.Plus,
 	StringLiteral =
 		Shorthand.StringLiteral,
+	Switch =
+		Shorthand.Switch,
 	This =
 		Shorthand.Var( 'this' ),
 	True =
@@ -1086,21 +1092,20 @@ Gen.prototype.genCreatorFreeStringsParser =
 	}
 
 	loop =
-		Code.Block( )
+		Block( )
 		.VarDec(
 			'arg',
-			Code.Member(
-				Code.Var( 'arguments' ),
-				Code.Plus(
-					Code.Var( 'a' ),
-					Code.NumberLiteral( 1 )
+			Member(
+				Var( 'arguments' ),
+				Plus(
+					Var( 'a' ),
+					NumberLiteral( 1 )
 				)
 			)
 		);
 
 	switchExpr =
-		Code
-		.Switch(
+		Switch(
 			Code.Member(
 				Code.Var( 'arguments' ),
 				Code.Var( 'a' )
