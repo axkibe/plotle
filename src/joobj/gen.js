@@ -53,6 +53,8 @@ var
 | Shorthanding Shorthands.
 */
 var
+	ArrayLiteral =
+		Shorthand.ArrayLiteral,
 	Assign =
 		Shorthand.Assign,
 	Block =
@@ -79,6 +81,8 @@ var
 		Shorthand.StringLiteral,
 	This =
 		Shorthand.Var( 'this' ),
+	True =
+		Shorthand.True( ),
 	Var =
 		Shorthand.Var,
 
@@ -1040,18 +1044,18 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		thisCheck =
 			thisCheck
 			.Elsewise(
-				Code.Block( )
+				Block( )
 				.Assign(
-					Code.Var( 'twig' ),
-					Code.ObjLiteral( )
+					Var( 'twig' ),
+					ObjLiteral( )
 				)
 				.Assign(
-					Code.Var( 'ranks' ),
-					Code.ArrayLiteral( )
+					Var( 'ranks' ),
+					ArrayLiteral( )
 				)
 				.Assign(
-					Code.Var( 'twigDup' ),
-					Code.True( )
+					Var( 'twigDup' ),
+					True
 				)
 			);
 	}
@@ -1168,7 +1172,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 					.Assign(
 						Code.Var( 'twigDup' ),
-						Code.True( )
+						True
 					)
 				)
 				.Assign(
@@ -1248,7 +1252,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 					.Assign(
 						Code.Var( 'twigDup' ),
-						Code.True( )
+						True
 					)
 				)
 				.Assign(
@@ -1321,7 +1325,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 					.Assign(
 						Code.Var( 'twigDup' ),
-						Code.True( )
+						True
 					)
 				)
 				.Assign(
@@ -1438,7 +1442,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 					.Assign(
 						Code.Var( 'twigDup' ),
-						Code.True( )
+						True
 					)
 				)
 				.If(
@@ -2730,9 +2734,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 			case 'twigDup' :
 
 				call =
-					call.Append(
-						Code.True( )
-					);
+					call.Append( True );
 
 				break;
 
@@ -3152,10 +3154,8 @@ Gen.prototype.genEquals =
 				Code.Var( 'this' ),
 				Code.Var( 'obj' )
 			),
-			Code.Block( )
-			.Return(
-				Code.True( )
-			)
+			Block( )
+			.Return( True )
 		)
 		.If(
 			Code.Not(
