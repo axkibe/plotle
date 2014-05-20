@@ -71,10 +71,14 @@ var
 		Shorthand.False( ),
 	Func =
 		Shorthand.Func,
+	GreaterThan =
+		Shorthand.GreaterThan,
 	If =
 		Shorthand.If,
 //	Member =
 //		Shorthand.Member,
+	LessThan =
+		Shorthand.LessThan,
 	Not =
 		Shorthand.Not,
 	Null =
@@ -1295,7 +1299,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				Block( )
 				.If(
 					Not( Var( 'twigDup' ) ),
-					Code.Block( )
+					Block( )
 					.Assign(
 						Var( 'twig' ),
 						Call(
@@ -1320,18 +1324,18 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.Assign(
 					Var( 'rank' ),
-					Code.Member(
-						Code.Var( 'arguments' ),
-						Code.Plus(
-							Code.Var( 'a' ),
-							Code.NumberLiteral( 2 )
+					Var( 'arguments' )
+					.Member(
+						Plus(
+							Var( 'a' ),
+							NumberLiteral( 2 )
 						)
 					)
 				)
 				.Assign(
 					Var( 'arg' ),
-					Code.Member(
-						Var( 'arguments' ),
+					Var( 'arguments' )
+					.Member(
 						Plus(
 							Var( 'a' ),
 							NumberLiteral( 3 )
@@ -1345,29 +1349,29 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.If(
-					Code.Differs(
-						Code.Member(
-							Code.Var( 'twig' ),
-							Code.Var( 'key' )
+					Differs(
+						Var( 'twig' )
+						.Member(
+							Var( 'key' )
 						),
 						Undefined
 					),
-					Code.Block( )
+					Block( )
 					.Fail(
-						Code.Plus(
-							Code.StringLiteral( 'key "' ),
-							Code.Var( 'key' ),
-							Code.StringLiteral( '" already in use' )
+						Plus(
+							StringLiteral( 'key "' ),
+							Var( 'key' ),
+							StringLiteral( '" already in use' )
 						)
 					)
 				)
 				.If(
-					Code.Or(
-						Code.LessThan(
-							Code.Var( 'rank' ),
-							Code.NumberLiteral( 0 )
+					Or(
+						LessThan(
+							Var( 'rank' ),
+							NumberLiteral( 0 )
 						),
-						Code.GreaterThan(
+						GreaterThan(
 							Code.Var( 'rank' ),
 							Code.Dot(
 								Code.Var( 'ranks' ),
