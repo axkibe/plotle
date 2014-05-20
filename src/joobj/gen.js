@@ -87,6 +87,8 @@ var
 		Shorthand.Or,
 	Plus =
 		Shorthand.Plus,
+	PlusAssign =
+		Shorthand.PlusAssign,
 	PreIncrement =
 		Shorthand.PreIncrement,
 	StringLiteral =
@@ -1223,7 +1225,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.Call(
 					Var( 'ranks' ).Dot( 'push' ),
-					Code.Var( 'key' )
+					Var( 'key' )
 				)
 			)
 			.Case(
@@ -1234,14 +1236,14 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Block( )
 					.Assign(
 						Var( 'twig' ),
-						Code.Call(
+						Call(
 							Var( 'Jools' ).Dot( 'copy' ),
-							Code.Var( 'twig' )
+							Var( 'twig' )
 						)
 					)
 					.Assign(
-						Code.Var( 'ranks' ),
-						Code.Call(
+						Var( 'ranks' ),
+						Call(
 							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
@@ -1256,10 +1258,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.Assign(
 					Var( 'arg' ),
-					Code.Member(
-						Code.Var( 'arguments' ),
-						Code.Plus(
-							PreIncrement( Code.Var( 'a' ) ),
+					Var( 'arguments' )
+					.Member(
+						Plus(
+							PreIncrement( Var( 'a' ) ),
 							NumberLiteral( 1 )
 						)
 					)
@@ -1271,61 +1273,53 @@ Gen.prototype.genCreatorFreeStringsParser =
 						),
 						Undefined
 					),
-					Code.Block( )
+					Block( )
 					.Fail(
-						Code.Plus(
-							Code.StringLiteral( 'key "' ),
-							Code.Var( 'key' ),
-							Code.StringLiteral( '" not in use' )
+						Plus(
+							StringLiteral( 'key "' ),
+							Var( 'key' ),
+							StringLiteral( '" not in use' )
 						)
 					)
 				)
 				.Assign(
-					Code.Member(
-						Code.Var( 'twig' ),
-						Code.Var( 'key' )
+					Var( 'twig' )
+					.Member(
+						Var( 'key' )
 					),
-					Code.Var( 'arg' )
+					Var( 'arg' )
 				)
 			)
 			.Case(
-				Code.StringLiteral( 'twig:insert' ),
-				Code.Block( )
+				StringLiteral( 'twig:insert' ),
+				Block( )
 				.If(
-					Code.Not(
-						Code.Var( 'twigDup' )
-					),
+					Not( Var( 'twigDup' ) ),
 					Code.Block( )
 					.Assign(
-						Code.Var( 'twig' ),
-						Code.Call(
-							Code.Dot(
-								Code.Var( 'Jools' ),
-								'copy'
-							),
-							Code.Var( 'twig' )
+						Var( 'twig' ),
+						Call(
+							Var( 'Jools' ).Dot( 'copy' ),
+							Var( 'twig' )
 						)
 					)
 					.Assign(
-						Code.Var( 'ranks' ),
-						Code.Call(
-							Code.Dot(
-								Code.Var( 'ranks' ),
-								'slice'
-							)
+						Var( 'ranks' ),
+						Call(
+							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
 					.Assign(
-						Code.Var( 'twigDup' ),
+						Var( 'twigDup' ),
 						True
 					)
 				)
 				.Assign(
-					Code.Var( 'key' ),
-					Code.Var( 'arg' )
+					Var( 'key' ),
+					Var( 'arg' )
 				)
 				.Assign(
-					Code.Var( 'rank' ),
+					Var( 'rank' ),
 					Code.Member(
 						Code.Var( 'arguments' ),
 						Code.Plus(
@@ -1335,19 +1329,19 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Assign(
-					Code.Var( 'arg' ),
+					Var( 'arg' ),
 					Code.Member(
-						Code.Var( 'arguments' ),
-						Code.Plus(
-							Code.Var( 'a' ),
-							Code.NumberLiteral( 3 )
+						Var( 'arguments' ),
+						Plus(
+							Var( 'a' ),
+							NumberLiteral( 3 )
 						)
 					)
 				)
 				.Append(
-					Code.PlusAssign(
-						Code.Var( 'a' ),
-						Code.NumberLiteral( 2 )
+					PlusAssign(
+						Var( 'a' ),
+						NumberLiteral( 2 )
 					)
 				)
 				.If(
