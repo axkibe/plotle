@@ -85,6 +85,8 @@ var
 		Shorthand.Or,
 	Plus =
 		Shorthand.Plus,
+	PreIncrement =
+		Shorthand.PreIncrement,
 	StringLiteral =
 		Shorthand.StringLiteral,
 	Switch =
@@ -1164,41 +1166,35 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Block( )
 					.Assign(
 						Var( 'twig' ),
-						Code.Call(
-							Code.Dot(
-								Code.Var( 'Jools' ),
-								'copy'
-							),
-							Code.Var( 'twig' )
+						Call(
+							Var( 'Jools' ).Dot( 'copy' ),
+							Var( 'twig' )
 						)
 					)
 					.Assign(
-						Code.Var( 'ranks' ),
+						Var( 'ranks' ),
 						Code.Call(
-							Code.Dot(
-								Code.Var( 'ranks' ),
-								'slice'
-							)
+							Code.Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
 					.Assign(
-						Code.Var( 'twigDup' ),
+						Var( 'twigDup' ),
 						True
 					)
 				)
 				.Assign(
-					Code.Var( 'key' ),
-					Code.Var( 'arg' )
+					Var( 'key' ),
+					Var( 'arg' )
 				)
 				.Assign(
-					Code.Var( 'arg' ),
-					Code.Member(
-						Code.Var( 'arguments' ),
-						Code.Plus(
-							Code.PreIncrement(
-								Code.Var( 'a' )
+					Var( 'arg' ),
+					Var( 'arguments' )
+					.Member(
+						Plus(
+							PreIncrement(
+								Var( 'a' )
 							),
-							Code.NumberLiteral( 1 )
+							NumberLiteral( 1 )
 						)
 					)
 				)
@@ -1275,7 +1271,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Code.Member(
 						Code.Var( 'arguments' ),
 						Code.Plus(
-							Code.PreIncrement(
+							PreIncrement(
 								Code.Var( 'a' )
 							),
 							Code.NumberLiteral( 1 )
@@ -2690,7 +2686,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 				Code.Var( 'a' ),
 				Code.Var( 'aZ' )
 			),
-			Code.PreIncrement(
+			PreIncrement(
 				Code.Var( 'a' )
 			),
 			loop
