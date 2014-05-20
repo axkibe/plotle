@@ -73,12 +73,16 @@ var
 		Shorthand.If,
 //	Member =
 //		Shorthand.Member,
+	Not =
+		Shorthand.Not,
 	Null =
 		Shorthand.Null( ),
 	NumberLiteral =
 		Shorthand.NumberLiteral,
 	ObjLiteral =
 		Shorthand.ObjLiteral,
+	Or =
+		Shorthand.Or,
 	Plus =
 		Shorthand.Plus,
 	StringLiteral =
@@ -89,6 +93,8 @@ var
 		Shorthand.Var( 'this' ),
 	True =
 		Shorthand.True( ),
+	Undefined =
+		Shorthand.Var( 'undefined' ),
 	Var =
 		Shorthand.Var,
 
@@ -1127,17 +1133,17 @@ Gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.Case(
-				Code.StringLiteral( name  ),
-				Code.Block( )
+				StringLiteral( name  ),
+				Block( )
 				.If(
 					Differs(
 						Var( 'arg' ),
-						Code.Var( 'undefined' )
+						Undefined
 					),
-					Code.Block( )
+					Block( )
 					.Assign(
-						Code.Var( attr.vName ),
-						Code.Var( 'arg' )
+						Var( attr.vName ),
+						Var( 'arg' )
 					)
 				)
 			);
@@ -1149,15 +1155,15 @@ Gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.Case(
-				Code.StringLiteral( 'twig:add' ),
-				Code.Block( )
+				StringLiteral( 'twig:add' ),
+				Block( )
 				.If(
-					Code.Not(
-						Code.Var( 'twigDup' )
+					Not(
+						Var( 'twigDup' )
 					),
-					Code.Block( )
+					Block( )
 					.Assign(
-						Code.Var( 'twig' ),
+						Var( 'twig' ),
 						Code.Call(
 							Code.Dot(
 								Code.Var( 'Jools' ),
@@ -2651,12 +2657,12 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			Code.ObjLiteral( )
 		)
 		.If(
-			Code.Or(
-				Code.Not(
-					Code.Var( 'jwig' )
+			Or(
+				Not(
+					Var( 'jwig' )
 				),
-				Code.Not(
-					Code.Var( 'ranks' )
+				Not(
+					Var( 'ranks' )
 				)
 			),
 			Code.Block( )
