@@ -53,6 +53,8 @@ var
 | Shorthanding Shorthands.
 */
 var
+	And =
+		Shorthand.And,
 	ArrayLiteral =
 		Shorthand.ArrayLiteral,
 	Assign =
@@ -77,6 +79,8 @@ var
 		Shorthand.GreaterThan,
 	If =
 		Shorthand.If,
+	Instanceof =
+		Shorthand.Instanceof,
 //	Member =
 //		Shorthand.Member,
 	LessThan =
@@ -101,14 +105,20 @@ var
 		Shorthand.StringLiteral,
 	Switch =
 		Shorthand.Switch,
+	Term =
+		Shorthand.Term, // FIXME remove
 	This =
 		Shorthand.Var( 'this' ),
 	True =
 		Shorthand.True( ),
+	Typeof =
+		Shorthand.Typeof,
 	Undefined =
 		Shorthand.Var( 'undefined' ),
 	Var =
 		Shorthand.Var,
+	VList =
+		Shorthand.VList,
 
 	Code = Shorthand; // FIXME remove
 
@@ -1479,26 +1489,22 @@ Gen.prototype.genCreatorFreeStringsParser =
 	block =
 		block
 		.For(
-			Code
-			.VList( )
+			VList( )
 			.VarDec(
 				'a',
-				Code.NumberLiteral( 0 )
+				NumberLiteral( 0 )
 			)
 			.VarDec(
 				'aZ',
-				Code.Dot(
-					Code.Var( 'arguments' ),
-					'length'
-				)
+				Var( 'arguments' ).Dot( 'length' )
 			),
-			Code.LessThan(
-				Code.Var( 'a' ),
-				Code.Var( 'aZ' )
+			LessThan(
+				Var( 'a' ),
+				Var( 'aZ' )
 			),
-			Code.PlusAssign(
-				Code.Var( 'a' ),
-				Code.NumberLiteral( 2 )
+			PlusAssign(
+				Var( 'a' ),
+				NumberLiteral( 2 )
 			),
 			loop
 		);
@@ -1544,13 +1550,13 @@ Gen.prototype.genCreatorDefaults =
 			block =
 				block
 				.If(
-					Code.Equals(
-						Code.Var( attr.vName ),
+					Equals(
+						Var( attr.vName ),
 						Undefined
 					),
-					Code.Block( )
+					Block( )
 					.Assign(
-						Code.Var( attr.vName ),
+						Var( attr.vName ),
 						Code.Term( attr.defaultValue )
 					)
 				);
@@ -1581,7 +1587,7 @@ Gen.prototype.genCreatorChecks =
 	if( checkin )
 	{
 		check =
-			Code.Block( );
+			Block( );
 	}
 	else
 	{
@@ -1605,11 +1611,11 @@ Gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Code.Equals(
-						Code.Var( attr.vName ),
+					Equals(
+						Var( attr.vName ),
 						Undefined
 					),
-					Code.Block( )
+					Block( )
 					.Fail( 'undefined attribute ' + name )
 				);
 		}
@@ -1618,11 +1624,11 @@ Gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Code.Equals(
-						Code.Var( attr.vName ),
+					Equals(
+						Var( attr.vName ),
 						Null
 					),
-					Code.Block( )
+					Block( )
 					.Fail( 'attribute ' + name + ' must not be null.' )
 				);
 		}
@@ -1643,29 +1649,29 @@ Gen.prototype.genCreatorChecks =
 		if( attr.allowsNull && !attr.allowsUndefined )
 		{
 			cond =
-				Code.Differs(
-					Code.Var( attr.vName ),
+				Differs(
+					Var( attr.vName ),
 					Null
 				);
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				Code.Differs(
-					Code.Var( attr.vName ),
+				Differs(
+					Var( attr.vName ),
 					Undefined
 				);
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				Code.And(
-					Code.Differs(
-						Code.Var( attr.vName ),
+				And(
+					Differs(
+						Var( attr.vName ),
 						Null
 					),
-					Code.Differs(
-						Code.Var( attr.vName ),
+					Differs(
+						Var( attr.vName ),
 						Undefined
 					)
 				);
@@ -1681,11 +1687,11 @@ Gen.prototype.genCreatorChecks =
 			case 'Boolean' :
 
 				tcheck =
-					Code.Differs(
-						Code.Typeof(
-							Code.Var( attr.vName )
+					Differs(
+						Typeof(
+							Var( attr.vName )
 						),
-						Code.StringLiteral( 'boolean' )
+						StringLiteral( 'boolean' )
 					);
 
 				break;
@@ -1693,22 +1699,19 @@ Gen.prototype.genCreatorChecks =
 			case 'Integer' :
 
 				tcheck =
-					Code.Or(
-						Code.Differs(
-							Code.Typeof(
-								Code.Var( attr.vName )
+					Or(
+						Differs(
+							Typeof(
+								Var( attr.vName )
 							),
-							Code.StringLiteral( 'number' )
+							StringLiteral( 'number' )
 						),
-						Code.Differs(
-							Code.Call(
-								Code.Dot(
-									Code.Var( 'Math' ),
-									'floor'
-								),
-								Code.Var( attr.vName )
+						Differs(
+							Call(
+								Var( 'Math' ).Dot( 'floor' ),
+								Var( attr.vName )
 							),
-							Code.Var( attr.vName )
+							Var( attr.vName )
 						)
 					);
 
@@ -1717,11 +1720,11 @@ Gen.prototype.genCreatorChecks =
 			case 'Number' :
 
 				tcheck =
-					Code.Differs(
-						Code.Typeof(
-							Code.Var( attr.vName )
+					Differs(
+						Typeof(
+							Var( attr.vName )
 						),
-						Code.StringLiteral( 'number' )
+						StringLiteral( 'number' )
 					);
 
 				break;
@@ -1730,17 +1733,17 @@ Gen.prototype.genCreatorChecks =
 			case 'String' :
 
 				tcheck =
-					Code.And(
-						Code.Differs(
-							Code.Typeof(
-								Code.Var( attr.vName )
+					And(
+						Differs(
+							Typeof(
+								Var( attr.vName )
 							),
-							Code.StringLiteral( 'string' )
+							StringLiteral( 'string' )
 						),
-						Code.Not(
-							Code.Instanceof(
-								Code.Var( attr.vName ),
-								Code.Var( 'String' )
+						Not(
+							Instanceof(
+								Var( attr.vName ),
+								Var( 'String' )
 							)
 						)
 					);
@@ -1750,19 +1753,16 @@ Gen.prototype.genCreatorChecks =
 			default :
 
 				tcheck =
-					Code.Differs(
-						Code.Dot(
-							Code.Var( attr.vName ),
-							'reflect'
-						),
-						Code.StringLiteral( attr.type )
+					Differs(
+						Var( attr.vName ).Dot( 'reflect' ),
+						StringLiteral( attr.type )
 					);
 
 				break;
 		}
 
 		tfail =
-			Code.Block( )
+			Block( )
 			.Fail( 'type mismatch' );
 
 		if( cond )
@@ -1770,7 +1770,7 @@ Gen.prototype.genCreatorChecks =
 			check =
 				check.If(
 					cond,
-					Code.Block( )
+					Block( )
 					.If(
 						tcheck,
 						tfail
@@ -1853,8 +1853,8 @@ Gen.prototype.genCreatorConcerns =
 		if( func )
 		{
 			cExpr =
-				Code.Call(
-					Code.Term( func )
+				Call(
+					Term( func )
 				);
 
 			for(
