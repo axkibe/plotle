@@ -2837,17 +2837,11 @@ Gen.prototype.genJoobjProto =
 		)
 		.Comment( 'Gets values by path' )
 		.Assign(
-			Code.Dot(
-				Code.Dot(
-					Code.Var( this.reference ),
-					'prototype'
-				),
-				'getPath'
-			),
-			Code.Dot(
-				Code.Var( 'JoobjProto' ),
-				'getPath'
-			)
+			Var( this.reference )
+			.Dot( 'prototype' )
+			.Dot( 'getPath' ),
+			Var( 'JoobjProto' )
+			.Dot( 'getPath' )
 		);
 
 	if( this.twig )
@@ -2856,8 +2850,11 @@ Gen.prototype.genJoobjProto =
 			capsule
 			.Comment( 'Returns a twig by rank.' )
 			.Assign(
-				Code.Term( this.reference + '.prototype.atRank' ),
-				Code.Term( 'JoobjProto.atRank' )
+				Code.Var( this.reference )
+				.Dot( 'prototype' )
+				.Dot( 'atRank' ),
+				Code.Var( 'JoobjProto' )
+				.Dot( 'atRank' )
 			)
 			.Comment( 'Gets the rank of a key.' )
 			.Assign(
