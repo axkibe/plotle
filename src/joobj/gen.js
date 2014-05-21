@@ -2504,7 +2504,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		if( ut.unit )
 		{
 			base =
-				Code.Var( ut.unit ).Dot( ut.type );
+				Var( ut.unit ).Dot( ut.type );
 		}
 		else
 		{
@@ -2518,16 +2518,13 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 				StringLiteral( name ),
 				Block( )
 				.Assign(
-					Code.Member(
-						Code.Var( 'twig' ),
-						Code.Var( 'key' )
+					Var( 'twig' )
+					.Member(
+						Var( 'key' )
 					),
-					Code.Call(
-						Code.Dot(
-							base,
-							'CreateFromJSON'
-						),
-						Code.Var( 'jval' )
+					Call(
+						base.Dot( 'CreateFromJSON' ),
+						Var( 'jval' )
 					)
 				)
 			);
@@ -2536,27 +2533,27 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 	switchExpr =
 		switchExpr
 		.Default(
-			Code.Block( )
+			Block( )
 			.Fail( 'invalid twig type' )
 		);
 
 	loop =
-		Code.Block( )
+		Block( )
 		.Assign(
-			Code.Var( 'key' ),
-			Code.Member(
-				Code.Var( 'ranks' ),
-				Code.Var( 'a' )
+			Var( 'key' ),
+			Var( 'ranks' )
+			.Member(
+				Var( 'a' )
 			)
 		)
 		.If(
-			Code.Not(
-				Code.Member(
-					Code.Var( 'jwig' ),
-					Code.Var( 'key' )
+			Not(
+				Var( 'jwig' )
+				.Member(
+					Var( 'key' )
 				)
 			),
-			Code.Block( )
+			Block( )
 			.Fail( 'JSON ranks/twig mismatch' )
 		)
 		.Assign(
@@ -2573,8 +2570,8 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 	block =
 		block
 		.Assign(
-			Code.Var( 'twig' ),
-			Code.ObjLiteral( )
+			Var( 'twig' ),
+			ObjLiteral( )
 		)
 		.If(
 			Or(
@@ -2585,7 +2582,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 					Var( 'ranks' )
 				)
 			),
-			Code.Block( )
+			Block( )
 			.Fail( 'ranks/twig information missing' )
 		)
 		.For(
