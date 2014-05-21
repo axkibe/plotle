@@ -84,6 +84,26 @@ Dot.prototype._init =
 
 
 /*
+| Creates a dot member access of a dot.
+*/
+Dot.prototype.Dot =
+	function(
+		member // member string
+	)
+{
+	// checking if member is a string is done in 'Dot'
+	return (
+		Dot.Create(
+			'expr',
+				this,
+			'member',
+				member
+		)
+	);
+};
+
+
+/*
 | Node export.
 */
 module.exports =

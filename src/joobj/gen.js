@@ -2076,7 +2076,7 @@ Gen.prototype.genCreatorUnchanged =
 								Var( attr.vName ),
 								Call(
 									Var( attr.vName ).Dot( 'equals' ),
-									Code.Var( 'inherit' ).Dot( attr.assign )
+									Var( 'inherit' ).Dot( attr.assign )
 								)
 							)
 						);
@@ -2164,7 +2164,7 @@ Gen.prototype.genCreatorReturn =
 
 				call =
 					call.Append(
-						Code.Var( name )
+						Var( name )
 					);
 
 				break;
@@ -2183,14 +2183,14 @@ Gen.prototype.genCreatorReturn =
 
 				call =
 					call.Append(
-						Code.Var( attr.vName )
+						Var( attr.vName )
 					);
 		}
 	}
 
 	return (
 		block.Return(
-			Code.New( call )
+			New( call )
 		)
 	);
 };
@@ -2213,7 +2213,7 @@ Gen.prototype.genCreator =
 		);
 
 	block =
-		Code.Block( );
+		Block( );
 
 	block =
 		this.genCreatorVariables( block );
@@ -2242,19 +2242,12 @@ Gen.prototype.genCreator =
 	capsule =
 		capsule
 		.Assign(
-			Code.Dot(
-				Code.Var( this.reference ),
-				'Create'
-			),
-			Code.Assign(
-				Code.Dot(
-					Code.Dot(
-						Code.Var( this.reference ),
-						'prototype'
-					),
-					'Create'
-				),
-				Code.Func( block )
+			Var( this.reference ).Dot( 'Create' ),
+			Assign(
+				Var( this.reference )
+				.Dot( 'prototype' )
+				.Dot( 'Create' ),
+				Func( block )
 				.Arg(
 					null,
 					'free strings'
@@ -2352,18 +2345,18 @@ Gen.prototype.genFromJSONCreatorParser =
 		switchExpr;
 
 	switchExpr =
-		Code.Switch(
-			Code.Var( 'name' )
+		Switch(
+			Var( 'name' )
 		)
 		.Case(
-			Code.StringLiteral( 'type' ),
-			Code.Block( )
+			StringLiteral( 'type' ),
+			Block( )
 			.If(
-				Code.Differs(
-					Code.Var( 'arg' ),
-					Code.StringLiteral( this.name )
+				Differs(
+					Var( 'arg' ),
+					StringLiteral( this.name )
 				),
-				Code.Block( )
+				Block( )
 				.Fail( 'invalid JSON ' )
 			)
 		);
@@ -2373,19 +2366,19 @@ Gen.prototype.genFromJSONCreatorParser =
 		switchExpr =
 			switchExpr
 			.Case(
-				Code.StringLiteral( 'twig' ),
-				Code.Block( )
+				StringLiteral( 'twig' ),
+				Block( )
 				.Assign(
-					Code.Var( 'jwig' ),
-					Code.Var( 'arg' )
+					Var( 'jwig' ),
+					Var( 'arg' )
 				)
 			)
 			.Case(
-				Code.StringLiteral( 'ranks' ),
-				Code.Block( )
+				StringLiteral( 'ranks' ),
+				Block( )
 				.Assign(
-					Code.Var( 'ranks' ),
-					Code.Var( 'arg' )
+					Var( 'ranks' ),
+					Var( 'arg' )
 				)
 			);
 	}
@@ -2415,7 +2408,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			case 'String' :
 
 				arg =
-					Code.Var( 'arg' );
+					Var( 'arg' );
 
 				break;
 
@@ -2424,38 +2417,32 @@ Gen.prototype.genFromJSONCreatorParser =
 				if( attr.unit )
 				{
 					base =
-						Code.Dot(
-							Code.Var( attr.unit ),
-							attr.type
-						);
+						Var( attr.unit ).Dot( attr.type );
 				}
 				else
 				{
 					base =
-						Code.Var( attr.type );
+						Var( attr.type );
 				}
 
 				arg =
-					Code.Call(
-						Code.Dot(
-							base,
-							'CreateFromJSON'
-						),
-						Code.Var( 'arg' )
+					Call(
+						base.Dot( 'CreateFromJSON' ),
+						Var( 'arg' )
 					);
 		}
 
 		caseBlock =
-			Code.Block( )
+			Block( )
 			.Assign(
-				Code.Var( attr.vName ),
+				Var( attr.vName ),
 				arg
 			);
 
 		switchExpr =
 			switchExpr
 			.Case(
-				Code.StringLiteral( name ),
+				StringLiteral( name ),
 				caseBlock
 			);
 	}
@@ -2464,13 +2451,13 @@ Gen.prototype.genFromJSONCreatorParser =
 		block
 		.ForIn(
 			'name',
-			Code.Var( 'json' ),
-			Code.Block( )
+			Var( 'json' ),
+			Block( )
 			.Assign(
-				Code.Var( 'arg' ),
-				Code.Member(
-					Code.Var( 'json' ),
-					Code.Var( 'name' )
+				Var( 'arg' ),
+				Var( 'json' )
+				.Member(
+					Var( 'name' )
 				)
 			)
 			.Append(
@@ -2498,11 +2485,8 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		ut;
 
 	switchExpr =
-		Code.Switch(
-			Code.Dot(
-				Code.Var( 'jval' ),
-				'type'
-			)
+		Switch(
+			Var( 'jval' ).Dot( 'type' )
 		);
 
 	for(
@@ -2520,22 +2504,19 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		if( ut.unit )
 		{
 			base =
-				Code.Dot(
-					Code.Var( ut.unit ),
-					ut.type
-				);
+				Code.Var( ut.unit ).Dot( ut.type );
 		}
 		else
 		{
 			base =
-				Code.Var( ut.type );
+				Var( ut.type );
 		}
 
 		switchExpr =
 			switchExpr
 			.Case(
-				Code.StringLiteral( name ),
-				Code.Block( )
+				StringLiteral( name ),
+				Block( )
 				.Assign(
 					Code.Member(
 						Code.Var( 'twig' ),
