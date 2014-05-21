@@ -63,6 +63,8 @@ var
 		Shorthand.Block,
 	Call =
 		Shorthand.Call,
+	CommaList =
+		Shorthand.CommaList,
 	Condition =
 		Shorthand.Condition,
 	Delete =
@@ -2587,28 +2589,25 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		)
 		.For(
 			// FIXME, put into the commalist call
-			Code.CommaList( )
+			CommaList( )
 			.Append(
-				Code.Assign(
-					Code.Var( 'a' ),
-					Code.NumberLiteral( 0 )
+				Assign(
+					Var( 'a' ),
+					NumberLiteral( 0 )
 				)
 			)
 			.Append(
-				Code.Assign(
-					Code.Var( 'aZ' ),
-					Code.Dot(
-						Code.Var( 'ranks' ),
-						'length'
-					)
+				Assign(
+					Var( 'aZ' ),
+					Var( 'ranks' ).Dot( 'length' )
 				)
 			),
-			Code.LessThan(
-				Code.Var( 'a' ),
-				Code.Var( 'aZ' )
+			LessThan(
+				Var( 'a' ),
+				Var( 'aZ' )
 			),
 			PreIncrement(
-				Code.Var( 'a' )
+				Var( 'a' )
 			),
 			loop
 		);
@@ -2630,8 +2629,8 @@ Gen.prototype.genFromJSONCreatorReturn =
 		name;
 
 	call =
-		Code.Call(
-			Code.Var( this.reference )
+		Call(
+			Var( this.reference )
 		);
 
 	for(
@@ -2671,7 +2670,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 				call =
 					call.Append(
-						Code.Var( name )
+						Var( name )
 					);
 
 				break;
@@ -2692,7 +2691,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 					call =
 						call
 						.Append(
-							Code.Var( attr.vName )
+							Var( attr.vName )
 						);
 				}
 		}
@@ -2701,7 +2700,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 	return (
 		block
 		.Return(
-			Code.New( call )
+			New( call )
 		)
 	);
 };
@@ -2760,7 +2759,7 @@ Gen.prototype.genFromJSONCreator =
 
 	funcBlock =
 		this.genFromJSONCreatorVariables(
-			Code.Block( )
+			Block( )
 		);
 
 	funcBlock =
@@ -2784,11 +2783,8 @@ Gen.prototype.genFromJSONCreator =
 	capsule =
 		capsule
 		.Assign(
-			Code.Dot(
-				Code.Var( this.reference ),
-				'CreateFromJSON'
-			),
-			Code.Func( funcBlock )
+			Var( this.reference ).Dot( 'CreateFromJSON' ),
+			Func( funcBlock )
 			.Arg(
 				'json',
 				'the JSON object'
@@ -2811,14 +2807,10 @@ Gen.prototype.genReflection =
 		capsule
 		.Comment( 'Reflection.' )
 		.Assign(
-			Code.Dot(
-				Code.Dot(
-					Code.Var( this.reference ),
-					'prototype'
-				),
-				'reflect'
-			),
-			Code.StringLiteral( this.name )
+			Var( this.reference )
+			.Dot( 'prototype' )
+			.Dot( 'reflect' ),
+			StringLiteral( this.name )
 		);
 
 	return capsule;
@@ -2837,17 +2829,11 @@ Gen.prototype.genJoobjProto =
 		capsule
 		.Comment( 'Sets values by path.' )
 		.Assign(
-			Code.Dot(
-				Code.Dot(
-					Code.Var( this.reference ),
-					'prototype'
-				),
-				'setPath'
-			),
-			Code.Dot(
-				Code.Var( 'JoobjProto' ),
-				'setPath'
-			)
+			Var( this.reference )
+			.Dot( 'prototype' )
+			.Dot( 'setPath' ),
+			Var( 'JoobjProto' )
+			.Dot( 'setPath' )
 		)
 		.Comment( 'Gets values by path' )
 		.Assign(
