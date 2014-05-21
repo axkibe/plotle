@@ -61,6 +61,8 @@ var
 		Shorthand.Block,
 	Call =
 		Shorthand.Call,
+	Delete =
+		Shorthand.Delete,
 	Differs =
 		Shorthand.Differs,
 	Dot =
@@ -1398,76 +1400,64 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.Case(
-				Code.StringLiteral( 'twig:remove' ),
-				Code.Block( )
+				StringLiteral( 'twig:remove' ),
+				Block( )
 				.If(
-					Code.Not(
-						Code.Var( 'twigDup' )
+					Not(
+						Var( 'twigDup' )
 					),
-					Code.Block( )
+					Block( )
 					.Assign(
-						Code.Var( 'twig' ),
-						Code.Call(
-							Code.Dot(
-								Code.Var( 'Jools' ),
-								'copy'
-							),
-							Code.Var( 'twig' )
+						Var( 'twig' ),
+						Call(
+							Var( 'Jools' ).Dot( 'copy' ),
+							Var( 'twig' )
 						)
 					)
 					.Assign(
-						Code.Var( 'ranks' ),
-						Code.Call(
-							Code.Dot(
-								Code.Var( 'ranks' ),
-								'slice'
-							)
+						Var( 'ranks' ),
+						Call(
+							Code.Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
 					.Assign(
-						Code.Var( 'twigDup' ),
+						Var( 'twigDup' ),
 						True
 					)
 				)
 				.If(
-					Code.Equals(
-						Code.Member(
-							Code.Var( 'twig' ),
-							Code.Var( 'arg' )
+					Equals(
+						Var( 'twig' )
+						.Member(
+							Var( 'arg' )
 						),
 						Undefined
 					),
-					Code.Block( )
+					Block( )
 					.Fail(
-						Code.Plus(
-							Code.StringLiteral( 'key "' ),
-							Code.Var( 'arg' ),
-							Code.StringLiteral( '" not in use' )
+						Plus(
+							StringLiteral( 'key "' ),
+							Var( 'arg' ),
+							StringLiteral( '" not in use' )
 						)
 					)
 				)
 				.Append(
-					Code.Delete(
-						Code.Member(
-							Code.Var( 'twig' ),
-							Code.Var( 'arg' )
+					Delete(
+						Var( 'twig' )
+						.Member(
+							Var( 'arg' )
 						)
 					)
 				)
 				.Append(
-					Code.Call(
-						Code.Dot(
-							Code.Var( 'ranks' ),
-							'splice'
+					Call(
+						Var( 'ranks' ).Dot( 'splice' ),
+						Call(
+							Var( 'ranks' ).Dot( 'indexOf' ),
+							Var( 'arg' )
 						),
-						Code.Call(
-							Code.Dot(
-								Code.Var( 'ranks' ),
-								'indexOf'
-							),
-							Code.Var( 'arg' )
-						),
-						Code.NumberLiteral( 1 )
+						NumberLiteral( 1 )
 					)
 				)
 			);
@@ -1476,9 +1466,9 @@ Gen.prototype.genCreatorFreeStringsParser =
 	switchExpr =
 		switchExpr
 		.Default(
-			Code.Block( )
+			Block( )
 			.Check(
-				Code.Block( )
+				Block( )
 				.Fail( 'invalid argument' )
 			)
 		);
