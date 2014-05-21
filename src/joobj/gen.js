@@ -63,6 +63,8 @@ var
 		Shorthand.Block,
 	Call =
 		Shorthand.Call,
+	Condition =
+		Shorthand.Condition,
 	Delete =
 		Shorthand.Delete,
 	Differs =
@@ -85,6 +87,8 @@ var
 //		Shorthand.Member,
 	LessThan =
 		Shorthand.LessThan,
+	New =
+		Shorthand.New,
 	Not =
 		Shorthand.Not,
 	Null =
@@ -1427,7 +1431,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.Assign(
 						Var( 'ranks' ),
 						Call(
-							Code.Var( 'ranks' ).Dot( 'slice' )
+							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
 					.Assign(
@@ -1557,7 +1561,7 @@ Gen.prototype.genCreatorDefaults =
 					Block( )
 					.Assign(
 						Var( attr.vName ),
-						Code.Term( attr.defaultValue )
+						Term( attr.defaultValue )
 					)
 				);
 		}
@@ -1877,7 +1881,7 @@ Gen.prototype.genCreatorConcerns =
 
 				cExpr =
 					cExpr.Append(
-						Code.Var( bAttr.vName )
+						Var( bAttr.vName )
 					);
 			}
 		}
@@ -1899,13 +1903,13 @@ Gen.prototype.genCreatorConcerns =
 				else if( attr.allowsNull )
 				{
 					cExpr =
-						Code.Condition(
-							Code.Differs(
-								Code.Var( attr.vName ),
+						Condition(
+							Differs(
+								Var( attr.vName ),
 								Null
 							),
-							Code.Dot(
-								Code.Var( attr.vName ),
+							Dot(
+								Var( attr.vName ),
 								member
 							),
 							Null
@@ -1915,35 +1919,26 @@ Gen.prototype.genCreatorConcerns =
 				else if( attr.allowsUndefined )
 				{
 					cExpr =
-						Code.Condition(
-							Code.Differs(
-								Code.Var( attr.vName ),
+						Condition(
+							Differs(
+								Var( attr.vName ),
 								Undefined
 							),
-							Code.Dot(
-								Code.Var( attr.vName ),
-								member
-							),
+							Var( attr.vName ).Dot( member ),
 							Null
 						);
 				}
 				else
 				{
 					cExpr =
-						Code.Dot(
-							Code.Var( attr.vName ),
-							member
-						);
+						Var( attr.vName ).Dot( member );
 				}
 			}
 			else
 			{
 				cExpr =
-					Code.Call(
-						Code.Dot(
-							Code.Var( attr.vName ),
-							member
-						)
+					Call(
+						Var( attr.vName ).Dot( member )
 					);
 
 				for(
@@ -1964,7 +1959,7 @@ Gen.prototype.genCreatorConcerns =
 
 					cExpr =
 						cExpr.Append(
-							Code.Var( bAttr.vName )
+							Var( bAttr.vName )
 						);
 				}
 			}
@@ -1973,7 +1968,7 @@ Gen.prototype.genCreatorConcerns =
 		block =
 			block
 			.Assign(
-				Code.Var( attr.vName  ),
+				Var( attr.vName  ),
 				cExpr
 			);
 	}
@@ -1999,16 +1994,16 @@ Gen.prototype.genCreatorUnchanged =
 		name;
 
 	cond =
-		Code.Var( 'inherit' );
+		Var( 'inherit' );
 
 
 	if( this.twig )
 	{
 		cond =
-			Code.And(
+			And(
 				cond,
-				Code.Not(
-					Code.Var( 'twigDup' )
+				Not(
+					Var( 'twigDup' )
 				)
 			);
 	}
@@ -2028,11 +2023,10 @@ Gen.prototype.genCreatorUnchanged =
 		if( attr.assign === null )
 		{
 			cond =
-				Code.And(
+				And(
 					cond,
-//					Code.False( )
-					Code.Equals(
-						Code.Var( attr.vName ),
+					Equals(
+						Var( attr.vName ),
 						Null
 					)
 				);
@@ -2053,12 +2047,9 @@ Gen.prototype.genCreatorUnchanged =
 			case 'Tree' : // FIXME
 
 				ceq =
-					Code.Equals(
-						Code.Var( attr.vName ),
-						Code.Dot(
-							Code.Var( 'inherit' ),
-							attr.assign
-						)
+					Equals(
+						Var( attr.vName ),
+						Var( 'inherit' ).Dot( attr.assign )
 					);
 
 				break;
@@ -2068,39 +2059,24 @@ Gen.prototype.genCreatorUnchanged =
 				if( !attr.allowsNull && !attr.allowsUndefined )
 				{
 					ceq =
-						Code.Call(
-							Code.Dot(
-								Code.Var( attr.vName ),
-								'equals'
-							),
-							Code.Dot(
-								Code.Var( 'inherit' ),
-								attr.assign
-							)
+						Call(
+							Var( attr.vName ).Dot( 'equals' ),
+							Var( 'inherit' ).Dot( attr.assign )
 						);
 				}
 				else
 				{
 					ceq =
-						Code.Or(
-							Code.Equals(
-								Code.Var( attr.vName ),
-								Code.Dot(
-									Code.Var( 'inherit' ),
-									attr.assign
-								)
+						Or(
+							Equals(
+								Var( attr.vName ),
+								Var( 'inherit' ).Dot( attr.assign )
 							),
-							Code.And(
-								Code.Var( attr.vName ),
-								Code.Call(
-									Code.Dot(
-										Code.Var( attr.vName ),
-										'equals'
-									),
-									Code.Dot(
-										Code.Var( 'inherit' ),
-										attr.assign
-									)
+							And(
+								Var( attr.vName ),
+								Call(
+									Var( attr.vName ).Dot( 'equals' ),
+									Code.Var( 'inherit' ).Dot( attr.assign )
 								)
 							)
 						);
@@ -2108,7 +2084,7 @@ Gen.prototype.genCreatorUnchanged =
 		}
 
 		cond =
-			Code.And(
+			And(
 				cond,
 				ceq
 			);
@@ -2117,9 +2093,9 @@ Gen.prototype.genCreatorUnchanged =
 	block =
 		block.If(
 			cond,
-			Code.Block( )
+			Block( )
 			.Return(
-				Code.Var( 'inherit' )
+				Var( 'inherit' )
 			)
 		);
 
@@ -2145,29 +2121,29 @@ Gen.prototype.genCreatorReturn =
 		return (
 			block
 			.If(
-				Code.Not(
-					Code.Var( '_singleton' )
+				Not(
+					Var( '_singleton' )
 				),
-				Code.Block( )
+				Block( )
 				.Assign(
-					Code.Var( '_singleton' ),
-					Code.New(
-						Code.Call(
-							Code.Var( this.reference ),
+					Var( '_singleton' ),
+					New(
+						Call(
+							Var( this.reference ),
 							this.tag
 						)
 					)
 				)
 			)
 			.Return(
-				Code.Var( '_singleton' )
+				Var( '_singleton' )
 			)
 		);
 	}
 
 	call =
-		Code.Call(
-			Code.Var( this.reference )
+		Call(
+			Var( this.reference )
 		);
 
 	for(
