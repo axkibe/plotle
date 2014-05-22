@@ -708,17 +708,11 @@ Gen.prototype.genConstructor =
 		block =
 			block
 			.Assign(
-				Dot(
-					Var( 'this' ),
-					'twig'
-				),
+				This.Dot( 'twig' ),
 				Var( 'twig' )
 			)
 			.Assign(
-				Dot(
-					Var( 'this' ),
-					'ranks'
-				),
+				This.Dot( 'ranks' ),
 				Var( 'ranks' )
 			);
 	}
@@ -728,10 +722,7 @@ Gen.prototype.genConstructor =
 	{
 		initCall =
 			Call(
-				Dot(
-					Var( 'this' ),
-					'_init'
-				)
+				This.Dot( '_init' )
 			);
 
 		for(
@@ -782,11 +773,8 @@ Gen.prototype.genConstructor =
 	block =
 		block
 		.Call(
-			Dot(
-				Var( 'Jools' ),
-				'immute'
-			),
-			Var( 'this' )
+			Var( 'Jools' ). Dot( 'immute' ),
+			This
 		);
 
 	if( this.twig )
@@ -1024,7 +1012,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 			Block( )
 			.Assign(
 				Var( 'inherit' ),
-				Var( 'this' )
+				This
 			);
 
 	if( this.twig )
@@ -3106,7 +3094,7 @@ Gen.prototype.genEquals =
 			case 'Tree' : // FIXME
 
 				ceq =
-					Code.Equals(
+					Equals(
 						This.Dot( attr.assign ),
 						Var( 'obj' ).Dot( attr.assign )
 					);
@@ -3118,46 +3106,27 @@ Gen.prototype.genEquals =
 				if( !attr.allowsNull )
 				{
 					ceq =
-						Code.Equals(
-							Code.Dot(
-								Code.Var( 'this' ),
-								attr.assign
-							),
-							Code.Dot(
-								Code.Var( 'obj' ),
-								attr.assign
-							)
+						Equals(
+							This.Dot( attr.assign ),
+							Var( 'obj' ).Dot( attr.assign )
 						);
 				}
 				else
 				{
 					ceq =
-						Code.Or(
-							Code.Equals(
-								Code.Dot(
-									Code.Var( 'this' ),
-									attr.assign
-								),
-								Code.Dot(
-									Code.Var( 'obj' ),
-									attr.assign
-								)
+						Or(
+							Equals(
+								This.Dot( attr.assign ),
+								Var( 'obj' ).Dot( attr.assign )
 							),
-							Code.And(
-								Code.Differs(
-									Code.Dot(
-										Code.Var( 'this' ),
-										attr.assign
-									),
+							And(
+								Differs(
+									This.Dot( attr.assign ),
 									Null
 								),
-								Code.Call(
-									Code.Term(
-										'this.' + attr.assign + '.equals'
-									),
-									Code.Term(
-										'obj.' + attr.assign
-									)
+								Call(
+									This.Dot( attr.assign ).Dot( 'equals' ),
+									Var( 'obj' ).Dot( attr.assign )
 								)
 							)
 						);
@@ -3169,7 +3138,7 @@ Gen.prototype.genEquals =
 			?
 			ceq
 			:
-			Code.And(
+			And(
 				cond,
 				ceq
 			);
