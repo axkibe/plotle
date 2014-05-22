@@ -77,6 +77,8 @@ var
 		Shorthand.Equals,
 	False =
 		Shorthand.False( ),
+	File =
+		Shorthand.File,
 	Func =
 		Shorthand.Func,
 	GreaterThan =
@@ -124,15 +126,7 @@ var
 	Var =
 		Shorthand.Var,
 	VList =
-		Shorthand.VList,
-
-	Code = Shorthand; // FIXME remove
-
-// FIXME
-//   make shorthands for
-//   Ranks
-
-
+		Shorthand.VList;
 
 /*
 | Converts a camel case string to a dash seperated string.
@@ -3151,14 +3145,8 @@ Gen.prototype.genEquals =
 	capsule =
 		capsule
 		.Assign(
-			Code.Dot(
-				Code.Dot(
-					Code.Var( this.reference ),
-					'prototype'
-				),
-				'equals'
-			),
-			Code.Func( block )
+			Var( this.reference ).Dot( 'prototype' ).Dot( 'equals' ),
+			Func( block )
 			.Arg(
 				'obj',
 				'object to compare to'
@@ -3181,14 +3169,11 @@ Gen.prototype.genNodeExport =
 		capsule
 		.Comment( 'Node export.' )
 		.If(
-			Code.Var( 'SERVER' ),
-			Code.Block( )
+			Var( 'SERVER' ),
+			Block( )
 			.Assign(
-				Code.Dot(
-					Code.Var( 'module' ),
-					'exports'
-				),
-				Code.Var( this.reference )
+				Var( 'module' ).Dot( 'exports' ),
+				Var( this.reference )
 			)
 		)
 	);
@@ -3213,9 +3198,9 @@ Gen.prototype.genExport =
 			block
 			.VarDec(
 				this.unit,
-				Code.Or(
-					Code.Var( this.unit ),
-					Code.ObjLiteral( )
+				Or(
+					Var( this.unit ),
+					ObjLiteral( )
 				)
 			);
 	}
@@ -3242,7 +3227,7 @@ Gen.prototype.genPreamble =
 		block;
 
 	block =
-		Code.Block( );
+		Block( );
 
 	block =
 		this.genExport( block );
@@ -3261,8 +3246,10 @@ Gen.prototype.genCapsule =
 	function( )
 {
 	var
-		capsule =
-			Code.Block( );
+		capsule;
+
+	capsule =
+		Block( );
 
 	if( this.node )
 	{
@@ -3340,7 +3327,7 @@ Gen.generate =
 		);
 
 	file =
-		Code.File( )
+		File( )
 		.Header(
 			'This is an auto generated file.',
 			'',
