@@ -3067,26 +3067,14 @@ Gen.prototype.genEquals =
 	if( this.twig )
 	{
 		cond =
-			Code.And(
-				Code.Equals(
-					Code.Dot(
-						Code.Var( 'this' ),
-						'tree'
-					),
-					Code.Dot(
-						Code.Var( 'obj' ),
-						'tree'
-					)
+			And(
+				Equals(
+					This.Dot( 'tree' ),
+					Var( 'obj' ).Dot( 'tree' )
 				),
-				Code.Equals(
-					Code.Dot(
-						Code.Var( 'this' ),
-						'ranks'
-					),
-					Code.Dot(
-						Code.Var( 'obj' ),
-						'ranks'
-					)
+				Equals(
+					This.Dot( 'ranks' ),
+					Var( 'obj' ).Dot( 'ranks' )
 				)
 			);
 	}
@@ -3119,14 +3107,8 @@ Gen.prototype.genEquals =
 
 				ceq =
 					Code.Equals(
-						Code.Dot(
-							Code.Var( 'this' ),
-							attr.assign
-						),
-						Code.Dot(
-							Code.Var( 'obj' ),
-							attr.assign
-						)
+						This.Dot( attr.assign ),
+						Var( 'obj' ).Dot( attr.assign )
 					);
 
 				break;
