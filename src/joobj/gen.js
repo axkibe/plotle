@@ -2850,21 +2850,27 @@ Gen.prototype.genJoobjProto =
 			capsule
 			.Comment( 'Returns a twig by rank.' )
 			.Assign(
-				Code.Var( this.reference )
+				Var( this.reference )
 				.Dot( 'prototype' )
 				.Dot( 'atRank' ),
-				Code.Var( 'JoobjProto' )
+				Var( 'JoobjProto' )
 				.Dot( 'atRank' )
 			)
 			.Comment( 'Gets the rank of a key.' )
 			.Assign(
-				Code.Term( this.reference + '.prototype.rankOf' ),
-				Code.Term( 'JoobjProto.rankOf' )
+				Var( this.reference )
+				.Dot( 'prototype' )
+				.Dot( 'rankOf' ),
+				Var( 'JoobjProto' )
+				.Dot( 'rankOf' )
 			)
 			.Comment( 'Creates a new unique identifier.' )
 			.Assign(
-				Code.Term( this.reference + '.prototype.newUID' ),
-				Code.Term( 'JoobjProto.newUID' )
+				Var( this.reference )
+				.Dot( 'prototype' )
+				.Dot( 'newUID' ),
+				Var( 'JoobjProto' )
+				.Dot( 'newUID' )
 			);
 	}
 
@@ -2887,17 +2893,16 @@ Gen.prototype.genToJSON =
 		olit;
 
 	block =
-		Code.Block( )
+		Block( )
 		.VarDec(
 			'json'
 		);
 
 	olit =
-		Code
-		.ObjLiteral( )
+		ObjLiteral( )
 		.Add(
 			'type',
-			Code.StringLiteral( this.name )
+			StringLiteral( this.name )
 		);
 
 	for(
@@ -2921,10 +2926,7 @@ Gen.prototype.genToJSON =
 			olit
 			.Add(
 				name,
-				Code.Dot(
-					Code.Var( 'this' ),
-					attr.assign
-				)
+				This.Dot( attr.assign )
 			);
 	}
 
