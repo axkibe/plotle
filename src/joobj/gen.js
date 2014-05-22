@@ -2936,34 +2936,28 @@ Gen.prototype.genToJSON =
 			olit
 			.Add(
 				'ranks',
-				Code.Term( 'this.ranks' )
+				This.Dot( 'ranks' )
 			)
 			.Add(
 				'twig',
-				Code.Dot(
-					Code.Var( 'this' ),
-					'twig'
-				)
+				This.Dot( 'twig' )
 			);
 	}
 
 	block =
 		block
 		.Assign(
-			Code.Var( 'json' ),
-			Code.Call(
-				Code.Dot(
-					Code.Var( 'Object' ),
-					'freeze'
-				),
+			Var( 'json' ),
+			Call(
+				Var( 'Object' ).Dot( 'freeze' ),
 				olit
 			)
 		)
 		.Return(
-			Code.Func(
-				Code.Block( )
+			Func(
+				Block( )
 				.Return(
-					Code.Var( 'json' )
+					Var( 'json' )
 				)
 			)
 		);
@@ -2972,16 +2966,10 @@ Gen.prototype.genToJSON =
 		capsule
 		.Comment( 'Converts a ' + this.name + ' into JSON.' )
 		.Call(
-			Code.Dot(
-				Code.Var( 'Jools' ),
-				'lazyValue'
-			),
-			Code.Dot(
-				Code.Var( this.reference ),
-				'prototype'
-			),
-			Code.StringLiteral( 'toJSON' ),
-			Code.Func( block )
+			Var( 'Jools' ).Dot( 'lazyValue' ),
+			Var( this.reference ).Dot( 'prototype' ),
+			StringLiteral( 'toJSON' ),
+			Func( block )
 		);
 
 	return capsule;
@@ -3018,19 +3006,15 @@ Gen.prototype.genEquals =
 				capsule
 				.Comment( 'Tests equality of object.' )
 				.Assign(
-					Code.Dot(
-						Code.Dot(
-							Code.Var( this.reference ),
-							'prototype'
-						),
-						'equals'
-					),
-					Code.Func(
-						Code.Block( )
+					Var( this.reference )
+					.Dot( 'prototype' )
+					.Dot( 'equals' ),
+					Func(
+						Block( )
 						.Return(
-							Code.Equals(
-								Code.Var( 'this' ),
-								Code.Var( 'obj' )
+							Equals(
+								This,
+								Var( 'obj' )
 							)
 						)
 					)
@@ -3058,25 +3042,25 @@ Gen.prototype.genEquals =
 		.Comment( 'Tests equality of object.' );
 
 	block =
-		Code.Block( );
+		Block( );
 
 	block =
 		block
 		.If(
-			Code.Equals(
-				Code.Var( 'this' ),
-				Code.Var( 'obj' )
+			Equals(
+				This,
+				Var( 'obj' )
 			),
 			Block( )
 			.Return( True )
 		)
 		.If(
-			Code.Not(
-				Code.Var( 'obj' )
+			Not(
+				Var( 'obj' )
 			),
-			Code.Block( )
+			Block( )
 			.Return(
-				Code.False( )
+				False
 			)
 		);
 
