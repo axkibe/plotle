@@ -66,7 +66,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				hover :
 					{
@@ -75,7 +75,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null',
+							null,
 						concerns :
 							{
 								func :
@@ -111,7 +111,7 @@ if( JOOBJ )
 						type :
 							'Mark',
 						defaultValue :
-							'null'
+							null
 					},
 				maxlen :
 					{
@@ -127,7 +127,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				path :
 					{
@@ -136,7 +136,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							null
 					},
 				superFrame :
 					{
@@ -145,7 +145,7 @@ if( JOOBJ )
 						type :
 							'Rect',
 						defaultValue :
-							'null'
+							null
 					},
 				style :
 					{
@@ -162,7 +162,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							"''"
+							"''" //XXX
 					},
 				visible :
 					{
@@ -171,7 +171,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'true'
+							true
 					}
 			},
 

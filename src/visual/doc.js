@@ -49,7 +49,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				fontsize :
 					{
@@ -58,7 +58,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				paraSep :
 					{
@@ -67,7 +67,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				path :
 					{
@@ -76,7 +76,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				mark :
 					{
@@ -85,7 +85,7 @@ if( JOOBJ )
 						type :
 							'Mark',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				view :
 					{
@@ -94,7 +94,7 @@ if( JOOBJ )
 						type :
 							'View',
 						defaultValue :
-							'undefined'
+							undefined
 					}
 			},
 		init :

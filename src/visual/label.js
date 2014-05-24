@@ -74,7 +74,7 @@ if( JOOBJ )
 							null,
 						// FIXME make defaultValue undefined for server
 						defaultValue :
-							'null'
+							null
 					},
 				path :
 					{
@@ -83,7 +83,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				pnw :
 					{
@@ -115,7 +115,7 @@ if( JOOBJ )
 						type :
 							'Mark',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				traitSet :
 					{
@@ -127,7 +127,7 @@ if( JOOBJ )
 							null,
 						// FIXME make defaultValue undefined for server
 						defaultValue :
-							'null'
+							null
 					},
 				view :
 					{
@@ -136,7 +136,7 @@ if( JOOBJ )
 						type :
 							'View',
 						defaultValue :
-							'undefined'
+							undefined
 					}
 			},
 		init :

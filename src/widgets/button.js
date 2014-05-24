@@ -61,7 +61,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				font :
 					{
@@ -70,7 +70,7 @@ if( JOOBJ )
 						type :
 							'Font',
 						defaultValue :
-							'null'
+							null
 					},
 				hover :
 					{
@@ -79,7 +79,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null',
+							null,
 						concerns :
 							{
 								func :
@@ -99,7 +99,7 @@ if( JOOBJ )
 							'String',
 						defaultValue :
 							// TODO undefiend
-							'null'
+							null
 					},
 				iconStyle :
 					{
@@ -108,7 +108,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				// FUTURE find a more elegent solution
 				icons :
@@ -118,7 +118,7 @@ if( JOOBJ )
 						type :
 							'Icons',
 						defaultValue :
-							'null'
+							null
 					},
 				mark :
 					{
@@ -128,7 +128,7 @@ if( JOOBJ )
 							'Mark',
 						// FIXME do not allow null
 						defaultValue :
-							'null',
+							null,
 						assign :
 							null
 					},
@@ -139,7 +139,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							null
 					},
 				shape :
 					{
@@ -156,7 +156,7 @@ if( JOOBJ )
 						type :
 							'Rect',
 						defaultValue :
-							'null'
+							null
 					},
 				style :
 					{
@@ -173,7 +173,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				textDesignPos :
 					{
@@ -182,7 +182,7 @@ if( JOOBJ )
 						type :
 							'AnchorPoint',
 						defaultValue :
-							'null'
+							null
 					},
 				textNewline :
 					{
@@ -191,7 +191,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'null'
+							null
 					},
 				textRotation :
 					{
@@ -200,7 +200,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'null'
+							null
 					},
 				visible :
 					{
@@ -209,7 +209,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'true'
+							true
 					}
 			},
 		subclass :

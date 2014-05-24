@@ -29,7 +29,7 @@ if( JOOBJ )
 						type :
 							'Integer',
 						defaultValue :
-							'0'
+							0
 					},
 				check :
 					{
@@ -38,7 +38,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				inline :
 					{
@@ -47,7 +47,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				root :
 					{

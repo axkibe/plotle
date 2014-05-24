@@ -29,7 +29,7 @@ if( JOOBJ )
 							'Object',
 						defaultValue :
 							// by default determined from filePath
-							'null'
+							null
 					},
 				coding :
 					{
@@ -39,7 +39,7 @@ if( JOOBJ )
 							'String',
 						defaultValue :
 							// by default determined from file extension
-							'undefined'
+							undefined
 					},
 				data :
 					{
@@ -48,7 +48,7 @@ if( JOOBJ )
 						type :
 							'Object',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				devel :
 					{
@@ -57,7 +57,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				joobjSrcPath :
 					{
@@ -66,7 +66,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				gzip :
 					{
@@ -75,7 +75,7 @@ if( JOOBJ )
 						type :
 							'Object',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				filePath :
 					{
@@ -93,7 +93,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				inBundle :
 					{
@@ -102,7 +102,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				inTestPad :
 					{
@@ -111,7 +111,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				isJoobj :
 					{
@@ -120,7 +120,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				maxage :
 					{
@@ -139,7 +139,7 @@ if( JOOBJ )
 							'String',
 						defaultValue :
 							// by default determined from file extension
-							'undefined'
+							undefined
 					},
 				postProcessor :
 					{
@@ -148,7 +148,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined'
+							undefined
 					}
 			},
 		node :

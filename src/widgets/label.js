@@ -42,7 +42,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'null',
+							null,
 						assign :
 							null
 					},
@@ -60,7 +60,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null',
+							null,
 						assign :
 							null
 					},
@@ -71,7 +71,7 @@ if( JOOBJ )
 						type :
 							'Font',
 						defaultValue :
-							'null'
+							null
 					},
 				mark :
 					{
@@ -80,7 +80,7 @@ if( JOOBJ )
 						type :
 							'Mark',
 						defaultValue :
-							'null',
+							null,
 						assign :
 							null
 					},
@@ -91,7 +91,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'null'
+							null
 					},
 				path :
 					{
@@ -100,7 +100,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							null
 					},
 				superFrame :
 					{
@@ -109,7 +109,7 @@ if( JOOBJ )
 						type :
 							'Rect',
 						defaultValue :
-							'null'
+							null
 					},
 				text :
 					{
@@ -125,7 +125,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'true'
+							true
 					}
 			},
 		subclass :

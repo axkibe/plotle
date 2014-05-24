@@ -42,7 +42,7 @@ if( JOOBJ )
 						type :
 							'Point',
 						defaultValue :
-							'null'
+							null
 					},
 				toItemPath :
 					{
@@ -58,7 +58,7 @@ if( JOOBJ )
 						type :
 							'Point',
 						defaultValue :
-							'null'
+							null
 					},
 				// FIXME rename
 				// FIXME make a defined state list
@@ -76,7 +76,7 @@ if( JOOBJ )
 						type :
 							'Point',
 						defaultValue :
-							'null'
+							null
 					}
 			}
 	};

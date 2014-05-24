@@ -48,7 +48,6 @@ var
 	Validator =
 		require( './validator' );
 
-// Code
 /*
 | Shorthanding Shorthands.
 */
@@ -153,7 +152,9 @@ Gen.prototype._init =
 		attrList,
 		constructorList =
 			[ ],
+		defaultValue,
 		jAttr,
+		jdv,
 		joobj =
 			this.joobj,
 		ut,
@@ -276,17 +277,59 @@ Gen.prototype._init =
 			constructorList.push( name );
 		}
 
+		defaultValue = null;
+
+		if( Object.keys( jAttr ).indexOf( 'defaultValue' ) >= 0 )
+		{
+			jdv =
+				jAttr.defaultValue;
+
+
+			if( jdv === null )
+			{
+				defaultValue = Null;
+			}
+			else if( jdv === undefined )
+			{
+				defaultValue = Undefined;
+			}
+			else if( jdv === false )
+			{
+				defaultValue = False;
+			}
+			else if( jdv === true )
+			{
+				defaultValue = True;
+			}
+			else if( typeof( jdv ) === 'number' )
+			{
+				defaultValue = NumberLiteral( jAttr.defaultValue );
+			}
+			else if( Jools.isString( jdv ) )
+			{
+				if( jdv[ 0 ] !== "'" )
+				{
+					throw new Error(
+						'invalid default Value: ' + jdv
+					);
+				}
+
+				defaultValue =
+					StringLiteral( jdv.substr( 1, jdv.length - 2 ) );
+			}
+		}
+
 		attr =
 		attributes[ name ] =
 			Object.freeze( {
 				allowsNull :
 					jAttr.allowsNull
 					||
-					jAttr.defaultValue === 'null',
+					defaultValue === Null,
 				allowsUndefined :
 					jAttr.allowsUndefined
 					||
-					jAttr.defaultValue === 'undefined',
+					defaultValue === Undefined,
 				assign :
 					assign,
 				comment :
@@ -294,7 +337,7 @@ Gen.prototype._init =
 				concerns :
 					jAttr.concerns,
 				defaultValue :
-					jAttr.defaultValue,
+					defaultValue,
 				json :
 					jAttr.json,
 				name :
@@ -1533,7 +1576,7 @@ Gen.prototype.genCreatorDefaults =
 			continue;
 		}
 
-		if( attr.defaultValue )
+		if( attr.defaultValue !== null )
 		{
 			block =
 				block
@@ -1545,7 +1588,7 @@ Gen.prototype.genCreatorDefaults =
 					Block( )
 					.Assign(
 						Var( attr.vName ),
-						Term( attr.defaultValue )
+						attr.defaultValue
 					)
 				);
 		}

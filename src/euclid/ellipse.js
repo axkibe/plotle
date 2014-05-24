@@ -63,7 +63,7 @@ if( JOOBJ )
 						type :
 							'Point',
 						defaultValue :
-							'null',
+							null,
 						assign :
 							'_gradientPC'
 					},
@@ -74,7 +74,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'null',
+							null,
 						assign :
 							'_gradientR0'
 					},
@@ -85,7 +85,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'null',
+							null,
 						assign :
 							'_gradientR1'
 					}

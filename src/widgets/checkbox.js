@@ -50,7 +50,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				designFrame :
 					{
@@ -67,7 +67,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
 				hover :
 					{
@@ -76,7 +76,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null',
+							null,
 						concerns :
 							{
 								func :
@@ -96,7 +96,7 @@ if( JOOBJ )
 							'Mark',
 						// FIXME do not allow null
 						defaultValue :
-							'null',
+							null,
 						assign :
 							null
 					},
@@ -107,7 +107,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							null
 					},
 				superFrame :
 					{
@@ -116,7 +116,7 @@ if( JOOBJ )
 						type :
 							'Rect',
 						defaultValue :
-							'null'
+							null
 					},
 				style :
 					{
@@ -133,7 +133,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'true'
+							true
 					}
 			},
 		subclass :

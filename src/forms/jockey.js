@@ -70,7 +70,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				spaceTag :
 					{
@@ -79,7 +79,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				username :
 					{
@@ -88,7 +88,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				view :
 					{

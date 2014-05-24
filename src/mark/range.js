@@ -83,7 +83,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'null'
+							null
 					}
 			}
 	};

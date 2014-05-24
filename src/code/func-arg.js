@@ -41,7 +41,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					}
 			},
 		node :

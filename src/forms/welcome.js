@@ -51,7 +51,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							null
 					},
 				mark :
 					{
@@ -70,7 +70,7 @@ if( JOOBJ )
 									]
 							},
 						defaultValue :
-							'null'
+							null
 					},
 				path :
 					{
@@ -79,7 +79,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				spaceUser :
 					{
@@ -88,7 +88,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined',
+							undefined,
 						assign :
 							null
 					},
@@ -99,7 +99,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined',
+							undefined,
 						assign :
 							null
 					},
@@ -110,7 +110,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				view :
 					{
@@ -124,7 +124,7 @@ if( JOOBJ )
 									'sizeOnly'
 							},
 						defaultValue :
-							'undefined'
+							undefined
 					}
 			},
 		subclass :

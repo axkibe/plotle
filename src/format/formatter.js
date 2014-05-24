@@ -1622,16 +1622,14 @@ formatExpression =
 
 	if( subtext === null || textLen( subtext ) > MAX_TEXT_WIDTH )
 	{
-		subtext =
-			formatter( subcontext, expr );
+		subtext = formatter( subcontext, expr );
 	}
 
 	text += subtext;
 
 	if( bracket )
 	{
-		text +=
-			context.sep + context.tab + ')';
+		text += context.sep + context.tab + ')';
 	}
 
 	return text;

@@ -53,7 +53,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				hover :
 					{
@@ -62,7 +62,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				mark :
 					{
@@ -78,7 +78,7 @@ if( JOOBJ )
 									[ 'mark' ]
 							},
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				path :
 					{
@@ -87,7 +87,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				spaceUser :
 					{
@@ -96,7 +96,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				spaceTag :
 					{
@@ -105,7 +105,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				// FIXME remove
 				traitSet :
@@ -117,7 +117,7 @@ if( JOOBJ )
 						assign :
 							null,
 						defaultValue :
-							'null'
+							null
 					},
 				view :
 					{
@@ -126,7 +126,7 @@ if( JOOBJ )
 						type :
 							'View',
 						defaultValue :
-							'undefined'
+							undefined
 					}
 			},
 		init :

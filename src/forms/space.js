@@ -49,7 +49,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							null
 					},
 				mark :
 					{
@@ -68,7 +68,7 @@ if( JOOBJ )
 									]
 							},
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				path :
 					{
@@ -77,7 +77,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				spaceUser :
 					{
@@ -86,7 +86,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				spaceTag :
 					{
@@ -95,7 +95,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				username :
 					{
@@ -104,7 +104,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null',
+							null,
 						assign :
 							null
 					},
@@ -120,7 +120,7 @@ if( JOOBJ )
 									'sizeOnly'
 							},
 						defaultValue :
-							'undefined'
+							undefined
 					}
 			},
 		subclass :

@@ -159,13 +159,6 @@ var _checkAttribute =
 		{
 			case 'defaultValue' :
 
-				if ( !Jools.isString( value ) )
-				{
-					throw new Error(
-						'defaultValue must be a string literal'
-					);
-				}
-
 				break;
 
 			case 'allowsNull' :

@@ -31,7 +31,7 @@ if( JOOBJ )
 						type :
 							'Block',
 						defaultValue :
-							'null'
+							null
 					}
 			},
 		node :

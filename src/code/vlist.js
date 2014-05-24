@@ -36,7 +36,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							null
 					}
 			},
 		twig :

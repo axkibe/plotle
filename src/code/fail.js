@@ -31,7 +31,7 @@ if( JOOBJ )
 						type :
 							'Object',
 						defaultValue :
-							'null'
+							null
 					}
 			},
 		node :

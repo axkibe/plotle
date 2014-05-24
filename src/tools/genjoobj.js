@@ -148,6 +148,11 @@ for(
 	inFilename =
 		listing.list[ a ];
 
+	Jools.log(
+		'genjoobj',
+		'Reading ' + inFilename
+	);
+
 	input =
 		fs.readFileSync(
 			inFilename,

@@ -49,7 +49,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				action :
 					{
@@ -58,7 +58,7 @@ if( JOOBJ )
 						type :
 							'Action',
 						defaultValue :
-							'null'
+							null
 					},
 				hover :
 					{
@@ -67,7 +67,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'null'
+							null
 					},
 				mark :
 					{
@@ -76,7 +76,7 @@ if( JOOBJ )
 						type :
 							'Mark',
 						defaultValue :
-							'null'
+							null
 					},
 				mode :
 					{
@@ -85,7 +85,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				path :
 					{
@@ -94,7 +94,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				spaceUser :
 					{
@@ -103,7 +103,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				spaceTag :
 					{
@@ -112,7 +112,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				username :
 					{
@@ -121,7 +121,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				view :
 					{
@@ -135,7 +135,7 @@ if( JOOBJ )
 									'sizeOnly'
 							},
 						defaultValue :
-							'null'
+							null
 					}
 			},
 		subclass :

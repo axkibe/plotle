@@ -107,7 +107,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				spaceTag :
 					{
@@ -116,7 +116,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					},
 				username :
 					{
@@ -125,7 +125,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'null'
+							null
 					}
 			},
 		subclass :

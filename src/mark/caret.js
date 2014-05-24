@@ -62,7 +62,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'null'
+							null
 					},
 				focus :
 					{
@@ -71,7 +71,7 @@ if( JOOBJ )
 						type :
 							'Boolean',
 						defaultValue :
-							'true'
+							true
 					}
 			},
 		init :

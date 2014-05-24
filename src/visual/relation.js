@@ -76,7 +76,7 @@ if( JOOBJ )
 							null,
 						defaultValue :
 							// FIXME undefined
-							'null'
+							null
 					},
 				item1key :
 					{
@@ -103,7 +103,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				pnw :
 					{
@@ -134,7 +134,7 @@ if( JOOBJ )
 						type :
 							'Mark',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				// FIXME remove
 				traitSet :
@@ -146,7 +146,7 @@ if( JOOBJ )
 						assign :
 							null,
 						defaultValue :
-							'null'
+							null
 					},
 				view :
 					{
@@ -155,7 +155,7 @@ if( JOOBJ )
 						type :
 							'View',
 						defaultValue :
-							'undefined'
+							undefined
 					}
 			},
 		init :

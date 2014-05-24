@@ -76,7 +76,7 @@ if( JOOBJ )
 						assign :
 							null,
 						defaultValue :
-							'null'
+							null
 					},
 				mark :
 					{
@@ -96,7 +96,7 @@ if( JOOBJ )
 						type :
 							'Mark',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				path :
 					{
@@ -105,7 +105,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				scrolly :
 					{
@@ -114,7 +114,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				traitSet :
 					{
@@ -125,7 +125,7 @@ if( JOOBJ )
 						assign :
 							null,
 						defaultValue :
-							'null'
+							null
 					},
 				view :
 					{
@@ -134,7 +134,7 @@ if( JOOBJ )
 						type :
 							'View',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				zone :
 					{

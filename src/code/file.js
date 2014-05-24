@@ -31,7 +31,7 @@ if( JOOBJ )
 						type :
 							'Comment',
 						defaultValue :
-							'null'
+							null
 					},
 				preamble :
 					{
@@ -40,7 +40,7 @@ if( JOOBJ )
 						type :
 							'Block',
 						defaultValue :
-							'null'
+							null
 					},
 				capsule :
 					{
@@ -49,7 +49,7 @@ if( JOOBJ )
 						type :
 							'Block',
 						defaultValue :
-							'null'
+							null
 					}
 			},
 		node :

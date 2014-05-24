@@ -54,7 +54,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				fontsize :
 					{
@@ -63,7 +63,7 @@ if( JOOBJ )
 						type :
 							'Number',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				mark :
 					{
@@ -82,7 +82,7 @@ if( JOOBJ )
 						type :
 							'Mark',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				path :
 					{
@@ -91,7 +91,7 @@ if( JOOBJ )
 						type :
 							'Path',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				text :
 					{
@@ -102,7 +102,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue : // TODO
-							'null'
+							null
 					},
 				view :
 					{
@@ -111,7 +111,7 @@ if( JOOBJ )
 						type :
 							'View',
 						defaultValue :
-							'undefined'
+							undefined
 					}
 			},
 /* TODO
