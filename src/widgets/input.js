@@ -162,7 +162,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							"''" //XXX
+							''
 					},
 				visible :
 					{

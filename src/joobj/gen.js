@@ -307,7 +307,7 @@ Gen.prototype._init =
 			}
 			else if( Jools.isString( jdv ) )
 			{
-				if( jdv[ 0 ] !== "'" )
+				if( jdv[ 0 ] === "'" )
 				{
 					throw new Error(
 						'invalid default Value: ' + jdv
@@ -315,7 +315,7 @@ Gen.prototype._init =
 				}
 
 				defaultValue =
-					StringLiteral( jdv.substr( 1, jdv.length - 2 ) );
+					StringLiteral( jdv );
 			}
 		}
 

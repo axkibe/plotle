@@ -129,7 +129,7 @@ if( JOOBJ )
 						type :
 							'String',
 						defaultValue :
-							'\'none\''
+							'none'
 					},
 				mime :
 					{
