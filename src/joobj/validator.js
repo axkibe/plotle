@@ -106,9 +106,11 @@ var _checkConcern =
 	{
 		switch( name )
 		{
+			case 'args' :
 			case 'func' :
 			case 'member' :
-			case 'args' :
+			case 'type' :
+			case 'unit' :
 
 				break;
 

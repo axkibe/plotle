@@ -70,8 +70,8 @@ var
 		Shorthand.Delete,
 	Differs =
 		Shorthand.Differs,
-	Dot =
-		Shorthand.Dot, // FUTURE only from expr
+//	Dot =
+//		Shorthand.Dot, // FUTURE only from expr
 	Equals =
 		Shorthand.Equals,
 	False =
@@ -630,10 +630,7 @@ Gen.prototype.genNodeIncludes =
 			block =
 				block
 				.Assign(
-					Dot(
-						Var( unitName ),
-						typeName
-					),
+					Var( unitName ).Dot( typeName ),
 					Call(
 						Var( 'require' ),
 						StringLiteral(
@@ -819,15 +816,11 @@ Gen.prototype.genConstructor =
 		block =
 			block
 			.Call(
-				Dot(
-					Var( 'Jools' ),
-					'immute'
-				),
+				Var( 'Jools' ).Dot( 'immute' ),
 				Var( 'twig' )
 			)
 			.Call(
-				Var( 'Jools' )
-				.Dot( 'immute' ),
+				Var( 'Jools' ).Dot( 'immute' ),
 				Var( 'ranks' )
 			);
 	}
@@ -914,10 +907,7 @@ Gen.prototype.genConstructor =
 			capsule.VarDec(
 				this.reference,
 				Assign(
-					Dot(
-						Var( this.unit ),
-						this.name
-					),
+					Var( this.unit ).Dot( this.name ),
 					constructor
 				)
 			);
@@ -1935,10 +1925,7 @@ Gen.prototype.genCreatorConcerns =
 								Var( attr.vName ),
 								Null
 							),
-							Dot(
-								Var( attr.vName ),
-								member
-							),
+							Var( attr.vName ).Dot( member ),
 							Null
 						);
 
