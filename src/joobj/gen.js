@@ -347,8 +347,8 @@ Gen.prototype._init =
 				unit :
 					jAttr.unit,
 				// FIXME make this a Var
-				vName :
-					'v_' + name
+				v :
+					Var( 'v_' + name )
 			} );
 	}
 
@@ -712,7 +712,7 @@ Gen.prototype.genConstructor =
 		assign =
 			Assign(
 				This.Dot( attr.assign ),
-				Var( attr.vName )
+				attr.v
 			);
 
 		if( !attr.allowsUndefined )
@@ -725,10 +725,7 @@ Gen.prototype.genConstructor =
 			block =
 				block
 				.If(
-					Differs(
-						Var( attr.vName ),
-						Undefined
-					),
+					Differs( attr.v, Undefined ),
 					Block( )
 					.Append(
 						assign
@@ -792,9 +789,7 @@ Gen.prototype.genConstructor =
 			}
 
 			initCall =
-				initCall.Append(
-					Var( attr.vName )
-				);
+				initCall.Append( ( attr.v ) );
 		}
 
 		block =
@@ -895,7 +890,7 @@ Gen.prototype.genConstructor =
 
 				constructor =
 					constructor.Arg(
-						attr.vName,
+						attr.v.name,
 						attr.comment
 					);
 		}
@@ -989,7 +984,7 @@ Gen.prototype.genCreatorVariables =
 
 	for( name in this.attributes )
 	{
-		varList.push( this.attributes[ name ].vName );
+		varList.push( this.attributes[ name ].v.name );
 	}
 
 	varList.push( 'inherit' );
@@ -1080,7 +1075,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		receiver =
 			receiver
 			.Assign(
-				Var( attr.vName ),
+				attr.v,
 				This.Dot ( attr.assign )
 			);
 	}
@@ -1185,7 +1180,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					Block( )
 					.Assign(
-						Var( attr.vName ),
+						attr.v,
 						Var( 'arg' )
 					)
 				)
@@ -1571,15 +1566,9 @@ Gen.prototype.genCreatorDefaults =
 			block =
 				block
 				.If(
-					Equals(
-						Var( attr.vName ),
-						Undefined
-					),
+					Equals( attr.v, Undefined ),
 					Block( )
-					.Assign(
-						Var( attr.vName ),
-						attr.defaultValue
-					)
+					.Assign( attr.v, attr.defaultValue )
 				);
 		}
 	}
@@ -1632,10 +1621,7 @@ Gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Equals(
-						Var( attr.vName ),
-						Undefined
-					),
+					Equals( attr.v, Undefined ),
 					Block( )
 					.Fail( 'undefined attribute ' + name )
 				);
@@ -1645,10 +1631,7 @@ Gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Equals(
-						Var( attr.vName ),
-						Null
-					),
+					Equals( attr.v, Null ),
 					Block( )
 					.Fail( 'attribute ' + name + ' must not be null.' )
 				);
@@ -1670,31 +1653,19 @@ Gen.prototype.genCreatorChecks =
 		if( attr.allowsNull && !attr.allowsUndefined )
 		{
 			cond =
-				Differs(
-					Var( attr.vName ),
-					Null
-				);
+				Differs( attr.v, Null );
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				Differs(
-					Var( attr.vName ),
-					Undefined
-				);
+				Differs( attr.v, Undefined );
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
 				And(
-					Differs(
-						Var( attr.vName ),
-						Null
-					),
-					Differs(
-						Var( attr.vName ),
-						Undefined
-					)
+					Differs( attr.v, Null ),
+					Differs( attr.v, Undefined )
 				);
 		}
 		else
@@ -1709,9 +1680,7 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					Differs(
-						Typeof(
-							Var( attr.vName )
-						),
+						Typeof( attr.v ),
 						StringLiteral( 'boolean' )
 					);
 
@@ -1722,17 +1691,15 @@ Gen.prototype.genCreatorChecks =
 				tcheck =
 					Or(
 						Differs(
-							Typeof(
-								Var( attr.vName )
-							),
+							Typeof( attr.v ),
 							StringLiteral( 'number' )
 						),
 						Differs(
 							Call(
 								Var( 'Math' ).Dot( 'floor' ),
-								Var( attr.vName )
+								attr.v
 							),
-							Var( attr.vName )
+							attr.v
 						)
 					);
 
@@ -1742,9 +1709,7 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					Differs(
-						Typeof(
-							Var( attr.vName )
-						),
+						Typeof( attr.v ),
 						StringLiteral( 'number' )
 					);
 
@@ -1756,14 +1721,12 @@ Gen.prototype.genCreatorChecks =
 				tcheck =
 					And(
 						Differs(
-							Typeof(
-								Var( attr.vName )
-							),
+							Typeof( attr.v ),
 							StringLiteral( 'string' )
 						),
 						Not(
 							Instanceof(
-								Var( attr.vName ),
+								attr.v,
 								Var( 'String' )
 							)
 						)
@@ -1775,7 +1738,7 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					Differs(
-						Var( attr.vName ).Dot( 'reflect' ),
+						attr.v.Dot( 'reflect' ),
 						StringLiteral( attr.type )
 					);
 
@@ -1851,32 +1814,25 @@ Gen.prototype.genCreatorConcerns =
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ];
+		name = this.attrList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes[ name ];
 
 		if( !attr.concerns )
 		{
 			continue;
 		}
 
-		args =
-			attr.concerns.args;
+		args = attr.concerns.args;
 
-		func =
-			attr.concerns.func;
+		func = attr.concerns.func;
 
-		member =
-			attr.concerns.member;
+		member = attr.concerns.member;
 
 		if( func )
 		{
 			cExpr =
-				Call(
-					Term( func )
-				);
+				Call( Term( func ) ); // XXX
 
 			for(
 				b = 0, bZ = args.length;
@@ -1886,8 +1842,7 @@ Gen.prototype.genCreatorConcerns =
 			{
 				// FIXME, make a gen.getCreatorVarName func
 
-				bAttr =
-					this.attributes[ args[ b ] ];
+				bAttr = this.attributes[ args[ b ] ];
 
 				if( !bAttr )
 				{
@@ -1897,9 +1852,7 @@ Gen.prototype.genCreatorConcerns =
 				}
 
 				cExpr =
-					cExpr.Append(
-						Var( bAttr.vName )
-					);
+					cExpr.Append( bAttr.v );
 			}
 		}
 		else
@@ -1921,11 +1874,8 @@ Gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						Condition(
-							Differs(
-								Var( attr.vName ),
-								Null
-							),
-							Var( attr.vName ).Dot( member ),
+							Differs( attr.v, Null ),
+							attr.v.Dot( member ),
 							Null
 						);
 
@@ -1934,25 +1884,22 @@ Gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						Condition(
-							Differs(
-								Var( attr.vName ),
-								Undefined
-							),
-							Var( attr.vName ).Dot( member ),
+							Differs( attr.v, Undefined ),
+							attr.v.Dot( member ),
 							Null
 						);
 				}
 				else
 				{
 					cExpr =
-						Var( attr.vName ).Dot( member );
+						attr.v.Dot( member );
 				}
 			}
 			else
 			{
 				cExpr =
 					Call(
-						Var( attr.vName ).Dot( member )
+						attr.v.Dot( member )
 					);
 
 				for(
@@ -1972,19 +1919,14 @@ Gen.prototype.genCreatorConcerns =
 					}
 
 					cExpr =
-						cExpr.Append(
-							Var( bAttr.vName )
-						);
+						cExpr.Append( bAttr.v );
 				}
 			}
 		}
 
 		block =
 			block
-			.Assign(
-				Var( attr.vName  ),
-				cExpr
-			);
+			.Assign( attr.v, cExpr );
 	}
 
 	return block;
@@ -2039,10 +1981,7 @@ Gen.prototype.genCreatorUnchanged =
 			cond =
 				And(
 					cond,
-					Equals(
-						Var( attr.vName ),
-						Null
-					)
+					Equals( attr.v, Null )
 				);
 
 			continue;
@@ -2062,7 +2001,7 @@ Gen.prototype.genCreatorUnchanged =
 
 				ceq =
 					Equals(
-						Var( attr.vName ),
+						attr.v,
 						Var( 'inherit' ).Dot( attr.assign )
 					);
 
@@ -2074,7 +2013,7 @@ Gen.prototype.genCreatorUnchanged =
 				{
 					ceq =
 						Call(
-							Var( attr.vName ).Dot( 'equals' ),
+							attr.v.Dot( 'equals' ),
 							Var( 'inherit' ).Dot( attr.assign )
 						);
 				}
@@ -2083,13 +2022,13 @@ Gen.prototype.genCreatorUnchanged =
 					ceq =
 						Or(
 							Equals(
-								Var( attr.vName ),
+								attr.v,
 								Var( 'inherit' ).Dot( attr.assign )
 							),
 							And(
-								Var( attr.vName ),
+								attr.v,
 								Call(
-									Var( attr.vName ).Dot( 'equals' ),
+									attr.v.Dot( 'equals' ),
 									Var( 'inherit' ).Dot( attr.assign )
 								)
 							)
@@ -2196,9 +2135,7 @@ Gen.prototype.genCreatorReturn =
 					this.attributes[ name ];
 
 				call =
-					call.Append(
-						Var( attr.vName )
-					);
+					call.Append( attr.v );
 		}
 	}
 
@@ -2299,7 +2236,7 @@ Gen.prototype.genFromJSONCreatorVariables =
 			continue;
 		}
 
-		varList.push( attr.vName );
+		varList.push( attr.v.name );
 	}
 
 	varList.push( 'arg' );
@@ -2448,10 +2385,7 @@ Gen.prototype.genFromJSONCreatorParser =
 
 		caseBlock =
 			Block( )
-			.Assign(
-				Var( attr.vName ),
-				arg
-			);
+			.Assign( attr.v, arg);
 
 		switchExpr =
 			switchExpr
@@ -2700,11 +2634,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 				}
 				else
 				{
-					call =
-						call
-						.Append(
-							Var( attr.vName )
-						);
+					call = call.Append( attr.v );
 				}
 		}
 	}
