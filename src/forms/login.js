@@ -59,8 +59,12 @@ if( JOOBJ )
 							'the users mark',
 						concerns :
 							{
+								unit :
+									'Forms',
+								type :
+									'Form',
 								func :
-									'Forms.Form.concernsMark',
+									'concernsMark',
 								args :
 									[
 										'mark',
