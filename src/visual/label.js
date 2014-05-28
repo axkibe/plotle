@@ -102,9 +102,12 @@ if( JOOBJ )
 							'the users mark',
 						concerns :
 							{
+								unit :
+									'Visual',
+								type :
+									'Item',
 								func :
-									// FUTURE this is kinda not nice
-									'Visual.Item && Visual.Item.concernsMark',
+									'concernsMark',
 								args :
 									[
 										'mark',

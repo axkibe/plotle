@@ -150,6 +150,7 @@ Gen.prototype._init =
 		attributes =
 			{ },
 		attrList,
+		concerns,
 		constructorList =
 			[ ],
 		defaultValue,
@@ -179,25 +180,19 @@ Gen.prototype._init =
 	twigMap =
 		null;
 
-	this.hasJSON =
-		!!joobj.json;
+	this.hasJSON = !!joobj.json;
 
-	this.init =
-		joobj.init;
+	this.init = joobj.init;
 
-	this.name =
-		joobj.name;
+	this.name = joobj.name;
 
-	this.node =
-		!!joobj.node;
+	this.node = !!joobj.node;
 
-	this.singleton =
-		!!joobj.singleton;
+	this.singleton = !!joobj.singleton;
 
 	if( joobj.subclass )
 	{
-		subParts =
-			joobj.subclass.split( '.' );
+		subParts = joobj.subclass.split( '.' );
 
 		if( subParts.length >=  2 )
 		{
@@ -208,12 +203,10 @@ Gen.prototype._init =
 
 			if( !units[ subParts[ 0 ] ] )
 			{
-				units[ subParts[ 0 ] ] =
-					{ };
+				units[ subParts[ 0 ] ] = { };
 			}
 
-			units[ subParts[ 0 ] ][ subParts[ 1 ] ] =
-				true;
+			units[ subParts[ 0 ] ][ subParts[ 1 ] ] = true;
 
 			this.subclass =
 				Var( subParts[ 0 ] )
@@ -221,40 +214,33 @@ Gen.prototype._init =
 		}
 		else
 		{
-			this.subclass =
-				Var( joobj.subclass );
+			this.subclass = Var( joobj.subclass );
 		}
 	}
 
-	this.tag =
-		// FIXME
-		NumberLiteral( 8833 );
-//		NumberLiteral( Math.floor( Math.random( ) * 1000000000 ) );
+	this.tag = NumberLiteral( 8833 );
+	// FIXME
+	// NumberLiteral( Math.floor( Math.random( ) * 1000000000 ) );
 
-	this.unit =
-		joobj.unit;
+	this.unit = joobj.unit;
 
 	for( name in joobj.attributes || { } )
 	{
-		jAttr =
-			joobj.attributes[ name ];
+		jAttr = joobj.attributes[ name ];
 
 		if( jAttr.json )
 		{
-			this.hasJSON =
-				true;
+			this.hasJSON = true;
 		}
 
 		if( jAttr.unit )
 		{
 			if( !units[ jAttr.unit ] )
 			{
-				units[ jAttr.unit ] =
-					{ };
+				units[ jAttr.unit ] = { };
 			}
 
-			units[ jAttr.unit ][ jAttr.type ] =
-				true;
+			units[ jAttr.unit ][ jAttr.type ] = true;
 		}
 
 		assign =
@@ -279,11 +265,24 @@ Gen.prototype._init =
 
 		defaultValue = null;
 
+		concerns = jAttr.concerns;
+
+		if( concerns && concerns.unit )
+		{
+			// TODO check in validator that type is also set
+			//      if unit is set
+			if( !units[ concerns.unit ] )
+			{
+				units[ concerns.unit ] = { };
+			}
+
+			units[ concerns.unit ][ concerns.type ] = true;
+		}
+
+		// tests also if defaultValue is defined to be `undefined`
 		if( Object.keys( jAttr ).indexOf( 'defaultValue' ) >= 0 )
 		{
-			jdv =
-				jAttr.defaultValue;
-
+			jdv = jAttr.defaultValue;
 
 			if( jdv === null )
 			{
@@ -346,7 +345,6 @@ Gen.prototype._init =
 					jAttr.type,
 				unit :
 					jAttr.unit,
-				// FIXME make this a Var
 				v :
 					Var( 'v_' + name )
 			} );
@@ -1789,6 +1787,9 @@ Gen.prototype.genCreatorChecks =
 
 /*
 | Generates the creators concerns.
+|
+| 'func' is a call to a function
+| 'member' is an access to an attribute ( without call )
 */
 Gen.prototype.genCreatorConcerns =
 	function(
@@ -1804,9 +1805,12 @@ Gen.prototype.genCreatorConcerns =
 		bZ,
 		bAttr,
 		cExpr,
+		concerns,
 		func,
 		member,
-		name;
+		name,
+		type,
+		unit;
 
 	for(
 		a = 0, aZ = this.attrList.length;
@@ -1818,21 +1822,37 @@ Gen.prototype.genCreatorConcerns =
 
 		attr = this.attributes[ name ];
 
-		if( !attr.concerns )
+		concerns = attr.concerns;
+
+		if( !concerns )
 		{
 			continue;
 		}
 
-		args = attr.concerns.args;
+		unit = concerns.unit;
 
-		func = attr.concerns.func;
+		type = concerns.type;
 
-		member = attr.concerns.member;
+		args = concerns.args;
+
+		func = concerns.func;
+
+		member = concerns.member;
 
 		if( func )
 		{
-			cExpr =
-				Call( Term( func ) ); // XXX
+			if( unit )
+			{
+				cExpr =
+					Call(
+						Var( unit ).Dot( type ).Dot( func )
+					);
+			}
+			else
+			{
+				cExpr =
+					Call( Term( func ) ); // XXX
+			}
 
 			for(
 				b = 0, bZ = args.length;
@@ -1840,7 +1860,7 @@ Gen.prototype.genCreatorConcerns =
 				b++
 			)
 			{
-				// FIXME, make a gen.getCreatorVarName func
+				// FUTURE, make a gen.getCreatorVarName func
 
 				bAttr = this.attributes[ args[ b ] ];
 
@@ -1851,8 +1871,7 @@ Gen.prototype.genCreatorConcerns =
 					);
 				}
 
-				cExpr =
-					cExpr.Append( bAttr.v );
+				cExpr = cExpr.Append( bAttr.v );
 			}
 		}
 		else
