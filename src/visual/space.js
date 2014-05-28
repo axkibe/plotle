@@ -72,8 +72,12 @@ if( JOOBJ )
 							'Mark',
 						concerns :
 							{
+								unit :
+									'Visual',
+								type :
+									'Space',
 								func :
-									'Space.concernsMark',
+									'concernsMark',
 								args :
 									[ 'mark' ]
 							},

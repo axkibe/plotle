@@ -64,8 +64,12 @@ if( JOOBJ )
 							'the users mark',
 						concerns :
 							{
+								unit :
+									'Visual',
+								type :
+									'Item',
 								func :
-									'Visual.Item.concernsMark',
+									'concernsMark',
 								args :
 									[
 										'mark',

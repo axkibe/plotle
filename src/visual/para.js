@@ -71,8 +71,12 @@ if( JOOBJ )
 							'the users mark',
 						concerns :
 							{
+								unit :
+									'Visual',
+								type :
+									'Para',
 								func :
-									'Para.concernsMark',
+									'concernsMark',
 								args :
 									[
 										'mark',
