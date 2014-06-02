@@ -34,16 +34,8 @@ if( JOOBJ )
 							'Object' // Expression
 					},
 			},
-		// FIXME
 		twig :
-			{
-				'Term' :
-					'Code.Term',
-				'Or' :
-					'Code.Or', //XXX
-				'Var' :
-					'Code.Var',
-			}
+			'expression',
 	};
 }
 

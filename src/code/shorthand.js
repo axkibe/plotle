@@ -93,8 +93,6 @@ Code =
 			require( '../code/string-literal' ),
 		Switch :
 			require( '../code/switch' ),
-		Term :
-			require( '../code/term' ),
 		Typeof :
 			require( '../code/typeof' ),
 		Var :
@@ -650,23 +648,6 @@ ShortHand.Switch =
 		Code.Switch.Create(
 			'statement',
 				statement
-		)
-	);
-};
-
-
-/*
-| Shorthand for creating terms.
-*/
-ShortHand.Term =
-	function(
-		term
-	)
-{
-	return (
-		Code.Term.Create(
-			'term',
-				term
 		)
 	);
 };

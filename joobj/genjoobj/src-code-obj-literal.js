@@ -53,8 +53,6 @@ if( SERVER )
 
 	Code.Or = require( '../../src/code/or' );
 
-	Code.Term = require( '../../src/code/term' );
-
 	Code.Var = require( '../../src/code/var' );
 }
 

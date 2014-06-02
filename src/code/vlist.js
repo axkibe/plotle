@@ -57,8 +57,6 @@ var
 		{
 			Assign :
 				require( './assign' ),
-			Term :
-				require( './term' ),
 			VarDec :
 				require( './var-dec' ),
 		},

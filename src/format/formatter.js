@@ -98,8 +98,6 @@ precTable =
 			17,
 		'PreIncrement' :
 			3,
-		'Term' :
-			-1,
 		'Typeof' :
 			4,
 		'StringLiteral' :
@@ -1518,7 +1516,6 @@ formatStatement =
 		case 'PlusAssign' :
 		case 'Return' :
 		case 'StringLiteral' :
-		case 'Term' :
 		case 'Var' :
 
 			return text + ';' + context.sep;
@@ -2095,33 +2092,6 @@ formatPreIncrement =
 };
 
 
-
-
-/*
-| Formats a term.
-|
-| FIXME remove
-*/
-var
-formatTerm =
-	function(
-		context,
-		term
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( term.reflect !== 'Term' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return context.tab + term.term;
-};
-
-
 /*
 | Formats a typeof expression.
 */
@@ -2655,8 +2625,6 @@ exprFormatter =
 			formatPreIncrement,
 		'StringLiteral' :
 			formatStringLiteral,
-		'Term' :
-			formatTerm,
 		'Typeof' :
 			formatTypeof,
 		'Var' :

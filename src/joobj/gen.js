@@ -112,8 +112,6 @@ var
 		Shorthand.StringLiteral,
 	Switch =
 		Shorthand.Switch,
-	Term =
-		Shorthand.Term, // FIXME remove
 	This =
 		Shorthand.Var( 'this' ),
 	True =
@@ -1851,8 +1849,7 @@ Gen.prototype.genCreatorConcerns =
 			else
 			{
 				cExpr =
-//					Call( Term( func ) ); // XXX
-					Call( Var( func ) ); // XXX
+					Call( Var( func ) );
 			}
 
 			for(

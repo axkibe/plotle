@@ -17,8 +17,6 @@ module.exports =
 		'Code.ObjLiteral',
 	'Or' :
 		'Code.Or',
-	'Term' : // TODO
-		'Code.Term',
 	'Var' :
 		'Code.Var'
 };

@@ -35,19 +35,15 @@ if( JOOBJ )
 		node :
 			true,
 		twig :
-			{
-				'Term' :
-					'Code.Term'
-			}
+			'expression',
 	};
 }
 
 
-var
-	Case =
-		require( '../joobj/this' )( module );
-//	Jools =
-//		require( '../jools/jools' );
+var Case;
+
+Case =
+	require( '../joobj/this' )( module );
 
 /*
 | Node export.
