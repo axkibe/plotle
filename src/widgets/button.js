@@ -82,8 +82,12 @@ if( JOOBJ )
 							null,
 						concerns :
 							{
+								unit :
+									'Widgets',
+								type :
+									'Widget',
 								func :
-									'Widgets.Widget.concernsHover',
+									'concernsHover',
 								args :
 									[
 										'hover',

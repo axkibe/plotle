@@ -78,8 +78,12 @@ if( JOOBJ )
 							null,
 						concerns :
 							{
+								unit :
+									'Widgets',
+								type :
+									'Widget',
 								func :
-									'Widgets.Widget.concernsHover',
+									'concernsHover',
 								args :
 									[
 										'hover',
@@ -100,8 +104,12 @@ if( JOOBJ )
 							'the users mark',
 						concerns :
 							{
+								unit :
+									'Widgets',
+								type :
+									'Widget',
 								func :
-									'Widgets.Widget.concernsMark',
+									'concernsMark',
 								args :
 									[
 										'mark',

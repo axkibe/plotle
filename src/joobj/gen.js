@@ -1851,8 +1851,8 @@ Gen.prototype.genCreatorConcerns =
 			else
 			{
 				cExpr =
-//					Call( Term( func ) ); // XXX
-					Call( Var( func ) ); // XXX
+					Call( Term( func ) ); // XXX
+//					Call( Var( func ) ); // XXX
 			}
 
 			for(
