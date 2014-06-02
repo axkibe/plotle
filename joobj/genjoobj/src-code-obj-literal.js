@@ -39,7 +39,23 @@ if( SERVER )
 
 	Code = { };
 
+	Code.And = require( '../../src/code/and' );
+
+	Code.Assign = require( '../../src/code/assign' );
+
+	Code.Call = require( '../../src/code/call' );
+
+	Code.Func = require( '../../src/code/func' );
+
+	Code.New = require( '../../src/code/new' );
+
+	Code.ObjLiteral = require( '../../src/code/obj-literal' );
+
+	Code.Or = require( '../../src/code/or' );
+
 	Code.Term = require( '../../src/code/term' );
+
+	Code.Var = require( '../../src/code/var' );
 }
 
 
@@ -51,8 +67,7 @@ Code.ObjLiteral =
 	function(
 		tag, // magic cookie
 		twig, // twig
-		ranks, // twig ranks
-		v_path // the path
+		ranks // twig ranks
 	)
 {
 /**/if( CHECK )
@@ -62,8 +77,6 @@ Code.ObjLiteral =
 /**/		throw new Error( );
 /**/	}
 /**/}
-
-	this.path = v_path;
 
 	this.twig = twig;
 
@@ -92,8 +105,7 @@ ObjLiteral.prototype.Create =
 		rank,
 		ranks,
 		twig,
-		twigDup,
-		v_path;
+		twigDup;
 
 	if( this !== ObjLiteral )
 	{
@@ -104,8 +116,6 @@ ObjLiteral.prototype.Create =
 		ranks = inherit.ranks;
 
 		twigDup = false;
-
-		v_path = this.path;
 	}
 	else
 	{
@@ -128,15 +138,6 @@ ObjLiteral.prototype.Create =
 
 		switch( arguments[ a ] )
 		{
-			case 'path' :
-
-				if( arg !== undefined )
-				{
-					v_path = arg;
-				}
-
-				break;
-
 			case 'twig:add' :
 
 				if( !twigDup )
@@ -253,43 +254,16 @@ ObjLiteral.prototype.Create =
 		}
 	}
 
-	if( v_path === undefined )
-	{
-		v_path = null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_path === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute path' );
-/**/	}
-/**/
-/**/	if( v_path !== null )
-/**/	{
-/**/		if( v_path.reflect !== 'Path' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
-/**/	}
 /**/}
 
-	if(
-		inherit
-		&&
-		!twigDup
-		&&
-		(
-			v_path === inherit.path
-			||
-			v_path && v_path.equals( inherit.path )
-		)
-	)
+	if( inherit && !twigDup )
 	{
 		return inherit;
 	}
 
-	return new ObjLiteral( 8833, twig, ranks, v_path );
+	return new ObjLiteral( 8833, twig, ranks );
 };
 
 
@@ -347,17 +321,7 @@ ObjLiteral.prototype.equals =
 		return false;
 	}
 
-	return (
-		this.tree === obj.tree
-		&&
-		this.ranks === obj.ranks
-		&&
-		(
-			this.path === obj.path
-			||
-			this.path !== null && this.path.equals( obj.path )
-		)
-	);
+	return this.tree === obj.tree && this.ranks === obj.ranks;
 };
 
 

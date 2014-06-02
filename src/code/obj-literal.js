@@ -22,26 +22,10 @@ if( JOOBJ )
 			'ObjLiteral',
 		unit :
 			'Code',
-		attributes :
-			{
-				// FIXME check if necessary
-				'path' :
-					{
-						comment :
-							'the path',
-						type :
-							'Path',
-						defaultValue :
-							null
-					}
-			},
 		node :
 			true,
 		twig :
-			{
-				'Term' :
-					'Code.Term'
-			}
+			'statement'
 	};
 }
 

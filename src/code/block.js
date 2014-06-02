@@ -27,19 +27,6 @@ if( JOOBJ )
 			'Code',
 		node :
 			true,
-		attributes :
-			{
-				// FIXME check if necessary
-				'path' :
-					{
-						comment :
-							'the path',
-						type :
-							'Path',
-						defaultValue :
-							null
-					}
-			},
 		twig :
 			{
 				'Check' :
@@ -82,8 +69,6 @@ var
 				require( './return' ),
 			StringLiteral :
 				require( './string-literal' ),
-			Term :
-				require( './term' ),
 			VarDec :
 				require( './var-dec' ),
 		},
@@ -355,28 +340,6 @@ Block.prototype.Return =
 
 	return this.Append( expr );
 };
-
-
-/*
-| Returns the block with a term appended.
-*/
-Block.prototype.Term =
-	function(
-		term
-	)
-{
-	if( term.reflect !== 'Term' )
-	{
-		term =
-			Code.Term.Create(
-				'term',
-					term
-			);
-	}
-
-	return this.Append( term );
-};
-
 
 
 /*
