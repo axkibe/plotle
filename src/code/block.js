@@ -80,6 +80,8 @@ var
 				require( './new' ),
 			Return :
 				require( './return' ),
+			StringLiteral :
+				require( './string-literal' ),
 			Term :
 				require( './term' ),
 			VarDec :
@@ -238,9 +240,9 @@ Block.prototype.Fail =
 	else if( Jools.isString( message ) )
 	{
 		message =
-			Code.Term.Create(
-				'term',
-					'\'' + message + '\''
+			Code.StringLiteral.Create(
+				'string',
+					message
 			);
 	}
 
