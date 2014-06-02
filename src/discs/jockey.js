@@ -68,8 +68,12 @@ if( JOOBJ )
 							'the users mark',
 						concerns :
 							{
+								unit :
+									'Discs',
+								type :
+									'Jockey',
 								func :
-									'Discs.Jockey.concernsMark',
+									'concernsMark',
 								args :
 									[
 										'mark'
