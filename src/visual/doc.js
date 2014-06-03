@@ -98,7 +98,9 @@ if( JOOBJ )
 					}
 			},
 		init :
-			[ ],
+			[
+				'twigDup'
+			],
 		json :
 			true,
 		twig :
@@ -137,19 +139,27 @@ var
 | Initializer.
 */
 Doc.prototype._init =
-	function( )
+	function(
+		twigDup
+	)
 {
+	var
+		twig,
+		ranks;
+
 	if( !this.view )
 	{
-		// if abstract don't initialize anything
+		// if abstract nothing is initialized
 		return;
 	}
 
-	var
-		ranks =
-			this.ranks,
-		twig =
-			Jools.copy( this.twig ); // TODO only when not copied
+	ranks =
+		this.ranks;
+
+	twig =
+		twigDup
+			? this.twig
+			: Jools.copy( this.twig );
 
 	this._$pnws =
 		null;

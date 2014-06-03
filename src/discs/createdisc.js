@@ -150,19 +150,11 @@ if( JOOBJ )
 			'Discs.Disc',
 		init :
 			[
-				'inherit'
+				'inherit',
+				'twigDup'
 			],
 		twig :
-			{
-				'Button' :
-					'Widgets.Button',
-				'CheckBox' :
-					'Widgets.Checkbox',
-				'Input' :
-					'Widgets.Input',
-				'Label' :
-					'Widgets.Label'
-			}
+			'form-widgets'
 	};
 }
 
@@ -177,9 +169,14 @@ var
 */
 CreateDisc.prototype._init =
 	function(
-		inherit
+		inherit,
+		twigDup
 	)
 {
+	var
+		twig,
+		ranks;
+
 	if( !this.path )
 	{
 		return;
@@ -190,11 +187,13 @@ CreateDisc.prototype._init =
 		inherit
 	);
 
-	var
-		twig =
-			Jools.copy( this.twig ), // TODO
-		ranks =
-			this.ranks;
+	twig =
+		twigDup
+			?  this.twig
+			: Jools.copy( this.twig );
+
+	ranks =
+		this.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;
