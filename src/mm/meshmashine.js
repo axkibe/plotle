@@ -51,11 +51,6 @@ if( SERVER )
 		require( './sign' );
 }
 
-// FIXME remove
-var
-	is =
-		Jools.is;
-
 /*
 | Transformation.
 | FIXME move elsewhere.
@@ -149,7 +144,8 @@ var tfxSign =
 	}
 
 	if(
-		!is( sign.path ) ||
+		sign.path === undefined
+		||
 		sign.path.length === 0
 	)
 	{
@@ -472,7 +468,7 @@ TFXOps.split =
 	// FIXME form ranks
 	// simpler case signature is only one point
 	if(
-		!is( sign.at2 )
+		sign.at2 === undefined
 	)
 	{
 //		Jools.log(
@@ -588,7 +584,7 @@ TFXOps.join =
 //		sign
 //	);
 
-	if (!is(sign.at2))
+	if( sign.at2 === undefined )
 	{
 		return new Sign(
 			sign,
@@ -630,7 +626,7 @@ TFXOps.rank =
 		return sign;
 	}
 
-	if( !is( sign.rank ) )
+	if( sign.rank === undefined )
 	{
 		return sign;
 	}
@@ -678,9 +674,12 @@ TFXOps.set =
 	)
 {
 	if(
-		!is(sign.rank) ||
-		!is(trg.rank) ||
-		!trg.path ||
+		sign.rank === undefined
+		||
+		trg.rank === undefined
+		||
+		!trg.path
+		||
 		!trg.path.subPathOf( sign.path, - 1 )
 	)
 	{
@@ -766,8 +765,9 @@ TFXOps.insert =
 //	);
 
 	if(
-		!is( trg.at1 ) ||
-		!is( trg.at2 )
+		trg.at1 === undefined
+		||
+		trg.at2 === undefined
 	)
 	{
 		throw new Error( );
@@ -781,7 +781,7 @@ TFXOps.insert =
 	var len =
 		src.val.length;
 
-	if( is( sign.at2 ) )
+	if( sign.at2 !== undefined )
 	{
 		return new Sign(
 			sign,
@@ -821,19 +821,18 @@ TFXOps.remove =
 	}
 
 	if(
-		!is(src.at1)
+		src.at1 === undefined
 		||
-		!is(src.at2)
+		src.at2 === undefined
 	)
 	{
 		throw new Error( );
 	}
 
-	var len =
-		src.at2 - src.at1;
+	var len = src.at2 - src.at1;
 
 	// simpler case signature is only one point
-	if( !is( sign.at2 ) )
+	if( sign.at2 === undefined )
 	{
 		// src (removed span)      ######
 		// sign, case0:        +   '    '      (sign to left,  no effect)
