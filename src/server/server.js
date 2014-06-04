@@ -2604,7 +2604,8 @@ Server.prototype.cmdGet =
 	}
 
 	if(
-		!Jools.is( this.$users[ user ] ) ||
+		this.$users[ user ] === undefined
+		||
 		passhash !== this.$users[ user ].pass
 	)
 	{
@@ -2612,12 +2613,12 @@ Server.prototype.cmdGet =
 	}
 
 	// FIXME dont call it "time"
-	if( !Jools.is( cmd.time ) )
+	if( cmd.time === undefined )
 	{
 		throw Jools.reject( 'time missing' );
 	}
 
-	if( !Jools.is( cmd.path ) )
+	if( cmd.path === undefined )
 	{
 		throw Jools.reject( 'path missing' );
 	}

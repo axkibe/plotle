@@ -118,48 +118,55 @@ Jools.lazyValue(
 	function( )
 	{
 		var
-			is =
-				Jools.is,
-			src =
-				this.src,
-			trg =
-				this.trg,
+			src,
+			trg,
 			type;
+
+		src = this.src;
+
+		trg = this.trg;
 
 		if( trg.proc === 'splice' )
 		{
-			type =
-				'split';
+			type = 'split';
 		}
-		else if( src.proc === 'splice' )
+		else if(
+			src.proc === 'splice'
+		)
 		{
-			type =
-				'join';
+			type = 'join';
 		}
-		else if( is( src.val ) && !is( trg.at1 ) )
+		else if(
+			src.val !== undefined && trg.at1 === undefined
+		)
 		{
-			type =
-				'set';
+			type = 'set';
 		}
-		else if( is( src.val ) && is( trg.at1 ) )
+		else if(
+			src.val !== undefined && trg.at1 !== undefined
+		)
 		{
-			type =
-				'insert';
+			type = 'insert';
 		}
-		else if( is( src.at1 ) && is( src.at2 ) && !is( trg.at1 ) )
+		else if(
+			src.at1 !== undefined
+			&&
+			src.at2 !== undefined
+			&&
+			trg.at1 === undefined
+		)
 		{
-			type =
-				'remove';
+			type = 'remove';
 		}
-		else if( is( trg.rank ) )
+		else if(
+			trg.rank !== undefined
+		)
 		{
-			type =
-				'rank';
+			type = 'rank';
 		}
 		else
 		{
-			type =
-				null;
+			type = null;
 
 			if( Jools.prissy )
 			{
