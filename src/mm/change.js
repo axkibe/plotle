@@ -328,13 +328,13 @@ Change.prototype.set =
 		null;
 
 	Jools.check(
-		!Jools.is( trg.at1 ),
+		trg.at1 === undefined,
 		cm,
 		'trg.at1 must not exist.'
 	);
 
 	Jools.check(
-		Jools.is( src.val ),
+		src.val !== undefined,
 		cm,
 		'src.val missing'
 	);
@@ -358,10 +358,9 @@ Change.prototype.set =
 	save =
 		tree.getPath( trg.path );
 
-	if( !Jools.is( save ) )
+	if( save === undefined )
 	{
-		save =
-			null;
+		save = null;
 	}
 
 	trg =
@@ -383,7 +382,7 @@ Change.prototype.set =
 		);
 
 	// FIXME simplify
-	if( !Jools.is( trg.rank ) )
+	if( trg.rank === undefined )
 	{
 		tree =
 			tree.setPath(
@@ -419,8 +418,7 @@ Change.prototype.set =
 		}
 		else
 		{
-			orank =
-				pivot.rankOf( key );
+			orank = pivot.rankOf( key );
 
 			trg =
 				new Sign(
@@ -446,13 +444,13 @@ Change.prototype.set =
 		}
 		else
 		{
-			tree =
-				pivot;
+			tree = pivot;
 		}
 	}
 
 	if(
-		src === this.src &&
+		src === this.src
+		&&
 		trg === this.trg
 	)
 	{
@@ -861,7 +859,7 @@ Change.prototype.split =
 
 	Jools.check( pivot.ranks, cm, 'pivot has no ranks' );
 
-	if( Jools.is( trg.path ) )
+	if( trg.path !== undefined )
 	{
 		vKey =
 			trg.path.get( -2 );
@@ -971,36 +969,35 @@ Change.prototype.rank =
 		src,
 		trg;
 
-	cm =
-		'change.rank';
-	src =
-		this.src;
-	trg =
-		this.trg;
+	cm = 'change.rank';
+
+	src = this.src;
+
+	trg = this.trg;
 
 	Jools.check(
-		Jools.is(src.path),
-		cm, 'src.path not present'
+		src.path !== undefined,
+		cm,
+		'src.path not present'
 	);
 
 	Jools.check(
-		Jools.is(trg.rank),
-		cm, 'trg.rank not present'
+		trg.rank !== undefined,
+		cm,
+		'trg.rank not present'
 	);
 
-	pivot =
-		tree.getPath( src.path.shorten( 2 ) );
+	pivot = tree.getPath( src.path.shorten( 2 ) );
 
 	Jools.check(
-		Jools.is( pivot.ranks ),
+		pivot.ranks !== undefined,
 		cm,
 		'pivot has no ranks'
 	);
 
-	key =
-		src.path.get( -1 );
-	orank =
-		pivot.rankOf( key );
+	key = src.path.get( -1 );
+
+	orank = pivot.rankOf( key );
 
 	if ( orank < 0 )
 	{
