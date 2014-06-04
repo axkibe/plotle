@@ -586,39 +586,29 @@ Server.prototype.cmdMessage =
 		passhash =
 			cmd.passhash;
 
-	if( !Jools.is( username ) )
+	if( username === undefined )
 	{
-		throw Jools.reject(
-			'user missing'
-		);
+		throw Jools.reject( 'user missing' );
 	}
 
-	if( !Jools.is( passhash ) )
+	if( passhash === undefined )
 	{
-		throw Jools.reject(
-			'passhash missing'
-		);
+		throw Jools.reject( 'passhash missing' );
 	}
 
-	if( !Jools.is( spaceUser ) )
+	if( spaceUser === undefined )
 	{
-		throw Jools.reject(
-			'spaceUser missing'
-		);
+		throw Jools.reject( 'spaceUser missing' );
 	}
 
-	if( !Jools.is( spaceTag ) )
+	if( spaceTag === undefined )
 	{
-		throw Jools.reject(
-			'spaceTag missing'
-		);
+		throw Jools.reject( 'spaceTag missing' );
 	}
 
-	if( !Jools.is( message ) )
+	if( message === undefined )
 	{
-		throw Jools.reject(
-			'message missing'
-		);
+		throw Jools.reject( 'message missing' );
 	}
 
 	if( this.$users[username].pass !== passhash )
@@ -1425,6 +1415,7 @@ Server.prototype.cmdAlter =
 		cmd
 	)
 {
+	// TODO
 	var time =
 		cmd.time;
 
@@ -1446,7 +1437,7 @@ Server.prototype.cmdAlter =
 	var passhash =
 		cmd.passhash;
 
-	if( !Jools.is( username ) )
+	if( username === undefined )
 	{
 		throw Jools.reject( 'user missing' );
 	}
@@ -1456,12 +1447,12 @@ Server.prototype.cmdAlter =
 		throw Jools.reject( 'invalid pass' );
 	}
 
-	if( !Jools.is( spaceUser ) )
+	if( spaceUser === undefined )
 	{
 		throw Jools.reject( 'spaceUser missing' );
 	}
 
-	if( !Jools.is( spaceTag ) )
+	if( spaceTag === undefined )
 	{
 		throw Jools.reject( 'spaceTag missing' );
 	}
@@ -1477,17 +1468,17 @@ Server.prototype.cmdAlter =
 		throw Jools.reject( 'no access' );
 	}
 
-	if( !Jools.is( time ) )
+	if( time === undefined )
 	{
 		throw Jools.reject( 'time missing' );
 	}
 
-	if( !Jools.is( chgX ) )
+	if( chgX === undefined )
 	{
 		throw Jools.reject( 'chgX missing' );
 	}
 
-	if( !Jools.is( cid ) )
+	if( cid === undefined )
 	{
 		throw Jools.reject( 'cid missing' );
 	}
@@ -1500,7 +1491,7 @@ Server.prototype.cmdAlter =
 		space =
 			this.$spaces[ spaceName ];
 
-	if( !Jools.is( space ) )
+	if( space === undefined )
 	{
 		throw Jools.reject( 'unknown space' );
 	}
@@ -1661,12 +1652,12 @@ Server.prototype.cmdAuth =
 		cmd
 	)
 {
-	if( !Jools.is( cmd.user ) )
+	if( cmd.user === undefined )
 	{
 		throw Jools.reject( 'user missing' );
 	}
 
-	if( !Jools.is( cmd.passhash ) )
+	if( cmd.passhash === undefined )
 	{
 		throw Jools.reject( 'passhash missing' );
 	}
@@ -1794,6 +1785,8 @@ Server.prototype.cmdRegister =
 		cmd
 	)
 {
+	// TODO 
+
 	var
 		username =
 			cmd.user;
@@ -1810,22 +1803,22 @@ Server.prototype.cmdRegister =
 		news =
 			cmd.news;
 
-	if( !Jools.is( username ) )
+	if( username === undefined )
 	{
 		return Jools.reject( 'user missing' );
 	}
 
-	if( !Jools.is( passhash ) )
+	if( passhash === undefined )
 	{
 		return Jools.reject( 'passhash missing' );
 	}
 
-	if( !Jools.is( mail ) )
+	if( mail === undefined )
 	{
 		return Jools.reject( 'mail missing' );
 	}
 
-	if( !Jools.is( news ) )
+	if( news === undefined )
 	{
 		return Jools.reject( 'news missing' );
 	}
@@ -2146,12 +2139,12 @@ Server.prototype.cmdUpdate =
 	var mseq =
 		cmd.mseq;
 
-	if( !Jools.is(user) )
+	if( user === undefined )
 	{
 		throw Jools.reject( 'User missing' );
 	}
 
-	if( !Jools.is(passhash) )
+	if( passhash === undefined )
 	{
 		throw Jools.reject( 'Passhash missing' );
 	}
@@ -2161,12 +2154,12 @@ Server.prototype.cmdUpdate =
 		throw Jools.reject( 'Invalid password' );
 	}
 
-	if( !Jools.is( spaceUser ) )
+	if( spaceUser === undefined )
 	{
 		throw Jools.reject( 'spaceUser missing' );
 	}
 
-	if( !Jools.is( spaceTag ) )
+	if( spaceTag === undefined )
 	{
 		throw Jools.reject( 'spaceTag missing' );
 	}
