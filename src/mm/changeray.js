@@ -52,11 +52,10 @@ ChangeRay =
 {
 	var
 		ray =
-		this._$ray =
-			[ ];
+		this._$ray = [ ];
 
 	// no model -> nothing to do
-	if( !Jools.is( model ) )
+	if( model === undefined )
 	{
 		return;
 	}
@@ -85,8 +84,7 @@ ChangeRay =
 				);
 		}
 
-		ray[ a ] =
-			c;
+		ray[ a ] = c;
 	}
 };
 

@@ -252,13 +252,11 @@ Path.prototype.shorten =
 	)
 {
 	var
-		p =
-			this._path.slice( );
+		p = this._path.slice( );
 
-	if( !Jools.is( n ) )
+	if( n === undefined )
 	{
-		n =
-			1;
+		n = 1;
 	}
 
 /**/if( CHECK )
@@ -430,17 +428,15 @@ Path.prototype.subPathOf =
 		len    // the length of this path to consider.
 	)
 {
-	if( !Jools.is( len ) )
+	if( len === undefined )
 	{
-		len =
-			this.length;
+		len = this.length;
 	}
 	else
 	{
 		if( len < 0 )
 		{
-			len +=
-				this.length;
+			len += this.length;
 		}
 
 		if( len < 0 )
@@ -481,11 +477,9 @@ Jools.lazyValue(
 	function( )
 	{
 		var
-			path =
-				this._path,
+			path = this._path,
 
-			b =
-				[ '[ '[ 0 ] ]; // FIXME jshint bug
+			b = [ '[ '[ 0 ] ]; // FIXME jshint bug
 
 		for(
 			var a = 0, aZ = this.length;
@@ -499,9 +493,7 @@ Jools.lazyValue(
 			);
 		}
 
-		b.push(
-			' ]'
-		);
+		b.push( ' ]' );
 
 		return b.join( '' );
 	}

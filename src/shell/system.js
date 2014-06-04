@@ -817,7 +817,8 @@ System.prototype._onMouseDown =
 	event.preventDefault( );
 
 	if(
-		Jools.is( event.button ) &&
+		event.button !== undefined
+		&&
 		event.button !== 0
 	)
 	{
@@ -1179,15 +1180,13 @@ System.prototype._onMouseWheel =
 				event.pageY - _canvas.offsetTop
 		);
 
-	if( Jools.is( event.wheelDelta ) )
+	if( event.wheelDelta !== undefined )
 	{
-		dir =
-			event.wheelDelta > 0 ? 1 : -1;
+		dir = event.wheelDelta > 0 ? 1 : -1;
 	}
-	else if( Jools.is( event.detail ) )
+	else if( event.detail !== undefined )
 	{
-		dir =
-			event.detail > 0 ? -1 : 1;
+		dir = event.detail > 0 ? -1 : 1;
 	}
 	else
 	{

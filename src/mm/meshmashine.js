@@ -85,25 +85,20 @@ var tfxSign1 =
 {
 	if( chg.length !== 1 )
 	{
-		throw new Error(
-			CHECK && 'tfxSign1 chg.length !== 1'
-		);
+		throw new Error( );
 	}
 
-	if( !Jools.is( sign.path ) )
+	if( sign.path === undefined )
 	{
 		return sign;
 	}
 
 	var
-		op =
-			TFXOps[ chg.type ];
+		op = TFXOps[ chg.type ];
 
 	if( !op )
 	{
-		throw new Error(
-			CHECK && 'tfxSign1, no op'
-		);
+		throw new Error( );
 	}
 
 	// FIXME give, chg.
@@ -135,26 +130,22 @@ var tfxSign =
 	{
 		case Change  :
 		case ChangeRay :
+
 			break;
 
 		default :
-			throw new Error(
-				CHECK && 'invalid chgX'
-			);
+
+			throw new Error( );
 	}
 
 	if( arguments.length !== 2 )
 	{
-		throw new Error(
-			CHECK && 'tfxSign argument fail (n)'
-		);
+		throw new Error( );
 	}
 
 	if( sign.constructor !== Sign )
 	{
-		throw new Error(
-			CHECK && 'tfxSign argument fail (1)'
-		);
+		throw new Error( );
 	}
 
 	if(
@@ -242,9 +233,7 @@ var tfxSign =
 
 						default :
 
-							throw new Error(
-								CHECK && 'Invalid fs'
-							);
+							throw new Error( );
 					}
 				}
 
@@ -252,9 +241,7 @@ var tfxSign =
 
 			default :
 
-				throw new Error(
-					CHECK && 'Invalid signX'
-				);
+				throw new Error( );
 		}
 	}
 
@@ -286,9 +273,7 @@ var tfxChg =
 
 	if( chg.constructor !== Change )
 	{
-		throw new Error(
-			CHECK && 'tfxChg param error'
-		);
+		throw new Error( );
 	}
 
 	var srcX =
@@ -394,9 +379,7 @@ var tfxChg =
 	}
 	else
 	{
-		throw new Error(
-			CHECK && 'srcX and trgX arrays :-('
-		);
+		throw new Error( );
 	}
 
 };
@@ -594,9 +577,7 @@ TFXOps.join =
 
 	if( !trg.path )
 	{
-		throw new Error(
-			CHECK && 'join missing trg.path'
-		);
+		throw new Error( );
 	}
 
 	// FIXME tfx ranks
@@ -789,9 +770,7 @@ TFXOps.insert =
 		!is( trg.at2 )
 	)
 	{
-		throw new Error(
-			CHECK && 'history mangled'
-		);
+		throw new Error( );
 	}
 
 	if( sign.at1 < trg.at1 )
@@ -842,13 +821,12 @@ TFXOps.remove =
 	}
 
 	if(
-		!is(src.at1) ||
+		!is(src.at1)
+		||
 		!is(src.at2)
 	)
 	{
-		throw new Error(
-			CHECK && 'history mangled'
-		);
+		throw new Error( );
 	}
 
 	var len =
@@ -996,14 +974,7 @@ TFXOps.remove =
 	}
 	else
 	{
-		throw new Error(
-			CHECK &&
-			(
-				'remove, no case fitted! ' +
-					sign.at1 + '-' + sign.at2 + ' ' +
-					src.at1 + '-' + src.at2
-			)
-		);
+		throw new Error( );
 	}
 };
 
