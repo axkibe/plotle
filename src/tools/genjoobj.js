@@ -180,7 +180,8 @@ for(
 				outFilename
 		}
 	);
-};
+}
+
 
 /*
 | Generates joobjs if the input file is newer

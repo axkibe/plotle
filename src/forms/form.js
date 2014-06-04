@@ -53,6 +53,12 @@ Form.init =
 		// inherit
 	)
 {
+	var
+		name,
+		widgetProto,
+		path,
+		focusAccent;
+
 	if( !this.path )
 	{
 		// this is an abstract
@@ -77,18 +83,14 @@ Form.init =
 		a++
 	)
 	{
-		var
-			name =
-				ranks[ a ],
-			widgetProto =
-				twig[ name ],
-			path,
-			focusAccent =
-				false;
+		name = ranks[ a ];
+
+		widgetProto = twig[ name ];
+
+		focusAccent = false;
 
 		// FIXME only when not having widgetProto
-		path =
-			this.path.append( 'twig' ).append( name );
+		path = this.path.append( 'twig' ).append( name );
 
 		if( widgetProto.focusable )
 		{
@@ -119,8 +121,7 @@ Form.init =
 			);
 	}
 
-	this.twig =
-		twig;
+	this.twig = twig;
 };
 
 
@@ -164,8 +165,9 @@ Form.prototype._focusedWidget =
 	function( )
 {
 	var
-		path =
-			this.mark.widgetPath;
+		path;
+		
+	path = this.mark.widgetPath;
 
 	if( path.length === 0 )
 	{
@@ -192,6 +194,9 @@ Form.prototype.draw =
 		fabric
 	)
 {
+	var
+		ranks;
+
 	fabric.paint(
 		theme.forms.style,
 		fabric,
@@ -199,17 +204,15 @@ Form.prototype.draw =
 		Euclid.View.proper
 	);
 
-	var
-		ranks =
-			this.ranks;
+	ranks = this.ranks;
 
 	for(
-		var a = ranks.length - 1;
-		a >= 0;
-		a--
+		var r = ranks.length - 1;
+		r >= 0;
+		r--
 	)
 	{
-		this.atRank( a ).draw( fabric );
+		this.atRank( r ).draw( fabric );
 	}
 };
 
@@ -253,29 +256,25 @@ Form.prototype.pointingHover =
 	)
 {
 	var
-		a,
-		aZ,
-
-		ranks =
-			this.ranks;
+		r,
+		rZ,
+		ranks,
+		reply;
+	
+	ranks = this.ranks;
 
 	for(
-		a = 0, aZ = ranks.length;
-		a < aZ;
-		a++
+		r = 0, rZ = ranks.length;
+		r < rZ;
+		r++
 	)
 	{
-		var
-			name =
-				ranks[ a ],
-
-			// FIXME atRank
-			reply =
-				this.twig[ name ].pointingHover(
-					p,
-					shift,
-					ctrl
-				);
+		reply =
+			this.atRank( r ).pointingHover(
+				p,
+				shift,
+				ctrl
+			);
 
 		if( reply )
 		{
@@ -305,26 +304,23 @@ Form.prototype.click =
 	)
 {
 	var
-		ranks =
-			this.ranks;
+		ranks,
+		result;
+
+	ranks = this.ranks;
 
 	for(
-		var a = 0, aZ = ranks.length;
-		a < aZ;
-		a++
+		var r = 0, rZ = ranks.length;
+		r < rZ;
+		r++
 	)
 	{
-		var
-			name =
-				ranks[ a ],
-
-			// TODO atRank
-			result =
-				this.twig[ name ].click(
-					p,
-					shift,
-					ctrl
-				);
+		result =
+			this.atRank( r ).click(
+				p,
+				shift,
+				ctrl
+			);
 
 		if( result !== null )
 		{
@@ -361,8 +357,9 @@ Form.prototype.input =
 	)
 {
 	var
-		widget =
-			this._focusedWidget( );
+		widget;
+
+	widget = this._focusedWidget( );
 
 	if( !widget )
 	{
@@ -382,47 +379,42 @@ Form.prototype.cycleFocus =
 	)
 {
 	var
-		path =
-			this.mark.widgetPath;
+		len,
+		name,
+		path,
+		rank,
+		ranks,
+		rs,
+		ve;
+		
+	path = this.mark.widgetPath;
 
 	if( path.isEmpty )
 	{
 		return;
 	}
 
-	var
-		ranks =
-			this.ranks,
+	ranks = this.ranks,
 
-		rank =
-			// tree.rankOf( path.get( 3 ) ), TODO
-			ranks.indexOf( path.get( 4 ) ),
+	rank = // tree.rankOf( path.get( 3 ) ), TODO
+		ranks.indexOf( path.get( 4 ) ),
 
-		length =
-			ranks.length, // TODO
+	len = ranks.length, // TODO
 
-		rs =
-			rank,
-
-		name,
-
-		ve;
+	rs = rank;
 
 	while( true )
 	{
-		rank =
-			( rank + dir + length ) % length;
+		rank = ( rank + dir + len ) % len;
 
 		if( rank === rs )
 		{
 			break;
 		}
 
-		name =
-			ranks[ rank ];
+		name = ranks[ rank ];
 
-		ve =
-			this.twig[ name ];
+		ve = this.twig[ name ];
 
 		if(
 			ve.focusable
@@ -468,8 +460,9 @@ Form.prototype.specialKey =
 	)
 {
 	var
-		item =
-			this._focusedWidget( );
+		item;
+		
+	item = this._focusedWidget( );
 
 	if( !item )
 	{
@@ -532,8 +525,9 @@ Form.prototype._widgetPath =
 	)
 {
 	var
-		path =
-			this.twig[ widgetName ].path;
+		path;
+		
+	path = this.twig[ widgetName ].path;
 
 	if( !path )
 	{
@@ -554,19 +548,18 @@ Jools.lazyValue(
 	function( )
 	{
 		var
-			focus =
-				this._focusedWidget( );
+			focus;
+
+		focus = this._focusedWidget( );
 
 		if( !focus )
 		{
 			return null;
 		}
 
-		return (
-			focus.attentionCenter
-		);
+		return focus.attentionCenter;
 	}
 );
 
 
-})( );
+} )( );
