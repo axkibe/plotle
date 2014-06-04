@@ -209,12 +209,7 @@ Form.prototype.draw =
 		a--
 	)
 	{
-		var
-			name =
-				ranks[ a ];
-
-		// FIXME just create a atRank
-		this.twig[ name ].draw( fabric );
+		this.atRank( a ).draw( fabric );
 	}
 };
 

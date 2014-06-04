@@ -1,5 +1,5 @@
 /*
-| Runs the joobj generator for a single file
+| Runs the joobj generator for a list of files.
 |
 | Authors: Axel Kittenberger
 */
@@ -71,6 +71,9 @@ var
 		};
 
 
+/*
+| Parses arguments.
+*/
 for(
 	a = 2, aZ = argV.length;
 	a < aZ;
@@ -126,6 +129,10 @@ for(
 		arg;
 }
 
+
+/*
+| Checks.
+*/
 if( !listingName )
 {
 	Jools.log(
@@ -136,9 +143,16 @@ if( !listingName )
 	process.exit( -1 );
 }
 
+
+/*
+| Loads the listing.
+*/
 listing =
 	require( '../../' + listingName );
 
+/*
+| Prepares the listings filenames
+*/
 for(
 	a = 0, aZ = listing.list.length;
 	a < aZ;
@@ -148,32 +162,6 @@ for(
 	inFilename =
 		listing.list[ a ];
 
-	Jools.log(
-		'genjoobj',
-		'Reading ' + inFilename
-	);
-
-	input =
-		fs.readFileSync(
-			inFilename,
-			readOptions
-		);
-
-	joobj =
-		vm.runInNewContext(
-			input,
-			{
-				JOOBJ :
-					true
-			},
-			inFilename
-		);
-
-	ast =
-		Generator.generate( joobj );
-
-	output =
-		Formatter.format( ast );
 
 	outFilename =
 		'./joobj/'
@@ -182,41 +170,39 @@ for(
 		+
 		'/'
 		+
-		inFilename
-		.replace( /\//g, '-' );
+		inFilename.replace( /\//g, '-' );
 
 	list.push(
 		{
 			inFilename :
 				inFilename,
-			output :
-				output,
 			outFilename :
 				outFilename
 		}
 	);
-}
+};
 
+/*
+| Generates joobjs if the input file is newer
+| than the output or if --all is set.
+*/
 for(
 	a = 0, aZ = list.length;
 	a < aZ;
 	a++
 )
 {
-	file =
-		list[ a ];
+	file = list[ a ];
 
-	inStat =
-		fs.statSync(  file.inFilename );
+	inStat = fs.statSync(  file.inFilename );
 
-	try{
-		outStat =
-			fs.statSync( file.outFilename );
+	try
+	{
+		outStat = fs.statSync( file.outFilename );
 	}
 	catch( e )
 	{
-		outStat =
-			null;
+		outStat = null;
 	}
 
 	if(
@@ -229,18 +215,46 @@ for(
 	{
 		Jools.log(
 			'genjoobj',
+			'Reading ' + inFilename
+		);
+
+		input =
+			fs.readFileSync(
+				file.inFilename,
+				readOptions
+			);
+
+		joobj =
+			vm.runInNewContext(
+				input,
+				{
+					JOOBJ :
+						true
+				},
+				inFilename
+			);
+
+		ast =
+			Generator.generate( joobj );
+
+		output =
+			Formatter.format( ast );
+
+		Jools.log(
+			'genjoobj',
 			'Writing ' + file.outFilename
 		);
 
 		fs.writeFileSync(
 			file.outFilename,
-			file.output
+			output
 		);
 
 		didSomething =
 			true;
 	}
 }
+
 
 if (didSomething )
 {
