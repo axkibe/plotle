@@ -1415,27 +1415,28 @@ Server.prototype.cmdAlter =
 		cmd
 	)
 {
-	// TODO
-	var time =
-		cmd.time;
+	var
+		time,
+		chgX,
+		cid,
+		spaceUser,
+		spaceTag,
+		username,
+		passhash;
 
-	var chgX =
-		cmd.chgX;
+	time = cmd.time;
 
-	var cid =
-		cmd.cid;
+	chgX = cmd.chgX;
 
-	var spaceUser =
-		cmd.spaceUser;
+	cid = cmd.cid;
 
-	var spaceTag =
-		cmd.spaceTag;
+	spaceUser = cmd.spaceUser;
 
-	var username =
-		cmd.user;
+	spaceTag = cmd.spaceTag;
 
-	var passhash =
-		cmd.passhash;
+	username = cmd.user;
+
+	passhash = cmd.passhash;
 
 	if( username === undefined )
 	{
@@ -1785,23 +1786,20 @@ Server.prototype.cmdRegister =
 		cmd
 	)
 {
-	// TODO 
-
 	var
-		username =
-			cmd.user;
+		username,
+		passhash,
+		mail,
+		news,
+		user;
+	
+	username = cmd.user;
 
-	var
-		passhash =
-			cmd.passhash;
+	passhash = cmd.passhash;
 
-	var
-		mail =
-			cmd.mail;
+	mail = cmd.mail;
 
-	var
-		news =
-			cmd.news;
+	news = cmd.news;
 
 	if( username === undefined )
 	{
@@ -1838,12 +1836,11 @@ Server.prototype.cmdRegister =
 		throw Jools.reject( 'Username too short, min. 4 characters' );
 	}
 
-	var
-		user =
-			yield this.$db.users.findOne(
-				{ _id : username },
-				sus.resume( )
-			);
+	user =
+		yield this.$db.users.findOne(
+			{ _id : username },
+			sus.resume( )
+		);
 
 	if( user !== null )
 	{
@@ -1853,13 +1850,10 @@ Server.prototype.cmdRegister =
 	user = {
 		_id :
 			username,
-
 		pass :
 			passhash,
-
 		mail :
 			mail,
-
 		news :
 			news
 	};
@@ -1880,7 +1874,6 @@ Server.prototype.cmdRegister =
 	return {
 		ok :
 			true,
-
 		user :
 			username
 	};
@@ -1898,8 +1891,11 @@ Server.prototype.refreshPresence =
 	)
 {
 	var
-		pu =
-			this.$presences[ user ];
+		pu,
+		pus,
+		spaceName;
+
+	pu = this.$presences[ user ];
 
 	if( !pu )
 	{
@@ -1910,12 +1906,9 @@ Server.prototype.refreshPresence =
 			};
 	}
 
-	var
-		spaceName =
-			spaceUser + ':' + spaceTag,
+	spaceName = spaceUser + ':' + spaceTag,
 
-		pus =
-			pu.spaces[ spaceName ];
+	pus = pu.spaces[ spaceName ];
 
 	if( !pus )
 	{
@@ -1949,8 +1942,7 @@ Server.prototype.refreshPresence =
 		{
 			clearTimeout( pus.timerID );
 
-			pus.timerID =
-				null;
+			pus.timerID = null;
 		}
 
 		pus.timerID =
@@ -1978,11 +1970,14 @@ Server.prototype.establishPresence =
 	)
 {
 	var
-		pres =
-			this.$presences,
+		pres,
+		pu,
+		pus,
+		spaceName;
 
-		pu =
-			pres[ user ];
+	pres = this.$presences,
+
+	pu = pres[ user ];
 
 	if( !pu )
 	{
@@ -1994,12 +1989,9 @@ Server.prototype.establishPresence =
 			};
 	}
 
-	var
-		spaceName =
-			spaceUser + ':' + spaceTag,
+	spaceName = spaceUser + ':' + spaceTag,
 
-		pus =
-			pu.spaces[ spaceName ];
+	pus = pu.spaces[ spaceName ];
 
 	if( !pus )
 	{
@@ -2046,14 +2038,15 @@ Server.prototype.destablishPresence =
 	)
 {
 	var
-		pu =
-			this.$presences[ user ],
+		pu,
+		pus,
+		spaceName;
 
-		spaceName =
-			spaceUser + ':' + spaceTag,
+	pu = this.$presences[ user ],
 
-		pus =
-			pu.spaces[ spaceName ];
+	spaceName = spaceUser + ':' + spaceTag,
+
+	pus = pu.spaces[ spaceName ];
 
 	pus.establish--;
 
@@ -2089,8 +2082,10 @@ Server.prototype.expirePresence =
 	)
 {
 	var
-		spaceName =
-			spaceUser + ':' + spaceTag;
+		pu,
+		spaceName;
+	
+	spaceName = spaceUser + ':' + spaceTag;
 
 	self.sendMessage(
 		spaceUser,
@@ -2099,9 +2094,7 @@ Server.prototype.expirePresence =
 		user + ' left "' + spaceName + '"'
 	);
 
-	var
-		pu =
-			self.$presences[ user ];
+	pu = self.$presences[ user ];
 
 	if( pu.spaces[ spaceName ].establish !== 0 )
 	{
@@ -2121,23 +2114,28 @@ Server.prototype.cmdUpdate =
 		result
 	)
 {
-	var user =
-		cmd.user;
+	var
+		asw,
+		user,
+		passhash,
+		space,
+		spaceName,
+		spaceUser,
+		spaceTag,
+		time,
+		mseq;
 
-	var passhash =
-		cmd.passhash;
+	user = cmd.user;
 
-	var spaceUser =
-		cmd.spaceUser;
+	passhash = cmd.passhash;
 
-	var spaceTag =
-		cmd.spaceTag;
+	spaceUser = cmd.spaceUser;
 
-	var time =
-		cmd.time;
+	spaceTag = cmd.spaceTag;
 
-	var mseq =
-		cmd.mseq;
+	time = cmd.time;
+
+	mseq = cmd.mseq;
 
 	if( user === undefined )
 	{
@@ -2164,12 +2162,9 @@ Server.prototype.cmdUpdate =
 		throw Jools.reject( 'spaceTag missing' );
 	}
 
-	var
-		spaceName =
-			spaceUser + ':' + spaceTag,
+	spaceName = spaceUser + ':' + spaceTag,
 
-		space =
-			this.$spaces[ spaceName ];
+	space = this.$spaces[ spaceName ];
 
 	if( !space )
 	{
@@ -2203,12 +2198,13 @@ Server.prototype.cmdUpdate =
 		spaceTag
 	);
 
-	var asw = this.conveyUpdate(
-		time,
-		mseq,
-		spaceUser,
-		spaceTag
-	);
+	asw =
+		this.conveyUpdate(
+			time,
+			mseq,
+			spaceUser,
+			spaceTag
+		);
 
 	// immediate answer?
 	if(
@@ -2220,8 +2216,7 @@ Server.prototype.cmdUpdate =
 	}
 
 	// if not an immediate anwwer, the request is put to sleep
-	var sleepID =
-		'' + this.$nextSleep++;
+	var sleepID = '' + this.$nextSleep++;
 
 	var timerID =
 		setTimeout(
@@ -2273,8 +2268,15 @@ Server.prototype.expireSleep =
 		sleepID
 	)
 {
-	var sleep =
-		self.$upsleep[ sleepID ];
+	var
+		asw,
+		result,
+		seqZ,
+		sleep,
+		space,
+		spaceName;
+
+	sleep = self.$upsleep[ sleepID ];
 
 	// maybe it just had expired at the same time
 	if( !sleep )
@@ -2282,14 +2284,11 @@ Server.prototype.expireSleep =
 		return;
 	}
 
-	var spaceName =
-		sleep.spaceUser + ':' + sleep.spaceTag;
+	spaceName = sleep.spaceUser + ':' + sleep.spaceTag;
 
-	var space =
-		self.$spaces[ spaceName ];
+	space = self.$spaces[ spaceName ];
 
-	var seqZ =
-		space.$seqZ;
+	seqZ = space.$seqZ;
 
 	delete self.$upsleep[ sleepID ];
 
@@ -2300,7 +2299,7 @@ Server.prototype.expireSleep =
 		sleep.spaceTag
 	);
 
-	var asw =
+	asw =
 		{
 			ok :
 				true,
@@ -2314,9 +2313,7 @@ Server.prototype.expireSleep =
 
 	Jools.log( 'ajax', '->', asw );
 
-	var
-		result =
-			sleep.result;
+	result = sleep.result;
 
 	result.writeHead(
 		200,
@@ -2340,9 +2337,13 @@ Server.prototype.expireSleep =
 | A sleeping update closed prematurely.
 */
 Server.prototype.closeSleep =
-	function( sleepID )
+	function(
+		sleepID
+	)
 {
-	var sleep = this.$upsleep[ sleepID ];
+	var sleep;
+	
+	sleep = this.$upsleep[ sleepID ];
 
 	// maybe it just had expired at the same time
 	if( !sleep )
@@ -2371,29 +2372,31 @@ Server.prototype.conveyUpdate =
 		spaceTag
 	)
 {
-	var spaceName =
-		spaceUser + ':' + spaceTag;
+	var
+		spaceName,
+		space,
+		changes,
+		messages,
+		seqZ,
+		msgZ,
+		chgA,
+		msgA;
 
-	var space =
-		this.$spaces[ spaceName ];
+	spaceName = spaceUser + ':' + spaceTag;
 
-	var changes =
-		space.$changes;
+	space = this.$spaces[ spaceName ];
 
-	var messages =
-		this.$messages;
+	changes = space.$changes;
 
-	var seqZ =
-		space.$seqZ;
+	messages = this.$messages;
 
-	var msgZ =
-		messages.length;
+	seqZ = space.$seqZ;
 
-	var chgA =
-		[ ];
+	msgZ = messages.length;
 
-	var msgA =
-		[ ];
+	chgA = [ ];
+
+	msgA = [ ];
 
 	for( var c = time; c < seqZ; c++ )
 	{
@@ -2416,22 +2419,16 @@ Server.prototype.conveyUpdate =
 	return {
 		ok :
 			true,
-
 		time :
 			time,
-
 		timeZ :
 			seqZ,
-
 		chgs :
 			chgA,
-
 		msgs :
 			msgA,
-
 		mseq :
 			mseq,
-
 		mseqZ :
 			msgZ
 	};
@@ -2571,6 +2568,7 @@ Server.prototype.cmdGet =
 		node,
 		passhash,
 		seqZ,
+		space,
 		spaceName,
 		spaceTag,
 		spaceUser,
@@ -2578,20 +2576,15 @@ Server.prototype.cmdGet =
 		tree,
 		user;
 
-	passhash =
-		cmd.passhash;
+	passhash = cmd.passhash;
 
-	spaceTag =
-		cmd.spaceTag;
+	spaceTag = cmd.spaceTag;
 
-	spaceUser =
-		cmd.spaceUser;
+	spaceUser = cmd.spaceUser;
 
-	time =
-		cmd.time;
+	time = cmd.time;
 
-	user =
-		cmd.user;
+	user = cmd.user;
 
 	if( !cmd.user )
 	{
@@ -2625,8 +2618,7 @@ Server.prototype.cmdGet =
 
 	// FIXME test spaceUser/Tag
 
-	spaceName =
-		cmd.spaceUser + ':'  + cmd.spaceTag;
+	spaceName = cmd.spaceUser + ':'  + cmd.spaceTag;
 
 	access =
 		this.testAccess(
@@ -2647,9 +2639,7 @@ Server.prototype.cmdGet =
 		};
 	}
 
-	var
-		space =
-			this.$spaces[ spaceName ];
+	space = this.$spaces[ spaceName ];
 
 	if( !space )
 	{
@@ -2674,11 +2664,9 @@ Server.prototype.cmdGet =
 		}
 	}
 
-	changes =
-		space.$changes,
+	changes = space.$changes,
 
-	seqZ =
-		space.$seqZ;
+	seqZ = space.$seqZ;
 
 	if( time === -1 )
 	{
@@ -2689,8 +2677,7 @@ Server.prototype.cmdGet =
 		throw Jools.reject( 'invalid time' );
 	}
 
-	tree =
-		space.$tree;
+	tree = space.$tree;
 
 	// if the requested tree is not the latest, replay it backwards
 	for(
@@ -3140,34 +3127,45 @@ Server.prototype.ajaxCmd =
 	switch ( cmd.cmd )
 	{
 		case 'alter' :
+
 			return this.cmdAlter( cmd );
 
 		case 'auth' :
+
 			return yield* this.cmdAuth(  cmd );
 
 		case 'get' :
+
 			return yield* this.cmdGet( cmd );
 
 		case 'message' :
+
 			return this.cmdMessage( cmd );
 
 		case 'register' :
+
 			return yield* this.cmdRegister( cmd );
 
 		case 'update' :
+
 			return this.cmdUpdate( cmd, result );
 
-		default:
+		default :
+
 			return Jools.reject('unknown command');
 	}
 };
 
-var run =
+var
+	run;
+
+run =
 	function*( )
 {
 	var
-		server =
-			new Server( );
+		server;
+
+	server = new Server( );
 
 	yield* server.startup( );
 };

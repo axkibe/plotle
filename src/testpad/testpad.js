@@ -1194,32 +1194,6 @@ TestPad.prototype.inputSpecialKey =
 
 
 /*
-| Updates data from server.
-|
-| TODO remove
-*/
-/*
-TestPad.prototype.update =
-	function(
-		seq
-	)
-{
-	if( space )
-	{
-		var note  = space.copse.testnote;
-		this.$ranks = note.doc.ranks;
-		this.$copse = note.doc.copse;
-	}
-	else
-	{
-		this.$ranks = null;
-		this.$copse = null;
-	}
-};
-*/
-
-
-/*
 | Button update-to-now has been clicked.
 */
 TestPad.prototype.onUpNowButton =
