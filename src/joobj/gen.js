@@ -70,8 +70,6 @@ var
 		Shorthand.Delete,
 	Differs =
 		Shorthand.Differs,
-//	Dot =
-//		Shorthand.Dot, // FUTURE only from expr
 	Equals =
 		Shorthand.Equals,
 	False =
@@ -86,8 +84,6 @@ var
 		Shorthand.If,
 	Instanceof =
 		Shorthand.Instanceof,
-//	Member =
-//		Shorthand.Member,
 	LessThan =
 		Shorthand.LessThan,
 	New =
@@ -500,6 +496,9 @@ Gen.prototype._init =
 
 	this.equals =
 		joobj.equals;
+
+	this.alike =
+		joobj.alike;
 };
 
 
@@ -3135,6 +3134,39 @@ Gen.prototype.genEquals =
 
 
 /*
+| Generates the alike test(s).
+*/
+// XXX
+Gen.prototype.genAlike =
+	function(
+		capsule // block to append to
+	)
+{
+	var
+		a, aZ,
+		alikeList,
+		alikeName;
+		
+	alikeList = Object.keys( this.alike );
+
+	alikeList.sort( );
+
+	for(
+		a = 0, aZ = alikeList.length;
+		a < aZ;
+		a++
+	)
+	{
+		alikeName = alikeList[ a ];
+
+		console.log( 'DOING', alikeName );
+	}
+
+	return capsule;
+};
+
+
+/*
 | Generates the export.
 */
 Gen.prototype.genNodeExport =
@@ -3225,32 +3257,26 @@ Gen.prototype.genCapsule =
 	var
 		capsule;
 
-	capsule =
-		Block( );
+	capsule = Block( );
 
 	if( this.node )
 	{
-		capsule =
-			this.genNodeIncludes( capsule );
+		capsule = this.genNodeIncludes( capsule );
 	}
 
-	capsule =
-		this.genConstructor( capsule );
+	capsule = this.genConstructor( capsule );
 
 	if( this.singleton )
 	{
-		capsule =
-			this.genSingleton( capsule );
+		capsule = this.genSingleton( capsule );
 	}
 
 	if( this.subclass )
 	{
-		capsule =
-			this.genSubclass( capsule );
+		capsule = this.genSubclass( capsule );
 	}
 
-	capsule =
-		this.genCreator( capsule );
+	capsule = this.genCreator( capsule );
 
 	if( this.hasJSON )
 	{
@@ -3258,25 +3284,25 @@ Gen.prototype.genCapsule =
 			this.genFromJSONCreator( capsule );
 	}
 
-	capsule =
-		this.genReflection( capsule );
+	capsule = this.genReflection( capsule );
 
-	capsule =
-		this.genJoobjProto( capsule );
+	capsule = this.genJoobjProto( capsule );
 
 	if( this.hasJSON )
 	{
-		capsule =
-			this.genToJSON( capsule );
+		capsule = this.genToJSON( capsule );
 	}
 
-	capsule =
-		this.genEquals( capsule );
+	capsule = this.genEquals( capsule );
+	
+	if( this.alike )
+	{
+		capsule = this.genAlike( capsule );
+	}
 
 	if( this.node )
 	{
-		capsule =
-			this.genNodeExport( capsule );
+		capsule = this.genNodeExport( capsule );
 	}
 
 	return capsule;

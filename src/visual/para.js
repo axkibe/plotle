@@ -12,8 +12,7 @@ var
 	Visual;
 
 
-Visual =
-	Visual || { };
+Visual = Visual || { };
 
 
 /*
@@ -118,18 +117,16 @@ if( JOOBJ )
 							undefined
 					}
 			},
-/* TODO
 		alike :
 			{
 				alikeIgnoringView :
 					{
 						ignores :
 							[
-								'view'
+								'viewx'
 							]
 					}
 			},
-*/
 		init :
 			[
 				'inherit'
@@ -154,8 +151,9 @@ if( SERVER )
 
 
 var
-	Para =
-		Visual.Para;
+	Para;
+	
+Para = Visual.Para;
 
 
 /*

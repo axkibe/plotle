@@ -169,8 +169,9 @@ if( SERVER )
 
 
 var
-	Label =
-		Visual.Label;
+	Label;
+	
+Label = Visual.Label;
 
 
 /*

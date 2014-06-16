@@ -9,8 +9,9 @@
 | Exports.
 */
 var
-	Validator =
-		{ };
+	Validator;
+	
+Validator = { };
 
 
 /*
@@ -21,7 +22,7 @@ var
 
 
 /*
-| Capsule (to make jshint happy)
+| Capsule.
 */
 (function( ) {
 'use strict';
@@ -32,8 +33,7 @@ var
 */
 if( SERVER )
 {
-	Jools =
-		require( '../jools/jools' );
+	Jools = require( '../jools/jools' );
 }
 
 
@@ -70,6 +70,8 @@ var _attributeBlacklist =
 */
 var _joobjWhitelist =
 	Object.freeze( {
+		'alike' :
+			true,
 		'attributes' :
 			true,
 		'init' :
@@ -125,6 +127,65 @@ var _checkConcern =
 
 
 /*
+| Checks the alike definitions.
+*/
+var _checkAlikes =
+	function(
+		joobj // the joobj definition
+	)
+{
+	var
+		alike,
+		adef,
+		ignores,
+		name;
+
+	alike = joobj.alike;
+		
+	if( !joobj.attr )
+	{
+		throw new Error(
+			'there cannot be alikes without attributes'
+		);
+	}
+
+	for( name in alike )
+	{
+		adef = alike[ name ];
+
+		for( var spec in adef )
+		{
+			if( spec !== 'ignores' )
+			{
+				throw new Error(
+					'alike ' + name + ' has invalid specifier ' + spec
+				);
+			}
+		}
+
+		ignores = adef.ignores;
+
+		if( typeof( ignores ) !== 'object' )
+		{
+			throw new Error(
+				'alike ' + name + ' misses ignores.'
+			);
+		}
+		
+		for( var attr in ignores )
+		{
+			if( !joobj.attr[ attr ] )
+			{
+				throw new Error(
+					'alike ' + name + ' ignores unknown attribute ' + attr
+				);
+			}
+		}
+	}
+};
+
+
+/*
 | Checks if a joobj attribute definition looks ok.
 */
 var _checkAttribute =
@@ -133,6 +194,10 @@ var _checkAttribute =
 		name	// the attribute name
 	)
 {
+	var
+		attr,
+		value;
+
 	if( _attributeBlacklist[ name ] )
 	{
 		throw new Error(
@@ -140,10 +205,7 @@ var _checkAttribute =
 		);
 	}
 
-	var
-		attr =
-			joobj.attributes[ name ],
-		value;
+	attr = joobj.attributes[ name ];
 
 	if( !Jools.isString( attr.type ) )
 	{
@@ -154,8 +216,7 @@ var _checkAttribute =
 
 	for( var key in attr )
 	{
-		value =
-			attr[ key ];
+		value = attr[ key ];
 
 		switch( key )
 		{
@@ -258,8 +319,7 @@ Validator.check =
 		);
 	}
 
-	attr =
-		joobj.attributes;
+	attr = joobj.attributes;
 
 	if( joobj.singleton && attr )
 	{
@@ -272,11 +332,13 @@ Validator.check =
 	{
 		for( name in attr )
 		{
-			_checkAttribute(
-				joobj,
-				name
-			);
+			_checkAttribute( joobj, name );
 		}
+	}
+
+	if( joobj.alike )
+	{
+		_checkAlikes( joobj );
 	}
 };
 
@@ -286,8 +348,7 @@ Validator.check =
 */
 if( SERVER )
 {
-	module.exports =
-		Validator;
+	module.exports = Validator;
 }
 
 
