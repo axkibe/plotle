@@ -2935,6 +2935,73 @@ Gen.prototype.genToJSON =
 
 
 /*
+| Generates the equals condition for an attribute.
+*/
+Gen.prototype.genAttributeEquals =
+	function(
+		name // attribute name
+	)
+{
+	var
+		attr,
+		ceq;
+		
+	attr = this.attributes[ name ];
+
+	switch( attr.type )
+	{
+		case 'Boolean' :
+		case 'Integer' :
+		case 'Mark' : // FIXME
+		case 'Number' :
+		case 'String' :
+		case 'Tree' : // FIXME
+
+			ceq =
+				Equals(
+					This.Dot( attr.assign ),
+					Var( 'obj' ).Dot( attr.assign )
+				);
+
+			break;
+
+		default :
+
+			if( !attr.allowsNull )
+			{
+				ceq =
+					Equals(
+						This.Dot( attr.assign ),
+						Var( 'obj' ).Dot( attr.assign )
+					);
+			}
+			else
+			{
+				ceq =
+					Or(
+						Equals(
+							This.Dot( attr.assign ),
+							Var( 'obj' ).Dot( attr.assign )
+						),
+						And(
+							Differs(
+								This.Dot( attr.assign ),
+								Null
+							),
+							Call(
+								This.Dot( attr.assign ).Dot( 'equals' ),
+								Var( 'obj' ).Dot( attr.assign )
+							)
+						)
+					);
+			}
+	}
+
+	return ceq;
+};
+
+
+/*
 | Generates the equals test.
 */
 Gen.prototype.genEquals =
@@ -3000,10 +3067,7 @@ Gen.prototype.genEquals =
 		.Comment( 'Tests equality of object.' );
 
 	block =
-		Block( );
-
-	block =
-		block
+		Block( )
 		.If(
 			Equals(
 				This,
@@ -3043,75 +3107,21 @@ Gen.prototype.genEquals =
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ];
+		name = this.attrList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes[ name ];
 
 		if( attr.assign === null )
 		{
 			continue;
 		}
 
-		switch( attr.type )
-		{
-			case 'Boolean' :
-			case 'Integer' :
-			case 'Mark' : // FIXME
-			case 'Number' :
-			case 'String' :
-			case 'Tree' : // FIXME
-
-				ceq =
-					Equals(
-						This.Dot( attr.assign ),
-						Var( 'obj' ).Dot( attr.assign )
-					);
-
-				break;
-
-			default :
-
-				if( !attr.allowsNull )
-				{
-					ceq =
-						Equals(
-							This.Dot( attr.assign ),
-							Var( 'obj' ).Dot( attr.assign )
-						);
-				}
-				else
-				{
-					ceq =
-						Or(
-							Equals(
-								This.Dot( attr.assign ),
-								Var( 'obj' ).Dot( attr.assign )
-							),
-							And(
-								Differs(
-									This.Dot( attr.assign ),
-									Null
-								),
-								Call(
-									This.Dot( attr.assign ).Dot( 'equals' ),
-									Var( 'obj' ).Dot( attr.assign )
-								)
-							)
-						);
-				}
-		}
+		ceq = this.genAttributeEquals( name );
 
 		cond =
 			cond === null
-			?
-			ceq
-			:
-			And(
-				cond,
-				ceq
-			);
+			? ceq
+			: And( cond, ceq );
 	}
 
 	block =
@@ -3136,7 +3146,6 @@ Gen.prototype.genEquals =
 /*
 | Generates the alike test(s).
 */
-// XXX
 Gen.prototype.genAlike =
 	function(
 		capsule // block to append to
@@ -3145,11 +3154,19 @@ Gen.prototype.genAlike =
 	var
 		a, aZ,
 		alikeList,
-		alikeName;
+		alikeName,
+		attr,
+		block,
+		ceq,
+		cond,
+		ignores,
+		name;
 		
 	alikeList = Object.keys( this.alike );
 
 	alikeList.sort( );
+
+	cond = null;
 
 	for(
 		a = 0, aZ = alikeList.length;
@@ -3158,8 +3175,89 @@ Gen.prototype.genAlike =
 	)
 	{
 		alikeName = alikeList[ a ];
+	
+		ignores = this.alike[ alikeName ].ignores;
 
-		console.log( 'DOING', alikeName );
+		capsule =
+			capsule
+			.Comment( 'Tests partial equality.' );
+
+		block =
+			Block( )
+			.If(
+				Equals(
+					This,
+					Var( 'obj' )
+				),
+				Block( )
+				.Return( True )
+			)
+			.If(
+				Not(
+					Var( 'obj' )
+				),
+				Block( )
+				.Return(
+					False
+				)
+			);
+
+		if( this.twig )
+		{
+			cond =
+				And(
+					Equals(
+						This.Dot( 'tree' ),
+						Var( 'obj' ).Dot( 'tree' )
+					),
+					Equals(
+						This.Dot( 'ranks' ),
+						Var( 'obj' ).Dot( 'ranks' )
+					)
+				);
+		}
+
+		for(
+			a = 0, aZ = this.attrList.length;
+			a < aZ;
+			a++
+		)
+		{
+			name = this.attrList[ a ];
+
+			attr = this.attributes[ name ];
+		
+			if(
+				attr.assign === null
+				||
+				ignores[ name ]
+			)
+			{
+				continue;
+			}
+
+			ceq = this.genAttributeEquals( name );
+		
+			cond =
+				cond === null
+				? ceq
+				: And( cond, ceq );
+		}
+
+		block =
+			block
+			.Return( cond );
+
+		capsule =
+			capsule
+			.Assign(
+				Var( this.reference ).Dot( 'prototype' ).Dot( alikeName ),
+				Func( block )
+				.Arg(
+					'obj',
+					'object to compare to'
+				)
+			);
 	}
 
 	return capsule;

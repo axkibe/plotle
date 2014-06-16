@@ -142,7 +142,7 @@ var _checkAlikes =
 
 	alike = joobj.alike;
 		
-	if( !joobj.attr )
+	if( !joobj.attributes )
 	{
 		throw new Error(
 			'there cannot be alikes without attributes'
@@ -174,7 +174,7 @@ var _checkAlikes =
 		
 		for( var attr in ignores )
 		{
-			if( !joobj.attr[ attr ] )
+			if( !joobj.attributes[ attr ] )
 			{
 				throw new Error(
 					'alike ' + name + ' ignores unknown attribute ' + attr

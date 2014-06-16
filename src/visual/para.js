@@ -122,9 +122,9 @@ if( JOOBJ )
 				alikeIgnoringView :
 					{
 						ignores :
-							[
-								'viewx'
-							]
+							{
+								'view' : true
+							}
 					}
 			},
 		init :

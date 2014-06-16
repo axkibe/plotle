@@ -216,7 +216,7 @@ for(
 	{
 		Jools.log(
 			'genjoobj',
-			'Reading ' + inFilename
+			'Reading ' + file.inFilename
 		);
 
 		input =

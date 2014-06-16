@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 node --harmony src/tools/genjoobj.js joobj/listing-genjoobj.js
 node --harmony src/tools/genjoobj.js joobj/listing-server.js
 node --harmony src/server/server.js
