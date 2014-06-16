@@ -169,19 +169,10 @@ Para.prototype._init =
 		return;
 	}
 
-	// TODO make general equal builder
 	if(
 		inherit
 		&&
-		inherit.flowWidth === this.flowWidth
-		&&
-		inherit.fontsize === this.fontsize
-		&&
-		inherit.mark.equals( this.mark )
-		&&
-		inherit.path.equals( this.path )
-		&&
-		inherit.text === this.text
+		inherit.alikeIgnoringView( this )
 		&&
 		inherit.view.zoom === this.view.zoom
 	)
