@@ -206,17 +206,18 @@ Doc.prototype.attentionCenter =
 		item
 	)
 {
+	var
+		path,
+		key;
+
 	if( !this.mark.hasCaret )
 	{
 		return 0;
 	}
 
-	var
-		path =
-			this.mark.caretPath,
+	path = this.mark.caretPath,
 
-		key =
-			path.get( 5 ); // FIXME
+	key = path.get( 5 ); // FIXME
 
 	return (
 		this.getPNW( item, key ).y

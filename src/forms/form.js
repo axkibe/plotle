@@ -12,8 +12,7 @@ var
 	Forms;
 
 
-Forms =
-	Forms || { };
+Forms = Forms || { };
 
 
 /*
@@ -399,7 +398,7 @@ Form.prototype.cycleFocus =
 	rank = // tree.rankOf( path.get( 3 ) ), TODO
 		ranks.indexOf( path.get( 4 ) ),
 
-	len = ranks.length, // TODO
+	len = ranks.length;
 
 	rs = rank;
 

@@ -478,41 +478,6 @@ Jools.ensureInt =
 
 
 /*
-| Checks the definedness of a list of variables
-| and throws an arguments error if not.
-|
-| TODO remove
-*/
-Jools.ensureArgs =
-	function(
-		// list of:
-		//   argument name, defined variable
-	)
-{
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		var arg =
-			arguments[ a + 1 ];
-
-		if( arg === undefined )
-		{
-			throw new Error(
-				CHECK
-				&&
-				(
-					'argument missing: ' + arguments[ a ]
-				)
-			);
-		}
-	}
-};
-
-
-/*
 | Sets an not enumerable value
 |
 | if writable is undefined, defaults to false

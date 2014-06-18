@@ -370,7 +370,6 @@
 . emptyNote
 . emptyPortal
 > end
-. ensureArgs
 . ensureInt
 . enter
 . equals

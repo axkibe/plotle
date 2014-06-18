@@ -872,16 +872,21 @@ Fabric.prototype.paintText =
 		}
 	}
 
-	Jools.ensureArgs(
-		'text',
-			text,
-		'x',
-			x,
-		'y',
-			y,
-		'font',
-			font
-	);
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		text === undefined
+/**/		||
+/**/		x === undefined
+/**/		||
+/**/		y === undefined
+/**/		||
+/**/		font === undefined
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+	}
 
 	this._setFont( font );
 
