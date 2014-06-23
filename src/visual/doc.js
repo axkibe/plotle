@@ -302,7 +302,7 @@ Doc.prototype.draw =
 /*
 | Returns the para pnws
 |
-| TODO FIXME use jools lazyFunc
+| FIXME use jools lazyFunc
 */
 Doc.prototype.getPNWs =
 	function(

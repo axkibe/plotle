@@ -395,8 +395,7 @@ Form.prototype.cycleFocus =
 
 	ranks = this.ranks,
 
-	rank = // tree.rankOf( path.get( 3 ) ), TODO
-		ranks.indexOf( path.get( 4 ) ),
+	rank = this.rankOf( path.get( 4 ) );
 
 	len = ranks.length;
 

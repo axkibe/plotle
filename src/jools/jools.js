@@ -271,7 +271,7 @@ Jools.passhash =
 /*
 | Returns a rejection error.
 |
-| TODO remove
+| FUTURE remove
 */
 Jools.reject =
 	function(
