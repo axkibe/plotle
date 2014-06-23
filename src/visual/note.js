@@ -695,24 +695,16 @@ Note.prototype.scrollMarkIntoView =
 
 	if( n + pnw.y - imargin.n < sy )
 	{
-		shell.setTraits(
-			TraitSet.Create(
-				'trait',
-					this.path,
-					'scrolly',
-					n + pnw.y - imargin.n
-			)
+		shell.setPath(
+			this.path.append( 'scrolly' ),
+			n + pnw.y - imargin.n
 		);
 	}
 	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
 		shell.setTraits(
-			TraitSet.Create(
-				'trait',
-					this.path,
-					'scrolly',
-					s + pnw.y - zone.height + imargin.s
-			)
+			this.path.append( 'scrolly' ),
+			s + pnw.y - zone.height + imargin.s
 		);
 	}
 };

@@ -263,8 +263,6 @@ Gen.prototype._init =
 
 		if( concerns && concerns.unit )
 		{
-			// TODO check in validator that type is also set
-			//      if unit is set
 			if( !units[ concerns.unit ] )
 			{
 				units[ concerns.unit ] = { };

@@ -123,6 +123,13 @@ var _checkConcern =
 				);
 		}
 	}
+
+	if( concern.unit && !concern.type )
+	{
+		throw new Error(
+			'concern "' + name + '" has unit but not type'
+		);
+	}
 };
 
 
