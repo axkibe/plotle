@@ -1106,37 +1106,6 @@ Shell.prototype._setHover =
 
 /*
 | Sets the trait(s) of item(s).
-| TODO remove
-*/
-Shell.prototype.setTraits =
-	function(
-		traitSet
-	)
-{
-	if( CHECK )
-	{
-		if( traitSet.reflect !== 'TraitSet' )
-		{
-			throw new Error(
-				'invalid traitSet'
-			);
-		}
-	}
-
-	this.$space =
-		this.$space.Create(
-			'traitSet',
-				traitSet
-		);
-
-	shell._$redraw =
-		true;
-};
-
-
-
-/*
-| Sets the trait(s) of item(s).
 */
 Shell.prototype.setPath =
 	function(

@@ -671,13 +671,9 @@ Item.prototype.dragMove =
 				spos =
 					action.startPos + sbary.scale( dy );
 
-			shell.setTraits(
-				TraitSet.Create(
-					'trait',
-						this.path,
-						'scrolly',
-						spos
-				)
+			shell.setPath(
+				this.path.append( 'scrolly' ),
+				spos
 			);
 
 			return true;
