@@ -194,7 +194,6 @@
 . _releaseEvents
 . _repeatHover
 . _sendChanges
-. _set
 . _setFont
 . _setHover
 . _setMark
@@ -412,7 +411,6 @@
 . genjoobj
 > get
 . getArea
-. getByPathKey
 > getContext
 > getDate
 > getElementById
@@ -796,8 +794,6 @@
 . toPoint
 > top
 > touches
-. trait
-. traitSet
 . transItem
 > tree
 > trg

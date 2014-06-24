@@ -26,8 +26,7 @@ var
 	Mark,
 	Path,
 	shell,
-	theme,
-	TraitSet;
+	theme;
 
 
 /*

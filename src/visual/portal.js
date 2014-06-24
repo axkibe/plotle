@@ -108,18 +108,6 @@ if( JOOBJ )
 						json :
 							true
 					},
-				// FIXME remove
-				traitSet :
-					{
-						comment :
-							'traits set',
-						type :
-							'TraitSet',
-						assign :
-							null,
-						defaultValue :
-							null
-					},
 				view :
 					{
 						comment :

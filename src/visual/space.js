@@ -111,18 +111,6 @@ if( JOOBJ )
 						defaultValue :
 							undefined
 					},
-				// FIXME remove
-				traitSet :
-					{
-						comment :
-							'traitSet',
-						type :
-							'TraitSet',
-						assign :
-							null,
-						defaultValue :
-							null
-					},
 				view :
 					{
 						comment :
@@ -136,8 +124,7 @@ if( JOOBJ )
 		init :
 			[
 				'inherit',
-				'twigDup',
-				'traitSet'
+				'twigDup'
 			],
 		node :
 			true,
@@ -183,8 +170,7 @@ var
 Space.prototype._init =
 	function(
 		inherit,
-		twigDup,
-		traitSet
+		twigDup
 	)
 {
 	if( !this.view )
@@ -212,8 +198,6 @@ Space.prototype._init =
 					this.hover,
 				'mark',
 					this.mark,
-				'traitSet',
-					traitSet,
 				'view',
 					this.view
 			);
@@ -367,63 +351,6 @@ Jools.lazyValue(
 		);
 	}
 );
-
-
-/*
-| Creates a new visual representation of an item.
-*/
-/*
-Space.prototype._createItem =
-	function(
-		key,
-		proto,
-		traitSet
-	)
-{
-	var
-		// default undefined -> inherit
-		path,
-
-		tree =
-			this.tree.twig[ key ];
-
-	if( !proto )
-	{
-		proto =
-			Visual[ tree.twig.type ];
-
-**	if( CHECK )
-**	{
-**		if( !proto )
-**		{
-**			throw new Error(
-**				'unknown type: ' + tree.twig.type
-**			);
-**		}
-**	}
-
-		path =
-			this.path.appendNC( key );
-	}
-
-	return (
-		proto.Create(
-			'tree',
-				tree,
-			'path',
-				path,
-			'hover',
-				this.hover,
-			'mark',
-				this.mark,
-			'traitSet',
-				traitSet,
-			'view',
-				this.view
-		)
-	);
-};
-*/
 
 
 /*

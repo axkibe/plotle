@@ -22,8 +22,7 @@ var
 	shell,
 	Style,
 	system,
-	theme,
-	TraitSet;
+	theme;
 
 
 /*
@@ -118,17 +117,6 @@ if( JOOBJ )
 						defaultValue :
 							undefined
 					},
-				traitSet :
-					{
-						comment :
-							'traits set',
-						type :
-							'TraitSet',
-						assign :
-							null,
-						defaultValue :
-							null
-					},
 				view :
 					{
 						comment :
@@ -151,10 +139,7 @@ if( JOOBJ )
 					}
 			},
 		init :
-			[
-				'inherit',
-				'traitSet'
-			],
+			[ ],
 		node :
 			true,
 		subclass :
@@ -187,17 +172,11 @@ Note = Visual.Note;
 | Initializer.
 */
 Note.prototype._init =
-	function(
-		inherit,
-		traitSet
-	)
+	function( )
 {
 	var
-		a,
-		aZ,
 		minHeight,
 		minWidth,
-		t,
 		zone;
 
 	if( !this.view )
@@ -263,36 +242,6 @@ Note.prototype._init =
 	if( this.scrolly === undefined )
 	{
 		this.scrolly = 0;
-	}
-
-	if( traitSet )
-	{
-		for(
-			a = 0, aZ = traitSet.length;
-			a < aZ;
-			a++
-		)
-		{
-			t =
-				traitSet.get( a );
-
-			if( t.path.equals( this.path ) )
-			{
-				switch( t.key )
-				{
-					case 'scrolly' :
-
-						this.scrolly =
-							t.val;
-
-						break;
-
-					default :
-
-						throw new Error( );
-				}
-			}
-		}
 	}
 
 	this.scrollbarY =

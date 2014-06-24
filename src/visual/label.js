@@ -120,18 +120,6 @@ if( JOOBJ )
 						defaultValue :
 							undefined
 					},
-				traitSet :
-					{
-						comment :
-							'traits set',
-						type :
-							'TraitSet',
-						assign :
-							null,
-						// FIXME make defaultValue undefined for server
-						defaultValue :
-							null
-					},
 				view :
 					{
 						comment :

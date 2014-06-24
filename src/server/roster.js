@@ -283,12 +283,6 @@ module.exports =
 	),
 	Resource.Create(
 		'filePath',
-			'src/shell/traitset.js',
-		'inBundle',
-			true
-	),
-	Resource.Create(
-		'filePath',
 			'src/shell/iface.js',
 		'inBundle',
 			true
