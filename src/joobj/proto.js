@@ -22,8 +22,7 @@ var
 */
 if( SERVER )
 {
-	Jools =
-		require( '../jools/jools' );
+	Jools = require( '../jools/jools' );
 }
 
 
@@ -43,8 +42,7 @@ JoobjProto.setPath =
 
 	if( pos === undefined )
 	{
-		pos =
-			0;
+		pos = 0;
 	}
 
 /**/if( CHECK )
@@ -60,10 +58,9 @@ JoobjProto.setPath =
 /**/	}
 /**/}
 
-	pZ =
-		path.length;
-	key =
-		path.get( pos );
+	pZ = path.length;
+
+	key = path.get( pos );
 
 	if( key === 'twig' )
 	{
@@ -72,8 +69,7 @@ JoobjProto.setPath =
 			throw new Error( );
 		}
 
-		key =
-			path.get( pos + 1 );
+		key = path.get( pos + 1 );
 
 		if( pos + 2 === pZ )
 		{
@@ -137,8 +133,7 @@ JoobjProto.getPath =
 
 	if( pos === undefined )
 	{
-		pos =
-			0;
+		pos = 0;
 	}
 
 	if( path.length === pos )
@@ -146,11 +141,9 @@ JoobjProto.getPath =
 		return this;
 	}
 
-	pZ =
-		path.length,
+	pZ = path.length,
 
-	key =
-		path.get( pos );
+	key = path.get( pos );
 
 	if( key === 'twig' )
 	{
@@ -159,8 +152,7 @@ JoobjProto.getPath =
 			throw new Error( );
 		}
 
-		key =
-			path.get( pos + 1 );
+		key = path.get( pos + 1 );
 
 		if( pos + 2 === pZ )
 		{
@@ -210,15 +202,12 @@ JoobjProto.newUID =
 	var
 		u;
 
-	u =
-		Jools.uid( );
+	u = Jools.uid( );
 
 	return (
 		( this.twig[ u ] === undefined )
-			?
-			u
-			:
-			this.newUID( )
+		?  u
+		: this.newUID( )
 	);
 };
 
@@ -256,8 +245,9 @@ JoobjProto.rankOf =
 
 	// checks ranking cache
 	var
-		rof =
-			this._$rof;
+		rof;
+	
+	rof = this._$rof;
 
 	if( !rof )
 	{
@@ -269,8 +259,9 @@ JoobjProto.rankOf =
 	}
 
 	var
-		rank =
-			rof[ key ];
+		rank;
+		
+	rank = rof[ key ];
 
 	if( rank !== undefined )
 	{

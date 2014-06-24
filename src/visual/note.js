@@ -6,7 +6,6 @@
 | Authors: Axel Kittenberger
 */
 
-
 /*
 | Export
 */
@@ -179,8 +178,9 @@ if( SERVER )
 }
 
 var
-	Note =
-		Visual.Note;
+	Note;
+
+Note = Visual.Note;
 
 
 /*
@@ -702,52 +702,12 @@ Note.prototype.scrollMarkIntoView =
 	}
 	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
-		shell.setTraits(
+		shell.setPath(
 			this.path.append( 'scrolly' ),
 			s + pnw.y - zone.height + imargin.s
 		);
 	}
 };
-
-
-/*
-| Scrolls the note so the caret comes into view.
-*/
-/*
-TODO remove:q
-
-Note.prototype.scrollPage =
-	function(
-		up
-	)
-{
-	var
-		zone =
-			this.zone,
-
-		dir =
-			up ? -1 : 1,
-
-		fs =
-			this.doc.font.size;
-
-	shell.setTraits(
-		TraitSet.Create(
-			'trait',
-				this.path,
-				'scrolly',
-				this.scrollbarY.pos + dir * zone.height - fs * 2
-		)
-	);
-
-	var
-		ac =
-			this.doc.attentionCenter( this );
-
-	console.log( 'AC', ac );
-
-};
-*/
 
 
 /*
@@ -773,14 +733,9 @@ Note.prototype.mousewheel =
 		return false;
 	}
 
-	shell.setTraits(
-		TraitSet.Create(
-			'trait',
-				this.path,
-				'scrolly',
-				this.scrollbarY.pos -
-					dir * system.textWheelSpeed
-		)
+	shell.setPath(
+		this.path.append( 'scrolly' ),
+		this.scrollbarY.pos - dir * system.textWheelSpeed
 	);
 
 	return true;

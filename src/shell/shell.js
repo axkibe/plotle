@@ -1161,9 +1161,16 @@ Shell.prototype.setPath =
 
 			break;
 
-		case 'space ' :
+		case 'space' :
+		
+			this.$space =
+				this.$space.setPath(
+					path,
+					value,
+					1
+				);
 
-			throw new Error( 'FIXME' );
+			break;
 
 		default :
 
@@ -1235,8 +1242,7 @@ Shell.prototype.input =
 	{
 		display.input( text );
 
-		focusItem =
-			this.$space.focusedItem( );
+		focusItem = this.$space.focusedItem( );
 
 		if( focusItem && focusItem.scrollMarkIntoView )
 		{
@@ -1304,7 +1310,8 @@ Shell.prototype.setUser =
 	else
 	{
 		if(
-			this.$space &&
+			this.$space
+			&&
 			this.$space.spaceUser !== 'meshcraft'
 		)
 		{
