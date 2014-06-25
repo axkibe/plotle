@@ -185,8 +185,6 @@ Note.prototype._init =
 		return;
 	}
 
-	console.log( 'scrolly', this.scrolly );
-
 	zone = this.zone;
 
 	minWidth = theme.note.minWidth;

@@ -41,33 +41,26 @@ IFace =
 	function( )
 {
 	// the current space;
-	this.$cSpace =
-		null;
+	this.$cSpace = null;
 
 	// the remote tree.
 	// what the client thinks the server thinks.
-	this.$rSpace =
-		null;
+	this.$rSpace = null;
 
 	// the remote time sequence
-	this.$remoteTime =
-		null;
+	this.$remoteTime = null;
 
 	// the current message sequence number
-	this.$mseq =
-		null;
+	this.$mseq = null;
 
 	// changes to be send to the server
-	this._$outbox =
-		null;
+	this._$outbox = null;
 
 	// changes that are currently on the way to the server
-	this.$postbox =
-		null;
+	this.$postbox = null;
 
 	// current update request
-	this._$updateAjax =
-		null;
+	this._$updateAjax = null;
 };
 
 
@@ -80,15 +73,14 @@ IFace.prototype._ajax =
 		callback
 	)
 {
+	var ajax;
+
 	if( !request.cmd )
 	{
 		throw new Error( 'ajax request.cmd missing' );
 	}
 
-
-	var
-		ajax =
-			new XMLHttpRequest( );
+	ajax = new XMLHttpRequest( );
 
 	ajax.open(
 		'POST',
@@ -138,6 +130,7 @@ IFace.prototype._ajax =
 		}
 
 		var asw;
+
 		try
 		{
 			asw = JSON.parse( ajax.responseText );
@@ -176,8 +169,9 @@ IFace.prototype._ajax =
 	};
 
 	var
-		rs =
-			JSON.stringify( request );
+		rs;
+		
+	rs = JSON.stringify( request );
 
 	Jools.log(
 		'iface',
@@ -198,11 +192,9 @@ IFace.prototype.setUser =
 		passhash
 	)
 {
-	this.$user =
-		user;
+	this.$user = user;
 
-	this.$passhash =
-		passhash;
+	this.$passhash = passhash;
 };
 
 
@@ -270,8 +262,9 @@ IFace.prototype.register =
 	)
 {
 	var
-		self =
-			this;
+		self;
+		
+	self = this;
 
 	if( self.$regActive )
 	{
@@ -313,7 +306,9 @@ IFace.prototype.register =
 | Sends a message.
 */
 IFace.prototype.sendMessage =
-	function( message )
+	function(
+		message
+	)
 {
 	var self = this;
 
@@ -326,19 +321,14 @@ IFace.prototype.sendMessage =
 		{
 			cmd :
 				'message',
-
 			user :
 				self.$user,
-
 			passhash :
 				self.$passhash,
-
 			spaceUser :
 				self.$spaceUser,
-
 			spaceTag :
 				self.$spaceTag,
-
 			message :
 				message
 		},
@@ -357,25 +347,25 @@ IFace.prototype.aquireSpace =
 		create
 	)
 {
-	var self =
-		this;
+	var
+		ajax,
+		self;
+
+	self = this;
 
 	// aborts the current running update.
 	if( self._$updateAjax )
 	{
-		self._$updateAjax.$abort =
-			true;
+		self._$updateAjax.$abort = true;
 
 		self._$updateAjax.abort( );
 
-		self._$updateAjax =
-			null;
+		self._$updateAjax = null;
 	}
 
-	var
-		ajax =
-		self.$aquireAjax =
-			new XMLHttpRequest( );
+	ajax =
+	self.$aquireAjax =
+		new XMLHttpRequest( );
 
 	ajax.open(
 		'POST',
@@ -402,8 +392,7 @@ IFace.prototype.aquireSpace =
 
 		if( ajax.status !== 200 )
 		{
-			self.$aquireAjax =
-				null;
+			self.$aquireAjax = null;
 
 			Jools.log(
 				'iface',
@@ -449,8 +438,7 @@ IFace.prototype.aquireSpace =
 
 		if( !asw.ok )
 		{
-			self.$aquireAjax =
-				null;
+			self.$aquireAjax = null;
 
 			throw new Error(
 				'Server not OK: ' + asw.message
@@ -491,22 +479,22 @@ IFace.prototype.aquireSpace =
 		self.$cSpace =
 		self.$rSpace =
 			Visual.Space.CreateFromJSON( asw.node );
-		self.$spaceUser =
-			spaceUser;
-		self.$spaceTag =
-			spaceTag;
-		self._$outbox =
-			[ ];
-		self.$postbox =
-			[ ];
-		self.$mseq =
-			-1;
-		self.$remoteTime =
-			asw.time;
-		self._$undo =
-			[ ];
-		self._$redo =
-			[ ];
+
+		self.$spaceUser = spaceUser;
+
+		self.$spaceTag = spaceTag;
+
+		self._$outbox = [ ];
+
+		self.$postbox = [ ];
+
+		self.$mseq = -1;
+
+		self.$remoteTime = asw.time;
+
+		self._$undo = [ ];
+
+		self._$redo = [ ];
 
 		// FIXME check if $cSpace is a space
 
@@ -549,25 +537,18 @@ IFace.prototype.aquireSpace =
 		{
 			cmd :
 				'get',
-
 			create :
 				create,
-
 			spaceUser :
 				spaceUser,
-
 			spaceTag :
 				spaceTag,
-
 			path :
 				Path.empty,
-
 			passhash :
 				self.$passhash,
-
 			time :
 				-1,
-
 			user :
 				self.$user
 		};
@@ -614,8 +595,7 @@ IFace.prototype._update =
 		ajax,
 		self;
 
-	self =
-		this;
+	self = this;
 
 	if( self._$updateAjax )
 	{
@@ -639,10 +619,18 @@ IFace.prototype._update =
 
 	ajax.onreadystatechange = function( )
 	{
-		var a, aZ, asw, b, bZ, chgX;
+		var
+			a,
+			aZ,
+			asw,
+			b,
+			bZ,
+			chgX;
 
 		if( ajax.readyState !== 4 )
-			{ return; }
+		{
+			return;
+		}
 
 		// ios bug?
 		// hinders the onreadystatechange function to be
@@ -984,22 +972,16 @@ IFace.prototype._update =
 		{
 			cmd :
 				'update',
-
 			passhash :
 				self.$passhash,
-
 			spaceUser :
 				self.$spaceUser,
-
 			spaceTag :
 				self.$spaceTag,
-
 			time :
 				self.$remoteTime,
-
 			mseq :
 				self.$mseq,
-
 			user :
 				self.$user
 		};
@@ -1062,11 +1044,9 @@ IFace.prototype.alter =
 
 	this._$outbox.push( c );
 
-	this._$redo =
-		[ ];
+	this._$redo = [ ];
 
-	undo =
-		this._$undo;
+	undo = this._$undo;
 
 	undo.push( c );
 
@@ -1093,6 +1073,9 @@ IFace.prototype.alter =
 IFace.prototype._sendChanges =
 	function( )
 {
+	var
+		ajax;
+
 	// already sending?
 	if( this.$postbox.length > 0 )
 	{
@@ -1105,8 +1088,7 @@ IFace.prototype._sendChanges =
 		return;
 	}
 
-	var ajax =
-		new XMLHttpRequest( );
+	ajax = new XMLHttpRequest( );
 
 	ajax.open(
 		'POST',
@@ -1217,47 +1199,48 @@ IFace.prototype._sendChanges =
 IFace.prototype.undo =
 	function( )
 {
+	var
+		c,
+		chgX,
+		result;
+
 	if( this._$undo.length === 0 )
 	{
 		return;
 	}
 
-	var
-		chgX =
-			this._$undo.pop( ).chgX.invert( ),
+	chgX =
+		this._$undo.pop( ).chgX.invert( ),
 
-		result =
-			chgX
-			.changeTree( this.$cSpace );
+	result =
+		chgX
+		.changeTree( this.$cSpace );
 
 	if( result === null )
 	{
 		return;
 	}
 
-	this.$cSpace =
-		result.tree;
+	this.$cSpace = result.tree;
 
-	chgX =
-		result.chgX;
+	chgX = result.chgX;
 
 	if( chgX === null )
 	{
 		return;
 	}
 
-	var c = Jools.immute(
-		{
-			cid :
-				Jools.uid( ),
-
-			chgX :
-				chgX,
-
-			time :
-				this.$remoteTime
-		}
-	);
+	c =
+		Jools.immute(
+			{
+				cid :
+					Jools.uid( ),
+				chgX :
+					chgX,
+				time :
+					this.$remoteTime
+			}
+		);
 
 	this._$outbox.push( c );
 
@@ -1281,37 +1264,39 @@ IFace.prototype.undo =
 IFace.prototype.redo =
 	function( )
 {
-	if( this._$redo.length === 0 )
-		{ return; }
-
 	var
-		chgX =
-			this._$redo.pop( ).chgX.invert( ),
+		c,
+		chgX,
+		result;
 
-		result =
-			chgX
-			.changeTree( this.$cSpace );
+	if( this._$redo.length === 0 )
+	{
+		return;
+	}
+
+	chgX = this._$redo.pop( ).chgX.invert( ),
+
+	result =
+		chgX
+		.changeTree( this.$cSpace );
 
 	this.$cSpace =
 		result.tree;
 
-	chgX =
-		result.chgX;
+	chgX = result.chgX;
 
 	if( chgX === null )
 	{
 		return;
 	}
 
-	var c =
+	c =
 		Jools.immute(
 			{
 				cid :
 					Jools.uid( ),
-
 				chgX :
 					chgX,
-
 				time :
 					this.$remoteTime
 			}
