@@ -47,8 +47,8 @@ IFace =
 	// what the client thinks the server thinks.
 	this.$rSpace = null;
 
-	// the remote time sequence
-	this.$remoteTime = null;
+	// the remote sequence number
+	this.$remoteSeq = null;
 
 	// the current message sequence number
 	this.$mseq = null;
@@ -490,7 +490,7 @@ IFace.prototype.aquireSpace =
 
 		self.$mseq = -1;
 
-		self.$remoteTime = asw.time;
+		self.$remoteSeq = asw.seq;
 
 		self._$undo = [ ];
 
@@ -547,7 +547,7 @@ IFace.prototype.aquireSpace =
 				Path.empty,
 			passhash :
 				self.$passhash,
-			time :
+			seq :
 				-1,
 			user :
 				self.$user
@@ -691,8 +691,8 @@ IFace.prototype._update =
 			gotOwnChgs =
 				false,
 
-			time =
-				asw.time;
+			seq =
+				asw.seq;
 
 		// this wasn't an empty timeout?
 		if( chgs && chgs.length > 0 )
@@ -752,7 +752,7 @@ IFace.prototype._update =
 					u =
 						undo[ b ];
 
-					if( u.time < time + a )
+					if( u.seq < seq + a )
 					{
 						tfxChgX =
 							MeshMashine.tfxChgX(
@@ -774,12 +774,10 @@ IFace.prototype._update =
 							Jools.immute( {
 								cid :
 									u.cid,
-
 								chgX :
 									tfxChgX,
-
-								time :
-									u.time
+								seq :
+									u.seq
 							} );
 					}
 				}
@@ -797,7 +795,7 @@ IFace.prototype._update =
 					u =
 						redo[ b ];
 
-					if( u.time < time + a )
+					if( u.seq < seq + a )
 					{
 						tfxChgX =
 							MeshMashine.tfxChgX(
@@ -819,21 +817,18 @@ IFace.prototype._update =
 							Jools.immute( {
 								cid :
 									u.cid,
-
 								chgX :
 									MeshMashine.tfxChgX(
 										u.chgX,
 										chgX
 									),
-
-								time :
-									u.time
+								seq :
+									u.seq
 							} );
 					}
 				}
 
-				report =
-					report.append( chgX );
+				report = report.append( chgX );
 			}
 
 			// adapts all queued changes
@@ -904,12 +899,10 @@ IFace.prototype._update =
 						{
 							cid :
 								c.cid,
-
 							chgX :
 								chgX,
-
-							time :
-								c.time
+							seq :
+								c.seq
 						}
 					);
 
@@ -937,8 +930,8 @@ IFace.prototype._update =
 			}
 		}
 
-		self.$remoteTime =
-			asw.timeZ;
+		self.$remoteSeq =
+			asw.seqZ;
 
 		var
 			mseqZ =
@@ -978,8 +971,8 @@ IFace.prototype._update =
 				self.$spaceUser,
 			spaceTag :
 				self.$spaceTag,
-			time :
-				self.$remoteTime,
+			seq :
+				self.$remoteSeq,
 			mseq :
 				self.$mseq,
 			user :
@@ -1034,12 +1027,10 @@ IFace.prototype.alter =
 		Jools.immute( {
 			cid :
 				Jools.uid( ),
-
 			chgX :
 				chgX,
-
-			time :
-				this.$remoteTime
+			seq :
+				this.$remoteSeq
 		} );
 
 	this._$outbox.push( c );
@@ -1157,25 +1148,18 @@ IFace.prototype._sendChanges =
 		{
 			cmd :
 				'alter',
-
 			spaceUser :
 				this.$spaceUser,
-
 			spaceTag :
 				this.$spaceTag,
-
 			chgX :
 				c.chgX,
-
 			cid :
 				c.cid,
-
 			passhash :
 				this.$passhash,
-
-			time :
-				this.$remoteTime,
-
+			seq :
+				this.$remoteSeq,
 			user :
 				this.$user
 		};
@@ -1237,8 +1221,8 @@ IFace.prototype.undo =
 					Jools.uid( ),
 				chgX :
 					chgX,
-				time :
-					this.$remoteTime
+				seq :
+					this.$remoteSeq
 			}
 		);
 
@@ -1297,8 +1281,8 @@ IFace.prototype.redo =
 					Jools.uid( ),
 				chgX :
 					chgX,
-				time :
-					this.$remoteTime
+				seq :
+					this.$remoteSeq
 			}
 		);
 

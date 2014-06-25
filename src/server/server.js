@@ -1416,15 +1416,15 @@ Server.prototype.cmdAlter =
 	)
 {
 	var
-		time,
 		chgX,
 		cid,
+		passhash,
+		seq,
 		spaceUser,
 		spaceTag,
-		username,
-		passhash;
+		username;
 
-	time = cmd.time;
+	seq = cmd.seq;
 
 	chgX = cmd.chgX;
 
@@ -1469,9 +1469,9 @@ Server.prototype.cmdAlter =
 		throw Jools.reject( 'no access' );
 	}
 
-	if( time === undefined )
+	if( seq === undefined )
 	{
-		throw Jools.reject( 'time missing' );
+		throw Jools.reject( 'seq missing' );
 	}
 
 	if( chgX === undefined )
@@ -1505,14 +1505,14 @@ Server.prototype.cmdAlter =
 		seqZ =
 			space.$seqZ;
 
-	if( time === -1 )
+	if( seq === -1 )
 	{
-		time = seqZ;
+		seq = seqZ;
 	}
 
-	if( !(time >= 0 && time <= seqZ) )
+	if( !(seq >= 0 && seq <= seqZ) )
 	{
-		throw Jools.reject('invalid time');
+		throw Jools.reject( 'invalid seq' );
 	}
 
 	// fits the cmd into data structures
@@ -1537,7 +1537,7 @@ Server.prototype.cmdAlter =
 	}
 
 	// translates the changes if not most recent
-	for( var a = time; a < seqZ; a++ )
+	for( var a = seq; a < seqZ; a++ )
 	{
 		chgX = MeshMashine.tfxChgX(
 			chgX,
@@ -1915,8 +1915,10 @@ Server.prototype.refreshPresence =
 		pus =
 		pu.spaces[ spaceName ] =
 			{
-				establish : 0,
-				timerID : null
+				establish :
+					0,
+				timerID :
+					null
 			};
 
 		pus.timerID =
@@ -2000,7 +2002,6 @@ Server.prototype.establishPresence =
 			{
 				establish :
 					1,
-
 				timerID :
 					null
 			};
@@ -2018,8 +2019,7 @@ Server.prototype.establishPresence =
 		{
 			clearTimeout( pus.timerID );
 
-			pus.timerID =
-				null;
+			pus.timerID = null;
 		}
 
 		pus.establish++;
@@ -2116,14 +2116,14 @@ Server.prototype.cmdUpdate =
 {
 	var
 		asw,
-		user,
+		mseq,
 		passhash,
+		seq,
 		space,
 		spaceName,
 		spaceUser,
 		spaceTag,
-		time,
-		mseq;
+		user;
 
 	user = cmd.user;
 
@@ -2133,7 +2133,7 @@ Server.prototype.cmdUpdate =
 
 	spaceTag = cmd.spaceTag;
 
-	time = cmd.time;
+	seq = cmd.seq;
 
 	mseq = cmd.mseq;
 
@@ -2171,9 +2171,9 @@ Server.prototype.cmdUpdate =
 		throw Jools.reject( 'Unknown space' );
 	}
 
-	if ( !( time >= 0 && time <= space.$seqZ ) )
+	if ( !( seq >= 0 && seq <= space.$seqZ ) )
 	{
-		throw Jools.reject( 'Invalid or missing time: ' + time );
+		throw Jools.reject( 'Invalid or missing seq: ' + seq );
 	}
 
 	if( mseq < 0 )
@@ -2200,7 +2200,7 @@ Server.prototype.cmdUpdate =
 
 	asw =
 		this.conveyUpdate(
-			time,
+			seq,
 			mseq,
 			spaceUser,
 			spaceTag
@@ -2230,8 +2230,8 @@ Server.prototype.cmdUpdate =
 		{
 			user :
 				user,
-			time :
-				time,
+			seq :
+				seq,
 			mseq :
 				mseq,
 			timerID :
@@ -2303,9 +2303,9 @@ Server.prototype.expireSleep =
 		{
 			ok :
 				true,
-			time :
-				sleep.time,
-			timeZ :
+			seq :
+				sleep.seq,
+			seqZ :
 				seqZ,
 			chgs :
 				null
@@ -2366,7 +2366,7 @@ Server.prototype.closeSleep =
 */
 Server.prototype.conveyUpdate =
 	function(
-		time,
+		seq,
 		mseq,
 		spaceUser,
 		spaceTag
@@ -2398,7 +2398,7 @@ Server.prototype.conveyUpdate =
 
 	msgA = [ ];
 
-	for( var c = time; c < seqZ; c++ )
+	for( var c = seq; c < seqZ; c++ )
 	{
 		chgA.push( changes[c] );
 	}
@@ -2419,9 +2419,9 @@ Server.prototype.conveyUpdate =
 	return {
 		ok :
 			true,
-		time :
-			time,
-		timeZ :
+		seq :
+			seq,
+		seqZ :
 			seqZ,
 		chgs :
 			chgA,
@@ -2474,7 +2474,7 @@ Server.prototype.wake =
 		var
 			asw =
 				this.conveyUpdate(
-					sleep.time,
+					sleep.seq,
 					sleep.mseq,
 					sleep.spaceUser,
 					sleep.spaceTag
@@ -2567,12 +2567,12 @@ Server.prototype.cmdGet =
 		chgX,
 		node,
 		passhash,
+		seq,
 		seqZ,
 		space,
 		spaceName,
 		spaceTag,
 		spaceUser,
-		time,
 		tree,
 		user;
 
@@ -2582,7 +2582,7 @@ Server.prototype.cmdGet =
 
 	spaceUser = cmd.spaceUser;
 
-	time = cmd.time;
+	seq = cmd.seq;
 
 	user = cmd.user;
 
@@ -2605,10 +2605,9 @@ Server.prototype.cmdGet =
 		throw Jools.reject( 'wrong user/password' );
 	}
 
-	// FIXME dont call it "time"
-	if( cmd.time === undefined )
+	if( cmd.seq === undefined )
 	{
-		throw Jools.reject( 'time missing' );
+		throw Jools.reject( 'seq missing' );
 	}
 
 	if( cmd.path === undefined )
@@ -2668,13 +2667,13 @@ Server.prototype.cmdGet =
 
 	seqZ = space.$seqZ;
 
-	if( time === -1 )
+	if( seq === -1 )
 	{
-		time = seqZ;
+		seq = seqZ;
 	}
-	else if( !( time >= 0 && time <= seqZ ) )
+	else if( !( seq >= 0 && seq <= seqZ ) )
 	{
-		throw Jools.reject( 'invalid time' );
+		throw Jools.reject( 'invalid seq' );
 	}
 
 	tree = space.$tree;
@@ -2682,7 +2681,7 @@ Server.prototype.cmdGet =
 	// if the requested tree is not the latest, replay it backwards
 	for(
 		a = seqZ - 1;
-		a >= time;
+		a >= seq;
 		a--
 	)
 	{
@@ -2730,8 +2729,8 @@ Server.prototype.cmdGet =
 			'served',
 		access :
 			access,
-		time :
-			time,
+		seq :
+			seq,
 		node :
 			node
 	};

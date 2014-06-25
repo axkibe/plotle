@@ -11,7 +11,7 @@
 . $postbox
 . $rSpace
 . $regActive
-. $remoteTime
+. $remoteSeq
 . $settedDefaultFonts
 . $space
 . $spaceTag
@@ -785,8 +785,8 @@
 . tfxChg
 . tfxChgX
 . tfxSign
-> time
-> timeZ
+> seq
+> seqZ
 . timer
 . toItemPath
 > toJSON
