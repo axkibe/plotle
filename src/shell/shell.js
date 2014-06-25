@@ -380,39 +380,36 @@ Shell.prototype.update =
 		bSign,
 		eSign,
 		mark,
+		sign,
 		item;
 
-	mark =
-		this.space.mark;
+	mark = this.space.mark;
 
 	switch( mark.reflect )
 	{
 		case 'Caret' :
 
-			item =
-				space.twig[ mark.path.get( 2 ) ];
+			item = space.twig[ mark.path.get( 2 ) ];
 
 			if( item === undefined )
 			{
 				// the item holding the caret was removed
-				mark =
-					Mark.Vacant.Create( );
+				mark = Mark.Vacant.Create( );
 			}
 			else
 			{
-				var
-					sign =
-						MeshMashine.tfxSign(
-							new Sign(
-								{
-									path :
-										mark.path.chop( ),
-									at1 :
-										mark.at
-								}
-							),
-							chgX
-						);
+				sign =
+					MeshMashine.tfxSign(
+						new Sign(
+							{
+								path :
+									mark.path.chop( ),
+								at1 :
+									mark.at
+							}
+						),
+						chgX
+					);
 
 				// FIXME
 				//   keeping retainx might not be correct
@@ -432,28 +429,24 @@ Shell.prototype.update =
 
 		case 'Item' :
 
-			item =
-				space.twig[ mark.path.get( 2 ) ];
+			item = space.twig[ mark.path.get( 2 ) ];
 
 			if( item === undefined )
 			{
 				// the item holding the caret was removed
-				mark =
-					Mark.Vacant.Create( );
+				mark = Mark.Vacant.Create( );
 			}
 
 			break;
 
 		case 'Range' :
 
-			item =
-				space.twig[ mark.bPath.get( 2 ) ];
+			item = space.twig[ mark.bPath.get( 2 ) ];
 
 			// tests if the owning item was removed
 			if( item === undefined )
 			{
-				mark =
-					Mark.Vacant.Create( );
+				mark = Mark.Vacant.Create( );
 			}
 			else
 			{

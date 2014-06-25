@@ -154,15 +154,15 @@ if( SERVER )
 
 	Visual =
 		{
-			Space :
-				require( '../joobj/this' )( module )
+			Space : require( '../joobj/this' )( module )
 		};
 }
 
 
 var
-	Space =
-		Visual.Space;
+	Space;
+	
+Space = Visual.Space;
 
 /*
 | Initializer.
@@ -181,8 +181,7 @@ Space.prototype._init =
 
 	if( !twigDup )
 	{
-		this.twig =
-			Jools.copy( this.twig );
+		this.twig = Jools.copy( this.twig );
 	}
 
 	for( var k in this.twig )
@@ -208,8 +207,7 @@ Space.prototype._init =
 /*
 | The disc is shown while a space is shown.
 */
-Space.prototype.showDisc =
-	true;
+Space.prototype.showDisc = true;
 
 
 /*
@@ -252,12 +250,11 @@ Space.prototype.focusedItem =
 		mark,
 		path;
 
-	action =
-		shell.action;
-	mark =
-		this.mark;
-	path =
-		mark.itemPath;
+	action = shell.action;
+
+	mark = this.mark;
+
+	path = mark.itemPath;
 
 	if( action )
 	{
@@ -363,15 +360,17 @@ Space.prototype.draw =
 {
 	var
 		action,
+		arrow,
 		focus,
+		fromSilhoutte,
 		r,
+		toItem,
+		toSilhoutte,
 		view;
 
-	view =
-		this.view,
+	view = this.view,
 
-	action =
-		shell.action;
+	action = shell.action;
 
 	for(
 		r = this.ranks.length - 1;
@@ -382,8 +381,7 @@ Space.prototype.draw =
 		this.atRank( r ).draw( fabric );
 	}
 
-	focus =
-		this.focusedItem( );
+	focus = this.focusedItem( );
 
 	if( focus )
 	{
@@ -416,9 +414,7 @@ Space.prototype.draw =
 
 				fromItem.highlight( fabric );
 
-				var
-					toItem =
-						null;
+				toItem = null;
 
 				if( !action.toItemPath.isEmpty )
 				{
@@ -430,11 +426,7 @@ Space.prototype.draw =
 					toItem.highlight( fabric );
 				}
 
-				var
-					fromSilhoutte =
-						fromItem.silhoutte,
-
-					toSilhoutte;
+				fromSilhoutte = fromItem.silhoutte;
 
 				if(
 					!action.toItemPath.isEmpty
@@ -443,8 +435,7 @@ Space.prototype.draw =
 				)
 				{
 					// arrow connects two items
-					toSilhoutte =
-						toItem.silhoutte;
+					toSilhoutte = toItem.silhoutte;
 				}
 				else if ( action.relationState === 'hadSelect' )
 				{
@@ -455,7 +446,7 @@ Space.prototype.draw =
 
 				if( toSilhoutte )
 				{
-					var arrow =
+					arrow =
 						Euclid.Line.connect(
 							fromSilhoutte,
 							'normal',
@@ -475,8 +466,8 @@ Space.prototype.draw =
 				if( !this.hover.isEmpty )
 				{
 					this
-						.getItem( this.hover.get( 2 ) )
-						.highlight( fabric );
+					.getItem( this.hover.get( 2 ) )
+					.highlight( fabric );
 				}
 			}
 
@@ -502,8 +493,7 @@ Space.prototype.mousewheel =
 		rZ,
 		view;
 
-	view =
-		this.view;
+	view = this.view;
 
 	for(
 		r = 0, rZ = this.ranks.length;

@@ -185,14 +185,13 @@ Note.prototype._init =
 		return;
 	}
 
-	zone =
-		this.zone;
+	console.log( 'scrolly', this.scrolly );
 
-	minWidth =
-		theme.note.minWidth;
+	zone = this.zone;
 
-	minHeight =
-		theme.note.minHeight;
+	minWidth = theme.note.minWidth;
+
+	minHeight = theme.note.minHeight;
 
 	if(
 		zone.width  < minWidth ||
