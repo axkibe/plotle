@@ -848,20 +848,15 @@ Para.prototype.input =
 		rx,
 		textPath;
 
-	reg =
-		/([^\n]+)(\n?)/g;
+	reg = /([^\n]+)(\n?)/g;
 
-	path =
-		this.path;
+	path = this.path;
 
-	paraKey =
-		this.key;
+	paraKey = this.key;
 
-	textPath =
-		this.textPath;
+	textPath = this.textPath;
 
-	doc =
-		item.doc;
+	doc = item.doc;
 
 	caretAt =
 		this.mark.caretAt;
@@ -891,22 +886,18 @@ Para.prototype.input =
 					caretAt + line.length
 				);
 
-			doc =
-				r.tree.getPath( path.chop( ).limit( 2 ) );
+			doc = r.tree.getPath( path.chop( ).limit( 3 ) );
 
 			paraKey =
 				doc.ranks[
 					doc.rankOf( paraKey ) + 1
 				];
+			
+			path = path.limit( 5 ).append( paraKey );
 
-			path =
-				path.limit( 3 ).append( paraKey );
+			textPath = path.append( 'text' );
 
-			textPath =
-				path.append( 'text' );
-
-			caretAt =
-				0;
+			caretAt = 0;
 		}
 	}
 };

@@ -1,7 +1,7 @@
 /*
 | This is a wrapper around HTML5 browsers,
 | creating a more comfortable interface for
-| graphical systems like the meshcraft shell.
+| meshcraft shell.
 |
 | Authors: Axel Kittenberger
 */
@@ -11,7 +11,7 @@
 | Export
 */
 var
-	makeCatcher,
+	catcher,
 	system,
 	startup;
 
@@ -37,7 +37,7 @@ var
 /*
 | Catches all errors a function throws if config.devel is set.
 */
-makeCatcher =
+catcher =
 	function(
 		t,
 		f
@@ -189,43 +189,43 @@ var System =
 		null;
 
 	_canvas.onmousedown =
-		makeCatcher(
+		catcher(
 			this,
 			this._onMouseDown
 		);
 
 	_canvas.onmousemove =
-		makeCatcher(
+		catcher(
 			this,
 			this._onMouseMove
 		);
 
 	_canvas.onmouseup =
-		makeCatcher(
+		catcher(
 			this,
 			this._onMouseUp
 		);
 
 	_canvas.ontouchstart =
-		makeCatcher(
+		catcher(
 			this,
 			this._onTouchStart
 		);
 
 	_canvas.ontouchmove =
-		makeCatcher(
+		catcher(
 			this,
 			this._onTouchMove
 		);
 
 	_canvas.ontouchend =
-		makeCatcher(
+		catcher(
 			this,
 			this._onTouchEnd
 		);
 
 	_canvas.onmousewheel =
-		makeCatcher(
+		catcher(
 			this,
 			this._onMouseWheel
 		);
@@ -241,67 +241,67 @@ var System =
 	window.scrollTo( 0, 0 );
 
 	window.onresize =
-		makeCatcher(
+		catcher(
 			this,
 			this._onResize
 		);
 
 	window.onfocus =
-		makeCatcher(
+		catcher(
 			this,
 			this._onSystemFocus
 		);
 
 	window.onblur =
-		makeCatcher(
+		catcher(
 			this,
 			this._onSystemBlur
 		);
 
 	_hiddenInput.onblur =
-		makeCatcher(
+		catcher(
 			this,
 			this._onHiddenInputBlur
 		);
 
 	document.onkeyup =
-		makeCatcher(
+		catcher(
 			this,
 			this._onKeyUp
 		);
 
 	document.onkeydown =
-		makeCatcher(
+		catcher(
 			this,
 			this._onKeyDown
 		);
 
 	document.onkeypress =
-		makeCatcher(
+		catcher(
 			this,
 			this._onKeyPress
 		);
 
 	this._testInputCatcher =
-		makeCatcher(
+		catcher(
 			this,
 			this._testInput
 		);
 
 	this._onAtweenTimeCatcher =
-		makeCatcher(
+		catcher(
 			this,
 			this._onAtweenTime
 		);
 
 	this._blinkCatcher =
-		makeCatcher(
+		catcher(
 			this,
 			this._blink
 		);
 
 	document.oncontextmenu =
-		makeCatcher(
+		catcher(
 			this,
 			this._onContextMenu
 		);
@@ -516,7 +516,7 @@ System.prototype.setTimer =
 	)
 {
 	return window.setTimeout(
-		makeCatcher(
+		catcher(
 			null,
 			callback
 		),
@@ -1760,8 +1760,10 @@ System.prototype._steerAttention =
 */
 startup = function( )
 {
-	var catcher =
-		makeCatcher(
+	var start;
+
+	start =
+		catcher(
 			null,
 			function( )
 			{
@@ -1778,7 +1780,7 @@ startup = function( )
 
 	if( !config.debug.weinre )
 	{
-		catcher( );
+		start( );
 	}
 	else
 	{

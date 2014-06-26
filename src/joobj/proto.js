@@ -225,8 +225,11 @@ JoobjProto.rankOf =
 	)
 {
 	var
-		ranks =
-			this.ranks;
+		rank,
+		ranks,
+		rof;
+		
+	ranks = this.ranks;
 
 /**/if( CHECK )
 /**/{
@@ -244,9 +247,6 @@ JoobjProto.rankOf =
 /**/}
 
 	// checks ranking cache
-	var
-		rof;
-	
 	rof = this._$rof;
 
 	if( !rof )
@@ -258,9 +258,6 @@ JoobjProto.rankOf =
 		);
 	}
 
-	var
-		rank;
-		
 	rank = rof[ key ];
 
 	if( rank !== undefined )
@@ -283,8 +280,7 @@ JoobjProto.rankOf =
 */
 if( SERVER )
 {
-	module.exports =
-		JoobjProto;
+	module.exports = JoobjProto;
 }
 
 
