@@ -72,7 +72,7 @@ catcher =
 						'Please report to axkibe@gmail.com'
 					].join('');
 
-				if( true || !config.debug.weinre ) // TODO
+				if( !config.debug.weinre )
 				{
 					system.failScreen( message );
 				}
@@ -92,8 +92,7 @@ catcher =
 
 
 var
-	_failScreen =
-		false,
+	_failScreen = false,
 
 	// the main canvas everything is
 	// drawn upon
@@ -114,6 +113,23 @@ var
 	// false, 'atween' or 'drag'
 	_pointingState =
 		false;
+
+/*
+| Creates a catcher that calls a system function.
+*/
+var _systemCatcher =
+	function(
+		funcName  // name of the function to call	
+	)
+{
+	return (
+		function( )
+		{
+			catcher( system[ funcName ].apply( system, arguments ) );
+		}
+	);
+};
+
 
 
 /*
@@ -175,52 +191,28 @@ var System =
 		});
 
 	// hidden input that forwards all events
-	_hiddenInput =
-		document.getElementById( 'input' );
+	_hiddenInput = document.getElementById( 'input' );
 
 	// remembers last special key pressed, to hinder double events.
 	// Opera is behaving stupid here.
-	this._$lastSpecialKey =
-		-1;
+	this._$lastSpecialKey = -1;
 
 	// remembers last pointing device hovering state.
-	this._$hover =
-		null;
+	this._$hover = null;
 
-	_canvas.onmousedown =
-		catcher(
-			function( ) { system._onMouseDown.apply( system, arguments ); }
-		);
+	_canvas.onmousedown = _systemCatcher( '_onMouseDown' );
 
-	_canvas.onmousemove =
-		catcher(
-			function( ) { system._onMouseMove.apply( system, arguments ); }
-		);
+	_canvas.onmousemove = _systemCatcher( '_onMouseMove' );
 
-	_canvas.onmouseup =
-		catcher(
-			function( ) { system._onMouseUp.apply( system, arguments ); }
-		);
+	_canvas.onmouseup = _systemCatcher( '_onMouseUp' );
 
-	_canvas.ontouchstart =
-		catcher(
-			function( ) { system._onTouchStart.apply( system, arguments ); }
-		);
+	_canvas.ontouchstart = _systemCatcher( '_onTouchStart' );
 
-	_canvas.ontouchmove =
-		catcher(
-			function( ) { system._onTouchMove.apply( system, arguments ); }
-		);
+	_canvas.ontouchmove = _systemCatcher( '_onTouchMove' );
 
-	_canvas.ontouchend =
-		catcher(
-			function( ) { system._onTouchEnd.apply( system, arguments ); }
-		);
+	_canvas.ontouchend = _systemCatcher( '_onTouchEnd' );
 
-	_canvas.onmousewheel =
-		catcher(
-			function( ) { system._onMouseWheel.apply( system, arguments ); }
-		);
+	_canvas.onmousewheel = _systemCatcher( '_onMouseWheel' );
 
 	// firefox wheel listening
 	_canvas.addEventListener(
@@ -232,60 +224,27 @@ var System =
 	// iPad sometimes starts just somewhere
 	window.scrollTo( 0, 0 );
 
-	window.onresize =
-		catcher(
-			function( ) { system._onResize.apply( system, arguments ); }
-		);
+	window.onresize = _systemCatcher( '_onResize' );
 
-	window.onfocus =
-		catcher(
-			function( ) { system._onSystemFocus.apply( system, arguments ); }
-		);
+	window.onfocus = _systemCatcher( '_onSystemFocus' );
 
-	window.onblur =
-		catcher(
-			function( ) { system._onSystemBlur.apply( system, arguments ); }
-		);
+	window.onblur = _systemCatcher( '_onSystemBlur' );
 
-	_hiddenInput.onblur =
-		catcher(
-			function( ) { system._onHiddenInputBlur.apply( system, arguments ); }
-		);
+	_hiddenInput.onblur = _systemCatcher( '_onHiddenInputBlur' );
 
-	document.onkeyup =
-		catcher(
-			function( ) { system._onKeyUp.apply( system, arguments ); }
-		);
+	document.onkeyup = _systemCatcher( '_onKeyUp' );
 
-	document.onkeydown =
-		catcher(
-			function( ) { system._onKeyDown.apply( system, arguments ); }
-		);
+	document.onkeydown = _systemCatcher( '_onKeyDown' );
 
-	document.onkeypress =
-		catcher(
-			function( ) { system._onKeyPress.apply( system, arguments ); }
-		);
+	document.onkeypress = _systemCatcher( '_onKeyPress' );
 
-	this._testInputCatcher =
-		catcher(
-			function( ) { system._testInput.apply( system, arguments ); }
-		);
+	this._testInputCatcher = _systemCatcher( '_testInput' );
 
-	this._onAtweenTimeCatcher =
-		catcher(
-			function( ) { system._onAtweenTime.apply( system, arguments ); }
-		);
+	this._onAtweenTimeCatcher = _systemCatcher( '_onAtweenTime' );
 
-	this._blinkCatcher =
-		catcher(
-			function( ) { system._blink.apply( system, arguments ); }
-		);
+	this._blinkCatcher = _systemCatcher( '_blink' );
 
-	document.oncontextmenu =
-		catcher(
-			function( ) { system._onContextMenu.apply( system, arguments ); }
-		);
+	document.oncontextmenu = _systemCatcher( '_onContextMenu' );
 
 	// the blink (and check input) timer
 	this._blinkTimer = null;
@@ -354,6 +313,8 @@ System.prototype.failScreen =
 		message
 	)
 {
+	var body;
+
 	if( console )
 	{
 		console.log(
@@ -367,12 +328,9 @@ System.prototype.failScreen =
 		return;
 	}
 
-	_failScreen =
-		true;
+	_failScreen = true;
 
-	var
-		body =
-			document.body;
+	body = document.body;
 
 	body.removeChild( _canvas );
 
