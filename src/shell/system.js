@@ -11,6 +11,7 @@
 | Export
 */
 var
+	makeCatcher,
 	system,
 	startup;
 
@@ -36,7 +37,7 @@ var
 /*
 | Catches all errors a function throws if config.devel is set.
 */
-var makeCatcher =
+makeCatcher =
 	function(
 		t,
 		f
@@ -44,6 +45,8 @@ var makeCatcher =
 {
 	return function( )
 	{
+		var message;
+
 		if(
 			config.devel &&
 			!config.debug.weinre
@@ -59,7 +62,7 @@ var makeCatcher =
 		catch( e )
 		{
 			try {
-				var message =
+				message =
 					[
 						'OOPS! Internal failure, ',
 							e.name, ': ',
@@ -125,11 +128,9 @@ var System =
 		throw new Error( );
 	}
 
-	_canvas =
-		document.getElementById( 'canvas' );
+	_canvas = document.getElementById( 'canvas' );
 
-	_height =
-		window.innerHeight - 1;
+	_height = window.innerHeight - 1;
 
 	this._fabric =
 		Euclid.Fabric.Create(
@@ -1757,15 +1758,14 @@ System.prototype._steerAttention =
 /*
 | System starts up ( pages loades )
 */
-startup =
-	function( )
+startup = function( )
 {
 	var catcher =
 		makeCatcher(
 			null,
-			function( ) {
-				system =
-					new System( );
+			function( )
+			{
+				system = new System( );
 
 				(
 					new Shell( system._fabric )

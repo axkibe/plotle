@@ -88,12 +88,10 @@ IFace.prototype._ajax =
 		true
 	);
 
-
 	ajax.setRequestHeader(
 		'Content-type',
 		'application/x-www-form-urlencoded'
 	);
-
 
 	ajax.onreadystatechange =
 		function( )
