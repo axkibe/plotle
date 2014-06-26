@@ -51,12 +51,12 @@ catcher =
 			!config.debug.weinre
 		)
 		{
-			return func.apply( null, arguments );
+			return func.apply( this, arguments );
 		}
 
 		try
 		{
-			func.apply( null, arguments );
+			func.apply( this, arguments );
 		}
 		catch( e )
 		{

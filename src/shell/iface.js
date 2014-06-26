@@ -16,12 +16,14 @@ var
 | Imports
 */
 var
+	catcher,
 	Change,
 	ChangeRay,
 	config,
 	Jools,
 	MeshMashine,
 	Path,
+	shell,
 	Sign,
 	system,
 	Visual;
@@ -33,6 +35,34 @@ var
 ( function( ) {
 'use strict';
 
+
+var
+	_ifaceCatcher;
+
+/*
+| Creates a catcher that calls an iface function.
+*/
+_ifaceCatcher =
+	function(
+		funcName // name of the function to call
+	)
+{
+	return (
+		function( )
+		{
+			var iface = shell.peer.iface;
+
+			catcher( iface[ funcName ].apply( this, arguments ) );
+		}
+	);
+};
+
+
+/*
+| FIXME move back into the peer object and make it a joobj.
+*/
+var
+	_updateAjax;
 
 /*
 | Constructor.
@@ -58,9 +88,6 @@ IFace =
 
 	// changes that are currently on the way to the server
 	this.$postbox = null;
-
-	// current update request
-	this._$updateAjax = null;
 };
 
 
@@ -73,12 +100,17 @@ IFace.prototype._ajax =
 		callback
 	)
 {
-	var ajax;
+	var
+		ajax,
+		rs;
 
-	if( !request.cmd )
-	{
-		throw new Error( 'ajax request.cmd missing' );
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( !request.cmd )
+/**/	{
+/**/		throw new Error( 'ajax request.cmd missing' );
+/**/	}
+/**/}
 
 	ajax = new XMLHttpRequest( );
 
@@ -139,8 +171,10 @@ IFace.prototype._ajax =
 			{
 				callback(
 					{
-						ok      : false,
-						message : 'nojson'
+						ok :
+							false,
+						message :
+							'nojson'
 					}
 				);
 			}
@@ -166,9 +200,6 @@ IFace.prototype._ajax =
 		}
 	};
 
-	var
-		rs;
-		
 	rs = JSON.stringify( request );
 
 	Jools.log(
@@ -217,9 +248,12 @@ IFace.prototype.auth =
 
 	self._ajax(
 		{
-			cmd      : 'auth',
-			user     : user,
-			passhash : passhash
+			cmd :
+				'auth',
+			user :
+				user,
+			passhash :
+				passhash
 		},
 		function( asw )
 		{
@@ -352,13 +386,13 @@ IFace.prototype.aquireSpace =
 	self = this;
 
 	// aborts the current running update.
-	if( self._$updateAjax )
+	if( _updateAjax )
 	{
-		self._$updateAjax.$abort = true;
+		_updateAjax.aborted = true;
 
-		self._$updateAjax.abort( );
+		_updateAjax.abort( );
 
-		self._$updateAjax = null;
+		_updateAjax = null;
 	}
 
 	ajax =
@@ -381,7 +415,8 @@ IFace.prototype.aquireSpace =
 	{
 		var asw;
 
-		if( ajax.readyState !== 4 ||
+		if(
+			ajax.readyState !== 4 ||
 			self.$aquireAjax !== ajax
 		)
 		{
@@ -591,17 +626,18 @@ IFace.prototype._update =
 {
 	var
 		ajax,
-		self;
+		request;
 
-	self = this;
-
-	if( self._$updateAjax )
-	{
-		throw new Error( 'double update?' );
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( _updateAjax )
+/**/	{
+/**/		throw new Error( 'double update?' );
+/**/	}
+/**/}
 
 	ajax =
-	self._$updateAjax =
+	_updateAjax =
 		new XMLHttpRequest( );
 
 	ajax.open(
@@ -615,366 +651,26 @@ IFace.prototype._update =
 		'application/x-www-form-urlencoded'
 	);
 
-	ajax.onreadystatechange = function( )
-	{
-		var
-			a,
-			aZ,
-			asw,
-			b,
-			bZ,
-			chgX;
+	ajax.onreadystatechange =
+		_ifaceCatcher( '_onUpdate' );
 
-		if( ajax.readyState !== 4 )
-		{
-			return;
-		}
 
-		// ios bug?
-		// hinders the onreadystatechange function to be
-		// called multiple times
-		ajax.onreadystatechange = null;
-
-		// call was willingfull aborted
-		if( ajax.$abort )
-		{
-			return;
-		}
-
-		self._$updateAjax = null;
-
-		if( ajax.status !== 200 )
-		{
-			Jools.log(
-				'iface',
-				'update.status == ' + ajax.status
-			);
-
-			system.failScreen(
-				'Connection with server failed.'
-			);
-
-			return;
-		}
-
-		try
-		{
-			asw = JSON.parse( ajax.responseText );
-		}
-		catch( e )
-		{
-			throw new Error(
-				'Server answered no JSON!'
-			);
-		}
-
-		Jools.log( 'iface', '<-u', asw );
-
-		if( !asw.ok )
-		{
-			system.failScreen(
-				'Server not OK: ' + asw.message
-			);
-
-			return;
-		}
-
-		var
-			chgs =
-				asw.chgs,
-
-			report =
-				new ChangeRay( ),
-
-			gotOwnChgs =
-				false,
-
-			seq =
-				asw.seq;
-
-		// this wasn't an empty timeout?
-		if( chgs && chgs.length > 0 )
-		{
-			var postbox =
-				self.$postbox;
-
-			for(
-				a = 0, aZ = chgs.length;
-				a < aZ;
-				a++
-			)
-			{
-				chgX =
-					new Change(
-						chgs[ a ].chgX.src,
-						chgs[ a ].chgX.trg
-					);
-
-				var
-					cid =
-						chgs[ a ].cid;
-
-				// changes the clients understanding of the server tree
-				self.$rSpace =
-					chgX
-					.changeTree( self.$rSpace)
-					.tree;
-
-				if(
-					postbox.length > 0
-					&&
-					postbox[ 0 ].cid === cid
-				)
-				{
-					postbox.splice( 0, 1 );
-
-					gotOwnChgs =
-						true;
-
-					continue;
-				}
-
-				// alters undo and redo queues.
-				var
-					tfxChgX,
-					u,
-					undo =
-						self._$undo;
-
-				for(
-					b = 0, bZ = undo.length;
-					b < bZ;
-					b++
-				)
-				{
-					u =
-						undo[ b ];
-
-					if( u.seq < seq + a )
-					{
-						tfxChgX =
-							MeshMashine.tfxChgX(
-								u.chgX,
-								chgX
-							);
-
-						// the change vanished by transformation
-						if( tfxChgX === null )
-						{
-							undo.splice( b--, 1 );
-							bZ--;
-
-							continue;
-						}
-
-						u =
-						undo[ b ] =
-							Jools.immute( {
-								cid :
-									u.cid,
-								chgX :
-									tfxChgX,
-								seq :
-									u.seq
-							} );
-					}
-				}
-
-				var
-					redo =
-						self._$redo;
-
-				for(
-					b = 0, bZ = redo.length;
-					b < bZ;
-					b++
-				)
-				{
-					u =
-						redo[ b ];
-
-					if( u.seq < seq + a )
-					{
-						tfxChgX =
-							MeshMashine.tfxChgX(
-								u.chgX,
-								chgX
-							);
-
-						// the change vanished by transformation
-						if( tfxChgX === null )
-						{
-							undo.splice( b--, 1 );
-							bZ--;
-
-							continue;
-						}
-
-						u =
-						redo[ b ] =
-							Jools.immute( {
-								cid :
-									u.cid,
-								chgX :
-									MeshMashine.tfxChgX(
-										u.chgX,
-										chgX
-									),
-								seq :
-									u.seq
-							} );
-					}
-				}
-
-				report = report.append( chgX );
-			}
-
-			// adapts all queued changes
-			// and rebuilds the clients understanding of its own tree
-			var outbox =
-				self._$outbox;
-
-			var space =
-				self.$rSpace;
-
-			for(
-				a = 0, aZ = postbox.length;
-				a < aZ;
-				a++
-			)
-			{
-				chgX =
-					postbox[ a ].chgX;
-
-				for(
-					b = 0, bZ = report.length;
-					b < bZ;
-					b++
-				)
-				{
-					chgX =
-						MeshMashine.tfxChgX(
-							chgX,
-							report.get( b )
-						);
-				}
-
-				space =
-					chgX
-					.changeTree( space )
-					.tree;
-			}
-
-			// transforms the outbox
-			for(
-				a = 0, aZ = outbox.length;
-				a < aZ;
-				a++
-			)
-			{
-				var c =
-					outbox[ a ];
-
-				chgX =
-					c.chgX;
-
-				for(
-					b = 0, bZ = report.length;
-					b < bZ;
-					b++
-				)
-				{
-					chgX =
-						MeshMashine.tfxChgX(
-							chgX,
-							report.get( b )
-						);
-				}
-
-				c =
-				outbox[ a ] =
-					Jools.immute(
-						{
-							cid :
-								c.cid,
-							chgX :
-								chgX,
-							seq :
-								c.seq
-						}
-					);
-
-				space =
-					chgX
-					.changeTree( space )
-					.tree;
-			}
-
-			self.$cSpace =
-				space;
-		}
-
-		var msgs =
-			asw.msgs;
-
-		if( msgs )
-		{
-			for( a = 0, aZ = msgs.length; a < aZ; a++ )
-			{
-				system.asyncEvent(
-					'message',
-					msgs[ a ]
-				);
-			}
-		}
-
-		self.$remoteSeq =
-			asw.seqZ;
-
-		var
-			mseqZ =
-				asw.mseqZ;
-
-		if( Jools.is( mseqZ ) )
-		{
-			self.$mseq =
-				mseqZ;
-		}
-
-		if( report.length > 0 )
-		{
-			system.asyncEvent(
-				'update',
-				self.$cSpace,
-				report
-			);
-		}
-
-		if( gotOwnChgs )
-		{
-			self._sendChanges( );
-		}
-
-		// issue the following update
-		self._update( );
-	};
-
-	var request =
+	request =
 		{
 			cmd :
 				'update',
 			passhash :
-				self.$passhash,
+				this.$passhash,
 			spaceUser :
-				self.$spaceUser,
+				this.$spaceUser,
 			spaceTag :
-				self.$spaceTag,
+				this.$spaceTag,
 			seq :
-				self.$remoteSeq,
+				this.$remoteSeq,
 			mseq :
-				self.$mseq,
+				this.$mseq,
 			user :
-				self.$user
+				this.$user
 		};
 
 	Jools.log(
@@ -987,6 +683,349 @@ IFace.prototype._update =
 		JSON.stringify( request );
 
 	ajax.send( request );
+};
+
+
+/*
+| Called by network on an update.
+*/
+IFace.prototype._onUpdate =
+	function( )
+{
+	var
+		a,
+		aZ,
+		asw,
+		b,
+		bZ,
+		c,
+		chgX,
+		chgs,
+		cid,
+		iface,
+		gotOwnChgs,
+		msgs,
+		mseqZ,
+		outbox,
+		postbox,
+		redo,
+		report,
+		seq,
+		space,
+		tfxChgX,
+		u,
+		undo;
+
+	iface = shell.peer.iface;
+
+	if( this.readyState !== 4 )
+	{
+		return;
+	}
+	
+	if(
+		this !== _updateAjax
+		||
+		_updateAjax.aborted
+	)
+	{
+		console.log( 'invalid ajax call in onUpdate' );
+	}
+
+	// ios bug?
+	// hinders the onreadystatechange function to be
+	// called multiple times
+	this.onreadystatechange = null;
+
+	_updateAjax = null;
+
+	if( this.status !== 200 )
+	{
+		Jools.log(
+			'iface',
+			'update.status == ' + this.status
+		);
+
+		system.failScreen(
+			'Connection with server failed.'
+		);
+
+		return;
+	}
+
+	try
+	{
+		asw = JSON.parse( this.responseText );
+	}
+	catch( e )
+	{
+		throw new Error(
+			'Server answered no JSON!'
+		);
+	}
+
+	Jools.log( 'iface', '<-u', asw );
+
+	if( !asw.ok )
+	{
+		system.failScreen(
+			'Server not OK: ' + asw.message
+		);
+
+		return;
+	}
+
+	chgs = asw.chgs;
+
+	report = new ChangeRay( );
+
+	gotOwnChgs = false;
+
+	seq = asw.seq;
+
+	// this wasn't an empty timeout?
+	if( chgs && chgs.length > 0 )
+	{
+		postbox = iface.$postbox;
+
+		for(
+			a = 0, aZ = chgs.length;
+			a < aZ;
+			a++
+		)
+		{
+			chgX =
+				new Change(
+					chgs[ a ].chgX.src,
+					chgs[ a ].chgX.trg
+				);
+
+			cid = chgs[ a ].cid;
+
+			// changes the clients understanding of the server tree
+			iface.$rSpace =
+				chgX
+				.changeTree( iface.$rSpace)
+				.tree;
+
+			if(
+				postbox.length > 0
+				&&
+				postbox[ 0 ].cid === cid
+			)
+			{
+				postbox.splice( 0, 1 );
+
+				gotOwnChgs = true;
+
+				continue;
+			}
+
+			// alters undo and redo queues.
+			undo = iface._$undo;
+
+			for(
+				b = 0, bZ = undo.length;
+				b < bZ;
+				b++
+			)
+			{
+				u = undo[ b ];
+
+				if( u.seq < seq + a )
+				{
+					tfxChgX =
+						MeshMashine.tfxChgX(
+							u.chgX,
+							chgX
+						);
+
+					// the change vanished by transformation
+					if( tfxChgX === null )
+					{
+						undo.splice( b--, 1 );
+						bZ--;
+
+						continue;
+					}
+
+					u =
+					undo[ b ] =
+						Jools.immute( {
+							cid :
+								u.cid,
+							chgX :
+								tfxChgX,
+							seq :
+								u.seq
+						} );
+				}
+			}
+
+			redo = iface._$redo;
+
+			for(
+				b = 0, bZ = redo.length;
+				b < bZ;
+				b++
+			)
+			{
+				u = redo[ b ];
+
+				if( u.seq < seq + a )
+				{
+					tfxChgX =
+						MeshMashine.tfxChgX(
+							u.chgX,
+							chgX
+						);
+
+					// the change vanished by transformation
+					if( tfxChgX === null )
+					{
+						undo.splice( b--, 1 );
+						bZ--;
+
+						continue;
+					}
+
+					u =
+					redo[ b ] =
+						Jools.immute( {
+							cid :
+								u.cid,
+							chgX :
+								MeshMashine.tfxChgX(
+									u.chgX,
+									chgX
+								),
+							seq :
+								u.seq
+						} );
+				}
+			}
+
+			report = report.append( chgX );
+		}
+
+		// adapts all queued changes
+		// and rebuilds the clients understanding of its own tree
+		outbox = iface._$outbox;
+
+		space = iface.$rSpace;
+
+		for(
+			a = 0, aZ = postbox.length;
+			a < aZ;
+			a++
+		)
+		{
+			chgX =
+				postbox[ a ].chgX;
+
+			for(
+				b = 0, bZ = report.length;
+				b < bZ;
+				b++
+			)
+			{
+				chgX =
+					MeshMashine.tfxChgX(
+						chgX,
+						report.get( b )
+					);
+			}
+
+			space =
+				chgX
+				.changeTree( space )
+				.tree;
+		}
+
+		// transforms the outbox
+		for(
+			a = 0, aZ = outbox.length;
+			a < aZ;
+			a++
+		)
+		{
+			c = outbox[ a ];
+
+			chgX = c.chgX;
+
+			for(
+				b = 0, bZ = report.length;
+				b < bZ;
+				b++
+			)
+			{
+				chgX =
+					MeshMashine.tfxChgX(
+						chgX,
+						report.get( b )
+					);
+			}
+
+			c =
+			outbox[ a ] =
+				Jools.immute(
+					{
+						cid :
+							c.cid,
+						chgX :
+							chgX,
+						seq :
+							c.seq
+					}
+				);
+
+			space =
+				chgX
+				.changeTree( space )
+				.tree;
+		}
+
+		iface.$cSpace = space;
+	}
+
+	msgs = asw.msgs;
+
+	if( msgs )
+	{
+		for( a = 0, aZ = msgs.length; a < aZ; a++ )
+		{
+			system.asyncEvent(
+				'message',
+				msgs[ a ]
+			);
+		}
+	}
+
+	iface.$remoteSeq = asw.seqZ;
+
+	mseqZ = asw.mseqZ;
+
+	if( Jools.is( mseqZ ) )
+	{
+		iface.$mseq = mseqZ;
+	}
+
+	if( report.length > 0 )
+	{
+		system.asyncEvent(
+			'update',
+			iface.$cSpace,
+			report
+		);
+	}
+
+	if( gotOwnChgs )
+	{
+		iface._sendChanges( );
+	}
+
+	// issues the following update
+	iface._update( );
 };
 
 
@@ -1057,7 +1096,7 @@ IFace.prototype.alter =
 
 
 /*
-| Sends the stored changes to remote meshmashine
+| Sends the stored changes to remote meshmashine.
 */
 IFace.prototype._sendChanges =
 	function( )

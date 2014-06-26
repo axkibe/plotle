@@ -9,10 +9,12 @@
 | Export
 */
 var
-	shell =
-		null,
-	Shell =
-		null;
+	shell,
+	Shell;
+
+shell =
+Shell =
+	null;
 
 /*
 | Imports
@@ -1361,25 +1363,23 @@ Shell.prototype.setView =
 Shell.prototype.onload =
 	function( )
 {
-	this.peer =
-		new Peer( new IFace( ) );
-
 	var
-		username =
-			window.localStorage.getItem( 'username' ),
+		passhash,
+		username;
 
-		passhash =
-			null;
+	this.peer = new Peer( new IFace( ) );
+
+	username = window.localStorage.getItem( 'username' ),
+
+	passhash = null;
 
 	if( username )
 	{
-		passhash =
-			window.localStorage.getItem( 'passhash' );
+		passhash = window.localStorage.getItem( 'passhash' );
 	}
 	else
 	{
-		username =
-			'visitor';
+		username = 'visitor';
 	}
 
 	this.peer.auth(

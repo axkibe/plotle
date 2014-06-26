@@ -36,7 +36,7 @@ Peer =
 		iface
 	)
 {
-	this._iface =
+	this.iface =
 		iface;
 
 	this._$visitUser =
@@ -56,7 +56,7 @@ Peer.prototype.setUser =
 		passhash
 	)
 {
-	this._iface.setUser(
+	this.iface.setUser(
 		user,
 		passhash
 	);
@@ -144,7 +144,7 @@ Peer.prototype.auth =
 		passhash = Jools.uid( );
 	}
 
-	self._iface.auth(
+	self.iface.auth(
 		user,
 		passhash,
 		function( asw )
@@ -176,7 +176,7 @@ Peer.prototype.auth =
 Peer.prototype.sendMessage =
 	function( message )
 {
-	this._iface.sendMessage( message );
+	this.iface.sendMessage( message );
 };
 
 
@@ -192,7 +192,7 @@ Peer.prototype.register =
 		onRegisterReceiver
 	)
 {
-	this._iface.register(
+	this.iface.register(
 		user,
 		mail,
 		passhash,
@@ -212,7 +212,7 @@ Peer.prototype.aquireSpace =
 		create
 	)
 {
-	this._iface.aquireSpace(
+	this.iface.aquireSpace(
 		spaceUser,
 		spaceTag,
 		create
@@ -229,7 +229,7 @@ Peer.prototype.get =
 		len
 	)
 {
-	return this._iface.get(
+	return this.iface.get(
 		path.chop( 1 ) ,
 		len
 	);
@@ -247,7 +247,7 @@ Peer.prototype.newNote =
 	)
 {
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				val :
 				{
@@ -305,7 +305,7 @@ Peer.prototype.newPortal =
 	)
 {
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				val :
 				{
@@ -345,7 +345,7 @@ Peer.prototype.setZone =
 	)
 {
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				val :
 					zone
@@ -369,7 +369,7 @@ Peer.prototype.setFontSize =
 	)
 {
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				val :
 					fontsize
@@ -393,7 +393,7 @@ Peer.prototype.setPNW =
 	)
 {
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				val :
 					pnw
@@ -420,7 +420,7 @@ Peer.prototype.newLabel =
 	)
 {
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				val :
 				{
@@ -473,7 +473,7 @@ Peer.prototype.newLabel =
 Peer.prototype.undo =
 	function( )
 {
-	this._iface.undo( );
+	this.iface.undo( );
 };
 
 
@@ -483,7 +483,7 @@ Peer.prototype.undo =
 Peer.prototype.redo =
 	function( )
 {
-	this._iface.redo( );
+	this.iface.redo( );
 };
 
 
@@ -502,7 +502,7 @@ Peer.prototype.newRelation =
 	)
 {
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				val :
 				{
@@ -559,7 +559,7 @@ Peer.prototype.moveToTop =
 		path
 	)
 {
-	this._iface.alter(
+	this.iface.alter(
 		{
 			path :
 				path.chop( )
@@ -583,7 +583,7 @@ Peer.prototype.insertText =
 	)
 {
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				val :
 					text
@@ -620,7 +620,7 @@ Peer.prototype.removeText =
 	}
 
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				path :
 					path.chop( 1 ),
@@ -688,7 +688,7 @@ Peer.prototype.removeRange =
 		path2.get( -2 );
 
 	pivot =
-		this._iface.get( path1.chop( 1 ).shorten( 3 ) );
+		this.iface.get( path1.chop( 1 ).shorten( 3 ) );
 
 	r1 =
 		pivot.rankOf( k1 );
@@ -704,12 +704,12 @@ Peer.prototype.removeRange =
 	{
 		this.join(
 			path1,
-			this._iface.get( path1.chop( 1 ) ).length
+			this.iface.get( path1.chop( 1 ) ).length
 		);
 	}
 
 	len2 =
-		this._iface.get( path1.chop( 1 ) ).length;
+		this.iface.get( path1.chop( 1 ) ).length;
 
 	this.join(
 		path1,
@@ -739,7 +739,7 @@ Peer.prototype.split =
 	)
 {
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				path :
 					path.chop( 1 ),
@@ -765,7 +765,7 @@ Peer.prototype.join =
 	)
 {
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				proc :
 					'splice'
@@ -798,7 +798,7 @@ Peer.prototype.removeItem =
 		path.get( -1 );
 
 	pivot =
-		this._iface.get(
+		this.iface.get(
 			path.chop( 1 ).shorten( 2 )
 		);
 
@@ -806,7 +806,7 @@ Peer.prototype.removeItem =
 		pivot.rankOf( key );
 
 	return (
-		this._iface.alter(
+		this.iface.alter(
 			{
 				val :
 					null,
