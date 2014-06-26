@@ -1117,6 +1117,9 @@ Para.prototype._keyBackspace =
 		// bAt
 	)
 {
+	var
+		r;
+
 	if( at > 0 )
 	{
 		shell.peer.removeText(
@@ -1128,9 +1131,7 @@ Para.prototype._keyBackspace =
 		return;
 	}
 
-	var
-		r =
-			doc.rankOf( this.key );
+	r = doc.rankOf( this.key );
 
 	if( r > 0 )
 	{
@@ -1159,6 +1160,9 @@ Para.prototype._keyDel =
 		// bAt
 	)
 {
+	var
+		r;
+
 	if( at < this.text.length )
 	{
 		shell.peer.removeText(
@@ -1170,9 +1174,7 @@ Para.prototype._keyDel =
 		return;
 	}
 
-	var
-		r =
-			doc.rankOf( this.key );
+	r = doc.rankOf( this.key );
 
 	if( r < doc.ranks.length - 1 )
 	{
@@ -1198,16 +1200,20 @@ Para.prototype._keyDown =
 	)
 {
 	var
-		flow =
-			this.flow,
+		cpos,
+		flow,
+		r,
+		ve,
+		x;
+	
+	flow = this.flow,
 
-		cpos =
-			this.locateOffset( at ),
+	cpos = this.locateOffset( at ),
 
-		x =
-			retainx !== null ?
-				retainx :
-				cpos.p.x;
+	x =
+		retainx !== null
+		?  retainx
+		: cpos.p.x;
 
 	if( cpos.line < flow.length - 1 )
 	{
@@ -1229,18 +1235,14 @@ Para.prototype._keyDown =
 	}
 
 	// goto next para
-	var
-		r =
-			doc.rankOf( this.key );
+	r =
+		doc.rankOf( this.key );
 
 	if( r < doc.ranks.length - 1 )
 	{
-		var
-			ve =
-				doc.atRank( r + 1 );
+		ve = doc.atRank( r + 1 );
 
-		at =
-			ve.getOffsetAt( 0, x );
+		at = ve.getOffsetAt( 0, x );
 
 		ve._setMark(
 			at,
@@ -1309,6 +1311,10 @@ Para.prototype._keyLeft =
 		bAt
 	)
 {
+	var
+		r,
+		ve;
+
 	if( at > 0 )
 	{
 		this._setMark(
@@ -1322,15 +1328,11 @@ Para.prototype._keyLeft =
 		return;
 	}
 
-	var
-		r =
-			doc.rankOf( this.key );
+	r = doc.rankOf( this.key );
 
 	if( r > 0 )
 	{
-		var
-			ve =
-				doc.atRank( r - 1 );
+		ve = doc.atRank( r - 1 );
 
 		ve._setMark(
 			ve.text.length,
@@ -1564,15 +1566,19 @@ Para.prototype._keyUp =
 	)
 {
 	var
-		cpos =
-			this.locateOffset(
-				at
-			),
+		cpos,
+		r,
+		x;
 
-		x =
-			retainx !== null ?
-					retainx :
-					cpos.p.x;
+	cpos =
+		this.locateOffset(
+			at
+		),
+
+	x =
+		retainx !== null ?
+				retainx :
+				cpos.p.x;
 
 	if( cpos.line > 0 )
 	{
@@ -1595,9 +1601,7 @@ Para.prototype._keyUp =
 	}
 
 	// goto prev para
-	var
-		r =
-			doc.rankOf( this.key );
+	r = doc.rankOf( this.key );
 
 	if( r > 0 )
 	{

@@ -93,8 +93,7 @@ if( JOOBJ )
 var
 	Range;
 
-Range =
-	Mark.Range;
+Range = Mark.Range;
 
 /*
 | The begin or end path,
@@ -178,8 +177,7 @@ Jools.lazyValue(
 | The caretPath and caretAt are identical to
 | ePath and eAt
 */
-Range.prototype.hasCaret =
-	true;
+Range.prototype.hasCaret = true;
 
 
 /*
@@ -281,41 +279,39 @@ Jools.lazyValue(
 			r, rZ,
 			text;
 
-		frontPath =
-			this.frontPath;
-		frontAt =
-			this.frontAt;
-		backPath =
-			this.backPath;
-		backAt =
-			this.backAt;
-		doc =
-			this.doc;
-		frontKey =
-			frontPath.get( -2 );
-		backKey =
-			backPath.get( -2 );
+		frontPath = this.frontPath;
+
+		frontAt = this.frontAt;
+
+		backPath = this.backPath;
+
+		backAt = this.backAt;
+
+		doc = this.doc;
+
+		frontKey = frontPath.get( -2 );
+
+		backKey = backPath.get( -2 );
 
 		if( frontPath.equals( backPath ) )
 		{
-			text =
-				doc.twig[ frontKey ].text;
-
+			text = doc.twig[ frontKey ].text;
+		
 			return text.substring( frontAt, backAt );
 		}
 
-		frontText =
-			doc.twig[ frontKey ].text;
-		backText =
-			doc.twig[ backKey ].text;
+		frontText = doc.twig[ frontKey ].text;
+
+		backText = doc.twig[ backKey ].text;
+
 		buf =
 			[
 				frontText.substring( frontAt, frontText.length )
 			];
 
 		for(
-			r = doc.rankOf( frontKey ), rZ = doc.rankOf( backKey );
-			r < rZ - 1;
+			r = doc.rankOf( frontKey ) + 1, rZ = doc.rankOf( backKey );
+			r < rZ;
 			r++
 		)
 		{

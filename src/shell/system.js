@@ -39,8 +39,7 @@ var
 */
 catcher =
 	function(
-		t,
-		f
+		func
 	)
 {
 	return function( )
@@ -52,12 +51,12 @@ catcher =
 			!config.debug.weinre
 		)
 		{
-			return f.apply( t, arguments );
+			return func.apply( null, arguments );
 		}
 
 		try
 		{
-			f.apply( t, arguments );
+			func.apply( null, arguments );
 		}
 		catch( e )
 		{
@@ -190,44 +189,37 @@ var System =
 
 	_canvas.onmousedown =
 		catcher(
-			this,
-			this._onMouseDown
+			function( ) { system._onMouseDown.apply( system, arguments ); }
 		);
 
 	_canvas.onmousemove =
 		catcher(
-			this,
-			this._onMouseMove
+			function( ) { system._onMouseMove.apply( system, arguments ); }
 		);
 
 	_canvas.onmouseup =
 		catcher(
-			this,
-			this._onMouseUp
+			function( ) { system._onMouseUp.apply( system, arguments ); }
 		);
 
 	_canvas.ontouchstart =
 		catcher(
-			this,
-			this._onTouchStart
+			function( ) { system._onTouchStart.apply( system, arguments ); }
 		);
 
 	_canvas.ontouchmove =
 		catcher(
-			this,
-			this._onTouchMove
+			function( ) { system._onTouchMove.apply( system, arguments ); }
 		);
 
 	_canvas.ontouchend =
 		catcher(
-			this,
-			this._onTouchEnd
+			function( ) { system._onTouchEnd.apply( system, arguments ); }
 		);
 
 	_canvas.onmousewheel =
 		catcher(
-			this,
-			this._onMouseWheel
+			function( ) { system._onMouseWheel.apply( system, arguments ); }
 		);
 
 	// firefox wheel listening
@@ -242,73 +234,61 @@ var System =
 
 	window.onresize =
 		catcher(
-			this,
-			this._onResize
+			function( ) { system._onResize.apply( system, arguments ); }
 		);
 
 	window.onfocus =
 		catcher(
-			this,
-			this._onSystemFocus
+			function( ) { system._onSystemFocus.apply( system, arguments ); }
 		);
 
 	window.onblur =
 		catcher(
-			this,
-			this._onSystemBlur
+			function( ) { system._onSystemBlur.apply( system, arguments ); }
 		);
 
 	_hiddenInput.onblur =
 		catcher(
-			this,
-			this._onHiddenInputBlur
+			function( ) { system._onHiddenInputBlur.apply( system, arguments ); }
 		);
 
 	document.onkeyup =
 		catcher(
-			this,
-			this._onKeyUp
+			function( ) { system._onKeyUp.apply( system, arguments ); }
 		);
 
 	document.onkeydown =
 		catcher(
-			this,
-			this._onKeyDown
+			function( ) { system._onKeyDown.apply( system, arguments ); }
 		);
 
 	document.onkeypress =
 		catcher(
-			this,
-			this._onKeyPress
+			function( ) { system._onKeyPress.apply( system, arguments ); }
 		);
 
 	this._testInputCatcher =
 		catcher(
-			this,
-			this._testInput
+			function( ) { system._testInput.apply( system, arguments ); }
 		);
 
 	this._onAtweenTimeCatcher =
 		catcher(
-			this,
-			this._onAtweenTime
+			function( ) { system._onAtweenTime.apply( system, arguments ); }
 		);
 
 	this._blinkCatcher =
 		catcher(
-			this,
-			this._blink
+			function( ) { system._blink.apply( system, arguments ); }
 		);
 
 	document.oncontextmenu =
 		catcher(
-			this,
-			this._onContextMenu
+			function( ) { system._onContextMenu.apply( system, arguments ); }
 		);
 
 	// the blink (and check input) timer
-	this._blinkTimer =
-		null;
+	this._blinkTimer = null;
 
 	_canvas.focus( );
 
@@ -517,7 +497,6 @@ System.prototype.setTimer =
 {
 	return window.setTimeout(
 		catcher(
-			null,
 			callback
 		),
 		time
@@ -575,11 +554,9 @@ System.prototype._onAtweenTime =
 /**/	}
 /**/}
 
-	atween =
-		this._$atween;
+	atween = this._$atween;
 
-	_pointingState =
-		'drag';
+	_pointingState = 'drag';
 
 	shell.dragStart(
 		atween.pos,
@@ -594,13 +571,11 @@ System.prototype._onAtweenTime =
 			atween.ctrl
 		);
 
-	this._$atween =
-		null;
+	this._$atween = null;
 
 	if( cursor !== null )
 	{
-		_canvas.style.cursor =
-			cursor;
+		_canvas.style.cursor = cursor;
 	}
 };
 
@@ -1764,7 +1739,6 @@ startup = function( )
 
 	start =
 		catcher(
-			null,
 			function( )
 			{
 				system = new System( );
@@ -1785,7 +1759,7 @@ startup = function( )
 	else
 	{
 		// gives weinre a moment to set itself up
-		window.setTimeout( catcher, 1500 );
+		window.setTimeout( start, 1500 );
 	}
 };
 
