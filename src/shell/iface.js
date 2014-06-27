@@ -62,7 +62,13 @@ _ifaceCatcher =
 | FIXME move back into the peer object and make it a joobj.
 */
 var
-	_updateAjax;
+	_ajax;
+
+_ajax =
+	{
+		update :
+			null
+	};
 
 /*
 | Constructor.
@@ -386,13 +392,13 @@ IFace.prototype.aquireSpace =
 	self = this;
 
 	// aborts the current running update.
-	if( _updateAjax )
+	if( _ajax.update )
 	{
-		_updateAjax.aborted = true;
+		_ajax.update.aborted = true;
 
-		_updateAjax.abort( );
+		_ajax.update.abort( );
 
-		_updateAjax = null;
+		_ajax.update = null;
 	}
 
 	ajax =
@@ -630,14 +636,14 @@ IFace.prototype._update =
 
 /**/if( CHECK )
 /**/{
-/**/	if( _updateAjax )
+/**/	if( _ajax.update )
 /**/	{
 /**/		throw new Error( 'double update?' );
 /**/	}
 /**/}
 
 	ajax =
-	_updateAjax =
+	_ajax.update =
 		new XMLHttpRequest( );
 
 	ajax.open(
@@ -722,11 +728,11 @@ IFace.prototype._onUpdate =
 	{
 		return;
 	}
-	
+
 	if(
-		this !== _updateAjax
+		this !== _ajax.update
 		||
-		_updateAjax.aborted
+		_ajax.update.aborted
 	)
 	{
 		console.log( 'invalid ajax call in onUpdate' );
@@ -737,7 +743,7 @@ IFace.prototype._onUpdate =
 	// called multiple times
 	this.onreadystatechange = null;
 
-	_updateAjax = null;
+	_ajax.update = null;
 
 	if( this.status !== 200 )
 	{

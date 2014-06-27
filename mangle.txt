@@ -1,4 +1,5 @@
-. $abort
+. _onUpdate
+. aborted
 . $action
 . $aquireAjax
 . $authActive
@@ -115,7 +116,6 @@
 . _$spaceFields
 . _$twist
 . _$undo
-. _$updateAjax
 . _$visitPasshash
 . _$visitUser
 . _ajax
@@ -146,7 +146,6 @@
 . _gradientR1
 . _handles
 . _icons
-. _iface
 . _init
 . _invert
 . _isActiveButton
