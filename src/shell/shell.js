@@ -99,6 +99,9 @@ Shell =
 		fabric
 	)
 {
+	var
+		canvas,
+		view;
 
 /**/if( CHECK )
 /**/{
@@ -110,12 +113,9 @@ Shell =
 /**/	}
 /**/}
 
-	shell =
-		this;
+	shell = this;
 
-	var
-		canvas =
-			document.createElement( 'canvas' );
+	canvas = document.createElement( 'canvas' );
 
 	swatch =
 		Euclid.Fabric.Create(
@@ -125,8 +125,7 @@ Shell =
 
 	Euclid.Measure.init( canvas );
 
-	this._fontWFont =
-		fontPool.get( 20, 'la' );
+	this._fontWFont = fontPool.get( 20, 'la' );
 
 	this._$fontWatch =
 		Euclid.Measure.width(
@@ -134,38 +133,31 @@ Shell =
 			'meshcraft$8833'
 		);
 
-	this.fabric =
-		fabric;
+	this.fabric = fabric;
 
-	this.username =
-		null;
+	this.username = null;
 
-	this.$space =
-		null;
+	this.$space = null;
 
-	this.$action =
-		Action.None.Create( );
+	this.$action = Action.None.Create( );
 
-	this._$mode =
-		'Normal';
+	this._$mode = 'Normal';
 
 	// currently hovered thing
-	this._$hover =
-		Path.empty;
+	this._$hover = Path.empty;
 
-	var
-		view =
-		this.$view =
-			Euclid.View.Create(
-				'pan',
-					Euclid.Point.zero,
-				'fact',
-					0,
-				'width',
-					fabric.width,
-				'height',
-					fabric.height
-			);
+	view =
+	this.$view =
+		Euclid.View.Create(
+			'pan',
+				Euclid.Point.zero,
+			'fact',
+				0,
+			'width',
+				fabric.width,
+			'height',
+				fabric.height
+		);
 
 	this._$formJockey =
 		Forms.Jockey.Create(
@@ -227,8 +219,14 @@ Shell =
 				Gruga.CreateDisc
 		);
 
-	this.mark =
-		Mark.Vacant.Create( );
+	this.mark = Mark.Vacant.Create( );
+
+	// remembers an aquired visitor user name and passhash
+	// so when logging out from a real user the previous
+	// visitor is regained.
+	this._$visitUser = null;
+
+	this._$visitPasshash = null;
 
 	this._draw( );
 };
@@ -1290,20 +1288,17 @@ Shell.prototype.setUser =
 			null
 		);
 
-		// FIXME remove
-		window.localStorage.setItem(
-			'user',
-			null
-		);
-
 		window.localStorage.setItem(
 			'passhash',
 			null
 		);
+
+		this._$visitUser = username;
+
+		this._$visitPasshash = passhash;
 	}
 
-	this.username =
-		username;
+	this.username = username;
 
 	this._$discJockey =
 		this._$discJockey.Create(
@@ -1589,6 +1584,7 @@ Shell.prototype.onAuth =
 		res.passhash
 	);
 
+
 	if( !this.$space )
 	{
 		this.moveToSpace(
@@ -1610,7 +1606,25 @@ Shell.prototype.logout =
 		self =
 			this;
 
-	this.peer.logout(
+	if( this._$visitUser )
+	{
+		self.setUser(
+			this._$visitUser,
+			this._$visitPasshash
+		);
+
+		self.moveToSpace(
+			'meshcraft',
+			'home',
+			false
+		);
+
+		return;
+	}
+
+	this.peer.auth(
+		'visitor',
+		null,
 		function( res )
 		{
 			if(! res.ok )

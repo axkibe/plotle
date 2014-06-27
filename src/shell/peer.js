@@ -37,14 +37,7 @@ Peer =
 		iface
 	)
 {
-	this.iface =
-		iface;
-
-	this._$visitUser =
-		null;
-
-	this._$visitPasshash =
-		null;
+	this.iface = iface;
 };
 
 
@@ -61,39 +54,6 @@ Peer.prototype.setUser =
 		user,
 		passhash
 	);
-};
-
-
-/*
-| Logs out a registered users.
-| Switches to visitor.
-*/
-Peer.prototype.logout =
-	function(
-		callback
-	)
-{
-	if( this._$visitUser )
-	{
-		callback(
-			{
-				ok :
-					true,
-				user :
-					this._$visitUser,
-				passhash :
-					this._$visitPasshash
-			}
-		);
-	}
-	else
-	{
-		this.auth(
-			'visitor',
-			null,
-			callback
-		);
-	}
 };
 
 
@@ -138,15 +98,6 @@ Peer.prototype.auth =
 		passhash,
 		function( asw )
 		{
-			if( asw.ok && user.substring( 0, 5 ) === 'visit' )
-			{
-				self._$visitUser =
-					asw.user;
-
-				self._$visitPasshash =
-					asw.passhash;
-			}
-
 			shell.onAuth(
 				user,
 				passhash,
