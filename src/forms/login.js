@@ -297,8 +297,7 @@ Login.prototype.login =
 
 	shell.peer.auth(
 		user,
-		Jools.passhash( pass ),
-		this
+		Jools.passhash( pass )
 	);
 };
 

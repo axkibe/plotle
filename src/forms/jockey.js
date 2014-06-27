@@ -254,19 +254,20 @@ Jockey.prototype.get =
 */
 Jockey.prototype.cycleFocus =
 	function(
-		formname,
+		formName,
 		dir
 	)
 {
+
 /**/if( CHECK )
 /**/{
-/**/	if( !this.twig[ formname ] )
+/**/	if( !this.twig[ formName ] )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	return this.twig[ formname ].cycleFocus( dir );
+	return this.twig[ formName ].cycleFocus( dir );
 };
 
 

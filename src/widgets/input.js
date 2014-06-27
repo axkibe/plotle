@@ -780,7 +780,7 @@ Input.prototype._keyEnter =
 	function( )
 {
 	shell.cycleFormFocus(
-		this.path.get( 1 ),
+		this.path.get( 2 ),
 		1
 	);
 };

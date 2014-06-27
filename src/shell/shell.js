@@ -1383,8 +1383,7 @@ Shell.prototype.onload =
 
 	this.peer.auth(
 		username,
-		passhash,
-		this
+		passhash
 	);
 };
 

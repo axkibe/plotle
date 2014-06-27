@@ -91,7 +91,6 @@ Peer.prototype.logout =
 		this.auth(
 			'visitor',
 			null,
-			this,
 			callback
 		);
 	}
@@ -120,7 +119,6 @@ Peer.prototype.auth =
 	function(
 		user,
 		passhash,
-		onAuthReceiver,
 		a1
 	)
 {
