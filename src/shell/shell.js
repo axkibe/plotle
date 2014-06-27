@@ -583,14 +583,14 @@ Shell.prototype._draw =
 	function( )
 {
 	var
-		fabric =
-			this.fabric;
+		display,
+		fabric;
+		
+	fabric = this.fabric;
 
 	fabric.clear( );
 
-	var
-		display =
-			this._getCurrentDisplay( );
+	display = this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -621,8 +621,7 @@ Shell.prototype.click =
 		click,
 		display;
 
-	display =
-		this._getCurrentDisplay( ),
+	display = this._getCurrentDisplay( ),
 
 	click =
 		this._$discJockey.click(
@@ -660,8 +659,9 @@ Shell.prototype._getCurrentDisplay =
 	function( )
 {
 	var
-		name =
-			this._$mode;
+		name;
+		
+	name = this._$mode;
 
 	switch( name )
 	{
@@ -1199,8 +1199,7 @@ Shell.prototype.input =
 		display,
 		focusItem;
 
-	display =
-		this._getCurrentDisplay( );
+	display = this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -1554,6 +1553,17 @@ Shell.prototype.onAuth =
 		res
 	)
 {
+	if( this._$mode === 'Login' )
+	{
+		this._$formJockey.get( 'Login' ).onAuth(
+			username,
+			passhash,
+			res
+		);
+
+		return;
+	}
+
 	if( !res.ok )
 	{
 		// when logging in with a real user failed

@@ -721,21 +721,26 @@ IFace.prototype._onUpdate =
 		tfxChgX,
 		u,
 		undo;
+	
+/**/if( CHECK )
+/**/{
+/**/	if( this !== _ajax.update )
+/**/		{
+/**/		console.log( 'invalid ajax call in onUpdate' );
+/**/
+/**/		return;
+/**/	}
+/**/}
 
 	iface = shell.peer.iface;
 
-	if( this.readyState !== 4 )
-	{
-		return;
-	}
-
 	if(
-		this !== _ajax.update
+		this.readyState !== 4
 		||
-		_ajax.update.aborted
+		this.aborted
 	)
 	{
-		console.log( 'invalid ajax call in onUpdate' );
+		return;
 	}
 
 	// ios bug?

@@ -298,8 +298,7 @@ Login.prototype.login =
 	shell.peer.auth(
 		user,
 		Jools.passhash( pass ),
-		this,
-		pass
+		this
 	);
 };
 
@@ -344,23 +343,23 @@ Login.prototype.onAuth =
 	function(
 		user,
 		passhash,
-		res,
-		pass
+		res
 	)
 {
 	var
-		twig =
-			this.twig;
+		twig;
+		
+	twig =
+		this.twig;
 
 	if( !res.ok )
 	{
 		shell.setPath(
-			this._widgetPath( 'errorLabel' )
-				.append( 'text' ),
+			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			res.message
 		);
 
-		if( res.message.search(/Username/) >= 0 )
+		if( res.message.search( /Username/ ) >= 0 )
 		{
 			shell.setMark(
 				Mark.Caret.Create(
@@ -378,7 +377,7 @@ Login.prototype.onAuth =
 					'path',
 						twig.passwordInput.path,
 					'at',
-						pass.length
+						twig.passwordInput.value.length
 				)
 			);
 		}

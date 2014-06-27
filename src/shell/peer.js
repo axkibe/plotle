@@ -18,7 +18,8 @@ var
 */
 var
 	Jools,
-	Path;
+	Path,
+	shell;
 
 
 /*
@@ -91,8 +92,7 @@ Peer.prototype.logout =
 			'visitor',
 			null,
 			this,
-			callback,
-			'logout'
+			callback
 		);
 	}
 };
@@ -106,17 +106,9 @@ Peer.prototype.onAuth =
 		user,
 		passhash,
 		asw,
-		callback,
-		op
+		callback
 	)
 {
-	if( op !== 'logout' )
-	{
-		throw new Error(
-			'onAuth unexpected operation: ' + op
-		);
-	}
-
 	callback( asw );
 };
 
@@ -129,8 +121,7 @@ Peer.prototype.auth =
 		user,
 		passhash,
 		onAuthReceiver,
-		a1,
-		a2
+		a1
 	)
 {
 	var self =
@@ -158,12 +149,11 @@ Peer.prototype.auth =
 					asw.passhash;
 			}
 
-			onAuthReceiver.onAuth(
+			shell.onAuth(
 				user,
 				passhash,
 				asw,
-				a1,
-				a2
+				a1
 			);
 		}
 	);
