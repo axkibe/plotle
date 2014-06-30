@@ -693,7 +693,6 @@
 > selectionEnd
 > selectionStart
 > send
-. sendMessage
 > set
 . setAction
 . setCapture

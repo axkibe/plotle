@@ -41,22 +41,6 @@ Peer =
 
 
 /*
-| Sets the current user.
-*/
-Peer.prototype.setUser =
-	function(
-		user,
-		passhash
-	)
-{
-	this.iface.setUser(
-		user,
-		passhash
-	);
-};
-
-
-/*
 | authenticates a user or visitor.
 */
 Peer.prototype.auth =
@@ -65,9 +49,6 @@ Peer.prototype.auth =
 		passhash
 	)
 {
-	var self =
-		this;
-
 	if(
 		user === 'visitor' &&
 		passhash === null
@@ -76,20 +57,10 @@ Peer.prototype.auth =
 		passhash = Jools.uid( );
 	}
 
-	self.iface.auth(
+	this.iface.auth(
 		user,
 		passhash
 	);
-};
-
-
-/*
-| sends a message.
-*/
-Peer.prototype.sendMessage =
-	function( message )
-{
-	this.iface.sendMessage( message );
 };
 
 

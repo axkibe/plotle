@@ -528,6 +528,7 @@ Server.prototype.loadSpace =
 /*
 | sends a message
 */
+/*
 Server.prototype.sendMessage =
 	function(
 		spaceUser,
@@ -566,11 +567,13 @@ Server.prototype.sendMessage =
 		}
 	);
 };
+*/
 
 
 /*
 | Creates a message for a space
 */
+/*
 Server.prototype.cmdMessage =
 	function( cmd )
 {
@@ -629,6 +632,7 @@ Server.prototype.cmdMessage =
 		ok : true
 	};
 };
+*/
 
 
 /*
@@ -1929,12 +1933,14 @@ Server.prototype.refreshPresence =
 				spaceTag
 			);
 
+		/*
 		this.sendMessage(
 			spaceUser,
 			spaceTag,
 			null,
 			user + ' entered "' + spaceName + '"'
 		);
+		*/
 	}
 	else if( pus.references <= 0 )
 	{
@@ -2004,12 +2010,14 @@ Server.prototype.establishPresence =
 					null
 			};
 
+		/*
 		this.sendMessage(
 			spaceUser,
 			spaceTag,
 			null,
 			user + ' entered "' + spaceName + '"'
 		);
+		*/
 	}
 	else
 	{
@@ -2082,15 +2090,17 @@ Server.prototype.expirePresence =
 	var
 		pu,
 		spaceName;
-	
+
 	spaceName = spaceUser + ':' + spaceTag;
 
+	/*
 	self.sendMessage(
 		spaceUser,
 		spaceTag,
 		null,
 		user + ' left "' + spaceName + '"'
 	);
+	*/
 
 	pu = self.$presences[ user ];
 
