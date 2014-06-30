@@ -238,9 +238,8 @@ IFace.prototype.setUser =
 */
 IFace.prototype.auth =
 	function(
-		user,
-		passhash,
-		callback
+		username,
+		passhash
 	)
 {
 	var self = this;
@@ -257,7 +256,7 @@ IFace.prototype.auth =
 			cmd :
 				'auth',
 			user :
-				user,
+				username,
 			passhash :
 				passhash
 		},
@@ -267,20 +266,11 @@ IFace.prototype.auth =
 
 			if( asw.ok )
 			{
-				callback(
-					{
-						ok :
-							true,
-						user :
-							asw.user,
-						passhash :
-							passhash
-					}
-				);
+				shell.onAuth( true, asw.user, passhash );
 			}
 			else
 			{
-				callback( asw );
+				shell.onAuth( false, null, null, asw.message );
 			}
 		}
 	);
@@ -725,10 +715,8 @@ IFace.prototype._onUpdate =
 /**/if( CHECK )
 /**/{
 /**/	if( this !== _ajax.update )
-/**/		{
-/**/		console.log( 'invalid ajax call in onUpdate' );
-/**/
-/**/		return;
+/**/	{
+/**/		throw new Error( 'invalid ajax call in onUpdate' );
 /**/	}
 /**/}
 

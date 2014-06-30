@@ -340,9 +340,10 @@ Login.prototype.specialKey =
 */
 Login.prototype.onAuth =
 	function(
-		user,
+		ok,
+		username,
 		passhash,
-		res
+		message
 	)
 {
 	var
@@ -351,21 +352,21 @@ Login.prototype.onAuth =
 	twig =
 		this.twig;
 
-	if( !res.ok )
+	if( !ok )
 	{
 		shell.setPath(
 			this._widgetPath( 'errorLabel' ).append( 'text' ),
-			res.message
+			message
 		);
 
-		if( res.message.search( /Username/ ) >= 0 )
+		if( message.search( /Username/ ) >= 0 )
 		{
 			shell.setMark(
 				Mark.Caret.Create(
 					'path',
 						twig.userInput.path,
 					'at',
-						user.length
+						username.length
 				)
 			);
 		}
@@ -385,7 +386,7 @@ Login.prototype.onAuth =
 	}
 
 	shell.setUser(
-		user,
+		username,
 		passhash
 	);
 

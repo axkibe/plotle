@@ -1653,6 +1653,11 @@ Server.prototype.cmdAuth =
 		cmd
 	)
 {
+	var
+		uid,
+		users,
+		val;
+
 	if( cmd.user === undefined )
 	{
 		throw Jools.reject( 'user missing' );
@@ -1663,21 +1668,17 @@ Server.prototype.cmdAuth =
 		throw Jools.reject( 'passhash missing' );
 	}
 
-	var
-		users =
-			this.$users;
+	users = this.$users;
 
 	if( cmd.user === 'visitor' )
 	{
-		var uid;
-
 		do
 		{
 			this.$nextVisitor++;
 
 			uid = 'visitor-' + this.$nextVisitor;
 		}
-		while ( users[uid]);
+		while ( users[uid] );
 
 		users[ uid ] =
 			{
@@ -1694,20 +1695,18 @@ Server.prototype.cmdAuth =
 		return {
 			ok :
 				true,
-
 			user:
 				uid
 		};
 	}
 
-	if( !users[cmd.user] )
+	if( !users[ cmd.user ] )
 	{
-		var
-			val =
-				yield this.$db.users.findOne(
-					{ _id : cmd.user },
-					sus.resume( )
-				);
+		val =
+			yield this.$db.users.findOne(
+				{ _id : cmd.user },
+				sus.resume( )
+			);
 
 		if( val === null )
 		{
@@ -1726,7 +1725,6 @@ Server.prototype.cmdAuth =
 	return {
 		ok :
 			true,
-
 		user :
 			cmd.user
 	};

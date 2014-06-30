@@ -1363,9 +1363,7 @@ Shell.prototype.onload =
 
 	this.peer = new Peer( new IFace( ) );
 
-	username = window.localStorage.getItem( 'username' ),
-
-	passhash = null;
+	username = window.localStorage.getItem( 'username' );
 
 	if( username )
 	{
@@ -1374,6 +1372,8 @@ Shell.prototype.onload =
 	else
 	{
 		username = 'visitor';
+
+		passhash = null;
 	}
 
 	this.peer.auth(
@@ -1488,17 +1488,11 @@ Shell.prototype.onAquireSpace =
 			return;
 	}
 
-	spaceUser =
-		asw.spaceUser,
+	spaceUser = asw.spaceUser,
 
-	spaceTag =
-		asw.spaceTag,
+	spaceTag = asw.spaceTag,
 
-	//tree =
-	//	asw.tree;
-
-	access =
-		asw.access;
+	access = asw.access;
 
 	this.$space =
 		asw.space.Create(
@@ -1542,23 +1536,30 @@ Shell.prototype.onAquireSpace =
 */
 Shell.prototype.onAuth =
 	function(
+		ok,
 		username,
 		passhash,
-		res
+		message
 	)
 {
+	// if in login mode this is a tempted login
+
 	if( this._$mode === 'Login' )
 	{
 		this._$formJockey.get( 'Login' ).onAuth(
+			ok,
 			username,
 			passhash,
-			res
+			message
 		);
 
 		return;
 	}
 
-	if( !res.ok )
+	// otherwise this is an onload login
+	// or logout.
+
+	if( !ok )
 	{
 		// when logging in with a real user failed
 		// takes a visitor instead
@@ -1574,25 +1575,21 @@ Shell.prototype.onAuth =
 		}
 
 		// if even that failed, bailing to failScreen
-		system.failScreen( res.message );
+		system.failScreen( message );
 
 		return;
 	}
 
 	this.setUser(
-		res.user,
-		res.passhash
+		username,
+		passhash
 	);
 
-
-	if( !this.$space )
-	{
-		this.moveToSpace(
-			'meshcraft',
-			'home',
-			false
-		);
-	}
+	this.moveToSpace(
+		'meshcraft',
+		'home',
+		false
+	);
 };
 
 
@@ -1602,18 +1599,14 @@ Shell.prototype.onAuth =
 Shell.prototype.logout =
 	function( )
 {
-	var
-		self =
-			this;
-
 	if( this._$visitUser )
 	{
-		self.setUser(
+		this.setUser(
 			this._$visitUser,
 			this._$visitPasshash
 		);
 
-		self.moveToSpace(
+		this.moveToSpace(
 			'meshcraft',
 			'home',
 			false
@@ -1624,29 +1617,7 @@ Shell.prototype.logout =
 
 	this.peer.auth(
 		'visitor',
-		null,
-		function( res )
-		{
-			if(! res.ok )
-			{
-				system.failScreen(
-					'Cannot logout: ' + res.message
-				);
-
-				return;
-			}
-
-			self.setUser(
-				res.user,
-				res.passhash
-			);
-
-			self.moveToSpace(
-				'meshcraft',
-				'home',
-				false
-			);
-		}
+		null
 	);
 };
 

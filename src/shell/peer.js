@@ -18,8 +18,7 @@ var
 */
 var
 	Jools,
-	Path,
-	shell;
+	Path;
 
 
 /*
@@ -58,28 +57,12 @@ Peer.prototype.setUser =
 
 
 /*
-| Authentication completed of a visitor user on log out.
-*/
-Peer.prototype.onAuth =
-	function(
-		user,
-		passhash,
-		asw,
-		callback
-	)
-{
-	callback( asw );
-};
-
-
-/*
 | authenticates a user or visitor.
 */
 Peer.prototype.auth =
 	function(
 		user,
-		passhash,
-		a1
+		passhash
 	)
 {
 	var self =
@@ -95,16 +78,7 @@ Peer.prototype.auth =
 
 	self.iface.auth(
 		user,
-		passhash,
-		function( asw )
-		{
-			shell.onAuth(
-				user,
-				passhash,
-				asw,
-				a1
-			);
-		}
+		passhash
 	);
 };
 
