@@ -1251,7 +1251,7 @@ Shell.prototype.setUser =
 		passhash
 	)
 {
-	this.peer.setUser(
+	this.iface.setUser(
 		username,
 		passhash
 	);
@@ -1358,10 +1358,15 @@ Shell.prototype.onload =
 	function( )
 {
 	var
+		iface,
 		passhash,
 		username;
 
-	this.peer = new Peer( new IFace( ) );
+	iface =
+	this.iface =
+		new IFace( );
+
+	this.peer = new Peer( iface );
 
 	username = window.localStorage.getItem( 'username' );
 
