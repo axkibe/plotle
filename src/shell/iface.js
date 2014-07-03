@@ -98,9 +98,9 @@ IFace =
 
 
 /*
-| General purpose AJAX.
+| Issues a general purpose AJAX request.
 */
-IFace.prototype._ajax =
+IFace.prototype._request =
 	function(
 		request,
 		callback
@@ -108,15 +108,43 @@ IFace.prototype._ajax =
 {
 	var
 		ajax,
+		cmd,
 		rs;
+
+	cmd = request.cmd;
 
 /**/if( CHECK )
 /**/{
-/**/	if( !request.cmd )
+/**/	if( !cmd )
 /**/	{
 /**/		throw new Error( 'ajax request.cmd missing' );
 /**/	}
 /**/}
+
+	if( _ajax.request )
+	{
+		console.log( 'already a request active' );
+		return false;
+	}
+
+	ajax =
+	_ajax.request =
+		new XMLHttpRequest( );
+
+	ajax.open(
+		'POST',
+		'/mm',
+		true
+	);
+
+	ajax.setRequestHeader(
+		'Content-type',
+		'application/x-www-form-urlencoded'
+	);
+
+	ajax.onreadystatechange =
+		_ifaceCatcher( '_onUpdate' );
+
 
 	ajax = new XMLHttpRequest( );
 
@@ -134,16 +162,27 @@ IFace.prototype._ajax =
 	ajax.onreadystatechange =
 		function( )
 	{
-		if( ajax.readyState !== 4 )
+		var
+			asw;
+
+		if(
+			this.readyState !== 4
+			||
+			this.aborted
+		)
 		{
 			return;
 		}
+
+		_ajax.request = null;
+
+		this.onreadystatechange = null;
 
 		if( ajax.status !== 200 )
 		{
 			Jools.log(
 				'iface',
-				request.cmd,
+				cmd,
 				'status: ',
 				ajax.status
 			);
@@ -165,32 +204,22 @@ IFace.prototype._ajax =
 			return;
 		}
 
-		var asw;
-
 		try
 		{
 			asw = JSON.parse( ajax.responseText );
 		}
 		catch( e )
 		{
-			if( callback )
-			{
-				callback(
-					{
-						ok :
-							false,
-						message :
-							'nojson'
-					}
-				);
-			}
+			throw new Error(
+				'Server answered no JSON!'
+			);
 		}
 
 		Jools.log( 'iface', '<-', asw );
 
 		if( !asw.ok )
 		{
-			Jools.log( 'iface', request.cmd, 'server not ok' );
+			Jools.log( 'iface', cmd, 'server not ok' );
 
 			if( callback )
 			{
@@ -242,16 +271,7 @@ IFace.prototype.auth =
 		passhash
 	)
 {
-	var self = this;
-
-	if( self.$authActive )
-	{
-		throw new Error( 'Auth already active' );
-	}
-
-	self.$authActive = true;
-
-	self._ajax(
+	this._request(
 		{
 			cmd :
 				'auth',
@@ -262,8 +282,6 @@ IFace.prototype.auth =
 		},
 		function( asw )
 		{
-			self.$authActive = false;
-
 			if( asw.ok )
 			{
 				shell.onAuth( true, asw.user, passhash );
@@ -289,20 +307,7 @@ IFace.prototype.register =
 		onRegisterReceiver
 	)
 {
-	var
-		self;
-		
-	self = this;
-
-	if( self.$regActive )
-	{
-		throw new Error( 'Register already active' );
-	}
-
-	self.$regActive =
-		true;
-
-	self._ajax(
+	this._request(
 		{
 			cmd :
 				'register',
@@ -317,9 +322,6 @@ IFace.prototype.register =
 		},
 		function( asw )
 		{
-			self.$regActive =
-				false;
-
 			onRegisterReceiver.onRegister(
 				user,
 				passhash,
@@ -344,18 +346,18 @@ IFace.prototype.sendMessage =
 		throw new Error( 'message is no string' );
 	}
 
-	self._ajax(
+	this._request(
 		{
 			cmd :
 				'message',
 			user :
-				self.$user,
+				this.$user,
 			passhash :
-				self.$passhash,
+				this.$passhash,
 			spaceUser :
-				self.$spaceUser,
+				this.$spaceUser,
 			spaceTag :
-				self.$spaceTag,
+				this.$spaceTag,
 			message :
 				message
 		},
@@ -624,13 +626,11 @@ IFace.prototype._update =
 		ajax,
 		request;
 
-/**/if( CHECK )
-/**/{
-/**/	if( _ajax.update )
-/**/	{
-/**/		throw new Error( 'double update?' );
-/**/	}
-/**/}
+	if( _ajax.update )
+	{
+		throw new Error( 'double update' );
+	}
+
 
 	ajax =
 	_ajax.update =
@@ -649,7 +649,6 @@ IFace.prototype._update =
 
 	ajax.onreadystatechange =
 		_ifaceCatcher( '_onUpdate' );
-
 
 	request =
 		{
