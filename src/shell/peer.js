@@ -18,7 +18,8 @@ var
 */
 var
 	Jools,
-	Path;
+	Path,
+	shell;
 
 
 /*
@@ -27,23 +28,15 @@ var
 (function( ) {
 'use strict';
 
-
-/*
-| Constructor
-*/
-Peer =
-	function(
-		iface
-	)
-{
-	this.iface = iface;
-};
+Peer = { };
 
 
 /*
 | authenticates a user or visitor.
+|
+| FIXME remove
 */
-Peer.prototype.auth =
+Peer.auth =
 	function(
 		user,
 		passhash
@@ -57,7 +50,7 @@ Peer.prototype.auth =
 		passhash = Jools.uid( );
 	}
 
-	this.iface.auth(
+	shell.iface.auth(
 		user,
 		passhash
 	);
@@ -65,55 +58,15 @@ Peer.prototype.auth =
 
 
 /*
-| Registers a new user.
-*/
-Peer.prototype.register =
-	function(
-		user,
-		mail,
-		passhash,
-		newsletter,
-		onRegisterReceiver
-	)
-{
-	this.iface.register(
-		user,
-		mail,
-		passhash,
-		newsletter,
-		onRegisterReceiver
-	);
-};
-
-
-/*
-| Aquires a space.
-*/
-Peer.prototype.aquireSpace =
-	function(
-		spaceUser,
-		spaceTag,
-		create
-	)
-{
-	this.iface.aquireSpace(
-		spaceUser,
-		spaceTag,
-		create
-	);
-};
-
-
-/*
 | Gets a tree.
 */
-Peer.prototype.get =
+Peer.get =
 	function(
 		path, // path to tree
 		len
 	)
 {
-	return this.iface.get(
+	return shell.iface.get(
 		path.chop( 1 ) ,
 		len
 	);
@@ -123,7 +76,7 @@ Peer.prototype.get =
 /*
 | Creates a new note.
 */
-Peer.prototype.newNote =
+Peer.newNote =
 	function(
 		spaceUser,
 		spaceTag,
@@ -131,7 +84,7 @@ Peer.prototype.newNote =
 	)
 {
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				val :
 				{
@@ -177,19 +130,19 @@ Peer.prototype.newNote =
 
 
 /*
-| creates a new portal.
+| Creates a new portal.
 */
-Peer.prototype.newPortal =
+Peer.newPortal =
 	function(
-		spaceUser,  // the space the portal is to be created in
-		spaceTag,   // the space the portal is to be created in
-		zone,       // the zone of the potal
+		spaceUser,      // the space the portal is to be created in
+		spaceTag,       // the space the portal is to be created in
+		zone,           // the zone of the potal
 		destSpaceUser,  // the user of the space the portal leads to
 		destSpaceTag    // the tag of the space the portal leads to
 	)
 {
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				val :
 				{
@@ -222,14 +175,14 @@ Peer.prototype.newPortal =
 /*
 | Sets the zone for item.
 */
-Peer.prototype.setZone =
+Peer.setZone =
 	function(
 		itemPath,
 		zone
 	)
 {
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				val :
 					zone
@@ -246,14 +199,14 @@ Peer.prototype.setZone =
 /*
 | Sets an items fontsize.
 */
-Peer.prototype.setFontSize =
+Peer.setFontSize =
 	function(
 		itemPath,
 		fontsize
 	)
 {
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				val :
 					fontsize
@@ -270,14 +223,14 @@ Peer.prototype.setFontSize =
 /*
 | Sets an items pnw (point in north-west)
 */
-Peer.prototype.setPNW =
+Peer.setPNW =
 	function(
 		itemPath,
 		pnw
 	)
 {
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				val :
 					pnw
@@ -294,7 +247,7 @@ Peer.prototype.setPNW =
 /*
 | Creates a new label.
 */
-Peer.prototype.newLabel =
+Peer.newLabel =
 	function(
 		spaceUser,
 		spaceTag,
@@ -304,7 +257,7 @@ Peer.prototype.newLabel =
 	)
 {
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				val :
 				{
@@ -352,29 +305,9 @@ Peer.prototype.newLabel =
 
 
 /*
-| Undoes a change.
-*/
-Peer.prototype.undo =
-	function( )
-{
-	this.iface.undo( );
-};
-
-
-/*
-| Redoes a change.
-*/
-Peer.prototype.redo =
-	function( )
-{
-	this.iface.redo( );
-};
-
-
-/*
 | Creates a new relation.
 */
-Peer.prototype.newRelation =
+Peer.newRelation =
 	function(
 		spaceUser,
 		spaceTag,
@@ -386,7 +319,7 @@ Peer.prototype.newRelation =
 	)
 {
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				val :
 				{
@@ -436,14 +369,14 @@ Peer.prototype.newRelation =
 
 
 /*
-| moves an item's z-index up to top.
+| Moves an item's z-index up to top.
 */
-Peer.prototype.moveToTop =
+Peer.moveToTop =
 	function(
 		path
 	)
 {
-	this.iface.alter(
+	shell.iface.alter(
 		{
 			path :
 				path.chop( )
@@ -459,7 +392,7 @@ Peer.prototype.moveToTop =
 /*
 | Inserts some text.
 */
-Peer.prototype.insertText =
+Peer.insertText =
 	function(
 		path,
 		offset,
@@ -467,7 +400,7 @@ Peer.prototype.insertText =
 	)
 {
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				val :
 					text
@@ -486,7 +419,7 @@ Peer.prototype.insertText =
 /*
 | Removes some text within one node.
 */
-Peer.prototype.removeText =
+Peer.removeText =
 	function(
 		path,
 		at1,
@@ -504,7 +437,7 @@ Peer.prototype.removeText =
 	}
 
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				path :
 					path.chop( 1 ),
@@ -525,7 +458,7 @@ Peer.prototype.removeText =
 /*
 | Removes a text spawning over several entities.
 */
-Peer.prototype.removeRange =
+Peer.removeRange =
 	function(
 		path1,
 		at1,
@@ -556,7 +489,7 @@ Peer.prototype.removeRange =
 
 	if ( path1.equals( path2 ) )
 	{
-		this.removeText(
+		Peer.removeText(
 			path1,
 			at1,
 			at2 - at1
@@ -565,20 +498,15 @@ Peer.prototype.removeRange =
 		return;
 	}
 
-	k1 =
-		path1.get( -2 );
+	k1 = path1.get( -2 );
 
-	k2 =
-		path2.get( -2 );
+	k2 = path2.get( -2 );
 
-	pivot =
-		this.iface.get( path1.chop( 1 ).shorten( 3 ) );
+	pivot = shell.iface.get( path1.chop( 1 ).shorten( 3 ) );
 
-	r1 =
-		pivot.rankOf( k1 );
+	r1 = pivot.rankOf( k1 );
 
-	r2 =
-		pivot.rankOf( k2 );
+	r2 = pivot.rankOf( k2 );
 
 	for(
 		r = r1;
@@ -586,16 +514,15 @@ Peer.prototype.removeRange =
 		r++
 	)
 	{
-		this.join(
+		Peer.join(
 			path1,
-			this.iface.get( path1.chop( 1 ) ).length
+			shell.iface.get( path1.chop( 1 ) ).length
 		);
 	}
 
-	len2 =
-		this.iface.get( path1.chop( 1 ) ).length;
+	len2 = shell.iface.get( path1.chop( 1 ) ).length;
 
-	this.join(
+	Peer.join(
 		path1,
 		len2
 	);
@@ -605,7 +532,7 @@ Peer.prototype.removeRange =
 		return;
 	}
 
-	this.removeText(
+	Peer.removeText(
 		path1,
 		at1,
 		len2 - at1 + at2
@@ -616,14 +543,14 @@ Peer.prototype.removeRange =
 /*
 | Splits a text node.
 */
-Peer.prototype.split =
+Peer.split =
 	function(
 		path,
 		offset
 	)
 {
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				path :
 					path.chop( 1 ),
@@ -642,14 +569,14 @@ Peer.prototype.split =
 /*
 | Joins a text node with its next one.
 */
-Peer.prototype.join =
+Peer.join =
 	function(
 		path,
 		at1
 	)
 {
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				proc :
 					'splice'
@@ -668,7 +595,7 @@ Peer.prototype.join =
 /*
 | Removes an item.
 */
-Peer.prototype.removeItem =
+Peer.removeItem =
 	function(
 		path
 	)
@@ -678,19 +605,17 @@ Peer.prototype.removeItem =
 		pivot,
 		r1;
 
-	key =
-		path.get( -1 );
+	key = path.get( -1 );
 
 	pivot =
-		this.iface.get(
+		shell.iface.get(
 			path.chop( 1 ).shorten( 2 )
 		);
 
-	r1 =
-		pivot.rankOf( key );
+	r1 = pivot.rankOf( key );
 
 	return (
-		this.iface.alter(
+		shell.iface.alter(
 			{
 				val :
 					null,

@@ -22,6 +22,7 @@ Forms =
 var
 	Jools,
 	Mark,
+	Peer,
 	shell;
 
 
@@ -317,7 +318,7 @@ SignUp.prototype.signup =
 		return;
 	}
 
-	shell.peer.register(
+	Peer.register(
 		user,
 		email,
 		Jools.passhash( pass ),

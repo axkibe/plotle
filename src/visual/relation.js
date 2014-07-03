@@ -22,6 +22,7 @@ var
 	Euclid,
 	Jools,
 	Mark,
+	Peer,
 	shell,
 	theme;
 
@@ -227,7 +228,7 @@ Relation.spawn =
 		);
 
 	result =
-		shell.peer.newRelation(
+		Peer.newRelation(
 			shell.space.spaceUser,
 			shell.space.spaceTag,
 			pnw,

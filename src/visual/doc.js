@@ -9,6 +9,7 @@
 | Export
 */
 var
+	Peer,
 	Visual;
 
 
@@ -528,7 +529,7 @@ Doc.prototype.input =
 		!mark.empty
 	)
 	{
-		shell.peer.removeRange(
+		Peer.removeRange(
 			mark.frontPath,
 			mark.frontAt,
 			mark.backPath,
@@ -582,7 +583,7 @@ Doc.prototype.specialKey =
 
 				if( !mark.empty )
 				{
-					shell.peer.removeRange(
+					Peer.removeRange(
 						mark.frontPath,
 						mark.frontAt,
 						mark.backPath,
@@ -596,7 +597,7 @@ Doc.prototype.specialKey =
 
 				if( !mark.empty )
 				{
-					shell.peer.removeRange(
+					Peer.removeRange(
 						mark.frontPath,
 						mark.frontAt,
 						mark.backPath,

@@ -18,6 +18,7 @@ var
 var
 	Euclid,
 	Jools,
+	Peer,
 	shell,
 	Style,
 	theme,
@@ -365,7 +366,7 @@ Label.prototype.dragStop =
 				!this.pnw.equals( zone.pnw )
 			)
 			{
-				shell.peer.setPNW(
+				Peer.setPNW(
 					this.path,
 					zone.pnw
 				);
@@ -373,7 +374,7 @@ Label.prototype.dragStop =
 
 			if( fontsize !== this.fontsize )
 			{
-				shell.peer.setFontSize(
+				Peer.setFontSize(
 					this.path,
 					fontsize
 				);

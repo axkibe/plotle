@@ -22,6 +22,7 @@ var
 	Jools,
 	Mark,
 	Path,
+	Peer,
 	shell,
 	Stubs,
 	theme;
@@ -962,7 +963,7 @@ Space.prototype.dragStop =
 							);
 
 					result =
-						shell.peer.newNote(
+						Peer.newNote(
 							this.spaceUser,
 							this.spaceTag,
 							note.zone
@@ -1038,7 +1039,7 @@ Space.prototype.dragStop =
 							);
 
 					result =
-						shell.peer.newLabel(
+						Peer.newLabel(
 							this.spaceUser,
 							this.spaceTag,
 							label.pnw,
@@ -1084,7 +1085,7 @@ Space.prototype.dragStop =
 						);
 
 					result =
-						shell.peer.newPortal(
+						Peer.newPortal(
 							this.spaceUser,
 							this.spaceTag,
 							portal.zone,
@@ -1092,8 +1093,7 @@ Space.prototype.dragStop =
 							'home'
 						);
 
-					key =
-						result.chgX.trg.path.get( -1 );
+					key = result.chgX.trg.path.get( -1 );
 
 					shell.setMark(
 						Mark.Caret.Create(
@@ -1196,7 +1196,7 @@ Space.prototype.dragStop =
 				{
 					case 'zone' :
 
-						shell.peer.setZone(
+						Peer.setZone(
 							action.transItem.path,
 							action.transItem.zone
 						);
@@ -1205,7 +1205,7 @@ Space.prototype.dragStop =
 
 					case 'pnw/fontsize' :
 
-						shell.peer.setPNW(
+						Peer.setPNW(
 							action.transItem.path,
 							action.transItem.zone.pnw
 						);
@@ -1233,7 +1233,7 @@ Space.prototype.dragStop =
 				{
 					case 'zone' :
 
-						shell.peer.setZone(
+						Peer.setZone(
 							action.transItem.path,
 							action.transItem.zone
 						);
@@ -1242,12 +1242,12 @@ Space.prototype.dragStop =
 
 					case 'pnw/fontsize' :
 
-						shell.peer.setPNW(
+						Peer.setPNW(
 							action.transItem.path,
 							action.transItem.zone.pnw
 						);
 
-						shell.peer.setFontSize(
+						Peer.setFontSize(
 							action.transItem.path,
 							action.transItem.doc.fontsize
 						);
@@ -1714,13 +1714,13 @@ Space.prototype.specialKey =
 		{
 			case 'z' :
 
-				shell.peer.undo( );
+				shell.iface.undo( );
 
 				return;
 
 			case 'y' :
 
-				shell.peer.redo( );
+				shell.iface.redo( );
 
 				return;
 

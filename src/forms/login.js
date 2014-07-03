@@ -22,6 +22,7 @@ Forms =
 var
 	Jools,
 	Mark,
+	Peer,
 	shell;
 
 
@@ -295,7 +296,7 @@ Login.prototype.login =
 		return;
 	}
 
-	shell.peer.auth(
+	Peer.auth(
 		user,
 		Jools.passhash( pass )
 	);

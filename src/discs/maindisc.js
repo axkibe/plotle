@@ -9,7 +9,8 @@
 | Export
 */
 var
-	Discs;
+	Discs,
+	Peer;
 
 Discs =
 	Discs || { };
@@ -416,7 +417,7 @@ MainDisc.prototype.pushButton =
 
 	if( buttonName === 'Remove' )
 	{
-		shell.peer.removeItem( this.mark.itemPath );
+		Peer.removeItem( this.mark.itemPath );
 	}
 	else
 	{

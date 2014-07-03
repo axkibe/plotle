@@ -23,6 +23,7 @@ var
 	fontPool,
 	Jools,
 	Mark,
+	Peer,
 	shell,
 	theme;
 
@@ -152,7 +153,7 @@ if( SERVER )
 
 var
 	Para;
-	
+
 Para = Visual.Para;
 
 
@@ -870,7 +871,7 @@ Para.prototype.input =
 		line =
 			rx[ 1 ];
 
-		shell.peer.insertText(
+		Peer.insertText(
 			textPath,
 			caretAt,
 			line
@@ -881,7 +882,7 @@ Para.prototype.input =
 			// FIXME, somehow use changes
 			// over return values more elegantly
 			r =
-				shell.peer.split(
+				Peer.split(
 					textPath,
 					caretAt + line.length
 				);
@@ -892,7 +893,7 @@ Para.prototype.input =
 				doc.ranks[
 					doc.rankOf( paraKey ) + 1
 				];
-			
+
 			path = path.limit( 5 ).append( paraKey );
 
 			textPath = path.append( 'text' );
@@ -1122,7 +1123,7 @@ Para.prototype._keyBackspace =
 
 	if( at > 0 )
 	{
-		shell.peer.removeText(
+		Peer.removeText(
 			this.textPath,
 			at - 1,
 			1
@@ -1139,7 +1140,7 @@ Para.prototype._keyBackspace =
 			ve =
 				doc.atRank( r - 1 );
 
-		shell.peer.join(
+		Peer.join(
 			ve.textPath,
 			ve.text.length
 		);
@@ -1165,7 +1166,7 @@ Para.prototype._keyDel =
 
 	if( at < this.text.length )
 	{
-		shell.peer.removeText(
+		Peer.removeText(
 			this.textPath,
 			at,
 			1
@@ -1178,7 +1179,7 @@ Para.prototype._keyDel =
 
 	if( r < doc.ranks.length - 1 )
 	{
-		shell.peer.join(
+		Peer.join(
 			this.textPath,
 			this.text.length
 		);
@@ -1291,7 +1292,7 @@ Para.prototype._keyEnter =
 		// bAt
 	)
 {
-	shell.peer.split(
+	Peer.split(
 		this.textPath,
 		at
 	);

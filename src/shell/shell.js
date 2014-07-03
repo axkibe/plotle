@@ -1366,8 +1366,6 @@ Shell.prototype.onload =
 	this.iface =
 		new IFace( );
 
-	this.peer = new Peer( iface );
-
 	username = window.localStorage.getItem( 'username' );
 
 	if( username )
@@ -1381,7 +1379,7 @@ Shell.prototype.onload =
 		passhash = null;
 	}
 
-	this.peer.auth(
+	this.iface.auth(
 		username,
 		passhash
 	);
@@ -1406,7 +1404,7 @@ Shell.prototype.moveToSpace =
 	);
 	*/
 
-	this.peer.aquireSpace(
+	this.iface.aquireSpace(
 		spaceUser,
 		spaceTag,
 		create
@@ -1570,7 +1568,7 @@ Shell.prototype.onAuth =
 		// takes a visitor instead
 		if( username !== 'visitor' )
 		{
-			this.peer.auth(
+			Peer.auth(
 				'visitor',
 				null,
 				this
@@ -1620,7 +1618,7 @@ Shell.prototype.logout =
 		return;
 	}
 
-	this.peer.auth(
+	Peer.auth(
 		'visitor',
 		null
 	);

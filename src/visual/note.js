@@ -19,6 +19,7 @@ var
 var
 	Euclid,
 	Jools,
+	Peer,
 	shell,
 	Style,
 	system,
@@ -312,7 +313,7 @@ Note.prototype.dragStop =
 				return;
 			}
 
-			shell.peer.setZone(
+			Peer.setZone(
 				this.path,
 				zone
 			);

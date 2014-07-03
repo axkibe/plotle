@@ -24,6 +24,7 @@ var
 	HoverReply,
 	Jools,
 	Mark,
+	Peer,
 	shell,
 	Style,
 	theme;
@@ -394,7 +395,7 @@ Portal.prototype.dragStop =
 				return;
 			}
 
-			shell.peer.setZone(
+			Peer.setZone(
 				this.path,
 				zone
 			);
@@ -929,7 +930,7 @@ Portal.prototype.input =
 	{
 		var line = rx[ 1 ];
 
-		shell.peer.insertText(
+		Peer.insertText(
 			this.subPaths[ section ],
 			mark.caretAt,
 			line
@@ -1164,7 +1165,7 @@ Portal.prototype._keyBackspace =
 		return;
 	}
 
-	shell.peer.removeText(
+	Peer.removeText(
 		this.subPaths[ section ],
 		at - 1,
 		1
@@ -1581,14 +1582,16 @@ Portal.prototype._keyDel =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		at,
+		mark,
+		section,
+		value;
 
-		section =
-			mark.caretPath.get( -1 ),
+	mark = this.mark;
 
-		value =
-			this[ section ];
+	section = mark.caretPath.get( -1 );
+
+	value = this[ section ];
 
 	if(
 		!this._isSection( section ) ||
@@ -1598,16 +1601,14 @@ Portal.prototype._keyDel =
 		return;
 	}
 
-	var
-		at =
-			mark.caretAt;
+	at = mark.caretAt;
 
 	if( at >= value.length )
 	{
 		return;
 	}
 
-	shell.peer.removeText(
+	Peer.removeText(
 		this.subPaths[ section ],
 		at,
 		1
@@ -1622,11 +1623,14 @@ Portal.prototype._keyEnd =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		at,
+		mark,
+		section,
+		value;
 
-		section =
-			mark.caretPath.get( -1 );
+	mark = this.mark;
+
+	section = mark.caretPath.get( -1 );
 
 	if(
 		!this._isSection( section ) ||
@@ -1636,12 +1640,9 @@ Portal.prototype._keyEnd =
 		return;
 	}
 
-	var
-		at =
-			mark.caretAt,
+	at = mark.caretAt,
 
-		value =
-			this[ section ];
+	value = this[ section ];
 
 	if( at >= value.length )
 	{
@@ -1666,34 +1667,32 @@ Portal.prototype._keyEnter =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		cycle,
+		mark,
+		section;
 
-		section =
-			mark.caretPath.get( -1 );
+	mark = this.mark;
+
+	section = mark.caretPath.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
 		return;
 	}
 
-	var
-		cycle =
-			null;
+	cycle = null;
 
 	switch( section )
 	{
 		case 'spaceUser' :
 
-			cycle =
-				'spaceTag';
+			cycle = 'spaceTag';
 
 			break;
 
 		case 'spaceTag' :
 
-			cycle =
-				'moveToButton';
+			cycle = 'moveToButton';
 
 			break;
 	}

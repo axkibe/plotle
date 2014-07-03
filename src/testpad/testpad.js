@@ -111,15 +111,6 @@ if( JOOBJ )
 						defaultValue :
 							'false'
 					},
-				peer :
-					{
-						comment :
-							'the peer',
-						type :
-							'Object',
-						defaultValue :
-							'undefined'
-					},
 				seq :
 					{
 						comment :
@@ -284,16 +275,10 @@ TestPad.prototype._init =
 			this.iface.goToSeq( this.seq );
 	}
 
-	if( !this.peer )
-	{
-		this.peer =
-			new Peer( this.iface );
-	}
-
 	var
 		doc =
 		this._doc =
-			this.peer.get( _noteDocPath );
+			this.iface.get( _noteDocPath );
 
 	elements.now.innerHTML =
 		'' + this.seq;
@@ -651,7 +636,7 @@ TestPad.prototype.send =
 					.append( doc.ranks[ action.line ] )
 					.append( 'text' );
 
-			this.peer.insertText(
+			Peer.insertText(
 				path,
 				action.at,
 				action.value
@@ -669,7 +654,7 @@ TestPad.prototype.send =
 					.append( doc.ranks[ action.line ] )
 					.append( 'text' );
 
-			this.peer.removeText(
+			Peer.removeText(
 				path,
 				action.at,
 				action.at2 - action.at
@@ -693,7 +678,7 @@ TestPad.prototype.send =
 					.append( doc.ranks[ action.line ] )
 					.append( 'text' );
 
-			this.peer.split(
+			Peer.split(
 				path,
 				action.at
 			);
@@ -707,7 +692,7 @@ TestPad.prototype.send =
 					.append( doc.ranks[ action.line - 1] )
 					.append( 'text' );
 
-			this.peer.join(
+			Peer.join(
 				path,
 				doc.twig[ doc.ranks[ action.line - 1 ] ].text.length
 			);

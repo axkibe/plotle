@@ -50,7 +50,7 @@ _ifaceCatcher =
 	return (
 		function( )
 		{
-			var iface = shell.peer.iface;
+			var iface = shell.iface;
 
 			catcher( iface[ funcName ].apply( this, arguments ) );
 		}
@@ -59,7 +59,7 @@ _ifaceCatcher =
 
 
 /*
-| FIXME move back into the peer object and make it a joobj.
+| FIXME move back into the object and make it a joobj.
 */
 var
 	_ajax;
@@ -711,7 +711,7 @@ IFace.prototype._onUpdate =
 		tfxChgX,
 		u,
 		undo;
-	
+
 /**/if( CHECK )
 /**/{
 /**/	if( this !== _ajax.update )
@@ -720,7 +720,7 @@ IFace.prototype._onUpdate =
 /**/	}
 /**/}
 
-	iface = shell.peer.iface;
+	iface = shell.iface;
 
 	if(
 		this.readyState !== 4
