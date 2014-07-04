@@ -71,7 +71,7 @@ _ajax =
 		request :
 			null,
 		update :
-			null,
+			null
 	};
 
 /*

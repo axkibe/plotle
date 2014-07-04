@@ -1,8 +1,13 @@
+. _onAuth
+. _onRegister
+. _onReply
+. _request
 . _onUpdate
+. receiver
+. request
 . aborted
 . $action
 . $aquireAjax
-. $authActive
 . $cSpace
 . $clip
 . $move
@@ -11,7 +16,6 @@
 . $pool
 . $postbox
 . $rSpace
-. $regActive
 . $remoteSeq
 . $settedDefaultFonts
 . $space
@@ -118,7 +122,6 @@
 . _$undo
 . _$visitPasshash
 . _$visitUser
-. _ajax
 . _backAt
 . _backPath
 . _begin
