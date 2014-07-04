@@ -1865,8 +1865,7 @@ Server.prototype.cmdRegister =
 		sus.resume( )
 	);
 
-	this.$users[ username ] =
-		user;
+	this.$users[ username ] = user;
 
 	yield* this.createSpace(
 		username,
@@ -1875,9 +1874,7 @@ Server.prototype.cmdRegister =
 
 	return {
 		ok :
-			true,
-		user :
-			username
+			true
 	};
 };
 
@@ -3059,8 +3056,7 @@ Server.prototype.webAjax =
 
 			try
 			{
-				asw =
-					yield* self.ajaxCmd( cmd, result );
+				asw = yield* self.ajaxCmd( cmd, result );
 			}
 			catch( err )
 			{
@@ -3094,10 +3090,8 @@ Server.prototype.webAjax =
 				{
 					'Content-Type' :
 						'application/json',
-
 					'Cache-Control' :
 						'no-cache',
-
 					'Date' :
 						new Date().toUTCString()
 				}
@@ -3129,7 +3123,10 @@ Server.prototype.webAjax =
 | Executes an ajaxCmd
 */
 Server.prototype.ajaxCmd =
-	function*( cmd, result )
+	function*(
+		cmd,
+		result
+	)
 {
 	switch ( cmd.cmd )
 	{

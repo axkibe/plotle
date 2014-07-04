@@ -1,6 +1,8 @@
 /*
 | The interface that talks asynchronously with the server.
 |
+| TODO all asw -> reply
+|
 | Authors: Axel Kittenberger
 */
 
@@ -66,8 +68,10 @@ var
 
 _ajax =
 	{
+		request :
+			null,
 		update :
-			null
+			null,
 	};
 
 /*
@@ -103,7 +107,7 @@ IFace =
 IFace.prototype._request =
 	function(
 		request,
-		callback
+		receiver
 	)
 {
 	var
@@ -131,22 +135,9 @@ IFace.prototype._request =
 	_ajax.request =
 		new XMLHttpRequest( );
 
-	ajax.open(
-		'POST',
-		'/mm',
-		true
-	);
+	ajax.request = request;
 
-	ajax.setRequestHeader(
-		'Content-type',
-		'application/x-www-form-urlencoded'
-	);
-
-	ajax.onreadystatechange =
-		_ifaceCatcher( '_onUpdate' );
-
-
-	ajax = new XMLHttpRequest( );
+	ajax.receiver = receiver;
 
 	ajax.open(
 		'POST',
@@ -160,80 +151,7 @@ IFace.prototype._request =
 	);
 
 	ajax.onreadystatechange =
-		function( )
-	{
-		var
-			asw;
-
-		if(
-			this.readyState !== 4
-			||
-			this.aborted
-		)
-		{
-			return;
-		}
-
-		_ajax.request = null;
-
-		this.onreadystatechange = null;
-
-		if( ajax.status !== 200 )
-		{
-			Jools.log(
-				'iface',
-				cmd,
-				'status: ',
-				ajax.status
-			);
-
-			if( callback )
-			{
-				callback(
-					{
-						ok:
-							false,
-						message:
-							'connection',
-						status:
-							ajax.status
-					}
-				);
-			}
-
-			return;
-		}
-
-		try
-		{
-			asw = JSON.parse( ajax.responseText );
-		}
-		catch( e )
-		{
-			throw new Error(
-				'Server answered no JSON!'
-			);
-		}
-
-		Jools.log( 'iface', '<-', asw );
-
-		if( !asw.ok )
-		{
-			Jools.log( 'iface', cmd, 'server not ok' );
-
-			if( callback )
-			{
-				callback( asw, null );
-			}
-
-			return;
-		}
-
-		if( callback )
-		{
-			callback( asw );
-		}
-	};
+		_ifaceCatcher( '_onReply' );
 
 	rs = JSON.stringify( request );
 
@@ -244,6 +162,87 @@ IFace.prototype._request =
 	);
 
 	ajax.send( rs );
+};
+
+
+/*
+| A request has been replied.
+|
+| 'this' is the ajax request.
+*/
+IFace.prototype._onReply =
+	function( )
+{
+	var
+		request,
+		reply,
+		receiver;
+
+	if(
+		this.readyState !== 4
+		||
+		this.aborted
+	)
+	{
+		return;
+	}
+
+	_ajax.request = null;
+
+	this.onreadystatechange = null;
+
+	receiver = this.receiver;
+
+	request = this.request;
+
+	if( this.status !== 200 )
+	{
+		Jools.log(
+			'iface',
+			request.cmd,
+			'status: ',
+			this.status
+		);
+
+		if( receiver )
+		{
+			shell.iface[ receiver ](
+				{
+					ok:
+						false,
+					message:
+						'connection',
+					status:
+						this.status
+				}
+			);
+		}
+
+		return;
+	}
+
+	try
+	{
+		reply = JSON.parse( this.responseText );
+	}
+	catch( e )
+	{
+		throw new Error(
+			'Server answered no JSON!'
+		);
+	}
+
+	Jools.log( 'iface', '<-', reply );
+
+	if( !reply.ok )
+	{
+		Jools.log( 'iface', request.cmd, 'server not ok' );
+	}
+
+	if( receiver )
+	{
+		shell.iface[ receiver ]( this.request, reply );
+	}
 };
 
 
@@ -280,18 +279,28 @@ IFace.prototype.auth =
 			passhash :
 				passhash
 		},
-		function( asw )
-		{
-			if( asw.ok )
-			{
-				shell.onAuth( true, asw.user, passhash );
-			}
-			else
-			{
-				shell.onAuth( false, null, null, asw.message );
-			}
-		}
+		'_onAuth'
 	);
+};
+
+
+/*
+| Received an auth reply.
+*/
+IFace.prototype._onAuth =
+	function(
+		request,
+		reply
+	)
+{
+	if( reply.ok )
+	{
+		shell.onAuth( true, reply.user, request.passhash );
+	}
+	else
+	{
+		shell.onAuth( false, null, null, reply.message );
+	}
 };
 
 
@@ -303,8 +312,7 @@ IFace.prototype.register =
 		user,
 		mail,
 		passhash,
-		news,
-		onRegisterReceiver
+		news
 	)
 {
 	this._request(
@@ -320,14 +328,30 @@ IFace.prototype.register =
 			news  :
 				news
 		},
-		function( asw )
-		{
-			onRegisterReceiver.onRegister(
-				user,
-				passhash,
-				asw
-			);
-		}
+		'_onRegister'
+	);
+};
+
+
+/*
+| Received a register reply.
+*/
+IFace.prototype._onRegister =
+	function(
+		request,
+		reply
+	)
+{
+	var
+		ok;
+
+	ok = reply.ok;
+
+	shell.onRegister(
+		ok,
+		ok ? request.user : null,
+		ok ? request.passhash : null,
+		ok ? null : reply.message
 	);
 };
 
@@ -683,6 +707,8 @@ IFace.prototype._update =
 
 /*
 | Called by network on an update.
+|
+| 'this' is the ajax request.
 */
 IFace.prototype._onUpdate =
 	function( )

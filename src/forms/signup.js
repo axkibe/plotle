@@ -22,7 +22,6 @@ Forms =
 var
 	Jools,
 	Mark,
-	Peer,
 	shell;
 
 
@@ -318,12 +317,11 @@ SignUp.prototype.signup =
 		return;
 	}
 
-	Peer.register(
+	shell.iface.register(
 		user,
 		email,
 		Jools.passhash( pass ),
-		newsletter,
-		this
+		newsletter
 	);
 };
 
@@ -333,24 +331,26 @@ SignUp.prototype.signup =
 */
 SignUp.prototype.onRegister =
 	function(
+		ok,
 		user,
 		passhash,
-		res
+		message
 	)
 {
 	var
 		twig =
 			this.twig;
 
-	if( !res.ok )
+	if( !ok )
 	{
 		shell.setPath(
-			this._widgetPath( 'errorLabel' )
-				.append( 'text' ),
-			res.message
+			this
+			._widgetPath( 'errorLabel' )
+			.append( 'text' ),
+			message
 		);
 
-		if( res.message.search( /Username/ ) >= 0 )
+		if( message.search( /Username/ ) >= 0 )
 		{
 			shell.setMark(
 				Mark.Caret.Create(

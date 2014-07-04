@@ -658,7 +658,7 @@ Shell.prototype._getCurrentDisplay =
 {
 	var
 		name;
-		
+
 	name = this._$mode;
 
 	switch( name )
@@ -1535,7 +1535,7 @@ Shell.prototype.onAquireSpace =
 
 
 /*
-| answer to on 'auth' operation.
+| Received an 'auth' reply.
 */
 Shell.prototype.onAuth =
 	function(
@@ -1593,6 +1593,39 @@ Shell.prototype.onAuth =
 		'home',
 		false
 	);
+};
+
+
+/*
+| Received a 'register' reply.
+*/
+Shell.prototype.onRegister =
+	function(
+		ok,
+		username,
+		passhash,
+		message
+	)
+{
+	// if in login mode this is a tempted login
+
+	if( this._$mode !== 'SignUp' )
+	{
+		console.log(
+			'ignoring a register reply, since out of signup form'
+		);
+
+		return;
+	}
+
+	this._$formJockey.get( 'SignUp' ).onRegister(
+		ok,
+		username,
+		passhash,
+		message
+	);
+
+	return;
 };
 
 
