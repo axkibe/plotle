@@ -128,6 +128,7 @@ IFace.prototype._request =
 	if( _ajax.request )
 	{
 		console.log( 'already a request active' );
+
 		return false;
 	}
 
@@ -207,6 +208,7 @@ IFace.prototype._onReply =
 		if( receiver )
 		{
 			shell.iface[ receiver ](
+				this.request,
 				{
 					ok:
 						false,
@@ -293,14 +295,18 @@ IFace.prototype._onAuth =
 		reply
 	)
 {
-	if( reply.ok )
-	{
-		shell.onAuth( true, reply.user, request.passhash );
-	}
-	else
-	{
-		shell.onAuth( false, null, null, reply.message );
-	}
+	var
+		ok;
+
+	ok = reply.ok;
+
+	system.asyncEvent(
+		'onAuth',
+		ok,
+		ok ? reply.user : null,
+		ok ? request.passhash : null,
+		ok ? null : reply.message
+	);
 };
 
 
@@ -347,7 +353,8 @@ IFace.prototype._onRegister =
 
 	ok = reply.ok;
 
-	shell.onRegister(
+	system.asyncEvent(
+		'onRegister',
 		ok,
 		ok ? request.user : null,
 		ok ? request.passhash : null,
@@ -401,12 +408,6 @@ IFace.prototype.aquireSpace =
 		create
 	)
 {
-	var
-		ajax,
-		self;
-
-	self = this;
-
 	// aborts the current running update.
 	if( _ajax.update )
 	{
@@ -417,178 +418,8 @@ IFace.prototype.aquireSpace =
 		_ajax.update = null;
 	}
 
-	ajax =
-	self.$aquireAjax =
-		new XMLHttpRequest( );
 
-	ajax.open(
-		'POST',
-		'/mm',
-		true
-	);
-
-	ajax.setRequestHeader(
-		'Content-type',
-		'application/x-www-form-urlencoded'
-	);
-
-	ajax.onreadystatechange =
-	function( )
-	{
-		var asw;
-
-		if(
-			ajax.readyState !== 4 ||
-			self.$aquireAjax !== ajax
-		)
-		{
-			return;
-		}
-
-		if( ajax.status !== 200 )
-		{
-			self.$aquireAjax = null;
-
-			Jools.log(
-				'iface',
-				'aquireSpace.status == ' + ajax.status
-			);
-
-			system.asyncEvent(
-				'onAquireSpace',
-				Jools.immute(
-					{
-						status :
-							'connection fail',
-						message :
-							'connection fail: ' + ajax.status
-					}
-				)
-			);
-
-			self._update( );
-
-			return;
-		}
-
-		try
-		{
-			asw = JSON.parse( ajax.responseText );
-		}
-		catch( e )
-		{
-			self.$aquireAjax =
-				null;
-
-			throw new Error(
-				'Server delivered no JSON.'
-			);
-		}
-
-		Jools.log(
-			'iface',
-			'<-sg',
-			asw
-		);
-
-		if( !asw.ok )
-		{
-			self.$aquireAjax = null;
-
-			throw new Error(
-				'Server not OK: ' + asw.message
-			);
-		}
-
-		switch( asw.status )
-		{
-			case 'nonexistent' :
-			case 'no access' :
-
-				system.asyncEvent(
-					'onAquireSpace',
-					Jools.immute(
-						{
-							status :
-								asw.status,
-							spaceUser :
-								spaceUser,
-							spaceTag :
-								spaceTag
-						}
-					)
-				);
-
-				self._update( );
-
-				return;
-		}
-
-		if( asw.node.type !== 'Space' )
-		{
-			throw new Error(
-				' aquireSpace(): server served no space '
-			);
-		}
-
-		self.$cSpace =
-		self.$rSpace =
-			Visual.Space.CreateFromJSON( asw.node );
-
-		self.$spaceUser = spaceUser;
-
-		self.$spaceTag = spaceTag;
-
-		self._$outbox = [ ];
-
-		self.$postbox = [ ];
-
-		self.$mseq = -1;
-
-		self.$remoteSeq = asw.seq;
-
-		self._$undo = [ ];
-
-		self._$redo = [ ];
-
-		// FIXME check if $cSpace is a space
-
-		system.asyncEvent(
-			'onAquireSpace',
-			Jools.immute(
-				{
-					status :
-						asw.status,
-					spaceUser :
-						spaceUser,
-					spaceTag :
-						spaceTag,
-					space :
-						self.$cSpace,
-					access :
-						asw.access
-				}
-			)
-		);
-
-		// waits a second before going into update cycle, so safari
-		// stops its wheely thing.
-		system.setTimer(
-			1,
-			function( )
-			{
-				if( self.$aquireAjax === ajax )
-				{
-					self._update( );
-				}
-
-				self.$aquireAjax =
-					null;
-			}
-		);
-	};
-
-	var request =
+	this._request(
 		{
 			cmd :
 				'get',
@@ -601,22 +432,120 @@ IFace.prototype.aquireSpace =
 			path :
 				Path.empty,
 			passhash :
-				self.$passhash,
+				this.$passhash,
 			seq :
 				-1,
 			user :
-				self.$user
-		};
+				this.$user
+		},
+		'_onAquireSpace'
+	);
+};
 
-	Jools.log(
-		'iface',
-		'sg->',
-		request
+
+IFace.prototype._onAquireSpace =
+	function(
+		request,
+		reply
+	)
+{
+	var
+		iface;
+
+	iface = shell.iface;
+
+	if( !reply.ok )
+	{
+		system.asyncEvent(
+			'onAquireSpace',
+			reply
+		);
+
+		this._update( );
+
+		return;
+	}
+
+	switch( reply.status )
+	{
+		case 'nonexistent' :
+		case 'no access' :
+
+			system.asyncEvent(
+				'onAquireSpace',
+				Jools.immute(
+					{
+						status :
+							reply.status,
+						spaceUser :
+							request.spaceUser,
+						spaceTag :
+							request.spaceTag
+					}
+				)
+			);
+
+			this._update( );
+
+			return;
+	}
+
+	if( reply.node.type !== 'Space' )
+	{
+		throw new Error(
+			' aquireSpace(): server served no space '
+		);
+	}
+
+	this.$cSpace =
+	this.$rSpace =
+		Visual.Space.CreateFromJSON( reply.node );
+
+	this.$spaceUser = request.spaceUser;
+
+	this.$spaceTag = request.spaceTag;
+
+	this._$outbox = [ ];
+
+	this.$postbox = [ ];
+
+	this.$mseq = -1;
+
+	this.$remoteSeq = reply.seq;
+
+	this._$undo = [ ];
+
+	this._$redo = [ ];
+
+	// FIXME check if $cSpace is a space
+
+	system.asyncEvent(
+		'onAquireSpace',
+		Jools.immute(
+			{
+				status :
+					reply.status,
+				spaceUser :
+					request.spaceUser,
+				spaceTag :
+					request.spaceTag,
+				space :
+					this.$cSpace,
+				access :
+					reply.access
+			}
+		)
 	);
 
-	request = JSON.stringify( request );
-
-	ajax.send( request );
+	// waits a second before going into update cycle, so safari
+	// stops its wheely thing.
+	system.setTimer(
+		1,
+		function( )
+		{
+			shell.iface._update( );
+		}
+	);
 };
 
 
@@ -654,7 +583,6 @@ IFace.prototype._update =
 	{
 		throw new Error( 'double update' );
 	}
-
 
 	ajax =
 	_ajax.update =
@@ -698,8 +626,7 @@ IFace.prototype._update =
 		request
 	);
 
-	request =
-		JSON.stringify( request );
+	request = JSON.stringify( request );
 
 	ajax.send( request );
 };
@@ -1078,11 +1005,9 @@ IFace.prototype.alter =
 			this.$cSpace
 		);
 
-	this.$cSpace =
-		result.tree;
+	this.$cSpace = result.tree;
 
-	chgX =
-		result.chgX,
+	chgX = result.chgX,
 
 	c =
 		Jools.immute( {
@@ -1168,13 +1093,13 @@ IFace.prototype._sendChanges =
 				system.failScreen(
 					'Cannot send changes, error code ' + ajax.status
 				);
+
 				return;
 			}
 
 			try
 			{
-				asw =
-					JSON.parse( ajax.responseText );
+				asw = JSON.parse( ajax.responseText );
 			}
 			catch( e )
 			{
@@ -1202,7 +1127,9 @@ IFace.prototype._sendChanges =
 		};
 
 	var c = this._$outbox[0];
+
 	this._$outbox.splice(0, 1);
+
 	this.$postbox.push(c);
 
 	var request =
@@ -1231,8 +1158,7 @@ IFace.prototype._sendChanges =
 		request
 	);
 
-	request =
-		JSON.stringify( request );
+	request = JSON.stringify( request );
 
 	ajax.send( request );
 };

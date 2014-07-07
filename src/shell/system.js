@@ -289,7 +289,8 @@ System.prototype.asyncEvent =
 		eventName,
 		a1,
 		a2,
-		a3
+		a3,
+		a4
 	)
 {
 	if( _failScreen )
@@ -297,7 +298,7 @@ System.prototype.asyncEvent =
 		return;
 	}
 
-	shell[ eventName ]( a1, a2, a3 );
+	shell[ eventName ]( a1, a2, a3, a4 );
 
 	this._repeatHover( );
 
@@ -1651,13 +1652,13 @@ System.prototype._steerAttention =
 	function( )
 {
 	var
-		ac =
-			shell.attentionCenter;
+		ac;
+	
+	ac = shell.attentionCenter;
 
 	if( ac === null )
 	{
-		_hiddenInput.style.top =
-			'0';
+		_hiddenInput.style.top = '0';
 	}
 	else
 	{
@@ -1668,8 +1669,7 @@ System.prototype._steerAttention =
 				_height - 15
 			);
 
-		_hiddenInput.style.top =
-			ac + 'px';
+		_hiddenInput.style.top = ac + 'px';
 	}
 
 	if( shell.suggestingKeyboard( ) )

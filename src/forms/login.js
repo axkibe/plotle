@@ -350,8 +350,7 @@ Login.prototype.onAuth =
 	var
 		twig;
 		
-	twig =
-		this.twig;
+	twig = this.twig;
 
 	if( !ok )
 	{
@@ -367,7 +366,7 @@ Login.prototype.onAuth =
 					'path',
 						twig.userInput.path,
 					'at',
-						username.length
+						twig.userInput.value.length
 				)
 			);
 		}

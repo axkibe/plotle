@@ -1,3 +1,4 @@
+. _onAquireSpace
 . _onAuth
 . _onRegister
 . _onReply
@@ -7,7 +8,6 @@
 . request
 . aborted
 . $action
-. $aquireAjax
 . $cSpace
 . $clip
 . $move

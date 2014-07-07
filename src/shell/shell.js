@@ -326,9 +326,12 @@ Object.defineProperty(
 		get :
 			function( )
 			{
-				return (
-					this._getCurrentDisplay( ).attentionCenter
-				);
+				var
+					display;
+
+				display = this._getCurrentDisplay( );
+
+				return display && display.attentionCenter;
 			}
 	}
 );
