@@ -1,8 +1,6 @@
 /*
 | The interface that talks asynchronously with the server.
 |
-| TODO all asw -> reply
-|
 | Authors: Axel Kittenberger
 */
 
@@ -643,7 +641,6 @@ IFace.prototype._onUpdate =
 	var
 		a,
 		aZ,
-		asw,
 		b,
 		bZ,
 		c,
@@ -657,6 +654,7 @@ IFace.prototype._onUpdate =
 		outbox,
 		postbox,
 		redo,
+		reply,
 		report,
 		seq,
 		space,
@@ -706,7 +704,7 @@ IFace.prototype._onUpdate =
 
 	try
 	{
-		asw = JSON.parse( this.responseText );
+		reply = JSON.parse( this.responseText );
 	}
 	catch( e )
 	{
@@ -715,24 +713,24 @@ IFace.prototype._onUpdate =
 		);
 	}
 
-	Jools.log( 'iface', '<-u', asw );
+	Jools.log( 'iface', '<-u', reply );
 
-	if( !asw.ok )
+	if( !reply.ok )
 	{
 		system.failScreen(
-			'Server not OK: ' + asw.message
+			'Server not OK: ' + reply.message
 		);
 
 		return;
 	}
 
-	chgs = asw.chgs;
+	chgs = reply.chgs;
 
 	report = new ChangeRay( );
 
 	gotOwnChgs = false;
 
-	seq = asw.seq;
+	seq = reply.seq;
 
 	// this wasn't an empty timeout?
 	if( chgs && chgs.length > 0 )
@@ -939,7 +937,7 @@ IFace.prototype._onUpdate =
 		iface.$cSpace = space;
 	}
 
-	msgs = asw.msgs;
+	msgs = reply.msgs;
 
 	if( msgs )
 	{
@@ -952,9 +950,9 @@ IFace.prototype._onUpdate =
 		}
 	}
 
-	iface.$remoteSeq = asw.seqZ;
+	iface.$remoteSeq = reply.seqZ;
 
-	mseqZ = asw.mseqZ;
+	mseqZ = reply.mseqZ;
 
 	if( Jools.is( mseqZ ) )
 	{
@@ -1050,9 +1048,6 @@ IFace.prototype.alter =
 IFace.prototype._sendChanges =
 	function( )
 {
-	var
-		ajax;
-
 	// already sending?
 	if( this.$postbox.length > 0 )
 	{
@@ -1064,75 +1059,14 @@ IFace.prototype._sendChanges =
 	{
 		return;
 	}
+	
+	var c = this._$outbox[ 0 ];
 
-	ajax = new XMLHttpRequest( );
+	this._$outbox.splice( 0, 1 );
 
-	ajax.open(
-		'POST',
-		'/mm',
-		true
-	);
+	this.$postbox.push( c );
 
-	ajax.setRequestHeader(
-		'Content-type',
-		'application/x-www-form-urlencoded'
-	);
-
-	ajax.onreadystatechange =
-		function( )
-		{
-			var asw;
-
-			if( ajax.readyState !== 4 )
-			{
-				return;
-			}
-
-			if( ajax.status !== 200 )
-			{
-				system.failScreen(
-					'Cannot send changes, error code ' + ajax.status
-				);
-
-				return;
-			}
-
-			try
-			{
-				asw = JSON.parse( ajax.responseText );
-			}
-			catch( e )
-			{
-				system.failScreen(
-					'Server answered no JSON!'
-				);
-
-				return;
-			}
-
-			Jools.log(
-				'iface',
-				'<-sc',
-				asw
-			);
-
-			if( !asw.ok )
-			{
-				system.failScreen(
-					'Server not OK: ' + asw.message
-				);
-
-				return;
-			}
-		};
-
-	var c = this._$outbox[0];
-
-	this._$outbox.splice(0, 1);
-
-	this.$postbox.push(c);
-
-	var request =
+	this._request(
 		{
 			cmd :
 				'alter',
@@ -1150,17 +1084,29 @@ IFace.prototype._sendChanges =
 				this.$remoteSeq,
 			user :
 				this.$user
-		};
-
-	Jools.log(
-		'iface',
-		'sc->',
-		request
+		},
+		'_onSendChanges'
 	);
+};
 
-	request = JSON.stringify( request );
 
-	ajax.send( request );
+/*
+| Reply of a sendChanges request
+*/
+IFace.prototype._onSendChanges =
+	function(
+		request,
+		reply
+	)
+{
+	if( !reply.ok )
+	{
+		system.failScreen(
+			'Server not OK: ' + reply.message
+		);
+
+		return;
+	}
 };
 
 
