@@ -50,25 +50,9 @@ Peer.auth =
 		passhash = Jools.uid( );
 	}
 
-	shell.iface.auth(
+	shell.link.auth(
 		user,
 		passhash
-	);
-};
-
-
-/*
-| Gets a tree.
-*/
-Peer.get =
-	function(
-		path, // path to tree
-		len
-	)
-{
-	return shell.iface.get(
-		path.chop( 1 ) ,
-		len
 	);
 };
 
@@ -84,7 +68,7 @@ Peer.newNote =
 	)
 {
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				val :
 				{
@@ -142,7 +126,7 @@ Peer.newPortal =
 	)
 {
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				val :
 				{
@@ -182,7 +166,7 @@ Peer.setZone =
 	)
 {
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				val :
 					zone
@@ -206,7 +190,7 @@ Peer.setFontSize =
 	)
 {
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				val :
 					fontsize
@@ -230,7 +214,7 @@ Peer.setPNW =
 	)
 {
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				val :
 					pnw
@@ -257,7 +241,7 @@ Peer.newLabel =
 	)
 {
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				val :
 				{
@@ -319,7 +303,7 @@ Peer.newRelation =
 	)
 {
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				val :
 				{
@@ -376,7 +360,7 @@ Peer.moveToTop =
 		path
 	)
 {
-	shell.iface.alter(
+	shell.link.alter(
 		{
 			path :
 				path.chop( )
@@ -400,7 +384,7 @@ Peer.insertText =
 	)
 {
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				val :
 					text
@@ -437,7 +421,7 @@ Peer.removeText =
 	}
 
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				path :
 					path.chop( 1 ),
@@ -502,7 +486,7 @@ Peer.removeRange =
 
 	k2 = path2.get( -2 );
 
-	pivot = shell.iface.get( path1.chop( 1 ).shorten( 3 ) );
+	pivot = shell.getPath( path1.chop( 1 ).shorten( 3 ) );
 
 	r1 = pivot.rankOf( k1 );
 
@@ -516,11 +500,11 @@ Peer.removeRange =
 	{
 		Peer.join(
 			path1,
-			shell.iface.get( path1.chop( 1 ) ).length
+			shell.getPath( path1.chop( 1 ) ).length
 		);
 	}
 
-	len2 = shell.iface.get( path1.chop( 1 ) ).length;
+	len2 = shell.getPath( path1.chop( 1 ) ).length;
 
 	Peer.join(
 		path1,
@@ -550,7 +534,7 @@ Peer.split =
 	)
 {
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				path :
 					path.chop( 1 ),
@@ -576,7 +560,7 @@ Peer.join =
 	)
 {
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				proc :
 					'splice'
@@ -608,14 +592,14 @@ Peer.removeItem =
 	key = path.get( -1 );
 
 	pivot =
-		shell.iface.get(
+		shell.link.get(
 			path.chop( 1 ).shorten( 2 )
 		);
 
 	r1 = pivot.rankOf( key );
 
 	return (
-		shell.iface.alter(
+		shell.link.alter(
 			{
 				val :
 					null,

@@ -1794,7 +1794,7 @@ Server.prototype.cmdRegister =
 		mail,
 		news,
 		user;
-	
+
 	username = cmd.user;
 
 	passhash = cmd.passhash;

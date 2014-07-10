@@ -26,9 +26,9 @@ var
 	fontPool,
 	Forms,
 	Gruga,
-	IFace,
 	Mark,
 	MeshMashine,
+	Net,
 	Path,
 	Peer,
 	Sign,
@@ -262,20 +262,6 @@ Object.defineProperty(
 			}
 	}
 );
-
-
-/*
-| Peer received a message.
-*/
-Shell.prototype.message =
-	function(
-		// space,
-		// user,
-		// message
-	)
-{
-	// FIXME
-};
 
 
 /*
@@ -1361,13 +1347,31 @@ Shell.prototype.onload =
 	function( )
 {
 	var
-		iface,
+		ajaxPath,
 		passhash,
 		username;
 
-	iface =
-	this.iface =
-		new IFace( );
+	ajaxPath = Path.empty.append( 'ajax' );
+
+	this.ajax =
+		Net.Ajax.create(
+			'path',
+				ajaxPath,
+			'twig:add',
+			'command',
+				Net.Channel.create(
+					'path',
+						ajaxPath.append( 'command' )
+				),
+			'twig:add',
+			'update',
+				Net.Channel.create(
+					'update',
+						ajaxPath.append( 'update' )
+				)
+		);
+
+	this.link = Net.Link.create( );
 
 	username = window.localStorage.getItem( 'username' );
 
@@ -1382,7 +1386,7 @@ Shell.prototype.onload =
 		passhash = null;
 	}
 
-	this.iface.auth(
+	this.link.auth(
 		username,
 		passhash
 	);
@@ -1401,12 +1405,6 @@ Shell.prototype.moveToSpace =
 		create
 	)
 {
-	/*
-	message(
-		'Moving to ' + spaceUser + ':' + spaceTag + ' ...'
-	);
-	*/
-
 	this.iface.aquireSpace(
 		spaceUser,
 		spaceTag,
@@ -1417,6 +1415,8 @@ Shell.prototype.moveToSpace =
 
 /*
 | Receiving a moveTo event
+|
+| FIXME, dont put an asw object here.
 */
 Shell.prototype.onAquireSpace =
 	function(

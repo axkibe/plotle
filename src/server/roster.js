@@ -283,7 +283,25 @@ module.exports =
 	),
 	Resource.Create(
 		'filePath',
-			'src/shell/iface.js',
+			'src/net/channel.js',
+		'hasJoobj',
+			true,
+		'inBundle',
+			true
+	),
+	Resource.Create(
+		'filePath',
+			'src/net/ajax.js',
+		'hasJoobj',
+			true,
+		'inBundle',
+			true
+	),
+	Resource.Create(
+		'filePath',
+			'src/net/link.js',
+		'hasJoobj',
+			true,
 		'inBundle',
 			true
 	),
