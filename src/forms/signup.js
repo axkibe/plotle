@@ -317,7 +317,7 @@ SignUp.prototype.signup =
 		return;
 	}
 
-	shell.iface.register(
+	shell.link.register(
 		user,
 		email,
 		Jools.passhash( pass ),

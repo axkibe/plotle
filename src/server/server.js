@@ -571,71 +571,6 @@ Server.prototype.sendMessage =
 
 
 /*
-| Creates a message for a space
-*/
-/*
-Server.prototype.cmdMessage =
-	function( cmd )
-{
-	var
-		spaceUser =
-			cmd.spaceUser,
-		spaceTag =
-			cmd.spaceTag,
-		message =
-			cmd.message,
-		username =
-			cmd.user,
-		passhash =
-			cmd.passhash;
-
-	if( username === undefined )
-	{
-		throw Jools.reject( 'user missing' );
-	}
-
-	if( passhash === undefined )
-	{
-		throw Jools.reject( 'passhash missing' );
-	}
-
-	if( spaceUser === undefined )
-	{
-		throw Jools.reject( 'spaceUser missing' );
-	}
-
-	if( spaceTag === undefined )
-	{
-		throw Jools.reject( 'spaceTag missing' );
-	}
-
-	if( message === undefined )
-	{
-		throw Jools.reject( 'message missing' );
-	}
-
-	if( this.$users[username].pass !== passhash )
-	{
-		throw Jools.reject(
-			'invalid pass'
-		);
-	}
-
-	this.sendMessage(
-		spaceUser,
-		spaceTag,
-		username,
-		message
-	);
-
-	return {
-		ok : true
-	};
-};
-*/
-
-
-/*
 | Builds the shells config.js file.
 */
 Server.prototype.buildShellConfig =
@@ -2121,7 +2056,6 @@ Server.prototype.cmdUpdate =
 {
 	var
 		asw,
-		mseq,
 		passhash,
 		seq,
 		space,
@@ -2139,8 +2073,6 @@ Server.prototype.cmdUpdate =
 	spaceTag = cmd.spaceTag;
 
 	seq = cmd.seq;
-
-	mseq = cmd.mseq;
 
 	if( user === undefined )
 	{
@@ -2181,22 +2113,6 @@ Server.prototype.cmdUpdate =
 		throw Jools.reject( 'Invalid or missing seq: ' + seq );
 	}
 
-	if( mseq < 0 )
-	{
-		mseq = this.$messages.length;
-	}
-
-	if(
-		!Jools.isInteger( mseq )
-		||
-		mseq > this.$messages.length
-	)
-	{
-		throw Jools.reject(
-			'Invalid or missing mseq: ' + mseq
-		);
-	}
-
 	this.refreshPresence(
 		user,
 		spaceUser,
@@ -2206,15 +2122,13 @@ Server.prototype.cmdUpdate =
 	asw =
 		this.conveyUpdate(
 			seq,
-			mseq,
 			spaceUser,
 			spaceTag
 		);
 
 	// immediate answer?
 	if(
-		asw.chgs.length > 0 ||
-		asw.msgs.length > 0
+		asw.chgs.length > 0
 	)
 	{
 		return asw;
@@ -2237,8 +2151,6 @@ Server.prototype.cmdUpdate =
 				user,
 			seq :
 				seq,
-			mseq :
-				mseq,
 			timerID :
 				timerID,
 			result :
@@ -2372,7 +2284,6 @@ Server.prototype.closeSleep =
 Server.prototype.conveyUpdate =
 	function(
 		seq,
-		mseq,
 		spaceUser,
 		spaceTag
 	)
@@ -2381,11 +2292,8 @@ Server.prototype.conveyUpdate =
 		spaceName,
 		space,
 		changes,
-		messages,
 		seqZ,
-		msgZ,
-		chgA,
-		msgA;
+		chgA;
 
 	spaceName = spaceUser + ':' + spaceTag;
 
@@ -2393,32 +2301,13 @@ Server.prototype.conveyUpdate =
 
 	changes = space.$changes;
 
-	messages = this.$messages;
-
 	seqZ = space.$seqZ;
 
-	msgZ = messages.length;
-
 	chgA = [ ];
-
-	msgA = [ ];
 
 	for( var c = seq; c < seqZ; c++ )
 	{
 		chgA.push( changes[c] );
-	}
-
-	for( var m = mseq; m < msgZ; m++ )
-	{
-		if(
-			messages[m].spaceUser !== spaceUser ||
-			messages[m].spaceTag !== spaceTag
-		)
-		{
-			continue;
-		}
-
-		msgA.push( messages[m] );
 	}
 
 	return {
@@ -2429,13 +2318,7 @@ Server.prototype.conveyUpdate =
 		seqZ :
 			seqZ,
 		chgs :
-			chgA,
-		msgs :
-			msgA,
-		mseq :
-			mseq,
-		mseqZ :
-			msgZ
+			chgA
 	};
 };
 
@@ -2480,7 +2363,6 @@ Server.prototype.wake =
 			asw =
 				this.conveyUpdate(
 					sleep.seq,
-					sleep.mseq,
 					sleep.spaceUser,
 					sleep.spaceTag
 				),
@@ -3141,10 +3023,6 @@ Server.prototype.ajaxCmd =
 		case 'get' :
 
 			return yield* this.cmdGet( cmd );
-
-		case 'message' :
-
-			return this.cmdMessage( cmd );
 
 		case 'register' :
 

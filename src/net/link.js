@@ -9,8 +9,9 @@
 | Export
 */
 var
-	Link;
+	Net;
 
+Net = Net || { };
 
 /*
 | Imports
@@ -83,7 +84,7 @@ if( JOOBJ )
 						defaultValue :
 							null
 					},
-				user :
+				username :
 					{
 						comment :
 							'currently logged in user',
@@ -137,10 +138,30 @@ if( JOOBJ )
 							'Object',
 						defaultValue :
 							null
+					},
+				_undo :
+					{
+						comment :
+							'the undo stack',
+						type :
+							'Object',
+						defaultValue :
+							null
+					},
+				_redo :
+					{
+						comment :
+							'the redo stack',
+						type :
+							'Object',
+						defaultValue :
+							null
 					}
 			}
 	};
 }
+
+var Link = Net.Link;
 
 
 /*
@@ -153,7 +174,7 @@ Link.prototype.auth =
 		passhash
 	)
 {
-	shell.ajax.command.request(
+	shell.ajax.twig.command.request(
 		{
 			cmd :
 				'auth',
@@ -196,18 +217,18 @@ Link.prototype._onAuth =
 */
 Link.prototype.register =
 	function(
-		user,
+		username,
 		mail,
 		passhash,
 		news
 	)
 {
-	shell.ajax.command.request(
+	shell.ajax.twig.command.request(
 		{
 			cmd :
 				'register',
 			user :
-				user,
+				username,
 			mail :
 				mail,
 			passhash :
@@ -256,9 +277,9 @@ Link.prototype.aquireSpace =
 	)
 {
 	// aborts the current running update.
-	shell.ajax.update.abortAll( );
+	shell.ajax.twig.update.abortAll( );
 
-	shell.ajax.command.request(
+	shell.ajax.twig.command.request(
 		{
 			cmd :
 				'get',
@@ -275,7 +296,7 @@ Link.prototype.aquireSpace =
 			seq :
 				-1,
 			user :
-				this.user
+				this.username
 		},
 		'_onAquireSpace'
 	);
@@ -340,7 +361,7 @@ Link.prototype._onAquireSpace =
 	space = Visual.Space.CreateFromJSON( reply.node );
 
 	shell.link =
-		shell.link.create(
+		shell.link.Create(
 			'spaceUser',
 				request.spaceUser,
 			'spaceTag',
@@ -398,7 +419,7 @@ Link.prototype._onAquireSpace =
 Link.prototype._update =
 	function( )
 {
-	shell.ajax.update.request(
+	shell.ajax.twig.update.request(
 		{
 			cmd :
 				'update',
@@ -411,7 +432,7 @@ Link.prototype._update =
 			seq :
 				this._rSeq,
 			user :
-				this.user
+				this.username
 		},
 		'_onUpdate'
 	);
@@ -782,7 +803,7 @@ Link.prototype._sendChanges =
 
 	this._postbox.push( c );
 
-	this._request(
+	shell.ajax.twig.command.request(
 		{
 			cmd :
 				'alter',
@@ -799,7 +820,7 @@ Link.prototype._sendChanges =
 			seq :
 				this._rSeq,
 			user :
-				this.user
+				this.username
 		},
 		'_onSendChanges'
 	);

@@ -1714,13 +1714,13 @@ Space.prototype.specialKey =
 		{
 			case 'z' :
 
-				shell.iface.undo( );
+				shell.link.undo( );
 
 				return;
 
 			case 'y' :
 
-				shell.iface.redo( );
+				shell.link.redo( );
 
 				return;
 

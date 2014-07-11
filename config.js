@@ -157,8 +157,6 @@ config.log  = {
 		true,
 	twig :
 		false,
-	iface :
-		false,
 	peer :
 		false,
 	report :

@@ -34,7 +34,7 @@ if( JOOBJ )
 				'path' :
 				{
 					comment :
-						'the ajax path; is [ system, ajax ] ',
+						'the ajax path',
 					type :
 						'Path'
 				}
@@ -43,9 +43,7 @@ if( JOOBJ )
 			{
 				'Channel' :
 					'Net.Channel'
-			},
-		init :
-			[ ]
+			}
 	};
 }
 

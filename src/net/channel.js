@@ -49,14 +49,16 @@ if( JOOBJ )
 						comment :
 							'the channels path in data tree',
 						type :
-							'String'
+							'Path'
 					},
 				fifo :
 					{
 						comment :
 							'the request buffer',
 						type :
-							'Object'
+							'Object',
+						defaultValue :
+							null
 					}
 			},
 		init :
@@ -74,15 +76,18 @@ var Channel = Net.Channel;
 Channel.prototype._init =
 	function( )
 {
-	this.name = this.path.get( -1 );
+	var
+		channelName;
+
+	channelName =
+	this.channelName =
+		this.path.get( -1 );
 
 /**/	// FUTURE allow arbitrary paths.
 /**/	if( CHECK )
 /**/	{
 /**/		if(
-/**/			this.path.get( 0 ) !== 'shell'
-/**/			||
-/**/			this.path.get( 1 ) !== 'ajax'
+/**/			this.path.get( 0 ) !== 'ajax'
 /**/		)
 /**/		{
 /**/			throw new Error( );
@@ -94,7 +99,8 @@ Channel.prototype._init =
 			function( )
 			{
 				shell
-				.ajax[ name ]
+				.ajax
+				.twig[ channelName ]
 				._onReply
 				.apply( this, arguments );
 			}
@@ -108,7 +114,7 @@ Channel.prototype._init =
 Channel.prototype.abortAll =
 	function( )
 {
-	if( this.fifo )
+	if( !this.fifo )
 	{
 		// nothing pending
 		return;
@@ -118,12 +124,12 @@ Channel.prototype.abortAll =
 
 	this.fifo.abort( );
 
-	// FUTURE shell.create
+	// FUTURE shell.Create
 	shell.ajax =
-		shell.ajax.create(
+		shell.ajax.Create(
 			'twig:set',
-			this.name,
-			this.create(
+			this.channelName,
+			this.Create(
 				'fifo',
 					null
 			)
@@ -159,7 +165,7 @@ Channel.prototype.request =
 /**/}
 
 	// FUTURE make a real fifo
-	if( this.request )
+	if( this.fifo )
 	{
 		console.log( 'already a request active' );
 
@@ -168,7 +174,7 @@ Channel.prototype.request =
 
 	xhr = new XMLHttpRequest( );
 
-	xhr.channelName = this.name;
+	xhr.channelName = this.channelName;
 
 	xhr.request = request;
 
@@ -190,18 +196,12 @@ Channel.prototype.request =
 
 	rs = JSON.stringify( request );
 
-	Jools.log(
-		'iface',
-		'->',
-		rs
-	);
-
-	// FUTURE shell.create
+	// FUTURE shell.Create
 	shell.ajax =
-		shell.ajax.create(
+		shell.ajax.Create(
 			'twig:set',
-			this.name,
-			this.create(
+			this.channelName,
+			this.Create(
 				'fifo',
 					xhr
 			)
@@ -225,7 +225,7 @@ Channel.prototype._onReply =
 		reply,
 		receiverFunc;
 
-	channel = shell.ajax[ this.channelName ];
+	channel = shell.ajax.twig[ this.channelName ];
 
 	if(
 		this.readyState !== 4
@@ -236,12 +236,12 @@ Channel.prototype._onReply =
 		return;
 	}
 
-	// FUTURE shell.create
+	// FUTURE shell.Create
 	shell.ajax =
-		shell.ajax.create(
+		shell.ajax.Create(
 			'twig:set',
-			channel.name,
-			channel.create(
+			channel.channelName,
+			channel.Create(
 				'fifo',
 					null
 			)
@@ -255,13 +255,6 @@ Channel.prototype._onReply =
 
 	if( this.status !== 200 )
 	{
-		Jools.log(
-			'iface',
-			request.cmd,
-			'status: ',
-			this.status
-		);
-
 		throw new Error(
 			'Lost server connection'
 		);
@@ -277,8 +270,6 @@ Channel.prototype._onReply =
 			'Server answered no JSON!'
 		);
 	}
-
-	Jools.log( 'iface', '<-', reply );
 
 	if( receiverFunc )
 	{

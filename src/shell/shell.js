@@ -505,7 +505,7 @@ Shell.prototype.update =
 
 	}
 
-	// FIXME let the iface do the real stuff
+	// FIXME let the link do the real stuff
 	this.$space =
 		space.Create(
 			'spaceUser',
@@ -1147,8 +1147,7 @@ Shell.prototype.specialKey =
 		display,
 		focusItem;
 
-	display =
-		this._getCurrentDisplay( );
+	display = this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -1158,7 +1157,7 @@ Shell.prototype.specialKey =
 			ctrl
 		);
 	}
-	
+
 	focusItem =
 		this.$space.focusedItem( );
 
@@ -1240,10 +1239,13 @@ Shell.prototype.setUser =
 		passhash
 	)
 {
-	this.iface.setUser(
-		username,
-		passhash
-	);
+	this.link =
+		this.link.Create(
+			'username',
+				username,
+			'passhash',
+				passhash
+		);
 
 	if( username.substr( 0, 5 ) !== 'visit' )
 	{
@@ -1354,24 +1356,24 @@ Shell.prototype.onload =
 	ajaxPath = Path.empty.append( 'ajax' );
 
 	this.ajax =
-		Net.Ajax.create(
+		Net.Ajax.Create(
 			'path',
 				ajaxPath,
 			'twig:add',
 			'command',
-				Net.Channel.create(
+				Net.Channel.Create(
 					'path',
 						ajaxPath.append( 'command' )
 				),
 			'twig:add',
 			'update',
-				Net.Channel.create(
-					'update',
+				Net.Channel.Create(
+					'path',
 						ajaxPath.append( 'update' )
 				)
 		);
 
-	this.link = Net.Link.create( );
+	this.link = Net.Link.Create( );
 
 	username = window.localStorage.getItem( 'username' );
 
@@ -1405,7 +1407,7 @@ Shell.prototype.moveToSpace =
 		create
 	)
 {
-	this.iface.aquireSpace(
+	this.link.aquireSpace(
 		spaceUser,
 		spaceTag,
 		create
