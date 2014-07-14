@@ -1,5 +1,7 @@
 /*
-| A vacant mark
+| A vacant mark.
+|
+| FUTURE replace by null.
 |
 | Authors: Axel Kittenberger
 */
@@ -16,8 +18,8 @@ var
 | Imports
 */
 var
-	Jools,
-	Path;
+	Jion,
+	Jools;
 
 
 /*
@@ -60,7 +62,7 @@ Jools.lazyValue(
 	'itemPath',
 	function( )
 	{
-		return Path.empty;
+		return Jion.Path.empty;
 	}
 );
 
@@ -72,7 +74,7 @@ Jools.lazyValue(
 	'widgetPath',
 	function( )
 	{
-		return  Path.empty;
+		return  Jion.Path.empty;
 	}
 );
 

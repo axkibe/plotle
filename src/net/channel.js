@@ -22,7 +22,6 @@ Net = Net || { };
 */
 var
 	catcher,
-	Jools,
 	shell;
 
 /*

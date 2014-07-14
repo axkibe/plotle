@@ -16,8 +16,8 @@ var
 | Imports
 */
 var
-	Jools,
-	Path;
+	Jion,
+	Jools;
 
 
 /*
@@ -80,7 +80,7 @@ Jools.lazyValue(
 	'itemPath',
 	function( )
 	{
-		return Path.empty;
+		return Jion.Path.empty;
 	}
 );
 

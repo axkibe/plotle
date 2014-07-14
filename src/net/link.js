@@ -20,9 +20,9 @@ var
 	Change,
 	ChangeRay,
 	config,
+	Jion,
 	Jools,
 	MeshMashine,
-	Path,
 	shell,
 	Sign,
 	system,
@@ -290,7 +290,7 @@ Link.prototype.aquireSpace =
 			spaceTag :
 				spaceTag,
 			path :
-				Path.empty,
+				Jion.Path.empty,
 			passhash :
 				this.passhash,
 			seq :

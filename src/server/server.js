@@ -49,6 +49,11 @@ var
 		require( 'http' ),
 	Inventory =
 		require( './inventory' ),
+	Jion =
+		{
+			Path :
+				require( '../jion/path' ),
+		},
 	Jools =
 		require( '../jools/jools' ),
 	MaxAge =
@@ -57,8 +62,6 @@ var
 		require( '../mm/meshmashine' ),
 	mongodb =
 		require( 'mongodb' ),
-	Path =
-		require( '../mm/path' ),
 	PostProcessor =
 		require( './post-processor' ),
 	Resource =
@@ -2596,7 +2599,7 @@ Server.prototype.cmdGet =
 	{
 		node =
 			tree.getPath(
-				Path.Create(
+				Jion.Path.Create(
 					'array',
 					cmd.path
 				)

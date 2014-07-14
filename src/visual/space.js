@@ -19,9 +19,9 @@ var
 	Action,
 	Euclid,
 	HoverReply,
+	Jion,
 	Jools,
 	Mark,
-	Path,
 	Peer,
 	shell,
 	Stubs,
@@ -225,7 +225,7 @@ Space.concernsMark =
 		!mark
 		||
 		mark.containsPath(
-			Path.empty.append( 'space' )
+			Jion.Path.empty.append( 'space' )
 		)
 	)
 	{
@@ -576,7 +576,7 @@ Space.prototype.pointingHover =
 			return (
 				HoverReply.Create(
 					'path',
-						Path.empty,
+						Jion.Path.empty,
 					'cursor',
 						com + '-resize'
 				)
@@ -608,7 +608,7 @@ Space.prototype.pointingHover =
 	return (
 		HoverReply.Create(
 			'path',
-				Path.empty,
+				Jion.Path.empty,
 			'cursor',
 				'pointer'
 		)
@@ -704,7 +704,7 @@ Space.prototype.dragStart =
 				'mark',
 					Mark.Vacant.Create( ),
 				'path',
-					Path.empty,
+					Jion.Path.empty,
 				'view',
 					view
 			);
@@ -737,7 +737,7 @@ Space.prototype.dragStart =
 				'mark',
 					Mark.Vacant.Create( ),
 				'path',
-					Path.empty,
+					Jion.Path.empty,
 				'view',
 					view
 			);
@@ -766,11 +766,11 @@ Space.prototype.dragStart =
 		transItem =
 			Stubs.emptyPortal.Create(
 				'hover',
-					Path.empty,
+					Jion.Path.empty,
 				'mark',
 					Mark.Vacant.Create( ),
 				'path',
-					Path.empty,
+					Jion.Path.empty,
 				'view',
 					view,
 				'zone',
@@ -1420,7 +1420,7 @@ Space.prototype.dragMove =
 			shell.setAction(
 				action.Create(
 					'toItemPath',
-						Path.empty,
+						Jion.Path.empty,
 					'toPoint',
 						p
 				)

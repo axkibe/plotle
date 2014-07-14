@@ -11,8 +11,7 @@
 var
 	Widgets;
 
-Widgets =
-	Widgets || { };
+Widgets = Widgets || { };
 
 
 /*

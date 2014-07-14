@@ -11,8 +11,8 @@
 var
 	Action,
 	IFaceSym,
+	Jion,
 	Jools,
-	Path,
 	Peer;
 
 /*
@@ -131,10 +131,12 @@ var
 		null,
 
 	_noteDocPath =
-		Path.empty
-			.append( 'space' )
-			.append( 'testnote' )
-			.append( 'doc' );
+		Jion
+		.Path
+		.empty
+		.append( 'space' )
+		.append( 'testnote' )
+		.append( 'doc' );
 
 
 /*

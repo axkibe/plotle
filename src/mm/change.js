@@ -9,8 +9,8 @@
 | Imports
 */
 var
+	Jion,
 	Jools,
-	Path,
 	Sign;
 
 
@@ -36,8 +36,11 @@ if( SERVER )
 {
 	Jools =
 		require( '../jools/jools' );
-	Path =
-		require( './path'  );
+	Jion =
+		{
+			Path :
+				require( '../jion/path'  )
+		};
 	Sign =
 		require( './sign'  );
 }
@@ -74,7 +77,7 @@ Change =
 		if( src.path && src.path.reflect !== 'Path' )
 		{
 			src.path =
-				Path.Create(
+				Jion.Path.Create(
 					'array',
 					src.path
 				);
@@ -95,7 +98,7 @@ Change =
 		if( trg.path && trg.path.reflect !== 'Path' )
 		{
 			trg.path =
-				Path.Create(
+				Jion.Path.Create(
 					'array',
 					trg.path
 				);

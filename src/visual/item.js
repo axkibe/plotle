@@ -22,9 +22,9 @@ var
 	Action,
 	Euclid,
 	HoverReply,
+	Jion,
 	Jools,
 	Mark,
-	Path,
 	shell,
 	theme;
 
@@ -572,7 +572,7 @@ Item.prototype.dragStart =
 				'fromItemPath',
 					this.path,
 				'toItemPath',
-					Path.empty,
+					Jion.Path.empty,
 				'relationState',
 					'hadSelect',
 				'toPoint',

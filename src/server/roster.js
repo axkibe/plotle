@@ -81,7 +81,7 @@ module.exports =
 	),
 	Resource.Create(
 		'filePath',
-			'src/mm/path.js',
+			'src/jion/path.js',
 		'inBundle',
 			true,
 		'inTestPad',

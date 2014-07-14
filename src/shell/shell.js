@@ -26,10 +26,10 @@ var
 	fontPool,
 	Forms,
 	Gruga,
+	Jion,
 	Mark,
 	MeshMashine,
 	Net,
-	Path,
 	Peer,
 	Sign,
 	system,
@@ -144,7 +144,7 @@ Shell =
 	this._$mode = 'Normal';
 
 	// currently hovered thing
-	this._$hover = Path.empty;
+	this._$hover = Jion.Path.empty;
 
 	view =
 	this.$view =
@@ -162,11 +162,11 @@ Shell =
 	this._$formJockey =
 		Forms.Jockey.Create(
 			'hover',
-				Path.empty,
+				Jion.Path.empty,
 			'mark',
 				Mark.Vacant.Create( ),
 			'path',
-				Path.empty.append( 'forms' ),
+				Jion.Path.empty.append( 'forms' ),
 			'view',
 				view,
 			'twig:add',
@@ -202,13 +202,13 @@ Shell =
 			'action',
 				Action.None.Create( ),
 			'hover',
-				Path.empty,
+				Jion.Path.empty,
 			'mark',
 				Mark.Vacant.Create( ),
 			'mode',
 				this._$mode,
 			'path',
-				Path.empty.append( 'discs' ),
+				Jion.Path.empty.append( 'discs' ),
 			'view',
 				view,
 			'twig:add',
@@ -1054,7 +1054,7 @@ Shell.prototype._setHover =
 			// FIXME make concernsHover
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'discs' ?
-					Path.empty
+					Jion.Path.empty
 					:
 					path
 		);
@@ -1064,7 +1064,7 @@ Shell.prototype._setHover =
 			'hover',
 				// FIXME make a concernsHover
 				path.isEmpty || path.get( 0 ) !== 'forms' ?
-					Path.empty
+					Jion.Path.empty
 					:
 					path
 		);
@@ -1073,7 +1073,7 @@ Shell.prototype._setHover =
 		this.$space.Create(
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'space' ?
-					Path.empty
+					Jion.Path.empty
 					:
 					path
 		);
@@ -1353,7 +1353,7 @@ Shell.prototype.onload =
 		passhash,
 		username;
 
-	ajaxPath = Path.empty.append( 'ajax' );
+	ajaxPath = Jion.Path.empty.append( 'ajax' );
 
 	this.ajax =
 		Net.Ajax.Create(
@@ -1511,11 +1511,11 @@ Shell.prototype.onAquireSpace =
 			'access',
 				access,
 			'hover',
-				Path.empty,
+				Jion.Path.empty,
 			'mark',
 				Mark.Vacant.Create( ),
 			'path',
-				Path.empty.append( 'space' ),
+				Jion.Path.empty.append( 'space' ),
 			'view',
 				Euclid.View.Create(
 					'fact',

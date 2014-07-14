@@ -21,9 +21,9 @@ Forms = Forms || { };
 var
 	Euclid,
 	HoverReply,
+	Jion,
 	Jools,
 	Mark,
-	Path,
 	shell,
 	theme;
 
@@ -284,7 +284,7 @@ Form.prototype.pointingHover =
 	return (
 		HoverReply.Create(
 			'path',
-				Path.empty,
+				Jion.Path.empty,
 			'cursor',
 				'default'
 		)

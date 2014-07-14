@@ -1,24 +1,25 @@
 /*
-| Paths describe entities in a tree.
+| A path toward an entity in a tree.
 |
-| FIXME make it a joobj
+| FIXME make it a jiobj
 |
 | Authors: Axel Kittenberger
 */
 
 
 /*
-| Import
+| Export.
+*/
+var
+	Jion;
+
+Jion = Jion || { };
+
+/*
+| Imports.
 */
 var
 	Jools;
-
-
-/*
-| Exports
-*/
-var
-	Path;
 
 
 /*
@@ -33,12 +34,12 @@ var
 */
 if( SERVER )
 {
-	Jools =
-		require( '../jools/jools' );
+	Jools = require( '../jools/jools' );
 }
 
 
 var
+	Path,
 	_tag =
 		'PATH-87085899';
 
@@ -50,6 +51,7 @@ var
 | arguments followed by master are appended to the path
 */
 Path =
+Jion.Path =
 	function(
 		tag,
 		_path
@@ -75,18 +77,16 @@ Path =
 /**/	}
 /**/}
 
-	this.length =
-		_path.length;
+	this.length = _path.length;
 
-	this._path =
-		Object.freeze( _path );
+	this._path = Object.freeze( _path );
 
 	Jools.immute( this );
 };
 
 
 /*
-| Creates a new Array from an array
+| Creates a new path
 */
 Path.Create =
 	function(
@@ -103,8 +103,7 @@ Path.Create =
 	{
 		case 'array' :
 
-			p =
-				arguments[ 1 ].slice( );
+			p = arguments[ 1 ].slice( );
 
 /**/		if( CHECK )
 /**/		{
@@ -120,8 +119,7 @@ Path.Create =
 
 		case 'list' :
 
-			p =
-				[ ];
+			p = [ ];
 
 			for(
 				a = 1, aZ = arguments.length;
@@ -129,8 +127,7 @@ Path.Create =
 				a++
 			)
 			{
-				p[ a - 1 ] =
-					arguments[ a ];
+				p[ a - 1 ] = arguments[ a ];
 			}
 
 			break;
@@ -220,14 +217,15 @@ Path.prototype.chop =
 		//// defaults to 1
 	)
 {
+	var
+		p;
+
 	if( n === 0 )
 	{
 		return this;
 	}
 
-	var
-		p =
-			this._path.slice( );
+	p = this._path.slice( );
 
 	p.shift( );
 
@@ -252,7 +250,9 @@ Path.prototype.shorten =
 	)
 {
 	var
-		p = this._path.slice( );
+		p;
+
+	p = this._path.slice( );
 
 	if( n === undefined )
 	{
@@ -541,5 +541,5 @@ if( SERVER )
 		Path;
 }
 
-} )( );
 
+} )( );

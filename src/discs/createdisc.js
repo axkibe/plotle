@@ -20,8 +20,8 @@ Discs =
 var
 	Action,
 	Euclid,
+	Jion,
 	Jools,
-	Path,
 	shell;
 
 
@@ -371,11 +371,11 @@ CreateDisc.prototype.pushButton =
 			shell.setAction(
 				Action.CreateRelation.Create(
 					'fromItemPath',
-						Path.empty,
+						Jion.Path.empty,
 					'relationState',
 						'start',
 					'toItemPath',
-						Path.empty
+						Jion.Path.empty
 				)
 			);
 

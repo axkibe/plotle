@@ -19,7 +19,6 @@ var
 	Change,
 	ChangeRay,
 	Jools,
-	Path,
 	Sign;
 
 
@@ -43,9 +42,6 @@ if( SERVER )
 
 	Jools =
 		require( '../jools/jools' );
-
-	Path =
-		require( './path' );
 
 	Sign =
 		require( './sign' );
