@@ -153,7 +153,7 @@ config.log  = {
 		true,
 	fail :
 		true,
-	genjoobj :
+	genjion :
 		true,
 	twig :
 		false,

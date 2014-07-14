@@ -15,27 +15,10 @@
 'use strict';
 
 
-
 var
-	fs =
-		require( 'fs' );
-//	vm =
-//		require( 'vm' ),
-//	jionGenerator =
-//		require( './generator' ),
-//	Jools =
-//		require( '../jools/jools' ),
-//	input =
-//		null,
-//	jion =
-//		null,
-//	output =
-//		null,
-//	readOptions =
-//		{
-//			encoding :
-//				'utf8'
-//		};
+	fs;
+
+fs = require( 'fs' );
 
 var
 jionNodeGenerator =
@@ -48,6 +31,7 @@ jionNodeGenerator =
 			module,
 		inFilename,
 		inStat,
+		outFilename,
 		outStat,
 		si,
 		separator =
@@ -80,57 +64,18 @@ jionNodeGenerator =
 	inFilename =
 		module.filename.substring( si + 1 );
 
-/*
-	input =
-		fs.readFileSync(
-			inFilename,
-			readOptions
-		);
+	outFilename =
+		'jion/'
+		+
+		APP
+		+
+		'/'
+		+
+		inFilename.replace( /\//g, '-' );
 
-	jion =
-		vm.runInNewContext(
-			input,
-			{
-				JION :
-					true
-			},
-			inFilename
-		);
+	inStat = fs.statSync( inFilename );
 
-	output =
-		jionGenerator( jion );
-*/
-
-	var
-		outFilename =
-			'jion/'
-			+
-			APP
-			+
-			'/'
-			+
-			inFilename.replace( /\//g, '-' );
-
-/*	Jools.log(
-		'start',
-		'generating ' + outFilename
-	);
-
-
-	if( !config.noWrite )
-	{
-		fs.writeFileSync(
-			outFilename,
-			output
-		);
-	}
-*/
-
-	inStat =
-		fs.statSync( inFilename );
-
-	outStat =
-		fs.statSync( outFilename );
+	outStat = fs.statSync( outFilename );
 
 	if( inStat.mtime > outStat.mtime )
 	{

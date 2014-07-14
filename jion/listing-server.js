@@ -6,6 +6,7 @@ module.exports =
 		[
 			'src/euclid/point.js',
 			'src/euclid/rect.js',
+			'src/jion/path.js',
 			'src/server/resource.js',
 			'src/visual/doc.js',
 			'src/visual/label.js',

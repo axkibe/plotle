@@ -84,6 +84,8 @@ module.exports =
 			'src/jion/path.js',
 		'inBundle',
 			true,
+		'hasJoobj',
+			true,
 		'inTestPad',
 			true
 	),

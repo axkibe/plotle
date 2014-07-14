@@ -418,13 +418,11 @@ Gen.prototype._init =
 /**/			}
 /**/		}
 
-			twigMap =
-				require( '../typemaps/' + jion.twig );
+			twigMap = require( '../typemaps/' + jion.twig );
 		}
 		else
 		{
-			twigMap =
-				jion.twig;
+			twigMap = jion.twig;
 		}
 
 		for( name in twigMap )
@@ -467,14 +465,11 @@ Gen.prototype._init =
 			null;
 	}
 
-	unitList =
-		Object.keys( units ).sort( );
+	unitList = Object.keys( units ).sort( );
 
-	this.unitList =
-		Object.freeze( unitList );
+	this.unitList = Object.freeze( unitList );
 
-	this.units =
-		Object.freeze( units );
+	this.units = Object.freeze( units );
 
 	if( twig )
 	{
@@ -492,11 +487,9 @@ Gen.prototype._init =
 			:
 			jion.name;
 
-	this.equals =
-		jion.equals;
+	this.equals = jion.equals;
 
-	this.alike =
-		jion.alike;
+	this.alike = jion.alike;
 };
 
 
@@ -2943,7 +2936,7 @@ Gen.prototype.genAttributeEquals =
 	var
 		attr,
 		ceq;
-		
+
 	attr = this.attributes[ name ];
 
 	switch( attr.type )

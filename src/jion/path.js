@@ -1,8 +1,6 @@
 /*
 | A path toward an entity in a tree.
 |
-| FIXME make it a jiobj
-|
 | Authors: Axel Kittenberger
 */
 
@@ -30,45 +28,82 @@ var
 
 
 /*
+| The jion definition.
+*/
+if( JION )
+{
+	return {
+		name :
+			'Path',
+		unit :
+			'Jion',
+		attributes :
+			{
+				'array' :
+				{
+					comment :
+						'the ajax path',
+					type :
+						'Object',
+					assign :
+						null,
+					defaultValue :
+						undefined
+				},
+
+				'_sliced' :
+				{
+					comment :
+						'true if the array is already sliced',
+					type :
+						'Boolean',
+					assign :
+						null,
+					defaultValue :
+						undefined
+				}
+			},
+		init :
+			[ 'array', '_sliced' ],
+		node :
+			true,
+		equals :
+			false
+	};
+}
+
+
+/*
 | Node imports.
 */
 if( SERVER )
 {
 	Jools = require( '../jools/jools' );
+
+	Jion.Path = require( '../jion/this' )( module );
 }
 
 
 var
-	Path,
-	_tag =
-		'PATH-87085899';
+	Path;
+
+Path = Jion.Path;
 
 
 /*
-| Constructs a new Path.
-|
-| model can be an array or another path or null
-| arguments followed by master are appended to the path
+| Initializer.
 */
-Path =
-Jion.Path =
+Path.prototype._init =
 	function(
-		tag,
-		_path
+		array,
+		_sliced
 	)
 {
 
 /**/if( CHECK )
 /**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid tag'
-/**/		);
-/**/	}
-/**/
 /**/	if(
-/**/		( !(_path instanceof Array ) )
+/**/		( !(array instanceof Array ) )
 /**/	)
 /**/	{
 /**/		throw new Error(
@@ -77,77 +112,20 @@ Jion.Path =
 /**/	}
 /**/}
 
-	this.length = _path.length;
-
-	this._path = Object.freeze( _path );
-
-	Jools.immute( this );
-};
-
-
-/*
-| Creates a new path
-*/
-Path.Create =
-	function(
-		// free strings
-	)
-{
-	var
-		p =
-			null,
-
-		a, aZ;
-
-	switch( arguments[ 0 ] )
+	if( _sliced !== true )
 	{
-		case 'array' :
-
-			p = arguments[ 1 ].slice( );
-
-/**/		if( CHECK )
-/**/		{
-/**/			if( arguments.length !== 2 )
-/**/			{
-/**/				throw new Error(
-/**/					'too many arguments'
-/**/				);
-/**/			}
-/**/		}
-
-			break;
-
-		case 'list' :
-
-			p = [ ];
-
-			for(
-				a = 1, aZ = arguments.length;
-				a < aZ;
-				a++
-			)
-			{
-				p[ a - 1 ] = arguments[ a ];
-			}
-
-			break;
-
-		default :
-
-			throw new Error(
-				'invalid argument'
-			);
+		array = array.slice( );
 	}
 
-	return new Path( _tag, p );
+	this.length = array.length;
+
+/**/if( CHECK )
+/**/{
+/**/	array = Object.freeze( array );
+/**/}
+
+	this._path = array;
 };
-
-
-/*
-| Refletion.
-*/
-Path.prototype.reflect =
-	'Path';
 
 
 /*
@@ -162,8 +140,7 @@ Path.prototype.get =
 {
 	if( idx < 0 )
 	{
-		idx +=
-			this.length;
+		idx += this.length;
 	}
 
 /**/if( CHECK )
@@ -182,6 +159,7 @@ Path.prototype.get =
 | Returns a path with key appended
 |
 | FIXME cache
+| FIXME call Append
 */
 Path.prototype.append =
 	function(
@@ -189,12 +167,20 @@ Path.prototype.append =
 	)
 {
 	var
-		p =
-			this._path.slice( );
+		arr;
 
-	p.push( key );
+	arr = this._path.slice( );
 
-	return new Path( _tag, p );
+	arr.push( key );
+
+	return (
+		Path.Create(
+			'array',
+				arr,
+			'_sliced',
+				true
+		)
+	);
 };
 
 
@@ -210,6 +196,7 @@ Path.prototype.appendNC =
 | Returns a path with the first items chopped of.
 |
 | FIXME cache
+| FIXME call Chop
 */
 Path.prototype.chop =
 	function(
@@ -218,23 +205,38 @@ Path.prototype.chop =
 	)
 {
 	var
-		p;
+		arr;
 
 	if( n === 0 )
 	{
 		return this;
 	}
 
-	p = this._path.slice( );
+	arr = this._path.slice( );
 
-	p.shift( );
+	arr.shift( );
 
 	if( n > 0 )
 	{
-		return new Path( _tag, p ).chop( n - 1 );
+		return (
+			Path.Create(
+				'array',
+					arr,
+				'_sliced',
+					true
+			)
+			.chop( n - 1 )
+		);
 	}
 
-	return new Path( _tag, p );
+	return (
+		Path.Create(
+			'array',
+				arr,
+			'_sliced',
+				true
+		)
+	);
 };
 
 
@@ -243,6 +245,7 @@ Path.prototype.chop =
 | Returns a path with the last 'n' item(s) removed.
 |
 | FIXME cache
+| FIXME call Shorten
 */
 Path.prototype.shorten =
 	function(
@@ -250,9 +253,9 @@ Path.prototype.shorten =
 	)
 {
 	var
-		p;
+		arr;
 
-	p = this._path.slice( );
+	arr = this._path.slice( );
 
 	if( n === undefined )
 	{
@@ -280,22 +283,31 @@ Path.prototype.shorten =
 		a++
 	)
 	{
-		p.pop( );
+		arr.pop( );
 	}
 
-	return new Path( _tag, p );
+	return (
+		Path.Create(
+			'array',
+				arr,
+			'_sliced',
+				true
+		)
+	);
 };
 
 
 /*
-| Returns a path limited to a specific lenght.
+| Returns a path limited to a specific length.
+|
+| FIXME cache
+| FIXME call Limit
 */
 Path.prototype.limit =
 	function(
 		n
 	)
 {
-
 /**/if( CHECK )
 /**/{
 /**/	if( n > this.length || n < 0 )
@@ -316,17 +328,22 @@ Path.prototype.limit =
 		return Path.empty;
 	}
 
-	var
-		p =
-			this._path.slice( 0, n );
 
-	return new Path( _tag, p );
+	return (
+		Path.Create(
+			'array',
+				this._path.slice( 0, n ),
+			'_sliced',
+				true
+		)
+	);
 };
 
 /*
 | Returns a path with the first item prepended.
 |
 | FIXME cache
+| FIXME call Prepend
 */
 Path.prototype.prepend =
 	function(
@@ -334,17 +351,27 @@ Path.prototype.prepend =
 	)
 {
 	var
-		p =
-			this._path.slice( );
+		arr;
 
-	p.unshift( key );
+	arr = this._path.slice( );
 
-	return new Path( _tag, p );
+	arr.unshift( key );
+
+	return (
+		Path.Create(
+			'array',
+				arr,
+			'_sliced',
+				true
+		)
+	);
 };
 
 
 /*
 | Returns a path with key indexed by i set
+|
+| FIXME rename Set
 */
 Path.prototype.set =
 	function(
@@ -353,8 +380,9 @@ Path.prototype.set =
 	)
 {
 	var
-		p =
-			this._path.slice( );
+		arr;
+
+	arr = this._path.slice( );
 
 	if( idx < 0 )
 	{
@@ -370,10 +398,16 @@ Path.prototype.set =
 /**/	}
 /**/}
 
-	p[ idx ] =
-		key;
+	arr[ idx ] = key;
 
-	return new Path( _tag, p );
+	return (
+		Path.Create(
+			'array',
+				arr,
+			'_sliced',
+				true
+		)
+	);
 };
 
 
@@ -383,6 +417,10 @@ Path.prototype.set =
 Path.prototype.equals =
 	function( o )
 {
+	var
+		op,
+		tp;
+
 	if( !o )
 	{
 		return false;
@@ -393,12 +431,9 @@ Path.prototype.equals =
 		return true;
 	}
 
-	var
-		tp =
-			this._path,
+	tp = this._path,
 
-		op =
-			o._path;
+	op = o._path;
 
 	if( tp.length !== op.length )
 	{
@@ -428,6 +463,9 @@ Path.prototype.subPathOf =
 		len    // the length of this path to consider.
 	)
 {
+	var
+		a;
+
 	if( len === undefined )
 	{
 		len = this.length;
@@ -453,7 +491,7 @@ Path.prototype.subPathOf =
 	}
 
 	for(
-		var a = 0;
+		a = 0;
 		a < len;
 		a++
 	)
@@ -477,12 +515,17 @@ Jools.lazyValue(
 	function( )
 	{
 		var
-			path = this._path,
+			a,
+			aZ,
+			b,
+			path;
 
-			b = [ '[ '[ 0 ] ]; // FIXME jshint bug
+		path = this._path,
+
+		b = [ '[ '[ 0 ] ]; // FUTURE jshint bug
 
 		for(
-			var a = 0, aZ = this.length;
+			a = 0, aZ = this.length;
 			a < aZ;
 			a++
 		)
@@ -527,9 +570,11 @@ Jools.lazyValue(
 | An empty path.
 */
 Path.empty =
-	new Path(
-		_tag,
-		[ ]
+	Path.Create(
+		'array',
+			[ ],
+		'_sliced',
+			true
 	);
 
 /*
@@ -537,8 +582,7 @@ Path.empty =
 */
 if( SERVER )
 {
-	module.exports =
-		Path;
+	module.exports = Path;
 }
 
 
