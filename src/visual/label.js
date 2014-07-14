@@ -33,9 +33,9 @@ var
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -152,7 +152,7 @@ if( SERVER )
 	Visual =
 		{
 			Label :
-				require( '../joobj/this' )( module )
+				require( '../jion/this' )( module )
 		};
 }
 

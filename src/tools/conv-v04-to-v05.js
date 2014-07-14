@@ -43,7 +43,7 @@ var
 */
 GLOBAL.CHECK =
 	true;
-GLOBAL.JOOBJ =
+GLOBAL.JION =
 	false;
 GLOBAL.SERVER =
 	true;

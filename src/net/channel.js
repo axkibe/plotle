@@ -32,9 +32,9 @@ var
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -140,7 +140,7 @@ Channel.prototype.abortAll =
 | Issues a general purpose AJAX request.
 |
 | FUTURE currently the receiver is hardcoded to be 'shell.link'.
-|    when the shell became a JOOBJ allow receiverPaths
+|    when the shell became a JION allow receiverPaths
 */
 Channel.prototype.request =
 	function(

@@ -14,9 +14,9 @@
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -42,7 +42,7 @@ var
 	BooleanLiteral;
 
 BooleanLiteral =
-	require( '../joobj/this' )( module );
+	require( '../jion/this' )( module );
 
 /*
 | Node export.

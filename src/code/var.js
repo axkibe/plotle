@@ -13,9 +13,9 @@
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -55,7 +55,7 @@ Code =
 			require( '../code/member' )
 	};
 
-Var = require( '../joobj/this' )( module );
+Var = require( '../jion/this' )( module );
 
 
 /*

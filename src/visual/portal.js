@@ -38,9 +38,9 @@ var
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -150,7 +150,7 @@ if( SERVER )
 	Visual =
 		{
 			Portal :
-				require( '../joobj/this' )( module )
+				require( '../jion/this' )( module )
 		};
 }
 

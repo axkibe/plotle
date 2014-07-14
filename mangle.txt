@@ -2,7 +2,6 @@
 . _onAuth
 . _onRegister
 . _onReply
-. _request
 . _onUpdate
 . request
 . aborted
@@ -446,7 +445,6 @@
 . iconRemove
 . iconStyle
 . icons
-. iface
 . ignores
 . immute
 > index

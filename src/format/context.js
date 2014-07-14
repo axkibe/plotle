@@ -13,9 +13,9 @@
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -77,7 +77,7 @@ var
 */
 var
 	Context =
-		require( '../joobj/this' )( module ),
+		require( '../jion/this' )( module ),
 	Jools =
 		require( '../jools/jools' );
 

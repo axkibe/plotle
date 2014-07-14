@@ -56,7 +56,7 @@ var
 /*
 | Creator.
 |
-| FIXME make it a joobj
+| FIXME make it a jion
 */
 Inventory.Create =
 	function(

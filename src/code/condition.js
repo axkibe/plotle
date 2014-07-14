@@ -14,9 +14,9 @@
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -60,12 +60,12 @@ var
 	Condition;
 
 Condition =
-	require( '../joobj/this' )( module );
+	require( '../jion/this' )( module );
 
 /*
 | Creates a condition with the elsewise expression set.
 |
-| FUTURE create this single recreators with joobj-gen.
+| FUTURE create this single recreators with jion-gen.
 */
 Condition.prototype.Elsewise =
 	function(

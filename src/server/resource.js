@@ -12,9 +12,9 @@
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -59,10 +59,10 @@ if( JOOBJ )
 						defaultValue :
 							false
 					},
-				joobjSrcPath :
+				jionSrcPath :
 					{
 						comment :
-							'source file of a joobj',
+							'source file of a jion',
 						type :
 							'String',
 						defaultValue :
@@ -89,7 +89,7 @@ if( JOOBJ )
 				hasJoobj :
 					{
 						comment :
-							'true if this resource has a joobj def.',
+							'true if this resource has a jion def.',
 						type :
 							'Boolean',
 						defaultValue :
@@ -116,7 +116,7 @@ if( JOOBJ )
 				isJoobj :
 					{
 						comment :
-							'true if this resource is a joobj.',
+							'true if this resource is a jion.',
 						type :
 							'Boolean',
 						defaultValue :
@@ -170,7 +170,7 @@ var
 		require( '../jools/jools' ),
 
 	Resource =
-		require( '../joobj/this' )( module );
+		require( '../jion/this' )( module );
 
 
 /*
@@ -206,7 +206,7 @@ Resource.prototype._init =
 
 
 /*
-| This resource as generated joobj.
+| This resource as generated jion.
 */
 Jools.lazyValue(
 	Resource.prototype,
@@ -221,10 +221,10 @@ Jools.lazyValue(
 		return this.Create(
 			'aliases',
 				null,
-			'joobjSrcPath',
+			'jionSrcPath',
 				this.filePath,
 			'filePath',
-				'joobj/'
+				'jion/'
 				+
 				SHELLAPP
 				+

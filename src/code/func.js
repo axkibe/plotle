@@ -13,9 +13,9 @@
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -51,7 +51,7 @@ var
 	FuncArg =
 		require( './func-arg' ),
 	Func =
-		require( '../joobj/this' )( module ),
+		require( '../jion/this' )( module ),
 	Jools =
 		require( '../jools/jools' );
 

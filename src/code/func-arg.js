@@ -13,9 +13,9 @@
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -51,7 +51,7 @@ if( JOOBJ )
 
 
 module.exports =
-	require( '../joobj/this' )( module );
+	require( '../jion/this' )( module );
 
 
 } )( );

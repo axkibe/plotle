@@ -791,7 +791,7 @@ Change.prototype.join =
 
 	var chg;
 
-	// FIXME make a JOOBJ
+	// FIXME make a JION
 	if(
 		src === this.src &&
 		trg === this.trg
@@ -809,7 +809,7 @@ Change.prototype.join =
 			);
 	}
 
-	// FIXME make a JOOBJ
+	// FIXME make a JION
 	return {
 		tree :
 			tree,
@@ -928,7 +928,7 @@ Change.prototype.split =
 	var
 		chg;
 
-	// FIXME make a proper joobj
+	// FIXME make a proper jion
 	if( src === this.src && trg === this.trg )
 	{
 		chg =
@@ -943,7 +943,7 @@ Change.prototype.split =
 			);
 	}
 
-	// FIXME make a proper joobj
+	// FIXME make a proper jion
 	return {
 		tree :
 			tree,

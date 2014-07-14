@@ -2,7 +2,7 @@
 | User has no access to a space he tried to port to.
 |
 | FIXME spaceUser and spaceTag are phony
-|       yet are not looked at by joobj
+|       yet are not looked at by jion
 |
 | Authors: Axel Kittenberger
 */
@@ -35,9 +35,9 @@ var
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :

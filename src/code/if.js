@@ -13,9 +13,9 @@
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -59,7 +59,7 @@ if( JOOBJ )
 */
 var
 	If =
-		require( '../joobj/this' )( module );
+		require( '../jion/this' )( module );
 
 /*
 | Creates an if with the Elsewise block set.

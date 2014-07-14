@@ -23,7 +23,7 @@ GLOBAL.SHELLAPP=
 	'shell';
 GLOBAL.CHECK =
 	true;
-GLOBAL.JOOBJ =
+GLOBAL.JION =
 	false;
 GLOBAL.SERVER =
 	true;
@@ -44,7 +44,7 @@ var
 	fs =
 		require( 'fs' ),
 	GenerateJoobj =
-		require( './generate-joobj' ),
+		require( './generate-jion' ),
 	http =
 		require( 'http' ),
 	Inventory =
@@ -866,7 +866,7 @@ Server.prototype.prepareInventory =
 						{
 							'CHECK' :
 								false,
-							'JOOBJ' :
+							'JION' :
 								false,
 							'SERVER' :
 								false,
@@ -1059,7 +1059,7 @@ Server.prototype.prependConfigFlags =
 			resource,
 			resource.Create(
 				'data',
-					'var JOOBJ = false;\n' +
+					'var JION = false;\n' +
 					'var CHECK = true;\n' +
 					'var SERVER = false;\n' +
 					'var SHELL = true;\n' +
@@ -1385,7 +1385,7 @@ Server.prototype.cmdAlter =
 		throw Jools.reject( 'user missing' );
 	}
 
-	if( this.$users[username].pass !== passhash )
+	if( this.$users[ username ].pass !== passhash )
 	{
 		throw Jools.reject( 'invalid pass' );
 	}
@@ -2764,7 +2764,7 @@ Server.prototype.requestListener =
 	var
 		data;
 
-	// if the joobj is requested generate that one from the file
+	// if the jion is requested generate that one from the file
 	if( resource.isJoobj )
 	{
 		try{

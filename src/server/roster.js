@@ -59,7 +59,7 @@ module.exports =
 	),
 	Resource.Create(
 		'filePath',
-			'src/joobj/proto.js',
+			'src/jion/proto.js',
 		'inBundle',
 			true,
 		'inTestPad',

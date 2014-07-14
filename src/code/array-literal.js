@@ -13,9 +13,9 @@
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -36,7 +36,7 @@ if( JOOBJ )
 */
 var
 	ArrayLiteral =
-		require( '../joobj/this' )( module ),
+		require( '../jion/this' )( module ),
 	Jools =
 		require( '../jools/jools' );
 

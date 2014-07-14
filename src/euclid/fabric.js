@@ -118,7 +118,7 @@ Euclid.Fabric =
 /*
 | Creator.
 |
-| FUTURE make a joobj
+| FUTURE make a jion
 */
 Fabric.Create =
 Fabric.prototype.Create =

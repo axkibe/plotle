@@ -13,9 +13,9 @@
 
 
 /*
-| The joobj definition.
+| The jion definition.
 */
-if( JOOBJ )
+if( JION )
 {
 	return {
 		name :
@@ -62,7 +62,7 @@ var
 	Comment =
 		require( './comment' ),
 	File =
-		require( '../joobj/this' )( module );
+		require( '../jion/this' )( module );
 
 
 /*
