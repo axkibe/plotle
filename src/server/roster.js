@@ -1,6 +1,5 @@
 /*
 | The roster of all resources.
-| TODO: 'hasJoobj', JION
 |
 | Authors: Axel Kittenberger
 */
@@ -16,8 +15,9 @@
 | Imports
 */
 var
-	Resource =
-		require( './resource' );
+	Resource;
+	
+Resource = require( './resource' );
 
 
 module.exports =
@@ -85,7 +85,7 @@ module.exports =
 			'src/jion/path.js',
 		'inBundle',
 			true,
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inTestPad',
 			true
@@ -93,7 +93,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/euclid/point.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true,
@@ -103,7 +103,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/euclid/rect.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true,
@@ -147,7 +147,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/euclid/font.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -167,7 +167,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/euclid/shape.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -175,7 +175,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/euclid/round-rect.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -183,7 +183,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/euclid/ellipse.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -191,7 +191,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/euclid/line.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -199,7 +199,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/euclid/view.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -207,7 +207,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/design/anchor-point.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -215,7 +215,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/design/anchor-rect.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -223,7 +223,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/design/anchor-ellipse.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -243,7 +243,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/widgets/button.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -251,7 +251,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/widgets/input.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -259,7 +259,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/widgets/checkbox.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -267,7 +267,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/widgets/label.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -287,7 +287,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/net/channel.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -295,7 +295,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/net/ajax.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -303,7 +303,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/net/link.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -331,7 +331,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/discs/createdisc.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -339,7 +339,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/discs/maindisc.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -347,7 +347,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/discs/jockey.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -355,7 +355,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/shell/hover-reply.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -369,7 +369,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/forms/login.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -377,7 +377,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/forms/signup.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -385,7 +385,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/forms/space.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -393,7 +393,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/forms/moveto.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -401,7 +401,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/forms/user.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -409,7 +409,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/forms/welcome.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -417,7 +417,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/forms/no-access-to-space.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -425,7 +425,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/forms/non-existing-space.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -433,7 +433,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/forms/jockey.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -501,7 +501,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/visual/para.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true,
@@ -511,7 +511,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/visual/scrollbar.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -519,7 +519,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/visual/doc.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true,
@@ -545,7 +545,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/visual/note.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true,
@@ -555,7 +555,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/visual/label.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -563,7 +563,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/visual/relation.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -571,7 +571,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/visual/portal.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -579,7 +579,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/visual/space.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true,
@@ -589,7 +589,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/jion/sign.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true,
@@ -639,7 +639,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/mark/caret.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -647,7 +647,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/mark/item.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -655,7 +655,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/mark/range.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -663,7 +663,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/mark/vacant.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -671,7 +671,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/mark/widget.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -685,7 +685,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/action/none.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -693,7 +693,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/action/create-generic.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -701,7 +701,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/action/create-relation.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -709,7 +709,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/action/item-drag.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -717,7 +717,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/action/item-resize.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -725,7 +725,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/action/pan.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -733,7 +733,7 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/action/scrolly.js',
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inBundle',
 			true
@@ -877,7 +877,7 @@ module.exports =
 			'src/testpad/action.js',
 		'devel',
 			true,
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inTestPad',
 			true
@@ -887,7 +887,7 @@ module.exports =
 			'src/testpad/testpad.js',
 		'devel',
 			true,
-		'hasJoobj',
+		'hasJion',
 			true,
 		'inTestPad',
 			true

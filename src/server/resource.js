@@ -86,7 +86,7 @@ if( JION )
 						allowsNull :
 							true
 					},
-				hasJoobj :
+				hasJion :
 					{
 						comment :
 							'true if this resource has a jion def.',
@@ -213,7 +213,7 @@ Jools.lazyValue(
 	'asJoobj',
 	function( )
 	{
-		if( !this.hasJoobj )
+		if( !this.hasJion )
 		{
 			return null;
 		}
@@ -231,7 +231,7 @@ Jools.lazyValue(
 				'/'
 				+
 				this.filePath.replace( /\//g, '-' ),
-			'hasJoobj',
+			'hasJion',
 				false,
 			'isJoobj',
 				true

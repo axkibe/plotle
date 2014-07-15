@@ -707,7 +707,7 @@ Server.prototype.prepareInventory =
 			continue;
 		}
 
-		if( resource.hasJoobj )
+		if( resource.hasJion )
 		{
 			this.inventory =
 				this.inventory.addResource( resource.asJoobj );
