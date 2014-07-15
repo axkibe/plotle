@@ -1,6 +1,6 @@
 torrent
 node_modules/
 report/*
-joobj/server/*
-joobj/shell/*
+jion/server/*
+jion/shell/*
 .jshint.stamp
