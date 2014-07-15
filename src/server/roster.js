@@ -1,5 +1,6 @@
 /*
 | The roster of all resources.
+| TODO: 'hasJoobj', JION
 |
 | Authors: Axel Kittenberger
 */
@@ -587,7 +588,9 @@ module.exports =
 	),
 	Resource.Create(
 		'filePath',
-			'src/mm/sign.js',
+			'src/jion/sign.js',
+		'hasJoobj',
+			true,
 		'inBundle',
 			true,
 		'inTestPad',

@@ -24,7 +24,6 @@ var
 	Jools,
 	MeshMashine,
 	shell,
-	Sign,
 	system,
 	Visual;
 
@@ -734,8 +733,8 @@ Link.prototype.alter =
 
 	result =
 		new Change( // FIXME create
-			new Sign( src ), // FIXME create
-			new Sign( trg )
+			Jion.Sign.CreateFromJSON( src ),
+			Jion.Sign.CreateFromJSON( trg )
 		).changeTree(
 			this._cSpace
 		);

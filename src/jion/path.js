@@ -107,7 +107,7 @@ Path.prototype._init =
 /**/	)
 /**/	{
 /**/		throw new Error(
-/**/			'invalid _path'
+/**/			'path array not an array'
 /**/		);
 /**/	}
 /**/}
@@ -537,6 +537,32 @@ Jools.lazyValue(
 		return b.join( '' );
 	}
 );
+
+
+/*
+| CreateFromJSON
+*/
+Path.CreateFromJSON =
+	function( json )
+{
+	// FIXME this is a dirty hack and ought to be removed.
+	if( json.reflect === 'Path' )
+	{
+		return json;
+	}
+
+	if( !json instanceof Array )
+	{
+		throw new Error( 'invalid JSON, path is no array' );
+	}
+
+	return (
+		Path.Create(
+			'array',
+				json
+		)
+	);
+};
 
 
 /*

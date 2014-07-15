@@ -10,8 +10,7 @@
 */
 var
 	Jion,
-	Jools,
-	Sign;
+	Jools;
 
 
 /*
@@ -39,10 +38,10 @@ if( SERVER )
 	Jion =
 		{
 			Path :
-				require( '../jion/path'  )
+				require( '../jion/path'  ),
+			Sign :
+				require( '../jion/sign'  )
 		};
-	Sign =
-		require( './sign'  );
 }
 
 
@@ -66,7 +65,7 @@ Change =
 /**/	}
 /**/}
 
-	if( src.constructor === Sign )
+	if( src.constructor === Jion.Sign )
 	{
 		this.src =
 			src;
@@ -74,6 +73,7 @@ Change =
 	else
 	{
 		// FIXME do not change callee object
+		/*
 		if( src.path && src.path.reflect !== 'Path' )
 		{
 			src.path =
@@ -82,12 +82,12 @@ Change =
 					src.path
 				);
 		}
+		*/
 
-		this.src =
-			new Sign( src );
+		this.src = Jion.Sign.CreateFromJSON( src );
 	}
 
-	if( trg.constructor === Sign )
+	if( trg.constructor === Jion.Sign )
 	{
 		this.trg =
 			trg;
@@ -95,6 +95,7 @@ Change =
 	else
 	{
 		// FIXME do not change callee object
+		/*
 		if( trg.path && trg.path.reflect !== 'Path' )
 		{
 			trg.path =
@@ -103,9 +104,9 @@ Change =
 					trg.path
 				);
 		}
+		*/
 
-		this.trg =
-			new Sign( trg );
+		this.trg = Jion.Sign.CreateFromJSON( trg );
 	}
 
 	Jools.immute( this );
@@ -185,6 +186,7 @@ Jools.lazyValue(
 /*
 | Returns the inversion to this change.
 | FIXME use lazyValue
+| FIXME call it Invert
 */
 Change.prototype.invert =
 	function( )
@@ -224,6 +226,7 @@ Change.prototype.invert =
 
 /*
 | Performes this change on a tree.
+| Call it ChangeTree
 */
 Change.prototype.changeTree =
 	function(
@@ -276,8 +279,7 @@ Change.prototype.changeTree =
 | Change emulates a ChangeRay with the length of 1.
 | FIXME check if needed
 */
-Change.prototype.length =
-	1;
+Change.prototype.length = 1;
 
 
 /*
@@ -305,7 +307,7 @@ Change.prototype.get =
 |
 | A new item is inserted or replaces an existing.
 */
-Change.prototype.Set =
+Change.prototype.set =
 	function(
 		tree
 	)
@@ -319,16 +321,15 @@ Change.prototype.Set =
 		src,
 		trg;
 
-	cm =
-		'change.set';
-	src =
-		this.src;
-	trg =
-		this.trg;
-	pivot =
-		null;
-	key =
-		null;
+	cm = 'change.set';
+
+	src = this.src;
+
+	trg = this.trg;
+
+	pivot = null;
+
+	key = null;
 
 	Jools.check(
 		trg.at1 === undefined,
@@ -345,13 +346,12 @@ Change.prototype.Set =
 	// if $new is given, replaces it with a unique ID
 	if( trg.path.get( -1 ) === '$new' )
 	{
-		pivot =
-			tree.getPath( trg.path.Shorten( 2 ) );
-		key =
-			pivot.newUID( );
+		pivot = tree.getPath( trg.path.Shorten( 2 ) );
+
+		key = pivot.newUID( );
+
 		trg =
-			new Sign(
-				trg,
+			trg.Create(
 				'path',
 					trg.path.Set( -1, key )
 			);
@@ -424,8 +424,7 @@ Change.prototype.Set =
 			orank = pivot.rankOf( key );
 
 			trg =
-				new Sign(
-					trg,
+				trg.Create(
 					'rank',
 						orank
 				);
@@ -747,7 +746,7 @@ Change.prototype.join =
 
 	key2 = pivot.ranks[ kn + 1 ];
 
-	path2 = path.set( -2, key2 );
+	path2 = path.Set( -2, key2 );
 
 	src =
 		src.affix(
@@ -868,8 +867,7 @@ Change.prototype.split =
 			pivot.newUID( );
 
 		trg =
-			new Sign(
-				trg,
+			trg.Create(
 				'path',
 					src.path.Set( -2, vKey )
 			);

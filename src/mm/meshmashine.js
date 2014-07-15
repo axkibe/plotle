@@ -1,6 +1,8 @@
 /*
 | The causal consistency / operation transformation engine for meshcraft.
 |
+| FIXME move the tfxs to Sign/Change
+| 
 | Authors: Axel Kittenberger
 */
 
@@ -18,8 +20,8 @@ var
 var
 	Change,
 	ChangeRay,
-	Jools,
-	Sign;
+	Jion,
+	Jools;
 
 
 /*
@@ -43,9 +45,17 @@ if( SERVER )
 	Jools =
 		require( '../jools/jools' );
 
-	Sign =
-		require( './sign' );
+	Jion =
+		{
+			Sign :
+				require( '../jion/sign' )
+		};
 }
+
+var
+	Sign;
+
+Sign = Jion.Sign;
 
 /*
 | Transformation.
@@ -477,12 +487,13 @@ TFXOps.split =
 			return sign;
 		}
 
-		return new Sign(
-			sign,
-			'path',
-				trg.path,
-			'at1',
-				sign.at1 - src.at1
+		return (
+			sign.Create(
+				'path',
+					trg.path,
+				'at1',
+					sign.at1 - src.at1
+			)
 		);
 	}
 
@@ -509,14 +520,15 @@ TFXOps.split =
 //		);
 
 		// signature goes into splitted line instead
-		return new Sign(
-			sign,
-			'path',
-				trg.path,
-			'at1',
-				sign.at1 - src.at1,
-			'at2',
-				sign.at2 - src.at1
+		return (
+			sign.Create(
+				'path',
+					trg.path,
+				'at1',
+					sign.at1 - src.at1,
+				'at2',
+					sign.at2 - src.at1
+			)
 		);
 	}
 
@@ -528,14 +540,12 @@ TFXOps.split =
 	// the signature is splited into a part that stays and one that goes to next line.
 
 	return [
-		new Sign (
-			sign,
+		sign.Create(
 			'at2',
 				src.at1
 		),
 
-		new Sign (
-			sign,
+		sign.Create(
 			'path',
 				trg.path,
 			'at1',
@@ -582,24 +592,26 @@ TFXOps.join =
 
 	if( sign.at2 === undefined )
 	{
-		return new Sign(
-			sign,
-			'path',
-				trg.path,
-			'at1',
-				sign.at1 + trg.at1
+		return (
+			sign.Create(
+				'path',
+					trg.path,
+				'at1',
+					sign.at1 + trg.at1
+			)
 		);
 	}
 	else
 	{
-		return new Sign(
-			sign,
-			'path',
-				trg.path,
-			'at1',
-				sign.at1 + trg.at1,
-			'at2',
-				sign.at2 + trg.at1
+		return (
+			sign.Create(
+				'path',
+					trg.path,
+				'at1',
+					sign.at1 + trg.at1,
+				'at2',
+					sign.at2 + trg.at1
+			)
 		);
 	}
 };
@@ -638,19 +650,17 @@ TFXOps.rank =
 	)
 	{
 		sign =
-			new Sign(
-				sign,
+			sign.Create(
 				'rank',
-				sign.rank - 1
+					sign.rank - 1
 			);
 	}
 	else if( src.rank > sign.rank && trg.rank <= sign.rank )
 	{
 		sign =
-			new Sign(
-				sign,
+			sign.Create(
 				'rank',
-				sign.rank + 1
+					sign.rank + 1
 			);
 	}
 
@@ -692,8 +702,7 @@ TFXOps.set =
 		if( sign.rank >= trg.rank )
 		{
 			sign =
-				new Sign(
-					sign,
+				sign.Create(
 					'rank',
 						sign.rank - 1
 				);
@@ -704,8 +713,7 @@ TFXOps.set =
 		if( sign.rank >= src.rank )
 		{
 			sign =
-				new Sign(
-					sign,
+				sign.Create(
 					'rank',
 						sign.rank + 1
 				);
@@ -716,8 +724,7 @@ TFXOps.set =
 		if( src.rank <= sign.rank && trg.rank > sign.rank )
 		{
 			sign =
-				new Sign(
-					sign,
+				sign.Create(
 					'rank',
 						sign.rank - 1
 				);
@@ -725,8 +732,7 @@ TFXOps.set =
 		else if( src.rank > sign.rank && trg.rank <= sign.rank )
 		{
 			sign =
-				new Sign(
-					sign,
+				sign.Create(
 					'rank',
 						sign.rank + 1
 				);
@@ -779,20 +785,22 @@ TFXOps.insert =
 
 	if( sign.at2 !== undefined )
 	{
-		return new Sign(
-			sign,
-			'at1',
-				sign.at1 + len,
-			'at2',
-				sign.at2 + len
+		return (
+			sign.Create(
+				'at1',
+					sign.at1 + len,
+				'at2',
+					sign.at2 + len
+			)
 		);
 	}
 	else
 	{
-		return new Sign(
-			sign,
-			'at1',
-				sign.at1 + len
+		return (
+			sign.Create(
+				'at1',
+					sign.at1 + len
+			)
 		);
 	}
 };
@@ -837,37 +845,24 @@ TFXOps.remove =
 
 		if( sign.at1 <= src.at1 )
 		{
-//			Jools.log(
-//				'tfx',
-//				'remove (case s0)'
-//			);
-
 			return sign;
 		}
 
 		if( sign.at1 <= src.at2 )
 		{
-//			Jools.log(
-//				'tfx',
-//				'remove (case s1)'
-//			);
-
-			return new Sign(
-				sign,
-				'at1',
-				src.at1
+			return (
+				sign.Create(
+					'at1',
+						src.at1
+				)
 			);
 		}
 
-//		Jools.log(
-//			'tfx',
-//			'remove (case s2)'
-//		);
-
-		return new Sign(
-			sign,
-			'at1',
-			sign.at1 - len
+		return (
+			sign.Create(
+				'at1',
+				sign.at1 - len
+			)
 		);
 	}
 
@@ -885,70 +880,50 @@ TFXOps.remove =
 
 	if( sign.at2 <= src.at1 )
 	{
-//		Jools.log(
-//			'tfx',
-//			'remove (case 0)'
-//		);
-
 		return sign;
 	}
 	else if( sign.at1 >= src.at2 )
 	{
-//		Jools.log(
-//			'tfx',
-//			'remove (case 1)'
-//		);
-
-		return new Sign(
-			sign,
-			'at1',
-				sign.at1 - len,
-			'at2',
-				sign.at2 - len
-			);
+		return (
+			sign.Create(
+				'at1',
+					sign.at1 - len,
+				'at2',
+					sign.at2 - len
+				)
+		);
 	}
 	else if(
 		sign.at1 < src.at1 &&
 		sign.at2 > src.at2
 	)
 	{
-//		Jools.log(
-//			'tfx',
-//			'remove (case 2)'
-//		);
-
-		return new Sign(
-			sign,
-			'at2',
-			sign.at2 - len
+		return (
+			sign.Create(
+				'at2',
+					sign.at2 - len
+			)
 		);
 	}
 	else if(
-		sign.at1 >= src.at1 &&
+		sign.at1 >= src.at1
+		&&
 		sign.at2 <= src.at2
 	)
 	{
-//		Jools.log(
-//			'tfx',
-//			'remove (case 3)'
-//		);
-
 		return null;
 	}
 	else if(
-		sign.at1 < src.at1 &&
+		sign.at1 < src.at1
+		&&
 		sign.at2 <= src.at2
 	)
 	{
-//		Jools.log(
-//			'tfx',
-//			'remove (case 4)'
-//		);
-
-		return new Sign(
-			sign,
-			'at2',
-			src.at1
+		return (
+			sign.Create(
+				'at2',
+					src.at1
+			)
 		);
 	}
 	else if(
@@ -956,15 +931,11 @@ TFXOps.remove =
 		sign.at2 > src.at2
 	)
 	{
-//		Jools.log(
-//			'tfx',
-//			'remove (case 5)'
-//		);
-
-		return new Sign(
-			sign,
-			'at2',
-			src.at2
+		return (
+			sign.Create(
+				'at2',
+				src.at2
+			)
 		);
 	}
 	else

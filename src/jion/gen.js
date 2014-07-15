@@ -2365,8 +2365,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			case 'Number' :
 			case 'String' :
 
-				arg =
-					Var( 'arg' );
+				arg = Var( 'arg' );
 
 				break;
 
@@ -2379,15 +2378,28 @@ Gen.prototype.genFromJSONCreatorParser =
 				}
 				else
 				{
+					// FUTURE remove this hack to disable
+					// Object.CreateFromJSON creation
 					base =
-						Var( attr.type );
+						attr.type !== 'Object'
+						? Var( attr.type )
+						: null;
 				}
 
-				arg =
-					Call(
-						base.Dot( 'CreateFromJSON' ),
-						Var( 'arg' )
-					);
+				if( base )
+				{
+					arg =
+						Call(
+							base.Dot( 'CreateFromJSON' ),
+							Var( 'arg' )
+						);
+				}
+				else
+				{
+					// FUTURE remove this hack to disable
+					// Object.CreateFromJSON creation
+					arg = Var( 'arg' );
+				}
 		}
 
 		caseBlock =

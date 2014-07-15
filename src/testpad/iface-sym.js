@@ -18,9 +18,9 @@ var
 */
 var
 	Change,
+	Jion,
 	Jools,
 	MeshMashine,
-	Sign,
 	Visual;
 
 
@@ -185,8 +185,8 @@ IFaceSym.prototype.alter =
 		aZ,
 		chgX =
 			new Change(
-				new Sign( src ),
-				new Sign( trg )
+				Jion.Sign.CreateFromJSON( src ),
+				Jion.Sign.CreateFromJSON( trg )
 			),
 		changes =
 			this.$changes,

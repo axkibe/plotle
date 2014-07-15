@@ -88,8 +88,9 @@ if( SERVER )
 
 
 var
-	Rect =
-		Euclid.Rect;
+	Rect;
+	
+Rect = Euclid.Rect;
 
 
 /*
