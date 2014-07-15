@@ -17,8 +17,8 @@ var
 | Imports
 */
 var
+	Jion,
 	Jools,
-	Path,
 	shell;
 
 
@@ -27,6 +27,17 @@ var
 */
 (function( ) {
 'use strict';
+
+
+var
+	newItemPath;
+
+
+/* path to a new Item */
+newItemPath =
+	Jion.Path.empty
+	.Append( 'twig' )
+	.Append( '$new' );
 
 Peer = { };
 
@@ -101,10 +112,7 @@ Peer.newNote =
 			},
 			{
 				path :
-					Path
-					.empty
-					.Append( 'twig' )
-					.Append( '$new' ),
+					newItemPath,
 				rank :
 					0
 			}
@@ -144,10 +152,7 @@ Peer.newPortal =
 			},
 			{
 				path :
-					Path
-					.empty
-					.Append( 'twig' )
-					.Append( '$new' ),
+					newItemPath,
 				rank :
 					0
 			}
@@ -282,10 +287,7 @@ Peer.newLabel =
 			},
 			{
 				path :
-					Path
-					.empty
-					.Append( 'twig' )
-					.Append( '$new' ),
+					newItemPath,
 				rank :
 					0
 			}
@@ -346,10 +348,7 @@ Peer.newRelation =
 			},
 			{
 				path :
-					Path
-					.empty
-					.Append( 'twig' )
-					.Append( '$new' ),
+					newItemPath,
 				rank :
 					0
 			}

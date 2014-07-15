@@ -17,8 +17,7 @@ var
 | Exports
 */
 var
-	Change =
-		null;
+	Change;
 
 
 /*
@@ -72,18 +71,6 @@ Change =
 	}
 	else
 	{
-		// FIXME do not change callee object
-		/*
-		if( src.path && src.path.reflect !== 'Path' )
-		{
-			src.path =
-				Jion.Path.Create(
-					'array',
-					src.path
-				);
-		}
-		*/
-
 		this.src = Jion.Sign.CreateFromJSON( src );
 	}
 
@@ -94,18 +81,6 @@ Change =
 	}
 	else
 	{
-		// FIXME do not change callee object
-		/*
-		if( trg.path && trg.path.reflect !== 'Path' )
-		{
-			trg.path =
-				Jion.Path.Create(
-					'array',
-					trg.path
-				);
-		}
-		*/
-
 		this.trg = Jion.Sign.CreateFromJSON( trg );
 	}
 
@@ -488,13 +463,19 @@ Change.prototype.insert =
 	)
 {
 	var
-		cm =
-			'change.insert',
-		src =
-			this.src,
+		cm,
+		nstr,
+		src,
 		str,
-		trg =
-			this.trg;
+		tat2,
+		trg;
+
+
+	cm = 'change.insert';
+
+	src = this.src;
+	
+	trg = this.trg;
 
 	Jools.check(
 		trg.path.reflect === 'Path',
@@ -502,8 +483,7 @@ Change.prototype.insert =
 		'trg.path missing'
 	);
 
-	str =
-		tree.getPath( trg.path );
+	str = tree.getPath( trg.path );
 
 	Jools.check(
 		Jools.isString( str ),
@@ -512,9 +492,7 @@ Change.prototype.insert =
 	);
 
 	// where trg span should end
-	var
-		tat2 =
-			trg.at1 + src.val.length;
+	tat2 = trg.at1 + src.val.length;
 
 	trg =
 		trg.affix(
@@ -524,11 +502,10 @@ Change.prototype.insert =
 				tat2
 		);
 
-	var
-		nstr =
-			str.substring( 0, trg.at1 ) +
-			src.val +
-			str.substring( trg.at1 );
+	nstr =
+		str.substring( 0, trg.at1 ) +
+		src.val +
+		str.substring( trg.at1 );
 
 	tree =
 		tree.setPath(
@@ -696,20 +673,15 @@ Change.prototype.join =
 		path2,
 		at1;
 
-	cm =
-		'change.join';
+	cm = 'change.join';
 
-	src =
-		this.src;
+	src = this.src;
 
-	trg =
-		this.trg;
+	trg = this.trg;
 
-	path =
-		trg.path;
+	path = trg.path;
 
-	at1 =
-		trg.at1;
+	at1 = trg.at1;
 
 	Jools.check(
 		at1 !== undefined,

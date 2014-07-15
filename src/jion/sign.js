@@ -93,6 +93,8 @@ if( JION )
 							'true',
 						type :
 							'Integer',
+						allowsNull :
+							true,
 						defaultValue :
 							undefined
 					},
@@ -113,6 +115,8 @@ if( JION )
 							'true',
 						type :
 							'Object',
+						allowsNull :
+							true,
 						defaultValue :
 							undefined
 					}
