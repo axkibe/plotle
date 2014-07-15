@@ -18,8 +18,8 @@ var
 | Imports
 */
 var
-	Jools,
-	Change;
+	Jion,
+	Jools;
 
 
 /*
@@ -37,8 +37,11 @@ if( SERVER )
 	Jools =
 		require( '../jools/jools'  );
 
-	Change =
-		require( './change' );
+	Jion =
+		{
+			Change :
+				require( '../jion/change' )
+		};
 }
 
 
@@ -75,10 +78,10 @@ ChangeRay =
 	{
 		var c = model[ a ];
 
-		if( !(c instanceof Change ) )
+		if( !(c instanceof Jion.Change ) )
 		{
 			c =
-				new Change(
+				new Jion.Change(
 					a.src,
 					a.trg
 				);
@@ -213,8 +216,11 @@ ChangeRay.prototype.changeTree =
 {
 	// the ray with the changes applied
 	var
-		cray =
-			new ChangeRay( );
+		chg,
+		cray,
+		cr;
+
+	cray = new ChangeRay( );
 
 	// iterates through the change ray
 	for(
@@ -223,23 +229,21 @@ ChangeRay.prototype.changeTree =
 		a++
 	)
 	{
-		var
-			chg =
-				this.get( a ),
+		chg = this.get( a ),
 
-			r =
-				chg.changeTree(
-					tree,
-					universe
-				);
+		cr =
+			chg.changeTree(
+				tree,
+				universe
+			);
 
 		// the tree returned by op-handler is the new tree
-		tree =
-			r.tree;
+		tree = cr.tree;
 
-		cray.push( r.chg );
+		cray.push( cr.chg );
 	}
 
+	// FUTURE make a "changeResult" jion.
 	return Jools.immute(
 		{
 			tree :

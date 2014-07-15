@@ -51,6 +51,8 @@ var
 		require( './inventory' ),
 	Jion =
 		{
+			Change :
+				require( '../jion/change' ),
 			Path :
 				require( '../jion/path' ),
 		},
@@ -507,7 +509,7 @@ Server.prototype.loadSpace =
 		if ( !Jools.isArray( o.chgX ) )
 		{
 			change.chgX =
-				new MeshMashine.Change(
+				new Jion.Change(
 					o.chgX.src,
 					o.chgX.trg
 				);
@@ -1468,7 +1470,7 @@ Server.prototype.cmdAlter =
 		}
 
 		chgX =
-			new MeshMashine.Change( chgX.src, chgX.trg );
+			new Jion.Change( chgX.src, chgX.trg );
 
 	}
 	catch( err )

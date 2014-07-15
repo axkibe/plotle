@@ -6,18 +6,17 @@
 
 
 /*
-| Imports
+| Export.
 */
 var
-	Jion,
-	Jools;
+	Jion;
 
 
 /*
-| Exports
+| Imports
 */
 var
-	Change;
+	Jools;
 
 
 /*
@@ -36,6 +35,7 @@ if( SERVER )
 		require( '../jools/jools' );
 	Jion =
 		{
+			//Change : this
 			Path :
 				require( '../jion/path'  ),
 			Sign :
@@ -44,10 +44,14 @@ if( SERVER )
 }
 
 
+var
+	Change;
+
 /*
 | Constructor
 */
 Change =
+Jion.Change =
 	function(
 		src,
 		trg

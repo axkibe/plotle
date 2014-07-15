@@ -36,9 +36,6 @@ var
 */
 if( SERVER )
 {
-	Change =
-		require( './change' );
-
 	ChangeRay =
 		require( './changeray' );
 
@@ -47,6 +44,8 @@ if( SERVER )
 
 	Jion =
 		{
+			Change :
+				require( '../jion/change' ),
 			Sign :
 				require( '../jion/sign' )
 		};
@@ -54,6 +53,8 @@ if( SERVER )
 
 var
 	Sign;
+
+Change = Jion.Change;
 
 Sign = Jion.Sign;
 

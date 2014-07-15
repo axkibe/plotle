@@ -17,7 +17,6 @@ Net = Net || { };
 | Imports
 */
 var
-	Change,
 	ChangeRay,
 	config,
 	Jion,
@@ -496,7 +495,7 @@ Link.prototype._onUpdate =
 		)
 		{
 			chgX =
-				new Change(
+				new Jion.Change(
 					chgs[ a ].chgX.src,
 					chgs[ a ].chgX.trg
 				);
@@ -732,7 +731,7 @@ Link.prototype.alter =
 		undo;
 
 	result =
-		new Change( // FIXME create
+		new Jion.Change( // FIXME create
 			Jion.Sign.CreateFromJSON( src ),
 			Jion.Sign.CreateFromJSON( trg )
 		).changeTree(
