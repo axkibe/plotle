@@ -298,9 +298,8 @@ Path.prototype.Shorten =
 | Returns a path limited to a specific length.
 |
 | FIXME cache
-| FIXME call Limit
 */
-Path.prototype.limit =
+Path.prototype.Limit =
 	function(
 		n
 	)
@@ -368,9 +367,9 @@ Path.prototype.prepend =
 /*
 | Returns a path with key indexed by i set
 |
-| FIXME rename Set
+| Currently unused.
 */
-Path.prototype.set =
+Path.prototype.Set =
 	function(
 		idx,
 		key

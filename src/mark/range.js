@@ -223,7 +223,7 @@ Jools.lazyValue(
 			return Jion.Path.empty;
 		}
 
-		return this.bPath.limit( 3 );
+		return this.bPath.Limit( 3 );
 	}
 );
 

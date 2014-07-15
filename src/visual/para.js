@@ -887,14 +887,17 @@ Para.prototype.input =
 					caretAt + line.length
 				);
 
-			doc = r.tree.getPath( path.Chop( ).limit( 3 ) );
+			doc =
+				r.tree.getPath(
+					path.Chop( ).Limit( 3 )
+				);
 
 			paraKey =
 				doc.ranks[
 					doc.rankOf( paraKey ) + 1
 				];
 
-			path = path.limit( 5 ).Append( paraKey );
+			path = path.Limit( 5 ).Append( paraKey );
 
 			textPath = path.Append( 'text' );
 

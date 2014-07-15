@@ -305,7 +305,7 @@ Change.prototype.get =
 |
 | A new item is inserted or replaces an existing.
 */
-Change.prototype.set =
+Change.prototype.Set =
 	function(
 		tree
 	)
@@ -353,7 +353,7 @@ Change.prototype.set =
 			new Sign(
 				trg,
 				'path',
-					trg.path.set( -1, key )
+					trg.path.Set( -1, key )
 			);
 	}
 
@@ -735,8 +735,7 @@ Change.prototype.join =
 
 	Jools.check( pivot.ranks, cm, 'pivot has no ranks' );
 
-	kn =
-		pivot.rankOf( key );
+	kn = pivot.rankOf( key );
 
 	Jools.check( kn >= 0, cm, 'invalid line key (1)' );
 
@@ -746,11 +745,9 @@ Change.prototype.join =
 		'cannot join last line'
 	);
 
-	key2 =
-		pivot.ranks[ kn + 1 ];
+	key2 = pivot.ranks[ kn + 1 ];
 
-	path2 =
-		path.set( -2, key2 );
+	path2 = path.set( -2, key2 );
 
 	src =
 		src.affix(
@@ -760,11 +757,9 @@ Change.prototype.join =
 			path2
 		);
 
-	para1 =
-		pivot.twig[ key  ];
+	para1 = pivot.twig[ key  ];
 
-	para2 =
-		pivot.twig[ key2 ];
+	para2 = pivot.twig[ key2 ];
 
 	// FIXME check other keys to be equal
 
@@ -876,7 +871,7 @@ Change.prototype.split =
 			new Sign(
 				trg,
 				'path',
-					src.path.set( -2, vKey )
+					src.path.Set( -2, vKey )
 			);
 	}
 

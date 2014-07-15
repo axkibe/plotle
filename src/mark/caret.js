@@ -134,7 +134,7 @@ Jools.lazyValue(
 			return Jion.Path.empty;
 		}
 
-		return this.path.limit( 3 );
+		return this.path.Limit( 3 );
 	}
 );
 
@@ -156,7 +156,7 @@ Jools.lazyValue(
 			return Jion.Path.empty;
 		}
 
-		return this.path.limit( 5 );
+		return this.path.Limit( 5 );
 	}
 );
 
