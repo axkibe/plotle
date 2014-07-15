@@ -346,7 +346,7 @@ Change.prototype.set =
 	if( trg.path.get( -1 ) === '$new' )
 	{
 		pivot =
-			tree.getPath( trg.path.shorten( 2 ) );
+			tree.getPath( trg.path.Shorten( 2 ) );
 		key =
 			pivot.newUID( );
 		trg =
@@ -398,7 +398,7 @@ Change.prototype.set =
 		pivot =
 			pivot
 			||
-			tree.getPath( trg.path.shorten( 2 ) );
+			tree.getPath( trg.path.Shorten( 2 ) );
 
 		if( key === null )
 		{
@@ -441,7 +441,7 @@ Change.prototype.set =
 		{
 			tree =
 				tree.setPath(
-					trg.path.shorten( 2 ),
+					trg.path.Shorten( 2 ),
 					pivot
 				);
 		}
@@ -731,7 +731,7 @@ Change.prototype.join =
 		path.get( -2 );
 
 	pivot =
-		tree.getPath( path.shorten( 3 ) );
+		tree.getPath( path.Shorten( 3 ) );
 
 	Jools.check( pivot.ranks, cm, 'pivot has no ranks' );
 
@@ -785,7 +785,7 @@ Change.prototype.join =
 
 	tree =
 		tree.setPath(
-			path.shorten( 3 ),
+			path.Shorten( 3 ),
 			pivot
 		);
 
@@ -856,7 +856,7 @@ Change.prototype.split =
 	text =
 		tree.getPath( path );
 	pivot =
-		tree.getPath( path.shorten( 3 ) );
+		tree.getPath( path.Shorten( 3 ) );
 
 	Jools.check( Jools.isString( text ), cm, 'src signates no text' );
 
@@ -921,7 +921,7 @@ Change.prototype.split =
 
 	tree =
 		tree.setPath(
-			path.shorten( 3 ),
+			path.Shorten( 3 ),
 			pivot
 		);
 
@@ -990,7 +990,7 @@ Change.prototype.rank =
 		'trg.rank not present'
 	);
 
-	pivot = tree.getPath( src.path.shorten( 2 ) );
+	pivot = tree.getPath( src.path.Shorten( 2 ) );
 
 	Jools.check(
 		pivot.ranks !== undefined,
@@ -1044,7 +1044,7 @@ Change.prototype.rank =
 	{
 		tree =
 			tree.setPath(
-				src.path.shorten( 2 ),
+				src.path.Shorten( 2 ),
 				pivot
 			);
 	}

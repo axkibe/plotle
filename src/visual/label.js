@@ -181,9 +181,8 @@ Label.prototype._init =
 		return;
 	}
 
-	docPath =
-		// FIXME not if inherited
-		this.path.append( 'doc' );
+	// FIXME not if inherited
+	docPath = this.path.Append( 'doc' );
 
 	doc =
 	this.doc =

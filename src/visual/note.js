@@ -219,7 +219,7 @@ Note.prototype._init =
 	var
 		docPath =
 			// FIXME not if inherited
-			this.path.append( 'doc' );
+			this.path.Append( 'doc' );
 
 	this.doc =
 		this.doc.Create(
@@ -643,14 +643,14 @@ Note.prototype.scrollMarkIntoView =
 	if( n + pnw.y - imargin.n < sy )
 	{
 		shell.setPath(
-			this.path.append( 'scrolly' ),
+			this.path.Append( 'scrolly' ),
 			n + pnw.y - imargin.n
 		);
 	}
 	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
 		shell.setPath(
-			this.path.append( 'scrolly' ),
+			this.path.Append( 'scrolly' ),
 			s + pnw.y - zone.height + imargin.s
 		);
 	}
@@ -681,7 +681,7 @@ Note.prototype.mousewheel =
 	}
 
 	shell.setPath(
-		this.path.append( 'scrolly' ),
+		this.path.Append( 'scrolly' ),
 		this.scrollbarY.pos - dir * system.textWheelSpeed
 	);
 

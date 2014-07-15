@@ -181,8 +181,8 @@ Jockey.prototype._init =
 		{
 			path =
 				this.path
-					.append( 'twig' )
-					.append( name );
+				.Append( 'twig' )
+				.Append( name );
 		}
 		else
 		{

@@ -235,8 +235,7 @@ Login.prototype.login =
 	if( user.length < 4 )
 	{
 		shell.setPath(
-			this._widgetPath( 'errorLabel' )
-				.append( 'text' ),
+			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			'Username too short, min. 4 characters'
 		);
 
@@ -257,8 +256,7 @@ Login.prototype.login =
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
 		shell.setPath(
-			this._widgetPath( 'errorLabel' )
-				.append( 'text' ),
+			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			'Username must not start with "visit"'
 		);
 
@@ -279,8 +277,7 @@ Login.prototype.login =
 	if( pass.length < 5 )
 	{
 		shell.setPath(
-			this._widgetPath( 'errorLabel' )
-				.append( 'text' ),
+			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			'Password too short, min. 5 characters'
 		);
 
@@ -349,13 +346,13 @@ Login.prototype.onAuth =
 {
 	var
 		twig;
-		
+
 	twig = this.twig;
 
 	if( !ok )
 	{
 		shell.setPath(
-			this._widgetPath( 'errorLabel' ).append( 'text' ),
+			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			message
 		);
 
@@ -410,12 +407,12 @@ Login.prototype.clear =
 {
 	// FUTURE combine calls
 	shell.setPath(
-		this._widgetPath( 'userInput' ).append( 'value' ),
+		this._widgetPath( 'userInput' ).Append( 'value' ),
 		''
 	);
 
 	shell.setPath(
-		this._widgetPath( 'passwordInput' ).append( 'value' ),
+		this._widgetPath( 'passwordInput' ).Append( 'value' ),
 		''
 	);
 

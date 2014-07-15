@@ -629,8 +629,13 @@ Item.prototype.dragMove =
 	)
 {
 	var
-		action =
-			shell.action;
+		action,
+		dy,
+		sbary,
+		spos,
+		start;
+
+	action = shell.action;
 
 	switch( action.reflect )
 	{
@@ -657,21 +662,16 @@ Item.prototype.dragMove =
 
 		case 'ScrollY' :
 
-			var
-				start =
-					action.start,
+			start = action.start,
 
-				dy =
-					( p.y - start.y ) / view.zoom,
+			dy = ( p.y - start.y ) / view.zoom,
 
-				sbary =
-					this.scrollbarY,
+			sbary = this.scrollbarY,
 
-				spos =
-					action.startPos + sbary.scale( dy );
+			spos = action.startPos + sbary.scale( dy );
 
 			shell.setPath(
-				this.path.append( 'scrolly' ),
+				this.path.Append( 'scrolly' ),
 				spos
 			);
 

@@ -695,8 +695,7 @@ Input.prototype.input =
 	}
 
 	shell.setPath(
-		this.path
-			.append( 'value' ),
+		this.path.Append( 'value' ),
 		value.substring( 0, at ) +
 			text +
 			value.substring( at )
@@ -732,8 +731,7 @@ Input.prototype._keyBackspace =
 	}
 
 	shell.setPath(
-		this.path
-			.append( 'value' ),
+		this.path.Append( 'value' ),
 		this.value.substring( 0, at - 1 ) +
 			this.value.substring( at )
 	);
@@ -765,8 +763,7 @@ Input.prototype._keyDel =
 	}
 
 	shell.setPath(
-		this.path
-			.append( 'value' ),
+		this.path.Append( 'value' ),
 		this.value.substring( 0, at ) +
 			this.value.substring( at + 1 )
 	);

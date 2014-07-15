@@ -231,13 +231,13 @@ Portal.prototype._init =
 			Jools.immute(
 				{
 					moveToButton :
-						this.path.append( 'moveToButton' ),
+						this.path.Append( 'moveToButton' ),
 
 					spaceUser :
-						this.path.append( 'spaceUser' ),
+						this.path.Append( 'spaceUser' ),
 
 					spaceTag :
-						this.path.append( 'spaceTag' )
+						this.path.Append( 'spaceTag' )
 				}
 			);
 	}

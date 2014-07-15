@@ -612,7 +612,7 @@ Link.prototype._onUpdate =
 				}
 			}
 
-			report = report.append( chgX );
+			report = report.Append( chgX );
 		}
 
 		// adapts all queued changes

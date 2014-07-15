@@ -1,9 +1,9 @@
 /*
-|
 | An array of changes to a tree.
 |
-| Authors: Axel Kittenberger
+| TODO: Jion
 |
+| Authors: Axel Kittenberger
 */
 
 
@@ -133,7 +133,7 @@ ChangeRay.prototype.invert =
 /*
 | Appends a change to the change ray.
 */
-ChangeRay.prototype.append =
+ChangeRay.prototype.Append =
 	function(
 		chg
 	)

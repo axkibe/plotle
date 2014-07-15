@@ -166,7 +166,8 @@ Shell =
 			'mark',
 				Mark.Vacant.Create( ),
 			'path',
-				Jion.Path.empty.append( 'forms' ),
+				Jion.Path.empty
+				.Append( 'forms' ),
 			'view',
 				view,
 			'twig:add',
@@ -208,7 +209,8 @@ Shell =
 			'mode',
 				this._$mode,
 			'path',
-				Jion.Path.empty.append( 'discs' ),
+				Jion.Path.empty
+				.Append( 'discs' ),
 			'view',
 				view,
 			'twig:add',
@@ -392,7 +394,7 @@ Shell.prototype.update =
 						new Sign(
 							{
 								path :
-									mark.path.chop( ),
+									mark.path.Chop( ),
 								at1 :
 									mark.at
 							}
@@ -444,7 +446,7 @@ Shell.prototype.update =
 						new Sign(
 							{
 								path :
-									mark.bPath.chop( ),
+									mark.bPath.Chop( ),
 								at1 :
 									mark.bAt
 							}
@@ -457,7 +459,7 @@ Shell.prototype.update =
 						new Sign(
 							{
 								path :
-									mark.ePath.chop( ),
+									mark.ePath.Chop( ),
 								at1 :
 									mark.eAt
 							}
@@ -1353,7 +1355,7 @@ Shell.prototype.onload =
 		passhash,
 		username;
 
-	ajaxPath = Jion.Path.empty.append( 'ajax' );
+	ajaxPath = Jion.Path.empty.Append( 'ajax' );
 
 	this.ajax =
 		Net.Ajax.Create(
@@ -1363,13 +1365,13 @@ Shell.prototype.onload =
 			'command',
 				Net.Channel.Create(
 					'path',
-						ajaxPath.append( 'command' )
+						ajaxPath.Append( 'command' )
 				),
 			'twig:add',
 			'update',
 				Net.Channel.Create(
 					'path',
-						ajaxPath.append( 'update' )
+						ajaxPath.Append( 'update' )
 				)
 		);
 
@@ -1441,14 +1443,14 @@ Shell.prototype.onAquireSpace =
 
 			shell.setPath(
 				shell._$formJockey.twig.NonExistingSpace.path
-					.append( 'nonSpaceUser' ),
-					asw.spaceUser
+				.Append( 'nonSpaceUser' ),
+				asw.spaceUser
 			);
 
 			shell.setPath(
 				shell._$formJockey.twig.NonExistingSpace.path
-					.append( 'nonSpaceTag' ),
-					asw.spaceTag
+				.Append( 'nonSpaceTag' ),
+				asw.spaceTag
 			);
 
 			shell.setMode( 'NonExistingSpace' );
@@ -1515,7 +1517,7 @@ Shell.prototype.onAquireSpace =
 			'mark',
 				Mark.Vacant.Create( ),
 			'path',
-				Jion.Path.empty.append( 'space' ),
+				Jion.Path.empty.Append( 'space' ),
 			'view',
 				Euclid.View.Create(
 					'fact',

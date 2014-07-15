@@ -134,9 +134,9 @@ var
 		Jion
 		.Path
 		.empty
-		.append( 'space' )
-		.append( 'testnote' )
-		.append( 'doc' );
+		.Append( 'space' )
+		.Append( 'testnote' )
+		.Append( 'doc' );
 
 
 /*
@@ -635,8 +635,8 @@ TestPad.prototype.send =
 
 			path =
 				_noteDocPath
-					.append( doc.ranks[ action.line ] )
-					.append( 'text' );
+				.Append( doc.ranks[ action.line ] )
+				.Append( 'text' );
 
 			Peer.insertText(
 				path,
@@ -653,8 +653,8 @@ TestPad.prototype.send =
 
 			path =
 				_noteDocPath
-					.append( doc.ranks[ action.line ] )
-					.append( 'text' );
+				.Append( doc.ranks[ action.line ] )
+				.Append( 'text' );
 
 			Peer.removeText(
 				path,
@@ -677,8 +677,8 @@ TestPad.prototype.send =
 
 			path =
 				_noteDocPath
-					.append( doc.ranks[ action.line ] )
-					.append( 'text' );
+				.Append( doc.ranks[ action.line ] )
+				.Append( 'text' );
 
 			Peer.split(
 				path,
@@ -691,8 +691,8 @@ TestPad.prototype.send =
 
 			path =
 				_noteDocPath
-					.append( doc.ranks[ action.line - 1] )
-					.append( 'text' );
+				.Append( doc.ranks[ action.line - 1] )
+				.Append( 'text' );
 
 			Peer.join(
 				path,

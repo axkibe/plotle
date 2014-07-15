@@ -159,9 +159,8 @@ Path.prototype.get =
 | Returns a path with key appended
 |
 | FIXME cache
-| FIXME call Append
 */
-Path.prototype.append =
+Path.prototype.Append =
 	function(
 		key
 	)
@@ -187,8 +186,8 @@ Path.prototype.append =
 /*
 | Same as append but without caching.
 */
-Path.prototype.appendNC =
-	Path.prototype.append;
+Path.prototype.AppendNC =
+	Path.prototype.Append;
 
 
 
@@ -196,9 +195,8 @@ Path.prototype.appendNC =
 | Returns a path with the first items chopped of.
 |
 | FIXME cache
-| FIXME call Chop
 */
-Path.prototype.chop =
+Path.prototype.Chop =
 	function(
 		n // if not undefined chop this amount of items;
 		//// defaults to 1
@@ -225,7 +223,7 @@ Path.prototype.chop =
 				'_sliced',
 					true
 			)
-			.chop( n - 1 )
+			.Chop( n - 1 )
 		);
 	}
 
@@ -245,9 +243,8 @@ Path.prototype.chop =
 | Returns a path with the last 'n' item(s) removed.
 |
 | FIXME cache
-| FIXME call Shorten
 */
-Path.prototype.shorten =
+Path.prototype.Shorten =
 	function(
 		n
 	)
@@ -313,7 +310,7 @@ Path.prototype.limit =
 /**/	if( n > this.length || n < 0 )
 /**/	{
 /**/		throw new Error(
-/**/			'invalid shorten'
+/**/			'invalid limit'
 /**/		);
 /**/	}
 /**/}

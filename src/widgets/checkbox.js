@@ -276,8 +276,7 @@ CheckBox.prototype.click =
 	)
 	{
 		shell.setPath(
-			this.path
-				.append( 'checked' ),
+			this.path.Append( 'checked' ),
 			!this.checked
 		);
 
@@ -318,8 +317,7 @@ CheckBox.prototype.specialKey =
 		case 'enter' :
 
 			shell.setPath(
-				this.path
-					.append( 'checked' ),
+				this.path.Append( 'checked' ),
 				!this.checked
 			);
 
@@ -337,8 +335,7 @@ CheckBox.prototype.input =
 	)
 {
 	shell.setPath(
-		this.path
-			.append( 'checked' ),
+		this.path.Append( 'checked' ),
 		!this.checked
 	);
 

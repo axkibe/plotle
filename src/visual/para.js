@@ -887,16 +887,16 @@ Para.prototype.input =
 					caretAt + line.length
 				);
 
-			doc = r.tree.getPath( path.chop( ).limit( 3 ) );
+			doc = r.tree.getPath( path.Chop( ).limit( 3 ) );
 
 			paraKey =
 				doc.ranks[
 					doc.rankOf( paraKey ) + 1
 				];
 
-			path = path.limit( 5 ).append( paraKey );
+			path = path.limit( 5 ).Append( paraKey );
 
-			textPath = path.append( 'text' );
+			textPath = path.Append( 'text' );
 
 			caretAt = 0;
 		}
@@ -1057,7 +1057,7 @@ Jools.lazyValue(
 			return null;
 		}
 
-		return this.path.append( 'text' );
+		return this.path.Append( 'text' );
 	}
 );
 

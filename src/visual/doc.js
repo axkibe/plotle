@@ -145,6 +145,8 @@ Doc.prototype._init =
 	)
 {
 	var
+		key,
+		path,
 		twig,
 		ranks;
 
@@ -154,16 +156,14 @@ Doc.prototype._init =
 		return;
 	}
 
-	ranks =
-		this.ranks;
+	ranks = this.ranks;
 
 	twig =
 		twigDup
 			? this.twig
 			: Jools.copy( this.twig );
 
-	this._$pnws =
-		null;
+	this._$pnws = null;
 
 	for(
 		var r = 0, rZ = this.ranks.length;
@@ -171,13 +171,12 @@ Doc.prototype._init =
 		r++
 	)
 	{
-		var
-			key =
-				ranks[ r ],
-			path =
-				this.path
-				.append( 'twig' )
-				.appendNC( key );
+		key = ranks[ r ];
+
+		path =
+			this.path
+			.Append( 'twig' )
+			.AppendNC( key );
 
 		twig[ key ] =
 			twig[ key ].Create(

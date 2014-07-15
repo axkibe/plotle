@@ -103,8 +103,8 @@ Peer.newNote =
 				path :
 					Path
 					.empty
-					.append( 'twig' )
-					.append( '$new' ),
+					.Append( 'twig' )
+					.Append( '$new' ),
 				rank :
 					0
 			}
@@ -146,8 +146,8 @@ Peer.newPortal =
 				path :
 					Path
 					.empty
-					.append( 'twig' )
-					.append( '$new' ),
+					.Append( 'twig' )
+					.Append( '$new' ),
 				rank :
 					0
 			}
@@ -173,7 +173,9 @@ Peer.setZone =
 			},
 			{
 				path :
-					itemPath.chop( ).append( 'zone' )
+					itemPath
+					.Chop( )
+					.Append( 'zone' )
 			}
 		)
 	);
@@ -197,7 +199,9 @@ Peer.setFontSize =
 			},
 			{
 				path :
-					itemPath.chop( ).append( 'fontsize' )
+					itemPath
+					.Chop( )
+					.Append( 'fontsize' )
 			}
 		)
 	);
@@ -221,7 +225,9 @@ Peer.setPNW =
 			},
 			{
 				path :
-					itemPath.chop( ).append( 'pnw' )
+					itemPath
+					.Chop( )
+					.Append( 'pnw' )
 			}
 		)
 	);
@@ -278,8 +284,8 @@ Peer.newLabel =
 				path :
 					Path
 					.empty
-					.append( 'twig' )
-					.append( '$new' ),
+					.Append( 'twig' )
+					.Append( '$new' ),
 				rank :
 					0
 			}
@@ -342,8 +348,8 @@ Peer.newRelation =
 				path :
 					Path
 					.empty
-					.append( 'twig' )
-					.append( '$new' ),
+					.Append( 'twig' )
+					.Append( '$new' ),
 				rank :
 					0
 			}
@@ -363,7 +369,7 @@ Peer.moveToTop =
 	shell.link.alter(
 		{
 			path :
-				path.chop( )
+				path.Chop( )
 		},
 		{
 			rank :
@@ -391,7 +397,7 @@ Peer.insertText =
 			},
 			{
 				path :
-					path.chop( 1 ),
+					path.Chop( 1 ),
 				at1 :
 					offset
 			}
@@ -424,7 +430,7 @@ Peer.removeText =
 		shell.link.alter(
 			{
 				path :
-					path.chop( 1 ),
+					path.Chop( 1 ),
 				at1 :
 					at1,
 				at2 :
@@ -486,7 +492,7 @@ Peer.removeRange =
 
 	k2 = path2.get( -2 );
 
-	pivot = shell.getPath( path1.chop( 1 ).shorten( 3 ) );
+	pivot = shell.getPath( path1.Chop( 1 ).Shorten( 3 ) );
 
 	r1 = pivot.rankOf( k1 );
 
@@ -500,11 +506,11 @@ Peer.removeRange =
 	{
 		Peer.join(
 			path1,
-			shell.getPath( path1.chop( 1 ) ).length
+			shell.getPath( path1.Chop( 1 ) ).length
 		);
 	}
 
-	len2 = shell.getPath( path1.chop( 1 ) ).length;
+	len2 = shell.getPath( path1.Chop( 1 ) ).length;
 
 	Peer.join(
 		path1,
@@ -537,7 +543,7 @@ Peer.split =
 		shell.link.alter(
 			{
 				path :
-					path.chop( 1 ),
+					path.Chop( 1 ),
 				at1 :
 					offset
 			},
@@ -567,7 +573,7 @@ Peer.join =
 			},
 			{
 				path :
-					path.chop( 1 ),
+					path.Chop( 1 ),
 				at1 :
 					at1
 			}
@@ -593,7 +599,7 @@ Peer.removeItem =
 
 	pivot =
 		shell.link.get(
-			path.chop( 1 ).shorten( 2 )
+			path.Chop( 1 ).Shorten( 2 )
 		);
 
 	r1 = pivot.rankOf( key );
@@ -608,7 +614,7 @@ Peer.removeItem =
 			},
 			{
 				path :
-					path.chop( 1 ),
+					path.Chop( 1 ),
 				rank :
 					null
 			}
