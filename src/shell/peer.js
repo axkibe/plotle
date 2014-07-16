@@ -491,7 +491,7 @@ Peer.removeRange =
 
 	k2 = path2.get( -2 );
 
-	pivot = shell.getPath( path1.Chop( 1 ).Shorten( 3 ) );
+	pivot = shell.space.getPath( path1.Chop( 1 ).Shorten( 3 ) );
 
 	r1 = pivot.rankOf( k1 );
 
@@ -505,11 +505,11 @@ Peer.removeRange =
 	{
 		Peer.join(
 			path1,
-			shell.getPath( path1.Chop( 1 ) ).length
+			shell.space.getPath( path1.Chop( 1 ) ).length
 		);
 	}
 
-	len2 = shell.getPath( path1.Chop( 1 ) ).length;
+	len2 = shell.space.getPath( path1.Chop( 1 ) ).length;
 
 	Peer.join(
 		path1,
