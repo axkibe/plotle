@@ -111,8 +111,35 @@ ShortHand.And =
 	function(
 		left,
 		right
+		// or more
 	)
 {
+	var
+		args;
+
+	if( arguments.length > 2 )
+	{
+		args = Array.prototype.slice.call( arguments );
+
+		args.splice(
+			0,
+			2,
+			Code.And.Create(
+				'left',
+					left,
+				'right',
+					right
+			)
+		);
+
+		return (
+			ShortHand.And.apply(
+				this,
+				args
+			)
+		);
+	}
+
 	return (
 		Code.And.Create(
 			'left',
@@ -520,8 +547,35 @@ ShortHand.Or =
 	function(
 		left,
 		right
+		// or more
 	)
 {
+	var
+		args;
+
+	if( arguments.length > 2 )
+	{
+		args = Array.prototype.slice.call( arguments );
+
+		args.splice(
+			0,
+			2,
+			Code.Or.Create(
+				'left',
+					left,
+				'right',
+					right
+			)
+		);
+
+		return (
+			ShortHand.Or.apply(
+				this,
+				args
+			)
+		);
+	}
+
 	return (
 		Code.Or.Create(
 			'left',
@@ -548,8 +602,7 @@ ShortHand.Plus =
 
 	if( arguments.length > 2 )
 	{
-		args =
-			Array.prototype.slice.call( arguments );
+		args = Array.prototype.slice.call( arguments );
 
 		args.splice(
 			0,

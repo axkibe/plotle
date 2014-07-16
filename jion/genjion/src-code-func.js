@@ -355,7 +355,11 @@ Func.prototype.equals =
 		(
 			this.block === obj.block
 			||
-			this.block !== null && this.block.equals( obj.block )
+			this.block !== null
+			&&
+			this.block.equals
+			&&
+			this.block.equals( obj.block )
 		)
 	);
 };

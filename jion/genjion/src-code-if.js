@@ -252,7 +252,11 @@ If.prototype.equals =
 		(
 			this.elsewise === obj.elsewise
 			||
-			this.elsewise !== null && this.elsewise.equals( obj.elsewise )
+			this.elsewise !== null
+			&&
+			this.elsewise.equals
+			&&
+			this.elsewise.equals( obj.elsewise )
 		)
 		&&
 		this.then === obj.then

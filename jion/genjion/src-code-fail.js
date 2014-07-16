@@ -174,7 +174,11 @@ Fail.prototype.equals =
 	return (
 		this.message === obj.message
 		||
-		this.message !== null && this.message.equals( obj.message )
+		this.message !== null
+		&&
+		this.message.equals
+		&&
+		this.message.equals( obj.message )
 	);
 };
 

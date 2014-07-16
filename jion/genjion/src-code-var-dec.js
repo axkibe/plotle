@@ -215,7 +215,11 @@ VarDec.prototype.equals =
 		(
 			this.assign === obj.assign
 			||
-			this.assign !== null && this.assign.equals( obj.assign )
+			this.assign !== null
+			&&
+			this.assign.equals
+			&&
+			this.assign.equals( obj.assign )
 		)
 		&&
 		this.name === obj.name

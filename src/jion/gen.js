@@ -1631,7 +1631,6 @@ Gen.prototype.genCreatorChecks =
 			case 'Item' :
 			case 'Mark' :
 			case 'Object' :
-			case 'Tree' :
 
 				continue;
 		}
@@ -1994,6 +1993,8 @@ Gen.prototype.genCreatorUnchanged =
 			continue;
 		}
 
+		// FUTURE use genAttributeEquals
+
 		switch( attr.type )
 		{
 			case 'Array' : // FIXME
@@ -2004,7 +2005,6 @@ Gen.prototype.genCreatorUnchanged =
 			case 'Number' :
 			case 'Object' :
 			case 'String' :
-			case 'Tree' : // FIXME
 
 				ceq =
 					Equals(
@@ -2942,7 +2942,9 @@ Gen.prototype.genToJSON =
 */
 Gen.prototype.genAttributeEquals =
 	function(
-		name // attribute name
+		name, // attribute name
+		le, // this value expression
+		re  // other value expression
 	)
 {
 	var
@@ -2958,12 +2960,11 @@ Gen.prototype.genAttributeEquals =
 		case 'Mark' : // FIXME
 		case 'Number' :
 		case 'String' :
-		case 'Tree' : // FIXME
 
 			ceq =
 				Equals(
-					This.Dot( attr.assign ),
-					Var( 'obj' ).Dot( attr.assign )
+					le,
+					re
 				);
 
 			break;
@@ -2974,29 +2975,17 @@ Gen.prototype.genAttributeEquals =
 			{
 				ceq =
 					// FIXME, misses equals call
-					Equals(
-						This.Dot( attr.assign ),
-						Var( 'obj' ).Dot( attr.assign )
-					);
+					Equals( le, re );
 			}
 			else
 			{
 				ceq =
 					Or(
-						Equals(
-							This.Dot( attr.assign ),
-							Var( 'obj' ).Dot( attr.assign )
-						),
+						Equals( le, re ),
 						And(
-							Differs(
-								This.Dot( attr.assign ),
-								Null
-							),
-							This.Dot( attr.assign ).Dot( 'equals' ),
-							Call(
-								This.Dot( attr.assign ).Dot( 'equals' ),
-								Var( 'obj' ).Dot( attr.assign )
-							)
+							Differs( le, Null ),
+							le.Dot( 'equals' ),
+							Call( le.Dot( 'equals' ), re )
 						)
 					);
 			}
@@ -3121,7 +3110,12 @@ Gen.prototype.genEquals =
 			continue;
 		}
 
-		ceq = this.genAttributeEquals( name );
+		ceq =
+			this.genAttributeEquals(
+				name,
+				This.Dot( attr.assign ),
+				Var( 'obj' ).Dot( attr.assign )
+			);
 
 		cond =
 			cond === null
@@ -3241,7 +3235,12 @@ Gen.prototype.genAlike =
 				continue;
 			}
 
-			ceq = this.genAttributeEquals( name );
+			ceq =
+				this.genAttributeEquals(
+					name,
+					This.Dot( attr.assign ),
+					Var( 'obj' ).Dot( attr.assign )
+				);
 		
 			cond =
 				cond === null

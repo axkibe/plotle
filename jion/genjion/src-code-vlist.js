@@ -355,7 +355,11 @@ VList.prototype.equals =
 		(
 			this.path === obj.path
 			||
-			this.path !== null && this.path.equals( obj.path )
+			this.path !== null
+			&&
+			this.path.equals
+			&&
+			this.path.equals( obj.path )
 		)
 	);
 };
