@@ -495,9 +495,8 @@ Link.prototype._onUpdate =
 		)
 		{
 			chgX =
-				new Jion.Change(
-					chgs[ a ].chgX.src,
-					chgs[ a ].chgX.trg
+				Jion.Change.CreateFromJSON(
+					chgs[ a ].chgX
 				);
 
 			cid = chgs[ a ].cid;
@@ -731,9 +730,11 @@ Link.prototype.alter =
 		undo;
 
 	result =
-		new Jion.Change( // FIXME create
-			Jion.Sign.CreateFromJSON( src ),
-			Jion.Sign.CreateFromJSON( trg )
+		Jion.Change.Create( // FIXME CreateFromJSON
+			'src',
+				Jion.Sign.CreateFromJSON( src ),
+			'trg',
+				Jion.Sign.CreateFromJSON( trg )
 		).changeTree(
 			this._cSpace
 		);

@@ -17,7 +17,6 @@ var
 | Imports
 */
 var
-	Change,
 	Jion,
 	Jools,
 	MeshMashine,
@@ -176,7 +175,7 @@ IFaceSym.prototype.get =
 */
 IFaceSym.prototype.alter =
 	function(
-		src,
+		src, // FUTURE let this receiver a Change
 		trg
 	)
 {
@@ -184,9 +183,11 @@ IFaceSym.prototype.alter =
 		a,
 		aZ,
 		chgX =
-			new Change(
-				Jion.Sign.CreateFromJSON( src ),
-				Jion.Sign.CreateFromJSON( trg )
+			Jion.Change.Create(
+				'src',
+					Jion.Sign.CreateFromJSON( src ),
+				'trg',
+					Jion.Sign.CreateFromJSON( trg )
 			),
 		changes =
 			this.$changes,

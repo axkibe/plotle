@@ -508,11 +508,10 @@ Server.prototype.loadSpace =
 
 		if ( !Jools.isArray( o.chgX ) )
 		{
+			o.type = 'Change'; // FUTURE this is a hack
+
 			change.chgX =
-				new Jion.Change(
-					o.chgX.src,
-					o.chgX.trg
-				);
+				Jion.Change.CreateFromJSON( o.chgX );
 		}
 		else
 		{
@@ -1360,10 +1359,16 @@ Server.prototype.cmdAlter =
 	)
 {
 	var
+		a,
+		changes,
 		chgX,
 		cid,
 		passhash,
+		result,
 		seq,
+		seqZ,
+		space,
+		spaceName,
 		spaceUser,
 		spaceTag,
 		username;
@@ -1428,26 +1433,18 @@ Server.prototype.cmdAlter =
 		throw Jools.reject( 'cid missing' );
 	}
 
-	var
-		spaceName =
-			spaceUser + ':' + spaceTag;
+	spaceName = spaceUser + ':' + spaceTag;
 
-	var
-		space =
-			this.$spaces[ spaceName ];
+	space = this.$spaces[ spaceName ];
 
 	if( space === undefined )
 	{
 		throw Jools.reject( 'unknown space' );
 	}
 
-	var
-		changes =
-			space.$changes;
+	changes = space.$changes;
 
-	var
-		seqZ =
-			space.$seqZ;
+	seqZ = space.$seqZ;
 
 	if( seq === -1 )
 	{
@@ -1461,7 +1458,7 @@ Server.prototype.cmdAlter =
 
 	// fits the cmd into data structures
 	try {
-		// FIXME
+		// FUTURE
 		if( Jools.isArray( chgX ) )
 		{
 			throw new Error(
@@ -1469,9 +1466,7 @@ Server.prototype.cmdAlter =
 			);
 		}
 
-		chgX =
-			new Jion.Change( chgX.src, chgX.trg );
-
+		chgX = Jion.Change.CreateFromJSON( chgX );
 	}
 	catch( err )
 	{
@@ -1481,12 +1476,13 @@ Server.prototype.cmdAlter =
 	}
 
 	// translates the changes if not most recent
-	for( var a = seq; a < seqZ; a++ )
+	for( a = seq; a < seqZ; a++ )
 	{
-		chgX = MeshMashine.tfxChgX(
-			chgX,
-			changes[a].chgX
-		);
+		chgX =
+			MeshMashine.tfxChgX(
+				chgX,
+				changes[a].chgX
+			);
 
 		if(
 			chgX === null
@@ -1495,8 +1491,10 @@ Server.prototype.cmdAlter =
 		)
 		{
 			return {
-				ok: true,
-				chgX: chgX
+				ok :
+					true,
+				chgX :
+					chgX
 			};
 		}
 	}
@@ -1508,17 +1506,18 @@ Server.prototype.cmdAlter =
 	)
 	{
 		return {
-			ok   : true,
-			chgX : chgX
+			ok :
+				true,
+			chgX :
+				chgX
 		};
 	}
 
 	// applies the changes
-	var
-		result =
-			chgX.changeTree(
-				space.$tree
-			);
+	result =
+		chgX.changeTree(
+			space.$tree
+		);
 
 	space.$tree =
 		result.tree;
@@ -1530,7 +1529,6 @@ Server.prototype.cmdAlter =
 		{
 			cid :
 				cmd.cid,
-
 			chgX :
 				chgX
 		};
@@ -1540,16 +1538,12 @@ Server.prototype.cmdAlter =
 		{
 			_id :
 				seqZ,
-
 			cid :
 				cmd.cid,
-
 			chgX :
 				JSON.parse( JSON.stringify( chgX ) ), // FIXME why copy?
-
 			user :
 				cmd.user,
-
 			date :
 				Date.now()
 		},
@@ -1582,7 +1576,6 @@ Server.prototype.cmdAlter =
 	return {
 		ok :
 			true,
-
 		chgX :
 			chgX
 	};

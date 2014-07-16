@@ -2973,6 +2973,7 @@ Gen.prototype.genAttributeEquals =
 			if( !attr.allowsNull )
 			{
 				ceq =
+					// FIXME, misses equals call
 					Equals(
 						This.Dot( attr.assign ),
 						Var( 'obj' ).Dot( attr.assign )
@@ -2991,6 +2992,7 @@ Gen.prototype.genAttributeEquals =
 								This.Dot( attr.assign ),
 								Null
 							),
+							This.Dot( attr.assign ).Dot( 'equals' ),
 							Call(
 								This.Dot( attr.assign ).Dot( 'equals' ),
 								Var( 'obj' ).Dot( attr.assign )

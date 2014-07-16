@@ -599,6 +599,8 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/jion/change.js',
+		'hasJion',
+			true,
 		'inBundle',
 			true,
 		'inTestPad',

@@ -27,6 +27,47 @@ var
 
 
 /*
+| The jion definition.
+*/
+if( JION )
+{
+	return {
+		name :
+			'Change',
+		unit :
+			'Jion',
+		attributes :
+			{
+				src :
+					{
+						comment :
+							'source signature',
+						json :
+							'true',
+						unit :
+							'Jion',
+						type :
+							'Sign'
+					},
+				trg :
+					{
+						comment :
+							'source signature',
+						json :
+							'true',
+						unit :
+							'Jion',
+						type :
+							'Sign'
+					}
+			},
+		node :
+			true
+	};
+}
+
+
+/*
 | Node includes.
 */
 if( SERVER )
@@ -35,7 +76,8 @@ if( SERVER )
 		require( '../jools/jools' );
 	Jion =
 		{
-			//Change : this
+			Change :
+				require( '../jion/this' )( module ),
 			Path :
 				require( '../jion/path'  ),
 			Sign :
@@ -47,49 +89,8 @@ if( SERVER )
 var
 	Change;
 
-/*
-| Constructor
-*/
 Change =
-Jion.Change =
-	function(
-		src,
-		trg
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 2 )
-/**/	{
-/**/		throw new Error(
-/**/			'argFail'
-/**/		);
-/**/	}
-/**/}
-
-	if( src.constructor === Jion.Sign )
-	{
-		this.src =
-			src;
-	}
-	else
-	{
-		this.src = Jion.Sign.CreateFromJSON( src );
-	}
-
-	if( trg.constructor === Jion.Sign )
-	{
-		this.trg =
-			trg;
-	}
-	else
-	{
-		this.trg = Jion.Sign.CreateFromJSON( trg );
-	}
-
-	Jools.immute( this );
-};
+	Jion.Change;
 
 
 /*
@@ -180,9 +181,11 @@ Change.prototype.invert =
 	}
 
 	r =
-		new Change(
-			this.trg,
-			this.src
+		Change.Create(
+			'src',
+				this.trg,
+			'trg',
+				this.src
 		);
 
 	// caches the inversion for both changies
@@ -227,8 +230,7 @@ Change.prototype.changeTree =
 
 	// executes the op-handler
 	// FIXME make a switch call around this
-	r =
-		this[ this.type ]( tree );
+	r = this[ this.type ]( tree );
 
 	Jools.log(
 		'change',
@@ -292,7 +294,6 @@ Change.prototype.set =
 	)
 {
 	var
-		chg,
 		cm,
 		key,
 		pivot,
@@ -429,29 +430,16 @@ Change.prototype.set =
 		}
 	}
 
-	if(
-		src === this.src
-		&&
-		trg === this.trg
-	)
-	{
-		chg =
-			this;
-	}
-	else
-	{
-		chg =
-			new Change(
-				src,
-				trg
-			);
-	}
-
 	return {
 		tree :
 			tree,
 		chg :
-			chg
+			this.Create(
+				'src',
+					src,
+				'trg',
+					trg
+			)
 	};
 };
 
@@ -517,30 +505,16 @@ Change.prototype.insert =
 			nstr
 		);
 
-	var
-		chg;
-
-	// FIXME use equals
-	if( src === this.src && trg === this.trg )
-	{
-		chg =
-			this;
-	}
-	else
-	{
-		// FIXME create
-		chg =
-			new Change(
-				src,
-				trg
-			);
-	}
-
 	return {
 		tree :
 			tree,
 		chg :
-			chg
+			this.Create(
+				'src',
+					src,
+				'trg',
+					trg
+			)
 	};
 };
 
@@ -556,7 +530,6 @@ Change.prototype.remove =
 	)
 {
 	var
-		chg,
 		cm,
 		nstr,
 		str,
@@ -564,12 +537,11 @@ Change.prototype.remove =
 		trg,
 		val;
 
-	cm =
-		'change.remove';
-	src =
-		this.src;
-	trg =
-		this.trg;
+	cm = 'change.remove';
+
+	src = this.src;
+
+	trg = this.trg;
 
 	Jools.check(
 		src.path.reflect === 'Path',
@@ -577,8 +549,7 @@ Change.prototype.remove =
 		'src.path missing'
 	);
 
-	str =
-		tree.getPath( src.path );
+	str = tree.getPath( src.path );
 
 	if( !Jools.isString( str ) )
 	{
@@ -626,28 +597,16 @@ Change.prototype.remove =
 			nstr
 		);
 
-	if(
-		src === this.src &&
-		trg === this.trg
-	)
-	{
-		chg =
-			this;
-	}
-	else
-	{
-		chg =
-			new Change(
-				src,
-				trg
-			);
-	}
-
 	return {
 		tree :
 			tree,
 		chg :
-			chg
+			this.Create(
+				'src',
+					src,
+				'trg',
+					trg
+			)
 	};
 };
 
@@ -759,32 +718,17 @@ Change.prototype.join =
 			pivot
 		);
 
-	var chg;
-
-	// FIXME make a JION
-	if(
-		src === this.src &&
-		trg === this.trg
-	)
-	{
-		chg =
-			this;
-	}
-	else
-	{
-		chg =
-			new Change(
-				src,
-				trg
-			);
-	}
-
 	// FIXME make a JION
 	return {
 		tree :
 			tree,
 		chg :
-			chg
+			this.Create(
+				'src',
+					src,
+				'trg',
+					trg
+			)
 	};
 };
 
@@ -894,30 +838,17 @@ Change.prototype.split =
 			pivot
 		);
 
-	var
-		chg;
-
-	// FIXME make a proper jion
-	if( src === this.src && trg === this.trg )
-	{
-		chg =
-			this;
-	}
-	else
-	{
-		chg =
-			new Change(
-				src,
-				trg
-			);
-	}
-
 	// FIXME make a proper jion
 	return {
 		tree :
 			tree,
 		chg :
-			chg
+			this.Create(
+				'src',
+					src,
+				'trg',
+					trg
+			)
 	};
 };
 
@@ -933,7 +864,6 @@ Change.prototype.rank =
 	)
 {
 	var
-		chg,
 		cm,
 		key,
 		orank,
@@ -1027,29 +957,19 @@ Change.prototype.rank =
 /**/		}
 /**/	}
 
-		tree =
-			pivot;
-	}
-
-	if( src === this.src && trg === this.trg )
-	{
-		chg =
-			this;
-	}
-	else
-	{
-		chg =
-			new Change(
-				src,
-				trg
-			);
+		tree = pivot;
 	}
 
 	return {
 		tree :
 			tree,
 		chg :
-			chg
+			this.Create(
+				'src',
+					src,
+				'trg',
+					trg
+			)
 	};
 };
 
@@ -1059,8 +979,7 @@ Change.prototype.rank =
 */
 if( SERVER )
 {
-	module.exports =
-		Change;
+	module.exports = Change;
 }
 
 

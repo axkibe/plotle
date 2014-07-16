@@ -321,25 +321,35 @@ var tfxChg =
 	{
 		// FIXME check in ray conditions too if this happens
 		if(
-			( srcX.proc === 'splice' || trgX.proc === 'splice' ) &&
-			( srcX.path.equals( trgX.path ) )
+			(
+				srcX.proc === 'splice'
+				||
+				trgX.proc === 'splice'
+			)
+			&&
+			(
+				srcX.path.equals( trgX.path )
+			)
 		)
 		{
-//			Jools.log(
-//				'tfx',
-//				'splice transformed to equalness'
-//			);
+			// splice transformed to equalness'
 
 			return null;
 		}
 
 
-		return new Change( srcX, trgX );
+		return (
+			Change.Create(
+				'src',
+					srcX,
+				'trg',
+					trgX
+			)
+		);
 	}
 	else if( !srcA && trgA )
 	{
-		ray =
-			new ChangeRay( );
+		ray = new ChangeRay( );
 
 		for(
 			a = 0, aZ = trgX.length;
@@ -349,9 +359,11 @@ var tfxChg =
 		{
 			ray.set(
 				a,
-				new Change(
-					srcX,
-					trgX.get( a )
+				Change.Create(
+					'src',
+						srcX,
+					'trg',
+						trgX.get( a )
 				)
 			);
 		}
@@ -360,8 +372,7 @@ var tfxChg =
 	}
 	else if( srcA && !trgA )
 	{
-		ray =
-			new ChangeRay( );
+		ray = new ChangeRay( );
 
 		for(
 			a = 0, aZ = srcX.length;
@@ -371,9 +382,11 @@ var tfxChg =
 		{
 			ray.set(
 				a,
-				new Change(
-					srcX.get( a ),
-					trgX
+				Change.Create(
+					'src',
+						srcX.get( a ),
+					'trg',
+						trgX
 				)
 			);
 		}
@@ -412,8 +425,7 @@ var tfxChgX =
 
 		case ChangeRay :
 
-			var ray =
-				new ChangeRay( );
+			var ray = new ChangeRay( );
 
 			for(
 				var a = 0, aZ = chgX1.length;

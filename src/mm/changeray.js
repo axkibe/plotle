@@ -81,9 +81,11 @@ ChangeRay =
 		if( !(c instanceof Jion.Change ) )
 		{
 			c =
-				new Jion.Change(
-					a.src,
-					a.trg
+				Jion.Change.Create(
+					'src',
+						a.src,
+					'trg',
+						a.trg
 				);
 		}
 
