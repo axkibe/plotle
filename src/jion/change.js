@@ -1061,6 +1061,66 @@ Change.prototype.tfxSign =
 
 
 /*
+| Transforms a SignRay on a this change
+|
+| This can possibly return a sign ray.
+*/
+Change.prototype.tfxSignRay =
+	function(
+		signray
+	)
+{
+	var
+		a,
+		b,
+		bZ,
+		cx;
+
+	for(
+		a = 0;
+		a < signray.length; // not using aZ on purpose
+		a++
+	)
+	{
+		cx = this.tfxSign( signray.get( a ) );
+
+		if( cx === null )
+		{
+			signray = signray.Remove( a-- );
+
+			continue;
+		}
+
+		switch( cx.reflect )
+		{
+			case 'Sign' :
+
+				signray = signray.Set( a, cx );
+
+				break;
+
+			case 'SignRay' :
+
+				for(
+					b = 0, bZ = cx.length;
+					b < bZ;
+					b++
+				)
+				{
+					signray = signray.Insert( a++, cx.get( b ) );
+				}
+
+				break;
+
+			default :
+
+				throw new Error( );
+		}
+	}
+};
+
+
+/*
 | Transforms a signature on one a split.
 */
 Change.prototype._tfxSignSplit =

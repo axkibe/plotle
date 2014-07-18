@@ -117,54 +117,7 @@ var tfxSign =
 
 			case 'SignRay' :
 
-				for(
-					var a = 0, aZ = signX.length;
-					a < aZ;
-					a++
-				)
-				{
-					var fs = chg.tfxSign( sign[ a ] );
-
-					if( fs === null )
-					{
-						sign.splice(
-							a--,
-							1
-						);
-
-						continue;
-					}
-
-					switch( fs.constructor )
-					{
-						case Sign :
-
-							signX[ a ] = fs;
-
-							break;
-
-						case Array :
-
-							for(
-								var b = 0, bZ = fs.length;
-								b < bZ;
-								b++
-							)
-							{
-								signX.splice(
-									a++,
-									0,
-									fs[ b ]
-								);
-							}
-
-							break;
-
-						default :
-
-							throw new Error( );
-					}
-				}
+				signX = chg.tfxSignRay( signX );
 
 				break;
 
