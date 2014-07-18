@@ -83,9 +83,6 @@ var tfxSign1 =
 		chg
 	)
 {
-	var
-		op;
-
 	if( chg.length !== 1 )
 	{
 		throw new Error( );
@@ -96,18 +93,38 @@ var tfxSign1 =
 		return sign;
 	}
 
-	op = TFXOps[ chg.type ];
-
-	if( !op )
+	switch( chg.type )
 	{
-		throw new Error( );
-	}
+		case 'split' :
 
-	return op(
-		sign,
-		chg
-	);
+			return TFXOps._tfxSignSplit( sign, chg );
+
+		case 'join' :
+
+			return TFXOps._tfxSignJoin( sign, chg );
+
+		case 'rank' :
+
+			return TFXOps._tfxSignRank( sign, chg );
+
+		case 'set' :
+
+			return TFXOps._tfxSignSet( sign, chg );
+
+		case 'insert' :
+
+			return TFXOps._tfxSignInsert( sign, chg );
+
+		case 'remove' :
+
+			return TFXOps._tfxSignRemove( sign, chg );
+
+		default :
+
+			throw new Error( );
+	}
 };
+
 
 /*
 | Transforms a signature on a list of alternations.
@@ -476,7 +493,7 @@ var tfxChgX =
 /*
 | Transforms a signature on one a split.
 */
-TFXOps.split =
+TFXOps._tfxSignSplit =
 	function(
 		sign,
 		chg
@@ -506,10 +523,6 @@ TFXOps.split =
 		sign.at2 === undefined
 	)
 	{
-//		Jools.log(
-//			'tfx',
-//			'split (simple)'
-//		);
 
 		if( sign.at1 < src.at1 )
 		{
@@ -588,7 +601,7 @@ TFXOps.split =
 /*
 | Transforms a signature on a join.
 */
-TFXOps.join =
+TFXOps._tfxSignJoin =
 	function(
 		sign,
 		chg
@@ -654,7 +667,7 @@ TFXOps.join =
 /*
 | Transforms a signature on a rank
 */
-TFXOps.rank =
+TFXOps._tfxSignRank =
 	function(
 		sign,
 		chg
@@ -709,7 +722,7 @@ TFXOps.rank =
 /*
 | Transforms a signature on a join.
 */
-TFXOps.set =
+TFXOps._tfxSignSet =
 	function(
 		sign,
 		chg
@@ -785,7 +798,7 @@ TFXOps.set =
 /*
 | Transforms a signature on an insert.
 */
-TFXOps.insert =
+TFXOps._tfxSignInsert =
 	function(
 		sign,
 		chg
@@ -850,7 +863,7 @@ TFXOps.insert =
 /*
 | Transforms a signature on a remove
 */
-TFXOps.remove =
+TFXOps._tfxSignRemove =
 	function(
 		sign,
 		chg

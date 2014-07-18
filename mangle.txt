@@ -1,3 +1,9 @@
+. _tfxSignInsert
+. _tfxSignJoin
+. _tfxSignRank
+. _tfxSignRemove
+. _tfxSignSet
+. _tfxSignSplit
 . ChangeRay
 . _ray
 > Sign
