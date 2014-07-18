@@ -1,3 +1,9 @@
+. _changeTreeInsert
+. _changeTreeJoin
+. _changeTreeRank
+. _changeTreeRemove
+. _changeTreeSet
+. _changeTreeSplit
 . _tfxSignInsert
 . _tfxSignJoin
 . _tfxSignRank

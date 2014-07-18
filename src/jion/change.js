@@ -230,13 +230,49 @@ Change.prototype.changeTree =
 
 	// executes the op-handler
 	// FIXME make a switch call around this
-	r = this[ this.type ]( tree );
+	switch( this.type )
+	{
+		case 'split' :
 
-	Jools.log(
-		'change',
-		'result',
-			r
-	);
+			r = this._changeTreeSplit( tree );
+
+			break;
+
+		case 'join' :
+
+			r = this._changeTreeJoin( tree );
+
+			break;
+
+		case 'set' :
+
+			r = this._changeTreeSet( tree );
+
+			break;
+
+		case 'insert' :
+
+			r = this._changeTreeInsert( tree );
+
+			break;
+
+		case 'remove' :
+
+			r = this._changeTreeRemove( tree );
+
+			break;
+
+		case 'rank' :
+
+			r = this._changeTreeRank( tree );
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
+
 
 	// if answer is null the change has vaporated
 	if( r === null )
@@ -288,7 +324,7 @@ Change.prototype.get =
 |
 | A new item is inserted or replaces an existing.
 */
-Change.prototype.set =
+Change.prototype._changeTreeSet =
 	function(
 		tree
 	)
@@ -449,7 +485,7 @@ Change.prototype.set =
 |
 | A string is inserted into a string item.
 */
-Change.prototype.insert =
+Change.prototype._changeTreeInsert =
 	function(
 		tree
 	)
@@ -466,7 +502,7 @@ Change.prototype.insert =
 	cm = 'change.insert';
 
 	src = this.src;
-	
+
 	trg = this.trg;
 
 	Jools.check(
@@ -524,7 +560,7 @@ Change.prototype.insert =
 |
 | A part of a string item is removed.
 */
-Change.prototype.remove =
+Change.prototype._changeTreeRemove =
 	function(
 		tree
 	)
@@ -616,7 +652,7 @@ Change.prototype.remove =
 |
 | Two texts are joined into one.
 */
-Change.prototype.join =
+Change.prototype._changeTreeJoin =
 	function(
 		tree
 	)
@@ -738,7 +774,7 @@ Change.prototype.join =
 |
 | A text is split into two.
 */
-Change.prototype.split =
+Change.prototype._changeTreeSplit =
 	function(
 		tree
 	)
@@ -858,7 +894,7 @@ Change.prototype.split =
 |
 | A tree's rank is changed.
 */
-Change.prototype.rank =
+Change.prototype._changeTreeRank =
 	function(
 		tree
 	)
@@ -971,6 +1007,548 @@ Change.prototype.rank =
 					trg
 			)
 	};
+};
+
+
+/*
+| Transforms a signature on a this change
+|
+| This can possibly return an array of signs.
+*/
+Change.prototype.tfxSign =
+	function(
+		sign
+	)
+{
+	if( sign.path === undefined )
+	{
+		return sign;
+	}
+
+	switch( this.type )
+	{
+		case 'split' :
+
+			return this._tfxSignSplit( sign );
+
+		case 'join' :
+
+			return this._tfxSignJoin( sign );
+
+		case 'rank' :
+
+			return this._tfxSignRank( sign );
+
+		case 'set' :
+
+			return this._tfxSignSet( sign );
+
+		case 'insert' :
+
+			return this._tfxSignInsert( sign );
+
+		case 'remove' :
+
+			return this._tfxSignRemove( sign );
+
+		default :
+
+			throw new Error( );
+	}
+};
+
+
+/*
+| Transforms a signature on one a split.
+*/
+Change.prototype._tfxSignSplit =
+	function(
+		sign
+	)
+{
+	var
+		src,
+		trg;
+
+	src = this.src;
+
+	trg = this.trg;
+
+	// src.path -- the line splitted
+	// trg.path -- the new line
+
+	if(
+		!src.path ||
+		!src.path.equals( sign.path )
+	)
+	{
+		return sign;
+	}
+
+	// FIXME form ranks
+	// simpler case signature is only one point
+	if(
+		sign.at2 === undefined
+	)
+	{
+
+		if( sign.at1 < src.at1 )
+		{
+			return sign;
+		}
+
+		return (
+			sign.Create(
+				'path',
+					trg.path,
+				'at1',
+					sign.at1 - src.at1
+			)
+		);
+	}
+
+	// A more complicated signature is affected.
+	//                   ............
+	// Span                  mmmmm
+	// Splits cases:      1    2    3
+
+	if( sign.at2 <= src.at1 )
+	{
+		return sign;
+	}
+
+	if( sign.at1 >= src.at1 )
+	{
+		// signature goes into splitted line instead
+		return (
+			sign.Create(
+				'path',
+					trg.path,
+				'at1',
+					sign.at1 - src.at1,
+				'at2',
+					sign.at2 - src.at1
+			)
+		);
+	}
+
+	// the signature is splited into a part that stays and one that goes to next line.
+
+	return [
+		sign.Create(
+			'at2',
+				src.at1
+		),
+
+		sign.Create(
+			'path',
+				trg.path,
+			'at1',
+				0,
+			'at2',
+				sign.at2 - src.at1
+		)
+	];
+};
+
+/*
+| Transforms a signature on a join.
+*/
+Change.prototype._tfxSignJoin =
+	function(
+		sign
+	)
+{
+	var
+		src,
+		trg;
+
+	src = this.src;
+
+	trg = this.trg;
+
+	// trg.path is the line that got the join
+	// src.path is the line that was removed
+
+	if(
+		!src.path ||
+		!sign.path.equals( src.path )
+	)
+	{
+		return sign;
+	}
+
+	if( !trg.path )
+	{
+		throw new Error( );
+	}
+
+	// FIXME tfx ranks
+
+//	Jools.log(
+//		'tfx',
+//		'join',
+//		sign
+//	);
+
+	if( sign.at2 === undefined )
+	{
+		return (
+			sign.Create(
+				'path',
+					trg.path,
+				'at1',
+					sign.at1 + trg.at1
+			)
+		);
+	}
+	else
+	{
+		return (
+			sign.Create(
+				'path',
+					trg.path,
+				'at1',
+					sign.at1 + trg.at1,
+				'at2',
+					sign.at2 + trg.at1
+			)
+		);
+	}
+};
+
+/*
+| Transforms a signature on a rank
+*/
+Change.prototype._tfxSignRank =
+	function(
+		sign
+	)
+{
+	var
+		src,
+		trg;
+
+	src = this.src;
+
+	trg = this.trg;
+
+	if(
+		!src.path ||
+		!src.path.equals( sign.path )
+	)
+	{
+		return sign;
+	}
+
+	if( sign.rank === undefined )
+	{
+		return sign;
+	}
+
+	if(
+		src.rank <= sign.rank &&
+		trg.rank > sign.rank
+	)
+	{
+		return (
+			sign.Create(
+				'rank',
+					sign.rank - 1
+			)
+		);
+	}
+	else if( src.rank > sign.rank && trg.rank <= sign.rank )
+	{
+		return (
+			sign.Create(
+				'rank',
+					sign.rank + 1
+			)
+		);
+	}
+};
+
+
+
+/*
+| Transforms a signature on a join.
+*/
+Change.prototype._tfxSignSet =
+	function(
+		sign
+	)
+{
+	var
+		src,
+		trg;
+
+	src = this.src;
+
+	trg = this.trg;
+
+	if(
+		sign.rank === undefined
+		||
+		trg.rank === undefined
+		||
+		!trg.path
+		||
+		!trg.path.subPathOf( sign.path, - 1 )
+	)
+	{
+		return sign;
+	}
+
+	if( trg.rank === null )
+	{
+		if( sign.rank >= trg.rank )
+		{
+			sign =
+				sign.Create(
+					'rank',
+						sign.rank - 1
+				);
+		}
+	}
+	else if( src.rank === null )
+	{
+		if( sign.rank >= src.rank )
+		{
+			sign =
+				sign.Create(
+					'rank',
+						sign.rank + 1
+				);
+		}
+	}
+	else
+	{
+		if( src.rank <= sign.rank && trg.rank > sign.rank )
+		{
+			sign =
+				sign.Create(
+					'rank',
+						sign.rank - 1
+				);
+		}
+		else if( src.rank > sign.rank && trg.rank <= sign.rank )
+		{
+			sign =
+				sign.Create(
+					'rank',
+						sign.rank + 1
+				);
+		}
+	}
+
+	return sign;
+};
+
+
+/*
+| Transforms a signature on an insert.
+*/
+Change.prototype._tfxSignInsert =
+	function(
+		sign
+	)
+{
+	var
+		src,
+		trg;
+
+	src = this.src;
+
+	trg = this.trg;
+
+	if(
+		!trg.path ||
+		!trg.path.equals( sign.path )
+	)
+	{
+		return sign;
+	}
+
+	if(
+		trg.at1 === undefined
+		||
+		trg.at2 === undefined
+	)
+	{
+		throw new Error( );
+	}
+
+	if( sign.at1 < trg.at1 )
+	{
+		return sign;
+	}
+
+	var len =
+		src.val.length;
+
+	if( sign.at2 !== undefined )
+	{
+		return (
+			sign.Create(
+				'at1',
+					sign.at1 + len,
+				'at2',
+					sign.at2 + len
+			)
+		);
+	}
+	else
+	{
+		return (
+			sign.Create(
+				'at1',
+					sign.at1 + len
+			)
+		);
+	}
+};
+
+
+/*
+| Transforms a signature on a remove
+*/
+Change.prototype._tfxSignRemove =
+	function(
+		sign
+	)
+{
+	var
+		src;
+
+	src = this.src;
+
+	if(
+		!src.path ||
+		!src.path.equals(sign.path)
+	)
+	{
+		return sign;
+	}
+
+	if(
+		src.at1 === undefined
+		||
+		src.at2 === undefined
+	)
+	{
+		throw new Error( );
+	}
+
+	var len = src.at2 - src.at1;
+
+	// simpler case signature is only one point
+	if( sign.at2 === undefined )
+	{
+		// src (removed span)      ######
+		// sign, case0:        +   '    '      (sign to left,  no effect)
+		// sign, case1:            ' +  '      (sign in middle, move to left)
+		// sign, case2:            '    ' +    (sign to right, substract)
+
+		if( sign.at1 <= src.at1 )
+		{
+			return sign;
+		}
+
+		if( sign.at1 <= src.at2 )
+		{
+			return (
+				sign.Create(
+					'at1',
+						src.at1
+				)
+			);
+		}
+
+		return (
+			sign.Create(
+				'at1',
+				sign.at1 - len
+			)
+		);
+	}
+
+	// More complicated signature is affected.
+	// Supposedly its a remove as well.
+	//
+	//                     ............
+	// src (removed span)      ######
+	// sign, case0:        +++ '    '      (sign to left,  no effect)
+	// sign, case1:            '    ' +++  (sign to right, move to left)
+	// sign, case2:          +++++++++     (sign splitted into two)
+	// sign, case3:            ' ++ '      (sign completely removed)
+	// sign, case4:          ++++   '      (part of sign removed)
+	// sign, case5:            '   ++++    (part of sign removed)
+
+	if( sign.at2 <= src.at1 )
+	{
+		return sign;
+	}
+	else if( sign.at1 >= src.at2 )
+	{
+		return (
+			sign.Create(
+				'at1',
+					sign.at1 - len,
+				'at2',
+					sign.at2 - len
+				)
+		);
+	}
+	else if(
+		sign.at1 < src.at1 &&
+		sign.at2 > src.at2
+	)
+	{
+		return (
+			sign.Create(
+				'at2',
+					sign.at2 - len
+			)
+		);
+	}
+	else if(
+		sign.at1 >= src.at1
+		&&
+		sign.at2 <= src.at2
+	)
+	{
+		return null;
+	}
+	else if(
+		sign.at1 < src.at1
+		&&
+		sign.at2 <= src.at2
+	)
+	{
+		return (
+			sign.Create(
+				'at2',
+					src.at1
+			)
+		);
+	}
+	else if(
+		sign.at1 <= src.at2 &&
+		sign.at2 > src.at2
+	)
+	{
+		return (
+			sign.Create(
+				'at2',
+				src.at2
+			)
+		);
+	}
+	else
+	{
+		throw new Error( );
+	}
 };
 
 
