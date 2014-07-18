@@ -2,7 +2,7 @@
 | The causal consistency / operation transformation engine for meshcraft.
 |
 | FIXME move the tfxs to Sign/Change
-| 
+|
 | Authors: Axel Kittenberger
 */
 
@@ -83,6 +83,9 @@ var tfxSign1 =
 		chg
 	)
 {
+	var
+		op;
+
 	if( chg.length !== 1 )
 	{
 		throw new Error( );
@@ -93,19 +96,16 @@ var tfxSign1 =
 		return sign;
 	}
 
-	var
-		op = TFXOps[ chg.type ];
+	op = TFXOps[ chg.type ];
 
 	if( !op )
 	{
 		throw new Error( );
 	}
 
-	// FIXME give, chg.
 	return op(
 		sign,
-		chg.src,
-		chg.trg
+		chg
 	);
 };
 
@@ -479,10 +479,16 @@ var tfxChgX =
 TFXOps.split =
 	function(
 		sign,
-		src,
-		trg
+		chg
 	)
 {
+	var
+		src,
+		trg;
+
+	src = chg.src;
+	trg = chg.trg;
+
 	// src.path -- the line splitted
 	// trg.path -- the new line
 
@@ -585,10 +591,16 @@ TFXOps.split =
 TFXOps.join =
 	function(
 		sign,
-		src,
-		trg
+		chg
 	)
 {
+	var
+		src,
+		trg;
+
+	src = chg.src;
+	trg = chg.trg;
+
 	// trg.path is the line that got the join
 	// src.path is the line that was removed
 
@@ -645,10 +657,17 @@ TFXOps.join =
 TFXOps.rank =
 	function(
 		sign,
-		src,
-		trg
+		chg
 	)
 {
+	var
+		src,
+		trg;
+
+	src = chg.src;
+
+	trg = chg.trg;
+
 	if(
 		!src.path ||
 		!src.path.equals( sign.path )
@@ -661,11 +680,6 @@ TFXOps.rank =
 	{
 		return sign;
 	}
-
-//	Jools.log(
-//		'tfx',
-//		'rank'
-//	);
 
 	if(
 		src.rank <= sign.rank &&
@@ -698,10 +712,17 @@ TFXOps.rank =
 TFXOps.set =
 	function(
 		sign,
-		src,
-		trg
+		chg
 	)
 {
+	var
+		src,
+		trg;
+
+	src = chg.src;
+
+	trg = chg.trg;
+
 	if(
 		sign.rank === undefined
 		||
@@ -714,11 +735,6 @@ TFXOps.set =
 	{
 		return sign;
 	}
-
-//	Jools.log(
-//		'tfx',
-//		'set'
-//	);
 
 	if( trg.rank === null )
 	{
@@ -772,10 +788,17 @@ TFXOps.set =
 TFXOps.insert =
 	function(
 		sign,
-		src,
-		trg
+		chg
 	)
 {
+	var
+		src,
+		trg;
+
+	src = chg.src;
+
+	trg = chg.trg;
+
 	if(
 		!trg.path ||
 		!trg.path.equals( sign.path )
@@ -783,11 +806,6 @@ TFXOps.insert =
 	{
 		return sign;
 	}
-
-//	Jools.log(
-//		'tfx',
-//		'insert'
-//	);
 
 	if(
 		trg.at1 === undefined
@@ -835,10 +853,14 @@ TFXOps.insert =
 TFXOps.remove =
 	function(
 		sign,
-		src
-		// trg
+		chg
 	)
 {
+	var
+		src;
+
+	src = chg.src;
+
 	if(
 		!src.path ||
 		!src.path.equals(sign.path)
