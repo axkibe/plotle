@@ -53,6 +53,8 @@ var
 		{
 			Change :
 				require( '../jion/change' ),
+			ChangeRay :
+				require( '../jion/change-ray' ),
 			Path :
 				require( '../jion/path' ),
 		},
@@ -516,7 +518,7 @@ Server.prototype.loadSpace =
 		else
 		{
 			change.chgX =
-				new MeshMashine.ChangeRay( o.chgX );
+				Jion.ChangeRay.CreateFromJSON( o.chgX );
 		}
 
 		space.$seqZ++;

@@ -36,16 +36,14 @@ var
 */
 if( SERVER )
 {
-	ChangeRay =
-		require( './changeray' );
-
 	Jools =
 		require( '../jools/jools' );
-
 	Jion =
 		{
 			Change :
 				require( '../jion/change' ),
+			ChangeRay :
+				require( '../jion/change-ray' ),
 			Sign :
 				require( '../jion/sign' )
 		};
@@ -266,56 +264,45 @@ var tfxChg =
 		chgX
 	)
 {
-
-//	Jools.log(
-//		'tfx',
-//		'tfxChg',
-//		chg,
-//		chgX
-//	);
+	var
+		a,
+		aZ,
+		ray,
+		srcA,
+		srcX,
+		trgA,
+		trgX,
+		y;
 
 	if( chg.constructor !== Change )
 	{
 		throw new Error( );
 	}
 
-	var srcX =
+	srcX =
 		tfxSign(
 			chg.src,
 			chgX
 		);
 
-	var trgX =
+	trgX =
 		tfxSign(
 			chg.trg,
 			chgX
 		);
 
 	if(
-		srcX === null ||
+		srcX === null
+		||
 		trgX === null
 	)
 	{
-//		Jools.log(
-//			'tfx',
-//			'transformed to null'
-//		);
-
 		return null;
 	}
 
-	var
-		a,
+	srcA = Jools.isArray( srcX );
 
-		aZ,
-
-		ray,
-
-		srcA =
-			Jools.isArray( srcX ),
-
-		trgA =
-			Jools.isArray( trgX );
+	trgA = Jools.isArray( trgX );
 
 	if( !srcA && !trgA )
 	{
@@ -349,7 +336,7 @@ var tfxChg =
 	}
 	else if( !srcA && trgA )
 	{
-		ray = new ChangeRay( );
+		y = [ ];
 
 		for(
 			a = 0, aZ = trgX.length;
@@ -357,22 +344,25 @@ var tfxChg =
 			a++
 		)
 		{
-			ray.set(
-				a,
+			y[ a ] =
 				Change.Create(
 					'src',
 						srcX,
 					'trg',
 						trgX.get( a )
-				)
-			);
+				);
 		}
 
-		return ray;
+		return (
+			ChangeRay.Create(
+				'array',
+					y
+			)
+		);
 	}
 	else if( srcA && !trgA )
 	{
-		ray = new ChangeRay( );
+		y = [ ];
 
 		for(
 			a = 0, aZ = srcX.length;
@@ -391,14 +381,19 @@ var tfxChg =
 			);
 		}
 
-		return ray;
+		return (
+			ChangeRay.Create(
+				'array',
+					y
+			)
+		);
 	}
 	else
 	{
 		throw new Error( );
 	}
-
 };
+
 
 /*
 | Transforms a change(ray) upon a change(ray).
@@ -409,6 +404,14 @@ var tfxChgX =
 		chgX2
 	)
 {
+	var
+		a,
+		aZ,
+		b,
+		bZ,
+		rX,
+		y;
+
 	if( chgX1 === null )
 	{
 		return null;
@@ -418,40 +421,47 @@ var tfxChgX =
 	{
 		case Change :
 
-			return tfxChg(
-				chgX1,
-				chgX2
+			return (
+				tfxChg(
+					chgX1,
+					chgX2
+				)
 			);
 
 		case ChangeRay :
 
-			var ray = new ChangeRay( );
+			y = [ ];
 
 			for(
-				var a = 0, aZ = chgX1.length;
+				a = 0, aZ = chgX1.length;
 				a < aZ;
 				a++
 			)
 			{
-				var rX =
+				rX =
 					tfxChg(
 						chgX1[ a ],
 						chgX2
 					);
 
 				for(
-					var b = 0, bZ = rX.length;
+					b = 0, bZ = rX.length;
 					b < bZ;
 					b++
 				)
 				{
-					ray.push(
+					y.push(
 						rX.get( b )
 					);
 				}
 			}
 
-			return ray;
+			return (
+				ChangeRay.create(
+					'array',
+						y
+				)
+			);
 
 		default :
 

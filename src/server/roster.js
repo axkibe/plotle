@@ -608,8 +608,12 @@ module.exports =
 	),
 	Resource.Create(
 		'filePath',
-			'src/mm/changeray.js',
+			'src/jion/change-ray.js',
+		'hasJion',
+			true,
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	Resource.Create(

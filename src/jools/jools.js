@@ -517,14 +517,17 @@ Jools.lazyValue =
 		proto,
 		key,
 		{
-			// this clever overriding does not work in IE9 :-( or Android 2.2 Browser
+			// this clever overriding does not work in IE9 :-(
+			// or Android 2.2 Browser
 			// get : function() { return fixate(this, key, getter.call(this)); },
 
 			get : function( )
 			{
 				var
-					ckey =
-						'_lazy_' + key;
+					ckey;
+
+				ckey =
+					'_lazy_' + key;
 
 				if( this[ ckey ] !== undefined )
 				{

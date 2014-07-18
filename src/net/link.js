@@ -17,7 +17,6 @@ Net = Net || { };
 | Imports
 */
 var
-	ChangeRay,
 	config,
 	Jion,
 	Jools,
@@ -477,7 +476,7 @@ Link.prototype._onUpdate =
 
 	chgs = reply.chgs;
 
-	report = new ChangeRay( ); // FIXME create
+	report = Jion.ChangeRay.Create( );
 
 	gotOwnChgs = false;
 
