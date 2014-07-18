@@ -43,7 +43,7 @@ if( JION )
 				'array' :
 				{
 					comment :
-						'the ajax path',
+						'the array',
 					type :
 						'Object',
 					assign :

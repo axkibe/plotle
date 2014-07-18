@@ -1,3 +1,4 @@
+. SignRay
 . _changeTreeInsert
 . _changeTreeJoin
 . _changeTreeRank

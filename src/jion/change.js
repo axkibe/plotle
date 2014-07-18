@@ -81,6 +81,8 @@ if( SERVER )
 			Path :
 				require( '../jion/path'  ),
 			Sign :
+				require( '../jion/sign'  ),
+			SignRay :
 				require( '../jion/sign'  )
 		};
 }
@@ -1013,7 +1015,7 @@ Change.prototype._changeTreeRank =
 /*
 | Transforms a signature on a this change
 |
-| This can possibly return an array of signs.
+| This can possibly return a sign ray.
 */
 Change.prototype.tfxSign =
 	function(
@@ -1134,21 +1136,27 @@ Change.prototype._tfxSignSplit =
 
 	// the signature is splited into a part that stays and one that goes to next line.
 
-	return [
-		sign.Create(
-			'at2',
-				src.at1
-		),
-
-		sign.Create(
-			'path',
-				trg.path,
-			'at1',
-				0,
-			'at2',
-				sign.at2 - src.at1
+	return (
+		Jion.SignRay.Create(
+			'array',
+				[
+					sign.Create(
+						'at2',
+							src.at1
+					),
+					sign.Create(
+						'path',
+							trg.path,
+						'at1',
+							0,
+						'at2',
+							sign.at2 - src.at1
+					)
+				],
+			'_sliced',
+				true
 		)
-	];
+	);
 };
 
 /*

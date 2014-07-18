@@ -10,6 +10,7 @@ module.exports =
 			'src/jion/change-ray.js',
 			'src/jion/path.js',
 			'src/jion/sign.js',
+			'src/jion/sign-ray.js',
 			'src/server/resource.js',
 			'src/visual/doc.js',
 			'src/visual/label.js',

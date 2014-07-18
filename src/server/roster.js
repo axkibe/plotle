@@ -16,7 +16,7 @@
 */
 var
 	Resource;
-	
+
 Resource = require( './resource' );
 
 
@@ -589,6 +589,16 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/jion/sign.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.Create(
+		'filePath',
+			'src/jion/sign-ray.js',
 		'hasJion',
 			true,
 		'inBundle',

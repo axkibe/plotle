@@ -67,17 +67,10 @@ var tfxSign =
 		chgX
 	)
 {
-//	Jools.log(
-//		'tfx',
-//		'tfxSign',
-//		sign,
-//		chgX
-//	);
-
-	switch( chgX.constructor )
+	switch( chgX.reflect )
 	{
-		case Change  :
-		case ChangeRay :
+		case 'Change' :
+		case 'ChangeRay' :
 
 			break;
 
@@ -86,15 +79,13 @@ var tfxSign =
 			throw new Error( );
 	}
 
-	if( arguments.length !== 2 )
-	{
-		throw new Error( );
-	}
-
-	if( sign.constructor !== Sign )
-	{
-		throw new Error( );
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( sign.reflect !== 'Sign' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	if(
 		sign.path === undefined
@@ -115,16 +106,16 @@ var tfxSign =
 	{
 		var chg = chgX.get( t );
 
-		switch( signX.constructor )
+		switch( signX.reflect )
 		{
 
-			case Sign :
+			case 'Sign' :
 
 				signX = chg.tfxSign( signX );
 
 				break;
 
-			case Array :
+			case 'SignRay' :
 
 				for(
 					var a = 0, aZ = signX.length;
@@ -148,8 +139,7 @@ var tfxSign =
 					{
 						case Sign :
 
-							signX[ a ] =
-								fs;
+							signX[ a ] = fs;
 
 							break;
 
@@ -183,12 +173,6 @@ var tfxSign =
 				throw new Error( );
 		}
 	}
-
-//	Jools.log(
-//		'tfx',
-//		'out',
-//		signX
-//	);
 
 	return signX;
 };
@@ -238,9 +222,9 @@ var tfxChg =
 		return null;
 	}
 
-	srcA = Jools.isArray( srcX );
+	srcA = srcX.reflect === 'SignRay';
 
-	trgA = Jools.isArray( trgX );
+	trgA = trgX.reflect === 'SignRay';
 
 	if( !srcA && !trgA )
 	{
