@@ -104,27 +104,7 @@ var tfxSign =
 		t++
 	)
 	{
-		var chg = chgX.get( t );
-
-		switch( signX.reflect )
-		{
-
-			case 'Sign' :
-
-				signX = chg.tfxSign( signX );
-
-				break;
-
-			case 'SignRay' :
-
-				signX = chg.tfxSignRay( signX );
-
-				break;
-
-			default :
-
-				throw new Error( );
-		}
+		signX = chgX.get( t ).tfxSignX( signX );
 	}
 
 	return signX;

@@ -1121,6 +1121,34 @@ Change.prototype.tfxSignRay =
 
 
 /*
+| Transforms a Sign or SignRay on a this change.
+|
+| This can possibly return a Sign or SignRay.
+*/
+Change.prototype.tfxSignX =
+	function(
+		signX
+	)
+{
+	switch( signX.reflect )
+	{
+
+		case 'Sign' :
+
+			return this.tfxSign( signX );
+
+		case 'SignRay' :
+
+			return this.tfxSignRay( signX );
+
+		default :
+
+			throw new Error( );
+	}
+};
+
+
+/*
 | Transforms a signature on one a split.
 */
 Change.prototype._tfxSignSplit =
