@@ -1,3 +1,4 @@
+. tfxSignX
 . Insert
 . tfxSignRay
 . SignRay
@@ -140,7 +141,6 @@
 . _$fontWatch
 . _$formJockey
 . _$hover
-. _$invert
 . _$lastSpecialKey
 . _$mode
 . _$moveToButton
@@ -181,7 +181,6 @@
 . _handles
 . _icons
 . _init
-. _invert
 . _isActiveButton
 . _isSection
 . _json

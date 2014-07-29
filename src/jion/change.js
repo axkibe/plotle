@@ -167,45 +167,29 @@ Jools.lazyValue(
 
 /*
 | Returns the inversion to this change.
-| FIXME use lazyValue
 | FIXME call it Invert
 */
-Change.prototype.invert =
+Jools.lazyValue(
+	Change.prototype,
+	'Invert',
 	function( )
-{
-	var
-		r;
-
-	// checks if the inversion is cached.
-	if( this._invert !== undefined )
 	{
-		return this._invert;
-	}
+		var
+			r;
 
-	r =
-		Change.Create(
-			'src',
+		r =
+			Change.Create(
+				'src',
 				this.trg,
-			'trg',
-				this.src
-		);
+				'trg',
+					this.src
+			);
 
-	// caches the inversion for both changies
+		// TODO ahreadValue
 
-	Jools.innumerable(
-		this,
-		'_invert',
-		r
-	);
-
-	Jools.innumerable(
-		r,
-		'_invert',
-		this
-	);
-
-	return r;
-};
+		return r;
+	}
+);
 
 
 /*

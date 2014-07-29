@@ -1,5 +1,5 @@
 /*
-| An array of changes to a tree.
+| An array of signs.
 |
 | Authors: Axel Kittenberger
 */
@@ -35,7 +35,7 @@ if( JION )
 {
 	return {
 		name :
-			'ChangeRay',
+			'SignRay',
 		unit :
 			'Jion',
 		attributes :
@@ -84,23 +84,24 @@ if( SERVER )
 
 	Jion =
 		{
-			Change :
-				require( '../jion/change' ),
-			ChangeRay :
+			Sign :
+				require( '../jion/sign' ),
+			SignRay :
 				require( '../jion/this' )( module )
 		};
 }
 
 
 var
-	ChangeRay;
+	SignRay;
 
-ChangeRay = Jion.ChangeRay;
+SignRay = Jion.SignRay;
+
 
 /*
 | Initializer.
 */
-ChangeRay.prototype._init =
+SignRay.prototype._init =
 	function(
 		array,
 		_sliced
@@ -135,50 +136,11 @@ ChangeRay.prototype._init =
 };
 
 
-/*
-| Returns a change ray with inverted changes.
-*/
-Jools.lazyValue(
-	ChangeRay.prototype,
-	'Invert',
-	function( )
-	{
-		var
-			a,
-			aZ,
-			inv,
-			rc;
-
-		rc = [ ];
-
-		for(
-			a = 0, aZ = this.length;
-			a < aZ;
-			a++
-		)
-		{
-			rc[ a ] = this._ray[ a ].Invert;
-		}
-
-		inv =
-			ChangeRay.Create(
-				'array',
-					rc,
-				'_sliced',
-					true
-			);
-
-		// TODO aheadValue on inv.
-
-		return inv;
-	}
-);
-
 
 /*
 | Appends a change to the change ray.
 */
-ChangeRay.prototype.Append =
+SignRay.prototype.Append =
 	function(
 		chg
 	)
@@ -191,7 +153,7 @@ ChangeRay.prototype.Append =
 	rc.push( chg );
 
 	return (
-		ChangeRay.Create(
+		SignRay.Create(
 			'array',
 				rc,
 			'_sliced',
@@ -205,7 +167,7 @@ ChangeRay.prototype.Append =
 | Returns the length of the changeray
 */
 Jools.lazyValue(
-	ChangeRay.prototype,
+	SignRay.prototype,
 	'length',
 	function( )
 	{
@@ -217,7 +179,7 @@ Jools.lazyValue(
 /*
 | Gets one change.
 */
-ChangeRay.prototype.get =
+SignRay.prototype.get =
 	function(
 		idx
 	)
@@ -227,12 +189,12 @@ ChangeRay.prototype.get =
 
 
 /*
-| Returns a ChangeRay with one element altered.
+| Returns a SignRay with one element altered.
 */
-ChangeRay.prototype.Set =
+SignRay.prototype.Set =
 	function(
 		idx,
-		chg
+		sign
 	)
 {
 	var
@@ -240,10 +202,10 @@ ChangeRay.prototype.Set =
 
 	rc = this._ray.slice( );
 
-	rc[ idx ] = chg;
+	rc[ idx ] = sign;
 
 	return (
-		ChangeRay.Create(
+		SignRay.Create(
 			'array',
 				rc,
 			'_sliced',
@@ -253,61 +215,55 @@ ChangeRay.prototype.Set =
 };
 
 
-
 /*
-| Performes this change-ray on a tree.
-|
-| FIXME trace if a signle change has changed and create
-| a new array only then
+| Returns a SignRay with one element removed.
 */
-ChangeRay.prototype.changeTree =
+SignRay.prototype.Remove =
 	function(
-		tree,
-		universe
+		idx
 	)
 {
-	// the ray with the changes applied
 	var
-		chg,
-		cray,
-		cr;
+		rc;
 
-	cray = [ ];
+	rc = this._ray.slice( );
 
-	// iterates through the change ray
-	for(
-		var a = 0, aZ = this.length;
-		a < aZ;
-		a++
+	rc.splice( idx, 1 );
+
+	return (
+		SignRay.Create(
+			'array',
+				rc,
+			'_sliced',
+				true
+		)
+	);
+};
+
+
+/*
+| Returns a SignRay with one element inserted.
+*/
+SignRay.prototype.Insert =
+	function(
+		idx,
+		sign
 	)
-	{
-		chg = this.get( a ),
+{
+	var
+		rc;
 
-		cr =
-			chg.changeTree(
-				tree,
-				universe
-			);
+	rc = this._ray.slice( );
 
-		// the tree returned by op-handler is the new tree
-		tree = cr.tree;
+	rc.splice( idx, 0, sign );
 
-		cray.push( cr.chg );
-	}
-
-	// FUTURE make a "changeResult" jion.
-	return Jools.immute(
-		{
-			tree :
-				tree,
-			chgX :
-				ChangeRay.Create(
-					'array',
-						cray,
-					'_sliced',
-						true
-				)
-		}
+	return (
+		SignRay.Create(
+			'array',
+				rc,
+			'_sliced',
+				true
+		)
 	);
 };
 
@@ -317,7 +273,7 @@ ChangeRay.prototype.changeTree =
 */
 if( SERVER )
 {
-	module.exports = ChangeRay;
+	module.exports = SignRay;
 }
 
 }( ) );

@@ -861,8 +861,7 @@ Link.prototype.undo =
 		return;
 	}
 
-	chgX =
-		this._undo.pop( ).chgX.invert( ); // XXX
+	chgX = this._undo.pop( ).chgX.Invert; // XXX
 
 	result = chgX.changeTree( this._cSpace );
 
@@ -924,7 +923,7 @@ Link.prototype.redo =
 		return;
 	}
 
-	chgX = this._redo.pop( ).chgX.invert( ); // XXX
+	chgX = this._redo.pop( ).chgX.Invert; // XXX
 
 	result = chgX.changeTree( this._cSpace );
 
