@@ -62,8 +62,6 @@ var
 		require( '../jools/jools' ),
 	MaxAge =
 		require( './max-age' ),
-	MeshMashine =
-		require( '../mm/meshmashine' ),
 	mongodb =
 		require( 'mongodb' ),
 	PostProcessor =
@@ -1481,10 +1479,7 @@ Server.prototype.cmdAlter =
 	for( a = seq; a < seqZ; a++ )
 	{
 		chgX =
-			MeshMashine.tfxChgX(
-				chgX,
-				changes[a].chgX
-			);
+			chgX.TransformChangeX( changes[a].chgX );
 
 		if(
 			chgX === null
@@ -2862,7 +2857,7 @@ Server.prototype.requestListener =
 
 
 /*
-| Handles ajax requests to the MeshMashine.
+| Handles ajax requests.
 */
 Server.prototype.webAjax =
 	function(

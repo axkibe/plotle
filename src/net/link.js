@@ -20,7 +20,6 @@ var
 	config,
 	Jion,
 	Jools,
-	MeshMashine,
 	shell,
 	system,
 	Visual;
@@ -535,11 +534,7 @@ Link.prototype._onUpdate =
 
 				if( u.seq < seq + a )
 				{
-					tfxChgX =
-						MeshMashine.tfxChgX(
-							u.chgX,
-							chgX
-						);
+					tfxChgX = u.chgX.TransformChangeX( chgX );
 
 					// the change vanished by transformation
 					if( tfxChgX === null )
@@ -576,11 +571,7 @@ Link.prototype._onUpdate =
 
 				if( u.seq < seq + a )
 				{
-					tfxChgX =
-						MeshMashine.tfxChgX(
-							u.chgX,
-							chgX
-						);
+					tfxChgX = u.chgX.transformChangeX( chgX );
 
 					// the change vanished by transformation
 					if( tfxChgX === null )
@@ -598,10 +589,7 @@ Link.prototype._onUpdate =
 							cid :
 								u.cid,
 							chgX :
-								MeshMashine.tfxChgX(
-									u.chgX,
-									chgX
-								),
+								u.chgX.TransformChangeX( chgX ),
 							seq :
 								u.seq
 						} );
@@ -632,10 +620,7 @@ Link.prototype._onUpdate =
 			)
 			{
 				chgX =
-					MeshMashine.tfxChgX(
-						chgX,
-						report.get( b )
-					);
+					chgX.TransformChangeX( report.get( b ) );
 			}
 
 			space =
@@ -662,10 +647,7 @@ Link.prototype._onUpdate =
 			)
 			{
 				chgX =
-					MeshMashine.tfxChgX(
-						chgX,
-						report.get( b )
-					);
+					chgX.TransformChangeX( report.get( b ) );
 			}
 
 			c =

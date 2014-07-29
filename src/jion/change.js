@@ -78,6 +78,8 @@ if( SERVER )
 		{
 			Change :
 				require( '../jion/this' )( module ),
+			ChangeRay :
+				require( '../jion/change-ray' ),
 			Path :
 				require( '../jion/path'  ),
 			Sign :
@@ -302,6 +304,180 @@ Change.prototype.get =
 	}
 
 	return this;
+};
+
+
+/*
+| Returns a change transformed on this change.
+*/
+Change.prototype.TransformChange =
+	function(
+		chg
+	)
+{
+	var
+		a,
+		aZ,
+		srcA,
+		srcX,
+		trgA,
+		trgX,
+		y;
+
+/**/if( CHECK )
+/**/{
+/**/	if( chg.reflect !== "Change" )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	srcX = this.TransformSign( chg.src );
+
+	trgX = this.TransformSign( chg.trg );
+
+	if(
+		srcX === null
+		||
+		trgX === null
+	)
+	{
+		return null;
+	}
+
+	srcA = srcX.reflect === 'SignRay';
+
+	trgA = trgX.reflect === 'SignRay';
+
+	if( !srcA && !trgA )
+	{
+		// FIXME check in ray conditions too if this happens
+		if(
+			(
+				srcX.proc === 'splice'
+				||
+				trgX.proc === 'splice'
+			)
+			&&
+			(
+				srcX.path.equals( trgX.path )
+			)
+		)
+		{
+			console.log( 'splice transformed to equalness' ); // FIXME
+			// splice transformed to equalness
+
+			return null;
+		}
+
+
+		return (
+			Change.Create(
+				'src',
+					srcX,
+				'trg',
+					trgX
+			)
+		);
+	}
+	else if( !srcA && trgA )
+	{
+		y = [ ];
+
+		for(
+			a = 0, aZ = trgX.length;
+			a < aZ;
+			a++
+		)
+		{
+			y[ a ] =
+				Change.Create(
+					'src',
+						srcX,
+					'trg',
+						trgX.get( a )
+				);
+		}
+
+		return (
+			Jion.ChangeRay.Create(
+				'array',
+					y,
+				'_sliced',
+					true
+			)
+		);
+	}
+	else if( srcA && !trgA )
+	{
+		y = [ ];
+
+		for(
+			a = 0, aZ = srcX.length;
+			a < aZ;
+			a++
+		)
+		{
+			y[ a ] =
+				Change.Create(
+					'src',
+						srcX.get( a ),
+					'trg',
+						trgX
+				);
+		}
+
+		return (
+			Jion.ChangeRay.Create(
+				'array',
+					y,
+				'_sliced',
+					true
+			)
+		);
+	}
+	else
+	{
+		throw new Error( );
+	}
+};
+
+
+/*
+| Returns a change ray transformed on this change.
+*/
+Change.prototype.TransformChangeRay =
+	function(
+	//	chgX
+	)
+{
+	throw new Error( );
+	// TODO
+};
+
+
+/*
+| Returns a Change or a ChangeRay transformed on this Change.
+*/
+Change.prototype.TransformChangeX =
+	function(
+		chgX
+	)
+{
+	switch( chgX.reflect )
+	{
+		case 'Change' :
+
+			return this.TransformChange( chgX );
+
+		case 'ChangeRay' :
+
+			return this.TransformChangeRay( chgX );
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 
@@ -1001,7 +1177,7 @@ Change.prototype._changeTreeRank =
 |
 | This can possibly return a sign ray.
 */
-Change.prototype.TfxSign =
+Change.prototype.TransformSign =
 	function(
 		sign
 	)
@@ -1015,27 +1191,27 @@ Change.prototype.TfxSign =
 	{
 		case 'split' :
 
-			return this._TfxSignSplit( sign );
+			return this._TransformSignSplit( sign );
 
 		case 'join' :
 
-			return this._TfxSignJoin( sign );
+			return this._TransformSignJoin( sign );
 
 		case 'rank' :
 
-			return this._TfxSignRank( sign );
+			return this._TransformSignRank( sign );
 
 		case 'set' :
 
-			return this._TfxSignSet( sign );
+			return this._TransformSignSet( sign );
 
 		case 'insert' :
 
-			return this._TfxSignInsert( sign );
+			return this._TransformSignInsert( sign );
 
 		case 'remove' :
 
-			return this._TfxSignRemove( sign );
+			return this._TransformSignRemove( sign );
 
 		default :
 
@@ -1047,7 +1223,7 @@ Change.prototype.TfxSign =
 /*
 | Returns a transformed SignRay on this change.
 */
-Change.prototype.TfxSignRay =
+Change.prototype.TransformSignRay =
 	function(
 		signray
 	)
@@ -1064,7 +1240,7 @@ Change.prototype.TfxSignRay =
 		a++
 	)
 	{
-		cx = this.TfxSign( signray.get( a ) );
+		cx = this.TransformSign( signray.get( a ) );
 
 		if( cx === null )
 		{
@@ -1107,7 +1283,7 @@ Change.prototype.TfxSignRay =
 |
 | Can possibly transform a Sign to a SignRay.
 */
-Change.prototype.TfxSignX =
+Change.prototype.TransformSignX =
 	function(
 		signX
 	)
@@ -1117,11 +1293,11 @@ Change.prototype.TfxSignX =
 
 		case 'Sign' :
 
-			return this.TfxSign( signX );
+			return this.TransformSign( signX );
 
 		case 'SignRay' :
 
-			return this.TfxSignRay( signX );
+			return this.TransformSignRay( signX );
 
 		default :
 
@@ -1133,7 +1309,7 @@ Change.prototype.TfxSignX =
 /*
 | Transforms a signature on one a split.
 */
-Change.prototype._TfxSignSplit =
+Change.prototype._TransformSignSplit =
 	function(
 		sign
 	)
@@ -1232,7 +1408,7 @@ Change.prototype._TfxSignSplit =
 /*
 | Transforms a signature on a join.
 */
-Change.prototype._TfxSignJoin =
+Change.prototype._TransformSignJoin =
 	function(
 		sign
 	)
@@ -1261,13 +1437,7 @@ Change.prototype._TfxSignJoin =
 		throw new Error( );
 	}
 
-	// FIXME tfx ranks
-
-//	Jools.log(
-//		'tfx',
-//		'join',
-//		sign
-//	);
+	// FUTURE? transform ranks
 
 	if( sign.at2 === undefined )
 	{
@@ -1298,7 +1468,7 @@ Change.prototype._TfxSignJoin =
 /*
 | Transforms a signature on a rank
 */
-Change.prototype._TfxSignRank =
+Change.prototype._TransformSignRank =
 	function(
 		sign
 	)
@@ -1352,7 +1522,7 @@ Change.prototype._TfxSignRank =
 /*
 | Transforms a signature on a join.
 */
-Change.prototype._TfxSignSet =
+Change.prototype._TransformSignSet =
 	function(
 		sign
 	)
@@ -1427,7 +1597,7 @@ Change.prototype._TfxSignSet =
 /*
 | Transforms a signature on an insert.
 */
-Change.prototype._TfxSignInsert =
+Change.prototype._TransformSignInsert =
 	function(
 		sign
 	)
@@ -1491,7 +1661,7 @@ Change.prototype._TfxSignInsert =
 /*
 | Transforms a signature on a remove
 */
-Change.prototype._TfxSignRemove =
+Change.prototype._TransformSignRemove =
 	function(
 		sign
 	)

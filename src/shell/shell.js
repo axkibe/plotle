@@ -28,7 +28,6 @@ var
 	Gruga,
 	Jion,
 	Mark,
-	MeshMashine,
 	Net,
 	Peer,
 	system,
@@ -358,7 +357,7 @@ Shell.prototype.setAction =
 
 
 /*
-| MeshMashine is reporting updates.
+| The link is reporting updates.
 */
 Shell.prototype.update =
 	function(
@@ -389,7 +388,7 @@ Shell.prototype.update =
 			else
 			{
 				sign =
-					chgX.TfxSign(
+					chgX.TransformSign(
 						Jion.Sign.Create(
 							'path',
 								mark.path.Chop( ),
@@ -438,7 +437,7 @@ Shell.prototype.update =
 			else
 			{
 				bSign =
-					chgX.TfxSign(
+					chgX.TransformSign(
 						Jion.Sign.Create(
 							'path',
 								mark.bPath.Chop( ),
@@ -448,7 +447,7 @@ Shell.prototype.update =
 					);
 
 				eSign =
-					chgX.TfxSign(
+					chgX.TransformSign(
 						Jion.Sign.Create(
 							'path',
 								mark.ePath.Chop( ),

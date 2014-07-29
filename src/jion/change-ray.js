@@ -254,6 +254,109 @@ ChangeRay.prototype.Set =
 };
 
 
+/*
+| Returns the result of a change
+| transformed by this change ray.
+*/
+ChangeRay.prototype.TransformChange =
+	function(
+		chg
+	)
+{
+	var
+		a,
+		aZ,
+		chgX;
+
+	chgX = chg;
+
+	for(
+		a = 0, aZ = this.length;
+		a < aZ;
+		a++)
+	{
+		chgX = this.get( a ).TransformChange( chgX );
+	}
+
+	return chgX;
+};
+
+
+/*
+| Returns the result of a change ray
+| transformed by this change ray.
+*/
+ChangeRay.prototype.TransformChangeRay =
+	function(
+		cray
+	)
+{
+	var
+		a,
+		aZ,
+		b,
+		bZ,
+		rX,
+		y;
+
+	y = [ ];
+
+	for(
+		a = 0, aZ = this.length;
+		a < aZ;
+		a++
+	)
+	{
+		rX = this.get( a ).TransformChangeRay( cray );
+
+		for(
+			b = 0, bZ = rX.length;
+			b < bZ;
+			b++
+		)
+		{
+			y.push(
+				rX.get( b )
+			);
+		}
+	}
+
+	return (
+		ChangeRay.create(
+			'array',
+				y,
+			'_sliced',
+				true
+		)
+	);
+};
+
+
+/*
+| Returns the result of a change or change ray
+| transformed by this change ray.
+*/
+ChangeRay.prototype.TransformChangeX =
+	function(
+		chgX
+	)
+{
+	switch( chgX.reflect )
+	{
+		case 'Change' :
+
+			return this.TransformChange( chgX );
+
+		case 'ChangeRay' :
+
+			return this.TransformChangeRay( chgX );
+
+		default :
+
+			throw new Error( );
+	}
+};
+
 
 /*
 | Performes this change-ray on a tree.
@@ -318,7 +421,7 @@ ChangeRay.prototype.changeTree =
 |
 | If the signature is a span, it can transform to a sign-ray.
 */
-ChangeRay.prototype.TfxSign =
+ChangeRay.prototype.TransformSign =
 	function(
 		sign
 	)
@@ -349,7 +452,7 @@ ChangeRay.prototype.TfxSign =
 		t++
 	)
 	{
-		signX = this.get( t ).TfxSignX( signX );
+		signX = this.get( t ).TransformSignX( signX );
 	}
 
 	return signX;

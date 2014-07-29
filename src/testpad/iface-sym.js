@@ -19,7 +19,6 @@ var
 var
 	Jion,
 	Jools,
-	MeshMashine,
 	Visual;
 
 
@@ -203,8 +202,7 @@ IFaceSym.prototype.alter =
 		s++
 	)
 	{
-		chgX =
-			MeshMashine.tfxChgX( chgX, changes[ s ] );
+		chgX = chgX.TransformChangeX( changes[ s ] );
 
 		if( chgX === null )
 		{

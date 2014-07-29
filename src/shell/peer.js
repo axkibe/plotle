@@ -1,6 +1,5 @@
 /*
 | A peer to a meshcraft repository.
-| Utilizes its own meshmashine.
 |
 | Authors: Axel Kittenberger
 */

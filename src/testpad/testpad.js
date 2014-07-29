@@ -602,7 +602,7 @@ TestPad.prototype.clearAction =
 
 
 /*
-| Sends the current action to the meshmashine.
+| Sends the current action.
 */
 TestPad.prototype.send =
 	function( )

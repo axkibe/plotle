@@ -628,14 +628,6 @@ module.exports =
 	),
 	Resource.Create(
 		'filePath',
-			'src/mm/meshmashine.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.Create(
-		'filePath',
 			'src/shell/stubs.js',
 		'inBundle',
 			true
