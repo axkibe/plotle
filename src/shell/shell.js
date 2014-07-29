@@ -389,14 +389,13 @@ Shell.prototype.update =
 			else
 			{
 				sign =
-					MeshMashine.tfxSign(
+					chgX.TfxSign(
 						Jion.Sign.Create(
 							'path',
 								mark.path.Chop( ),
 							'at1',
 								mark.at
-						),
-						chgX
+						)
 					);
 
 				// FIXME
@@ -439,25 +438,23 @@ Shell.prototype.update =
 			else
 			{
 				bSign =
-					MeshMashine.tfxSign(
+					chgX.TfxSign(
 						Jion.Sign.Create(
 							'path',
 								mark.bPath.Chop( ),
 							'at1',
 								mark.bAt
-						),
-						chgX
-					),
+						)
+					);
 
 				eSign =
-					MeshMashine.tfxSign(
+					chgX.TfxSign(
 						Jion.Sign.Create(
 							'path',
 								mark.ePath.Chop( ),
 							'at1',
 								mark.eAt
-						),
-						chgX
+						)
 					);
 
 				// tests if the range collapsed to a simple caret.

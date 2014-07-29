@@ -97,6 +97,7 @@ var
 
 ChangeRay = Jion.ChangeRay;
 
+
 /*
 | Initializer.
 */
@@ -309,6 +310,49 @@ ChangeRay.prototype.changeTree =
 				)
 		}
 	);
+};
+
+
+/*
+| Returns a sign transformed on this change ray.
+|
+| If the signature is a span, it can transform to a sign-ray.
+*/
+ChangeRay.prototype.TfxSign =
+	function(
+		sign
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( sign.reflect !== 'Sign' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if(
+		sign.path === undefined
+		||
+		sign.path.length === 0
+	)
+	{
+		return sign;
+	}
+
+	var signX = sign;
+
+	for(
+		var t = 0, tZ = this.length;
+		t < tZ;
+		t++
+	)
+	{
+		signX = this.get( t ).TfxSignX( signX );
+	}
+
+	return signX;
 };
 
 

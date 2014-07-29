@@ -1001,7 +1001,7 @@ Change.prototype._changeTreeRank =
 |
 | This can possibly return a sign ray.
 */
-Change.prototype.tfxSign =
+Change.prototype.TfxSign =
 	function(
 		sign
 	)
@@ -1015,27 +1015,27 @@ Change.prototype.tfxSign =
 	{
 		case 'split' :
 
-			return this._tfxSignSplit( sign );
+			return this._TfxSignSplit( sign );
 
 		case 'join' :
 
-			return this._tfxSignJoin( sign );
+			return this._TfxSignJoin( sign );
 
 		case 'rank' :
 
-			return this._tfxSignRank( sign );
+			return this._TfxSignRank( sign );
 
 		case 'set' :
 
-			return this._tfxSignSet( sign );
+			return this._TfxSignSet( sign );
 
 		case 'insert' :
 
-			return this._tfxSignInsert( sign );
+			return this._TfxSignInsert( sign );
 
 		case 'remove' :
 
-			return this._tfxSignRemove( sign );
+			return this._TfxSignRemove( sign );
 
 		default :
 
@@ -1045,11 +1045,9 @@ Change.prototype.tfxSign =
 
 
 /*
-| Transforms a SignRay on a this change
-|
-| This can possibly return a sign ray.
+| Returns a transformed SignRay on this change.
 */
-Change.prototype.tfxSignRay =
+Change.prototype.TfxSignRay =
 	function(
 		signray
 	)
@@ -1066,7 +1064,7 @@ Change.prototype.tfxSignRay =
 		a++
 	)
 	{
-		cx = this.tfxSign( signray.get( a ) );
+		cx = this.TfxSign( signray.get( a ) );
 
 		if( cx === null )
 		{
@@ -1105,11 +1103,11 @@ Change.prototype.tfxSignRay =
 
 
 /*
-| Transforms a Sign or SignRay on a this change.
+| Returns a transformed Sign or SignRay on this change.
 |
-| This can possibly return a Sign or SignRay.
+| Can possibly transform a Sign to a SignRay.
 */
-Change.prototype.tfxSignX =
+Change.prototype.TfxSignX =
 	function(
 		signX
 	)
@@ -1119,11 +1117,11 @@ Change.prototype.tfxSignX =
 
 		case 'Sign' :
 
-			return this.tfxSign( signX );
+			return this.TfxSign( signX );
 
 		case 'SignRay' :
 
-			return this.tfxSignRay( signX );
+			return this.TfxSignRay( signX );
 
 		default :
 
@@ -1135,7 +1133,7 @@ Change.prototype.tfxSignX =
 /*
 | Transforms a signature on one a split.
 */
-Change.prototype._tfxSignSplit =
+Change.prototype._TfxSignSplit =
 	function(
 		sign
 	)
@@ -1234,7 +1232,7 @@ Change.prototype._tfxSignSplit =
 /*
 | Transforms a signature on a join.
 */
-Change.prototype._tfxSignJoin =
+Change.prototype._TfxSignJoin =
 	function(
 		sign
 	)
@@ -1300,7 +1298,7 @@ Change.prototype._tfxSignJoin =
 /*
 | Transforms a signature on a rank
 */
-Change.prototype._tfxSignRank =
+Change.prototype._TfxSignRank =
 	function(
 		sign
 	)
@@ -1354,7 +1352,7 @@ Change.prototype._tfxSignRank =
 /*
 | Transforms a signature on a join.
 */
-Change.prototype._tfxSignSet =
+Change.prototype._TfxSignSet =
 	function(
 		sign
 	)
@@ -1429,7 +1427,7 @@ Change.prototype._tfxSignSet =
 /*
 | Transforms a signature on an insert.
 */
-Change.prototype._tfxSignInsert =
+Change.prototype._TfxSignInsert =
 	function(
 		sign
 	)
@@ -1493,7 +1491,7 @@ Change.prototype._tfxSignInsert =
 /*
 | Transforms a signature on a remove
 */
-Change.prototype._tfxSignRemove =
+Change.prototype._TfxSignRemove =
 	function(
 		sign
 	)

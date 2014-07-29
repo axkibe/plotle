@@ -57,61 +57,11 @@ Change = Jion.Change;
 Sign = Jion.Sign;
 
 
-/*
-| Transforms a signature on a list of alternations.
-| If the signature is a span, it can return an array of signs.
-*/
-var tfxSign =
-	function(
-		sign,
-		chgX
-	)
-{
-	switch( chgX.reflect )
-	{
-		case 'Change' :
-		case 'ChangeRay' :
-
-			break;
-
-		default :
-
-			throw new Error( );
-	}
-
-/**/if( CHECK )
-/**/{
-/**/	if( sign.reflect !== 'Sign' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if(
-		sign.path === undefined
-		||
-		sign.path.length === 0
-	)
-	{
-		return sign;
-	}
-
-	var signX = sign;
-
-	for(
-		var t = 0, tZ = chgX.length;
-		t < tZ;
-		t++
-	)
-	{
-		signX = chgX.get( t ).tfxSignX( signX );
-	}
-
-	return signX;
-};
 
 /*
 | Transforms a change on an a change(ray).
+|
+| TODO remove
 */
 var tfxChg =
 	function(
@@ -134,17 +84,9 @@ var tfxChg =
 		throw new Error( );
 	}
 
-	srcX =
-		tfxSign(
-			chg.src,
-			chgX
-		);
+	srcX = chgX.TfxSign( chg.src );
 
-	trgX =
-		tfxSign(
-			chg.trg,
-			chgX
-		);
+	trgX = chgX.TfxSign( chg.trg );
 
 	if(
 		srcX === null
@@ -336,9 +278,7 @@ MeshMashine =
 	tfxChg :
 		tfxChg,
 	tfxChgX :
-		tfxChgX,
-	tfxSign :
-		tfxSign
+		tfxChgX
 };
 
 
