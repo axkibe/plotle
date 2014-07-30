@@ -196,9 +196,8 @@ Jools.lazyValue(
 
 /*
 | Performes this change on a tree.
-| Call it ChangeTree
 */
-Change.prototype.changeTree =
+Change.prototype.ChangeTree =
 	function(
 		tree
 	)
@@ -222,37 +221,37 @@ Change.prototype.changeTree =
 	{
 		case 'split' :
 
-			r = this._changeTreeSplit( tree );
+			r = this._ChangeTreeSplit( tree );
 
 			break;
 
 		case 'join' :
 
-			r = this._changeTreeJoin( tree );
+			r = this._ChangeTreeJoin( tree );
 
 			break;
 
 		case 'set' :
 
-			r = this._changeTreeSet( tree );
+			r = this._ChangeTreeSet( tree );
 
 			break;
 
 		case 'insert' :
 
-			r = this._changeTreeInsert( tree );
+			r = this._ChangeTreeInsert( tree );
 
 			break;
 
 		case 'remove' :
 
-			r = this._changeTreeRemove( tree );
+			r = this._ChangeTreeRemove( tree );
 
 			break;
 
 		case 'rank' :
 
-			r = this._changeTreeRank( tree );
+			r = this._ChangeTreeRank( tree );
 
 			break;
 
@@ -486,7 +485,7 @@ Change.prototype.TransformChangeX =
 |
 | A new item is inserted or replaces an existing.
 */
-Change.prototype._changeTreeSet =
+Change.prototype._ChangeTreeSet =
 	function(
 		tree
 	)
@@ -647,7 +646,7 @@ Change.prototype._changeTreeSet =
 |
 | A string is inserted into a string item.
 */
-Change.prototype._changeTreeInsert =
+Change.prototype._ChangeTreeInsert =
 	function(
 		tree
 	)
@@ -722,7 +721,7 @@ Change.prototype._changeTreeInsert =
 |
 | A part of a string item is removed.
 */
-Change.prototype._changeTreeRemove =
+Change.prototype._ChangeTreeRemove =
 	function(
 		tree
 	)
@@ -814,7 +813,7 @@ Change.prototype._changeTreeRemove =
 |
 | Two texts are joined into one.
 */
-Change.prototype._changeTreeJoin =
+Change.prototype._ChangeTreeJoin =
 	function(
 		tree
 	)
@@ -936,7 +935,7 @@ Change.prototype._changeTreeJoin =
 |
 | A text is split into two.
 */
-Change.prototype._changeTreeSplit =
+Change.prototype._ChangeTreeSplit =
 	function(
 		tree
 	)
@@ -955,20 +954,22 @@ Change.prototype._changeTreeSplit =
 		pivot,
 		vKey;
 
-	cm =
-		'change.split';
-	src =
-		this.src;
-	trg =
-		this.trg;
-	path =
-		src.path;
-	at1 =
-		src.at1;
-	text =
-		tree.getPath( path );
+	cm = 'change.split';
+
+	src = this.src;
+
+	trg = this.trg;
+
+	path = src.path;
+
+	at1 = src.at1;
+
+	text = tree.getPath( path );
+
 	pivot =
-		tree.getPath( path.Shorten( 3 ) );
+		tree.getPath(
+			path.Shorten( 3 )
+		);
 
 	Jools.check( Jools.isString( text ), cm, 'src signates no text' );
 
@@ -976,13 +977,11 @@ Change.prototype._changeTreeSplit =
 
 	if( trg.path !== undefined )
 	{
-		vKey =
-			trg.path.get( -2 );
+		vKey = trg.path.get( -2 );
 	}
 	else
 	{
-		vKey =
-			pivot.newUID( );
+		vKey = pivot.newUID( );
 
 		trg =
 			trg.Create(
@@ -998,15 +997,14 @@ Change.prototype._changeTreeSplit =
 		vKey
 	);
 
-	key =
-		path.get( -2 ),
-	kn =
-		pivot.rankOf( key );
+	key = path.get( -2 ),
+
+	kn = pivot.rankOf( key );
 
 	Jools.check( kn >= 0, cm, 'invalid line key ( 2 )' );
 
-	para1 =
-		pivot.twig[ key ];
+	para1 = pivot.twig[ key ];
+
 	para2 =
 		para1.Create(
 			'text',
@@ -1056,7 +1054,7 @@ Change.prototype._changeTreeSplit =
 |
 | A tree's rank is changed.
 */
-Change.prototype._changeTreeRank =
+Change.prototype._ChangeTreeRank =
 	function(
 		tree
 	)

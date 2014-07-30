@@ -364,7 +364,7 @@ ChangeRay.prototype.TransformChangeX =
 | FIXME trace if a signle change has changed and create
 | a new array only then
 */
-ChangeRay.prototype.changeTree =
+ChangeRay.prototype.ChangeTree =
 	function(
 		tree,
 		universe
@@ -388,7 +388,7 @@ ChangeRay.prototype.changeTree =
 		chg = this.get( a ),
 
 		cr =
-			chg.changeTree(
+			chg.ChangeTree(
 				tree,
 				universe
 			);

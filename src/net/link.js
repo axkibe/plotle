@@ -502,7 +502,7 @@ Link.prototype._onUpdate =
 			// changes the clients understanding of the server tree
 			this._rSpace = // XXX
 				chgX
-				.changeTree( this._rSpace)
+				.ChangeTree( this._rSpace)
 				.tree;
 
 			// if the cid is the one in the postbox the client
@@ -571,7 +571,7 @@ Link.prototype._onUpdate =
 
 				if( u.seq < seq + a )
 				{
-					tfxChgX = u.chgX.transformChangeX( chgX );
+					tfxChgX = u.chgX.TransformChangeX( chgX );
 
 					// the change vanished by transformation
 					if( tfxChgX === null )
@@ -623,9 +623,13 @@ Link.prototype._onUpdate =
 					chgX.TransformChangeX( report.get( b ) );
 			}
 
+			// FUTURE adapt ChangeTree so it
+			//        optionally does not create result
+			//        intermediary objects but returns
+			//        the tree directly
 			space =
 				chgX
-				.changeTree( space )
+				.ChangeTree( space )
 				.tree;
 		}
 
@@ -647,7 +651,9 @@ Link.prototype._onUpdate =
 			)
 			{
 				chgX =
-					chgX.TransformChangeX( report.get( b ) );
+					chgX.TransformChangeX(
+						report.get( b )
+					);
 			}
 
 			c =
@@ -665,7 +671,7 @@ Link.prototype._onUpdate =
 
 			space =
 				chgX
-				.changeTree( space )
+				.ChangeTree( space )
 				.tree;
 		}
 
@@ -689,6 +695,7 @@ Link.prototype._onUpdate =
 	}
 
 	// issues the following update
+
 	this._update( );
 };
 
@@ -716,7 +723,7 @@ Link.prototype.alter =
 				Jion.Sign.CreateFromJSON( src ),
 			'trg',
 				Jion.Sign.CreateFromJSON( trg )
-		).changeTree(
+		).ChangeTree(
 			this._cSpace
 		);
 
@@ -725,6 +732,7 @@ Link.prototype.alter =
 	chgX = result.chgX,
 
 	c =
+		// FUTURE make this a jion object
 		Jools.immute( {
 			cid :
 				Jools.uid( ),
@@ -760,7 +768,7 @@ Link.prototype.alter =
 
 
 /*
-| Sends the stored changes to remote meshmashine.
+| Sends the stored changes to server.
 */
 Link.prototype._sendChanges =
 	function( )
@@ -776,7 +784,7 @@ Link.prototype._sendChanges =
 	{
 		return;
 	}
-	
+
 	var c = this._outbox[ 0 ];
 
 	this._outbox.splice( 0, 1 ); // XXX
@@ -845,7 +853,7 @@ Link.prototype.undo =
 
 	chgX = this._undo.pop( ).chgX.Invert; // XXX
 
-	result = chgX.changeTree( this._cSpace );
+	result = chgX.ChangeTree( this._cSpace );
 
 	if( result === null )
 	{
@@ -907,7 +915,7 @@ Link.prototype.redo =
 
 	chgX = this._redo.pop( ).chgX.Invert; // XXX
 
-	result = chgX.changeTree( this._cSpace );
+	result = chgX.ChangeTree( this._cSpace );
 
 	this._cSpace = result.tree; // XXX
 

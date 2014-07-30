@@ -522,7 +522,7 @@ Server.prototype.loadSpace =
 		space.$seqZ++;
 
 		space.$tree =
-			change.chgX.changeTree(
+			change.chgX.ChangeTree(
 				space.$tree
 			).tree;
 	}
@@ -1511,10 +1511,7 @@ Server.prototype.cmdAlter =
 	}
 
 	// applies the changes
-	result =
-		chgX.changeTree(
-			space.$tree
-		);
+	result = chgX.ChangeTree( space.$tree );
 
 	space.$tree =
 		result.tree;
@@ -2580,7 +2577,7 @@ Server.prototype.cmdGet =
 				chgX
 				.get( b )
 				.Invert
-				.changeTree( tree )
+				.ChangeTree( tree )
 				.tree;
 		}
 	}

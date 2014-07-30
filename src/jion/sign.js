@@ -257,9 +257,10 @@ Sign.prototype.affix =
 {
 	if( test( this[ key ] ) )
 	{
+		/* FUTURE
 		if( !Jools.matches( val, this[ key ] ) )
 		{
-			throw new Jools.reject(
+			throw Jools.reject(
 				[
 					cm, ' ',
 					base, '.', key,
@@ -268,6 +269,7 @@ Sign.prototype.affix =
 				].join( '' )
 			);
 		}
+		*/
 
 		return this;
 	}
