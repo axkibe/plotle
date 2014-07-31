@@ -1,4 +1,3 @@
-> ChangeWrap
 . $action
 . $clip
 . $move
@@ -18,6 +17,8 @@
 . Caret
 > Change
 > ChangeRay
+. ChangeTree
+> ChangeWrap
 . Channel
 . CheckBox
 . Chop
@@ -121,6 +122,12 @@
 . _$twist
 . _$visitPasshash
 . _$visitUser
+. _ChangeTreeInsert
+. _ChangeTreeJoin
+. _ChangeTreeRank
+. _ChangeTreeRemove
+. _ChangeTreeSet
+. _ChangeTreeSplit
 . _TransformSignInsert
 . _TransformSignJoin
 . _TransformSignRank
@@ -136,12 +143,6 @@
 . _cSpace
 . _canvas
 . _captureEvents
-. _ChangeTreeInsert
-. _ChangeTreeJoin
-. _ChangeTreeRank
-. _ChangeTreeRemove
-. _ChangeTreeSet
-. _ChangeTreeSplit
 . _changeZoom
 . _colorStyle
 . _cx
@@ -304,7 +305,6 @@
 . caretable
 . cdistance
 > change
-. ChangeTree
 > changedTouches
 . channelName
 > charCodeAt
