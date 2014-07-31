@@ -481,9 +481,12 @@ Link.prototype._onUpdate =
 
 	seq = reply.seq;
 
-	// was this an not a timeout and thus empty?
+	// if this wasn't an empty timeout
+	// process the received changes
+
 	if( chgs && chgs.length > 0 )
 	{
+
 		postbox = this._postbox;
 
 		for(
@@ -502,7 +505,7 @@ Link.prototype._onUpdate =
 			// changes the clients understanding of the server tree
 			this._rSpace = // XXX
 				chgX
-				.ChangeTree( this._rSpace)
+				.ChangeTree( this._rSpace )
 				.tree;
 
 			// if the cid is the one in the postbox the client
@@ -548,14 +551,14 @@ Link.prototype._onUpdate =
 
 					u =
 					undo[ b ] =
-						Jools.immute( {
-							cid :
+						Jion.ChangeWrap.Create(
+							'cid',
 								u.cid,
-							chgX :
+							'chgX',
 								tfxChgX,
-							seq :
+							'seq',
 								u.seq
-						} );
+						);
 				}
 			}
 
@@ -585,14 +588,14 @@ Link.prototype._onUpdate =
 
 					u =
 					redo[ b ] =
-						Jools.immute( {
-							cid :
+						Jion.ChangeWrap.Create(
+							'cid',
 								u.cid,
-							chgX :
+							'chgX',
 								u.chgX.TransformChangeX( chgX ),
-							seq :
+							'seq',
 								u.seq
-						} );
+						);
 				}
 			}
 
@@ -658,15 +661,13 @@ Link.prototype._onUpdate =
 
 			c =
 			outbox[ a ] =
-				Jools.immute(
-					{
-						cid :
-							c.cid,
-						chgX :
-							chgX,
-						seq :
-							c.seq
-					}
+				Jion.ChangeWrap.Create(
+					'cid',
+						c.cid,
+					'chgX',
+						chgX,
+					'seq',
+						c.seq
 				);
 
 			space =
@@ -718,18 +719,17 @@ Link.prototype.alter =
 
 	this._cSpace = result.tree;
 
-	chgX = result.chgX,
+	chgX = result.chgX;
 
 	c =
-		// FUTURE make this a jion object
-		Jools.immute( {
-			cid :
+		Jion.ChangeWrap.Create(
+			'cid',
 				Jools.uid( ),
-			chgX :
+			'chgX',
 				chgX,
-			seq :
+			'seq',
 				this._rSeq
-		} );
+		);
 
 	this._outbox.push( c ); // XXX
 
@@ -859,15 +859,13 @@ Link.prototype.undo =
 	}
 
 	c =
-		Jools.immute(
-			{
-				cid :
-					Jools.uid( ),
-				chgX :
-					chgX,
-				seq :
-					this._rSeq
-			}
+		Jion.ChangeWrap.Create(
+			'cid',
+				Jools.uid( ),
+			'chgX',
+				chgX,
+			'seq',
+				this._rSeq
 		);
 
 	this._outbox.push( c ); // XXX
@@ -916,15 +914,13 @@ Link.prototype.redo =
 	}
 
 	c =
-		Jools.immute(
-			{
-				cid :
-					Jools.uid( ),
-				chgX :
-					chgX,
-				seq :
-					this._rSeq
-			}
+		Jion.ChangeWrap.Create(
+			'cid',
+				Jools.uid( ),
+			'chgX',
+				chgX,
+			'seq',
+				this._rSeq
 		);
 
 	this._outbox.push( c );

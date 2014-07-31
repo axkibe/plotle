@@ -2315,7 +2315,7 @@ Gen.prototype.genFromJSONCreatorParser =
 					StringLiteral( this.name )
 				),
 				Block( )
-				.Fail( 'invalid JSON ' )
+				.Fail( 'invalid JSON' )
 			)
 		);
 

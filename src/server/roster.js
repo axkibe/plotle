@@ -132,6 +132,16 @@ module.exports =
 	),
 	Resource.Create(
 		'filePath',
+			'src/jion/change-wrap.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.Create(
+		'filePath',
 			'src/euclid/point.js',
 		'hasJion',
 			true,
