@@ -568,7 +568,6 @@
 > moveTo
 . moveToButton
 . moveToSpace
-. moveToTop
 . moveto
 > n
 > name

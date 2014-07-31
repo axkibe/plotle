@@ -18,7 +18,8 @@ var
 var
 	Jion,
 	Jools,
-	shell;
+	shell,
+	Visual;
 
 
 /*
@@ -29,14 +30,33 @@ var
 
 
 var
-	newItemPath;
+	Change,
+	newItemSign,
+	Sign,
+	spliceSign;
 
 
-/* path to a new Item */
-newItemPath =
-	Jion.Path.empty
-	.Append( 'twig' )
-	.Append( '$new' );
+Change = Jion.Change;
+
+Sign = Jion.Sign;
+
+// sign for a new Item
+newItemSign =
+	Sign.Create(
+		'path',
+			Jion.Path.empty
+			.Append( 'twig' )
+			.Append( '$new' ),
+		'rank',
+			0
+	);
+
+// sign for split/join
+spliceSign =
+	Sign.Create(
+		'proc',
+			'splice'
+	);
 
 Peer = { };
 
@@ -77,44 +97,39 @@ Peer.newNote =
 		zone
 	)
 {
+	var
+		src;
+
+	src =
+		Sign.Create(
+			'val',
+				Visual.Note.Create(
+					'fontsize',
+						13,
+					'zone',
+						zone,
+					'doc',
+						Visual.Doc.Create(
+							'twig:add',
+							'1',
+							Visual.Para.Create(
+								'text',
+									''
+							)
+						)
+				),
+			'rank',
+				null
+		);
+
 	return (
 		shell.link.alter(
-			{
-				val :
-				{
-					type :
-						'Note',
-					fontsize :
-						13,
-					zone :
-						zone,
-					doc  :
-					{
-						type :
-							'Doc',
-						twig :
-							{
-								'1' :
-								{
-									type :
-										'Para',
-									text :
-										''
-								}
-							},
-						ranks :
-							[ '1' ]
-					}
-				},
-				rank :
-					null
-			},
-			{
-				path :
-					newItemPath,
-				rank :
-					0
-			}
+			Change.Create(
+				'src',
+					src,
+				'trg',
+					newItemSign
+			)
 		)
 	);
 };
@@ -125,36 +140,41 @@ Peer.newNote =
 */
 Peer.newPortal =
 	function(
+						// TODO remove
 		spaceUser,      // the space the portal is to be created in
+						// TODO remove
 		spaceTag,       // the space the portal is to be created in
 		zone,           // the zone of the potal
 		destSpaceUser,  // the user of the space the portal leads to
 		destSpaceTag    // the tag of the space the portal leads to
 	)
 {
+	var
+		src;
+
+	src =
+		Sign.Create(
+			'val',
+				Visual.Portal.Create(
+					'zone',
+						zone,
+					'spaceUser',
+						destSpaceUser,
+					'spaceTag',
+						destSpaceTag
+				),
+			'rank',
+				null
+		);
+
 	return (
 		shell.link.alter(
-			{
-				val :
-				{
-					type :
-						'Portal',
-					zone :
-						zone,
-					spaceUser :
-						destSpaceUser,
-					spaceTag :
-						destSpaceTag
-				},
-				rank :
-					null
-			},
-			{
-				path :
-					newItemPath,
-				rank :
-					0
-			}
+			Change.Create(
+				'src',
+					src,
+				'trg',
+					newItemSign
+			)
 		)
 	);
 };
@@ -171,16 +191,20 @@ Peer.setZone =
 {
 	return (
 		shell.link.alter(
-			{
-				val :
-					zone
-			},
-			{
-				path :
-					itemPath
-					.Chop( )
-					.Append( 'zone' )
-			}
+			Change.Create(
+				'src',
+					Sign.Create(
+						'val',
+							zone
+					),
+				'trg',
+					Sign.Create(
+						'path',
+							itemPath
+							.Chop( )
+							.Append( 'zone' )
+					)
+			)
 		)
 	);
 };
@@ -197,16 +221,20 @@ Peer.setFontSize =
 {
 	return (
 		shell.link.alter(
-			{
-				val :
-					fontsize
-			},
-			{
-				path :
-					itemPath
-					.Chop( )
-					.Append( 'fontsize' )
-			}
+			Change.Create(
+				'src',
+					Sign.Create(
+						'val',
+							fontsize
+					),
+				'trg',
+					Sign.Create(
+						'path',
+							itemPath
+							.Chop( )
+							.Append( 'fontsize' )
+					)
+			)
 		)
 	);
 };
@@ -223,16 +251,20 @@ Peer.setPNW =
 {
 	return (
 		shell.link.alter(
-			{
-				val :
-					pnw
-			},
-			{
-				path :
-					itemPath
-					.Chop( )
-					.Append( 'pnw' )
-			}
+			Change.Create(
+				'src',
+					Sign.Create(
+						'val',
+							pnw
+					),
+				'trg',
+					Sign.Create(
+						'path',
+							itemPath
+							.Chop( )
+							.Append( 'pnw' )
+					)
+			)
 		)
 	);
 };
@@ -243,53 +275,46 @@ Peer.setPNW =
 */
 Peer.newLabel =
 	function(
-		spaceUser,
-		spaceTag,
+		spaceUser,  // TODO remove
+		spaceTag,   // TODO remove
 		pnw,
 		text,
 		fontsize
 	)
 {
+	var
+		src;
+
+	src =
+		Sign.Create(
+			'val',
+				Visual.Label.Create(
+					'fontsize',
+						fontsize,
+					'pnw',
+						pnw,
+					'doc',
+						Visual.Doc.Create(
+							'twig:add',
+							'1',
+							Visual.Para.Create(
+								'text',
+									text
+							)
+						)
+				),
+			'rank',
+				null
+		);
+
 	return (
 		shell.link.alter(
-			{
-				val :
-				{
-					type :
-						'Label',
-					fontsize :
-						fontsize,
-					pnw :
-						pnw,
-					doc :
-					{
-						type :
-							'Doc',
-						twig :
-						{
-							'1' :
-							{
-								type :
-									'Para',
-								text :
-									text
-							}
-						},
-						ranks : [
-							'1'
-						]
-					}
-				},
-
-				rank :
-					null
-			},
-			{
-				path :
-					newItemPath,
-				rank :
-					0
-			}
+			Change.Create(
+				'src',
+					src,
+				'trg',
+					newItemSign
+			)
 		)
 	);
 };
@@ -300,8 +325,8 @@ Peer.newLabel =
 */
 Peer.newRelation =
 	function(
-		spaceUser,
-		spaceTag,
+		spaceUser,  // TODO remove
+		spaceTag,   // TODO remove
 		pnw,
 		text,
 		fontsize,
@@ -309,48 +334,43 @@ Peer.newRelation =
 		item2key
 	)
 {
+	var
+		src;
+
+	src =
+		Sign.Create(
+			'val',
+				Visual.Relation.Create(
+					'item1key',
+						item1key,
+					'item2key',
+						item2key,
+					'pnw',
+						pnw,
+					'fontsize',
+						fontsize,
+					'doc',
+						Visual.Doc.Create(
+							'twig:add',
+							'1',
+							Visual.Para.Create(
+								'text',
+									text
+							)
+						)
+				),
+			'rank',
+				null
+		);
+
 	return (
 		shell.link.alter(
-			{
-				val :
-				{
-					type :
-						'Relation',
-					item1key :
-						item1key,
-					item2key :
-						item2key,
-					pnw :
-						pnw,
-					fontsize :
-						fontsize,
-					doc :
-					{
-						type :
-							'Doc',
-						twig :
-						{
-							'1' :
-							{
-								type :
-									'Para',
-								text :
-									text
-							}
-						},
-						ranks :
-							[ '1' ]
-					}
-				},
-				rank :
-					null
-			},
-			{
-				path :
-					newItemPath,
-				rank :
-					0
-			}
+			Change.Create(
+				'src',
+					src,
+				'trg',
+					newItemSign
+			)
 		)
 	);
 };
@@ -359,6 +379,7 @@ Peer.newRelation =
 /*
 | Moves an item's z-index up to top.
 */
+/*
 Peer.moveToTop =
 	function(
 		path
@@ -375,6 +396,7 @@ Peer.moveToTop =
 		}
 	);
 };
+*/
 
 
 /*
@@ -389,16 +411,20 @@ Peer.insertText =
 {
 	return (
 		shell.link.alter(
-			{
-				val :
-					text
-			},
-			{
-				path :
-					path.Chop( 1 ),
-				at1 :
-					offset
-			}
+			Change.Create(
+				'src',
+					Sign.Create(
+						'val',
+							text
+					),
+				'trg',
+					Sign.Create(
+						'path',
+							path.Chop( 1 ),
+						'at1',
+							offset
+					)
+			)
 		)
 	);
 };
@@ -426,18 +452,22 @@ Peer.removeText =
 
 	return (
 		shell.link.alter(
-			{
-				path :
-					path.Chop( 1 ),
-				at1 :
-					at1,
-				at2 :
-					at1 + len
-			},
-			{
-				val :
-					null
-			}
+			Change.Create(
+				'src',
+					Sign.Create(
+						'path',
+							path.Chop( 1 ),
+						'at1',
+							at1,
+						'at2',
+							at1 + len
+					),
+				'trg',
+					Sign.Create(
+						'val',
+							null
+					)
+			)
 		)
 	);
 };
@@ -539,16 +569,17 @@ Peer.split =
 {
 	return (
 		shell.link.alter(
-			{
-				path :
-					path.Chop( 1 ),
-				at1 :
-					offset
-			},
-			{
-				proc :
-					'splice'
-			}
+			Change.Create(
+				'src',
+					Sign.Create(
+						'path',
+							path.Chop( 1 ),
+						'at1',
+							offset
+					),
+				'trg',
+					spliceSign
+			)
 		)
 	);
 };
@@ -565,16 +596,17 @@ Peer.join =
 {
 	return (
 		shell.link.alter(
-			{
-				proc :
-					'splice'
-			},
-			{
-				path :
-					path.Chop( 1 ),
-				at1 :
-					at1
-			}
+			Change.Create(
+				'src',
+					spliceSign,
+				'trg',
+					Sign.Create(
+						'path',
+							path.Chop( 1 ),
+						'at1',
+							at1
+					)
+			)
 		)
 	);
 };
@@ -595,27 +627,34 @@ Peer.removeItem =
 
 	key = path.get( -1 );
 
-	pivot =
+	pivot = shell.space.getPath( path.Chop( 1 ).Shorten( 2 ) );
+
+	/*pivot =
 		shell.link.get(
 			path.Chop( 1 ).Shorten( 2 )
 		);
+	*/
 
 	r1 = pivot.rankOf( key );
 
 	return (
 		shell.link.alter(
-			{
-				val :
-					null,
-				rank :
-					r1
-			},
-			{
-				path :
-					path.Chop( 1 ),
-				rank :
-					null
-			}
+			Change.Create(
+				'src',
+					Sign.Create(
+						'val',
+							null,
+						'rank',
+							r1
+					),
+				'trg',
+					Sign.Create(
+						'path',
+							path.Chop( 1 ),
+						'rank',
+							null
+					)
+			)
 		)
 	);
 };

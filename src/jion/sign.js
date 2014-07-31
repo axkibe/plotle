@@ -178,7 +178,7 @@ Sign.prototype._init =
 
 	var
 		val;
-		
+
 	val = this.val;
 
 	if( val && !val.reflect && val.type )

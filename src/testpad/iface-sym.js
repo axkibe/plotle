@@ -17,7 +17,6 @@ var
 | Imports
 */
 var
-	Jion,
 	Jools,
 	Visual;
 
@@ -174,27 +173,19 @@ IFaceSym.prototype.get =
 */
 IFaceSym.prototype.alter =
 	function(
-		src, // FUTURE let this receiver a Change
-		trg
+		chg
 	)
 {
 	var
 		a,
 		aZ,
-		chgX =
-			Jion.Change.Create(
-				'src',
-					Jion.Sign.CreateFromJSON( src ),
-				'trg',
-					Jion.Sign.CreateFromJSON( trg )
-			),
-		changes =
-			this.$changes,
-		cZ =
-			changes.length,
+		chgX,
+		changes = this.$changes,
+		cZ = changes.length,
 		s,
-		seq =
-			this.$seq;
+		seq = this.$seq;
+
+	chgX = chg;
 
 	for(
 		s = seq;

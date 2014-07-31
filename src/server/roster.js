@@ -92,6 +92,46 @@ module.exports =
 	),
 	Resource.Create(
 		'filePath',
+			'src/jion/sign.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.Create(
+		'filePath',
+			'src/jion/sign-ray.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.Create(
+		'filePath',
+			'src/jion/change.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.Create(
+		'filePath',
+			'src/jion/change-ray.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	Resource.Create(
+		'filePath',
 			'src/euclid/point.js',
 		'hasJion',
 			true,
@@ -579,46 +619,6 @@ module.exports =
 	Resource.Create(
 		'filePath',
 			'src/visual/space.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.Create(
-		'filePath',
-			'src/jion/sign.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.Create(
-		'filePath',
-			'src/jion/sign-ray.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.Create(
-		'filePath',
-			'src/jion/change.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	Resource.Create(
-		'filePath',
-			'src/jion/change-ray.js',
 		'hasJion',
 			true,
 		'inBundle',

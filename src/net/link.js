@@ -702,13 +702,10 @@ Link.prototype._onUpdate =
 
 /*
 | Alters the tree.
-|
-| FIXME why doesnt this get a change?
 */
 Link.prototype.alter =
 	function(
-		src,
-		trg
+		chg
 	)
 {
 	var
@@ -717,15 +714,7 @@ Link.prototype.alter =
 		result,
 		undo;
 
-	result =
-		Jion.Change.Create( // FIXME CreateFromJSON
-			'src',
-				Jion.Sign.CreateFromJSON( src ),
-			'trg',
-				Jion.Sign.CreateFromJSON( trg )
-		).ChangeTree(
-			this._cSpace
-		);
+	result = chg.ChangeTree( this._cSpace );
 
 	this._cSpace = result.tree;
 
