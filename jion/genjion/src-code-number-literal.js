@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var NumberLiteral =
-Code.NumberLiteral =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_number // the number
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.number = v_number;
+		this.number = v_number;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new NumberLiteral object.
 */
-NumberLiteral.Create =
-NumberLiteral.prototype.Create =
+var NumberLiteral =
+Code.NumberLiteral =
 	function(
 		// free strings
 	)
@@ -136,32 +135,43 @@ NumberLiteral.prototype.Create =
 		return inherit;
 	}
 
-	return new NumberLiteral( 8833, v_number );
+	return new Constructor( 8833, v_number );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	NumberLiteral.prototype = Constructor.prototype;
+
+
+NumberLiteral.Create = Constructor.prototype.Create = NumberLiteral;
 
 
 /*
 | Reflection.
 */
-NumberLiteral.prototype.reflect = 'NumberLiteral';
+Constructor.prototype.reflect = 'NumberLiteral';
 
 
 /*
 | Sets values by path.
 */
-NumberLiteral.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-NumberLiteral.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-NumberLiteral.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

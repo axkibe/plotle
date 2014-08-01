@@ -42,22 +42,21 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Null =
-Code.Null =
+var Constructor =
 	function(
 		tag // magic cookie
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
@@ -71,8 +70,8 @@ var
 /*
 | Creates a new Null object.
 */
-Null.Create =
-Null.prototype.Create =
+var Null =
+Code.Null =
 	function(
 		// free strings
 	)
@@ -96,7 +95,7 @@ Null.prototype.Create =
 
 	if( !_singleton )
 	{
-		_singleton = new Null( 8833 );
+		_singleton = new Constructor( 8833 );
 	}
 
 	return _singleton;
@@ -104,27 +103,38 @@ Null.prototype.Create =
 
 
 /*
+| Prototype
+*/
+var
+	prototype =
+	Null.prototype = Constructor.prototype;
+
+
+Null.Create = Constructor.prototype.Create = Null;
+
+
+/*
 | Reflection.
 */
-Null.prototype.reflect = 'Null';
+Constructor.prototype.reflect = 'Null';
 
 
 /*
 | Sets values by path.
 */
-Null.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Null.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Null.prototype.equals =
+Constructor.prototype.equals =
 	function( obj // object to compare to
 ) { return this === obj; };
 

@@ -46,8 +46,7 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Switch =
-Code.Switch =
+var Constructor =
 	function(
 		tag, // magic cookie
 		twig, // twig
@@ -55,36 +54,36 @@ Code.Switch =
 		v_defaultCase, // the default block
 		v_statement // the statement expression
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.defaultCase = v_defaultCase;
+		this.defaultCase = v_defaultCase;
 
-	this.statement = v_statement;
+		this.statement = v_statement;
 
-	this.twig = twig;
+		this.twig = twig;
 
-	this.ranks = ranks;
+		this.ranks = ranks;
 
-	Jools.immute( this );
+		Jools.immute( this );
 
-	Jools.immute( twig );
+		Jools.immute( twig );
 
-	Jools.immute( ranks );
-};
+		Jools.immute( ranks );
+	};
 
 
 /*
 | Creates a new Switch object.
 */
-Switch.Create =
-Switch.prototype.Create =
+var Switch =
+Code.Switch =
 	function(
 		// free strings
 	)
@@ -316,50 +315,69 @@ Switch.prototype.Create =
 		return inherit;
 	}
 
-	return new Switch( 8833, twig, ranks, v_defaultCase, v_statement );
+	return (
+		new Constructor(
+			8833,
+			twig,
+			ranks,
+			v_defaultCase,
+			v_statement
+		)
+	);
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Switch.prototype = Constructor.prototype;
+
+
+Switch.Create = Constructor.prototype.Create = Switch;
 
 
 /*
 | Reflection.
 */
-Switch.prototype.reflect = 'Switch';
+Constructor.prototype.reflect = 'Switch';
 
 
 /*
 | Sets values by path.
 */
-Switch.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Switch.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-Switch.prototype.atRank = JoobjProto.atRank;
+Constructor.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-Switch.prototype.rankOf = JoobjProto.rankOf;
+Constructor.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-Switch.prototype.newUID = JoobjProto.newUID;
+Constructor.prototype.newUID = JoobjProto.newUID;
 
 
 /*
 | Tests equality of object.
 */
-Switch.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

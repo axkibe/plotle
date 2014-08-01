@@ -42,35 +42,34 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Differs =
-Code.Differs =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_left, // left expression
 		v_right // right expression
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.left = v_left;
+		this.left = v_left;
 
-	this.right = v_right;
+		this.right = v_right;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Differs object.
 */
-Differs.Create =
-Differs.prototype.Create =
+var Differs =
+Code.Differs =
 	function(
 		// free strings
 	)
@@ -156,32 +155,43 @@ Differs.prototype.Create =
 		return inherit;
 	}
 
-	return new Differs( 8833, v_left, v_right );
+	return new Constructor( 8833, v_left, v_right );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Differs.prototype = Constructor.prototype;
+
+
+Differs.Create = Constructor.prototype.Create = Differs;
 
 
 /*
 | Reflection.
 */
-Differs.prototype.reflect = 'Differs';
+Constructor.prototype.reflect = 'Differs';
 
 
 /*
 | Sets values by path.
 */
-Differs.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Differs.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Differs.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Comment =
-Code.Comment =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_content // comment content
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.content = v_content;
+		this.content = v_content;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Comment object.
 */
-Comment.Create =
-Comment.prototype.Create =
+var Comment =
+Code.Comment =
 	function(
 		// free strings
 	)
@@ -131,32 +130,43 @@ Comment.prototype.Create =
 		return inherit;
 	}
 
-	return new Comment( 8833, v_content );
+	return new Constructor( 8833, v_content );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Comment.prototype = Constructor.prototype;
+
+
+Comment.Create = Constructor.prototype.Create = Comment;
 
 
 /*
 | Reflection.
 */
-Comment.prototype.reflect = 'Comment';
+Constructor.prototype.reflect = 'Comment';
 
 
 /*
 | Sets values by path.
 */
-Comment.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Comment.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Comment.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

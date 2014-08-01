@@ -50,39 +50,38 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Block =
-Code.Block =
+var Constructor =
 	function(
 		tag, // magic cookie
 		twig, // twig
 		ranks // twig ranks
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.twig = twig;
+		this.twig = twig;
 
-	this.ranks = ranks;
+		this.ranks = ranks;
 
-	Jools.immute( this );
+		Jools.immute( this );
 
-	Jools.immute( twig );
+		Jools.immute( twig );
 
-	Jools.immute( ranks );
-};
+		Jools.immute( ranks );
+	};
 
 
 /*
 | Creates a new Block object.
 */
-Block.Create =
-Block.prototype.Create =
+var Block =
+Code.Block =
 	function(
 		// free strings
 	)
@@ -251,50 +250,61 @@ Block.prototype.Create =
 		return inherit;
 	}
 
-	return new Block( 8833, twig, ranks );
+	return new Constructor( 8833, twig, ranks );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Block.prototype = Constructor.prototype;
+
+
+Block.Create = Constructor.prototype.Create = Block;
 
 
 /*
 | Reflection.
 */
-Block.prototype.reflect = 'Block';
+Constructor.prototype.reflect = 'Block';
 
 
 /*
 | Sets values by path.
 */
-Block.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Block.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-Block.prototype.atRank = JoobjProto.atRank;
+Constructor.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-Block.prototype.rankOf = JoobjProto.rankOf;
+Constructor.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-Block.prototype.newUID = JoobjProto.newUID;
+Constructor.prototype.newUID = JoobjProto.newUID;
 
 
 /*
 | Tests equality of object.
 */
-Block.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

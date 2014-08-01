@@ -60,39 +60,38 @@ if( SERVER )
 /*
 | Constructor.
 */
-var CommaList =
-Code.CommaList =
+var Constructor =
 	function(
 		tag, // magic cookie
 		twig, // twig
 		ranks // twig ranks
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.twig = twig;
+		this.twig = twig;
 
-	this.ranks = ranks;
+		this.ranks = ranks;
 
-	Jools.immute( this );
+		Jools.immute( this );
 
-	Jools.immute( twig );
+		Jools.immute( twig );
 
-	Jools.immute( ranks );
-};
+		Jools.immute( ranks );
+	};
 
 
 /*
 | Creates a new CommaList object.
 */
-CommaList.Create =
-CommaList.prototype.Create =
+var CommaList =
+Code.CommaList =
 	function(
 		// free strings
 	)
@@ -261,50 +260,61 @@ CommaList.prototype.Create =
 		return inherit;
 	}
 
-	return new CommaList( 8833, twig, ranks );
+	return new Constructor( 8833, twig, ranks );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	CommaList.prototype = Constructor.prototype;
+
+
+CommaList.Create = Constructor.prototype.Create = CommaList;
 
 
 /*
 | Reflection.
 */
-CommaList.prototype.reflect = 'CommaList';
+Constructor.prototype.reflect = 'CommaList';
 
 
 /*
 | Sets values by path.
 */
-CommaList.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-CommaList.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-CommaList.prototype.atRank = JoobjProto.atRank;
+Constructor.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-CommaList.prototype.rankOf = JoobjProto.rankOf;
+Constructor.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-CommaList.prototype.newUID = JoobjProto.newUID;
+Constructor.prototype.newUID = JoobjProto.newUID;
 
 
 /*
 | Tests equality of object.
 */
-CommaList.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

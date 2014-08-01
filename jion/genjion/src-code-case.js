@@ -60,42 +60,41 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Case =
-Code.Case =
+var Constructor =
 	function(
 		tag, // magic cookie
 		twig, // twig
 		ranks, // twig ranks
 		v_block // the statement
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.block = v_block;
+		this.block = v_block;
 
-	this.twig = twig;
+		this.twig = twig;
 
-	this.ranks = ranks;
+		this.ranks = ranks;
 
-	Jools.immute( this );
+		Jools.immute( this );
 
-	Jools.immute( twig );
+		Jools.immute( twig );
 
-	Jools.immute( ranks );
-};
+		Jools.immute( ranks );
+	};
 
 
 /*
 | Creates a new Case object.
 */
-Case.Create =
-Case.prototype.Create =
+var Case =
+Code.Case =
 	function(
 		// free strings
 	)
@@ -290,50 +289,61 @@ Case.prototype.Create =
 		return inherit;
 	}
 
-	return new Case( 8833, twig, ranks, v_block );
+	return new Constructor( 8833, twig, ranks, v_block );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Case.prototype = Constructor.prototype;
+
+
+Case.Create = Constructor.prototype.Create = Case;
 
 
 /*
 | Reflection.
 */
-Case.prototype.reflect = 'Case';
+Constructor.prototype.reflect = 'Case';
 
 
 /*
 | Sets values by path.
 */
-Case.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Case.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-Case.prototype.atRank = JoobjProto.atRank;
+Constructor.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-Case.prototype.rankOf = JoobjProto.rankOf;
+Constructor.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-Case.prototype.newUID = JoobjProto.newUID;
+Constructor.prototype.newUID = JoobjProto.newUID;
 
 
 /*
 | Tests equality of object.
 */
-Case.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

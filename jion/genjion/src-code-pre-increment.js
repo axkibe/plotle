@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var PreIncrement =
-Code.PreIncrement =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_expr // the expression to pre increment
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.expr = v_expr;
+		this.expr = v_expr;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new PreIncrement object.
 */
-PreIncrement.Create =
-PreIncrement.prototype.Create =
+var PreIncrement =
+Code.PreIncrement =
 	function(
 		// free strings
 	)
@@ -131,32 +130,43 @@ PreIncrement.prototype.Create =
 		return inherit;
 	}
 
-	return new PreIncrement( 8833, v_expr );
+	return new Constructor( 8833, v_expr );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	PreIncrement.prototype = Constructor.prototype;
+
+
+PreIncrement.Create = Constructor.prototype.Create = PreIncrement;
 
 
 /*
 | Reflection.
 */
-PreIncrement.prototype.reflect = 'PreIncrement';
+Constructor.prototype.reflect = 'PreIncrement';
 
 
 /*
 | Sets values by path.
 */
-PreIncrement.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-PreIncrement.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-PreIncrement.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

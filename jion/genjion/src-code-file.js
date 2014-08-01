@@ -42,38 +42,37 @@ if( SERVER )
 /*
 | Constructor.
 */
-var File =
-Code.File =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_capsule, // the capsule
 		v_header, // header comment
 		v_preamble // preamble to capsule
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.capsule = v_capsule;
+		this.capsule = v_capsule;
 
-	this.header = v_header;
+		this.header = v_header;
 
-	this.preamble = v_preamble;
+		this.preamble = v_preamble;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new File object.
 */
-File.Create =
-File.prototype.Create =
+var File =
+Code.File =
 	function(
 		// free strings
 	)
@@ -225,32 +224,43 @@ File.prototype.Create =
 		return inherit;
 	}
 
-	return new File( 8833, v_capsule, v_header, v_preamble );
+	return new Constructor( 8833, v_capsule, v_header, v_preamble );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	File.prototype = Constructor.prototype;
+
+
+File.Create = Constructor.prototype.Create = File;
 
 
 /*
 | Reflection.
 */
-File.prototype.reflect = 'File';
+Constructor.prototype.reflect = 'File';
 
 
 /*
 | Sets values by path.
 */
-File.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-File.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-File.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

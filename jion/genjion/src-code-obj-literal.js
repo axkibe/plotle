@@ -60,39 +60,38 @@ if( SERVER )
 /*
 | Constructor.
 */
-var ObjLiteral =
-Code.ObjLiteral =
+var Constructor =
 	function(
 		tag, // magic cookie
 		twig, // twig
 		ranks // twig ranks
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.twig = twig;
+		this.twig = twig;
 
-	this.ranks = ranks;
+		this.ranks = ranks;
 
-	Jools.immute( this );
+		Jools.immute( this );
 
-	Jools.immute( twig );
+		Jools.immute( twig );
 
-	Jools.immute( ranks );
-};
+		Jools.immute( ranks );
+	};
 
 
 /*
 | Creates a new ObjLiteral object.
 */
-ObjLiteral.Create =
-ObjLiteral.prototype.Create =
+var ObjLiteral =
+Code.ObjLiteral =
 	function(
 		// free strings
 	)
@@ -261,50 +260,61 @@ ObjLiteral.prototype.Create =
 		return inherit;
 	}
 
-	return new ObjLiteral( 8833, twig, ranks );
+	return new Constructor( 8833, twig, ranks );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	ObjLiteral.prototype = Constructor.prototype;
+
+
+ObjLiteral.Create = Constructor.prototype.Create = ObjLiteral;
 
 
 /*
 | Reflection.
 */
-ObjLiteral.prototype.reflect = 'ObjLiteral';
+Constructor.prototype.reflect = 'ObjLiteral';
 
 
 /*
 | Sets values by path.
 */
-ObjLiteral.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-ObjLiteral.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-ObjLiteral.prototype.atRank = JoobjProto.atRank;
+Constructor.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-ObjLiteral.prototype.rankOf = JoobjProto.rankOf;
+Constructor.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-ObjLiteral.prototype.newUID = JoobjProto.newUID;
+Constructor.prototype.newUID = JoobjProto.newUID;
 
 
 /*
 | Tests equality of object.
 */
-ObjLiteral.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

@@ -42,38 +42,37 @@ if( SERVER )
 /*
 | Constructor.
 */
-var ForIn =
-Code.ForIn =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_block, // the for block
 		v_object, // the object expression to iterate over
 		v_variable // the loop variable
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.block = v_block;
+		this.block = v_block;
 
-	this.object = v_object;
+		this.object = v_object;
 
-	this.variable = v_variable;
+		this.variable = v_variable;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new ForIn object.
 */
-ForIn.Create =
-ForIn.prototype.Create =
+var ForIn =
+Code.ForIn =
 	function(
 		// free strings
 	)
@@ -203,32 +202,43 @@ ForIn.prototype.Create =
 		return inherit;
 	}
 
-	return new ForIn( 8833, v_block, v_object, v_variable );
+	return new Constructor( 8833, v_block, v_object, v_variable );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	ForIn.prototype = Constructor.prototype;
+
+
+ForIn.Create = Constructor.prototype.Create = ForIn;
 
 
 /*
 | Reflection.
 */
-ForIn.prototype.reflect = 'ForIn';
+Constructor.prototype.reflect = 'ForIn';
 
 
 /*
 | Sets values by path.
 */
-ForIn.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-ForIn.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-ForIn.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

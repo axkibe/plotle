@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Fail =
-Code.Fail =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_message // the error message expression
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.message = v_message;
+		this.message = v_message;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Fail object.
 */
-Fail.Create =
-Fail.prototype.Create =
+var Fail =
+Code.Fail =
 	function(
 		// free strings
 	)
@@ -131,32 +130,43 @@ Fail.prototype.Create =
 		return inherit;
 	}
 
-	return new Fail( 8833, v_message );
+	return new Constructor( 8833, v_message );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Fail.prototype = Constructor.prototype;
+
+
+Fail.Create = Constructor.prototype.Create = Fail;
 
 
 /*
 | Reflection.
 */
-Fail.prototype.reflect = 'Fail';
+Constructor.prototype.reflect = 'Fail';
 
 
 /*
 | Sets values by path.
 */
-Fail.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Fail.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Fail.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

@@ -42,37 +42,36 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Dot =
-Code.Dot =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_expr, // the expression to get the member of
 		v_member // the members name
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.expr = v_expr;
+		this.expr = v_expr;
 
-	this.member = v_member;
+		this.member = v_member;
 
-	this._init( );
+		this._init( );
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Dot object.
 */
-Dot.Create =
-Dot.prototype.Create =
+var Dot =
+Code.Dot =
 	function(
 		// free strings
 	)
@@ -173,32 +172,43 @@ Dot.prototype.Create =
 		return inherit;
 	}
 
-	return new Dot( 8833, v_expr, v_member );
+	return new Constructor( 8833, v_expr, v_member );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Dot.prototype = Constructor.prototype;
+
+
+Dot.Create = Constructor.prototype.Create = Dot;
 
 
 /*
 | Reflection.
 */
-Dot.prototype.reflect = 'Dot';
+Constructor.prototype.reflect = 'Dot';
 
 
 /*
 | Sets values by path.
 */
-Dot.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Dot.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Dot.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

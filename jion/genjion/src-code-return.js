@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Return =
-Code.Return =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_expr // the expression to return
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.expr = v_expr;
+		this.expr = v_expr;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Return object.
 */
-Return.Create =
-Return.prototype.Create =
+var Return =
+Code.Return =
 	function(
 		// free strings
 	)
@@ -131,32 +130,43 @@ Return.prototype.Create =
 		return inherit;
 	}
 
-	return new Return( 8833, v_expr );
+	return new Constructor( 8833, v_expr );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Return.prototype = Constructor.prototype;
+
+
+Return.Create = Constructor.prototype.Create = Return;
 
 
 /*
 | Reflection.
 */
-Return.prototype.reflect = 'Return';
+Constructor.prototype.reflect = 'Return';
 
 
 /*
 | Sets values by path.
 */
-Return.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Return.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Return.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

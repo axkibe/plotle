@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var BooleanLiteral =
-Code.BooleanLiteral =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_boolean // the boolean
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.boolean = v_boolean;
+		this.boolean = v_boolean;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new BooleanLiteral object.
 */
-BooleanLiteral.Create =
-BooleanLiteral.prototype.Create =
+var BooleanLiteral =
+Code.BooleanLiteral =
 	function(
 		// free strings
 	)
@@ -136,32 +135,43 @@ BooleanLiteral.prototype.Create =
 		return inherit;
 	}
 
-	return new BooleanLiteral( 8833, v_boolean );
+	return new Constructor( 8833, v_boolean );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	BooleanLiteral.prototype = Constructor.prototype;
+
+
+BooleanLiteral.Create = Constructor.prototype.Create = BooleanLiteral;
 
 
 /*
 | Reflection.
 */
-BooleanLiteral.prototype.reflect = 'BooleanLiteral';
+Constructor.prototype.reflect = 'BooleanLiteral';
 
 
 /*
 | Sets values by path.
 */
-BooleanLiteral.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-BooleanLiteral.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-BooleanLiteral.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

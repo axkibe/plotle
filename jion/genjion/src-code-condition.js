@@ -42,38 +42,37 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Condition =
-Code.Condition =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_condition, // the condition
 		v_elsewise, // the else condition
 		v_then // the then expression
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.condition = v_condition;
+		this.condition = v_condition;
 
-	this.elsewise = v_elsewise;
+		this.elsewise = v_elsewise;
 
-	this.then = v_then;
+		this.then = v_then;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Condition object.
 */
-Condition.Create =
-Condition.prototype.Create =
+var Condition =
+Code.Condition =
 	function(
 		// free strings
 	)
@@ -189,32 +188,43 @@ Condition.prototype.Create =
 		return inherit;
 	}
 
-	return new Condition( 8833, v_condition, v_elsewise, v_then );
+	return new Constructor( 8833, v_condition, v_elsewise, v_then );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Condition.prototype = Constructor.prototype;
+
+
+Condition.Create = Constructor.prototype.Create = Condition;
 
 
 /*
 | Reflection.
 */
-Condition.prototype.reflect = 'Condition';
+Constructor.prototype.reflect = 'Condition';
 
 
 /*
 | Sets values by path.
 */
-Condition.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Condition.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Condition.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

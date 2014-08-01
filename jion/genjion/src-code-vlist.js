@@ -46,42 +46,41 @@ if( SERVER )
 /*
 | Constructor.
 */
-var VList =
-Code.VList =
+var Constructor =
 	function(
 		tag, // magic cookie
 		twig, // twig
 		ranks, // twig ranks
 		v_path // the path
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.path = v_path;
+		this.path = v_path;
 
-	this.twig = twig;
+		this.twig = twig;
 
-	this.ranks = ranks;
+		this.ranks = ranks;
 
-	Jools.immute( this );
+		Jools.immute( this );
 
-	Jools.immute( twig );
+		Jools.immute( twig );
 
-	Jools.immute( ranks );
-};
+		Jools.immute( ranks );
+	};
 
 
 /*
 | Creates a new VList object.
 */
-VList.Create =
-VList.prototype.Create =
+var VList =
+Code.VList =
 	function(
 		// free strings
 	)
@@ -289,50 +288,61 @@ VList.prototype.Create =
 		return inherit;
 	}
 
-	return new VList( 8833, twig, ranks, v_path );
+	return new Constructor( 8833, twig, ranks, v_path );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	VList.prototype = Constructor.prototype;
+
+
+VList.Create = Constructor.prototype.Create = VList;
 
 
 /*
 | Reflection.
 */
-VList.prototype.reflect = 'VList';
+Constructor.prototype.reflect = 'VList';
 
 
 /*
 | Sets values by path.
 */
-VList.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-VList.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-VList.prototype.atRank = JoobjProto.atRank;
+Constructor.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-VList.prototype.rankOf = JoobjProto.rankOf;
+Constructor.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-VList.prototype.newUID = JoobjProto.newUID;
+Constructor.prototype.newUID = JoobjProto.newUID;
 
 
 /*
 | Tests equality of object.
 */
-VList.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

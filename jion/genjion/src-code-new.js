@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var New =
-Code.New =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_call // the constrcutor call
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.call = v_call;
+		this.call = v_call;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new New object.
 */
-New.Create =
-New.prototype.Create =
+var New =
+Code.New =
 	function(
 		// free strings
 	)
@@ -136,32 +135,43 @@ New.prototype.Create =
 		return inherit;
 	}
 
-	return new New( 8833, v_call );
+	return new Constructor( 8833, v_call );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	New.prototype = Constructor.prototype;
+
+
+New.Create = Constructor.prototype.Create = New;
 
 
 /*
 | Reflection.
 */
-New.prototype.reflect = 'New';
+Constructor.prototype.reflect = 'New';
 
 
 /*
 | Sets values by path.
 */
-New.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-New.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-New.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

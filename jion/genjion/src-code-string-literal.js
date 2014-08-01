@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var StringLiteral =
-Code.StringLiteral =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_string // the literal
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.string = v_string;
+		this.string = v_string;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new StringLiteral object.
 */
-StringLiteral.Create =
-StringLiteral.prototype.Create =
+var StringLiteral =
+Code.StringLiteral =
 	function(
 		// free strings
 	)
@@ -140,32 +139,43 @@ StringLiteral.prototype.Create =
 		return inherit;
 	}
 
-	return new StringLiteral( 8833, v_string );
+	return new Constructor( 8833, v_string );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	StringLiteral.prototype = Constructor.prototype;
+
+
+StringLiteral.Create = Constructor.prototype.Create = StringLiteral;
 
 
 /*
 | Reflection.
 */
-StringLiteral.prototype.reflect = 'StringLiteral';
+Constructor.prototype.reflect = 'StringLiteral';
 
 
 /*
 | Sets values by path.
 */
-StringLiteral.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-StringLiteral.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-StringLiteral.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

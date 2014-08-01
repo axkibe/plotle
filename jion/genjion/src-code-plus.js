@@ -42,35 +42,34 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Plus =
-Code.Plus =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_left, // left expression
 		v_right // right expression
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.left = v_left;
+		this.left = v_left;
 
-	this.right = v_right;
+		this.right = v_right;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Plus object.
 */
-Plus.Create =
-Plus.prototype.Create =
+var Plus =
+Code.Plus =
 	function(
 		// free strings
 	)
@@ -156,32 +155,43 @@ Plus.prototype.Create =
 		return inherit;
 	}
 
-	return new Plus( 8833, v_left, v_right );
+	return new Constructor( 8833, v_left, v_right );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Plus.prototype = Constructor.prototype;
+
+
+Plus.Create = Constructor.prototype.Create = Plus;
 
 
 /*
 | Reflection.
 */
-Plus.prototype.reflect = 'Plus';
+Constructor.prototype.reflect = 'Plus';
 
 
 /*
 | Sets values by path.
 */
-Plus.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Plus.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Plus.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

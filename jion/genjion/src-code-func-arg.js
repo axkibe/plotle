@@ -42,35 +42,34 @@ if( SERVER )
 /*
 | Constructor.
 */
-var FuncArg =
-Code.FuncArg =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_comment, // argument comment
 		v_name // argument name
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.comment = v_comment;
+		this.comment = v_comment;
 
-	this.name = v_name;
+		this.name = v_name;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new FuncArg object.
 */
-FuncArg.Create =
-FuncArg.prototype.Create =
+var FuncArg =
+Code.FuncArg =
 	function(
 		// free strings
 	)
@@ -181,32 +180,43 @@ FuncArg.prototype.Create =
 		return inherit;
 	}
 
-	return new FuncArg( 8833, v_comment, v_name );
+	return new Constructor( 8833, v_comment, v_name );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	FuncArg.prototype = Constructor.prototype;
+
+
+FuncArg.Create = Constructor.prototype.Create = FuncArg;
 
 
 /*
 | Reflection.
 */
-FuncArg.prototype.reflect = 'FuncArg';
+Constructor.prototype.reflect = 'FuncArg';
 
 
 /*
 | Sets values by path.
 */
-FuncArg.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-FuncArg.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-FuncArg.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Not =
-Code.Not =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_expr // the expression to negate
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.expr = v_expr;
+		this.expr = v_expr;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Not object.
 */
-Not.Create =
-Not.prototype.Create =
+var Not =
+Code.Not =
 	function(
 		// free strings
 	)
@@ -131,32 +130,43 @@ Not.prototype.Create =
 		return inherit;
 	}
 
-	return new Not( 8833, v_expr );
+	return new Constructor( 8833, v_expr );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Not.prototype = Constructor.prototype;
+
+
+Not.Create = Constructor.prototype.Create = Not;
 
 
 /*
 | Reflection.
 */
-Not.prototype.reflect = 'Not';
+Constructor.prototype.reflect = 'Not';
 
 
 /*
 | Sets values by path.
 */
-Not.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Not.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Not.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

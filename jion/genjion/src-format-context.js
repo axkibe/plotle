@@ -41,7 +41,7 @@ if( SERVER )
 /*
 | Constructor.
 */
-Context =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_check, // true if within optinal CHECK code
@@ -49,32 +49,31 @@ Context =
 		v_inline, // true if to be formated inline
 		v_root // true if in root context
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.check = v_check;
+		this.check = v_check;
 
-	this.indent = v_indent;
+		this.indent = v_indent;
 
-	this.inline = v_inline;
+		this.inline = v_inline;
 
-	this.root = v_root;
+		this.root = v_root;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Context object.
 */
-Context.Create =
-Context.prototype.Create =
+Context =
 	function(
 		// free strings
 	)
@@ -253,32 +252,43 @@ Context.prototype.Create =
 		return inherit;
 	}
 
-	return new Context( 8833, v_check, v_indent, v_inline, v_root );
+	return new Constructor( 8833, v_check, v_indent, v_inline, v_root );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Context.prototype = Constructor.prototype;
+
+
+Context.Create = Constructor.prototype.Create = Context;
 
 
 /*
 | Reflection.
 */
-Context.prototype.reflect = 'Context';
+Constructor.prototype.reflect = 'Context';
 
 
 /*
 | Sets values by path.
 */
-Context.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Context.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Context.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

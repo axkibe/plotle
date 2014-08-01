@@ -60,39 +60,38 @@ if( SERVER )
 /*
 | Constructor.
 */
-var ArrayLiteral =
-Code.ArrayLiteral =
+var Constructor =
 	function(
 		tag, // magic cookie
 		twig, // twig
 		ranks // twig ranks
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.twig = twig;
+		this.twig = twig;
 
-	this.ranks = ranks;
+		this.ranks = ranks;
 
-	Jools.immute( this );
+		Jools.immute( this );
 
-	Jools.immute( twig );
+		Jools.immute( twig );
 
-	Jools.immute( ranks );
-};
+		Jools.immute( ranks );
+	};
 
 
 /*
 | Creates a new ArrayLiteral object.
 */
-ArrayLiteral.Create =
-ArrayLiteral.prototype.Create =
+var ArrayLiteral =
+Code.ArrayLiteral =
 	function(
 		// free strings
 	)
@@ -261,50 +260,61 @@ ArrayLiteral.prototype.Create =
 		return inherit;
 	}
 
-	return new ArrayLiteral( 8833, twig, ranks );
+	return new Constructor( 8833, twig, ranks );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	ArrayLiteral.prototype = Constructor.prototype;
+
+
+ArrayLiteral.Create = Constructor.prototype.Create = ArrayLiteral;
 
 
 /*
 | Reflection.
 */
-ArrayLiteral.prototype.reflect = 'ArrayLiteral';
+Constructor.prototype.reflect = 'ArrayLiteral';
 
 
 /*
 | Sets values by path.
 */
-ArrayLiteral.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-ArrayLiteral.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-ArrayLiteral.prototype.atRank = JoobjProto.atRank;
+Constructor.prototype.atRank = JoobjProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-ArrayLiteral.prototype.rankOf = JoobjProto.rankOf;
+Constructor.prototype.rankOf = JoobjProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-ArrayLiteral.prototype.newUID = JoobjProto.newUID;
+Constructor.prototype.newUID = JoobjProto.newUID;
 
 
 /*
 | Tests equality of object.
 */
-ArrayLiteral.prototype.equals =
+Constructor.prototype.equals =
 	function( obj // object to compare to
 ) { return this === obj; };
 

@@ -42,35 +42,34 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Or =
-Code.Or =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_left, // left expression
 		v_right // right expression
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.left = v_left;
+		this.left = v_left;
 
-	this.right = v_right;
+		this.right = v_right;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Or object.
 */
-Or.Create =
-Or.prototype.Create =
+var Or =
+Code.Or =
 	function(
 		// free strings
 	)
@@ -156,32 +155,43 @@ Or.prototype.Create =
 		return inherit;
 	}
 
-	return new Or( 8833, v_left, v_right );
+	return new Constructor( 8833, v_left, v_right );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Or.prototype = Constructor.prototype;
+
+
+Or.Create = Constructor.prototype.Create = Or;
 
 
 /*
 | Reflection.
 */
-Or.prototype.reflect = 'Or';
+Constructor.prototype.reflect = 'Or';
 
 
 /*
 | Sets values by path.
 */
-Or.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Or.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Or.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

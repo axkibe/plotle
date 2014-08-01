@@ -41,33 +41,23 @@ if( SERVER )
 /*
 | Constructor.
 */
-Gen =
+var Constructor =
 	function(
-		tag, // magic cookie
 		v_jion // the jion definition
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
+	{
+		this.jion = v_jion;
 
-	this.jion = v_jion;
+		this._init( );
 
-	this._init( );
-
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Gen object.
 */
-Gen.Create =
-Gen.prototype.Create =
+Gen =
 	function(
 		// free strings
 	)
@@ -131,32 +121,43 @@ Gen.prototype.Create =
 		return inherit;
 	}
 
-	return new Gen( 8833, v_jion );
+	return new Constructor( v_jion );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Gen.prototype = Constructor.prototype;
+
+
+Gen.Create = Constructor.prototype.Create = Gen;
 
 
 /*
 | Reflection.
 */
-Gen.prototype.reflect = 'Gen';
+prototype.reflect = 'Gen';
 
 
 /*
 | Sets values by path.
 */
-Gen.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Gen.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Gen.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

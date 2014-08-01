@@ -42,35 +42,34 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Equals =
-Code.Equals =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_left, // left expression
 		v_right // right expression
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.left = v_left;
+		this.left = v_left;
 
-	this.right = v_right;
+		this.right = v_right;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Equals object.
 */
-Equals.Create =
-Equals.prototype.Create =
+var Equals =
+Code.Equals =
 	function(
 		// free strings
 	)
@@ -156,32 +155,43 @@ Equals.prototype.Create =
 		return inherit;
 	}
 
-	return new Equals( 8833, v_left, v_right );
+	return new Constructor( 8833, v_left, v_right );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Equals.prototype = Constructor.prototype;
+
+
+Equals.Create = Constructor.prototype.Create = Equals;
 
 
 /*
 | Reflection.
 */
-Equals.prototype.reflect = 'Equals';
+Constructor.prototype.reflect = 'Equals';
 
 
 /*
 | Sets values by path.
 */
-Equals.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Equals.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Equals.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

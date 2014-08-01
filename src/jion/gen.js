@@ -212,10 +212,6 @@ Gen.prototype._init =
 		}
 	}
 
-	this.tag = NumberLiteral( 8833 );
-	// FIXME
-	// NumberLiteral( Math.floor( Math.random( ) * 1000000000 ) );
-
 	this.unit = jion.unit;
 
 	for( name in jion.attributes || { } )
@@ -399,8 +395,6 @@ Gen.prototype._init =
 		}
 	}
 
-	constructorList.unshift( 'tag' );
-
 	this.constructorList =
 		Object.freeze( constructorList );
 
@@ -427,8 +421,7 @@ Gen.prototype._init =
 
 		for( name in twigMap )
 		{
-			ut =
-				twigMap[ name ].split( '.' );
+			ut = twigMap[ name ].split( '.' );
 
 			if( ut.length !== 2 )
 			{
@@ -439,12 +432,10 @@ Gen.prototype._init =
 
 			if( !units[ ut[ 0 ] ] )
 			{
-				units[ ut[ 0 ] ] =
-					{ };
+				units[ ut[ 0 ] ] = { };
 			}
 
-			units[ ut[ 0 ] ][ ut[ 1 ] ] =
-				true;
+			units[ ut[ 0 ] ][ ut[ 1 ] ] = true;
 
 			twig[ name ] =
 				Object.freeze( {
@@ -455,8 +446,7 @@ Gen.prototype._init =
 				} );
 		}
 
-		this.twig =
-			Object.freeze( twig );
+		this.twig = Object.freeze( twig );
 	}
 	else
 	{
@@ -473,13 +463,12 @@ Gen.prototype._init =
 
 	if( twig )
 	{
-		twigList =
-			Object.keys( twig ).sort( );
+		twigList = Object.keys( twig ).sort( );
 
-		this.twigList =
-			Object.freeze( twigList );
+		this.twigList = Object.freeze( twigList );
 	}
 
+	// FUTURE make it a Var
 	this.reference =
 		( jion.unit === jion.name )
 			?
@@ -663,20 +652,7 @@ Gen.prototype.genConstructor =
 			'Constructor.'
 		);
 
-	// checks the tag
-	block =
-		Block( )
-		.Check(
-			Block( ).
-			If(
-				Differs(
-					Var( 'tag' ),
-					this.tag
-				),
-				Block( )
-				.Fail( )
-			)
-		);
+	block = Block( );
 
 	// assigns the variables
 	for(
@@ -685,10 +661,9 @@ Gen.prototype.genConstructor =
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ],
-		attr =
-			this.attributes[ name ];
+		name = this.attrList[ a ];
+
+		attr = this.attributes[ name ];
 
 		if( attr.assign === null )
 		{
@@ -840,16 +815,6 @@ Gen.prototype.genConstructor =
 
 				break;
 
-			case 'tag' :
-
-				constructor =
-					constructor.Arg(
-						'tag',
-						'magic cookie'
-					);
-
-				break;
-
 			case 'twig' :
 
 				constructor =
@@ -882,26 +847,11 @@ Gen.prototype.genConstructor =
 		}
 	}
 
-	if( this.unit )
-	{
-		capsule =
-			capsule.VarDec(
-				this.reference,
-				Assign(
-					Var( this.unit ).Dot( this.name ),
-					constructor
-				)
-			);
-	}
-	else
-	{
-		capsule =
-			capsule
-			.Assign(
-				Var( this.name ),
-				constructor
-			);
-	}
+	capsule =
+		capsule.VarDec(
+			'Constructor',
+			constructor
+		);
 
 	return capsule;
 };
@@ -945,7 +895,7 @@ Gen.prototype.genSubclass =
 		)
 		.Call(
 			Var( 'Jools' ).Dot( 'subclass' ),
-			Var( this.reference ),
+			Var( 'Constructor' ),
 			this.subclass
 		)
 	);
@@ -2089,8 +2039,7 @@ Gen.prototype.genCreatorReturn =
 					Var( '_singleton' ),
 					New(
 						Call(
-							Var( this.reference ),
-							this.tag
+							Var( 'Constructor' )
 						)
 					)
 				)
@@ -2103,7 +2052,7 @@ Gen.prototype.genCreatorReturn =
 
 	call =
 		Call(
-			Var( this.reference )
+			Var( 'Constructor' )
 		);
 
 	for(
@@ -2126,13 +2075,6 @@ Gen.prototype.genCreatorReturn =
 					call.Append(
 						Var( name )
 					);
-
-				break;
-
-			case 'tag' :
-
-				call =
-					call.Append( this.tag );
 
 				break;
 
@@ -2163,53 +2105,80 @@ Gen.prototype.genCreator =
 	)
 {
 	var
-		block;
+		block,
+		creator;
 
 	capsule =
 		capsule.Comment(
 			'Creates a new ' + this.name + ' object.'
 		);
 
-	block =
-		Block( );
+	block = Block( );
 
-	block =
-		this.genCreatorVariables( block );
+	block = this.genCreatorVariables( block );
 
-	block =
-		this.genCreatorInheritanceReceiver( block );
+	block = this.genCreatorInheritanceReceiver( block );
 
-	block =
-		this.genCreatorFreeStringsParser( block );
+	block = this.genCreatorFreeStringsParser( block );
 
-	block =
-		this.genCreatorDefaults( block, false );
+	block = this.genCreatorDefaults( block, false );
 
-	block =
-		this.genCreatorChecks( block, true );
+	block = this.genCreatorChecks( block, true );
 
-	block =
-		this.genCreatorConcerns( block );
+	block = this.genCreatorConcerns( block );
 
-	block =
-		this.genCreatorUnchanged( block );
+	block = this.genCreatorUnchanged( block );
 
-	block =
-		this.genCreatorReturn( block );
+	block = this.genCreatorReturn( block );
 
+	creator =
+		Func( block )
+		.Arg(
+			null,
+			'free strings'
+		);
+
+	if( this.unit )
+	{
+		capsule =
+			capsule.VarDec(
+				this.reference,
+				Assign(
+					Var( this.unit ).Dot( this.name ),
+					creator
+				)
+			);
+
+	}
+	else
+	{
+		capsule =
+			capsule
+			.Assign(
+				Var( this.name ),
+				creator
+			);
+	}
+
+	capsule =
+		capsule
+		.Comment( 'Prototype' )
+		.VarDec(
+			'prototype',
+			Assign(
+				Var( this.reference ).Dot( 'prototype' ),
+				Var( 'Constructor' ).Dot( 'prototype' )
+			)
+		);
+
+	// FIXME remove
 	capsule =
 		capsule
 		.Assign(
 			Var( this.reference ).Dot( 'Create' ),
 			Assign(
+				Var( 'Constructor' ).Dot( 'prototype' ).Dot( 'Create' ),
 				Var( this.reference )
-				.Dot( 'prototype' )
-				.Dot( 'Create' ),
-				Func( block )
-				.Arg(
-					null,
-					'free strings'
-				)
 			)
 		);
 
@@ -2595,7 +2564,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 	call =
 		Call(
-			Var( this.reference )
+			Var( 'Constructor' )
 		);
 
 	for(
@@ -2613,13 +2582,6 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 				call =
 					call.Append( Null );
-
-				break;
-
-			case 'tag' :
-
-				call =
-					call.Append( this.tag );
 
 				break;
 
@@ -2768,9 +2730,7 @@ Gen.prototype.genReflection =
 		capsule
 		.Comment( 'Reflection.' )
 		.Assign(
-			Var( this.reference )
-			.Dot( 'prototype' )
-			.Dot( 'reflect' ),
+			Var( 'prototype' ).Dot( 'reflect' ),
 			StringLiteral( this.name )
 		);
 
@@ -2790,19 +2750,13 @@ Gen.prototype.genJoobjProto =
 		capsule
 		.Comment( 'Sets values by path.' )
 		.Assign(
-			Var( this.reference )
-			.Dot( 'prototype' )
-			.Dot( 'setPath' ),
-			Var( 'JoobjProto' )
-			.Dot( 'setPath' )
+			Var( 'prototype' ).Dot( 'setPath' ),
+			Var( 'JoobjProto' ).Dot( 'setPath' )
 		)
 		.Comment( 'Gets values by path' )
 		.Assign(
-			Var( this.reference )
-			.Dot( 'prototype' )
-			.Dot( 'getPath' ),
-			Var( 'JoobjProto' )
-			.Dot( 'getPath' )
+			Var( 'prototype' ).Dot( 'getPath' ),
+			Var( 'JoobjProto' ).Dot( 'getPath' )
 		);
 
 	if( this.twig )
@@ -2811,15 +2765,12 @@ Gen.prototype.genJoobjProto =
 			capsule
 			.Comment( 'Returns a twig by rank.' )
 			.Assign(
-				Var( this.reference )
-				.Dot( 'prototype' )
-				.Dot( 'atRank' ),
-				Var( 'JoobjProto' )
-				.Dot( 'atRank' )
+				Var( 'prototype' ).Dot( 'atRank' ),
+				Var( 'JoobjProto' ).Dot( 'atRank' )
 			)
 			.Comment( 'Gets the rank of a key.' )
 			.Assign(
-				Var( this.reference )
+				Var( 'Constructor' )
 				.Dot( 'prototype' )
 				.Dot( 'rankOf' ),
 				Var( 'JoobjProto' )
@@ -2827,7 +2778,7 @@ Gen.prototype.genJoobjProto =
 			)
 			.Comment( 'Creates a new unique identifier.' )
 			.Assign(
-				Var( this.reference )
+				Var( 'Constructor' )
 				.Dot( 'prototype' )
 				.Dot( 'newUID' ),
 				Var( 'JoobjProto' )
@@ -2928,7 +2879,7 @@ Gen.prototype.genToJSON =
 		.Comment( 'Converts a ' + this.name + ' into JSON.' )
 		.Call(
 			Var( 'Jools' ).Dot( 'lazyValue' ),
-			Var( this.reference ).Dot( 'prototype' ),
+			Var( 'Constructor' ).Dot( 'prototype' ),
 			StringLiteral( 'toJSON' ),
 			Func( block )
 		);
@@ -3025,7 +2976,7 @@ Gen.prototype.genEquals =
 				capsule
 				.Comment( 'Tests equality of object.' )
 				.Assign(
-					Var( this.reference )
+					Var( 'Constructor' )
 					.Dot( 'prototype' )
 					.Dot( 'equals' ),
 					Func(
@@ -3130,7 +3081,9 @@ Gen.prototype.genEquals =
 	capsule =
 		capsule
 		.Assign(
-			Var( this.reference ).Dot( 'prototype' ).Dot( 'equals' ),
+			Var( 'Constructor' )
+			.Dot( 'prototype' )
+			.Dot( 'equals' ),
 			Func( block )
 			.Arg(
 				'obj',
@@ -3241,7 +3194,7 @@ Gen.prototype.genAlike =
 					This.Dot( attr.assign ),
 					Var( 'obj' ).Dot( attr.assign )
 				);
-		
+
 			cond =
 				cond === null
 				? ceq
@@ -3255,7 +3208,7 @@ Gen.prototype.genAlike =
 		capsule =
 			capsule
 			.Assign(
-				Var( this.reference ).Dot( 'prototype' ).Dot( alikeName ),
+				Var( 'Constructor' ).Dot( 'prototype' ).Dot( alikeName ),
 				Func( block )
 				.Arg(
 					'obj',
@@ -3337,14 +3290,11 @@ Gen.prototype.genPreamble =
 	var
 		block;
 
-	block =
-		Block( );
+	block = Block( );
 
-	block =
-		this.genExport( block );
+	block = this.genExport( block );
 
-	block =
-		this.genImports( block );
+	block = this.genImports( block );
 
 	return block;
 };

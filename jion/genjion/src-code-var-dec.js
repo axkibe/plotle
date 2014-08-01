@@ -42,35 +42,34 @@ if( SERVER )
 /*
 | Constructor.
 */
-var VarDec =
-Code.VarDec =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_assign, // Assignment of variable
 		v_name // variable name
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.assign = v_assign;
+		this.assign = v_assign;
 
-	this.name = v_name;
+		this.name = v_name;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new VarDec object.
 */
-VarDec.Create =
-VarDec.prototype.Create =
+var VarDec =
+Code.VarDec =
 	function(
 		// free strings
 	)
@@ -171,32 +170,43 @@ VarDec.prototype.Create =
 		return inherit;
 	}
 
-	return new VarDec( 8833, v_assign, v_name );
+	return new Constructor( 8833, v_assign, v_name );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	VarDec.prototype = Constructor.prototype;
+
+
+VarDec.Create = Constructor.prototype.Create = VarDec;
 
 
 /*
 | Reflection.
 */
-VarDec.prototype.reflect = 'VarDec';
+Constructor.prototype.reflect = 'VarDec';
 
 
 /*
 | Sets values by path.
 */
-VarDec.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-VarDec.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-VarDec.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

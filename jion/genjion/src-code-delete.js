@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Delete =
-Code.Delete =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_expr // the expression to delete
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.expr = v_expr;
+		this.expr = v_expr;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Delete object.
 */
-Delete.Create =
-Delete.prototype.Create =
+var Delete =
+Code.Delete =
 	function(
 		// free strings
 	)
@@ -131,32 +130,43 @@ Delete.prototype.Create =
 		return inherit;
 	}
 
-	return new Delete( 8833, v_expr );
+	return new Constructor( 8833, v_expr );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Delete.prototype = Constructor.prototype;
+
+
+Delete.Create = Constructor.prototype.Create = Delete;
 
 
 /*
 | Reflection.
 */
-Delete.prototype.reflect = 'Delete';
+Constructor.prototype.reflect = 'Delete';
 
 
 /*
 | Sets values by path.
 */
-Delete.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Delete.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Delete.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)

@@ -42,32 +42,31 @@ if( SERVER )
 /*
 | Constructor.
 */
-var Typeof =
-Code.Typeof =
+var Constructor =
 	function(
 		tag, // magic cookie
 		v_expr // the expression to get the type of
 	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== 8833 )
+	{
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( tag !== 8833 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	this.expr = v_expr;
+		this.expr = v_expr;
 
-	Jools.immute( this );
-};
+		Jools.immute( this );
+	};
 
 
 /*
 | Creates a new Typeof object.
 */
-Typeof.Create =
-Typeof.prototype.Create =
+var Typeof =
+Code.Typeof =
 	function(
 		// free strings
 	)
@@ -131,32 +130,43 @@ Typeof.prototype.Create =
 		return inherit;
 	}
 
-	return new Typeof( 8833, v_expr );
+	return new Constructor( 8833, v_expr );
 };
+
+
+/*
+| Prototype
+*/
+var
+	prototype =
+	Typeof.prototype = Constructor.prototype;
+
+
+Typeof.Create = Constructor.prototype.Create = Typeof;
 
 
 /*
 | Reflection.
 */
-Typeof.prototype.reflect = 'Typeof';
+Constructor.prototype.reflect = 'Typeof';
 
 
 /*
 | Sets values by path.
 */
-Typeof.prototype.setPath = JoobjProto.setPath;
+Constructor.prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Typeof.prototype.getPath = JoobjProto.getPath;
+Constructor.prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Tests equality of object.
 */
-Typeof.prototype.equals =
+Constructor.prototype.equals =
 	function(
 		obj // object to compare to
 	)
