@@ -44,18 +44,9 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_expr // the expression to return
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.expr = v_expr;
 
 		Jools.immute( this );
@@ -130,7 +121,7 @@ Code.Return =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_expr );
+	return new Constructor( v_expr );
 };
 
 
@@ -142,25 +133,25 @@ var
 	Return.prototype = Constructor.prototype;
 
 
-Return.Create = Constructor.prototype.Create = Return;
+Return.create = Constructor.prototype.create = Return;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Return';
+prototype.reflect = 'Return';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

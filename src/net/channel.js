@@ -125,10 +125,10 @@ Channel.prototype.abortAll =
 
 	// FUTURE shell.Create
 	shell.ajax =
-		shell.ajax.Create(
+		shell.ajax.create(
 			'twig:set',
 			this.channelName,
-			this.Create(
+			this.create(
 				'fifo',
 					null
 			)
@@ -197,10 +197,10 @@ Channel.prototype.request =
 
 	// FUTURE shell.Create
 	shell.ajax =
-		shell.ajax.Create(
+		shell.ajax.create(
 			'twig:set',
 			this.channelName,
-			this.Create(
+			this.create(
 				'fifo',
 					xhr
 			)
@@ -237,10 +237,10 @@ Channel.prototype._onReply =
 
 	// FUTURE shell.Create
 	shell.ajax =
-		shell.ajax.Create(
+		shell.ajax.create(
 			'twig:set',
 			channel.channelName,
-			channel.Create(
+			channel.create(
 				'fifo',
 					null
 			)

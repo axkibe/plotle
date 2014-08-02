@@ -163,7 +163,7 @@ Space.prototype._init =
 		}
 
 		this.twig.headline =
-			this.twig.headline.Create(
+			this.twig.headline.create(
 				'text',
 					this.spaceUser + ':' + this.spaceTag
 			);

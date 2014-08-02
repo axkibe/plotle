@@ -62,19 +62,10 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		twig, // twig
 		ranks // twig ranks
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.twig = twig;
 
 		this.ranks = ranks;
@@ -260,7 +251,7 @@ Code.CommaList =
 		return inherit;
 	}
 
-	return new Constructor( 8833, twig, ranks );
+	return new Constructor( twig, ranks );
 };
 
 
@@ -272,31 +263,31 @@ var
 	CommaList.prototype = Constructor.prototype;
 
 
-CommaList.Create = Constructor.prototype.Create = CommaList;
+CommaList.create = Constructor.prototype.create = CommaList;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'CommaList';
+prototype.reflect = 'CommaList';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-Constructor.prototype.atRank = JoobjProto.atRank;
+prototype.atRank = JoobjProto.atRank;
 
 
 /*

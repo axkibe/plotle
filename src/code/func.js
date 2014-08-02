@@ -65,7 +65,7 @@ Func.prototype.Append =
 	)
 {
 	return (
-		this.Create(
+		this.create(
 			'twig:add',
 			Jools.uid( ), // FIXME
 			arg
@@ -86,7 +86,7 @@ Func.prototype.Arg =
 {
 	return (
 		this.Append(
-			FuncArg.Create(
+			FuncArg.create(
 				'name',
 					name,
 				'comment',

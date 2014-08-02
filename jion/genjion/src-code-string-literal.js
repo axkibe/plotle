@@ -44,18 +44,9 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_string // the literal
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.string = v_string;
 
 		Jools.immute( this );
@@ -139,7 +130,7 @@ Code.StringLiteral =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_string );
+	return new Constructor( v_string );
 };
 
 
@@ -151,25 +142,25 @@ var
 	StringLiteral.prototype = Constructor.prototype;
 
 
-StringLiteral.Create = Constructor.prototype.Create = StringLiteral;
+StringLiteral.create = Constructor.prototype.create = StringLiteral;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'StringLiteral';
+prototype.reflect = 'StringLiteral';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

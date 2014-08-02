@@ -73,16 +73,16 @@ Disc._init =
 			Jools.half( this.view.height - height );
 
 	this.frame =
-		Euclid.Rect.Create(
+		Euclid.Rect.create(
 			'pnw',
-				Euclid.Point.Create(
+				Euclid.Point.create(
 					'x',
 						0,
 					'y',
 						ny
 				),
 			'pse',
-				Euclid.Point.Create(
+				Euclid.Point.create(
 					'x',
 						width,
 					'y',
@@ -91,23 +91,23 @@ Disc._init =
 		);
 
 	this.silhoutte =
-		Euclid.Ellipse.Create(
+		Euclid.Ellipse.create(
 			'pnw',
-				Euclid.Point.Create(
+				Euclid.Point.create(
 					'x',
 						width - 1 - ew,
 					'y',
 						0 - Jools.half( eh - height )
 				),
 			'pse',
-				Euclid.Point.Create(
+				Euclid.Point.create(
 					'x',
 						width - 1,
 					'y',
 						height + Jools.half( eh - height )
 				),
 			'gradientPC',
-				Euclid.Point.Create(
+				Euclid.Point.create(
 					'x',
 						-600,
 					'y',

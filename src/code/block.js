@@ -84,7 +84,7 @@ Block.prototype.Append =
 	)
 {
 	return (
-		this.Create(
+		this.create(
 			'twig:add',
 			Jools.uid( ), // FIXME
 			statement
@@ -103,7 +103,7 @@ Block.prototype.Assign =
 {
 	var
 		assign =
-			Code.Assign.Create(
+			Code.Assign.create(
 				'left',
 					left,
 				'right',
@@ -125,7 +125,7 @@ Block.prototype.Call =
 {
 	var
 		call =
-			Code.Call.Create(
+			Code.Call.create(
 				'func',
 					func
 			);
@@ -153,7 +153,7 @@ Block.prototype.Check =
 {
 	return (
 		this.Append(
-			Code.Check.Create(
+			Code.Check.create(
 				'block',
 					block
 			)
@@ -174,7 +174,7 @@ Block.prototype.Comment =
 	{
 		// arguments have to be a list of strings otherwise
 		header =
-			Code.Comment.Create(
+			Code.Comment.create(
 				'content',
 					Array.prototype.slice.call( arguments )
 			);
@@ -196,7 +196,7 @@ Block.prototype.If =
 {
 	var
 		statement =
-			Code.If.Create(
+			Code.If.create(
 				'condition',
 					condition,
 				'then',
@@ -225,7 +225,7 @@ Block.prototype.Fail =
 	else if( Jools.isString( message ) )
 	{
 		message =
-			Code.StringLiteral.Create(
+			Code.StringLiteral.create(
 				'string',
 					message
 			);
@@ -233,7 +233,7 @@ Block.prototype.Fail =
 
 	return (
 		this.Append(
-			Code.Fail.Create(
+			Code.Fail.create(
 				'message',
 					message
 			)
@@ -255,7 +255,7 @@ Block.prototype.For =
 {
 	var
 		statement =
-			Code.For.Create(
+			Code.For.create(
 				'init',
 					init,
 				'condition',
@@ -282,7 +282,7 @@ Block.prototype.ForIn =
 {
 	var
 		statement =
-			Code.ForIn.Create(
+			Code.ForIn.create(
 				'variable',
 					variable,
 				'object',
@@ -304,7 +304,7 @@ Block.prototype.New =
 {
 	return (
 		this.Append(
-			Code.New.Create(
+			Code.New.create(
 				'call',
 					call
 			)
@@ -330,7 +330,7 @@ Block.prototype.Return =
 		default :
 
 			expr =
-				Code.Return.Create(
+				Code.Return.create(
 					'expr',
 						expr
 				);
@@ -353,7 +353,7 @@ Block.prototype.VarDec =
 {
 	var
 		varDec =
-			Code.VarDec.Create(
+			Code.VarDec.create(
 				'name',
 					name,
 				'assign',

@@ -44,19 +44,10 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_left, // left-hand side
 		v_right // right-hand side
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.left = v_left;
 
 		this.right = v_right;
@@ -155,7 +146,7 @@ Code.PlusAssign =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_left, v_right );
+	return new Constructor( v_left, v_right );
 };
 
 
@@ -167,25 +158,25 @@ var
 	PlusAssign.prototype = Constructor.prototype;
 
 
-PlusAssign.Create = Constructor.prototype.Create = PlusAssign;
+PlusAssign.create = Constructor.prototype.create = PlusAssign;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'PlusAssign';
+prototype.reflect = 'PlusAssign';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

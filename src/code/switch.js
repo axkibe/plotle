@@ -76,7 +76,7 @@ Switch.prototype.Case =
 	if( case_or_condition.reflect !== 'Case' )
 	{
 		caseExpr =
-			Case.Create(
+			Case.create(
 				'twig:add',
 					Jools.uid( ), // FIXME
 					case_or_condition,
@@ -86,7 +86,7 @@ Switch.prototype.Case =
 	}
 
 	return (
-		this.Create(
+		this.create(
 			'twig:add',
 			Jools.uid( ), // FIXME
 			caseExpr
@@ -104,7 +104,7 @@ Switch.prototype.Default =
 	)
 {
 	return (
-		this.Create(
+		this.create(
 			'defaultCase',
 			block
 		)

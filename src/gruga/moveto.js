@@ -72,16 +72,16 @@ var
 | Layout
 */
 Gruga.MoveTo =
-	Forms.MoveTo.Create(
+	Forms.MoveTo.create(
 		'twig:add',
 		'headline',
-			Widgets.Label.Create(
+			Widgets.Label.create(
 				'text',
 					'move to another space',
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.Create(
+					Design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -92,13 +92,13 @@ Gruga.MoveTo =
 			),
 		'twig:add',
 		'meshcraftHomeButton',
-			Widgets.Button.Create(
+			Widgets.Button.create(
 				'style',
 					'portalButton',
 				'designFrame',
-					Design.AnchorRect.Create(
+					Design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.Create(
+							Design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -107,7 +107,7 @@ Gruga.MoveTo =
 									meshcraftHomeButton.n
 							),
 						'pse',
-							Design.AnchorPoint.Create(
+							Design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -125,7 +125,7 @@ Gruga.MoveTo =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.Create(
+					Design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -138,13 +138,13 @@ Gruga.MoveTo =
 			),
 		'twig:add',
 		'meshcraftSandboxButton',
-			Widgets.Button.Create(
+			Widgets.Button.create(
 				'style',
 					'portalButton',
 				'designFrame',
-					Design.AnchorRect.Create(
+					Design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.Create(
+							Design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -153,7 +153,7 @@ Gruga.MoveTo =
 									meshcraftSandboxButton.n
 							),
 						'pse',
-							Design.AnchorPoint.Create(
+							Design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -171,7 +171,7 @@ Gruga.MoveTo =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.Create(
+					Design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -184,13 +184,13 @@ Gruga.MoveTo =
 			),
 		'twig:add',
 		'userHomeButton',
-			Widgets.Button.Create(
+			Widgets.Button.create(
 				'style',
 					'portalButton',
 				'designFrame',
-					Design.AnchorRect.Create(
+					Design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.Create(
+							Design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -199,7 +199,7 @@ Gruga.MoveTo =
 									userHomeButton.n
 							),
 						'pse',
-							Design.AnchorPoint.Create(
+							Design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -217,7 +217,7 @@ Gruga.MoveTo =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.Create(
+					Design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',

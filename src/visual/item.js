@@ -75,7 +75,7 @@ Item.concernsMark =
 
 	if( path.isEmpty )
 	{
-		return Mark.Vacant.Create( );
+		return Mark.Vacant.create( );
 	}
 
 	if(
@@ -86,7 +86,7 @@ Item.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.Create( );
+		return Mark.Vacant.create( );
 	}
 };
 
@@ -522,7 +522,7 @@ Item.prototype.dragStart =
 	)
 	{
 		shell.setAction(
-			Action.ScrollY.Create(
+			Action.ScrollY.create(
 				'itemPath',
 					this.path,
 				'start',
@@ -550,7 +550,7 @@ Item.prototype.dragStart =
 		case 'CreateRelation' :
 
 			shell.setAction(
-				action.Create(
+				action.create(
 					'fromItemPath',
 						this.path,
 					'relationState',
@@ -568,7 +568,7 @@ Item.prototype.dragStart =
 		// relation binding
 
 		shell.setAction(
-			Action.CreateRelation.Create(
+			Action.CreateRelation.create(
 				'fromItemPath',
 					this.path,
 				'toItemPath',
@@ -590,7 +590,7 @@ Item.prototype.dragStart =
 		if( shell.space.focusedItem( ) !== this )
 		{
 			shell.setMark(
-				Mark.Item.Create(
+				Mark.Item.create(
 					'path',
 						this.path
 				)
@@ -598,7 +598,7 @@ Item.prototype.dragStart =
 		}
 
 		shell.setAction(
-			Action.ItemDrag.Create(
+			Action.ItemDrag.create(
 				'start',
 					view.depoint( p ),
 				'transItem',
@@ -652,7 +652,7 @@ Item.prototype.dragMove =
 			}
 
 			shell.setAction(
-				action.Create(
+				action.create(
 					'toItemPath',
 						this.path
 				)
@@ -757,7 +757,7 @@ Item.prototype.pointingHover =
 	)
 	{
 		return (
-			HoverReply.Create(
+			HoverReply.create(
 				'path',
 					this.path,
 				'cursor',
@@ -777,7 +777,7 @@ Item.prototype.pointingHover =
 	}
 
 	return (
-		HoverReply.Create(
+		HoverReply.create(
 			'path',
 				this.path,
 			'cursor',

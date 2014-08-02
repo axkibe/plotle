@@ -44,19 +44,10 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_expr, // the expression to get the member of
 		v_member // the members name
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.expr = v_expr;
 
 		this.member = v_member;
@@ -172,7 +163,7 @@ Code.Dot =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_expr, v_member );
+	return new Constructor( v_expr, v_member );
 };
 
 
@@ -184,25 +175,25 @@ var
 	Dot.prototype = Constructor.prototype;
 
 
-Dot.Create = Constructor.prototype.Create = Dot;
+Dot.create = Constructor.prototype.create = Dot;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Dot';
+prototype.reflect = 'Dot';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

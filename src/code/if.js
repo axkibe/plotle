@@ -70,7 +70,7 @@ If.prototype.Elsewise =
 	)
 {
 	return (
-		this.Create(
+		this.create(
 			'elsewise',
 				block
 		)

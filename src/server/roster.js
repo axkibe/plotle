@@ -22,7 +22,7 @@ Resource = require( './resource' );
 
 module.exports =
 [
-	Resource.Create(
+	Resource.create(
 		'aliases',
 			[
 				'meshcraft.html',
@@ -36,7 +36,7 @@ module.exports =
 		'postProcessor',
 			'indexHtml'
 	),
-	Resource.Create(
+	Resource.create(
 		'aliases',
 			[ 'devel.html' ],
 		'filePath',
@@ -46,19 +46,19 @@ module.exports =
 		'postProcessor',
 			'develHtml'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/favicon.ico',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'webfont/webfont.js',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/jion/proto.js',
 		'inBundle',
@@ -66,7 +66,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/jools/jools.js',
 		'inBundle',
@@ -74,13 +74,13 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/jools/sha1.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/jion/path.js',
 		'inBundle',
@@ -90,7 +90,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/jion/sign.js',
 		'hasJion',
@@ -100,7 +100,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/jion/sign-ray.js',
 		'hasJion',
@@ -110,7 +110,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/jion/change.js',
 		'hasJion',
@@ -120,7 +120,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/jion/change-ray.js',
 		'hasJion',
@@ -130,7 +130,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/jion/change-wrap.js',
 		'hasJion',
@@ -140,7 +140,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/point.js',
 		'hasJion',
@@ -150,7 +150,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/rect.js',
 		'hasJion',
@@ -160,7 +160,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/shell/fontpool.js',
 		'inBundle',
@@ -168,7 +168,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/shell/theme.js',
 		'inBundle',
@@ -176,25 +176,25 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/const.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/compass.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/margin.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/font.js',
 		'hasJion',
@@ -202,19 +202,19 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/fabric.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/measure.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/shape.js',
 		'hasJion',
@@ -222,7 +222,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/round-rect.js',
 		'hasJion',
@@ -230,7 +230,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/ellipse.js',
 		'hasJion',
@@ -238,7 +238,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/line.js',
 		'hasJion',
@@ -246,7 +246,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/euclid/view.js',
 		'hasJion',
@@ -254,7 +254,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/design/anchor-point.js',
 		'hasJion',
@@ -262,7 +262,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/design/anchor-rect.js',
 		'hasJion',
@@ -270,7 +270,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/design/anchor-ellipse.js',
 		'hasJion',
@@ -278,19 +278,19 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/widgets/widget.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/widgets/getstyle.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/widgets/button.js',
 		'hasJion',
@@ -298,7 +298,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/widgets/input.js',
 		'hasJion',
@@ -306,7 +306,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/widgets/checkbox.js',
 		'hasJion',
@@ -314,7 +314,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/widgets/label.js',
 		'hasJion',
@@ -322,19 +322,19 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/shell/style.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/shell/accent.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/net/channel.js',
 		'hasJion',
@@ -342,7 +342,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/net/ajax.js',
 		'hasJion',
@@ -350,7 +350,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/net/link.js',
 		'hasJion',
@@ -358,7 +358,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/shell/peer.js',
 		'inBundle',
@@ -366,19 +366,19 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/discs/icons.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/discs/disc.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/discs/createdisc.js',
 		'hasJion',
@@ -386,7 +386,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/discs/maindisc.js',
 		'hasJion',
@@ -394,7 +394,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/discs/jockey.js',
 		'hasJion',
@@ -402,7 +402,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/shell/hover-reply.js',
 		'hasJion',
@@ -410,13 +410,13 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/forms/form.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/forms/login.js',
 		'hasJion',
@@ -424,7 +424,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/forms/signup.js',
 		'hasJion',
@@ -432,7 +432,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/forms/space.js',
 		'hasJion',
@@ -440,7 +440,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/forms/moveto.js',
 		'hasJion',
@@ -448,7 +448,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/forms/user.js',
 		'hasJion',
@@ -456,7 +456,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/forms/welcome.js',
 		'hasJion',
@@ -464,7 +464,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/forms/no-access-to-space.js',
 		'hasJion',
@@ -472,7 +472,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/forms/non-existing-space.js',
 		'hasJion',
@@ -480,7 +480,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/forms/jockey.js',
 		'hasJion',
@@ -488,67 +488,67 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/gruga/maindisc.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/gruga/createdisc.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/gruga/login.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/gruga/moveto.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/gruga/no-access-to-space.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/gruga/non-existing-space.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/gruga/signup.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/gruga/space.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/gruga/user.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/gruga/welcome.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/visual/para.js',
 		'hasJion',
@@ -558,7 +558,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/visual/scrollbar.js',
 		'hasJion',
@@ -566,7 +566,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/visual/doc.js',
 		'hasJion',
@@ -576,7 +576,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/visual/item.js',
 		'inBundle',
@@ -584,7 +584,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/visual/doc-item.js',
 		'inBundle',
@@ -592,7 +592,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/visual/note.js',
 		'hasJion',
@@ -602,7 +602,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/visual/label.js',
 		'hasJion',
@@ -610,7 +610,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/visual/relation.js',
 		'hasJion',
@@ -618,7 +618,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/visual/portal.js',
 		'hasJion',
@@ -626,7 +626,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/visual/space.js',
 		'hasJion',
@@ -636,25 +636,25 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/shell/stubs.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/shell/system.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/mark/mark.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/mark/caret.js',
 		'hasJion',
@@ -662,7 +662,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/mark/item.js',
 		'hasJion',
@@ -670,7 +670,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/mark/range.js',
 		'hasJion',
@@ -678,7 +678,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/mark/vacant.js',
 		'hasJion',
@@ -686,7 +686,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/mark/widget.js',
 		'hasJion',
@@ -694,13 +694,13 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/action/action.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/action/none.js',
 		'hasJion',
@@ -708,7 +708,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/action/create-generic.js',
 		'hasJion',
@@ -716,7 +716,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/action/create-relation.js',
 		'hasJion',
@@ -724,7 +724,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/action/item-drag.js',
 		'hasJion',
@@ -732,7 +732,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/action/item-resize.js',
 		'hasJion',
@@ -740,7 +740,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/action/pan.js',
 		'hasJion',
@@ -748,7 +748,7 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/action/scrolly.js',
 		'hasJion',
@@ -756,115 +756,115 @@ module.exports =
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/shell/shell.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/shell/fontloader.js',
 		'inBundle',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/style.css',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/boldoblique-webfont.eot',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/boldoblique-webfont.svg',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/boldoblique-webfont.ttf',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/boldoblique-webfont.woff',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/bold-webfont.eot',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/bold-webfont.svg',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/bold-webfont.ttf',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/bold-webfont.woff',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/oblique-webfont.eot',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/oblique-webfont.svg',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/oblique-webfont.ttf',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/oblique-webfont.woff',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/webfont.eot',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/webfont.svg',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/webfont.ttf',
 		'maxage',
 			'long'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'media/dejavusans/webfont.woff',
 		'maxage',
@@ -872,7 +872,7 @@ module.exports =
 	),
 
 	// --- TestPad ---
-	Resource.Create(
+	Resource.create(
 		'aliases',
 			[ 'testpad.html' ],
 		'filePath',
@@ -882,7 +882,7 @@ module.exports =
 		'postProcessor',
 			'testPadHtml'
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/testpad/iface-sym.js',
 		'devel',
@@ -890,7 +890,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/testpad/action.js',
 		'devel',
@@ -900,7 +900,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'filePath',
 			'src/testpad/testpad.js',
 		'devel',
@@ -910,7 +910,7 @@ module.exports =
 		'inTestPad',
 			true
 	),
-	Resource.Create(
+	Resource.create(
 		'aliases',
 			[ 'torrent/PeridexisErrant%20LNP%20r53.torrent' ],
 		'filePath',

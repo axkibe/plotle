@@ -136,19 +136,19 @@ Ellipse.prototype._init =
 
 		// cardinal points
 		pw =
-			Euclid.Point.Create( 'x', wx, 'y', my ),
+			Euclid.Point.create( 'x', wx, 'y', my ),
 
 		pn =
-			Euclid.Point.Create( 'x', mx, 'y', ny ),
+			Euclid.Point.create( 'x', mx, 'y', ny ),
 
 		pe =
-			Euclid.Point.Create( 'x', ex, 'y', my ),
+			Euclid.Point.create( 'x', ex, 'y', my ),
 
 		ps =
-			Euclid.Point.Create( 'x', mx, 'y', sy );
+			Euclid.Point.create( 'x', mx, 'y', sy );
 
 	this.shape =
-		Euclid.Shape.Create(
+		Euclid.Shape.create(
 			'hull',
 				[
 					'start',
@@ -181,7 +181,7 @@ Jools.lazyValue(
 	function()
 	{
 		return (
-			Euclid.Point.Create(
+			Euclid.Point.create(
 				'x',
 					Jools.half(
 						this.pnw.x + this.pse.x
@@ -211,7 +211,7 @@ Jools.lazyValue(
 		}
 
 		return (
-			Euclid.Point.Create(
+			Euclid.Point.create(
 				'x',
 					Jools.half(
 						this.pnw.x + this.pse.x

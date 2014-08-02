@@ -124,7 +124,7 @@ ShortHand.And =
 		args.splice(
 			0,
 			2,
-			Code.And.Create(
+			Code.And.create(
 				'left',
 					left,
 				'right',
@@ -141,7 +141,7 @@ ShortHand.And =
 	}
 
 	return (
-		Code.And.Create(
+		Code.And.create(
 			'left',
 				left,
 			'right',
@@ -157,7 +157,7 @@ ShortHand.And =
 ShortHand.ArrayLiteral =
 	function( )
 {
-	return Code.ArrayLiteral.Create( );
+	return Code.ArrayLiteral.create( );
 };
 
 
@@ -171,7 +171,7 @@ ShortHand.Assign =
 	)
 {
 	return (
-		Code.Assign.Create(
+		Code.Assign.create(
 			'left',
 				left,
 			'right',
@@ -187,7 +187,7 @@ ShortHand.Assign =
 ShortHand.Block =
 	function( )
 {
-	return Code.Block.Create( );
+	return Code.Block.create( );
 };
 
 
@@ -202,7 +202,7 @@ ShortHand.Call =
 {
 	var
 		call =
-			Code.Call.Create(
+			Code.Call.create(
 				'func',
 					func
 			);
@@ -232,7 +232,7 @@ ShortHand.Condition =
 	)
 {
 	return (
-		Code.Condition.Create(
+		Code.Condition.create(
 			'condition',
 				condition,
 			'then',
@@ -254,7 +254,7 @@ ShortHand.Differs =
 	)
 {
 	return (
-		Code.Differs.Create(
+		Code.Differs.create(
 			'left',
 				left,
 			'right',
@@ -273,7 +273,7 @@ ShortHand.Delete =
 	)
 {
 	return (
-		Code.Delete.Create(
+		Code.Delete.create(
 			'expr',
 				expr
 		)
@@ -291,7 +291,7 @@ ShortHand.Dot =
 	)
 {
 	return (
-		Code.Dot.Create(
+		Code.Dot.create(
 			'expr',
 				expr,
 			'member',
@@ -311,7 +311,7 @@ ShortHand.Equals =
 	)
 {
 	return (
-		Code.Equals.Create(
+		Code.Equals.create(
 			'left',
 				left,
 			'right',
@@ -331,7 +331,7 @@ ShortHand.LessThan =
 	)
 {
 	return (
-		Code.LessThan.Create(
+		Code.LessThan.create(
 			'left',
 				left,
 			'right',
@@ -351,7 +351,7 @@ ShortHand.GreaterThan =
 	)
 {
 	return (
-		Code.GreaterThan.Create(
+		Code.GreaterThan.create(
 			'left',
 				left,
 			'right',
@@ -368,7 +368,7 @@ ShortHand.False =
 	function( )
 {
 	return (
-		Code.BooleanLiteral.Create(
+		Code.BooleanLiteral.create(
 			'boolean',
 				false
 		)
@@ -387,7 +387,7 @@ ShortHand.If =
 	)
 {
 	return (
-		Code.If.Create(
+		Code.If.create(
 			'condition',
 				condition,
 			'then',
@@ -405,7 +405,7 @@ ShortHand.If =
 ShortHand.File =
 	function( )
 {
-	return Code.File.Create( );
+	return Code.File.create( );
 };
 
 
@@ -419,7 +419,7 @@ ShortHand.Func =
 {
 	var
 		func =
-			Code.Func.Create(
+			Code.Func.create(
 				'block',
 					block || null
 			);
@@ -438,7 +438,7 @@ ShortHand.Instanceof =
 	)
 {
 	return (
-		Code.Instanceof.Create(
+		Code.Instanceof.create(
 			'left',
 				left,
 			'right',
@@ -459,7 +459,7 @@ ShortHand.Member =
 	)
 {
 	return (
-		Code.Member.Create(
+		Code.Member.create(
 			'expr',
 				expr,
 			'member',
@@ -478,7 +478,7 @@ ShortHand.New =
 	)
 {
 	return (
-		Code.New.Create(
+		Code.New.create(
 			'call',
 				call
 		)
@@ -495,7 +495,7 @@ ShortHand.Not =
 	)
 {
 	return (
-		Code.Not.Create(
+		Code.Not.create(
 			'expr',
 				expr
 		)
@@ -509,7 +509,7 @@ ShortHand.Not =
 ShortHand.Null =
 	function( )
 {
-	return Code.Null.Create( );
+	return Code.Null.create( );
 };
 
 
@@ -522,7 +522,7 @@ ShortHand.NumberLiteral =
 	)
 {
 	return (
-		Code.NumberLiteral.Create(
+		Code.NumberLiteral.create(
 			'number',
 				number
 		)
@@ -536,7 +536,7 @@ ShortHand.NumberLiteral =
 ShortHand.ObjLiteral =
 	function( )
 {
-	return Code.ObjLiteral.Create( );
+	return Code.ObjLiteral.create( );
 };
 
 
@@ -560,7 +560,7 @@ ShortHand.Or =
 		args.splice(
 			0,
 			2,
-			Code.Or.Create(
+			Code.Or.create(
 				'left',
 					left,
 				'right',
@@ -577,7 +577,7 @@ ShortHand.Or =
 	}
 
 	return (
-		Code.Or.Create(
+		Code.Or.create(
 			'left',
 				left,
 			'right',
@@ -607,7 +607,7 @@ ShortHand.Plus =
 		args.splice(
 			0,
 			2,
-			Code.Plus.Create(
+			Code.Plus.create(
 				'left',
 					left,
 				'right',
@@ -624,7 +624,7 @@ ShortHand.Plus =
 	}
 
 	return (
-		Code.Plus.Create(
+		Code.Plus.create(
 			'left',
 				left,
 			'right',
@@ -644,7 +644,7 @@ ShortHand.PlusAssign =
 	)
 {
 	return (
-		Code.PlusAssign.Create(
+		Code.PlusAssign.create(
 			'left',
 				left,
 			'right',
@@ -664,7 +664,7 @@ ShortHand.PreIncrement =
 	)
 {
 	return (
-		Code.PreIncrement.Create(
+		Code.PreIncrement.create(
 			'expr',
 				expr
 		)
@@ -681,7 +681,7 @@ ShortHand.StringLiteral =
 	)
 {
 	return (
-		Code.StringLiteral.Create(
+		Code.StringLiteral.create(
 			'string',
 				string
 		)
@@ -698,7 +698,7 @@ ShortHand.Switch =
 	)
 {
 	return (
-		Code.Switch.Create(
+		Code.Switch.create(
 			'statement',
 				statement
 		)
@@ -713,7 +713,7 @@ ShortHand.True =
 	function( )
 {
 	return (
-		Code.BooleanLiteral.Create(
+		Code.BooleanLiteral.create(
 			'boolean',
 				true
 		)
@@ -730,7 +730,7 @@ ShortHand.Typeof =
 	)
 {
 	return (
-		Code.Typeof.Create(
+		Code.Typeof.create(
 			'expr',
 				expr
 		)
@@ -748,7 +748,7 @@ ShortHand.Var =
 	)
 {
 	return (
-		Code.Var.Create(
+		Code.Var.create(
 			'name',
 				name
 		)
@@ -767,7 +767,7 @@ ShortHand.VarDec =
 	)
 {
 	return (
-		Code.VarDec.Create(
+		Code.VarDec.create(
 			'name',
 				name,
 			'assign',
@@ -784,7 +784,7 @@ ShortHand.VarDec =
 ShortHand.CommaList =
 	function( )
 {
-	return Code.CommaList.Create( );
+	return Code.CommaList.create( );
 };
 
 
@@ -795,7 +795,7 @@ ShortHand.CommaList =
 ShortHand.VList =
 	function( )
 {
-	return Code.VList.Create( );
+	return Code.VList.create( );
 };
 
 

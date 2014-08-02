@@ -44,18 +44,9 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_number // the number
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.number = v_number;
 
 		Jools.immute( this );
@@ -135,7 +126,7 @@ Code.NumberLiteral =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_number );
+	return new Constructor( v_number );
 };
 
 
@@ -147,25 +138,25 @@ var
 	NumberLiteral.prototype = Constructor.prototype;
 
 
-NumberLiteral.Create = Constructor.prototype.Create = NumberLiteral;
+NumberLiteral.create = Constructor.prototype.create = NumberLiteral;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'NumberLiteral';
+prototype.reflect = 'NumberLiteral';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

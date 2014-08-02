@@ -199,7 +199,7 @@ Note.prototype._init =
 	{
 		zone =
 		this.zone =
-			Euclid.Rect.Create(
+			Euclid.Rect.create(
 				'pnw',
 					zone.pnw,
 				'pse',
@@ -222,7 +222,7 @@ Note.prototype._init =
 			this.path.Append( 'doc' );
 
 	this.doc =
-		this.doc.Create(
+		this.doc.create(
 			'flowWidth',
 				zone.width - Note.innerMargin.x,
 			'fontsize',
@@ -243,13 +243,13 @@ Note.prototype._init =
 	}
 
 	this.scrollbarY =
-		Visual.Scrollbar.Create(
+		Visual.Scrollbar.create(
 			'aperture',
 				zone.height - this.innerMargin.y,
 			'max',
 				this.doc.height,
 			'pnw',
-				Euclid.Point.Create(
+				Euclid.Point.create(
 					'x',
 						zone.pse.x,
 					'y',
@@ -364,7 +364,7 @@ Jools.lazyValue(
 				this.view.home,
 
 			f =
-				Euclid.Fabric.Create(
+				Euclid.Fabric.create(
 					'width',
 						vzone.width + 2,
 					'height',
@@ -396,7 +396,7 @@ Jools.lazyValue(
 			hview,
 			this,
 			this.zone.width,
-			Euclid.Point.Create(
+			Euclid.Point.create(
 				'x',
 					0,
 				'y',
@@ -505,7 +505,7 @@ Jools.lazyValue(
 				theme.note.cornerRadius;
 
 			return (
-				Euclid.RoundRect.Create(
+				Euclid.RoundRect.create(
 					'pnw',
 						zone.pnw,
 					'pse',
@@ -536,11 +536,11 @@ Jools.lazyValue(
 				theme.note.cornerRadius;
 
 		return (
-			Euclid.RoundRect.Create(
+			Euclid.RoundRect.create(
 				'pnw',
 					Euclid.Point.zero,
 				'pse',
-					Euclid.Point.Create(
+					Euclid.Point.create(
 						'x',
 							zone.width,
 						'y',

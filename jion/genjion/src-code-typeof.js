@@ -44,18 +44,9 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_expr // the expression to get the type of
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.expr = v_expr;
 
 		Jools.immute( this );
@@ -130,7 +121,7 @@ Code.Typeof =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_expr );
+	return new Constructor( v_expr );
 };
 
 
@@ -142,25 +133,25 @@ var
 	Typeof.prototype = Constructor.prototype;
 
 
-Typeof.Create = Constructor.prototype.Create = Typeof;
+Typeof.create = Constructor.prototype.create = Typeof;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Typeof';
+prototype.reflect = 'Typeof';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

@@ -44,18 +44,9 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_boolean // the boolean
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.boolean = v_boolean;
 
 		Jools.immute( this );
@@ -135,7 +126,7 @@ Code.BooleanLiteral =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_boolean );
+	return new Constructor( v_boolean );
 };
 
 
@@ -147,25 +138,25 @@ var
 	BooleanLiteral.prototype = Constructor.prototype;
 
 
-BooleanLiteral.Create = Constructor.prototype.Create = BooleanLiteral;
+BooleanLiteral.create = Constructor.prototype.create = BooleanLiteral;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'BooleanLiteral';
+prototype.reflect = 'BooleanLiteral';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

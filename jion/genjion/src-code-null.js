@@ -43,20 +43,7 @@ if( SERVER )
 | Constructor.
 */
 var Constructor =
-	function(
-		tag // magic cookie
-	)
-	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
-		Jools.immute( this );
-	};
+	function( ) { Jools.immute( this ); };
 
 
 /*
@@ -95,7 +82,7 @@ Code.Null =
 
 	if( !_singleton )
 	{
-		_singleton = new Constructor( 8833 );
+		_singleton = new Constructor( );
 	}
 
 	return _singleton;
@@ -110,25 +97,25 @@ var
 	Null.prototype = Constructor.prototype;
 
 
-Null.Create = Constructor.prototype.Create = Null;
+Null.create = Constructor.prototype.create = Null;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Null';
+prototype.reflect = 'Null';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

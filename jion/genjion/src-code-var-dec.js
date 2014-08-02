@@ -44,19 +44,10 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_assign, // Assignment of variable
 		v_name // variable name
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.assign = v_assign;
 
 		this.name = v_name;
@@ -170,7 +161,7 @@ Code.VarDec =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_assign, v_name );
+	return new Constructor( v_assign, v_name );
 };
 
 
@@ -182,25 +173,25 @@ var
 	VarDec.prototype = Constructor.prototype;
 
 
-VarDec.Create = Constructor.prototype.Create = VarDec;
+VarDec.create = Constructor.prototype.create = VarDec;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'VarDec';
+prototype.reflect = 'VarDec';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

@@ -44,19 +44,10 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_left, // left expression
 		v_right // right expression
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.left = v_left;
 
 		this.right = v_right;
@@ -155,7 +146,7 @@ Code.Equals =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_left, v_right );
+	return new Constructor( v_left, v_right );
 };
 
 
@@ -167,25 +158,25 @@ var
 	Equals.prototype = Constructor.prototype;
 
 
-Equals.Create = Constructor.prototype.Create = Equals;
+Equals.create = Constructor.prototype.create = Equals;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Equals';
+prototype.reflect = 'Equals';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

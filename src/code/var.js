@@ -98,7 +98,7 @@ Var.prototype.Dot =
 {
 	// checking if member is a string is done in 'Dot'
 	return (
-		Code.Dot.Create(
+		Code.Dot.create(
 			'expr',
 				this,
 			'member',
@@ -117,7 +117,7 @@ Var.prototype.Member =
 	)
 {
 	return (
-		Code.Member.Create(
+		Code.Member.create(
 			'expr',
 				this,
 			'member',

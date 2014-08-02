@@ -44,18 +44,9 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_message // the error message expression
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.message = v_message;
 
 		Jools.immute( this );
@@ -130,7 +121,7 @@ Code.Fail =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_message );
+	return new Constructor( v_message );
 };
 
 
@@ -142,25 +133,25 @@ var
 	Fail.prototype = Constructor.prototype;
 
 
-Fail.Create = Constructor.prototype.Create = Fail;
+Fail.create = Constructor.prototype.create = Fail;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Fail';
+prototype.reflect = 'Fail';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

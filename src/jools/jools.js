@@ -413,41 +413,12 @@ Jools.subclass =
 {
 	function Inherit( ) { }
 
-	if( base.constructor === Object )
-	{
-		// multiple inheritance
-		// FIXME remove
-		for( var name in base )
-		{
-			for( var k in base[name].prototype )
-			{
-				if( k === 'constructor' )
-					continue;
+	// single inheritance
+	Inherit.prototype = base.prototype;
 
-				if( Inherit.prototype[ k ] )
-				{
-					throw new Error(
-						CHECK &&
-						(
-							'Multiple inheritance clash for ' + sub + ' :' + k
-						)
-					);
-				}
-				Inherit.prototype[ k ] = base[ name ].prototype[ k ];
-			}
-		}
-	}
-	else
-	{
-		// single inheritance
-		Inherit.prototype = base.prototype;
-	}
+	sub.prototype = new Inherit( );
 
-	sub.prototype =
-		new Inherit( );
-
-	sub.prototype.constructor =
-		sub;
+	sub.prototype.constructor = sub;
 };
 
 

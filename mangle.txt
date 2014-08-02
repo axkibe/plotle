@@ -25,7 +25,7 @@
 . Compass
 . Const
 . Create
-. CreateArbitrary
+. createArbitrary
 . CreateDisc
 . CreateFromJSON
 . CreateGeneric

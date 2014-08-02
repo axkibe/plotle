@@ -58,7 +58,7 @@ var
 |
 | FIXME make it a jion
 */
-Inventory.Create =
+Inventory.create =
 	function(
 		// ...
 	)

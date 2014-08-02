@@ -44,18 +44,9 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_block // the code block
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.block = v_block;
 
 		Jools.immute( this );
@@ -135,7 +126,7 @@ Code.Check =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_block );
+	return new Constructor( v_block );
 };
 
 
@@ -147,25 +138,25 @@ var
 	Check.prototype = Constructor.prototype;
 
 
-Check.Create = Constructor.prototype.Create = Check;
+Check.create = Constructor.prototype.create = Check;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Check';
+prototype.reflect = 'Check';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

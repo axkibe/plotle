@@ -50,7 +50,7 @@ ObjLiteral.prototype.Add =
 	)
 {
 	return (
-		this.Create(
+		this.create(
 			'twig:add',
 			key,
 			expr

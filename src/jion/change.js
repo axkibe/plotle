@@ -180,7 +180,7 @@ Jools.lazyValue(
 			r;
 
 		r =
-			Change.Create(
+			Change.create(
 				'src',
 				this.trg,
 				'trg',
@@ -371,7 +371,7 @@ Change.prototype.TransformChange =
 
 
 		return (
-			Change.Create(
+			Change.create(
 				'src',
 					srcX,
 				'trg',
@@ -390,7 +390,7 @@ Change.prototype.TransformChange =
 		)
 		{
 			y[ a ] =
-				Change.Create(
+				Change.create(
 					'src',
 						srcX,
 					'trg',
@@ -399,7 +399,7 @@ Change.prototype.TransformChange =
 		}
 
 		return (
-			Jion.ChangeRay.Create(
+			Jion.ChangeRay.create(
 				'array',
 					y,
 				'_sliced',
@@ -418,7 +418,7 @@ Change.prototype.TransformChange =
 		)
 		{
 			y[ a ] =
-				Change.Create(
+				Change.create(
 					'src',
 						srcX.get( a ),
 					'trg',
@@ -427,7 +427,7 @@ Change.prototype.TransformChange =
 		}
 
 		return (
-			Jion.ChangeRay.Create(
+			Jion.ChangeRay.create(
 				'array',
 					y,
 				'_sliced',
@@ -528,7 +528,7 @@ Change.prototype._ChangeTreeSet =
 		key = pivot.newUID( );
 
 		trg =
-			trg.Create(
+			trg.create(
 				'path',
 					trg.path.Set( -1, key )
 			);
@@ -589,7 +589,7 @@ Change.prototype._ChangeTreeSet =
 		if( src.val !== null )
 		{
 			pivot =
-				pivot.Create(
+				pivot.create(
 					'twig:insert',
 					key,
 					trg.rank,
@@ -601,13 +601,13 @@ Change.prototype._ChangeTreeSet =
 			orank = pivot.rankOf( key );
 
 			trg =
-				trg.Create(
+				trg.create(
 					'rank',
 						orank
 				);
 
 			pivot =
-				pivot.Create(
+				pivot.create(
 					'twig:remove',
 					key
 				);
@@ -631,7 +631,7 @@ Change.prototype._ChangeTreeSet =
 		tree :
 			tree,
 		chg :
-			this.Create(
+			this.create(
 				'src',
 					src,
 				'trg',
@@ -706,7 +706,7 @@ Change.prototype._ChangeTreeInsert =
 		tree :
 			tree,
 		chg :
-			this.Create(
+			this.create(
 				'src',
 					src,
 				'trg',
@@ -798,7 +798,7 @@ Change.prototype._ChangeTreeRemove =
 		tree :
 			tree,
 		chg :
-			this.Create(
+			this.create(
 				'src',
 					src,
 				'trg',
@@ -895,13 +895,13 @@ Change.prototype._ChangeTreeJoin =
 	// FIXME check other keys to be equal
 
 	para1 =
-		para1.Create(
+		para1.create(
 			'text',
 				para1.text + para2.text
 		);
 
 	pivot =
-		pivot.Create(
+		pivot.create(
 			'twig:set',
 				key,
 				para1,
@@ -920,7 +920,7 @@ Change.prototype._ChangeTreeJoin =
 		tree :
 			tree,
 		chg :
-			this.Create(
+			this.create(
 				'src',
 					src,
 				'trg',
@@ -984,7 +984,7 @@ Change.prototype._ChangeTreeSplit =
 		vKey = pivot.newUID( );
 
 		trg =
-			trg.Create(
+			trg.create(
 				'path',
 					src.path.Set( -2, vKey )
 			);
@@ -1006,19 +1006,19 @@ Change.prototype._ChangeTreeSplit =
 	para1 = pivot.twig[ key ];
 
 	para2 =
-		para1.Create(
+		para1.create(
 			'text',
 				text.substring( at1, text.length )
 		);
 
 	para1 =
-		para1.Create(
+		para1.create(
 			'text',
 				text.substring( 0, at1 )
 		);
 
 	pivot =
-		pivot.Create(
+		pivot.create(
 			'twig:set',
 				key,
 				para1,
@@ -1039,7 +1039,7 @@ Change.prototype._ChangeTreeSplit =
 		tree :
 			tree,
 		chg :
-			this.Create(
+			this.create(
 				'src',
 					src,
 				'trg',
@@ -1126,7 +1126,7 @@ Change.prototype._ChangeTreeRank =
 
 	// FUTURE make a twig:rerank
 	pivot =
-		pivot.Create(
+		pivot.create(
 			'twig:remove',
 				key,
 			'twig:insert',
@@ -1160,7 +1160,7 @@ Change.prototype._ChangeTreeRank =
 		tree :
 			tree,
 		chg :
-			this.Create(
+			this.create(
 				'src',
 					src,
 				'trg',
@@ -1344,7 +1344,7 @@ Change.prototype._TransformSignSplit =
 		}
 
 		return (
-			sign.Create(
+			sign.create(
 				'path',
 					trg.path,
 				'at1',
@@ -1367,7 +1367,7 @@ Change.prototype._TransformSignSplit =
 	{
 		// signature goes into splitted line instead
 		return (
-			sign.Create(
+			sign.create(
 				'path',
 					trg.path,
 				'at1',
@@ -1381,14 +1381,14 @@ Change.prototype._TransformSignSplit =
 	// the signature is splited into a part that stays and one that goes to next line.
 
 	return (
-		Jion.SignRay.Create(
+		Jion.SignRay.create(
 			'array',
 				[
-					sign.Create(
+					sign.create(
 						'at2',
 							src.at1
 					),
-					sign.Create(
+					sign.create(
 						'path',
 							trg.path,
 						'at1',
@@ -1440,7 +1440,7 @@ Change.prototype._TransformSignJoin =
 	if( sign.at2 === undefined )
 	{
 		return (
-			sign.Create(
+			sign.create(
 				'path',
 					trg.path,
 				'at1',
@@ -1451,7 +1451,7 @@ Change.prototype._TransformSignJoin =
 	else
 	{
 		return (
-			sign.Create(
+			sign.create(
 				'path',
 					trg.path,
 				'at1',
@@ -1498,7 +1498,7 @@ Change.prototype._TransformSignRank =
 	)
 	{
 		return (
-			sign.Create(
+			sign.create(
 				'rank',
 					sign.rank - 1
 			)
@@ -1507,7 +1507,7 @@ Change.prototype._TransformSignRank =
 	else if( src.rank > sign.rank && trg.rank <= sign.rank )
 	{
 		return (
-			sign.Create(
+			sign.create(
 				'rank',
 					sign.rank + 1
 			)
@@ -1551,7 +1551,7 @@ Change.prototype._TransformSignSet =
 		if( sign.rank >= trg.rank )
 		{
 			sign =
-				sign.Create(
+				sign.create(
 					'rank',
 						sign.rank - 1
 				);
@@ -1562,7 +1562,7 @@ Change.prototype._TransformSignSet =
 		if( sign.rank >= src.rank )
 		{
 			sign =
-				sign.Create(
+				sign.create(
 					'rank',
 						sign.rank + 1
 				);
@@ -1573,7 +1573,7 @@ Change.prototype._TransformSignSet =
 		if( src.rank <= sign.rank && trg.rank > sign.rank )
 		{
 			sign =
-				sign.Create(
+				sign.create(
 					'rank',
 						sign.rank - 1
 				);
@@ -1581,7 +1581,7 @@ Change.prototype._TransformSignSet =
 		else if( src.rank > sign.rank && trg.rank <= sign.rank )
 		{
 			sign =
-				sign.Create(
+				sign.create(
 					'rank',
 						sign.rank + 1
 				);
@@ -1636,7 +1636,7 @@ Change.prototype._TransformSignInsert =
 	if( sign.at2 !== undefined )
 	{
 		return (
-			sign.Create(
+			sign.create(
 				'at1',
 					sign.at1 + len,
 				'at2',
@@ -1647,7 +1647,7 @@ Change.prototype._TransformSignInsert =
 	else
 	{
 		return (
-			sign.Create(
+			sign.create(
 				'at1',
 					sign.at1 + len
 			)
@@ -1704,7 +1704,7 @@ Change.prototype._TransformSignRemove =
 		if( sign.at1 <= src.at2 )
 		{
 			return (
-				sign.Create(
+				sign.create(
 					'at1',
 						src.at1
 				)
@@ -1712,7 +1712,7 @@ Change.prototype._TransformSignRemove =
 		}
 
 		return (
-			sign.Create(
+			sign.create(
 				'at1',
 				sign.at1 - len
 			)
@@ -1738,7 +1738,7 @@ Change.prototype._TransformSignRemove =
 	else if( sign.at1 >= src.at2 )
 	{
 		return (
-			sign.Create(
+			sign.create(
 				'at1',
 					sign.at1 - len,
 				'at2',
@@ -1752,7 +1752,7 @@ Change.prototype._TransformSignRemove =
 	)
 	{
 		return (
-			sign.Create(
+			sign.create(
 				'at2',
 					sign.at2 - len
 			)
@@ -1773,7 +1773,7 @@ Change.prototype._TransformSignRemove =
 	)
 	{
 		return (
-			sign.Create(
+			sign.create(
 				'at2',
 					src.at1
 			)
@@ -1785,7 +1785,7 @@ Change.prototype._TransformSignRemove =
 	)
 	{
 		return (
-			sign.Create(
+			sign.create(
 				'at2',
 				src.at2
 			)

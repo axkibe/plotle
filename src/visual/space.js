@@ -188,7 +188,7 @@ Space.prototype._init =
 	for( var k in this.twig )
 	{
 		this.twig[ k ] =
-			this.twig[ k ].Create(
+			this.twig[ k ].create(
 				'path',
 					this.path
 					.Append( 'twig' )
@@ -232,7 +232,7 @@ Space.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.Create( );
+		return Mark.Vacant.create( );
 	}
 };
 
@@ -573,7 +573,7 @@ Space.prototype.pointingHover =
 		if( com )
 		{
 			return (
-				HoverReply.Create(
+				HoverReply.create(
 					'path',
 						Jion.Path.empty,
 					'cursor',
@@ -605,7 +605,7 @@ Space.prototype.pointingHover =
 	}
 
 	return (
-		HoverReply.Create(
+		HoverReply.create(
 			'path',
 				Jion.Path.empty,
 			'cursor',
@@ -658,7 +658,7 @@ Space.prototype.dragStart =
 				view.depoint( p );
 
 			shell.setAction(
-				Action.ItemResize.Create(
+				Action.ItemResize.create(
 					'start',
 						dp,
 					'transItem',
@@ -692,16 +692,16 @@ Space.prototype.dragStart =
 	)
 	{
 		transItem =
-			Stubs.emptyNote.Create(
+			Stubs.emptyNote.create(
 				'zone',
-					Euclid.Rect.Create(
+					Euclid.Rect.create(
 						'pnw',
 							p,  // FIXME why no depoint?
 						'pse',
 							p
 					),
 				'mark',
-					Mark.Vacant.Create( ),
+					Mark.Vacant.create( ),
 				'path',
 					Jion.Path.empty,
 				'view',
@@ -709,7 +709,7 @@ Space.prototype.dragStart =
 			);
 
 		shell.setAction(
-			action.Create(
+			action.create(
 				'start',
 					p,
 				'model',
@@ -730,11 +730,11 @@ Space.prototype.dragStart =
 	)
 	{
 		transItem =
-			Stubs.emptyLabel.Create(
+			Stubs.emptyLabel.create(
 				'pnw',
 					view.depoint( p ),
 				'mark',
-					Mark.Vacant.Create( ),
+					Mark.Vacant.create( ),
 				'path',
 					Jion.Path.empty,
 				'view',
@@ -742,7 +742,7 @@ Space.prototype.dragStart =
 			);
 
 		shell.setAction(
-			action.Create(
+			action.create(
 				'start',
 					p,
 				'model',
@@ -763,17 +763,17 @@ Space.prototype.dragStart =
 	)
 	{
 		transItem =
-			Stubs.emptyPortal.Create(
+			Stubs.emptyPortal.create(
 				'hover',
 					Jion.Path.empty,
 				'mark',
-					Mark.Vacant.Create( ),
+					Mark.Vacant.create( ),
 				'path',
 					Jion.Path.empty,
 				'view',
 					view,
 				'zone',
-					Euclid.Rect.Create(
+					Euclid.Rect.create(
 						'pnw',
 							p, //FIXME depoint?
 						'pse',
@@ -782,7 +782,7 @@ Space.prototype.dragStart =
 			);
 
 		shell.setAction(
-			action.Create(
+			action.create(
 				'start',
 					p,
 				'model',
@@ -826,7 +826,7 @@ Space.prototype.dragStart =
 		case 'CreateRelation' :
 
 			shell.setAction(
-				action.Create(
+				action.create(
 					'pan',
 						view.pan,
 					'relationState',
@@ -841,7 +841,7 @@ Space.prototype.dragStart =
 
 	// otherwise panning is initiated
 	shell.setAction(
-		Action.Pan.Create(
+		Action.Pan.create(
 			'start',
 				p,
 			'pan',
@@ -900,7 +900,7 @@ Space.prototype.click =
 	// otherwise ...
 
 	shell.setMark(
-		Mark.Vacant.Create( )
+		Mark.Vacant.create( )
 	);
 
 	return true;
@@ -953,9 +953,9 @@ Space.prototype.dragStop =
 
 					var
 						note =
-							action.transItem.Create(
+							action.transItem.create(
 								'zone',
-									Euclid.Rect.CreateArbitrary(
+									Euclid.Rect.createArbitrary(
 										view.depoint( action.start ),
 										view.depoint( p )
 									)
@@ -972,7 +972,7 @@ Space.prototype.dragStop =
 						result.chgX.trg.path.get( -1 );
 
 					shell.setMark(
-						Mark.Caret.Create(
+						Mark.Caret.create(
 							'path',
 								shell.
 									space.twig[ key ].
@@ -986,7 +986,7 @@ Space.prototype.dragStop =
 					if( !ctrl )
 					{
 						shell.setAction(
-							Action.None.Create( )
+							Action.None.create( )
 						);
 					}
 
@@ -999,7 +999,7 @@ Space.prototype.dragStop =
 							action.model,
 
 						zone =
-							Euclid.Rect.CreateArbitrary(
+							Euclid.Rect.createArbitrary(
 								view.depoint( action.start ),
 								view.depoint( p )
 							),
@@ -1018,18 +1018,18 @@ Space.prototype.dragStop =
 						),
 
 						resized =
-							action.transItem.Create(
+							action.transItem.create(
 								'fontsize',
 									fs
 							),
 
 						label =
-							resized.Create(
+							resized.create(
 								'pnw',
 									( p.x > action.start.x ) ?
 										zone.pnw
 										:
-										Euclid.Point.Create(
+										Euclid.Point.create(
 											'x',
 												zone.pse.x - resized.zone.width,
 											'y',
@@ -1050,7 +1050,7 @@ Space.prototype.dragStop =
 						result.chgX.trg.path.get( -1 );
 
 					shell.setMark(
-						Mark.Caret.Create(
+						Mark.Caret.create(
 							'path',
 								shell.space
 								.twig[ key ]
@@ -1063,7 +1063,7 @@ Space.prototype.dragStop =
 					if( !ctrl )
 					{
 						shell.setAction(
-							Action.None.Create( )
+							Action.None.create( )
 						);
 					}
 
@@ -1075,9 +1075,9 @@ Space.prototype.dragStop =
 						portal;
 
 					portal =
-						action.transItem.Create(
+						action.transItem.create(
 							'zone',
-								Euclid.Rect.CreateArbitrary(
+								Euclid.Rect.createArbitrary(
 									view.depoint( action.start ),
 									view.depoint( p )
 								)
@@ -1095,7 +1095,7 @@ Space.prototype.dragStop =
 					key = result.chgX.trg.path.get( -1 );
 
 					shell.setMark(
-						Mark.Caret.Create(
+						Mark.Caret.create(
 							'path',
 								shell
 								.space
@@ -1110,7 +1110,7 @@ Space.prototype.dragStop =
 					if( !ctrl )
 					{
 						shell.setAction(
-							Action.None.Create( )
+							Action.None.create( )
 						);
 					}
 
@@ -1130,7 +1130,7 @@ Space.prototype.dragStop =
 		case 'Pan' :
 
 			shell.setAction(
-				Action.None.Create( )
+				Action.None.create( )
 			);
 
 			break;
@@ -1143,7 +1143,7 @@ Space.prototype.dragStop =
 				case 'start' :
 
 					shell.setAction(
-						Action.None.Create( )
+						Action.None.create( )
 					);
 
 					break;
@@ -1164,7 +1164,7 @@ Space.prototype.dragStop =
 					}
 
 					shell.setAction(
-						Action.None.Create( )
+						Action.None.create( )
 					);
 
 					break;
@@ -1172,7 +1172,7 @@ Space.prototype.dragStop =
 				case 'pan' :
 
 					shell.setAction(
-						action.Create(
+						action.create(
 							'relationState',
 								'start'
 						)
@@ -1218,7 +1218,7 @@ Space.prototype.dragStop =
 			}
 
 			shell.setAction(
-				Action.None.Create( )
+				Action.None.create( )
 			);
 
 			break;
@@ -1260,7 +1260,7 @@ Space.prototype.dragStop =
 			}
 
 			shell.setAction(
-				Action.None.Create( )
+				Action.None.create( )
 			);
 
 			break;
@@ -1277,7 +1277,7 @@ Space.prototype.dragStop =
 			);
 
 			shell.setAction(
-				Action.None.Create( )
+				Action.None.create( )
 			);
 
 			break;
@@ -1329,7 +1329,7 @@ Space.prototype.dragMove =
 			model =
 				action.model;
 			zone =
-				Euclid.Rect.CreateArbitrary(
+				Euclid.Rect.createArbitrary(
 					view.depoint( action.start ),
 					view.depoint( p )
 				);
@@ -1339,7 +1339,7 @@ Space.prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						model.Create(
+						model.create(
 							'zone',
 								zone
 						);
@@ -1359,18 +1359,18 @@ Space.prototype.dragMove =
 						);
 
 					resized =
-						model.Create(
+						model.create(
 							'fontsize',
 								fs
 						);
 
 					transItem =
-						resized.Create(
+						resized.create(
 							'pnw',
 								( p.x > action.start.x ) ?
 									zone.pnw
 									:
-									Euclid.Point.Create(
+									Euclid.Point.create(
 										'x',
 											zone.pse.x - resized.zone.width,
 										'y',
@@ -1386,7 +1386,7 @@ Space.prototype.dragMove =
 			}
 
 			shell.setAction(
-				action.Create(
+				action.create(
 					'transItem',
 						transItem
 				)
@@ -1404,7 +1404,7 @@ Space.prototype.dragMove =
 					p.sub( action.start );
 
 				shell.setView(
-					view.Create(
+					view.create(
 						'pan',
 							action.pan.add(
 								pd.x / view.zoom,
@@ -1417,7 +1417,7 @@ Space.prototype.dragMove =
 			}
 
 			shell.setAction(
-				action.Create(
+				action.create(
 					'toItemPath',
 						Jion.Path.empty,
 					'toPoint',
@@ -1455,7 +1455,7 @@ Space.prototype.dragMove =
 				p.sub( action.start );
 
 			shell.setView(
-				view.Create(
+				view.create(
 					'pan',
 						action.pan.add(
 							Math.round( pd.x / view.zoom ),
@@ -1476,7 +1476,7 @@ Space.prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						origin.Create(
+						origin.create(
 							'zone',
 								origin.zone.add(
 									view.dex( p.x ) - action.start.x,
@@ -1489,7 +1489,7 @@ Space.prototype.dragMove =
 				case 'pnw/fontsize' :
 
 					transItem =
-						origin.Create(
+						origin.create(
 							'pnw',
 								origin.pnw.add(
 									view.dex( p.x ) - action.start.x,
@@ -1499,7 +1499,7 @@ Space.prototype.dragMove =
 			}
 
 			shell.setAction(
-				action.Create(
+				action.create(
 					'transItem',
 						transItem
 				)
@@ -1522,7 +1522,7 @@ Space.prototype.dragMove =
 				case 'zone' :
 
 					transItem =
-						origin.Create(
+						origin.create(
 							'zone',
 								origin.zone.cardinalResize(
 									align,
@@ -1576,13 +1576,13 @@ Space.prototype.dragMove =
 						);
 
 					resized =
-						origin.Create(
+						origin.create(
 							'fontsize',
 								fs
 						);
 
 					transItem =
-						resized.Create(
+						resized.create(
 							'pnw',
 								resized.pnw.add(
 									align === 'sw' || align === 'nw' ?
@@ -1610,7 +1610,7 @@ Space.prototype.dragMove =
 			}
 
 			shell.setAction(
-				action.Create(
+				action.create(
 					'transItem',
 						transItem
 				)

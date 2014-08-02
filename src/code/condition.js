@@ -73,7 +73,7 @@ Condition.prototype.Elsewise =
 	)
 {
 	return (
-		this.Create(
+		this.create(
 			'elsewise',
 				expr
 		)

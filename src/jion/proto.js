@@ -74,7 +74,7 @@ JoobjProto.setPath =
 		if( pos + 2 === pZ )
 		{
 			return (
-				this.Create(
+				this.create(
 					'twig:set',
 					key,
 					value
@@ -83,7 +83,7 @@ JoobjProto.setPath =
 		}
 
 		return (
-			this.Create(
+			this.create(
 				'twig:set',
 				key,
 				this.twig[ key ].setPath(
@@ -98,7 +98,7 @@ JoobjProto.setPath =
 	if( pos + 1 === pZ )
 	{
 		return (
-			this.Create(
+			this.create(
 				key,
 				value
 			)
@@ -106,7 +106,7 @@ JoobjProto.setPath =
 	}
 
 	return (
-		this.Create(
+		this.create(
 			key,
 			this[ key ].setPath(
 				path,

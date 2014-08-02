@@ -48,21 +48,12 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		twig, // twig
 		ranks, // twig ranks
 		v_defaultCase, // the default block
 		v_statement // the statement expression
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.defaultCase = v_defaultCase;
 
 		this.statement = v_statement;
@@ -315,15 +306,7 @@ Code.Switch =
 		return inherit;
 	}
 
-	return (
-		new Constructor(
-			8833,
-			twig,
-			ranks,
-			v_defaultCase,
-			v_statement
-		)
-	);
+	return new Constructor( twig, ranks, v_defaultCase, v_statement );
 };
 
 
@@ -335,31 +318,31 @@ var
 	Switch.prototype = Constructor.prototype;
 
 
-Switch.Create = Constructor.prototype.Create = Switch;
+Switch.create = Constructor.prototype.create = Switch;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Switch';
+prototype.reflect = 'Switch';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-Constructor.prototype.atRank = JoobjProto.atRank;
+prototype.atRank = JoobjProto.atRank;
 
 
 /*

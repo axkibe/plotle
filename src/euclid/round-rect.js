@@ -121,13 +121,13 @@ RoundRect.prototype._init =
 {
 	var
 		pne =
-			Euclid.Point.Create( 'x', pse.x, 'y', pnw.y ),
+			Euclid.Point.create( 'x', pse.x, 'y', pnw.y ),
 
 		psw =
-			Euclid.Point.Create( 'x', pnw.x, 'y', pse.y );
+			Euclid.Point.create( 'x', pnw.x, 'y', pse.y );
 
 	this.shape =
-		Euclid.Shape.Create(
+		Euclid.Shape.create(
 			'hull',
 				[
 					'start',
@@ -168,7 +168,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Point.Create(
+			Euclid.Point.create(
 				'x',
 					Jools.half( this.pse.x + this.pnw.x ),
 				'y',

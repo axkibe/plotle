@@ -162,7 +162,7 @@ Jools.lazyValue(
 		}
 
 		inv =
-			ChangeRay.Create(
+			ChangeRay.create(
 				'array',
 					rc,
 				'_sliced',
@@ -192,7 +192,7 @@ ChangeRay.prototype.Append =
 	rc.push( chg );
 
 	return (
-		ChangeRay.Create(
+		ChangeRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -244,7 +244,7 @@ ChangeRay.prototype.Set =
 	rc[ idx ] = chg;
 
 	return (
-		ChangeRay.Create(
+		ChangeRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -405,7 +405,7 @@ ChangeRay.prototype.ChangeTree =
 			tree :
 				tree,
 			chgX :
-				ChangeRay.Create(
+				ChangeRay.create(
 					'array',
 						cray,
 					'_sliced',

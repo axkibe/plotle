@@ -191,7 +191,7 @@ Jockey.prototype._init =
 		}
 
 		twig[ name ] =
-			proto.Create(
+			proto.create(
 				'access',
 					this.access,
 				'action',

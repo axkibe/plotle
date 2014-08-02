@@ -116,7 +116,7 @@ Shell =
 	canvas = document.createElement( 'canvas' );
 
 	swatch =
-		Euclid.Fabric.Create(
+		Euclid.Fabric.create(
 			'canvas',
 				canvas
 		);
@@ -137,7 +137,7 @@ Shell =
 
 	this.$space = null;
 
-	this.$action = Action.None.Create( );
+	this.$action = Action.None.create( );
 
 	this._$mode = 'Normal';
 
@@ -146,7 +146,7 @@ Shell =
 
 	view =
 	this.$view =
-		Euclid.View.Create(
+		Euclid.View.create(
 			'pan',
 				Euclid.Point.zero,
 			'fact',
@@ -158,11 +158,11 @@ Shell =
 		);
 
 	this._$formJockey =
-		Forms.Jockey.Create(
+		Forms.Jockey.create(
 			'hover',
 				Jion.Path.empty,
 			'mark',
-				Mark.Vacant.Create( ),
+				Mark.Vacant.create( ),
 			'path',
 				Jion.Path.empty
 				.Append( 'forms' ),
@@ -195,15 +195,15 @@ Shell =
 		);
 
 	this._$discJockey =
-		Discs.Jockey.Create(
+		Discs.Jockey.create(
 			'access',
 				'',
 			'action',
-				Action.None.Create( ),
+				Action.None.create( ),
 			'hover',
 				Jion.Path.empty,
 			'mark',
-				Mark.Vacant.Create( ),
+				Mark.Vacant.create( ),
 			'mode',
 				this._$mode,
 			'path',
@@ -219,7 +219,7 @@ Shell =
 				Gruga.CreateDisc
 		);
 
-	this.mark = Mark.Vacant.Create( );
+	this.mark = Mark.Vacant.create( );
 
 	// remembers an aquired visitor user name and passhash
 	// so when logging out from a real user the previous
@@ -286,7 +286,7 @@ Shell.prototype.setMode =
 		mode;
 
 	this._$discJockey =
-		this._$discJockey.Create(
+		this._$discJockey.create(
 			'mode',
 				mode
 		);
@@ -346,7 +346,7 @@ Shell.prototype.setAction =
 		action;
 
 	this._$discJockey =
-		this._$discJockey.Create(
+		this._$discJockey.create(
 			'action',
 				action
 		);
@@ -383,13 +383,13 @@ Shell.prototype.update =
 			if( item === undefined )
 			{
 				// the item holding the caret was removed
-				mark = Mark.Vacant.Create( );
+				mark = Mark.Vacant.create( );
 			}
 			else
 			{
 				sign =
 					chgX.TransformSign(
-						Jion.Sign.Create(
+						Jion.Sign.create(
 							'path',
 								mark.path.Chop( ),
 							'at1',
@@ -401,7 +401,7 @@ Shell.prototype.update =
 				//   keeping retainx might not be correct
 				//   in some cases
 				mark =
-					Mark.Caret.Create(
+					Mark.Caret.create(
 						'path',
 							sign.path.prepend( 'space' ),
 						'at',
@@ -420,7 +420,7 @@ Shell.prototype.update =
 			if( item === undefined )
 			{
 				// the item holding the caret was removed
-				mark = Mark.Vacant.Create( );
+				mark = Mark.Vacant.create( );
 			}
 
 			break;
@@ -432,13 +432,13 @@ Shell.prototype.update =
 			// tests if the owning item was removed
 			if( item === undefined )
 			{
-				mark = Mark.Vacant.Create( );
+				mark = Mark.Vacant.create( );
 			}
 			else
 			{
 				bSign =
 					chgX.TransformSign(
-						Jion.Sign.Create(
+						Jion.Sign.create(
 							'path',
 								mark.bPath.Chop( ),
 							'at1',
@@ -448,7 +448,7 @@ Shell.prototype.update =
 
 				eSign =
 					chgX.TransformSign(
-						Jion.Sign.Create(
+						Jion.Sign.create(
 							'path',
 								mark.ePath.Chop( ),
 							'at1',
@@ -463,7 +463,7 @@ Shell.prototype.update =
 				)
 				{
 					mark =
-						Mark.Caret.Create(
+						Mark.Caret.create(
 							'path',
 								bSign.path.prepend( 'space' ),
 							'at',
@@ -475,7 +475,7 @@ Shell.prototype.update =
 				else
 				{
 					mark =
-						Mark.Range.Create(
+						Mark.Range.create(
 							'doc',
 								item.doc,
 							'bPath',
@@ -498,7 +498,7 @@ Shell.prototype.update =
 
 	// FIXME let the link do the real stuff
 	this.$space =
-		space.Create(
+		space.create(
 			'spaceUser',
 				this.$space.spaceUser,
 			'spaceTag',
@@ -516,7 +516,7 @@ Shell.prototype.update =
 		);
 
 	this._$discJockey =
-		this._$discJockey.Create(
+		this._$discJockey.create(
 			'mark',
 				mark
 		);
@@ -538,7 +538,7 @@ Shell.prototype.setFocus =
 		case 'Caret' :
 
 			this.setMark(
-				this.mark.Create(
+				this.mark.create(
 					'focus',
 						focus
 				)
@@ -958,19 +958,19 @@ Shell.prototype.setMark =
 		mark;
 
 	this.$space =
-		this.$space.Create(
+		this.$space.create(
 			'mark',
 				mark
 		);
 
 	this._$formJockey =
-		this._$formJockey.Create(
+		this._$formJockey.create(
 			'mark',
 				mark
 		);
 
 	this._$discJockey =
-		this._$discJockey.Create(
+		this._$discJockey.create(
 			'mark',
 				mark
 		);
@@ -1041,7 +1041,7 @@ Shell.prototype._setHover =
 	}
 
 	this._$discJockey =
-		this._$discJockey.Create(
+		this._$discJockey.create(
 			// FIXME make concernsHover
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'discs' ?
@@ -1051,7 +1051,7 @@ Shell.prototype._setHover =
 		);
 
 	this._$formJockey =
-		this._$formJockey.Create(
+		this._$formJockey.create(
 			'hover',
 				// FIXME make a concernsHover
 				path.isEmpty || path.get( 0 ) !== 'forms' ?
@@ -1061,7 +1061,7 @@ Shell.prototype._setHover =
 		);
 
 	this.$space =
-		this.$space.Create(
+		this.$space.create(
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'space' ?
 					Jion.Path.empty
@@ -1209,7 +1209,7 @@ Shell.prototype.resize =
 		fabric;
 
 	this.setView(
-		this.$view.Create(
+		this.$view.create(
 			'height',
 				fabric.height,
 			'width',
@@ -1231,7 +1231,7 @@ Shell.prototype.setUser =
 	)
 {
 	this.link =
-		this.link.Create(
+		this.link.create(
 			'username',
 				username,
 			'passhash',
@@ -1283,13 +1283,13 @@ Shell.prototype.setUser =
 	this.username = username;
 
 	this._$discJockey =
-		this._$discJockey.Create(
+		this._$discJockey.create(
 			'username',
 				username
 		);
 
 	this._$formJockey =
-		this._$formJockey.Create(
+		this._$formJockey.create(
 			'username',
 				username
 		);
@@ -1310,20 +1310,20 @@ Shell.prototype.setView =
 	if( this.$space )
 	{
 		this.$space =
-			this.$space.Create(
+			this.$space.create(
 				'view',
 					view
 			);
 	}
 
 	this._$discJockey =
-		this._$discJockey.Create(
+		this._$discJockey.create(
 			'view',
 				view
 		);
 
 	this._$formJockey =
-		this._$formJockey.Create(
+		this._$formJockey.create(
 			'view',
 				view
 		);
@@ -1347,24 +1347,24 @@ Shell.prototype.onload =
 	ajaxPath = Jion.Path.empty.Append( 'ajax' );
 
 	this.ajax =
-		Net.Ajax.Create(
+		Net.Ajax.create(
 			'path',
 				ajaxPath,
 			'twig:add',
 			'command',
-				Net.Channel.Create(
+				Net.Channel.create(
 					'path',
 						ajaxPath.Append( 'command' )
 				),
 			'twig:add',
 			'update',
-				Net.Channel.Create(
+				Net.Channel.create(
 					'path',
 						ajaxPath.Append( 'update' )
 				)
 		);
 
-	this.link = Net.Link.Create( );
+	this.link = Net.Link.create( );
 
 	username = window.localStorage.getItem( 'username' );
 
@@ -1455,7 +1455,7 @@ Shell.prototype.onAquireSpace =
 				this._$formJockey.get( 'NoAccessToSpace' ).path;
 
 			this._$formJockey =
-				this._$formJockey.Create(
+				this._$formJockey.create(
 					'spaceUser',
 						asw.spaceUser,
 					'spaceTag',
@@ -1494,7 +1494,7 @@ Shell.prototype.onAquireSpace =
 	access = asw.access;
 
 	this.$space =
-		asw.space.Create(
+		asw.space.create(
 			'spaceUser',
 				spaceUser,
 			'spaceTag',
@@ -1504,11 +1504,11 @@ Shell.prototype.onAquireSpace =
 			'hover',
 				Jion.Path.empty,
 			'mark',
-				Mark.Vacant.Create( ),
+				Mark.Vacant.create( ),
 			'path',
 				Jion.Path.empty.Append( 'space' ),
 			'view',
-				Euclid.View.Create(
+				Euclid.View.create(
 					'fact',
 						0,
 					'height',
@@ -1665,7 +1665,7 @@ Shell.prototype.arrivedAtSpace =
 	)
 {
 	this._$discJockey =
-		this._$discJockey.Create(
+		this._$discJockey.create(
 			'access',
 				access,
 			'spaceUser',
@@ -1675,7 +1675,7 @@ Shell.prototype.arrivedAtSpace =
 		);
 
 	this._$formJockey =
-		this._$formJockey.Create(
+		this._$formJockey.create(
 			'spaceUser',
 				spaceUser,
 			'spaceTag',

@@ -52,19 +52,10 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		twig, // twig
 		ranks // twig ranks
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.twig = twig;
 
 		this.ranks = ranks;
@@ -250,7 +241,7 @@ Code.Block =
 		return inherit;
 	}
 
-	return new Constructor( 8833, twig, ranks );
+	return new Constructor( twig, ranks );
 };
 
 
@@ -262,31 +253,31 @@ var
 	Block.prototype = Constructor.prototype;
 
 
-Block.Create = Constructor.prototype.Create = Block;
+Block.create = Constructor.prototype.create = Block;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Block';
+prototype.reflect = 'Block';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-Constructor.prototype.atRank = JoobjProto.atRank;
+prototype.atRank = JoobjProto.atRank;
 
 
 /*

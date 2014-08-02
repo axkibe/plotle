@@ -210,7 +210,7 @@ DocItem.prototype.click =
 			);
 
 		shell.setMark(
-			Mark.Caret.Create(
+			Mark.Caret.create(
 				'path',
 					para.textPath,
 				'at',
@@ -224,7 +224,7 @@ DocItem.prototype.click =
 			doc.atRank( doc.ranks.length - 1 );
 
 		shell.setMark(
-			Mark.Caret.Create(
+			Mark.Caret.create(
 				'path',
 					para.textPath,
 				'at',

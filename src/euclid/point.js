@@ -102,7 +102,7 @@ Point.prototype.add =
 			return this;
 		}
 
-		return Point.Create(
+		return Point.create(
 			'x',
 				this.x + a1.x,
 			'y',
@@ -116,7 +116,7 @@ Point.prototype.add =
 			return this;
 		}
 
-		return Point.Create(
+		return Point.create(
 			'x',
 				this.x + a1,
 			'y',
@@ -142,7 +142,7 @@ Point.prototype.sub =
 			return this;
 		}
 
-		return Point.Create(
+		return Point.create(
 			'x',
 				this.x - a1.x,
 			'y',
@@ -156,7 +156,7 @@ Point.prototype.sub =
 			return this;
 		}
 
-		return Point.Create(
+		return Point.create(
 			'x',
 				this.x - a1,
 			'y',
@@ -200,7 +200,7 @@ Point.renew =
 		}
 	}
 
-	return Point.Create(
+	return Point.create(
 		'x',
 			x,
 		'y',
@@ -213,7 +213,7 @@ Point.renew =
 | Shortcut for point at 0/0.
 */
 Point.zero =
-	Point.Create(
+	Point.create(
 		'x',
 			0,
 		'y',

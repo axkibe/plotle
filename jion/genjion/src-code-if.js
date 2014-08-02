@@ -44,20 +44,11 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_condition, // the if condition
 		v_elsewise, // the else wise
 		v_then // the then code
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.condition = v_condition;
 
 		this.elsewise = v_elsewise;
@@ -205,7 +196,7 @@ Code.If =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_condition, v_elsewise, v_then );
+	return new Constructor( v_condition, v_elsewise, v_then );
 };
 
 
@@ -217,25 +208,25 @@ var
 	If.prototype = Constructor.prototype;
 
 
-If.Create = Constructor.prototype.Create = If;
+If.create = Constructor.prototype.create = If;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'If';
+prototype.reflect = 'If';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

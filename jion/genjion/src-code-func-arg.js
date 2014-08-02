@@ -44,19 +44,10 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_comment, // argument comment
 		v_name // argument name
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.comment = v_comment;
 
 		this.name = v_name;
@@ -180,7 +171,7 @@ Code.FuncArg =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_comment, v_name );
+	return new Constructor( v_comment, v_name );
 };
 
 
@@ -192,25 +183,25 @@ var
 	FuncArg.prototype = Constructor.prototype;
 
 
-FuncArg.Create = Constructor.prototype.Create = FuncArg;
+FuncArg.create = Constructor.prototype.create = FuncArg;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'FuncArg';
+prototype.reflect = 'FuncArg';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

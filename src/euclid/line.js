@@ -182,7 +182,7 @@ Line.connect =
 			shape2.getProjection( pc1 );
 	}
 
-	return Line.Create(
+	return Line.create(
 		'p1',
 			p1,
 		'p1end',
@@ -210,7 +210,7 @@ Jools.lazyValue(
 			p2 =
 				this.p2;
 
-		return Euclid.Rect.Create(
+		return Euclid.Rect.create(
 			'pnw',
 				Euclid.Point.renew(
 					Math.min( p1.x, p2.x ),
@@ -245,7 +245,7 @@ Jools.lazyValue(
 				this.p2;
 
 		return (
-			Euclid.Point.Create(
+			Euclid.Point.create(
 				'x',
 					Jools.half( p1.x + p2.x ),
 				'y',

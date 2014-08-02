@@ -2175,9 +2175,9 @@ Gen.prototype.genCreator =
 	capsule =
 		capsule
 		.Assign(
-			Var( this.reference ).Dot( 'Create' ),
+			Var( this.reference ).Dot( 'create' ),
 			Assign(
-				Var( 'Constructor' ).Dot( 'prototype' ).Dot( 'Create' ),
+				Var( 'Constructor' ).Dot( 'prototype' ).Dot( 'create' ),
 				Var( this.reference )
 			)
 		);
@@ -3376,7 +3376,7 @@ Gen.generate =
 		gen;
 
 	gen =
-		Gen.Create(
+		Gen.create(
 			'jion',
 				jion
 		);

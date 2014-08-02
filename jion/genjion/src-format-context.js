@@ -43,21 +43,12 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_check, // true if within optinal CHECK code
 		v_indent, // the indentation
 		v_inline, // true if to be formated inline
 		v_root // true if in root context
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.check = v_check;
 
 		this.indent = v_indent;
@@ -252,7 +243,7 @@ Context =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_check, v_indent, v_inline, v_root );
+	return new Constructor( v_check, v_indent, v_inline, v_root );
 };
 
 
@@ -264,25 +255,25 @@ var
 	Context.prototype = Constructor.prototype;
 
 
-Context.Create = Constructor.prototype.Create = Context;
+Context.create = Constructor.prototype.create = Context;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Context';
+prototype.reflect = 'Context';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

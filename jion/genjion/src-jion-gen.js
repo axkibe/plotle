@@ -133,7 +133,7 @@ var
 	Gen.prototype = Constructor.prototype;
 
 
-Gen.Create = Constructor.prototype.Create = Gen;
+Gen.create = Constructor.prototype.create = Gen;
 
 
 /*

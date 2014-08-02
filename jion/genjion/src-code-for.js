@@ -44,21 +44,12 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_block, // the for block
 		v_condition, // the continue condition
 		v_init, // the initialization
 		v_iterate // the iteration expression
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.block = v_block;
 
 		this.condition = v_condition;
@@ -220,15 +211,7 @@ Code.For =
 		return inherit;
 	}
 
-	return (
-		new Constructor(
-			8833,
-			v_block,
-			v_condition,
-			v_init,
-			v_iterate
-		)
-	);
+	return new Constructor( v_block, v_condition, v_init, v_iterate );
 };
 
 
@@ -240,25 +223,25 @@ var
 	For.prototype = Constructor.prototype;
 
 
-For.Create = Constructor.prototype.Create = For;
+For.create = Constructor.prototype.create = For;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'For';
+prototype.reflect = 'For';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

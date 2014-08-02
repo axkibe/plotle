@@ -44,20 +44,11 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_capsule, // the capsule
 		v_header, // header comment
 		v_preamble // preamble to capsule
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.capsule = v_capsule;
 
 		this.header = v_header;
@@ -224,7 +215,7 @@ Code.File =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_capsule, v_header, v_preamble );
+	return new Constructor( v_capsule, v_header, v_preamble );
 };
 
 
@@ -236,25 +227,25 @@ var
 	File.prototype = Constructor.prototype;
 
 
-File.Create = Constructor.prototype.Create = File;
+File.create = Constructor.prototype.create = File;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'File';
+prototype.reflect = 'File';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

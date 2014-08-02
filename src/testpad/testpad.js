@@ -359,7 +359,7 @@ TestPad.prototype.onMouseDown =
 
 	testPad.captureEvents( );
 
-	testPad.Create(
+	testPad.create(
 		'mouseDown',
 			true
 	);
@@ -395,7 +395,7 @@ TestPad.prototype.onMouseDown =
 		cText =
 			doc.twig[ doc.ranks[ cLine ] ].text;
 
-	testPad.Create(
+	testPad.create(
 		'cursorLine',
 			cLine,
 		'cursorAt',
@@ -471,7 +471,7 @@ TestPad.prototype.onMouseUp =
 
 	event.preventDefault( );
 
-	testPad.Create(
+	testPad.create(
 		'mouseDown',
 			false
 	);
@@ -566,7 +566,7 @@ TestPad.prototype.onKeyUp =
 TestPad.prototype.onFocus =
 	function( )
 {
-	testPad.Create(
+	testPad.create(
 		'haveFocus',
 			true
 	);
@@ -579,7 +579,7 @@ TestPad.prototype.onFocus =
 TestPad.prototype.onBlur =
 	function( )
 {
-	testPad.Create(
+	testPad.create(
 		'haveFocus',
 			false
 	);
@@ -708,7 +708,7 @@ TestPad.prototype.send =
 			);
 	}
 
-	testPad.Create(
+	testPad.create(
 		'action',
 			null,
 		'cursorAt',
@@ -725,7 +725,7 @@ TestPad.prototype.send =
 TestPad.prototype.onCancelButton =
 	function( )
 {
-	testPad.Create(
+	testPad.create(
 		'action',
 			null
 	);
@@ -746,7 +746,7 @@ TestPad.prototype.beep =
 		clearInterval( testPad.beepTimer );
 	}
 
-	testPad.Create(
+	testPad.create(
 		'beepTimer',
 			setInterval( _bind( 'clearBeep' ), 540 )
 	);
@@ -764,7 +764,7 @@ TestPad.prototype.clearBeep =
 
 	clearInterval( testPad.beepTimer );
 
-	testPad.Create(
+	testPad.create(
 		'beepTimer',
 			null
 	);
@@ -806,9 +806,9 @@ TestPad.prototype.testInput =
 
 	if( action === null )
 	{
-		testPad.Create(
+		testPad.create(
 			'action',
-			Action.Create(
+			Action.create(
 				'command',
 					'insert',
 				'line',
@@ -831,9 +831,9 @@ TestPad.prototype.testInput =
 		cursorAt === action.at
 	)
 	{
-		testPad.Create(
+		testPad.create(
 			'action',
-			action.Create(
+			action.create(
 				'value',
 					action.value + text
 			)
@@ -890,9 +890,9 @@ TestPad.prototype.inputSpecialKey =
 					return;
 				}
 
-				testPad.Create(
+				testPad.create(
 					'action',
-						Action.Create(
+						Action.create(
 							'command',
 								'join',
 							'line',
@@ -905,9 +905,9 @@ TestPad.prototype.inputSpecialKey =
 
 			if( !action )
 			{
-				testPad.Create(
+				testPad.create(
 					'action',
-						Action.Create(
+						Action.create(
 							'command',
 								'remove',
 							'line',
@@ -935,9 +935,9 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.Create(
+			testPad.create(
 				'action',
-					testPad.action.Create(
+					testPad.action.create(
 						'at',
 							testPad.action.at - 1
 					),
@@ -971,9 +971,9 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.Create(
+			testPad.create(
 				'action',
-					Action.Create(
+					Action.create(
 						'command',
 							'split',
 						'line',
@@ -988,7 +988,7 @@ TestPad.prototype.inputSpecialKey =
 		case 27 :
 			// esc
 
-			testPad.Create(
+			testPad.create(
 				'action',
 					null
 			);
@@ -1005,7 +1005,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.Create(
+			testPad.create(
 				'cursorAt',
 					doc.twig[ doc.ranks[ cursorLine ] ].text.length
 			);
@@ -1022,7 +1022,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.Create(
+			testPad.create(
 				'cursorAt',
 					0
 			);
@@ -1046,7 +1046,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.Create(
+			testPad.create(
 				'cursorAt',
 					cursorAt - 1
 			);
@@ -1067,7 +1067,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.Create(
+			testPad.create(
 				'cursorLine',
 					cursorLine - 1
 			);
@@ -1084,7 +1084,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.Create(
+			testPad.create(
 				'cursorAt',
 					cursorAt + 1
 			);
@@ -1105,7 +1105,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.Create(
+			testPad.create(
 				'cursorLine',
 					cursorLine + 1
 			);
@@ -1135,9 +1135,9 @@ TestPad.prototype.inputSpecialKey =
 
 			if( !action )
 			{
-				testPad.Create(
+				testPad.create(
 					'action',
-						Action.Create(
+						Action.create(
 							'command',
 								'remove',
 							'line',
@@ -1165,9 +1165,9 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.Create(
+			testPad.create(
 				'action',
-					action.Create(
+					action.create(
 						'at2',
 							action.at2 + 1
 					),
@@ -1186,7 +1186,7 @@ TestPad.prototype.inputSpecialKey =
 TestPad.prototype.onUpNowButton =
 	function( )
 {
-	testPad.Create(
+	testPad.create(
 		'seq',
 			Jools.MAX_INTEGER
 	);
@@ -1201,7 +1201,7 @@ TestPad.prototype.onUpNowButton =
 TestPad.prototype.onUpButton =
 	function( )
 {
-	testPad.Create(
+	testPad.create(
 		'seq',
 			this.seq + 1
 	);
@@ -1216,7 +1216,7 @@ TestPad.prototype.onUpButton =
 TestPad.prototype.onDownButton =
 	function( )
 {
-	testPad.Create(
+	testPad.create(
 		'seq',
 			testPad.seq - 1
 	);
@@ -1482,7 +1482,7 @@ TestPad.noDataScreen =
 window.onload =
 	function( )
 {
-	TestPad.Create( );
+	TestPad.create( );
 	testPad.elements.input.focus( );
 };
 

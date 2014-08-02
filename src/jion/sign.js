@@ -275,7 +275,7 @@ Sign.prototype.affix =
 	}
 
 	return (
-		this.Create(
+		this.create(
 			key,
 				val
 		)

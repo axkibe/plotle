@@ -93,7 +93,7 @@ Dot.prototype.Dot =
 {
 	// checking if member is a string is done in 'Dot'
 	return (
-		Dot.Create(
+		Dot.create(
 			'expr',
 				this,
 			'member',

@@ -106,7 +106,7 @@ Form.init =
 		}
 
 		twig[ name ] =
-			widgetProto.Create(
+			widgetProto.create(
 				'path',
 					path,
 				'superFrame',
@@ -145,7 +145,7 @@ Form.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.Create( );
+		return Mark.Vacant.create( );
 	}
 };
 
@@ -282,7 +282,7 @@ Form.prototype.pointingHover =
 	}
 
 	return (
-		HoverReply.Create(
+		HoverReply.create(
 			'path',
 				Jion.Path.empty,
 			'cursor',
@@ -423,7 +423,7 @@ Form.prototype.cycleFocus =
 			if( ve.caretable )
 			{
 				shell.setMark(
-					Mark.Caret.Create(
+					Mark.Caret.create(
 						'path',
 							ve.path,
 						'at',
@@ -434,7 +434,7 @@ Form.prototype.cycleFocus =
 			else
 			{
 				shell.setMark(
-					Mark.Widget.Create(
+					Mark.Widget.create(
 						'path',
 							ve.path
 					)

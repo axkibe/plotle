@@ -218,7 +218,7 @@ Para.concernsMark =
 		}
 		else
 		{
-			return Mark.Vacant.Create( );
+			return Mark.Vacant.create( );
 		}
 	}
 
@@ -230,7 +230,7 @@ Para.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.Create( );
+		return Mark.Vacant.create( );
 	}
 };
 
@@ -307,7 +307,7 @@ Jools.lazyValue(
 
 		// adds to width so the caret gets visible.
 		f =
-			Euclid.Fabric.Create(
+			Euclid.Fabric.create(
 				'width',
 					width + 7,
 				'height',
@@ -757,7 +757,7 @@ Para.prototype.locateOffset =
 	if( token )
 	{
 		p =
-			Euclid.Point.Create(
+			Euclid.Point.create(
 				'x',
 					Math.round(
 						token.x +
@@ -772,7 +772,7 @@ Para.prototype.locateOffset =
 	else
 	{
 		p =
-			Euclid.Point.Create(
+			Euclid.Point.create(
 				'x',
 					Math.round(
 						Euclid.Measure.width( font, text )
@@ -938,7 +938,7 @@ Para.prototype.specialKey =
 						doc.atRank( doc.ranks.length - 1 );
 
 				shell.setMark(
-					Mark.Range.Create(
+					Mark.Range.create(
 						'doc',
 							doc,
 						'bPath',
@@ -1645,7 +1645,7 @@ Para.prototype._setMark =
 	if( !bPath )
 	{
 		return shell.setMark(
-			Mark.Caret.Create(
+			Mark.Caret.create(
 				'path',
 					this.textPath,
 				'at',
@@ -1658,7 +1658,7 @@ Para.prototype._setMark =
 	else
 	{
 		return shell.setMark(
-			Mark.Range.Create(
+			Mark.Range.create(
 				'doc',
 					doc,
 				'bPath',

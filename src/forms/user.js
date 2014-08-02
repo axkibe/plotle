@@ -181,49 +181,49 @@ User.prototype._init =
 	}
 
 	this.twig.headline =
-		this.twig.headline.Create(
+		this.twig.headline.create(
 			'text',
 				'hello ' + ( this.username || '' )
 		);
 
 	this.twig.visitor1 =
-		this.twig.visitor1.Create(
+		this.twig.visitor1.create(
 			'visible',
 				isGuest
 		);
 
 	this.twig.visitor2 =
-		this.twig.visitor2.Create(
+		this.twig.visitor2.create(
 			'visible',
 				isGuest
 		);
 
 	this.twig.visitor3 =
-		this.twig.visitor3.Create(
+		this.twig.visitor3.create(
 			'visible',
 				isGuest
 		);
 
 	this.twig.visitor4 =
-		this.twig.visitor4.Create(
+		this.twig.visitor4.create(
 			'visible',
 				isGuest
 		);
 
 	this.twig.greeting1 =
-		this.twig.greeting1.Create(
+		this.twig.greeting1.create(
 			'visible',
 				!isGuest
 		);
 
 	this.twig.greeting2 =
-		this.twig.greeting2.Create(
+		this.twig.greeting2.create(
 			'visible',
 				!isGuest
 		);
 
 	this.twig.greeting3 =
-		this.twig.greeting3.Create(
+		this.twig.greeting3.create(
 			'visible',
 				!isGuest
 		);

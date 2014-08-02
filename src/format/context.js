@@ -146,7 +146,7 @@ Jools.lazyValue(
 				this.IncSame,
 
 			inc =
-				incSame.Create(
+				incSame.create(
 					'root',
 						false
 				);
@@ -169,7 +169,7 @@ Jools.lazyValue(
 			inc;
 			
 		inc =
-			this.Create(
+			this.create(
 				'indent',
 					this.indent + 1
 			);
@@ -206,7 +206,7 @@ Jools.lazyValue(
 			dec;
 
 		dec =
-			this.Create(
+			this.create(
 				'indent',
 					this.indent - 1
 			);
@@ -236,7 +236,7 @@ Jools.lazyValue(
 		}
 
 		return (
-			this.Create(
+			this.create(
 				'inline',
 					true
 			)

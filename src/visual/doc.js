@@ -179,7 +179,7 @@ Doc.prototype._init =
 			.AppendNC( key );
 
 		twig[ key ] =
-			twig[ key ].Create(
+			twig[ key ].create(
 				'path',
 					path,
 				'fontsize',
@@ -344,7 +344,7 @@ Doc.prototype.getPNWs =
 				vpara.flow;
 
 		pnws[ ranks[ r ] ] =
-			Euclid.Point.Create(
+			Euclid.Point.create(
 				'x',
 					innerMargin.w,
 				'y',

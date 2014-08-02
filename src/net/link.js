@@ -357,7 +357,7 @@ Link.prototype._onAquireSpace =
 	space = Visual.Space.CreateFromJSON( reply.node );
 
 	shell.link =
-		shell.link.Create(
+		shell.link.create(
 			'spaceUser',
 				request.spaceUser,
 			'spaceTag',
@@ -475,7 +475,7 @@ Link.prototype._onUpdate =
 
 	chgs = reply.chgs;
 
-	report = Jion.ChangeRay.Create( );
+	report = Jion.ChangeRay.create( );
 
 	gotOwnChgs = false;
 
@@ -551,7 +551,7 @@ Link.prototype._onUpdate =
 
 					u =
 					undo[ b ] =
-						Jion.ChangeWrap.Create(
+						Jion.ChangeWrap.create(
 							'cid',
 								u.cid,
 							'chgX',
@@ -588,7 +588,7 @@ Link.prototype._onUpdate =
 
 					u =
 					redo[ b ] =
-						Jion.ChangeWrap.Create(
+						Jion.ChangeWrap.create(
 							'cid',
 								u.cid,
 							'chgX',
@@ -661,7 +661,7 @@ Link.prototype._onUpdate =
 
 			c =
 			outbox[ a ] =
-				Jion.ChangeWrap.Create(
+				Jion.ChangeWrap.create(
 					'cid',
 						c.cid,
 					'chgX',
@@ -722,7 +722,7 @@ Link.prototype.alter =
 	chgX = result.chgX;
 
 	c =
-		Jion.ChangeWrap.Create(
+		Jion.ChangeWrap.create(
 			'cid',
 				Jools.uid( ),
 			'chgX',
@@ -859,7 +859,7 @@ Link.prototype.undo =
 	}
 
 	c =
-		Jion.ChangeWrap.Create(
+		Jion.ChangeWrap.create(
 			'cid',
 				Jools.uid( ),
 			'chgX',
@@ -914,7 +914,7 @@ Link.prototype.redo =
 	}
 
 	c =
-		Jion.ChangeWrap.Create(
+		Jion.ChangeWrap.create(
 			'cid',
 				Jools.uid( ),
 			'chgX',

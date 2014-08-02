@@ -173,7 +173,7 @@ Path.prototype.Append =
 	arr.push( key );
 
 	return (
-		Path.Create(
+		Path.create(
 			'array',
 				arr,
 			'_sliced',
@@ -217,7 +217,7 @@ Path.prototype.Chop =
 	if( n > 0 )
 	{
 		return (
-			Path.Create(
+			Path.create(
 				'array',
 					arr,
 				'_sliced',
@@ -228,7 +228,7 @@ Path.prototype.Chop =
 	}
 
 	return (
-		Path.Create(
+		Path.create(
 			'array',
 				arr,
 			'_sliced',
@@ -284,7 +284,7 @@ Path.prototype.Shorten =
 	}
 
 	return (
-		Path.Create(
+		Path.create(
 			'array',
 				arr,
 			'_sliced',
@@ -326,7 +326,7 @@ Path.prototype.Limit =
 
 
 	return (
-		Path.Create(
+		Path.create(
 			'array',
 				this._path.slice( 0, n ),
 			'_sliced',
@@ -354,7 +354,7 @@ Path.prototype.prepend =
 	arr.unshift( key );
 
 	return (
-		Path.Create(
+		Path.create(
 			'array',
 				arr,
 			'_sliced',
@@ -397,7 +397,7 @@ Path.prototype.Set =
 	arr[ idx ] = key;
 
 	return (
-		Path.Create(
+		Path.create(
 			'array',
 				arr,
 			'_sliced',
@@ -557,7 +557,7 @@ Path.CreateFromJSON =
 	}
 
 	return (
-		Path.Create(
+		Path.create(
 			'array',
 				json
 		)
@@ -592,7 +592,7 @@ Jools.lazyValue(
 | An empty path.
 */
 Path.empty =
-	Path.Create(
+	Path.create(
 		'array',
 			[ ],
 		'_sliced',

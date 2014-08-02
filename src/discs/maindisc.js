@@ -288,7 +288,7 @@ MainDisc.prototype._init =
 		}
 
 		twig[ wname ] =
-			twig[ wname ].Create(
+			twig[ wname ].create(
 				'hover',
 					this.hover,
 				'focusAccent',
@@ -341,7 +341,7 @@ Jools.lazyValue(
 	{
 		var
 			fabric =
-				Euclid.Fabric.Create(
+				Euclid.Fabric.create(
 					'width',
 						this.style.width,
 					'height',

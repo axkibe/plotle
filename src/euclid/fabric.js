@@ -120,8 +120,8 @@ Euclid.Fabric =
 |
 | FUTURE make a jion
 */
-Fabric.Create =
-Fabric.prototype.Create =
+Fabric.create =
+Fabric.prototype.create =
 	function(
 		// free strings
 	)
@@ -1019,7 +1019,7 @@ Jools.lazyValue(
 				Jools.half( this.height );
 
 		return (
-			Euclid.Point.Create( 'x', x, 'y', y )
+			Euclid.Point.create( 'x', x, 'y', y )
 		);
 	}
 );
@@ -1686,7 +1686,7 @@ Jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Point.Create(
+			Euclid.Point.create(
 				'x',
 					this.width,
 				'y',

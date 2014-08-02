@@ -53,16 +53,16 @@ var
 | Layout
 */
 Gruga.NoAccessToSpace =
-	Forms.NoAccessToSpace.Create(
+	Forms.NoAccessToSpace.create(
 		'twig:add',
 		'headline',
-			Widgets.Label.Create(
+			Widgets.Label.create(
 				'text',
 					'',
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.Create(
+					Design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -73,13 +73,13 @@ Gruga.NoAccessToSpace =
 			),
 		'twig:add',
 		'message1',
-			Widgets.Label.Create(
+			Widgets.Label.create(
 				'text',
 					'Sorry, you cannot port to this space or create it.',
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.Create(
+					Design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -90,13 +90,13 @@ Gruga.NoAccessToSpace =
 			),
 		'twig:add',
 		'okButton',
-			Widgets.Button.Create(
+			Widgets.Button.create(
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.Create(
+					Design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.Create(
+							Design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -105,7 +105,7 @@ Gruga.NoAccessToSpace =
 									okButton.n
 							),
 						'pse',
-							Design.AnchorPoint.Create(
+							Design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',

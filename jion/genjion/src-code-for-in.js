@@ -44,20 +44,11 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_block, // the for block
 		v_object, // the object expression to iterate over
 		v_variable // the loop variable
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.block = v_block;
 
 		this.object = v_object;
@@ -202,7 +193,7 @@ Code.ForIn =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_block, v_object, v_variable );
+	return new Constructor( v_block, v_object, v_variable );
 };
 
 
@@ -214,25 +205,25 @@ var
 	ForIn.prototype = Constructor.prototype;
 
 
-ForIn.Create = Constructor.prototype.Create = ForIn;
+ForIn.create = Constructor.prototype.create = ForIn;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'ForIn';
+prototype.reflect = 'ForIn';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

@@ -306,7 +306,7 @@ Jools.lazyValue(
 					this.focusAccent
 				),
 			f =
-				Euclid.Fabric.Create(
+				Euclid.Fabric.create(
 					'width',
 						this.frame.width,
 					'height',
@@ -445,7 +445,7 @@ Button.prototype.pointingHover =
 	}
 
 	return (
-		HoverReply.Create(
+		HoverReply.create(
 			'path',
 				this.path,
 			'cursor',

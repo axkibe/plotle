@@ -107,7 +107,7 @@ Server.prototype.startup =
 {
 	// the servers inventory
 	this.inventory =
-		Inventory.Create( );
+		Inventory.create( );
 
 	// initializes the database
 	var
@@ -469,7 +469,7 @@ Server.prototype.loadSpace =
 				$changes :
 					[ ],
 				$tree :
-					Visual.Space.Create( ),
+					Visual.Space.create( ),
 				$seqZ :
 					1
 			};
@@ -679,7 +679,7 @@ Server.prototype.prepareInventory =
 
 	// autogenerates the shell config as resource
 	cconfig =
-		Resource.Create(
+		Resource.create(
 			'data',
 				this.buildShellConfig( ),
 			'filePath',
@@ -747,7 +747,7 @@ Server.prototype.prepareInventory =
 		this.inventory =
 			this.inventory.updateResource(
 				resource,
-				resource.Create(
+				resource.create(
 					'data',
 						( yield fs.readFile(
 							resource.filePath,
@@ -934,7 +934,7 @@ Server.prototype.prepareInventory =
 	// registers the bundle as resource
 	this.inventory =
 		this.inventory.addResource(
-			Resource.Create(
+			Resource.create(
 				'filePath',
 					bundleFilePath,
 				'maxage',
@@ -988,7 +988,7 @@ Server.prototype.prepareInventory =
 		this.inventory =
 			this.inventory.updateResource(
 				resource,
-				resource.Create(
+				resource.create(
 					'data',
 						PostProcessor[ resource.postProcessor ](
 							resource.data,
@@ -1020,7 +1020,7 @@ Server.prototype.prepareInventory =
 		this.inventory =
 			this.inventory.updateResource(
 				resource,
-				resource.Create(
+				resource.create(
 					'gzip',
 						yield zlib.gzip(
 							resource.data,
@@ -1058,7 +1058,7 @@ Server.prototype.prependConfigFlags =
 	this.inventory =
 		this.inventory.updateResource(
 			resource,
-			resource.Create(
+			resource.create(
 				'data',
 					'var JION = false;\n' +
 					'var CHECK = true;\n' +
@@ -1689,7 +1689,7 @@ Server.prototype.createSpace =
 				[ ],
 
 			$tree :
-				Visual.Space.Create( ),
+				Visual.Space.create( ),
 
 			$seqZ :
 				1
@@ -2588,7 +2588,7 @@ Server.prototype.cmdGet =
 	{
 		node =
 			tree.getPath(
-				Jion.Path.Create(
+				Jion.Path.create(
 					'array',
 					cmd.path
 				)

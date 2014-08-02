@@ -74,7 +74,7 @@ File.prototype.Capsule =
 	)
 {
 	return (
-		this.Create(
+		this.create(
 			'capsule',
 				capsule
 		)
@@ -94,14 +94,14 @@ File.prototype.Header =
 	{
 		// arguments have to be a list of strings otherwise
 		header =
-			Comment.Create(
+			Comment.create(
 				'content',
 					Array.prototype.slice.call( arguments )
 			);
 	}
 
 	return (
-		this.Create(
+		this.create(
 			'header',
 				header
 		)
@@ -118,7 +118,7 @@ File.prototype.Preamble =
 	)
 {
 	return (
-		this.Create(
+		this.create(
 			'preamble',
 				preamble
 		)

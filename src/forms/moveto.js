@@ -174,7 +174,7 @@ MoveTo.prototype._init =
 		}
 
 		this.twig.userHomeButton =
-			this.twig.userHomeButton.Create(
+			this.twig.userHomeButton.create(
 				'visible',
 					!isGuest,
 				'text',
@@ -199,6 +199,8 @@ MoveTo.prototype.pushButton =
 		// ctrl
 	)
 {
+	var
+		buttonName;
 
 /**/if( CHECK )
 /**/{
@@ -208,9 +210,8 @@ MoveTo.prototype.pushButton =
 /**/	}
 /**/}
 
-	var
-		buttonName =
-			path.get( 4 );
+	buttonName =
+		path.get( 4 );
 
 	switch( buttonName )
 	{

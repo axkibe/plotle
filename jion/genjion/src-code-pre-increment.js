@@ -44,18 +44,9 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_expr // the expression to pre increment
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.expr = v_expr;
 
 		Jools.immute( this );
@@ -130,7 +121,7 @@ Code.PreIncrement =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_expr );
+	return new Constructor( v_expr );
 };
 
 
@@ -142,25 +133,25 @@ var
 	PreIncrement.prototype = Constructor.prototype;
 
 
-PreIncrement.Create = Constructor.prototype.Create = PreIncrement;
+PreIncrement.create = Constructor.prototype.create = PreIncrement;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'PreIncrement';
+prototype.reflect = 'PreIncrement';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

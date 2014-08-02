@@ -44,18 +44,9 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		tag, // magic cookie
 		v_content // comment content
 	)
 	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( tag !== 8833 )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
 		this.content = v_content;
 
 		Jools.immute( this );
@@ -130,7 +121,7 @@ Code.Comment =
 		return inherit;
 	}
 
-	return new Constructor( 8833, v_content );
+	return new Constructor( v_content );
 };
 
 
@@ -142,25 +133,25 @@ var
 	Comment.prototype = Constructor.prototype;
 
 
-Comment.Create = Constructor.prototype.Create = Comment;
+Comment.create = Constructor.prototype.create = Comment;
 
 
 /*
 | Reflection.
 */
-Constructor.prototype.reflect = 'Comment';
+prototype.reflect = 'Comment';
 
 
 /*
 | Sets values by path.
 */
-Constructor.prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JoobjProto.setPath;
 
 
 /*
 | Gets values by path
 */
-Constructor.prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JoobjProto.getPath;
 
 
 /*

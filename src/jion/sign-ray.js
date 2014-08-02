@@ -153,7 +153,7 @@ SignRay.prototype.Append =
 	rc.push( chg );
 
 	return (
-		SignRay.Create(
+		SignRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -205,7 +205,7 @@ SignRay.prototype.Set =
 	rc[ idx ] = sign;
 
 	return (
-		SignRay.Create(
+		SignRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -231,7 +231,7 @@ SignRay.prototype.Remove =
 	rc.splice( idx, 1 );
 
 	return (
-		SignRay.Create(
+		SignRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -258,7 +258,7 @@ SignRay.prototype.Insert =
 	rc.splice( idx, 0, sign );
 
 	return (
-		SignRay.Create(
+		SignRay.create(
 			'array',
 				rc,
 			'_sliced',

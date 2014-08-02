@@ -301,7 +301,7 @@ formatCheck =
 	}
 
 	context =
-		context.Create(
+		context.create(
 			'check',
 				true
 		);
@@ -2507,7 +2507,7 @@ Formatter.format =
 {
 	var
 		context =
-			Context.Create(
+			Context.create(
 				'root',
 					true
 			),
