@@ -2348,7 +2348,7 @@ Gen.prototype.genFromJSONCreatorParser =
 				else
 				{
 					// FUTURE remove this hack to disable
-					// Object.CreateFromJSON creation
+					// Object.createFromJSON creation
 					base =
 						attr.type !== 'Object'
 						? Var( attr.type )
@@ -2359,14 +2359,14 @@ Gen.prototype.genFromJSONCreatorParser =
 				{
 					arg =
 						Call(
-							base.Dot( 'CreateFromJSON' ),
+							base.Dot( 'createFromJSON' ),
 							Var( 'arg' )
 						);
 				}
 				else
 				{
 					// FUTURE remove this hack to disable
-					// Object.CreateFromJSON creation
+					// Object.createFromJSON creation
 					arg = Var( 'arg' );
 				}
 		}
@@ -2459,7 +2459,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 						Var( 'key' )
 					),
 					Call(
-						base.Dot( 'CreateFromJSON' ),
+						base.Dot( 'createFromJSON' ),
 						Var( 'jval' )
 					)
 				)
@@ -2706,7 +2706,7 @@ Gen.prototype.genFromJSONCreator =
 	capsule =
 		capsule
 		.Assign(
-			Var( this.reference ).Dot( 'CreateFromJSON' ),
+			Var( this.reference ).Dot( 'createFromJSON' ),
 			Func( funcBlock )
 			.Arg(
 				'json',

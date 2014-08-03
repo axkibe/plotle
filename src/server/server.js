@@ -15,20 +15,19 @@
 /*
 | Globals.
 */
-GLOBAL.APP=
-	'server';
-GLOBAL.FORCE=
-	false;
-GLOBAL.SHELLAPP=
-	'shell';
-GLOBAL.CHECK =
-	true;
-GLOBAL.JION =
-	false;
-GLOBAL.SERVER =
-	true;
-GLOBAL.SHELL =
-	false;
+GLOBAL.APP = 'server';
+
+GLOBAL.FORCE = false;
+
+GLOBAL.SHELLAPP = 'shell';
+
+GLOBAL.CHECK = true;
+
+GLOBAL.JION = false;
+
+GLOBAL.SERVER = true;
+
+GLOBAL.SHELL = false;
 
 /*
 | Constants.
@@ -511,12 +510,12 @@ Server.prototype.loadSpace =
 			o.type = 'Change'; // FUTURE this is a hack
 
 			change.chgX =
-				Jion.Change.CreateFromJSON( o.chgX );
+				Jion.Change.createFromJSON( o.chgX );
 		}
 		else
 		{
 			change.chgX =
-				Jion.ChangeRay.CreateFromJSON( o.chgX );
+				Jion.ChangeRay.createFromJSON( o.chgX );
 		}
 
 		space.$seqZ++;
@@ -1466,7 +1465,7 @@ Server.prototype.cmdAlter =
 			);
 		}
 
-		chgX = Jion.Change.CreateFromJSON( chgX );
+		chgX = Jion.Change.createFromJSON( chgX );
 	}
 	catch( err )
 	{

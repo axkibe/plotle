@@ -27,7 +27,7 @@
 . Create
 . createArbitrary
 . CreateDisc
-. CreateFromJSON
+. createFromJSON
 . CreateGeneric
 . CreateLabel
 . CreateNote

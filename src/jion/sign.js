@@ -188,28 +188,28 @@ Sign.prototype._init =
 			case 'Label' :
 
 				this.val =
-					Visual.Label.CreateFromJSON( val );
+					Visual.Label.createFromJSON( val );
 
 				break;
 
 			case 'Note' :
 
 				this.val =
-					Visual.Note.CreateFromJSON( val );
+					Visual.Note.createFromJSON( val );
 
 				break;
 
 			case 'Point' :
 
 				this.val =
-					Euclid.Point.CreateFromJSON( val );
+					Euclid.Point.createFromJSON( val );
 
 				break;
 
 			case 'Portal' :
 
 				this.val =
-					Visual.Portal.CreateFromJSON( val );
+					Visual.Portal.createFromJSON( val );
 
 				break;
 
@@ -217,14 +217,14 @@ Sign.prototype._init =
 			case 'Rect' :
 
 				this.val =
-					Euclid.Rect.CreateFromJSON( val );
+					Euclid.Rect.createFromJSON( val );
 
 				break;
 
 			case 'Relation' :
 
 				this.val =
-					Visual.Relation.CreateFromJSON( val );
+					Visual.Relation.createFromJSON( val );
 
 				break;
 

@@ -542,7 +542,7 @@ Jools.lazyValue(
 /*
 | CreateFromJSON
 */
-Path.CreateFromJSON =
+Path.createFromJSON =
 	function( json )
 {
 	// FIXME this is a dirty hack and ought to be removed.

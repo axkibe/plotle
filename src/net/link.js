@@ -354,7 +354,7 @@ Link.prototype._onAquireSpace =
 		);
 	}
 
-	space = Visual.Space.CreateFromJSON( reply.node );
+	space = Visual.Space.createFromJSON( reply.node );
 
 	shell.link =
 		shell.link.create(
@@ -496,7 +496,7 @@ Link.prototype._onUpdate =
 		)
 		{
 			chgX =
-				Jion.Change.CreateFromJSON(
+				Jion.Change.createFromJSON(
 					chgs[ a ].chgX
 				);
 
