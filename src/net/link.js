@@ -537,7 +537,7 @@ Link.prototype._onUpdate =
 
 				if( u.seq < seq + a )
 				{
-					tfxChgX = u.chgX.TransformChangeX( chgX );
+					tfxChgX = u.chgX.transformChangeX( chgX );
 
 					// the change vanished by transformation
 					if( tfxChgX === null )
@@ -574,7 +574,7 @@ Link.prototype._onUpdate =
 
 				if( u.seq < seq + a )
 				{
-					tfxChgX = u.chgX.TransformChangeX( chgX );
+					tfxChgX = u.chgX.transformChangeX( chgX );
 
 					// the change vanished by transformation
 					if( tfxChgX === null )
@@ -592,7 +592,7 @@ Link.prototype._onUpdate =
 							'cid',
 								u.cid,
 							'chgX',
-								u.chgX.TransformChangeX( chgX ),
+								u.chgX.transformChangeX( chgX ),
 							'seq',
 								u.seq
 						);
@@ -623,7 +623,7 @@ Link.prototype._onUpdate =
 			)
 			{
 				chgX =
-					chgX.TransformChangeX( report.get( b ) );
+					chgX.transformChangeX( report.get( b ) );
 			}
 
 			// FUTURE adapt ChangeTree so it
@@ -654,7 +654,7 @@ Link.prototype._onUpdate =
 			)
 			{
 				chgX =
-					chgX.TransformChangeX(
+					chgX.transformChangeX(
 						report.get( b )
 					);
 			}

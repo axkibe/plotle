@@ -309,7 +309,7 @@ Change.prototype.get =
 /*
 | Returns a change transformed on this change.
 */
-Change.prototype.TransformChange =
+Change.prototype.transformChange =
 	function(
 		chg
 	)
@@ -331,9 +331,9 @@ Change.prototype.TransformChange =
 /**/	}
 /**/}
 
-	srcX = this.TransformSign( chg.src );
+	srcX = this.transformSign( chg.src );
 
-	trgX = this.TransformSign( chg.trg );
+	trgX = this.transformSign( chg.trg );
 
 	if(
 		srcX === null
@@ -445,7 +445,7 @@ Change.prototype.TransformChange =
 /*
 | Returns a change ray transformed on this change.
 */
-Change.prototype.TransformChangeRay =
+Change.prototype.transformChangeRay =
 	function(
 	//	chgX
 	)
@@ -458,7 +458,7 @@ Change.prototype.TransformChangeRay =
 /*
 | Returns a Change or a ChangeRay transformed on this Change.
 */
-Change.prototype.TransformChangeX =
+Change.prototype.transformChangeX =
 	function(
 		chgX
 	)
@@ -467,11 +467,11 @@ Change.prototype.TransformChangeX =
 	{
 		case 'Change' :
 
-			return this.TransformChange( chgX );
+			return this.transformChange( chgX );
 
 		case 'ChangeRay' :
 
-			return this.TransformChangeRay( chgX );
+			return this.transformChangeRay( chgX );
 
 		default :
 
@@ -1175,7 +1175,7 @@ Change.prototype._ChangeTreeRank =
 |
 | This can possibly return a sign ray.
 */
-Change.prototype.TransformSign =
+Change.prototype.transformSign =
 	function(
 		sign
 	)
@@ -1189,27 +1189,27 @@ Change.prototype.TransformSign =
 	{
 		case 'split' :
 
-			return this._TransformSignSplit( sign );
+			return this._transformSignSplit( sign );
 
 		case 'join' :
 
-			return this._TransformSignJoin( sign );
+			return this._transformSignJoin( sign );
 
 		case 'rank' :
 
-			return this._TransformSignRank( sign );
+			return this._transformSignRank( sign );
 
 		case 'set' :
 
-			return this._TransformSignSet( sign );
+			return this._transformSignSet( sign );
 
 		case 'insert' :
 
-			return this._TransformSignInsert( sign );
+			return this._transformSignInsert( sign );
 
 		case 'remove' :
 
-			return this._TransformSignRemove( sign );
+			return this._transformSignRemove( sign );
 
 		default :
 
@@ -1221,7 +1221,7 @@ Change.prototype.TransformSign =
 /*
 | Returns a transformed SignRay on this change.
 */
-Change.prototype.TransformSignRay =
+Change.prototype.transformSignRay =
 	function(
 		signray
 	)
@@ -1238,7 +1238,7 @@ Change.prototype.TransformSignRay =
 		a++
 	)
 	{
-		cx = this.TransformSign( signray.get( a ) );
+		cx = this.transformSign( signray.get( a ) );
 
 		if( cx === null )
 		{
@@ -1281,7 +1281,7 @@ Change.prototype.TransformSignRay =
 |
 | Can possibly transform a Sign to a SignRay.
 */
-Change.prototype.TransformSignX =
+Change.prototype.transformSignX =
 	function(
 		signX
 	)
@@ -1291,11 +1291,11 @@ Change.prototype.TransformSignX =
 
 		case 'Sign' :
 
-			return this.TransformSign( signX );
+			return this.transformSign( signX );
 
 		case 'SignRay' :
 
-			return this.TransformSignRay( signX );
+			return this.transformSignRay( signX );
 
 		default :
 
@@ -1307,7 +1307,7 @@ Change.prototype.TransformSignX =
 /*
 | Transforms a signature on one a split.
 */
-Change.prototype._TransformSignSplit =
+Change.prototype._transformSignSplit =
 	function(
 		sign
 	)
@@ -1406,7 +1406,7 @@ Change.prototype._TransformSignSplit =
 /*
 | Transforms a signature on a join.
 */
-Change.prototype._TransformSignJoin =
+Change.prototype._transformSignJoin =
 	function(
 		sign
 	)
@@ -1466,7 +1466,7 @@ Change.prototype._TransformSignJoin =
 /*
 | Transforms a signature on a rank
 */
-Change.prototype._TransformSignRank =
+Change.prototype._transformSignRank =
 	function(
 		sign
 	)
@@ -1520,7 +1520,7 @@ Change.prototype._TransformSignRank =
 /*
 | Transforms a signature on a join.
 */
-Change.prototype._TransformSignSet =
+Change.prototype._transformSignSet =
 	function(
 		sign
 	)
@@ -1595,7 +1595,7 @@ Change.prototype._TransformSignSet =
 /*
 | Transforms a signature on an insert.
 */
-Change.prototype._TransformSignInsert =
+Change.prototype._transformSignInsert =
 	function(
 		sign
 	)
@@ -1659,7 +1659,7 @@ Change.prototype._TransformSignInsert =
 /*
 | Transforms a signature on a remove
 */
-Change.prototype._TransformSignRemove =
+Change.prototype._transformSignRemove =
 	function(
 		sign
 	)

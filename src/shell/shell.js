@@ -388,7 +388,7 @@ Shell.prototype.update =
 			else
 			{
 				sign =
-					chgX.TransformSign(
+					chgX.transformSign(
 						Jion.Sign.create(
 							'path',
 								mark.path.Chop( ),
@@ -437,7 +437,7 @@ Shell.prototype.update =
 			else
 			{
 				bSign =
-					chgX.TransformSign(
+					chgX.transformSign(
 						Jion.Sign.create(
 							'path',
 								mark.bPath.Chop( ),
@@ -447,7 +447,7 @@ Shell.prototype.update =
 					);
 
 				eSign =
-					chgX.TransformSign(
+					chgX.transformSign(
 						Jion.Sign.create(
 							'path',
 								mark.ePath.Chop( ),

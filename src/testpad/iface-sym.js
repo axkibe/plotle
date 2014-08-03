@@ -193,7 +193,7 @@ IFaceSym.prototype.alter =
 		s++
 	)
 	{
-		chgX = chgX.TransformChangeX( changes[ s ] );
+		chgX = chgX.transformChangeX( changes[ s ] );
 
 		if( chgX === null )
 		{

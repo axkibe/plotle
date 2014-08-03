@@ -1477,8 +1477,7 @@ Server.prototype.cmdAlter =
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )
 	{
-		chgX =
-			chgX.TransformChangeX( changes[a].chgX );
+		chgX = chgX.transformChangeX( changes[a].chgX );
 
 		if(
 			chgX === null
