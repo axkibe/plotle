@@ -69,7 +69,7 @@ var
 	Code.BooleanLiteral =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -77,7 +77,7 @@ var
 | Creates a new BooleanLiteral object.
 */
 BooleanLiteral.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -154,6 +154,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'BooleanLiteral';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.booleanLiteral';
 
 
 /*

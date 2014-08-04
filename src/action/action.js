@@ -38,17 +38,17 @@ Action.Action =
 ***		| Returns true if the reflection string is an action
 ***		*
 ***/	Action.isAction =
-/**/		function( reflect )
+/**/		function( reflex )
 /**/	{
-/**/		switch ( reflect )
+/**/		switch ( reflex )
 /**/		{
-/**/			case 'CreateGeneric' :
-/**/			case 'CreateRelation' :
-/**/			case 'ItemDrag' :
-/**/			case 'ItemResize' :
-/**/			case 'None' :
-/**/			case 'Pan' :
-/**/			case 'ScrollY' :
+/**/			case 'action.createGeneric' :
+/**/			case 'action.createRelation' :
+/**/			case 'action.itemDrag' :
+/**/			case 'action.itemResize' :
+/**/			case 'action.none' :
+/**/			case 'action.pan' :
+/**/			case 'action.scrollY' :
 /**/
 /**/				return true;
 /**/

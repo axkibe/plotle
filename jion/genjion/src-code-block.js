@@ -84,7 +84,7 @@ var
 	Code.Block =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -92,7 +92,7 @@ var
 | Creates a new Block object.
 */
 Block.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -269,6 +269,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Block';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.block';
 
 
 /*

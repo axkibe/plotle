@@ -72,7 +72,7 @@ var
 	Code.VarDec =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -80,7 +80,7 @@ var
 | Creates a new VarDec object.
 */
 VarDec.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -189,6 +189,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'VarDec';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.varDec';
 
 
 /*

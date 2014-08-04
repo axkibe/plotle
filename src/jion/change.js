@@ -325,7 +325,7 @@ Change.prototype.transformChange =
 
 /**/if( CHECK )
 /**/{
-/**/	if( chg.reflect !== "Change" )
+/**/	if( chg.reflex !== 'jion.change' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -344,9 +344,9 @@ Change.prototype.transformChange =
 		return null;
 	}
 
-	srcA = srcX.reflect === 'SignRay';
+	srcA = srcX.reflex === 'jion.signRay';
 
-	trgA = trgX.reflect === 'SignRay';
+	trgA = trgX.reflex === 'jion.signRay';
 
 	if( !srcA && !trgA )
 	{

@@ -69,7 +69,7 @@ var
 	Code.NumberLiteral =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -77,7 +77,7 @@ var
 | Creates a new NumberLiteral object.
 */
 NumberLiteral.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -154,6 +154,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'NumberLiteral';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.numberLiteral';
 
 
 /*

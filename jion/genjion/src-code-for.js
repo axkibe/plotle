@@ -78,7 +78,7 @@ var
 	Code.For =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -86,7 +86,7 @@ var
 | Creates a new For object.
 */
 For.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -239,6 +239,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'For';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.for';
 
 
 /*

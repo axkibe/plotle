@@ -22,7 +22,6 @@ Widgets =
 var
 	Accent,
 	Euclid,
-	HoverReply,
 	Jools,
 	Mark,
 	shell,
@@ -1038,7 +1037,7 @@ Input.prototype.pointingHover =
 	}
 
 	return (
-		HoverReply.create(
+		reply.hover.create(
 			'path',
 				this.path,
 			'cursor',

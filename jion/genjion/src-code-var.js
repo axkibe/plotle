@@ -71,7 +71,7 @@ var
 	Code.Var =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -79,7 +79,7 @@ var
 | Creates a new Var object.
 */
 Var.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -160,6 +160,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Var';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.var';
 
 
 /*

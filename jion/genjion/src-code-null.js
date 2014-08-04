@@ -62,7 +62,7 @@ var
 	Code.Null =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -78,7 +78,7 @@ var
 | Creates a new Null object.
 */
 Null.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -113,6 +113,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Null';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.null';
 
 
 /*

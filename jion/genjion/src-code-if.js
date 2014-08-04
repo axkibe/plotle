@@ -75,7 +75,7 @@ var
 	Code.If =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -83,7 +83,7 @@ var
 | Creates a new If object.
 */
 If.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -224,6 +224,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'If';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.if';
 
 
 /*

@@ -74,7 +74,7 @@ var
 	Code.Dot =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -82,7 +82,7 @@ var
 | Creates a new Dot object.
 */
 Dot.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -191,6 +191,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Dot';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.dot';
 
 
 /*

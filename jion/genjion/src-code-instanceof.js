@@ -72,7 +72,7 @@ var
 	Code.Instanceof =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -80,7 +80,7 @@ var
 | Creates a new Instanceof object.
 */
 Instanceof.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -174,6 +174,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Instanceof';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.instanceof';
 
 
 /*

@@ -21,10 +21,10 @@ var
 	Accent,
 	fontPool,
 	Euclid,
-	HoverReply,
 	Jools,
 	Mark,
 	Peer,
+	reply,
 	shell,
 	Style,
 	theme;
@@ -704,7 +704,7 @@ Portal.prototype.pointingHover =
 	)
 	{
 		return (
-			HoverReply.create(
+			reply.hover.create(
 				'path',
 					this.subPaths.moveToButton,
 				'cursor',
@@ -715,7 +715,7 @@ Portal.prototype.pointingHover =
 	else
 	{
 		return (
-			HoverReply.create(
+			reply.hover.create(
 				'path',
 					this.path,
 				'cursor',

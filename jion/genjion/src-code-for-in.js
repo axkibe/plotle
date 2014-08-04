@@ -75,7 +75,7 @@ var
 	Code.ForIn =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -83,7 +83,7 @@ var
 | Creates a new ForIn object.
 */
 ForIn.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -221,6 +221,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'ForIn';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.forIn';
 
 
 /*

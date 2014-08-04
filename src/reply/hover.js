@@ -21,26 +21,23 @@
 if( JION )
 {
 	return {
-
+		unit :
+			'reply',
 		name :
-			'HoverReply',
-
+			'hover',
 		attributes :
 			{
 				cursor :
 					{
 						comment :
 							'the cursor to display',
-
 						type :
 							'String'
 					},
-
 				path :
 					{
 						comment :
 							'the path to the thing being hovered upon',
-
 						type :
 							'Path'
 					}

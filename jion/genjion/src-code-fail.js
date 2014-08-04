@@ -69,7 +69,7 @@ var
 	Code.Fail =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -77,7 +77,7 @@ var
 | Creates a new Fail object.
 */
 Fail.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -149,6 +149,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Fail';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.fail';
 
 
 /*

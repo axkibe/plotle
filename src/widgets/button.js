@@ -22,8 +22,8 @@ Widgets =
 var
 	Accent,
 	Euclid,
-	HoverReply,
 	Jools,
+	reply,
 	shell;
 
 
@@ -445,7 +445,7 @@ Button.prototype.pointingHover =
 	}
 
 	return (
-		HoverReply.create(
+		reply.hover.create(
 			'path',
 				this.path,
 			'cursor',

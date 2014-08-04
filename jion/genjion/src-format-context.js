@@ -75,7 +75,7 @@ var
 Context =
 	{
 		prototype :
-			Constructor.prototype
+			prototype
 	};
 
 
@@ -83,7 +83,7 @@ Context =
 | Creates a new Context object.
 */
 Context.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -270,6 +270,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Context';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'context';
 
 
 /*

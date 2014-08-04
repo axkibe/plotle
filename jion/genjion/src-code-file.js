@@ -75,7 +75,7 @@ var
 	Code.File =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -83,7 +83,7 @@ var
 | Creates a new File object.
 */
 File.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -243,6 +243,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'File';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.file';
 
 
 /*

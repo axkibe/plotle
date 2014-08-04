@@ -334,7 +334,7 @@ Shell.prototype.setAction =
 
 /**/if ( CHECK )
 /**/{
-/**/	if( !action || !Action.isAction( action.reflect ) )
+/**/	if( !action || !Action.isAction( action.reflex ) )
 /**/	{
 /**/		throw new Error(
 /**/			'invalid action'
@@ -374,9 +374,9 @@ Shell.prototype.update =
 
 	mark = this.space.mark;
 
-	switch( mark.reflect )
+	switch( mark.reflex )
 	{
-		case 'Caret' :
+		case 'mark.caret' :
 
 			item = space.twig[ mark.path.get( 2 ) ];
 
@@ -413,7 +413,7 @@ Shell.prototype.update =
 
 			break;
 
-		case 'Item' :
+		case 'mark.item' :
 
 			item = space.twig[ mark.path.get( 2 ) ];
 
@@ -425,7 +425,7 @@ Shell.prototype.update =
 
 			break;
 
-		case 'Range' :
+		case 'mark.range' :
 
 			item = space.twig[ mark.bPath.get( 2 ) ];
 
@@ -533,9 +533,9 @@ Shell.prototype.setFocus =
 		focus
 	)
 {
-	switch( this.mark.reflect )
+	switch( this.mark.reflex )
 	{
-		case 'Caret' :
+		case 'mark.caret' :
 
 			this.setMark(
 				this.mark.create(
@@ -698,7 +698,7 @@ Shell.prototype.pointingHover =
 		{
 			if( CHECK )
 			{
-				if( reply.reflect !== 'HoverReply' )
+				if( reply.reflex !== 'shell.hoverReply' )
 				{
 					throw new Error( 'invalid reply' );
 				}
@@ -730,7 +730,7 @@ Shell.prototype.pointingHover =
 /**/		if(
 /**/			!reply
 /**/			||
-/**/			reply.reflect !== 'HoverReply'
+/**/			reply.reflex !== 'reply.hover'
 /**/		)
 /**/		{
 /**/			throw new Error(

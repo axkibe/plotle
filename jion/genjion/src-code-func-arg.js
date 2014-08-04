@@ -72,7 +72,7 @@ var
 	Code.FuncArg =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -80,7 +80,7 @@ var
 | Creates a new FuncArg object.
 */
 FuncArg.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -199,6 +199,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'FuncArg';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.funcArg';
 
 
 /*

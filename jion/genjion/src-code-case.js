@@ -97,7 +97,7 @@ var
 	Code.Case =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -105,7 +105,7 @@ var
 | Creates a new Case object.
 */
 Case.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -308,6 +308,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Case';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.case';
 
 
 /*

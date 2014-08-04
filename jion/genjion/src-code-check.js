@@ -69,7 +69,7 @@ var
 	Code.Check =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -77,7 +77,7 @@ var
 | Creates a new Check object.
 */
 Check.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -154,6 +154,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Check';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.check';
 
 
 /*

@@ -18,11 +18,11 @@ var
 var
 	Action,
 	Euclid,
-	HoverReply,
 	Jion,
 	Jools,
 	Mark,
 	Peer,
+	reply,
 	shell,
 	Stubs,
 	theme;
@@ -552,7 +552,7 @@ Space.prototype.pointingHover =
 		aZ,
 		item,
 		focus,
-		reply,
+		result,
 		view;
 
 	view =
@@ -573,7 +573,7 @@ Space.prototype.pointingHover =
 		if( com )
 		{
 			return (
-				HoverReply.create(
+				reply.hover.create(
 					'path',
 						Jion.Path.empty,
 					'cursor',
@@ -592,20 +592,20 @@ Space.prototype.pointingHover =
 		item =
 			this.atRank( a ),
 
-		reply =
+		result =
 			item.pointingHover(
 				view,
 				p
 			);
 
-		if( reply )
+		if( result )
 		{
-			return reply;
+			return result;
 		}
 	}
 
 	return (
-		HoverReply.create(
+		reply.hover.create(
 			'path',
 				Jion.Path.empty,
 			'cursor',

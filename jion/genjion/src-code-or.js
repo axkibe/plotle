@@ -72,7 +72,7 @@ var
 	Code.Or =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -80,7 +80,7 @@ var
 | Creates a new Or object.
 */
 Or.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -174,6 +174,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Or';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.or';
 
 
 /*

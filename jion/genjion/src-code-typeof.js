@@ -69,7 +69,7 @@ var
 	Code.Typeof =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -77,7 +77,7 @@ var
 | Creates a new Typeof object.
 */
 Typeof.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -149,6 +149,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Typeof';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.typeof';
 
 
 /*

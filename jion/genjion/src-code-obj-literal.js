@@ -94,7 +94,7 @@ var
 	Code.ObjLiteral =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -102,7 +102,7 @@ var
 | Creates a new ObjLiteral object.
 */
 ObjLiteral.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -279,6 +279,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'ObjLiteral';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.objLiteral';
 
 
 /*

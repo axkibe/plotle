@@ -20,7 +20,6 @@ Forms = Forms || { };
 */
 var
 	Euclid,
-	HoverReply,
 	Jion,
 	Jools,
 	Mark,
@@ -258,8 +257,8 @@ Form.prototype.pointingHover =
 		r,
 		rZ,
 		ranks,
-		reply;
-	
+		result;
+
 	ranks = this.ranks;
 
 	for(
@@ -268,21 +267,21 @@ Form.prototype.pointingHover =
 		r++
 	)
 	{
-		reply =
+		result =
 			this.atRank( r ).pointingHover(
 				p,
 				shift,
 				ctrl
 			);
 
-		if( reply )
+		if( result )
 		{
-			return reply;
+			return result;
 		}
 	}
 
 	return (
-		HoverReply.create(
+		reply.hover.create(
 			'path',
 				Jion.Path.empty,
 			'cursor',

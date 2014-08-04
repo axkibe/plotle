@@ -86,7 +86,7 @@ var
 	Code.Switch =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -94,7 +94,7 @@ var
 | Creates a new Switch object.
 */
 Switch.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -334,6 +334,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Switch';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.switch';
 
 
 /*

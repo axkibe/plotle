@@ -72,7 +72,7 @@ var
 	Code.Member =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -80,7 +80,7 @@ var
 | Creates a new Member object.
 */
 Member.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -180,6 +180,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Member';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.member';
 
 
 /*

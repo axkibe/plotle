@@ -75,7 +75,7 @@ var
 	Code.Condition =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -83,7 +83,7 @@ var
 | Creates a new Condition object.
 */
 Condition.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -207,6 +207,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Condition';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.condition';
 
 
 /*

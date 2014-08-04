@@ -94,7 +94,7 @@ var
 	Code.CommaList =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -102,7 +102,7 @@ var
 | Creates a new CommaList object.
 */
 CommaList.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -279,6 +279,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'CommaList';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.commaList';
 
 
 /*

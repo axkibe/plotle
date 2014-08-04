@@ -69,7 +69,7 @@ var
 	Code.Return =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -77,7 +77,7 @@ var
 | Creates a new Return object.
 */
 Return.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -149,6 +149,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Return';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.return';
 
 
 /*

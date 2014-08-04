@@ -151,6 +151,12 @@ prototype.reflect = 'Gen';
 
 
 /*
+| New Reflection.
+*/
+prototype.reflex = 'gen';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

@@ -69,7 +69,7 @@ var
 	Code.StringLiteral =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -77,7 +77,7 @@ var
 | Creates a new StringLiteral object.
 */
 StringLiteral.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -158,6 +158,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'StringLiteral';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.stringLiteral';
 
 
 /*

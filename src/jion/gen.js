@@ -133,6 +133,32 @@ camelCaseToDash =
 
 
 /*
+| Adapts naming conventions
+|
+| FIXME remove
+*/
+var
+adaptName =
+	function(
+		unit,
+		name
+	)
+{
+	if( !unit )
+	{
+		return name[ 0 ].toLowerCase( ) + name.slice( 1 );
+	}
+
+	return (
+		unit[ 0 ].toLowerCase( ) + unit.slice( 1 )
+		+
+		'.'
+		+
+		name[ 0 ].toLowerCase( ) + name.slice( 1 )
+	);
+};
+
+/*
 | Initializes a generator.
 */
 Gen.prototype._init =
@@ -2733,6 +2759,22 @@ Gen.prototype.genReflection =
 			Var( 'prototype' ).Dot( 'reflect' ),
 			StringLiteral( this.name )
 		);
+
+	capsule =
+		capsule
+		.Comment( 'New Reflection.' )
+		.Assign(
+			Var( 'prototype' ).Dot( 'reflex' ),
+			StringLiteral(
+				adaptName(
+					this.unit,
+					this.name
+				)
+			)
+		);
+
+	// TODO remove old reflection
+	// TODO there should not be no unit ever.
 
 	return capsule;
 };

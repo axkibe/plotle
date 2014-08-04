@@ -21,10 +21,10 @@ Visual =
 var
 	Action,
 	Euclid,
-	HoverReply,
 	Jion,
 	Jools,
 	Mark,
+	reply,
 	shell,
 	theme;
 
@@ -757,7 +757,7 @@ Item.prototype.pointingHover =
 	)
 	{
 		return (
-			HoverReply.create(
+			reply.hover.create(
 				'path',
 					this.path,
 				'cursor',
@@ -777,7 +777,7 @@ Item.prototype.pointingHover =
 	}
 
 	return (
-		HoverReply.create(
+		reply.hover.create(
 			'path',
 				this.path,
 			'cursor',

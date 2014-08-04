@@ -72,7 +72,7 @@ var
 	Code.GreaterThan =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -80,7 +80,7 @@ var
 | Creates a new GreaterThan object.
 */
 GreaterThan.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -174,6 +174,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'GreaterThan';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.greaterThan';
 
 
 /*

@@ -83,7 +83,7 @@ var
 	Code.Func =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -91,7 +91,7 @@ var
 | Creates a new Func object.
 */
 Func.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -307,6 +307,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Func';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.func';
 
 
 /*

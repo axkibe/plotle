@@ -97,7 +97,7 @@ var
 	Code.Call =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -105,7 +105,7 @@ var
 | Creates a new Call object.
 */
 Call.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -303,6 +303,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'Call';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.call';
 
 
 /*

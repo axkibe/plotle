@@ -83,7 +83,7 @@ var
 	Code.VList =
 		{
 			prototype :
-				Constructor.prototype
+				prototype
 		};
 
 
@@ -91,7 +91,7 @@ var
 | Creates a new VList object.
 */
 VList.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)
@@ -307,6 +307,12 @@ Constructor.prototype.create =
 | Reflection.
 */
 prototype.reflect = 'VList';
+
+
+/*
+| New Reflection.
+*/
+prototype.reflex = 'code.vList';
 
 
 /*
