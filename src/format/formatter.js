@@ -48,7 +48,7 @@ precTable =
 	{
 		'anAnd' :
 			13,
-		'ArrayLiteral' :
+		'anArrayLiteral' :
 			-1,
 		'Assign' :
 			17,
@@ -1914,7 +1914,7 @@ formatNull =
 | FUTURE format also inline
 */
 var
-formatArrayLiteral =
+formatAnArrayLiteral =
 	function(
 		context,
 		expr
@@ -1927,7 +1927,7 @@ formatArrayLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.arrayLiteral' )
+/**/	if( expr.reflex !== 'code.anArrayLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1960,7 +1960,7 @@ formatArrayLiteral =
 			formatExpression(
 				context.Inc,
 				expr.twig[ key ],
-				precTable.ArrayLiteral
+				precTable.anArrayLiteral
 			)
 			+
 			(
@@ -2573,8 +2573,8 @@ exprFormatter =
 	{
 		'anAnd' :
 			formatAnd,
-		'ArrayLiteral' :
-			formatArrayLiteral,
+		'anArrayLiteral' :
+			formatAnArrayLiteral,
 		'Assign' :
 			formatAssign,
 		'BooleanLiteral' :

@@ -88,8 +88,8 @@ var
 | Jion
 */
 var
-	ArrayLiteral =
-	Code.ArrayLiteral =
+	anArrayLiteral =
+	Code.anArrayLiteral =
 		{
 			prototype :
 				prototype
@@ -97,9 +97,9 @@ var
 
 
 /*
-| Creates a new ArrayLiteral object.
+| Creates a new anArrayLiteral object.
 */
-ArrayLiteral.create =
+anArrayLiteral.create =
 prototype.create =
 	function(
 		// free strings
@@ -113,7 +113,7 @@ prototype.create =
 		twig,
 		twigDup;
 
-	if( this !== ArrayLiteral )
+	if( this !== anArrayLiteral )
 	{
 		inherit = this;
 
@@ -276,13 +276,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ArrayLiteral';
+prototype.reflect = 'anArrayLiteral';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.arrayLiteral';
+prototype.reflex = 'code.anArrayLiteral';
 
 
 /*
@@ -328,7 +328,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = ArrayLiteral;
+	module.exports = anArrayLiteral;
 }
 
 

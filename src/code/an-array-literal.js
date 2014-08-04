@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'ArrayLiteral',
+			'anArrayLiteral',
 		unit :
 			'Code',
 		node :
@@ -35,7 +35,7 @@ if( JION )
 | Node imports.
 */
 var
-	ArrayLiteral =
+	AnArrayLiteral =
 		require( '../jion/this' )( module ),
 	Jools =
 		require( '../jools/jools' );
@@ -44,7 +44,7 @@ var
 /*
 | Returns an array literal with an expression appended.
 */
-ArrayLiteral.prototype.Append =
+AnArrayLiteral.prototype.Append =
 	function(
 		expr
 	)
@@ -63,7 +63,7 @@ ArrayLiteral.prototype.Append =
 | Node export.
 */
 module.exports =
-	ArrayLiteral;
+	AnArrayLiteral;
 
 
 } )( );

@@ -29,8 +29,8 @@ Code =
 	{
 		anAnd :
 			require( '../code/an-and' ),
-		ArrayLiteral :
-			require( '../code/array-literal' ),
+		anArrayLiteral :
+			require( '../code/an-array-literal' ),
 		Assign :
 			require( '../code/assign' ),
 		Block :
@@ -154,10 +154,10 @@ ShortHand.anAnd =
 /*
 | Shorthand for creating array literals.
 */
-ShortHand.ArrayLiteral =
+ShortHand.anArrayLiteral =
 	function( )
 {
-	return Code.ArrayLiteral.create( );
+	return Code.anArrayLiteral.create( );
 };
 
 

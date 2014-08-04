@@ -54,8 +54,8 @@ var
 var
 	anAnd =
 		Shorthand.anAnd,
-	ArrayLiteral =
-		Shorthand.ArrayLiteral,
+	anArrayLiteral =
+		Shorthand.anArrayLiteral,
 	Assign =
 		Shorthand.Assign,
 	Block =
@@ -1096,7 +1096,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 				)
 				.Assign(
 					Var( 'ranks' ),
-					ArrayLiteral( )
+					anArrayLiteral( )
 				)
 				.Assign(
 					Var( 'twigDup' ),
