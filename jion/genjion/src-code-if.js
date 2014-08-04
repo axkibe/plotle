@@ -60,10 +60,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	If =
+	Code.If =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new If object.
 */
-var If =
-Code.If =
+If.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -198,17 +218,6 @@ Code.If =
 
 	return new Constructor( v_condition, v_elsewise, v_then );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	If.prototype = Constructor.prototype;
-
-
-If.create = Constructor.prototype.create = If;
 
 
 /*

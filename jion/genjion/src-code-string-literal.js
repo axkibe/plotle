@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	StringLiteral =
+	Code.StringLiteral =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new StringLiteral object.
 */
-var StringLiteral =
-Code.StringLiteral =
+StringLiteral.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -132,17 +152,6 @@ Code.StringLiteral =
 
 	return new Constructor( v_string );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	StringLiteral.prototype = Constructor.prototype;
-
-
-StringLiteral.create = Constructor.prototype.create = StringLiteral;
 
 
 /*

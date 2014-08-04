@@ -60,10 +60,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	ForIn =
+	Code.ForIn =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new ForIn object.
 */
-var ForIn =
-Code.ForIn =
+ForIn.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -195,17 +215,6 @@ Code.ForIn =
 
 	return new Constructor( v_block, v_object, v_variable );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	ForIn.prototype = Constructor.prototype;
-
-
-ForIn.create = Constructor.prototype.create = ForIn;
 
 
 /*

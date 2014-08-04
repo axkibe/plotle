@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Comment =
+	Code.Comment =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Comment object.
 */
-var Comment =
-Code.Comment =
+Comment.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -123,17 +143,6 @@ Code.Comment =
 
 	return new Constructor( v_content );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Comment.prototype = Constructor.prototype;
-
-
-Comment.create = Constructor.prototype.create = Comment;
 
 
 /*

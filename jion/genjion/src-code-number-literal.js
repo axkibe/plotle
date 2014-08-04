@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	NumberLiteral =
+	Code.NumberLiteral =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new NumberLiteral object.
 */
-var NumberLiteral =
-Code.NumberLiteral =
+NumberLiteral.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -128,17 +148,6 @@ Code.NumberLiteral =
 
 	return new Constructor( v_number );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	NumberLiteral.prototype = Constructor.prototype;
-
-
-NumberLiteral.create = Constructor.prototype.create = NumberLiteral;
 
 
 /*

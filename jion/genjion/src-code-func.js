@@ -68,10 +68,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Func =
+	Code.Func =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Func object.
 */
-var Func =
-Code.Func =
+Func.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -281,17 +301,6 @@ Code.Func =
 
 	return new Constructor( twig, ranks, v_block );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Func.prototype = Constructor.prototype;
-
-
-Func.create = Constructor.prototype.create = Func;
 
 
 /*

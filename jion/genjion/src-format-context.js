@@ -62,9 +62,28 @@ var Constructor =
 
 
 /*
-| Creates a new Context object.
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
 */
 Context =
+	{
+		prototype :
+			Constructor.prototype
+	};
+
+
+/*
+| Creates a new Context object.
+*/
+Context.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -245,17 +264,6 @@ Context =
 
 	return new Constructor( v_check, v_indent, v_inline, v_root );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Context.prototype = Constructor.prototype;
-
-
-Context.create = Constructor.prototype.create = Context;
 
 
 /*

@@ -649,9 +649,7 @@ Gen.prototype.genConstructor =
 		name;
 
 	capsule =
-		capsule.Comment(
-			'Constructor.'
-		);
+		capsule.Comment( 'Constructor.' );
 
 	block = Block( );
 
@@ -854,6 +852,21 @@ Gen.prototype.genConstructor =
 			constructor
 		);
 
+	// subclass
+	if( this.subclass )
+	{
+		capsule =
+			capsule
+			.Comment(
+				'Subclass.'
+			)
+			.Call(
+				Var( 'Jools' ).Dot( 'subclass' ),
+				Var( 'Constructor' ),
+				this.subclass
+			);
+	}
+
 	// prototype shortcut
 	capsule =
 		capsule
@@ -872,7 +885,7 @@ Gen.prototype.genConstructor =
 		ObjLiteral( )
 		.Add(
 			'prototype',
-			Var( 'Constructor' ).Dot( 'prototype' )
+			Var( 'prototype' )
 		);
 
 	if( this.unit )
@@ -921,30 +934,6 @@ Gen.prototype.genSingleton =
 		)
 	);
 };
-
-
-
-/*
-| Generates the subclass.
-*/
-Gen.prototype.genSubclass =
-	function(
-		capsule // block to append to
-	)
-{
-	return (
-		capsule
-		.Comment(
-			'Subclass.'
-		)
-		.Call(
-			Var( 'Jools' ).Dot( 'subclass' ),
-			Var( 'Constructor' ),
-			this.subclass
-		)
-	);
-};
-
 
 
 /*
@@ -2188,7 +2177,7 @@ Gen.prototype.genCreator =
 		.Assign(
 			Var( this.reference ).Dot( 'create' ),
 			Assign(
-				Var( 'Constructor' ).Dot( 'prototype' ).Dot( 'create' ),
+				Var( 'prototype' ).Dot( 'create' ),
 				creator
 			)
 		);
@@ -3334,11 +3323,6 @@ Gen.prototype.genCapsule =
 		capsule = this.genSingleton( capsule );
 	}
 
-	if( this.subclass )
-	{
-		capsule = this.genSubclass( capsule );
-	}
-
 	capsule = this.genCreator( capsule );
 
 	if( this.hasJSON )
@@ -3357,7 +3341,7 @@ Gen.prototype.genCapsule =
 	}
 
 	capsule = this.genEquals( capsule );
-	
+
 	if( this.alike )
 	{
 		capsule = this.genAlike( capsule );

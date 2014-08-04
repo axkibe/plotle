@@ -60,10 +60,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Condition =
+	Code.Condition =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Condition object.
 */
-var Condition =
-Code.Condition =
+Condition.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -181,17 +201,6 @@ Code.Condition =
 
 	return new Constructor( v_condition, v_elsewise, v_then );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Condition.prototype = Constructor.prototype;
-
-
-Condition.create = Constructor.prototype.create = Condition;
 
 
 /*

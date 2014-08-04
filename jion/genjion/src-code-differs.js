@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Differs =
+	Code.Differs =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Differs object.
 */
-var Differs =
-Code.Differs =
+Differs.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -148,17 +168,6 @@ Code.Differs =
 
 	return new Constructor( v_left, v_right );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Differs.prototype = Constructor.prototype;
-
-
-Differs.create = Constructor.prototype.create = Differs;
 
 
 /*

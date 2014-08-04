@@ -366,14 +366,14 @@ View.prototype.rect =
 	{
 		var
 			r =
-				(a1 instanceof Euclid.Rect) ?
-					a1 :
-					Euclid.Rect.create(
-						'pnw',
-							a1,
-						'pse',
-							a2
-					);
+				( a1.reflect === 'Rect' )
+				?  a1
+				: Euclid.Rect.create(
+					'pnw',
+						a1,
+					'pse',
+						a2
+				);
 
 		return (
 			( this.pan.x === 0 && this.pan.y === 0 )

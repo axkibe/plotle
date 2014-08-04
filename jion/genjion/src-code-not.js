@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Not =
+	Code.Not =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Not object.
 */
-var Not =
-Code.Not =
+Not.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -123,17 +143,6 @@ Code.Not =
 
 	return new Constructor( v_expr );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Not.prototype = Constructor.prototype;
-
-
-Not.create = Constructor.prototype.create = Not;
 
 
 /*

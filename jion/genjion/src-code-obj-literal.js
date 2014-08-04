@@ -79,10 +79,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	ObjLiteral =
+	Code.ObjLiteral =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new ObjLiteral object.
 */
-var ObjLiteral =
-Code.ObjLiteral =
+ObjLiteral.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -253,17 +273,6 @@ Code.ObjLiteral =
 
 	return new Constructor( twig, ranks );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	ObjLiteral.prototype = Constructor.prototype;
-
-
-ObjLiteral.create = Constructor.prototype.create = ObjLiteral;
 
 
 /*

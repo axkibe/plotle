@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Return =
+	Code.Return =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Return object.
 */
-var Return =
-Code.Return =
+Return.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -123,17 +143,6 @@ Code.Return =
 
 	return new Constructor( v_expr );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Return.prototype = Constructor.prototype;
-
-
-Return.create = Constructor.prototype.create = Return;
 
 
 /*

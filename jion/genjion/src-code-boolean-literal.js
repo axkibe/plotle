@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	BooleanLiteral =
+	Code.BooleanLiteral =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new BooleanLiteral object.
 */
-var BooleanLiteral =
-Code.BooleanLiteral =
+BooleanLiteral.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -128,17 +148,6 @@ Code.BooleanLiteral =
 
 	return new Constructor( v_boolean );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	BooleanLiteral.prototype = Constructor.prototype;
-
-
-BooleanLiteral.create = Constructor.prototype.create = BooleanLiteral;
 
 
 /*

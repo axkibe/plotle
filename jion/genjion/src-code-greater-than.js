@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	GreaterThan =
+	Code.GreaterThan =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new GreaterThan object.
 */
-var GreaterThan =
-Code.GreaterThan =
+GreaterThan.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -148,17 +168,6 @@ Code.GreaterThan =
 
 	return new Constructor( v_left, v_right );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	GreaterThan.prototype = Constructor.prototype;
-
-
-GreaterThan.create = Constructor.prototype.create = GreaterThan;
 
 
 /*

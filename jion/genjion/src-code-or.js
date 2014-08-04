@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Or =
+	Code.Or =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Or object.
 */
-var Or =
-Code.Or =
+Or.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -148,17 +168,6 @@ Code.Or =
 
 	return new Constructor( v_left, v_right );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Or.prototype = Constructor.prototype;
-
-
-Or.create = Constructor.prototype.create = Or;
 
 
 /*

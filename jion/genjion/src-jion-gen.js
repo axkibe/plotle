@@ -68,7 +68,7 @@ var
 Gen =
 	{
 		prototype :
-			Constructor.prototype
+			prototype
 	};
 
 
@@ -76,7 +76,7 @@ Gen =
 | Creates a new Gen object.
 */
 Gen.create =
-Constructor.prototype.create =
+prototype.create =
 	function(
 		// free strings
 	)

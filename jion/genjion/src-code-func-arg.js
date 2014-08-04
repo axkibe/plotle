@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	FuncArg =
+	Code.FuncArg =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new FuncArg object.
 */
-var FuncArg =
-Code.FuncArg =
+FuncArg.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -173,17 +193,6 @@ Code.FuncArg =
 
 	return new Constructor( v_comment, v_name );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	FuncArg.prototype = Constructor.prototype;
-
-
-FuncArg.create = Constructor.prototype.create = FuncArg;
 
 
 /*

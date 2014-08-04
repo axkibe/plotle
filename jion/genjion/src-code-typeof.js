@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Typeof =
+	Code.Typeof =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Typeof object.
 */
-var Typeof =
-Code.Typeof =
+Typeof.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -123,17 +143,6 @@ Code.Typeof =
 
 	return new Constructor( v_expr );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Typeof.prototype = Constructor.prototype;
-
-
-Typeof.create = Constructor.prototype.create = Typeof;
 
 
 /*

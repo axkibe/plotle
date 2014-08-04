@@ -47,6 +47,26 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Null =
+	Code.Null =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Singleton
 */
 var
@@ -57,8 +77,8 @@ var
 /*
 | Creates a new Null object.
 */
-var Null =
-Code.Null =
+Null.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -87,17 +107,6 @@ Code.Null =
 
 	return _singleton;
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Null.prototype = Constructor.prototype;
-
-
-Null.create = Constructor.prototype.create = Null;
 
 
 /*

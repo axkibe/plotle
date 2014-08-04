@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Instanceof =
+	Code.Instanceof =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Instanceof object.
 */
-var Instanceof =
-Code.Instanceof =
+Instanceof.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -148,17 +168,6 @@ Code.Instanceof =
 
 	return new Constructor( v_left, v_right );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Instanceof.prototype = Constructor.prototype;
-
-
-Instanceof.create = Constructor.prototype.create = Instanceof;
 
 
 /*

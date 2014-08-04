@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Check =
+	Code.Check =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Check object.
 */
-var Check =
-Code.Check =
+Check.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -128,17 +148,6 @@ Code.Check =
 
 	return new Constructor( v_block );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Check.prototype = Constructor.prototype;
-
-
-Check.create = Constructor.prototype.create = Check;
 
 
 /*

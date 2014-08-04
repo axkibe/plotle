@@ -82,10 +82,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Case =
+	Code.Case =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Case object.
 */
-var Case =
-Code.Case =
+Case.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -282,17 +302,6 @@ Code.Case =
 
 	return new Constructor( twig, ranks, v_block );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Case.prototype = Constructor.prototype;
-
-
-Case.create = Constructor.prototype.create = Case;
 
 
 /*

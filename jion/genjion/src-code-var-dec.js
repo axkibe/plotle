@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	VarDec =
+	Code.VarDec =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new VarDec object.
 */
-var VarDec =
-Code.VarDec =
+VarDec.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -163,17 +183,6 @@ Code.VarDec =
 
 	return new Constructor( v_assign, v_name );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	VarDec.prototype = Constructor.prototype;
-
-
-VarDec.create = Constructor.prototype.create = VarDec;
 
 
 /*

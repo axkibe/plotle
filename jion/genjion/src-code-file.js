@@ -60,10 +60,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	File =
+	Code.File =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new File object.
 */
-var File =
-Code.File =
+File.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -217,17 +237,6 @@ Code.File =
 
 	return new Constructor( v_capsule, v_header, v_preamble );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	File.prototype = Constructor.prototype;
-
-
-File.create = Constructor.prototype.create = File;
 
 
 /*

@@ -56,10 +56,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Var =
+	Code.Var =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Var object.
 */
-var Var =
-Code.Var =
+Var.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -134,17 +154,6 @@ Code.Var =
 
 	return new Constructor( v_name );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Var.prototype = Constructor.prototype;
-
-
-Var.create = Constructor.prototype.create = Var;
 
 
 /*

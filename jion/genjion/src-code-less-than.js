@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	LessThan =
+	Code.LessThan =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new LessThan object.
 */
-var LessThan =
-Code.LessThan =
+LessThan.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -148,17 +168,6 @@ Code.LessThan =
 
 	return new Constructor( v_left, v_right );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	LessThan.prototype = Constructor.prototype;
-
-
-LessThan.create = Constructor.prototype.create = LessThan;
 
 
 /*

@@ -79,10 +79,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	CommaList =
+	Code.CommaList =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new CommaList object.
 */
-var CommaList =
-Code.CommaList =
+CommaList.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -253,17 +273,6 @@ Code.CommaList =
 
 	return new Constructor( twig, ranks );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	CommaList.prototype = Constructor.prototype;
-
-
-CommaList.create = Constructor.prototype.create = CommaList;
 
 
 /*

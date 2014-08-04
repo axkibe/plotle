@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Member =
+	Code.Member =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Member object.
 */
-var Member =
-Code.Member =
+Member.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -154,17 +174,6 @@ Code.Member =
 
 	return new Constructor( v_expr, v_member );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Member.prototype = Constructor.prototype;
-
-
-Member.create = Constructor.prototype.create = Member;
 
 
 /*

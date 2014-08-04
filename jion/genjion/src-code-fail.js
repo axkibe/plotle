@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Fail =
+	Code.Fail =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Fail object.
 */
-var Fail =
-Code.Fail =
+Fail.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -123,17 +143,6 @@ Code.Fail =
 
 	return new Constructor( v_message );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Fail.prototype = Constructor.prototype;
-
-
-Fail.create = Constructor.prototype.create = Fail;
 
 
 /*

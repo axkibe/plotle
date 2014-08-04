@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	PlusAssign =
+	Code.PlusAssign =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new PlusAssign object.
 */
-var PlusAssign =
-Code.PlusAssign =
+PlusAssign.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -148,17 +168,6 @@ Code.PlusAssign =
 
 	return new Constructor( v_left, v_right );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	PlusAssign.prototype = Constructor.prototype;
-
-
-PlusAssign.create = Constructor.prototype.create = PlusAssign;
 
 
 /*

@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	PreIncrement =
+	Code.PreIncrement =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new PreIncrement object.
 */
-var PreIncrement =
-Code.PreIncrement =
+PreIncrement.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -123,17 +143,6 @@ Code.PreIncrement =
 
 	return new Constructor( v_expr );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	PreIncrement.prototype = Constructor.prototype;
-
-
-PreIncrement.create = Constructor.prototype.create = PreIncrement;
 
 
 /*

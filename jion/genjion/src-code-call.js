@@ -82,10 +82,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Call =
+	Code.Call =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Call object.
 */
-var Call =
-Code.Call =
+Call.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -277,17 +297,6 @@ Code.Call =
 
 	return new Constructor( twig, ranks, v_func );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Call.prototype = Constructor.prototype;
-
-
-Call.create = Constructor.prototype.create = Call;
 
 
 /*

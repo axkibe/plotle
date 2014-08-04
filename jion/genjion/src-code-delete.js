@@ -54,10 +54,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Delete =
+	Code.Delete =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Delete object.
 */
-var Delete =
-Code.Delete =
+Delete.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -123,17 +143,6 @@ Code.Delete =
 
 	return new Constructor( v_expr );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Delete.prototype = Constructor.prototype;
-
-
-Delete.create = Constructor.prototype.create = Delete;
 
 
 /*

@@ -71,10 +71,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Switch =
+	Code.Switch =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Switch object.
 */
-var Switch =
-Code.Switch =
+Switch.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -308,17 +328,6 @@ Code.Switch =
 
 	return new Constructor( twig, ranks, v_defaultCase, v_statement );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Switch.prototype = Constructor.prototype;
-
-
-Switch.create = Constructor.prototype.create = Switch;
 
 
 /*

@@ -59,10 +59,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Dot =
+	Code.Dot =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Dot object.
 */
-var Dot =
-Code.Dot =
+Dot.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -165,17 +185,6 @@ Code.Dot =
 
 	return new Constructor( v_expr, v_member );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Dot.prototype = Constructor.prototype;
-
-
-Dot.create = Constructor.prototype.create = Dot;
 
 
 /*

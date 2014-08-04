@@ -69,10 +69,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Block =
+	Code.Block =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Block object.
 */
-var Block =
-Code.Block =
+Block.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -243,17 +263,6 @@ Code.Block =
 
 	return new Constructor( twig, ranks );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Block.prototype = Constructor.prototype;
-
-
-Block.create = Constructor.prototype.create = Block;
 
 
 /*

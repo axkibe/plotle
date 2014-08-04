@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	Equals =
+	Code.Equals =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new Equals object.
 */
-var Equals =
-Code.Equals =
+Equals.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -148,17 +168,6 @@ Code.Equals =
 
 	return new Constructor( v_left, v_right );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Equals.prototype = Constructor.prototype;
-
-
-Equals.create = Constructor.prototype.create = Equals;
 
 
 /*

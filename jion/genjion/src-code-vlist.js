@@ -68,10 +68,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	VList =
+	Code.VList =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new VList object.
 */
-var VList =
-Code.VList =
+VList.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -281,17 +301,6 @@ Code.VList =
 
 	return new Constructor( twig, ranks, v_path );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	VList.prototype = Constructor.prototype;
-
-
-VList.create = Constructor.prototype.create = VList;
 
 
 /*

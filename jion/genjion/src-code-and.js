@@ -57,10 +57,30 @@ var Constructor =
 
 
 /*
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
+*/
+var
+	And =
+	Code.And =
+		{
+			prototype :
+				Constructor.prototype
+		};
+
+
+/*
 | Creates a new And object.
 */
-var And =
-Code.And =
+And.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -148,17 +168,6 @@ Code.And =
 
 	return new Constructor( v_left, v_right );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	And.prototype = Constructor.prototype;
-
-
-And.create = Constructor.prototype.create = And;
 
 
 /*
