@@ -36,22 +36,6 @@ if( SERVER )
 	JoobjProto = require( '../../src/jion/proto' );
 
 	Jools = require( '../../src/jools/jools' );
-
-	Code = { };
-
-	Code.Assign = require( '../../src/code/assign' );
-
-	Code.Call = require( '../../src/code/call' );
-
-	Code.Func = require( '../../src/code/func' );
-
-	Code.New = require( '../../src/code/new' );
-
-	Code.ObjLiteral = require( '../../src/code/obj-literal' );
-
-	Code.Or = require( '../../src/code/or' );
-
-	Code.Var = require( '../../src/code/var' );
 }
 
 
