@@ -272,15 +272,15 @@ Shell.prototype.setMode =
 		mode
 	)
 {
-	if( CHECK )
-	{
-		if( !_modes[ mode ] )
-		{
-			throw new Error(
-				'invalid mode : ' + mode
-			);
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( !_modes[ mode ] )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid mode : ' + mode
+/**/		);
+/**/	}
+/**/}
 
 	this._$mode =
 		mode;
@@ -696,13 +696,13 @@ Shell.prototype.pointingHover =
 
 		if( reply )
 		{
-			if( CHECK )
-			{
-				if( reply.reflex !== 'shell.hoverReply' )
-				{
-					throw new Error( 'invalid reply' );
-				}
-			}
+/**/		if( CHECK )
+/**/		{
+/**/			if( reply.reflex !== 'reply.hover' )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+/**/		}
 
 			shell._setHover( reply.path );
 
@@ -829,9 +829,7 @@ Shell.prototype.dragMove =
 
 	if( !action )
 	{
-		throw new Error(
-			CHECK && 'no action on dragMove'
-		);
+		throw new Error( );
 	}
 
 	cursor =
@@ -874,9 +872,7 @@ Shell.prototype.dragStop =
 
 	if( !action )
 	{
-		throw new Error(
-			CHECK && 'no action on dragStop'
-		);
+		throw new Error( );
 	}
 
 	var
