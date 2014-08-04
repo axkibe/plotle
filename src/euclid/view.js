@@ -293,7 +293,7 @@ View.prototype.point =
 
 /**/if( CHECK )
 /**/{
-/**/	if( p.reflect !== 'Point' )
+/**/	if( p.reflex !== 'euclid.point' )
 /**/	{
 /**/		throw new Error(
 /**/			'invalid arg'
@@ -334,7 +334,7 @@ View.prototype.depoint =
 
 /**/if( CHECK )
 /**/{
-/**/	if( p.reflect !== 'Point' )
+/**/	if( p.reflex !== 'euclid.point' )
 /**/	{
 /**/		throw new Error(
 /**/			'invalid arg'
@@ -366,7 +366,7 @@ View.prototype.rect =
 	{
 		var
 			r =
-				( a1.reflect === 'Rect' )
+				( a1.reflex === 'euclid.rect' )
 				?  a1
 				: Euclid.Rect.create(
 					'pnw',
@@ -388,21 +388,17 @@ View.prototype.rect =
 		pnw,
 		pse;
 
-	if( a1 instanceof Euclid.Rect )
+	if( a1.reflex === 'euclid.rect' )
 	{
-		pnw =
-			a1.pnw;
+		pnw = a1.pnw;
 
-		pse =
-			a1.pse;
+		pse = a1.pse;
 	}
 	else
 	{
-		pnw =
-			a1;
+		pnw = a1;
 
-		pse =
-			a2;
+		pse = a2;
 	}
 
 	return Euclid.Rect.create(
