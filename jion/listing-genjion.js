@@ -6,6 +6,7 @@ module.exports =
 		true,
 	list :
 		[
+			'src/code/a-null.js',
 			'src/code/and.js',
 			'src/code/array-literal.js',
 			'src/code/assign.js',
@@ -35,7 +36,6 @@ module.exports =
 			'src/code/new.js',
 			'src/code/not.js',
 			'src/code/number-literal.js',
-			'src/code/null.js',
 			'src/code/obj-literal.js',
 			'src/code/or.js',
 			'src/code/plus.js',

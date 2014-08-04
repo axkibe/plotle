@@ -90,8 +90,8 @@ var
 		Shorthand.New,
 	Not =
 		Shorthand.Not,
-	Null =
-		Shorthand.Null( ),
+	aNull =
+		Shorthand.aNull( ),
 	NumberLiteral =
 		Shorthand.NumberLiteral,
 	ObjLiteral =
@@ -300,7 +300,7 @@ Gen.prototype._init =
 
 			if( jdv === null )
 			{
-				defaultValue = Null;
+				defaultValue = aNull;
 			}
 			else if( jdv === undefined )
 			{
@@ -338,7 +338,7 @@ Gen.prototype._init =
 				allowsNull :
 					jAttr.allowsNull
 					||
-					defaultValue === Null,
+					defaultValue === aNull,
 				allowsUndefined :
 					jAttr.allowsUndefined
 					||
@@ -956,7 +956,7 @@ Gen.prototype.genSingleton =
 		)
 		.VarDec(
 			'_singleton',
-			Null
+			aNull
 		)
 	);
 };
@@ -1626,7 +1626,7 @@ Gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Equals( attr.v, Null ),
+					Equals( attr.v, aNull ),
 					Block( )
 					.Fail( 'attribute ' + name + ' must not be null.' )
 				);
@@ -1647,7 +1647,7 @@ Gen.prototype.genCreatorChecks =
 		if( attr.allowsNull && !attr.allowsUndefined )
 		{
 			cond =
-				Differs( attr.v, Null );
+				Differs( attr.v, aNull );
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
@@ -1658,7 +1658,7 @@ Gen.prototype.genCreatorChecks =
 		{
 			cond =
 				And(
-					Differs( attr.v, Null ),
+					Differs( attr.v, aNull ),
 					Differs( attr.v, Undefined )
 				);
 		}
@@ -1889,9 +1889,9 @@ Gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						Condition(
-							Differs( attr.v, Null ),
+							Differs( attr.v, aNull ),
 							attr.v.Dot( member ),
-							Null
+							aNull
 						);
 
 				}
@@ -1901,7 +1901,7 @@ Gen.prototype.genCreatorConcerns =
 						Condition(
 							Differs( attr.v, Undefined ),
 							attr.v.Dot( member ),
-							Null
+							aNull
 						);
 				}
 				else
@@ -1996,7 +1996,7 @@ Gen.prototype.genCreatorUnchanged =
 			cond =
 				And(
 					cond,
-					Equals( attr.v, Null )
+					Equals( attr.v, aNull )
 				);
 
 			continue;
@@ -2607,7 +2607,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 			case 'inherit' :
 
 				call =
-					call.Append( Null );
+					call.Append( aNull );
 
 				break;
 
@@ -2637,7 +2637,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 				{
 					call =
 						call
-						.Append( Null );
+						.Append( aNull );
 				}
 				else
 				{
@@ -2976,7 +2976,7 @@ Gen.prototype.genAttributeEquals =
 					Or(
 						Equals( le, re ),
 						And(
-							Differs( le, Null ),
+							Differs( le, aNull ),
 							le.Dot( 'equals' ),
 							Call( le.Dot( 'equals' ), re )
 						)

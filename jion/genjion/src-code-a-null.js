@@ -58,8 +58,8 @@ var
 | Jion
 */
 var
-	Null =
-	Code.Null =
+	aNull =
+	Code.aNull =
 		{
 			prototype :
 				prototype
@@ -75,9 +75,9 @@ var
 
 
 /*
-| Creates a new Null object.
+| Creates a new aNull object.
 */
-Null.create =
+aNull.create =
 prototype.create =
 	function(
 		// free strings
@@ -86,7 +86,7 @@ prototype.create =
 	var
 		inherit;
 
-	if( this !== Null )
+	if( this !== aNull )
 	{
 		inherit = this;
 	}
@@ -112,13 +112,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Null';
+prototype.reflect = 'aNull';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.null';
+prototype.reflex = 'code.aNull';
 
 
 /*
@@ -146,7 +146,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Null;
+	module.exports = aNull;
 }
 
 

@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Null',
+			'aNull',
 		unit :
 			'Code',
 		node :

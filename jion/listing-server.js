@@ -21,6 +21,8 @@ module.exports =
 			'src/visual/space.js',
 
 			// built-in genjion
+			'src/code/a-null.js',
+
 			'src/code/and.js',
 			'src/code/array-literal.js',
 			'src/code/assign.js',
@@ -49,7 +51,6 @@ module.exports =
 			'src/code/member.js',
 			'src/code/new.js',
 			'src/code/not.js',
-			'src/code/null.js',
 			'src/code/number-literal.js',
 			'src/code/obj-literal.js',
 			'src/code/or.js',

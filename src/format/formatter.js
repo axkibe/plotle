@@ -84,7 +84,7 @@ precTable =
 			2,
 		'Not' :
 			4,
-		'Null' :
+		'aNull' :
 			-1,
 		'NumberLiteral' :
 			-1,
@@ -1898,7 +1898,7 @@ formatNull =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.null' )
+/**/	if( expr.reflex !== 'code.aNull' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2607,7 +2607,7 @@ exprFormatter =
 			formatNew,
 		'Not' :
 			formatNot,
-		'Null' :
+		'aNull' :
 			formatNull,
 		'NumberLiteral' :
 			formatNumberLiteral,

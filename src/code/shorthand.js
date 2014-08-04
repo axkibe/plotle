@@ -75,8 +75,8 @@ Code =
 			require( '../code/new' ),
 		Not :
 			require( '../code/not' ),
-		Null :
-			require( '../code/null' ),
+		aNull :
+			require( '../code/a-null' ),
 		NumberLiteral :
 			require( '../code/number-literal' ),
 		ObjLiteral :
@@ -506,10 +506,10 @@ ShortHand.Not =
 /*
 | Shorthand for creating nulls.
 */
-ShortHand.Null =
+ShortHand.aNull =
 	function( )
 {
-	return Code.Null.create( );
+	return Code.aNull.create( );
 };
 
 
