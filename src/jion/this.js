@@ -81,7 +81,6 @@ jionNodeGenerator =
 	{
 		if( !FORCE )
 		{
-			/* XXXXXXXXXXXXXXXXXXX
 			throw new Error(
 				'Out of date jion: ' +
 					inFilename
@@ -90,7 +89,6 @@ jionNodeGenerator =
 					+
 					outFilename
 			);
-			*/
 		}
 	}
 
