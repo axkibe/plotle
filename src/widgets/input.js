@@ -24,6 +24,7 @@ var
 	Euclid,
 	Jools,
 	Mark,
+	reply,
 	shell,
 	theme;
 
