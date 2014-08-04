@@ -258,7 +258,7 @@ ChangeRay.prototype.Set =
 | Returns the result of a change
 | transformed by this change ray.
 */
-ChangeRay.prototype.TransformChange =
+ChangeRay.prototype.transformChange =
 	function(
 		chg
 	)
@@ -275,7 +275,7 @@ ChangeRay.prototype.TransformChange =
 		a < aZ;
 		a++)
 	{
-		chgX = this.get( a ).TransformChange( chgX );
+		chgX = this.get( a ).transformChange( chgX );
 	}
 
 	return chgX;
@@ -286,7 +286,7 @@ ChangeRay.prototype.TransformChange =
 | Returns the result of a change ray
 | transformed by this change ray.
 */
-ChangeRay.prototype.TransformChangeRay =
+ChangeRay.prototype.transformChangeRay =
 	function(
 		cray
 	)
@@ -307,7 +307,7 @@ ChangeRay.prototype.TransformChangeRay =
 		a++
 	)
 	{
-		rX = this.get( a ).TransformChangeRay( cray );
+		rX = this.get( a ).transformChangeRay( cray );
 
 		for(
 			b = 0, bZ = rX.length;
@@ -336,7 +336,7 @@ ChangeRay.prototype.TransformChangeRay =
 | Returns the result of a change or change ray
 | transformed by this change ray.
 */
-ChangeRay.prototype.TransformChangeX =
+ChangeRay.prototype.transformChangeX =
 	function(
 		chgX
 	)
@@ -345,11 +345,11 @@ ChangeRay.prototype.TransformChangeX =
 	{
 		case 'Change' :
 
-			return this.TransformChange( chgX );
+			return this.transformChange( chgX );
 
 		case 'ChangeRay' :
 
-			return this.TransformChangeRay( chgX );
+			return this.transformChangeRay( chgX );
 
 		default :
 
@@ -421,7 +421,7 @@ ChangeRay.prototype.ChangeTree =
 |
 | If the signature is a span, it can transform to a sign-ray.
 */
-ChangeRay.prototype.TransformSign =
+ChangeRay.prototype.transformSign =
 	function(
 		sign
 	)
@@ -452,7 +452,7 @@ ChangeRay.prototype.TransformSign =
 		t++
 	)
 	{
-		signX = this.get( t ).TransformSignX( signX );
+		signX = this.get( t ).transformSignX( signX );
 	}
 
 	return signX;

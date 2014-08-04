@@ -55,9 +55,28 @@ var Constructor =
 
 
 /*
-| Creates a new Gen object.
+| Prototype shortcut
+*/
+var
+	prototype =
+		Constructor.prototype;
+
+
+/*
+| Jion
 */
 Gen =
+	{
+		prototype :
+			Constructor.prototype
+	};
+
+
+/*
+| Creates a new Gen object.
+*/
+Gen.create =
+Constructor.prototype.create =
 	function(
 		// free strings
 	)
@@ -123,17 +142,6 @@ Gen =
 
 	return new Constructor( v_jion );
 };
-
-
-/*
-| Prototype
-*/
-var
-	prototype =
-	Gen.prototype = Constructor.prototype;
-
-
-Gen.create = Constructor.prototype.create = Gen;
 
 
 /*

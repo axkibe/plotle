@@ -645,6 +645,7 @@ Gen.prototype.genConstructor =
 		block,
 		constructor,
 		initCall,
+		jionObj,
 		name;
 
 	capsule =
@@ -852,6 +853,49 @@ Gen.prototype.genConstructor =
 			'Constructor',
 			constructor
 		);
+
+	// prototype shortcut
+	capsule =
+		capsule
+		.Comment( 'Prototype shortcut' )
+		.VarDec(
+			'prototype',
+			Var( 'Constructor' ).Dot( 'prototype' )
+		);
+
+	// the exported object
+	capsule =
+		capsule
+		.Comment( 'Jion' );
+
+	jionObj =
+		ObjLiteral( )
+		.Add(
+			'prototype',
+			Var( 'Constructor' ).Dot( 'prototype' )
+		);
+
+	if( this.unit )
+	{
+		capsule =
+			capsule.VarDec(
+				this.reference,
+				Assign(
+					Var( this.unit ).Dot( this.name ),
+					jionObj
+				)
+			);
+
+	}
+	else
+	{
+		capsule =
+			capsule
+			.Assign(
+				Var( this.reference ),
+				jionObj
+			);
+	}
 
 	return capsule;
 };
@@ -2138,47 +2182,14 @@ Gen.prototype.genCreator =
 			'free strings'
 		);
 
-	if( this.unit )
-	{
-		capsule =
-			capsule.VarDec(
-				this.reference,
-				Assign(
-					Var( this.unit ).Dot( this.name ),
-					creator
-				)
-			);
 
-	}
-	else
-	{
-		capsule =
-			capsule
-			.Assign(
-				Var( this.name ),
-				creator
-			);
-	}
-
-	capsule =
-		capsule
-		.Comment( 'Prototype' )
-		.VarDec(
-			'prototype',
-			Assign(
-				Var( this.reference ).Dot( 'prototype' ),
-				Var( 'Constructor' ).Dot( 'prototype' )
-			)
-		);
-
-	// FIXME remove
 	capsule =
 		capsule
 		.Assign(
 			Var( this.reference ).Dot( 'create' ),
 			Assign(
 				Var( 'Constructor' ).Dot( 'prototype' ).Dot( 'create' ),
-				Var( this.reference )
+				creator
 			)
 		);
 
