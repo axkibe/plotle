@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	And =
-	Code.And =
+	anAnd =
+	Code.anAnd =
 		{
 			prototype :
 				prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new And object.
+| Creates a new anAnd object.
 */
-And.create =
+anAnd.create =
 prototype.create =
 	function(
 		// free strings
@@ -90,7 +90,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== And )
+	if( this !== anAnd )
 	{
 		inherit = this;
 
@@ -173,13 +173,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'And';
+prototype.reflect = 'anAnd';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.and';
+prototype.reflex = 'code.anAnd';
 
 
 /*
@@ -221,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = And;
+	module.exports = anAnd;
 }
 
 

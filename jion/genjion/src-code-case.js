@@ -39,8 +39,6 @@ if( SERVER )
 
 	Code = { };
 
-	Code.And = require( '../../src/code/and' );
-
 	Code.Assign = require( '../../src/code/assign' );
 
 	Code.Call = require( '../../src/code/call' );

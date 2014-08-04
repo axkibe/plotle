@@ -1,10 +1,11 @@
 /*
 | Typemap code expressions.
+|
+| FIXME remove
 */
 module.exports =
 {
-	'And' :
-		'Code.And',
+//	'And' : 'Code.And',
 	'Assign' :
 		'Code.Assign',
 	'Call' :

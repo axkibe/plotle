@@ -52,8 +52,8 @@ var
 | Shorthanding Shorthands.
 */
 var
-	And =
-		Shorthand.And,
+	anAnd =
+		Shorthand.anAnd,
 	ArrayLiteral =
 		Shorthand.ArrayLiteral,
 	Assign =
@@ -1657,7 +1657,7 @@ Gen.prototype.genCreatorChecks =
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				And(
+				anAnd(
 					Differs( attr.v, aNull ),
 					Differs( attr.v, Undefined )
 				);
@@ -1713,7 +1713,7 @@ Gen.prototype.genCreatorChecks =
 			case 'String' :
 
 				tcheck =
-					And(
+					anAnd(
 						Differs(
 							Typeof( attr.v ),
 							StringLiteral( 'string' )
@@ -1971,7 +1971,7 @@ Gen.prototype.genCreatorUnchanged =
 	if( this.twig )
 	{
 		cond =
-			And(
+			anAnd(
 				cond,
 				Not(
 					Var( 'twigDup' )
@@ -1994,7 +1994,7 @@ Gen.prototype.genCreatorUnchanged =
 		if( attr.assign === null )
 		{
 			cond =
-				And(
+				anAnd(
 					cond,
 					Equals( attr.v, aNull )
 				);
@@ -2041,7 +2041,7 @@ Gen.prototype.genCreatorUnchanged =
 								attr.v,
 								Var( 'inherit' ).Dot( attr.assign )
 							),
-							And(
+							anAnd(
 								attr.v,
 								Call(
 									attr.v.Dot( 'equals' ),
@@ -2053,7 +2053,7 @@ Gen.prototype.genCreatorUnchanged =
 		}
 
 		cond =
-			And(
+			anAnd(
 				cond,
 				ceq
 			);
@@ -2975,7 +2975,7 @@ Gen.prototype.genAttributeEquals =
 				ceq =
 					Or(
 						Equals( le, re ),
-						And(
+						anAnd(
 							Differs( le, aNull ),
 							le.Dot( 'equals' ),
 							Call( le.Dot( 'equals' ), re )
@@ -3076,7 +3076,7 @@ Gen.prototype.genEquals =
 	if( this.twig )
 	{
 		cond =
-			And(
+			anAnd(
 				Equals(
 					This.Dot( 'tree' ),
 					Var( 'obj' ).Dot( 'tree' )
@@ -3113,7 +3113,7 @@ Gen.prototype.genEquals =
 		cond =
 			cond === null
 			? ceq
-			: And( cond, ceq );
+			: anAnd( cond, ceq );
 	}
 
 	block =
@@ -3199,7 +3199,7 @@ Gen.prototype.genAlike =
 		if( this.twig )
 		{
 			cond =
-				And(
+				anAnd(
 					Equals(
 						This.Dot( 'tree' ),
 						Var( 'obj' ).Dot( 'tree' )
@@ -3220,7 +3220,7 @@ Gen.prototype.genAlike =
 			name = this.attrList[ a ];
 
 			attr = this.attributes[ name ];
-		
+
 			if(
 				attr.assign === null
 				||
@@ -3240,7 +3240,7 @@ Gen.prototype.genAlike =
 			cond =
 				cond === null
 				? ceq
-				: And( cond, ceq );
+				: anAnd( cond, ceq );
 		}
 
 		block =

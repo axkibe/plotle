@@ -27,8 +27,8 @@ var
 */
 Code =
 	{
-		And :
-			require( '../code/and' ),
+		anAnd :
+			require( '../code/an-and' ),
 		ArrayLiteral :
 			require( '../code/array-literal' ),
 		Assign :
@@ -107,7 +107,7 @@ Code =
 /*
 | Shorthand for creating ands.
 */
-ShortHand.And =
+ShortHand.anAnd =
 	function(
 		left,
 		right
@@ -124,7 +124,7 @@ ShortHand.And =
 		args.splice(
 			0,
 			2,
-			Code.And.create(
+			Code.anAnd.create(
 				'left',
 					left,
 				'right',
@@ -133,7 +133,7 @@ ShortHand.And =
 		);
 
 		return (
-			ShortHand.And.apply(
+			ShortHand.anAnd.apply(
 				this,
 				args
 			)
@@ -141,7 +141,7 @@ ShortHand.And =
 	}
 
 	return (
-		Code.And.create(
+		Code.anAnd.create(
 			'left',
 				left,
 			'right',

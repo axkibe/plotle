@@ -22,8 +22,8 @@ module.exports =
 
 			// built-in genjion
 			'src/code/a-null.js',
+			'src/code/an-and.js',
 
-			'src/code/and.js',
 			'src/code/array-literal.js',
 			'src/code/assign.js',
 			'src/code/block.js',

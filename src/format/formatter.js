@@ -46,7 +46,7 @@ var
 var
 precTable =
 	{
-		'And' :
+		'anAnd' :
 			13,
 		'ArrayLiteral' :
 			-1,
@@ -137,7 +137,7 @@ formatAnd =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.and' )
+/**/	if( expr.reflex !== 'code.anAnd' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -147,7 +147,7 @@ formatAnd =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.And
+			precTable.anAnd
 		)
 		+
 		context.sep
@@ -157,7 +157,7 @@ formatAnd =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.And
+			precTable.anAnd
 		);
 
 	return text;
@@ -2571,7 +2571,7 @@ Formatter.format =
 var
 exprFormatter =
 	{
-		'And' :
+		'anAnd' :
 			formatAnd,
 		'ArrayLiteral' :
 			formatArrayLiteral,
