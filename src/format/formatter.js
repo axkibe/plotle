@@ -50,7 +50,7 @@ precTable =
 			-1,
 		'anAssign' :
 			17,
-		'BooleanLiteral' :
+		'aBooleanLiteral' :
 			-1,
 		'Call' :
 			2,
@@ -1505,7 +1505,7 @@ formatStatement =
 			break;
 
 		case 'code.anAssign' :
-		case 'code.booleanLiteral' :
+		case 'code.aBooleanLiteral' :
 		case 'code.call' :
 		case 'code.delete' :
 		case 'code.fail' :
@@ -1680,7 +1680,7 @@ formatFail =
 | Formats a boolean literal use.
 */
 var
-formatBooleanLiteral =
+formatABooleanLiteral =
 	function(
 		context,
 		expr
@@ -1689,7 +1689,7 @@ formatBooleanLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.booleanLiteral' )
+/**/	if( expr.reflex !== 'code.aBooleanLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2575,8 +2575,8 @@ exprFormatter =
 			formatAnArrayLiteral,
 		'anAssign' :
 			formatAnAssign,
-		'BooleanLiteral' :
-			formatBooleanLiteral,
+		'aBooleanLiteral' :
+			formatABooleanLiteral,
 		'Call' :
 			formatCall,
 		'CommaList' :

@@ -35,8 +35,8 @@ Code =
 			require( '../code/an-assign' ),
 		aBlock :
 			require( '../code/a-block' ),
-		BooleanLiteral :
-			require( '../code/boolean-literal' ),
+		aBooleanLiteral :
+			require( '../code/a-boolean-literal' ),
 		Call :
 			require( '../code/call' ),
 		Check :
@@ -368,7 +368,7 @@ ShortHand.False =
 	function( )
 {
 	return (
-		Code.BooleanLiteral.create(
+		Code.aBooleanLiteral.create(
 			'boolean',
 				false
 		)
@@ -713,7 +713,7 @@ ShortHand.True =
 	function( )
 {
 	return (
-		Code.BooleanLiteral.create(
+		Code.aBooleanLiteral.create(
 			'boolean',
 				true
 		)

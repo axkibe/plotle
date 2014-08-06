@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	BooleanLiteral =
-		Code.BooleanLiteral =
+	aBooleanLiteral =
+		Code.aBooleanLiteral =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new BooleanLiteral object.
+| Creates a new aBooleanLiteral object.
 */
-BooleanLiteral.create =
+aBooleanLiteral.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ BooleanLiteral.create =
 			inherit,
 			v_boolean;
 
-		if( this !== BooleanLiteral )
+		if( this !== aBooleanLiteral )
 		{
 			inherit = this;
 
@@ -153,13 +153,13 @@ BooleanLiteral.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'BooleanLiteral';
+prototype.reflect = 'aBooleanLiteral';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.booleanLiteral';
+prototype.reflex = 'code.aBooleanLiteral';
 
 
 /*
@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = BooleanLiteral;
+	module.exports = aBooleanLiteral;
 }
 
 

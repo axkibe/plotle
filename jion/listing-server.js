@@ -26,8 +26,8 @@ module.exports =
 			'src/code/an-array-literal.js',
 			'src/code/an-assign.js',
 			'src/code/a-block.js',
+			'src/code/a-boolean-literal.js',
 
-			'src/code/boolean-literal.js',
 			'src/code/call.js',
 			'src/code/case.js',
 			'src/code/check.js',

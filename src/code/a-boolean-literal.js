@@ -20,7 +20,7 @@ if( JION )
 {
 	return {
 		name :
-			'BooleanLiteral',
+			'aBooleanLiteral',
 		unit :
 			'Code',
 		node :
@@ -39,16 +39,16 @@ if( JION )
 }
 
 var
-	BooleanLiteral;
+	aBooleanLiteral;
 
-BooleanLiteral =
+aBooleanLiteral =
 	require( '../jion/this' )( module );
 
 /*
 | Node export.
 */
 module.exports =
-	BooleanLiteral;
+	aBooleanLiteral;
 
 
 } )( );
