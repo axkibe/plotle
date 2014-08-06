@@ -74,8 +74,8 @@ var
 | Jion
 */
 var
-	For =
-		Code.For =
+	aFor =
+		Code.aFor =
 			{
 				prototype :
 					prototype
@@ -83,9 +83,9 @@ var
 
 
 /*
-| Creates a new For object.
+| Creates a new aFor object.
 */
-For.create =
+aFor.create =
 	prototype.create =
 		function(
 			// free strings
@@ -98,7 +98,7 @@ For.create =
 			v_init,
 			v_iterate;
 
-		if( this !== For )
+		if( this !== aFor )
 		{
 			inherit = this;
 
@@ -238,13 +238,13 @@ For.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'For';
+prototype.reflect = 'aFor';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.for';
+prototype.reflex = 'code.aFor';
 
 
 /*
@@ -294,7 +294,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = For;
+	module.exports = aFor;
 }
 
 
