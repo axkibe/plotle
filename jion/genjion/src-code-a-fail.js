@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	Fail =
-		Code.Fail =
+	aFail =
+		Code.aFail =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new Fail object.
+| Creates a new aFail object.
 */
-Fail.create =
+aFail.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ Fail.create =
 			inherit,
 			v_message;
 
-		if( this !== Fail )
+		if( this !== aFail )
 		{
 			inherit = this;
 
@@ -148,13 +148,13 @@ Fail.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Fail';
+prototype.reflect = 'aFail';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.fail';
+prototype.reflex = 'code.aFail';
 
 
 /*
@@ -204,7 +204,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Fail;
+	module.exports = aFail;
 }
 
 

@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Fail',
+			'aFail',
 		unit :
 			'Code',
 		attributes :
