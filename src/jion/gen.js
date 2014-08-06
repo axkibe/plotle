@@ -1487,7 +1487,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 
 	block =
 		block
-		.For(
+		.aFor(
 			VList( )
 			.VarDec(
 				'a',
@@ -2530,7 +2530,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			aBlock( )
 			.aFail( 'ranks/twig information missing' )
 		)
-		.For(
+		.aFor(
 			// FIXME, put into the commalist call
 			aCommaList( )
 			.Append(

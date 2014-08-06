@@ -769,7 +769,7 @@ formatIf =
 | Formats a classical for loop.
 */
 var
-formatFor =
+formatAFor =
 	function(
 		context,
 		forExpr
@@ -1401,49 +1401,42 @@ formatStatement =
 
 			if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
 			{
-				text +=
-					subtext;
+				text += subtext;
 			}
 			else
 			{
-				text +=
-					formatAFail( context, statement );
+				text += formatAFail( context, statement );
 			}
 
 			break;
 
-		case 'code.for' :
+		case 'code.aFor' :
 
-			text +=
-				formatFor( context, statement );
+			text += formatAFor( context, statement );
 
 			break;
 
 		case 'code.aForIn' :
 
-			text +=
-				formatAForIn( context, statement );
+			text += formatAForIn( context, statement );
 
 			break;
 
 		case 'code.return' :
 
-			text +=
-				formatReturn( context, statement );
+			text += formatReturn( context, statement );
 
 			break;
 
 		case 'code.varDec' :
 
-			text +=
-				formatVarDec( context, statement, lookBehind );
+			text += formatVarDec( context, statement, lookBehind );
 
 			break;
 
 		case 'code.switch' :
 
-			text +=
-				formatSwitch( context, statement );
+			text += formatSwitch( context, statement );
 
 			break;
 
@@ -1519,7 +1512,7 @@ formatStatement =
 			return text + ';' + context.sep;
 
 		case 'code.aCheck' :
-		case 'code.for' :
+		case 'code.aFor' :
 		case 'code.aForIn' :
 		case 'code.if' :
 		case 'code.switch' :

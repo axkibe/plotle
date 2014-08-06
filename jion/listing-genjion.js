@@ -24,9 +24,7 @@ module.exports =
 			'src/code/an-equals.js',
 			'src/code/a-fail.js',
 			'src/code/a-file.js',
-
-			'src/code/for.js',
-
+			'src/code/a-for.js',
 			'src/code/a-for-in.js',
 
 			'src/code/func-arg.js',

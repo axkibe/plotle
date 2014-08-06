@@ -52,8 +52,8 @@ var
 				require( './a-comment' ),
 			aFail :
 				require( './a-fail' ),
-			For :
-				require( './for' ),
+			aFor :
+				require( './a-for' ),
 			aForIn :
 				require( './a-for-in' ),
 			If :
@@ -240,7 +240,7 @@ aBlock.prototype.aFail =
 /*
 | Returns the block with a classical for loop appended.
 */
-aBlock.prototype.For =
+aBlock.prototype.aFor =
 	function(
 		init,
 		condition,
@@ -250,7 +250,7 @@ aBlock.prototype.For =
 {
 	var
 		statement =
-			Code.For.create(
+			Code.aFor.create(
 				'init',
 					init,
 				'condition',
