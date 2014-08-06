@@ -71,8 +71,8 @@ var
 | Jion
 */
 var
-	File =
-		Code.File =
+	aFile =
+		Code.aFile =
 			{
 				prototype :
 					prototype
@@ -80,9 +80,9 @@ var
 
 
 /*
-| Creates a new File object.
+| Creates a new aFile object.
 */
-File.create =
+aFile.create =
 	prototype.create =
 		function(
 			// free strings
@@ -94,7 +94,7 @@ File.create =
 			v_header,
 			v_preamble;
 
-		if( this !== File )
+		if( this !== aFile )
 		{
 			inherit = this;
 
@@ -242,13 +242,13 @@ File.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'File';
+prototype.reflect = 'aFile';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.file';
+prototype.reflex = 'code.aFile';
 
 
 /*
@@ -320,7 +320,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = File;
+	module.exports = aFile;
 }
 
 

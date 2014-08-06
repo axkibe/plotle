@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'File',
+			'aFile',
 		unit :
 			'Code',
 		attributes :
@@ -61,14 +61,15 @@ if( JION )
 var
 	aComment =
 		require( './a-comment' ),
-	File =
+	aFile =
 		require( '../jion/this' )( module );
 
 
 /*
 | Returns the file with the capsule set.
+| FIXME rename
 */
-File.prototype.Capsule =
+aFile.prototype.Capsule =
 	function(
 		capsule
 	)
@@ -85,7 +86,7 @@ File.prototype.Capsule =
 /*
 | Returns the file with the header set.
 */
-File.prototype.setHeader =
+aFile.prototype.setHeader =
 	function(
 		header
 	)
@@ -111,8 +112,9 @@ File.prototype.setHeader =
 
 /*
 | Returns the file with the preamble set.
+| FIXME rename
 */
-File.prototype.Preamble =
+aFile.prototype.Preamble =
 	function(
 		preamble
 	)
@@ -129,8 +131,7 @@ File.prototype.Preamble =
 /*
 | Node export.
 */
-module.exports =
-	File;
+module.exports = aFile;
 
 
 } )( );
