@@ -75,8 +75,8 @@ var
 | Jion
 */
 var
-	Call =
-		Code.Call =
+	aCall =
+		Code.aCall =
 			{
 				prototype :
 					prototype
@@ -84,9 +84,9 @@ var
 
 
 /*
-| Creates a new Call object.
+| Creates a new aCall object.
 */
-Call.create =
+aCall.create =
 	prototype.create =
 		function(
 			// free strings
@@ -101,7 +101,7 @@ Call.create =
 			twigDup,
 			v_func;
 
-		if( this !== Call )
+		if( this !== aCall )
 		{
 			inherit = this;
 
@@ -284,13 +284,13 @@ Call.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Call';
+prototype.reflect = 'aCall';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.call';
+prototype.reflex = 'code.aCall';
 
 
 /*
@@ -356,7 +356,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Call;
+	module.exports = aCall;
 }
 
 

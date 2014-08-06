@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Call',
+			'aCall',
 		unit :
 			'Code',
 		node :
@@ -43,7 +43,7 @@ if( JION )
 | Node imports.
 */
 var
-	Call =
+	aCall =
 		require( '../jion/this' )( module ),
 	Jools =
 		require( '../jools/jools' );
@@ -51,7 +51,7 @@ var
 /*
 | Returns a call with a parameter appended
 */
-Call.prototype.Append =
+aCall.prototype.Append =
 	function(
 		expr
 	)
@@ -69,8 +69,7 @@ Call.prototype.Append =
 /*
 | Node export.
 */
-module.exports =
-	Call;
+module.exports = aCall;
 
 
 } )( );
