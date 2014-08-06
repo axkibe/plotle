@@ -46,8 +46,8 @@ var
 				require( './an-assign' ),
 			aCall :
 				require( './a-call' ),
-			Check :
-				require( './check' ),
+			aCheck :
+				require( './a-check' ),
 			Comment :
 				require( './comment' ),
 			Fail :
@@ -141,14 +141,14 @@ aBlock.prototype.aCall =
 /*
 | Returns the block with a check appended.
 */
-aBlock.prototype.Check =
+aBlock.prototype.aCheck =
 	function(
 		block
 	)
 {
 	return (
 		this.Append(
-			Code.Check.create(
+			Code.aCheck.create(
 				'block',
 					block
 			)

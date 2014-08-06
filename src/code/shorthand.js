@@ -39,8 +39,8 @@ Code =
 			require( '../code/a-boolean-literal' ),
 		aCall :
 			require( '../code/a-call' ),
-		Check :
-			require( '../code/check' ),
+		aCheck :
+			require( '../code/a-check' ),
 		CommaList :
 			require( '../code/comma-list' ),
 		Comment :

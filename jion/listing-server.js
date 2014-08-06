@@ -29,8 +29,8 @@ module.exports =
 			'src/code/a-boolean-literal.js',
 			'src/code/a-call.js',
 			'src/code/a-case.js',
+			'src/code/a-check.js',
 
-			'src/code/check.js',
 			'src/code/comma-list.js',
 			'src/code/comment.js',
 			'src/code/condition.js',

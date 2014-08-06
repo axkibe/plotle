@@ -1488,7 +1488,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 		switchExpr
 		.Default(
 			aBlock( )
-			.Check(
+			.aCheck(
 				aBlock( )
 				.Fail( 'invalid argument' )
 			)
@@ -1771,10 +1771,7 @@ Gen.prototype.genCreatorChecks =
 
 	if( checkin )
 	{
-		block =
-			block.Check(
-				check
-			);
+		block = block.aCheck( check );
 	}
 
 	return block;

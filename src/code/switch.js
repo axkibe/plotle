@@ -53,7 +53,7 @@ if( JION )
 
 var
 	aCase =
-		require( './case' ),
+		require( './a-case' ),
 	Jools =
 		require( '../jools/jools' ),
 	Switch =

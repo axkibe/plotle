@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Check',
+			'aCheck',
 		unit :
 			'Code',
 		attributes :
@@ -38,8 +38,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

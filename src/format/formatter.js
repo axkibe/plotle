@@ -1367,7 +1367,7 @@ formatStatement =
 
 	switch( statement.reflex )
 	{
-		case 'code.check' :
+		case 'code.aCheck' :
 
 			text +=
 				formatCheck( context, statement );
@@ -1518,7 +1518,7 @@ formatStatement =
 
 			return text + ';' + context.sep;
 
-		case 'code.check' :
+		case 'code.aCheck' :
 		case 'code.for' :
 		case 'code.forIn' :
 		case 'code.if' :

@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	Check =
-		Code.Check =
+	aCheck =
+		Code.aCheck =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new Check object.
+| Creates a new aCheck object.
 */
-Check.create =
+aCheck.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ Check.create =
 			inherit,
 			v_block;
 
-		if( this !== Check )
+		if( this !== aCheck )
 		{
 			inherit = this;
 
@@ -153,13 +153,13 @@ Check.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Check';
+prototype.reflect = 'aCheck';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.check';
+prototype.reflex = 'code.aCheck';
 
 
 /*
@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Check;
+	module.exports = aCheck;
 }
 
 
