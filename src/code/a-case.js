@@ -40,10 +40,10 @@ if( JION )
 }
 
 
-var Case;
+var aCase;
 
-Case =
-	require( '../jion/this' )( module );
+aCase = require( '../jion/this' )( module );
+
 
 /*
 | Node export.
