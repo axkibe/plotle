@@ -66,7 +66,7 @@ precTable =
 			1,
 		'anEquals' :
 			9,
-		'Func' :
+		'aFunc' :
 			-1,
 		'In' :
 			8,
@@ -1220,7 +1220,7 @@ formatSwitch =
 | Formats a function.
 */
 var
-formatFunc =
+formatAFunc =
 	function(
 		context,
 		func
@@ -2220,7 +2220,7 @@ formatVarDec =
 	)
 	{
 		if(
-			varDec.assign.reflex === 'code.func'
+			varDec.assign.reflex === 'code.aFunc'
 		)
 		{
 			isRootFunc =
@@ -2229,7 +2229,7 @@ formatVarDec =
 		else if(
 			varDec.assign.reflex === 'code.assign'
 			&&
-			varDec.assign.right.reflex === 'code.func'
+			varDec.assign.right.reflex === 'code.aFunc'
 		)
 		{
 			// FUTURUE allow abitrary amount of assignments
@@ -2584,8 +2584,8 @@ exprFormatter =
 			formatADot,
 		'anEquals' :
 			formatAnEquals,
-		'Func' :
-			formatFunc,
+		'aFunc' :
+			formatAFunc,
 		'GreaterThan' :
 			formatGreaterThan,
 		'Instanceof' :

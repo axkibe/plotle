@@ -57,8 +57,8 @@ Code =
 			require( '../code/an-equals' ),
 		aFile :
 			require( '../code/a-file' ),
-		Func :
-			require( '../code/func' ),
+		aFunc :
+			require( '../code/a-func' ),
 		FuncArg :
 			require( '../code/func-arg' ),
 		GreaterThan :
@@ -412,19 +412,17 @@ ShortHand.aFile =
 /*
 | Shorthand for creating functions.
 */
-ShortHand.Func =
+ShortHand.aFunc =
 	function(
 		block
 	)
 {
-	var
-		func =
-			Code.Func.create(
-				'block',
-					block || null
-			);
-
-	return func;
+	return (
+		Code.aFunc.create(
+			'block',
+				block || null
+		)
+	);
 };
 
 

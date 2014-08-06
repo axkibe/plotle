@@ -76,8 +76,8 @@ var
 		Shorthand.False( ),
 	aFile =
 		Shorthand.aFile,
-	Func =
-		Shorthand.Func,
+	aFunc =
+		Shorthand.aFunc,
 	GreaterThan =
 		Shorthand.GreaterThan,
 	If =
@@ -800,8 +800,7 @@ Gen.prototype.genConstructor =
 			);
 	}
 
-	constructor =
-		Func( block );
+	constructor = aFunc( block );
 
 	for(
 		a = 0, aZ = this.constructorList.length;
@@ -2174,7 +2173,7 @@ Gen.prototype.genCreator =
 	block = this.genCreatorReturn( block );
 
 	creator =
-		Func( block )
+		aFunc( block )
 		.Arg(
 			null,
 			'free strings'
@@ -2716,7 +2715,7 @@ Gen.prototype.genFromJSONCreator =
 		capsule
 		.anAssign(
 			Var( this.reference ).aDot( 'createFromJSON' ),
-			Func( funcBlock )
+			aFunc( funcBlock )
 			.Arg(
 				'json',
 				'the JSON object'
@@ -2885,7 +2884,7 @@ Gen.prototype.genToJSON =
 			)
 		)
 		.Return(
-			Func(
+			aFunc(
 				aBlock( )
 				.Return(
 					Var( 'json' )
@@ -2900,7 +2899,7 @@ Gen.prototype.genToJSON =
 			Var( 'Jools' ).aDot( 'lazyValue' ),
 			Var( 'Constructor' ).aDot( 'prototype' ),
 			StringLiteral( 'toJSON' ),
-			Func( block )
+			aFunc( block )
 		);
 
 	return capsule;
@@ -2996,7 +2995,7 @@ Gen.prototype.genEquals =
 				.aComment( 'Tests equality of object.' )
 				.anAssign(
 					Var( 'Constructor' ).aDot( 'prototype' ).aDot( 'equals' ),
-					Func(
+					aFunc(
 						aBlock( )
 						.Return(
 							anEquals(
@@ -3099,7 +3098,7 @@ Gen.prototype.genEquals =
 		capsule
 		.anAssign(
 			Var( 'Constructor' ).aDot( 'prototype' ).aDot( 'equals' ),
-			Func( block )
+			aFunc( block )
 			.Arg(
 				'obj',
 				'object to compare to'
@@ -3222,7 +3221,7 @@ Gen.prototype.genAlike =
 			capsule
 			.anAssign(
 				Var( 'Constructor' ).aDot( 'prototype' ).aDot( alikeName ),
-				Func( block )
+				aFunc( block )
 				.Arg(
 					'obj',
 					'object to compare to'
