@@ -60,8 +60,8 @@ var
 		Shorthand.anAssign,
 	aBlock =
 		Shorthand.aBlock,
-	Call =
-		Shorthand.Call,
+	aCall =
+		Shorthand.aCall,
 	CommaList =
 		Shorthand.CommaList,
 	Condition =
@@ -573,14 +573,14 @@ Gen.prototype.genNodeIncludes =
 		aBlock( )
 		.anAssign(
 			Var( 'JoobjProto' ),
-			Call(
+			aCall(
 				Var( 'require' ),
 				StringLiteral( '../../src/jion/proto' )
 			)
 		)
 		.anAssign(
 			Var( 'Jools' ),
-			Call(
+			aCall(
 				Var( 'require' ),
 				StringLiteral( '../../src/jools/jools' )
 			)
@@ -632,7 +632,7 @@ Gen.prototype.genNodeIncludes =
 				block
 				.anAssign(
 					Var( unitName ).Dot( typeName ),
-					Call(
+					aCall(
 						Var( 'require' ),
 						StringLiteral(
 							'../../src/' +
@@ -738,7 +738,7 @@ Gen.prototype.genConstructor =
 	if( this.init )
 	{
 		initCall =
-			Call(
+			aCall(
 				This.Dot( '_init' )
 			);
 
@@ -787,7 +787,7 @@ Gen.prototype.genConstructor =
 	// immutes the new object
 	block =
 		block
-		.Call(
+		.aCall(
 			Var( 'Jools' ). Dot( 'immute' ),
 			This
 		);
@@ -796,11 +796,11 @@ Gen.prototype.genConstructor =
 	{
 		block =
 			block
-			.Call(
+			.aCall(
 				Var( 'Jools' ).Dot( 'immute' ),
 				Var( 'twig' )
 			)
-			.Call(
+			.aCall(
 				Var( 'Jools' ).Dot( 'immute' ),
 				Var( 'ranks' )
 			);
@@ -886,7 +886,7 @@ Gen.prototype.genConstructor =
 			.Comment(
 				'Subclass.'
 			)
-			.Call(
+			.aCall(
 				Var( 'Jools' ).Dot( 'subclass' ),
 				Var( 'Constructor' ),
 				this.subclass
@@ -1197,14 +1197,14 @@ Gen.prototype.genCreatorFreeStringsParser =
 					aBlock( )
 					.anAssign(
 						Var( 'twig' ),
-						Call(
+						aCall(
 							Var( 'Jools' ).Dot( 'copy' ),
 							Var( 'twig' )
 						)
 					)
 					.anAssign(
 						Var( 'ranks' ),
-						Call(
+						aCall(
 							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
@@ -1250,7 +1250,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					Var( 'arg' )
 				)
-				.Call(
+				.aCall(
 					Var( 'ranks' ).Dot( 'push' ),
 					Var( 'key' )
 				)
@@ -1263,14 +1263,14 @@ Gen.prototype.genCreatorFreeStringsParser =
 					aBlock( )
 					.anAssign(
 						Var( 'twig' ),
-						Call(
+						aCall(
 							Var( 'Jools' ).Dot( 'copy' ),
 							Var( 'twig' )
 						)
 					)
 					.anAssign(
 						Var( 'ranks' ),
-						Call(
+						aCall(
 							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
@@ -1325,14 +1325,14 @@ Gen.prototype.genCreatorFreeStringsParser =
 					aBlock( )
 					.anAssign(
 						Var( 'twig' ),
-						Call(
+						aCall(
 							Var( 'Jools' ).Dot( 'copy' ),
 							Var( 'twig' )
 						)
 					)
 					.anAssign(
 						Var( 'ranks' ),
-						Call(
+						aCall(
 							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
@@ -1412,7 +1412,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Var( 'arg' )
 				)
 				.Append(
-					Call(
+					aCall(
 						Var( 'ranks' ).Dot( 'splice' ),
 						Var( 'rank' ),
 						NumberLiteral( 0 ),
@@ -1430,14 +1430,14 @@ Gen.prototype.genCreatorFreeStringsParser =
 					aBlock( )
 					.anAssign(
 						Var( 'twig' ),
-						Call(
+						aCall(
 							Var( 'Jools' ).Dot( 'copy' ),
 							Var( 'twig' )
 						)
 					)
 					.anAssign(
 						Var( 'ranks' ),
-						Call(
+						aCall(
 							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
@@ -1472,9 +1472,9 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Append(
-					Call(
+					aCall(
 						Var( 'ranks' ).Dot( 'splice' ),
-						Call(
+						aCall(
 							Var( 'ranks' ).Dot( 'indexOf' ),
 							Var( 'arg' )
 						),
@@ -1689,7 +1689,7 @@ Gen.prototype.genCreatorChecks =
 							StringLiteral( 'number' )
 						),
 						Differs(
-							Call(
+							aCall(
 								Var( 'Math' ).Dot( 'floor' ),
 								attr.v
 							),
@@ -1840,14 +1840,14 @@ Gen.prototype.genCreatorConcerns =
 			if( unit )
 			{
 				cExpr =
-					Call(
+					aCall(
 						Var( unit ).Dot( type ).Dot( func )
 					);
 			}
 			else
 			{
 				cExpr =
-					Call( Var( func ) );
+					aCall( Var( func ) );
 			}
 
 			for(
@@ -1913,7 +1913,7 @@ Gen.prototype.genCreatorConcerns =
 			else
 			{
 				cExpr =
-					Call(
+					aCall(
 						attr.v.Dot( member )
 					);
 
@@ -2028,7 +2028,7 @@ Gen.prototype.genCreatorUnchanged =
 				if( !attr.allowsNull && !attr.allowsUndefined )
 				{
 					ceq =
-						Call(
+						aCall(
 							attr.v.Dot( 'equals' ),
 							Var( 'inherit' ).Dot( attr.assign )
 						);
@@ -2043,7 +2043,7 @@ Gen.prototype.genCreatorUnchanged =
 							),
 							anAnd(
 								attr.v,
-								Call(
+								aCall(
 									attr.v.Dot( 'equals' ),
 									Var( 'inherit' ).Dot( attr.assign )
 								)
@@ -2097,7 +2097,7 @@ Gen.prototype.genCreatorReturn =
 				.anAssign(
 					Var( '_singleton' ),
 					New(
-						Call(
+						aCall(
 							Var( 'Constructor' )
 						)
 					)
@@ -2110,7 +2110,7 @@ Gen.prototype.genCreatorReturn =
 	}
 
 	call =
-		Call(
+		aCall(
 			Var( 'Constructor' )
 		);
 
@@ -2139,11 +2139,9 @@ Gen.prototype.genCreatorReturn =
 
 			default :
 
-				attr =
-					this.attributes[ name ];
+				attr = this.attributes[ name ];
 
-				call =
-					call.Append( attr.v );
+				call = call.Append( attr.v );
 		}
 	}
 
@@ -2384,7 +2382,7 @@ Gen.prototype.genFromJSONCreatorParser =
 				if( base )
 				{
 					arg =
-						Call(
+						aCall(
 							base.Dot( 'createFromJSON' ),
 							Var( 'arg' )
 						);
@@ -2484,7 +2482,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 					.Member(
 						Var( 'key' )
 					),
-					Call(
+					aCall(
 						base.Dot( 'createFromJSON' ),
 						Var( 'jval' )
 					)
@@ -2589,7 +2587,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 		name;
 
 	call =
-		Call(
+		aCall(
 			Var( 'Constructor' )
 		);
 
@@ -2902,7 +2900,7 @@ Gen.prototype.genToJSON =
 		block
 		.anAssign(
 			Var( 'json' ),
-			Call(
+			aCall(
 				Var( 'Object' ).Dot( 'freeze' ),
 				olit
 			)
@@ -2919,7 +2917,7 @@ Gen.prototype.genToJSON =
 	capsule =
 		capsule
 		.Comment( 'Converts a ' + this.name + ' into JSON.' )
-		.Call(
+		.aCall(
 			Var( 'Jools' ).Dot( 'lazyValue' ),
 			Var( 'Constructor' ).Dot( 'prototype' ),
 			StringLiteral( 'toJSON' ),
@@ -2978,7 +2976,7 @@ Gen.prototype.genAttributeEquals =
 						anAnd(
 							Differs( le, aNull ),
 							le.Dot( 'equals' ),
-							Call( le.Dot( 'equals' ), re )
+							aCall( le.Dot( 'equals' ), re )
 						)
 					);
 			}

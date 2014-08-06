@@ -135,7 +135,7 @@ New.create =
 /**/			throw new Error( 'attribute call must not be null.' );
 /**/		}
 /**/
-/**/		if( v_call.reflect !== 'Call' )
+/**/		if( v_call.reflect !== 'aCall' )
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}

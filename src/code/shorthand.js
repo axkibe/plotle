@@ -37,8 +37,8 @@ Code =
 			require( '../code/a-block' ),
 		aBooleanLiteral :
 			require( '../code/a-boolean-literal' ),
-		Call :
-			require( '../code/call' ),
+		aCall :
+			require( '../code/a-call' ),
 		Check :
 			require( '../code/check' ),
 		CommaList :
@@ -194,7 +194,7 @@ ShortHand.aBlock =
 /*
 | Shorthand for creating calls.
 */
-ShortHand.Call =
+ShortHand.aCall =
 	function(
 		func
 		// args
@@ -202,7 +202,7 @@ ShortHand.Call =
 {
 	var
 		call =
-			Code.Call.create(
+			Code.aCall.create(
 				'func',
 					func
 			);

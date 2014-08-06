@@ -12,8 +12,8 @@ module.exports =
 			'src/code/an-assign.js',
 			'src/code/a-block.js',
 			'src/code/a-boolean-literal.js',
+			'src/code/a-call.js',
 
-			'src/code/call.js',
 			'src/code/case.js',
 			'src/code/check.js',
 			'src/code/comma-list.js',

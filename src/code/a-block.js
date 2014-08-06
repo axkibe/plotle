@@ -44,8 +44,8 @@ var
 		{
 			anAssign :
 				require( './an-assign' ),
-			Call :
-				require( './call' ),
+			aCall :
+				require( './a-call' ),
 			Check :
 				require( './check' ),
 			Comment :
@@ -112,7 +112,7 @@ aBlock.prototype.anAssign =
 /*
 | Recreates the block with a call appended.
 */
-aBlock.prototype.Call =
+aBlock.prototype.aCall =
 	function(
 		func
 		// args
@@ -120,7 +120,7 @@ aBlock.prototype.Call =
 {
 	var
 		call =
-			Code.Call.create(
+			Code.aCall.create(
 				'func',
 					func
 			);

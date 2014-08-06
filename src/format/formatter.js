@@ -52,7 +52,7 @@ precTable =
 			17,
 		'aBooleanLiteral' :
 			-1,
-		'Call' :
+		'aCall' :
 			2,
 		'CommaList' :
 			18,
@@ -1506,7 +1506,7 @@ formatStatement =
 
 		case 'code.anAssign' :
 		case 'code.aBooleanLiteral' :
-		case 'code.call' :
+		case 'code.aCall' :
 		case 'code.delete' :
 		case 'code.fail' :
 		case 'code.new' :
@@ -1712,7 +1712,7 @@ formatABooleanLiteral =
 | Formats a call.
 */
 var
-formatCall =
+formatACall =
 	function(
 		context,
 		call,
@@ -1725,7 +1725,7 @@ formatCall =
 
 /**/if( CHECK )
 /**/{
-/**/	if( call.reflex !== 'code.call' )
+/**/	if( call.reflex !== 'code.aCall' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1842,7 +1842,7 @@ formatNew =
 		+
 		'new '
 		+
-		formatCall(
+		formatACall(
 			context,
 			expr.call,
 			true
@@ -2577,8 +2577,8 @@ exprFormatter =
 			formatAnAssign,
 		'aBooleanLiteral' :
 			formatABooleanLiteral,
-		'Call' :
-			formatCall,
+		'aCall' :
+			formatACall,
 		'CommaList' :
 			formatCommaList,
 		'Condition' :
