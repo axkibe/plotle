@@ -49,8 +49,8 @@ var
 
 Code =
 	{
-		Dot :
-			require( '../code/dot' ),
+		aDot :
+			require( '../code/a-dot' ),
 		Member :
 			require( '../code/member' )
 	};
@@ -91,14 +91,14 @@ Var.prototype._init =
 /*
 | Creates a dot member access of a variable.
 */
-Var.prototype.Dot =
+Var.prototype.aDot =
 	function(
 		member // member string
 	)
 {
-	// checking if member is a string is done in 'Dot'
+	// checking if member is a string is done in 'aDot'
 	return (
-		Code.Dot.create(
+		Code.aDot.create(
 			'expr',
 				this,
 			'member',

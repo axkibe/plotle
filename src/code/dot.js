@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Dot',
+			'aDot',
 		unit :
 			'Code',
 		attributes :
@@ -48,15 +48,15 @@ if( JION )
 
 
 var
-	Dot;
+	aDot;
 
-Dot =
+aDot =
 	require( '../jion/this' )( module );
 
 /*
 | Initializer.
 */
-Dot.prototype._init =
+aDot.prototype._init =
 	function( )
 {
 	var
@@ -86,14 +86,14 @@ Dot.prototype._init =
 /*
 | Creates a dot member access of a dot.
 */
-Dot.prototype.Dot =
+aDot.prototype.aDot =
 	function(
 		member // member string
 	)
 {
-	// checking if member is a string is done in 'Dot'
+	// checking if member is a string is done in 'aDot'
 	return (
-		Dot.create(
+		aDot.create(
 			'expr',
 				this,
 			'member',
@@ -106,8 +106,7 @@ Dot.prototype.Dot =
 /*
 | Node export.
 */
-module.exports =
-	Dot;
+module.exports = aDot;
 
 
 } )( );

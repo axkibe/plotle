@@ -35,8 +35,8 @@ module.exports =
 			'src/code/a-condition.js',
 			'src/code/a-delete.js',
 			'src/code/a-differs.js',
+			'src/code/a-dot.js',
 
-			'src/code/dot.js',
 			'src/code/equals.js',
 			'src/code/fail.js',
 			'src/code/file.js',

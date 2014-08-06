@@ -51,8 +51,8 @@ Code =
 			require( '../code/a-delete' ),
 		aDiffers :
 			require( '../code/a-differs' ),
-		Dot :
-			require( '../code/dot' ),
+		aDot :
+			require( '../code/a-dot' ),
 		If :
 			require( '../code/if' ),
 		Equals :
@@ -284,14 +284,14 @@ ShortHand.aDelete =
 /*
 | Shorthand for creating dots.
 */
-ShortHand.Dot =
+ShortHand.aDot =
 	function(
 		expr,
 		member
 	)
 {
 	return (
-		Code.Dot.create(
+		Code.aDot.create(
 			'expr',
 				expr,
 			'member',

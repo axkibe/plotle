@@ -62,7 +62,7 @@ precTable =
 			4,
 		'aDiffers' :
 			9,
-		'Dot' :
+		'aDot' :
 			1,
 		'Equals' :
 			9,
@@ -527,7 +527,7 @@ formatPlusAssign =
 | Formats a Dot.
 */
 var
-formatDot =
+formatADot =
 	function(
 		context,
 		expr
@@ -535,7 +535,7 @@ formatDot =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.dot' )
+/**/	if( expr.reflex !== 'code.aDot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -545,7 +545,7 @@ formatDot =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.Dot
+			precTable.aDot
 		)
 		+ '.'
 		+ expr.member
@@ -2587,8 +2587,8 @@ exprFormatter =
 			formatADelete,
 		'aDiffers' :
 			formatADiffers,
-		'Dot' :
-			formatDot,
+		'aDot' :
+			formatADot,
 		'Equals' :
 			formatEquals,
 		'Func' :
