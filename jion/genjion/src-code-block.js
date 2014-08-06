@@ -39,8 +39,6 @@ if( SERVER )
 
 	Code = { };
 
-	Code.Assign = require( '../../src/code/assign' );
-
 	Code.Check = require( '../../src/code/check' );
 
 	Code.Comment = require( '../../src/code/comment' );

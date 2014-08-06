@@ -31,8 +31,8 @@ Code =
 			require( '../code/an-and' ),
 		anArrayLiteral :
 			require( '../code/an-array-literal' ),
-		Assign :
-			require( '../code/assign' ),
+		anAssign :
+			require( '../code/an-assign' ),
 		Block :
 			require( '../code/block' ),
 		BooleanLiteral :
@@ -164,14 +164,14 @@ ShortHand.anArrayLiteral =
 /*
 | Shorthand for creating assignments.
 */
-ShortHand.Assign =
+ShortHand.anAssign =
 	function(
 		left,
 		right
 	)
 {
 	return (
-		Code.Assign.create(
+		Code.anAssign.create(
 			'left',
 				left,
 			'right',

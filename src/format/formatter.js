@@ -24,9 +24,7 @@ Formatter =
 /*
 | Constants.
 */
-var
-	MAX_TEXT_WIDTH =
-		79;
+var MAX_TEXT_WIDTH = 79;
 
 /*
 | Node imports.
@@ -50,7 +48,7 @@ precTable =
 			13,
 		'anArrayLiteral' :
 			-1,
-		'Assign' :
+		'anAssign' :
 			17,
 		'BooleanLiteral' :
 			-1,
@@ -168,7 +166,7 @@ formatAnd =
 | Formats an assignment.
 */
 var
-formatAssign =
+formatAnAssign =
 	function(
 		context,
 		assign
@@ -184,7 +182,7 @@ formatAssign =
 		formatExpression(
 			context,
 			assign.left,
-			precTable.Assign
+			precTable.anAssign
 		)
 		+ ' ='
 		+ context.sep;
@@ -205,7 +203,7 @@ formatAssign =
 			formatExpression(
 				context.Inline,
 				assign.right,
-				precTable.Assign
+				precTable.anAssign
 			);
 	}
 	catch( e )
@@ -233,7 +231,7 @@ formatAssign =
 			formatExpression(
 				context,
 				assign.right,
-				precTable.Assign
+				precTable.anAssign
 			);
 	}
 
@@ -492,13 +490,13 @@ formatPlusAssign =
 			formatExpression(
 				context.Inline,
 				assign.left,
-				precTable.Assign
+				precTable.anAssign
 			)
 			+ ' += '
 			+ formatExpression(
 				context.Inline,
 				assign.right,
-				precTable.Assign
+				precTable.anAssign
 			);
 	}
 	catch( e )
@@ -1506,7 +1504,7 @@ formatStatement =
 
 			break;
 
-		case 'code.assign' :
+		case 'code.anAssign' :
 		case 'code.booleanLiteral' :
 		case 'code.call' :
 		case 'code.delete' :
@@ -2433,7 +2431,7 @@ formatVList =
 				formatExpression(
 					context,
 					varDec.assign,
-					precTable.Assign
+					precTable.anAssign
 				);
 		}
 
@@ -2575,8 +2573,8 @@ exprFormatter =
 			formatAnd,
 		'anArrayLiteral' :
 			formatAnArrayLiteral,
-		'Assign' :
-			formatAssign,
+		'anAssign' :
+			formatAnAssign,
 		'BooleanLiteral' :
 			formatBooleanLiteral,
 		'Call' :

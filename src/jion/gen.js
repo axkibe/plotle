@@ -56,8 +56,8 @@ var
 		Shorthand.anAnd,
 	anArrayLiteral =
 		Shorthand.anArrayLiteral,
-	Assign =
-		Shorthand.Assign,
+	anAssign =
+		Shorthand.anAssign,
 	Block =
 		Shorthand.Block,
 	Call =
@@ -571,14 +571,14 @@ Gen.prototype.genNodeIncludes =
 
 	block =
 		Block( )
-		.Assign(
+		.anAssign(
 			Var( 'JoobjProto' ),
 			Call(
 				Var( 'require' ),
 				StringLiteral( '../../src/jion/proto' )
 			)
 		)
-		.Assign(
+		.anAssign(
 			Var( 'Jools' ),
 			Call(
 				Var( 'require' ),
@@ -596,7 +596,7 @@ Gen.prototype.genNodeIncludes =
 	{
 		block =
 			block
-			.Assign(
+			.anAssign(
 				Var( this.unitList[ a ] ),
 				ObjLiteral( )
 			);
@@ -630,7 +630,7 @@ Gen.prototype.genNodeIncludes =
 
 			block =
 				block
-				.Assign(
+				.anAssign(
 					Var( unitName ).Dot( typeName ),
 					Call(
 						Var( 'require' ),
@@ -696,7 +696,7 @@ Gen.prototype.genConstructor =
 		}
 
 		assign =
-			Assign(
+			anAssign(
 				This.Dot( attr.assign ),
 				attr.v
 			);
@@ -724,11 +724,11 @@ Gen.prototype.genConstructor =
 	{
 		block =
 			block
-			.Assign(
+			.anAssign(
 				This.Dot( 'twig' ),
 				Var( 'twig' )
 			)
-			.Assign(
+			.anAssign(
 				This.Dot( 'ranks' ),
 				Var( 'ranks' )
 			);
@@ -919,7 +919,7 @@ Gen.prototype.genConstructor =
 		capsule =
 			capsule.VarDec(
 				this.reference,
-				Assign(
+				anAssign(
 					Var( this.unit ).Dot( this.name ),
 					jionObj
 				)
@@ -930,7 +930,7 @@ Gen.prototype.genConstructor =
 	{
 		capsule =
 			capsule
-			.Assign(
+			.anAssign(
 				Var( this.reference ),
 				jionObj
 			);
@@ -1027,7 +1027,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		name,
 		receiver =
 			Block( )
-			.Assign(
+			.anAssign(
 				Var( 'inherit' ),
 				This
 			);
@@ -1036,15 +1036,15 @@ Gen.prototype.genCreatorInheritanceReceiver =
 	{
 		receiver =
 			receiver
-			.Assign(
+			.anAssign(
 				Var( 'twig' ),
 				Var( 'inherit' ).Dot( 'twig' )
 			)
-			.Assign(
+			.anAssign(
 				Var( 'ranks' ),
 				Var( 'inherit' ).Dot( 'ranks' )
 			)
-			.Assign(
+			.anAssign(
 				Var( 'twigDup' ),
 				False
 			);
@@ -1069,7 +1069,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 
 		receiver =
 			receiver
-			.Assign(
+			.anAssign(
 				attr.v,
 				This.Dot ( attr.assign )
 			);
@@ -1090,15 +1090,15 @@ Gen.prototype.genCreatorInheritanceReceiver =
 			thisCheck
 			.Elsewise(
 				Block( )
-				.Assign(
+				.anAssign(
 					Var( 'twig' ),
 					ObjLiteral( )
 				)
-				.Assign(
+				.anAssign(
 					Var( 'ranks' ),
 					anArrayLiteral( )
 				)
-				.Assign(
+				.anAssign(
 					Var( 'twigDup' ),
 					True
 				)
@@ -1174,7 +1174,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						Undefined
 					),
 					Block( )
-					.Assign(
+					.anAssign(
 						attr.v,
 						Var( 'arg' )
 					)
@@ -1195,29 +1195,29 @@ Gen.prototype.genCreatorFreeStringsParser =
 						Var( 'twigDup' )
 					),
 					Block( )
-					.Assign(
+					.anAssign(
 						Var( 'twig' ),
 						Call(
 							Var( 'Jools' ).Dot( 'copy' ),
 							Var( 'twig' )
 						)
 					)
-					.Assign(
+					.anAssign(
 						Var( 'ranks' ),
 						Call(
 							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
-					.Assign(
+					.anAssign(
 						Var( 'twigDup' ),
 						True
 					)
 				)
-				.Assign(
+				.anAssign(
 					Var( 'key' ),
 					Var( 'arg' )
 				)
-				.Assign(
+				.anAssign(
 					Var( 'arg' ),
 					Var( 'arguments' )
 					.Member(
@@ -1243,7 +1243,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.Assign(
+				.anAssign(
 					Var( 'twig' )
 					.Member(
 						Var( 'key' )
@@ -1261,29 +1261,29 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.If(
 					Not( Var( 'twigDup' ) ),
 					Block( )
-					.Assign(
+					.anAssign(
 						Var( 'twig' ),
 						Call(
 							Var( 'Jools' ).Dot( 'copy' ),
 							Var( 'twig' )
 						)
 					)
-					.Assign(
+					.anAssign(
 						Var( 'ranks' ),
 						Call(
 							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
-					.Assign(
+					.anAssign(
 						Var( 'twigDup' ),
 						True
 					)
 				)
-				.Assign(
+				.anAssign(
 					Var( 'key' ),
 					Var( 'arg' )
 				)
-				.Assign(
+				.anAssign(
 					Var( 'arg' ),
 					Var( 'arguments' )
 					.Member(
@@ -1309,7 +1309,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.Assign(
+				.anAssign(
 					Var( 'twig' )
 					.Member(
 						Var( 'key' )
@@ -1323,29 +1323,29 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.If(
 					Not( Var( 'twigDup' ) ),
 					Block( )
-					.Assign(
+					.anAssign(
 						Var( 'twig' ),
 						Call(
 							Var( 'Jools' ).Dot( 'copy' ),
 							Var( 'twig' )
 						)
 					)
-					.Assign(
+					.anAssign(
 						Var( 'ranks' ),
 						Call(
 							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
-					.Assign(
+					.anAssign(
 						Var( 'twigDup' ),
 						True
 					)
 				)
-				.Assign(
+				.anAssign(
 					Var( 'key' ),
 					Var( 'arg' )
 				)
-				.Assign(
+				.anAssign(
 					Var( 'rank' ),
 					Var( 'arguments' )
 					.Member(
@@ -1355,7 +1355,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.Assign(
+				.anAssign(
 					Var( 'arg' ),
 					Var( 'arguments' )
 					.Member(
@@ -1404,7 +1404,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						StringLiteral( 'invalid rank' )
 					)
 				)
-				.Assign(
+				.anAssign(
 					Var( 'twig' )
 					.Member(
 						Var( 'key' )
@@ -1428,20 +1428,20 @@ Gen.prototype.genCreatorFreeStringsParser =
 						Var( 'twigDup' )
 					),
 					Block( )
-					.Assign(
+					.anAssign(
 						Var( 'twig' ),
 						Call(
 							Var( 'Jools' ).Dot( 'copy' ),
 							Var( 'twig' )
 						)
 					)
-					.Assign(
+					.anAssign(
 						Var( 'ranks' ),
 						Call(
 							Var( 'ranks' ).Dot( 'slice' )
 						)
 					)
-					.Assign(
+					.anAssign(
 						Var( 'twigDup' ),
 						True
 					)
@@ -1563,7 +1563,7 @@ Gen.prototype.genCreatorDefaults =
 				.If(
 					Equals( attr.v, Undefined ),
 					Block( )
-					.Assign( attr.v, attr.defaultValue )
+					.anAssign( attr.v, attr.defaultValue )
 				);
 		}
 	}
@@ -1941,7 +1941,7 @@ Gen.prototype.genCreatorConcerns =
 
 		block =
 			block
-			.Assign( attr.v, cExpr );
+			.anAssign( attr.v, cExpr );
 	}
 
 	return block;
@@ -2094,7 +2094,7 @@ Gen.prototype.genCreatorReturn =
 					Var( '_singleton' )
 				),
 				Block( )
-				.Assign(
+				.anAssign(
 					Var( '_singleton' ),
 					New(
 						Call(
@@ -2200,9 +2200,9 @@ Gen.prototype.genCreator =
 
 	capsule =
 		capsule
-		.Assign(
+		.anAssign(
 			Var( this.reference ).Dot( 'create' ),
-			Assign(
+			anAssign(
 				Var( 'prototype' ).Dot( 'create' ),
 				creator
 			)
@@ -2321,7 +2321,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			.Case(
 				StringLiteral( 'twig' ),
 				Block( )
-				.Assign(
+				.anAssign(
 					Var( 'jwig' ),
 					Var( 'arg' )
 				)
@@ -2329,7 +2329,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			.Case(
 				StringLiteral( 'ranks' ),
 				Block( )
-				.Assign(
+				.anAssign(
 					Var( 'ranks' ),
 					Var( 'arg' )
 				)
@@ -2399,7 +2399,7 @@ Gen.prototype.genFromJSONCreatorParser =
 
 		caseBlock =
 			Block( )
-			.Assign( attr.v, arg);
+			.anAssign( attr.v, arg);
 
 		switchExpr =
 			switchExpr
@@ -2415,7 +2415,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			'name',
 			Var( 'json' ),
 			Block( )
-			.Assign(
+			.anAssign(
 				Var( 'arg' ),
 				Var( 'json' )
 				.Member(
@@ -2479,7 +2479,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			.Case(
 				StringLiteral( name ),
 				Block( )
-				.Assign(
+				.anAssign(
 					Var( 'twig' )
 					.Member(
 						Var( 'key' )
@@ -2501,7 +2501,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 
 	loop =
 		Block( )
-		.Assign(
+		.anAssign(
 			Var( 'key' ),
 			Var( 'ranks' )
 			.Member(
@@ -2518,7 +2518,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			Block( )
 			.Fail( 'JSON ranks/twig mismatch' )
 		)
-		.Assign(
+		.anAssign(
 			Var( 'jval' ),
 			Var( 'jwig' )
 			.Member(
@@ -2531,7 +2531,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 
 	block =
 		block
-		.Assign(
+		.anAssign(
 			Var( 'twig' ),
 			ObjLiteral( )
 		)
@@ -2551,13 +2551,13 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			// FIXME, put into the commalist call
 			CommaList( )
 			.Append(
-				Assign(
+				anAssign(
 					Var( 'a' ),
 					NumberLiteral( 0 )
 				)
 			)
 			.Append(
-				Assign(
+				anAssign(
 					Var( 'aZ' ),
 					Var( 'ranks' ).Dot( 'length' )
 				)
@@ -2731,7 +2731,7 @@ Gen.prototype.genFromJSONCreator =
 
 	capsule =
 		capsule
-		.Assign(
+		.anAssign(
 			Var( this.reference ).Dot( 'createFromJSON' ),
 			Func( funcBlock )
 			.Arg(
@@ -2755,7 +2755,7 @@ Gen.prototype.genReflection =
 	capsule =
 		capsule
 		.Comment( 'Reflection.' )
-		.Assign(
+		.anAssign(
 			Var( 'prototype' ).Dot( 'reflect' ),
 			StringLiteral( this.name )
 		);
@@ -2763,7 +2763,7 @@ Gen.prototype.genReflection =
 	capsule =
 		capsule
 		.Comment( 'New Reflection.' )
-		.Assign(
+		.anAssign(
 			Var( 'prototype' ).Dot( 'reflex' ),
 			StringLiteral(
 				adaptName(
@@ -2791,12 +2791,12 @@ Gen.prototype.genJoobjProto =
 	capsule =
 		capsule
 		.Comment( 'Sets values by path.' )
-		.Assign(
+		.anAssign(
 			Var( 'prototype' ).Dot( 'setPath' ),
 			Var( 'JoobjProto' ).Dot( 'setPath' )
 		)
 		.Comment( 'Gets values by path' )
-		.Assign(
+		.anAssign(
 			Var( 'prototype' ).Dot( 'getPath' ),
 			Var( 'JoobjProto' ).Dot( 'getPath' )
 		);
@@ -2806,12 +2806,12 @@ Gen.prototype.genJoobjProto =
 		capsule =
 			capsule
 			.Comment( 'Returns a twig by rank.' )
-			.Assign(
+			.anAssign(
 				Var( 'prototype' ).Dot( 'atRank' ),
 				Var( 'JoobjProto' ).Dot( 'atRank' )
 			)
 			.Comment( 'Gets the rank of a key.' )
-			.Assign(
+			.anAssign(
 				Var( 'Constructor' )
 				.Dot( 'prototype' )
 				.Dot( 'rankOf' ),
@@ -2819,7 +2819,7 @@ Gen.prototype.genJoobjProto =
 				.Dot( 'rankOf' )
 			)
 			.Comment( 'Creates a new unique identifier.' )
-			.Assign(
+			.anAssign(
 				Var( 'Constructor' )
 				.Dot( 'prototype' )
 				.Dot( 'newUID' ),
@@ -2900,7 +2900,7 @@ Gen.prototype.genToJSON =
 
 	block =
 		block
-		.Assign(
+		.anAssign(
 			Var( 'json' ),
 			Call(
 				Var( 'Object' ).Dot( 'freeze' ),
@@ -3017,7 +3017,7 @@ Gen.prototype.genEquals =
 			return (
 				capsule
 				.Comment( 'Tests equality of object.' )
-				.Assign(
+				.anAssign(
 					Var( 'Constructor' )
 					.Dot( 'prototype' )
 					.Dot( 'equals' ),
@@ -3122,7 +3122,7 @@ Gen.prototype.genEquals =
 
 	capsule =
 		capsule
-		.Assign(
+		.anAssign(
 			Var( 'Constructor' )
 			.Dot( 'prototype' )
 			.Dot( 'equals' ),
@@ -3249,7 +3249,7 @@ Gen.prototype.genAlike =
 
 		capsule =
 			capsule
-			.Assign(
+			.anAssign(
 				Var( 'Constructor' ).Dot( 'prototype' ).Dot( alikeName ),
 				Func( block )
 				.Arg(
@@ -3277,7 +3277,7 @@ Gen.prototype.genNodeExport =
 		.If(
 			Var( 'SERVER' ),
 			Block( )
-			.Assign(
+			.anAssign(
 				Var( 'module' ).Dot( 'exports' ),
 				Var( this.reference )
 			)

@@ -5,12 +5,12 @@
 */
 module.exports =
 {
-//	'And' : 'Code.And',
-//	'Assign' : 'Code.Assign',
-//	'Call' : 'Code.Call',
-//	'Func' : 'Code.Func',
-//	'New' : 'Code.New',
-//	'ObjLiteral' : 'Code.ObjLiteral',
-//	'Or' : 'Code.Or',
-//	'Var' : 'Code.Var'
+//	'anAnd' : 'Code.anAnd',
+//	'anAssign' : 'Code.anAssign',
+//	'aCall' : 'Code.aCall',
+//	'aFunc' : 'Code.aFunc',
+//	'aNew' : 'Code.aNew',
+//	'anObjLiteral' : 'Code.anObjLiteral',
+//	'anOr' : 'Code.anOr',
+//	'aVar' : 'Code.aVar'
 };

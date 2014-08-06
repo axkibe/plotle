@@ -29,12 +29,7 @@ if( JION )
 			true,
 		twig :
 			{
-				'Check' :
-					'Code.Check',
-				'Comment' :
-					'Code.Comment',
-				'Assign' :
-					'Code.Assign'
+				// FUTURE statement
 			}
 	};
 }
@@ -47,8 +42,8 @@ var
 		require( '../jion/this' )( module ),
 	Code =
 		{
-			Assign :
-				require( './assign' ),
+			anAssign :
+				require( './an-assign' ),
 			Call :
 				require( './call' ),
 			Check :
@@ -95,7 +90,7 @@ Block.prototype.Append =
 /*
 | Returns the block with an assignment appended.
 */
-Block.prototype.Assign =
+Block.prototype.anAssign =
 	function(
 		left,
 		right
@@ -103,7 +98,7 @@ Block.prototype.Assign =
 {
 	var
 		assign =
-			Code.Assign.create(
+			Code.anAssign.create(
 				'left',
 					left,
 				'right',

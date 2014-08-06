@@ -80,227 +80,227 @@ var
 */
 var
 	VList =
-	Code.VList =
-		{
-			prototype :
-				prototype
-		};
+		Code.VList =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new VList object.
 */
 VList.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		key,
-		rank,
-		ranks,
-		twig,
-		twigDup,
-		v_path;
-
-	if( this !== VList )
-	{
-		inherit = this;
-
-		twig = inherit.twig;
-
-		ranks = inherit.ranks;
-
-		twigDup = false;
-
-		v_path = this.path;
-	}
-	else
-	{
-		twig = { };
-
-		ranks = [ ];
-
-		twigDup = true;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			key,
+			rank,
+			ranks,
+			twig,
+			twigDup,
+			v_path;
 
-		switch( arguments[ a ] )
+		if( this !== VList )
 		{
-			case 'path' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_path = arg;
-				}
+			twig = inherit.twig;
 
-				break;
+			ranks = inherit.ranks;
 
-			case 'twig:add' :
+			twigDup = false;
 
-				if( !twigDup )
-				{
-					twig = Jools.copy( twig );
-
-					ranks = ranks.slice( );
-
-					twigDup = true;
-				}
-
-				key = arg;
-
-				arg = arguments[ ++a + 1 ];
-
-				if( twig[ key ] !== undefined )
-				{
-					throw new Error( 'key "' + key + '" already in use' );
-				}
-
-				twig[ key ] = arg;
-
-				ranks.push( key );
-
-				break;
-
-			case 'twig:set' :
-
-				if( !twigDup )
-				{
-					twig = Jools.copy( twig );
-
-					ranks = ranks.slice( );
-
-					twigDup = true;
-				}
-
-				key = arg;
-
-				arg = arguments[ ++a + 1 ];
-
-				if( twig[ key ] === undefined )
-				{
-					throw new Error( 'key "' + key + '" not in use' );
-				}
-
-				twig[ key ] = arg;
-
-				break;
-
-			case 'twig:insert' :
-
-				if( !twigDup )
-				{
-					twig = Jools.copy( twig );
-
-					ranks = ranks.slice( );
-
-					twigDup = true;
-				}
-
-				key = arg;
-
-				rank = arguments[ a + 2 ];
-
-				arg = arguments[ a + 3 ];
-
-				a += 2;
-
-				if( twig[ key ] !== undefined )
-				{
-					throw new Error( 'key "' + key + '" already in use' );
-				}
-
-				if( rank < 0 || rank > ranks.length )
-				{
-					throw new Error( 'invalid rank' );
-				}
-
-				twig[ key ] = arg;
-
-				ranks.splice( rank, 0, key );
-
-				break;
-
-			case 'twig:remove' :
-
-				if( !twigDup )
-				{
-					twig = Jools.copy( twig );
-
-					ranks = ranks.slice( );
-
-					twigDup = true;
-				}
-
-				if( twig[ arg ] === undefined )
-				{
-					throw new Error( 'key "' + arg + '" not in use' );
-				}
-
-				delete twig[ arg ];
-
-				ranks.splice( ranks.indexOf( arg ), 1 );
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_path = this.path;
 		}
-	}
+		else
+		{
+			twig = { };
 
-	if( v_path === undefined )
-	{
-		v_path = null;
-	}
+			ranks = [ ];
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_path === undefined )
+			twigDup = true;
+		}
+
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
+
+			switch( arguments[ a ] )
+			{
+				case 'path' :
+
+					if( arg !== undefined )
+					{
+						v_path = arg;
+					}
+
+					break;
+
+				case 'twig:add' :
+
+					if( !twigDup )
+					{
+						twig = Jools.copy( twig );
+
+						ranks = ranks.slice( );
+
+						twigDup = true;
+					}
+
+					key = arg;
+
+					arg = arguments[ ++a + 1 ];
+
+					if( twig[ key ] !== undefined )
+					{
+						throw new Error( 'key "' + key + '" already in use' );
+					}
+
+					twig[ key ] = arg;
+
+					ranks.push( key );
+
+					break;
+
+				case 'twig:set' :
+
+					if( !twigDup )
+					{
+						twig = Jools.copy( twig );
+
+						ranks = ranks.slice( );
+
+						twigDup = true;
+					}
+
+					key = arg;
+
+					arg = arguments[ ++a + 1 ];
+
+					if( twig[ key ] === undefined )
+					{
+						throw new Error( 'key "' + key + '" not in use' );
+					}
+
+					twig[ key ] = arg;
+
+					break;
+
+				case 'twig:insert' :
+
+					if( !twigDup )
+					{
+						twig = Jools.copy( twig );
+
+						ranks = ranks.slice( );
+
+						twigDup = true;
+					}
+
+					key = arg;
+
+					rank = arguments[ a + 2 ];
+
+					arg = arguments[ a + 3 ];
+
+					a += 2;
+
+					if( twig[ key ] !== undefined )
+					{
+						throw new Error( 'key "' + key + '" already in use' );
+					}
+
+					if( rank < 0 || rank > ranks.length )
+					{
+						throw new Error( 'invalid rank' );
+					}
+
+					twig[ key ] = arg;
+
+					ranks.splice( rank, 0, key );
+
+					break;
+
+				case 'twig:remove' :
+
+					if( !twigDup )
+					{
+						twig = Jools.copy( twig );
+
+						ranks = ranks.slice( );
+
+						twigDup = true;
+					}
+
+					if( twig[ arg ] === undefined )
+					{
+						throw new Error( 'key "' + arg + '" not in use' );
+					}
+
+					delete twig[ arg ];
+
+					ranks.splice( ranks.indexOf( arg ), 1 );
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+		if( v_path === undefined )
+		{
+			v_path = null;
+		}
+
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( 'undefined attribute path' );
-/**/	}
-/**/
-/**/	if( v_path !== null )
-/**/	{
-/**/		if( v_path.reflect !== 'Path' )
+/**/		if( v_path === undefined )
 /**/		{
-/**/			throw new Error( 'type mismatch' );
+/**/			throw new Error( 'undefined attribute path' );
+/**/		}
+/**/
+/**/		if( v_path !== null )
+/**/		{
+/**/			if( v_path.reflect !== 'Path' )
+/**/			{
+/**/				throw new Error( 'type mismatch' );
+/**/			}
 /**/		}
 /**/	}
-/**/}
 
-	if(
-		inherit
-		&&
-		!twigDup
-		&&
-		(
-			v_path === inherit.path
-			||
-			v_path && v_path.equals( inherit.path )
+		if(
+			inherit
+			&&
+			!twigDup
+			&&
+			(
+				v_path === inherit.path
+				||
+				v_path && v_path.equals( inherit.path )
+			)
 		)
-	)
-	{
-		return inherit;
-	}
+		{
+			return inherit;
+		}
 
-	return new Constructor( twig, ranks, v_path );
-};
+		return new Constructor( twig, ranks, v_path );
+	};
 
 
 /*

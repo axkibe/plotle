@@ -55,8 +55,8 @@ var
 		require( '../jion/this' )( module ),
 	Code =
 		{
-			Assign :
-				require( './assign' ),
+			anAssign :
+				require( './an-assign' ),
 			VarDec :
 				require( './var-dec' ),
 		},
