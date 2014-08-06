@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Case',
+			'aCase',
 		unit :
 			'Code',
 		attributes :
@@ -48,8 +48,7 @@ Case =
 /*
 | Node export.
 */
-module.exports =
-	Case;
+module.exports = aCase;
 
 
 } )( );

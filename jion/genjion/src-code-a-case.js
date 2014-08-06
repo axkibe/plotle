@@ -75,8 +75,8 @@ var
 | Jion
 */
 var
-	Case =
-		Code.Case =
+	aCase =
+		Code.aCase =
 			{
 				prototype :
 					prototype
@@ -84,9 +84,9 @@ var
 
 
 /*
-| Creates a new Case object.
+| Creates a new aCase object.
 */
-Case.create =
+aCase.create =
 	prototype.create =
 		function(
 			// free strings
@@ -101,7 +101,7 @@ Case.create =
 			twigDup,
 			v_block;
 
-		if( this !== Case )
+		if( this !== aCase )
 		{
 			inherit = this;
 
@@ -289,13 +289,13 @@ Case.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Case';
+prototype.reflect = 'aCase';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.case';
+prototype.reflex = 'code.aCase';
 
 
 /*
@@ -361,7 +361,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Case;
+	module.exports = aCase;
 }
 
 
