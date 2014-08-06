@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	Equals =
-		Code.Equals =
+	anEquals =
+		Code.anEquals =
 			{
 				prototype :
 					prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new Equals object.
+| Creates a new anEquals object.
 */
-Equals.create =
+anEquals.create =
 	prototype.create =
 		function(
 			// free strings
@@ -90,7 +90,7 @@ Equals.create =
 			v_left,
 			v_right;
 
-		if( this !== Equals )
+		if( this !== anEquals )
 		{
 			inherit = this;
 
@@ -173,13 +173,13 @@ Equals.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Equals';
+prototype.reflect = 'anEquals';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.equals';
+prototype.reflex = 'code.anEquals';
 
 
 /*
@@ -221,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Equals;
+	module.exports = anEquals;
 }
 
 

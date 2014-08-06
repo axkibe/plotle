@@ -91,7 +91,8 @@ aDot.prototype.aDot =
 		member // member string
 	)
 {
-	// checking if member is a string is done in 'aDot'
+	// checks if member is a string is done in 'aDot'
+
 	return (
 		aDot.create(
 			'expr',

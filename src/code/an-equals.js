@@ -6,7 +6,7 @@
 
 
 /*
-| Capsule
+| Capsule.
 */
 (function() {
 'use strict';
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Equals',
+			'anEquals',
 		unit :
 			'Code',
 		attributes :
@@ -45,8 +45,10 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+/*
+| Export.
+*/
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

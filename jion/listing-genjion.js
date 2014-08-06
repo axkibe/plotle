@@ -21,8 +21,8 @@ module.exports =
 			'src/code/a-delete.js',
 			'src/code/a-differs.js',
 			'src/code/a-dot.js',
+			'src/code/an-equals.js',
 
-			'src/code/equals.js',
 			'src/code/fail.js',
 			'src/code/file.js',
 			'src/code/for-in.js',

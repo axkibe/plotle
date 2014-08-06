@@ -64,7 +64,7 @@ precTable =
 			9,
 		'aDot' :
 			1,
-		'Equals' :
+		'anEquals' :
 			9,
 		'Func' :
 			-1,
@@ -595,7 +595,7 @@ formatMember =
 | Formats an equality check.
 */
 var
-formatEquals =
+formatAnEquals =
 	function(
 		context,
 		expr
@@ -606,7 +606,7 @@ formatEquals =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.equals' )
+/**/	if( expr.reflex !== 'code.anEquals' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -616,7 +616,7 @@ formatEquals =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.Equals
+			precTable.anEquals
 		)
 		+ context.sep
 		+ context.tab
@@ -625,7 +625,7 @@ formatEquals =
 		+ formatExpression(
 			context,
 			expr.right,
-			precTable.Equals
+			precTable.anEquals
 		);
 
 	return text;
@@ -2589,8 +2589,8 @@ exprFormatter =
 			formatADiffers,
 		'aDot' :
 			formatADot,
-		'Equals' :
-			formatEquals,
+		'anEquals' :
+			formatAnEquals,
 		'Func' :
 			formatFunc,
 		'GreaterThan' :

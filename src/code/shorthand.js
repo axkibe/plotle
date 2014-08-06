@@ -53,10 +53,10 @@ Code =
 			require( '../code/a-differs' ),
 		aDot :
 			require( '../code/a-dot' ),
+		anEquals :
+			require( '../code/an-equals' ),
 		If :
 			require( '../code/if' ),
-		Equals :
-			require( '../code/equals' ),
 		File :
 			require( '../code/file' ),
 		Func :
@@ -304,14 +304,14 @@ ShortHand.aDot =
 /*
 | Shorthand for creating equals.
 */
-ShortHand.Equals =
+ShortHand.anEquals =
 	function(
 		left,
 		right
 	)
 {
 	return (
-		Code.Equals.create(
+		Code.anEquals.create(
 			'left',
 				left,
 			'right',

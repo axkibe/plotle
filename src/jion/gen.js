@@ -70,8 +70,8 @@ var
 		Shorthand.aDelete,
 	aDiffers =
 		Shorthand.aDiffers,
-	Equals =
-		Shorthand.Equals,
+	anEquals =
+		Shorthand.anEquals,
 	False =
 		Shorthand.False( ),
 	File =
@@ -1282,7 +1282,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.If(
-					Equals(
+					anEquals(
 						Var( 'twig' ).Member(
 							Var( 'key' )
 						),
@@ -1435,7 +1435,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.If(
-					Equals(
+					anEquals(
 						Var( 'twig' )
 						.Member(
 							Var( 'arg' )
@@ -1549,7 +1549,7 @@ Gen.prototype.genCreatorDefaults =
 			block =
 				block
 				.If(
-					Equals( attr.v, Undefined ),
+					anEquals( attr.v, Undefined ),
 					aBlock( )
 					.anAssign( attr.v, attr.defaultValue )
 				);
@@ -1604,7 +1604,7 @@ Gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Equals( attr.v, Undefined ),
+					anEquals( attr.v, Undefined ),
 					aBlock( )
 					.Fail( 'undefined attribute ' + name )
 				);
@@ -1614,7 +1614,7 @@ Gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.If(
-					Equals( attr.v, aNull ),
+					anEquals( attr.v, aNull ),
 					aBlock( )
 					.Fail( 'attribute ' + name + ' must not be null.' )
 				);
@@ -1981,7 +1981,7 @@ Gen.prototype.genCreatorUnchanged =
 			cond =
 				anAnd(
 					cond,
-					Equals( attr.v, aNull )
+					anEquals( attr.v, aNull )
 				);
 
 			continue;
@@ -2001,7 +2001,7 @@ Gen.prototype.genCreatorUnchanged =
 			case 'String' :
 
 				ceq =
-					Equals(
+					anEquals(
 						attr.v,
 						Var( 'inherit' ).aDot( attr.assign )
 					);
@@ -2022,7 +2022,7 @@ Gen.prototype.genCreatorUnchanged =
 				{
 					ceq =
 						Or(
-							Equals(
+							anEquals(
 								attr.v,
 								Var( 'inherit' ).aDot( attr.assign )
 							),
@@ -2932,7 +2932,7 @@ Gen.prototype.genAttributeEquals =
 		case 'String' :
 
 			ceq =
-				Equals(
+				anEquals(
 					le,
 					re
 				);
@@ -2945,13 +2945,13 @@ Gen.prototype.genAttributeEquals =
 			{
 				ceq =
 					// FIXME, misses equals call
-					Equals( le, re );
+					anEquals( le, re );
 			}
 			else
 			{
 				ceq =
 					Or(
-						Equals( le, re ),
+						anEquals( le, re ),
 						anAnd(
 							aDiffers( le, aNull ),
 							le.aDot( 'equals' ),
@@ -2999,7 +2999,7 @@ Gen.prototype.genEquals =
 					Func(
 						aBlock( )
 						.Return(
-							Equals(
+							anEquals(
 								This,
 								Var( 'obj' )
 							)
@@ -3031,7 +3031,7 @@ Gen.prototype.genEquals =
 	block =
 		aBlock( )
 		.If(
-			Equals(
+			anEquals(
 				This,
 				Var( 'obj' )
 			),
@@ -3052,11 +3052,11 @@ Gen.prototype.genEquals =
 	{
 		cond =
 			anAnd(
-				Equals(
+				anEquals(
 					This.aDot( 'tree' ),
 					Var( 'obj' ).aDot( 'tree' )
 				),
-				Equals(
+				anEquals(
 					This.aDot( 'ranks' ),
 					Var( 'obj' ).aDot( 'ranks' )
 				)
@@ -3150,7 +3150,7 @@ Gen.prototype.genAlike =
 		block =
 			aBlock( )
 			.If(
-				Equals(
+				anEquals(
 					This,
 					Var( 'obj' )
 				),
@@ -3171,11 +3171,11 @@ Gen.prototype.genAlike =
 		{
 			cond =
 				anAnd(
-					Equals(
+					anEquals(
 						This.aDot( 'tree' ),
 						Var( 'obj' ).aDot( 'tree' )
 					),
-					Equals(
+					anEquals(
 						This.aDot( 'ranks' ),
 						Var( 'obj' ).aDot( 'ranks' )
 					)

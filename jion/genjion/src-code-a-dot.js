@@ -70,8 +70,8 @@ var
 | Jion
 */
 var
-	Dot =
-		Code.Dot =
+	aDot =
+		Code.aDot =
 			{
 				prototype :
 					prototype
@@ -79,9 +79,9 @@ var
 
 
 /*
-| Creates a new Dot object.
+| Creates a new aDot object.
 */
-Dot.create =
+aDot.create =
 	prototype.create =
 		function(
 			// free strings
@@ -92,7 +92,7 @@ Dot.create =
 			v_expr,
 			v_member;
 
-		if( this !== Dot )
+		if( this !== aDot )
 		{
 			inherit = this;
 
@@ -190,13 +190,13 @@ Dot.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Dot';
+prototype.reflect = 'aDot';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.dot';
+prototype.reflex = 'code.aDot';
 
 
 /*
@@ -238,7 +238,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Dot;
+	module.exports = aDot;
 }
 
 
