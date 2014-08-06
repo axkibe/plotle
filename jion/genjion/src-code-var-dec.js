@@ -69,120 +69,120 @@ var
 */
 var
 	VarDec =
-	Code.VarDec =
-		{
-			prototype :
-				prototype
-		};
+		Code.VarDec =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new VarDec object.
 */
 VarDec.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_assign,
-		v_name;
-
-	if( this !== VarDec )
-	{
-		inherit = this;
-
-		v_assign = this.assign;
-
-		v_name = this.name;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_assign,
+			v_name;
 
-		switch( arguments[ a ] )
+		if( this !== VarDec )
 		{
-			case 'assign' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_assign = arg;
-				}
+			v_assign = this.assign;
 
-				break;
-
-			case 'name' :
-
-				if( arg !== undefined )
-				{
-					v_name = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_name = this.name;
 		}
-	}
 
-	if( v_assign === undefined )
-	{
-		v_assign = null;
-	}
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_assign === undefined )
+			switch( arguments[ a ] )
+			{
+				case 'assign' :
+
+					if( arg !== undefined )
+					{
+						v_assign = arg;
+					}
+
+					break;
+
+				case 'name' :
+
+					if( arg !== undefined )
+					{
+						v_name = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+		if( v_assign === undefined )
+		{
+			v_assign = null;
+		}
+
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( 'undefined attribute assign' );
-/**/	}
+/**/		if( v_assign === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute assign' );
+/**/		}
 /**/
-/**/	if( v_name === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute name' );
-/**/	}
+/**/		if( v_name === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute name' );
+/**/		}
 /**/
-/**/	if( v_name === null )
-/**/	{
-/**/		throw new Error( 'attribute name must not be null.' );
-/**/	}
+/**/		if( v_name === null )
+/**/		{
+/**/			throw new Error( 'attribute name must not be null.' );
+/**/		}
 /**/
-/**/	if(
-/**/		typeof( v_name ) !== 'string'
-/**/		&&
-/**/		!( v_name instanceof String )
-/**/	)
-/**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		if(
+/**/			typeof( v_name ) !== 'string'
+/**/			&&
+/**/			!( v_name instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
 /**/	}
-/**/}
 
-	if(
-		inherit
-		&&
-		v_assign === inherit.assign
-		&&
-		v_name === inherit.name
-	)
-	{
-		return inherit;
-	}
+		if(
+			inherit
+			&&
+			v_assign === inherit.assign
+			&&
+			v_name === inherit.name
+		)
+		{
+			return inherit;
+		}
 
-	return new Constructor( v_assign, v_name );
-};
+		return new Constructor( v_assign, v_name );
+	};
 
 
 /*

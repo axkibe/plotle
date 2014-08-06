@@ -22,7 +22,7 @@ if( JION )
 {
 	return {
 		name :
-			'Block',
+			'aBlock',
 		unit :
 			'Code',
 		node :
@@ -38,7 +38,7 @@ if( JION )
 | Node imports.
 */
 var
-	Block =
+	aBlock =
 		require( '../jion/this' )( module ),
 	Code =
 		{
@@ -73,7 +73,7 @@ var
 /*
 | Returns the block with a statement appended;
 */
-Block.prototype.Append =
+aBlock.prototype.Append =
 	function(
 		statement
 	)
@@ -90,7 +90,7 @@ Block.prototype.Append =
 /*
 | Returns the block with an assignment appended.
 */
-Block.prototype.anAssign =
+aBlock.prototype.anAssign =
 	function(
 		left,
 		right
@@ -112,7 +112,7 @@ Block.prototype.anAssign =
 /*
 | Recreates the block with a call appended.
 */
-Block.prototype.Call =
+aBlock.prototype.Call =
 	function(
 		func
 		// args
@@ -141,7 +141,7 @@ Block.prototype.Call =
 /*
 | Returns the block with a check appended.
 */
-Block.prototype.Check =
+aBlock.prototype.Check =
 	function(
 		block
 	)
@@ -160,7 +160,7 @@ Block.prototype.Check =
 /*
 | Returns the block with a comment appended.
 */
-Block.prototype.Comment =
+aBlock.prototype.Comment =
 	function(
 		header
 	)
@@ -182,7 +182,7 @@ Block.prototype.Comment =
 /*
 | Returns the block with an if appended.
 */
-Block.prototype.If =
+aBlock.prototype.If =
 	function(
 		condition,
 		then,
@@ -207,7 +207,7 @@ Block.prototype.If =
 /*
 | Returns the block with a error throwing appended.
 */
-Block.prototype.Fail =
+aBlock.prototype.Fail =
 	function(
 		message
 	)
@@ -240,7 +240,7 @@ Block.prototype.Fail =
 /*
 | Returns the block with a classical for loop appended.
 */
-Block.prototype.For =
+aBlock.prototype.For =
 	function(
 		init,
 		condition,
@@ -268,7 +268,7 @@ Block.prototype.For =
 /*
 | Returns the block with a for-in loop appended.
 */
-Block.prototype.ForIn =
+aBlock.prototype.ForIn =
 	function(
 		variable,
 		object,
@@ -292,7 +292,7 @@ Block.prototype.ForIn =
 /*
 | Shorthand for creating new calls.
 */
-Block.prototype.New =
+aBlock.prototype.New =
 	function(
 		call
 	)
@@ -311,7 +311,7 @@ Block.prototype.New =
 /*
 | Returns the block with a term appended.
 */
-Block.prototype.Return =
+aBlock.prototype.Return =
 	function(
 		expr
 	)
@@ -340,7 +340,7 @@ Block.prototype.Return =
 /*
 | Returns the block with a variable decleration appended.
 */
-Block.prototype.VarDec =
+aBlock.prototype.VarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
@@ -362,8 +362,7 @@ Block.prototype.VarDec =
 /*
 | Node export.
 */
-module.exports =
-	Block;
+module.exports = aBlock;
 
 
 } )( );

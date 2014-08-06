@@ -66,88 +66,88 @@ var
 */
 var
 	NumberLiteral =
-	Code.NumberLiteral =
-		{
-			prototype :
-				prototype
-		};
+		Code.NumberLiteral =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new NumberLiteral object.
 */
 NumberLiteral.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_number;
-
-	if( this !== NumberLiteral )
-	{
-		inherit = this;
-
-		v_number = this.number;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_number;
 
-		switch( arguments[ a ] )
+		if( this !== NumberLiteral )
 		{
-			case 'number' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_number = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_number = this.number;
 		}
-	}
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_number === undefined )
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
+
+			switch( arguments[ a ] )
+			{
+				case 'number' :
+
+					if( arg !== undefined )
+					{
+						v_number = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( 'undefined attribute number' );
-/**/	}
+/**/		if( v_number === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute number' );
+/**/		}
 /**/
-/**/	if( v_number === null )
-/**/	{
-/**/		throw new Error( 'attribute number must not be null.' );
-/**/	}
+/**/		if( v_number === null )
+/**/		{
+/**/			throw new Error( 'attribute number must not be null.' );
+/**/		}
 /**/
-/**/	if( typeof( v_number ) !== 'number' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		if( typeof( v_number ) !== 'number' )
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
 /**/	}
-/**/}
 
-	if( inherit && v_number === inherit.number )
-	{
-		return inherit;
-	}
+		if( inherit && v_number === inherit.number )
+		{
+			return inherit;
+		}
 
-	return new Constructor( v_number );
-};
+		return new Constructor( v_number );
+	};
 
 
 /*

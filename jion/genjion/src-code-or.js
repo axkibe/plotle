@@ -69,105 +69,105 @@ var
 */
 var
 	Or =
-	Code.Or =
-		{
-			prototype :
-				prototype
-		};
+		Code.Or =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new Or object.
 */
 Or.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_left,
-		v_right;
-
-	if( this !== Or )
-	{
-		inherit = this;
-
-		v_left = this.left;
-
-		v_right = this.right;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_left,
+			v_right;
 
-		switch( arguments[ a ] )
+		if( this !== Or )
 		{
-			case 'left' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_left = arg;
-				}
+			v_left = this.left;
 
-				break;
-
-			case 'right' :
-
-				if( arg !== undefined )
-				{
-					v_right = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_right = this.right;
 		}
-	}
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_left === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute left' );
-/**/	}
-/**/
-/**/	if( v_left === null )
-/**/	{
-/**/		throw new Error( 'attribute left must not be null.' );
-/**/	}
-/**/
-/**/	if( v_right === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute right' );
-/**/	}
-/**/
-/**/	if( v_right === null )
-/**/	{
-/**/		throw new Error( 'attribute right must not be null.' );
-/**/	}
-/**/}
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
 
-	if( inherit && v_left === inherit.left && v_right === inherit.right )
-	{
-		return inherit;
-	}
+			switch( arguments[ a ] )
+			{
+				case 'left' :
 
-	return new Constructor( v_left, v_right );
-};
+					if( arg !== undefined )
+					{
+						v_left = arg;
+					}
+
+					break;
+
+				case 'right' :
+
+					if( arg !== undefined )
+					{
+						v_right = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( v_left === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute left' );
+/**/		}
+/**/
+/**/		if( v_left === null )
+/**/		{
+/**/			throw new Error( 'attribute left must not be null.' );
+/**/		}
+/**/
+/**/		if( v_right === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute right' );
+/**/		}
+/**/
+/**/		if( v_right === null )
+/**/		{
+/**/			throw new Error( 'attribute right must not be null.' );
+/**/		}
+/**/	}
+
+		if( inherit && v_left === inherit.left && v_right === inherit.right )
+		{
+			return inherit;
+		}
+
+		return new Constructor( v_left, v_right );
+	};
 
 
 /*

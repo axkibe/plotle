@@ -83,187 +83,187 @@ Context =
 | Creates a new Context object.
 */
 Context.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_check,
-		v_indent,
-		v_inline,
-		v_root;
-
-	if( this !== Context )
-	{
-		inherit = this;
-
-		v_check = this.check;
-
-		v_indent = this.indent;
-
-		v_inline = this.inline;
-
-		v_root = this.root;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_check,
+			v_indent,
+			v_inline,
+			v_root;
 
-		switch( arguments[ a ] )
+		if( this !== Context )
 		{
-			case 'check' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_check = arg;
-				}
+			v_check = this.check;
 
-				break;
+			v_indent = this.indent;
 
-			case 'indent' :
+			v_inline = this.inline;
 
-				if( arg !== undefined )
-				{
-					v_indent = arg;
-				}
-
-				break;
-
-			case 'inline' :
-
-				if( arg !== undefined )
-				{
-					v_inline = arg;
-				}
-
-				break;
-
-			case 'root' :
-
-				if( arg !== undefined )
-				{
-					v_root = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_root = this.root;
 		}
-	}
 
-	if( v_check === undefined )
-	{
-		v_check = false;
-	}
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
 
-	if( v_indent === undefined )
-	{
-		v_indent = 0;
-	}
+			switch( arguments[ a ] )
+			{
+				case 'check' :
 
-	if( v_inline === undefined )
-	{
-		v_inline = false;
-	}
+					if( arg !== undefined )
+					{
+						v_check = arg;
+					}
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_check === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute check' );
-/**/	}
-/**/
-/**/	if( v_check === null )
-/**/	{
-/**/		throw new Error( 'attribute check must not be null.' );
-/**/	}
-/**/
-/**/	if( typeof( v_check ) !== 'boolean' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
-/**/	}
-/**/
-/**/	if( v_indent === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute indent' );
-/**/	}
-/**/
-/**/	if( v_indent === null )
-/**/	{
-/**/		throw new Error( 'attribute indent must not be null.' );
-/**/	}
-/**/
-/**/	if(
-/**/		typeof( v_indent ) !== 'number'
-/**/		||
-/**/		Math.floor( v_indent ) !== v_indent
-/**/	)
-/**/	{
-/**/		throw new Error( 'type mismatch' );
-/**/	}
-/**/
-/**/	if( v_inline === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute inline' );
-/**/	}
-/**/
-/**/	if( v_inline === null )
-/**/	{
-/**/		throw new Error( 'attribute inline must not be null.' );
-/**/	}
-/**/
-/**/	if( typeof( v_inline ) !== 'boolean' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
-/**/	}
-/**/
-/**/	if( v_root === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute root' );
-/**/	}
-/**/
-/**/	if( v_root === null )
-/**/	{
-/**/		throw new Error( 'attribute root must not be null.' );
-/**/	}
-/**/
-/**/	if( typeof( v_root ) !== 'boolean' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
-/**/	}
-/**/}
+					break;
 
-	if(
-		inherit
-		&&
-		v_check === inherit.check
-		&&
-		v_indent === inherit.indent
-		&&
-		v_inline === inherit.inline
-		&&
-		v_root === inherit.root
-	)
-	{
-		return inherit;
-	}
+				case 'indent' :
 
-	return new Constructor( v_check, v_indent, v_inline, v_root );
-};
+					if( arg !== undefined )
+					{
+						v_indent = arg;
+					}
+
+					break;
+
+				case 'inline' :
+
+					if( arg !== undefined )
+					{
+						v_inline = arg;
+					}
+
+					break;
+
+				case 'root' :
+
+					if( arg !== undefined )
+					{
+						v_root = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+		if( v_check === undefined )
+		{
+			v_check = false;
+		}
+
+		if( v_indent === undefined )
+		{
+			v_indent = 0;
+		}
+
+		if( v_inline === undefined )
+		{
+			v_inline = false;
+		}
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( v_check === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute check' );
+/**/		}
+/**/
+/**/		if( v_check === null )
+/**/		{
+/**/			throw new Error( 'attribute check must not be null.' );
+/**/		}
+/**/
+/**/		if( typeof( v_check ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
+/**/
+/**/		if( v_indent === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute indent' );
+/**/		}
+/**/
+/**/		if( v_indent === null )
+/**/		{
+/**/			throw new Error( 'attribute indent must not be null.' );
+/**/		}
+/**/
+/**/		if(
+/**/			typeof( v_indent ) !== 'number'
+/**/			||
+/**/			Math.floor( v_indent ) !== v_indent
+/**/		)
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
+/**/
+/**/		if( v_inline === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute inline' );
+/**/		}
+/**/
+/**/		if( v_inline === null )
+/**/		{
+/**/			throw new Error( 'attribute inline must not be null.' );
+/**/		}
+/**/
+/**/		if( typeof( v_inline ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
+/**/
+/**/		if( v_root === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute root' );
+/**/		}
+/**/
+/**/		if( v_root === null )
+/**/		{
+/**/			throw new Error( 'attribute root must not be null.' );
+/**/		}
+/**/
+/**/		if( typeof( v_root ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
+/**/	}
+
+		if(
+			inherit
+			&&
+			v_check === inherit.check
+			&&
+			v_indent === inherit.indent
+			&&
+			v_inline === inherit.inline
+			&&
+			v_root === inherit.root
+		)
+		{
+			return inherit;
+		}
+
+		return new Constructor( v_check, v_indent, v_inline, v_root );
+	};
 
 
 /*

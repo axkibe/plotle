@@ -45,12 +45,9 @@ if( SERVER )
 var Constructor =
 	function(
 		twig, // twig
-		ranks, // twig ranks
-		v_block // the statement
+		ranks // twig ranks
 	)
 	{
-		this.block = v_block;
-
 		this.twig = twig;
 
 		this.ranks = ranks;
@@ -75,8 +72,8 @@ var
 | Jion
 */
 var
-	Case =
-		Code.Case =
+	aBlock =
+		Code.aBlock =
 			{
 				prototype :
 					prototype
@@ -84,9 +81,9 @@ var
 
 
 /*
-| Creates a new Case object.
+| Creates a new aBlock object.
 */
-Case.create =
+aBlock.create =
 	prototype.create =
 		function(
 			// free strings
@@ -98,10 +95,9 @@ Case.create =
 			rank,
 			ranks,
 			twig,
-			twigDup,
-			v_block;
+			twigDup;
 
-		if( this !== Case )
+		if( this !== aBlock )
 		{
 			inherit = this;
 
@@ -110,8 +106,6 @@ Case.create =
 			ranks = inherit.ranks;
 
 			twigDup = false;
-
-			v_block = this.block;
 		}
 		else
 		{
@@ -134,15 +128,6 @@ Case.create =
 
 			switch( arguments[ a ] )
 			{
-				case 'block' :
-
-					if( arg !== undefined )
-					{
-						v_block = arg;
-					}
-
-					break;
-
 				case 'twig:add' :
 
 					if( !twigDup )
@@ -261,41 +246,27 @@ Case.create =
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( v_block === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute block' );
-/**/		}
-/**/
-/**/		if( v_block === null )
-/**/		{
-/**/			throw new Error( 'attribute block must not be null.' );
-/**/		}
-/**/
-/**/		if( v_block.reflect !== 'aBlock' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
 /**/	}
 
-		if( inherit && !twigDup && v_block.equals( inherit.block ) )
+		if( inherit && !twigDup )
 		{
 			return inherit;
 		}
 
-		return new Constructor( twig, ranks, v_block );
+		return new Constructor( twig, ranks );
 	};
 
 
 /*
 | Reflection.
 */
-prototype.reflect = 'Case';
+prototype.reflect = 'aBlock';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.case';
+prototype.reflex = 'code.aBlock';
 
 
 /*
@@ -346,13 +317,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return (
-		this.tree === obj.tree
-		&&
-		this.ranks === obj.ranks
-		&&
-		this.block === obj.block
-	);
+	return this.tree === obj.tree && this.ranks === obj.ranks;
 };
 
 
@@ -361,7 +326,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Case;
+	module.exports = aBlock;
 }
 
 

@@ -72,171 +72,171 @@ var
 */
 var
 	File =
-	Code.File =
-		{
-			prototype :
-				prototype
-		};
+		Code.File =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new File object.
 */
 File.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_capsule,
-		v_header,
-		v_preamble;
-
-	if( this !== File )
-	{
-		inherit = this;
-
-		v_capsule = this.capsule;
-
-		v_header = this.header;
-
-		v_preamble = this.preamble;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_capsule,
+			v_header,
+			v_preamble;
 
-		switch( arguments[ a ] )
+		if( this !== File )
 		{
-			case 'capsule' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_capsule = arg;
-				}
+			v_capsule = this.capsule;
 
-				break;
+			v_header = this.header;
 
-			case 'header' :
-
-				if( arg !== undefined )
-				{
-					v_header = arg;
-				}
-
-				break;
-
-			case 'preamble' :
-
-				if( arg !== undefined )
-				{
-					v_preamble = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_preamble = this.preamble;
 		}
-	}
 
-	if( v_capsule === undefined )
-	{
-		v_capsule = null;
-	}
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
 
-	if( v_header === undefined )
-	{
-		v_header = null;
-	}
+			switch( arguments[ a ] )
+			{
+				case 'capsule' :
 
-	if( v_preamble === undefined )
-	{
-		v_preamble = null;
-	}
+					if( arg !== undefined )
+					{
+						v_capsule = arg;
+					}
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_capsule === undefined )
+					break;
+
+				case 'header' :
+
+					if( arg !== undefined )
+					{
+						v_header = arg;
+					}
+
+					break;
+
+				case 'preamble' :
+
+					if( arg !== undefined )
+					{
+						v_preamble = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+		if( v_capsule === undefined )
+		{
+			v_capsule = null;
+		}
+
+		if( v_header === undefined )
+		{
+			v_header = null;
+		}
+
+		if( v_preamble === undefined )
+		{
+			v_preamble = null;
+		}
+
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( 'undefined attribute capsule' );
-/**/	}
-/**/
-/**/	if( v_capsule !== null )
-/**/	{
-/**/		if( v_capsule.reflect !== 'Block' )
+/**/		if( v_capsule === undefined )
 /**/		{
-/**/			throw new Error( 'type mismatch' );
+/**/			throw new Error( 'undefined attribute capsule' );
+/**/		}
+/**/
+/**/		if( v_capsule !== null )
+/**/		{
+/**/			if( v_capsule.reflect !== 'aBlock' )
+/**/			{
+/**/				throw new Error( 'type mismatch' );
+/**/			}
+/**/		}
+/**/
+/**/		if( v_header === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute header' );
+/**/		}
+/**/
+/**/		if( v_header !== null )
+/**/		{
+/**/			if( v_header.reflect !== 'Comment' )
+/**/			{
+/**/				throw new Error( 'type mismatch' );
+/**/			}
+/**/		}
+/**/
+/**/		if( v_preamble === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute preamble' );
+/**/		}
+/**/
+/**/		if( v_preamble !== null )
+/**/		{
+/**/			if( v_preamble.reflect !== 'aBlock' )
+/**/			{
+/**/				throw new Error( 'type mismatch' );
+/**/			}
 /**/		}
 /**/	}
-/**/
-/**/	if( v_header === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute header' );
-/**/	}
-/**/
-/**/	if( v_header !== null )
-/**/	{
-/**/		if( v_header.reflect !== 'Comment' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
-/**/	}
-/**/
-/**/	if( v_preamble === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute preamble' );
-/**/	}
-/**/
-/**/	if( v_preamble !== null )
-/**/	{
-/**/		if( v_preamble.reflect !== 'Block' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
-/**/	}
-/**/}
 
-	if(
-		inherit
-		&&
-		(
-			v_capsule === inherit.capsule
-			||
-			v_capsule && v_capsule.equals( inherit.capsule )
+		if(
+			inherit
+			&&
+			(
+				v_capsule === inherit.capsule
+				||
+				v_capsule && v_capsule.equals( inherit.capsule )
+			)
+			&&
+			(
+				v_header === inherit.header
+				||
+				v_header && v_header.equals( inherit.header )
+			)
+			&&
+			(
+				v_preamble === inherit.preamble
+				||
+				v_preamble && v_preamble.equals( inherit.preamble )
+			)
 		)
-		&&
-		(
-			v_header === inherit.header
-			||
-			v_header && v_header.equals( inherit.header )
-		)
-		&&
-		(
-			v_preamble === inherit.preamble
-			||
-			v_preamble && v_preamble.equals( inherit.preamble )
-		)
-	)
-	{
-		return inherit;
-	}
+		{
+			return inherit;
+		}
 
-	return new Constructor( v_capsule, v_header, v_preamble );
-};
+		return new Constructor( v_capsule, v_header, v_preamble );
+	};
 
 
 /*

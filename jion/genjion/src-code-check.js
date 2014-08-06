@@ -66,88 +66,88 @@ var
 */
 var
 	Check =
-	Code.Check =
-		{
-			prototype :
-				prototype
-		};
+		Code.Check =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new Check object.
 */
 Check.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_block;
-
-	if( this !== Check )
-	{
-		inherit = this;
-
-		v_block = this.block;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_block;
 
-		switch( arguments[ a ] )
+		if( this !== Check )
 		{
-			case 'block' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_block = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_block = this.block;
 		}
-	}
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_block === undefined )
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
+
+			switch( arguments[ a ] )
+			{
+				case 'block' :
+
+					if( arg !== undefined )
+					{
+						v_block = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( 'undefined attribute block' );
-/**/	}
+/**/		if( v_block === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute block' );
+/**/		}
 /**/
-/**/	if( v_block === null )
-/**/	{
-/**/		throw new Error( 'attribute block must not be null.' );
-/**/	}
+/**/		if( v_block === null )
+/**/		{
+/**/			throw new Error( 'attribute block must not be null.' );
+/**/		}
 /**/
-/**/	if( v_block.reflect !== 'Block' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		if( v_block.reflect !== 'aBlock' )
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
 /**/	}
-/**/}
 
-	if( inherit && v_block.equals( inherit.block ) )
-	{
-		return inherit;
-	}
+		if( inherit && v_block.equals( inherit.block ) )
+		{
+			return inherit;
+		}
 
-	return new Constructor( v_block );
-};
+		return new Constructor( v_block );
+	};
 
 
 /*

@@ -66,88 +66,88 @@ var
 */
 var
 	BooleanLiteral =
-	Code.BooleanLiteral =
-		{
-			prototype :
-				prototype
-		};
+		Code.BooleanLiteral =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new BooleanLiteral object.
 */
 BooleanLiteral.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_boolean;
-
-	if( this !== BooleanLiteral )
-	{
-		inherit = this;
-
-		v_boolean = this.boolean;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_boolean;
 
-		switch( arguments[ a ] )
+		if( this !== BooleanLiteral )
 		{
-			case 'boolean' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_boolean = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_boolean = this.boolean;
 		}
-	}
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_boolean === undefined )
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
+
+			switch( arguments[ a ] )
+			{
+				case 'boolean' :
+
+					if( arg !== undefined )
+					{
+						v_boolean = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( 'undefined attribute boolean' );
-/**/	}
+/**/		if( v_boolean === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute boolean' );
+/**/		}
 /**/
-/**/	if( v_boolean === null )
-/**/	{
-/**/		throw new Error( 'attribute boolean must not be null.' );
-/**/	}
+/**/		if( v_boolean === null )
+/**/		{
+/**/			throw new Error( 'attribute boolean must not be null.' );
+/**/		}
 /**/
-/**/	if( typeof( v_boolean ) !== 'boolean' )
-/**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		if( typeof( v_boolean ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
 /**/	}
-/**/}
 
-	if( inherit && v_boolean === inherit.boolean )
-	{
-		return inherit;
-	}
+		if( inherit && v_boolean === inherit.boolean )
+		{
+			return inherit;
+		}
 
-	return new Constructor( v_boolean );
-};
+		return new Constructor( v_boolean );
+	};
 
 
 /*

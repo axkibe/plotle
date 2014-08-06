@@ -66,83 +66,83 @@ var
 */
 var
 	Fail =
-	Code.Fail =
-		{
-			prototype :
-				prototype
-		};
+		Code.Fail =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new Fail object.
 */
 Fail.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_message;
-
-	if( this !== Fail )
-	{
-		inherit = this;
-
-		v_message = this.message;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_message;
 
-		switch( arguments[ a ] )
+		if( this !== Fail )
 		{
-			case 'message' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_message = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_message = this.message;
 		}
-	}
 
-	if( v_message === undefined )
-	{
-		v_message = null;
-	}
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_message === undefined )
+			switch( arguments[ a ] )
+			{
+				case 'message' :
+
+					if( arg !== undefined )
+					{
+						v_message = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+		if( v_message === undefined )
+		{
+			v_message = null;
+		}
+
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( 'undefined attribute message' );
+/**/		if( v_message === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute message' );
+/**/		}
 /**/	}
-/**/}
 
-	if( inherit && v_message === inherit.message )
-	{
-		return inherit;
-	}
+		if( inherit && v_message === inherit.message )
+		{
+			return inherit;
+		}
 
-	return new Constructor( v_message );
-};
+		return new Constructor( v_message );
+	};
 
 
 /*

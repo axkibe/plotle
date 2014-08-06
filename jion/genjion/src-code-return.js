@@ -66,83 +66,83 @@ var
 */
 var
 	Return =
-	Code.Return =
-		{
-			prototype :
-				prototype
-		};
+		Code.Return =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new Return object.
 */
 Return.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_expr;
-
-	if( this !== Return )
-	{
-		inherit = this;
-
-		v_expr = this.expr;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_expr;
 
-		switch( arguments[ a ] )
+		if( this !== Return )
 		{
-			case 'expr' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_expr = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_expr = this.expr;
 		}
-	}
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_expr === undefined )
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
+
+			switch( arguments[ a ] )
+			{
+				case 'expr' :
+
+					if( arg !== undefined )
+					{
+						v_expr = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( 'undefined attribute expr' );
-/**/	}
+/**/		if( v_expr === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute expr' );
+/**/		}
 /**/
-/**/	if( v_expr === null )
-/**/	{
-/**/		throw new Error( 'attribute expr must not be null.' );
+/**/		if( v_expr === null )
+/**/		{
+/**/			throw new Error( 'attribute expr must not be null.' );
+/**/		}
 /**/	}
-/**/}
 
-	if( inherit && v_expr === inherit.expr )
-	{
-		return inherit;
-	}
+		if( inherit && v_expr === inherit.expr )
+		{
+			return inherit;
+		}
 
-	return new Constructor( v_expr );
-};
+		return new Constructor( v_expr );
+	};
 
 
 /*

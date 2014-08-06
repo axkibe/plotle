@@ -72,135 +72,135 @@ var
 */
 var
 	Condition =
-	Code.Condition =
-		{
-			prototype :
-				prototype
-		};
+		Code.Condition =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new Condition object.
 */
 Condition.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_condition,
-		v_elsewise,
-		v_then;
-
-	if( this !== Condition )
-	{
-		inherit = this;
-
-		v_condition = this.condition;
-
-		v_elsewise = this.elsewise;
-
-		v_then = this.then;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_condition,
+			v_elsewise,
+			v_then;
 
-		switch( arguments[ a ] )
+		if( this !== Condition )
 		{
-			case 'condition' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_condition = arg;
-				}
+			v_condition = this.condition;
 
-				break;
+			v_elsewise = this.elsewise;
 
-			case 'elsewise' :
-
-				if( arg !== undefined )
-				{
-					v_elsewise = arg;
-				}
-
-				break;
-
-			case 'then' :
-
-				if( arg !== undefined )
-				{
-					v_then = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_then = this.then;
 		}
-	}
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_condition === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute condition' );
-/**/	}
-/**/
-/**/	if( v_condition === null )
-/**/	{
-/**/		throw new Error( 'attribute condition must not be null.' );
-/**/	}
-/**/
-/**/	if( v_elsewise === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute elsewise' );
-/**/	}
-/**/
-/**/	if( v_elsewise === null )
-/**/	{
-/**/		throw new Error( 'attribute elsewise must not be null.' );
-/**/	}
-/**/
-/**/	if( v_then === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute then' );
-/**/	}
-/**/
-/**/	if( v_then === null )
-/**/	{
-/**/		throw new Error( 'attribute then must not be null.' );
-/**/	}
-/**/}
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
 
-	if(
-		inherit
-		&&
-		v_condition === inherit.condition
-		&&
-		v_elsewise === inherit.elsewise
-		&&
-		v_then === inherit.then
-	)
-	{
-		return inherit;
-	}
+			switch( arguments[ a ] )
+			{
+				case 'condition' :
 
-	return new Constructor( v_condition, v_elsewise, v_then );
-};
+					if( arg !== undefined )
+					{
+						v_condition = arg;
+					}
+
+					break;
+
+				case 'elsewise' :
+
+					if( arg !== undefined )
+					{
+						v_elsewise = arg;
+					}
+
+					break;
+
+				case 'then' :
+
+					if( arg !== undefined )
+					{
+						v_then = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( v_condition === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute condition' );
+/**/		}
+/**/
+/**/		if( v_condition === null )
+/**/		{
+/**/			throw new Error( 'attribute condition must not be null.' );
+/**/		}
+/**/
+/**/		if( v_elsewise === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute elsewise' );
+/**/		}
+/**/
+/**/		if( v_elsewise === null )
+/**/		{
+/**/			throw new Error( 'attribute elsewise must not be null.' );
+/**/		}
+/**/
+/**/		if( v_then === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute then' );
+/**/		}
+/**/
+/**/		if( v_then === null )
+/**/		{
+/**/			throw new Error( 'attribute then must not be null.' );
+/**/		}
+/**/	}
+
+		if(
+			inherit
+			&&
+			v_condition === inherit.condition
+			&&
+			v_elsewise === inherit.elsewise
+			&&
+			v_then === inherit.then
+		)
+		{
+			return inherit;
+		}
+
+		return new Constructor( v_condition, v_elsewise, v_then );
+	};
 
 
 /*

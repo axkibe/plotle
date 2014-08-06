@@ -33,8 +33,8 @@ Code =
 			require( '../code/an-array-literal' ),
 		anAssign :
 			require( '../code/an-assign' ),
-		Block :
-			require( '../code/block' ),
+		aBlock :
+			require( '../code/a-block' ),
 		BooleanLiteral :
 			require( '../code/boolean-literal' ),
 		Call :
@@ -184,10 +184,10 @@ ShortHand.anAssign =
 /*
 | Shorthand for creating blocks.
 */
-ShortHand.Block =
+ShortHand.aBlock =
 	function( )
 {
-	return Code.Block.create( );
+	return Code.aBlock.create( );
 };
 
 

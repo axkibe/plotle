@@ -44,10 +44,13 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		v_expr // the expression to delete
+		v_left, // left-hand side
+		v_right // right-hand side
 	)
 	{
-		this.expr = v_expr;
+		this.left = v_left;
+
+		this.right = v_right;
 
 		Jools.immute( this );
 	};
@@ -65,8 +68,8 @@ var
 | Jion
 */
 var
-	Delete =
-		Code.Delete =
+	anAssign =
+		Code.anAssign =
 			{
 				prototype :
 					prototype
@@ -74,9 +77,9 @@ var
 
 
 /*
-| Creates a new Delete object.
+| Creates a new anAssign object.
 */
-Delete.create =
+anAssign.create =
 	prototype.create =
 		function(
 			// free strings
@@ -84,13 +87,16 @@ Delete.create =
 	{
 		var
 			inherit,
-			v_expr;
+			v_left,
+			v_right;
 
-		if( this !== Delete )
+		if( this !== anAssign )
 		{
 			inherit = this;
 
-			v_expr = this.expr;
+			v_left = this.left;
+
+			v_right = this.right;
 		}
 
 		for(
@@ -105,11 +111,20 @@ Delete.create =
 
 			switch( arguments[ a ] )
 			{
-				case 'expr' :
+				case 'left' :
 
 					if( arg !== undefined )
 					{
-						v_expr = arg;
+						v_left = arg;
+					}
+
+					break;
+
+				case 'right' :
+
+					if( arg !== undefined )
+					{
+						v_right = arg;
 					}
 
 					break;
@@ -125,36 +140,46 @@ Delete.create =
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( v_expr === undefined )
+/**/		if( v_left === undefined )
 /**/		{
-/**/			throw new Error( 'undefined attribute expr' );
+/**/			throw new Error( 'undefined attribute left' );
 /**/		}
 /**/
-/**/		if( v_expr === null )
+/**/		if( v_left === null )
 /**/		{
-/**/			throw new Error( 'attribute expr must not be null.' );
+/**/			throw new Error( 'attribute left must not be null.' );
+/**/		}
+/**/
+/**/		if( v_right === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute right' );
+/**/		}
+/**/
+/**/		if( v_right === null )
+/**/		{
+/**/			throw new Error( 'attribute right must not be null.' );
 /**/		}
 /**/	}
 
-		if( inherit && v_expr === inherit.expr )
+		if( inherit && v_left === inherit.left && v_right === inherit.right )
 		{
 			return inherit;
 		}
 
-		return new Constructor( v_expr );
+		return new Constructor( v_left, v_right );
 	};
 
 
 /*
 | Reflection.
 */
-prototype.reflect = 'Delete';
+prototype.reflect = 'anAssign';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.delete';
+prototype.reflex = 'code.anAssign';
 
 
 /*
@@ -187,7 +212,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return this.expr === obj.expr;
+	return this.left === obj.left && this.right === obj.right;
 };
 
 
@@ -196,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Delete;
+	module.exports = anAssign;
 }
 
 

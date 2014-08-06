@@ -58,8 +58,8 @@ var
 		Shorthand.anArrayLiteral,
 	anAssign =
 		Shorthand.anAssign,
-	Block =
-		Shorthand.Block,
+	aBlock =
+		Shorthand.aBlock,
 	Call =
 		Shorthand.Call,
 	CommaList =
@@ -570,7 +570,7 @@ Gen.prototype.genNodeIncludes =
 		);
 
 	block =
-		Block( )
+		aBlock( )
 		.anAssign(
 			Var( 'JoobjProto' ),
 			Call(
@@ -677,7 +677,7 @@ Gen.prototype.genConstructor =
 	capsule =
 		capsule.Comment( 'Constructor.' );
 
-	block = Block( );
+	block = aBlock( );
 
 	// assigns the variables
 	for(
@@ -712,7 +712,7 @@ Gen.prototype.genConstructor =
 				block
 				.If(
 					Differs( attr.v, Undefined ),
-					Block( )
+					aBlock( )
 					.Append(
 						assign
 					)
@@ -1026,7 +1026,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		thisCheck,
 		name,
 		receiver =
-			Block( )
+			aBlock( )
 			.anAssign(
 				Var( 'inherit' ),
 				This
@@ -1089,7 +1089,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		thisCheck =
 			thisCheck
 			.Elsewise(
-				Block( )
+				aBlock( )
 				.anAssign(
 					Var( 'twig' ),
 					ObjLiteral( )
@@ -1131,7 +1131,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 	}
 
 	loop =
-		Block( )
+		aBlock( )
 		.VarDec(
 			'arg',
 			Var( 'arguments' )
@@ -1167,13 +1167,13 @@ Gen.prototype.genCreatorFreeStringsParser =
 			switchExpr
 			.Case(
 				StringLiteral( name  ),
-				Block( )
+				aBlock( )
 				.If(
 					Differs(
 						Var( 'arg' ),
 						Undefined
 					),
-					Block( )
+					aBlock( )
 					.anAssign(
 						attr.v,
 						Var( 'arg' )
@@ -1189,12 +1189,12 @@ Gen.prototype.genCreatorFreeStringsParser =
 			switchExpr
 			.Case(
 				StringLiteral( 'twig:add' ),
-				Block( )
+				aBlock( )
 				.If(
 					Not(
 						Var( 'twigDup' )
 					),
-					Block( )
+					aBlock( )
 					.anAssign(
 						Var( 'twig' ),
 						Call(
@@ -1234,7 +1234,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						),
 						Undefined
 					),
-					Block( )
+					aBlock( )
 					.Fail(
 						Plus(
 							StringLiteral( 'key "' ),
@@ -1257,10 +1257,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 			)
 			.Case(
 				StringLiteral( 'twig:set' ),
-				Block( )
+				aBlock( )
 				.If(
 					Not( Var( 'twigDup' ) ),
-					Block( )
+					aBlock( )
 					.anAssign(
 						Var( 'twig' ),
 						Call(
@@ -1300,7 +1300,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						),
 						Undefined
 					),
-					Block( )
+					aBlock( )
 					.Fail(
 						Plus(
 							StringLiteral( 'key "' ),
@@ -1319,10 +1319,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 			)
 			.Case(
 				StringLiteral( 'twig:insert' ),
-				Block( )
+				aBlock( )
 				.If(
 					Not( Var( 'twigDup' ) ),
-					Block( )
+					aBlock( )
 					.anAssign(
 						Var( 'twig' ),
 						Call(
@@ -1379,7 +1379,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						),
 						Undefined
 					),
-					Block( )
+					aBlock( )
 					.Fail(
 						Plus(
 							StringLiteral( 'key "' ),
@@ -1399,7 +1399,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 							Var( 'ranks' ).Dot( 'length' )
 						)
 					),
-					Block( )
+					aBlock( )
 					.Fail(
 						StringLiteral( 'invalid rank' )
 					)
@@ -1422,12 +1422,12 @@ Gen.prototype.genCreatorFreeStringsParser =
 			)
 			.Case(
 				StringLiteral( 'twig:remove' ),
-				Block( )
+				aBlock( )
 				.If(
 					Not(
 						Var( 'twigDup' )
 					),
-					Block( )
+					aBlock( )
 					.anAssign(
 						Var( 'twig' ),
 						Call(
@@ -1454,7 +1454,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						),
 						Undefined
 					),
-					Block( )
+					aBlock( )
 					.Fail(
 						Plus(
 							StringLiteral( 'key "' ),
@@ -1487,9 +1487,9 @@ Gen.prototype.genCreatorFreeStringsParser =
 	switchExpr =
 		switchExpr
 		.Default(
-			Block( )
+			aBlock( )
 			.Check(
-				Block( )
+				aBlock( )
 				.Fail( 'invalid argument' )
 			)
 		);
@@ -1562,7 +1562,7 @@ Gen.prototype.genCreatorDefaults =
 				block
 				.If(
 					Equals( attr.v, Undefined ),
-					Block( )
+					aBlock( )
 					.anAssign( attr.v, attr.defaultValue )
 				);
 		}
@@ -1592,7 +1592,7 @@ Gen.prototype.genCreatorChecks =
 	if( checkin )
 	{
 		check =
-			Block( );
+			aBlock( );
 	}
 	else
 	{
@@ -1617,7 +1617,7 @@ Gen.prototype.genCreatorChecks =
 			check =
 				check.If(
 					Equals( attr.v, Undefined ),
-					Block( )
+					aBlock( )
 					.Fail( 'undefined attribute ' + name )
 				);
 		}
@@ -1627,7 +1627,7 @@ Gen.prototype.genCreatorChecks =
 			check =
 				check.If(
 					Equals( attr.v, aNull ),
-					Block( )
+					aBlock( )
 					.Fail( 'attribute ' + name + ' must not be null.' )
 				);
 		}
@@ -1740,7 +1740,7 @@ Gen.prototype.genCreatorChecks =
 		}
 
 		tfail =
-			Block( )
+			aBlock( )
 			.Fail( 'type mismatch' );
 
 		if( cond )
@@ -1748,7 +1748,7 @@ Gen.prototype.genCreatorChecks =
 			check =
 				check.If(
 					cond,
-					Block( )
+					aBlock( )
 					.If(
 						tcheck,
 						tfail
@@ -2062,7 +2062,7 @@ Gen.prototype.genCreatorUnchanged =
 	block =
 		block.If(
 			cond,
-			Block( )
+			aBlock( )
 			.Return(
 				Var( 'inherit' )
 			)
@@ -2093,7 +2093,7 @@ Gen.prototype.genCreatorReturn =
 				Not(
 					Var( '_singleton' )
 				),
-				Block( )
+				aBlock( )
 				.anAssign(
 					Var( '_singleton' ),
 					New(
@@ -2172,7 +2172,7 @@ Gen.prototype.genCreator =
 			'Creates a new ' + this.name + ' object.'
 		);
 
-	block = Block( );
+	block = aBlock( );
 
 	block = this.genCreatorVariables( block );
 
@@ -2303,13 +2303,13 @@ Gen.prototype.genFromJSONCreatorParser =
 		)
 		.Case(
 			StringLiteral( 'type' ),
-			Block( )
+			aBlock( )
 			.If(
 				Differs(
 					Var( 'arg' ),
 					StringLiteral( this.name )
 				),
-				Block( )
+				aBlock( )
 				.Fail( 'invalid JSON' )
 			)
 		);
@@ -2320,7 +2320,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			switchExpr
 			.Case(
 				StringLiteral( 'twig' ),
-				Block( )
+				aBlock( )
 				.anAssign(
 					Var( 'jwig' ),
 					Var( 'arg' )
@@ -2328,7 +2328,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			)
 			.Case(
 				StringLiteral( 'ranks' ),
-				Block( )
+				aBlock( )
 				.anAssign(
 					Var( 'ranks' ),
 					Var( 'arg' )
@@ -2398,7 +2398,7 @@ Gen.prototype.genFromJSONCreatorParser =
 		}
 
 		caseBlock =
-			Block( )
+			aBlock( )
 			.anAssign( attr.v, arg);
 
 		switchExpr =
@@ -2414,7 +2414,7 @@ Gen.prototype.genFromJSONCreatorParser =
 		.ForIn(
 			'name',
 			Var( 'json' ),
-			Block( )
+			aBlock( )
 			.anAssign(
 				Var( 'arg' ),
 				Var( 'json' )
@@ -2478,7 +2478,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			switchExpr
 			.Case(
 				StringLiteral( name ),
-				Block( )
+				aBlock( )
 				.anAssign(
 					Var( 'twig' )
 					.Member(
@@ -2495,12 +2495,12 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 	switchExpr =
 		switchExpr
 		.Default(
-			Block( )
+			aBlock( )
 			.Fail( 'invalid twig type' )
 		);
 
 	loop =
-		Block( )
+		aBlock( )
 		.anAssign(
 			Var( 'key' ),
 			Var( 'ranks' )
@@ -2515,7 +2515,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 					Var( 'key' )
 				)
 			),
-			Block( )
+			aBlock( )
 			.Fail( 'JSON ranks/twig mismatch' )
 		)
 		.anAssign(
@@ -2544,7 +2544,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 					Var( 'ranks' )
 				)
 			),
-			Block( )
+			aBlock( )
 			.Fail( 'ranks/twig information missing' )
 		)
 		.For(
@@ -2708,7 +2708,7 @@ Gen.prototype.genFromJSONCreator =
 
 	funcBlock =
 		this.genFromJSONCreatorVariables(
-			Block( )
+			aBlock( )
 		);
 
 	funcBlock =
@@ -2847,7 +2847,7 @@ Gen.prototype.genToJSON =
 		olit;
 
 	block =
-		Block( )
+		aBlock( )
 		.VarDec(
 			'json'
 		);
@@ -2909,7 +2909,7 @@ Gen.prototype.genToJSON =
 		)
 		.Return(
 			Func(
-				Block( )
+				aBlock( )
 				.Return(
 					Var( 'json' )
 				)
@@ -3022,7 +3022,7 @@ Gen.prototype.genEquals =
 					.Dot( 'prototype' )
 					.Dot( 'equals' ),
 					Func(
-						Block( )
+						aBlock( )
 						.Return(
 							Equals(
 								This,
@@ -3054,20 +3054,20 @@ Gen.prototype.genEquals =
 		.Comment( 'Tests equality of object.' );
 
 	block =
-		Block( )
+		aBlock( )
 		.If(
 			Equals(
 				This,
 				Var( 'obj' )
 			),
-			Block( )
+			aBlock( )
 			.Return( True )
 		)
 		.If(
 			Not(
 				Var( 'obj' )
 			),
-			Block( )
+			aBlock( )
 			.Return(
 				False
 			)
@@ -3169,7 +3169,7 @@ Gen.prototype.genAlike =
 	)
 	{
 		alikeName = alikeList[ a ];
-	
+
 		ignores = this.alike[ alikeName ].ignores;
 
 		capsule =
@@ -3177,20 +3177,20 @@ Gen.prototype.genAlike =
 			.Comment( 'Tests partial equality.' );
 
 		block =
-			Block( )
+			aBlock( )
 			.If(
 				Equals(
 					This,
 					Var( 'obj' )
 				),
-				Block( )
+				aBlock( )
 				.Return( True )
 			)
 			.If(
 				Not(
 					Var( 'obj' )
 				),
-				Block( )
+				aBlock( )
 				.Return(
 					False
 				)
@@ -3276,7 +3276,7 @@ Gen.prototype.genNodeExport =
 		.Comment( 'Node export.' )
 		.If(
 			Var( 'SERVER' ),
-			Block( )
+			aBlock( )
 			.anAssign(
 				Var( 'module' ).Dot( 'exports' ),
 				Var( this.reference )
@@ -3332,7 +3332,7 @@ Gen.prototype.genPreamble =
 	var
 		block;
 
-	block = Block( );
+	block = aBlock( );
 
 	block = this.genExport( block );
 
@@ -3351,7 +3351,7 @@ Gen.prototype.genCapsule =
 	var
 		capsule;
 
-	capsule = Block( );
+	capsule = aBlock( );
 
 	if( this.node )
 	{

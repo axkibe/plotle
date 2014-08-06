@@ -36,7 +36,7 @@ if( JION )
 						comment :
 							'the default block',
 						type :
-							'Block',
+							'aBlock',
 						defaultValue :
 							null
 					}

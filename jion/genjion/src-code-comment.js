@@ -66,83 +66,83 @@ var
 */
 var
 	Comment =
-	Code.Comment =
-		{
-			prototype :
-				prototype
-		};
+		Code.Comment =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new Comment object.
 */
 Comment.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_content;
-
-	if( this !== Comment )
-	{
-		inherit = this;
-
-		v_content = this.content;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_content;
 
-		switch( arguments[ a ] )
+		if( this !== Comment )
 		{
-			case 'content' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_content = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_content = this.content;
 		}
-	}
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_content === undefined )
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
+
+			switch( arguments[ a ] )
+			{
+				case 'content' :
+
+					if( arg !== undefined )
+					{
+						v_content = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( 'undefined attribute content' );
-/**/	}
+/**/		if( v_content === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute content' );
+/**/		}
 /**/
-/**/	if( v_content === null )
-/**/	{
-/**/		throw new Error( 'attribute content must not be null.' );
+/**/		if( v_content === null )
+/**/		{
+/**/			throw new Error( 'attribute content must not be null.' );
+/**/		}
 /**/	}
-/**/}
 
-	if( inherit && v_content === inherit.content )
-	{
-		return inherit;
-	}
+		if( inherit && v_content === inherit.content )
+		{
+			return inherit;
+		}
 
-	return new Constructor( v_content );
-};
+		return new Constructor( v_content );
+	};
 
 
 /*

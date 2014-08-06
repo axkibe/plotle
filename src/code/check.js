@@ -29,7 +29,7 @@ if( JION )
 						comment :
 							'the code block',
 						type :
-							'Block'
+							'aBlock'
 					}
 			},
 		node :

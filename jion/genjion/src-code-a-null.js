@@ -59,11 +59,11 @@ var
 */
 var
 	aNull =
-	Code.aNull =
-		{
-			prototype :
-				prototype
-		};
+		Code.aNull =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
@@ -78,35 +78,35 @@ var
 | Creates a new aNull object.
 */
 aNull.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit;
-
-	if( this !== aNull )
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
-		inherit = this;
-	}
+		var
+			inherit;
 
-/**/if( CHECK )
-/**/{
-/**/}
+		if( this !== aNull )
+		{
+			inherit = this;
+		}
 
-	if( inherit )
-	{
-		return inherit;
-	}
+/**/	if( CHECK )
+/**/	{
+/**/	}
 
-	if( !_singleton )
-	{
-		_singleton = new Constructor( );
-	}
+		if( inherit )
+		{
+			return inherit;
+		}
 
-	return _singleton;
-};
+		if( !_singleton )
+		{
+			_singleton = new Constructor( );
+		}
+
+		return _singleton;
+	};
 
 
 /*

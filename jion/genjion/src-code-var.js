@@ -68,92 +68,92 @@ var
 */
 var
 	Var =
-	Code.Var =
-		{
-			prototype :
-				prototype
-		};
+		Code.Var =
+			{
+				prototype :
+					prototype
+			};
 
 
 /*
 | Creates a new Var object.
 */
 Var.create =
-prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		inherit,
-		v_name;
-
-	if( this !== Var )
-	{
-		inherit = this;
-
-		v_name = this.name;
-	}
-
-	for(
-		var a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
+	prototype.create =
+		function(
+			// free strings
+		)
 	{
 		var
-			arg =
-				arguments[ a + 1 ];
+			inherit,
+			v_name;
 
-		switch( arguments[ a ] )
+		if( this !== Var )
 		{
-			case 'name' :
+			inherit = this;
 
-				if( arg !== undefined )
-				{
-					v_name = arg;
-				}
-
-				break;
-
-			default :
-
-/**/			if( CHECK )
-/**/			{
-/**/				throw new Error( 'invalid argument' );
-/**/			}
+			v_name = this.name;
 		}
-	}
 
-/**/if( CHECK )
-/**/{
-/**/	if( v_name === undefined )
+		for(
+			var a = 0, aZ = arguments.length;
+			a < aZ;
+			a += 2
+		)
+		{
+			var
+				arg =
+					arguments[ a + 1 ];
+
+			switch( arguments[ a ] )
+			{
+				case 'name' :
+
+					if( arg !== undefined )
+					{
+						v_name = arg;
+					}
+
+					break;
+
+				default :
+
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error( 'invalid argument' );
+/**/				}
+			}
+		}
+
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( 'undefined attribute name' );
-/**/	}
+/**/		if( v_name === undefined )
+/**/		{
+/**/			throw new Error( 'undefined attribute name' );
+/**/		}
 /**/
-/**/	if( v_name === null )
-/**/	{
-/**/		throw new Error( 'attribute name must not be null.' );
-/**/	}
+/**/		if( v_name === null )
+/**/		{
+/**/			throw new Error( 'attribute name must not be null.' );
+/**/		}
 /**/
-/**/	if(
-/**/		typeof( v_name ) !== 'string'
-/**/		&&
-/**/		!( v_name instanceof String )
-/**/	)
-/**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		if(
+/**/			typeof( v_name ) !== 'string'
+/**/			&&
+/**/			!( v_name instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
 /**/	}
-/**/}
 
-	if( inherit && v_name === inherit.name )
-	{
-		return inherit;
-	}
+		if( inherit && v_name === inherit.name )
+		{
+			return inherit;
+		}
 
-	return new Constructor( v_name );
-};
+		return new Constructor( v_name );
+	};
 
 
 /*
