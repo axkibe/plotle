@@ -1,5 +1,5 @@
 /*
-| A file to be generated
+| A function.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Func',
+			'aFunc',
 		unit :
 			'Code',
 		attributes :
@@ -38,8 +38,9 @@ if( JION )
 			true,
 		twig :
 			{
-				'FuncArg' :
-					'Code.FuncArg'
+// FUTURE
+//				'FuncArg' :
+//					'Code.FuncArg'
 			}
 	};
 }
@@ -50,7 +51,7 @@ if( JION )
 var
 	FuncArg =
 		require( './func-arg' ),
-	Func =
+	aFunc =
 		require( '../jion/this' )( module ),
 	Jools =
 		require( '../jools/jools' );
@@ -58,8 +59,9 @@ var
 
 /*
 | Returns the function with a an argument appended.
+| FIXME rename
 */
-Func.prototype.Append =
+aFunc.prototype.Append =
 	function(
 		arg
 	)
@@ -77,8 +79,9 @@ Func.prototype.Append =
 /*
 | Convenience shortcut.
 | Returns the function with a an argument appended.
+| FIXME rename
 */
-Func.prototype.Arg =
+aFunc.prototype.Arg =
 	function(
 		name,
 		comment
@@ -99,8 +102,7 @@ Func.prototype.Arg =
 /*
 | Node export.
 */
-module.exports =
-	Func;
+module.exports = aFunc;
 
 
 } )( );

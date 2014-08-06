@@ -36,10 +36,6 @@ if( SERVER )
 	JoobjProto = require( '../../src/jion/proto' );
 
 	Jools = require( '../../src/jools/jools' );
-
-	Code = { };
-
-	Code.FuncArg = require( '../../src/code/func-arg' );
 }
 
 
@@ -79,8 +75,8 @@ var
 | Jion
 */
 var
-	Func =
-		Code.Func =
+	aFunc =
+		Code.aFunc =
 			{
 				prototype :
 					prototype
@@ -88,9 +84,9 @@ var
 
 
 /*
-| Creates a new Func object.
+| Creates a new aFunc object.
 */
-Func.create =
+aFunc.create =
 	prototype.create =
 		function(
 			// free strings
@@ -105,7 +101,7 @@ Func.create =
 			twigDup,
 			v_block;
 
-		if( this !== Func )
+		if( this !== aFunc )
 		{
 			inherit = this;
 
@@ -306,13 +302,13 @@ Func.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Func';
+prototype.reflect = 'aFunc';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.func';
+prototype.reflex = 'code.aFunc';
 
 
 /*
@@ -386,7 +382,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Func;
+	module.exports = aFunc;
 }
 
 
