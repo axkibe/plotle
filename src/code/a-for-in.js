@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'ForIn',
+			'aForIn',
 		unit :
 			'Code',
 		attributes :
@@ -52,8 +52,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

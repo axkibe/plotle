@@ -50,12 +50,12 @@ var
 				require( './a-check' ),
 			aComment :
 				require( './a-comment' ),
-			Fail :
-				require( './fail' ),
+			aFail :
+				require( './a-fail' ),
 			For :
 				require( './for' ),
-			ForIn :
-				require( './for-in' ),
+			aForIn :
+				require( './a-for-in' ),
 			If :
 				require( './if' ),
 			New :
@@ -207,7 +207,7 @@ aBlock.prototype.If =
 /*
 | Returns the block with a error throwing appended.
 */
-aBlock.prototype.Fail =
+aBlock.prototype.aFail =
 	function(
 		message
 	)
@@ -228,7 +228,7 @@ aBlock.prototype.Fail =
 
 	return (
 		this.Append(
-			Code.Fail.create(
+			Code.aFail.create(
 				'message',
 					message
 			)
@@ -268,7 +268,7 @@ aBlock.prototype.For =
 /*
 | Returns the block with a for-in loop appended.
 */
-aBlock.prototype.ForIn =
+aBlock.prototype.aForIn =
 	function(
 		variable,
 		object,
@@ -277,7 +277,7 @@ aBlock.prototype.ForIn =
 {
 	var
 		statement =
-			Code.ForIn.create(
+			Code.aForIn.create(
 				'variable',
 					variable,
 				'object',

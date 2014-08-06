@@ -71,8 +71,8 @@ var
 | Jion
 */
 var
-	ForIn =
-		Code.ForIn =
+	aForIn =
+		Code.aForIn =
 			{
 				prototype :
 					prototype
@@ -80,9 +80,9 @@ var
 
 
 /*
-| Creates a new ForIn object.
+| Creates a new aForIn object.
 */
-ForIn.create =
+aForIn.create =
 	prototype.create =
 		function(
 			// free strings
@@ -94,7 +94,7 @@ ForIn.create =
 			v_object,
 			v_variable;
 
-		if( this !== ForIn )
+		if( this !== aForIn )
 		{
 			inherit = this;
 
@@ -220,13 +220,13 @@ ForIn.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ForIn';
+prototype.reflect = 'aForIn';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.forIn';
+prototype.reflex = 'code.aForIn';
 
 
 /*
@@ -274,7 +274,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = ForIn;
+	module.exports = aForIn;
 }
 
 

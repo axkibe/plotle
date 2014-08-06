@@ -55,16 +55,16 @@ Code =
 			require( '../code/a-dot' ),
 		anEquals :
 			require( '../code/an-equals' ),
-		If :
-			require( '../code/if' ),
-		File :
-			require( '../code/file' ),
+		aFile :
+			require( '../code/a-file' ),
 		Func :
 			require( '../code/func' ),
 		FuncArg :
 			require( '../code/func-arg' ),
 		GreaterThan :
 			require( '../code/greater-than' ),
+		If :
+			require( '../code/if' ),
 		Instanceof :
 			require( '../code/instanceof' ),
 		LessThan :
@@ -402,10 +402,10 @@ ShortHand.If =
 /*
 | Shorthand for creating files.
 */
-ShortHand.File =
+ShortHand.aFile =
 	function( )
 {
-	return Code.File.create( );
+	return Code.aFile.create( );
 };
 
 

@@ -37,11 +37,13 @@ module.exports =
 			'src/code/a-differs.js',
 			'src/code/a-dot.js',
 			'src/code/an-equals.js',
+			'src/code/a-fail.js',
+			'src/code/a-file.js',
 
-			'src/code/fail.js',
-			'src/code/file.js',
-			'src/code/for-in.js',
 			'src/code/for.js',
+
+			'src/code/a-for-in.js',
+
 			'src/code/func-arg.js',
 			'src/code/func.js',
 			'src/code/greater-than.js',

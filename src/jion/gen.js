@@ -74,8 +74,8 @@ var
 		Shorthand.anEquals,
 	False =
 		Shorthand.False( ),
-	File =
-		Shorthand.File,
+	aFile =
+		Shorthand.aFile,
 	Func =
 		Shorthand.Func,
 	GreaterThan =
@@ -1223,7 +1223,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						Undefined
 					),
 					aBlock( )
-					.Fail(
+					.aFail(
 						Plus(
 							StringLiteral( 'key "' ),
 							Var( 'key' ),
@@ -1289,7 +1289,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						Undefined
 					),
 					aBlock( )
-					.Fail(
+					.aFail(
 						Plus(
 							StringLiteral( 'key "' ),
 							Var( 'key' ),
@@ -1368,7 +1368,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						Undefined
 					),
 					aBlock( )
-					.Fail(
+					.aFail(
 						Plus(
 							StringLiteral( 'key "' ),
 							Var( 'key' ),
@@ -1388,7 +1388,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						)
 					),
 					aBlock( )
-					.Fail(
+					.aFail(
 						StringLiteral( 'invalid rank' )
 					)
 				)
@@ -1443,7 +1443,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						Undefined
 					),
 					aBlock( )
-					.Fail(
+					.aFail(
 						Plus(
 							StringLiteral( 'key "' ),
 							Var( 'arg' ),
@@ -1478,7 +1478,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			aBlock( )
 			.aCheck(
 				aBlock( )
-				.Fail( 'invalid argument' )
+				.aFail( 'invalid argument' )
 			)
 		);
 
@@ -1606,7 +1606,7 @@ Gen.prototype.genCreatorChecks =
 				check.If(
 					anEquals( attr.v, Undefined ),
 					aBlock( )
-					.Fail( 'undefined attribute ' + name )
+					.aFail( 'undefined attribute ' + name )
 				);
 		}
 
@@ -1616,7 +1616,7 @@ Gen.prototype.genCreatorChecks =
 				check.If(
 					anEquals( attr.v, aNull ),
 					aBlock( )
-					.Fail( 'attribute ' + name + ' must not be null.' )
+					.aFail( 'attribute ' + name + ' must not be null.' )
 				);
 		}
 
@@ -1729,7 +1729,7 @@ Gen.prototype.genCreatorChecks =
 
 		tfail =
 			aBlock( )
-			.Fail( 'type mismatch' );
+			.aFail( 'type mismatch' );
 
 		if( cond )
 		{
@@ -2293,7 +2293,7 @@ Gen.prototype.genFromJSONCreatorParser =
 					StringLiteral( this.name )
 				),
 				aBlock( )
-				.Fail( 'invalid JSON' )
+				.aFail( 'invalid JSON' )
 			)
 		);
 
@@ -2394,7 +2394,7 @@ Gen.prototype.genFromJSONCreatorParser =
 
 	block =
 		block
-		.ForIn(
+		.aForIn(
 			'name',
 			Var( 'json' ),
 			aBlock( )
@@ -2479,7 +2479,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		switchExpr
 		.Default(
 			aBlock( )
-			.Fail( 'invalid twig type' )
+			.aFail( 'invalid twig type' )
 		);
 
 	loop =
@@ -2499,7 +2499,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 				)
 			),
 			aBlock( )
-			.Fail( 'JSON ranks/twig mismatch' )
+			.aFail( 'JSON ranks/twig mismatch' )
 		)
 		.anAssign(
 			Var( 'jval' ),
@@ -2528,7 +2528,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 				)
 			),
 			aBlock( )
-			.Fail( 'ranks/twig information missing' )
+			.aFail( 'ranks/twig information missing' )
 		)
 		.For(
 			// FIXME, put into the commalist call
@@ -3386,7 +3386,7 @@ Gen.generate =
 		);
 
 	file =
-		File( )
+		aFile( )
 		.setHeader(
 			'This is an auto generated file.',
 			'',

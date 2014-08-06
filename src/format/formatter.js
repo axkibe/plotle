@@ -820,7 +820,7 @@ formatFor =
 | Formats a for-in loop.
 */
 var
-formatForIn =
+formatAForIn =
 	function(
 		context,
 		expr
@@ -1381,14 +1381,14 @@ formatStatement =
 
 			break;
 
-		case 'code.fail' :
+		case 'code.aFail' :
 
 			try
 			{
 				subtext =
 					context.tab
 					+
-					formatFail( context.Inline, statement );
+					formatAFail( context.Inline, statement );
 			}
 			catch( e )
 			{
@@ -1407,7 +1407,7 @@ formatStatement =
 			else
 			{
 				text +=
-					formatFail( context, statement );
+					formatAFail( context, statement );
 			}
 
 			break;
@@ -1419,10 +1419,10 @@ formatStatement =
 
 			break;
 
-		case 'code.forIn' :
+		case 'code.aForIn' :
 
 			text +=
-				formatForIn( context, statement );
+				formatAForIn( context, statement );
 
 			break;
 
@@ -1508,7 +1508,7 @@ formatStatement =
 		case 'code.aBooleanLiteral' :
 		case 'code.aCall' :
 		case 'code.aDelete' :
-		case 'code.fail' :
+		case 'code.aFail' :
 		case 'code.new' :
 		case 'code.numberLiteral' :
 		case 'code.plusAssign' :
@@ -1520,7 +1520,7 @@ formatStatement =
 
 		case 'code.aCheck' :
 		case 'code.for' :
-		case 'code.forIn' :
+		case 'code.aForIn' :
 		case 'code.if' :
 		case 'code.switch' :
 
@@ -1633,7 +1633,7 @@ formatExpression =
 | Formats a fail statement.
 */
 var
-formatFail =
+formatAFail =
 	function(
 		context,
 		fail
@@ -1641,7 +1641,7 @@ formatFail =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( fail.reflex !== 'code.fail' )
+/**/	if( fail.reflex !== 'code.aFail' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
