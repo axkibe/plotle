@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Differs',
+			'aDiffers',
 		unit :
 			'Code',
 		attributes :
@@ -45,8 +45,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

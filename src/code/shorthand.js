@@ -49,8 +49,8 @@ Code =
 			require( '../code/a-condition' ),
 		aDelete :
 			require( '../code/a-delete' ),
-		Differs :
-			require( '../code/differs' ),
+		aDiffers :
+			require( '../code/a-differs' ),
 		Dot :
 			require( '../code/dot' ),
 		If :
@@ -247,14 +247,14 @@ ShortHand.aCondition =
 /*
 | Shorthand for creating differs.
 */
-ShortHand.Differs =
+ShortHand.aDiffers =
 	function(
 		left,
 		right
 	)
 {
 	return (
-		Code.Differs.create(
+		Code.aDiffers.create(
 			'left',
 				left,
 			'right',

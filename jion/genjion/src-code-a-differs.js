@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	Differs =
-		Code.Differs =
+	aDiffers =
+		Code.aDiffers =
 			{
 				prototype :
 					prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new Differs object.
+| Creates a new aDiffers object.
 */
-Differs.create =
+aDiffers.create =
 	prototype.create =
 		function(
 			// free strings
@@ -90,7 +90,7 @@ Differs.create =
 			v_left,
 			v_right;
 
-		if( this !== Differs )
+		if( this !== aDiffers )
 		{
 			inherit = this;
 
@@ -173,13 +173,13 @@ Differs.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Differs';
+prototype.reflect = 'aDiffers';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.differs';
+prototype.reflex = 'code.aDiffers';
 
 
 /*
@@ -221,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Differs;
+	module.exports = aDiffers;
 }
 
 

@@ -60,7 +60,7 @@ precTable =
 			15,
 		'aDelete' :
 			4,
-		'Differs' :
+		'aDiffers' :
 			9,
 		'Dot' :
 			1,
@@ -383,7 +383,7 @@ formatBlock =
 | Formats a difference check.
 */
 var
-formatDiffers =
+formatADiffers =
 	function(
 		context,
 		expr
@@ -394,7 +394,7 @@ formatDiffers =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.differs' )
+/**/	if( expr.reflex !== 'code.aDiffers' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -404,14 +404,14 @@ formatDiffers =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.Differs
+			precTable.aDiffers
 		)
 		+ context.sep
 		+ context.tab + '!==' + context.sep
 		+ formatExpression(
 			context,
 			expr.right,
-			precTable.Differs
+			precTable.aDiffers
 		);
 
 	return text;
@@ -2585,8 +2585,8 @@ exprFormatter =
 			formatACondition,
 		'aDelete' :
 			formatADelete,
-		'Differs' :
-			formatDiffers,
+		'aDiffers' :
+			formatADiffers,
 		'Dot' :
 			formatDot,
 		'Equals' :

@@ -68,8 +68,8 @@ var
 		Shorthand.aCondition,
 	aDelete =
 		Shorthand.aDelete,
-	Differs =
-		Shorthand.Differs,
+	aDiffers =
+		Shorthand.aDiffers,
 	Equals =
 		Shorthand.Equals,
 	False =
@@ -705,7 +705,7 @@ Gen.prototype.genConstructor =
 			block =
 				block
 				.If(
-					Differs( attr.v, Undefined ),
+					aDiffers( attr.v, Undefined ),
 					aBlock( )
 					.Append(
 						assign
@@ -1065,7 +1065,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 
 	thisCheck =
 		If(
-			Differs(
+			aDiffers(
 				This,
 				Var( this.reference )
 			),
@@ -1157,7 +1157,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				StringLiteral( name  ),
 				aBlock( )
 				.If(
-					Differs(
+					aDiffers(
 						Var( 'arg' ),
 						Undefined
 					),
@@ -1216,7 +1216,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.If(
-					Differs(
+					aDiffers(
 						Var( 'twig' ).Member(
 							Var( 'key' )
 						),
@@ -1360,7 +1360,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.If(
-					Differs(
+					aDiffers(
 						Var( 'twig' )
 						.Member(
 							Var( 'key' )
@@ -1635,19 +1635,19 @@ Gen.prototype.genCreatorChecks =
 		if( attr.allowsNull && !attr.allowsUndefined )
 		{
 			cond =
-				Differs( attr.v, aNull );
+				aDiffers( attr.v, aNull );
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				Differs( attr.v, Undefined );
+				aDiffers( attr.v, Undefined );
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
 				anAnd(
-					Differs( attr.v, aNull ),
-					Differs( attr.v, Undefined )
+					aDiffers( attr.v, aNull ),
+					aDiffers( attr.v, Undefined )
 				);
 		}
 		else
@@ -1661,7 +1661,7 @@ Gen.prototype.genCreatorChecks =
 			case 'Boolean' :
 
 				tcheck =
-					Differs(
+					aDiffers(
 						Typeof( attr.v ),
 						StringLiteral( 'boolean' )
 					);
@@ -1672,11 +1672,11 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					Or(
-						Differs(
+						aDiffers(
 							Typeof( attr.v ),
 							StringLiteral( 'number' )
 						),
-						Differs(
+						aDiffers(
 							aCall(
 								Var( 'Math' ).Dot( 'floor' ),
 								attr.v
@@ -1690,7 +1690,7 @@ Gen.prototype.genCreatorChecks =
 			case 'Number' :
 
 				tcheck =
-					Differs(
+					aDiffers(
 						Typeof( attr.v ),
 						StringLiteral( 'number' )
 					);
@@ -1702,7 +1702,7 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					anAnd(
-						Differs(
+						aDiffers(
 							Typeof( attr.v ),
 							StringLiteral( 'string' )
 						),
@@ -1719,7 +1719,7 @@ Gen.prototype.genCreatorChecks =
 			default :
 
 				tcheck =
-					Differs(
+					aDiffers(
 						attr.v.Dot( 'reflect' ),
 						StringLiteral( attr.type )
 					);
@@ -1874,7 +1874,7 @@ Gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						aCondition(
-							Differs( attr.v, aNull ),
+							aDiffers( attr.v, aNull ),
 							attr.v.Dot( member ),
 							aNull
 						);
@@ -1884,7 +1884,7 @@ Gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						aCondition(
-							Differs( attr.v, Undefined ),
+							aDiffers( attr.v, Undefined ),
 							attr.v.Dot( member ),
 							aNull
 						);
@@ -2288,7 +2288,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			StringLiteral( 'type' ),
 			aBlock( )
 			.If(
-				Differs(
+				aDiffers(
 					Var( 'arg' ),
 					StringLiteral( this.name )
 				),
@@ -2959,7 +2959,7 @@ Gen.prototype.genAttributeEquals =
 					Or(
 						Equals( le, re ),
 						anAnd(
-							Differs( le, aNull ),
+							aDiffers( le, aNull ),
 							le.Dot( 'equals' ),
 							aCall( le.Dot( 'equals' ), re )
 						)
