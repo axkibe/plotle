@@ -16,8 +16,8 @@ module.exports =
 			'src/code/a-case.js',
 			'src/code/a-check.js',
 			'src/code/a-comma-list.js',
+			'src/code/a-comment.js',
 
-			'src/code/comment.js',
 			'src/code/condition.js',
 			'src/code/delete.js',
 			'src/code/differs.js',

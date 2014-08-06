@@ -1329,7 +1329,7 @@ formatStatement =
 	if(
 		lookBehind
 		&&
-		lookBehind.reflex !== 'code.comment'
+		lookBehind.reflex !== 'code.aComment'
 		&&
 		!(
 			lookBehind.reflex === 'code.varDec'
@@ -1354,7 +1354,7 @@ formatStatement =
 		}
 	}
 
-	if( statement.reflex === 'code.comment' )
+	if( statement.reflex === 'code.aComment' )
 	{
 		text +=
 			formatComment(

@@ -190,7 +190,7 @@ File.create =
 /**/
 /**/		if( v_header !== null )
 /**/		{
-/**/			if( v_header.reflect !== 'Comment' )
+/**/			if( v_header.reflect !== 'aComment' )
 /**/			{
 /**/				throw new Error( 'type mismatch' );
 /**/			}

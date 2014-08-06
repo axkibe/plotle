@@ -43,8 +43,8 @@ Code =
 			require( '../code/a-check' ),
 		aCommaList :
 			require( '../code/a-comma-list' ),
-		Comment :
-			require( '../code/comment' ),
+		aComment :
+			require( '../code/a-comment' ),
 		Condition :
 			require( '../code/condition' ),
 		Delete :

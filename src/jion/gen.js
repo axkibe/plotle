@@ -516,9 +516,7 @@ Gen.prototype.genImports =
 		capsule // block to append to
 	)
 {
-	capsule =
-		capsule
-		.Comment( 'Imports.' );
+	capsule = capsule.aComment( 'Imports.' );
 
 	capsule =
 		capsule
@@ -564,10 +562,7 @@ Gen.prototype.genNodeIncludes =
 		unitName,
 		unit;
 
-	capsule =
-		capsule.Comment(
-			'Node includes.'
-		);
+	capsule = capsule.aComment( 'Node includes.' );
 
 	block =
 		aBlock( )
@@ -674,8 +669,7 @@ Gen.prototype.genConstructor =
 		jionObj,
 		name;
 
-	capsule =
-		capsule.Comment( 'Constructor.' );
+	capsule = capsule.aComment( 'Constructor.' );
 
 	block = aBlock( );
 
@@ -883,9 +877,7 @@ Gen.prototype.genConstructor =
 	{
 		capsule =
 			capsule
-			.Comment(
-				'Subclass.'
-			)
+			.aComment( 'Subclass.' )
 			.aCall(
 				Var( 'Jools' ).Dot( 'subclass' ),
 				Var( 'Constructor' ),
@@ -896,16 +888,14 @@ Gen.prototype.genConstructor =
 	// prototype shortcut
 	capsule =
 		capsule
-		.Comment( 'Prototype shortcut' )
+		.aComment( 'Prototype shortcut' )
 		.VarDec(
 			'prototype',
 			Var( 'Constructor' ).Dot( 'prototype' )
 		);
 
 	// the exported object
-	capsule =
-		capsule
-		.Comment( 'Jion' );
+	capsule = capsule.aComment( 'Jion' );
 
 	jionObj =
 		ObjLiteral( )
@@ -951,9 +941,7 @@ Gen.prototype.genSingleton =
 {
 	return (
 		capsule
-		.Comment(
-			'Singleton'
-		)
+		.aComment( 'Singleton' )
 		.VarDec(
 			'_singleton',
 			aNull
@@ -2163,7 +2151,7 @@ Gen.prototype.genCreator =
 		creator;
 
 	capsule =
-		capsule.Comment(
+		capsule.aComment(
 			'Creates a new ' + this.name + ' object.'
 		);
 
@@ -2697,7 +2685,7 @@ Gen.prototype.genFromJSONCreator =
 	jsonList.sort( );
 
 	capsule =
-		capsule.Comment(
+		capsule.aComment(
 			'Creates a new ' + this.name + ' object from JSON.'
 		);
 
@@ -2749,7 +2737,7 @@ Gen.prototype.genReflection =
 {
 	capsule =
 		capsule
-		.Comment( 'Reflection.' )
+		.aComment( 'Reflection.' )
 		.anAssign(
 			Var( 'prototype' ).Dot( 'reflect' ),
 			StringLiteral( this.name )
@@ -2757,7 +2745,7 @@ Gen.prototype.genReflection =
 
 	capsule =
 		capsule
-		.Comment( 'New Reflection.' )
+		.aComment( 'New Reflection.' )
 		.anAssign(
 			Var( 'prototype' ).Dot( 'reflex' ),
 			StringLiteral(
@@ -2785,12 +2773,12 @@ Gen.prototype.genJoobjProto =
 {
 	capsule =
 		capsule
-		.Comment( 'Sets values by path.' )
+		.aComment( 'Sets values by path.' )
 		.anAssign(
 			Var( 'prototype' ).Dot( 'setPath' ),
 			Var( 'JoobjProto' ).Dot( 'setPath' )
 		)
-		.Comment( 'Gets values by path' )
+		.aComment( 'Gets values by path' )
 		.anAssign(
 			Var( 'prototype' ).Dot( 'getPath' ),
 			Var( 'JoobjProto' ).Dot( 'getPath' )
@@ -2800,12 +2788,12 @@ Gen.prototype.genJoobjProto =
 	{
 		capsule =
 			capsule
-			.Comment( 'Returns a twig by rank.' )
+			.aComment( 'Returns a twig by rank.' )
 			.anAssign(
 				Var( 'prototype' ).Dot( 'atRank' ),
 				Var( 'JoobjProto' ).Dot( 'atRank' )
 			)
-			.Comment( 'Gets the rank of a key.' )
+			.aComment( 'Gets the rank of a key.' )
 			.anAssign(
 				Var( 'Constructor' )
 				.Dot( 'prototype' )
@@ -2813,7 +2801,7 @@ Gen.prototype.genJoobjProto =
 				Var( 'JoobjProto' )
 				.Dot( 'rankOf' )
 			)
-			.Comment( 'Creates a new unique identifier.' )
+			.aComment( 'Creates a new unique identifier.' )
 			.anAssign(
 				Var( 'Constructor' )
 				.Dot( 'prototype' )
@@ -2913,7 +2901,7 @@ Gen.prototype.genToJSON =
 
 	capsule =
 		capsule
-		.Comment( 'Converts a ' + this.name + ' into JSON.' )
+		.aComment( 'Converts a ' + this.name + ' into JSON.' )
 		.aCall(
 			Var( 'Jools' ).Dot( 'lazyValue' ),
 			Var( 'Constructor' ).Dot( 'prototype' ),
@@ -3011,7 +2999,7 @@ Gen.prototype.genEquals =
 
 			return (
 				capsule
-				.Comment( 'Tests equality of object.' )
+				.aComment( 'Tests equality of object.' )
 				.anAssign(
 					Var( 'Constructor' )
 					.Dot( 'prototype' )
@@ -3046,7 +3034,7 @@ Gen.prototype.genEquals =
 
 	capsule =
 		capsule
-		.Comment( 'Tests equality of object.' );
+		.aComment( 'Tests equality of object.' );
 
 	block =
 		aBlock( )
@@ -3150,7 +3138,7 @@ Gen.prototype.genAlike =
 		cond,
 		ignores,
 		name;
-		
+
 	alikeList = Object.keys( this.alike );
 
 	alikeList.sort( );
@@ -3167,9 +3155,7 @@ Gen.prototype.genAlike =
 
 		ignores = this.alike[ alikeName ].ignores;
 
-		capsule =
-			capsule
-			.Comment( 'Tests partial equality.' );
+		capsule = capsule.aComment( 'Tests partial equality.' );
 
 		block =
 			aBlock( )
@@ -3268,7 +3254,7 @@ Gen.prototype.genNodeExport =
 {
 	return (
 		capsule
-		.Comment( 'Node export.' )
+		.aComment( 'Node export.' )
 		.If(
 			Var( 'SERVER' ),
 			aBlock( )
@@ -3287,11 +3273,7 @@ Gen.prototype.genNodeExport =
 Gen.prototype.genExport =
 	function( block )
 {
-	block =
-		block
-		.Comment(
-			'Export.'
-		);
+	block = block.aComment( 'Export.' );
 
 	if( this.unit )
 	{
@@ -3415,7 +3397,7 @@ Gen.generate =
 
 	file =
 		File( )
-		.Header(
+		.setHeader(
 			'This is an auto generated file.',
 			'',
 			'DO NOT EDIT!'

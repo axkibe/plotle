@@ -29,7 +29,7 @@ if( JION )
 						comment :
 							'header comment',
 						type :
-							'Comment',
+							'aComment',
 						defaultValue :
 							null
 					},
@@ -59,8 +59,8 @@ if( JION )
 
 
 var
-	Comment =
-		require( './comment' ),
+	aComment =
+		require( './a-comment' ),
 	File =
 		require( '../jion/this' )( module );
 
@@ -85,16 +85,16 @@ File.prototype.Capsule =
 /*
 | Returns the file with the header set.
 */
-File.prototype.Header =
+File.prototype.setHeader =
 	function(
 		header
 	)
 {
-	if( header.reflect !== 'Comment' )
+	if( header.reflect !== 'aComment' )
 	{
 		// arguments have to be a list of strings otherwise
 		header =
-			Comment.create(
+			aComment.create(
 				'content',
 					Array.prototype.slice.call( arguments )
 			);

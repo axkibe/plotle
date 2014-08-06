@@ -48,8 +48,8 @@ var
 				require( './a-call' ),
 			aCheck :
 				require( './a-check' ),
-			Comment :
-				require( './comment' ),
+			aComment :
+				require( './a-comment' ),
 			Fail :
 				require( './fail' ),
 			For :
@@ -160,16 +160,16 @@ aBlock.prototype.aCheck =
 /*
 | Returns the block with a comment appended.
 */
-aBlock.prototype.Comment =
+aBlock.prototype.aComment =
 	function(
 		header
 	)
 {
-	if( header.reflect !== 'Comment' )
+	if( header.reflect !== 'aComment' )
 	{
 		// arguments have to be a list of strings otherwise
 		header =
-			Code.Comment.create(
+			Code.aComment.create(
 				'content',
 					Array.prototype.slice.call( arguments )
 			);

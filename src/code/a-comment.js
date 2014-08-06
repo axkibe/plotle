@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Comment',
+			'aComment',
 		unit :
 			'Code',
 		attributes :
@@ -38,8 +38,10 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+/*
+| Export.
+*/
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

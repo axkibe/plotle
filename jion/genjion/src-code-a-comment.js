@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	Comment =
-		Code.Comment =
+	aComment =
+		Code.aComment =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new Comment object.
+| Creates a new aComment object.
 */
-Comment.create =
+aComment.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ Comment.create =
 			inherit,
 			v_content;
 
-		if( this !== Comment )
+		if( this !== aComment )
 		{
 			inherit = this;
 
@@ -148,13 +148,13 @@ Comment.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Comment';
+prototype.reflect = 'aComment';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.comment';
+prototype.reflex = 'code.aComment';
 
 
 /*
@@ -196,7 +196,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Comment;
+	module.exports = aComment;
 }
 
 
