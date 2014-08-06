@@ -20,7 +20,7 @@ if( JION )
 {
 	return {
 		name :
-			'Condition',
+			'aCondition',
 		unit :
 			'Code',
 		attributes :
@@ -57,17 +57,19 @@ if( JION )
 | Node includes.
 */
 var
-	Condition;
+	aCondition;
 
-Condition =
+aCondition =
 	require( '../jion/this' )( module );
 
 /*
 | Creates a condition with the elsewise expression set.
 |
 | FUTURE create this single recreators with jion-gen.
+|
+| FIXME call setElsewise
 */
-Condition.prototype.Elsewise =
+aCondition.prototype.Elsewise =
 	function(
 		expr
 	)
@@ -85,7 +87,7 @@ Condition.prototype.Elsewise =
 | Node export.
 */
 module.exports =
-	Condition;
+	aCondition;
 
 
 } )( );

@@ -56,7 +56,7 @@ precTable =
 			2,
 		'aCommaList' :
 			18,
-		'Condition' :
+		'aCondition' :
 			15,
 		'Delete' :
 			4,
@@ -244,7 +244,7 @@ formatAnAssign =
 | Formats a comment.
 */
 var
-formatComment =
+formatAComment =
 	function(
 		context,
 		comment
@@ -638,7 +638,7 @@ formatEquals =
 | The ? : thing.
 */
 var
-formatCondition =
+formatACondition =
 	function(
 		context,
 		expr
@@ -647,7 +647,7 @@ formatCondition =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.condition' )
+/**/	if( expr.reflex !== 'code.aCondition' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -658,7 +658,7 @@ formatCondition =
 		+ formatExpression(
 			context,
 			expr.condition,
-			precTable.Condition
+			precTable.aCondition
 		)
 		+ context.sep
 		+ '?'
@@ -666,7 +666,7 @@ formatCondition =
 		+ formatExpression(
 			context,
 			expr.then,
-			precTable.Condition
+			precTable.aCondition
 		)
 		+ context.sep
 		+ ':'
@@ -674,7 +674,7 @@ formatCondition =
 		+ formatExpression(
 			context,
 			expr.elsewise,
-			precTable.Condition
+			precTable.aCondition
 		)
 	);
 };
@@ -1357,7 +1357,7 @@ formatStatement =
 	if( statement.reflex === 'code.aComment' )
 	{
 		text +=
-			formatComment(
+			formatAComment(
 				context,
 				statement
 			);
@@ -2516,7 +2516,7 @@ Formatter.format =
 	if( file.header )
 	{
 		text +=
-			formatComment(
+			formatAComment(
 				context,
 				file.header
 			);
@@ -2581,8 +2581,8 @@ exprFormatter =
 			formatACall,
 		'aCommaList' :
 			formatACommaList,
-		'Condition' :
-			formatCondition,
+		'aCondition' :
+			formatACondition,
 		'Delete' :
 			formatDelete,
 		'Differs' :

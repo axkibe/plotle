@@ -32,8 +32,8 @@ module.exports =
 			'src/code/a-check.js',
 			'src/code/a-comma-list.js',
 			'src/code/a-comment.js',
+			'src/code/a-condition.js',
 
-			'src/code/condition.js',
 			'src/code/delete.js',
 			'src/code/differs.js',
 			'src/code/dot.js',

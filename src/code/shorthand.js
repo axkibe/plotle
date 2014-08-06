@@ -45,8 +45,8 @@ Code =
 			require( '../code/a-comma-list' ),
 		aComment :
 			require( '../code/a-comment' ),
-		Condition :
-			require( '../code/condition' ),
+		aCondition :
+			require( '../code/a-condition' ),
 		Delete :
 			require( '../code/delete' ),
 		Differs :
@@ -224,7 +224,7 @@ ShortHand.aCall =
 /*
 | Shorthand for creating conditions.
 */
-ShortHand.Condition =
+ShortHand.aCondition =
 	function(
 		condition,
 		then,
@@ -232,7 +232,7 @@ ShortHand.Condition =
 	)
 {
 	return (
-		Code.Condition.create(
+		Code.aCondition.create(
 			'condition',
 				condition,
 			'then',

@@ -71,8 +71,8 @@ var
 | Jion
 */
 var
-	Condition =
-		Code.Condition =
+	aCondition =
+		Code.aCondition =
 			{
 				prototype :
 					prototype
@@ -80,9 +80,9 @@ var
 
 
 /*
-| Creates a new Condition object.
+| Creates a new aCondition object.
 */
-Condition.create =
+aCondition.create =
 	prototype.create =
 		function(
 			// free strings
@@ -94,7 +94,7 @@ Condition.create =
 			v_elsewise,
 			v_then;
 
-		if( this !== Condition )
+		if( this !== aCondition )
 		{
 			inherit = this;
 
@@ -206,13 +206,13 @@ Condition.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Condition';
+prototype.reflect = 'aCondition';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.condition';
+prototype.reflex = 'code.aCondition';
 
 
 /*
@@ -260,7 +260,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Condition;
+	module.exports = aCondition;
 }
 
 

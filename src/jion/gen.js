@@ -64,8 +64,8 @@ var
 		Shorthand.aCall,
 	aCommaList =
 		Shorthand.aCommaList,
-	Condition =
-		Shorthand.Condition,
+	aCondition =
+		Shorthand.aCondition,
 	Delete =
 		Shorthand.Delete,
 	Differs =
@@ -1873,7 +1873,7 @@ Gen.prototype.genCreatorConcerns =
 				else if( attr.allowsNull )
 				{
 					cExpr =
-						Condition(
+						aCondition(
 							Differs( attr.v, aNull ),
 							attr.v.Dot( member ),
 							aNull
@@ -1883,7 +1883,7 @@ Gen.prototype.genCreatorConcerns =
 				else if( attr.allowsUndefined )
 				{
 					cExpr =
-						Condition(
+						aCondition(
 							Differs( attr.v, Undefined ),
 							attr.v.Dot( member ),
 							aNull
