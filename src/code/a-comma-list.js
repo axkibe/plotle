@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'CommaList',
+			'aCommaList',
 		unit :
 			'Code',
 		node :
@@ -34,15 +34,17 @@ if( JION )
 | Node imports.
 */
 var
-	CommaList =
+	aCommaList =
 		require( '../jion/this' )( module ),
 	Jools =
 		require( '../jools/jools' );
 
 /*
 | Returns the block with a statement appended;
+|
+| FIXME lowercase
 */
-CommaList.prototype.Append =
+aCommaList.prototype.Append =
 	function(
 		expr
 	)
@@ -60,8 +62,7 @@ CommaList.prototype.Append =
 /*
 | Node export.
 */
-module.exports =
-	CommaList;
+module.exports = aCommaList;
 
 
 } )( );

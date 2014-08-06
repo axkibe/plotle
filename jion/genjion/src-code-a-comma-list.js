@@ -72,8 +72,8 @@ var
 | Jion
 */
 var
-	CommaList =
-		Code.CommaList =
+	aCommaList =
+		Code.aCommaList =
 			{
 				prototype :
 					prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new CommaList object.
+| Creates a new aCommaList object.
 */
-CommaList.create =
+aCommaList.create =
 	prototype.create =
 		function(
 			// free strings
@@ -97,7 +97,7 @@ CommaList.create =
 			twig,
 			twigDup;
 
-		if( this !== CommaList )
+		if( this !== aCommaList )
 		{
 			inherit = this;
 
@@ -260,13 +260,13 @@ CommaList.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'CommaList';
+prototype.reflect = 'aCommaList';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.commaList';
+prototype.reflex = 'code.aCommaList';
 
 
 /*
@@ -326,7 +326,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = CommaList;
+	module.exports = aCommaList;
 }
 
 

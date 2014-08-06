@@ -62,8 +62,8 @@ var
 		Shorthand.aBlock,
 	aCall =
 		Shorthand.aCall,
-	CommaList =
-		Shorthand.CommaList,
+	aCommaList =
+		Shorthand.aCommaList,
 	Condition =
 		Shorthand.Condition,
 	Delete =
@@ -2544,7 +2544,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		)
 		.For(
 			// FIXME, put into the commalist call
-			CommaList( )
+			aCommaList( )
 			.Append(
 				anAssign(
 					Var( 'a' ),

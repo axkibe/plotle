@@ -41,8 +41,8 @@ Code =
 			require( '../code/a-call' ),
 		aCheck :
 			require( '../code/a-check' ),
-		CommaList :
-			require( '../code/comma-list' ),
+		aCommaList :
+			require( '../code/a-comma-list' ),
 		Comment :
 			require( '../code/comment' ),
 		Condition :
@@ -781,10 +781,10 @@ ShortHand.VarDec =
 /*
 | Shorthand for creating comma lists.
 */
-ShortHand.CommaList =
+ShortHand.aCommaList =
 	function( )
 {
-	return Code.CommaList.create( );
+	return Code.aCommaList.create( );
 };
 
 

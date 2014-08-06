@@ -54,7 +54,7 @@ precTable =
 			-1,
 		'aCall' :
 			2,
-		'CommaList' :
+		'aCommaList' :
 			18,
 		'Condition' :
 			15,
@@ -2340,7 +2340,7 @@ formatVarDec =
 | Formats a comma list operator
 */
 var
-formatCommaList =
+formatACommaList =
 	function(
 		context,
 		list
@@ -2371,7 +2371,7 @@ formatCommaList =
 			+ formatExpression(
 				context.Inc,
 				expr,
-				precTable.CommaList
+				precTable.aCommaList
 			);
 	}
 
@@ -2579,8 +2579,8 @@ exprFormatter =
 			formatABooleanLiteral,
 		'aCall' :
 			formatACall,
-		'CommaList' :
-			formatCommaList,
+		'aCommaList' :
+			formatACommaList,
 		'Condition' :
 			formatCondition,
 		'Delete' :
