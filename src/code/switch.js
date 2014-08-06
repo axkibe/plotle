@@ -45,15 +45,14 @@ if( JION )
 			true,
 		twig :
 			{
-				'Case' :
-					'Code.Case'
+//				'aCase' : 'Code.aCase'
 			}
 	};
 }
 
 
 var
-	Case =
+	aCase =
 		require( './case' ),
 	Jools =
 		require( '../jools/jools' ),
@@ -64,7 +63,7 @@ var
 /*
 | Shortcut for appending a case to this switch.
 */
-Switch.prototype.Case =
+Switch.prototype.aCase =
 	function(
 		case_or_condition,
 		block
@@ -73,10 +72,10 @@ Switch.prototype.Case =
 	var
 		caseExpr;
 
-	if( case_or_condition.reflect !== 'Case' )
+	if( case_or_condition.reflect !== 'aCase' )
 	{
 		caseExpr =
-			Case.create(
+			aCase.create(
 				'twig:add',
 					Jools.uid( ), // FIXME
 					case_or_condition,

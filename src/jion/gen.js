@@ -1165,7 +1165,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 
 		switchExpr =
 			switchExpr
-			.Case(
+			.aCase(
 				StringLiteral( name  ),
 				aBlock( )
 				.If(
@@ -1187,7 +1187,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 		// FIXME make a sub-function to add the twigDup stuff
 		switchExpr =
 			switchExpr
-			.Case(
+			.aCase(
 				StringLiteral( 'twig:add' ),
 				aBlock( )
 				.If(
@@ -1255,7 +1255,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Var( 'key' )
 				)
 			)
-			.Case(
+			.aCase(
 				StringLiteral( 'twig:set' ),
 				aBlock( )
 				.If(
@@ -1317,7 +1317,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Var( 'arg' )
 				)
 			)
-			.Case(
+			.aCase(
 				StringLiteral( 'twig:insert' ),
 				aBlock( )
 				.If(
@@ -1420,7 +1420,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 			)
-			.Case(
+			.aCase(
 				StringLiteral( 'twig:remove' ),
 				aBlock( )
 				.If(
@@ -2299,7 +2299,7 @@ Gen.prototype.genFromJSONCreatorParser =
 		Switch(
 			Var( 'name' )
 		)
-		.Case(
+		.aCase(
 			StringLiteral( 'type' ),
 			aBlock( )
 			.If(
@@ -2316,7 +2316,7 @@ Gen.prototype.genFromJSONCreatorParser =
 	{
 		switchExpr =
 			switchExpr
-			.Case(
+			.aCase(
 				StringLiteral( 'twig' ),
 				aBlock( )
 				.anAssign(
@@ -2324,7 +2324,7 @@ Gen.prototype.genFromJSONCreatorParser =
 					Var( 'arg' )
 				)
 			)
-			.Case(
+			.aCase(
 				StringLiteral( 'ranks' ),
 				aBlock( )
 				.anAssign(
@@ -2401,7 +2401,7 @@ Gen.prototype.genFromJSONCreatorParser =
 
 		switchExpr =
 			switchExpr
-			.Case(
+			.aCase(
 				StringLiteral( name ),
 				caseBlock
 			);
@@ -2474,7 +2474,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 
 		switchExpr =
 			switchExpr
-			.Case(
+			.aCase(
 				StringLiteral( name ),
 				aBlock( )
 				.anAssign(

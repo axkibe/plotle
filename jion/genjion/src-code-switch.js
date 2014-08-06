@@ -36,10 +36,6 @@ if( SERVER )
 	JoobjProto = require( '../../src/jion/proto' );
 
 	Jools = require( '../../src/jools/jools' );
-
-	Code = { };
-
-	Code.Case = require( '../../src/code/case' );
 }
 
 

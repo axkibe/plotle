@@ -28,8 +28,8 @@ module.exports =
 			'src/code/a-block.js',
 			'src/code/a-boolean-literal.js',
 			'src/code/a-call.js',
+			'src/code/a-case.js',
 
-			'src/code/case.js',
 			'src/code/check.js',
 			'src/code/comma-list.js',
 			'src/code/comment.js',
