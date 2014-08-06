@@ -33,8 +33,8 @@ module.exports =
 			'src/code/a-comma-list.js',
 			'src/code/a-comment.js',
 			'src/code/a-condition.js',
+			'src/code/a-delete.js',
 
-			'src/code/delete.js',
 			'src/code/differs.js',
 			'src/code/dot.js',
 			'src/code/equals.js',

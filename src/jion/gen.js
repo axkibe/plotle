@@ -66,8 +66,8 @@ var
 		Shorthand.aCommaList,
 	aCondition =
 		Shorthand.aCondition,
-	Delete =
-		Shorthand.Delete,
+	aDelete =
+		Shorthand.aDelete,
 	Differs =
 		Shorthand.Differs,
 	Equals =
@@ -1452,7 +1452,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Append(
-					Delete(
+					aDelete(
 						Var( 'twig' )
 						.Member(
 							Var( 'arg' )

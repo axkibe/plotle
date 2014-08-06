@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	Delete =
-		Code.Delete =
+	aDelete =
+		Code.aDelete =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new Delete object.
+| Creates a new aDelete object.
 */
-Delete.create =
+aDelete.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ Delete.create =
 			inherit,
 			v_expr;
 
-		if( this !== Delete )
+		if( this !== aDelete )
 		{
 			inherit = this;
 
@@ -148,13 +148,13 @@ Delete.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Delete';
+prototype.reflect = 'aDelete';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.delete';
+prototype.reflex = 'code.aDelete';
 
 
 /*
@@ -196,7 +196,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Delete;
+	module.exports = aDelete;
 }
 
 

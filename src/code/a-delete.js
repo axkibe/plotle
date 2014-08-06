@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Delete',
+			'aDelete',
 		unit :
 			'Code',
 		node :
@@ -42,14 +42,15 @@ if( JION )
 | Node imports.
 */
 var
-	Delete =
-		require( '../jion/this' )( module );
+	aDelete;
+
+aDelete =
+	require( '../jion/this' )( module );
 
 /*
 | Node export.
 */
-module.exports =
-	Delete;
+module.exports = aDelete;
 
 
 } )( );

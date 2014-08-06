@@ -47,8 +47,8 @@ Code =
 			require( '../code/a-comment' ),
 		aCondition :
 			require( '../code/a-condition' ),
-		Delete :
-			require( '../code/delete' ),
+		aDelete :
+			require( '../code/a-delete' ),
 		Differs :
 			require( '../code/differs' ),
 		Dot :
@@ -267,13 +267,13 @@ ShortHand.Differs =
 /*
 | Shorthand for creating delete calls.
 */
-ShortHand.Delete =
+ShortHand.aDelete =
 	function(
 		expr
 	)
 {
 	return (
-		Code.Delete.create(
+		Code.aDelete.create(
 			'expr',
 				expr
 		)

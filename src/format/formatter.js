@@ -58,7 +58,7 @@ precTable =
 			18,
 		'aCondition' :
 			15,
-		'Delete' :
+		'aDelete' :
 			4,
 		'Differs' :
 			9,
@@ -1507,7 +1507,7 @@ formatStatement =
 		case 'code.anAssign' :
 		case 'code.aBooleanLiteral' :
 		case 'code.aCall' :
-		case 'code.delete' :
+		case 'code.aDelete' :
 		case 'code.fail' :
 		case 'code.new' :
 		case 'code.numberLiteral' :
@@ -1788,7 +1788,7 @@ formatACall =
 | Formats a delete expression.
 */
 var
-formatDelete =
+formatADelete =
 	function(
 		context,
 		expr
@@ -1797,7 +1797,7 @@ formatDelete =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.delete' )
+/**/	if( expr.reflex !== 'code.aDelete' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1811,7 +1811,7 @@ formatDelete =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.Delete
+			precTable.aDelete
 		)
 	);
 };
@@ -2583,8 +2583,8 @@ exprFormatter =
 			formatACommaList,
 		'aCondition' :
 			formatACondition,
-		'Delete' :
-			formatDelete,
+		'aDelete' :
+			formatADelete,
 		'Differs' :
 			formatDiffers,
 		'Dot' :
