@@ -208,7 +208,7 @@ Para.concernsMark =
 		return undefined;
 	}
 
-	if( mark.reflect === 'Range' )
+	if( mark.reflex === 'mark.range' )
 	{
 		if(
 			mark.itemPath.subPathOf( path )
@@ -352,7 +352,7 @@ Jools.lazyValue(
 		f.scale( 1 / zoom );
 
 		if(
-			mark.reflect === 'Caret'
+			mark.reflex === 'mark.caret'
 			&&
 			mark.focus
 		)
@@ -919,11 +919,14 @@ Para.prototype.specialKey =
 	)
 {
 	var
-		doc =
-			item.doc,
+		doc,
+		mark,
+		v0,
+		v1;
 
-		mark =
-			this.mark;
+	doc = item.doc,
+
+	mark = this.mark;
 
 	if( ctrl )
 	{
@@ -931,11 +934,9 @@ Para.prototype.specialKey =
 		{
 			case 'a' :
 
-				var
-					v0 =
-						doc.atRank( 0 ),
-					v1 =
-						doc.atRank( doc.ranks.length - 1 );
+				v0 = doc.atRank( 0 );
+
+				v1 = doc.atRank( doc.ranks.length - 1 );
 
 				shell.setMark(
 					Mark.Range.create(
@@ -972,62 +973,50 @@ Para.prototype.specialKey =
 		retainx =
 			null;
 
-	switch( mark.reflect )
+	switch( mark.reflex )
 	{
-		case 'Caret' :
+		case 'mark.caret' :
 
-			if( CHECK )
-			{
-				if( !this.path.subPathOf( mark.caretPath ) )
-				{
-					throw new Error(
-						'path mismatch'
-					);
-				}
-			}
+/**/		if( CHECK )
+/**/		{
+/**/			if( !this.path.subPathOf( mark.caretPath ) )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+/**/		}
 
-			at =
-				mark.caretAt;
+			at = mark.caretAt;
 
-			retainx =
-				mark.retainx;
+			retainx = mark.retainx;
 
 			if( shift )
 			{
-				bPath =
-					mark.caretPath;
+				bPath = mark.caretPath;
 
-				bAt =
-					mark.caretAt;
+				bAt = mark.caretAt;
 			}
 
 			break;
 
-		case 'Range' :
+		case 'mark.range' :
 
-			if( CHECK )
-			{
-				if( !this.path.subPathOf( mark.caretPath ) )
-				{
-					throw new Error(
-						'path mismatch'
-					);
-				}
-			}
+/**/		if( CHECK )
+/**/		{
+/**/			if( !this.path.subPathOf( mark.caretPath ) )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+/**/		}
 
-			at =
-				mark.caretAt;
+			at = mark.caretAt;
 
-			retainx =
-				mark.retainx;
+			retainx = mark.retainx;
 
 			if( shift )
 			{
-				bPath =
-					mark.bPath;
+				bPath = mark.bPath;
 
-				bAt =
-					mark.bAt;
+				bAt = mark.bAt;
 			}
 
 			break;
