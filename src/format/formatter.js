@@ -80,7 +80,7 @@ precTable =
 			1,
 		'aNew' :
 			2,
-		'Not' :
+		'aNot' :
 			4,
 		'aNull' :
 			-1,
@@ -1848,7 +1848,7 @@ formatANew =
 | Formats a not expression.
 */
 var
-formatNot =
+formatANot =
 	function(
 		context,
 		expr
@@ -1857,7 +1857,7 @@ formatNot =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.not' )
+/**/	if( expr.reflex !== 'code.aNot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1871,7 +1871,7 @@ formatNot =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.Not
+			precTable.aNot
 		)
 	);
 };
@@ -2596,8 +2596,8 @@ exprFormatter =
 			formatAMember,
 		'aNew' :
 			formatANew,
-		'Not' :
-			formatNot,
+		'aNot' :
+			formatANot,
 		'aNull' :
 			formatNull,
 		'NumberLiteral' :

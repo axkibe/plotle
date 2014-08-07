@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	Not =
-		Code.Not =
+	aNot =
+		Code.aNot =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new Not object.
+| Creates a new aNot object.
 */
-Not.create =
+aNot.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ Not.create =
 			inherit,
 			v_expr;
 
-		if( this !== Not )
+		if( this !== aNot )
 		{
 			inherit = this;
 
@@ -148,13 +148,13 @@ Not.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Not';
+prototype.reflect = 'aNot';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.not';
+prototype.reflex = 'code.aNot';
 
 
 /*
@@ -196,7 +196,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Not;
+	module.exports = aNot;
 }
 
 

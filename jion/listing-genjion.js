@@ -34,8 +34,8 @@ module.exports =
 			'src/code/a-less-than.js',
 			'src/code/a-member.js',
 			'src/code/a-new.js',
+			'src/code/a-not.js',
 
-			'src/code/not.js',
 			'src/code/number-literal.js',
 			'src/code/obj-literal.js',
 			'src/code/or.js',

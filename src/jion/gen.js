@@ -88,8 +88,8 @@ var
 		Shorthand.aLessThan,
 	aNew =
 		Shorthand.aNew,
-	Not =
-		Shorthand.Not,
+	aNot =
+		Shorthand.aNot,
 	aNull =
 		Shorthand.aNull( ),
 	NumberLiteral =
@@ -1178,7 +1178,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				StringLiteral( 'twig:add' ),
 				aBlock( )
 				.anIf(
-					Not(
+					aNot(
 						Var( 'twigDup' )
 					),
 					aBlock( )
@@ -1246,7 +1246,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				StringLiteral( 'twig:set' ),
 				aBlock( )
 				.anIf(
-					Not( Var( 'twigDup' ) ),
+					aNot( Var( 'twigDup' ) ),
 					aBlock( )
 					.anAssign(
 						Var( 'twig' ),
@@ -1308,7 +1308,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				StringLiteral( 'twig:insert' ),
 				aBlock( )
 				.anIf(
-					Not( Var( 'twigDup' ) ),
+					aNot( Var( 'twigDup' ) ),
 					aBlock( )
 					.anAssign(
 						Var( 'twig' ),
@@ -1411,7 +1411,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				StringLiteral( 'twig:remove' ),
 				aBlock( )
 				.anIf(
-					Not(
+					aNot(
 						Var( 'twigDup' )
 					),
 					aBlock( )
@@ -1705,7 +1705,7 @@ Gen.prototype.genCreatorChecks =
 							Typeof( attr.v ),
 							StringLiteral( 'string' )
 						),
-						Not(
+						aNot(
 							anInstanceof(
 								attr.v,
 								Var( 'String' )
@@ -1957,7 +1957,7 @@ Gen.prototype.genCreatorUnchanged =
 		cond =
 			anAnd(
 				cond,
-				Not(
+				aNot(
 					Var( 'twigDup' )
 				)
 			);
@@ -2074,7 +2074,7 @@ Gen.prototype.genCreatorReturn =
 		return (
 			block
 			.anIf(
-				Not(
+				aNot(
 					Var( '_singleton' )
 				),
 				aBlock( )
@@ -2491,7 +2491,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			)
 		)
 		.anIf(
-			Not(
+			aNot(
 				Var( 'jwig' )
 				.aMember(
 					Var( 'key' )
@@ -2519,10 +2519,10 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		)
 		.anIf(
 			Or(
-				Not(
+				aNot(
 					Var( 'jwig' )
 				),
-				Not(
+				aNot(
 					Var( 'ranks' )
 				)
 			),
@@ -3038,7 +3038,7 @@ Gen.prototype.genEquals =
 			.Return( True )
 		)
 		.anIf(
-			Not(
+			aNot(
 				Var( 'obj' )
 			),
 			aBlock( )
@@ -3157,7 +3157,7 @@ Gen.prototype.genAlike =
 				.Return( True )
 			)
 			.anIf(
-				Not(
+				aNot(
 					Var( 'obj' )
 				),
 				aBlock( )

@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Not',
+			'aNot',
 		unit :
 			'Code',
 		attributes :
@@ -39,9 +39,9 @@ if( JION )
 
 
 var
-	Not;
+	aNot;
 
-Not =
+aNot =
 	require( '../jion/this' )( module );
 
 
@@ -49,7 +49,7 @@ Not =
 | Node export.
 */
 module.exports =
-	Not;
+	aNot;
 
 
 } )( );

@@ -73,8 +73,8 @@ Code =
 			require( '../code/a-member' ),
 		aNew :
 			require( '../code/a-new' ),
-		Not :
-			require( '../code/not' ),
+		aNot :
+			require( '../code/a-not' ),
 		aNull :
 			require( '../code/a-null' ),
 		NumberLiteral :
@@ -487,13 +487,13 @@ ShortHand.aNew =
 /*
 | Shorthand for creating negations.
 */
-ShortHand.Not =
+ShortHand.aNot =
 	function(
 		expr
 	)
 {
 	return (
-		Code.Not.create(
+		Code.aNot.create(
 			'expr',
 				expr
 		)
