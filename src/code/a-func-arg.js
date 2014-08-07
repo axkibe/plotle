@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'FuncArg',
+			'aFuncArg',
 		unit :
 			'Code',
 		attributes :
@@ -50,8 +50,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

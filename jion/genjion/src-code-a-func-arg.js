@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	FuncArg =
-		Code.FuncArg =
+	aFuncArg =
+		Code.aFuncArg =
 			{
 				prototype :
 					prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new FuncArg object.
+| Creates a new aFuncArg object.
 */
-FuncArg.create =
+aFuncArg.create =
 	prototype.create =
 		function(
 			// free strings
@@ -90,7 +90,7 @@ FuncArg.create =
 			v_comment,
 			v_name;
 
-		if( this !== FuncArg )
+		if( this !== aFuncArg )
 		{
 			inherit = this;
 
@@ -198,13 +198,13 @@ FuncArg.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'FuncArg';
+prototype.reflect = 'aFuncArg';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.funcArg';
+prototype.reflex = 'code.aFuncArg';
 
 
 /*
@@ -246,7 +246,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = FuncArg;
+	module.exports = aFuncArg;
 }
 
 
