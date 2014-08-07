@@ -38,8 +38,7 @@ module.exports =
 			'src/code/a-number-literal.js',
 			'src/code/an-obj-literal.js',
 			'src/code/an-or.js',
-
-			'src/code/plus.js',
+			'src/code/a-plus.js',
 			'src/code/a-plus-assign.js',
 
 			'src/code/pre-increment.js',

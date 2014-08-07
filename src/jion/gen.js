@@ -98,8 +98,8 @@ var
 		Shorthand.anObjLiteral,
 	anOr =
 		Shorthand.anOr,
-	Plus =
-		Shorthand.Plus,
+	aPlus =
+		Shorthand.aPlus,
 	aPlusAssign =
 		Shorthand.aPlusAssign,
 	PreIncrement =
@@ -1123,7 +1123,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			'arg',
 			Var( 'arguments' )
 			.aMember(
-				Plus(
+				aPlus(
 					Var( 'a' ),
 					aNumberLiteral( 1 )
 				)
@@ -1208,7 +1208,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Var( 'arg' ),
 					Var( 'arguments' )
 					.aMember(
-						Plus(
+						aPlus(
 							PreIncrement( Var( 'a' ) ),
 							aNumberLiteral( 1 )
 						)
@@ -1223,7 +1223,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					aBlock( )
 					.aFail(
-						Plus(
+						aPlus(
 							StringLiteral( 'key "' ),
 							Var( 'key' ),
 							StringLiteral( '" already in use' )
@@ -1274,7 +1274,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Var( 'arg' ),
 					Var( 'arguments' )
 					.aMember(
-						Plus(
+						aPlus(
 							PreIncrement( Var( 'a' ) ),
 							aNumberLiteral( 1 )
 						)
@@ -1289,7 +1289,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					aBlock( )
 					.aFail(
-						Plus(
+						aPlus(
 							StringLiteral( 'key "' ),
 							Var( 'key' ),
 							StringLiteral( '" not in use' )
@@ -1336,7 +1336,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Var( 'rank' ),
 					Var( 'arguments' )
 					.aMember(
-						Plus(
+						aPlus(
 							Var( 'a' ),
 							aNumberLiteral( 2 )
 						)
@@ -1346,7 +1346,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Var( 'arg' ),
 					Var( 'arguments' )
 					.aMember(
-						Plus(
+						aPlus(
 							Var( 'a' ),
 							aNumberLiteral( 3 )
 						)
@@ -1368,7 +1368,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					aBlock( )
 					.aFail(
-						Plus(
+						aPlus(
 							StringLiteral( 'key "' ),
 							Var( 'key' ),
 							StringLiteral( '" already in use' )
@@ -1443,7 +1443,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					aBlock( )
 					.aFail(
-						Plus(
+						aPlus(
 							StringLiteral( 'key "' ),
 							Var( 'arg' ),
 							StringLiteral( '" not in use' )

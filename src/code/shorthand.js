@@ -83,8 +83,8 @@ Code =
 			require( '../code/an-obj-literal' ),
 		anOr :
 			require( '../code/an-or' ),
-		Plus :
-			require( '../code/plus' ),
+		aPlus :
+			require( '../code/a-plus' ),
 		aPlusAssign :
 			require( '../code/a-plus-assign' ),
 		PreIncrement :
@@ -588,7 +588,7 @@ ShortHand.anOr =
 /*
 | Shorthand for creating pluses.
 */
-ShortHand.Plus =
+ShortHand.aPlus =
 	function(
 		left,
 		right
@@ -605,7 +605,7 @@ ShortHand.Plus =
 		args.splice(
 			0,
 			2,
-			Code.Plus.create(
+			Code.aPlus.create(
 				'left',
 					left,
 				'right',
@@ -614,7 +614,7 @@ ShortHand.Plus =
 		);
 
 		return (
-			ShortHand.Plus.apply(
+			ShortHand.aPlus.apply(
 				this,
 				args
 			)
@@ -622,7 +622,7 @@ ShortHand.Plus =
 	}
 
 	return (
-		Code.Plus.create(
+		Code.aPlus.create(
 			'left',
 				left,
 			'right',

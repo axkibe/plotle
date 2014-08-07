@@ -90,7 +90,7 @@ precTable =
 			-1,
 		'anOr' :
 			14,
-		'Plus' :
+		'aPlus' :
 			6,
 		'aPlusAssign' :
 			17,
@@ -422,7 +422,7 @@ formatADiffers =
 | Formats a Plus.
 */
 var
-formatPlus =
+formatAPlus =
 	function(
 		context,
 		expr
@@ -433,7 +433,7 @@ formatPlus =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.plus' )
+/**/	if( expr.reflex !== 'code.aPlus' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -443,7 +443,7 @@ formatPlus =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.Plus
+			precTable.aPlus
 		)
 		+ context.sep
 		+ context.tab
@@ -452,7 +452,7 @@ formatPlus =
 		+ formatExpression(
 			context,
 			expr.right,
-			precTable.Plus
+			precTable.aPlus
 		);
 
 	return text;
@@ -2606,8 +2606,8 @@ exprFormatter =
 			formatAnObjLiteral,
 		'anOr' :
 			formatAnOr,
-		'Plus' :
-			formatPlus,
+		'aPlus' :
+			formatAPlus,
 		'aPlusAssign' :
 			formatAPlusAssign,
 		'PreIncrement' :
