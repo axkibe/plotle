@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	PlusAssign =
-		Code.PlusAssign =
+	aPlusAssign =
+		Code.aPlusAssign =
 			{
 				prototype :
 					prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new PlusAssign object.
+| Creates a new aPlusAssign object.
 */
-PlusAssign.create =
+aPlusAssign.create =
 	prototype.create =
 		function(
 			// free strings
@@ -90,7 +90,7 @@ PlusAssign.create =
 			v_left,
 			v_right;
 
-		if( this !== PlusAssign )
+		if( this !== aPlusAssign )
 		{
 			inherit = this;
 
@@ -173,13 +173,13 @@ PlusAssign.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'PlusAssign';
+prototype.reflect = 'aPlusAssign';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.plusAssign';
+prototype.reflex = 'code.aPlusAssign';
 
 
 /*
@@ -221,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = PlusAssign;
+	module.exports = aPlusAssign;
 }
 
 

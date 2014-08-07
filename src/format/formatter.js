@@ -92,7 +92,7 @@ precTable =
 			14,
 		'Plus' :
 			6,
-		'PlusAssign' :
+		'aPlusAssign' :
 			17,
 		'PreIncrement' :
 			3,
@@ -463,7 +463,7 @@ formatPlus =
 | Formats a plus-assignment.
 */
 var
-formatPlusAssign =
+formatAPlusAssign =
 	function(
 		context,
 		assign
@@ -1504,7 +1504,7 @@ formatStatement =
 		case 'code.aFail' :
 		case 'code.aNew' :
 		case 'code.aNumberLiteral' :
-		case 'code.plusAssign' :
+		case 'code.aPlusAssign' :
 		case 'code.return' :
 		case 'code.stringLiteral' :
 		case 'code.var' :
@@ -2608,8 +2608,8 @@ exprFormatter =
 			formatAnOr,
 		'Plus' :
 			formatPlus,
-		'PlusAssign' :
-			formatPlusAssign,
+		'aPlusAssign' :
+			formatAPlusAssign,
 		'PreIncrement' :
 			formatPreIncrement,
 		'StringLiteral' :

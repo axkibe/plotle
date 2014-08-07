@@ -40,7 +40,8 @@ module.exports =
 			'src/code/an-or.js',
 
 			'src/code/plus.js',
-			'src/code/plus-assign.js',
+			'src/code/a-plus-assign.js',
+
 			'src/code/pre-increment.js',
 			'src/code/return.js',
 			'src/code/string-literal.js',

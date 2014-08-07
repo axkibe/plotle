@@ -85,8 +85,8 @@ Code =
 			require( '../code/an-or' ),
 		Plus :
 			require( '../code/plus' ),
-		PlusAssign :
-			require( '../code/plus-assign' ),
+		aPlusAssign :
+			require( '../code/a-plus-assign' ),
 		PreIncrement :
 			require( '../code/pre-increment' ),
 		StringLiteral :
@@ -635,14 +635,14 @@ ShortHand.Plus =
 /*
 | Shorthand for creating plus-assignments.
 */
-ShortHand.PlusAssign =
+ShortHand.aPlusAssign =
 	function(
 		left,
 		right
 	)
 {
 	return (
-		Code.PlusAssign.create(
+		Code.aPlusAssign.create(
 			'left',
 				left,
 			'right',

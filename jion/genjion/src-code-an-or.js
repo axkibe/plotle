@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	AnOr =
-		Code.AnOr =
+	anOr =
+		Code.anOr =
 			{
 				prototype :
 					prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new AnOr object.
+| Creates a new anOr object.
 */
-AnOr.create =
+anOr.create =
 	prototype.create =
 		function(
 			// free strings
@@ -90,7 +90,7 @@ AnOr.create =
 			v_left,
 			v_right;
 
-		if( this !== AnOr )
+		if( this !== anOr )
 		{
 			inherit = this;
 
@@ -221,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = AnOr;
+	module.exports = anOr;
 }
 
 

@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'PlusAssign',
+			'aPlusAssign',
 		unit :
 			'Code',
 		attributes :

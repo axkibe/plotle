@@ -100,8 +100,8 @@ var
 		Shorthand.anOr,
 	Plus =
 		Shorthand.Plus,
-	PlusAssign =
-		Shorthand.PlusAssign,
+	aPlusAssign =
+		Shorthand.aPlusAssign,
 	PreIncrement =
 		Shorthand.PreIncrement,
 	StringLiteral =
@@ -1353,7 +1353,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.Append(
-					PlusAssign(
+					aPlusAssign(
 						Var( 'a' ),
 						aNumberLiteral( 2 )
 					)
@@ -1500,7 +1500,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				Var( 'a' ),
 				Var( 'aZ' )
 			),
-			PlusAssign(
+			aPlusAssign(
 				Var( 'a' ),
 				aNumberLiteral( 2 )
 			),
