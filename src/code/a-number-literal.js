@@ -1,6 +1,8 @@
 /*
 | A number literal.
 |
+| FIXME remove the Literal in name
+|
 | Authors: Axel Kittenberger
 */
 
@@ -19,7 +21,7 @@ if( JION )
 {
 	return {
 		name :
-			'NumberLiteral',
+			'aNumberLiteral',
 		unit :
 			'Code',
 		node :
@@ -38,16 +40,15 @@ if( JION )
 }
 
 var
-	NumberLiteral;
+	aNumberLiteral;
 
-NumberLiteral =
+aNumberLiteral =
 	require( '../jion/this' )( module );
 
 /*
 | Node export.
 */
-module.exports =
-	NumberLiteral;
+module.exports = aNumberLiteral;
 
 
 } )( );

@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	NumberLiteral =
-		Code.NumberLiteral =
+	aNumberLiteral =
+		Code.aNumberLiteral =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new NumberLiteral object.
+| Creates a new aNumberLiteral object.
 */
-NumberLiteral.create =
+aNumberLiteral.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ NumberLiteral.create =
 			inherit,
 			v_number;
 
-		if( this !== NumberLiteral )
+		if( this !== aNumberLiteral )
 		{
 			inherit = this;
 
@@ -153,13 +153,13 @@ NumberLiteral.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'NumberLiteral';
+prototype.reflect = 'aNumberLiteral';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.numberLiteral';
+prototype.reflex = 'code.aNumberLiteral';
 
 
 /*
@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = NumberLiteral;
+	module.exports = aNumberLiteral;
 }
 
 
