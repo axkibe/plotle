@@ -20,7 +20,7 @@ if( JION )
 {
 	return {
 		name :
-			'Plus',
+			'aPlus',
 		unit :
 			'Code',
 		attributes :
@@ -46,8 +46,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

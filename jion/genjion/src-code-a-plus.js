@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	Plus =
-		Code.Plus =
+	aPlus =
+		Code.aPlus =
 			{
 				prototype :
 					prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new Plus object.
+| Creates a new aPlus object.
 */
-Plus.create =
+aPlus.create =
 	prototype.create =
 		function(
 			// free strings
@@ -90,7 +90,7 @@ Plus.create =
 			v_left,
 			v_right;
 
-		if( this !== Plus )
+		if( this !== aPlus )
 		{
 			inherit = this;
 
@@ -173,13 +173,13 @@ Plus.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Plus';
+prototype.reflect = 'aPlus';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.plus';
+prototype.reflex = 'code.aPlus';
 
 
 /*
@@ -221,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Plus;
+	module.exports = aPlus;
 }
 
 
