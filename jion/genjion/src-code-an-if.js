@@ -71,8 +71,8 @@ var
 | Jion
 */
 var
-	If =
-		Code.If =
+	anIf =
+		Code.anIf =
 			{
 				prototype :
 					prototype
@@ -80,9 +80,9 @@ var
 
 
 /*
-| Creates a new If object.
+| Creates a new anIf object.
 */
-If.create =
+anIf.create =
 	prototype.create =
 		function(
 			// free strings
@@ -94,7 +94,7 @@ If.create =
 			v_elsewise,
 			v_then;
 
-		if( this !== If )
+		if( this !== anIf )
 		{
 			inherit = this;
 
@@ -223,13 +223,13 @@ If.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'If';
+prototype.reflect = 'anIf';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.if';
+prototype.reflex = 'code.anIf';
 
 
 /*
@@ -285,7 +285,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = If;
+	module.exports = anIf;
 }
 
 

@@ -80,8 +80,8 @@ var
 		Shorthand.aFunc,
 	aGreaterThan =
 		Shorthand.aGreaterThan,
-	If =
-		Shorthand.If,
+	anIf =
+		Shorthand.anIf,
 	Instanceof =
 		Shorthand.Instanceof,
 	LessThan =
@@ -641,7 +641,7 @@ Gen.prototype.genNodeIncludes =
 	}
 
 	capsule =
-		capsule.If(
+		capsule.anIf(
 			Var( 'SERVER' ),
 			block
 		);
@@ -704,7 +704,7 @@ Gen.prototype.genConstructor =
 		{
 			block =
 				block
-				.If(
+				.anIf(
 					aDiffers( attr.v, Undefined ),
 					aBlock( )
 					.Append(
@@ -1063,7 +1063,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 	}
 
 	thisCheck =
-		If(
+		anIf(
 			aDiffers(
 				This,
 				Var( this.reference )
@@ -1155,7 +1155,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			.aCase(
 				StringLiteral( name  ),
 				aBlock( )
-				.If(
+				.anIf(
 					aDiffers(
 						Var( 'arg' ),
 						Undefined
@@ -1177,7 +1177,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			.aCase(
 				StringLiteral( 'twig:add' ),
 				aBlock( )
-				.If(
+				.anIf(
 					Not(
 						Var( 'twigDup' )
 					),
@@ -1214,7 +1214,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.If(
+				.anIf(
 					aDiffers(
 						Var( 'twig' ).Member(
 							Var( 'key' )
@@ -1245,7 +1245,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			.aCase(
 				StringLiteral( 'twig:set' ),
 				aBlock( )
-				.If(
+				.anIf(
 					Not( Var( 'twigDup' ) ),
 					aBlock( )
 					.anAssign(
@@ -1280,7 +1280,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.If(
+				.anIf(
 					anEquals(
 						Var( 'twig' ).Member(
 							Var( 'key' )
@@ -1307,7 +1307,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			.aCase(
 				StringLiteral( 'twig:insert' ),
 				aBlock( )
-				.If(
+				.anIf(
 					Not( Var( 'twigDup' ) ),
 					aBlock( )
 					.anAssign(
@@ -1358,7 +1358,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						NumberLiteral( 2 )
 					)
 				)
-				.If(
+				.anIf(
 					aDiffers(
 						Var( 'twig' )
 						.Member(
@@ -1375,7 +1375,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.If(
+				.anIf(
 					Or(
 						LessThan(
 							Var( 'rank' ),
@@ -1410,7 +1410,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			.aCase(
 				StringLiteral( 'twig:remove' ),
 				aBlock( )
-				.If(
+				.anIf(
 					Not(
 						Var( 'twigDup' )
 					),
@@ -1433,7 +1433,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 						True
 					)
 				)
-				.If(
+				.anIf(
 					anEquals(
 						Var( 'twig' )
 						.Member(
@@ -1547,7 +1547,7 @@ Gen.prototype.genCreatorDefaults =
 		{
 			block =
 				block
-				.If(
+				.anIf(
 					anEquals( attr.v, Undefined ),
 					aBlock( )
 					.anAssign( attr.v, attr.defaultValue )
@@ -1602,7 +1602,7 @@ Gen.prototype.genCreatorChecks =
 		if( !attr.allowsUndefined )
 		{
 			check =
-				check.If(
+				check.anIf(
 					anEquals( attr.v, Undefined ),
 					aBlock( )
 					.aFail( 'undefined attribute ' + name )
@@ -1612,7 +1612,7 @@ Gen.prototype.genCreatorChecks =
 		if( !attr.allowsNull )
 		{
 			check =
-				check.If(
+				check.anIf(
 					anEquals( attr.v, aNull ),
 					aBlock( )
 					.aFail( 'attribute ' + name + ' must not be null.' )
@@ -1733,10 +1733,10 @@ Gen.prototype.genCreatorChecks =
 		if( cond )
 		{
 			check =
-				check.If(
+				check.anIf(
 					cond,
 					aBlock( )
-					.If(
+					.anIf(
 						tcheck,
 						tfail
 					)
@@ -1745,7 +1745,7 @@ Gen.prototype.genCreatorChecks =
 		else
 		{
 			check =
-				check.If(
+				check.anIf(
 					tcheck,
 					tfail
 				);
@@ -2044,7 +2044,7 @@ Gen.prototype.genCreatorUnchanged =
 	}
 
 	block =
-		block.If(
+		block.anIf(
 			cond,
 			aBlock( )
 			.Return(
@@ -2073,7 +2073,7 @@ Gen.prototype.genCreatorReturn =
 	{
 		return (
 			block
-			.If(
+			.anIf(
 				Not(
 					Var( '_singleton' )
 				),
@@ -2286,7 +2286,7 @@ Gen.prototype.genFromJSONCreatorParser =
 		.aCase(
 			StringLiteral( 'type' ),
 			aBlock( )
-			.If(
+			.anIf(
 				aDiffers(
 					Var( 'arg' ),
 					StringLiteral( this.name )
@@ -2490,7 +2490,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 				Var( 'a' )
 			)
 		)
-		.If(
+		.anIf(
 			Not(
 				Var( 'jwig' )
 				.Member(
@@ -2517,7 +2517,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			Var( 'twig' ),
 			ObjLiteral( )
 		)
-		.If(
+		.anIf(
 			Or(
 				Not(
 					Var( 'jwig' )
@@ -3029,7 +3029,7 @@ Gen.prototype.genEquals =
 
 	block =
 		aBlock( )
-		.If(
+		.anIf(
 			anEquals(
 				This,
 				Var( 'obj' )
@@ -3037,7 +3037,7 @@ Gen.prototype.genEquals =
 			aBlock( )
 			.Return( True )
 		)
-		.If(
+		.anIf(
 			Not(
 				Var( 'obj' )
 			),
@@ -3148,7 +3148,7 @@ Gen.prototype.genAlike =
 
 		block =
 			aBlock( )
-			.If(
+			.anIf(
 				anEquals(
 					This,
 					Var( 'obj' )
@@ -3156,7 +3156,7 @@ Gen.prototype.genAlike =
 				aBlock( )
 				.Return( True )
 			)
-			.If(
+			.anIf(
 				Not(
 					Var( 'obj' )
 				),
@@ -3244,7 +3244,7 @@ Gen.prototype.genNodeExport =
 	return (
 		capsule
 		.aComment( 'Node export.' )
-		.If(
+		.anIf(
 			Var( 'SERVER' ),
 			aBlock( )
 			.anAssign(

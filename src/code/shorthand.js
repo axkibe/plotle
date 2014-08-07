@@ -63,8 +63,8 @@ Code =
 			require( '../code/a-func-arg' ),
 		aGreaterThan :
 			require( '../code/a-greater-than' ),
-		If :
-			require( '../code/if' ),
+		anIf :
+			require( '../code/an-if' ),
 		Instanceof :
 			require( '../code/instanceof' ),
 		LessThan :
@@ -379,7 +379,7 @@ ShortHand.False =
 /*
 | Shorthand for creating ifs.
 */
-ShortHand.If =
+ShortHand.anIf =
 	function(
 		condition,
 		then,
@@ -387,7 +387,7 @@ ShortHand.If =
 	)
 {
 	return (
-		Code.If.create(
+		Code.anIf.create(
 			'condition',
 				condition,
 			'then',

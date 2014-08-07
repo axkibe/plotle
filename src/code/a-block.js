@@ -56,8 +56,8 @@ var
 				require( './a-for' ),
 			aForIn :
 				require( './a-for-in' ),
-			If :
-				require( './if' ),
+			anIf :
+				require( './an-if' ),
 			New :
 				require( './new' ),
 			Return :
@@ -182,7 +182,7 @@ aBlock.prototype.aComment =
 /*
 | Returns the block with an if appended.
 */
-aBlock.prototype.If =
+aBlock.prototype.anIf =
 	function(
 		condition,
 		then,
@@ -191,7 +191,7 @@ aBlock.prototype.If =
 {
 	var
 		statement =
-			Code.If.create(
+			Code.anIf.create(
 				'condition',
 					condition,
 				'then',

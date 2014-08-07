@@ -698,7 +698,7 @@ formatIf =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflex !== 'code.if' )
+/**/	if( statement.reflex !== 'code.anIf' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1374,7 +1374,7 @@ formatStatement =
 
 			break;
 
-		case 'code.if' :
+		case 'code.anIf' :
 
 			text +=
 				formatIf( context, statement );
@@ -1514,7 +1514,7 @@ formatStatement =
 		case 'code.aCheck' :
 		case 'code.aFor' :
 		case 'code.aForIn' :
-		case 'code.if' :
+		case 'code.anIf' :
 		case 'code.switch' :
 
 			return text + context.sep;

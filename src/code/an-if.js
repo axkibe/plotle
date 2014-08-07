@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'If',
+			'anIf',
 		unit :
 			'Code',
 		attributes :
@@ -58,13 +58,17 @@ if( JION )
 | Node includes.
 */
 var
-	If =
-		require( '../jion/this' )( module );
+	anIf;
+
+anIf =
+	require( '../jion/this' )( module );
 
 /*
 | Creates an if with the Elsewise block set.
+|
+| FIXME rename
 */
-If.prototype.Elsewise =
+anIf.prototype.Elsewise =
 	function(
 		block
 	)
@@ -81,8 +85,7 @@ If.prototype.Elsewise =
 /*
 | Node export.
 */
-module.exports =
-	If;
+module.exports = anIf;
 
 
 } )( );
