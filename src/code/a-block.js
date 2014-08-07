@@ -58,8 +58,8 @@ var
 				require( './a-for-in' ),
 			anIf :
 				require( './an-if' ),
-			New :
-				require( './new' ),
+			aNew :
+				require( './a-new' ),
 			Return :
 				require( './return' ),
 			StringLiteral :
@@ -292,14 +292,14 @@ aBlock.prototype.aForIn =
 /*
 | Shorthand for creating new calls.
 */
-aBlock.prototype.New =
+aBlock.prototype.aNew =
 	function(
 		call
 	)
 {
 	return (
 		this.Append(
-			Code.New.create(
+			Code.aNew.create(
 				'call',
 					call
 			)

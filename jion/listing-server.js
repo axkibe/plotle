@@ -48,8 +48,8 @@ module.exports =
 			'src/code/an-instanceof.js',
 			'src/code/a-less-than.js',
 			'src/code/a-member.js',
+			'src/code/a-new.js',
 
-			'src/code/new.js',
 			'src/code/not.js',
 			'src/code/number-literal.js',
 			'src/code/obj-literal.js',

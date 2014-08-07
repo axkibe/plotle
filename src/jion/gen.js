@@ -86,8 +86,8 @@ var
 		Shorthand.anInstanceof,
 	aLessThan =
 		Shorthand.aLessThan,
-	New =
-		Shorthand.New,
+	aNew =
+		Shorthand.aNew,
 	Not =
 		Shorthand.Not,
 	aNull =
@@ -2080,7 +2080,7 @@ Gen.prototype.genCreatorReturn =
 				aBlock( )
 				.anAssign(
 					Var( '_singleton' ),
-					New(
+					aNew(
 						aCall(
 							Var( 'Constructor' )
 						)
@@ -2131,7 +2131,7 @@ Gen.prototype.genCreatorReturn =
 
 	return (
 		block.Return(
-			New( call )
+			aNew( call )
 		)
 	);
 };
@@ -2631,7 +2631,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 	return (
 		block
 		.Return(
-			New( call )
+			aNew( call )
 		)
 	);
 };

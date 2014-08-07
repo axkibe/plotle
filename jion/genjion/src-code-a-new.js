@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	New =
-		Code.New =
+	aNew =
+		Code.aNew =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new New object.
+| Creates a new aNew object.
 */
-New.create =
+aNew.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ New.create =
 			inherit,
 			v_call;
 
-		if( this !== New )
+		if( this !== aNew )
 		{
 			inherit = this;
 
@@ -153,13 +153,13 @@ New.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'New';
+prototype.reflect = 'aNew';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.new';
+prototype.reflex = 'code.aNew';
 
 
 /*
@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = New;
+	module.exports = aNew;
 }
 
 

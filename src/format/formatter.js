@@ -78,7 +78,7 @@ precTable =
 			8,
 		'aMember' :
 			1,
-		'New' :
+		'aNew' :
 			2,
 		'Not' :
 			4,
@@ -1502,7 +1502,7 @@ formatStatement =
 		case 'code.aCall' :
 		case 'code.aDelete' :
 		case 'code.aFail' :
-		case 'code.new' :
+		case 'code.aNew' :
 		case 'code.numberLiteral' :
 		case 'code.plusAssign' :
 		case 'code.return' :
@@ -1815,7 +1815,7 @@ formatADelete =
 | Formats a new expression.
 */
 var
-formatNew =
+formatANew =
 	function(
 		context,
 		expr
@@ -1824,7 +1824,7 @@ formatNew =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.new' )
+/**/	if( expr.reflex !== 'code.aNew' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2594,8 +2594,8 @@ exprFormatter =
 			formatALessThan,
 		'aMember' :
 			formatAMember,
-		'New' :
-			formatNew,
+		'aNew' :
+			formatANew,
 		'Not' :
 			formatNot,
 		'aNull' :

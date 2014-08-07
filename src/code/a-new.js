@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'New',
+			'aNew',
 		unit :
 			'Code',
 		node :
@@ -41,14 +41,15 @@ if( JION )
 | Node imports.
 */
 var
-	New =
-		require( '../jion/this' )( module );
+	aNew;
+
+aNew =
+	require( '../jion/this' )( module );
 
 /*
 | Node export.
 */
-module.exports =
-	New;
+module.exports = aNew;
 
 
 } )( );

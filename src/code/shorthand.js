@@ -71,8 +71,8 @@ Code =
 			require( '../code/a-less-than' ),
 		aMember :
 			require( '../code/a-member' ),
-		New :
-			require( '../code/new' ),
+		aNew :
+			require( '../code/a-new' ),
 		Not :
 			require( '../code/not' ),
 		aNull :
@@ -470,13 +470,13 @@ ShortHand.aMember =
 /*
 | Shorthand for creating new calls.
 */
-ShortHand.New =
+ShortHand.aNew =
 	function(
 		call
 	)
 {
 	return (
-		Code.New.create(
+		Code.aNew.create(
 			'call',
 				call
 		)
