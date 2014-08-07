@@ -70,7 +70,7 @@ precTable =
 			-1,
 		'aGreaterThan' :
 			8,
-		'In' :
+		'anIn' :
 			8,
 		'anInstanceof' :
 			8,
@@ -88,7 +88,7 @@ precTable =
 			-1,
 		'anObjLiteral' :
 			-1,
-		'Or' :
+		'anOr' :
 			14,
 		'Plus' :
 			6,
@@ -841,7 +841,7 @@ formatAForIn =
 		formatExpression(
 			context.Inline,
 			expr.object,
-			precTable.In
+			precTable.anIn
 		)
 		+
 		' )\n'
@@ -996,7 +996,7 @@ formatAnInstanceof =
 | Formats a logical or.
 */
 var
-formatOr =
+formatAnOr =
 	function(
 		context,
 		expr
@@ -1007,7 +1007,7 @@ formatOr =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.or' )
+/**/	if( expr.reflex !== 'code.anOr' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1017,7 +1017,7 @@ formatOr =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.Or
+			precTable.anOr
 		)
 		+
 		context.sep
@@ -1027,7 +1027,7 @@ formatOr =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.Or
+			precTable.anOr
 		);
 
 	return text;
@@ -2604,8 +2604,8 @@ exprFormatter =
 			formatANumberLiteral,
 		'anObjLiteral' :
 			formatAnObjLiteral,
-		'Or' :
-			formatOr,
+		'anOr' :
+			formatAnOr,
 		'Plus' :
 			formatPlus,
 		'PlusAssign' :

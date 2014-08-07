@@ -52,8 +52,8 @@ module.exports =
 			'src/code/a-not.js',
 			'src/code/a-number-literal.js',
 			'src/code/an-obj-literal.js',
+			'src/code/an-or.js',
 
-			'src/code/or.js',
 			'src/code/plus.js',
 			'src/code/plus-assign.js',
 			'src/code/pre-increment.js',

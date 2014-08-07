@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	Or =
-		Code.Or =
+	AnOr =
+		Code.AnOr =
 			{
 				prototype :
 					prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new Or object.
+| Creates a new AnOr object.
 */
-Or.create =
+AnOr.create =
 	prototype.create =
 		function(
 			// free strings
@@ -90,7 +90,7 @@ Or.create =
 			v_left,
 			v_right;
 
-		if( this !== Or )
+		if( this !== AnOr )
 		{
 			inherit = this;
 
@@ -173,13 +173,13 @@ Or.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Or';
+prototype.reflect = 'anOr';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.or';
+prototype.reflex = 'code.anOr';
 
 
 /*
@@ -221,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Or;
+	module.exports = AnOr;
 }
 
 

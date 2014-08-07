@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Or',
+			'anOr',
 		unit :
 			'Code',
 		attributes :

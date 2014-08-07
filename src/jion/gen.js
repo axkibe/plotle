@@ -96,8 +96,8 @@ var
 		Shorthand.aNumberLiteral,
 	anObjLiteral =
 		Shorthand.anObjLiteral,
-	Or =
-		Shorthand.Or,
+	anOr =
+		Shorthand.anOr,
 	Plus =
 		Shorthand.Plus,
 	PlusAssign =
@@ -1376,7 +1376,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.anIf(
-					Or(
+					anOr(
 						aLessThan(
 							Var( 'rank' ),
 							aNumberLiteral( 0 )
@@ -1670,7 +1670,7 @@ Gen.prototype.genCreatorChecks =
 			case 'Integer' :
 
 				tcheck =
-					Or(
+					anOr(
 						aDiffers(
 							Typeof( attr.v ),
 							StringLiteral( 'number' )
@@ -2020,7 +2020,7 @@ Gen.prototype.genCreatorUnchanged =
 				else
 				{
 					ceq =
-						Or(
+						anOr(
 							anEquals(
 								attr.v,
 								Var( 'inherit' ).aDot( attr.assign )
@@ -2518,7 +2518,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			anObjLiteral( )
 		)
 		.anIf(
-			Or(
+			anOr(
 				aNot(
 					Var( 'jwig' )
 				),
@@ -2949,7 +2949,7 @@ Gen.prototype.genAttributeEquals =
 			else
 			{
 				ceq =
-					Or(
+					anOr(
 						anEquals( le, re ),
 						anAnd(
 							aDiffers( le, aNull ),
@@ -3270,7 +3270,7 @@ Gen.prototype.genExport =
 			block
 			.VarDec(
 				this.unit,
-				Or(
+				anOr(
 					Var( this.unit ),
 					anObjLiteral( )
 				)

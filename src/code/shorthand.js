@@ -81,8 +81,8 @@ Code =
 			require( '../code/a-number-literal' ),
 		anObjLiteral :
 			require( '../code/an-obj-literal' ),
-		Or :
-			require( '../code/or' ),
+		anOr :
+			require( '../code/an-or' ),
 		Plus :
 			require( '../code/plus' ),
 		PlusAssign :
@@ -541,7 +541,7 @@ ShortHand.anObjLiteral =
 /*
 | Shorthand for creating ors.
 */
-ShortHand.Or =
+ShortHand.anOr =
 	function(
 		left,
 		right
@@ -558,7 +558,7 @@ ShortHand.Or =
 		args.splice(
 			0,
 			2,
-			Code.Or.create(
+			Code.anOr.create(
 				'left',
 					left,
 				'right',
@@ -567,7 +567,7 @@ ShortHand.Or =
 		);
 
 		return (
-			ShortHand.Or.apply(
+			ShortHand.anOr.apply(
 				this,
 				args
 			)
@@ -575,7 +575,7 @@ ShortHand.Or =
 	}
 
 	return (
-		Code.Or.create(
+		Code.anOr.create(
 			'left',
 				left,
 			'right',
