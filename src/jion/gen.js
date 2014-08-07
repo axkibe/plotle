@@ -102,8 +102,8 @@ var
 		Shorthand.aPlus,
 	aPlusAssign =
 		Shorthand.aPlusAssign,
-	PreIncrement =
-		Shorthand.PreIncrement,
+	aPreIncrement =
+		Shorthand.aPreIncrement,
 	StringLiteral =
 		Shorthand.StringLiteral,
 	Switch =
@@ -1209,7 +1209,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Var( 'arguments' )
 					.aMember(
 						aPlus(
-							PreIncrement( Var( 'a' ) ),
+							aPreIncrement( Var( 'a' ) ),
 							aNumberLiteral( 1 )
 						)
 					)
@@ -1275,7 +1275,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Var( 'arguments' )
 					.aMember(
 						aPlus(
-							PreIncrement( Var( 'a' ) ),
+							aPreIncrement( Var( 'a' ) ),
 							aNumberLiteral( 1 )
 						)
 					)
@@ -2548,7 +2548,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 				Var( 'a' ),
 				Var( 'aZ' )
 			),
-			PreIncrement(
+			aPreIncrement(
 				Var( 'a' )
 			),
 			loop

@@ -87,8 +87,8 @@ Code =
 			require( '../code/a-plus' ),
 		aPlusAssign :
 			require( '../code/a-plus-assign' ),
-		PreIncrement :
-			require( '../code/pre-increment' ),
+		aPreIncrement :
+			require( '../code/a-pre-increment' ),
 		StringLiteral :
 			require( '../code/string-literal' ),
 		Switch :
@@ -656,13 +656,13 @@ ShortHand.aPlusAssign =
 /*
 | Shorthand for creating pre-increments.
 */
-ShortHand.PreIncrement =
+ShortHand.aPreIncrement =
 	function(
 		expr
 	)
 {
 	return (
-		Code.PreIncrement.create(
+		Code.aPreIncrement.create(
 			'expr',
 				expr
 		)

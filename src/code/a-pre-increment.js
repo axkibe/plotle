@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'PreIncrement',
+			'aPreIncrement',
 		unit :
 			'Code',
 		attributes :
@@ -39,9 +39,9 @@ if( JION )
 
 
 var
-	PreIncrement;
+	aPreIncrement;
 
-PreIncrement =
+aPreIncrement =
 	require( '../jion/this' )( module );
 
 
@@ -49,7 +49,7 @@ PreIncrement =
 | Node export.
 */
 module.exports =
-	PreIncrement;
+	aPreIncrement;
 
 
 } )( );

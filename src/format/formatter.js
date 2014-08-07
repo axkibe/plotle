@@ -94,7 +94,7 @@ precTable =
 			6,
 		'aPlusAssign' :
 			17,
-		'PreIncrement' :
+		'aPreIncrement' :
 			3,
 		'Typeof' :
 			4,
@@ -2052,7 +2052,7 @@ formatAnObjLiteral =
 | Formats a pre-increment.
 */
 var
-formatPreIncrement =
+formatAPreIncrement =
 	function(
 		context,
 		expr
@@ -2061,7 +2061,7 @@ formatPreIncrement =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.preIncrement' )
+/**/	if( expr.reflex !== 'code.aPreIncrement' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2075,7 +2075,7 @@ formatPreIncrement =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.PreIncrement
+			precTable.aPreIncrement
 		)
 	);
 };
@@ -2610,8 +2610,8 @@ exprFormatter =
 			formatAPlus,
 		'aPlusAssign' :
 			formatAPlusAssign,
-		'PreIncrement' :
-			formatPreIncrement,
+		'aPreIncrement' :
+			formatAPreIncrement,
 		'StringLiteral' :
 			formatStringLiteral,
 		'Typeof' :

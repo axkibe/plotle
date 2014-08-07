@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	PreIncrement =
-		Code.PreIncrement =
+	aPreIncrement =
+		Code.aPreIncrement =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new PreIncrement object.
+| Creates a new aPreIncrement object.
 */
-PreIncrement.create =
+aPreIncrement.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ PreIncrement.create =
 			inherit,
 			v_expr;
 
-		if( this !== PreIncrement )
+		if( this !== aPreIncrement )
 		{
 			inherit = this;
 
@@ -148,13 +148,13 @@ PreIncrement.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'PreIncrement';
+prototype.reflect = 'aPreIncrement';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.preIncrement';
+prototype.reflex = 'code.aPreIncrement';
 
 
 /*
@@ -196,7 +196,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = PreIncrement;
+	module.exports = aPreIncrement;
 }
 
 
