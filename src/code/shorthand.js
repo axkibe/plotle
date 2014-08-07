@@ -77,10 +77,10 @@ Code =
 			require( '../code/a-not' ),
 		aNull :
 			require( '../code/a-null' ),
-		NumberLiteral :
-			require( '../code/number-literal' ),
-		ObjLiteral :
-			require( '../code/obj-literal' ),
+		aNumberLiteral :
+			require( '../code/a-number-literal' ),
+		anObjLiteral :
+			require( '../code/an-obj-literal' ),
 		Or :
 			require( '../code/or' ),
 		Plus :
@@ -514,13 +514,13 @@ ShortHand.aNull =
 /*
 | Shorthand for creating number literals.
 */
-ShortHand.NumberLiteral =
+ShortHand.aNumberLiteral =
 	function(
 		number
 	)
 {
 	return (
-		Code.NumberLiteral.create(
+		Code.aNumberLiteral.create(
 			'number',
 				number
 		)
@@ -531,10 +531,10 @@ ShortHand.NumberLiteral =
 /*
 | Shorthand for creating object literals.
 */
-ShortHand.ObjLiteral =
+ShortHand.anObjLiteral =
 	function( )
 {
-	return Code.ObjLiteral.create( );
+	return Code.anObjLiteral.create( );
 };
 
 

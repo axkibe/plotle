@@ -92,10 +92,10 @@ var
 		Shorthand.aNot,
 	aNull =
 		Shorthand.aNull( ),
-	NumberLiteral =
-		Shorthand.NumberLiteral,
-	ObjLiteral =
-		Shorthand.ObjLiteral,
+	aNumberLiteral =
+		Shorthand.aNumberLiteral,
+	anObjLiteral =
+		Shorthand.anObjLiteral,
 	Or =
 		Shorthand.Or,
 	Plus =
@@ -316,7 +316,7 @@ Gen.prototype._init =
 			}
 			else if( typeof( jdv ) === 'number' )
 			{
-				defaultValue = NumberLiteral( jAttr.defaultValue );
+				defaultValue = aNumberLiteral( jAttr.defaultValue );
 			}
 			else if( Jools.isString( jdv ) )
 			{
@@ -593,7 +593,7 @@ Gen.prototype.genNodeIncludes =
 			block
 			.anAssign(
 				Var( this.unitList[ a ] ),
-				ObjLiteral( )
+				anObjLiteral( )
 			);
 	}
 
@@ -897,7 +897,7 @@ Gen.prototype.genConstructor =
 	capsule = capsule.aComment( 'Jion' );
 
 	jionObj =
-		ObjLiteral( )
+		anObjLiteral( )
 		.Add(
 			'prototype',
 			Var( 'prototype' )
@@ -1079,7 +1079,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 				aBlock( )
 				.anAssign(
 					Var( 'twig' ),
-					ObjLiteral( )
+					anObjLiteral( )
 				)
 				.anAssign(
 					Var( 'ranks' ),
@@ -1125,7 +1125,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			.aMember(
 				Plus(
 					Var( 'a' ),
-					NumberLiteral( 1 )
+					aNumberLiteral( 1 )
 				)
 			)
 		);
@@ -1210,7 +1210,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.aMember(
 						Plus(
 							PreIncrement( Var( 'a' ) ),
-							NumberLiteral( 1 )
+							aNumberLiteral( 1 )
 						)
 					)
 				)
@@ -1276,7 +1276,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.aMember(
 						Plus(
 							PreIncrement( Var( 'a' ) ),
-							NumberLiteral( 1 )
+							aNumberLiteral( 1 )
 						)
 					)
 				)
@@ -1338,7 +1338,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.aMember(
 						Plus(
 							Var( 'a' ),
-							NumberLiteral( 2 )
+							aNumberLiteral( 2 )
 						)
 					)
 				)
@@ -1348,14 +1348,14 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.aMember(
 						Plus(
 							Var( 'a' ),
-							NumberLiteral( 3 )
+							aNumberLiteral( 3 )
 						)
 					)
 				)
 				.Append(
 					PlusAssign(
 						Var( 'a' ),
-						NumberLiteral( 2 )
+						aNumberLiteral( 2 )
 					)
 				)
 				.anIf(
@@ -1379,7 +1379,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					Or(
 						aLessThan(
 							Var( 'rank' ),
-							NumberLiteral( 0 )
+							aNumberLiteral( 0 )
 						),
 						aGreaterThan(
 							Var( 'rank' ),
@@ -1402,7 +1402,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					aCall(
 						Var( 'ranks' ).aDot( 'splice' ),
 						Var( 'rank' ),
-						NumberLiteral( 0 ),
+						aNumberLiteral( 0 ),
 						Var( 'key' )
 					)
 				)
@@ -1465,7 +1465,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 							Var( 'ranks' ).aDot( 'indexOf' ),
 							Var( 'arg' )
 						),
-						NumberLiteral( 1 )
+						aNumberLiteral( 1 )
 					)
 				)
 			);
@@ -1490,7 +1490,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			VList( )
 			.VarDec(
 				'a',
-				NumberLiteral( 0 )
+				aNumberLiteral( 0 )
 			)
 			.VarDec(
 				'aZ',
@@ -1502,7 +1502,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 			),
 			PlusAssign(
 				Var( 'a' ),
-				NumberLiteral( 2 )
+				aNumberLiteral( 2 )
 			),
 			loop
 		);
@@ -2515,7 +2515,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		block
 		.anAssign(
 			Var( 'twig' ),
-			ObjLiteral( )
+			anObjLiteral( )
 		)
 		.anIf(
 			Or(
@@ -2535,7 +2535,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			.Append(
 				anAssign(
 					Var( 'a' ),
-					NumberLiteral( 0 )
+					aNumberLiteral( 0 )
 				)
 			)
 			.Append(
@@ -2829,7 +2829,7 @@ Gen.prototype.genToJSON =
 		);
 
 	olit =
-		ObjLiteral( )
+		anObjLiteral( )
 		.Add(
 			'type',
 			StringLiteral( this.name )
@@ -3272,7 +3272,7 @@ Gen.prototype.genExport =
 				this.unit,
 				Or(
 					Var( this.unit ),
-					ObjLiteral( )
+					anObjLiteral( )
 				)
 			);
 	}

@@ -35,9 +35,9 @@ module.exports =
 			'src/code/a-member.js',
 			'src/code/a-new.js',
 			'src/code/a-not.js',
+			'src/code/a-number-literal.js',
+			'src/code/an-obj-literal.js',
 
-			'src/code/number-literal.js',
-			'src/code/obj-literal.js',
 			'src/code/or.js',
 			'src/code/plus.js',
 			'src/code/plus-assign.js',

@@ -84,9 +84,9 @@ precTable =
 			4,
 		'aNull' :
 			-1,
-		'NumberLiteral' :
+		'aNumberLiteral' :
 			-1,
-		'ObjLiteral' :
+		'anObjLiteral' :
 			-1,
 		'Or' :
 			14,
@@ -1503,7 +1503,7 @@ formatStatement =
 		case 'code.aDelete' :
 		case 'code.aFail' :
 		case 'code.aNew' :
-		case 'code.numberLiteral' :
+		case 'code.aNumberLiteral' :
 		case 'code.plusAssign' :
 		case 'code.return' :
 		case 'code.stringLiteral' :
@@ -1977,7 +1977,7 @@ formatAnArrayLiteral =
 | FUTURE format also inline
 */
 var
-formatObjLiteral =
+formatAnObjLiteral =
 	function(
 		context,
 		objliteral  // FIXME call expr
@@ -1990,7 +1990,7 @@ formatObjLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( objliteral.reflex !== 'code.objLiteral' )
+/**/	if( objliteral.reflex !== 'code.anObjLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2149,7 +2149,7 @@ formatVar =
 | Formats a string literal use.
 */
 var
-formatNumberLiteral =
+formatANumberLiteral =
 	function(
 		context,
 		expr
@@ -2158,7 +2158,7 @@ formatNumberLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.numberLiteral' )
+/**/	if( expr.reflex !== 'code.aNumberLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2600,10 +2600,10 @@ exprFormatter =
 			formatANot,
 		'aNull' :
 			formatNull,
-		'NumberLiteral' :
-			formatNumberLiteral,
-		'ObjLiteral' :
-			formatObjLiteral,
+		'aNumberLiteral' :
+			formatANumberLiteral,
+		'anObjLiteral' :
+			formatAnObjLiteral,
 		'Or' :
 			formatOr,
 		'Plus' :
