@@ -1122,7 +1122,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 		.VarDec(
 			'arg',
 			Var( 'arguments' )
-			.Member(
+			.aMember(
 				Plus(
 					Var( 'a' ),
 					NumberLiteral( 1 )
@@ -1133,7 +1133,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 	switchExpr =
 		Switch(
 			Var( 'arguments' )
-			.Member(
+			.aMember(
 				Var( 'a' )
 			)
 		);
@@ -1207,7 +1207,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.anAssign(
 					Var( 'arg' ),
 					Var( 'arguments' )
-					.Member(
+					.aMember(
 						Plus(
 							PreIncrement( Var( 'a' ) ),
 							NumberLiteral( 1 )
@@ -1216,7 +1216,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anIf(
 					aDiffers(
-						Var( 'twig' ).Member(
+						Var( 'twig' ).aMember(
 							Var( 'key' )
 						),
 						Undefined
@@ -1232,7 +1232,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anAssign(
 					Var( 'twig' )
-					.Member(
+					.aMember(
 						Var( 'key' )
 					),
 					Var( 'arg' )
@@ -1273,7 +1273,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.anAssign(
 					Var( 'arg' ),
 					Var( 'arguments' )
-					.Member(
+					.aMember(
 						Plus(
 							PreIncrement( Var( 'a' ) ),
 							NumberLiteral( 1 )
@@ -1282,7 +1282,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anIf(
 					anEquals(
-						Var( 'twig' ).Member(
+						Var( 'twig' ).aMember(
 							Var( 'key' )
 						),
 						Undefined
@@ -1298,7 +1298,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anAssign(
 					Var( 'twig' )
-					.Member(
+					.aMember(
 						Var( 'key' )
 					),
 					Var( 'arg' )
@@ -1335,7 +1335,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.anAssign(
 					Var( 'rank' ),
 					Var( 'arguments' )
-					.Member(
+					.aMember(
 						Plus(
 							Var( 'a' ),
 							NumberLiteral( 2 )
@@ -1345,7 +1345,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.anAssign(
 					Var( 'arg' ),
 					Var( 'arguments' )
-					.Member(
+					.aMember(
 						Plus(
 							Var( 'a' ),
 							NumberLiteral( 3 )
@@ -1361,7 +1361,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.anIf(
 					aDiffers(
 						Var( 'twig' )
-						.Member(
+						.aMember(
 							Var( 'key' )
 						),
 						Undefined
@@ -1393,7 +1393,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anAssign(
 					Var( 'twig' )
-					.Member(
+					.aMember(
 						Var( 'key' )
 					),
 					Var( 'arg' )
@@ -1436,7 +1436,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.anIf(
 					anEquals(
 						Var( 'twig' )
-						.Member(
+						.aMember(
 							Var( 'arg' )
 						),
 						Undefined
@@ -1453,7 +1453,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.Append(
 					aDelete(
 						Var( 'twig' )
-						.Member(
+						.aMember(
 							Var( 'arg' )
 						)
 					)
@@ -2400,7 +2400,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			.anAssign(
 				Var( 'arg' ),
 				Var( 'json' )
-				.Member(
+				.aMember(
 					Var( 'name' )
 				)
 			)
@@ -2463,7 +2463,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 				aBlock( )
 				.anAssign(
 					Var( 'twig' )
-					.Member(
+					.aMember(
 						Var( 'key' )
 					),
 					aCall(
@@ -2486,14 +2486,14 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		.anAssign(
 			Var( 'key' ),
 			Var( 'ranks' )
-			.Member(
+			.aMember(
 				Var( 'a' )
 			)
 		)
 		.anIf(
 			Not(
 				Var( 'jwig' )
-				.Member(
+				.aMember(
 					Var( 'key' )
 				)
 			),
@@ -2503,7 +2503,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		.anAssign(
 			Var( 'jval' ),
 			Var( 'jwig' )
-			.Member(
+			.aMember(
 				Var( 'key' )
 			)
 		)

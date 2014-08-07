@@ -76,7 +76,7 @@ precTable =
 			8,
 		'aLessThan' :
 			8,
-		'Member' :
+		'aMember' :
 			1,
 		'New' :
 			2,
@@ -554,10 +554,10 @@ formatADot =
 
 
 /*
-| Formats a Member.
+| Formats a member.
 */
 var
-formatMember =
+formatAMember =
 	function(
 		context,
 		expr
@@ -565,7 +565,7 @@ formatMember =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.member' )
+/**/	if( expr.reflex !== 'code.aMember' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -575,7 +575,7 @@ formatMember =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.Member
+			precTable.aMember
 		)
 		+ '['
 		+ context.sep
@@ -2592,8 +2592,8 @@ exprFormatter =
 			formatAnInstanceof,
 		'aLessThan' :
 			formatALessThan,
-		'Member' :
-			formatMember,
+		'aMember' :
+			formatAMember,
 		'New' :
 			formatNew,
 		'Not' :

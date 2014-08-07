@@ -21,7 +21,7 @@ if( JION )
 {
 	return {
 		name :
-			'Member',
+			'aMember',
 		unit :
 			'Code',
 		attributes :
@@ -48,16 +48,16 @@ if( JION )
 
 
 var
-	Member;
+	aMember;
 
-Member =
+aMember =
 	require( '../jion/this' )( module );
 
 /*
 | Node export.
 */
 module.exports =
-	Member;
+	aMember;
 
 
 } )( );

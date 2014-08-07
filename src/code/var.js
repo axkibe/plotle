@@ -51,8 +51,8 @@ Code =
 	{
 		aDot :
 			require( '../code/a-dot' ),
-		Member :
-			require( '../code/member' )
+		aMember :
+			require( '../code/a-member' )
 	};
 
 Var = require( '../jion/this' )( module );
@@ -111,13 +111,13 @@ Var.prototype.aDot =
 /*
 | Creates a generic member access of a variable.
 */
-Var.prototype.Member =
+Var.prototype.aMember =
 	function(
 		member // member expression
 	)
 {
 	return (
-		Code.Member.create(
+		Code.aMember.create(
 			'expr',
 				this,
 			'member',

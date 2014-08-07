@@ -69,8 +69,8 @@ Code =
 			require( '../code/an-instanceof' ),
 		aLessThan :
 			require( '../code/a-less-than' ),
-		Member :
-			require( '../code/member' ),
+		aMember :
+			require( '../code/a-member' ),
 		New :
 			require( '../code/new' ),
 		Not :
@@ -450,14 +450,14 @@ ShortHand.anInstanceof =
 /*
 | Shorthand for creating members.
 */
-ShortHand.Member =
+ShortHand.aMember =
 	function(
 		expr,
 		member
 	)
 {
 	return (
-		Code.Member.create(
+		Code.aMember.create(
 			'expr',
 				expr,
 			'member',
