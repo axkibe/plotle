@@ -49,8 +49,8 @@ if( JION )
 | Node imports.
 */
 var
-	FuncArg =
-		require( './func-arg' ),
+	aFuncArg =
+		require( './a-func-arg' ),
 	aFunc =
 		require( '../jion/this' )( module ),
 	Jools =
@@ -89,7 +89,7 @@ aFunc.prototype.Arg =
 {
 	return (
 		this.Append(
-			FuncArg.create(
+			aFuncArg.create(
 				'name',
 					name,
 				'comment',

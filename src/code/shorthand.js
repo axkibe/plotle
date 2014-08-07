@@ -59,10 +59,10 @@ Code =
 			require( '../code/a-file' ),
 		aFunc :
 			require( '../code/a-func' ),
-		FuncArg :
-			require( '../code/func-arg' ),
-		GreaterThan :
-			require( '../code/greater-than' ),
+		aFuncArg :
+			require( '../code/a-func-arg' ),
+		aGreaterThan :
+			require( '../code/a-greater-than' ),
 		If :
 			require( '../code/if' ),
 		Instanceof :
@@ -344,14 +344,14 @@ ShortHand.LessThan =
 /*
 | Shorthand for creating greater-than comparisons.
 */
-ShortHand.GreaterThan =
+ShortHand.aGreaterThan =
 	function(
 		left,
 		right
 	)
 {
 	return (
-		Code.GreaterThan.create(
+		Code.aGreaterThan.create(
 			'left',
 				left,
 			'right',

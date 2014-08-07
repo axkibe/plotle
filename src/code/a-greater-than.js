@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'GreaterThan',
+			'aGreaterThan',
 		unit :
 			'Code',
 		attributes :

@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	GreaterThan =
-		Code.GreaterThan =
+	aGreaterThan =
+		Code.aGreaterThan =
 			{
 				prototype :
 					prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new GreaterThan object.
+| Creates a new aGreaterThan object.
 */
-GreaterThan.create =
+aGreaterThan.create =
 	prototype.create =
 		function(
 			// free strings
@@ -90,7 +90,7 @@ GreaterThan.create =
 			v_left,
 			v_right;
 
-		if( this !== GreaterThan )
+		if( this !== aGreaterThan )
 		{
 			inherit = this;
 
@@ -173,13 +173,13 @@ GreaterThan.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'GreaterThan';
+prototype.reflect = 'aGreaterThan';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.greaterThan';
+prototype.reflex = 'code.aGreaterThan';
 
 
 /*
@@ -221,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = GreaterThan;
+	module.exports = aGreaterThan;
 }
 
 

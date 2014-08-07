@@ -78,8 +78,8 @@ var
 		Shorthand.aFile,
 	aFunc =
 		Shorthand.aFunc,
-	GreaterThan =
-		Shorthand.GreaterThan,
+	aGreaterThan =
+		Shorthand.aGreaterThan,
 	If =
 		Shorthand.If,
 	Instanceof =
@@ -1381,7 +1381,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 							Var( 'rank' ),
 							NumberLiteral( 0 )
 						),
-						GreaterThan(
+						aGreaterThan(
 							Var( 'rank' ),
 							Var( 'ranks' ).aDot( 'length' )
 						)

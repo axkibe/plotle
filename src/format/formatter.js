@@ -68,11 +68,11 @@ precTable =
 			9,
 		'aFunc' :
 			-1,
+		'aGreaterThan' :
+			8,
 		'In' :
 			8,
 		'Instanceof' :
-			8,
-		'GreaterThan' :
 			8,
 		'LessThan' :
 			8,
@@ -905,7 +905,7 @@ formatLessThan =
 | Formats a more-than check.
 */
 var
-formatGreaterThan =
+formatAGreaterThan =
 	function(
 		context,
 		expr
@@ -916,7 +916,7 @@ formatGreaterThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.greaterThan' )
+/**/	if( expr.reflex !== 'code.aGreaterThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -926,7 +926,7 @@ formatGreaterThan =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.GreaterThan
+			precTable.aGreaterThan
 		)
 		+
 		context.sep
@@ -940,7 +940,7 @@ formatGreaterThan =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.GreaterThan
+			precTable.aGreaterThan
 		);
 
 	return text;
@@ -2586,8 +2586,8 @@ exprFormatter =
 			formatAnEquals,
 		'aFunc' :
 			formatAFunc,
-		'GreaterThan' :
-			formatGreaterThan,
+		'aGreaterThan' :
+			formatAGreaterThan,
 		'Instanceof' :
 			formatInstanceof,
 		'LessThan' :
