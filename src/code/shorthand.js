@@ -65,8 +65,8 @@ Code =
 			require( '../code/a-greater-than' ),
 		anIf :
 			require( '../code/an-if' ),
-		Instanceof :
-			require( '../code/instanceof' ),
+		anInstanceof :
+			require( '../code/an-instanceof' ),
 		LessThan :
 			require( '../code/less-than' ),
 		Member :
@@ -429,14 +429,14 @@ ShortHand.aFunc =
 /*
 | Shorthand for creating instanceof expressions.
 */
-ShortHand.Instanceof =
+ShortHand.anInstanceof =
 	function(
 		left,
 		right
 	)
 {
 	return (
-		Code.Instanceof.create(
+		Code.anInstanceof.create(
 			'left',
 				left,
 			'right',

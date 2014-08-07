@@ -82,8 +82,8 @@ var
 		Shorthand.aGreaterThan,
 	anIf =
 		Shorthand.anIf,
-	Instanceof =
-		Shorthand.Instanceof,
+	anInstanceof =
+		Shorthand.anInstanceof,
 	LessThan =
 		Shorthand.LessThan,
 	New =
@@ -1706,7 +1706,7 @@ Gen.prototype.genCreatorChecks =
 							StringLiteral( 'string' )
 						),
 						Not(
-							Instanceof(
+							anInstanceof(
 								attr.v,
 								Var( 'String' )
 							)

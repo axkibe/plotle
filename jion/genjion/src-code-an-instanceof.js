@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	Instanceof =
-		Code.Instanceof =
+	anInstanceof =
+		Code.anInstanceof =
 			{
 				prototype :
 					prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new Instanceof object.
+| Creates a new anInstanceof object.
 */
-Instanceof.create =
+anInstanceof.create =
 	prototype.create =
 		function(
 			// free strings
@@ -90,7 +90,7 @@ Instanceof.create =
 			v_left,
 			v_right;
 
-		if( this !== Instanceof )
+		if( this !== anInstanceof )
 		{
 			inherit = this;
 
@@ -173,13 +173,13 @@ Instanceof.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Instanceof';
+prototype.reflect = 'anInstanceof';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.instanceof';
+prototype.reflex = 'code.anInstanceof';
 
 
 /*
@@ -221,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Instanceof;
+	module.exports = anInstanceof;
 }
 
 

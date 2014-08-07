@@ -72,7 +72,7 @@ precTable =
 			8,
 		'In' :
 			8,
-		'Instanceof' :
+		'anInstanceof' :
 			8,
 		'LessThan' :
 			8,
@@ -951,7 +951,7 @@ formatAGreaterThan =
 | Formats an instanceof expression.
 */
 var
-formatInstanceof =
+formatAnInstanceof =
 	function(
 		context,
 		expr
@@ -962,7 +962,7 @@ formatInstanceof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.instanceof' )
+/**/	if( expr.reflex !== 'code.anInstanceof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -972,7 +972,7 @@ formatInstanceof =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.Instanceof
+			precTable.anInstanceof
 		)
 		+
 		context.sep
@@ -986,7 +986,7 @@ formatInstanceof =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.Instanceof
+			precTable.anInstanceof
 		);
 
 	return text;
@@ -2588,8 +2588,8 @@ exprFormatter =
 			formatAFunc,
 		'aGreaterThan' :
 			formatAGreaterThan,
-		'Instanceof' :
-			formatInstanceof,
+		'anInstanceof' :
+			formatAnInstanceof,
 		'LessThan' :
 			formatLessThan,
 		'Member' :

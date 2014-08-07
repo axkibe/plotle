@@ -45,8 +45,8 @@ module.exports =
 			'src/code/a-func-arg.js',
 			'src/code/a-greater-than.js',
 			'src/code/an-if.js',
+			'src/code/an-instanceof.js',
 
-			'src/code/instanceof.js',
 			'src/code/less-than.js',
 			'src/code/member.js',
 			'src/code/new.js',
