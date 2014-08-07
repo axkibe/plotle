@@ -84,8 +84,8 @@ var
 		Shorthand.anIf,
 	anInstanceof =
 		Shorthand.anInstanceof,
-	LessThan =
-		Shorthand.LessThan,
+	aLessThan =
+		Shorthand.aLessThan,
 	New =
 		Shorthand.New,
 	Not =
@@ -1377,7 +1377,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anIf(
 					Or(
-						LessThan(
+						aLessThan(
 							Var( 'rank' ),
 							NumberLiteral( 0 )
 						),
@@ -1496,7 +1496,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				'aZ',
 				Var( 'arguments' ).aDot( 'length' )
 			),
-			LessThan(
+			aLessThan(
 				Var( 'a' ),
 				Var( 'aZ' )
 			),
@@ -2544,7 +2544,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 					Var( 'ranks' ).aDot( 'length' )
 				)
 			),
-			LessThan(
+			aLessThan(
 				Var( 'a' ),
 				Var( 'aZ' )
 			),

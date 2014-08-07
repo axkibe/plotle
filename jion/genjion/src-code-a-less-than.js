@@ -68,8 +68,8 @@ var
 | Jion
 */
 var
-	LessThan =
-		Code.LessThan =
+	aLessThan =
+		Code.aLessThan =
 			{
 				prototype :
 					prototype
@@ -77,9 +77,9 @@ var
 
 
 /*
-| Creates a new LessThan object.
+| Creates a new aLessThan object.
 */
-LessThan.create =
+aLessThan.create =
 	prototype.create =
 		function(
 			// free strings
@@ -90,7 +90,7 @@ LessThan.create =
 			v_left,
 			v_right;
 
-		if( this !== LessThan )
+		if( this !== aLessThan )
 		{
 			inherit = this;
 
@@ -173,13 +173,13 @@ LessThan.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'LessThan';
+prototype.reflect = 'aLessThan';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.lessThan';
+prototype.reflex = 'code.aLessThan';
 
 
 /*
@@ -221,7 +221,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = LessThan;
+	module.exports = aLessThan;
 }
 
 

@@ -67,8 +67,8 @@ Code =
 			require( '../code/an-if' ),
 		anInstanceof :
 			require( '../code/an-instanceof' ),
-		LessThan :
-			require( '../code/less-than' ),
+		aLessThan :
+			require( '../code/a-less-than' ),
 		Member :
 			require( '../code/member' ),
 		New :
@@ -324,14 +324,14 @@ ShortHand.anEquals =
 /*
 | Shorthand for creating less-than comparisons.
 */
-ShortHand.LessThan =
+ShortHand.aLessThan =
 	function(
 		left,
 		right
 	)
 {
 	return (
-		Code.LessThan.create(
+		Code.aLessThan.create(
 			'left',
 				left,
 			'right',

@@ -74,7 +74,7 @@ precTable =
 			8,
 		'anInstanceof' :
 			8,
-		'LessThan' :
+		'aLessThan' :
 			8,
 		'Member' :
 			1,
@@ -859,7 +859,7 @@ formatAForIn =
 | Formats a less-than check.
 */
 var
-formatLessThan =
+formatALessThan =
 	function(
 		context,
 		expr
@@ -870,7 +870,7 @@ formatLessThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.lessThan' )
+/**/	if( expr.reflex !== 'code.aLessThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -880,7 +880,7 @@ formatLessThan =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.LessThan
+			precTable.aLessThan
 		)
 		+
 		context.sep
@@ -894,7 +894,7 @@ formatLessThan =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.LessThan
+			precTable.aLessThan
 		);
 
 	return text;
@@ -2590,8 +2590,8 @@ exprFormatter =
 			formatAGreaterThan,
 		'anInstanceof' :
 			formatAnInstanceof,
-		'LessThan' :
-			formatLessThan,
+		'aLessThan' :
+			formatALessThan,
 		'Member' :
 			formatMember,
 		'New' :

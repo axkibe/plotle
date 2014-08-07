@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'LessThan',
+			'aLessThan',
 		unit :
 			'Code',
 		attributes :
