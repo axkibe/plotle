@@ -72,8 +72,8 @@ var
 | Jion
 */
 var
-	ObjLiteral =
-		Code.ObjLiteral =
+	anObjLiteral =
+		Code.anObjLiteral =
 			{
 				prototype :
 					prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new ObjLiteral object.
+| Creates a new anObjLiteral object.
 */
-ObjLiteral.create =
+anObjLiteral.create =
 	prototype.create =
 		function(
 			// free strings
@@ -97,7 +97,7 @@ ObjLiteral.create =
 			twig,
 			twigDup;
 
-		if( this !== ObjLiteral )
+		if( this !== anObjLiteral )
 		{
 			inherit = this;
 
@@ -260,13 +260,13 @@ ObjLiteral.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ObjLiteral';
+prototype.reflect = 'anObjLiteral';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.objLiteral';
+prototype.reflex = 'code.anObjLiteral';
 
 
 /*
@@ -326,7 +326,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = ObjLiteral;
+	module.exports = anObjLiteral;
 }
 
 

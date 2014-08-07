@@ -1,6 +1,8 @@
 /*
 | An object literal.
 |
+| FIXME simply call anObject
+|
 | Authors: Axel Kittenberger
 */
 
@@ -19,7 +21,7 @@ if( JION )
 {
 	return {
 		name :
-			'ObjLiteral',
+			'anObjLiteral',
 		unit :
 			'Code',
 		node :
@@ -33,17 +35,19 @@ if( JION )
 | Node imports.
 */
 var
-	ObjLiteral;
+	anObjLiteral;
 
 
-ObjLiteral =
+anObjLiteral =
 		require( '../jion/this' )( module );
 
 
 /*
 | Returns an object literal with a key-expr pair added.
+|
+| FIXME rename
 */
-ObjLiteral.prototype.Add =
+anObjLiteral.prototype.Add =
 	function(
 		key,
 		expr
@@ -63,7 +67,7 @@ ObjLiteral.prototype.Add =
 | Node export.
 */
 module.exports =
-	ObjLiteral;
+	anObjLiteral;
 
 
 } )( );
