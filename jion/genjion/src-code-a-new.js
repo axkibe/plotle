@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -66,88 +68,89 @@ var
 */
 var
 	aNew =
-		Code.aNew =
-			{
-				prototype :
-					prototype
-			};
+	Code.aNew =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aNew object.
 */
 aNew.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_call;
+
+	if( this !== aNew )
+	{
+		inherit = this;
+
+		v_call = this.call;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_call;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aNew )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'call' :
 
-			v_call = this.call;
+				if( arg !== undefined )
+				{
+					v_call = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
-
-			switch( arguments[ a ] )
-			{
-				case 'call' :
-
-					if( arg !== undefined )
-					{
-						v_call = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_call === undefined )
 /**/	{
-/**/		if( v_call === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute call' );
-/**/		}
-/**/
-/**/		if( v_call === null )
-/**/		{
-/**/			throw new Error( 'attribute call must not be null.' );
-/**/		}
-/**/
-/**/		if( v_call.reflect !== 'aCall' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
+/**/		throw new Error( 'undefined attribute call' );
 /**/	}
+/**/
+/**/	if( v_call === null )
+/**/	{
+/**/		throw new Error( 'attribute call must not be null.' );
+/**/	}
+/**/
+/**/	if( v_call.reflect !== 'aCall' )
+/**/	{
+/**/		throw new Error( 'type mismatch' );
+/**/	}
+/**/}
 
-		if( inherit && v_call.equals( inherit.call ) )
-		{
-			return inherit;
-		}
+	if( inherit && v_call.equals( inherit.call ) )
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_call );
-	};
+	return new Constructor( v_call );
+};
 
 
 /*

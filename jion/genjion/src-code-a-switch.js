@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -79,251 +81,258 @@ var
 */
 var
 	aSwitch =
-		Code.aSwitch =
-			{
-				prototype :
-					prototype
-			};
+	Code.aSwitch =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aSwitch object.
 */
 aSwitch.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		key,
+
+		rank,
+
+		ranks,
+
+		twig,
+
+		twigDup,
+
+		v_defaultCase,
+
+		v_statement;
+
+	if( this !== aSwitch )
+	{
+		inherit = this;
+
+		twig = inherit.twig;
+
+		ranks = inherit.ranks;
+
+		twigDup = false;
+
+		v_defaultCase = this.defaultCase;
+
+		v_statement = this.statement;
+	}
+	else
+	{
+		twig = { };
+
+		ranks = [ ];
+
+		twigDup = true;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			key,
-			rank,
-			ranks,
-			twig,
-			twigDup,
-			v_defaultCase,
-			v_statement;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aSwitch )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'defaultCase' :
 
-			twig = inherit.twig;
+				if( arg !== undefined )
+				{
+					v_defaultCase = arg;
+				}
 
-			ranks = inherit.ranks;
+				break;
 
-			twigDup = false;
+			case 'statement' :
 
-			v_defaultCase = this.defaultCase;
+				if( arg !== undefined )
+				{
+					v_statement = arg;
+				}
 
-			v_statement = this.statement;
-		}
-		else
-		{
-			twig = { };
+				break;
 
-			ranks = [ ];
+			case 'twig:add' :
 
-			twigDup = true;
-		}
+				if( !twigDup )
+				{
+					twig = Jools.copy( twig );
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
+					ranks = ranks.slice( );
 
-			switch( arguments[ a ] )
-			{
-				case 'defaultCase' :
+					twigDup = true;
+				}
 
-					if( arg !== undefined )
-					{
-						v_defaultCase = arg;
-					}
+				key = arg;
 
-					break;
+				arg = arguments[ ++a + 1 ];
 
-				case 'statement' :
+				if( twig[ key ] !== undefined )
+				{
+					throw new Error( 'key "' + key + '" already in use' );
+				}
 
-					if( arg !== undefined )
-					{
-						v_statement = arg;
-					}
+				twig[ key ] = arg;
 
-					break;
+				ranks.push( key );
 
-				case 'twig:add' :
+				break;
 
-					if( !twigDup )
-					{
-						twig = Jools.copy( twig );
+			case 'twig:set' :
 
-						ranks = ranks.slice( );
+				if( !twigDup )
+				{
+					twig = Jools.copy( twig );
 
-						twigDup = true;
-					}
+					ranks = ranks.slice( );
 
-					key = arg;
+					twigDup = true;
+				}
 
-					arg = arguments[ ++a + 1 ];
+				key = arg;
 
-					if( twig[ key ] !== undefined )
-					{
-						throw new Error( 'key "' + key + '" already in use' );
-					}
+				arg = arguments[ ++a + 1 ];
 
-					twig[ key ] = arg;
+				if( twig[ key ] === undefined )
+				{
+					throw new Error( 'key "' + key + '" not in use' );
+				}
 
-					ranks.push( key );
+				twig[ key ] = arg;
 
-					break;
+				break;
 
-				case 'twig:set' :
+			case 'twig:insert' :
 
-					if( !twigDup )
-					{
-						twig = Jools.copy( twig );
+				if( !twigDup )
+				{
+					twig = Jools.copy( twig );
 
-						ranks = ranks.slice( );
+					ranks = ranks.slice( );
 
-						twigDup = true;
-					}
+					twigDup = true;
+				}
 
-					key = arg;
+				key = arg;
 
-					arg = arguments[ ++a + 1 ];
+				rank = arguments[ a + 2 ];
 
-					if( twig[ key ] === undefined )
-					{
-						throw new Error( 'key "' + key + '" not in use' );
-					}
+				arg = arguments[ a + 3 ];
 
-					twig[ key ] = arg;
+				a += 2;
 
-					break;
+				if( twig[ key ] !== undefined )
+				{
+					throw new Error( 'key "' + key + '" already in use' );
+				}
 
-				case 'twig:insert' :
+				if( rank < 0 || rank > ranks.length )
+				{
+					throw new Error( 'invalid rank' );
+				}
 
-					if( !twigDup )
-					{
-						twig = Jools.copy( twig );
+				twig[ key ] = arg;
 
-						ranks = ranks.slice( );
+				ranks.splice( rank, 0, key );
 
-						twigDup = true;
-					}
+				break;
 
-					key = arg;
+			case 'twig:remove' :
 
-					rank = arguments[ a + 2 ];
+				if( !twigDup )
+				{
+					twig = Jools.copy( twig );
 
-					arg = arguments[ a + 3 ];
+					ranks = ranks.slice( );
 
-					a += 2;
+					twigDup = true;
+				}
 
-					if( twig[ key ] !== undefined )
-					{
-						throw new Error( 'key "' + key + '" already in use' );
-					}
+				if( twig[ arg ] === undefined )
+				{
+					throw new Error( 'key "' + arg + '" not in use' );
+				}
 
-					if( rank < 0 || rank > ranks.length )
-					{
-						throw new Error( 'invalid rank' );
-					}
+				delete twig[ arg ];
 
-					twig[ key ] = arg;
+				ranks.splice( ranks.indexOf( arg ), 1 );
 
-					ranks.splice( rank, 0, key );
+				break;
 
-					break;
+			default :
 
-				case 'twig:remove' :
-
-					if( !twigDup )
-					{
-						twig = Jools.copy( twig );
-
-						ranks = ranks.slice( );
-
-						twigDup = true;
-					}
-
-					if( twig[ arg ] === undefined )
-					{
-						throw new Error( 'key "' + arg + '" not in use' );
-					}
-
-					delete twig[ arg ];
-
-					ranks.splice( ranks.indexOf( arg ), 1 );
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-		if( v_defaultCase === undefined )
-		{
-			v_defaultCase = null;
-		}
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( v_defaultCase === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute defaultCase' );
-/**/		}
-/**/
-/**/		if( v_defaultCase !== null )
-/**/		{
-/**/			if( v_defaultCase.reflect !== 'aBlock' )
+/**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'type mismatch' );
+/**/				throw new Error( 'invalid argument' );
 /**/			}
-/**/		}
+		}
+	}
+
+	if( v_defaultCase === undefined )
+	{
+		v_defaultCase = null;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_defaultCase === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute defaultCase' );
+/**/	}
 /**/
-/**/		if( v_statement === undefined )
+/**/	if( v_defaultCase !== null )
+/**/	{
+/**/		if( v_defaultCase.reflect !== 'aBlock' )
 /**/		{
-/**/			throw new Error( 'undefined attribute statement' );
-/**/		}
-/**/
-/**/		if( v_statement === null )
-/**/		{
-/**/			throw new Error( 'attribute statement must not be null.' );
+/**/			throw new Error( 'type mismatch' );
 /**/		}
 /**/	}
+/**/
+/**/	if( v_statement === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute statement' );
+/**/	}
+/**/
+/**/	if( v_statement === null )
+/**/	{
+/**/		throw new Error( 'attribute statement must not be null.' );
+/**/	}
+/**/}
 
-		if(
-			inherit
-			&&
-			!twigDup
-			&&
-			(
-				v_defaultCase === inherit.defaultCase
-				||
-				v_defaultCase && v_defaultCase.equals( inherit.defaultCase )
-			)
-			&&
-			v_statement === inherit.statement
+	if(
+		inherit
+		&&
+		!twigDup
+		&&
+		(
+			v_defaultCase === inherit.defaultCase
+			||
+			v_defaultCase && v_defaultCase.equals( inherit.defaultCase )
 		)
-		{
-			return inherit;
-		}
+		&&
+		v_statement === inherit.statement
+	)
+	{
+		return inherit;
+	}
 
-		return new Constructor( twig, ranks, v_defaultCase, v_statement );
-	};
+	return new Constructor( twig, ranks, v_defaultCase, v_statement );
+};
 
 
 /*

@@ -46,13 +46,12 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		v_left, // left expression
-		v_right // right expression
+		v_name // the variable name
 	)
 	{
-		this.left = v_left;
+		this.name = v_name;
 
-		this.right = v_right;
+		this._init( );
 
 		Jools.immute( this );
 	};
@@ -70,8 +69,8 @@ var
 | Jion
 */
 var
-	aDiffers =
-	Code.aDiffers =
+	aVar =
+	Code.aVar =
 		{
 			prototype :
 				prototype
@@ -79,9 +78,9 @@ var
 
 
 /*
-| Creates a new aDiffers object.
+| Creates a new aVar object.
 */
-aDiffers.create =
+aVar.create =
 prototype.create =
 	function(
 		// free strings
@@ -90,17 +89,13 @@ prototype.create =
 	var
 		inherit,
 
-		v_left,
+		v_name;
 
-		v_right;
-
-	if( this !== aDiffers )
+	if( this !== aVar )
 	{
 		inherit = this;
 
-		v_left = this.left;
-
-		v_right = this.right;
+		v_name = this.name;
 	}
 
 	for(
@@ -115,20 +110,11 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
-			case 'left' :
+			case 'name' :
 
 				if( arg !== undefined )
 				{
-					v_left = arg;
-				}
-
-				break;
-
-			case 'right' :
-
-				if( arg !== undefined )
-				{
-					v_right = arg;
+					v_name = arg;
 				}
 
 				break;
@@ -144,46 +130,45 @@ prototype.create =
 
 /**/if( CHECK )
 /**/{
-/**/	if( v_left === undefined )
+/**/	if( v_name === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute left' );
+/**/		throw new Error( 'undefined attribute name' );
 /**/	}
 /**/
-/**/	if( v_left === null )
+/**/	if( v_name === null )
 /**/	{
-/**/		throw new Error( 'attribute left must not be null.' );
+/**/		throw new Error( 'attribute name must not be null.' );
 /**/	}
 /**/
-/**/	if( v_right === undefined )
+/**/	if(
+/**/		typeof( v_name ) !== 'string'
+/**/		&&
+/**/		!( v_name instanceof String )
+/**/	)
 /**/	{
-/**/		throw new Error( 'undefined attribute right' );
-/**/	}
-/**/
-/**/	if( v_right === null )
-/**/	{
-/**/		throw new Error( 'attribute right must not be null.' );
+/**/		throw new Error( 'type mismatch' );
 /**/	}
 /**/}
 
-	if( inherit && v_left === inherit.left && v_right === inherit.right )
+	if( inherit && v_name === inherit.name )
 	{
 		return inherit;
 	}
 
-	return new Constructor( v_left, v_right );
+	return new Constructor( v_name );
 };
 
 
 /*
 | Reflection.
 */
-prototype.reflect = 'aDiffers';
+prototype.reflect = 'aVar';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.aDiffers';
+prototype.reflex = 'code.aVar';
 
 
 /*
@@ -216,7 +201,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return this.left === obj.left && this.right === obj.right;
+	return this.name === obj.name;
 };
 
 
@@ -225,7 +210,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aDiffers;
+	module.exports = aVar;
 }
 
 

@@ -100,7 +100,7 @@ precTable =
 			-1,
 		'aTypeof' :
 			4,
-		'Var' :
+		'aVar' :
 			-1,
 		'VList' :
 			-1
@@ -187,7 +187,7 @@ formatAnAssign =
 		+ ' ='
 		+ context.sep;
 
-	if( assign.right.reflex !== 'code.assign' )
+	if( assign.right.reflex !== 'code.anAssign' )
 	{
 		context =
 			context.IncSame;
@@ -1507,7 +1507,7 @@ formatStatement =
 		case 'code.aPlusAssign' :
 		case 'code.aReturn' :
 		case 'code.aStringLiteral' :
-		case 'code.var' :
+		case 'code.aVar' :
 
 			return text + ';' + context.sep;
 
@@ -2126,7 +2126,7 @@ formatATypeof =
 | Formats a variable use.
 */
 var
-formatVar =
+formatAVar =
 	function(
 		context,
 		expr
@@ -2135,7 +2135,7 @@ formatVar =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.var' )
+/**/	if( expr.reflex !== 'code.aVar' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2227,7 +2227,7 @@ formatVarDec =
 				true;
 		}
 		else if(
-			varDec.assign.reflex === 'code.assign'
+			varDec.assign.reflex === 'code.anAssign'
 			&&
 			varDec.assign.right.reflex === 'code.aFunc'
 		)
@@ -2282,10 +2282,9 @@ formatVarDec =
 		text +=
 			' =' + context.sep;
 
-		if( varDec.assign.reflex !== 'code.assign' )
+		if( varDec.assign.reflex !== 'code.anAssign' )
 		{
-			context =
-				context.Inc;
+			context = context.Inc;
 		}
 
 		aText =
@@ -2616,8 +2615,8 @@ exprFormatter =
 			formatAStringLiteral,
 		'aTypeof' :
 			formatATypeof,
-		'Var' :
-			formatVar,
+		'aVar' :
+			formatAVar,
 		'VList' :
 			formatVList
 	};

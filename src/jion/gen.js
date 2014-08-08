@@ -108,16 +108,16 @@ var
 		Shorthand.aStringLiteral,
 	aSwitch =
 		Shorthand.aSwitch,
-	This =
-		Shorthand.Var( 'this' ),
+	This = // FIXME and others
+		Shorthand.aVar( 'this' ),
 	True =
 		Shorthand.True( ),
 	aTypeof =
 		Shorthand.aTypeof,
 	Undefined =
-		Shorthand.Var( 'undefined' ),
-	Var =
-		Shorthand.Var,
+		Shorthand.aVar( 'undefined' ),
+	aVar =
+		Shorthand.aVar,
 	VList =
 		Shorthand.VList;
 
@@ -229,12 +229,12 @@ Gen.prototype._init =
 			units[ subParts[ 0 ] ][ subParts[ 1 ] ] = true;
 
 			this.subclass =
-				Var( subParts[ 0 ] )
+				aVar( subParts[ 0 ] )
 				.aDot( subParts[ 1 ] );
 		}
 		else
 		{
-			this.subclass = Var( jion.subclass );
+			this.subclass = aVar( jion.subclass );
 		}
 	}
 
@@ -359,7 +359,7 @@ Gen.prototype._init =
 				unit :
 					jAttr.unit,
 				v :
-					Var( 'v_' + name )
+					aVar( 'v_' + name )
 			} );
 	}
 
@@ -493,7 +493,7 @@ Gen.prototype._init =
 		this.twigList = Object.freeze( twigList );
 	}
 
-	// FUTURE make it a Var
+	// FUTURE make it a aVar
 	this.reference =
 		( jion.unit === jion.name )
 			?
@@ -566,16 +566,16 @@ Gen.prototype.genNodeIncludes =
 	block =
 		aBlock( )
 		.anAssign(
-			Var( 'JoobjProto' ),
+			aVar( 'JoobjProto' ),
 			aCall(
-				Var( 'require' ),
+				aVar( 'require' ),
 				aStringLiteral( '../../src/jion/proto' )
 			)
 		)
 		.anAssign(
-			Var( 'Jools' ),
+			aVar( 'Jools' ),
 			aCall(
-				Var( 'require' ),
+				aVar( 'require' ),
 				aStringLiteral( '../../src/jools/jools' )
 			)
 		);
@@ -591,7 +591,7 @@ Gen.prototype.genNodeIncludes =
 		block =
 			block
 			.anAssign(
-				Var( this.unitList[ a ] ),
+				aVar( this.unitList[ a ] ),
 				anObjLiteral( )
 			);
 	}
@@ -625,9 +625,9 @@ Gen.prototype.genNodeIncludes =
 			block =
 				block
 				.anAssign(
-					Var( unitName ).aDot( typeName ),
+					aVar( unitName ).aDot( typeName ),
 					aCall(
-						Var( 'require' ),
+						aVar( 'require' ),
 						aStringLiteral(
 							'../../src/' +
 								camelCaseToDash( unitName ) +
@@ -641,7 +641,7 @@ Gen.prototype.genNodeIncludes =
 
 	capsule =
 		capsule.anIf(
-			Var( 'SERVER' ),
+			aVar( 'SERVER' ),
 			block
 		);
 
@@ -719,11 +719,11 @@ Gen.prototype.genConstructor =
 			block
 			.anAssign(
 				This.aDot( 'twig' ),
-				Var( 'twig' )
+				aVar( 'twig' )
 			)
 			.anAssign(
 				This.aDot( 'ranks' ),
-				Var( 'ranks' )
+				aVar( 'ranks' )
 			);
 	}
 
@@ -751,7 +751,7 @@ Gen.prototype.genConstructor =
 
 					initCall =
 						initCall.Append(
-							Var( this.init[ a ] )
+							aVar( this.init[ a ] )
 						);
 
 					continue;
@@ -781,7 +781,7 @@ Gen.prototype.genConstructor =
 	block =
 		block
 		.aCall(
-			Var( 'Jools' ).aDot( 'immute' ),
+			aVar( 'Jools' ).aDot( 'immute' ),
 			This
 		);
 
@@ -790,12 +790,12 @@ Gen.prototype.genConstructor =
 		block =
 			block
 			.aCall(
-				Var( 'Jools' ).aDot( 'immute' ),
-				Var( 'twig' )
+				aVar( 'Jools' ).aDot( 'immute' ),
+				aVar( 'twig' )
 			)
 			.aCall(
-				Var( 'Jools' ).aDot( 'immute' ),
-				Var( 'ranks' )
+				aVar( 'Jools' ).aDot( 'immute' ),
+				aVar( 'ranks' )
 			);
 	}
 
@@ -877,8 +877,8 @@ Gen.prototype.genConstructor =
 			capsule
 			.aComment( 'Subclass.' )
 			.aCall(
-				Var( 'Jools' ).aDot( 'subclass' ),
-				Var( 'Constructor' ),
+				aVar( 'Jools' ).aDot( 'subclass' ),
+				aVar( 'Constructor' ),
 				this.subclass
 			);
 	}
@@ -889,7 +889,7 @@ Gen.prototype.genConstructor =
 		.aComment( 'Prototype shortcut' )
 		.aVarDec(
 			'prototype',
-			Var( 'Constructor' ).aDot( 'prototype' )
+			aVar( 'Constructor' ).aDot( 'prototype' )
 		);
 
 	// the exported object
@@ -899,7 +899,7 @@ Gen.prototype.genConstructor =
 		anObjLiteral( )
 		.Add(
 			'prototype',
-			Var( 'prototype' )
+			aVar( 'prototype' )
 		);
 
 	if( this.unit )
@@ -908,7 +908,7 @@ Gen.prototype.genConstructor =
 			capsule.aVarDec(
 				this.reference,
 				anAssign(
-					Var( this.unit ).aDot( this.name ),
+					aVar( this.unit ).aDot( this.name ),
 					jionObj
 				)
 			);
@@ -919,7 +919,7 @@ Gen.prototype.genConstructor =
 		capsule =
 			capsule
 			.anAssign(
-				Var( this.reference ),
+				aVar( this.reference ),
 				jionObj
 			);
 	}
@@ -1014,7 +1014,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		receiver =
 			aBlock( )
 			.anAssign(
-				Var( 'inherit' ),
+				aVar( 'inherit' ),
 				This
 			);
 
@@ -1023,15 +1023,15 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		receiver =
 			receiver
 			.anAssign(
-				Var( 'twig' ),
-				Var( 'inherit' ).aDot( 'twig' )
+				aVar( 'twig' ),
+				aVar( 'inherit' ).aDot( 'twig' )
 			)
 			.anAssign(
-				Var( 'ranks' ),
-				Var( 'inherit' ).aDot( 'ranks' )
+				aVar( 'ranks' ),
+				aVar( 'inherit' ).aDot( 'ranks' )
 			)
 			.anAssign(
-				Var( 'twigDup' ),
+				aVar( 'twigDup' ),
 				False
 			);
 	}
@@ -1065,7 +1065,7 @@ Gen.prototype.genCreatorInheritanceReceiver =
 		anIf(
 			aDiffers(
 				This,
-				Var( this.reference )
+				aVar( this.reference )
 			),
 			receiver
 		);
@@ -1077,15 +1077,15 @@ Gen.prototype.genCreatorInheritanceReceiver =
 			.Elsewise(
 				aBlock( )
 				.anAssign(
-					Var( 'twig' ),
+					aVar( 'twig' ),
 					anObjLiteral( )
 				)
 				.anAssign(
-					Var( 'ranks' ),
+					aVar( 'ranks' ),
 					anArrayLiteral( )
 				)
 				.anAssign(
-					Var( 'twigDup' ),
+					aVar( 'twigDup' ),
 					True
 				)
 			);
@@ -1120,10 +1120,10 @@ Gen.prototype.genCreatorFreeStringsParser =
 		aBlock( )
 		.aVarDec(
 			'arg',
-			Var( 'arguments' )
+			aVar( 'arguments' )
 			.aMember(
 				aPlus(
-					Var( 'a' ),
+					aVar( 'a' ),
 					aNumberLiteral( 1 )
 				)
 			)
@@ -1131,9 +1131,9 @@ Gen.prototype.genCreatorFreeStringsParser =
 
 	switchExpr =
 		aSwitch(
-			Var( 'arguments' )
+			aVar( 'arguments' )
 			.aMember(
-				Var( 'a' )
+				aVar( 'a' )
 			)
 		);
 
@@ -1156,13 +1156,13 @@ Gen.prototype.genCreatorFreeStringsParser =
 				aBlock( )
 				.anIf(
 					aDiffers(
-						Var( 'arg' ),
+						aVar( 'arg' ),
 						Undefined
 					),
 					aBlock( )
 					.anAssign(
 						attr.v,
-						Var( 'arg' )
+						aVar( 'arg' )
 					)
 				)
 			);
@@ -1178,45 +1178,45 @@ Gen.prototype.genCreatorFreeStringsParser =
 				aBlock( )
 				.anIf(
 					aNot(
-						Var( 'twigDup' )
+						aVar( 'twigDup' )
 					),
 					aBlock( )
 					.anAssign(
-						Var( 'twig' ),
+						aVar( 'twig' ),
 						aCall(
-							Var( 'Jools' ).aDot( 'copy' ),
-							Var( 'twig' )
+							aVar( 'Jools' ).aDot( 'copy' ),
+							aVar( 'twig' )
 						)
 					)
 					.anAssign(
-						Var( 'ranks' ),
+						aVar( 'ranks' ),
 						aCall(
-							Var( 'ranks' ).aDot( 'slice' )
+							aVar( 'ranks' ).aDot( 'slice' )
 						)
 					)
 					.anAssign(
-						Var( 'twigDup' ),
+						aVar( 'twigDup' ),
 						True
 					)
 				)
 				.anAssign(
-					Var( 'key' ),
-					Var( 'arg' )
+					aVar( 'key' ),
+					aVar( 'arg' )
 				)
 				.anAssign(
-					Var( 'arg' ),
-					Var( 'arguments' )
+					aVar( 'arg' ),
+					aVar( 'arguments' )
 					.aMember(
 						aPlus(
-							aPreIncrement( Var( 'a' ) ),
+							aPreIncrement( aVar( 'a' ) ),
 							aNumberLiteral( 1 )
 						)
 					)
 				)
 				.anIf(
 					aDiffers(
-						Var( 'twig' ).aMember(
-							Var( 'key' )
+						aVar( 'twig' ).aMember(
+							aVar( 'key' )
 						),
 						Undefined
 					),
@@ -1224,65 +1224,62 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.aFail(
 						aPlus(
 							aStringLiteral( 'key "' ),
-							Var( 'key' ),
+							aVar( 'key' ),
 							aStringLiteral( '" already in use' )
 						)
 					)
 				)
 				.anAssign(
-					Var( 'twig' )
-					.aMember(
-						Var( 'key' )
-					),
-					Var( 'arg' )
+					aVar( 'twig' ).aMember( aVar( 'key' ) ),
+					aVar( 'arg' )
 				)
 				.aCall(
-					Var( 'ranks' ).aDot( 'push' ),
-					Var( 'key' )
+					aVar( 'ranks' ).aDot( 'push' ),
+					aVar( 'key' )
 				)
 			)
 			.aCase(
 				aStringLiteral( 'twig:set' ),
 				aBlock( )
 				.anIf(
-					aNot( Var( 'twigDup' ) ),
+					aNot( aVar( 'twigDup' ) ),
 					aBlock( )
 					.anAssign(
-						Var( 'twig' ),
+						aVar( 'twig' ),
 						aCall(
-							Var( 'Jools' ).aDot( 'copy' ),
-							Var( 'twig' )
+							aVar( 'Jools' ).aDot( 'copy' ),
+							aVar( 'twig' )
 						)
 					)
 					.anAssign(
-						Var( 'ranks' ),
+						aVar( 'ranks' ),
 						aCall(
-							Var( 'ranks' ).aDot( 'slice' )
+							aVar( 'ranks' ).aDot( 'slice' )
 						)
 					)
 					.anAssign(
-						Var( 'twigDup' ),
+						aVar( 'twigDup' ),
 						True
 					)
 				)
 				.anAssign(
-					Var( 'key' ),
-					Var( 'arg' )
+					aVar( 'key' ),
+					aVar( 'arg' )
 				)
 				.anAssign(
-					Var( 'arg' ),
-					Var( 'arguments' )
+					aVar( 'arg' ),
+					aVar( 'arguments' )
 					.aMember(
 						aPlus(
-							aPreIncrement( Var( 'a' ) ),
+							aPreIncrement( aVar( 'a' ) ),
 							aNumberLiteral( 1 )
 						)
 					)
 				)
 				.anIf(
 					anEquals(
-						Var( 'twig' ).aMember(
-							Var( 'key' )
+						aVar( 'twig' ).aMember(
+							aVar( 'key' )
 						),
 						Undefined
 					),
@@ -1290,78 +1287,78 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.aFail(
 						aPlus(
 							aStringLiteral( 'key "' ),
-							Var( 'key' ),
+							aVar( 'key' ),
 							aStringLiteral( '" not in use' )
 						)
 					)
 				)
 				.anAssign(
-					Var( 'twig' )
+					aVar( 'twig' )
 					.aMember(
-						Var( 'key' )
+						aVar( 'key' )
 					),
-					Var( 'arg' )
+					aVar( 'arg' )
 				)
 			)
 			.aCase(
 				aStringLiteral( 'twig:insert' ),
 				aBlock( )
 				.anIf(
-					aNot( Var( 'twigDup' ) ),
+					aNot( aVar( 'twigDup' ) ),
 					aBlock( )
 					.anAssign(
-						Var( 'twig' ),
+						aVar( 'twig' ),
 						aCall(
-							Var( 'Jools' ).aDot( 'copy' ),
-							Var( 'twig' )
+							aVar( 'Jools' ).aDot( 'copy' ),
+							aVar( 'twig' )
 						)
 					)
 					.anAssign(
-						Var( 'ranks' ),
+						aVar( 'ranks' ),
 						aCall(
-							Var( 'ranks' ).aDot( 'slice' )
+							aVar( 'ranks' ).aDot( 'slice' )
 						)
 					)
 					.anAssign(
-						Var( 'twigDup' ),
+						aVar( 'twigDup' ),
 						True
 					)
 				)
 				.anAssign(
-					Var( 'key' ),
-					Var( 'arg' )
+					aVar( 'key' ),
+					aVar( 'arg' )
 				)
 				.anAssign(
-					Var( 'rank' ),
-					Var( 'arguments' )
+					aVar( 'rank' ),
+					aVar( 'arguments' )
 					.aMember(
 						aPlus(
-							Var( 'a' ),
+							aVar( 'a' ),
 							aNumberLiteral( 2 )
 						)
 					)
 				)
 				.anAssign(
-					Var( 'arg' ),
-					Var( 'arguments' )
+					aVar( 'arg' ),
+					aVar( 'arguments' )
 					.aMember(
 						aPlus(
-							Var( 'a' ),
+							aVar( 'a' ),
 							aNumberLiteral( 3 )
 						)
 					)
 				)
 				.Append(
 					aPlusAssign(
-						Var( 'a' ),
+						aVar( 'a' ),
 						aNumberLiteral( 2 )
 					)
 				)
 				.anIf(
 					aDiffers(
-						Var( 'twig' )
+						aVar( 'twig' )
 						.aMember(
-							Var( 'key' )
+							aVar( 'key' )
 						),
 						Undefined
 					),
@@ -1369,7 +1366,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.aFail(
 						aPlus(
 							aStringLiteral( 'key "' ),
-							Var( 'key' ),
+							aVar( 'key' ),
 							aStringLiteral( '" already in use' )
 						)
 					)
@@ -1377,12 +1374,12 @@ Gen.prototype.genCreatorFreeStringsParser =
 				.anIf(
 					anOr(
 						aLessThan(
-							Var( 'rank' ),
+							aVar( 'rank' ),
 							aNumberLiteral( 0 )
 						),
 						aGreaterThan(
-							Var( 'rank' ),
-							Var( 'ranks' ).aDot( 'length' )
+							aVar( 'rank' ),
+							aVar( 'ranks' ).aDot( 'length' )
 						)
 					),
 					aBlock( )
@@ -1391,18 +1388,18 @@ Gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.anAssign(
-					Var( 'twig' )
+					aVar( 'twig' )
 					.aMember(
-						Var( 'key' )
+						aVar( 'key' )
 					),
-					Var( 'arg' )
+					aVar( 'arg' )
 				)
 				.Append(
 					aCall(
-						Var( 'ranks' ).aDot( 'splice' ),
-						Var( 'rank' ),
+						aVar( 'ranks' ).aDot( 'splice' ),
+						aVar( 'rank' ),
 						aNumberLiteral( 0 ),
-						Var( 'key' )
+						aVar( 'key' )
 					)
 				)
 			)
@@ -1411,32 +1408,32 @@ Gen.prototype.genCreatorFreeStringsParser =
 				aBlock( )
 				.anIf(
 					aNot(
-						Var( 'twigDup' )
+						aVar( 'twigDup' )
 					),
 					aBlock( )
 					.anAssign(
-						Var( 'twig' ),
+						aVar( 'twig' ),
 						aCall(
-							Var( 'Jools' ).aDot( 'copy' ),
-							Var( 'twig' )
+							aVar( 'Jools' ).aDot( 'copy' ),
+							aVar( 'twig' )
 						)
 					)
 					.anAssign(
-						Var( 'ranks' ),
+						aVar( 'ranks' ),
 						aCall(
-							Var( 'ranks' ).aDot( 'slice' )
+							aVar( 'ranks' ).aDot( 'slice' )
 						)
 					)
 					.anAssign(
-						Var( 'twigDup' ),
+						aVar( 'twigDup' ),
 						True
 					)
 				)
 				.anIf(
 					anEquals(
-						Var( 'twig' )
+						aVar( 'twig' )
 						.aMember(
-							Var( 'arg' )
+							aVar( 'arg' )
 						),
 						Undefined
 					),
@@ -1444,25 +1441,25 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.aFail(
 						aPlus(
 							aStringLiteral( 'key "' ),
-							Var( 'arg' ),
+							aVar( 'arg' ),
 							aStringLiteral( '" not in use' )
 						)
 					)
 				)
 				.Append(
 					aDelete(
-						Var( 'twig' )
+						aVar( 'twig' )
 						.aMember(
-							Var( 'arg' )
+							aVar( 'arg' )
 						)
 					)
 				)
 				.Append(
 					aCall(
-						Var( 'ranks' ).aDot( 'splice' ),
+						aVar( 'ranks' ).aDot( 'splice' ),
 						aCall(
-							Var( 'ranks' ).aDot( 'indexOf' ),
-							Var( 'arg' )
+							aVar( 'ranks' ).aDot( 'indexOf' ),
+							aVar( 'arg' )
 						),
 						aNumberLiteral( 1 )
 					)
@@ -1493,14 +1490,14 @@ Gen.prototype.genCreatorFreeStringsParser =
 			)
 			.aVarDec(
 				'aZ',
-				Var( 'arguments' ).aDot( 'length' )
+				aVar( 'arguments' ).aDot( 'length' )
 			),
 			aLessThan(
-				Var( 'a' ),
-				Var( 'aZ' )
+				aVar( 'a' ),
+				aVar( 'aZ' )
 			),
 			aPlusAssign(
-				Var( 'a' ),
+				aVar( 'a' ),
 				aNumberLiteral( 2 )
 			),
 			loop
@@ -1676,7 +1673,7 @@ Gen.prototype.genCreatorChecks =
 						),
 						aDiffers(
 							aCall(
-								Var( 'Math' ).aDot( 'floor' ),
+								aVar( 'Math' ).aDot( 'floor' ),
 								attr.v
 							),
 							attr.v
@@ -1707,7 +1704,7 @@ Gen.prototype.genCreatorChecks =
 						aNot(
 							anInstanceof(
 								attr.v,
-								Var( 'String' )
+								aVar( 'String' )
 							)
 						)
 					);
@@ -1824,13 +1821,13 @@ Gen.prototype.genCreatorConcerns =
 			{
 				cExpr =
 					aCall(
-						Var( unit ).aDot( type ).aDot( func )
+						aVar( unit ).aDot( type ).aDot( func )
 					);
 			}
 			else
 			{
 				cExpr =
-					aCall( Var( func ) );
+					aCall( aVar( func ) );
 			}
 
 			for(
@@ -1947,8 +1944,7 @@ Gen.prototype.genCreatorUnchanged =
 		cond,
 		name;
 
-	cond =
-		Var( 'inherit' );
+	cond = aVar( 'inherit' );
 
 
 	if( this.twig )
@@ -1957,7 +1953,7 @@ Gen.prototype.genCreatorUnchanged =
 			anAnd(
 				cond,
 				aNot(
-					Var( 'twigDup' )
+					aVar( 'twigDup' )
 				)
 			);
 	}
@@ -2001,7 +1997,7 @@ Gen.prototype.genCreatorUnchanged =
 				ceq =
 					anEquals(
 						attr.v,
-						Var( 'inherit' ).aDot( attr.assign )
+						aVar( 'inherit' ).aDot( attr.assign )
 					);
 
 				break;
@@ -2013,7 +2009,7 @@ Gen.prototype.genCreatorUnchanged =
 					ceq =
 						aCall(
 							attr.v.aDot( 'equals' ),
-							Var( 'inherit' ).aDot( attr.assign )
+							aVar( 'inherit' ).aDot( attr.assign )
 						);
 				}
 				else
@@ -2022,13 +2018,13 @@ Gen.prototype.genCreatorUnchanged =
 						anOr(
 							anEquals(
 								attr.v,
-								Var( 'inherit' ).aDot( attr.assign )
+								aVar( 'inherit' ).aDot( attr.assign )
 							),
 							anAnd(
 								attr.v,
 								aCall(
 									attr.v.aDot( 'equals' ),
-									Var( 'inherit' ).aDot( attr.assign )
+									aVar( 'inherit' ).aDot( attr.assign )
 								)
 							)
 						);
@@ -2047,7 +2043,7 @@ Gen.prototype.genCreatorUnchanged =
 			cond,
 			aBlock( )
 			.aReturn(
-				Var( 'inherit' )
+				aVar( 'inherit' )
 			)
 		);
 
@@ -2074,27 +2070,27 @@ Gen.prototype.genCreatorReturn =
 			block
 			.anIf(
 				aNot(
-					Var( '_singleton' )
+					aVar( '_singleton' )
 				),
 				aBlock( )
 				.anAssign(
-					Var( '_singleton' ),
+					aVar( '_singleton' ),
 					aNew(
 						aCall(
-							Var( 'Constructor' )
+							aVar( 'Constructor' )
 						)
 					)
 				)
 			)
 			.aReturn(
-				Var( '_singleton' )
+				aVar( '_singleton' )
 			)
 		);
 	}
 
 	call =
 		aCall(
-			Var( 'Constructor' )
+			aVar( 'Constructor' )
 		);
 
 	for(
@@ -2115,7 +2111,7 @@ Gen.prototype.genCreatorReturn =
 
 				call =
 					call.Append(
-						Var( name )
+						aVar( name )
 					);
 
 				break;
@@ -2182,9 +2178,9 @@ Gen.prototype.genCreator =
 	capsule =
 		capsule
 		.anAssign(
-			Var( this.reference ).aDot( 'create' ),
+			aVar( this.reference ).aDot( 'create' ),
 			anAssign(
-				Var( 'prototype' ).aDot( 'create' ),
+				aVar( 'prototype' ).aDot( 'create' ),
 				creator
 			)
 		);
@@ -2280,14 +2276,14 @@ Gen.prototype.genFromJSONCreatorParser =
 
 	switchExpr =
 		aSwitch(
-			Var( 'name' )
+			aVar( 'name' )
 		)
 		.aCase(
 			aStringLiteral( 'type' ),
 			aBlock( )
 			.anIf(
 				aDiffers(
-					Var( 'arg' ),
+					aVar( 'arg' ),
 					aStringLiteral( this.name )
 				),
 				aBlock( )
@@ -2303,16 +2299,16 @@ Gen.prototype.genFromJSONCreatorParser =
 				aStringLiteral( 'twig' ),
 				aBlock( )
 				.anAssign(
-					Var( 'jwig' ),
-					Var( 'arg' )
+					aVar( 'jwig' ),
+					aVar( 'arg' )
 				)
 			)
 			.aCase(
 				aStringLiteral( 'ranks' ),
 				aBlock( )
 				.anAssign(
-					Var( 'ranks' ),
-					Var( 'arg' )
+					aVar( 'ranks' ),
+					aVar( 'arg' )
 				)
 			);
 	}
@@ -2341,7 +2337,7 @@ Gen.prototype.genFromJSONCreatorParser =
 			case 'Number' :
 			case 'String' :
 
-				arg = Var( 'arg' );
+				arg = aVar( 'arg' );
 
 				break;
 
@@ -2349,8 +2345,7 @@ Gen.prototype.genFromJSONCreatorParser =
 
 				if( attr.unit )
 				{
-					base =
-						Var( attr.unit ).aDot( attr.type );
+					base = aVar( attr.unit ).aDot( attr.type );
 				}
 				else
 				{
@@ -2358,7 +2353,7 @@ Gen.prototype.genFromJSONCreatorParser =
 					// Object.createFromJSON creation
 					base =
 						attr.type !== 'Object'
-						? Var( attr.type )
+						? aVar( attr.type )
 						: null;
 				}
 
@@ -2367,14 +2362,14 @@ Gen.prototype.genFromJSONCreatorParser =
 					arg =
 						aCall(
 							base.aDot( 'createFromJSON' ),
-							Var( 'arg' )
+							aVar( 'arg' )
 						);
 				}
 				else
 				{
 					// FUTURE remove this hack to disable
 					// Object.createFromJSON creation
-					arg = Var( 'arg' );
+					arg = aVar( 'arg' );
 				}
 		}
 
@@ -2394,13 +2389,13 @@ Gen.prototype.genFromJSONCreatorParser =
 		block
 		.aForIn(
 			'name',
-			Var( 'json' ),
+			aVar( 'json' ),
 			aBlock( )
 			.anAssign(
-				Var( 'arg' ),
-				Var( 'json' )
+				aVar( 'arg' ),
+				aVar( 'json' )
 				.aMember(
-					Var( 'name' )
+					aVar( 'name' )
 				)
 			)
 			.Append(
@@ -2429,7 +2424,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 
 	switchExpr =
 		aSwitch(
-			Var( 'jval' ).aDot( 'type' )
+			aVar( 'jval' ).aDot( 'type' )
 		);
 
 	for(
@@ -2447,12 +2442,12 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		if( ut.unit )
 		{
 			base =
-				Var( ut.unit ).aDot( ut.type );
+				aVar( ut.unit ).aDot( ut.type );
 		}
 		else
 		{
 			base =
-				Var( ut.type );
+				aVar( ut.type );
 		}
 
 		switchExpr =
@@ -2461,13 +2456,13 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 				aStringLiteral( name ),
 				aBlock( )
 				.anAssign(
-					Var( 'twig' )
+					aVar( 'twig' )
 					.aMember(
-						Var( 'key' )
+						aVar( 'key' )
 					),
 					aCall(
 						base.aDot( 'createFromJSON' ),
-						Var( 'jval' )
+						aVar( 'jval' )
 					)
 				)
 			);
@@ -2483,27 +2478,27 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 	loop =
 		aBlock( )
 		.anAssign(
-			Var( 'key' ),
-			Var( 'ranks' )
+			aVar( 'key' ),
+			aVar( 'ranks' )
 			.aMember(
-				Var( 'a' )
+				aVar( 'a' )
 			)
 		)
 		.anIf(
 			aNot(
-				Var( 'jwig' )
+				aVar( 'jwig' )
 				.aMember(
-					Var( 'key' )
+					aVar( 'key' )
 				)
 			),
 			aBlock( )
 			.aFail( 'JSON ranks/twig mismatch' )
 		)
 		.anAssign(
-			Var( 'jval' ),
-			Var( 'jwig' )
+			aVar( 'jval' ),
+			aVar( 'jwig' )
 			.aMember(
-				Var( 'key' )
+				aVar( 'key' )
 			)
 		)
 		.Append(
@@ -2513,17 +2508,13 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 	block =
 		block
 		.anAssign(
-			Var( 'twig' ),
+			aVar( 'twig' ),
 			anObjLiteral( )
 		)
 		.anIf(
 			anOr(
-				aNot(
-					Var( 'jwig' )
-				),
-				aNot(
-					Var( 'ranks' )
-				)
+				aNot( aVar( 'jwig' ) ),
+				aNot( aVar( 'ranks' ) )
 			),
 			aBlock( )
 			.aFail( 'ranks/twig information missing' )
@@ -2533,22 +2524,22 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 			aCommaList( )
 			.Append(
 				anAssign(
-					Var( 'a' ),
+					aVar( 'a' ),
 					aNumberLiteral( 0 )
 				)
 			)
 			.Append(
 				anAssign(
-					Var( 'aZ' ),
-					Var( 'ranks' ).aDot( 'length' )
+					aVar( 'aZ' ),
+					aVar( 'ranks' ).aDot( 'length' )
 				)
 			),
 			aLessThan(
-				Var( 'a' ),
-				Var( 'aZ' )
+				aVar( 'a' ),
+				aVar( 'aZ' )
 			),
 			aPreIncrement(
-				Var( 'a' )
+				aVar( 'a' )
 			),
 			loop
 		);
@@ -2571,7 +2562,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 	call =
 		aCall(
-			Var( 'Constructor' )
+			aVar( 'Constructor' )
 		);
 
 	for(
@@ -2604,7 +2595,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 				call =
 					call.Append(
-						Var( name )
+						aVar( name )
 					);
 
 				break;
@@ -2713,7 +2704,7 @@ Gen.prototype.genFromJSONCreator =
 	capsule =
 		capsule
 		.anAssign(
-			Var( this.reference ).aDot( 'createFromJSON' ),
+			aVar( this.reference ).aDot( 'createFromJSON' ),
 			aFunc( funcBlock )
 			.Arg(
 				'json',
@@ -2737,7 +2728,7 @@ Gen.prototype.genReflection =
 		capsule
 		.aComment( 'Reflection.' )
 		.anAssign(
-			Var( 'prototype' ).aDot( 'reflect' ),
+			aVar( 'prototype' ).aDot( 'reflect' ),
 			aStringLiteral( this.name )
 		);
 
@@ -2745,7 +2736,7 @@ Gen.prototype.genReflection =
 		capsule
 		.aComment( 'New Reflection.' )
 		.anAssign(
-			Var( 'prototype' ).aDot( 'reflex' ),
+			aVar( 'prototype' ).aDot( 'reflex' ),
 			aStringLiteral(
 				adaptName(
 					this.unit,
@@ -2773,13 +2764,13 @@ Gen.prototype.genJoobjProto =
 		capsule
 		.aComment( 'Sets values by path.' )
 		.anAssign(
-			Var( 'prototype' ).aDot( 'setPath' ),
-			Var( 'JoobjProto' ).aDot( 'setPath' )
+			aVar( 'prototype' ).aDot( 'setPath' ),
+			aVar( 'JoobjProto' ).aDot( 'setPath' )
 		)
 		.aComment( 'Gets values by path' )
 		.anAssign(
-			Var( 'prototype' ).aDot( 'getPath' ),
-			Var( 'JoobjProto' ).aDot( 'getPath' )
+			aVar( 'prototype' ).aDot( 'getPath' ),
+			aVar( 'JoobjProto' ).aDot( 'getPath' )
 		);
 
 	if( this.twig )
@@ -2788,18 +2779,18 @@ Gen.prototype.genJoobjProto =
 			capsule
 			.aComment( 'Returns a twig by rank.' )
 			.anAssign(
-				Var( 'prototype' ).aDot( 'atRank' ),
-				Var( 'JoobjProto' ).aDot( 'atRank' )
+				aVar( 'prototype' ).aDot( 'atRank' ),
+				aVar( 'JoobjProto' ).aDot( 'atRank' )
 			)
 			.aComment( 'Gets the rank of a key.' )
 			.anAssign(
-				Var( 'Constructor' ).aDot( 'prototype' ).aDot( 'rankOf' ),
-				Var( 'JoobjProto' ).aDot( 'rankOf' )
+				aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'rankOf' ),
+				aVar( 'JoobjProto' ).aDot( 'rankOf' )
 			)
 			.aComment( 'Creates a new unique identifier.' )
 			.anAssign(
-				Var( 'Constructor' ).aDot( 'prototype' ).aDot( 'newUID' ),
-				Var( 'JoobjProto' ).aDot( 'newUID' )
+				aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'newUID' ),
+				aVar( 'JoobjProto' ).aDot( 'newUID' )
 			);
 	}
 
@@ -2874,9 +2865,9 @@ Gen.prototype.genToJSON =
 	block =
 		block
 		.anAssign(
-			Var( 'json' ),
+			aVar( 'json' ),
 			aCall(
-				Var( 'Object' ).aDot( 'freeze' ),
+				aVar( 'Object' ).aDot( 'freeze' ),
 				olit
 			)
 		)
@@ -2884,7 +2875,7 @@ Gen.prototype.genToJSON =
 			aFunc(
 				aBlock( )
 				.aReturn(
-					Var( 'json' )
+					aVar( 'json' )
 				)
 			)
 		);
@@ -2893,8 +2884,8 @@ Gen.prototype.genToJSON =
 		capsule
 		.aComment( 'Converts a ' + this.name + ' into JSON.' )
 		.aCall(
-			Var( 'Jools' ).aDot( 'lazyValue' ),
-			Var( 'Constructor' ).aDot( 'prototype' ),
+			aVar( 'Jools' ).aDot( 'lazyValue' ),
+			aVar( 'Constructor' ).aDot( 'prototype' ),
 			aStringLiteral( 'toJSON' ),
 			aFunc( block )
 		);
@@ -2991,13 +2982,13 @@ Gen.prototype.genEquals =
 				capsule
 				.aComment( 'Tests equality of object.' )
 				.anAssign(
-					Var( 'Constructor' ).aDot( 'prototype' ).aDot( 'equals' ),
+					aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'equals' ),
 					aFunc(
 						aBlock( )
 						.aReturn(
 							anEquals(
 								This,
-								Var( 'obj' )
+								aVar( 'obj' )
 							)
 						)
 					)
@@ -3029,14 +3020,14 @@ Gen.prototype.genEquals =
 		.anIf(
 			anEquals(
 				This,
-				Var( 'obj' )
+				aVar( 'obj' )
 			),
 			aBlock( )
 			.aReturn( True )
 		)
 		.anIf(
 			aNot(
-				Var( 'obj' )
+				aVar( 'obj' )
 			),
 			aBlock( )
 			.aReturn(
@@ -3050,11 +3041,11 @@ Gen.prototype.genEquals =
 			anAnd(
 				anEquals(
 					This.aDot( 'tree' ),
-					Var( 'obj' ).aDot( 'tree' )
+					aVar( 'obj' ).aDot( 'tree' )
 				),
 				anEquals(
 					This.aDot( 'ranks' ),
-					Var( 'obj' ).aDot( 'ranks' )
+					aVar( 'obj' ).aDot( 'ranks' )
 				)
 			);
 	}
@@ -3078,7 +3069,7 @@ Gen.prototype.genEquals =
 			this.genAttributeEquals(
 				name,
 				This.aDot( attr.assign ),
-				Var( 'obj' ).aDot( attr.assign )
+				aVar( 'obj' ).aDot( attr.assign )
 			);
 
 		cond =
@@ -3094,7 +3085,7 @@ Gen.prototype.genEquals =
 	capsule =
 		capsule
 		.anAssign(
-			Var( 'Constructor' ).aDot( 'prototype' ).aDot( 'equals' ),
+			aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'equals' ),
 			aFunc( block )
 			.Arg(
 				'obj',
@@ -3148,15 +3139,13 @@ Gen.prototype.genAlike =
 			.anIf(
 				anEquals(
 					This,
-					Var( 'obj' )
+					aVar( 'obj' )
 				),
 				aBlock( )
 				.aReturn( True )
 			)
 			.anIf(
-				aNot(
-					Var( 'obj' )
-				),
+				aNot( aVar( 'obj' ) ),
 				aBlock( )
 				.aReturn(
 					False
@@ -3169,11 +3158,11 @@ Gen.prototype.genAlike =
 				anAnd(
 					anEquals(
 						This.aDot( 'tree' ),
-						Var( 'obj' ).aDot( 'tree' )
+						aVar( 'obj' ).aDot( 'tree' )
 					),
 					anEquals(
 						This.aDot( 'ranks' ),
-						Var( 'obj' ).aDot( 'ranks' )
+						aVar( 'obj' ).aDot( 'ranks' )
 					)
 				);
 		}
@@ -3201,7 +3190,7 @@ Gen.prototype.genAlike =
 				this.genAttributeEquals(
 					name,
 					This.aDot( attr.assign ),
-					Var( 'obj' ).aDot( attr.assign )
+					aVar( 'obj' ).aDot( attr.assign )
 				);
 
 			cond =
@@ -3217,7 +3206,7 @@ Gen.prototype.genAlike =
 		capsule =
 			capsule
 			.anAssign(
-				Var( 'Constructor' ).aDot( 'prototype' ).aDot( alikeName ),
+				aVar( 'Constructor' ).aDot( 'prototype' ).aDot( alikeName ),
 				aFunc( block )
 				.Arg(
 					'obj',
@@ -3242,11 +3231,11 @@ Gen.prototype.genNodeExport =
 		capsule
 		.aComment( 'Node export.' )
 		.anIf(
-			Var( 'SERVER' ),
+			aVar( 'SERVER' ),
 			aBlock( )
 			.anAssign(
-				Var( 'module' ).aDot( 'exports' ),
-				Var( this.reference )
+				aVar( 'module' ).aDot( 'exports' ),
+				aVar( this.reference )
 			)
 		)
 	);
@@ -3268,7 +3257,7 @@ Gen.prototype.genExport =
 			.aVarDec(
 				this.unit,
 				anOr(
-					Var( this.unit ),
+					aVar( this.unit ),
 					anObjLiteral( )
 				)
 			);

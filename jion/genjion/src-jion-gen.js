@@ -78,73 +78,73 @@ Gen =
 | Creates a new Gen object.
 */
 Gen.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_jion;
+
+	if( this !== Gen )
+	{
+		inherit = this;
+
+		v_jion = this.jion;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
+			arg =
+				arguments[ a + 1 ];
 
-			v_jion;
-
-		if( this !== Gen )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'jion' :
 
-			v_jion = this.jion;
+				if( arg !== undefined )
+				{
+					v_jion = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
-
-			switch( arguments[ a ] )
-			{
-				case 'jion' :
-
-					if( arg !== undefined )
-					{
-						v_jion = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_jion === undefined )
 /**/	{
-/**/		if( v_jion === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute jion' );
-/**/		}
-/**/
-/**/		if( v_jion === null )
-/**/		{
-/**/			throw new Error( 'attribute jion must not be null.' );
-/**/		}
+/**/		throw new Error( 'undefined attribute jion' );
 /**/	}
+/**/
+/**/	if( v_jion === null )
+/**/	{
+/**/		throw new Error( 'attribute jion must not be null.' );
+/**/	}
+/**/}
 
-		if( inherit && v_jion === inherit.jion )
-		{
-			return inherit;
-		}
+	if( inherit && v_jion === inherit.jion )
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_jion );
-	};
+	return new Constructor( v_jion );
+};
 
 
 /*

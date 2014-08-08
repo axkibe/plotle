@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -66,88 +68,89 @@ var
 */
 var
 	aNumberLiteral =
-		Code.aNumberLiteral =
-			{
-				prototype :
-					prototype
-			};
+	Code.aNumberLiteral =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aNumberLiteral object.
 */
 aNumberLiteral.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_number;
+
+	if( this !== aNumberLiteral )
+	{
+		inherit = this;
+
+		v_number = this.number;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_number;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aNumberLiteral )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'number' :
 
-			v_number = this.number;
+				if( arg !== undefined )
+				{
+					v_number = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
-
-			switch( arguments[ a ] )
-			{
-				case 'number' :
-
-					if( arg !== undefined )
-					{
-						v_number = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_number === undefined )
 /**/	{
-/**/		if( v_number === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute number' );
-/**/		}
-/**/
-/**/		if( v_number === null )
-/**/		{
-/**/			throw new Error( 'attribute number must not be null.' );
-/**/		}
-/**/
-/**/		if( typeof( v_number ) !== 'number' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
+/**/		throw new Error( 'undefined attribute number' );
 /**/	}
+/**/
+/**/	if( v_number === null )
+/**/	{
+/**/		throw new Error( 'attribute number must not be null.' );
+/**/	}
+/**/
+/**/	if( typeof( v_number ) !== 'number' )
+/**/	{
+/**/		throw new Error( 'type mismatch' );
+/**/	}
+/**/}
 
-		if( inherit && v_number === inherit.number )
-		{
-			return inherit;
-		}
+	if( inherit && v_number === inherit.number )
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_number );
-	};
+	return new Constructor( v_number );
+};
 
 
 /*

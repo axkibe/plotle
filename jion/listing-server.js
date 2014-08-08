@@ -60,9 +60,7 @@ module.exports =
 			'src/code/a-string-literal.js',
 			'src/code/a-switch.js',
 			'src/code/a-typeof.js',
-
-			'src/code/var.js',
-
+			'src/code/a-var.js',
 			'src/code/a-var-dec.js',
 
 			'src/code/vlist.js',

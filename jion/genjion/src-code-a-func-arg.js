@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -69,130 +71,132 @@ var
 */
 var
 	aFuncArg =
-		Code.aFuncArg =
-			{
-				prototype :
-					prototype
-			};
+	Code.aFuncArg =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aFuncArg object.
 */
 aFuncArg.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_comment,
+
+		v_name;
+
+	if( this !== aFuncArg )
+	{
+		inherit = this;
+
+		v_comment = this.comment;
+
+		v_name = this.name;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_comment,
-			v_name;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aFuncArg )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'comment' :
 
-			v_comment = this.comment;
+				if( arg !== undefined )
+				{
+					v_comment = arg;
+				}
 
-			v_name = this.name;
+				break;
+
+			case 'name' :
+
+				if( arg !== undefined )
+				{
+					v_name = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
+	if( v_comment === undefined )
+	{
+		v_comment = null;
+	}
 
-			switch( arguments[ a ] )
-			{
-				case 'comment' :
-
-					if( arg !== undefined )
-					{
-						v_comment = arg;
-					}
-
-					break;
-
-				case 'name' :
-
-					if( arg !== undefined )
-					{
-						v_name = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-		if( v_comment === undefined )
-		{
-			v_comment = null;
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_comment === undefined )
 /**/	{
-/**/		if( v_comment === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute comment' );
-/**/		}
+/**/		throw new Error( 'undefined attribute comment' );
+/**/	}
 /**/
-/**/		if( v_comment !== null )
+/**/	if( v_comment !== null )
+/**/	{
+/**/		if(
+/**/			typeof( v_comment ) !== 'string'
+/**/			&&
+/**/			!( v_comment instanceof String )
+/**/		)
 /**/		{
-/**/			if(
-/**/				typeof( v_comment ) !== 'string'
-/**/				&&
-/**/				!( v_comment instanceof String )
-/**/			)
-/**/			{
-/**/				throw new Error( 'type mismatch' );
-/**/			}
-/**/		}
-/**/
-/**/		if( v_name === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute name' );
-/**/		}
-/**/
-/**/		if( v_name !== null )
-/**/		{
-/**/			if(
-/**/				typeof( v_name ) !== 'string'
-/**/				&&
-/**/				!( v_name instanceof String )
-/**/			)
-/**/			{
-/**/				throw new Error( 'type mismatch' );
-/**/			}
+/**/			throw new Error( 'type mismatch' );
 /**/		}
 /**/	}
+/**/
+/**/	if( v_name === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute name' );
+/**/	}
+/**/
+/**/	if( v_name !== null )
+/**/	{
+/**/		if(
+/**/			typeof( v_name ) !== 'string'
+/**/			&&
+/**/			!( v_name instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
+/**/	}
+/**/}
 
-		if(
-			inherit
-			&&
-			v_comment === inherit.comment
-			&&
-			v_name === inherit.name
-		)
-		{
-			return inherit;
-		}
+	if(
+		inherit
+		&&
+		v_comment === inherit.comment
+		&&
+		v_name === inherit.name
+	)
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_comment, v_name );
-	};
+	return new Constructor( v_comment, v_name );
+};
 
 
 /*

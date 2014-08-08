@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -66,83 +68,84 @@ var
 */
 var
 	aComment =
-		Code.aComment =
-			{
-				prototype :
-					prototype
-			};
+	Code.aComment =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aComment object.
 */
 aComment.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_content;
+
+	if( this !== aComment )
+	{
+		inherit = this;
+
+		v_content = this.content;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_content;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aComment )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'content' :
 
-			v_content = this.content;
+				if( arg !== undefined )
+				{
+					v_content = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
-
-			switch( arguments[ a ] )
-			{
-				case 'content' :
-
-					if( arg !== undefined )
-					{
-						v_content = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_content === undefined )
 /**/	{
-/**/		if( v_content === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute content' );
-/**/		}
-/**/
-/**/		if( v_content === null )
-/**/		{
-/**/			throw new Error( 'attribute content must not be null.' );
-/**/		}
+/**/		throw new Error( 'undefined attribute content' );
 /**/	}
+/**/
+/**/	if( v_content === null )
+/**/	{
+/**/		throw new Error( 'attribute content must not be null.' );
+/**/	}
+/**/}
 
-		if( inherit && v_content === inherit.content )
-		{
-			return inherit;
-		}
+	if( inherit && v_content === inherit.content )
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_content );
-	};
+	return new Constructor( v_content );
+};
 
 
 /*

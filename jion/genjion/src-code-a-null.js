@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -59,11 +61,11 @@ var
 */
 var
 	aNull =
-		Code.aNull =
-			{
-				prototype :
-					prototype
-			};
+	Code.aNull =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
@@ -78,35 +80,35 @@ var
 | Creates a new aNull object.
 */
 aNull.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit;
+
+	if( this !== aNull )
 	{
-		var
-			inherit;
+		inherit = this;
+	}
 
-		if( this !== aNull )
-		{
-			inherit = this;
-		}
+/**/if( CHECK )
+/**/{
+/**/}
 
-/**/	if( CHECK )
-/**/	{
-/**/	}
+	if( inherit )
+	{
+		return inherit;
+	}
 
-		if( inherit )
-		{
-			return inherit;
-		}
+	if( !_singleton )
+	{
+		_singleton = new Constructor( );
+	}
 
-		if( !_singleton )
-		{
-			_singleton = new Constructor( );
-		}
-
-		return _singleton;
-	};
+	return _singleton;
+};
 
 
 /*

@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -72,149 +74,152 @@ var
 */
 var
 	aForIn =
-		Code.aForIn =
-			{
-				prototype :
-					prototype
-			};
+	Code.aForIn =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aForIn object.
 */
 aForIn.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_block,
+
+		v_object,
+
+		v_variable;
+
+	if( this !== aForIn )
+	{
+		inherit = this;
+
+		v_block = this.block;
+
+		v_object = this.object;
+
+		v_variable = this.variable;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_block,
-			v_object,
-			v_variable;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aForIn )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'block' :
 
-			v_block = this.block;
+				if( arg !== undefined )
+				{
+					v_block = arg;
+				}
 
-			v_object = this.object;
+				break;
 
-			v_variable = this.variable;
+			case 'object' :
+
+				if( arg !== undefined )
+				{
+					v_object = arg;
+				}
+
+				break;
+
+			case 'variable' :
+
+				if( arg !== undefined )
+				{
+					v_variable = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
-
-			switch( arguments[ a ] )
-			{
-				case 'block' :
-
-					if( arg !== undefined )
-					{
-						v_block = arg;
-					}
-
-					break;
-
-				case 'object' :
-
-					if( arg !== undefined )
-					{
-						v_object = arg;
-					}
-
-					break;
-
-				case 'variable' :
-
-					if( arg !== undefined )
-					{
-						v_variable = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_block === undefined )
 /**/	{
-/**/		if( v_block === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute block' );
-/**/		}
-/**/
-/**/		if( v_block === null )
-/**/		{
-/**/			throw new Error( 'attribute block must not be null.' );
-/**/		}
-/**/
-/**/		if( v_block.reflect !== 'aBlock' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
-/**/
-/**/		if( v_object === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute object' );
-/**/		}
-/**/
-/**/		if( v_object === null )
-/**/		{
-/**/			throw new Error( 'attribute object must not be null.' );
-/**/		}
-/**/
-/**/		if( v_variable === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute variable' );
-/**/		}
-/**/
-/**/		if( v_variable === null )
-/**/		{
-/**/			throw new Error( 'attribute variable must not be null.' );
-/**/		}
-/**/
-/**/		if(
-/**/			typeof( v_variable ) !== 'string'
-/**/			&&
-/**/			!( v_variable instanceof String )
-/**/		)
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
+/**/		throw new Error( 'undefined attribute block' );
 /**/	}
+/**/
+/**/	if( v_block === null )
+/**/	{
+/**/		throw new Error( 'attribute block must not be null.' );
+/**/	}
+/**/
+/**/	if( v_block.reflect !== 'aBlock' )
+/**/	{
+/**/		throw new Error( 'type mismatch' );
+/**/	}
+/**/
+/**/	if( v_object === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute object' );
+/**/	}
+/**/
+/**/	if( v_object === null )
+/**/	{
+/**/		throw new Error( 'attribute object must not be null.' );
+/**/	}
+/**/
+/**/	if( v_variable === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute variable' );
+/**/	}
+/**/
+/**/	if( v_variable === null )
+/**/	{
+/**/		throw new Error( 'attribute variable must not be null.' );
+/**/	}
+/**/
+/**/	if(
+/**/		typeof( v_variable ) !== 'string'
+/**/		&&
+/**/		!( v_variable instanceof String )
+/**/	)
+/**/	{
+/**/		throw new Error( 'type mismatch' );
+/**/	}
+/**/}
 
-		if(
-			inherit
-			&&
-			v_block.equals( inherit.block )
-			&&
-			v_object === inherit.object
-			&&
-			v_variable === inherit.variable
-		)
-		{
-			return inherit;
-		}
+	if(
+		inherit
+		&&
+		v_block.equals( inherit.block )
+		&&
+		v_object === inherit.object
+		&&
+		v_variable === inherit.variable
+	)
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_block, v_object, v_variable );
-	};
+	return new Constructor( v_block, v_object, v_variable );
+};
 
 
 /*

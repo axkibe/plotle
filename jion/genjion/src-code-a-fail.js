@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -66,83 +68,84 @@ var
 */
 var
 	aFail =
-		Code.aFail =
-			{
-				prototype :
-					prototype
-			};
+	Code.aFail =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aFail object.
 */
 aFail.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_message;
+
+	if( this !== aFail )
+	{
+		inherit = this;
+
+		v_message = this.message;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_message;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aFail )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'message' :
 
-			v_message = this.message;
+				if( arg !== undefined )
+				{
+					v_message = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
+	if( v_message === undefined )
+	{
+		v_message = null;
+	}
 
-			switch( arguments[ a ] )
-			{
-				case 'message' :
-
-					if( arg !== undefined )
-					{
-						v_message = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-		if( v_message === undefined )
-		{
-			v_message = null;
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_message === undefined )
 /**/	{
-/**/		if( v_message === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute message' );
-/**/		}
+/**/		throw new Error( 'undefined attribute message' );
 /**/	}
+/**/}
 
-		if( inherit && v_message === inherit.message )
-		{
-			return inherit;
-		}
+	if( inherit && v_message === inherit.message )
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_message );
-	};
+	return new Constructor( v_message );
+};
 
 
 /*

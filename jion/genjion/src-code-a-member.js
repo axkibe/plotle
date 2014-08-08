@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -69,111 +71,113 @@ var
 */
 var
 	aMember =
-		Code.aMember =
-			{
-				prototype :
-					prototype
-			};
+	Code.aMember =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aMember object.
 */
 aMember.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_expr,
+
+		v_member;
+
+	if( this !== aMember )
+	{
+		inherit = this;
+
+		v_expr = this.expr;
+
+		v_member = this.member;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_expr,
-			v_member;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aMember )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'expr' :
 
-			v_expr = this.expr;
+				if( arg !== undefined )
+				{
+					v_expr = arg;
+				}
 
-			v_member = this.member;
+				break;
+
+			case 'member' :
+
+				if( arg !== undefined )
+				{
+					v_member = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
-
-			switch( arguments[ a ] )
-			{
-				case 'expr' :
-
-					if( arg !== undefined )
-					{
-						v_expr = arg;
-					}
-
-					break;
-
-				case 'member' :
-
-					if( arg !== undefined )
-					{
-						v_member = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_expr === undefined )
 /**/	{
-/**/		if( v_expr === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute expr' );
-/**/		}
-/**/
-/**/		if( v_expr === null )
-/**/		{
-/**/			throw new Error( 'attribute expr must not be null.' );
-/**/		}
-/**/
-/**/		if( v_member === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute member' );
-/**/		}
-/**/
-/**/		if( v_member === null )
-/**/		{
-/**/			throw new Error( 'attribute member must not be null.' );
-/**/		}
+/**/		throw new Error( 'undefined attribute expr' );
 /**/	}
+/**/
+/**/	if( v_expr === null )
+/**/	{
+/**/		throw new Error( 'attribute expr must not be null.' );
+/**/	}
+/**/
+/**/	if( v_member === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute member' );
+/**/	}
+/**/
+/**/	if( v_member === null )
+/**/	{
+/**/		throw new Error( 'attribute member must not be null.' );
+/**/	}
+/**/}
 
-		if(
-			inherit
-			&&
-			v_expr === inherit.expr
-			&&
-			v_member === inherit.member
-		)
-		{
-			return inherit;
-		}
+	if(
+		inherit
+		&&
+		v_expr === inherit.expr
+		&&
+		v_member === inherit.member
+	)
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_expr, v_member );
-	};
+	return new Constructor( v_expr, v_member );
+};
 
 
 /*

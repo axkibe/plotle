@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -66,92 +68,93 @@ var
 */
 var
 	aStringLiteral =
-		Code.aStringLiteral =
-			{
-				prototype :
-					prototype
-			};
+	Code.aStringLiteral =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aStringLiteral object.
 */
 aStringLiteral.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_string;
+
+	if( this !== aStringLiteral )
+	{
+		inherit = this;
+
+		v_string = this.string;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_string;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aStringLiteral )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'string' :
 
-			v_string = this.string;
+				if( arg !== undefined )
+				{
+					v_string = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
-
-			switch( arguments[ a ] )
-			{
-				case 'string' :
-
-					if( arg !== undefined )
-					{
-						v_string = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_string === undefined )
 /**/	{
-/**/		if( v_string === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute string' );
-/**/		}
-/**/
-/**/		if( v_string === null )
-/**/		{
-/**/			throw new Error( 'attribute string must not be null.' );
-/**/		}
-/**/
-/**/		if(
-/**/			typeof( v_string ) !== 'string'
-/**/			&&
-/**/			!( v_string instanceof String )
-/**/		)
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
+/**/		throw new Error( 'undefined attribute string' );
 /**/	}
+/**/
+/**/	if( v_string === null )
+/**/	{
+/**/		throw new Error( 'attribute string must not be null.' );
+/**/	}
+/**/
+/**/	if(
+/**/		typeof( v_string ) !== 'string'
+/**/		&&
+/**/		!( v_string instanceof String )
+/**/	)
+/**/	{
+/**/		throw new Error( 'type mismatch' );
+/**/	}
+/**/}
 
-		if( inherit && v_string === inherit.string )
-		{
-			return inherit;
-		}
+	if( inherit && v_string === inherit.string )
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_string );
-	};
+	return new Constructor( v_string );
+};
 
 
 /*

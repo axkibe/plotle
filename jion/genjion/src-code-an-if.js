@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -72,152 +74,155 @@ var
 */
 var
 	anIf =
-		Code.anIf =
-			{
-				prototype :
-					prototype
-			};
+	Code.anIf =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new anIf object.
 */
 anIf.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_condition,
+
+		v_elsewise,
+
+		v_then;
+
+	if( this !== anIf )
+	{
+		inherit = this;
+
+		v_condition = this.condition;
+
+		v_elsewise = this.elsewise;
+
+		v_then = this.then;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_condition,
-			v_elsewise,
-			v_then;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== anIf )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'condition' :
 
-			v_condition = this.condition;
+				if( arg !== undefined )
+				{
+					v_condition = arg;
+				}
 
-			v_elsewise = this.elsewise;
+				break;
 
-			v_then = this.then;
-		}
+			case 'elsewise' :
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
+				if( arg !== undefined )
+				{
+					v_elsewise = arg;
+				}
 
-			switch( arguments[ a ] )
-			{
-				case 'condition' :
+				break;
 
-					if( arg !== undefined )
-					{
-						v_condition = arg;
-					}
+			case 'then' :
 
-					break;
+				if( arg !== undefined )
+				{
+					v_then = arg;
+				}
 
-				case 'elsewise' :
+				break;
 
-					if( arg !== undefined )
-					{
-						v_elsewise = arg;
-					}
+			default :
 
-					break;
-
-				case 'then' :
-
-					if( arg !== undefined )
-					{
-						v_then = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-		if( v_elsewise === undefined )
-		{
-			v_elsewise = null;
-		}
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( v_condition === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute condition' );
-/**/		}
-/**/
-/**/		if( v_condition === null )
-/**/		{
-/**/			throw new Error( 'attribute condition must not be null.' );
-/**/		}
-/**/
-/**/		if( v_elsewise === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute elsewise' );
-/**/		}
-/**/
-/**/		if( v_elsewise !== null )
-/**/		{
-/**/			if( v_elsewise.reflect !== 'aBlock' )
+/**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'type mismatch' );
+/**/				throw new Error( 'invalid argument' );
 /**/			}
-/**/		}
+		}
+	}
+
+	if( v_elsewise === undefined )
+	{
+		v_elsewise = null;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_condition === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute condition' );
+/**/	}
 /**/
-/**/		if( v_then === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute then' );
-/**/		}
+/**/	if( v_condition === null )
+/**/	{
+/**/		throw new Error( 'attribute condition must not be null.' );
+/**/	}
 /**/
-/**/		if( v_then === null )
-/**/		{
-/**/			throw new Error( 'attribute then must not be null.' );
-/**/		}
+/**/	if( v_elsewise === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute elsewise' );
+/**/	}
 /**/
-/**/		if( v_then.reflect !== 'aBlock' )
+/**/	if( v_elsewise !== null )
+/**/	{
+/**/		if( v_elsewise.reflect !== 'aBlock' )
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}
 /**/	}
+/**/
+/**/	if( v_then === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute then' );
+/**/	}
+/**/
+/**/	if( v_then === null )
+/**/	{
+/**/		throw new Error( 'attribute then must not be null.' );
+/**/	}
+/**/
+/**/	if( v_then.reflect !== 'aBlock' )
+/**/	{
+/**/		throw new Error( 'type mismatch' );
+/**/	}
+/**/}
 
-		if(
-			inherit
-			&&
-			v_condition === inherit.condition
-			&&
-			(
-				v_elsewise === inherit.elsewise
-				||
-				v_elsewise && v_elsewise.equals( inherit.elsewise )
-			)
-			&&
-			v_then.equals( inherit.then )
+	if(
+		inherit
+		&&
+		v_condition === inherit.condition
+		&&
+		(
+			v_elsewise === inherit.elsewise
+			||
+			v_elsewise && v_elsewise.equals( inherit.elsewise )
 		)
-		{
-			return inherit;
-		}
+		&&
+		v_then.equals( inherit.then )
+	)
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_condition, v_elsewise, v_then );
-	};
+	return new Constructor( v_condition, v_elsewise, v_then );
+};
 
 
 /*

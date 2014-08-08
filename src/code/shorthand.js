@@ -95,8 +95,8 @@ Code =
 			require( '../code/a-switch' ),
 		aTypeof :
 			require( '../code/a-typeof' ),
-		Var :
-			require( '../code/var' ),
+		aVar :
+			require( '../code/a-var' ),
 		aVarDec :
 			require( '../code/a-var-dec' ),
 		VList :
@@ -740,13 +740,13 @@ ShortHand.aTypeof =
 /*
 | Shorthand for creating variable uses.
 */
-ShortHand.Var =
+ShortHand.aVar =
 	function(
 		name
 	)
 {
 	return (
-		Code.Var.create(
+		Code.aVar.create(
 			'name',
 				name
 		)

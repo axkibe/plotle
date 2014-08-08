@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -66,88 +68,89 @@ var
 */
 var
 	aCheck =
-		Code.aCheck =
-			{
-				prototype :
-					prototype
-			};
+	Code.aCheck =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aCheck object.
 */
 aCheck.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_block;
+
+	if( this !== aCheck )
+	{
+		inherit = this;
+
+		v_block = this.block;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_block;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aCheck )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'block' :
 
-			v_block = this.block;
+				if( arg !== undefined )
+				{
+					v_block = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
-
-			switch( arguments[ a ] )
-			{
-				case 'block' :
-
-					if( arg !== undefined )
-					{
-						v_block = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_block === undefined )
 /**/	{
-/**/		if( v_block === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute block' );
-/**/		}
-/**/
-/**/		if( v_block === null )
-/**/		{
-/**/			throw new Error( 'attribute block must not be null.' );
-/**/		}
-/**/
-/**/		if( v_block.reflect !== 'aBlock' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
+/**/		throw new Error( 'undefined attribute block' );
 /**/	}
+/**/
+/**/	if( v_block === null )
+/**/	{
+/**/		throw new Error( 'attribute block must not be null.' );
+/**/	}
+/**/
+/**/	if( v_block.reflect !== 'aBlock' )
+/**/	{
+/**/		throw new Error( 'type mismatch' );
+/**/	}
+/**/}
 
-		if( inherit && v_block.equals( inherit.block ) )
-		{
-			return inherit;
-		}
+	if( inherit && v_block.equals( inherit.block ) )
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_block );
-	};
+	return new Constructor( v_block );
+};
 
 
 /*

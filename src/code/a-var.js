@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Var',
+			'aVar',
 		unit :
 			'Code',
 		node :
@@ -45,7 +45,7 @@ if( JION )
 */
 var
 	Code,
-	Var;
+	aVar;
 
 Code =
 	{
@@ -55,13 +55,13 @@ Code =
 			require( '../code/a-member' )
 	};
 
-Var = require( '../jion/this' )( module );
+aVar = require( '../jion/this' )( module );
 
 
 /*
 | Initializer.
 */
-Var.prototype._init =
+aVar.prototype._init =
 	function( )
 {
 	var
@@ -91,7 +91,7 @@ Var.prototype._init =
 /*
 | Creates a dot member access of a variable.
 */
-Var.prototype.aDot =
+aVar.prototype.aDot =
 	function(
 		member // member string
 	)
@@ -111,7 +111,7 @@ Var.prototype.aDot =
 /*
 | Creates a generic member access of a variable.
 */
-Var.prototype.aMember =
+aVar.prototype.aMember =
 	function(
 		member // member expression
 	)
@@ -130,8 +130,7 @@ Var.prototype.aMember =
 /*
 | Node export.
 */
-module.exports =
-	Var;
+module.exports = aVar;
 
 
 } )( );

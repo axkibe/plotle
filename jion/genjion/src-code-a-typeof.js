@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -66,83 +68,84 @@ var
 */
 var
 	aTypeof =
-		Code.aTypeof =
-			{
-				prototype :
-					prototype
-			};
+	Code.aTypeof =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aTypeof object.
 */
 aTypeof.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_expr;
+
+	if( this !== aTypeof )
+	{
+		inherit = this;
+
+		v_expr = this.expr;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_expr;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aTypeof )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'expr' :
 
-			v_expr = this.expr;
+				if( arg !== undefined )
+				{
+					v_expr = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
-
-			switch( arguments[ a ] )
-			{
-				case 'expr' :
-
-					if( arg !== undefined )
-					{
-						v_expr = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_expr === undefined )
 /**/	{
-/**/		if( v_expr === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute expr' );
-/**/		}
-/**/
-/**/		if( v_expr === null )
-/**/		{
-/**/			throw new Error( 'attribute expr must not be null.' );
-/**/		}
+/**/		throw new Error( 'undefined attribute expr' );
 /**/	}
+/**/
+/**/	if( v_expr === null )
+/**/	{
+/**/		throw new Error( 'attribute expr must not be null.' );
+/**/	}
+/**/}
 
-		if( inherit && v_expr === inherit.expr )
-		{
-			return inherit;
-		}
+	if( inherit && v_expr === inherit.expr )
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_expr );
-	};
+	return new Constructor( v_expr );
+};
 
 
 /*

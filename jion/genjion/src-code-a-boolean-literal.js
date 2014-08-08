@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -66,88 +68,89 @@ var
 */
 var
 	aBooleanLiteral =
-		Code.aBooleanLiteral =
-			{
-				prototype :
-					prototype
-			};
+	Code.aBooleanLiteral =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
 | Creates a new aBooleanLiteral object.
 */
 aBooleanLiteral.create =
-	prototype.create =
-		function(
-			// free strings
-		)
+prototype.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit,
+
+		v_boolean;
+
+	if( this !== aBooleanLiteral )
+	{
+		inherit = this;
+
+		v_boolean = this.boolean;
+	}
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
 		var
-			inherit,
-			v_boolean;
+			arg =
+				arguments[ a + 1 ];
 
-		if( this !== aBooleanLiteral )
+		switch( arguments[ a ] )
 		{
-			inherit = this;
+			case 'boolean' :
 
-			v_boolean = this.boolean;
+				if( arg !== undefined )
+				{
+					v_boolean = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( 'invalid argument' );
+/**/			}
 		}
+	}
 
-		for(
-			var a = 0, aZ = arguments.length;
-			a < aZ;
-			a += 2
-		)
-		{
-			var
-				arg =
-					arguments[ a + 1 ];
-
-			switch( arguments[ a ] )
-			{
-				case 'boolean' :
-
-					if( arg !== undefined )
-					{
-						v_boolean = arg;
-					}
-
-					break;
-
-				default :
-
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error( 'invalid argument' );
-/**/				}
-			}
-		}
-
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if( v_boolean === undefined )
 /**/	{
-/**/		if( v_boolean === undefined )
-/**/		{
-/**/			throw new Error( 'undefined attribute boolean' );
-/**/		}
-/**/
-/**/		if( v_boolean === null )
-/**/		{
-/**/			throw new Error( 'attribute boolean must not be null.' );
-/**/		}
-/**/
-/**/		if( typeof( v_boolean ) !== 'boolean' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
+/**/		throw new Error( 'undefined attribute boolean' );
 /**/	}
+/**/
+/**/	if( v_boolean === null )
+/**/	{
+/**/		throw new Error( 'attribute boolean must not be null.' );
+/**/	}
+/**/
+/**/	if( typeof( v_boolean ) !== 'boolean' )
+/**/	{
+/**/		throw new Error( 'type mismatch' );
+/**/	}
+/**/}
 
-		if( inherit && v_boolean === inherit.boolean )
-		{
-			return inherit;
-		}
+	if( inherit && v_boolean === inherit.boolean )
+	{
+		return inherit;
+	}
 
-		return new Constructor( v_boolean );
-	};
+	return new Constructor( v_boolean );
+};
 
 
 /*
