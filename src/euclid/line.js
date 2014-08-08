@@ -111,26 +111,22 @@ Line.connect =
 		pc1,
 		pc2;
 
-	if( shape1.reflect === 'Point' )
+	if( shape1.reflex === 'euclid.point' )
 	{
-		pc1 =
-			shape1;
+		pc1 = shape1;
 	}
 	else
 	{
-		pc1 =
-			shape1.pc;
+		pc1 = shape1.pc;
 	}
 
-	if( shape2.reflect === 'Point' )
+	if( shape2.reflex === 'euclid.point' )
 	{
-		pc2 =
-			shape2;
+		pc2 = shape2;
 	}
 	else
 	{
-		pc2 =
-			shape2.pc;
+		pc2 = shape2.pc;
 	}
 
 	// the projection points
@@ -140,29 +136,26 @@ Line.connect =
 
 	if
 	(
-		shape1.reflect === 'Point'
+		shape1.reflex === 'euclid.point'
 	)
 	{
-		p1 =
-			shape1;
+		p1 = shape1;
 	}
 	else if
 	(
 		shape1.within( Euclid.View.proper, pc2 )
 	)
 	{
-		p1 =
-			pc1;
+		p1 = pc1;
 	}
 	else
 	{
-		p1 =
-			shape1.getProjection( pc2 );
+		p1 = shape1.getProjection( pc2 );
 	}
 
 	if
 	(
-		shape2.reflect === 'Point'
+		shape2.reflex === 'euclid.point'
 	)
 	{
 		p2 =
