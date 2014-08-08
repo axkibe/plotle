@@ -41,8 +41,9 @@ if( JION )
 			},
 		twig :
 			{
-				'VarDec' :
-					'Code.VarDec'
+// FUTURE
+//				'aVarDec' :
+//					'Code.aVarDec'
 			}
 	};
 }
@@ -57,8 +58,8 @@ var
 		{
 			anAssign :
 				require( './an-assign' ),
-			VarDec :
-				require( './var-dec' ),
+			aVarDec :
+				require( './a-var-dec' ),
 		},
 	Jools =
 		require( '../jools/jools' );
@@ -67,7 +68,7 @@ var
 /*
 | Returns the vlist with a variable decleration appended.
 */
-VList.prototype.VarDec =
+VList.prototype.aVarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
@@ -75,7 +76,7 @@ VList.prototype.VarDec =
 {
 	var
 		varDec =
-			Code.VarDec.create(
+			Code.aVarDec.create(
 				'name',
 					name,
 				'assign',

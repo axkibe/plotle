@@ -1332,9 +1332,9 @@ formatStatement =
 		lookBehind.reflex !== 'code.aComment'
 		&&
 		!(
-			lookBehind.reflex === 'code.varDec'
+			lookBehind.reflex === 'code.aCarDec'
 			&&
-			statement.reflex === 'code.varDec'
+			statement.reflex === 'code.aVarDec'
 		)
 	)
 	{
@@ -1434,7 +1434,7 @@ formatStatement =
 
 			break;
 
-		case 'code.varDec' :
+		case 'code.aVarDec' :
 
 			text += formatVarDec( context, statement, lookBehind );
 
@@ -1480,12 +1480,12 @@ formatStatement =
 
 	switch( statement.reflex )
 	{
-		case 'code.varDec' :
+		case 'code.aVarDec' :
 
 			if(
 				lookAhead
 				&&
-				lookAhead.reflex === 'code.varDec'
+				lookAhead.reflex === 'code.aVarDec'
 			)
 			{
 				return text += ',\n';
@@ -2243,7 +2243,7 @@ formatVarDec =
 		if(
 			!lookBehind
 			||
-			lookBehind.reflex !== 'code.varDec'
+			lookBehind.reflex !== 'code.aVarDec'
 		)
 		{
 			if( !context.inline )
@@ -2408,7 +2408,7 @@ formatVList =
 
 		if( CHECK )
 		{
-			if( varDec.reflex !== 'code.varDec' )
+			if( varDec.reflex !== 'code.aVarDec' )
 			{
 				throw new Error( );
 			}

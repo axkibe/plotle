@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -36,10 +38,6 @@ if( SERVER )
 	JoobjProto = require( '../../src/jion/proto' );
 
 	Jools = require( '../../src/jools/jools' );
-
-	Code = { };
-
-	Code.VarDec = require( '../../src/code/var-dec' );
 }
 
 
@@ -98,11 +96,17 @@ VList.create =
 	{
 		var
 			inherit,
+
 			key,
+
 			rank,
+
 			ranks,
+
 			twig,
+
 			twigDup,
+
 			v_path;
 
 		if( this !== VList )

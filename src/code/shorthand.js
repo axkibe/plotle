@@ -97,8 +97,8 @@ Code =
 			require( '../code/a-typeof' ),
 		Var :
 			require( '../code/var' ),
-		VarDec :
-			require( '../code/var-dec' ),
+		aVarDec :
+			require( '../code/a-var-dec' ),
 		VList :
 			require( '../code/vlist' )
 	};
@@ -758,14 +758,14 @@ ShortHand.Var =
 | Shorthand for variable declerations.
 */
 /*
-ShortHand.VarDec =
+ShortHand.aVarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
 	)
 {
 	return (
-		Code.VarDec.create(
+		Code.aVarDec.create(
 			'name',
 				name,
 			'assign',

@@ -18,6 +18,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -91,10 +93,15 @@ aBlock.create =
 	{
 		var
 			inherit,
+
 			key,
+
 			rank,
+
 			ranks,
+
 			twig,
+
 			twigDup;
 
 		if( this !== aBlock )

@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'VarDec',
+			'aVarDec',
 		unit :
 			'Code',
 		attributes :
@@ -47,8 +47,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

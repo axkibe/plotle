@@ -64,8 +64,8 @@ var
 				require( './a-return' ),
 			aStringLiteral :
 				require( './a-string-literal' ),
-			VarDec :
-				require( './var-dec' ),
+			aVarDec :
+				require( './a-var-dec' ),
 		},
 	Jools =
 		require( '../jools/jools' );
@@ -342,20 +342,22 @@ aBlock.prototype.aReturn =
 /*
 | Returns the block with a variable decleration appended.
 */
-aBlock.prototype.VarDec =
+aBlock.prototype.aVarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
 	)
 {
 	var
-		varDec =
-			Code.VarDec.create(
-				'name',
-					name,
-				'assign',
-					assign || null
-			);
+		varDec;
+
+	varDec =
+		Code.aVarDec.create(
+			'name',
+				name,
+			'assign',
+				assign || null
+		);
 
 	return this.Append( varDec );
 };

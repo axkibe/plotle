@@ -519,8 +519,8 @@ Gen.prototype.genImports =
 
 	capsule =
 		capsule
-		.VarDec( 'JoobjProto' )
-		.VarDec( 'Jools' );
+		.aVarDec( 'JoobjProto' )
+		.aVarDec( 'Jools' );
 
 	// FUTURE when type checking is there this might become needed
 	// without jsons
@@ -534,7 +534,7 @@ Gen.prototype.genImports =
 		{
 			capsule =
 				capsule
-				.VarDec( this.unitList[ a ] );
+				.aVarDec( this.unitList[ a ] );
 		}
 	}
 
@@ -865,7 +865,7 @@ Gen.prototype.genConstructor =
 	}
 
 	capsule =
-		capsule.VarDec(
+		capsule.aVarDec(
 			'Constructor',
 			constructor
 		);
@@ -887,7 +887,7 @@ Gen.prototype.genConstructor =
 	capsule =
 		capsule
 		.aComment( 'Prototype shortcut' )
-		.VarDec(
+		.aVarDec(
 			'prototype',
 			Var( 'Constructor' ).aDot( 'prototype' )
 		);
@@ -905,7 +905,7 @@ Gen.prototype.genConstructor =
 	if( this.unit )
 	{
 		capsule =
-			capsule.VarDec(
+			capsule.aVarDec(
 				this.reference,
 				anAssign(
 					Var( this.unit ).aDot( this.name ),
@@ -940,7 +940,7 @@ Gen.prototype.genSingleton =
 	return (
 		capsule
 		.aComment( 'Singleton' )
-		.VarDec(
+		.aVarDec(
 			'_singleton',
 			aNull
 		)
@@ -990,7 +990,7 @@ Gen.prototype.genCreatorVariables =
 	)
 	{
 		block =
-			block.VarDec( varList[ a ] );
+			block.aVarDec( varList[ a ] );
 	}
 
 	return block;
@@ -1118,7 +1118,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 
 	loop =
 		aBlock( )
-		.VarDec(
+		.aVarDec(
 			'arg',
 			Var( 'arguments' )
 			.aMember(
@@ -1487,11 +1487,11 @@ Gen.prototype.genCreatorFreeStringsParser =
 		block
 		.aFor(
 			VList( )
-			.VarDec(
+			.aVarDec(
 				'a',
 				aNumberLiteral( 0 )
 			)
-			.VarDec(
+			.aVarDec(
 				'aZ',
 				Var( 'arguments' ).aDot( 'length' )
 			),
@@ -2251,7 +2251,7 @@ Gen.prototype.genFromJSONCreatorVariables =
 	)
 	{
 		block =
-			block.VarDec( varList[ a ] );
+			block.aVarDec( varList[ a ] );
 	}
 
 	return block;
@@ -2823,9 +2823,7 @@ Gen.prototype.genToJSON =
 
 	block =
 		aBlock( )
-		.VarDec(
-			'json'
-		);
+		.aVarDec( 'json' );
 
 	olit =
 		anObjLiteral( )
@@ -3267,7 +3265,7 @@ Gen.prototype.genExport =
 	{
 		block =
 			block
-			.VarDec(
+			.aVarDec(
 				this.unit,
 				anOr(
 					Var( this.unit ),
@@ -3279,7 +3277,7 @@ Gen.prototype.genExport =
 	{
 		block =
 			block
-			.VarDec(
+			.aVarDec(
 				this.name
 			);
 	}

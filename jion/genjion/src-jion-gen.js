@@ -17,6 +17,8 @@ var
 */
 var
 	JoobjProto,
+
+
 	Jools;
 
 
@@ -83,6 +85,7 @@ Gen.create =
 	{
 		var
 			inherit,
+
 			v_jion;
 
 		if( this !== Gen )
