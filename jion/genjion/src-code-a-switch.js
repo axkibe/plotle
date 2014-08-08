@@ -78,8 +78,8 @@ var
 | Jion
 */
 var
-	Switch =
-		Code.Switch =
+	aSwitch =
+		Code.aSwitch =
 			{
 				prototype :
 					prototype
@@ -87,9 +87,9 @@ var
 
 
 /*
-| Creates a new Switch object.
+| Creates a new aSwitch object.
 */
-Switch.create =
+aSwitch.create =
 	prototype.create =
 		function(
 			// free strings
@@ -105,7 +105,7 @@ Switch.create =
 			v_defaultCase,
 			v_statement;
 
-		if( this !== Switch )
+		if( this !== aSwitch )
 		{
 			inherit = this;
 
@@ -329,13 +329,13 @@ Switch.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Switch';
+prototype.reflect = 'aSwitch';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.switch';
+prototype.reflex = 'code.aSwitch';
 
 
 /*
@@ -411,7 +411,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Switch;
+	module.exports = aSwitch;
 }
 
 

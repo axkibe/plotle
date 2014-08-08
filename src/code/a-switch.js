@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Switch',
+			'aSwitch',
 		unit :
 			'Code',
 		attributes :
@@ -56,14 +56,14 @@ var
 		require( './a-case' ),
 	Jools =
 		require( '../jools/jools' ),
-	Switch =
+	aSwitch =
 		require( '../jion/this' )( module );
 
 
 /*
 | Shortcut for appending a case to this switch.
 */
-Switch.prototype.aCase =
+aSwitch.prototype.aCase =
 	function(
 		case_or_condition,
 		block
@@ -97,7 +97,7 @@ Switch.prototype.aCase =
 /*
 | Shortcut for setting the default case.
 */
-Switch.prototype.Default =
+aSwitch.prototype.Default =
 	function(
 		block
 	)
@@ -115,7 +115,7 @@ Switch.prototype.Default =
 | Node export.
 */
 module.exports =
-	Switch;
+	aSwitch;
 
 
 } )( );
