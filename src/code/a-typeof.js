@@ -1,5 +1,5 @@
 /*
-| Typeof of an expression
+| A Typeof of an expression
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Typeof',
+			'aTypeof',
 		unit :
 			'Code',
 		node :
@@ -41,14 +41,13 @@ if( JION )
 | Node imports.
 */
 var
-	Typeof =
+	aTypeof =
 		require( '../jion/this' )( module );
 
 /*
 | Node export.
 */
-module.exports =
-	Typeof;
+module.exports = aTypeof;
 
 
 } )( );

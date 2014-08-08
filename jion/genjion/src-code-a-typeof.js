@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	Typeof =
-		Code.Typeof =
+	aTypeof =
+		Code.aTypeof =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new Typeof object.
+| Creates a new aTypeof object.
 */
-Typeof.create =
+aTypeof.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ Typeof.create =
 			inherit,
 			v_expr;
 
-		if( this !== Typeof )
+		if( this !== aTypeof )
 		{
 			inherit = this;
 
@@ -148,13 +148,13 @@ Typeof.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Typeof';
+prototype.reflect = 'aTypeof';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.typeof';
+prototype.reflex = 'code.aTypeof';
 
 
 /*
@@ -196,7 +196,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Typeof;
+	module.exports = aTypeof;
 }
 
 

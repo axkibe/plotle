@@ -42,10 +42,10 @@ module.exports =
 			'src/code/a-plus-assign.js',
 			'src/code/a-pre-increment.js',
 			'src/code/a-return.js',
+			'src/code/a-string-literal.js',
+			'src/code/a-switch.js',
+			'src/code/a-typeof.js',
 
-			'src/code/string-literal.js',
-			'src/code/switch.js',
-			'src/code/typeof.js',
 			'src/code/var.js',
 			'src/code/var-dec.js',
 			'src/code/vlist.js',

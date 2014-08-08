@@ -104,16 +104,16 @@ var
 		Shorthand.aPlusAssign,
 	aPreIncrement =
 		Shorthand.aPreIncrement,
-	StringLiteral =
-		Shorthand.StringLiteral,
-	Switch =
-		Shorthand.Switch,
+	aStringLiteral =
+		Shorthand.aStringLiteral,
+	aSwitch =
+		Shorthand.aSwitch,
 	This =
 		Shorthand.Var( 'this' ),
 	True =
 		Shorthand.True( ),
-	Typeof =
-		Shorthand.Typeof,
+	aTypeof =
+		Shorthand.aTypeof,
 	Undefined =
 		Shorthand.Var( 'undefined' ),
 	Var =
@@ -327,8 +327,7 @@ Gen.prototype._init =
 					);
 				}
 
-				defaultValue =
-					StringLiteral( jdv );
+				defaultValue = aStringLiteral( jdv );
 			}
 		}
 
@@ -570,14 +569,14 @@ Gen.prototype.genNodeIncludes =
 			Var( 'JoobjProto' ),
 			aCall(
 				Var( 'require' ),
-				StringLiteral( '../../src/jion/proto' )
+				aStringLiteral( '../../src/jion/proto' )
 			)
 		)
 		.anAssign(
 			Var( 'Jools' ),
 			aCall(
 				Var( 'require' ),
-				StringLiteral( '../../src/jools/jools' )
+				aStringLiteral( '../../src/jools/jools' )
 			)
 		);
 
@@ -629,7 +628,7 @@ Gen.prototype.genNodeIncludes =
 					Var( unitName ).aDot( typeName ),
 					aCall(
 						Var( 'require' ),
-						StringLiteral(
+						aStringLiteral(
 							'../../src/' +
 								camelCaseToDash( unitName ) +
 								'/' +
@@ -1131,7 +1130,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 		);
 
 	switchExpr =
-		Switch(
+		aSwitch(
 			Var( 'arguments' )
 			.aMember(
 				Var( 'a' )
@@ -1153,7 +1152,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.aCase(
-				StringLiteral( name  ),
+				aStringLiteral( name  ),
 				aBlock( )
 				.anIf(
 					aDiffers(
@@ -1175,7 +1174,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.aCase(
-				StringLiteral( 'twig:add' ),
+				aStringLiteral( 'twig:add' ),
 				aBlock( )
 				.anIf(
 					aNot(
@@ -1224,9 +1223,9 @@ Gen.prototype.genCreatorFreeStringsParser =
 					aBlock( )
 					.aFail(
 						aPlus(
-							StringLiteral( 'key "' ),
+							aStringLiteral( 'key "' ),
 							Var( 'key' ),
-							StringLiteral( '" already in use' )
+							aStringLiteral( '" already in use' )
 						)
 					)
 				)
@@ -1243,7 +1242,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.aCase(
-				StringLiteral( 'twig:set' ),
+				aStringLiteral( 'twig:set' ),
 				aBlock( )
 				.anIf(
 					aNot( Var( 'twigDup' ) ),
@@ -1290,9 +1289,9 @@ Gen.prototype.genCreatorFreeStringsParser =
 					aBlock( )
 					.aFail(
 						aPlus(
-							StringLiteral( 'key "' ),
+							aStringLiteral( 'key "' ),
 							Var( 'key' ),
-							StringLiteral( '" not in use' )
+							aStringLiteral( '" not in use' )
 						)
 					)
 				)
@@ -1305,7 +1304,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.aCase(
-				StringLiteral( 'twig:insert' ),
+				aStringLiteral( 'twig:insert' ),
 				aBlock( )
 				.anIf(
 					aNot( Var( 'twigDup' ) ),
@@ -1369,9 +1368,9 @@ Gen.prototype.genCreatorFreeStringsParser =
 					aBlock( )
 					.aFail(
 						aPlus(
-							StringLiteral( 'key "' ),
+							aStringLiteral( 'key "' ),
 							Var( 'key' ),
-							StringLiteral( '" already in use' )
+							aStringLiteral( '" already in use' )
 						)
 					)
 				)
@@ -1388,7 +1387,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					),
 					aBlock( )
 					.aFail(
-						StringLiteral( 'invalid rank' )
+						aStringLiteral( 'invalid rank' )
 					)
 				)
 				.anAssign(
@@ -1408,7 +1407,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.aCase(
-				StringLiteral( 'twig:remove' ),
+				aStringLiteral( 'twig:remove' ),
 				aBlock( )
 				.anIf(
 					aNot(
@@ -1444,9 +1443,9 @@ Gen.prototype.genCreatorFreeStringsParser =
 					aBlock( )
 					.aFail(
 						aPlus(
-							StringLiteral( 'key "' ),
+							aStringLiteral( 'key "' ),
 							Var( 'arg' ),
-							StringLiteral( '" not in use' )
+							aStringLiteral( '" not in use' )
 						)
 					)
 				)
@@ -1661,8 +1660,8 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					aDiffers(
-						Typeof( attr.v ),
-						StringLiteral( 'boolean' )
+						aTypeof( attr.v ),
+						aStringLiteral( 'boolean' )
 					);
 
 				break;
@@ -1672,8 +1671,8 @@ Gen.prototype.genCreatorChecks =
 				tcheck =
 					anOr(
 						aDiffers(
-							Typeof( attr.v ),
-							StringLiteral( 'number' )
+							aTypeof( attr.v ),
+							aStringLiteral( 'number' )
 						),
 						aDiffers(
 							aCall(
@@ -1690,8 +1689,8 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					aDiffers(
-						Typeof( attr.v ),
-						StringLiteral( 'number' )
+						aTypeof( attr.v ),
+						aStringLiteral( 'number' )
 					);
 
 				break;
@@ -1702,8 +1701,8 @@ Gen.prototype.genCreatorChecks =
 				tcheck =
 					anAnd(
 						aDiffers(
-							Typeof( attr.v ),
-							StringLiteral( 'string' )
+							aTypeof( attr.v ),
+							aStringLiteral( 'string' )
 						),
 						aNot(
 							anInstanceof(
@@ -1720,7 +1719,7 @@ Gen.prototype.genCreatorChecks =
 				tcheck =
 					aDiffers(
 						attr.v.aDot( 'reflect' ),
-						StringLiteral( attr.type )
+						aStringLiteral( attr.type )
 					);
 
 				break;
@@ -2280,16 +2279,16 @@ Gen.prototype.genFromJSONCreatorParser =
 		switchExpr;
 
 	switchExpr =
-		Switch(
+		aSwitch(
 			Var( 'name' )
 		)
 		.aCase(
-			StringLiteral( 'type' ),
+			aStringLiteral( 'type' ),
 			aBlock( )
 			.anIf(
 				aDiffers(
 					Var( 'arg' ),
-					StringLiteral( this.name )
+					aStringLiteral( this.name )
 				),
 				aBlock( )
 				.aFail( 'invalid JSON' )
@@ -2301,7 +2300,7 @@ Gen.prototype.genFromJSONCreatorParser =
 		switchExpr =
 			switchExpr
 			.aCase(
-				StringLiteral( 'twig' ),
+				aStringLiteral( 'twig' ),
 				aBlock( )
 				.anAssign(
 					Var( 'jwig' ),
@@ -2309,7 +2308,7 @@ Gen.prototype.genFromJSONCreatorParser =
 				)
 			)
 			.aCase(
-				StringLiteral( 'ranks' ),
+				aStringLiteral( 'ranks' ),
 				aBlock( )
 				.anAssign(
 					Var( 'ranks' ),
@@ -2386,7 +2385,7 @@ Gen.prototype.genFromJSONCreatorParser =
 		switchExpr =
 			switchExpr
 			.aCase(
-				StringLiteral( name ),
+				aStringLiteral( name ),
 				caseBlock
 			);
 	}
@@ -2429,7 +2428,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		ut;
 
 	switchExpr =
-		Switch(
+		aSwitch(
 			Var( 'jval' ).aDot( 'type' )
 		);
 
@@ -2459,7 +2458,7 @@ Gen.prototype.genFromJSONCreatorTwigProcessing =
 		switchExpr =
 			switchExpr
 			.aCase(
-				StringLiteral( name ),
+				aStringLiteral( name ),
 				aBlock( )
 				.anAssign(
 					Var( 'twig' )
@@ -2739,7 +2738,7 @@ Gen.prototype.genReflection =
 		.aComment( 'Reflection.' )
 		.anAssign(
 			Var( 'prototype' ).aDot( 'reflect' ),
-			StringLiteral( this.name )
+			aStringLiteral( this.name )
 		);
 
 	capsule =
@@ -2747,7 +2746,7 @@ Gen.prototype.genReflection =
 		.aComment( 'New Reflection.' )
 		.anAssign(
 			Var( 'prototype' ).aDot( 'reflex' ),
-			StringLiteral(
+			aStringLiteral(
 				adaptName(
 					this.unit,
 					this.name
@@ -2832,7 +2831,7 @@ Gen.prototype.genToJSON =
 		anObjLiteral( )
 		.Add(
 			'type',
-			StringLiteral( this.name )
+			aStringLiteral( this.name )
 		);
 
 	for(
@@ -2898,7 +2897,7 @@ Gen.prototype.genToJSON =
 		.aCall(
 			Var( 'Jools' ).aDot( 'lazyValue' ),
 			Var( 'Constructor' ).aDot( 'prototype' ),
-			StringLiteral( 'toJSON' ),
+			aStringLiteral( 'toJSON' ),
 			aFunc( block )
 		);
 

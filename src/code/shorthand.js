@@ -89,12 +89,12 @@ Code =
 			require( '../code/a-plus-assign' ),
 		aPreIncrement :
 			require( '../code/a-pre-increment' ),
-		StringLiteral :
-			require( '../code/string-literal' ),
-		Switch :
-			require( '../code/switch' ),
-		Typeof :
-			require( '../code/typeof' ),
+		aStringLiteral :
+			require( '../code/a-string-literal' ),
+		aSwitch :
+			require( '../code/a-switch' ),
+		aTypeof :
+			require( '../code/a-typeof' ),
 		Var :
 			require( '../code/var' ),
 		VarDec :
@@ -673,13 +673,13 @@ ShortHand.aPreIncrement =
 /*
 | Shorthand for creating string literals.
 */
-ShortHand.StringLiteral =
+ShortHand.aStringLiteral =
 	function(
 		string
 	)
 {
 	return (
-		Code.StringLiteral.create(
+		Code.aStringLiteral.create(
 			'string',
 				string
 		)
@@ -690,13 +690,13 @@ ShortHand.StringLiteral =
 /*
 | Shorthand for creating switch statements.
 */
-ShortHand.Switch =
+ShortHand.aSwitch =
 	function(
 		statement
 	)
 {
 	return (
-		Code.Switch.create(
+		Code.aSwitch.create(
 			'statement',
 				statement
 		)
@@ -722,13 +722,13 @@ ShortHand.True =
 /*
 | Shorthand for creating typeofs.
 */
-ShortHand.Typeof =
+ShortHand.aTypeof =
 	function(
 		expr
 	)
 {
 	return (
-		Code.Typeof.create(
+		Code.aTypeof.create(
 			'expr',
 				expr
 		)

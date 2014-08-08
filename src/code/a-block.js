@@ -62,8 +62,8 @@ var
 				require( './a-new' ),
 			aReturn :
 				require( './a-return' ),
-			StringLiteral :
-				require( './string-literal' ),
+			aStringLiteral :
+				require( './a-string-literal' ),
 			VarDec :
 				require( './var-dec' ),
 		},
@@ -222,7 +222,7 @@ aBlock.prototype.aFail =
 	else if( Jools.isString( message ) )
 	{
 		message =
-			Code.StringLiteral.create(
+			Code.aStringLiteral.create(
 				'string',
 					message
 			);

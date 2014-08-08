@@ -96,10 +96,10 @@ precTable =
 			17,
 		'aPreIncrement' :
 			3,
-		'Typeof' :
-			4,
-		'StringLiteral' :
+		'aStringLiteral' :
 			-1,
+		'aTypeof' :
+			4,
 		'Var' :
 			-1,
 		'VList' :
@@ -1116,7 +1116,7 @@ formatAReturn =
 | Formats a switch statement
 */
 var
-formatSwitch =
+formatASwitch =
 	function(
 		context,
 		switchExpr
@@ -1428,15 +1428,15 @@ formatStatement =
 
 			break;
 
-		case 'code.varDec' :
+		case 'code.aSwitch' :
 
-			text += formatVarDec( context, statement, lookBehind );
+			text += formatASwitch( context, statement );
 
 			break;
 
-		case 'code.switch' :
+		case 'code.varDec' :
 
-			text += formatSwitch( context, statement );
+			text += formatVarDec( context, statement, lookBehind );
 
 			break;
 
@@ -1506,7 +1506,7 @@ formatStatement =
 		case 'code.aNumberLiteral' :
 		case 'code.aPlusAssign' :
 		case 'code.aReturn' :
-		case 'code.stringLiteral' :
+		case 'code.aStringLiteral' :
 		case 'code.var' :
 
 			return text + ';' + context.sep;
@@ -1515,7 +1515,7 @@ formatStatement =
 		case 'code.aFor' :
 		case 'code.aForIn' :
 		case 'code.anIf' :
-		case 'code.switch' :
+		case 'code.aSwitch' :
 
 			return text + context.sep;
 
@@ -2085,7 +2085,7 @@ formatAPreIncrement =
 | Formats a typeof expression.
 */
 var
-formatTypeof =
+formatATypeof =
 	function(
 		context,
 		expr
@@ -2094,7 +2094,7 @@ formatTypeof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.typeof' )
+/**/	if( expr.reflex !== 'code.aTypeof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2110,7 +2110,7 @@ formatTypeof =
 		formatExpression(
 			context.Inc,
 			expr.expr,
-			precTable.Typeof
+			precTable.aTypeof
 		)
 		+
 		context.sep
@@ -2172,7 +2172,7 @@ formatANumberLiteral =
 | Formats a string literal use.
 */
 var
-formatStringLiteral =
+formatAStringLiteral =
 	function(
 		context,
 		expr
@@ -2181,7 +2181,7 @@ formatStringLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.stringLiteral' )
+/**/	if( expr.reflex !== 'code.aStringLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2612,10 +2612,10 @@ exprFormatter =
 			formatAPlusAssign,
 		'aPreIncrement' :
 			formatAPreIncrement,
-		'StringLiteral' :
-			formatStringLiteral,
-		'Typeof' :
-			formatTypeof,
+		'aStringLiteral' :
+			formatAStringLiteral,
+		'aTypeof' :
+			formatATypeof,
 		'Var' :
 			formatVar,
 		'VList' :
