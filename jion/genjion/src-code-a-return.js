@@ -65,8 +65,8 @@ var
 | Jion
 */
 var
-	Return =
-		Code.Return =
+	aReturn =
+		Code.aReturn =
 			{
 				prototype :
 					prototype
@@ -74,9 +74,9 @@ var
 
 
 /*
-| Creates a new Return object.
+| Creates a new aReturn object.
 */
-Return.create =
+aReturn.create =
 	prototype.create =
 		function(
 			// free strings
@@ -86,7 +86,7 @@ Return.create =
 			inherit,
 			v_expr;
 
-		if( this !== Return )
+		if( this !== aReturn )
 		{
 			inherit = this;
 
@@ -148,13 +148,13 @@ Return.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Return';
+prototype.reflect = 'aReturn';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.return';
+prototype.reflex = 'code.aReturn';
 
 
 /*
@@ -196,7 +196,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Return;
+	module.exports = aReturn;
 }
 
 

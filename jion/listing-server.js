@@ -56,8 +56,8 @@ module.exports =
 			'src/code/a-plus.js',
 			'src/code/a-plus-assign.js',
 			'src/code/a-pre-increment.js',
+			'src/code/a-return.js',
 
-			'src/code/return.js',
 			'src/code/string-literal.js',
 			'src/code/switch.js',
 			'src/code/typeof.js',

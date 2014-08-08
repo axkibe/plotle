@@ -2047,7 +2047,7 @@ Gen.prototype.genCreatorUnchanged =
 		block.anIf(
 			cond,
 			aBlock( )
-			.Return(
+			.aReturn(
 				Var( 'inherit' )
 			)
 		);
@@ -2087,7 +2087,7 @@ Gen.prototype.genCreatorReturn =
 					)
 				)
 			)
-			.Return(
+			.aReturn(
 				Var( '_singleton' )
 			)
 		);
@@ -2130,7 +2130,7 @@ Gen.prototype.genCreatorReturn =
 	}
 
 	return (
-		block.Return(
+		block.aReturn(
 			aNew( call )
 		)
 	);
@@ -2630,7 +2630,7 @@ Gen.prototype.genFromJSONCreatorReturn =
 
 	return (
 		block
-		.Return(
+		.aReturn(
 			aNew( call )
 		)
 	);
@@ -2883,10 +2883,10 @@ Gen.prototype.genToJSON =
 				olit
 			)
 		)
-		.Return(
+		.aReturn(
 			aFunc(
 				aBlock( )
-				.Return(
+				.aReturn(
 					Var( 'json' )
 				)
 			)
@@ -2997,7 +2997,7 @@ Gen.prototype.genEquals =
 					Var( 'Constructor' ).aDot( 'prototype' ).aDot( 'equals' ),
 					aFunc(
 						aBlock( )
-						.Return(
+						.aReturn(
 							anEquals(
 								This,
 								Var( 'obj' )
@@ -3035,14 +3035,14 @@ Gen.prototype.genEquals =
 				Var( 'obj' )
 			),
 			aBlock( )
-			.Return( True )
+			.aReturn( True )
 		)
 		.anIf(
 			aNot(
 				Var( 'obj' )
 			),
 			aBlock( )
-			.Return(
+			.aReturn(
 				False
 			)
 		);
@@ -3092,7 +3092,7 @@ Gen.prototype.genEquals =
 
 	block =
 		block
-		.Return( cond );
+		.aReturn( cond );
 
 	capsule =
 		capsule
@@ -3154,14 +3154,14 @@ Gen.prototype.genAlike =
 					Var( 'obj' )
 				),
 				aBlock( )
-				.Return( True )
+				.aReturn( True )
 			)
 			.anIf(
 				aNot(
 					Var( 'obj' )
 				),
 				aBlock( )
-				.Return(
+				.aReturn(
 					False
 				)
 			);
@@ -3215,7 +3215,7 @@ Gen.prototype.genAlike =
 
 		block =
 			block
-			.Return( cond );
+			.aReturn( cond );
 
 		capsule =
 			capsule

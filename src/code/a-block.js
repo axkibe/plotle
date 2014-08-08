@@ -60,8 +60,8 @@ var
 				require( './an-if' ),
 			aNew :
 				require( './a-new' ),
-			Return :
-				require( './return' ),
+			aReturn :
+				require( './a-return' ),
 			StringLiteral :
 				require( './string-literal' ),
 			VarDec :
@@ -72,6 +72,8 @@ var
 
 /*
 | Returns the block with a statement appended;
+|
+| TODO rename
 */
 aBlock.prototype.Append =
 	function(
@@ -311,21 +313,21 @@ aBlock.prototype.aNew =
 /*
 | Returns the block with a term appended.
 */
-aBlock.prototype.Return =
+aBlock.prototype.aReturn =
 	function(
 		expr
 	)
 {
 	switch( expr.reflect )
 	{
-		case 'Return' :
+		case 'aReturn' :
 
 			break;
 
 		default :
 
 			expr =
-				Code.Return.create(
+				Code.aReturn.create(
 					'expr',
 						expr
 				);

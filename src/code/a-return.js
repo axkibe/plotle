@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Return',
+			'aReturn',
 		unit :
 			'Code',
 		attributes :

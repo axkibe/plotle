@@ -1039,7 +1039,7 @@ formatAnOr =
 | Formats a return statement.
 */
 var
-formatReturn =
+formatAReturn =
 	function(
 		context,
 		statement
@@ -1050,7 +1050,7 @@ formatReturn =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflex !== 'code.return' )
+/**/	if( statement.reflex !== 'code.aReturn' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1422,9 +1422,9 @@ formatStatement =
 
 			break;
 
-		case 'code.return' :
+		case 'code.aReturn' :
 
-			text += formatReturn( context, statement );
+			text += formatAReturn( context, statement );
 
 			break;
 
@@ -1505,7 +1505,7 @@ formatStatement =
 		case 'code.aNew' :
 		case 'code.aNumberLiteral' :
 		case 'code.aPlusAssign' :
-		case 'code.return' :
+		case 'code.aReturn' :
 		case 'code.stringLiteral' :
 		case 'code.var' :
 
