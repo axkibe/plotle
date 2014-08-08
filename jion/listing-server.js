@@ -62,8 +62,8 @@ module.exports =
 			'src/code/a-typeof.js',
 			'src/code/a-var.js',
 			'src/code/a-var-dec.js',
+			'src/code/a-vlist.js',
 
-			'src/code/vlist.js',
 			'src/format/context.js',
 			'src/jion/gen.js'
 		]

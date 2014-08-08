@@ -21,7 +21,7 @@ if( JION )
 {
 	return {
 		name :
-			'VList',
+			'aVList',
 		unit :
 			'Code',
 		node :
@@ -52,7 +52,7 @@ if( JION )
 | Node imports.
 */
 var
-	VList =
+	aVList =
 		require( '../jion/this' )( module ),
 	Code =
 		{
@@ -68,7 +68,7 @@ var
 /*
 | Returns the vlist with a variable decleration appended.
 */
-VList.prototype.aVarDec =
+aVList.prototype.aVarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
@@ -96,8 +96,7 @@ VList.prototype.aVarDec =
 /*
 | Node export.
 */
-module.exports =
-	VList;
+module.exports = aVList;
 
 
 } )( );

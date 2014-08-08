@@ -99,8 +99,8 @@ Code =
 			require( '../code/a-var' ),
 		aVarDec :
 			require( '../code/a-var-dec' ),
-		VList :
-			require( '../code/vlist' )
+		aVList :
+			require( '../code/a-vlist' )
 	};
 
 
@@ -790,10 +790,10 @@ ShortHand.aCommaList =
 /*
 | Shorthand for creating vlists.
 */
-ShortHand.VList =
+ShortHand.aVList =
 	function( )
 {
-	return Code.VList.create( );
+	return Code.aVList.create( );
 };
 
 

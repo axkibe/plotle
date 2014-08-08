@@ -118,8 +118,8 @@ var
 		Shorthand.aVar( 'undefined' ),
 	aVar =
 		Shorthand.aVar,
-	VList =
-		Shorthand.VList;
+	aVList =
+		Shorthand.aVList;
 
 /*
 | Converts a camel case string to a dash seperated string.
@@ -1483,7 +1483,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 	block =
 		block
 		.aFor(
-			VList( )
+			aVList( )
 			.aVarDec(
 				'a',
 				aNumberLiteral( 0 )

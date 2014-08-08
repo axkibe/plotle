@@ -77,8 +77,8 @@ var
 | Jion
 */
 var
-	VList =
-	Code.VList =
+	aVList =
+	Code.aVList =
 		{
 			prototype :
 				prototype
@@ -86,9 +86,9 @@ var
 
 
 /*
-| Creates a new VList object.
+| Creates a new aVList object.
 */
-VList.create =
+aVList.create =
 prototype.create =
 	function(
 		// free strings
@@ -109,7 +109,7 @@ prototype.create =
 
 		v_path;
 
-	if( this !== VList )
+	if( this !== aVList )
 	{
 		inherit = this;
 
@@ -310,13 +310,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'VList';
+prototype.reflect = 'aVList';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'code.vList';
+prototype.reflex = 'code.aVList';
 
 
 /*
@@ -390,7 +390,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = VList;
+	module.exports = aVList;
 }
 
 
