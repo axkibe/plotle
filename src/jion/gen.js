@@ -42,7 +42,7 @@ var
 	Gen =
 		require( '../jion/this' )( module ),
 	Shorthand =
-		require( '../code/shorthand' ),
+		require( '../ast/shorthand' ),
 	Jools =
 		require( '../jools/jools' ),
 	Validator =

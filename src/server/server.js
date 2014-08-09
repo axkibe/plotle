@@ -792,8 +792,7 @@ Server.prototype.prepareInventory =
 
 		if( resource.isJoobj )
 		{
-			code =
-				yield* GenerateJoobj.run( resource );
+			code = yield* GenerateJoobj.run( resource );
 		}
 		else
 		{
@@ -807,8 +806,7 @@ Server.prototype.prepareInventory =
 			}
 			else
 			{
-				code =
-					resource.data;
+				code = resource.data;
 			}
 		}
 
@@ -2636,8 +2634,7 @@ Server.prototype.webError =
 		}
 	);
 
-	message =
-		code + ' ' + message;
+	message = code + ' ' + message;
 
 	Jools.log( 'web', 'error', code, message );
 

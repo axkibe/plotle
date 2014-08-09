@@ -135,7 +135,7 @@ formatAnd =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.anAnd' )
+/**/	if( expr.reflex !== 'ast.anAnd' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -187,7 +187,7 @@ formatAnAssign =
 		+ ' ='
 		+ context.sep;
 
-	if( assign.right.reflex !== 'code.anAssign' )
+	if( assign.right.reflex !== 'ast.anAssign' )
 	{
 		context =
 			context.IncSame;
@@ -394,7 +394,7 @@ formatADiffers =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aDiffers' )
+/**/	if( expr.reflex !== 'ast.aDiffers' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -433,7 +433,7 @@ formatAPlus =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aPlus' )
+/**/	if( expr.reflex !== 'ast.aPlus' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -535,7 +535,7 @@ formatADot =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aDot' )
+/**/	if( expr.reflex !== 'ast.aDot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -565,7 +565,7 @@ formatAMember =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aMember' )
+/**/	if( expr.reflex !== 'ast.aMember' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -606,7 +606,7 @@ formatAnEquals =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.anEquals' )
+/**/	if( expr.reflex !== 'ast.anEquals' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -647,7 +647,7 @@ formatACondition =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aCondition' )
+/**/	if( expr.reflex !== 'ast.aCondition' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -698,7 +698,7 @@ formatIf =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflex !== 'code.anIf' )
+/**/	if( statement.reflex !== 'ast.anIf' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -870,7 +870,7 @@ formatALessThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aLessThan' )
+/**/	if( expr.reflex !== 'ast.aLessThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -916,7 +916,7 @@ formatAGreaterThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aGreaterThan' )
+/**/	if( expr.reflex !== 'ast.aGreaterThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -962,7 +962,7 @@ formatAnInstanceof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.anInstanceof' )
+/**/	if( expr.reflex !== 'ast.anInstanceof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1007,7 +1007,7 @@ formatAnOr =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.anOr' )
+/**/	if( expr.reflex !== 'ast.anOr' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1050,7 +1050,7 @@ formatAReturn =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflex !== 'code.aReturn' )
+/**/	if( statement.reflex !== 'ast.aReturn' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1329,12 +1329,12 @@ formatStatement =
 	if(
 		lookBehind
 		&&
-		lookBehind.reflex !== 'code.aComment'
+		lookBehind.reflex !== 'ast.aComment'
 		&&
 		!(
-			lookBehind.reflex === 'code.aCarDec'
+			lookBehind.reflex === 'ast.aCarDec'
 			&&
-			statement.reflex === 'code.aVarDec'
+			statement.reflex === 'ast.aVarDec'
 		)
 	)
 	{
@@ -1354,7 +1354,7 @@ formatStatement =
 		}
 	}
 
-	if( statement.reflex === 'code.aComment' )
+	if( statement.reflex === 'ast.aComment' )
 	{
 		text +=
 			formatAComment(
@@ -1367,21 +1367,21 @@ formatStatement =
 
 	switch( statement.reflex )
 	{
-		case 'code.aCheck' :
+		case 'ast.aCheck' :
 
 			text +=
 				formatCheck( context, statement );
 
 			break;
 
-		case 'code.anIf' :
+		case 'ast.anIf' :
 
 			text +=
 				formatIf( context, statement );
 
 			break;
 
-		case 'code.aFail' :
+		case 'ast.aFail' :
 
 			try
 			{
@@ -1410,31 +1410,31 @@ formatStatement =
 
 			break;
 
-		case 'code.aFor' :
+		case 'ast.aFor' :
 
 			text += formatAFor( context, statement );
 
 			break;
 
-		case 'code.aForIn' :
+		case 'ast.aForIn' :
 
 			text += formatAForIn( context, statement );
 
 			break;
 
-		case 'code.aReturn' :
+		case 'ast.aReturn' :
 
 			text += formatAReturn( context, statement );
 
 			break;
 
-		case 'code.aSwitch' :
+		case 'ast.aSwitch' :
 
 			text += formatASwitch( context, statement );
 
 			break;
 
-		case 'code.aVarDec' :
+		case 'ast.aVarDec' :
 
 			text += formatVarDec( context, statement, lookBehind );
 
@@ -1480,12 +1480,12 @@ formatStatement =
 
 	switch( statement.reflex )
 	{
-		case 'code.aVarDec' :
+		case 'ast.aVarDec' :
 
 			if(
 				lookAhead
 				&&
-				lookAhead.reflex === 'code.aVarDec'
+				lookAhead.reflex === 'ast.aVarDec'
 			)
 			{
 				return text += ',\n';
@@ -1497,25 +1497,25 @@ formatStatement =
 
 			break;
 
-		case 'code.anAssign' :
-		case 'code.aBooleanLiteral' :
-		case 'code.aCall' :
-		case 'code.aDelete' :
-		case 'code.aFail' :
-		case 'code.aNew' :
-		case 'code.aNumberLiteral' :
-		case 'code.aPlusAssign' :
-		case 'code.aReturn' :
-		case 'code.aStringLiteral' :
-		case 'code.aVar' :
+		case 'ast.anAssign' :
+		case 'ast.aBooleanLiteral' :
+		case 'ast.aCall' :
+		case 'ast.aDelete' :
+		case 'ast.aFail' :
+		case 'ast.aNew' :
+		case 'ast.aNumberLiteral' :
+		case 'ast.aPlusAssign' :
+		case 'ast.aReturn' :
+		case 'ast.aStringLiteral' :
+		case 'ast.aVar' :
 
 			return text + ';' + context.sep;
 
-		case 'code.aCheck' :
-		case 'code.aFor' :
-		case 'code.aForIn' :
-		case 'code.anIf' :
-		case 'code.aSwitch' :
+		case 'ast.aCheck' :
+		case 'ast.aFor' :
+		case 'ast.aForIn' :
+		case 'ast.anIf' :
+		case 'ast.aSwitch' :
 
 			return text + context.sep;
 
@@ -1634,7 +1634,7 @@ formatAFail =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( fail.reflex !== 'code.aFail' )
+/**/	if( fail.reflex !== 'ast.aFail' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1682,7 +1682,7 @@ formatABooleanLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aBooleanLiteral' )
+/**/	if( expr.reflex !== 'ast.aBooleanLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1718,7 +1718,7 @@ formatACall =
 
 /**/if( CHECK )
 /**/{
-/**/	if( call.reflex !== 'code.aCall' )
+/**/	if( call.reflex !== 'ast.aCall' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1790,7 +1790,7 @@ formatADelete =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aDelete' )
+/**/	if( expr.reflex !== 'ast.aDelete' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1824,7 +1824,7 @@ formatANew =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aNew' )
+/**/	if( expr.reflex !== 'ast.aNew' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1857,7 +1857,7 @@ formatANot =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aNot' )
+/**/	if( expr.reflex !== 'ast.aNot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1889,7 +1889,7 @@ formatNull =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aNull' )
+/**/	if( expr.reflex !== 'ast.aNull' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1918,7 +1918,7 @@ formatAnArrayLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.anArrayLiteral' )
+/**/	if( expr.reflex !== 'ast.anArrayLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1990,7 +1990,7 @@ formatAnObjLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( objliteral.reflex !== 'code.anObjLiteral' )
+/**/	if( objliteral.reflex !== 'ast.anObjLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2061,7 +2061,7 @@ formatAPreIncrement =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aPreIncrement' )
+/**/	if( expr.reflex !== 'ast.aPreIncrement' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2094,7 +2094,7 @@ formatATypeof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aTypeof' )
+/**/	if( expr.reflex !== 'ast.aTypeof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2135,7 +2135,7 @@ formatAVar =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aVar' )
+/**/	if( expr.reflex !== 'ast.aVar' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2158,7 +2158,7 @@ formatANumberLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aNumberLiteral' )
+/**/	if( expr.reflex !== 'ast.aNumberLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2181,7 +2181,7 @@ formatAStringLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflex !== 'code.aStringLiteral' )
+/**/	if( expr.reflex !== 'ast.aStringLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2220,16 +2220,16 @@ formatVarDec =
 	)
 	{
 		if(
-			varDec.assign.reflex === 'code.aFunc'
+			varDec.assign.reflex === 'ast.aFunc'
 		)
 		{
 			isRootFunc =
 				true;
 		}
 		else if(
-			varDec.assign.reflex === 'code.anAssign'
+			varDec.assign.reflex === 'ast.anAssign'
 			&&
-			varDec.assign.right.reflex === 'code.aFunc'
+			varDec.assign.right.reflex === 'ast.aFunc'
 		)
 		{
 			// FUTURUE allow abitrary amount of assignments
@@ -2243,7 +2243,7 @@ formatVarDec =
 		if(
 			!lookBehind
 			||
-			lookBehind.reflex !== 'code.aVarDec'
+			lookBehind.reflex !== 'ast.aVarDec'
 		)
 		{
 			if( !context.inline )
@@ -2282,7 +2282,7 @@ formatVarDec =
 		text +=
 			' =' + context.sep;
 
-		if( varDec.assign.reflex !== 'code.anAssign' )
+		if( varDec.assign.reflex !== 'ast.anAssign' )
 		{
 			context = context.Inc;
 		}
@@ -2407,7 +2407,7 @@ formatAVList =
 
 		if( CHECK )
 		{
-			if( varDec.reflex !== 'code.aVarDec' )
+			if( varDec.reflex !== 'ast.aVarDec' )
 			{
 				throw new Error( );
 			}
