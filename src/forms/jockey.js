@@ -202,11 +202,9 @@ Jockey.prototype._init =
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( this.twig[ name ].reflect !== name )
+/**/		if( this.twig[ name ].reflexName !== name )
 /**/		{
-/**/			throw new Error(
-/**/				'reflection mismatch'
-/**/			);
+/**/			throw new Error( );
 /**/		}
 /**/	}
 	}

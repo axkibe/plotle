@@ -181,7 +181,7 @@ Sign.prototype._init =
 
 	val = this.val;
 
-	if( val && !val.reflect && val.type )
+	if( val && !val.reflex && val.type )
 	{
 		switch( val.type )
 		{

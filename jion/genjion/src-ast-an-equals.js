@@ -187,6 +187,12 @@ prototype.reflex = 'ast.anEquals';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'anEquals';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

@@ -161,6 +161,12 @@ prototype.reflex = 'ast.aComment';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aComment';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

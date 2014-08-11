@@ -285,6 +285,12 @@ prototype.reflex = 'context';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'Context';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

@@ -187,6 +187,12 @@ prototype.reflex = 'ast.aLessThan';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aLessThan';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

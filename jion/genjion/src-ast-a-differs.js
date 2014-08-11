@@ -187,6 +187,12 @@ prototype.reflex = 'ast.aDiffers';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aDiffers';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

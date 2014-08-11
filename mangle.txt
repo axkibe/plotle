@@ -44,7 +44,6 @@
 . HOFOC
 . HOVER
 . Help
-. Icons
 . Input
 . Insert
 . Invert
@@ -161,7 +160,6 @@
 . _gradientR0
 . _gradientR1
 . _handles
-. _icons
 . _init
 . _isActiveButton
 . _isSection

@@ -161,6 +161,12 @@ prototype.reflex = 'ast.aDelete';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aDelete';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

@@ -248,7 +248,7 @@ User.prototype.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflect )
+/**/	if( path.get( 2 ) !== this.reflexName )
 /**/	{
 /**/		throw new Error( );
 /**/	}

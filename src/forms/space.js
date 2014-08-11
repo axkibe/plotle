@@ -19,8 +19,7 @@ Forms =
 | Imports
 */
 var
-	Jools,
-	shell;
+	Jools;
 
 
 /*
@@ -173,44 +172,6 @@ Space.prototype._init =
 		this,
 		inherit
 	);
-};
-
-
-/*
-| A button of the form has been pushed.
-*/
-Space.prototype.pushButton =
-	function(
-		path
-		// shift,
-		// ctrl
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( path.get( 2 ) !== this.reflect )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	var
-		buttonName =
-			path.get( 4 );
-
-	switch( buttonName )
-	{
-		case 'closeButton' :
-
-			shell.setMode( 'Normal' );
-
-			break;
-
-		default :
-
-			throw new Error( );
-	}
 };
 
 

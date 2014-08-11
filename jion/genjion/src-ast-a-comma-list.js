@@ -277,6 +277,12 @@ prototype.reflex = 'ast.aCommaList';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aCommaList';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

@@ -1545,18 +1545,18 @@ formatExpression =
 		subtext,
 		text;
 
-	prec = precTable[ expr.reflect ];
+	prec = precTable[ expr.reflexName ];
 
 	if( prec === undefined )
 	{
-		throw new Error( expr.reflect );
+		throw new Error( expr.reflexName );
 	}
 
-	formatter = exprFormatter[ expr.reflect ];
+	formatter = exprFormatter[ expr.reflexName ];
 
 	if( !formatter )
 	{
-		throw new Error( expr.reflect );
+		throw new Error( expr.reflexName );
 	}
 
 	bracket =

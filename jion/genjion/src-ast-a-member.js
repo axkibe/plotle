@@ -193,6 +193,12 @@ prototype.reflex = 'ast.aMember';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aMember';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

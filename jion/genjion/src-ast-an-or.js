@@ -187,6 +187,12 @@ prototype.reflex = 'ast.anOr';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'anOr';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

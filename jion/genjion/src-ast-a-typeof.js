@@ -161,6 +161,12 @@ prototype.reflex = 'ast.aTypeof';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aTypeof';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

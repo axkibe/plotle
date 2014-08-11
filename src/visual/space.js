@@ -1124,11 +1124,11 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'None' :
+		case 'action.none' :
 
 			break;
 
-		case 'Pan' :
+		case 'action.pan' :
 
 			shell.setAction(
 				Action.None.create( )
@@ -1136,7 +1136,7 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'CreateRelation' :
+		case 'action.createRelation' :
 
 			switch( action.relationState )
 			{
@@ -1188,7 +1188,7 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'ItemDrag' :
+		case 'action.itemDrag' :
 
 			if( !action.transItem.zone.equals( action.origin.zone ) )
 			{
@@ -1224,7 +1224,7 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'ItemResize' :
+		case 'action.itemResize' :
 
 			if( !action.transItem.zone.equals( action.origin.zone ) )
 			{
@@ -1266,7 +1266,7 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'ScrollY' :
+		case 'action.scrollY' :
 
 			this.getItem(
 				action.itemPath.get( -1 )
@@ -1304,6 +1304,7 @@ Space.prototype.dragMove =
 {
 	var
 		action,
+		align,
 		view,
 		transItem,
 		fs,
@@ -1395,7 +1396,7 @@ Space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'CreateRelation' :
+		case 'action.createRelation' :
 
 			if( action.relationState === 'pan' )
 			{
@@ -1446,11 +1447,11 @@ Space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'None' :
+		case 'action.none' :
 
 			return 'pointer';
 
-		case 'Pan' :
+		case 'action.pan' :
 
 			pd =
 				p.sub( action.start );
@@ -1467,7 +1468,7 @@ Space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'ItemDrag' :
+		case 'action.itemDrag' :
 
 			origin =
 				action.origin;
@@ -1509,14 +1510,11 @@ Space.prototype.dragMove =
 			return true;
 
 
-		case 'ItemResize' :
+		case 'action.itemResize' :
 
-			origin =
-				action.origin;
+			origin = action.origin;
 
-			var
-				align =
-					action.align;
+			align = action.align;
 
 			switch( origin.positioning )
 			{
@@ -1538,8 +1536,7 @@ Space.prototype.dragMove =
 
 				case 'pnw/fontsize' :
 
-					oheight =
-						origin.zone.height;
+					oheight = origin.zone.height;
 
 					var
 						dy;
@@ -1619,7 +1616,7 @@ Space.prototype.dragMove =
 
 			return true;
 
-		case 'ScrollY' :
+		case 'action.scrollY' :
 
 			this.getItem(
 				action.itemPath.get( -1 )

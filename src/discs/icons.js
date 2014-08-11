@@ -1,8 +1,6 @@
 /*
 | Sketches of the icons on the discs.
 |
-| FIXME make this static
-|
 | Authors: Axel Kittenberger
 */
 
@@ -13,8 +11,7 @@
 var
 	Discs;
 
-Discs =
-	Discs || { };
+Discs = Discs || { };
 
 
 /*
@@ -34,24 +31,15 @@ var
 /*
 | Constructor.
 */
-var Icons =
-Discs.Icons =
-	function( )
-{
-	// pass
-};
+var icons =
+Discs.icons =
+	{ };
 
-
-/*
-| Reflection.
-*/
-Icons.prototype.reflect =
-	'Icons';
 
 /*
 | Sketches the normal button's icon.
 */
-Icons.prototype.normal =
+icons.normal =
 	function(
 		fabric
 		// border,
@@ -89,7 +77,7 @@ Icons.prototype.normal =
 /*
 | Sketches the moveto button's icon.
 */
-Icons.prototype.moveto =
+icons.moveto =
 	function(
 		fabric
 		// border,
@@ -139,7 +127,7 @@ Icons.prototype.moveto =
 /*
 | Sketches the remove button's icon.
 */
-Icons.prototype.remove =
+icons.remove =
 	function(
 		fabric
 		// border,
@@ -197,18 +185,6 @@ Icons.prototype.remove =
 	fabric.lineTo( wx      , ny + ah );  // P
 	fabric.lineTo( wx      , ny      );  // A
 
-};
-
-
-/*
-| Compares this to another icons object
-*/
-Icons.prototype.equals =
-	function(
-		o
-	)
-{
-	return this === o;
 };
 
 

@@ -233,9 +233,7 @@ CreateDisc.prototype._init =
 				'hover',
 					this.hover,
 				'focusAccent',
-					focusAccent,
-				'icons',
-					this._icons
+					focusAccent
 			);
 	}
 
@@ -303,7 +301,7 @@ CreateDisc.prototype.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflect )
+/**/	if( path.get( 2 ) !== this.reflexName )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -638,9 +636,9 @@ CreateDisc._isActiveButton =
 		wname    // the widget name
 	)
 {
-	switch( action.reflect )
+	switch( action.reflex )
 	{
-		case 'CreateGeneric' :
+		case 'action.createGeneric' :
 
 			switch( action.itemType )
 			{
@@ -670,7 +668,7 @@ CreateDisc._isActiveButton =
 
 			break;
 
-		case 'CreateRelation' :
+		case 'action.createRelation' :
 
 			return wname === 'CreateRelation';
 

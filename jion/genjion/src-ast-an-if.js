@@ -182,7 +182,7 @@ prototype.create =
 /**/
 /**/	if( v_elsewise !== null )
 /**/	{
-/**/		if( v_elsewise.reflect !== 'aBlock' )
+/**/		if( v_elsewise.reflexName !== 'aBlock' )
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}
@@ -198,7 +198,7 @@ prototype.create =
 /**/		throw new Error( 'attribute then must not be null.' );
 /**/	}
 /**/
-/**/	if( v_then.reflect !== 'aBlock' )
+/**/	if( v_then.reflexName !== 'aBlock' )
 /**/	{
 /**/		throw new Error( 'type mismatch' );
 /**/	}
@@ -235,6 +235,12 @@ prototype.reflect = 'anIf';
 | New Reflection.
 */
 prototype.reflex = 'ast.anIf';
+
+
+/*
+| Name Reflection.
+*/
+prototype.reflexName = 'anIf';
 
 
 /*

@@ -212,6 +212,12 @@ prototype.reflex = 'ast.aFuncArg';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aFuncArg';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

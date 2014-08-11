@@ -38,9 +38,9 @@ Disc =
 Discs.Disc =
 	function( )
 {
-	throw new Error(
-		CHECK && 'initializing abstract'
-	);
+	// abstract should not be constructed.
+	// FIXME just make it an object?
+	throw new Error( );
 };
 
 
@@ -49,28 +49,30 @@ Discs.Disc =
 */
 Disc._init =
 	function(
-		inherit
+		// inherit
 	)
 {
 	var
-		style =
-		this.style =
-			theme.disc[ this.reflect ],
+		style,
+		width,
+		height,
+		ew,
+		eh,
+		ny;
 
-		width =
-			style.width,
+	style =
+	this.style =
+		theme.disc[ this.reflexName ],
 
-		height =
-			style.height,
+	width = style.width,
 
-		ew =
-			style.ellipse.width,
+	height = style.height,
 
-		eh =
-			style.ellipse.height,
+	ew = style.ellipse.width,
 
-		ny =
-			Jools.half( this.view.height - height );
+	eh = style.ellipse.height,
+
+	ny = Jools.half( this.view.height - height );
 
 	this.frame =
 		Euclid.Rect.create(
@@ -116,16 +118,6 @@ Disc._init =
 			'gradientR1',
 				650
 		);
-
-	// TODO this is ouch.
-	this._icons =
-		(
-			inherit
-			&&
-			inherit._icons
-		)
-		||
-		new Discs.Icons( );
 };
 
 

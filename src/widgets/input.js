@@ -524,7 +524,7 @@ Jools.lazyValue(
 
 
 		if(
-			this.mark.reflect === 'Caret'
+			this.mark.reflex === 'mark.caret'
 			&&
 			this.mark.focus
 		)

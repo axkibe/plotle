@@ -302,6 +302,12 @@ prototype.reflex = 'ast.aCall';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aCall';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

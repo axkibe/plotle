@@ -187,6 +187,12 @@ prototype.reflex = 'ast.anInstanceof';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'anInstanceof';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

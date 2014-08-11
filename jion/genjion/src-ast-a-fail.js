@@ -161,6 +161,12 @@ prototype.reflex = 'ast.aFail';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aFail';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

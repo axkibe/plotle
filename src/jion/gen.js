@@ -1715,7 +1715,7 @@ Gen.prototype.genCreatorChecks =
 
 				tcheck =
 					aDiffers(
-						attr.v.aDot( 'reflect' ),
+						attr.v.aDot( 'reflexName' ), // FIXME
 						aStringLiteral( attr.type )
 					);
 
@@ -2743,6 +2743,14 @@ Gen.prototype.genReflection =
 					this.name
 				)
 			)
+		);
+
+	capsule =
+		capsule
+		.aComment( 'Name Reflection.' )
+		.anAssign(
+			aVar( 'prototype' ).aDot( 'reflexName' ),
+			aStringLiteral( this.name )
 		);
 
 	// TODO remove old reflection

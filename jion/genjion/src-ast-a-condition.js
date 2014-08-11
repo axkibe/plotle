@@ -221,6 +221,12 @@ prototype.reflex = 'ast.aCondition';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aCondition';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

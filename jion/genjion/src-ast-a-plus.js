@@ -187,6 +187,12 @@ prototype.reflex = 'ast.aPlus';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aPlus';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

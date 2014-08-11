@@ -187,6 +187,12 @@ prototype.reflex = 'ast.anAnd';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'anAnd';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

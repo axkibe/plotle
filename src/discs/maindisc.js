@@ -293,8 +293,6 @@ MainDisc.prototype._init =
 					this.hover,
 				'focusAccent',
 					this.mode === wname,
-				'icons',
-					this._icons,
 				'path',
 					path,
 				'superFrame',
@@ -388,22 +386,20 @@ MainDisc.prototype.pushButton =
 	)
 {
 	var
-		discname =
-			path.get( 2 );
+		buttonName,
+		discname;
+
+	discname = path.get( 2 );
 
 /**/if( CHECK )
 /**/{
-/**/	if( discname !== this.reflect )
+/**/	if( discname !== this.reflexName )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid discname: ' + discname
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
-	var
-		buttonName =
-			path.get( 4 );
+	buttonName = path.get( 4 );
 
 	if(
 		buttonName === 'Login' &&

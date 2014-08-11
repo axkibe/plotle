@@ -138,7 +138,7 @@ prototype.create =
 /**/		throw new Error( 'attribute block must not be null.' );
 /**/	}
 /**/
-/**/	if( v_block.reflect !== 'aBlock' )
+/**/	if( v_block.reflexName !== 'aBlock' )
 /**/	{
 /**/		throw new Error( 'type mismatch' );
 /**/	}
@@ -163,6 +163,12 @@ prototype.reflect = 'aCheck';
 | New Reflection.
 */
 prototype.reflex = 'ast.aCheck';
+
+
+/*
+| Name Reflection.
+*/
+prototype.reflexName = 'aCheck';
 
 
 /*

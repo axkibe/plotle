@@ -281,7 +281,7 @@ prototype.create =
 /**/
 /**/	if( v_path !== null )
 /**/	{
-/**/		if( v_path.reflect !== 'Path' )
+/**/		if( v_path.reflexName !== 'Path' )
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}
@@ -317,6 +317,12 @@ prototype.reflect = 'aVList';
 | New Reflection.
 */
 prototype.reflex = 'ast.aVList';
+
+
+/*
+| Name Reflection.
+*/
+prototype.reflexName = 'aVList';
 
 
 /*

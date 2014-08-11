@@ -341,13 +341,13 @@ ChangeRay.prototype.transformChangeX =
 		chgX
 	)
 {
-	switch( chgX.reflect )
+	switch( chgX.reflex )
 	{
-		case 'Change' :
+		case 'jion.change' :
 
 			return this.transformChange( chgX );
 
-		case 'ChangeRay' :
+		case 'jion.changeRay' :
 
 			return this.transformChangeRay( chgX );
 
@@ -429,7 +429,7 @@ ChangeRay.prototype.transformSign =
 
 /**/if( CHECK )
 /**/{
-/**/	if( sign.reflect !== 'Sign' )
+/**/	if( sign.reflex !== 'jion.sign' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

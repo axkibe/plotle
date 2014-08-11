@@ -166,6 +166,12 @@ prototype.reflex = 'ast.aBooleanLiteral';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aBooleanLiteral';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

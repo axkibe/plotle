@@ -277,6 +277,12 @@ prototype.reflex = 'ast.aBlock';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aBlock';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

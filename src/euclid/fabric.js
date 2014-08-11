@@ -1414,11 +1414,9 @@ Fabric.prototype.withinSketch =
 
 /**/if( CHECK )
 /**/{
-/**/	if( p.reflect !== 'Point' )
+/**/	if( p.reflex !== 'euclid.point' )
 /**/	{
-/**/		throw new Error(
-/**/			'p not a point'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 

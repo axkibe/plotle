@@ -21,6 +21,7 @@ Widgets =
 */
 var
 	Accent,
+	Discs,
 	Euclid,
 	Jools,
 	reply,
@@ -111,16 +112,6 @@ if( JION )
 							'icon style to display',
 						type :
 							'String',
-						defaultValue :
-							null
-					},
-				// FUTURE find a more elegent solution
-				icons :
-					{
-						comment :
-							'class used to sketch icons if applicable',
-						type :
-							'Icons',
 						defaultValue :
 							null
 					},
@@ -397,7 +388,7 @@ Jools.lazyValue(
 
 			f.paint(
 				style,
-				this.icons,
+				Discs.icons,
 				this.icon,
 				Euclid.View.proper
 			);

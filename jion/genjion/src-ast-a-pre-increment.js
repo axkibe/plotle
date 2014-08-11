@@ -161,6 +161,12 @@ prototype.reflex = 'ast.aPreIncrement';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aPreIncrement';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

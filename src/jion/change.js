@@ -463,13 +463,13 @@ Change.prototype.transformChangeX =
 		chgX
 	)
 {
-	switch( chgX.reflect )
+	switch( chgX.reflex )
 	{
-		case 'Change' :
+		case 'jion.change' :
 
 			return this.transformChange( chgX );
 
-		case 'ChangeRay' :
+		case 'jion.changeRay' :
 
 			return this.transformChangeRay( chgX );
 
@@ -667,7 +667,7 @@ Change.prototype._ChangeTreeInsert =
 	trg = this.trg;
 
 	Jools.check(
-		trg.path.reflect === 'Path',
+		trg.path.reflex === 'jion.path',
 		cm,
 		'trg.path missing'
 	);
@@ -741,7 +741,7 @@ Change.prototype._ChangeTreeRemove =
 	trg = this.trg;
 
 	Jools.check(
-		src.path.reflect === 'Path',
+		src.path.reflex === 'jion.path',
 		cm,
 		'src.path missing'
 	);
@@ -1247,15 +1247,15 @@ Change.prototype.transformSignRay =
 			continue;
 		}
 
-		switch( cx.reflect )
+		switch( cx.reflex )
 		{
-			case 'Sign' :
+			case 'jion.sign' :
 
 				signray = signray.Set( a, cx );
 
 				break;
 
-			case 'SignRay' :
+			case 'jion.signRay' :
 
 				for(
 					b = 0, bZ = cx.length;
@@ -1286,14 +1286,14 @@ Change.prototype.transformSignX =
 		signX
 	)
 {
-	switch( signX.reflect )
+	switch( signX.reflex )
 	{
 
-		case 'Sign' :
+		case 'jion.sign' :
 
 			return this.transformSign( signX );
 
-		case 'SignRay' :
+		case 'jion.signRay' :
 
 			return this.transformSignRay( signX );
 

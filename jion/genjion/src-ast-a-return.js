@@ -161,6 +161,12 @@ prototype.reflex = 'ast.aReturn';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aReturn';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;

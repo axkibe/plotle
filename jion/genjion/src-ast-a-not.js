@@ -161,6 +161,12 @@ prototype.reflex = 'ast.aNot';
 
 
 /*
+| Name Reflection.
+*/
+prototype.reflexName = 'aNot';
+
+
+/*
 | Sets values by path.
 */
 prototype.setPath = JoobjProto.setPath;
