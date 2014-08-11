@@ -218,18 +218,18 @@ NonExistingSpace.prototype.pushButton =
 		// ctrl
 	)
 {
+	var
+		buttonName;
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflect )
+/**/	if( path.get( 2 ) !== this.reflexName )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	var
-		buttonName =
-			path.get( 4 );
+	buttonName = path.get( 4 );
 
 	switch( buttonName )
 	{

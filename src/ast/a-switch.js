@@ -72,7 +72,7 @@ aSwitch.prototype.aCase =
 	var
 		caseExpr;
 
-	if( case_or_condition.reflect !== 'aCase' )
+	if( case_or_condition.reflex !== 'ast.aCase' )
 	{
 		caseExpr =
 			aCase.create(

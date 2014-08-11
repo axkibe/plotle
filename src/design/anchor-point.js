@@ -144,7 +144,7 @@ AnchorPoint.prototype.compute =
 
 /**/if( CHECK )
 /**/{
-/**/	if( frame.reflect !== 'Rect' )
+/**/	if( frame.reflex !== 'euclid.rect' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

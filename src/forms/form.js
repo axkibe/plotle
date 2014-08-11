@@ -165,7 +165,7 @@ Form.prototype._focusedWidget =
 {
 	var
 		path;
-		
+
 	path = this.mark.widgetPath;
 
 	if( path.length === 0 )
@@ -175,7 +175,7 @@ Form.prototype._focusedWidget =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflect )
+/**/	if( path.get( 2 ) !== this.reflexName )
 /**/	{
 /**/		throw new Error( );
 /**/	}

@@ -546,7 +546,7 @@ Path.createFromJSON =
 	function( json )
 {
 	// FIXME this is a dirty hack and ought to be removed.
-	if( json.reflect === 'Path' )
+	if( json.reflex === 'jion.path' )
 	{
 		return json;
 	}
