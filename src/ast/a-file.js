@@ -91,7 +91,7 @@ aFile.prototype.setHeader =
 		header
 	)
 {
-	if( header.reflect !== 'aComment' )
+	if( header.reflex !== 'ast.aComment' )
 	{
 		// arguments have to be a list of strings otherwise
 		header =

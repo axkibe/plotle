@@ -288,12 +288,11 @@ Note.prototype.dragStop =
 	action =
 		shell.action;
 
-	switch( action.reflect )
+	switch( action.reflex )
 	{
-		case 'ItemResize' :
+		case 'action.itemResize' :
 
-			zone =
-				this.zone;
+			zone = this.zone;
 
 /**/		if( CHECK )
 /**/		{
@@ -583,25 +582,33 @@ Note.prototype.scrollMarkIntoView =
 	function( )
 {
 	var
-		mark =
-			this.mark;
+		descend,
+		imargin,
+		fs,
+		mark,
+		n,
+		p,
+		para,
+		pnw,
+		s,
+		sy,
+		zone;
+
+	mark = this.mark;
 
 	if( !mark.hasCaret )
 	{
 		return;
 	}
 
-	var
-		sy =
-			this.scrollbarY.pos,
+	sy = this.scrollbarY.pos;
 
-		para =
-			// FIXME, more elegant path getting
-			this.doc.twig[ mark.caretPath.get( 5 )  ];
+	// FIXME, more elegant path getting
+	para = this.doc.twig[ mark.caretPath.get( 5 )  ];
 
 /**/if( CHECK )
 /**/{
-/**/	if( para.reflect !== 'Para' )
+/**/	if( para.reflex !== 'visual.para' )
 /**/	{
 /**/		throw new Error(
 /**/			'para not a para.'
@@ -609,36 +616,29 @@ Note.prototype.scrollMarkIntoView =
 /**/	}
 /**/}
 
-	var
-		zone =
-			this.zone,
+	zone = this.zone;
 
-		imargin =
-			this.innerMargin,
+	imargin = this.innerMargin;
 
-		fs =
-			this.doc.font.size,
+	fs = this.doc.font.size;
 
-		descend =
-			fs * theme.bottombox,
+	descend = fs * theme.bottombox;
 
-		p =
-			para.locateOffset(
-				mark.caretAt
-			).p,
+	p =
+		para.locateOffset(
+			mark.caretAt
+		).p;
 
-		pnw =
-			this.doc.getPNW(
-				this,
-				para.key
-			),
 
-		s =
-			Math.round( p.y + descend ),
+	pnw =
+		this.doc.getPNW(
+			this,
+			para.key
+		);
 
-		n =
-			s - Math.round( fs + descend );
+	s = Math.round( p.y + descend );
 
+	n = s - Math.round( fs + descend );
 
 	if( n + pnw.y - imargin.n < sy )
 	{
