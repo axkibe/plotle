@@ -511,7 +511,7 @@ Item.prototype.dragStart =
 			this.scrollbarY;
 
 	if(
-		action.reflect === 'None'
+		action.reflex === 'action.none'
 		&&
 		sbary
 		&&
@@ -545,9 +545,9 @@ Item.prototype.dragStart =
 		return false;
 	}
 
-	switch( action && action.reflect )
+	switch( action && action.reflex )
 	{
-		case 'CreateRelation' :
+		case 'action.createRelation' :
 
 			shell.setAction(
 				action.create(
@@ -637,9 +637,9 @@ Item.prototype.dragMove =
 
 	action = shell.action;
 
-	switch( action.reflect )
+	switch( action.reflex )
 	{
-		case 'CreateRelation' :
+		case 'action.createRelation' :
 
 			if(
 				!this.zone.within(
@@ -660,7 +660,7 @@ Item.prototype.dragMove =
 
 			return true;
 
-		case 'ScrollY' :
+		case 'action.scrollY' :
 
 			start = action.start,
 
@@ -701,9 +701,9 @@ Item.prototype.dragStop =
 		action =
 			shell.action;
 
-	switch( action.reflect )
+	switch( action.reflex )
 	{
-		case 'CreateRelation' :
+		case 'action.createRelation' :
 
 			if(
 				!this.zone.within(
