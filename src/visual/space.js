@@ -258,10 +258,10 @@ Space.prototype.focusedItem =
 
 	if( action )
 	{
-		switch( action.reflect )
+		switch( action.reflex )
 		{
-			case 'ItemDrag' :
-			case 'ItemResize' :
+			case 'action.itemDrag' :
+			case 'action.itemResize' :
 
 				if( action.transItem.path.subPathOf( path ) )
 				{
@@ -292,13 +292,14 @@ Space.prototype.getItem =
 	)
 {
 	var
-		action =
-			shell.action;
+		action;
 
-	switch( action && action.reflect )
+	action = shell.action;
+
+	switch( action && action.reflex )
 	{
-		case 'ItemDrag' :
-		case 'ItemResize' :
+		case 'action.itemDrag' :
+		case 'action.itemResize' :
 
 			if( action.transItem.key === key )
 			{
@@ -391,9 +392,9 @@ Space.prototype.draw =
 		);
 	}
 
-	switch( action && action.reflect )
+	switch( action && action.reflex )
 	{
-		case 'CreateGeneric' :
+		case 'action.createGeneric' :
 
 			if( action.start )
 			{
@@ -402,7 +403,7 @@ Space.prototype.draw =
 
 			break;
 
-		case 'CreateRelation' :
+		case 'action.createRelation' :
 
 			if( !action.fromItemPath.isEmpty )
 			{
@@ -687,7 +688,7 @@ Space.prototype.dragStart =
 	// FIXME simplify
 	if(
 		action &&
-		action.reflect === 'CreateGeneric' &&
+		action.reflex === 'action.createGeneric' &&
 		action.itemType === 'Note'
 	)
 	{
@@ -724,7 +725,7 @@ Space.prototype.dragStart =
 	else if
 	(
 		action &&
-		action.reflect === 'CreateGeneric' &&
+		action.reflex === 'action.createGeneric' &&
 		action.itemType === 'Label'
 
 	)
@@ -757,7 +758,7 @@ Space.prototype.dragStart =
 	else if
 	(
 		action &&
-		action.reflect === 'CreateGeneric' &&
+		action.reflex === 'action.createGeneric' &&
 		action.itemType === 'Portal'
 
 	)
@@ -821,9 +822,9 @@ Space.prototype.dragStart =
 
 	// starts a panning operation instead
 
-	switch( action && action.reflect )
+	switch( action && action.reflex )
 	{
-		case 'CreateRelation' :
+		case 'action.createRelation' :
 
 			shell.setAction(
 				action.create(
@@ -940,9 +941,9 @@ Space.prototype.dragStop =
 /**/	}
 /**/}
 
-	switch( action.reflect )
+	switch( action.reflex )
 	{
-		case 'CreateGeneric' :
+		case 'action.createGeneric' :
 
 			switch( action.itemType )
 			{
@@ -1322,9 +1323,9 @@ Space.prototype.dragMove =
 	view =
 		this.view;
 
-	switch( action.reflect )
+	switch( action.reflex )
 	{
-		case 'CreateGeneric' :
+		case 'action.createGeneric' :
 
 			model =
 				action.model;
