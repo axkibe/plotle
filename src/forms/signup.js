@@ -20,7 +20,7 @@ Forms =
 | Imports
 */
 var
-	Jools,
+	jools,
 	Mark,
 	shell;
 
@@ -311,7 +311,7 @@ SignUp.prototype.signup =
 	shell.link.register(
 		user,
 		email,
-		Jools.passhash( pass ),
+		jools.passhash( pass ),
 		newsletter
 	);
 };

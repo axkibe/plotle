@@ -43,7 +43,7 @@ var
 		require( '../jion/this' )( module ),
 	Shorthand =
 		require( '../ast/shorthand' ),
-	Jools =
+	jools =
 		require( '../jools/jools' ),
 	Validator =
 		require( './validator' );
@@ -318,7 +318,7 @@ Gen.prototype._init =
 			{
 				defaultValue = aNumberLiteral( jAttr.defaultValue );
 			}
-			else if( Jools.isString( jdv ) )
+			else if( jools.isString( jdv ) )
 			{
 				if( jdv[ 0 ] === "'" )
 				{
@@ -427,7 +427,7 @@ Gen.prototype._init =
 	{
 		twig = { };
 
-		if( Jools.isString( jion.twig ) )
+		if( jools.isString( jion.twig ) )
 		{
 /**/		if( CHECK )
 /**/		{
@@ -520,7 +520,7 @@ Gen.prototype.genImports =
 	capsule =
 		capsule
 		.aVarDec( 'JoobjProto' )
-		.aVarDec( 'Jools' );
+		.aVarDec( 'jools' );
 
 	// FUTURE when type checking is there this might become needed
 	// without jsons
@@ -573,7 +573,7 @@ Gen.prototype.genNodeIncludes =
 			)
 		)
 		.anAssign(
-			aVar( 'Jools' ),
+			aVar( 'jools' ),
 			aCall(
 				aVar( 'require' ),
 				aStringLiteral( '../../src/jools/jools' )
@@ -781,7 +781,7 @@ Gen.prototype.genConstructor =
 	block =
 		block
 		.aCall(
-			aVar( 'Jools' ).aDot( 'immute' ),
+			aVar( 'jools' ).aDot( 'immute' ),
 			This
 		);
 
@@ -790,11 +790,11 @@ Gen.prototype.genConstructor =
 		block =
 			block
 			.aCall(
-				aVar( 'Jools' ).aDot( 'immute' ),
+				aVar( 'jools' ).aDot( 'immute' ),
 				aVar( 'twig' )
 			)
 			.aCall(
-				aVar( 'Jools' ).aDot( 'immute' ),
+				aVar( 'jools' ).aDot( 'immute' ),
 				aVar( 'ranks' )
 			);
 	}
@@ -877,7 +877,7 @@ Gen.prototype.genConstructor =
 			capsule
 			.aComment( 'Subclass.' )
 			.aCall(
-				aVar( 'Jools' ).aDot( 'subclass' ),
+				aVar( 'jools' ).aDot( 'subclass' ),
 				aVar( 'Constructor' ),
 				this.subclass
 			);
@@ -1184,7 +1184,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.anAssign(
 						aVar( 'twig' ),
 						aCall(
-							aVar( 'Jools' ).aDot( 'copy' ),
+							aVar( 'jools' ).aDot( 'copy' ),
 							aVar( 'twig' )
 						)
 					)
@@ -1247,7 +1247,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.anAssign(
 						aVar( 'twig' ),
 						aCall(
-							aVar( 'Jools' ).aDot( 'copy' ),
+							aVar( 'jools' ).aDot( 'copy' ),
 							aVar( 'twig' )
 						)
 					)
@@ -1309,7 +1309,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.anAssign(
 						aVar( 'twig' ),
 						aCall(
-							aVar( 'Jools' ).aDot( 'copy' ),
+							aVar( 'jools' ).aDot( 'copy' ),
 							aVar( 'twig' )
 						)
 					)
@@ -1414,7 +1414,7 @@ Gen.prototype.genCreatorFreeStringsParser =
 					.anAssign(
 						aVar( 'twig' ),
 						aCall(
-							aVar( 'Jools' ).aDot( 'copy' ),
+							aVar( 'jools' ).aDot( 'copy' ),
 							aVar( 'twig' )
 						)
 					)
@@ -2892,7 +2892,7 @@ Gen.prototype.genToJSON =
 		capsule
 		.aComment( 'Converts a ' + this.name + ' into JSON.' )
 		.aCall(
-			aVar( 'Jools' ).aDot( 'lazyValue' ),
+			aVar( 'jools' ).aDot( 'lazyValue' ),
 			aVar( 'Constructor' ).aDot( 'prototype' ),
 			aStringLiteral( 'toJSON' ),
 			aFunc( block )

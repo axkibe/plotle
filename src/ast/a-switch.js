@@ -54,7 +54,7 @@ if( JION )
 var
 	aCase =
 		require( './a-case' ),
-	Jools =
+	jools =
 		require( '../jools/jools' ),
 	aSwitch =
 		require( '../jion/this' )( module );
@@ -77,7 +77,7 @@ aSwitch.prototype.aCase =
 		caseExpr =
 			aCase.create(
 				'twig:add',
-					Jools.uid( ), // FIXME
+					jools.uid( ), // FIXME
 					case_or_condition,
 				'block',
 					block
@@ -87,7 +87,7 @@ aSwitch.prototype.aCase =
 	return (
 		this.create(
 			'twig:add',
-			Jools.uid( ), // FIXME
+			jools.uid( ), // FIXME
 			caseExpr
 		)
 	);

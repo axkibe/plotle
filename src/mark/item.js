@@ -17,7 +17,7 @@ var
 */
 var
 	Jion,
-	Jools;
+	jools;
 
 
 /*
@@ -75,7 +75,7 @@ Item.prototype.hasCaret =
 /*
 | The item's path.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Item.prototype,
 	'itemPath',
 	function( )
@@ -88,7 +88,7 @@ Jools.lazyValue(
 /*
 | The widget's path.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Item.prototype,
 	'widgetPath',
 	function( )

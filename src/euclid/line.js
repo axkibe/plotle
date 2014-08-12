@@ -19,7 +19,7 @@ Euclid =
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -191,7 +191,7 @@ Line.connect =
 /*
 | The zone of the arrow.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Line.prototype,
 	'zone',
 	function()
@@ -226,7 +226,7 @@ Jools.lazyValue(
 /*
 | The point at center.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Line.prototype,
 	'pc',
 	function() {
@@ -240,9 +240,9 @@ Jools.lazyValue(
 		return (
 			Euclid.Point.create(
 				'x',
-					Jools.half( p1.x + p2.x ),
+					jools.half( p1.x + p2.x ),
 				'y',
-					Jools.half( p1.y + p2.y )
+					jools.half( p1.y + p2.y )
 			)
 		);
 	}

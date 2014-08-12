@@ -21,7 +21,7 @@ Visual = Visual || { };
 var
 	Euclid,
 	fontPool,
-	Jools,
+	jools,
 	Mark,
 	Peer,
 	shell,
@@ -143,11 +143,9 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 
-	Visual.Para =
-		require( '../jion/this' )( module );
+	Visual.Para = require( '../jion/this' )( module );
 }
 
 
@@ -178,13 +176,13 @@ Para.prototype._init =
 		inherit.view.zoom === this.view.zoom
 	)
 	{
-		Jools.aheadValue(
+		jools.aheadValue(
 			this,
 			'flow',
 			inherit.flow
 		);
 
-		Jools.aheadValue(
+		jools.aheadValue(
 			this,
 			'_fabric',
 			inherit._fabric
@@ -239,7 +237,7 @@ Para.concernsMark =
 | Shortcut to the para's key.
 | It is the last path entry.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Para.prototype,
 	'key',
 	function( )
@@ -252,7 +250,7 @@ Jools.lazyValue(
 /*
 | The attention center.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Para.prototype,
 	'attentionCenter',
 	function( )
@@ -283,7 +281,7 @@ Jools.lazyValue(
 /*
 | The para's fabric.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Para.prototype,
 	'_fabric',
 	function( )
@@ -423,7 +421,7 @@ Para.prototype._drawCaret =
 /*
 | The font for this para.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Para.prototype,
 	'font',
 	function( )
@@ -439,7 +437,7 @@ Jools.lazyValue(
 /*
 | The para's flow, the position of all chunks.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Para.prototype,
 	'flow',
 	function( )
@@ -577,7 +575,7 @@ Jools.lazyValue(
 /*
 | The height of the para.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Para.prototype,
 	'height',
 	function( )
@@ -783,10 +781,9 @@ Para.prototype.locateOffset =
 	}
 
 	return (
-		Jools.immute( {
+		jools.immute( {
 			p :
 				p,
-
 			line :
 				lineN
 		} )
@@ -1039,7 +1036,7 @@ Para.prototype.specialKey =
 /*
 | The path to the .text attribute
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Para.prototype,
 	'textPath',
 	function( )

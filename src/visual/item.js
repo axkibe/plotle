@@ -22,7 +22,7 @@ var
 	Action,
 	Euclid,
 	Jion,
-	Jools,
+	jools,
 	Mark,
 	reply,
 	shell,
@@ -41,7 +41,7 @@ var
 */
 if( SERVER )
 {
-	Jools =
+	jools =
 		require( '../jools/jools' );
 }
 
@@ -95,7 +95,7 @@ Item.concernsMark =
 | Shortcut to the item's key.
 | It is the last path entry.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Item.prototype,
 	'key',
 	function( )
@@ -168,8 +168,9 @@ Item.prototype.checkHandles =
 
 /*
 | The handle object to plan where to sketch the handles to
+| FIXME vars
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Item.prototype,
 	'_handles',
 	function( )
@@ -194,10 +195,10 @@ Jools.lazyValue(
 				zone.pse.y,
 
 			mx =
-				Jools.half( wx + ex ),
+				jools.half( wx + ex ),
 
 			my =
-				Jools.half( ny + sy ),
+				jools.half( ny + sy ),
 
 			dcx =
 				theme.handle.cdistance,
@@ -232,7 +233,7 @@ Jools.lazyValue(
 		if( dcx > a )
 		{
 			dex -=
-				Jools.half( dcx - a );
+				jools.half( dcx - a );
 
 			dcx =
 				a;
@@ -241,13 +242,13 @@ Jools.lazyValue(
 		if( dcy > b )
 		{
 			dey -=
-				Jools.half( dcy - b );
+				jools.half( dcy - b );
 
 			dcy =
 				b;
 		}
 
-		return Jools.immute(
+		return jools.immute(
 			{
 				// ellipse bezier height
 				bb :

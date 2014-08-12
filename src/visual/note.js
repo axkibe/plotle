@@ -18,7 +18,7 @@ var
 */
 var
 	Euclid,
-	Jools,
+	jools,
 	Peer,
 	shell,
 	Style,
@@ -153,7 +153,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 	Visual =
@@ -230,7 +230,7 @@ Note.prototype._init =
 			'mark',
 				this.mark,
 			'paraSep',
-				Jools.half( this.fontsize ),
+				jools.half( this.fontsize ),
 			'path',
 				docPath,
 			'view',
@@ -350,7 +350,7 @@ if( SHELL )
 /*
 | The notes fabric.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Note.prototype,
 	'_fabric',
 	function( )
@@ -466,7 +466,7 @@ if( SHELL )
 | Resize handles to show on notes.
 */
 Note.prototype.handles =
-	Jools.immute(
+	jools.immute(
 		{
 			n :
 				true,
@@ -491,7 +491,7 @@ Note.prototype.handles =
 /*
 | The notes silhoutte.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Note.prototype,
 	'silhoutte',
 	function( )
@@ -522,7 +522,7 @@ Jools.lazyValue(
 /*
 | The notes silhoutte anchored at zero.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Note.prototype,
 	'zeroSilhoutte',
 	function( )

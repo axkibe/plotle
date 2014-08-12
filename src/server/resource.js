@@ -166,7 +166,7 @@ var
 	FileTypes =
 		require( './file-types' ),
 
-	Jools =
+	jools =
 		require( '../jools/jools' ),
 
 	Resource =
@@ -208,7 +208,7 @@ Resource.prototype._init =
 /*
 | This resource as generated jion.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Resource.prototype,
 	'asJoobj',
 	function( )
@@ -243,7 +243,7 @@ Jools.lazyValue(
 /*
 | The file extension
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Resource.prototype,
 	'fileExt',
 	function( )

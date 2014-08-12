@@ -10,7 +10,7 @@
 */
 var
 	Validator;
-	
+
 Validator = { };
 
 
@@ -18,7 +18,7 @@ Validator = { };
 | Imports.
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -33,7 +33,7 @@ var
 */
 if( SERVER )
 {
-	Jools = require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 }
 
 
@@ -214,7 +214,7 @@ var _checkAttribute =
 
 	attr = jion.attributes[ name ];
 
-	if( !Jools.isString( attr.type ) )
+	if( !jools.isString( attr.type ) )
 	{
 		throw new Error(
 			'type is missing from "' + name + '"'
@@ -319,7 +319,7 @@ Validator.check =
 		}
 	}
 
-	if( !Jools.isString( jion.name ) )
+	if( !jools.isString( jion.name ) )
 	{
 		throw new Error(
 			'name missing'

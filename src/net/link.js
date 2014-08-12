@@ -19,7 +19,7 @@ Net = Net || { };
 var
 	config,
 	Jion,
-	Jools,
+	jools,
 	shell,
 	system,
 	Visual;
@@ -330,7 +330,7 @@ Link.prototype._onAquireSpace =
 
 			system.asyncEvent(
 				'onAquireSpace',
-				Jools.immute(
+				jools.immute(
 					{
 						status :
 							reply.status,
@@ -380,7 +380,7 @@ Link.prototype._onAquireSpace =
 
 	system.asyncEvent(
 		'onAquireSpace',
-		Jools.immute(
+		jools.immute(
 			{
 				status :
 					reply.status,
@@ -724,7 +724,7 @@ Link.prototype.alter =
 	c =
 		Jion.ChangeWrap.create(
 			'cid',
-				Jools.uid( ),
+				jools.uid( ),
 			'chgX',
 				chgX,
 			'seq',
@@ -861,7 +861,7 @@ Link.prototype.undo =
 	c =
 		Jion.ChangeWrap.create(
 			'cid',
-				Jools.uid( ),
+				jools.uid( ),
 			'chgX',
 				chgX,
 			'seq',
@@ -916,7 +916,7 @@ Link.prototype.redo =
 	c =
 		Jion.ChangeWrap.create(
 			'cid',
-				Jools.uid( ),
+				jools.uid( ),
 			'chgX',
 				chgX,
 			'seq',

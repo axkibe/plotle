@@ -1,6 +1,8 @@
 /*
 | The resource inventory of the server
 |
+| FIXME make a JION
+|
 | Authors: Axel Kittenberger
 */
 
@@ -19,7 +21,7 @@ var
 | Imports
 */
 var
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 
@@ -40,16 +42,13 @@ var
 		throw new Error( );
 	}
 
-	this.list =
-		Jools.immute( list );
+	this.list = jools.immute( list );
 
-	this.map =
-		Jools.immute( map );
+	this.map = jools.immute( map );
 
-	this.idx =
-		Jools.immute( idx );
+	this.idx = jools.immute( idx );
 
-	Jools.immute( this );
+	jools.immute( this );
 };
 
 
@@ -76,6 +75,8 @@ Inventory.create =
 
 /*
 | Returns an inventory with a resource appended.
+|
+| FIXME vars
 */
 Inventory.prototype.addResource =
 	function(
@@ -87,10 +88,10 @@ Inventory.prototype.addResource =
 			this.list.slice( ),
 
 		map =
-			Jools.copy( this.map ),
+			jools.copy( this.map ),
 
 		idx =
-			Jools.copy( this.idx ),
+			jools.copy( this.idx ),
 
 		llen =
 			list.length;
@@ -149,7 +150,7 @@ Inventory.prototype.updateResource =
 			this.list.slice( ),
 
 		map =
-			Jools.copy( this.map ),
+			jools.copy( this.map ),
 
 		index =
 			this.idx[ oldRes.aliases[ 0 ] ];
@@ -220,10 +221,10 @@ Inventory.prototype.removeResource =
 			this.list.slice( ),
 
 		map =
-			Jools.copy( this.map ),
+			jools.copy( this.map ),
 
 		idx =
-			Jools.copy( this.idx ),
+			jools.copy( this.idx ),
 
 		index =
 			idx[ res.aliases[ 0 ] ];

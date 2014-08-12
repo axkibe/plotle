@@ -33,10 +33,6 @@ var
 	Context =
 		require( './context' );
 
-//var
-//	Jools =
-//		require( '../jools/jools' );
-
 
 /*
 | Expression precedence table.

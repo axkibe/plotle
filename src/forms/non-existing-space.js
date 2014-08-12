@@ -23,7 +23,7 @@ Forms =
 | Imports
 */
 var
-	Jools,
+	jools,
 	shell;
 
 
@@ -188,8 +188,7 @@ NonExistingSpace.prototype._init =
 
 	if( !twigDup )
 	{
-		this.twig =
-			Jools.copy( this.twig );
+		this.twig = jools.copy( this.twig );
 	}
 
 	this.twig.headline =

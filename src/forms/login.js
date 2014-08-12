@@ -20,7 +20,7 @@ Forms =
 | Imports
 */
 var
-	Jools,
+	jools,
 	Mark,
 	Peer,
 	shell;
@@ -295,7 +295,7 @@ Login.prototype.login =
 
 	Peer.auth(
 		user,
-		Jools.passhash( pass )
+		jools.passhash( pass )
 	);
 };
 

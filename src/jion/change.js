@@ -16,7 +16,7 @@ var
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -72,7 +72,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
+	jools =
 		require( '../jools/jools' );
 	Jion =
 		{
@@ -100,7 +100,7 @@ Change =
 /*
 | The type of this change.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Change.prototype,
 	'type',
 	function( )
@@ -156,7 +156,7 @@ Jools.lazyValue(
 		{
 			type = null;
 
-			if( Jools.prissy )
+			if( jools.prissy )
 			{
 				throw new Error( 'invalid type' );
 			}
@@ -171,7 +171,7 @@ Jools.lazyValue(
 | Returns the inversion to this change.
 | FIXME call it Invert
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Change.prototype,
 	'Invert',
 	function( )
@@ -205,7 +205,7 @@ Change.prototype.ChangeTree =
 	var
 		r;
 
-	Jools.log(
+	jools.log(
 		'change',
 		'src:',
 			this.src,
@@ -267,7 +267,7 @@ Change.prototype.ChangeTree =
 		return null;
 	}
 
-	return Jools.immute(
+	return jools.immute(
 		{
 			tree :
 				r.tree,
@@ -508,13 +508,13 @@ Change.prototype._ChangeTreeSet =
 
 	key = null;
 
-	Jools.check(
+	jools.check(
 		trg.at1 === undefined,
 		cm,
 		'trg.at1 must not exist.'
 	);
 
-	Jools.check(
+	jools.check(
 		src.val !== undefined,
 		cm,
 		'src.val missing'
@@ -545,7 +545,7 @@ Change.prototype._ChangeTreeSet =
 
 	trg =
 		trg.affix(
-			Jools.is,
+			jools.is,
 			cm,
 			'trg',
 			'val',
@@ -554,7 +554,7 @@ Change.prototype._ChangeTreeSet =
 
 	src =
 		src.affix(
-			Jools.is,
+			jools.is,
 			cm,
 			'src',
 			'path',
@@ -666,7 +666,7 @@ Change.prototype._ChangeTreeInsert =
 
 	trg = this.trg;
 
-	Jools.check(
+	jools.check(
 		trg.path.reflex === 'jion.path',
 		cm,
 		'trg.path missing'
@@ -674,8 +674,8 @@ Change.prototype._ChangeTreeInsert =
 
 	str = tree.getPath( trg.path );
 
-	Jools.check(
-		Jools.isString( str ),
+	jools.check(
+		jools.isString( str ),
 		cm,
 		'trg.path signates no string'
 	);
@@ -685,7 +685,7 @@ Change.prototype._ChangeTreeInsert =
 
 	trg =
 		trg.affix(
-			Jools.is,
+			jools.is,
 			cm, 'trg',
 			'at2',
 				tat2
@@ -740,7 +740,7 @@ Change.prototype._ChangeTreeRemove =
 
 	trg = this.trg;
 
-	Jools.check(
+	jools.check(
 		src.path.reflex === 'jion.path',
 		cm,
 		'src.path missing'
@@ -748,9 +748,9 @@ Change.prototype._ChangeTreeRemove =
 
 	str = tree.getPath( src.path );
 
-	if( !Jools.isString( str ) )
+	if( !jools.isString( str ) )
 	{
-		Jools.log(
+		jools.log(
 			'change',
 			'src.path signates no string'
 		);
@@ -760,7 +760,7 @@ Change.prototype._ChangeTreeRemove =
 
 	if( src.at1 === src.at2 )
 	{
-		Jools.log(
+		jools.log(
 			'change',
 			'removed nothing'
 		);
@@ -776,7 +776,7 @@ Change.prototype._ChangeTreeRemove =
 
 	trg =
 		trg.affix(
-			Jools.isnon,
+			jools.isnon,
 			cm,
 			'trg',
 			'val',
@@ -843,7 +843,7 @@ Change.prototype._ChangeTreeJoin =
 
 	at1 = trg.at1;
 
-	Jools.check(
+	jools.check(
 		at1 !== undefined,
 		cm,
 		'trg.at1 missing'
@@ -852,25 +852,23 @@ Change.prototype._ChangeTreeJoin =
 	text =
 		tree.getPath( path );
 
-	Jools.check(
-		Jools.isString( text ),
+	jools.check(
+		jools.isString( text ),
 		cm,
 		'trg signates no text'
 	);
 
-	key =
-		path.get( -2 );
+	key = path.get( -2 );
 
-	pivot =
-		tree.getPath( path.Shorten( 3 ) );
+	pivot = tree.getPath( path.Shorten( 3 ) );
 
-	Jools.check( pivot.ranks, cm, 'pivot has no ranks' );
+	jools.check( pivot.ranks, cm, 'pivot has no ranks' );
 
 	kn = pivot.rankOf( key );
 
-	Jools.check( kn >= 0, cm, 'invalid line key (1)' );
+	jools.check( kn >= 0, cm, 'invalid line key (1)' );
 
-	Jools.check(
+	jools.check(
 		kn < pivot.ranks.length,
 		cm,
 		'cannot join last line'
@@ -882,7 +880,7 @@ Change.prototype._ChangeTreeJoin =
 
 	src =
 		src.affix(
-			Jools.is,
+			jools.is,
 			cm,
 			'src', 'path',
 			path2
@@ -971,9 +969,9 @@ Change.prototype._ChangeTreeSplit =
 			path.Shorten( 3 )
 		);
 
-	Jools.check( Jools.isString( text ), cm, 'src signates no text' );
+	jools.check( jools.isString( text ), cm, 'src signates no text' );
 
-	Jools.check( pivot.ranks, cm, 'pivot has no ranks' );
+	jools.check( pivot.ranks, cm, 'pivot has no ranks' );
 
 	if( trg.path !== undefined )
 	{
@@ -990,8 +988,8 @@ Change.prototype._ChangeTreeSplit =
 			);
 	}
 
-	Jools.check(
-		!Jools.isnon( pivot.twig[ vKey ] ),
+	jools.check(
+		!jools.isnon( pivot.twig[ vKey ] ),
 		cm,
 		'newUID not vacant: ',
 		vKey
@@ -1001,7 +999,7 @@ Change.prototype._ChangeTreeSplit =
 
 	kn = pivot.rankOf( key );
 
-	Jools.check( kn >= 0, cm, 'invalid line key ( 2 )' );
+	jools.check( kn >= 0, cm, 'invalid line key ( 2 )' );
 
 	para1 = pivot.twig[ key ];
 
@@ -1073,13 +1071,13 @@ Change.prototype._ChangeTreeRank =
 
 	trg = this.trg;
 
-	Jools.check(
+	jools.check(
 		src.path !== undefined,
 		cm,
 		'src.path not present'
 	);
 
-	Jools.check(
+	jools.check(
 		trg.rank !== undefined,
 		cm,
 		'trg.rank not present'
@@ -1087,7 +1085,7 @@ Change.prototype._ChangeTreeRank =
 
 	pivot = tree.getPath( src.path.Shorten( 2 ) );
 
-	Jools.check(
+	jools.check(
 		pivot.ranks !== undefined,
 		cm,
 		'pivot has no ranks'
@@ -1099,7 +1097,7 @@ Change.prototype._ChangeTreeRank =
 
 	if ( orank < 0 )
 	{
-		throw Jools.reject(
+		throw jools.reject(
 			'invalid key :' + key
 		);
 	}
@@ -1108,7 +1106,7 @@ Change.prototype._ChangeTreeRank =
 
 	src =
 		src.affix(
-			Jools.is,
+			jools.is,
 			cm,
 			'src',
 			'rank',
@@ -1117,7 +1115,7 @@ Change.prototype._ChangeTreeRank =
 
 	trg =
 		trg.affix(
-			Jools.is,
+			jools.is,
 			cm,
 			'trg',
 			'path',

@@ -36,7 +36,7 @@ if( JION )
 var
 	aCommaList =
 		require( '../jion/this' )( module ),
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 /*
@@ -52,7 +52,7 @@ aCommaList.prototype.Append =
 	return (
 		this.create(
 			'twig:add',
-			Jools.uid( ), // FIXME
+			jools.uid( ), // FIXME
 			expr
 		)
 	);

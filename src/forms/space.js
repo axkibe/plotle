@@ -19,7 +19,7 @@ Forms =
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -157,8 +157,7 @@ Space.prototype._init =
 	{
 		if( !twigDup )
 		{
-			this.twig =
-				Jools.copy( this.twig );
+			this.twig = jools.copy( this.twig );
 		}
 
 		this.twig.headline =

@@ -57,7 +57,7 @@ var
 			Path :
 				require( '../jion/path' ),
 		},
-	Jools =
+	jools =
 		require( '../jools/jools' ),
 	MaxAge =
 		require( './max-age' ),
@@ -162,7 +162,7 @@ Server.prototype.startup =
 
 	yield* this.prepareInventory( );
 
-	Jools.log(
+	jools.log(
 		'start',
 		'connecting to database',
 		config.database.host + ':' + config.database.port,
@@ -184,7 +184,7 @@ Server.prototype.startup =
 
 	yield* this.loadSpaces( );
 
-	Jools.log(
+	jools.log(
 		'start',
 		'starting server @ http://' +
 			( config.ip || '*' ) + '/:' + config.port
@@ -225,7 +225,7 @@ Server.prototype.startup =
 		sus.resume( )
 	);
 
-	Jools.log(
+	jools.log(
 		'start',
 		'server running'
 	);
@@ -238,7 +238,7 @@ Server.prototype.startup =
 Server.prototype.checkRepositorySchemaVersion =
 	function* ( )
 {
-	Jools.log(
+	jools.log(
 		'start',
 		'checking repository schema version'
 	);
@@ -285,7 +285,7 @@ Server.prototype.checkRepositorySchemaVersion =
 Server.prototype.initRepository =
 	function*( )
 {
-	Jools.log(
+	jools.log(
 		'start',
 		'found no repository, initializing a new one'
 	);
@@ -307,7 +307,7 @@ Server.prototype.initRepository =
 			space =
 				initSpaces[ s ];
 
-		Jools.log(
+		jools.log(
 			'start',
 			'  initializing space ' + space
 		);
@@ -320,7 +320,7 @@ Server.prototype.initRepository =
 		);
 	}
 
-	Jools.log(
+	jools.log(
 		'start',
 		'  initializing global.version'
 	);
@@ -350,7 +350,7 @@ Server.prototype.initRepository =
 Server.prototype.ensureMeshcraftUser =
 	function* ( )
 {
-	Jools.log(
+	jools.log(
 		'start',
 		'ensuring existence of the "meshcraft" user'
 	);
@@ -367,14 +367,14 @@ Server.prototype.ensureMeshcraftUser =
 
 	if( !mUser )
 	{
-		Jools.log(
+		jools.log(
 			'start',
 			'not found! (re)creating the "meshcraft" user'
 		);
 
 		var
 			pass =
-				Jools.randomPassword( 12 );
+				jools.randomPassword( 12 );
 
 		mUser =
 			{
@@ -382,7 +382,7 @@ Server.prototype.ensureMeshcraftUser =
 					'meshcraft',
 
 				pass :
-					Jools.passhash( pass ),
+					jools.passhash( pass ),
 
 				clearPass :
 					pass,
@@ -400,7 +400,7 @@ Server.prototype.ensureMeshcraftUser =
 	this.$users.meshcraft =
 		mUser;
 
-	Jools.log(
+	jools.log(
 		'start',
 		'"meshcraft" user\'s clear password is: ',
 		mUser.clearPass
@@ -414,7 +414,7 @@ Server.prototype.ensureMeshcraftUser =
 Server.prototype.loadSpaces =
 	function*( )
 {
-	Jools.log(
+	jools.log(
 		'start',
 		'loading and replaying all spaces'
 	);
@@ -452,7 +452,7 @@ Server.prototype.loadSpace =
 		o,
 		space;
 
-	Jools.log(
+	jools.log(
 		'start',
 		'loading and replaying all "' + spaceName + '"'
 	);
@@ -505,7 +505,7 @@ Server.prototype.loadSpace =
 					null
 			};
 
-		if ( !Jools.isArray( o.chgX ) )
+		if ( !jools.isArray( o.chgX ) )
 		{
 			o.type = 'Change'; // FUTURE this is a hack
 
@@ -618,9 +618,9 @@ Server.prototype.buildShellConfig =
 			'\t\t',
 			k,
 			' : ',
-			Jools.isString( val ) ? "'" : '',
+			jools.isString( val ) ? "'" : '',
 			val,
-			Jools.isString( val ) ? "'" : ''
+			jools.isString( val ) ? "'" : ''
 		);
 	}
 
@@ -674,7 +674,7 @@ Server.prototype.prepareInventory =
 		inv,
 		resource;
 
-	Jools.log( 'start', 'preparing inventory' );
+	jools.log( 'start', 'preparing inventory' );
 
 	// autogenerates the shell config as resource
 	cconfig =
@@ -769,7 +769,7 @@ Server.prototype.prepareInventory =
 		this.prependConfigFlags( );
 	}
 
-	Jools.log( 'start', 'building bundle' );
+	jools.log( 'start', 'building bundle' );
 
 	var
 		ast,
@@ -844,7 +844,7 @@ Server.prototype.prepareInventory =
 
 	if( config.uglify )
 	{
-		Jools.log( 'start', 'uglifying bundle' );
+		jools.log( 'start', 'uglifying bundle' );
 
 		ast.figure_out_scope( );
 
@@ -941,7 +941,7 @@ Server.prototype.prepareInventory =
 			)
 		);
 
-	Jools.log( 'start', 'bundle:', bundleFilePath );
+	jools.log( 'start', 'bundle:', bundleFilePath );
 
 	// if uglify is turned on
 	// the flags are added after bundle
@@ -1027,13 +1027,13 @@ Server.prototype.prepareInventory =
 			);
 	}
 
-	Jools.log(
+	jools.log(
 		'start',
 		'uncompressed bundle size is ',
 		this.inventory.map[ bundleFilePath ].data.length
 	);
 
-	Jools.log(
+	jools.log(
 		'start',
 		'  compressed bundle size is ',
 		this.inventory.map[ bundleFilePath ].gzip.length
@@ -1274,7 +1274,7 @@ Server.prototype.extraMangle =
 				return false;
 			}
 
-			if( !Jools.isString( node[ k ] ) )
+			if( !jools.isString( node[ k ] ) )
 			{
 				return false;
 			}
@@ -1386,22 +1386,22 @@ Server.prototype.cmdAlter =
 
 	if( username === undefined )
 	{
-		throw Jools.reject( 'user missing' );
+		throw jools.reject( 'user missing' );
 	}
 
 	if( this.$users[ username ].pass !== passhash )
 	{
-		throw Jools.reject( 'invalid pass' );
+		throw jools.reject( 'invalid pass' );
 	}
 
 	if( spaceUser === undefined )
 	{
-		throw Jools.reject( 'spaceUser missing' );
+		throw jools.reject( 'spaceUser missing' );
 	}
 
 	if( spaceTag === undefined )
 	{
-		throw Jools.reject( 'spaceTag missing' );
+		throw jools.reject( 'spaceTag missing' );
 	}
 
 	if(
@@ -1412,22 +1412,22 @@ Server.prototype.cmdAlter =
 		) !== 'rw'
 	)
 	{
-		throw Jools.reject( 'no access' );
+		throw jools.reject( 'no access' );
 	}
 
 	if( seq === undefined )
 	{
-		throw Jools.reject( 'seq missing' );
+		throw jools.reject( 'seq missing' );
 	}
 
 	if( chgX === undefined )
 	{
-		throw Jools.reject( 'chgX missing' );
+		throw jools.reject( 'chgX missing' );
 	}
 
 	if( cid === undefined )
 	{
-		throw Jools.reject( 'cid missing' );
+		throw jools.reject( 'cid missing' );
 	}
 
 	spaceName = spaceUser + ':' + spaceTag;
@@ -1436,7 +1436,7 @@ Server.prototype.cmdAlter =
 
 	if( space === undefined )
 	{
-		throw Jools.reject( 'unknown space' );
+		throw jools.reject( 'unknown space' );
 	}
 
 	changes = space.$changes;
@@ -1450,13 +1450,13 @@ Server.prototype.cmdAlter =
 
 	if( !(seq >= 0 && seq <= seqZ) )
 	{
-		throw Jools.reject( 'invalid seq' );
+		throw jools.reject( 'invalid seq' );
 	}
 
 	// fits the cmd into data structures
 	try {
 		// FUTURE
-		if( Jools.isArray( chgX ) )
+		if( jools.isArray( chgX ) )
 		{
 			throw new Error(
 				'Array chgX not yet supported'
@@ -1467,7 +1467,7 @@ Server.prototype.cmdAlter =
 	}
 	catch( err )
 	{
-		throw Jools.reject(
+		throw jools.reject(
 			'invalid cmd: ' + err.message
 		);
 	}
@@ -1587,12 +1587,12 @@ Server.prototype.cmdAuth =
 
 	if( cmd.user === undefined )
 	{
-		throw Jools.reject( 'user missing' );
+		throw jools.reject( 'user missing' );
 	}
 
 	if( cmd.passhash === undefined )
 	{
-		throw Jools.reject( 'passhash missing' );
+		throw jools.reject( 'passhash missing' );
 	}
 
 	users = this.$users;
@@ -1637,7 +1637,7 @@ Server.prototype.cmdAuth =
 
 		if( val === null )
 		{
-			return Jools.reject( 'Username unknown' );
+			return jools.reject( 'Username unknown' );
 		}
 
 		users[ cmd.user ] =
@@ -1646,7 +1646,7 @@ Server.prototype.cmdAuth =
 
 	if( users[cmd.user].pass !== cmd.passhash )
 	{
-		return Jools.reject( 'Invalid password' );
+		return jools.reject( 'Invalid password' );
 	}
 
 	return {
@@ -1728,37 +1728,37 @@ Server.prototype.cmdRegister =
 
 	if( username === undefined )
 	{
-		return Jools.reject( 'user missing' );
+		return jools.reject( 'user missing' );
 	}
 
 	if( passhash === undefined )
 	{
-		return Jools.reject( 'passhash missing' );
+		return jools.reject( 'passhash missing' );
 	}
 
 	if( mail === undefined )
 	{
-		return Jools.reject( 'mail missing' );
+		return jools.reject( 'mail missing' );
 	}
 
 	if( news === undefined )
 	{
-		return Jools.reject( 'news missing' );
+		return jools.reject( 'news missing' );
 	}
 
 	if( typeof( news ) !== 'boolean' )
 	{
-		return Jools.reject( 'news not a boolean' );
+		return jools.reject( 'news not a boolean' );
 	}
 
 	if( username.substr( 0, 7 ) === 'visitor' )
 	{
-		return Jools.reject( 'Username must not start with "visitor"' );
+		return jools.reject( 'Username must not start with "visitor"' );
 	}
 
 	if( username.length < 4 )
 	{
-		throw Jools.reject( 'Username too short, min. 4 characters' );
+		throw jools.reject( 'Username too short, min. 4 characters' );
 	}
 
 	user =
@@ -1769,7 +1769,7 @@ Server.prototype.cmdRegister =
 
 	if( user !== null )
 	{
-		return Jools.reject( 'Username already taken' );
+		return jools.reject( 'Username already taken' );
 	}
 
 	user = {
@@ -2064,27 +2064,27 @@ Server.prototype.cmdUpdate =
 
 	if( user === undefined )
 	{
-		throw Jools.reject( 'User missing' );
+		throw jools.reject( 'User missing' );
 	}
 
 	if( passhash === undefined )
 	{
-		throw Jools.reject( 'Passhash missing' );
+		throw jools.reject( 'Passhash missing' );
 	}
 
 	if( this.$users[user].pass !== passhash )
 	{
-		throw Jools.reject( 'Invalid password' );
+		throw jools.reject( 'Invalid password' );
 	}
 
 	if( spaceUser === undefined )
 	{
-		throw Jools.reject( 'spaceUser missing' );
+		throw jools.reject( 'spaceUser missing' );
 	}
 
 	if( spaceTag === undefined )
 	{
-		throw Jools.reject( 'spaceTag missing' );
+		throw jools.reject( 'spaceTag missing' );
 	}
 
 	spaceName = spaceUser + ':' + spaceTag,
@@ -2093,12 +2093,12 @@ Server.prototype.cmdUpdate =
 
 	if( !space )
 	{
-		throw Jools.reject( 'Unknown space' );
+		throw jools.reject( 'Unknown space' );
 	}
 
 	if ( !( seq >= 0 && seq <= space.$seqZ ) )
 	{
-		throw Jools.reject( 'Invalid or missing seq: ' + seq );
+		throw jools.reject( 'Invalid or missing seq: ' + seq );
 	}
 
 	this.refreshPresence(
@@ -2216,7 +2216,7 @@ Server.prototype.expireSleep =
 				null
 		};
 
-	Jools.log( 'ajax', '->', asw );
+	jools.log( 'ajax', '->', asw );
 
 	result = sleep.result;
 
@@ -2358,7 +2358,7 @@ Server.prototype.wake =
 			result =
 				sleep.result;
 
-		Jools.log( 'ajax', '->', asw );
+		jools.log( 'ajax', '->', asw );
 
 		result.writeHead(200,
 			{
@@ -2387,8 +2387,8 @@ Server.prototype.testAccess =
 	)
 {
 	if(
-		!Jools.isString( spaceUser ) ||
-		!Jools.isString( spaceTag )
+		!jools.isString( spaceUser ) ||
+		!jools.isString( spaceTag )
 	)
 	{
 		return 'no';
@@ -2463,12 +2463,12 @@ Server.prototype.cmdGet =
 
 	if( !cmd.user )
 	{
-		throw Jools.reject('user missing');
+		throw jools.reject('user missing');
 	}
 
 	if( !cmd.passhash )
 	{
-		throw Jools.reject( 'passhash missing' );
+		throw jools.reject( 'passhash missing' );
 	}
 
 	if(
@@ -2477,17 +2477,17 @@ Server.prototype.cmdGet =
 		passhash !== this.$users[ user ].pass
 	)
 	{
-		throw Jools.reject( 'wrong user/password' );
+		throw jools.reject( 'wrong user/password' );
 	}
 
 	if( cmd.seq === undefined )
 	{
-		throw Jools.reject( 'seq missing' );
+		throw jools.reject( 'seq missing' );
 	}
 
 	if( cmd.path === undefined )
 	{
-		throw Jools.reject( 'path missing' );
+		throw jools.reject( 'path missing' );
 	}
 
 	// FIXME test spaceUser/Tag
@@ -2548,7 +2548,7 @@ Server.prototype.cmdGet =
 	}
 	else if( !( seq >= 0 && seq <= seqZ ) )
 	{
-		throw Jools.reject( 'invalid seq' );
+		throw jools.reject( 'invalid seq' );
 	}
 
 	tree = space.$tree;
@@ -2592,7 +2592,7 @@ Server.prototype.cmdGet =
 	}
 	catch( err )
 	{
-		throw Jools.reject(
+		throw jools.reject(
 			'cannot get path: ' + err.message
 		);
 	}
@@ -2636,7 +2636,7 @@ Server.prototype.webError =
 
 	message = code + ' ' + message;
 
-	Jools.log( 'web', 'error', code, message );
+	jools.log( 'web', 'error', code, message );
 
 	result.end( message );
 };
@@ -2661,7 +2661,7 @@ Server.prototype.requestListener =
 	red =
 		url.parse( request.url );
 
-	Jools.log(
+	jools.log(
 		'web',
 		request.connection.remoteAddress,
 		red.href
@@ -2763,7 +2763,7 @@ Server.prototype.requestListener =
 				'Internal Server Error'
 			);
 
-			Jools.log(
+			jools.log(
 				'fail',
 				'Error generating Joobj: ' + e.toString( )
 			);
@@ -2788,7 +2788,7 @@ Server.prototype.requestListener =
 				'Internal Server Error'
 			);
 
-			Jools.log(
+			jools.log(
 				'fail',
 				'Missing file: ' + resource.filePath
 			);
@@ -2906,7 +2906,7 @@ Server.prototype.webAjax =
 				asw,
 				cmd;
 
-			Jools.log( 'ajax', '<-', query );
+			jools.log( 'ajax', '<-', query );
 
 			try
 			{
@@ -2935,7 +2935,7 @@ Server.prototype.webAjax =
 				}
 				else
 				{
-					Jools.log(
+					jools.log(
 						'web',
 						'not ok',
 						err.message
@@ -2953,7 +2953,7 @@ Server.prototype.webAjax =
 				return;
 			}
 
-			Jools.log( 'ajax', '->', asw );
+			jools.log( 'ajax', '->', asw );
 
 			result.writeHead( 200,
 				{
@@ -3021,7 +3021,7 @@ Server.prototype.ajaxCmd =
 
 		default :
 
-			return Jools.reject('unknown command');
+			return jools.reject('unknown command');
 	}
 };
 

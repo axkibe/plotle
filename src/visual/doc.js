@@ -19,7 +19,7 @@ var
 var
 	Euclid,
 	fontPool,
-	Jools,
+	jools,
 	shell,
 	theme;
 
@@ -120,8 +120,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 
 	Visual =
 		{
@@ -161,7 +160,7 @@ Doc.prototype._init =
 	twig =
 		twigDup
 			? this.twig
-			: Jools.copy( this.twig );
+			: jools.copy( this.twig );
 
 	this._$pnws = null;
 
@@ -361,7 +360,7 @@ Doc.prototype.getPNWs =
 /*
 | The height of the document.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Doc.prototype,
 	'height',
 	function( )
@@ -422,7 +421,7 @@ Doc.prototype.getPNW =
 /*
 | The width actually used by the document.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Doc.prototype,
 	'spread',
 	function( )
@@ -452,7 +451,7 @@ Jools.lazyValue(
 /*
 | The default font for the document.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Doc.prototype,
 	'font',
 	function( )

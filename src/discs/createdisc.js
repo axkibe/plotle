@@ -21,7 +21,7 @@ var
 	Action,
 	Euclid,
 	Jion,
-	Jools,
+	jools,
 	shell;
 
 
@@ -190,7 +190,7 @@ CreateDisc.prototype._init =
 	twig =
 		twigDup
 			?  this.twig
-			: Jools.copy( this.twig );
+			: jools.copy( this.twig );
 
 	ranks =
 		this.ranks;
@@ -245,7 +245,7 @@ CreateDisc.prototype._init =
 /*
 | The disc panel's fabric.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	CreateDisc.prototype,
 	'_fabric',
 	function( )
@@ -406,7 +406,7 @@ CreateDisc.prototype.draw =
 		'x',
 			0,
 		'y',
-			Jools.half(
+			jools.half(
 				this.view.height - this.style.height
 			)
 	);

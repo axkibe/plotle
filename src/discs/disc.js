@@ -19,7 +19,7 @@ Discs =
 */
 var
 	Euclid,
-	Jools,
+	jools,
 	theme;
 
 
@@ -72,7 +72,7 @@ Disc._init =
 
 	eh = style.ellipse.height,
 
-	ny = Jools.half( this.view.height - height );
+	ny = jools.half( this.view.height - height );
 
 	this.frame =
 		Euclid.Rect.create(
@@ -99,21 +99,21 @@ Disc._init =
 					'x',
 						width - 1 - ew,
 					'y',
-						0 - Jools.half( eh - height )
+						0 - jools.half( eh - height )
 				),
 			'pse',
 				Euclid.Point.create(
 					'x',
 						width - 1,
 					'y',
-						height + Jools.half( eh - height )
+						height + jools.half( eh - height )
 				),
 			'gradientPC',
 				Euclid.Point.create(
 					'x',
 						-600,
 					'y',
-						Jools.half( height )
+						jools.half( height )
 				),
 			'gradientR1',
 				650

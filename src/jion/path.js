@@ -17,7 +17,7 @@ Jion = Jion || { };
 | Imports.
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -78,7 +78,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools = require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 
 	Jion.Path = require( '../jion/this' )( module );
 }
@@ -505,7 +505,7 @@ Path.prototype.subPathOf =
 /*
 | Turns the path to a string.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Path.prototype,
 	'string',
 	function( )
@@ -578,7 +578,7 @@ Path.prototype.toJSON =
 /*
 | Returns true is this path is empty.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Path.prototype,
 	'isEmpty',
 	function( )

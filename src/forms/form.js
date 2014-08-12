@@ -21,7 +21,7 @@ Forms = Forms || { };
 var
 	Euclid,
 	Jion,
-	Jools,
+	jools,
 	Mark,
 	reply,
 	shell,
@@ -72,7 +72,7 @@ Form.init =
 	var
 		twig =
 			// FIXME do not copy if this.twig !== inherit.twig
-			Jools.copy( this.twig ),
+			jools.copy( this.twig ),
 		ranks =
 			this.ranks;
 
@@ -540,7 +540,7 @@ Form.prototype._widgetPath =
 /*
 | The attention center.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Form.prototype,
 	'attentionCenter',
 	function( )

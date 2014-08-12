@@ -19,7 +19,7 @@ var
 	Action,
 	Euclid,
 	Jion,
-	Jools,
+	jools,
 	Mark,
 	Peer,
 	reply,
@@ -150,8 +150,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 
 	Visual =
 		{
@@ -162,7 +161,7 @@ if( SERVER )
 
 var
 	Space;
-	
+
 Space = Visual.Space;
 
 /*
@@ -182,7 +181,7 @@ Space.prototype._init =
 
 	if( !twigDup )
 	{
-		this.twig = Jools.copy( this.twig );
+		this.twig = jools.copy( this.twig );
 	}
 
 	for( var k in this.twig )
@@ -328,7 +327,7 @@ Space.prototype.atRank =
 /*
 | The attention center.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Space.prototype,
 	'attentionCenter',
 	function( )

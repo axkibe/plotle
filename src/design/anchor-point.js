@@ -20,7 +20,7 @@ Design =
 | Import
 */
 var
-	Jools,
+	jools,
 	Euclid;
 
 /*
@@ -141,6 +141,10 @@ AnchorPoint.prototype.compute =
 		frame
 	)
 {
+	var
+		half,
+		pnw,
+		pse;
 
 /**/if( CHECK )
 /**/{
@@ -150,15 +154,11 @@ AnchorPoint.prototype.compute =
 /**/	}
 /**/}
 
-	var
-		half =
-			Jools.half,
+	half = jools.half;
 
-		pnw =
-			frame.pnw,
+	pnw = frame.pnw;
 
-		pse =
-			frame.pse;
+	pse = frame.pse;
 
 	switch( this.anchor )
 	{

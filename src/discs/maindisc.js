@@ -21,7 +21,7 @@ Discs =
 */
 var
 	Euclid,
-	Jools,
+	jools,
 	shell;
 
 /*
@@ -185,7 +185,7 @@ MainDisc.prototype._init =
 
 	var
 		twig =
-			Jools.copy( this.twig ), // FIXME only if needed
+			jools.copy( this.twig ), // FIXME only if needed
 		path,
 		ranks =
 			this.ranks,
@@ -314,7 +314,7 @@ MainDisc.prototype._init =
 |
 | FUTURE make user an own object.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	MainDisc.prototype,
 	'_userIsGuest',
 	function( )
@@ -332,7 +332,7 @@ Jools.lazyValue(
 /*
 | The disc panel's fabric.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	MainDisc.prototype,
 	'_fabric',
 	function( )

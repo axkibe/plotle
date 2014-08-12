@@ -61,7 +61,7 @@ var
 			aVarDec :
 				require( './a-var-dec' ),
 		},
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 
@@ -86,7 +86,7 @@ aVList.prototype.aVarDec =
 	return (
 		this.create(
 			'twig:add',
-			Jools.uid( ), // FIXME
+			jools.uid( ), // FIXME
 			varDec
 		)
 	);

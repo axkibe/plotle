@@ -18,7 +18,7 @@ Forms = Forms || { };
 | Imports
 */
 var
-	Jools,
+	jools,
 	Mark;
 
 
@@ -153,8 +153,7 @@ Jockey.prototype._init =
 
 	if( !twigDup )
 	{
-		this.twig =
-			Jools.copy( this.twig );
+		this.twig = jools.copy( this.twig );
 	}
 
 	for(
@@ -163,11 +162,9 @@ Jockey.prototype._init =
 		a++
 	)
 	{
-		name =
-			this.ranks[ a ],
+		name = this.ranks[ a ],
 
-		form =
-			this.twig[ name ];
+		form = this.twig[ name ];
 
 		if( !form.path )
 		{

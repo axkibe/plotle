@@ -18,7 +18,7 @@ Discs = Discs || { };
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -146,8 +146,8 @@ icons.remove =
 	var ex = wx + w;
 	var sy = ny + h;
 
-	var cx = Jools.half( wx + ex );
-	var cy = Jools.half( ny + sy );
+	var cx = jools.half( wx + ex );
+	var cy = jools.half( ny + sy );
 
 	// arm with and height
 	var aw = 2;

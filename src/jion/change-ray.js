@@ -18,7 +18,7 @@ Jion = Jion || { };
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -79,7 +79,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
+	jools =
 		require( '../jools/jools'  );
 
 	Jion =
@@ -139,7 +139,7 @@ ChangeRay.prototype._init =
 /*
 | Returns a change ray with inverted changes.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	ChangeRay.prototype,
 	'Invert',
 	function( )
@@ -205,7 +205,7 @@ ChangeRay.prototype.Append =
 /*
 | Returns the length of the changeray
 */
-Jools.lazyValue(
+jools.lazyValue(
 	ChangeRay.prototype,
 	'length',
 	function( )
@@ -400,7 +400,7 @@ ChangeRay.prototype.ChangeTree =
 	}
 
 	// FUTURE make a "changeResult" jion.
-	return Jools.immute(
+	return jools.immute(
 		{
 			tree :
 				tree,

@@ -41,7 +41,7 @@ var
 		require( '../format/formatter' ),
 	Generator =
 		require( '../jion/gen' ),
-	Jools =
+	jools =
 		require( '../jools/jools' ),
 	ast =
 		null,
@@ -87,7 +87,7 @@ for(
 	{
 		if( arg[ 1 ] !== '-' )
 		{
-			Jools.log(
+			jools.log(
 				'fail',
 				'Invalid argument: ' + arg
 			);
@@ -106,7 +106,7 @@ for(
 
 			default :
 
-				Jools.log(
+				jools.log(
 					'fail',
 					'Invalid argument: ' + arg
 				);
@@ -117,7 +117,7 @@ for(
 
 	if( listingName )
 	{
-		Jools.log(
+		jools.log(
 			'fail',
 			'Cannot handle more than one listing.'
 		);
@@ -135,7 +135,7 @@ for(
 */
 if( !listingName )
 {
-	Jools.log(
+	jools.log(
 		'fail',
 		'Listing missing.'
 	);
@@ -214,7 +214,7 @@ for(
 		outStat.mtime <= inStat.mtime
 	)
 	{
-		Jools.log(
+		jools.log(
 			'genjion',
 			'Reading ' + file.inFilename
 		);
@@ -241,7 +241,7 @@ for(
 		output =
 			Formatter.format( ast );
 
-		Jools.log(
+		jools.log(
 			'genjion',
 			'Writing ' + file.outFilename
 		);
@@ -259,14 +259,14 @@ for(
 
 if (didSomething )
 {
-	Jools.log(
+	jools.log(
 		'genjion',
 		'done updating ' + listingName
 	);
 }
 else
 {
-	Jools.log(
+	jools.log(
 		'genjion',
 		'nothing to be done for ' + listingName
 	);

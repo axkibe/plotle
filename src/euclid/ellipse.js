@@ -19,7 +19,7 @@ Euclid =
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -129,10 +129,10 @@ Ellipse.prototype._init =
 
 		// middles of cardinal cords
 		my =
-			Jools.half( ny + sy ),
+			jools.half( ny + sy ),
 
 		mx =
-			Jools.half(wx + ex),
+			jools.half(wx + ex),
 
 		// cardinal points
 		pw =
@@ -175,7 +175,7 @@ Ellipse.prototype._init =
 /*
 | Center point of an ellipse.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Ellipse.prototype,
 	'pc',
 	function()
@@ -183,11 +183,11 @@ Jools.lazyValue(
 		return (
 			Euclid.Point.create(
 				'x',
-					Jools.half(
+					jools.half(
 						this.pnw.x + this.pse.x
 					),
 				'y',
-					Jools.half(
+					jools.half(
 						this.pnw.y + this.pse.y
 					)
 			)
@@ -199,7 +199,7 @@ Jools.lazyValue(
 /*
 | Gradient's center point.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Ellipse.prototype,
 	'gradientPC',
 	function( )
@@ -213,11 +213,11 @@ Jools.lazyValue(
 		return (
 			Euclid.Point.create(
 				'x',
-					Jools.half(
+					jools.half(
 						this.pnw.x + this.pse.x
 					),
 				'y',
-					Jools.half(
+					jools.half(
 						this.pnw.y + this.pse.y
 					)
 			)
@@ -229,7 +229,7 @@ Jools.lazyValue(
 /*
 | Gradient inner radius.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Ellipse.prototype,
 	'gradientR1',
 	function( )
@@ -259,7 +259,7 @@ Jools.lazyValue(
 /*
 | Gradient inner radius.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Ellipse.prototype,
 	'gradientR0',
 	function( )

@@ -20,7 +20,7 @@ Euclid =
 | Imports
 */
 var
-	Jools;
+	jools;
 
 /*
 | Capsule
@@ -71,7 +71,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 	Euclid.Point =

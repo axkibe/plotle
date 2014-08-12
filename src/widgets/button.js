@@ -23,7 +23,7 @@ var
 	Accent,
 	Discs,
 	Euclid,
-	Jools,
+	jools,
 	reply,
 	shell;
 
@@ -283,7 +283,7 @@ Button.prototype.sketch =
 /*
 | The button's fabric.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Button.prototype,
 	'_fabric',
 	function( )

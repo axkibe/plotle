@@ -20,7 +20,7 @@ var
 	JoobjProto,
 
 
-	Jools;
+	jools;
 
 
 /*
@@ -37,7 +37,7 @@ if( SERVER )
 {
 	JoobjProto = require( '../../src/jion/proto' );
 
-	Jools = require( '../../src/jools/jools' );
+	jools = require( '../../src/jools/jools' );
 }
 
 
@@ -57,7 +57,7 @@ var Constructor =
 
 		this.variable = v_variable;
 
-		Jools.immute( this );
+		jools.immute( this );
 	};
 
 

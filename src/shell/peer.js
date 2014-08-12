@@ -17,7 +17,7 @@ var
 */
 var
 	Jion,
-	Jools,
+	jools,
 	shell,
 	Visual;
 
@@ -77,7 +77,7 @@ Peer.auth =
 		passhash === null
 	)
 	{
-		passhash = Jools.uid( );
+		passhash = jools.uid( );
 	}
 
 	shell.link.auth(

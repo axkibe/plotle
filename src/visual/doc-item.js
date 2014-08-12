@@ -21,7 +21,7 @@ Visual =
 | Imports
 */
 var
-	Jools,
+	jools,
 	Mark,
 	shell;
 
@@ -38,7 +38,7 @@ var
 */
 if( SERVER )
 {
-	Jools =
+	jools =
 		require( '../jools/jools' );
 }
 
@@ -58,7 +58,7 @@ Visual.DocItem =
 // FIXME this is ugly
 if( !SERVER )
 {
-	Jools.subclass(
+	jools.subclass(
 		DocItem,
 		Visual.Item
 	);
@@ -85,7 +85,7 @@ DocItem.prototype.dragStop =
 /*
 | The attention center.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	DocItem.prototype,
 	'attentionCenter',
 	function( )
@@ -93,7 +93,7 @@ Jools.lazyValue(
 		return (
 			this.zone.pnw.y
 			+
-			Jools.limit(
+			jools.limit(
 				0,
 				this.doc.attentionCenter( this )
 				-

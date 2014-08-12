@@ -17,7 +17,7 @@ var
 | Imports
 */
 var
-	Jools,
+	jools,
 	Visual;
 
 
@@ -239,11 +239,7 @@ IFaceSym.prototype.goToSeq =
 
 	seq =
 	this.$seq =
-		Jools.limit(
-			0,
-			seq,
-			cZ
-		);
+		jools.limit( 0, seq, cZ );
 
 	return seq;
 };

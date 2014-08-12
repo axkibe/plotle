@@ -16,7 +16,7 @@ Euclid =
 /*
 | Imports
 */
-var Jools;
+var jools;
 
 
 /*
@@ -60,7 +60,7 @@ Euclid.Margin =
 		this.w = w;
 	}
 
-	Jools.immute(this);
+	jools.immute(this);
 };
 
 
@@ -96,7 +96,9 @@ Margin.prototype.toJSON = function()
 /*
 | East + west margin = x
 */
-Jools.lazyValue(Margin.prototype, 'x',
+jools.lazyValue(
+	Margin.prototype,
+	'x',
 	function( )
 	{
 		return this.e + this.w;
@@ -107,7 +109,9 @@ Jools.lazyValue(Margin.prototype, 'x',
 /*
 | North + south margin = y
 */
-Jools.lazyValue(Margin.prototype, 'y',
+jools.lazyValue(
+	Margin.prototype,
+	'y',
 	function( )
 	{
 		return this.n + this.s;

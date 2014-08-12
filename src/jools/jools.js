@@ -9,8 +9,9 @@
 | Export
 */
 var
-	Jools =
-		{ };
+	jools;
+
+jools = { };
 
 
 /*
@@ -37,13 +38,13 @@ if( SERVER )
 	sha1hex =
 		require( './sha1' ).sha1hex;
 
-	Jools.devel =
+	jools.devel =
 		config.develServer;
 }
 else
 {
 	// in shell
-	Jools.devel =
+	jools.devel =
 		config.develShell;
 }
 
@@ -56,14 +57,14 @@ var
 /*
 | Largest integer value.
 */
-Jools.MAX_INTEGER =
+jools.MAX_INTEGER =
 	9007199254740992;
 
 
 /*
 | Compares two things.
 */
-Jools.compare =
+jools.compare =
 	function( o, p )
 {
 	if( o > p )
@@ -84,7 +85,7 @@ Jools.compare =
 | Returns true if o is defined
 | FIXME remove
 */
-Jools.is =
+jools.is =
 	function( o )
 {
 	return typeof( o ) !== 'undefined';
@@ -94,7 +95,7 @@ Jools.is =
 /*
 | Returns true if o is defined and not null
 */
-Jools.isnon =
+jools.isnon =
 	function( o )
 {
 	return (
@@ -107,7 +108,7 @@ Jools.isnon =
 /*
 | Returns true if o is an integer number
 */
-Jools.isInteger =
+jools.isInteger =
 	function( o )
 {
 	return (
@@ -120,7 +121,7 @@ Jools.isInteger =
 /*
 | Returns true if o is an Array
 */
-Jools.isArray =
+jools.isArray =
 	function( o )
 {
 	if( !o )
@@ -135,7 +136,7 @@ Jools.isArray =
 /*
 | Returns true if o is a String
 */
-Jools.isString  =
+jools.isString  =
 	function( o )
 {
 	return (
@@ -148,7 +149,7 @@ Jools.isString  =
 /*
 | Limits value to be between min and max
 */
-Jools.limit =
+jools.limit =
 	function(
 		min,
 		val,
@@ -208,19 +209,19 @@ var fail =
 
 	b.unshift( 'fail' );
 
-	Jools.log.apply(
+	jools.log.apply(
 		null,
 		b
 	);
 
-	throw Jools.reject( a.join(' ') );
+	throw jools.reject( a.join(' ') );
 };
 
 
 /*
 | Throws a reject if condition is not met.
 */
-Jools.check =
+jools.check =
 	function( condition )
 {
 	if( !condition )
@@ -236,7 +237,7 @@ Jools.check =
 /*
 | Throws a reject if v is not within limits
 */
-Jools.checkLimits =
+jools.checkLimits =
 	function(
 		v,
 		low,
@@ -261,7 +262,7 @@ Jools.checkLimits =
 /*
 | Hashes the password.
 */
-Jools.passhash =
+jools.passhash =
 	function( pass )
 {
 	return sha1hex( pass + '-meshcraft-8833' );
@@ -273,18 +274,18 @@ Jools.passhash =
 |
 | FUTURE remove
 */
-Jools.reject =
+jools.reject =
 	function(
 		message
 	)
 {
 	// in devel mode any failure is fatal.{
-	if( Jools.devel )
+	if( jools.devel )
 	{
 		throw new Error( message );
 	}
 
-	Jools.log(
+	jools.log(
 		'reject',
 		'reject',
 		message
@@ -303,7 +304,7 @@ Jools.reject =
 /*
 | Returns an unique identifier.
 */
-Jools.uid =
+jools.uid =
 	function( )
 {
 	var
@@ -340,7 +341,7 @@ if( SERVER )
 /*
 | Creates a random password with only numbers and lower case alphas.
 */
-Jools.randomPassword =
+jools.randomPassword =
 	function(
 		length
 	)
@@ -403,7 +404,7 @@ if( !Object.freeze )
 | Subclassing helper.
 |
 */
-Jools.subclass =
+jools.subclass =
 	function(
 		sub,   // prototype to become a subclass.
 		base   // either a prototype to become the base.
@@ -425,7 +426,7 @@ Jools.subclass =
 /*
 | Throws an error if any argument is not an integer.
 */
-Jools.ensureInt =
+jools.ensureInt =
 	function(
 		// integers
 	)
@@ -453,7 +454,7 @@ Jools.ensureInt =
 |
 | if writable is undefined, defaults to false
 */
-Jools.innumerable =
+jools.innumerable =
 	function(
 		obj,
 		key,
@@ -477,7 +478,7 @@ Jools.innumerable =
 /*
 | A value is computed and fixated only when needed.
 */
-Jools.lazyValue =
+jools.lazyValue =
 	function(
 		proto,
 		key,
@@ -506,7 +507,7 @@ Jools.lazyValue =
 				}
 
 				return (
-					Jools.innumerable(
+					jools.innumerable(
 						this,
 						ckey,
 						getter.call( this )
@@ -521,7 +522,7 @@ Jools.lazyValue =
 /*
 | A lazy value is computed and fixated before it is needed.
 */
-Jools.aheadValue =
+jools.aheadValue =
 	function(
 		obj,
 		key,
@@ -560,7 +561,7 @@ Jools.aheadValue =
 /**/}
 
 	return (
-		Jools.innumerable(
+		jools.innumerable(
 			obj,
 			ckey,
 			value
@@ -572,7 +573,7 @@ Jools.aheadValue =
 /*
 | Copies one object (not deep!)
 */
-Jools.copy =
+jools.copy =
 	function(
 		o  // the object to copy from
 	)
@@ -599,7 +600,7 @@ Jools.copy =
 /*
 | Returns true if a node matches another node
 */
-Jools.matches =
+jools.matches =
 	function(
 		// o1,
 		// o2
@@ -656,7 +657,7 @@ Jools.matches =
 			k1[ a ];
 
 		if(
-			!Jools.matches(
+			!jools.matches(
 				o1[ k ],
 				o2[ k ]
 			)
@@ -926,7 +927,7 @@ var _inspect =
 | Logs a number of inspected argument
 | if category is configured to be logged.
 */
-Jools.log =
+jools.log =
 	function(
 		category
 	)
@@ -975,7 +976,7 @@ Jools.log =
 /*
 | Logs creation of new entities.
 */
-Jools.logNew =
+jools.logNew =
 	function(
 		entity,
 		path
@@ -990,7 +991,7 @@ Jools.logNew =
 		return;
 	}
 
-	Jools.log(
+	jools.log(
 		'news',
 		entity.reflex,
 		path.string
@@ -1001,7 +1002,7 @@ Jools.logNew =
 /*
 | Shortcut for log('debug', ...);
 */
-Jools.debug =
+jools.debug =
 	function( )
 {
 	if( !config.log.debug )
@@ -1038,7 +1039,7 @@ Jools.debug =
 /*
 | Returns a descriptive string for an object.
 */
-Jools.inspect =
+jools.inspect =
 	function( o )
 {
 	var a = [ ];
@@ -1057,7 +1058,7 @@ Jools.inspect =
 /*
 | Makes an object immutable
 */
-Jools.immute =
+jools.immute =
 	function(
 		obj
 	)
@@ -1122,7 +1123,7 @@ Jools.immute =
 |
 | Used for developing during changes
 */
-Jools.keyNonGrata =
+jools.keyNonGrata =
 	function(
 		obj,
 		key
@@ -1162,7 +1163,7 @@ Jools.keyNonGrata =
 };
 
 // divides by 2 and rounds up
-Jools.half =
+jools.half =
 	function( v )
 {
 	return Math.round( v / 2 );
@@ -1175,8 +1176,7 @@ Jools.half =
 */
 if( SERVER )
 {
-	module.exports =
-		Jools;
+	module.exports = jools;
 }
 
 

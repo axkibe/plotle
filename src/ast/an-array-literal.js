@@ -37,7 +37,7 @@ if( JION )
 var
 	AnArrayLiteral =
 		require( '../jion/this' )( module ),
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 
@@ -52,7 +52,7 @@ AnArrayLiteral.prototype.Append =
 	return (
 		this.create(
 			'twig:add',
-			Jools.uid( ), // FIXME
+			jools.uid( ), // FIXME
 			expr
 		)
 	);

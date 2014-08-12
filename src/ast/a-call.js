@@ -45,7 +45,7 @@ if( JION )
 var
 	aCall =
 		require( '../jion/this' )( module ),
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 /*
@@ -59,7 +59,7 @@ aCall.prototype.Append =
 	return (
 		this.create(
 			'twig:add',
-			Jools.uid( ), // FIXME
+			jools.uid( ), // FIXME
 			expr
 		)
 	);

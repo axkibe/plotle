@@ -20,7 +20,7 @@ var
 	JoobjProto,
 
 
-	Jools;
+	jools;
 
 
 /*
@@ -37,7 +37,7 @@ if( SERVER )
 {
 	JoobjProto = require( '../../src/jion/proto' );
 
-	Jools = require( '../../src/jools/jools' );
+	jools = require( '../../src/jools/jools' );
 }
 
 
@@ -54,11 +54,11 @@ var Constructor =
 
 		this.ranks = ranks;
 
-		Jools.immute( this );
+		jools.immute( this );
 
-		Jools.immute( twig );
+		jools.immute( twig );
 
-		Jools.immute( ranks );
+		jools.immute( ranks );
 	};
 
 
@@ -139,7 +139,7 @@ prototype.create =
 
 				if( !twigDup )
 				{
-					twig = Jools.copy( twig );
+					twig = jools.copy( twig );
 
 					ranks = ranks.slice( );
 
@@ -165,7 +165,7 @@ prototype.create =
 
 				if( !twigDup )
 				{
-					twig = Jools.copy( twig );
+					twig = jools.copy( twig );
 
 					ranks = ranks.slice( );
 
@@ -189,7 +189,7 @@ prototype.create =
 
 				if( !twigDup )
 				{
-					twig = Jools.copy( twig );
+					twig = jools.copy( twig );
 
 					ranks = ranks.slice( );
 
@@ -224,7 +224,7 @@ prototype.create =
 
 				if( !twigDup )
 				{
-					twig = Jools.copy( twig );
+					twig = jools.copy( twig );
 
 					ranks = ranks.slice( );
 

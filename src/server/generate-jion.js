@@ -32,7 +32,7 @@ var
 		require( '../format/formatter' ),
 	Generator =
 		require( '../jion/gen' ),
-	Jools =
+	jools =
 		require( '../jools/jools' ),
 	sus =
 		require( 'suspend' ),
@@ -93,7 +93,7 @@ GenerateJoobj.run =
 		inputFileStat.mtime > outputFileStat.mtime
 	)
 	{
-		Jools.log(
+		jools.log(
 			'start',
 			'generating ' +
 				resource.aliases[ 0 ]

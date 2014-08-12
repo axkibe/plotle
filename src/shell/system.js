@@ -22,7 +22,7 @@ var
 var
 	config,
 	Euclid,
-	Jools,
+	jools,
 	Shell,
 	shell;
 
@@ -168,7 +168,7 @@ var System =
 	// a drag, if it goes up before either happens, its a click
 
 	this._$atween =
-		Jools.immute({
+		jools.immute({
 			// timer for atween state
 			timer :
 				null,
@@ -259,7 +259,7 @@ var System =
 | Default system behavior settings
 */
 var _settings =
-	Jools.immute(
+	jools.immute(
 		{
 			// blink speed of the caret.
 			caretBlinkSpeed :
@@ -314,7 +314,12 @@ System.prototype.failScreen =
 		message
 	)
 {
-	var body;
+	var
+		body,
+		butReload,
+		divContent,
+		divMessage,
+		divWrap;
 
 	if( console )
 	{
@@ -337,21 +342,16 @@ System.prototype.failScreen =
 
 	body.removeChild( _hiddenInput );
 
-	var
-		divWrap =
-			document.createElement( 'div' ),
+	divWrap = document.createElement( 'div' );
 
-		divContent =
-			document.createElement( 'div' ),
+	divContent = document.createElement( 'div' ),
 
-		divMessage =
-			document.createElement( 'div' ),
+	divMessage = document.createElement( 'div' ),
 
-		butReload =
-			document.createElement( 'button' );
-
+	butReload = document.createElement( 'button' );
 
 	body.appendChild( divWrap );
+
 	body.style.backgroundColor = 'rgb(250, 245, 206)';
 
 	document.getElementById( 'viewport' ).content =
@@ -504,10 +504,10 @@ System.prototype._onAtweenTime =
 /**/{
 /**/	if( _pointingState !== 'atween' )
 /**/	{
-/**/		Jools.log(
+/**/		jools.log(
 /**/			'warn',
 /**/			'dragTime() in wrong action mode'
-/**/	);
+/**/		);
 /**/
 /**/		return;
 /**/	}
@@ -785,7 +785,7 @@ System.prototype._onMouseDown =
 		'atween';
 
 	this._$atween =
-		Jools.immute({
+		jools.immute({
 			pos :
 				p,
 
@@ -826,7 +826,7 @@ System.prototype._pointingHover =
 	)
 {
 	this._$hover =
-		Jools.immute(
+		jools.immute(
 			{
 				p :
 					p,
@@ -1125,7 +1125,7 @@ System.prototype._onMouseWheel =
 	}
 	else
 	{
-		Jools.log(
+		jools.log(
 			'warn',
 			'invalid wheel event'
 		);
@@ -1177,7 +1177,7 @@ System.prototype._onTouchStart =
 		'atween';
 
 	this._$atween =
-		Jools.immute({
+		jools.immute({
 			pos :
 				p,
 
@@ -1653,7 +1653,7 @@ System.prototype._steerAttention =
 {
 	var
 		ac;
-	
+
 	ac = shell.attentionCenter;
 
 	if( ac === null )
@@ -1663,7 +1663,7 @@ System.prototype._steerAttention =
 	else
 	{
 		ac =
-			Jools.limit(
+			jools.limit(
 				0,
 				ac,
 				_height - 15

@@ -12,7 +12,7 @@ var
 	Action,
 	IFaceSym,
 	Jion,
-	Jools,
+	jools,
 	Peer;
 
 /*
@@ -286,14 +286,14 @@ TestPad.prototype._init =
 		'' + this.seq;
 
 	this.cursorLine =
-		Jools.limit(
+		jools.limit(
 			0,
 			this.cursorLine,
 			doc.ranks.length - 1
 		);
 
 	this.cursorAt =
-		Jools.limit(
+		jools.limit(
 			0,
 			this.cursorAt,
 			doc.twig[ doc.ranks[ this.cursorLine ] ].text.length
@@ -387,7 +387,7 @@ TestPad.prototype.onMouseDown =
 
 	var
 		cLine =
-			Jools.limit(
+			jools.limit(
 				0,
 				Math.floor( y / measure.offsetHeight ),
 				doc.ranks.length - 1
@@ -399,7 +399,7 @@ TestPad.prototype.onMouseDown =
 		'cursorLine',
 			cLine,
 		'cursorAt',
-			Jools.limit(
+			jools.limit(
 				0,
 				Math.floor( x / measure.offsetWidth ),
 				cText.length
@@ -714,7 +714,7 @@ TestPad.prototype.send =
 		'cursorAt',
 			cursorAt,
 		'seq',
-			Jools.MAX_INTEGER
+			jools.MAX_INTEGER
 	);
 };
 
@@ -1188,7 +1188,7 @@ TestPad.prototype.onUpNowButton =
 {
 	testPad.create(
 		'seq',
-			Jools.MAX_INTEGER
+			jools.MAX_INTEGER
 	);
 
 	this.elements.input.focus( );

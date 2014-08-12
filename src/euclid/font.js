@@ -20,7 +20,7 @@ Euclid =
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -85,7 +85,7 @@ if( JION )
 /*
 | The CSS-string for this font.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Euclid.Font.prototype,
 	'css',
 	function( )

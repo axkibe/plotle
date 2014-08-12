@@ -22,7 +22,7 @@ Widgets =
 var
 	Accent,
 	Euclid,
-	Jools,
+	jools,
 	Mark,
 	reply,
 	shell,
@@ -453,7 +453,7 @@ Input.prototype.sketchMask =
 /*
 | Returns the fabric for the input field.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Input.prototype,
 	'_fabric',
 	function( )
@@ -1099,25 +1099,27 @@ Input.prototype.click =
 /*
 | The attention center.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Input.prototype,
 	'attentionCenter',
 	function( )
 	{
 		var
-			fs =
-				this.font.size,
+			descend,
+			fs,
+			p,
+			s;
 
-			descend =
-				fs * theme.bottombox,
+		fs = this.font.size,
 
-			p =
-				this.locateOffset(
-					this.mark.caretAt
-				),
+		descend = fs * theme.bottombox,
 
-			s =
-				Math.round( p.y + descend + 1 );
+		p =
+			this.locateOffset(
+				this.mark.caretAt
+			),
+
+		s = Math.round( p.y + descend + 1 );
 
 		return (
 			this.frame.pnw.y + s - Math.round( fs + descend )

@@ -20,7 +20,7 @@ Euclid =
 | Imports
 */
 var
-	Jools,
+	jools,
 	theme;
 
 
@@ -100,7 +100,7 @@ View.prototype._init =
 	function( )
 {
 	this.fact =
-		Jools.limit(
+		jools.limit(
 			theme.zoom.min,
 			this.fact,
 			theme.zoom.max
@@ -246,7 +246,7 @@ View.prototype.dey =
 |
 | FUTURE remove?
 */
-Jools.lazyValue(
+jools.lazyValue(
 	View.prototype,
 	'home',
 	function( )
@@ -265,7 +265,7 @@ Jools.lazyValue(
 /*
 | A view with pan zero and fact zero
 */
-Jools.lazyValue(
+jools.lazyValue(
 	View.prototype,
 	'sizeOnly',
 	function( )
@@ -446,7 +446,7 @@ View.prototype.review =
 	else
 	{
 		f1 =
-			Jools.limit(
+			jools.limit(
 				theme.zoom.min,
 				this.fact + df,
 				theme.zoom.max
@@ -479,7 +479,7 @@ View.prototype.review =
 /*
 | The zero based frame of this view.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	View.prototype,
 	'baseFrame',
 	function( )

@@ -17,7 +17,7 @@ var
 */
 var
 	Euclid,
-	Jools,
+	jools,
 	Peer,
 	shell,
 	Style,
@@ -146,7 +146,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
+	jools =
 		require( '../jools/jools' ),
 
 	Visual =
@@ -159,7 +159,7 @@ if( SERVER )
 
 var
 	Label;
-	
+
 Label = Visual.Label;
 
 
@@ -250,7 +250,7 @@ if( SHELL )
 | Resize handles to show on labels
 */
 Label.prototype.handles =
-	Jools.immute(
+	jools.immute(
 		{
 			ne :
 				true,
@@ -287,7 +287,7 @@ Label.prototype.highlight =
 /*
 | The label's silhoutte.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Label.prototype,
 	'silhoutte',
 	function( )
@@ -307,7 +307,7 @@ Jools.lazyValue(
 /*
 | The items silhoutte anchored at zero.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Label.prototype,
 	'zeroSilhoutte',
 	function( )
@@ -395,7 +395,7 @@ Label.prototype.dragStop =
 /*
 | The label's fabric.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Label.prototype,
 	'_fabric',
 	function( )

@@ -20,7 +20,7 @@ Euclid =
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -76,7 +76,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 	Euclid.Point =
@@ -170,7 +170,7 @@ Rect.createArbitrary =
 /*
 | Rectangle width.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Rect.prototype,
 	'width',
 	function( )
@@ -183,7 +183,7 @@ Jools.lazyValue(
 /*
 | Rectangle height.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Rect.prototype,
 	'height',
 	function( )
@@ -196,7 +196,7 @@ Jools.lazyValue(
 /*
 | A rectangle of same size with pnw at 0/0
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Rect.prototype,
 	'zeropnw',
 	function( )
@@ -492,7 +492,7 @@ Rect.prototype.cardinalResize =
 /*
 | Point in the center.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Rect.prototype,
 	'pc',
 	function( )
@@ -500,9 +500,9 @@ Jools.lazyValue(
 		return (
 			Euclid.Point.create(
 				'x',
-					Jools.half( this.pse.x + this.pnw.x ),
+					jools.half( this.pse.x + this.pnw.x ),
 				'y',
-					Jools.half( this.pse.y + this.pnw.y )
+					jools.half( this.pse.y + this.pnw.y )
 			)
 		);
 	}
@@ -512,7 +512,7 @@ Jools.lazyValue(
 /*
 | Point in the north.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Rect.prototype,
 	'pn',
 	function( )
@@ -520,7 +520,7 @@ Jools.lazyValue(
 		return (
 			Euclid.Point.create(
 				'x',
-					Jools.half( this.pse.x + this.pnw.x ),
+					jools.half( this.pse.x + this.pnw.x ),
 				'y',
 					this.pnw.y
 			)
@@ -532,7 +532,7 @@ Jools.lazyValue(
 /*
 | West point.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Rect.prototype,
 	'w',
 	function( )
@@ -542,7 +542,7 @@ Jools.lazyValue(
 				'x',
 					this.pnw.x,
 				'y',
-					Jools.half( this.pse.y + this.pnw.y )
+					jools.half( this.pse.y + this.pnw.y )
 			)
 		);
 	}
@@ -552,7 +552,7 @@ Jools.lazyValue(
 /*
 | East point.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Rect.prototype,
 	'e',
 	function( )
@@ -562,7 +562,7 @@ Jools.lazyValue(
 				'x',
 					this.pse.x,
 				'y',
-					Jools.half( this.pse.y + this.pnw.y )
+					jools.half( this.pse.y + this.pnw.y )
 			)
 		);
 	}
@@ -604,15 +604,13 @@ Rect.renew =
 		//, ...  a list of additional rects to look for objects to be reused
 	)
 {
+	// FIXMe
 	var
-		pnw =
-			null,
+		pnw = null,
 
-		pse =
-			null,
+		pse = null,
 
-		isnon =
-			Jools.isnon,
+		isnon = jools.isnon,
 
 		a,
 		aZ,

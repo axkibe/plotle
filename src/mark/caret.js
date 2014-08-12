@@ -17,7 +17,7 @@ var
 */
 var
 	Jion,
-	Jools;
+	jools;
 
 
 /*
@@ -120,7 +120,7 @@ Caret.prototype.hasCaret =
 /*
 | The item's path.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Caret.prototype,
 	'itemPath',
 	function( )
@@ -142,7 +142,7 @@ Jools.lazyValue(
 /*
 | The widget's path.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Caret.prototype,
 	'widgetPath',
 	function( )
@@ -166,7 +166,7 @@ Jools.lazyValue(
 |
 | This allows a common interface with text range.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Caret.prototype,
 	'caretPath',
 	function( )
@@ -181,7 +181,7 @@ Jools.lazyValue(
 |
 | This allows a common interface with text range.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Caret.prototype,
 	'caretAt',
 	function( )

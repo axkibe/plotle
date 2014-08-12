@@ -78,14 +78,14 @@ var
 var
 	Context =
 		require( '../jion/this' )( module ),
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 
 /*
 | Seperator is a space when inline otherwise a newline.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Context.prototype,
 	'sep',
 	function( )
@@ -98,7 +98,7 @@ Jools.lazyValue(
 /*
 | Transforms the context into a tab indentation.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Context.prototype,
 	'tab',
 	function( )
@@ -136,7 +136,7 @@ Jools.lazyValue(
 /*
 | Increases the indentation.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Context.prototype,
 	'Inc',
 	function( )
@@ -160,21 +160,21 @@ Jools.lazyValue(
 | Increases the indentation.
 | But keeps root context.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Context.prototype,
 	'IncSame',
 	function( )
 	{
 		var
 			inc;
-			
+
 		inc =
 			this.create(
 				'indent',
 					this.indent + 1
 			);
 
-		Jools.aheadValue(
+		jools.aheadValue(
 			inc,
 			'Dec',
 			this
@@ -189,7 +189,7 @@ Jools.lazyValue(
 /*
 | Decreases the indentation.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Context.prototype,
 	'Dec',
 	function( )
@@ -211,7 +211,7 @@ Jools.lazyValue(
 					this.indent - 1
 			);
 
-		Jools.aheadValue(
+		jools.aheadValue(
 			dec,
 			'Inc',
 			this
@@ -225,7 +225,7 @@ Jools.lazyValue(
 /*
 | Sets the context to be inline.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Context.prototype,
 	'Inline',
 	function( )

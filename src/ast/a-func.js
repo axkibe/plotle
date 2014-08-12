@@ -53,7 +53,7 @@ var
 		require( './a-func-arg' ),
 	aFunc =
 		require( '../jion/this' )( module ),
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 
@@ -69,7 +69,7 @@ aFunc.prototype.Append =
 	return (
 		this.create(
 			'twig:add',
-			Jools.uid( ), // FIXME
+			jools.uid( ), // FIXME
 			arg
 		)
 	);

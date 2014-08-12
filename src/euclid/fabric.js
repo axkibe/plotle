@@ -20,7 +20,7 @@ Euclid =
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -111,7 +111,7 @@ Euclid.Fabric =
 	this.$clip =
 		false;
 
-	Jools.immute( this );
+	jools.immute( this );
 };
 
 
@@ -615,10 +615,7 @@ Fabric.prototype.drawImage =
 /**/		);
 /**/	}
 /**/
-/**/	Jools.ensureInt(
-/**/		x,
-/**/		y
-/**/	);
+/**/	jools.ensureInt( x, y );
 /**/}
 
 	if( composite !== undefined )
@@ -1006,17 +1003,17 @@ Fabric.prototype.fillRect =
 /*
 | The center point of the fabric.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Fabric.prototype,
 	'pc',
 	function( )
 	{
 		var
-			x =
-				Jools.half( this.width ),
+			x, y;
 
-			y =
-				Jools.half( this.height );
+		x = jools.half( this.width ),
+
+		y = jools.half( this.height );
 
 		return (
 			Euclid.Point.create( 'x', x, 'y', y )
@@ -1053,47 +1050,44 @@ Fabric.prototype.lineTo =
 	)
 {
 	var
-		tw =
-			this._$twist,
+		tw,
 		v,
 		x,
 		y;
 
+	tw = this._$twist;
+
 	if( typeof( a1 ) === 'object' )
 	{
-		x =
-			a1.x;
+		x = a1.x;
 
-		y =
-			a1.y;
+		y = a1.y;
 
-		v =
-			a2;
+		v = a2;
 	}
 	else
 	{
-		x =
-			a1;
+		x = a1;
 
-		y =
-			a2;
+		y = a2;
 
-		v =
-			a3;
+		v = a3;
 	}
 
-	Jools.ensureInt( x, y );
+/**/if( CHECK )
+/**/{
+/**/	jools.ensureInt( x, y );
+/**/}
 
 	if( v )
 	{
-		x =
-			v.x( x );
+		x = v.x( x );
 
-		y =
-			v.y( y );
+		y = v.y( y );
 	}
 
 	this._$posx = x;
+
 	this._$posy = y;
 
 	this._cx.lineTo( x + tw, y + tw );
@@ -1146,7 +1140,7 @@ Fabric.prototype.moveTo =
 			a3;
 	}
 
-	Jools.ensureInt( x, y );
+	jools.ensureInt( x, y );
 
 	if( v )
 	{
@@ -1220,7 +1214,7 @@ Fabric.prototype.paint =
 		a4
 	);
 
-	if( Jools.isnon( fillStyle ) )
+	if( jools.isnon( fillStyle ) )
 	{
 		cx.fillStyle = this._colorStyle(
 			fillStyle,
@@ -1231,7 +1225,7 @@ Fabric.prototype.paint =
 		cx.fill( );
 	}
 
-	if( Jools.isArray( edgeStyle ) )
+	if( jools.isArray( edgeStyle ) )
 	{
 		for(var i = 0; i < edgeStyle.length; i++)
 		{
@@ -1333,64 +1327,53 @@ Fabric.prototype._setFont =
 		font
 	)
 {
+	var
+		align,
+		base,
+		cx,
+		fill;
+
 	// already setted this font
 	if( this._$font === font )
 	{
 		return;
 	}
 
-	var
-		fill =
-			font.fill,
+	fill = font.fill;
 
-		align =
-			font.align,
+	align = font.align;
 
-		base =
-			font.base;
+	base = font.base;
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( !Jools.is( fill ) )
+/**/		if(	fill === undefined )
 /**/		{
-/**/			throw new Error(
-/**/				'fontstyle misses fill'
-/**/			);
+/**/			throw new Error( );
 /**/		}
 /**/
-/**/		if( !Jools.is( align ) )
+/**/		if( align === undefined )
 /**/		{
-/**/			throw new Error(
-/**/				'fontstyle misses align'
-/**/			);
+/**/			throw new Error( );
 /**/		}
 /**/
-/**/		if( !Jools.is( base ) )
+/**/		if( base === undefined )
 /**/		{
-/**/			throw new Error(
-/**/				'fontstyle misses base'
-/**/			);
+/**/			throw new Error( );
 /**/		}
 /**/	}
 
-	var
-		cx =
-			this._cx;
+	cx = this._cx;
 
-	cx.font =
-		font.css;
+	cx.font = font.css;
 
-	cx.fillStyle =
-		fill;
+	cx.fillStyle = fill;
 
-	cx.textAlign =
-		align;
+	cx.textAlign = align;
 
-	cx.textBaseline =
-		base;
+	cx.textBaseline = base;
 
-	this._$font =
-		font;
+	this._$font = font;
 };
 
 
@@ -1678,7 +1661,7 @@ Fabric.prototype.pnw =
 /*
 | Point in south east.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Fabric.prototype,
 	'pse',
 	function( )

@@ -13,15 +13,13 @@
 var
 	Euclid;
 
-Euclid =
-	Euclid ||
-	{ };
+Euclid = Euclid || { };
 
 
 /*
 | Imports
 */
-var Jools;
+var jools;
 
 
 /*
@@ -38,11 +36,10 @@ var Const =
 /*
 |'magic' number to approximate ellipses with beziers.
 */
-Const.magic =
-	0.551784;
+Const.magic = 0.551784;
 
 
-Jools.immute( Const );
+jools.immute( Const );
 
 
 } )( );

@@ -18,7 +18,7 @@ Jion = Jion || { };
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -79,7 +79,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
+	jools =
 		require( '../jools/jools'  );
 
 	Jion =
@@ -166,7 +166,7 @@ SignRay.prototype.Append =
 /*
 | Returns the length of the changeray
 */
-Jools.lazyValue(
+jools.lazyValue(
 	SignRay.prototype,
 	'length',
 	function( )

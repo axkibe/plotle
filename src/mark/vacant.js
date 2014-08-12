@@ -19,7 +19,7 @@ var
 */
 var
 	Jion,
-	Jools;
+	jools;
 
 
 /*
@@ -57,7 +57,7 @@ var
 /*
 | The item's path.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Vacant.prototype,
 	'itemPath',
 	function( )
@@ -69,7 +69,7 @@ Jools.lazyValue(
 /*
 | The widget's path.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Vacant.prototype,
 	'widgetPath',
 	function( )

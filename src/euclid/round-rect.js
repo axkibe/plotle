@@ -31,7 +31,7 @@ Euclid =
 | Imports
 */
 var
-	Jools;
+	jools;
 
 
 /*
@@ -162,7 +162,7 @@ RoundRect.prototype._init =
 /*
 | point in the center
 */
-Jools.lazyValue(
+jools.lazyValue(
 	RoundRect.prototype,
 	'pc',
 	function( )
@@ -170,9 +170,9 @@ Jools.lazyValue(
 		return (
 			Euclid.Point.create(
 				'x',
-					Jools.half( this.pse.x + this.pnw.x ),
+					jools.half( this.pse.x + this.pnw.x ),
 				'y',
-					Jools.half( this.pse.y + this.pnw.y )
+					jools.half( this.pse.y + this.pnw.y )
 			)
 		);
 	}
@@ -182,7 +182,7 @@ Jools.lazyValue(
 /*
 | Rectangle width.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	RoundRect.prototype,
 	'width',
 	function( )
@@ -194,7 +194,7 @@ Jools.lazyValue(
 /*
 | Rectangle height.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	RoundRect.prototype,
 	'height',
 	function( )

@@ -5,7 +5,7 @@
 */
 
 var
-	Jools,
+	jools,
 	JoobjProto =
 		{ };
 
@@ -22,7 +22,7 @@ var
 */
 if( SERVER )
 {
-	Jools = require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 }
 
 
@@ -202,7 +202,7 @@ JoobjProto.newUID =
 	var
 		u;
 
-	u = Jools.uid( );
+	u = jools.uid( );
 
 	return (
 		( this.twig[ u ] === undefined )
@@ -228,17 +228,17 @@ JoobjProto.rankOf =
 		rank,
 		ranks,
 		rof;
-		
+
 	ranks = this.ranks;
 
 /**/if( CHECK )
 /**/{
-/**/	if( !Jools.isArray( ranks ) )
+/**/	if( !jools.isArray( ranks ) )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( !Jools.isString( key ) )
+/**/	if( !jools.isString( key ) )
 /**/	{
 /**/		throw new Error(
 /**/			'key no string'

@@ -19,7 +19,7 @@ Discs = Discs || { };
 */
 var
 	Jion,
-	Jools;
+	jools;
 
 /*
 | Capsule
@@ -162,7 +162,7 @@ Jockey.prototype._init =
 			this.ranks,
 		twig =
 			// FIXME do not copy when inherit.twig !== this.twig
-			Jools.copy( this.twig );
+			jools.copy( this.twig );
 
 	for(
 		var a = 0, aZ = ranks.length;

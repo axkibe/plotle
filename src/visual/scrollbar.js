@@ -19,7 +19,7 @@ var
 */
 var
 	Euclid,
-	Jools,
+	jools,
 	theme;
 
 
@@ -115,7 +115,7 @@ Scrollbar.prototype._init =
 	if( this.max - this.aperture >= 0 )
 	{
 		this.pos =
-			Jools.limit(
+			jools.limit(
 				0,
 				this.pos,
 				this.max - this.aperture
@@ -168,32 +168,33 @@ Scrollbar.prototype.getArea =
 	)
 {
 	var
-		ths =
-			theme.scrollbar,
+		ths,
+		pnw,
+		size,
+		pos,
+		max,
+		ap,
+		map,
+		sy,
+		s05;
 
-		pnw =
-			this.pnw,
+	ths = theme.scrollbar;
 
-		size =
-			this.size,
+	pnw = this.pnw;
 
-		pos =
-			this.pos,
+	size = this.size;
 
-		max =
-			this.max,
+	pos = this.pos;
 
-		ap =
-			Math.round( this.aperture * size / max ),
+	max = this.max;
 
-		map =
-			Math.max( ap, ths.minSize ),
+	ap = Math.round( this.aperture * size / max );
 
-		sy =
-			Math.round( pos * ( ( size - map + ap ) / max ) ),
+	map = Math.max( ap, ths.minSize );
 
-		s05 =
-			Jools.half( ths.strength );
+	sy = Math.round( pos * ( ( size - map + ap ) / max ) );
+
+	s05 = jools.half( ths.strength );
 
 	return (
 		Euclid.RoundRect.create(

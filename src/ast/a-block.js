@@ -67,7 +67,7 @@ var
 			aVarDec :
 				require( './a-var-dec' ),
 		},
-	Jools =
+	jools =
 		require( '../jools/jools' );
 
 /*
@@ -83,7 +83,7 @@ aBlock.prototype.Append =
 	return (
 		this.create(
 			'twig:add',
-			Jools.uid( ), // FIXME
+			jools.uid( ), // FIXME
 			statement
 		)
 	);
@@ -99,13 +99,15 @@ aBlock.prototype.anAssign =
 	)
 {
 	var
-		assign =
-			ast.anAssign.create(
-				'left',
-					left,
-				'right',
-					right
-			);
+		assign;
+
+	assign =
+		ast.anAssign.create(
+			'left',
+				left,
+			'right',
+				right
+		);
 
 	return this.Append( assign );
 };
@@ -121,11 +123,13 @@ aBlock.prototype.aCall =
 	)
 {
 	var
-		call =
-			ast.aCall.create(
-				'func',
-					func
-			);
+		call;
+
+	call =
+		ast.aCall.create(
+			'func',
+				func
+		);
 
 	for(
 		var a = 1, aZ = arguments.length;
@@ -133,8 +137,7 @@ aBlock.prototype.aCall =
 		a++
 	)
 	{
-		call =
-			call.Append( arguments[ a ] );
+		call = call.Append( arguments[ a ] );
 	}
 
 	return this.Append( call );
@@ -216,10 +219,9 @@ aBlock.prototype.aFail =
 {
 	if( !message )
 	{
-		message =
-			null;
+		message = null;
 	}
-	else if( Jools.isString( message ) )
+	else if( jools.isString( message ) )
 	{
 		message =
 			ast.aStringLiteral.create(

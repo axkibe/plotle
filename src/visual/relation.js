@@ -20,7 +20,7 @@ Visual =
 */
 var
 	Euclid,
-	Jools,
+	jools,
 	Mark,
 	Peer,
 	shell,
@@ -167,8 +167,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 
 	Visual =
 		{

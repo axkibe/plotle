@@ -16,7 +16,7 @@ var
 */
 var
 	Euclid,
-	Jools,
+	jools,
 	Visual;
 
 
@@ -133,7 +133,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
+	jools =
 		require( '../jools/jools' );
 	Euclid =
 		{
@@ -234,7 +234,7 @@ Sign.prototype._init =
 		}
 	}
 
-	Jools.immute( this );
+	jools.immute( this );
 };
 
 
@@ -258,9 +258,9 @@ Sign.prototype.affix =
 	if( test( this[ key ] ) )
 	{
 		/* FUTURE
-		if( !Jools.matches( val, this[ key ] ) )
+		if( !jools.matches( val, this[ key ] ) )
 		{
-			throw Jools.reject(
+			throw jools.reject(
 				[
 					cm, ' ',
 					base, '.', key,

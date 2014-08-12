@@ -17,7 +17,7 @@ var
 */
 var
 	Jion,
-	Jools;
+	jools;
 
 
 /*
@@ -99,7 +99,7 @@ Range = Mark.Range;
 | The begin or end path,
 | dependening on which comes first in the doc.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Range.prototype,
 	'frontPath',
 	function( )
@@ -118,7 +118,7 @@ Jools.lazyValue(
 | The begin or end offset,
 | dependening on which comes first in the doc.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Range.prototype,
 	'frontAt',
 	function( )
@@ -137,7 +137,7 @@ Jools.lazyValue(
 | The begin or end path,
 | dependening on which comes last in the doc.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Range.prototype,
 	'backPath',
 	function( )
@@ -156,7 +156,7 @@ Jools.lazyValue(
 | The begin or end path,
 | dependening on which comes last in the doc.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Range.prototype,
 	'backAt',
 	function( )
@@ -185,7 +185,7 @@ Range.prototype.hasCaret = true;
 |
 | This allows a common interface with text range.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Range.prototype,
 	'caretPath',
 	function( )
@@ -200,7 +200,7 @@ Jools.lazyValue(
 |
 | This allows a common interface with text range.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Range.prototype,
 	'caretAt',
 	function( )
@@ -213,7 +213,7 @@ Jools.lazyValue(
 /*
 | The item's path.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Range.prototype,
 	'itemPath',
 	function( )
@@ -260,7 +260,7 @@ Range.prototype.containsPath =
 /*
 | The content the mark puts into the clipboard.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Range.prototype,
 	'clipboard',
 	function( )
@@ -334,7 +334,7 @@ Jools.lazyValue(
 /*
 | True if begin equals end
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Range.prototype,
 	'empty',
 	function( )

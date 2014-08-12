@@ -21,7 +21,7 @@ var
 	Accent,
 	fontPool,
 	Euclid,
-	Jools,
+	jools,
 	Mark,
 	Peer,
 	reply,
@@ -144,8 +144,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 
 	Visual =
 		{
@@ -228,7 +227,7 @@ Portal.prototype._init =
 		// paths to spaceUser and spaceTag
 
 		this.subPaths =
-			Jools.immute(
+			jools.immute(
 				{
 					moveToButton :
 						this.path.Append( 'moveToButton' ),
@@ -253,7 +252,7 @@ Portal.prototype._init =
 | List of all space fields of the portal
 */
 Portal.spaceFields =
-	Jools.immute(
+	jools.immute(
 		{
 			spaceUser :
 				true,
@@ -291,7 +290,7 @@ if( SHELL )
 | Resize handles to show on portals.
 */
 Portal.prototype.handles =
-	Jools.immute(
+	jools.immute(
 		{
 			n :
 				true,
@@ -316,7 +315,7 @@ Portal.prototype.handles =
 /*
 | The portal's silhoutte.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Portal.prototype,
 	'silhoutte',
 	function( )
@@ -336,7 +335,7 @@ Jools.lazyValue(
 /*
 | The portal's silhoutte at zero.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Portal.prototype,
 	'zeroSilhoutte',
 	function( )
@@ -534,7 +533,7 @@ Portal.prototype.click =
 /*
 | Returns the attention center.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Portal.prototype,
 	'attentionCenter',
 	function( )
@@ -730,7 +729,7 @@ Portal.prototype.pointingHover =
 /*
 | The protal's fabric.
 */
-Jools.lazyValue(
+jools.lazyValue(
 	Portal.prototype,
 	'_fabric',
 	function( )
@@ -945,7 +944,7 @@ if( SHELL )
 	| Font for spacesUser/Tag
 	*/
 	Portal.prototype._fonts =
-		Jools.immute( {
+		jools.immute( {
 			spaceUser :
 				fontPool.get(
 					13,
@@ -1772,9 +1771,9 @@ Portal.prototype._prepareMoveToButton =
 		pnw =
 			Euclid.Point.create(
 				'x',
-					Jools.half( zone.width - width ),
+					jools.half( zone.width - width ),
 				'y',
-					Jools.half( zone.height ) + 10
+					jools.half( zone.height ) + 10
 			),
 
 		pse =
@@ -1799,9 +1798,9 @@ Portal.prototype._prepareMoveToButton =
 		textCenter :
 			Euclid.Point.create(
 				'x',
-					Jools.half( pnw.x + pse.x ),
+					jools.half( pnw.x + pse.x ),
 				'y',
-					Jools.half( pnw.y + pse.y )
+					jools.half( pnw.y + pse.y )
 			)
 	};
 };
@@ -1843,10 +1842,10 @@ Portal.prototype._prepareField =
 			(
 				Euclid.Point.create(
 					'x',
-						Jools.half( zone.width - width ),
+						jools.half( zone.width - width ),
 					'y',
 						Math.round(
-							Jools.half( zone.height ) - 30
+							jools.half( zone.height ) - 30
 						)
 				)
 			)
@@ -1854,7 +1853,7 @@ Portal.prototype._prepareField =
 			(
 				Euclid.Point.create(
 					'x',
-						Jools.half( zone.width - width ),
+						jools.half( zone.width - width ),
 					'y',
 						basePNW.y + 23
 				)
