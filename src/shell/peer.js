@@ -30,13 +30,13 @@ var
 
 
 var
-	Change,
+	change,
 	newItemSign,
 	Sign,
 	spliceSign;
 
 
-Change = jion.Change;
+change = jion.change;
 
 Sign = jion.Sign;
 
@@ -124,7 +124,7 @@ Peer.newNote =
 
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					src,
 				'trg',
@@ -169,7 +169,7 @@ Peer.newPortal =
 
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					src,
 				'trg',
@@ -191,7 +191,7 @@ Peer.setZone =
 {
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					Sign.create(
 						'val',
@@ -221,7 +221,7 @@ Peer.setFontSize =
 {
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					Sign.create(
 						'val',
@@ -251,7 +251,7 @@ Peer.setPNW =
 {
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					Sign.create(
 						'val',
@@ -309,7 +309,7 @@ Peer.newLabel =
 
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					src,
 				'trg',
@@ -365,7 +365,7 @@ Peer.newRelation =
 
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					src,
 				'trg',
@@ -411,7 +411,7 @@ Peer.insertText =
 {
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					Sign.create(
 						'val',
@@ -452,7 +452,7 @@ Peer.removeText =
 
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					Sign.create(
 						'path',
@@ -569,7 +569,7 @@ Peer.split =
 {
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					Sign.create(
 						'path',
@@ -596,7 +596,7 @@ Peer.join =
 {
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					spliceSign,
 				'trg',
@@ -639,7 +639,7 @@ Peer.removeItem =
 
 	return (
 		shell.link.alter(
-			Change.create(
+			change.create(
 				'src',
 					Sign.create(
 						'val',

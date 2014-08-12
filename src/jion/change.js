@@ -33,7 +33,7 @@ if( JION )
 {
 	return {
 		name :
-			'Change',
+			'change',
 		unit :
 			'jion',
 		attributes :
@@ -76,9 +76,9 @@ if( SERVER )
 		require( '../jools/jools' );
 	jion =
 		{
-			Change :
+			change :
 				require( '../jion/this' )( module ),
-			ChangeRay :
+			changeRay :
 				require( '../jion/change-ray' ),
 			Path :
 				require( '../jion/path'  ),
@@ -91,16 +91,16 @@ if( SERVER )
 
 
 var
-	Change;
+	change;
 
-Change = jion.Change;
+change = jion.change;
 
 
 /*
 | The type of this change.
 */
 jools.lazyValue(
-	Change.prototype,
+	change.prototype,
 	'type',
 	function( )
 	{
@@ -171,7 +171,7 @@ jools.lazyValue(
 | FIXME call it Invert
 */
 jools.lazyValue(
-	Change.prototype,
+	change.prototype,
 	'Invert',
 	function( )
 	{
@@ -179,7 +179,7 @@ jools.lazyValue(
 			r;
 
 		r =
-			Change.create(
+			change.create(
 				'src',
 				this.trg,
 				'trg',
@@ -196,7 +196,7 @@ jools.lazyValue(
 /*
 | Performes this change on a tree.
 */
-Change.prototype.ChangeTree =
+change.prototype.changeTree =
 	function(
 		tree
 	)
@@ -220,37 +220,37 @@ Change.prototype.ChangeTree =
 	{
 		case 'split' :
 
-			r = this._ChangeTreeSplit( tree );
+			r = this._changeTreeSplit( tree );
 
 			break;
 
 		case 'join' :
 
-			r = this._ChangeTreeJoin( tree );
+			r = this._changeTreeJoin( tree );
 
 			break;
 
 		case 'set' :
 
-			r = this._ChangeTreeSet( tree );
+			r = this._changeTreeSet( tree );
 
 			break;
 
 		case 'insert' :
 
-			r = this._ChangeTreeInsert( tree );
+			r = this._changeTreeInsert( tree );
 
 			break;
 
 		case 'remove' :
 
-			r = this._ChangeTreeRemove( tree );
+			r = this._changeTreeRemove( tree );
 
 			break;
 
 		case 'rank' :
 
-			r = this._ChangeTreeRank( tree );
+			r = this._changeTreeRank( tree );
 
 			break;
 
@@ -279,27 +279,29 @@ Change.prototype.ChangeTree =
 
 
 /*
-| Change emulates a ChangeRay with the length of 1.
+| Change emulates a changeRay with the length of 1.
 | FIXME check if needed
 */
-Change.prototype.length = 1;
+change.prototype.length = 1;
 
 
 /*
-| Change emulates a ChangeRay with the length of 1.
+| change emulates a changeRay with the length of 1.
 | FIXME check if needed
 */
-Change.prototype.get =
+change.prototype.get =
 	function(
 		idx
 	)
 {
-	if( idx !== 0 )
-	{
-		throw new Error(
-			'Change.get: out of bonds'
-		);
-	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( idx !== 0 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	return this;
 };
@@ -308,7 +310,7 @@ Change.prototype.get =
 /*
 | Returns a change transformed on this change.
 */
-Change.prototype.transformChange =
+change.prototype.transformChange =
 	function(
 		chg
 	)
@@ -370,7 +372,7 @@ Change.prototype.transformChange =
 
 
 		return (
-			Change.create(
+			change.create(
 				'src',
 					srcX,
 				'trg',
@@ -389,7 +391,7 @@ Change.prototype.transformChange =
 		)
 		{
 			y[ a ] =
-				Change.create(
+				change.create(
 					'src',
 						srcX,
 					'trg',
@@ -398,7 +400,7 @@ Change.prototype.transformChange =
 		}
 
 		return (
-			jion.ChangeRay.create(
+			jion.changeRay.create(
 				'array',
 					y,
 				'_sliced',
@@ -417,7 +419,7 @@ Change.prototype.transformChange =
 		)
 		{
 			y[ a ] =
-				Change.create(
+				change.create(
 					'src',
 						srcX.get( a ),
 					'trg',
@@ -426,7 +428,7 @@ Change.prototype.transformChange =
 		}
 
 		return (
-			jion.ChangeRay.create(
+			jion.changeRay.create(
 				'array',
 					y,
 				'_sliced',
@@ -444,7 +446,7 @@ Change.prototype.transformChange =
 /*
 | Returns a change ray transformed on this change.
 */
-Change.prototype.transformChangeRay =
+change.prototype.transformChangeRay =
 	function(
 	//	chgX
 	)
@@ -455,9 +457,9 @@ Change.prototype.transformChangeRay =
 
 
 /*
-| Returns a Change or a ChangeRay transformed on this Change.
+| Returns a change or a changeRay transformed on this change.
 */
-Change.prototype.transformChangeX =
+change.prototype.transformChangeX =
 	function(
 		chgX
 	)
@@ -484,7 +486,7 @@ Change.prototype.transformChangeX =
 |
 | A new item is inserted or replaces an existing.
 */
-Change.prototype._ChangeTreeSet =
+change.prototype._changeTreeSet =
 	function(
 		tree
 	)
@@ -641,11 +643,11 @@ Change.prototype._ChangeTreeSet =
 
 
 /*
-| Change Operation: insert
+| change Operation: insert
 |
 | A string is inserted into a string item.
 */
-Change.prototype._ChangeTreeInsert =
+change.prototype._changeTreeInsert =
 	function(
 		tree
 	)
@@ -720,7 +722,7 @@ Change.prototype._ChangeTreeInsert =
 |
 | A part of a string item is removed.
 */
-Change.prototype._ChangeTreeRemove =
+change.prototype._changeTreeRemove =
 	function(
 		tree
 	)
@@ -812,7 +814,7 @@ Change.prototype._ChangeTreeRemove =
 |
 | Two texts are joined into one.
 */
-Change.prototype._ChangeTreeJoin =
+change.prototype._changeTreeJoin =
 	function(
 		tree
 	)
@@ -932,7 +934,7 @@ Change.prototype._ChangeTreeJoin =
 |
 | A text is split into two.
 */
-Change.prototype._ChangeTreeSplit =
+change.prototype._changeTreeSplit =
 	function(
 		tree
 	)
@@ -1051,7 +1053,7 @@ Change.prototype._ChangeTreeSplit =
 |
 | A tree's rank is changed.
 */
-Change.prototype._ChangeTreeRank =
+change.prototype._changeTreeRank =
 	function(
 		tree
 	)
@@ -1172,7 +1174,7 @@ Change.prototype._ChangeTreeRank =
 |
 | This can possibly return a sign ray.
 */
-Change.prototype.transformSign =
+change.prototype.transformSign =
 	function(
 		sign
 	)
@@ -1218,7 +1220,7 @@ Change.prototype.transformSign =
 /*
 | Returns a transformed SignRay on this change.
 */
-Change.prototype.transformSignRay =
+change.prototype.transformSignRay =
 	function(
 		signray
 	)
@@ -1278,7 +1280,7 @@ Change.prototype.transformSignRay =
 |
 | Can possibly transform a Sign to a SignRay.
 */
-Change.prototype.transformSignX =
+change.prototype.transformSignX =
 	function(
 		signX
 	)
@@ -1304,7 +1306,7 @@ Change.prototype.transformSignX =
 /*
 | Transforms a signature on one a split.
 */
-Change.prototype._transformSignSplit =
+change.prototype._transformSignSplit =
 	function(
 		sign
 	)
@@ -1403,7 +1405,7 @@ Change.prototype._transformSignSplit =
 /*
 | Transforms a signature on a join.
 */
-Change.prototype._transformSignJoin =
+change.prototype._transformSignJoin =
 	function(
 		sign
 	)
@@ -1463,7 +1465,7 @@ Change.prototype._transformSignJoin =
 /*
 | Transforms a signature on a rank
 */
-Change.prototype._transformSignRank =
+change.prototype._transformSignRank =
 	function(
 		sign
 	)
@@ -1517,7 +1519,7 @@ Change.prototype._transformSignRank =
 /*
 | Transforms a signature on a join.
 */
-Change.prototype._transformSignSet =
+change.prototype._transformSignSet =
 	function(
 		sign
 	)
@@ -1592,7 +1594,7 @@ Change.prototype._transformSignSet =
 /*
 | Transforms a signature on an insert.
 */
-Change.prototype._transformSignInsert =
+change.prototype._transformSignInsert =
 	function(
 		sign
 	)
@@ -1656,7 +1658,7 @@ Change.prototype._transformSignInsert =
 /*
 | Transforms a signature on a remove
 */
-Change.prototype._transformSignRemove =
+change.prototype._transformSignRemove =
 	function(
 		sign
 	)
@@ -1800,7 +1802,7 @@ Change.prototype._transformSignRemove =
 */
 if( SERVER )
 {
-	module.exports = Change;
+	module.exports = change;
 }
 
 

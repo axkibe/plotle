@@ -50,9 +50,9 @@ var
 		require( './inventory' ),
 	jion =
 		{
-			Change :
+			change :
 				require( '../jion/change' ),
-			ChangeRay :
+			changeRay :
 				require( '../jion/change-ray' ),
 			Path :
 				require( '../jion/path' ),
@@ -496,7 +496,7 @@ Server.prototype.loadSpace =
 			throw new Error( 'sequence mismatch' );
 		}
 
-		// FIXME there is something quirky, why isn't *this* a "Change"?
+		// FIXME there is something quirky, why isn't *this* a "change"?
 		change =
 			{
 				cid :
@@ -507,19 +507,19 @@ Server.prototype.loadSpace =
 
 		if ( !jools.isArray( o.chgX ) )
 		{
-			o.type = 'Change'; // FUTURE this is a hack
+			o.type = 'change'; // FUTURE this is a hack
 
-			change.chgX = jion.Change.createFromJSON( o.chgX );
+			change.chgX = jion.change.createFromJSON( o.chgX );
 		}
 		else
 		{
-			change.chgX = jion.ChangeRay.createFromJSON( o.chgX );
+			change.chgX = jion.changeRay.createFromJSON( o.chgX );
 		}
 
 		space.$seqZ++;
 
 		space.$tree =
-			change.chgX.ChangeTree(
+			change.chgX.changeTree(
 				space.$tree
 			).tree;
 	}
@@ -1461,7 +1461,7 @@ Server.prototype.cmdAlter =
 			);
 		}
 
-		chgX = jion.Change.createFromJSON( chgX );
+		chgX = jion.change.createFromJSON( chgX );
 	}
 	catch( err )
 	{
@@ -1505,7 +1505,7 @@ Server.prototype.cmdAlter =
 	}
 
 	// applies the changes
-	result = chgX.ChangeTree( space.$tree );
+	result = chgX.changeTree( space.$tree );
 
 	space.$tree =
 		result.tree;
@@ -2571,7 +2571,7 @@ Server.prototype.cmdGet =
 				chgX
 				.get( b )
 				.Invert
-				.ChangeTree( tree )
+				.changeTree( tree )
 				.tree;
 		}
 	}

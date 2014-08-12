@@ -158,7 +158,7 @@ IFaceSym.prototype.get =
 				chgX
 				.get( 0 )
 				.Invert
-				.ChangeTree( space )
+				.changeTree( space )
 				.tree;
 		}
 	}
@@ -204,7 +204,7 @@ IFaceSym.prototype.alter =
 	var
 		r =
 			chgX
-			.ChangeTree( this.space );
+			.changeTree( this.space );
 
 	chgX =
 		r.chgX;

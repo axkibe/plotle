@@ -26,7 +26,7 @@ if( JION )
 {
 	return {
 		name :
-			'ChangeWrap',
+			'changeWrap',
 		unit :
 			'jion',
 		attributes :
@@ -72,7 +72,7 @@ if( SERVER )
 {
 	jion =
 		{
-			ChangeWrap :
+			changeWrap :
 				require( '../jion/change-wrap' )
 		};
 }
@@ -83,7 +83,7 @@ if( SERVER )
 */
 if( SERVER )
 {
-	module.exports = jion.ChangeWrap;
+	module.exports = jion.changeWrap;
 }
 
 

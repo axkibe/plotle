@@ -366,9 +366,9 @@ Link.prototype._onAquireSpace =
 				space,
 			'_rSpace',
 				space,
-			'_outbox', // FIXME ChangeRay
+			'_outbox', // FIXME changeRay
 				[ ],
-			'_postbox', // FIXME ChangeRay
+			'_postbox', // FIXME changeRay
 				[ ],
 			'_rSeq',
 				reply.seq,
@@ -475,7 +475,7 @@ Link.prototype._onUpdate =
 
 	chgs = reply.chgs;
 
-	report = jion.ChangeRay.create( );
+	report = jion.changeRay.create( );
 
 	gotOwnChgs = false;
 
@@ -496,7 +496,7 @@ Link.prototype._onUpdate =
 		)
 		{
 			chgX =
-				jion.Change.createFromJSON(
+				jion.change.createFromJSON(
 					chgs[ a ].chgX
 				);
 
@@ -505,7 +505,7 @@ Link.prototype._onUpdate =
 			// changes the clients understanding of the server tree
 			this._rSpace = // XXX
 				chgX
-				.ChangeTree( this._rSpace )
+				.changeTree( this._rSpace )
 				.tree;
 
 			// if the cid is the one in the postbox the client
@@ -551,7 +551,7 @@ Link.prototype._onUpdate =
 
 					u =
 					undo[ b ] =
-						jion.ChangeWrap.create(
+						jion.changeWrap.create(
 							'cid',
 								u.cid,
 							'chgX',
@@ -588,7 +588,7 @@ Link.prototype._onUpdate =
 
 					u =
 					redo[ b ] =
-						jion.ChangeWrap.create(
+						jion.changeWrap.create(
 							'cid',
 								u.cid,
 							'chgX',
@@ -626,13 +626,13 @@ Link.prototype._onUpdate =
 					chgX.transformChangeX( report.get( b ) );
 			}
 
-			// FUTURE adapt ChangeTree so it
+			// FUTURE adapt changeTree so it
 			//        optionally does not create result
 			//        intermediary objects but returns
 			//        the tree directly
 			space =
 				chgX
-				.ChangeTree( space )
+				.changeTree( space )
 				.tree;
 		}
 
@@ -661,7 +661,7 @@ Link.prototype._onUpdate =
 
 			c =
 			outbox[ a ] =
-				jion.ChangeWrap.create(
+				jion.changeWrap.create(
 					'cid',
 						c.cid,
 					'chgX',
@@ -672,7 +672,7 @@ Link.prototype._onUpdate =
 
 			space =
 				chgX
-				.ChangeTree( space )
+				.changeTree( space )
 				.tree;
 		}
 
@@ -715,14 +715,14 @@ Link.prototype.alter =
 		result,
 		undo;
 
-	result = chg.ChangeTree( this._cSpace );
+	result = chg.changeTree( this._cSpace );
 
 	this._cSpace = result.tree;
 
 	chgX = result.chgX;
 
 	c =
-		jion.ChangeWrap.create(
+		jion.changeWrap.create(
 			'cid',
 				jools.uid( ),
 			'chgX',
@@ -842,7 +842,7 @@ Link.prototype.undo =
 
 	chgX = this._undo.pop( ).chgX.Invert; // XXX
 
-	result = chgX.ChangeTree( this._cSpace );
+	result = chgX.changeTree( this._cSpace );
 
 	if( result === null )
 	{
@@ -859,7 +859,7 @@ Link.prototype.undo =
 	}
 
 	c =
-		jion.ChangeWrap.create(
+		jion.changeWrap.create(
 			'cid',
 				jools.uid( ),
 			'chgX',
@@ -902,7 +902,7 @@ Link.prototype.redo =
 
 	chgX = this._redo.pop( ).chgX.Invert; // XXX
 
-	result = chgX.ChangeTree( this._cSpace );
+	result = chgX.changeTree( this._cSpace );
 
 	this._cSpace = result.tree; // XXX
 
@@ -914,7 +914,7 @@ Link.prototype.redo =
 	}
 
 	c =
-		jion.ChangeWrap.create(
+		jion.changeWrap.create(
 			'cid',
 				jools.uid( ),
 			'chgX',

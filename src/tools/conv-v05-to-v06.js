@@ -1,5 +1,5 @@
 /*
-| Converts a v04 repository to v05
+| Converts a v05 repository to v06
 |
 | Authors: Axel Kittenberger
 */
@@ -8,27 +8,29 @@
 | This tool is configered directly here
 */
 var
-	config =
+	config,
+
+config =
+	{
+		src :
 		{
-			src :
-			{
-				host :
-					'127.0.0.1',
-				port :
-					27017,
-				name :
-					'meshcraft04'
-			},
-			trg :
-			{
-				host :
-					'127.0.0.1',
-				port :
-					27017,
-				name :
-					'meshcraft05'
-			}
-		};
+			host :
+				'127.0.0.1',
+			port :
+				27017,
+			name :
+				'meshcraft05'
+		},
+		trg :
+		{
+			host :
+				'127.0.0.1',
+			port :
+				27017,
+			name :
+				'meshcraft06'
+		}
+	};
 
 
 /*

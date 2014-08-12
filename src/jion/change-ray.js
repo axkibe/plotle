@@ -35,7 +35,7 @@ if( JION )
 {
 	return {
 		name :
-			'ChangeRay',
+			'changeRay',
 		unit :
 			'jion',
 		attributes :
@@ -84,24 +84,24 @@ if( SERVER )
 
 	jion =
 		{
-			Change :
+			change :
 				require( '../jion/change' ),
-			ChangeRay :
+			changeRay :
 				require( '../jion/this' )( module )
 		};
 }
 
 
 var
-	ChangeRay;
+	changeRay;
 
-ChangeRay = jion.ChangeRay;
+changeRay = jion.changeRay;
 
 
 /*
 | Initializer.
 */
-ChangeRay.prototype._init =
+changeRay.prototype._init =
 	function(
 		array,
 		_sliced
@@ -140,7 +140,7 @@ ChangeRay.prototype._init =
 | Returns a change ray with inverted changes.
 */
 jools.lazyValue(
-	ChangeRay.prototype,
+	changeRay.prototype,
 	'Invert',
 	function( )
 	{
@@ -162,7 +162,7 @@ jools.lazyValue(
 		}
 
 		inv =
-			ChangeRay.create(
+			changeRay.create(
 				'array',
 					rc,
 				'_sliced',
@@ -179,7 +179,7 @@ jools.lazyValue(
 /*
 | Appends a change to the change ray.
 */
-ChangeRay.prototype.Append =
+changeRay.prototype.Append =
 	function(
 		chg
 	)
@@ -192,7 +192,7 @@ ChangeRay.prototype.Append =
 	rc.push( chg );
 
 	return (
-		ChangeRay.create(
+		changeRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -206,7 +206,7 @@ ChangeRay.prototype.Append =
 | Returns the length of the changeray
 */
 jools.lazyValue(
-	ChangeRay.prototype,
+	changeRay.prototype,
 	'length',
 	function( )
 	{
@@ -218,7 +218,7 @@ jools.lazyValue(
 /*
 | Gets one change.
 */
-ChangeRay.prototype.get =
+changeRay.prototype.get =
 	function(
 		idx
 	)
@@ -228,9 +228,9 @@ ChangeRay.prototype.get =
 
 
 /*
-| Returns a ChangeRay with one element altered.
+| Returns a changeRay with one element altered.
 */
-ChangeRay.prototype.Set =
+changeRay.prototype.Set =
 	function(
 		idx,
 		chg
@@ -244,7 +244,7 @@ ChangeRay.prototype.Set =
 	rc[ idx ] = chg;
 
 	return (
-		ChangeRay.create(
+		changeRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -258,7 +258,7 @@ ChangeRay.prototype.Set =
 | Returns the result of a change
 | transformed by this change ray.
 */
-ChangeRay.prototype.transformChange =
+changeRay.prototype.transformChange =
 	function(
 		chg
 	)
@@ -286,7 +286,7 @@ ChangeRay.prototype.transformChange =
 | Returns the result of a change ray
 | transformed by this change ray.
 */
-ChangeRay.prototype.transformChangeRay =
+changeRay.prototype.transformChangeRay =
 	function(
 		cray
 	)
@@ -322,7 +322,7 @@ ChangeRay.prototype.transformChangeRay =
 	}
 
 	return (
-		ChangeRay.create(
+		changeRay.create(
 			'array',
 				y,
 			'_sliced',
@@ -336,7 +336,7 @@ ChangeRay.prototype.transformChangeRay =
 | Returns the result of a change or change ray
 | transformed by this change ray.
 */
-ChangeRay.prototype.transformChangeX =
+changeRay.prototype.transformChangeX =
 	function(
 		chgX
 	)
@@ -364,7 +364,7 @@ ChangeRay.prototype.transformChangeX =
 | FIXME trace if a signle change has changed and create
 | a new array only then
 */
-ChangeRay.prototype.ChangeTree =
+changeRay.prototype.changeTree =
 	function(
 		tree,
 		universe
@@ -388,7 +388,7 @@ ChangeRay.prototype.ChangeTree =
 		chg = this.get( a ),
 
 		cr =
-			chg.ChangeTree(
+			chg.changeTree(
 				tree,
 				universe
 			);
@@ -405,7 +405,7 @@ ChangeRay.prototype.ChangeTree =
 			tree :
 				tree,
 			chgX :
-				ChangeRay.create(
+				changeRay.create(
 					'array',
 						cray,
 					'_sliced',
@@ -421,7 +421,7 @@ ChangeRay.prototype.ChangeTree =
 |
 | If the signature is a span, it can transform to a sign-ray.
 */
-ChangeRay.prototype.transformSign =
+changeRay.prototype.transformSign =
 	function(
 		sign
 	)
@@ -464,7 +464,7 @@ ChangeRay.prototype.transformSign =
 */
 if( SERVER )
 {
-	module.exports = ChangeRay;
+	module.exports = changeRay;
 }
 
 }( ) );
