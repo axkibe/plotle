@@ -77,7 +77,7 @@ var
 
 
 /*
-| Jion
+| Jion.
 */
 var
 	aSwitch =

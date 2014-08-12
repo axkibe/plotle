@@ -18,7 +18,7 @@ Discs = Discs || { };
 | Imports
 */
 var
-	Jion,
+	jion,
 	jools;
 
 /*
@@ -200,7 +200,7 @@ Jockey.prototype._init =
 					// FIXME make a concernsHover in the disc
 					( this.hover.isEmpty || this.hover.get( 2 ) !== name )
 						?
-						Jion.Path.empty
+						jion.Path.empty
 						:
 						this.hover,
 				'mark',

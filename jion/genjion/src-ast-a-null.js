@@ -57,7 +57,7 @@ var
 
 
 /*
-| Jion
+| Jion.
 */
 var
 	aNull =

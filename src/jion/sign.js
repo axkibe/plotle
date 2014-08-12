@@ -8,7 +8,7 @@
 | Exports
 */
 var
-	Jion;
+	jion;
 
 
 /*
@@ -36,7 +36,7 @@ if( JION )
 		name :
 			'Sign',
 		unit :
-			'Jion',
+			'jion',
 		attributes :
 			{
 				at1 :
@@ -68,7 +68,7 @@ if( JION )
 						json :
 							'true',
 						unit :
-							'Jion',
+							'jion',
 						type :
 							'Path',
 						defaultValue :
@@ -142,7 +142,7 @@ if( SERVER )
 			Rect :
 				require( '../euclid/rect' )
 		};
-	Jion =
+	jion =
 		{
 			Sign :
 				require( '../jion/this' )( module )
@@ -164,7 +164,7 @@ if( SERVER )
 var
 	Sign;
 
-Sign = Jion.Sign;
+Sign = jion.Sign;
 
 
 /*

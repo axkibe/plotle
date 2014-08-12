@@ -16,7 +16,7 @@ var
 | Imports
 */
 var
-	Jion,
+	jion,
 	jools;
 
 
@@ -220,7 +220,7 @@ jools.lazyValue(
 	{
 		if( this.bPath.length < 3 )
 		{
-			return Jion.Path.empty;
+			return jion.Path.empty;
 		}
 
 		return this.bPath.Limit( 3 );

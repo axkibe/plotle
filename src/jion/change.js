@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	Jion;
+	jion;
 
 
 /*
@@ -35,7 +35,7 @@ if( JION )
 		name :
 			'Change',
 		unit :
-			'Jion',
+			'jion',
 		attributes :
 			{
 				src :
@@ -45,7 +45,7 @@ if( JION )
 						json :
 							'true',
 						unit :
-							'Jion',
+							'jion',
 						type :
 							'Sign'
 					},
@@ -56,7 +56,7 @@ if( JION )
 						json :
 							'true',
 						unit :
-							'Jion',
+							'jion',
 						type :
 							'Sign'
 					}
@@ -74,7 +74,7 @@ if( SERVER )
 {
 	jools =
 		require( '../jools/jools' );
-	Jion =
+	jion =
 		{
 			Change :
 				require( '../jion/this' )( module ),
@@ -93,8 +93,7 @@ if( SERVER )
 var
 	Change;
 
-Change =
-	Jion.Change;
+Change = jion.Change;
 
 
 /*
@@ -399,7 +398,7 @@ Change.prototype.transformChange =
 		}
 
 		return (
-			Jion.ChangeRay.create(
+			jion.ChangeRay.create(
 				'array',
 					y,
 				'_sliced',
@@ -427,7 +426,7 @@ Change.prototype.transformChange =
 		}
 
 		return (
-			Jion.ChangeRay.create(
+			jion.ChangeRay.create(
 				'array',
 					y,
 				'_sliced',
@@ -1379,7 +1378,7 @@ Change.prototype._transformSignSplit =
 	// the signature is splited into a part that stays and one that goes to next line.
 
 	return (
-		Jion.SignRay.create(
+		jion.SignRay.create(
 			'array',
 				[
 					sign.create(

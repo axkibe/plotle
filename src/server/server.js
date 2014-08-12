@@ -48,7 +48,7 @@ var
 		require( 'http' ),
 	Inventory =
 		require( './inventory' ),
-	Jion =
+	jion =
 		{
 			Change :
 				require( '../jion/change' ),
@@ -509,13 +509,11 @@ Server.prototype.loadSpace =
 		{
 			o.type = 'Change'; // FUTURE this is a hack
 
-			change.chgX =
-				Jion.Change.createFromJSON( o.chgX );
+			change.chgX = jion.Change.createFromJSON( o.chgX );
 		}
 		else
 		{
-			change.chgX =
-				Jion.ChangeRay.createFromJSON( o.chgX );
+			change.chgX = jion.ChangeRay.createFromJSON( o.chgX );
 		}
 
 		space.$seqZ++;
@@ -1463,7 +1461,7 @@ Server.prototype.cmdAlter =
 			);
 		}
 
-		chgX = Jion.Change.createFromJSON( chgX );
+		chgX = jion.Change.createFromJSON( chgX );
 	}
 	catch( err )
 	{
@@ -2584,7 +2582,7 @@ Server.prototype.cmdGet =
 	{
 		node =
 			tree.getPath(
-				Jion.Path.create(
+				jion.Path.create(
 					'array',
 					cmd.path
 				)

@@ -18,7 +18,7 @@ Net = Net || { };
 */
 var
 	config,
-	Jion,
+	jion,
 	jools,
 	shell,
 	system,
@@ -286,7 +286,7 @@ Link.prototype.aquireSpace =
 			spaceTag :
 				spaceTag,
 			path :
-				Jion.Path.empty,
+				jion.Path.empty,
 			passhash :
 				this.passhash,
 			seq :
@@ -475,7 +475,7 @@ Link.prototype._onUpdate =
 
 	chgs = reply.chgs;
 
-	report = Jion.ChangeRay.create( );
+	report = jion.ChangeRay.create( );
 
 	gotOwnChgs = false;
 
@@ -496,7 +496,7 @@ Link.prototype._onUpdate =
 		)
 		{
 			chgX =
-				Jion.Change.createFromJSON(
+				jion.Change.createFromJSON(
 					chgs[ a ].chgX
 				);
 
@@ -551,7 +551,7 @@ Link.prototype._onUpdate =
 
 					u =
 					undo[ b ] =
-						Jion.ChangeWrap.create(
+						jion.ChangeWrap.create(
 							'cid',
 								u.cid,
 							'chgX',
@@ -588,7 +588,7 @@ Link.prototype._onUpdate =
 
 					u =
 					redo[ b ] =
-						Jion.ChangeWrap.create(
+						jion.ChangeWrap.create(
 							'cid',
 								u.cid,
 							'chgX',
@@ -661,7 +661,7 @@ Link.prototype._onUpdate =
 
 			c =
 			outbox[ a ] =
-				Jion.ChangeWrap.create(
+				jion.ChangeWrap.create(
 					'cid',
 						c.cid,
 					'chgX',
@@ -722,7 +722,7 @@ Link.prototype.alter =
 	chgX = result.chgX;
 
 	c =
-		Jion.ChangeWrap.create(
+		jion.ChangeWrap.create(
 			'cid',
 				jools.uid( ),
 			'chgX',
@@ -859,7 +859,7 @@ Link.prototype.undo =
 	}
 
 	c =
-		Jion.ChangeWrap.create(
+		jion.ChangeWrap.create(
 			'cid',
 				jools.uid( ),
 			'chgX',
@@ -914,7 +914,7 @@ Link.prototype.redo =
 	}
 
 	c =
-		Jion.ChangeWrap.create(
+		jion.ChangeWrap.create(
 			'cid',
 				jools.uid( ),
 			'chgX',

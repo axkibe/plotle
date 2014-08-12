@@ -893,7 +893,7 @@ Gen.prototype.genConstructor =
 		);
 
 	// the exported object
-	capsule = capsule.aComment( 'Jion' );
+	capsule = capsule.aComment( 'Jion.' );
 
 	jionObj =
 		anObjLiteral( )

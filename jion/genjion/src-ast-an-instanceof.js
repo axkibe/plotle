@@ -67,7 +67,7 @@ var
 
 
 /*
-| Jion
+| Jion.
 */
 var
 	anInstanceof =

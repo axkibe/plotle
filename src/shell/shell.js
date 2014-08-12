@@ -26,7 +26,7 @@ var
 	fontPool,
 	Forms,
 	Gruga,
-	Jion,
+	jion,
 	Mark,
 	Net,
 	Peer,
@@ -142,7 +142,7 @@ Shell =
 	this._$mode = 'Normal';
 
 	// currently hovered thing
-	this._$hover = Jion.Path.empty;
+	this._$hover = jion.Path.empty;
 
 	view =
 	this.$view =
@@ -160,11 +160,11 @@ Shell =
 	this._$formJockey =
 		Forms.Jockey.create(
 			'hover',
-				Jion.Path.empty,
+				jion.Path.empty,
 			'mark',
 				Mark.Vacant.create( ),
 			'path',
-				Jion.Path.empty
+				jion.Path.empty
 				.Append( 'forms' ),
 			'view',
 				view,
@@ -201,13 +201,13 @@ Shell =
 			'action',
 				Action.None.create( ),
 			'hover',
-				Jion.Path.empty,
+				jion.Path.empty,
 			'mark',
 				Mark.Vacant.create( ),
 			'mode',
 				this._$mode,
 			'path',
-				Jion.Path.empty
+				jion.Path.empty
 				.Append( 'discs' ),
 			'view',
 				view,
@@ -389,7 +389,7 @@ Shell.prototype.update =
 			{
 				sign =
 					chgX.transformSign(
-						Jion.Sign.create(
+						jion.Sign.create(
 							'path',
 								mark.path.Chop( ),
 							'at1',
@@ -438,7 +438,7 @@ Shell.prototype.update =
 			{
 				bSign =
 					chgX.transformSign(
-						Jion.Sign.create(
+						jion.Sign.create(
 							'path',
 								mark.bPath.Chop( ),
 							'at1',
@@ -448,7 +448,7 @@ Shell.prototype.update =
 
 				eSign =
 					chgX.transformSign(
-						Jion.Sign.create(
+						jion.Sign.create(
 							'path',
 								mark.ePath.Chop( ),
 							'at1',
@@ -563,7 +563,7 @@ Shell.prototype._draw =
 	var
 		display,
 		fabric;
-		
+
 	fabric = this.fabric;
 
 	fabric.clear( );
@@ -1041,7 +1041,7 @@ Shell.prototype._setHover =
 			// FIXME make concernsHover
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'discs' ?
-					Jion.Path.empty
+					jion.Path.empty
 					:
 					path
 		);
@@ -1051,7 +1051,7 @@ Shell.prototype._setHover =
 			'hover',
 				// FIXME make a concernsHover
 				path.isEmpty || path.get( 0 ) !== 'forms' ?
-					Jion.Path.empty
+					jion.Path.empty
 					:
 					path
 		);
@@ -1060,7 +1060,7 @@ Shell.prototype._setHover =
 		this.$space.create(
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'space' ?
-					Jion.Path.empty
+					jion.Path.empty
 					:
 					path
 		);
@@ -1100,7 +1100,7 @@ Shell.prototype.setPath =
 			break;
 
 		case 'space' :
-		
+
 			this.$space =
 				this.$space.setPath(
 					path,
@@ -1340,7 +1340,7 @@ Shell.prototype.onload =
 		passhash,
 		username;
 
-	ajaxPath = Jion.Path.empty.Append( 'ajax' );
+	ajaxPath = jion.Path.empty.Append( 'ajax' );
 
 	this.ajax =
 		Net.Ajax.create(
@@ -1498,11 +1498,11 @@ Shell.prototype.onAquireSpace =
 			'access',
 				access,
 			'hover',
-				Jion.Path.empty,
+				jion.Path.empty,
 			'mark',
 				Mark.Vacant.create( ),
 			'path',
-				Jion.Path.empty.Append( 'space' ),
+				jion.Path.empty.Append( 'space' ),
 			'view',
 				Euclid.View.create(
 					'fact',

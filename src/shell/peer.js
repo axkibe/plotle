@@ -16,7 +16,7 @@ var
 | Imports
 */
 var
-	Jion,
+	jion,
 	jools,
 	shell,
 	Visual;
@@ -36,15 +36,15 @@ var
 	spliceSign;
 
 
-Change = Jion.Change;
+Change = jion.Change;
 
-Sign = Jion.Sign;
+Sign = jion.Sign;
 
 // sign for a new Item
 newItemSign =
 	Sign.create(
 		'path',
-			Jion.Path.empty
+			jion.Path.empty
 			.Append( 'twig' )
 			.Append( '$new' ),
 		'rank',

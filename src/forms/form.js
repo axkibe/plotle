@@ -20,7 +20,7 @@ Forms = Forms || { };
 */
 var
 	Euclid,
-	Jion,
+	jion,
 	jools,
 	Mark,
 	reply,
@@ -284,7 +284,7 @@ Form.prototype.pointingHover =
 	return (
 		reply.hover.create(
 			'path',
-				Jion.Path.empty,
+				jion.Path.empty,
 			'cursor',
 				'default'
 		)

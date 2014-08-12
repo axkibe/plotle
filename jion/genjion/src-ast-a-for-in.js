@@ -70,7 +70,7 @@ var
 
 
 /*
-| Jion
+| Jion.
 */
 var
 	aForIn =

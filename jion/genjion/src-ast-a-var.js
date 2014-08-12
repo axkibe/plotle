@@ -66,7 +66,7 @@ var
 
 
 /*
-| Jion
+| Jion.
 */
 var
 	aVar =

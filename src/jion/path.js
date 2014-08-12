@@ -9,9 +9,9 @@
 | Export.
 */
 var
-	Jion;
+	jion;
 
-Jion = Jion || { };
+jion = jion || { };
 
 /*
 | Imports.
@@ -36,7 +36,7 @@ if( JION )
 		name :
 			'Path',
 		unit :
-			'Jion',
+			'jion',
 		attributes :
 			{
 				'array' :
@@ -80,14 +80,14 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	Jion.Path = require( '../jion/this' )( module );
+	jion.Path = require( '../jion/this' )( module );
 }
 
 
 var
 	Path;
 
-Path = Jion.Path;
+Path = jion.Path;
 
 
 /*

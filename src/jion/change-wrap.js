@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	Jion;
+	jion;
 
 
 /*
@@ -28,7 +28,7 @@ if( JION )
 		name :
 			'ChangeWrap',
 		unit :
-			'Jion',
+			'jion',
 		attributes :
 			{
 				cid :
@@ -70,7 +70,7 @@ if( JION )
 */
 if( SERVER )
 {
-	Jion =
+	jion =
 		{
 			ChangeWrap :
 				require( '../jion/change-wrap' )
@@ -83,7 +83,7 @@ if( SERVER )
 */
 if( SERVER )
 {
-	module.exports = Jion.ChangeWrap;
+	module.exports = jion.ChangeWrap;
 }
 
 

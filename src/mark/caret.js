@@ -16,7 +16,7 @@ var
 | Imports
 */
 var
-	Jion,
+	jion,
 	jools;
 
 
@@ -131,7 +131,7 @@ jools.lazyValue(
 			this.path.get( 0 ) !== 'space'
 		)
 		{
-			return Jion.Path.empty;
+			return jion.Path.empty;
 		}
 
 		return this.path.Limit( 3 );
@@ -153,7 +153,7 @@ jools.lazyValue(
 			this.path.get( 0 ) !== 'forms'
 		)
 		{
-			return Jion.Path.empty;
+			return jion.Path.empty;
 		}
 
 		return this.path.Limit( 5 );

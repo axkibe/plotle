@@ -74,7 +74,7 @@ var
 
 
 /*
-| Jion
+| Jion.
 */
 var
 	aCase =

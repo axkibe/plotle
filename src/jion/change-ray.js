@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Jion;
+	jion;
 
-Jion = Jion || { };
+jion = jion || { };
 
 
 /*
@@ -37,7 +37,7 @@ if( JION )
 		name :
 			'ChangeRay',
 		unit :
-			'Jion',
+			'jion',
 		attributes :
 			{
 				'array' :
@@ -82,7 +82,7 @@ if( SERVER )
 	jools =
 		require( '../jools/jools'  );
 
-	Jion =
+	jion =
 		{
 			Change :
 				require( '../jion/change' ),
@@ -95,7 +95,7 @@ if( SERVER )
 var
 	ChangeRay;
 
-ChangeRay = Jion.ChangeRay;
+ChangeRay = jion.ChangeRay;
 
 
 /*

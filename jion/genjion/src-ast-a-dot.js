@@ -69,7 +69,7 @@ var
 
 
 /*
-| Jion
+| Jion.
 */
 var
 	aDot =

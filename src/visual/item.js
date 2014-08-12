@@ -21,7 +21,7 @@ Visual =
 var
 	Action,
 	Euclid,
-	Jion,
+	jion,
 	jools,
 	Mark,
 	reply,
@@ -573,7 +573,7 @@ Item.prototype.dragStart =
 				'fromItemPath',
 					this.path,
 				'toItemPath',
-					Jion.Path.empty,
+					jion.Path.empty,
 				'relationState',
 					'hadSelect',
 				'toPoint',

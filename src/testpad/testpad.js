@@ -11,7 +11,7 @@
 var
 	Action,
 	IFaceSym,
-	Jion,
+	jion,
 	jools,
 	Peer;
 
@@ -131,7 +131,7 @@ var
 		null,
 
 	_noteDocPath =
-		Jion
+		jion
 		.Path
 		.empty
 		.Append( 'space' )

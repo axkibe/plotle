@@ -71,7 +71,7 @@ var
 
 
 /*
-| Jion
+| Jion.
 */
 var
 	aCommaList =

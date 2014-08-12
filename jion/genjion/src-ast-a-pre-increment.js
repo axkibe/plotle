@@ -64,7 +64,7 @@ var
 
 
 /*
-| Jion
+| Jion.
 */
 var
 	aPreIncrement =
