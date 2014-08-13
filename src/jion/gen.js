@@ -167,17 +167,16 @@ Gen.prototype._init =
 	var
 		assign,
 		attr,
-		attributes =
-			{ },
+		attributes,
 		attrList,
+		attrType,
+		attrUnit,
 		concerns,
-		constructorList =
-			[ ],
+		constructorList,
 		defaultValue,
 		jAttr,
 		jdv,
-		jion =
-			this.jion,
+		jion,
 		ut,
 		name,
 		// twigs to be recognized
@@ -191,14 +190,19 @@ Gen.prototype._init =
 		// units sorted alphabetically
 		unitList,
 		// units used
-		units =
-			{ };
+		units;
 
-	twig =
-		null;
+	attributes = { };
 
-	twigMap =
-		null;
+	constructorList = [ ];
+
+	jion = this.jion;
+
+	twig = null;
+
+	twigMap = null;
+
+	units = { };
 
 	this.hasJSON = !!jion.json;
 
@@ -244,19 +248,55 @@ Gen.prototype._init =
 	{
 		jAttr = jion.attributes[ name ];
 
+		// TODO
+		if( jAttr.unit )
+		{
+			console.log( 'WARNING: ' + jAttr.unit + '.' + jAttr.type );
+		}
+		else if( jAttr.type )
+		{
+			switch( jAttr.type )
+			{
+				case 'Boolean' :
+				case 'Integer' :
+				case 'Number' :
+				case 'Object' :
+				case 'String' :
+
+					break;
+
+				default :
+
+					console.log( 'WARNING: NONE.' + jAttr.type );
+			}
+		}
+
+		if( jAttr.typx )
+		{
+			attrUnit = jAttr.jtypx.split( '.' )[ 0 ];
+
+			attrType = jAttr.jtypx.split( '.' )[ 1 ];
+		}
+		else
+		{
+			attrUnit = jAttr.unit;
+
+			attrType = jAttr.type;
+		}
+
 		if( jAttr.json )
 		{
 			this.hasJSON = true;
 		}
 
-		if( jAttr.unit )
+		if( attrUnit )
 		{
-			if( !units[ jAttr.unit ] )
+			if( !units[ attrUnit ] )
 			{
-				units[ jAttr.unit ] = { };
+				units[ attrUnit ] = { };
 			}
 
-			units[ jAttr.unit ][ jAttr.type ] = true;
+			units[ attrUnit ][ attrType ] = true;
 		}
 
 		assign =
@@ -355,9 +395,9 @@ Gen.prototype._init =
 				name :
 					name,
 				type :
-					jAttr.type,
+					attrType,
 				unit :
-					jAttr.unit,
+					attrUnit,
 				v :
 					aVar( 'v_' + name )
 			} );
