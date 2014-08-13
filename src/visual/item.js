@@ -124,7 +124,7 @@ Item.prototype.checkHandles =
 
 	f = shell.fabric;
 
-	d8cwcf = euclid.Compass.dir8CWCF;
+	d8cwcf = euclid.compass.dir8CWCF;
 
 	for(
 		var a = 0, aZ = d8cwcf.length;
@@ -353,17 +353,21 @@ Item.prototype.sketchAllHandles =
 		view
 	)
 {
+	var
+		d,
+		d8cwcf,
+		fixView,
+		h,
+		z;
+
 	if( border !== 0 )
 	{
 		throw new Error( 'borders unsupported for handles' );
 	}
 
-	var
-		h =
-			this._handles,
+	h = this._handles;
 
-		d8cwcf =
-			euclid.Compass.dir8CWCF;
+	d8cwcf = euclid.compass.dir8CWCF;
 
 	for(
 		var a = d8cwcf.length - 1;
@@ -371,18 +375,16 @@ Item.prototype.sketchAllHandles =
 		a--
 	)
 	{
-		var
-			d =
-				d8cwcf[ a ],
-			z =
-				h[ d ];
+		d = d8cwcf[ a ];
+
+		z = h[ d ];
 
 		if( !z )
 		{
 			continue;
 		}
 
-		var fixView =
+		fixView =
 			view.review(
 				0,
 				view.point( z.pc )

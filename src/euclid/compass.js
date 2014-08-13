@@ -25,15 +25,15 @@ euclid = euclid || { };
 | Constructor.
 */
 var
-	Compass =
-	euclid.Compass =
+	compass =
+	euclid.compass =
 		{ };
 
 
 /*
 | all 8 directions, clock wise, corners first
 */
-Compass.dir8CWCF = [
+compass.dir8CWCF = [
 	'nw',
 	'ne',
 	'se',
