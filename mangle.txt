@@ -30,7 +30,6 @@
 . DocItem
 . FOCUS
 . Fabric
-. Font
 . Form
 . HOFOC
 . HOVER
@@ -44,14 +43,13 @@
 . Jockey
 > Label
 . Limit
-. Line
 . Link
 . Login
 . MAX_INTEGER
 . MainDisc
-. Margin
+. margin
 . Mark
-. Measure
+. measure
 . MoveTo
 . NORMA
 . NoAccessToSpace

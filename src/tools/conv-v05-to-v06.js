@@ -72,6 +72,8 @@ var translateSign =
 		sign
 	)
 {
+	sign.type = 'sign';
+
 	if( !sign.val )
 	{
 		return sign;
