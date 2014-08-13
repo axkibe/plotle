@@ -389,7 +389,7 @@ Shell.prototype.update =
 			{
 				sign =
 					chgX.transformSign(
-						jion.Sign.create(
+						jion.sign.create(
 							'path',
 								mark.path.Chop( ),
 							'at1',
@@ -438,7 +438,7 @@ Shell.prototype.update =
 			{
 				bSign =
 					chgX.transformSign(
-						jion.Sign.create(
+						jion.sign.create(
 							'path',
 								mark.bPath.Chop( ),
 							'at1',
@@ -448,7 +448,7 @@ Shell.prototype.update =
 
 				eSign =
 					chgX.transformSign(
-						jion.Sign.create(
+						jion.sign.create(
 							'path',
 								mark.ePath.Chop( ),
 							'at1',

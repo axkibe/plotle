@@ -84,6 +84,41 @@ var translateChange =
 			throw new Error( );
 	}
 
+/*
+	switch( chg.chgX.src.type )
+	{
+		case 'Sign' :
+
+//			chg.chgX.src.type = 'sign';
+
+			break;
+
+		case undefined :
+
+//			chg.chgX.src.type = 'sign';
+
+			break;
+
+		default :
+			console.log( chg.chgX.src.type );
+
+			throw new Error( chg.chgX.src.type );
+	}
+
+	switch( chg.chgX.trg.type )
+	{
+		case 'Sign' :
+		case undefined :
+
+//			chg.chgX.trg.type = 'sign';
+
+			break;
+
+		default :
+			throw new Error( chg.chgX.trg.type );
+	}
+*/
+
 	return chg;
 };
 

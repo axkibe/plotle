@@ -34,7 +34,7 @@ if( JION )
 {
 	return {
 		name :
-			'Sign',
+			'sign',
 		unit :
 			'jion',
 		attributes :
@@ -144,7 +144,7 @@ if( SERVER )
 		};
 	jion =
 		{
-			Sign :
+			sign :
 				require( '../jion/this' )( module )
 		};
 	Visual =
@@ -162,15 +162,15 @@ if( SERVER )
 
 
 var
-	Sign;
+	sign;
 
-Sign = jion.Sign;
+sign = jion.sign;
 
 
 /*
 | Initializer.
 */
-Sign.prototype._init =
+sign.prototype._init =
 	function( )
 {
 	// FUTURE remove this hack and enable
@@ -246,7 +246,7 @@ Sign.prototype._init =
 |
 | TODO rename Affix and simplify
 */
-Sign.prototype.affix =
+sign.prototype.affix =
 	function(
 		test, // function to test existence of key (is or isnon)
 		cm,   // checks message for failed checks
@@ -288,7 +288,7 @@ Sign.prototype.affix =
 */
 if( SERVER )
 {
-	module.exports = Sign;
+	module.exports = sign;
 }
 
 }( ) );

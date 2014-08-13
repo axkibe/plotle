@@ -35,7 +35,7 @@ if( JION )
 {
 	return {
 		name :
-			'SignRay',
+			'signRay',
 		unit :
 			'jion',
 		attributes :
@@ -84,24 +84,24 @@ if( SERVER )
 
 	jion =
 		{
-			Sign :
+			sign :
 				require( '../jion/sign' ),
-			SignRay :
+			signRay :
 				require( '../jion/this' )( module )
 		};
 }
 
 
 var
-	SignRay;
+	signRay;
 
-SignRay = jion.SignRay;
+signRay = jion.signRay;
 
 
 /*
 | Initializer.
 */
-SignRay.prototype._init =
+signRay.prototype._init =
 	function(
 		array,
 		_sliced
@@ -140,7 +140,7 @@ SignRay.prototype._init =
 /*
 | Appends a change to the change ray.
 */
-SignRay.prototype.Append =
+signRay.prototype.Append =
 	function(
 		chg
 	)
@@ -153,7 +153,7 @@ SignRay.prototype.Append =
 	rc.push( chg );
 
 	return (
-		SignRay.create(
+		signRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -167,7 +167,7 @@ SignRay.prototype.Append =
 | Returns the length of the changeray
 */
 jools.lazyValue(
-	SignRay.prototype,
+	signRay.prototype,
 	'length',
 	function( )
 	{
@@ -179,7 +179,7 @@ jools.lazyValue(
 /*
 | Gets one change.
 */
-SignRay.prototype.get =
+signRay.prototype.get =
 	function(
 		idx
 	)
@@ -189,9 +189,9 @@ SignRay.prototype.get =
 
 
 /*
-| Returns a SignRay with one element altered.
+| Returns a signRay with one element altered.
 */
-SignRay.prototype.Set =
+signRay.prototype.Set =
 	function(
 		idx,
 		sign
@@ -205,7 +205,7 @@ SignRay.prototype.Set =
 	rc[ idx ] = sign;
 
 	return (
-		SignRay.create(
+		signRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -216,9 +216,9 @@ SignRay.prototype.Set =
 
 
 /*
-| Returns a SignRay with one element removed.
+| Returns a signRay with one element removed.
 */
-SignRay.prototype.Remove =
+signRay.prototype.Remove =
 	function(
 		idx
 	)
@@ -231,7 +231,7 @@ SignRay.prototype.Remove =
 	rc.splice( idx, 1 );
 
 	return (
-		SignRay.create(
+		signRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -242,9 +242,9 @@ SignRay.prototype.Remove =
 
 
 /*
-| Returns a SignRay with one element inserted.
+| Returns a signRay with one element inserted.
 */
-SignRay.prototype.Insert =
+signRay.prototype.Insert =
 	function(
 		idx,
 		sign
@@ -258,7 +258,7 @@ SignRay.prototype.Insert =
 	rc.splice( idx, 0, sign );
 
 	return (
-		SignRay.create(
+		signRay.create(
 			'array',
 				rc,
 			'_sliced',
@@ -273,7 +273,7 @@ SignRay.prototype.Insert =
 */
 if( SERVER )
 {
-	module.exports = SignRay;
+	module.exports = signRay;
 }
 
 }( ) );

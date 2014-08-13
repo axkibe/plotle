@@ -47,7 +47,7 @@ if( JION )
 						unit :
 							'jion',
 						type :
-							'Sign'
+							'sign'
 					},
 				trg :
 					{
@@ -58,7 +58,7 @@ if( JION )
 						unit :
 							'jion',
 						type :
-							'Sign'
+							'sign'
 					}
 			},
 		node :
@@ -82,9 +82,9 @@ if( SERVER )
 				require( '../jion/change-ray' ),
 			path :
 				require( '../jion/path'  ),
-			Sign :
+			sign :
 				require( '../jion/sign'  ),
-			SignRay :
+			signRay :
 				require( '../jion/sign'  )
 		};
 }
@@ -1218,7 +1218,7 @@ change.prototype.transformSign =
 
 
 /*
-| Returns a transformed SignRay on this change.
+| Returns a transformed signRay on this change.
 */
 change.prototype.transformSignRay =
 	function(
@@ -1276,9 +1276,9 @@ change.prototype.transformSignRay =
 
 
 /*
-| Returns a transformed Sign or SignRay on this change.
+| Returns a transformed sign or signRay on this change.
 |
-| Can possibly transform a Sign to a SignRay.
+| Can possibly transform a sign to a signRay.
 */
 change.prototype.transformSignX =
 	function(
@@ -1380,7 +1380,7 @@ change.prototype._transformSignSplit =
 	// the signature is splited into a part that stays and one that goes to next line.
 
 	return (
-		jion.SignRay.create(
+		jion.signRay.create(
 			'array',
 				[
 					sign.create(

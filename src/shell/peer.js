@@ -32,17 +32,17 @@ var
 var
 	change,
 	newItemSign,
-	Sign,
+	sign,
 	spliceSign;
 
 
 change = jion.change;
 
-Sign = jion.Sign;
+sign = jion.sign;
 
 // sign for a new Item
 newItemSign =
-	Sign.create(
+	sign.create(
 		'path',
 			jion.path.empty
 			.Append( 'twig' )
@@ -53,7 +53,7 @@ newItemSign =
 
 // sign for split/join
 spliceSign =
-	Sign.create(
+	sign.create(
 		'proc',
 			'splice'
 	);
@@ -101,7 +101,7 @@ Peer.newNote =
 		src;
 
 	src =
-		Sign.create(
+		sign.create(
 			'val',
 				Visual.Note.create(
 					'fontsize',
@@ -153,7 +153,7 @@ Peer.newPortal =
 		src;
 
 	src =
-		Sign.create(
+		sign.create(
 			'val',
 				Visual.Portal.create(
 					'zone',
@@ -193,12 +193,12 @@ Peer.setZone =
 		shell.link.alter(
 			change.create(
 				'src',
-					Sign.create(
+					sign.create(
 						'val',
 							zone
 					),
 				'trg',
-					Sign.create(
+					sign.create(
 						'path',
 							itemPath
 							.Chop( )
@@ -223,12 +223,12 @@ Peer.setFontSize =
 		shell.link.alter(
 			change.create(
 				'src',
-					Sign.create(
+					sign.create(
 						'val',
 							fontsize
 					),
 				'trg',
-					Sign.create(
+					sign.create(
 						'path',
 							itemPath
 							.Chop( )
@@ -253,12 +253,12 @@ Peer.setPNW =
 		shell.link.alter(
 			change.create(
 				'src',
-					Sign.create(
+					sign.create(
 						'val',
 							pnw
 					),
 				'trg',
-					Sign.create(
+					sign.create(
 						'path',
 							itemPath
 							.Chop( )
@@ -286,7 +286,7 @@ Peer.newLabel =
 		src;
 
 	src =
-		Sign.create(
+		sign.create(
 			'val',
 				Visual.Label.create(
 					'fontsize',
@@ -338,7 +338,7 @@ Peer.newRelation =
 		src;
 
 	src =
-		Sign.create(
+		sign.create(
 			'val',
 				Visual.Relation.create(
 					'item1key',
@@ -413,12 +413,12 @@ Peer.insertText =
 		shell.link.alter(
 			change.create(
 				'src',
-					Sign.create(
+					sign.create(
 						'val',
 							text
 					),
 				'trg',
-					Sign.create(
+					sign.create(
 						'path',
 							path.Chop( 1 ),
 						'at1',
@@ -454,7 +454,7 @@ Peer.removeText =
 		shell.link.alter(
 			change.create(
 				'src',
-					Sign.create(
+					sign.create(
 						'path',
 							path.Chop( 1 ),
 						'at1',
@@ -463,7 +463,7 @@ Peer.removeText =
 							at1 + len
 					),
 				'trg',
-					Sign.create(
+					sign.create(
 						'val',
 							null
 					)
@@ -571,7 +571,7 @@ Peer.split =
 		shell.link.alter(
 			change.create(
 				'src',
-					Sign.create(
+					sign.create(
 						'path',
 							path.Chop( 1 ),
 						'at1',
@@ -600,7 +600,7 @@ Peer.join =
 				'src',
 					spliceSign,
 				'trg',
-					Sign.create(
+					sign.create(
 						'path',
 							path.Chop( 1 ),
 						'at1',
@@ -641,14 +641,14 @@ Peer.removeItem =
 		shell.link.alter(
 			change.create(
 				'src',
-					Sign.create(
+					sign.create(
 						'val',
 							null,
 						'rank',
 							r1
 					),
 				'trg',
-					Sign.create(
+					sign.create(
 						'path',
 							path.Chop( 1 ),
 						'rank',
