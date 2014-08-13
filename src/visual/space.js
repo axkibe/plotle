@@ -447,7 +447,7 @@ Space.prototype.draw =
 				if( toSilhoutte )
 				{
 					arrow =
-						euclid.Line.connect(
+						euclid.line.connect(
 							fromSilhoutte,
 							'normal',
 							toSilhoutte,

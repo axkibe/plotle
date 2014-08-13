@@ -37,7 +37,7 @@ FontPool.styles =
 {
 	ca         :
 	{
-		type   : 'Font',
+		type   : 'font',
 		family : '(default)',
 		fill   : 'black',
 		align  : 'center',
@@ -46,7 +46,7 @@ FontPool.styles =
 
 	car        :
 	{
-		type   : 'Font',
+		type   : 'font',
 		family : '(default)',
 		fill   : 'red',
 		align  : 'center',
@@ -55,7 +55,7 @@ FontPool.styles =
 
 	cm         :
 	{
-		type   : 'Font',
+		type   : 'font',
 		family : '(default)',
 		fill   : 'black',
 		align  : 'center',
@@ -64,7 +64,7 @@ FontPool.styles =
 
 	la         :
 	{
-		type   : 'Font',
+		type   : 'font',
 		family : '(default)',
 		fill   : 'black',
 		align  : 'start',
@@ -73,7 +73,7 @@ FontPool.styles =
 
 	lm         :
 	{
-		type   : 'Font',
+		type   : 'font',
 		family : '(default)',
 		fill   : 'black',
 		align  : 'start',
@@ -82,7 +82,7 @@ FontPool.styles =
 
 	ra         :
 	{
-		type   : 'Font',
+		type   : 'font',
 		family : '(default)',
 		fill   : 'black',
 		align  : 'end',
@@ -192,7 +192,7 @@ FontPool.prototype.get =
 
 	f =
 	c[ size ] =
-		euclid.Font.create(
+		euclid.font.create(
 			'family',
 				style.family,
 			'fill',

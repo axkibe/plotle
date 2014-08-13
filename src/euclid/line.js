@@ -38,7 +38,7 @@ if( JION )
 {
 	return {
 		name :
-			'Line',
+			'line',
 		unit :
 			'euclid',
 		attributes :
@@ -81,15 +81,15 @@ if( JION )
 
 
 var
-	Line;
+	line;
 
-Line = euclid.Line;
+line = euclid.line;
 
 
 /*
 | Returns the line connecting shape1 to shape2
 */
-Line.connect =
+line.connect =
 	function(
 		shape1,  // a Rect or Point
 		end1,    // 'normal' or 'arrow'
@@ -103,7 +103,7 @@ Line.connect =
 /**/	if( !shape1 || !shape2 )
 /**/	{
 /**/		throw new Error(
-/**/			'Line.connect() missing shape1 or shape2'
+/**/			'line.connect() missing shape1 or shape2'
 /**/		);
 /**/	}
 /**/}
@@ -178,7 +178,7 @@ Line.connect =
 			shape2.getProjection( pc1 );
 	}
 
-	return Line.create(
+	return line.create(
 		'p1',
 			p1,
 		'p1end',
@@ -195,7 +195,7 @@ Line.connect =
 | The zone of the arrow.
 */
 jools.lazyValue(
-	Line.prototype,
+	line.prototype,
 	'zone',
 	function()
 	{
@@ -230,7 +230,7 @@ jools.lazyValue(
 | The point at center.
 */
 jools.lazyValue(
-	Line.prototype,
+	line.prototype,
 	'pc',
 	function() {
 		var
@@ -255,7 +255,7 @@ jools.lazyValue(
 /*
 | Sketches the line.
 */
-Line.prototype.sketch =
+line.prototype.sketch =
 	function(
 		fabric,
 		border,
@@ -382,7 +382,7 @@ Line.prototype.sketch =
 /*
 | Draws the line.
 */
-Line.prototype.draw =
+line.prototype.draw =
 	function(
 		fabric,
 		view,

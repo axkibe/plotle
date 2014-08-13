@@ -36,7 +36,7 @@ if( JION )
 {
 	return {
 		name :
-			'Font',
+			'font',
 		unit :
 			'euclid',
 		attributes :
@@ -85,7 +85,7 @@ if( JION )
 | The CSS-string for this font.
 */
 jools.lazyValue(
-	euclid.Font.prototype,
+	euclid.font.prototype,
 	'css',
 	function( )
 	{

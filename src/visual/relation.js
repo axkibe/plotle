@@ -214,7 +214,7 @@ Relation.spawn =
 		result;
 
 	cline =
-		euclid.Line.connect(
+		euclid.line.connect(
 			item1.silhoutte,
 			null,
 			item2.silhoutte,
@@ -287,7 +287,7 @@ Relation.prototype.draw =
 	if( item1 )
 	{
 		l1 =
-			euclid.Line.connect(
+			euclid.line.connect(
 				item1.silhoutte,
 				'normal',
 				zone,
@@ -305,7 +305,7 @@ Relation.prototype.draw =
 	if( item2 )
 	{
 		l2 =
-			euclid.Line.connect(
+			euclid.line.connect(
 				zone,
 				'normal',
 				item2.silhoutte,
