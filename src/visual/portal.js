@@ -988,7 +988,7 @@ if( SHELL )
 		return euclid.Point.create(
 			'x',
 				Math.round(
-					euclid.Measure.width(
+					euclid.measure.width(
 						font,
 						text.substring(
 							0,
@@ -1828,7 +1828,7 @@ Portal.prototype._prepareField =
 			this[ section ],
 
 		width =
-			euclid.Measure.width(
+			euclid.measure.width(
 				this._fonts[ section ],
 				text
 			),
@@ -1945,7 +1945,7 @@ Portal.prototype._getOffsetAt =
 		x1 = x2;
 
 		x2 =
-			euclid.Measure.width(
+			euclid.measure.width(
 				font,
 				value.substr( 0, a )
 			);

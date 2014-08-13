@@ -23,8 +23,8 @@ var euclid;
 /*
 | Singleton
 */
-var Measure =
-euclid.Measure =
+var measure =
+euclid.measure =
 {
 
 	/*
@@ -33,7 +33,7 @@ euclid.Measure =
 	init :
 		function( canvas )
 	{
-		Measure._cx =
+		measure._cx =
 			canvas.getContext( '2d' );
 	},
 
@@ -48,15 +48,13 @@ euclid.Measure =
 		)
 	{
 		var
-			cx =
-				Measure._cx;
+			cx;
 
-		if(
-			cx.font !== font.css
-		)
+		cx = measure._cx;
+
+		if( cx.font !== font.css )
 		{
-			cx.font =
-				font.css;
+			cx.font = font.css;
 		}
 
 		return cx.measureText( text ).width;

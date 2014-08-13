@@ -300,7 +300,7 @@ Input.prototype.getOffsetAt =
 		else
 		{
 			x2 =
-				euclid.Measure.width(
+				euclid.measure.width(
 					font,
 					value.substr( 0, a )
 				);
@@ -606,7 +606,7 @@ Input.prototype.locateOffset =
 				'x',
 					Math.round(
 						pitch.x +
-						euclid.Measure.width(
+						euclid.measure.width(
 							font,
 							value.substring( 0, offset )
 						)

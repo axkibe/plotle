@@ -121,12 +121,12 @@ Shell =
 				canvas
 		);
 
-	euclid.Measure.init( canvas );
+	euclid.measure.init( canvas );
 
 	this._fontWFont = fontPool.get( 20, 'la' );
 
 	this._$fontWatch =
-		euclid.Measure.width(
+		euclid.measure.width(
 			this._fontWFont,
 			'meshcraft$8833'
 		);

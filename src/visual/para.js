@@ -479,7 +479,7 @@ jools.lazyValue(
 			y =
 				Math.round( font.size ),
 			space =
-				euclid.Measure.width( font, ' ' ),
+				euclid.measure.width( font, ' ' ),
 			line =
 				0,
 			flow =
@@ -510,7 +510,7 @@ jools.lazyValue(
 				token =
 					ca[ 1 ] + ca[ 2 ],
 				w =
-					euclid.Measure.width( font, token );
+					euclid.measure.width( font, token );
 
 			xw =
 				x + w;
@@ -673,7 +673,7 @@ Para.prototype.getOffsetAt =
 			x2;
 
 		x2 =
-			euclid.Measure.width(
+			euclid.measure.width(
 				font,
 				text.substr( 0, a )
 			);
@@ -769,7 +769,7 @@ Para.prototype.locateOffset =
 				'x',
 					Math.round(
 						token.x +
-						euclid.Measure.width(
+						euclid.measure.width(
 							font, text.substring( token.o, offset )
 						)
 					),
@@ -783,7 +783,7 @@ Para.prototype.locateOffset =
 			euclid.Point.create(
 				'x',
 					Math.round(
-						euclid.Measure.width( font, text )
+						euclid.measure.width( font, text )
 					),
 				'y',
 					line.y
