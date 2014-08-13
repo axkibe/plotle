@@ -38,6 +38,12 @@ if( SERVER )
 	JoobjProto = require( '../../src/jion/proto' );
 
 	jools = require( '../../src/jools/jools' );
+
+	ast = { };
+
+	ast.aBlock = require( '../../src/ast/a-block' );
+
+	ast.aComment = require( '../../src/ast/a-comment' );
 }
 
 

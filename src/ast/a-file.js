@@ -29,7 +29,7 @@ if( JION )
 						comment :
 							'header comment',
 						type :
-							'aComment',
+							'ast.aComment',
 						defaultValue :
 							null
 					},
@@ -38,7 +38,7 @@ if( JION )
 						comment :
 							'preamble to capsule',
 						type :
-							'aBlock',
+							'ast.aBlock',
 						defaultValue :
 							null
 					},
@@ -47,7 +47,7 @@ if( JION )
 						comment :
 							'the capsule',
 						type :
-							'aBlock',
+							'ast.aBlock',
 						defaultValue :
 							null
 					}

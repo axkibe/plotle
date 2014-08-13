@@ -50,7 +50,7 @@ if( JION )
 						comment :
 							'the for block',
 						type :
-							'aBlock'
+							'ast.aBlock'
 					}
 			},
 		node :

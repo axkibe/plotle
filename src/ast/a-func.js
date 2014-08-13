@@ -29,7 +29,7 @@ if( JION )
 						comment :
 							'function code',
 						type :
-							'aBlock',
+							'ast.aBlock',
 						defaultValue :
 							null
 					}

@@ -257,6 +257,7 @@ Gen.prototype._init =
 		{
 			switch( jAttr.type )
 			{
+				case 'Array' :
 				case 'Boolean' :
 				case 'Integer' :
 				case 'Number' :
