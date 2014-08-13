@@ -251,13 +251,15 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			fabric =
-				euclid.Fabric.create(
-					'width',
-						this.style.width,
-					'height',
-						this.style.height
-				);
+			fabric;
+
+		fabric =
+			euclid.fabric.create(
+				'width',
+					this.style.width,
+				'height',
+					this.style.height
+			);
 
 		fabric.fill(
 			this.style,
@@ -272,8 +274,7 @@ jools.lazyValue(
 			r++
 		)
 		{
-			this.atRank( r )
-				.draw( fabric );
+			this.atRank( r ).draw( fabric );
 		}
 
 		fabric.edge(

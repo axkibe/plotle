@@ -739,7 +739,7 @@ jools.lazyValue(
 				this.view.rect( this.zone ),
 
 			f =
-				euclid.Fabric.create(
+				euclid.fabric.create(
 					'width',
 						vzone.width + 2,
 					'height',

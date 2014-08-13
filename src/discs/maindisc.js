@@ -339,7 +339,7 @@ jools.lazyValue(
 	{
 		var
 			fabric =
-				euclid.Fabric.create(
+				euclid.fabric.create(
 					'width',
 						this.style.width,
 					'height',

@@ -12,8 +12,7 @@ var
 	euclid;
 
 
-euclid =
-	euclid || { };
+euclid = euclid || { };
 
 
 /*
@@ -37,8 +36,8 @@ var
 /*
 | Constructor.
 */
-var Fabric =
-euclid.Fabric =
+var fabric =
+euclid.fabric =
 	function(
 		tag,
 		canvas,
@@ -60,56 +59,45 @@ euclid.Fabric =
 
 	if( inherit )
 	{
-		canvas =
-			inherit._canvas;
+		canvas = inherit._canvas;
 	}
 	else if( canvas === undefined )
 	{
-		canvas =
-			document.createElement( 'canvas' );
+		canvas = document.createElement( 'canvas' );
 	}
 
 	if( width === undefined )
 	{
-		width =
-			canvas.width;
+		width = canvas.width;
 	}
 	else
 	{
-		canvas.width =
-			width;
+		canvas.width = width;
 	}
 
 	if( height === undefined )
 	{
-		height =
-			canvas.height;
+		height = canvas.height;
 	}
 	else
 	{
-		canvas.height =
-			height;
+		canvas.height = height;
 	}
 
-	this.width =
-		width;
+	this.width = width;
 
-	this.height =
-		height;
+	this.height = height;
 
-	this._canvas =
-		canvas;
+	this._canvas = canvas;
 
-	this._cx =
-		canvas.getContext( '2d' );
+	this._cx = canvas.getContext( '2d' );
 
 	// curren positiont ( without twist )
 	this._$posx =
 	this._$posy =
 		null;
 
-	this.$clip =
-		false;
+	this.$clip = false;
 
 	jools.immute( this );
 };
@@ -120,8 +108,8 @@ euclid.Fabric =
 |
 | FUTURE make a jion
 */
-Fabric.create =
-Fabric.prototype.create =
+fabric.create =
+fabric.prototype.create =
 	function(
 		// free strings
 	)
@@ -181,7 +169,7 @@ Fabric.prototype.create =
 		}
 	}
 
-	if( this !== Fabric )
+	if( this !== fabric )
 	{
 /**/	if( CHECK )
 /**/	{
@@ -195,7 +183,7 @@ Fabric.prototype.create =
 			this;
 	}
 
-	return new Fabric(
+	return new fabric(
 		_tag,
 		canvas,
 		height,
@@ -212,7 +200,7 @@ Fabric.prototype.create =
 | arc(p,    radius, startAngle, endAngle, anticlockwise)   -or-
 | arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
 */
-Fabric.prototype.arc =
+fabric.prototype.arc =
 	function(
 		a1,
 		a2,
@@ -261,7 +249,7 @@ Fabric.prototype.arc =
 | bezier(cp1x, cp1y, cp2x, cp2y, x, y) -or-
 | any combination of points and arguments.
 */
-Fabric.prototype.beziTo =
+fabric.prototype.beziTo =
 	function( )
 {
 	var
@@ -426,7 +414,7 @@ Fabric.prototype.beziTo =
 /*
 | Clips the fabric into a shape.
 */
-Fabric.prototype.clip =
+fabric.prototype.clip =
 	function(
 		shape,
 		sketch,
@@ -469,7 +457,7 @@ Fabric.prototype.clip =
 /*
 | Removes the clipping
 */
-Fabric.prototype.deClip =
+fabric.prototype.deClip =
 	function( )
 {
 
@@ -502,7 +490,7 @@ Fabric.prototype.deClip =
 |    'alpha'
 |
 */
-Fabric.prototype.drawImage =
+fabric.prototype.drawImage =
 	function(
 		// free strings
 	)
@@ -583,7 +571,7 @@ Fabric.prototype.drawImage =
 		}
 	}
 
-	if( image instanceof Fabric )
+	if( image instanceof fabric )
 	{
 		if(
 			!(
@@ -659,7 +647,7 @@ Fabric.prototype.drawImage =
 /*
 | Draws an edge.
 */
-Fabric.prototype.edge =
+fabric.prototype.edge =
 	function(
 		style,  // the style formated in meshcraft style notation.
 		shape,  // an object which has 'sketch'() defined
@@ -710,7 +698,7 @@ Fabric.prototype.edge =
 /*
 | Draws a filled area.
 */
-Fabric.prototype.fill =
+fabric.prototype.fill =
 	function(
 		style,   // the style formated in meshcraft style notation.
 		shape,   // an object which has 'sketch'() defined
@@ -780,7 +768,7 @@ Fabric.prototype.fill =
 | 'rotate' ( degree )
 |      text is rotated by degree
 */
-Fabric.prototype.paintText =
+fabric.prototype.paintText =
 	function(
 		// free strings
 	)
@@ -935,7 +923,7 @@ Fabric.prototype.paintText =
 | fillRect( style, pnw, pse ) -or-
 | fillRect( style, nwx, nwy, width, height )
 */
-Fabric.prototype.fillRect =
+fabric.prototype.fillRect =
 	function(
 		style,
 		a1,
@@ -976,7 +964,7 @@ Fabric.prototype.fillRect =
 				a2.y
 			);
 		}
-		else if( a1 instanceof euclid.Fabric )
+		else if( a1 instanceof euclid.fabric )
 		{
 			return this._cx.fillRect(
 				0,
@@ -1004,7 +992,7 @@ Fabric.prototype.fillRect =
 | The center point of the fabric.
 */
 jools.lazyValue(
-	Fabric.prototype,
+	fabric.prototype,
 	'pc',
 	function( )
 	{
@@ -1026,7 +1014,7 @@ jools.lazyValue(
 | Sets the global alpha
 | FIXME remove
 */
-Fabric.prototype.globalAlpha =
+fabric.prototype.globalAlpha =
 	function( a )
 {
 	this._cx.globalAlpha = a;
@@ -1042,7 +1030,7 @@ Fabric.prototype.globalAlpha =
 | lineto(point, view) -or-
 | lineto(x, y, view)
 */
-Fabric.prototype.lineTo =
+fabric.prototype.lineTo =
 	function(
 		a1,
 		a2,
@@ -1103,7 +1091,7 @@ Fabric.prototype.lineTo =
 | moveTo(point, view) -or-
 | moveTo(x, y, view)
 */
-Fabric.prototype.moveTo =
+fabric.prototype.moveTo =
 	function(
 		a1,
 		a2,
@@ -1164,7 +1152,7 @@ Fabric.prototype.moveTo =
 /*
 | The canvas is cleared.
 */
-Fabric.prototype.clear =
+fabric.prototype.clear =
 	function( )
 {
 	this._cx.clearRect(
@@ -1179,7 +1167,7 @@ Fabric.prototype.clear =
 /*
 | Fills an aera and draws its borders
 */
-Fabric.prototype.paint =
+fabric.prototype.paint =
 	function(
 		style,
 		shape,
@@ -1260,7 +1248,7 @@ Fabric.prototype.paint =
 /*
 | Clips the fabric so that the shape is left out.
 */
-Fabric.prototype.reverseClip =
+fabric.prototype.reverseClip =
 	function(
 		shape,
 		sketch,
@@ -1310,7 +1298,7 @@ Fabric.prototype.reverseClip =
 |
 | FIXME remove
 */
-Fabric.prototype.scale =
+fabric.prototype.scale =
 	function(
 		s
 	)
@@ -1322,7 +1310,7 @@ Fabric.prototype.scale =
 /*
 | Sets the font.
 */
-Fabric.prototype._setFont =
+fabric.prototype._setFont =
 	function(
 		font
 	)
@@ -1383,7 +1371,7 @@ Fabric.prototype._setFont =
 | euclid.Point -or-
 | x / y
 */
-Fabric.prototype.withinSketch =
+fabric.prototype.withinSketch =
 	function(
 		shape,
 		sketch,
@@ -1414,7 +1402,7 @@ Fabric.prototype.withinSketch =
 /*
 | Begins a sketch
 */
-Fabric.prototype._begin =
+fabric.prototype._begin =
 	function(
 		twist
 	)
@@ -1434,7 +1422,7 @@ Fabric.prototype._begin =
 /*
 | Returns a HTML5 color style for a meshcraft style notation.
 */
-Fabric.prototype._colorStyle =
+fabric.prototype._colorStyle =
 	function(
 		style,
 		shape,
@@ -1574,7 +1562,7 @@ Fabric.prototype._colorStyle =
 /*
 | Draws a single edge.
 */
-Fabric.prototype._edge =
+fabric.prototype._edge =
 	function(
 		style,  // the style formated in meshcraft style notation.
 		shape,  // an object which has 'sketch'() defined
@@ -1630,7 +1618,7 @@ Fabric.prototype._edge =
 /*
 | Draws the fabrics background
 */
-Fabric.prototype.sketch =
+fabric.prototype.sketch =
 	function(
 		fabric,
 		border
@@ -1654,7 +1642,7 @@ Fabric.prototype.sketch =
 | Point in north-west
 | is always considered zero.
 */
-Fabric.prototype.pnw =
+fabric.prototype.pnw =
 	euclid.Point.zero;
 
 
@@ -1662,7 +1650,7 @@ Fabric.prototype.pnw =
 | Point in south east.
 */
 jools.lazyValue(
-	Fabric.prototype,
+	fabric.prototype,
 	'pse',
 	function( )
 	{

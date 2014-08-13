@@ -287,25 +287,34 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			accent =
-				Accent.state(
-					this.hover
-						&&
-						this.hover.equals( this.path ),
-					this.focusAccent
-				),
-			f =
-				euclid.Fabric.create(
-					'width',
-						this.frame.width,
-					'height',
-						this.frame.height
-				),
-			style =
-				Widgets.getStyle(
-					this.style,
-					accent
-				);
+			accent,
+			f,
+			font,
+			newline,
+			style,
+			textPos;
+
+		accent =
+			Accent.state(
+				this.hover
+					&&
+					this.hover.equals( this.path ),
+				this.focusAccent
+			);
+
+		f =
+			euclid.fabric.create(
+				'width',
+					this.frame.width,
+				'height',
+					this.frame.height
+			);
+
+		style =
+			Widgets.getStyle(
+				this.style,
+				accent
+			);
 
 		f.paint(
 			style,
@@ -316,18 +325,15 @@ jools.lazyValue(
 
 		if( this.text )
 		{
-			var
-				newline =
-					this.textNewline,
+			newline = this.textNewline;
 
-				font =
-					this.font,
+			font = this.font;
 
-				// FIXME put into _init
-				textPos =
-					this.textDesignPos.compute(
-						this.frame.zeropnw
-					);
+			// FIXME put into _init
+			textPos =
+				this.textDesignPos.compute(
+					this.frame.zeropnw
+				);
 
 			if( newline === null )
 			{

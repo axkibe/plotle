@@ -406,22 +406,19 @@ jools.lazyValue(
 			hview,
 			vzone;
 
-		vzone =
-			this.view.rect( this.zone );
+		vzone = this.view.rect( this.zone );
 
 		f =
-			euclid.Fabric.create(
+			euclid.fabric.create(
 				'width',
 					vzone.width,
 				'height',
 					vzone.height
 			);
 
-		doc =
-			this.doc;
+		doc = this.doc;
 
-		hview =
-			this.view.home;
+		hview = this.view.home;
 
 		// draws selection and text
 		doc.draw(

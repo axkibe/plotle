@@ -148,7 +148,7 @@ var System =
 	_height = window.innerHeight - 1;
 
 	this._fabric =
-		euclid.Fabric.create(
+		euclid.fabric.create(
 			'canvas',
 				_canvas,
 			'width',

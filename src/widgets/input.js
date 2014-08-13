@@ -468,7 +468,7 @@ jools.lazyValue(
 				this._pitch,
 
 			f =
-				euclid.Fabric.create(
+				euclid.fabric.create(
 					'width',
 						shape.width + 1,
 					'height',

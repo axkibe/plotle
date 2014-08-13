@@ -287,25 +287,39 @@ jools.lazyValue(
 	function( )
 	{
 		var
+			a,
+			aZ,
+			b,
+			bZ,
+			chunk,
 			f,
-			flow =
-				this.flow,
-			font =
-				this.font,
-			mark =
-				this.mark,
-			view =
-				this.view,
-			zoom =
-				view.zoom,
-			height =
-				this.height * zoom,
-			width =
-				flow.spread * zoom;
+			flow,
+			font,
+			line,
+			mark,
+			view,
+			zoom,
+			height,
+			width;
+
+		flow = this.flow;
+
+		font = this.font;
+
+		mark = this.mark;
+
+		view = this.view;
+
+		zoom = view.zoom;
+
+		height = this.height * zoom;
+
+		width = flow.spread * zoom;
+
 
 		// adds to width so the caret gets visible.
 		f =
-			euclid.Fabric.create(
+			euclid.fabric.create(
 				'width',
 					width + 7,
 				'height',
@@ -316,24 +330,20 @@ jools.lazyValue(
 
 		// draws text into the fabric
 		for(
-			var a = 0, aZ = flow.length;
+			a = 0, aZ = flow.length;
 			a < aZ;
 			a++
 		)
 		{
-			var
-				line =
-					flow[ a ];
+			line = flow[ a ];
 
 			for(
-				var b = 0, bZ = line.a.length;
+				b = 0, bZ = line.a.length;
 				b < bZ;
 				b++
 			)
 			{
-				var
-					chunk =
-						line.a[ b ];
+				chunk = line.a[ b ];
 
 				f.paintText(
 					'text',

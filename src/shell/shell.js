@@ -116,7 +116,7 @@ Shell =
 	canvas = document.createElement( 'canvas' );
 
 	swatch =
-		euclid.Fabric.create(
+		euclid.fabric.create(
 			'canvas',
 				canvas
 		);
