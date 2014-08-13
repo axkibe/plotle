@@ -11,9 +11,7 @@
 var
 	Widgets;
 
-
-Widgets =
-	Widgets || { };
+Widgets = Widgets || { };
 
 
 /*
@@ -22,7 +20,7 @@ Widgets =
 var
 	Accent,
 	Discs,
-	Euclid,
+	euclid,
 	jools,
 	reply,
 	shell;
@@ -275,7 +273,7 @@ Button.prototype.sketch =
 		fabric,
 		border,
 		twist,
-		Euclid.View.proper
+		euclid.View.proper
 	);
 };
 
@@ -297,7 +295,7 @@ jools.lazyValue(
 					this.focusAccent
 				),
 			f =
-				Euclid.Fabric.create(
+				euclid.Fabric.create(
 					'width',
 						this.frame.width,
 					'height',
@@ -313,7 +311,7 @@ jools.lazyValue(
 			style,
 			this,
 			'sketch',
-			Euclid.View.proper
+			euclid.View.proper
 		);
 
 		if( this.text )
@@ -390,7 +388,7 @@ jools.lazyValue(
 				style,
 				Discs.icons,
 				this.icon,
-				Euclid.View.proper
+				euclid.View.proper
 			);
 		}
 
@@ -411,7 +409,7 @@ Button.prototype.pointingHover =
 		!this.visible
 		||
 		!this.frame.within(
-			Euclid.View.proper,
+			euclid.View.proper,
 			p
 		)
 	)
@@ -427,7 +425,7 @@ Button.prototype.pointingHover =
 		!this._fabric.withinSketch(
 			this,
 			'sketch',
-			Euclid.View.proper,
+			euclid.View.proper,
 			pp
 		)
 	)
@@ -460,7 +458,7 @@ Button.prototype.click =
 		!this.visible
 		||
 		!this.frame.within(
-			Euclid.View.proper,
+			euclid.View.proper,
 			p
 		)
 	)
@@ -476,7 +474,7 @@ Button.prototype.click =
 		this._fabric.withinSketch(
 			this,
 			'sketch',
-			Euclid.View.proper,
+			euclid.View.proper,
 			pp
 		)
 	)

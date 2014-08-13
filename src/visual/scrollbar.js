@@ -18,7 +18,7 @@ var
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	jools,
 	theme;
 
@@ -154,7 +154,7 @@ Scrollbar.prototype.draw =
 		theme.scrollbar.style,
 		this.getArea( view ),
 		'sketch',
-		Euclid.View.proper
+		euclid.View.proper
 	);
 };
 
@@ -197,7 +197,7 @@ Scrollbar.prototype.getArea =
 	s05 = jools.half( ths.strength );
 
 	return (
-		Euclid.RoundRect.create(
+		euclid.RoundRect.create(
 			'pnw',
 				view.point(
 					pnw.add( 0, sy )

@@ -21,7 +21,7 @@ Design =
 */
 var
 	jools,
-	Euclid;
+	euclid;
 
 /*
 | Capsule
@@ -134,7 +134,7 @@ AnchorPoint.PSE_M1 =
 	);
 
 /*
-| Computes the AnchorPoint to an Euclid one.
+| Computes the AnchorPoint to an euclid one.
 */
 AnchorPoint.prototype.compute =
 	function(
@@ -165,7 +165,7 @@ AnchorPoint.prototype.compute =
 		case 'c'  :
 
 			return (
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						half( pnw.x + pse.x ) + this.x,
 					'y',
@@ -176,7 +176,7 @@ AnchorPoint.prototype.compute =
 		case 'n'  :
 
 			return (
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						half( pnw.x + pse.x ) + this.x,
 					'y',
@@ -187,7 +187,7 @@ AnchorPoint.prototype.compute =
 		case 'ne' :
 
 			return (
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						pse.x + this.x,
 					'y',
@@ -198,7 +198,7 @@ AnchorPoint.prototype.compute =
 		case 'e'  :
 
 			return (
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						pse.x + this.x,
 					'y',
@@ -218,7 +218,7 @@ AnchorPoint.prototype.compute =
 		case 's'  :
 
 			return (
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						half( pnw.x + pse.x ) + this.x,
 					'y',
@@ -229,7 +229,7 @@ AnchorPoint.prototype.compute =
 		case 'sw' :
 
 			return (
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						pnw.x + this.x,
 					'y',
@@ -240,7 +240,7 @@ AnchorPoint.prototype.compute =
 		case 'w'  :
 
 			return (
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						pnw.x + this.x,
 					'y',

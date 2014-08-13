@@ -22,7 +22,7 @@ Shell =
 var
 	Action,
 	Discs,
-	Euclid,
+	euclid,
 	fontPool,
 	Forms,
 	Gruga,
@@ -116,17 +116,17 @@ Shell =
 	canvas = document.createElement( 'canvas' );
 
 	swatch =
-		Euclid.Fabric.create(
+		euclid.Fabric.create(
 			'canvas',
 				canvas
 		);
 
-	Euclid.Measure.init( canvas );
+	euclid.Measure.init( canvas );
 
 	this._fontWFont = fontPool.get( 20, 'la' );
 
 	this._$fontWatch =
-		Euclid.Measure.width(
+		euclid.Measure.width(
 			this._fontWFont,
 			'meshcraft$8833'
 		);
@@ -146,9 +146,9 @@ Shell =
 
 	view =
 	this.$view =
-		Euclid.View.create(
+		euclid.View.create(
 			'pan',
-				Euclid.Point.zero,
+				euclid.Point.zero,
 			'fact',
 				0,
 			'width',
@@ -1504,13 +1504,13 @@ Shell.prototype.onAquireSpace =
 			'path',
 				jion.path.empty.Append( 'space' ),
 			'view',
-				Euclid.View.create(
+				euclid.View.create(
 					'fact',
 						0,
 					'height',
 						this.fabric.height,
 					'pan',
-						Euclid.Point.zero,
+						euclid.Point.zero,
 					'width',
 						this.fabric.width
 				)

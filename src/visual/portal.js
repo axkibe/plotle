@@ -20,7 +20,7 @@ Visual =
 var
 	Accent,
 	fontPool,
-	Euclid,
+	euclid,
 	jools,
 	Mark,
 	Peer,
@@ -125,7 +125,7 @@ if( JION )
 						type :
 							'Rect',
 						unit :
-							'Euclid',
+							'euclid',
 						json :
 							true
 					}
@@ -193,7 +193,7 @@ Portal.prototype._init =
 	{
 		zone =
 		this.zone =
-			Euclid.Rect.create(
+			euclid.Rect.create(
 				'pnw',
 					zone.pnw,
 				'pse',
@@ -321,7 +321,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Ellipse.create(
+			euclid.Ellipse.create(
 				'pnw',
 					this.zone.pnw,
 				'pse',
@@ -341,11 +341,11 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Ellipse.create(
+			euclid.Ellipse.create(
 				'pnw',
-					Euclid.Point.zero,
+					euclid.Point.zero,
 				'pse',
-					Euclid.Point.create(
+					euclid.Point.create(
 						'x',
 							this.zone.width,
 						'y',
@@ -460,7 +460,7 @@ Portal.prototype.click =
 	if(
 		moveToButton.shape
 		.within(
-			Euclid.View.proper,
+			euclid.View.proper,
 			pp
 		)
 	)
@@ -489,7 +489,7 @@ Portal.prototype.click =
 		if(
 			sf.silhoutte
 				.within(
-					Euclid.View.proper,
+					euclid.View.proper,
 					pp
 				)
 		)
@@ -697,7 +697,7 @@ Portal.prototype.pointingHover =
 	if(
 		moveToButton.shape
 			.within(
-				Euclid.View.proper,
+				euclid.View.proper,
 				pp
 			)
 	)
@@ -739,7 +739,7 @@ jools.lazyValue(
 				this.view.rect( this.zone ),
 
 			f =
-				Euclid.Fabric.create(
+				euclid.Fabric.create(
 					'width',
 						vzone.width + 2,
 					'height',
@@ -985,10 +985,10 @@ if( SHELL )
 		text =
 			this[ section ];
 
-		return Euclid.Point.create(
+		return euclid.Point.create(
 			'x',
 				Math.round(
-					Euclid.Measure.width(
+					euclid.Measure.width(
 						font,
 						text.substring(
 							0,
@@ -1769,7 +1769,7 @@ Portal.prototype._prepareMoveToButton =
 			theme.portal.moveTo.rounding,
 
 		pnw =
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					jools.half( zone.width - width ),
 				'y',
@@ -1784,7 +1784,7 @@ Portal.prototype._prepareMoveToButton =
 
 	return {
 		shape :
-			Euclid.RoundRect.create(
+			euclid.RoundRect.create(
 				'pnw',
 					pnw,
 				'pse',
@@ -1796,7 +1796,7 @@ Portal.prototype._prepareMoveToButton =
 			),
 
 		textCenter :
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					jools.half( pnw.x + pse.x ),
 				'y',
@@ -1828,7 +1828,7 @@ Portal.prototype._prepareField =
 			this[ section ],
 
 		width =
-			Euclid.Measure.width(
+			euclid.Measure.width(
 				this._fonts[ section ],
 				text
 			),
@@ -1840,7 +1840,7 @@ Portal.prototype._prepareField =
 			basePNW === null
 			?
 			(
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						jools.half( zone.width - width ),
 					'y',
@@ -1851,7 +1851,7 @@ Portal.prototype._prepareField =
 			)
 			:
 			(
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						jools.half( zone.width - width ),
 					'y',
@@ -1860,7 +1860,7 @@ Portal.prototype._prepareField =
 			),
 
 		silhoutte =
-			Euclid.RoundRect.create(
+			euclid.RoundRect.create(
 				'pnw',
 					pnw.sub(
 						pitch,
@@ -1921,17 +1921,13 @@ Portal.prototype._getOffsetAt =
 	)
 {
 	var
-		dx =
-			x - this._$spaceFields[ section ].pnw.x,
+		dx = x - this._$spaceFields[ section ].pnw.x,
 
-		value =
-			this[ section ],
+		value = this[ section ],
 
-		x1 =
-			0,
+		x1 = 0,
 
-		x2 =
-			0,
+		x2 = 0,
 
 		a,
 
@@ -1946,11 +1942,10 @@ Portal.prototype._getOffsetAt =
 		a++
 	)
 	{
-		x1 =
-			x2;
+		x1 = x2;
 
 		x2 =
-			Euclid.Measure.width(
+			euclid.Measure.width(
 				font,
 				value.substr( 0, a )
 			);
@@ -1992,8 +1987,7 @@ Portal.prototype._moveTo =
 */
 if( SERVER )
 {
-	module.exports =
-		Portal;
+	module.exports = Portal;
 }
 
 

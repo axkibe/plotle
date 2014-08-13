@@ -10,7 +10,7 @@
 /*
 | Exports
 */
-var Euclid;
+var euclid;
 
 
 /*
@@ -24,7 +24,7 @@ var Euclid;
 | Singleton
 */
 var Measure =
-Euclid.Measure =
+euclid.Measure =
 {
 
 	/*

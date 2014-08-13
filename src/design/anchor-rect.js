@@ -20,7 +20,7 @@ Design =
 | Import
 */
 var
-	Euclid;
+	euclid;
 
 /*
 | Capsule
@@ -79,7 +79,7 @@ AnchorRect.prototype.compute =
 		frame
 	)
 {
-	return Euclid.Rect.create(
+	return euclid.Rect.create(
 		'pnw',
 			this.pnw.compute( frame ),
 		'pse',

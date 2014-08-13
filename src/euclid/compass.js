@@ -1,9 +1,7 @@
 /*
-|
 | Directions on a compass.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -11,11 +9,9 @@
 | Export
 */
 var
-	Euclid;
+	euclid;
 
-
-Euclid =
-	Euclid || { };
+euclid = euclid || { };
 
 
 /*
@@ -30,7 +26,7 @@ Euclid =
 */
 var
 	Compass =
-	Euclid.Compass =
+	euclid.Compass =
 		{ };
 
 

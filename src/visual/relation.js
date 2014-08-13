@@ -19,7 +19,7 @@ Visual =
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	jools,
 	Mark,
 	Peer,
@@ -113,7 +113,7 @@ if( JION )
 						type :
 							'Point',
 						unit :
-							'Euclid',
+							'euclid',
 						json :
 							true
 					},
@@ -214,7 +214,7 @@ Relation.spawn =
 		result;
 
 	cline =
-		Euclid.Line.connect(
+		euclid.Line.connect(
 			item1.silhoutte,
 			null,
 			item2.silhoutte,
@@ -287,7 +287,7 @@ Relation.prototype.draw =
 	if( item1 )
 	{
 		l1 =
-			Euclid.Line.connect(
+			euclid.Line.connect(
 				item1.silhoutte,
 				'normal',
 				zone,
@@ -305,7 +305,7 @@ Relation.prototype.draw =
 	if( item2 )
 	{
 		l2 =
-			Euclid.Line.connect(
+			euclid.Line.connect(
 				zone,
 				'normal',
 				item2.silhoutte,

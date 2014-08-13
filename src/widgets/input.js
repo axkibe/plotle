@@ -20,7 +20,7 @@ Widgets = Widgets || { };
 */
 var
 	Accent,
-	Euclid,
+	euclid,
 	jools,
 	Mark,
 	reply,
@@ -214,9 +214,9 @@ Input.prototype._init =
 			);
 
 		this._shape =
-			Euclid.RoundRect.create(
+			euclid.RoundRect.create(
 				'pnw',
-					Euclid.Point.zero,
+					euclid.Point.zero,
 				'pse',
 					frame.pse.sub( frame.pnw ),
 				'a',
@@ -243,7 +243,7 @@ Input.prototype._init =
 | Default distance of text
 */
 Input._pitch =
-	Euclid.Point.create( 'x', 8, 'y', 3 );
+	euclid.Point.create( 'x', 8, 'y', 3 );
 
 
 /*
@@ -300,7 +300,7 @@ Input.prototype.getOffsetAt =
 		else
 		{
 			x2 =
-				Euclid.Measure.width(
+				euclid.Measure.width(
 					font,
 					value.substr( 0, a )
 				);
@@ -385,7 +385,7 @@ Input.prototype.sketchMask =
 			this.maskKern( size ),
 
 		magic =
-			Euclid.Const.magic,
+			euclid.Const.magic,
 
 		mw =
 			magic * w,
@@ -468,7 +468,7 @@ jools.lazyValue(
 				this._pitch,
 
 			f =
-				Euclid.Fabric.create(
+				euclid.Fabric.create(
 					'width',
 						shape.width + 1,
 					'height',
@@ -491,7 +491,7 @@ jools.lazyValue(
 			style,
 			shape,
 			'sketch',
-			Euclid.View.proper
+			euclid.View.proper
 		);
 
 		if( this.password )
@@ -503,7 +503,7 @@ jools.lazyValue(
 				},
 				this,
 				'sketchMask',
-				Euclid.View.proper,
+				euclid.View.proper,
 				value.length,
 				font.size
 			);
@@ -536,7 +536,7 @@ jools.lazyValue(
 			style,
 			shape,
 			'sketch',
-			Euclid.View.proper
+			euclid.View.proper
 		);
 
 		return f;
@@ -583,7 +583,7 @@ Input.prototype.locateOffset =
 	if( this.password )
 	{
 		return (
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					pitch.x +
 					(
@@ -602,11 +602,11 @@ Input.prototype.locateOffset =
 	else
 	{
 		return (
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					Math.round(
 						pitch.x +
-						Euclid.Measure.width(
+						euclid.Measure.width(
 							font,
 							value.substring( 0, offset )
 						)
@@ -801,11 +801,12 @@ Input.prototype._keyEnd =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		at,
+		mark;
 
-		at =
-			mark.caretAt;
+	mark = this.mark;
+
+	at = mark.caretAt;
 
 	if( at >= this.value.length )
 	{
@@ -830,8 +831,9 @@ Input.prototype._keyLeft =
 	function( )
 {
 	var
-		mark =
-			this.mark;
+		mark;
+
+	mark = this.mark;
 
 	if( mark.caretAt <= 0 )
 	{
@@ -857,8 +859,9 @@ Input.prototype._keyPos1 =
 	function( )
 {
 	var
-		mark =
-			this.mark;
+		mark;
+
+	mark = this.mark;
 
 	if( mark.at <= 0 )
 	{
@@ -883,8 +886,9 @@ Input.prototype._keyRight =
 	function( )
 {
 	var
-		mark =
-			this.mark;
+		mark;
+
+	mark = this.mark;
 
 	if( mark.caretAt >= this.value.length )
 	{
@@ -989,15 +993,13 @@ Input.prototype.specialKey =
 /*
 | Inputs can hold a caret.
 */
-Input.prototype.caretable =
-	true;
+Input.prototype.caretable = true;
 
 
 /*
 | Inputs are focusable
 */
-Input.prototype.focusable =
-	true;
+Input.prototype.focusable = true;
 
 
 /*
@@ -1010,9 +1012,12 @@ Input.prototype.pointingHover =
 		// ctrl
 	)
 {
+	var
+		pp;
+
 	if(
 		!this.frame.within(
-			Euclid.View.proper,
+			euclid.View.proper,
 			p
 		)
 	)
@@ -1020,15 +1025,11 @@ Input.prototype.pointingHover =
 		return null;
 	}
 
-	var
-		pp =
-			p.sub(
-				this.frame.pnw
-			);
+	pp = p.sub( this.frame.pnw );
 
 	if(
 		!this._shape.within(
-			Euclid.View.proper,
+			euclid.View.proper,
 			pp
 		)
 	)
@@ -1057,10 +1058,13 @@ Input.prototype.click =
 		// ctrl
 	)
 {
+	var
+		pp;
+
 	if(
 		p === null ||
 		!this.frame.within(
-			Euclid.View.proper,
+			euclid.View.proper,
 			p
 		)
 	)
@@ -1068,13 +1072,11 @@ Input.prototype.click =
 		return null;
 	}
 
-	var
-		pp =
-			p.sub( this.frame.pnw );
+	pp = p.sub( this.frame.pnw );
 
 	if(
 		!this._shape.within(
-			Euclid.View.proper,
+			euclid.View.proper,
 			pp
 		)
 	)
@@ -1109,14 +1111,14 @@ jools.lazyValue(
 			p,
 			s;
 
-		fs = this.font.size,
+		fs = this.font.size;
 
-		descend = fs * theme.bottombox,
+		descend = fs * theme.bottombox;
 
 		p =
 			this.locateOffset(
 				this.mark.caretAt
-			),
+			);
 
 		s = Math.round( p.y + descend + 1 );
 

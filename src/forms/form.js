@@ -19,7 +19,7 @@ Forms = Forms || { };
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	jion,
 	jools,
 	Mark,
@@ -200,7 +200,7 @@ Form.prototype.draw =
 		theme.forms.style,
 		fabric,
 		'sketch',
-		Euclid.View.proper
+		euclid.View.proper
 	);
 
 	ranks = this.ranks;

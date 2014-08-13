@@ -9,10 +9,9 @@
 | Export
 */
 var
-	Euclid;
+	euclid;
 
-Euclid =
-	Euclid || { };
+euclid = euclid || { };
 
 
 /*
@@ -38,7 +37,7 @@ if( JION )
 		name :
 			'Ellipse',
 		unit :
-			'Euclid',
+			'euclid',
 		attributes :
 			{
 				pnw :
@@ -100,8 +99,9 @@ if( JION )
 
 
 var
-	Ellipse =
-		Euclid.Ellipse;
+	Ellipse;
+
+Ellipse = euclid.Ellipse;
 
 
 /*
@@ -136,19 +136,19 @@ Ellipse.prototype._init =
 
 		// cardinal points
 		pw =
-			Euclid.Point.create( 'x', wx, 'y', my ),
+			euclid.Point.create( 'x', wx, 'y', my ),
 
 		pn =
-			Euclid.Point.create( 'x', mx, 'y', ny ),
+			euclid.Point.create( 'x', mx, 'y', ny ),
 
 		pe =
-			Euclid.Point.create( 'x', ex, 'y', my ),
+			euclid.Point.create( 'x', ex, 'y', my ),
 
 		ps =
-			Euclid.Point.create( 'x', mx, 'y', sy );
+			euclid.Point.create( 'x', mx, 'y', sy );
 
 	this.shape =
-		Euclid.Shape.create(
+		euclid.Shape.create(
 			'hull',
 				[
 					'start',
@@ -181,7 +181,7 @@ jools.lazyValue(
 	function()
 	{
 		return (
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					jools.half(
 						this.pnw.x + this.pse.x
@@ -211,7 +211,7 @@ jools.lazyValue(
 		}
 
 		return (
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					jools.half(
 						this.pnw.x + this.pse.x

@@ -20,7 +20,7 @@ Widgets =
 */
 var
 	Accent,
-	Euclid,
+	euclid,
 	shell;
 
 
@@ -270,7 +270,7 @@ CheckBox.prototype.click =
 
 	if(
 		this.frame.within(
-			Euclid.View.proper,
+			euclid.View.proper,
 			p
 		)
 	)
@@ -373,7 +373,7 @@ CheckBox.prototype.draw =
 		style,
 		this.frame,
 		'sketch',
-		Euclid.View.proper
+		euclid.View.proper
 	);
 
 	if( this.checked )
@@ -385,7 +385,7 @@ CheckBox.prototype.draw =
 			),
 			this,
 			'sketchCheck',
-			Euclid.View.proper
+			euclid.View.proper
 		);
 	}
 };

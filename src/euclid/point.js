@@ -9,11 +9,11 @@
 | Exports
 */
 var
-	Euclid;
+	euclid;
 
 
-Euclid =
-	Euclid || { };
+euclid =
+	euclid || { };
 
 
 /*
@@ -38,7 +38,7 @@ if( JION )
 		name :
 			'Point',
 		unit :
-			'Euclid',
+			'euclid',
 		attributes :
 			{
 				x :
@@ -74,7 +74,7 @@ if( SERVER )
 	jools =
 		require( '../jools/jools' );
 
-	Euclid.Point =
+	euclid.Point =
 		require( '../jion/this' )( module );
 }
 
@@ -82,8 +82,7 @@ if( SERVER )
 var
 	Point;
 
-Point =
-	Euclid.Point;
+Point = euclid.Point;
 
 
 /*

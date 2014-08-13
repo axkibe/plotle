@@ -18,7 +18,7 @@ Discs =
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	jools,
 	theme;
 
@@ -75,16 +75,16 @@ Disc._init =
 	ny = jools.half( this.view.height - height );
 
 	this.frame =
-		Euclid.Rect.create(
+		euclid.Rect.create(
 			'pnw',
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						0,
 					'y',
 						ny
 				),
 			'pse',
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						width,
 					'y',
@@ -93,23 +93,23 @@ Disc._init =
 		);
 
 	this.silhoutte =
-		Euclid.Ellipse.create(
+		euclid.Ellipse.create(
 			'pnw',
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						width - 1 - ew,
 					'y',
 						0 - jools.half( eh - height )
 				),
 			'pse',
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						width - 1,
 					'y',
 						height + jools.half( eh - height )
 				),
 			'gradientPC',
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						-600,
 					'y',

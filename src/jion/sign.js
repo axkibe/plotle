@@ -15,7 +15,7 @@ var
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	jools,
 	Visual;
 
@@ -135,7 +135,7 @@ if( SERVER )
 {
 	jools =
 		require( '../jools/jools' );
-	Euclid =
+	euclid =
 		{
 			Point :
 				require( '../euclid/point' ),
@@ -173,8 +173,8 @@ sign = jion.sign;
 sign.prototype._init =
 	function( )
 {
-	// FUTURE remove this hack and enable
-	//        optinal types in fromJSON
+	// FIXME remove this hack and enable
+	//       optinal types in fromJSON
 
 	var
 		val;
@@ -202,7 +202,7 @@ sign.prototype._init =
 			case 'Point' :
 
 				this.val =
-					Euclid.Point.createFromJSON( val );
+					euclid.Point.createFromJSON( val );
 
 				break;
 
@@ -217,7 +217,7 @@ sign.prototype._init =
 			case 'Rect' :
 
 				this.val =
-					Euclid.Rect.createFromJSON( val );
+					euclid.Rect.createFromJSON( val );
 
 				break;
 

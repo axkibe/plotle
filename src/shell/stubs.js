@@ -16,7 +16,7 @@ var
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	theme,
 	Visual;
 
@@ -38,7 +38,7 @@ Stubs = { };
 Stubs.emptyLabel =
 	Visual.Label.create(
 		'pnw',
-			Euclid.Point.zero,
+			euclid.Point.zero,
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'doc',
@@ -58,11 +58,11 @@ Stubs.emptyNote =
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'zone',
-			Euclid.Rect.create(
+			euclid.Rect.create(
 				'pnw',
-					Euclid.Point.zero,
+					euclid.Point.zero,
 				'pse',
-					Euclid.Point.zero
+					euclid.Point.zero
 			),
 		'doc',
 			Visual.Doc.create(
@@ -79,11 +79,11 @@ Stubs.emptyNote =
 Stubs.emptyPortal =
 	Visual.Portal.create(
 		'zone',
-			Euclid.Rect.create(
+			euclid.Rect.create(
 				'pnw',
-					Euclid.Point.zero,
+					euclid.Point.zero,
 				'pse',
-					Euclid.Point.zero
+					euclid.Point.zero
 			),
 		'spaceUser',
 			'',

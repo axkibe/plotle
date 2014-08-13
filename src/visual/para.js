@@ -19,7 +19,7 @@ Visual = Visual || { };
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	fontPool,
 	jools,
 	Mark,
@@ -305,7 +305,7 @@ jools.lazyValue(
 
 		// adds to width so the caret gets visible.
 		f =
-			Euclid.Fabric.create(
+			euclid.Fabric.create(
 				'width',
 					width + 7,
 				'height',
@@ -469,7 +469,7 @@ jools.lazyValue(
 			y =
 				Math.round( font.size ),
 			space =
-				Euclid.Measure.width( font, ' ' ),
+				euclid.Measure.width( font, ' ' ),
 			line =
 				0,
 			flow =
@@ -500,7 +500,7 @@ jools.lazyValue(
 				token =
 					ca[ 1 ] + ca[ 2 ],
 				w =
-					Euclid.Measure.width( font, token );
+					euclid.Measure.width( font, token );
 
 			xw =
 				x + w;
@@ -663,7 +663,7 @@ Para.prototype.getOffsetAt =
 			x2;
 
 		x2 =
-			Euclid.Measure.width(
+			euclid.Measure.width(
 				font,
 				text.substr( 0, a )
 			);
@@ -755,11 +755,11 @@ Para.prototype.locateOffset =
 	if( token )
 	{
 		p =
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					Math.round(
 						token.x +
-						Euclid.Measure.width(
+						euclid.Measure.width(
 							font, text.substring( token.o, offset )
 						)
 					),
@@ -770,10 +770,10 @@ Para.prototype.locateOffset =
 	else
 	{
 		p =
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					Math.round(
-						Euclid.Measure.width( font, text )
+						euclid.Measure.width( font, text )
 					),
 				'y',
 					line.y

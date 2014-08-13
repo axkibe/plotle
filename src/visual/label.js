@@ -16,7 +16,7 @@ var
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	jools,
 	Peer,
 	shell,
@@ -93,7 +93,7 @@ if( JION )
 						type :
 							'Point',
 						unit :
-							'Euclid',
+							'euclid',
 						json :
 							true
 					},
@@ -208,7 +208,7 @@ Label.prototype._init =
 		this.pnw;
 
 	this.zone =
-		Euclid.Rect.create(
+		euclid.Rect.create(
 			'pnw',
 				pnw,
 			'pse',
@@ -240,7 +240,7 @@ if( SHELL )
 	| Default margin for all labels.
 	*/
 	Label.prototype.innerMargin =
-		new Euclid.Margin(
+		new euclid.Margin(
 			theme.label.innerMargin
 		);
 }
@@ -293,7 +293,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Rect.create(
+			euclid.Rect.create(
 				'pnw',
 					this.zone.pnw,
 				'pse',
@@ -317,11 +317,11 @@ jools.lazyValue(
 				this.zone;
 
 		return (
-			Euclid.Rect.create(
+			euclid.Rect.create(
 				'pnw',
-					Euclid.Point.zero,
+					euclid.Point.zero,
 				'pse',
-					Euclid.Point.create(
+					euclid.Point.create(
 						'x',
 							Math.max( zone.width  - 1, 0 ),
 						'y',
@@ -410,7 +410,7 @@ jools.lazyValue(
 			this.view.rect( this.zone );
 
 		f =
-			Euclid.Fabric.create(
+			euclid.Fabric.create(
 				'width',
 					vzone.width,
 				'height',
@@ -429,7 +429,7 @@ jools.lazyValue(
 			hview,
 			this,
 			this.zone.width,
-			Euclid.Point.zero
+			euclid.Point.zero
 		);
 
 		// draws the border

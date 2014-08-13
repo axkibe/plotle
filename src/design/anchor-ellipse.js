@@ -20,7 +20,7 @@ Design =
 | Import
 */
 var
-	Euclid;
+	euclid;
 
 /*
 | Capsule
@@ -61,8 +61,9 @@ if( JION )
 
 
 var
-	AnchorEllipse =
-		Design.AnchorEllipse;
+	AnchorEllipse;
+
+AnchorEllipse = Design.AnchorEllipse;
 
 
 /*
@@ -86,11 +87,13 @@ AnchorEllipse.prototype.compute =
 		frame
 	)
 {
-	return Euclid.Ellipse.create(
-		'pnw',
-			this.pnw.compute( frame ),
-		'pse',
-			this.pse.compute( frame )
+	return (
+		euclid.Ellipse.create(
+			'pnw',
+				this.pnw.compute( frame ),
+			'pse',
+				this.pse.compute( frame )
+		)
 	);
 };
 

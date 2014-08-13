@@ -21,7 +21,7 @@ var
 */
 var
 	config,
-	Euclid,
+	euclid,
 	jools,
 	Shell,
 	shell;
@@ -148,7 +148,7 @@ var System =
 	_height = window.innerHeight - 1;
 
 	this._fabric =
-		Euclid.Fabric.create(
+		euclid.Fabric.create(
 			'canvas',
 				_canvas,
 			'width',
@@ -768,7 +768,7 @@ System.prototype._onMouseDown =
 			_canvas,
 
 		p =
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -901,7 +901,7 @@ System.prototype._onMouseMove =
 		shift;
 
 	p =
-		Euclid.Point.create(
+		euclid.Point.create(
 			'x',
 				event.pageX - _canvas.offsetLeft,
 			'y',
@@ -1017,7 +1017,7 @@ System.prototype._onMouseUp =
 	this._releaseEvents( );
 
 	p =
-		Euclid.Point.create(
+		euclid.Point.create(
 			'x',
 				event.pageX - _canvas.offsetLeft,
 			'y',
@@ -1108,7 +1108,7 @@ System.prototype._onMouseWheel =
 		p;
 
 	p =
-		Euclid.Point.create(
+		euclid.Point.create(
 			'x',
 				event.pageX - _canvas.offsetLeft,
 			'y',
@@ -1160,7 +1160,7 @@ System.prototype._onTouchStart =
 
 	var
 		p =
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					event.pageX - _canvas.offsetLeft,
 				'y',
@@ -1219,7 +1219,7 @@ System.prototype._onTouchMove =
 
 	var
 		p =
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					event.pageX - _canvas.offsetLeft,
 				'y',
@@ -1321,6 +1321,11 @@ System.prototype._onTouchMove =
 System.prototype._onTouchEnd =
 	function( event )
 {
+	var
+		p,
+		shift,
+		ctrl;
+
 	event.preventDefault( );
 
 	// for now ignore multi-touches
@@ -1331,22 +1336,19 @@ System.prototype._onTouchEnd =
 
 	this._releaseEvents( );
 
-	var
-		p =
-			Euclid.Point.create(
-				'x',
-					event.changedTouches[ 0 ].pageX -
-					_canvas.offsetLeft,
-				'y',
-					event.changedTouches[ 0 ].pageY -
-					_canvas.offsetTop
-			),
+	p =
+		euclid.Point.create(
+			'x',
+				event.changedTouches[ 0 ].pageX -
+				_canvas.offsetLeft,
+			'y',
+				event.changedTouches[ 0 ].pageY -
+				_canvas.offsetTop
+		);
 
-		shift =
-			event.shiftKey,
+	shift = event.shiftKey;
 
-		ctrl =
-			event.ctrlKey || event.metaKey;
+	ctrl = event.ctrlKey || event.metaKey;
 
 	switch( _pointingState )
 	{

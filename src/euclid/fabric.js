@@ -9,11 +9,11 @@
 | Exports
 */
 var
-	Euclid;
+	euclid;
 
 
-Euclid =
-	Euclid || { };
+euclid =
+	euclid || { };
 
 
 /*
@@ -38,7 +38,7 @@ var
 | Constructor.
 */
 var Fabric =
-Euclid.Fabric =
+euclid.Fabric =
 	function(
 		tag,
 		canvas,
@@ -958,7 +958,7 @@ Fabric.prototype.fillRect =
 
 	if( typeof( a1 ) === 'object' )
 	{
-		if( a1 instanceof Euclid.Rect )
+		if( a1 instanceof euclid.Rect )
 		{
 			return this._cx.fillRect(
 				a1.pnw.x,
@@ -967,7 +967,7 @@ Fabric.prototype.fillRect =
 				a1.pse.y
 			);
 		}
-		else if( a1 instanceof Euclid.Point )
+		else if( a1 instanceof euclid.Point )
 		{
 			return this._cx.fillRect(
 				a1.x,
@@ -976,7 +976,7 @@ Fabric.prototype.fillRect =
 				a2.y
 			);
 		}
-		else if( a1 instanceof Euclid.Fabric )
+		else if( a1 instanceof euclid.Fabric )
 		{
 			return this._cx.fillRect(
 				0,
@@ -1016,7 +1016,7 @@ jools.lazyValue(
 		y = jools.half( this.height );
 
 		return (
-			Euclid.Point.create( 'x', x, 'y', y )
+			euclid.Point.create( 'x', x, 'y', y )
 		);
 	}
 );
@@ -1380,7 +1380,7 @@ Fabric.prototype._setFont =
 /*
 | Returns true if a point is in a sketch.
 |
-| Euclid.Point -or-
+| euclid.Point -or-
 | x / y
 */
 Fabric.prototype.withinSketch =
@@ -1655,7 +1655,7 @@ Fabric.prototype.sketch =
 | is always considered zero.
 */
 Fabric.prototype.pnw =
-	Euclid.Point.zero;
+	euclid.Point.zero;
 
 
 /*
@@ -1667,7 +1667,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					this.width,
 				'y',

@@ -84,8 +84,8 @@
 . Set
 . Shape
 . Shorten
-> Sign
-. SignRay
+> sign
+> signRay
 . SignUp
 > Space
 . User

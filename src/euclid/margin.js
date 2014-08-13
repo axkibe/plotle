@@ -7,10 +7,9 @@
 | Exports
 */
 var
-	Euclid;
+	euclid;
 
-Euclid =
-	Euclid || { };
+euclid = euclid || { };
 
 
 /*
@@ -37,7 +36,7 @@ var jools;
 | w: west margin
 */
 var Margin =
-Euclid.Margin =
+euclid.Margin =
 	function(
 		m,
 		e,

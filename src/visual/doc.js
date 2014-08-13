@@ -17,7 +17,7 @@ var
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	fontPool,
 	jools,
 	shell,
@@ -308,27 +308,29 @@ Doc.prototype.getPNWs =
 		item // the item this doc belongs to
 	)
 {
+	var
+		flow,
+		innerMargin,
+		paraSep,
+		pnws,
+		ranks,
+		vpara,
+		y;
+
 	if( this._$pnws )
 	{
 		return this._$pnws;
 	}
 
-	var
-		pnws =
-		this._$pnws =
-			{ },
+	pnws = this._$pnws = { };
 
-		paraSep =
-			this.paraSep,
+	paraSep = this.paraSep;
 
-		innerMargin =
-			item.innerMargin,
+	innerMargin = item.innerMargin;
 
-		y =
-			innerMargin.n,
+	y = innerMargin.n;
 
-		ranks =
-			this.ranks;
+	ranks = this.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -336,22 +338,19 @@ Doc.prototype.getPNWs =
 		r++
 	)
 	{
-		var
-			vpara =
-				this.atRank( r ),
-			flow =
-				vpara.flow;
+		vpara = this.atRank( r );
+
+		flow = vpara.flow;
 
 		pnws[ ranks[ r ] ] =
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					innerMargin.w,
 				'y',
 					Math.round( y )
 			);
 
-		y +=
-			flow.height + paraSep;
+		y += flow.height + paraSep;
 	}
 
 	return pnws;

@@ -19,7 +19,7 @@ Discs =
 */
 var
 	Action,
-	Euclid,
+	euclid,
 	jion,
 	jools,
 	shell;
@@ -252,7 +252,7 @@ jools.lazyValue(
 	{
 		var
 			fabric =
-				Euclid.Fabric.create(
+				euclid.Fabric.create(
 					'width',
 						this.style.width,
 					'height',
@@ -263,7 +263,7 @@ jools.lazyValue(
 			this.style,
 			this.silhoutte,
 			'sketch',
-			Euclid.View.proper
+			euclid.View.proper
 		);
 
 		for(
@@ -280,7 +280,7 @@ jools.lazyValue(
 			this.style,
 			this.silhoutte,
 			'sketch',
-			Euclid.View.proper
+			euclid.View.proper
 		);
 
 		return fabric;
@@ -446,7 +446,7 @@ CreateDisc.prototype.pointingHover =
 		!fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
-			Euclid.View.proper,
+			euclid.View.proper,
 			pp
 		)
 	)
@@ -513,7 +513,7 @@ CreateDisc.prototype.click =
 		!fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
-			Euclid.View.proper,
+			euclid.View.proper,
 			pp
 		)
 	)
@@ -614,7 +614,7 @@ CreateDisc.prototype.dragStart =
 		!this._fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
-			Euclid.View.proper,
+			euclid.View.proper,
 			p.sub( this.frame.pnw )
 		)
 	)

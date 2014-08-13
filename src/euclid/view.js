@@ -10,10 +10,9 @@
 | Export
 */
 var
-	Euclid;
+	euclid;
 
-Euclid =
-	Euclid || { };
+euclid = euclid || { };
 
 
 /*
@@ -42,7 +41,7 @@ if( JION )
 			'View',
 
 		unit :
-			'Euclid',
+			'euclid',
 
 		attributes :
 			{
@@ -90,8 +89,10 @@ if( JION )
 
 
 var
-	View =
-		Euclid.View;
+	View;
+
+View = euclid.View;
+
 
 /*
 | Initializer.
@@ -254,7 +255,7 @@ jools.lazyValue(
 		return (
 			this.create(
 				'pan',
-					Euclid.Point.zero
+					euclid.Point.zero
 			)
 		);
 	}
@@ -273,7 +274,7 @@ jools.lazyValue(
 		return (
 			this.create(
 				'pan',
-					Euclid.Point.zero,
+					euclid.Point.zero,
 				'fact',
 					0
 			)
@@ -313,7 +314,7 @@ View.prototype.point =
 	}
 
 	return (
-		Euclid.Point.create(
+		euclid.Point.create(
 			'x',
 				this.x( p.x ),
 			'y',
@@ -343,7 +344,7 @@ View.prototype.depoint =
 /**/}
 
 	return (
-		Euclid.Point.create(
+		euclid.Point.create(
 			'x',
 				this.dex( p.x ),
 			'y',
@@ -368,7 +369,7 @@ View.prototype.rect =
 			r =
 				( a1.reflex === 'euclid.rect' )
 				?  a1
-				: Euclid.Rect.create(
+				: euclid.Rect.create(
 					'pnw',
 						a1,
 					'pse',
@@ -401,7 +402,7 @@ View.prototype.rect =
 		pse = a2;
 	}
 
-	return Euclid.Rect.create(
+	return euclid.Rect.create(
 		'pnw',
 			this.point( pnw ),
 		'pse',
@@ -466,7 +467,7 @@ View.prototype.review =
 		'fact',
 			f1,
 		'pan',
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					Math.round( pan.x + p.x * f ),
 				'y',
@@ -485,11 +486,11 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Rect.create(
+			euclid.Rect.create(
 				'pnw',
-					Euclid.Point.zero,
+					euclid.Point.zero,
 				'pse',
-					Euclid.Point.create(
+					euclid.Point.create(
 						'x',
 							this.width,
 						'y',
@@ -513,7 +514,7 @@ View.proper =
 		'fact',
 			0,
 		'pan',
-			Euclid.Point.zero,
+			euclid.Point.zero,
 		'width',
 			0
 	);

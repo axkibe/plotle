@@ -9,11 +9,10 @@
 | Export
 */
 var
-	Euclid;
+	euclid;
 
 
-Euclid =
-	Euclid || { };
+euclid = euclid || { };
 
 
 /*
@@ -39,7 +38,7 @@ if( JION )
 		name :
 			'Font',
 		unit :
-			'Euclid',
+			'euclid',
 		attributes :
 			{
 				size :
@@ -86,7 +85,7 @@ if( JION )
 | The CSS-string for this font.
 */
 jools.lazyValue(
-	Euclid.Font.prototype,
+	euclid.Font.prototype,
 	'css',
 	function( )
 	{

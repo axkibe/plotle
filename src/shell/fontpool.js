@@ -9,7 +9,7 @@
 | Imports
 */
 var
-	Euclid;
+	euclid;
 
 /*
 | Exports
@@ -192,7 +192,7 @@ FontPool.prototype.get =
 
 	f =
 	c[ size ] =
-		Euclid.Font.create(
+		euclid.Font.create(
 			'family',
 				style.family,
 			'fill',

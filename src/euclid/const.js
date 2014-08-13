@@ -11,9 +11,9 @@
 | Exports
 */
 var
-	Euclid;
+	euclid;
 
-Euclid = Euclid || { };
+euclid = euclid || { };
 
 
 /*
@@ -30,7 +30,7 @@ var jools;
 
 
 var Const =
-	Euclid.Const =
+	euclid.Const =
 	{ };
 
 /*

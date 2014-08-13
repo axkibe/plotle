@@ -11,18 +11,16 @@
 | Export
 */
 var
-	Euclid;
+	euclid;
 
-
-Euclid =
-	Euclid || { };
+euclid = euclid || { };
 
 
 /*
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	swatch;
 
 
@@ -44,7 +42,7 @@ if( JION )
 			'Shape',
 
 		unit :
-			'Euclid',
+			'euclid',
 
 		attributes :
 			{
@@ -74,8 +72,9 @@ if( JION )
 
 
 var
-	Shape =
-		Euclid.Shape;
+	Shape;
+
+Shape = euclid.Shape;
 
 
 /*
@@ -173,7 +172,7 @@ Shape.prototype.sketch =
 					hull[ h + 2 ];
 
 				magic =
-					Euclid.Const.magic;
+					euclid.Const.magic;
 
 				break;
 
@@ -488,7 +487,7 @@ Shape.prototype.getProjection =
 					)
 					{
 						return (
-							Euclid.Point.create(
+							euclid.Point.create(
 								'x',
 									pix,
 								'y',
@@ -566,7 +565,7 @@ Shape.prototype.getProjection =
 					if( p.y > cy )
 					{
 						return (
-							Euclid.Point.create(
+							euclid.Point.create(
 								'x',
 									cx,
 								'y',
@@ -577,7 +576,7 @@ Shape.prototype.getProjection =
 					else if( p.y < cy )
 					{
 						return (
-							Euclid.Point.create(
+							euclid.Point.create(
 								'x',
 									cx,
 								'y',
@@ -588,7 +587,7 @@ Shape.prototype.getProjection =
 					else if( p.y === cy )
 					{
 						return (
-							Euclid.Point.create(
+							euclid.Point.create(
 								'x',
 									cx,
 								'y',
@@ -654,7 +653,7 @@ Shape.prototype.getProjection =
 						)
 					)
 					{
-						return Euclid.Point.create( 'x', x, 'y', y );
+						return euclid.Point.create( 'x', x, 'y', y );
 					}
 				}
 

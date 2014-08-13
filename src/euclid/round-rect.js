@@ -21,10 +21,9 @@
 | Export
 */
 var
-	Euclid;
+	euclid;
 
-Euclid =
-	Euclid || { };
+euclid = euclid || { };
 
 
 /*
@@ -50,44 +49,35 @@ if( JION )
 
 		name :
 			'RoundRect',
-
 		unit :
-			'Euclid',
-
+			'euclid',
 		attributes :
 			{
 				pnw :
 					{
 						comment :
 							'point in north west',
-
 						type :
 							'Point'
 					},
-
 				pse :
 					{
 						comment :
 							'point in south east',
-
 						type :
 							'Point'
 					},
-
 				a :
 					{
 						comment :
 							'horizontal rounding',
-
 						type :
 							'Number'
 					},
-
 				b :
 					{
 						comment :
 							'vertical rounding',
-
 						type :
 							'Number'
 					}
@@ -105,8 +95,10 @@ if( JION )
 
 
 var
-	RoundRect =
-		Euclid.RoundRect;
+	RoundRect;
+
+RoundRect = euclid.RoundRect;
+
 
 /*
 | Initializes the round rect.
@@ -121,13 +113,13 @@ RoundRect.prototype._init =
 {
 	var
 		pne =
-			Euclid.Point.create( 'x', pse.x, 'y', pnw.y ),
+			euclid.Point.create( 'x', pse.x, 'y', pnw.y ),
 
 		psw =
-			Euclid.Point.create( 'x', pnw.x, 'y', pse.y );
+			euclid.Point.create( 'x', pnw.x, 'y', pse.y );
 
 	this.shape =
-		Euclid.Shape.create(
+		euclid.Shape.create(
 			'hull',
 				[
 					'start',
@@ -168,7 +160,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					jools.half( this.pse.x + this.pnw.x ),
 				'y',

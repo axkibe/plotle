@@ -20,7 +20,7 @@ Visual =
 */
 var
 	Action,
-	Euclid,
+	euclid,
 	jion,
 	jools,
 	Mark,
@@ -116,14 +116,15 @@ Item.prototype.checkHandles =
 	)
 {
 	var
-		h =
-			this._handles,
+		f,
+		h,
+		d8cwcf;
 
-		f =
-			shell.fabric,
+	h = this._handles;
 
-		d8cwcf =
-			Euclid.Compass.dir8CWCF;
+	f = shell.fabric;
+
+	d8cwcf = euclid.Compass.dir8CWCF;
 
 	for(
 		var a = 0, aZ = d8cwcf.length;
@@ -132,10 +133,9 @@ Item.prototype.checkHandles =
 	)
 	{
 		var
-			d =
-				d8cwcf[ a ],
-			z =
-				h[ d ];
+			d = d8cwcf[ a ],
+
+			z = h[ d ];
 
 		if( !z )
 		{
@@ -259,7 +259,7 @@ jools.lazyValue(
 
 				nw :
 					ha.nw &&
-					Euclid.Rect.renew(
+					euclid.Rect.renew(
 						wx - dcx,
 						ny - dcy,
 
@@ -269,7 +269,7 @@ jools.lazyValue(
 
 				n :
 					ha.n &&
-					Euclid.Rect.renew(
+					euclid.Rect.renew(
 						mx - a,
 						ny - dey,
 
@@ -279,7 +279,7 @@ jools.lazyValue(
 
 				ne :
 					ha.ne &&
-					Euclid.Rect.renew(
+					euclid.Rect.renew(
 						ex + dcx - a2,
 						ny - dcy,
 
@@ -289,7 +289,7 @@ jools.lazyValue(
 
 				e :
 					ha.e &&
-					Euclid.Rect.renew(
+					euclid.Rect.renew(
 						ex + dex - a2,
 						my - b,
 
@@ -299,7 +299,7 @@ jools.lazyValue(
 
 				se :
 					ha.se &&
-					Euclid.Rect.renew(
+					euclid.Rect.renew(
 						ex + dcx - a2,
 						sy + dcy - b2,
 
@@ -309,7 +309,7 @@ jools.lazyValue(
 
 				s :
 					ha.s &&
-					Euclid.Rect.renew(
+					euclid.Rect.renew(
 						mx - a,
 						sy + dey -b2,
 
@@ -319,7 +319,7 @@ jools.lazyValue(
 
 				sw :
 					ha.sw &&
-					Euclid.Rect.renew(
+					euclid.Rect.renew(
 						wx - dcx,
 						sy + dcy - b2,
 
@@ -329,7 +329,7 @@ jools.lazyValue(
 
 				w :
 					ha.w &&
-					Euclid.Rect.renew(
+					euclid.Rect.renew(
 						wx - dex,
 						my - b,
 
@@ -363,7 +363,7 @@ Item.prototype.sketchAllHandles =
 			this._handles,
 
 		d8cwcf =
-			Euclid.Compass.dir8CWCF;
+			euclid.Compass.dir8CWCF;
 
 	for(
 		var a = d8cwcf.length - 1;
@@ -467,7 +467,7 @@ Item.prototype.drawHandles =
 		fabric.reverseClip(
 			area,
 			'sketch',
-			Euclid.View.proper,
+			euclid.View.proper,
 			-1
 		);
 	}

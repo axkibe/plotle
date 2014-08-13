@@ -1,5 +1,6 @@
 /*
 | A line.
+|
 | It can have arrow heads.
 |
 | Authors: Axel Kittenberger
@@ -9,10 +10,11 @@
 /*
 | Export
 */
-var Euclid;
+var
+	euclid;
 
-Euclid =
-	Euclid || { };
+
+euclid = euclid || { };
 
 
 /*
@@ -38,7 +40,7 @@ if( JION )
 		name :
 			'Line',
 		unit :
-			'Euclid',
+			'euclid',
 		attributes :
 			{
 				p1 :
@@ -79,8 +81,9 @@ if( JION )
 
 
 var
-	Line =
-		Euclid.Line;
+	Line;
+
+Line = euclid.Line;
 
 
 /*
@@ -143,7 +146,7 @@ Line.connect =
 	}
 	else if
 	(
-		shape1.within( Euclid.View.proper, pc2 )
+		shape1.within( euclid.View.proper, pc2 )
 	)
 	{
 		p1 = pc1;
@@ -163,7 +166,7 @@ Line.connect =
 	}
 	else if
 	(
-		shape2.within( Euclid.View.proper, pc1 )
+		shape2.within( euclid.View.proper, pc1 )
 	)
 	{
 		p2 =
@@ -203,16 +206,16 @@ jools.lazyValue(
 			p2 =
 				this.p2;
 
-		return Euclid.Rect.create(
+		return euclid.Rect.create(
 			'pnw',
-				Euclid.Point.renew(
+				euclid.Point.renew(
 					Math.min( p1.x, p2.x ),
 					Math.min( p1.y, p2.y ),
 					p1,
 					p2
 				),
 			'pse',
-				Euclid.Point.renew(
+				euclid.Point.renew(
 					Math.max( p1.x, p2.x ),
 					Math.max( p1.y, p2.y ),
 					p1,
@@ -238,7 +241,7 @@ jools.lazyValue(
 				this.p2;
 
 		return (
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					jools.half( p1.x + p2.x ),
 				'y',

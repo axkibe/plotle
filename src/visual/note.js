@@ -17,7 +17,7 @@ var
 | Imports
 */
 var
-	Euclid,
+	euclid,
 	jools,
 	Peer,
 	shell,
@@ -134,7 +134,7 @@ if( JION )
 						type :
 							'Rect',
 						unit :
-							'Euclid',
+							'euclid',
 						json :
 							true
 					}
@@ -199,7 +199,7 @@ Note.prototype._init =
 	{
 		zone =
 		this.zone =
-			Euclid.Rect.create(
+			euclid.Rect.create(
 				'pnw',
 					zone.pnw,
 				'pse',
@@ -249,7 +249,7 @@ Note.prototype._init =
 			'max',
 				this.doc.height,
 			'pnw',
-				Euclid.Point.create(
+				euclid.Point.create(
 					'x',
 						zone.pse.x,
 					'y',
@@ -363,7 +363,7 @@ jools.lazyValue(
 				this.view.home,
 
 			f =
-				Euclid.Fabric.create(
+				euclid.Fabric.create(
 					'width',
 						vzone.width + 2,
 					'height',
@@ -395,7 +395,7 @@ jools.lazyValue(
 			hview,
 			this,
 			this.zone.width,
-			Euclid.Point.create(
+			euclid.Point.create(
 				'x',
 					0,
 				'y',
@@ -456,7 +456,7 @@ if( SHELL )
 	*/
 	Note.innerMargin =
 	Note.prototype.innerMargin =
-		new Euclid.Margin(
+		new euclid.Margin(
 			theme.note.innerMargin
 		);
 }
@@ -504,7 +504,7 @@ jools.lazyValue(
 				theme.note.cornerRadius;
 
 			return (
-				Euclid.RoundRect.create(
+				euclid.RoundRect.create(
 					'pnw',
 						zone.pnw,
 					'pse',
@@ -535,11 +535,11 @@ jools.lazyValue(
 				theme.note.cornerRadius;
 
 		return (
-			Euclid.RoundRect.create(
+			euclid.RoundRect.create(
 				'pnw',
-					Euclid.Point.zero,
+					euclid.Point.zero,
 				'pse',
-					Euclid.Point.create(
+					euclid.Point.create(
 						'x',
 							zone.width,
 						'y',
