@@ -955,7 +955,7 @@ fabric.prototype.fillRect =
 				a1.pse.y
 			);
 		}
-		else if( a1 instanceof euclid.Point )
+		else if( a1 instanceof euclid.point )
 		{
 			return this._cx.fillRect(
 				a1.x,
@@ -1004,7 +1004,7 @@ jools.lazyValue(
 		y = jools.half( this.height );
 
 		return (
-			euclid.Point.create( 'x', x, 'y', y )
+			euclid.point.create( 'x', x, 'y', y )
 		);
 	}
 );
@@ -1368,7 +1368,7 @@ fabric.prototype._setFont =
 /*
 | Returns true if a point is in a sketch.
 |
-| euclid.Point -or-
+| euclid.point -or-
 | x / y
 */
 fabric.prototype.withinSketch =
@@ -1639,11 +1639,11 @@ fabric.prototype.sketch =
 
 
 /*
-| Point in north-west
+| point in north-west
 | is always considered zero.
 */
 fabric.prototype.pnw =
-	euclid.Point.zero;
+	euclid.point.zero;
 
 
 /*
@@ -1655,7 +1655,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					this.width,
 				'y',

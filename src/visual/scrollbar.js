@@ -36,61 +36,48 @@ var
 if( JION )
 {
 	return {
-
 		name :
 			'Scrollbar',
-
 		unit :
 			'Visual',
-
 		attributes :
 			{
 				pos :
 					{
 						comment :
 							'position of the scrollbar',
-
 						type :
 							'Number'
 					},
-
 				aperture :
 					{
 						comment :
 							'the size of the bar',
-
 						type :
 							'Number'
 					},
-
 				max :
 					{
 						comment :
 							'maximum position',
-
 						type :
 							'Number'
 					},
-
 				pnw :
 					{
 						comment :
 							'point in north west',
-
 						type :
-							'Point'
+							'euclid.point'
 					},
-
 				size :
 					{
 						comment :
 							'size',
-
 						type :
 							'Number'
 					}
 			},
-
 		init :
 			[ ]
 	};
@@ -98,8 +85,9 @@ if( JION )
 
 
 var
-	Scrollbar =
-		Visual.Scrollbar;
+	Scrollbar;
+
+Scrollbar = Visual.Scrollbar;
 
 
 /*
@@ -108,8 +96,7 @@ var
 Scrollbar.prototype._init =
 	function( )
 {
-	this.visible =
-		this.max > this.aperture;
+	this.visible = this.max > this.aperture;
 
 	// FIXME this look more complicated than it needs to be
 	if( this.max - this.aperture >= 0 )
@@ -123,8 +110,7 @@ Scrollbar.prototype._init =
 	}
 	else
 	{
-		this.pos =
-			0;
+		this.pos = 0;
 	}
 
 	if( this.pos < 0 )
@@ -143,12 +129,14 @@ Scrollbar.prototype.draw =
 		view
 	)
 {
-	if( !this.visible )
-	{
-		throw new Error(
-			'Drawing an invisible scrollbar'
-		);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( !this.visible )
+/**/	{
+/**/		// Trying to drawing an invisible scrollbar
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	fabric.paint(
 		theme.scrollbar.style,

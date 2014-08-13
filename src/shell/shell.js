@@ -148,7 +148,7 @@ Shell =
 	this.$view =
 		euclid.View.create(
 			'pan',
-				euclid.Point.zero,
+				euclid.point.zero,
 			'fact',
 				0,
 			'width',
@@ -1510,7 +1510,7 @@ Shell.prototype.onAquireSpace =
 					'height',
 						this.fabric.height,
 					'pan',
-						euclid.Point.zero,
+						euclid.point.zero,
 					'width',
 						this.fabric.width
 				)

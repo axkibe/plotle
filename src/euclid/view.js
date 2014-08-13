@@ -36,52 +36,41 @@ var
 if( JION )
 {
 	return {
-
 		name :
 			'View',
-
 		unit :
 			'euclid',
-
 		attributes :
 			{
 				fact :
 					{
 						comment :
 							'zooming factor of view',
-
 						type :
 							'Number'
 					},
-
 				height :
 					{
 						comment :
 							'current height of screen',
-
 						type :
 							'Integer'
 					},
-
 				pan :
 					{
 						comment :
 							'point in north west (equals panning)',
-
 						type :
-							'Point'
+							'euclid.point'
 					},
-
 				width :
 					{
 						comment :
 							'current width of screen',
-
 						type :
 							'Integer'
 					}
 			},
-
 		init :
 			[ ]
 	};
@@ -255,7 +244,7 @@ jools.lazyValue(
 		return (
 			this.create(
 				'pan',
-					euclid.Point.zero
+					euclid.point.zero
 			)
 		);
 	}
@@ -274,7 +263,7 @@ jools.lazyValue(
 		return (
 			this.create(
 				'pan',
-					euclid.Point.zero,
+					euclid.point.zero,
 				'fact',
 					0
 			)
@@ -314,7 +303,7 @@ View.prototype.point =
 	}
 
 	return (
-		euclid.Point.create(
+		euclid.point.create(
 			'x',
 				this.x( p.x ),
 			'y',
@@ -344,7 +333,7 @@ View.prototype.depoint =
 /**/}
 
 	return (
-		euclid.Point.create(
+		euclid.point.create(
 			'x',
 				this.dex( p.x ),
 			'y',
@@ -467,7 +456,7 @@ View.prototype.review =
 		'fact',
 			f1,
 		'pan',
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					Math.round( pan.x + p.x * f ),
 				'y',
@@ -488,9 +477,9 @@ jools.lazyValue(
 		return (
 			euclid.Rect.create(
 				'pnw',
-					euclid.Point.zero,
+					euclid.point.zero,
 				'pse',
-					euclid.Point.create(
+					euclid.point.create(
 						'x',
 							this.width,
 						'y',
@@ -514,7 +503,7 @@ View.proper =
 		'fact',
 			0,
 		'pan',
-			euclid.Point.zero,
+			euclid.point.zero,
 		'width',
 			0
 	);

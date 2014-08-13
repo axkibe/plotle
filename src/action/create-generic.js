@@ -63,7 +63,7 @@ if( JION )
 						comment :
 							'mouse down point on drag creation',
 						type :
-							'Point',
+							'euclid.point',
 						allowsNull :
 							true
 					}

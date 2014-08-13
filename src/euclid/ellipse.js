@@ -45,14 +45,14 @@ if( JION )
 						comment :
 							'point in north west',
 						type :
-							'Point'
+							'point'
 					},
 				pse :
 					{
 						comment :
 							'point in south east',
 						type :
-							'Point'
+							'point'
 					},
 				// FIXME make proper optionals
 				gradientPC :
@@ -60,7 +60,7 @@ if( JION )
 						comment :
 							'center for gradient',
 						type :
-							'Point',
+							'point',
 						defaultValue :
 							null,
 						assign :
@@ -136,16 +136,16 @@ ellipse.prototype._init =
 
 		// cardinal points
 		pw =
-			euclid.Point.create( 'x', wx, 'y', my ),
+			euclid.point.create( 'x', wx, 'y', my ),
 
 		pn =
-			euclid.Point.create( 'x', mx, 'y', ny ),
+			euclid.point.create( 'x', mx, 'y', ny ),
 
 		pe =
-			euclid.Point.create( 'x', ex, 'y', my ),
+			euclid.point.create( 'x', ex, 'y', my ),
 
 		ps =
-			euclid.Point.create( 'x', mx, 'y', sy );
+			euclid.point.create( 'x', mx, 'y', sy );
 
 	this.shape =
 		euclid.Shape.create(
@@ -181,7 +181,7 @@ jools.lazyValue(
 	function()
 	{
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					jools.half(
 						this.pnw.x + this.pse.x
@@ -211,7 +211,7 @@ jools.lazyValue(
 		}
 
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					jools.half(
 						this.pnw.x + this.pse.x

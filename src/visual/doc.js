@@ -343,7 +343,7 @@ Doc.prototype.getPNWs =
 		flow = vpara.flow;
 
 		pnws[ ranks[ r ] ] =
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					innerMargin.w,
 				'y',

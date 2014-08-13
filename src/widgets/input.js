@@ -216,7 +216,7 @@ Input.prototype._init =
 		this._shape =
 			euclid.RoundRect.create(
 				'pnw',
-					euclid.Point.zero,
+					euclid.point.zero,
 				'pse',
 					frame.pse.sub( frame.pnw ),
 				'a',
@@ -243,7 +243,7 @@ Input.prototype._init =
 | Default distance of text
 */
 Input._pitch =
-	euclid.Point.create( 'x', 8, 'y', 3 );
+	euclid.point.create( 'x', 8, 'y', 3 );
 
 
 /*
@@ -583,7 +583,7 @@ Input.prototype.locateOffset =
 	if( this.password )
 	{
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					pitch.x +
 					(
@@ -602,7 +602,7 @@ Input.prototype.locateOffset =
 	else
 	{
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					Math.round(
 						pitch.x +

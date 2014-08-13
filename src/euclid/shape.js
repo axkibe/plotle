@@ -50,18 +50,15 @@ if( JION )
 					{
 						comment :
 							'hull definition',
-
 						type :
 							'Array'
 					},
-
 				pc :
 					{
 						comment :
 							'center point',
-
 						type :
-							'Point'
+							'euclid.point'
 					}
 			},
 
@@ -178,14 +175,8 @@ Shape.prototype.sketch =
 
 			default :
 
-				throw new Error(
-					CHECK
-					&&
-					(
-						'unknown hull section: ' + hull[ h ]
-					)
-				);
-
+				// unknown hull section
+				throw new Error( );
 		}
 
 		if( pn === 'close' )
@@ -285,11 +276,8 @@ Shape.prototype.sketch =
 
 					default :
 
-						throw new Error(
-							CHECK
-							&&
-							'unknown rotation'
-						);
+						// unknown rotation
+						throw new Error( );
 				}
 
 				h += 3;
@@ -298,11 +286,8 @@ Shape.prototype.sketch =
 
 			default :
 
-				throw new Error(
-					CHECK
-					&&
-					( 'unknown hull section: ' + hull[ h ] )
-				);
+				// unknown hull section.
+				throw new Error( );
 		}
 
 		pp =
@@ -409,20 +394,15 @@ Shape.prototype.getProjection =
 
 			default :
 
-				throw new Error(
-					CHECK
-					&&
-					( 'unknown hull section: ' + hull[ h ] )
-				);
+				// unknown hull section
+				throw new Error( );
 		}
 
 		if( pn === 'close')
 		{
-			pn =
-				pstart;
+			pn = pstart;
 
-			pstart =
-				null;
+			pstart = null;
 		}
 
 		switch( hull[h] )
@@ -432,11 +412,8 @@ Shape.prototype.getProjection =
 
 				if( CHECK )
 				{
-					throw new Error(
-						CHECK
-						&&
-						'cannot yet do projections for beziers '
-					);
+					// cannot yet do projections for beziers.
+					throw new Error( );
 				}
 
 				break;
@@ -487,7 +464,7 @@ Shape.prototype.getProjection =
 					)
 					{
 						return (
-							euclid.Point.create(
+							euclid.point.create(
 								'x',
 									pix,
 								'y',
@@ -565,7 +542,7 @@ Shape.prototype.getProjection =
 					if( p.y > cy )
 					{
 						return (
-							euclid.Point.create(
+							euclid.point.create(
 								'x',
 									cx,
 								'y',
@@ -576,7 +553,7 @@ Shape.prototype.getProjection =
 					else if( p.y < cy )
 					{
 						return (
-							euclid.Point.create(
+							euclid.point.create(
 								'x',
 									cx,
 								'y',
@@ -587,7 +564,7 @@ Shape.prototype.getProjection =
 					else if( p.y === cy )
 					{
 						return (
-							euclid.Point.create(
+							euclid.point.create(
 								'x',
 									cx,
 								'y',
@@ -653,7 +630,7 @@ Shape.prototype.getProjection =
 						)
 					)
 					{
-						return euclid.Point.create( 'x', x, 'y', y );
+						return euclid.point.create( 'x', x, 'y', y );
 					}
 				}
 
@@ -663,22 +640,15 @@ Shape.prototype.getProjection =
 
 			default :
 
-				throw new Error(
-					CHECK
-					&&
-					( 'unknown hull section: ' + hull[ h ] )
-				);
-
+				// unknown hull section.
+				throw new Error( );
 		}
 
 		pp = pn;
 	}
 
-	throw new Error(
-		CHECK
-		&&
-		'no hull section created a projection'
-	);
+	// no hull section created a projection.
+	throw new Error( );
 };
 
 

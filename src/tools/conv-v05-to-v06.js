@@ -65,7 +65,51 @@ sus = require( 'suspend' );
 
 
 /*
-| Change translation.
+| Translates a sign.
+*/
+var translateSign =
+	function(
+		sign
+	)
+{
+	if( !sign.val )
+	{
+		return sign;
+	}
+
+	if( sign.val.type === 'Point' )
+	{
+		sign.val.type = 'point';
+
+		return sign;
+	}
+
+	if( sign.val.pnw && sign.val.pnw.type === 'Point' )
+	{
+		sign.val.pnw.type = 'point';
+	}
+
+	if( sign.val.pse && sign.val.pse.type === 'Point' )
+	{
+		sign.val.pse.type = 'point';
+	}
+
+	if( sign.val.zone && sign.val.zone.pnw.type === 'Point' )
+	{
+		sign.val.zone.pnw.type = 'point';
+	}
+
+	if( sign.val.zone && sign.val.zone.pse.type === 'Point' )
+	{
+		sign.val.zone.pse.type = 'point';
+	}
+
+	return sign;
+};
+
+
+/*
+| Translates a change.
 */
 var translateChange =
 	function(
@@ -83,6 +127,10 @@ var translateChange =
 		default :
 			throw new Error( );
 	}
+
+	chg.chgX.src = translateSign( chg.chgX.src );
+
+	chg.chgX.trg = translateSign( chg.chgX.trg );
 
 /*
 	switch( chg.chgX.src.type )

@@ -40,7 +40,7 @@ if( JION )
 						comment :
 							'mouse down point on drag creation',
 						type :
-							'Point'
+							'point'
 					},
 				transItem :
 					{

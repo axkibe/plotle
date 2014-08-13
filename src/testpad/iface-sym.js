@@ -66,14 +66,14 @@ IFaceSym =
 				'zone',
 					Visual.Rect.create(
 						'pnw',
-							Visual.Point.create(
+							Visual.point.create(
 								'x',
 									0,
 								'y',
 									0
 							),
 						'pse',
-							Visual.Point.create(
+							Visual.point.create(
 								'x',
 									100,
 								'y',

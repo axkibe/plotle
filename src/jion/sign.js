@@ -137,7 +137,7 @@ if( SERVER )
 		require( '../jools/jools' );
 	euclid =
 		{
-			Point :
+			point :
 				require( '../euclid/point' ),
 			Rect :
 				require( '../euclid/rect' )
@@ -199,10 +199,9 @@ sign.prototype._init =
 
 				break;
 
-			case 'Point' :
+			case 'point' :
 
-				this.val =
-					euclid.Point.createFromJSON( val );
+				this.val = euclid.point.createFromJSON( val );
 
 				break;
 

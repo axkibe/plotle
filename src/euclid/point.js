@@ -1,5 +1,5 @@
 /*
-| A Point in a 2D plane.
+| A point in a 2D plane.
 |
 | Authors: Axel Kittenberger
 */
@@ -11,9 +11,7 @@
 var
 	euclid;
 
-
-euclid =
-	euclid || { };
+euclid = euclid || { };
 
 
 /*
@@ -36,7 +34,7 @@ if( JION )
 {
 	return {
 		name :
-			'Point',
+			'point',
 		unit :
 			'euclid',
 		attributes :
@@ -71,24 +69,22 @@ if( JION )
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 
-	euclid.Point =
-		require( '../jion/this' )( module );
+	euclid.point = require( '../jion/this' )( module );
 }
 
 
 var
-	Point;
+	point;
 
-Point = euclid.Point;
+point = euclid.point;
 
 
 /*
 | Adds two points or x/y values, returns a new point.
 */
-Point.prototype.add =
+point.prototype.add =
 	function(
 		a1,
 		a2
@@ -101,7 +97,7 @@ Point.prototype.add =
 			return this;
 		}
 
-		return Point.create(
+		return point.create(
 			'x',
 				this.x + a1.x,
 			'y',
@@ -115,7 +111,7 @@ Point.prototype.add =
 			return this;
 		}
 
-		return Point.create(
+		return point.create(
 			'x',
 				this.x + a1,
 			'y',
@@ -128,7 +124,7 @@ Point.prototype.add =
 /*
 | Subtracts a points (or x/y from this), returns new point
 */
-Point.prototype.sub =
+point.prototype.sub =
 	function(
 		a1,
 		a2
@@ -141,7 +137,7 @@ Point.prototype.sub =
 			return this;
 		}
 
-		return Point.create(
+		return point.create(
 			'x',
 				this.x - a1.x,
 			'y',
@@ -155,7 +151,7 @@ Point.prototype.sub =
 			return this;
 		}
 
-		return Point.create(
+		return point.create(
 			'x',
 				this.x - a1,
 			'y',
@@ -172,9 +168,9 @@ Point.prototype.sub =
 | this point has already this x/y to save the creation of yet
 | another object
 |
-| Point.renew(x, y, p1, p2, p3, ...)
+| point.renew(x, y, p1, p2, p3, ...)
 */
-Point.renew =
+point.renew =
 	function(
 		x,
 		y
@@ -190,7 +186,7 @@ Point.renew =
 			arguments[a];
 
 		if(
-			p instanceof Point &&
+			p instanceof point &&
 			p.x === x &&
 			p.y === y
 		)
@@ -199,7 +195,7 @@ Point.renew =
 		}
 	}
 
-	return Point.create(
+	return point.create(
 		'x',
 			x,
 		'y',
@@ -211,8 +207,8 @@ Point.renew =
 /*
 | Shortcut for point at 0/0.
 */
-Point.zero =
-	Point.create(
+point.zero =
+	point.create(
 		'x',
 			0,
 		'y',
@@ -225,8 +221,7 @@ Point.zero =
 */
 if( SERVER )
 {
-	module.exports =
-		Point;
+	module.exports = point;
 }
 
 

@@ -58,14 +58,14 @@ if( JION )
 						comment :
 							'point in north west',
 						type :
-							'Point'
+							'euclid.point'
 					},
 				pse :
 					{
 						comment :
 							'point in south east',
 						type :
-							'Point'
+							'euclid.point'
 					},
 				a :
 					{
@@ -113,10 +113,10 @@ RoundRect.prototype._init =
 {
 	var
 		pne =
-			euclid.Point.create( 'x', pse.x, 'y', pnw.y ),
+			euclid.point.create( 'x', pse.x, 'y', pnw.y ),
 
 		psw =
-			euclid.Point.create( 'x', pnw.x, 'y', pse.y );
+			euclid.point.create( 'x', pnw.x, 'y', pse.y );
 
 	this.shape =
 		euclid.Shape.create(
@@ -160,7 +160,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					jools.half( this.pse.x + this.pnw.x ),
 				'y',

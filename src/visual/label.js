@@ -91,7 +91,7 @@ if( JION )
 						comment :
 							'point in the north-west',
 						type :
-							'Point',
+							'point',
 						unit :
 							'euclid',
 						json :
@@ -319,9 +319,9 @@ jools.lazyValue(
 		return (
 			euclid.Rect.create(
 				'pnw',
-					euclid.Point.zero,
+					euclid.point.zero,
 				'pse',
-					euclid.Point.create(
+					euclid.point.create(
 						'x',
 							Math.max( zone.width  - 1, 0 ),
 						'y',
@@ -426,7 +426,7 @@ jools.lazyValue(
 			hview,
 			this,
 			this.zone.width,
-			euclid.Point.zero
+			euclid.point.zero
 		);
 
 		// draws the border

@@ -1029,7 +1029,7 @@ Space.prototype.dragStop =
 									( p.x > action.start.x ) ?
 										zone.pnw
 										:
-										euclid.Point.create(
+										euclid.point.create(
 											'x',
 												zone.pse.x - resized.zone.width,
 											'y',
@@ -1371,7 +1371,7 @@ Space.prototype.dragMove =
 								( p.x > action.start.x ) ?
 									zone.pnw
 									:
-									euclid.Point.create(
+									euclid.point.create(
 										'x',
 											zone.pse.x - resized.zone.width,
 										'y',

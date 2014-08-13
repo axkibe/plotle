@@ -765,7 +765,7 @@ Para.prototype.locateOffset =
 	if( token )
 	{
 		p =
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					Math.round(
 						token.x +
@@ -780,7 +780,7 @@ Para.prototype.locateOffset =
 	else
 	{
 		p =
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					Math.round(
 						euclid.measure.width( font, text )

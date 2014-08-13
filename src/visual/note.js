@@ -249,7 +249,7 @@ Note.prototype._init =
 			'max',
 				this.doc.height,
 			'pnw',
-				euclid.Point.create(
+				euclid.point.create(
 					'x',
 						zone.pse.x,
 					'y',
@@ -395,7 +395,7 @@ jools.lazyValue(
 			hview,
 			this,
 			this.zone.width,
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					0,
 				'y',
@@ -528,18 +528,19 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			zone =
-				this.zone,
+			zone,
+			cr;
 
-			cr =
-				theme.note.cornerRadius;
+		zone = this.zone;
+
+		cr = theme.note.cornerRadius;
 
 		return (
 			euclid.RoundRect.create(
 				'pnw',
-					euclid.Point.zero,
+					euclid.point.zero,
 				'pse',
-					euclid.Point.create(
+					euclid.point.create(
 						'x',
 							zone.width,
 						'y',

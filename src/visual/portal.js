@@ -343,9 +343,9 @@ jools.lazyValue(
 		return (
 			euclid.ellipse.create(
 				'pnw',
-					euclid.Point.zero,
+					euclid.point.zero,
 				'pse',
-					euclid.Point.create(
+					euclid.point.create(
 						'x',
 							this.zone.width,
 						'y',
@@ -386,7 +386,8 @@ Portal.prototype.dragStop =
 				zone.height < theme.portal.minHeight
 			)
 			{
-				throw new Error( 'Portal under minimum size!' );
+				// Portal under minimum size!
+				throw new Error( );
 			}
 
 			if( this.zone.equals( zone ) )
@@ -985,7 +986,7 @@ if( SHELL )
 		text =
 			this[ section ];
 
-		return euclid.Point.create(
+		return euclid.point.create(
 			'x',
 				Math.round(
 					euclid.measure.width(
@@ -1769,7 +1770,7 @@ Portal.prototype._prepareMoveToButton =
 			theme.portal.moveTo.rounding,
 
 		pnw =
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					jools.half( zone.width - width ),
 				'y',
@@ -1796,7 +1797,7 @@ Portal.prototype._prepareMoveToButton =
 			),
 
 		textCenter :
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					jools.half( pnw.x + pse.x ),
 				'y',
@@ -1840,7 +1841,7 @@ Portal.prototype._prepareField =
 			basePNW === null
 			?
 			(
-				euclid.Point.create(
+				euclid.point.create(
 					'x',
 						jools.half( zone.width - width ),
 					'y',
@@ -1851,7 +1852,7 @@ Portal.prototype._prepareField =
 			)
 			:
 			(
-				euclid.Point.create(
+				euclid.point.create(
 					'x',
 						jools.half( zone.width - width ),
 					'y',

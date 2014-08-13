@@ -38,7 +38,7 @@ Stubs = { };
 Stubs.emptyLabel =
 	Visual.Label.create(
 		'pnw',
-			euclid.Point.zero,
+			euclid.point.zero,
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'doc',
@@ -60,9 +60,9 @@ Stubs.emptyNote =
 		'zone',
 			euclid.Rect.create(
 				'pnw',
-					euclid.Point.zero,
+					euclid.point.zero,
 				'pse',
-					euclid.Point.zero
+					euclid.point.zero
 			),
 		'doc',
 			Visual.Doc.create(
@@ -81,9 +81,9 @@ Stubs.emptyPortal =
 		'zone',
 			euclid.Rect.create(
 				'pnw',
-					euclid.Point.zero,
+					euclid.point.zero,
 				'pse',
-					euclid.Point.zero
+					euclid.point.zero
 			),
 		'spaceUser',
 			'',

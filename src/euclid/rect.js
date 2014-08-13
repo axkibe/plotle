@@ -47,9 +47,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'Point',
-						unit :
-							'euclid'
+							'euclid.point'
 					},
 				pse :
 					{
@@ -58,9 +56,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'Point',
-						unit :
-							'euclid'
+							'euclid.point'
 					}
 			},
 		node :
@@ -77,7 +73,7 @@ if( SERVER )
 	jools =
 		require( '../jools/jools' );
 
-	euclid.Point =
+	euclid.point =
 		require( './point' );
 
 	euclid.Rect =
@@ -128,18 +124,18 @@ Rect.createArbitrary =
 		p1.y >= p2.y
 	)
 	{
-		pnw = euclid.Point.create( 'x', p1.x, 'y', p2.y );
+		pnw = euclid.point.create( 'x', p1.x, 'y', p2.y );
 
-		pse = euclid.Point.create( 'x', p2.x, 'y', p1.y );
+		pse = euclid.point.create( 'x', p2.x, 'y', p1.y );
 	}
 	else if (
 		p1.x >= p2.x &&
 		p2.y >= p1.y
 	)
 	{
-		pnw = euclid.Point.create( 'x', p2.x, 'y', p1.y );
+		pnw = euclid.point.create( 'x', p2.x, 'y', p1.y );
 
-		pse = euclid.Point.create( 'x', p1.x, 'y', p2.y );
+		pse = euclid.point.create( 'x', p1.x, 'y', p2.y );
 	}
 	else
 	{
@@ -203,7 +199,7 @@ jools.lazyValue(
 			return (
 				Rect.create(
 					'pnw',
-						euclid.Point.zero,
+						euclid.point.zero,
 					'pse',
 						this.pse.sub( this.pnw )
 				)
@@ -255,14 +251,14 @@ Rect.prototype.reduce =
 	return (
 		Rect.create(
 			'pnw',
-				euclid.Point.renew(
+				euclid.point.renew(
 					this.pnw.x + margin.e,
 					this.pnw.y + margin.n,
 					this.pnw,
 					this.pse
 				),
 			'pse',
-				euclid.Point.renew(
+				euclid.point.renew(
 					this.pse.x - margin.w,
 					this.pse.y - margin.s,
 					this.pnw,
@@ -495,7 +491,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					jools.half( this.pse.x + this.pnw.x ),
 				'y',
@@ -515,7 +511,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					jools.half( this.pse.x + this.pnw.x ),
 				'y',
@@ -535,7 +531,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					this.pnw.x,
 				'y',
@@ -555,7 +551,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					this.pse.x,
 				'y',
@@ -682,13 +678,13 @@ Rect.renew =
 	if( !pnw )
 	{
 		pnw =
-			euclid.Point.create( 'x', wx, 'y', ny );
+			euclid.point.create( 'x', wx, 'y', ny );
 	}
 
 	if( !pse )
 	{
 		pse =
-			euclid.Point.create( 'x', ex, 'y', sy );
+			euclid.point.create( 'x', ex, 'y', sy );
 	}
 
 	return (
@@ -874,7 +870,7 @@ Rect.prototype.getProjection =
 
 		if ( x >= wx && x <= ex )
 		{
-			return euclid.Point.create( 'x', x, 'y', ny );
+			return euclid.point.create( 'x', x, 'y', ny );
 		}
 	}
 
@@ -885,7 +881,7 @@ Rect.prototype.getProjection =
 
 		if( x >= wx && x <= ex )
 		{
-			return euclid.Point.create( 'x', x, 'y', sy );
+			return euclid.point.create( 'x', x, 'y', sy );
 		}
 	}
 
@@ -896,7 +892,7 @@ Rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return euclid.Point.create( 'x', ex, 'y', y );
+			return euclid.point.create( 'x', ex, 'y', y );
 		}
 	}
 
@@ -907,7 +903,7 @@ Rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return euclid.Point.create( 'x', wx, 'y', y );
+			return euclid.point.create( 'x', wx, 'y', y );
 		}
 	}
 

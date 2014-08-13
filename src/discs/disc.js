@@ -77,14 +77,14 @@ Disc._init =
 	this.frame =
 		euclid.Rect.create(
 			'pnw',
-				euclid.Point.create(
+				euclid.point.create(
 					'x',
 						0,
 					'y',
 						ny
 				),
 			'pse',
-				euclid.Point.create(
+				euclid.point.create(
 					'x',
 						width,
 					'y',
@@ -95,21 +95,21 @@ Disc._init =
 	this.silhoutte =
 		euclid.ellipse.create(
 			'pnw',
-				euclid.Point.create(
+				euclid.point.create(
 					'x',
 						width - 1 - ew,
 					'y',
 						0 - jools.half( eh - height )
 				),
 			'pse',
-				euclid.Point.create(
+				euclid.point.create(
 					'x',
 						width - 1,
 					'y',
 						height + jools.half( eh - height )
 				),
 			'gradientPC',
-				euclid.Point.create(
+				euclid.point.create(
 					'x',
 						-600,
 					'y',

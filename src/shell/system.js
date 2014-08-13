@@ -768,7 +768,7 @@ System.prototype._onMouseDown =
 			_canvas,
 
 		p =
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -901,7 +901,7 @@ System.prototype._onMouseMove =
 		shift;
 
 	p =
-		euclid.Point.create(
+		euclid.point.create(
 			'x',
 				event.pageX - _canvas.offsetLeft,
 			'y',
@@ -1017,7 +1017,7 @@ System.prototype._onMouseUp =
 	this._releaseEvents( );
 
 	p =
-		euclid.Point.create(
+		euclid.point.create(
 			'x',
 				event.pageX - _canvas.offsetLeft,
 			'y',
@@ -1108,7 +1108,7 @@ System.prototype._onMouseWheel =
 		p;
 
 	p =
-		euclid.Point.create(
+		euclid.point.create(
 			'x',
 				event.pageX - _canvas.offsetLeft,
 			'y',
@@ -1160,7 +1160,7 @@ System.prototype._onTouchStart =
 
 	var
 		p =
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					event.pageX - _canvas.offsetLeft,
 				'y',
@@ -1219,7 +1219,7 @@ System.prototype._onTouchMove =
 
 	var
 		p =
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					event.pageX - _canvas.offsetLeft,
 				'y',
@@ -1337,7 +1337,7 @@ System.prototype._onTouchEnd =
 	this._releaseEvents( );
 
 	p =
-		euclid.Point.create(
+		euclid.point.create(
 			'x',
 				event.changedTouches[ 0 ].pageX -
 				_canvas.offsetLeft,

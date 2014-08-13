@@ -48,7 +48,7 @@ if( JION )
 						comment :
 							'first point',
 						type :
-							'Point'
+							'euclid.point'
 					},
 				p1end :
 					{
@@ -64,7 +64,7 @@ if( JION )
 						comment :
 							'second point',
 						type :
-							'Point'
+							'euclid.point'
 					},
 				p2end :
 					{
@@ -91,9 +91,9 @@ line = euclid.line;
 */
 line.connect =
 	function(
-		shape1,  // a Rect or Point
+		shape1,  // a Rect or point
 		end1,    // 'normal' or 'arrow'
-		shape2,  // shape2: a Rect or Point
+		shape2,  // shape2: a Rect or point
 		end2     // 'normal' or 'arrow'
 	)
 {
@@ -208,14 +208,14 @@ jools.lazyValue(
 
 		return euclid.Rect.create(
 			'pnw',
-				euclid.Point.renew(
+				euclid.point.renew(
 					Math.min( p1.x, p2.x ),
 					Math.min( p1.y, p2.y ),
 					p1,
 					p2
 				),
 			'pse',
-				euclid.Point.renew(
+				euclid.point.renew(
 					Math.max( p1.x, p2.x ),
 					Math.max( p1.y, p2.y ),
 					p1,
@@ -241,7 +241,7 @@ jools.lazyValue(
 				this.p2;
 
 		return (
-			euclid.Point.create(
+			euclid.point.create(
 				'x',
 					jools.half( p1.x + p2.x ),
 				'y',

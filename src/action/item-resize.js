@@ -54,7 +54,7 @@ if( JION )
 						comment :
 							'mouseDown point on drag creation',
 						type :
-							'Point'
+							'euclid.point'
 					}
 			}
 	};
