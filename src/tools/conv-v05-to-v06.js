@@ -43,25 +43,27 @@ config =
 /*
 | Turn on checking on server side by default.
 */
-GLOBAL.CHECK =
-	true;
-GLOBAL.JION =
-	false;
-GLOBAL.SERVER =
-	true;
-GLOBAL.SHELL =
-	false;
+GLOBAL.CHECK = true;
+
+GLOBAL.JION = false;
+
+GLOBAL.SERVER = true;
+
+GLOBAL.SHELL = false;
 
 
 /*
 | Imports
 */
 var
-	mongodb =
-		require( 'mongodb' ),
-	sus =
-		require( 'suspend' );
+	mongodb,
+	sus;
 
+mongodb = require( 'mongodb' );
+
+sus = require( 'suspend' );
+
+var util = require( 'util' );
 
 /*
 | Change translation.
@@ -72,53 +74,19 @@ var translateChange =
 	)
 {
 	var
-		src =
-			chg.chgX.src,
-		trg =
-			chg.chgX.trg;
+		src,
+		trg;
 
-	if( src.path )
+	switch( chg.chgX.type )
 	{
-		if( src.path[ 1 ] === 'doc' )
-		{
-			src.path.splice( 2, 0, 'twig' );
-		}
+		case 'Change' :
+		case undefined :
 
-		src.path.splice( 0, 0, 'twig' );
-	}
+			chg.chgX.type = 'change';
+			break;
 
-	if( trg.path )
-	{
-		if( trg.path[ 1 ] === 'doc' )
-		{
-			trg.path.splice( 2, 0, 'twig' );
-		}
-
-		trg.path.splice( 0, 0, 'twig' );
-	}
-
-	if(
-		src.val
-		&&
-		src.val.type === 'Note'
-		&&
-		src.val.twig
-	)
-	{
-		console.log( 'Fixing malformed ' + src.val.type + ' src' );
-
-		if( src.val.twig.type !== src.val.type )
-		{
-			throw new Error( 'what the ?' );
-		}
-
-		for( var k in src.val.twig )
-		{
-			src.val[ k ] =
-				src.val.twig[ k ];
-		}
-
-		delete src.val.twig;
+		default :
+			throw new Error( );
 	}
 
 	return chg;
@@ -131,12 +99,17 @@ var translateChange =
 var run =
 	function*( )
 {
-
 	var
-		src =
-			{ },
-		trg =
-			{ };
+		cursor,
+		o,
+		spaces,
+		src,
+		trg,
+		users;
+
+	src = { };
+
+	trg = { };
 
 	// initializes the mongodb databases access
 	src.server =
@@ -158,8 +131,7 @@ var run =
 			config.src.name,
 			src.server,
 			{
-				w :
-					1
+				w : 1
 			}
 		);
 
@@ -168,14 +140,9 @@ var run =
 			config.trg.name,
 			trg.server,
 			{
-				w :
-					1
+				w : 1
 			}
 		);
-
-	var
-		o,
-		cursor;
 
 	console.log( '* connecting to src' );
 
@@ -221,9 +188,9 @@ var run =
 			sus.resume( )
 		);
 
-	if( o.version !== 4 )
+	if( o.version !== 5 )
 	{
-		throw new Error( 'src is not a v4 repository' );
+		throw new Error( 'src is not a v5 repository' );
 	}
 
 	console.log( '* creating trg.global' );
@@ -233,19 +200,16 @@ var run =
 			_id :
 				'version',
 			version :
-				5
+				6
 		},
 		sus.resume( )
 	);
 
 	console.log( '* copying src.users -> trg.users' );
 
-	cursor =
-		yield src.users.find( sus.resume( ) );
+	cursor = yield src.users.find( sus.resume( ) );
 
-	var
-		users =
-			{ };
+	users = { };
 
 	for(
 		o = yield cursor.nextObject( sus.resume( ) );
@@ -253,8 +217,7 @@ var run =
 		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
-		users[ o._id ] =
-			o;
+		users[ o._id ] = o;
 
 		yield trg.users.insert( o, sus.resume( ) );
 	}
@@ -264,9 +227,7 @@ var run =
 	cursor =
 		yield src.spaces.find( sus.resume( ) );
 
-	var
-		spaces =
-			{ };
+	spaces = { };
 
 	for(
 		o = yield cursor.nextObject( sus.resume( ) );

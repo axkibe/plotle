@@ -29,10 +29,12 @@ GLOBAL.SERVER = true;
 
 GLOBAL.SHELL = false;
 
+
 /*
 | Constants.
 */
-var MESHCRAFT_DB_VERSION = 5;
+var MESHCRAFT_DB_VERSION = 6;
+
 
 /*
 | Imports.
