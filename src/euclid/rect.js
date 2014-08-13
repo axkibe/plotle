@@ -240,10 +240,15 @@ Rect.prototype.reduce =
 		margin
 	)
 {
-	if( margin.constructor !== euclid.Margin )
-	{
-		throw new Error( 'margin of wrong type' );
-	}
+	// FIXME use reflex when a jion
+
+/**/if( CHECK )
+/**/{
+/**/	if( margin.constructor !== euclid.margin )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	// allows margins to reduce the rect to zero size without erroring.
 

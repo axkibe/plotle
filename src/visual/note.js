@@ -456,7 +456,7 @@ if( SHELL )
 	*/
 	Note.innerMargin =
 	Note.prototype.innerMargin =
-		new euclid.Margin(
+		new euclid.margin(
 			theme.note.innerMargin
 		);
 }

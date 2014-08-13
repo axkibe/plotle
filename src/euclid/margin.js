@@ -1,5 +1,7 @@
 /*
 | Holds information of inner or outer distances.
+|
+| FIXME, make it a jion.
 */
 
 
@@ -28,15 +30,15 @@ var jools;
 /*
 | Constructor.
 |
-| Margin(n, e, s, w)
+| margin(n, e, s, w)
 |
 | n: master or north margin
 | e: east margin
 | s: south margin
 | w: west margin
 */
-var Margin =
-euclid.Margin =
+var margin =
+euclid.margin =
 	function(
 		m,
 		e,
@@ -66,8 +68,8 @@ euclid.Margin =
 /*
 | A margin with all distances 0.
 */
-Margin.zero =
-	new Margin(
+margin.zero =
+	new margin(
 		0,
 		0,
 		0,
@@ -79,7 +81,7 @@ Margin.zero =
 | Returns a json object for this margin
 | FIXME is this ever used?
 */
-Margin.prototype.toJSON = function()
+margin.prototype.toJSON = function()
 {
 	return this._json ||
 		( this._json =
@@ -96,7 +98,7 @@ Margin.prototype.toJSON = function()
 | East + west margin = x
 */
 jools.lazyValue(
-	Margin.prototype,
+	margin.prototype,
 	'x',
 	function( )
 	{
@@ -109,7 +111,7 @@ jools.lazyValue(
 | North + south margin = y
 */
 jools.lazyValue(
-	Margin.prototype,
+	margin.prototype,
 	'y',
 	function( )
 	{

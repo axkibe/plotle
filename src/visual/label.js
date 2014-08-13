@@ -240,7 +240,7 @@ if( SHELL )
 	| Default margin for all labels.
 	*/
 	Label.prototype.innerMargin =
-		new euclid.Margin(
+		new euclid.margin(
 			theme.label.innerMargin
 		);
 }

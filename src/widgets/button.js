@@ -67,7 +67,7 @@ if( JION )
 						comment :
 							'font of the text',
 						type :
-							'Font',
+							'euclid.font',
 						defaultValue :
 							null
 					},
