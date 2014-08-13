@@ -35,7 +35,7 @@ if( JION )
 {
 	return {
 		name :
-			'Ellipse',
+			'ellipse',
 		unit :
 			'euclid',
 		attributes :
@@ -99,15 +99,15 @@ if( JION )
 
 
 var
-	Ellipse;
+	ellipse;
 
-Ellipse = euclid.Ellipse;
+ellipse = euclid.ellipse;
 
 
 /*
 | Initialization.
 */
-Ellipse.prototype._init =
+ellipse.prototype._init =
 	function(
 		pnw,
 		pse
@@ -176,7 +176,7 @@ Ellipse.prototype._init =
 | Center point of an ellipse.
 */
 jools.lazyValue(
-	Ellipse.prototype,
+	ellipse.prototype,
 	'pc',
 	function()
 	{
@@ -200,7 +200,7 @@ jools.lazyValue(
 | Gradient's center point.
 */
 jools.lazyValue(
-	Ellipse.prototype,
+	ellipse.prototype,
 	'gradientPC',
 	function( )
 	{
@@ -230,7 +230,7 @@ jools.lazyValue(
 | Gradient inner radius.
 */
 jools.lazyValue(
-	Ellipse.prototype,
+	ellipse.prototype,
 	'gradientR1',
 	function( )
 	{
@@ -260,7 +260,7 @@ jools.lazyValue(
 | Gradient inner radius.
 */
 jools.lazyValue(
-	Ellipse.prototype,
+	ellipse.prototype,
 	'gradientR0',
 	function( )
 	{
@@ -278,7 +278,7 @@ jools.lazyValue(
 /*
 | Draws the ellipse.
 */
-Ellipse.prototype.sketch =
+ellipse.prototype.sketch =
 	function
 	(
 		// ...
@@ -294,7 +294,7 @@ Ellipse.prototype.sketch =
 /*
 | Returns true if point is within the ellipse.
 */
-Ellipse.prototype.within =
+ellipse.prototype.within =
 	function
 	(
 		view,
@@ -325,7 +325,7 @@ Ellipse.prototype.within =
 /*
 | Gets the source of a projection to p.
 */
-Ellipse.prototype.getProjection =
+ellipse.prototype.getProjection =
 	function
 	(
 		// ...

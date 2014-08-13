@@ -93,7 +93,7 @@ Disc._init =
 		);
 
 	this.silhoutte =
-		euclid.Ellipse.create(
+		euclid.ellipse.create(
 			'pnw',
 				euclid.Point.create(
 					'x',

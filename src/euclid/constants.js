@@ -1,9 +1,7 @@
 /*
-|
 | Constans for euclid.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -29,17 +27,17 @@ var jools;
 'use strict';
 
 
-var Const =
-	euclid.Const =
-	{ };
+var constants;
+
+constants = euclid.constants = { };
 
 /*
 |'magic' number to approximate ellipses with beziers.
 */
-Const.magic = 0.551784;
+constants.magic = 0.551784;
 
 
-jools.immute( Const );
+jools.immute( constants );
 
 
 } )( );

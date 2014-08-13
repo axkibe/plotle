@@ -1,7 +1,7 @@
 /*
 | A geometric shape.
 |
-| Used by Ellipse, RoundRect
+| Used by ellipse, RoundRect
 |
 | Authors: Axel Kittenberger
 */
@@ -172,7 +172,7 @@ Shape.prototype.sketch =
 					hull[ h + 2 ];
 
 				magic =
-					euclid.Const.magic;
+					euclid.constants.magic;
 
 				break;
 

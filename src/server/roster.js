@@ -178,7 +178,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/euclid/const.js',
+			'src/euclid/constants.js',
 		'inBundle',
 			true
 	),

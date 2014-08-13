@@ -321,7 +321,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			euclid.Ellipse.create(
+			euclid.ellipse.create(
 				'pnw',
 					this.zone.pnw,
 				'pse',
@@ -341,7 +341,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			euclid.Ellipse.create(
+			euclid.ellipse.create(
 				'pnw',
 					euclid.Point.zero,
 				'pse',

@@ -221,11 +221,13 @@ Rect.prototype.computeEllipse =
 		model
 	)
 {
-	return euclid.Ellipse.create(
-		'pnw',
-			model.pnw.compute( this ),
-		'pse',
-			model.pse.compute( this )
+	return (
+		euclid.ellipse.create(
+			'pnw',
+				model.pnw.compute( this ),
+			'pse',
+				model.pse.compute( this )
+		)
 	);
 };
 

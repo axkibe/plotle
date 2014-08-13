@@ -15,14 +15,9 @@
 . AppendNC
 . Button
 . Caret
-> change
-> changeRay
-> changeWrap
 . Channel
 . CheckBox
 . Chop
-. Compass
-. Const
 . Create
 . CreateDisc
 . CreateGeneric
@@ -33,7 +28,6 @@
 . Disc
 > Doc
 . DocItem
-. Ellipse
 . FOCUS
 . Fabric
 . Font
@@ -84,8 +78,6 @@
 . Set
 . Shape
 . Shorten
-> sign
-> signRay
 . SignUp
 > Space
 . User
@@ -292,7 +284,10 @@
 . caretPath
 . caretable
 . cdistance
+> change
+> changeRay
 . changeTree
+> changeWrap
 > changedTouches
 . channelName
 > charCodeAt
@@ -321,6 +316,7 @@
 . command
 . comment
 . compare
+. compass
 . compute
 . computeEllipse
 . concerns
@@ -328,6 +324,7 @@
 . concernsMark
 > configurable
 . connect
+. constants
 . containsPath
 > content
 . copy
@@ -738,6 +735,8 @@
 > shift
 > shiftKey
 . showDisc
+> sign
+> signRay
 . signup
 . signupButton
 . silhoutte

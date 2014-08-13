@@ -385,7 +385,7 @@ Input.prototype.sketchMask =
 			this.maskKern( size ),
 
 		magic =
-			euclid.Const.magic,
+			euclid.constants.magic,
 
 		mw =
 			magic * w,
