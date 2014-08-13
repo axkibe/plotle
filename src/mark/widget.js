@@ -51,7 +51,7 @@ if( JION )
 							'path of the item',
 
 						type :
-							'Path'
+							'path'
 					}
 			}
 	};
@@ -80,7 +80,7 @@ jools.lazyValue(
 	'itemPath',
 	function( )
 	{
-		return jion.Path.empty;
+		return jion.path.empty;
 	}
 );
 

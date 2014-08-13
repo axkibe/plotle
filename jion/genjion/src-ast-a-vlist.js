@@ -281,7 +281,7 @@ prototype.create =
 /**/
 /**/	if( v_path !== null )
 /**/	{
-/**/		if( v_path.reflexName !== 'Path' )
+/**/		if( v_path.reflexName !== 'path' )
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}

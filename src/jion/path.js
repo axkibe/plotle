@@ -34,7 +34,7 @@ if( JION )
 {
 	return {
 		name :
-			'Path',
+			'path',
 		unit :
 			'jion',
 		attributes :
@@ -80,20 +80,20 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	jion.Path = require( '../jion/this' )( module );
+	jion.path = require( '../jion/this' )( module );
 }
 
 
 var
-	Path;
+	path;
 
-Path = jion.Path;
+path = jion.path;
 
 
 /*
 | Initializer.
 */
-Path.prototype._init =
+path.prototype._init =
 	function(
 		array,
 		_sliced
@@ -133,7 +133,7 @@ Path.prototype._init =
 |
 | FIXME base indizes on strings instead of numbers
 */
-Path.prototype.get =
+path.prototype.get =
 	function(
 		idx
 	)
@@ -160,7 +160,7 @@ Path.prototype.get =
 |
 | FIXME cache
 */
-Path.prototype.Append =
+path.prototype.Append =
 	function(
 		key
 	)
@@ -173,7 +173,7 @@ Path.prototype.Append =
 	arr.push( key );
 
 	return (
-		Path.create(
+		path.create(
 			'array',
 				arr,
 			'_sliced',
@@ -186,8 +186,8 @@ Path.prototype.Append =
 /*
 | Same as append but without caching.
 */
-Path.prototype.AppendNC =
-	Path.prototype.Append;
+path.prototype.AppendNC =
+	path.prototype.Append;
 
 
 
@@ -196,7 +196,7 @@ Path.prototype.AppendNC =
 |
 | FIXME cache
 */
-Path.prototype.Chop =
+path.prototype.Chop =
 	function(
 		n // if not undefined chop this amount of items;
 		//// defaults to 1
@@ -217,7 +217,7 @@ Path.prototype.Chop =
 	if( n > 0 )
 	{
 		return (
-			Path.create(
+			path.create(
 				'array',
 					arr,
 				'_sliced',
@@ -228,7 +228,7 @@ Path.prototype.Chop =
 	}
 
 	return (
-		Path.create(
+		path.create(
 			'array',
 				arr,
 			'_sliced',
@@ -244,7 +244,7 @@ Path.prototype.Chop =
 |
 | FIXME cache
 */
-Path.prototype.Shorten =
+path.prototype.Shorten =
 	function(
 		n
 	)
@@ -271,7 +271,7 @@ Path.prototype.Shorten =
 
 	if( n === this.length )
 	{
-		return Path.empty;
+		return path.empty;
 	}
 
 	for(
@@ -284,7 +284,7 @@ Path.prototype.Shorten =
 	}
 
 	return (
-		Path.create(
+		path.create(
 			'array',
 				arr,
 			'_sliced',
@@ -299,7 +299,7 @@ Path.prototype.Shorten =
 |
 | FIXME cache
 */
-Path.prototype.Limit =
+path.prototype.Limit =
 	function(
 		n
 	)
@@ -321,12 +321,12 @@ Path.prototype.Limit =
 
 	if( n === 0 )
 	{
-		return Path.empty;
+		return path.empty;
 	}
 
 
 	return (
-		Path.create(
+		path.create(
 			'array',
 				this._path.slice( 0, n ),
 			'_sliced',
@@ -341,7 +341,7 @@ Path.prototype.Limit =
 | FIXME cache
 | FIXME call Prepend
 */
-Path.prototype.prepend =
+path.prototype.prepend =
 	function(
 		key
 	)
@@ -354,7 +354,7 @@ Path.prototype.prepend =
 	arr.unshift( key );
 
 	return (
-		Path.create(
+		path.create(
 			'array',
 				arr,
 			'_sliced',
@@ -369,7 +369,7 @@ Path.prototype.prepend =
 |
 | Currently unused.
 */
-Path.prototype.Set =
+path.prototype.Set =
 	function(
 		idx,
 		key
@@ -397,7 +397,7 @@ Path.prototype.Set =
 	arr[ idx ] = key;
 
 	return (
-		Path.create(
+		path.create(
 			'array',
 				arr,
 			'_sliced',
@@ -410,7 +410,7 @@ Path.prototype.Set =
 /*
 | Returns true if this path is the same as another.
 */
-Path.prototype.equals =
+path.prototype.equals =
 	function( o )
 {
 	var
@@ -453,7 +453,7 @@ Path.prototype.equals =
 |
 | FIXME: optimize by using local variables
 */
-Path.prototype.subPathOf =
+path.prototype.subPathOf =
 	function(
 		o,     // the other path
 		len    // the length of this path to consider.
@@ -506,7 +506,7 @@ Path.prototype.subPathOf =
 | Turns the path to a string.
 */
 jools.lazyValue(
-	Path.prototype,
+	path.prototype,
 	'string',
 	function( )
 	{
@@ -542,7 +542,7 @@ jools.lazyValue(
 /*
 | CreateFromJSON
 */
-Path.createFromJSON =
+path.createFromJSON =
 	function( json )
 {
 	// FIXME this is a dirty hack and ought to be removed.
@@ -557,7 +557,7 @@ Path.createFromJSON =
 	}
 
 	return (
-		Path.create(
+		path.create(
 			'array',
 				json
 		)
@@ -568,7 +568,7 @@ Path.createFromJSON =
 /*
 | Jsonfy.
 */
-Path.prototype.toJSON =
+path.prototype.toJSON =
 	function( )
 {
 	return this._path;
@@ -579,7 +579,7 @@ Path.prototype.toJSON =
 | Returns true is this path is empty.
 */
 jools.lazyValue(
-	Path.prototype,
+	path.prototype,
 	'isEmpty',
 	function( )
 	{
@@ -591,8 +591,8 @@ jools.lazyValue(
 /*
 | An empty path.
 */
-Path.empty =
-	Path.create(
+path.empty =
+	path.create(
 		'array',
 			[ ],
 		'_sliced',
@@ -604,7 +604,7 @@ Path.empty =
 */
 if( SERVER )
 {
-	module.exports = Path;
+	module.exports = path;
 }
 
 

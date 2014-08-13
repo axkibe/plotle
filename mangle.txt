@@ -72,7 +72,6 @@
 . PSE_M1
 . Pan
 > Para
-. Path
 > Point
 > Portal
 . Range

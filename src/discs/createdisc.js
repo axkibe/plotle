@@ -67,7 +67,7 @@ if( JION )
 						comment :
 							'the widget hovered upon',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							null
 					},
@@ -94,7 +94,7 @@ if( JION )
 						comment :
 							'path of the disc',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							undefined
 					},
@@ -369,11 +369,11 @@ CreateDisc.prototype.pushButton =
 			shell.setAction(
 				Action.CreateRelation.create(
 					'fromItemPath',
-						jion.Path.empty,
+						jion.path.empty,
 					'relationState',
 						'start',
 					'toItemPath',
-						jion.Path.empty
+						jion.path.empty
 				)
 			);
 

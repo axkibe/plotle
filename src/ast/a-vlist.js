@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'the path',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							null
 					}

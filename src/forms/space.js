@@ -11,8 +11,7 @@
 var Forms;
 
 
-Forms =
-	Forms || { };
+Forms = Forms || { };
 
 
 /*
@@ -46,7 +45,7 @@ if( JION )
 						comment :
 							'the widget hovered upon',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							null
 					},
@@ -78,7 +77,7 @@ if( JION )
 						comment :
 							'the path of the form',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							undefined
 					},

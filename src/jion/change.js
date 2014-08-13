@@ -80,7 +80,7 @@ if( SERVER )
 				require( '../jion/this' )( module ),
 			changeRay :
 				require( '../jion/change-ray' ),
-			Path :
+			path :
 				require( '../jion/path'  ),
 			Sign :
 				require( '../jion/sign'  ),

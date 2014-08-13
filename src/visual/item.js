@@ -573,7 +573,7 @@ Item.prototype.dragStart =
 				'fromItemPath',
 					this.path,
 				'toItemPath',
-					jion.Path.empty,
+					jion.path.empty,
 				'relationState',
 					'hadSelect',
 				'toPoint',

@@ -54,7 +54,7 @@ if( JION )
 						comment :
 							'node currently hovered upon',
 						type :
-							'Path',
+							'path',
 						// FIXME undefined
 						defaultValue :
 							null
@@ -87,7 +87,7 @@ if( JION )
 						comment :
 							'the path of the doc',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							undefined
 					},

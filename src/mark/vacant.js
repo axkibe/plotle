@@ -62,7 +62,7 @@ jools.lazyValue(
 	'itemPath',
 	function( )
 	{
-		return jion.Path.empty;
+		return jion.path.empty;
 	}
 );
 
@@ -74,7 +74,7 @@ jools.lazyValue(
 	'widgetPath',
 	function( )
 	{
-		return  jion.Path.empty;
+		return  jion.path.empty;
 	}
 );
 

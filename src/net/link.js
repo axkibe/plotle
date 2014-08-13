@@ -49,7 +49,7 @@ if( JION )
 						comment :
 							'the path of the link',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							null
 					},
@@ -286,7 +286,7 @@ Link.prototype.aquireSpace =
 			spaceTag :
 				spaceTag,
 			path :
-				jion.Path.empty,
+				jion.path.empty,
 			passhash :
 				this.passhash,
 			seq :

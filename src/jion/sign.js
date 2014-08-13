@@ -70,7 +70,7 @@ if( JION )
 						unit :
 							'jion',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							undefined
 					},

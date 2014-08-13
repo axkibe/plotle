@@ -56,7 +56,7 @@ var
 				require( '../jion/change' ),
 			changeRay :
 				require( '../jion/change-ray' ),
-			Path :
+			path :
 				require( '../jion/path' ),
 		},
 	jools =
@@ -2584,7 +2584,7 @@ Server.prototype.cmdGet =
 	{
 		node =
 			tree.getPath(
-				jion.Path.create(
+				jion.path.create(
 					'array',
 					cmd.path
 				)

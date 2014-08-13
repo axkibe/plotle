@@ -39,7 +39,7 @@ if( JION )
 						comment :
 							'the path to the thing being hovered upon',
 						type :
-							'Path'
+							'path'
 					}
 			}
 	};

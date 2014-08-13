@@ -284,7 +284,7 @@ Form.prototype.pointingHover =
 	return (
 		reply.hover.create(
 			'path',
-				jion.Path.empty,
+				jion.path.empty,
 			'cursor',
 				'default'
 		)

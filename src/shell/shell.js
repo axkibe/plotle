@@ -142,7 +142,7 @@ Shell =
 	this._$mode = 'Normal';
 
 	// currently hovered thing
-	this._$hover = jion.Path.empty;
+	this._$hover = jion.path.empty;
 
 	view =
 	this.$view =
@@ -160,11 +160,11 @@ Shell =
 	this._$formJockey =
 		Forms.Jockey.create(
 			'hover',
-				jion.Path.empty,
+				jion.path.empty,
 			'mark',
 				Mark.Vacant.create( ),
 			'path',
-				jion.Path.empty
+				jion.path.empty
 				.Append( 'forms' ),
 			'view',
 				view,
@@ -201,13 +201,13 @@ Shell =
 			'action',
 				Action.None.create( ),
 			'hover',
-				jion.Path.empty,
+				jion.path.empty,
 			'mark',
 				Mark.Vacant.create( ),
 			'mode',
 				this._$mode,
 			'path',
-				jion.Path.empty
+				jion.path.empty
 				.Append( 'discs' ),
 			'view',
 				view,
@@ -1041,7 +1041,7 @@ Shell.prototype._setHover =
 			// FIXME make concernsHover
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'discs' ?
-					jion.Path.empty
+					jion.path.empty
 					:
 					path
 		);
@@ -1051,7 +1051,7 @@ Shell.prototype._setHover =
 			'hover',
 				// FIXME make a concernsHover
 				path.isEmpty || path.get( 0 ) !== 'forms' ?
-					jion.Path.empty
+					jion.path.empty
 					:
 					path
 		);
@@ -1060,7 +1060,7 @@ Shell.prototype._setHover =
 		this.$space.create(
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'space' ?
-					jion.Path.empty
+					jion.path.empty
 					:
 					path
 		);
@@ -1340,7 +1340,7 @@ Shell.prototype.onload =
 		passhash,
 		username;
 
-	ajaxPath = jion.Path.empty.Append( 'ajax' );
+	ajaxPath = jion.path.empty.Append( 'ajax' );
 
 	this.ajax =
 		Net.Ajax.create(
@@ -1498,11 +1498,11 @@ Shell.prototype.onAquireSpace =
 			'access',
 				access,
 			'hover',
-				jion.Path.empty,
+				jion.path.empty,
 			'mark',
 				Mark.Vacant.create( ),
 			'path',
-				jion.Path.empty.Append( 'space' ),
+				jion.path.empty.Append( 'space' ),
 			'view',
 				Euclid.View.create(
 					'fact',

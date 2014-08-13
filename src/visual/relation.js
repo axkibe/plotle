@@ -72,7 +72,7 @@ if( JION )
 						comment :
 							'node currently hovered upon',
 						type :
-							'Path',
+							'path',
 						assign :
 							null,
 						defaultValue :
@@ -102,7 +102,7 @@ if( JION )
 						comment :
 							'the path of the doc',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							undefined
 					},

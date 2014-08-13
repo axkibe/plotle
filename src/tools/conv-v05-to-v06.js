@@ -8,29 +8,29 @@
 | This tool is configered directly here
 */
 var
-	config,
+config,
 
 config =
-	{
-		src :
-		{
-			host :
-				'127.0.0.1',
-			port :
-				27017,
-			name :
-				'meshcraft05'
-		},
-		trg :
-		{
-			host :
-				'127.0.0.1',
-			port :
-				27017,
-			name :
-				'meshcraft06'
-		}
-	};
+{
+src :
+{
+	host :
+		'127.0.0.1',
+	port :
+		27017,
+	name :
+		'meshcraft05'
+},
+trg :
+{
+	host :
+		'127.0.0.1',
+	port :
+		27017,
+	name :
+		'meshcraft06'
+}
+};
 
 
 /*
@@ -56,14 +56,13 @@ GLOBAL.SHELL = false;
 | Imports
 */
 var
-	mongodb,
-	sus;
+mongodb,
+sus;
 
 mongodb = require( 'mongodb' );
 
 sus = require( 'suspend' );
 
-var util = require( 'util' );
 
 /*
 | Change translation.
@@ -73,10 +72,6 @@ var translateChange =
 		chg
 	)
 {
-	var
-		src,
-		trg;
-
 	switch( chg.chgX.type )
 	{
 		case 'Change' :

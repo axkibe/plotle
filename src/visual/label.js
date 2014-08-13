@@ -70,7 +70,7 @@ if( JION )
 						comment :
 							'node currently hovered upon',
 						type :
-							'Path',
+							'path',
 						assign :
 							null,
 						// FIXME make defaultValue undefined for server
@@ -82,7 +82,7 @@ if( JION )
 						comment :
 							'the path of the doc',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							undefined
 					},

@@ -33,16 +33,12 @@ var
 if( JION )
 {
 	return {
-
 		name :
 			'Item',
-
 		unit :
 			'Mark',
-
 		subclass :
 			'Mark.Mark',
-
 		attributes :
 			{
 				path :
@@ -51,7 +47,7 @@ if( JION )
 							'path of the item',
 
 						type :
-							'Path'
+							'path'
 					}
 			}
 	};
@@ -59,8 +55,10 @@ if( JION )
 
 
 var
-	Item =
-		Mark.Item;
+	Item;
+
+Item = Mark.Item;
+
 
 /*
 | A caret mark has a caret.
@@ -68,8 +66,7 @@ var
 | (the text range is the other mark
 |  which has this too )
 */
-Item.prototype.hasCaret =
-	false;
+Item.prototype.hasCaret = false;
 
 
 /*
@@ -93,7 +90,7 @@ jools.lazyValue(
 	'widgetPath',
 	function( )
 	{
-		return jion.Path.empty;
+		return jion.path.empty;
 	}
 );
 
@@ -104,8 +101,7 @@ jools.lazyValue(
 |
 | FIXME write something
 */
-Item.prototype.clipboard =
-	'';
+Item.prototype.clipboard = '';
 
 
 /*

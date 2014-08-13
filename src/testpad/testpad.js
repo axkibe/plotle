@@ -132,7 +132,7 @@ var
 
 	_noteDocPath =
 		jion
-		.Path
+		.path
 		.empty
 		.Append( 'space' )
 		.Append( 'testnote' )

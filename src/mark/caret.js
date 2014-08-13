@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'path of the caret',
 						type :
-							'Path'
+							'path'
 					},
 				at :
 					{
@@ -131,7 +131,7 @@ jools.lazyValue(
 			this.path.get( 0 ) !== 'space'
 		)
 		{
-			return jion.Path.empty;
+			return jion.path.empty;
 		}
 
 		return this.path.Limit( 3 );
@@ -153,7 +153,7 @@ jools.lazyValue(
 			this.path.get( 0 ) !== 'forms'
 		)
 		{
-			return jion.Path.empty;
+			return jion.path.empty;
 		}
 
 		return this.path.Limit( 5 );

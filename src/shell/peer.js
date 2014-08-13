@@ -44,7 +44,7 @@ Sign = jion.Sign;
 newItemSign =
 	Sign.create(
 		'path',
-			jion.Path.empty
+			jion.path.empty
 			.Append( 'twig' )
 			.Append( '$new' ),
 		'rank',

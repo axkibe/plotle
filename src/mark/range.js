@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'path of the begin of the range',
 						type :
-							'Path'
+							'path'
 					},
 				bAt :
 					{
@@ -67,7 +67,7 @@ if( JION )
 						comment :
 							'path of the end of the range',
 						type :
-							'Path'
+							'path'
 					},
 				eAt :
 					{
@@ -220,7 +220,7 @@ jools.lazyValue(
 	{
 		if( this.bPath.length < 3 )
 		{
-			return jion.Path.empty;
+			return jion.path.empty;
 		}
 
 		return this.bPath.Limit( 3 );

@@ -59,7 +59,7 @@ if( JION )
 						comment :
 							'the widget hovered upon',
 						type :
-							'Path'
+							'path'
 					},
 				mark :
 					{
@@ -94,7 +94,7 @@ if( JION )
 						comment :
 							'path of the disc',
 						type :
-							'Path'
+							'path'
 					},
 				view :
 					{
@@ -200,7 +200,7 @@ Jockey.prototype._init =
 					// FIXME make a concernsHover in the disc
 					( this.hover.isEmpty || this.hover.get( 2 ) !== name )
 						?
-						jion.Path.empty
+						jion.path.empty
 						:
 						this.hover,
 				'mark',

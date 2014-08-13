@@ -93,7 +93,7 @@ if( JION )
 						comment :
 							'the path of the para',
 						type :
-							'Path',
+							'path',
 						defaultValue :
 							undefined
 					},
