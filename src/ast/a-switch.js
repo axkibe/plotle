@@ -36,7 +36,7 @@ if( JION )
 						comment :
 							'the default block',
 						type :
-							'aBlock',
+							'ast.aBlock',
 						defaultValue :
 							null
 					}

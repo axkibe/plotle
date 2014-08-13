@@ -26,19 +26,6 @@ if( JION )
 			'ast',
 		node :
 			true,
-		attributes :
-			{
-				// FIXME check if necessary
-				'path' :
-					{
-						comment :
-							'the path',
-						type :
-							'path',
-						defaultValue :
-							null
-					}
-			},
 		twig :
 			{
 // FUTURE

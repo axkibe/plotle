@@ -47,12 +47,9 @@ if( SERVER )
 var Constructor =
 	function(
 		twig, // twig
-		ranks, // twig ranks
-		v_path // the path
+		ranks // twig ranks
 	)
 	{
-		this.path = v_path;
-
 		this.twig = twig;
 
 		this.ranks = ranks;
@@ -105,9 +102,7 @@ prototype.create =
 
 		twig,
 
-		twigDup,
-
-		v_path;
+		twigDup;
 
 	if( this !== aVList )
 	{
@@ -118,8 +113,6 @@ prototype.create =
 		ranks = inherit.ranks;
 
 		twigDup = false;
-
-		v_path = this.path;
 	}
 	else
 	{
@@ -142,15 +135,6 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
-			case 'path' :
-
-				if( arg !== undefined )
-				{
-					v_path = arg;
-				}
-
-				break;
-
 			case 'twig:add' :
 
 				if( !twigDup )
@@ -267,43 +251,16 @@ prototype.create =
 		}
 	}
 
-	if( v_path === undefined )
-	{
-		v_path = null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_path === undefined )
-/**/	{
-/**/		throw new Error( 'undefined attribute path' );
-/**/	}
-/**/
-/**/	if( v_path !== null )
-/**/	{
-/**/		if( v_path.reflexName !== 'path' )
-/**/		{
-/**/			throw new Error( 'type mismatch' );
-/**/		}
-/**/	}
 /**/}
 
-	if(
-		inherit
-		&&
-		!twigDup
-		&&
-		(
-			v_path === inherit.path
-			||
-			v_path && v_path.equals( inherit.path )
-		)
-	)
+	if( inherit && !twigDup )
 	{
 		return inherit;
 	}
 
-	return new Constructor( twig, ranks, v_path );
+	return new Constructor( twig, ranks );
 };
 
 
@@ -373,21 +330,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return (
-		this.tree === obj.tree
-		&&
-		this.ranks === obj.ranks
-		&&
-		(
-			this.path === obj.path
-			||
-			this.path !== null
-			&&
-			this.path.equals
-			&&
-			this.path.equals( obj.path )
-		)
-	);
+	return this.tree === obj.tree && this.ranks === obj.ranks;
 };
 
 

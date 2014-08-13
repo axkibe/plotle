@@ -253,7 +253,7 @@ Gen.prototype._init =
 		{
 			console.log( 'WARNING: ' + jAttr.unit + '.' + jAttr.type );
 		}
-		else if( jAttr.type )
+		else if( jAttr.type.indexOf( '.' ) < 0  )
 		{
 			switch( jAttr.type )
 			{
@@ -271,11 +271,11 @@ Gen.prototype._init =
 			}
 		}
 
-		if( jAttr.typx )
+		if( jAttr.type.indexOf( '.' ) >= 0 )
 		{
-			attrUnit = jAttr.jtypx.split( '.' )[ 0 ];
+			attrUnit = jAttr.type.split( '.' )[ 0 ];
 
-			attrType = jAttr.jtypx.split( '.' )[ 1 ];
+			attrType = jAttr.type.split( '.' )[ 1 ];
 		}
 		else
 		{
