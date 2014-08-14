@@ -48,7 +48,7 @@ var
 			'svg' :
 				// some font
 				'utf-8',
-		
+
 			'torrent'  :
 				// torrents
 				'binary',

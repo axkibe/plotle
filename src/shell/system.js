@@ -172,19 +172,15 @@ var System =
 			// timer for atween state
 			timer :
 				null,
-
 			// position mouse button went down
 			pos :
 				null,
-
 			// latest mouse position seen in atween state
 			$move :
 				null,
-
 			// shift key in atween state
 			shift :
 				null,
-
 			// ctrl  key in atween state
 			ctrl :
 				null

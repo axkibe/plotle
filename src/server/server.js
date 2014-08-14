@@ -2247,7 +2247,7 @@ Server.prototype.closeSleep =
 	)
 {
 	var sleep;
-	
+
 	sleep = this.$upsleep[ sleepID ];
 
 	// maybe it just had expired at the same time
@@ -2360,7 +2360,8 @@ Server.prototype.wake =
 
 		jools.log( 'ajax', '->', asw );
 
-		result.writeHead(200,
+		result.writeHead(
+			200,
 			{
 				'Content-Type' :
 					'application/json',
@@ -2707,8 +2708,7 @@ Server.prototype.requestListener =
 		if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
 		{
 			// delivers compressed
-			header[ 'Content-Encoding' ] =
-				'gzip';
+			header[ 'Content-Encoding' ] = 'gzip';
 
 			result.writeHead(
 				200,

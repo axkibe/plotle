@@ -190,8 +190,7 @@ Channel.prototype.request =
 		'application/x-www-form-urlencoded'
 	);
 
-	xhr.onreadystatechange =
-		this._readyHandler;
+	xhr.onreadystatechange = this._readyHandler;
 
 	rs = JSON.stringify( request );
 
