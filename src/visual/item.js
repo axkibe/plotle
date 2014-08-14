@@ -259,7 +259,7 @@ jools.lazyValue(
 
 				nw :
 					ha.nw &&
-					euclid.Rect.renew(
+					euclid.rect.renew(
 						wx - dcx,
 						ny - dcy,
 
@@ -269,7 +269,7 @@ jools.lazyValue(
 
 				n :
 					ha.n &&
-					euclid.Rect.renew(
+					euclid.rect.renew(
 						mx - a,
 						ny - dey,
 
@@ -279,7 +279,7 @@ jools.lazyValue(
 
 				ne :
 					ha.ne &&
-					euclid.Rect.renew(
+					euclid.rect.renew(
 						ex + dcx - a2,
 						ny - dcy,
 
@@ -289,7 +289,7 @@ jools.lazyValue(
 
 				e :
 					ha.e &&
-					euclid.Rect.renew(
+					euclid.rect.renew(
 						ex + dex - a2,
 						my - b,
 
@@ -299,7 +299,7 @@ jools.lazyValue(
 
 				se :
 					ha.se &&
-					euclid.Rect.renew(
+					euclid.rect.renew(
 						ex + dcx - a2,
 						sy + dcy - b2,
 
@@ -309,7 +309,7 @@ jools.lazyValue(
 
 				s :
 					ha.s &&
-					euclid.Rect.renew(
+					euclid.rect.renew(
 						mx - a,
 						sy + dey -b2,
 
@@ -319,7 +319,7 @@ jools.lazyValue(
 
 				sw :
 					ha.sw &&
-					euclid.Rect.renew(
+					euclid.rect.renew(
 						wx - dcx,
 						sy + dcy - b2,
 
@@ -329,7 +329,7 @@ jools.lazyValue(
 
 				w :
 					ha.w &&
-					euclid.Rect.renew(
+					euclid.rect.renew(
 						wx - dex,
 						my - b,
 

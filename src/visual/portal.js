@@ -123,7 +123,7 @@ if( JION )
 						comment :
 							'the portals zone',
 						type :
-							'Rect',
+							'rect',
 						unit :
 							'euclid',
 						json :
@@ -193,7 +193,7 @@ Portal.prototype._init =
 	{
 		zone =
 		this.zone =
-			euclid.Rect.create(
+			euclid.rect.create(
 				'pnw',
 					zone.pnw,
 				'pse',

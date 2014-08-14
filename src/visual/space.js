@@ -694,7 +694,7 @@ Space.prototype.dragStart =
 		transItem =
 			Stubs.emptyNote.create(
 				'zone',
-					euclid.Rect.create(
+					euclid.rect.create(
 						'pnw',
 							p,  // FIXME why no depoint?
 						'pse',
@@ -773,7 +773,7 @@ Space.prototype.dragStart =
 				'view',
 					view,
 				'zone',
-					euclid.Rect.create(
+					euclid.rect.create(
 						'pnw',
 							p, //FIXME depoint?
 						'pse',
@@ -955,7 +955,7 @@ Space.prototype.dragStop =
 						note =
 							action.transItem.create(
 								'zone',
-									euclid.Rect.createArbitrary(
+									euclid.rect.createArbitrary(
 										view.depoint( action.start ),
 										view.depoint( p )
 									)
@@ -999,7 +999,7 @@ Space.prototype.dragStop =
 							action.model,
 
 						zone =
-							euclid.Rect.createArbitrary(
+							euclid.rect.createArbitrary(
 								view.depoint( action.start ),
 								view.depoint( p )
 							),
@@ -1077,7 +1077,7 @@ Space.prototype.dragStop =
 					portal =
 						action.transItem.create(
 							'zone',
-								euclid.Rect.createArbitrary(
+								euclid.rect.createArbitrary(
 									view.depoint( action.start ),
 									view.depoint( p )
 								)
@@ -1330,7 +1330,7 @@ Space.prototype.dragMove =
 			model =
 				action.model;
 			zone =
-				euclid.Rect.createArbitrary(
+				euclid.rect.createArbitrary(
 					view.depoint( action.start ),
 					view.depoint( p )
 				);

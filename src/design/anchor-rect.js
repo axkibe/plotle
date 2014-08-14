@@ -79,7 +79,7 @@ AnchorRect.prototype.compute =
 		frame
 	)
 {
-	return euclid.Rect.create(
+	return euclid.rect.create(
 		'pnw',
 			this.pnw.compute( frame ),
 		'pse',

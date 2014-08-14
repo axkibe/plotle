@@ -58,7 +58,7 @@ Stubs.emptyNote =
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'zone',
-			euclid.Rect.create(
+			euclid.rect.create(
 				'pnw',
 					euclid.point.zero,
 				'pse',
@@ -79,7 +79,7 @@ Stubs.emptyNote =
 Stubs.emptyPortal =
 	Visual.Portal.create(
 		'zone',
-			euclid.Rect.create(
+			euclid.rect.create(
 				'pnw',
 					euclid.point.zero,
 				'pse',

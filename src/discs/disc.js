@@ -75,7 +75,7 @@ Disc._init =
 	ny = jools.half( this.view.height - height );
 
 	this.frame =
-		euclid.Rect.create(
+		euclid.rect.create(
 			'pnw',
 				euclid.point.create(
 					'x',

@@ -29,7 +29,6 @@
 > Doc
 . DocItem
 . FOCUS
-. Fabric
 . Form
 . HOFOC
 . HOVER
@@ -64,10 +63,8 @@
 . PSE_M1
 . Pan
 > Para
-> Point
 > Portal
 . Range
-> Rect
 > Relation
 . Remove
 . RoundRect
@@ -629,7 +626,7 @@
 . peer
 . pitch
 > pnw
-. point
+> point
 . pointingHover
 > pop
 . portal
@@ -658,7 +655,7 @@
 > ranks
 > readyState
 . receiverFunc
-. rect
+> rect
 . redo
 . reduce
 . reflect

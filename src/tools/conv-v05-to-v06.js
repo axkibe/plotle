@@ -86,6 +86,11 @@ var translateSign =
 		return sign;
 	}
 
+	if( sign.val.type === 'Rect' )
+	{
+		sign.val.type = 'rect';
+	}
+
 	if( sign.val.pnw && sign.val.pnw.type === 'Point' )
 	{
 		sign.val.pnw.type = 'point';
@@ -94,6 +99,11 @@ var translateSign =
 	if( sign.val.pse && sign.val.pse.type === 'Point' )
 	{
 		sign.val.pse.type = 'point';
+	}
+
+	if( sign.val.zone && sign.val.zone.type === 'Rect' )
+	{
+		sign.val.zone.type = 'rect';
 	}
 
 	if( sign.val.zone && sign.val.zone.pnw.type === 'Point' )

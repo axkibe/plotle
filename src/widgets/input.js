@@ -150,7 +150,7 @@ if( JION )
 						comment :
 							'the frame the widget resides in',
 						type :
-							'Rect',
+							'euclid.rect',
 						defaultValue :
 							null
 					},

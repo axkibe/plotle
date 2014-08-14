@@ -17,6 +17,7 @@ var
 | Imports
 */
 var
+	euclid,
 	jools,
 	Visual;
 
@@ -64,16 +65,16 @@ IFaceSym =
 							)
 					),
 				'zone',
-					Visual.Rect.create(
+					euclid.rect.create(
 						'pnw',
-							Visual.point.create(
+							euclid.point.create(
 								'x',
 									0,
 								'y',
 									0
 							),
 						'pse',
-							Visual.point.create(
+							euclid.point.create(
 								'x',
 									100,
 								'y',

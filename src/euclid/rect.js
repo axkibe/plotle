@@ -35,7 +35,7 @@ if( JION )
 {
 	return {
 		name :
-			'Rect',
+			'rect',
 		unit :
 			'euclid',
 		attributes :
@@ -76,21 +76,21 @@ if( SERVER )
 	euclid.point =
 		require( './point' );
 
-	euclid.Rect =
+	euclid.rect =
 		require( '../jion/this' )( module );
 }
 
 
 var
-	Rect;
+	rect;
 
-Rect = euclid.Rect;
+rect = euclid.rect;
 
 
 /*
 | Creates a rect by two arbitrary corner points
 */
-Rect.createArbitrary =
+rect.createArbitrary =
 	function(
 		p1,
 		p2
@@ -143,7 +143,7 @@ Rect.createArbitrary =
 	}
 
 	return (
-		Rect.create(
+		rect.create(
 			'pnw',
 				pnw,
 			'pse',
@@ -157,7 +157,7 @@ Rect.createArbitrary =
 | Rectangle width.
 */
 jools.lazyValue(
-	Rect.prototype,
+	rect.prototype,
 	'width',
 	function( )
 	{
@@ -170,7 +170,7 @@ jools.lazyValue(
 | Rectangle height.
 */
 jools.lazyValue(
-	Rect.prototype,
+	rect.prototype,
 	'height',
 	function( )
 	{
@@ -183,7 +183,7 @@ jools.lazyValue(
 | A rectangle of same size with pnw at 0/0
 */
 jools.lazyValue(
-	Rect.prototype,
+	rect.prototype,
 	'zeropnw',
 	function( )
 	{
@@ -197,7 +197,7 @@ jools.lazyValue(
 		else
 		{
 			return (
-				Rect.create(
+				rect.create(
 					'pnw',
 						euclid.point.zero,
 					'pse',
@@ -212,7 +212,7 @@ jools.lazyValue(
 /*
 | Computes an ellipse modelled relative to this rect.
 */
-Rect.prototype.computeEllipse =
+rect.prototype.computeEllipse =
 	function(
 		model
 	)
@@ -231,7 +231,7 @@ Rect.prototype.computeEllipse =
 /*
 | Returns a rectangle thats reduced on every side by a margin object
 */
-Rect.prototype.reduce =
+rect.prototype.reduce =
 	function(
 		margin
 	)
@@ -249,7 +249,7 @@ Rect.prototype.reduce =
 	// allows margins to reduce the rect to zero size without erroring.
 
 	return (
-		Rect.create(
+		rect.create(
 			'pnw',
 				euclid.point.renew(
 					this.pnw.x + margin.e,
@@ -272,7 +272,7 @@ Rect.prototype.reduce =
 /*
 | Returns a resized rect with cardinal limits.
 */
-Rect.prototype.cardinalResize =
+rect.prototype.cardinalResize =
 	function(
 		cardinal,  // 'n', 'ne', 'e', etc.
 		dx,        // x-difference
@@ -471,7 +471,7 @@ Rect.prototype.cardinalResize =
 	}
 
 	return (
-		Rect.renew(
+		rect.renew(
 			wx,
 			ny,
 			ex,
@@ -486,7 +486,7 @@ Rect.prototype.cardinalResize =
 | Point in the center.
 */
 jools.lazyValue(
-	Rect.prototype,
+	rect.prototype,
 	'pc',
 	function( )
 	{
@@ -506,7 +506,7 @@ jools.lazyValue(
 | Point in the north.
 */
 jools.lazyValue(
-	Rect.prototype,
+	rect.prototype,
 	'pn',
 	function( )
 	{
@@ -526,7 +526,7 @@ jools.lazyValue(
 | West point.
 */
 jools.lazyValue(
-	Rect.prototype,
+	rect.prototype,
 	'w',
 	function( )
 	{
@@ -546,7 +546,7 @@ jools.lazyValue(
 | East point.
 */
 jools.lazyValue(
-	Rect.prototype,
+	rect.prototype,
 	'e',
 	function( )
 	{
@@ -568,14 +568,14 @@ jools.lazyValue(
 | add( point )   -or-
 | add( x, y  )
 */
-Rect.prototype.add =
+rect.prototype.add =
 	function(
 		a1,
 		a2
 	)
 {
 	return (
-		Rect.create(
+		rect.create(
 			'pnw',
 				this.pnw.add( a1, a2 ),
 			'pse',
@@ -588,7 +588,7 @@ Rect.prototype.add =
 /*
 | Creates a new rect.
 */
-Rect.renew =
+rect.renew =
 	function(
 		wx,
 		ny,
@@ -688,7 +688,7 @@ Rect.renew =
 	}
 
 	return (
-		Rect.create(
+		rect.create(
 			'pnw',
 				pnw,
 			'pse',
@@ -704,14 +704,14 @@ Rect.renew =
 | sub(point)   -or-
 | sub(x, y)
 */
-Rect.prototype.sub =
+rect.prototype.sub =
 	function(
 		a1,
 		a2
 	)
 {
 	return (
-		Rect.create(
+		rect.create(
 			'pnw',
 				this.pnw.sub( a1, a2 ),
 			'pse',
@@ -724,7 +724,7 @@ Rect.prototype.sub =
 /*
 | Returns true if this rectangle is the same as another
 */
-Rect.prototype.equals =
+rect.prototype.equals =
 	function(
 		r
 	)
@@ -743,7 +743,7 @@ Rect.prototype.equals =
 /*
 | Draws the rectangle.
 */
-Rect.prototype.sketch =
+rect.prototype.sketch =
 	function(
 		fabric,
 		border,
@@ -794,7 +794,7 @@ Rect.prototype.sketch =
 /*
 | Returns true if point is within this rect.
 */
-Rect.prototype.within =
+rect.prototype.within =
 	function(
 		view,
 		p
@@ -834,7 +834,7 @@ Rect.prototype.within =
 | Returns the point where a ray going from
 | center of the rect (pc) to p intersects with the rect.
 */
-Rect.prototype.getProjection =
+rect.prototype.getProjection =
 	function(
 		p
 	)
@@ -916,8 +916,7 @@ Rect.prototype.getProjection =
 */
 if( SERVER )
 {
-	module.exports =
-		Rect;
+	module.exports = rect;
 }
 
-})( );
+} )( );

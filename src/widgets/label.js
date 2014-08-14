@@ -97,7 +97,7 @@ if( JION )
 						comment :
 							'the path of the widget',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							null
 					},
@@ -106,7 +106,7 @@ if( JION )
 						comment :
 							'the frame the widget resides in',
 						type :
-							'Rect',
+							'euclid.rect',
 						defaultValue :
 							null
 					},

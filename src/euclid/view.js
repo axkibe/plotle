@@ -358,7 +358,7 @@ View.prototype.rect =
 			r =
 				( a1.reflex === 'euclid.rect' )
 				?  a1
-				: euclid.Rect.create(
+				: euclid.rect.create(
 					'pnw',
 						a1,
 					'pse',
@@ -391,7 +391,7 @@ View.prototype.rect =
 		pse = a2;
 	}
 
-	return euclid.Rect.create(
+	return euclid.rect.create(
 		'pnw',
 			this.point( pnw ),
 		'pse',
@@ -475,7 +475,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			euclid.Rect.create(
+			euclid.rect.create(
 				'pnw',
 					euclid.point.zero,
 				'pse',

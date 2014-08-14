@@ -208,7 +208,7 @@ Label.prototype._init =
 		this.pnw;
 
 	this.zone =
-		euclid.Rect.create(
+		euclid.rect.create(
 			'pnw',
 				pnw,
 			'pse',
@@ -293,7 +293,7 @@ jools.lazyValue(
 	function( )
 	{
 		return (
-			euclid.Rect.create(
+			euclid.rect.create(
 				'pnw',
 					this.zone.pnw,
 				'pse',
@@ -313,11 +313,12 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			zone =
-				this.zone;
+			zone;
+
+		zone = this.zone;
 
 		return (
-			euclid.Rect.create(
+			euclid.rect.create(
 				'pnw',
 					euclid.point.zero,
 				'pse',

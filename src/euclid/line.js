@@ -91,9 +91,9 @@ line = euclid.line;
 */
 line.connect =
 	function(
-		shape1,  // a Rect or point
+		shape1,  // a rect or point
 		end1,    // 'normal' or 'arrow'
-		shape2,  // shape2: a Rect or point
+		shape2,  // shape2: a rect or point
 		end2     // 'normal' or 'arrow'
 	)
 {
@@ -206,7 +206,7 @@ jools.lazyValue(
 			p2 =
 				this.p2;
 
-		return euclid.Rect.create(
+		return euclid.rect.create(
 			'pnw',
 				euclid.point.renew(
 					Math.min( p1.x, p2.x ),
