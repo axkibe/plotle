@@ -270,7 +270,7 @@ CheckBox.prototype.click =
 
 	if(
 		this.frame.within(
-			euclid.View.proper,
+			euclid.view.proper,
 			p
 		)
 	)
@@ -373,7 +373,7 @@ CheckBox.prototype.draw =
 		style,
 		this.frame,
 		'sketch',
-		euclid.View.proper
+		euclid.view.proper
 	);
 
 	if( this.checked )
@@ -385,7 +385,7 @@ CheckBox.prototype.draw =
 			),
 			this,
 			'sketchCheck',
-			euclid.View.proper
+			euclid.view.proper
 		);
 	}
 };

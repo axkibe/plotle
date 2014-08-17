@@ -120,7 +120,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'View',
+							'view',
 						concerns :
 							{
 								member :

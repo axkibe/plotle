@@ -142,7 +142,7 @@ Scrollbar.prototype.draw =
 		theme.scrollbar.style,
 		this.getArea( view ),
 		'sketch',
-		euclid.View.proper
+		euclid.view.proper
 	);
 };
 

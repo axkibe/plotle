@@ -200,7 +200,7 @@ Form.prototype.draw =
 		theme.forms.style,
 		fabric,
 		'sketch',
-		euclid.View.proper
+		euclid.view.proper
 	);
 
 	ranks = this.ranks;

@@ -146,7 +146,7 @@ line.connect =
 	}
 	else if
 	(
-		shape1.within( euclid.View.proper, pc2 )
+		shape1.within( euclid.view.proper, pc2 )
 	)
 	{
 		p1 = pc1;
@@ -166,7 +166,7 @@ line.connect =
 	}
 	else if
 	(
-		shape2.within( euclid.View.proper, pc1 )
+		shape2.within( euclid.view.proper, pc1 )
 	)
 	{
 		p2 =

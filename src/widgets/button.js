@@ -273,7 +273,7 @@ Button.prototype.sketch =
 		fabric,
 		border,
 		twist,
-		euclid.View.proper
+		euclid.view.proper
 	);
 };
 
@@ -320,7 +320,7 @@ jools.lazyValue(
 			style,
 			this,
 			'sketch',
-			euclid.View.proper
+			euclid.view.proper
 		);
 
 		if( this.text )
@@ -394,7 +394,7 @@ jools.lazyValue(
 				style,
 				Discs.icons,
 				this.icon,
-				euclid.View.proper
+				euclid.view.proper
 			);
 		}
 
@@ -415,7 +415,7 @@ Button.prototype.pointingHover =
 		!this.visible
 		||
 		!this.frame.within(
-			euclid.View.proper,
+			euclid.view.proper,
 			p
 		)
 	)
@@ -431,7 +431,7 @@ Button.prototype.pointingHover =
 		!this._fabric.withinSketch(
 			this,
 			'sketch',
-			euclid.View.proper,
+			euclid.view.proper,
 			pp
 		)
 	)
@@ -464,7 +464,7 @@ Button.prototype.click =
 		!this.visible
 		||
 		!this.frame.within(
-			euclid.View.proper,
+			euclid.view.proper,
 			p
 		)
 	)
@@ -480,7 +480,7 @@ Button.prototype.click =
 		this._fabric.withinSketch(
 			this,
 			'sketch',
-			euclid.View.proper,
+			euclid.view.proper,
 			pp
 		)
 	)

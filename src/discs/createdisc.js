@@ -136,7 +136,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'View',
+							'euclid.view',
 						concerns :
 							{
 								member :
@@ -265,7 +265,7 @@ jools.lazyValue(
 			this.style,
 			this.silhoutte,
 			'sketch',
-			euclid.View.proper
+			euclid.view.proper
 		);
 
 		for(
@@ -281,7 +281,7 @@ jools.lazyValue(
 			this.style,
 			this.silhoutte,
 			'sketch',
-			euclid.View.proper
+			euclid.view.proper
 		);
 
 		return fabric;
@@ -447,7 +447,7 @@ CreateDisc.prototype.pointingHover =
 		!fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
-			euclid.View.proper,
+			euclid.view.proper,
 			pp
 		)
 	)
@@ -514,7 +514,7 @@ CreateDisc.prototype.click =
 		!fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
-			euclid.View.proper,
+			euclid.view.proper,
 			pp
 		)
 	)
@@ -615,7 +615,7 @@ CreateDisc.prototype.dragStart =
 		!this._fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
-			euclid.View.proper,
+			euclid.view.proper,
 			p.sub( this.frame.pnw )
 		)
 	)

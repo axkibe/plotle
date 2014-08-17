@@ -37,7 +37,7 @@ if( JION )
 {
 	return {
 		name :
-			'View',
+			'view',
 		unit :
 			'euclid',
 		attributes :
@@ -72,42 +72,65 @@ if( JION )
 					}
 			},
 		init :
-			[ ]
+			[ ],
+		node :
+			true
 	};
 }
 
 
-var
-	View;
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	jools =
+		require( '../jools/jools' );
 
-View = euclid.View;
+	euclid =
+		{
+			point :
+				require( './point' ),
+			view :
+				require( '../jion/this' )( module )
+		};
+}
+
+
+var
+	view;
+
+view = euclid.view;
 
 
 /*
 | Initializer.
 */
-View.prototype._init =
+view.prototype._init =
 	function( )
 {
-	this.fact =
-		jools.limit(
-			theme.zoom.min,
-			this.fact,
-			theme.zoom.max
-		);
+	if( SHELL )
+	{
+		this.fact =
+			jools.limit(
+				theme.zoom.min,
+				this.fact,
+				theme.zoom.max
+			);
 
-	this.zoom =
-		Math.pow(
-			theme.zoom.base,
-			this.fact
-		);
+		this.zoom =
+			Math.pow(
+				theme.zoom.base,
+				this.fact
+			);
+	}
 };
 
 
 /*
 | Returns the scaled distance of d
 */
-View.prototype.scale =
+view.prototype.scale =
 	function(
 		d
 	)
@@ -119,7 +142,7 @@ View.prototype.scale =
 /*
 | Returns the x value for a point for this view.
 */
-View.prototype.x =
+view.prototype.x =
 	function(
 		x
 	)
@@ -147,7 +170,7 @@ View.prototype.x =
 /*
 | Returns the original x value for a point in this view.
 */
-View.prototype.dex =
+view.prototype.dex =
 	function(
 		x
 	)
@@ -176,7 +199,7 @@ View.prototype.dex =
 /*
 | Returns the y value for a point for this view.
 */
-View.prototype.y =
+view.prototype.y =
 	function(
 		y
 	)
@@ -205,7 +228,7 @@ View.prototype.y =
 /*
 | Returns the original y value for a point in this view.
 */
-View.prototype.dey =
+view.prototype.dey =
 	function(
 		y
 	)
@@ -237,7 +260,7 @@ View.prototype.dey =
 | FUTURE remove?
 */
 jools.lazyValue(
-	View.prototype,
+	view.prototype,
 	'home',
 	function( )
 	{
@@ -256,7 +279,7 @@ jools.lazyValue(
 | A view with pan zero and fact zero
 */
 jools.lazyValue(
-	View.prototype,
+	view.prototype,
 	'sizeOnly',
 	function( )
 	{
@@ -275,7 +298,7 @@ jools.lazyValue(
 /*
 | Returns a point repositioned to the current view.
 */
-View.prototype.point =
+view.prototype.point =
 	function(
 		p
 	)
@@ -316,7 +339,7 @@ View.prototype.point =
 /*
 | Returns the original position of repositioned point.
 */
-View.prototype.depoint =
+view.prototype.depoint =
 	function(
 		p
 	)
@@ -346,7 +369,7 @@ View.prototype.depoint =
 /*
 | Returns a rect repositioned and resized to the current view.
 */
-View.prototype.rect =
+view.prototype.rect =
 	function(
 		a1,
 		a2
@@ -416,7 +439,7 @@ View.prototype.rect =
 |
 | -> k1 = p *(1 / z1 - 1 / z0) + k0
 */
-View.prototype.review =
+view.prototype.review =
 	function(
 		df,
 		p
@@ -470,7 +493,7 @@ View.prototype.review =
 | The zero based frame of this view.
 */
 jools.lazyValue(
-	View.prototype,
+	view.prototype,
 	'baseFrame',
 	function( )
 	{
@@ -496,8 +519,8 @@ jools.lazyValue(
 |
 | FIXME remove
 */
-View.proper =
-	View.create(
+view.proper =
+	view.create(
 		'height',
 			0,
 		'fact',

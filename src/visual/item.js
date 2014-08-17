@@ -469,7 +469,7 @@ Item.prototype.drawHandles =
 		fabric.reverseClip(
 			area,
 			'sketch',
-			euclid.View.proper,
+			euclid.view.proper,
 			-1
 		);
 	}

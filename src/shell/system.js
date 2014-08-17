@@ -570,7 +570,7 @@ System.prototype._onSystemFocus =
 
 
 /*
-| View window is being resized.
+| Window is being resized.
 */
 System.prototype._onResize =
 	function(

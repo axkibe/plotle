@@ -114,7 +114,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'View',
+							'euclid.view',
 						defaultValue :
 							undefined
 					},
@@ -123,9 +123,7 @@ if( JION )
 						comment :
 							'the portals zone',
 						type :
-							'rect',
-						unit :
-							'euclid',
+							'euclid.rect',
 						json :
 							true
 					}
@@ -461,7 +459,7 @@ Portal.prototype.click =
 	if(
 		moveToButton.shape
 		.within(
-			euclid.View.proper,
+			euclid.view.proper,
 			pp
 		)
 	)
@@ -490,7 +488,7 @@ Portal.prototype.click =
 		if(
 			sf.silhoutte
 				.within(
-					euclid.View.proper,
+					euclid.view.proper,
 					pp
 				)
 		)
@@ -698,7 +696,7 @@ Portal.prototype.pointingHover =
 	if(
 		moveToButton.shape
 			.within(
-				euclid.View.proper,
+				euclid.view.proper,
 				pp
 			)
 	)

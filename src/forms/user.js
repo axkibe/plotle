@@ -117,7 +117,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'View',
+							'euclid.view',
 						concerns :
 							{
 								member :

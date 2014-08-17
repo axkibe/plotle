@@ -491,7 +491,7 @@ jools.lazyValue(
 			style,
 			shape,
 			'sketch',
-			euclid.View.proper
+			euclid.view.proper
 		);
 
 		if( this.password )
@@ -503,7 +503,7 @@ jools.lazyValue(
 				},
 				this,
 				'sketchMask',
-				euclid.View.proper,
+				euclid.view.proper,
 				value.length,
 				font.size
 			);
@@ -536,7 +536,7 @@ jools.lazyValue(
 			style,
 			shape,
 			'sketch',
-			euclid.View.proper
+			euclid.view.proper
 		);
 
 		return f;
@@ -1017,7 +1017,7 @@ Input.prototype.pointingHover =
 
 	if(
 		!this.frame.within(
-			euclid.View.proper,
+			euclid.view.proper,
 			p
 		)
 	)
@@ -1029,7 +1029,7 @@ Input.prototype.pointingHover =
 
 	if(
 		!this._shape.within(
-			euclid.View.proper,
+			euclid.view.proper,
 			pp
 		)
 	)
@@ -1064,7 +1064,7 @@ Input.prototype.click =
 	if(
 		p === null ||
 		!this.frame.within(
-			euclid.View.proper,
+			euclid.view.proper,
 			p
 		)
 	)
@@ -1076,7 +1076,7 @@ Input.prototype.click =
 
 	if(
 		!this._shape.within(
-			euclid.View.proper,
+			euclid.view.proper,
 			pp
 		)
 	)

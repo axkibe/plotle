@@ -146,7 +146,7 @@ Shell =
 
 	view =
 	this.$view =
-		euclid.View.create(
+		euclid.view.create(
 			'pan',
 				euclid.point.zero,
 			'fact',
@@ -1504,7 +1504,7 @@ Shell.prototype.onAquireSpace =
 			'path',
 				jion.path.empty.Append( 'space' ),
 			'view',
-				euclid.View.create(
+				euclid.view.create(
 					'fact',
 						0,
 					'height',
