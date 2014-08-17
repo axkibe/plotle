@@ -128,7 +128,7 @@ Shell =
 	this._$fontWatch =
 		euclid.measure.width(
 			this._fontWFont,
-			'meshcraft$8833'
+			'ArchLoom$8833'
 		);
 
 	this.fabric = fabric;

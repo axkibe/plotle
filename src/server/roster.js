@@ -25,12 +25,12 @@ module.exports =
 	Resource.create(
 		'aliases',
 			[
-				'meshcraft.html',
+				'archloom.html',
 				'index.html',
 				''
 			],
 		'filePath',
-			'media/meshcraft.html',
+			'media/archloom.html',
 		'maxage',
 			'short',
 		'postProcessor',
