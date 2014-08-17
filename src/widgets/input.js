@@ -214,7 +214,7 @@ Input.prototype._init =
 			);
 
 		this._shape =
-			euclid.RoundRect.create(
+			euclid.roundRect.create(
 				'pnw',
 					euclid.point.zero,
 				'pse',

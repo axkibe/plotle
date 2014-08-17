@@ -1,7 +1,7 @@
 /*
 | A geometric shape.
 |
-| Used by ellipse, RoundRect
+| Used by ellipse, roundRect
 |
 | Authors: Axel Kittenberger
 */
@@ -39,7 +39,7 @@ if( JION )
 	return {
 
 		name :
-			'Shape',
+			'shape',
 
 		unit :
 			'euclid',
@@ -69,15 +69,15 @@ if( JION )
 
 
 var
-	Shape;
+	shape;
 
-Shape = euclid.Shape;
+shape = euclid.shape;
 
 
 /*
 | Draws the shape.
 */
-Shape.prototype.sketch =
+shape.prototype.sketch =
 	function(
 		fabric,
 		border,
@@ -310,7 +310,7 @@ Shape.prototype.sketch =
 /*
 | Gets the source of a projection to p.
 */
-Shape.prototype.getProjection =
+shape.prototype.getProjection =
 	function(
 		p
 	)
@@ -655,7 +655,7 @@ Shape.prototype.getProjection =
 /*
 | Returns true if point is within the shape.
 */
-Shape.prototype.within =
+shape.prototype.within =
 	function(
 		view,
 		p

@@ -148,7 +148,7 @@ ellipse.prototype._init =
 			euclid.point.create( 'x', mx, 'y', sy );
 
 	this.shape =
-		euclid.Shape.create(
+		euclid.shape.create(
 			'hull',
 				[
 					'start',

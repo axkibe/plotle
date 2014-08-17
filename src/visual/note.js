@@ -504,7 +504,7 @@ jools.lazyValue(
 				theme.note.cornerRadius;
 
 			return (
-				euclid.RoundRect.create(
+				euclid.roundRect.create(
 					'pnw',
 						zone.pnw,
 					'pse',
@@ -536,7 +536,7 @@ jools.lazyValue(
 		cr = theme.note.cornerRadius;
 
 		return (
-			euclid.RoundRect.create(
+			euclid.roundRect.create(
 				'pnw',
 					euclid.point.zero,
 				'pse',

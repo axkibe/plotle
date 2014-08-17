@@ -48,7 +48,7 @@ if( JION )
 	return {
 
 		name :
-			'RoundRect',
+			'roundRect',
 		unit :
 			'euclid',
 		attributes :
@@ -95,15 +95,15 @@ if( JION )
 
 
 var
-	RoundRect;
+	roundRect;
 
-RoundRect = euclid.RoundRect;
+roundRect = euclid.roundRect;
 
 
 /*
 | Initializes the round rect.
 */
-RoundRect.prototype._init =
+roundRect.prototype._init =
 	function(
 		pnw,
 		pse,
@@ -119,7 +119,7 @@ RoundRect.prototype._init =
 			euclid.point.create( 'x', pnw.x, 'y', pse.y );
 
 	this.shape =
-		euclid.Shape.create(
+		euclid.shape.create(
 			'hull',
 				[
 					'start',
@@ -155,7 +155,7 @@ RoundRect.prototype._init =
 | point in the center
 */
 jools.lazyValue(
-	RoundRect.prototype,
+	roundRect.prototype,
 	'pc',
 	function( )
 	{
@@ -175,7 +175,7 @@ jools.lazyValue(
 | Rectangle width.
 */
 jools.lazyValue(
-	RoundRect.prototype,
+	roundRect.prototype,
 	'width',
 	function( )
 	{
@@ -187,7 +187,7 @@ jools.lazyValue(
 | Rectangle height.
 */
 jools.lazyValue(
-	RoundRect.prototype,
+	roundRect.prototype,
 	'height',
 	function( )
 	{
@@ -199,7 +199,7 @@ jools.lazyValue(
 /*
 | Draws the round-rect.
 */
-RoundRect.prototype.sketch =
+roundRect.prototype.sketch =
 	function
 	(
 		// ...
@@ -215,7 +215,7 @@ RoundRect.prototype.sketch =
 /*
 | Returns true if point is within the ellipse.
 */
-RoundRect.prototype.within =
+roundRect.prototype.within =
 	function
 	(
 		view,
@@ -246,7 +246,7 @@ RoundRect.prototype.within =
 /*
 | Gets the source of a projection to p.
 */
-RoundRect.prototype.getProjection =
+roundRect.prototype.getProjection =
 	function
 	(
 		// ...

@@ -67,11 +67,10 @@
 . Range
 > Relation
 . Remove
-. RoundRect
+. roundRect
 . ScrollY
 . Scrollbar
 . Set
-. Shape
 . Shorten
 . SignUp
 > Space

@@ -185,7 +185,7 @@ Scrollbar.prototype.getArea =
 	s05 = jools.half( ths.strength );
 
 	return (
-		euclid.RoundRect.create(
+		euclid.roundRect.create(
 			'pnw',
 				view.point(
 					pnw.add( 0, sy )

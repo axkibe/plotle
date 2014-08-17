@@ -1785,7 +1785,7 @@ Portal.prototype._prepareMoveToButton =
 
 	return {
 		shape :
-			euclid.RoundRect.create(
+			euclid.roundRect.create(
 				'pnw',
 					pnw,
 				'pse',
@@ -1861,7 +1861,7 @@ Portal.prototype._prepareField =
 			),
 
 		silhoutte =
-			euclid.RoundRect.create(
+			euclid.roundRect.create(
 				'pnw',
 					pnw.sub(
 						pitch,
