@@ -19,7 +19,7 @@ Visual =
 | Imports
 */
 var
-	action,
+	Action,
 	euclid,
 	jion,
 	jools,
@@ -525,7 +525,7 @@ Item.prototype.dragStart =
 	)
 	{
 		shell.setAction(
-			action.ScrollY.create(
+			Action.ScrollY.create(
 				'itemPath',
 					this.path,
 				'start',
@@ -571,7 +571,7 @@ Item.prototype.dragStart =
 		// relation binding
 
 		shell.setAction(
-			action.CreateRelation.create(
+			Action.CreateRelation.create(
 				'fromItemPath',
 					this.path,
 				'toItemPath',
@@ -601,7 +601,7 @@ Item.prototype.dragStart =
 		}
 
 		shell.setAction(
-			action.ItemDrag.create(
+			Action.ItemDrag.create(
 				'start',
 					view.depoint( p ),
 				'transItem',

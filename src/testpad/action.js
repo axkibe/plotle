@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'action',
+			'Action',
 		attributes :
 			{
 				command :

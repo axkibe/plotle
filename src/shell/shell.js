@@ -20,7 +20,7 @@ Shell =
 | Imports
 */
 var
-	action,
+	Action,
 	Discs,
 	euclid,
 	fontPool,
@@ -137,7 +137,7 @@ Shell =
 
 	this.$space = null;
 
-	this.$action = action.None.create( );
+	this.$action = Action.None.create( );
 
 	this._$mode = 'Normal';
 
@@ -199,7 +199,7 @@ Shell =
 			'access',
 				'',
 			'action',
-				action.None.create( ),
+				Action.None.create( ),
 			'hover',
 				jion.path.empty,
 			'mark',
@@ -334,7 +334,7 @@ Shell.prototype.setAction =
 
 /**/if ( CHECK )
 /**/{
-/**/	if( !action || !action.isAction( action.reflex ) )
+/**/	if( !action || !Action.isAction( action.reflex ) )
 /**/	{
 /**/		throw new Error(
 /**/			'invalid action'

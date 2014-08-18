@@ -9,7 +9,7 @@
 | Imports
 */
 var
-	action,
+	Action,
 	IFaceSym,
 	jion,
 	jools,
@@ -44,7 +44,7 @@ if( JION )
 						comment :
 							'the action the user is preparing',
 						type :
-							'action',
+							'Action',
 						defaultValue :
 							'null'
 					},
@@ -808,7 +808,7 @@ TestPad.prototype.testInput =
 	{
 		testPad.create(
 			'action',
-			action.create(
+			Action.create(
 				'command',
 					'insert',
 				'line',
@@ -892,7 +892,7 @@ TestPad.prototype.inputSpecialKey =
 
 				testPad.create(
 					'action',
-						action.create(
+						Action.create(
 							'command',
 								'join',
 							'line',
@@ -907,7 +907,7 @@ TestPad.prototype.inputSpecialKey =
 			{
 				testPad.create(
 					'action',
-						action.create(
+						Action.create(
 							'command',
 								'remove',
 							'line',
@@ -973,7 +973,7 @@ TestPad.prototype.inputSpecialKey =
 
 			testPad.create(
 				'action',
-					action.create(
+					Action.create(
 						'command',
 							'split',
 						'line',
@@ -1137,7 +1137,7 @@ TestPad.prototype.inputSpecialKey =
 			{
 				testPad.create(
 					'action',
-						action.create(
+						Action.create(
 							'command',
 								'remove',
 							'line',

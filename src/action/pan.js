@@ -21,9 +21,9 @@ if( JION )
 		name :
 			'Pan',
 		unit :
-			'action',
+			'Action',
 		subclass :
-			'action.action',
+			'Action.Action',
 		equals :
 			'primitive',
 		attributes :

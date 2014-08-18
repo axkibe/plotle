@@ -12,9 +12,8 @@
 | Export
 */
 var
-	action;
-
-action = action || { };
+	Action =
+		Action || { };
 
 
 /*
@@ -24,7 +23,7 @@ action = action || { };
 'use strict';
 
 
-action.action =
+Action.Action =
 	function( )
 {
 	// initializing abstract
@@ -37,7 +36,7 @@ action.action =
 /**		*
 ***		| Returns true if the reflection string is an action
 ***		*
-***/	action.isAction =
+***/	Action.isAction =
 /**/		function( reflex )
 /**/	{
 /**/		switch ( reflex )
