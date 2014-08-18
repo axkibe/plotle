@@ -25,12 +25,12 @@ module.exports =
 	Resource.create(
 		'aliases',
 			[
-				'archloom.html',
+				'ideoloom.html',
 				'index.html',
 				''
 			],
 		'filePath',
-			'media/archloom.html',
+			'media/ideoloom.html',
 		'maxage',
 			'short',
 		'postProcessor',

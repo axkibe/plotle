@@ -1251,11 +1251,11 @@ Shell.prototype.setUser =
 		if(
 			this.$space
 			&&
-			this.$space.spaceUser !== 'meshcraft'
+			this.$space.spaceUser !== 'ideoloom'
 		)
 		{
 			this.moveToSpace(
-				'meshcraft',
+				'ideoloom',
 				'home',
 				false
 			);
@@ -1581,7 +1581,7 @@ Shell.prototype.onAuth =
 	);
 
 	this.moveToSpace(
-		'meshcraft',
+		'ideoloom',
 		'home',
 		false
 	);
@@ -1635,7 +1635,7 @@ Shell.prototype.logout =
 		);
 
 		this.moveToSpace(
-			'meshcraft',
+			'ideoloom',
 			'home',
 			false
 		);

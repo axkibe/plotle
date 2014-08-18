@@ -295,8 +295,8 @@ Server.prototype.initRepository =
 	var
 		initSpaces =
 			[
-				'meshcraft:home',
-				'meshcraft:sandbox'
+				'ideoloom:home',
+				'ideoloom:sandbox'
 			];
 
 	for(
@@ -347,14 +347,14 @@ Server.prototype.initRepository =
 
 
 /*
-| Ensures there is the archloom (root) user
+| Ensures there is the ideoloom (root) user
 */
 Server.prototype.ensureMeshcraftUser =
 	function* ( )
 {
 	jools.log(
 		'start',
-		'ensuring existence of the "archloom" user'
+		'ensuring existence of the "ideoloom" user'
 	);
 
 	var
@@ -362,7 +362,7 @@ Server.prototype.ensureMeshcraftUser =
 			yield this.$db.users.findOne(
 				{
 					_id :
-						'archloom'
+						'ideoloom'
 				},
 				sus.resume( )
 			);
@@ -371,7 +371,7 @@ Server.prototype.ensureMeshcraftUser =
 	{
 		jools.log(
 			'start',
-			'not found! (re)creating the "archloom" user'
+			'not found! (re)creating the "ideoloom" user'
 		);
 
 		var
@@ -381,7 +381,7 @@ Server.prototype.ensureMeshcraftUser =
 		mUser =
 			{
 				_id :
-					'archloom',
+					'ideoloom',
 				pass :
 					jools.passhash( pass ),
 				clearPass :
@@ -396,12 +396,12 @@ Server.prototype.ensureMeshcraftUser =
 		);
 	}
 
-	this.$users.archloom =
+	this.$users.ideoloom =
 		mUser;
 
 	jools.log(
 		'start',
-		'"archloom" user\'s clear password is: ',
+		'"ideoloom" user\'s clear password is: ',
 		mUser.clearPass
 	);
 };
@@ -923,7 +923,7 @@ Server.prototype.prepareInventory =
 	// calculates the hash for the bundle
 	bundleFilePath =
 	this.bundleFilePath =
-		'archloom-' + sha1.sha1hex( bundle ) + '.js';
+		'ideoloom-' + sha1.sha1hex( bundle ) + '.js';
 
 	// registers the bundle as resource
 	this.inventory =
@@ -2392,7 +2392,7 @@ Server.prototype.testAccess =
 		return 'no';
 	}
 
-	if( spaceUser == 'meshcraft' )
+	if( spaceUser == 'ideoloom' )
 	{
 		switch( spaceTag )
 		{

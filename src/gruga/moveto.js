@@ -33,7 +33,7 @@ var
 
 
 var
-	meshcraftHomeButton =
+	ideoloomHomeButton =
 	{
 		w :
 			-145,
@@ -44,7 +44,7 @@ var
 		height :
 			130
 	},
-	meshcraftSandboxButton =
+	ideoloomSandboxButton =
 	{
 		w :
 			15,
@@ -91,7 +91,7 @@ Gruga.MoveTo =
 					)
 			),
 		'twig:add',
-		'meshcraftHomeButton',
+		'ideoloomHomeButton',
 			Widgets.Button.create(
 				'style',
 					'portalButton',
@@ -102,24 +102,24 @@ Gruga.MoveTo =
 								'anchor',
 									'c',
 								'x',
-									meshcraftHomeButton.w,
+									ideoloomHomeButton.w,
 								'y',
-									meshcraftHomeButton.n
+									ideoloomHomeButton.n
 							),
 						'pse',
 							Design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
-									meshcraftHomeButton.w +
-									meshcraftHomeButton.width,
+									ideoloomHomeButton.w +
+									ideoloomHomeButton.width,
 								'y',
-									meshcraftHomeButton.n +
-									meshcraftHomeButton.height
+									ideoloomHomeButton.n +
+									ideoloomHomeButton.height
 							)
 					),
 				'text',
-					'meshraft\nhome',
+					'ideoloom\nhome',
 				'textNewline',
 					25,
 				'font',
@@ -137,7 +137,7 @@ Gruga.MoveTo =
 					Design.AnchorEllipse.fullSkewNW
 			),
 		'twig:add',
-		'meshcraftSandboxButton',
+		'ideoloomSandboxButton',
 			Widgets.Button.create(
 				'style',
 					'portalButton',
@@ -148,24 +148,24 @@ Gruga.MoveTo =
 								'anchor',
 									'c',
 								'x',
-									meshcraftSandboxButton.w,
+									ideoloomSandboxButton.w,
 								'y',
-									meshcraftSandboxButton.n
+									ideoloomSandboxButton.n
 							),
 						'pse',
 							Design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
-									meshcraftSandboxButton.w +
-									meshcraftSandboxButton.width,
+									ideoloomSandboxButton.w +
+									ideoloomSandboxButton.width,
 								'y',
-									meshcraftSandboxButton.n +
-									meshcraftSandboxButton.height
+									ideoloomSandboxButton.n +
+									ideoloomSandboxButton.height
 							)
 					),
 				'text',
-					'meshraft\nsandbox',
+					'ideoloom\nsandbox',
 				'textNewline',
 					25,
 				'font',

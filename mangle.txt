@@ -76,7 +76,6 @@
 > Space
 . User
 . Vacant
-. View
 . Welcome
 . Widget
 . _$atween
@@ -534,8 +533,8 @@
 . maxlen
 > measureText
 . member
-. meshcraftHomeButton
-. meshcraftSandboxButton
+. ideoloomHomeButton
+. ideoloomSandboxButton
 > message
 . message1
 > metaKey

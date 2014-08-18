@@ -390,7 +390,7 @@ Login.prototype.onAuth =
 	this.clear( );
 
 	shell.moveToSpace(
-		'meshcraft',
+		'ideoloom',
 		'home',
 		false
 	);

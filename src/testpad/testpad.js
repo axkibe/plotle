@@ -1,5 +1,5 @@
 /*
-| A testing pad for meshcraft.
+| A testing pad for the CC/OT engine.
 |
 | Authors: Axel Kittenberger
 */

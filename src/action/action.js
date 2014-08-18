@@ -26,9 +26,8 @@ var
 Action.Action =
 	function( )
 {
-	throw new Error(
-		CHECK && 'initializing abstract'
-	);
+	// initializing abstract
+	throw new Error( );
 };
 
 

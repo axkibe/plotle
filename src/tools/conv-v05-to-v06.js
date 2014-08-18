@@ -192,9 +192,12 @@ var run =
 	var
 		cursor,
 		o,
+		sc,
 		spaces,
 		src,
+		tc,
 		trg,
+		sourceSpaceName,
 		users;
 
 	src = { };
@@ -325,8 +328,21 @@ var run =
 		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
-		spaces[ o._id ] =
-			o;
+		switch( o._id )
+		{
+			case 'meshcraft:home' :
+
+				o._id = 'ideoloom:home';
+
+				break;
+
+			case 'meshcraft:sandbox' :
+
+				o._id = 'ideoloom:sandbox';
+
+				break;
+		}
+		spaces[ o._id ] = o;
 
 		yield trg.spaces.insert( o, sus.resume( ) );
 	}
@@ -335,24 +351,45 @@ var run =
 
 	for( var spaceName in spaces )
 	{
+		switch( spaceName )
+		{
+			case 'ideoloom:home' :
+
+				sourceSpaceName = 'meshcraft:home';
+
+				break;
+
+			case 'ideoloom:sandbox' :
+
+				sourceSpaceName = 'meshcraft:sandbox';
+
+				break;
+
+			default :
+
+				sourceSpaceName = spaceName;
+
+				break;
+		}
+
 		console.log(
-			' * copying src.changes.' + spaceName +
-			' -> trg.changes.' + spaceName );
+			' * copying src.changes.' + sourceSpaceName +
+			' -> trg.changes.' + spaceName
+		);
 
-		var
-			sc =
-				yield src.connection.collection(
-					'changes:' + spaceName,
-					sus.resume( )
-				),
-			tc =
-				yield trg.connection.collection(
-					'changes:' + spaceName,
-					sus.resume( )
-				);
+		sc =
+			yield src.connection.collection(
+				'changes:' + sourceSpaceName,
+				sus.resume( )
+			);
 
-		cursor =
-			yield sc.find( sus.resume( ) );
+		tc =
+			yield trg.connection.collection(
+				'changes:' + spaceName,
+				sus.resume( )
+			);
+
+		cursor = yield sc.find( sus.resume( ) );
 
 		for(
 			o = yield cursor.nextObject( sus.resume( ) );
@@ -370,6 +407,7 @@ var run =
 	console.log( '* closing connections' );
 
 	src.connection.close( );
+
 	trg.connection.close( );
 
 	console.log( '* done' );

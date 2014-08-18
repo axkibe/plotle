@@ -1,7 +1,7 @@
 /*
 | This is a wrapper around HTML5 browsers,
 | creating a more comfortable interface for
-| meshcraft shell.
+| the shell.
 |
 | Authors: Axel Kittenberger
 */
@@ -536,7 +536,7 @@ System.prototype._onAtweenTime =
 
 
 /*
-| The meshcraft system lost focus
+| Lost focus.
 */
 System.prototype._onSystemBlur =
 	function(
@@ -558,7 +558,7 @@ System.prototype._onHiddenInputBlur =
 
 
 /*
-| The meshcraft system got focus
+| Got focus.
 */
 System.prototype._onSystemFocus =
 	function(

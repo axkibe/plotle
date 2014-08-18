@@ -214,10 +214,10 @@ MoveTo.prototype.pushButton =
 
 	switch( buttonName )
 	{
-		case 'meshcraftHomeButton' :
+		case 'ideoloomHomeButton' :
 
 			shell.moveToSpace(
-				'meshcraft',
+				'ideoloom',
 				'home',
 				false
 			);
@@ -225,10 +225,10 @@ MoveTo.prototype.pushButton =
 
 			break;
 
-		case 'meshcraftSandboxButton' :
+		case 'ideoloomSandboxButton' :
 
 			shell.moveToSpace(
-				'meshcraft',
+				'ideoloom',
 				'sandbox',
 				false
 			);

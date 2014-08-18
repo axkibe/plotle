@@ -1,5 +1,5 @@
 /*
-| A peer to a meshcraft repository.
+| A peer to a repository.
 |
 | Authors: Axel Kittenberger
 */
