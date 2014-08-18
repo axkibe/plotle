@@ -21,9 +21,9 @@ if( JION )
 		name :
 			'ItemResize',
 		unit :
-			'Action',
+			'action',
 		subclass :
-			'Action.Action',
+			'action.action',
 		equals :
 			'primitive',
 		attributes :

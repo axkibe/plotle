@@ -52,7 +52,7 @@ if( JION )
 						comment :
 							'currently active action',
 						type :
-							'Action'
+							'action'
 					},
 				hover :
 					{

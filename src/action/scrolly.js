@@ -21,9 +21,9 @@ if( JION )
 		name :
 			'ScrollY',
 		unit :
-			'Action',
+			'action',
 		subclass :
-			'Action.Action',
+			'action.action',
 		equals :
 			'primitive',
 		attributes :
