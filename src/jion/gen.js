@@ -1658,11 +1658,10 @@ Gen.prototype.genCreatorChecks =
 
 		switch( attr.type )
 		{
-			case 'Action' :
 			case 'Array' :
 			case 'Function' :
-			case 'Item' :
-			case 'Mark' :
+			case 'Item' : // FUTURE
+			case 'Mark' : // FUTURE
 			case 'Object' :
 
 				continue;

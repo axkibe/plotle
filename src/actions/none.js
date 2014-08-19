@@ -21,11 +21,11 @@ if( JION )
 		name :
 			'None',
 		unit :
-			'Action',
+			'actions',
 		singleton :
 			true,
 		subclass :
-			'Action.Action',
+			'actions.action',
 		equals :
 			'primitive'
 	};

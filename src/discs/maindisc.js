@@ -57,7 +57,7 @@ if( JION )
 						comment :
 							'currently active action',
 						type :
-							'Action',
+							'Object', // FUTURE 'actions.*',
 						defaultValue :
 							null
 					},

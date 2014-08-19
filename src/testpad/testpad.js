@@ -9,11 +9,11 @@
 | Imports
 */
 var
-	Action,
 	IFaceSym,
 	jion,
 	jools,
-	Peer;
+	Peer,
+	testpad;
 
 /*
 | Export
@@ -44,7 +44,7 @@ if( JION )
 						comment :
 							'the action the user is preparing',
 						type :
-							'Action',
+							'testpad.action',
 						defaultValue :
 							'null'
 					},
@@ -587,21 +587,6 @@ TestPad.prototype.onBlur =
 
 
 /*
-| Clears the current action
-*/
-/*
-TestPad.prototype.clearAction =
-	function( )
-{
-	elements.cancel.disabled = true;
-	elements.send.disabled   = true;
-
-	this.$action = null;
-};
-*/
-
-
-/*
 | Sends the current action.
 */
 TestPad.prototype.send =
@@ -808,7 +793,7 @@ TestPad.prototype.testInput =
 	{
 		testPad.create(
 			'action',
-			Action.create(
+			testpad.action.create(
 				'command',
 					'insert',
 				'line',
@@ -892,7 +877,7 @@ TestPad.prototype.inputSpecialKey =
 
 				testPad.create(
 					'action',
-						Action.create(
+						testpad.action.create(
 							'command',
 								'join',
 							'line',
@@ -907,7 +892,7 @@ TestPad.prototype.inputSpecialKey =
 			{
 				testPad.create(
 					'action',
-						Action.create(
+						testpad.action.create(
 							'command',
 								'remove',
 							'line',
@@ -973,7 +958,7 @@ TestPad.prototype.inputSpecialKey =
 
 			testPad.create(
 				'action',
-					Action.create(
+					testpad.action.create(
 						'command',
 							'split',
 						'line',
@@ -1137,7 +1122,7 @@ TestPad.prototype.inputSpecialKey =
 			{
 				testPad.create(
 					'action',
-						Action.create(
+						testpad.action.create(
 							'command',
 								'remove',
 							'line',

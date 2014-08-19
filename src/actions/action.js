@@ -12,8 +12,9 @@
 | Export
 */
 var
-	Action =
-		Action || { };
+	actions;
+
+actions = actions || { };
 
 
 /*
@@ -23,7 +24,7 @@ var
 'use strict';
 
 
-Action.Action =
+actions.action =
 	function( )
 {
 	// initializing abstract
@@ -35,19 +36,20 @@ Action.Action =
 /**/{
 /**		*
 ***		| Returns true if the reflection string is an action
+***     | Future remove by generic typecheck
 ***		*
-***/	Action.isAction =
+***/	actions.isAction =
 /**/		function( reflex )
 /**/	{
 /**/		switch ( reflex )
 /**/		{
-/**/			case 'action.createGeneric' :
-/**/			case 'action.createRelation' :
-/**/			case 'action.itemDrag' :
-/**/			case 'action.itemResize' :
-/**/			case 'action.none' :
-/**/			case 'action.pan' :
-/**/			case 'action.scrollY' :
+/**/			case 'actions.createGeneric' :
+/**/			case 'actions.createRelation' :
+/**/			case 'actions.itemDrag' :
+/**/			case 'actions.itemResize' :
+/**/			case 'actions.none' :
+/**/			case 'actions.pan' :
+/**/			case 'actions.scrollY' :
 /**/
 /**/				return true;
 /**/

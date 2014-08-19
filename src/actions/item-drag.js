@@ -1,5 +1,5 @@
 /*
-| The user is panning the background.
+| The user is dragging an item.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,28 +19,35 @@ if( JION )
 {
 	return {
 		name :
-			'Pan',
+			'ItemDrag',
 		unit :
-			'Action',
+			'actions',
 		subclass :
-			'Action.Action',
+			'actions.action',
 		equals :
 			'primitive',
 		attributes :
 			{
+				origin :
+					{
+						comment :
+							'the item being dragged',
+						type :
+							'Item'
+					},
 				start :
 					{
 						comment :
-							'mouse down point on start of scrolling',
+							'mouse down point on drag creation',
 						type :
-							'euclid.point'
+							'point'
 					},
-				pan :
+				transItem :
 					{
 						comment :
-							'pan position on start',
+							'the transient item while it is dragged',
 						type :
-							'euclid.point'
+							'Item'
 					}
 			}
 	};

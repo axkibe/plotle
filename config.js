@@ -63,7 +63,7 @@ config.database.port =
 */
 config.database.name =
 	// 'meshcraft05';
-	'meshcraft06';
+	'ideoloom-1';
 
 
 /*

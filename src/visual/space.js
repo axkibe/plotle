@@ -16,7 +16,7 @@ var
 | Imports
 */
 var
-	Action,
+	actions,
 	euclid,
 	jion,
 	jools,
@@ -259,8 +259,8 @@ Space.prototype.focusedItem =
 	{
 		switch( action.reflex )
 		{
-			case 'action.itemDrag' :
-			case 'action.itemResize' :
+			case 'actions.itemDrag' :
+			case 'actions.itemResize' :
 
 				if( action.transItem.path.subPathOf( path ) )
 				{
@@ -297,8 +297,8 @@ Space.prototype.getItem =
 
 	switch( action && action.reflex )
 	{
-		case 'action.itemDrag' :
-		case 'action.itemResize' :
+		case 'actions.itemDrag' :
+		case 'actions.itemResize' :
 
 			if( action.transItem.key === key )
 			{
@@ -393,7 +393,7 @@ Space.prototype.draw =
 
 	switch( action && action.reflex )
 	{
-		case 'action.createGeneric' :
+		case 'actions.createGeneric' :
 
 			if( action.start )
 			{
@@ -402,7 +402,7 @@ Space.prototype.draw =
 
 			break;
 
-		case 'action.createRelation' :
+		case 'actions.createRelation' :
 
 			if( !action.fromItemPath.isEmpty )
 			{
@@ -658,7 +658,7 @@ Space.prototype.dragStart =
 				view.depoint( p );
 
 			shell.setAction(
-				Action.ItemResize.create(
+				actions.ItemResize.create(
 					'start',
 						dp,
 					'transItem',
@@ -687,7 +687,7 @@ Space.prototype.dragStart =
 	// FIXME simplify
 	if(
 		action &&
-		action.reflex === 'action.createGeneric' &&
+		action.reflex === 'actions.createGeneric' &&
 		action.itemType === 'Note'
 	)
 	{
@@ -724,7 +724,7 @@ Space.prototype.dragStart =
 	else if
 	(
 		action &&
-		action.reflex === 'action.createGeneric' &&
+		action.reflex === 'actions.createGeneric' &&
 		action.itemType === 'Label'
 
 	)
@@ -757,7 +757,7 @@ Space.prototype.dragStart =
 	else if
 	(
 		action &&
-		action.reflex === 'action.createGeneric' &&
+		action.reflex === 'actions.createGeneric' &&
 		action.itemType === 'Portal'
 
 	)
@@ -823,7 +823,7 @@ Space.prototype.dragStart =
 
 	switch( action && action.reflex )
 	{
-		case 'action.createRelation' :
+		case 'actions.createRelation' :
 
 			shell.setAction(
 				action.create(
@@ -841,7 +841,7 @@ Space.prototype.dragStart =
 
 	// otherwise panning is initiated
 	shell.setAction(
-		Action.Pan.create(
+		actions.Pan.create(
 			'start',
 				p,
 			'pan',
@@ -942,7 +942,7 @@ Space.prototype.dragStop =
 
 	switch( action.reflex )
 	{
-		case 'action.createGeneric' :
+		case 'actions.createGeneric' :
 
 			switch( action.itemType )
 			{
@@ -986,7 +986,7 @@ Space.prototype.dragStop =
 					if( !ctrl )
 					{
 						shell.setAction(
-							Action.None.create( )
+							actions.None.create( )
 						);
 					}
 
@@ -1063,7 +1063,7 @@ Space.prototype.dragStop =
 					if( !ctrl )
 					{
 						shell.setAction(
-							Action.None.create( )
+							actions.None.create( )
 						);
 					}
 
@@ -1110,7 +1110,7 @@ Space.prototype.dragStop =
 					if( !ctrl )
 					{
 						shell.setAction(
-							Action.None.create( )
+							actions.None.create( )
 						);
 					}
 
@@ -1123,19 +1123,19 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'action.none' :
+		case 'actions.none' :
 
 			break;
 
-		case 'action.pan' :
+		case 'actions.pan' :
 
 			shell.setAction(
-				Action.None.create( )
+				actions.None.create( )
 			);
 
 			break;
 
-		case 'action.createRelation' :
+		case 'actions.createRelation' :
 
 			switch( action.relationState )
 			{
@@ -1143,7 +1143,7 @@ Space.prototype.dragStop =
 				case 'start' :
 
 					shell.setAction(
-						Action.None.create( )
+						actions.None.create( )
 					);
 
 					break;
@@ -1164,7 +1164,7 @@ Space.prototype.dragStop =
 					}
 
 					shell.setAction(
-						Action.None.create( )
+						actions.None.create( )
 					);
 
 					break;
@@ -1187,7 +1187,7 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'action.itemDrag' :
+		case 'actions.itemDrag' :
 
 			if( !action.transItem.zone.equals( action.origin.zone ) )
 			{
@@ -1218,12 +1218,12 @@ Space.prototype.dragStop =
 			}
 
 			shell.setAction(
-				Action.None.create( )
+				actions.None.create( )
 			);
 
 			break;
 
-		case 'action.itemResize' :
+		case 'actions.itemResize' :
 
 			if( !action.transItem.zone.equals( action.origin.zone ) )
 			{
@@ -1260,12 +1260,12 @@ Space.prototype.dragStop =
 			}
 
 			shell.setAction(
-				Action.None.create( )
+				actions.None.create( )
 			);
 
 			break;
 
-		case 'action.scrollY' :
+		case 'actions.scrollY' :
 
 			this.getItem(
 				action.itemPath.get( -1 )
@@ -1277,7 +1277,7 @@ Space.prototype.dragStop =
 			);
 
 			shell.setAction(
-				Action.None.create( )
+				actions.None.create( )
 			);
 
 			break;
@@ -1325,7 +1325,7 @@ Space.prototype.dragMove =
 
 	switch( action.reflex )
 	{
-		case 'action.createGeneric' :
+		case 'actions.createGeneric' :
 
 			model =
 				action.model;
@@ -1395,7 +1395,7 @@ Space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'action.createRelation' :
+		case 'actions.createRelation' :
 
 			if( action.relationState === 'pan' )
 			{
@@ -1446,11 +1446,11 @@ Space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'action.none' :
+		case 'actions.none' :
 
 			return 'pointer';
 
-		case 'action.pan' :
+		case 'actions.pan' :
 
 			pd =
 				p.sub( action.start );
@@ -1467,7 +1467,7 @@ Space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'action.itemDrag' :
+		case 'actions.itemDrag' :
 
 			origin =
 				action.origin;
@@ -1509,7 +1509,7 @@ Space.prototype.dragMove =
 			return true;
 
 
-		case 'action.itemResize' :
+		case 'actions.itemResize' :
 
 			origin = action.origin;
 
@@ -1615,7 +1615,7 @@ Space.prototype.dragMove =
 
 			return true;
 
-		case 'action.scrollY' :
+		case 'actions.scrollY' :
 
 			this.getItem(
 				action.itemPath.get( -1 )

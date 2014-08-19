@@ -19,7 +19,7 @@ Visual =
 | Imports
 */
 var
-	Action,
+	actions,
 	euclid,
 	jion,
 	jools,
@@ -514,7 +514,7 @@ Item.prototype.dragStart =
 			this.scrollbarY;
 
 	if(
-		action.reflex === 'action.none'
+		action.reflex === 'actions.none'
 		&&
 		sbary
 		&&
@@ -525,7 +525,7 @@ Item.prototype.dragStart =
 	)
 	{
 		shell.setAction(
-			Action.ScrollY.create(
+			actions.ScrollY.create(
 				'itemPath',
 					this.path,
 				'start',
@@ -550,7 +550,7 @@ Item.prototype.dragStart =
 
 	switch( action && action.reflex )
 	{
-		case 'action.createRelation' :
+		case 'actions.createRelation' :
 
 			shell.setAction(
 				action.create(
@@ -571,7 +571,7 @@ Item.prototype.dragStart =
 		// relation binding
 
 		shell.setAction(
-			Action.CreateRelation.create(
+			actions.CreateRelation.create(
 				'fromItemPath',
 					this.path,
 				'toItemPath',
@@ -601,7 +601,7 @@ Item.prototype.dragStart =
 		}
 
 		shell.setAction(
-			Action.ItemDrag.create(
+			actions.ItemDrag.create(
 				'start',
 					view.depoint( p ),
 				'transItem',
@@ -642,7 +642,7 @@ Item.prototype.dragMove =
 
 	switch( action.reflex )
 	{
-		case 'action.createRelation' :
+		case 'actions.createRelation' :
 
 			if(
 				!this.zone.within(
@@ -663,7 +663,7 @@ Item.prototype.dragMove =
 
 			return true;
 
-		case 'action.scrollY' :
+		case 'actions.scrollY' :
 
 			start = action.start,
 
@@ -706,7 +706,7 @@ Item.prototype.dragStop =
 
 	switch( action.reflex )
 	{
-		case 'action.createRelation' :
+		case 'actions.createRelation' :
 
 			if(
 				!this.zone.within(

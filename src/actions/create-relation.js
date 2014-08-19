@@ -21,9 +21,9 @@ if( JION )
 		name :
 			'CreateRelation',
 		unit :
-			'Action',
+			'actions',
 		subclass :
-			'Action.Action',
+			'actions.action',
 		equals :
 			'primitive',
 		attributes :

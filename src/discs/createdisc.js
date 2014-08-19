@@ -18,7 +18,7 @@ Discs =
 | Imports
 */
 var
-	Action,
+	actions,
 	euclid,
 	jion,
 	jools,
@@ -58,7 +58,7 @@ if( JION )
 						comment :
 							'currently active action',
 						type :
-							'Action',
+							'Object',  // FUTURE 'actions.*',
 						defaultValue :
 							null
 					},
@@ -317,7 +317,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreateLabel' :
 
 			shell.setAction(
-				Action.CreateGeneric.create(
+				actions.CreateGeneric.create(
 					'itemType',
 						'Label',
 					'model',
@@ -334,7 +334,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreateNote' :
 
 			shell.setAction(
-				Action.CreateGeneric.create(
+				actions.CreateGeneric.create(
 					'itemType',
 						'Note',
 					'model',
@@ -351,7 +351,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreatePortal' :
 
 			shell.setAction(
-				Action.CreateGeneric.create(
+				actions.CreateGeneric.create(
 					'itemType',
 						'Portal',
 					'model',
@@ -368,7 +368,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreateRelation' :
 
 			shell.setAction(
-				Action.CreateRelation.create(
+				actions.CreateRelation.create(
 					'fromItemPath',
 						jion.path.empty,
 					'relationState',
@@ -639,7 +639,7 @@ CreateDisc._isActiveButton =
 {
 	switch( action.reflex )
 	{
-		case 'action.createGeneric' :
+		case 'actions.createGeneric' :
 
 			switch( action.itemType )
 			{
@@ -669,7 +669,7 @@ CreateDisc._isActiveButton =
 
 			break;
 
-		case 'action.createRelation' :
+		case 'actions.createRelation' :
 
 			return wname === 'CreateRelation';
 

@@ -373,8 +373,8 @@ Portal.prototype.dragStop =
 
 	switch( action.reflex )
 	{
-		case 'action.itemDrag' :
-		case 'action.itemResize' :
+		case 'actions.itemDrag' :
+		case 'actions.itemResize' :
 
 			zone =
 				this.zone;

@@ -13,13 +13,15 @@
 
 
 /*
-| The jion definition.
+| Jion definition.
 */
 if( JION )
 {
 	return {
 		name :
-			'Action',
+			'action',
+		unit :
+			'testpad',
 		attributes :
 			{
 				command :

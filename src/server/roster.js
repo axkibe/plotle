@@ -696,13 +696,13 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/action/action.js',
+			'src/actions/action.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
 		'filePath',
-			'src/action/none.js',
+			'src/actions/none.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -710,7 +710,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/action/create-generic.js',
+			'src/actions/create-generic.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -718,7 +718,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/action/create-relation.js',
+			'src/actions/create-relation.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -726,7 +726,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/action/item-drag.js',
+			'src/actions/item-drag.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -734,7 +734,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/action/item-resize.js',
+			'src/actions/item-resize.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -742,7 +742,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/action/pan.js',
+			'src/actions/pan.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -750,7 +750,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/action/scrolly.js',
+			'src/actions/scrolly.js',
 		'hasJion',
 			true,
 		'inBundle',

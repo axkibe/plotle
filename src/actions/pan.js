@@ -1,5 +1,5 @@
 /*
-| The user is scrolling a note.
+| The user is panning the background.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,22 +19,15 @@ if( JION )
 {
 	return {
 		name :
-			'ScrollY',
+			'Pan',
 		unit :
-			'Action',
+			'actions',
 		subclass :
-			'Action.Action',
+			'actions.action',
 		equals :
 			'primitive',
 		attributes :
 			{
-				itemPath :
-					{
-						comment :
-							'path to the item being scrolled',
-						type :
-							'path'
-					},
 				start :
 					{
 						comment :
@@ -42,12 +35,12 @@ if( JION )
 						type :
 							'euclid.point'
 					},
-				startPos :
+				pan :
 					{
 						comment :
-							'position of the scrollbar on start of scrolling',
+							'pan position on start',
 						type :
-							'Number'
+							'euclid.point'
 					}
 			}
 	};

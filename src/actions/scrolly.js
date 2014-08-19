@@ -1,5 +1,5 @@
 /*
-| The user is dragging an item.
+| The user is scrolling a note.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,35 +19,35 @@ if( JION )
 {
 	return {
 		name :
-			'ItemDrag',
+			'ScrollY',
 		unit :
-			'Action',
+			'actions',
 		subclass :
-			'Action.Action',
+			'actions.action',
 		equals :
 			'primitive',
 		attributes :
 			{
-				origin :
+				itemPath :
 					{
 						comment :
-							'the item being dragged',
+							'path to the item being scrolled',
 						type :
-							'Item'
+							'path'
 					},
 				start :
 					{
 						comment :
-							'mouse down point on drag creation',
+							'mouse down point on start of scrolling',
 						type :
-							'point'
+							'euclid.point'
 					},
-				transItem :
+				startPos :
 					{
 						comment :
-							'the transient item while it is dragged',
+							'position of the scrollbar on start of scrolling',
 						type :
-							'Item'
+							'Number'
 					}
 			}
 	};

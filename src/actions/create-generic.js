@@ -25,9 +25,9 @@ if( JION )
 		name :
 			'CreateGeneric',
 		unit :
-			'Action',
+			'actions',
 		subclass :
-			'Action.Action',
+			'actions.action',
 		equals :
 			'primitive',
 		attributes :

@@ -28,7 +28,7 @@ trg :
 	port :
 		27017,
 	name :
-		'meshcraft06'
+		'ideoloom-1'
 }
 };
 
