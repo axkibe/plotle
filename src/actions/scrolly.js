@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'ScrollY',
+			'scrollY',
 		unit :
 			'actions',
 		subclass :

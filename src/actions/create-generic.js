@@ -23,7 +23,7 @@ if( JION )
 {
 	return {
 		name :
-			'CreateGeneric',
+			'createGeneric',
 		unit :
 			'actions',
 		subclass :

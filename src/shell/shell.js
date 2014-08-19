@@ -137,7 +137,7 @@ Shell =
 
 	this.$space = null;
 
-	this.$action = actions.None.create( );
+	this.$action = actions.none.create( );
 
 	this._$mode = 'Normal';
 
@@ -199,7 +199,7 @@ Shell =
 			'access',
 				'',
 			'action',
-				actions.None.create( ),
+				actions.none.create( ),
 			'hover',
 				jion.path.empty,
 			'mark',

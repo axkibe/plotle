@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'CreateRelation',
+			'createRelation',
 		unit :
 			'actions',
 		subclass :

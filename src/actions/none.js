@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'None',
+			'none',
 		unit :
 			'actions',
 		singleton :

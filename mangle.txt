@@ -6,7 +6,6 @@
 . $space
 . $view
 > 1
-. Action
 . Ajax
 . AnchorEllipse
 . AnchorPoint
@@ -20,11 +19,9 @@
 . Chop
 . Create
 . CreateDisc
-. CreateGeneric
 . CreateLabel
 . CreateNote
 . CreatePortal
-. CreateRelation
 . Disc
 > Doc
 . DocItem
@@ -37,7 +34,6 @@
 . Insert
 . Invert
 . Item
-. ItemDrag
 . ItemResize
 . Jockey
 > Label
@@ -46,14 +42,11 @@
 . Login
 . MAX_INTEGER
 . MainDisc
-. margin
 . Mark
-. measure
 . MoveTo
 . NORMA
 . NoAccessToSpace
 . NonExistingSpace
-. None
 . Normal
 > Note
 . PC
@@ -61,14 +54,11 @@
 . PNW
 . PSE
 . PSE_M1
-. Pan
 > Para
 > Portal
 . Range
 > Relation
 . Remove
-. roundRect
-. ScrollY
 . Scrollbar
 . Set
 . Shorten
@@ -328,8 +318,10 @@
 . createButton
 > createElement
 . createFromJSON
+. createGeneric
 > createLinearGradient
 > createRadialGradient
+. createRelation
 . css
 . ctrl
 > ctrlKey
@@ -467,6 +459,8 @@
 . iconRemove
 . iconStyle
 . icons
+. ideoloomHomeButton
+. ideoloomSandboxButton
 . ignores
 . immute
 > index
@@ -491,6 +485,7 @@
 . isnon
 > item1key
 > item2key
+. itemDrag
 . itemPath
 . itemType
 > join
@@ -520,6 +515,7 @@
 . magic
 > mail
 . mainButton
+. margin
 > marginLeft
 > marginRight
 > marginTop
@@ -531,10 +527,9 @@
 . maxSize
 . maxUndo
 . maxlen
+. measure
 > measureText
 . member
-. ideoloomHomeButton
-. ideoloomSandboxButton
 > message
 . message1
 > metaKey
@@ -568,6 +563,7 @@
 > node
 . nonSpaceTag
 . nonSpaceUser
+. none
 . normal
 . note
 > null
@@ -684,6 +680,7 @@
 . right
 . rotate
 > round
+. roundRect
 . rounding
 > s
 > save
@@ -692,6 +689,7 @@
 . scrollMarkIntoView
 . scrollPage
 > scrollTo
+. scrollY
 . scrollbar
 . scrollbarY
 . scrolly

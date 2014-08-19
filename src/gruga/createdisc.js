@@ -153,7 +153,7 @@ Gruga.CreateDisc =
 					Design.AnchorEllipse.fullSkewNW
 			),
 		'twig:add',
-		'CreateRelation',
+		'createRelation',
 			Widgets.Button.create(
 				'style',
 					'createButton',

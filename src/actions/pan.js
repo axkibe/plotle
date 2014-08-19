@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'Pan',
+			'pan',
 		unit :
 			'actions',
 		subclass :

@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		name :
-			'ItemDrag',
+			'itemDrag',
 		unit :
 			'actions',
 		subclass :

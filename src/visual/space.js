@@ -841,7 +841,7 @@ Space.prototype.dragStart =
 
 	// otherwise panning is initiated
 	shell.setAction(
-		actions.Pan.create(
+		actions.pan.create(
 			'start',
 				p,
 			'pan',
@@ -986,7 +986,7 @@ Space.prototype.dragStop =
 					if( !ctrl )
 					{
 						shell.setAction(
-							actions.None.create( )
+							actions.none.create( )
 						);
 					}
 
@@ -1063,7 +1063,7 @@ Space.prototype.dragStop =
 					if( !ctrl )
 					{
 						shell.setAction(
-							actions.None.create( )
+							actions.none.create( )
 						);
 					}
 
@@ -1110,7 +1110,7 @@ Space.prototype.dragStop =
 					if( !ctrl )
 					{
 						shell.setAction(
-							actions.None.create( )
+							actions.none.create( )
 						);
 					}
 
@@ -1130,7 +1130,7 @@ Space.prototype.dragStop =
 		case 'actions.pan' :
 
 			shell.setAction(
-				actions.None.create( )
+				actions.none.create( )
 			);
 
 			break;
@@ -1143,7 +1143,7 @@ Space.prototype.dragStop =
 				case 'start' :
 
 					shell.setAction(
-						actions.None.create( )
+						actions.none.create( )
 					);
 
 					break;
@@ -1164,7 +1164,7 @@ Space.prototype.dragStop =
 					}
 
 					shell.setAction(
-						actions.None.create( )
+						actions.none.create( )
 					);
 
 					break;
@@ -1218,7 +1218,7 @@ Space.prototype.dragStop =
 			}
 
 			shell.setAction(
-				actions.None.create( )
+				actions.none.create( )
 			);
 
 			break;
@@ -1260,7 +1260,7 @@ Space.prototype.dragStop =
 			}
 
 			shell.setAction(
-				actions.None.create( )
+				actions.none.create( )
 			);
 
 			break;
@@ -1277,7 +1277,7 @@ Space.prototype.dragStop =
 			);
 
 			shell.setAction(
-				actions.None.create( )
+				actions.none.create( )
 			);
 
 			break;

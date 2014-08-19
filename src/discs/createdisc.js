@@ -317,7 +317,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreateLabel' :
 
 			shell.setAction(
-				actions.CreateGeneric.create(
+				actions.createGeneric.create(
 					'itemType',
 						'Label',
 					'model',
@@ -334,7 +334,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreateNote' :
 
 			shell.setAction(
-				actions.CreateGeneric.create(
+				actions.createGeneric.create(
 					'itemType',
 						'Note',
 					'model',
@@ -351,7 +351,7 @@ CreateDisc.prototype.pushButton =
 		case 'CreatePortal' :
 
 			shell.setAction(
-				actions.CreateGeneric.create(
+				actions.createGeneric.create(
 					'itemType',
 						'Portal',
 					'model',
@@ -365,10 +365,10 @@ CreateDisc.prototype.pushButton =
 
 			return;
 
-		case 'CreateRelation' :
+		case 'createRelation' :
 
 			shell.setAction(
-				actions.CreateRelation.create(
+				actions.createRelation.create(
 					'fromItemPath',
 						jion.path.empty,
 					'relationState',
@@ -671,7 +671,7 @@ CreateDisc._isActiveButton =
 
 		case 'actions.createRelation' :
 
-			return wname === 'CreateRelation';
+			return wname === 'createRelation';
 
 		default :
 

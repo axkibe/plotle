@@ -525,7 +525,7 @@ Item.prototype.dragStart =
 	)
 	{
 		shell.setAction(
-			actions.ScrollY.create(
+			actions.scrollY.create(
 				'itemPath',
 					this.path,
 				'start',
@@ -571,7 +571,7 @@ Item.prototype.dragStart =
 		// relation binding
 
 		shell.setAction(
-			actions.CreateRelation.create(
+			actions.createRelation.create(
 				'fromItemPath',
 					this.path,
 				'toItemPath',
@@ -601,7 +601,7 @@ Item.prototype.dragStart =
 		}
 
 		shell.setAction(
-			actions.ItemDrag.create(
+			actions.itemDrag.create(
 				'start',
 					view.depoint( p ),
 				'transItem',
