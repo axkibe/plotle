@@ -20,7 +20,7 @@ Gruga =
 | Imports
 */
 var
-	Design,
+	design,
 	Forms,
 	fontPool,
 	Widgets;
@@ -72,7 +72,7 @@ Gruga.Login =
 				'font',
 					fontPool.get( 22, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -89,7 +89,7 @@ Gruga.Login =
 				'font',
 					fontPool.get( 16, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -106,7 +106,7 @@ Gruga.Login =
 				'font',
 					fontPool.get( 16, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -123,7 +123,7 @@ Gruga.Login =
 				'font',
 					fontPool.get( 14, 'car' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -142,9 +142,9 @@ Gruga.Login =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -153,7 +153,7 @@ Gruga.Login =
 									-67
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -175,9 +175,9 @@ Gruga.Login =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -186,7 +186,7 @@ Gruga.Login =
 									-27
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -202,9 +202,9 @@ Gruga.Login =
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -213,7 +213,7 @@ Gruga.Login =
 									loginButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -229,9 +229,9 @@ Gruga.Login =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'closeButton',
@@ -239,9 +239,9 @@ Gruga.Login =
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -250,7 +250,7 @@ Gruga.Login =
 									closeButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -266,9 +266,9 @@ Gruga.Login =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			)
 	);
 

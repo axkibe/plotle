@@ -20,7 +20,7 @@ Gruga =
 | Imports
 */
 var
-	Design,
+	design,
 	Forms,
 	fontPool,
 	Widgets;
@@ -62,7 +62,7 @@ Gruga.Space =
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -79,7 +79,7 @@ Gruga.Space =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -94,9 +94,9 @@ Gruga.Space =
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -105,7 +105,7 @@ Gruga.Space =
 									closeButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -121,9 +121,9 @@ Gruga.Space =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			)
 	);
 

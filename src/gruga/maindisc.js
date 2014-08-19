@@ -20,7 +20,7 @@ Gruga =
 | Imports
 */
 var
-	Design,
+	design,
 	Discs,
 	fontPool,
 	Widgets;
@@ -33,84 +33,95 @@ var
 
 
 /*
-| All important design variables for convenience
+| All important design variables for convenience.
 */
-var design =
-{
-	generic :
+var
+	dv;
+
+dv =
 	{
-		width :
-			44,
-		height :
-			44,
-		font :
-			fontPool.get( 14, 'cm' )
-	},
-	normal :
-	{
-		x :
-			4,
-		y :
-			120
-	},
-	create :
-	{
-		x :
-			20,
-		y :
-			169
-	},
-	remove :
-	{
-		x :
-			32,
-		y :
-			218
-	},
-	moveto :
-	{
-		x :
-			47,
-		y :
-			326
-	},
-	space :
-	{
-		width :
-			28,
-		height :
-			290,
-		x :
-			0,
-		y :
-			170
-	},
-	user :
-	{
-		width :
-			24,
-		height :
-			180,
-		x :
-			0,
-		y :
-			440
-	},
-	login :
-	{
-		x :
-			30,
-		y :
-			535
-	},
-	signup :
-	{
-		x :
-			19,
-		y :
-			585
-	}
-};
+		generic :
+		{
+			width :
+				44,
+			height :
+				44,
+			font :
+				fontPool.get( 14, 'cm' )
+		},
+
+		normal :
+		{
+			x :
+				4,
+			y :
+				120
+		},
+
+		create :
+		{
+			x :
+				20,
+			y :
+				169
+		},
+
+		remove :
+		{
+			x :
+				32,
+			y :
+				218
+		},
+
+		moveto :
+		{
+			x :
+				47,
+			y :
+				326
+		},
+
+		space :
+		{
+			width :
+				28,
+			height :
+				290,
+			x :
+				0,
+			y :
+				170
+		},
+
+		user :
+		{
+			width :
+				24,
+			height :
+				180,
+			x :
+				0,
+			y :
+				440
+		},
+
+		login :
+		{
+			x :
+				30,
+			y :
+				535
+		},
+
+		signup :
+		{
+			x :
+				19,
+			y :
+				585
+		}
+	};
 
 Gruga.MainDisc =
 	Discs.MainDisc.create(
@@ -124,30 +135,28 @@ Gruga.MainDisc =
 				'iconStyle',
 					'iconNormal',
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.normal.x,
+									dv.normal.x,
 								'y',
-									design.normal.y
+									dv.normal.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.normal.x +
-									design.generic.width,
+									dv.normal.x + dv.generic.width,
 								'y',
-									design.normal.y +
-									design.generic.height
+									dv.normal.y + dv.generic.height
 							)
 					),
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'Create',
@@ -159,34 +168,32 @@ Gruga.MainDisc =
 				'text',
 					'new',
 				'font',
-					design.generic.font,
+					dv.generic.font,
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.create.x,
+									dv.create.x,
 								'y',
-									design.create.y
+									dv.create.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.create.x +
-									design.generic.width,
+									dv.create.x + dv.generic.width,
 								'y',
-									design.create.y +
-									design.generic.height
+									dv.create.y + dv.generic.height
 							)
 					),
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'Remove',
@@ -200,30 +207,28 @@ Gruga.MainDisc =
 				'visible',
 					false,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.remove.x,
+									dv.remove.x,
 								'y',
-									design.remove.y
+									dv.remove.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.remove.x +
-									design.generic.width,
+									dv.remove.x + dv.generic.width,
 								'y',
-									design.remove.y +
-									design.generic.height
+									dv.remove.y + dv.generic.height
 							)
 					),
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'MoveTo',
@@ -237,30 +242,28 @@ Gruga.MainDisc =
 				'visible',
 					false,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.moveto.x,
+									dv.moveto.x,
 								'y',
-									design.moveto.y
+									dv.moveto.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.moveto.x +
-									design.generic.width,
+									dv.moveto.x + dv.generic.width,
 								'y',
-									design.moveto.y +
-									design.generic.height
+									dv.moveto.y + dv.generic.height
 							)
 					),
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'Space',
@@ -268,26 +271,24 @@ Gruga.MainDisc =
 				'style',
 					'mainButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.space.x,
+									dv.space.x,
 								'y',
-									design.space.y
+									dv.space.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.space.x +
-									design.space.width,
+									dv.space.x + dv.space.width,
 								'y',
-									design.space.y +
-									design.space.height
+									dv.space.y + dv.space.height
 							)
 					),
 				'text',
@@ -295,11 +296,11 @@ Gruga.MainDisc =
 				'font',
 					fontPool.get( 12, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'shape',
-					Design.AnchorEllipse.create(
+					design.AnchorEllipse.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -308,7 +309,7 @@ Gruga.MainDisc =
 									0
 							),
 						'pse',
-							Design.AnchorPoint.PSE_M1
+							design.AnchorPoint.PSE_M1
 					),
 				'textRotation',
 					- Math.PI / 2
@@ -319,26 +320,24 @@ Gruga.MainDisc =
 				'style',
 					'mainButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.user.x,
+									dv.user.x,
 								'y',
-									design.user.y
+									dv.user.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.user.x +
-									design.user.width,
+									dv.user.x + dv.user.width,
 								'y',
-									design.user.y +
-									design.user.height
+									dv.user.y + dv.user.height
 							)
 					),
 				'text',
@@ -346,11 +345,11 @@ Gruga.MainDisc =
 				'font',
 					fontPool.get( 12, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'shape',
-					Design.AnchorEllipse.create(
+					design.AnchorEllipse.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -359,7 +358,7 @@ Gruga.MainDisc =
 									0
 							),
 						'pse',
-							Design.AnchorPoint.PSE_M1
+							design.AnchorPoint.PSE_M1
 					),
 				'textRotation',
 						( -Math.PI / 2 )
@@ -378,32 +377,30 @@ Gruga.MainDisc =
 				'font',
 					fontPool.get( 13, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.login.x,
+									dv.login.x,
 								'y',
-									design.login.y
+									dv.login.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.login.x +
-									design.generic.width,
+									dv.login.x + dv.generic.width,
 								'y',
-									design.login.y +
-									design.generic.height
+									dv.login.y + dv.generic.height
 							)
 					),
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'SignUp',
@@ -419,32 +416,30 @@ Gruga.MainDisc =
 				'font',
 					fontPool.get( 13, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.signup.x,
+									dv.signup.x,
 								'y',
-									design.signup.y
+									dv.signup.y
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
-									design.signup.x +
-									design.generic.width,
+									dv.signup.x + dv.generic.width,
 								'y',
-									design.signup.y +
-									design.generic.height
+									dv.signup.y + dv.generic.height
 							)
 					),
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			)
 	);
 

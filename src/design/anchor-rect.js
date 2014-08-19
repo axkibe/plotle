@@ -9,11 +9,11 @@
 | Export
 */
 var
-	Design;
+	design;
 
 
-Design =
-	Design || { };
+design =
+	design || { };
 
 
 /*
@@ -40,7 +40,7 @@ if( JION )
 			'AnchorRect',
 
 		unit :
-			'Design',
+			'design',
 
 		attributes :
 			{
@@ -67,8 +67,9 @@ if( JION )
 
 
 var
-	AnchorRect =
-		Design.AnchorRect;
+	AnchorRect;
+
+AnchorRect = design.AnchorRect;
 
 
 /*

@@ -12,15 +12,14 @@ var
 	Gruga;
 
 
-Gruga =
-	Gruga || { };
+Gruga = Gruga || { };
 
 
 /*
 | Imports
 */
 var
-	Design,
+	design,
 	fontPool,
 	Forms,
 	Widgets;
@@ -62,7 +61,7 @@ Gruga.NoAccessToSpace =
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -79,7 +78,7 @@ Gruga.NoAccessToSpace =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -94,9 +93,9 @@ Gruga.NoAccessToSpace =
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -105,7 +104,7 @@ Gruga.NoAccessToSpace =
 									okButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -121,9 +120,9 @@ Gruga.NoAccessToSpace =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			)
 	);
 

@@ -20,7 +20,7 @@ Gruga =
 | Imports
 */
 var
-	Design,
+	design,
 	fontPool,
 	Forms,
 	Widgets;
@@ -75,7 +75,7 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 22, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -92,7 +92,7 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 16, 'ra' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -109,7 +109,7 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 16, 'ra' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -126,7 +126,7 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 16, 'ra' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -143,7 +143,7 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 16, 'ra' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -160,7 +160,7 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 16, 'ra' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -177,7 +177,7 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 14, 'car' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -196,9 +196,9 @@ Gruga.SignUp =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -207,7 +207,7 @@ Gruga.SignUp =
 									-120
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -227,9 +227,9 @@ Gruga.SignUp =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -238,7 +238,7 @@ Gruga.SignUp =
 									-80
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -260,9 +260,9 @@ Gruga.SignUp =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -271,7 +271,7 @@ Gruga.SignUp =
 									-40
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -293,9 +293,9 @@ Gruga.SignUp =
 				'maxlen',
 					100,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -304,7 +304,7 @@ Gruga.SignUp =
 									0
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -322,9 +322,9 @@ Gruga.SignUp =
 				'checked',
 					true,
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -333,7 +333,7 @@ Gruga.SignUp =
 									45
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -351,7 +351,7 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 12, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -368,7 +368,7 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 12, 'la' ),
 				'designPos',
-					Design.AnchorPoint.create(
+					design.AnchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -383,9 +383,9 @@ Gruga.SignUp =
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -394,7 +394,7 @@ Gruga.SignUp =
 									signupButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -410,9 +410,9 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'closeButton',
@@ -420,9 +420,9 @@ Gruga.SignUp =
 				'style',
 					'genericButton',
 				'designFrame',
-					Design.AnchorRect.create(
+					design.AnchorRect.create(
 						'pnw',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -431,7 +431,7 @@ Gruga.SignUp =
 									closeButton.n
 							),
 						'pse',
-							Design.AnchorPoint.create(
+							design.AnchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -447,9 +447,9 @@ Gruga.SignUp =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					Design.AnchorPoint.PC,
+					design.AnchorPoint.PC,
 				'shape',
-					Design.AnchorEllipse.fullSkewNW
+					design.AnchorEllipse.fullSkewNW
 			)
 	);
 

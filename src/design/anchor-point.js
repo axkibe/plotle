@@ -9,11 +9,11 @@
 | Export
 */
 var
-	Design;
+	design;
 
 
-Design =
-	Design || { };
+design =
+	design || { };
 
 
 /*
@@ -41,7 +41,7 @@ if( JION )
 			'AnchorPoint',
 
 		unit :
-			'Design',
+			'design',
 
 		attributes :
 			{
@@ -77,8 +77,10 @@ if( JION )
 
 
 var
-	AnchorPoint =
-		Design.AnchorPoint;
+	AnchorPoint;
+
+AnchorPoint = design.AnchorPoint;
+
 
 /*
 | Point in center.

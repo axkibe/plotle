@@ -9,11 +9,9 @@
 | Export
 */
 var
-	Design;
+	design;
 
-
-Design =
-	Design || { };
+design = design || { };
 
 
 /*
@@ -38,7 +36,7 @@ if( JION )
 		name :
 			'AnchorEllipse',
 		unit :
-			'Design',
+			'design',
 		attributes :
 			{
 				pnw :
@@ -63,7 +61,7 @@ if( JION )
 var
 	AnchorEllipse;
 
-AnchorEllipse = Design.AnchorEllipse;
+AnchorEllipse = design.AnchorEllipse;
 
 
 /*
@@ -73,9 +71,9 @@ AnchorEllipse = Design.AnchorEllipse;
 AnchorEllipse.fullSkewNW =
 	AnchorEllipse.create(
 		'pnw',
-			Design.AnchorPoint.PNW,
+			design.AnchorPoint.PNW,
 		'pse',
-			Design.AnchorPoint.PSE_M1
+			design.AnchorPoint.PSE_M1
 	);
 
 
