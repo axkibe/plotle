@@ -74,7 +74,7 @@ var
 /**/			'nonExistingSpace' :
 /**/				true,
 /**/			// Signing up
-/**/			'SignUp' :
+/**/			'signUp' :
 /**/				true,
 /**/			// Space view
 /**/			'Space' :
@@ -181,8 +181,8 @@ Shell =
 			'nonExistingSpace',
 				Gruga.nonExistingSpace,
 			'twig:add',
-			'SignUp',
-				Gruga.SignUp,
+			'signUp',
+				Gruga.signUp,
 			'twig:add',
 			'Space',
 				Gruga.Space,
@@ -652,7 +652,7 @@ Shell.prototype._getCurrentDisplay =
 		case 'moveTo' :
 		case 'noAccessToSpace' :
 		case 'nonExistingSpace' :
-		case 'SignUp' :
+		case 'signUp' :
 		case 'Space' :
 		case 'User' :
 		case 'Welcome' :
@@ -1601,7 +1601,7 @@ Shell.prototype.onRegister =
 {
 	// if in login mode this is a tempted login
 
-	if( this._$mode !== 'SignUp' )
+	if( this._$mode !== 'signUp' )
 	{
 		console.log(
 			'ignoring a register reply, since out of signup form'
@@ -1610,7 +1610,7 @@ Shell.prototype.onRegister =
 		return;
 	}
 
-	this._$formJockey.get( 'SignUp' ).onRegister(
+	this._$formJockey.get( 'signUp' ).onRegister(
 		ok,
 		username,
 		passhash,

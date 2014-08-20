@@ -173,6 +173,9 @@ mainDisc.prototype._init =
 		inherit
 	)
 {
+	var
+		wname;
+
 	if( !this.path )
 	{
 		return;
@@ -198,14 +201,11 @@ mainDisc.prototype._init =
 		r++
 	)
 	{
-		var
-			wname =
-				ranks[ r ];
+		wname = ranks[ r ];
 
-		text =
-			undefined;
-		visible =
-			undefined;
+		text = undefined;
+
+		visible = undefined;
 
 		switch( wname )
 		{
@@ -233,22 +233,19 @@ mainDisc.prototype._init =
 
 			case 'Create' :
 
-				visible =
-					this.access === 'rw';
+				visible = this.access === 'rw';
 
 				break;
 
-			case 'SignUp' :
+			case 'signUp' :
 
-				visible =
-					this._userIsGuest;
+				visible = this._userIsGuest;
 
 				break;
 
 			case 'Space' :
 
-				text =
-					this.spaceUser + ':' + this.spaceTag;
+				text = this.spaceUser + ':' + this.spaceTag;
 
 				visible =
 					true;

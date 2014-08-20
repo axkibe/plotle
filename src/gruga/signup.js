@@ -63,8 +63,8 @@ var
 /*
 | Layout
 */
-Gruga.SignUp =
-	forms.SignUp.create(
+Gruga.signUp =
+	forms.signUp.create(
 		'twig:add',
 		'headline',
 			widgets.Label.create(

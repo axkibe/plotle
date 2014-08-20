@@ -402,7 +402,7 @@ Gruga.mainDisc =
 					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
-			'SignUp',
+			'signUp',
 			widgets.Button.create(
 				'style',
 					'mainButton',
