@@ -36,7 +36,7 @@ if( JION )
 {
 	return {
 		name :
-			'Jockey',
+			'jockey',
 		unit :
 			'Forms',
 		attributes :
@@ -132,16 +132,15 @@ if( JION )
 
 
 var
-	Jockey;
+	jockey;
 
-Jockey =
-	Forms.Jockey;
+jockey = Forms.jockey;
 
 
 /*
 | Initializer.
 */
-Jockey.prototype._init =
+jockey.prototype._init =
 	function(
 		twigDup
 	)
@@ -211,14 +210,14 @@ Jockey.prototype._init =
 /*
 | Returns the mark if the form jockey concerns a mark.
 */
-Jockey.concernsMark =
+jockey.concernsMark =
 	function(
 		mark
 	)
 {
 	if(
 		mark.containsPath(
-			Jockey.path
+			jockey.path
 		)
 	)
 	{
@@ -234,7 +233,7 @@ Jockey.concernsMark =
 /*
 | Returns the appropriate form.
 */
-Jockey.prototype.get =
+jockey.prototype.get =
 	function(
 		name
 	)
@@ -246,7 +245,7 @@ Jockey.prototype.get =
 /*
 | Cycles the focus in a form
 */
-Jockey.prototype.cycleFocus =
+jockey.prototype.cycleFocus =
 	function(
 		formName,
 		dir
@@ -268,7 +267,7 @@ Jockey.prototype.cycleFocus =
 /*
 | A button has been pushed.
 */
-Jockey.prototype.pushButton =
+jockey.prototype.pushButton =
 	function(
 		path
 	)

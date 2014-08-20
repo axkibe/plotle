@@ -158,7 +158,7 @@ Shell =
 		);
 
 	this._$formJockey =
-		Forms.Jockey.create(
+		Forms.jockey.create(
 			'hover',
 				jion.path.empty,
 			'mark',
@@ -195,7 +195,7 @@ Shell =
 		);
 
 	this._$discJockey =
-		discs.Jockey.create(
+		discs.jockey.create(
 			'access',
 				'',
 			'action',

@@ -35,7 +35,7 @@ if( JION )
 {
 	return {
 		name :
-			'Jockey',
+			'jockey',
 		unit :
 			'discs',
 		attributes :
@@ -70,7 +70,7 @@ if( JION )
 								unit :
 									'discs',
 								type :
-									'Jockey',
+									'jockey',
 								func :
 									'concernsMark',
 								args :
@@ -146,15 +146,15 @@ if( JION )
 }
 
 var
-	Jockey;
+	jockey;
 
-Jockey = discs.Jockey;
+jockey = discs.jockey;
 
 
 /*
 | Initializes the disc jockey.
 */
-Jockey.prototype._init =
+jockey.prototype._init =
 	function( )
 {
 	var
@@ -231,7 +231,7 @@ Jockey.prototype._init =
 |
 | FIXME go into markItemPath
 */
-Jockey.concernsMark =
+jockey.concernsMark =
 	function(
 		mark
 	)
@@ -243,7 +243,7 @@ Jockey.concernsMark =
 /*
 | Start of a dragging operation.
 */
-Jockey.prototype.dragStart =
+jockey.prototype.dragStart =
 	function(
 		p,
 		shift,
@@ -283,7 +283,7 @@ Jockey.prototype.dragStart =
 /*
 | Draws the disc panel.
 */
-Jockey.prototype.draw =
+jockey.prototype.draw =
 	function(
 		fabric
 	)
@@ -300,7 +300,7 @@ Jockey.prototype.draw =
 /*
 | Returns true if point is on the disc panel.
 */
-Jockey.prototype.pointingHover =
+jockey.prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -340,7 +340,7 @@ Jockey.prototype.pointingHover =
 /*
 | Displays a message
 */
-Jockey.prototype.message =
+jockey.prototype.message =
 	function(
 		// message
 	)
@@ -352,7 +352,7 @@ Jockey.prototype.message =
 /*
 | Returns true if point is on this panel.
 */
-Jockey.prototype.click =
+jockey.prototype.click =
 	function(
 		p,
 		shift,
@@ -392,7 +392,7 @@ Jockey.prototype.click =
 /*
 | A button of the main disc has been pushed.
 */
-Jockey.prototype.pushButton =
+jockey.prototype.pushButton =
 	function(
 		path,
 		shift,
