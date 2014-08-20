@@ -35,7 +35,7 @@ if( JION )
 {
 	return {
 		name :
-			'Space',
+			'space',
 		unit :
 			'forms',
 		attributes :
@@ -139,15 +139,15 @@ if( JION )
 
 
 var
-	Space;
+	space;
 
-Space = forms.Space;
+space = forms.space;
 
 
 /*
 | The space form.
 */
-Space.prototype._init =
+space.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -177,7 +177,7 @@ Space.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-Space.prototype.pushButton =
+space.prototype.pushButton =
 	function(
 		path
 		// shift,

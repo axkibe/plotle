@@ -50,8 +50,8 @@ var
 /*
 | Layout
 */
-Gruga.Space =
-	forms.Space.create(
+Gruga.space =
+	forms.space.create(
 		'twig:add',
 		'headline',
 			widgets.Label.create(

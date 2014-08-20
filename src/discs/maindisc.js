@@ -243,7 +243,7 @@ mainDisc.prototype._init =
 
 				break;
 
-			case 'Space' :
+			case 'space' :
 
 				text = this.spaceUser + ':' + this.spaceTag;
 

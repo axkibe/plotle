@@ -35,8 +35,6 @@
 . MAX_INTEGER
 . Mark
 . NORMA
-. noAccessToSpace
-. nonExistingSpace
 . Normal
 > Note
 . PC
@@ -52,8 +50,6 @@
 . Scrollbar
 . Set
 . Shorten
-. SignUp
-> Space
 . User
 . Vacant
 . Welcome
@@ -556,8 +552,10 @@
 . newsletter3Label
 . newsletterCheckBox
 . newsletterLabel
+. noAccessToSpace
 . noButton
 > node
+. nonExistingSpace
 . nonSpaceTag
 . nonSpaceUser
 . none
@@ -725,6 +723,7 @@
 . showDisc
 > sign
 > signRay
+. signUp
 . signup
 . signupButton
 . silhoutte
@@ -739,7 +738,7 @@
 . sketchMask
 . sketchRange
 > slice
-. space
+> space
 . spaceFields
 > spaceTag
 > spaceUser

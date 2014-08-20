@@ -347,14 +347,14 @@ Link.prototype._onAquireSpace =
 			return;
 	}
 
-	if( reply.node.type !== 'Space' )
+	if( reply.node.type !== 'space' )
 	{
 		throw new Error(
 			'aquireSpace(): server served no space '
 		);
 	}
 
-	space = visual.Space.createFromJSON( reply.node );
+	space = visual.space.createFromJSON( reply.node );
 
 	shell.link =
 		shell.link.create(

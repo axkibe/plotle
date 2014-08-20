@@ -38,7 +38,7 @@ IFaceSym =
 	// the current space;
 	this.space  =
 		// FUTURE FIX
-		visual.Space.create(
+		visual.space.create(
 			'twig:add',
 			'testnote',
 			visual.Note.create(

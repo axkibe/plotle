@@ -265,7 +265,7 @@ Gruga.mainDisc =
 					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
-			'Space',
+			'space',
 			widgets.Button.create(
 				'style',
 					'mainButton',

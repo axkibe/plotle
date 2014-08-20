@@ -69,15 +69,15 @@ var
 /**/			// User does not have access to a space.
 /**/			'noAccessToSpace' :
 /**/				true,
-/**/			// Space does not exist,
+/**/			// space does not exist,
 /**/			// but user is allowed to create it.
 /**/			'nonExistingSpace' :
 /**/				true,
 /**/			// Signing up
 /**/			'signUp' :
 /**/				true,
-/**/			// Space view
-/**/			'Space' :
+/**/			// space view
+/**/			'space' :
 /**/				true,
 /**/			// User view
 /**/			'User' :
@@ -184,8 +184,8 @@ Shell =
 			'signUp',
 				Gruga.signUp,
 			'twig:add',
-			'Space',
-				Gruga.Space,
+			'space',
+				Gruga.space,
 			'twig:add',
 			'User',
 				Gruga.User,
@@ -653,7 +653,7 @@ Shell.prototype._getCurrentDisplay =
 		case 'noAccessToSpace' :
 		case 'nonExistingSpace' :
 		case 'signUp' :
-		case 'Space' :
+		case 'space' :
 		case 'User' :
 		case 'Welcome' :
 

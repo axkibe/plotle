@@ -121,8 +121,8 @@ if( JION )
 					'forms.nonExistingSpace',
 				'signUp' :
 					'forms.signUp',
-				'Space' :
-					'forms.Space',
+				'space' :
+					'forms.space',
 				'User' :
 					'forms.User',
 				'Welcome' :

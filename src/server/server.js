@@ -83,7 +83,7 @@ var
 		require( 'util' ),
 	visual =
 		{
-			Space :
+			space :
 				require( '../visual/space' )
 		},
 	zlib =
@@ -467,7 +467,7 @@ Server.prototype.loadSpace =
 				$changes :
 					[ ],
 				$tree :
-					visual.Space.create( ),
+					visual.space.create( ),
 				$seqZ :
 					1
 			};
@@ -1680,7 +1680,7 @@ Server.prototype.createSpace =
 			$changes :
 				[ ],
 			$tree :
-				visual.Space.create( ),
+				visual.space.create( ),
 			$seqZ :
 				1
 		};

@@ -42,7 +42,7 @@ if( JION )
 {
 	return {
 		name :
-			'Space',
+			'space',
 		unit :
 			'visual',
 		attributes :
@@ -76,7 +76,7 @@ if( JION )
 								unit :
 									'visual',
 								type :
-									'Space',
+									'space',
 								func :
 									'concernsMark',
 								args :
@@ -154,20 +154,21 @@ if( SERVER )
 
 	visual =
 		{
-			Space : require( '../jion/this' )( module )
+			space : require( '../jion/this' )( module )
 		};
 }
 
 
 var
-	Space;
+	space;
 
-Space = visual.Space;
+space = visual.space;
+
 
 /*
 | Initializer.
 */
-Space.prototype._init =
+space.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -206,13 +207,13 @@ Space.prototype._init =
 /*
 | The disc is shown while a space is shown.
 */
-Space.prototype.showDisc = true;
+space.prototype.showDisc = true;
 
 
 /*
 | Returns the mark if the form jockey concerns a mark.
 */
-Space.concernsMark =
+space.concernsMark =
 	function(
 		mark
 	)
@@ -241,7 +242,7 @@ Space.concernsMark =
 |
 | FIXME handle this more gracefully
 */
-Space.prototype.focusedItem =
+space.prototype.focusedItem =
 	function( )
 {
 	var
@@ -285,7 +286,7 @@ Space.prototype.focusedItem =
 /*
 | Returns an item by its key.
 */
-Space.prototype.getItem =
+space.prototype.getItem =
 	function(
 		key
 	)
@@ -315,7 +316,7 @@ Space.prototype.getItem =
 /*
 | Returns the visual item by a given tree-rank.
 */
-Space.prototype.atRank =
+space.prototype.atRank =
 	function(
 		rank
 	)
@@ -328,7 +329,7 @@ Space.prototype.atRank =
 | The attention center.
 */
 jools.lazyValue(
-	Space.prototype,
+	space.prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -353,7 +354,7 @@ jools.lazyValue(
 /*
 | Redraws the complete space.
 */
-Space.prototype.draw =
+space.prototype.draw =
 	function(
 		fabric
 	)
@@ -479,7 +480,7 @@ Space.prototype.draw =
 /*
 | Mouse wheel
 */
-Space.prototype.mousewheel =
+space.prototype.mousewheel =
 	function(
 		p,
 		dir,
@@ -540,7 +541,7 @@ Space.prototype.mousewheel =
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-Space.prototype.pointingHover =
+space.prototype.pointingHover =
 	function(
 		p
 		// shift,
@@ -618,7 +619,7 @@ Space.prototype.pointingHover =
 /*
 | Starts an operation with the mouse button held down.
 */
-Space.prototype.dragStart =
+space.prototype.dragStart =
 	function(
 		p,
 		shift,
@@ -856,7 +857,7 @@ Space.prototype.dragStart =
 /*
 | A mouse click.
 */
-Space.prototype.click =
+space.prototype.click =
 	function(
 		p,
 		shift,
@@ -910,7 +911,7 @@ Space.prototype.click =
 /*
 | Stops an operation with the mouse button held down.
 */
-Space.prototype.dragStop =
+space.prototype.dragStop =
 	function(
 		p,
 		shift,
@@ -1294,7 +1295,7 @@ Space.prototype.dragStop =
 /*
 | Moving during an operation with the mouse button held down.
 */
-Space.prototype.dragMove =
+space.prototype.dragMove =
 	function(
 		p
 		// shift,
@@ -1637,7 +1638,7 @@ Space.prototype.dragMove =
 /*
 | Text input
 */
-Space.prototype.input =
+space.prototype.input =
 	function(
 		text
 	)
@@ -1671,7 +1672,7 @@ Space.prototype.input =
 /*
 | Changes the zoom factor ( around center )
 */
-Space.prototype._changeZoom =
+space.prototype._changeZoom =
 	function( df )
 {
 	var
@@ -1692,7 +1693,7 @@ Space.prototype._changeZoom =
 /*
 | User pressed a special key.
 */
-Space.prototype.specialKey =
+space.prototype.specialKey =
 	function(
 		key,
 		shift,
@@ -1764,8 +1765,7 @@ Space.prototype.specialKey =
 */
 if( SERVER )
 {
-	module.exports =
-		Space;
+	module.exports = space;
 }
 
 
