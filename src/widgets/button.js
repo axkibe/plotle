@@ -50,7 +50,7 @@ if( JION )
 						comment :
 							'designed frame (using anchors',
 						type :
-							'AnchorRect'
+							'design.anchorRect'
 					},
 				// FIXME deduce from mark
 				focusAccent :
@@ -140,7 +140,7 @@ if( JION )
 							'shape of the button',
 						type :
 							// FUTURE allow other types
-							'AnchorEllipse'
+							'design.anchorEllipse'
 					},
 				superFrame :
 					{
@@ -173,7 +173,7 @@ if( JION )
 						comment :
 							'designed position of the text',
 						type :
-							'AnchorPoint',
+							'design.anchorPoint',
 						defaultValue :
 							null
 					},

@@ -94,11 +94,11 @@ Gruga.CreateDisc =
 				'font',
 					dv.generic.font,
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -107,7 +107,7 @@ Gruga.CreateDisc =
 									dv.note.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -117,7 +117,7 @@ Gruga.CreateDisc =
 							)
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'CreateLabel',
@@ -129,11 +129,11 @@ Gruga.CreateDisc =
 				'font',
 					dv.generic.font,
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -142,7 +142,7 @@ Gruga.CreateDisc =
 									dv.label.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -152,7 +152,7 @@ Gruga.CreateDisc =
 							)
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'createRelation',
@@ -166,11 +166,11 @@ Gruga.CreateDisc =
 				'font',
 					dv.generic.font,
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -179,7 +179,7 @@ Gruga.CreateDisc =
 									dv.relation.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -189,7 +189,7 @@ Gruga.CreateDisc =
 							)
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'CreatePortal',
@@ -201,11 +201,11 @@ Gruga.CreateDisc =
 				'font',
 					dv.generic.font,
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -214,7 +214,7 @@ Gruga.CreateDisc =
 									dv.portal.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -224,7 +224,7 @@ Gruga.CreateDisc =
 							)
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			)
 	);
 

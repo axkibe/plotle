@@ -34,7 +34,7 @@ if( JION )
 {
 	return {
 		name :
-			'AnchorEllipse',
+			'anchorEllipse',
 		unit :
 			'design',
 		attributes :
@@ -44,14 +44,14 @@ if( JION )
 						comment :
 							'point in north-west',
 						type :
-							'AnchorPoint'
+							'design.anchorPoint'
 					},
 				pse :
 					{
 						comment :
 							'point in south-east',
 						type :
-							'AnchorPoint'
+							'design.anchorPoint'
 					}
 			}
 	};
@@ -59,28 +59,28 @@ if( JION )
 
 
 var
-	AnchorEllipse;
+	anchorEllipse;
 
-AnchorEllipse = design.AnchorEllipse;
+anchorEllipse = design.anchorEllipse;
 
 
 /*
 | ellipse filling the full frame
 | skewed a little to north west
 */
-AnchorEllipse.fullSkewNW =
-	AnchorEllipse.create(
+anchorEllipse.fullSkewNW =
+	anchorEllipse.create(
 		'pnw',
-			design.AnchorPoint.PNW,
+			design.anchorPoint.PNW,
 		'pse',
-			design.AnchorPoint.PSE_M1
+			design.anchorPoint.PSE_M1
 	);
 
 
 /*
 | Computes a rect modelled relative to this rect.
 */
-AnchorEllipse.prototype.compute =
+anchorEllipse.prototype.compute =
 	function(
 		frame
 	)

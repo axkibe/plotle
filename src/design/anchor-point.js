@@ -12,8 +12,7 @@ var
 	design;
 
 
-design =
-	design || { };
+design = design || { };
 
 
 /*
@@ -38,7 +37,7 @@ if( JION )
 	return {
 
 		name :
-			'AnchorPoint',
+			'anchorPoint',
 
 		unit :
 			'design',
@@ -77,16 +76,16 @@ if( JION )
 
 
 var
-	AnchorPoint;
+	anchorPoint;
 
-AnchorPoint = design.AnchorPoint;
+anchorPoint = design.anchorPoint;
 
 
 /*
 | Point in center.
 */
-AnchorPoint.PC =
-	AnchorPoint.create(
+anchorPoint.PC =
+	anchorPoint.create(
 		'anchor',
 			'c',
 		'x',
@@ -99,8 +98,8 @@ AnchorPoint.PC =
 /*
 | Point in north west.
 */
-AnchorPoint.PNW =
-	AnchorPoint.create(
+anchorPoint.PNW =
+	anchorPoint.create(
 		'anchor',
 			'nw',
 		'x',
@@ -112,8 +111,8 @@ AnchorPoint.PNW =
 /*
 | Point in south east.
 */
-AnchorPoint.PSE =
-	AnchorPoint.create(
+anchorPoint.PSE =
+	anchorPoint.create(
 		'anchor',
 			'se',
 		'x',
@@ -125,8 +124,8 @@ AnchorPoint.PSE =
 /*
 | Point in south east minus 1.
 */
-AnchorPoint.PSE_M1 =
-	AnchorPoint.create(
+anchorPoint.PSE_M1 =
+	anchorPoint.create(
 		'anchor',
 			'se',
 		'x',
@@ -136,9 +135,9 @@ AnchorPoint.PSE_M1 =
 	);
 
 /*
-| Computes the AnchorPoint to an euclid one.
+| Computes the anchorPoint to an euclid one.
 */
-AnchorPoint.prototype.compute =
+anchorPoint.prototype.compute =
 	function(
 		frame
 	)

@@ -81,7 +81,7 @@ Gruga.MoveTo =
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					design.AnchorPoint.create(
+					design.anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -96,9 +96,9 @@ Gruga.MoveTo =
 				'style',
 					'portalButton',
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -107,7 +107,7 @@ Gruga.MoveTo =
 									ideoloomHomeButton.n
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -125,7 +125,7 @@ Gruga.MoveTo =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.AnchorPoint.create(
+					design.anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -134,7 +134,7 @@ Gruga.MoveTo =
 							0
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'ideoloomSandboxButton',
@@ -142,9 +142,9 @@ Gruga.MoveTo =
 				'style',
 					'portalButton',
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -153,7 +153,7 @@ Gruga.MoveTo =
 									ideoloomSandboxButton.n
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -171,7 +171,7 @@ Gruga.MoveTo =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.AnchorPoint.create(
+					design.anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -180,7 +180,7 @@ Gruga.MoveTo =
 							0
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'userHomeButton',
@@ -188,9 +188,9 @@ Gruga.MoveTo =
 				'style',
 					'portalButton',
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -199,7 +199,7 @@ Gruga.MoveTo =
 									userHomeButton.n
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -217,7 +217,7 @@ Gruga.MoveTo =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.AnchorPoint.create(
+					design.anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -226,7 +226,7 @@ Gruga.MoveTo =
 							0
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			)
 	);
 

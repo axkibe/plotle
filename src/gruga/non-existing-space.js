@@ -73,7 +73,7 @@ Gruga.NonExistingSpace =
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					design.AnchorPoint.create(
+					design.anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -90,7 +90,7 @@ Gruga.NonExistingSpace =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.AnchorPoint.create(
+					design.anchorPoint.create(
 						'anchor',
 								'c',
 						'x',
@@ -105,9 +105,9 @@ Gruga.NonExistingSpace =
 				'style',
 					'genericButton',
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -116,7 +116,7 @@ Gruga.NonExistingSpace =
 									noButton.n
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -132,9 +132,9 @@ Gruga.NonExistingSpace =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'yesButton',
@@ -142,9 +142,9 @@ Gruga.NonExistingSpace =
 				'style',
 					'genericButton',
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -153,7 +153,7 @@ Gruga.NonExistingSpace =
 									yesButton.n
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -169,9 +169,9 @@ Gruga.NonExistingSpace =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			)
 	);
 

@@ -35,31 +35,26 @@ var
 if( JION )
 {
 	return {
-
 		name :
-			'AnchorRect',
-
+			'anchorRect',
 		unit :
 			'design',
-
 		attributes :
 			{
 				pnw :
 					{
 						comment :
 							'point in north-west',
-
 						type :
-							'AnchorPoint'
+							'design.anchorPoint'
 					},
 
 				pse :
 					{
 						comment :
 							'point in south-east',
-
 						type :
-							'AnchorPoint'
+							'design.anchorPoint'
 					}
 			}
 	};
@@ -67,15 +62,15 @@ if( JION )
 
 
 var
-	AnchorRect;
+	anchorRect;
 
-AnchorRect = design.AnchorRect;
+anchorRect = design.anchorRect;
 
 
 /*
 | Computes a rect modelled relative to this rect.
 */
-AnchorRect.prototype.compute =
+anchorRect.prototype.compute =
 	function(
 		frame
 	)

@@ -135,9 +135,9 @@ Gruga.MainDisc =
 				'iconStyle',
 					'iconNormal',
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -146,7 +146,7 @@ Gruga.MainDisc =
 									dv.normal.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -156,7 +156,7 @@ Gruga.MainDisc =
 							)
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'Create',
@@ -170,11 +170,11 @@ Gruga.MainDisc =
 				'font',
 					dv.generic.font,
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -183,7 +183,7 @@ Gruga.MainDisc =
 									dv.create.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -193,7 +193,7 @@ Gruga.MainDisc =
 							)
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'Remove',
@@ -207,9 +207,9 @@ Gruga.MainDisc =
 				'visible',
 					false,
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -218,7 +218,7 @@ Gruga.MainDisc =
 									dv.remove.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -228,7 +228,7 @@ Gruga.MainDisc =
 							)
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'MoveTo',
@@ -242,9 +242,9 @@ Gruga.MainDisc =
 				'visible',
 					false,
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -253,7 +253,7 @@ Gruga.MainDisc =
 									dv.moveto.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -263,7 +263,7 @@ Gruga.MainDisc =
 							)
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'Space',
@@ -271,9 +271,9 @@ Gruga.MainDisc =
 				'style',
 					'mainButton',
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -282,7 +282,7 @@ Gruga.MainDisc =
 									dv.space.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -296,11 +296,11 @@ Gruga.MainDisc =
 				'font',
 					fontPool.get( 12, 'cm' ),
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'shape',
-					design.AnchorEllipse.create(
+					design.anchorEllipse.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -309,7 +309,7 @@ Gruga.MainDisc =
 									0
 							),
 						'pse',
-							design.AnchorPoint.PSE_M1
+							design.anchorPoint.PSE_M1
 					),
 				'textRotation',
 					- Math.PI / 2
@@ -320,9 +320,9 @@ Gruga.MainDisc =
 				'style',
 					'mainButton',
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -331,7 +331,7 @@ Gruga.MainDisc =
 									dv.user.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -345,11 +345,11 @@ Gruga.MainDisc =
 				'font',
 					fontPool.get( 12, 'cm' ),
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'shape',
-					design.AnchorEllipse.create(
+					design.anchorEllipse.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -358,7 +358,7 @@ Gruga.MainDisc =
 									0
 							),
 						'pse',
-							design.AnchorPoint.PSE_M1
+							design.anchorPoint.PSE_M1
 					),
 				'textRotation',
 						( -Math.PI / 2 )
@@ -377,11 +377,11 @@ Gruga.MainDisc =
 				'font',
 					fontPool.get( 13, 'cm' ),
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -390,7 +390,7 @@ Gruga.MainDisc =
 									dv.login.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -400,7 +400,7 @@ Gruga.MainDisc =
 							)
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'SignUp',
@@ -416,11 +416,11 @@ Gruga.MainDisc =
 				'font',
 					fontPool.get( 13, 'cm' ),
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -429,7 +429,7 @@ Gruga.MainDisc =
 									dv.signup.y
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'nw',
 								'x',
@@ -439,7 +439,7 @@ Gruga.MainDisc =
 							)
 					),
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			)
 	);
 

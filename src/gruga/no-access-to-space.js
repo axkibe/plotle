@@ -61,7 +61,7 @@ Gruga.NoAccessToSpace =
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					design.AnchorPoint.create(
+					design.anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -78,7 +78,7 @@ Gruga.NoAccessToSpace =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.AnchorPoint.create(
+					design.anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -93,9 +93,9 @@ Gruga.NoAccessToSpace =
 				'style',
 					'genericButton',
 				'designFrame',
-					design.AnchorRect.create(
+					design.anchorRect.create(
 						'pnw',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -104,7 +104,7 @@ Gruga.NoAccessToSpace =
 									okButton.n
 							),
 						'pse',
-							design.AnchorPoint.create(
+							design.anchorPoint.create(
 								'anchor',
 									'c',
 								'x',
@@ -120,9 +120,9 @@ Gruga.NoAccessToSpace =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.AnchorPoint.PC,
+					design.anchorPoint.PC,
 				'shape',
-					design.AnchorEllipse.fullSkewNW
+					design.anchorEllipse.fullSkewNW
 			)
 	);
 

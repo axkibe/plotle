@@ -55,7 +55,7 @@ if( JION )
 						comment :
 							'designed frame (using anchors',
 						type :
-							'AnchorRect'
+							'design.anchorRect'
 					},
 				// FIXME deduce from mark
 				focusAccent :
