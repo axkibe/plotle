@@ -7,9 +7,6 @@
 . $view
 > 1
 . Ajax
-. AnchorEllipse
-. AnchorPoint
-. AnchorRect
 . Append
 . AppendNC
 . Button
@@ -219,6 +216,9 @@
 . allowsNull
 > alter
 . anchor
+. anchorEllipse
+. anchorPoint
+. anchorRect
 . aperture
 > appendChild
 > apply

@@ -21,7 +21,7 @@ Shell =
 */
 var
 	actions,
-	Discs,
+	discs,
 	euclid,
 	fontPool,
 	Forms,
@@ -195,7 +195,7 @@ Shell =
 		);
 
 	this._$discJockey =
-		Discs.Jockey.create(
+		discs.Jockey.create(
 			'access',
 				'',
 			'action',

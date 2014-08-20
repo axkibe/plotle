@@ -9,11 +9,10 @@
 | Export
 */
 var
-	Discs,
+	discs,
 	Peer;
 
-Discs =
-	Discs || { };
+discs = discs || { };
 
 
 /*
@@ -40,7 +39,7 @@ if( JION )
 		name :
 			'MainDisc',
 		unit :
-			'Discs',
+			'discs',
 		attributes :
 			{
 				access :
@@ -140,7 +139,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Discs.Disc',
+			'discs.disc',
 		init :
 			[
 				'inherit'
@@ -162,7 +161,7 @@ if( JION )
 
 var
 	MainDisc =
-		Discs.MainDisc;
+		discs.MainDisc;
 
 
 /*
@@ -178,7 +177,7 @@ MainDisc.prototype._init =
 		return;
 	}
 
-	Discs.Disc._init.call(
+	discs.disc._init.call(
 		this,
 		inherit
 	);

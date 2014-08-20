@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Discs;
+	discs;
 
-Discs = Discs || { };
+discs = discs || { };
 
 
 /*
@@ -28,11 +28,11 @@ var
 'use strict';
 
 
-/*
-| Constructor.
-*/
-var icons =
-Discs.icons =
+var
+	icons;
+
+icons =
+discs.icons =
 	{ };
 
 

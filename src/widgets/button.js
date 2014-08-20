@@ -19,7 +19,7 @@ Widgets = Widgets || { };
 */
 var
 	Accent,
-	Discs,
+	discs,
 	euclid,
 	jools,
 	reply,
@@ -392,7 +392,7 @@ jools.lazyValue(
 
 			f.paint(
 				style,
-				Discs.icons,
+				discs.icons,
 				this.icon,
 				euclid.view.proper
 			);

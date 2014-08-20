@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Discs;
+	discs;
 
-Discs = Discs || { };
+discs = discs || { };
 
 
 /*
@@ -37,7 +37,7 @@ if( JION )
 		name :
 			'Jockey',
 		unit :
-			'Discs',
+			'discs',
 		attributes :
 			{
 				access :
@@ -68,7 +68,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Discs',
+									'discs',
 								type :
 									'Jockey',
 								func :
@@ -132,22 +132,23 @@ if( JION )
 					}
 			},
 		subclass :
-			'Discs.Disc',
+			'discs.disc',
 		init :
 			[ ],
 		twig :
 			{
 				'MainDisc' :
-					'Discs.MainDisc',
+					'discs.MainDisc',
 				'CreateDisc' :
-					'Discs.CreateDisc'
+					'discs.CreateDisc'
 			}
 	};
 }
 
 var
-	Jockey =
-		Discs.Jockey;
+	Jockey;
+
+Jockey = discs.Jockey;
 
 
 /*

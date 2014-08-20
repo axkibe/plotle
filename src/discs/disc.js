@@ -8,10 +8,9 @@
 /*
 | Export
 */
-var Discs;
+var discs;
 
-Discs =
-	Discs || { };
+discs = discs || { };
 
 
 /*
@@ -34,8 +33,8 @@ var
 | Constructor
 */
 var
-Disc =
-Discs.Disc =
+disc =
+discs.disc =
 	function( )
 {
 	// abstract should not be constructed.
@@ -47,7 +46,7 @@ Discs.Disc =
 /*
 | Common initializer.
 */
-Disc._init =
+disc._init =
 	function(
 		// inherit
 	)

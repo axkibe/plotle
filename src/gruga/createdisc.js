@@ -11,9 +11,7 @@
 var
 	Gruga;
 
-
-Gruga =
-	Gruga || { };
+Gruga = Gruga || { };
 
 
 /*
@@ -21,7 +19,7 @@ Gruga =
 */
 var
 	design,
-	Discs,
+	discs,
 	fontPool,
 	Widgets;
 
@@ -83,7 +81,7 @@ dv =
 	};
 
 Gruga.CreateDisc =
-	Discs.CreateDisc.create(
+	discs.CreateDisc.create(
 		'twig:add',
 		'CreateNote',
 			Widgets.Button.create(

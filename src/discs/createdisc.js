@@ -8,10 +8,9 @@
 | Export
 */
 var
-	Discs;
+	discs;
 
-Discs =
-	Discs || { };
+discs = discs || { };
 
 
 /*
@@ -41,7 +40,7 @@ if( JION )
 		name :
 			'CreateDisc',
 		unit :
-			'Discs',
+			'discs',
 		attributes :
 			{
 				access :
@@ -147,7 +146,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Discs.Disc',
+			'discs.disc',
 		init :
 			[
 				'inherit',
@@ -161,7 +160,7 @@ if( JION )
 
 var
 	CreateDisc =
-		Discs.CreateDisc;
+		discs.CreateDisc;
 
 
 /*
@@ -182,7 +181,7 @@ CreateDisc.prototype._init =
 		return;
 	}
 
-	Discs.Disc._init.call(
+	discs.disc._init.call(
 		this,
 		inherit
 	);
