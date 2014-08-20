@@ -9,11 +9,9 @@
 | Export
 */
 var
-	Forms;
+	forms;
 
-
-Forms =
-	Forms || { };
+forms = forms || { };
 
 
 /*
@@ -41,7 +39,7 @@ if( JION )
 		name :
 			'SignUp',
 		unit :
-			'Forms',
+			'forms',
 		attributes :
 			{
 				hover :
@@ -62,7 +60,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Forms',
+									'forms',
 								type :
 									'Form',
 								func :
@@ -134,7 +132,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Forms.Form',
+			'forms.Form',
 		init :
 			[
 				'inherit'
@@ -146,8 +144,9 @@ if( JION )
 
 
 var
-	SignUp =
-		Forms.SignUp;
+	SignUp;
+
+SignUp = forms.SignUp;
 
 /*
 | The signup form.
@@ -157,7 +156,7 @@ SignUp.prototype._init =
 		inherit
 	)
 {
-	Forms.Form.init.call(
+	forms.Form.init.call(
 		this,
 		inherit
 	);

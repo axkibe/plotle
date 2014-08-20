@@ -10,7 +10,7 @@
 */
 var
 	Peer,
-	Visual;
+	visual;
 
 
 /*
@@ -40,7 +40,7 @@ if( JION )
 		name :
 			'Doc',
 		unit :
-			'Visual',
+			'visual',
 		attributes :
 			{
 				flowWidth :
@@ -106,8 +106,9 @@ if( JION )
 			true,
 		twig :
 			{
-				'Para' :
-					'Visual.Para'
+				// FUTURE
+				//'Para' :
+				//	'visual.Para'
 			},
 		node :
 			true
@@ -122,7 +123,7 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	Visual =
+	visual =
 		{
 			Doc :
 				require( '../jion/this' )( module )
@@ -131,8 +132,9 @@ if( SERVER )
 
 
 var
-	Doc =
-		Visual.Doc;
+	Doc;
+
+Doc = visual.Doc;
 
 
 /*

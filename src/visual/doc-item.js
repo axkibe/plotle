@@ -11,10 +11,9 @@
 | Export
 */
 var
-	Visual;
+	visual;
 
-Visual =
-	Visual || { };
+visual = visual || { };
 
 
 /*
@@ -47,7 +46,7 @@ if( SERVER )
 | Constructor
 */
 var DocItem =
-Visual.DocItem =
+visual.DocItem =
 	function( )
 {
 	// initializing abstract.
@@ -60,7 +59,7 @@ if( !SERVER )
 {
 	jools.subclass(
 		DocItem,
-		Visual.Item
+		visual.Item
 	);
 }
 
@@ -74,10 +73,12 @@ DocItem.prototype.dragStop =
 		p
 	)
 {
-	return Visual.Item.prototype.dragStop.call(
-		this,
-		view,
-		p
+	return(
+		visual.Item.prototype.dragStop.call(
+			this,
+			view,
+			p
+		)
 	);
 };
 

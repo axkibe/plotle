@@ -11,7 +11,6 @@
 var
 	Gruga;
 
-
 Gruga = Gruga || { };
 
 
@@ -20,9 +19,10 @@ Gruga = Gruga || { };
 */
 var
 	design,
-	Forms,
+	forms,
 	fontPool,
 	Widgets;
+
 
 /*
 | Capsule
@@ -62,7 +62,7 @@ var
 | Layout
 */
 Gruga.Login =
-	Forms.Login.create(
+	forms.Login.create(
 		'twig:add',
 		'headline',
 			Widgets.Label.create(

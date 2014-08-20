@@ -9,10 +9,9 @@
 | Export
 */
 var
-	Visual;
+	visual;
 
-
-Visual = Visual || { };
+visual = visual || { };
 
 
 /*
@@ -44,7 +43,7 @@ if( JION )
 		name :
 			'Para',
 		unit :
-			'Visual',
+			'visual',
 		attributes :
 			{
 				flowWidth :
@@ -72,7 +71,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Visual',
+									'visual',
 								type :
 									'Para',
 								func :
@@ -145,14 +144,14 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	Visual.Para = require( '../jion/this' )( module );
+	visual.Para = require( '../jion/this' )( module );
 }
 
 
 var
 	Para;
 
-Para = Visual.Para;
+Para = visual.Para;
 
 
 /*

@@ -8,9 +8,10 @@
 /*
 | Export
 */
-var Forms;
-Forms =
-	Forms || { };
+var
+	forms;
+
+forms = forms || { };
 
 
 /*
@@ -37,7 +38,7 @@ if( JION )
 		name :
 			'User',
 		unit :
-			'Forms',
+			'forms',
 		attributes :
 			{
 				hover :
@@ -58,7 +59,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Forms',
+									'forms',
 								type :
 									'Form',
 								func :
@@ -129,7 +130,7 @@ if( JION )
 			},
 
 		subclass :
-			'Forms.Form',
+			'forms.Form',
 
 		init :
 			[
@@ -143,7 +144,7 @@ if( JION )
 
 var
 	User =
-		Forms.User;
+		forms.User;
 
 
 /*
@@ -227,7 +228,7 @@ User.prototype._init =
 				!isGuest
 		);
 
-	Forms.Form.init.call(
+	forms.Form.init.call(
 		this,
 		inherit
 	);

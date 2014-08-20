@@ -22,7 +22,7 @@ var
 	jools,
 	shell,
 	system,
-	Visual;
+	visual;
 
 
 /*
@@ -354,7 +354,7 @@ Link.prototype._onAquireSpace =
 		);
 	}
 
-	space = Visual.Space.createFromJSON( reply.node );
+	space = visual.Space.createFromJSON( reply.node );
 
 	shell.link =
 		shell.link.create(

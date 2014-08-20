@@ -9,10 +9,9 @@
 | Export
 */
 var
-	Forms;
+	forms;
 
-Forms =
-	Forms || { };
+forms = forms || { };
 
 
 /*
@@ -38,7 +37,7 @@ if( JION )
 		name :
 			'NoAccessToSpace',
 		unit :
-			'Forms',
+			'forms',
 		attributes :
 			{
 				hover :
@@ -59,7 +58,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Forms',
+									'forms',
 								type :
 									'Form',
 								func :
@@ -131,7 +130,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Forms.Form',
+			'forms.Form',
 		init :
 			[
 				'inherit'
@@ -143,8 +142,9 @@ if( JION )
 
 
 var
-	NoAccessToSpace =
-		Forms.NoAccessToSpace;
+	NoAccessToSpace;
+
+NoAccessToSpace = forms.NoAccessToSpace;
 
 
 /*
@@ -155,7 +155,7 @@ NoAccessToSpace.prototype._init =
 		inherit
 	)
 {
-	Forms.Form.init.call(
+	forms.Form.init.call(
 		this,
 		inherit
 	);

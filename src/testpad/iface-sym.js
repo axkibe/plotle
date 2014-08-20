@@ -19,7 +19,7 @@ var
 var
 	euclid,
 	jools,
-	Visual;
+	visual;
 
 
 /*
@@ -38,27 +38,27 @@ IFaceSym =
 	// the current space;
 	this.space  =
 		// FUTURE FIX
-		Visual.Space.create(
+		visual.Space.create(
 			'twig:add',
 			'testnote',
-			Visual.Note.create(
+			visual.Note.create(
 				'doc',
-					Visual.Doc.create(
+					visual.Doc.create(
 						'twig:add',
 						'1',
-							Visual.Para.create(
+							visual.Para.create(
 								'text',
 									'Why would I want to know that?'
 							),
 						'twig:add',
 						'$new',
-							Visual.Para.create(
+							visual.Para.create(
 								'text',
 									'Can we have Bender Burgers again?'
 							),
 						'twig:add',
 						'$new',
-							Visual.Para.create(
+							visual.Para.create(
 								'text',
 									'And so we say goodbye to ' +
 									'our beloved pet, Nibbler.'

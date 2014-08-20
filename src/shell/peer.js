@@ -19,7 +19,7 @@ var
 	jion,
 	jools,
 	shell,
-	Visual;
+	visual;
 
 
 /*
@@ -103,16 +103,16 @@ Peer.newNote =
 	src =
 		sign.create(
 			'val',
-				Visual.Note.create(
+				visual.Note.create(
 					'fontsize',
 						13,
 					'zone',
 						zone,
 					'doc',
-						Visual.Doc.create(
+						visual.Doc.create(
 							'twig:add',
 							'1',
-							Visual.Para.create(
+							visual.Para.create(
 								'text',
 									''
 							)
@@ -155,7 +155,7 @@ Peer.newPortal =
 	src =
 		sign.create(
 			'val',
-				Visual.Portal.create(
+				visual.Portal.create(
 					'zone',
 						zone,
 					'spaceUser',
@@ -288,16 +288,16 @@ Peer.newLabel =
 	src =
 		sign.create(
 			'val',
-				Visual.Label.create(
+				visual.Label.create(
 					'fontsize',
 						fontsize,
 					'pnw',
 						pnw,
 					'doc',
-						Visual.Doc.create(
+						visual.Doc.create(
 							'twig:add',
 							'1',
-							Visual.Para.create(
+							visual.Para.create(
 								'text',
 									text
 							)
@@ -340,7 +340,7 @@ Peer.newRelation =
 	src =
 		sign.create(
 			'val',
-				Visual.Relation.create(
+				visual.Relation.create(
 					'item1key',
 						item1key,
 					'item2key',
@@ -350,10 +350,10 @@ Peer.newRelation =
 					'fontsize',
 						fontsize,
 					'doc',
-						Visual.Doc.create(
+						visual.Doc.create(
 							'twig:add',
 							'1',
-							Visual.Para.create(
+							visual.Para.create(
 								'text',
 									text
 							)

@@ -10,11 +10,9 @@
 | Export
 */
 var
-	Forms;
+	forms;
 
-
-Forms =
-	Forms || { };
+forms = forms || { };
 
 
 /*
@@ -41,7 +39,7 @@ if( JION )
 		name :
 			'Welcome',
 		unit :
-			'Forms',
+			'forms',
 		attributes :
 			{
 				hover :
@@ -62,7 +60,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Forms',
+									'forms',
 								type :
 									'Form',
 								func :
@@ -132,7 +130,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Forms.Form',
+			'forms.Form',
 		init :
 			[
 				'inherit',
@@ -147,8 +145,7 @@ if( JION )
 var
 	Welcome;
 
-Welcome =
-	Forms.Welcome;
+Welcome = forms.Welcome;
 
 
 /*
@@ -176,7 +173,7 @@ Welcome.prototype._init =
 				'Welcome ' + ( this.username || '' ) + '!'
 		);
 
-	Forms.Form.init.call(
+	forms.Form.init.call(
 		this,
 		inherit
 	);

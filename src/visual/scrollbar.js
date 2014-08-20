@@ -11,7 +11,7 @@
 | Export
 */
 var
-	Visual;
+	visual;
 
 
 /*
@@ -39,7 +39,7 @@ if( JION )
 		name :
 			'Scrollbar',
 		unit :
-			'Visual',
+			'visual',
 		attributes :
 			{
 				pos :
@@ -87,7 +87,7 @@ if( JION )
 var
 	Scrollbar;
 
-Scrollbar = Visual.Scrollbar;
+Scrollbar = visual.Scrollbar;
 
 
 /*

@@ -9,10 +9,10 @@
 | Export
 */
 var
-	Visual;
+	visual;
 
-Visual =
-	Visual || { };
+visual =
+	visual || { };
 
 
 /*
@@ -49,8 +49,11 @@ if( SERVER )
 /*
 | Constructor
 */
-var Item =
-Visual.Item =
+var
+	Item;
+
+Item =
+visual.Item =
 	function( )
 {
 	// this is an abstract class
@@ -507,11 +510,12 @@ Item.prototype.dragStart =
 	)
 {
 	var
-		action =
-			shell.action,
+		action,
+		sbary;
 
-		sbary =
-			this.scrollbarY;
+	action = shell.action,
+
+	sbary = this.scrollbarY;
 
 	if(
 		action.reflex === 'actions.none'
@@ -701,8 +705,9 @@ Item.prototype.dragStop =
 	)
 {
 	var
-		action =
-			shell.action;
+		action;
+
+	action = shell.action;
 
 	switch( action.reflex )
 	{
@@ -718,12 +723,8 @@ Item.prototype.dragStop =
 				return false;
 			}
 
-			var
-				space =
-					shell.space;
-
-			Visual.Relation.spawn(
-				space.getItem(
+			visual.Relation.spawn(
+				shell.space.getItem(
 					action.fromItemPath.get( -1 )
 				),
 				this

@@ -9,10 +9,9 @@
 | Export
 */
 var
-	Visual;
+	visual;
 
-Visual =
-	Visual || { };
+visual = visual || { };
 
 
 /*
@@ -43,18 +42,18 @@ if( JION )
 		name :
 			'Relation',
 		unit :
-			'Visual',
+			'visual',
 		attributes :
 			{
 				doc :
 					{
 						comment :
 							'the labels document',
-						// FUTURE make this type: 'Visual.Doc'
+						// FUTURE make this type: 'visual.Doc'
 						type :
 							'Doc',
 						unit :
-							'Visual',
+							'visual',
 						json :
 							true
 					},
@@ -122,7 +121,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Visual',
+									'visual',
 								type :
 									'Item',
 								func :
@@ -155,7 +154,7 @@ if( JION )
 		node :
 			true,
 		subclass :
-			'Visual.Label'
+			'visual.Label'
 	};
 }
 
@@ -167,7 +166,7 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	Visual =
+	visual =
 		{
 			Label :
 				require( './label' ),
@@ -177,8 +176,9 @@ if( SERVER )
 }
 
 var
-	Relation =
-		Visual.Relation;
+	Relation;
+
+Relation = visual.Relation;
 
 
 /*
@@ -189,7 +189,7 @@ Relation.prototype._init =
 		inherit
 	)
 {
-	Visual.Label.prototype._init.call(
+	visual.Label.prototype._init.call(
 		this,
 		inherit
 	);
@@ -318,7 +318,7 @@ Relation.prototype.draw =
 		);
 	}
 
-	Visual.Label.prototype.draw.call(
+	visual.Label.prototype.draw.call(
 		this,
 		fabric
 	);
@@ -330,8 +330,7 @@ Relation.prototype.draw =
 */
 if( SERVER )
 {
-	module.exports =
-		Relation;
+	module.exports = Relation;
 }
 
 

@@ -9,7 +9,7 @@
 | Export
 */
 var
-	Visual;
+	visual;
 
 
 /*
@@ -44,7 +44,7 @@ if( JION )
 		name :
 			'Space',
 		unit :
-			'Visual',
+			'visual',
 		attributes :
 			{
 				access :
@@ -74,7 +74,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Visual',
+									'visual',
 								type :
 									'Space',
 								func :
@@ -133,14 +133,15 @@ if( JION )
 			true,
 		twig :
 			{
-				'Note' :
-					'Visual.Note',
-				'Label' :
-					'Visual.Label',
-				'Relation' :
-					'Visual.Relation',
-				'Portal' :
-					'Visual.Portal'
+				// FUTURE
+				//'Note' :
+				//	'visual.Note',
+				//'Label' :
+				//	'visual.Label',
+				//'Relation' :
+				//	'visual.Relation',
+				//'Portal' :
+				//	'visual.Portal'
 			}
 	};
 }
@@ -152,7 +153,7 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	Visual =
+	visual =
 		{
 			Space : require( '../jion/this' )( module )
 		};
@@ -162,7 +163,7 @@ if( SERVER )
 var
 	Space;
 
-Space = Visual.Space;
+Space = visual.Space;
 
 /*
 | Initializer.

@@ -8,10 +8,10 @@
 /*
 | Export
 */
-var Forms;
+var
+	forms;
 
-
-Forms = Forms || { };
+forms = forms || { };
 
 
 /*
@@ -37,7 +37,7 @@ if( JION )
 		name :
 			'Space',
 		unit :
-			'Forms',
+			'forms',
 		attributes :
 			{
 				hover :
@@ -58,7 +58,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Forms',
+									'forms',
 								type :
 									'Form',
 								func :
@@ -126,7 +126,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Forms.Form',
+			'forms.Form',
 		init :
 			[
 				'inherit',
@@ -139,8 +139,9 @@ if( JION )
 
 
 var
-	Space =
-		Forms.Space;
+	Space;
+
+Space = forms.Space;
 
 
 /*
@@ -166,7 +167,7 @@ Space.prototype._init =
 			);
 	}
 
-	Forms.Form.init.call(
+	forms.Form.init.call(
 		this,
 		inherit
 	);

@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Forms;
+	forms;
 
-Forms = Forms || { };
+forms = forms || { };
 
 
 /*
@@ -38,7 +38,7 @@ if( JION )
 		name :
 			'jockey',
 		unit :
-			'Forms',
+			'forms',
 		attributes :
 			{
 				hover :
@@ -103,29 +103,31 @@ if( JION )
 					}
 			},
 		subclass :
-			'Forms.Form',
+			'forms.Form',
 		init :
 			[
 				'twigDup'
 			],
 		twig :
 			{
+				/* FUTURE
 				'Login' :
-					'Forms.Login',
+					'forms.Login',
 				'MoveTo' :
-					'Forms.MoveTo',
+					'forms.MoveTo',
 				'NoAccessToSpace' :
-					'Forms.NoAccessToSpace',
+					'forms.NoAccessToSpace',
 				'NonExistingSpace' :
-					'Forms.NonExistingSpace',
+					'forms.NonExistingSpace',
 				'SignUp' :
-					'Forms.SignUp',
+					'forms.SignUp',
 				'Space' :
-					'Forms.Space',
+					'forms.Space',
 				'User' :
-					'Forms.User',
+					'forms.User',
 				'Welcome' :
-					'Forms.Welcome'
+					'forms.Welcome'
+				*/
 			}
 	};
 }
@@ -134,7 +136,7 @@ if( JION )
 var
 	jockey;
 
-jockey = Forms.jockey;
+jockey = forms.jockey;
 
 
 /*

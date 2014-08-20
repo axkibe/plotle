@@ -11,9 +11,7 @@
 var
 	Gruga;
 
-
-Gruga =
-	Gruga || { };
+Gruga = Gruga || { };
 
 
 /*
@@ -22,7 +20,7 @@ Gruga =
 var
 	design,
 	fontPool,
-	Forms,
+	forms,
 	Widgets;
 
 /*
@@ -66,7 +64,7 @@ var
 | Layout
 */
 Gruga.SignUp =
-	Forms.SignUp.create(
+	forms.SignUp.create(
 		'twig:add',
 		'headline',
 			Widgets.Label.create(

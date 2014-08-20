@@ -81,7 +81,7 @@ var
 		require( 'url' ),
 	util =
 		require( 'util' ),
-	Visual =
+	visual =
 		{
 			Space :
 				require( '../visual/space' )
@@ -467,7 +467,7 @@ Server.prototype.loadSpace =
 				$changes :
 					[ ],
 				$tree :
-					Visual.Space.create( ),
+					visual.Space.create( ),
 				$seqZ :
 					1
 			};
@@ -1677,13 +1677,10 @@ Server.prototype.createSpace =
 					'changes:' + spaceName,
 					sus.resume( )
 				),
-
 			$changes :
 				[ ],
-
 			$tree :
-				Visual.Space.create( ),
-
+				visual.Space.create( ),
 			$seqZ :
 				1
 		};

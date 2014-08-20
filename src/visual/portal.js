@@ -8,10 +8,10 @@
 /*
 | Export
 */
-var Visual;
+var
+	visual;
 
-Visual =
-	Visual || { };
+visual = visual || { };
 
 
 /*
@@ -46,7 +46,7 @@ if( JION )
 		name :
 			'Portal',
 		unit :
-			'Visual',
+			'visual',
 		attributes :
 			{
 				hover :
@@ -66,7 +66,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Visual',
+									'visual',
 								type :
 									'Item',
 								func :
@@ -133,7 +133,7 @@ if( JION )
 		node :
 			true,
 		subclass :
-			'Visual.Item'
+			'visual.Item'
 	};
 }
 
@@ -144,7 +144,7 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	Visual =
+	visual =
 		{
 			Portal :
 				require( '../jion/this' )( module )
@@ -154,7 +154,7 @@ if( SERVER )
 
 var
 	Portal =
-		Visual.Portal;
+		visual.Portal;
 
 
 /*
@@ -402,10 +402,12 @@ Portal.prototype.dragStop =
 
 		default :
 
-			return Visual.Item.prototype.dragStop.call(
-				this,
-				view,
-				p
+			return(
+				visual.Item.prototype.dragStop.call(
+					this,
+					view,
+					p
+				)
 			);
 	}
 };

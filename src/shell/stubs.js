@@ -18,7 +18,7 @@ var
 var
 	euclid,
 	theme,
-	Visual;
+	visual;
 
 
 /*
@@ -36,16 +36,16 @@ Stubs = { };
 
 
 Stubs.emptyLabel =
-	Visual.Label.create(
+	visual.Label.create(
 		'pnw',
 			euclid.point.zero,
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'doc',
-			Visual.Doc.create(
+			visual.Doc.create(
 				'twig:add',
 				'1',
-				Visual.Para.create(
+				visual.Para.create(
 					'text',
 						'Label'
 				)
@@ -54,7 +54,7 @@ Stubs.emptyLabel =
 
 
 Stubs.emptyNote =
-	Visual.Note.create(
+	visual.Note.create(
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'zone',
@@ -65,10 +65,10 @@ Stubs.emptyNote =
 					euclid.point.zero
 			),
 		'doc',
-			Visual.Doc.create(
+			visual.Doc.create(
 				'twig:add',
 				'1',
-				Visual.Para.create(
+				visual.Para.create(
 					'text',
 						''
 				)
@@ -77,7 +77,7 @@ Stubs.emptyNote =
 
 
 Stubs.emptyPortal =
-	Visual.Portal.create(
+	visual.Portal.create(
 		'zone',
 			euclid.rect.create(
 				'pnw',

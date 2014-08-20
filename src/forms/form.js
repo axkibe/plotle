@@ -9,10 +9,9 @@
 | Export
 */
 var
-	Forms;
+	forms;
 
-
-Forms = Forms || { };
+forms = forms || { };
 
 
 /*
@@ -36,13 +35,13 @@ var
 
 
 var Form =
-Forms.Form =
+forms.Form =
 	function( )
 {
-	throw new Error(
-		CHECK && 'initializing abstract'
-	);
+	// initializing abstract
+	throw new Error( );
 };
+
 
 /*
 | Constructor

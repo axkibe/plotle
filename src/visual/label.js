@@ -9,7 +9,7 @@
 | Export
 */
 var
-	Visual;
+	visual;
 
 
 /*
@@ -22,7 +22,7 @@ var
 	shell,
 	Style,
 	theme,
-	Visual;
+	visual;
 
 
 /*
@@ -41,18 +41,18 @@ if( JION )
 		name :
 			'Label',
 		unit :
-			'Visual',
+			'visual',
 		attributes :
 			{
 				doc :
 					{
 						comment :
 							'the labels document',
-						// FUTURE make this type: 'Visual.Doc'
+						// FUTURE make this type: 'visual.Doc'
 						type :
 							'Doc',
 						unit :
-							'Visual',
+							'visual',
 						json :
 							true
 					},
@@ -104,7 +104,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Visual',
+									'visual',
 								type :
 									'Item',
 								func :
@@ -136,7 +136,7 @@ if( JION )
 		node :
 			true,
 		subclass :
-			'Visual.DocItem'
+			'visual.DocItem'
 	};
 }
 
@@ -149,7 +149,7 @@ if( SERVER )
 	jools =
 		require( '../jools/jools' ),
 
-	Visual =
+	visual =
 		{
 			Label :
 				require( '../jion/this' )( module )
@@ -160,7 +160,7 @@ if( SERVER )
 var
 	Label;
 
-Label = Visual.Label;
+Label = visual.Label;
 
 
 /*
@@ -384,10 +384,12 @@ Label.prototype.dragStop =
 
 		default :
 
-			return Visual.DocItem.prototype.dragStop.call(
-				this,
-				view,
-				p
+			return (
+				visual.DocItem.prototype.dragStop.call(
+					this,
+					view,
+					p
+				)
 			);
 	}
 };
@@ -449,7 +451,7 @@ jools.lazyValue(
 /*
 | Draws the label.
 |
-| FIXME: move the common stuff into Visual.Item.draw()
+| FIXME: move the common stuff into visual.Item.draw()
 */
 Label.prototype.draw =
 	function(

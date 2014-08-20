@@ -11,7 +11,6 @@
 var
 	Gruga;
 
-
 Gruga = Gruga || { };
 
 
@@ -21,7 +20,7 @@ Gruga = Gruga || { };
 var
 	design,
 	fontPool,
-	Forms,
+	forms,
 	Widgets;
 
 /*
@@ -52,7 +51,7 @@ var
 | Layout
 */
 Gruga.NoAccessToSpace =
-	Forms.NoAccessToSpace.create(
+	forms.NoAccessToSpace.create(
 		'twig:add',
 		'headline',
 			Widgets.Label.create(

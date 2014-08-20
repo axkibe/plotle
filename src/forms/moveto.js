@@ -9,11 +9,9 @@
 | Export
 */
 var
-	Forms;
+	forms;
 
-
-Forms =
-	Forms || { };
+forms = forms || { };
 
 
 /*
@@ -40,7 +38,7 @@ if( JION )
 		name :
 			'MoveTo',
 		unit :
-			'Forms',
+			'forms',
 		attributes :
 			{
 				hover :
@@ -61,7 +59,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Forms',
+									'forms',
 								type :
 									'Form',
 								func :
@@ -131,7 +129,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Forms.Form',
+			'forms.Form',
 		init :
 			[
 				'inherit',
@@ -143,8 +141,9 @@ if( JION )
 }
 
 var
-	MoveTo =
-		Forms.MoveTo;
+	MoveTo;
+
+MoveTo = forms.MoveTo;
 
 
 /*
@@ -181,7 +180,7 @@ MoveTo.prototype._init =
 			);
 	}
 
-	Forms.Form.init.call(
+	forms.Form.init.call(
 		this,
 		inherit
 	);

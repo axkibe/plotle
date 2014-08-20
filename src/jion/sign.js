@@ -17,7 +17,7 @@ var
 var
 	euclid,
 	jools,
-	Visual;
+	visual;
 
 
 /*
@@ -147,7 +147,7 @@ if( SERVER )
 			sign :
 				require( '../jion/this' )( module )
 		};
-	Visual =
+	visual =
 		{
 			Label :
 				require( '../visual/label' ),
@@ -188,14 +188,14 @@ sign.prototype._init =
 			case 'Label' :
 
 				this.val =
-					Visual.Label.createFromJSON( val );
+					visual.Label.createFromJSON( val );
 
 				break;
 
 			case 'Note' :
 
 				this.val =
-					Visual.Note.createFromJSON( val );
+					visual.Note.createFromJSON( val );
 
 				break;
 
@@ -208,7 +208,7 @@ sign.prototype._init =
 			case 'Portal' :
 
 				this.val =
-					Visual.Portal.createFromJSON( val );
+					visual.Portal.createFromJSON( val );
 
 				break;
 
@@ -222,7 +222,7 @@ sign.prototype._init =
 			case 'Relation' :
 
 				this.val =
-					Visual.Relation.createFromJSON( val );
+					visual.Relation.createFromJSON( val );
 
 				break;
 

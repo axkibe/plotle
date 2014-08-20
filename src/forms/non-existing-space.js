@@ -12,11 +12,9 @@
 | Export
 */
 var
-	Forms;
+	forms;
 
-
-Forms =
-	Forms || { };
+forms = forms || { };
 
 
 /*
@@ -43,7 +41,7 @@ if( JION )
 		name :
 			'NonExistingSpace',
 		unit :
-			'Forms',
+			'forms',
 		attributes :
 			{
 				hover :
@@ -64,7 +62,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Forms',
+									'forms',
 								type :
 									'Form',
 								func :
@@ -155,7 +153,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Forms.Form',
+			'forms.Form',
 		init :
 			[
 				'inherit',
@@ -168,8 +166,9 @@ if( JION )
 
 
 var
-	NonExistingSpace =
-		Forms.NonExistingSpace;
+	NonExistingSpace;
+
+NonExistingSpace = forms.NonExistingSpace;
 
 
 /*
@@ -200,7 +199,7 @@ NonExistingSpace.prototype._init =
 				' does not exist.'
 		);
 
-	Forms.Form.init.call(
+	forms.Form.init.call(
 		this,
 		inherit
 	);

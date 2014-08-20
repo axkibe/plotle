@@ -24,7 +24,7 @@ var
 	discs,
 	euclid,
 	fontPool,
-	Forms,
+	forms,
 	Gruga,
 	jion,
 	Mark,
@@ -158,7 +158,7 @@ Shell =
 		);
 
 	this._$formJockey =
-		Forms.jockey.create(
+		forms.jockey.create(
 			'hover',
 				jion.path.empty,
 			'mark',

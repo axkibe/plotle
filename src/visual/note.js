@@ -10,7 +10,7 @@
 | Export
 */
 var
-	Visual;
+	visual;
 
 
 /*
@@ -42,18 +42,18 @@ if( JION )
 		name :
 			'Note',
 		unit :
-			'Visual',
+			'visual',
 		attributes :
 			{
 				doc :
 					{
 						comment :
 							'the notes document',
-						// FUTURE make this type: 'Visual.Doc'
+						// FUTURE make this type: 'visual.Doc'
 						type :
 							'Doc',
 						unit :
-							'Visual',
+							'visual',
 						json :
 							true
 					},
@@ -84,7 +84,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Visual',
+									'visual',
 								type :
 									'Item',
 								func :
@@ -144,7 +144,7 @@ if( JION )
 		node :
 			true,
 		subclass :
-			'Visual.DocItem'
+			'visual.DocItem'
 	};
 }
 
@@ -156,7 +156,7 @@ if( SERVER )
 	jools =
 		require( '../jools/jools' );
 
-	Visual =
+	visual =
 		{
 			Note :
 				require( '../jion/this' )( module )
@@ -166,7 +166,7 @@ if( SERVER )
 var
 	Note;
 
-Note = Visual.Note;
+Note = visual.Note;
 
 
 /*
@@ -243,7 +243,7 @@ Note.prototype._init =
 	}
 
 	this.scrollbarY =
-		Visual.Scrollbar.create(
+		visual.Scrollbar.create(
 			'aperture',
 				zone.height - this.innerMargin.y,
 			'max',
@@ -321,10 +321,12 @@ Note.prototype.dragStop =
 
 		default :
 
-			return Visual.DocItem.prototype.dragStop.call(
-				this,
-				view,
-				p
+			return (
+				visual.DocItem.prototype.dragStop.call(
+					this,
+					view,
+					p
+				)
 			);
 	}
 };
