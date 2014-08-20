@@ -9,7 +9,8 @@
 | Export.
 */
 var
-	Context;
+	format =
+		format || { };
 
 
 /*
@@ -74,17 +75,19 @@ var
 /*
 | Jion.
 */
-Context =
-	{
-		prototype :
-			prototype
-	};
+var
+	context =
+	format.context =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
-| Creates a new Context object.
+| Creates a new context object.
 */
-Context.create =
+context.create =
 prototype.create =
 	function(
 		// free strings
@@ -101,7 +104,7 @@ prototype.create =
 
 		v_root;
 
-	if( this !== Context )
+	if( this !== context )
 	{
 		inherit = this;
 
@@ -275,19 +278,19 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Context';
+prototype.reflect = 'context';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'context';
+prototype.reflex = 'format.context';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'Context';
+prototype.reflexName = 'context';
 
 
 /*
@@ -337,7 +340,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Context;
+	module.exports = context;
 }
 
 

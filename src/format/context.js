@@ -1,5 +1,5 @@
 /*
-| Formatter context
+| Formating context.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,9 @@ if( JION )
 {
 	return {
 		name :
-			'Context',
+			'context',
+		unit :
+			'format',
 		attributes :
 			{
 				indent :
@@ -67,26 +69,26 @@ if( JION )
 | Tabbing format.
 */
 var
-	_tab =
-//		'    '; // FIXME
-		'\t';
+	_tab = '\t';
 
 
 /*
 | Node imports.
 */
 var
-	Context =
-		require( '../jion/this' )( module ),
-	jools =
-		require( '../jools/jools' );
+	context,
+	jools;
+
+context = require( '../jion/this' )( module );
+
+jools = require( '../jools/jools' );
 
 
 /*
 | Seperator is a space when inline otherwise a newline.
 */
 jools.lazyValue(
-	Context.prototype,
+	context.prototype,
 	'sep',
 	function( )
 	{
@@ -99,7 +101,7 @@ jools.lazyValue(
 | Transforms the context into a tab indentation.
 */
 jools.lazyValue(
-	Context.prototype,
+	context.prototype,
 	'tab',
 	function( )
 	{
@@ -137,7 +139,7 @@ jools.lazyValue(
 | Increases the indentation.
 */
 jools.lazyValue(
-	Context.prototype,
+	context.prototype,
 	'Inc',
 	function( )
 	{
@@ -161,7 +163,7 @@ jools.lazyValue(
 | But keeps root context.
 */
 jools.lazyValue(
-	Context.prototype,
+	context.prototype,
 	'IncSame',
 	function( )
 	{
@@ -190,7 +192,7 @@ jools.lazyValue(
 | Decreases the indentation.
 */
 jools.lazyValue(
-	Context.prototype,
+	context.prototype,
 	'Dec',
 	function( )
 	{
@@ -226,7 +228,7 @@ jools.lazyValue(
 | Sets the context to be inline.
 */
 jools.lazyValue(
-	Context.prototype,
+	context.prototype,
 	'Inline',
 	function( )
 	{
@@ -248,8 +250,7 @@ jools.lazyValue(
 /*
 | Node export.
 */
-module.exports =
-	Context;
+module.exports = context;
 
 
 } )( );

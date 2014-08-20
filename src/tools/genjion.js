@@ -37,7 +37,7 @@ var
 		require( 'fs' ),
 	vm =
 		require( 'vm' ),
-	Formatter =
+	formatter =
 		require( '../format/formatter' ),
 	Generator =
 		require( '../jion/gen' ),
@@ -235,11 +235,9 @@ for(
 				inFilename
 			);
 
-		ast =
-			Generator.generate( jion );
+		ast = Generator.generate( jion );
 
-		output =
-			Formatter.format( ast );
+		output = formatter.format( ast );
 
 		jools.log(
 			'genjion',
@@ -251,8 +249,7 @@ for(
 			output
 		);
 
-		didSomething =
-			true;
+		didSomething = true;
 	}
 }
 

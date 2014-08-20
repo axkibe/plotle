@@ -28,7 +28,7 @@ var
 		require( '../../config' ),
 	fs =
 		require( 'fs' ),
-	Formatter =
+	formatter =
 		require( '../format/formatter' ),
 	Generator =
 		require( '../jion/gen' ),
@@ -115,11 +115,9 @@ GenerateJoobj.run =
 				resource.jionSrcPath
 			);
 
-		ast =
-			Generator.generate( jion );
+		ast = Generator.generate( jion );
 
-		output =
-			Formatter.format( ast );
+		output = formatter.format( ast );
 
 		if( !config.noWrite )
 		{

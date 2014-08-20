@@ -9,10 +9,9 @@
 | Export
 */
 var
-	Formatter;
+	formatter;
 
-Formatter =
-		{ };
+formatter = { };
 
 
 /*
@@ -30,8 +29,13 @@ var MAX_TEXT_WIDTH = 79;
 | Node imports.
 */
 var
-	Context =
-		require( './context' );
+	format;
+
+format =
+	{
+		context :
+			require( './context' )
+	};
 
 
 /*
@@ -2203,11 +2207,9 @@ formatVarDec =
 		text;
 
 	// true when this is a root function
-	isRootFunc =
-		false;
+	isRootFunc = false;
 
-	text =
-		'';
+	text = '';
 
 	if(
 		context.root
@@ -2219,8 +2221,7 @@ formatVarDec =
 			varDec.assign.reflex === 'ast.aFunc'
 		)
 		{
-			isRootFunc =
-				true;
+			isRootFunc = true;
 		}
 		else if(
 			varDec.assign.reflex === 'ast.anAssign'
@@ -2229,8 +2230,7 @@ formatVarDec =
 		)
 		{
 			// FUTURUE allow abitrary amount of assignments
-			isRootFunc =
-				true;
+			isRootFunc = true;
 		}
 	}
 
@@ -2244,27 +2244,22 @@ formatVarDec =
 		{
 			if( !context.inline )
 			{
-				text +=
-					context.tab + 'var' + '\n';
+				text += context.tab + 'var' + '\n';
 			}
 			else
 			{
-				text +=
-					'var ';
+				text += 'var ';
 			}
 		}
 
 		if( !context.inline )
 		{
-			context =
-				context.Inc;
+			context = context.Inc;
 
-			text +=
-				context.tab;
+			text += context.tab;
 		}
 
-		text +=
-			varDec.name;
+		text += varDec.name;
 	}
 	else
 	{
@@ -2316,8 +2311,7 @@ formatVarDec =
 				);
 		}
 
-		text +=
-			aText;
+		text += aText;
 	}
 
 	return text;
@@ -2338,8 +2332,7 @@ formatACommaList =
 		expr,
 		text;
 
-	text =
-		'';
+	text = '';
 
 	for(
 		var a = 0, aZ = list.ranks.length;
@@ -2356,7 +2349,8 @@ formatACommaList =
 				? ( ',' + context.sep )
 				: ''
 			)
-			+ formatExpression(
+			+
+			formatExpression(
 				context.Inc,
 				expr,
 				precTable.aCommaList
@@ -2398,8 +2392,7 @@ formatAVList =
 		a++
 	)
 	{
-		varDec =
-			vList.atRank( a );
+		varDec = vList.atRank( a );
 
 		if( CHECK )
 		{
@@ -2409,8 +2402,7 @@ formatAVList =
 			}
 		}
 
-		text +=
-			varDec.name;
+		text += varDec.name;
 
 		if( varDec.assign )
 		{
@@ -2484,22 +2476,26 @@ formatCapsule =
 /*
 | Formats a file.
 */
-Formatter.format =
+formatter.format =
 	function(
 		file
 	)
 {
 	var
-		context =
-			Context.create(
-				'root',
-					true
-			),
-		text =
-			'',
-		// do a seperator?
-		doSep =
-			false;
+		context,
+		text,
+		doSep;
+
+	context =
+		format.context.create(
+			'root',
+				true
+		);
+
+	text = '';
+
+	// do a seperator?
+	doSep = false;
 
 	if( file.header )
 	{
@@ -2509,16 +2505,14 @@ Formatter.format =
 				file.header
 			);
 
-		doSep =
-			true;
+		doSep = true;
 	}
 
 	if( file.preamble )
 	{
 		if( doSep )
 		{
-			text +=
-				'\n\n';
+			text += '\n\n';
 		}
 
 		text +=
@@ -2528,16 +2522,14 @@ Formatter.format =
 				true
 			);
 
-		doSep =
-			true;
+		doSep = true;
 	}
 
 	if( file.capsule )
 	{
 		if( doSep )
 		{
-			text +=
-				'\n\n';
+			text += '\n\n';
 		}
 
 		text +=
@@ -2623,8 +2615,7 @@ exprFormatter =
 */
 if( SERVER )
 {
-	module.exports =
-		Formatter;
+	module.exports = formatter;
 }
 
 
