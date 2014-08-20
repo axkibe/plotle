@@ -9,10 +9,9 @@
 | Export
 */
 var
-	Widgets;
+	widgets;
 
-Widgets =
-	Widgets || { };
+widgets = widgets || { };
 
 
 /*
@@ -33,7 +32,7 @@ var
 /*
 | Gets a style by its name.
 */
-Widgets.getStyle =
+widgets.getStyle =
 	function(
 		name,
 		accent

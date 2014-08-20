@@ -9,11 +9,9 @@
 | Export
 */
 var
-	Widgets;
+	widgets;
 
-
-Widgets =
-	Widgets || { };
+widgets = widgets || { };
 
 
 /*
@@ -33,13 +31,15 @@ var
 /*
 | Constructor.
 */
-var Widget =
-Widgets.Widget =
+var
+	Widget;
+
+Widget =
+widgets.Widget =
 	function( )
 {
-	throw new Error(
-		CHECK && 'initializing abstract'
-	);
+	// initializing abstract
+	throw new Error( );
 };
 
 

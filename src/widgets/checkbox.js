@@ -9,10 +9,9 @@
 | Export
 */
 var
-	Widgets;
+	widgets;
 
-Widgets =
-	Widgets || { };
+widgets = widgets || { };
 
 
 /*
@@ -40,7 +39,7 @@ if( JION )
 		name :
 			'CheckBox',
 		unit :
-			'Widgets',
+			'widgets',
 		attributes :
 			{
 				checked :
@@ -80,7 +79,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Widgets',
+									'widgets',
 								type :
 									'Widget',
 								func :
@@ -141,7 +140,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Widgets.Widget',
+			'widgets.Widget',
 		init :
 			[ ]
 	};
@@ -149,8 +148,9 @@ if( JION )
 
 
 var
-	CheckBox =
-		Widgets.CheckBox;
+	CheckBox;
+
+CheckBox = widgets.CheckBox;
 
 
 /*
@@ -359,7 +359,7 @@ CheckBox.prototype.draw =
 
 	var
 		style =
-			Widgets.getStyle(
+			widgets.getStyle(
 				this.style,
 				Accent.state(
 					this.hover
@@ -379,7 +379,7 @@ CheckBox.prototype.draw =
 	if( this.checked )
 	{
 		fabric.paint(
-			Widgets.getStyle(
+			widgets.getStyle(
 				'checkboxCheck',
 				Accent.NORMA
 			),

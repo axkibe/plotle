@@ -9,10 +9,9 @@
 | Export
 */
 var
-	Widgets;
+	widgets;
 
-
-Widgets = Widgets || { };
+widgets = widgets || { };
 
 
 /*
@@ -46,7 +45,7 @@ if( JION )
 			'Input',
 
 		unit :
-			'Widgets',
+			'widgets',
 
 		attributes :
 			{
@@ -78,7 +77,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Widgets',
+									'widgets',
 								type :
 									'Widget',
 								func :
@@ -104,7 +103,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Widgets',
+									'widgets',
 								type :
 									'Widget',
 								func :
@@ -183,7 +182,7 @@ if( JION )
 			},
 
 		subclass :
-			'Widgets.Widget',
+			'widgets.Widget',
 
 		init :
 			[ ]
@@ -192,8 +191,9 @@ if( JION )
 
 
 var
-	Input =
-		Widgets.Input;
+	Input;
+
+Input = widgets.Input;
 
 
 /*
@@ -476,7 +476,7 @@ jools.lazyValue(
 				),
 
 			style =
-				Widgets.getStyle(
+				widgets.getStyle(
 					this.style,
 					Accent.state(
 						false, // FIXME

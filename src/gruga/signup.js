@@ -21,7 +21,7 @@ var
 	design,
 	fontPool,
 	forms,
-	Widgets;
+	widgets;
 
 /*
 | Capsule
@@ -67,7 +67,7 @@ Gruga.SignUp =
 	forms.SignUp.create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'Sign Up',
 				'font',
@@ -84,7 +84,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'usernameLabel',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'username',
 				'font',
@@ -101,7 +101,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'emailLabel',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'email',
 				'font',
@@ -118,7 +118,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'passwordLabel',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'password',
 				'font',
@@ -135,7 +135,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'password2Label',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'repeat password',
 				'font',
@@ -152,7 +152,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'newsletterLabel',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'newsletter',
 				'font',
@@ -169,7 +169,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'errorLabel',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'',
 				'font',
@@ -186,7 +186,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'userInput',
-			Widgets.Input.create(
+			widgets.Input.create(
 				'style',
 					'input',
 				'font',
@@ -217,7 +217,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'emailInput',
-			Widgets.Input.create(
+			widgets.Input.create(
 				'style',
 					'input',
 				'font',
@@ -248,7 +248,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'passwordInput',
-			Widgets.Input.create(
+			widgets.Input.create(
 				'password',
 					true,
 				'style',
@@ -281,7 +281,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'password2Input',
-			Widgets.Input.create(
+			widgets.Input.create(
 				'password',
 					true,
 				'style',
@@ -314,7 +314,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'newsletterCheckBox',
-			Widgets.CheckBox.create(
+			widgets.CheckBox.create(
 				'style',
 					'checkbox',
 				'checked',
@@ -343,7 +343,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'newsletter2Label',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'Updates and News',
 				'font',
@@ -360,7 +360,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'newsletter3Label',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'Never going to be more than an email a month. For sure!',
 				'font',
@@ -377,7 +377,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'signupButton',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'genericButton',
 				'designFrame',
@@ -414,7 +414,7 @@ Gruga.SignUp =
 			),
 		'twig:add',
 		'closeButton',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'genericButton',
 				'designFrame',

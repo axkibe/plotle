@@ -21,7 +21,7 @@ var
 	design,
 	forms,
 	fontPool,
-	Widgets;
+	widgets;
 
 
 /*
@@ -65,7 +65,7 @@ Gruga.Login =
 	forms.Login.create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'Log In',
 				'font',
@@ -82,7 +82,7 @@ Gruga.Login =
 			),
 		'twig:add',
 		'usernameLabel',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'username',
 				'font',
@@ -99,7 +99,7 @@ Gruga.Login =
 			),
 		'twig:add',
 		'passwordLabel',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'password',
 				'font',
@@ -116,7 +116,7 @@ Gruga.Login =
 			),
 		'twig:add',
 		'errorLabel',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'',
 				'font',
@@ -133,7 +133,7 @@ Gruga.Login =
 			),
 		'twig:add',
 		'userInput',
-			Widgets.Input.create(
+			widgets.Input.create(
 				'style',
 					'input',
 				'font',
@@ -164,7 +164,7 @@ Gruga.Login =
 			),
 		'twig:add',
 		'passwordInput',
-			Widgets.Input.create(
+			widgets.Input.create(
 				'password',
 					true,
 				'style',
@@ -197,7 +197,7 @@ Gruga.Login =
 			),
 		'twig:add',
 		'loginButton',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'genericButton',
 				'designFrame',
@@ -234,7 +234,7 @@ Gruga.Login =
 			),
 		'twig:add',
 		'closeButton',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'genericButton',
 				'designFrame',

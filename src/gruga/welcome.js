@@ -21,7 +21,7 @@ var
 	design,
 	fontPool,
 	forms,
-	Widgets;
+	widgets;
 
 
 /*
@@ -55,7 +55,7 @@ Gruga.Welcome =
 	forms.Welcome.create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'Welcome',
 				'font',
@@ -72,7 +72,7 @@ Gruga.Welcome =
 			),
 		'twig:add',
 		'message1',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'Your registration was successful :-)',
 				'font',
@@ -89,7 +89,7 @@ Gruga.Welcome =
 			),
 		'twig:add',
 		'closeButton',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'genericButton',
 				'designFrame',

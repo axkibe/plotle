@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Widgets;
+	widgets;
 
-Widgets = Widgets || { };
+widgets = widgets || { };
 
 
 /*
@@ -42,7 +42,7 @@ if( JION )
 		name :
 			'Button',
 		unit :
-			'Widgets',
+			'widgets',
 		attributes :
 			{
 				designFrame :
@@ -82,7 +82,7 @@ if( JION )
 						concerns :
 							{
 								unit :
-									'Widgets',
+									'widgets',
 								type :
 									'Widget',
 								func :
@@ -206,7 +206,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Widgets.Widget',
+			'widgets.Widget',
 		init :
 			[ ]
 	};
@@ -214,8 +214,9 @@ if( JION )
 
 
 var
-	Button =
-		Widgets.Button;
+	Button;
+
+Button = widgets.Button;
 
 
 /*
@@ -311,7 +312,7 @@ jools.lazyValue(
 			);
 
 		style =
-			Widgets.getStyle(
+			widgets.getStyle(
 				this.style,
 				accent
 			);
@@ -385,7 +386,7 @@ jools.lazyValue(
 		if( this.icon )
 		{
 			style =
-				Widgets.getStyle(
+				widgets.getStyle(
 					this.iconStyle,
 					Accent.NORMA
 				);

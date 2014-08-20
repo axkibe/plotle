@@ -21,7 +21,7 @@ var
 	design,
 	fontPool,
 	forms,
-	Widgets;
+	widgets;
 
 /*
 | Capsule
@@ -54,7 +54,7 @@ Gruga.NoAccessToSpace =
 	forms.NoAccessToSpace.create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'',
 				'font',
@@ -71,7 +71,7 @@ Gruga.NoAccessToSpace =
 			),
 		'twig:add',
 		'message1',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'Sorry, you cannot port to this space or create it.',
 				'font',
@@ -88,7 +88,7 @@ Gruga.NoAccessToSpace =
 			),
 		'twig:add',
 		'okButton',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'genericButton',
 				'designFrame',

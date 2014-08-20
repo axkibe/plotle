@@ -21,7 +21,7 @@ var
 	design,
 	discs,
 	fontPool,
-	Widgets;
+	widgets;
 
 /*
 | Capsule
@@ -84,7 +84,7 @@ Gruga.createDisc =
 	discs.createDisc.create(
 		'twig:add',
 		'CreateNote',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'createButton',
 				'text',
@@ -119,7 +119,7 @@ Gruga.createDisc =
 			),
 		'twig:add',
 		'CreateLabel',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'createButton',
 				'text',
@@ -154,7 +154,7 @@ Gruga.createDisc =
 			),
 		'twig:add',
 		'createRelation',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'createButton',
 				'text',
@@ -191,7 +191,7 @@ Gruga.createDisc =
 			),
 		'twig:add',
 		'CreatePortal',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'createButton',
 				'text',

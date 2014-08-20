@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Widgets;
+	widgets;
 
-Widgets = Widgets || { };
+widgets = widgets || { };
 
 
 /*
@@ -30,7 +30,7 @@ if( JION )
 		name :
 			'Label',
 		unit :
-			'Widgets',
+			'widgets',
 		attributes :
 			{
 				// FIXME deduce from mark
@@ -128,7 +128,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'Widgets.Widget',
+			'widgets.Widget',
 		init :
 			[ ]
 	};
@@ -136,8 +136,9 @@ if( JION )
 
 
 var
-	Label =
-		Widgets.Label;
+	Label;
+
+Label = widgets.Label;
 
 
 /*

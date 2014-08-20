@@ -21,7 +21,7 @@ var
 	design,
 	fontPool,
 	forms,
-	Widgets;
+	widgets;
 
 /*
 | Capsule
@@ -53,7 +53,7 @@ Gruga.User =
 	forms.User.create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'Hello',
 				'font',
@@ -70,7 +70,7 @@ Gruga.User =
 			),
 		'twig:add',
 		'visitor1',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'You\'re currently an anonymous visitor!',
 				'font',
@@ -87,7 +87,7 @@ Gruga.User =
 			),
 		'twig:add',
 		'visitor2',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'Click on "sign up" or "log in"',
 				'font',
@@ -97,7 +97,7 @@ Gruga.User =
 			),
 		'twig:add',
 		'visitor3',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'on the control disc to the left',
 				'font',
@@ -114,7 +114,7 @@ Gruga.User =
 			),
 		'twig:add',
 		'visitor4',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'to register as an user.',
 				'font',
@@ -131,7 +131,7 @@ Gruga.User =
 			),
 		'twig:add',
 		'greeting1',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'This is your profile page!',
 				'font',
@@ -148,7 +148,7 @@ Gruga.User =
 			),
 		'twig:add',
 		'greeting2',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'In future you will be able to do stuff here,',
 				'font',
@@ -165,7 +165,7 @@ Gruga.User =
 			),
 		'twig:add',
 		'greeting3',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'like for example change your password.',
 				'font',
@@ -182,7 +182,7 @@ Gruga.User =
 			),
 		'twig:add',
 		'closeButton',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'genericButton',
 				'designFrame',

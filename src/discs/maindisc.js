@@ -147,13 +147,13 @@ if( JION )
 		twig :
 			{
 				'Button' :
-					'Widgets.Button',
+					'widgets.Button',
 				'CheckBox' :
-					'Widgets.Checkbox',
+					'widgets.Checkbox',
 				'Input' :
-					'Widgets.Input',
+					'widgets.Input',
 				'Label' :
-					'Widgets.Label'
+					'widgets.Label'
 			}
 	};
 }

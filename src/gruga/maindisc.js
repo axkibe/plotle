@@ -21,7 +21,7 @@ var
 	design,
 	discs,
 	fontPool,
-	Widgets;
+	widgets;
 
 
 /*
@@ -126,7 +126,7 @@ Gruga.mainDisc =
 	discs.mainDisc.create(
 		'twig:add',
 			'Normal',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'mainButton',
 				'icon',
@@ -159,7 +159,7 @@ Gruga.mainDisc =
 			),
 		'twig:add',
 			'Create',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'mainButton',
 				'visible',
@@ -196,7 +196,7 @@ Gruga.mainDisc =
 			),
 		'twig:add',
 			'Remove',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'mainButton',
 				'icon',
@@ -231,7 +231,7 @@ Gruga.mainDisc =
 			),
 		'twig:add',
 			'MoveTo',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'mainButton',
 				'icon',
@@ -266,7 +266,7 @@ Gruga.mainDisc =
 			),
 		'twig:add',
 			'Space',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'mainButton',
 				'designFrame',
@@ -315,7 +315,7 @@ Gruga.mainDisc =
 			),
 		'twig:add',
 			'User',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'mainButton',
 				'designFrame',
@@ -364,7 +364,7 @@ Gruga.mainDisc =
 			),
 		'twig:add',
 			'Login',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'mainButton',
 				'visible',
@@ -403,7 +403,7 @@ Gruga.mainDisc =
 			),
 		'twig:add',
 			'SignUp',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'mainButton',
 				'visible',

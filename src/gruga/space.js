@@ -21,7 +21,7 @@ var
 	design,
 	forms,
 	fontPool,
-	Widgets;
+	widgets;
 
 
 /*
@@ -54,7 +54,7 @@ Gruga.Space =
 	forms.Space.create(
 		'twig:add',
 		'headline',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'',
 				'font',
@@ -71,7 +71,7 @@ Gruga.Space =
 			),
 		'twig:add',
 		'message1',
-			Widgets.Label.create(
+			widgets.Label.create(
 				'text',
 					'In future space settings can be altered here.',
 				'font',
@@ -88,7 +88,7 @@ Gruga.Space =
 			),
 		'twig:add',
 		'closeButton',
-			Widgets.Button.create(
+			widgets.Button.create(
 				'style',
 					'genericButton',
 				'designFrame',
