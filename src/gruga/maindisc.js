@@ -122,8 +122,8 @@ dv =
 		}
 	};
 
-Gruga.MainDisc =
-	discs.MainDisc.create(
+Gruga.mainDisc =
+	discs.mainDisc.create(
 		'twig:add',
 			'Normal',
 			Widgets.Button.create(

@@ -137,10 +137,10 @@ if( JION )
 			[ ],
 		twig :
 			{
-				'MainDisc' :
-					'discs.MainDisc',
-				'CreateDisc' :
-					'discs.CreateDisc'
+				'mainDisc' :
+					'discs.mainDisc',
+				'createDisc' :
+					'discs.createDisc'
 			}
 	};
 }
@@ -254,7 +254,7 @@ jockey.prototype.dragStart =
 		bubble;
 
 	bubble =
-		this.twig.MainDisc.dragStart(
+		this.twig.mainDisc.dragStart(
 			p,
 			shift,
 			ctrl
@@ -268,7 +268,7 @@ jockey.prototype.dragStart =
 	if( this.mode === 'Create' )
 	{
 		return (
-			this.twig.CreateDisc.dragStart(
+			this.twig.createDisc.dragStart(
 				p,
 				shift,
 				ctrl
@@ -290,10 +290,10 @@ jockey.prototype.draw =
 {
 	if( this.mode === 'Create' )
 	{
-		this.twig.CreateDisc.draw( fabric );
+		this.twig.createDisc.draw( fabric );
 	}
 
-	this.twig.MainDisc.draw( fabric );
+	this.twig.mainDisc.draw( fabric );
 };
 
 
@@ -311,7 +311,7 @@ jockey.prototype.pointingHover =
 		hover;
 
 	hover =
-		this.twig.MainDisc.pointingHover(
+		this.twig.mainDisc.pointingHover(
 			p,
 			shift,
 			ctrl
@@ -325,7 +325,7 @@ jockey.prototype.pointingHover =
 	if( this.mode === 'Create' )
 	{
 		return (
-			this.twig.CreateDisc.pointingHover(
+			this.twig.createDisc.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -363,7 +363,7 @@ jockey.prototype.click =
 		start;
 
 	start =
-		this.twig.MainDisc.click(
+		this.twig.mainDisc.click(
 			p,
 			shift,
 			ctrl
@@ -377,7 +377,7 @@ jockey.prototype.click =
 	if( this.mode === 'Create' )
 	{
 		return (
-			this.twig.CreateDisc.click(
+			this.twig.createDisc.click(
 				p,
 				shift,
 				ctrl
@@ -401,20 +401,20 @@ jockey.prototype.pushButton =
 {
 	switch( path.get( 2 ) )
 	{
-		case 'CreateDisc' :
+		case 'createDisc' :
 
 			return (
-				this.twig.CreateDisc.pushButton(
+				this.twig.createDisc.pushButton(
 					path,
 					shift,
 					ctrl
 				)
 			);
 
-		case 'MainDisc' :
+		case 'mainDisc' :
 
 			return (
-				this.twig.MainDisc.pushButton(
+				this.twig.mainDisc.pushButton(
 					path,
 					shift,
 					ctrl

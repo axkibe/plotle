@@ -15,11 +15,9 @@
 . CheckBox
 . Chop
 . Create
-. CreateDisc
 . CreateLabel
 . CreateNote
 . CreatePortal
-. Disc
 > Doc
 . DocItem
 . FOCUS
@@ -32,13 +30,11 @@
 . Invert
 . Item
 . ItemResize
-. Jockey
 > Label
 . Limit
 . Link
 . Login
 . MAX_INTEGER
-. MainDisc
 . Mark
 . MoveTo
 . NORMA
@@ -316,6 +312,7 @@
 > create
 . createArbitrary
 . createButton
+. createDisc
 > createElement
 . createFromJSON
 . createGeneric
@@ -488,6 +485,7 @@
 . itemDrag
 . itemPath
 . itemType
+. jockey
 > join
 . json
 . key
@@ -515,6 +513,7 @@
 . magic
 > mail
 . mainButton
+. mainDisc
 . margin
 > marginLeft
 > marginRight

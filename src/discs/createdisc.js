@@ -38,7 +38,7 @@ if( JION )
 {
 	return {
 		name :
-			'CreateDisc',
+			'createDisc',
 		unit :
 			'discs',
 		attributes :
@@ -159,14 +159,15 @@ if( JION )
 
 
 var
-	CreateDisc =
-		discs.CreateDisc;
+	createDisc;
+
+createDisc = discs.createDisc;
 
 
 /*
 | Initializes the create disc.
 */
-CreateDisc.prototype._init =
+createDisc.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -205,7 +206,7 @@ CreateDisc.prototype._init =
 				ranks[ r ],
 			path,
 			focusAccent =
-				CreateDisc._isActiveButton(
+				createDisc._isActiveButton(
 					this.action,
 					wname
 				);
@@ -245,7 +246,7 @@ CreateDisc.prototype._init =
 | The disc panel's fabric.
 */
 jools.lazyValue(
-	CreateDisc.prototype,
+	createDisc.prototype,
 	'_fabric',
 	function( )
 	{
@@ -291,7 +292,7 @@ jools.lazyValue(
 /*
 | A button of the main disc has been pushed.
 */
-CreateDisc.prototype.pushButton =
+createDisc.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -395,7 +396,7 @@ CreateDisc.prototype.pushButton =
 /*
 | Draws the disc panel.
 */
-CreateDisc.prototype.draw =
+createDisc.prototype.draw =
 	function(
 		fabric
 	)
@@ -416,7 +417,7 @@ CreateDisc.prototype.draw =
 /*
 | Returns true if point is on the disc panel.
 */
-CreateDisc.prototype.pointingHover =
+createDisc.prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -483,7 +484,7 @@ CreateDisc.prototype.pointingHover =
 /*
 | Checks if the user clicked something on the panel.
 */
-CreateDisc.prototype.click =
+createDisc.prototype.click =
 	function(
 		p,
 		shift,
@@ -550,7 +551,7 @@ CreateDisc.prototype.click =
 /*
 | User is inputing text.
 */
-CreateDisc.prototype.input =
+createDisc.prototype.input =
 	function(
 		// text
 	)
@@ -562,7 +563,7 @@ CreateDisc.prototype.input =
 /*
 | Cycles the focus
 */
-CreateDisc.prototype.cycleFocus =
+createDisc.prototype.cycleFocus =
 	function(
 		// dir
 	)
@@ -578,7 +579,7 @@ CreateDisc.prototype.cycleFocus =
 /*
 | User is pressing a special key.
 */
-CreateDisc.prototype.specialKey =
+createDisc.prototype.specialKey =
 	function(
 	//	key,
 	//	shift,
@@ -592,7 +593,7 @@ CreateDisc.prototype.specialKey =
 /*
 | Start of a dragging operation.
 */
-CreateDisc.prototype.dragStart =
+createDisc.prototype.dragStart =
 	function(
 		p
 		// shift,
@@ -630,7 +631,7 @@ CreateDisc.prototype.dragStart =
 | Returns true if the button called 'wname'
 | should be highlighted for current 'action'
 */
-CreateDisc._isActiveButton =
+createDisc._isActiveButton =
 	function(
 		action,  // the action
 		wname    // the widget name

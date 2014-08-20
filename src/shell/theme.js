@@ -189,7 +189,7 @@ theme =
 		/*
 		| The main disc.
 		*/
-		MainDisc :
+		mainDisc :
 		{
 			width :
 				100,
@@ -253,7 +253,7 @@ theme =
 		/*
 		| The creation disc.
 		*/
-		CreateDisc :
+		createDisc :
 		{
 
 			width :

@@ -212,11 +212,11 @@ Shell =
 			'view',
 				view,
 			'twig:add',
-			'MainDisc',
-				Gruga.MainDisc,
+			'mainDisc',
+				Gruga.mainDisc,
 			'twig:add',
-			'CreateDisc',
-				Gruga.CreateDisc
+			'createDisc',
+				Gruga.createDisc
 		);
 
 	this.mark = Mark.Vacant.create( );

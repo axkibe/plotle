@@ -80,8 +80,8 @@ dv =
 		}
 	};
 
-Gruga.CreateDisc =
-	discs.CreateDisc.create(
+Gruga.createDisc =
+	discs.createDisc.create(
 		'twig:add',
 		'CreateNote',
 			Widgets.Button.create(

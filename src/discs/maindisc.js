@@ -37,7 +37,7 @@ if( JION )
 {
 	return {
 		name :
-			'MainDisc',
+			'mainDisc',
 		unit :
 			'discs',
 		attributes :
@@ -160,14 +160,15 @@ if( JION )
 
 
 var
-	MainDisc =
-		discs.MainDisc;
+	mainDisc;
+
+mainDisc = discs.mainDisc;
 
 
 /*
 | Initializes the main disc.
 */
-MainDisc.prototype._init =
+mainDisc.prototype._init =
 	function(
 		inherit
 	)
@@ -314,7 +315,7 @@ MainDisc.prototype._init =
 | FUTURE make user an own object.
 */
 jools.lazyValue(
-	MainDisc.prototype,
+	mainDisc.prototype,
 	'_userIsGuest',
 	function( )
 	{
@@ -332,7 +333,7 @@ jools.lazyValue(
 | The disc panel's fabric.
 */
 jools.lazyValue(
-	MainDisc.prototype,
+	mainDisc.prototype,
 	'_fabric',
 	function( )
 	{
@@ -377,7 +378,7 @@ jools.lazyValue(
 /*
 | A button of the main disc has been pushed.
 */
-MainDisc.prototype.pushButton =
+mainDisc.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -424,7 +425,7 @@ MainDisc.prototype.pushButton =
 /*
 | Draws the disc panel.
 */
-MainDisc.prototype.draw =
+mainDisc.prototype.draw =
 	function(
 		fabric
 	)
@@ -441,7 +442,7 @@ MainDisc.prototype.draw =
 /*
 | Returns true if point is on the disc panel.
 */
-MainDisc.prototype.pointingHover =
+mainDisc.prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -504,7 +505,7 @@ MainDisc.prototype.pointingHover =
 /*
 | Checks if the user clicked something on the panel
 */
-MainDisc.prototype.click =
+mainDisc.prototype.click =
 	function(
 		p,
 		shift,
@@ -573,7 +574,7 @@ MainDisc.prototype.click =
 /*
 | User is inputing text.
 */
-MainDisc.prototype.input =
+mainDisc.prototype.input =
 	function(
 		// text
 	)
@@ -585,7 +586,7 @@ MainDisc.prototype.input =
 /*
 | User is pressing a special key.
 */
-MainDisc.prototype.specialKey =
+mainDisc.prototype.specialKey =
 	function(
 		// key,
 		// shift,
@@ -599,7 +600,7 @@ MainDisc.prototype.specialKey =
 /*
 | Start of a dragging operation.
 */
-MainDisc.prototype.dragStart =
+mainDisc.prototype.dragStart =
 	function(
 		p
 		// shift,
