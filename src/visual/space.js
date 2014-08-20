@@ -133,15 +133,14 @@ if( JION )
 			true,
 		twig :
 			{
-				// FUTURE
-				//'Note' :
-				//	'visual.Note',
-				//'Label' :
-				//	'visual.Label',
-				//'Relation' :
-				//	'visual.Relation',
-				//'Portal' :
-				//	'visual.Portal'
+				'Note' :
+					'visual.Note',
+				'Label' :
+					'visual.Label',
+				'Relation' :
+					'visual.Relation',
+				'Portal' :
+					'visual.Portal'
 			}
 	};
 }

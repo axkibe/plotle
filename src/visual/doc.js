@@ -106,9 +106,8 @@ if( JION )
 			true,
 		twig :
 			{
-				// FUTURE
-				//'Para' :
-				//	'visual.Para'
+				'Para' :
+					'visual.Para'
 			},
 		node :
 			true
