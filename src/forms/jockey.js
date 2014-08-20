@@ -111,8 +111,8 @@ if( JION )
 		twig :
 			{
 				/* FUTURE
-				'Login' :
-					'forms.Login',
+				'login' :
+					'forms.login',
 				'MoveTo' :
 					'forms.MoveTo',
 				'NoAccessToSpace' :

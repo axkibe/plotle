@@ -21,7 +21,6 @@
 > Doc
 . DocItem
 . FOCUS
-. Form
 . HOFOC
 . HOVER
 . Help
@@ -33,7 +32,6 @@
 > Label
 . Limit
 . Link
-. Login
 . MAX_INTEGER
 . Mark
 . MoveTo
@@ -395,6 +393,7 @@
 . focusedItem
 > font
 > fontsize
+. form
 . forms
 . frame
 > freeze

@@ -363,7 +363,7 @@ Gruga.mainDisc =
 						( -Math.PI / 2 )
 			),
 		'twig:add',
-			'Login',
+			'login',
 			widgets.Button.create(
 				'style',
 					'mainButton',

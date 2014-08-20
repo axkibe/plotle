@@ -58,7 +58,7 @@ var
 /**/			'Help' :
 /**/				true,
 /**/			// Logging in.
-/**/			'Login' :
+/**/			'login' :
 /**/				true,
 /**/			// Moveing To another space.
 /**/			'MoveTo' :
@@ -169,8 +169,8 @@ Shell =
 			'view',
 				view,
 			'twig:add',
-			'Login',
-				Gruga.Login,
+			'login',
+				Gruga.login,
 			'twig:add',
 			'MoveTo',
 				Gruga.MoveTo,
@@ -648,7 +648,7 @@ Shell.prototype._getCurrentDisplay =
 
 			return this.$space;
 
-		case 'Login' :
+		case 'login' :
 		case 'MoveTo' :
 		case 'NoAccessToSpace' :
 		case 'NonExistingSpace' :
@@ -1539,9 +1539,9 @@ Shell.prototype.onAuth =
 {
 	// if in login mode this is a tempted login
 
-	if( this._$mode === 'Login' )
+	if( this._$mode === 'login' )
 	{
-		this._$formJockey.get( 'Login' ).onAuth(
+		this._$formJockey.get( 'login' ).onAuth(
 			ok,
 			username,
 			passhash,

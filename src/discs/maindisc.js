@@ -209,10 +209,9 @@ mainDisc.prototype._init =
 
 		switch( wname )
 		{
-			case 'Login' :
+			case 'login' :
 
-				visible =
-					true;
+				visible = true;
 
 				text =
 					this._userIsGuest
@@ -402,7 +401,8 @@ mainDisc.prototype.pushButton =
 	buttonName = path.get( 4 );
 
 	if(
-		buttonName === 'Login' &&
+		buttonName === 'login'
+		&&
 		!this._userIsGuest
 	)
 	{

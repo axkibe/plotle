@@ -32,7 +32,7 @@ var
 
 
 var
-	// Login control
+	// login control
 	loginButton =
 	{
 		width :
@@ -61,8 +61,8 @@ var
 /*
 | Layout
 */
-Gruga.Login =
-	forms.Login.create(
+Gruga.login =
+	forms.login.create(
 		'twig:add',
 		'headline',
 			widgets.Label.create(

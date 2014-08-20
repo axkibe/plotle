@@ -38,7 +38,7 @@ if( JION )
 {
 	return {
 		name :
-			'Login',
+			'login',
 		unit :
 			'forms',
 		attributes :
@@ -145,15 +145,15 @@ if( JION )
 
 
 var
-	Login;
+	login;
 
-Login = forms.Login;
+login = forms.login;
 
 
 /*
 | The login form.
 */
-Login.prototype._init =
+login.prototype._init =
 	function(
 		inherit
 	)
@@ -168,7 +168,7 @@ Login.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-Login.prototype.pushButton =
+login.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -218,7 +218,7 @@ Login.prototype.pushButton =
 /*
 | Logins the user
 */
-Login.prototype.login =
+login.prototype.login =
 	function( )
 {
 	var
@@ -302,7 +302,7 @@ Login.prototype.login =
 /*
 | User is pressing a special key.
 */
-Login.prototype.specialKey =
+login.prototype.specialKey =
 	function(
 		key,
 		shift,
@@ -337,7 +337,7 @@ Login.prototype.specialKey =
 /*
 | an auth ( login ) operation completed.
 */
-Login.prototype.onAuth =
+login.prototype.onAuth =
 	function(
 		ok,
 		username,
@@ -403,7 +403,7 @@ Login.prototype.onAuth =
 /*
 | Clears all fields
 */
-Login.prototype.clear =
+login.prototype.clear =
 	function( )
 {
 	// FUTURE combine calls
