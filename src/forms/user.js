@@ -61,7 +61,7 @@ if( JION )
 								unit :
 									'forms',
 								type :
-									'Form',
+									'form',
 								func :
 									'concernsMark',
 								args :
@@ -130,7 +130,7 @@ if( JION )
 			},
 
 		subclass :
-			'forms.Form',
+			'forms.form',
 
 		init :
 			[
@@ -228,7 +228,7 @@ User.prototype._init =
 				!isGuest
 		);
 
-	forms.Form.init.call(
+	forms.form.init.call(
 		this,
 		inherit
 	);

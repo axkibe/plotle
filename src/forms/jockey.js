@@ -103,7 +103,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.Form',
+			'forms.form',
 		init :
 			[
 				'twigDup'

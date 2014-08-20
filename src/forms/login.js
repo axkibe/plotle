@@ -61,7 +61,7 @@ if( JION )
 								unit :
 									'forms',
 								type :
-									'Form',
+									'form',
 								func :
 									'concernsMark',
 								args :
@@ -133,7 +133,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.Form',
+			'forms.form',
 		init :
 			[
 				'inherit'
@@ -158,7 +158,7 @@ Login.prototype._init =
 		inherit
 	)
 {
-	forms.Form.init.call(
+	forms.form.init.call(
 		this,
 		inherit
 	);
@@ -324,7 +324,7 @@ Login.prototype.specialKey =
 	}
 
 	return (
-		forms.Form.prototype.specialKey.call(
+		forms.form.prototype.specialKey.call(
 			this,
 			key,
 			shift,

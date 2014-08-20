@@ -60,7 +60,7 @@ if( JION )
 								unit :
 									'forms',
 								type :
-									'Form',
+									'form',
 								func :
 									'concernsMark',
 								args :
@@ -126,7 +126,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.Form',
+			'forms.form',
 		init :
 			[
 				'inherit',
@@ -167,7 +167,7 @@ Space.prototype._init =
 			);
 	}
 
-	forms.Form.init.call(
+	forms.form.init.call(
 		this,
 		inherit
 	);
