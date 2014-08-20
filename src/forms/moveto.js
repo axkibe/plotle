@@ -36,7 +36,7 @@ if( JION )
 {
 	return {
 		name :
-			'MoveTo',
+			'moveTo',
 		unit :
 			'forms',
 		attributes :
@@ -141,15 +141,15 @@ if( JION )
 }
 
 var
-	MoveTo;
+	moveTo;
 
-MoveTo = forms.MoveTo;
+moveTo = forms.moveTo;
 
 
 /*
 | The moveto form.
 */
-MoveTo.prototype._init =
+moveTo.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -190,7 +190,7 @@ MoveTo.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-MoveTo.prototype.pushButton =
+moveTo.prototype.pushButton =
 	function(
 		path
 		// shift,

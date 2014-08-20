@@ -50,8 +50,8 @@ var
 /*
 | Layout
 */
-Gruga.NoAccessToSpace =
-	forms.NoAccessToSpace.create(
+Gruga.noAccessToSpace =
+	forms.noAccessToSpace.create(
 		'twig:add',
 		'headline',
 			widgets.Label.create(

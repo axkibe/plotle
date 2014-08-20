@@ -61,17 +61,17 @@ var
 /**/			'login' :
 /**/				true,
 /**/			// Moveing To another space.
-/**/			'MoveTo' :
+/**/			'moveTo' :
 /**/				true,
 /**/			// Standard selection, moving stuff around.
 /**/			'Normal' :
 /**/				true,
 /**/			// User does not have access to a space.
-/**/			'NoAccessToSpace' :
+/**/			'noAccessToSpace' :
 /**/				true,
 /**/			// Space does not exist,
 /**/			// but user is allowed to create it.
-/**/			'NonExistingSpace' :
+/**/			'nonExistingSpace' :
 /**/				true,
 /**/			// Signing up
 /**/			'SignUp' :
@@ -172,14 +172,14 @@ Shell =
 			'login',
 				Gruga.login,
 			'twig:add',
-			'MoveTo',
-				Gruga.MoveTo,
+			'moveTo',
+				Gruga.moveTo,
 			'twig:add',
-			'NoAccessToSpace',
-				Gruga.NoAccessToSpace,
+			'noAccessToSpace',
+				Gruga.noAccessToSpace,
 			'twig:add',
-			'NonExistingSpace',
-				Gruga.NonExistingSpace,
+			'nonExistingSpace',
+				Gruga.nonExistingSpace,
 			'twig:add',
 			'SignUp',
 				Gruga.SignUp,
@@ -649,9 +649,9 @@ Shell.prototype._getCurrentDisplay =
 			return this.$space;
 
 		case 'login' :
-		case 'MoveTo' :
-		case 'NoAccessToSpace' :
-		case 'NonExistingSpace' :
+		case 'moveTo' :
+		case 'noAccessToSpace' :
+		case 'nonExistingSpace' :
 		case 'SignUp' :
 		case 'Space' :
 		case 'User' :
@@ -1427,18 +1427,18 @@ Shell.prototype.onAquireSpace =
 		case 'nonexistent' :
 
 			shell.setPath(
-				shell._$formJockey.twig.NonExistingSpace.path
+				shell._$formJockey.twig.nonExistingSpace.path
 				.Append( 'nonSpaceUser' ),
 				asw.spaceUser
 			);
 
 			shell.setPath(
-				shell._$formJockey.twig.NonExistingSpace.path
+				shell._$formJockey.twig.nonExistingSpace.path
 				.Append( 'nonSpaceTag' ),
 				asw.spaceTag
 			);
 
-			shell.setMode( 'NonExistingSpace' );
+			shell.setMode( 'nonExistingSpace' );
 
 			this._draw( );
 
@@ -1448,7 +1448,7 @@ Shell.prototype.onAquireSpace =
 
 			// FIXME remove get
 			path =
-				this._$formJockey.get( 'NoAccessToSpace' ).path;
+				this._$formJockey.get( 'noAccessToSpace' ).path;
 
 			this._$formJockey =
 				this._$formJockey.create(
@@ -1458,7 +1458,7 @@ Shell.prototype.onAquireSpace =
 						asw.spaceTag
 				);
 
-			shell.setMode( 'NoAccessToSpace' );
+			shell.setMode( 'noAccessToSpace' );
 
 			this._draw( );
 

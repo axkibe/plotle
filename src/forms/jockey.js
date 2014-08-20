@@ -113,12 +113,12 @@ if( JION )
 				/* FUTURE
 				'login' :
 					'forms.login',
-				'MoveTo' :
-					'forms.MoveTo',
-				'NoAccessToSpace' :
-					'forms.NoAccessToSpace',
-				'NonExistingSpace' :
-					'forms.NonExistingSpace',
+				'moveTo' :
+					'forms.moveTo',
+				'noAccessToSpace' :
+					'forms.noAccessToSpace',
+				'nonExistingSpace' :
+					'forms.nonExistingSpace',
 				'SignUp' :
 					'forms.SignUp',
 				'Space' :

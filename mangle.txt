@@ -34,10 +34,9 @@
 . Link
 . MAX_INTEGER
 . Mark
-. MoveTo
 . NORMA
-. NoAccessToSpace
-. NonExistingSpace
+. noAccessToSpace
+. nonExistingSpace
 . Normal
 > Note
 . PC

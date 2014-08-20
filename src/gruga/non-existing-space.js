@@ -61,8 +61,8 @@ var
 /*
 | Layout
 */
-Gruga.NonExistingSpace =
-	forms.NonExistingSpace.create(
+Gruga.nonExistingSpace =
+	forms.nonExistingSpace.create(
 		'twig:add',
 		'headline',
 			widgets.Label.create(

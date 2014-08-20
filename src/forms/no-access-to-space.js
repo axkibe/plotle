@@ -35,7 +35,7 @@ if( JION )
 {
 	return {
 		name :
-			'NoAccessToSpace',
+			'noAccessToSpace',
 		unit :
 			'forms',
 		attributes :
@@ -142,15 +142,15 @@ if( JION )
 
 
 var
-	NoAccessToSpace;
+	noAccessToSpace;
 
-NoAccessToSpace = forms.NoAccessToSpace;
+noAccessToSpace = forms.noAccessToSpace;
 
 
 /*
 | The no access to space form.
 */
-NoAccessToSpace.prototype._init =
+noAccessToSpace.prototype._init =
 	function(
 		inherit
 	)
@@ -165,7 +165,7 @@ NoAccessToSpace.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-NoAccessToSpace.prototype.pushButton =
+noAccessToSpace.prototype.pushButton =
 	function(
 		path
 		// shift,

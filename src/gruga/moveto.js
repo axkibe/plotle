@@ -69,8 +69,8 @@ var
 /*
 | Layout
 */
-Gruga.MoveTo =
-	forms.MoveTo.create(
+Gruga.moveTo =
+	forms.moveTo.create(
 		'twig:add',
 		'headline',
 			widgets.Label.create(

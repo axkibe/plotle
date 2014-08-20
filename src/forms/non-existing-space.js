@@ -39,7 +39,7 @@ if( JION )
 {
 	return {
 		name :
-			'NonExistingSpace',
+			'nonExistingSpace',
 		unit :
 			'forms',
 		attributes :
@@ -166,15 +166,15 @@ if( JION )
 
 
 var
-	NonExistingSpace;
+	nonExistingSpace;
 
-NonExistingSpace = forms.NonExistingSpace;
+nonExistingSpace = forms.nonExistingSpace;
 
 
 /*
 | The space does not exist form.
 */
-NonExistingSpace.prototype._init =
+nonExistingSpace.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -209,7 +209,7 @@ NonExistingSpace.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-NonExistingSpace.prototype.pushButton =
+nonExistingSpace.prototype.pushButton =
 	function(
 		path
 		// shift,

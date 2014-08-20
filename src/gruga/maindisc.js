@@ -230,7 +230,7 @@ Gruga.mainDisc =
 					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
-			'MoveTo',
+			'moveTo',
 			widgets.Button.create(
 				'style',
 					'mainButton',

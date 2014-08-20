@@ -174,4 +174,41 @@ Space.prototype._init =
 };
 
 
+/*
+| A button of the form has been pushed.
+*/
+Space.prototype.pushButton =
+	function(
+		path
+		// shift,
+		// ctrl
+	)
+{
+	var
+		buttonName;
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.get( 2 ) !== this.reflexName )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	buttonName = path.get( 4 );
+
+	switch( buttonName )
+	{
+		case 'closeButton' :
+
+			shell.setMode( 'Normal' );
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
+};
+
 } )( );
