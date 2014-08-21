@@ -50,7 +50,6 @@
 . Scrollbar
 . Set
 . Shorten
-. User
 . Vacant
 . Welcome
 . Widget

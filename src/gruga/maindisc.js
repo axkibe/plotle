@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Gruga;
+	gruga;
 
-Gruga = Gruga || { };
+gruga = gruga || { };
 
 
 /*
@@ -122,7 +122,7 @@ dv =
 		}
 	};
 
-Gruga.mainDisc =
+gruga.mainDisc =
 	discs.mainDisc.create(
 		'twig:add',
 			'Normal',
@@ -314,7 +314,7 @@ Gruga.mainDisc =
 					- Math.PI / 2
 			),
 		'twig:add',
-			'User',
+			'user',
 			widgets.Button.create(
 				'style',
 					'mainButton',

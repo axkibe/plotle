@@ -25,7 +25,7 @@ var
 	euclid,
 	fontPool,
 	forms,
-	Gruga,
+	gruga,
 	jion,
 	Mark,
 	Net,
@@ -79,8 +79,8 @@ var
 /**/			// space view
 /**/			'space' :
 /**/				true,
-/**/			// User view
-/**/			'User' :
+/**/			// user view
+/**/			'user' :
 /**/				true,
 /**/			// Welcome view
 /**/			'Welcome' :
@@ -170,28 +170,28 @@ Shell =
 				view,
 			'twig:add',
 			'login',
-				Gruga.login,
+				gruga.login,
 			'twig:add',
 			'moveTo',
-				Gruga.moveTo,
+				gruga.moveTo,
 			'twig:add',
 			'noAccessToSpace',
-				Gruga.noAccessToSpace,
+				gruga.noAccessToSpace,
 			'twig:add',
 			'nonExistingSpace',
-				Gruga.nonExistingSpace,
+				gruga.nonExistingSpace,
 			'twig:add',
 			'signUp',
-				Gruga.signUp,
+				gruga.signUp,
 			'twig:add',
 			'space',
-				Gruga.space,
+				gruga.space,
 			'twig:add',
-			'User',
-				Gruga.User,
+			'user',
+				gruga.user,
 			'twig:add',
 			'Welcome',
-				Gruga.Welcome
+				gruga.Welcome
 		);
 
 	this._$discJockey =
@@ -213,10 +213,10 @@ Shell =
 				view,
 			'twig:add',
 			'mainDisc',
-				Gruga.mainDisc,
+				gruga.mainDisc,
 			'twig:add',
 			'createDisc',
-				Gruga.createDisc
+				gruga.createDisc
 		);
 
 	this.mark = Mark.Vacant.create( );
@@ -654,7 +654,7 @@ Shell.prototype._getCurrentDisplay =
 		case 'nonExistingSpace' :
 		case 'signUp' :
 		case 'space' :
-		case 'User' :
+		case 'user' :
 		case 'Welcome' :
 
 			return (

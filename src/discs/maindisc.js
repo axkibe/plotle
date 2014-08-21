@@ -247,25 +247,21 @@ mainDisc.prototype._init =
 
 				text = this.spaceUser + ':' + this.spaceTag;
 
-				visible =
-					true;
+				visible = true;
 
 				break;
 
-			case 'User' :
+			case 'user' :
 
-				text =
-					this.username;
+				text = this.username;
 
-				visible =
-					true;
+				visible = true;
 
 				break;
 
 			default :
 
-				visible =
-					true;
+				visible = true;
 
 				break;
 		}

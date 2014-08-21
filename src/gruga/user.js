@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Gruga;
+	gruga;
 
-Gruga = Gruga || { };
+gruga = gruga || { };
 
 
 /*
@@ -49,8 +49,8 @@ var closeButton =
 /*
 | Layout
 */
-Gruga.User =
-	forms.User.create(
+gruga.user =
+	forms.user.create(
 		'twig:add',
 		'headline',
 			widgets.Label.create(

@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Gruga;
+	gruga;
 
-Gruga = Gruga || { };
+gruga = gruga || { };
 
 
 /*
@@ -50,7 +50,7 @@ var
 /*
 | Layout
 */
-Gruga.space =
+gruga.space =
 	forms.space.create(
 		'twig:add',
 		'headline',

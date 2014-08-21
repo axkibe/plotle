@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Gruga;
+	gruga;
 
-Gruga = Gruga || { };
+gruga = gruga || { };
 
 
 /*
@@ -80,7 +80,7 @@ dv =
 		}
 	};
 
-Gruga.createDisc =
+gruga.createDisc =
 	discs.createDisc.create(
 		'twig:add',
 		'CreateNote',

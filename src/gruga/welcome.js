@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Gruga;
+	gruga;
 
-Gruga = Gruga || { };
+gruga = gruga || { };
 
 
 /*
@@ -51,7 +51,7 @@ var
 /*
 | Layout
 */
-Gruga.Welcome =
+gruga.Welcome =
 	forms.Welcome.create(
 		'twig:add',
 		'headline',

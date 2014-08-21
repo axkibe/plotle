@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Gruga;
+	gruga;
 
-Gruga = Gruga || { };
+gruga = gruga || { };
 
 
 /*
@@ -61,7 +61,7 @@ var
 /*
 | Layout
 */
-Gruga.nonExistingSpace =
+gruga.nonExistingSpace =
 	forms.nonExistingSpace.create(
 		'twig:add',
 		'headline',

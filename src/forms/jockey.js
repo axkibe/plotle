@@ -123,8 +123,8 @@ if( JION )
 					'forms.signUp',
 				'space' :
 					'forms.space',
-				'User' :
-					'forms.User',
+				'user' :
+					'forms.user',
 				'Welcome' :
 					'forms.Welcome'
 				*/
