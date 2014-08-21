@@ -40,7 +40,7 @@
 . PSE_M1
 > Para
 > Portal
-. Range
+. range
 > Relation
 . Remove
 . Scrollbar

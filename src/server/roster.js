@@ -650,13 +650,13 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/mark/mark.js',
+			'src/marks/mark.js',
 		'inBundle',
 			true
 	),
 	Resource.create(
 		'filePath',
-			'src/mark/caret.js',
+			'src/marks/caret.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -664,7 +664,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/mark/item.js',
+			'src/marks/item.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -672,7 +672,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/mark/range.js',
+			'src/marks/range.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -680,7 +680,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/mark/vacant.js',
+			'src/marks/vacant.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -688,7 +688,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/mark/widget.js',
+			'src/marks/widget.js',
 		'hasJion',
 			true,
 		'inBundle',
