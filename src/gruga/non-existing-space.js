@@ -99,7 +99,7 @@ gruga.nonExistingSpace =
 			),
 		'twig:add',
 		'noButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'genericButton',
 				'designFrame',
@@ -136,7 +136,7 @@ gruga.nonExistingSpace =
 			),
 		'twig:add',
 		'yesButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'genericButton',
 				'designFrame',

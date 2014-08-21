@@ -197,7 +197,7 @@ gruga.login =
 			),
 		'twig:add',
 		'loginButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'genericButton',
 				'designFrame',
@@ -234,7 +234,7 @@ gruga.login =
 			),
 		'twig:add',
 		'closeButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'genericButton',
 				'designFrame',

@@ -84,7 +84,7 @@ gruga.createDisc =
 	discs.createDisc.create(
 		'twig:add',
 		'createNote',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'createButton',
 				'text',
@@ -119,7 +119,7 @@ gruga.createDisc =
 			),
 		'twig:add',
 		'createLabel',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'createButton',
 				'text',
@@ -154,7 +154,7 @@ gruga.createDisc =
 			),
 		'twig:add',
 		'createRelation',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'createButton',
 				'text',
@@ -191,7 +191,7 @@ gruga.createDisc =
 			),
 		'twig:add',
 		'createPortal',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'createButton',
 				'text',

@@ -40,7 +40,7 @@ if( JION )
 {
 	return {
 		name :
-			'Button',
+			'button',
 		unit :
 			'widgets',
 		attributes :
@@ -211,15 +211,15 @@ if( JION )
 
 
 var
-	Button;
+	button;
 
-Button = widgets.Button;
+button = widgets.button;
 
 
 /*
 | Initializes the widget.
 */
-Button.prototype._init =
+button.prototype._init =
 	function( )
 {
 	if( this.superFrame )
@@ -236,31 +236,27 @@ Button.prototype._init =
 	}
 	else
 	{
-		this.frame =
-			null;
+		this.frame = null;
 
-		this._shape =
-			null;
+		this._shape = null;
 	}
 
 	// if true repeats the push action if held down
 	// FIXME
-	this.repeating =
-		false;
+	this.repeating = false;
 };
 
 
 /*
 | Buttons are focusable.
 */
-Button.prototype.focusable =
-	true;
+button.prototype.focusable = true;
 
 
 /*
 | Sketches the button.
 */
-Button.prototype.sketch =
+button.prototype.sketch =
 	function(
 		fabric,
 		border,
@@ -280,7 +276,7 @@ Button.prototype.sketch =
 | The button's fabric.
 */
 jools.lazyValue(
-	Button.prototype,
+	button.prototype,
 	'_fabric',
 	function( )
 	{
@@ -404,7 +400,7 @@ jools.lazyValue(
 /*
 | Mouse hover.
 */
-Button.prototype.pointingHover =
+button.prototype.pointingHover =
 	function(
 		p
 	)
@@ -451,7 +447,7 @@ Button.prototype.pointingHover =
 /*
 | User clicked.
 */
-Button.prototype.click =
+button.prototype.click =
 	function(
 		p
 		// shift,
@@ -530,7 +526,7 @@ Button.prototype.click =
 /*
 | Special keys for buttons having focus
 */
-Button.prototype.specialKey =
+button.prototype.specialKey =
 	function(
 		key,
 		owner
@@ -564,7 +560,7 @@ Button.prototype.specialKey =
 /*
 | Any normal key for a button having focus triggers a push.
 */
-Button.prototype.input =
+button.prototype.input =
 	function(
 		// text
 	)
@@ -578,7 +574,7 @@ Button.prototype.input =
 /*
 | Draws the button.
 */
-Button.prototype.draw =
+button.prototype.draw =
 	function(
 		fabric
 	)
@@ -602,7 +598,7 @@ Button.prototype.draw =
 |
 | FIXME refix
 */
-Button.prototype.dragStop =
+button.prototype.dragStop =
 	function( )
 {
 	/*

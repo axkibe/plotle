@@ -88,7 +88,7 @@ gruga.noAccessToSpace =
 			),
 		'twig:add',
 		'okButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'genericButton',
 				'designFrame',

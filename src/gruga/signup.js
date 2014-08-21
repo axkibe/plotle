@@ -377,7 +377,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'signupButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'genericButton',
 				'designFrame',
@@ -414,7 +414,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'closeButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'genericButton',
 				'designFrame',

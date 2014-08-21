@@ -90,7 +90,7 @@ gruga.moveTo =
 			),
 		'twig:add',
 		'ideoloomHomeButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'portalButton',
 				'designFrame',
@@ -136,7 +136,7 @@ gruga.moveTo =
 			),
 		'twig:add',
 		'ideoloomSandboxButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'portalButton',
 				'designFrame',
@@ -182,7 +182,7 @@ gruga.moveTo =
 			),
 		'twig:add',
 		'userHomeButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'portalButton',
 				'designFrame',

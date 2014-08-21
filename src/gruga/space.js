@@ -88,7 +88,7 @@ gruga.space =
 			),
 		'twig:add',
 		'closeButton',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'genericButton',
 				'designFrame',

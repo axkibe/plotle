@@ -126,7 +126,7 @@ gruga.mainDisc =
 	discs.mainDisc.create(
 		'twig:add',
 			'Normal',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'mainButton',
 				'icon',
@@ -159,7 +159,7 @@ gruga.mainDisc =
 			),
 		'twig:add',
 			'Create',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'mainButton',
 				'visible',
@@ -196,7 +196,7 @@ gruga.mainDisc =
 			),
 		'twig:add',
 			'Remove',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'mainButton',
 				'icon',
@@ -231,7 +231,7 @@ gruga.mainDisc =
 			),
 		'twig:add',
 			'moveTo',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'mainButton',
 				'icon',
@@ -266,7 +266,7 @@ gruga.mainDisc =
 			),
 		'twig:add',
 			'space',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'mainButton',
 				'designFrame',
@@ -315,7 +315,7 @@ gruga.mainDisc =
 			),
 		'twig:add',
 			'user',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'mainButton',
 				'designFrame',
@@ -364,7 +364,7 @@ gruga.mainDisc =
 			),
 		'twig:add',
 			'login',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'mainButton',
 				'visible',
@@ -403,7 +403,7 @@ gruga.mainDisc =
 			),
 		'twig:add',
 			'signUp',
-			widgets.Button.create(
+			widgets.button.create(
 				'style',
 					'mainButton',
 				'visible',
