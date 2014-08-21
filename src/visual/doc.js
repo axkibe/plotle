@@ -38,7 +38,7 @@ if( JION )
 {
 	return {
 		name :
-			'Doc',
+			'doc',
 		unit :
 			'visual',
 		attributes :
@@ -124,22 +124,22 @@ if( SERVER )
 
 	visual =
 		{
-			Doc :
+			doc :
 				require( '../jion/this' )( module )
 		};
 }
 
 
 var
-	Doc;
+	doc;
 
-Doc = visual.Doc;
+doc = visual.doc;
 
 
 /*
 | Initializer.
 */
-Doc.prototype._init =
+doc.prototype._init =
 	function(
 		twigDup
 	)
@@ -201,7 +201,7 @@ Doc.prototype._init =
 /*
 | Returns the attention center.
 */
-Doc.prototype.attentionCenter =
+doc.prototype.attentionCenter =
 	function(
 		item
 	)
@@ -231,7 +231,7 @@ Doc.prototype.attentionCenter =
 /*
 | Draws the document on a fabric.
 */
-Doc.prototype.draw =
+doc.prototype.draw =
 	function(
 		fabric,      // to draw upon
 		view,        // current pan/zoom/motion TODO
@@ -304,7 +304,7 @@ Doc.prototype.draw =
 |
 | FIXME use jools lazyFunc
 */
-Doc.prototype.getPNWs =
+doc.prototype.getPNWs =
 	function(
 		item // the item this doc belongs to
 	)
@@ -361,7 +361,7 @@ Doc.prototype.getPNWs =
 | The height of the document.
 */
 jools.lazyValue(
-	Doc.prototype,
+	doc.prototype,
 	'height',
 	function( )
 	{
@@ -408,7 +408,7 @@ jools.lazyValue(
 /*
 | returns the north-west point of the paragraph with the key 'key'.
 */
-Doc.prototype.getPNW =
+doc.prototype.getPNW =
 	function(
 		item,
 		key
@@ -422,7 +422,7 @@ Doc.prototype.getPNW =
 | The width actually used by the document.
 */
 jools.lazyValue(
-	Doc.prototype,
+	doc.prototype,
 	'spread',
 	function( )
 	{
@@ -452,7 +452,7 @@ jools.lazyValue(
 | The default font for the document.
 */
 jools.lazyValue(
-	Doc.prototype,
+	doc.prototype,
 	'font',
 	function( )
 	{
@@ -464,7 +464,7 @@ jools.lazyValue(
 /*
 | Returns the paragraph at point
 */
-Doc.prototype.getParaAtPoint =
+doc.prototype.getParaAtPoint =
 	function(
 		item,
 		p
@@ -502,7 +502,7 @@ Doc.prototype.getParaAtPoint =
 /*
 | A text has been inputed.
 */
-Doc.prototype.input =
+doc.prototype.input =
 	function(
 		text,
 		item
@@ -555,7 +555,7 @@ Doc.prototype.input =
 /*
 | Handles a special key.
 */
-Doc.prototype.specialKey =
+doc.prototype.specialKey =
 	function(
 		key,
 		item,
@@ -631,7 +631,7 @@ Doc.prototype.specialKey =
 /*
 | Sketches a selection.
 */
-Doc.prototype.sketchRange =
+doc.prototype.sketchRange =
 	function(
 		fabric,      // the fabric to path for
 		border,      // width of the path (ignored)
@@ -924,8 +924,7 @@ Doc.prototype.sketchRange =
 */
 if( SERVER )
 {
-	module.exports =
-		Doc;
+	module.exports = doc;
 }
 
 

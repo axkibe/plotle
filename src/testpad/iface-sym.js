@@ -43,7 +43,7 @@ IFaceSym =
 			'testnote',
 			visual.note.create(
 				'doc',
-					visual.Doc.create(
+					visual.doc.create(
 						'twig:add',
 						'1',
 							visual.para.create(

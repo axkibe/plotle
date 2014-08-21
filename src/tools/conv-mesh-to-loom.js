@@ -124,6 +124,11 @@ var translateSign =
 
 	if( sign.val.doc )
 	{
+		if( sign.val.doc.type === 'Doc' )
+		{
+			sign.val.doc.type = 'doc';
+		}
+
 		for( var key in sign.val.doc.twig )
 		{
 			if( sign.val.doc.twig[ key ].type === 'Para' )

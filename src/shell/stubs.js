@@ -42,7 +42,7 @@ Stubs.emptyLabel =
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'doc',
-			visual.Doc.create(
+			visual.doc.create(
 				'twig:add',
 				'1',
 				visual.para.create(
@@ -65,7 +65,7 @@ Stubs.emptyNote =
 					euclid.point.zero
 			),
 		'doc',
-			visual.Doc.create(
+			visual.doc.create(
 				'twig:add',
 				'1',
 				visual.para.create(

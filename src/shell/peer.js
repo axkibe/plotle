@@ -109,7 +109,7 @@ Peer.newNote =
 					'zone',
 						zone,
 					'doc',
-						visual.Doc.create(
+						visual.doc.create(
 							'twig:add',
 							'1',
 							visual.para.create(
@@ -294,7 +294,7 @@ Peer.newLabel =
 					'pnw',
 						pnw,
 					'doc',
-						visual.Doc.create(
+						visual.doc.create(
 							'twig:add',
 							'1',
 							visual.para.create(
@@ -350,7 +350,7 @@ Peer.newRelation =
 					'fontsize',
 						fontsize,
 					'doc',
-						visual.Doc.create(
+						visual.doc.create(
 							'twig:add',
 							'1',
 							visual.para.create(

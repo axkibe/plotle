@@ -49,11 +49,8 @@ if( JION )
 					{
 						comment :
 							'the labels document',
-						// FUTURE make this type: 'visual.Doc'
 						type :
-							'Doc',
-						unit :
-							'visual',
+							'visual.doc',
 						json :
 							true
 					},

@@ -44,7 +44,7 @@ if( JION )
 						comment :
 							'path of the begin of the range',
 						type :
-							'path'
+							'jion.path'
 					},
 				bAt :
 					{
@@ -58,14 +58,14 @@ if( JION )
 						comment :
 							'the document the range belongs to',
 						type :
-							'Doc'
+							'visual.doc'
 					},
 				ePath :
 					{
 						comment :
 							'path of the end of the range',
 						type :
-							'path'
+							'jion.path'
 					},
 				eAt :
 					{

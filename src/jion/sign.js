@@ -194,7 +194,6 @@ sign.prototype._init =
 
 			case 'note' :
 
-				console.log( 'XXX', 'N', val );
 				this.val =
 					visual.note.createFromJSON( val );
 

@@ -49,11 +49,8 @@ if( JION )
 					{
 						comment :
 							'the notes document',
-						// FUTURE make this type: 'visual.Doc'
 						type :
-							'Doc',
-						unit :
-							'visual',
+							'visual.doc',
 						json :
 							true
 					},
@@ -132,9 +129,7 @@ if( JION )
 						comment :
 							'the notes zone',
 						type :
-							'rect',
-						unit :
-							'euclid',
+							'euclid.rect',
 						json :
 							true
 					}
