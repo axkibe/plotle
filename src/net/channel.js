@@ -38,7 +38,7 @@ if( JION )
 {
 	return {
 		name :
-			'Channel',
+			'channel',
 		unit :
 			'net',
 		attributes :
@@ -66,13 +66,13 @@ if( JION )
 }
 
 
-var Channel = net.Channel;
+var channel = net.channel;
 
 
 /*
 | Initializer.
 */
-Channel.prototype._init =
+channel.prototype._init =
 	function( )
 {
 	var
@@ -110,7 +110,7 @@ Channel.prototype._init =
 /*
 | Aborts all pending requests.
 */
-Channel.prototype.abortAll =
+channel.prototype.abortAll =
 	function( )
 {
 	if( !this.fifo )
@@ -142,7 +142,7 @@ Channel.prototype.abortAll =
 | FUTURE currently the receiver is hardcoded to be 'shell.link'.
 |    when the shell became a JION allow receiverPaths
 */
-Channel.prototype.request =
+channel.prototype.request =
 	function(
 		request,       // request
 		receiverFunc   // the receivers func to call
@@ -214,7 +214,7 @@ Channel.prototype.request =
 |
 | 'this' is the ajax request.
 */
-Channel.prototype._onReply =
+channel.prototype._onReply =
 	function( )
 {
 	var

@@ -39,7 +39,7 @@ if( JION )
 {
 	return {
 		name :
-			'Link',
+			'link',
 		unit :
 			'net',
 		attributes :
@@ -157,14 +157,14 @@ if( JION )
 	};
 }
 
-var Link = net.Link;
+var link = net.link;
 
 
 /*
 | Checks with server if a username / passhash
 | combo is valid.
 */
-Link.prototype.auth =
+link.prototype.auth =
 	function(
 		username,
 		passhash
@@ -187,7 +187,7 @@ Link.prototype.auth =
 /*
 | Received an auth reply.
 */
-Link.prototype._onAuth =
+link.prototype._onAuth =
 	function(
 		request,
 		reply
@@ -211,7 +211,7 @@ Link.prototype._onAuth =
 /*
 | Tries to registers a new user.
 */
-Link.prototype.register =
+link.prototype.register =
 	function(
 		username,
 		mail,
@@ -240,7 +240,7 @@ Link.prototype.register =
 /*
 | Received a register reply.
 */
-Link.prototype._onRegister =
+link.prototype._onRegister =
 	function(
 		request,
 		reply
@@ -265,7 +265,7 @@ Link.prototype._onRegister =
 | Aquires a space from the server
 | and starts receiving updates for it.
 */
-Link.prototype.aquireSpace =
+link.prototype.aquireSpace =
 	function(
 		spaceUser,
 		spaceTag,
@@ -302,7 +302,7 @@ Link.prototype.aquireSpace =
 /*
 | A space has been aquired.
 */
-Link.prototype._onAquireSpace =
+link.prototype._onAquireSpace =
 	function(
 		request,
 		reply
@@ -412,7 +412,7 @@ Link.prototype._onAquireSpace =
 /*
 | Sends an update request to the server and computes its answer.
 */
-Link.prototype._update =
+link.prototype._update =
 	function( )
 {
 	shell.ajax.twig.update.request(
@@ -438,7 +438,7 @@ Link.prototype._update =
 /*
 | Received an update.
 */
-Link.prototype._onUpdate =
+link.prototype._onUpdate =
 	function(
 		request,
 		reply
@@ -704,7 +704,7 @@ Link.prototype._onUpdate =
 /*
 | Alters the tree.
 */
-Link.prototype.alter =
+link.prototype.alter =
 	function(
 		chg
 	)
@@ -759,7 +759,7 @@ Link.prototype.alter =
 /*
 | Sends the stored changes to server.
 */
-Link.prototype._sendChanges =
+link.prototype._sendChanges =
 	function( )
 {
 	// already sending?
@@ -807,7 +807,7 @@ Link.prototype._sendChanges =
 /*
 | Received a reply of a sendChanges request.
 */
-Link.prototype._onSendChanges =
+link.prototype._onSendChanges =
 	function(
 		request,
 		reply
@@ -827,7 +827,7 @@ Link.prototype._onSendChanges =
 /*
 | Reverts actions from the undo chain.
 */
-Link.prototype.undo =
+link.prototype.undo =
 	function( )
 {
 	var
@@ -887,7 +887,7 @@ Link.prototype.undo =
 /*
 | Sends the stored changes to remote meshmashine
 */
-Link.prototype.redo =
+link.prototype.redo =
 	function( )
 {
 	var

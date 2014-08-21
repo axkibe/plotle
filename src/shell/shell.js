@@ -1348,19 +1348,19 @@ Shell.prototype.onload =
 				ajaxPath,
 			'twig:add',
 			'command',
-				net.Channel.create(
+				net.channel.create(
 					'path',
 						ajaxPath.Append( 'command' )
 				),
 			'twig:add',
 			'update',
-				net.Channel.create(
+				net.channel.create(
 					'path',
 						ajaxPath.Append( 'update' )
 				)
 		);
 
-	this.link = net.Link.create( );
+	this.link = net.link.create( );
 
 	username = window.localStorage.getItem( 'username' );
 
