@@ -37,7 +37,7 @@ if( JION )
 {
 	return {
 		name :
-			'Welcome',
+			'welcome',
 		unit :
 			'forms',
 		attributes :
@@ -143,15 +143,15 @@ if( JION )
 
 
 var
-	Welcome;
+	welcome;
 
-Welcome = forms.Welcome;
+welcome = forms.welcome;
 
 
 /*
 | The welcome form.
 */
-Welcome.prototype._init =
+welcome.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -170,7 +170,7 @@ Welcome.prototype._init =
 	this.twig.headline =
 		this.twig.headline.create(
 			'text',
-				'Welcome ' + ( this.username || '' ) + '!'
+				'welcome ' + ( this.username || '' ) + '!'
 		);
 
 	forms.form.init.call(
@@ -183,7 +183,7 @@ Welcome.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-Welcome.prototype.pushButton =
+welcome.prototype.pushButton =
 	function(
 		path
 		// shift,

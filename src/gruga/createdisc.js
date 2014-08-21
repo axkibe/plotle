@@ -83,7 +83,7 @@ dv =
 gruga.createDisc =
 	discs.createDisc.create(
 		'twig:add',
-		'CreateNote',
+		'createNote',
 			widgets.Button.create(
 				'style',
 					'createButton',
@@ -118,7 +118,7 @@ gruga.createDisc =
 					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
-		'CreateLabel',
+		'createLabel',
 			widgets.Button.create(
 				'style',
 					'createButton',
@@ -190,7 +190,7 @@ gruga.createDisc =
 					design.anchorEllipse.fullSkewNW
 			),
 		'twig:add',
-		'CreatePortal',
+		'createPortal',
 			widgets.Button.create(
 				'style',
 					'createButton',

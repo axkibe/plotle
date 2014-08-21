@@ -51,13 +51,13 @@ var
 /*
 | Layout
 */
-gruga.Welcome =
-	forms.Welcome.create(
+gruga.welcome =
+	forms.welcome.create(
 		'twig:add',
 		'headline',
 			widgets.Label.create(
 				'text',
-					'Welcome',
+					'welcome',
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',

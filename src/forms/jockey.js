@@ -125,8 +125,8 @@ if( JION )
 					'forms.space',
 				'user' :
 					'forms.user',
-				'Welcome' :
-					'forms.Welcome'
+				'welcome' :
+					'forms.welcome'
 				*/
 			}
 	};

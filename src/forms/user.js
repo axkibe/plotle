@@ -143,7 +143,7 @@ if( JION )
 }
 
 var
-	user =
+	user;
 
 user = forms.user;
 

@@ -314,7 +314,7 @@ createDisc.prototype.pushButton =
 
 	switch( buttonName )
 	{
-		case 'CreateLabel' :
+		case 'createLabel' :
 
 			shell.setAction(
 				actions.createGeneric.create(
@@ -331,7 +331,7 @@ createDisc.prototype.pushButton =
 
 			return;
 
-		case 'CreateNote' :
+		case 'createNote' :
 
 			shell.setAction(
 				actions.createGeneric.create(
@@ -348,7 +348,7 @@ createDisc.prototype.pushButton =
 
 			return;
 
-		case 'CreatePortal' :
+		case 'createPortal' :
 
 			shell.setAction(
 				actions.createGeneric.create(
@@ -645,15 +645,15 @@ createDisc._isActiveButton =
 			{
 				case 'Note' :
 
-					return wname === 'CreateNote';
+					return wname === 'createNote';
 
 				case 'Label' :
 
-					return wname === 'CreateLabel';
+					return wname === 'createLabel';
 
 				case 'Portal' :
 
-					return wname === 'CreatePortal';
+					return wname === 'createPortal';
 
 				default :
 

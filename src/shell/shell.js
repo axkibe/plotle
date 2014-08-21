@@ -82,8 +82,8 @@ var
 /**/			// user view
 /**/			'user' :
 /**/				true,
-/**/			// Welcome view
-/**/			'Welcome' :
+/**/			// welcome view
+/**/			'welcome' :
 /**/				true
 /**/		} );
 /**/}
@@ -190,8 +190,8 @@ Shell =
 			'user',
 				gruga.user,
 			'twig:add',
-			'Welcome',
-				gruga.Welcome
+			'welcome',
+				gruga.welcome
 		);
 
 	this._$discJockey =
@@ -655,7 +655,7 @@ Shell.prototype._getCurrentDisplay =
 		case 'signUp' :
 		case 'space' :
 		case 'user' :
-		case 'Welcome' :
+		case 'welcome' :
 
 			return (
 				this._$formJockey.get( name )

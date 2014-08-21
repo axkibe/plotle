@@ -51,7 +51,7 @@
 . Set
 . Shorten
 . Vacant
-. Welcome
+. welcome
 . Widget
 . _$atween
 . _$discJockey

@@ -362,7 +362,7 @@ signUp.prototype.onRegister =
 
 	this.clear( );
 
-	shell.setMode( 'Welcome' );
+	shell.setMode( 'welcome' );
 };
 
 

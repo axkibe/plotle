@@ -18,7 +18,8 @@ forms = forms || { };
 | Imports
 */
 var
-	jools;
+	jools,
+	shell;
 
 
 /*
