@@ -418,7 +418,7 @@ login.prototype.clear =
 	);
 
 	shell.setMark(
-		marks.Vacant.create( )
+		marks.vacant.create( )
 	);
 };
 

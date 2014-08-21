@@ -78,7 +78,7 @@ item.concernsMark =
 
 	if( path.isEmpty )
 	{
-		return marks.Vacant.create( );
+		return marks.vacant.create( );
 	}
 
 	if(
@@ -89,7 +89,7 @@ item.concernsMark =
 	}
 	else
 	{
-		return marks.Vacant.create( );
+		return marks.vacant.create( );
 	}
 };
 

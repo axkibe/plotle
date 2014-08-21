@@ -215,7 +215,7 @@ Para.concernsMark =
 		}
 		else
 		{
-			return marks.Vacant.create( );
+			return marks.vacant.create( );
 		}
 	}
 
@@ -227,7 +227,7 @@ Para.concernsMark =
 	}
 	else
 	{
-		return marks.Vacant.create( );
+		return marks.vacant.create( );
 	}
 };
 

@@ -404,7 +404,7 @@ signUp.prototype.clear =
 	);
 
 	shell.setMark(
-		marks.Vacant.create( )
+		marks.vacant.create( )
 	);
 };
 

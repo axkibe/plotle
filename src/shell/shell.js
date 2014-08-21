@@ -162,7 +162,7 @@ Shell =
 			'hover',
 				jion.path.empty,
 			'mark',
-				marks.Vacant.create( ),
+				marks.vacant.create( ),
 			'path',
 				jion.path.empty
 				.Append( 'forms' ),
@@ -203,7 +203,7 @@ Shell =
 			'hover',
 				jion.path.empty,
 			'mark',
-				marks.Vacant.create( ),
+				marks.vacant.create( ),
 			'mode',
 				this._$mode,
 			'path',
@@ -219,7 +219,7 @@ Shell =
 				gruga.createDisc
 		);
 
-	this.mark = marks.Vacant.create( );
+	this.mark = marks.vacant.create( );
 
 	// remembers an aquired visitor user name and passhash
 	// so when logging out from a real user the previous
@@ -383,7 +383,7 @@ Shell.prototype.update =
 			if( item === undefined )
 			{
 				// the item holding the caret was removed
-				mark = marks.Vacant.create( );
+				mark = marks.vacant.create( );
 			}
 			else
 			{
@@ -420,7 +420,7 @@ Shell.prototype.update =
 			if( item === undefined )
 			{
 				// the item holding the caret was removed
-				mark = marks.Vacant.create( );
+				mark = marks.vacant.create( );
 			}
 
 			break;
@@ -432,7 +432,7 @@ Shell.prototype.update =
 			// tests if the owning item was removed
 			if( item === undefined )
 			{
-				mark = marks.Vacant.create( );
+				mark = marks.vacant.create( );
 			}
 			else
 			{
@@ -1500,7 +1500,7 @@ Shell.prototype.onAquireSpace =
 			'hover',
 				jion.path.empty,
 			'mark',
-				marks.Vacant.create( ),
+				marks.vacant.create( ),
 			'path',
 				jion.path.empty.Append( 'space' ),
 			'view',

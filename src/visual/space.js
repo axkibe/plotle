@@ -232,7 +232,7 @@ space.concernsMark =
 	}
 	else
 	{
-		return marks.Vacant.create( );
+		return marks.vacant.create( );
 	}
 };
 
@@ -702,7 +702,7 @@ space.prototype.dragStart =
 							p
 					),
 				'mark',
-					marks.Vacant.create( ),
+					marks.vacant.create( ),
 				'path',
 					jion.path.empty,
 				'view',
@@ -735,7 +735,7 @@ space.prototype.dragStart =
 				'pnw',
 					view.depoint( p ),
 				'mark',
-					marks.Vacant.create( ),
+					marks.vacant.create( ),
 				'path',
 					jion.path.empty,
 				'view',
@@ -768,7 +768,7 @@ space.prototype.dragStart =
 				'hover',
 					jion.path.empty,
 				'mark',
-					marks.Vacant.create( ),
+					marks.vacant.create( ),
 				'path',
 					jion.path.empty,
 				'view',
@@ -901,7 +901,7 @@ space.prototype.click =
 	// otherwise ...
 
 	shell.setMark(
-		marks.Vacant.create( )
+		marks.vacant.create( )
 	);
 
 	return true;

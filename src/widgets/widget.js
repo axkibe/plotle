@@ -66,7 +66,7 @@ Widget.concernsMark =
 	}
 	else
 	{
-		return marks.Vacant.create( );
+		return marks.vacant.create( );
 	}
 };
 

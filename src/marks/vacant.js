@@ -36,7 +36,7 @@ if( JION )
 {
 	return {
 		name :
-			'Vacant',
+			'vacant',
 		unit :
 			'marks',
 		singleton :
@@ -48,16 +48,16 @@ if( JION )
 
 
 var
-	Vacant =
+	vacant =
 
-Vacant = marks.Vacant;
+vacant = marks.vacant;
 
 
 /*
 | The item's path.
 */
 jools.lazyValue(
-	Vacant.prototype,
+	vacant.prototype,
 	'itemPath',
 	function( )
 	{
@@ -69,7 +69,7 @@ jools.lazyValue(
 | The widget's path.
 */
 jools.lazyValue(
-	Vacant.prototype,
+	vacant.prototype,
 	'widgetPath',
 	function( )
 	{
@@ -80,14 +80,13 @@ jools.lazyValue(
 /*
 | The content the mark puts into the clipboard.
 */
-Vacant.prototype.clipboard =
-	'';
+vacant.prototype.clipboard = '';
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-Vacant.prototype.containsPath =
+vacant.prototype.containsPath =
 	function(
 		path
 	)
