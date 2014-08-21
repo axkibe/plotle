@@ -497,7 +497,7 @@ Portal.prototype.click =
 		{
 			mark =
 				shell.setMark(
-					marks.Caret.create(
+					marks.caret.create(
 						'path',
 							this.subPaths[ field ],
 						'at',
@@ -860,7 +860,7 @@ jools.lazyValue(
 
 
 			if(
-				mark.reflex === 'mark.caret'
+				mark.reflex === 'marks.caret'
 				&&
 				mark.focus
 			)
@@ -1208,7 +1208,7 @@ Portal.prototype._keyDown =
 				);
 
 			shell.setMark(
-				marks.Caret.create(
+				marks.caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1229,7 +1229,7 @@ Portal.prototype._keyDown =
 		case 'spaceTag' :
 
 			shell.setMark(
-				marks.Caret.create(
+				marks.caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1246,7 +1246,7 @@ Portal.prototype._keyDown =
 		case 'moveToButton' :
 
 			shell.setMark(
-				marks.Caret.create(
+				marks.caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1313,7 +1313,7 @@ Portal.prototype._keyLeft =
 		}
 
 		shell.setMark(
-			marks.Caret.create(
+			marks.caret.create(
 				'path',
 					// FIXME rather user this.path
 					mark.caretPath.set(
@@ -1332,7 +1332,7 @@ Portal.prototype._keyLeft =
 	}
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1387,7 +1387,7 @@ Portal.prototype._keyTab =
 	}
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				mark.caretPath.set(
 					mark.caretPath.length - 1,
@@ -1426,7 +1426,7 @@ Portal.prototype._keyUp =
 		case 'spaceUser' :
 
 			shell.setMark(
-				marks.Caret.create(
+				marks.caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1448,7 +1448,7 @@ Portal.prototype._keyUp =
 				);
 
 			shell.setMark(
-				marks.Caret.create(
+				marks.caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1468,7 +1468,7 @@ Portal.prototype._keyUp =
 		case 'moveToButton' :
 
 			shell.setMark(
-				marks.Caret.create(
+				marks.caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1544,7 +1544,7 @@ Portal.prototype._keyRight =
 		}
 
 		shell.setMark(
-			marks.Caret.create(
+			marks.caret.create(
 				'path', // FIXME this.paths
 					mark.caretPath.set(
 						mark.caretPath.length - 1,
@@ -1559,7 +1559,7 @@ Portal.prototype._keyRight =
 	}
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1646,7 +1646,7 @@ Portal.prototype._keyEnd =
 	}
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1696,7 +1696,7 @@ Portal.prototype._keyEnter =
 	if( cycle )
 	{
 		shell.setMark(
-			marks.Caret.create(
+			marks.caret.create(
 				'path',
 					mark.caretPath.set(
 						mark.caretPath.length - 1,

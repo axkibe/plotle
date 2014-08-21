@@ -10,7 +10,7 @@
 . Append
 . AppendNC
 . Button
-. Caret
+. caret
 . Channel
 . CheckBox
 . Chop

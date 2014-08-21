@@ -239,7 +239,7 @@ login.prototype.login =
 		);
 
 		shell.setMark(
-			marks.Caret.create(
+			marks.caret.create(
 				'path',
 					twig.userInput.path,
 				'at',
@@ -260,7 +260,7 @@ login.prototype.login =
 		);
 
 		shell.setMark(
-			marks.Caret.create(
+			marks.caret.create(
 				'path',
 					twig.userInput.path,
 				'at',
@@ -281,7 +281,7 @@ login.prototype.login =
 		);
 
 		shell.setMark(
-			marks.Caret.create(
+			marks.caret.create(
 				'path',
 					twig.passwordInput.path,
 				'at',
@@ -360,7 +360,7 @@ login.prototype.onAuth =
 		if( message.search( /Username/ ) >= 0 )
 		{
 			shell.setMark(
-				marks.Caret.create(
+				marks.caret.create(
 					'path',
 						twig.userInput.path,
 					'at',
@@ -371,7 +371,7 @@ login.prototype.onAuth =
 		else
 		{
 			shell.setMark(
-				marks.Caret.create(
+				marks.caret.create(
 					'path',
 						twig.passwordInput.path,
 					'at',

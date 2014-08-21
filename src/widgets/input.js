@@ -523,7 +523,7 @@ jools.lazyValue(
 
 
 		if(
-			this.mark.reflex === 'mark.caret'
+			this.mark.reflex === 'marks.caret'
 			&&
 			this.mark.focus
 		)
@@ -701,7 +701,7 @@ Input.prototype.input =
 	);
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -736,7 +736,7 @@ Input.prototype._keyBackspace =
 	);
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -814,7 +814,7 @@ Input.prototype._keyEnd =
 	}
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -842,7 +842,7 @@ Input.prototype._keyLeft =
 
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -869,7 +869,7 @@ Input.prototype._keyPos1 =
 	}
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -896,7 +896,7 @@ Input.prototype._keyRight =
 	}
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1085,7 +1085,7 @@ Input.prototype.click =
 	}
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				this.path,
 			'at',

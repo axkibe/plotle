@@ -205,7 +205,7 @@ Para.concernsMark =
 		return undefined;
 	}
 
-	if( mark.reflex === 'mark.range' )
+	if( mark.reflex === 'marks.range' )
 	{
 		if(
 			mark.itemPath.subPathOf( path )
@@ -359,7 +359,7 @@ jools.lazyValue(
 		f.scale( 1 / zoom );
 
 		if(
-			mark.reflex === 'mark.caret'
+			mark.reflex === 'marks.caret'
 			&&
 			mark.focus
 		)
@@ -981,7 +981,7 @@ Para.prototype.specialKey =
 
 	switch( mark.reflex )
 	{
-		case 'mark.caret' :
+		case 'marks.caret' :
 
 /**/		if( CHECK )
 /**/		{
@@ -1004,7 +1004,7 @@ Para.prototype.specialKey =
 
 			break;
 
-		case 'mark.range' :
+		case 'marks.range' :
 
 /**/		if( CHECK )
 /**/		{
@@ -1640,7 +1640,7 @@ Para.prototype._setMark =
 	if( !bPath )
 	{
 		return shell.setMark(
-			marks.Caret.create(
+			marks.caret.create(
 				'path',
 					this.textPath,
 				'at',

@@ -425,7 +425,7 @@ form.prototype.cycleFocus =
 			if( ve.caretable )
 			{
 				shell.setMark(
-					marks.Caret.create(
+					marks.caret.create(
 						'path',
 							ve.path,
 						'at',

@@ -973,7 +973,7 @@ space.prototype.dragStop =
 						result.chgX.trg.path.get( -1 );
 
 					shell.setMark(
-						marks.Caret.create(
+						marks.caret.create(
 							'path',
 								shell.
 									space.twig[ key ].
@@ -1051,7 +1051,7 @@ space.prototype.dragStop =
 						result.chgX.trg.path.get( -1 );
 
 					shell.setMark(
-						marks.Caret.create(
+						marks.caret.create(
 							'path',
 								shell.space
 								.twig[ key ]
@@ -1096,7 +1096,7 @@ space.prototype.dragStop =
 					key = result.chgX.trg.path.get( -1 );
 
 					shell.setMark(
-						marks.Caret.create(
+						marks.caret.create(
 							'path',
 								shell
 								.space

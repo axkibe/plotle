@@ -376,7 +376,7 @@ Shell.prototype.update =
 
 	switch( mark.reflex )
 	{
-		case 'mark.caret' :
+		case 'marks.caret' :
 
 			item = space.twig[ mark.path.get( 2 ) ];
 
@@ -401,7 +401,7 @@ Shell.prototype.update =
 				//   keeping retainx might not be correct
 				//   in some cases
 				mark =
-					marks.Caret.create(
+					marks.caret.create(
 						'path',
 							sign.path.prepend( 'space' ),
 						'at',
@@ -413,7 +413,7 @@ Shell.prototype.update =
 
 			break;
 
-		case 'mark.item' :
+		case 'marks.item' :
 
 			item = space.twig[ mark.path.get( 2 ) ];
 
@@ -425,7 +425,7 @@ Shell.prototype.update =
 
 			break;
 
-		case 'mark.range' :
+		case 'marks.range' :
 
 			item = space.twig[ mark.bPath.get( 2 ) ];
 
@@ -463,7 +463,7 @@ Shell.prototype.update =
 				)
 				{
 					mark =
-						marks.Caret.create(
+						marks.caret.create(
 							'path',
 								bSign.path.prepend( 'space' ),
 							'at',
@@ -535,7 +535,7 @@ Shell.prototype.setFocus =
 {
 	switch( this.mark.reflex )
 	{
-		case 'mark.caret' :
+		case 'marks.caret' :
 
 			this.setMark(
 				this.mark.create(

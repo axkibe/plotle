@@ -239,7 +239,7 @@ Relation.spawn =
 		result.chgX.trg.path.get( -1 );
 
 	shell.setMark(
-		marks.Caret.create(
+		marks.caret.create(
 			'path',
 				shell
 				.space

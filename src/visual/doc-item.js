@@ -211,7 +211,7 @@ DocItem.prototype.click =
 			);
 
 		shell.setMark(
-			marks.Caret.create(
+			marks.caret.create(
 				'path',
 					para.textPath,
 				'at',
@@ -221,11 +221,10 @@ DocItem.prototype.click =
 	}
 	else
 	{
-		para =
-			doc.atRank( doc.ranks.length - 1 );
+		para = doc.atRank( doc.ranks.length - 1 );
 
 		shell.setMark(
-			marks.Caret.create(
+			marks.caret.create(
 				'path',
 					para.textPath,
 				'at',
@@ -265,11 +264,13 @@ DocItem.prototype.specialKey =
 		ctrl
 	)
 {
-	return this.doc.specialKey(
-		key,
-		this,
-		shift,
-		ctrl
+	return (
+		this.doc.specialKey(
+			key,
+			this,
+			shift,
+			ctrl
+		)
 	);
 };
 

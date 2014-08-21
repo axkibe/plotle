@@ -34,7 +34,7 @@ if( JION )
 {
 	return {
 		name :
-			'Caret',
+			'caret',
 		unit :
 			'marks',
 		subclass :
@@ -81,15 +81,15 @@ if( JION )
 
 
 var
-	Caret =
+	caret =
 
-Caret = marks.Caret;
+caret = marks.caret;
 
 
 /*
 | Initializer.
 */
-Caret.prototype._init =
+caret.prototype._init =
 	function( )
 {
 
@@ -114,7 +114,7 @@ Caret.prototype._init =
 | (the text range is the other mark
 |  which has this too )
 */
-Caret.prototype.hasCaret =
+caret.prototype.hasCaret =
 	true;
 
 
@@ -122,7 +122,7 @@ Caret.prototype.hasCaret =
 | The item's path.
 */
 jools.lazyValue(
-	Caret.prototype,
+	caret.prototype,
 	'itemPath',
 	function( )
 	{
@@ -144,7 +144,7 @@ jools.lazyValue(
 | The widget's path.
 */
 jools.lazyValue(
-	Caret.prototype,
+	caret.prototype,
 	'widgetPath',
 	function( )
 	{
@@ -168,7 +168,7 @@ jools.lazyValue(
 | This allows a common interface with text range.
 */
 jools.lazyValue(
-	Caret.prototype,
+	caret.prototype,
 	'caretPath',
 	function( )
 	{
@@ -183,7 +183,7 @@ jools.lazyValue(
 | This allows a common interface with text range.
 */
 jools.lazyValue(
-	Caret.prototype,
+	caret.prototype,
 	'caretAt',
 	function( )
 	{
@@ -195,7 +195,7 @@ jools.lazyValue(
 /*
 | The content the mark puts into the clipboard.
 */
-Caret.prototype.clipboard =
+caret.prototype.clipboard =
 	'';
 
 
@@ -203,7 +203,7 @@ Caret.prototype.clipboard =
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-Caret.prototype.containsPath =
+caret.prototype.containsPath =
 	function(
 		path
 	)
