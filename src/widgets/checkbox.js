@@ -37,7 +37,7 @@ if( JION )
 {
 	return {
 		name :
-			'CheckBox',
+			'checkbox',
 		unit :
 			'widgets',
 		attributes :
@@ -145,15 +145,15 @@ if( JION )
 
 
 var
-	CheckBox;
+	checkbox;
 
-CheckBox = widgets.CheckBox;
+checkbox = widgets.checkbox;
 
 
 /*
 | Initializes the widget.
 */
-CheckBox.prototype._init =
+checkbox.prototype._init =
 	function( )
 {
 	if( this.superFrame )
@@ -174,14 +174,14 @@ CheckBox.prototype._init =
 /*
 | CheckBoxes are focusable.
 */
-CheckBox.prototype.focusable =
+checkbox.prototype.focusable =
 	true;
 
 
 /*
 | Mouse hover.
 */
-CheckBox.prototype.pointingHover =
+checkbox.prototype.pointingHover =
 	function(
 		// p
 	)
@@ -193,7 +193,7 @@ CheckBox.prototype.pointingHover =
 /*
 | Sketches the check
 */
-CheckBox.prototype.sketchCheck =
+checkbox.prototype.sketchCheck =
 	function(
 		fabric
 		// border,
@@ -238,9 +238,9 @@ CheckBox.prototype.sketchCheck =
 
 
 /*
-| CheckBox is being changed.
+| checkbox is being changed.
 */
-CheckBox.prototype.change =
+checkbox.prototype.change =
 	function(
 		// shift,
 		// ctrl
@@ -253,7 +253,7 @@ CheckBox.prototype.change =
 /*
 | User clicked.
 */
-CheckBox.prototype.click =
+checkbox.prototype.click =
 	function(
 		p
 		// shift,
@@ -289,7 +289,7 @@ CheckBox.prototype.click =
 /*
 | Special keys for buttons having focus
 */
-CheckBox.prototype.specialKey =
+checkbox.prototype.specialKey =
 	function(
 		key,
 		owner
@@ -326,7 +326,7 @@ CheckBox.prototype.specialKey =
 /*
 | Any normal key for a checkbox triggers it to flip
 */
-CheckBox.prototype.input =
+checkbox.prototype.input =
 	function(
 		// text
 	)
@@ -344,7 +344,7 @@ CheckBox.prototype.input =
 | Draws the checkbox.
 | FIXME _fabric caching
 */
-CheckBox.prototype.draw =
+checkbox.prototype.draw =
 	function(
 		fabric
 	)

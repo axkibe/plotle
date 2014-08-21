@@ -314,7 +314,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'newsletterCheckBox',
-			widgets.CheckBox.create(
+			widgets.checkbox.create(
 				'style',
 					'checkbox',
 				'checked',

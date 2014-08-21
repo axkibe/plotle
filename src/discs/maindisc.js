@@ -148,8 +148,8 @@ if( JION )
 			{
 				'button' :
 					'widgets.button',
-				'CheckBox' :
-					'widgets.Checkbox',
+				'checkbox' :
+					'widgets.checkbox',
 				'Input' :
 					'widgets.Input',
 				'Label' :
