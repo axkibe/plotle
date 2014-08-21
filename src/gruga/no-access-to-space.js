@@ -54,7 +54,7 @@ gruga.noAccessToSpace =
 	forms.noAccessToSpace.create(
 		'twig:add',
 		'headline',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'',
 				'font',
@@ -71,7 +71,7 @@ gruga.noAccessToSpace =
 			),
 		'twig:add',
 		'message1',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'Sorry, you cannot port to this space or create it.',
 				'font',

@@ -288,7 +288,7 @@ Peer.newLabel =
 	src =
 		sign.create(
 			'val',
-				visual.Label.create(
+				visual.label.create(
 					'fontsize',
 						fontsize,
 					'pnw',

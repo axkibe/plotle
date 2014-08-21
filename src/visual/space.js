@@ -135,8 +135,8 @@ if( JION )
 			{
 				'Note' :
 					'visual.Note',
-				'Label' :
-					'visual.Label',
+				'label' :
+					'visual.label',
 				'Relation' :
 					'visual.Relation',
 				'Portal' :
@@ -726,7 +726,7 @@ space.prototype.dragStart =
 	(
 		action &&
 		action.reflex === 'actions.createGeneric' &&
-		action.itemType === 'Label'
+		action.itemType === 'label'
 
 	)
 	{
@@ -993,7 +993,7 @@ space.prototype.dragStop =
 
 					break;
 
-				case 'Label' :
+				case 'label' :
 
 					var
 						model =

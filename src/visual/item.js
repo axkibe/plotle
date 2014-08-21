@@ -1,5 +1,5 @@
 /*
-| Common base of Note, Label and Relation.
+| Common base of Note, label and Relation.
 |
 | Authors: Axel Kittenberger
 */

@@ -55,7 +55,7 @@ gruga.welcome =
 	forms.welcome.create(
 		'twig:add',
 		'headline',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'welcome',
 				'font',
@@ -72,7 +72,7 @@ gruga.welcome =
 			),
 		'twig:add',
 		'message1',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'Your registration was successful :-)',
 				'font',

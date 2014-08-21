@@ -2,7 +2,7 @@
 | An users action in the making.
 |
 | Creating a new Note.
-| Creating a new Label.
+| Creating a new label.
 | Creating a new Portal.
 |
 | Authors: Axel Kittenberger

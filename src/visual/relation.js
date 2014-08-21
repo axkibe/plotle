@@ -154,7 +154,7 @@ if( JION )
 		node :
 			true,
 		subclass :
-			'visual.Label'
+			'visual.label'
 	};
 }
 
@@ -168,7 +168,7 @@ if( SERVER )
 
 	visual =
 		{
-			Label :
+			label :
 				require( './label' ),
 			Relation :
 				require( '../jion/this' )( module )
@@ -189,7 +189,7 @@ Relation.prototype._init =
 		inherit
 	)
 {
-	visual.Label.prototype._init.call(
+	visual.label.prototype._init.call(
 		this,
 		inherit
 	);
@@ -318,7 +318,7 @@ Relation.prototype.draw =
 		);
 	}
 
-	visual.Label.prototype.draw.call(
+	visual.label.prototype.draw.call(
 		this,
 		fabric
 	);

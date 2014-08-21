@@ -152,8 +152,8 @@ if( JION )
 					'widgets.checkbox',
 				'input' :
 					'widgets.input',
-				'Label' :
-					'widgets.Label'
+				'label' :
+					'widgets.label'
 			}
 	};
 }

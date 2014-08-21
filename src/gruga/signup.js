@@ -67,7 +67,7 @@ gruga.signUp =
 	forms.signUp.create(
 		'twig:add',
 		'headline',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'Sign Up',
 				'font',
@@ -84,7 +84,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'usernameLabel',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'username',
 				'font',
@@ -101,7 +101,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'emailLabel',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'email',
 				'font',
@@ -118,7 +118,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'passwordLabel',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'password',
 				'font',
@@ -135,7 +135,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'password2Label',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'repeat password',
 				'font',
@@ -152,7 +152,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'newsletterLabel',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'newsletter',
 				'font',
@@ -169,7 +169,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'errorLabel',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'',
 				'font',
@@ -343,7 +343,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'newsletter2Label',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'Updates and News',
 				'font',
@@ -360,7 +360,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'newsletter3Label',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'Never going to be more than an email a month. For sure!',
 				'font',

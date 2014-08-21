@@ -54,7 +54,7 @@ gruga.space =
 	forms.space.create(
 		'twig:add',
 		'headline',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'',
 				'font',
@@ -71,7 +71,7 @@ gruga.space =
 			),
 		'twig:add',
 		'message1',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'In future space settings can be altered here.',
 				'font',

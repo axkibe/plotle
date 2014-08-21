@@ -86,6 +86,11 @@ var translateSign =
 		return sign;
 	}
 
+	if( sign.val.type === 'Label' )
+	{
+		sign.val.type = 'label';
+	}
+
 	if( sign.val.type === 'Rect' )
 	{
 		sign.val.type = 'rect';

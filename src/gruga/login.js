@@ -65,7 +65,7 @@ gruga.login =
 	forms.login.create(
 		'twig:add',
 		'headline',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'Log In',
 				'font',
@@ -82,7 +82,7 @@ gruga.login =
 			),
 		'twig:add',
 		'usernameLabel',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'username',
 				'font',
@@ -99,7 +99,7 @@ gruga.login =
 			),
 		'twig:add',
 		'passwordLabel',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'password',
 				'font',
@@ -116,7 +116,7 @@ gruga.login =
 			),
 		'twig:add',
 		'errorLabel',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'',
 				'font',

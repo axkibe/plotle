@@ -154,7 +154,7 @@ theme =
 
 
 	/*
-	| A Label in space.
+	| A label in space.
 	*/
 	label :
 	{

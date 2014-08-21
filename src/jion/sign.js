@@ -149,7 +149,7 @@ if( SERVER )
 		};
 	visual =
 		{
-			Label :
+			label :
 				require( '../visual/label' ),
 			Note :
 				require( '../visual/note' ),
@@ -185,10 +185,10 @@ sign.prototype._init =
 	{
 		switch( val.type )
 		{
-			case 'Label' :
+			case 'label' :
 
 				this.val =
-					visual.Label.createFromJSON( val );
+					visual.label.createFromJSON( val );
 
 				break;
 

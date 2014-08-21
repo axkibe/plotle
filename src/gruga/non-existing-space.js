@@ -65,7 +65,7 @@ gruga.nonExistingSpace =
 	forms.nonExistingSpace.create(
 		'twig:add',
 		'headline',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'',
 				'font',
@@ -82,7 +82,7 @@ gruga.nonExistingSpace =
 			),
 		'twig:add',
 		'message1',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'Do you want to create it?',
 				'font',

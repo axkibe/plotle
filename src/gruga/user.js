@@ -53,7 +53,7 @@ gruga.user =
 	forms.user.create(
 		'twig:add',
 		'headline',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'Hello',
 				'font',
@@ -70,7 +70,7 @@ gruga.user =
 			),
 		'twig:add',
 		'visitor1',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'You\'re currently an anonymous visitor!',
 				'font',
@@ -87,7 +87,7 @@ gruga.user =
 			),
 		'twig:add',
 		'visitor2',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'Click on "sign up" or "log in"',
 				'font',
@@ -97,7 +97,7 @@ gruga.user =
 			),
 		'twig:add',
 		'visitor3',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'on the control disc to the left',
 				'font',
@@ -114,7 +114,7 @@ gruga.user =
 			),
 		'twig:add',
 		'visitor4',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'to register as an user.',
 				'font',
@@ -131,7 +131,7 @@ gruga.user =
 			),
 		'twig:add',
 		'greeting1',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'This is your profile page!',
 				'font',
@@ -148,7 +148,7 @@ gruga.user =
 			),
 		'twig:add',
 		'greeting2',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'In future you will be able to do stuff here,',
 				'font',
@@ -165,7 +165,7 @@ gruga.user =
 			),
 		'twig:add',
 		'greeting3',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'like for example change your password.',
 				'font',

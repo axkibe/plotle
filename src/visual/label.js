@@ -39,7 +39,7 @@ if( JION )
 {
 	return {
 		name :
-			'Label',
+			'label',
 		unit :
 			'visual',
 		attributes :
@@ -151,22 +151,22 @@ if( SERVER )
 
 	visual =
 		{
-			Label :
+			label :
 				require( '../jion/this' )( module )
 		};
 }
 
 
 var
-	Label;
+	label;
 
-Label = visual.Label;
+label = visual.label;
 
 
 /*
 | Initializer.
 */
-Label.prototype._init =
+label.prototype._init =
 	function( )
 {
 	var
@@ -230,7 +230,7 @@ Label.prototype._init =
 /*
 | Labels use pnw/fontsize for positioning
 */
-Label.prototype.positioning =
+label.prototype.positioning =
 	'pnw/fontsize';
 
 
@@ -239,7 +239,7 @@ if( SHELL )
 	/*
 	| Default margin for all labels.
 	*/
-	Label.prototype.innerMargin =
+	label.prototype.innerMargin =
 		new euclid.margin(
 			theme.label.innerMargin
 		);
@@ -249,7 +249,7 @@ if( SHELL )
 /*
 | Resize handles to show on labels
 */
-Label.prototype.handles =
+label.prototype.handles =
 	jools.immute(
 		{
 			ne :
@@ -267,7 +267,7 @@ Label.prototype.handles =
 /*
 | Highlights the label.
 */
-Label.prototype.highlight =
+label.prototype.highlight =
 	function(
 		fabric
 	)
@@ -288,7 +288,7 @@ Label.prototype.highlight =
 | The label's silhoutte.
 */
 jools.lazyValue(
-	Label.prototype,
+	label.prototype,
 	'silhoutte',
 	function( )
 	{
@@ -308,7 +308,7 @@ jools.lazyValue(
 | The items silhoutte anchored at zero.
 */
 jools.lazyValue(
-	Label.prototype,
+	label.prototype,
 	'zeroSilhoutte',
 	function( )
 	{
@@ -337,7 +337,7 @@ jools.lazyValue(
 /*
 | Sets the items position and size aften an action.
 */
-Label.prototype.dragStop =
+label.prototype.dragStop =
 	function(
 		view,
 		p
@@ -399,7 +399,7 @@ Label.prototype.dragStop =
 | The label's fabric.
 */
 jools.lazyValue(
-	Label.prototype,
+	label.prototype,
 	'_fabric',
 	function( )
 	{
@@ -453,7 +453,7 @@ jools.lazyValue(
 |
 | FIXME: move the common stuff into visual.item.draw()
 */
-Label.prototype.draw =
+label.prototype.draw =
 	function(
 		fabric
 	)
@@ -470,7 +470,7 @@ Label.prototype.draw =
 /*
 | Mouse wheel turned.
 */
-Label.prototype.mousewheel =
+label.prototype.mousewheel =
 	function(
 		// view,
 		// p,
@@ -485,7 +485,7 @@ Label.prototype.mousewheel =
 /*
 | Dummy since a label does not scroll.
 */
-Label.prototype.scrollMarkIntoView =
+label.prototype.scrollMarkIntoView =
 	function( )
 {
 	// nada
@@ -495,7 +495,7 @@ Label.prototype.scrollMarkIntoView =
 /*
 | Dummy since a label does not scroll.
 */
-Label.prototype.scrollPage =
+label.prototype.scrollPage =
 	function(
 		// up
 	)
@@ -509,8 +509,7 @@ Label.prototype.scrollPage =
 */
 if( SERVER )
 {
-	module.exports =
-		Label;
+	module.exports = label;
 }
 
 

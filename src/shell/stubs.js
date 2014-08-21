@@ -36,7 +36,7 @@ Stubs = { };
 
 
 Stubs.emptyLabel =
-	visual.Label.create(
+	visual.label.create(
 		'pnw',
 			euclid.point.zero,
 		'fontsize',

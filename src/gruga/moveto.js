@@ -73,7 +73,7 @@ gruga.moveTo =
 	forms.moveTo.create(
 		'twig:add',
 		'headline',
-			widgets.Label.create(
+			widgets.label.create(
 				'text',
 					'move to another space',
 				'font',

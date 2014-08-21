@@ -28,7 +28,7 @@ if( JION )
 {
 	return {
 		name :
-			'Label',
+			'label',
 		unit :
 			'widgets',
 		attributes :
@@ -134,15 +134,15 @@ if( JION )
 
 
 var
-	Label;
+	label;
 
-Label = widgets.Label;
+label = widgets.label;
 
 
 /*
 | Initializes the widget.
 */
-Label.prototype._init =
+label.prototype._init =
 	function( )
 {
 	if( this.superFrame )
@@ -165,7 +165,7 @@ Label.prototype._init =
 |
 | FIXME use _fabric
 */
-Label.prototype.draw =
+label.prototype.draw =
 	function(
 		fabric
 	)
@@ -189,7 +189,7 @@ Label.prototype.draw =
 /*
 | User is hovering his/her pointer ( mouse move )
 */
-Label.prototype.pointingHover =
+label.prototype.pointingHover =
 	function(
 		// p,
 		// shift,
@@ -203,7 +203,7 @@ Label.prototype.pointingHover =
 /*
 | User clicked.
 */
-Label.prototype.click =
+label.prototype.click =
 	function(
 		// p,
 		// shift,
