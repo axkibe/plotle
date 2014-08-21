@@ -41,7 +41,7 @@ if( JION )
 {
 	return {
 		name :
-			'Para',
+			'para',
 		unit :
 			'visual',
 		attributes :
@@ -73,7 +73,7 @@ if( JION )
 								unit :
 									'visual',
 								type :
-									'Para',
+									'para',
 								func :
 									'concernsMark',
 								args :
@@ -144,20 +144,20 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	visual.Para = require( '../jion/this' )( module );
+	visual.para = require( '../jion/this' )( module );
 }
 
 
 var
-	Para;
+	para;
 
-Para = visual.Para;
+para = visual.para;
 
 
 /*
 | Initializer.
 */
-Para.prototype._init =
+para.prototype._init =
 	function(
 		inherit
 	)
@@ -194,7 +194,7 @@ Para.prototype._init =
 | Returns the mark if an item with 'path' concerns about
 | the mark.
 */
-Para.concernsMark =
+para.concernsMark =
 	function(
 		mark,
 		path
@@ -237,7 +237,7 @@ Para.concernsMark =
 | It is the last path entry.
 */
 jools.lazyValue(
-	Para.prototype,
+	para.prototype,
 	'key',
 	function( )
 	{
@@ -250,7 +250,7 @@ jools.lazyValue(
 | The attention center.
 */
 jools.lazyValue(
-	Para.prototype,
+	para.prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -281,7 +281,7 @@ jools.lazyValue(
 | The para's fabric.
 */
 jools.lazyValue(
-	Para.prototype,
+	para.prototype,
 	'_fabric',
 	function( )
 	{
@@ -375,7 +375,7 @@ jools.lazyValue(
 /*
 | Draws the paragraph in its cache and returns it.
 */
-Para.prototype.draw =
+para.prototype.draw =
 	function(
 		fabric, // the fabric to draw upon
 		pnw     // pnw of this para
@@ -393,7 +393,7 @@ Para.prototype.draw =
 /*
 | Draws the caret.
 */
-Para.prototype._drawCaret =
+para.prototype._drawCaret =
 	function(
 		fabric
 	)
@@ -431,7 +431,7 @@ Para.prototype._drawCaret =
 | The font for this para.
 */
 jools.lazyValue(
-	Para.prototype,
+	para.prototype,
 	'font',
 	function( )
 	{
@@ -447,7 +447,7 @@ jools.lazyValue(
 | The para's flow, the position of all chunks.
 */
 jools.lazyValue(
-	Para.prototype,
+	para.prototype,
 	'flow',
 	function( )
 	{
@@ -585,7 +585,7 @@ jools.lazyValue(
 | The height of the para.
 */
 jools.lazyValue(
-	Para.prototype,
+	para.prototype,
 	'height',
 	function( )
 	{
@@ -602,7 +602,7 @@ jools.lazyValue(
 /*
 | Returns the offset by an x coordinate in a flow.
 */
-Para.prototype.getOffsetAt =
+para.prototype.getOffsetAt =
 	function(
 		line,
 		x
@@ -701,7 +701,7 @@ Para.prototype.getOffsetAt =
 /*
 | Returns the point of a given offset.
 */
-Para.prototype.locateOffset =
+para.prototype.locateOffset =
 	function(
 		offset    // the offset to get the point from.
 	)
@@ -803,7 +803,7 @@ Para.prototype.locateOffset =
 /*
 | Returns the offset closest to a point.
 */
-Para.prototype.getPointOffset =
+para.prototype.getPointOffset =
 	function(
 		item,
 		point     // the point to look for
@@ -838,7 +838,7 @@ Para.prototype.getPointOffset =
 /*
 | A text has been inputed.
 */
-Para.prototype.input =
+para.prototype.input =
 	function(
 		text,
 		item
@@ -916,7 +916,7 @@ Para.prototype.input =
 /*
 | Handles a special key.
 */
-Para.prototype.specialKey =
+para.prototype.specialKey =
 	function(
 		key,
 		item,
@@ -1046,7 +1046,7 @@ Para.prototype.specialKey =
 | The path to the .text attribute
 */
 jools.lazyValue(
-	Para.prototype,
+	para.prototype,
 	'textPath',
 	function( )
 	{
@@ -1106,7 +1106,7 @@ var
 /*
 | Backspace pressed.
 */
-Para.prototype._keyBackspace =
+para.prototype._keyBackspace =
 	function(
 		item,
 		doc,
@@ -1149,7 +1149,7 @@ Para.prototype._keyBackspace =
 /*
 | Del-key pressed.
 */
-Para.prototype._keyDel =
+para.prototype._keyDel =
 	function(
 		item,
 		doc,
@@ -1188,7 +1188,7 @@ Para.prototype._keyDel =
 /*
 | Down arrow pressed.
 */
-Para.prototype._keyDown =
+para.prototype._keyDown =
 	function(
 		item,
 		doc,
@@ -1204,7 +1204,7 @@ Para.prototype._keyDown =
 		r,
 		ve,
 		x;
-	
+
 	flow = this.flow,
 
 	cpos = this.locateOffset( at ),
@@ -1257,7 +1257,7 @@ Para.prototype._keyDown =
 /*
 | End-key pressed.
 */
-Para.prototype._keyEnd =
+para.prototype._keyEnd =
 	function(
 		item,
 		doc,
@@ -1280,7 +1280,7 @@ Para.prototype._keyEnd =
 /*
 | Enter-key pressed
 */
-Para.prototype._keyEnter =
+para.prototype._keyEnter =
 	function(
 		item,
 		doc,
@@ -1300,7 +1300,7 @@ Para.prototype._keyEnter =
 /*
 | Left arrow pressed.
 */
-Para.prototype._keyLeft =
+para.prototype._keyLeft =
 	function(
 		item,
 		doc,
@@ -1361,7 +1361,7 @@ Para.prototype._keyLeft =
 |
 | FUTURE maintain relative scroll pos
 */
-Para.prototype._pageUpDown =
+para.prototype._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
 		item,
@@ -1434,7 +1434,7 @@ Para.prototype._pageUpDown =
 /*
 | PageDown key pressed.
 */
-Para.prototype._keyPageDown =
+para.prototype._keyPageDown =
 	function(
 		item,
 		doc,
@@ -1459,7 +1459,7 @@ Para.prototype._keyPageDown =
 /*
 | PageUp key pressed.
 */
-Para.prototype._keyPageUp =
+para.prototype._keyPageUp =
 	function(
 		item,
 		doc,
@@ -1484,7 +1484,7 @@ Para.prototype._keyPageUp =
 /*
 | Pos1-key pressed.
 */
-Para.prototype._keyPos1 =
+para.prototype._keyPos1 =
 	function(
 		item,
 		doc,
@@ -1507,7 +1507,7 @@ Para.prototype._keyPos1 =
 /*
 | Right arrow pressed.
 */
-Para.prototype._keyRight =
+para.prototype._keyRight =
 	function(
 		item,
 		doc,
@@ -1554,7 +1554,7 @@ Para.prototype._keyRight =
 /*
 | Up arrow pressed.
 */
-Para.prototype._keyUp =
+para.prototype._keyUp =
 	function(
 		item,
 		doc,
@@ -1628,7 +1628,7 @@ Para.prototype._keyUp =
 /*
 | Sets the users caret or range
 */
-Para.prototype._setMark =
+para.prototype._setMark =
 	function(
 		at,      // position to mark caret (or end of range)
 		retainx, // retains this x position when moving up/down
@@ -1677,8 +1677,7 @@ Para.prototype._setMark =
 */
 if( SERVER )
 {
-	module.exports =
-		Para;
+	module.exports = para;
 }
 
 

@@ -106,8 +106,8 @@ if( JION )
 			true,
 		twig :
 			{
-				'Para' :
-					'visual.Para'
+				'para' :
+					'visual.para'
 			},
 		node :
 			true

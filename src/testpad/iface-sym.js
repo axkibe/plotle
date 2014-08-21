@@ -46,19 +46,19 @@ IFaceSym =
 					visual.Doc.create(
 						'twig:add',
 						'1',
-							visual.Para.create(
+							visual.para.create(
 								'text',
 									'Why would I want to know that?'
 							),
 						'twig:add',
 						'$new',
-							visual.Para.create(
+							visual.para.create(
 								'text',
 									'Can we have Bender Burgers again?'
 							),
 						'twig:add',
 						'$new',
-							visual.Para.create(
+							visual.para.create(
 								'text',
 									'And so we say goodbye to ' +
 									'our beloved pet, Nibbler.'

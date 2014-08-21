@@ -112,7 +112,7 @@ Peer.newNote =
 						visual.Doc.create(
 							'twig:add',
 							'1',
-							visual.Para.create(
+							visual.para.create(
 								'text',
 									''
 							)
@@ -297,7 +297,7 @@ Peer.newLabel =
 						visual.Doc.create(
 							'twig:add',
 							'1',
-							visual.Para.create(
+							visual.para.create(
 								'text',
 									text
 							)
@@ -353,7 +353,7 @@ Peer.newRelation =
 						visual.Doc.create(
 							'twig:add',
 							'1',
-							visual.Para.create(
+							visual.para.create(
 								'text',
 									text
 							)

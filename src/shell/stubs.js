@@ -45,7 +45,7 @@ Stubs.emptyLabel =
 			visual.Doc.create(
 				'twig:add',
 				'1',
-				visual.Para.create(
+				visual.para.create(
 					'text',
 						'Label'
 				)
@@ -68,7 +68,7 @@ Stubs.emptyNote =
 			visual.Doc.create(
 				'twig:add',
 				'1',
-				visual.Para.create(
+				visual.para.create(
 					'text',
 						''
 				)

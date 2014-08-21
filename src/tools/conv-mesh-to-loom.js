@@ -106,6 +106,33 @@ var translateSign =
 		sign.val.type = 'rect';
 	}
 
+	if( sign.val.type === 'Para' )
+	{
+		sign.val.type = 'para';
+	}
+
+	if( sign.val.twig )
+	{
+		for( var key in sign.val.twig )
+		{
+			if( sign.val.twig[ key ].type === 'Para' )
+			{
+				sign.val.twig[ key ].type = 'para';
+			}
+		}
+	}
+
+	if( sign.val.doc )
+	{
+		for( var key in sign.val.doc.twig )
+		{
+			if( sign.val.doc.twig[ key ].type === 'Para' )
+			{
+				sign.val.doc.twig[ key ].type = 'para';
+			}
+		}
+	}
+
 	if( sign.val.pnw && sign.val.pnw.type === 'Point' )
 	{
 		sign.val.pnw.type = 'point';
