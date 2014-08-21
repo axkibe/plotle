@@ -436,7 +436,7 @@ form.prototype.cycleFocus =
 			else
 			{
 				shell.setMark(
-					marks.Widget.create(
+					marks.widget.create(
 						'path',
 							ve.path
 					)

@@ -127,8 +127,6 @@ if( JION )
 							true
 					}
 			},
-		subclass :
-			'widgets.Widget',
 		init :
 			[ ]
 	};

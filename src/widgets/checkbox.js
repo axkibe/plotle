@@ -81,7 +81,7 @@ if( JION )
 								unit :
 									'widgets',
 								type :
-									'Widget',
+									'widget',
 								func :
 									'concernsHover',
 								args :
@@ -138,8 +138,6 @@ if( JION )
 							true
 					}
 			},
-		subclass :
-			'widgets.Widget',
 		init :
 			[ ]
 	};

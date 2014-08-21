@@ -32,10 +32,10 @@ var
 | Constructor.
 */
 var
-	Widget;
+	widget;
 
-Widget =
-widgets.Widget =
+widget =
+widgets.widget =
 	function( )
 {
 	// initializing abstract
@@ -47,7 +47,7 @@ widgets.Widget =
 | Returns the mark if an item with
 | 'path' concerns about the mark.
 */
-Widget.concernsMark =
+widget.concernsMark =
 	function(
 		mark,
 		path
@@ -75,7 +75,7 @@ Widget.concernsMark =
 | Returns the hover path if an item with
 | 'path' concerns about the hover.
 */
-Widget.concernsHover =
+widget.concernsHover =
 	function(
 		hover,
 		path

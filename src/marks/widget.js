@@ -34,7 +34,7 @@ if( JION )
 {
 	return {
 		name :
-			'Widget',
+			'widget',
 		unit :
 			'marks',
 		attributes :
@@ -52,9 +52,9 @@ if( JION )
 
 
 var
-	Widget =
+	widget =
 
-Widget = marks.Widget;
+widget = marks.widget;
 
 /*
 | A caret mark has a caret.
@@ -62,14 +62,14 @@ Widget = marks.Widget;
 | (the text range is the other mark
 |  which has this too )
 */
-Widget.prototype.hasCaret = false;
+widget.prototype.hasCaret = false;
 
 
 /*
 | The item's path.
 */
 jools.lazyValue(
-	Widget.prototype,
+	widget.prototype,
 	'itemPath',
 	function( )
 	{
@@ -82,7 +82,7 @@ jools.lazyValue(
 | The widget's path.
 */
 jools.lazyValue(
-	Widget.prototype,
+	widget.prototype,
 	'widgetPath',
 	function( )
 	{
@@ -94,7 +94,7 @@ jools.lazyValue(
 /*
 | The content the mark puts into the clipboard.
 */
-Widget.prototype.clipboard =
+widget.prototype.clipboard =
 	'';
 
 
@@ -102,7 +102,7 @@ Widget.prototype.clipboard =
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-Widget.prototype.containsPath =
+widget.prototype.containsPath =
 	function(
 		path
 	)

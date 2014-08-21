@@ -79,7 +79,7 @@ if( JION )
 								unit :
 									'widgets',
 								type :
-									'Widget',
+									'widget',
 								func :
 									'concernsHover',
 								args :
@@ -105,7 +105,7 @@ if( JION )
 								unit :
 									'widgets',
 								type :
-									'Widget',
+									'widget',
 								func :
 									'concernsMark',
 								args :
@@ -180,10 +180,6 @@ if( JION )
 							true
 					}
 			},
-
-		subclass :
-			'widgets.Widget',
-
 		init :
 			[ ]
 	};
