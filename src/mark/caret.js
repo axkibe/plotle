@@ -9,7 +9,7 @@
 | Export
 */
 var
-	Mark;
+	marks;
 
 
 /*
@@ -36,9 +36,9 @@ if( JION )
 		name :
 			'Caret',
 		unit :
-			'Mark',
+			'marks',
 		subclass :
-			'Mark.Mark',
+			'marks.mark',
 		attributes :
 			{
 				path :
@@ -82,7 +82,8 @@ if( JION )
 
 var
 	Caret =
-		Mark.Caret;
+
+Caret = marks.Caret;
 
 
 /*

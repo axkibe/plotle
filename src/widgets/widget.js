@@ -18,7 +18,7 @@ widgets = widgets || { };
 | Imports
 */
 var
-	Mark;
+	marks;
 
 
 /*
@@ -66,7 +66,7 @@ Widget.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.create( );
+		return marks.Vacant.create( );
 	}
 };
 

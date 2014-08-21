@@ -45,7 +45,7 @@ var
 		require( '../ast/shorthand' ),
 	jools =
 		require( '../jools/jools' ),
-	Validator =
+	validator =
 		require( './validator' );
 
 /*
@@ -1661,7 +1661,6 @@ Gen.prototype.genCreatorChecks =
 			case 'Array' :
 			case 'Function' :
 			case 'Item' : // FUTURE
-			case 'Mark' : // FUTURE
 			case 'Object' :
 
 				continue;
@@ -2029,7 +2028,6 @@ Gen.prototype.genCreatorUnchanged =
 			case 'Boolean' :
 			case 'Function' :
 			case 'Integer' :
-			case 'Mark' : // FIXME
 			case 'Number' :
 			case 'Object' :
 			case 'String' :
@@ -2962,7 +2960,6 @@ Gen.prototype.genAttributeEquals =
 	{
 		case 'Boolean' :
 		case 'Integer' :
-		case 'Mark' : // FIXME
 		case 'Number' :
 		case 'String' :
 
@@ -3406,11 +3403,11 @@ Gen.generate =
 		jion // the jion definition
 	)
 {
-	Validator.check( jion );
-
 	var
 		file,
 		gen;
+
+	validator.check( jion );
 
 	gen =
 		Gen.create(

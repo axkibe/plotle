@@ -9,7 +9,7 @@
 | Export
 */
 var
-	Mark;
+	marks;
 
 
 /*
@@ -36,9 +36,9 @@ if( JION )
 		name :
 			'Range',
 		unit :
-			'Mark',
+			'marks',
 		subclass :
-			'Mark.Mark',
+			'marks.mark',
 		attributes :
 			{
 				bPath :
@@ -93,7 +93,8 @@ if( JION )
 var
 	Range;
 
-Range = Mark.Range;
+Range = marks.Range;
+
 
 /*
 | The begin or end path,

@@ -23,7 +23,7 @@ var
 	euclid,
 	jion,
 	jools,
-	Mark,
+	marks,
 	reply,
 	shell,
 	theme;
@@ -78,7 +78,7 @@ Item.concernsMark =
 
 	if( path.isEmpty )
 	{
-		return Mark.Vacant.create( );
+		return marks.Vacant.create( );
 	}
 
 	if(
@@ -89,7 +89,7 @@ Item.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.create( );
+		return marks.Vacant.create( );
 	}
 };
 
@@ -597,7 +597,7 @@ Item.prototype.dragStart =
 		if( shell.space.focusedItem( ) !== this )
 		{
 			shell.setMark(
-				Mark.Item.create(
+				marks.Item.create(
 					'path',
 						this.path
 				)

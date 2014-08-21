@@ -56,7 +56,7 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Mark',
+							'Object', // FUTURE 'marks',
 						concerns :
 							{
 								unit :

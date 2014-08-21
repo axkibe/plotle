@@ -1,6 +1,8 @@
 /*
 | Superclass of all marks
 |
+| FIXME remove
+|
 | (User)Marks can be:
 |     the caret
 |     a text selection
@@ -13,8 +15,9 @@
 | Export
 */
 var
-	Mark =
-		Mark || { };
+	marks;
+
+marks = marks || { };
 
 /*
 | Capsule
@@ -23,12 +26,11 @@ var
 'use strict';
 
 
-Mark.Mark =
+marks.mark =
 function( )
 {
-	throw new Error(
-		CHECK && 'initializing abstract'
-	);
+	// abstract
+	throw new Error( );
 };
 
 

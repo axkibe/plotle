@@ -19,7 +19,7 @@ forms = forms || { };
 */
 var
 	jools,
-	Mark,
+	marks,
 	shell;
 
 
@@ -56,7 +56,7 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Mark',
+							'Object', // FUTURE 'marks.*'
 						concerns :
 							{
 								unit :
@@ -239,7 +239,7 @@ signUp.prototype.signup =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					twig.userInput.path,
 				'at',
@@ -258,7 +258,7 @@ signUp.prototype.signup =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					twig.userInput.path,
 				'at',
@@ -277,7 +277,7 @@ signUp.prototype.signup =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					twig.passwordInput.path,
 				'at',
@@ -296,7 +296,7 @@ signUp.prototype.signup =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					twig.password2Input.path,
 				'at',
@@ -343,7 +343,7 @@ signUp.prototype.onRegister =
 		if( message.search( /Username/ ) >= 0 )
 		{
 			shell.setMark(
-				Mark.Caret.create(
+				marks.Caret.create(
 					'path',
 						twig.userInput.path,
 					'at',
@@ -404,7 +404,7 @@ signUp.prototype.clear =
 	);
 
 	shell.setMark(
-		Mark.Vacant.create( )
+		marks.Vacant.create( )
 	);
 };
 

@@ -77,7 +77,7 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Mark',
+							'Object', // FUTURE 'marks',
 						defaultValue :
 							null,
 						assign :

@@ -9,7 +9,7 @@
 | Export
 */
 var
-	Mark;
+	marks;
 
 
 /*
@@ -38,10 +38,10 @@ if( JION )
 			'Widget',
 
 		unit :
-			'Mark',
+			'marks',
 
 		subclass :
-			'Mark.Mark',
+			'marks.mark',
 
 		attributes :
 			{
@@ -60,7 +60,8 @@ if( JION )
 
 var
 	Widget =
-		Mark.Widget;
+
+Widget = marks.Widget;
 
 /*
 | A caret mark has a caret.

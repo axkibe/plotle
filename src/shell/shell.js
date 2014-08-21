@@ -27,7 +27,7 @@ var
 	forms,
 	gruga,
 	jion,
-	Mark,
+	marks,
 	Net,
 	Peer,
 	system,
@@ -162,7 +162,7 @@ Shell =
 			'hover',
 				jion.path.empty,
 			'mark',
-				Mark.Vacant.create( ),
+				marks.Vacant.create( ),
 			'path',
 				jion.path.empty
 				.Append( 'forms' ),
@@ -203,7 +203,7 @@ Shell =
 			'hover',
 				jion.path.empty,
 			'mark',
-				Mark.Vacant.create( ),
+				marks.Vacant.create( ),
 			'mode',
 				this._$mode,
 			'path',
@@ -219,7 +219,7 @@ Shell =
 				gruga.createDisc
 		);
 
-	this.mark = Mark.Vacant.create( );
+	this.mark = marks.Vacant.create( );
 
 	// remembers an aquired visitor user name and passhash
 	// so when logging out from a real user the previous
@@ -383,7 +383,7 @@ Shell.prototype.update =
 			if( item === undefined )
 			{
 				// the item holding the caret was removed
-				mark = Mark.Vacant.create( );
+				mark = marks.Vacant.create( );
 			}
 			else
 			{
@@ -401,7 +401,7 @@ Shell.prototype.update =
 				//   keeping retainx might not be correct
 				//   in some cases
 				mark =
-					Mark.Caret.create(
+					marks.Caret.create(
 						'path',
 							sign.path.prepend( 'space' ),
 						'at',
@@ -420,7 +420,7 @@ Shell.prototype.update =
 			if( item === undefined )
 			{
 				// the item holding the caret was removed
-				mark = Mark.Vacant.create( );
+				mark = marks.Vacant.create( );
 			}
 
 			break;
@@ -432,7 +432,7 @@ Shell.prototype.update =
 			// tests if the owning item was removed
 			if( item === undefined )
 			{
-				mark = Mark.Vacant.create( );
+				mark = marks.Vacant.create( );
 			}
 			else
 			{
@@ -463,7 +463,7 @@ Shell.prototype.update =
 				)
 				{
 					mark =
-						Mark.Caret.create(
+						marks.Caret.create(
 							'path',
 								bSign.path.prepend( 'space' ),
 							'at',
@@ -475,7 +475,7 @@ Shell.prototype.update =
 				else
 				{
 					mark =
-						Mark.Range.create(
+						marks.Range.create(
 							'doc',
 								item.doc,
 							'bPath',
@@ -1500,7 +1500,7 @@ Shell.prototype.onAquireSpace =
 			'hover',
 				jion.path.empty,
 			'mark',
-				Mark.Vacant.create( ),
+				marks.Vacant.create( ),
 			'path',
 				jion.path.empty.Append( 'space' ),
 			'view',

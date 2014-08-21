@@ -15,9 +15,6 @@
 . CheckBox
 . Chop
 . Create
-. CreateLabel
-. CreateNote
-. CreatePortal
 > Doc
 . DocItem
 . FOCUS
@@ -33,7 +30,6 @@
 . Limit
 . Link
 . MAX_INTEGER
-. Mark
 . NORMA
 . Normal
 > Note
@@ -51,7 +47,6 @@
 . Set
 . Shorten
 . Vacant
-. welcome
 . Widget
 . _$atween
 . _$discJockey
@@ -308,7 +303,10 @@
 > createElement
 . createFromJSON
 . createGeneric
+. createLabel
 > createLinearGradient
+. createNote
+. createPortal
 > createRadialGradient
 . createRelation
 . css
@@ -828,6 +826,7 @@
 . warn
 . web
 . weinre
+. welcome
 > wheelDelta
 > which
 > whiteSpace

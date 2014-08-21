@@ -19,7 +19,7 @@ forms = forms || { };
 */
 var
 	jools,
-	Mark;
+	marks;
 
 
 /*
@@ -53,7 +53,7 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Mark'
+							'Object' // FUTURE 'marks.*'
 					},
 				path :
 					{
@@ -227,7 +227,7 @@ jockey.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.create( );
+		return marks.Vacant.create( );
 	}
 };
 

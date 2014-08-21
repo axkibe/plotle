@@ -22,7 +22,7 @@ var
 	fontPool,
 	euclid,
 	jools,
-	Mark,
+	marks,
 	Peer,
 	reply,
 	shell,
@@ -78,7 +78,7 @@ if( JION )
 									]
 							},
 						type :
-							'Mark',
+							'Object', // FUTURE 'marks.*'
 						defaultValue :
 							undefined
 					},
@@ -497,7 +497,7 @@ Portal.prototype.click =
 		{
 			mark =
 				shell.setMark(
-					Mark.Caret.create(
+					marks.Caret.create(
 						'path',
 							this.subPaths[ field ],
 						'at',
@@ -520,7 +520,7 @@ Portal.prototype.click =
 	)
 	{
 		shell.setMark(
-			Mark.Item.create(
+			marks.Item.create(
 				'path',
 					this.path
 			)
@@ -1208,7 +1208,7 @@ Portal.prototype._keyDown =
 				);
 
 			shell.setMark(
-				Mark.Caret.create(
+				marks.Caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1229,7 +1229,7 @@ Portal.prototype._keyDown =
 		case 'spaceTag' :
 
 			shell.setMark(
-				Mark.Caret.create(
+				marks.Caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1246,7 +1246,7 @@ Portal.prototype._keyDown =
 		case 'moveToButton' :
 
 			shell.setMark(
-				Mark.Caret.create(
+				marks.Caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1313,7 +1313,7 @@ Portal.prototype._keyLeft =
 		}
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					// FIXME rather user this.path
 					mark.caretPath.set(
@@ -1332,7 +1332,7 @@ Portal.prototype._keyLeft =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1350,47 +1350,44 @@ Portal.prototype._keyTab =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		cycle,
+		mark,
+		section;
 
-		section =
-			mark.caretPath.get( -1 );
+	mark = this.mark;
+
+	section = mark.caretPath.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
 		return;
 	}
 
-	var
-		cycle =
-			null;
+	cycle = null;
 
 	switch( section )
 	{
 		case 'spaceUser' :
 
-			cycle =
-				'spaceTag';
+			cycle = 'spaceTag';
 
 			break;
 
 		case 'spaceTag' :
 
-			cycle =
-				'moveToButton';
+			cycle = 'moveToButton';
 
 			break;
 
 		case 'moveToButton' :
 
-			cycle =
-				'spaceUser';
+			cycle = 'spaceUser';
 
 			break;
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				mark.caretPath.set(
 					mark.caretPath.length - 1,
@@ -1409,11 +1406,13 @@ Portal.prototype._keyUp =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		cpos,
+		mark,
+		section;
 
-		section =
-			mark.caretPath.get( -1 );
+	mark = this.mark;
+
+	section = mark.caretPath.get( -1 );
 
 	if(
 		!this._isSection( section )
@@ -1422,15 +1421,12 @@ Portal.prototype._keyUp =
 		return;
 	}
 
-	var
-		cpos;
-
 	switch( section )
 	{
 		case 'spaceUser' :
 
 			shell.setMark(
-				Mark.Caret.create(
+				marks.Caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1452,7 +1448,7 @@ Portal.prototype._keyUp =
 				);
 
 			shell.setMark(
-				Mark.Caret.create(
+				marks.Caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1472,7 +1468,7 @@ Portal.prototype._keyUp =
 		case 'moveToButton' :
 
 			shell.setMark(
-				Mark.Caret.create(
+				marks.Caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1548,7 +1544,7 @@ Portal.prototype._keyRight =
 		}
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path', // FIXME this.paths
 					mark.caretPath.set(
 						mark.caretPath.length - 1,
@@ -1563,7 +1559,7 @@ Portal.prototype._keyRight =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1650,7 +1646,7 @@ Portal.prototype._keyEnd =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1700,7 +1696,7 @@ Portal.prototype._keyEnter =
 	if( cycle )
 	{
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					mark.caretPath.set(
 						mark.caretPath.length - 1,

@@ -21,7 +21,7 @@ var
 	Accent,
 	euclid,
 	jools,
-	Mark,
+	marks,
 	reply,
 	shell,
 	theme;
@@ -115,7 +115,7 @@ if( JION )
 									]
 							},
 						type :
-							'Mark',
+							'Object', // FUTURE 'marks.*',
 						defaultValue :
 							null
 					},
@@ -701,7 +701,7 @@ Input.prototype.input =
 	);
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -736,7 +736,7 @@ Input.prototype._keyBackspace =
 	);
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -814,7 +814,7 @@ Input.prototype._keyEnd =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -842,7 +842,7 @@ Input.prototype._keyLeft =
 
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -869,7 +869,7 @@ Input.prototype._keyPos1 =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -896,7 +896,7 @@ Input.prototype._keyRight =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1085,7 +1085,7 @@ Input.prototype.click =
 	}
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				this.path,
 			'at',

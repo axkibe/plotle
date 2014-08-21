@@ -21,7 +21,7 @@ visual = visual || { };
 */
 var
 	jools,
-	Mark,
+	marks,
 	shell;
 
 
@@ -211,7 +211,7 @@ DocItem.prototype.click =
 			);
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					para.textPath,
 				'at',
@@ -225,7 +225,7 @@ DocItem.prototype.click =
 			doc.atRank( doc.ranks.length - 1 );
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					para.textPath,
 				'at',

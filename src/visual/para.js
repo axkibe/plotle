@@ -21,7 +21,7 @@ var
 	euclid,
 	fontPool,
 	jools,
-	Mark,
+	marks,
 	Peer,
 	shell,
 	theme;
@@ -83,7 +83,7 @@ if( JION )
 									]
 							},
 						type :
-							'Mark',
+							'Object', // FUTURE 'marks.*',
 						defaultValue :
 							undefined
 					},
@@ -215,7 +215,7 @@ Para.concernsMark =
 		}
 		else
 		{
-			return Mark.Vacant.create( );
+			return marks.Vacant.create( );
 		}
 	}
 
@@ -227,7 +227,7 @@ Para.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.create( );
+		return marks.Vacant.create( );
 	}
 };
 
@@ -945,7 +945,7 @@ Para.prototype.specialKey =
 				v1 = doc.atRank( doc.ranks.length - 1 );
 
 				shell.setMark(
-					Mark.Range.create(
+					marks.Range.create(
 						'doc',
 							doc,
 						'bPath',
@@ -1640,7 +1640,7 @@ Para.prototype._setMark =
 	if( !bPath )
 	{
 		return shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					this.textPath,
 				'at',
@@ -1653,7 +1653,7 @@ Para.prototype._setMark =
 	else
 	{
 		return shell.setMark(
-			Mark.Range.create(
+			marks.Range.create(
 				'doc',
 					doc,
 				'bPath',

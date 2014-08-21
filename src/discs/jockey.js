@@ -79,8 +79,7 @@ if( JION )
 									]
 							},
 						type :
-							'Mark'
-
+							'Object' // FUTURE 'marks.*'
 					},
 				mode :
 					{

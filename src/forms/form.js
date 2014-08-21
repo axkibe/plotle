@@ -21,7 +21,7 @@ var
 	euclid,
 	jion,
 	jools,
-	Mark,
+	marks,
 	reply,
 	shell,
 	theme;
@@ -147,7 +147,7 @@ form.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.create( );
+		return marks.Vacant.create( );
 	}
 };
 
@@ -425,7 +425,7 @@ form.prototype.cycleFocus =
 			if( ve.caretable )
 			{
 				shell.setMark(
-					Mark.Caret.create(
+					marks.Caret.create(
 						'path',
 							ve.path,
 						'at',
@@ -436,7 +436,7 @@ form.prototype.cycleFocus =
 			else
 			{
 				shell.setMark(
-					Mark.Widget.create(
+					marks.Widget.create(
 						'path',
 							ve.path
 					)

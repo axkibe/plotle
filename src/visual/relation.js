@@ -20,7 +20,7 @@ visual = visual || { };
 var
 	euclid,
 	jools,
-	Mark,
+	marks,
 	Peer,
 	shell,
 	theme;
@@ -133,7 +133,7 @@ if( JION )
 									]
 							},
 						type :
-							'Mark',
+							'Object', // FUTURE 'marks.*',
 						defaultValue :
 							undefined
 					},
@@ -239,7 +239,7 @@ Relation.spawn =
 		result.chgX.trg.path.get( -1 );
 
 	shell.setMark(
-		Mark.Caret.create(
+		marks.Caret.create(
 			'path',
 				shell
 				.space

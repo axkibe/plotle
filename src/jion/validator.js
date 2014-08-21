@@ -9,9 +9,9 @@
 | Exports.
 */
 var
-	Validator;
+	validator;
 
-Validator = { };
+validator = { };
 
 
 /*
@@ -295,7 +295,7 @@ var _checkAttribute =
 /*
 | Checks if a jion definition looks ok.
 */
-Validator.check =
+validator.check =
 	function(
 		jion // the jools object definition
 	)
@@ -355,7 +355,7 @@ Validator.check =
 */
 if( SERVER )
 {
-	module.exports = Validator;
+	module.exports = validator;
 }
 
 

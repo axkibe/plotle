@@ -11,7 +11,7 @@
 | Exports
 */
 var
-	Mark;
+	marks;
 
 
 /*
@@ -38,11 +38,11 @@ if( JION )
 		name :
 			'Vacant',
 		unit :
-			'Mark',
+			'marks',
 		singleton :
 			true,
 		subclass :
-			'Mark.Mark',
+			'marks.mark',
 		equals :
 			'primitive'
 	};
@@ -51,7 +51,8 @@ if( JION )
 
 var
 	Vacant =
-		Mark.Vacant;
+
+Vacant = marks.Vacant;
 
 
 /*

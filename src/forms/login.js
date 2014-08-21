@@ -19,7 +19,7 @@ forms = forms || { };
 */
 var
 	jools,
-	Mark,
+	marks,
 	Peer,
 	shell;
 
@@ -71,7 +71,7 @@ if( JION )
 									]
 							},
 						type :
-							'Mark',
+							'Object', // FUTURE 'marks.*',
 						defaultValue :
 							null
 					},
@@ -239,7 +239,7 @@ login.prototype.login =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					twig.userInput.path,
 				'at',
@@ -260,7 +260,7 @@ login.prototype.login =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					twig.userInput.path,
 				'at',
@@ -281,7 +281,7 @@ login.prototype.login =
 		);
 
 		shell.setMark(
-			Mark.Caret.create(
+			marks.Caret.create(
 				'path',
 					twig.passwordInput.path,
 				'at',
@@ -360,7 +360,7 @@ login.prototype.onAuth =
 		if( message.search( /Username/ ) >= 0 )
 		{
 			shell.setMark(
-				Mark.Caret.create(
+				marks.Caret.create(
 					'path',
 						twig.userInput.path,
 					'at',
@@ -371,7 +371,7 @@ login.prototype.onAuth =
 		else
 		{
 			shell.setMark(
-				Mark.Caret.create(
+				marks.Caret.create(
 					'path',
 						twig.passwordInput.path,
 					'at',
@@ -418,7 +418,7 @@ login.prototype.clear =
 	);
 
 	shell.setMark(
-		Mark.Vacant.create( )
+		marks.Vacant.create( )
 	);
 };
 

@@ -20,7 +20,7 @@ var
 	euclid,
 	jion,
 	jools,
-	Mark,
+	marks,
 	Peer,
 	reply,
 	shell,
@@ -232,7 +232,7 @@ space.concernsMark =
 	}
 	else
 	{
-		return Mark.Vacant.create( );
+		return marks.Vacant.create( );
 	}
 };
 
@@ -702,7 +702,7 @@ space.prototype.dragStart =
 							p
 					),
 				'mark',
-					Mark.Vacant.create( ),
+					marks.Vacant.create( ),
 				'path',
 					jion.path.empty,
 				'view',
@@ -735,7 +735,7 @@ space.prototype.dragStart =
 				'pnw',
 					view.depoint( p ),
 				'mark',
-					Mark.Vacant.create( ),
+					marks.Vacant.create( ),
 				'path',
 					jion.path.empty,
 				'view',
@@ -768,7 +768,7 @@ space.prototype.dragStart =
 				'hover',
 					jion.path.empty,
 				'mark',
-					Mark.Vacant.create( ),
+					marks.Vacant.create( ),
 				'path',
 					jion.path.empty,
 				'view',
@@ -901,7 +901,7 @@ space.prototype.click =
 	// otherwise ...
 
 	shell.setMark(
-		Mark.Vacant.create( )
+		marks.Vacant.create( )
 	);
 
 	return true;
@@ -973,7 +973,7 @@ space.prototype.dragStop =
 						result.chgX.trg.path.get( -1 );
 
 					shell.setMark(
-						Mark.Caret.create(
+						marks.Caret.create(
 							'path',
 								shell.
 									space.twig[ key ].
@@ -1051,7 +1051,7 @@ space.prototype.dragStop =
 						result.chgX.trg.path.get( -1 );
 
 					shell.setMark(
-						Mark.Caret.create(
+						marks.Caret.create(
 							'path',
 								shell.space
 								.twig[ key ]
@@ -1096,7 +1096,7 @@ space.prototype.dragStop =
 					key = result.chgX.trg.path.get( -1 );
 
 					shell.setMark(
-						Mark.Caret.create(
+						marks.Caret.create(
 							'path',
 								shell
 								.space

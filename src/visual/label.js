@@ -117,7 +117,7 @@ if( JION )
 							},
 
 						type :
-							'Mark',
+							'Object', // FUTURE 'marks.*',
 						defaultValue :
 							undefined
 					},

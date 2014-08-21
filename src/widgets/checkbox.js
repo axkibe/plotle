@@ -96,8 +96,7 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Mark',
-						// FIXME do not allow null
+							'Object', // FUTURE 'marks.*',
 						defaultValue :
 							null,
 						assign :
