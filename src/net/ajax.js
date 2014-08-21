@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Net;
+	net;
 
-Net = Net || { };
+net = net || { };
 
 /*
 | Capsule
@@ -29,7 +29,7 @@ if( JION )
 		name :
 			'Ajax',
 		unit :
-			'Net',
+			'net',
 		attributes :
 			{
 				'path' :
@@ -43,7 +43,7 @@ if( JION )
 		twig :
 			{
 				'Channel' :
-					'Net.Channel'
+					'net.Channel'
 			}
 	};
 }

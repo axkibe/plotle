@@ -28,7 +28,7 @@ var
 	gruga,
 	jion,
 	marks,
-	Net,
+	net,
 	Peer,
 	system,
 	swatch;
@@ -1343,24 +1343,24 @@ Shell.prototype.onload =
 	ajaxPath = jion.path.empty.Append( 'ajax' );
 
 	this.ajax =
-		Net.Ajax.create(
+		net.Ajax.create(
 			'path',
 				ajaxPath,
 			'twig:add',
 			'command',
-				Net.Channel.create(
+				net.Channel.create(
 					'path',
 						ajaxPath.Append( 'command' )
 				),
 			'twig:add',
 			'update',
-				Net.Channel.create(
+				net.Channel.create(
 					'path',
 						ajaxPath.Append( 'update' )
 				)
 		);
 
-	this.link = Net.Link.create( );
+	this.link = net.Link.create( );
 
 	username = window.localStorage.getItem( 'username' );
 

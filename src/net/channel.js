@@ -12,9 +12,9 @@
 | Export
 */
 var
-	Net;
+	net;
 
-Net = Net || { };
+net = net || { };
 
 
 /*
@@ -40,7 +40,7 @@ if( JION )
 		name :
 			'Channel',
 		unit :
-			'Net',
+			'net',
 		attributes :
 			{
 				path :
@@ -66,7 +66,7 @@ if( JION )
 }
 
 
-var Channel = Net.Channel;
+var Channel = net.Channel;
 
 
 /*

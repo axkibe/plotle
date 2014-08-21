@@ -9,9 +9,9 @@
 | Export
 */
 var
-	Net;
+	net;
 
-Net = Net || { };
+net = net || { };
 
 /*
 | Imports
@@ -41,7 +41,7 @@ if( JION )
 		name :
 			'Link',
 		unit :
-			'Net',
+			'net',
 		attributes :
 			{
 				path :
@@ -157,7 +157,7 @@ if( JION )
 	};
 }
 
-var Link = Net.Link;
+var Link = net.Link;
 
 
 /*
