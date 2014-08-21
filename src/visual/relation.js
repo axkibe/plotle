@@ -40,7 +40,7 @@ if( JION )
 {
 	return {
 		name :
-			'Relation',
+			'relation',
 		unit :
 			'visual',
 		attributes :
@@ -170,21 +170,21 @@ if( SERVER )
 		{
 			label :
 				require( './label' ),
-			Relation :
+			relation :
 				require( '../jion/this' )( module )
 		};
 }
 
 var
-	Relation;
+	relation;
 
-Relation = visual.Relation;
+relation = visual.relation;
 
 
 /*
 | Initializer.
 */
-Relation.prototype._init =
+relation.prototype._init =
 	function(
 		inherit
 	)
@@ -197,9 +197,9 @@ Relation.prototype._init =
 
 
 /*
-| Creates a new Relation by specifing its relates.
+| Creates a new relation by specifing its relates.
 */
-Relation.spawn =
+relation.spawn =
 	function(
 		item1,
 		item2
@@ -257,7 +257,7 @@ Relation.spawn =
 /*
 | Draws the relation on the fabric.
 */
-Relation.prototype.draw =
+relation.prototype.draw =
 	function(
 		fabric
 	)
@@ -330,7 +330,7 @@ Relation.prototype.draw =
 */
 if( SERVER )
 {
-	module.exports = Relation;
+	module.exports = relation;
 }
 
 

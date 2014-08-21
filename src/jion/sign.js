@@ -151,11 +151,11 @@ if( SERVER )
 		{
 			label :
 				require( '../visual/label' ),
-			Note :
+			note :
 				require( '../visual/note' ),
 			Portal :
 				require( '../visual/portal' ),
-			Relation :
+			relation :
 				require( '../visual/relation' )
 		};
 }
@@ -192,10 +192,10 @@ sign.prototype._init =
 
 				break;
 
-			case 'Note' :
+			case 'note' :
 
 				this.val =
-					visual.Note.createFromJSON( val );
+					visual.note.createFromJSON( val );
 
 				break;
 
@@ -219,10 +219,10 @@ sign.prototype._init =
 
 				break;
 
-			case 'Relation' :
+			case 'relation' :
 
 				this.val =
-					visual.Relation.createFromJSON( val );
+					visual.relation.createFromJSON( val );
 
 				break;
 

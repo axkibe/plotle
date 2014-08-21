@@ -336,7 +336,7 @@ createDisc.prototype.pushButton =
 			shell.setAction(
 				actions.createGeneric.create(
 					'itemType',
-						'Note',
+						'note',
 					'model',
 						null,
 					'start',
@@ -643,7 +643,7 @@ createDisc._isActiveButton =
 
 			switch( action.itemType )
 			{
-				case 'Note' :
+				case 'note' :
 
 					return wname === 'createNote';
 

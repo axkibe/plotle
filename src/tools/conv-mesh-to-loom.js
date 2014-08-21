@@ -91,6 +91,16 @@ var translateSign =
 		sign.val.type = 'label';
 	}
 
+	if( sign.val.type === 'Note' )
+	{
+		sign.val.type = 'note';
+	}
+
+	if( sign.val.type === 'Relation' )
+	{
+		sign.val.type = 'relation';
+	}
+
 	if( sign.val.type === 'Rect' )
 	{
 		sign.val.type = 'rect';

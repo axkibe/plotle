@@ -40,7 +40,7 @@ if( JION )
 {
 	return {
 		name :
-			'Note',
+			'note',
 		unit :
 			'visual',
 		attributes :
@@ -158,21 +158,21 @@ if( SERVER )
 
 	visual =
 		{
-			Note :
+			note :
 				require( '../jion/this' )( module )
 		};
 }
 
 var
-	Note;
+	note;
 
-Note = visual.Note;
+note = visual.note;
 
 
 /*
 | Initializer.
 */
-Note.prototype._init =
+note.prototype._init =
 	function( )
 {
 	var
@@ -224,7 +224,7 @@ Note.prototype._init =
 	this.doc =
 		this.doc.create(
 			'flowWidth',
-				zone.width - Note.innerMargin.x,
+				zone.width - note.innerMargin.x,
 			'fontsize',
 				this.fontsize,
 			'mark',
@@ -268,14 +268,14 @@ Note.prototype._init =
 /*
 | Notes use zone for positioning
 */
-Note.prototype.positioning =
+note.prototype.positioning =
 	'zone';
 
 
 /*
 | Sets the items position and size after an action.
 */
-Note.prototype.dragStop =
+note.prototype.dragStop =
 	function(
 		view,
 		p
@@ -301,9 +301,7 @@ Note.prototype.dragStop =
 /**/				zone.height < theme.note.minHeight
 /**/			)
 /**/			{
-/**/				throw new Error(
-/**/					'Note under minimum size!'
-/**/				);
+/**/				throw new Error( );
 /**/			}
 /**/		}
 
@@ -337,15 +335,13 @@ if( SHELL )
 	/*
 	| Minimum height.
 	*/
-	Note.prototype.minHeight =
-		theme.note.minHeight;
+	note.prototype.minHeight = theme.note.minHeight;
 
 
 	/*
 	| Minimum width.
 	*/
-	Note.prototype.minWidth =
-		theme.note.minWidth;
+	note.prototype.minWidth = theme.note.minWidth;
 }
 
 
@@ -353,7 +349,7 @@ if( SHELL )
 | The notes fabric.
 */
 jools.lazyValue(
-	Note.prototype,
+	note.prototype,
 	'_fabric',
 	function( )
 	{
@@ -420,7 +416,7 @@ jools.lazyValue(
 /*
 | Draws the note.
 */
-Note.prototype.draw =
+note.prototype.draw =
 	function(
 		fabric
 	)
@@ -456,8 +452,9 @@ if( SHELL )
 	/*
 	| Default margin for all notes.
 	*/
-	Note.innerMargin =
-	Note.prototype.innerMargin =
+	note.innerMargin =
+	note.prototype.innerMargin =
+		// FIXME create!
 		new euclid.margin(
 			theme.note.innerMargin
 		);
@@ -467,7 +464,7 @@ if( SHELL )
 /*
 | Resize handles to show on notes.
 */
-Note.prototype.handles =
+note.prototype.handles =
 	jools.immute(
 		{
 			n :
@@ -494,7 +491,7 @@ Note.prototype.handles =
 | The notes silhoutte.
 */
 jools.lazyValue(
-	Note.prototype,
+	note.prototype,
 	'silhoutte',
 	function( )
 	{
@@ -525,7 +522,7 @@ jools.lazyValue(
 | The notes silhoutte anchored at zero.
 */
 jools.lazyValue(
-	Note.prototype,
+	note.prototype,
 	'zeroSilhoutte',
 	function( )
 	{
@@ -561,7 +558,7 @@ jools.lazyValue(
 /*
 | Highlights the note.
 */
-Note.prototype.highlight =
+note.prototype.highlight =
 	function(
 		fabric
 	)
@@ -581,7 +578,7 @@ Note.prototype.highlight =
 /*
 | Scrolls the note so the caret comes into view.
 */
-Note.prototype.scrollMarkIntoView =
+note.prototype.scrollMarkIntoView =
 	function( )
 {
 	var
@@ -663,7 +660,7 @@ Note.prototype.scrollMarkIntoView =
 /*
 | Mouse wheel turned.
 */
-Note.prototype.mousewheel =
+note.prototype.mousewheel =
 	function(
 		view,
 		p,
@@ -697,8 +694,7 @@ Note.prototype.mousewheel =
 */
 if( SERVER )
 {
-	module.exports =
-		Note;
+	module.exports = note;
 }
 
 

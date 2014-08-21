@@ -103,7 +103,7 @@ Peer.newNote =
 	src =
 		sign.create(
 			'val',
-				visual.Note.create(
+				visual.note.create(
 					'fontsize',
 						13,
 					'zone',
@@ -340,7 +340,7 @@ Peer.newRelation =
 	src =
 		sign.create(
 			'val',
-				visual.Relation.create(
+				visual.relation.create(
 					'item1key',
 						item1key,
 					'item2key',

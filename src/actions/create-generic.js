@@ -1,7 +1,7 @@
 /*
 | An users action in the making.
 |
-| Creating a new Note.
+| Creating a new note.
 | Creating a new label.
 | Creating a new Portal.
 |

@@ -1,5 +1,5 @@
 /*
-| Common base of Note, label and Relation.
+| Everything there is in a space.
 |
 | Authors: Axel Kittenberger
 */
@@ -723,7 +723,7 @@ item.prototype.dragStop =
 				return false;
 			}
 
-			visual.Relation.spawn(
+			visual.relation.spawn(
 				shell.space.getItem(
 					action.fromItemPath.get( -1 )
 				),

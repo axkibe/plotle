@@ -41,7 +41,7 @@ IFaceSym =
 		visual.space.create(
 			'twig:add',
 			'testnote',
-			visual.Note.create(
+			visual.note.create(
 				'doc',
 					visual.Doc.create(
 						'twig:add',

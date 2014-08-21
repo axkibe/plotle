@@ -133,12 +133,12 @@ if( JION )
 			true,
 		twig :
 			{
-				'Note' :
-					'visual.Note',
+				'note' :
+					'visual.note',
 				'label' :
 					'visual.label',
-				'Relation' :
-					'visual.Relation',
+				'relation' :
+					'visual.relation',
 				'Portal' :
 					'visual.Portal'
 			}
@@ -689,7 +689,7 @@ space.prototype.dragStart =
 	if(
 		action &&
 		action.reflex === 'actions.createGeneric' &&
-		action.itemType === 'Note'
+		action.itemType === 'note'
 	)
 	{
 		transItem =
@@ -947,9 +947,9 @@ space.prototype.dragStop =
 
 			switch( action.itemType )
 			{
-				case 'Note' :
+				case 'note' :
 
-					// FIXME move to Note
+					// FIXME move to note
 					// ( and all others creators )
 
 					var

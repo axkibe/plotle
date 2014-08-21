@@ -54,7 +54,7 @@ Stubs.emptyLabel =
 
 
 Stubs.emptyNote =
-	visual.Note.create(
+	visual.note.create(
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'zone',
