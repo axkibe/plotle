@@ -531,7 +531,7 @@ change.prototype._changeTreeSet =
 		trg =
 			trg.create(
 				'path',
-					trg.path.Set( -1, key )
+					trg.path.set( -1, key )
 			);
 	}
 
@@ -877,7 +877,7 @@ change.prototype._changeTreeJoin =
 
 	key2 = pivot.ranks[ kn + 1 ];
 
-	path2 = path.Set( -2, key2 );
+	path2 = path.set( -2, key2 );
 
 	src =
 		src.affix(
@@ -985,7 +985,7 @@ change.prototype._changeTreeSplit =
 		trg =
 			trg.create(
 				'path',
-					src.path.Set( -2, vKey )
+					src.path.set( -2, vKey )
 			);
 	}
 
@@ -1250,7 +1250,7 @@ change.prototype.transformSignRay =
 		{
 			case 'jion.sign' :
 
-				signray = signray.Set( a, cx );
+				signray = signray.set( a, cx );
 
 				break;
 

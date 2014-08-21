@@ -9,10 +9,6 @@
 . Ajax
 . Append
 . AppendNC
-. Button
-. caret
-. Channel
-. CheckBox
 . Chop
 . Create
 > Doc
@@ -21,14 +17,11 @@
 . HOFOC
 . HOVER
 . Help
-. Input
 . Insert
 . Invert
-. Item
 . ItemResize
 > Label
 . Limit
-. Link
 . MAX_INTEGER
 . NORMA
 . Normal
@@ -40,14 +33,10 @@
 . PSE_M1
 > Para
 > Portal
-. range
 > Relation
 . Remove
 . Scrollbar
-. Set
 . Shorten
-. Vacant
-. Widget
 . _$atween
 . _$discJockey
 . _$font
@@ -245,6 +234,7 @@
 . cancelTimer
 . car
 . cardinalResize
+. caret
 . caretAt
 . caretBlinkSpeed
 . caretPath
@@ -255,6 +245,7 @@
 . changeTree
 > changeWrap
 > changedTouches
+. channel
 . channelName
 > charCodeAt
 . check
@@ -471,6 +462,7 @@
 > isPointInPath
 . isString
 . isnon
+. item
 > item1key
 > item2key
 . itemDrag
@@ -636,6 +628,7 @@
 > ra
 > random
 . randomPassword
+. range
 > rank
 . rankOf
 > ranks
@@ -812,6 +805,7 @@
 . userInput
 > username
 . usernameLabel
+. vacant
 > val
 > value
 . vdis
@@ -830,6 +824,7 @@
 > wheelDelta
 > which
 > whiteSpace
+. widget
 . widgetPath
 > width
 . within

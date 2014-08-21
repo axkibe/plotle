@@ -230,7 +230,7 @@ changeRay.prototype.get =
 /*
 | Returns a changeRay with one element altered.
 */
-changeRay.prototype.Set =
+changeRay.prototype.set =
 	function(
 		idx,
 		chg

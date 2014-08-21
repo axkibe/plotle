@@ -133,7 +133,7 @@ gruga.login =
 			),
 		'twig:add',
 		'userInput',
-			widgets.Input.create(
+			widgets.input.create(
 				'style',
 					'input',
 				'font',
@@ -164,7 +164,7 @@ gruga.login =
 			),
 		'twig:add',
 		'passwordInput',
-			widgets.Input.create(
+			widgets.input.create(
 				'password',
 					true,
 				'style',

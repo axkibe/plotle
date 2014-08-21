@@ -42,7 +42,7 @@ if( JION )
 	return {
 
 		name :
-			'Input',
+			'input',
 
 		unit :
 			'widgets',
@@ -187,15 +187,15 @@ if( JION )
 
 
 var
-	Input;
+	input;
 
-Input = widgets.Input;
+input = widgets.input;
 
 
 /*
 | Initializes the widget.
 */
-Input.prototype._init =
+input.prototype._init =
 	function( )
 {
 	var
@@ -231,21 +231,21 @@ Input.prototype._init =
 
 
 	this._pitch =
-		Input._pitch;
+		input._pitch;
 };
 
 
 /*
 | Default distance of text
 */
-Input._pitch =
+input._pitch =
 	euclid.point.create( 'x', 8, 'y', 3 );
 
 
 /*
 | Returns the offset nearest to point p.
 */
-Input.prototype.getOffsetAt =
+input.prototype.getOffsetAt =
 	function(
 		p
 	)
@@ -323,7 +323,7 @@ Input.prototype.getOffsetAt =
 /*
 | Returns the width of a character for password masks.
 */
-Input.prototype.maskWidth =
+input.prototype.maskWidth =
 	function(
 		size
 	)
@@ -335,7 +335,7 @@ Input.prototype.maskWidth =
 /*
 | Returns the kerning of characters for password masks.
 */
-Input.prototype.maskKern =
+input.prototype.maskKern =
 	function(
 		size
 	)
@@ -347,7 +347,7 @@ Input.prototype.maskKern =
 /*
 | Draws the mask for password fields
 */
-Input.prototype.sketchMask =
+input.prototype.sketchMask =
 	function(
 		fabric,
 		border,
@@ -449,7 +449,7 @@ Input.prototype.sketchMask =
 | Returns the fabric for the input field.
 */
 jools.lazyValue(
-	Input.prototype,
+	input.prototype,
 	'_fabric',
 	function( )
 	{
@@ -543,7 +543,7 @@ jools.lazyValue(
 /*
 | Draws the input field.
 */
-Input.prototype.draw =
+input.prototype.draw =
 	function(
 		fabric
 	)
@@ -560,7 +560,7 @@ Input.prototype.draw =
 /*
 | Returns the point of a given offset.
 */
-Input.prototype.locateOffset =
+input.prototype.locateOffset =
 	function(
 		offset // the offset to get the point from.
 	)
@@ -621,7 +621,7 @@ Input.prototype.locateOffset =
 /*
 | Draws the caret
 */
-Input.prototype._drawCaret =
+input.prototype._drawCaret =
 	function(
 		fabric
 	)
@@ -658,7 +658,7 @@ Input.prototype._drawCaret =
 /*
 | User input.
 */
-Input.prototype.input =
+input.prototype.input =
 	function(
 		text
 	)
@@ -710,7 +710,7 @@ Input.prototype.input =
 /*
 | User pressed backspace.
 */
-Input.prototype._keyBackspace =
+input.prototype._keyBackspace =
 	function( )
 {
 	var
@@ -745,7 +745,7 @@ Input.prototype._keyBackspace =
 /*
 | User pressed del.
 */
-Input.prototype._keyDel =
+input.prototype._keyDel =
 	function( )
 {
 	var
@@ -768,7 +768,7 @@ Input.prototype._keyDel =
 /*
 | User pressed return key.
 */
-Input.prototype._keyEnter =
+input.prototype._keyEnter =
 	function( )
 {
 	shell.cycleFormFocus(
@@ -781,7 +781,7 @@ Input.prototype._keyEnter =
 /*
 | User pressed down key.
 */
-Input.prototype._keyDown =
+input.prototype._keyDown =
 	function(
 		owner
 	)
@@ -793,7 +793,7 @@ Input.prototype._keyDown =
 /*
 | User pressed end key.
 */
-Input.prototype._keyEnd =
+input.prototype._keyEnd =
 	function( )
 {
 	var
@@ -823,7 +823,7 @@ Input.prototype._keyEnd =
 /*
 | User pressed left key.
 */
-Input.prototype._keyLeft =
+input.prototype._keyLeft =
 	function( )
 {
 	var
@@ -851,7 +851,7 @@ Input.prototype._keyLeft =
 /*
 | User pressed pos1 key
 */
-Input.prototype._keyPos1 =
+input.prototype._keyPos1 =
 	function( )
 {
 	var
@@ -878,7 +878,7 @@ Input.prototype._keyPos1 =
 /*
 | User pressed right key
 */
-Input.prototype._keyRight =
+input.prototype._keyRight =
 	function( )
 {
 	var
@@ -905,7 +905,7 @@ Input.prototype._keyRight =
 /*
 | User pressed up key.
 */
-Input.prototype._keyUp =
+input.prototype._keyUp =
 	function(
 		owner
 	)
@@ -919,7 +919,7 @@ Input.prototype._keyUp =
 /*
 | User pressed a special key
 */
-Input.prototype.specialKey =
+input.prototype.specialKey =
 	function(
 		key,
 		owner
@@ -989,19 +989,19 @@ Input.prototype.specialKey =
 /*
 | Inputs can hold a caret.
 */
-Input.prototype.caretable = true;
+input.prototype.caretable = true;
 
 
 /*
 | Inputs are focusable
 */
-Input.prototype.focusable = true;
+input.prototype.focusable = true;
 
 
 /*
 | Mouse hover
 */
-Input.prototype.pointingHover =
+input.prototype.pointingHover =
 	function(
 		p
 		// shift,
@@ -1047,7 +1047,7 @@ Input.prototype.pointingHover =
 /*
 | User clicked.
 */
-Input.prototype.click =
+input.prototype.click =
 	function(
 		p
 		// shift
@@ -1097,7 +1097,7 @@ Input.prototype.click =
 | The attention center.
 */
 jools.lazyValue(
-	Input.prototype,
+	input.prototype,
 	'attentionCenter',
 	function( )
 	{

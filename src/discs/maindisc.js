@@ -150,8 +150,8 @@ if( JION )
 					'widgets.button',
 				'checkbox' :
 					'widgets.checkbox',
-				'Input' :
-					'widgets.Input',
+				'input' :
+					'widgets.input',
 				'Label' :
 					'widgets.Label'
 			}

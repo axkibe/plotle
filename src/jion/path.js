@@ -366,10 +366,8 @@ path.prototype.prepend =
 
 /*
 | Returns a path with key indexed by i set
-|
-| Currently unused.
 */
-path.prototype.Set =
+path.prototype.set =
 	function(
 		idx,
 		key

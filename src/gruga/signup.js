@@ -186,7 +186,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'userInput',
-			widgets.Input.create(
+			widgets.input.create(
 				'style',
 					'input',
 				'font',
@@ -217,7 +217,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'emailInput',
-			widgets.Input.create(
+			widgets.input.create(
 				'style',
 					'input',
 				'font',
@@ -248,7 +248,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'passwordInput',
-			widgets.Input.create(
+			widgets.input.create(
 				'password',
 					true,
 				'style',
@@ -281,7 +281,7 @@ gruga.signUp =
 			),
 		'twig:add',
 		'password2Input',
-			widgets.Input.create(
+			widgets.input.create(
 				'password',
 					true,
 				'style',

@@ -191,7 +191,7 @@ signRay.prototype.get =
 /*
 | Returns a signRay with one element altered.
 */
-signRay.prototype.Set =
+signRay.prototype.set =
 	function(
 		idx,
 		sign
