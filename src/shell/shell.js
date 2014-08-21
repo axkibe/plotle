@@ -475,7 +475,7 @@ Shell.prototype.update =
 				else
 				{
 					mark =
-						marks.Range.create(
+						marks.range.create(
 							'doc',
 								item.doc,
 							'bPath',

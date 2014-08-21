@@ -945,7 +945,7 @@ Para.prototype.specialKey =
 				v1 = doc.atRank( doc.ranks.length - 1 );
 
 				shell.setMark(
-					marks.Range.create(
+					marks.range.create(
 						'doc',
 							doc,
 						'bPath',
@@ -1653,7 +1653,7 @@ Para.prototype._setMark =
 	else
 	{
 		return shell.setMark(
-			marks.Range.create(
+			marks.range.create(
 				'doc',
 					doc,
 				'bPath',

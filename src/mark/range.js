@@ -34,7 +34,7 @@ if( JION )
 {
 	return {
 		name :
-			'Range',
+			'range',
 		unit :
 			'marks',
 		subclass :
@@ -91,9 +91,9 @@ if( JION )
 
 
 var
-	Range;
+	range;
 
-Range = marks.Range;
+range = marks.range;
 
 
 /*
@@ -101,7 +101,7 @@ Range = marks.Range;
 | dependening on which comes first in the doc.
 */
 jools.lazyValue(
-	Range.prototype,
+	range.prototype,
 	'frontPath',
 	function( )
 	{
@@ -120,7 +120,7 @@ jools.lazyValue(
 | dependening on which comes first in the doc.
 */
 jools.lazyValue(
-	Range.prototype,
+	range.prototype,
 	'frontAt',
 	function( )
 	{
@@ -139,7 +139,7 @@ jools.lazyValue(
 | dependening on which comes last in the doc.
 */
 jools.lazyValue(
-	Range.prototype,
+	range.prototype,
 	'backPath',
 	function( )
 	{
@@ -158,7 +158,7 @@ jools.lazyValue(
 | dependening on which comes last in the doc.
 */
 jools.lazyValue(
-	Range.prototype,
+	range.prototype,
 	'backAt',
 	function( )
 	{
@@ -178,7 +178,7 @@ jools.lazyValue(
 | The caretPath and caretAt are identical to
 | ePath and eAt
 */
-Range.prototype.hasCaret = true;
+range.prototype.hasCaret = true;
 
 
 /*
@@ -187,7 +187,7 @@ Range.prototype.hasCaret = true;
 | This allows a common interface with text range.
 */
 jools.lazyValue(
-	Range.prototype,
+	range.prototype,
 	'caretPath',
 	function( )
 	{
@@ -202,7 +202,7 @@ jools.lazyValue(
 | This allows a common interface with text range.
 */
 jools.lazyValue(
-	Range.prototype,
+	range.prototype,
 	'caretAt',
 	function( )
 	{
@@ -215,7 +215,7 @@ jools.lazyValue(
 | The item's path.
 */
 jools.lazyValue(
-	Range.prototype,
+	range.prototype,
 	'itemPath',
 	function( )
 	{
@@ -233,7 +233,7 @@ jools.lazyValue(
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-Range.prototype.containsPath =
+range.prototype.containsPath =
 	function(
 		path
 	)
@@ -262,7 +262,7 @@ Range.prototype.containsPath =
 | The content the mark puts into the clipboard.
 */
 jools.lazyValue(
-	Range.prototype,
+	range.prototype,
 	'clipboard',
 	function( )
 	{
@@ -336,7 +336,7 @@ jools.lazyValue(
 | True if begin equals end
 */
 jools.lazyValue(
-	Range.prototype,
+	range.prototype,
 	'empty',
 	function( )
 	{
@@ -354,7 +354,7 @@ jools.lazyValue(
 |
 | FIXME remove
 */
-Range.prototype._normalize =
+range.prototype._normalize =
 	function( )
 {
 	var
