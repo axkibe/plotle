@@ -59,7 +59,7 @@ if( !SERVER )
 {
 	jools.subclass(
 		DocItem,
-		visual.Item
+		visual.item
 	);
 }
 
@@ -74,7 +74,7 @@ DocItem.prototype.dragStop =
 	)
 {
 	return(
-		visual.Item.prototype.dragStop.call(
+		visual.item.prototype.dragStop.call(
 			this,
 			view,
 			p

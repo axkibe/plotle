@@ -34,7 +34,7 @@ if( JION )
 {
 	return {
 		name :
-			'Item',
+			'item',
 		unit :
 			'marks',
 		attributes :
@@ -53,9 +53,9 @@ if( JION )
 
 
 var
-	Item;
+	item;
 
-Item = marks.Item;
+item = marks.item;
 
 
 /*
@@ -64,14 +64,14 @@ Item = marks.Item;
 | (the text range is the other mark
 |  which has this too )
 */
-Item.prototype.hasCaret = false;
+item.prototype.hasCaret = false;
 
 
 /*
 | The item's path.
 */
 jools.lazyValue(
-	Item.prototype,
+	item.prototype,
 	'itemPath',
 	function( )
 	{
@@ -84,7 +84,7 @@ jools.lazyValue(
 | The widget's path.
 */
 jools.lazyValue(
-	Item.prototype,
+	item.prototype,
 	'widgetPath',
 	function( )
 	{
@@ -99,14 +99,14 @@ jools.lazyValue(
 |
 | FIXME write something
 */
-Item.prototype.clipboard = '';
+item.prototype.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-Item.prototype.containsPath =
+item.prototype.containsPath =
 	function(
 		path
 	)

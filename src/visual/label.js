@@ -106,7 +106,7 @@ if( JION )
 								unit :
 									'visual',
 								type :
-									'Item',
+									'item',
 								func :
 									'concernsMark',
 								args :
@@ -451,7 +451,7 @@ jools.lazyValue(
 /*
 | Draws the label.
 |
-| FIXME: move the common stuff into visual.Item.draw()
+| FIXME: move the common stuff into visual.item.draw()
 */
 Label.prototype.draw =
 	function(

@@ -123,7 +123,7 @@ if( JION )
 								unit :
 									'visual',
 								type :
-									'Item',
+									'item',
 								func :
 									'concernsMark',
 								args :

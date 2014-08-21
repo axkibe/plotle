@@ -33,7 +33,7 @@ if( JION )
 						comment :
 							'the item being dragged',
 						type :
-							'Item'
+							'Object' // FUTURE items.*
 					},
 				start :
 					{
@@ -47,7 +47,7 @@ if( JION )
 						comment :
 							'the transient item while it is dragged',
 						type :
-							'Item'
+							'Object' // FUTURE items.*
 					}
 			}
 	};

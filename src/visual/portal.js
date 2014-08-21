@@ -68,7 +68,7 @@ if( JION )
 								unit :
 									'visual',
 								type :
-									'Item',
+									'item',
 								func :
 									'concernsMark',
 								args :
@@ -133,7 +133,7 @@ if( JION )
 		node :
 			true,
 		subclass :
-			'visual.Item'
+			'visual.item'
 	};
 }
 
@@ -403,7 +403,7 @@ Portal.prototype.dragStop =
 		default :
 
 			return(
-				visual.Item.prototype.dragStop.call(
+				visual.item.prototype.dragStop.call(
 					this,
 					view,
 					p
@@ -520,7 +520,7 @@ Portal.prototype.click =
 	)
 	{
 		shell.setMark(
-			marks.Item.create(
+			marks.item.create(
 				'path',
 					this.path
 			)

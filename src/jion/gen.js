@@ -1660,7 +1660,6 @@ Gen.prototype.genCreatorChecks =
 		{
 			case 'Array' :
 			case 'Function' :
-			case 'Item' : // FUTURE
 			case 'Object' :
 
 				continue;

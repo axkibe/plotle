@@ -50,10 +50,10 @@ if( SERVER )
 | Constructor
 */
 var
-	Item;
+	item;
 
-Item =
-visual.Item =
+item =
+visual.item =
 	function( )
 {
 	// this is an abstract class
@@ -65,7 +65,7 @@ visual.Item =
 | Returns the mark if an item with 'path' concerns about
 | the mark.
 */
-Item.concernsMark =
+item.concernsMark =
 	function(
 		mark,
 		path
@@ -99,7 +99,7 @@ Item.concernsMark =
 | It is the last path entry.
 */
 jools.lazyValue(
-	Item.prototype,
+	item.prototype,
 	'key',
 	function( )
 	{
@@ -112,7 +112,7 @@ jools.lazyValue(
 | Returns the compass direction of the handle
 | if p is on a resizer handle.
 */
-Item.prototype.checkHandles =
+item.prototype.checkHandles =
 	function(
 		view,
 		p
@@ -174,7 +174,7 @@ Item.prototype.checkHandles =
 | FIXME vars
 */
 jools.lazyValue(
-	Item.prototype,
+	item.prototype,
 	'_handles',
 	function( )
 	{
@@ -348,7 +348,7 @@ jools.lazyValue(
 /*
 | Sketches all resize handles.
 */
-Item.prototype.sketchAllHandles =
+item.prototype.sketchAllHandles =
 	function(
 		fabric,
 		border,
@@ -407,7 +407,7 @@ Item.prototype.sketchAllHandles =
 /*
 | Sketches one or all resize handles.
 */
-Item.prototype.sketchHandle =
+item.prototype.sketchHandle =
 	function(
 		fabric,
 		border,
@@ -455,7 +455,7 @@ Item.prototype.sketchHandle =
 /*
 | Draws the handles of an item ( resize, itemmenu )
 */
-Item.prototype.drawHandles =
+item.prototype.drawHandles =
 	function(
 		fabric,
 		view
@@ -500,7 +500,7 @@ Item.prototype.drawHandles =
 /*
 | Checks if a dragStart targets this item.
 */
-Item.prototype.dragStart =
+item.prototype.dragStart =
 	function(
 		view,
 		p,
@@ -597,7 +597,7 @@ Item.prototype.dragStart =
 		if( shell.space.focusedItem( ) !== this )
 		{
 			shell.setMark(
-				marks.Item.create(
+				marks.item.create(
 					'path',
 						this.path
 				)
@@ -627,7 +627,7 @@ Item.prototype.dragStart =
 /*
 | A move during an action.
 */
-Item.prototype.dragMove =
+item.prototype.dragMove =
 	function(
 		view,
 		p
@@ -698,7 +698,7 @@ Item.prototype.dragMove =
 /*
 | Sets the items position and size after an action.
 */
-Item.prototype.dragStop =
+item.prototype.dragStop =
 	function(
 		view,
 		p
@@ -744,7 +744,7 @@ Item.prototype.dragStop =
 |
 | Checks if this item reacts on this.
 */
-Item.prototype.pointingHover =
+item.prototype.pointingHover =
 	function(
 		view,
 		p
@@ -796,7 +796,7 @@ Item.prototype.pointingHover =
 |
 | FIXME, make this correct.
 */
-Item.prototype.equals =
+item.prototype.equals =
 	function(
 		obj
 	)
@@ -810,8 +810,7 @@ Item.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports =
-		Item;
+	module.exports = item;
 }
 
 } )( );

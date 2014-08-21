@@ -40,7 +40,7 @@ change = jion.change;
 
 sign = jion.sign;
 
-// sign for a new Item
+// sign for a new item
 newItemSign =
 	sign.create(
 		'path',

@@ -45,7 +45,7 @@ if( JION )
 						comment :
 							'the transient item in creation',
 						type :
-							'Item',
+							'item',
 						allowsNull :
 							true
 					},
@@ -54,7 +54,7 @@ if( JION )
 						comment :
 							'a transient item used as model',
 						type :
-							'Item',
+							'Object', // FUTURE visual.*
 						allowsNull :
 							true
 					},
