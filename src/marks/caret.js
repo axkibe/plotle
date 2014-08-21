@@ -37,8 +37,6 @@ if( JION )
 			'caret',
 		unit :
 			'marks',
-		subclass :
-			'marks.mark',
 		attributes :
 			{
 				path :

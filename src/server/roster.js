@@ -650,12 +650,6 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/marks/mark.js',
-		'inBundle',
-			true
-	),
-	Resource.create(
-		'filePath',
 			'src/marks/caret.js',
 		'hasJion',
 			true,

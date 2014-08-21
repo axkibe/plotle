@@ -41,8 +41,6 @@ if( JION )
 			'marks',
 		singleton :
 			true,
-		subclass :
-			'marks.mark',
 		equals :
 			'primitive'
 	};

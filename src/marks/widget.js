@@ -33,23 +33,16 @@ var
 if( JION )
 {
 	return {
-
 		name :
 			'Widget',
-
 		unit :
 			'marks',
-
-		subclass :
-			'marks.mark',
-
 		attributes :
 			{
 				path :
 					{
 						comment :
 							'path of the item',
-
 						type :
 							'path'
 					}
@@ -69,8 +62,7 @@ Widget = marks.Widget;
 | (the text range is the other mark
 |  which has this too )
 */
-Widget.prototype.hasCaret =
-	false;
+Widget.prototype.hasCaret = false;
 
 
 /*
@@ -120,9 +112,7 @@ Widget.prototype.containsPath =
 /**/{
 /**/	if( path.length === 0 )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid empty path'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 

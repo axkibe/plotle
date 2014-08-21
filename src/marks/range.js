@@ -37,8 +37,6 @@ if( JION )
 			'range',
 		unit :
 			'marks',
-		subclass :
-			'marks.mark',
 		attributes :
 			{
 				bPath :
