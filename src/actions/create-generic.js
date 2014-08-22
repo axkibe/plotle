@@ -45,7 +45,7 @@ if( JION )
 						comment :
 							'the transient item in creation',
 						type :
-							'item',
+							'Object', // FUTURE 'items.*',
 						allowsNull :
 							true
 					},

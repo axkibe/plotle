@@ -88,9 +88,7 @@ if( JION )
 						comment :
 							'point in the north-west',
 						type :
-							'point',
-						unit :
-							'euclid',
+							'euclid.point',
 						json :
 							true
 					},

@@ -44,10 +44,8 @@ if( JION )
 							'source signature',
 						json :
 							'true',
-						unit :
-							'jion',
 						type :
-							'sign'
+							'jion.sign'
 					},
 				trg :
 					{
@@ -55,10 +53,8 @@ if( JION )
 							'source signature',
 						json :
 							'true',
-						unit :
-							'jion',
 						type :
-							'sign'
+							'jion.sign'
 					}
 			},
 		node :

@@ -251,7 +251,9 @@ Gen.prototype._init =
 		// TODO
 		if( jAttr.unit )
 		{
-			console.log( 'WARNING: ' + jAttr.unit + '.' + jAttr.type );
+			throw new Error( 'ERROR: ' + jAttr.unit + '.' + jAttr.type );
+
+			//console.log( 'WARNING: ' + jAttr.unit + '.' + jAttr.type );
 		}
 		else if( jAttr.type.indexOf( '.' ) < 0  )
 		{

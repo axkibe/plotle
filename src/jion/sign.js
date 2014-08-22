@@ -67,10 +67,8 @@ if( JION )
 							'path the signature affects',
 						json :
 							'true',
-						unit :
-							'jion',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							undefined
 					},
