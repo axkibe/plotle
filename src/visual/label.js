@@ -133,7 +133,7 @@ if( JION )
 		node :
 			true,
 		subclass :
-			'visual.DocItem'
+			'visual.docItem'
 	};
 }
 
@@ -382,7 +382,7 @@ label.prototype.dragStop =
 		default :
 
 			return (
-				visual.DocItem.prototype.dragStop.call(
+				visual.docItem.prototype.dragStop.call(
 					this,
 					view,
 					p

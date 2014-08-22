@@ -43,8 +43,8 @@ if( SERVER )
 /*
 | Constructor
 */
-var DocItem =
-visual.DocItem =
+var docItem =
+visual.docItem =
 	function( )
 {
 	// initializing abstract.
@@ -56,7 +56,7 @@ visual.DocItem =
 if( !SERVER )
 {
 	jools.subclass(
-		DocItem,
+		docItem,
 		visual.item
 	);
 }
@@ -65,7 +65,7 @@ if( !SERVER )
 /*
 | Sets the items position and size after an action.
 */
-DocItem.prototype.dragStop =
+docItem.prototype.dragStop =
 	function(
 		view,
 		p
@@ -85,7 +85,7 @@ DocItem.prototype.dragStop =
 | The attention center.
 */
 jools.lazyValue(
-	DocItem.prototype,
+	docItem.prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -113,7 +113,7 @@ jools.lazyValue(
 /*
 | Returns the para at point. FIXME, honor scroll here.
 */
-DocItem.prototype.getParaAtPoint =
+docItem.prototype.getParaAtPoint =
 	function(
 		p
 	)
@@ -133,7 +133,7 @@ DocItem.prototype.getParaAtPoint =
 /*
 | Sees if this item is being clicked.
 */
-DocItem.prototype.click =
+docItem.prototype.click =
 	function(
 		space,
 		view,
@@ -238,7 +238,7 @@ DocItem.prototype.click =
 /*
 | A text has been inputed.
 */
-DocItem.prototype.input =
+docItem.prototype.input =
 	function(
 		text
 	)
@@ -255,7 +255,7 @@ DocItem.prototype.input =
 /*
 | Handles a special key.
 */
-DocItem.prototype.specialKey =
+docItem.prototype.specialKey =
 	function(
 		key,
 		shift,

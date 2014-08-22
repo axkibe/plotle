@@ -11,8 +11,6 @@
 . AppendNC
 . Chop
 . Create
-> Doc
-. DocItem
 . FOCUS
 . HOFOC
 . HOVER
@@ -31,9 +29,7 @@
 . PNW
 . PSE
 . PSE_M1
-> Para
 > Portal
-> Relation
 . Remove
 . Scrollbar
 . Shorten
@@ -325,6 +321,7 @@
 . disc
 > display
 > doc
+. docItem
 . down
 . dragMove
 . dragStart
@@ -591,6 +588,7 @@
 . paint
 . paintText
 . pan
+> para
 . paraSep
 > parse
 > passhash
@@ -640,7 +638,7 @@
 . reflect
 > register
 . reject
-. relation
+> relation
 . relationState
 > releaseCapture
 > reload
