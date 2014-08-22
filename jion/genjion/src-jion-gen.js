@@ -9,7 +9,8 @@
 | Export.
 */
 var
-	Gen;
+	jion =
+		jion || { };
 
 
 /*
@@ -67,17 +68,19 @@ var
 /*
 | Jion.
 */
-Gen =
-	{
-		prototype :
-			prototype
-	};
+var
+	gen =
+	jion.gen =
+		{
+			prototype :
+				prototype
+		};
 
 
 /*
-| Creates a new Gen object.
+| Creates a new gen object.
 */
-Gen.create =
+gen.create =
 prototype.create =
 	function(
 		// free strings
@@ -88,7 +91,7 @@ prototype.create =
 
 		v_jion;
 
-	if( this !== Gen )
+	if( this !== gen )
 	{
 		inherit = this;
 
@@ -150,19 +153,19 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'Gen';
+prototype.reflect = 'gen';
 
 
 /*
 | New Reflection.
 */
-prototype.reflex = 'gen';
+prototype.reflex = 'jion.gen';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'Gen';
+prototype.reflexName = 'gen';
 
 
 /*
@@ -204,7 +207,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = Gen;
+	module.exports = gen;
 }
 
 
