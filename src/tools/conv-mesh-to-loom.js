@@ -96,6 +96,11 @@ var translateSign =
 		sign.val.type = 'note';
 	}
 
+	if( sign.val.type === 'Portal' )
+	{
+		sign.val.type = 'portal';
+	}
+
 	if( sign.val.type === 'Relation' )
 	{
 		sign.val.type = 'relation';

@@ -155,7 +155,7 @@ Peer.newPortal =
 	src =
 		sign.create(
 			'val',
-				visual.Portal.create(
+				visual.portal.create(
 					'zone',
 						zone,
 					'spaceUser',

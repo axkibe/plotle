@@ -139,8 +139,8 @@ if( JION )
 					'visual.label',
 				'relation' :
 					'visual.relation',
-				'Portal' :
-					'visual.Portal'
+				'portal' :
+					'visual.portal'
 			}
 	};
 }
@@ -759,7 +759,7 @@ space.prototype.dragStart =
 	(
 		action &&
 		action.reflex === 'actions.createGeneric' &&
-		action.itemType === 'Portal'
+		action.itemType === 'portal'
 
 	)
 	{
@@ -1070,7 +1070,7 @@ space.prototype.dragStop =
 
 					break;
 
-				case 'Portal' :
+				case 'portal' :
 
 					var
 						portal;

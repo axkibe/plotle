@@ -44,7 +44,7 @@ if( JION )
 {
 	return {
 		name :
-			'Portal',
+			'portal',
 		unit :
 			'visual',
 		attributes :
@@ -146,21 +146,21 @@ if( SERVER )
 
 	visual =
 		{
-			Portal :
+			portal :
 				require( '../jion/this' )( module )
 		};
 }
 
 
 var
-	Portal =
-		visual.Portal;
+	portal =
+		visual.portal;
 
 
 /*
 | Initializer.
 */
-Portal.prototype._init =
+portal.prototype._init =
 	function( )
 {
 	var
@@ -249,7 +249,7 @@ Portal.prototype._init =
 /*
 | List of all space fields of the portal
 */
-Portal.spaceFields =
+portal.spaceFields =
 	jools.immute(
 		{
 			spaceUser :
@@ -263,8 +263,7 @@ Portal.spaceFields =
 /*
 | Portals are positioned by their zone.
 */
-Portal.prototype.positioning =
-	'zone';
+portal.prototype.positioning = 'zone';
 
 
 if( SHELL )
@@ -272,14 +271,14 @@ if( SHELL )
 	/*
 	| Minimum height.
 	*/
-	Portal.prototype.minHeight =
+	portal.prototype.minHeight =
 		theme.portal.minHeight;
 
 
 	/*
 	| Minimum width.
 	*/
-	Portal.prototype.minWidth =
+	portal.prototype.minWidth =
 		theme.portal.minWidth;
 }
 
@@ -287,7 +286,7 @@ if( SHELL )
 /*
 | Resize handles to show on portals.
 */
-Portal.prototype.handles =
+portal.prototype.handles =
 	jools.immute(
 		{
 			n :
@@ -314,7 +313,7 @@ Portal.prototype.handles =
 | The portal's silhoutte.
 */
 jools.lazyValue(
-	Portal.prototype,
+	portal.prototype,
 	'silhoutte',
 	function( )
 	{
@@ -334,7 +333,7 @@ jools.lazyValue(
 | The portal's silhoutte at zero.
 */
 jools.lazyValue(
-	Portal.prototype,
+	portal.prototype,
 	'zeroSilhoutte',
 	function( )
 	{
@@ -358,7 +357,7 @@ jools.lazyValue(
 /*
 | Sets the items position and size after an action.
 */
-Portal.prototype.dragStop =
+portal.prototype.dragStop =
 	function(
 		view,
 		p
@@ -384,7 +383,7 @@ Portal.prototype.dragStop =
 				zone.height < theme.portal.minHeight
 			)
 			{
-				// Portal under minimum size!
+				// portal under minimum size!
 				throw new Error( );
 			}
 
@@ -416,7 +415,7 @@ Portal.prototype.dragStop =
 /*
 | Sees if this portal is being clicked.
 */
-Portal.prototype.click =
+portal.prototype.click =
 	function(
 		space,
 		view,
@@ -481,7 +480,7 @@ Portal.prototype.click =
 		.depoint( p )
 		.sub( zone.pnw );
 
-	for( var field in Portal.spaceFields )
+	for( var field in portal.spaceFields )
 	{
 		var
 			sf =
@@ -535,7 +534,7 @@ Portal.prototype.click =
 | Returns the attention center.
 */
 jools.lazyValue(
-	Portal.prototype,
+	portal.prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -603,7 +602,7 @@ jools.lazyValue(
 /*
 | Draws the portal.
 */
-Portal.prototype.draw =
+portal.prototype.draw =
 	function(
 		fabric
 	)
@@ -620,7 +619,7 @@ Portal.prototype.draw =
 /*
 | Mouse wheel turned.
 */
-Portal.prototype.mousewheel =
+portal.prototype.mousewheel =
 	function(
 		view,
 		p
@@ -641,7 +640,7 @@ Portal.prototype.mousewheel =
 /*
 | Highlights the portal.
 */
-Portal.prototype.highlight =
+portal.prototype.highlight =
 	function( fabric )
 {
 	fabric.edge(
@@ -661,7 +660,7 @@ Portal.prototype.highlight =
 |
 | Checks if this item reacts on this.
 */
-Portal.prototype.pointingHover =
+portal.prototype.pointingHover =
 	function(
 		view,
 		p
@@ -731,7 +730,7 @@ Portal.prototype.pointingHover =
 | The protal's fabric.
 */
 jools.lazyValue(
-	Portal.prototype,
+	portal.prototype,
 	'_fabric',
 	function( )
 	{
@@ -894,7 +893,7 @@ jools.lazyValue(
 /*
 | Text has been inputed.
 */
-Portal.prototype.input =
+portal.prototype.input =
 	function(
 		text
 	)
@@ -944,7 +943,7 @@ if( SHELL )
 	/*
 	| Font for spacesUser/Tag
 	*/
-	Portal.prototype._fonts =
+	portal.prototype._fonts =
 		jools.immute( {
 			spaceUser :
 				fontPool.get(
@@ -969,7 +968,7 @@ if( SHELL )
 	/*
 	| Returns the point of a given offset.
 	*/
-	Portal.prototype._locateOffset =
+	portal.prototype._locateOffset =
 		function(
 			section,   // 'spaceUser' or 'spaceTag'
 			offset     // the offset to get the point from.
@@ -1007,7 +1006,7 @@ if( SHELL )
 /*
 | Draws the caret
 */
-Portal.prototype._drawCaret =
+portal.prototype._drawCaret =
 	function(
 		fabric
 	)
@@ -1066,7 +1065,7 @@ Portal.prototype._drawCaret =
 /*
 | User pressed a special key.
 */
-Portal.prototype.specialKey =
+portal.prototype.specialKey =
 	function(
 		key
 		// shift
@@ -1141,7 +1140,7 @@ Portal.prototype.specialKey =
 /*
 | User pressed backspace.
 */
-Portal.prototype._keyBackspace =
+portal.prototype._keyBackspace =
 	function( )
 {
 	var
@@ -1177,7 +1176,7 @@ Portal.prototype._keyBackspace =
 /*
 | User pressed down key.
 */
-Portal.prototype._keyDown =
+portal.prototype._keyDown =
 	function( )
 {
 	var
@@ -1267,7 +1266,7 @@ Portal.prototype._keyDown =
 /*
 | User pressed right key.
 */
-Portal.prototype._keyLeft =
+portal.prototype._keyLeft =
 	function( )
 {
 	var
@@ -1346,7 +1345,7 @@ Portal.prototype._keyLeft =
 /*
 | User pressed down key.
 */
-Portal.prototype._keyTab =
+portal.prototype._keyTab =
 	function( )
 {
 	var
@@ -1402,7 +1401,7 @@ Portal.prototype._keyTab =
 /*
 | User pressed down key.
 */
-Portal.prototype._keyUp =
+portal.prototype._keyUp =
 	function( )
 {
 	var
@@ -1486,7 +1485,7 @@ Portal.prototype._keyUp =
 /*
 | User pressed right key.
 */
-Portal.prototype._keyRight =
+portal.prototype._keyRight =
 	function( )
 {
 	var
@@ -1574,7 +1573,7 @@ Portal.prototype._keyRight =
 /*
 | User pressed del.
 */
-Portal.prototype._keyDel =
+portal.prototype._keyDel =
 	function( )
 {
 	var
@@ -1615,7 +1614,7 @@ Portal.prototype._keyDel =
 /*
 | User pressed end key.
 */
-Portal.prototype._keyEnd =
+portal.prototype._keyEnd =
 	function( )
 {
 	var
@@ -1659,7 +1658,7 @@ Portal.prototype._keyEnd =
 /*
 | User pressed enter key.
 */
-Portal.prototype._keyEnter =
+portal.prototype._keyEnter =
 	function( )
 {
 	var
@@ -1725,7 +1724,7 @@ Portal.prototype._keyEnter =
 /*
 | Returns true if section is a section.
 */
-Portal.prototype._isSection =
+portal.prototype._isSection =
 	function(
 		section
 	)
@@ -1749,7 +1748,7 @@ Portal.prototype._isSection =
 /*
 | Prepares the moveTo button.
 */
-Portal.prototype._prepareMoveToButton =
+portal.prototype._prepareMoveToButton =
 	function( )
 {
 	var
@@ -1805,7 +1804,7 @@ Portal.prototype._prepareMoveToButton =
 /*
 | Prepares an input field ( user / tag )
 */
-Portal.prototype._prepareField =
+portal.prototype._prepareField =
 	function(
 		section,
 		basePNW
@@ -1896,7 +1895,7 @@ Portal.prototype._prepareField =
 /*
 | User pressed pos1 key,
 */
-Portal.prototype._keyPos1 =
+portal.prototype._keyPos1 =
 	function( )
 {
 	shell.setMark(
@@ -1911,7 +1910,7 @@ Portal.prototype._keyPos1 =
 /*
 | Returns the offset nearest to point p.
 */
-Portal.prototype._getOffsetAt =
+portal.prototype._getOffsetAt =
 	function(
 		section,
 		x
@@ -1968,7 +1967,7 @@ Portal.prototype._getOffsetAt =
 /*
 | Issues the moveTo action.
 */
-Portal.prototype._moveTo =
+portal.prototype._moveTo =
 	function( )
 {
 	shell.moveToSpace(
@@ -1984,7 +1983,7 @@ Portal.prototype._moveTo =
 */
 if( SERVER )
 {
-	module.exports = Portal;
+	module.exports = portal;
 }
 
 

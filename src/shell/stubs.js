@@ -77,7 +77,7 @@ Stubs.emptyNote =
 
 
 Stubs.emptyPortal =
-	visual.Portal.create(
+	visual.portal.create(
 		'zone',
 			euclid.rect.create(
 				'pnw',

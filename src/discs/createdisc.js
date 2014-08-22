@@ -353,7 +353,7 @@ createDisc.prototype.pushButton =
 			shell.setAction(
 				actions.createGeneric.create(
 					'itemType',
-						'Portal',
+						'portal',
 					'model',
 						null,
 					'start',
@@ -651,7 +651,7 @@ createDisc._isActiveButton =
 
 					return wname === 'createLabel';
 
-				case 'Portal' :
+				case 'portal' :
 
 					return wname === 'createPortal';
 

@@ -153,7 +153,7 @@ if( SERVER )
 				require( '../visual/label' ),
 			note :
 				require( '../visual/note' ),
-			Portal :
+			portal :
 				require( '../visual/portal' ),
 			relation :
 				require( '../visual/relation' )
@@ -205,10 +205,10 @@ sign.prototype._init =
 
 				break;
 
-			case 'Portal' :
+			case 'portal' :
 
 				this.val =
-					visual.Portal.createFromJSON( val );
+					visual.portal.createFromJSON( val );
 
 				break;
 
