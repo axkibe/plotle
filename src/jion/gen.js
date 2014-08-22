@@ -222,7 +222,9 @@ Gen.prototype._init =
 		{
 			if( subParts.length > 2 )
 			{
-				throw new Error( 'subclass can only have one dot' );
+				throw new Error(
+					'subclass can only have one dot'
+				);
 			}
 
 			if( !units[ subParts[ 0 ] ] )
@@ -249,13 +251,7 @@ Gen.prototype._init =
 		jAttr = jion.attributes[ name ];
 
 		// TODO
-		if( jAttr.unit )
-		{
-			throw new Error( 'ERROR: ' + jAttr.unit + '.' + jAttr.type );
-
-			//console.log( 'WARNING: ' + jAttr.unit + '.' + jAttr.type );
-		}
-		else if( jAttr.type.indexOf( '.' ) < 0  )
+		if( jAttr.type.indexOf( '.' ) < 0  )
 		{
 			switch( jAttr.type )
 			{
@@ -288,7 +284,7 @@ Gen.prototype._init =
 		}
 		else
 		{
-			attrUnit = jAttr.unit;
+			attrUnit = undefined;
 
 			attrType = jAttr.type;
 		}

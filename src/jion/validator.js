@@ -103,7 +103,6 @@ var _checkConcern =
 		concern
 	)
 {
-
 	for( var name in concern )
 	{
 		switch( name )
@@ -269,7 +268,6 @@ var _checkAttribute =
 			case 'assign' :
 			case 'comment' :
 			case 'type' :
-			case 'unit' :
 
 				break;
 
