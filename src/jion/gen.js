@@ -269,11 +269,13 @@ Gen.prototype._init =
 
 				default :
 
+					// FIXME
 					switch( jAttr.type )
 					{
 						case 'path' :
 							throw new Error( 'Error: NONE.' + jAttr.type );
 					}
+					throw new Error( 'Error: NONE.' + jAttr.type );
 
 					console.log( 'WARNING: NONE.' + jAttr.type );
 			}

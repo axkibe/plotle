@@ -45,14 +45,14 @@ if( JION )
 						comment :
 							'point in north west',
 						type :
-							'point'
+							'euclid.point'
 					},
 				pse :
 					{
 						comment :
 							'point in south east',
 						type :
-							'point'
+							'euclid.point'
 					},
 				// FIXME make proper optionals
 				gradientPC :
@@ -60,7 +60,7 @@ if( JION )
 						comment :
 							'center for gradient',
 						type :
-							'point',
+							'euclid.point',
 						defaultValue :
 							null,
 						assign :

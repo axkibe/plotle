@@ -50,7 +50,7 @@ if( JION )
 						comment :
 							'designed position of the text',
 						type :
-							'anchorPoint'
+							'design.anchorPoint'
 					},
 				hover :
 					{
