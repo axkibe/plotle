@@ -73,10 +73,8 @@ if( JION )
 							'Object', // FUTURE
 						concerns :
 							{
-								unit :
-									'visual',
 								type :
-									'space',
+									'visual.space',
 								func :
 									'concernsMark',
 								args :

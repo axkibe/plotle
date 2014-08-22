@@ -172,6 +172,9 @@ Gen.prototype._init =
 		attrType,
 		attrUnit,
 		concerns,
+		concernsParts,
+		concernsType,
+		concernsUnit,
 		constructorList,
 		defaultValue,
 		jAttr,
@@ -328,14 +331,46 @@ Gen.prototype._init =
 
 		concerns = jAttr.concerns;
 
-		if( concerns && concerns.unit )
+		if( concerns && concerns.type )
 		{
-			if( !units[ concerns.unit ] )
+			concernsParts = concerns.type.split( '.' );
+
+			if( concerns.unit )
 			{
-				units[ concerns.unit ] = { };
+				// TODO
+				throw new Error(
+					'unit is deprecated'
+				);
 			}
 
-			units[ concerns.unit ][ concerns.type ] = true;
+			if( concernsParts.length > 2 )
+			{
+				throw new Error(
+					'concerns can only have one dot.'
+				);
+			}
+			else if( concernsParts.length === 2 )
+			{
+				concernsUnit = concernsParts[ 0 ];
+
+				concernsType = concernsParts[ 1 ];
+			}
+			else
+			{
+				throw new Error(
+					'concerns misses type.'
+				);
+			}
+
+			if( concernsUnit )
+			{
+				if( !units[ concernsUnit ] )
+				{
+					units[ concernsUnit ] = { };
+				}
+
+				units[ concernsUnit ][ concernsType ] = true;
+			}
 		}
 
 		// tests also if defaultValue is defined to be `undefined`
@@ -392,7 +427,21 @@ Gen.prototype._init =
 				comment :
 					jAttr.comment,
 				concerns :
-					jAttr.concerns,
+					jAttr.concerns
+					?
+						Object.freeze( {
+							unit :
+								concernsUnit,
+							type :
+								concernsType,
+							func :
+								jAttr.concerns.func,
+							args :
+								jAttr.concerns.args,
+							member :
+								jAttr.concerns.member
+						} )
+					: null,
 				defaultValue :
 					defaultValue,
 				json :

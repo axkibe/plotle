@@ -79,7 +79,7 @@ if( JION )
 
 
 var
-	caret =
+	caret;
 
 caret = marks.caret;
 

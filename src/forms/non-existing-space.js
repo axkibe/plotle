@@ -61,10 +61,8 @@ if( JION )
 							'Object', // FUTURE 'marks.*',
 						concerns :
 							{
-								unit :
-									'forms',
 								type :
-									'form',
+									'forms.form',
 								func :
 									'concernsMark',
 								args :

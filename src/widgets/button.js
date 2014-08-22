@@ -81,10 +81,8 @@ if( JION )
 							null,
 						concerns :
 							{
-								unit :
-									'widgets',
 								type :
-									'widget',
+									'widgets.widget',
 								func :
 									'concernsHover',
 								args :

@@ -76,10 +76,8 @@ if( JION )
 							null,
 						concerns :
 							{
-								unit :
-									'widgets',
 								type :
-									'widget',
+									'widgets.widget',
 								func :
 									'concernsHover',
 								args :
@@ -102,10 +100,8 @@ if( JION )
 							'the users mark',
 						concerns :
 							{
-								unit :
-									'widgets',
 								type :
-									'widget',
+									'widgets.widget',
 								func :
 									'concernsMark',
 								args :

@@ -70,10 +70,8 @@ if( JION )
 							'the users mark',
 						concerns :
 							{
-								unit :
-									'visual',
 								type :
-									'para',
+									'visual.para',
 								func :
 									'concernsMark',
 								args :

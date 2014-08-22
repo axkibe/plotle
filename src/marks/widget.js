@@ -52,7 +52,7 @@ if( JION )
 
 
 var
-	widget =
+	widget;
 
 widget = marks.widget;
 

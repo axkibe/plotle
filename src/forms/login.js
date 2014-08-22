@@ -58,10 +58,8 @@ if( JION )
 							'the users mark',
 						concerns :
 							{
-								unit :
-									'forms',
 								type :
-									'form',
+									'forms.form',
 								func :
 									'concernsMark',
 								args :

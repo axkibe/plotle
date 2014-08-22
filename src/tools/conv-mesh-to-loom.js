@@ -72,6 +72,9 @@ var translateSign =
 		sign
 	)
 {
+	var
+		key;
+
 	sign.type = 'sign';
 
 	if( !sign.val )
@@ -118,7 +121,7 @@ var translateSign =
 
 	if( sign.val.twig )
 	{
-		for( var key in sign.val.twig )
+		for( key in sign.val.twig )
 		{
 			if( sign.val.twig[ key ].type === 'Para' )
 			{
@@ -134,7 +137,7 @@ var translateSign =
 			sign.val.doc.type = 'doc';
 		}
 
-		for( var key in sign.val.doc.twig )
+		for( key in sign.val.doc.twig )
 		{
 			if( sign.val.doc.twig[ key ].type === 'Para' )
 			{

@@ -67,10 +67,8 @@ if( JION )
 							'the users mark',
 						concerns :
 							{
-								unit :
-									'discs',
 								type :
-									'jockey',
+									'discs.jockey',
 								func :
 									'concernsMark',
 								args :

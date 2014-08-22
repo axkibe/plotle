@@ -111,7 +111,6 @@ var _checkConcern =
 			case 'func' :
 			case 'member' :
 			case 'type' :
-			case 'unit' :
 
 				break;
 

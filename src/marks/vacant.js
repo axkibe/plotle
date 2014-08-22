@@ -48,7 +48,7 @@ if( JION )
 
 
 var
-	vacant =
+	vacant;
 
 vacant = marks.vacant;
 
