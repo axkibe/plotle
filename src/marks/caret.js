@@ -44,7 +44,7 @@ if( JION )
 						comment :
 							'path of the caret',
 						type :
-							'path'
+							'jion.path'
 					},
 				at :
 					{

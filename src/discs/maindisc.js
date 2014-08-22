@@ -65,7 +65,7 @@ if( JION )
 						comment :
 							'the widget hovered upon',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							null
 					},
@@ -92,7 +92,7 @@ if( JION )
 						comment :
 							'path of the disc',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							undefined
 					},

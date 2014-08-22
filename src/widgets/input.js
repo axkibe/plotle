@@ -71,7 +71,7 @@ if( JION )
 						comment :
 							'component hovered upon',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							null,
 						concerns :
@@ -140,7 +140,7 @@ if( JION )
 						comment :
 							'the path of the widget',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							null
 					},

@@ -45,7 +45,7 @@ if( JION )
 						comment :
 							'the widget hovered upon',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							null
 					},
@@ -77,7 +77,7 @@ if( JION )
 						comment :
 							'the path of the form',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							undefined
 					},

@@ -43,9 +43,8 @@ if( JION )
 					{
 						comment :
 							'path of the item',
-
 						type :
-							'path'
+							'jion.path'
 					}
 			}
 	};

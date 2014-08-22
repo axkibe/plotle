@@ -49,7 +49,7 @@ if( JION )
 						comment :
 							'the path of the link',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							null
 					},

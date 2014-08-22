@@ -268,6 +268,12 @@ Gen.prototype._init =
 
 				default :
 
+					switch( jAttr.type )
+					{
+						case 'path' :
+							throw new Error( 'Error: NONE.' + jAttr.type );
+					}
+
 					console.log( 'WARNING: NONE.' + jAttr.type );
 			}
 		}

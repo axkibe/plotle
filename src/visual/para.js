@@ -92,7 +92,7 @@ if( JION )
 						comment :
 							'the path of the para',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							undefined
 					},

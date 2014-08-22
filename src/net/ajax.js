@@ -37,7 +37,7 @@ if( JION )
 					comment :
 						'the ajax path',
 					type :
-						'path'
+						'jion.path'
 				}
 			},
 		twig :

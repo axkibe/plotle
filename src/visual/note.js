@@ -68,7 +68,7 @@ if( JION )
 						comment :
 							'node currently hovered upon',
 						type :
-							'path',
+							'jion.path',
 						assign :
 							null,
 						defaultValue :
@@ -102,7 +102,7 @@ if( JION )
 						comment :
 							'the path of the note',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							undefined
 					},

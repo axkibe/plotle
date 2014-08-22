@@ -57,7 +57,7 @@ if( JION )
 						comment :
 							'component hovered upon',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							null,
 						assign :

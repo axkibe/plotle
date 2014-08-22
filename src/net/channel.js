@@ -48,7 +48,7 @@ if( JION )
 						comment :
 							'the channels path in data tree',
 						type :
-							'path'
+							'jion.path'
 					},
 				fifo :
 					{

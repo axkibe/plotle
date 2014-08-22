@@ -75,7 +75,7 @@ if( JION )
 						comment :
 							'the path of the doc',
 						type :
-							'path',
+							'jion.path',
 						defaultValue :
 							undefined
 					},

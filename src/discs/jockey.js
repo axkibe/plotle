@@ -59,7 +59,7 @@ if( JION )
 						comment :
 							'the widget hovered upon',
 						type :
-							'path'
+							'jion.path'
 					},
 				mark :
 					{
@@ -93,7 +93,7 @@ if( JION )
 						comment :
 							'path of the disc',
 						type :
-							'path'
+							'jion.path'
 					},
 				view :
 					{
@@ -158,11 +158,13 @@ jockey.prototype._init =
 {
 	var
 		path,
-		ranks =
-			this.ranks,
-		twig =
-			// FIXME do not copy when inherit.twig !== this.twig
-			jools.copy( this.twig );
+		ranks,
+		twig;
+
+	ranks = this.ranks;
+
+	// FIXME do not copy when inherit.twig !== this.twig
+	twig = jools.copy( this.twig );
 
 	for(
 		var a = 0, aZ = ranks.length;
