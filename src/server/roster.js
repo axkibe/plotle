@@ -752,7 +752,7 @@ module.exports =
 	),
 	Resource.create(
 		'filePath',
-			'src/shell/shell.js',
+			'src/shell/root.js',
 		'inBundle',
 			true
 	),
