@@ -21,7 +21,7 @@ discs = discs || { };
 var
 	euclid,
 	jools,
-	shell;
+	root;
 
 /*
 | Capsule
@@ -399,7 +399,7 @@ mainDisc.prototype.pushButton =
 		!this._userIsGuest
 	)
 	{
-		shell.logout( );
+		root.logout( );
 
 		return;
 	}
@@ -410,7 +410,7 @@ mainDisc.prototype.pushButton =
 	}
 	else
 	{
-		shell.setMode( buttonName );
+		root.setMode( buttonName );
 	}
 };
 

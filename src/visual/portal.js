@@ -25,7 +25,7 @@ var
 	marks,
 	Peer,
 	reply,
-	shell,
+	root,
 	Style,
 	theme;
 
@@ -365,8 +365,7 @@ portal.prototype.dragStop =
 		action,
 		zone;
 
-	action =
-		shell.action;
+	action = root.action;
 
 	switch( action.reflex )
 	{
@@ -493,7 +492,7 @@ portal.prototype.click =
 		)
 		{
 			mark =
-				shell.setMark(
+				root.setMark(
 					marks.caret.create(
 						'path',
 							this.subPaths[ field ],
@@ -513,10 +512,10 @@ portal.prototype.click =
 	// just focus the portal itself
 	if(
 		mark === null &&
-		shell.space.focusedItem( ) !== this
+		root.space.focusedItem( ) !== this
 	)
 	{
-		shell.setMark(
+		root.setMark(
 			marks.item.create(
 				'path',
 					this.path
@@ -1204,7 +1203,7 @@ portal.prototype._keyDown =
 					mark.caretAt
 				);
 
-			shell.setMark(
+			root.setMark(
 				marks.caret.create(
 					'path',
 						// FIXME use this paths
@@ -1225,7 +1224,7 @@ portal.prototype._keyDown =
 
 		case 'spaceTag' :
 
-			shell.setMark(
+			root.setMark(
 				marks.caret.create(
 					'path',
 						// FIXME use this paths
@@ -1242,7 +1241,7 @@ portal.prototype._keyDown =
 
 		case 'moveToButton' :
 
-			shell.setMark(
+			root.setMark(
 				marks.caret.create(
 					'path',
 						// FIXME use this paths
@@ -1309,7 +1308,7 @@ portal.prototype._keyLeft =
 				break;
 		}
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					// FIXME rather user this.path
@@ -1328,7 +1327,7 @@ portal.prototype._keyLeft =
 		return;
 	}
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				mark.caretPath,
@@ -1383,7 +1382,7 @@ portal.prototype._keyTab =
 			break;
 	}
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				mark.caretPath.set(
@@ -1422,7 +1421,7 @@ portal.prototype._keyUp =
 	{
 		case 'spaceUser' :
 
-			shell.setMark(
+			root.setMark(
 				marks.caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
@@ -1444,7 +1443,7 @@ portal.prototype._keyUp =
 					mark.caretAt
 				);
 
-			shell.setMark(
+			root.setMark(
 				marks.caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
@@ -1464,7 +1463,7 @@ portal.prototype._keyUp =
 
 		case 'moveToButton' :
 
-			shell.setMark(
+			root.setMark(
 				marks.caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
@@ -1540,7 +1539,7 @@ portal.prototype._keyRight =
 				break;
 		}
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path', // FIXME this.paths
 					mark.caretPath.set(
@@ -1555,7 +1554,7 @@ portal.prototype._keyRight =
 		return;
 	}
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				mark.caretPath,
@@ -1642,7 +1641,7 @@ portal.prototype._keyEnd =
 		return;
 	}
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				mark.caretPath,
@@ -1692,7 +1691,7 @@ portal.prototype._keyEnter =
 
 	if( cycle )
 	{
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					mark.caretPath.set(
@@ -1896,7 +1895,7 @@ portal.prototype._prepareField =
 portal.prototype._keyPos1 =
 	function( )
 {
-	shell.setMark(
+	root.setMark(
 		this.mark.create(
 			'at',
 				0
@@ -1968,7 +1967,7 @@ portal.prototype._getOffsetAt =
 portal.prototype._moveTo =
 	function( )
 {
-	shell.moveToSpace(
+	root.moveToSpace(
 		this.spaceUser,
 		this.spaceTag,
 		false

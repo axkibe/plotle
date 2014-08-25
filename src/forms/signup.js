@@ -20,7 +20,7 @@ forms = forms || { };
 var
 	jools,
 	marks,
-	shell;
+	root;
 
 
 /*
@@ -194,7 +194,7 @@ signUp.prototype.pushButton =
 
 		case 'closeButton' :
 
-			shell.setMode( 'Normal' );
+			root.setMode( 'Normal' );
 
 			break;
 
@@ -211,32 +211,34 @@ signUp.prototype.signup =
 	function( )
 {
 	var
-		twig =
-			this.twig,
+		twig,
+		user,
+		email,
+		pass,
+		pass2,
+		newsletter;
 
-		user =
-			twig.userInput.value,
+	twig = this.twig;
 
-		email =
-			twig.emailInput.value,
+	user = twig.userInput.value;
 
-		pass =
-			twig.passwordInput.value,
+	email = twig.emailInput.value;
 
-		pass2 =
-			twig.password2Input.value,
+	pass = twig.passwordInput.value;
 
-		newsletter =
-			twig.newsletterCheckBox.checked;
+	pass2 = twig.password2Input.value;
+
+	newsletter = twig.newsletterCheckBox.checked;
+
 
 	if( user.length < 4 )
 	{
-		shell.setPath(
+		root.setPath(
 			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			'Username too short, min. 4 characters'
 		);
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					twig.userInput.path,
@@ -250,12 +252,12 @@ signUp.prototype.signup =
 
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		shell.setPath(
+		root.setPath(
 			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			'Username must not start with "visit"'
 		);
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					twig.userInput.path,
@@ -269,12 +271,12 @@ signUp.prototype.signup =
 
 	if( pass.length < 5 )
 	{
-		shell.setPath(
+		root.setPath(
 			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			'Password too short, min. 5 characters'
 		);
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					twig.passwordInput.path,
@@ -288,12 +290,12 @@ signUp.prototype.signup =
 
 	if( pass !== pass2 )
 	{
-		shell.setPath(
+		root.setPath(
 			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			'Passwords do not match'
 		);
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					twig.password2Input.path,
@@ -305,7 +307,7 @@ signUp.prototype.signup =
 		return;
 	}
 
-	shell.link.register(
+	root.link.register(
 		user,
 		email,
 		jools.passhash( pass ),
@@ -331,7 +333,7 @@ signUp.prototype.onRegister =
 
 	if( !ok )
 	{
-		shell.setPath(
+		root.setPath(
 			this
 			._widgetPath( 'errorLabel' )
 			.Append( 'text' ),
@@ -340,7 +342,7 @@ signUp.prototype.onRegister =
 
 		if( message.search( /Username/ ) >= 0 )
 		{
-			shell.setMark(
+			root.setMark(
 				marks.caret.create(
 					'path',
 						twig.userInput.path,
@@ -353,14 +355,14 @@ signUp.prototype.onRegister =
 		return;
 	}
 
-	shell.setUser(
+	root.setUser(
 		user,
 		passhash
 	);
 
 	this.clear( );
 
-	shell.setMode( 'welcome' );
+	root.setMode( 'welcome' );
 };
 
 
@@ -371,37 +373,38 @@ signUp.prototype.clear =
 	function( )
 {
 	var
-		twig =
-			this.twig;
+		twig;
+
+	twig = this.twig;
 
 	// FUTURE make this in one call, somehow
 
-	shell.setPath(
+	root.setPath(
 		twig.userInput.path.Append( 'value' ),
 		''
 	);
 
-	shell.setPath(
+	root.setPath(
 		twig.emailInput.path.Append( 'value' ),
 		''
 	);
 
-	shell.setPath(
+	root.setPath(
 		twig.passwordInput.path.Append( 'value' ),
 		''
 	);
 
-	shell.setPath(
+	root.setPath(
 		twig.password2Input.path.Append( 'value' ),
 		''
 	);
 
-	shell.setPath(
+	root.setPath(
 		twig.newsletterCheckBox.path.Append( 'checked' ),
 		true
 	);
 
-	shell.setMark(
+	root.setMark(
 		marks.vacant.create( )
 	);
 };

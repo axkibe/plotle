@@ -22,7 +22,7 @@ var
 	jools,
 	marks,
 	Peer,
-	shell,
+	root,
 	theme;
 
 
@@ -221,8 +221,8 @@ relation.spawn =
 
 	result =
 		Peer.newRelation(
-			shell.space.spaceUser,
-			shell.space.spaceTag,
+			root.space.spaceUser,
+			root.space.spaceTag,
 			pnw,
 			'relates to',
 			20,
@@ -233,10 +233,10 @@ relation.spawn =
 	key =
 		result.chgX.trg.path.get( -1 );
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
-				shell
+				root
 				.space
 				.twig[ key ]
 				.doc
@@ -265,17 +265,13 @@ relation.prototype.draw =
 		space,
 		zone;
 
-	space =
-		shell.$space;
+	space = root.$space;
 
-	item1 =
-		space.getItem( this.item1key );
+	item1 = space.getItem( this.item1key );
 
-	item2 =
-		space.getItem( this.item2key );
+	item2 = space.getItem( this.item2key );
 
-	zone =
-		this.zone;
+	zone = this.zone;
 
 	if( item1 )
 	{

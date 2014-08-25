@@ -18,7 +18,7 @@ forms = forms || { };
 | Imports
 */
 var
-	shell;
+	root;
 
 
 /*
@@ -189,7 +189,7 @@ noAccessToSpace.prototype.pushButton =
 	{
 		case 'okButton' :
 
-			shell.setMode( 'Normal' );
+			root.setMode( 'Normal' );
 
 			break;
 

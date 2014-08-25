@@ -22,7 +22,7 @@ net = net || { };
 */
 var
 	catcher,
-	shell;
+	root;
 
 /*
 | Capsule.
@@ -97,7 +97,7 @@ channel.prototype._init =
 		catcher(
 			function( )
 			{
-				shell
+				root
 				.ajax
 				.twig[ channelName ]
 				._onReply
@@ -123,9 +123,9 @@ channel.prototype.abortAll =
 
 	this.fifo.abort( );
 
-	// FUTURE shell.Create
-	shell.ajax =
-		shell.ajax.create(
+	// FUTURE root.Create
+	root.ajax =
+		root.ajax.create(
 			'twig:set',
 			this.channelName,
 			this.create(
@@ -139,8 +139,8 @@ channel.prototype.abortAll =
 /*
 | Issues a general purpose AJAX request.
 |
-| FUTURE currently the receiver is hardcoded to be 'shell.link'.
-|    when the shell became a JION allow receiverPaths
+| FUTURE currently the receiver is hardcoded to be 'root.link'.
+|    when the root became a JION allow receiverPaths
 */
 channel.prototype.request =
 	function(
@@ -194,9 +194,9 @@ channel.prototype.request =
 
 	rs = JSON.stringify( request );
 
-	// FUTURE shell.Create
-	shell.ajax =
-		shell.ajax.create(
+	// FUTURE root.Create
+	root.ajax =
+		root.ajax.create(
 			'twig:set',
 			this.channelName,
 			this.create(
@@ -223,7 +223,7 @@ channel.prototype._onReply =
 		reply,
 		receiverFunc;
 
-	channel = shell.ajax.twig[ this.channelName ];
+	channel = root.ajax.twig[ this.channelName ];
 
 	if(
 		this.readyState !== 4
@@ -234,9 +234,9 @@ channel.prototype._onReply =
 		return;
 	}
 
-	// FUTURE shell.Create
-	shell.ajax =
-		shell.ajax.create(
+	// FUTURE root.Create
+	root.ajax =
+		root.ajax.create(
 			'twig:set',
 			channel.channelName,
 			channel.create(
@@ -271,7 +271,7 @@ channel.prototype._onReply =
 
 	if( receiverFunc )
 	{
-		shell.link[ receiverFunc ]( request, reply );
+		root.link[ receiverFunc ]( request, reply );
 	}
 };
 

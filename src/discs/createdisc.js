@@ -21,7 +21,7 @@ var
 	euclid,
 	jion,
 	jools,
-	shell;
+	root;
 
 
 /*
@@ -316,7 +316,7 @@ createDisc.prototype.pushButton =
 	{
 		case 'createLabel' :
 
-			shell.setAction(
+			root.setAction(
 				actions.createGeneric.create(
 					'itemType',
 						'label',
@@ -333,7 +333,7 @@ createDisc.prototype.pushButton =
 
 		case 'createNote' :
 
-			shell.setAction(
+			root.setAction(
 				actions.createGeneric.create(
 					'itemType',
 						'note',
@@ -350,7 +350,7 @@ createDisc.prototype.pushButton =
 
 		case 'createPortal' :
 
-			shell.setAction(
+			root.setAction(
 				actions.createGeneric.create(
 					'itemType',
 						'portal',
@@ -367,7 +367,7 @@ createDisc.prototype.pushButton =
 
 		case 'createRelation' :
 
-			shell.setAction(
+			root.setAction(
 				actions.createRelation.create(
 					'fromItemPath',
 						jion.path.empty,

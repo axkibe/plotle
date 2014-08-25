@@ -23,7 +23,7 @@ var
 	marks,
 	Peer,
 	reply,
-	shell,
+	root,
 	Stubs,
 	theme;
 
@@ -248,7 +248,7 @@ space.prototype.focusedItem =
 		mark,
 		path;
 
-	action = shell.action;
+	action = root.action;
 
 	mark = this.mark;
 
@@ -292,7 +292,7 @@ space.prototype.getItem =
 	var
 		action;
 
-	action = shell.action;
+	action = root.action;
 
 	switch( action && action.reflex )
 	{
@@ -369,7 +369,7 @@ space.prototype.draw =
 
 	view = this.view,
 
-	action = shell.action;
+	action = root.action;
 
 	for(
 		r = this.ranks.length - 1;
@@ -500,8 +500,7 @@ space.prototype.mousewheel =
 		r++
 	)
 	{
-		item =
-			this.atRank(r);
+		item = this.atRank(r);
 
 		if (
 			item.mousewheel(
@@ -519,13 +518,13 @@ space.prototype.mousewheel =
 
 	if ( dir > 0 )
 	{
-		shell.setView(
+		root.setView(
 			this.view.review( 1, p )
 		);
 	}
 	else
 	{
-		shell.setView(
+		root.setView(
 			this.view.review( -1, p )
 		);
 	}
@@ -554,11 +553,9 @@ space.prototype.pointingHover =
 		result,
 		view;
 
-	view =
-		this.view,
+	view = this.view,
 
-	focus =
-		this.focusedItem( );
+	focus = this.focusedItem( );
 
 	if( focus )
 	{
@@ -627,14 +624,15 @@ space.prototype.dragStart =
 	var
 		a,
 		aZ,
+		action,
 		focus,
+		item,
+		transItem,
 		view;
 
-	view =
-		this.view,
+	view = this.view,
 
-	focus =
-		this.focusedItem( );
+	focus = this.focusedItem( );
 
 	// see if the handles were targeted
 	if(
@@ -656,7 +654,7 @@ space.prototype.dragStart =
 			dp =
 				view.depoint( p );
 
-			shell.setAction(
+			root.setAction(
 				actions.ItemResize.create(
 					'start',
 						dp,
@@ -673,15 +671,11 @@ space.prototype.dragStart =
 		}
 	}
 
-	var
-		action =
-			shell.action,
+	action = root.action;
 
-		item =
-			null,
+	item = null;
 
-		transItem =
-			null;
+	transItem = null;
 
 	// FIXME simplify
 	if(
@@ -707,7 +701,7 @@ space.prototype.dragStart =
 					view
 			);
 
-		shell.setAction(
+		root.setAction(
 			action.create(
 				'start',
 					p,
@@ -740,7 +734,7 @@ space.prototype.dragStart =
 					view
 			);
 
-		shell.setAction(
+		root.setAction(
 			action.create(
 				'start',
 					p,
@@ -780,7 +774,7 @@ space.prototype.dragStart =
 					)
 			);
 
-		shell.setAction(
+		root.setAction(
 			action.create(
 				'start',
 					p,
@@ -824,7 +818,7 @@ space.prototype.dragStart =
 	{
 		case 'actions.createRelation' :
 
-			shell.setAction(
+			root.setAction(
 				action.create(
 					'pan',
 						view.pan,
@@ -839,7 +833,7 @@ space.prototype.dragStart =
 	}
 
 	// otherwise panning is initiated
-	shell.setAction(
+	root.setAction(
 		actions.pan.create(
 			'start',
 				p,
@@ -898,7 +892,7 @@ space.prototype.click =
 
 	// otherwise ...
 
-	shell.setMark(
+	root.setMark(
 		marks.vacant.create( )
 	);
 
@@ -924,7 +918,7 @@ space.prototype.dragStop =
 		view;
 
 	action =
-		shell.action;
+		root.action;
 
 	view =
 		this.view;
@@ -970,10 +964,10 @@ space.prototype.dragStop =
 					key =
 						result.chgX.trg.path.get( -1 );
 
-					shell.setMark(
+					root.setMark(
 						marks.caret.create(
 							'path',
-								shell.
+								root.
 									space.twig[ key ].
 									doc.
 									atRank( 0 ).textPath,
@@ -984,7 +978,7 @@ space.prototype.dragStop =
 
 					if( !ctrl )
 					{
-						shell.setAction(
+						root.setAction(
 							actions.none.create( )
 						);
 					}
@@ -1048,10 +1042,10 @@ space.prototype.dragStop =
 					key =
 						result.chgX.trg.path.get( -1 );
 
-					shell.setMark(
+					root.setMark(
 						marks.caret.create(
 							'path',
-								shell.space
+								root.space
 								.twig[ key ]
 								.doc.atRank( 0 ).textPath,
 							'at',
@@ -1061,7 +1055,7 @@ space.prototype.dragStop =
 
 					if( !ctrl )
 					{
-						shell.setAction(
+						root.setAction(
 							actions.none.create( )
 						);
 					}
@@ -1087,16 +1081,16 @@ space.prototype.dragStop =
 							this.spaceUser,
 							this.spaceTag,
 							portal.zone,
-							shell.username, // FIXME
+							root.username, // FIXME
 							'home'
 						);
 
 					key = result.chgX.trg.path.get( -1 );
 
-					shell.setMark(
+					root.setMark(
 						marks.caret.create(
 							'path',
-								shell
+								root
 								.space
 								.twig[ key ]
 								.subPaths
@@ -1108,7 +1102,7 @@ space.prototype.dragStop =
 
 					if( !ctrl )
 					{
-						shell.setAction(
+						root.setAction(
 							actions.none.create( )
 						);
 					}
@@ -1128,7 +1122,7 @@ space.prototype.dragStop =
 
 		case 'actions.pan' :
 
-			shell.setAction(
+			root.setAction(
 				actions.none.create( )
 			);
 
@@ -1141,7 +1135,7 @@ space.prototype.dragStop =
 
 				case 'start' :
 
-					shell.setAction(
+					root.setAction(
 						actions.none.create( )
 					);
 
@@ -1162,7 +1156,7 @@ space.prototype.dragStop =
 						);
 					}
 
-					shell.setAction(
+					root.setAction(
 						actions.none.create( )
 					);
 
@@ -1170,7 +1164,7 @@ space.prototype.dragStop =
 
 				case 'pan' :
 
-					shell.setAction(
+					root.setAction(
 						action.create(
 							'relationState',
 								'start'
@@ -1216,7 +1210,7 @@ space.prototype.dragStop =
 				}
 			}
 
-			shell.setAction(
+			root.setAction(
 				actions.none.create( )
 			);
 
@@ -1258,7 +1252,7 @@ space.prototype.dragStop =
 				}
 			}
 
-			shell.setAction(
+			root.setAction(
 				actions.none.create( )
 			);
 
@@ -1275,7 +1269,7 @@ space.prototype.dragStop =
 				ctrl
 			);
 
-			shell.setAction(
+			root.setAction(
 				actions.none.create( )
 			);
 
@@ -1316,7 +1310,7 @@ space.prototype.dragMove =
 		zone;
 
 	action =
-		shell.action;
+		root.action;
 	transItem =
 		null;
 	view =
@@ -1385,7 +1379,7 @@ space.prototype.dragMove =
 					throw new Error( );
 			}
 
-			shell.setAction(
+			root.setAction(
 				action.create(
 					'transItem',
 						transItem
@@ -1403,7 +1397,7 @@ space.prototype.dragMove =
 				pd =
 					p.sub( action.start );
 
-				shell.setView(
+				root.setView(
 					view.create(
 						'pan',
 							action.pan.add(
@@ -1416,7 +1410,7 @@ space.prototype.dragMove =
 				return 'pointer';
 			}
 
-			shell.setAction(
+			root.setAction(
 				action.create(
 					'toItemPath',
 						jion.path.empty,
@@ -1454,7 +1448,7 @@ space.prototype.dragMove =
 			pd =
 				p.sub( action.start );
 
-			shell.setView(
+			root.setView(
 				view.create(
 					'pan',
 						action.pan.add(
@@ -1498,7 +1492,7 @@ space.prototype.dragMove =
 						);
 			}
 
-			shell.setAction(
+			root.setAction(
 				action.create(
 					'transItem',
 						transItem
@@ -1605,7 +1599,7 @@ space.prototype.dragMove =
 					throw new Error( );
 			}
 
-			shell.setAction(
+			root.setAction(
 				action.create(
 					'transItem',
 						transItem
@@ -1679,7 +1673,7 @@ space.prototype._changeZoom =
 				this.view.baseFrame.pc
 			);
 
-	shell.setView(
+	root.setView(
 		this.view.review(
 			df,
 			pm
@@ -1709,13 +1703,13 @@ space.prototype.specialKey =
 		{
 			case 'z' :
 
-				shell.link.undo( );
+				root.link.undo( );
 
 				return;
 
 			case 'y' :
 
-				shell.link.redo( );
+				root.link.redo( );
 
 				return;
 

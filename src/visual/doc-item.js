@@ -20,7 +20,7 @@ visual = visual || { };
 var
 	jools,
 	marks,
-	shell;
+	root;
 
 
 /*
@@ -208,7 +208,7 @@ docItem.prototype.click =
 				pi.sub( ppnw )
 			);
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					para.textPath,
@@ -221,7 +221,7 @@ docItem.prototype.click =
 	{
 		para = doc.atRank( doc.ranks.length - 1 );
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					para.textPath,

@@ -21,7 +21,7 @@ var
 	jools,
 	marks,
 	Peer,
-	shell;
+	root;
 
 
 /*
@@ -196,7 +196,7 @@ login.prototype.pushButton =
 
 		case 'closeButton' :
 
-			shell.setMode( 'Normal' );
+			root.setMode( 'Normal' );
 
 			break;
 
@@ -231,12 +231,12 @@ login.prototype.login =
 
 	if( user.length < 4 )
 	{
-		shell.setPath(
+		root.setPath(
 			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			'Username too short, min. 4 characters'
 		);
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					twig.userInput.path,
@@ -252,12 +252,12 @@ login.prototype.login =
 
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		shell.setPath(
+		root.setPath(
 			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			'Username must not start with "visit"'
 		);
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					twig.userInput.path,
@@ -273,12 +273,12 @@ login.prototype.login =
 
 	if( pass.length < 5 )
 	{
-		shell.setPath(
+		root.setPath(
 			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			'Password too short, min. 5 characters'
 		);
 
-		shell.setMark(
+		root.setMark(
 			marks.caret.create(
 				'path',
 					twig.passwordInput.path,
@@ -350,14 +350,14 @@ login.prototype.onAuth =
 
 	if( !ok )
 	{
-		shell.setPath(
+		root.setPath(
 			this._widgetPath( 'errorLabel' ).Append( 'text' ),
 			message
 		);
 
 		if( message.search( /Username/ ) >= 0 )
 		{
-			shell.setMark(
+			root.setMark(
 				marks.caret.create(
 					'path',
 						twig.userInput.path,
@@ -368,7 +368,7 @@ login.prototype.onAuth =
 		}
 		else
 		{
-			shell.setMark(
+			root.setMark(
 				marks.caret.create(
 					'path',
 						twig.passwordInput.path,
@@ -381,20 +381,20 @@ login.prototype.onAuth =
 		return;
 	}
 
-	shell.setUser(
+	root.setUser(
 		username,
 		passhash
 	);
 
 	this.clear( );
 
-	shell.moveToSpace(
+	root.moveToSpace(
 		'ideoloom',
 		'home',
 		false
 	);
 
-	shell.setMode( 'Normal' );
+	root.setMode( 'Normal' );
 };
 
 
@@ -405,17 +405,17 @@ login.prototype.clear =
 	function( )
 {
 	// FUTURE combine calls
-	shell.setPath(
+	root.setPath(
 		this._widgetPath( 'userInput' ).Append( 'value' ),
 		''
 	);
 
-	shell.setPath(
+	root.setPath(
 		this._widgetPath( 'passwordInput' ).Append( 'value' ),
 		''
 	);
 
-	shell.setMark(
+	root.setMark(
 		marks.vacant.create( )
 	);
 };

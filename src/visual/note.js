@@ -20,7 +20,7 @@ var
 	euclid,
 	jools,
 	Peer,
-	shell,
+	root,
 	Style,
 	system,
 	theme;
@@ -278,8 +278,7 @@ note.prototype.dragStop =
 		action,
 		zone;
 
-	action =
-		shell.action;
+	action = root.action;
 
 	switch( action.reflex )
 	{
@@ -635,14 +634,14 @@ note.prototype.scrollMarkIntoView =
 
 	if( n + pnw.y - imargin.n < sy )
 	{
-		shell.setPath(
+		root.setPath(
 			this.path.Append( 'scrolly' ),
 			n + pnw.y - imargin.n
 		);
 	}
 	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
-		shell.setPath(
+		root.setPath(
 			this.path.Append( 'scrolly' ),
 			s + pnw.y - zone.height + imargin.s
 		);
@@ -673,7 +672,7 @@ note.prototype.mousewheel =
 		return false;
 	}
 
-	shell.setPath(
+	root.setPath(
 		this.path.Append( 'scrolly' ),
 		this.scrollbarY.pos - dir * system.textWheelSpeed
 	);

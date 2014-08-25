@@ -1,5 +1,7 @@
 /*
-| Generates the jion of a resource for the shell.
+| Generates the jion of a resource.
+|
+| FIXME, Joobj -> Jion
 |
 | Authors: Axel Kittenberger
 */
@@ -144,8 +146,7 @@ GenerateJoobj.run =
 };
 
 
-module.exports =
-	GenerateJoobj;
+module.exports = GenerateJoobj;
 
 
 } )( );

@@ -19,7 +19,7 @@ forms = forms || { };
 */
 var
 	jools,
-	shell;
+	root;
 
 
 /*
@@ -261,7 +261,7 @@ user.prototype.pushButton =
 	{
 		case 'closeButton' :
 
-			shell.setMode( 'Normal' );
+			root.setMode( 'Normal' );
 
 			break;
 

@@ -20,7 +20,7 @@ widgets = widgets || { };
 var
 	Accent,
 	euclid,
-	shell;
+	root;
 
 
 /*
@@ -270,7 +270,7 @@ checkbox.prototype.click =
 		)
 	)
 	{
-		shell.setPath(
+		root.setPath(
 			this.path.Append( 'checked' ),
 			!this.checked
 		);
@@ -311,7 +311,7 @@ checkbox.prototype.specialKey =
 
 		case 'enter' :
 
-			shell.setPath(
+			root.setPath(
 				this.path.Append( 'checked' ),
 				!this.checked
 			);
@@ -329,7 +329,7 @@ checkbox.prototype.input =
 		// text
 	)
 {
-	shell.setPath(
+	root.setPath(
 		this.path.Append( 'checked' ),
 		!this.checked
 	);

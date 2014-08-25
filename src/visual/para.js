@@ -23,7 +23,7 @@ var
 	jools,
 	marks,
 	Peer,
-	shell,
+	root,
 	theme;
 
 
@@ -942,7 +942,7 @@ para.prototype.specialKey =
 
 				v1 = doc.atRank( doc.ranks.length - 1 );
 
-				shell.setMark(
+				root.setMark(
 					marks.range.create(
 						'doc',
 							doc,
@@ -1637,7 +1637,7 @@ para.prototype._setMark =
 {
 	if( !bPath )
 	{
-		return shell.setMark(
+		return root.setMark(
 			marks.caret.create(
 				'path',
 					this.textPath,
@@ -1650,7 +1650,7 @@ para.prototype._setMark =
 	}
 	else
 	{
-		return shell.setMark(
+		return root.setMark(
 			marks.range.create(
 				'doc',
 					doc,

@@ -23,7 +23,7 @@ var
 	jools,
 	marks,
 	reply,
-	shell,
+	root,
 	theme;
 
 
@@ -424,7 +424,7 @@ form.prototype.cycleFocus =
 		{
 			if( ve.caretable )
 			{
-				shell.setMark(
+				root.setMark(
 					marks.caret.create(
 						'path',
 							ve.path,
@@ -435,7 +435,7 @@ form.prototype.cycleFocus =
 			}
 			else
 			{
-				shell.setMark(
+				root.setMark(
 					marks.widget.create(
 						'path',
 							ve.path

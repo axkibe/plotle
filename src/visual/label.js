@@ -19,7 +19,7 @@ var
 	euclid,
 	jools,
 	Peer,
-	shell,
+	root,
 	Style,
 	theme,
 	visual;
@@ -341,8 +341,7 @@ label.prototype.dragStop =
 		fontsize,
 		zone;
 
-	action =
-		shell.action;
+	action = root.action;
 
 	switch( action.reflex )
 	{

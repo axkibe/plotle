@@ -20,7 +20,7 @@ var
 	euclid,
 	fontPool,
 	jools,
-	shell,
+	root,
 	theme;
 
 
@@ -536,7 +536,7 @@ doc.prototype.input =
 
 		// FIXME this is an akward workaround
 
-		shell.input( text );
+		root.input( text );
 
 		return true;
 	}
@@ -603,7 +603,7 @@ doc.prototype.specialKey =
 					);
 				}
 
-				shell.specialKey(
+				root.specialKey(
 					key,
 					shift,
 					ctrl

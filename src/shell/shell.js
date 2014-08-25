@@ -1,5 +1,5 @@
 /*
-| The users shell.
+| The root of the user shell.
 |
 | Authors: Axel Kittenberger
 */
@@ -9,10 +9,10 @@
 | Export
 */
 var
-	shell,
+	root,
 	Shell;
 
-shell =
+root =
 Shell =
 	null;
 
@@ -103,15 +103,14 @@ Shell =
 
 /**/if( CHECK )
 /**/{
-/**/	if( shell !== null )
+/**/	if( root !== null )
 /**/	{
-/**/		throw new Error(
-/**/			'Singleton not single'
-/**/		);
+/**/		// singleton
+/**/		throw new Error( );
 /**/	}
 /**/}
 
-	shell = this;
+	root = this;
 
 	canvas = document.createElement( 'canvas' );
 
@@ -580,8 +579,7 @@ Shell.prototype._draw =
 		this._$discJockey.draw( fabric );
 	}
 
-	this._$redraw =
-		false;
+	this._$redraw = false;
 };
 
 
@@ -704,7 +702,7 @@ Shell.prototype.pointingHover =
 /**/			}
 /**/		}
 
-			shell._setHover( reply.path );
+			root._setHover( reply.path );
 
 			if( this._$redraw )
 			{
@@ -739,7 +737,7 @@ Shell.prototype.pointingHover =
 /**/		}
 /**/	}
 
-		shell._setHover( reply.path );
+		root._setHover( reply.path );
 
 		if( this._$redraw )
 		{
@@ -1068,7 +1066,7 @@ Shell.prototype._setHover =
 	this._$hover =
 		path;
 
-	shell._$redraw =
+	root._$redraw =
 		true;
 };
 
@@ -1115,7 +1113,7 @@ Shell.prototype.setPath =
 			throw new Error( );
 	}
 
-	shell._$redraw =
+	root._$redraw =
 		true;
 };
 
@@ -1426,19 +1424,19 @@ Shell.prototype.onAquireSpace =
 
 		case 'nonexistent' :
 
-			shell.setPath(
-				shell._$formJockey.twig.nonExistingSpace.path
+			root.setPath(
+				root._$formJockey.twig.nonExistingSpace.path
 				.Append( 'nonSpaceUser' ),
 				asw.spaceUser
 			);
 
-			shell.setPath(
-				shell._$formJockey.twig.nonExistingSpace.path
+			root.setPath(
+				root._$formJockey.twig.nonExistingSpace.path
 				.Append( 'nonSpaceTag' ),
 				asw.spaceTag
 			);
 
-			shell.setMode( 'nonExistingSpace' );
+			root.setMode( 'nonExistingSpace' );
 
 			this._draw( );
 
@@ -1458,7 +1456,7 @@ Shell.prototype.onAquireSpace =
 						asw.spaceTag
 				);
 
-			shell.setMode( 'noAccessToSpace' );
+			root.setMode( 'noAccessToSpace' );
 
 			this._draw( );
 
@@ -1678,7 +1676,7 @@ Shell.prototype.arrivedAtSpace =
 				spaceTag
 		);
 
-	shell.setMode( 'Normal' );
+	root.setMode( 'Normal' );
 };
 
 

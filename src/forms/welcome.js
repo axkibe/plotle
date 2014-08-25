@@ -20,7 +20,7 @@ forms = forms || { };
 */
 var
 	jools,
-	shell;
+	root;
 
 
 /*
@@ -205,7 +205,7 @@ welcome.prototype.pushButton =
 	{
 		case 'closeButton' :
 
-			shell.setMode( 'Normal' );
+			root.setMode( 'Normal' );
 
 			break;
 

@@ -19,7 +19,7 @@ forms = forms || { };
 */
 var
 	jools,
-	shell;
+	root;
 
 
 /*
@@ -213,7 +213,7 @@ moveTo.prototype.pushButton =
 	{
 		case 'ideoloomHomeButton' :
 
-			shell.moveToSpace(
+			root.moveToSpace(
 				'ideoloom',
 				'home',
 				false
@@ -224,7 +224,7 @@ moveTo.prototype.pushButton =
 
 		case 'ideoloomSandboxButton' :
 
-			shell.moveToSpace(
+			root.moveToSpace(
 				'ideoloom',
 				'sandbox',
 				false
@@ -234,7 +234,7 @@ moveTo.prototype.pushButton =
 
 		case 'userHomeButton' :
 
-			shell.moveToSpace(
+			root.moveToSpace(
 				this.username,
 				'home',
 				false

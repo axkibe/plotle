@@ -22,7 +22,7 @@ forms = forms || { };
 */
 var
 	jools,
-	shell;
+	root;
 
 
 /*
@@ -231,19 +231,19 @@ nonExistingSpace.prototype.pushButton =
 	{
 		case 'noButton' :
 
-			shell.setMode( 'Normal' );
+			root.setMode( 'Normal' );
 
 			break;
 
 		case 'yesButton' :
 
-			shell.moveToSpace(
+			root.moveToSpace(
 				this.nonSpaceUser,
 				this.nonSpaceTag,
 				true
 			);
 
-			shell.setMode( 'Normal' );
+			root.setMode( 'Normal' );
 
 			break;
 

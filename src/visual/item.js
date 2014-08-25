@@ -25,7 +25,7 @@ var
 	jools,
 	marks,
 	reply,
-	shell,
+	root,
 	theme;
 
 
@@ -125,7 +125,7 @@ item.prototype.checkHandles =
 
 	h = this._handles;
 
-	f = shell.fabric;
+	f = root.fabric;
 
 	d8cwcf = euclid.compass.dir8CWCF;
 
@@ -513,7 +513,7 @@ item.prototype.dragStart =
 		action,
 		sbary;
 
-	action = shell.action,
+	action = root.action,
 
 	sbary = this.scrollbarY;
 
@@ -528,7 +528,7 @@ item.prototype.dragStart =
 		)
 	)
 	{
-		shell.setAction(
+		root.setAction(
 			actions.scrollY.create(
 				'itemPath',
 					this.path,
@@ -556,7 +556,7 @@ item.prototype.dragStart =
 	{
 		case 'actions.createRelation' :
 
-			shell.setAction(
+			root.setAction(
 				action.create(
 					'fromItemPath',
 						this.path,
@@ -574,7 +574,7 @@ item.prototype.dragStart =
 	{
 		// relation binding
 
-		shell.setAction(
+		root.setAction(
 			actions.createRelation.create(
 				'fromItemPath',
 					this.path,
@@ -594,9 +594,9 @@ item.prototype.dragStart =
 	if( access == 'rw' )
 	{
 		// take focus
-		if( shell.space.focusedItem( ) !== this )
+		if( root.space.focusedItem( ) !== this )
 		{
-			shell.setMark(
+			root.setMark(
 				marks.item.create(
 					'path',
 						this.path
@@ -604,7 +604,7 @@ item.prototype.dragStart =
 			);
 		}
 
-		shell.setAction(
+		root.setAction(
 			actions.itemDrag.create(
 				'start',
 					view.depoint( p ),
@@ -642,7 +642,7 @@ item.prototype.dragMove =
 		spos,
 		start;
 
-	action = shell.action;
+	action = root.action;
 
 	switch( action.reflex )
 	{
@@ -658,7 +658,7 @@ item.prototype.dragMove =
 				return false;
 			}
 
-			shell.setAction(
+			root.setAction(
 				action.create(
 					'toItemPath',
 						this.path
@@ -677,7 +677,7 @@ item.prototype.dragMove =
 
 			spos = action.startPos + sbary.scale( dy );
 
-			shell.setPath(
+			root.setPath(
 				this.path.Append( 'scrolly' ),
 				spos
 			);
@@ -707,7 +707,7 @@ item.prototype.dragStop =
 	var
 		action;
 
-	action = shell.action;
+	action = root.action;
 
 	switch( action.reflex )
 	{
@@ -724,7 +724,7 @@ item.prototype.dragStop =
 			}
 
 			visual.relation.spawn(
-				shell.space.getItem(
+				root.space.getItem(
 					action.fromItemPath.get( -1 )
 				),
 				this

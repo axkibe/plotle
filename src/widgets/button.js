@@ -23,7 +23,7 @@ var
 	euclid,
 	jools,
 	reply,
-	shell;
+	root;
 
 
 /*
@@ -487,7 +487,7 @@ button.prototype.click =
 		!this._$retimer
 	)
 	{
-		shell.setAction(
+		root.setAction(
 			'ReButton',
 			'itemPath',
 				this.path
@@ -498,7 +498,7 @@ button.prototype.click =
 		repeatFunc =
 			function( )
 			{
-				shell.pushButton( this.path );
+				root.pushButton( this.path );
 
 				self._$retimer =
 					system.setTimer(
@@ -515,7 +515,7 @@ button.prototype.click =
 	}
 	*/
 
-	shell.pushButton( this.path );
+	root.pushButton( this.path );
 
 	return this.repeating ? 'drag' : false;
 };
@@ -548,7 +548,7 @@ button.prototype.specialKey =
 
 		case 'enter' :
 
-			shell.pushButton( this.path );
+			root.pushButton( this.path );
 
 			return;
 	}
@@ -563,7 +563,7 @@ button.prototype.input =
 		// text
 	)
 {
-	shell.pushButton( this.path );
+	root.pushButton( this.path );
 
 	return true;
 };
@@ -608,7 +608,7 @@ button.prototype.dragStop =
 		null;
 	*/
 
-	shell.setAction( null );
+	root.setAction( null );
 };
 
 

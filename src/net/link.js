@@ -20,7 +20,7 @@ var
 	config,
 	jion,
 	jools,
-	shell,
+	root,
 	system,
 	visual;
 
@@ -170,7 +170,7 @@ link.prototype.auth =
 		passhash
 	)
 {
-	shell.ajax.twig.command.request(
+	root.ajax.twig.command.request(
 		{
 			cmd :
 				'auth',
@@ -219,7 +219,7 @@ link.prototype.register =
 		news
 	)
 {
-	shell.ajax.twig.command.request(
+	root.ajax.twig.command.request(
 		{
 			cmd :
 				'register',
@@ -273,9 +273,9 @@ link.prototype.aquireSpace =
 	)
 {
 	// aborts the current running update.
-	shell.ajax.twig.update.abortAll( );
+	root.ajax.twig.update.abortAll( );
 
-	shell.ajax.twig.command.request(
+	root.ajax.twig.command.request(
 		{
 			cmd :
 				'get',
@@ -356,8 +356,8 @@ link.prototype._onAquireSpace =
 
 	space = visual.space.createFromJSON( reply.node );
 
-	shell.link =
-		shell.link.create(
+	root.link =
+		root.link.create(
 			'spaceUser',
 				request.spaceUser,
 			'spaceTag',
@@ -402,7 +402,7 @@ link.prototype._onAquireSpace =
 		1,
 		function( )
 		{
-			shell.link._update( );
+			root.link._update( );
 		}
 	);
 };
@@ -415,7 +415,7 @@ link.prototype._onAquireSpace =
 link.prototype._update =
 	function( )
 {
-	shell.ajax.twig.update.request(
+	root.ajax.twig.update.request(
 		{
 			cmd :
 				'update',
@@ -780,7 +780,7 @@ link.prototype._sendChanges =
 
 	this._postbox.push( c );
 
-	shell.ajax.twig.command.request(
+	root.ajax.twig.command.request(
 		{
 			cmd :
 				'alter',

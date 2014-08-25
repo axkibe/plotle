@@ -23,7 +23,7 @@ var
 	jools,
 	marks,
 	reply,
-	shell,
+	root,
 	theme;
 
 
@@ -685,14 +685,14 @@ input.prototype.input =
 			);
 	}
 
-	shell.setPath(
+	root.setPath(
 		this.path.Append( 'value' ),
 		value.substring( 0, at ) +
 			text +
 			value.substring( at )
 	);
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				mark.caretPath,
@@ -721,13 +721,13 @@ input.prototype._keyBackspace =
 		return;
 	}
 
-	shell.setPath(
+	root.setPath(
 		this.path.Append( 'value' ),
 		this.value.substring( 0, at - 1 ) +
 			this.value.substring( at )
 	);
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				mark.caretPath,
@@ -753,7 +753,7 @@ input.prototype._keyDel =
 		return;
 	}
 
-	shell.setPath(
+	root.setPath(
 		this.path.Append( 'value' ),
 		this.value.substring( 0, at ) +
 			this.value.substring( at + 1 )
@@ -767,7 +767,7 @@ input.prototype._keyDel =
 input.prototype._keyEnter =
 	function( )
 {
-	shell.cycleFormFocus(
+	root.cycleFormFocus(
 		this.path.get( 2 ),
 		1
 	);
@@ -805,7 +805,7 @@ input.prototype._keyEnd =
 		return;
 	}
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				mark.caretPath,
@@ -833,7 +833,7 @@ input.prototype._keyLeft =
 	}
 
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				mark.caretPath,
@@ -860,7 +860,7 @@ input.prototype._keyPos1 =
 		return;
 	}
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				mark.caretPath,
@@ -887,7 +887,7 @@ input.prototype._keyRight =
 		return;
 	}
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				mark.caretPath,
@@ -1076,7 +1076,7 @@ input.prototype.click =
 		return null;
 	}
 
-	shell.setMark(
+	root.setMark(
 		marks.caret.create(
 			'path',
 				this.path,

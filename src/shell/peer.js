@@ -18,7 +18,7 @@ var
 var
 	jion,
 	jools,
-	shell,
+	root,
 	visual;
 
 
@@ -80,7 +80,7 @@ Peer.auth =
 		passhash = jools.uid( );
 	}
 
-	shell.link.auth(
+	root.link.auth(
 		user,
 		passhash
 	);
@@ -123,7 +123,7 @@ Peer.newNote =
 		);
 
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					src,
@@ -168,7 +168,7 @@ Peer.newPortal =
 		);
 
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					src,
@@ -190,7 +190,7 @@ Peer.setZone =
 	)
 {
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					sign.create(
@@ -220,7 +220,7 @@ Peer.setFontSize =
 	)
 {
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					sign.create(
@@ -250,7 +250,7 @@ Peer.setPNW =
 	)
 {
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					sign.create(
@@ -308,7 +308,7 @@ Peer.newLabel =
 		);
 
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					src,
@@ -364,7 +364,7 @@ Peer.newRelation =
 		);
 
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					src,
@@ -385,7 +385,7 @@ Peer.moveToTop =
 		path
 	)
 {
-	shell.link.alter(
+	root.link.alter(
 		{
 			path :
 				path.Chop( )
@@ -410,7 +410,7 @@ Peer.insertText =
 	)
 {
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					sign.create(
@@ -451,7 +451,7 @@ Peer.removeText =
 	}
 
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					sign.create(
@@ -520,7 +520,7 @@ Peer.removeRange =
 
 	k2 = path2.get( -2 );
 
-	pivot = shell.space.getPath( path1.Chop( 1 ).Shorten( 3 ) );
+	pivot = root.space.getPath( path1.Chop( 1 ).Shorten( 3 ) );
 
 	r1 = pivot.rankOf( k1 );
 
@@ -534,11 +534,11 @@ Peer.removeRange =
 	{
 		Peer.join(
 			path1,
-			shell.space.getPath( path1.Chop( 1 ) ).length
+			root.space.getPath( path1.Chop( 1 ) ).length
 		);
 	}
 
-	len2 = shell.space.getPath( path1.Chop( 1 ) ).length;
+	len2 = root.space.getPath( path1.Chop( 1 ) ).length;
 
 	Peer.join(
 		path1,
@@ -568,7 +568,7 @@ Peer.split =
 	)
 {
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					sign.create(
@@ -595,7 +595,7 @@ Peer.join =
 	)
 {
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					spliceSign,
@@ -627,10 +627,10 @@ Peer.removeItem =
 
 	key = path.get( -1 );
 
-	pivot = shell.space.getPath( path.Chop( 1 ).Shorten( 2 ) );
+	pivot = root.space.getPath( path.Chop( 1 ).Shorten( 2 ) );
 
 	/*pivot =
-		shell.link.get(
+		root.link.get(
 			path.Chop( 1 ).Shorten( 2 )
 		);
 	*/
@@ -638,7 +638,7 @@ Peer.removeItem =
 	r1 = pivot.rankOf( key );
 
 	return (
-		shell.link.alter(
+		root.link.alter(
 			change.create(
 				'src',
 					sign.create(

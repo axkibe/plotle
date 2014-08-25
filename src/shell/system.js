@@ -23,8 +23,8 @@ var
 	config,
 	euclid,
 	jools,
-	Shell,
-	shell;
+	root,
+	Shell;
 
 
 /*
@@ -294,7 +294,7 @@ System.prototype.asyncEvent =
 		return;
 	}
 
-	shell[ eventName ]( a1, a2, a3, a4 );
+	root[ eventName ]( a1, a2, a3, a4 );
 
 	this._repeatHover( );
 
@@ -513,14 +513,14 @@ System.prototype._onAtweenTime =
 
 	_pointingState = 'drag';
 
-	shell.dragStart(
+	root.dragStart(
 		atween.pos,
 		atween.shift,
 		atween.ctrl
 	);
 
 	cursor =
-		shell.dragMove(
+		root.dragMove(
 			atween.$move,
 			atween.shift,
 			atween.ctrl
@@ -543,7 +543,7 @@ System.prototype._onSystemBlur =
 		// event
 	)
 {
-	shell.setFocus( false );
+	root.setFocus( false );
 };
 
 
@@ -565,7 +565,7 @@ System.prototype._onSystemFocus =
 		// event
 	)
 {
-	shell.setFocus( true );
+	root.setFocus( true );
 };
 
 
@@ -590,9 +590,9 @@ System.prototype._onResize =
 					_height
 			);
 
-	if( shell )
+	if( root )
 	{
-		shell.resize( fabric );
+		root.resize( fabric );
 	}
 };
 
@@ -689,9 +689,9 @@ System.prototype._onKeyPress =
 	}
 	else
 	{
-		if( !shell.suggestingKeyboard( ) )
+		if( !root.suggestingKeyboard( ) )
 		{
-			shell.input( String.fromCharCode( kcode ) );
+			root.input( String.fromCharCode( kcode ) );
 		}
 	}
 
@@ -837,7 +837,7 @@ System.prototype._pointingHover =
 
 	var
 		cursor =
-			shell.pointingHover(
+			root.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -866,7 +866,7 @@ System.prototype._repeatHover =
 
 	var
 		cursor =
-			shell.pointingHover(
+			root.pointingHover(
 				this._$hover.p,
 				this._$hover.shift,
 				this._$hover.ctrl
@@ -944,14 +944,14 @@ System.prototype._onMouseMove =
 				_pointingState =
 					'drag';
 
-				shell.dragStart(
+				root.dragStart(
 					atween.pos,
 					shift,
 					ctrl
 				);
 
 				cursor =
-					shell.dragMove(
+					root.dragMove(
 						p,
 						shift,
 						ctrl
@@ -970,7 +970,7 @@ System.prototype._onMouseMove =
 		case 'drag':
 
 			cursor =
-				shell.dragMove(
+				root.dragMove(
 					p,
 					shift,
 					ctrl
@@ -1042,7 +1042,7 @@ System.prototype._onMouseUp =
 			this._$atween =
 				null;
 
-			shell.click(
+			root.click(
 				p,
 				shift,
 				ctrl
@@ -1063,7 +1063,7 @@ System.prototype._onMouseUp =
 
 		case 'drag' :
 
-			shell.dragStop(
+			root.dragStop(
 				p,
 				shift,
 				ctrl
@@ -1129,7 +1129,7 @@ System.prototype._onMouseWheel =
 		return;
 	}
 
-	shell.mousewheel(
+	root.mousewheel(
 		p,
 		dir,
 		event.shiftKey,
@@ -1266,14 +1266,14 @@ System.prototype._onTouchMove =
 				_pointingState =
 					'drag';
 
-				shell.dragStart(
+				root.dragStart(
 					atween.pos,
 					shift,
 					ctrl
 				);
 
 				cursor =
-					shell.dragMove(
+					root.dragMove(
 						p,
 						shift,
 						ctrl
@@ -1293,7 +1293,7 @@ System.prototype._onTouchMove =
 		case 'drag':
 
 			cursor =
-				shell.dragMove(
+				root.dragMove(
 					p,
 					shift,
 					ctrl
@@ -1364,7 +1364,7 @@ System.prototype._onTouchEnd =
 			this._$atween =
 				null;
 
-			shell.click(
+			root.click(
 				p,
 				shift,
 				ctrl
@@ -1385,7 +1385,7 @@ System.prototype._onTouchEnd =
 
 		case 'drag' :
 
-			shell.dragStop(
+			root.dragStop(
 				p,
 				shift,
 				ctrl
@@ -1588,7 +1588,7 @@ System.prototype._specialKey =
 		return true;
 	}
 
-	shell.specialKey(
+	root.specialKey(
 		key,
 		shift,
 		ctrl
@@ -1620,7 +1620,7 @@ System.prototype._testInput =
 	if(
 		text === _inputVal
 		||
-		!shell
+		!root
 	)
 	{
 		return;
@@ -1633,7 +1633,7 @@ System.prototype._testInput =
 	hi.selectionStart =
 		0;
 
-	shell.input( text );
+	root.input( text );
 
 	this._steerAttention( );
 };
@@ -1652,7 +1652,7 @@ System.prototype._steerAttention =
 	var
 		ac;
 
-	ac = shell.attentionCenter;
+	ac = root.attentionCenter;
 
 	if( ac === null )
 	{
@@ -1670,7 +1670,7 @@ System.prototype._steerAttention =
 		_hiddenInput.style.top = ac + 'px';
 	}
 
-	if( shell.suggestingKeyboard( ) )
+	if( root.suggestingKeyboard( ) )
 	{
 		_hiddenInput.focus( );
 
