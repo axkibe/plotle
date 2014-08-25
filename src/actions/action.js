@@ -36,7 +36,7 @@ actions.action =
 /**/{
 /**		*
 ***		| Returns true if the reflection string is an action
-***     | Future remove by generic typecheck
+***     | FUTURE remove by generic typecheck
 ***		*
 ***/	actions.isAction =
 /**/		function( reflex )
