@@ -24,7 +24,7 @@ var
 	euclid,
 	jools,
 	root,
-	Shell;
+	shell;
 
 
 /*
@@ -1700,7 +1700,7 @@ startup = function( )
 				system = new System( );
 
 				(
-					new Shell( system._fabric )
+					new shell.root( system._fabric )
 				).onload( );
 
 				// FIXME work on IOS

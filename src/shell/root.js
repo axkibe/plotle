@@ -10,11 +10,12 @@
 */
 var
 	root,
-	Shell;
+	shell;
 
-root =
-Shell =
-	null;
+root = null;
+
+shell = shell || { };
+
 
 /*
 | Imports
@@ -92,7 +93,7 @@ var
 /*
 | Constructor.
 */
-Shell =
+shell.root =
 	function(
 		fabric
 	)
@@ -231,11 +232,17 @@ Shell =
 };
 
 
+var
+	proto;
+
+proto = shell.root.prototype,
+
+
 /*
 | FIXME, workaround until $space is gone
 */
 Object.defineProperty(
-	Shell.prototype,
+	proto,
 	'space',
 	{
 		get :
@@ -251,7 +258,7 @@ Object.defineProperty(
 | FIXME, workaround until $action is gone
 */
 Object.defineProperty(
-	Shell.prototype,
+	proto,
 	'action',
 	{
 		get :
@@ -266,7 +273,7 @@ Object.defineProperty(
 /*
 | Changes the mode.
 */
-Shell.prototype.setMode =
+proto.setMode =
 	function(
 		mode
 	)
@@ -305,7 +312,7 @@ Shell.prototype.setMode =
 | when the keyboard is visible.
 */
 Object.defineProperty(
-	Shell.prototype,
+	proto,
 	'attentionCenter',
 	{
 		get :
@@ -325,7 +332,7 @@ Object.defineProperty(
 /*
 | Sets the current action.
 */
-Shell.prototype.setAction =
+proto.setAction =
 	function(
 		action
 	)
@@ -358,7 +365,7 @@ Shell.prototype.setAction =
 /*
 | The link is reporting updates.
 */
-Shell.prototype.update =
+proto.update =
 	function(
 		space,
 		chgX
@@ -527,7 +534,7 @@ Shell.prototype.update =
 /*
 | The shell got or lost the systems focus.
 */
-Shell.prototype.setFocus =
+proto.setFocus =
 	function(
 		focus
 	)
@@ -556,7 +563,7 @@ Shell.prototype.setFocus =
 /*
 | Draws everything.
 */
-Shell.prototype._draw =
+proto._draw =
 	function( )
 {
 	var
@@ -586,7 +593,7 @@ Shell.prototype._draw =
 /*
 | User clicked.
 */
-Shell.prototype.click =
+proto.click =
 	function(
 		p,
 		shift,
@@ -631,7 +638,7 @@ Shell.prototype.click =
 |
 | This is either a visual space or a form
 */
-Shell.prototype._getCurrentDisplay =
+proto._getCurrentDisplay =
 	function( )
 {
 	var
@@ -669,7 +676,7 @@ Shell.prototype._getCurrentDisplay =
 /*
 | User is hovering his/her point ( mouse move )
 */
-Shell.prototype.pointingHover =
+proto.pointingHover =
 	function(
 		p,
 		shift,
@@ -761,7 +768,7 @@ Shell.prototype.pointingHover =
 |
 | Mouse down or finger on screen.
 */
-Shell.prototype.dragStart =
+proto.dragStart =
 	function(
 		p,
 		shift,
@@ -810,7 +817,7 @@ Shell.prototype.dragStart =
 /*
 | Moving during an operation with the mouse button held down.
 */
-Shell.prototype.dragMove =
+proto.dragMove =
 	function(
 		p,
 		shift,
@@ -857,7 +864,7 @@ Shell.prototype.dragMove =
 /*
 | Stops an operation with the mouse button held down.
 */
-Shell.prototype.dragStop =
+proto.dragStop =
 	function(
 		p,
 		shift,
@@ -896,7 +903,7 @@ Shell.prototype.dragStop =
 /*
 | Mouse wheel is being turned.
 */
-Shell.prototype.mousewheel =
+proto.mousewheel =
 	function(
 		p,
 		dir,
@@ -907,8 +914,9 @@ Shell.prototype.mousewheel =
 	// FIXME disc?
 
 	var
-		display =
-			this._getCurrentDisplay( );
+		display;
+
+	display = this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -931,7 +939,7 @@ Shell.prototype.mousewheel =
 | Returns true if the iPad ought to display
 | the virtual keyboard
 */
-Shell.prototype.suggestingKeyboard =
+proto.suggestingKeyboard =
 	function( )
 {
 	return this.mark.hasCaret;
@@ -941,7 +949,7 @@ Shell.prototype.suggestingKeyboard =
 /*
 | Sets the user's mark.
 */
-Shell.prototype.setMark =
+proto.setMark =
 	function(
 		mark
 	)
@@ -977,7 +985,7 @@ Shell.prototype.setMark =
 /*
 | Cycles focus in a form.
 */
-Shell.prototype.cycleFormFocus =
+proto.cycleFormFocus =
 	function(
 		name,
 		dir
@@ -993,7 +1001,7 @@ Shell.prototype.cycleFormFocus =
 /*
 | A button has been pushed.
 */
-Shell.prototype.pushButton =
+proto.pushButton =
 	function( path )
 {
 	switch( path.get( 0 ) )
@@ -1024,7 +1032,7 @@ Shell.prototype.pushButton =
 /*
 | Sets a hovered component.
 */
-Shell.prototype._setHover =
+proto._setHover =
 	function(
 		path
 	)
@@ -1063,18 +1071,16 @@ Shell.prototype._setHover =
 					path
 		);
 
-	this._$hover =
-		path;
+	this._$hover = path;
 
-	root._$redraw =
-		true;
+	root._$redraw = true;
 };
 
 
 /*
 | Sets the trait(s) of item(s).
 */
-Shell.prototype.setPath =
+proto.setPath =
 	function(
 		path,
 		value
@@ -1121,7 +1127,7 @@ Shell.prototype.setPath =
 /*
 | User is pressing a special key.
 */
-Shell.prototype.specialKey =
+proto.specialKey =
 	function(
 		key,
 		shift,
@@ -1161,7 +1167,7 @@ Shell.prototype.specialKey =
 /*
 | User entered normal text (one character or more).
 */
-Shell.prototype.input =
+proto.input =
 	function(
 		text
 	)
@@ -1194,7 +1200,7 @@ Shell.prototype.input =
 /*
 | The window has been resized.
 */
-Shell.prototype.resize =
+proto.resize =
 	function(
 		fabric
 	)
@@ -1218,7 +1224,7 @@ Shell.prototype.resize =
 /*
 | Sets the current user
 */
-Shell.prototype.setUser =
+proto.setUser =
 	function(
 		username,
 		passhash
@@ -1293,7 +1299,7 @@ Shell.prototype.setUser =
 /*
 | Sets the current view ( of the space )
 */
-Shell.prototype.setView =
+proto.setView =
 	function(
 		view
 	)
@@ -1330,7 +1336,7 @@ Shell.prototype.setView =
 /*
 | Called when loading the website
 */
-Shell.prototype.onload =
+proto.onload =
 	function( )
 {
 	var
@@ -1385,7 +1391,7 @@ Shell.prototype.onload =
 |
 | if name is null, reloads current space.
 */
-Shell.prototype.moveToSpace =
+proto.moveToSpace =
 	function(
 		spaceUser,
 		spaceTag,
@@ -1405,7 +1411,7 @@ Shell.prototype.moveToSpace =
 |
 | FIXME, dont put an asw object here.
 */
-Shell.prototype.onAquireSpace =
+proto.onAquireSpace =
 	function(
 		asw
 	)
@@ -1527,7 +1533,7 @@ Shell.prototype.onAquireSpace =
 /*
 | Received an 'auth' reply.
 */
-Shell.prototype.onAuth =
+proto.onAuth =
 	function(
 		ok,
 		username,
@@ -1589,7 +1595,7 @@ Shell.prototype.onAuth =
 /*
 | Received a 'register' reply.
 */
-Shell.prototype.onRegister =
+proto.onRegister =
 	function(
 		ok,
 		username,
@@ -1622,7 +1628,7 @@ Shell.prototype.onRegister =
 /*
 | Logs out the current user
 */
-Shell.prototype.logout =
+proto.logout =
 	function( )
 {
 	if( this._$visitUser )
@@ -1651,7 +1657,7 @@ Shell.prototype.logout =
 /*
 | A space finished loading.
 */
-Shell.prototype.arrivedAtSpace =
+proto.arrivedAtSpace =
 	function(
 		spaceUser,
 		spaceTag,
