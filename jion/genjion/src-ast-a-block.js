@@ -267,19 +267,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aBlock';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aBlock';
+prototype.reflect = 'ast.aBlock';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aBlock';
+prototype.reflectName = 'aBlock';
 
 
 /*

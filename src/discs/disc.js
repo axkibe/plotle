@@ -61,7 +61,7 @@ disc._init =
 
 	style =
 	this.style =
-		theme.disc[ this.reflexName ],
+		theme.disc[ this.reflectName ],
 
 	width = style.width,
 

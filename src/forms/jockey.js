@@ -200,7 +200,7 @@ jockey.prototype._init =
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( this.twig[ name ].reflexName !== name )
+/**/		if( this.twig[ name ].reflectName !== name )
 /**/		{
 /**/			throw new Error( );
 /**/		}

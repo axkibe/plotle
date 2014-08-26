@@ -347,7 +347,7 @@ link.prototype._onAquireSpace =
 			return;
 	}
 
-	if( reply.node.type !== 'space' )
+	if( reply.node.type !== 'visual.space' )
 	{
 		throw new Error(
 			'aquireSpace(): server served no space '

@@ -177,19 +177,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aPlusAssign';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aPlusAssign';
+prototype.reflect = 'ast.aPlusAssign';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aPlusAssign';
+prototype.reflectName = 'aPlusAssign';
 
 
 /*

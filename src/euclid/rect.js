@@ -236,7 +236,7 @@ rect.prototype.reduce =
 		margin
 	)
 {
-	// FIXME use reflex when a jion
+	// FIXME use reflect when a jion
 
 /**/if( CHECK )
 /**/{

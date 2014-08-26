@@ -39,9 +39,9 @@ actions.action =
 ***     | FUTURE remove by generic typecheck
 ***		*
 ***/	actions.isAction =
-/**/		function( reflex )
+/**/		function( reflect )
 /**/	{
-/**/		switch ( reflex )
+/**/		switch ( reflect )
 /**/		{
 /**/			case 'actions.createGeneric' :
 /**/			case 'actions.createRelation' :

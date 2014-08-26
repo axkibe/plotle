@@ -202,19 +202,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aFuncArg';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aFuncArg';
+prototype.reflect = 'ast.aFuncArg';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aFuncArg';
+prototype.reflectName = 'aFuncArg';
 
 
 /*

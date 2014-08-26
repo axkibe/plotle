@@ -367,7 +367,7 @@ portal.prototype.dragStop =
 
 	action = root.action;
 
-	switch( action.reflex )
+	switch( action.reflect )
 	{
 		case 'actions.itemDrag' :
 		case 'actions.itemResize' :
@@ -856,7 +856,7 @@ jools.lazyValue(
 
 
 			if(
-				mark.reflex === 'marks.caret'
+				mark.reflect === 'marks.caret'
 				&&
 				mark.focus
 			)

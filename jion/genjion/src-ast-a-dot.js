@@ -194,19 +194,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aDot';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aDot';
+prototype.reflect = 'ast.aDot';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aDot';
+prototype.reflectName = 'aDot';
 
 
 /*

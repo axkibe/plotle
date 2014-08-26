@@ -160,19 +160,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aStringLiteral';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aStringLiteral';
+prototype.reflect = 'ast.aStringLiteral';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aStringLiteral';
+prototype.reflectName = 'aStringLiteral';
 
 
 /*

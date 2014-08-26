@@ -188,7 +188,7 @@ prototype.create =
 /**/
 /**/	if( v_capsule !== null )
 /**/	{
-/**/		if( v_capsule.reflexName !== 'aBlock' )
+/**/		if( v_capsule.reflectName !== 'aBlock' )
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}
@@ -201,7 +201,7 @@ prototype.create =
 /**/
 /**/	if( v_header !== null )
 /**/	{
-/**/		if( v_header.reflexName !== 'aComment' )
+/**/		if( v_header.reflectName !== 'aComment' )
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}
@@ -214,7 +214,7 @@ prototype.create =
 /**/
 /**/	if( v_preamble !== null )
 /**/	{
-/**/		if( v_preamble.reflexName !== 'aBlock' )
+/**/		if( v_preamble.reflectName !== 'aBlock' )
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}
@@ -253,19 +253,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aFile';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aFile';
+prototype.reflect = 'ast.aFile';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aFile';
+prototype.reflectName = 'aFile';
 
 
 /*

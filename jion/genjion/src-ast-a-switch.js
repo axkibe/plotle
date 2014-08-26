@@ -301,7 +301,7 @@ prototype.create =
 /**/
 /**/	if( v_defaultCase !== null )
 /**/	{
-/**/		if( v_defaultCase.reflexName !== 'aBlock' )
+/**/		if( v_defaultCase.reflectName !== 'aBlock' )
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}
@@ -342,19 +342,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aSwitch';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aSwitch';
+prototype.reflect = 'ast.aSwitch';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aSwitch';
+prototype.reflectName = 'aSwitch';
 
 
 /*

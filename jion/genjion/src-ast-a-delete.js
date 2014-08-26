@@ -151,19 +151,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aDelete';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aDelete';
+prototype.reflect = 'ast.aDelete';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aDelete';
+prototype.reflectName = 'aDelete';
 
 
 /*

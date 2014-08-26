@@ -75,7 +75,7 @@ var translateSign =
 	var
 		key;
 
-	sign.type = 'sign';
+	sign.type = 'jion.sign';
 
 	if( !sign.val )
 	{
@@ -84,39 +84,39 @@ var translateSign =
 
 	if( sign.val.type === 'Point' )
 	{
-		sign.val.type = 'point';
+		sign.val.type = 'euclid.point';
 
 		return sign;
 	}
 
+	if( sign.val.type === 'Rect' )
+	{
+		sign.val.type = 'euclid.rect';
+	}
+
 	if( sign.val.type === 'Label' )
 	{
-		sign.val.type = 'label';
+		sign.val.type = 'visual.label';
 	}
 
 	if( sign.val.type === 'Note' )
 	{
-		sign.val.type = 'note';
+		sign.val.type = 'visual.note';
 	}
 
 	if( sign.val.type === 'Portal' )
 	{
-		sign.val.type = 'portal';
+		sign.val.type = 'visual.portal';
 	}
 
 	if( sign.val.type === 'Relation' )
 	{
-		sign.val.type = 'relation';
-	}
-
-	if( sign.val.type === 'Rect' )
-	{
-		sign.val.type = 'rect';
+		sign.val.type = 'visual.relation';
 	}
 
 	if( sign.val.type === 'Para' )
 	{
-		sign.val.type = 'para';
+		sign.val.type = 'visual.para';
 	}
 
 	if( sign.val.twig )
@@ -125,7 +125,7 @@ var translateSign =
 		{
 			if( sign.val.twig[ key ].type === 'Para' )
 			{
-				sign.val.twig[ key ].type = 'para';
+				sign.val.twig[ key ].type = 'visual.para';
 			}
 		}
 	}
@@ -134,41 +134,41 @@ var translateSign =
 	{
 		if( sign.val.doc.type === 'Doc' )
 		{
-			sign.val.doc.type = 'doc';
+			sign.val.doc.type = 'visual.doc';
 		}
 
 		for( key in sign.val.doc.twig )
 		{
 			if( sign.val.doc.twig[ key ].type === 'Para' )
 			{
-				sign.val.doc.twig[ key ].type = 'para';
+				sign.val.doc.twig[ key ].type = 'visual.para';
 			}
 		}
 	}
 
 	if( sign.val.pnw && sign.val.pnw.type === 'Point' )
 	{
-		sign.val.pnw.type = 'point';
+		sign.val.pnw.type = 'euclid.point';
 	}
 
 	if( sign.val.pse && sign.val.pse.type === 'Point' )
 	{
-		sign.val.pse.type = 'point';
+		sign.val.pse.type = 'euclid.point';
 	}
 
 	if( sign.val.zone && sign.val.zone.type === 'Rect' )
 	{
-		sign.val.zone.type = 'rect';
+		sign.val.zone.type = 'euclid.rect';
 	}
 
 	if( sign.val.zone && sign.val.zone.pnw.type === 'Point' )
 	{
-		sign.val.zone.pnw.type = 'point';
+		sign.val.zone.pnw.type = 'euclid.point';
 	}
 
 	if( sign.val.zone && sign.val.zone.pse.type === 'Point' )
 	{
-		sign.val.zone.pse.type = 'point';
+		sign.val.zone.pse.type = 'euclid.point';
 	}
 
 	return sign;
@@ -188,7 +188,7 @@ var translateChange =
 		case 'Change' :
 		case undefined :
 
-			chg.chgX.type = 'change';
+			chg.chgX.type = 'jion.change';
 			break;
 
 		default :

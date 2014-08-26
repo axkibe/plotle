@@ -302,7 +302,7 @@ createDisc.prototype.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflexName )
+/**/	if( path.get( 2 ) !== this.reflectName )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -637,7 +637,7 @@ createDisc._isActiveButton =
 		wname    // the widget name
 	)
 {
-	switch( action.reflex )
+	switch( action.reflect )
 	{
 		case 'actions.createGeneric' :
 

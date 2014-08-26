@@ -292,19 +292,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aCall';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aCall';
+prototype.reflect = 'ast.aCall';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aCall';
+prototype.reflectName = 'aCall';
 
 
 /*

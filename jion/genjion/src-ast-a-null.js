@@ -114,19 +114,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aNull';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aNull';
+prototype.reflect = 'ast.aNull';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aNull';
+prototype.reflectName = 'aNull';
 
 
 /*

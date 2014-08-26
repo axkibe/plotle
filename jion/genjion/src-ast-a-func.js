@@ -285,7 +285,7 @@ prototype.create =
 /**/
 /**/	if( v_block !== null )
 /**/	{
-/**/		if( v_block.reflexName !== 'aBlock' )
+/**/		if( v_block.reflectName !== 'aBlock' )
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}
@@ -314,19 +314,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aFunc';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aFunc';
+prototype.reflect = 'ast.aFunc';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aFunc';
+prototype.reflectName = 'aFunc';
 
 
 /*

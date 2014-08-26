@@ -200,7 +200,7 @@ moveTo.prototype.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	if( path.get( 2 ) !== this.reflexName )
+/**/	if( path.get( 2 ) !== this.reflectName )
 /**/	{
 /**/		throw new Error( );
 /**/	}

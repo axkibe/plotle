@@ -151,19 +151,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aPreIncrement';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aPreIncrement';
+prototype.reflect = 'ast.aPreIncrement';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aPreIncrement';
+prototype.reflectName = 'aPreIncrement';
 
 
 /*

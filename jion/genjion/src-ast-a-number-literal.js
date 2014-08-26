@@ -156,19 +156,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aNumberLiteral';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aNumberLiteral';
+prototype.reflect = 'ast.aNumberLiteral';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aNumberLiteral';
+prototype.reflectName = 'aNumberLiteral';
 
 
 /*

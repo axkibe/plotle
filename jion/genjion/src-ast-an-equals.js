@@ -177,19 +177,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'anEquals';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.anEquals';
+prototype.reflect = 'ast.anEquals';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'anEquals';
+prototype.reflectName = 'anEquals';
 
 
 /*

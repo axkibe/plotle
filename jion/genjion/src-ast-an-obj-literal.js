@@ -267,19 +267,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'anObjLiteral';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.anObjLiteral';
+prototype.reflect = 'ast.anObjLiteral';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'anObjLiteral';
+prototype.reflectName = 'anObjLiteral';
 
 
 /*

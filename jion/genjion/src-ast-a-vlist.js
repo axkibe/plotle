@@ -267,19 +267,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aVList';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aVList';
+prototype.reflect = 'ast.aVList';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aVList';
+prototype.reflectName = 'aVList';
 
 
 /*

@@ -278,19 +278,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'context';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'format.context';
+prototype.reflect = 'format.context';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'context';
+prototype.reflectName = 'context';
 
 
 /*

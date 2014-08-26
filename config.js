@@ -62,7 +62,6 @@ config.database.port =
 | Name of the mongodb database
 */
 config.database.name =
-	// 'meshcraft05';
 	'ideoloom-1';
 
 
@@ -91,6 +90,7 @@ config.noWrite =
 | If true "uglifies" the javascript pack, minimizing its size.
 */
 config.uglify =
+//	true ||
 	false;
 
 

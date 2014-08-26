@@ -151,19 +151,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aTypeof';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aTypeof';
+prototype.reflect = 'ast.aTypeof';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aTypeof';
+prototype.reflectName = 'aTypeof';
 
 
 /*

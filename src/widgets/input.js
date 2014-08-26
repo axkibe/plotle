@@ -515,7 +515,7 @@ jools.lazyValue(
 
 
 		if(
-			this.mark.reflex === 'marks.caret'
+			this.mark.reflect === 'marks.caret'
 			&&
 			this.mark.focus
 		)

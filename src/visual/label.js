@@ -343,7 +343,7 @@ label.prototype.dragStop =
 
 	action = root.action;
 
-	switch( action.reflex )
+	switch( action.reflect )
 	{
 		case 'actions.itemDrag' :
 		case 'actions.itemResize' :

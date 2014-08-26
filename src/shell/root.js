@@ -343,7 +343,7 @@ proto.setAction =
 /**/	if(
 /**/		!action
 /**/		||
-/**/		!actions.isAction( action.reflex )
+/**/		!actions.isAction( action.reflect )
 /**/	)
 /**/	{
 /**/		throw new Error( );
@@ -380,7 +380,7 @@ proto.update =
 
 	mark = this.space.mark;
 
-	switch( mark.reflex )
+	switch( mark.reflect )
 	{
 		case 'marks.caret' :
 
@@ -539,7 +539,7 @@ proto.setFocus =
 		focus
 	)
 {
-	switch( this.mark.reflex )
+	switch( this.mark.reflect )
 	{
 		case 'marks.caret' :
 
@@ -703,7 +703,7 @@ proto.pointingHover =
 		{
 /**/		if( CHECK )
 /**/		{
-/**/			if( reply.reflex !== 'reply.hover' )
+/**/			if( reply.reflect !== 'reply.hover' )
 /**/			{
 /**/				throw new Error( );
 /**/			}
@@ -735,7 +735,7 @@ proto.pointingHover =
 /**/		if(
 /**/			!reply
 /**/			||
-/**/			reply.reflex !== 'reply.hover'
+/**/			reply.reflect !== 'reply.hover'
 /**/		)
 /**/		{
 /**/			throw new Error(

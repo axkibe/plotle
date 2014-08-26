@@ -156,19 +156,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aBooleanLiteral';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aBooleanLiteral';
+prototype.reflect = 'ast.aBooleanLiteral';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aBooleanLiteral';
+prototype.reflectName = 'aBooleanLiteral';
 
 
 /*

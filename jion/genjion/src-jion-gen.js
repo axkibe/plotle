@@ -153,19 +153,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'gen';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'jion.gen';
+prototype.reflect = 'jion.gen';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'gen';
+prototype.reflectName = 'gen';
 
 
 /*

@@ -179,48 +179,43 @@ sign.prototype._init =
 
 	val = this.val;
 
-	if( val && !val.reflex && val.type )
+	if( val && !val.reflect && val.type )
 	{
 		switch( val.type )
 		{
-			case 'label' :
-
-				this.val =
-					visual.label.createFromJSON( val );
-
-				break;
-
-			case 'note' :
-
-				this.val =
-					visual.note.createFromJSON( val );
-
-				break;
-
-			case 'point' :
+			case 'euclid.point' :
 
 				this.val = euclid.point.createFromJSON( val );
 
 				break;
 
-			case 'portal' :
+			case 'euclid.rect' :
 
-				this.val =
-					visual.portal.createFromJSON( val );
-
-				break;
-
-			case 'rect' :
-
-				this.val =
-					euclid.rect.createFromJSON( val );
+				this.val = euclid.rect.createFromJSON( val );
 
 				break;
 
-			case 'relation' :
+			case 'visual.label' :
 
-				this.val =
-					visual.relation.createFromJSON( val );
+				this.val = visual.label.createFromJSON( val );
+
+				break;
+
+			case 'visual.note' :
+
+				this.val = visual.note.createFromJSON( val );
+
+				break;
+
+			case 'visual.portal' :
+
+				this.val = visual.portal.createFromJSON( val );
+
+				break;
+
+			case 'visual.relation' :
+
+				this.val = visual.relation.createFromJSON( val );
 
 				break;
 

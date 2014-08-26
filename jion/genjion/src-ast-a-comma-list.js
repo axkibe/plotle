@@ -267,19 +267,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aCommaList';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aCommaList';
+prototype.reflect = 'ast.aCommaList';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aCommaList';
+prototype.reflectName = 'aCommaList';
 
 
 /*

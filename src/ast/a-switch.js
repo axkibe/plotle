@@ -29,7 +29,7 @@ if( JION )
 						comment :
 							'the statement expression',
 						type :
-							'Object'
+							'Object' // FUTURE ast.*
 					},
 				defaultCase :
 					{
@@ -72,7 +72,7 @@ aSwitch.prototype.aCase =
 	var
 		caseExpr;
 
-	if( case_or_condition.reflex !== 'ast.aCase' )
+	if( case_or_condition.reflect !== 'ast.aCase' )
 	{
 		caseExpr =
 			aCase.create(

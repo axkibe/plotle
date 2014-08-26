@@ -249,7 +249,7 @@ doc.prototype.draw =
 			this.mark;
 
 	if(
-		mark.reflex === 'marks.range'
+		mark.reflect === 'marks.range'
 		&&
 		mark.itemPath.equals( item.path )
 	)
@@ -522,7 +522,7 @@ doc.prototype.input =
 			this.mark.caretPath;
 
 	if(
-		mark.reflex === 'marks.range'
+		mark.reflect === 'marks.range'
 		&&
 		!mark.empty
 	)
@@ -572,7 +572,7 @@ doc.prototype.specialKey =
 		return false;
 	}
 
-	if( mark.reflex === 'marks.range' )
+	if( mark.reflect === 'marks.range' )
 	{
 		switch( key )
 		{
@@ -679,7 +679,7 @@ doc.prototype.sketchRange =
 
 /**/if( CHECK )
 /**/{
-/**/	if( mark.reflex !== 'marks.range' )
+/**/	if( mark.reflect !== 'marks.range' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

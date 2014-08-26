@@ -385,7 +385,7 @@ mainDisc.prototype.pushButton =
 
 /**/if( CHECK )
 /**/{
-/**/	if( discname !== this.reflexName )
+/**/	if( discname !== this.reflectName )
 /**/	{
 /**/		throw new Error( );
 /**/	}

@@ -142,7 +142,7 @@ prototype.create =
 /**/		throw new Error( 'attribute call must not be null.' );
 /**/	}
 /**/
-/**/	if( v_call.reflexName !== 'aCall' )
+/**/	if( v_call.reflectName !== 'aCall' )
 /**/	{
 /**/		throw new Error( 'type mismatch' );
 /**/	}
@@ -160,19 +160,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aNew';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aNew';
+prototype.reflect = 'ast.aNew';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aNew';
+prototype.reflectName = 'aNew';
 
 
 /*

@@ -946,7 +946,7 @@ fabric.prototype.fillRect =
 
 	if( typeof( a1 ) === 'object' )
 	{
-		if( a1.reflex === 'euclid.rect' )
+		if( a1.reflect === 'euclid.rect' )
 		{
 			return this._cx.fillRect(
 				a1.pnw.x,
@@ -955,7 +955,7 @@ fabric.prototype.fillRect =
 				a1.pse.y
 			);
 		}
-		else if( a1.reflex === 'euclid.point' )
+		else if( a1.reflect === 'euclid.point' )
 		{
 			return this._cx.fillRect(
 				a1.x,
@@ -1384,7 +1384,7 @@ fabric.prototype.withinSketch =
 
 /**/if( CHECK )
 /**/{
-/**/	if( p.reflex !== 'euclid.point' )
+/**/	if( p.reflect !== 'euclid.point' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

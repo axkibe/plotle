@@ -993,7 +993,7 @@ jools.logNew =
 
 	jools.log(
 		'news',
-		entity.reflex,
+		entity.reflect,
 		path.string
 	);
 };

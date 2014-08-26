@@ -114,7 +114,7 @@ line.connect =
 		pc1,
 		pc2;
 
-	if( shape1.reflex === 'euclid.point' )
+	if( shape1.reflect === 'euclid.point' )
 	{
 		pc1 = shape1;
 	}
@@ -123,7 +123,7 @@ line.connect =
 		pc1 = shape1.pc;
 	}
 
-	if( shape2.reflex === 'euclid.point' )
+	if( shape2.reflect === 'euclid.point' )
 	{
 		pc2 = shape2;
 	}
@@ -139,7 +139,7 @@ line.connect =
 
 	if
 	(
-		shape1.reflex === 'euclid.point'
+		shape1.reflect === 'euclid.point'
 	)
 	{
 		p1 = shape1;
@@ -158,7 +158,7 @@ line.connect =
 
 	if
 	(
-		shape2.reflex === 'euclid.point'
+		shape2.reflect === 'euclid.point'
 	)
 	{
 		p2 =

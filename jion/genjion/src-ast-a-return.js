@@ -151,19 +151,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aReturn';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aReturn';
+prototype.reflect = 'ast.aReturn';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aReturn';
+prototype.reflectName = 'aReturn';
 
 
 /*

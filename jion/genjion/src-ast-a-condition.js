@@ -211,19 +211,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aCondition';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aCondition';
+prototype.reflect = 'ast.aCondition';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aCondition';
+prototype.reflectName = 'aCondition';
 
 
 /*

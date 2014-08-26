@@ -177,19 +177,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'anInstanceof';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.anInstanceof';
+prototype.reflect = 'ast.anInstanceof';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'anInstanceof';
+prototype.reflectName = 'anInstanceof';
 
 
 /*

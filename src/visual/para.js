@@ -203,7 +203,7 @@ para.concernsMark =
 		return undefined;
 	}
 
-	if( mark.reflex === 'marks.range' )
+	if( mark.reflect === 'marks.range' )
 	{
 		if(
 			mark.itemPath.subPathOf( path )
@@ -357,7 +357,7 @@ jools.lazyValue(
 		f.scale( 1 / zoom );
 
 		if(
-			mark.reflex === 'marks.caret'
+			mark.reflect === 'marks.caret'
 			&&
 			mark.focus
 		)
@@ -977,7 +977,7 @@ para.prototype.specialKey =
 		retainx =
 			null;
 
-	switch( mark.reflex )
+	switch( mark.reflect )
 	{
 		case 'marks.caret' :
 

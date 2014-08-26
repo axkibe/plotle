@@ -192,19 +192,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'aVarDec';
-
-
-/*
-| New Reflection.
-*/
-prototype.reflex = 'ast.aVarDec';
+prototype.reflect = 'ast.aVarDec';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflexName = 'aVarDec';
+prototype.reflectName = 'aVarDec';
 
 
 /*

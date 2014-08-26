@@ -322,7 +322,7 @@ change.prototype.transformChange =
 
 /**/if( CHECK )
 /**/{
-/**/	if( chg.reflex !== 'jion.change' )
+/**/	if( chg.reflect !== 'jion.change' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -341,9 +341,9 @@ change.prototype.transformChange =
 		return null;
 	}
 
-	srcA = srcX.reflex === 'jion.signRay';
+	srcA = srcX.reflect === 'jion.signRay';
 
-	trgA = trgX.reflex === 'jion.signRay';
+	trgA = trgX.reflect === 'jion.signRay';
 
 	if( !srcA && !trgA )
 	{
@@ -460,7 +460,7 @@ change.prototype.transformChangeX =
 		chgX
 	)
 {
-	switch( chgX.reflex )
+	switch( chgX.reflect )
 	{
 		case 'jion.change' :
 
@@ -664,7 +664,7 @@ change.prototype._changeTreeInsert =
 	trg = this.trg;
 
 	jools.check(
-		trg.path.reflex === 'jion.path',
+		trg.path.reflect === 'jion.path',
 		cm,
 		'trg.path missing'
 	);
@@ -738,7 +738,7 @@ change.prototype._changeTreeRemove =
 	trg = this.trg;
 
 	jools.check(
-		src.path.reflex === 'jion.path',
+		src.path.reflect === 'jion.path',
 		cm,
 		'src.path missing'
 	);
@@ -1242,7 +1242,7 @@ change.prototype.transformSignRay =
 			continue;
 		}
 
-		switch( cx.reflex )
+		switch( cx.reflect )
 		{
 			case 'jion.sign' :
 
@@ -1281,7 +1281,7 @@ change.prototype.transformSignX =
 		signX
 	)
 {
-	switch( signX.reflex )
+	switch( signX.reflect )
 	{
 
 		case 'jion.sign' :

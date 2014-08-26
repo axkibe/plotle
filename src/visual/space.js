@@ -256,7 +256,7 @@ space.prototype.focusedItem =
 
 	if( action )
 	{
-		switch( action.reflex )
+		switch( action.reflect )
 		{
 			case 'actions.itemDrag' :
 			case 'actions.itemResize' :
@@ -294,7 +294,7 @@ space.prototype.getItem =
 
 	action = root.action;
 
-	switch( action && action.reflex )
+	switch( action && action.reflect )
 	{
 		case 'actions.itemDrag' :
 		case 'actions.itemResize' :
@@ -390,7 +390,7 @@ space.prototype.draw =
 		);
 	}
 
-	switch( action && action.reflex )
+	switch( action && action.reflect )
 	{
 		case 'actions.createGeneric' :
 
@@ -680,7 +680,7 @@ space.prototype.dragStart =
 	// FIXME simplify
 	if(
 		action &&
-		action.reflex === 'actions.createGeneric' &&
+		action.reflect === 'actions.createGeneric' &&
 		action.itemType === 'note'
 	)
 	{
@@ -717,7 +717,7 @@ space.prototype.dragStart =
 	else if
 	(
 		action &&
-		action.reflex === 'actions.createGeneric' &&
+		action.reflect === 'actions.createGeneric' &&
 		action.itemType === 'label'
 
 	)
@@ -750,7 +750,7 @@ space.prototype.dragStart =
 	else if
 	(
 		action &&
-		action.reflex === 'actions.createGeneric' &&
+		action.reflect === 'actions.createGeneric' &&
 		action.itemType === 'portal'
 
 	)
@@ -814,7 +814,7 @@ space.prototype.dragStart =
 
 	// starts a panning operation instead
 
-	switch( action && action.reflex )
+	switch( action && action.reflect )
 	{
 		case 'actions.createRelation' :
 
@@ -933,7 +933,7 @@ space.prototype.dragStop =
 /**/	}
 /**/}
 
-	switch( action.reflex )
+	switch( action.reflect )
 	{
 		case 'actions.createGeneric' :
 
@@ -1316,7 +1316,7 @@ space.prototype.dragMove =
 	view =
 		this.view;
 
-	switch( action.reflex )
+	switch( action.reflect )
 	{
 		case 'actions.createGeneric' :
 

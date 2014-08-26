@@ -280,7 +280,7 @@ note.prototype.dragStop =
 
 	action = root.action;
 
-	switch( action.reflex )
+	switch( action.reflect )
 	{
 		case 'actions.itemResize' :
 
@@ -600,11 +600,9 @@ note.prototype.scrollMarkIntoView =
 
 /**/if( CHECK )
 /**/{
-/**/	if( para.reflex !== 'visual.para' )
+/**/	if( para.reflect !== 'visual.para' )
 /**/	{
-/**/		throw new Error(
-/**/			'para not a para.'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 

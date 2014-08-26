@@ -170,7 +170,7 @@ aBlock.prototype.aComment =
 		header
 	)
 {
-	if( header.reflex !== 'ast.aComment' )
+	if( header.reflect !== 'ast.aComment' )
 	{
 		// arguments have to be a list of strings otherwise
 		header =
@@ -320,7 +320,7 @@ aBlock.prototype.aReturn =
 		expr
 	)
 {
-	switch( expr.reflex )
+	switch( expr.reflect )
 	{
 		case 'ast.aReturn' :
 

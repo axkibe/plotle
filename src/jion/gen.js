@@ -1,5 +1,5 @@
 /*
-| Generates jooled objects from a jools definition.
+| Generates jion objects from a jion definition.
 |
 | Authors: Axel Kittenberger
 */
@@ -1804,7 +1804,7 @@ gen.prototype.genCreatorChecks =
 
 				tcheck =
 					aDiffers(
-						attr.v.aDot( 'reflexName' ), // FIXME
+						attr.v.aDot( 'reflectName' ), // FIXME
 						aStringLiteral( attr.type )
 					);
 
@@ -2372,7 +2372,15 @@ gen.prototype.genFromJSONCreatorParser =
 			.anIf(
 				aDiffers(
 					aVar( 'arg' ),
-					aStringLiteral( this.name )
+					aStringLiteral(
+						this.unit // FUTURE must not be false
+						?
+							adaptName(
+								this.unit,
+								this.name
+							)
+						: attr.name
+					)
 				),
 				aBlock( )
 				.aFail( 'invalid JSON' )
@@ -2407,16 +2415,14 @@ gen.prototype.genFromJSONCreatorParser =
 		a++
 	)
 	{
-		name =
-			jsonList[ a ];
+		name = jsonList[ a ];
 
 		if( name === 'twig' || name === 'ranks' )
 		{
 			continue;
 		}
 
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes[ name ];
 
 		switch( attr.type )
 		{
@@ -2439,6 +2445,7 @@ gen.prototype.genFromJSONCreatorParser =
 				{
 					// FUTURE remove this hack to disable
 					// Object.createFromJSON creation
+					// THIS code should not happen in future anyway.
 					base =
 						attr.type !== 'Object'
 						? aVar( attr.type )
@@ -2463,12 +2470,12 @@ gen.prototype.genFromJSONCreatorParser =
 
 		caseBlock =
 			aBlock( )
-			.anAssign( attr.v, arg);
+			.anAssign( attr.v, arg );
 
 		switchExpr =
 			switchExpr
 			.aCase(
-				aStringLiteral( name ),
+				aStringLiteral( attr.name ),
 				caseBlock
 			);
 	}
@@ -2521,27 +2528,28 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		a++
 	)
 	{
-		name =
-			this.twigList[ a ];
+		name = this.twigList[ a ];
 
-		ut =
-			this.twig[ name ];
+		ut = this.twig[ name ];
 
 		if( ut.unit )
 		{
-			base =
-				aVar( ut.unit ).aDot( ut.type );
+			base = aVar( ut.unit ).aDot( ut.type );
 		}
 		else
 		{
-			base =
-				aVar( ut.type );
+			base = aVar( ut.type );
 		}
 
 		switchExpr =
 			switchExpr
 			.aCase(
-				aStringLiteral( name ),
+				aStringLiteral(  // XXX
+					adaptName(
+						ut.unit,
+						ut.type
+					)
+				),
 				aBlock( )
 				.anAssign(
 					aVar( 'twig' )
@@ -2782,8 +2790,7 @@ gen.prototype.genFromJSONCreator =
 
 	if( this.twig )
 	{
-		funcBlock =
-			this.genFromJSONCreatorTwigProcessing( funcBlock );
+		funcBlock = this.genFromJSONCreatorTwigProcessing( funcBlock );
 	}
 
 	funcBlock =
@@ -2817,19 +2824,8 @@ gen.prototype.genReflection =
 		.aComment( 'Reflection.' )
 		.anAssign(
 			aVar( 'prototype' ).aDot( 'reflect' ),
-			aStringLiteral( this.name )
-		);
-
-	capsule =
-		capsule
-		.aComment( 'New Reflection.' )
-		.anAssign(
-			aVar( 'prototype' ).aDot( 'reflex' ),
 			aStringLiteral(
-				adaptName(
-					this.unit,
-					this.name
-				)
+				adaptName( this.unit, this.name )
 			)
 		);
 
@@ -2837,7 +2833,7 @@ gen.prototype.genReflection =
 		capsule
 		.aComment( 'Name Reflection.' )
 		.anAssign(
-			aVar( 'prototype' ).aDot( 'reflexName' ),
+			aVar( 'prototype' ).aDot( 'reflectName' ),
 			aStringLiteral( this.name )
 		);
 
@@ -2916,7 +2912,11 @@ gen.prototype.genToJSON =
 		anObjLiteral( )
 		.Add(
 			'type',
-			aStringLiteral( this.name )
+			aStringLiteral(
+				this.unit // FIXME should always be true
+				? adaptName( this.unit, this.name )
+				: this.name
+			)
 		);
 
 	for(
@@ -2925,11 +2925,9 @@ gen.prototype.genToJSON =
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ];
+		name = this.attrList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes[ name ];
 
 		if( !attr.json )
 		{
