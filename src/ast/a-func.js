@@ -37,11 +37,10 @@ if( JION )
 		node :
 			true,
 		twig :
-			{
-// FUTURE
-//				'FuncArg' :
-//					'ast.FuncArg'
-			}
+			[
+//				FUTURE
+//				'ast.FuncArg'
+			]
 	};
 }
 

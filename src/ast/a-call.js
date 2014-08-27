@@ -35,7 +35,7 @@ if( JION )
 					},
 			},
 		twig :
-			'expression',
+			'->expression',
 	};
 }
 

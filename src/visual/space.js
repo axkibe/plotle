@@ -130,16 +130,12 @@ if( JION )
 		json :
 			true,
 		twig :
-			{
-				'note' :
-					'visual.note',
-				'label' :
-					'visual.label',
-				'relation' :
-					'visual.relation',
-				'portal' :
-					'visual.portal'
-			}
+			[
+				'visual.note',
+				'visual.label',
+				'visual.relation',
+				'visual.portal'
+			]
 	};
 }
 

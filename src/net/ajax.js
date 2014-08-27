@@ -41,10 +41,9 @@ if( JION )
 				}
 			},
 		twig :
-			{
-				'channel' :
-					'net.channel'
-			}
+			[
+				'net.channel'
+			]
 	};
 }
 

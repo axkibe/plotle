@@ -167,6 +167,8 @@ gen.prototype._init =
 	function( )
 {
 	var
+		a,
+		aZ,
 		assign,
 		attr,
 		attributes,
@@ -179,6 +181,8 @@ gen.prototype._init =
 		concernsUnit,
 		constructorList,
 		defaultValue,
+		// sorted init list
+		inits,
 		jAttr,
 		jdv,
 		jion,
@@ -186,10 +190,12 @@ gen.prototype._init =
 		name,
 		// twigs to be recognized
 		subParts,
+		// twig entry
+		te,
 		// processed twig table for generator use
 		twig,
 		// twig map to be used (the definition)
-		twigMap,
+		twigDef,
 		// twigs sorted alphabetically
 		twigList,
 		// units sorted alphabetically
@@ -205,7 +211,7 @@ gen.prototype._init =
 
 	twig = null;
 
-	twigMap = null;
+	twigDef = null;
 
 	units = { };
 
@@ -455,14 +461,11 @@ gen.prototype._init =
 			} );
 	}
 
-	attrList =
-		Object.keys( attributes ).sort ( );
+	attrList = Object.keys( attributes ).sort ( );
 
-	this.attrList =
-		Object.freeze( attrList );
+	this.attrList = Object.freeze( attrList );
 
-	this.attributes =
-		Object.freeze( attributes );
+	this.attributes = Object.freeze( attributes );
 
 	constructorList.sort( );
 
@@ -475,19 +478,15 @@ gen.prototype._init =
 
 	if( jion.init )
 	{
-		var
-			// sorted init list
-			inits =
-				jion.init.slice( ).sort( );
+		inits = jion.init.slice( ).sort( );
 
 		for(
-			var a = inits.length - 1;
+			a = inits.length - 1;
 			a >= 0;
 			a--
 		)
 		{
-			name =
-				jion.init[ a ];
+			name = jion.init[ a ];
 
 			if( attributes[ name ] )
 			{
@@ -521,29 +520,27 @@ gen.prototype._init =
 
 		if( jools.isString( jion.twig ) )
 		{
-/**/		if( CHECK )
-/**/		{
-/**/			if( !/[a-zA-Z_-]+/.test( jion.twig ) )
-/**/			{
-/**/				throw new Error( 'invalid typemap reference' );
-/**/			}
-/**/		}
-
-			twigMap = require( '../typemaps/' + jion.twig );
+			twigDef = require( '../typemaps/' + jion.twig.substr( 2 ) );
 		}
 		else
 		{
-			twigMap = jion.twig;
+			twigDef = jion.twig;
 		}
 
-		for( name in twigMap )
+		for(
+			a = 0, aZ = twigDef.length;
+			a < aZ;
+			a++
+		)
 		{
-			ut = twigMap[ name ].split( '.' );
+			te = twigDef[ a ];
+
+			ut = te.split( '.' );
 
 			if( ut.length !== 2 )
 			{
 				throw new Error(
-					'invalid twig unit.type: ' + name
+					'invalid twig unit.type: ' + te
 				);
 			}
 
@@ -554,7 +551,7 @@ gen.prototype._init =
 
 			units[ ut[ 0 ] ][ ut[ 1 ] ] = true;
 
-			twig[ name ] =
+			twig[ te ] =
 				Object.freeze( {
 					unit :
 						ut[ 0 ],
@@ -2513,8 +2510,8 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 	var
 		base,
 		loop,
-		name,
 		switchExpr,
+		te,
 		ut;
 
 	switchExpr =
@@ -2528,9 +2525,9 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		a++
 	)
 	{
-		name = this.twigList[ a ];
+		te = this.twigList[ a ];
 
-		ut = this.twig[ name ];
+		ut = this.twig[ te ];
 
 		if( ut.unit )
 		{
@@ -2667,8 +2664,7 @@ gen.prototype.genFromJSONCreatorReturn =
 		a++
 	)
 	{
-		name =
-			this.constructorList[ a ];
+		name = this.constructorList[ a ];
 
 		switch( name )
 		{
@@ -2750,11 +2746,9 @@ gen.prototype.genFromJSONCreator =
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ];
+		name = this.attrList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes[ name ];
 
 		if( attr.json )
 		{
@@ -2779,22 +2773,18 @@ gen.prototype.genFromJSONCreator =
 			aBlock( )
 		);
 
-	funcBlock =
-		this.genFromJSONCreatorParser( funcBlock, jsonList );
+	funcBlock = this.genFromJSONCreatorParser( funcBlock, jsonList );
 
-	funcBlock =
-		this.genCreatorDefaults( funcBlock, true );
+	funcBlock = this.genCreatorDefaults( funcBlock, true );
 
-	funcBlock =
-		this.genCreatorChecks( funcBlock, false );
+	funcBlock = this.genCreatorChecks( funcBlock, false );
 
 	if( this.twig )
 	{
 		funcBlock = this.genFromJSONCreatorTwigProcessing( funcBlock );
 	}
 
-	funcBlock =
-		this.genFromJSONCreatorReturn( funcBlock );
+	funcBlock = this.genFromJSONCreatorReturn( funcBlock );
 
 	capsule =
 		capsule
@@ -3056,10 +3046,12 @@ gen.prototype.genEquals =
 	var
 		attr,
 		block,
-		cond =
-			null,
+		cond,
 		ceq,
 		name;
+
+
+	cond = null;
 
 	switch( this.equals )
 	{

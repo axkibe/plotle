@@ -146,7 +146,7 @@ var _checkAlikes =
 		name;
 
 	alike = jion.alike;
-		
+
 	if( !jion.attributes )
 	{
 		throw new Error(
@@ -176,7 +176,7 @@ var _checkAlikes =
 				'alike ' + name + ' misses ignores.'
 			);
 		}
-		
+
 		for( var attr in ignores )
 		{
 			if( !jion.attributes[ attr ] )
@@ -186,6 +186,70 @@ var _checkAlikes =
 				);
 			}
 		}
+	}
+};
+
+
+/*
+| Checks the twig definition.
+*/
+var _checkTwig =
+	function(
+		jion // the jion definition
+	)
+{
+	var
+		entry,
+		map,
+		twig;
+
+	twig = jion.twig;
+
+	map = { };
+
+	if( jools.isString( twig ) )
+	{
+		if( !( /\->[a-zA-Z_-]+/.test( jion.twig ) ) )
+		{
+				throw new Error( 'invalid typemap reference' );
+		}
+
+		twig = require( '../typemaps/' + twig.substr( 2 ) + '.js' );
+	}
+
+	if(
+		!( Array.isArray( twig ) )
+	)
+	{
+		throw new Error(
+			'twig definition must be an Array or a typemap to one'
+		);
+	}
+
+	for(
+		var a = 0, aZ = twig.length;
+		a < aZ;
+		a++
+	)
+	{
+		entry = twig[ a ];
+
+		if( !jools.isString( entry ) )
+		{
+			throw new Error(
+				'twig definition entry not a String'
+			);
+		}
+
+		if( map[ entry ] )
+		{
+			throw new Error(
+				'twig definition contains duplicate: '
+				+ entry
+			);
+		}
+
+		map[ entry ] = true;
 	}
 };
 
@@ -343,6 +407,11 @@ validator.check =
 	if( jion.alike )
 	{
 		_checkAlikes( jion );
+	}
+
+	if( jion.twig )
+	{
+		_checkTwig( jion );
 	}
 };
 

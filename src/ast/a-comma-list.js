@@ -25,7 +25,7 @@ if( JION )
 		node :
 			true,
 		twig :
-			'expression'
+			'->expression'
 	};
 }
 

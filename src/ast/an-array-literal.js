@@ -27,7 +27,7 @@ if( JION )
 		equals :
 			'primitive', // FUTURE
 		twig :
-			'expression'
+			'->expression'
 	};
 }
 

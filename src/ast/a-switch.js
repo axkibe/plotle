@@ -44,9 +44,9 @@ if( JION )
 		node :
 			true,
 		twig :
-			{
-//				'aCase' : 'ast.aCase'
-			}
+			[
+				'ast.aCase'
+			]
 	};
 }
 

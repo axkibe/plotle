@@ -27,7 +27,7 @@ if( JION )
 		node :
 			true,
 		twig :
-			'statement'
+			'->statement'
 	};
 }
 
@@ -66,8 +66,7 @@ anObjLiteral.prototype.Add =
 /*
 | Node export.
 */
-module.exports =
-	anObjLiteral;
+module.exports = anObjLiteral;
 
 
 } )( );

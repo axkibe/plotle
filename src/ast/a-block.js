@@ -28,11 +28,10 @@ if( JION )
 		node :
 			true,
 		twig :
-			{
-				// FUTURE statement
-			}
+			'->statement'
 	};
 }
+
 
 /*
 | Node imports.

@@ -133,12 +133,10 @@ if( JION )
 		init :
 			[ ],
 		twig :
-			{
-				'mainDisc' :
-					'discs.mainDisc',
-				'createDisc' :
-					'discs.createDisc'
-			}
+			[
+				'discs.mainDisc',
+				'discs.createDisc'
+			]
 	};
 }
 

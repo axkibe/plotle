@@ -109,26 +109,18 @@ if( JION )
 				'twigDup'
 			],
 		twig :
-			{
+			[
 				/* FUTURE
-				'login' :
-					'forms.login',
-				'moveTo' :
-					'forms.moveTo',
-				'noAccessToSpace' :
-					'forms.noAccessToSpace',
-				'nonExistingSpace' :
-					'forms.nonExistingSpace',
-				'signUp' :
-					'forms.signUp',
-				'space' :
-					'forms.space',
-				'user' :
-					'forms.user',
-				'welcome' :
-					'forms.welcome'
+				'forms.login',
+				'forms.moveTo',
+				'forms.noAccessToSpace',
+				'forms.nonExistingSpace',
+				'forms.signUp',
+				'forms.space',
+				'forms.user',
+				'forms.welcome'
 				*/
-			}
+			]
 	};
 }
 

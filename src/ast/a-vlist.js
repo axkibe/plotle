@@ -27,11 +27,10 @@ if( JION )
 		node :
 			true,
 		twig :
-			{
-// FUTURE
-//				'aVarDec' :
-//					'ast.aVarDec'
-			}
+			[
+//				FUTURE
+//				'ast.aVarDec'
+			]
 	};
 }
 

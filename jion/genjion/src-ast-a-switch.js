@@ -42,6 +42,8 @@ if( SERVER )
 	ast = { };
 
 	ast.aBlock = require( '../../src/ast/a-block' );
+
+	ast.aCase = require( '../../src/ast/a-case' );
 }
 
 

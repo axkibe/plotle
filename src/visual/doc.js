@@ -105,10 +105,9 @@ if( JION )
 		json :
 			true,
 		twig :
-			{
-				'para' :
-					'visual.para'
-			},
+			[
+				'visual.para'
+			],
 		node :
 			true
 	};

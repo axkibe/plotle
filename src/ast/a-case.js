@@ -35,12 +35,13 @@ if( JION )
 		node :
 			true,
 		twig :
-			'expression',
+			'->expression',
 	};
 }
 
 
-var aCase;
+var
+	aCase;
 
 aCase = require( '../jion/this' )( module );
 
