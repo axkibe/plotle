@@ -209,24 +209,43 @@ fabric.prototype.arc =
 		a6
 	)
 {
-	var tw = this._$twist, x, y, r, sa, ea, ac;
+	var
+		tw,
+		x,
+		y,
+		r,
+		sa,
+		ea,
+		ac;
+
+	tw = this._$twist;
 
 	if( typeof( a1 ) === 'object' )
 	{
 		x  = a1.x;
+
 		y  = a1.y;
+
 		r  = a2;
+
 		sa = a3;
+
 		ea = a4;
+
 		ac = a5;
 	}
 	else
 	{
 		x  = a1;
+
 		y  = a2;
+
 		r  = a3;
+
 		sa = a4;
+
 		ea = a5;
+
 		ac = a6;
 	}
 
@@ -244,8 +263,8 @@ fabric.prototype.arc =
 /*
 | Draws a bezier.
 |
-| bezier(cp1,  cp2,  p)   -or-
-| bezier(cp1x, cp1y, cp2x, cp2y, x, y) -or-
+| beziTo( cp1,  cp2,  p )   -or-
+| beziTo( cp1x, cp1y, cp2x, cp2y, x, y ) -or-
 | any combination of points and arguments.
 */
 fabric.prototype.beziTo =
@@ -356,7 +375,7 @@ fabric.prototype.beziTo =
 /**/	{
 /**/		if( a >= aZ )
 /**/		{
-/**/			throw new Error( 'beziTo: aFail' );
+/**/			throw new Error( );
 /**/		}
 /**/	}
 

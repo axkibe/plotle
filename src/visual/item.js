@@ -417,16 +417,18 @@ item.prototype.sketchHandle =
 	)
 {
 	var
-		bb =
-			view.scale(
-				this._handles.bb
-			),
+		bb,
+		w,
+		e;
 
-		w =
-			view.point( zone.w ),
+	bb =
+		view.scale(
+			this._handles.bb
+		),
 
-		e =
-			view.point( zone.e );
+	w = view.point( zone.w ),
+
+	e = view.point( zone.e );
 
 	fabric.moveTo( w );
 
@@ -461,13 +463,15 @@ item.prototype.drawHandles =
 		view
 	)
 {
-	var sbary =
-		this.scrollbarY;
+	var
+		area,
+		sbary;
+
+	sbary = this.scrollbarY;
 
 	if( sbary && sbary.visible )
 	{
-		var area =
-			sbary.getArea( view );
+		area = sbary.getArea( view );
 
 		fabric.reverseClip(
 			area,
@@ -513,7 +517,7 @@ item.prototype.dragStart =
 		action,
 		sbary;
 
-	action = root.action,
+	action = root.action;
 
 	sbary = this.scrollbarY;
 
