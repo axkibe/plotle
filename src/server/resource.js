@@ -18,7 +18,9 @@ if( JION )
 {
 	return {
 		name :
-			'Resource',
+			'resource',
+		unit :
+			'server',
 		attributes :
 			{
 				aliases :
@@ -163,25 +165,36 @@ if( JION )
 | Imports.
 */
 var
-	FileTypes =
-		require( './file-types' ),
+	FileTypes, // TODO
+	jools,
+	resource,
+	server;
 
-	jools =
-		require( '../jools/jools' ),
 
-	Resource =
-		require( '../jion/this' )( module );
+FileTypes = require( './file-types' );
+
+jools = require( '../jools/jools' );
+
+server =
+	{
+		resource :
+			require( '../jion/this' )( module )
+	};
+
+
+resource = server.resource;
 
 
 /*
 | Initializer.
 */
-Resource.prototype._init =
+resource.prototype._init =
 	function( )
 {
 	var
-		filePath =
-			this.filePath;
+		filePath;
+
+	filePath = this.filePath;
 
 	// the alias is are the paths the file is served as
 	// directories are replaced with hypens to ease debugging
@@ -193,14 +206,12 @@ Resource.prototype._init =
 
 	if( !this.coding )
 	{
-		this.coding =
-			FileTypes.coding( this.fileExt );
+		this.coding = FileTypes.coding( this.fileExt );
 	}
 
 	if( !this.mime )
 	{
-		this.mime =
-			FileTypes.mime( this.fileExt );
+		this.mime = FileTypes.mime( this.fileExt );
 	}
 };
 
@@ -209,7 +220,7 @@ Resource.prototype._init =
 | This resource as generated jion.
 */
 jools.lazyValue(
-	Resource.prototype,
+	resource.prototype,
 	'asJoobj',
 	function( )
 	{
@@ -244,13 +255,14 @@ jools.lazyValue(
 | The file extension
 */
 jools.lazyValue(
-	Resource.prototype,
+	resource.prototype,
 	'fileExt',
 	function( )
 	{
 		var
-			fp =
-				this.filePath;
+			fp;
+
+		fp = this.filePath;
 
 		if( !fp )
 		{
@@ -265,8 +277,7 @@ jools.lazyValue(
 /*
 | Node export
 */
-module.exports =
-	Resource;
+module.exports = resource;
 
 
 } )( );

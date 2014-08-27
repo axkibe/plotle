@@ -67,10 +67,13 @@ var
 		require( 'mongodb' ),
 	PostProcessor =
 		require( './post-processor' ),
-	Resource =
-		require( './resource' ),
 	roster =
 		require( './roster' ),
+	server =
+		{
+			resource :
+				require( './resource' ),
+		},
 	sha1 =
 		require( '../jools/sha1' ),
 	sus =
@@ -675,7 +678,7 @@ Server.prototype.prepareInventory =
 
 	// autogenerates the shell config as resource
 	cconfig =
-		Resource.create(
+		server.resource.create(
 			'data',
 				this.buildShellConfig( ),
 			'filePath',
@@ -928,7 +931,7 @@ Server.prototype.prepareInventory =
 	// registers the bundle as resource
 	this.inventory =
 		this.inventory.addResource(
-			Resource.create(
+			server.resource.create(
 				'filePath',
 					bundleFilePath,
 				'maxage',
