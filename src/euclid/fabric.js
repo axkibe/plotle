@@ -11,7 +11,6 @@
 var
 	euclid;
 
-
 euclid = euclid || { };
 
 
@@ -253,15 +252,9 @@ fabric.prototype.beziTo =
 	function( )
 {
 	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
-		tw =
-			this._$twist,
-
+		a,
+		aZ,
+		tw,
 		cp1x,
 		cp1y,
 		cp2x,
@@ -269,13 +262,17 @@ fabric.prototype.beziTo =
 		x,
 		y;
 
+	a = 0;
+
+	aZ = arguments.length;
+
+	tw = this._$twist;
+
 /**/if( CHECK )
 /**/{
 /**/	if( this._$posx === null || this._$posy === null )
 /**/	{
-/**/		throw new Error(
-/**/			'beziTo: pFail'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( a >= aZ )
@@ -288,91 +285,72 @@ fabric.prototype.beziTo =
 
 	if( typeof( arguments[ a ] ) === 'object' )
 	{
-		cp1x =
-			arguments[ a ].x;
+		cp1x = arguments[ a ].x;
 
-		cp1y =
-			arguments[ a++ ].y;
+		cp1y = arguments[ a++ ].y;
 	}
 	else
 	{
-		cp1x =
-			arguments[ a++ ];
+		cp1x = arguments[ a++ ];
 
 /**/	if( CHECK )
 /**/	{
 /**/		if (a >= aZ)
 /**/		{
-/**/			throw new Error(
-/**/				'beziTo: aFail'
-/**/			);
+/**/			throw new Error( );
 /**/		}
 /**/	}
 
-		cp1y =
-			arguments[ a++ ];
+		cp1y = arguments[ a++ ];
 	}
 
 /**/if( CHECK )
 /**/{
 /**/	if( a >= aZ )
 /**/	{
-/**/		throw new Error(
-/**/			'beziTo: aFail'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
 
 	if( typeof( arguments[ a ] ) === 'object' )
 	{
-		cp2x =
-			arguments[ a ].x;
+		cp2x = arguments[ a ].x;
 
-		cp2y =
-			arguments[ a++ ].y;
+		cp2y = arguments[ a++ ].y;
 	}
 	else
 	{
-		cp2x =
-			arguments[ a++ ];
+		cp2x = arguments[ a++ ];
 
 /**/	if( CHECK )
 /**/	{
 /**/		if(a >= aZ)
 /**/		{
-/**/			throw new Error(
-/**/				'beziTo: aFail'
-/**/			);
+/**/			throw new Error( );
 /**/		}
 /**/	}
 
-		cp2y =
-			arguments[ a++ ];
+		cp2y = arguments[ a++ ];
 	}
 
 /**/if( CHECK )
 /**/{
 /**/	if( a >= aZ )
 /**/	{
-/**/		throw new Error(
-/**/			'beziTo: aFail'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
 	if( typeof(arguments[ a ]) === 'object' )
 	{
-		x =
-			arguments[ a ].x;
+		x = arguments[ a ].x;
 
-		y =
-			arguments[ a++ ].y;
+		y = arguments[ a++ ].y;
 	}
 	else
 	{
-		x =
-			arguments[ a++ ];
+		x = arguments[ a++ ];
 
 /**/	if( CHECK )
 /**/	{
@@ -382,22 +360,23 @@ fabric.prototype.beziTo =
 /**/		}
 /**/	}
 
-		y =
-			arguments[ a++ ];
+		y = arguments[ a++ ];
 	}
 
 	cp1x += this._$posx + tw;
+
 	cp1y += this._$posy + tw;
+
 	cp2x += x + tw;
+
 	cp2y += y + tw;
 
-	this._$posx =
-		x;
+	this._$posx = x;
 
-	this._$posy =
-		y;
+	this._$posy = y;
 
 	x += tw;
+
 	y += tw;
 
 	this._cx.bezierCurveTo(
@@ -427,15 +406,15 @@ fabric.prototype.clip =
 	)
 {
 	var
-		cx =
-			this._cx;
+		cx;
+
+	cx = this._cx;
 
 	if( !this.$clip )
 	{
 		cx.save( );
 
-		this.$clip =
-			true;
+		this.$clip = true;
 	}
 
 	cx.beginPath( );
@@ -471,8 +450,7 @@ fabric.prototype.deClip =
 /**/	}
 /**/}
 
-	this.$clip =
-		false;
+	this.$clip = false;
 
 	this._cx.restore( );
 };
@@ -496,78 +474,68 @@ fabric.prototype.drawImage =
 	)
 {
 	var
-		a =
-			0,
-
-		aZ =
-			arguments.length,
-
+		a,
+		aZ,
+		arg,
 		image,
 		x,
 		y,
 		composite,
-		alpha;
+		alpha,
+		saveAlpha;
+
+	a = 0;
+
+	aZ = arguments.length;
 
 	while( a < aZ )
 	{
-		var
-			arg =
-				arguments[ a++ ];
+		arg = arguments[ a++ ];
 
 		switch( arg )
 		{
 			case 'image' :
 
-				image =
-					arguments[ a++ ];
+				image = arguments[ a++ ];
 
 				continue;
 
 			case 'pnw' :
 
-				x =
-					arguments[ a ].x;
+				x = arguments[ a ].x;
 
-				y =
-					arguments[ a++ ].y;
+				y = arguments[ a++ ].y;
 
 				continue;
 
 			case 'x' :
 
-				x =
-					arguments[ a++ ];
+				x = arguments[ a++ ];
 
 				continue;
 
 			case 'y' :
 
-				y =
-					arguments[ a++ ];
+				y = arguments[ a++ ];
 
 				continue;
 
 			case 'composite' :
 
-				composite =
-					arguments[ a++ ];
+				composite = arguments[ a++ ];
 
 				continue;
 
 			case 'alpha' :
 
-				alpha =
-					arguments[ a++ ];
+				alpha = arguments[ a++ ];
 
 				continue;
 
 			default :
 
-				throw new Error(
-					CHECK
-					&&
-					( 'unknown argument: ' + arg )
-				);
+				// unknown argument
+				throw new Error( );
 		}
 	}
 
@@ -583,24 +551,19 @@ fabric.prototype.drawImage =
 			return;
 		}
 
-		image =
-			image._canvas;
+		image = image._canvas;
 	}
 
 /**/if( CHECK )
 /**/{
 /**/	if( image === undefined )
 /**/	{
-/**/		throw new Error(
-/**/			'image missing'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( x === undefined || y === undefined )
 /**/	{
-/**/		throw new Error(
-/**/			'x/y missing'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	jools.ensureInt( x, y );
@@ -608,20 +571,14 @@ fabric.prototype.drawImage =
 
 	if( composite !== undefined )
 	{
-		this._cx.globalCompositeOperation =
-			composite;
+		this._cx.globalCompositeOperation = composite;
 	}
-
-	var
-		saveAlpha;
 
 	if( alpha !== undefined )
 	{
-		saveAlpha =
-			this._cx.globalAlpha;
+		saveAlpha = this._cx.globalAlpha;
 
-		this._cx.globalAlpha =
-			alpha;
+		this._cx.globalAlpha = alpha;
 	}
 
 	this._cx.drawImage(
@@ -632,14 +589,12 @@ fabric.prototype.drawImage =
 
 	if( composite !== undefined )
 	{
-		this._cx.globalCompositeOperation =
-			'source-over';
+		this._cx.globalCompositeOperation = 'source-over';
 	}
 
 	if( alpha !== undefined )
 	{
-		this._cx.globalAlpha =
-			saveAlpha;
+		this._cx.globalAlpha = saveAlpha;
 	}
 };
 
@@ -660,10 +615,11 @@ fabric.prototype.edge =
 	)
 {
 	var
-		edge =
-			style.edge;
+		edge;
 
-	if( edge instanceof Array )
+	edge = style.edge;
+
+	if( Array.isArray( edge ) )
 	{
 		for( var i = 0; i < edge.length; i++ )
 		{
@@ -711,14 +667,14 @@ fabric.prototype.fill =
 	)
 {
 	var
-		fill =
-			style.fill,
+		cx,
+		fill;
 
-		cx =
-			this._cx;
+	cx = this._cx;
 
-	this._$font =
-		null;
+	fill = style.fill;
+
+	this._$font = null;
 
 	this._begin( false );
 
@@ -744,9 +700,8 @@ fabric.prototype.fill =
 /**/{
 /**/	if( this._$twist !== 0 )
 /**/	{
-/**/		throw new Error(
-/**/			'wrong twist'
-/**/		);
+/**/		// wrong twist
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -774,16 +729,22 @@ fabric.prototype.paintText =
 	)
 {
 	var
+		a,
+		aZ,
+		cx,
+		det,
+		font,
+		p,
+		rotate,
+		t1,
+		t2,
 		text,
 		x,
-		y,
-		font,
-		rotate,
-		a =
-			0,
-		aZ =
-			arguments.length,
-		p;
+		y;
+
+	a = 0;
+
+	aZ = arguments.length;
 
 // FIXME make a loop
 	while( a < aZ )
@@ -792,8 +753,7 @@ fabric.prototype.paintText =
 		{
 			case 'text' :
 
-				text =
-					arguments[ a + 1 ];
+				text = arguments[ a + 1 ];
 
 				a += 2;
 
@@ -801,11 +761,9 @@ fabric.prototype.paintText =
 
 			case 'xy' :
 
-				x =
-					arguments[ a + 1 ];
+				x = arguments[ a + 1 ];
 
-				y =
-					arguments[ a + 2 ];
+				y = arguments[ a + 2 ];
 
 				a += 3;
 
@@ -813,14 +771,11 @@ fabric.prototype.paintText =
 
 			case 'p' :
 
-				p =
-					arguments[ a + 1 ];
+				p = arguments[ a + 1 ];
 
-				x =
-					p.x;
+				x = p.x;
 
-				y =
-					p.y;
+				y = p.y;
 
 				a += 2;
 
@@ -828,8 +783,7 @@ fabric.prototype.paintText =
 
 			case 'font' :
 
-				font =
-					arguments[ a + 1 ];
+				font = arguments[ a + 1 ];
 
 				a += 2;
 
@@ -837,8 +791,7 @@ fabric.prototype.paintText =
 
 			case 'rotate' :
 
-				rotate =
-					arguments[ a + 1 ];
+				rotate = arguments[ a + 1 ];
 
 				a += 2;
 
@@ -846,14 +799,7 @@ fabric.prototype.paintText =
 
 			default :
 
-				throw new Error(
-					CHECK
-					&&
-					(
-						'unknown argument:' +
-							arguments[ a ]
-					)
-				);
+				throw new Error( );
 		}
 	}
 
@@ -875,9 +821,7 @@ fabric.prototype.paintText =
 
 	this._setFont( font );
 
-	var
-		cx =
-			this._cx;
+	cx = this._cx;
 
 	if( rotate === undefined )
 	{
@@ -889,16 +833,14 @@ fabric.prototype.paintText =
 	}
 	else
 	{
-		var
-			t1 =
-				Math.cos( rotate ),
-			t2 =
-				Math.sin( rotate ),
-			det =
-				t1 * t1 + t2 * t2;
+		t1 = Math.cos( rotate );
+
+		t2 = Math.sin( rotate );
+
+		det = t1 * t1 + t2 * t2;
 
 		cx.setTransform(
-			t1,  t2,
+			t1, t2,
 			-t2, t1,
 			0, 0
 		);
@@ -935,14 +877,13 @@ fabric.prototype.fillRect =
 	// FIXME remove fillRect
 
 	var
-		cx =
-			this._cx;
+		cx;
 
-	this._$font =
-		null;
+	cx = this._cx;
 
-	cx.fillStyle =
-		style;
+	this._$font = null;
+
+	cx.fillStyle = style;
 
 	if( typeof( a1 ) === 'object' )
 	{
@@ -978,11 +919,13 @@ fabric.prototype.fillRect =
 		throw new Error( );
 	}
 
-	return this._cx.fillRect(
-		a1,
-		a2,
-		a3,
-		a4
+	return (
+		this._cx.fillRect(
+			a1,
+			a2,
+			a3,
+			a4
+		)
 	);
 };
 
@@ -996,7 +939,8 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			x, y;
+			x,
+			y;
 
 		x = jools.half( this.width ),
 
@@ -1098,47 +1042,41 @@ fabric.prototype.moveTo =
 	)
 {
 	var
-		tw =
-			this._$twist,
+		tw,
 		v,
 		x,
 		y;
 
+	tw = this._$twist;
+
 	if( typeof( a1 ) === 'object' )
 	{
-		x =
-			a1.x;
+		x = a1.x;
 
-		y =
-			a1.y;
+		y = a1.y;
 
-		v =
-			a2;
+		v = a2;
 	}
 	else
 	{
-		x =
-			a1;
+		x = a1;
 
-		y =
-			a2;
+		y = a2;
 
-		v =
-			a3;
+		v = a3;
 	}
 
 	jools.ensureInt( x, y );
 
 	if( v )
 	{
-		x =
-			v.x( x );
+		x = v.x( x );
 
-		y =
-			v.y( y );
+		y = v.y( y );
 	}
 
 	this._$posx = x;
+
 	this._$posy = y;
 
 	this._cx.moveTo(
@@ -1259,31 +1197,37 @@ fabric.prototype.reverseClip =
 		a4
 	)
 {
-	var cx =
-		this._cx;
+	var
+		c,
+		cx,
+		h,
+		w;
 
-	var c =
-		this._canvas;
+	cx = this._cx;
 
-	var w =
-		c.width;
+	c = this._canvas;
 
-	var h =
-		c.height;
+	w = c.width;
+
+	h = c.height;
 
 	if( !this.$clip )
 	{
 		cx.save( );
 
-		this.$clip =
-			true;
+		this.$clip = true;
 	}
 
 	cx.beginPath( );
+
 	cx.moveTo( 0, 0 );
+
 	cx.lineTo( 0, h );
+
 	cx.lineTo( w, h );
+
 	cx.lineTo( w, 0 );
+
 	cx.lineTo( 0, 0 );
 
 	shape[ sketch ]( this, border, true, view, a1, a2, a3, a4 );
@@ -1332,23 +1276,23 @@ fabric.prototype._setFont =
 
 	base = font.base;
 
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if(	fill === undefined )
 /**/	{
-/**/		if(	fill === undefined )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/
-/**/		if( align === undefined )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/
-/**/		if( base === undefined )
-/**/		{
-/**/			throw new Error( );
-/**/		}
+/**/		throw new Error( );
 /**/	}
+/**/
+/**/	if( align === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( base === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	cx = this._cx;
 
@@ -1408,7 +1352,9 @@ fabric.prototype._begin =
 {
 	// lines are targed at .5 coords.
 	this._$twist =
-		twist ? 0.5 : 0;
+		twist
+		? 0.5
+		: 0;
 
 	this._cx.beginPath( );
 
@@ -1428,6 +1374,15 @@ fabric.prototype._colorStyle =
 		view
 	)
 {
+	var
+		grad,
+		pc,
+		pnw,
+		pse,
+		steps,
+		r0,
+		r1;
+
 	if( style.substring )
 	{
 		return style;
@@ -1435,12 +1390,9 @@ fabric.prototype._colorStyle =
 
 	else if( !style.gradient )
 	{
-		throw new Error(
-			CHECK && 'unknown style'
-		);
+		throw new Error( );
 	}
 
-	var grad;
 	switch( style.gradient )
 	{
 		case 'askew' :
@@ -1450,9 +1402,7 @@ fabric.prototype._colorStyle =
 /**/		{
 /**/			if( !shape.pnw || !shape.pse )
 /**/			{
-/**/				throw new Error(
-/**/					style.gradient + 'gradiend misses pnw/pse'
-/**/				);
+/**/				throw new Error( );
 /**/			}
 /**/		}
 
@@ -1468,12 +1418,9 @@ fabric.prototype._colorStyle =
 
 		case 'horizontal' :
 
-			var
-				pnw =
-					shape.pnw,
+			pnw = shape.pnw,
 
-				pse =
-					shape.pse;
+			pse = shape.pse;
 
 			// FIXME use gradientPNW
 /**/		if( CHECK )
@@ -1498,15 +1445,11 @@ fabric.prototype._colorStyle =
 
 		case 'radial' :
 
-			var
-				r0 =
-					shape.gradientR0 || 0,
+			r0 = shape.gradientR0 || 0;
 
-				r1 =
-					shape.gradientR1,
+			r1 = shape.gradientR1;
 
-				pc =
-					shape.gradientPC;
+			pc = shape.gradientPC;
 
 /**/		if( CHECK )
 /**/		{
@@ -1533,14 +1476,10 @@ fabric.prototype._colorStyle =
 
 		default :
 
-			throw new Error(
-				CHECK && 'unknown gradient'
-			);
+			throw new Error( );
 	}
 
-	var
-		steps =
-			style.steps;
+	steps = style.steps;
 
 	for(
 		var i = 0;
@@ -1574,8 +1513,9 @@ fabric.prototype._edge =
 	)
 {
 	var
-		cx =
-			this._cx;
+		cx;
+
+	cx = this._cx;
 
 	this._begin( true );
 
@@ -1597,16 +1537,14 @@ fabric.prototype._edge =
 			view
 		);
 
-	cx.lineWidth =
-		style.width;
+	cx.lineWidth = style.width;
 
 /**/if( CHECK )
 /**/{
 /**/	if( this._$twist !== 0.5 )
 /**/	{
-/**/		throw new Error(
-/**/			'wrong twist'
-/**/		);
+/**/		// wrong twist
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -1625,9 +1563,16 @@ fabric.prototype.sketch =
 		// view
 	)
 {
-	var b = border;
-	var w = this.width - b;
-	var h = this.height - b;
+	var
+		b,
+		w,
+		h;
+
+	b = border;
+
+	w = this.width - b;
+
+	h = this.height - b;
 
 	fabric.moveTo( b, b );
 	fabric.lineTo( w, b );

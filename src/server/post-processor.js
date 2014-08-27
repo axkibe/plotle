@@ -39,21 +39,20 @@ PostProcessor.develHtml =
 	)
 {
 	var
-		devels =
-			[ ];
+		devels,
+		resource;
 
-	data =
-		data + '';
+	devels = [ ];
+
+	data = data + '';
 
 	for(
-		var a = 0, aZ = inventory.list.length;
+		var a = 0, aZ = inventory.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		var
-			resource =
-				inventory.list[ a ];
+		resource = inventory.atRank( a );
 
 		if( resource.inBundle )
 		{
@@ -64,7 +63,6 @@ PostProcessor.develHtml =
 			);
 		}
 	}
-
 
 	data =
 		data.replace(
@@ -98,21 +96,19 @@ PostProcessor.testPadHtml =
 	)
 {
 	var
-		devels =
-			[ ];
+		devels;
 
-	data =
-		data + '';
+	devels = [ ];
+
+	data = data + '';
 
 	for(
-		var a = 0, aZ = inventory.list.length;
+		var a = 0, aZ = inventory.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		var
-			resource =
-				inventory.list[ a ];
+		resource = inventory.atRank( a );
 
 		if( resource.inTestPad )
 		{
@@ -156,8 +152,7 @@ PostProcessor.indexHtml =
 		bundleFilePath // the file path of the bundle resource
 	)
 {
-	data =
-		data + '';
+	data = data + '';
 
 	return (
 		data.replace(
@@ -173,8 +168,7 @@ PostProcessor.indexHtml =
 /*
 | Node export
 */
-module.exports =
-	PostProcessor;
+module.exports = PostProcessor;
 
 
 } )( );

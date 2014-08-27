@@ -4,6 +4,15 @@
 | Authors: Axel Kittenberger
 */
 
+/*
+| Export.
+*/
+var
+	server;
+
+server =
+	server || { };
+
 
 /*
 | Capsule
@@ -13,107 +22,112 @@
 
 
 var
-	FileTypes =
-		{ },
+	_codings,
+	_mimes,
+	fileTypes;
 
-	/*
-	| coding mappings for file types
-	*/
-	_codings =
-		{
-			'css' :
-				// cascading style sheet
-				'utf-8',
+fileTypes =
+server.fileTypes =
+		{ };
 
-			'eot' :
-				// some font
-				'binary',
-
-			'html' :
-				// hypertext
-				'utf-8',
-
-			'ico' :
-				// icon
-				'binary',
-
-			'js' :
-				// javascript
-				'utf-8',
-
-			'otf' :
-				// some font
-				'binary',
-
-			'svg' :
-				// some font
-				'utf-8',
-
-			'torrent'  :
-				// torrents
-				'binary',
-
-			'ttf' :
-				// some font
-				'binary',
-
-			'woff' :
-				// some font
-				'binary'
-		},
-
-	/*
-	| mime mappings for file types
-	*/
-	_mimes =
-		{
+/*
+| coding mappings for file types
+*/
+_codings =
+	{
 		'css' :
 			// cascading style sheet
-			'text/css',
+			'utf-8',
 
 		'eot' :
 			// some font
-			'font/eot',
+			'binary',
 
 		'html' :
 			// hypertext
-			'text/html',
+			'utf-8',
 
 		'ico' :
 			// icon
-			'image/x-icon',
+			'binary',
 
 		'js' :
 			// javascript
-			'text/javascript',
+			'utf-8',
 
 		'otf' :
 			// some font
-			'font/otf',
+			'binary',
 
 		'svg' :
 			// some font
-			'image/svg+xml',
+			'utf-8',
 
 		'torrent'  :
 			// torrents
-			'application/x-bittorrent',
+			'binary',
 
-		'ttf'  :
+		'ttf' :
 			// some font
-			'font/ttf',
+			'binary',
 
 		'woff' :
 			// some font
-			'application/font-woff'
-	};
+			'binary'
+	},
+
+/*
+| mime mappings for file types
+*/
+_mimes =
+	{
+	'css' :
+		// cascading style sheet
+		'text/css',
+
+	'eot' :
+		// some font
+		'font/eot',
+
+	'html' :
+		// hypertext
+		'text/html',
+
+	'ico' :
+		// icon
+		'image/x-icon',
+
+	'js' :
+		// javascript
+		'text/javascript',
+
+	'otf' :
+		// some font
+		'font/otf',
+
+	'svg' :
+		// some font
+		'image/svg+xml',
+
+	'torrent'  :
+		// torrents
+		'application/x-bittorrent',
+
+	'ttf'  :
+		// some font
+		'font/ttf',
+
+	'woff' :
+		// some font
+		'application/font-woff'
+};
 
 
 
 /*
 | Maps a file extension to a coding.
 */
-FileTypes.coding =
+fileTypes.coding =
 	function(
 		ext
 	)
@@ -136,14 +150,16 @@ FileTypes.coding =
 /*
 | Maps a file type to a mime.
 */
-FileTypes.mime =
+fileTypes.mime =
 	function(
 		ext
 	)
 {
 	var
-		mime =
-			_mimes[ ext ];
+		mime;
+
+	mime =
+		_mimes[ ext ];
 
 	if( !mime )
 	{
@@ -159,8 +175,7 @@ FileTypes.mime =
 /*
 | Node export.
 */
-module.exports =
-	FileTypes;
+module.exports = fileTypes;
 
 
 } )( );
