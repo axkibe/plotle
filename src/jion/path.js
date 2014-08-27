@@ -160,7 +160,7 @@ path.prototype.get =
 |
 | FIXME cache
 */
-path.prototype.Append =
+path.prototype.append =
 	function(
 		key
 	)
@@ -186,8 +186,8 @@ path.prototype.Append =
 /*
 | Same as append but without caching.
 */
-path.prototype.AppendNC =
-	path.prototype.Append;
+path.prototype.appendNC =
+	path.prototype.append;
 
 
 

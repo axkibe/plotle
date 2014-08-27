@@ -51,7 +51,7 @@ var
 /*
 | Returns a call with a parameter appended
 */
-aCall.prototype.Append =
+aCall.prototype.append =
 	function(
 		expr
 	)

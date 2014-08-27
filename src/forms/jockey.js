@@ -163,8 +163,8 @@ jockey.prototype._init =
 		{
 			path =
 				this.path
-				.Append( 'twig' )
-				.Append( name );
+				.append( 'twig' )
+				.append( name );
 		}
 		else
 		{

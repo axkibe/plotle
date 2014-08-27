@@ -169,6 +169,7 @@ note.prototype._init =
 	function( )
 {
 	var
+		docPath,
 		minHeight,
 		minWidth,
 		zone;
@@ -209,10 +210,8 @@ note.prototype._init =
 			);
 	}
 
-	var
-		docPath =
-			// FIXME not if inherited
-			this.path.Append( 'doc' );
+	// FIXME not if inherited
+	docPath = this.path.append( 'doc' );
 
 	this.doc =
 		this.doc.create(
@@ -633,14 +632,14 @@ note.prototype.scrollMarkIntoView =
 	if( n + pnw.y - imargin.n < sy )
 	{
 		root.setPath(
-			this.path.Append( 'scrolly' ),
+			this.path.append( 'scrolly' ),
 			n + pnw.y - imargin.n
 		);
 	}
 	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
 		root.setPath(
-			this.path.Append( 'scrolly' ),
+			this.path.append( 'scrolly' ),
 			s + pnw.y - zone.height + imargin.s
 		);
 	}
@@ -671,7 +670,7 @@ note.prototype.mousewheel =
 	}
 
 	root.setPath(
-		this.path.Append( 'scrolly' ),
+		this.path.append( 'scrolly' ),
 		this.scrollbarY.pos - dir * system.textWheelSpeed
 	);
 

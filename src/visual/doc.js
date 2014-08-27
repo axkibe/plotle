@@ -174,8 +174,8 @@ doc.prototype._init =
 
 		path =
 			this.path
-			.Append( 'twig' )
-			.AppendNC( key );
+			.append( 'twig' )
+			.appendNC( key );
 
 		twig[ key ] =
 			twig[ key ].create(

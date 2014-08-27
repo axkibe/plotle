@@ -226,13 +226,13 @@ portal.prototype._init =
 			jools.immute(
 				{
 					moveToButton :
-						this.path.Append( 'moveToButton' ),
+						this.path.append( 'moveToButton' ),
 
 					spaceUser :
-						this.path.Append( 'spaceUser' ),
+						this.path.append( 'spaceUser' ),
 
 					spaceTag :
-						this.path.Append( 'spaceTag' )
+						this.path.append( 'spaceTag' )
 				}
 			);
 	}

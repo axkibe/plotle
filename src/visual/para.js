@@ -901,9 +901,9 @@ para.prototype.input =
 					doc.rankOf( paraKey ) + 1
 				];
 
-			path = path.Limit( 5 ).Append( paraKey );
+			path = path.Limit( 5 ).append( paraKey );
 
-			textPath = path.Append( 'text' );
+			textPath = path.append( 'text' );
 
 			caretAt = 0;
 		}
@@ -1053,7 +1053,7 @@ jools.lazyValue(
 			return null;
 		}
 
-		return this.path.Append( 'text' );
+		return this.path.append( 'text' );
 	}
 );
 

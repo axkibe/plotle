@@ -44,7 +44,7 @@ var
 /*
 | Returns an array literal with an expression appended.
 */
-AnArrayLiteral.prototype.Append =
+AnArrayLiteral.prototype.append =
 	function(
 		expr
 	)
@@ -62,8 +62,7 @@ AnArrayLiteral.prototype.Append =
 /*
 | Node export.
 */
-module.exports =
-	AnArrayLiteral;
+module.exports = AnArrayLiteral;
 
 
 } )( );

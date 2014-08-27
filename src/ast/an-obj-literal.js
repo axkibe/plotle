@@ -44,10 +44,8 @@ anObjLiteral =
 
 /*
 | Returns an object literal with a key-expr pair added.
-|
-| FIXME rename
 */
-anObjLiteral.prototype.Add =
+anObjLiteral.prototype.add =
 	function(
 		key,
 		expr

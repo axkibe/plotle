@@ -41,10 +41,8 @@ var
 
 /*
 | Returns the block with a statement appended;
-|
-| FIXME lowercase
 */
-aCommaList.prototype.Append =
+aCommaList.prototype.append =
 	function(
 		expr
 	)

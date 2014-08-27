@@ -686,7 +686,7 @@ input.prototype.input =
 	}
 
 	root.setPath(
-		this.path.Append( 'value' ),
+		this.path.append( 'value' ),
 		value.substring( 0, at ) +
 			text +
 			value.substring( at )
@@ -722,7 +722,7 @@ input.prototype._keyBackspace =
 	}
 
 	root.setPath(
-		this.path.Append( 'value' ),
+		this.path.append( 'value' ),
 		this.value.substring( 0, at - 1 ) +
 			this.value.substring( at )
 	);
@@ -754,7 +754,7 @@ input.prototype._keyDel =
 	}
 
 	root.setPath(
-		this.path.Append( 'value' ),
+		this.path.append( 'value' ),
 		this.value.substring( 0, at ) +
 			this.value.substring( at + 1 )
 	);

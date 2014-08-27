@@ -58,9 +58,8 @@ var
 
 /*
 | Returns the function with a an argument appended.
-| FIXME rename
 */
-aFunc.prototype.Append =
+aFunc.prototype.append =
 	function(
 		arg
 	)
@@ -87,7 +86,7 @@ aFunc.prototype.Arg =
 	)
 {
 	return (
-		this.Append(
+		this.append(
 			aFuncArg.create(
 				'name',
 					name,

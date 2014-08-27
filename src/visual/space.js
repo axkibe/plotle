@@ -185,8 +185,8 @@ space.prototype._init =
 			this.twig[ k ].create(
 				'path',
 					this.path
-					.Append( 'twig' )
-					.AppendNC( k ), // FIXME inherit
+					.append( 'twig' )
+					.appendNC( k ), // FIXME inherit
 				'hover',
 					this.hover,
 				'mark',
@@ -218,7 +218,7 @@ space.concernsMark =
 		!mark
 		||
 		mark.containsPath(
-			jion.path.empty.Append( 'space' )
+			jion.path.empty.append( 'space' )
 		)
 	)
 	{

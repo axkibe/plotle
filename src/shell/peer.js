@@ -45,8 +45,8 @@ newItemSign =
 	sign.create(
 		'path',
 			jion.path.empty
-			.Append( 'twig' )
-			.Append( '$new' ),
+			.append( 'twig' )
+			.append( '$new' ),
 		'rank',
 			0
 	);
@@ -202,7 +202,7 @@ Peer.setZone =
 						'path',
 							itemPath
 							.Chop( )
-							.Append( 'zone' )
+							.append( 'zone' )
 					)
 			)
 		)
@@ -232,7 +232,7 @@ Peer.setFontSize =
 						'path',
 							itemPath
 							.Chop( )
-							.Append( 'fontsize' )
+							.append( 'fontsize' )
 					)
 			)
 		)
@@ -262,7 +262,7 @@ Peer.setPNW =
 						'path',
 							itemPath
 							.Chop( )
-							.Append( 'pnw' )
+							.append( 'pnw' )
 					)
 			)
 		)

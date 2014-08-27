@@ -165,7 +165,7 @@ shell.root =
 				marks.vacant.create( ),
 			'path',
 				jion.path.empty
-				.Append( 'forms' ),
+				.append( 'forms' ),
 			'view',
 				view,
 			'twig:add',
@@ -208,7 +208,7 @@ shell.root =
 				this._$mode,
 			'path',
 				jion.path.empty
-				.Append( 'discs' ),
+				.append( 'discs' ),
 			'view',
 				view,
 			'twig:add',
@@ -1344,7 +1344,7 @@ proto.onload =
 		passhash,
 		username;
 
-	ajaxPath = jion.path.empty.Append( 'ajax' );
+	ajaxPath = jion.path.empty.append( 'ajax' );
 
 	this.ajax =
 		net.Ajax.create(
@@ -1354,13 +1354,13 @@ proto.onload =
 			'command',
 				net.channel.create(
 					'path',
-						ajaxPath.Append( 'command' )
+						ajaxPath.append( 'command' )
 				),
 			'twig:add',
 			'update',
 				net.channel.create(
 					'path',
-						ajaxPath.Append( 'update' )
+						ajaxPath.append( 'update' )
 				)
 		);
 
@@ -1432,13 +1432,13 @@ proto.onAquireSpace =
 
 			root.setPath(
 				root._$formJockey.twig.nonExistingSpace.path
-				.Append( 'nonSpaceUser' ),
+				.append( 'nonSpaceUser' ),
 				asw.spaceUser
 			);
 
 			root.setPath(
 				root._$formJockey.twig.nonExistingSpace.path
-				.Append( 'nonSpaceTag' ),
+				.append( 'nonSpaceTag' ),
 				asw.spaceTag
 			);
 
@@ -1506,7 +1506,7 @@ proto.onAquireSpace =
 			'mark',
 				marks.vacant.create( ),
 			'path',
-				jion.path.empty.Append( 'space' ),
+				jion.path.empty.append( 'space' ),
 			'view',
 				euclid.view.create(
 					'fact',

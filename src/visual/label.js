@@ -175,7 +175,7 @@ label.prototype._init =
 	}
 
 	// FIXME not if inherited
-	docPath = this.path.Append( 'doc' );
+	docPath = this.path.append( 'doc' );
 
 	doc =
 	this.doc =
@@ -194,11 +194,9 @@ label.prototype._init =
 				this.view
 		);
 
-	height =
-		doc.height,
+	height = doc.height,
 
-	pnw =
-		this.pnw;
+	pnw = this.pnw;
 
 	this.zone =
 		euclid.rect.create(
@@ -348,11 +346,9 @@ label.prototype.dragStop =
 		case 'actions.itemDrag' :
 		case 'actions.itemResize' :
 
-			zone =
-				this.zone,
+			zone = this.zone,
 
-			fontsize =
-				this.doc.font.size;
+			fontsize = this.doc.font.size;
 
 			if(
 				!this.pnw.equals( zone.pnw )

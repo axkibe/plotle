@@ -234,7 +234,7 @@ signUp.prototype.signup =
 	if( user.length < 4 )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).Append( 'text' ),
+			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			'Username too short, min. 4 characters'
 		);
 
@@ -253,7 +253,7 @@ signUp.prototype.signup =
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).Append( 'text' ),
+			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			'Username must not start with "visit"'
 		);
 
@@ -272,7 +272,7 @@ signUp.prototype.signup =
 	if( pass.length < 5 )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).Append( 'text' ),
+			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			'Password too short, min. 5 characters'
 		);
 
@@ -291,7 +291,7 @@ signUp.prototype.signup =
 	if( pass !== pass2 )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).Append( 'text' ),
+			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			'Passwords do not match'
 		);
 
@@ -336,7 +336,7 @@ signUp.prototype.onRegister =
 		root.setPath(
 			this
 			._widgetPath( 'errorLabel' )
-			.Append( 'text' ),
+			.append( 'text' ),
 			message
 		);
 
@@ -380,27 +380,27 @@ signUp.prototype.clear =
 	// FUTURE make this in one call, somehow
 
 	root.setPath(
-		twig.userInput.path.Append( 'value' ),
+		twig.userInput.path.append( 'value' ),
 		''
 	);
 
 	root.setPath(
-		twig.emailInput.path.Append( 'value' ),
+		twig.emailInput.path.append( 'value' ),
 		''
 	);
 
 	root.setPath(
-		twig.passwordInput.path.Append( 'value' ),
+		twig.passwordInput.path.append( 'value' ),
 		''
 	);
 
 	root.setPath(
-		twig.password2Input.path.Append( 'value' ),
+		twig.password2Input.path.append( 'value' ),
 		''
 	);
 
 	root.setPath(
-		twig.newsletterCheckBox.path.Append( 'checked' ),
+		twig.newsletterCheckBox.path.append( 'checked' ),
 		true
 	);
 

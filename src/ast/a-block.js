@@ -71,10 +71,8 @@ var
 
 /*
 | Returns the block with a statement appended;
-|
-| TODO rename
 */
-aBlock.prototype.Append =
+aBlock.prototype.append =
 	function(
 		statement
 	)
@@ -108,7 +106,7 @@ aBlock.prototype.anAssign =
 				right
 		);
 
-	return this.Append( assign );
+	return this.append( assign );
 };
 
 
@@ -136,10 +134,10 @@ aBlock.prototype.aCall =
 		a++
 	)
 	{
-		call = call.Append( arguments[ a ] );
+		call = call.append( arguments[ a ] );
 	}
 
-	return this.Append( call );
+	return this.append( call );
 };
 
 /*
@@ -151,7 +149,7 @@ aBlock.prototype.aCheck =
 	)
 {
 	return (
-		this.Append(
+		this.append(
 			ast.aCheck.create(
 				'block',
 					block
@@ -179,7 +177,7 @@ aBlock.prototype.aComment =
 			);
 	}
 
-	return this.Append( header );
+	return this.append( header );
 };
 
 
@@ -204,7 +202,7 @@ aBlock.prototype.anIf =
 					elsewise || null
 			);
 
-	return this.Append( statement );
+	return this.append( statement );
 };
 
 
@@ -230,7 +228,7 @@ aBlock.prototype.aFail =
 	}
 
 	return (
-		this.Append(
+		this.append(
 			ast.aFail.create(
 				'message',
 					message
@@ -264,7 +262,7 @@ aBlock.prototype.aFor =
 					block
 			);
 
-	return this.Append( statement );
+	return this.append( statement );
 };
 
 
@@ -289,7 +287,7 @@ aBlock.prototype.aForIn =
 					block
 			);
 
-	return this.Append( statement );
+	return this.append( statement );
 };
 
 /*
@@ -301,7 +299,7 @@ aBlock.prototype.aNew =
 	)
 {
 	return (
-		this.Append(
+		this.append(
 			ast.aNew.create(
 				'call',
 					call
@@ -336,7 +334,7 @@ aBlock.prototype.aReturn =
 			break;
 	}
 
-	return this.Append( expr );
+	return this.append( expr );
 };
 
 
@@ -360,7 +358,7 @@ aBlock.prototype.aVarDec =
 				assign || null
 		);
 
-	return this.Append( varDec );
+	return this.append( varDec );
 };
 
 

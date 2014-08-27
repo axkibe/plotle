@@ -599,7 +599,7 @@ link.prototype._onUpdate =
 				}
 			}
 
-			report = report.Append( chgX );
+			report = report.append( chgX );
 		}
 
 		// adapts all queued changes

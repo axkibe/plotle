@@ -179,7 +179,7 @@ jools.lazyValue(
 /*
 | Appends a change to the change ray.
 */
-changeRay.prototype.Append =
+changeRay.prototype.append =
 	function(
 		chg
 	)

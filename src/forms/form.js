@@ -91,7 +91,7 @@ form.init =
 		focusAccent = false;
 
 		// FIXME only when not having widgetProto
-		path = this.path.Append( 'twig' ).Append( name );
+		path = this.path.append( 'twig' ).append( name );
 
 		if( widgetProto.focusable )
 		{
@@ -533,7 +533,7 @@ form.prototype._widgetPath =
 	if( !path )
 	{
 		// at startup the path might still be null
-		return this.path.Append( 'twig' ).Append( widgetName );
+		return this.path.append( 'twig' ).append( widgetName );
 	}
 
 	return path;

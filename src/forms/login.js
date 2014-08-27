@@ -232,7 +232,7 @@ login.prototype.login =
 	if( user.length < 4 )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).Append( 'text' ),
+			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			'Username too short, min. 4 characters'
 		);
 
@@ -253,7 +253,7 @@ login.prototype.login =
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).Append( 'text' ),
+			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			'Username must not start with "visit"'
 		);
 
@@ -274,7 +274,7 @@ login.prototype.login =
 	if( pass.length < 5 )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).Append( 'text' ),
+			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			'Password too short, min. 5 characters'
 		);
 
@@ -351,7 +351,7 @@ login.prototype.onAuth =
 	if( !ok )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).Append( 'text' ),
+			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			message
 		);
 
@@ -406,12 +406,12 @@ login.prototype.clear =
 {
 	// FUTURE combine calls
 	root.setPath(
-		this._widgetPath( 'userInput' ).Append( 'value' ),
+		this._widgetPath( 'userInput' ).append( 'value' ),
 		''
 	);
 
 	root.setPath(
-		this._widgetPath( 'passwordInput' ).Append( 'value' ),
+		this._widgetPath( 'passwordInput' ).append( 'value' ),
 		''
 	);
 

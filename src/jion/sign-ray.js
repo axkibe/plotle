@@ -140,7 +140,7 @@ signRay.prototype._init =
 /*
 | Appends a change to the change ray.
 */
-signRay.prototype.Append =
+signRay.prototype.append =
 	function(
 		chg
 	)
@@ -217,6 +217,7 @@ signRay.prototype.set =
 
 /*
 | Returns a signRay with one element removed.
+| TODO rename
 */
 signRay.prototype.Remove =
 	function(
@@ -243,6 +244,7 @@ signRay.prototype.Remove =
 
 /*
 | Returns a signRay with one element inserted.
+| TODO rename
 */
 signRay.prototype.Insert =
 	function(

@@ -678,7 +678,7 @@ item.prototype.dragMove =
 			spos = action.startPos + sbary.scale( dy );
 
 			root.setPath(
-				this.path.Append( 'scrolly' ),
+				this.path.append( 'scrolly' ),
 				spos
 			);
 

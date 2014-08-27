@@ -220,8 +220,8 @@ createDisc.prototype._init =
 		{
 			path =
 				this.path
-				.Append( 'twig' )
-				.Append( wname );
+				.append( 'twig' )
+				.append( wname );
 		}
 
 		twig[ wname ] =

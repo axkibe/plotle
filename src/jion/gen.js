@@ -785,8 +785,7 @@ gen.prototype.genConstructor =
 
 		if( !attr.allowsUndefined )
 		{
-			block =
-				block.Append( assign );
+			block = block.append( assign );
 		}
 		else
 		{
@@ -795,9 +794,7 @@ gen.prototype.genConstructor =
 				.anIf(
 					aDiffers( attr.v, Undefined ),
 					aBlock( )
-					.Append(
-						assign
-					)
+					.append( assign )
 				);
 		}
 	}
@@ -839,7 +836,7 @@ gen.prototype.genConstructor =
 				case 'twigDup' :
 
 					initCall =
-						initCall.Append(
+						initCall.append(
 							aVar( this.init[ a ] )
 						);
 
@@ -857,13 +854,10 @@ gen.prototype.genConstructor =
 			}
 
 			initCall =
-				initCall.Append( ( attr.v ) );
+				initCall.append( ( attr.v ) );
 		}
 
-		block =
-			block.Append(
-				initCall
-			);
+		block = block.append( initCall );
 	}
 
 	// immutes the new object
@@ -986,7 +980,7 @@ gen.prototype.genConstructor =
 
 	jionObj =
 		anObjLiteral( )
-		.Add(
+		.add(
 			'prototype',
 			aVar( 'prototype' )
 		);
@@ -1180,7 +1174,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			);
 	}
 
-	return block.Append( thisCheck );
+	return block.append( thisCheck );
 };
 
 
@@ -1437,7 +1431,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.Append(
+				.append(
 					aPlusAssign(
 						aVar( 'a' ),
 						aNumberLiteral( 2 )
@@ -1483,7 +1477,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					),
 					aVar( 'arg' )
 				)
-				.Append(
+				.append(
 					aCall(
 						aVar( 'ranks' ).aDot( 'splice' ),
 						aVar( 'rank' ),
@@ -1535,7 +1529,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.Append(
+				.append(
 					aDelete(
 						aVar( 'twig' )
 						.aMember(
@@ -1543,7 +1537,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.Append(
+				.append(
 					aCall(
 						aVar( 'ranks' ).aDot( 'splice' ),
 						aCall(
@@ -1566,8 +1560,7 @@ gen.prototype.genCreatorFreeStringsParser =
 			)
 		);
 
-	loop =
-		loop.Append( switchExpr );
+	loop = loop.append( switchExpr );
 
 	block =
 		block
@@ -1933,7 +1926,7 @@ gen.prototype.genCreatorConcerns =
 					);
 				}
 
-				cExpr = cExpr.Append( bAttr.v );
+				cExpr = cExpr.append( bAttr.v );
 			}
 		}
 		else
@@ -1999,8 +1992,7 @@ gen.prototype.genCreatorConcerns =
 						);
 					}
 
-					cExpr =
-						cExpr.Append( bAttr.v );
+					cExpr = cExpr.append( bAttr.v );
 				}
 			}
 		}
@@ -2195,7 +2187,7 @@ gen.prototype.genCreatorReturn =
 			case 'ranks' :
 
 				call =
-					call.Append(
+					call.append(
 						aVar( name )
 					);
 
@@ -2205,7 +2197,7 @@ gen.prototype.genCreatorReturn =
 
 				attr = this.attributes[ name ];
 
-				call = call.Append( attr.v );
+				call = call.append( attr.v );
 		}
 	}
 
@@ -2490,7 +2482,7 @@ gen.prototype.genFromJSONCreatorParser =
 					aVar( 'name' )
 				)
 			)
-			.Append(
+			.append(
 				switchExpr
 			)
 		);
@@ -2594,7 +2586,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 				aVar( 'key' )
 			)
 		)
-		.Append(
+		.append(
 			switchExpr
 		);
 
@@ -2615,13 +2607,13 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		.aFor(
 			// FIXME, put into the commalist call
 			aCommaList( )
-			.Append(
+			.append(
 				anAssign(
 					aVar( 'a' ),
 					aNumberLiteral( 0 )
 				)
 			)
-			.Append(
+			.append(
 				anAssign(
 					aVar( 'aZ' ),
 					aVar( 'ranks' ).aDot( 'length' )
@@ -2670,15 +2662,13 @@ gen.prototype.genFromJSONCreatorReturn =
 		{
 			case 'inherit' :
 
-				call =
-					call.Append( aNull );
+				call = call.append( aNull );
 
 				break;
 
 			case 'twigDup' :
 
-				call =
-					call.Append( True );
+				call = call.append( True );
 
 				break;
 
@@ -2686,7 +2676,7 @@ gen.prototype.genFromJSONCreatorReturn =
 			case 'twig' :
 
 				call =
-					call.Append(
+					call.append(
 						aVar( name )
 					);
 
@@ -2699,13 +2689,11 @@ gen.prototype.genFromJSONCreatorReturn =
 
 				if( attr.assign === null )
 				{
-					call =
-						call
-						.Append( aNull );
+					call = call.append( aNull );
 				}
 				else
 				{
-					call = call.Append( attr.v );
+					call = call.append( attr.v );
 				}
 		}
 	}
@@ -2900,7 +2888,7 @@ gen.prototype.genToJSON =
 
 	olit =
 		anObjLiteral( )
-		.Add(
+		.add(
 			'type',
 			aStringLiteral(
 				this.unit // FIXME should always be true
@@ -2926,7 +2914,7 @@ gen.prototype.genToJSON =
 
 		olit =
 			olit
-			.Add(
+			.add(
 				name,
 				This.aDot( attr.assign )
 			);
@@ -2936,11 +2924,11 @@ gen.prototype.genToJSON =
 	{
 		olit =
 			olit
-			.Add(
+			.add(
 				'ranks',
 				This.aDot( 'ranks' )
 			)
-			.Add(
+			.add(
 				'twig',
 				This.aDot( 'twig' )
 			);

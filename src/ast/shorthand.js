@@ -215,7 +215,7 @@ ShortHand.aCall =
 		a++
 	)
 	{
-		call = call.Append( arguments[ a ] );
+		call = call.append( arguments[ a ] );
 	}
 
 	return call;
