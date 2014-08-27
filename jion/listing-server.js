@@ -13,6 +13,7 @@ module.exports =
 			'src/jion/sign.js',
 			'src/jion/sign-ray.js',
 			'src/server/resource.js',
+			'src/server/inventory.js',
 			'src/visual/doc.js',
 			'src/visual/label.js',
 			'src/visual/note.js',

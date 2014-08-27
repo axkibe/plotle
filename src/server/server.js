@@ -48,8 +48,6 @@ var
 		require( './generate-jion' ),
 	http =
 		require( 'http' ),
-	Inventory =
-		require( './inventory' ),
 	jion =
 		{
 			change :
@@ -71,8 +69,10 @@ var
 		require( './roster' ),
 	server =
 		{
+			inventory :
+				require( './inventory' ),
 			resource :
-				require( './resource' ),
+				require( './resource' )
 		},
 	sha1 =
 		require( '../jools/sha1' ),
@@ -110,8 +110,7 @@ Server.prototype.startup =
 	function*( )
 {
 	// the servers inventory
-	this.inventory =
-		Inventory.create( );
+	this.inventory = server.inventory.create( );
 
 	// initializes the database
 	var
@@ -718,17 +717,15 @@ Server.prototype.prepareInventory =
 	}
 
 	// Reads in all files to be cached
-	inv =
-		this.inventory;
+	inv = this.inventory;
 
 	for(
-		a = 0, aZ = inv.list.length;
+		a = 0, aZ = inv.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		resource =
-			inv.list[ a ];
+		resource = inv.atRank( a );
 
 		if(
 			resource.data
@@ -777,13 +774,12 @@ Server.prototype.prepareInventory =
 
 	// loads the files to be bundled
 	for(
-		a = 0, aZ = this.inventory.list.length;
+		a = 0, aZ = this.inventory.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		resource =
-			this.inventory.list[ a ];
+		resource = this.inventory.atRank( a );
 
 		if( !resource.inBundle )
 		{
@@ -957,13 +953,12 @@ Server.prototype.prepareInventory =
 
 	// loads the files to be bundled
 	for(
-		a = 0, aZ = inv.list.length;
+		a = 0, aZ = inv.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		resource =
-			inv.list[ a ];
+		resource = inv.atRank( a );
 
 		if(
 			!resource.postProcessor
@@ -1001,13 +996,12 @@ Server.prototype.prepareInventory =
 
 	// prepares the zipped versions
 	for(
-		a = 0, aZ = inv.list.length;
+		a = 0, aZ = inv.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		resource =
-			inv.list[ a ];
+		resource = inv.atRank( a );
 
 		if( resource.inBundle || resource.devel )
 		{
@@ -1030,13 +1024,13 @@ Server.prototype.prepareInventory =
 	jools.log(
 		'start',
 		'uncompressed bundle size is ',
-		this.inventory.map[ bundleFilePath ].data.length
+		this.inventory.twig[ bundleFilePath ].data.length
 	);
 
 	jools.log(
 		'start',
 		'  compressed bundle size is ',
-		this.inventory.map[ bundleFilePath ].gzip.length
+		this.inventory.twig[ bundleFilePath ].gzip.length
 	);
 };
 
@@ -1049,8 +1043,9 @@ Server.prototype.prependConfigFlags =
 	function( )
 {
 	var
-		resource =
-			this.inventory.map[ 'config.js' ];
+		resource;
+
+	resource = this.inventory.twig[ 'config.js' ];
 
 	this.inventory =
 		this.inventory.updateResource(
@@ -2656,8 +2651,7 @@ Server.prototype.requestListener =
 		resource,
 		red;
 
-	red =
-		url.parse( request.url );
+	red = url.parse( request.url );
 
 	jools.log(
 		'web',
@@ -2665,16 +2659,14 @@ Server.prototype.requestListener =
 		red.href
 	);
 
-	pathname =
-		red.pathname.replace( /^[\/]+/g, '' );
+	pathname = red.pathname.replace( /^[\/]+/g, '' );
 
 	if( pathname === 'mm' )
 	{
 		return this.webAjax( request, red, result );
 	}
 
-	resource =
-		this.inventory.map[ pathname ];
+	resource = this.inventory.twig[ pathname ];
 
 	if( !resource )
 	{
@@ -2690,7 +2682,9 @@ Server.prototype.requestListener =
 	if( resource.data )
 	{
 		aenc =
-			resource.gzip && request.headers[ 'accept-encoding' ],
+			resource.gzip
+			&&
+			request.headers[ 'accept-encoding' ],
 
 		header =
 			{

@@ -1,9 +1,7 @@
 /*
 | The resource inventory of the server
 |
-| FIXME make a JION
-|
-| Authors: Axel Kittenberger
+. Authors: Axel Kittenberger
 */
 
 /*
@@ -13,194 +11,41 @@
 'use strict';
 
 
-var
-	_tag =
-		35108845;
-
 /*
-| Imports
+| The jion definition.
 */
-var
-	jools =
-		require( '../jools/jools' );
-
-
-/*
-| Constructor.
-*/
-var
-	Inventory =
-		function(
-			tag,
-			list, // the list of all resources
-			map,  // global mapping of aliases to resources
-			idx   // global mapping of aliases to index in list
-		)
+if( JION )
 {
-	if( tag !== _tag )
-	{
-		throw new Error( );
-	}
+	return {
+		name :
+			'inventory',
+		unit :
+			'server',
+		/*
+		attributes :
+			{
+			},
+		*/
+		node :
+			true,
+		twig :
+			[
+				'server.resource'
+			]
+	};
+}
 
-	this.list = jools.immute( list );
 
-	this.map = jools.immute( map );
+var
+	inventory;
 
-	this.idx = jools.immute( idx );
-
-	jools.immute( this );
-};
-
-
-/*
-| Creator.
-|
-| FIXME make it a jion
-*/
-Inventory.create =
-	function(
-		// ...
-	)
-{
-	return (
-		new Inventory(
-			_tag,
-			[ ],
-			{ },
-			{ }
-		)
-	);
-};
+inventory = require( '../jion/this' )( module );
 
 
 /*
 | Returns an inventory with a resource appended.
 */
-Inventory.prototype.addResource =
-	function(
-		res
-	)
-{
-	var
-		alias,
-		idx,
-		list,
-		llen,
-		map;
-
-	list = this.list.slice( );
-
-	map = jools.copy( this.map );
-
-	idx = jools.copy( this.idx );
-
-	llen = list.length;
-
-	list[ llen ] = res;
-
-	for(
-		var a = 0, aZ = res.aliases.length;
-		a < aZ;
-		a++
-	)
-	{
-		alias = res.aliases[ a ];
-
-		if( map[ alias ] )
-		{
-			throw new Error(
-				'duplicate alias : '
-				+
-				a
-			);
-		}
-
-		map[ alias ] = res;
-
-		idx[ alias ] = llen;
-	}
-
-	return (
-		new Inventory(
-			_tag,
-			list,
-			map,
-			idx
-		)
-	);
-};
-
-
-/*
-| Returns an inventory with a resource updated.
-*/
-Inventory.prototype.updateResource =
-	function(
-		oldRes,
-		newRes
-	)
-{
-	var
-		alias,
-		index,
-		list,
-		map;
-
-	list = this.list.slice( );
-
-	map = jools.copy( this.map );
-
-	index = this.idx[ oldRes.aliases[ 0 ] ];
-
-	if( index === undefined )
-	{
-		throw new Error(
-			'invalid oldRes'
-		);
-	}
-
-	if( list[ index ] !== oldRes )
-	{
-		throw new Error(
-			'inventory damaged'
-		);
-	}
-
-	list[ index ] = newRes;
-
-	for(
-		var a = 0, aZ = newRes.aliases.length;
-		a < aZ;
-		a++
-	)
-	{
-		alias = newRes.aliases[ a ];
-
-		if( map[ alias ] !== oldRes )
-		{
-			throw new Error(
-				'invalid update'
-			);
-		}
-
-		map[ alias ] = newRes;
-	}
-
-	return (
-		new Inventory(
-			_tag,
-			list,
-			map,
-			this.idx
-		)
-	);
-};
-
-
-/*
-| Returns an inventory with a resource remove.
-*/
-Inventory.prototype.removeResource =
+inventory.prototype.addResource =
 	function(
 		res
 	)
@@ -208,26 +53,9 @@ Inventory.prototype.removeResource =
 	var
 		a,
 		aZ,
-		alias,
-		idx,
-		index,
-		list,
-		map;
+		inv;
 
-	list = this.list.slice( );
-
-	map = jools.copy( this.map );
-
-	idx = jools.copy( this.idx );
-
-	index = idx[ res.aliases[ 0 ] ];
-
-	if( index === undefined )
-	{
-		throw new Error(
-			'invalid res'
-		);
-	}
+	inv = this;
 
 	for(
 		a = 0, aZ = res.aliases.length;
@@ -235,45 +63,92 @@ Inventory.prototype.removeResource =
 		a++
 	)
 	{
-		alias = res.aliases[ a ];
-
-		if( map[ alias ] !== res )
-		{
-			throw new Error(
-				'invalid remove'
+		inv =
+			inv.create(
+				'twig:add',
+				res.aliases[ a ],
+				res
 			);
-		}
-
-		delete map[ alias ];
-
-		delete idx[ alias ];
 	}
 
-	list.splice( index, 1 );
+	return inv;
+};
 
-	for( alias in idx )
+
+/*
+| Returns an inventory with a resource updated.
+*/
+inventory.prototype.updateResource =
+	function(
+		oldRed,
+		newRes
+	)
+{
+	var
+		a,
+		aZ,
+		alias,
+		inv;
+
+	inv = this;
+
+	for(
+		a = 0, aZ = newRes.aliases.length;
+		a < aZ;
+		a++
+	)
 	{
-		if( idx[ alias ] > index )
-		{
-			idx[ alias ]--;
-		}
+		alias = newRes.aliases[ a ];
+
+		inv =
+			inv.create(
+				'twig:set',
+				alias,
+				newRes
+			);
 	}
 
-	return (
-		new Inventory(
-			_tag,
-			list,
-			map,
-			idx
-		)
-	);
+	return inv;
+};
+
+
+/*
+| Returns an inventory with a resource removed.
+*/
+inventory.prototype.removeResource =
+	function(
+		res
+	)
+{
+	var
+		a,
+		aZ,
+		inv;
+
+	inv = this;
+
+	for(
+		a = 0, aZ = res.aliases.length;
+		a < aZ;
+		a++
+	)
+	{
+		inv =
+			inv.create(
+				'twig:remove',
+				res.aliases[ a ],
+				res
+			);
+	}
+
+	return inv;
 };
 
 
 /*
 | Module export.
 */
-module.exports = Inventory;
+module.exports = inventory;
 
 
 } )( );
