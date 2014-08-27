@@ -893,7 +893,7 @@ para.prototype.input =
 
 			doc =
 				r.tree.getPath(
-					path.Chop( ).Limit( 3 )
+					path.chop( ).limit( 3 )
 				);
 
 			paraKey =
@@ -901,7 +901,7 @@ para.prototype.input =
 					doc.rankOf( paraKey ) + 1
 				];
 
-			path = path.Limit( 5 ).append( paraKey );
+			path = path.limit( 5 ).append( paraKey );
 
 			textPath = path.append( 'text' );
 

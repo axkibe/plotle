@@ -397,7 +397,7 @@ proto.update =
 					chgX.transformSign(
 						jion.sign.create(
 							'path',
-								mark.path.Chop( ),
+								mark.path.chop( ),
 							'at1',
 								mark.at
 						)
@@ -446,7 +446,7 @@ proto.update =
 					chgX.transformSign(
 						jion.sign.create(
 							'path',
-								mark.bPath.Chop( ),
+								mark.bPath.chop( ),
 							'at1',
 								mark.bAt
 						)
@@ -456,7 +456,7 @@ proto.update =
 					chgX.transformSign(
 						jion.sign.create(
 							'path',
-								mark.ePath.Chop( ),
+								mark.ePath.chop( ),
 							'at1',
 								mark.eAt
 						)

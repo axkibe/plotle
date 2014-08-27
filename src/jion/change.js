@@ -520,7 +520,7 @@ change.prototype._changeTreeSet =
 	// if $new is given, replaces it with a unique ID
 	if( trg.path.get( -1 ) === '$new' )
 	{
-		pivot = tree.getPath( trg.path.Shorten( 2 ) );
+		pivot = tree.getPath( trg.path.shorten( 2 ) );
 
 		key = pivot.newUID( );
 
@@ -572,7 +572,7 @@ change.prototype._changeTreeSet =
 		pivot =
 			pivot
 			||
-			tree.getPath( trg.path.Shorten( 2 ) );
+			tree.getPath( trg.path.shorten( 2 ) );
 
 		if( key === null )
 		{
@@ -614,7 +614,7 @@ change.prototype._changeTreeSet =
 		{
 			tree =
 				tree.setPath(
-					trg.path.Shorten( 2 ),
+					trg.path.shorten( 2 ),
 					pivot
 				);
 		}
@@ -857,7 +857,7 @@ change.prototype._changeTreeJoin =
 
 	key = path.get( -2 );
 
-	pivot = tree.getPath( path.Shorten( 3 ) );
+	pivot = tree.getPath( path.shorten( 3 ) );
 
 	jools.check( pivot.ranks, cm, 'pivot has no ranks' );
 
@@ -906,7 +906,7 @@ change.prototype._changeTreeJoin =
 
 	tree =
 		tree.setPath(
-			path.Shorten( 3 ),
+			path.shorten( 3 ),
 			pivot
 		);
 
@@ -963,7 +963,7 @@ change.prototype._changeTreeSplit =
 
 	pivot =
 		tree.getPath(
-			path.Shorten( 3 )
+			path.shorten( 3 )
 		);
 
 	jools.check( jools.isString( text ), cm, 'src signates no text' );
@@ -1025,7 +1025,7 @@ change.prototype._changeTreeSplit =
 
 	tree =
 		tree.setPath(
-			path.Shorten( 3 ),
+			path.shorten( 3 ),
 			pivot
 		);
 
@@ -1080,7 +1080,7 @@ change.prototype._changeTreeRank =
 		'trg.rank not present'
 	);
 
-	pivot = tree.getPath( src.path.Shorten( 2 ) );
+	pivot = tree.getPath( src.path.shorten( 2 ) );
 
 	jools.check(
 		pivot.ranks !== undefined,
@@ -1134,7 +1134,7 @@ change.prototype._changeTreeRank =
 	{
 		tree =
 			tree.setPath(
-				src.path.Shorten( 2 ),
+				src.path.shorten( 2 ),
 				pivot
 			);
 	}

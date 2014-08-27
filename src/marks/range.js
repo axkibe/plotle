@@ -222,7 +222,7 @@ jools.lazyValue(
 			return jion.path.empty;
 		}
 
-		return this.bPath.Limit( 3 );
+		return this.bPath.limit( 3 );
 	}
 );
 
@@ -241,9 +241,7 @@ range.prototype.containsPath =
 /**/{
 /**/	if( path.length === 0 )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid empty path'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 

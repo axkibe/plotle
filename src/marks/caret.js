@@ -133,7 +133,7 @@ jools.lazyValue(
 			return jion.path.empty;
 		}
 
-		return this.path.Limit( 3 );
+		return this.path.limit( 3 );
 	}
 );
 
@@ -155,7 +155,7 @@ jools.lazyValue(
 			return jion.path.empty;
 		}
 
-		return this.path.Limit( 5 );
+		return this.path.limit( 5 );
 	}
 );
 

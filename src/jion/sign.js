@@ -96,15 +96,6 @@ if( JION )
 						defaultValue :
 							undefined
 					},
-					/*
-				space :
-					{
-						comment :
-							'TODO: no idea',
-						defaultValue :
-							undefined
-					},
-					*/
 				val :
 					{
 						comment :
@@ -235,7 +226,7 @@ sign.prototype._init =
 | If this sign has the new value already set,
 | it is checked for equality.
 |
-| TODO rename Affix and simplify
+| FUTURE simplify
 */
 sign.prototype.affix =
 	function(

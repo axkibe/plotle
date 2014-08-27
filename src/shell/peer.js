@@ -201,7 +201,7 @@ Peer.setZone =
 					sign.create(
 						'path',
 							itemPath
-							.Chop( )
+							.chop( )
 							.append( 'zone' )
 					)
 			)
@@ -231,7 +231,7 @@ Peer.setFontSize =
 					sign.create(
 						'path',
 							itemPath
-							.Chop( )
+							.chop( )
 							.append( 'fontsize' )
 					)
 			)
@@ -261,7 +261,7 @@ Peer.setPNW =
 					sign.create(
 						'path',
 							itemPath
-							.Chop( )
+							.chop( )
 							.append( 'pnw' )
 					)
 			)
@@ -388,7 +388,7 @@ Peer.moveToTop =
 	root.link.alter(
 		{
 			path :
-				path.Chop( )
+				path.chop( )
 		},
 		{
 			rank :
@@ -420,7 +420,7 @@ Peer.insertText =
 				'trg',
 					sign.create(
 						'path',
-							path.Chop( 1 ),
+							path.chop( 1 ),
 						'at1',
 							offset
 					)
@@ -456,7 +456,7 @@ Peer.removeText =
 				'src',
 					sign.create(
 						'path',
-							path.Chop( 1 ),
+							path.chop( 1 ),
 						'at1',
 							at1,
 						'at2',
@@ -520,7 +520,7 @@ Peer.removeRange =
 
 	k2 = path2.get( -2 );
 
-	pivot = root.space.getPath( path1.Chop( 1 ).Shorten( 3 ) );
+	pivot = root.space.getPath( path1.chop( 1 ).shorten( 3 ) );
 
 	r1 = pivot.rankOf( k1 );
 
@@ -534,11 +534,11 @@ Peer.removeRange =
 	{
 		Peer.join(
 			path1,
-			root.space.getPath( path1.Chop( 1 ) ).length
+			root.space.getPath( path1.chop( 1 ) ).length
 		);
 	}
 
-	len2 = root.space.getPath( path1.Chop( 1 ) ).length;
+	len2 = root.space.getPath( path1.chop( 1 ) ).length;
 
 	Peer.join(
 		path1,
@@ -573,7 +573,7 @@ Peer.split =
 				'src',
 					sign.create(
 						'path',
-							path.Chop( 1 ),
+							path.chop( 1 ),
 						'at1',
 							offset
 					),
@@ -602,7 +602,7 @@ Peer.join =
 				'trg',
 					sign.create(
 						'path',
-							path.Chop( 1 ),
+							path.chop( 1 ),
 						'at1',
 							at1
 					)
@@ -627,11 +627,11 @@ Peer.removeItem =
 
 	key = path.get( -1 );
 
-	pivot = root.space.getPath( path.Chop( 1 ).Shorten( 2 ) );
+	pivot = root.space.getPath( path.chop( 1 ).shorten( 2 ) );
 
 	/*pivot =
 		root.link.get(
-			path.Chop( 1 ).Shorten( 2 )
+			path.chop( 1 ).shorten( 2 )
 		);
 	*/
 
@@ -650,7 +650,7 @@ Peer.removeItem =
 				'trg',
 					sign.create(
 						'path',
-							path.Chop( 1 ),
+							path.chop( 1 ),
 						'rank',
 							null
 					)

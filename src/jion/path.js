@@ -196,7 +196,7 @@ path.prototype.appendNC =
 |
 | FIXME cache
 */
-path.prototype.Chop =
+path.prototype.chop =
 	function(
 		n // if not undefined chop this amount of items;
 		//// defaults to 1
@@ -223,7 +223,7 @@ path.prototype.Chop =
 				'_sliced',
 					true
 			)
-			.Chop( n - 1 )
+			.chop( n - 1 )
 		);
 	}
 
@@ -242,9 +242,9 @@ path.prototype.Chop =
 /*
 | Returns a path with the last 'n' item(s) removed.
 |
-| FIXME cache
+| FUTURE cache
 */
-path.prototype.Shorten =
+path.prototype.shorten =
 	function(
 		n
 	)
@@ -299,7 +299,7 @@ path.prototype.Shorten =
 |
 | FIXME cache
 */
-path.prototype.Limit =
+path.prototype.limit =
 	function(
 		n
 	)
