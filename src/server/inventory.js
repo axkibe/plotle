@@ -75,8 +75,6 @@ Inventory.create =
 
 /*
 | Returns an inventory with a resource appended.
-|
-| FIXME vars
 */
 Inventory.prototype.addResource =
 	function(
@@ -84,20 +82,21 @@ Inventory.prototype.addResource =
 	)
 {
 	var
-		list =
-			this.list.slice( ),
+		alias,
+		idx,
+		list,
+		llen,
+		map;
 
-		map =
-			jools.copy( this.map ),
+	list = this.list.slice( );
 
-		idx =
-			jools.copy( this.idx ),
+	map = jools.copy( this.map );
 
-		llen =
-			list.length;
+	idx = jools.copy( this.idx );
 
-	list[ llen ] =
-		res;
+	llen = list.length;
+
+	list[ llen ] = res;
 
 	for(
 		var a = 0, aZ = res.aliases.length;
@@ -105,9 +104,7 @@ Inventory.prototype.addResource =
 		a++
 	)
 	{
-		var
-			alias =
-				res.aliases[ a ];
+		alias = res.aliases[ a ];
 
 		if( map[ alias ] )
 		{
@@ -118,11 +115,9 @@ Inventory.prototype.addResource =
 			);
 		}
 
-		map[ alias ] =
-			res;
+		map[ alias ] = res;
 
-		idx[ alias ] =
-			llen;
+		idx[ alias ] = llen;
 	}
 
 	return (
@@ -146,14 +141,16 @@ Inventory.prototype.updateResource =
 	)
 {
 	var
-		list =
-			this.list.slice( ),
+		alias,
+		index,
+		list,
+		map;
 
-		map =
-			jools.copy( this.map ),
+	list = this.list.slice( );
 
-		index =
-			this.idx[ oldRes.aliases[ 0 ] ];
+	map = jools.copy( this.map );
+
+	index = this.idx[ oldRes.aliases[ 0 ] ];
 
 	if( index === undefined )
 	{
@@ -169,8 +166,7 @@ Inventory.prototype.updateResource =
 		);
 	}
 
-	list[ index ] =
-		newRes;
+	list[ index ] = newRes;
 
 	for(
 		var a = 0, aZ = newRes.aliases.length;
@@ -178,9 +174,7 @@ Inventory.prototype.updateResource =
 		a++
 	)
 	{
-		var
-			alias =
-				newRes.aliases[ a ];
+		alias = newRes.aliases[ a ];
 
 		if( map[ alias ] !== oldRes )
 		{
@@ -189,8 +183,7 @@ Inventory.prototype.updateResource =
 			);
 		}
 
-		map[ alias ] =
-			newRes;
+		map[ alias ] = newRes;
 	}
 
 	return (
@@ -216,18 +209,18 @@ Inventory.prototype.removeResource =
 		a,
 		aZ,
 		alias,
+		idx,
+		index,
+		list,
+		map;
 
-		list =
-			this.list.slice( ),
+	list = this.list.slice( );
 
-		map =
-			jools.copy( this.map ),
+	map = jools.copy( this.map );
 
-		idx =
-			jools.copy( this.idx ),
+	idx = jools.copy( this.idx );
 
-		index =
-			idx[ res.aliases[ 0 ] ];
+	index = idx[ res.aliases[ 0 ] ];
 
 	if( index === undefined )
 	{
@@ -242,8 +235,7 @@ Inventory.prototype.removeResource =
 		a++
 	)
 	{
-		alias =
-			res.aliases[ a ];
+		alias = res.aliases[ a ];
 
 		if( map[ alias ] !== res )
 		{
@@ -281,8 +273,7 @@ Inventory.prototype.removeResource =
 /*
 | Module export.
 */
-module.exports =
-	Inventory;
+module.exports = Inventory;
 
 
 } )( );

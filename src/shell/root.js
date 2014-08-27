@@ -288,8 +288,7 @@ proto.setMode =
 /**/	}
 /**/}
 
-	this._$mode =
-		mode;
+	this._$mode = mode;
 
 	this._$discJockey =
 		this._$discJockey.create(
@@ -297,8 +296,7 @@ proto.setMode =
 				mode
 		);
 
-	this._$redraw =
-		true;
+	this._$redraw = true;
 };
 
 
