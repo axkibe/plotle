@@ -40,10 +40,8 @@ if( JION )
 
 		name :
 			'shape',
-
 		unit :
 			'euclid',
-
 		attributes :
 			{
 				hull :
@@ -86,14 +84,24 @@ shape.prototype.sketch =
 	)
 {
 	var
-		hull =
-			this.hull,
+		dx,
+		dxy,
+		dy,
+		hull,
+		h,
+		hZ,
+		magic,
+		pc,
+		pp,
+		pn,
+		pstart,
+		rotation;
 
-		h =
-			1,
+	hull = this.hull;
 
-		hZ =
-			hull.length;
+	h = 1;
+
+	hZ = hull.length;
 
 /**/if( CHECK )
 /**/{
@@ -105,12 +113,9 @@ shape.prototype.sketch =
 /**/	}
 /**/}
 
-	var
-		pstart =
-			view.point( hull [ h++ ] ),
+	pstart = view.point( hull [ h++ ] );
 
-		pc =
-			view.point( this.pc );
+	pc = view.point( this.pc );
 
 	pstart =
 		pstart.add(
@@ -122,16 +127,9 @@ shape.prototype.sketch =
 				( pstart.y < pc.y ? border : 0 )
 		);
 
-	var
-		pp =
-			pstart,
+	pp = pstart;
 
-		pn =
-			null,
-
-		dx,
-		dy,
-		magic;
+	pn = null;
 
 	fabric.moveTo( pstart );
 
@@ -148,28 +146,23 @@ shape.prototype.sketch =
 
 		switch( hull[ h ] )
 		{
-
 			case 'bezier' :
 
-				pn =
-					hull[ h + 5 ];
+				pn = hull[ h + 5 ];
 
 				break;
 
 			case 'line' :
 
-				pn =
-					hull[ h + 1 ];
+				pn = hull[ h + 1 ];
 
 				break;
 
 			case 'round' :
 
-				pn =
-					hull[ h + 2 ];
+				pn = hull[ h + 2 ];
 
-				magic =
-					euclid.constants.magic;
+				magic = euclid.constants.magic;
 
 				break;
 
@@ -181,16 +174,13 @@ shape.prototype.sketch =
 
 		if( pn === 'close' )
 		{
-			pn =
-				pstart;
+			pn = pstart;
 
-			pstart =
-				null;
+			pstart = null;
 		}
 		else
 		{
-			pn =
-				view.point( pn );
+			pn = view.point( pn );
 
 			if( border !== 0 )
 			{
@@ -222,11 +212,9 @@ shape.prototype.sketch =
 
 			case 'bezier' :
 
-				dx =
-					pn.x - pp.x;
+				dx = pn.x - pp.x;
 
-				dy =
-					pn.y - pp.y;
+				dy = pn.y - pp.y;
 
 				fabric.beziTo(
 					hull[ h + 1 ] * dx,
@@ -251,14 +239,12 @@ shape.prototype.sketch =
 			case 'round' :
 
 				dx = pn.x - pp.x;
+
 				dy = pn.y - pp.y;
 
-				var
-					rotation =
-						hull[ h + 1 ],
+				rotation = hull[ h + 1 ];
 
-					dxy =
-						dx * dy;
+				dxy = dx * dy;
 
 				switch( rotation )
 				{
@@ -290,17 +276,15 @@ shape.prototype.sketch =
 				throw new Error( );
 		}
 
-		pp =
-			pn;
+		pp = pn;
 	}
 
 /**/if( CHECK )
 /**/{
 /**/	if( pstart !== null )
 /**/	{
-/**/		throw new Error(
-/**/			'hull did not close'
-/**/		);
+/**/		// hull did not close
+/**/		throw new Error( );
 /**/	}
 /**/}
 

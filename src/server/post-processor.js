@@ -96,7 +96,8 @@ PostProcessor.testPadHtml =
 	)
 {
 	var
-		devels;
+		devels,
+		resource;
 
 	devels = [ ];
 

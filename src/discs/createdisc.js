@@ -424,6 +424,11 @@ createDisc.prototype.pointingHover =
 		ctrl
 	)
 {
+	var
+		fabric,
+		pp,
+		reply;
+
 	// shortcut if p is not near the panel
 	if(
 		!this.frame.within(
@@ -435,12 +440,9 @@ createDisc.prototype.pointingHover =
 		return null;
 	}
 
-	var
-		fabric =
-			this._fabric,
+	fabric = this._fabric;
 
-		pp =
-			p.sub( this.frame.pnw );
+	pp = p.sub( this.frame.pnw );
 
 	// FUTURE optimize by reusing the latest path of this.$fabric
 	if(
@@ -462,14 +464,13 @@ createDisc.prototype.pointingHover =
 		r++
 	)
 	{
-		var
-			reply =
-				this.atRank( r )
-					.pointingHover(
-						pp,
-						shift,
-						ctrl
-					);
+		reply =
+			this.atRank( r )
+				.pointingHover(
+					pp,
+					shift,
+					ctrl
+				);
 
 		if( reply )
 		{
@@ -491,6 +492,10 @@ createDisc.prototype.click =
 		ctrl
 	)
 {
+	var
+		fabric,
+		pp;
+
 	// shortcut if p is not near the panel
 	if(
 		!this.frame.within(
@@ -502,12 +507,9 @@ createDisc.prototype.click =
 		return null;
 	}
 
-	var
-		fabric =
-			this._fabric,
+	fabric = this._fabric,
 
-		pp =
-			p.sub( this.frame.pnw );
+	pp = p.sub( this.frame.pnw );
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 	if(
