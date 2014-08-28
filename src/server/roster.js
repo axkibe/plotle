@@ -368,7 +368,19 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/discs/icons.js',
+			'src/icons/normal.js',
+		'inBundle',
+			true
+	),
+	resource.create(
+		'filePath',
+			'src/icons/moveto.js',
+		'inBundle',
+			true
+	),
+	resource.create(
+		'filePath',
+			'src/icons/remove.js',
 		'inBundle',
 			true
 	),

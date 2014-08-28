@@ -5,6 +5,10 @@
 */
 
 
+var
+	HACK = false; // TODO
+
+
 /*
 | Exports
 */
@@ -638,6 +642,11 @@ fabric.prototype.edge =
 
 	edge = style.edge;
 
+	if( HACK && sketch !== 'sketch' )
+	{
+		throw new Error( 'XXX TODO' );
+	}
+
 	if( Array.isArray( edge ) )
 	{
 		for( var i = 0; i < edge.length; i++ )
@@ -688,6 +697,11 @@ fabric.prototype.fill =
 	var
 		cx,
 		fill;
+
+	if( HACK && sketch !== 'sketch' )
+	{
+		throw new Error( 'XXX TODO' );
+	}
 
 	cx = this._cx;
 
@@ -765,7 +779,6 @@ fabric.prototype.paintText =
 
 	aZ = arguments.length;
 
-// FIXME make a loop
 	while( a < aZ )
 	{
 		switch( arguments[ a ] )
@@ -1140,6 +1153,11 @@ fabric.prototype.paint =
 	var edgeStyle = style.edge;
 
 	var cx = this._cx;
+
+	if( HACK && sketch !== 'sketch' )
+	{
+		throw new Error( 'XXX TODO' );
+	}
 
 	// resets the font since the canvas context
 	// is going to be reconfigured

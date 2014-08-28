@@ -19,8 +19,8 @@ widgets = widgets || { };
 */
 var
 	Accent,
-	discs,
 	euclid,
+	icons,
 	jools,
 	reply,
 	root;
@@ -384,8 +384,8 @@ jools.lazyValue(
 
 			f.paint(
 				style,
-				discs.icons,
-				this.icon,
+				icons[ this.icon ],
+				'sketch',
 				euclid.view.proper
 			);
 		}
