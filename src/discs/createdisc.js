@@ -264,7 +264,6 @@ jools.lazyValue(
 		fabric.fill(
 			this.style,
 			this.silhoutte,
-			'sketch',
 			euclid.view.proper
 		);
 
@@ -280,7 +279,6 @@ jools.lazyValue(
 		fabric.edge(
 			this.style,
 			this.silhoutte,
-			'sketch',
 			euclid.view.proper
 		);
 
@@ -448,7 +446,6 @@ createDisc.prototype.pointingHover =
 	if(
 		!fabric.withinSketch(
 			this.silhoutte,
-			'sketch',
 			euclid.view.proper,
 			pp
 		)
@@ -515,7 +512,6 @@ createDisc.prototype.click =
 	if(
 		!fabric.withinSketch(
 			this.silhoutte,
-			'sketch',
 			euclid.view.proper,
 			pp
 		)
@@ -616,7 +612,6 @@ createDisc.prototype.dragStart =
 	if(
 		!this._fabric.withinSketch(
 			this.silhoutte,
-			'sketch',
 			euclid.view.proper,
 			p.sub( this.frame.pnw )
 		)

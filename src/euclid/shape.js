@@ -647,7 +647,6 @@ shape.prototype.within =
 {
 	return swatch.withinSketch(
 		this,
-		'sketch',
 		view,
 		p
 	);

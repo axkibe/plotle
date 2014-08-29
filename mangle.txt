@@ -124,6 +124,7 @@
 . _onUpdate
 . _outbox
 . _pageUpDown
+. _passMask
 . _path
 . _pitch
 . _pointingHover
@@ -720,10 +721,7 @@
 . size
 . sizeOnly
 . sketch
-. sketchAllHandles
 . sketchCheck
-. sketchHandle
-. sketchMask
 . sketchRange
 > slice
 > space

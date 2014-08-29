@@ -70,14 +70,11 @@ if( JION )
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 
-	euclid.point =
-		require( './point' );
+	euclid.point = require( './point' );
 
-	euclid.rect =
-		require( '../jion/this' )( module );
+	euclid.rect = require( '../jion/this' )( module );
 }
 
 
@@ -110,7 +107,7 @@ rect.createArbitrary =
 
 		pse = p2;
 	}
-	else if (
+	else if(
 		p1.x >= p2.x &&
 		p1.y >= p2.y
 	)
@@ -128,7 +125,7 @@ rect.createArbitrary =
 
 		pse = euclid.point.create( 'x', p2.x, 'y', p1.y );
 	}
-	else if (
+	else if(
 		p1.x >= p2.x &&
 		p2.y >= p1.y
 	)
@@ -142,7 +139,7 @@ rect.createArbitrary =
 		throw new Error( );
 	}
 
-	return (
+	return(
 		rect.create(
 			'pnw',
 				pnw,
@@ -188,7 +185,8 @@ jools.lazyValue(
 	function( )
 	{
 		if (
-			this.pnw.x === 0 &&
+			this.pnw.x === 0
+			&&
 			this.pnw.y === 0
 		)
 		{
@@ -282,26 +280,22 @@ rect.prototype.cardinalResize =
 	)
 {
 	var
-		pnw =
-			this.pnw,
-
-		pse =
-			this.pse,
-
+		pnw,
+		pse,
 		wx,
-
 		ny,
-
 		ex,
-
 		sy;
+
+	pnw = this.pnw;
+
+	pse = this.pse;
 
 	switch( cardinal )
 	{
 		case 'n'  :
 
-			wx =
-				pnw.x;
+			wx = pnw.x;
 
 			ny =
 				Math.min(
@@ -309,18 +303,15 @@ rect.prototype.cardinalResize =
 					pse.y - minh
 				);
 
-			ex =
-				pse.x;
+			ex = pse.x;
 
-			sy =
-				pse.y;
+			sy = pse.y;
 
 			break;
 
 		case 'ne' :
 
-			wx =
-				pnw.x;
+			wx = pnw.x;
 
 			ny =
 				Math.min(
@@ -334,18 +325,15 @@ rect.prototype.cardinalResize =
 					pnw.x + minw
 				);
 
-			sy =
-				pse.y;
+			sy = pse.y;
 
 			break;
 
 		case 'e'  :
 
-			wx =
-				pnw.x;
+			wx = pnw.x;
 
-			ny =
-				pnw.y;
+			ny = pnw.y;
 
 			ex =
 				Math.max(
@@ -353,18 +341,15 @@ rect.prototype.cardinalResize =
 					pnw.x + minw
 				),
 
-			sy =
-				pse.y;
+			sy = pse.y;
 
 			break;
 
 		case 'se' :
 
-			wx =
-				pnw.x;
+			wx = pnw.x;
 
-			ny =
-				pnw.y;
+			ny = pnw.y;
 
 			ex =
 				Math.max(
@@ -382,14 +367,11 @@ rect.prototype.cardinalResize =
 
 		case 's' :
 
-			wx =
-				pnw.x;
+			wx = pnw.x;
 
-			ny =
-				pnw.y;
+			ny = pnw.y;
 
-			ex =
-				pse.x;
+			ex = pse.x;
 
 			sy =
 				Math.max(
@@ -407,11 +389,9 @@ rect.prototype.cardinalResize =
 					pse.x - minw
 				);
 
-			ny =
-				pnw.y;
+			ny = pnw.y;
 
-			ex =
-				pse.x;
+			ex = pse.x;
 
 			sy =
 				Math.max(
@@ -429,14 +409,11 @@ rect.prototype.cardinalResize =
 					pse.x - minw
 				);
 
-			ny =
-				pnw.y;
+			ny = pnw.y;
 
-			ex =
-				pse.x;
+			ex = pse.x;
 
-			sy =
-				pse.y;
+			sy = pse.y;
 
 			break;
 
@@ -454,23 +431,19 @@ rect.prototype.cardinalResize =
 					pse.y - minh
 				);
 
-			ex =
-				pse.x;
+			ex = pse.x;
 
-			sy =
-				pse.y;
+			sy = pse.y;
 
 			break;
 
 		default  :
-			throw new Error(
-				CHECK
-				&&
-				'unknown cardinal'
-			);
+
+			// unknown cardinal
+			throw new Error( );
 	}
 
-	return (
+	return(
 		rect.renew(
 			wx,
 			ny,
@@ -752,17 +725,18 @@ rect.prototype.sketch =
 	)
 {
 	var
-		wx =
-			view.x( this.pnw.x ),
+		wx,
+		ny,
+		ex,
+		sy;
 
-		ny =
-			view.y( this.pnw.y ),
+	wx = view.x( this.pnw.x );
 
-		ex =
-			view.x( this.pse.x ),
+	ny = view.y( this.pnw.y );
 
-		sy =
-			view.y( this.pse.y );
+	ex = view.x( this.pse.x );
+
+	sy = view.y( this.pse.y );
 
 	fabric.moveTo(
 		wx + border,
@@ -801,30 +775,32 @@ rect.prototype.within =
 	)
 {
 	var
-		x =
-			view
-				?
-				view.dex( p.x )
-				:
-				p.x,
+		x,
+		y,
+		pnw,
+		pse;
 
-		y =
-			view
-				?
-				view.dey( p.y )
-				:
-				p.y,
+	x =
+		view
+		? view.dex( p.x )
+		: p.x;
 
-		pnw =
-			this.pnw,
+	y =
+		view
+		?  view.dey( p.y )
+		: p.y;
 
-		pse =
-			this.pse;
+	pnw = this.pnw;
+
+	pse = this.pse;
 
 	return (
-		x >= pnw.x &&
-		y >= pnw.y &&
-		x <= pse.x &&
+		x >= pnw.x
+		&&
+		y >= pnw.y
+		&&
+		x <= pse.x
+		&&
 		y <= pse.y
 	);
 };
@@ -840,33 +816,33 @@ rect.prototype.getProjection =
 	)
 {
 	var
-		pc =
-			this.pc,
+		pc,
+		ny,
+		ex,
+		sy,
+		wx,
+		k,
+		x,
+		y;
 
-		ny =
-			this.pnw.y,
+	pc = this.pc,
 
-		ex =
-			this.pse.x,
+	ny = this.pnw.y,
 
-		sy =
-			this.pse.y,
+	ex = this.pse.x,
 
-		wx =
-			this.pnw.x,
+	sy = this.pse.y,
 
-		k =
-			( p.y - pc.y ) / ( p.x - pc.x ),
+	wx = this.pnw.x,
 
-		x, y;
+	k = ( p.y - pc.y ) / ( p.x - pc.x );
 
 	// y = (x - pc.x) * k + pc.y
 	// x = (y - pc.y) / k + pc.x
 
 	if( p.y <= ny )
 	{
-		x =
-			( ny - pc.y ) / k + pc.x;
+		x = ( ny - pc.y ) / k + pc.x;
 
 		if ( x >= wx && x <= ex )
 		{
@@ -876,8 +852,7 @@ rect.prototype.getProjection =
 
 	if( p.y >= sy )
 	{
-		x =
-			( sy - pc.y ) / k + pc.x;
+		x = ( sy - pc.y ) / k + pc.x;
 
 		if( x >= wx && x <= ex )
 		{
@@ -887,8 +862,7 @@ rect.prototype.getProjection =
 
 	if( p.x >= ex )
 	{
-		y =
-			( ex - pc.x ) * k + pc.y;
+		y = ( ex - pc.x ) * k + pc.y;
 
 		if( y >= ny && y <= sy )
 		{
@@ -898,8 +872,7 @@ rect.prototype.getProjection =
 
 	if( p.x <= wx )
 	{
-		y =
-			( wx - pc.x ) * k + pc.y;
+		y = ( wx - pc.x ) * k + pc.y;
 
 		if( y >= ny && y <= sy )
 		{

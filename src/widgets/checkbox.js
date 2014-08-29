@@ -190,6 +190,7 @@ checkbox.prototype.pointingHover =
 
 /*
 | Sketches the check
+| XXX TODO
 */
 checkbox.prototype.sketchCheck =
 	function(
@@ -199,14 +200,15 @@ checkbox.prototype.sketchCheck =
 	)
 {
 	var
-		pc =
-			this.frame.pc,
+		pc,
+		pcx,
+		pcy;
 
-		pcx =
-			pc.x,
+	pc = this.frame.pc;
 
-		pcy =
-			pc.y;
+	pcx = pc.x;
+
+	pcy = pc.y;
 
 	fabric.moveTo(
 		pcx -  5,
@@ -379,7 +381,7 @@ checkbox.prototype.draw =
 				Accent.NORMA
 			),
 			this,
-			'sketchCheck',
+			// 'sketchCheck', XXX
 			euclid.view.proper
 		);
 	}

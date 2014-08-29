@@ -646,7 +646,6 @@ portal.prototype.highlight =
 			'highlight'
 		),
 		this.silhoutte,
-		'sketch',
 		this.view
 	);
 };
@@ -760,7 +759,6 @@ jools.lazyValue(
 				'normal'
 			),
 			this.zeroSilhoutte,
-			'sketch',
 			hview
 		);
 
@@ -768,7 +766,6 @@ jools.lazyValue(
 		{
 			f.clip(
 				this.zeroSilhoutte,
-				'sketch',
 				hview,
 				0
 			);
@@ -801,7 +798,6 @@ jools.lazyValue(
 					)
 				),
 				moveToButton.shape,
-				'sketch',
 				hview
 			);
 
@@ -811,7 +807,6 @@ jools.lazyValue(
 					'normal'
 				),
 				spaceUser.silhoutte,
-				'sketch',
 				hview
 			);
 
@@ -821,7 +816,6 @@ jools.lazyValue(
 					'normal'
 				),
 				spaceTag.silhoutte,
-				'sketch',
 				hview
 			);
 
@@ -878,7 +872,6 @@ jools.lazyValue(
 				'normal'
 			),
 			this.zeroSilhoutte,
-			'sketch',
 			hview
 		);
 

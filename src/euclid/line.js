@@ -264,17 +264,18 @@ line.prototype.sketch =
 	)
 {
 	var
-		p1x =
-			view.x( this.p1.x ),
+		p1x,
+		p1y,
+		p2x,
+		p2y;
 
-		p1y =
-			view.y( this.p1.y ),
+	p1x = view.x( this.p1.x );
 
-		p2x =
-			view.x( this.p2.x ),
+	p1y = view.y( this.p1.y );
 
-		p2y =
-			view.y( this.p2.y );
+	p2x = view.x( this.p2.x );
+
+	p2y = view.y( this.p2.y );
 
 	// @@, multiple line end types
 	switch(this.p1end)
@@ -287,10 +288,9 @@ line.prototype.sketch =
 			break;
 
 		default :
-			throw new Error(
-				CHECK &&
-				'unknown line end'
-			);
+
+			// unknown line end
+			throw new Error( );
 	}
 
 	switch(this.p2end)
@@ -305,6 +305,7 @@ line.prototype.sketch =
 
 		case 'arrow' :
 
+			// FIXME
 			var
 				cos =
 					Math.cos,
@@ -392,7 +393,6 @@ line.prototype.draw =
 	fabric.paint(
 		style,
 		this,
-		'sketch',
 		view
 	);
 };

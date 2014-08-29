@@ -286,7 +286,6 @@ relation.prototype.draw =
 		fabric.paint(
 			theme.relation.style,
 			l1,
-			'sketch',
 			this.view
 		);
 	}
@@ -304,7 +303,6 @@ relation.prototype.draw =
 		fabric.paint(
 			theme.relation.style,
 			l2,
-			'sketch',
 			this.view
 		);
 	}

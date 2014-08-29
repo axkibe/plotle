@@ -311,7 +311,6 @@ jools.lazyValue(
 		f.paint(
 			style,
 			this,
-			'sketch',
 			euclid.view.proper
 		);
 
@@ -385,7 +384,6 @@ jools.lazyValue(
 			f.paint(
 				style,
 				icons[ this.icon ],
-				'sketch',
 				euclid.view.proper
 			);
 		}
@@ -422,7 +420,6 @@ button.prototype.pointingHover =
 	if(
 		!this._fabric.withinSketch(
 			this,
-			'sketch',
 			euclid.view.proper,
 			pp
 		)
@@ -471,7 +468,6 @@ button.prototype.click =
 	if(!
 		this._fabric.withinSketch(
 			this,
-			'sketch',
 			euclid.view.proper,
 			pp
 		)

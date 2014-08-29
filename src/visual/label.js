@@ -269,7 +269,6 @@ label.prototype.highlight =
 			'highlight'
 		),
 		this.silhoutte,
-		'sketch',
 		this.view
 	);
 };
@@ -427,7 +426,6 @@ jools.lazyValue(
 				'normal'
 			),
 			this.zeroSilhoutte,
-			'sketch',
 			hview
 		);
 

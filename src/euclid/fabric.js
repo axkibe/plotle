@@ -5,13 +5,6 @@
 */
 
 
-// TODO
-var
-	HACK =
-//		true ||
-		false;
-
-
 /*
 | Exports
 */
@@ -422,7 +415,6 @@ fabric.prototype.beziTo =
 fabric.prototype.clip =
 	function(
 		shape,
-		sketch,
 		view,
 		border,
 		a1,
@@ -445,7 +437,7 @@ fabric.prototype.clip =
 
 	cx.beginPath( );
 
-	shape[ sketch ](
+	shape.sketch(
 		this,
 		border,
 		true,
@@ -631,8 +623,7 @@ fabric.prototype.drawImage =
 fabric.prototype.edge =
 	function(
 		style,  // the style formated in meshcraft style notation.
-		shape,  // an object which has 'sketch'() defined
-		sketch,
+		shape,  // an object which has sketch defined
 		view,
 		a1,
 		a2,
@@ -645,11 +636,6 @@ fabric.prototype.edge =
 
 	edge = style.edge;
 
-	if( HACK && sketch !== 'sketch' )
-	{
-		throw new Error( 'XXX TODO' );
-	}
-
 	if( Array.isArray( edge ) )
 	{
 		for( var i = 0; i < edge.length; i++ )
@@ -657,7 +643,6 @@ fabric.prototype.edge =
 			this._edge(
 				edge[ i ],
 				shape,
-				sketch,
 				view,
 				a1,
 				a2,
@@ -671,7 +656,6 @@ fabric.prototype.edge =
 		this._edge(
 			edge,
 			shape,
-			sketch,
 			view,
 			a1,
 			a2,
@@ -688,8 +672,7 @@ fabric.prototype.edge =
 fabric.prototype.fill =
 	function(
 		style,   // the style formated in meshcraft style notation.
-		shape,   // an object which has 'sketch'() defined
-		sketch,
+		shape,   // an object which has sketch defined
 		view,
 		a1,
 		a2,
@@ -701,11 +684,6 @@ fabric.prototype.fill =
 		cx,
 		fill;
 
-	if( HACK && sketch !== 'sketch' )
-	{
-		throw new Error( 'XXX TODO' );
-	}
-
 	cx = this._cx;
 
 	fill = style.fill;
@@ -714,7 +692,7 @@ fabric.prototype.fill =
 
 	this._begin( false );
 
-	shape[ sketch ](
+	shape.sketch(
 		this,
 		0,
 		false,
@@ -1143,7 +1121,6 @@ fabric.prototype.paint =
 	function(
 		style,
 		shape,
-		sketch,
 		view,
 		a1,
 		a2,
@@ -1157,18 +1134,13 @@ fabric.prototype.paint =
 
 	var cx = this._cx;
 
-	if( HACK && sketch !== 'sketch' )
-	{
-		throw new Error( 'XXX TODO' );
-	}
-
 	// resets the font since the canvas context
 	// is going to be reconfigured
 	this._$font = null;
 
 	this._begin( false );
 
-	shape[ sketch ](
+	shape.sketch(
 		this,
 		0,
 		false,
@@ -1197,7 +1169,6 @@ fabric.prototype.paint =
 			this._edge(
 				edgeStyle[ i ],
 				shape,
-				sketch,
 				view,
 				a1,
 				a2,
@@ -1211,7 +1182,6 @@ fabric.prototype.paint =
 		this._edge(
 			edgeStyle,
 			shape,
-			sketch,
 			view,
 			a1,
 			a2,
@@ -1228,7 +1198,6 @@ fabric.prototype.paint =
 fabric.prototype.reverseClip =
 	function(
 		shape,
-		sketch,
 		view,
 		border,
 		a1,
@@ -1270,7 +1239,7 @@ fabric.prototype.reverseClip =
 
 	cx.lineTo( 0, 0 );
 
-	shape[ sketch ]( this, border, true, view, a1, a2, a3, a4 );
+	shape.sketch( this, border, true, view, a1, a2, a3, a4 );
 
 	cx.clip( );
 };
@@ -1357,7 +1326,6 @@ fabric.prototype._setFont =
 fabric.prototype.withinSketch =
 	function(
 		shape,
-		sketch,
 		view,
 		p,
 		a1,
@@ -1376,7 +1344,7 @@ fabric.prototype.withinSketch =
 
 	this._begin( true );
 
-	shape[ sketch ]( this, 0, true, view, a1, a2, a3 );
+	shape.sketch( this, 0, true, view, a1, a2, a3 );
 
 	return this._cx.isPointInPath( p.x, p.y );
 };
@@ -1543,8 +1511,7 @@ fabric.prototype._colorStyle =
 fabric.prototype._edge =
 	function(
 		style,  // the style formated in meshcraft style notation.
-		shape,  // an object which has 'sketch'() defined
-		sketch,
+		shape,  // an object which has sketch defined
 		view,
 		a1,
 		a2,
@@ -1559,7 +1526,7 @@ fabric.prototype._edge =
 
 	this._begin( true );
 
-	shape[ sketch ](
+	shape.sketch(
 		this,
 		style.border,
 		true,

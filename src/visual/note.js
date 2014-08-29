@@ -374,7 +374,6 @@ jools.lazyValue(
 		f.fill(
 			style,
 			this.zeroSilhoutte,
-			'sketch',
 			hview
 		);
 
@@ -396,7 +395,6 @@ jools.lazyValue(
 		f.edge(
 			style,
 			this.zeroSilhoutte,
-			'sketch',
 			hview
 		);
 
@@ -560,7 +558,6 @@ note.prototype.highlight =
 			'highlight'
 		),
 		this.silhoutte,
-		'sketch',
 		this.view
 	);
 };

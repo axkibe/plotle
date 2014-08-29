@@ -414,7 +414,6 @@ item.prototype.drawHandles =
 
 		fabric.reverseClip(
 			area,
-			'sketch',
 			euclid.view.proper,
 			-1
 		);
@@ -422,7 +421,6 @@ item.prototype.drawHandles =
 
 	fabric.reverseClip(
 		this.silhoutte,
-		'sketch',
 		view,
 		-1
 	);
@@ -453,7 +451,6 @@ item.prototype.drawHandles =
 		fabric.paint(
 			theme.handle.style,
 			h,
-			'sketch',
 			fixView
 		);
 	}

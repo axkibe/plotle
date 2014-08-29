@@ -247,47 +247,45 @@ input.prototype.getOffsetAt =
 	)
 {
 	var
-		pitch =
-			this._pitch,
-
-		dx =
-			p.x - pitch.x,
-
-		value =
-			this.value,
-
-		x1 =
-			0,
-
-		x2 =
-			0,
-
 		a,
+		dx,
+		font,
+		mw,
+		password,
+		pitch,
+		value,
+		x1,
+		x2;
 
-		password =
-			this.password,
+	pitch = this._pitch;
 
-		font =
-			this.font,
+	dx = p.x - pitch.x;
 
-		mw;
+	value = this.value,
+
+	x1 = 0;
+
+	x2 = 0;
+
+	password = this.password,
+
+	font = this.font;
 
 	if( password )
 	{
 		mw =
-			this.maskWidth( font.size ) * 2 +
+			this.maskWidth( font.size )
+			+
 			this.maskKern( font.size );
 	}
 
 	for( a = 0; a < value.length; a++ )
 	{
-		x1 =
-			x2;
+		x1 = x2;
 
 		if( password )
 		{
-			x2 =
-				a * mw;
+			x2 = a * mw;
 		}
 		else
 		{
@@ -305,7 +303,8 @@ input.prototype.getOffsetAt =
 	}
 
 	if(
-		dx - x1 < x2 - dx &&
+		dx - x1 < x2 - dx
+		&&
 		a > 0
 	)
 	{
@@ -324,7 +323,7 @@ input.prototype.maskWidth =
 		size
 	)
 {
-	return Math.round( size * 0.2 );
+	return Math.round( size * 0.4 );
 };
 
 
@@ -341,104 +340,84 @@ input.prototype.maskKern =
 
 
 /*
-| Draws the mask for password fields
+| Returns an array of ellipses
+| representing the password mask.
 */
-input.prototype.sketchMask =
-	function(
-		fabric,
-		border,
-		twist,
-		view,
-		length,
-		size
-	)
-{
-	var
-		pitch =
-			this._pitch,
+jools.lazyValue(
+	input.prototype,
+	'_passMask',
+	function( )
+	{
+		var
+			a,
+			aZ,
+			h,
+			k,
+			pitch,
+			pm,
+			size,
+			value,
+			view,
+			w,
+			x,
+			y;
 
-		x =
-			view.x( pitch.x ),
+		value = this.value;
+
+		view = euclid.view.proper;
+
+		size = this.font.size;
+
+		pm = [ ];
+
+		pitch = this._pitch;
+
+		x = view.x( pitch.x ),
 
 		y =
-			view.y( pitch.y ) +
-			Math.round( size * 0.7 ),
+			view.y( pitch.y )
+			+
+			Math.round( size * 0.7 );
 
-		h =
-			Math.round( size * 0.32 ),
+		h = Math.round( size * 0.32 ),
 
-		w =
-			this.maskWidth( size ),
+		w = this.maskWidth( size );
 
-		w2 =
-			w * 2,
+		k = this.maskKern( size );
 
-		k =
-			this.maskKern( size ),
+		for(
+			a = 0, aZ = value.length;
+			a < aZ;
+			a++, x += w + k
+		)
+		{
+			pm[ a ] =
+				euclid.ellipse.create(
+					'pnw',
+						euclid.point.create(
+							'x', x,
+							'y', y - h
+						),
+					'pse',
+						euclid.point.create(
+							'x', x + w,
+							'y', y + h
+						)
+				);
+		}
 
-		magic =
-			euclid.constants.magic,
-
-		mw =
-			magic * w,
-
-		mh =
-			magic * h;
-
-	for( var a = 0; a < length; a++ )
-	{
-		fabric.moveTo(
-			x + w,
-			y - h
-		);
-
-		fabric.beziTo(
-			mw,
-			0,
-
-			0,
-			-mh,
-
-			x + w2,
-			y
-		);
-
-		fabric.beziTo(
-			0,
-			mh,
-
-			mw,
-			0,
-
-			x + w,
-			y + h
-		);
-
-		fabric.beziTo(
-			-mw,
-			0,
-
-			0,
-			mh,
-
-			x,
-			y
-		);
-
-		fabric.beziTo(
-			0,
-			-mh,
-
-			-mw,
-			0,
-
-			x + w,
-			y - h
-		);
-
-		x += w2 + k;
+		return pm;
 	}
-};
+);
+
+/*
+| Black style
+*/
+var blackStyle =
+	{
+		fill :
+			'black'
+	};
 
 
 /*
@@ -450,55 +429,63 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			value =
-				this.value,
+			a,
+			aZ,
+			f,
+			font,
+			pitch,
+			pm,
+			shape,
+			style,
+			value;
 
-			shape =
-				this._shape,
+		value = this.value;
 
-			pitch =
-				this._pitch,
+		shape = this._shape;
 
-			f =
-				euclid.fabric.create(
-					'width',
-						shape.width + 1,
-					'height',
-						shape.height + 1
-				),
+		pitch = this._pitch;
 
-			style =
-				widgets.getStyle(
-					this.style,
-					Accent.state(
-						false, // FIXME
-						this.focusAccent
-					)
-				),
+		f =
+			euclid.fabric.create(
+				'width',
+					shape.width + 1,
+				'height',
+					shape.height + 1
+			);
 
-			font =
-				this.font;
+		style =
+			widgets.getStyle(
+				this.style,
+				Accent.state(
+					false, // FIXME
+					this.focusAccent
+				)
+			),
+
+		font = this.font;
 
 		f.fill(
 			style,
 			shape,
-			'sketch',
 			euclid.view.proper
 		);
 
 		if( this.password )
 		{
-			f.fill(
-				{
-					fill:
-						'black'
-				},
-				this,
-				'sketchMask',
-				euclid.view.proper,
-				value.length,
-				font.size
-			);
+			pm = this._passMask;
+
+			for(
+				a = 0, aZ = pm.length;
+				a < aZ;
+				a++
+			)
+			{
+				f.fill(
+					blackStyle,
+					pm[ a ],
+					euclid.view.proper
+				);
+			}
 		}
 		else
 		{
@@ -527,7 +514,6 @@ jools.lazyValue(
 		f.edge(
 			style,
 			shape,
-			'sketch',
 			euclid.view.proper
 		);
 
@@ -579,7 +565,7 @@ input.prototype.locateOffset =
 				'x',
 					pitch.x +
 					(
-						2 * this.maskWidth( font.size ) +
+						this.maskWidth( font.size ) +
 						this.maskKern( font.size )
 					) * offset
 					- 1,
@@ -660,21 +646,23 @@ input.prototype.input =
 	)
 {
 	var
-		mark =
-			this.mark,
+		mark,
+		value,
+		at,
+		maxlen;
 
-		value =
-			this.value,
+	mark = this.mark;
 
-		at =
-			mark.caretAt,
+	value = this.value;
 
-		maxlen =
-			this.maxlen;
+	at = mark.caretAt;
+
+	maxlen = this.maxlen;
 
 	// cuts of text if larger than this maxlen
 	if(
-		maxlen > 0 &&
+		maxlen > 0
+		&&
 		value.length + text.length > maxlen
 	)
 	{
@@ -710,11 +698,12 @@ input.prototype._keyBackspace =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		at,
+		mark;
 
-		at =
-			mark.at;
+	mark = this.mark;
+
+	at = mark.at;
 
 	if( at <= 0 )
 	{
@@ -760,6 +749,8 @@ input.prototype._keyDel =
 	);
 };
 
+
+// FIXME two times different cycles?
 
 /*
 | User pressed return key.
@@ -831,7 +822,6 @@ input.prototype._keyLeft =
 	{
 		return;
 	}
-
 
 	root.setMark(
 		marks.caret.create(

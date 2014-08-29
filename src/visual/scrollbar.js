@@ -141,7 +141,6 @@ Scrollbar.prototype.draw =
 	fabric.paint(
 		theme.scrollbar.style,
 		this.getArea( view ),
-		'sketch',
 		euclid.view.proper
 	);
 };

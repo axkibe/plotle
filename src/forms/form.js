@@ -201,7 +201,6 @@ form.prototype.draw =
 	fabric.paint(
 		theme.forms.style,
 		fabric,
-		'sketch',
 		euclid.view.proper
 	);
 
