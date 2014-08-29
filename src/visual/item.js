@@ -119,11 +119,14 @@ item.prototype.checkHandles =
 	)
 {
 	var
+		d,
 		f,
+		fixView,
 		h,
+		handles,
 		d8cwcf;
 
-	h = this._handles;
+	handles = this._handles;
 
 	f = root.fabric;
 
@@ -135,29 +138,25 @@ item.prototype.checkHandles =
 		a++
 	)
 	{
-		var
-			d = d8cwcf[ a ],
+		d = d8cwcf[ a ];
 
-			z = h[ d ];
+		h = handles[ d ];
 
-		if( !z )
+		if( !h )
 		{
 			continue;
 		}
 
-		var fixView =
+		fixView =
 			view.review(
 				0,
-				view.point( z.pc )
+				view.point( h.pc )
 			);
 
 		if(
-			f.withinSketch(
-				this,
-				'sketchHandle',
+			h.within(
 				fixView,
-				p,
-				z
+				p
 			)
 		)
 		{
@@ -179,279 +178,210 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			ha =
-				this.handles,
+			ha,
+			zone,
+			wx,
+			ny,
+			ex,
+			sy,
+			mx,
+			my,
+			dcx,
+			dcy,
+			dex,
+			dey,
+			a,
+			b,
+			a2,
+			b2;
 
-			zone =
-				this.zone,
+		ha = this.handles;
 
-			wx =
-				zone.pnw.x,
+		zone = this.zone;
 
-			ny =
-				zone.pnw.y,
+		wx = zone.pnw.x;
 
-			ex =
-				zone.pse.x,
+		ny = zone.pnw.y;
 
-			sy =
-				zone.pse.y,
+		ex = zone.pse.x;
 
-			mx =
-				jools.half( wx + ex ),
+		sy = zone.pse.y;
 
-			my =
-				jools.half( ny + sy ),
+		mx = jools.half( wx + ex );
 
-			dcx =
-				theme.handle.cdistance,
+		my = jools.half( ny + sy );
 
-			dcy =
-				theme.handle.cdistance,
+		dcx = theme.handle.cdistance;
 
-			dex =
-				theme.handle.edistance,
+		dcy = theme.handle.cdistance;
 
-			dey =
-				theme.handle.edistance,
+		dex = theme.handle.edistance;
 
-			a =
-				Math.min(
-					Math.round( ( zone.width  + 2 * dcx ) / 6 ),
-					theme.handle.maxSize
-				),
+		dey = theme.handle.edistance;
 
-			b =
-				Math.min(
-					Math.round( ( zone.height + 2 * dcy ) / 6 ),
-					theme.handle.maxSize
-				),
+		a =
+			Math.min(
+				Math.round( ( zone.width  + 2 * dcx ) / 6 ),
+				theme.handle.maxSize
+			),
 
-			a2 =
-				2 * a,
+		b =
+			Math.min(
+				Math.round( ( zone.height + 2 * dcy ) / 6 ),
+				theme.handle.maxSize
+			),
 
-			b2 =
-				2 * b;
+		a2 = 2 * a,
+
+		b2 = 2 * b;
 
 		if( dcx > a )
 		{
-			dex -=
-				jools.half( dcx - a );
+			dex -= jools.half( dcx - a );
 
-			dcx =
-				a;
+			dcx = a;
 		}
 
 		if( dcy > b )
 		{
-			dey -=
-				jools.half( dcy - b );
+			dey -= jools.half( dcy - b );
 
-			dcy =
-				b;
+			dcy = b;
 		}
 
 		return jools.immute(
 			{
 				// ellipse bezier height
+				// TODO remove?
 				bb :
 					Math.round( b / 0.75 ),
-
+				// TODO remove?
 				zone :
 					zone,
-
 				nw :
-					ha.nw &&
-					euclid.rect.renew(
-						wx - dcx,
-						ny - dcy,
-
-						wx - dcx + a2,
-						ny - dcy + b2
+					ha.nw
+					&&
+					euclid.ellipse.create(
+						'pnw',
+							euclid.point.create(
+								'x', wx - dcx,
+								'y', ny - dcy
+							),
+						'pse',
+							euclid.point.create(
+								'x', wx - dcx + a2,
+								'y', ny - dcy + b2
+							)
 					),
-
 				n :
-					ha.n &&
-					euclid.rect.renew(
-						mx - a,
-						ny - dey,
-
-						mx + a,
-						ny - dey + b2
+					ha.n
+					&&
+					euclid.ellipse.create(
+						'pnw',
+							euclid.point.create(
+								'x', mx - a,
+								'y', ny - dey
+							),
+						'pse',
+							euclid.point.create(
+								'x', mx + a,
+								'y', ny - dey + b2
+							)
 					),
-
 				ne :
-					ha.ne &&
-					euclid.rect.renew(
-						ex + dcx - a2,
-						ny - dcy,
-
-						ex + dex,
-						ny - dcy + b2
+					ha.ne
+					&&
+					euclid.ellipse.create(
+						'pnw',
+							euclid.point.create(
+								'x', ex + dcx - a2,
+								'y', ny - dcy
+							),
+						'pse',
+							euclid.point.create(
+								'x', ex + dex,
+								'y', ny - dcy + b2
+							)
 					),
-
 				e :
-					ha.e &&
-					euclid.rect.renew(
-						ex + dex - a2,
-						my - b,
-
-						ex + dex,
-						my + b
+					ha.e
+					&&
+					euclid.ellipse.create(
+						'pnw',
+							euclid.point.create(
+								'x', ex + dex - a2,
+								'y', my - b
+							),
+						'pse',
+							euclid.point.create(
+								'x', ex + dex,
+								'y', my + b
+							)
 					),
-
 				se :
-					ha.se &&
-					euclid.rect.renew(
-						ex + dcx - a2,
-						sy + dcy - b2,
-
-						ex + dcx,
-						sy + dcx
+					ha.se
+					&&
+					euclid.ellipse.create(
+						'pnw',
+							euclid.point.create(
+								'x', ex + dcx - a2,
+								'y', sy + dcy - b2
+							),
+						'pse',
+							euclid.point.create(
+								'x', ex + dcx,
+								'y', sy + dcx
+							)
 					),
-
 				s :
-					ha.s &&
-					euclid.rect.renew(
-						mx - a,
-						sy + dey -b2,
-
-						mx + a,
-						sy + dey
+					ha.s
+					&&
+					euclid.ellipse.create(
+						'pnw',
+							euclid.point.create(
+								'x', mx - a,
+								'y', sy + dey -b2
+							),
+						'pse',
+							euclid.point.create(
+								'x', mx + a,
+								'y', sy + dey
+							)
 					),
-
 				sw :
-					ha.sw &&
-					euclid.rect.renew(
-						wx - dcx,
-						sy + dcy - b2,
-
-						wx - dcx + a2,
-						sy + dcy
+					ha.sw
+					&&
+					euclid.ellipse.create(
+						'pnw',
+							euclid.point.create(
+								'x', wx - dcx,
+								'y', sy + dcy - b2
+							),
+						'pse',
+							euclid.point.create(
+								'x', wx - dcx + a2,
+								'y', sy + dcy
+							)
 					),
-
 				w :
-					ha.w &&
-					euclid.rect.renew(
-						wx - dex,
-						my - b,
-
-						wx - dex + a2,
-						my + b
+					ha.w
+					&&
+					euclid.ellipse.create(
+						'pnw',
+							euclid.point.create(
+								'x', wx - dex,
+								'y', my - b
+							),
+						'pse',
+							euclid.point.create(
+								'x', wx - dex + a2,
+								'y', my + b
+							)
 					)
 			}
 		);
 	}
 );
-
-
-/*
-| Sketches all resize handles.
-*/
-item.prototype.sketchAllHandles =
-	function(
-		fabric,
-		border,
-		twist,
-		view
-	)
-{
-	var
-		d,
-		d8cwcf,
-		fixView,
-		h,
-		z;
-
-	if( border !== 0 )
-	{
-		throw new Error( 'borders unsupported for handles' );
-	}
-
-	h = this._handles;
-
-	d8cwcf = euclid.compass.dir8CWCF;
-
-	for(
-		var a = d8cwcf.length - 1;
-		a >= 0;
-		a--
-	)
-	{
-		d = d8cwcf[ a ];
-
-		z = h[ d ];
-
-		if( !z )
-		{
-			continue;
-		}
-
-		fixView =
-			view.review(
-				0,
-				view.point( z.pc )
-			);
-
-		this.sketchHandle(
-			fabric,
-			border,
-			twist,
-			fixView,
-			z
-		);
-	}
-};
-
-
-/*
-| Sketches one or all resize handles.
-*/
-item.prototype.sketchHandle =
-	function(
-		fabric,
-		border,
-		twist,
-		view,
-		zone
-	)
-{
-	var
-		bb,
-		w,
-		e;
-
-	bb =
-		view.scale(
-			this._handles.bb
-		),
-
-	w = view.point( zone.w ),
-
-	e = view.point( zone.e );
-
-	fabric.moveTo( w );
-
-	fabric.beziTo(
-		0,
-		-bb,
-
-		0,
-		-bb,
-
-		e
-	);
-
-	fabric.beziTo(
-		0,
-		+bb,
-
-		0,
-		+bb,
-
-		w
-	);
-};
 
 
 /*
@@ -465,7 +395,16 @@ item.prototype.drawHandles =
 {
 	var
 		area,
+		d,
+		d8cwcf,
+		fixView,
+		h,
+		handles,
 		sbary;
+
+	d8cwcf = euclid.compass.dir8CWCF;
+
+	handles = this._handles;
 
 	sbary = this.scrollbarY;
 
@@ -489,12 +428,35 @@ item.prototype.drawHandles =
 	);
 
 	// draws the resize handles
-	fabric.paint(
-		theme.handle.style,
-		this,
-		'sketchAllHandles',
-		view
-	);
+
+	for(
+		var a = d8cwcf.length - 1;
+		a >= 0;
+		a--
+	)
+	{
+		d = d8cwcf[ a ];
+
+		h = handles[ d ];
+
+		if( !h )
+		{
+			continue;
+		}
+
+		fixView =
+			view.review(
+				0,
+				view.point( h.pc )
+			);
+
+		fabric.paint(
+			theme.handle.style,
+			h,
+			'sketch',
+			fixView
+		);
+	}
 
 	fabric.deClip( );
 };
@@ -764,7 +726,7 @@ item.prototype.pointingHover =
 		sbary.within( view, p )
 	)
 	{
-		return (
+		return(
 			reply.hover.create(
 				'path',
 					this.path,
@@ -784,7 +746,7 @@ item.prototype.pointingHover =
 		return null;
 	}
 
-	return (
+	return(
 		reply.hover.create(
 			'path',
 				this.path,

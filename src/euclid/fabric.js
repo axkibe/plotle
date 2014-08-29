@@ -5,8 +5,11 @@
 */
 
 
+// TODO
 var
-	HACK = false; // TODO
+	HACK =
+//		true ||
+		false;
 
 
 /*

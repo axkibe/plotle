@@ -115,37 +115,40 @@ ellipse.prototype._init =
 {
 	// cardinal coords
 	var
-		wx =
-			pnw.x,
-
-		ny =
-			pnw.y,
-
-		ex =
-			pse.x,
-
-		sy =
-			pse.y,
-
+		wx,
+		ny,
+		ex,
+		sy,
 		// middles of cardinal cords
-		my =
-			jools.half( ny + sy ),
-
-		mx =
-			jools.half(wx + ex),
-
+		my,
+		mx,
 		// cardinal points
-		pw =
-			euclid.point.create( 'x', wx, 'y', my ),
+		pw,
+		pn,
+		pe,
+		ps;
 
-		pn =
-			euclid.point.create( 'x', mx, 'y', ny ),
+	wx = pnw.x;
 
-		pe =
-			euclid.point.create( 'x', ex, 'y', my ),
+	ny = pnw.y;
 
-		ps =
-			euclid.point.create( 'x', mx, 'y', sy );
+	ex = pse.x;
+
+	sy = pse.y;
+
+	// middles of cardinal cords
+	my = jools.half( ny + sy );
+
+	mx = jools.half(wx + ex);
+
+	// cardinal points
+	pw = euclid.point.create( 'x', wx, 'y', my );
+
+	pn = euclid.point.create( 'x', mx, 'y', ny );
+
+	pe = euclid.point.create( 'x', ex, 'y', my );
+
+	ps = euclid.point.create( 'x', mx, 'y', sy );
 
 	this.shape =
 		euclid.shape.create(
@@ -183,13 +186,9 @@ jools.lazyValue(
 		return (
 			euclid.point.create(
 				'x',
-					jools.half(
-						this.pnw.x + this.pse.x
-					),
+					jools.half( this.pnw.x + this.pse.x ),
 				'y',
-					jools.half(
-						this.pnw.y + this.pse.y
-					)
+					jools.half( this.pnw.y + this.pse.y )
 			)
 		);
 	}
@@ -213,13 +212,9 @@ jools.lazyValue(
 		return (
 			euclid.point.create(
 				'x',
-					jools.half(
-						this.pnw.x + this.pse.x
-					),
+					jools.half( this.pnw.x + this.pse.x ),
 				'y',
-					jools.half(
-						this.pnw.y + this.pse.y
-					)
+					jools.half( this.pnw.y + this.pse.y )
 			)
 		);
 	}
@@ -234,24 +229,21 @@ jools.lazyValue(
 	'gradientR1',
 	function( )
 	{
+		var
+			dx,
+			dy;
+
 		// FIXME this is just a workaround
 		if( this._gradientR1 )
 		{
 			return this._gradientR1;
 		}
 
-		var
-			dx =
-				this.pse.x - this.pnw.x;
+		dx = this.pse.x - this.pnw.x;
 
-		var
-			dy =
-				this.pse.y - this.pnw.y;
+		dy = this.pse.y - this.pnw.y;
 
-		return Math.max(
-			dx,
-			dy
-		);
+		return Math.max( dx, dy );
 	}
 );
 
@@ -302,8 +294,9 @@ ellipse.prototype.within =
 	)
 {
 	var
-		pp =
-			view.depoint( p );
+		pp;
+
+	pp = view.depoint( p );
 
 	if(
 		pp.x < this.pnw.x ||
@@ -315,9 +308,11 @@ ellipse.prototype.within =
 		return false;
 	}
 
-	return this.shape.within(
-		view,
-		p
+	return(
+		this.shape.within(
+			view,
+			p
+		)
 	);
 };
 
@@ -331,9 +326,11 @@ ellipse.prototype.getProjection =
 		// ...
 	)
 {
-	return this.shape.getProjection.apply(
-		this.shape,
-		arguments
+	return(
+		this.shape.getProjection.apply(
+			this.shape,
+			arguments
+		)
 	);
 };
 
