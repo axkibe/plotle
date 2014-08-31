@@ -383,7 +383,9 @@ jools.lazyValue(
 
 			f.paint(
 				style,
-				icons[ this.icon ],
+				icons[ this.icon ].create // FIXME always create( )
+				? icons[ this.icon ].create( )
+				: icons[ this.icon ],
 				euclid.view.proper
 			);
 		}

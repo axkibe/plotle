@@ -375,6 +375,8 @@ module.exports =
 	resource.create(
 		'filePath',
 			'src/icons/moveto.js',
+		'hasJion',
+			true,
 		'inBundle',
 			true
 	),

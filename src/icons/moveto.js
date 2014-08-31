@@ -21,18 +21,33 @@ icons = icons || { };
 'use strict';
 
 
+/*
+| The jion definition
+*/
+if( JION )
+{
+	return {
+		name :
+			'moveto',
+		unit :
+			'icons',
+		singleton :
+			true,
+		equals :
+			'primitive'
+	};
+}
+
 var
 	moveto;
 
-moveto =
-icons.moveto =
-	{ };
+moveto = icons.moveto;
 
 
 /*
 | Sketches the moveto button's icon.
 */
-moveto.sketch =
+moveto.prototype.sketch =
 	function(
 		fabric
 		// border,
