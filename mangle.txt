@@ -244,6 +244,7 @@
 > charCodeAt
 . check
 . checkHandles
+. checkIcon
 . checkLimits
 . checkbox
 . checkboxCheck
@@ -721,7 +722,6 @@
 . size
 . sizeOnly
 . sketch
-. sketchCheck
 . sketchRange
 > slice
 > space

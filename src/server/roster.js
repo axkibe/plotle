@@ -386,6 +386,14 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
+			'src/icons/check.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true
+	),
+	resource.create(
+		'filePath',
 			'src/discs/disc.js',
 		'inBundle',
 			true

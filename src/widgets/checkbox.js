@@ -20,6 +20,8 @@ widgets = widgets || { };
 var
 	Accent,
 	euclid,
+	icons,
+	jools,
 	root;
 
 
@@ -166,14 +168,32 @@ checkbox.prototype._init =
 		this.frame =
 			null;
 	}
+
 };
+
+
+/*
+| The check icon of the check box
+*/
+jools.lazyValue(
+	checkbox.prototype,
+	'checkIcon',
+	function( )
+	{
+		return(
+			icons.check.create(
+				'pc',
+					this.frame.pc
+			)
+		);
+	}
+);
 
 
 /*
 | CheckBoxes are focusable.
 */
-checkbox.prototype.focusable =
-	true;
+checkbox.prototype.focusable = true;
 
 
 /*
@@ -185,55 +205,6 @@ checkbox.prototype.pointingHover =
 	)
 {
 	return null;
-};
-
-
-/*
-| Sketches the check
-| XXX TODO
-*/
-checkbox.prototype.sketchCheck =
-	function(
-		fabric
-		// border,
-		// twist
-	)
-{
-	var
-		pc,
-		pcx,
-		pcy;
-
-	pc = this.frame.pc;
-
-	pcx = pc.x;
-
-	pcy = pc.y;
-
-	fabric.moveTo(
-		pcx -  5,
-		pcy -  3
-	);
-
-	fabric.lineTo(
-		pcx +  2,
-		pcy +  5
-	);
-
-	fabric.lineTo(
-		pcx + 14,
-		pcy - 12
-	);
-
-	fabric.lineTo(
-		pcx +  2,
-		pcy -  1
-	);
-
-	fabric.lineTo(
-		pcx -  5,
-		pcy -  3
-	);
 };
 
 
@@ -349,27 +320,28 @@ checkbox.prototype.draw =
 		fabric
 	)
 {
+	var
+		style;
+
 	if( !this.visible )
 	{
 		return;
 	}
 
-	var
-		style =
-			widgets.getStyle(
-				this.style,
-				Accent.state(
-					this.hover
-						&&
-						this.hover.equals( this.path ),
-					this.focusAccent
-				)
-			);
+	style =
+		widgets.getStyle(
+			this.style,
+			Accent.state(
+				this.hover
+					&&
+					this.hover.equals( this.path ),
+				this.focusAccent
+			)
+		);
 
 	fabric.paint(
 		style,
 		this.frame,
-		'sketch',
 		euclid.view.proper
 	);
 
@@ -380,8 +352,7 @@ checkbox.prototype.draw =
 				'checkboxCheck',
 				Accent.NORMA
 			),
-			this,
-			// 'sketchCheck', XXX
+			this.checkIcon,
 			euclid.view.proper
 		);
 	}
