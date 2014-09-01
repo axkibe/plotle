@@ -144,11 +144,6 @@ adaptName =
 		name
 	)
 {
-	if( !unit )
-	{
-		return name[ 0 ].toLowerCase( ) + name.slice( 1 );
-	}
-
 	return (
 		unit[ 0 ].toLowerCase( ) + unit.slice( 1 )
 		+
@@ -223,10 +218,11 @@ gen.prototype._init =
 
 	idParts = jion.id.split( '.' );
 
+	this.id = jion.id;
+
 	this.unit = idParts[ 0 ];
 
 	this.name = idParts[ 1 ];
-
 
 	if( jion.subclass )
 	{
@@ -681,14 +677,11 @@ gen.prototype.genNodeIncludes =
 		a++
 	)
 	{
-		unitName =
-			this.unitList[ a ];
+		unitName = this.unitList[ a ];
 
-		unit =
-			this.units[ this.unitList[ a ] ];
+		unit = this.units[ this.unitList[ a ] ];
 
-		types =
-			Object.keys( unit );
+		types = Object.keys( unit );
 
 		types.sort( );
 
@@ -975,27 +968,14 @@ gen.prototype.genConstructor =
 			aVar( 'prototype' )
 		);
 
-	if( this.unit )
-	{
-		capsule =
-			capsule.aVarDec(
-				this.reference,
-				anAssign(
-					aVar( this.unit ).aDot( this.name ),
-					jionObj
-				)
-			);
-
-	}
-	else
-	{
-		capsule =
-			capsule
-			.anAssign(
-				aVar( this.reference ),
+	capsule =
+		capsule.aVarDec(
+			this.reference,
+			anAssign(
+				aVar( this.unit ).aDot( this.name ),
 				jionObj
-			);
-	}
+			)
+		);
 
 	return capsule;
 };
@@ -2352,13 +2332,10 @@ gen.prototype.genFromJSONCreatorParser =
 				aDiffers(
 					aVar( 'arg' ),
 					aStringLiteral(
-						this.unit // FUTURE must not be false
-						?
-							adaptName(
-								this.unit,
-								this.name
-							)
-						: attr.name
+						adaptName(
+							this.unit,
+							this.name
+						)
 					)
 				),
 				aBlock( )
@@ -2517,6 +2494,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		}
 		else
 		{
+			throw new Error( 'FIXME does this ever happen?' );
 			base = aVar( ut.type );
 		}
 
@@ -2805,9 +2783,6 @@ gen.prototype.genReflection =
 			aStringLiteral( this.name )
 		);
 
-	// TODO remove old reflection
-	// TODO there should not be no unit ever.
-
 	return capsule;
 };
 
@@ -2881,9 +2856,7 @@ gen.prototype.genToJSON =
 		.add(
 			'type',
 			aStringLiteral(
-				this.unit // FIXME should always be true
-				? adaptName( this.unit, this.name )
-				: this.name
+				adaptName( this.unit, this.name )
 			)
 		);
 
@@ -3313,26 +3286,15 @@ gen.prototype.genExport =
 {
 	block = block.aComment( 'Export.' );
 
-	if( this.unit )
-	{
-		block =
-			block
-			.aVarDec(
-				this.unit,
-				anOr(
-					aVar( this.unit ),
-					anObjLiteral( )
-				)
-			);
-	}
-	else
-	{
-		block =
-			block
-			.aVarDec(
-				this.name
-			);
-	}
+	block =
+		block
+		.aVarDec(
+			this.unit,
+			anOr(
+				aVar( this.unit ),
+				anObjLiteral( )
+			)
+		);
 
 	return block;
 };
