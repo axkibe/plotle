@@ -35,10 +35,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'anchorRect',
-		unit :
-			'design',
+		id :
+			'design.anchorRect',
 		attributes :
 			{
 				pnw :

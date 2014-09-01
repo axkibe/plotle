@@ -19,10 +19,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aPlus',
-		unit :
-			'ast',
+		id :
+			'ast.aPlus',
 		attributes :
 			{
 				left :

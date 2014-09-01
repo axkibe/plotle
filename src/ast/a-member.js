@@ -20,10 +20,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aMember',
-		unit :
-			'ast',
+		id :
+			'ast.aMember',
 		attributes :
 			{
 				expr :

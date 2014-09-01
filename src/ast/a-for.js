@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aFor',
-		unit :
-			'ast',
+		id :
+			'ast.aFor',
 		attributes :
 			{
 				init :

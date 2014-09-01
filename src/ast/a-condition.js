@@ -20,10 +20,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aCondition',
-		unit :
-			'ast',
+		id :
+			'ast.aCondition',
 		attributes :
 			{
 				condition :

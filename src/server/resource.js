@@ -17,10 +17,8 @@
 if( JION )
 {
 	return {
-		name :
-			'resource',
-		unit :
-			'server',
+		id :
+			'server.resource',
 		attributes :
 			{
 				aliases :

@@ -34,10 +34,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'noAccessToSpace',
-		unit :
-			'forms',
+		id :
+			'forms.noAccessToSpace',
 		attributes :
 			{
 				hover :

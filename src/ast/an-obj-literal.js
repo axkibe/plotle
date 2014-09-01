@@ -20,10 +20,8 @@
 if( JION )
 {
 	return {
-		name :
-			'anObjLiteral',
-		unit :
-			'ast',
+		id :
+			'ast.anObjLiteral',
 		node :
 			true,
 		twig :

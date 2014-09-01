@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aComment',
-		unit :
-			'ast',
+		id :
+			'ast.aComment',
 		attributes :
 			{
 				content :

@@ -28,10 +28,8 @@ icons = icons || { };
 if( JION )
 {
 	return {
-		name :
-			'check',
-		unit :
-			'icons',
+		id :
+			'icons.check',
 		attributes :
 			{
 				pc :

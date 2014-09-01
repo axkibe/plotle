@@ -35,13 +35,8 @@ var
 if( JION )
 {
 	return {
-
-		name :
-			'anchorPoint',
-
-		unit :
-			'design',
-
+		id :
+			'design.anchorPoint',
 		attributes :
 			{
 				anchor :

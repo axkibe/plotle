@@ -33,10 +33,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'point',
-		unit :
-			'euclid',
+		id :
+			'euclid.point',
 		attributes :
 			{
 				x :

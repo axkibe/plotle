@@ -33,10 +33,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'path',
-		unit :
-			'jion',
+		id :
+			'jion.path',
 		attributes :
 			{
 				'array' :

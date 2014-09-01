@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aCase',
-		unit :
-			'ast',
+		id :
+			'ast.aCase',
 		attributes :
 			{
 				block :

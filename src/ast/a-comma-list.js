@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aCommaList',
-		unit :
-			'ast',
+		id :
+			'ast.aCommaList',
 		node :
 			true,
 		twig :

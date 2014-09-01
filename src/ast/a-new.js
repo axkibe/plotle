@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aNew',
-		unit :
-			'ast',
+		id :
+			'ast.aNew',
 		node :
 			true,
 		attributes :

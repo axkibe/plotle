@@ -21,10 +21,8 @@
 if( JION )
 {
 	return {
-		unit :
-			'reply',
-		name :
-			'hover',
+		id :
+			'reply.hover',
 		attributes :
 			{
 				cursor :

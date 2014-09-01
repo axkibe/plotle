@@ -34,10 +34,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'ellipse',
-		unit :
-			'euclid',
+		id :
+			'euclid.ellipse',
 		attributes :
 			{
 				pnw :

@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aVarDec',
-		unit :
-			'ast',
+		id :
+			'ast.aVarDec',
 		attributes :
 			{
 				name :

@@ -33,10 +33,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'range',
-		unit :
-			'marks',
+		id :
+			'marks.range',
 		attributes :
 			{
 				bPath :

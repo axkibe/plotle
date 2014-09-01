@@ -32,10 +32,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'change',
-		unit :
-			'jion',
+		id :
+			'jion.change',
 		attributes :
 			{
 				src :

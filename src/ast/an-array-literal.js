@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'anArrayLiteral',
-		unit :
-			'ast',
+		id :
+			'ast.anArrayLiteral',
 		node :
 			true,
 		equals :

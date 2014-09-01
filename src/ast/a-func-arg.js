@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aFuncArg',
-		unit :
-			'ast',
+		id :
+			'ast.aFuncArg',
 		attributes :
 			{
 				name :

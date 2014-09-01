@@ -20,10 +20,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aStringLiteral',
-		unit :
-			'ast',
+		id :
+			'ast.aStringLiteral',
 		node :
 			true,
 		attributes :

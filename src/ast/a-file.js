@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aFile',
-		unit :
-			'ast',
+		id :
+			'ast.aFile',
 		attributes :
 			{
 				header :

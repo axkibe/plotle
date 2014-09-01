@@ -33,10 +33,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'sign',
-		unit :
-			'jion',
+		id :
+			'jion.sign',
 		attributes :
 			{
 				at1 :

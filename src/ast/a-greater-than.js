@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aGreaterThan',
-		unit :
-			'ast',
+		id :
+			'ast.aGreaterThan',
 		attributes :
 			{
 				left :

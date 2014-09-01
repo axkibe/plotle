@@ -38,10 +38,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'checkbox',
-		unit :
-			'widgets',
+		id :
+			'widgets.checkbox',
 		attributes :
 			{
 				checked :

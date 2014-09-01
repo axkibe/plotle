@@ -37,10 +37,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'channel',
-		unit :
-			'net',
+		id :
+			'net.channel',
 		attributes :
 			{
 				path :

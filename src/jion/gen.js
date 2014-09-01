@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'gen',
-		unit :
-			'jion',
+		id :
+			'jion.gen',
 		node :
 			true,
 		attributes :
@@ -182,13 +180,13 @@ gen.prototype._init =
 		constructorList,
 		defaultValue,
 		// sorted init list
+		idParts,
 		inits,
 		jAttr,
 		jdv,
 		jion,
 		ut,
 		name,
-		// twigs to be recognized
 		subParts,
 		// twig entry
 		te,
@@ -219,11 +217,16 @@ gen.prototype._init =
 
 	this.init = jion.init;
 
-	this.name = jion.name;
-
 	this.node = !!jion.node;
 
 	this.singleton = !!jion.singleton;
+
+	idParts = jion.id.split( '.' );
+
+	this.unit = idParts[ 0 ];
+
+	this.name = idParts[ 1 ];
+
 
 	if( jion.subclass )
 	{
@@ -253,17 +256,6 @@ gen.prototype._init =
 		{
 			this.subclass = aVar( jion.subclass );
 		}
-	}
-
-	this.unit = jion.unit;
-
-	if( !jion.unit )
-	{
-		/*
-		throw new Error(
-			'unit missing'
-		);
-		*/
 	}
 
 	for( name in jion.attributes || { } )
@@ -582,13 +574,11 @@ gen.prototype._init =
 		this.twigList = Object.freeze( twigList );
 	}
 
-	// FUTURE make it a aVar
+	// FIXME make it a aVar
 	this.reference =
-		( jion.unit === jion.name )
-			?
-			jion.name + 'Obj'
-			:
-			jion.name;
+		( this.unit === this.name )
+		? this.name + 'Obj'
+		: this.name;
 
 	this.equals = jion.equals;
 

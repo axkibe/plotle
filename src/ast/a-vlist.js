@@ -20,10 +20,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aVList',
-		unit :
-			'ast',
+		id :
+			'ast.aVList',
 		node :
 			true,
 		twig :

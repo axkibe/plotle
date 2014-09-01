@@ -37,11 +37,8 @@ var
 if( JION )
 {
 	return {
-
-		name :
-			'shape',
-		unit :
-			'euclid',
+		id :
+			'euclid.shape',
 		attributes :
 			{
 				hull :

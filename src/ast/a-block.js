@@ -21,10 +21,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aBlock',
-		unit :
-			'ast',
+		id :
+			'ast.aBlock',
 		node :
 			true,
 		twig :

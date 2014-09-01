@@ -36,10 +36,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'signUp',
-		unit :
-			'forms',
+		id :
+			'forms.signUp',
 		attributes :
 			{
 				hover :

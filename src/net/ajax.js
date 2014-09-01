@@ -26,10 +26,8 @@ net = net || { };
 if( JION )
 {
 	return {
-		name :
-			'Ajax',
-		unit :
-			'net',
+		id :
+			'net.ajax',
 		attributes :
 			{
 				'path' :

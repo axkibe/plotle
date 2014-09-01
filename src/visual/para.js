@@ -40,10 +40,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'para',
-		unit :
-			'visual',
+		id :
+			'visual.para',
 		attributes :
 			{
 				flowWidth :

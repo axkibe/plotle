@@ -1,6 +1,8 @@
 /*
 | The non-action.
 |
+| FUTURE remove
+|
 | Authors: Axel Kittenberger
 */
 
@@ -18,10 +20,8 @@
 if( JION )
 {
 	return {
-		name :
-			'none',
-		unit :
-			'actions',
+		id :
+			'actions.none',
 		singleton :
 			true,
 		subclass :

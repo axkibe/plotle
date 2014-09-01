@@ -41,10 +41,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'space',
-		unit :
-			'visual',
+		id :
+			'visual.space',
 		attributes :
 			{
 				access :

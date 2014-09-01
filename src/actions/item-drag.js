@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'itemDrag',
-		unit :
-			'actions',
+		id :
+			'actions.itemDrag',
 		subclass :
 			'actions.action',
 		equals :

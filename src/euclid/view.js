@@ -36,10 +36,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'view',
-		unit :
-			'euclid',
+		id :
+			'euclid.view',
 		attributes :
 			{
 				fact :

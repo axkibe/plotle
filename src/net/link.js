@@ -38,10 +38,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'link',
-		unit :
-			'net',
+		id :
+			'net.link',
 		attributes :
 			{
 				path :

@@ -38,10 +38,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'label',
-		unit :
-			'visual',
+		id :
+			'visual.label',
 		attributes :
 			{
 				doc :

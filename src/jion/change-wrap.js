@@ -25,10 +25,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'changeWrap',
-		unit :
-			'jion',
+		id :
+			'jion.changeWrap',
 		attributes :
 			{
 				cid :

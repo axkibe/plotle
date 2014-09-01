@@ -17,15 +17,8 @@
 if( JION )
 {
 	return {
-		name :
-			'inventory',
-		unit :
-			'server',
-		/*
-		attributes :
-			{
-			},
-		*/
+		id :
+			'server.inventory',
 		node :
 			true,
 		twig :

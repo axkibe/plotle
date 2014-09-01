@@ -27,10 +27,8 @@ icons = icons || { };
 if( JION )
 {
 	return {
-		name :
-			'normal',
-		unit :
-			'icons',
+		id :
+			'icons.normal',
 		singleton :
 			true,
 		equals :

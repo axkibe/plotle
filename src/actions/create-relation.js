@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'createRelation',
-		unit :
-			'actions',
+		id :
+			'actions.createRelation',
 		subclass :
 			'actions.action',
 		equals :

@@ -27,10 +27,8 @@ icons = icons || { };
 if( JION )
 {
 	return {
-		name :
-			'moveto',
-		unit :
-			'icons',
+		id :
+			'icons.moveto',
 		singleton :
 			true,
 		equals :

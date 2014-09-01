@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'scrollY',
-		unit :
-			'actions',
+		id :
+			'actions.scrollY',
 		subclass :
 			'actions.action',
 		equals :

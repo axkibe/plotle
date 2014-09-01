@@ -37,10 +37,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'line',
-		unit :
-			'euclid',
+		id :
+			'euclid.line',
 		attributes :
 			{
 				p1 :

@@ -47,10 +47,8 @@ if( JION )
 {
 	return {
 
-		name :
-			'roundRect',
-		unit :
-			'euclid',
+		id :
+			'euclid.roundRect',
 		attributes :
 			{
 				pnw :

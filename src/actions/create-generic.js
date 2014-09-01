@@ -22,10 +22,8 @@
 if( JION )
 {
 	return {
-		name :
-			'createGeneric',
-		unit :
-			'actions',
+		id :
+			'actions.createGeneric',
 		subclass :
 			'actions.action',
 		equals :

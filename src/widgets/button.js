@@ -39,10 +39,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'button',
-		unit :
-			'widgets',
+		id :
+			'widgets.button',
 		attributes :
 			{
 				designFrame :

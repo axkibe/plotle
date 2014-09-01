@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'context',
-		unit :
-			'format',
+		id :
+			'format.context',
 		attributes :
 			{
 				indent :

@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'pan',
-		unit :
-			'actions',
+		id :
+			'actions.pan',
 		subclass :
 			'actions.action',
 		equals :

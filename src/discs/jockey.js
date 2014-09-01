@@ -34,10 +34,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'jockey',
-		unit :
-			'discs',
+		id :
+			'discs.jockey',
 		attributes :
 			{
 				access :

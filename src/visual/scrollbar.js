@@ -36,10 +36,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'Scrollbar',
-		unit :
-			'visual',
+		id :
+			'visual.Scrollbar', // XXX TODO
 		attributes :
 			{
 				pos :

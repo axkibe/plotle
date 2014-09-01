@@ -27,10 +27,8 @@ widgets = widgets || { };
 if( JION )
 {
 	return {
-		name :
-			'label',
-		unit :
-			'widgets',
+		id :
+			'widgets.label',
 		attributes :
 			{
 				// FIXME deduce from mark

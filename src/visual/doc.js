@@ -37,10 +37,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'doc',
-		unit :
-			'visual',
+		id :
+			'visual.doc',
 		attributes :
 			{
 				flowWidth :

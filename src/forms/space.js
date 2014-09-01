@@ -35,10 +35,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'space',
-		unit :
-			'forms',
+		id :
+			'forms.space',
 		attributes :
 			{
 				hover :

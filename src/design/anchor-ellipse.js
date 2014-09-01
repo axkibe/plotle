@@ -33,10 +33,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'anchorEllipse',
-		unit :
-			'design',
+		id :
+			'design.anchorEllipse',
 		attributes :
 			{
 				pnw :

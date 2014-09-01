@@ -33,10 +33,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'widget',
-		unit :
-			'marks',
+		id :
+			'marks.widget',
 		attributes :
 			{
 				path :

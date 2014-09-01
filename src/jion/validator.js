@@ -42,26 +42,16 @@ if( SERVER )
 */
 var _attributeBlacklist =
 	Object.freeze( {
-		'atRank' :
-			true,
-		'create' :
-			true,
-		'getPath' :
-			true,
-		'inherit' :
-			true,
-		'newUID' :
-			true,
-		'ranks' :
-			true,
-		'rankOf' :
-			true,
-		'setPath' :
-			true,
-		'type' :
-			true,
-		'twig' :
-			true
+		'atRank' : true,
+		'create' : true,
+		'getPath' : true,
+		'inherit' : true,
+		'newUID' : true,
+		'ranks' : true,
+		'rankOf' : true,
+		'setPath' : true,
+		'type' : true,
+		'twig' : true
 	} );
 
 
@@ -70,28 +60,18 @@ var _attributeBlacklist =
 */
 var _jionWhitelist =
 	Object.freeze( {
-		'alike' :
-			true,
-		'attributes' :
-			true,
-		'init' :
-			true,
-		'json' :
-			true,
-		'name' :
-			true,
-		'node' :
-			true,
-		'equals' :
-			true,
-		'subclass' :
-			true,
-		'singleton' :
-			true,
-		'twig' :
-			true,
-		'unit' :
-			true,
+		'alike' : true,
+		'attributes' : true,
+		'id' : true,
+		'init' : true,
+		'json' : true,
+		'name' : true, //XXX TODO
+		'node' : true,
+		'equals' : true,
+		'subclass' : true,
+		'singleton' : true,
+		'twig' : true,
+		'unit' : true, //XXX TODO
 	} );
 
 
@@ -298,7 +278,10 @@ var _checkAttribute =
 				if( attr.defaultValue === 'null' )
 				{
 					throw new Error(
-						jion.unit + '.' + jion.name + ': ' +
+						jion.id
+						+
+						': '
+						+
 						'defaultValue \"null\" implies allowsNull'
 					);
 				}
@@ -310,7 +293,10 @@ var _checkAttribute =
 				if( attr.defaultValue === 'undefined' )
 				{
 					throw new Error(
-						jion.unit + '.' + jion.name + ': ' +
+						jion.id
+						+
+						': '
+						+
 						'defaultValue \"undefined\" implies allowsUndefined'
 					);
 				}
@@ -363,6 +349,7 @@ validator.check =
 {
 	var
 		attr,
+		idParts,
 		name;
 
 	if( !jion )
@@ -380,11 +367,28 @@ validator.check =
 		}
 	}
 
-	if( !jools.isString( jion.name ) )
+	if( !jools.isString( jion.id ) )
 	{
-		throw new Error(
-			'name missing'
-		);
+		throw new Error( 'id missing' );
+	}
+
+	idParts = jion.id.split( '.' );
+
+	if( idParts.length !== 2 )
+	{
+		// XXX
+		throw new Error( 'name must be unit.name' );
+	}
+
+	// FIXME remove
+	if( jion.name )
+	{
+		throw new Error( 'unit deprecated' );
+	}
+
+	if( jion.unit )
+	{
+		throw new Error( 'unit deprecated' );
 	}
 
 	attr = jion.attributes;

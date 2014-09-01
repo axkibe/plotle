@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'anIf',
-		unit :
-			'ast',
+		id :
+			'ast.anIf',
 		attributes :
 			{
 				condition :

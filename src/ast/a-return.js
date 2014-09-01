@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aReturn',
-		unit :
-			'ast',
+		id :
+			'ast.aReturn',
 		attributes :
 			{
 				expr :

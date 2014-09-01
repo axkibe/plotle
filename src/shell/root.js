@@ -1345,7 +1345,7 @@ proto.onload =
 	ajaxPath = jion.path.empty.append( 'ajax' );
 
 	this.ajax =
-		net.Ajax.create(
+		net.ajax.create(
 			'path',
 				ajaxPath,
 			'twig:add',

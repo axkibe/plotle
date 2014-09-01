@@ -34,10 +34,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'rect',
-		unit :
-			'euclid',
+		id :
+			'euclid.rect',
 		attributes :
 			{
 				pnw :

@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aDelete',
-		unit :
-			'ast',
+		id :
+			'ast.aDelete',
 		node :
 			true,
 		attributes :

@@ -43,10 +43,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'portal',
-		unit :
-			'visual',
+		id :
+			'visual.portal',
 		attributes :
 			{
 				hover :

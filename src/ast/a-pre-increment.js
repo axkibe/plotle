@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aPreIncrement',
-		unit :
-			'ast',
+		id :
+			'ast.aPreIncrement',
 		attributes :
 			{
 				expr :

@@ -35,10 +35,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'vacant',
-		unit :
-			'marks',
+		id :
+			'marks.vacant',
 		singleton :
 			true,
 		equals :

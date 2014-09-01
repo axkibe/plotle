@@ -40,13 +40,8 @@ var
 if( JION )
 {
 	return {
-
-		name :
-			'input',
-
-		unit :
-			'widgets',
-
+		id :
+			'widgets.input',
 		attributes :
 			{
 				designFrame :

@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aPlusAssign',
-		unit :
-			'ast',
+		id :
+			'ast.aPlusAssign',
 		attributes :
 			{
 				left :

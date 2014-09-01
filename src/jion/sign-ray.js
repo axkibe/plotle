@@ -34,10 +34,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'signRay',
-		unit :
-			'jion',
+		id :
+			'jion.signRay',
 		attributes :
 			{
 				'array' :

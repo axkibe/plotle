@@ -39,10 +39,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'relation',
-		unit :
-			'visual',
+		id :
+			'visual.relation',
 		attributes :
 			{
 				doc :

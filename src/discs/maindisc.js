@@ -36,10 +36,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'mainDisc',
-		unit :
-			'discs',
+		id :
+			'discs.mainDisc',
 		attributes :
 			{
 				access :

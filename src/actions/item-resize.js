@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'ItemResize',
-		unit :
-			'actions',
+		id :
+			'action.ItemResize', // XXX TODO
 		subclass :
 			'actions.action',
 		equals :

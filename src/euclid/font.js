@@ -35,10 +35,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'font',
-		unit :
-			'euclid',
+		id :
+			'euclid.font',
 		attributes :
 			{
 				size :

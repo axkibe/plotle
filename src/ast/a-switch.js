@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aSwitch',
-		unit :
-			'ast',
+		id :
+			'ast.aSwitch',
 		attributes :
 			{
 				statement :

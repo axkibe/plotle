@@ -34,10 +34,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'changeRay',
-		unit :
-			'jion',
+		id :
+			'jion.changeRay',
 		attributes :
 			{
 				'array' :

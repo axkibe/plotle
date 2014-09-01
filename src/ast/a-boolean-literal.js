@@ -19,10 +19,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aBooleanLiteral',
-		unit :
-			'ast',
+		id :
+			'ast.aBooleanLiteral',
 		node :
 			true,
 		attributes :

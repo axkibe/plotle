@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'aFail',
-		unit :
-			'ast',
+		id :
+			'ast.aFail',
 		attributes :
 			{
 				message :

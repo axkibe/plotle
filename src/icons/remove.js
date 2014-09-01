@@ -34,10 +34,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'remove',
-		unit :
-			'icons',
+		id :
+			'icons.remove',
 		singleton :
 			true,
 		equals :

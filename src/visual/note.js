@@ -39,10 +39,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'note',
-		unit :
-			'visual',
+		id :
+			'visual.note',
 		attributes :
 			{
 				doc :
