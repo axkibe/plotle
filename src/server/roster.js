@@ -385,6 +385,8 @@ module.exports =
 	resource.create(
 		'filePath',
 			'src/icons/remove.js',
+		'hasJion',
+			true,
 		'inBundle',
 			true
 	),

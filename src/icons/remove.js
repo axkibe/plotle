@@ -28,18 +28,35 @@ var
 'use strict';
 
 
+/*
+| The jion definition
+*/
+if( JION )
+{
+	return {
+		name :
+			'remove',
+		unit :
+			'icons',
+		singleton :
+			true,
+		equals :
+			'primitive'
+	};
+}
+
+
+
 var
 	remove;
 
-remove =
-icons.remove =
-	{ };
+remove = icons.remove;
 
 
 /*
 | Sketches the remove button's icon.
 */
-remove.sketch =
+remove.prototype.sketch =
 	function(
 		fabric
 		// border,
@@ -96,7 +113,6 @@ remove.sketch =
 	fabric.lineTo( cx - cw , cy      );  // O
 	fabric.lineTo( wx      , ny + ah );  // P
 	fabric.lineTo( wx      , ny      );  // A
-
 };
 
 
