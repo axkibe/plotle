@@ -369,6 +369,8 @@ module.exports =
 	resource.create(
 		'filePath',
 			'src/icons/normal.js',
+		'hasJion',
+			true,
 		'inBundle',
 			true
 	),

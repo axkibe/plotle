@@ -21,18 +21,34 @@ icons = icons || { };
 'use strict';
 
 
+/*
+| The jion definition
+*/
+if( JION )
+{
+	return {
+		name :
+			'normal',
+		unit :
+			'icons',
+		singleton :
+			true,
+		equals :
+			'primitive'
+	};
+}
+
+
 var
 	normal;
 
-normal =
-icons.normal =
-	{ };
+normal = icons.normal;
 
 
 /*
 | Sketches the normal button's icon.
 */
-normal.sketch =
+normal.prototype.sketch =
 	function(
 		fabric
 		// border,
