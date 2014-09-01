@@ -377,6 +377,16 @@ validator.check =
 		throw new Error( 'id must be unit.name' );
 	}
 
+	if( !/[a-z]/.exec(idParts[ 0 ][ 0 ] ) )
+	{
+		throw new Error( 'unit ( id ) must start with lowercase letter' );
+	}
+
+	if( !/[a-z]/.exec(idParts[ 1 ][ 0 ] ) )
+	{
+		throw new Error( 'name ( id ) must start with lowercase letter' );
+	}
+
 	attr = jion.attributes;
 
 	if( jion.singleton && attr )
