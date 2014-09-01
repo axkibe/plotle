@@ -2331,12 +2331,7 @@ gen.prototype.genFromJSONCreatorParser =
 			.anIf(
 				aDiffers(
 					aVar( 'arg' ),
-					aStringLiteral(
-						adaptName(
-							this.unit,
-							this.name
-						)
-					)
+					aStringLiteral( this.id )
 				),
 				aBlock( )
 				.aFail( 'invalid JSON' )
@@ -2770,9 +2765,7 @@ gen.prototype.genReflection =
 		.aComment( 'Reflection.' )
 		.anAssign(
 			aVar( 'prototype' ).aDot( 'reflect' ),
-			aStringLiteral(
-				adaptName( this.unit, this.name )
-			)
+			aStringLiteral( this.id )
 		);
 
 	capsule =
@@ -2855,9 +2848,7 @@ gen.prototype.genToJSON =
 		anObjLiteral( )
 		.add(
 			'type',
-			aStringLiteral(
-				adaptName( this.unit, this.name )
-			)
+			aStringLiteral( this.id )
 		);
 
 	for(
