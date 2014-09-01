@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'action.ItemResize', // XXX TODO
+			'actions.itemResize',
 		subclass :
 			'actions.action',
 		equals :

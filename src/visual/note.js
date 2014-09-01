@@ -233,7 +233,7 @@ note.prototype._init =
 	}
 
 	this.scrollbarY =
-		visual.Scrollbar.create(
+		visual.scrollbar.create(
 			'aperture',
 				zone.height - this.innerMargin.y,
 			'max',

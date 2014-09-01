@@ -649,7 +649,7 @@ space.prototype.dragStart =
 				view.depoint( p );
 
 			root.setAction(
-				actions.ItemResize.create(
+				actions.itemResize.create(
 					'start',
 						dp,
 					'transItem',

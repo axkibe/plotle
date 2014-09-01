@@ -37,7 +37,7 @@ if( JION )
 {
 	return {
 		id :
-			'visual.Scrollbar', // XXX TODO
+			'visual.scrollbar',
 		attributes :
 			{
 				pos :
@@ -83,15 +83,15 @@ if( JION )
 
 
 var
-	Scrollbar;
+	scrollbar;
 
-Scrollbar = visual.Scrollbar;
+scrollbar = visual.scrollbar;
 
 
 /*
 | Initializer.
 */
-Scrollbar.prototype._init =
+scrollbar.prototype._init =
 	function( )
 {
 	this.visible = this.max > this.aperture;
@@ -121,7 +121,7 @@ Scrollbar.prototype._init =
 /*
 | Draws the scrollbar.
 */
-Scrollbar.prototype.draw =
+scrollbar.prototype.draw =
 	function(
 		fabric,
 		view
@@ -147,7 +147,7 @@ Scrollbar.prototype.draw =
 /*
 | Returns the (2d) area of the scrollbar.
 */
-Scrollbar.prototype.getArea =
+scrollbar.prototype.getArea =
 	function(
 		view
 	)
@@ -205,7 +205,7 @@ Scrollbar.prototype.getArea =
 /*
 | Returns true if p is within the scrollbar.
 */
-Scrollbar.prototype.within =
+scrollbar.prototype.within =
 	function(
 		view,
 		p
@@ -238,7 +238,7 @@ Scrollbar.prototype.within =
 /*
 | Returns the value of pos change for d pixels in the current zone.
 */
-Scrollbar.prototype.scale =
+scrollbar.prototype.scale =
 	function(
 		d
 	)

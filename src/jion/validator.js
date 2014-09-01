@@ -65,13 +65,11 @@ var _jionWhitelist =
 		'id' : true,
 		'init' : true,
 		'json' : true,
-		'name' : true, //XXX TODO
 		'node' : true,
 		'equals' : true,
 		'subclass' : true,
 		'singleton' : true,
 		'twig' : true,
-		'unit' : true, //XXX TODO
 	} );
 
 
@@ -376,19 +374,7 @@ validator.check =
 
 	if( idParts.length !== 2 )
 	{
-		// XXX
-		throw new Error( 'name must be unit.name' );
-	}
-
-	// FIXME remove
-	if( jion.name )
-	{
-		throw new Error( 'unit deprecated' );
-	}
-
-	if( jion.unit )
-	{
-		throw new Error( 'unit deprecated' );
+		throw new Error( 'id must be unit.name' );
 	}
 
 	attr = jion.attributes;

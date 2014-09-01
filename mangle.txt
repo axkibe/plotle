@@ -1,3 +1,4 @@
+. id
 . $action
 . $clip
 . $move
@@ -6,7 +7,6 @@
 . $space
 . $view
 > 1
-. Ajax
 . Create
 . FOCUS
 . HOFOC
@@ -14,7 +14,6 @@
 . Help
 . Insert
 . Invert
-. ItemResize
 > Label
 . MAX_INTEGER
 . NORMA
@@ -27,7 +26,6 @@
 . PSE_M1
 > Portal
 . Remove
-. Scrollbar
 . _$atween
 . _$discJockey
 . _$font
@@ -463,6 +461,7 @@
 > item2key
 . itemDrag
 . itemPath
+. itemResize
 . itemType
 . jockey
 > join
@@ -792,7 +791,6 @@
 . uid
 > undefined
 . undo
-. unit
 > unshift
 . up
 > update
