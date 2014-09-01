@@ -219,8 +219,6 @@ relation.spawn =
 
 	result =
 		Peer.newRelation(
-			root.space.spaceUser,
-			root.space.spaceTag,
 			pnw,
 			'relates to',
 			20,

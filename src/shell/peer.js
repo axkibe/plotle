@@ -140,10 +140,6 @@ Peer.newNote =
 */
 Peer.newPortal =
 	function(
-						// TODO remove
-		spaceUser,      // the space the portal is to be created in
-						// TODO remove
-		spaceTag,       // the space the portal is to be created in
 		zone,           // the zone of the potal
 		destSpaceUser,  // the user of the space the portal leads to
 		destSpaceTag    // the tag of the space the portal leads to
@@ -275,8 +271,6 @@ Peer.setPNW =
 */
 Peer.newLabel =
 	function(
-		spaceUser,  // TODO remove
-		spaceTag,   // TODO remove
 		pnw,
 		text,
 		fontsize
@@ -325,8 +319,6 @@ Peer.newLabel =
 */
 Peer.newRelation =
 	function(
-		spaceUser,  // TODO remove
-		spaceTag,   // TODO remove
 		pnw,
 		text,
 		fontsize,

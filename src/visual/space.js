@@ -1026,8 +1026,6 @@ space.prototype.dragStop =
 
 					result =
 						Peer.newLabel(
-							this.spaceUser,
-							this.spaceTag,
 							label.pnw,
 							'Label',
 							label.doc.fontsize
@@ -1072,8 +1070,6 @@ space.prototype.dragStop =
 
 					result =
 						Peer.newPortal(
-							this.spaceUser,
-							this.spaceTag,
 							portal.zone,
 							root.username, // FIXME
 							'home'
