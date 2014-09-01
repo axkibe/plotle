@@ -133,27 +133,6 @@ camelCaseToDash =
 
 
 /*
-| Adapts naming conventions
-|
-| FIXME remove
-*/
-var
-adaptName =
-	function(
-		unit,
-		name
-	)
-{
-	return (
-		unit[ 0 ].toLowerCase( ) + unit.slice( 1 )
-		+
-		'.'
-		+
-		name[ 0 ].toLowerCase( ) + name.slice( 1 )
-	);
-};
-
-/*
 | Initializes a generator.
 */
 gen.prototype._init =
@@ -183,8 +162,8 @@ gen.prototype._init =
 		ut,
 		name,
 		subParts,
-		// twig entry
-		te,
+		// twig id
+		twigId,
 		// processed twig table for generator use
 		twig,
 		// twig map to be used (the definition)
@@ -521,14 +500,14 @@ gen.prototype._init =
 			a++
 		)
 		{
-			te = twigDef[ a ];
+			twigId = twigDef[ a ];
 
-			ut = te.split( '.' );
+			ut = twigId.split( '.' );
 
 			if( ut.length !== 2 )
 			{
 				throw new Error(
-					'invalid twig unit.type: ' + te
+					'invalid twig id: ' + twigId
 				);
 			}
 
@@ -539,7 +518,7 @@ gen.prototype._init =
 
 			units[ ut[ 0 ] ][ ut[ 1 ] ] = true;
 
-			twig[ te ] =
+			twig[ twigId ] =
 				Object.freeze( {
 					unit :
 						ut[ 0 ],
@@ -2465,7 +2444,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		base,
 		loop,
 		switchExpr,
-		te,
+		twigId,
 		ut;
 
 	switchExpr =
@@ -2479,29 +2458,16 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		a++
 	)
 	{
-		te = this.twigList[ a ];
+		twigId = this.twigList[ a ];
 
-		ut = this.twig[ te ];
+		ut = this.twig[ twigId ];
 
-		if( ut.unit )
-		{
-			base = aVar( ut.unit ).aDot( ut.type );
-		}
-		else
-		{
-			throw new Error( 'FIXME does this ever happen?' );
-			base = aVar( ut.type );
-		}
+		base = aVar( ut.unit ).aDot( ut.type );
 
 		switchExpr =
 			switchExpr
 			.aCase(
-				aStringLiteral(  // XXX
-					adaptName(
-						ut.unit,
-						ut.type
-					)
-				),
+				aStringLiteral( twigId ),
 				aBlock( )
 				.anAssign(
 					aVar( 'twig' )
