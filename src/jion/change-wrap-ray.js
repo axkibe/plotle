@@ -163,7 +163,6 @@ changeWrapRay.prototype.append =
 */
 changeWrapRay.prototype.remove =
 	function(
-		chg,
 		idx
 	)
 {
@@ -244,5 +243,6 @@ if( SERVER )
 {
 	module.exports = changeWrapRay;
 }
+
 
 }( ) );

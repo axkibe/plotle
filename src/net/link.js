@@ -138,7 +138,7 @@ if( JION )
 						comment :
 							'the undo stack',
 						type :
-							'Object',
+							'jion.changeWrapRay',
 						defaultValue :
 							null
 					},
@@ -147,7 +147,7 @@ if( JION )
 						comment :
 							'the redo stack',
 						type :
-							'Object',
+							'jion.changeWrapRay',
 						defaultValue :
 							null
 					}
@@ -371,9 +371,9 @@ link.prototype._onAquireSpace =
 			'_rSeq',
 				reply.seq,
 			'_undo',
-				[ ], // FIXME changeWrapRay
+				jion.changeWrapRay.create( ),
 			'_redo',
-				[ ] // FIXME changeWrapRay
+				jion.changeWrapRay.create( )
 		);
 
 	system.asyncEvent(
@@ -479,6 +479,10 @@ link.prototype._onUpdate =
 
 	seq = reply.seq;
 
+	undo = this._undo;
+
+	redo = this._redo;
+
 	// if this wasn't an empty timeout
 	// process the received changes
 
@@ -520,7 +524,6 @@ link.prototype._onUpdate =
 
 			// if this was not an own change,
 			// undo and redo queues are adapted.
-			undo = this._undo;
 
 			for(
 				b = 0, bZ = undo.length;
@@ -528,7 +531,7 @@ link.prototype._onUpdate =
 				b++
 			)
 			{
-				u = undo[ b ];
+				u = undo.get( b );
 
 				if( u.seq < seq + a )
 				{
@@ -537,27 +540,27 @@ link.prototype._onUpdate =
 					// the change vanished by transformation
 					if( tfxChgX === null )
 					{
-						undo.splice( b--, 1 ); // XXX
+						undo = undo.remove( b-- );
 
 						bZ--;
 
 						continue;
 					}
 
-					u =
-					undo[ b ] =
-						jion.changeWrap.create(
-							'cid',
-								u.cid,
-							'chgX',
-								tfxChgX,
-							'seq',
-								u.seq
+					undo =
+						undo.set(
+							b,
+							jion.changeWrap.create(
+								'cid',
+									u.cid,
+								'chgX',
+									tfxChgX,
+								'seq',
+									u.seq
+							)
 						);
 				}
 			}
-
-			redo = this._redo;
 
 			for(
 				b = 0, bZ = redo.length;
@@ -565,7 +568,7 @@ link.prototype._onUpdate =
 				b++
 			)
 			{
-				u = redo[ b ];
+				u = redo.get( b );
 
 				if( u.seq < seq + a )
 				{
@@ -574,15 +577,15 @@ link.prototype._onUpdate =
 					// the change vanished by transformation
 					if( tfxChgX === null )
 					{
-						redo.splice( b--, 1 ); // XXX
+						redo = redo.remove( b-- );
 
 						bZ--;
 
 						continue;
 					}
 
-					u =
-					redo[ b ] =
+					redo.set(
+						b,
 						jion.changeWrap.create(
 							'cid',
 								u.cid,
@@ -590,7 +593,8 @@ link.prototype._onUpdate =
 								u.chgX.transformChangeX( chgX ),
 							'seq',
 								u.seq
-						);
+						)
+					);
 				}
 			}
 
@@ -678,6 +682,10 @@ link.prototype._onUpdate =
 
 	this._postbox = postbox; // XXX
 
+	this._undo = undo; // XXX
+
+	this._redo = redo; // XXX
+
 	if( report.length > 0 )
 	{
 		system.asyncEvent(
@@ -730,16 +738,18 @@ link.prototype.alter =
 
 	this._outbox = this._outbox.append( c ); // XXX
 
-	this._redo = [ ]; // XXX
+	this._redo = jion.changeWrapRay.create( ); // XXX
 
 	undo = this._undo;
 
-	undo.push( c ); // XXX
+	undo = undo.append( c );
 
 	if( undo.length > config.maxUndo )
 	{
-		undo.shift( );
+		undo = undo.remove( 0 );
 	}
+
+	this._undo = undo; // XXX
 
 	this._sendChanges( );
 
@@ -830,14 +840,21 @@ link.prototype.undo =
 	var
 		c,
 		chgX,
-		result;
+		result,
+		undo;
 
-	if( this._undo.length === 0 )
+	undo = this._undo;
+
+	if( undo.length === 0 )
 	{
 		return;
 	}
 
-	chgX = this._undo.pop( ).chgX.invert; // XXX
+	chgX = undo.get( undo.length - 1 ).chgX.invert;
+
+	undo = undo.remove( undo.length - 1 );
+
+	this._undo = undo; // XXX
 
 	result = chgX.changeTree( this._cSpace );
 
@@ -867,7 +884,7 @@ link.prototype.undo =
 
 	this._outbox = this._outbox.append( c ); // XXX
 
-	this._redo.push( c ); //XXX
+	this._redo = this._redo.append( c ); //XXX
 
 	this._sendChanges( );
 
@@ -897,11 +914,13 @@ link.prototype.redo =
 		return;
 	}
 
-	chgX = this._redo.pop( ).chgX.invert; // XXX
+	chgX = this._redo.get( this._redo.length - 1 ).chgX.invert;
 
 	result = chgX.changeTree( this._cSpace );
 
 	this._cSpace = result.tree; // XXX
+
+	this._redo = this._redo.remove( this._redo.length - 1 ); // XXX
 
 	chgX = result.chgX;
 
@@ -922,7 +941,7 @@ link.prototype.redo =
 
 	this._outbox = this._outbox.append( c ); // XXX
 
-	this._undo.push( c );
+	this._undo = this._undo.append( c ); // XXX
 
 	this._sendChanges( );
 
