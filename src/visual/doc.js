@@ -190,8 +190,7 @@ doc.prototype._init =
 			);
 	}
 
-	this.twig =
-		twig;
+	this.twig = twig;
 };
 
 
@@ -225,6 +224,344 @@ doc.prototype.attentionCenter =
 	);
 };
 
+
+/*
+| Returns the shape for a selection range
+*/
+doc.prototype._getRangeShape =
+	function(
+		item,        // the item of the doc
+		width,       // width the vdoc is drawn
+		scrollp      // scroll position of the doc
+	)
+{
+	var
+		ascend,
+		// b2y,
+		backAt,
+		backFlow,
+		backKey,
+		backPath,
+		backPara,
+		backPnw,
+		// backRank,
+		bo,
+		bp,
+		descend,
+		// f2y,
+		f2Key,
+		f2Para,
+		fo,
+		fontsize,
+		fp,
+		frontAt,
+		frontFlow,
+		frontKey,
+		frontPara,
+		frontPath,
+		frontPnw,
+		frontRank,
+		innerMargin,
+		lx,
+		mark,
+		rx;
+
+	mark = this.mark;
+
+/**/if( CHECK )
+/**/{
+/**/	if( mark.reflect !== 'marks.range' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	frontPath = mark.frontPath;
+
+	frontAt = mark.frontAt;
+
+	backPath = mark.backPath;
+
+	backAt = mark.backAt;
+
+	frontKey = frontPath.get( -2 );
+
+	backKey = backPath.get( -2 );
+
+	frontPnw = this.getPNW( item, frontKey );
+
+	backPnw = this.getPNW( item, backKey );
+
+	frontPara = this.twig[ frontKey ];
+
+	backPara = this.twig[ backKey ];
+
+	fo = frontPara.locateOffset( frontAt );
+
+	bo = backPara.locateOffset( backAt );
+
+	fp = fo.p;
+
+	bp = bo.p;
+
+	fontsize = this.fontsize;
+
+	descend = Math.round( fontsize * theme.bottombox );
+
+	ascend = Math.round( fontsize );
+
+	// inner margin of the doc
+	innerMargin = item.innerMargin;
+
+	rx = width - innerMargin.e;
+
+	lx = innerMargin.w;
+
+	// FIXME do not create points
+
+	fp =
+		fp.add(
+			frontPnw.x - scrollp.x,
+			frontPnw.y - scrollp.y
+		);
+
+	bp =
+		bp.add(
+			backPnw.x - scrollp.x,
+			backPnw.y - scrollp.y
+		);
+
+	frontFlow = frontPara.flow;
+
+	backFlow = backPara.flow;
+
+	frontRank = this.rankOf( frontKey );
+
+	f2Key =
+		( frontRank + 1 < this.ranks.length )
+			? this.ranks[ frontRank + 1 ]
+			: null;
+
+	f2Para = f2Key && this.twig[ f2Key ];
+
+	if(
+		frontKey === backKey &&
+		fo.line === bo.line
+	)
+	{
+		// fp o******o bp
+		// FIXME return a rect-ray
+
+		return(
+			euclid.shape.create(
+				'hull',
+					[
+						'start',
+							fp.add( 0, descend ),
+						'line',
+							fp.add( 0, -ascend ),
+						'line',
+							bp.add( 0, -ascend ),
+						'line',
+							bp.add( 0, descend ),
+						'line',
+							'close'
+					],
+				'pc',
+					euclid.point.create(
+						'x', jools.half( fp.x + bp.x ),
+						'y', jools.half( fp.y + bp.y )
+					)
+			)
+		);
+	}
+	else if (
+		bp.x < fp.x
+		&&
+		(
+			(
+				frontKey === backKey &&
+				fo.line + 1 === bo.line
+			)
+			||
+			(
+				f2Key === backKey &&
+				fo.line + 1 >= frontFlow.length &&
+				bo.line === 0
+			)
+		)
+	)
+	{
+		//         fp o****
+		// ****o bp
+
+		return(
+			[
+				euclid.shape.create(
+					'hull',
+						[
+							'start',
+								euclid.point.create(
+									'x', rx,
+									'y', fp.y - ascend
+								),
+							'line',
+								euclid.point.create(
+									'x', fp.x,
+									'y', fp.y - ascend
+								),
+							'line',
+								euclid.point.create(
+									'x', fp.x,
+									'y', fp.y + descend
+								),
+							'line',
+								euclid.point.create(
+									'x', rx,
+									'y', fp.y + descend
+								),
+							'0-line',
+								'close'
+						],
+					'pc',
+						euclid.point.create(
+							'x', jools.half( fp.x + rx ),
+							'y', jools.half( 2 * fp.y - ascend + descend )
+						)
+				),
+				euclid.shape.create(
+					'hull',
+						[
+							'start',
+								euclid.point.create(
+									'x', lx,
+									'y', bp.y - ascend
+								),
+							'line',
+								euclid.point.create(
+									'x', bp.x,
+									'y', bp.y - ascend
+								),
+							'line',
+								euclid.point.create(
+									'x', bp.x,
+									'y', bp.y + descend
+								),
+							'line',
+								euclid.point.create(
+									'x', lx,
+									'y', bp.y + descend
+								),
+							'0-line',
+								'close'
+						],
+					'pc',
+						euclid.point.create(
+							'x', jools.half( fp.x + rx ),
+							'y', jools.half( 2 * fp.y - ascend + descend )
+						)
+				)
+			]
+		);
+	}
+	else
+	{
+		//          6/7            8
+		//        fp o------------+
+		// fp2  +----+:::::::::::::
+		//    5 :::::::::::::::::::
+		//      ::::::::::::+-----+  bp2
+		//      +-----------o bp   1
+		//      4          2/3
+
+		throw new Error( 'TODO' );
+
+		/*
+		f2y = null;
+
+		b2y = null;
+
+		if( fo.line + 1 < frontFlow.length )
+		{
+			f2y =
+				Math.round(
+					frontFlow[ fo.line + 1 ].y +
+						frontPnw.y -
+						scrollp.y
+				);
+		}
+		else
+		{
+			f2y =
+				Math.round(
+					f2Para.flow[ 0 ].y +
+						this.getPNW( item, f2Key ).y -
+						scrollp.y
+				);
+		}
+
+		if( bo.line > 0 )
+		{
+			b2y =
+				Math.round(
+					backFlow[ bo.line - 1 ].y +
+						backPnw.y -
+						scrollp.y
+				);
+		}
+		else
+		{
+			backRank = this.rankOf( backKey );
+
+			b2Key = this.ranks[ backRank - 1 ];
+
+			b2Para = this.twig[ b2Key ];
+
+			b2y =
+				Math.round(
+					b2Para.flow[ b2Para.flow.length - 1 ].y +
+						this.getPNW( item, b2Key ).y -
+						scrollp.y
+				);
+		}
+
+		fabric.moveTo( rx,     b2y  + descend, view ); // 1
+		fabric.lineTo( bp.x,   b2y  + descend, view ); // 2
+		fabric.lineTo( bp.x,   bp.y + descend, view ); // 3
+		fabric.lineTo( lx,     bp.y + descend, view ); // 4
+
+		if( frontAt > 0 )
+		{
+			if( twist )
+			{
+				fabric.moveTo( lx, f2y - ascend, view ); // 5
+			}
+			else
+			{
+				fabric.lineTo( lx, f2y - ascend, view ); // 5
+			}
+			fabric.lineTo( fp.x, f2y  - ascend, view );  // 6
+		}
+
+		if( frontAt > 0 || !twist )
+		{
+			fabric.lineTo( fp.x, fp.y -  ascend, view ); // 7
+		}
+		else
+		{
+			fabric.moveTo( fp.x, fp.y -  ascend, view ); // 7
+		}
+
+		fabric.lineTo( rx,   fp.y -  ascend, view );   // 8
+
+		if( !twist )
+		{
+			fabric.lineTo( rx, bp.y - ascend, view );
+		}*/
+	}
+};
+
+
 /*
 | Draws the document on a fabric.
 */
@@ -239,11 +576,15 @@ doc.prototype.draw =
 {
 	// FIXME <pre>
 	var
-		innerMargin =
-			item.innerMargin,
+		mark,
+		para,
+		p,
+		pnw,
+		pnws,
+		ranks,
+		rs;
 
-		mark =
-			this.mark;
+	mark = this.mark;
 
 	if(
 		mark.reflect === 'marks.range'
@@ -251,25 +592,38 @@ doc.prototype.draw =
 		mark.itemPath.equals( item.path )
 	)
 	{
-		fabric.paint(
-			theme.selection.style,
-			this,
-			'sketchRange',
-			view,
-			item,
-			width,
-			innerMargin,
-			scrollp
-		);
+		rs = this._getRangeShape( item, width, scrollp );
+
+		// FUTURE have shapeRays handled more elegantly
+		if( !Array.isArray( rs ) )
+		{
+			fabric.paint(
+				theme.selection.style,
+				rs,
+				view
+			);
+		}
+		else
+		{
+			for(
+				var a = 0, aZ = rs.length;
+				a < aZ;
+				a++
+			)
+			{
+				fabric.paint(
+					theme.selection.style,
+					rs[ a ],
+					view
+				);
+			}
+		}
 	}
 
-	var
-		// north-west points of paras
-		pnws =
-			this.getPNWs( item ),
+	// north-west points of paras
+	pnws = this.getPNWs( item );
 
-		ranks =
-			this.ranks;
+	ranks = this.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -277,18 +631,13 @@ doc.prototype.draw =
 		r++
 	)
 	{
-		var
-			vpara =
-				this.atRank( r ),
-			pnw =
-				pnws[ ranks[ r ] ],
-			p =
-				pnw.sub(
-					0,
-					Math.round( scrollp.y )
-				);
+		para = this.atRank( r );
 
-		vpara.draw(
+		pnw = pnws[ ranks[ r ] ];
+
+		p = pnw.sub( 0, Math.round( scrollp.y ) );
+
+		para.draw(
 			fabric,
 			view.point( p )
 		);
@@ -309,10 +658,10 @@ doc.prototype.getPNWs =
 	var
 		flow,
 		innerMargin,
+		para,
 		paraSep,
 		pnws,
 		ranks,
-		vpara,
 		y;
 
 	if( this._$pnws )
@@ -336,9 +685,9 @@ doc.prototype.getPNWs =
 		r++
 	)
 	{
-		vpara = this.atRank( r );
+		para = this.atRank( r );
 
-		flow = vpara.flow;
+		flow = para.flow;
 
 		pnws[ ranks[ r ] ] =
 			euclid.point.create(
@@ -363,14 +712,20 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			fs =
-				this.fontsize,
-			paraSep =
-				this.paraSep,
-			ranks =
-				this.ranks,
-			height =
-				0;
+			flow,
+			fs,
+			height,
+			para,
+			paraSep,
+			ranks;
+
+		fs = this.fontsize;
+
+		paraSep = this.paraSep;
+
+		ranks = this.ranks;
+
+		height = 0;
 
 		for(
 			var r = 0, rZ = ranks.length;
@@ -378,24 +733,19 @@ jools.lazyValue(
 			r++
 		)
 		{
-			var
-				vpara =
-					this.atRank( r ),
-				flow =
-					vpara.flow;
+			para = this.atRank( r );
+
+			flow = para.flow;
 
 			if( r > 0 )
 			{
-				height +=
-					paraSep;
+				height += paraSep;
 			}
 
-			height +=
-				flow.height;
+			height += flow.height;
 		}
 
-		height +=
-			Math.round( fs * theme.bottombox );
+		height += Math.round( fs * theme.bottombox );
 
 		return height;
 	}
@@ -424,12 +774,15 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			spread =
-				0,
-			twig =
-				this.twig,
-			max =
-				Math.max;
+			max,
+			spread,
+			twig;
+
+		spread = 0;
+
+		twig = this.twig;
+
+		max = Math.max;
 
 		for( var key in twig )
 		{
@@ -468,12 +821,17 @@ doc.prototype.getParaAtPoint =
 	)
 {
 	var
-		pnws =
-			this.getPNWs( item ),
-		ranks =
-			this.ranks,
-		twig =
-			this.twig;
+		k,
+		para,
+		pnws,
+		ranks,
+		twig;
+
+	pnws = this.getPNWs( item );
+
+	ranks = this.ranks;
+
+	twig = this.twig;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -481,15 +839,14 @@ doc.prototype.getParaAtPoint =
 		r++
 	)
 	{
-		var
-			k =
-				ranks[ r ],
-			vpara =
-				twig[ k ];
+		// FIXME use atRank
+		k = ranks[ r ];
 
-		if( p.y < pnws[ k ].y + vpara.flow.height )
+		para = twig[ k ];
+
+		if( p.y < pnws[ k ].y + para.flow.height )
 		{
-			return vpara;
+			return para;
 		}
 	}
 
@@ -613,307 +970,18 @@ doc.prototype.specialKey =
 
 	return (
 		this
-			.twig[ mark.caretPath.get( 5 ) ]
-			.specialKey(
-				key,
-				item,
-				shift,
-				ctrl
-			)
+		.twig[ mark.caretPath.get( 5 ) ]
+		.specialKey(
+			key,
+			item,
+			shift,
+			ctrl
+		)
 	);
 };
 
 
 
-/*
-| Sketches a selection.
-*/
-doc.prototype.sketchRange =
-	function(
-		fabric,      // the fabric to path for
-		border,      // width of the path (ignored)
-		twist,       // true -> drawing a border, false -> fill
-		view,        // current view
-		item,        // the item of the doc
-		width,       // width the vdoc is drawn
-		innerMargin, // inner margin of the doc
-		scrollp      // scroll position of the doc
-	)
-{
-	var
-		ascend,
-		backAt,
-		backFlow,
-		backKey,
-		backPath,
-		backPara,
-		backPnw,
-		bo,
-		bp,
-		descend,
-		f2Key,
-		f2Para,
-		fo,
-		fontsize,
-		fp,
-		frontAt,
-		frontFlow,
-		frontKey,
-		frontPara,
-		frontPath,
-		frontPnw,
-		frontRank,
-		lx,
-		mark,
-		rx,
-		sp;
-
-	sp =
-		scrollp,
-
-	mark =
-		this.mark;
-
-/**/if( CHECK )
-/**/{
-/**/	if( mark.reflect !== 'marks.range' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	frontPath =
-		mark.frontPath;
-
-	frontAt =
-		mark.frontAt;
-
-	backPath =
-		mark.backPath;
-
-	backAt =
-		mark.backAt;
-
-	frontKey =
-		frontPath.get( -2 );
-
-	backKey =
-		backPath.get( -2 );
-
-	frontPnw =
-		this.getPNW( item, frontKey );
-
-	backPnw =
-		this.getPNW( item, backKey );
-
-	frontPara =
-		this.twig[ frontKey ];
-
-	backPara =
-		this.twig[ backKey ];
-
-	fo =
-		frontPara.locateOffset( frontAt );
-
-	bo =
-		backPara.locateOffset( backAt );
-
-	fp =
-		fo.p;
-
-	bp =
-		bo.p;
-
-	fontsize =
-		this.fontsize;
-
-	descend =
-		Math.round( fontsize * theme.bottombox );
-
-	ascend =
-		Math.round( fontsize );
-
-	rx =
-		width - innerMargin.e;
-
-	lx =
-		innerMargin.w;
-
-	// FIXME do not create points
-
-	fp =
-		fp.add(
-			frontPnw.x - sp.x,
-			frontPnw.y - sp.y
-		);
-
-	bp =
-		bp.add(
-			backPnw.x - sp.x,
-			backPnw.y - sp.y
-		);
-
-	frontFlow =
-		frontPara.flow;
-
-	backFlow =
-		backPara.flow;
-
-	frontRank =
-		this.rankOf( frontKey );
-
-	f2Key =
-		( frontRank + 1 < this.ranks.length )
-			?
-			this.ranks[ frontRank + 1 ]
-			:
-			null;
-
-	f2Para =
-		f2Key
-		&&
-		this.twig[ f2Key ];
-
-	if(
-		frontKey === backKey &&
-		fo.line === bo.line
-	)
-	{
-		// fp o******o bp
-
-		fabric.moveTo( fp.x, fp.y + descend, view );
-		fabric.lineTo( fp.x, fp.y - ascend,  view );
-		fabric.lineTo( bp.x, bp.y - ascend,  view );
-		fabric.lineTo( bp.x, bp.y + descend, view );
-		fabric.lineTo( fp.x, fp.y + descend, view );
-	}
-	else if (
-		bp.x < fp.x
-		&&
-		(
-			(
-				frontKey === backKey &&
-				fo.line + 1 === bo.line
-			)
-			||
-			(
-				f2Key === backKey &&
-				fo.line + 1 >= frontFlow.length &&
-				bo.line === 0
-			)
-		)
-	)
-	{
-		//         fp o****
-		// ****o bp
-
-		fabric.moveTo( rx,   fp.y -  ascend, view );
-		fabric.lineTo( fp.x, fp.y -  ascend, view );
-		fabric.lineTo( fp.x, fp.y + descend, view );
-		fabric.lineTo( rx,   fp.y + descend, view );
-
-		fabric.moveTo( lx,   bp.y -  ascend, view );
-		fabric.lineTo( bp.x, bp.y -  ascend, view );
-		fabric.lineTo( bp.x, bp.y + descend, view );
-		fabric.lineTo( lx,   bp.y + descend, view );
-	}
-	else
-	{
-		//          6/7            8
-		//        fp o------------+
-		// fp2  +----+:::::::::::::
-		//    5 :::::::::::::::::::
-		//      ::::::::::::+-----+  bp2
-		//      +-----------o bp   1
-		//      4          2/3
-
-		var
-			f2y =
-				null,
-			b2y =
-				null;
-
-		if( fo.line + 1 < frontFlow.length )
-		{
-			f2y =
-				Math.round(
-					frontFlow[ fo.line + 1 ].y +
-						frontPnw.y -
-						sp.y
-				);
-		}
-		else
-		{
-			f2y =
-				Math.round(
-					f2Para.flow[ 0 ].y +
-						this.getPNW( item, f2Key ).y -
-						sp.y
-				);
-		}
-
-		if( bo.line > 0 )
-		{
-			b2y =
-				Math.round(
-					backFlow[ bo.line - 1 ].y +
-						backPnw.y -
-						sp.y
-				);
-		}
-		else
-		{
-			var
-				backRank =
-					this.rankOf( backKey ),
-				b2Key =
-					this.ranks[ backRank - 1 ],
-				b2Para =
-					this.twig[ b2Key ];
-
-			b2y =
-				Math.round(
-					b2Para.flow[ b2Para.flow.length - 1 ].y +
-						this.getPNW( item, b2Key ).y -
-						sp.y
-				);
-		}
-
-		fabric.moveTo( rx,     b2y  + descend, view ); // 1
-		fabric.lineTo( bp.x,   b2y  + descend, view ); // 2
-		fabric.lineTo( bp.x,   bp.y + descend, view ); // 3
-		fabric.lineTo( lx,     bp.y + descend, view ); // 4
-
-		if( frontAt > 0 )
-		{
-			if( twist )
-			{
-				fabric.moveTo( lx, f2y - ascend, view ); // 5
-			}
-			else
-			{
-				fabric.lineTo( lx, f2y - ascend, view ); // 5
-			}
-			fabric.lineTo( fp.x, f2y  - ascend, view );  // 6
-		}
-
-		if( frontAt > 0 || !twist )
-		{
-			fabric.lineTo( fp.x, fp.y -  ascend, view ); // 7
-		}
-		else
-		{
-			fabric.moveTo( fp.x, fp.y -  ascend, view ); // 7
-		}
-
-		fabric.lineTo( rx,   fp.y -  ascend, view );   // 8
-
-		if( !twist )
-		{
-			fabric.lineTo( rx, bp.y - ascend, view );
-		}
-	}
-};
 
 
 /*

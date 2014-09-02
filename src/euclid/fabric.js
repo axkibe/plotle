@@ -1128,6 +1128,8 @@ fabric.prototype.paint =
 		a4
 	)
 {
+	// FIXME remove a1-a4 stuff
+
 	var fillStyle = style.fill;
 
 	var edgeStyle = style.edge;

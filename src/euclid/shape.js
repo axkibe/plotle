@@ -150,6 +150,7 @@ shape.prototype.sketch =
 				break;
 
 			case 'line' :
+			case '0-line' :
 
 				pn = hull[ h + 1 ];
 
@@ -233,6 +234,14 @@ shape.prototype.sketch =
 
 				break;
 
+			case '0-line' :
+
+				fabric.moveTo( pn );
+
+				h += 2;
+
+				break;
+
 			case 'round' :
 
 				dx = pn.x - pp.x;
@@ -297,17 +306,38 @@ shape.prototype.getProjection =
 	)
 {
 	var
-		hull =
-			this.hull,
+		a,
+		b,
+		cx,
+		cy,
+		det,
+		dx,
+		dy,
+		dxy,
+		h,
+		hull,
+		hZ,
+		la1,
+		lb1,
+		lc1,
+		la2,
+		lb2,
+		lc2,
+		pc,
+		pix,
+		piy,
+		pn,
+		pp,
+		pstart,
+		y;
 
-		h =
-			1,
+	hull = this.hull;
 
-		hZ =
-			hull.length,
+	h = 1;
 
-		pc =
-			this.pc;
+	hZ = hull.length;
+
+	pc = this.pc;
 
 /**/if( CHECK )
 /**/{
@@ -319,23 +349,11 @@ shape.prototype.getProjection =
 /**/	}
 /**/}
 
-	var
-		pstart =
-			hull [ h++ ],
+	pstart = hull [ h++ ];
 
-		pp =
-			pstart,
+	pp = pstart;
 
-		pn =
-			null,
-
-		dx,
-		dy,
-		dxy,
-		cx,
-		cy,
-		a,
-		b;
+	pn = null;
 
 	while( h < hZ )
 	{
@@ -354,22 +372,20 @@ shape.prototype.getProjection =
 
 			case 'bezier' :
 
-				pn =
-					hull[ h + 5 ];
+				pn = hull[ h + 5 ];
 
 				break;
 
 			case 'line' :
+			case '0-line' :
 
-				pn =
-					hull[ h + 1 ];
+				pn = hull[ h + 1 ];
 
 				break;
 
 			case 'round' :
 
-				pn =
-					hull[ h + 2 ];
+				pn = hull[ h + 2 ];
 
 				break;
 
@@ -379,7 +395,7 @@ shape.prototype.getProjection =
 				throw new Error( );
 		}
 
-		if( pn === 'close')
+		if( pn === 'close' )
 		{
 			pn = pstart;
 
@@ -391,46 +407,36 @@ shape.prototype.getProjection =
 
 			case 'bezier' :
 
-				if( CHECK )
-				{
-					// cannot yet do projections for beziers.
-					throw new Error( );
-				}
+/**/			if( CHECK )
+/**/			{
+/**/				// cannot yet do projections for beziers.
+/**/				throw new Error( );
+/**/			}
 
 				break;
 
 			case 'line' :
+			case '0-line' :
 
-				var
-					la1 =
-						p.y - pc.y,
+				la1 = p.y - pc.y;
 
-					lb1 =
-						pc.x -  p.x,
+				lb1 = pc.x -  p.x;
 
-					lc1 =
-						la1 * pc.x + lb1 * pc.y,
+				lc1 = la1 * pc.x + lb1 * pc.y;
 
-					la2 =
-						pn.y - pp.y,
+				la2 = pn.y - pp.y;
 
-					lb2 =
-						pp.x - pn.x,
+				lb2 = pp.x - pn.x;
 
-					lc2 =
-						la2 * pp.x + lb2 * pp.y,
+				lc2 = la2 * pp.x + lb2 * pp.y;
 
-					det =
-						la1 * lb2 - la2 * lb1;
+				det = la1 * lb2 - la2 * lb1;
 
 				if( det !== 0 )
 				{
-					var
-						pix =
-							( lb2 * lc1 - lb1 * lc2 ) / det,
+					pix = ( lb2 * lc1 - lb1 * lc2 ) / det;
 
-						piy =
-							( la1 * lc2 - la2 * lc1 ) / det;
+					piy = ( la1 * lc2 - la2 * lc1 ) / det;
 
 					if(
 						Math.min( pp.x, pn.x ) <= pix &&
@@ -461,42 +467,31 @@ shape.prototype.getProjection =
 
 			case 'round' :
 
-				dx =
-					pn.x - pp.x;
+				dx = pn.x - pp.x;
 
-				dy =
-					pn.y - pp.y;
+				dy = pn.y - pp.y;
 
-				dxy =
-					dx * dy;
+				dxy = dx * dy;
 
 				if( dxy > 0 )
 				{
-					cx =
-						pp.x;
+					cx = pp.x;
 
-					cy =
-						pn.y;
+					cy = pn.y;
 
-					a  =
-						Math.abs( pn.x - cx );
+					a  = Math.abs( pn.x - cx );
 
-					b  =
-						Math.abs( pp.y - cy );
+					b  = Math.abs( pp.y - cy );
 				}
 				else
 				{
-					cx =
-						pn.x;
+					cx = pn.x;
 
-					cy =
-						pp.y;
+					cy = pp.y;
 
-					a =
-						Math.abs( pp.x - cx );
+					a = Math.abs( pp.x - cx );
 
-					b =
-						Math.abs( pn.y - cy );
+					b = Math.abs( pn.y - cy );
 				}
 
 				if(
@@ -592,11 +587,10 @@ shape.prototype.getProjection =
 					}
 					// var x = Math.sqrt( 1 / ( 1 / ( a * a ) + k * k / ( b * b ) ) );
 
-					var
-						y =
-							k * x + d;
+					y = k * x + d;
 
 					x += cx;
+
 					y += cy;
 
 					if(
@@ -648,7 +642,6 @@ shape.prototype.within =
 		p
 	);
 };
-
 
 
 })( );
