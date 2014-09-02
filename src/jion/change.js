@@ -162,11 +162,10 @@ jools.lazyValue(
 
 /*
 | Returns the inversion to this change.
-| FIXME call it Invert
 */
 jools.lazyValue(
 	change.prototype,
-	'Invert',
+	'invert',
 	function( )
 	{
 		var
@@ -180,7 +179,7 @@ jools.lazyValue(
 					this.src
 			);
 
-		// TODO ahreadValue
+		// TODO aheadValue
 
 		return r;
 	}

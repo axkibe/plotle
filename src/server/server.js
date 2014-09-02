@@ -2565,7 +2565,7 @@ Server.prototype.cmdGet =
 			tree =
 				chgX
 				.get( b )
-				.Invert
+				.invert
 				.changeTree( tree )
 				.tree;
 		}

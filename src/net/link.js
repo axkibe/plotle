@@ -101,7 +101,7 @@ if( JION )
 						comment :
 							'changes to be send to the server',
 						type :
-							'Object',
+							'jion.changeWrapRay',
 						defaultValue :
 							null
 					},
@@ -364,16 +364,16 @@ link.prototype._onAquireSpace =
 				space,
 			'_rSpace',
 				space,
-			'_outbox', // FIXME changeRay
-				[ ],
-			'_postbox', // FIXME changeRay
+			'_outbox',
+				jion.changeWrapRay.create( ),
+			'_postbox', // FIXME changeWrapRay
 				[ ],
 			'_rSeq',
 				reply.seq,
 			'_undo',
-				[ ],
+				[ ], // FIXME changeWrapRay
 			'_redo',
-				[ ]
+				[ ] // FIXME changeWrapRay
 		);
 
 	system.asyncEvent(
@@ -493,10 +493,7 @@ link.prototype._onUpdate =
 			a++
 		)
 		{
-			chgX =
-				jion.change.createFromJSON(
-					chgs[ a ].chgX
-				);
+			chgX = jion.change.createFromJSON( chgs[ a ].chgX );
 
 			cid = chgs[ a ].cid;
 
@@ -641,7 +638,7 @@ link.prototype._onUpdate =
 			a++
 		)
 		{
-			c = outbox[ a ];
+			c = outbox.get( a );
 
 			chgX = c.chgX;
 
@@ -657,15 +654,17 @@ link.prototype._onUpdate =
 					);
 			}
 
-			c =
-			outbox[ a ] =
-				jion.changeWrap.create(
-					'cid',
-						c.cid,
-					'chgX',
-						chgX,
-					'seq',
-						c.seq
+			outbox =
+				outbox.set(
+					a,
+					jion.changeWrap.create(
+						'cid',
+							c.cid,
+						'chgX',
+							chgX,
+						'seq',
+							c.seq
+					)
 				);
 
 			space =
@@ -678,6 +677,8 @@ link.prototype._onUpdate =
 	}
 
 	this._rSeq = reply.seqZ; // XXX
+
+	this._outbox = outbox; // XXX
 
 	if( report.length > 0 )
 	{
@@ -729,7 +730,7 @@ link.prototype.alter =
 				this._rSeq
 		);
 
-	this._outbox.push( c ); // XXX
+	this._outbox = this._outbox.append( c ); // XXX
 
 	this._redo = [ ]; // XXX
 
@@ -772,9 +773,9 @@ link.prototype._sendChanges =
 		return;
 	}
 
-	var c = this._outbox[ 0 ];
+	var c = this._outbox.get( 0 );
 
-	this._outbox.splice( 0, 1 ); // XXX
+	this._outbox = this._outbox.remove( 0 );
 
 	this._postbox.push( c );
 
@@ -838,7 +839,7 @@ link.prototype.undo =
 		return;
 	}
 
-	chgX = this._undo.pop( ).chgX.Invert; // XXX
+	chgX = this._undo.pop( ).chgX.invert; // XXX
 
 	result = chgX.changeTree( this._cSpace );
 
@@ -866,7 +867,7 @@ link.prototype.undo =
 				this._rSeq
 		);
 
-	this._outbox.push( c ); // XXX
+	this._outbox = this._outbox.append( c ); // XXX
 
 	this._redo.push( c ); //XXX
 
@@ -898,7 +899,7 @@ link.prototype.redo =
 		return;
 	}
 
-	chgX = this._redo.pop( ).chgX.Invert; // XXX
+	chgX = this._redo.pop( ).chgX.invert; // XXX
 
 	result = chgX.changeTree( this._cSpace );
 
@@ -921,7 +922,7 @@ link.prototype.redo =
 				this._rSeq
 		);
 
-	this._outbox.push( c );
+	this._outbox = this._outbox.append( c ); // XXX
 
 	this._undo.push( c );
 

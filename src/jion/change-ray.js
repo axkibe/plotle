@@ -139,7 +139,7 @@ changeRay.prototype._init =
 */
 jools.lazyValue(
 	changeRay.prototype,
-	'Invert',
+	'invert',
 	function( )
 	{
 		var
@@ -156,7 +156,7 @@ jools.lazyValue(
 			a++
 		)
 		{
-			rc[ a ] = this._ray[ a ].Invert;
+			rc[ a ] = this._ray[ a ].invert;
 		}
 
 		inv =

@@ -158,7 +158,7 @@ IFaceSym.prototype.get =
 			space =
 				chgX
 				.get( 0 )
-				.Invert
+				.invert
 				.changeTree( space )
 				.tree;
 		}

@@ -9,6 +9,10 @@ module.exports =
 			'src/euclid/view.js',
 			'src/jion/change.js',
 			'src/jion/change-ray.js',
+			// FUTURE check server really using
+			// these two
+			'src/jion/change-wrap.js',
+			'src/jion/change-wrap-ray.js',
 			'src/jion/path.js',
 			'src/jion/sign.js',
 			'src/jion/sign-ray.js',

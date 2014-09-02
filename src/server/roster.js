@@ -136,8 +136,14 @@ module.exports =
 		'hasJion',
 			true,
 		'inBundle',
+			true
+	),
+	resource.create(
+		'filePath',
+			'src/jion/change-wrap-ray.js',
+		'hasJion',
 			true,
-		'inTestPad',
+		'inBundle',
 			true
 	),
 	resource.create(
