@@ -110,7 +110,7 @@ if( JION )
 						comment :
 							'changes that are currently on the way',
 						type :
-							'Object',
+							'jion.changeWrapRay',
 						defaultValue :
 							null
 					},
@@ -366,8 +366,8 @@ link.prototype._onAquireSpace =
 				space,
 			'_outbox',
 				jion.changeWrapRay.create( ),
-			'_postbox', // FIXME changeWrapRay
-				[ ],
+			'_postbox',
+				jion.changeWrapRay.create( ),
 			'_rSeq',
 				reply.seq,
 			'_undo',
@@ -508,10 +508,10 @@ link.prototype._onUpdate =
 			if(
 				postbox.length > 0
 				&&
-				postbox[ 0 ].cid === cid
+				postbox.get( 0 ).cid === cid
 			)
 			{
-				postbox.splice( 0, 1 ); // XXX
+				postbox = postbox.remove( 0 );
 
 				gotOwnChgs = true;
 
@@ -609,7 +609,7 @@ link.prototype._onUpdate =
 			a++
 		)
 		{
-			chgX = postbox[ a ].chgX;
+			chgX = postbox.get( a ).chgX;
 
 			for(
 				b = 0, bZ = report.length;
@@ -617,8 +617,7 @@ link.prototype._onUpdate =
 				b++
 			)
 			{
-				chgX =
-					chgX.transformChangeX( report.get( b ) );
+				chgX = chgX.transformChangeX( report.get( b ) );
 			}
 
 			// FUTURE adapt changeTree so it
@@ -648,10 +647,7 @@ link.prototype._onUpdate =
 				b++
 			)
 			{
-				chgX =
-					chgX.transformChangeX(
-						report.get( b )
-					);
+				chgX = chgX.transformChangeX( report.get( b ) );
 			}
 
 			outbox =
@@ -679,6 +675,8 @@ link.prototype._onUpdate =
 	this._rSeq = reply.seqZ; // XXX
 
 	this._outbox = outbox; // XXX
+
+	this._postbox = postbox; // XXX
 
 	if( report.length > 0 )
 	{
@@ -775,9 +773,9 @@ link.prototype._sendChanges =
 
 	var c = this._outbox.get( 0 );
 
-	this._outbox = this._outbox.remove( 0 );
+	this._outbox = this._outbox.remove( 0 ); // XXX
 
-	this._postbox.push( c );
+	this._postbox = this._postbox.append( c ); // XXX
 
 	root.ajax.twig.command.request(
 		{
