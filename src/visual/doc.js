@@ -1024,44 +1024,43 @@ doc.prototype.specialKey =
 	)
 {
 	var
-		mark =
-			this.mark;
+		mark;
+
+	mark = this.mark;
 
 	if( !mark.hasCaret )
 	{
 		return false;
 	}
 
-	if( mark.reflect === 'marks.range' )
+	if(
+		mark.reflect === 'marks.range'
+		&&
+		!mark.empty
+	)
 	{
 		switch( key )
 		{
 			case 'backspace' :
 			case 'del' :
 
-				if( !mark.empty )
-				{
-					Peer.removeRange(
-						mark.frontPath,
-						mark.frontAt,
-						mark.backPath,
-						mark.backAt
-					);
-				}
+				Peer.removeRange(
+					mark.frontPath,
+					mark.frontAt,
+					mark.backPath,
+					mark.backAt
+				);
 
 				return true;
 
 			case 'enter' :
 
-				if( !mark.empty )
-				{
-					Peer.removeRange(
-						mark.frontPath,
-						mark.frontAt,
-						mark.backPath,
-						mark.backAt
-					);
-				}
+				Peer.removeRange(
+					mark.frontPath,
+					mark.frontAt,
+					mark.backPath,
+					mark.backAt
+				);
 
 				root.specialKey(
 					key,
