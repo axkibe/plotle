@@ -237,18 +237,20 @@ doc.prototype._getRangeShape =
 {
 	var
 		ascend,
-		// b2y,
+		b2Key,
+		b2Para,
+		b2y,
 		backAt,
 		backFlow,
 		backKey,
 		backPath,
 		backPara,
 		backPnw,
-		// backRank,
+		backRank,
 		bo,
 		bp,
 		descend,
-		// f2y,
+		f2y,
 		f2Key,
 		f2Para,
 		fo,
@@ -474,9 +476,6 @@ doc.prototype._getRangeShape =
 		//      +-----------o bp   1
 		//      4          2/3
 
-		throw new Error( 'TODO' );
-
-		/*
 		f2y = null;
 
 		b2y = null;
@@ -485,18 +484,22 @@ doc.prototype._getRangeShape =
 		{
 			f2y =
 				Math.round(
-					frontFlow[ fo.line + 1 ].y +
-						frontPnw.y -
-						scrollp.y
+					frontFlow[ fo.line + 1 ].y
+					+
+					frontPnw.y
+					-
+					scrollp.y
 				);
 		}
 		else
 		{
 			f2y =
 				Math.round(
-					f2Para.flow[ 0 ].y +
-						this.getPNW( item, f2Key ).y -
-						scrollp.y
+					f2Para.flow[ 0 ].y
+					+
+					this.getPNW( item, f2Key ).y
+					-
+					scrollp.y
 				);
 		}
 
@@ -504,9 +507,11 @@ doc.prototype._getRangeShape =
 		{
 			b2y =
 				Math.round(
-					backFlow[ bo.line - 1 ].y +
-						backPnw.y -
-						scrollp.y
+					backFlow[ bo.line - 1 ].y
+					+
+					backPnw.y
+					-
+					scrollp.y
 				);
 		}
 		else
@@ -519,27 +524,128 @@ doc.prototype._getRangeShape =
 
 			b2y =
 				Math.round(
-					b2Para.flow[ b2Para.flow.length - 1 ].y +
-						this.getPNW( item, b2Key ).y -
-						scrollp.y
+					b2Para.flow[ b2Para.flow.length - 1 ].y
+					+
+					this.getPNW( item, b2Key ).y
+					-
+					scrollp.y
 				);
 		}
 
-		fabric.moveTo( rx,     b2y  + descend, view ); // 1
-		fabric.lineTo( bp.x,   b2y  + descend, view ); // 2
-		fabric.lineTo( bp.x,   bp.y + descend, view ); // 3
-		fabric.lineTo( lx,     bp.y + descend, view ); // 4
 
 		if( frontAt > 0 )
 		{
-			if( twist )
-			{
-				fabric.moveTo( lx, f2y - ascend, view ); // 5
-			}
-			else
-			{
-				fabric.lineTo( lx, f2y - ascend, view ); // 5
-			}
+			return(
+				euclid.shape.create(
+					'hull',
+						[
+							'start', // 1
+								euclid.point.create(
+									'x', rx,
+									'y', b2y + descend
+								),
+							'line', // 2
+								euclid.point.create(
+									'x', bp.x,
+									'y', b2y + descend
+								),
+							'line', // 3
+								euclid.point.create(
+									'x', bp.x,
+									'y', bp.y + descend
+								),
+							'line', // 4
+								euclid.point.create(
+									'x', lx,
+									'y', bp.y + descend
+								),
+							'0-line', // 5
+								euclid.point.create(
+									'x', lx,
+									'y', f2y - ascend
+								),
+							'line', // 6
+								euclid.point.create(
+									'x', fp.x,
+									'y', f2y - ascend
+								),
+							'line', // 7
+								euclid.point.create(
+									'x', fp.x,
+									'y', fp.y - ascend
+								),
+							'line', // 8
+								euclid.point.create(
+									'x', rx,
+									'y', fp.y - ascend
+								),
+							'0-line',
+								'close'
+						],
+					'pc',
+						euclid.point.create(
+							'x', jools.half( rx + lx ),
+							'y', jools.half( b2y + descend + f2y - ascend )
+						)
+				)
+			);
+		}
+		else
+		{
+			return(
+				euclid.shape.create(
+					'hull',
+						[
+							'start', // 1
+								euclid.point.create(
+									'x', rx,
+									'y', b2y + descend
+								),
+							'line', // 2
+								euclid.point.create(
+									'x', bp.x,
+									'y', b2y + descend
+								),
+							'line', // 3
+								euclid.point.create(
+									'x', bp.x,
+									'y', bp.y + descend
+								),
+							'line', // 4
+								euclid.point.create(
+									'x', lx,
+									'y', bp.y + descend
+								),
+							'0-line', // 7
+								euclid.point.create(
+									'x', lx,
+									'y', fp.y - ascend
+								),
+							'line', // 8
+								euclid.point.create(
+									'x', rx,
+									'y', fp.y - ascend
+								),
+							'0-line',
+								'close'
+						],
+					'pc',
+						euclid.point.create(
+							'x', jools.half( rx + lx ),
+							'y', jools.half( b2y + descend + f2y - ascend )
+						)
+				)
+			);
+
+		}
+
+
+
+		/*
+		if( frontAt > 0 )
+		{
+			fabric.moveTo( lx, f2y - ascend, view ); // 5
+			fabric.lineTo( lx, f2y - ascend, view ); // 5
 			fabric.lineTo( fp.x, f2y  - ascend, view );  // 6
 		}
 

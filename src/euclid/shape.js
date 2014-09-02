@@ -236,7 +236,14 @@ shape.prototype.sketch =
 
 			case '0-line' :
 
-				fabric.moveTo( pn );
+				if( twist )
+				{
+					fabric.moveTo( pn );
+				}
+				else
+				{
+					fabric.lineTo( pn );
+				}
 
 				h += 2;
 
