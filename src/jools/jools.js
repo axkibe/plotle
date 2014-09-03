@@ -1079,8 +1079,7 @@ jools.immute =
 		a++
 	)
 	{
-		var name =
-			names[ a ];
+		var name = names[ a ];
 
 		if(
 			name.substring( 0, 1 ) === '$' ||
@@ -1101,11 +1100,9 @@ jools.immute =
 			continue;
 		}
 
-		desc.configurable =
-			false;
+		desc.configurable = false;
 
-		desc.writable =
-			false;
+		desc.writable = false;
 
 		Object.defineProperty(
 			obj,
