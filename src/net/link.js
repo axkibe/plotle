@@ -452,6 +452,7 @@ link.prototype._onUpdate =
 		chgs,
 		cid,
 		gotOwnChgs,
+		link,
 		outbox,
 		postbox,
 		redo,
@@ -462,6 +463,16 @@ link.prototype._onUpdate =
 		tfxChgX,
 		u,
 		undo;
+
+	link = this;
+
+/**/if( CHECK )
+/**/{
+/**/	if( root.link !== link )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	if( !reply.ok )
 	{
@@ -480,11 +491,11 @@ link.prototype._onUpdate =
 
 	seq = reply.seq;
 
-	undo = this._undo;
+	undo = link._undo;
 
-	redo = this._redo;
+	redo = link._redo;
 
-	rSpace = this._rSpace;
+	rSpace = link._rSpace;
 
 	// if this wasn't an empty timeout
 	// process the received changes
@@ -671,8 +682,9 @@ link.prototype._onUpdate =
 		}
 	}
 
+	link =
 	root.link =
-		root.link.create(
+		link.create(
 			'_cSpace',
 				cSpace,
 			'_outbox',
@@ -701,12 +713,12 @@ link.prototype._onUpdate =
 
 	if( gotOwnChgs )
 	{
-		root.link._sendChanges( );
+		link._sendChanges( );
 	}
 
 	// issues the following update
 
-	root.link._update( );
+	link._update( );
 };
 
 
@@ -721,12 +733,21 @@ link.prototype.alter =
 	var
 		c,
 		chgX,
+		link,
 		result,
 		undo;
 
-	result = chg.changeTree( this._cSpace );
+	link = this;
 
-	this._cSpace = result.tree;
+/**/if( CHECK )
+/**/{
+/**/	if( root.link !== link )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	result = chg.changeTree( link._cSpace );
 
 	chgX = result.chgX;
 
@@ -737,14 +758,10 @@ link.prototype.alter =
 			'chgX',
 				chgX,
 			'seq',
-				this._rSeq
+				link._rSeq
 		);
 
-	this._outbox = this._outbox.append( c ); // XXX
-
-	this._redo = jion.changeWrapRay.create( ); // XXX
-
-	undo = this._undo;
+	undo = link._undo;
 
 	undo = undo.append( c );
 
@@ -753,9 +770,20 @@ link.prototype.alter =
 		undo = undo.remove( 0 );
 	}
 
-	this._undo = undo; // XXX
+	link =
+	root.link =
+		link.create(
+			'_cSpace',
+				result.tree,
+			'_undo',
+				undo,
+			'_outbox',
+				root.link._outbox.append( c ),
+			'_redo',
+				jion.changeWrapRay.create( )
+		);
 
-	this._sendChanges( );
+	link._sendChanges( );
 
 	system.asyncEvent(
 		'update',
@@ -773,42 +801,61 @@ link.prototype.alter =
 link.prototype._sendChanges =
 	function( )
 {
+	var
+		c,
+		link;
+
+	link = this;
+
+/**/if( CHECK )
+/**/{
+/**/	if( root.link !== link )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	// already sending?
-	if( this._postbox.length > 0 )
+	if( link._postbox.length > 0 )
 	{
 		return;
 	}
 
 	// nothing to send?
-	if( this._outbox.length === 0 )
+	if( link._outbox.length === 0 )
 	{
 		return;
 	}
 
-	var c = this._outbox.get( 0 );
+	c = link._outbox.get( 0 );
 
-	this._outbox = this._outbox.remove( 0 ); // XXX
-
-	this._postbox = this._postbox.append( c ); // XXX
+	link =
+	root.link =
+		link.create(
+			'_outbox',
+				link._outbox.remove( 0 ),
+			'_postbox',
+				link._postbox.append( c )
+		);
 
 	root.ajax.twig.command.request(
 		{
 			cmd :
 				'alter',
 			spaceUser :
-				this.spaceUser,
+				link.spaceUser,
 			spaceTag :
-				this.spaceTag,
+				link.spaceTag,
 			chgX :
 				c.chgX,
 			cid :
 				c.cid,
 			passhash :
-				this.passhash,
+				link.passhash,
 			seq :
-				this._rSeq,
+				link._rSeq,
 			user :
-				this.username
+				link.username
 		},
 		'_onSendChanges'
 	);

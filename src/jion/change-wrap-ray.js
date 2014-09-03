@@ -67,7 +67,7 @@ if( JION )
 		node :
 			true,
 		equals :
-			false
+			'primitive'
 	};
 }
 
