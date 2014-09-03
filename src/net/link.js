@@ -457,7 +457,8 @@ link.prototype._onUpdate =
 		redo,
 		report,
 		seq,
-		space,
+		cSpace,
+		rSpace,
 		tfxChgX,
 		u,
 		undo;
@@ -483,6 +484,8 @@ link.prototype._onUpdate =
 
 	redo = this._redo;
 
+	rSpace = this._rSpace;
+
 	// if this wasn't an empty timeout
 	// process the received changes
 
@@ -502,10 +505,7 @@ link.prototype._onUpdate =
 			cid = chgs[ a ].cid;
 
 			// changes the clients understanding of the server tree
-			this._rSpace = // XXX
-				chgX
-				.changeTree( this._rSpace )
-				.tree;
+			rSpace = chgX.changeTree( rSpace ).tree;
 
 			// if the cid is the one in the postbox the client
 			// received the update of its own change.
@@ -605,7 +605,7 @@ link.prototype._onUpdate =
 		// and rebuilds the clients understanding of its own tree
 		outbox = this._outbox;
 
-		space = this._rSpace;
+		cSpace = rSpace;
 
 		for(
 			a = 0, aZ = postbox.length;
@@ -628,10 +628,7 @@ link.prototype._onUpdate =
 			//        optionally does not create result
 			//        intermediary objects but returns
 			//        the tree directly
-			space =
-				chgX
-				.changeTree( space )
-				.tree;
+			cSpace = chgX.changeTree( cSpace ).tree;
 		}
 
 		// transforms the outbox
@@ -667,42 +664,49 @@ link.prototype._onUpdate =
 					)
 				);
 
-			space =
+			cSpace =
 				chgX
-				.changeTree( space )
+				.changeTree( cSpace )
 				.tree;
 		}
-
-		this._cSpace = space; // XXX
 	}
 
-	this._rSeq = reply.seqZ; // XXX
+	root.link =
+		root.link.create(
+			'_cSpace',
+				cSpace,
+			'_outbox',
+				outbox,
+			'_postbox',
+				postbox,
+			'_redo',
+				redo,
+			'_rSeq',
+				reply.seqZ,
+			'_rSpace',
+				rSpace,
+			'_undo',
+				undo
+		);
 
-	this._outbox = outbox; // XXX
-
-	this._postbox = postbox; // XXX
-
-	this._undo = undo; // XXX
-
-	this._redo = redo; // XXX
 
 	if( report.length > 0 )
 	{
 		system.asyncEvent(
 			'update',
-			this._cSpace,
+			cSpace,
 			report
 		);
 	}
 
 	if( gotOwnChgs )
 	{
-		this._sendChanges( );
+		root.link._sendChanges( );
 	}
 
 	// issues the following update
 
-	this._update( );
+	root.link._update( );
 };
 
 
