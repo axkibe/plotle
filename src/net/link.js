@@ -891,10 +891,21 @@ link.prototype.undo =
 	var
 		c,
 		chgX,
+		link,
 		result,
 		undo;
 
-	undo = this._undo;
+	link = this;
+
+/**/if( CHECK )
+/**/{
+/**/	if( root.link !== link )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	undo = link._undo;
 
 	if( undo.length === 0 )
 	{
@@ -905,21 +916,31 @@ link.prototype.undo =
 
 	undo = undo.remove( undo.length - 1 );
 
-	this._undo = undo; // XXX
-
-	result = chgX.changeTree( this._cSpace );
+	result = chgX.changeTree( link._cSpace );
 
 	if( result === null )
 	{
+		root.link =
+			root.link.create(
+				'_undo',
+					undo
+			);
+
 		return;
 	}
-
-	this._cSpace = result.tree; // XXX
 
 	chgX = result.chgX;
 
 	if( chgX === null )
 	{
+		root.link =
+			root.link.create(
+				'_cSpace',
+					result.tree,
+				'_undo',
+					undo
+			);
+
 		return;
 	}
 
@@ -933,11 +954,20 @@ link.prototype.undo =
 				this._rSeq
 		);
 
-	this._outbox = this._outbox.append( c ); // XXX
+	link =
+	root.link =
+		root.link.create(
+			'_cSpace',
+				result.tree,
+			'_outbox',
+				this._outbox.append( c ),
+			'_redo',
+				this._redo.append( c ),
+			'_undo',
+				undo
+		);
 
-	this._redo = this._redo.append( c ); //XXX
-
-	this._sendChanges( );
+	link._sendChanges( );
 
 	system.asyncEvent(
 		'update',
