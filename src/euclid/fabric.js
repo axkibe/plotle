@@ -416,15 +416,19 @@ fabric.prototype.clip =
 	function(
 		shape,
 		view,
-		border,
-		a1,
-		a2,
-		a3,
-		a4
+		border
 	)
 {
 	var
 		cx;
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	cx = this._cx;
 
@@ -437,15 +441,11 @@ fabric.prototype.clip =
 
 	cx.beginPath( );
 
-	shape.sketch(
-		this,
+	this._sketch(
+		shape,
 		border,
 		true,
-		view,
-		a1,
-		a2,
-		a3,
-		a4
+		view
 	);
 
 	cx.clip( );
@@ -624,15 +624,19 @@ fabric.prototype.edge =
 	function(
 		style,  // the style formated in meshcraft style notation.
 		shape,  // an object which has sketch defined
-		view,
-		a1,
-		a2,
-		a3,
-		a4
+		view
 	)
 {
 	var
 		edge;
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	edge = style.edge;
 
@@ -643,11 +647,7 @@ fabric.prototype.edge =
 			this._edge(
 				edge[ i ],
 				shape,
-				view,
-				a1,
-				a2,
-				a3,
-				a4
+				view
 			);
 		}
 	}
@@ -656,11 +656,7 @@ fabric.prototype.edge =
 		this._edge(
 			edge,
 			shape,
-			view,
-			a1,
-			a2,
-			a3,
-			a4
+			view
 		);
 	}
 };
@@ -673,16 +669,20 @@ fabric.prototype.fill =
 	function(
 		style,   // the style formated in meshcraft style notation.
 		shape,   // an object which has sketch defined
-		view,
-		a1,
-		a2,
-		a3,
-		a4
+		view
 	)
 {
 	var
 		cx,
 		fill;
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	cx = this._cx;
 
@@ -692,15 +692,11 @@ fabric.prototype.fill =
 
 	this._begin( false );
 
-	shape.sketch(
-		this,
+	this._sketch(
+		shape,
 		0,
 		false,
-		view,
-		a1,
-		a2,
-		a3,
-		a4
+		view
 	);
 
 	cx.fillStyle =
@@ -1041,6 +1037,8 @@ fabric.prototype.lineTo =
 /*
 | Moves the sketch maker.
 |
+| TODO remove
+|
 | moveTo(point)       -or-
 | moveTo(x, y)        -or-
 |
@@ -1121,14 +1119,17 @@ fabric.prototype.paint =
 	function(
 		style,
 		shape,
-		view,
-		a1,
-		a2,
-		a3,
-		a4
+		view
 	)
 {
-	// FIXME remove a1-a4 stuff
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	var fillStyle = style.fill;
 
@@ -1142,15 +1143,11 @@ fabric.prototype.paint =
 
 	this._begin( false );
 
-	shape.sketch(
-		this,
+	this._sketch(
+		shape,
 		0,
 		false,
-		view,
-		a1,
-		a2,
-		a3,
-		a4
+		view
 	);
 
 	if( jools.isnon( fillStyle ) )
@@ -1171,11 +1168,7 @@ fabric.prototype.paint =
 			this._edge(
 				edgeStyle[ i ],
 				shape,
-				view,
-				a1,
-				a2,
-				a3,
-				a4
+				view
 			);
 		}
 	}
@@ -1184,11 +1177,7 @@ fabric.prototype.paint =
 		this._edge(
 			edgeStyle,
 			shape,
-			view,
-			a1,
-			a2,
-			a3,
-			a4
+			view
 		);
 	}
 };
@@ -1201,11 +1190,7 @@ fabric.prototype.reverseClip =
 	function(
 		shape,
 		view,
-		border,
-		a1,
-		a2,
-		a3,
-		a4
+		border
 	)
 {
 	var
@@ -1213,6 +1198,14 @@ fabric.prototype.reverseClip =
 		cx,
 		h,
 		w;
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	cx = this._cx;
 
@@ -1241,7 +1234,12 @@ fabric.prototype.reverseClip =
 
 	cx.lineTo( 0, 0 );
 
-	shape.sketch( this, border, true, view, a1, a2, a3, a4 );
+	this._sketch(
+		shape,
+		border,
+		true,
+		view
+	);
 
 	cx.clip( );
 };
@@ -1329,15 +1327,17 @@ fabric.prototype.withinSketch =
 	function(
 		shape,
 		view,
-		p,
-		a1,
-		a2,
-		a3
+		p
 	)
 {
 
 /**/if( CHECK )
 /**/{
+/**/	if( arguments.length !== 3 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
 /**/	if( p.reflect !== 'euclid.point' )
 /**/	{
 /**/		throw new Error( );
@@ -1346,7 +1346,12 @@ fabric.prototype.withinSketch =
 
 	this._begin( true );
 
-	shape.sketch( this, 0, true, view, a1, a2, a3 );
+	this._sketch(
+		shape,
+		0,
+		true,
+		view
+	);
 
 	return this._cx.isPointInPath( p.x, p.y );
 };
@@ -1514,11 +1519,7 @@ fabric.prototype._edge =
 	function(
 		style,  // the style formated in meshcraft style notation.
 		shape,  // an object which has sketch defined
-		view,
-		a1,
-		a2,
-		a3,
-		a4
+		view
 	)
 {
 	var
@@ -1528,15 +1529,11 @@ fabric.prototype._edge =
 
 	this._begin( true );
 
-	shape.sketch(
-		this,
+	this._sketch(
+		shape,
 		style.border,
 		true,
-		view,
-		a1,
-		a2,
-		a3,
-		a4
+		view
 	);
 
 	cx.strokeStyle =
@@ -1563,6 +1560,8 @@ fabric.prototype._edge =
 
 /*
 | Draws the fabrics background
+|
+| TODO remove
 */
 fabric.prototype.sketch =
 	function(
@@ -1618,5 +1617,274 @@ jools.lazyValue(
 	}
 );
 
+
+/*
+| Sketches a generic ( hull ) shape.
+*/
+fabric.prototype._sketchGeneric =
+	function(
+		shape,
+		border,
+		twist,
+		view
+	)
+{
+	var
+		dx,
+		dxy,
+		dy,
+		hull,
+		h,
+		hZ,
+		magic,
+		pc,
+		pp,
+		pn,
+		pstart,
+		rotation;
+
+	hull = shape.hull;
+
+	h = 1;
+
+	hZ = hull.length;
+
+/**/if( CHECK )
+/**/{
+/**/	if( hull[ 0 ] !== 'start' )
+/**/	{
+/**/		throw new Error(
+/**/			'hull must have start at [  0]'
+/**/		);
+/**/	}
+/**/}
+
+	pstart = view.point( hull [ h++ ] );
+
+	pc = view.point( shape.pc );
+
+	pstart =
+		pstart.add(
+			pstart.x > pc.x ?
+				-border :
+				( pstart.x < pc.x ? border : 0 ),
+			pstart.y > pc.y ?
+				-border :
+				( pstart.y < pc.y ? border : 0 )
+		);
+
+	pp = pstart;
+
+	pn = null;
+
+	this.moveTo( pstart );
+
+	while( h < hZ )
+	{
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( !pstart )
+/**/		{
+/**/			throw new Error( 'hull closed prematurely' );
+/**/		}
+/**/	}
+
+		switch( hull[ h ] )
+		{
+			case 'bezier' :
+
+				pn = hull[ h + 5 ];
+
+				break;
+
+			case 'line' :
+			case '0-line' :
+
+				pn = hull[ h + 1 ];
+
+				break;
+
+			case 'round' :
+
+				pn = hull[ h + 2 ];
+
+				magic = euclid.constants.magic;
+
+				break;
+
+			default :
+
+				// unknown hull section
+				throw new Error( );
+		}
+
+		if( pn === 'close' )
+		{
+			pn = pstart;
+
+			pstart = null;
+		}
+		else
+		{
+			pn = view.point( pn );
+
+			if( border !== 0 )
+			{
+				pn = pn.add(
+					pn.x > pc.x ?
+						-border
+						:
+						(
+							pn.x < pc.x ?
+								border
+								:
+								0
+						),
+					pn.y > pc.y ?
+						-border
+						:
+						(
+							pn.y < pc.y ?
+								border
+								:
+								0
+						)
+				);
+			}
+		}
+
+		switch( hull[h] )
+		{
+
+			case 'bezier' :
+
+				dx = pn.x - pp.x;
+
+				dy = pn.y - pp.y;
+
+				this.beziTo(
+					hull[ h + 1 ] * dx,
+					hull[ h + 2 ] * dy,
+					-hull[ h + 3 ] * dx,
+					-hull[ h + 4 ] * dy,
+					pn
+				);
+
+				h += 6;
+
+				break;
+
+			case 'line' :
+
+				this.lineTo( pn );
+
+				h += 2;
+
+				break;
+
+			case '0-line' :
+
+				if( twist )
+				{
+					this.moveTo( pn );
+				}
+				else
+				{
+					this.lineTo( pn );
+				}
+
+				h += 2;
+
+				break;
+
+			case 'round' :
+
+				dx = pn.x - pp.x;
+
+				dy = pn.y - pp.y;
+
+				rotation = hull[ h + 1 ];
+
+				dxy = dx * dy;
+
+				switch( rotation )
+				{
+					case 'clockwise' :
+
+						this.beziTo(
+							dxy > 0 ?   magic * dx : 0,
+							dxy < 0 ?   magic * dy : 0,
+							dxy < 0 ? - magic * dx : 0,
+							dxy > 0 ? - magic * dy : 0,
+							pn
+						);
+
+						break;
+
+					default :
+
+						// unknown rotation
+						throw new Error( );
+				}
+
+				h += 3;
+
+				break;
+
+			default :
+
+				// unknown hull section.
+				throw new Error( );
+		}
+
+		pp = pn;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( pstart !== null )
+/**/	{
+/**/		// hull did not close
+/**/		throw new Error( );
+/**/	}
+/**/}
+};
+
+
+/*
+| Sketches a shape.
+*/
+fabric.prototype._sketch =
+	function(
+		shape,
+		border,
+		twist,
+		view
+	)
+{
+	if( shape.hull )
+	{
+		return (
+			this._sketchGeneric(
+				shape,
+				border,
+				twist,
+				view
+			)
+		);
+	}
+
+	// TODO do not fallback to previous implementation
+
+	return (
+		shape.sketch(
+			this,
+			border,
+			twist,
+			view
+		)
+	);
+};
 
 } )( );
