@@ -712,58 +712,6 @@ rect.prototype.equals =
 
 
 /*
-| Draws the rectangle.
-*/
-rect.prototype.sketch =
-	function(
-		fabric,
-		border,
-		twist,
-		view
-	)
-{
-	var
-		wx,
-		ny,
-		ex,
-		sy;
-
-	wx = view.x( this.pnw.x );
-
-	ny = view.y( this.pnw.y );
-
-	ex = view.x( this.pse.x );
-
-	sy = view.y( this.pse.y );
-
-	fabric.moveTo(
-		wx + border,
-		ny + border
-	);
-
-	fabric.lineTo(
-		ex - border,
-		ny + border
-	);
-
-	fabric.lineTo(
-		ex - border,
-		sy - border
-	);
-
-	fabric.lineTo(
-		wx + border,
-		sy - border
-	);
-
-	fabric.lineTo(
-		wx + border,
-		ny + border
-	);
-};
-
-
-/*
 | Returns true if point is within this rect.
 */
 rect.prototype.within =

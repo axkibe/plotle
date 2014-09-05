@@ -196,6 +196,7 @@ jools.lazyValue(
 
 /*
 | Draws the round-rect.
+| XXX
 */
 roundRect.prototype.sketch =
 	function

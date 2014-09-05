@@ -266,22 +266,6 @@ jools.lazyValue(
 
 
 /*
-| Draws the ellipse.
-*/
-ellipse.prototype.sketch =
-	function
-	(
-		// ...
-	)
-{
-	return this.shape.sketch.apply(
-		this.shape,
-		arguments
-	);
-};
-
-
-/*
 | Returns true if point is within the ellipse.
 */
 ellipse.prototype.within =

@@ -1853,6 +1853,43 @@ fabric.prototype._sketchGeneric =
 
 
 /*
+| Draws the rectangle.
+*/
+fabric.prototype._sketchRect =
+	function(
+		rect,
+		border,
+		twist,
+		view
+	)
+{
+	var
+		wx,
+		ny,
+		ex,
+		sy;
+
+	wx = view.x( rect.pnw.x );
+
+	ny = view.y( rect.pnw.y );
+
+	ex = view.x( rect.pse.x );
+
+	sy = view.y( rect.pse.y );
+
+	this.moveTo( wx + border, ny + border );
+
+	this.lineTo( ex - border, ny + border );
+
+	this.lineTo( ex - border, sy - border );
+
+	this.lineTo( wx + border, sy - border );
+
+	this.lineTo( wx + border, ny + border );
+};
+
+
+/*
 | Sketches a shape.
 */
 fabric.prototype._sketch =
@@ -1863,6 +1900,27 @@ fabric.prototype._sketch =
 		view
 	)
 {
+	if( shape.shape )
+	{
+		shape = shape.shape;
+	}
+
+	switch( shape.reflect )
+	{
+		case 'euclid.rect' :
+
+			return (
+				this._sketchRect(
+					shape,
+					border,
+					twist,
+					view
+				)
+			);
+
+			break;
+	}
+
 	if( shape.hull )
 	{
 		return (

@@ -250,25 +250,6 @@ button.prototype.focusable = true;
 
 
 /*
-| Sketches the button.
-*/
-button.prototype.sketch =
-	function(
-		fabric,
-		border,
-		twist
-	)
-{
-	this._shape.sketch(
-		fabric,
-		border,
-		twist,
-		euclid.view.proper
-	);
-};
-
-
-/*
 | The button's fabric.
 */
 jools.lazyValue(
@@ -308,7 +289,7 @@ jools.lazyValue(
 
 		f.paint(
 			style,
-			this,
+			this._shape,
 			euclid.view.proper
 		);
 
@@ -417,7 +398,7 @@ button.prototype.pointingHover =
 
 	if(
 		!this._fabric.withinSketch(
-			this,
+			this._shape,
 			euclid.view.proper,
 			pp
 		)
@@ -465,7 +446,7 @@ button.prototype.click =
 
 	if(!
 		this._fabric.withinSketch(
-			this,
+			this._shape,
 			euclid.view.proper,
 			pp
 		)
