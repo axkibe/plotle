@@ -18,6 +18,7 @@ icons = icons || { };
 | Imports
 */
 var
+	euclid,
 	jools;
 
 
@@ -29,7 +30,7 @@ var
 
 
 /*
-| The jion definition
+| The jion definition.
 */
 if( JION )
 {
@@ -39,7 +40,9 @@ if( JION )
 		singleton :
 			true,
 		equals :
-			'primitive'
+			'primitive',
+		init :
+			[ ]
 	};
 }
 
@@ -52,29 +55,58 @@ remove = icons.remove;
 
 
 /*
-| Sketches the remove button's icon.
+|  Initializer.
+|
+|
+| NW**B   D**E
+|  P***   ***F
+|    ***C***
+|     O***G
+|    ***K***
+|  N***   ***H
+|  M**L   J**SE
+|
 */
-remove.prototype.sketch =
-	function(
-		fabric
-		// border,
-		// twist
-	)
+remove.prototype._init =
+	function( )
 {
-	var w =
-		11;
+	var
+		pnw,
+		pne,
+		pse,
+		psw,
+		pc;
 
-	var h =
-		11;
+	pnw =
+		euclid.point.create(
+			'x', 17,
+			'y', 16
+		);
 
-	// zone
-	var wx = 17;
-	var ny = 16;
-	var ex = wx + w;
-	var sy = ny + h;
+	pse =
+		euclid.point.create(
+			'x', 28,
+			'y', 27
+		);
 
-	var cx = jools.half( wx + ex );
-	var cy = jools.half( ny + sy );
+	pne =
+		euclid.point.create(
+			'x', pse.x,
+			'y', pnw.y
+		);
+
+	psw =
+		euclid.point.create(
+			'x', pnw.x,
+			'y', pse.y
+		);
+
+	pc =
+		// FUTURE make it an euclid middle call
+		euclid.point.create(
+			'x', jools.half( pnw.x + pse.x ),
+			'y', jools.half( pnw.y + pse.y )
+		);
 
 	// arm with and height
 	var aw = 2;
@@ -84,33 +116,45 @@ remove.prototype.sketch =
 	var cw = 2;
 	var ch = 2;
 
-	//
-	// A**B   D**E
-	// P***   ***F
-	//   ***C***
-	//    O***G
-	//   ***K***
-	// N***   ***H
-	// M**L   J**I
-	//
+	this._x =
+		euclid.shape.create(
+			'hull',
+				[
+					'start', pnw,                 // A
+					'line',  pnw.add(  aw,   0 ), // B
+					'line',  pc.add(    0, -ch ), // C
+					'line',  pne.add( -aw,   0 ), // D
+					'line',  pne,                 // E
+					'line',  pne.add(   0,  ah ), // F
+					'line',  pc.add(   cw,   0 ), // G
+					'line',  pse.add(   0, -ah ), // H
+					'line',  pse,                 // I
+					'line',  pse.add( -aw,   0 ), // J
+					'line',  pc.add(    0,  ch ), // K
+					'line',  psw.add(  aw,   0 ), // L
+					'line',  psw,                 // M
+					'line',  psw.add(   0, -ah ), // N
+					'line',  pc.add(  -cw,   0 ), // O
+					'line',  pnw.add(   0,  ah ), // P
+					'line',  'close'              // A
+				],
+			'pc',
+				pc
+		);
+};
 
-	fabric.moveTo( wx      , ny      );  // A
-	fabric.lineTo( wx + aw , ny      );  // B
-	fabric.lineTo( cx      , cy - ch );  // C
-	fabric.lineTo( ex - aw , ny      );  // D
-	fabric.lineTo( ex      , ny      );  // E
-	fabric.lineTo( ex      , ny + ah );  // F
-	fabric.lineTo( cx + cw , cy      );  // G
-	fabric.lineTo( ex      , sy - ah );  // H
-	fabric.lineTo( ex      , sy      );  // I
-	fabric.lineTo( ex - aw , sy      );  // J
-	fabric.lineTo( cx      , cy + ch );  // K
-	fabric.lineTo( wx + aw , sy      );  // L
-	fabric.lineTo( wx      , sy      );  // M
-	fabric.lineTo( wx      , sy - ah );  // N
-	fabric.lineTo( cx - cw , cy      );  // O
-	fabric.lineTo( wx      , ny + ah );  // P
-	fabric.lineTo( wx      , ny      );  // A
+
+/*
+| Draws the moveto button on a fabric
+*/
+remove.prototype.draw =
+	function(
+		fabric,
+		style,
+		view
+	)
+{
+	fabric.paint( style, this._x, view );
 };
 
 

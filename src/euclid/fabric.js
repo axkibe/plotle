@@ -1917,8 +1917,6 @@ fabric.prototype._sketch =
 					view
 				)
 			);
-
-			break;
 	}
 
 	if( shape.hull )

@@ -237,8 +237,13 @@ button.prototype._init =
 		this._shape = null;
 	}
 
+	if( this.icon )
+	{
+		this._icon = icons[ this.icon ].create( );
+	}
+
 	// if true repeats the push action if held down
-	// FIXME
+	// FUTURE
 	this.repeating = false;
 };
 
@@ -352,17 +357,14 @@ jools.lazyValue(
 			}
 		}
 
-		if( this.icon )
+		if( this._icon )
 		{
-			style =
+			this._icon.draw(
+				f,
 				widgets.getStyle(
 					this.iconStyle,
 					Accent.NORMA
-				);
-
-			f.paint(
-				style,
-				icons[ this.icon ].create( ),
+				),
 				euclid.view.proper
 			);
 		}

@@ -180,8 +180,7 @@ jools.lazyValue(
 	{
 		return(
 			icons.check.create(
-				'pc',
-					this.frame.pc
+				'pc', this.frame.pc
 			)
 		);
 	}
@@ -345,12 +344,12 @@ checkbox.prototype.draw =
 
 	if( this.checked )
 	{
-		fabric.paint(
+		this.checkIcon.draw(
+			fabric,
 			widgets.getStyle(
 				'checkboxCheck',
 				Accent.NORMA
 			),
-			this.checkIcon,
 			euclid.view.proper
 		);
 	}

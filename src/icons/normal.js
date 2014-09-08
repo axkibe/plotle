@@ -15,6 +15,13 @@ icons = icons || { };
 
 
 /*
+| Imports
+*/
+var
+	euclid;
+
+
+/*
 | Capsule
 */
 ( function( ) {
@@ -32,7 +39,9 @@ if( JION )
 		singleton :
 			true,
 		equals :
-			'primitive'
+			'primitive',
+		init :
+			[ ]
 	};
 }
 
@@ -45,39 +54,72 @@ normal = icons.normal;
 
 /*
 | Sketches the normal button's icon.
+|
+|
+|     A
+|     **
+|     ***
+|     ****
+|     *****
+|     ******
+|     *******
+|     **F**C*B
+|     G   **
+|          **
+|           ED
 */
-normal.prototype.sketch =
+normal.prototype._init =
+	function( )
+{
+	var
+		ap;
+
+	ap =
+		euclid.point.create(
+			'x',
+				18,
+			'y',
+				12
+		);
+
+	this._arrow =
+		euclid.shape.create(
+			'hull',
+				[
+					'start',
+						ap,                 // A
+					'line',
+						ap.add(  11,  10 ), // B
+					'line',
+						ap.add(   6,  11 ), // C
+					'line',
+						ap.add(   9,  17 ), // D
+					'line',
+						ap.add(   7,  18 ), // E
+					'line',
+						ap.add(   4,  12 ), // F
+					'line',
+						ap.add(   0,  15 ), // G
+					'line',
+						'close'
+				],
+			'pc',
+				ap.add( 5, 9 )
+		);
+};
+
+
+/*
+| Draws the moveto button on a fabric
+*/
+normal.prototype.draw =
 	function(
-		fabric
-		// border,
-		// twist
+		fabric,
+		style,
+		view
 	)
 {
-	var wx = 18;
-	var ny = 12;
-
-	//
-	//
-	//  A
-	//  **
-	//  ***
-	//  ****
-	//  *****
-	//  ******
-	//  *******
-	//  **F**C*B
-	//  G   **
-	//       **
-	//        ED
-
-	fabric.moveTo( wx +  0, ny +  0 );  // A
-	fabric.lineTo( wx + 11, ny + 10 );  // B
-	fabric.lineTo( wx +  6, ny + 11 );  // C
-	fabric.lineTo( wx +  9, ny + 17 );  // D
-	fabric.lineTo( wx +  7, ny + 18 );  // E
-	fabric.lineTo( wx +  4, ny + 12 );  // F
-	fabric.lineTo( wx +  0, ny + 15 );  // G
-	fabric.lineTo( wx +  0, ny +  0 );  // A
+	fabric.paint( style, this._arrow, view );
 };
 
 

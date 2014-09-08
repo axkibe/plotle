@@ -15,6 +15,13 @@ icons = icons || { };
 
 
 /*
+| Imports
+*/
+var
+	euclid;
+
+
+/*
 | Capsule
 */
 ( function( ) {
@@ -22,7 +29,7 @@ icons = icons || { };
 
 
 /*
-| The jion definition
+| The jion definition.
 */
 if( JION )
 {
@@ -32,7 +39,9 @@ if( JION )
 		singleton :
 			true,
 		equals :
-			'primitive'
+			'primitive',
+		init :
+			[ ]
 	};
 }
 
@@ -43,52 +52,91 @@ moveto = icons.moveto;
 
 
 /*
-| Sketches the moveto button's icon.
+| The moveto button's icon.
+|
+|        A (ap)
+|       ***
+|      *****
+|     *******
+|    G*F***C*B
+|      *****
+|      *****
+|      *****
+|      E***D
+|
+|      H***I
+|      K***J
 */
-moveto.prototype.sketch =
+moveto.prototype._init =
+	function( )
+{
+	var ap;
+
+	ap =
+		euclid.point.create(
+			'x', 22,
+			'y', 11
+		);
+
+	this._arrow =
+		euclid.shape.create(
+			'hull',
+				[
+					'start',
+						ap,             // A
+					'line',
+						ap.add(  6,  8 ), // B
+					'line',
+						ap.add(  2,  8 ), // C
+					'line',
+						ap.add(  2, 14 ), // D
+					'line',
+						ap.add( -2, 14 ), // E
+					'line',
+						ap.add( -2,  8 ), // F,
+					'line',
+						ap.add( -6,  8 ), // G,
+					'line',
+						'close'
+				],
+			'pc',
+				ap.add( 0, 7 )
+		);
+
+	this._base1 =
+		euclid.rect.create(
+			'pnw',
+				ap.add( -2, 16 ),
+			'pse',
+				ap.add( +2, 17 )
+		);
+
+	this._base2 =
+		euclid.rect.create(
+			'pnw',
+				ap.add( -2, 19 ),
+			'pse',
+				ap.add( +2, 20 )
+		);
+
+};
+
+
+/*
+| Draws the moveto button on a fabric
+*/
+moveto.prototype.draw =
 	function(
-		fabric
-		// border,
-		// twist
+		fabric,
+		style,
+		view
 	)
 {
-	var wx = 22;
-	var ny = 11;
+	fabric.paint( style, this._arrow, view );
 
-	//
-	//     A
-	//    ***
-	//   *****
-	//  *******
-	// G*F***C*B
-	//   *****
-	//   *****
-	//   *****
-	//   E***D
-	//
-	//   H***I
-	//   K***J
+	fabric.paint( style, this._base1, view );
 
-	fabric.moveTo( wx + 0, ny +  0 );  // A
-	fabric.lineTo( wx + 6, ny +  8 );  // B
-	fabric.lineTo( wx + 2, ny +  8 );  // C
-	fabric.lineTo( wx + 2, ny + 14 );  // D
-	fabric.lineTo( wx - 2, ny + 14 );  // E
-	fabric.lineTo( wx - 2, ny +  8 );  // F
-	fabric.lineTo( wx - 6, ny +  8 );  // G
-	fabric.lineTo( wx + 0, ny +  0 );  // A
-
-	fabric.moveTo( wx - 2, ny + 16 );  // H
-	fabric.lineTo( wx + 2, ny + 16 );  // I
-	fabric.lineTo( wx + 2, ny + 17 );  // J
-	fabric.lineTo( wx - 2, ny + 17 );  // K
-	fabric.moveTo( wx - 2, ny + 16 );  // H
-
-	fabric.moveTo( wx - 2, ny + 19 );  // H
-	fabric.lineTo( wx + 2, ny + 19 );  // I
-	fabric.lineTo( wx + 2, ny + 20 );  // J
-	fabric.lineTo( wx - 2, ny + 20 );  // K
-	fabric.moveTo( wx - 2, ny + 19 );  // H
+	fabric.paint( style, this._base2, view );
 };
 
 

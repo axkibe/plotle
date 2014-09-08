@@ -16,6 +16,13 @@ icons = icons || { };
 
 
 /*
+| Imports
+*/
+var
+	euclid;
+
+
+/*
 | Capsule
 */
 ( function( ) {
@@ -23,7 +30,7 @@ icons = icons || { };
 
 
 /*
-| The jion definition
+| The jion definition.
 */
 if( JION )
 {
@@ -39,7 +46,9 @@ if( JION )
 						type :
 							'euclid.point'
 					}
-			}
+			},
+		init :
+			[ ]
 	};
 }
 
@@ -47,55 +56,52 @@ if( JION )
 var
 	check;
 
-check =
-	icons.check;
+check = icons.check;
 
 
 /*
 | Sketches the normal button's icon.
 */
-check.prototype.sketch =
-	function(
-		fabric
-		// border,
-		// twist
-	)
+check.prototype._init =
+	function( )
 {
 	var
-		pc,
-		pcx,
-		pcy;
+		pc;
 
 	pc = this.pc;
 
-	pcx = pc.x;
+	this._check =
+		euclid.shape.create(
+			'hull',
+				[
+					'start',
+						pc.add( -5,  -3 ),
+					'line',
+						pc.add(  2,   5 ),
+					'line',
+						pc.add( 14, -12 ),
+					'line',
+						pc.add(  2,  -1 ),
+					'line',
+						'close'
+				],
+			'pc',
+				pc
+		);
+};
 
-	pcy = pc.y;
 
-	fabric.moveTo(
-		pcx -  5,
-		pcy -  3
-	);
-
-	fabric.lineTo(
-		pcx +  2,
-		pcy +  5
-	);
-
-	fabric.lineTo(
-		pcx + 14,
-		pcy - 12
-	);
-
-	fabric.lineTo(
-		pcx +  2,
-		pcy -  1
-	);
-
-	fabric.lineTo(
-		pcx -  5,
-		pcy -  3
-	);
+/*
+| Draws the check button on a fabric.
+*/
+check.prototype.draw =
+	function(
+		fabric,
+		style,
+		view
+	)
+{
+	fabric.paint( style, this._check, view );
 };
 
 

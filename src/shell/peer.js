@@ -62,7 +62,7 @@ Peer = { };
 
 
 /*
-| authenticates a user or visitor.
+| Authenticates a user or visitor.
 |
 | FIXME remove
 */

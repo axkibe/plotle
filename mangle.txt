@@ -42,8 +42,11 @@
 . _$twist
 . _$visitPasshash
 . _$visitUser
+. _arrow
 . _backAt
 . _backPath
+. _base1
+. _base2
 . _begin
 . _blink
 . _blinkCatcher
@@ -58,6 +61,7 @@
 . _changeTreeSet
 . _changeTreeSplit
 . _changeZoom
+. _check
 . _colorStyle
 . _cx
 . _draw
@@ -76,6 +80,7 @@
 . _gradientR0
 . _gradientR1
 . _handles
+. _icon
 . _init
 . _isActiveButton
 . _isSection
@@ -140,6 +145,9 @@
 . _setHover
 . _setMark
 . _shape
+. _sketch
+. _sketchGeneric
+. _sketchRect
 . _sliced
 . _specialKey
 . _steerAttention
@@ -156,6 +164,7 @@
 . _useCapture
 . _userIsGuest
 . _widgetPath
+. _x
 > a
 > abort
 . abortAll
