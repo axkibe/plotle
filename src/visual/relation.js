@@ -199,13 +199,13 @@ relation.spawn =
 	)
 {
 	var
-		cline,
+		arrow,
 		key,
 		pnw,
 		result;
 
-	cline =
-		euclid.line.connect(
+	arrow =
+		euclid.arrow.connect(
 			item1.silhoutte,
 			null,
 			item2.silhoutte,
@@ -213,7 +213,7 @@ relation.spawn =
 		);
 
 	pnw =
-		cline.pc.sub(
+		arrow.pc.sub(
 			theme.relation.spawnOffset
 		);
 
@@ -256,8 +256,8 @@ relation.prototype.draw =
 	var
 		item1,
 		item2,
-		l1,
-		l2,
+		arrow1,
+		arrow2,
 		space,
 		zone;
 
@@ -271,8 +271,8 @@ relation.prototype.draw =
 
 	if( item1 )
 	{
-		l1 =
-			euclid.line.connect(
+		arrow1 =
+			euclid.arrow.connect(
 				item1.silhoutte,
 				'normal',
 				zone,
@@ -281,15 +281,15 @@ relation.prototype.draw =
 
 		fabric.paint(
 			theme.relation.style,
-			l1,
+			arrow1,
 			this.view
 		);
 	}
 
 	if( item2 )
 	{
-		l2 =
-			euclid.line.connect(
+		arrow2 =
+			euclid.arrow.connect(
 				zone,
 				'normal',
 				item2.silhoutte,
@@ -298,7 +298,7 @@ relation.prototype.draw =
 
 		fabric.paint(
 			theme.relation.style,
-			l2,
+			arrow2,
 			this.view
 		);
 	}

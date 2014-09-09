@@ -638,32 +638,6 @@ doc.prototype._getRangeShape =
 			);
 
 		}
-
-
-
-		/*
-		if( frontAt > 0 )
-		{
-			fabric.moveTo( lx, f2y - ascend, view ); // 5
-			fabric.lineTo( lx, f2y - ascend, view ); // 5
-			fabric.lineTo( fp.x, f2y  - ascend, view );  // 6
-		}
-
-		if( frontAt > 0 || !twist )
-		{
-			fabric.lineTo( fp.x, fp.y -  ascend, view ); // 7
-		}
-		else
-		{
-			fabric.moveTo( fp.x, fp.y -  ascend, view ); // 7
-		}
-
-		fabric.lineTo( rx,   fp.y -  ascend, view );   // 8
-
-		if( !twist )
-		{
-			fabric.lineTo( rx, bp.y - ascend, view );
-		}*/
 	}
 };
 

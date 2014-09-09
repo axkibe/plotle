@@ -254,6 +254,14 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
+			'src/euclid/arrow.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true
+	),
+	resource.create(
+		'filePath',
 			'src/euclid/view.js',
 		'hasJion',
 			true,
