@@ -158,6 +158,14 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
+			'src/euclid/fix-point.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true
+	),
+	resource.create(
+		'filePath',
 			'src/euclid/rect.js',
 		'hasJion',
 			true,

@@ -174,18 +174,24 @@ point.renew =
 		y
 	)
 {
+	var
+		p;
+
 	for(
 		var a = 2, aZ = arguments.length;
 		a < aZ;
 		a++
 	)
 	{
-		var p =
-			arguments[a];
+		p = arguments[a];
 
 		if(
-			p instanceof point &&
-			p.x === x &&
+			p
+			&&
+			p.reflect === 'euclid.point'
+			&&
+			p.x === x
+			&&
 			p.y === y
 		)
 		{
@@ -198,6 +204,28 @@ point.renew =
 			x,
 		'y',
 			y
+	);
+};
+
+
+/*
+| Creates a fix point anchored to this point.
+*/
+point.prototype.fixPoint =
+	function(
+		x,
+		y
+	)
+{
+	return(
+		euclid.fixPoint.create(
+			'anchor',
+				this,
+			'x',
+				x,
+			'y',
+				y
+		)
 	);
 };
 

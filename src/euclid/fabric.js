@@ -1077,14 +1077,14 @@ fabric.prototype.moveTo =
 		v = a3;
 	}
 
-	jools.ensureInt( x, y );
-
 	if( v )
 	{
 		x = v.x( x );
 
 		y = v.y( y );
 	}
+
+	jools.ensureInt( x, y );
 
 	this._$posx = x;
 
@@ -1640,7 +1640,7 @@ fabric.prototype._sketchGeneric =
 		pc,
 		pp,
 		pn,
-		pstart,
+		pStart,
 		rotation;
 
 	hull = shape.hull;
@@ -1659,32 +1659,32 @@ fabric.prototype._sketchGeneric =
 /**/	}
 /**/}
 
-	pstart = view.point( hull [ h++ ] );
+	pStart = view.point( hull [ h++ ] );
 
 	pc = view.point( shape.pc );
 
-	pstart =
-		pstart.add(
-			pstart.x > pc.x ?
-				-border :
-				( pstart.x < pc.x ? border : 0 ),
-			pstart.y > pc.y ?
-				-border :
-				( pstart.y < pc.y ? border : 0 )
+	pStart =
+		pStart.add(
+			pStart.x > pc.x
+				?  -border
+				: ( pStart.x < pc.x ? border : 0 ),
+			pStart.y > pc.y
+				?  -border
+				: ( pStart.y < pc.y ? border : 0 )
 		);
 
-	pp = pstart;
+	pp = pStart;
 
 	pn = null;
 
-	this.moveTo( pstart );
+	this.moveTo( pStart );
 
 	while( h < hZ )
 	{
 
 /**/	if( CHECK )
 /**/	{
-/**/		if( !pstart )
+/**/		if( !pStart )
 /**/		{
 /**/			throw new Error( 'hull closed prematurely' );
 /**/		}
@@ -1721,9 +1721,9 @@ fabric.prototype._sketchGeneric =
 
 		if( pn === 'close' )
 		{
-			pn = pstart;
+			pn = pStart;
 
-			pstart = null;
+			pStart = null;
 		}
 		else
 		{
@@ -1843,7 +1843,7 @@ fabric.prototype._sketchGeneric =
 
 /**/if( CHECK )
 /**/{
-/**/	if( pstart !== null )
+/**/	if( pStart !== null )
 /**/	{
 /**/		// hull did not close
 /**/		throw new Error( );

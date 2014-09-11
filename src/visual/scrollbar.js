@@ -146,6 +146,8 @@ scrollbar.prototype.draw =
 
 /*
 | Returns the (2d) area of the scrollbar.
+|
+| FIXME use fixPoints
 */
 scrollbar.prototype.getArea =
 	function(

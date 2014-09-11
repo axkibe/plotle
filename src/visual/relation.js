@@ -279,10 +279,10 @@ relation.prototype.draw =
 				'normal'
 			);
 
-		fabric.paint(
-			theme.relation.style,
-			arrow1,
-			this.view
+		arrow1.draw(
+			fabric,
+			this.view,
+			theme.relation.style
 		);
 	}
 
@@ -296,10 +296,10 @@ relation.prototype.draw =
 				'arrow'
 			);
 
-		fabric.paint(
-			theme.relation.style,
-			arrow2,
-			this.view
+		arrow2.draw(
+			fabric,
+			this.view,
+			theme.relation.style
 		);
 	}
 

@@ -219,125 +219,127 @@ jools.lazyValue(
 
 
 /*
-| Sketches the line.
+| Returns the shape of the arrow.
 */
-arrow.prototype.sketch =
-	function(
-		fabric,
-		border,
-		twist,
-		view
-	)
-{
-	var
-		ad,
-		cos,
-		d,
-		p1x,
-		p1y,
-		p2x,
-		p2y,
-		ms,
-		round,
-		sin;
-
-	p1x = view.x( this.p1.x );
-
-	p1y = view.y( this.p1.y );
-
-	p2x = view.x( this.p2.x );
-
-	p2y = view.y( this.p2.y );
-
-	// @@, multiple line end types
-	switch( this.p1end )
+jools.lazyValue(
+	arrow.prototype,
+	'_shape',
+	function( )
 	{
-		case 'normal':
+		var
+			ad,
+			arrowBase,
+			cos,
+			d,
+			hull,
+			p1,
+			p2,
+			ms,
+			round,
+			sin;
 
-			if( twist )
-			{
-				fabric.moveTo( p1x, p1y );
-			}
-			break;
+		p1 = this.p1;
 
-		default :
+		p2 = this.p2;
 
-			// unknown line end
-			throw new Error( );
-	}
+		hull = [ ];
 
-	switch( this.p2end )
-	{
-		case 'normal' :
+		// FUTURE, allow arrows on p1.
+		switch( this.p1end )
+		{
+			case 'normal':
 
-			if( twist )
-			{
-				fabric.lineTo( p2x, p2y );
-			}
-
-			break;
-
-		case 'arrow' :
-
-			cos = Math.cos;
-
-			sin = Math.sin;
-
-			round = Math.round;
-
-			// degree of arrow tail
-			d = Math.atan2( p2y - p1y, p2x - p1x );
-
-			// degree of arrow head
-			ad = Math.PI / 12;
-
-			// arrow span
-			// the arrow is formed as hexagon piece
-			ms = 2 / Math.sqrt(3) * arrowSize;
-
-			if (twist)
-			{
-				fabric.lineTo(
-					p2x - round( ms * cos( d ) ),
-					p2y - round( ms * sin( d ) )
+				hull.push(
+					'start',
+						p1
 				);
-			}
-			else
-			{
-				fabric.moveTo(
-					p2x - round( ms * cos( d ) ),
-					p2y - round( ms * sin( d ) )
+
+				break;
+
+			default :
+
+				// unknown arrow end
+				throw new Error( );
+		}
+
+		switch( this.p2end )
+		{
+			case 'normal' :
+
+				hull.push(
+					'line',
+						p2
 				);
-			}
 
-			fabric.lineTo(
-				p2x - round( arrowSize * cos( d - ad ) ),
-				p2y - round( arrowSize * sin( d - ad ) )
-			);
+				break;
 
-			fabric.lineTo(
-				p2x,
-				p2y
-			);
+			case 'arrow' :
 
-			fabric.lineTo(
-				p2x - round( arrowSize * cos( d + ad ) ),
-				p2y - round( arrowSize * sin( d + ad ) )
-			);
+				cos = Math.cos;
 
-			fabric.lineTo(
-				p2x - round( ms * cos( d ) ),
-				p2y - round( ms * sin( d ) )
-			);
+				sin = Math.sin;
 
-			break;
+				round = Math.round;
 
-		default :
+				// degree of arrow tail
+				d = Math.atan2( p2.y - p1.y, p2.x - p1.x );
 
-			// unknown arrow end
-			throw new Error( );
+				// degree of arrow head
+				ad = Math.PI / 12;
+
+				// arrow span
+				// the arrow is formed as hexagon piece
+				ms = 2 / Math.sqrt(3) * arrowSize;
+
+				arrowBase =
+					p2.fixPoint(
+						-round( ms * cos( d ) ),
+						-round( ms * sin( d ) )
+					);
+
+				hull.push(
+					'line',
+						arrowBase,
+					'line',
+						p2.fixPoint(
+							-round( arrowSize * cos( d - ad ) ),
+							-round( arrowSize * sin( d - ad ) )
+						),
+					'line',
+						p2,
+					'line',
+						p2.fixPoint(
+							-round( arrowSize * cos( d + ad ) ),
+							-round( arrowSize * sin( d + ad ) )
+						),
+					'line',
+						arrowBase
+				);
+
+
+				break;
+
+			default :
+
+				// unknown arrow end
+				throw new Error( );
+		}
+
+		hull.push(
+			'0-line',
+				'close'
+		);
+
+		return(
+			euclid.shape.create(
+				'hull',
+					hull,
+				'pc',
+					this.pc
+			)
+		);
 	}
-};
+);
 
 
 /*
@@ -352,7 +354,7 @@ arrow.prototype.draw =
 {
 	fabric.paint(
 		style,
-		this,
+		this._shape,
 		view
 	);
 };

@@ -153,9 +153,7 @@ view.prototype.x =
 /**/		arguments.length !== 1
 /**/	)
 /**/	{
-/**/		throw new Error(
-/**/			'arg fail'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -182,15 +180,11 @@ view.prototype.dex =
 /**/		arguments.length !== 1
 /**/	)
 /**/	{
-/**/		throw new Error(
-/**/			'arg fail'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
-	return Math.round(
-		x / this.zoom - this.pan.x
-	);
+	return Math.round( x / this.zoom - this.pan.x );
 };
 
 
@@ -211,9 +205,7 @@ view.prototype.y =
 /**/		arguments.length !== 1
 /**/	)
 /**/	{
-/**/		throw new Error(
-/**/			'arg fail'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -240,9 +232,7 @@ view.prototype.dey =
 /**/		arguments.length !== 1
 /**/	)
 /**/	{
-/**/		throw new Error(
-/**/			'arg fail'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -301,36 +291,38 @@ view.prototype.point =
 		p
 	)
 {
+	var
+		anchor;
 
-/**/if( CHECK )
-/**/{
-/**/	if( p.reflect !== 'euclid.point' )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid arg'
-/**/		);
-/**/	}
-/**/}
-
-	if (
-		this.zoom === 1
-		&&
-		this.pan.x === 0
-		&&
-		this.pan.y === 0
-	)
+	switch( p.reflect )
 	{
-		return p;
-	}
+		case 'euclid.point' :
 
-	return (
-		euclid.point.create(
-			'x',
-				this.x( p.x ),
-			'y',
-				this.y( p.y )
-		)
-	);
+			return(
+				euclid.point.renew(
+					this.x( p.x ),
+					this.y( p.y ),
+					p
+				)
+			);
+
+		case 'euclid.fixPoint' :
+
+			anchor = p.anchor;
+
+			return(
+				euclid.point.create(
+					'x',
+						this.x( anchor.x ) + p.x,
+					'y',
+						this.y( anchor.y ) + p.y
+				)
+			);
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 
@@ -347,9 +339,7 @@ view.prototype.depoint =
 /**/{
 /**/	if( p.reflect !== 'euclid.point' )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid arg'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -373,6 +363,10 @@ view.prototype.rect =
 		a2
 	)
 {
+	var
+		pnw,
+		pse;
+
 	if( this.zoom === 1 )
 	{
 		var
@@ -388,16 +382,10 @@ view.prototype.rect =
 
 		return (
 			( this.pan.x === 0 && this.pan.y === 0 )
-			?
-			r
-			:
-			r.add( this.pan )
+			?  r
+			: r.add( this.pan )
 		);
 	}
-
-	var
-		pnw,
-		pse;
 
 	if( a1.reflect === 'euclid.rect' )
 	{
@@ -444,15 +432,16 @@ view.prototype.review =
 	)
 {
 	var
-		pan =
-			this.pan,
+		f,
+		f1,
+		pan,
+		z1;
 
-		f1;
+	pan = this.pan;
 
 	if( df === 0 )
 	{
-		f1 =
-			0;
+		f1 = 0;
 	}
 	else
 	{
@@ -464,25 +453,25 @@ view.prototype.review =
 			);
 	}
 
-	var
-		z1 =
-			Math.pow( 1.1, f1 ),
+	z1 = Math.pow( 1.1, f1 );
 
-		f =
-			1 / z1
-			-
-			1 / this.zoom;
+	f =
+		1 / z1
+		-
+		1 / this.zoom;
 
-	return this.create(
-		'fact',
-			f1,
-		'pan',
-			euclid.point.create(
-				'x',
-					Math.round( pan.x + p.x * f ),
-				'y',
-					Math.round( pan.y + p.y * f )
-			)
+	return(
+		this.create(
+			'fact',
+				f1,
+			'pan',
+				euclid.point.create(
+					'x',
+						Math.round( pan.x + p.x * f ),
+					'y',
+						Math.round( pan.y + p.y * f )
+				)
+		)
 	);
 };
 
@@ -495,7 +484,7 @@ jools.lazyValue(
 	'baseFrame',
 	function( )
 	{
-		return (
+		return(
 			euclid.rect.create(
 				'pnw',
 					euclid.point.zero,
@@ -514,8 +503,6 @@ jools.lazyValue(
 
 /*
 | Proper is the view at point zero with zero zoom.
-|
-| FIXME remove
 */
 view.proper =
 	view.create(

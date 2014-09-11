@@ -371,6 +371,7 @@
 > fillStyle
 > fillText
 . firstTimer
+. fixPoint
 > floor
 . flow
 . flowWidth
