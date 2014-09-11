@@ -131,42 +131,6 @@ jools.lazyValue(
 
 
 /*
-| Sketches the line.
-*/
-line.prototype.sketch =
-	function(
-		fabric,
-		border,
-		twist,
-		view
-	)
-{
-	var
-		p1x,
-		p1y,
-		p2x,
-		p2y;
-
-	if( !twist )
-	{
-		return;
-	}
-
-	p1x = view.x( this.p1.x );
-
-	p1y = view.y( this.p1.y );
-
-	p2x = view.x( this.p2.x );
-
-	p2y = view.y( this.p2.y );
-
-	fabric.moveTo( p1x, p1y );
-
-	fabric.lineTo( p2x, p2y );
-};
-
-
-/*
 | Draws the line.
 */
 line.prototype.draw =

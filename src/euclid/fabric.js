@@ -1931,16 +1931,7 @@ fabric.prototype._sketch =
 		);
 	}
 
-	// TODO do not fallback to previous implementation
-
-	return (
-		shape.sketch(
-			this,
-			border,
-			twist,
-			view
-		)
-	);
+	throw new Error( );
 };
 
 } )( );

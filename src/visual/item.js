@@ -168,9 +168,10 @@ item.prototype.checkHandles =
 };
 
 
-/*
-| The handle object to plan where to sketch the handles to
-| FIXME vars
+/*i
+| The handle object to plan where to put the handles at
+|
+| FUTURE use fixPoints
 */
 jools.lazyValue(
 	item.prototype,

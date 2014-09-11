@@ -195,23 +195,6 @@ jools.lazyValue(
 
 
 /*
-| Draws the round-rect.
-| XXX
-*/
-roundRect.prototype.sketch =
-	function
-	(
-		// ...
-	)
-{
-	return this.shape.sketch.apply(
-		this.shape,
-		arguments
-	);
-};
-
-
-/*
 | Returns true if point is within the ellipse.
 */
 roundRect.prototype.within =
@@ -222,23 +205,24 @@ roundRect.prototype.within =
 	)
 {
 	var
-		pp =
-			view.depoint( p );
+		pp;
+
+	pp = view.depoint( p );
 
 	if(
-		pp.x < this.pnw.x ||
-		pp.y < this.pnw.y ||
-		pp.x > this.pse.x ||
+		pp.x < this.pnw.x
+		||
+		pp.y < this.pnw.y
+		||
+		pp.x > this.pse.x
+		||
 		pp.y > this.pse.y
 	)
 	{
 		return false;
 	}
 
-	return this.shape.within(
-		view,
-		p
-	);
+	return this.shape.within( view, p );
 };
 
 
