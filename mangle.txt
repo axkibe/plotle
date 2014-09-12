@@ -1,5 +1,5 @@
+. _clip
 . $action
-. $clip
 . $move
 . $pool
 . $settedDefaultFonts
@@ -34,12 +34,9 @@
 . _$mode
 . _$moveToButton
 . _$pnws
-. _$posx
-. _$posy
 . _$redraw
 . _$rof
 . _$spaceFields
-. _$twist
 . _$visitPasshash
 . _$visitUser
 . _arrow
@@ -47,7 +44,6 @@
 . _backPath
 . _base1
 . _base2
-. _begin
 . _blink
 . _blinkCatcher
 . _blinkTimer
@@ -195,7 +191,6 @@
 . appendNC
 > apply
 . aquireSpace
-> arc
 . args
 . array
 . arrivedAtSpace
@@ -223,7 +218,6 @@
 . baseFrame
 . bb
 > beginPath
-. beziTo
 > bezierCurveTo
 > body
 . border

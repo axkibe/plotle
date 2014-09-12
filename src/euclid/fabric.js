@@ -669,8 +669,6 @@ fabric.prototype.paintText =
 | fillRect( style, rect )     -or-
 | fillRect( style, pnw, pse ) -or-
 | fillRect( style, nwx, nwy, width, height )
-|
-| FIXME remove
 */
 fabric.prototype.fillRect =
 	function(
@@ -708,15 +706,6 @@ fabric.prototype.fillRect =
 				a1.y,
 				a2.x,
 				a2.y
-			);
-		}
-		else if( a1 instanceof euclid.fabric ) // FIXME
-		{
-			return this._cx.fillRect(
-				0,
-				0,
-				this.width,
-				this.height
 			);
 		}
 
