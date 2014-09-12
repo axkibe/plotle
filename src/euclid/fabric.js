@@ -50,9 +50,7 @@ euclid.fabric =
 /**/{
 /**/	if( tag !== _tag )
 /**/	{
-/**/		throw new Error(
-/**/			'tag mismatch'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -191,6 +189,28 @@ fabric.prototype.create =
 	);
 };
 
+
+/*
+| Returns the silhoutte that entails the whole fabric.
+*/
+jools.lazyValue(
+	fabric.prototype,
+	'silhoutte',
+	function( )
+	{
+		return(
+			euclid.rect.create(
+				'pnw',
+					euclid.point.zero,
+				'pse',
+					euclid.point.create(
+						'x', this.width,
+						'y', this.height
+					)
+			)
+		);
+	}
+);
 
 
 /*
@@ -873,6 +893,8 @@ fabric.prototype.paintText =
 | fillRect( style, rect )     -or-
 | fillRect( style, pnw, pse ) -or-
 | fillRect( style, nwx, nwy, width, height )
+|
+| FIXME remove
 */
 fabric.prototype.fillRect =
 	function(
@@ -883,8 +905,6 @@ fabric.prototype.fillRect =
 		a4
 	)
 {
-	// FIXME remove fillRect
-
 	var
 		cx;
 
@@ -982,7 +1002,7 @@ fabric.prototype.globalAlpha =
 | lineto(point, view) -or-
 | lineto(x, y, view)
 */
-fabric.prototype.lineTo =
+fabric.prototype._lineTo =
 	function(
 		a1,
 		a2
@@ -1029,7 +1049,7 @@ fabric.prototype.lineTo =
 | moveTo(point)       -or-
 | moveTo(x, y)        -or-
 */
-fabric.prototype.moveTo =
+fabric.prototype._moveTo =
 	function(
 		a1,
 		a2
@@ -1616,7 +1636,7 @@ fabric.prototype._sketchGeneric =
 
 	pn = null;
 
-	this.moveTo( pStart );
+	this._moveTo( pStart );
 
 	while( h < hZ )
 	{
@@ -1716,7 +1736,7 @@ fabric.prototype._sketchGeneric =
 
 			case 'line' :
 
-				this.lineTo( pn );
+				this._lineTo( pn );
 
 				h += 2;
 
@@ -1726,11 +1746,11 @@ fabric.prototype._sketchGeneric =
 
 				if( twist )
 				{
-					this.moveTo( pn );
+					this._moveTo( pn );
 				}
 				else
 				{
-					this.lineTo( pn );
+					this._lineTo( pn );
 				}
 
 				h += 2;
@@ -1816,15 +1836,15 @@ fabric.prototype._sketchRect =
 
 	sy = view.y( rect.pse.y );
 
-	this.moveTo( wx + border, ny + border );
+	this._moveTo( wx + border, ny + border );
 
-	this.lineTo( ex - border, ny + border );
+	this._lineTo( ex - border, ny + border );
 
-	this.lineTo( ex - border, sy - border );
+	this._lineTo( ex - border, sy - border );
 
-	this.lineTo( wx + border, sy - border );
+	this._lineTo( wx + border, sy - border );
 
-	this.lineTo( wx + border, ny + border );
+	this._lineTo( wx + border, ny + border );
 };
 
 

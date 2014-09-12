@@ -196,18 +196,19 @@ form.prototype.draw =
 	)
 {
 	var
+		r,
 		ranks;
 
 	fabric.paint(
 		theme.forms.style,
-		fabric,
+		fabric.silhoutte,
 		euclid.view.proper
 	);
 
 	ranks = this.ranks;
 
 	for(
-		var r = ranks.length - 1;
+		r = ranks.length - 1;
 		r >= 0;
 		r--
 	)
