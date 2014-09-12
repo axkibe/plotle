@@ -1,6 +1,5 @@
 . _clip
 . $action
-. $move
 . $pool
 . $settedDefaultFonts
 . $space
@@ -24,7 +23,6 @@
 . PSE_M1
 > Portal
 . Remove
-. _$atween
 . _$discJockey
 . _$font
 . _$fontWatch
@@ -774,7 +772,6 @@
 . textRotation
 . textWheelSpeed
 . tfx
-. timer
 . toItemPath
 > toJSON
 > toLowerCase

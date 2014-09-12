@@ -92,6 +92,26 @@ catcher =
 
 
 var
+	// atween is the state where the mouse button went down,
+	// and its yet unsure if this is a click or drag.
+	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
+	// a drag, if it goes up before either happens, its a click
+	//
+	// timer of the atween state
+	_atweenTimer = null,
+
+	// status of shift / ctrl when atween state starte
+	_atweenShift = false,
+	_atweenCtrl = false,
+
+	// position where mouse went down
+	_atweenPos = null,
+
+	// move position where cursor moved to in atween state
+	_atweenMove = null,
+
+	// if true the system dropped down to show
+	// a fail screen
 	_failScreen = false,
 
 	// the main canvas everything is
@@ -111,15 +131,14 @@ var
 	_height,
 
 	// false, 'atween' or 'drag'
-	_pointingState =
-		false;
+	_pointingState = false;
 
 /*
 | Creates a catcher that calls a system function.
 */
 var _systemCatcher =
 	function(
-		funcName  // name of the function to call	
+		funcName  // name of the function to call
 	)
 {
 	return (
@@ -161,30 +180,6 @@ var System =
 	// if false needs work around
 	this._useCapture =
 		!!_canvas.setCapture;
-
-	// atween is the state where the mouse button went down,
-	// and its yet unsure if this is a click or drag.
-	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
-	// a drag, if it goes up before either happens, its a click
-
-	this._$atween =
-		jools.immute({
-			// timer for atween state
-			timer :
-				null,
-			// position mouse button went down
-			pos :
-				null,
-			// latest mouse position seen in atween state
-			$move :
-				null,
-			// shift key in atween state
-			shift :
-				null,
-			// ctrl  key in atween state
-			ctrl :
-				null
-		});
 
 	// hidden input that forwards all events
 	_hiddenInput = document.getElementById( 'input' );
@@ -319,10 +314,7 @@ System.prototype.failScreen =
 
 	if( console )
 	{
-		console.log(
-			'failScreen',
-			message
-		);
+		console.log( 'failScreen', message );
 	}
 
 	if( _failScreen )
@@ -486,6 +478,21 @@ System.prototype._blink =
 };
 
 
+var
+_resetAtweenState =
+	function( )
+{
+	_atweenTimer = null;
+
+	_atweenShift = false;
+
+	_atweenCtrl = false;
+
+	_atweenPos = null;
+
+	_atweenMove = null;
+};
+
 /*
 | timeout after mouse down so dragging starts
 */
@@ -493,7 +500,6 @@ System.prototype._onAtweenTime =
 	function( )
 {
 	var
-		atween,
 		cursor;
 
 /**/if( CHECK )
@@ -509,24 +515,22 @@ System.prototype._onAtweenTime =
 /**/	}
 /**/}
 
-	atween = this._$atween;
-
 	_pointingState = 'drag';
 
 	root.dragStart(
-		atween.pos,
-		atween.shift,
-		atween.ctrl
+		_atweenPos,
+		_atweenShift,
+		_atweenCtrl
 	);
 
 	cursor =
 		root.dragMove(
-			atween.$move,
-			atween.shift,
-			atween.ctrl
+			_atweenMove,
+			_atweenShift,
+			_atweenCtrl
 		);
 
-	this._$atween = null;
+	_resetAtweenState( );
 
 	if( cursor !== null )
 	{
@@ -610,11 +614,9 @@ System.prototype._captureEvents =
 		return;
 	}
 
-	document.onmouseup =
-		_canvas.onmouseup;
+	document.onmouseup = _canvas.onmouseup;
 
-	document.onmousemove =
-		_canvas.onmousemove;
+	document.onmousemove = _canvas.onmousemove;
 };
 
 
@@ -695,8 +697,7 @@ System.prototype._onKeyPress =
 		}
 	}
 
-	this._$lastSpecialKey =
-		-1;
+	this._$lastSpecialKey = -1;
 
 	this._testInput( );
 
@@ -760,46 +761,33 @@ System.prototype._onMouseDown =
 	window.focus( );
 
 	var
-		canvas =
-			_canvas,
+		canvas = _canvas,
 
 		p =
 			euclid.point.create(
-				'x',
-					event.pageX - canvas.offsetLeft,
-				'y',
-					event.pageY - canvas.offsetTop
+				'x', event.pageX - canvas.offsetLeft,
+				'y', event.pageY - canvas.offsetTop
 			),
 
-		shift =
-			event.shiftKey,
+		shift = event.shiftKey,
 
-		ctrl =
-			event.ctrlKey || event.metaKey;
+		ctrl = event.ctrlKey || event.metaKey;
 
-	_pointingState =
-		'atween';
+	_pointingState = 'atween';
 
-	this._$atween =
-		jools.immute({
-			pos :
-				p,
+	_atweenPos = p;
 
-			$move :
-				p,
+	_atweenMove = p;
 
-			shift :
-				shift,
+	_atweenShift = shift;
 
-			ctrl :
-				ctrl,
+	_atweenCtrl = ctrl;
 
-			timer :
-				this.setTimer(
-					_settings.dragtime,
-					this._onAtweenTimeCatcher
-				)
-		});
+	_atweenTimer =
+		this.setTimer(
+			_settings.dragtime,
+			this._onAtweenTimeCatcher
+		);
 
 	this._pointingHover(
 		p,
@@ -874,8 +862,7 @@ System.prototype._repeatHover =
 
 	if( cursor !== null )
 	{
-		_canvas.style.cursor =
-			cursor;
+		_canvas.style.cursor = cursor;
 	}
 };
 
@@ -889,7 +876,6 @@ System.prototype._onMouseMove =
 	)
 {
 	var
-		atween,
 		ctrl,
 		cursor,
 		dragbox,
@@ -903,12 +889,12 @@ System.prototype._onMouseMove =
 			'y',
 				event.pageY - _canvas.offsetTop
 		);
-	shift =
-		event.shiftKey;
-	ctrl =
-		event.ctrlKey || event.metaKey;
-	cursor =
-		null;
+
+	shift = event.shiftKey;
+
+	ctrl = event.ctrlKey || event.metaKey;
+
+	cursor = null;
 
 	switch( _pointingState )
 	{
@@ -924,28 +910,21 @@ System.prototype._onMouseMove =
 
 		case 'atween' :
 
-			dragbox =
-				_settings.dragbox;
-
-			atween =
-				this._$atween;
+			dragbox = _settings.dragbox;
 
 			if(
-				( Math.abs( p.x - atween.pos.x ) > dragbox ) ||
-				( Math.abs( p.y - atween.pos.y ) > dragbox )
+				( Math.abs( p.x - _atweenPos.x ) > dragbox )
+				||
+				( Math.abs( p.y - _atweenPos.y ) > dragbox )
 			)
 			{
 				// moved out of dragbox -> start dragging
-				clearTimeout( atween.timer );
+				clearTimeout( _atweenTimer );
 
-				this._$atween =
-					null;
-
-				_pointingState =
-					'drag';
+				_pointingState = 'drag';
 
 				root.dragStart(
-					atween.pos,
+					_atweenPos,
 					shift,
 					ctrl
 				);
@@ -957,13 +936,14 @@ System.prototype._onMouseMove =
 						ctrl
 					);
 
+				_resetAtweenState( );
+
 				this._captureEvents( );
 			}
 			else
 			{
 				// saves position for possible atween timeout
-				atween.$move =
-					p;
+				_atweenMove = p;
 			}
 			break;
 
@@ -1003,7 +983,6 @@ System.prototype._onMouseUp =
 	)
 {
 	var
-		atween,
 		ctrl,
 		p,
 		shift;
@@ -1034,13 +1013,7 @@ System.prototype._onMouseUp =
 
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
-			atween =
-				this._$atween;
-
-			clearTimeout( atween.timer );
-
-			this._$atween =
-				null;
+			clearTimeout( _atweenTimer );
 
 			root.click(
 				p,
@@ -1056,8 +1029,9 @@ System.prototype._onMouseUp =
 
 			this._steerAttention( );
 
-			_pointingState =
-				false;
+			_resetAtweenState( );
+
+			_pointingState = false;
 
 			break;
 
@@ -1169,29 +1143,21 @@ System.prototype._onTouchStart =
 		ctrl =
 			event.ctrlKey || event.metaKey;
 
-	_pointingState =
-		'atween';
+	_pointingState = 'atween';
 
-	this._$atween =
-		jools.immute({
-			pos :
-				p,
+	_atweenPos = p;
 
-			$move :
-				p,
+	_atweenMove = p;
 
-			shift :
-				shift,
+	_atweenShift = shift;
 
-			ctrl :
-				ctrl,
+	_atweenCtrl = ctrl;
 
-			timer :
-				this.setTimer(
-					_settings.dragtime,
-					this._onAtweenTimeCatcher
-				)
-		});
+	_atweenTimer =
+		this.setTimer(
+			_settings.dragtime,
+			this._onAtweenTimeCatcher
+		);
 
 	return false;
 };
@@ -1205,6 +1171,9 @@ System.prototype._onTouchMove =
 		event
 	)
 {
+	var
+		dragbox;
+
 	event.preventDefault();
 
 	// for now ignore multi-touches
@@ -1245,29 +1214,21 @@ System.prototype._onTouchMove =
 
 		case 'atween':
 
-			var
-				dragbox =
-					_settings.dragbox,
-
-				atween =
-					this._$atween;
+			dragbox = _settings.dragbox;
 
 			if(
-				( Math.abs( p.x - atween.pos.x ) > dragbox ) ||
-				( Math.abs( p.y - atween.pos.y ) > dragbox )
+				( Math.abs( p.x - _atweenPos.x ) > dragbox )
+				||
+				( Math.abs( p.y - _atweenPos.y ) > dragbox )
 			)
 			{
 				// moved out of dragbox -> start dragging
-				clearTimeout( atween.timer );
+				clearTimeout( _atweenTimer );
 
-				this._$atween =
-					null;
-
-				_pointingState =
-					'drag';
+				_pointingState = 'drag';
 
 				root.dragStart(
-					atween.pos,
+					_atweenPos,
 					shift,
 					ctrl
 				);
@@ -1279,13 +1240,14 @@ System.prototype._onTouchMove =
 						ctrl
 					);
 
+				_resetAtweenState( );
+
 				this._captureEvents( );
 			}
 			else
 			{
 				// saves position for possible atween timeout
-				atween.$move =
-					p;
+				_atweenMove = p;
 			}
 
 			break;
@@ -1356,13 +1318,8 @@ System.prototype._onTouchEnd =
 
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
-			var atween =
-				this._$atween;
 
-			clearTimeout( atween.timer );
-
-			this._$atween =
-				null;
+			clearTimeout( _atweenTimer );
 
 			root.click(
 				p,
@@ -1378,8 +1335,9 @@ System.prototype._onTouchEnd =
 
 			this._steerAttention( );
 
-			_pointingState =
-				false;
+			_resetAtweenState( );
+
+			_pointingState = false;
 
 			break;
 
