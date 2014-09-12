@@ -45,6 +45,8 @@ euclid.fabric =
 		width
 	)
 {
+	var
+		cx;
 
 /**/if( CHECK )
 /**/{
@@ -87,14 +89,11 @@ euclid.fabric =
 
 	this._canvas = canvas;
 
-	this._cx = canvas.getContext( '2d' );
+	cx =
+	this._cx =
+		canvas.getContext( '2d' );
 
-	// curren positiont ( without twist )
-	this._$posx =
-	this._$posy =
-		null;
-
-	this.$clip = false;
+	cx._clip = false;
 
 	jools.immute( this );
 };
@@ -214,222 +213,6 @@ jools.lazyValue(
 
 
 /*
-| Draws an arc.
-|
-| arc(p,    radius, startAngle, endAngle, anticlockwise)   -or-
-| arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
-*/
-fabric.prototype.arc =
-	function(
-		a1,
-		a2,
-		a3,
-		a4,
-		a5,
-		a6
-	)
-{
-	var
-		tw,
-		x,
-		y,
-		r,
-		sa,
-		ea,
-		ac;
-
-	tw = this._$twist;
-
-	if( typeof( a1 ) === 'object' )
-	{
-		x  = a1.x;
-
-		y  = a1.y;
-
-		r  = a2;
-
-		sa = a3;
-
-		ea = a4;
-
-		ac = a5;
-	}
-	else
-	{
-		x  = a1;
-
-		y  = a2;
-
-		r  = a3;
-
-		sa = a4;
-
-		ea = a5;
-
-		ac = a6;
-	}
-
-	this._cx.arc(
-		x + tw,
-		y + tw,
-		r,
-		sa,
-		ea,
-		ac
-	);
-};
-
-
-/*
-| Draws a bezier.
-|
-| beziTo( cp1,  cp2,  p )   -or-
-| beziTo( cp1x, cp1y, cp2x, cp2y, x, y ) -or-
-| any combination of points and arguments.
-*/
-fabric.prototype.beziTo =
-	function( )
-{
-	var
-		a,
-		aZ,
-		tw,
-		cp1x,
-		cp1y,
-		cp2x,
-		cp2y,
-		x,
-		y;
-
-	a = 0;
-
-	aZ = arguments.length;
-
-	tw = this._$twist;
-
-/**/if( CHECK )
-/**/{
-/**/	if( this._$posx === null || this._$posy === null )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( a >= aZ )
-/**/	{
-/**/		throw new Error(
-/**/			'beziTo: aFail'
-/**/		);
-/**/	}
-/**/}
-
-	if( typeof( arguments[ a ] ) === 'object' )
-	{
-		cp1x = arguments[ a ].x;
-
-		cp1y = arguments[ a++ ].y;
-	}
-	else
-	{
-		cp1x = arguments[ a++ ];
-
-/**/	if( CHECK )
-/**/	{
-/**/		if (a >= aZ)
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
-		cp1y = arguments[ a++ ];
-	}
-
-/**/if( CHECK )
-/**/{
-/**/	if( a >= aZ )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-
-	if( typeof( arguments[ a ] ) === 'object' )
-	{
-		cp2x = arguments[ a ].x;
-
-		cp2y = arguments[ a++ ].y;
-	}
-	else
-	{
-		cp2x = arguments[ a++ ];
-
-/**/	if( CHECK )
-/**/	{
-/**/		if(a >= aZ)
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
-		cp2y = arguments[ a++ ];
-	}
-
-/**/if( CHECK )
-/**/{
-/**/	if( a >= aZ )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if( typeof(arguments[ a ]) === 'object' )
-	{
-		x = arguments[ a ].x;
-
-		y = arguments[ a++ ].y;
-	}
-	else
-	{
-		x = arguments[ a++ ];
-
-/**/	if( CHECK )
-/**/	{
-/**/		if( a >= aZ )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
-		y = arguments[ a++ ];
-	}
-
-	cp1x += this._$posx + tw;
-
-	cp1y += this._$posy + tw;
-
-	cp2x += x + tw;
-
-	cp2y += y + tw;
-
-	this._$posx = x;
-
-	this._$posy = y;
-
-	x += tw;
-
-	y += tw;
-
-	this._cx.bezierCurveTo(
-		cp1x,
-		cp1y,
-		cp2x,
-		cp2y,
-		x,
-		y
-	);
-};
-
-
-/*
 | Clips the fabric into a shape.
 */
 fabric.prototype.clip =
@@ -452,11 +235,11 @@ fabric.prototype.clip =
 
 	cx = this._cx;
 
-	if( !this.$clip )
+	if( !cx._clip )
 	{
 		cx.save( );
 
-		this.$clip = true;
+		cx._clip = true;
 	}
 
 	cx.beginPath( );
@@ -464,7 +247,7 @@ fabric.prototype.clip =
 	this._sketch(
 		shape,
 		border,
-		true,
+		0.5,
 		view
 	);
 
@@ -477,20 +260,22 @@ fabric.prototype.clip =
 fabric.prototype.deClip =
 	function( )
 {
+	var
+		cx;
+
+	cx = this._cx;
 
 /**/if( CHECK )
 /**/{
-/**/	if( !this.$clip )
+/**/	if( !cx._clip )
 /**/	{
-/**/		throw new Error(
-/**/			'not clipping!'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
-	this.$clip = false;
+	cx._clip = false;
 
-	this._cx.restore( );
+	cx.restore( );
 };
 
 
@@ -710,12 +495,12 @@ fabric.prototype.fill =
 
 	this._$font = null;
 
-	this._begin( false );
+	cx.beginPath( );
 
 	this._sketch(
 		shape,
 		0,
-		false,
+		0,
 		view
 	);
 
@@ -725,15 +510,6 @@ fabric.prototype.fill =
 			shape,
 			view
 		);
-
-/**/if( CHECK )
-/**/{
-/**/	if( this._$twist !== 0 )
-/**/	{
-/**/		// wrong twist
-/**/		throw new Error( );
-/**/	}
-/**/}
 
 	cx.fill( );
 };
@@ -846,7 +622,7 @@ fabric.prototype.paintText =
 /**/	{
 /**/		throw new Error( );
 /**/	}
-	}
+/**/}
 
 	this._setFont( font );
 
@@ -994,98 +770,6 @@ fabric.prototype.globalAlpha =
 
 
 /*
-| Draws a line.
-|
-| lineto(point)       -or-
-| lineto(x, y)        -or-
-|
-| lineto(point, view) -or-
-| lineto(x, y, view)
-*/
-fabric.prototype._lineTo =
-	function(
-		a1,
-		a2
-	)
-{
-	var
-		tw,
-		x,
-		y;
-
-	tw = this._$twist;
-
-	if( typeof( a1 ) === 'object' )
-	{
-		x = a1.x;
-
-		y = a1.y;
-	}
-	else
-	{
-		x = a1;
-
-		y = a2;
-	}
-
-/**/if( CHECK )
-/**/{
-/**/	jools.ensureInt( x, y );
-/**/}
-
-	this._$posx = x;
-
-	this._$posy = y;
-
-	this._cx.lineTo( x + tw, y + tw );
-};
-
-
-/*
-| Moves the sketch maker.
-|
-| TODO remove
-|
-| moveTo(point)       -or-
-| moveTo(x, y)        -or-
-*/
-fabric.prototype._moveTo =
-	function(
-		a1,
-		a2
-	)
-{
-	var
-		tw,
-		x,
-		y;
-
-	tw = this._$twist;
-
-	if( typeof( a1 ) === 'object' )
-	{
-		x = a1.x;
-
-		y = a1.y;
-	}
-	else
-	{
-		x = a1;
-
-		y = a2;
-	}
-
-	jools.ensureInt( x, y );
-
-	this._$posx = x;
-
-	this._$posy = y;
-
-	this._cx.moveTo( x + tw, y + tw );
-};
-
-
-/*
 | The canvas is cleared.
 */
 fabric.prototype.clear =
@@ -1101,7 +785,7 @@ fabric.prototype.clear =
 
 
 /*
-| Fills an aera and draws its borders
+| Fills an aera and draws its borders.
 */
 fabric.prototype.paint =
 	function(
@@ -1129,12 +813,12 @@ fabric.prototype.paint =
 	// is going to be reconfigured
 	this._$font = null;
 
-	this._begin( false );
+	cx.beginPath( );
 
 	this._sketch(
 		shape,
 		0,
-		false,
+		0,
 		view
 	);
 
@@ -1203,11 +887,11 @@ fabric.prototype.reverseClip =
 
 	h = c.height;
 
-	if( !this.$clip )
+	if( !cx._clip )
 	{
 		cx.save( );
 
-		this.$clip = true;
+		cx._clip = true;
 	}
 
 	cx.beginPath( );
@@ -1225,7 +909,7 @@ fabric.prototype.reverseClip =
 	this._sketch(
 		shape,
 		border,
-		true,
+		0.5,
 		view
 	);
 
@@ -1318,6 +1002,10 @@ fabric.prototype.withinSketch =
 		p
 	)
 {
+	var
+		cx;
+
+	cx = this._cx;
 
 /**/if( CHECK )
 /**/{
@@ -1332,38 +1020,16 @@ fabric.prototype.withinSketch =
 /**/	}
 /**/}
 
-	this._begin( true );
+	cx.beginPath( );
 
 	this._sketch(
 		shape,
 		0,
-		true,
+		0.5,
 		view
 	);
 
-	return this._cx.isPointInPath( p.x, p.y );
-};
-
-
-/*
-| Begins a sketch
-*/
-fabric.prototype._begin =
-	function(
-		twist
-	)
-{
-	// lines are targed at .5 coords.
-	this._$twist =
-		twist
-		? 0.5
-		: 0;
-
-	this._cx.beginPath( );
-
-	this._$posx =
-	this._$posy =
-		null;
+	return cx.isPointInPath( p.x, p.y );
 };
 
 
@@ -1515,12 +1181,12 @@ fabric.prototype._edge =
 
 	cx = this._cx;
 
-	this._begin( true );
+	cx.beginPath( );
 
 	this._sketch(
 		shape,
 		style.border,
-		true,
+		0.5,
 		view
 	);
 
@@ -1532,15 +1198,6 @@ fabric.prototype._edge =
 		);
 
 	cx.lineWidth = style.width;
-
-/**/if( CHECK )
-/**/{
-/**/	if( this._$twist !== 0.5 )
-/**/	{
-/**/		// wrong twist
-/**/		throw new Error( );
-/**/	}
-/**/}
 
 	cx.stroke( );
 };
@@ -1594,6 +1251,8 @@ fabric.prototype._sketchGeneric =
 		h,
 		hZ,
 		magic,
+		posx,
+		posy,
 		pc,
 		pp,
 		pn,
@@ -1636,7 +1295,11 @@ fabric.prototype._sketchGeneric =
 
 	pn = null;
 
-	this._moveTo( pStart );
+	cx.moveTo( pStart.x + twist, pStart.y + twist );
+
+	// FUTURE why not store the point?
+	posx = pStart.x;
+	posy = pStart.y;
 
 	while( h < hZ )
 	{
@@ -1722,12 +1385,13 @@ fabric.prototype._sketchGeneric =
 
 				dy = pn.y - pp.y;
 
-				this.beziTo(
-					hull[ h + 1 ] * dx,
-					hull[ h + 2 ] * dy,
-					-hull[ h + 3 ] * dx,
-					-hull[ h + 4 ] * dy,
-					pn
+				cx.bezierCurveTo(
+					posx + twist + hull[ h + 1 ] * dx,
+					posy + twist + hull[ h + 2 ] * dy,
+					pn.x + twist - hull[ h + 3 ] * dx,
+					pn.y + twist - hull[ h + 4 ] * dy,
+					pn.x + twist,
+					pn.y + twist
 				);
 
 				h += 6;
@@ -1736,7 +1400,7 @@ fabric.prototype._sketchGeneric =
 
 			case 'line' :
 
-				this._lineTo( pn );
+				cx.lineTo( pn.x + twist, pn.y + twist );
 
 				h += 2;
 
@@ -1746,11 +1410,11 @@ fabric.prototype._sketchGeneric =
 
 				if( twist )
 				{
-					this._moveTo( pn );
+					cx.moveTo( pn.x + twist, pn.y + twist );
 				}
 				else
 				{
-					this._lineTo( pn );
+					cx.lineTo( pn.x + twist, pn.y + twist );
 				}
 
 				h += 2;
@@ -1771,12 +1435,13 @@ fabric.prototype._sketchGeneric =
 				{
 					case 'clockwise' :
 
-						this.beziTo(
-							dxy > 0 ?   magic * dx : 0,
-							dxy < 0 ?   magic * dy : 0,
-							dxy < 0 ? - magic * dx : 0,
-							dxy > 0 ? - magic * dy : 0,
-							pn
+						cx.bezierCurveTo(
+							posx + twist + ( dxy > 0 ? magic * dx : 0 ),
+							posy + twist + ( dxy < 0 ? magic * dy : 0 ),
+							pn.x + twist - ( dxy < 0 ? magic * dx : 0 ),
+							pn.y + twist - ( dxy > 0 ? magic * dy : 0 ),
+							pn.x + twist,
+							pn.y + twist
 						);
 
 						break;
@@ -1796,6 +1461,9 @@ fabric.prototype._sketchGeneric =
 				// unknown hull section.
 				throw new Error( );
 		}
+
+		posx = pn.x;
+		posy = pn.y;
 
 		pp = pn;
 	}
@@ -1823,28 +1491,31 @@ fabric.prototype._sketchRect =
 	)
 {
 	var
+		cx,
 		wx,
 		ny,
 		ex,
 		sy;
 
-	wx = view.x( rect.pnw.x );
+	cx = this._cx;
 
-	ny = view.y( rect.pnw.y );
+	wx = view.x( rect.pnw.x ) + border + twist;
 
-	ex = view.x( rect.pse.x );
+	ny = view.y( rect.pnw.y ) + border + twist;
 
-	sy = view.y( rect.pse.y );
+	ex = view.x( rect.pse.x ) - border + twist;
 
-	this._moveTo( wx + border, ny + border );
+	sy = view.y( rect.pse.y ) - border + twist;
 
-	this._lineTo( ex - border, ny + border );
+	cx.moveTo( wx, ny );
 
-	this._lineTo( ex - border, sy - border );
+	cx.lineTo( ex, ny );
 
-	this._lineTo( wx + border, sy - border );
+	cx.lineTo( ex, sy );
 
-	this._lineTo( wx + border, ny + border );
+	cx.lineTo( wx, sy );
+
+	cx.lineTo( wx, ny );
 };
 
 
@@ -1868,7 +1539,7 @@ fabric.prototype._sketch =
 	{
 		case 'euclid.rect' :
 
-			return (
+			return(
 				this._sketchRect(
 					shape,
 					border,
@@ -1880,7 +1551,7 @@ fabric.prototype._sketch =
 
 	if( shape.hull )
 	{
-		return (
+		return(
 			this._sketchGeneric(
 				shape,
 				border,
