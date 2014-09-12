@@ -732,7 +732,6 @@
 . singleton
 . size
 . sizeOnly
-. sketch
 > slice
 > space
 . spaceFields

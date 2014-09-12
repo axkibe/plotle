@@ -985,13 +985,11 @@ fabric.prototype.globalAlpha =
 fabric.prototype.lineTo =
 	function(
 		a1,
-		a2,
-		a3
+		a2
 	)
 {
 	var
 		tw,
-		v,
 		x,
 		y;
 
@@ -1002,29 +1000,18 @@ fabric.prototype.lineTo =
 		x = a1.x;
 
 		y = a1.y;
-
-		v = a2;
 	}
 	else
 	{
 		x = a1;
 
 		y = a2;
-
-		v = a3;
 	}
 
 /**/if( CHECK )
 /**/{
 /**/	jools.ensureInt( x, y );
 /**/}
-
-	if( v )
-	{
-		x = v.x( x );
-
-		y = v.y( y );
-	}
 
 	this._$posx = x;
 
@@ -1041,20 +1028,15 @@ fabric.prototype.lineTo =
 |
 | moveTo(point)       -or-
 | moveTo(x, y)        -or-
-|
-| moveTo(point, view) -or-
-| moveTo(x, y, view)
 */
 fabric.prototype.moveTo =
 	function(
 		a1,
-		a2,
-		a3
+		a2
 	)
 {
 	var
 		tw,
-		v,
 		x,
 		y;
 
@@ -1065,23 +1047,12 @@ fabric.prototype.moveTo =
 		x = a1.x;
 
 		y = a1.y;
-
-		v = a2;
 	}
 	else
 	{
 		x = a1;
 
 		y = a2;
-
-		v = a3;
-	}
-
-	if( v )
-	{
-		x = v.x( x );
-
-		y = v.y( y );
 	}
 
 	jools.ensureInt( x, y );
@@ -1090,10 +1061,7 @@ fabric.prototype.moveTo =
 
 	this._$posy = y;
 
-	this._cx.moveTo(
-		x + tw,
-		y + tw
-	);
+	this._cx.moveTo( x + tw, y + tw );
 };
 
 
@@ -1559,38 +1527,6 @@ fabric.prototype._edge =
 
 
 /*
-| Draws the fabrics background
-|
-| TODO remove
-*/
-fabric.prototype.sketch =
-	function(
-		fabric,
-		border
-		// twist
-		// view
-	)
-{
-	var
-		b,
-		w,
-		h;
-
-	b = border;
-
-	w = this.width - b;
-
-	h = this.height - b;
-
-	fabric.moveTo( b, b );
-	fabric.lineTo( w, b );
-	fabric.lineTo( w, h );
-	fabric.lineTo( b, h );
-	fabric.lineTo( b, b );
-};
-
-
-/*
 | point in north-west
 | is always considered zero.
 */
@@ -1630,6 +1566,7 @@ fabric.prototype._sketchGeneric =
 	)
 {
 	var
+		cx,
 		dx,
 		dxy,
 		dy,
@@ -1642,6 +1579,8 @@ fabric.prototype._sketchGeneric =
 		pn,
 		pStart,
 		rotation;
+
+	cx = this._cx;
 
 	hull = shape.hull;
 
