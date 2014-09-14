@@ -1,9 +1,4 @@
 . _clip
-. $action
-. $pool
-. $settedDefaultFonts
-. $space
-. $view
 > 1
 . Create
 . FOCUS

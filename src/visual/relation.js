@@ -261,7 +261,7 @@ relation.prototype.draw =
 		space,
 		zone;
 
-	space = root.$space;
+	space = root.space;
 
 	item1 = space.getItem( this.item1key );
 

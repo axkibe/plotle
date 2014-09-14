@@ -1,5 +1,5 @@
 /*
-| Creates font objects by size and code
+| Creates font objects by size and code.
 |
 | Authors: Axel Kittenberger
 */
@@ -25,15 +25,21 @@ var
 
 
 var
-	FontPool =
-		function( )
-	{
-		this.$pool =
-			{ };
-	};
+	_pool,
+	_settedDefaultFonts;
+
+_pool = { };
+
+_settedDefaultFonts = false;
+
+/*
+| Constructor.
+*/
+fontPool = { };
 
 
-FontPool.styles =
+var
+_styles =
 {
 	ca         :
 	{
@@ -94,46 +100,44 @@ FontPool.styles =
 /*
 | Sets the default font
 */
-FontPool.prototype.setDefaultFonts =
+fontPool.setDefaultFonts =
 	function(
 		normal,
 		bold
 	)
 {
-	if( this.$settedDefaultFonts )
+	var
+		a,
+		s;
+
+	if( _settedDefaultFonts )
 	{
-		throw new Error(
-			CHECK && 'multiple calls to setDefaultFont'
-		);
+		throw new Error( );
 	}
 
-	this.$settedDefaultFonts =
-		true;
+	_settedDefaultFonts = true;
 
-	var styles = FontPool.styles;
-
-	for( var a in styles )
+	for( a in _styles )
 	{
-		var s = styles[ a ];
+		s = _styles[ a ];
 
 		switch( s.family )
 		{
 			case '(default)' :
+
 				s.family = normal;
+
 				break;
 
 			case '(bold)' :
+
 				s.family = bold;
+
 				break;
 
 			default :
-				throw new Error(
-					CHECK &&
-					(
-						'unknown font family tag in styles (' +
-							s.family + ')'
-					)
-				);
+
+				throw new Error( );
 		}
 	}
 };
@@ -142,48 +146,43 @@ FontPool.prototype.setDefaultFonts =
 /*
 | Gets a fontstlye by size and its code
 */
-FontPool.prototype.get =
+fontPool.get =
 	function(
 		size,
 		code
 	)
 {
+	var
+		c,
+		f,
+		style;
 
 /**/if( CHECK )
 /**/{
-/**/	if( !this.$settedDefaultFonts )
+/**/	if( !_settedDefaultFonts )
 /**/	{
-/**/		throw new Error(
-/**/			'not setted default fonts'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
-	var
-		style =
-			FontPool.styles[ code ];
+	style = _styles[ code ];
 
-	if( !style )
-	{
-		throw new Error(
-			CHECK && 'Invalid font style'
-		);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( !style )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
-	var
-		c =
-			this.$pool[ code ];
+	c = _pool[ code ];
 
 	if( !c )
 	{
-		c =
-		this.$pool[ code ] =
-			{ };
+		c = _pool[ code ] = { };
 	}
 
-	var
-		f =
-			c[ size ];
+	f = c[ size ];
 
 	if( f )
 	{
@@ -209,8 +208,10 @@ FontPool.prototype.get =
 };
 
 
-fontPool =
-	new FontPool( );
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( fontPool );
+/**/}
 
 
 } )( );

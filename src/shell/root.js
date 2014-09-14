@@ -135,9 +135,9 @@ shell.root =
 
 	this.username = null;
 
-	this.$space = null;
+	this.space = null;
 
-	this.$action = actions.none.create( );
+	this.action = actions.none.create( );
 
 	this._$mode = 'Normal';
 
@@ -145,7 +145,7 @@ shell.root =
 	this._$hover = jion.path.empty;
 
 	view =
-	this.$view =
+	this.view =
 		euclid.view.create(
 			'pan',
 				euclid.point.zero,
@@ -239,38 +239,6 @@ proto = shell.root.prototype,
 
 
 /*
-| FIXME, workaround until $space is gone
-*/
-Object.defineProperty(
-	proto,
-	'space',
-	{
-		get :
-			function( )
-			{
-				return this.$space;
-			}
-	}
-);
-
-
-/*
-| FIXME, workaround until $action is gone
-*/
-Object.defineProperty(
-	proto,
-	'action',
-	{
-		get :
-			function( )
-			{
-				return this.$action;
-			}
-	}
-);
-
-
-/*
 | Changes the mode.
 */
 proto.setMode =
@@ -348,7 +316,7 @@ proto.setAction =
 /**/	}
 /**/}
 
-	this.$action = action;
+	this.action = action;
 
 	this._$discJockey =
 		this._$discJockey.create(
@@ -501,22 +469,22 @@ proto.update =
 	}
 
 	// FIXME let the link do the real stuff
-	this.$space =
+	this.space =
 		space.create(
 			'spaceUser',
-				this.$space.spaceUser,
+				this.space.spaceUser,
 			'spaceTag',
-				this.$space.spaceTag,
+				this.space.spaceTag,
 			'access',
-				this.$space.access,
+				this.space.access,
 			'hover',
-				this.$space.hover,
+				this.space.hover,
 			'mark',
 				mark,
 			'path',
-				this.$space.path,
+				this.space.path,
 			'view',
-				this.$space.view
+				this.space.view
 		);
 
 	this._$discJockey =
@@ -649,7 +617,7 @@ proto._getCurrentDisplay =
 		case 'Create' :
 		case 'Normal' :
 
-			return this.$space;
+			return this.space;
 
 		case 'login' :
 		case 'moveTo' :
@@ -827,18 +795,16 @@ proto.dragMove =
 		cursor,
 		display;
 
-	action =
-		this.action;
+	action = this.action;
 
 	if( !action )
 	{
 		throw new Error( );
 	}
 
-	cursor =
-		null;
-	display =
-		this._getCurrentDisplay( );
+	cursor = null;
+
+	display = this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -870,17 +836,20 @@ proto.dragStop =
 	)
 {
 	var
-		action =
-			this.action;
+		action,
+		display;
 
-	if( !action )
-	{
-		throw new Error( );
-	}
+	action = this.action;
 
-	var
-		display =
-			this._getCurrentDisplay( );
+/**/if( CHECK )
+/**/{
+/**/	if( !action )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	display = this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -957,8 +926,8 @@ proto.setMark =
 	this.mark =
 		mark;
 
-	this.$space =
-		this.$space.create(
+	this.space =
+		this.space.create(
 			'mark',
 				mark
 		);
@@ -1060,8 +1029,8 @@ proto._setHover =
 					path
 		);
 
-	this.$space =
-		this.$space.create(
+	this.space =
+		this.space.create(
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'space' ?
 					jion.path.empty
@@ -1103,8 +1072,8 @@ proto.setPath =
 
 		case 'space' :
 
-			this.$space =
-				this.$space.setPath(
+			this.space =
+				this.space.setPath(
 					path,
 					value,
 					1
@@ -1147,8 +1116,7 @@ proto.specialKey =
 		);
 	}
 
-	focusItem =
-		this.$space.focusedItem( );
+	focusItem = this.space.focusedItem( );
 
 	if( focusItem && focusItem.scrollMarkIntoView )
 	{
@@ -1180,7 +1148,7 @@ proto.input =
 	{
 		display.input( text );
 
-		focusItem = this.$space.focusedItem( );
+		focusItem = this.space.focusedItem( );
 
 		if( focusItem && focusItem.scrollMarkIntoView )
 		{
@@ -1203,11 +1171,10 @@ proto.resize =
 		fabric
 	)
 {
-	this.fabric =
-		fabric;
+	this.fabric = fabric;
 
 	this.setView(
-		this.$view.create(
+		this.view.create(
 			'height',
 				fabric.height,
 			'width',
@@ -1251,9 +1218,9 @@ proto.setUser =
 	else
 	{
 		if(
-			this.$space
+			this.space
 			&&
-			this.$space.spaceUser !== 'ideoloom'
+			this.space.spaceUser !== 'ideoloom'
 		)
 		{
 			this.moveToSpace(
@@ -1302,13 +1269,12 @@ proto.setView =
 		view
 	)
 {
-	this.$view =
-		view;
+	this.view = view;
 
-	if( this.$space )
+	if( this.space )
 	{
-		this.$space =
-			this.$space.create(
+		this.space =
+			this.space.create(
 				'view',
 					view
 			);
@@ -1326,8 +1292,7 @@ proto.setView =
 				view
 		);
 
-	this._$redraw =
-		true;
+	this._$redraw = true;
 };
 
 
@@ -1491,7 +1456,7 @@ proto.onAquireSpace =
 
 	access = asw.access;
 
-	this.$space =
+	this.space =
 		asw.space.create(
 			'spaceUser',
 				spaceUser,
