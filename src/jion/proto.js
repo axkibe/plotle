@@ -6,7 +6,7 @@
 
 var
 	jools,
-	JoobjProto =
+	JionProto =
 		{ };
 
 
@@ -29,7 +29,7 @@ if( SERVER )
 /*
 | Sets a key of a sub node described by a path.
 */
-JoobjProto.setPath =
+JionProto.setPath =
 	function(
 		path,  // path to set
 		value, // value to set to
@@ -121,7 +121,7 @@ JoobjProto.setPath =
 /*
 | Gets a key of a sub node described by a path.
 */
-JoobjProto.getPath =
+JionProto.getPath =
 	function(
 		path,  // path to set
 		pos    // position in the path
@@ -184,7 +184,7 @@ JoobjProto.getPath =
 /*
 | Returns a twig node by its rank.
 */
-JoobjProto.atRank =
+JionProto.atRank =
 	function(
 		rank
 	)
@@ -196,7 +196,7 @@ JoobjProto.atRank =
 /*
 | Creates a new unique identifier.
 */
-JoobjProto.newUID =
+JionProto.newUID =
 	function( )
 {
 	var
@@ -219,7 +219,7 @@ JoobjProto.newUID =
 |
 | FIXME make a joolsLazyfunc
 */
-JoobjProto.rankOf =
+JionProto.rankOf =
 	function(
 		key
 	)
@@ -280,7 +280,7 @@ JoobjProto.rankOf =
 */
 if( SERVER )
 {
-	module.exports = JoobjProto;
+	module.exports = JionProto;
 }
 
 

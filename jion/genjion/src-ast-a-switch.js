@@ -17,7 +17,7 @@ var
 | Imports.
 */
 var
-	JoobjProto,
+	JionProto,
 
 
 	jools;
@@ -35,7 +35,7 @@ var
 */
 if( SERVER )
 {
-	JoobjProto = require( '../../src/jion/proto' );
+	JionProto = require( '../../src/jion/proto' );
 
 	jools = require( '../../src/jools/jools' );
 
@@ -356,31 +356,31 @@ prototype.reflectName = 'aSwitch';
 /*
 | Sets values by path.
 */
-prototype.setPath = JoobjProto.setPath;
+prototype.setPath = JionProto.setPath;
 
 
 /*
 | Gets values by path
 */
-prototype.getPath = JoobjProto.getPath;
+prototype.getPath = JionProto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-prototype.atRank = JoobjProto.atRank;
+prototype.atRank = JionProto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-Constructor.prototype.rankOf = JoobjProto.rankOf;
+Constructor.prototype.rankOf = JionProto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-Constructor.prototype.newUID = JoobjProto.newUID;
+Constructor.prototype.newUID = JionProto.newUID;
 
 
 /*

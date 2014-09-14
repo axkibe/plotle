@@ -573,7 +573,7 @@ gen.prototype.genImports =
 
 	capsule =
 		capsule
-		.aVarDec( 'JoobjProto' )
+		.aVarDec( 'JionProto' )
 		.aVarDec( 'jools' );
 
 	// FUTURE when type checking is there this might become needed
@@ -620,7 +620,7 @@ gen.prototype.genNodeIncludes =
 	block =
 		aBlock( )
 		.anAssign(
-			aVar( 'JoobjProto' ),
+			aVar( 'JionProto' ),
 			aCall(
 				aVar( 'require' ),
 				aStringLiteral( '../../src/jion/proto' )
@@ -2747,9 +2747,9 @@ gen.prototype.genReflection =
 
 
 /*
-| Generates the JoobjProto stuff.
+| Generates the JionProto stuff.
 */
-gen.prototype.genJoobjProto =
+gen.prototype.genJionProto =
 	function(
 		capsule // block to append to
 	)
@@ -2759,12 +2759,12 @@ gen.prototype.genJoobjProto =
 		.aComment( 'Sets values by path.' )
 		.anAssign(
 			aVar( 'prototype' ).aDot( 'setPath' ),
-			aVar( 'JoobjProto' ).aDot( 'setPath' )
+			aVar( 'JionProto' ).aDot( 'setPath' )
 		)
 		.aComment( 'Gets values by path' )
 		.anAssign(
 			aVar( 'prototype' ).aDot( 'getPath' ),
-			aVar( 'JoobjProto' ).aDot( 'getPath' )
+			aVar( 'JionProto' ).aDot( 'getPath' )
 		);
 
 	if( this.twig )
@@ -2774,17 +2774,17 @@ gen.prototype.genJoobjProto =
 			.aComment( 'Returns a twig by rank.' )
 			.anAssign(
 				aVar( 'prototype' ).aDot( 'atRank' ),
-				aVar( 'JoobjProto' ).aDot( 'atRank' )
+				aVar( 'JionProto' ).aDot( 'atRank' )
 			)
 			.aComment( 'Gets the rank of a key.' )
 			.anAssign(
 				aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'rankOf' ),
-				aVar( 'JoobjProto' ).aDot( 'rankOf' )
+				aVar( 'JionProto' ).aDot( 'rankOf' )
 			)
 			.aComment( 'Creates a new unique identifier.' )
 			.anAssign(
 				aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'newUID' ),
-				aVar( 'JoobjProto' ).aDot( 'newUID' )
+				aVar( 'JionProto' ).aDot( 'newUID' )
 			);
 	}
 
@@ -3309,7 +3309,7 @@ gen.prototype.genCapsule =
 
 	capsule = this.genReflection( capsule );
 
-	capsule = this.genJoobjProto( capsule );
+	capsule = this.genJionProto( capsule );
 
 	if( this.hasJSON )
 	{

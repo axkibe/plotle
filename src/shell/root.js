@@ -157,7 +157,7 @@ shell.root =
 				fabric.height
 		);
 
-	this._$formJockey =
+	this._formJockey =
 		forms.jockey.create(
 			'hover',
 				jion.path.empty,
@@ -194,7 +194,7 @@ shell.root =
 				gruga.welcome
 		);
 
-	this._$discJockey =
+	this._discJockey =
 		discs.jockey.create(
 			'access',
 				'',
@@ -258,8 +258,8 @@ proto.setMode =
 
 	this._$mode = mode;
 
-	this._$discJockey =
-		this._$discJockey.create(
+	this._discJockey =
+		this._discJockey.create(
 			'mode',
 				mode
 		);
@@ -318,8 +318,8 @@ proto.setAction =
 
 	this.action = action;
 
-	this._$discJockey =
-		this._$discJockey.create(
+	this._discJockey =
+		this._discJockey.create(
 			'action',
 				action
 		);
@@ -487,8 +487,8 @@ proto.update =
 				this.space.view
 		);
 
-	this._$discJockey =
-		this._$discJockey.create(
+	this._discJockey =
+		this._discJockey.create(
 			'mark',
 				mark
 		);
@@ -549,7 +549,7 @@ proto._draw =
 
 	if( display && display.showDisc )
 	{
-		this._$discJockey.draw( fabric );
+		this._discJockey.draw( fabric );
 	}
 
 	this._$redraw = false;
@@ -573,7 +573,7 @@ proto.click =
 	display = this._getCurrentDisplay( ),
 
 	click =
-		this._$discJockey.click(
+		this._discJockey.click(
 			p,
 			shift,
 			ctrl
@@ -629,7 +629,7 @@ proto._getCurrentDisplay =
 		case 'welcome' :
 
 			return (
-				this._$formJockey.get( name )
+				this._formJockey.get( name )
 			);
 
 		default :
@@ -659,7 +659,7 @@ proto.pointingHover =
 	if( display && display.showDisc )
 	{
 		reply =
-			this._$discJockey.pointingHover(
+			this._discJockey.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -753,7 +753,7 @@ proto.dragStart =
 	if( display && display.showDisc )
 	{
 		bubble =
-			this._$discJockey.dragStart(
+			this._discJockey.dragStart(
 				p,
 				shift,
 				ctrl
@@ -932,14 +932,14 @@ proto.setMark =
 				mark
 		);
 
-	this._$formJockey =
-		this._$formJockey.create(
+	this._formJockey =
+		this._formJockey.create(
 			'mark',
 				mark
 		);
 
-	this._$discJockey =
-		this._$discJockey.create(
+	this._discJockey =
+		this._discJockey.create(
 			'mark',
 				mark
 		);
@@ -958,7 +958,7 @@ proto.cycleFormFocus =
 		dir
 	)
 {
-	this._$formJockey.cycleFocus(
+	this._formJockey.cycleFocus(
 		name,
 		dir
 	);
@@ -975,7 +975,7 @@ proto.pushButton =
 	{
 		case 'discs' :
 
-			return this._$discJockey.pushButton(
+			return this._discJockey.pushButton(
 				path,
 				false,
 				false
@@ -983,7 +983,7 @@ proto.pushButton =
 
 		case 'forms' :
 
-			return this._$formJockey.pushButton(
+			return this._formJockey.pushButton(
 				path,
 				false,
 				false
@@ -1009,8 +1009,8 @@ proto._setHover =
 		return;
 	}
 
-	this._$discJockey =
-		this._$discJockey.create(
+	this._discJockey =
+		this._discJockey.create(
 			// FIXME make concernsHover
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'discs' ?
@@ -1019,8 +1019,8 @@ proto._setHover =
 					path
 		);
 
-	this._$formJockey =
-		this._$formJockey.create(
+	this._formJockey =
+		this._formJockey.create(
 			'hover',
 				// FIXME make a concernsHover
 				path.isEmpty || path.get( 0 ) !== 'forms' ?
@@ -1061,8 +1061,8 @@ proto.setPath =
 
 		case 'forms' :
 
-			this._$formJockey =
-				this._$formJockey.setPath(
+			this._formJockey =
+				this._formJockey.setPath(
 					path,
 					value,
 					1
@@ -1247,14 +1247,14 @@ proto.setUser =
 
 	this.username = username;
 
-	this._$discJockey =
-		this._$discJockey.create(
+	this._discJockey =
+		this._discJockey.create(
 			'username',
 				username
 		);
 
-	this._$formJockey =
-		this._$formJockey.create(
+	this._formJockey =
+		this._formJockey.create(
 			'username',
 				username
 		);
@@ -1280,14 +1280,14 @@ proto.setView =
 			);
 	}
 
-	this._$discJockey =
-		this._$discJockey.create(
+	this._discJockey =
+		this._discJockey.create(
 			'view',
 				view
 		);
 
-	this._$formJockey =
-		this._$formJockey.create(
+	this._formJockey =
+		this._formJockey.create(
 			'view',
 				view
 		);
@@ -1394,13 +1394,13 @@ proto.onAquireSpace =
 		case 'nonexistent' :
 
 			root.setPath(
-				root._$formJockey.twig.nonExistingSpace.path
+				root._formJockey.twig.nonExistingSpace.path
 				.append( 'nonSpaceUser' ),
 				asw.spaceUser
 			);
 
 			root.setPath(
-				root._$formJockey.twig.nonExistingSpace.path
+				root._formJockey.twig.nonExistingSpace.path
 				.append( 'nonSpaceTag' ),
 				asw.spaceTag
 			);
@@ -1415,10 +1415,10 @@ proto.onAquireSpace =
 
 			// FIXME remove get
 			path =
-				this._$formJockey.get( 'noAccessToSpace' ).path;
+				this._formJockey.get( 'noAccessToSpace' ).path;
 
-			this._$formJockey =
-				this._$formJockey.create(
+			this._formJockey =
+				this._formJockey.create(
 					'spaceUser',
 						asw.spaceUser,
 					'spaceTag',
@@ -1508,7 +1508,7 @@ proto.onAuth =
 
 	if( this._$mode === 'login' )
 	{
-		this._$formJockey.get( 'login' ).onAuth(
+		this._formJockey.get( 'login' ).onAuth(
 			ok,
 			username,
 			passhash,
@@ -1577,7 +1577,7 @@ proto.onRegister =
 		return;
 	}
 
-	this._$formJockey.get( 'signUp' ).onRegister(
+	this._formJockey.get( 'signUp' ).onRegister(
 		ok,
 		username,
 		passhash,
@@ -1627,8 +1627,8 @@ proto.arrivedAtSpace =
 		access
 	)
 {
-	this._$discJockey =
-		this._$discJockey.create(
+	this._discJockey =
+		this._discJockey.create(
 			'access',
 				access,
 			'spaceUser',
@@ -1637,8 +1637,8 @@ proto.arrivedAtSpace =
 				spaceTag
 		);
 
-	this._$formJockey =
-		this._$formJockey.create(
+	this._formJockey =
+		this._formJockey.create(
 			'spaceUser',
 				spaceUser,
 			'spaceTag',

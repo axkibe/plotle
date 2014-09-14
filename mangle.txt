@@ -1,4 +1,3 @@
-. _clip
 > 1
 . Create
 . FOCUS
@@ -18,10 +17,8 @@
 . PSE_M1
 > Portal
 . Remove
-. _$discJockey
 . _$font
 . _$fontWatch
-. _$formJockey
 . _$hover
 . _$lastSpecialKey
 . _$mode
@@ -51,8 +48,10 @@
 . _changeTreeSplit
 . _changeZoom
 . _check
+. _clip
 . _colorStyle
 . _cx
+. _discJockey
 . _draw
 . _drawCaret
 . _edge
@@ -60,6 +59,7 @@
 . _focusedWidget
 . _fontWFont
 . _fonts
+. _formJockey
 . _frontAt
 . _frontPath
 . _getCurrentDisplay
