@@ -113,7 +113,7 @@ if( JION )
 						defaultValue :
 							false
 					},
-				isJoobj :
+				isJion :
 					{
 						comment :
 							'true if this resource is a jion.',
@@ -217,7 +217,7 @@ resource.prototype._init =
 */
 jools.lazyValue(
 	resource.prototype,
-	'asJoobj',
+	'asJion',
 	function( )
 	{
 		if( !this.hasJion )
@@ -240,7 +240,7 @@ jools.lazyValue(
 				this.filePath.replace( /\//g, '-' ),
 			'hasJion',
 				false,
-			'isJoobj',
+			'isJion',
 				true
 		);
 	}

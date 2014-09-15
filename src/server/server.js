@@ -44,7 +44,7 @@ var
 		require( '../../config' ),
 	fs =
 		require( 'fs' ),
-	GenerateJoobj =
+	GenerateJion =
 		require( './generate-jion' ),
 	http =
 		require( 'http' ),
@@ -709,7 +709,7 @@ Server.prototype.prepareInventory =
 		if( resource.hasJion )
 		{
 			this.inventory =
-				this.inventory.addResource( resource.asJoobj );
+				this.inventory.addResource( resource.asJion );
 		}
 
 		this.inventory =
@@ -734,7 +734,7 @@ Server.prototype.prepareInventory =
 			||
 			resource.devel
 			||
-			resource.isJoobj
+			resource.isJion
 		)
 		{
 			continue;
@@ -786,9 +786,9 @@ Server.prototype.prepareInventory =
 			continue;
 		}
 
-		if( resource.isJoobj )
+		if( resource.isJion )
 		{
-			code = yield* GenerateJoobj.run( resource );
+			code = yield* GenerateJion.run( resource );
 		}
 		else
 		{
@@ -2740,11 +2740,11 @@ Server.prototype.requestListener =
 		data;
 
 	// if the jion is requested generate that one from the file
-	if( resource.isJoobj )
+	if( resource.isJion )
 	{
 		try{
 			data =
-				yield* GenerateJoobj.run( resource );
+				yield* GenerateJion.run( resource );
 		}
 		catch( e )
 		{
@@ -2756,7 +2756,7 @@ Server.prototype.requestListener =
 
 			jools.log(
 				'fail',
-				'Error generating Joobj: ' + e.toString( )
+				'Error generating Jion: ' + e.toString( )
 			);
 
 			return;

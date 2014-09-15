@@ -247,13 +247,29 @@ channel.prototype._onReply =
 
 	receiverFunc = this.receiverFunc;
 
+/**/if( CHECK )
+/**/{
+/**/	if( !receiverFunc )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	request = this.request;
 
 	if( this.status !== 200 )
 	{
-		throw new Error(
-			'Lost server connection'
+		root.link[ receiverFunc ](
+			request,
+			{
+				ok :
+					false,
+				message :
+					'Lost server connection'
+			}
 		);
+
+		return;
 	}
 
 	try
@@ -262,15 +278,20 @@ channel.prototype._onReply =
 	}
 	catch( e )
 	{
-		throw new Error(
-			'Server answered no JSON!'
+		root.link[ receiverFunc ](
+			request,
+			{
+				ok :
+					false,
+				message :
+					'Server answered no JSON!'
+			}
 		);
+
+		return;
 	}
 
-	if( receiverFunc )
-	{
-		root.link[ receiverFunc ]( request, reply );
-	}
+	root.link[ receiverFunc ]( request, reply );
 };
 
 

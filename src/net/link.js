@@ -476,9 +476,7 @@ link.prototype._onUpdate =
 
 	if( !reply.ok )
 	{
-		system.failScreen(
-			'Server not OK: ' + reply.message
-		);
+		system.failScreen( reply.message );
 
 		return;
 	}

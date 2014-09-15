@@ -1,8 +1,6 @@
 /*
 | Generates the jion of a resource.
 |
-| FIXME, Joobj -> Jion
-|
 | Authors: Axel Kittenberger
 */
 
@@ -11,8 +9,9 @@
 | Export
 */
 var
-	GenerateJoobj =
-		{ };
+	GenerateJion;
+
+GenerateJion = { };
 
 
 /*
@@ -45,7 +44,7 @@ var
 /*
 | Runs a generate jion operation.
 */
-GenerateJoobj.run =
+GenerateJion.run =
 	function*(
 		resource
 	)
@@ -132,7 +131,7 @@ GenerateJoobj.run =
 	}
 	else
 	{
-		// just read in the already generated Joobj
+		// just read in the already generated Jion
 		output =
 			(
 				yield fs.readFile(
@@ -146,7 +145,7 @@ GenerateJoobj.run =
 };
 
 
-module.exports = GenerateJoobj;
+module.exports = GenerateJion;
 
 
 } )( );
