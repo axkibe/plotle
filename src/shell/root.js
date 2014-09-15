@@ -24,7 +24,6 @@ var
 	actions,
 	discs,
 	euclid,
-	fontPool,
 	forms,
 	gruga,
 	jion,

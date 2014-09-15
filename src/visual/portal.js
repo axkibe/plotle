@@ -444,8 +444,7 @@ portal.prototype.click =
 		return false;
 	}
 
-	moveToButton =
-		this._$moveToButton;
+	moveToButton = this._$moveToButton;
 
 	pp =
 		view
@@ -680,8 +679,7 @@ portal.prototype.pointingHover =
 		return null;
 	}
 
-	moveToButton =
-		this._$moveToButton;
+	moveToButton = this._$moveToButton;
 
 	pp =
 		view
@@ -1740,53 +1738,64 @@ portal.prototype._prepareMoveToButton =
 	function( )
 {
 	var
-		zone =
-			this.zone,
+		height,
+		pmtTheme,
+		pnw,
+		pse,
+		result,
+		rounding,
+		width,
+		zone;
 
-		width =
-			theme.portal.moveTo.width,
+	pmtTheme = theme.portal.moveTo;
 
-		height =
-			theme.portal.moveTo.height,
+	zone = this.zone;
 
-		rounding =
-			theme.portal.moveTo.rounding,
+	width = pmtTheme.width;
 
-		pnw =
-			euclid.point.create(
-				'x',
-					jools.half( zone.width - width ),
-				'y',
-					jools.half( zone.height ) + 10
-			),
+	height = pmtTheme.height;
 
-		pse =
-			pnw.add(
-				width,
-				height
-			);
+	rounding = pmtTheme.rounding;
 
-	return {
-		shape :
-			euclid.roundRect.create(
-				'pnw',
-					pnw,
-				'pse',
-					pse,
-				'a',
-					rounding,
-				'b',
-					rounding
-			),
+	pnw =
+		euclid.point.create(
+			'x',
+				jools.half( zone.width - width ),
+			'y',
+				jools.half( zone.height ) + 10
+		),
 
-		textCenter :
-			euclid.point.create(
-				'x',
-					jools.half( pnw.x + pse.x ),
-				'y',
-					jools.half( pnw.y + pse.y )
-			)
-	};
+	pse = pnw.add( width, height );
+
+	result =
+		{
+			shape :
+				euclid.roundRect.create(
+					'pnw',
+						pnw,
+					'pse',
+						pse,
+					'a',
+						rounding,
+					'b',
+						rounding
+				),
+
+			textCenter :
+				euclid.point.create(
+					'x',
+						jools.half( pnw.x + pse.x ),
+					'y',
+						jools.half( pnw.y + pse.y )
+				)
+		};
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( result );
+/**/}
+
+	return result;
 };
 
 /*
