@@ -493,8 +493,6 @@ fabric.prototype.fill =
 
 	fill = style.fill;
 
-	this._$font = null;
-
 	cx.beginPath( );
 
 	this._sketch(
@@ -684,8 +682,6 @@ fabric.prototype.fillRect =
 
 	cx = this._cx;
 
-	this._$font = null;
-
 	cx.fillStyle = style;
 
 	if( typeof( a1 ) === 'object' )
@@ -797,10 +793,6 @@ fabric.prototype.paint =
 	var edgeStyle = style.edge;
 
 	var cx = this._cx;
-
-	// resets the font since the canvas context
-	// is going to be reconfigured
-	this._$font = null;
 
 	cx.beginPath( );
 
@@ -934,8 +926,10 @@ fabric.prototype._setFont =
 		cx,
 		fill;
 
+	cx = this._cx;
+
 	// already setted this font
-	if( this._$font === font )
+	if( cx._font === font )
 	{
 		return;
 	}
@@ -964,8 +958,6 @@ fabric.prototype._setFont =
 /**/	}
 /**/}
 
-	cx = this._cx;
-
 	cx.font = font.css;
 
 	cx.fillStyle = fill;
@@ -974,7 +966,7 @@ fabric.prototype._setFont =
 
 	cx.textBaseline = base;
 
-	this._$font = font;
+	cx._font = font;
 };
 
 
