@@ -123,13 +123,15 @@ shell.root =
 
 	euclid.measure.init( canvas );
 
+	/*
 	this._fontWFont = fontPool.get( 20, 'la' );
 
-	this._$fontWatch =
+	this._fontWatch =
 		euclid.measure.width(
 			this._fontWFont,
 			'ArchLoom$8833'
 		);
+	*/
 
 	this.fabric = fabric;
 
@@ -141,8 +143,8 @@ shell.root =
 
 	this._$mode = 'Normal';
 
-	// currently hovered thing
-	this._$hover = jion.path.empty;
+	// path of currently hovered thing
+	this._hoverPath = jion.path.empty;
 
 	view =
 	this.view =
@@ -1004,7 +1006,7 @@ proto._setHover =
 		path
 	)
 {
-	if( this._$hover.equals( path ) )
+	if( this._hoverPath.equals( path ) )
 	{
 		return;
 	}
@@ -1038,7 +1040,7 @@ proto._setHover =
 					path
 		);
 
-	this._$hover = path;
+	this._hoverPath = path;
 
 	root._$redraw = true;
 };

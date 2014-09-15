@@ -110,6 +110,12 @@ var
 	// move position where cursor moved to in atween state
 	_atweenMove = null,
 
+	// hover is getting repeated by events that change
+	// the root, so it can react properly
+	_hoverP = null,
+	_hoverShift = false,
+	_hoverCtrl = false,
+
 	// if true the system dropped down to show
 	// a fail screen
 	_failScreen = false,
@@ -178,8 +184,7 @@ var System =
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
-	this._useCapture =
-		!!_canvas.setCapture;
+	this._useCapture = !!_canvas.setCapture;
 
 	// hidden input that forwards all events
 	_hiddenInput = document.getElementById( 'input' );
@@ -189,7 +194,6 @@ var System =
 	this._$lastSpecialKey = -1;
 
 	// remembers last pointing device hovering state.
-	this._$hover = null;
 
 	_canvas.onmousedown = _systemCatcher( '_onMouseDown' );
 
@@ -809,32 +813,25 @@ System.prototype._pointingHover =
 		ctrl
 	)
 {
-	this._$hover =
-		jools.immute(
-			{
-				p :
-					p,
-
-				shift :
-					shift,
-
-				ctrl :
-					ctrl
-			}
-		);
-
 	var
-		cursor =
-			root.pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+		cursor;
+
+	_hoverP = p;
+
+	_hoverShift = shift;
+
+	_hoverCtrl = ctrl;
+
+	cursor =
+		root.pointingHover(
+			p,
+			shift,
+			ctrl
+		);
 
 	if( cursor !== null )
 	{
-		_canvas.style.cursor =
-			cursor;
+		_canvas.style.cursor = cursor;
 	}
 };
 
@@ -847,18 +844,20 @@ System.prototype._pointingHover =
 System.prototype._repeatHover =
 	function( )
 {
-	if( !this._$hover )
+	var
+		cursor;
+
+	if( !_hoverP )
 	{
 		return;
 	}
 
-	var
-		cursor =
-			root.pointingHover(
-				this._$hover.p,
-				this._$hover.shift,
-				this._$hover.ctrl
-			);
+	cursor =
+		root.pointingHover(
+			_hoverP,
+			_hoverShift,
+			_hoverCtrl
+		);
 
 	if( cursor !== null )
 	{

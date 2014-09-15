@@ -17,8 +17,6 @@
 . PSE_M1
 > Portal
 . Remove
-. _$font
-. _$fontWatch
 . _$hover
 . _$lastSpecialKey
 . _$mode
@@ -57,7 +55,7 @@
 . _edge
 . _fabric
 . _focusedWidget
-. _fontWFont
+. _font
 . _fonts
 . _formJockey
 . _frontAt
