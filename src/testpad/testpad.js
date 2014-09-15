@@ -12,7 +12,7 @@ var
 	IFaceSym,
 	jion,
 	jools,
-	Peer,
+	peer,
 	testpad;
 
 /*
@@ -623,7 +623,7 @@ TestPad.prototype.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			Peer.insertText(
+			peer.insertText(
 				path,
 				action.at,
 				action.value
@@ -641,7 +641,7 @@ TestPad.prototype.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			Peer.removeText(
+			peer.removeText(
 				path,
 				action.at,
 				action.at2 - action.at
@@ -665,7 +665,7 @@ TestPad.prototype.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			Peer.split(
+			peer.split(
 				path,
 				action.at
 			);
@@ -679,7 +679,7 @@ TestPad.prototype.send =
 				.append( doc.ranks[ action.line - 1] )
 				.append( 'text' );
 
-			Peer.join(
+			peer.join(
 				path,
 				doc.twig[ doc.ranks[ action.line - 1 ] ].text.length
 			);

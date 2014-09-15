@@ -22,7 +22,7 @@ var
 	fontPool,
 	jools,
 	marks,
-	Peer,
+	peer,
 	root,
 	theme;
 
@@ -873,7 +873,7 @@ para.prototype.input =
 		line =
 			rx[ 1 ];
 
-		Peer.insertText(
+		peer.insertText(
 			textPath,
 			caretAt,
 			line
@@ -884,7 +884,7 @@ para.prototype.input =
 			// FIXME, somehow use changes
 			// over return values more elegantly
 			r =
-				Peer.split(
+				peer.split(
 					textPath,
 					caretAt + line.length
 				);
@@ -1117,7 +1117,7 @@ para.prototype._keyBackspace =
 
 	if( at > 0 )
 	{
-		Peer.removeText(
+		peer.removeText(
 			this.textPath,
 			at - 1,
 			1
@@ -1134,7 +1134,7 @@ para.prototype._keyBackspace =
 			ve =
 				doc.atRank( r - 1 );
 
-		Peer.join(
+		peer.join(
 			ve.textPath,
 			ve.text.length
 		);
@@ -1160,7 +1160,7 @@ para.prototype._keyDel =
 
 	if( at < this.text.length )
 	{
-		Peer.removeText(
+		peer.removeText(
 			this.textPath,
 			at,
 			1
@@ -1173,7 +1173,7 @@ para.prototype._keyDel =
 
 	if( r < doc.ranks.length - 1 )
 	{
-		Peer.join(
+		peer.join(
 			this.textPath,
 			this.text.length
 		);
@@ -1286,7 +1286,7 @@ para.prototype._keyEnter =
 		// bAt
 	)
 {
-	Peer.split(
+	peer.split(
 		this.textPath,
 		at
 	);

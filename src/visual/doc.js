@@ -9,7 +9,7 @@
 | Export
 */
 var
-	Peer,
+	peer,
 	visual;
 
 
@@ -961,7 +961,7 @@ doc.prototype.input =
 		!mark.empty
 	)
 	{
-		Peer.removeRange(
+		peer.removeRange(
 			mark.frontPath,
 			mark.frontAt,
 			mark.backPath,
@@ -1018,7 +1018,7 @@ doc.prototype.specialKey =
 			case 'backspace' :
 			case 'del' :
 
-				Peer.removeRange(
+				peer.removeRange(
 					mark.frontPath,
 					mark.frontAt,
 					mark.backPath,
@@ -1029,7 +1029,7 @@ doc.prototype.specialKey =
 
 			case 'enter' :
 
-				Peer.removeRange(
+				peer.removeRange(
 					mark.frontPath,
 					mark.frontAt,
 					mark.backPath,

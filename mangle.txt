@@ -17,7 +17,6 @@
 . PSE_M1
 > Portal
 . Remove
-. _$moveToButton
 . _$pnws
 . _$redraw
 . _$rof
@@ -86,6 +85,7 @@
 . _locateOffset
 . _mode
 . _moveTo
+. _moveToButton
 . _normalize
 . _onAquireSpace
 . _onAtweenTime
@@ -118,7 +118,6 @@
 . _pointingHover
 . _postbox
 . _prepareField
-. _prepareMoveToButton
 . _rSeq
 . _rSpace
 . _ray

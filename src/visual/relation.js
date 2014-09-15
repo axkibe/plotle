@@ -21,7 +21,7 @@ var
 	euclid,
 	jools,
 	marks,
-	Peer,
+	peer,
 	root,
 	theme;
 
@@ -218,7 +218,7 @@ relation.spawn =
 		);
 
 	result =
-		Peer.newRelation(
+		peer.newRelation(
 			pnw,
 			'relates to',
 			20,
@@ -226,8 +226,7 @@ relation.spawn =
 			item2.key
 		);
 
-	key =
-		result.chgX.trg.path.get( -1 );
+	key = result.chgX.trg.path.get( -1 );
 
 	root.setMark(
 		marks.caret.create(

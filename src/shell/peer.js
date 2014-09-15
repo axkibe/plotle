@@ -9,7 +9,7 @@
 | Export
 */
 var
-	Peer;
+	peer;
 
 
 /*
@@ -58,7 +58,7 @@ spliceSign =
 			'splice'
 	);
 
-Peer = { };
+peer = { };
 
 
 /*
@@ -66,7 +66,7 @@ Peer = { };
 |
 | FIXME remove
 */
-Peer.auth =
+peer.auth =
 	function(
 		user,
 		passhash
@@ -90,7 +90,7 @@ Peer.auth =
 /*
 | Creates a new note.
 */
-Peer.newNote =
+peer.newNote =
 	function(
 		spaceUser,
 		spaceTag,
@@ -138,7 +138,7 @@ Peer.newNote =
 /*
 | Creates a new portal.
 */
-Peer.newPortal =
+peer.newPortal =
 	function(
 		zone,           // the zone of the potal
 		destSpaceUser,  // the user of the space the portal leads to
@@ -179,7 +179,7 @@ Peer.newPortal =
 /*
 | Sets the zone for item.
 */
-Peer.setZone =
+peer.setZone =
 	function(
 		itemPath,
 		zone
@@ -209,7 +209,7 @@ Peer.setZone =
 /*
 | Sets an items fontsize.
 */
-Peer.setFontSize =
+peer.setFontSize =
 	function(
 		itemPath,
 		fontsize
@@ -239,7 +239,7 @@ Peer.setFontSize =
 /*
 | Sets an items pnw (point in north-west)
 */
-Peer.setPNW =
+peer.setPNW =
 	function(
 		itemPath,
 		pnw
@@ -269,7 +269,7 @@ Peer.setPNW =
 /*
 | Creates a new label.
 */
-Peer.newLabel =
+peer.newLabel =
 	function(
 		pnw,
 		text,
@@ -317,7 +317,7 @@ Peer.newLabel =
 /*
 | Creates a new relation.
 */
-Peer.newRelation =
+peer.newRelation =
 	function(
 		pnw,
 		text,
@@ -372,7 +372,7 @@ Peer.newRelation =
 | Moves an item's z-index up to top.
 */
 /*
-Peer.moveToTop =
+peer.moveToTop =
 	function(
 		path
 	)
@@ -394,7 +394,7 @@ Peer.moveToTop =
 /*
 | Inserts some text.
 */
-Peer.insertText =
+peer.insertText =
 	function(
 		path,
 		offset,
@@ -425,7 +425,7 @@ Peer.insertText =
 /*
 | Removes some text within one node.
 */
-Peer.removeText =
+peer.removeText =
 	function(
 		path,
 		at1,
@@ -468,7 +468,7 @@ Peer.removeText =
 /*
 | Removes a text spawning over several entities.
 */
-Peer.removeRange =
+peer.removeRange =
 	function(
 		path1,
 		at1,
@@ -499,7 +499,7 @@ Peer.removeRange =
 
 	if ( path1.equals( path2 ) )
 	{
-		Peer.removeText(
+		peer.removeText(
 			path1,
 			at1,
 			at2 - at1
@@ -524,7 +524,7 @@ Peer.removeRange =
 		r++
 	)
 	{
-		Peer.join(
+		peer.join(
 			path1,
 			root.space.getPath( path1.chop( 1 ) ).length
 		);
@@ -532,7 +532,7 @@ Peer.removeRange =
 
 	len2 = root.space.getPath( path1.chop( 1 ) ).length;
 
-	Peer.join(
+	peer.join(
 		path1,
 		len2
 	);
@@ -542,7 +542,7 @@ Peer.removeRange =
 		return;
 	}
 
-	Peer.removeText(
+	peer.removeText(
 		path1,
 		at1,
 		len2 - at1 + at2
@@ -553,7 +553,7 @@ Peer.removeRange =
 /*
 | Splits a text node.
 */
-Peer.split =
+peer.split =
 	function(
 		path,
 		offset
@@ -580,7 +580,7 @@ Peer.split =
 /*
 | Joins a text node with its next one.
 */
-Peer.join =
+peer.join =
 	function(
 		path,
 		at1
@@ -607,7 +607,7 @@ Peer.join =
 /*
 | Removes an item.
 */
-Peer.removeItem =
+peer.removeItem =
 	function(
 		path
 	)

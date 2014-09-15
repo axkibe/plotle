@@ -21,7 +21,7 @@ var
 	jion,
 	jools,
 	marks,
-	Peer,
+	peer,
 	reply,
 	root,
 	Stubs,
@@ -949,7 +949,7 @@ space.prototype.dragStop =
 							);
 
 					result =
-						Peer.newNote(
+						peer.newNote(
 							this.spaceUser,
 							this.spaceTag,
 							note.zone
@@ -1025,7 +1025,7 @@ space.prototype.dragStop =
 							);
 
 					result =
-						Peer.newLabel(
+						peer.newLabel(
 							label.pnw,
 							'Label',
 							label.doc.fontsize
@@ -1069,7 +1069,7 @@ space.prototype.dragStop =
 						);
 
 					result =
-						Peer.newPortal(
+						peer.newPortal(
 							portal.zone,
 							root.username, // FIXME
 							'home'
@@ -1178,7 +1178,7 @@ space.prototype.dragStop =
 				{
 					case 'zone' :
 
-						Peer.setZone(
+						peer.setZone(
 							action.transItem.path,
 							action.transItem.zone
 						);
@@ -1187,7 +1187,7 @@ space.prototype.dragStop =
 
 					case 'pnw/fontsize' :
 
-						Peer.setPNW(
+						peer.setPNW(
 							action.transItem.path,
 							action.transItem.zone.pnw
 						);
@@ -1215,7 +1215,7 @@ space.prototype.dragStop =
 				{
 					case 'zone' :
 
-						Peer.setZone(
+						peer.setZone(
 							action.transItem.path,
 							action.transItem.zone
 						);
@@ -1224,12 +1224,12 @@ space.prototype.dragStop =
 
 					case 'pnw/fontsize' :
 
-						Peer.setPNW(
+						peer.setPNW(
 							action.transItem.path,
 							action.transItem.zone.pnw
 						);
 
-						Peer.setFontSize(
+						peer.setFontSize(
 							action.transItem.path,
 							action.transItem.doc.fontsize
 						);

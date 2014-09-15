@@ -29,7 +29,7 @@ var
 	jion,
 	marks,
 	net,
-	Peer,
+	peer,
 	system,
 	swatch;
 
@@ -1343,10 +1343,7 @@ proto.onload =
 		passhash = null;
 	}
 
-	this.link.auth(
-		username,
-		passhash
-	);
+	this.link.auth( username, passhash );
 };
 
 
@@ -1528,11 +1525,7 @@ proto.onAuth =
 		// takes a visitor instead
 		if( username !== 'visitor' )
 		{
-			Peer.auth(
-				'visitor',
-				null,
-				this
-			);
+			peer.auth( 'visitor', null );
 
 			return;
 		}
@@ -1611,10 +1604,7 @@ proto.logout =
 		return;
 	}
 
-	Peer.auth(
-		'visitor',
-		null
-	);
+	peer.auth( 'visitor', null );
 };
 
 

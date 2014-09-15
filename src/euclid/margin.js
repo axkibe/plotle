@@ -46,7 +46,7 @@ euclid.margin =
 		w
 	)
 {
-	if (typeof(m) === 'object')
+	if( typeof( m ) === 'object' )
 	{
 		this.n = m.n;
 		this.e = m.e;

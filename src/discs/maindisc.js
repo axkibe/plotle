@@ -10,7 +10,7 @@
 */
 var
 	discs,
-	Peer;
+	peer;
 
 discs = discs || { };
 
@@ -398,7 +398,7 @@ mainDisc.prototype.pushButton =
 
 	if( buttonName === 'Remove' )
 	{
-		Peer.removeItem( this.mark.itemPath );
+		peer.removeItem( this.mark.itemPath );
 	}
 	else
 	{

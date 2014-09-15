@@ -18,7 +18,7 @@ var
 var
 	euclid,
 	jools,
-	Peer,
+	peer,
 	root,
 	Style,
 	theme,
@@ -351,18 +351,12 @@ label.prototype.dragStop =
 				!this.pnw.equals( zone.pnw )
 			)
 			{
-				Peer.setPNW(
-					this.path,
-					zone.pnw
-				);
+				peer.setPNW( this.path, zone.pnw );
 			}
 
 			if( fontsize !== this.fontsize )
 			{
-				Peer.setFontSize(
-					this.path,
-					fontsize
-				);
+				peer.setFontSize( this.path, fontsize );
 			}
 
 			break;

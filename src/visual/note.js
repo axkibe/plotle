@@ -19,7 +19,7 @@ var
 var
 	euclid,
 	jools,
-	Peer,
+	peer,
 	root,
 	Style,
 	system,
@@ -299,10 +299,7 @@ note.prototype.dragStop =
 				return;
 			}
 
-			Peer.setZone(
-				this.path,
-				zone
-			);
+			peer.setZone( this.path, zone );
 
 			return true;
 

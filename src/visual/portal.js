@@ -23,7 +23,7 @@ var
 	euclid,
 	jools,
 	marks,
-	Peer,
+	peer,
 	reply,
 	root,
 	Style,
@@ -387,7 +387,7 @@ portal.prototype.dragStop =
 				return;
 			}
 
-			Peer.setZone(
+			peer.setZone(
 				this.path,
 				zone
 			);
@@ -444,7 +444,7 @@ portal.prototype.click =
 		return false;
 	}
 
-	moveToButton = this._$moveToButton;
+	moveToButton = this._moveToButton;
 
 	pp =
 		view
@@ -560,7 +560,7 @@ jools.lazyValue(
 
 		if( section === 'moveToButton' )
 		{
-			return ac + this._$moveToButton.shape.pnw.y;
+			return ac + this._moveToButton.shape.pnw.y;
 		}
 
 		font =
@@ -679,7 +679,7 @@ portal.prototype.pointingHover =
 		return null;
 	}
 
-	moveToButton = this._$moveToButton;
+	moveToButton = this._moveToButton;
 
 	pp =
 		view
@@ -727,27 +727,35 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			vzone =
-				this.view.rect( this.zone ),
+			f,
+			hview,
+			mark,
+			moveToButton,
+			section,
+			spaceUser,
+			spaceTag,
+			vzone;
 
-			f =
-				euclid.fabric.create(
-					'width',
-						vzone.width + 2,
-					'height',
-						vzone.height + 2
-				),
+		vzone = this.view.rect( this.zone );
 
-			hview =
-				this.view.home,
+		f =
+			euclid.fabric.create(
+				'width',
+					vzone.width + 2,
+				'height',
+					vzone.height + 2
+			),
 
-			mark =
-				this.mark,
+		hview = this.view.home;
 
-			section =
-				mark &&
-				mark.hasCaret &&
-				mark.caretPath.get( -1 );
+		mark = this.mark;
+
+		section =
+			mark
+			&&
+			mark.hasCaret
+			&&
+			mark.caretPath.get( -1 );
 
 		f.fill(
 			Style.getStyle(
@@ -766,24 +774,21 @@ jools.lazyValue(
 				0
 			);
 
-			var
-				spaceUser =
-				this._$spaceFields.spaceUser =
-					this._prepareField(
-						'spaceUser',
-						null
-					),
+			spaceUser =
+			this._$spaceFields.spaceUser =
+				this._prepareField(
+					'spaceUser',
+					null
+				),
 
-				spaceTag =
-				this._$spaceFields.spaceTag =
-					this._prepareField(
-						'spaceTag',
-						spaceUser.pnw
-					),
+			spaceTag =
+			this._$spaceFields.spaceTag =
+				this._prepareField(
+					'spaceTag',
+					spaceUser.pnw
+				),
 
-				moveToButton =
-				this._$moveToButton =
-					this._prepareMoveToButton( );
+			moveToButton = this._moveToButton;
 
 			f.paint(
 				Style.getStyle(
@@ -885,14 +890,16 @@ portal.prototype.input =
 	)
 {
 	var
-		reg  =
-			/([^\n]+)(\n?)/g,
+		reg,
+		rx,
+		mark,
+		section;
 
-		mark =
-			this.mark,
+	reg  = /([^\n]+)(\n?)/g;
 
-		section =
-			mark.caretPath.get( -1 );
+	mark = this.mark;
+
+	section = mark.caretPath.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
@@ -908,14 +915,14 @@ portal.prototype.input =
 
 	// ignores newlines
 	for(
-		var rx = reg.exec(text);
+		rx = reg.exec(text);
 		rx !== null;
 		rx = reg.exec( text )
 	)
 	{
 		var line = rx[ 1 ];
 
-		Peer.insertText(
+		peer.insertText(
 			this.subPaths[ section ],
 			mark.caretAt,
 			line
@@ -1150,7 +1157,7 @@ portal.prototype._keyBackspace =
 		return;
 	}
 
-	Peer.removeText(
+	peer.removeText(
 		this.subPaths[ section ],
 		at - 1,
 		1
@@ -1589,7 +1596,7 @@ portal.prototype._keyDel =
 		return;
 	}
 
-	Peer.removeText(
+	peer.removeText(
 		this.subPaths[ section ],
 		at,
 		1
@@ -1734,69 +1741,72 @@ portal.prototype._isSection =
 /*
 | Prepares the moveTo button.
 */
-portal.prototype._prepareMoveToButton =
+jools.lazyValue(
+	portal.prototype,
+	'_moveToButton',
 	function( )
-{
-	var
-		height,
-		pmtTheme,
-		pnw,
-		pse,
-		result,
-		rounding,
-		width,
-		zone;
+	{
+		var
+			height,
+			pmtTheme,
+			pnw,
+			pse,
+			result,
+			rounding,
+			width,
+			zone;
 
-	pmtTheme = theme.portal.moveTo;
+		pmtTheme = theme.portal.moveTo;
 
-	zone = this.zone;
+		zone = this.zone;
 
-	width = pmtTheme.width;
+		width = pmtTheme.width;
 
-	height = pmtTheme.height;
+		height = pmtTheme.height;
 
-	rounding = pmtTheme.rounding;
+		rounding = pmtTheme.rounding;
 
-	pnw =
-		euclid.point.create(
-			'x',
-				jools.half( zone.width - width ),
-			'y',
-				jools.half( zone.height ) + 10
-		),
+		pnw =
+			euclid.point.create(
+				'x',
+					jools.half( zone.width - width ),
+				'y',
+					jools.half( zone.height ) + 10
+			),
 
-	pse = pnw.add( width, height );
+		pse = pnw.add( width, height );
 
-	result =
-		{
-			shape :
-				euclid.roundRect.create(
-					'pnw',
-						pnw,
-					'pse',
-						pse,
-					'a',
-						rounding,
-					'b',
-						rounding
-				),
+		result =
+			{
+				shape :
+					euclid.roundRect.create(
+						'pnw',
+							pnw,
+						'pse',
+							pse,
+						'a',
+							rounding,
+						'b',
+							rounding
+					),
 
-			textCenter :
-				euclid.point.create(
-					'x',
-						jools.half( pnw.x + pse.x ),
-					'y',
-						jools.half( pnw.y + pse.y )
-				)
-		};
+				textCenter :
+					euclid.point.create(
+						'x',
+							jools.half( pnw.x + pse.x ),
+						'y',
+							jools.half( pnw.y + pse.y )
+					)
+			};
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( result );
-/**/}
+/**/	if( CHECK )
+/**/	{
+/**/		Object.freeze( result );
+/**/	}
 
-	return result;
-};
+		return result;
+	}
+);
 
 /*
 | Prepares an input field ( user / tag )
