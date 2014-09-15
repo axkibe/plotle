@@ -141,7 +141,7 @@ shell.root =
 
 	this.action = actions.none.create( );
 
-	this._$mode = 'Normal';
+	this._mode = 'Normal';
 
 	// path of currently hovered thing
 	this._hoverPath = jion.path.empty;
@@ -207,7 +207,7 @@ shell.root =
 			'mark',
 				marks.vacant.create( ),
 			'mode',
-				this._$mode,
+				this._mode,
 			'path',
 				jion.path.empty
 				.append( 'discs' ),
@@ -258,7 +258,7 @@ proto.setMode =
 /**/	}
 /**/}
 
-	this._$mode = mode;
+	this._mode = mode;
 
 	this._discJockey =
 		this._discJockey.create(
@@ -612,7 +612,7 @@ proto._getCurrentDisplay =
 	var
 		name;
 
-	name = this._$mode;
+	name = this._mode;
 
 	switch( name )
 	{
@@ -1508,7 +1508,7 @@ proto.onAuth =
 {
 	// if in login mode this is a tempted login
 
-	if( this._$mode === 'login' )
+	if( this._mode === 'login' )
 	{
 		this._formJockey.get( 'login' ).onAuth(
 			ok,
@@ -1570,7 +1570,7 @@ proto.onRegister =
 {
 	// if in login mode this is a tempted login
 
-	if( this._$mode !== 'signUp' )
+	if( this._mode !== 'signUp' )
 	{
 		console.log(
 			'ignoring a register reply, since out of signup form'

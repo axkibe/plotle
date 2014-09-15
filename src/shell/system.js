@@ -116,6 +116,10 @@ var
 	_hoverShift = false,
 	_hoverCtrl = false,
 
+	// remembers last special key pressed, to hinder double events.
+	// Opera is behaving stupid here.
+	_lastSpecialKey = -1,
+
 	// if true the system dropped down to show
 	// a fail screen
 	_failScreen = false,
@@ -188,10 +192,6 @@ var System =
 
 	// hidden input that forwards all events
 	_hiddenInput = document.getElementById( 'input' );
-
-	// remembers last special key pressed, to hinder double events.
-	// Opera is behaving stupid here.
-	this._$lastSpecialKey = -1;
 
 	// remembers last pointing device hovering state.
 
@@ -634,8 +634,10 @@ System.prototype._onKeyDown =
 	)
 {
 	var
-		kcode =
-		this._$lastSpecialKey =
+		kcode;
+
+	kcode =
+	_lastSpecialKey =
 			event.keyCode;
 
 	if(
@@ -681,16 +683,17 @@ System.prototype._onKeyPress =
 			ew === 0
 		)
 		&&
-		this._$lastSpecialKey !== kcode
+		_lastSpecialKey !== kcode
 	)
 	{
-		this._$lastSpecialKey =
-			-1;
+		_lastSpecialKey = -1;
 
-		return this._specialKey(
-			kcode,
-			shift,
-			ctrl
+		return(
+			this._specialKey(
+				kcode,
+				shift,
+				ctrl
+			)
 		);
 	}
 	else
@@ -701,7 +704,7 @@ System.prototype._onKeyPress =
 		}
 	}
 
-	this._$lastSpecialKey = -1;
+	_lastSpecialKey = -1;
 
 	this._testInput( );
 
