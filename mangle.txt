@@ -20,7 +20,6 @@
 . _$pnws
 . _$redraw
 . _$rof
-. _$spaceFields
 . _$visitPasshash
 . _$visitUser
 . _arrow
@@ -50,6 +49,8 @@
 . _drawCaret
 . _edge
 . _fabric
+. _fieldSpaceTag
+. _fieldSpaceUser
 . _focusedWidget
 . _font
 . _fonts
@@ -716,7 +717,6 @@
 . sizeOnly
 > slice
 > space
-. spaceFields
 > spaceTag
 > spaceUser
 . spawn

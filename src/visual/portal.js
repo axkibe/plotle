@@ -237,7 +237,7 @@ var _spaceFields =
 		spaceUser :
 			'_fieldSpaceUser',
 		spaceTag :
-				'_fieldSpaceTag',
+				'_fieldSpaceTag'
 	};
 
 
