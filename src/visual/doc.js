@@ -204,32 +204,33 @@ doc.prototype._init =
 /*
 | Returns the attention center.
 */
-doc.prototype.attentionCenter =
-	function(
-		item // TODO remove
-	)
-{
-	var
-		path,
-		key;
-
-	if( !this.mark.hasCaret )
+jools.lazyValue(
+	doc.prototype,
+	'attentionCenter',
+	function( )
 	{
-		return 0;
+		var
+			path,
+			key;
+
+		if( !this.mark.hasCaret )
+		{
+			return 0;
+		}
+
+		path = this.mark.caretPath;
+
+		key = path.get( 5 ); // FIXME
+
+		return (
+			this.getPNW( key ).y
+			+
+			this
+			.twig[ key ]
+			.attentionCenter
+		);
 	}
-
-	path = this.mark.caretPath,
-
-	key = path.get( 5 ); // FIXME
-
-	return (
-		this.getPNW( key ).y
-		+
-		this
-		.twig[ key ]
-		.attentionCenter
-	);
-};
+);
 
 
 /*
@@ -656,7 +657,6 @@ doc.prototype.draw =
 	function(
 		fabric,      // to draw upon
 		view,        // current pan/zoom/motion TODO
-		item,        // the item the doc belongs to TODO remove
 		width,       // the width to draw the document with
 		scrollp      // scroll position
 	)
@@ -670,6 +670,15 @@ doc.prototype.draw =
 		pnws,
 		ranks,
 		rs;
+
+	// FUTURE remove
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 4 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	mark = this.mark;
 

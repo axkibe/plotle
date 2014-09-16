@@ -407,7 +407,6 @@ jools.lazyValue(
 		doc.draw(
 			f,
 			hview,
-			this,
 			this.zone.width,
 			euclid.point.zero
 		);

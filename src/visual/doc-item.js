@@ -35,8 +35,7 @@ var
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 }
 
 
@@ -94,7 +93,7 @@ jools.lazyValue(
 			+
 			jools.limit(
 				0,
-				this.doc.attentionCenter( this )
+				this.doc.attentionCenter
 				-
 				(
 					this.scrollbarY
