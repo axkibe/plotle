@@ -69,6 +69,7 @@ config.database.name =
 | Determines the amound of checking and complaining if things go wrong.
 */
 config.develShell =
+//	false &&
 	true;
 
 /*

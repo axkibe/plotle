@@ -671,21 +671,12 @@ doc.prototype.draw =
 		ranks,
 		rs;
 
-	// FUTURE remove
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 4 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
 	mark = this.mark;
 
 	if(
 		mark.reflect === 'marks.range'
 		&&
-		mark.itemPath.equals( item.path )
+		mark.itemPath.subPathOf( this.path )
 	)
 	{
 		rs = this._getRangeShape( width, scrollp );
@@ -911,7 +902,7 @@ doc.prototype.getParaAtPoint =
 	)
 {
 	var
-		k,
+		key,
 		para,
 		pnws,
 		ranks,
@@ -929,12 +920,11 @@ doc.prototype.getParaAtPoint =
 		r++
 	)
 	{
-		// FIXME use atRank
-		k = ranks[ r ];
+		key = ranks[ r ];
 
-		para = twig[ k ];
+		para = twig[ key ];
 
-		if( p.y < pnws[ k ].y + para.flow.height )
+		if( p.y < pnws[ key ].y + para.flow.height )
 		{
 			return para;
 		}
@@ -953,17 +943,17 @@ doc.prototype.input =
 	)
 {
 	var
-		mark =
-			this.mark;
+		mark,
+		path;
+
+	mark = this.mark;
 
 	if( !this.mark.hasCaret )
 	{
 		return false;
 	}
 
-	var
-		path =
-			this.mark.caretPath;
+	path = this.mark.caretPath;
 
 	if(
 		mark.reflect === 'marks.range'
@@ -988,10 +978,7 @@ doc.prototype.input =
 	return (
 		this
 		.twig[ path.get( 5 ) ]
-		.input(
-			text,
-			item
-		)
+		.input( text, item )
 	);
 };
 
@@ -1002,7 +989,7 @@ doc.prototype.input =
 doc.prototype.specialKey =
 	function(
 		key,
-		item,
+		item, // TODO remove ?
 		shift,
 		ctrl
 	)

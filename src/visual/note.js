@@ -144,8 +144,7 @@ if( JION )
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 
 	visual =
 		{
@@ -213,8 +212,8 @@ note.prototype._init =
 
 	this.doc =
 		this.doc.create(
-			'flowWidth',
-				zone.width - note.innerMargin.x,
+			'flowWidth', // FUTURE remove?
+				zone.width - theme.note.innerMargin.x,
 			'fontsize',
 				this.fontsize,
 			'innerMargin',
@@ -407,12 +406,12 @@ note.prototype.draw =
 	)
 {
 	var
-		zone =
-			this.zone,
+		zone,
+		sbary;
 
-		sbary =
-			this.scrollbarY;
+	zone = this.zone;
 
+	sbary = this.scrollbarY;
 
 	fabric.drawImage(
 		'image',
@@ -424,25 +423,9 @@ note.prototype.draw =
 	// FIXME maybe just set sbary null
 	if( sbary.visible )
 	{
-		sbary.draw(
-			fabric,
-			this.view
-		);
+		sbary.draw( fabric, this.view );
 	}
 };
-
-
-if( SHELL )
-{
-	/*
-	| Default margin for all notes.
-	|
-	| TODO remove
-	*/
-	note.innerMargin =
-	note.prototype.innerMargin =
-		theme.note.innerMargin;
-}
 
 
 /*
@@ -599,7 +582,7 @@ note.prototype.scrollMarkIntoView =
 
 	zone = this.zone;
 
-	imargin = this.innerMargin;
+	imargin = this.doc.innerMargin;
 
 	fs = this.doc.font.size;
 

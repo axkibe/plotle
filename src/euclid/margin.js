@@ -65,8 +65,21 @@ if( JION )
 						type :
 							'Number'
 					}
-			}
+			},
+		node :
+			true
 	};
+}
+
+
+/*
+| Node includes.
+*/
+if( SERVER )
+{
+	jools = require( '../jools/jools' );
+
+	euclid.margin = require( '../jion/this' )( module );
 }
 
 

@@ -389,7 +389,7 @@
 > getOwnPropertyDescriptor
 > getOwnPropertyNames
 . getPNW
-. getPNWs
+. paraPNWs
 . getParaAtPoint
 . getPath
 . getPointOffset

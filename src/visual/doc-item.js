@@ -117,7 +117,7 @@ docItem.prototype.getParaAtPoint =
 		p
 	)
 {
-	if( p.y < this.innerMargin.n )
+	if( p.y < this.doc.innerMargin.n )
 	{
 		return null;
 	}

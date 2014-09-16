@@ -4,6 +4,7 @@ module.exports =
 		'server',
 	list :
 		[
+			'src/euclid/margin.js',
 			'src/euclid/point.js',
 			'src/euclid/rect.js',
 			'src/euclid/view.js',

@@ -225,17 +225,6 @@ label.prototype.positioning =
 	'pnw/fontsize';
 
 
-if( SHELL )
-{
-	/*
-	| Default margin for all labels.
-	|
-	| TODO remove
-	*/
-	label.prototype.innerMargin = theme.label.innerMargin;
-}
-
-
 /*
 | Resize handles to show on labels
 */
