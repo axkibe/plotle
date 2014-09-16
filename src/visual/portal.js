@@ -149,8 +149,9 @@ if( SERVER )
 
 
 var
-	portal =
-		visual.portal;
+	portal;
+
+portal = visual.portal;
 
 
 /*
@@ -170,14 +171,11 @@ portal.prototype._init =
 		return;
 	}
 
-	zone =
-		this.zone;
+	zone = this.zone;
 
-	minWidth =
-		theme.portal.minWidth,
+	minWidth = theme.portal.minWidth;
 
-	minHeight =
-		theme.portal.minHeight;
+	minHeight = theme.portal.minHeight;
 
 	if(
 		zone.width  < minWidth
@@ -203,17 +201,6 @@ portal.prototype._init =
 					)
 			);
 	}
-
-	// the prepared space fields
-	// FIXME lazy evaluate
-	this._$spaceFields =
-		{
-			spaceUser :
-				null,
-
-			spaceTag :
-				null
-		};
 
 	// FIXME once path caching is here this can go
 	if( !this.path.isEmpty )
@@ -245,15 +232,19 @@ portal.prototype._init =
 /*
 | List of all space fields of the portal
 */
-portal.spaceFields =
-	jools.immute(
-		{
-			spaceUser :
-				true,
-			spaceTag :
-				true
-		}
-	);
+var _spaceFields =
+	{
+		spaceUser :
+			'_fieldSpaceUser',
+		spaceTag :
+				'_fieldSpaceTag',
+	};
+
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( _spaceFields );
+/**/}
 
 
 /*
@@ -421,16 +412,16 @@ portal.prototype.click =
 	)
 {
 	var
+		fieldLazyName,
 		mark,
 		moveToButton,
 		pp,
+		sf,
 		zone;
 
-	mark =
-		null;
+	mark = null;
 
-	zone =
-		this.zone;
+	zone = this.zone;
 
 	// not clicked on the portal?
 	if(
@@ -474,11 +465,11 @@ portal.prototype.click =
 		.depoint( p )
 		.sub( zone.pnw );
 
-	for( var field in portal.spaceFields )
+	for( var field in _spaceFields )
 	{
-		var
-			sf =
-				this._$spaceFields[ field ];
+		fieldLazyName = _spaceFields[ field ];
+
+		sf = this[ fieldLazyName ];
 
 		if(
 			sf.silhoutte
@@ -534,24 +525,26 @@ jools.lazyValue(
 	{
 		var
 			ac,
+			descend,
+			fieldPNW,
 			font,
 			fs,
 			mark,
+			n,
+			p,
+			s,
 			section;
 
-		ac =
-			this.zone.pnw.y,
+		ac = this.zone.pnw.y,
 
-		mark =
-			this.mark;
+		mark = this.mark;
 
 		if( !mark.hasCaret )
 		{
 			return ac;
 		}
 
-		section =
-			mark.caretPath.get( -1 );
+		section = mark.caretPath.get( -1 );
 
 		if( !this._isSection( section ) )
 		{
@@ -563,32 +556,25 @@ jools.lazyValue(
 			return ac + this._moveToButton.shape.pnw.y;
 		}
 
-		font =
-			this._fonts[ section ];
+		font = this._fonts[ section ];
 
-		fs =
-			font.size;
+		fs = font.size;
 
-		var
-			descend =
-				fs * theme.bottombox,
+		descend = fs * theme.bottombox;
 
-			fieldPNW =
-				this._$spaceFields[ section ].pnw,
+		fieldPNW = this[ _spaceFields[ section ] ].pnw;
 
-			p =
-				this._locateOffset(
-					section,
-					mark.caretAt
-				),
+		p =
+			this._locateOffset(
+				section,
+				mark.caretAt
+			);
 
-			s =
-				Math.round( p.y + descend ) + fieldPNW.y,
+		s = Math.round( p.y + descend ) + fieldPNW.y;
 
-			n =
-				s - Math.round( fs + descend );
+		n = s - Math.round( fs + descend );
 
-			return ac + n;
+		return ac + n;
 	}
 );
 
@@ -962,11 +948,9 @@ if( SHELL )
 			text;
 
 		// FIXME cache position
-		font =
-			this._fonts[ section ];
+		font = this._fonts[ section ];
 
-		text =
-			this[ section ];
+		text = this[ section ];
 
 		return euclid.point.create(
 			'x',
@@ -995,11 +979,19 @@ portal.prototype._drawCaret =
 	)
 {
 	var
-		mark =
-			this.mark,
+		descend,
+		fieldPNW,
+		font,
+		fs,
+		mark,
+		n,
+		p,
+		s,
+		section;
 
-		section =
-			mark.caretPath.get( -1 );
+	mark = this.mark;
+
+	section = mark.caretPath.get( -1 );
 
 	if(
 		!this._isSection( section )
@@ -1009,30 +1001,23 @@ portal.prototype._drawCaret =
 		return;
 	}
 
-	var
-		font =
-			this._fonts[ section ],
+	font = this._fonts[ section ];
 
-		fs =
-			font.size,
+	fs = font.size;
 
-		descend =
-			fs * theme.bottombox,
+	descend = fs * theme.bottombox;
 
-		fieldPNW =
-			this._$spaceFields[ section ].pnw,
+	fieldPNW = this[ _spaceFields[ section ] ].pnw;
 
-		p =
-			this._locateOffset(
-				section,
-				mark.caretAt
-			),
+	p =
+		this._locateOffset(
+			section,
+			mark.caretAt
+		);
 
-		s =
-			Math.round( p.y + descend ) + fieldPNW.y,
+	s = Math.round( p.y + descend ) + fieldPNW.y;
 
-		n =
-			s - Math.round( fs + descend );
+	n = s - Math.round( fs + descend );
 
 	// draws the caret
 	fabric.fillRect(
@@ -1201,7 +1186,7 @@ portal.prototype._keyDown =
 						this._getOffsetAt(
 							'spaceTag',
 							cpos.x +
-								this._$spaceFields.spaceUser.pnw.x
+								this._fieldSpaceUser.pnw.x
 						)
 				)
 			);
@@ -1440,7 +1425,7 @@ portal.prototype._keyUp =
 						this._getOffsetAt(
 							'spaceUser',
 							cpos.x +
-								this._$spaceFields.spaceTag.pnw.x
+								this._fieldSpaceTag.pnw.x
 						)
 				)
 			);
@@ -1939,20 +1924,23 @@ portal.prototype._getOffsetAt =
 	)
 {
 	var
-		dx = x - this._$spaceFields[ section ].pnw.x,
-
-		value = this[ section ],
-
-		x1 = 0,
-
-		x2 = 0,
-
 		a,
-
 		aZ,
+		dx,
+		font,
+		value,
+		x1,
+		x2;
 
-		font =
-			this._fonts[ section ];
+	dx = x - this[ _spaceFields[ section ] ].pnw.x;
+
+	value = this[ section ];
+
+	x1 = 0;
+
+	x2 = 0;
+
+	font = this._fonts[ section ];
 
 	for(
 		a = 0, aZ = value.length;
