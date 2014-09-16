@@ -59,6 +59,15 @@ if( JION )
 						defaultValue :
 							undefined
 					},
+				innerMargin :
+					{
+						comment :
+							'inner margin of the doc',
+						type :
+							'euclid.margin',
+						defaultValue :
+							undefined
+					},
 				paraSep :
 					{
 						comment :
@@ -199,7 +208,7 @@ doc.prototype._init =
 */
 doc.prototype.attentionCenter =
 	function(
-		item
+		item // TODO remove
 	)
 {
 	var
@@ -216,7 +225,7 @@ doc.prototype.attentionCenter =
 	key = path.get( 5 ); // FIXME
 
 	return (
-		this.getPNW( item, key ).y
+		this.getPNW( key ).y
 		+
 		this
 		.twig[ key ]
@@ -227,11 +236,12 @@ doc.prototype.attentionCenter =
 
 /*
 | Returns the shape for a selection range
+|
+| FIXME, remove parameters and make lazy
 */
 doc.prototype._getRangeShape =
 	function(
-		item,        // the item of the doc
-		width,       // width the vdoc is drawn
+		width,       // width the doc is drawn
 		scrollp      // scroll position of the doc
 	)
 {
@@ -290,9 +300,9 @@ doc.prototype._getRangeShape =
 
 	backKey = backPath.get( -2 );
 
-	frontPnw = this.getPNW( item, frontKey );
+	frontPnw = this.getPNW( frontKey );
 
-	backPnw = this.getPNW( item, backKey );
+	backPnw = this.getPNW( backKey );
 
 	frontPara = this.twig[ frontKey ];
 
@@ -312,8 +322,7 @@ doc.prototype._getRangeShape =
 
 	ascend = Math.round( fontsize );
 
-	// inner margin of the doc
-	innerMargin = item.innerMargin;
+	innerMargin = this.innerMargin;
 
 	rx = width - innerMargin.e;
 
@@ -497,7 +506,7 @@ doc.prototype._getRangeShape =
 				Math.round(
 					f2Para.flow[ 0 ].y
 					+
-					this.getPNW( item, f2Key ).y
+					this.getPNW( f2Key ).y
 					-
 					scrollp.y
 				);
@@ -526,7 +535,7 @@ doc.prototype._getRangeShape =
 				Math.round(
 					b2Para.flow[ b2Para.flow.length - 1 ].y
 					+
-					this.getPNW( item, b2Key ).y
+					this.getPNW( b2Key ).y
 					-
 					scrollp.y
 				);
@@ -649,7 +658,7 @@ doc.prototype.draw =
 	function(
 		fabric,      // to draw upon
 		view,        // current pan/zoom/motion TODO
-		item,        // the item the doc belongs to
+		item,        // the item the doc belongs to TODO remove
 		width,       // the width to draw the document with
 		scrollp      // scroll position
 	)
@@ -672,7 +681,7 @@ doc.prototype.draw =
 		mark.itemPath.equals( item.path )
 	)
 	{
-		rs = this._getRangeShape( item, width, scrollp );
+		rs = this._getRangeShape( width, scrollp );
 
 		// FUTURE have shapeRays handled more elegantly
 		if( !Array.isArray( rs ) )
@@ -701,7 +710,7 @@ doc.prototype.draw =
 	}
 
 	// north-west points of paras
-	pnws = this.getPNWs( item );
+	pnws = this.getPNWs( );
 
 	ranks = this.ranks;
 
@@ -731,9 +740,7 @@ doc.prototype.draw =
 | FIXME use jools lazyFunc
 */
 doc.prototype.getPNWs =
-	function(
-		item // the item this doc belongs to
-	)
+	function( )
 {
 	var
 		flow,
@@ -753,7 +760,7 @@ doc.prototype.getPNWs =
 
 	paraSep = this.paraSep;
 
-	innerMargin = item.innerMargin;
+	innerMargin = this.innerMargin;
 
 	y = innerMargin.n;
 
@@ -837,11 +844,10 @@ jools.lazyValue(
 */
 doc.prototype.getPNW =
 	function(
-		item,
 		key
 	)
 {
-	return this.getPNWs( item )[ key ];
+	return this.getPNWs( )[ key ];
 };
 
 
@@ -896,7 +902,7 @@ jools.lazyValue(
 */
 doc.prototype.getParaAtPoint =
 	function(
-		item,
+		item, // TODO remove
 		p
 	)
 {
@@ -907,7 +913,7 @@ doc.prototype.getParaAtPoint =
 		ranks,
 		twig;
 
-	pnws = this.getPNWs( item );
+	pnws = this.getPNWs( );
 
 	ranks = this.ranks;
 

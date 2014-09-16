@@ -28,7 +28,7 @@ var
 
 
 /*
-| The jion definition
+| The jion definition.
 */
 if( JION )
 {

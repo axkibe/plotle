@@ -184,14 +184,6 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/shell/theme.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	resource.create(
-		'filePath',
 			'src/euclid/constants.js',
 		'inBundle',
 			true
@@ -205,6 +197,8 @@ module.exports =
 	resource.create(
 		'filePath',
 			'src/euclid/margin.js',
+		'hasJion',
+			true,
 		'inBundle',
 			true
 	),
@@ -270,14 +264,6 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/euclid/view.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
 			'src/design/anchor-point.js',
 		'hasJion',
 			true,
@@ -295,6 +281,22 @@ module.exports =
 	resource.create(
 		'filePath',
 			'src/design/anchor-ellipse.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true
+	),
+	resource.create(
+		'filePath',
+			'src/shell/theme.js',
+		'inBundle',
+			true,
+		'inTestPad',
+			true
+	),
+	resource.create(
+		'filePath',
+			'src/euclid/view.js',
 		'hasJion',
 			true,
 		'inBundle',

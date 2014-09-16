@@ -157,8 +157,7 @@ docItem.prototype.click =
 		return false;
 	}
 
-	vp =
-		view.depoint( p );
+	vp = view.depoint( p );
 
 	if(
 		!this.zone.within(
@@ -171,8 +170,7 @@ docItem.prototype.click =
 	}
 
 
-	pnw =
-		this.zone.pnw;
+	pnw = this.zone.pnw;
 
 	pi =
 		vp.sub(
@@ -187,20 +185,14 @@ docItem.prototype.click =
 				)
 		);
 
-	doc =
-		this.doc;
+	doc = this.doc;
 
-	para =
-		this.getParaAtPoint( pi );
+	para = this.getParaAtPoint( pi );
 
 	// FIXME move into para
 	if( para )
 	{
-		ppnw =
-			doc.getPNW(
-				this,
-				para.key
-			);
+		ppnw = doc.getPNW( para.key );
 
 		at =
 			para.getPointOffset(

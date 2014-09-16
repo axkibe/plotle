@@ -69,7 +69,6 @@
 . _init
 . _isActiveButton
 . _isSection
-. _json
 . _keyBackspace
 . _keyDel
 . _keyDown

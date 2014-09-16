@@ -28,74 +28,67 @@ var jools;
 
 
 /*
-| Constructor.
-|
-| margin(n, e, s, w)
-|
-| n: master or north margin
-| e: east margin
-| s: south margin
-| w: west margin
+| The jion definition.
 */
-var margin =
-euclid.margin =
-	function(
-		m,
-		e,
-		s,
-		w
-	)
+if( JION )
 {
-	if( typeof( m ) === 'object' )
-	{
-		this.n = m.n;
-		this.e = m.e;
-		this.s = m.s;
-		this.w = m.w;
-	}
-	else
-	{
-		this.n = m;
-		this.e = e;
-		this.s = s;
-		this.w = w;
-	}
+	return {
+		id :
+			'euclid.margin',
+		attributes :
+			{
+				n :
+					{
+						comment :
+							'n margin',
+						type :
+							'Number'
+					},
+				e :
+					{
+						comment :
+							'e margin',
+						type :
+							'Number'
+					},
+				s :
+					{
+						comment :
+							's margin',
+						type :
+							'Number'
+					},
+				w :
+					{
+						comment :
+							'w margin',
+						type :
+							'Number'
+					}
+			}
+	};
+}
 
-	jools.immute(this);
-};
+
+var
+	margin;
+
+margin = euclid.margin;
 
 
 /*
 | A margin with all distances 0.
 */
 margin.zero =
-	new margin(
-		0,
-		0,
-		0,
-		0
+	margin.create(
+		'n', 0,
+		'e', 0,
+		's', 0,
+		'w', 0
 	);
 
-
 /*
-| Returns a json object for this margin
-| FIXME is this ever used?
-*/
-margin.prototype.toJSON = function()
-{
-	return this._json ||
-		( this._json =
-			{
-				n: this.n,
-				e: this.e,
-				s: this.s,
-				w: this.w
-			}
-		);
-};
-
-/*
-| East + west margin = x
+| east + west margin = x
 */
 jools.lazyValue(
 	margin.prototype,
@@ -108,7 +101,7 @@ jools.lazyValue(
 
 
 /*
-| North + south margin = y
+| north + south margin = y
 */
 jools.lazyValue(
 	margin.prototype,

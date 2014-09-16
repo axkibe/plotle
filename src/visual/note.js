@@ -217,6 +217,8 @@ note.prototype._init =
 				zone.width - note.innerMargin.x,
 			'fontsize',
 				this.fontsize,
+			'innerMargin',
+				theme.note.innerMargin,
 			'mark',
 				this.mark,
 			'paraSep',
@@ -235,7 +237,7 @@ note.prototype._init =
 	this.scrollbarY =
 		visual.scrollbar.create(
 			'aperture',
-				zone.height - this.innerMargin.y,
+				zone.height - theme.note.innerMargin.y,
 			'max',
 				this.doc.height,
 			'pnw',
@@ -435,13 +437,12 @@ if( SHELL )
 {
 	/*
 	| Default margin for all notes.
+	|
+	| TODO remove
 	*/
 	note.innerMargin =
 	note.prototype.innerMargin =
-		// FIXME create!
-		new euclid.margin(
-			theme.note.innerMargin
-		);
+		theme.note.innerMargin;
 }
 
 
@@ -611,11 +612,7 @@ note.prototype.scrollMarkIntoView =
 		).p;
 
 
-	pnw =
-		this.doc.getPNW(
-			this,
-			para.key
-		);
+	pnw = this.doc.getPNW( para.key );
 
 	s = Math.round( p.y + descend );
 

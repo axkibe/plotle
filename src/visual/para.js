@@ -1360,7 +1360,7 @@ para.prototype._keyLeft =
 para.prototype._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
-		item,
+		item,     // TODO remove
 		doc,
 		at,
 		retainx,
@@ -1387,7 +1387,7 @@ para.prototype._pageUpDown =
 			item.zone,
 
 		pnw =
-			doc.getPNW( item, this.key ),
+			doc.getPNW( this.key ),
 
 		tp =
 			p.add(
@@ -1409,7 +1409,7 @@ para.prototype._pageUpDown =
 
 	var
 		tpnw =
-			doc.getPNW( item, tpara.key );
+			doc.getPNW( tpara.key );
 
 	at =
 		tpara.getPointOffset(

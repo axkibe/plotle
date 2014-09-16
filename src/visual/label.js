@@ -182,6 +182,8 @@ label.prototype._init =
 				0,
 			'fontsize',
 				this.fontsize,
+			'innerMargin',
+				theme.label.innerMargin,
 			'mark',
 				this.mark,
 			'paraSep',
@@ -227,11 +229,10 @@ if( SHELL )
 {
 	/*
 	| Default margin for all labels.
+	|
+	| TODO remove
 	*/
-	label.prototype.innerMargin =
-		new euclid.margin(
-			theme.label.innerMargin
-		);
+	label.prototype.innerMargin = theme.label.innerMargin;
 }
 
 

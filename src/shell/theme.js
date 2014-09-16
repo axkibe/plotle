@@ -10,14 +10,16 @@
 
 */
 var
-	theme =
-		null;
+	theme;
+
+theme = null;
 
 
 /*
 | Imports
 */
 var
+	euclid,
 	fontPool;
 
 /*
@@ -79,19 +81,12 @@ theme =
 			30,
 
 		innerMargin  :
-		{
-			n :
-				4,
-
-			e :
-				5,
-
-			s :
-				4,
-
-			w :
-				5
-		},
+			euclid.margin.create(
+				'n', 4,
+				'e', 5,
+				's', 4,
+				'w', 5
+			),
 
 		style :
 			'note',
@@ -158,26 +153,17 @@ theme =
 	*/
 	label :
 	{
-		minSize :
-			8,
+		minSize : 8,
 
-		style :
-			'label',
+		style : 'label',
 
 		innerMargin  :
-		{
-			n :
-				1,
-
-			e :
-				1,
-
-			s :
-				1,
-
-			w :
-				1
-		}
+			euclid.margin.create(
+				'n', 1,
+				'e', 1,
+				's', 1,
+				'w', 1
+			)
 	},
 
 
@@ -498,28 +484,19 @@ theme =
 		},
 
 		innerMargin :
-		{
-			n :
-				1,
-
-			e :
-				1,
-
-			s :
-				1,
-
-			w :
-				1
-		},
+			euclid.margin.create(
+				'n', 1,
+				'e', 1,
+				's', 1,
+				'w', 1
+			),
 
 		// offset for creation // FIXME calculate dynamically
 		spawnOffset :
 		{
-			x :
-				44,
+			x : 44,
 
-			y :
-				12
+			y : 12
 		}
 	}
 };
