@@ -169,8 +169,6 @@ doc.prototype._init =
 			? this.twig
 			: jools.copy( this.twig );
 
-	this._$pnws = null;
-
 	for(
 		var r = 0, rZ = this.ranks.length;
 		r < rZ;
@@ -710,7 +708,7 @@ doc.prototype.draw =
 	}
 
 	// north-west points of paras
-	pnws = this.getPNWs( );
+	pnws = this.paraPNWs;
 
 	ranks = this.ranks;
 
@@ -735,60 +733,57 @@ doc.prototype.draw =
 
 
 /*
-| Returns the para pnws
-|
-| FIXME use jools lazyFunc
+| The para pnws.
 */
-doc.prototype.getPNWs =
+jools.lazyValue(
+	doc.prototype,
+	'paraPNWs',
 	function( )
-{
-	var
-		flow,
-		innerMargin,
-		para,
-		paraSep,
-		pnws,
-		ranks,
-		y;
-
-	if( this._$pnws )
 	{
-		return this._$pnws;
+		var
+			flow,
+			innerMargin,
+			para,
+			paraSep,
+			pnws,
+			ranks,
+			y;
+
+		pnws = { };
+
+		paraSep = this.paraSep;
+
+		innerMargin = this.innerMargin;
+
+		y = innerMargin.n;
+
+		ranks = this.ranks;
+
+		for(
+			var r = 0, rZ = ranks.length;
+			r < rZ;
+			r++
+		)
+		{
+			para = this.atRank( r );
+
+			flow = para.flow;
+
+			pnws[ ranks[ r ] ] =
+				euclid.point.create(
+					'x',
+						innerMargin.w,
+					'y',
+						Math.round( y )
+				);
+
+			y += flow.height + paraSep;
+		}
+
+		return pnws;
 	}
+);
 
-	pnws = this._$pnws = { };
-
-	paraSep = this.paraSep;
-
-	innerMargin = this.innerMargin;
-
-	y = innerMargin.n;
-
-	ranks = this.ranks;
-
-	for(
-		var r = 0, rZ = ranks.length;
-		r < rZ;
-		r++
-	)
-	{
-		para = this.atRank( r );
-
-		flow = para.flow;
-
-		pnws[ ranks[ r ] ] =
-			euclid.point.create(
-				'x',
-					innerMargin.w,
-				'y',
-					Math.round( y )
-			);
-
-		y += flow.height + paraSep;
-	}
-
-	return pnws;
-};
 
 /*
 | The height of the document.
@@ -847,7 +842,7 @@ doc.prototype.getPNW =
 		key
 	)
 {
-	return this.getPNWs( )[ key ];
+	return this.paraPNWs[ key ];
 };
 
 
@@ -913,7 +908,7 @@ doc.prototype.getParaAtPoint =
 		ranks,
 		twig;
 
-	pnws = this.getPNWs( );
+	pnws = this.paraPNWs;
 
 	ranks = this.ranks;
 
