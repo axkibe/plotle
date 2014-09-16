@@ -732,8 +732,8 @@ jools.lazyValue(
 			mark,
 			moveToButton,
 			section,
-			spaceUser,
-			spaceTag,
+			fieldSpaceUser,
+			fieldSpaceTag,
 			vzone;
 
 		vzone = this.view.rect( this.zone );
@@ -774,19 +774,9 @@ jools.lazyValue(
 				0
 			);
 
-			spaceUser =
-			this._$spaceFields.spaceUser =
-				this._prepareField(
-					'spaceUser',
-					null
-				),
+			fieldSpaceUser = this._fieldSpaceUser;
 
-			spaceTag =
-			this._$spaceFields.spaceTag =
-				this._prepareField(
-					'spaceTag',
-					spaceUser.pnw
-				),
+			fieldSpaceTag = this._fieldSpaceTag;
 
 			moveToButton = this._moveToButton;
 
@@ -807,7 +797,7 @@ jools.lazyValue(
 					theme.portal.input.style,
 					'normal'
 				),
-				spaceUser.silhoutte,
+				fieldSpaceUser.silhoutte,
 				hview
 			);
 
@@ -816,7 +806,7 @@ jools.lazyValue(
 					theme.portal.input.style,
 					'normal'
 				),
-				spaceTag.silhoutte,
+				fieldSpaceTag.silhoutte,
 				hview
 			);
 
@@ -824,18 +814,18 @@ jools.lazyValue(
 
 			f.paintText(
 				'text',
-					spaceUser.text,
+					fieldSpaceUser.text,
 				'p',
-					spaceUser.pnw,
+					fieldSpaceUser.pnw,
 				'font',
 					this._fonts.spaceUser
 			);
 
 			f.paintText(
 				'text',
-					spaceTag.text,
+					fieldSpaceTag.text,
 				'p',
-					spaceTag.pnw,
+					fieldSpaceTag.pnw,
 				'font',
 					this._fonts.spaceTag
 			);
@@ -1818,86 +1808,111 @@ portal.prototype._prepareField =
 	)
 {
 	var
-		zone =
-			this.zone,
+		height,
+		pitch,
+		pnw,
+		rounding,
+		silhoutte,
+		text,
+		width,
+		zone;
 
-		pitch =
-			theme.portal.input.pitch,
+	zone = this.zone;
 
-		rounding =
-			theme.portal.input.rounding,
+	pitch = theme.portal.input.pitch;
 
-		text =
-			this[ section ],
+	rounding = theme.portal.input.rounding;
 
-		width =
-			euclid.measure.width(
-				this._fonts[ section ],
-				text
-			),
+	text = this[ section ];
 
-		height =
-			this._fonts[ section ].size + 2,
+	width =
+		euclid.measure.width(
+			this._fonts[ section ],
+			text
+		);
 
-		pnw =
-			basePNW === null
-			?
-			(
-				euclid.point.create(
-					'x',
-						jools.half( zone.width - width ),
-					'y',
-						Math.round(
-							jools.half( zone.height ) - 30
-						)
-				)
+	height = this._fonts[ section ].size + 2;
+
+	pnw =
+		basePNW === null
+		?
+		(
+			euclid.point.create(
+				'x',
+					jools.half( zone.width - width ),
+				'y',
+					Math.round(
+						jools.half( zone.height ) - 30
+					)
 			)
-			:
-			(
-				euclid.point.create(
-					'x',
-						jools.half( zone.width - width ),
-					'y',
-						basePNW.y + 23
-				)
-			),
+		)
+		:
+		(
+			euclid.point.create(
+				'x',
+					jools.half( zone.width - width ),
+				'y',
+					basePNW.y + 23
+			)
+		);
 
-		silhoutte =
-			euclid.roundRect.create(
-				'pnw',
-					pnw.sub(
-						pitch,
-						height
-					),
-				'pse',
-					pnw.add(
-						Math.round( width ) + pitch,
-						pitch
-					),
-				'a',
-					rounding,
-				'b',
-					rounding
-			);
+	silhoutte =
+		euclid.roundRect.create(
+			'pnw',
+				pnw.sub(
+					pitch,
+					height
+				),
+			'pse',
+				pnw.add(
+					Math.round( width ) + pitch,
+					pitch
+				),
+			'a',
+				rounding,
+			'b',
+				rounding
+		);
 
 	return {
 		text :
 			text,
-
 		width :
 			width,
-
 		height :
 			height,
-
 		pnw :
 			pnw,
-
 		silhoutte :
 			silhoutte
 	};
 };
 
+
+/*
+| Prepares the spaceUser field.
+*/
+jools.lazyValue(
+	portal.prototype,
+	'_fieldSpaceUser',
+	function( )
+	{
+		return this._prepareField( 'spaceUser', null );
+	}
+);
+
+
+/*
+| Prepares the spaceTag field.
+*/
+jools.lazyValue(
+	portal.prototype,
+	'_fieldSpaceTag',
+	function( )
+	{
+		return this._prepareField( 'spaceTag', this._fieldSpaceUser.pnw );
+	}
+);
 
 /*
 | User pressed pos1 key,
