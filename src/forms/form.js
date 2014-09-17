@@ -22,7 +22,7 @@ var
 	jion,
 	jools,
 	marks,
-	reply,
+	result,
 	root,
 	theme;
 
@@ -260,7 +260,7 @@ form.prototype.pointingHover =
 		r,
 		rZ,
 		ranks,
-		result;
+		res;
 
 	ranks = this.ranks;
 
@@ -270,21 +270,21 @@ form.prototype.pointingHover =
 		r++
 	)
 	{
-		result =
+		res =
 			this.atRank( r ).pointingHover(
 				p,
 				shift,
 				ctrl
 			);
 
-		if( result )
+		if( res )
 		{
-			return result;
+			return res;
 		}
 	}
 
-	return (
-		reply.hover.create(
+	return(
+		result.hover.create(
 			'path',
 				jion.path.empty,
 			'cursor',
@@ -306,7 +306,7 @@ form.prototype.click =
 {
 	var
 		ranks,
-		result;
+		res;
 
 	ranks = this.ranks;
 
@@ -316,16 +316,16 @@ form.prototype.click =
 		r++
 	)
 	{
-		result =
+		res =
 			this.atRank( r ).click(
 				p,
 				shift,
 				ctrl
 			);
 
-		if( result !== null )
+		if( res !== null )
 		{
-			return result;
+			return res;
 		}
 	}
 

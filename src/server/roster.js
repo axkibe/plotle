@@ -454,7 +454,7 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/reply/hover.js',
+			'src/result/hover.js',
 		'hasJion',
 			true,
 		'inBundle',

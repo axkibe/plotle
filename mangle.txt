@@ -257,7 +257,6 @@
 . color
 . command
 . comment
-. compare
 . compass
 . compute
 . computeEllipse

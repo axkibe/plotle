@@ -24,7 +24,7 @@ var
 	jools,
 	marks,
 	peer,
-	reply,
+	result,
 	root,
 	Style,
 	theme;
@@ -681,7 +681,7 @@ portal.prototype.pointingHover =
 	)
 	{
 		return (
-			reply.hover.create(
+			result.hover.create(
 				'path',
 					this.subPaths.moveToButton,
 				'cursor',
@@ -692,7 +692,7 @@ portal.prototype.pointingHover =
 	else
 	{
 		return (
-			reply.hover.create(
+			result.hover.create(
 				'path',
 					this.path,
 				'cursor',

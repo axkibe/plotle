@@ -22,7 +22,7 @@ var
 	jools,
 	marks,
 	peer,
-	reply,
+	result,
 	root,
 	Stubs,
 	theme;
@@ -544,7 +544,7 @@ space.prototype.pointingHover =
 		aZ,
 		item,
 		focus,
-		result,
+		res,
 		view;
 
 	view = this.view,
@@ -562,8 +562,8 @@ space.prototype.pointingHover =
 
 		if( com )
 		{
-			return (
-				reply.hover.create(
+			return(
+				result.hover.create(
 					'path',
 						jion.path.empty,
 					'cursor',
@@ -579,23 +579,22 @@ space.prototype.pointingHover =
 		a++
 	)
 	{
-		item =
-			this.atRank( a ),
+		item = this.atRank( a ),
 
-		result =
+		res =
 			item.pointingHover(
 				view,
 				p
 			);
 
-		if( result )
+		if( res )
 		{
-			return result;
+			return res;
 		}
 	}
 
-	return (
-		reply.hover.create(
+	return(
+		result.hover.create(
 			'path',
 				jion.path.empty,
 			'cursor',
@@ -908,7 +907,7 @@ space.prototype.dragStop =
 		action,
 		item,
 		key,
-		result,
+		res,
 		view;
 
 	action =
@@ -948,7 +947,7 @@ space.prototype.dragStop =
 									)
 							);
 
-					result =
+					res =
 						peer.newNote(
 							this.spaceUser,
 							this.spaceTag,
@@ -956,7 +955,7 @@ space.prototype.dragStop =
 						),
 
 					key =
-						result.chgX.trg.path.get( -1 );
+						res.chgX.trg.path.get( -1 );
 
 					root.setMark(
 						marks.caret.create(
@@ -1024,15 +1023,14 @@ space.prototype.dragStop =
 										)
 							);
 
-					result =
+					res =
 						peer.newLabel(
 							label.pnw,
 							'Label',
 							label.doc.fontsize
 						);
 
-					key =
-						result.chgX.trg.path.get( -1 );
+					key = res.chgX.trg.path.get( -1 );
 
 					root.setMark(
 						marks.caret.create(
@@ -1068,14 +1066,14 @@ space.prototype.dragStop =
 								)
 						);
 
-					result =
+					res =
 						peer.newPortal(
 							portal.zone,
 							root.username, // FIXME
 							'home'
 						);
 
-					key = result.chgX.trg.path.get( -1 );
+					key = res.chgX.trg.path.get( -1 );
 
 					root.setMark(
 						marks.caret.create(

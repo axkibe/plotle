@@ -651,46 +651,47 @@ proto.pointingHover =
 	)
 {
 	var
-		display =
-			this._getCurrentDisplay( ),
+		display,
+		result;
 
-		reply =
-			null;
+	display = this._getCurrentDisplay( ),
+
+	result = null;
 
 	if( display && display.showDisc )
 	{
-		reply =
+		result =
 			this._discJockey.pointingHover(
 				p,
 				shift,
 				ctrl
 			);
 
-		if( reply )
+		if( result )
 		{
 /**/		if( CHECK )
 /**/		{
-/**/			if( reply.reflect !== 'reply.hover' )
+/**/			if( result.reflect !== 'result.hover' )
 /**/			{
 /**/				throw new Error( );
 /**/			}
 /**/		}
 
-			root._setHover( reply.path );
+			root._setHover( result.path );
 
 			if( this._$redraw )
 			{
 				this._draw( );
 			}
 
-			return reply.cursor;
+			return result.cursor;
 		}
 	}
 
 
 	if( display )
 	{
-		reply =
+		result =
 			display.pointingHover(
 				p,
 				shift,
@@ -700,25 +701,23 @@ proto.pointingHover =
 /**/	if( CHECK )
 /**/	{
 /**/		if(
-/**/			!reply
+/**/			!result
 /**/			||
-/**/			reply.reflect !== 'reply.hover'
+/**/			result.reflect !== 'result.hover'
 /**/		)
 /**/		{
-/**/			throw new Error(
-/**/				'invalid reply'
-/**/			);
+/**/			throw new Error( );
 /**/		}
 /**/	}
 
-		root._setHover( reply.path );
+		root._setHover( result.path );
 
 		if( this._$redraw )
 		{
 			this._draw( );
 		}
 
-		return reply.cursor;
+		return result.cursor;
 	}
 
 	if( this._$redraw )

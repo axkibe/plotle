@@ -57,28 +57,8 @@ var
 /*
 | Largest integer value.
 */
-jools.MAX_INTEGER =
-	9007199254740992;
+jools.MAX_INTEGER = 9007199254740992;
 
-
-/*
-| Compares two things.
-*/
-jools.compare =
-	function( o, p )
-{
-	if( o > p )
-	{
-		return 1;
-	}
-
-	if( o < p )
-	{
-		return -1;
-	}
-
-	return 0;
-};
 
 
 /*
@@ -115,21 +95,6 @@ jools.isInteger =
 		typeof( o ) === 'number' &&
 		Math.floor( o ) === o
 	);
-};
-
-
-/*
-| Returns true if o is an Array
-*/
-jools.isArray =
-	function( o )
-{
-	if( !o )
-	{
-		return false;
-	}
-
-	return o.constructor === Array;
 };
 
 

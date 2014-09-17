@@ -48,6 +48,24 @@ if( JION )
 							'ast.aBlock',
 						defaultValue :
 							null
+					},
+				jionID :
+					{
+						comment :
+							'the id of the jion associated',
+						type :
+							'String',
+						defaultValue :
+							null
+					},
+				hasJSON :
+					{
+						comment :
+							'boolean if the jion supports jsonfying',
+						type :
+							'Boolean',
+						defaultValue :
+							null
 					}
 			},
 		node :
@@ -57,73 +75,8 @@ if( JION )
 
 
 var
-	aComment =
-		require( './a-comment' ),
 	aFile =
 		require( '../jion/this' )( module );
-
-
-/*
-| Returns the file with the capsule set.
-| FIXME rename
-*/
-aFile.prototype.Capsule =
-	function(
-		capsule
-	)
-{
-	return (
-		this.create(
-			'capsule',
-				capsule
-		)
-	);
-};
-
-
-/*
-| Returns the file with the header set.
-*/
-aFile.prototype.setHeader =
-	function(
-		header
-	)
-{
-	if( header.reflect !== 'ast.aComment' )
-	{
-		// arguments have to be a list of strings otherwise
-		header =
-			aComment.create(
-				'content',
-					Array.prototype.slice.call( arguments )
-			);
-	}
-
-	return (
-		this.create(
-			'header',
-				header
-		)
-	);
-};
-
-
-/*
-| Returns the file with the preamble set.
-| FIXME rename
-*/
-aFile.prototype.Preamble =
-	function(
-		preamble
-	)
-{
-	return (
-		this.create(
-			'preamble',
-				preamble
-		)
-	);
-};
 
 
 /*

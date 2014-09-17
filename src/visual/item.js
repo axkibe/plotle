@@ -24,7 +24,7 @@ var
 	jion,
 	jools,
 	marks,
-	reply,
+	result,
 	root,
 	theme;
 
@@ -715,8 +715,9 @@ item.prototype.pointingHover =
 	)
 {
 	var
-		sbary =
-			this.scrollbarY;
+		sbary;
+
+	sbary = this.scrollbarY;
 
 	if(
 		sbary
@@ -725,7 +726,7 @@ item.prototype.pointingHover =
 	)
 	{
 		return(
-			reply.hover.create(
+			result.hover.create(
 				'path',
 					this.path,
 				'cursor',
@@ -745,7 +746,7 @@ item.prototype.pointingHover =
 	}
 
 	return(
-		reply.hover.create(
+		result.hover.create(
 			'path',
 				this.path,
 			'cursor',

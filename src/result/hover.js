@@ -1,5 +1,5 @@
 /*
-| Answer of a pointingHover call.
+| Result of a pointingHover call.
 |
 | Containts the path of the component being hovered over
 | As well the shape the cursor should get.
@@ -22,7 +22,7 @@ if( JION )
 {
 	return {
 		id :
-			'reply.hover',
+			'result.hover',
 		attributes :
 			{
 				cursor :

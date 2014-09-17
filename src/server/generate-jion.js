@@ -51,8 +51,10 @@ GenerateJion.run =
 {
 	var
 		ast,
+		generate,
 		input,
 		inputFileStat,
+		joi,
 		jion,
 		output,
 		outputFileStat;
@@ -69,15 +71,11 @@ GenerateJion.run =
 
 	try
 	{
-		var
-			joi =
-				yield sus.join( );
+		joi = yield sus.join( );
 
-		inputFileStat =
-			joi[ 0 ];
+		inputFileStat = joi[ 0 ];
 
-		outputFileStat =
-			joi[ 1 ];
+		outputFileStat = joi[ 1 ];
 	}
 	catch( err )
 	{
@@ -86,38 +84,45 @@ GenerateJion.run =
 			null;
 	}
 
-	if(
+	// true if the jion file needs to created
+	generate =
 		!inputFileStat
 		||
 		!outputFileStat
 		||
-		inputFileStat.mtime > outputFileStat.mtime
-	)
-	{
-		jools.log(
-			'start',
-			'generating ' +
-				resource.aliases[ 0 ]
+		inputFileStat.mtime > outputFileStat.mtime;
+
+	jools.log(
+		'start',
+		(
+			generate
+			? 'generating '
+			: 'loading '
+		)
+		+
+		resource.aliases[ 0 ]
+	);
+
+	input =
+		yield fs.readFile(
+			resource.jionSrcPath,
+			sus.resume( )
 		);
 
-		input =
-			yield fs.readFile(
-				resource.jionSrcPath,
-				sus.resume( )
-			);
+	jion =
+		vm.runInNewContext(
+			input,
+			{
+				JION :
+					true
+			},
+			resource.jionSrcPath
+		);
 
-		jion =
-			vm.runInNewContext(
-				input,
-				{
-					JION :
-						true
-				},
-				resource.jionSrcPath
-			);
+	ast = Generator.generate( jion, !generate );
 
-		ast = Generator.generate( jion );
-
+	if( generate )
+	{
 		output = formatter.format( ast );
 
 		if( !config.noWrite )
@@ -138,7 +143,9 @@ GenerateJion.run =
 					resource.filePath,
 					sus.resume( )
 				)
-			) + '';
+			)
+			+
+			'';
 	}
 
 	return output;

@@ -506,7 +506,7 @@ Server.prototype.loadSpace =
 					null
 			};
 
-		if ( !jools.isArray( o.chgX ) )
+		if ( !Array.isArray( o.chgX ) )
 		{
 			o.type = 'change'; // FUTURE this is a hack
 
@@ -795,10 +795,14 @@ Server.prototype.prepareInventory =
 			if( !resource.data )
 			{
 				code =
-					( yield fs.readFile(
-						resource.filePath,
-						sus.resume( )
-					) ) + '';
+					(
+						yield fs.readFile(
+							resource.filePath,
+							sus.resume( )
+						)
+					)
+					+
+					'';
 			}
 			else
 			{
@@ -1451,7 +1455,7 @@ Server.prototype.cmdAlter =
 	// fits the cmd into data structures
 	try {
 		// FUTURE
-		if( jools.isArray( chgX ) )
+		if( Array.isArray( chgX ) )
 		{
 			throw new Error(
 				'Array chgX not yet supported'

@@ -300,8 +300,7 @@ formatCheck =
 
 	context =
 		context.create(
-			'check',
-				true
+			'check', true
 		);
 
 	return (
@@ -1320,11 +1319,9 @@ formatStatement =
 		text,
 		subtext;
 
-	text =
-		'';
+	text = '';
 
-	subtext =
-		null;
+	subtext = null;
 
 	if(
 		lookBehind
@@ -1369,15 +1366,13 @@ formatStatement =
 	{
 		case 'ast.aCheck' :
 
-			text +=
-				formatCheck( context, statement );
+			text += formatCheck( context, statement );
 
 			break;
 
 		case 'ast.anIf' :
 
-			text +=
-				formatIf( context, statement );
+			text += formatIf( context, statement );
 
 			break;
 
@@ -1632,6 +1627,11 @@ formatAFail =
 		fail
 	)
 {
+	var
+		checkContext,
+		messageContext,
+		result;
+
 /**/if( CHECK )
 /**/{
 /**/	if( fail.reflect !== 'ast.aFail' )
@@ -1647,25 +1647,62 @@ formatAFail =
 		);
 	}
 
-	return (
-		context.tab
+	if( context.check )
+	{
+		messageContext = context;
+
+		result = '';
+	}
+	else
+	{
+		checkContext = context.create( 'check', true );
+
+		messageContext = checkContext.Inc;
+
+		result =
+			checkContext.tab
+			+
+			'if( CHECK )'
+			+
+			checkContext.sep + checkContext.tab + '{'
+			+
+			checkContext.sep;
+	}
+
+	result +=
+		messageContext.tab
 		+
 		'throw new Error('
 		+
-		context.sep
+		messageContext.sep
 		+
 		formatExpression(
-			context.Inc,
+			messageContext.Inc,
 			fail.message,
 			null
 		)
 		+
-		context.sep
+		messageContext.sep + messageContext.tab
 		+
-		context.tab
-		+
-		')'
-	);
+		')';
+
+	if( !context.check )
+	{
+		result +=
+			';'
+			+
+			checkContext.sep
+			+
+			checkContext.tab + '}'
+			+
+			checkContext.sep
+			+
+			checkContext.sep
+			+
+			context.tab + 'throw new Error( )';
+	}
+
+	return result;
 };
 
 

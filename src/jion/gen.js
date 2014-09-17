@@ -39,6 +39,8 @@ if( JION )
 
 
 var
+	aComment =
+		require( '../ast/a-comment' ),
 	gen =
 		require( '../jion/this' )( module ),
 	Shorthand =
@@ -3337,7 +3339,8 @@ gen.prototype.genCapsule =
 */
 gen.generate =
 	function(
-		jion // the jion definition
+		jion, // the jion definition
+		skim
 	)
 {
 	var
@@ -3348,23 +3351,45 @@ gen.generate =
 
 	gi =
 		gen.create(
-			'jion',
-				jion
+			'jion', jion
 		);
 
-	file =
-		aFile( )
-		.setHeader(
-			'This is an auto generated file.',
-			'',
-			'DO NOT EDIT!'
-		)
-		.Preamble(
-			gi.genPreamble( )
-		)
-		.Capsule(
-			gi.genCapsule( )
-		);
+	if( skim )
+	{
+		file =
+			aFile( )
+			.create(
+				'jionID',
+					gi.id,
+				'hasJSON',
+					gi.hasJSON
+			);
+
+	}
+	else
+	{
+		file =
+			aFile( )
+			.create(
+				'header',
+					aComment.create(
+						'content',
+							[
+								'This is an auto generated file.',
+								'',
+								'DO NOT EDIT!'
+							]
+					),
+				'preamble',
+					gi.genPreamble( ),
+				'capsule',
+					gi.genCapsule( ),
+				'jionID',
+					gi.id,
+				'hasJSON',
+					gi.hasJSON
+			);
+	}
 
 	return file;
 };

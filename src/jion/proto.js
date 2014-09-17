@@ -233,7 +233,7 @@ JionProto.rankOf =
 
 /**/if( CHECK )
 /**/{
-/**/	if( !jools.isArray( ranks ) )
+/**/	if( !Array.isArray( ranks ) )
 /**/	{
 /**/		throw new Error( );
 /**/	}

@@ -53,13 +53,19 @@ if( SERVER )
 var Constructor =
 	function(
 		v_capsule, // the capsule
+		v_hasJSON, // boolean if the jion supports jsonfying
 		v_header, // header comment
+		v_jionID, // the id of the jion associated
 		v_preamble // preamble to capsule
 	)
 	{
 		this.capsule = v_capsule;
 
+		this.hasJSON = v_hasJSON;
+
 		this.header = v_header;
+
+		this.jionID = v_jionID;
 
 		this.preamble = v_preamble;
 
@@ -101,7 +107,11 @@ prototype.create =
 
 		v_capsule,
 
+		v_hasJSON,
+
 		v_header,
+
+		v_jionID,
 
 		v_preamble;
 
@@ -111,7 +121,11 @@ prototype.create =
 
 		v_capsule = this.capsule;
 
+		v_hasJSON = this.hasJSON;
+
 		v_header = this.header;
+
+		v_jionID = this.jionID;
 
 		v_preamble = this.preamble;
 	}
@@ -137,11 +151,29 @@ prototype.create =
 
 				break;
 
+			case 'hasJSON' :
+
+				if( arg !== undefined )
+				{
+					v_hasJSON = arg;
+				}
+
+				break;
+
 			case 'header' :
 
 				if( arg !== undefined )
 				{
 					v_header = arg;
+				}
+
+				break;
+
+			case 'jionID' :
+
+				if( arg !== undefined )
+				{
+					v_jionID = arg;
 				}
 
 				break;
@@ -169,9 +201,19 @@ prototype.create =
 		v_capsule = null;
 	}
 
+	if( v_hasJSON === undefined )
+	{
+		v_hasJSON = null;
+	}
+
 	if( v_header === undefined )
 	{
 		v_header = null;
+	}
+
+	if( v_jionID === undefined )
+	{
+		v_jionID = null;
 	}
 
 	if( v_preamble === undefined )
@@ -194,6 +236,19 @@ prototype.create =
 /**/		}
 /**/	}
 /**/
+/**/	if( v_hasJSON === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute hasJSON' );
+/**/	}
+/**/
+/**/	if( v_hasJSON !== null )
+/**/	{
+/**/		if( typeof( v_hasJSON ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
+/**/	}
+/**/
 /**/	if( v_header === undefined )
 /**/	{
 /**/		throw new Error( 'undefined attribute header' );
@@ -202,6 +257,23 @@ prototype.create =
 /**/	if( v_header !== null )
 /**/	{
 /**/		if( v_header.reflectName !== 'aComment' )
+/**/		{
+/**/			throw new Error( 'type mismatch' );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_jionID === undefined )
+/**/	{
+/**/		throw new Error( 'undefined attribute jionID' );
+/**/	}
+/**/
+/**/	if( v_jionID !== null )
+/**/	{
+/**/		if(
+/**/			typeof( v_jionID ) !== 'string'
+/**/			&&
+/**/			!( v_jionID instanceof String )
+/**/		)
 /**/		{
 /**/			throw new Error( 'type mismatch' );
 /**/		}
@@ -230,11 +302,15 @@ prototype.create =
 			v_capsule && v_capsule.equals( inherit.capsule )
 		)
 		&&
+		v_hasJSON === inherit.hasJSON
+		&&
 		(
 			v_header === inherit.header
 			||
 			v_header && v_header.equals( inherit.header )
 		)
+		&&
+		v_jionID === inherit.jionID
 		&&
 		(
 			v_preamble === inherit.preamble
@@ -246,7 +322,15 @@ prototype.create =
 		return inherit;
 	}
 
-	return new Constructor( v_capsule, v_header, v_preamble );
+	return (
+		new Constructor(
+			v_capsule,
+			v_hasJSON,
+			v_header,
+			v_jionID,
+			v_preamble
+		)
+	);
 };
 
 
@@ -303,6 +387,8 @@ Constructor.prototype.equals =
 			this.capsule.equals( obj.capsule )
 		)
 		&&
+		this.hasJSON === obj.hasJSON
+		&&
 		(
 			this.header === obj.header
 			||
@@ -312,6 +398,8 @@ Constructor.prototype.equals =
 			&&
 			this.header.equals( obj.header )
 		)
+		&&
+		this.jionID === obj.jionID
 		&&
 		(
 			this.preamble === obj.preamble

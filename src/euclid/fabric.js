@@ -814,7 +814,7 @@ fabric.prototype.paint =
 		cx.fill( );
 	}
 
-	if( jools.isArray( edgeStyle ) )
+	if( Array.isArray( edgeStyle ) )
 	{
 		for(var i = 0; i < edgeStyle.length; i++)
 		{

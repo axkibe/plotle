@@ -22,7 +22,7 @@ var
 	euclid,
 	jools,
 	marks,
-	reply,
+	result,
 	root,
 	theme;
 
@@ -1014,8 +1014,8 @@ input.prototype.pointingHover =
 		return null;
 	}
 
-	return (
-		reply.hover.create(
+	return(
+		result.hover.create(
 			'path',
 				this.path,
 			'cursor',

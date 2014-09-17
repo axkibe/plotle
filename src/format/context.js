@@ -224,6 +224,8 @@ jools.lazyValue(
 
 /*
 | Sets the context to be inline.
+|
+| FIXME rename
 */
 jools.lazyValue(
 	context.prototype,

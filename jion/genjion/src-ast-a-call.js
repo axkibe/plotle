@@ -168,7 +168,18 @@ prototype.create =
 
 				if( twig[ key ] !== undefined )
 				{
-					throw new Error( 'key "' + key + '" already in use' );
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error(
+/**/						'key "'
+/**/						+
+/**/						key
+/**/						+
+/**/						'" already in use'
+/**/					);
+/**/				}
+
+					throw new Error( );
 				}
 
 				twig[ key ] = arg;
@@ -194,7 +205,18 @@ prototype.create =
 
 				if( twig[ key ] === undefined )
 				{
-					throw new Error( 'key "' + key + '" not in use' );
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error(
+/**/						'key "'
+/**/						+
+/**/						key
+/**/						+
+/**/						'" not in use'
+/**/					);
+/**/				}
+
+					throw new Error( );
 				}
 
 				twig[ key ] = arg;
@@ -222,12 +244,30 @@ prototype.create =
 
 				if( twig[ key ] !== undefined )
 				{
-					throw new Error( 'key "' + key + '" already in use' );
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error(
+/**/						'key "'
+/**/						+
+/**/						key
+/**/						+
+/**/						'" already in use'
+/**/					);
+/**/				}
+
+					throw new Error( );
 				}
 
 				if( rank < 0 || rank > ranks.length )
 				{
-					throw new Error( 'invalid rank' );
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error(
+/**/						'invalid rank'
+/**/					);
+/**/				}
+
+					throw new Error( );
 				}
 
 				twig[ key ] = arg;
@@ -249,7 +289,18 @@ prototype.create =
 
 				if( twig[ arg ] === undefined )
 				{
-					throw new Error( 'key "' + arg + '" not in use' );
+/**/				if( CHECK )
+/**/				{
+/**/					throw new Error(
+/**/						'key "'
+/**/						+
+/**/						arg
+/**/						+
+/**/						'" not in use'
+/**/					);
+/**/				}
+
+					throw new Error( );
 				}
 
 				delete twig[ arg ];

@@ -235,7 +235,7 @@ for(
 				inFilename
 			);
 
-		ast = Generator.generate( jion );
+		ast = Generator.generate( jion, false );
 
 		output = formatter.format( ast );
 
