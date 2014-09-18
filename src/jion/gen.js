@@ -187,7 +187,14 @@ gen.prototype._init =
 
 	twigDef = null;
 
-	units = { };
+	units =
+		{
+			jion :
+				{
+					proto :
+						true
+				}
+		};
 
 	this.hasJSON = !!jion.json;
 
@@ -575,7 +582,7 @@ gen.prototype.genImports =
 
 	capsule =
 		capsule
-		.aVarDec( 'JionProto' )
+		.aVarDec( 'jion' )
 		.aVarDec( 'jools' );
 
 	// FUTURE when type checking is there this might become needed
@@ -621,13 +628,6 @@ gen.prototype.genNodeIncludes =
 
 	block =
 		aBlock( )
-		.anAssign(
-			aVar( 'JionProto' ),
-			aCall(
-				aVar( 'require' ),
-				aStringLiteral( '../../src/jion/proto' )
-			)
-		)
 		.anAssign(
 			aVar( 'jools' ),
 			aCall(
@@ -2749,7 +2749,7 @@ gen.prototype.genReflection =
 
 
 /*
-| Generates the JionProto stuff.
+| Generates the jionProto stuff.
 */
 gen.prototype.genJionProto =
 	function(
@@ -2761,12 +2761,12 @@ gen.prototype.genJionProto =
 		.aComment( 'Sets values by path.' )
 		.anAssign(
 			aVar( 'prototype' ).aDot( 'setPath' ),
-			aVar( 'JionProto' ).aDot( 'setPath' )
+			aVar( 'jion' ).aDot( 'proto' ).aDot( 'setPath' )
 		)
 		.aComment( 'Gets values by path' )
 		.anAssign(
 			aVar( 'prototype' ).aDot( 'getPath' ),
-			aVar( 'JionProto' ).aDot( 'getPath' )
+			aVar( 'jion' ).aDot( 'proto' ).aDot( 'getPath' )
 		);
 
 	if( this.twig )
@@ -2776,17 +2776,17 @@ gen.prototype.genJionProto =
 			.aComment( 'Returns a twig by rank.' )
 			.anAssign(
 				aVar( 'prototype' ).aDot( 'atRank' ),
-				aVar( 'JionProto' ).aDot( 'atRank' )
+				aVar( 'jion' ).aDot( 'proto' ).aDot( 'atRank' )
 			)
 			.aComment( 'Gets the rank of a key.' )
 			.anAssign(
 				aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'rankOf' ),
-				aVar( 'JionProto' ).aDot( 'rankOf' )
+				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rankOf' )
 			)
 			.aComment( 'Creates a new unique identifier.' )
 			.anAssign(
 				aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'newUID' ),
-				aVar( 'JionProto' ).aDot( 'newUID' )
+				aVar( 'jion' ).aDot( 'proto' ).aDot( 'newUID' )
 			);
 	}
 

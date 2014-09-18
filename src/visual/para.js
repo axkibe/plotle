@@ -1380,36 +1380,37 @@ para.prototype._pageUpDown =
 
 
 	var
-		p =
-			this.locateOffset( at ).p,
+		p,
+		pnw,
+		tp,
+		tpara,
+		tpnw,
+		zone;
 
-		zone =
-			item.zone,
+	p = this.locateOffset( at ).p,
 
-		pnw =
-			doc.getPNW( this.key ),
+	zone = item.zone,
 
-		tp =
-			p.add(
-				pnw.x,
-				pnw.y + zone.height * dir
-			),
+	pnw = doc.getPNW( this.key ),
 
-		tpara =
-			doc.getParaAtPoint(
-				item,
-				tp
-			);
+	tp =
+		p.add(
+			pnw.x,
+			pnw.y + zone.height * dir
+		),
+
+	tpara =
+		doc.getParaAtPoint(
+			item,
+			tp
+		);
 
 	if( tpara === null )
 	{
-		tpara =
-			doc.atRank( doc.ranks.length - 1 );
+		tpara = doc.atRank( doc.ranks.length - 1 );
 	}
 
-	var
-		tpnw =
-			doc.getPNW( tpara.key );
+	tpnw = doc.getPNW( tpara.key );
 
 	at =
 		tpara.getPointOffset(
@@ -1513,6 +1514,10 @@ para.prototype._keyRight =
 		bAt
 	)
 {
+	var
+		r,
+		ve;
+
 	if( at < this.text.length )
 	{
 		this._setMark(
@@ -1526,15 +1531,11 @@ para.prototype._keyRight =
 		return;
 	}
 
-	var
-		r =
-			doc.rankOf( this.key );
+	r = doc.rankOf( this.key );
 
 	if( r < doc.ranks.length - 1 )
 	{
-		var
-			ve =
-				doc.atRank( r + 1 );
+		ve = doc.atRank( r + 1 );
 
 		ve._setMark(
 			0,
@@ -1563,6 +1564,7 @@ para.prototype._keyUp =
 	var
 		cpos,
 		r,
+		ve,
 		x;
 
 	cpos =
@@ -1571,9 +1573,9 @@ para.prototype._keyUp =
 		),
 
 	x =
-		retainx !== null ?
-				retainx :
-				cpos.p.x;
+		retainx !== null
+		? retainx
+		: cpos.p.x;
 
 	if( cpos.line > 0 )
 	{
@@ -1600,9 +1602,7 @@ para.prototype._keyUp =
 
 	if( r > 0 )
 	{
-		var
-			ve =
-				doc.atRank( r - 1 );
+		ve = doc.atRank( r - 1 );
 
 		at =
 			ve.getOffsetAt(

@@ -17,7 +17,7 @@ var
 | Imports.
 */
 var
-	JionProto,
+	jion,
 
 
 	jools;
@@ -35,15 +35,17 @@ var
 */
 if( SERVER )
 {
-	JionProto = require( '../../src/jion/proto' );
-
 	jools = require( '../../src/jools/jools' );
 
 	ast = { };
 
+	jion = { };
+
 	ast.aBlock = require( '../../src/ast/a-block' );
 
 	ast.aCase = require( '../../src/ast/a-case' );
+
+	jion.proto = require( '../../src/jion/proto' );
 }
 
 
@@ -407,31 +409,31 @@ prototype.reflectName = 'aSwitch';
 /*
 | Sets values by path.
 */
-prototype.setPath = JionProto.setPath;
+prototype.setPath = jion.proto.setPath;
 
 
 /*
 | Gets values by path
 */
-prototype.getPath = JionProto.getPath;
+prototype.getPath = jion.proto.getPath;
 
 
 /*
 | Returns a twig by rank.
 */
-prototype.atRank = JionProto.atRank;
+prototype.atRank = jion.proto.atRank;
 
 
 /*
 | Gets the rank of a key.
 */
-Constructor.prototype.rankOf = JionProto.rankOf;
+Constructor.prototype.rankOf = jion.proto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-Constructor.prototype.newUID = JionProto.newUID;
+Constructor.prototype.newUID = jion.proto.newUID;
 
 
 /*

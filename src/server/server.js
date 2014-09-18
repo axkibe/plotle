@@ -2980,10 +2980,19 @@ Server.prototype.webAjax =
 	);
 
 	/*
-	request.on( 'end', function( )
+	request.on(
+		'end',
+		function( )
 		{
-			setTimeout( handler, 1880 );
-		});
+			setTimeout(
+				function( )
+				{
+					sus( handler )( );
+				},
+				1880
+			);
+		}
+	);
 	*/
 };
 

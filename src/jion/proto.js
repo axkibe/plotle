@@ -6,8 +6,10 @@
 
 var
 	jools,
-	JionProto =
-		{ };
+	jion;
+
+
+jion = jion || { };
 
 
 /*
@@ -15,6 +17,14 @@ var
 */
 (function( ) {
 'use strict';
+
+var
+	proto;
+
+
+proto =
+jion.proto =
+	{ };
 
 
 /*
@@ -29,7 +39,7 @@ if( SERVER )
 /*
 | Sets a key of a sub node described by a path.
 */
-JionProto.setPath =
+jion.proto.setPath =
 	function(
 		path,  // path to set
 		value, // value to set to
@@ -73,7 +83,7 @@ JionProto.setPath =
 
 		if( pos + 2 === pZ )
 		{
-			return (
+			return(
 				this.create(
 					'twig:set',
 					key,
@@ -82,7 +92,7 @@ JionProto.setPath =
 			);
 		}
 
-		return (
+		return(
 			this.create(
 				'twig:set',
 				key,
@@ -121,7 +131,7 @@ JionProto.setPath =
 /*
 | Gets a key of a sub node described by a path.
 */
-JionProto.getPath =
+proto.getPath =
 	function(
 		path,  // path to set
 		pos    // position in the path
@@ -184,7 +194,7 @@ JionProto.getPath =
 /*
 | Returns a twig node by its rank.
 */
-JionProto.atRank =
+proto.atRank =
 	function(
 		rank
 	)
@@ -196,7 +206,7 @@ JionProto.atRank =
 /*
 | Creates a new unique identifier.
 */
-JionProto.newUID =
+proto.newUID =
 	function( )
 {
 	var
@@ -219,7 +229,7 @@ JionProto.newUID =
 |
 | FIXME make a joolsLazyfunc
 */
-JionProto.rankOf =
+proto.rankOf =
 	function(
 		key
 	)
@@ -276,11 +286,47 @@ JionProto.rankOf =
 
 
 /*
-| Node export
+| Appends something to a ray.
+*/
+proto.rayAppend =
+	function(
+		o
+	)
+{
+	var
+		rc;
+
+	rc = this._ray.slice( );
+
+	rc.push( o );
+
+	return(
+		this.create(
+			'array',
+				rc,
+			'_sliced',
+				true
+		)
+	);
+};
+
+
+/*
+| Returns the length of a ray.
+*/
+proto.rayLength =
+	function( )
+{
+	return this._ray.length;
+};
+
+
+/*
+| Node export.
 */
 if( SERVER )
 {
-	module.exports = JionProto;
+	module.exports = proto;
 }
 
 

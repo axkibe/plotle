@@ -49,6 +49,7 @@ var _attributeBlacklist =
 		'newUID' : true,
 		'ranks' : true,
 		'rankOf' : true,
+		'ray' : true,
 		'setPath' : true,
 		'type' : true,
 		'twig' : true
@@ -69,6 +70,7 @@ var _jionWhitelist =
 		'equals' : true,
 		'subclass' : true,
 		'singleton' : true,
+		'ray' : true,
 		'twig' : true,
 	} );
 
@@ -189,7 +191,7 @@ var _checkTwig =
 	{
 		if( !( /\->[a-zA-Z_-]+/.test( jion.twig ) ) )
 		{
-				throw new Error( 'invalid typemap reference' );
+			throw new Error( 'invalid typemap reference' );
 		}
 
 		twig = require( '../typemaps/' + twig.substr( 2 ) + '.js' );
@@ -211,6 +213,70 @@ var _checkTwig =
 	)
 	{
 		entry = twig[ a ];
+
+		if( !jools.isString( entry ) )
+		{
+			throw new Error(
+				'twig definition entry not a String'
+			);
+		}
+
+		if( map[ entry ] )
+		{
+			throw new Error(
+				'twig definition contains duplicate: '
+				+ entry
+			);
+		}
+
+		map[ entry ] = true;
+	}
+};
+
+
+/*
+| Checks the ray definition.
+*/
+var _checkRay =
+	function(
+		jion // the jion definition
+	)
+{
+	var
+		entry,
+		map,
+		ray;
+
+	ray = jion.ray;
+
+	map = { };
+
+	if( jools.isString( ray ) )
+	{
+		if( !( /\->[a-zA-Z_-]+/.test( jion.ray ) ) )
+		{
+			throw new Error( 'invalid typemap reference' );
+		}
+
+		ray = require( '../typemaps/' + ray.substr( 2 ) + '.js' );
+	}
+
+	if(
+		!( Array.isArray( ray ) )
+	)
+	{
+		throw new Error(
+			'ray definition must be an Array or a typemap to one'
+		);
+	}
+
+	for(
+		var a = 0, aZ = ray.length;
+		a < aZ;
+		a++
+	)
+	{
+		entry = ray[ a ];
 
 		if( !jools.isString( entry ) )
 		{
@@ -412,6 +478,11 @@ validator.check =
 	if( jion.twig )
 	{
 		_checkTwig( jion );
+	}
+
+	if( jion.ray )
+	{
+		_checkRay( jion );
 	}
 };
 

@@ -17,7 +17,7 @@ var
 | Imports.
 */
 var
-	JionProto,
+	jion,
 
 
 	jools;
@@ -35,13 +35,15 @@ var
 */
 if( SERVER )
 {
-	JionProto = require( '../../src/jion/proto' );
-
 	jools = require( '../../src/jools/jools' );
 
 	ast = { };
 
+	jion = { };
+
 	ast.aBlock = require( '../../src/ast/a-block' );
+
+	jion.proto = require( '../../src/jion/proto' );
 }
 
 
@@ -260,13 +262,13 @@ prototype.reflectName = 'aFor';
 /*
 | Sets values by path.
 */
-prototype.setPath = JionProto.setPath;
+prototype.setPath = jion.proto.setPath;
 
 
 /*
 | Gets values by path
 */
-prototype.getPath = JionProto.getPath;
+prototype.getPath = jion.proto.getPath;
 
 
 /*

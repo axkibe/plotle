@@ -608,6 +608,7 @@
 . prissy
 > proc
 . proper
+. proto
 > prototype
 > pse
 . puffed
@@ -621,6 +622,9 @@
 > rank
 . rankOf
 > ranks
+. ray
+. rayAppend
+. rayLength
 > readyState
 . receiverFunc
 > rect

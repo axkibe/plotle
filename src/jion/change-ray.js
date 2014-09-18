@@ -67,7 +67,11 @@ if( JION )
 		node :
 			true,
 		equals :
-			false
+			false,
+		ray :
+			[
+				'jion.change'
+			]
 	};
 }
 
@@ -85,7 +89,9 @@ if( SERVER )
 			change :
 				require( '../jion/change' ),
 			changeRay :
-				require( '../jion/this' )( module )
+				require( '../jion/this' )( module ),
+			proto :
+				require( '../jion/proto' )
 		};
 }
 
@@ -178,26 +184,7 @@ jools.lazyValue(
 | Appends a change to the change ray.
 */
 changeRay.prototype.append =
-	function(
-		chg
-	)
-{
-	var
-		rc;
-
-	rc = this._ray.slice( );
-
-	rc.push( chg );
-
-	return (
-		changeRay.create(
-			'array',
-				rc,
-			'_sliced',
-				true
-		)
-	);
-};
+	jion.proto.rayAppend;
 
 
 /*
@@ -206,10 +193,7 @@ changeRay.prototype.append =
 jools.lazyValue(
 	changeRay.prototype,
 	'length',
-	function( )
-	{
-		return this._ray.length;
-	}
+	jion.proto.rayLength
 );
 
 
