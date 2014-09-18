@@ -44,7 +44,7 @@ var
 		require( '../../config' ),
 	fs =
 		require( 'fs' ),
-	GenerateJion =
+	generateJion =
 		require( './generate-jion' ),
 	http =
 		require( 'http' ),
@@ -770,7 +770,8 @@ Server.prototype.prepareInventory =
 
 	var
 		ast,
-		code;
+		code,
+		gjr;
 
 	// loads the files to be bundled
 	for(
@@ -788,7 +789,9 @@ Server.prototype.prepareInventory =
 
 		if( resource.isJion )
 		{
-			code = yield* GenerateJion.run( resource );
+			gjr = yield* generateJion.run( resource );
+
+			code = gjr.code;
 		}
 		else
 		{
@@ -2650,7 +2653,9 @@ Server.prototype.requestListener =
 {
 	var
 		aenc,
+		data,
 		header,
+		gjr,
 		pathname,
 		resource,
 		red;
@@ -2740,15 +2745,13 @@ Server.prototype.requestListener =
 		);
 	}
 
-	var
-		data;
-
 	// if the jion is requested generate that one from the file
 	if( resource.isJion )
 	{
 		try{
-			data =
-				yield* GenerateJion.run( resource );
+			gjr = yield* generateJion.run( resource );
+
+			data = gjr.code;
 		}
 		catch( e )
 		{

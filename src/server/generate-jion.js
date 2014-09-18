@@ -25,21 +25,35 @@ GenerateJion = { };
 | Imports
 */
 var
-	config =
-		require( '../../config' ),
-	fs =
-		require( 'fs' ),
-	formatter =
-		require( '../format/formatter' ),
-	Generator =
-		require( '../jion/gen' ),
-	jools =
-		require( '../jools/jools' ),
-	sus =
-		require( 'suspend' ),
-	vm =
-		require( 'vm' );
+	config,
+	formatter,
+	fs,
+	generator,
+	jools,
+	result,
+	sus,
+	vm;
 
+
+config = require( '../../config' );
+
+formatter = require( '../format/formatter' );
+
+fs = require( 'fs' );
+
+generator = require( '../jion/gen' );
+
+jools = require( '../jools/jools' );
+
+result =
+	{
+		genjion :
+			require( '../result/genjion' )
+	};
+
+sus = require( 'suspend' );
+
+vm = require( 'vm' );
 
 /*
 | Runs a generate jion operation.
@@ -119,7 +133,7 @@ GenerateJion.run =
 			resource.jionSrcPath
 		);
 
-	ast = Generator.generate( jion, !generate );
+	ast = generator.generate( jion, !generate );
 
 	if( generate )
 	{
@@ -148,7 +162,16 @@ GenerateJion.run =
 			'';
 	}
 
-	return output;
+	return(
+		result.genjion.create(
+			'code',
+				output,
+			'jionID',
+				ast.jionID,
+			'hasJSON',
+				ast.hasJSON
+		)
+	);
 };
 
 

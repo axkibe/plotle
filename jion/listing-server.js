@@ -17,6 +17,7 @@ module.exports =
 			'src/jion/path.js',
 			'src/jion/sign.js',
 			'src/jion/sign-ray.js',
+			'src/result/genjion.js',
 			'src/server/resource.js',
 			'src/server/inventory.js',
 			'src/visual/doc.js',
