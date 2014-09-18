@@ -11,11 +11,9 @@
 var config =
 module.exports =
 	{
-		database :
-			{ },
+		database : { },
 
-		debug :
-			{ }
+		debug : { }
 	};
 
 
@@ -69,7 +67,7 @@ config.database.name =
 | Determines the amound of checking and complaining if things go wrong.
 */
 config.develShell =
-	false &&
+//	false &&
 	true;
 
 /*
@@ -91,7 +89,7 @@ config.noWrite =
 | If true "uglifies" the javascript pack, minimizing its size.
 */
 config.uglify =
-	true ||
+//	true ||
 	false;
 
 

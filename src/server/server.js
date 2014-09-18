@@ -378,7 +378,7 @@ Server.prototype.ensureRootUser =
 		rootUser =
 			{
 				_id :
-					'ideoloom',
+					'root',
 				pass :
 					jools.passhash( pass ),
 				clearPass :
@@ -768,11 +768,10 @@ Server.prototype.prepareInventory =
 	var
 		ast,
 		code,
-		// jsonIDs
-		jsonIDs,
+		jionIDs,
 		gjr;
 
-	jsonIDs = { };
+	jionIDs = { };
 
 	// loads the files to be bundled
 	for(
@@ -792,10 +791,7 @@ Server.prototype.prepareInventory =
 		{
 			gjr = yield* generateJion.run( resource );
 
-			if( gjr.hasJSON )
-			{
-				jsonIDs[ gjr.jsonID ] = true;
-			}
+			jionIDs[ gjr.jionID ] = gjr.hasJSON;
 
 			code = gjr.code;
 		}
@@ -848,7 +844,7 @@ Server.prototype.prepareInventory =
 
 	if( config.extraMangle )
 	{
-		this.extraMangle( ast, jsonIDs );
+		this.extraMangle( ast, jionIDs );
 	}
 
 	if( config.uglify )
@@ -883,8 +879,7 @@ Server.prototype.prepareInventory =
 					}
 				);
 
-		ast =
-			ast.transform( compressor );
+		ast = ast.transform( compressor );
 
 		ast.figure_out_scope( );
 
@@ -1106,7 +1101,7 @@ var b64Count =
 Server.prototype.extraMangle =
 	function(
 		ast,
-		jsonIDs
+		jionIDs
 	)
 {
 	var
@@ -1116,7 +1111,7 @@ Server.prototype.extraMangle =
 		aZ,
 		at,
 		e,
-		jsonID,
+		jionID,
 		// associative of all mangles
 		mangle,
 		// mangle definitions:
@@ -1220,12 +1215,17 @@ Server.prototype.extraMangle =
 
 	}
 
-	// also mangles the jsonIDs
-	for( jsonID in jsonIDs )
+	// also mangles the jionIDs
+	for( jionID in jionIDs )
 	{
-		if( !noMangle[ jsonID ] )
+		if(
+			// only mangle those not used in json
+			jionIDs[ jionID ] === false
+			&&
+			!noMangle[ jionID ]
+		)
 		{
-			mangle[ jsonID ] = true;
+			mangle[ jionID ] = true;
 		}
 	}
 

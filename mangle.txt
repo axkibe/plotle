@@ -1,3 +1,4 @@
+. 0-line
 > 1
 . Create
 . FOCUS
@@ -271,7 +272,7 @@
 . copy
 . cornerRadius
 > cos
-> create
+. create
 . createArbitrary
 . createButton
 . createDisc
@@ -388,7 +389,6 @@
 > getOwnPropertyDescriptor
 > getOwnPropertyNames
 . getPNW
-. paraPNWs
 . getParaAtPoint
 . getPath
 . getPointOffset
@@ -579,6 +579,7 @@
 . paintText
 . pan
 > para
+. paraPNWs
 . paraSep
 > parse
 > passhash
@@ -775,6 +776,10 @@
 > tree
 > trg
 > twig
+. twig:add
+. twig:insert
+. twig:remove
+. twig:set
 > type
 . uid
 > undefined
