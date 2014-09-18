@@ -33,7 +33,7 @@ GLOBAL.SHELL = false;
 /*
 | Constants.
 */
-var MESHCRAFT_DB_VERSION = 6;
+var DB_VERSION = 6;
 
 
 /*
@@ -109,14 +109,20 @@ function( )
 Server.prototype.startup =
 	function*( )
 {
+	var
+		db,
+		requestListener,
+		self;
+
+	self = this;
+
 	// the servers inventory
 	this.inventory = server.inventory.create( );
 
 	// initializes the database
-	var
-		db =
-		this.$db =
-			{ };
+	db =
+	this.$db =
+		{ };
 
 	db.server =
 		new mongodb.Server(
@@ -136,33 +142,26 @@ Server.prototype.startup =
 		);
 
 	// all messages
-	this.$messages =
-		[ ];
+	this.$messages = [ ];
 
 	// all spaces
-	this.$spaces =
-		{ };
+	this.$spaces = { };
 
 	// a table of all clients waiting for an update
-	this.$upsleep =
-		{ };
+	this.$upsleep = { };
 
 	// next upsleepID
-	this.$nextSleep =
-		1;
+	this.$nextSleep = 1;
 
 	// next visitors ID
-	this.$nextVisitor =
-		1000;
+	this.$nextVisitor = 1000;
 
 	// table of all cached user credentials
-	this.$users =
-		{ };
+	this.$users = { };
 
 	// the list where a user is present
 	// user for 'entered' and 'left' messages
-	this.$presences =
-		{ };
+	this.$presences = { };
 
 	yield* this.prepareInventory( );
 
@@ -184,7 +183,7 @@ Server.prototype.startup =
 
 	yield* this.checkRepositorySchemaVersion( );
 
-	yield* this.ensureMeshcraftUser( );
+	yield* this.ensureRootUser( );
 
 	yield* this.loadSpaces( );
 
@@ -194,23 +193,18 @@ Server.prototype.startup =
 			( config.ip || '*' ) + '/:' + config.port
 	);
 
-	var
-		self =
-			this;
-
 	// FIXME this might go simpler
-	var
-		requestListener =
-			function*(
+	requestListener =
+		function*(
+			request,
+			result
+		)
+		{
+			yield* self.requestListener(
 				request,
 				result
-			)
-			{
-				yield* self.requestListener(
-					request,
-					result
-				);
-			};
+			);
+		};
 
 	yield http.createServer(
 		function(
@@ -229,10 +223,7 @@ Server.prototype.startup =
 		sus.resume( )
 	);
 
-	jools.log(
-		'start',
-		'server running'
-	);
+	jools.log( 'start', 'server running' );
 };
 
 
@@ -242,34 +233,36 @@ Server.prototype.startup =
 Server.prototype.checkRepositorySchemaVersion =
 	function* ( )
 {
+	var
+		global,
+		version;
+
 	jools.log(
 		'start',
 		'checking repository schema version'
 	);
 
-	var
-		global =
-			yield this.$db.connection.collection(
-				'global',
-				sus.resume( )
-			),
+	global =
+		yield this.$db.connection.collection(
+			'global',
+			sus.resume( )
+		),
 
-		version =
-			yield global.findOne(
-				{
-					_id :
-						'version'
-				},
-				sus.resume( )
-			);
+	version =
+		yield global.findOne(
+			{
+				_id : 'version'
+			},
+			sus.resume( )
+		);
 
 	if( version )
 	{
-		if( version.version !== MESHCRAFT_DB_VERSION )
+		if( version.version !== DB_VERSION )
 		{
 			throw new Error(
 				'Wrong repository schema version, expected '
-					+ MESHCRAFT_DB_VERSION +
+				+ DB_VERSION +
 				', got ' +
 				version.version
 			);
@@ -289,17 +282,21 @@ Server.prototype.checkRepositorySchemaVersion =
 Server.prototype.initRepository =
 	function*( )
 {
+	var
+		global,
+		initSpaces,
+		space;
+
 	jools.log(
 		'start',
 		'found no repository, initializing a new one'
 	);
 
-	var
-		initSpaces =
-			[
-				'ideoloom:home',
-				'ideoloom:sandbox'
-			];
+	initSpaces =
+		[
+			'ideoloom:home',
+			'ideoloom:sandbox'
+		];
 
 	for(
 		var s = 0, sZ = initSpaces.length;
@@ -307,9 +304,7 @@ Server.prototype.initRepository =
 		s++
 	)
 	{
-		var
-			space =
-				initSpaces[ s ];
+		space = initSpaces[ s ];
 
 		jools.log(
 			'start',
@@ -329,19 +324,18 @@ Server.prototype.initRepository =
 		'  initializing global.version'
 	);
 
-	var
-		global =
-			yield this.$db.connection.collection(
-				'global',
-				sus.resume( )
-			);
+	global =
+		yield this.$db.connection.collection(
+			'global',
+			sus.resume( )
+		);
 
 	yield global.insert(
 		{
 			_id :
 				'version',
 			version :
-				MESHCRAFT_DB_VERSION
+				DB_VERSION
 		},
 		sus.resume( )
 	);
@@ -349,38 +343,39 @@ Server.prototype.initRepository =
 
 
 /*
-| Ensures there is the ideoloom (root) user
+| Ensures there is the root user
 */
-Server.prototype.ensureMeshcraftUser =
+Server.prototype.ensureRootUser =
 	function* ( )
 {
+	var
+		pass,
+		rootUser;
+
 	jools.log(
 		'start',
-		'ensuring existence of the "ideoloom" user'
+		'ensuring existence of the root user'
 	);
 
-	var
-		mUser =
-			yield this.$db.users.findOne(
-				{
-					_id :
-						'ideoloom'
-				},
-				sus.resume( )
-			);
+	rootUser =
+		yield this.$db.users.findOne(
+			{
+				_id :
+					'root'
+			},
+			sus.resume( )
+		);
 
-	if( !mUser )
+	if( !rootUser )
 	{
 		jools.log(
 			'start',
-			'not found! (re)creating the "ideoloom" user'
+			'not found! (re)creating the root user'
 		);
 
-		var
-			pass =
-				jools.randomPassword( 12 );
+		pass = jools.randomPassword( 12 );
 
-		mUser =
+		rootUser =
 			{
 				_id :
 					'ideoloom',
@@ -393,18 +388,18 @@ Server.prototype.ensureMeshcraftUser =
 			};
 
 		yield this.$db.users.insert(
-			mUser,
+			rootUser,
 			sus.resume( )
 		);
 	}
 
 	this.$users.ideoloom =
-		mUser;
+		rootUser;
 
 	jools.log(
 		'start',
-		'"ideoloom" user\'s clear password is: ',
-		mUser.clearPass
+		'root user\'s clear password is: ',
+		rootUser.clearPass
 	);
 };
 
@@ -415,18 +410,20 @@ Server.prototype.ensureMeshcraftUser =
 Server.prototype.loadSpaces =
 	function*( )
 {
+	var
+		cursor;
+
 	jools.log(
 		'start',
 		'loading and replaying all spaces'
 	);
 
-	var
-		cursor =
-			yield this.$db.spaces.find(
-				{ },
-				{ sort: '_id'},
-				sus.resume( )
-			);
+	cursor =
+		yield this.$db.spaces.find(
+			{ },
+			{ sort: '_id' },
+			sus.resume( )
+		);
 
 	for(
 		var o = yield cursor.nextObject( sus.resume( ) );
@@ -771,7 +768,11 @@ Server.prototype.prepareInventory =
 	var
 		ast,
 		code,
+		// jsonIDs
+		jsonIDs,
 		gjr;
+
+	jsonIDs = { };
 
 	// loads the files to be bundled
 	for(
@@ -790,6 +791,11 @@ Server.prototype.prepareInventory =
 		if( resource.isJion )
 		{
 			gjr = yield* generateJion.run( resource );
+
+			if( gjr.hasJSON )
+			{
+				jsonIDs[ gjr.jsonID ] = true;
+			}
 
 			code = gjr.code;
 		}
@@ -842,7 +848,7 @@ Server.prototype.prepareInventory =
 
 	if( config.extraMangle )
 	{
-		this.extraMangle( ast );
+		this.extraMangle( ast, jsonIDs );
 	}
 
 	if( config.uglify )
@@ -1099,64 +1105,65 @@ var b64Count =
 */
 Server.prototype.extraMangle =
 	function(
-		ast
+		ast,
+		jsonIDs
 	)
 {
 	var
 		a,
+		// ast properties mangled
+		astProps,
 		aZ,
 		at,
 		e,
-
-		// unknown properties / keys
-		// that are missed in both lists
-		missed =
-			{ },
-
+		jsonID,
+		// associative of all mangles
+		mangle,
 		// mangle definitions:
 		// a file that looks like this
 		// ". value"  <-- this will be mangled
 		// "> value"  <-- this will not be mangled
-		mangleDefs =
-			(
-				fs.readFileSync(
-					'./mangle.txt'
-				) + ''
-			).split( '\n' ),
-
+		mangleDefs,
 		// an array of all mangles
 		mangleList,
-
-		// associative of all mangles
-		mangle =
-			{ },
-
+		// unknown properties / keys
+		// that are missed in both lists
+		missed,
 		// associative of all no-mangles
-		noMangle =
-			{ },
-
+		noMangle,
 		// associative of all mangles not used
-		useMangle =
-			{ },
-
+		useMangle,
 		// associative of all no-mangles not used
-		useNoMangle =
-			{ },
+		useNoMangle;
 
-		// ast properties mangled
-		astProps =
-			{
-				'property' :
-					'p',
+	missed = { };
 
-				'key' :
-					'p',
+	mangleDefs =
+		(
+			fs.readFileSync(
+				'./mangle.txt'
+			) + ''
+		).split( '\n' );
 
-				// string values are mangled
-				// but do not flag properties missed
-				'value' :
-					's'
-			};
+	mangle = { };
+
+	noMangle = { };
+
+	useMangle = { };
+
+	useNoMangle = { };
+
+	astProps =
+		{
+			'property' :
+				'p',
+			'key' :
+				'p',
+			// string values are mangled
+			// but do not flag properties missed
+			'value' :
+				's'
+		};
 
 	// cuts away empty lines
 	while( mangleDefs.indexOf( '' ) >= 0 )
@@ -1171,11 +1178,9 @@ Server.prototype.extraMangle =
 		a++
 	)
 	{
-		at =
-			mangleDefs[ a ];
+		at = mangleDefs[ a ];
 
-		e =
-			at.substring( 2 );
+		e = at.substring( 2 );
 
 		if(
 			e.length === 0 ||
@@ -1202,35 +1207,40 @@ Server.prototype.extraMangle =
 		{
 			case '.' :
 
-				mangle[ e ] =
-					true;
+				mangle[ e ] = true;
 
 				break;
 
 			case '>' :
 
-				noMangle[ e ] =
-					true;
+				noMangle[ e ] = true;
 
 				break;
 		}
+
 	}
 
-	mangleList =
-		Object.keys( mangle ).sort( );
+	// also mangles the jsonIDs
+	for( jsonID in jsonIDs )
+	{
+		if( !noMangle[ jsonID ] )
+		{
+			mangle[ jsonID ] = true;
+		}
+	}
 
-	// allots all mangles an value
+	mangleList = Object.keys( mangle ).sort( );
+
+	// allots all mangles a value
 	for(
 		a = 0, aZ = mangleList.length;
 		a < aZ;
 		a++
 	)
 	{
-		at =
-			mangleList[ a ];
+		at = mangleList[ a ];
 
-		mangle[ at ] =
-			'$$' + b64Count( a );
+		mangle[ at ] = '$$' + b64Count( a );
 	}
 
 	if( !config.noWrite )
@@ -1244,14 +1254,12 @@ Server.prototype.extraMangle =
 	// marks all mangles and no-mangles as unused so far
 	for( a in mangle )
 	{
-		useMangle[ a ] =
-			true;
+		useMangle[ a ] = true;
 	}
 
 	for( a in noMangle )
 	{
-		useNoMangle[ a ] =
-			true;
+		useNoMangle[ a ] = true;
 	}
 
 	// walks the syntax tree
@@ -1262,8 +1270,7 @@ Server.prototype.extraMangle =
 
 			for( k in astProps )
 			{
-				p =
-					node[ k ];
+				p = node[ k ];
 
 				if( p !== undefined )
 				{
@@ -1294,8 +1301,7 @@ Server.prototype.extraMangle =
 			{
 				delete useMangle[ p ];
 
-				node[ k ] =
-					mangle[ p ];
+				node[ k ] = mangle[ p ];
 
 				return false;
 			}
@@ -1303,8 +1309,7 @@ Server.prototype.extraMangle =
 			// if this is a property it is marked as missed
 			if( astProps[ k ] === 'p' )
 			{
-				missed[ p ] =
-					true;
+				missed[ p ] = true;
 			}
 
 			return false;
@@ -1312,14 +1317,11 @@ Server.prototype.extraMangle =
 	));
 
 	// turns check lists into arrays and sorts them
-	missed =
-		Object.keys( missed ).sort( );
+	missed = Object.keys( missed ).sort( );
 
-	useMangle =
-		Object.keys( useMangle ).sort( );
+	useMangle = Object.keys( useMangle ).sort( );
 
-	useNoMangle =
-		Object.keys( useNoMangle ).sort( );
+	useNoMangle = Object.keys( useNoMangle ).sort( );
 
 	if( missed.length > 0 )
 	{
