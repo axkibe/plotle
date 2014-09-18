@@ -201,39 +201,14 @@ jools.lazyValue(
 | Gets one change.
 */
 changeRay.prototype.get =
-	function(
-		idx
-	)
-{
-	return this._ray[ idx ];
-};
+	jion.proto.rayGet;
 
 
 /*
-| Returns a changeRay with one element altered.
+| Sets one change.
 */
 changeRay.prototype.set =
-	function(
-		idx,
-		chg
-	)
-{
-	var
-		rc;
-
-	rc = this._ray.slice( );
-
-	rc[ idx ] = chg;
-
-	return (
-		changeRay.create(
-			'array',
-				rc,
-			'_sliced',
-				true
-		)
-	);
-};
+	jion.proto.raySet;
 
 
 /*

@@ -475,6 +475,13 @@ validator.check =
 		_checkAlikes( jion );
 	}
 
+	if( jion.twig && jion.ray )
+	{
+		throw new Error(
+			'a jion cannot be a ray and twig at the same time'
+		);
+	}
+
 	if( jion.twig )
 	{
 		_checkTwig( jion );

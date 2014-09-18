@@ -624,7 +624,9 @@
 > ranks
 . ray
 . rayAppend
+. rayGet
 . rayLength
+. raySet
 > readyState
 . receiverFunc
 > rect

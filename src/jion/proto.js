@@ -322,6 +322,46 @@ proto.rayLength =
 
 
 /*
+| Gets one entry of a ray.
+*/
+proto.rayGet =
+	function(
+		idx
+	)
+{
+	return this._ray[ idx ];
+};
+
+
+/*
+| Returns a ray with one element altered.
+*/
+proto.raySet =
+	function(
+		idx,
+		chg
+	)
+{
+	var
+		rc;
+
+	rc = this._ray.slice( );
+
+	rc[ idx ] = chg;
+
+	return(
+		this.create(
+			'array',
+				rc,
+			'_sliced',
+				true
+		)
+	);
+};
+
+
+
+/*
 | Node export.
 */
 if( SERVER )
