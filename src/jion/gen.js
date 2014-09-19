@@ -1224,7 +1224,13 @@ gen.prototype.genCreatorFreeStringsParser =
 		switchExpr,
 		twigDupCheck;
 
-	if( !this.twig && this.attrList.length === 0 )
+	if(
+		!this.twig
+		&&
+		!this.ray
+		&&
+		this.attrList.length === 0
+	)
 	{
 		// no free strings parses needed
 		// FIXME check for no arguments
@@ -1518,12 +1524,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				aBlock( )
 				.anAssign(
 					aVar( 'ray' ),
-					aVar( 'arguments' ).aMember(
-						aPlus(
-							aPreIncrement( aVar( 'a' ) ),
-							aNumberLiteral( 1 )
-						)
-					)
+					aVar( 'arg' )
 				)
 				.anAssign(
 					aVar( 'rayDup' ),
@@ -1536,12 +1537,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.append( rayDupCheck )
 				.aCall(
 					aVar( 'ray' ).aDot( 'push' ),
-					aVar( 'arguments' ).aMember(
-						aPlus(
-							aPreIncrement( aVar( 'a' ) ),
-							aNumberLiteral( 1 )
-						)
-					)
+					aVar( 'arg' )
 				)
 			)
 			.aCase(
@@ -2060,15 +2056,21 @@ gen.prototype.genCreatorUnchanged =
 
 	cond = aVar( 'inherit' );
 
-
 	if( this.twig )
 	{
 		cond =
 			anAnd(
 				cond,
-				aNot(
-					aVar( 'twigDup' )
-				)
+				aNot( aVar( 'twigDup' ) )
+			);
+	}
+
+	if( this.ray )
+	{
+		cond =
+			anAnd(
+				cond,
+				aNot( aVar( 'rayDup' ) )
 			);
 	}
 
@@ -2078,11 +2080,9 @@ gen.prototype.genCreatorUnchanged =
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ];
+		name = this.attrList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes[ name ];
 
 		if( attr.assign === null )
 		{
@@ -2144,11 +2144,7 @@ gen.prototype.genCreatorUnchanged =
 				}
 		}
 
-		cond =
-			anAnd(
-				cond,
-				ceq
-			);
+		cond = anAnd( cond, ceq );
 	}
 
 	block =
