@@ -164,7 +164,7 @@ channel.prototype.request =
 	// FUTURE make a real fifo
 	if( this.fifo )
 	{
-		console.log( 'already a request active' );
+		throw new Error( 'already a request active' );
 
 		return false;
 	}
