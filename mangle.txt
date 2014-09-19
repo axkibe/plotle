@@ -5,7 +5,6 @@
 . HOFOC
 . HOVER
 . Help
-. Insert
 > Label
 . MAX_INTEGER
 . NORMA
@@ -120,7 +119,6 @@
 . _prepareField
 . _rSeq
 . _rSpace
-. _ray
 . _readyHandler
 . _redo
 . _releaseEvents
@@ -623,9 +621,16 @@
 . rankOf
 > ranks
 . ray
+. ray:append
+. ray:init
+. ray:insert
+. ray:remove
+. ray:set
 . rayAppend
 . rayGet
+. rayInsert
 . rayLength
+. rayRemove
 . raySet
 > readyState
 . receiverFunc

@@ -110,13 +110,13 @@ var
 		Shorthand.aStringLiteral,
 	aSwitch =
 		Shorthand.aSwitch,
-	This = // FIXME and others
+	aThis =
 		Shorthand.aVar( 'this' ),
-	True =
-		Shorthand.True( ),
+	aTrue =
+		Shorthand.aTrue( ),
 	aTypeof =
 		Shorthand.aTypeof,
-	Undefined =
+	Undefined = // FIXME and others
 		Shorthand.aVar( 'undefined' ),
 	aVar =
 		Shorthand.aVar,
@@ -372,7 +372,7 @@ gen.prototype._init =
 			}
 			else if( jdv === true )
 			{
-				defaultValue = True;
+				defaultValue = aTrue;
 			}
 			else if( typeof( jdv ) === 'number' )
 			{
@@ -452,6 +452,11 @@ gen.prototype._init =
 		constructorList.unshift( 'twig' );
 	}
 
+	if( jion.ray )
+	{
+		constructorList.unshift( 'ray' );
+	}
+
 	if( jion.init )
 	{
 		inits = jion.init.slice( ).sort( );
@@ -473,6 +478,8 @@ gen.prototype._init =
 			{
 				case 'inherit' :
 				case 'twigDup' :
+				case 'ray' :
+				case 'rayDup' :
 
 					constructorList.unshift( name );
 
@@ -750,7 +757,7 @@ gen.prototype.genConstructor =
 
 		assign =
 			anAssign(
-				This.aDot( attr.assign ),
+				aThis.aDot( attr.assign ),
 				attr.v
 			);
 
@@ -775,22 +782,30 @@ gen.prototype.genConstructor =
 		block =
 			block
 			.anAssign(
-				This.aDot( 'twig' ),
+				aThis.aDot( 'twig' ),
 				aVar( 'twig' )
 			)
 			.anAssign(
-				This.aDot( 'ranks' ),
+				aThis.aDot( 'ranks' ),
 				aVar( 'ranks' )
+			);
+	}
+
+
+	if( this.ray )
+	{
+		block =
+			block
+			.anAssign(
+				aThis.aDot( 'ray' ),
+				aVar( 'ray' )
 			);
 	}
 
 	// calls the initializer
 	if( this.init )
 	{
-		initCall =
-			aCall(
-				This.aDot( '_init' )
-			);
+		initCall = aCall( aThis.aDot( '_init' ) );
 
 		for(
 			a = 0, aZ = this.init.length;
@@ -798,8 +813,7 @@ gen.prototype.genConstructor =
 			a++
 		)
 		{
-			name =
-				this.init[ a ];
+			name = this.init[ a ];
 
 			switch( name )
 			{
@@ -814,8 +828,7 @@ gen.prototype.genConstructor =
 					continue;
 			}
 
-			attr =
-				this.attributes[ name ];
+			attr = this.attributes[ name ];
 
 			if( !attr )
 			{
@@ -824,23 +837,24 @@ gen.prototype.genConstructor =
 				);
 			}
 
-			initCall =
-				initCall.append( ( attr.v ) );
+			initCall = initCall.append( ( attr.v ) );
 		}
 
 		block = block.append( initCall );
 	}
 
 	// immutes the new object
+	// FIXME use object.freeze and only in checking
 	block =
 		block
 		.aCall(
 			aVar( 'jools' ).aDot( 'immute' ),
-			This
+			aThis
 		);
 
 	if( this.twig )
 	{
+		// FIXME use object.freeze and only in checking
 		block =
 			block
 			.aCall(
@@ -853,6 +867,19 @@ gen.prototype.genConstructor =
 			);
 	}
 
+	if( this.ray )
+	{
+		block =
+			block
+			.aCheck(
+				aBlock( )
+				.aCall(
+					aVar( 'Object' ).aDot( 'freeze' ),
+					aVar( 'ray' )
+				)
+			);
+	}
+
 	constructor = aFunc( block );
 
 	for(
@@ -861,27 +888,38 @@ gen.prototype.genConstructor =
 		a++
 	)
 	{
-		name =
-			this.constructorList[ a ];
+		name = this.constructorList[ a ];
 
 		switch( name )
 		{
 			case 'inherit' :
 
+				// TODO Arg --> appendArg
 				constructor =
-					constructor.Arg(
-						'inherit',
-						'inheritance'
-					);
+					constructor.Arg( 'inherit', 'inheritance' );
 
 				break;
 
 			case 'ranks' :
 
 				constructor =
+					constructor.Arg( 'ranks', 'twig ranks' );
+
+				break;
+
+			case 'ray' :
+
+				constructor =
+					constructor.Arg( 'ray', 'ray' );
+
+				break;
+
+			case 'rayDup' :
+
+				constructor =
 					constructor.Arg(
-						'ranks',
-						'twig ranks'
+						'rayDup',
+						'true if ray is already been duplicated'
 					);
 
 				break;
@@ -889,10 +927,7 @@ gen.prototype.genConstructor =
 			case 'twig' :
 
 				constructor =
-					constructor.Arg(
-						'twig',
-						'twig'
-					);
+					constructor.Arg( 'twig', 'twig' );
 
 				break;
 
@@ -1022,6 +1057,14 @@ gen.prototype.genCreatorVariables =
 		);
 	}
 
+	if( this.ray )
+	{
+		varList.push(
+			'ray',
+			'rayDup'
+		);
+	}
+
 	varList.sort( );
 
 	for(
@@ -1030,8 +1073,7 @@ gen.prototype.genCreatorVariables =
 		a++
 	)
 	{
-		block =
-			block.aVarDec( varList[ a ] );
+		block = block.aVarDec( varList[ a ] );
 	}
 
 	return block;
@@ -1056,7 +1098,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			aBlock( )
 			.anAssign(
 				aVar( 'inherit' ),
-				This
+				aThis
 			);
 
 	if( this.twig )
@@ -1077,17 +1119,29 @@ gen.prototype.genCreatorInheritanceReceiver =
 			);
 	}
 
+	if( this.ray )
+	{
+		receiver =
+			receiver
+			.anAssign(
+				aVar( 'ray' ),
+				aVar( 'inherit' ).aDot( 'ray' )
+			)
+			.anAssign(
+				aVar( 'rayDup' ),
+				False
+			);
+	}
+
 	for(
 		a = 0, aZ = this.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ];
+		name = this.attrList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes[ name ];
 
 		if( attr.assign === null )
 		{
@@ -1098,14 +1152,14 @@ gen.prototype.genCreatorInheritanceReceiver =
 			receiver
 			.anAssign(
 				attr.v,
-				This.aDot ( attr.assign )
+				aThis.aDot ( attr.assign )
 			);
 	}
 
 	thisCheck =
 		anIf(
 			aDiffers(
-				This,
+				aThis,
 				aVar( this.reference )
 			),
 			receiver
@@ -1115,7 +1169,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 	{
 		thisCheck =
 			thisCheck
-			.Elsewise(
+			.Elsewise( // FIXME rename Elsewise
 				aBlock( )
 				.anAssign(
 					aVar( 'twig' ),
@@ -1127,10 +1181,28 @@ gen.prototype.genCreatorInheritanceReceiver =
 				)
 				.anAssign(
 					aVar( 'twigDup' ),
-					True
+					aTrue
 				)
 			);
 	}
+
+	if( this.ray )
+	{
+		thisCheck =
+			thisCheck
+			.Elsewise(
+				aBlock( )
+				.anAssign(
+					aVar( 'ray' ),
+					anArrayLiteral( )
+				)
+				.anAssign(
+					aVar( 'rayDup' ),
+					aTrue
+				)
+			);
+	}
+
 
 	return block.append( thisCheck );
 };
@@ -1148,7 +1220,9 @@ gen.prototype.genCreatorFreeStringsParser =
 		attr,
 		loop,
 		name,
-		switchExpr;
+		rayDupCheck,
+		switchExpr,
+		twigDupCheck;
 
 	if( !this.twig && this.attrList.length === 0 )
 	{
@@ -1161,8 +1235,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		aBlock( )
 		.aVarDec(
 			'arg',
-			aVar( 'arguments' )
-			.aMember(
+			aVar( 'arguments' ).aMember(
 				aPlus(
 					aVar( 'a' ),
 					aNumberLiteral( 1 )
@@ -1172,10 +1245,7 @@ gen.prototype.genCreatorFreeStringsParser =
 
 	switchExpr =
 		aSwitch(
-			aVar( 'arguments' )
-			.aMember(
-				aVar( 'a' )
-			)
+			aVar( 'arguments' ).aMember( aVar( 'a' ) )
 		);
 
 	for(
@@ -1184,11 +1254,9 @@ gen.prototype.genCreatorFreeStringsParser =
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ];
+		name = this.attrList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes[ name ];
 
 		switchExpr =
 			switchExpr
@@ -1211,43 +1279,43 @@ gen.prototype.genCreatorFreeStringsParser =
 
 	if( this.twig )
 	{
+		twigDupCheck =
+			anIf(
+				aNot( aVar( 'twigDup' ) ),
+				aBlock( )
+				.anAssign(
+					aVar( 'twig' ),
+					aCall(
+						aVar( 'jools' ).aDot( 'copy' ),
+						aVar( 'twig' )
+					)
+				)
+				.anAssign(
+					aVar( 'ranks' ),
+					aCall(
+						aVar( 'ranks' ).aDot( 'slice' )
+					)
+				)
+				.anAssign(
+					aVar( 'twigDup' ),
+					aTrue
+				)
+			);
+
 		// FIXME make a sub-function to add the twigDup stuff
 		switchExpr =
 			switchExpr
 			.aCase(
 				aStringLiteral( 'twig:add' ),
 				aBlock( )
-				.anIf(
-					aNot(
-						aVar( 'twigDup' )
-					),
-					aBlock( )
-					.anAssign(
-						aVar( 'twig' ),
-						aCall(
-							aVar( 'jools' ).aDot( 'copy' ),
-							aVar( 'twig' )
-						)
-					)
-					.anAssign(
-						aVar( 'ranks' ),
-						aCall(
-							aVar( 'ranks' ).aDot( 'slice' )
-						)
-					)
-					.anAssign(
-						aVar( 'twigDup' ),
-						True
-					)
-				)
+				.append( twigDupCheck )
 				.anAssign(
 					aVar( 'key' ),
 					aVar( 'arg' )
 				)
 				.anAssign(
 					aVar( 'arg' ),
-					aVar( 'arguments' )
-					.aMember(
+					aVar( 'arguments' ).aMember(
 						aPlus(
 							aPreIncrement( aVar( 'a' ) ),
 							aNumberLiteral( 1 )
@@ -1256,9 +1324,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anIf(
 					aDiffers(
-						aVar( 'twig' ).aMember(
-							aVar( 'key' )
-						),
+						aVar( 'twig' ).aMember( aVar( 'key' ) ),
 						Undefined
 					),
 					aBlock( )
@@ -1282,35 +1348,14 @@ gen.prototype.genCreatorFreeStringsParser =
 			.aCase(
 				aStringLiteral( 'twig:set' ),
 				aBlock( )
-				.anIf(
-					aNot( aVar( 'twigDup' ) ),
-					aBlock( )
-					.anAssign(
-						aVar( 'twig' ),
-						aCall(
-							aVar( 'jools' ).aDot( 'copy' ),
-							aVar( 'twig' )
-						)
-					)
-					.anAssign(
-						aVar( 'ranks' ),
-						aCall(
-							aVar( 'ranks' ).aDot( 'slice' )
-						)
-					)
-					.anAssign(
-						aVar( 'twigDup' ),
-						True
-					)
-				)
+				.append( twigDupCheck )
 				.anAssign(
 					aVar( 'key' ),
 					aVar( 'arg' )
 				)
 				.anAssign(
 					aVar( 'arg' ),
-					aVar( 'arguments' )
-					.aMember(
+					aVar( 'arguments' ).aMember(
 						aPlus(
 							aPreIncrement( aVar( 'a' ) ),
 							aNumberLiteral( 1 )
@@ -1319,9 +1364,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anIf(
 					anEquals(
-						aVar( 'twig' ).aMember(
-							aVar( 'key' )
-						),
+						aVar( 'twig' ).aMember( aVar( 'key' ) ),
 						Undefined
 					),
 					aBlock( )
@@ -1334,45 +1377,21 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.anAssign(
-					aVar( 'twig' )
-					.aMember(
-						aVar( 'key' )
-					),
+					aVar( 'twig' ).aMember( aVar( 'key' ) ),
 					aVar( 'arg' )
 				)
 			)
 			.aCase(
 				aStringLiteral( 'twig:insert' ),
 				aBlock( )
-				.anIf(
-					aNot( aVar( 'twigDup' ) ),
-					aBlock( )
-					.anAssign(
-						aVar( 'twig' ),
-						aCall(
-							aVar( 'jools' ).aDot( 'copy' ),
-							aVar( 'twig' )
-						)
-					)
-					.anAssign(
-						aVar( 'ranks' ),
-						aCall(
-							aVar( 'ranks' ).aDot( 'slice' )
-						)
-					)
-					.anAssign(
-						aVar( 'twigDup' ),
-						True
-					)
-				)
+				.append( twigDupCheck )
 				.anAssign(
 					aVar( 'key' ),
 					aVar( 'arg' )
 				)
 				.anAssign(
 					aVar( 'rank' ),
-					aVar( 'arguments' )
-					.aMember(
+					aVar( 'arguments' ).aMember(
 						aPlus(
 							aVar( 'a' ),
 							aNumberLiteral( 2 )
@@ -1381,8 +1400,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anAssign(
 					aVar( 'arg' ),
-					aVar( 'arguments' )
-					.aMember(
+					aVar( 'arguments' ).aMember(
 						aPlus(
 							aVar( 'a' ),
 							aNumberLiteral( 3 )
@@ -1397,10 +1415,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anIf(
 					aDiffers(
-						aVar( 'twig' )
-						.aMember(
-							aVar( 'key' )
-						),
+						aVar( 'twig' ).aMember( aVar( 'key' ) ),
 						Undefined
 					),
 					aBlock( )
@@ -1429,10 +1444,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.anAssign(
-					aVar( 'twig' )
-					.aMember(
-						aVar( 'key' )
-					),
+					aVar( 'twig' ).aMember( aVar( 'key' ) ),
 					aVar( 'arg' )
 				)
 				.append(
@@ -1447,35 +1459,10 @@ gen.prototype.genCreatorFreeStringsParser =
 			.aCase(
 				aStringLiteral( 'twig:remove' ),
 				aBlock( )
-				.anIf(
-					aNot(
-						aVar( 'twigDup' )
-					),
-					aBlock( )
-					.anAssign(
-						aVar( 'twig' ),
-						aCall(
-							aVar( 'jools' ).aDot( 'copy' ),
-							aVar( 'twig' )
-						)
-					)
-					.anAssign(
-						aVar( 'ranks' ),
-						aCall(
-							aVar( 'ranks' ).aDot( 'slice' )
-						)
-					)
-					.anAssign(
-						aVar( 'twigDup' ),
-						True
-					)
-				)
+				.append( twigDupCheck )
 				.anIf(
 					anEquals(
-						aVar( 'twig' )
-						.aMember(
-							aVar( 'arg' )
-						),
+						aVar( 'twig' ).aMember( aVar( 'arg' ) ),
 						Undefined
 					),
 					aBlock( )
@@ -1489,10 +1476,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.append(
 					aDelete(
-						aVar( 'twig' )
-						.aMember(
-							aVar( 'arg' )
-						)
+						aVar( 'twig' ).aMember( aVar( 'arg' ) )
 					)
 				)
 				.append(
@@ -1503,6 +1487,100 @@ gen.prototype.genCreatorFreeStringsParser =
 							aVar( 'arg' )
 						),
 						aNumberLiteral( 1 )
+					)
+				)
+			);
+	}
+
+	if( this.ray )
+	{
+		rayDupCheck =
+			anIf(
+				aNot( aVar( 'rayDup' ) ),
+				aBlock( )
+				.anAssign(
+					aVar( 'ray' ),
+					aCall(
+						aVar( 'ray' ).aDot( 'slice' )
+					)
+				)
+				.anAssign(
+					aVar( 'rayDup' ),
+					aTrue
+				)
+			);
+
+		// FIXME make a sub-function to add the twigDup stuff
+		switchExpr =
+			switchExpr
+			.aCase(
+				aStringLiteral( 'ray:init' ),
+				aBlock( )
+				.anAssign(
+					aVar( 'ray' ),
+					aVar( 'arguments' ).aMember(
+						aPlus(
+							aPreIncrement( aVar( 'a' ) ),
+							aNumberLiteral( 1 )
+						)
+					)
+				)
+				.anAssign(
+					aVar( 'rayDup' ),
+					False
+				)
+			)
+			.aCase(
+				aStringLiteral( 'ray:append' ),
+				aBlock( )
+				.append( rayDupCheck )
+				.aCall(
+					aVar( 'ray' ).aDot( 'push' ),
+					aVar( 'arguments' ).aMember(
+						aPlus(
+							aPreIncrement( aVar( 'a' ) ),
+							aNumberLiteral( 1 )
+						)
+					)
+				)
+			)
+			.aCase(
+				aStringLiteral( 'ray:insert' ),
+				aBlock( )
+				.append( rayDupCheck )
+				.aCall(
+					aVar( 'ray' ).aDot( 'splice' ),
+					aVar( 'arg' ),
+					aNumberLiteral( 0 ),
+					aVar( 'arguments' ).aMember(
+						aPlus(
+							aPreIncrement( aVar( 'a' ) ),
+							aNumberLiteral( 1 )
+						)
+					)
+				)
+			)
+			.aCase(
+				aStringLiteral( 'ray:remove' ),
+				aBlock( )
+				.append( rayDupCheck )
+				.aCall(
+					aVar( 'ray' ).aDot( 'splice' ),
+					aVar( 'arg' ),
+					aNumberLiteral( 1 )
+				)
+			)
+			.aCase(
+				aStringLiteral( 'ray:set' ),
+				aBlock( )
+				.append( rayDupCheck )
+				.anAssign(
+					aVar( 'ray' ).aMember( aVar( 'arg' ) ),
+					aVar( 'arguments' ).aMember(
+						aPlus(
+							aPreIncrement( aVar( 'a' ) ),
+							aNumberLiteral( 1 )
+						)
 					)
 				)
 			);
@@ -2143,11 +2221,10 @@ gen.prototype.genCreatorReturn =
 			case 'twig' :
 			case 'twigDup' :
 			case 'ranks' :
+			case 'ray' :
+			case 'rayDup' :
 
-				call =
-					call.append(
-						aVar( name )
-					);
+				call = call.append( aVar( name ) );
 
 				break;
 
@@ -2427,10 +2504,7 @@ gen.prototype.genFromJSONCreatorParser =
 			aBlock( )
 			.anAssign(
 				aVar( 'arg' ),
-				aVar( 'json' )
-				.aMember(
-					aVar( 'name' )
-				)
+				aVar( 'json' ).aMember( aVar( 'name' ) )
 			)
 			.append(
 				switchExpr
@@ -2479,10 +2553,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 				aStringLiteral( twigId ),
 				aBlock( )
 				.anAssign(
-					aVar( 'twig' )
-					.aMember(
-						aVar( 'key' )
-					),
+					aVar( 'twig' ).aMember( aVar( 'key' ) ),
 					aCall(
 						base.aDot( 'createFromJSON' ),
 						aVar( 'jval' )
@@ -2502,31 +2573,20 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		aBlock( )
 		.anAssign(
 			aVar( 'key' ),
-			aVar( 'ranks' )
-			.aMember(
-				aVar( 'a' )
-			)
+			aVar( 'ranks' ).aMember( aVar( 'a' ) )
 		)
 		.anIf(
 			aNot(
-				aVar( 'jwig' )
-				.aMember(
-					aVar( 'key' )
-				)
+				aVar( 'jwig' ).aMember( aVar( 'key' ) )
 			),
 			aBlock( )
 			.aFail( 'JSON ranks/twig mismatch' )
 		)
 		.anAssign(
 			aVar( 'jval' ),
-			aVar( 'jwig' )
-			.aMember(
-				aVar( 'key' )
-			)
+			aVar( 'jwig' ).aMember( aVar( 'key' ) )
 		)
-		.append(
-			switchExpr
-		);
+		.append( switchExpr );
 
 	block =
 		block
@@ -2557,13 +2617,8 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 					aVar( 'ranks' ).aDot( 'length' )
 				)
 			),
-			aLessThan(
-				aVar( 'a' ),
-				aVar( 'aZ' )
-			),
-			aPreIncrement(
-				aVar( 'a' )
-			),
+			aLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
+			aPreIncrement( aVar( 'a' ) ),
 			loop
 		);
 
@@ -2583,10 +2638,7 @@ gen.prototype.genFromJSONCreatorReturn =
 		call,
 		name;
 
-	call =
-		aCall(
-			aVar( 'Constructor' )
-		);
+	call = aCall( aVar( 'Constructor' ) );
 
 	for(
 		var a = 0, aZ = this.constructorList.length;
@@ -2604,13 +2656,15 @@ gen.prototype.genFromJSONCreatorReturn =
 
 				break;
 
+			case 'rayDup' :
 			case 'twigDup' :
 
-				call = call.append( True );
+				call = call.append( aTrue );
 
 				break;
 
 			case 'ranks' :
+			case 'ray' :
 			case 'twig' :
 
 				call =
@@ -2637,10 +2691,7 @@ gen.prototype.genFromJSONCreatorReturn =
 	}
 
 	return (
-		block
-		.aReturn(
-			aNew( call )
-		)
+		block.aReturn( aNew( call ) )
 	);
 };
 
@@ -2663,8 +2714,7 @@ gen.prototype.genFromJSONCreator =
 		name,
 		jsonList;
 
-	jsonList =
-		[ ];
+	jsonList = [ ];
 
 	for(
 		a = 0, aZ = this.attrList.length;
@@ -2812,6 +2862,7 @@ gen.prototype.genJionProto =
 			.aCall(
 				aVar( 'jools' ).aDot( 'lazyValue' ),
 				aVar( 'prototype' ),
+				aStringLiteral( 'length' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayLength' )
 			)
 			.aComment(
@@ -2821,12 +2872,22 @@ gen.prototype.genJionProto =
 				aVar( 'prototype' ).aDot( 'get' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayGet' )
 			)
+			.aComment( 'Returns a jion with one entry inserted to the ray.' )
+			.anAssign(
+				aVar( 'prototype' ).aDot( 'insert' ),
+				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayInsert' )
+			)
 			.aComment(
 				'Returns the jion with one entry of the ray set.'
 			)
 			.anAssign(
 				aVar( 'prototype' ).aDot( 'set' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'raySet' )
+			)
+			.aComment( 'Returns a jion with one entry from the ray removed.' )
+			.anAssign(
+				aVar( 'prototype' ).aDot( 'remove' ),
+				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayRemove' )
 			);
 	}
 
@@ -2878,7 +2939,7 @@ gen.prototype.genToJSON =
 			olit
 			.add(
 				name,
-				This.aDot( attr.assign )
+				aThis.aDot( attr.assign )
 			);
 	}
 
@@ -2888,11 +2949,11 @@ gen.prototype.genToJSON =
 			olit
 			.add(
 				'ranks',
-				This.aDot( 'ranks' )
+				aThis.aDot( 'ranks' )
 			)
 			.add(
 				'twig',
-				This.aDot( 'twig' )
+				aThis.aDot( 'twig' )
 			);
 	}
 
@@ -3022,7 +3083,7 @@ gen.prototype.genEquals =
 						aBlock( )
 						.aReturn(
 							anEquals(
-								This,
+								aThis,
 								aVar( 'obj' )
 							)
 						)
@@ -3054,11 +3115,11 @@ gen.prototype.genEquals =
 		aBlock( )
 		.anIf(
 			anEquals(
-				This,
+				aThis,
 				aVar( 'obj' )
 			),
 			aBlock( )
-			.aReturn( True )
+			.aReturn( aTrue )
 		)
 		.anIf(
 			aNot(
@@ -3075,11 +3136,11 @@ gen.prototype.genEquals =
 		cond =
 			anAnd(
 				anEquals(
-					This.aDot( 'tree' ),
+					aThis.aDot( 'tree' ),
 					aVar( 'obj' ).aDot( 'tree' )
 				),
 				anEquals(
-					This.aDot( 'ranks' ),
+					aThis.aDot( 'ranks' ),
 					aVar( 'obj' ).aDot( 'ranks' )
 				)
 			);
@@ -3103,7 +3164,7 @@ gen.prototype.genEquals =
 		ceq =
 			this.genAttributeEquals(
 				name,
-				This.aDot( attr.assign ),
+				aThis.aDot( attr.assign ),
 				aVar( 'obj' ).aDot( attr.assign )
 			);
 
@@ -3173,11 +3234,11 @@ gen.prototype.genAlike =
 			aBlock( )
 			.anIf(
 				anEquals(
-					This,
+					aThis,
 					aVar( 'obj' )
 				),
 				aBlock( )
-				.aReturn( True )
+				.aReturn( aTrue )
 			)
 			.anIf(
 				aNot( aVar( 'obj' ) ),
@@ -3192,11 +3253,11 @@ gen.prototype.genAlike =
 			cond =
 				anAnd(
 					anEquals(
-						This.aDot( 'tree' ),
+						aThis.aDot( 'tree' ),
 						aVar( 'obj' ).aDot( 'tree' )
 					),
 					anEquals(
-						This.aDot( 'ranks' ),
+						aThis.aDot( 'ranks' ),
 						aVar( 'obj' ).aDot( 'ranks' )
 					)
 				);
@@ -3224,7 +3285,7 @@ gen.prototype.genAlike =
 			ceq =
 				this.genAttributeEquals(
 					name,
-					This.aDot( attr.assign ),
+					aThis.aDot( attr.assign ),
 					aVar( 'obj' ).aDot( attr.assign )
 				);
 

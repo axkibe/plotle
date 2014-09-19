@@ -544,8 +544,9 @@ jools.copy =
 	)
 {
 	var
-		c =
-			{ };
+		c;
+
+	c = { };
 
 	for( var k in o )
 	{
@@ -554,8 +555,7 @@ jools.copy =
 			continue;
 		}
 
-		c[ k ] =
-			o[ k ];
+		c[ k ] = o[ k ];
 	}
 
 	return c;

@@ -50,9 +50,11 @@ var _attributeBlacklist =
 		'ranks' : true,
 		'rankOf' : true,
 		'ray' : true,
+		'rayDup' : true,
 		'setPath' : true,
 		'type' : true,
-		'twig' : true
+		'twig' : true,
+		'twigDup' : true
 	} );
 
 

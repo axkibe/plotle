@@ -1234,7 +1234,7 @@ change.prototype.transformSignRay =
 
 		if( cx === null )
 		{
-			signray = signray.Remove( a-- );
+			signray = signray.remove( a-- );
 
 			continue;
 		}
@@ -1255,7 +1255,7 @@ change.prototype.transformSignRay =
 					b++
 				)
 				{
-					signray = signray.Insert( a++, cx.get( b ) );
+					signray = signray.insert( a++, cx.get( b ) );
 				}
 
 				break;

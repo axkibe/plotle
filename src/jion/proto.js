@@ -286,28 +286,14 @@ proto.rankOf =
 
 
 /*
-| Appends something to a ray.
+| Appends an element to a ray.
 */
 proto.rayAppend =
 	function(
-		o
+		e
 	)
 {
-	var
-		rc;
-
-	rc = this._ray.slice( );
-
-	rc.push( o );
-
-	return(
-		this.create(
-			'array',
-				rc,
-			'_sliced',
-				true
-		)
-	);
+	return this.create( 'ray:append', e );
 };
 
 
@@ -317,19 +303,44 @@ proto.rayAppend =
 proto.rayLength =
 	function( )
 {
-	return this._ray.length;
+	return this.ray.length;
 };
 
 
 /*
-| Gets one entry of a ray.
+| Gets one element of a ray.
 */
 proto.rayGet =
 	function(
 		idx
 	)
 {
-	return this._ray[ idx ];
+	return this.ray[ idx ];
+};
+
+
+/*
+| Returns a ray with one element inserted.
+*/
+proto.rayInsert =
+	function(
+		idx,
+		e
+	)
+{
+	return this.create( 'ray:insert', idx, e );
+};
+
+
+/*
+| Returns a ray with one element removed.
+*/
+proto.rayRemove =
+	function(
+		idx
+	)
+{
+	return this.create( 'ray:remove', idx );
 };
 
 
@@ -339,24 +350,10 @@ proto.rayGet =
 proto.raySet =
 	function(
 		idx,
-		chg
+		e
 	)
 {
-	var
-		rc;
-
-	rc = this._ray.slice( );
-
-	rc[ idx ] = chg;
-
-	return(
-		this.create(
-			'array',
-				rc,
-			'_sliced',
-				true
-		)
-	);
+	return this.create( 'ray:set', idx, e );
 };
 
 

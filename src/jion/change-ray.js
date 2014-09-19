@@ -36,33 +36,6 @@ if( JION )
 	return {
 		id :
 			'jion.changeRay',
-		attributes :
-			{
-				'array' :
-				{
-					comment :
-						'the array',
-					type :
-						'Object',
-					assign :
-						null,
-					defaultValue :
-						undefined
-				},
-				'_sliced' :
-				{
-					comment :
-						'true if the array is already sliced',
-					type :
-						'Boolean',
-					assign :
-						null,
-					defaultValue :
-						undefined
-				}
-			},
-		init :
-			[ 'array', '_sliced' ],
 		node :
 			true,
 		equals :
@@ -102,44 +75,6 @@ changeRay = jion.changeRay;
 
 
 /*
-| Initializer.
-*/
-changeRay.prototype._init =
-	function(
-		array,
-		_sliced
-	)
-{
-	if( array === undefined )
-	{
-		array = [ ];
-	}
-
-/**/if( CHECK )
-/**/{
-/**/	if(
-/**/		( !(array instanceof Array ) )
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if( _sliced !== true )
-	{
-		array = array.slice( );
-	}
-
-/**/if( CHECK )
-/**/{
-/**/	array = Object.freeze( array );
-/**/}
-
-	this._ray = array;
-};
-
-
-/*
 | Returns a change ray with inverted changes.
 */
 jools.lazyValue(
@@ -161,16 +96,10 @@ jools.lazyValue(
 			a++
 		)
 		{
-			rc[ a ] = this._ray[ a ].invert;
+			rc[ a ] = this.ray[ a ].invert;
 		}
 
-		inv =
-			changeRay.create(
-				'array',
-					rc,
-				'_sliced',
-					true
-			);
+		inv = changeRay.create( 'ray:init', rc );
 
 		// TODO aheadValue on inv.
 
@@ -246,14 +175,7 @@ changeRay.prototype.transformChangeRay =
 		}
 	}
 
-	return (
-		changeRay.create(
-			'array',
-				y,
-			'_sliced',
-				true
-		)
-	);
+	return changeRay.create( 'ray:init', y );
 };
 
 
@@ -325,12 +247,7 @@ changeRay.prototype.changeTree =
 			tree :
 				tree,
 			chgX :
-				changeRay.create(
-					'array',
-						cray,
-					'_sliced',
-						true
-				)
+				changeRay.create( 'ray:init', cray )
 		}
 	);
 };

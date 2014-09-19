@@ -708,7 +708,7 @@ ShortHand.aSwitch =
 /*
 | Shorthand for creating number true boolean literal.
 */
-ShortHand.True =
+ShortHand.aTrue =
 	function( )
 {
 	return (
