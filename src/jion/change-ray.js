@@ -49,7 +49,6 @@ if( JION )
 					defaultValue :
 						undefined
 				},
-
 				'_sliced' :
 				{
 					comment :
@@ -181,37 +180,6 @@ jools.lazyValue(
 
 
 /*
-| Appends a change to the change ray.
-*/
-changeRay.prototype.append =
-	jion.proto.rayAppend;
-
-
-/*
-| Returns the length of the changeray
-*/
-jools.lazyValue(
-	changeRay.prototype,
-	'length',
-	jion.proto.rayLength
-);
-
-
-/*
-| Gets one change.
-*/
-changeRay.prototype.get =
-	jion.proto.rayGet;
-
-
-/*
-| Sets one change.
-*/
-changeRay.prototype.set =
-	jion.proto.raySet;
-
-
-/*
 | Returns the result of a change
 | transformed by this change ray.
 */
@@ -323,8 +291,7 @@ changeRay.prototype.transformChangeX =
 */
 changeRay.prototype.changeTree =
 	function(
-		tree,
-		universe
+		tree
 	)
 {
 	// the ray with the changes applied
@@ -342,13 +309,9 @@ changeRay.prototype.changeTree =
 		a++
 	)
 	{
-		chg = this.get( a ),
+		chg = this.get( a );
 
-		cr =
-			chg.changeTree(
-				tree,
-				universe
-			);
+		cr = chg.changeTree( tree );
 
 		// the tree returned by op-handler is the new tree
 		tree = cr.tree;

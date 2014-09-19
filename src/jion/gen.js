@@ -487,8 +487,7 @@ gen.prototype._init =
 		}
 	}
 
-	this.constructorList =
-		Object.freeze( constructorList );
+	this.constructorList = Object.freeze( constructorList );
 
 	if( jion.twig )
 	{
@@ -543,6 +542,14 @@ gen.prototype._init =
 		twig =
 		this.twig =
 			null;
+	}
+
+	if( jion.ray )
+	{
+		this.ray =
+			Object.freeze(
+				jion.ray.slice( )
+			);
 	}
 
 	unitList = Object.keys( units ).sort( );
@@ -2787,6 +2794,39 @@ gen.prototype.genJionProto =
 			.anAssign(
 				aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'newUID' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'newUID' )
+			);
+	}
+
+	if( this.ray )
+	{
+		capsule =
+			capsule
+			.aComment( 'Appends an entry to the ray.' )
+			.anAssign(
+				aVar( 'prototype' ).aDot( 'append' ),
+				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayAppend' )
+			)
+			.aComment(
+				'Returns the length of the ray.'
+			)
+			.aCall(
+				aVar( 'jools' ).aDot( 'lazyValue' ),
+				aVar( 'prototype' ),
+				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayLength' )
+			)
+			.aComment(
+				'Gets one entry from the ray.'
+			)
+			.anAssign(
+				aVar( 'prototype' ).aDot( 'get' ),
+				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayGet' )
+			)
+			.aComment(
+				'Returns the jion with one entry of the ray set.'
+			)
+			.anAssign(
+				aVar( 'prototype' ).aDot( 'set' ),
+				aVar( 'jion' ).aDot( 'proto' ).aDot( 'raySet' )
 			);
 	}
 
