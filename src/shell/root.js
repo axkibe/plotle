@@ -27,9 +27,9 @@ var
 	forms,
 	gruga,
 	jion,
+	jools,
 	marks,
 	net,
-	peer,
 	system,
 	swatch;
 
@@ -1205,15 +1205,9 @@ proto.setUser =
 
 	if( username.substr( 0, 5 ) !== 'visit' )
 	{
-		window.localStorage.setItem(
-			'username',
-			username
-		);
+		window.localStorage.setItem( 'username', username );
 
-		window.localStorage.setItem(
-			'passhash',
-			passhash
-		);
+		window.localStorage.setItem( 'passhash', passhash );
 	}
 	else
 	{
@@ -1223,22 +1217,12 @@ proto.setUser =
 			this.space.spaceUser !== 'ideoloom'
 		)
 		{
-			this.moveToSpace(
-				'ideoloom',
-				'home',
-				false
-			);
+			this.moveToSpace( 'ideoloom', 'home', false );
 		}
 
-		window.localStorage.setItem(
-			'username',
-			null
-		);
+		window.localStorage.setItem( 'username', null );
 
-		window.localStorage.setItem(
-			'passhash',
-			null
-		);
+		window.localStorage.setItem( 'passhash', null );
 
 		this._$visitUser = username;
 
@@ -1339,7 +1323,7 @@ proto.onload =
 	{
 		username = 'visitor';
 
-		passhash = null;
+		passhash = jools.uid( );
 	}
 
 	this.link.auth( username, passhash );
@@ -1524,7 +1508,7 @@ proto.onAuth =
 		// takes a visitor instead
 		if( username !== 'visitor' )
 		{
-			peer.auth( 'visitor', null );
+			this.link.auth( 'visitor', jools.uid( ) );
 
 			return;
 		}
@@ -1535,16 +1519,9 @@ proto.onAuth =
 		return;
 	}
 
-	this.setUser(
-		username,
-		passhash
-	);
+	this.setUser( username, passhash );
 
-	this.moveToSpace(
-		'ideoloom',
-		'home',
-		false
-	);
+	this.moveToSpace( 'ideoloom', 'home', false );
 };
 
 
@@ -1594,16 +1571,12 @@ proto.logout =
 			this._$visitPasshash
 		);
 
-		this.moveToSpace(
-			'ideoloom',
-			'home',
-			false
-		);
+		this.moveToSpace( 'ideoloom', 'home', false );
 
 		return;
 	}
 
-	peer.auth( 'visitor', null );
+	root.link.auth( 'visitor', jools.uid( ) );
 };
 
 

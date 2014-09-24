@@ -868,7 +868,7 @@ Server.prototype.prepareInventory =
 						global_defs :
 						{
 							'CHECK' :
-								false,
+								config.shellCheck,
 							'JION' :
 								false,
 							'SERVER' :
@@ -1609,7 +1609,7 @@ Server.prototype.cmdAuth =
 
 			uid = 'visitor-' + this.$nextVisitor;
 		}
-		while ( users[uid] );
+		while( users[uid] );
 
 		users[ uid ] =
 			{
@@ -2664,11 +2664,19 @@ Server.prototype.requestListener =
 
 	red = url.parse( request.url );
 
-	jools.log(
-		'web',
-		request.connection.remoteAddress,
-		red.href
-	);
+	jools.log( 'web', request.connection.remoteAddress, red.href );
+
+	if( config.whiteList )
+	{
+		if( !config.whiteList[ request.connection.remoteAddress ] )
+		{
+			jools.log( 'web', request.connection.remoteAddress, 'not in whitelist!' );
+
+			this.webError( result, 403, 'Forbidden' );
+
+			return;
+		}
+	}
 
 	pathname = red.pathname.replace( /^[\/]+/g, '' );
 
@@ -2681,11 +2689,7 @@ Server.prototype.requestListener =
 
 	if( !resource )
 	{
-
-		this.webError(
-			result,
-			'404 Bad Request'
-		);
+		this.webError( result, 404, 'Bad Request' );
 
 		return;
 	}
@@ -2741,10 +2745,7 @@ Server.prototype.requestListener =
 
 	if( !config.develShell )
 	{
-		this.webError(
-			result,
-			'404 Bad Request'
-		);
+		this.webError( result, 404, 'Bad Request' );
 	}
 
 	// if the jion is requested generate that one from the file
@@ -2757,11 +2758,7 @@ Server.prototype.requestListener =
 		}
 		catch( e )
 		{
-			this.webError(
-				result,
-				500,
-				'Internal Server Error'
-			);
+			this.webError( result, 500, 'Internal Server Error' );
 
 			jools.log(
 				'fail',
@@ -2782,11 +2779,7 @@ Server.prototype.requestListener =
 		}
 		catch( e )
 		{
-			this.webError(
-				result,
-				500,
-				'Internal Server Error'
-			);
+			this.webError( result, 500, 'Internal Server Error' );
 
 			jools.log(
 				'fail',
@@ -2859,19 +2852,17 @@ Server.prototype.webAjax =
 	)
 {
 	var
-		self =
-			this,
+		handler,
+		self,
+		data;
 
-		data =
-			[ ];
+	self = this;
+
+	data = [ ];
 
 	if( request.method !== 'POST' )
 	{
-		this.webError(
-			result,
-			400,
-			'Must use POST'
-		);
+		this.webError( result, 400, 'Must use POST' );
 
 		return;
 	}
@@ -2895,81 +2886,77 @@ Server.prototype.webAjax =
 		}
 	);
 
-	var
-		handler =
-			function*( )
+	handler =
+		function*( )
+	{
+		var
+			asw,
+			cmd,
+			query;
+
+		query = data.join( '' ),
+
+
+		jools.log( 'ajax', '<-', query );
+
+		try
 		{
-			var
-				query =
-					data.join( '' ),
+			cmd = JSON.parse( query );
+		}
+		catch( err )
+		{
+			self.webError( result, 400, 'Not valid JSON' );
 
-				asw,
-				cmd;
+			return;
+		}
 
-			jools.log( 'ajax', '<-', query );
-
-			try
+		try
+		{
+			asw = yield* self.ajaxCmd( cmd, result );
+		}
+		catch( err )
+		{
+			if( err.ok !== false )
 			{
-				cmd = JSON.parse( query );
+				throw err;
 			}
-			catch( err )
+			else
 			{
-				self.webError(
-					result,
-					400,
-					'Not valid JSON'
+				jools.log(
+					'web',
+					'not ok',
+					err.message
 				);
 
-				return;
+				asw = {
+					ok : false,
+					message : err.message
+				};
 			}
+		}
 
-			try
+		if( asw === null )
+		{
+			return;
+		}
+
+		jools.log( 'ajax', '->', asw );
+
+		result.writeHead( 200,
 			{
-				asw = yield* self.ajaxCmd( cmd, result );
+				'Content-Type' :
+					'application/json',
+				'Cache-Control' :
+					'no-cache',
+				'Date' :
+					new Date().toUTCString()
 			}
-			catch( err )
-			{
-				if( err.ok !== false )
-				{
-					throw err;
-				}
-				else
-				{
-					jools.log(
-						'web',
-						'not ok',
-						err.message
-					);
+		);
 
-					asw = {
-						ok : false,
-						message : err.message
-					};
-				}
-			}
-
-			if( asw === null )
-			{
-				return;
-			}
-
-			jools.log( 'ajax', '->', asw );
-
-			result.writeHead( 200,
-				{
-					'Content-Type' :
-						'application/json',
-					'Cache-Control' :
-						'no-cache',
-					'Date' :
-						new Date().toUTCString()
-				}
-			);
-
-			result.end(
-				JSON.stringify( asw )
-			);
-		};
+		result.end(
+			JSON.stringify( asw )
+		);
+	};
 
 	request.on(
 		'end',

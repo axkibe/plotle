@@ -175,7 +175,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -184,47 +184,47 @@ prototype.create =
 /**/{
 /**/	if( v_block === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute block' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_block === null )
 /**/	{
-/**/		throw new Error( 'attribute block must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_block.reflectName !== 'aBlock' )
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_condition === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute condition' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_condition === null )
 /**/	{
-/**/		throw new Error( 'attribute condition must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_init === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute init' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_init === null )
 /**/	{
-/**/		throw new Error( 'attribute init must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_iterate === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute iterate' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_iterate === null )
 /**/	{
-/**/		throw new Error( 'attribute iterate must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

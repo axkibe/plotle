@@ -20,7 +20,6 @@ forms = forms || { };
 var
 	jools,
 	marks,
-	peer,
 	root;
 
 
@@ -288,10 +287,7 @@ login.prototype.login =
 		return;
 	}
 
-	peer.auth(
-		user,
-		jools.passhash( pass )
-	);
+	root.link.auth( user, jools.passhash( pass ) );
 };
 
 

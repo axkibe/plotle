@@ -193,7 +193,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -227,46 +227,46 @@ prototype.create =
 /**/{
 /**/	if( v_capsule === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute capsule' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_capsule !== null )
 /**/	{
 /**/		if( v_capsule.reflectName !== 'aBlock' )
 /**/		{
-/**/			throw new Error( 'type mismatch' );
+/**/			throw new Error( );
 /**/		}
 /**/	}
 /**/
 /**/	if( v_hasJSON === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute hasJSON' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_hasJSON !== null )
 /**/	{
 /**/		if( typeof( v_hasJSON ) !== 'boolean' )
 /**/		{
-/**/			throw new Error( 'type mismatch' );
+/**/			throw new Error( );
 /**/		}
 /**/	}
 /**/
 /**/	if( v_header === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute header' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_header !== null )
 /**/	{
 /**/		if( v_header.reflectName !== 'aComment' )
 /**/		{
-/**/			throw new Error( 'type mismatch' );
+/**/			throw new Error( );
 /**/		}
 /**/	}
 /**/
 /**/	if( v_jionID === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute jionID' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_jionID !== null )
@@ -277,20 +277,20 @@ prototype.create =
 /**/			!( v_jionID instanceof String )
 /**/		)
 /**/		{
-/**/			throw new Error( 'type mismatch' );
+/**/			throw new Error( );
 /**/		}
 /**/	}
 /**/
 /**/	if( v_preamble === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute preamble' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_preamble !== null )
 /**/	{
 /**/		if( v_preamble.reflectName !== 'aBlock' )
 /**/		{
-/**/			throw new Error( 'type mismatch' );
+/**/			throw new Error( );
 /**/		}
 /**/	}
 /**/}

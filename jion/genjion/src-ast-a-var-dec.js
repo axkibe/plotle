@@ -139,7 +139,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -153,17 +153,17 @@ prototype.create =
 /**/{
 /**/	if( v_assign === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute assign' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_name === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute name' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_name === null )
 /**/	{
-/**/		throw new Error( 'attribute name must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if(
@@ -172,7 +172,7 @@ prototype.create =
 /**/		!( v_name instanceof String )
 /**/	)
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

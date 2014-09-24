@@ -1335,11 +1335,13 @@ gen.prototype.genCreatorFreeStringsParser =
 					),
 					aBlock( )
 					.aFail(
+						/*
 						aPlus(
 							aStringLiteral( 'key "' ),
 							aVar( 'key' ),
 							aStringLiteral( '" already in use' )
 						)
+						*/
 					)
 				)
 				.anAssign(
@@ -1375,11 +1377,13 @@ gen.prototype.genCreatorFreeStringsParser =
 					),
 					aBlock( )
 					.aFail(
+						/*
 						aPlus(
 							aStringLiteral( 'key "' ),
 							aVar( 'key' ),
 							aStringLiteral( '" not in use' )
 						)
+						*/
 					)
 				)
 				.anAssign(
@@ -1426,11 +1430,13 @@ gen.prototype.genCreatorFreeStringsParser =
 					),
 					aBlock( )
 					.aFail(
+						/*
 						aPlus(
 							aStringLiteral( 'key "' ),
 							aVar( 'key' ),
 							aStringLiteral( '" already in use' )
 						)
+						*/
 					)
 				)
 				.anIf(
@@ -1446,7 +1452,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					),
 					aBlock( )
 					.aFail(
-						aStringLiteral( 'invalid rank' )
+						//aStringLiteral( 'invalid rank' )
 					)
 				)
 				.anAssign(
@@ -1473,11 +1479,13 @@ gen.prototype.genCreatorFreeStringsParser =
 					),
 					aBlock( )
 					.aFail(
+						/*
 						aPlus(
 							aStringLiteral( 'key "' ),
 							aVar( 'arg' ),
 							aStringLiteral( '" not in use' )
 						)
+						*/
 					)
 				)
 				.append(
@@ -1588,7 +1596,8 @@ gen.prototype.genCreatorFreeStringsParser =
 			aBlock( )
 			.aCheck(
 				aBlock( )
-				.aFail( 'invalid argument' )
+				//.aFail( 'invalid argument' )
+				.aFail( )
 			)
 		);
 
@@ -1715,7 +1724,8 @@ gen.prototype.genCreatorChecks =
 				check.anIf(
 					anEquals( attr.v, Undefined ),
 					aBlock( )
-					.aFail( 'undefined attribute ' + name )
+					//.aFail( 'undefined attribute ' + name )
+					.aFail( )
 				);
 		}
 
@@ -1725,7 +1735,8 @@ gen.prototype.genCreatorChecks =
 				check.anIf(
 					anEquals( attr.v, aNull ),
 					aBlock( )
-					.aFail( 'attribute ' + name + ' must not be null.' )
+					//.aFail( 'attribute ' + name + ' must not be null.' )
+					.aFail( )
 				);
 		}
 
@@ -1835,7 +1846,8 @@ gen.prototype.genCreatorChecks =
 
 		tfail =
 			aBlock( )
-			.aFail( 'type mismatch' );
+			//.aFail( 'type mismatch' );
+			.aFail( );
 
 		if( cond )
 		{
@@ -2395,7 +2407,8 @@ gen.prototype.genFromJSONCreatorParser =
 					aStringLiteral( this.id )
 				),
 				aBlock( )
-				.aFail( 'invalid JSON' )
+				// .aFail( 'invalid JSON' )
+				.aFail( )
 			)
 		);
 
@@ -2562,7 +2575,8 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		switchExpr
 		.Default(
 			aBlock( )
-			.aFail( 'invalid twig type' )
+			//.aFail( 'invalid twig type' )
+			.aFail( )
 		);
 
 	loop =
@@ -2576,6 +2590,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 				aVar( 'jwig' ).aMember( aVar( 'key' ) )
 			),
 			aBlock( )
+			//.aFail( )
 			.aFail( 'JSON ranks/twig mismatch' )
 		)
 		.anAssign(
@@ -2596,7 +2611,8 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 				aNot( aVar( 'ranks' ) )
 			),
 			aBlock( )
-			.aFail( 'ranks/twig information missing' )
+			//.aFail( 'ranks/twig information missing' )
+			.aFail( )
 		)
 		.aFor(
 			// FIXME, put into the commalist call

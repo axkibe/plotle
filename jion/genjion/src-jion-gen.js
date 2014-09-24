@@ -125,7 +125,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -134,12 +134,12 @@ prototype.create =
 /**/{
 /**/	if( v_jion === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute jion' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_jion === null )
 /**/	{
-/**/		throw new Error( 'attribute jion must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

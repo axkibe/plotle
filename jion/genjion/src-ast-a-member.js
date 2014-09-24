@@ -139,7 +139,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -148,22 +148,22 @@ prototype.create =
 /**/{
 /**/	if( v_expr === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute expr' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_expr === null )
 /**/	{
-/**/		throw new Error( 'attribute expr must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_member === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute member' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_member === null )
 /**/	{
-/**/		throw new Error( 'attribute member must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

@@ -192,17 +192,6 @@ prototype.create =
 
 				if( twig[ key ] !== undefined )
 				{
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'key "'
-/**/						+
-/**/						key
-/**/						+
-/**/						'" already in use'
-/**/					);
-/**/				}
-
 					throw new Error( );
 				}
 
@@ -229,17 +218,6 @@ prototype.create =
 
 				if( twig[ key ] === undefined )
 				{
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'key "'
-/**/						+
-/**/						key
-/**/						+
-/**/						'" not in use'
-/**/					);
-/**/				}
-
 					throw new Error( );
 				}
 
@@ -268,29 +246,11 @@ prototype.create =
 
 				if( twig[ key ] !== undefined )
 				{
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'key "'
-/**/						+
-/**/						key
-/**/						+
-/**/						'" already in use'
-/**/					);
-/**/				}
-
 					throw new Error( );
 				}
 
 				if( rank < 0 || rank > ranks.length )
 				{
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'invalid rank'
-/**/					);
-/**/				}
-
 					throw new Error( );
 				}
 
@@ -313,17 +273,6 @@ prototype.create =
 
 				if( twig[ arg ] === undefined )
 				{
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'key "'
-/**/						+
-/**/						arg
-/**/						+
-/**/						'" not in use'
-/**/					);
-/**/				}
-
 					throw new Error( );
 				}
 
@@ -337,7 +286,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -351,25 +300,25 @@ prototype.create =
 /**/{
 /**/	if( v_defaultCase === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute defaultCase' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_defaultCase !== null )
 /**/	{
 /**/		if( v_defaultCase.reflectName !== 'aBlock' )
 /**/		{
-/**/			throw new Error( 'type mismatch' );
+/**/			throw new Error( );
 /**/		}
 /**/	}
 /**/
 /**/	if( v_statement === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute statement' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_statement === null )
 /**/	{
-/**/		throw new Error( 'attribute statement must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

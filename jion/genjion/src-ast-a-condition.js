@@ -155,7 +155,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -164,32 +164,32 @@ prototype.create =
 /**/{
 /**/	if( v_condition === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute condition' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_condition === null )
 /**/	{
-/**/		throw new Error( 'attribute condition must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_elsewise === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute elsewise' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_elsewise === null )
 /**/	{
-/**/		throw new Error( 'attribute elsewise must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_then === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute then' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_then === null )
 /**/	{
-/**/		throw new Error( 'attribute then must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

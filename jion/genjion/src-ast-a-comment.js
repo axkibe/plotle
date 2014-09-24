@@ -123,7 +123,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -132,12 +132,12 @@ prototype.create =
 /**/{
 /**/	if( v_content === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute content' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_content === null )
 /**/	{
-/**/		throw new Error( 'attribute content must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

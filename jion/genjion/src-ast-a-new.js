@@ -127,7 +127,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -136,17 +136,17 @@ prototype.create =
 /**/{
 /**/	if( v_call === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute call' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_call === null )
 /**/	{
-/**/		throw new Error( 'attribute call must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_call.reflectName !== 'aCall' )
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

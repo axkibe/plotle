@@ -123,7 +123,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -137,7 +137,7 @@ prototype.create =
 /**/{
 /**/	if( v_message === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute message' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

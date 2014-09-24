@@ -159,7 +159,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -168,37 +168,37 @@ prototype.create =
 /**/{
 /**/	if( v_block === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute block' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_block === null )
 /**/	{
-/**/		throw new Error( 'attribute block must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_block.reflectName !== 'aBlock' )
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_object === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute object' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_object === null )
 /**/	{
-/**/		throw new Error( 'attribute object must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_variable === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute variable' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_variable === null )
 /**/	{
-/**/		throw new Error( 'attribute variable must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if(
@@ -207,7 +207,7 @@ prototype.create =
 /**/		!( v_variable instanceof String )
 /**/	)
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

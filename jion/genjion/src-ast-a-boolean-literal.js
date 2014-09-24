@@ -123,7 +123,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -132,17 +132,17 @@ prototype.create =
 /**/{
 /**/	if( v_boolean === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute boolean' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_boolean === null )
 /**/	{
-/**/		throw new Error( 'attribute boolean must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( typeof( v_boolean ) !== 'boolean' )
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

@@ -225,9 +225,7 @@ jools.lazyValue(
 		return (
 			this.getPNW( key ).y
 			+
-			this
-			.twig[ key ]
-			.attentionCenter
+			this.twig[ key ].attentionCenter
 		);
 	}
 );

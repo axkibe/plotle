@@ -17,7 +17,6 @@ var
 */
 var
 	jion,
-	jools,
 	root,
 	visual;
 
@@ -59,32 +58,6 @@ spliceSign =
 	);
 
 peer = { };
-
-
-/*
-| Authenticates a user or visitor.
-|
-| FIXME remove
-*/
-peer.auth =
-	function(
-		user,
-		passhash
-	)
-{
-	if(
-		user === 'visitor' &&
-		passhash === null
-	)
-	{
-		passhash = jools.uid( );
-	}
-
-	root.link.auth(
-		user,
-		passhash
-	);
-};
 
 
 /*

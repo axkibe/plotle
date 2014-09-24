@@ -21,7 +21,6 @@ net = net || { };
 | Imports
 */
 var
-	catcher,
 	root;
 
 /*
@@ -48,12 +47,12 @@ if( JION )
 						type :
 							'jion.path'
 					},
-				fifo :
+				_fifo :
 					{
 						comment :
-							'the request buffer',
+							'the fifo of requests',
 						type :
-							'Object',
+							'net.requestWrapRay',
 						defaultValue :
 							null
 					}
@@ -64,7 +63,10 @@ if( JION )
 }
 
 
-var channel = net.channel;
+var
+	channel;
+
+channel = net.channel;
 
 
 /*
@@ -91,17 +93,10 @@ channel.prototype._init =
 /**/		}
 /**/	}
 
-	this._readyHandler =
-		catcher(
-			function( )
-			{
-				root
-				.ajax
-				.twig[ channelName ]
-				._onReply
-				.apply( this, arguments );
-			}
-		);
+	if( !this._fifo )
+	{
+		this._fifo = net.requestWrapRay.create( );
+	}
 };
 
 
@@ -111,15 +106,13 @@ channel.prototype._init =
 channel.prototype.abortAll =
 	function( )
 {
-	if( !this.fifo )
+	if( this._fifo.length === 0 )
 	{
 		// nothing pending
 		return;
 	}
 
-	this.fifo.aborted = true;
-
-	this.fifo.abort( );
+	this._fifo.ray[ 0 ].abort( );
 
 	// FUTURE root.Create
 	root.ajax =
@@ -127,15 +120,15 @@ channel.prototype.abortAll =
 			'twig:set',
 			this.channelName,
 			this.create(
-				'fifo',
-					null
+				'_fifo',
+					net.requestWrapRay.create( )
 			)
 		);
 };
 
 
 /*
-| Issues a general purpose AJAX request.
+| Issues a request.
 |
 | FUTURE currently the receiver is hardcoded to be 'root.link'.
 |    when the root became a JION allow receiverPaths
@@ -148,8 +141,7 @@ channel.prototype.request =
 {
 	var
 		cmd,
-		rs,
-		xhr;
+		reqWrap;
 
 	cmd = request.cmd;
 
@@ -161,36 +153,20 @@ channel.prototype.request =
 /**/	}
 /**/}
 
-	// FUTURE make a real fifo
-	if( this.fifo )
+	reqWrap =
+		net.requestWrap.create(
+			'channelName',
+				this.channelName,
+			'receiverFunc',
+				receiverFunc,
+			'request',
+				request
+		);
+
+	if( this._fifo.length === 0 )
 	{
-		throw new Error( 'already a request active' );
-
-		return false;
+		reqWrap = reqWrap.send( );
 	}
-
-	xhr = new XMLHttpRequest( );
-
-	xhr.channelName = this.channelName;
-
-	xhr.request = request;
-
-	xhr.receiverFunc = receiverFunc;
-
-	xhr.open(
-		'POST',
-		'/mm',
-		true
-	);
-
-	xhr.setRequestHeader(
-		'Content-type',
-		'application/x-www-form-urlencoded'
-	);
-
-	xhr.onreadystatechange = this._readyHandler;
-
-	rs = JSON.stringify( request );
 
 	// FUTURE root.Create
 	root.ajax =
@@ -198,100 +174,48 @@ channel.prototype.request =
 			'twig:set',
 			this.channelName,
 			this.create(
-				'fifo',
-					xhr
+				'_fifo',
+					this._fifo.append( reqWrap )
 			)
 		);
-
-	xhr.send( rs );
 };
 
 
 /*
-| A request has been replied.
-|
-| 'this' is the ajax request.
+| The top request on the channel has received a reply
 */
-channel.prototype._onReply =
-	function( )
+channel.prototype.onReply =
+	function(
+		wrap,
+		reply
+	)
 {
 	var
 		channel,
-		request,
-		reply,
-		receiverFunc;
+		fifo;
 
-	channel = root.ajax.twig[ this.channelName ];
+	channel = this;
 
-	if(
-		this.readyState !== 4
-		||
-		this.aborted
-	)
+	fifo = channel._fifo;
+
+	fifo = fifo.remove( 0 );
+
+	if( fifo.length > 0 )
 	{
-		return;
+		fifo = fifo.set( 0, fifo.get( 0 ).send( ) );
 	}
+
+	channel = channel.create( '_fifo', fifo );
 
 	// FUTURE root.Create
 	root.ajax =
 		root.ajax.create(
 			'twig:set',
 			channel.channelName,
-			channel.create(
-				'fifo',
-					null
-			)
+			channel
 		);
 
-	this.onreadystatechange = null;
-
-	receiverFunc = this.receiverFunc;
-
-/**/if( CHECK )
-/**/{
-/**/	if( !receiverFunc )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	request = this.request;
-
-	if( this.status !== 200 )
-	{
-		root.link[ receiverFunc ](
-			request,
-			{
-				ok :
-					false,
-				message :
-					'Lost server connection'
-			}
-		);
-
-		return;
-	}
-
-	try
-	{
-		reply = JSON.parse( this.responseText );
-	}
-	catch( e )
-	{
-		root.link[ receiverFunc ](
-			request,
-			{
-				ok :
-					false,
-				message :
-					'Server answered no JSON!'
-			}
-		);
-
-		return;
-	}
-
-	root.link[ receiverFunc ]( request, reply );
+	root.link[ wrap.receiverFunc ]( wrap.request, reply );
 };
 
 

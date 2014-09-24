@@ -360,6 +360,22 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
+			'src/net/request-wrap.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true
+	),
+	resource.create(
+		'filePath',
+			'src/net/request-wrap-ray.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true
+	),
+	resource.create(
+		'filePath',
 			'src/net/channel.js',
 		'hasJion',
 			true,

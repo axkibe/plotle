@@ -170,17 +170,6 @@ prototype.create =
 
 				if( twig[ key ] !== undefined )
 				{
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'key "'
-/**/						+
-/**/						key
-/**/						+
-/**/						'" already in use'
-/**/					);
-/**/				}
-
 					throw new Error( );
 				}
 
@@ -207,17 +196,6 @@ prototype.create =
 
 				if( twig[ key ] === undefined )
 				{
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'key "'
-/**/						+
-/**/						key
-/**/						+
-/**/						'" not in use'
-/**/					);
-/**/				}
-
 					throw new Error( );
 				}
 
@@ -246,29 +224,11 @@ prototype.create =
 
 				if( twig[ key ] !== undefined )
 				{
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'key "'
-/**/						+
-/**/						key
-/**/						+
-/**/						'" already in use'
-/**/					);
-/**/				}
-
 					throw new Error( );
 				}
 
 				if( rank < 0 || rank > ranks.length )
 				{
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'invalid rank'
-/**/					);
-/**/				}
-
 					throw new Error( );
 				}
 
@@ -291,17 +251,6 @@ prototype.create =
 
 				if( twig[ arg ] === undefined )
 				{
-/**/				if( CHECK )
-/**/				{
-/**/					throw new Error(
-/**/						'key "'
-/**/						+
-/**/						arg
-/**/						+
-/**/						'" not in use'
-/**/					);
-/**/				}
-
 					throw new Error( );
 				}
 
@@ -315,7 +264,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -324,12 +273,12 @@ prototype.create =
 /**/{
 /**/	if( v_func === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute func' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_func === null )
 /**/	{
-/**/		throw new Error( 'attribute func must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

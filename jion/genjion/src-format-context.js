@@ -171,7 +171,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -195,27 +195,27 @@ prototype.create =
 /**/{
 /**/	if( v_check === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute check' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_check === null )
 /**/	{
-/**/		throw new Error( 'attribute check must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( typeof( v_check ) !== 'boolean' )
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_indent === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute indent' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_indent === null )
 /**/	{
-/**/		throw new Error( 'attribute indent must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if(
@@ -224,37 +224,37 @@ prototype.create =
 /**/		Math.floor( v_indent ) !== v_indent
 /**/	)
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_inline === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute inline' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_inline === null )
 /**/	{
-/**/		throw new Error( 'attribute inline must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( typeof( v_inline ) !== 'boolean' )
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_root === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute root' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_root === null )
 /**/	{
-/**/		throw new Error( 'attribute root must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( typeof( v_root ) !== 'boolean' )
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

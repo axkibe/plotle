@@ -121,12 +121,13 @@ jools.limit =
 		max
 	)
 {
-	if( min > max )
-	{
-		throw new Error(
-			'limit() min > max'
-		);
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( min > max )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	if( val < min )
 	{
@@ -244,22 +245,17 @@ jools.reject =
 		message
 	)
 {
-	// in devel mode any failure is fatal.{
+	// in devel mode any failure is fatal.
 	if( jools.devel )
 	{
 		throw new Error( message );
 	}
 
-	jools.log(
-		'reject',
-		'reject',
-		message
-	);
+	jools.log( 'reject', 'reject', message );
 
 	return {
 		ok :
 			false,
-
 		message :
 			message
 	};
@@ -273,11 +269,13 @@ jools.uid =
 	function( )
 {
 	var
-		mime =
-			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+		mime,
+		ua,
+		r32;
 
-		ua =
-			[ ];
+	mime = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+	ua = [ ];
 
 	for(
 		var a = 0;
@@ -285,9 +283,7 @@ jools.uid =
 		a++
 	)
 	{
-		var
-			r32 =
-				Math.floor( 0x100000000 * Math.random( ) );
+		r32 = Math.floor( 0x100000000 * Math.random( ) );
 
 		for( var b = 0; b < 6; b++ )
 		{
@@ -312,11 +308,12 @@ jools.randomPassword =
 	)
 {
 	var
-		ch =
-			'abcdefghijklmnopqrstuvwxyz0123456789',
+		ch,
+		ua;
 
-		ua =
-			[ ];
+	ch = 'abcdefghijklmnopqrstuvwxyz0123456789';
+
+	ua = [ ];
 
 	for(
 		var a = 0;
@@ -402,13 +399,7 @@ jools.ensureInt =
 
 		if( Math.floor( arg ) - arg !== 0 )
 		{
-			throw new Error(
-				CHECK
-				&&
-				(
-					arg + ' not an integer'
-				)
-			);
+			throw new Error( );
 		}
 	}
 };
@@ -418,6 +409,8 @@ jools.ensureInt =
 | Sets an not enumerable value
 |
 | if writable is undefined, defaults to false
+|
+| FIXME used?
 */
 jools.innumerable =
 	function(
@@ -431,8 +424,10 @@ jools.innumerable =
 		obj,
 		key,
 		{
-			value    : value,
-			writable : typeof( writable ) === 'undefined' ? false : writable
+			value :
+				value,
+			writable :
+				typeof( writable ) === 'undefined' ? false : writable
 		}
 	);
 
@@ -463,8 +458,7 @@ jools.lazyValue =
 				var
 					ckey;
 
-				ckey =
-					'_lazy_' + key;
+				ckey = '_lazy_' + key;
 
 				if( this[ ckey ] !== undefined )
 				{
@@ -495,8 +489,9 @@ jools.aheadValue =
 	)
 {
 	var
-		ckey =
-			'_lazy_' + key;
+		ckey;
+
+	ckey = '_lazy_' + key;
 
 /**/if( CHECK )
 /**/{
@@ -512,16 +507,14 @@ jools.aheadValue =
 /**/
 /**/	if( !desc || typeof( desc.get ) !== 'function' )
 /**/	{
-/**/		throw new Error(
-/**/			'aheadValue not a lazyValue'
-/**/		);
+/**/		// aheadValue not a lazyValue
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( obj[ ckey ] )
 /**/	{
-/**/		throw new Error(
-/**/			'aheadValue already computed'
-/**/		);
+/**/		// aheadValue already computed
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -1099,11 +1092,7 @@ jools.keyNonGrata =
 				function( )
 				{
 					throw new Error(
-						CHECK
-						&&
-						(
-							'accessed key non grata! ' + key
-						)
+						// 'accessed key non grata! ' + key
 					);
 				},
 
@@ -1113,11 +1102,7 @@ jools.keyNonGrata =
 				)
 				{
 					throw new Error(
-						CHECK
-						&&
-						(
-							'accessed key non grata! ' + key
-						)
+						// 'accessed key non grata! ' + key
 					);
 				}
 		}

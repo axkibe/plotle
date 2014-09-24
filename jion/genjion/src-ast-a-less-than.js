@@ -139,7 +139,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -148,22 +148,22 @@ prototype.create =
 /**/{
 /**/	if( v_left === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute left' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_left === null )
 /**/	{
-/**/		throw new Error( 'attribute left must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_right === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute right' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_right === null )
 /**/	{
-/**/		throw new Error( 'attribute right must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

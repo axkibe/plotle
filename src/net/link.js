@@ -783,11 +783,7 @@ link.prototype.alter =
 
 	link._sendChanges( );
 
-	system.asyncEvent(
-		'update',
-		result.tree,
-		chgX
-	);
+	system.asyncEvent( 'update', result.tree, chgX );
 
 	return result;
 };
@@ -967,11 +963,7 @@ link.prototype.undo =
 
 	link._sendChanges( );
 
-	system.asyncEvent(
-		'update',
-		result.tree,
-		chgX
-	);
+	system.asyncEvent( 'update', result.tree, chgX );
 
 	return chgX;
 };

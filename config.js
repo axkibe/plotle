@@ -60,7 +60,7 @@ config.database.port =
 | Name of the mongodb database
 */
 config.database.name =
-	'ideoloom-1';
+	'test-1';
 
 
 /*
@@ -68,6 +68,12 @@ config.database.name =
 */
 config.develShell =
 //	false &&
+	true;
+
+/*
+| If true checking code is turned on in shell
+*/
+config.shellCheck =
 	true;
 
 /*
@@ -104,7 +110,8 @@ config.extraMangle =
 | If true "beautifies" uglify output.
 */
 config.beautify =
-	false;
+//	false &&
+	true;
 
 
 /*
@@ -136,6 +143,16 @@ config.debug.immute =
 config.debug.weinre =
 	false &&
 	'192.168.77.1:8080';
+
+
+/*
+| If set, accept only connections from these addresses
+*/
+config.whiteList =
+	{
+		'::ffff:127.0.0.1' : true,
+		'131.130.188.200' : true
+	};
 
 /*
 | enable specific logging categories

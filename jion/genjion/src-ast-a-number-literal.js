@@ -123,7 +123,7 @@ prototype.create =
 
 /**/			if( CHECK )
 /**/			{
-/**/				throw new Error( 'invalid argument' );
+/**/				throw new Error( );
 /**/			}
 		}
 	}
@@ -132,17 +132,17 @@ prototype.create =
 /**/{
 /**/	if( v_number === undefined )
 /**/	{
-/**/		throw new Error( 'undefined attribute number' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_number === null )
 /**/	{
-/**/		throw new Error( 'attribute number must not be null.' );
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( typeof( v_number ) !== 'number' )
 /**/	{
-/**/		throw new Error( 'type mismatch' );
+/**/		throw new Error( );
 /**/	}
 /**/}
 
