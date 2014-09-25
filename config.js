@@ -150,6 +150,7 @@ config.debug.weinre =
 */
 config.whiteList =
 	{
+		'127.0.0.1' : true,
 		'::ffff:127.0.0.1' : true,
 		'131.130.188.200' : true
 	};

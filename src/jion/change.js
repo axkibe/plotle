@@ -357,7 +357,6 @@ change.prototype.transformChange =
 			)
 		)
 		{
-			console.log( 'splice transformed to equalness' ); // FIXME
 			// splice transformed to equalness
 
 			return null;
@@ -1657,32 +1656,42 @@ change.prototype._transformSignRemove =
 	)
 {
 	var
+		len,
 		src;
 
 	src = this.src;
 
 	if(
-		!src.path ||
-		!src.path.equals(sign.path)
+		!src.path
+		||
+		!src.path.equals( sign.path )
 	)
 	{
 		return sign;
 	}
 
-	if(
-		src.at1 === undefined
-		||
-		src.at2 === undefined
-	)
-	{
-		throw new Error( );
-	}
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		src.at1 === undefined
+/**/		||
+/**/		src.at2 === undefined
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
-	var len = src.at2 - src.at1;
+	len = src.at2 - src.at1;
 
 	// simpler case signature is only one point
 	if( sign.at2 === undefined )
 	{
+		if( sign.at1 === undefined )
+		{
+			return sign;
+		}
+
 		// src (removed span)      ######
 		// sign, case0:        +   '    '      (sign to left,  no effect)
 		// sign, case1:            ' +  '      (sign in middle, move to left)

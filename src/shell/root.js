@@ -494,6 +494,8 @@ proto.update =
 				mark
 		);
 
+	this.mark = mark;
+
 	this._draw( );
 };
 
@@ -921,31 +923,32 @@ proto.setMark =
 		mark
 	)
 {
+	// XXX
+	/*
+	if( CHECK )
+	{
+		if(
+			mark.caretPath
+			&&
+			mark.caretPath.get( 0 ) === 'space'
+		)
+		{
+			console.log( 'setMark', this.space.getPath( mark.caretPath.chop( 1 ) ) );
+		}
+	}
+	*/
+
 	system.setInput( mark.clipboard );
 
-	this.mark =
-		mark;
+	this.mark = mark;
 
-	this.space =
-		this.space.create(
-			'mark',
-				mark
-		);
+	this.space = this.space.create( 'mark', mark );
 
-	this._formJockey =
-		this._formJockey.create(
-			'mark',
-				mark
-		);
+	this._formJockey = this._formJockey.create( 'mark', mark );
 
-	this._discJockey =
-		this._discJockey.create(
-			'mark',
-				mark
-		);
+	this._discJockey = this._discJockey.create( 'mark', mark );
 
-	this._$redraw =
-		true;
+	this._$redraw = true;
 };
 
 
@@ -958,10 +961,7 @@ proto.cycleFormFocus =
 		dir
 	)
 {
-	this._formJockey.cycleFocus(
-		name,
-		dir
-	);
+	this._formJockey.cycleFocus( name, dir );
 };
 
 
@@ -1231,17 +1231,9 @@ proto.setUser =
 
 	this.username = username;
 
-	this._discJockey =
-		this._discJockey.create(
-			'username',
-				username
-		);
+	this._discJockey = this._discJockey.create( 'username', username );
 
-	this._formJockey =
-		this._formJockey.create(
-			'username',
-				username
-		);
+	this._formJockey = this._formJockey.create( 'username', username );
 };
 
 
@@ -1257,24 +1249,12 @@ proto.setView =
 
 	if( this.space )
 	{
-		this.space =
-			this.space.create(
-				'view',
-					view
-			);
+		this.space = this.space.create( 'view', view );
 	}
 
-	this._discJockey =
-		this._discJockey.create(
-			'view',
-				view
-		);
+	this._discJockey = this._discJockey.create( 'view', view );
 
-	this._formJockey =
-		this._formJockey.create(
-			'view',
-				view
-		);
+	this._formJockey = this._formJockey.create( 'view', view );
 
 	this._$redraw = true;
 };

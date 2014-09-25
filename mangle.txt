@@ -656,6 +656,8 @@
 > replace
 . report
 . request
+. requestWrap
+. requestWrapRay
 . resize
 > responseText
 . restartBlinker

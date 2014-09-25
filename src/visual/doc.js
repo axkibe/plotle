@@ -166,8 +166,8 @@ doc.prototype._init =
 
 	twig =
 		twigDup
-			? this.twig
-			: jools.copy( this.twig );
+		? this.twig
+		: jools.copy( this.twig );
 
 	for(
 		var r = 0, rZ = this.ranks.length;
@@ -197,6 +197,17 @@ doc.prototype._init =
 			);
 	}
 
+/**/if( CHECK )
+/**/{
+/**/	if( this.mark.hasCaret )
+/**/	{
+/**/		if( !this.twig[ this.mark.caretPath.get( 5 ) ] )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
 	this.twig = twig;
 };
 
@@ -220,7 +231,15 @@ jools.lazyValue(
 
 		path = this.mark.caretPath;
 
-		key = path.get( 5 ); // FIXME
+		key = path.get( 5 ); // FUTURUE
+
+/**/		if( CHECK )
+/**/		{
+/**/			if( !this.getPNW( key ) )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+/**/		}
 
 		return (
 			this.getPNW( key ).y
