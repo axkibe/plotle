@@ -395,22 +395,24 @@ para.prototype._drawCaret =
 	)
 {
 	var
-		view =
-			this.view,
+		descend,
+		n,
+		p,
+		s,
+		view;
 
-		descend =
-			this.fontsize * theme.bottombox,
+	view = this.view;
 
-		p =
-			this.locateOffset(
-				this.mark.caretAt
-			).p,
+	descend = this.fontsize * theme.bottombox;
 
-		s =
-			Math.round( p.y + descend ),
+	p =
+		this.locateOffset(
+			this.mark.caretAt
+		).p,
 
-		n =
-			s - Math.round( this.fontsize + descend );
+	s = Math.round( p.y + descend );
+
+	n = s - Math.round( this.fontsize + descend );
 
 	// draws the caret
 	fabric.fillRect(
