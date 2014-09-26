@@ -1,5 +1,5 @@
 /*
-| This wrapper enhances the HTML5 canvas by using immutable euclidean objects.
+| Wrapper around HTML5 canvas.
 |
 | Authors: Axel Kittenberger
 */
@@ -28,64 +28,98 @@ var
 'use strict';
 
 
-var
-	_tag =
-		86062371;
+/*
+| The jion definition.
+*/
+if( JION )
+{
+	return {
+		id :
+			'euclid.fabric',
+		attributes :
+			{
+				canvas :
+					{
+						comment :
+							'the canvas to wrap around',
+						type :
+							'Object',
+						defaultValue :
+							undefined,
+						assign :
+							null
+					},
+				width :
+					{
+						comment :
+							'width of the fabric',
+						type :
+							'Number', // FIXME Integer
+						defaultValue :
+							undefined
+					},
+				height :
+					{
+						comment :
+							'height of the fabric',
+						type :
+							'Number', // FIXME Integer
+						defaultValue :
+							undefined
+					}
+			},
+		init :
+			[ 'canvas', 'inherit' ]
+	};
+}
+
+
+var fabric;
+
+fabric = euclid.fabric;
+
 
 /*
-| Constructor.
+| Initializer.
 */
-var fabric =
-euclid.fabric =
+fabric.prototype._init =
 	function(
-		tag,
 		canvas,
-		height,
-		inherit,
-		width
+		inherit
 	)
 {
 	var
 		cx;
 
-/**/if( CHECK )
-/**/{
-/**/	if( tag !== _tag )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if( inherit )
+	if( !canvas )
 	{
-		canvas = inherit._canvas;
-	}
-	else if( canvas === undefined )
-	{
-		canvas = document.createElement( 'canvas' );
+		if( inherit && inherit._canvas )
+		{
+			canvas = inherit._canvas;
+		}
+		else
+		{
+			canvas = document.createElement( 'canvas' );
+		}
 	}
 
-	if( width === undefined )
+	if( this.width !== undefined )
 	{
-		width = canvas.width;
+		canvas.width = this.width;
 	}
 	else
 	{
-		canvas.width = width;
+		this.width = canvas.width;
 	}
 
-	if( height === undefined )
+	if( this.height !== undefined )
 	{
-		height = canvas.height;
+		canvas.height = this.height;
 	}
 	else
 	{
-		canvas.height = height;
+		this.height = canvas.height;
 	}
-
-	this.width = width;
-
-	this.height = height;
 
 	this._canvas = canvas;
 
@@ -94,98 +128,6 @@ euclid.fabric =
 		canvas.getContext( '2d' );
 
 	cx._clip = false;
-
-	jools.immute( this );
-};
-
-
-/*
-| Creator.
-|
-| FUTURE make a jion
-*/
-fabric.create =
-fabric.prototype.create =
-	function(
-		// free strings
-	)
-{
-	var
-		a,
-		aZ,
-
-		canvas,
-		inherit,
-		height,
-		width;
-
-	for(
-		a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		switch( arguments[ a ] )
-		{
-			case 'canvas' :
-
-				canvas =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'height' :
-
-				height =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'width' :
-
-				width =
-					arguments[ a + 1 ];
-
-				break;
-
-			default :
-
-				throw new Error(
-					CHECK
-					&&
-					'invalid argument'
-				);
-		}
-	}
-
-	if( this !== fabric )
-	{
-/**/	if( CHECK )
-/**/	{
-/**/		if( inherit )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-
-		inherit =
-			this;
-	}
-
-	return new fabric(
-		_tag,
-		canvas,
-		height,
-		inherit,
-		width
-	);
 };
 
 
@@ -362,11 +304,12 @@ fabric.prototype.drawImage =
 		}
 	}
 
-	if( image instanceof fabric )
+	if( image.reflect === 'euclid.fabric' )
 	{
 		if(
 			!(
-				image.width > 0 &&
+				image.width > 0
+				&&
 				image.height > 0
 			)
 		)

@@ -213,6 +213,8 @@ module.exports =
 	resource.create(
 		'filePath',
 			'src/euclid/fabric.js',
+		'hasJion',
+			true,
 		'inBundle',
 			true
 	),
