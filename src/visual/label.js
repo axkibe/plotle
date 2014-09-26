@@ -206,7 +206,7 @@ label.prototype._init =
 				pnw.add(
 					Math.round(
 						Math.max(
-							doc.spread + 3,
+							doc.widthUsed + 4,
 							height / 4
 						)
 					),

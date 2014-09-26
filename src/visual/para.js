@@ -304,14 +304,12 @@ jools.lazyValue(
 
 		zoom = view.zoom;
 
-		console.log( zoom );
-
 		// adds to width so the caret gets visible.
 		f =
 			euclid.fabric.create(
 				'width',
 					Math.round(
-						flow.spread * zoom + 12
+						flow.widthUsed * zoom + 5 // XXX
 					),
 				'height',
 					Math.round(
@@ -454,7 +452,7 @@ jools.lazyValue(
 			line,
 			reg,
 			space,
-			spread,
+			widthUsed,
 			text,
 			token,
 			w,
@@ -480,7 +478,7 @@ jools.lazyValue(
 		text = this.text;
 
 		// width really used.
-		spread = 0;
+		widthUsed = 0;
 
 		// current x positon, and current x including last tokens width
 		x = 0;
@@ -504,7 +502,7 @@ jools.lazyValue(
 				0
 		};
 
-		reg = ( /(\S+\s*$|\s*\S+|^\s+$)\s?(\s*)/g );
+		reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
 		// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 
 		for(
@@ -514,7 +512,7 @@ jools.lazyValue(
 		)
 		{
 			// a token is a word plus following hard spaces
-			token = ca[ 1 ] + ca[ 2 ];
+			token = ca[ 1 ] + ca[ 2 ] + ca[ 3 ];
 
 			w = euclid.measure.width( font, token );
 
@@ -529,9 +527,9 @@ jools.lazyValue(
 				if( x > 0 )
 				{
 					// soft break
-					if( spread < xw )
+					if( widthUsed < xw )
 					{
-						spread = xw;
+						widthUsed = xw;
 					}
 
 					x = 0;
@@ -571,19 +569,19 @@ jools.lazyValue(
 				}
 			);
 
-			x = xw + space;
+			x = xw;
 		}
 
-		if( spread < x )
+		if( widthUsed < x )
 		{
-			spread = x;
+			widthUsed = x;
 		}
 
 		flow.height = y;
 
 		flow.flowWidth = flowWidth;
 
-		flow.spread = spread;
+		flow.widthUsed = widthUsed;
 
 		return flow;
 	}

@@ -868,15 +868,15 @@ doc.prototype.getPNW =
 */
 jools.lazyValue(
 	doc.prototype,
-	'spread',
+	'widthUsed',
 	function( )
 	{
 		var
 			max,
-			spread,
+			widthUsed,
 			twig;
 
-		spread = 0;
+		widthUsed = 0;
 
 		twig = this.twig;
 
@@ -884,14 +884,14 @@ jools.lazyValue(
 
 		for( var key in twig )
 		{
-			spread =
+			widthUsed =
 				max(
-					spread,
-					twig[ key ].flow.spread
+					widthUsed,
+					twig[ key ].flow.widthUsed
 				);
 		}
 
-		return spread;
+		return widthUsed;
 	}
 );
 
