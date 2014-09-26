@@ -251,22 +251,21 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			fs =
-				this.fontsize,
+			descend,
+			fs,
+			n,
+			p,
+			s;
 
-			descend =
-				fs * theme.bottombox,
+		fs = this.fontsize;
 
-			p =
-				this.locateOffset(
-					this.mark.caretAt
-				).p,
+		descend = fs * theme.bottombox;
 
-			s =
-				Math.round( p.y + descend ),
+		p = this.locateOffset( this.mark.caretAt).p;
 
-			n =
-				s - Math.round( fs + descend );
+		s = Math.round( p.y + descend );
+
+		n = s - Math.round( fs + descend );
 
 		return n;
 	}
@@ -293,9 +292,7 @@ jools.lazyValue(
 			line,
 			mark,
 			view,
-			zoom,
-			height,
-			width;
+			zoom;
 
 		flow = this.flow;
 
@@ -307,18 +304,19 @@ jools.lazyValue(
 
 		zoom = view.zoom;
 
-		height = this.height * zoom;
-
-		width = flow.spread * zoom;
-
+		console.log( zoom );
 
 		// adds to width so the caret gets visible.
 		f =
 			euclid.fabric.create(
 				'width',
-					width + 7,
+					Math.round(
+						flow.spread * zoom + 12
+					),
 				'height',
-					height + 1
+					Math.round(
+						this.height * zoom + 1
+					)
 			);
 
 		f.scale( zoom );
@@ -336,7 +334,7 @@ jools.lazyValue(
 				b = 0, bZ = line.a.length;
 				b < bZ;
 				b++
-			)
+		)
 			{
 				chunk = line.a[ b ];
 
@@ -405,10 +403,7 @@ para.prototype._drawCaret =
 
 	descend = this.fontsize * theme.bottombox;
 
-	p =
-		this.locateOffset(
-			this.mark.caretAt
-		).p,
+	p = this.locateOffset( this.mark.caretAt ).p,
 
 	s = Math.round( p.y + descend );
 
@@ -443,12 +438,30 @@ jools.lazyValue(
 
 /*
 | The para's flow, the position of all chunks.
+|
+| FUTURE make this a proper jion.
 */
 jools.lazyValue(
 	para.prototype,
 	'flow',
 	function( )
 	{
+		var
+			ca,
+			flow,
+			flowWidth,
+			font,
+			line,
+			reg,
+			space,
+			spread,
+			text,
+			token,
+			w,
+			x,
+			xw,
+			y;
+
 /**/	if( CHECK )
 /**/	{
 /**/		if( !this.fontsize )
@@ -457,30 +470,30 @@ jools.lazyValue(
 /**/		}
 /**/	}
 
-		var
-			flowWidth =
-				this.flowWidth,
-			font =
-				this.font,
-			// FIXME go into subnodes instead
-			text =
-				this.text,
-			// width really used.
-			spread =
-				0,
-			// current x positon, and current x including last tokens width
-			x =
-				0,
-			xw =
-				0,
-			y =
-				Math.round( font.size ),
-			space =
-				euclid.measure.width( font, ' ' ),
-			line =
-				0,
-			flow =
-				[ ];
+		// width the flow can fill
+		// 0 means infinite
+		flowWidth = this.flowWidth;
+
+		font = this.font;
+
+		// FUTURE go into subnodes instead
+		text = this.text;
+
+		// width really used.
+		spread = 0;
+
+		// current x positon, and current x including last tokens width
+		x = 0;
+
+		xw = 0;
+
+		y = Math.round( font.size );
+
+		space = euclid.measure.width( font, ' ' );
+
+		line = 0;
+
+		flow = [ ];
 
 		flow[ line ] = {
 			a :
@@ -491,36 +504,34 @@ jools.lazyValue(
 				0
 		};
 
-
-		var reg =
-			( /(\S+\s*$|\s*\S+)\s?(\s*)/g );
-			// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
+		reg = ( /(\S+\s*$|\s*\S+|^\s+$)\s?(\s*)/g );
+		// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 
 		for(
-			var ca = reg.exec( text );
+			ca = reg.exec( text );
 			ca !== null;
 			ca = reg.exec( text )
 		)
 		{
 			// a token is a word plus following hard spaces
-			var
-				token =
-					ca[ 1 ] + ca[ 2 ],
-				w =
-					euclid.measure.width( font, token );
+			token = ca[ 1 ] + ca[ 2 ];
 
-			xw =
-				x + w;
+			w = euclid.measure.width( font, token );
 
-			if( flowWidth > 0 && xw > flowWidth )
+			xw = x + w;
+
+			if(
+				flowWidth > 0
+				&&
+				xw > flowWidth
+			)
 			{
 				if( x > 0 )
 				{
 					// soft break
 					if( spread < xw )
 					{
-						spread =
-							xw;
+						spread = xw;
 					}
 
 					x = 0;
@@ -563,9 +574,9 @@ jools.lazyValue(
 			x = xw + space;
 		}
 
-		if( spread < xw )
+		if( spread < x )
 		{
-			spread = xw;
+			spread = x;
 		}
 
 		flow.height = y;
@@ -607,26 +618,32 @@ para.prototype.getOffsetAt =
 	)
 {
 	var
-		font =
-			this.font,
+		a,
+		dx,
+		fline,
+		flow,
+		font,
+		ftoken,
+		text,
+		token,
+		x1,
+		x2;
 
-		flow =
-			this.flow,
+	font = this.font;
 
-		fline =
-			flow[ line ],
+	flow = this.flow;
 
-		ftoken =
-			null;
+	fline = flow[ line ];
+
+	ftoken = null;
 
 	for(
-		var token = 0;
+		token = 0;
 		token < fline.a.length;
 		token++
 	)
 	{
-		ftoken =
-			fline.a[ token ];
+		ftoken = fline.a[ token ];
 
 		if( x <= ftoken.x + ftoken.w )
 		{
@@ -636,8 +653,7 @@ para.prototype.getOffsetAt =
 
 	if( token >= fline.a.length )
 	{
-		ftoken =
-			fline.a[ --token ];
+		ftoken = fline.a[ --token ];
 	}
 
 	if( !ftoken )
@@ -645,20 +661,13 @@ para.prototype.getOffsetAt =
 		return 0;
 	}
 
-	var
-		dx =
-			x - ftoken.x,
+	dx = x - ftoken.x;
 
-		text =
-			ftoken.t,
+	text = ftoken.t;
 
-		x1 =
-			0,
+	x1 = 0;
 
-		x2 =
-			0,
-
-		a;
+	x2 = 0;
 
 	for(
 		a = 0;
@@ -666,8 +675,7 @@ para.prototype.getOffsetAt =
 		a++
 	)
 	{
-		x1 =
-			x2;
+		x1 = x2;
 
 		x2 =
 			euclid.measure.width(
@@ -683,8 +691,7 @@ para.prototype.getOffsetAt =
 
 	if( a > text.length )
 	{
-		a =
-			text.length;
+		a = text.length;
 	}
 
 	if( dx - x1 < x2 - dx && a > 0 )
@@ -698,66 +705,61 @@ para.prototype.getOffsetAt =
 
 /*
 | Returns the point of a given offset.
+|
+| FUTURE: Use lazy value and use two functions
+|         for p and line which aheadValue each other.
 */
 para.prototype.locateOffset =
 	function(
 		offset    // the offset to get the point from.
 	)
 {
-	// FIXME cache position
 	var
-		font =
-			this.font,
-
-		text =
-			this.text,
-
-		flow =
-			this.flow,
-		a,
 		aZ,
+		flow,
+		font,
+		line,
 		lineN,
+		p,
+		result,
+		text,
+		token,
 		tokenN;
 
+	font = this.font;
+
+	text = this.text;
+
+	flow = this.flow;
+
+	// determines which line this offset belongs to
 	for(
-		a = 1, aZ = flow.length, lineN = aZ - 1;
-		a < aZ;
-		a++
+		lineN = 0, aZ = flow.length - 1;
+		lineN < aZ;
+		lineN++
 	)
 	{
-		if( flow[ a ].o > offset )
+		if( flow[ lineN + 1 ].o > offset )
 		{
-			lineN =
-				a - 1;
-
 			break;
 		}
 	}
 
-	var
-		line =
-			flow[ lineN ];
+	line = flow[ lineN ];
 
 	for(
-		a = 1, aZ = line.a.length, tokenN = aZ - 1;
-		a < aZ;
-		a++
+		tokenN = 0, aZ = line.a.length - 1;
+		tokenN < aZ;
+		tokenN++
 	)
 	{
-		if (line.a[a].o > offset)
+		if( line.a[ tokenN + 1 ].o > offset )
 		{
-			tokenN =
-				a - 1;
-
 			break;
 		}
 	}
 
-	var
-		token =
-			line.a[ tokenN ],
-
-		p;
+	token = line.a[ tokenN ];
 
 	if( token )
 	{
@@ -767,7 +769,8 @@ para.prototype.locateOffset =
 					Math.round(
 						token.x +
 						euclid.measure.width(
-							font, text.substring( token.o, offset )
+							font,
+							text.substring( token.o, offset )
 						)
 					),
 				'y',
@@ -778,23 +781,25 @@ para.prototype.locateOffset =
 	{
 		p =
 			euclid.point.create(
-				'x',
-					Math.round(
-						euclid.measure.width( font, text )
-					),
-				'y',
-					line.y
+				'x', 0,
+				'y', line.y
 			);
 	}
 
-	return (
-		jools.immute( {
+	result =
+		{
 			p :
 				p,
 			line :
 				lineN
-		} )
-	);
+		};
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( result );
+/**/}
+
+	return result;
 };
 
 
@@ -808,10 +813,10 @@ para.prototype.getPointOffset =
 	)
 {
 	var
-		flow =
-			this.flow,
-
+		flow,
 		line;
+
+	flow = this.flow;
 
 	for( line = 0; line < flow.length; line++ )
 	{
@@ -826,10 +831,7 @@ para.prototype.getPointOffset =
 		line--;
 	}
 
-	return this.getOffsetAt(
-		line,
-		point.x
-	);
+	return this.getOffsetAt( line, point.x );
 };
 
 
@@ -863,8 +865,7 @@ para.prototype.input =
 
 	doc = item.doc;
 
-	caretAt =
-		this.mark.caretAt;
+	caretAt = this.mark.caretAt;
 
 	for(
 		rx = reg.exec( text );
@@ -872,8 +873,7 @@ para.prototype.input =
 		rx = reg.exec( text )
 	)
 	{
-		line =
-			rx[ 1 ];
+		line = rx[ 1 ];
 
 		peer.insertText(
 			textPath,
@@ -923,8 +923,13 @@ para.prototype.specialKey =
 	)
 {
 	var
+		at,
+		bAt,
+		bPath,
 		doc,
+		keyHandler,
 		mark,
+		retainx,
 		v0,
 		v1;
 
@@ -961,21 +966,15 @@ para.prototype.specialKey =
 		}
 	}
 
-	var
-		keyHandler =
-			_keyMap[ key ],
+	keyHandler = _keyMap[ key ];
 
-		at =
-			null,
+	at = null;
 
-		bPath =
-			null,
+	bPath = null;
 
-		bAt =
-			null,
+	bAt = null;
 
-		retainx =
-			null;
+	retainx = null;
 
 	switch( mark.reflect )
 	{
@@ -1064,42 +1063,48 @@ jools.lazyValue(
 
 
 var
-	_keyMap =
-		{
-			'backspace' :
-				'_keyBackspace',
+	_keyMap;
 
-			'del' :
-				'_keyDel',
+_keyMap =
+	{
+		'backspace' :
+			'_keyBackspace',
 
-			'down' :
-				'_keyDown',
+		'del' :
+			'_keyDel',
 
-			'end' :
-				'_keyEnd',
+		'down' :
+			'_keyDown',
 
-			'enter' :
-				'_keyEnter',
+		'end' :
+			'_keyEnd',
 
-			'left' :
-				'_keyLeft',
+		'enter' :
+			'_keyEnter',
 
-			'pagedown' :
-				'_keyPageDown',
+		'left' :
+			'_keyLeft',
 
-			'pageup' :
-				'_keyPageUp',
+		'pagedown' :
+			'_keyPageDown',
 
-			'pos1' :
-				'_keyPos1',
+		'pageup' :
+			'_keyPageUp',
 
-			'right' :
-				'_keyRight',
+		'pos1' :
+			'_keyPos1',
 
-			'up' :
-				'_keyUp'
-		};
+		'right' :
+			'_keyRight',
 
+		'up' :
+			'_keyUp'
+	};
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( _keyMap );
+/**/}
 
 /*
 | Backspace pressed.
@@ -1115,7 +1120,8 @@ para.prototype._keyBackspace =
 	)
 {
 	var
-		r;
+		r,
+		ve;
 
 	if( at > 0 )
 	{
@@ -1132,9 +1138,7 @@ para.prototype._keyBackspace =
 
 	if( r > 0 )
 	{
-		var
-			ve =
-				doc.atRank( r - 1 );
+		ve = doc.atRank( r - 1 );
 
 		peer.join(
 			ve.textPath,
@@ -1203,9 +1207,9 @@ para.prototype._keyDown =
 		ve,
 		x;
 
-	flow = this.flow,
+	flow = this.flow;
 
-	cpos = this.locateOffset( at ),
+	cpos = this.locateOffset( at );
 
 	x =
 		retainx !== null
@@ -1215,8 +1219,6 @@ para.prototype._keyDown =
 	if( cpos.line < flow.length - 1 )
 	{
 		// stays within this para
-		at =
-
 		this._setMark(
 			this.getOffsetAt(
 				cpos.line + 1,
@@ -1232,8 +1234,7 @@ para.prototype._keyDown =
 	}
 
 	// goto next para
-	r =
-		doc.rankOf( this.key );
+	r = doc.rankOf( this.key );
 
 	if( r < doc.ranks.length - 1 )
 	{
@@ -1288,10 +1289,7 @@ para.prototype._keyEnter =
 		// bAt
 	)
 {
-	peer.split(
-		this.textPath,
-		at
-	);
+	peer.split( this.textPath, at );
 };
 
 
@@ -1401,11 +1399,7 @@ para.prototype._pageUpDown =
 			pnw.y + zone.height * dir
 		),
 
-	tpara =
-		doc.getParaAtPoint(
-			item,
-			tp
-		);
+	tpara = doc.getParaAtPoint( item, tp );
 
 	if( tpara === null )
 	{
@@ -1569,10 +1563,7 @@ para.prototype._keyUp =
 		ve,
 		x;
 
-	cpos =
-		this.locateOffset(
-			at
-		),
+	cpos = this.locateOffset( at );
 
 	x =
 		retainx !== null
@@ -1582,11 +1573,7 @@ para.prototype._keyUp =
 	if( cpos.line > 0 )
 	{
 		// stay within this para
-		at =
-			this.getOffsetAt(
-				cpos.line - 1,
-				x
-			);
+		at = this.getOffsetAt( cpos.line - 1, x );
 
 		this._setMark(
 			at,
@@ -1606,11 +1593,7 @@ para.prototype._keyUp =
 	{
 		ve = doc.atRank( r - 1 );
 
-		at =
-			ve.getOffsetAt(
-				ve.flow.length - 1,
-				x
-			);
+		at = ve.getOffsetAt( ve.flow.length - 1, x );
 
 		ve._setMark(
 			at,
