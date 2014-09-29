@@ -585,12 +585,10 @@ jools.matches =
 	)
 {
 	// TODO
-	return true;
+	//return true;
 
-	/*
 	if( o1 === o2 )
 	{
-		console.log( 'HARD EQUALS');
 		return true;
 	}
 
@@ -600,14 +598,10 @@ jools.matches =
 		!o2.equals
 	)
 	{
-		console.log( 'NO EQUALS');
 		return false;
 	}
 
-	console.log( 'GOT TIL HERE');
-
 	return( o1.equals( o2 ) );
-	*/
 };
 
 

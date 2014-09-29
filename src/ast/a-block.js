@@ -323,11 +323,7 @@ aBlock.prototype.aReturn =
 
 		default :
 
-			expr =
-				ast.aReturn.create(
-					'expr',
-						expr
-				);
+			expr = ast.aReturn.create( 'expr', expr );
 
 			break;
 	}

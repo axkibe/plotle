@@ -365,7 +365,7 @@ ShortHand.aGreaterThan =
 /*
 | Shorthand for creating number false boolean literal.
 */
-ShortHand.False =
+ShortHand.aFalse =
 	function( )
 {
 	return (

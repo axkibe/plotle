@@ -45,17 +45,38 @@ if( JION )
 }
 
 
+/*
+| Import
+*/
 var
+	aDot,
 	aMember;
 
 aMember =
+module.exports =
 	require( '../jion/this' )( module );
 
+aDot = require( './a-dot' );
+
+
 /*
-| Node export.
+| Creates a dot member access of a dot.
 */
-module.exports =
-	aMember;
+aMember.prototype.aDot =
+	function(
+		member // member string
+	)
+{
+	// checks if member is a string is done in 'aDot'
+	return (
+		aDot.create(
+			'expr',
+				this,
+			'member',
+				member
+		)
+	);
+};
 
 
 } )( );

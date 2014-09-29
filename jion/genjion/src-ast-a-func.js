@@ -363,6 +363,13 @@ Constructor.prototype.equals =
 		obj // object to compare to
 	)
 {
+	var
+		a,
+
+		aZ,
+
+		key;
+
 	if( this === obj )
 	{
 		return true;
@@ -373,16 +380,40 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return (
-		this.tree === obj.tree
-		&&
-		this.ranks === obj.ranks
-		&&
-		(
-			this.block === obj.block
-			||
-			this.block !== null && this.block.equals( obj.block )
+	if( this.tree !== obj.tree || this.ranks !== obj.ranks )
+	{
+		if( this.ranks.length !== obj.ranks.length )
+		{
+			return false;
+		}
+
+		for(
+			a = 0, aZ = this.ranks.length;
+			a < aZ;
+			++a
 		)
+		{
+			key = this.ranks[ a ];
+
+			if(
+				key !== obj.ranks[ a ]
+				||
+								this.twig[ key ].equals
+?
+				!this.twig[ key ].equals( obj.twig[ key ] )
+:
+				this.twig[ key ] !== obj.twig[ key ]( )
+			)
+			{
+				return false;
+			}
+		}
+	}
+
+	return (
+		this.block === obj.block
+		||
+		this.block !== null && this.block.equals( obj.block )
 	);
 };
 

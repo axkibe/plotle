@@ -74,8 +74,8 @@ var
 		Shorthand.aDiffers,
 	anEquals =
 		Shorthand.anEquals,
-	False =
-		Shorthand.False( ),
+	aFalse =
+		Shorthand.aFalse( ),
 	aFile =
 		Shorthand.aFile,
 	aFunc =
@@ -368,7 +368,7 @@ gen.prototype._init =
 			}
 			else if( jdv === false )
 			{
-				defaultValue = False;
+				defaultValue = aFalse;
 			}
 			else if( jdv === true )
 			{
@@ -1115,7 +1115,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			)
 			.anAssign(
 				aVar( 'twigDup' ),
-				False
+				aFalse
 			);
 	}
 
@@ -1129,7 +1129,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			)
 			.anAssign(
 				aVar( 'rayDup' ),
-				False
+				aFalse
 			);
 	}
 
@@ -1530,14 +1530,8 @@ gen.prototype.genCreatorFreeStringsParser =
 			.aCase(
 				aStringLiteral( 'ray:init' ),
 				aBlock( )
-				.anAssign(
-					aVar( 'ray' ),
-					aVar( 'arg' )
-				)
-				.anAssign(
-					aVar( 'rayDup' ),
-					False
-				)
+				.anAssign( aVar( 'ray' ), aVar( 'arg' ) )
+				.anAssign( aVar( 'rayDup' ), aFalse )
 			)
 			.aCase(
 				aStringLiteral( 'ray:append' ),
@@ -1607,22 +1601,10 @@ gen.prototype.genCreatorFreeStringsParser =
 		block
 		.aFor(
 			aVList( )
-			.aVarDec(
-				'a',
-				aNumberLiteral( 0 )
-			)
-			.aVarDec(
-				'aZ',
-				aVar( 'arguments' ).aDot( 'length' )
-			),
-			aLessThan(
-				aVar( 'a' ),
-				aVar( 'aZ' )
-			),
-			aPlusAssign(
-				aVar( 'a' ),
-				aNumberLiteral( 2 )
-			),
+			.aVarDec( 'a', aNumberLiteral( 0 ) )
+			.aVarDec( 'aZ', aVar( 'arguments' ).aDot( 'length' ) ),
+			aLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
+			aPlusAssign( aVar( 'a' ), aNumberLiteral( 2 ) ),
 			loop
 		);
 
@@ -3024,8 +3006,6 @@ gen.prototype.genToJSON =
 
 /*
 | Generates the equals condition for an attribute.
-|
-| XXX
 */
 gen.prototype.genAttributeEquals =
 	function(
@@ -3111,7 +3091,11 @@ gen.prototype.genEquals =
 		block,
 		cond,
 		ceq,
-		name;
+		name,
+		twigTest,
+		twigTestLoopBody,
+		vA,
+		vKey;
 
 
 	cond = null;
@@ -3163,8 +3147,19 @@ gen.prototype.genEquals =
 		capsule
 		.aComment( 'Tests equality of object.' );
 
+	block = aBlock( );
+
+	if( this.twig )
+	{
+		block =
+			block
+			.aVarDec( 'a' )
+			.aVarDec( 'aZ' )
+			.aVarDec( 'key' );
+	}
+
 	block =
-		aBlock( )
+		block
 		.anIf(
 			anEquals(
 				aThis,
@@ -3177,24 +3172,84 @@ gen.prototype.genEquals =
 			aNot(
 				aVar( 'obj' )
 			),
-			aBlock( )
-			.aReturn(
-				False
-			)
+			aBlock( ).aReturn( aFalse )
 		);
+
+	// XXX
 
 	if( this.twig )
 	{
-		cond =
-			anAnd(
-				anEquals(
-					aThis.aDot( 'tree' ),
-					aVar( 'obj' ).aDot( 'tree' )
+		vA = aVar( 'a' );
+
+		vKey = aVar( 'key' );
+
+		twigTestLoopBody =
+			aBlock( )
+			.anAssign(
+				vKey,
+				aThis.aDot( 'ranks' ).aMember( vA )
+			)
+			.anIf(
+				anOr(
+					aDiffers(
+						aVar( 'key' ),
+						aVar( 'obj' ).aDot( 'ranks' ).aMember( vA )
+					),
+					aCall(
+						aCondition(
+							aThis.aDot( 'twig' ).aMember( vKey ).aDot( 'equals' ),
+							aNot(
+								aCall(
+									aThis.aDot( 'twig' ).aMember( vKey ).aDot( 'equals' ),
+									aVar( 'obj' ).aDot( 'twig' ).aMember( vKey )
+								)
+							),
+							aDiffers(
+								aThis.aDot( 'twig' ).aMember( vKey ),
+								aVar( 'obj' ).aDot( 'twig' ).aMember( vKey )
+							)
+						)
+					)
 				),
-				anEquals(
-					aThis.aDot( 'ranks' ),
-					aVar( 'obj' ).aDot( 'ranks' )
+				aBlock( ).aReturn( aFalse )
+			);
+
+		twigTest =
+			aBlock( )
+			.anIf(
+				aDiffers(
+					aThis.aDot( 'ranks' ).aDot( 'length' ),
+					aVar( 'obj' ).aDot( 'ranks' ).aDot( 'length' )
+				),
+				aBlock( ).aReturn( aFalse )
+			)
+			.aFor(
+				aCommaList( ) // FIXME add anAssign to aCommaList
+				.append(
+					anAssign( aVar( 'a' ), aNumberLiteral( 0 ) )
 				)
+				.append(
+					anAssign( aVar( 'aZ' ), aThis.aDot( 'ranks' ).aDot( 'length' ) )
+				),
+				aLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
+				aPreIncrement( aVar( 'a' ) ),
+				twigTestLoopBody
+			);
+
+		block =
+			block
+			.anIf(
+				anOr(
+					aDiffers(
+						aThis.aDot( 'tree' ),
+						aVar( 'obj' ).aDot( 'tree' )
+					),
+					aDiffers(
+						aThis.aDot( 'ranks' ),
+						aVar( 'obj' ).aDot( 'ranks' )
+					)
+				),
+				twigTest
 			);
 	}
 
@@ -3228,9 +3283,14 @@ gen.prototype.genEquals =
 			: anAnd( cond, ceq );
 	}
 
-	block =
-		block
-		.aReturn( cond );
+	if( cond )
+	{
+		block = block.aReturn( cond );
+	}
+	else
+	{
+		block = block.aReturn( aTrue );
+	}
 
 	capsule =
 		capsule
@@ -3297,13 +3357,12 @@ gen.prototype.genAlike =
 			.anIf(
 				aNot( aVar( 'obj' ) ),
 				aBlock( )
-				.aReturn(
-					False
-				)
+				.aReturn( aFalse )
 			);
 
 		if( this.twig )
 		{
+			// FIXME same test as in equals
 			cond =
 				anAnd(
 					anEquals(

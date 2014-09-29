@@ -428,10 +428,8 @@ peer.removeText =
 							at1 + len
 					),
 				'trg',
-					sign.create(
-						'val',
-							null
-					)
+					sign.create( )
+					// 'val', null
 			)
 		)
 	);

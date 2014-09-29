@@ -45,11 +45,20 @@ if( JION )
 }
 
 
+
+/*
+| Import
+*/
 var
-	aDot;
+	aDot,
+	aMember;
 
 aDot =
+module.exports =
 	require( '../jion/this' )( module );
+
+aMember = require( './a-member' );
+
 
 /*
 | Initializer.
@@ -103,9 +112,22 @@ aDot.prototype.aDot =
 
 
 /*
-| Node export.
+| Creates a generic member access of a variable.
 */
-module.exports = aDot;
+aDot.prototype.aMember =
+	function(
+		member // member expression
+	)
+{
+	return (
+		aMember.create(
+			'expr',
+				this,
+			'member',
+				member
+		)
+	);
+};
 
 
 } )( );
