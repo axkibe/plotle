@@ -382,11 +382,7 @@ Constructor.prototype.equals =
 		(
 			this.capsule === obj.capsule
 			||
-			this.capsule !== null
-			&&
-			this.capsule.equals
-			&&
-			this.capsule.equals( obj.capsule )
+			this.capsule !== null && this.capsule.equals( obj.capsule )
 		)
 		&&
 		this.hasJSON === obj.hasJSON
@@ -394,11 +390,7 @@ Constructor.prototype.equals =
 		(
 			this.header === obj.header
 			||
-			this.header !== null
-			&&
-			this.header.equals
-			&&
-			this.header.equals( obj.header )
+			this.header !== null && this.header.equals( obj.header )
 		)
 		&&
 		this.jionID === obj.jionID
@@ -406,11 +398,7 @@ Constructor.prototype.equals =
 		(
 			this.preamble === obj.preamble
 			||
-			this.preamble !== null
-			&&
-			this.preamble.equals
-			&&
-			this.preamble.equals( obj.preamble )
+			this.preamble !== null && this.preamble.equals( obj.preamble )
 		)
 	);
 };

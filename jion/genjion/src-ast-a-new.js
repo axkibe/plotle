@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return this.call === obj.call;
+	return this.call.equals( obj.call );
 };
 
 

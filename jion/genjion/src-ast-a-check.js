@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return this.block === obj.block;
+	return this.block.equals( obj.block );
 };
 
 

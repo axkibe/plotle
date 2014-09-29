@@ -229,38 +229,41 @@ sign.prototype._init =
 */
 sign.prototype.affix =
 	function(
-		test, // function to test existence of key (is or isnon)
-		cm,   // checks message for failed checks
-		base, // base message for failed checks
 		key,  // key to affix at
 		val   // value to affix
 	)
 {
-	if( test( this[ key ] ) )
+	if( this[ key ] !== undefined )
 	{
-		/* FUTURE
 		if( !jools.matches( val, this[ key ] ) )
 		{
-			throw jools.reject(
-				[
-					cm, ' ',
-					base, '.', key,
-					' faulty preset ',
-					val, ' !== ', this[ key ]
-				].join( '' )
-			);
-		}
-		*/
+			if( SERVER )
+			{
+				console.log( typeof( val ), typeof( this[ key ] ) );
+				console.log( val.equals, this[ key ].equals );
+				console.log( jools.matches( val, this[ key ] ) );
 
-		return this;
+				console.log( require( 'util' ).inspect( val.reflect, { depth : null } ) );
+				console.log( require( 'util' ).inspect( this[key].reflect, { depth : null } ) );
+
+				console.log(
+					'\n',
+					'faulty preset:\n',
+					require( 'util' ).inspect( val, { depth : null, showHidden : true } ), '\n',
+					'!==\n',
+					require( 'util' ).inspect( this[ key ], { depth : null, showHidden : true } ), '\n'
+				);
+
+				throw new Error( );
+			}
+			else
+			{
+				throw new Error( );
+			}
+		}
 	}
 
-	return (
-		this.create(
-			key,
-				val
-		)
-	);
+	return this.create( key, val );
 };
 
 

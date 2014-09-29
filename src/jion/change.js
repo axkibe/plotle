@@ -536,23 +536,9 @@ change.prototype._changeTreeSet =
 		save = null;
 	}
 
-	trg =
-		trg.affix(
-			jools.is,
-			cm,
-			'trg',
-			'val',
-				save
-		);
+	trg = trg.affix( 'val', save );
 
-	src =
-		src.affix(
-			jools.is,
-			cm,
-			'src',
-			'path',
-				trg.path
-		);
+	src = src.affix( 'path', trg.path );
 
 	// FIXME simplify
 	if( trg.rank === undefined )
@@ -676,13 +662,7 @@ change.prototype._changeTreeInsert =
 	// where trg span should end
 	tat2 = trg.at1 + src.val.length;
 
-	trg =
-		trg.affix(
-			jools.is,
-			cm, 'trg',
-			'at2',
-				tat2
-		);
+	trg = trg.affix( 'at2', tat2 );
 
 	nstr =
 		str.substring( 0, trg.at1 ) +
@@ -767,17 +747,11 @@ change.prototype._changeTreeRemove =
 			src.at2
 		);
 
-	trg =
-		trg.affix(
-			jools.isnon,
-			cm,
-			'trg',
-			'val',
-				val
-		);
+	trg = trg.affix( 'val', val );
 
 	nstr = (
-		str.substring( 0, src.at1 ) +
+		str.substring( 0, src.at1 )
+		+
 		str.substring( src.at2 )
 	);
 
@@ -871,13 +845,7 @@ change.prototype._changeTreeJoin =
 
 	path2 = path.set( -2, key2 );
 
-	src =
-		src.affix(
-			jools.is,
-			cm,
-			'src', 'path',
-			path2
-		);
+	src = src.affix( 'path', path2 );
 
 	para1 = pivot.twig[ key  ];
 
@@ -981,12 +949,14 @@ change.prototype._changeTreeSplit =
 			);
 	}
 
-	jools.check(
-		!jools.isnon( pivot.twig[ vKey ] ),
-		cm,
-		'newUID not vacant: ',
-		vKey
-	);
+/**/if( CHECK )
+/**/{
+/**/	if( pivot.twig[ vKey ] !== null && pivot.twig[ vKey ] !== undefined )
+/**/	{
+/**/		// newUID not vacant
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	key = path.get( -2 ),
 
@@ -1097,23 +1067,9 @@ change.prototype._changeTreeRank =
 
 	// FIXME if (orank === trg.rank) return null;
 
-	src =
-		src.affix(
-			jools.is,
-			cm,
-			'src',
-			'rank',
-				orank
-		);
+	src = src.affix( 'rank', orank );
 
-	trg =
-		trg.affix(
-			jools.is,
-			cm,
-			'trg',
-			'path',
-				src.path
-		);
+	trg = trg.affix( 'path', src.path );
 
 	// FUTURE make a twig:rerank
 	pivot =

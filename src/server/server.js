@@ -516,10 +516,7 @@ Server.prototype.loadSpace =
 
 		space.$seqZ++;
 
-		space.$tree =
-			change.chgX.changeTree(
-				space.$tree
-			).tree;
+		space.$tree = change.chgX.changeTree( space.$tree ).tree;
 	}
 };
 

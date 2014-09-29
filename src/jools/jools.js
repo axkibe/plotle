@@ -32,57 +32,29 @@ var
 if( SERVER )
 {
 	// in node
-	config =
-		require( '../../config' );
+	config = require( '../../config' );
 
-	sha1hex =
-		require( './sha1' ).sha1hex;
+	sha1hex = require( './sha1' ).sha1hex;
 
-	jools.devel =
-		config.develServer;
+	jools.devel = config.develServer;
 }
 else
 {
 	// in shell
-	jools.devel =
-		config.develShell;
+	jools.devel = config.develShell;
 }
 
 
 var
-	puffed =
-		config.debug.puffed;
+	puffed;
+
+puffed = config.debug.puffed;
 
 
 /*
 | Largest integer value.
 */
 jools.MAX_INTEGER = 9007199254740992;
-
-
-
-/*
-| Returns true if o is defined
-| FIXME remove
-*/
-jools.is =
-	function( o )
-{
-	return typeof( o ) !== 'undefined';
-};
-
-
-/*
-| Returns true if o is defined and not null
-*/
-jools.isnon =
-	function( o )
-{
-	return (
-		typeof( o ) !== 'undefined' &&
-		o !== null
-	);
-};
 
 
 /*
@@ -92,7 +64,8 @@ jools.isInteger =
 	function( o )
 {
 	return (
-		typeof( o ) === 'number' &&
+		typeof( o ) === 'number'
+		&&
 		Math.floor( o ) === o
 	);
 };
@@ -105,7 +78,8 @@ jools.isString  =
 	function( o )
 {
 	return (
-		typeof( o ) === 'string' ||
+		typeof( o ) === 'string'
+		||
 		( o instanceof String )
 	);
 };
@@ -479,6 +453,52 @@ jools.lazyValue =
 
 
 /*
+| A value is computed and fixated only when needed.
+*/
+/*
+jools.lazyFunction =
+	function(
+		proto,
+		key,
+		getter
+	)
+{
+	var func;
+
+	func =
+		function( )
+		{
+			var
+				ckey;
+
+			ckey = '_lazy_' + key;
+
+			if( this[ ckey ] !== undefined )
+			{
+				return this[ ckey ];
+			}
+
+			return (
+				jools.innumerable(
+					this,
+					ckey,
+					getter.call( this )
+				)
+			);
+		};
+
+	Object.defineProperty(
+		proto,
+		key,
+		{
+			get : func
+		}
+	);
+};
+*/
+
+
+/*
 | A lazy value is computed and fixated before it is needed.
 */
 jools.aheadValue =
@@ -560,72 +580,33 @@ jools.copy =
 */
 jools.matches =
 	function(
-		// o1,
-		// o2
+		o1,
+		o2
 	)
 {
-	// FIXME fix this
+	// TODO
 	return true;
 
 	/*
 	if( o1 === o2 )
 	{
+		console.log( 'HARD EQUALS');
 		return true;
 	}
 
-	// numbers or strings would have matched before
-	switch( o1.constructor )
-	{
-		case String :
-			return false;
-
-		case Number :
-			return false;
-	}
-
-	// also if either is null an not equal
 	if(
-		o1 === null ||
-		o2 === null
+		!o1.equals
+		||
+		!o2.equals
 	)
 	{
+		console.log( 'NO EQUALS');
 		return false;
 	}
 
-	var
-		k1 =
-			Object.keys( o1 );
+	console.log( 'GOT TIL HERE');
 
-	var
-		k2 =
-			Object.keys( o2 );
-
-	if( k1.length !== k2.length )
-	{
-		return false;
-	}
-
-	for(
-		var a = 0, aZ = k1.length;
-		a < aZ;
-		a++
-	)
-	{
-		var k =
-			k1[ a ];
-
-		if(
-			!jools.matches(
-				o1[ k ],
-				o2[ k ]
-			)
-		)
-		{
-			return false;
-		}
-	}
-
-	return true;
+	return( o1.equals( o2 ) );
 	*/
 };
 

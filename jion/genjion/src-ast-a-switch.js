@@ -413,8 +413,6 @@ Constructor.prototype.equals =
 			||
 			this.defaultCase !== null
 			&&
-			this.defaultCase.equals
-			&&
 			this.defaultCase.equals( obj.defaultCase )
 		)
 		&&

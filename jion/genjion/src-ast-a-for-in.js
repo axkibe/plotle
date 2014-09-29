@@ -271,7 +271,7 @@ Constructor.prototype.equals =
 	}
 
 	return (
-		this.block === obj.block
+		this.block.equals( obj.block )
 		&&
 		this.object === obj.object
 		&&

@@ -746,7 +746,7 @@ fabric.prototype.paint =
 		view
 	);
 
-	if( jools.isnon( fillStyle ) )
+	if( fillStyle )
 	{
 		cx.fillStyle = this._colorStyle(
 			fillStyle,

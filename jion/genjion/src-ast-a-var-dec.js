@@ -233,19 +233,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return (
-		(
-			this.assign === obj.assign
-			||
-			this.assign !== null
-			&&
-			this.assign.equals
-			&&
-			this.assign.equals( obj.assign )
-		)
-		&&
-		this.name === obj.name
-	);
+	return this.assign === obj.assign && this.name === obj.name;
 };
 
 

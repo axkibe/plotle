@@ -1,3 +1,4 @@
+. depth
 . 0-line
 > 1
 . Create
@@ -438,14 +439,12 @@
 . insertText
 . inspect
 . invert
-. is
 . isAction
 > isArray
 . isEmpty
 . isInteger
 > isPointInPath
 . isString
-. isnon
 . item
 > item1key
 > item2key

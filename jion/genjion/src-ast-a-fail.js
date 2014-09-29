@@ -192,15 +192,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return (
-		this.message === obj.message
-		||
-		this.message !== null
-		&&
-		this.message.equals
-		&&
-		this.message.equals( obj.message )
-	);
+	return this.message === obj.message;
 };
 
 

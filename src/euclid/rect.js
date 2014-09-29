@@ -192,7 +192,7 @@ jools.lazyValue(
 		}
 		else
 		{
-			return (
+			return(
 				rect.create(
 					'pnw',
 						euclid.point.zero,
@@ -213,7 +213,7 @@ rect.prototype.computeEllipse =
 		model
 	)
 {
-	return (
+	return(
 		euclid.ellipse.create(
 			'pnw',
 				model.pnw.compute( this ),
@@ -244,7 +244,7 @@ rect.prototype.reduce =
 
 	// allows margins to reduce the rect to zero size without erroring.
 
-	return (
+	return(
 		rect.create(
 			'pnw',
 				euclid.point.renew(
@@ -461,7 +461,7 @@ jools.lazyValue(
 	'pc',
 	function( )
 	{
-		return (
+		return(
 			euclid.point.create(
 				'x',
 					jools.half( this.pse.x + this.pnw.x ),
@@ -481,7 +481,7 @@ jools.lazyValue(
 	'pn',
 	function( )
 	{
-		return (
+		return(
 			euclid.point.create(
 				'x',
 					jools.half( this.pse.x + this.pnw.x ),
@@ -501,7 +501,7 @@ jools.lazyValue(
 	'w',
 	function( )
 	{
-		return (
+		return(
 			euclid.point.create(
 				'x',
 					this.pnw.x,
@@ -521,7 +521,7 @@ jools.lazyValue(
 	'e',
 	function( )
 	{
-		return (
+		return(
 			euclid.point.create(
 				'x',
 					this.pse.x,
@@ -545,7 +545,7 @@ rect.prototype.add =
 		a2
 	)
 {
-	return (
+	return(
 		rect.create(
 			'pnw',
 				this.pnw.add( a1, a2 ),
@@ -570,15 +570,16 @@ rect.renew =
 {
 	// FIXMe
 	var
-		pnw = null,
-
-		pse = null,
-
-		isnon = jools.isnon,
-
 		a,
 		aZ,
+		pnw,
+		pse,
 		r;
+
+	pnw = null;
+
+	pse = null;
+
 
 	for(
 		a = 4, aZ = arguments.length;
@@ -588,7 +589,7 @@ rect.renew =
 	{
 		r = arguments[ a ];
 
-		if ( !isnon( r ) )
+		if ( !r )
 		{
 			continue;
 		}
@@ -600,16 +601,14 @@ rect.renew =
 				return r;
 			}
 
-			pnw =
-				r.pnw;
+			pnw = r.pnw;
 
 			break;
 		}
 
 		if ( r.pse.x === wx && r.pse.y === ny )
 		{
-			pnw =
-				r.pse;
+			pnw = r.pse;
 
 			break;
 		}
@@ -621,26 +620,23 @@ rect.renew =
 		a++
 	)
 	{
-		r =
-			arguments[ a ];
+		r = arguments[ a ];
 
-		if( !isnon( r ) )
+		if( !r )
 		{
 			continue;
 		}
 
 		if( r.pnw.x === ex && r.pnw.y === sy )
 		{
-			pse =
-				r.pnw;
+			pse = r.pnw;
 
 			break;
 		}
 
 		if( r.pse.x === ex && r.pse.y === sy )
 		{
-			pse =
-				r.pse;
+			pse = r.pse;
 
 			break;
 		}
@@ -648,24 +644,15 @@ rect.renew =
 
 	if( !pnw )
 	{
-		pnw =
-			euclid.point.create( 'x', wx, 'y', ny );
+		pnw = euclid.point.create( 'x', wx, 'y', ny );
 	}
 
 	if( !pse )
 	{
-		pse =
-			euclid.point.create( 'x', ex, 'y', sy );
+		pse = euclid.point.create( 'x', ex, 'y', sy );
 	}
 
-	return (
-		rect.create(
-			'pnw',
-				pnw,
-			'pse',
-				pse
-		)
-	);
+	return rect.create( 'pnw', pnw, 'pse', pse );
 };
 
 
@@ -681,7 +668,7 @@ rect.prototype.sub =
 		a2
 	)
 {
-	return (
+	return(
 		rect.create(
 			'pnw',
 				this.pnw.sub( a1, a2 ),
@@ -700,7 +687,7 @@ rect.prototype.equals =
 		r
 	)
 {
-	return (
+	return(
 		this === r
 		||
 		(
@@ -740,7 +727,7 @@ rect.prototype.within =
 
 	pse = this.pse;
 
-	return (
+	return(
 		x >= pnw.x
 		&&
 		y >= pnw.y

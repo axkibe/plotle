@@ -116,7 +116,7 @@ var
 		Shorthand.aTrue( ),
 	aTypeof =
 		Shorthand.aTypeof,
-	Undefined = // FIXME and others
+	anUndefined =
 		Shorthand.aVar( 'undefined' ),
 	aVar =
 		Shorthand.aVar,
@@ -364,7 +364,7 @@ gen.prototype._init =
 			}
 			else if( jdv === undefined )
 			{
-				defaultValue = Undefined;
+				defaultValue = anUndefined;
 			}
 			else if( jdv === false )
 			{
@@ -401,7 +401,7 @@ gen.prototype._init =
 				allowsUndefined :
 					jAttr.allowsUndefined
 					||
-					defaultValue === Undefined,
+					defaultValue === anUndefined,
 				assign :
 					assign,
 				comment :
@@ -770,7 +770,7 @@ gen.prototype.genConstructor =
 			block =
 				block
 				.anIf(
-					aDiffers( attr.v, Undefined ),
+					aDiffers( attr.v, anUndefined ),
 					aBlock( )
 					.append( assign )
 				);
@@ -1272,7 +1272,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.anIf(
 					aDiffers(
 						aVar( 'arg' ),
-						Undefined
+						anUndefined
 					),
 					aBlock( )
 					.anAssign(
@@ -1331,7 +1331,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.anIf(
 					aDiffers(
 						aVar( 'twig' ).aMember( aVar( 'key' ) ),
-						Undefined
+						anUndefined
 					),
 					aBlock( )
 					.aFail(
@@ -1373,7 +1373,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.anIf(
 					anEquals(
 						aVar( 'twig' ).aMember( aVar( 'key' ) ),
-						Undefined
+						anUndefined
 					),
 					aBlock( )
 					.aFail(
@@ -1426,7 +1426,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.anIf(
 					aDiffers(
 						aVar( 'twig' ).aMember( aVar( 'key' ) ),
-						Undefined
+						anUndefined
 					),
 					aBlock( )
 					.aFail(
@@ -1475,7 +1475,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.anIf(
 					anEquals(
 						aVar( 'twig' ).aMember( aVar( 'arg' ) ),
-						Undefined
+						anUndefined
 					),
 					aBlock( )
 					.aFail(
@@ -1667,7 +1667,7 @@ gen.prototype.genCreatorDefaults =
 			block =
 				block
 				.anIf(
-					anEquals( attr.v, Undefined ),
+					anEquals( attr.v, anUndefined ),
 					aBlock( )
 					.anAssign( attr.v, attr.defaultValue )
 				);
@@ -1722,7 +1722,7 @@ gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.anIf(
-					anEquals( attr.v, Undefined ),
+					anEquals( attr.v, anUndefined ),
 					aBlock( )
 					//.aFail( 'undefined attribute ' + name )
 					.aFail( )
@@ -1757,14 +1757,14 @@ gen.prototype.genCreatorChecks =
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				aDiffers( attr.v, Undefined );
+				aDiffers( attr.v, anUndefined );
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
 				anAnd(
 					aDiffers( attr.v, aNull ),
-					aDiffers( attr.v, Undefined )
+					aDiffers( attr.v, anUndefined )
 				);
 		}
 		else
@@ -2002,7 +2002,7 @@ gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						aCondition(
-							aDiffers( attr.v, Undefined ),
+							aDiffers( attr.v, anUndefined ),
 							attr.v.aDot( member ),
 							aNull
 						);
@@ -2064,6 +2064,7 @@ gen.prototype.genCreatorUnchanged =
 		attr,
 		ceq,
 		cond,
+		equalsCall,
 		name;
 
 	cond = aVar( 'inherit' );
@@ -2107,7 +2108,7 @@ gen.prototype.genCreatorUnchanged =
 			continue;
 		}
 
-		// FUTURE use genAttributeEquals
+		// FIXME use genAttributeEquals
 
 		switch( attr.type )
 		{
@@ -2129,15 +2130,20 @@ gen.prototype.genCreatorUnchanged =
 
 			default :
 
-				if( !attr.allowsNull && !attr.allowsUndefined )
+				equalsCall =
+					aCall(
+						attr.v.aDot( 'equals' ),
+						aVar( 'inherit' ).aDot( attr.assign )
+					);
+
+				if( attr.allowsNull && attr.allowsUndefined )
 				{
-					ceq =
-						aCall(
-							attr.v.aDot( 'equals' ),
-							aVar( 'inherit' ).aDot( attr.assign )
-						);
+					throw new Error(
+						'cannot have allowsNull and allowsUndefined'
+					);
 				}
-				else
+
+				if( attr.allowsNull )
 				{
 					ceq =
 						anOr(
@@ -2147,12 +2153,27 @@ gen.prototype.genCreatorUnchanged =
 							),
 							anAnd(
 								attr.v,
-								aCall(
-									attr.v.aDot( 'equals' ),
-									aVar( 'inherit' ).aDot( attr.assign )
-								)
+								equalsCall
 							)
 						);
+				}
+				else if( attr.allowsUndefined )
+				{
+					ceq =
+						anOr(
+							anEquals(
+								attr.v,
+								aVar( 'inherit' ).aDot( attr.assign )
+							),
+							anAnd(
+								attr.v,
+								equalsCall
+							)
+						);
+				}
+				else
+				{
+					ceq = equalsCall;
 				}
 		}
 
@@ -3003,6 +3024,8 @@ gen.prototype.genToJSON =
 
 /*
 | Generates the equals condition for an attribute.
+|
+| XXX
 */
 gen.prototype.genAttributeEquals =
 	function(
@@ -3022,6 +3045,7 @@ gen.prototype.genAttributeEquals =
 		case 'Boolean' :
 		case 'Integer' :
 		case 'Number' :
+		case 'Object' :
 		case 'String' :
 
 			ceq =
@@ -3034,23 +3058,39 @@ gen.prototype.genAttributeEquals =
 
 		default :
 
-			if( !attr.allowsNull )
+
+			if( attr.allowNull && attr.allowsUndefined )
 			{
-				ceq =
-					// FIXME, misses equals call
-					anEquals( le, re );
+				throw new Error(
+					'cannot have allowsNull and allowsUndefined'
+				);
 			}
-			else
+
+			if( attr.allowsNull)
 			{
 				ceq =
 					anOr(
 						anEquals( le, re ),
 						anAnd(
 							aDiffers( le, aNull ),
-							le.aDot( 'equals' ),
 							aCall( le.aDot( 'equals' ), re )
 						)
 					);
+			}
+			else if( attr.allowsUndefined )
+			{
+				ceq =
+					anOr(
+						anEquals( le, re ),
+						anAnd(
+							aDiffers( le, anUndefined ),
+							aCall( le.aDot( 'equals' ), re )
+						)
+					);
+			}
+			else
+			{
+				ceq = aCall( le.aDot( 'equals' ), re );
 			}
 	}
 
@@ -3157,6 +3197,8 @@ gen.prototype.genEquals =
 				)
 			);
 	}
+
+	// FIXME this.ray!
 
 	for(
 		var a = 0, aZ = this.attrList.length;

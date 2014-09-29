@@ -365,7 +365,7 @@ Constructor.prototype.equals =
 		&&
 		this.ranks === obj.ranks
 		&&
-		this.block === obj.block
+		this.block.equals( obj.block )
 	);
 };
 
