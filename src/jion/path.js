@@ -1,6 +1,8 @@
 /*
 | A path toward an entity in a tree.
 |
+| FUTURE make it a ray.
+|
 | Authors: Axel Kittenberger
 */
 
@@ -100,9 +102,7 @@ path.prototype._init =
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		( !(array instanceof Array ) )
-/**/	)
+/**/	if( !Array.isArray( array ) )
 /**/	{
 /**/		throw new Error(
 /**/			'path array not an array'
@@ -547,17 +547,12 @@ path.createFromJSON =
 		return json;
 	}
 
-	if( !json instanceof Array )
+	if( !Array.isArray( json ) )
 	{
 		throw new Error( 'invalid JSON, path is no array' );
 	}
 
-	return (
-		path.create(
-			'array',
-				json
-		)
-	);
+	return path.create( 'array', json );
 };
 
 

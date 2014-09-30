@@ -35,8 +35,8 @@ var
 if( JION )
 {
 	return {
-		name :
-			'TestPad',
+		id :
+			'testpad.root',
 		attributes :
 			{
 				action :
@@ -127,34 +127,34 @@ if( JION )
 }
 
 var
-	testPad =
-		null,
+	proto,
+	root,
+	_noteDocPath;
 
-	_noteDocPath =
-		jion
-		.path
-		.empty
-		.append( 'space' )
-		.append( 'testnote' )
-		.append( 'doc' );
+proto = testpad.root.prototype;
+
+root = null;
+
+_noteDocPath =
+	jion.path.empty
+	.append( 'space' )
+	.append( 'testnote' )
+	.append( 'doc' );
 
 
 /*
 | Binds an event handler to the
-| latest instance of testPad.
+| latest instance of testpads root.
 */
 var _bind =
 	function(
-		handler  // the handler of testPad
+		handler  // the handler of testpad
 	)
 {
-	return (
+	return(
 		function( )
 		{
-			testPad[ handler ].apply(
-				testPad,
-				arguments
-			);
+			root[ handler ].apply( root, arguments );
 		}
 	);
 };
@@ -163,7 +163,7 @@ var _bind =
 /*
 | Initializer.
 */
-TestPad.prototype._init =
+proto._init =
 	function( )
 {
 	var
@@ -302,17 +302,14 @@ TestPad.prototype._init =
 	if( !doc )
 	{
 
-		elements.pad.innerHTML =
-			TestPad.noDataScreen( );
+		elements.pad.innerHTML = root.noDataScreen( );
 	}
 	else
 	{
-		elements.pad.innerHTML =
-			this.makeScreen( doc );
+		elements.pad.innerHTML = this.makeScreen( doc );
 	}
 
-	testPad =
-		this;
+	root = this;
 };
 
 
@@ -345,7 +342,7 @@ var _isSpecialKey =
 /*
 | Mouse down event on pad -> focuses the hidden input,
 */
-TestPad.prototype.onMouseDown =
+proto.onMouseDown =
 	function(
 		event
 	)
@@ -357,22 +354,19 @@ TestPad.prototype.onMouseDown =
 
 	event.preventDefault( );
 
-	testPad.captureEvents( );
+	root.captureEvents( );
 
-	testPad.create(
-		'mouseDown',
-			true
-	);
+	root.create( 'mouseDown', true );
 
-	testPad.elements.input.focus( );
+	root.elements.input.focus( );
 
 	var
 		pad =
-			testPad.elements.pad,
+			root.elements.pad,
 		measure =
-			testPad.elements.measure,
+			root.elements.measure,
 		doc =
-			testPad._doc,
+			root._doc,
 		x =
 			event.pageX - pad.offsetLeft,
 		y =
@@ -380,7 +374,7 @@ TestPad.prototype.onMouseDown =
 
 	if( !doc )
 	{
-		testPad.beep( );
+		root.beep( );
 
 		return;
 	}
@@ -395,7 +389,7 @@ TestPad.prototype.onMouseDown =
 		cText =
 			doc.twig[ doc.ranks[ cLine ] ].text;
 
-	testPad.create(
+	root.create(
 		'cursorLine',
 			cLine,
 		'cursorAt',
@@ -411,12 +405,13 @@ TestPad.prototype.onMouseDown =
 /*
 | Captures all mouse events.
 */
-TestPad.prototype.captureEvents =
+proto.captureEvents =
 	function( )
 {
 	var
 		pad =
-			testPad.elements.pad;
+
+	pad = root.elements.pad;
 
 	if( pad.setCapture )
 	{
@@ -424,11 +419,9 @@ TestPad.prototype.captureEvents =
 	}
 	else
 	{
-		document.onmouseup =
-			_bind( 'onMouseUp' );
+		document.onmouseup = _bind( 'onMouseUp' );
 
-		document.onmousemove =
-			_bind( 'onMouseMove' );
+		document.onmousemove = _bind( 'onMouseMove' );
 	}
 };
 
@@ -436,7 +429,7 @@ TestPad.prototype.captureEvents =
 /*
 | Stops capturing all mouse events.
 */
-TestPad.prototype.releaseEvents =
+proto.releaseEvents =
 	function( )
 {
 	var
@@ -459,7 +452,7 @@ TestPad.prototype.releaseEvents =
 /*
 | Mouse button released.
 */
-TestPad.prototype.onMouseUp =
+proto.onMouseUp =
 	function(
 		event
 	)
@@ -471,12 +464,9 @@ TestPad.prototype.onMouseUp =
 
 	event.preventDefault( );
 
-	testPad.create(
-		'mouseDown',
-			false
-	);
+	root.create( 'mouseDown', false );
 
-	testPad.releaseEvents( );
+	root.releaseEvents( );
 };
 
 
@@ -484,7 +474,7 @@ TestPad.prototype.onMouseUp =
 /*
 | Mouse clicked on pad.
 */
-TestPad.prototype.onMouseClick =
+proto.onMouseClick =
 	function(
 		event
 	)
@@ -497,14 +487,14 @@ TestPad.prototype.onMouseClick =
 | Mouse moved over pad
 | (or while dragging around it).
 */
-TestPad.prototype.onMouseMove =
+proto.onMouseMove =
 	function(
 		event
 	)
 {
-	if( testPad.mouseDown )
+	if( root.mouseDown )
 	{
-		testPad.onMouseDown( event );
+		root.onMouseDown( event );
 	}
 };
 
@@ -512,7 +502,7 @@ TestPad.prototype.onMouseMove =
 /*
 | Key down event to ( hidden ) input.
 */
-TestPad.prototype.onKeyDown =
+proto.onKeyDown =
 	function(
 		event
 	)
@@ -521,14 +511,11 @@ TestPad.prototype.onKeyDown =
 	{
 		event.preventDefault( );
 
-		testPad.inputSpecialKey(
-			event.keyCode,
-			event.ctrlKey
-		);
+		root.inputSpecialKey( event.keyCode, event.ctrlKey );
 	}
 	else
 	{
-		testPad.testInput( );
+		root.testInput( );
 	}
 };
 
@@ -536,7 +523,7 @@ TestPad.prototype.onKeyDown =
 /*
 | Press event to (hidden) input.
 */
-TestPad.prototype.onKeyPress =
+proto.onKeyPress =
 	function(
 		// event
 	)
@@ -551,45 +538,39 @@ TestPad.prototype.onKeyPress =
 /*
 | Up event to (hidden) input.
 */
-TestPad.prototype.onKeyUp =
+proto.onKeyUp =
 	function(
 		// event
 	)
 {
-	testPad.testInput( );
+	root.testInput( );
 };
 
 
 /*
 | Hidden input got focus.
 */
-TestPad.prototype.onFocus =
+proto.onFocus =
 	function( )
 {
-	testPad.create(
-		'haveFocus',
-			true
-	);
+	root.create( 'haveFocus', true );
 };
 
 
 /*
 | Hidden input lost focus.
 */
-TestPad.prototype.onBlur =
+proto.onBlur =
 	function( )
 {
-	testPad.create(
-		'haveFocus',
-			false
-	);
+	root.create( 'haveFocus', false );
 };
 
 
 /*
 | Sends the current action.
 */
-TestPad.prototype.send =
+proto.send =
 	function( )
 {
 	var
@@ -693,7 +674,7 @@ TestPad.prototype.send =
 			);
 	}
 
-	testPad.create(
+	root.create(
 		'action',
 			null,
 		'cursorAt',
@@ -707,31 +688,27 @@ TestPad.prototype.send =
 /*
 | Cancels the current action.
 */
-TestPad.prototype.onCancelButton =
+proto.onCancelButton =
 	function( )
 {
-	testPad.create(
-		'action',
-			null
-	);
+	root.create( 'action', null );
 };
 
 
 /*
 | Displays a beep message.
 */
-TestPad.prototype.beep =
+proto.beep =
 	function( )
 {
-	testPad.elements.beep.innerHTML =
-		'BEEP!';
+	root.elements.beep.innerHTML = 'BEEP!';
 
-	if( testPad.beepTimer )
+	if( root.beepTimer )
 	{
-		clearInterval( testPad.beepTimer );
+		clearInterval( root.beepTimer );
 	}
 
-	testPad.create(
+	root.create(
 		'beepTimer',
 			setInterval( _bind( 'clearBeep' ), 540 )
 	);
@@ -741,57 +718,52 @@ TestPad.prototype.beep =
 /*
 | Clears the beep message.
 */
-TestPad.prototype.clearBeep =
+proto.clearBeep =
 	function( )
 {
-	testPad.elements.beep.innerHTML =
-		'';
+	root.elements.beep.innerHTML = '';
 
-	clearInterval( testPad.beepTimer );
+	clearInterval( root.beepTimer );
 
-	testPad.create(
-		'beepTimer',
-			null
-	);
+	root.create( 'beepTimer', null );
 };
 
 
 /*
 | Aquires non-special input from (hidden) input.
 */
-TestPad.prototype.testInput =
+proto.testInput =
 	function( )
 {
 	var
 		action =
-			testPad.action,
+			root.action,
 		cursorLine =
-			testPad.cursorLine,
+			root.cursorLine,
 		cursorAt =
-			testPad.cursorAt,
+			root.cursorAt,
 		elements =
-			testPad.elements,
+			root.elements,
 		text =
 			elements.input.value;
 
-	elements.input.value =
-		'';
+	elements.input.value = '';
 
 	if( text === '' )
 	{
 		return;
 	}
 
-	if( !testPad._doc )
+	if( !root._doc )
 	{
-		testPad.beep( );
+		root.beep( );
 
 		return;
 	}
 
 	if( action === null )
 	{
-		testPad.create(
+		root.create(
 			'action',
 			testpad.action.create(
 				'command',
@@ -816,7 +788,7 @@ TestPad.prototype.testInput =
 		cursorAt === action.at
 	)
 	{
-		testPad.create(
+		root.create(
 			'action',
 			action.create(
 				'value',
@@ -827,14 +799,14 @@ TestPad.prototype.testInput =
 		return;
 	}
 
-	testPad.beep( );
+	root.beep( );
 };
 
 
 /*
 | Handles all kind of special keys.
 */
-TestPad.prototype.inputSpecialKey =
+proto.inputSpecialKey =
 	function(
 		keyCode,
 		ctrl
@@ -842,13 +814,13 @@ TestPad.prototype.inputSpecialKey =
 {
 	var
 		action =
-			testPad.action,
+			root.action,
 		cursorLine =
-			testPad.cursorLine,
+			root.cursorLine,
 		cursorAt =
-			testPad.cursorAt,
+			root.cursorAt,
 		doc =
-			testPad._doc;
+			root._doc;
 
 	switch( keyCode )
 	{
@@ -857,7 +829,7 @@ TestPad.prototype.inputSpecialKey =
 
 			if( !doc )
 			{
-				testPad.beep( );
+				root.beep( );
 
 				return;
 			}
@@ -870,12 +842,12 @@ TestPad.prototype.inputSpecialKey =
 					cursorLine <= 0
 				)
 				{
-					testPad.beep( );
+					root.beep( );
 
 					return;
 				}
 
-				testPad.create(
+				root.create(
 					'action',
 						testpad.action.create(
 							'command',
@@ -890,7 +862,7 @@ TestPad.prototype.inputSpecialKey =
 
 			if( !action )
 			{
-				testPad.create(
+				root.create(
 					'action',
 						testpad.action.create(
 							'command',
@@ -915,17 +887,14 @@ TestPad.prototype.inputSpecialKey =
 				cursorAt !== action.at
 			)
 			{
-				testPad.beep( );
+				root.beep( );
 
 				return;
 			}
 
-			testPad.create(
+			root.create(
 				'action',
-					testPad.action.create(
-						'at',
-							testPad.action.at - 1
-					),
+					root.action.create( 'at', root.action.at - 1 ),
 				'cursorAt',
 					cursorAt - 1
 			);
@@ -937,26 +906,26 @@ TestPad.prototype.inputSpecialKey =
 
 			if( !doc )
 			{
-				testPad.beep( );
+				root.beep( );
 
 				return;
 			}
 
 			if( ctrl )
 			{
-				testPad.send( );
+				root.send( );
 
 				return;
 			}
 
 			if( action )
 			{
-				testPad.beep( );
+				root.beep( );
 
 				return;
 			}
 
-			testPad.create(
+			root.create(
 				'action',
 					testpad.action.create(
 						'command',
@@ -973,7 +942,7 @@ TestPad.prototype.inputSpecialKey =
 		case 27 :
 			// esc
 
-			testPad.create(
+			root.create(
 				'action',
 					null
 			);
@@ -990,7 +959,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.create(
+			root.create(
 				'cursorAt',
 					doc.twig[ doc.ranks[ cursorLine ] ].text.length
 			);
@@ -1007,7 +976,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.create(
+			root.create(
 				'cursorAt',
 					0
 			);
@@ -1031,10 +1000,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.create(
-				'cursorAt',
-					cursorAt - 1
-			);
+			root.create( 'cursorAt', cursorAt - 1 );
 
 			return;
 
@@ -1052,10 +1018,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.create(
-				'cursorLine',
-					cursorLine - 1
-			);
+			root.create( 'cursorLine', cursorLine - 1 );
 
 			return;
 
@@ -1069,10 +1032,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.create(
-				'cursorAt',
-					cursorAt + 1
-			);
+			root.create( 'cursorAt', cursorAt + 1 );
 
 			return;
 
@@ -1090,10 +1050,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.create(
-				'cursorLine',
-					cursorLine + 1
-			);
+			root.create( 'cursorLine', cursorLine + 1 );
 
 			return;
 
@@ -1120,7 +1077,7 @@ TestPad.prototype.inputSpecialKey =
 
 			if( !action )
 			{
-				testPad.create(
+				root.create(
 					'action',
 						testpad.action.create(
 							'command',
@@ -1150,7 +1107,7 @@ TestPad.prototype.inputSpecialKey =
 				return;
 			}
 
-			testPad.create(
+			root.create(
 				'action',
 					action.create(
 						'at2',
@@ -1168,13 +1125,10 @@ TestPad.prototype.inputSpecialKey =
 /*
 | Button update-to-now has been clicked.
 */
-TestPad.prototype.onUpNowButton =
+proto.onUpNowButton =
 	function( )
 {
-	testPad.create(
-		'seq',
-			jools.MAX_INTEGER
-	);
+	root.create( 'seq', jools.MAX_INTEGER );
 
 	this.elements.input.focus( );
 };
@@ -1183,13 +1137,10 @@ TestPad.prototype.onUpNowButton =
 /*
 | Button one-up-the-sequence has been clicked.
 */
-TestPad.prototype.onUpButton =
+root.prototype.onUpButton =
 	function( )
 {
-	testPad.create(
-		'seq',
-			this.seq + 1
-	);
+	root.create( 'seq', this.seq + 1 );
 
 	this.elements.input.focus( );
 };
@@ -1198,13 +1149,10 @@ TestPad.prototype.onUpButton =
 /*
 | Button one-down-the-sequence has been clicked.
 */
-TestPad.prototype.onDownButton =
+root.prototype.onDownButton =
 	function( )
 {
-	testPad.create(
-		'seq',
-			testPad.seq - 1
-	);
+	root.create( 'seq', root.seq - 1 );
 
 	this.elements.input.focus( );
 };
@@ -1213,7 +1161,7 @@ TestPad.prototype.onDownButton =
 /*
 | Cretes a screen for current data.
 */
-TestPad.prototype.makeScreen =
+root.prototype.makeScreen =
 	function(
 		doc
 	)
@@ -1416,7 +1364,7 @@ TestPad.prototype.makeScreen =
 | Generates the noDataScreen.
 | FIXME lazyFixate
 */
-TestPad.noDataScreen =
+root.noDataScreen =
 	function( )
 {
 	// no data
@@ -1455,9 +1403,7 @@ TestPad.noDataScreen =
 		);
 	}
 
-	return (
-		lines.join( '\n' )
-	);
+	return lines.join( '\n' );
 };
 
 
@@ -1467,8 +1413,9 @@ TestPad.noDataScreen =
 window.onload =
 	function( )
 {
-	TestPad.create( );
-	testPad.elements.input.focus( );
+	testpad.root.create( );
+
+	root.elements.input.focus( );
 };
 
 
