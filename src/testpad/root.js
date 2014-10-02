@@ -9,7 +9,6 @@
 | Imports
 */
 var
-	IFaceSym,
 	jion,
 	jools,
 	peer,
@@ -19,7 +18,7 @@ var
 | Export
 */
 var
-	TestPad;
+	root;
 
 
 /*
@@ -46,7 +45,7 @@ if( JION )
 						type :
 							'testpad.action',
 						defaultValue :
-							'null'
+							null
 					},
 				beepTimer :
 					{
@@ -55,7 +54,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							'null'
+							null
 					},
 				cursorAt :
 					{
@@ -64,7 +63,7 @@ if( JION )
 						type :
 							'Integer',
 						defaultValue :
-							'0'
+							null // FUTURE 0
 					},
 				cursorLine :
 					{
@@ -73,7 +72,7 @@ if( JION )
 						type :
 							'Integer',
 						defaultValue :
-							'0'
+							null // FUTURE 0
 					},
 				elements :
 					{
@@ -82,7 +81,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							'undefined'
+							undefined
 					},
 				haveFocus :
 					{
@@ -91,16 +90,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
-					},
-				iface :
-					{
-						comment :
-							'the interface',
-						type :
-							'Object',
-						defaultValue :
-							'undefined'
+							false
 					},
 				mouseDown :
 					{
@@ -109,17 +99,17 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							'false'
+							false
 					},
-				seq :
+				link :
 					{
 						comment :
-							'current sequence pos',
+							'the testing repository',
 						type :
-							'Integer',
+							'testpad.repos',
 						defaultValue :
-							'0'
-					}
+							null
+					},
 			},
 		init :
 			[ ]
@@ -128,7 +118,6 @@ if( JION )
 
 var
 	proto,
-	root,
 	_noteDocPath;
 
 proto = testpad.root.prototype;
@@ -138,6 +127,7 @@ root = null;
 _noteDocPath =
 	jion.path.empty
 	.append( 'space' )
+	.append( 'twig' )
 	.append( 'testnote' )
 	.append( 'doc' );
 
@@ -167,8 +157,18 @@ proto._init =
 	function( )
 {
 	var
-		elements =
-			this.elements;
+		cancel,
+		doc,
+		down,
+		elements,
+		id,
+		input,
+		pad,
+		send,
+		up,
+		upnow;
+
+	elements = this.elements;
 
 	if( !elements )
 	{
@@ -197,111 +197,99 @@ proto._init =
 					null
 			};
 
-		for( var id in elements )
+		for( id in elements )
 		{
-			elements[ id ] =
-				document.getElementById( id );
+			elements[ id ] = document.getElementById( id );
 		}
 
-		var
-			pad =
-				elements.pad,
-			input =
-				elements.input,
-			send =
-				elements.send,
-			cancel =
-				elements.cancel,
-			down =
-				elements.down,
-			up =
-				elements.up,
-			upnow =
-				elements.upnow;
+		pad = elements.pad;
 
-		pad.onmousedown =
-			_bind( 'onMouseDown' );
+		input = elements.input;
 
-		pad.onmousemove =
-			_bind( 'onMouseMove' );
+		send = elements.send;
 
-		pad.onmouseup =
-			_bind( 'onMouseUp' );
+		cancel = elements.cancel;
 
-		pad.onclick =
-			_bind( 'onMouseClick' );
+		down = elements.down;
 
-		input.onkeypress =
-			_bind( 'onKeyPress' );
+		up = elements.up;
 
-		input.onkeydown =
-			_bind( 'onKeyDown' );
+		upnow = elements.upnow;
 
-		input.onkeyup =
-			_bind( 'onKeyUp' );
+		pad.onmousedown = _bind( 'onMouseDown' );
 
-		input.onfocus =
-			_bind( 'onFocus' );
+		pad.onmousemove = _bind( 'onMouseMove' );
 
-		input.onblur =
-			_bind( 'onBlur' );
+		pad.onmouseup = _bind( 'onMouseUp' );
 
-		send.onclick =
-			_bind( 'send' );
+		pad.onclick = _bind( 'onMouseClick' );
 
-		cancel.onclick =
-			_bind( 'onCancelButton' );
+		input.onkeypress = _bind( 'onKeyPress' );
 
-		down.onclick =
-			_bind( 'onDownButton' );
+		input.onkeydown = _bind( 'onKeyDown' );
 
-		up.onclick =
-			_bind( 'onUpButton' );
+		input.onkeyup = _bind( 'onKeyUp' );
 
-		upnow.onclick =
-			_bind( 'onUpNowButton' );
+		input.onfocus = _bind( 'onFocus' );
+
+		input.onblur = _bind( 'onBlur' );
+
+		send.onclick = _bind( 'send' );
+
+		cancel.onclick = _bind( 'onCancelButton' );
+
+		down.onclick = _bind( 'onDownButton' );
+
+		up.onclick = _bind( 'onUpButton' );
+
+		upnow.onclick = _bind( 'onUpNowButton' );
 	}
 
 	elements.send.disabled =
 	elements.cancel.disabled =
 		!this.action;
 
-	if( !this.iface )
+	if( !this.link )
 	{
-		this.iface =
-			new IFaceSym( );
+		this.link = testpad.repos.create( );
+	}
+
+	doc =
+	this._doc =
+		this.link.get( _noteDocPath.chop( 1 ) );
+
+	elements.now.innerHTML = '' + this.link.seq;
+
+	if( this.cursorLine === null )
+	{
+		this.cursorLine = 0;
 	}
 	else
 	{
-		this.seq =
-			this.iface.goToSeq( this.seq );
+		this.cursorLine =
+			jools.limit(
+				0,
+				this.cursorLine,
+				doc.ranks.length - 1
+			);
 	}
 
-	var
-		doc =
-		this._doc =
-			this.iface.get( _noteDocPath );
-
-	elements.now.innerHTML =
-		'' + this.seq;
-
-	this.cursorLine =
-		jools.limit(
-			0,
-			this.cursorLine,
-			doc.ranks.length - 1
-		);
-
-	this.cursorAt =
-		jools.limit(
-			0,
-			this.cursorAt,
-			doc.twig[ doc.ranks[ this.cursorLine ] ].text.length
-		);
+	if( this.cursorAt === null )
+	{
+		this.cursorAt = 0;
+	}
+	else
+	{
+		this.cursorAt =
+			jools.limit(
+				0,
+				this.cursorAt,
+				doc.twig[ doc.ranks[ this.cursorLine ] ].text.length
+			);
+	}
 
 	if( !doc )
 	{
-
 		elements.pad.innerHTML = root.noDataScreen( );
 	}
 	else
@@ -347,6 +335,16 @@ proto.onMouseDown =
 		event
 	)
 {
+	var
+		cLine,
+		cText,
+		doc,
+		pad,
+		measure,
+		x,
+		y;
+
+
 	if( event.button !== 0 )
 	{
 		return;
@@ -360,17 +358,15 @@ proto.onMouseDown =
 
 	root.elements.input.focus( );
 
-	var
-		pad =
-			root.elements.pad,
-		measure =
-			root.elements.measure,
-		doc =
-			root._doc,
-		x =
-			event.pageX - pad.offsetLeft,
-		y =
-			event.pageY - pad.offsetTop;
+	pad = root.elements.pad;
+
+	measure = root.elements.measure;
+
+	doc = root._doc;
+
+	x = event.pageX - pad.offsetLeft;
+
+	y = event.pageY - pad.offsetTop;
 
 	if( !doc )
 	{
@@ -379,15 +375,14 @@ proto.onMouseDown =
 		return;
 	}
 
-	var
-		cLine =
-			jools.limit(
-				0,
-				Math.floor( y / measure.offsetHeight ),
-				doc.ranks.length - 1
-			),
-		cText =
-			doc.twig[ doc.ranks[ cLine ] ].text;
+	cLine =
+		jools.limit(
+			0,
+			Math.floor( y / measure.offsetHeight ),
+			doc.ranks.length - 1
+		);
+
+	cText = doc.twig[ doc.ranks[ cLine ] ].text;
 
 	root.create(
 		'cursorLine',
@@ -409,7 +404,7 @@ proto.captureEvents =
 	function( )
 {
 	var
-		pad =
+		pad;
 
 	pad = root.elements.pad;
 
@@ -528,10 +523,7 @@ proto.onKeyPress =
 		// event
 	)
 {
-	setTimeout(
-		_bind( 'testInput' ),
-		0
-	);
+	setTimeout( _bind( 'testInput' ), 0 );
 };
 
 
@@ -574,19 +566,14 @@ proto.send =
 	function( )
 {
 	var
-		action =
-			this.action,
+		action,
 		cursorAt,
-		doc =
-			this._doc,
+		doc,
 		path;
 
-	/*
-	var copse    = this.$copse;
-	var cursor   = this.$cursor;
-	var ranks    = this.$ranks;
-	var notepath = this.notepath;
-	*/
+	action = this.action;
+
+	doc = this._doc;
 
 	if( !action )
 	{
@@ -599,8 +586,11 @@ proto.send =
 	{
 		case 'insert' :
 
+			// FIXME path is set in all cases equally, so
+			//       move it up
 			path =
 				_noteDocPath
+				.append( 'twig' )
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
@@ -619,6 +609,7 @@ proto.send =
 
 			path =
 				_noteDocPath
+				.append( 'twig' )
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
@@ -628,7 +619,8 @@ proto.send =
 				action.at2 - action.at
 			);
 
-			if( this.cursorLine == action.line
+			if(
+				this.cursorLine == action.line
 				&&
 				this.cursorAt >= action.at2
 			)
@@ -643,13 +635,11 @@ proto.send =
 
 			path =
 				_noteDocPath
+				.append( 'twig' )
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			peer.split(
-				path,
-				action.at
-			);
+			peer.split( path, action.at );
 
 			break;
 
@@ -657,6 +647,7 @@ proto.send =
 
 			path =
 				_noteDocPath
+				.append( 'twig' )
 				.append( doc.ranks[ action.line - 1] )
 				.append( 'text' );
 
@@ -669,9 +660,7 @@ proto.send =
 
 		default :
 
-			throw new Error(
-				'invalid action.command'
-			);
+			throw new Error( 'invalid action.command' );
 	}
 
 	root.create(
@@ -679,8 +668,8 @@ proto.send =
 			null,
 		'cursorAt',
 			cursorAt,
-		'seq',
-			jools.MAX_INTEGER
+		'link',
+			root.link.create( 'seq', jools.MAX_INTEGER )
 	);
 };
 
@@ -1128,7 +1117,10 @@ proto.inputSpecialKey =
 proto.onUpNowButton =
 	function( )
 {
-	root.create( 'seq', jools.MAX_INTEGER );
+	root.create(
+		'link',
+			root.link.create( 'seq', jools.MAX_INTEGER )
+	);
 
 	this.elements.input.focus( );
 };
@@ -1137,10 +1129,13 @@ proto.onUpNowButton =
 /*
 | Button one-up-the-sequence has been clicked.
 */
-root.prototype.onUpButton =
+proto.onUpButton =
 	function( )
 {
-	root.create( 'seq', this.seq + 1 );
+	root.create(
+		'link',
+			root.link.create( 'seq', root.link.seq + 1 )
+	);
 
 	this.elements.input.focus( );
 };
@@ -1149,10 +1144,13 @@ root.prototype.onUpButton =
 /*
 | Button one-down-the-sequence has been clicked.
 */
-root.prototype.onDownButton =
+proto.onDownButton =
 	function( )
 {
-	root.create( 'seq', root.seq - 1 );
+	root.create(
+		'link',
+			root.link.create( 'seq', root.link.seq - 1 )
+	);
 
 	this.elements.input.focus( );
 };
@@ -1161,7 +1159,7 @@ root.prototype.onDownButton =
 /*
 | Cretes a screen for current data.
 */
-root.prototype.makeScreen =
+proto.makeScreen =
 	function(
 		doc
 	)
@@ -1364,43 +1362,32 @@ root.prototype.makeScreen =
 | Generates the noDataScreen.
 | FIXME lazyFixate
 */
-root.noDataScreen =
+proto.noDataScreen =
 	function( )
 {
 	// no data
 	var
 		a,
-		line =
-			[ ],
-		lines =
-			[ ];
+		line,
+		line2,
+		lines;
 
-	for(
-		a = 0;
-		a < 100;
-		a++
-	)
+	line = [ ];
+
+	lines = [ ];
+
+	for( a = 0; a < 100; a++ )
 	{
 		line.push( '{}  ' );
 	}
 
-	line =
-		line.join( '' );
+	line = line.join( '' );
 
-	var
-		line2 =
-			'  ' + line;
+	line2 = '  ' + line;
 
-	for(
-		a = 0;
-		a < 50;
-		a++
-	)
+	for( a = 0; a < 50; a++ )
 	{
-		lines.push(
-			line,
-			line2
-		);
+		lines.push( line, line2 );
 	}
 
 	return lines.join( '\n' );

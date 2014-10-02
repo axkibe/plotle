@@ -9,9 +9,11 @@
 | Export
 */
 var
-	GenerateJion;
+	generateJion;
 
-GenerateJion = { };
+module.exports =
+generateJion =
+	{ };
 
 
 /*
@@ -58,7 +60,7 @@ vm = require( 'vm' );
 /*
 | Runs a generate jion operation.
 */
-GenerateJion.run =
+generateJion.run =
 	function*(
 		resource
 	)
@@ -173,9 +175,6 @@ GenerateJion.run =
 		)
 	);
 };
-
-
-module.exports = GenerateJion;
 
 
 } )( );

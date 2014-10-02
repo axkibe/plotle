@@ -239,27 +239,18 @@ sign.prototype.affix =
 		{
 			if( SERVER )
 			{
-				console.log( typeof( val ), typeof( this[ key ] ) );
-				console.log( val.equals, this[ key ].equals );
-				console.log( jools.matches( val, this[ key ] ) );
-
-				console.log( require( 'util' ).inspect( val.reflect, { depth : null } ) );
-				console.log( require( 'util' ).inspect( this[key].reflect, { depth : null } ) );
-
 				console.log(
 					'\n',
 					'faulty preset:\n',
-					require( 'util' ).inspect( val, { depth : null, showHidden : true } ), '\n',
+					require( 'util' )
+						.inspect( val, { depth : null } ), '\n',
 					'!==\n',
-					require( 'util' ).inspect( this[ key ], { depth : null, showHidden : true } ), '\n'
+					require( 'util' )
+						.inspect( this[ key ], { depth : null } ), '\n'
 				);
+			}
 
-				throw new Error( );
-			}
-			else
-			{
-				throw new Error( );
-			}
+			throw new Error( );
 		}
 	}
 

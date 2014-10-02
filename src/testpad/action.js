@@ -18,10 +18,8 @@
 if( JION )
 {
 	return {
-		name :
-			'action',
-		unit :
-			'testpad',
+		id :
+			'testpad.action',
 		attributes :
 			{
 				command :
@@ -45,7 +43,7 @@ if( JION )
 						type :
 							'Integer',
 						defaultValue :
-							'undefined',
+							undefined,
 					},
 				at2 :
 					{
@@ -54,7 +52,7 @@ if( JION )
 						type :
 							'Integer',
 						defaultValue :
-							'undefined',
+							undefined,
 					},
 				value :
 					{
@@ -63,7 +61,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							'undefined'
+							undefined
 					}
 			}
 	};

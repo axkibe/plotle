@@ -948,8 +948,10 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/testpad/iface-sym.js',
+			'src/testpad/repos.js',
 		'devel',
+			true,
+		'hasJion',
 			true,
 		'inTestPad',
 			true
@@ -966,7 +968,7 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/testpad/testpad.js',
+			'src/testpad/root.js',
 		'devel',
 			true,
 		'hasJion',

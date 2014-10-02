@@ -1548,6 +1548,7 @@ change.prototype._transformSignInsert =
 	)
 {
 	var
+		len,
 		src,
 		trg;
 
@@ -1556,29 +1557,28 @@ change.prototype._transformSignInsert =
 	trg = this.trg;
 
 	if(
-		!trg.path ||
+		!trg.path
+		||
 		!trg.path.equals( sign.path )
 	)
 	{
 		return sign;
 	}
 
-	if(
-		trg.at1 === undefined
-		||
-		trg.at2 === undefined
-	)
-	{
-		throw new Error( );
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( trg.at1 === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	if( sign.at1 < trg.at1 )
 	{
 		return sign;
 	}
 
-	var len =
-		src.val.length;
+	len = src.val.length;
 
 	if( sign.at2 !== undefined )
 	{

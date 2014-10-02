@@ -661,10 +661,15 @@ Server.prototype.prepareInventory =
 {
 	var
 		a,
+		ast,
 		aZ,
 		bundleFilePath,
 		cconfig,
+		code,
+		codes,
+		gjr,
 		inv,
+		jionIDs,
 		resource;
 
 	jools.log( 'start', 'preparing inventory' );
@@ -762,13 +767,9 @@ Server.prototype.prepareInventory =
 
 	jools.log( 'start', 'building bundle' );
 
-	var
-		ast,
-		code,
-		jionIDs,
-		gjr;
-
 	jionIDs = { };
+
+	codes = [ ];
 
 	// loads the files to be bundled
 	for(
@@ -812,10 +813,28 @@ Server.prototype.prepareInventory =
 			}
 		}
 
+		codes[ a ] = code;
+	}
+
+	jools.log( 'start', 'parsing bundle' );
+
+	for(
+		a = 0, aZ = this.inventory.ranks.length;
+		a < aZ;
+		a++
+	)
+	{
+		resource = this.inventory.atRank( a );
+
+		if( !resource.inBundle )
+		{
+			continue;
+		}
+
 		try{
 			ast =
 				uglify.parse(
-					code,
+					codes[ a ],
 					{
 						filename :
 							resource.filePath,
