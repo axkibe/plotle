@@ -33,7 +33,7 @@
 				true,
 			"CHECK" :
 				true,
-			"FORCE" :
+			"FORCE_JION_LOADING" :
 				true,
 			"JION" :
 				true,

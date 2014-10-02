@@ -34,7 +34,9 @@ if( JION )
 						comment :
 							'change id',
 						json :
-							'true',
+							true,
+							// FIXME it accepted 'true',
+							// jion validator shouldn't
 						type :
 							'String'
 					},
@@ -43,7 +45,7 @@ if( JION )
 						comment :
 							'change or change ray',
 						json :
-							'true',
+							true,
 						type :
 							'Object'
 					},
@@ -52,7 +54,7 @@ if( JION )
 						comment :
 							'sequence number',
 						json :
-							'true',
+							true,
 						type :
 							'Number'
 					}

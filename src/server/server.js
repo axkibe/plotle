@@ -17,7 +17,8 @@
 */
 GLOBAL.APP = 'server';
 
-GLOBAL.FORCE = false;
+// does not load jion code if out of date.
+GLOBAL.FORCE_JION_LOADING = false;
 
 GLOBAL.SHELLAPP = 'shell';
 
@@ -30,9 +31,6 @@ GLOBAL.SERVER = true;
 GLOBAL.SHELL = false;
 
 
-/*
-| Constants.
-*/
 var DB_VERSION = 6;
 
 
@@ -41,56 +39,80 @@ var DB_VERSION = 6;
 */
 var
 	config =
-		require( '../../config' ),
-	fs =
-		require( 'fs' ),
-	generateJion =
-		require( './generate-jion' ),
-	http =
-		require( 'http' ),
-	jion =
-		{
-			change :
-				require( '../jion/change' ),
-			changeRay :
-				require( '../jion/change-ray' ),
-			path :
-				require( '../jion/path' ),
-		},
-	jools =
-		require( '../jools/jools' ),
-	MaxAge =
-		require( './max-age' ),
-	mongodb =
-		require( 'mongodb' ),
-	PostProcessor =
-		require( './post-processor' ),
-	roster =
-		require( './roster' ),
-	server =
-		{
-			inventory :
-				require( './inventory' ),
-			resource :
-				require( './resource' )
-		},
-	sha1 =
-		require( '../jools/sha1' ),
-	sus =
-		require( 'suspend' ),
-	uglify =
-		require( 'uglify-js' ),
-	url =
-		require( 'url' ),
-	util =
-		require( 'util' ),
-	visual =
-		{
-			space :
-				require( '../visual/space' )
-		},
-	zlib =
-		require( 'zlib' );
+	DB_VERSION,
+	fs,
+	generateJion,
+	http,
+	jion,
+	jools,
+	maxAge,
+	mongodb,
+	postProcessor,
+	roster,
+	server,
+	sha1,
+	sus,
+	uglify,
+	url,
+	util,
+	visual,
+	zlib;
+
+DB_VERSION = 6;
+
+config = require( '../../config' );
+
+fs = require( 'fs' );
+
+generateJion = require( './generate-jion' );
+
+http = require( 'http' );
+
+jion =
+	{
+		change :
+			require( '../jion/change' ),
+		changeRay :
+			require( '../jion/change-ray' ),
+		path :
+			require( '../jion/path' ),
+	};
+
+jools = require( '../jools/jools' );
+
+maxAge = require( './max-age' );
+
+mongodb = require( 'mongodb' );
+
+postProcessor = require( './post-processor' );
+
+roster = require( './roster' );
+
+server =
+	{
+		inventory :
+			require( './inventory' ),
+		resource :
+			require( './resource' )
+	};
+
+sha1 = require( '../jools/sha1' );
+
+sus = require( 'suspend' );
+
+uglify = require( 'uglify-js' );
+
+url = require( 'url' );
+
+util = require( 'util' );
+
+visual =
+	{
+		space :
+			require( '../visual/space' )
+	};
+
+zlib = require( 'zlib' );
 
 
 /*
@@ -993,7 +1015,7 @@ Server.prototype.prepareInventory =
 			continue;
 		}
 
-		if( !PostProcessor[ resource.postProcessor ] )
+		if( !postProcessor[ resource.postProcessor ] )
 		{
 			throw new Error(
 				'invalid postProcessor: ' +
@@ -1006,7 +1028,7 @@ Server.prototype.prepareInventory =
 				resource,
 				resource.create(
 					'data',
-						PostProcessor[ resource.postProcessor ](
+						postProcessor[ resource.postProcessor ](
 							resource.data,
 							this.inventory,
 							bundleFilePath
@@ -1478,9 +1500,8 @@ Server.prototype.cmdAlter =
 		// FUTURE
 		if( Array.isArray( chgX ) )
 		{
-			throw new Error(
-				'Array chgX not yet supported'
-			);
+			// Array chgX not yet supported
+			throw new Error( );
 		}
 
 		chgX = jion.change.createFromJSON( chgX );
@@ -1529,11 +1550,9 @@ Server.prototype.cmdAlter =
 	// applies the changes
 	result = chgX.changeTree( space.$tree );
 
-	space.$tree =
-		result.tree;
+	space.$tree = result.tree;
 
-	chgX =
-		result.chgX;
+	chgX = result.chgX;
 
 	changes[ seqZ ] =
 		{
@@ -1573,8 +1592,9 @@ Server.prototype.cmdAlter =
 	space.$seqZ++;
 
 	var
-		self =
-			this;
+		self;
+
+	self = this;
 
 	process.nextTick(
 		function( )
@@ -2722,7 +2742,7 @@ Server.prototype.requestListener =
 				'Content-Type' :
 					resource.mime,
 				'Cache-Control' :
-					MaxAge.map( resource.maxage ),
+					maxAge.map( resource.maxage ),
 				'Date' :
 					new Date().toUTCString()
 			};
@@ -2808,7 +2828,7 @@ Server.prototype.requestListener =
 
 	if( resource.postProcessor )
 	{
-		if( !PostProcessor[ resource.postProcessor ] )
+		if( !postProcessor[ resource.postProcessor ] )
 		{
 			throw new Error(
 				'invalid postProcessor: ' +
@@ -2817,7 +2837,7 @@ Server.prototype.requestListener =
 		}
 
 		data =
-			PostProcessor[ resource.postProcessor ](
+			postProcessor[ resource.postProcessor ](
 				data,
 				this.inventory,
 				this.bundleFilePath

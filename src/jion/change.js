@@ -338,9 +338,43 @@ change.prototype.transformChange =
 		return null;
 	}
 
-	srcA = srcX.reflect === 'jion.signRay';
+	switch( srcX.reflect )
+	{
+		case 'jion.sign' :
 
-	trgA = trgX.reflect === 'jion.signRay';
+			srcA = false;
+
+			break;
+
+		case 'jion.signRay' :
+
+			srcA = true;
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
+
+	switch( trgX.reflect )
+	{
+		case 'jion.sign' :
+
+			trgA = false;
+
+			break;
+
+		case 'jion.signRay' :
+
+			trgA = true;
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
 
 	if( !srcA && !trgA )
 	{
@@ -362,13 +396,10 @@ change.prototype.transformChange =
 			return null;
 		}
 
-
-		return (
+		return(
 			change.create(
-				'src',
-					srcX,
-				'trg',
-					trgX
+				'src', srcX,
+				'trg', trgX
 			)
 		);
 	}
@@ -384,19 +415,14 @@ change.prototype.transformChange =
 		{
 			y[ a ] =
 				change.create(
-					'src',
-						srcX,
-					'trg',
-						trgX.get( a )
+					'src', srcX,
+					'trg', trgX.get( a )
 				);
 		}
 
-		return (
+		return(
 			jion.changeRay.create(
-				'array',
-					y,
-				'_sliced',
-					true
+				'ray:init', y
 			)
 		);
 	}
@@ -421,10 +447,7 @@ change.prototype.transformChange =
 
 		return (
 			jion.changeRay.create(
-				'array',
-					y,
-				'_sliced',
-					true
+				'ray:init', y
 			)
 		);
 	}
@@ -621,7 +644,7 @@ change.prototype._changeTreeSet =
 
 
 /*
-| change Operation: insert
+| Change Operation: insert
 |
 | A string is inserted into a string item.
 */
@@ -1540,7 +1563,7 @@ change.prototype._transformSignSet =
 
 
 /*
-| Transforms a signature on an insert.
+| Transforms a sign on an insert.
 */
 change.prototype._transformSignInsert =
 	function(
@@ -1582,7 +1605,7 @@ change.prototype._transformSignInsert =
 
 	if( sign.at2 !== undefined )
 	{
-		return (
+		return(
 			sign.create(
 				'at1',
 					sign.at1 + len,
@@ -1593,7 +1616,7 @@ change.prototype._transformSignInsert =
 	}
 	else
 	{
-		return (
+		return(
 			sign.create(
 				'at1',
 					sign.at1 + len

@@ -79,7 +79,7 @@ jionNodeGenerator =
 
 	if( inStat.mtime > outStat.mtime )
 	{
-		if( !FORCE )
+		if( !FORCE_JION_LOADING )
 		{
 			throw new Error(
 				'Out of date jion: ' +
