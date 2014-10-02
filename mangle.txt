@@ -214,7 +214,7 @@
 > ca
 > call
 . cancelTimer
-. canvas
+> canvas
 . car
 . cardinalResize
 . caret

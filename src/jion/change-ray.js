@@ -40,6 +40,8 @@ if( JION )
 			true,
 		equals :
 			false,
+		json :
+			true,
 		ray :
 			[
 				'jion.change'

@@ -20,29 +20,33 @@ GLOBAL.APP = 'server';
 // does not load jion code if out of date.
 GLOBAL.FORCE_JION_LOADING = false;
 
+// the name the runtime created jions are stored
+// under
 GLOBAL.SHELLAPP = 'shell';
 
+// server keeps checking on by default
 GLOBAL.CHECK = true;
 
+// this is not a jion creation
 GLOBAL.JION = false;
 
+// server is a server
 GLOBAL.SERVER = true;
 
+// and not a shell
 GLOBAL.SHELL = false;
-
-
-var DB_VERSION = 6;
 
 
 /*
 | Imports.
 */
 var
-	config =
-	DB_VERSION,
+	config,
+	db_version,
 	fs,
 	generateJion,
 	http,
+	isString,
 	jion,
 	jools,
 	maxAge,
@@ -58,7 +62,7 @@ var
 	visual,
 	zlib;
 
-DB_VERSION = 6;
+db_version = 6;
 
 config = require( '../../config' );
 
@@ -79,6 +83,8 @@ jion =
 	};
 
 jools = require( '../jools/jools' );
+
+isString = jools.isString;
 
 maxAge = require( './max-age' );
 
@@ -280,11 +286,11 @@ Server.prototype.checkRepositorySchemaVersion =
 
 	if( version )
 	{
-		if( version.version !== DB_VERSION )
+		if( version.version !== db_version )
 		{
 			throw new Error(
 				'Wrong repository schema version, expected '
-				+ DB_VERSION +
+				+ db_version +
 				', got ' +
 				version.version
 			);
@@ -357,7 +363,7 @@ Server.prototype.initRepository =
 			_id :
 				'version',
 			version :
-				DB_VERSION
+				db_version
 		},
 		sus.resume( )
 	);
@@ -633,9 +639,9 @@ Server.prototype.buildShellConfig =
 			'\t\t',
 			k,
 			' : ',
-			jools.isString( val ) ? "'" : '',
+			isString( val ) ? "'" : '',
 			val,
-			jools.isString( val ) ? "'" : ''
+			isString( val ) ? "'" : ''
 		);
 	}
 
@@ -1321,7 +1327,7 @@ Server.prototype.extraMangle =
 				return false;
 			}
 
-			if( !jools.isString( node[ k ] ) )
+			if( !isString( node[ k ] ) )
 			{
 				return false;
 			}
@@ -1447,11 +1453,7 @@ Server.prototype.cmdAlter =
 	}
 
 	if(
-		this.testAccess(
-			username,
-			spaceUser,
-			spaceTag
-		) !== 'rw'
+		this.testAccess( username, spaceUser, spaceTag ) !== 'rw'
 	)
 	{
 		throw jools.reject( 'no access' );
@@ -1495,16 +1497,26 @@ Server.prototype.cmdAlter =
 		throw jools.reject( 'invalid seq' );
 	}
 
-	// fits the cmd into data structures
-	try {
-		// FUTURE
-		if( Array.isArray( chgX ) )
+	try
+	{
+		switch( chgX.type )
 		{
-			// Array chgX not yet supported
-			throw new Error( );
-		}
+			case 'jion.change' :
 
-		chgX = jion.change.createFromJSON( chgX );
+				chgX = jion.change.createFromJSON( chgX );
+
+				break;
+
+			case 'jion.changeRay' :
+
+				chgX = jion.changeRay.createFromJSON( chgX );
+
+				break;
+
+			default :
+
+				throw jools.reject( 'invalid chgX type' );
+		}
 	}
 	catch( err )
 	{
@@ -1516,7 +1528,7 @@ Server.prototype.cmdAlter =
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )
 	{
-		chgX = chgX.transformChangeX( changes[a].chgX );
+		chgX = changes[ a ].chgX.transformChangeX( chgX );
 
 		if(
 			chgX === null
@@ -1574,7 +1586,7 @@ Server.prototype.cmdAlter =
 			user :
 				cmd.user,
 			date :
-				Date.now()
+				Date.now( )
 		},
 
 		function(
@@ -2357,14 +2369,24 @@ Server.prototype.wake =
 		spaceTag
 	)
 {
-	var sleepKeys = Object.keys( this.$upsleep );
+	var
+		a,
+		asw,
+		aZ,
+		result,
+		sKey,
+		sleep,
+		sleepKeys;
+
+	sleepKeys = Object.keys( this.$upsleep );
 
 	// FIXME cache change lists to answer the same to multiple clients.
 
-	for(var a = 0, aZ = sleepKeys.length; a < aZ; a++)
+	for(a = 0, aZ = sleepKeys.length; a < aZ; a++)
 	{
-		var sKey  = sleepKeys[a];
-		var sleep = this.$upsleep[sKey];
+		sKey = sleepKeys[a];
+
+		sleep = this.$upsleep[sKey];
 
 		if(
 			spaceUser !== sleep.spaceUser ||
@@ -2376,7 +2398,7 @@ Server.prototype.wake =
 
 		clearTimeout( sleep.timerID );
 
-		delete this.$upsleep[sKey];
+		delete this.$upsleep[ sKey ];
 
 		this.destablishPresence(
 			sleep.user,
@@ -2384,16 +2406,14 @@ Server.prototype.wake =
 			sleep.spaceTag
 		);
 
-		var
-			asw =
-				this.conveyUpdate(
-					sleep.seq,
-					sleep.spaceUser,
-					sleep.spaceTag
-				),
+		asw =
+			this.conveyUpdate(
+				sleep.seq,
+				sleep.spaceUser,
+				sleep.spaceTag
+			);
 
-			result =
-				sleep.result;
+		result = sleep.result;
 
 		jools.log( 'ajax', '->', asw );
 
@@ -2425,8 +2445,9 @@ Server.prototype.testAccess =
 	)
 {
 	if(
-		!jools.isString( spaceUser ) ||
-		!jools.isString( spaceTag )
+		!isString( spaceUser )
+		||
+		!isString( spaceTag )
 	)
 	{
 		return 'no';

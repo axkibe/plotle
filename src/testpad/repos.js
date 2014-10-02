@@ -239,7 +239,7 @@ proto.alter =
 		s++
 	)
 	{
-		chgX = chgX.transformChangeX( changes.get( s ).chgX );
+		chgX = changes.get( s ).chgX.transformChangeX( chgX );
 
 		if( chgX === null )
 		{
@@ -248,8 +248,6 @@ proto.alter =
 	}
 
 	r = chgX.changeTree( this.space );
-
-	chgX = r.chgX;
 
 	changes =
 		changes.append(
