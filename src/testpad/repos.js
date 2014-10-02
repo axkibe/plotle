@@ -19,6 +19,7 @@ testpad = testpad || { };
 var
 	euclid,
 	jools,
+	jion,
 	root,
 	visual;
 
@@ -40,22 +41,13 @@ if( JION )
 			'testpad.repos',
 		attributes :
 			{
+				// TODO _space
 				space :
 					{
 						comment :
 							'the action the user is preparing',
 						type :
 							'visual.space',
-						defaultValue :
-							null
-					},
-				changes :
-					{
-						comment :
-							'history of the space changes',
-						type :
-							// FIXME make it a change-wrap-ray
-							'Object',
 						defaultValue :
 							null
 					},
@@ -67,7 +59,16 @@ if( JION )
 							'Integer',
 						defaultValue :
 							null
-					}
+					},
+				_changes :
+					{
+						comment :
+							'history of the space changes',
+						type :
+							'jion.changeWrapRay',
+						defaultValue :
+							null
+					},
 			},
 		init :
 			[ ]
@@ -76,8 +77,11 @@ if( JION )
 
 
 var
+	nextcid,
 	proto,
 	repos;
+
+nextcid = 1001;
 
 repos = testpad.repos;
 
@@ -137,9 +141,9 @@ proto._init =
 		);
 	}
 
-	if( this.changes === null )
+	if( this._changes === null )
 	{
-		this.changes = [ ];
+		this._changes = jion.changeWrapRay.create( );
 	}
 
 	if( this.seq === null )
@@ -147,7 +151,7 @@ proto._init =
 		this.seq = 0;
 	}
 
-	this.seq = jools.limit( 0, this.seq, this.changes.length );
+	this.seq = jools.limit( 0, this.seq, this._changes.length );
 };
 
 
@@ -169,7 +173,7 @@ proto.get =
 		seq,
 		space;
 
-	changes = this.changes;
+	changes = this._changes;
 
 	cZ = changes.length;
 
@@ -187,7 +191,7 @@ proto.get =
 	// rewinds stuff
 	for( a = cZ - 1; a >= seq; a-- )
 	{
-		chgX = changes[ a ];
+		chgX = changes.get( a ).chgX;
 
 		for( b = 0; b < chgX.length; b++ )
 		{
@@ -214,8 +218,6 @@ proto.alter =
 	)
 {
 	var
-		a,
-		aZ,
 		chgX,
 		changes,
 		cZ,
@@ -223,7 +225,7 @@ proto.alter =
 		s,
 		seq;
 
-	changes = this.changes;
+	changes = this._changes;
 
 	cZ = changes.length;
 
@@ -237,7 +239,7 @@ proto.alter =
 		s++
 	)
 	{
-		chgX = chgX.transformChangeX( changes[ s ] );
+		chgX = chgX.transformChangeX( changes.get( s ).chgX );
 
 		if( chgX === null )
 		{
@@ -249,21 +251,22 @@ proto.alter =
 
 	chgX = r.chgX;
 
-	for(
-		a = 0, aZ = chgX.length;
-		a < aZ;
-		a++
-	)
-	{
-		// FIXME changes = changes.append( chgX.get( a ) );
-		changes = changes.slice( );
-		changes.push( chgX.get( a ) );
-	}
+	changes =
+		changes.append(
+			jion.changeWrap.create(
+				'cid',
+					'' + ( nextcid++ ),
+				'chgX',
+					r.chgX,
+				'seq',
+					seq + 1
+			)
+		);
 
 	root.create(
 		'link',
 			this.create(
-				'changes',
+				'_changes',
 					changes,
 				'space',
 					r.tree

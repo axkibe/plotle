@@ -136,6 +136,8 @@ module.exports =
 		'hasJion',
 			true,
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	resource.create(
@@ -144,6 +146,8 @@ module.exports =
 		'hasJion',
 			true,
 		'inBundle',
+			true,
+		'inTestPad',
 			true
 	),
 	resource.create(
