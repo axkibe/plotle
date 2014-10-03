@@ -27,7 +27,7 @@ if( JION )
 						comment :
 							'header comment',
 						type :
-							'ast.aComment',
+							'ast.astComment',
 						defaultValue :
 							null
 					},

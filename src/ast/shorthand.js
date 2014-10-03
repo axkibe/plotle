@@ -45,8 +45,8 @@ ast =
 			require( './ast-check' ),
 		astCommaList :
 			require( './ast-comma-list' ),
-		aComment :
-			require( './a-comment' ),
+		astComment :
+			require( './ast-comment' ),
 		aCondition :
 			require( './a-condition' ),
 		aDelete :

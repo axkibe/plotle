@@ -69,8 +69,8 @@ var
 | Jion.
 */
 var
-	aComment =
-	ast.aComment =
+	astComment =
+	ast.astComment =
 		{
 			prototype :
 				prototype
@@ -78,9 +78,9 @@ var
 
 
 /*
-| Creates a new aComment object.
+| Creates a new astComment object.
 */
-aComment.create =
+astComment.create =
 prototype.create =
 	function(
 		// free strings
@@ -91,7 +91,7 @@ prototype.create =
 
 		v_content;
 
-	if( this !== aComment )
+	if( this !== astComment )
 	{
 		inherit = this;
 
@@ -153,13 +153,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aComment';
+prototype.reflect = 'ast.astComment';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aComment';
+prototype.reflectName = 'astComment';
 
 
 /*
@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aComment;
+	module.exports = astComment;
 }
 
 

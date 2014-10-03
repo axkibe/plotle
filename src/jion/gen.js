@@ -39,8 +39,9 @@ if( JION )
 
 
 var
-	aComment =
-		require( '../ast/a-comment' ),
+	// FIXME this should a short hand as well
+	astComment =
+		require( '../ast/ast-comment' ),
 	gen =
 		require( '../jion/this' )( module ),
 	Shorthand =
@@ -592,7 +593,7 @@ gen.prototype.genImports =
 		capsule // block to append to
 	)
 {
-	capsule = capsule.aComment( 'Imports.' );
+	capsule = capsule.astComment( 'Imports.' );
 
 	capsule =
 		capsule
@@ -638,7 +639,7 @@ gen.prototype.genNodeIncludes =
 		unitName,
 		unit;
 
-	capsule = capsule.aComment( 'Node includes.' );
+	capsule = capsule.astComment( 'Node includes.' );
 
 	block =
 		astBlock( )
@@ -735,7 +736,7 @@ gen.prototype.genConstructor =
 		jionObj,
 		name;
 
-	capsule = capsule.aComment( 'Constructor.' );
+	capsule = capsule.astComment( 'Constructor.' );
 
 	block = astBlock( );
 
@@ -964,7 +965,7 @@ gen.prototype.genConstructor =
 	{
 		capsule =
 			capsule
-			.aComment( 'Subclass.' )
+			.astComment( 'Subclass.' )
 			.astCall(
 				aVar( 'jools' ).aDot( 'subclass' ),
 				aVar( 'Constructor' ),
@@ -975,14 +976,14 @@ gen.prototype.genConstructor =
 	// prototype shortcut
 	capsule =
 		capsule
-		.aComment( 'Prototype shortcut' )
+		.astComment( 'Prototype shortcut' )
 		.aVarDec(
 			'prototype',
 			aVar( 'Constructor' ).aDot( 'prototype' )
 		);
 
 	// the exported object
-	capsule = capsule.aComment( 'Jion.' );
+	capsule = capsule.astComment( 'Jion.' );
 
 	jionObj =
 		anObjLiteral( )
@@ -1015,7 +1016,7 @@ gen.prototype.genSingleton =
 {
 	return (
 		capsule
-		.aComment( 'Singleton' )
+		.astComment( 'Singleton' )
 		.aVarDec(
 			'_singleton',
 			aNull
@@ -2268,7 +2269,7 @@ gen.prototype.genCreator =
 		creator;
 
 	capsule =
-		capsule.aComment(
+		capsule.astComment(
 			'Creates a new ' + this.name + ' object.'
 		);
 
@@ -2755,7 +2756,7 @@ gen.prototype.genFromJSONCreator =
 	jsonList.sort( );
 
 	capsule =
-		capsule.aComment(
+		capsule.astComment(
 			'Creates a new ' + this.name + ' object from JSON.'
 		);
 
@@ -2802,7 +2803,7 @@ gen.prototype.genReflection =
 {
 	capsule =
 		capsule
-		.aComment( 'Reflection.' )
+		.astComment( 'Reflection.' )
 		.anAssign(
 			aVar( 'prototype' ).aDot( 'reflect' ),
 			aStringLiteral( this.id )
@@ -2810,7 +2811,7 @@ gen.prototype.genReflection =
 
 	capsule =
 		capsule
-		.aComment( 'Name Reflection.' )
+		.astComment( 'Name Reflection.' )
 		.anAssign(
 			aVar( 'prototype' ).aDot( 'reflectName' ),
 			aStringLiteral( this.name )
@@ -2830,12 +2831,12 @@ gen.prototype.genJionProto =
 {
 	capsule =
 		capsule
-		.aComment( 'Sets values by path.' )
+		.astComment( 'Sets values by path.' )
 		.anAssign(
 			aVar( 'prototype' ).aDot( 'setPath' ),
 			aVar( 'jion' ).aDot( 'proto' ).aDot( 'setPath' )
 		)
-		.aComment( 'Gets values by path' )
+		.astComment( 'Gets values by path' )
 		.anAssign(
 			aVar( 'prototype' ).aDot( 'getPath' ),
 			aVar( 'jion' ).aDot( 'proto' ).aDot( 'getPath' )
@@ -2845,17 +2846,17 @@ gen.prototype.genJionProto =
 	{
 		capsule =
 			capsule
-			.aComment( 'Returns a twig by rank.' )
+			.astComment( 'Returns a twig by rank.' )
 			.anAssign(
 				aVar( 'prototype' ).aDot( 'atRank' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'atRank' )
 			)
-			.aComment( 'Gets the rank of a key.' )
+			.astComment( 'Gets the rank of a key.' )
 			.anAssign(
 				aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'rankOf' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rankOf' )
 			)
-			.aComment( 'Creates a new unique identifier.' )
+			.astComment( 'Creates a new unique identifier.' )
 			.anAssign(
 				aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'newUID' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'newUID' )
@@ -2866,12 +2867,12 @@ gen.prototype.genJionProto =
 	{
 		capsule =
 			capsule
-			.aComment( 'Appends an entry to the ray.' )
+			.astComment( 'Appends an entry to the ray.' )
 			.anAssign(
 				aVar( 'prototype' ).aDot( 'append' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayAppend' )
 			)
-			.aComment(
+			.astComment(
 				'Returns the length of the ray.'
 			)
 			.astCall(
@@ -2880,26 +2881,26 @@ gen.prototype.genJionProto =
 				aStringLiteral( 'length' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayLength' )
 			)
-			.aComment(
+			.astComment(
 				'Gets one entry from the ray.'
 			)
 			.anAssign(
 				aVar( 'prototype' ).aDot( 'get' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayGet' )
 			)
-			.aComment( 'Returns a jion with one entry inserted to the ray.' )
+			.astComment( 'Returns a jion with one entry inserted to the ray.' )
 			.anAssign(
 				aVar( 'prototype' ).aDot( 'insert' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayInsert' )
 			)
-			.aComment(
+			.astComment(
 				'Returns the jion with one entry of the ray set.'
 			)
 			.anAssign(
 				aVar( 'prototype' ).aDot( 'set' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'raySet' )
 			)
-			.aComment( 'Returns a jion with one entry from the ray removed.' )
+			.astComment( 'Returns a jion with one entry from the ray removed.' )
 			.anAssign(
 				aVar( 'prototype' ).aDot( 'remove' ),
 				aVar( 'jion' ).aDot( 'proto' ).aDot( 'rayRemove' )
@@ -2992,7 +2993,7 @@ gen.prototype.genToJSON =
 
 	capsule =
 		capsule
-		.aComment( 'Converts a ' + this.name + ' into JSON.' )
+		.astComment( 'Converts a ' + this.name + ' into JSON.' )
 		.astCall(
 			aVar( 'jools' ).aDot( 'lazyValue' ),
 			aVar( 'Constructor' ).aDot( 'prototype' ),
@@ -3112,7 +3113,7 @@ gen.prototype.genEquals =
 
 			return (
 				capsule
-				.aComment( 'Tests equality of object.' )
+				.astComment( 'Tests equality of object.' )
 				.anAssign(
 					aVar( 'Constructor' ).aDot( 'prototype' ).aDot( 'equals' ),
 					aFunc(
@@ -3145,7 +3146,7 @@ gen.prototype.genEquals =
 
 	capsule =
 		capsule
-		.aComment( 'Tests equality of object.' );
+		.astComment( 'Tests equality of object.' );
 
 	block = astBlock( );
 
@@ -3348,7 +3349,7 @@ gen.prototype.genAlike =
 
 		ignores = this.alike[ alikeName ].ignores;
 
-		capsule = capsule.aComment( 'Tests partial equality.' );
+		capsule = capsule.astComment( 'Tests partial equality.' );
 
 		block =
 			astBlock( )
@@ -3444,7 +3445,7 @@ gen.prototype.genNodeExport =
 {
 	return (
 		capsule
-		.aComment( 'Node export.' )
+		.astComment( 'Node export.' )
 		.anIf(
 			aVar( 'SERVER' ),
 			astBlock( )
@@ -3463,7 +3464,7 @@ gen.prototype.genNodeExport =
 gen.prototype.genExport =
 	function( block )
 {
-	block = block.aComment( 'Export.' );
+	block = block.astComment( 'Export.' );
 
 	block =
 		block
@@ -3592,7 +3593,7 @@ gen.generate =
 			aFile( )
 			.create(
 				'header',
-					aComment.create(
+					astComment.create(
 						'content',
 							[
 								'This is an auto generated file.',

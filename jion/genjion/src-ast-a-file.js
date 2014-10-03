@@ -41,9 +41,9 @@ if( SERVER )
 
 	jion = { };
 
-	ast.aComment = require( '../../src/ast/a-comment' );
-
 	ast.astBlock = require( '../../src/ast/ast-block' );
+
+	ast.astComment = require( '../../src/ast/ast-comment' );
 
 	jion.proto = require( '../../src/jion/proto' );
 }
@@ -258,7 +258,7 @@ prototype.create =
 /**/
 /**/	if( v_header !== null )
 /**/	{
-/**/		if( v_header.reflectName !== 'aComment' )
+/**/		if( v_header.reflectName !== 'astComment' )
 /**/		{
 /**/			throw new Error( );
 /**/		}

@@ -1326,7 +1326,7 @@ formatStatement =
 	if(
 		lookBehind
 		&&
-		lookBehind.reflect !== 'ast.aComment'
+		lookBehind.reflect !== 'ast.astComment'
 		&&
 		!(
 			lookBehind.reflect === 'ast.aCarDec'
@@ -1351,7 +1351,7 @@ formatStatement =
 		}
 	}
 
-	if( statement.reflect === 'ast.aComment' )
+	if( statement.reflect === 'ast.astComment' )
 	{
 		text +=
 			formatAComment(

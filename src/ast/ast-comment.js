@@ -1,5 +1,5 @@
 /*
-| A file to be generated.
+| A comment in an abstract syntax tree.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aComment',
+			'ast.astComment',
 		attributes :
 			{
 				content :
@@ -36,9 +36,6 @@ if( JION )
 }
 
 
-/*
-| Export.
-*/
 module.exports = require( '../jion/this' )( module );
 
 

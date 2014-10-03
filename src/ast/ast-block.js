@@ -44,6 +44,7 @@ astBlock =
 module.exports =
 	require( '../jion/this' )( module );
 
+// FIXME remove ast table
 ast =
 	{
 		anAssign :
@@ -52,8 +53,8 @@ ast =
 			require( './ast-call' ),
 		astCheck :
 			require( './ast-check' ),
-		aComment :
-			require( './a-comment' ),
+		astComment :
+			require( './ast-comment' ),
 		aFail :
 			require( './a-fail' ),
 		aFor :
@@ -161,16 +162,16 @@ astBlock.prototype.astCheck =
 /*
 | Returns the block with a comment appended.
 */
-astBlock.prototype.aComment =
+astBlock.prototype.astComment =
 	function(
 		header
 	)
 {
-	if( header.reflect !== 'ast.aComment' )
+	if( header.reflect !== 'ast.astComment' )
 	{
 		// arguments have to be a list of strings otherwise
 		header =
-			ast.aComment.create(
+			ast.astComment.create(
 				'content',
 					Array.prototype.slice.call( arguments )
 			);
