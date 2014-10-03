@@ -1364,7 +1364,7 @@ formatStatement =
 
 	switch( statement.reflect )
 	{
-		case 'ast.aCheck' :
+		case 'ast.astCheck' :
 
 			text += formatCheck( context, statement );
 
@@ -1506,7 +1506,7 @@ formatStatement =
 
 			return text + ';' + context.sep;
 
-		case 'ast.aCheck' :
+		case 'ast.astCheck' :
 		case 'ast.aFor' :
 		case 'ast.aForIn' :
 		case 'ast.anIf' :

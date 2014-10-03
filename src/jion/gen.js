@@ -871,7 +871,7 @@ gen.prototype.genConstructor =
 	{
 		block =
 			block
-			.aCheck(
+			.astCheck(
 				astBlock( )
 				.astCall(
 					aVar( 'Object' ).aDot( 'freeze' ),
@@ -1588,7 +1588,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		switchExpr
 		.Default(
 			astBlock( )
-			.aCheck(
+			.astCheck(
 				astBlock( )
 				//.aFail( 'invalid argument' )
 				.aFail( )
@@ -1859,7 +1859,7 @@ gen.prototype.genCreatorChecks =
 
 	if( checkin )
 	{
-		block = block.aCheck( check );
+		block = block.astCheck( check );
 	}
 
 	return block;

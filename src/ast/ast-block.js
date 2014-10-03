@@ -50,8 +50,8 @@ ast =
 			require( './an-assign' ),
 		astCall :
 			require( './ast-call' ),
-		aCheck :
-			require( './a-check' ),
+		astCheck :
+			require( './ast-check' ),
 		aComment :
 			require( './a-comment' ),
 		aFail :
@@ -145,17 +145,14 @@ astBlock.prototype.astCall =
 /*
 | Returns the block with a check appended.
 */
-astBlock.prototype.aCheck =
+astBlock.prototype.astCheck =
 	function(
 		block
 	)
 {
-	return (
+	return(
 		this.append(
-			ast.aCheck.create(
-				'block',
-					block
-			)
+			ast.astCheck.create( 'block', block )
 		)
 	);
 };

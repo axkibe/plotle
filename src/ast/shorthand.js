@@ -41,8 +41,8 @@ ast =
 			require( './ast-boolean-literal' ),
 		astCall :
 			require( './ast-call' ),
-		aCheck :
-			require( './a-check' ),
+		astCheck :
+			require( './ast-check' ),
 		aCommaList :
 			require( './a-comma-list' ),
 		aComment :

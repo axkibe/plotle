@@ -73,8 +73,8 @@ var
 | Jion.
 */
 var
-	aCheck =
-	ast.aCheck =
+	astCheck =
+	ast.astCheck =
 		{
 			prototype :
 				prototype
@@ -82,9 +82,9 @@ var
 
 
 /*
-| Creates a new aCheck object.
+| Creates a new astCheck object.
 */
-aCheck.create =
+astCheck.create =
 prototype.create =
 	function(
 		// free strings
@@ -95,7 +95,7 @@ prototype.create =
 
 		v_block;
 
-	if( this !== aCheck )
+	if( this !== astCheck )
 	{
 		inherit = this;
 
@@ -162,13 +162,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aCheck';
+prototype.reflect = 'ast.astCheck';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aCheck';
+prototype.reflectName = 'astCheck';
 
 
 /*
@@ -210,7 +210,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aCheck;
+	module.exports = astCheck;
 }
 
 
