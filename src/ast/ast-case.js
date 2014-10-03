@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aCase',
+			'ast.astCase',
 		attributes :
 			{
 				block :
@@ -27,7 +27,7 @@ if( JION )
 						comment :
 							'the statement',
 						type :
-							'ast.aBlock'
+							'ast.astBlock'
 					}
 			},
 		node :
@@ -38,16 +38,10 @@ if( JION )
 }
 
 
-var
-	aCase;
-
-aCase = require( '../jion/this' )( module );
-
-
 /*
 | Node export.
 */
-module.exports = aCase;
+module.exports = require( '../jion/this' )( module )
 
 
 } )( );

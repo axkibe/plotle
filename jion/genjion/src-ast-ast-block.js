@@ -37,13 +37,7 @@ if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
 
-	ast = { };
-
 	jion = { };
-
-	ast.astBlock = require( '../../src/ast/ast-block' );
-
-	ast.astCase = require( '../../src/ast/ast-case' );
 
 	jion.proto = require( '../../src/jion/proto' );
 }
@@ -55,15 +49,9 @@ if( SERVER )
 var Constructor =
 	function(
 		twig, // twig
-		ranks, // twig ranks
-		v_defaultCase, // the default block
-		v_statement // the statement expression
+		ranks // twig ranks
 	)
 	{
-		this.defaultCase = v_defaultCase;
-
-		this.statement = v_statement;
-
 		this.twig = twig;
 
 		this.ranks = ranks;
@@ -88,8 +76,8 @@ var
 | Jion.
 */
 var
-	aSwitch =
-	ast.aSwitch =
+	astBlock =
+	ast.astBlock =
 		{
 			prototype :
 				prototype
@@ -97,9 +85,9 @@ var
 
 
 /*
-| Creates a new aSwitch object.
+| Creates a new astBlock object.
 */
-aSwitch.create =
+astBlock.create =
 prototype.create =
 	function(
 		// free strings
@@ -116,13 +104,9 @@ prototype.create =
 
 		twig,
 
-		twigDup,
+		twigDup;
 
-		v_defaultCase,
-
-		v_statement;
-
-	if( this !== aSwitch )
+	if( this !== astBlock )
 	{
 		inherit = this;
 
@@ -131,10 +115,6 @@ prototype.create =
 		ranks = inherit.ranks;
 
 		twigDup = false;
-
-		v_defaultCase = this.defaultCase;
-
-		v_statement = this.statement;
 	}
 	else
 	{
@@ -157,24 +137,6 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
-			case 'defaultCase' :
-
-				if( arg !== undefined )
-				{
-					v_defaultCase = arg;
-				}
-
-				break;
-
-			case 'statement' :
-
-				if( arg !== undefined )
-				{
-					v_statement = arg;
-				}
-
-				break;
-
 			case 'twig:add' :
 
 				if( !twigDup )
@@ -291,68 +253,29 @@ prototype.create =
 		}
 	}
 
-	if( v_defaultCase === undefined )
-	{
-		v_defaultCase = null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_defaultCase === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_defaultCase !== null )
-/**/	{
-/**/		if( v_defaultCase.reflectName !== 'astBlock' )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-/**/
-/**/	if( v_statement === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_statement === null )
-/**/	{
-/**/		throw new Error( );
-/**/	}
 /**/}
 
-	if(
-		inherit
-		&&
-		!twigDup
-		&&
-		(
-			v_defaultCase === inherit.defaultCase
-			||
-			v_defaultCase && v_defaultCase.equals( inherit.defaultCase )
-		)
-		&&
-		v_statement === inherit.statement
-	)
+	if( inherit && !twigDup )
 	{
 		return inherit;
 	}
 
-	return new Constructor( twig, ranks, v_defaultCase, v_statement );
+	return new Constructor( twig, ranks );
 };
 
 
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aSwitch';
+prototype.reflect = 'ast.astBlock';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aSwitch';
+prototype.reflectName = 'astBlock';
 
 
 /*
@@ -440,17 +363,7 @@ Constructor.prototype.equals =
 		}
 	}
 
-	return (
-		(
-			this.defaultCase === obj.defaultCase
-			||
-			this.defaultCase !== null
-			&&
-			this.defaultCase.equals( obj.defaultCase )
-		)
-		&&
-		this.statement === obj.statement
-	);
+	return true;
 };
 
 
@@ -459,7 +372,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aSwitch;
+	module.exports = astBlock;
 }
 
 

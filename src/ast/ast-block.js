@@ -22,7 +22,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aBlock',
+			'ast.astBlock',
 		node :
 			true,
 		twig :
@@ -35,42 +35,49 @@ if( JION )
 | Node imports.
 */
 var
-	aBlock =
-		require( '../jion/this' )( module ),
-	ast =
-		{
-			anAssign :
-				require( './an-assign' ),
-			aCall :
-				require( './a-call' ),
-			aCheck :
-				require( './a-check' ),
-			aComment :
-				require( './a-comment' ),
-			aFail :
-				require( './a-fail' ),
-			aFor :
-				require( './a-for' ),
-			aForIn :
-				require( './a-for-in' ),
-			anIf :
-				require( './an-if' ),
-			aNew :
-				require( './a-new' ),
-			aReturn :
-				require( './a-return' ),
-			aStringLiteral :
-				require( './a-string-literal' ),
-			aVarDec :
-				require( './a-var-dec' ),
-		},
-	jools =
-		require( '../jools/jools' );
+	astBlock,
+	ast,
+	jools;
+
+
+astBlock =
+module.exports =
+	require( '../jion/this' )( module );
+
+ast =
+	{
+		anAssign :
+			require( './an-assign' ),
+		aCall :
+			require( './a-call' ),
+		aCheck :
+			require( './a-check' ),
+		aComment :
+			require( './a-comment' ),
+		aFail :
+			require( './a-fail' ),
+		aFor :
+			require( './a-for' ),
+		aForIn :
+			require( './a-for-in' ),
+		anIf :
+			require( './an-if' ),
+		aNew :
+			require( './a-new' ),
+		aReturn :
+			require( './a-return' ),
+		aStringLiteral :
+			require( './a-string-literal' ),
+		aVarDec :
+			require( './a-var-dec' )
+	};
+
+jools = require( '../jools/jools' );
 
 /*
 | Returns the block with a statement appended;
 */
-aBlock.prototype.append =
+astBlock.prototype.append =
 	function(
 		statement
 	)
@@ -87,7 +94,7 @@ aBlock.prototype.append =
 /*
 | Returns the block with an assignment appended.
 */
-aBlock.prototype.anAssign =
+astBlock.prototype.anAssign =
 	function(
 		left,
 		right
@@ -111,7 +118,7 @@ aBlock.prototype.anAssign =
 /*
 | Recreates the block with a call appended.
 */
-aBlock.prototype.aCall =
+astBlock.prototype.aCall =
 	function(
 		func
 		// args
@@ -141,7 +148,7 @@ aBlock.prototype.aCall =
 /*
 | Returns the block with a check appended.
 */
-aBlock.prototype.aCheck =
+astBlock.prototype.aCheck =
 	function(
 		block
 	)
@@ -160,7 +167,7 @@ aBlock.prototype.aCheck =
 /*
 | Returns the block with a comment appended.
 */
-aBlock.prototype.aComment =
+astBlock.prototype.aComment =
 	function(
 		header
 	)
@@ -182,7 +189,7 @@ aBlock.prototype.aComment =
 /*
 | Returns the block with an if appended.
 */
-aBlock.prototype.anIf =
+astBlock.prototype.anIf =
 	function(
 		condition,
 		then,
@@ -207,7 +214,7 @@ aBlock.prototype.anIf =
 /*
 | Returns the block with a error throwing appended.
 */
-aBlock.prototype.aFail =
+astBlock.prototype.aFail =
 	function(
 		message
 	)
@@ -239,7 +246,7 @@ aBlock.prototype.aFail =
 /*
 | Returns the block with a classical for loop appended.
 */
-aBlock.prototype.aFor =
+astBlock.prototype.aFor =
 	function(
 		init,
 		condition,
@@ -267,7 +274,7 @@ aBlock.prototype.aFor =
 /*
 | Returns the block with a for-in loop appended.
 */
-aBlock.prototype.aForIn =
+astBlock.prototype.aForIn =
 	function(
 		variable,
 		object,
@@ -291,7 +298,7 @@ aBlock.prototype.aForIn =
 /*
 | Shorthand for creating new calls.
 */
-aBlock.prototype.aNew =
+astBlock.prototype.aNew =
 	function(
 		call
 	)
@@ -310,7 +317,7 @@ aBlock.prototype.aNew =
 /*
 | Returns the block with a term appended.
 */
-aBlock.prototype.aReturn =
+astBlock.prototype.aReturn =
 	function(
 		expr
 	)
@@ -335,7 +342,7 @@ aBlock.prototype.aReturn =
 /*
 | Returns the block with a variable decleration appended.
 */
-aBlock.prototype.aVarDec =
+astBlock.prototype.aVarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
@@ -354,12 +361,6 @@ aBlock.prototype.aVarDec =
 
 	return this.append( varDec );
 };
-
-
-/*
-| Node export.
-*/
-module.exports = aBlock;
 
 
 } )( );

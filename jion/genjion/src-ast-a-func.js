@@ -41,7 +41,7 @@ if( SERVER )
 
 	jion = { };
 
-	ast.aBlock = require( '../../src/ast/a-block' );
+	ast.astBlock = require( '../../src/ast/ast-block' );
 
 	jion.proto = require( '../../src/jion/proto' );
 }
@@ -287,7 +287,7 @@ prototype.create =
 /**/
 /**/	if( v_block !== null )
 /**/	{
-/**/		if( v_block.reflectName !== 'aBlock' )
+/**/		if( v_block.reflectName !== 'astBlock' )
 /**/		{
 /**/			throw new Error( );
 /**/		}

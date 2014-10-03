@@ -34,14 +34,14 @@ if( JION )
 						comment :
 							'the then code',
 						type :
-							'ast.aBlock'
+							'ast.astBlock'
 					},
 				elsewise :
 					{
 						comment :
 							'the else wise',
 						type :
-							'ast.aBlock',
+							'ast.astBlock',
 						defaultValue :
 							null
 					}

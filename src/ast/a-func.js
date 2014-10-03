@@ -27,7 +27,7 @@ if( JION )
 						comment :
 							'function code',
 						type :
-							'ast.aBlock',
+							'ast.astBlock',
 						defaultValue :
 							null
 					}
@@ -46,12 +46,17 @@ if( JION )
 | Node imports.
 */
 var
-	aFuncArg =
-		require( './a-func-arg' ),
-	aFunc =
-		require( '../jion/this' )( module ),
-	jools =
-		require( '../jools/jools' );
+	aFuncArg,
+	aFunc,
+	jools;
+
+aFunc =
+module.exports =
+	require( '../jion/this' )( module );
+
+aFuncArg = require( './a-func-arg' );
+
+jools = require( '../jools/jools' );
 
 
 /*
@@ -94,11 +99,6 @@ aFunc.prototype.Arg =
 		)
 	);
 };
-
-/*
-| Node export.
-*/
-module.exports = aFunc;
 
 
 } )( );

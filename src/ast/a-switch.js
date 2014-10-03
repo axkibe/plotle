@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'the default block',
 						type :
-							'ast.aBlock',
+							'ast.astBlock',
 						defaultValue :
 							null
 					}
@@ -43,15 +43,15 @@ if( JION )
 			true,
 		twig :
 			[
-				'ast.aCase'
+				'ast.astCase'
 			]
 	};
 }
 
 
 var
-	aCase =
-		require( './a-case' ),
+	astCase =
+		require( './ast-case' ),
 	jools =
 		require( '../jools/jools' ),
 	aSwitch =
@@ -61,7 +61,7 @@ var
 /*
 | Shortcut for appending a case to this switch.
 */
-aSwitch.prototype.aCase =
+aSwitch.prototype.astCase =
 	function(
 		case_or_condition,
 		block
@@ -70,10 +70,10 @@ aSwitch.prototype.aCase =
 	var
 		caseExpr;
 
-	if( case_or_condition.reflect !== 'ast.aCase' )
+	if( case_or_condition.reflect !== 'ast.astCase' )
 	{
 		caseExpr =
-			aCase.create(
+			astCase.create(
 				'twig:add',
 					jools.uid( ), // FIXME
 					case_or_condition,

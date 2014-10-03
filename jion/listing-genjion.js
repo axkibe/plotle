@@ -6,14 +6,14 @@ module.exports =
 		true,
 	list :
 		[
+			'src/ast/ast-block.js',
 			'src/ast/a-null.js',
 			'src/ast/an-and.js',
 			'src/ast/an-array-literal.js',
 			'src/ast/an-assign.js',
-			'src/ast/a-block.js',
 			'src/ast/a-boolean-literal.js',
 			'src/ast/a-call.js',
-			'src/ast/a-case.js',
+			'src/ast/ast-case.js',
 			'src/ast/a-check.js',
 			'src/ast/a-comma-list.js',
 			'src/ast/a-comment.js',

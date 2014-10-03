@@ -27,7 +27,7 @@ if( JION )
 						comment :
 							'the code block',
 						type :
-							'ast.aBlock'
+							'ast.astBlock'
 					}
 			},
 		node :

@@ -41,7 +41,7 @@ if( SERVER )
 
 	jion = { };
 
-	ast.aBlock = require( '../../src/ast/a-block' );
+	ast.astBlock = require( '../../src/ast/ast-block' );
 
 	jion.proto = require( '../../src/jion/proto' );
 }
@@ -83,8 +83,8 @@ var
 | Jion.
 */
 var
-	aCase =
-	ast.aCase =
+	astCase =
+	ast.astCase =
 		{
 			prototype :
 				prototype
@@ -92,9 +92,9 @@ var
 
 
 /*
-| Creates a new aCase object.
+| Creates a new astCase object.
 */
-aCase.create =
+astCase.create =
 prototype.create =
 	function(
 		// free strings
@@ -115,7 +115,7 @@ prototype.create =
 
 		v_block;
 
-	if( this !== aCase )
+	if( this !== astCase )
 	{
 		inherit = this;
 
@@ -285,7 +285,7 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_block.reflectName !== 'aBlock' )
+/**/	if( v_block.reflectName !== 'astBlock' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -303,13 +303,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aCase';
+prototype.reflect = 'ast.astCase';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aCase';
+prototype.reflectName = 'astCase';
 
 
 /*
@@ -406,7 +406,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aCase;
+	module.exports = astCase;
 }
 
 

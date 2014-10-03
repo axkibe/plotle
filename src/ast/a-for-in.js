@@ -41,7 +41,7 @@ if( JION )
 						comment :
 							'the for block',
 						type :
-							'ast.aBlock'
+							'ast.astBlock'
 					}
 			},
 		node :

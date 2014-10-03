@@ -41,9 +41,9 @@ if( SERVER )
 
 	jion = { };
 
-	ast.aBlock = require( '../../src/ast/a-block' );
-
 	ast.aComment = require( '../../src/ast/a-comment' );
+
+	ast.astBlock = require( '../../src/ast/ast-block' );
 
 	jion.proto = require( '../../src/jion/proto' );
 }
@@ -232,7 +232,7 @@ prototype.create =
 /**/
 /**/	if( v_capsule !== null )
 /**/	{
-/**/		if( v_capsule.reflectName !== 'aBlock' )
+/**/		if( v_capsule.reflectName !== 'astBlock' )
 /**/		{
 /**/			throw new Error( );
 /**/		}
@@ -288,7 +288,7 @@ prototype.create =
 /**/
 /**/	if( v_preamble !== null )
 /**/	{
-/**/		if( v_preamble.reflectName !== 'aBlock' )
+/**/		if( v_preamble.reflectName !== 'astBlock' )
 /**/		{
 /**/			throw new Error( );
 /**/		}

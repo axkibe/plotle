@@ -25,7 +25,7 @@ var
 	ast;
 
 /*
-| Import
+| Import FIXME skip ast table
 */
 ast =
 	{
@@ -35,8 +35,8 @@ ast =
 			require( './an-array-literal' ),
 		anAssign :
 			require( './an-assign' ),
-		aBlock :
-			require( './a-block' ),
+		astBlock :
+			require( './ast-block' ),
 		aBooleanLiteral :
 			require( './a-boolean-literal' ),
 		aCall :
@@ -186,10 +186,10 @@ ShortHand.anAssign =
 /*
 | Shorthand for creating blocks.
 */
-ShortHand.aBlock =
+ShortHand.astBlock =
 	function( )
 {
-	return ast.aBlock.create( );
+	return ast.astBlock.create( );
 };
 
 

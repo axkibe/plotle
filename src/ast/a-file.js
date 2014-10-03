@@ -36,7 +36,7 @@ if( JION )
 						comment :
 							'preamble to capsule',
 						type :
-							'ast.aBlock',
+							'ast.astBlock',
 						defaultValue :
 							null
 					},
@@ -45,7 +45,7 @@ if( JION )
 						comment :
 							'the capsule',
 						type :
-							'ast.aBlock',
+							'ast.astBlock',
 						defaultValue :
 							null
 					},
