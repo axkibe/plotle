@@ -54,7 +54,7 @@ precTable =
 			-1,
 		'astCall' :
 			2,
-		'aCommaList' :
+		'astCommaList' :
 			18,
 		'aCondition' :
 			15,
@@ -2359,7 +2359,7 @@ formatVarDec =
 | Formats a comma list operator
 */
 var
-formatACommaList =
+formatCommaList =
 	function(
 		context,
 		list
@@ -2377,8 +2377,7 @@ formatACommaList =
 		a++
 	)
 	{
-		expr =
-			list.atRank( a );
+		expr = list.atRank( a );
 
 		text +=
 			(
@@ -2390,7 +2389,7 @@ formatACommaList =
 			formatExpression(
 				context.Inc,
 				expr,
-				precTable.aCommaList
+				precTable.astCommaList
 			);
 	}
 
@@ -2596,8 +2595,8 @@ exprFormatter =
 			formatAstBooleanLiteral,
 		'astCall' :
 			formatCall,
-		'aCommaList' :
-			formatACommaList,
+		'astCommaList' :
+			formatCommaList,
 		'aCondition' :
 			formatACondition,
 		'aDelete' :

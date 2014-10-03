@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aCommaList',
+			'ast.astCommaList',
 		node :
 			true,
 		twig :
@@ -28,24 +28,27 @@ if( JION )
 }
 
 
-/*
-| Node imports.
-*/
 var
-	aCommaList =
-		require( '../jion/this' )( module ),
-	jools =
-		require( '../jools/jools' );
+	astCommaList,
+	jools;
+
+
+astCommaList =
+module.exports =
+	require( '../jion/this' )( module );
+
+jools =
+	require( '../jools/jools' );
 
 /*
 | Returns the block with a statement appended;
 */
-aCommaList.prototype.append =
+astCommaList.prototype.append =
 	function(
 		expr
 	)
 {
-	return (
+	return(
 		this.create(
 			'twig:add',
 			jools.uid( ), // FIXME
@@ -53,12 +56,6 @@ aCommaList.prototype.append =
 		)
 	);
 };
-
-
-/*
-| Node export.
-*/
-module.exports = aCommaList;
 
 
 } )( );

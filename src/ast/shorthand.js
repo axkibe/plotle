@@ -43,8 +43,8 @@ ast =
 			require( './ast-call' ),
 		astCheck :
 			require( './ast-check' ),
-		aCommaList :
-			require( './a-comma-list' ),
+		astCommaList :
+			require( './ast-comma-list' ),
 		aComment :
 			require( './a-comment' ),
 		aCondition :
@@ -778,10 +778,10 @@ ShortHand.aVarDec =
 /*
 | Shorthand for creating comma lists.
 */
-ShortHand.aCommaList =
+ShortHand.astCommaList =
 	function( )
 {
-	return ast.aCommaList.create( );
+	return ast.astCommaList.create( );
 };
 
 

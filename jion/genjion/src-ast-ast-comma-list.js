@@ -76,8 +76,8 @@ var
 | Jion.
 */
 var
-	aCommaList =
-	ast.aCommaList =
+	astCommaList =
+	ast.astCommaList =
 		{
 			prototype :
 				prototype
@@ -85,9 +85,9 @@ var
 
 
 /*
-| Creates a new aCommaList object.
+| Creates a new astCommaList object.
 */
-aCommaList.create =
+astCommaList.create =
 prototype.create =
 	function(
 		// free strings
@@ -106,7 +106,7 @@ prototype.create =
 
 		twigDup;
 
-	if( this !== aCommaList )
+	if( this !== astCommaList )
 	{
 		inherit = this;
 
@@ -269,13 +269,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aCommaList';
+prototype.reflect = 'ast.astCommaList';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aCommaList';
+prototype.reflectName = 'astCommaList';
 
 
 /*
@@ -372,7 +372,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aCommaList;
+	module.exports = astCommaList;
 }
 
 

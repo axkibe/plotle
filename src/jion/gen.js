@@ -64,8 +64,8 @@ var
 		Shorthand.astBlock,
 	astCall =
 		Shorthand.astCall,
-	aCommaList =
-		Shorthand.aCommaList,
+	astCommaList =
+		Shorthand.astCommaList,
 	aCondition =
 		Shorthand.aCondition,
 	aDelete =
@@ -2619,7 +2619,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		)
 		.aFor(
 			// FIXME, put into the commalist call
-			aCommaList( )
+			astCommaList( )
 			.append(
 				anAssign(
 					aVar( 'a' ),
@@ -3230,7 +3230,7 @@ gen.prototype.genEquals =
 				astBlock( ).aReturn( aFalse )
 			)
 			.aFor(
-				aCommaList( ) // FIXME add anAssign to aCommaList
+				astCommaList( ) // FIXME add anAssign to astCommaList
 				.append(
 					anAssign( aVar( 'a' ), aNumberLiteral( 0 ) )
 				)
