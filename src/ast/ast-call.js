@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aCall',
+			'ast.astCall',
 		node :
 			true,
 		attributes :
@@ -37,19 +37,22 @@ if( JION )
 	};
 }
 
-/*
-| Node imports.
-*/
 var
-	aCall =
-		require( '../jion/this' )( module ),
-	jools =
-		require( '../jools/jools' );
+	astCall,
+	jools;
+
+
+astCall =
+module.exports =
+	require( '../jion/this' )( module );
+
+jools = require( '../jools/jools' );
+
 
 /*
 | Returns a call with a parameter appended
 */
-aCall.prototype.append =
+astCall.prototype.append =
 	function(
 		expr
 	)
@@ -62,12 +65,6 @@ aCall.prototype.append =
 		)
 	);
 };
-
-
-/*
-| Node export.
-*/
-module.exports = aCall;
 
 
 } )( );

@@ -79,8 +79,8 @@ var
 | Jion.
 */
 var
-	aCall =
-	ast.aCall =
+	astCall =
+	ast.astCall =
 		{
 			prototype :
 				prototype
@@ -88,9 +88,9 @@ var
 
 
 /*
-| Creates a new aCall object.
+| Creates a new astCall object.
 */
-aCall.create =
+astCall.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 
 		v_func;
 
-	if( this !== aCall )
+	if( this !== astCall )
 	{
 		inherit = this;
 
@@ -294,13 +294,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aCall';
+prototype.reflect = 'ast.astCall';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aCall';
+prototype.reflectName = 'astCall';
 
 
 /*
@@ -397,7 +397,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aCall;
+	module.exports = astCall;
 }
 
 

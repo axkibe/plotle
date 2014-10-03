@@ -39,8 +39,8 @@ ast =
 			require( './ast-block' ),
 		astBooleanLiteral :
 			require( './ast-boolean-literal' ),
-		aCall :
-			require( './a-call' ),
+		astCall :
+			require( './ast-call' ),
 		aCheck :
 			require( './a-check' ),
 		aCommaList :
@@ -196,18 +196,16 @@ ShortHand.astBlock =
 /*
 | Shorthand for creating calls.
 */
-ShortHand.aCall =
+ShortHand.astCall =
 	function(
 		func
 		// args
 	)
 {
 	var
-		call =
-			ast.aCall.create(
-				'func',
-					func
-			);
+		call;
+
+	call = ast.astCall.create( 'func', func );
 
 	for(
 		var a = 1, aZ = arguments.length;

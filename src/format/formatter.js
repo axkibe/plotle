@@ -52,7 +52,7 @@ precTable =
 			17,
 		'astBooleanLiteral' :
 			-1,
-		'aCall' :
+		'astCall' :
 			2,
 		'aCommaList' :
 			18,
@@ -1494,7 +1494,7 @@ formatStatement =
 
 		case 'ast.anAssign' :
 		case 'ast.astBooleanLiteral' :
-		case 'ast.aCall' :
+		case 'ast.astCall' :
 		case 'ast.aDelete' :
 		case 'ast.aFail' :
 		case 'ast.aNew' :
@@ -1742,7 +1742,7 @@ formatAstBooleanLiteral =
 | Formats a call.
 */
 var
-formatACall =
+formatCall =
 	function(
 		context,
 		call,
@@ -1755,7 +1755,7 @@ formatACall =
 
 /**/if( CHECK )
 /**/{
-/**/	if( call.reflect !== 'ast.aCall' )
+/**/	if( call.reflect !== 'ast.astCall' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1872,7 +1872,7 @@ formatANew =
 		+
 		'new '
 		+
-		formatACall(
+		formatCall(
 			context,
 			expr.call,
 			true
@@ -2163,7 +2163,7 @@ formatATypeof =
 | Formats a variable use.
 */
 var
-formatAVar =
+formatVar =
 	function(
 		context,
 		expr
@@ -2594,8 +2594,8 @@ exprFormatter =
 			formatAnAssign,
 		'astBooleanLiteral' :
 			formatAstBooleanLiteral,
-		'aCall' :
-			formatACall,
+		'astCall' :
+			formatCall,
 		'aCommaList' :
 			formatACommaList,
 		'aCondition' :
@@ -2641,7 +2641,7 @@ exprFormatter =
 		'aTypeof' :
 			formatATypeof,
 		'aVar' :
-			formatAVar,
+			formatVar,
 		'aVList' :
 			formatAVList
 	};

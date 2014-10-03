@@ -48,8 +48,8 @@ ast =
 	{
 		anAssign :
 			require( './an-assign' ),
-		aCall :
-			require( './a-call' ),
+		astCall :
+			require( './ast-call' ),
 		aCheck :
 			require( './a-check' ),
 		aComment :
@@ -118,7 +118,7 @@ astBlock.prototype.anAssign =
 /*
 | Recreates the block with a call appended.
 */
-astBlock.prototype.aCall =
+astBlock.prototype.astCall =
 	function(
 		func
 		// args
@@ -127,11 +127,7 @@ astBlock.prototype.aCall =
 	var
 		call;
 
-	call =
-		ast.aCall.create(
-			'func',
-				func
-		);
+	call = ast.astCall.create( 'func', func );
 
 	for(
 		var a = 1, aZ = arguments.length;
@@ -144,6 +140,7 @@ astBlock.prototype.aCall =
 
 	return this.append( call );
 };
+
 
 /*
 | Returns the block with a check appended.

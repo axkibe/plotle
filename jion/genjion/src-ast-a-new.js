@@ -41,7 +41,7 @@ if( SERVER )
 
 	jion = { };
 
-	ast.aCall = require( '../../src/ast/a-call' );
+	ast.astCall = require( '../../src/ast/ast-call' );
 
 	jion.proto = require( '../../src/jion/proto' );
 }
@@ -144,7 +144,7 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_call.reflectName !== 'aCall' )
+/**/	if( v_call.reflectName !== 'astCall' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
