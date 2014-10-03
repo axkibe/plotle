@@ -30,11 +30,11 @@ module.exports =
 
 			// built-in genjion
 			'src/ast/ast-block.js',
+			'src/ast/ast-boolean-literal.js',
 			'src/ast/a-null.js',
 			'src/ast/an-and.js',
 			'src/ast/an-array-literal.js',
 			'src/ast/an-assign.js',
-			'src/ast/a-boolean-literal.js',
 			'src/ast/a-call.js',
 			'src/ast/ast-case.js',
 			'src/ast/a-check.js',

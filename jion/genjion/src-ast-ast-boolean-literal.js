@@ -69,8 +69,8 @@ var
 | Jion.
 */
 var
-	aBooleanLiteral =
-	ast.aBooleanLiteral =
+	astBooleanLiteral =
+	ast.astBooleanLiteral =
 		{
 			prototype :
 				prototype
@@ -78,9 +78,9 @@ var
 
 
 /*
-| Creates a new aBooleanLiteral object.
+| Creates a new astBooleanLiteral object.
 */
-aBooleanLiteral.create =
+astBooleanLiteral.create =
 prototype.create =
 	function(
 		// free strings
@@ -91,7 +91,7 @@ prototype.create =
 
 		v_boolean;
 
-	if( this !== aBooleanLiteral )
+	if( this !== astBooleanLiteral )
 	{
 		inherit = this;
 
@@ -158,13 +158,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aBooleanLiteral';
+prototype.reflect = 'ast.astBooleanLiteral';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aBooleanLiteral';
+prototype.reflectName = 'astBooleanLiteral';
 
 
 /*
@@ -206,7 +206,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aBooleanLiteral;
+	module.exports = astBooleanLiteral;
 }
 
 

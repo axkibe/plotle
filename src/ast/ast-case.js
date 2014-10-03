@@ -41,7 +41,7 @@ if( JION )
 /*
 | Node export.
 */
-module.exports = require( '../jion/this' )( module )
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

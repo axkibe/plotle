@@ -72,9 +72,6 @@ var translateSign =
 		sign
 	)
 {
-	var
-		key;
-
 	sign.type = 'ccot.sign';
 
 	return sign;

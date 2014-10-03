@@ -37,8 +37,8 @@ ast =
 			require( './an-assign' ),
 		astBlock :
 			require( './ast-block' ),
-		aBooleanLiteral :
-			require( './a-boolean-literal' ),
+		astBooleanLiteral :
+			require( './ast-boolean-literal' ),
 		aCall :
 			require( './a-call' ),
 		aCheck :
@@ -369,7 +369,7 @@ ShortHand.aFalse =
 	function( )
 {
 	return (
-		ast.aBooleanLiteral.create(
+		ast.astBooleanLiteral.create(
 			'boolean',
 				false
 		)
@@ -712,7 +712,7 @@ ShortHand.aTrue =
 	function( )
 {
 	return (
-		ast.aBooleanLiteral.create(
+		ast.astBooleanLiteral.create(
 			'boolean',
 				true
 		)

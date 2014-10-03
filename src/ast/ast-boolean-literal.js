@@ -20,7 +20,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aBooleanLiteral',
+			'ast.astBooleanLiteral',
 		node :
 			true,
 		attributes :
@@ -36,17 +36,11 @@ if( JION )
 	};
 }
 
-var
-	aBooleanLiteral;
-
-aBooleanLiteral =
-	require( '../jion/this' )( module );
 
 /*
 | Node export.
 */
-module.exports =
-	aBooleanLiteral;
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );
