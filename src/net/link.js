@@ -611,7 +611,8 @@ link.prototype._onUpdate =
 		}
 
 		// adapts all queued changes
-		// and rebuilds the clients understanding of its own tree
+		// and
+		// rebuilds the clients understanding of its own tree
 		outbox = this._outbox;
 
 		cSpace = rSpace;

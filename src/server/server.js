@@ -3015,6 +3015,7 @@ Server.prototype.webAjax =
 		);
 	};
 
+	/*
 	request.on(
 		'end',
 		function( )
@@ -3022,8 +3023,8 @@ Server.prototype.webAjax =
 			sus( handler )( );
 		}
 	);
+	*/
 
-	/*
 	request.on(
 		'end',
 		function( )
@@ -3037,7 +3038,6 @@ Server.prototype.webAjax =
 			);
 		}
 	);
-	*/
 };
 
 
