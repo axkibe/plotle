@@ -17,6 +17,7 @@ net = net || { };
 | Imports
 */
 var
+	ccot,
 	config,
 	jion,
 	jools,
@@ -101,7 +102,7 @@ if( JION )
 						comment :
 							'changes to be send to the server',
 						type :
-							'jion.changeWrapRay',
+							'ccot.changeWrapRay',
 						defaultValue :
 							null
 					},
@@ -110,7 +111,7 @@ if( JION )
 						comment :
 							'changes that are currently on the way',
 						type :
-							'jion.changeWrapRay',
+							'ccot.changeWrapRay',
 						defaultValue :
 							null
 					},
@@ -138,7 +139,7 @@ if( JION )
 						comment :
 							'the undo stack',
 						type :
-							'jion.changeWrapRay',
+							'ccot.changeWrapRay',
 						defaultValue :
 							null
 					},
@@ -147,7 +148,7 @@ if( JION )
 						comment :
 							'the redo stack',
 						type :
-							'jion.changeWrapRay',
+							'ccot.changeWrapRay',
 						defaultValue :
 							null
 					}
@@ -365,15 +366,15 @@ link.prototype._onAquireSpace =
 			'_rSpace',
 				space,
 			'_outbox',
-				jion.changeWrapRay.create( ),
+				ccot.changeWrapRay.create( ),
 			'_postbox',
-				jion.changeWrapRay.create( ),
+				ccot.changeWrapRay.create( ),
 			'_rSeq',
 				reply.seq,
 			'_undo',
-				jion.changeWrapRay.create( ),
+				ccot.changeWrapRay.create( ),
 			'_redo',
-				jion.changeWrapRay.create( )
+				ccot.changeWrapRay.create( )
 		);
 
 	system.asyncEvent(
@@ -483,7 +484,7 @@ link.prototype._onUpdate =
 
 	chgs = reply.chgs;
 
-	report = jion.changeRay.create( );
+	report = ccot.changeRay.create( );
 
 	gotOwnChgs = false;
 
@@ -509,7 +510,7 @@ link.prototype._onUpdate =
 			a++
 		)
 		{
-			chgX = jion.change.createFromJSON( chgs[ a ].chgX );
+			chgX = ccot.change.createFromJSON( chgs[ a ].chgX );
 
 			cid = chgs[ a ].cid;
 
@@ -559,7 +560,7 @@ link.prototype._onUpdate =
 					undo =
 						undo.set(
 							b,
-							jion.changeWrap.create(
+							ccot.changeWrap.create(
 								'cid',
 									u.cid,
 								'chgX',
@@ -595,7 +596,7 @@ link.prototype._onUpdate =
 
 					redo.set(
 						b,
-						jion.changeWrap.create(
+						ccot.changeWrap.create(
 							'cid',
 								u.cid,
 							'chgX',
@@ -664,7 +665,7 @@ link.prototype._onUpdate =
 			outbox =
 				outbox.set(
 					a,
-					jion.changeWrap.create(
+					ccot.changeWrap.create(
 						'cid',
 							c.cid,
 						'chgX',
@@ -751,7 +752,7 @@ link.prototype.alter =
 	chgX = result.chgX;
 
 	c =
-		jion.changeWrap.create(
+		ccot.changeWrap.create(
 			'cid',
 				jools.uid( ),
 			'chgX',
@@ -779,7 +780,7 @@ link.prototype.alter =
 			'_outbox',
 				root.link._outbox.append( c ),
 			'_redo',
-				jion.changeWrapRay.create( )
+				ccot.changeWrapRay.create( )
 		);
 
 	link._sendChanges( );
@@ -828,8 +829,12 @@ link.prototype._sendChanges =
 	root.link =
 		link.create(
 			'_outbox',
+//				ccot.changeWrapRay.create( ),
+// XXX
 				link._outbox.remove( 0 ),
 			'_postbox',
+//				link._outbox
+// XXX
 				link._postbox.append( c )
 		);
 
@@ -940,7 +945,7 @@ link.prototype.undo =
 	}
 
 	c =
-		jion.changeWrap.create(
+		ccot.changeWrap.create(
 			'cid',
 				jools.uid( ),
 			'chgX',
@@ -1033,7 +1038,7 @@ link.prototype.redo =
 	}
 
 	c =
-		jion.changeWrap.create(
+		ccot.changeWrap.create(
 			'cid',
 				jools.uid( ),
 			'chgX',

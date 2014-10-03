@@ -17,9 +17,9 @@ testpad = testpad || { };
 | Imports
 */
 var
+	ccot,
 	euclid,
 	jools,
-	jion,
 	root,
 	visual;
 
@@ -65,7 +65,7 @@ if( JION )
 						comment :
 							'history of the space changes',
 						type :
-							'jion.changeWrapRay',
+							'ccot.changeWrapRay',
 						defaultValue :
 							null
 					},
@@ -143,7 +143,7 @@ proto._init =
 
 	if( this._changes === null )
 	{
-		this._changes = jion.changeWrapRay.create( );
+		this._changes = ccot.changeWrapRay.create( );
 	}
 
 	if( this.seq === null )
@@ -251,7 +251,7 @@ proto.alter =
 
 	changes =
 		changes.append(
-			jion.changeWrap.create(
+			ccot.changeWrap.create(
 				'cid',
 					'' + ( nextcid++ ),
 				'chgX',

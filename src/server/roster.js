@@ -92,7 +92,7 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/jion/sign.js',
+			'src/ccot/sign.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -102,7 +102,7 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/jion/sign-ray.js',
+			'src/ccot/sign-ray.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -112,7 +112,7 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/jion/change.js',
+			'src/ccot/change.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -122,7 +122,7 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/jion/change-ray.js',
+			'src/ccot/change-ray.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -132,7 +132,7 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/jion/change-wrap.js',
+			'src/ccot/change-wrap.js',
 		'hasJion',
 			true,
 		'inBundle',
@@ -142,7 +142,7 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/jion/change-wrap-ray.js',
+			'src/ccot/change-wrap-ray.js',
 		'hasJion',
 			true,
 		'inBundle',

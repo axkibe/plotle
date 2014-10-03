@@ -22,6 +22,7 @@ shell = shell || { };
 */
 var
 	actions,
+	ccot,
 	discs,
 	euclid,
 	forms,
@@ -362,7 +363,7 @@ proto.update =
 			{
 				sign =
 					chgX.transformSign(
-						jion.sign.create(
+						ccot.sign.create(
 							'path',
 								mark.path.chop( ),
 							'at1',
@@ -411,7 +412,7 @@ proto.update =
 			{
 				bSign =
 					chgX.transformSign(
-						jion.sign.create(
+						ccot.sign.create(
 							'path',
 								mark.bPath.chop( ),
 							'at1',
@@ -421,7 +422,7 @@ proto.update =
 
 				eSign =
 					chgX.transformSign(
-						jion.sign.create(
+						ccot.sign.create(
 							'path',
 								mark.ePath.chop( ),
 							'at1',

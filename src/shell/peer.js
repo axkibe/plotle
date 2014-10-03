@@ -16,6 +16,7 @@ var
 | Imports
 */
 var
+	ccot,
 	jion,
 	root,
 	visual;
@@ -35,9 +36,9 @@ var
 	spliceSign;
 
 
-change = jion.change;
+change = ccot.change;
 
-sign = jion.sign;
+sign = ccot.sign;
 
 // sign for a new item
 newItemSign =

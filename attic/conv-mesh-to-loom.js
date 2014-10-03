@@ -3,6 +3,7 @@
 |
 | Authors: Axel Kittenberger
 */
+return false;
 
 /*
 | This tool is configered directly here

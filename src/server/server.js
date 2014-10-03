@@ -37,10 +37,8 @@ GLOBAL.SERVER = true;
 GLOBAL.SHELL = false;
 
 
-/*
-| Imports.
-*/
 var
+	ccot,
 	config,
 	db_version,
 	fs,
@@ -62,7 +60,7 @@ var
 	visual,
 	zlib;
 
-db_version = 6;
+db_version = 7;
 
 config = require( '../../config' );
 
@@ -72,12 +70,16 @@ generateJion = require( './generate-jion' );
 
 http = require( 'http' );
 
-jion =
+ccot =
 	{
 		change :
-			require( '../jion/change' ),
+			require( '../ccot/change' ),
 		changeRay :
-			require( '../jion/change-ray' ),
+			require( '../ccot/change-ray' )
+	};
+
+jion =
+	{
 		path :
 			require( '../jion/path' ),
 	};
@@ -535,11 +537,11 @@ Server.prototype.loadSpace =
 		{
 			o.type = 'change'; // FUTURE this is a hack
 
-			change.chgX = jion.change.createFromJSON( o.chgX );
+			change.chgX = ccot.change.createFromJSON( o.chgX );
 		}
 		else
 		{
-			change.chgX = jion.changeRay.createFromJSON( o.chgX );
+			change.chgX = ccot.changeRay.createFromJSON( o.chgX );
 		}
 
 		space.$seqZ++;
@@ -1501,15 +1503,15 @@ Server.prototype.cmdAlter =
 	{
 		switch( chgX.type )
 		{
-			case 'jion.change' :
+			case 'ccot.change' :
 
-				chgX = jion.change.createFromJSON( chgX );
+				chgX = ccot.change.createFromJSON( chgX );
 
 				break;
 
-			case 'jion.changeRay' :
+			case 'ccot.changeRay' :
 
-				chgX = jion.changeRay.createFromJSON( chgX );
+				chgX = ccot.changeRay.createFromJSON( chgX );
 
 				break;
 
@@ -3015,7 +3017,6 @@ Server.prototype.webAjax =
 		);
 	};
 
-	/*
 	request.on(
 		'end',
 		function( )
@@ -3023,8 +3024,8 @@ Server.prototype.webAjax =
 			sus( handler )( );
 		}
 	);
-	*/
 
+	/*
 	request.on(
 		'end',
 		function( )
@@ -3038,6 +3039,7 @@ Server.prototype.webAjax =
 			);
 		}
 	);
+	*/
 };
 
 

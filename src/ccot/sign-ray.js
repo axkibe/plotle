@@ -1,5 +1,5 @@
 /*
-| An array of wraped change(rays).
+| An array of signs.
 |
 | Authors: Axel Kittenberger
 */
@@ -9,9 +9,9 @@
 | Export
 */
 var
-	jion;
+	ccot;
 
-jion = jion || { };
+ccot = ccot || { };
 
 
 /*
@@ -35,15 +35,13 @@ if( JION )
 {
 	return {
 		id :
-			'jion.changeWrapRay',
+			'ccot.signRay',
 		node :
 			true,
 		ray :
-			[
-				'jion.changeWrap'
-			],
+			[ 'ccot.sign' ],
 		equals :
-			'primitive'
+			false
 	};
 }
 
@@ -56,18 +54,20 @@ if( SERVER )
 	jools =
 		require( '../jools/jools'  );
 
-	jion =
+	ccot =
 		{
-			changeWrapRay :
+			sign :
+				require( '../ccot/sign' ),
+			signRay :
 				require( '../jion/this' )( module )
 		};
 }
 
 
 var
-	changeWrapRay;
+	signRay;
 
-changeWrapRay = jion.changeWrapRay;
+signRay = ccot.signRay;
 
 
 /*
@@ -75,8 +75,7 @@ changeWrapRay = jion.changeWrapRay;
 */
 if( SERVER )
 {
-	module.exports = changeWrapRay;
+	module.exports = signRay;
 }
-
 
 }( ) );

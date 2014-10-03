@@ -1,5 +1,5 @@
 /*
-| A change to a tree.
+| A ccot change to a tree.
 |
 | Authors: Axel Kittenberger
 */
@@ -9,13 +9,14 @@
 | Export.
 */
 var
-	jion;
+	ccot;
 
 
 /*
 | Imports
 */
 var
+	jion,
 	jools;
 
 
@@ -33,7 +34,7 @@ if( JION )
 {
 	return {
 		id :
-			'jion.change',
+			'ccot.change',
 		attributes :
 			{
 				src :
@@ -43,7 +44,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'jion.sign'
+							'ccot.sign'
 					},
 				trg :
 					{
@@ -52,7 +53,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'jion.sign'
+							'ccot.sign'
 					}
 			},
 		node :
@@ -66,20 +67,24 @@ if( JION )
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
+
 	jion =
+		{
+			path :
+				require( '../jion/path'  )
+		};
+
+	ccot =
 		{
 			change :
 				require( '../jion/this' )( module ),
 			changeRay :
-				require( '../jion/change-ray' ),
-			path :
-				require( '../jion/path'  ),
+				require( '../ccot/change-ray' ),
 			sign :
-				require( '../jion/sign'  ),
+				require( '../ccot/sign'  ),
 			signRay :
-				require( '../jion/sign'  )
+				require( '../ccot/sign-ray'  )
 		};
 }
 
@@ -87,7 +92,7 @@ if( SERVER )
 var
 	change;
 
-change = jion.change;
+change = ccot.change;
 
 
 /*
@@ -319,7 +324,7 @@ change.prototype.transformChange =
 
 /**/if( CHECK )
 /**/{
-/**/	if( chg.reflect !== 'jion.change' )
+/**/	if( chg.reflect !== 'ccot.change' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -340,13 +345,13 @@ change.prototype.transformChange =
 
 	switch( srcX.reflect )
 	{
-		case 'jion.sign' :
+		case 'ccot.sign' :
 
 			srcA = false;
 
 			break;
 
-		case 'jion.signRay' :
+		case 'ccot.signRay' :
 
 			srcA = true;
 
@@ -359,13 +364,13 @@ change.prototype.transformChange =
 
 	switch( trgX.reflect )
 	{
-		case 'jion.sign' :
+		case 'ccot.sign' :
 
 			trgA = false;
 
 			break;
 
-		case 'jion.signRay' :
+		case 'ccot.signRay' :
 
 			trgA = true;
 
@@ -405,7 +410,7 @@ change.prototype.transformChange =
 	}
 	else if( !srcA && trgA )
 	{
-		y = [ ];
+		y = [ ]; // FIXME call it 'ray'
 
 		for(
 			a = 0, aZ = trgX.length;
@@ -420,11 +425,7 @@ change.prototype.transformChange =
 				);
 		}
 
-		return(
-			jion.changeRay.create(
-				'ray:init', y
-			)
-		);
+		return ccot.changeRay.create( 'ray:init', y );
 	}
 	else if( srcA && !trgA )
 	{
@@ -446,7 +447,7 @@ change.prototype.transformChange =
 		}
 
 		return (
-			jion.changeRay.create(
+			ccot.changeRay.create(
 				'ray:init', y
 			)
 		);
@@ -481,11 +482,11 @@ change.prototype.transformChangeX =
 {
 	switch( chgX.reflect )
 	{
-		case 'jion.change' :
+		case 'ccot.change' :
 
 			return this.transformChange( chgX );
 
-		case 'jion.changeRay' :
+		case 'ccot.changeRay' :
 
 			return this.transformChangeRay( chgX );
 
@@ -1219,13 +1220,13 @@ change.prototype.transformSignRay =
 
 		switch( cx.reflect )
 		{
-			case 'jion.sign' :
+			case 'ccot.sign' :
 
 				signray = signray.set( a, cx );
 
 				break;
 
-			case 'jion.signRay' :
+			case 'ccot.signRay' :
 
 				for(
 					b = 0, bZ = cx.length;
@@ -1259,11 +1260,11 @@ change.prototype.transformSignX =
 	switch( signX.reflect )
 	{
 
-		case 'jion.sign' :
+		case 'ccot.sign' :
 
 			return this.transformSign( signX );
 
-		case 'jion.signRay' :
+		case 'ccot.signRay' :
 
 			return this.transformSignRay( signX );
 
@@ -1350,9 +1351,9 @@ change.prototype._transformSignSplit =
 
 	// the signature is splited into a part that stays and one that goes to next line.
 
-	return (
-		jion.signRay.create(
-			'array',
+	return(
+		ccot.signRay.create(
+			'ray:init',
 				[
 					sign.create(
 						'at2',
@@ -1366,9 +1367,7 @@ change.prototype._transformSignSplit =
 						'at2',
 							sign.at2 - src.at1
 					)
-				],
-			'_sliced',
-				true
+				]
 		)
 	);
 };
@@ -1409,7 +1408,7 @@ change.prototype._transformSignJoin =
 
 	if( sign.at2 === undefined )
 	{
-		return (
+		return(
 			sign.create(
 				'path',
 					trg.path,
@@ -1420,7 +1419,7 @@ change.prototype._transformSignJoin =
 	}
 	else
 	{
-		return (
+		return(
 			sign.create(
 				'path',
 					trg.path,

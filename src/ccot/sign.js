@@ -8,7 +8,9 @@
 | Exports
 */
 var
-	jion;
+	ccot;
+
+ccot = ccot || { };
 
 
 /*
@@ -34,7 +36,7 @@ if( JION )
 {
 	return {
 		id :
-			'jion.sign',
+			'ccot.sign',
 		attributes :
 			{
 				at1 :
@@ -130,7 +132,7 @@ if( SERVER )
 			rect :
 				require( '../euclid/rect' )
 		};
-	jion =
+	ccot =
 		{
 			sign :
 				require( '../jion/this' )( module )
@@ -152,7 +154,7 @@ if( SERVER )
 var
 	sign;
 
-sign = jion.sign;
+sign = ccot.sign;
 
 
 /*

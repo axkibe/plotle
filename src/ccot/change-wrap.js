@@ -6,13 +6,6 @@
 
 
 /*
-| Export.
-*/
-var
-	jion;
-
-
-/*
 | Capsule
 */
 ( function( ) {
@@ -26,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'jion.changeWrap',
+			'ccot.changeWrap',
 		attributes :
 			{
 				cid :
@@ -66,24 +59,11 @@ if( JION )
 
 
 /*
-| Node includes.
-*/
-if( SERVER )
-{
-	jion =
-		{
-			changeWrap :
-				require( '../jion/change-wrap' )
-		};
-}
-
-
-/*
 | Exports
 */
 if( SERVER )
 {
-	module.exports = jion.changeWrap;
+	module.exports = require( '../jion/this' )( module );
 }
 
 

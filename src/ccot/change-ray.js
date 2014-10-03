@@ -9,9 +9,9 @@
 | Export
 */
 var
-	jion;
+	ccot;
 
-jion = jion || { };
+ccot = ccot || { };
 
 
 /*
@@ -35,7 +35,7 @@ if( JION )
 {
 	return {
 		id :
-			'jion.changeRay',
+			'ccot.changeRay',
 		node :
 			true,
 		equals :
@@ -44,7 +44,7 @@ if( JION )
 			true,
 		ray :
 			[
-				'jion.change'
+				'ccot.change'
 			]
 	};
 }
@@ -58,14 +58,12 @@ if( SERVER )
 	jools =
 		require( '../jools/jools'  );
 
-	jion =
+	ccot =
 		{
 			change :
-				require( '../jion/change' ),
+				require( '../ccot/change' ),
 			changeRay :
-				require( '../jion/this' )( module ),
-			proto :
-				require( '../jion/proto' )
+				require( '../jion/this' )( module )
 		};
 }
 
@@ -73,7 +71,7 @@ if( SERVER )
 var
 	changeRay;
 
-changeRay = jion.changeRay;
+changeRay = ccot.changeRay;
 
 
 /*
@@ -192,11 +190,11 @@ changeRay.prototype.transformChangeX =
 {
 	switch( chgX.reflect )
 	{
-		case 'jion.change' :
+		case 'ccot.change' :
 
 			return this.transformChange( chgX );
 
-		case 'jion.changeRay' :
+		case 'ccot.changeRay' :
 
 			return this.transformChangeRay( chgX );
 
@@ -268,7 +266,7 @@ changeRay.prototype.transformSign =
 
 /**/if( CHECK )
 /**/{
-/**/	if( sign.reflect !== 'jion.sign' )
+/**/	if( sign.reflect !== 'ccot.sign' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
