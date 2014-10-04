@@ -21,7 +21,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aCondition',
+			'ast.astCondition',
 		attributes :
 			{
 				condition :
@@ -51,15 +51,13 @@ if( JION )
 	};
 }
 
-
-/*
-| Node includes.
-*/
 var
-	aCondition;
+	astCondition;
 
-aCondition =
+astCondition =
+module.exports =
 	require( '../jion/this' )( module );
+
 
 /*
 | Creates a condition with the elsewise expression set.
@@ -68,7 +66,7 @@ aCondition =
 |
 | FIXME call setElsewise
 */
-aCondition.prototype.Elsewise =
+astCondition.prototype.Elsewise =
 	function(
 		expr
 	)
@@ -80,13 +78,6 @@ aCondition.prototype.Elsewise =
 		)
 	);
 };
-
-
-/*
-| Node export.
-*/
-module.exports =
-	aCondition;
 
 
 } )( );

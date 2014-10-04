@@ -47,8 +47,8 @@ ast =
 			require( './ast-comma-list' ),
 		astComment :
 			require( './ast-comment' ),
-		aCondition :
-			require( './a-condition' ),
+		astCondition :
+			require( './ast-condition' ),
 		aDelete :
 			require( './a-delete' ),
 		aDiffers :
@@ -223,7 +223,7 @@ ShortHand.astCall =
 /*
 | Shorthand for creating conditions.
 */
-ShortHand.aCondition =
+ShortHand.astCondition =
 	function(
 		condition,
 		then,
@@ -231,7 +231,7 @@ ShortHand.aCondition =
 	)
 {
 	return (
-		ast.aCondition.create(
+		ast.astCondition.create(
 			'condition',
 				condition,
 			'then',

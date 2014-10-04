@@ -67,8 +67,8 @@ var
 		Shorthand.astCall,
 	astCommaList =
 		Shorthand.astCommaList,
-	aCondition =
-		Shorthand.aCondition,
+	astCondition =
+		Shorthand.astCondition,
 	aDelete =
 		Shorthand.aDelete,
 	aDiffers =
@@ -1974,7 +1974,7 @@ gen.prototype.genCreatorConcerns =
 				else if( attr.allowsNull )
 				{
 					cExpr =
-						aCondition(
+						astCondition(
 							aDiffers( attr.v, aNull ),
 							attr.v.aDot( member ),
 							aNull
@@ -1984,7 +1984,7 @@ gen.prototype.genCreatorConcerns =
 				else if( attr.allowsUndefined )
 				{
 					cExpr =
-						aCondition(
+						astCondition(
 							aDiffers( attr.v, anUndefined ),
 							attr.v.aDot( member ),
 							aNull
@@ -3197,7 +3197,7 @@ gen.prototype.genEquals =
 						aVar( 'obj' ).aDot( 'ranks' ).aMember( vA )
 					),
 					astCall(
-						aCondition(
+						astCondition(
 							aThis.aDot( 'twig' ).aMember( vKey ).aDot( 'equals' ),
 							aNot(
 								astCall(

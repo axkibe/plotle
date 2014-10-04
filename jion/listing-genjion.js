@@ -18,7 +18,7 @@ module.exports =
 			'src/ast/an-array-literal.js',
 			'src/ast/an-assign.js',
 			'src/ast/ast-case.js',
-			'src/ast/a-condition.js',
+			'src/ast/ast-condition.js',
 			'src/ast/a-delete.js',
 			'src/ast/a-differs.js',
 			'src/ast/a-dot.js',

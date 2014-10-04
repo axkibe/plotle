@@ -56,7 +56,7 @@ precTable =
 			2,
 		'astCommaList' :
 			18,
-		'aCondition' :
+		'astCondition' :
 			15,
 		'aDelete' :
 			4,
@@ -646,7 +646,7 @@ formatACondition =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aCondition' )
+/**/	if( expr.reflect !== 'ast.astCondition' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -657,7 +657,7 @@ formatACondition =
 		+ formatExpression(
 			context,
 			expr.condition,
-			precTable.aCondition
+			precTable.astCondition
 		)
 		+ context.sep
 		+ '?'
@@ -665,7 +665,7 @@ formatACondition =
 		+ formatExpression(
 			context,
 			expr.then,
-			precTable.aCondition
+			precTable.astCondition
 		)
 		+ context.sep
 		+ ':'
@@ -673,7 +673,7 @@ formatACondition =
 		+ formatExpression(
 			context,
 			expr.elsewise,
-			precTable.aCondition
+			precTable.astCondition
 		)
 	);
 };
@@ -2597,7 +2597,7 @@ exprFormatter =
 			formatCall,
 		'astCommaList' :
 			formatCommaList,
-		'aCondition' :
+		'astCondition' :
 			formatACondition,
 		'aDelete' :
 			formatADelete,

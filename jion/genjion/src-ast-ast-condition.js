@@ -75,8 +75,8 @@ var
 | Jion.
 */
 var
-	aCondition =
-	ast.aCondition =
+	astCondition =
+	ast.astCondition =
 		{
 			prototype :
 				prototype
@@ -84,9 +84,9 @@ var
 
 
 /*
-| Creates a new aCondition object.
+| Creates a new astCondition object.
 */
-aCondition.create =
+astCondition.create =
 prototype.create =
 	function(
 		// free strings
@@ -101,7 +101,7 @@ prototype.create =
 
 		v_then;
 
-	if( this !== aCondition )
+	if( this !== astCondition )
 	{
 		inherit = this;
 
@@ -213,13 +213,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aCondition';
+prototype.reflect = 'ast.astCondition';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aCondition';
+prototype.reflectName = 'astCondition';
 
 
 /*
@@ -267,7 +267,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aCondition;
+	module.exports = astCondition;
 }
 
 
