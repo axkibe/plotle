@@ -49,27 +49,29 @@ if( JION )
 | Import
 */
 var
-	aDot,
+	astDot,
 	aMember;
+
 
 aMember =
 module.exports =
 	require( '../jion/this' )( module );
 
-aDot = require( './a-dot' );
+
+astDot = require( './ast-dot' );
 
 
 /*
 | Creates a dot member access of a dot.
 */
-aMember.prototype.aDot =
+aMember.prototype.astDot =
 	function(
 		member // member string
 	)
 {
-	// checks if member is a string is done in 'aDot'
+	// checks if member is a string is done in 'astDot'
 	return (
-		aDot.create(
+		astDot.create(
 			'expr',
 				this,
 			'member',

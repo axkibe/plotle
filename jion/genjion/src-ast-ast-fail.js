@@ -48,15 +48,10 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		v_expr, // the expression to get the member of
-		v_member // the members name
+		v_message // the error message expression
 	)
 	{
-		this.expr = v_expr;
-
-		this.member = v_member;
-
-		this._init( );
+		this.message = v_message;
 
 		jools.immute( this );
 	};
@@ -74,8 +69,8 @@ var
 | Jion.
 */
 var
-	aDot =
-	ast.aDot =
+	aFail =
+	ast.aFail =
 		{
 			prototype :
 				prototype
@@ -83,9 +78,9 @@ var
 
 
 /*
-| Creates a new aDot object.
+| Creates a new aFail object.
 */
-aDot.create =
+aFail.create =
 prototype.create =
 	function(
 		// free strings
@@ -94,17 +89,13 @@ prototype.create =
 	var
 		inherit,
 
-		v_expr,
+		v_message;
 
-		v_member;
-
-	if( this !== aDot )
+	if( this !== aFail )
 	{
 		inherit = this;
 
-		v_expr = this.expr;
-
-		v_member = this.member;
+		v_message = this.message;
 	}
 
 	for(
@@ -119,20 +110,11 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
-			case 'expr' :
+			case 'message' :
 
 				if( arg !== undefined )
 				{
-					v_expr = arg;
-				}
-
-				break;
-
-			case 'member' :
-
-				if( arg !== undefined )
-				{
-					v_member = arg;
+					v_message = arg;
 				}
 
 				break;
@@ -146,63 +128,38 @@ prototype.create =
 		}
 	}
 
+	if( v_message === undefined )
+	{
+		v_message = null;
+	}
+
 /**/if( CHECK )
 /**/{
-/**/	if( v_expr === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_expr === null )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_member === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_member === null )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if(
-/**/		typeof( v_member ) !== 'string'
-/**/		&&
-/**/		!( v_member instanceof String )
-/**/	)
+/**/	if( v_message === undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if(
-		inherit
-		&&
-		v_expr === inherit.expr
-		&&
-		v_member === inherit.member
-	)
+	if( inherit && v_message === inherit.message )
 	{
 		return inherit;
 	}
 
-	return new Constructor( v_expr, v_member );
+	return new Constructor( v_message );
 };
 
 
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aDot';
+prototype.reflect = 'ast.astFail';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aDot';
+prototype.reflectName = 'astFail';
 
 
 /*
@@ -235,7 +192,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return this.expr === obj.expr && this.member === obj.member;
+	return this.message === obj.message;
 };
 
 
@@ -244,7 +201,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aDot;
+	module.exports = aFail;
 }
 
 

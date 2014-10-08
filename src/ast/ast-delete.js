@@ -1,5 +1,5 @@
 /*
-| Tests for difference.
+| A call to delete
 |
 | Authors: Axel Kittenberger
 */
@@ -19,26 +19,19 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aDiffers',
+			'ast.astDelete',
+		node :
+			true,
 		attributes :
 			{
-				left :
+				'expr' :
 					{
 						comment :
-							'left expression',
+							'the expression to delete',
 						type :
 							'Object'
 					},
-				right :
-					{
-						comment :
-							'right expression',
-						type :
-							'Object'
-					}
-			},
-		node :
-			true
+			}
 	};
 }
 

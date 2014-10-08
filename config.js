@@ -81,6 +81,7 @@ config.shellCheck =
 | it will die on a command it considers unacceptable.
 */
 config.develServer =
+	false &&
 	true;
 
 

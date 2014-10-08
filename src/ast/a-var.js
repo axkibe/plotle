@@ -45,10 +45,11 @@ var
 	ast,
 	aVar;
 
+// FIXME remove ast
 ast =
 	{
-		aDot :
-			require( './a-dot' ),
+		astDot :
+			require( './ast-dot' ),
 		aMember :
 			require( './a-member' )
 	};
@@ -89,14 +90,14 @@ aVar.prototype._init =
 /*
 | Creates a dot member access of a variable.
 */
-aVar.prototype.aDot =
+aVar.prototype.astDot =
 	function(
 		member // member string
 	)
 {
-	// checking if member is a string is done in 'aDot'
+	// checking if member is a string is done in 'astDot'
 	return (
-		ast.aDot.create(
+		ast.astDot.create(
 			'expr',
 				this,
 			'member',

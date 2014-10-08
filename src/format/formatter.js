@@ -58,11 +58,11 @@ precTable =
 			18,
 		'astCondition' :
 			15,
-		'aDelete' :
+		'astDelete' :
 			4,
-		'aDiffers' :
+		'astDiffers' :
 			9,
-		'aDot' :
+		'astDot' :
 			1,
 		'anEquals' :
 			9,
@@ -382,7 +382,7 @@ formatBlock =
 | Formats a difference check.
 */
 var
-formatADiffers =
+formatDiffers =
 	function(
 		context,
 		expr
@@ -393,7 +393,7 @@ formatADiffers =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aDiffers' )
+/**/	if( expr.reflect !== 'ast.astDiffers' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -403,14 +403,14 @@ formatADiffers =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.aDiffers
+			precTable.astDiffers
 		)
 		+ context.sep
 		+ context.tab + '!==' + context.sep
 		+ formatExpression(
 			context,
 			expr.right,
-			precTable.aDiffers
+			precTable.astDiffers
 		);
 
 	return text;
@@ -526,7 +526,7 @@ formatAPlusAssign =
 | Formats a Dot.
 */
 var
-formatADot =
+formatDot =
 	function(
 		context,
 		expr
@@ -534,7 +534,7 @@ formatADot =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aDot' )
+/**/	if( expr.reflect !== 'ast.astDot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -544,7 +544,7 @@ formatADot =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.aDot
+			precTable.astDot
 		)
 		+ '.'
 		+ expr.member
@@ -637,7 +637,7 @@ formatAnEquals =
 | The ? : thing.
 */
 var
-formatACondition =
+formatCondition =
 	function(
 		context,
 		expr
@@ -1376,7 +1376,7 @@ formatStatement =
 
 			break;
 
-		case 'ast.aFail' :
+		case 'ast.astFail' :
 
 			try
 			{
@@ -1495,8 +1495,8 @@ formatStatement =
 		case 'ast.anAssign' :
 		case 'ast.astBooleanLiteral' :
 		case 'ast.astCall' :
-		case 'ast.aDelete' :
-		case 'ast.aFail' :
+		case 'ast.astDelete' :
+		case 'ast.astFail' :
 		case 'ast.aNew' :
 		case 'ast.aNumberLiteral' :
 		case 'ast.aPlusAssign' :
@@ -1634,7 +1634,7 @@ formatAFail =
 
 /**/if( CHECK )
 /**/{
-/**/	if( fail.reflect !== 'ast.aFail' )
+/**/	if( fail.reflect !== 'ast.astFail' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1710,7 +1710,7 @@ formatAFail =
 | Formats a boolean literal use.
 */
 var
-formatAstBooleanLiteral =
+formatBooleanLiteral =
 	function(
 		context,
 		expr
@@ -1818,7 +1818,7 @@ formatCall =
 | Formats a delete expression.
 */
 var
-formatADelete =
+formatDelete =
 	function(
 		context,
 		expr
@@ -1827,7 +1827,7 @@ formatADelete =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aDelete' )
+/**/	if( expr.reflect !== 'ast.astDelete' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1841,7 +1841,7 @@ formatADelete =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.aDelete
+			precTable.astDelete
 		)
 	);
 };
@@ -2592,19 +2592,19 @@ exprFormatter =
 		'anAssign' :
 			formatAnAssign,
 		'astBooleanLiteral' :
-			formatAstBooleanLiteral,
+			formatBooleanLiteral,
 		'astCall' :
 			formatCall,
 		'astCommaList' :
 			formatCommaList,
 		'astCondition' :
-			formatACondition,
-		'aDelete' :
-			formatADelete,
-		'aDiffers' :
-			formatADiffers,
-		'aDot' :
-			formatADot,
+			formatCondition,
+		'astDelete' :
+			formatDelete,
+		'astDiffers' :
+			formatDiffers,
+		'astDot' :
+			formatDot,
 		'anEquals' :
 			formatAnEquals,
 		'aFunc' :

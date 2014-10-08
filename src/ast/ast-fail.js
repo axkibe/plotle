@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aFail',
+			'ast.astFail',
 		attributes :
 			{
 				message :
@@ -38,8 +38,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

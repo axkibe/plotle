@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aDot',
+			'ast.astDot',
 		attributes :
 			{
 				expr :
@@ -27,7 +27,7 @@ if( JION )
 						comment :
 							'the expression to get the member of',
 						type :
-							'Object'
+							'Object' // FUTURE ->expression
 					},
 				member :
 					{
@@ -50,10 +50,10 @@ if( JION )
 | Import
 */
 var
-	aDot,
+	astDot,
 	aMember;
 
-aDot =
+astDot =
 module.exports =
 	require( '../jion/this' )( module );
 
@@ -63,7 +63,7 @@ aMember = require( './a-member' );
 /*
 | Initializer.
 */
-aDot.prototype._init =
+astDot.prototype._init =
 	function( )
 {
 	var
@@ -93,15 +93,15 @@ aDot.prototype._init =
 /*
 | Creates a dot member access of a dot.
 */
-aDot.prototype.aDot =
+astDot.prototype.astDot =
 	function(
 		member // member string
 	)
 {
-	// checks if member is a string is done in 'aDot'
+	// checks if member is a string is done in 'astDot'
 
 	return (
-		aDot.create(
+		astDot.create(
 			'expr',
 				this,
 			'member',
@@ -114,7 +114,7 @@ aDot.prototype.aDot =
 /*
 | Creates a generic member access of a variable.
 */
-aDot.prototype.aMember =
+astDot.prototype.aMember =
 	function(
 		member // member expression
 	)

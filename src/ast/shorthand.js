@@ -49,12 +49,12 @@ ast =
 			require( './ast-comment' ),
 		astCondition :
 			require( './ast-condition' ),
-		aDelete :
-			require( './a-delete' ),
-		aDiffers :
-			require( './a-differs' ),
-		aDot :
-			require( './a-dot' ),
+		astDelete :
+			require( './ast-delete' ),
+		astDiffers :
+			require( './ast-differs' ),
+		astDot :
+			require( './ast-dot' ),
 		anEquals :
 			require( './an-equals' ),
 		aFile :
@@ -246,14 +246,14 @@ ShortHand.astCondition =
 /*
 | Shorthand for creating differs.
 */
-ShortHand.aDiffers =
+ShortHand.astDiffers =
 	function(
 		left,
 		right
 	)
 {
 	return (
-		ast.aDiffers.create(
+		ast.astDiffers.create(
 			'left',
 				left,
 			'right',
@@ -266,31 +266,26 @@ ShortHand.aDiffers =
 /*
 | Shorthand for creating delete calls.
 */
-ShortHand.aDelete =
+ShortHand.astDelete =
 	function(
 		expr
 	)
 {
-	return (
-		ast.aDelete.create(
-			'expr',
-				expr
-		)
-	);
+	return ast.astDelete.create( 'expr', expr );
 };
 
 
 /*
 | Shorthand for creating dots.
 */
-ShortHand.aDot =
+ShortHand.astDot =
 	function(
 		expr,
 		member
 	)
 {
 	return (
-		ast.aDot.create(
+		ast.astDot.create(
 			'expr',
 				expr,
 			'member',

@@ -55,8 +55,8 @@ ast =
 			require( './ast-check' ),
 		astComment :
 			require( './ast-comment' ),
-		aFail :
-			require( './a-fail' ),
+		astFail :
+			require( './ast-fail' ),
 		aFor :
 			require( './a-for' ),
 		aForIn :
@@ -209,7 +209,7 @@ astBlock.prototype.anIf =
 /*
 | Returns the block with a error throwing appended.
 */
-astBlock.prototype.aFail =
+astBlock.prototype.astFail =
 	function(
 		message
 	)
@@ -229,7 +229,7 @@ astBlock.prototype.aFail =
 
 	return (
 		this.append(
-			ast.aFail.create(
+			ast.astFail.create(
 				'message',
 					message
 			)

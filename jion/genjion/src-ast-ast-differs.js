@@ -48,10 +48,13 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		v_expr // the expression to delete
+		v_left, // left expression
+		v_right // right expression
 	)
 	{
-		this.expr = v_expr;
+		this.left = v_left;
+
+		this.right = v_right;
 
 		jools.immute( this );
 	};
@@ -69,8 +72,8 @@ var
 | Jion.
 */
 var
-	aDelete =
-	ast.aDelete =
+	astDiffers =
+	ast.astDiffers =
 		{
 			prototype :
 				prototype
@@ -78,9 +81,9 @@ var
 
 
 /*
-| Creates a new aDelete object.
+| Creates a new astDiffers object.
 */
-aDelete.create =
+astDiffers.create =
 prototype.create =
 	function(
 		// free strings
@@ -89,13 +92,17 @@ prototype.create =
 	var
 		inherit,
 
-		v_expr;
+		v_left,
 
-	if( this !== aDelete )
+		v_right;
+
+	if( this !== astDiffers )
 	{
 		inherit = this;
 
-		v_expr = this.expr;
+		v_left = this.left;
+
+		v_right = this.right;
 	}
 
 	for(
@@ -110,11 +117,20 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
-			case 'expr' :
+			case 'left' :
 
 				if( arg !== undefined )
 				{
-					v_expr = arg;
+					v_left = arg;
+				}
+
+				break;
+
+			case 'right' :
+
+				if( arg !== undefined )
+				{
+					v_right = arg;
 				}
 
 				break;
@@ -130,36 +146,46 @@ prototype.create =
 
 /**/if( CHECK )
 /**/{
-/**/	if( v_expr === undefined )
+/**/	if( v_left === undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_expr === null )
+/**/	if( v_left === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_right === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_right === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if( inherit && v_expr === inherit.expr )
+	if( inherit && v_left === inherit.left && v_right === inherit.right )
 	{
 		return inherit;
 	}
 
-	return new Constructor( v_expr );
+	return new Constructor( v_left, v_right );
 };
 
 
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aDelete';
+prototype.reflect = 'ast.astDiffers';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aDelete';
+prototype.reflectName = 'astDiffers';
 
 
 /*
@@ -192,7 +218,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return this.expr === obj.expr;
+	return this.left === obj.left && this.right === obj.right;
 };
 
 
@@ -201,7 +227,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aDelete;
+	module.exports = astDiffers;
 }
 
 
