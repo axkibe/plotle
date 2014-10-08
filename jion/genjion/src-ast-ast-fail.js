@@ -69,8 +69,8 @@ var
 | Jion.
 */
 var
-	aFail =
-	ast.aFail =
+	astFail =
+	ast.astFail =
 		{
 			prototype :
 				prototype
@@ -78,9 +78,9 @@ var
 
 
 /*
-| Creates a new aFail object.
+| Creates a new astFail object.
 */
-aFail.create =
+astFail.create =
 prototype.create =
 	function(
 		// free strings
@@ -91,7 +91,7 @@ prototype.create =
 
 		v_message;
 
-	if( this !== aFail )
+	if( this !== astFail )
 	{
 		inherit = this;
 
@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aFail;
+	module.exports = astFail;
 }
 
 

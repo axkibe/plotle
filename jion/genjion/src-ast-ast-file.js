@@ -87,8 +87,8 @@ var
 | Jion.
 */
 var
-	aFile =
-	ast.aFile =
+	astFile =
+	ast.astFile =
 		{
 			prototype :
 				prototype
@@ -96,9 +96,9 @@ var
 
 
 /*
-| Creates a new aFile object.
+| Creates a new astFile object.
 */
-aFile.create =
+astFile.create =
 prototype.create =
 	function(
 		// free strings
@@ -117,7 +117,7 @@ prototype.create =
 
 		v_preamble;
 
-	if( this !== aFile )
+	if( this !== astFile )
 	{
 		inherit = this;
 
@@ -339,13 +339,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aFile';
+prototype.reflect = 'ast.astFile';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aFile';
+prototype.reflectName = 'astFile';
 
 
 /*
@@ -409,7 +409,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aFile;
+	module.exports = astFile;
 }
 
 

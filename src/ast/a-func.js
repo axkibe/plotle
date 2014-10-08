@@ -42,19 +42,18 @@ if( JION )
 	};
 }
 
-/*
-| Node imports.
-*/
+
 var
-	aFuncArg,
+	astFuncArg,
 	aFunc,
 	jools;
+
 
 aFunc =
 module.exports =
 	require( '../jion/this' )( module );
 
-aFuncArg = require( './a-func-arg' );
+astFuncArg = require( './ast-func-arg' );
 
 jools = require( '../jools/jools' );
 
@@ -67,7 +66,7 @@ aFunc.prototype.append =
 		arg
 	)
 {
-	return (
+	return(
 		this.create(
 			'twig:add',
 			jools.uid( ), // FIXME
@@ -88,9 +87,9 @@ aFunc.prototype.Arg =
 		comment
 	)
 {
-	return (
+	return(
 		this.append(
-			aFuncArg.create(
+			astFuncArg.create(
 				'name',
 					name,
 				'comment',

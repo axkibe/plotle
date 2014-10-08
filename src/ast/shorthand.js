@@ -55,14 +55,14 @@ ast =
 			require( './ast-differs' ),
 		astDot :
 			require( './ast-dot' ),
+		astFile :
+			require( './ast-file' ),
 		anEquals :
 			require( './an-equals' ),
-		aFile :
-			require( './a-file' ),
 		aFunc :
 			require( './a-func' ),
-		aFuncArg :
-			require( './a-func-arg' ),
+		astFuncArg :
+			require( './ast-func-arg' ),
 		aGreaterThan :
 			require( './a-greater-than' ),
 		anIf :
@@ -134,7 +134,7 @@ ShortHand.anAnd =
 			)
 		);
 
-		return (
+		return(
 			ShortHand.anAnd.apply(
 				this,
 				args
@@ -142,7 +142,7 @@ ShortHand.anAnd =
 		);
 	}
 
-	return (
+	return(
 		ast.anAnd.create(
 			'left',
 				left,
@@ -172,7 +172,7 @@ ShortHand.anAssign =
 		right
 	)
 {
-	return (
+	return(
 		ast.anAssign.create(
 			'left',
 				left,
@@ -230,7 +230,7 @@ ShortHand.astCondition =
 		elsewise
 	)
 {
-	return (
+	return(
 		ast.astCondition.create(
 			'condition',
 				condition,
@@ -252,7 +252,7 @@ ShortHand.astDiffers =
 		right
 	)
 {
-	return (
+	return(
 		ast.astDiffers.create(
 			'left',
 				left,
@@ -284,7 +284,7 @@ ShortHand.astDot =
 		member
 	)
 {
-	return (
+	return(
 		ast.astDot.create(
 			'expr',
 				expr,
@@ -304,7 +304,7 @@ ShortHand.anEquals =
 		right
 	)
 {
-	return (
+	return(
 		ast.anEquals.create(
 			'left',
 				left,
@@ -324,7 +324,7 @@ ShortHand.aLessThan =
 		right
 	)
 {
-	return (
+	return(
 		ast.aLessThan.create(
 			'left',
 				left,
@@ -344,7 +344,7 @@ ShortHand.aGreaterThan =
 		right
 	)
 {
-	return (
+	return(
 		ast.aGreaterThan.create(
 			'left',
 				left,
@@ -361,7 +361,7 @@ ShortHand.aGreaterThan =
 ShortHand.aFalse =
 	function( )
 {
-	return (
+	return(
 		ast.astBooleanLiteral.create(
 			'boolean',
 				false
@@ -380,7 +380,7 @@ ShortHand.anIf =
 		elsewise
 	)
 {
-	return (
+	return(
 		ast.anIf.create(
 			'condition',
 				condition,
@@ -396,10 +396,10 @@ ShortHand.anIf =
 /*
 | Shorthand for creating files.
 */
-ShortHand.aFile =
+ShortHand.astFile =
 	function( )
 {
-	return ast.aFile.create( );
+	return ast.astFile.create( );
 };
 
 
@@ -411,7 +411,7 @@ ShortHand.aFunc =
 		block
 	)
 {
-	return (
+	return(
 		ast.aFunc.create(
 			'block',
 				block || null
@@ -429,7 +429,7 @@ ShortHand.anInstanceof =
 		right
 	)
 {
-	return (
+	return(
 		ast.anInstanceof.create(
 			'left',
 				left,
@@ -450,7 +450,7 @@ ShortHand.aMember =
 		member
 	)
 {
-	return (
+	return(
 		ast.aMember.create(
 			'expr',
 				expr,
@@ -469,7 +469,7 @@ ShortHand.aNew =
 		call
 	)
 {
-	return (
+	return(
 		ast.aNew.create(
 			'call',
 				call
@@ -486,7 +486,7 @@ ShortHand.aNot =
 		expr
 	)
 {
-	return (
+	return(
 		ast.aNot.create(
 			'expr',
 				expr
@@ -513,7 +513,7 @@ ShortHand.aNumberLiteral =
 		number
 	)
 {
-	return (
+	return(
 		ast.aNumberLiteral.create(
 			'number',
 				number
@@ -560,7 +560,7 @@ ShortHand.anOr =
 			)
 		);
 
-		return (
+		return(
 			ShortHand.anOr.apply(
 				this,
 				args
@@ -568,7 +568,7 @@ ShortHand.anOr =
 		);
 	}
 
-	return (
+	return(
 		ast.anOr.create(
 			'left',
 				left,
@@ -607,7 +607,7 @@ ShortHand.aPlus =
 			)
 		);
 
-		return (
+		return(
 			ShortHand.aPlus.apply(
 				this,
 				args
@@ -615,7 +615,7 @@ ShortHand.aPlus =
 		);
 	}
 
-	return (
+	return(
 		ast.aPlus.create(
 			'left',
 				left,
@@ -635,7 +635,7 @@ ShortHand.aPlusAssign =
 		right
 	)
 {
-	return (
+	return(
 		ast.aPlusAssign.create(
 			'left',
 				left,
@@ -655,7 +655,7 @@ ShortHand.aPreIncrement =
 		expr
 	)
 {
-	return (
+	return(
 		ast.aPreIncrement.create(
 			'expr',
 				expr
@@ -672,7 +672,7 @@ ShortHand.aStringLiteral =
 		string
 	)
 {
-	return (
+	return(
 		ast.aStringLiteral.create(
 			'string',
 				string
@@ -689,7 +689,7 @@ ShortHand.aSwitch =
 		statement
 	)
 {
-	return (
+	return(
 		ast.aSwitch.create(
 			'statement',
 				statement
@@ -704,7 +704,7 @@ ShortHand.aSwitch =
 ShortHand.aTrue =
 	function( )
 {
-	return (
+	return(
 		ast.astBooleanLiteral.create(
 			'boolean',
 				true
@@ -721,7 +721,7 @@ ShortHand.aTypeof =
 		expr
 	)
 {
-	return (
+	return(
 		ast.aTypeof.create(
 			'expr',
 				expr
@@ -739,7 +739,7 @@ ShortHand.aVar =
 		name
 	)
 {
-	return (
+	return(
 		ast.aVar.create(
 			'name',
 				name
@@ -758,7 +758,7 @@ ShortHand.aVarDec =
 		assign  // variable assignment
 	)
 {
-	return (
+	return(
 		ast.aVarDec.create(
 			'name',
 				name,

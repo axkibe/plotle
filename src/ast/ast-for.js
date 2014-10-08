@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aFor',
+			'ast.astFor',
 		attributes :
 			{
 				init :

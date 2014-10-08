@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aFile',
+			'ast.astFile',
 		attributes :
 			{
 				header :
@@ -74,15 +74,10 @@ if( JION )
 }
 
 
-var
-	aFile =
-		require( '../jion/this' )( module );
-
-
 /*
 | Node export.
 */
-module.exports = aFile;
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

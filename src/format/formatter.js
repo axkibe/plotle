@@ -819,7 +819,7 @@ formatAFor =
 | Formats a for-in loop.
 */
 var
-formatAForIn =
+formatForIn =
 	function(
 		context,
 		expr
@@ -1405,15 +1405,15 @@ formatStatement =
 
 			break;
 
-		case 'ast.aFor' :
+		case 'ast.astFor' :
 
 			text += formatAFor( context, statement );
 
 			break;
 
-		case 'ast.aForIn' :
+		case 'ast.astForIn' :
 
-			text += formatAForIn( context, statement );
+			text += formatForIn( context, statement );
 
 			break;
 
@@ -1507,8 +1507,8 @@ formatStatement =
 			return text + ';' + context.sep;
 
 		case 'ast.astCheck' :
-		case 'ast.aFor' :
-		case 'ast.aForIn' :
+		case 'ast.astFor' :
+		case 'ast.astForIn' :
 		case 'ast.anIf' :
 		case 'ast.aSwitch' :
 

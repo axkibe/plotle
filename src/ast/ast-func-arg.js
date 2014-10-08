@@ -1,5 +1,5 @@
 /*
-| For-in loops in abstract syntax trees.
+| A function argument to be generated
 |
 | Authors: Axel Kittenberger
 */
@@ -19,29 +19,27 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aForIn',
+			'ast.astFuncArg',
 		attributes :
 			{
-				variable :
+				name :
 					{
+						// FIXME this is doubled
 						comment :
-							'the loop variable',
+							'argument name',
 						type :
-							'String'
+							'String',
+						allowsNull :
+							true
 					},
-				object :
+				comment :
 					{
 						comment :
-							'the object expression to iterate over',
+							'argument comment',
 						type :
-							'Object'
-					},
-				block :
-					{
-						comment :
-							'the for block',
-						type :
-							'ast.astBlock'
+							'String',
+						defaultValue :
+							null
 					}
 			},
 		node :

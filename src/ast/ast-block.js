@@ -57,10 +57,10 @@ ast =
 			require( './ast-comment' ),
 		astFail :
 			require( './ast-fail' ),
-		aFor :
-			require( './a-for' ),
-		aForIn :
-			require( './a-for-in' ),
+		astFor :
+			require( './ast-for' ),
+		astForIn :
+			require( './ast-for-in' ),
 		anIf :
 			require( './an-if' ),
 		aNew :
@@ -241,7 +241,7 @@ astBlock.prototype.astFail =
 /*
 | Returns the block with a classical for loop appended.
 */
-astBlock.prototype.aFor =
+astBlock.prototype.astFor =
 	function(
 		init,
 		condition,
@@ -251,7 +251,7 @@ astBlock.prototype.aFor =
 {
 	var
 		statement =
-			ast.aFor.create(
+			ast.astFor.create(
 				'init',
 					init,
 				'condition',
@@ -269,7 +269,7 @@ astBlock.prototype.aFor =
 /*
 | Returns the block with a for-in loop appended.
 */
-astBlock.prototype.aForIn =
+astBlock.prototype.astForIn =
 	function(
 		variable,
 		object,
@@ -278,7 +278,7 @@ astBlock.prototype.aForIn =
 {
 	var
 		statement =
-			ast.aForIn.create(
+			ast.astForIn.create(
 				'variable',
 					variable,
 				'object',

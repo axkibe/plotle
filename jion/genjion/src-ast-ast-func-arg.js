@@ -72,8 +72,8 @@ var
 | Jion.
 */
 var
-	aFuncArg =
-	ast.aFuncArg =
+	astFuncArg =
+	ast.astFuncArg =
 		{
 			prototype :
 				prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new aFuncArg object.
+| Creates a new astFuncArg object.
 */
-aFuncArg.create =
+astFuncArg.create =
 prototype.create =
 	function(
 		// free strings
@@ -96,7 +96,7 @@ prototype.create =
 
 		v_name;
 
-	if( this !== aFuncArg )
+	if( this !== astFuncArg )
 	{
 		inherit = this;
 
@@ -204,13 +204,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aFuncArg';
+prototype.reflect = 'ast.astFuncArg';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aFuncArg';
+prototype.reflectName = 'astFuncArg';
 
 
 /*
@@ -252,7 +252,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aFuncArg;
+	module.exports = astFuncArg;
 }
 
 

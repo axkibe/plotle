@@ -77,8 +77,8 @@ var
 		Shorthand.anEquals,
 	aFalse =
 		Shorthand.aFalse( ),
-	aFile =
-		Shorthand.aFile,
+	astFile =
+		Shorthand.astFile,
 	aFunc =
 		Shorthand.aFunc,
 	aGreaterThan =
@@ -1600,7 +1600,7 @@ gen.prototype.genCreatorFreeStringsParser =
 
 	block =
 		block
-		.aFor(
+		.astFor(
 			aVList( )
 			.aVarDec( 'a', aNumberLiteral( 0 ) )
 			.aVarDec( 'aZ', aVar( 'arguments' ).astDot( 'length' ) ),
@@ -2511,7 +2511,7 @@ gen.prototype.genFromJSONCreatorParser =
 
 	block =
 		block
-		.aForIn(
+		.astForIn(
 			'name',
 			aVar( 'json' ),
 			astBlock( )
@@ -2618,7 +2618,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			//.astFail( 'ranks/twig information missing' )
 			.astFail( )
 		)
-		.aFor(
+		.astFor(
 			// FIXME, put into the commalist call
 			astCommaList( )
 			.append(
@@ -3230,7 +3230,7 @@ gen.prototype.genEquals =
 				),
 				astBlock( ).aReturn( aFalse )
 			)
-			.aFor(
+			.astFor(
 				astCommaList( ) // FIXME add anAssign to astCommaList
 				.append(
 					anAssign( aVar( 'a' ), aNumberLiteral( 0 ) )
@@ -3578,7 +3578,7 @@ gen.generate =
 	if( skim )
 	{
 		file =
-			aFile( )
+			astFile( )
 			.create(
 				'jionID',
 					gi.id,
@@ -3590,7 +3590,7 @@ gen.generate =
 	else
 	{
 		file =
-			aFile( )
+			astFile( )
 			.create(
 				'header',
 					astComment.create(
