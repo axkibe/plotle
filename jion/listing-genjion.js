@@ -24,6 +24,8 @@ module.exports =
 			'src/ast/ast-func.js',
 			'src/ast/ast-func-arg.js',
 			'src/ast/ast-greater-than.js',
+			'src/ast/ast-less-than.js',
+			'src/ast/ast-member.js',
 
 			'src/ast/a-null.js',
 			'src/ast/an-and.js',
@@ -32,8 +34,6 @@ module.exports =
 			'src/ast/an-equals.js',
 			'src/ast/an-if.js',
 			'src/ast/an-instanceof.js',
-			'src/ast/a-less-than.js',
-			'src/ast/a-member.js',
 			'src/ast/a-new.js',
 			'src/ast/a-not.js',
 			'src/ast/a-number-literal.js',

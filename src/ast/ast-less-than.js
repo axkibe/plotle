@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aLessThan',
+			'ast.astLessThan',
 		attributes :
 			{
 				left :
@@ -43,8 +43,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

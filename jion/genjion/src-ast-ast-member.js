@@ -72,8 +72,8 @@ var
 | Jion.
 */
 var
-	aMember =
-	ast.aMember =
+	astMember =
+	ast.astMember =
 		{
 			prototype :
 				prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new aMember object.
+| Creates a new astMember object.
 */
-aMember.create =
+astMember.create =
 prototype.create =
 	function(
 		// free strings
@@ -96,7 +96,7 @@ prototype.create =
 
 		v_member;
 
-	if( this !== aMember )
+	if( this !== astMember )
 	{
 		inherit = this;
 
@@ -185,13 +185,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aMember';
+prototype.reflect = 'ast.astMember';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aMember';
+prototype.reflectName = 'astMember';
 
 
 /*
@@ -233,7 +233,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aMember;
+	module.exports = astMember;
 }
 
 

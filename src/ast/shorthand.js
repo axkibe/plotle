@@ -69,10 +69,10 @@ ast =
 			require( './an-if' ),
 		anInstanceof :
 			require( './an-instanceof' ),
-		aLessThan :
-			require( './a-less-than' ),
-		aMember :
-			require( './a-member' ),
+		astLessThan :
+			require( './ast-less-than' ),
+		astMember :
+			require( './ast-member' ),
 		aNew :
 			require( './a-new' ),
 		aNot :
@@ -318,14 +318,14 @@ ShortHand.anEquals =
 /*
 | Shorthand for creating less-than comparisons.
 */
-ShortHand.aLessThan =
+ShortHand.astLessThan =
 	function(
 		left,
 		right
 	)
 {
 	return(
-		ast.aLessThan.create(
+		ast.astLessThan.create(
 			'left',
 				left,
 			'right',
@@ -444,14 +444,14 @@ ShortHand.anInstanceof =
 /*
 | Shorthand for creating members.
 */
-ShortHand.aMember =
+ShortHand.astMember =
 	function(
 		expr,
 		member
 	)
 {
 	return(
-		ast.aMember.create(
+		ast.astMember.create(
 			'expr',
 				expr,
 			'member',

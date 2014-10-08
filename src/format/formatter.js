@@ -74,9 +74,9 @@ precTable =
 			8,
 		'anInstanceof' :
 			8,
-		'aLessThan' :
+		'astLessThan' :
 			8,
-		'aMember' :
+		'astMember' :
 			1,
 		'aNew' :
 			2,
@@ -556,7 +556,7 @@ formatDot =
 | Formats a member.
 */
 var
-formatAMember =
+formatMember =
 	function(
 		context,
 		expr
@@ -564,7 +564,7 @@ formatAMember =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aMember' )
+/**/	if( expr.reflect !== 'ast.astMember' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -574,7 +574,7 @@ formatAMember =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.aMember
+			precTable.astMember
 		)
 		+ '['
 		+ context.sep
@@ -858,7 +858,7 @@ formatForIn =
 | Formats a less-than check.
 */
 var
-formatALessThan =
+formatLessThan =
 	function(
 		context,
 		expr
@@ -869,7 +869,7 @@ formatALessThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aLessThan' )
+/**/	if( expr.reflect !== 'ast.astLessThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -879,7 +879,7 @@ formatALessThan =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.aLessThan
+			precTable.astLessThan
 		)
 		+
 		context.sep
@@ -893,7 +893,7 @@ formatALessThan =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.aLessThan
+			precTable.astLessThan
 		);
 
 	return text;
@@ -2613,10 +2613,10 @@ exprFormatter =
 			formatGreaterThan,
 		'anInstanceof' :
 			formatAnInstanceof,
-		'aLessThan' :
-			formatALessThan,
-		'aMember' :
-			formatAMember,
+		'astLessThan' :
+			formatLessThan,
+		'astMember' :
+			formatMember,
 		'aNew' :
 			formatANew,
 		'aNot' :

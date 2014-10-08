@@ -51,13 +51,15 @@ if( JION )
 */
 var
 	astDot,
-	aMember;
+	astMember;
+
 
 astDot =
 module.exports =
 	require( '../jion/this' )( module );
 
-aMember = require( './a-member' );
+
+astMember = require( './ast-member' );
 
 
 /*
@@ -114,13 +116,13 @@ astDot.prototype.astDot =
 /*
 | Creates a generic member access of a variable.
 */
-astDot.prototype.aMember =
+astDot.prototype.astMember =
 	function(
 		member // member expression
 	)
 {
-	return (
-		aMember.create(
+	return(
+		astMember.create(
 			'expr',
 				this,
 			'member',

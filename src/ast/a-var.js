@@ -50,8 +50,8 @@ ast =
 	{
 		astDot :
 			require( './ast-dot' ),
-		aMember :
-			require( './a-member' )
+		astMember :
+			require( './ast-member' )
 	};
 
 aVar = require( '../jion/this' )( module );
@@ -110,13 +110,13 @@ aVar.prototype.astDot =
 /*
 | Creates a generic member access of a variable.
 */
-aVar.prototype.aMember =
+aVar.prototype.astMember =
 	function(
 		member // member expression
 	)
 {
 	return (
-		ast.aMember.create(
+		ast.astMember.create(
 			'expr',
 				this,
 			'member',

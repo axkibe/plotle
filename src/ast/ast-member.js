@@ -1,7 +1,5 @@
 /*
-| Gets a member of an object.
-|
-| In other words the [ ] operator.
+| ast [ ] operator.
 |
 | Authors: Axel Kittenberger
 */
@@ -21,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aMember',
+			'ast.astMember',
 		attributes :
 			{
 				expr :
@@ -45,15 +43,12 @@ if( JION )
 }
 
 
-/*
-| Import
-*/
 var
 	astDot,
-	aMember;
+	astMember;
 
 
-aMember =
+astMember =
 module.exports =
 	require( '../jion/this' )( module );
 
@@ -64,13 +59,13 @@ astDot = require( './ast-dot' );
 /*
 | Creates a dot member access of a dot.
 */
-aMember.prototype.astDot =
+astMember.prototype.astDot =
 	function(
 		member // member string
 	)
 {
 	// checks if member is a string is done in 'astDot'
-	return (
+	return(
 		astDot.create(
 			'expr',
 				this,

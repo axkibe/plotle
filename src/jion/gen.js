@@ -87,8 +87,8 @@ var
 		Shorthand.anIf,
 	anInstanceof =
 		Shorthand.anInstanceof,
-	aLessThan =
-		Shorthand.aLessThan,
+	astLessThan =
+		Shorthand.astLessThan,
 	aNew =
 		Shorthand.aNew,
 	aNot =
@@ -1242,7 +1242,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		astBlock( )
 		.aVarDec(
 			'arg',
-			aVar( 'arguments' ).aMember(
+			aVar( 'arguments' ).astMember(
 				aPlus(
 					aVar( 'a' ),
 					aNumberLiteral( 1 )
@@ -1252,7 +1252,7 @@ gen.prototype.genCreatorFreeStringsParser =
 
 	switchExpr =
 		aSwitch(
-			aVar( 'arguments' ).aMember( aVar( 'a' ) )
+			aVar( 'arguments' ).astMember( aVar( 'a' ) )
 		);
 
 	for(
@@ -1322,7 +1322,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anAssign(
 					aVar( 'arg' ),
-					aVar( 'arguments' ).aMember(
+					aVar( 'arguments' ).astMember(
 						aPlus(
 							aPreIncrement( aVar( 'a' ) ),
 							aNumberLiteral( 1 )
@@ -1331,7 +1331,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anIf(
 					astDiffers(
-						aVar( 'twig' ).aMember( aVar( 'key' ) ),
+						aVar( 'twig' ).astMember( aVar( 'key' ) ),
 						anUndefined
 					),
 					astBlock( )
@@ -1346,7 +1346,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.anAssign(
-					aVar( 'twig' ).aMember( aVar( 'key' ) ),
+					aVar( 'twig' ).astMember( aVar( 'key' ) ),
 					aVar( 'arg' )
 				)
 				.astCall(
@@ -1364,7 +1364,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anAssign(
 					aVar( 'arg' ),
-					aVar( 'arguments' ).aMember(
+					aVar( 'arguments' ).astMember(
 						aPlus(
 							aPreIncrement( aVar( 'a' ) ),
 							aNumberLiteral( 1 )
@@ -1373,7 +1373,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anIf(
 					anEquals(
-						aVar( 'twig' ).aMember( aVar( 'key' ) ),
+						aVar( 'twig' ).astMember( aVar( 'key' ) ),
 						anUndefined
 					),
 					astBlock( )
@@ -1388,7 +1388,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.anAssign(
-					aVar( 'twig' ).aMember( aVar( 'key' ) ),
+					aVar( 'twig' ).astMember( aVar( 'key' ) ),
 					aVar( 'arg' )
 				)
 			)
@@ -1402,7 +1402,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anAssign(
 					aVar( 'rank' ),
-					aVar( 'arguments' ).aMember(
+					aVar( 'arguments' ).astMember(
 						aPlus(
 							aVar( 'a' ),
 							aNumberLiteral( 2 )
@@ -1411,7 +1411,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anAssign(
 					aVar( 'arg' ),
-					aVar( 'arguments' ).aMember(
+					aVar( 'arguments' ).astMember(
 						aPlus(
 							aVar( 'a' ),
 							aNumberLiteral( 3 )
@@ -1426,7 +1426,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anIf(
 					astDiffers(
-						aVar( 'twig' ).aMember( aVar( 'key' ) ),
+						aVar( 'twig' ).astMember( aVar( 'key' ) ),
 						anUndefined
 					),
 					astBlock( )
@@ -1442,7 +1442,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.anIf(
 					anOr(
-						aLessThan(
+						astLessThan(
 							aVar( 'rank' ),
 							aNumberLiteral( 0 )
 						),
@@ -1457,7 +1457,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.anAssign(
-					aVar( 'twig' ).aMember( aVar( 'key' ) ),
+					aVar( 'twig' ).astMember( aVar( 'key' ) ),
 					aVar( 'arg' )
 				)
 				.append(
@@ -1475,7 +1475,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.append( twigDupCheck )
 				.anIf(
 					anEquals(
-						aVar( 'twig' ).aMember( aVar( 'arg' ) ),
+						aVar( 'twig' ).astMember( aVar( 'arg' ) ),
 						anUndefined
 					),
 					astBlock( )
@@ -1491,7 +1491,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.append(
 					astDelete(
-						aVar( 'twig' ).aMember( aVar( 'arg' ) )
+						aVar( 'twig' ).astMember( aVar( 'arg' ) )
 					)
 				)
 				.append(
@@ -1551,7 +1551,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					aVar( 'ray' ).astDot( 'splice' ),
 					aVar( 'arg' ),
 					aNumberLiteral( 0 ),
-					aVar( 'arguments' ).aMember(
+					aVar( 'arguments' ).astMember(
 						aPlus(
 							aPreIncrement( aVar( 'a' ) ),
 							aNumberLiteral( 1 )
@@ -1574,8 +1574,8 @@ gen.prototype.genCreatorFreeStringsParser =
 				astBlock( )
 				.append( rayDupCheck )
 				.anAssign(
-					aVar( 'ray' ).aMember( aVar( 'arg' ) ),
-					aVar( 'arguments' ).aMember(
+					aVar( 'ray' ).astMember( aVar( 'arg' ) ),
+					aVar( 'arguments' ).astMember(
 						aPlus(
 							aPreIncrement( aVar( 'a' ) ),
 							aNumberLiteral( 1 )
@@ -1604,7 +1604,7 @@ gen.prototype.genCreatorFreeStringsParser =
 			aVList( )
 			.aVarDec( 'a', aNumberLiteral( 0 ) )
 			.aVarDec( 'aZ', aVar( 'arguments' ).astDot( 'length' ) ),
-			aLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
+			astLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
 			aPlusAssign( aVar( 'a' ), aNumberLiteral( 2 ) ),
 			loop
 		);
@@ -2517,7 +2517,7 @@ gen.prototype.genFromJSONCreatorParser =
 			astBlock( )
 			.anAssign(
 				aVar( 'arg' ),
-				aVar( 'json' ).aMember( aVar( 'name' ) )
+				aVar( 'json' ).astMember( aVar( 'name' ) )
 			)
 			.append(
 				switchExpr
@@ -2566,7 +2566,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 				aStringLiteral( twigId ),
 				astBlock( )
 				.anAssign(
-					aVar( 'twig' ).aMember( aVar( 'key' ) ),
+					aVar( 'twig' ).astMember( aVar( 'key' ) ),
 					astCall(
 						base.astDot( 'createFromJSON' ),
 						aVar( 'jval' )
@@ -2587,11 +2587,11 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		astBlock( )
 		.anAssign(
 			aVar( 'key' ),
-			aVar( 'ranks' ).aMember( aVar( 'a' ) )
+			aVar( 'ranks' ).astMember( aVar( 'a' ) )
 		)
 		.anIf(
 			aNot(
-				aVar( 'jwig' ).aMember( aVar( 'key' ) )
+				aVar( 'jwig' ).astMember( aVar( 'key' ) )
 			),
 			astBlock( )
 			//.astFail( )
@@ -2599,7 +2599,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		)
 		.anAssign(
 			aVar( 'jval' ),
-			aVar( 'jwig' ).aMember( aVar( 'key' ) )
+			aVar( 'jwig' ).astMember( aVar( 'key' ) )
 		)
 		.append( switchExpr );
 
@@ -2633,7 +2633,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 					aVar( 'ranks' ).astDot( 'length' )
 				)
 			),
-			aLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
+			astLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
 			aPreIncrement( aVar( 'a' ) ),
 			loop
 		);
@@ -3193,32 +3193,36 @@ gen.prototype.genEquals =
 			astBlock( )
 			.anAssign(
 				vKey,
-				aThis.astDot( 'ranks' ).aMember( vA )
+				aThis.astDot( 'ranks' ).astMember( vA )
 			)
 			.anIf(
 				anOr(
 					astDiffers(
 						aVar( 'key' ),
-						aVar( 'obj' ).astDot( 'ranks' ).aMember( vA )
+						aVar( 'obj' ).astDot( 'ranks' ).astMember( vA )
 					),
 					astCall(
 						astCondition(
-							aThis.astDot( 'twig' ).aMember( vKey ).astDot( 'equals' ),
+							aThis.astDot( 'twig' ).astMember( vKey ).astDot( 'equals' ),
 							aNot(
 								astCall(
 									aThis
 									.astDot( 'twig' )
-									.aMember( vKey )
+									.astMember( vKey )
 									.astDot( 'equals' ),
 
 									aVar( 'obj' )
 									.astDot( 'twig' )
-									.aMember( vKey )
+									.astMember( vKey )
 								)
 							),
 							astDiffers(
-								aThis.astDot( 'twig' ).aMember( vKey ),
-								aVar( 'obj' ).astDot( 'twig' ).aMember( vKey )
+								aThis
+									.astDot( 'twig' )
+									.astMember( vKey ),
+								aVar( 'obj' )
+									.astDot( 'twig' )
+									.astMember( vKey )
 							)
 						)
 					)
@@ -3241,9 +3245,13 @@ gen.prototype.genEquals =
 					anAssign( aVar( 'a' ), aNumberLiteral( 0 ) )
 				)
 				.append(
-					anAssign( aVar( 'aZ' ), aThis.astDot( 'ranks' ).astDot( 'length' ) )
+					anAssign(
+						aVar( 'aZ' ),
+						aThis
+							.astDot( 'ranks' )
+							.astDot( 'length' ) )
 				),
-				aLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
+				astLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
 				aPreIncrement( aVar( 'a' ) ),
 				twigTestLoopBody
 			);
