@@ -83,8 +83,8 @@ var
 | Jion.
 */
 var
-	aFunc =
-	ast.aFunc =
+	astFunc =
+	ast.astFunc =
 		{
 			prototype :
 				prototype
@@ -92,9 +92,9 @@ var
 
 
 /*
-| Creates a new aFunc object.
+| Creates a new astFunc object.
 */
-aFunc.create =
+astFunc.create =
 prototype.create =
 	function(
 		// free strings
@@ -115,7 +115,7 @@ prototype.create =
 
 		v_block;
 
-	if( this !== aFunc )
+	if( this !== astFunc )
 	{
 		inherit = this;
 
@@ -316,13 +316,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aFunc';
+prototype.reflect = 'ast.astFunc';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aFunc';
+prototype.reflectName = 'astFunc';
 
 
 /*
@@ -423,7 +423,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aFunc;
+	module.exports = astFunc;
 }
 
 

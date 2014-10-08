@@ -66,9 +66,9 @@ precTable =
 			1,
 		'anEquals' :
 			9,
-		'aFunc' :
+		'astFunc' :
 			-1,
-		'aGreaterThan' :
+		'astGreaterThan' :
 			8,
 		'anIn' :
 			8,
@@ -904,7 +904,7 @@ formatALessThan =
 | Formats a more-than check.
 */
 var
-formatAGreaterThan =
+formatGreaterThan =
 	function(
 		context,
 		expr
@@ -915,7 +915,7 @@ formatAGreaterThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aGreaterThan' )
+/**/	if( expr.reflect !== 'ast.astGreaterThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -925,7 +925,7 @@ formatAGreaterThan =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.aGreaterThan
+			precTable.astGreaterThan
 		)
 		+
 		context.sep
@@ -939,7 +939,7 @@ formatAGreaterThan =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.aGreaterThan
+			precTable.astGreaterThan
 		);
 
 	return text;
@@ -1219,7 +1219,7 @@ formatASwitch =
 | Formats a function.
 */
 var
-formatAFunc =
+formatFunc =
 	function(
 		context,
 		func
@@ -2255,7 +2255,7 @@ formatVarDec =
 	)
 	{
 		if(
-			varDec.assign.reflect === 'ast.aFunc'
+			varDec.assign.reflect === 'ast.astFunc'
 		)
 		{
 			isRootFunc = true;
@@ -2263,7 +2263,7 @@ formatVarDec =
 		else if(
 			varDec.assign.reflect === 'ast.anAssign'
 			&&
-			varDec.assign.right.reflect === 'ast.aFunc'
+			varDec.assign.right.reflect === 'ast.astFunc'
 		)
 		{
 			// FUTURUE allow abitrary amount of assignments
@@ -2607,10 +2607,10 @@ exprFormatter =
 			formatDot,
 		'anEquals' :
 			formatAnEquals,
-		'aFunc' :
-			formatAFunc,
-		'aGreaterThan' :
-			formatAGreaterThan,
+		'astFunc' :
+			formatFunc,
+		'astGreaterThan' :
+			formatGreaterThan,
 		'anInstanceof' :
 			formatAnInstanceof,
 		'aLessThan' :

@@ -72,8 +72,8 @@ var
 | Jion.
 */
 var
-	aGreaterThan =
-	ast.aGreaterThan =
+	astGreaterThan =
+	ast.astGreaterThan =
 		{
 			prototype :
 				prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new aGreaterThan object.
+| Creates a new astGreaterThan object.
 */
-aGreaterThan.create =
+astGreaterThan.create =
 prototype.create =
 	function(
 		// free strings
@@ -96,7 +96,7 @@ prototype.create =
 
 		v_right;
 
-	if( this !== aGreaterThan )
+	if( this !== astGreaterThan )
 	{
 		inherit = this;
 
@@ -179,13 +179,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aGreaterThan';
+prototype.reflect = 'ast.astGreaterThan';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aGreaterThan';
+prototype.reflectName = 'astGreaterThan';
 
 
 /*
@@ -227,7 +227,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aGreaterThan;
+	module.exports = astGreaterThan;
 }
 
 

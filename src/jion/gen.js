@@ -79,10 +79,10 @@ var
 		Shorthand.aFalse( ),
 	astFile =
 		Shorthand.astFile,
-	aFunc =
-		Shorthand.aFunc,
-	aGreaterThan =
-		Shorthand.aGreaterThan,
+	astFunc =
+		Shorthand.astFunc,
+	astGreaterThan =
+		Shorthand.astGreaterThan,
 	anIf =
 		Shorthand.anIf,
 	anInstanceof =
@@ -881,7 +881,7 @@ gen.prototype.genConstructor =
 			);
 	}
 
-	constructor = aFunc( block );
+	constructor = astFunc( block );
 
 	for(
 		a = 0, aZ = this.constructorList.length;
@@ -1446,7 +1446,7 @@ gen.prototype.genCreatorFreeStringsParser =
 							aVar( 'rank' ),
 							aNumberLiteral( 0 )
 						),
-						aGreaterThan(
+						astGreaterThan(
 							aVar( 'rank' ),
 							aVar( 'ranks' ).astDot( 'length' )
 						)
@@ -2292,7 +2292,7 @@ gen.prototype.genCreator =
 	block = this.genCreatorReturn( block );
 
 	creator =
-		aFunc( block )
+		astFunc( block )
 		.Arg(
 			null,
 			'free strings'
@@ -2782,7 +2782,7 @@ gen.prototype.genFromJSONCreator =
 		capsule
 		.anAssign(
 			aVar( this.reference ).astDot( 'createFromJSON' ),
-			aFunc( funcBlock )
+			astFunc( funcBlock )
 			.Arg(
 				'json',
 				'the JSON object'
@@ -2853,11 +2853,13 @@ gen.prototype.genJionProto =
 			)
 			.astComment( 'Gets the rank of a key.' )
 			.anAssign(
+				// FIXME use proto
 				aVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'rankOf' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'rankOf' )
 			)
 			.astComment( 'Creates a new unique identifier.' )
 			.anAssign(
+				// FIXME use proto
 				aVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'newUID' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'newUID' )
 			);
@@ -2983,7 +2985,7 @@ gen.prototype.genToJSON =
 			)
 		)
 		.aReturn(
-			aFunc(
+			astFunc(
 				astBlock( )
 				.aReturn(
 					aVar( 'json' )
@@ -2996,9 +2998,10 @@ gen.prototype.genToJSON =
 		.astComment( 'Converts a ' + this.name + ' into JSON.' )
 		.astCall(
 			aVar( 'jools' ).astDot( 'lazyValue' ),
+			// FIXME use proto
 			aVar( 'Constructor' ).astDot( 'prototype' ),
 			aStringLiteral( 'toJSON' ),
-			aFunc( block )
+			astFunc( block )
 		);
 
 	return capsule;
@@ -3115,8 +3118,10 @@ gen.prototype.genEquals =
 				capsule
 				.astComment( 'Tests equality of object.' )
 				.anAssign(
-					aVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'equals' ),
-					aFunc(
+					aVar( 'Constructor' )
+					.astDot( 'prototype' )
+					.astDot( 'equals' ),
+					astFunc(
 						astBlock( )
 						.aReturn(
 							anEquals(
@@ -3302,8 +3307,9 @@ gen.prototype.genEquals =
 	capsule =
 		capsule
 		.anAssign(
+			// FIXME use proto
 			aVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'equals' ),
-			aFunc( block )
+			astFunc( block )
 			.Arg(
 				'obj',
 				'object to compare to'
@@ -3422,8 +3428,12 @@ gen.prototype.genAlike =
 		capsule =
 			capsule
 			.anAssign(
-				aVar( 'Constructor' ).astDot( 'prototype' ).astDot( alikeName ),
-				aFunc( block )
+				// FIXME use proto
+				aVar( 'Constructor' )
+				.astDot( 'prototype' )
+				.astDot( alikeName ),
+
+				astFunc( block )
 				.Arg(
 					'obj',
 					'object to compare to'

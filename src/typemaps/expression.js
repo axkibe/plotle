@@ -8,7 +8,7 @@ module.exports =
 	'ast.anAnd',
 	'ast.anAssign',
 	'ast.astCall',
-	'ast.aFunc',
+	'ast.astFunc',
 	'ast.aNew',
 	'ast.anObjLiteral',
 	'ast.anOr',

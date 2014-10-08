@@ -1,5 +1,5 @@
 /*
-| Tests if a > b.
+| ast test if a > b.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aGreaterThan',
+			'ast.astGreaterThan',
 		attributes :
 			{
 				left :
@@ -43,8 +43,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

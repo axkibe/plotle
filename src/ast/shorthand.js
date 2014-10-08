@@ -59,12 +59,12 @@ ast =
 			require( './ast-file' ),
 		anEquals :
 			require( './an-equals' ),
-		aFunc :
-			require( './a-func' ),
+		astFunc :
+			require( './ast-func' ),
 		astFuncArg :
 			require( './ast-func-arg' ),
-		aGreaterThan :
-			require( './a-greater-than' ),
+		astGreaterThan :
+			require( './ast-greater-than' ),
 		anIf :
 			require( './an-if' ),
 		anInstanceof :
@@ -338,14 +338,14 @@ ShortHand.aLessThan =
 /*
 | Shorthand for creating greater-than comparisons.
 */
-ShortHand.aGreaterThan =
+ShortHand.astGreaterThan =
 	function(
 		left,
 		right
 	)
 {
 	return(
-		ast.aGreaterThan.create(
+		ast.astGreaterThan.create(
 			'left',
 				left,
 			'right',
@@ -406,13 +406,13 @@ ShortHand.astFile =
 /*
 | Shorthand for creating functions.
 */
-ShortHand.aFunc =
+ShortHand.astFunc =
 	function(
 		block
 	)
 {
 	return(
-		ast.aFunc.create(
+		ast.astFunc.create(
 			'block',
 				block || null
 		)

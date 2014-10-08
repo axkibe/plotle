@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aFunc',
+			'ast.astFunc',
 		attributes :
 			{
 				block :
@@ -45,11 +45,11 @@ if( JION )
 
 var
 	astFuncArg,
-	aFunc,
+	astFunc,
 	jools;
 
 
-aFunc =
+astFunc =
 module.exports =
 	require( '../jion/this' )( module );
 
@@ -61,7 +61,7 @@ jools = require( '../jools/jools' );
 /*
 | Returns the function with a an argument appended.
 */
-aFunc.prototype.append =
+astFunc.prototype.append =
 	function(
 		arg
 	)
@@ -81,7 +81,7 @@ aFunc.prototype.append =
 | Returns the function with a an argument appended.
 | FIXME rename
 */
-aFunc.prototype.Arg =
+astFunc.prototype.Arg =
 	function(
 		name,
 		comment
