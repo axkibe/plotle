@@ -17,9 +17,9 @@
 */
 if( JION )
 {
-	return {
+	return{
 		id :
-			'ast.anAssign',
+			'ast.astAssign',
 		attributes :
 			{
 				left :
@@ -43,8 +43,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );
