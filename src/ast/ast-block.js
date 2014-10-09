@@ -44,11 +44,12 @@ astBlock =
 module.exports =
 	require( '../jion/this' )( module );
 
+
 // FIXME remove ast table
 ast =
 	{
-		anAssign :
-			require( './an-assign' ),
+		astAssign :
+			require( './ast-assign' ),
 		astCall :
 			require( './ast-call' ),
 		astCheck :
@@ -95,7 +96,7 @@ astBlock.prototype.append =
 /*
 | Returns the block with an assignment appended.
 */
-astBlock.prototype.anAssign =
+astBlock.prototype.astAssign =
 	function(
 		left,
 		right
@@ -105,7 +106,7 @@ astBlock.prototype.anAssign =
 		assign;
 
 	assign =
-		ast.anAssign.create(
+		ast.astAssign.create(
 			'left',
 				left,
 			'right',

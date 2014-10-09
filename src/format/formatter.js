@@ -48,7 +48,7 @@ precTable =
 			13,
 		'astArrayLiteral' :
 			-1,
-		'anAssign' :
+		'astAssign' :
 			17,
 		'astBooleanLiteral' :
 			-1,
@@ -166,7 +166,7 @@ formatAnd =
 | Formats an assignment.
 */
 var
-formatAnAssign =
+formatAssign =
 	function(
 		context,
 		assign
@@ -182,12 +182,12 @@ formatAnAssign =
 		formatExpression(
 			context,
 			assign.left,
-			precTable.anAssign
+			precTable.astAssign
 		)
 		+ ' ='
 		+ context.sep;
 
-	if( assign.right.reflect !== 'ast.anAssign' )
+	if( assign.right.reflect !== 'ast.astAssign' )
 	{
 		context =
 			context.IncSame;
@@ -203,7 +203,7 @@ formatAnAssign =
 			formatExpression(
 				context.Inline,
 				assign.right,
-				precTable.anAssign
+				precTable.astAssign
 			);
 	}
 	catch( e )
@@ -231,7 +231,7 @@ formatAnAssign =
 			formatExpression(
 				context,
 				assign.right,
-				precTable.anAssign
+				precTable.astAssign
 			);
 	}
 
@@ -489,13 +489,15 @@ formatAPlusAssign =
 			formatExpression(
 				context.Inline,
 				assign.left,
-				precTable.anAssign
+				precTable.astAssign
 			)
-			+ ' += '
-			+ formatExpression(
+			+
+			' += '
+			+
+			formatExpression(
 				context.Inline,
 				assign.right,
-				precTable.anAssign
+				precTable.astAssign
 			);
 	}
 	catch( e )
@@ -1492,7 +1494,7 @@ formatStatement =
 
 			break;
 
-		case 'ast.anAssign' :
+		case 'ast.astAssign' :
 		case 'ast.astBooleanLiteral' :
 		case 'ast.astCall' :
 		case 'ast.astDelete' :
@@ -2261,7 +2263,7 @@ formatVarDec =
 			isRootFunc = true;
 		}
 		else if(
-			varDec.assign.reflect === 'ast.anAssign'
+			varDec.assign.reflect === 'ast.astAssign'
 			&&
 			varDec.assign.right.reflect === 'ast.astFunc'
 		)
@@ -2310,7 +2312,7 @@ formatVarDec =
 		text +=
 			' =' + context.sep;
 
-		if( varDec.assign.reflect !== 'ast.anAssign' )
+		if( varDec.assign.reflect !== 'ast.astAssign' )
 		{
 			context = context.Inc;
 		}
@@ -2447,7 +2449,7 @@ formatAVList =
 				formatExpression(
 					context,
 					varDec.assign,
-					precTable.anAssign
+					precTable.astAssign
 				);
 		}
 
@@ -2589,8 +2591,8 @@ exprFormatter =
 			formatAnd,
 		'astArrayLiteral' :
 			formatArrayLiteral,
-		'anAssign' :
-			formatAnAssign,
+		'astAssign' :
+			formatAssign,
 		'astBooleanLiteral' :
 			formatBooleanLiteral,
 		'astCall' :

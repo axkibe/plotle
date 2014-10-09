@@ -34,8 +34,8 @@ ast =
 			require( './ast-and' ),
 		astArrayLiteral :
 			require( './ast-array-literal' ),
-		anAssign :
-			require( './an-assign' ),
+		astAssign :
+			require( './ast-assign' ),
 		astBlock :
 			require( './ast-block' ),
 		astBooleanLiteral :
@@ -167,14 +167,14 @@ shorthand.astArrayLiteral =
 /*
 | Shorthand for creating assignments.
 */
-shorthand.anAssign =
+shorthand.astAssign =
 	function(
 		left,
 		right
 	)
 {
 	return(
-		ast.anAssign.create(
+		ast.astAssign.create(
 			'left',
 				left,
 			'right',

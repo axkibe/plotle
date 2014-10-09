@@ -40,8 +40,8 @@ var
 		require( '../jion/this' )( module ),
 	ast =
 		{
-			anAssign :
-				require( './an-assign' ),
+			astAssign :
+				require( './ast-assign' ),
 			aVarDec :
 				require( './a-var-dec' ),
 		},

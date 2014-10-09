@@ -31,6 +31,7 @@ module.exports =
 			// built-in genjion
 			'src/ast/ast-and.js',
 			'src/ast/ast-array-literal.js',
+			'src/ast/ast-assign.js',
 			'src/ast/ast-block.js',
 			'src/ast/ast-boolean-literal.js',
 			'src/ast/ast-call.js',
@@ -53,7 +54,6 @@ module.exports =
 			'src/ast/ast-member.js',
 
 			'src/ast/a-null.js',
-			'src/ast/an-assign.js',
 			'src/ast/an-equals.js',
 			'src/ast/an-if.js',
 			'src/ast/an-instanceof.js',

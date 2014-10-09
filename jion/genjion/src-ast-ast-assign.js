@@ -72,8 +72,8 @@ var
 | Jion.
 */
 var
-	anAssign =
-	ast.anAssign =
+	astAssign =
+	ast.astAssign =
 		{
 			prototype :
 				prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new anAssign object.
+| Creates a new astAssign object.
 */
-anAssign.create =
+astAssign.create =
 prototype.create =
 	function(
 		// free strings
@@ -96,7 +96,7 @@ prototype.create =
 
 		v_right;
 
-	if( this !== anAssign )
+	if( this !== astAssign )
 	{
 		inherit = this;
 
@@ -179,13 +179,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.anAssign';
+prototype.reflect = 'ast.astAssign';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'anAssign';
+prototype.reflectName = 'astAssign';
 
 
 /*
@@ -227,7 +227,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = anAssign;
+	module.exports = astAssign;
 }
 
 

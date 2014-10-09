@@ -6,7 +6,7 @@ module.exports =
 /*
 	FIXME
 	'ast.astAnd',
-	'ast.anAssign',
+	'ast.astAssign',
 	'ast.astCall',
 	'ast.astFunc',
 	'ast.aNew',

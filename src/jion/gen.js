@@ -59,8 +59,8 @@ var
 		Shorthand.astAnd,
 	astArrayLiteral =
 		Shorthand.astArrayLiteral,
-	anAssign =
-		Shorthand.anAssign,
+	astAssign =
+		Shorthand.astAssign,
 	astBlock =
 		Shorthand.astBlock,
 	astCall =
@@ -643,7 +643,7 @@ gen.prototype.genNodeIncludes =
 
 	block =
 		astBlock( )
-		.anAssign(
+		.astAssign(
 			aVar( 'jools' ),
 			astCall(
 				aVar( 'require' ),
@@ -661,7 +661,7 @@ gen.prototype.genNodeIncludes =
 	{
 		block =
 			block
-			.anAssign(
+			.astAssign(
 				aVar( this.unitList[ a ] ),
 				anObjLiteral( )
 			);
@@ -692,7 +692,7 @@ gen.prototype.genNodeIncludes =
 
 			block =
 				block
-				.anAssign(
+				.astAssign(
 					aVar( unitName ).astDot( typeName ),
 					astCall(
 						aVar( 'require' ),
@@ -757,7 +757,7 @@ gen.prototype.genConstructor =
 		}
 
 		assign =
-			anAssign(
+			astAssign(
 				aThis.astDot( attr.assign ),
 				attr.v
 			);
@@ -782,11 +782,11 @@ gen.prototype.genConstructor =
 	{
 		block =
 			block
-			.anAssign(
+			.astAssign(
 				aThis.astDot( 'twig' ),
 				aVar( 'twig' )
 			)
-			.anAssign(
+			.astAssign(
 				aThis.astDot( 'ranks' ),
 				aVar( 'ranks' )
 			);
@@ -797,7 +797,7 @@ gen.prototype.genConstructor =
 	{
 		block =
 			block
-			.anAssign(
+			.astAssign(
 				aThis.astDot( 'ray' ),
 				aVar( 'ray' )
 			);
@@ -995,7 +995,7 @@ gen.prototype.genConstructor =
 	capsule =
 		capsule.aVarDec(
 			this.reference,
-			anAssign(
+			astAssign(
 				aVar( this.unit ).astDot( this.name ),
 				jionObj
 			)
@@ -1097,7 +1097,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 		name,
 		receiver =
 			astBlock( )
-			.anAssign(
+			.astAssign(
 				aVar( 'inherit' ),
 				aThis
 			);
@@ -1106,15 +1106,15 @@ gen.prototype.genCreatorInheritanceReceiver =
 	{
 		receiver =
 			receiver
-			.anAssign(
+			.astAssign(
 				aVar( 'twig' ),
 				aVar( 'inherit' ).astDot( 'twig' )
 			)
-			.anAssign(
+			.astAssign(
 				aVar( 'ranks' ),
 				aVar( 'inherit' ).astDot( 'ranks' )
 			)
-			.anAssign(
+			.astAssign(
 				aVar( 'twigDup' ),
 				aFalse
 			);
@@ -1124,11 +1124,11 @@ gen.prototype.genCreatorInheritanceReceiver =
 	{
 		receiver =
 			receiver
-			.anAssign(
+			.astAssign(
 				aVar( 'ray' ),
 				aVar( 'inherit' ).astDot( 'ray' )
 			)
-			.anAssign(
+			.astAssign(
 				aVar( 'rayDup' ),
 				aFalse
 			);
@@ -1151,7 +1151,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 
 		receiver =
 			receiver
-			.anAssign(
+			.astAssign(
 				attr.v,
 				aThis.astDot ( attr.assign )
 			);
@@ -1172,15 +1172,15 @@ gen.prototype.genCreatorInheritanceReceiver =
 			thisCheck
 			.Elsewise( // FIXME rename Elsewise
 				astBlock( )
-				.anAssign(
+				.astAssign(
 					aVar( 'twig' ),
 					anObjLiteral( )
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'ranks' ),
 					astArrayLiteral( )
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'twigDup' ),
 					aTrue
 				)
@@ -1193,11 +1193,11 @@ gen.prototype.genCreatorInheritanceReceiver =
 			thisCheck
 			.Elsewise(
 				astBlock( )
-				.anAssign(
+				.astAssign(
 					aVar( 'ray' ),
 					astArrayLiteral( )
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'rayDup' ),
 					aTrue
 				)
@@ -1276,7 +1276,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						anUndefined
 					),
 					astBlock( )
-					.anAssign(
+					.astAssign(
 						attr.v,
 						aVar( 'arg' )
 					)
@@ -1290,20 +1290,20 @@ gen.prototype.genCreatorFreeStringsParser =
 			anIf(
 				aNot( aVar( 'twigDup' ) ),
 				astBlock( )
-				.anAssign(
+				.astAssign(
 					aVar( 'twig' ),
 					astCall(
 						aVar( 'jools' ).astDot( 'copy' ),
 						aVar( 'twig' )
 					)
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'ranks' ),
 					astCall(
 						aVar( 'ranks' ).astDot( 'slice' )
 					)
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'twigDup' ),
 					aTrue
 				)
@@ -1316,11 +1316,11 @@ gen.prototype.genCreatorFreeStringsParser =
 				aStringLiteral( 'twig:add' ),
 				astBlock( )
 				.append( twigDupCheck )
-				.anAssign(
+				.astAssign(
 					aVar( 'key' ),
 					aVar( 'arg' )
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'arg' ),
 					aVar( 'arguments' ).astMember(
 						aPlus(
@@ -1345,7 +1345,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						*/
 					)
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'twig' ).astMember( aVar( 'key' ) ),
 					aVar( 'arg' )
 				)
@@ -1358,11 +1358,11 @@ gen.prototype.genCreatorFreeStringsParser =
 				aStringLiteral( 'twig:set' ),
 				astBlock( )
 				.append( twigDupCheck )
-				.anAssign(
+				.astAssign(
 					aVar( 'key' ),
 					aVar( 'arg' )
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'arg' ),
 					aVar( 'arguments' ).astMember(
 						aPlus(
@@ -1387,7 +1387,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						*/
 					)
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'twig' ).astMember( aVar( 'key' ) ),
 					aVar( 'arg' )
 				)
@@ -1396,11 +1396,11 @@ gen.prototype.genCreatorFreeStringsParser =
 				aStringLiteral( 'twig:insert' ),
 				astBlock( )
 				.append( twigDupCheck )
-				.anAssign(
+				.astAssign(
 					aVar( 'key' ),
 					aVar( 'arg' )
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'rank' ),
 					aVar( 'arguments' ).astMember(
 						aPlus(
@@ -1409,7 +1409,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'arg' ),
 					aVar( 'arguments' ).astMember(
 						aPlus(
@@ -1456,7 +1456,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						//aStringLiteral( 'invalid rank' )
 					)
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'twig' ).astMember( aVar( 'key' ) ),
 					aVar( 'arg' )
 				)
@@ -1513,13 +1513,13 @@ gen.prototype.genCreatorFreeStringsParser =
 			anIf(
 				aNot( aVar( 'rayDup' ) ),
 				astBlock( )
-				.anAssign(
+				.astAssign(
 					aVar( 'ray' ),
 					astCall(
 						aVar( 'ray' ).astDot( 'slice' )
 					)
 				)
-				.anAssign(
+				.astAssign(
 					aVar( 'rayDup' ),
 					aTrue
 				)
@@ -1531,8 +1531,8 @@ gen.prototype.genCreatorFreeStringsParser =
 			.astCase(
 				aStringLiteral( 'ray:init' ),
 				astBlock( )
-				.anAssign( aVar( 'ray' ), aVar( 'arg' ) )
-				.anAssign( aVar( 'rayDup' ), aFalse )
+				.astAssign( aVar( 'ray' ), aVar( 'arg' ) )
+				.astAssign( aVar( 'rayDup' ), aFalse )
 			)
 			.astCase(
 				aStringLiteral( 'ray:append' ),
@@ -1573,7 +1573,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				aStringLiteral( 'ray:set' ),
 				astBlock( )
 				.append( rayDupCheck )
-				.anAssign(
+				.astAssign(
 					aVar( 'ray' ).astMember( aVar( 'arg' ) ),
 					aVar( 'arguments' ).astMember(
 						aPlus(
@@ -1652,7 +1652,7 @@ gen.prototype.genCreatorDefaults =
 				.anIf(
 					anEquals( attr.v, anUndefined ),
 					astBlock( )
-					.anAssign( attr.v, attr.defaultValue )
+					.astAssign( attr.v, attr.defaultValue )
 				);
 		}
 	}
@@ -2026,7 +2026,7 @@ gen.prototype.genCreatorConcerns =
 
 		block =
 			block
-			.anAssign( attr.v, cExpr );
+			.astAssign( attr.v, cExpr );
 	}
 
 	return block;
@@ -2198,7 +2198,7 @@ gen.prototype.genCreatorReturn =
 					aVar( '_singleton' )
 				),
 				astBlock( )
-				.anAssign(
+				.astAssign(
 					aVar( '_singleton' ),
 					aNew(
 						astCall(
@@ -2301,9 +2301,9 @@ gen.prototype.genCreator =
 
 	capsule =
 		capsule
-		.anAssign(
+		.astAssign(
 			aVar( this.reference ).astDot( 'create' ),
-			anAssign(
+			astAssign(
 				aVar( 'prototype' ).astDot( 'create' ),
 				creator
 			)
@@ -2423,7 +2423,7 @@ gen.prototype.genFromJSONCreatorParser =
 			.astCase(
 				aStringLiteral( 'twig' ),
 				astBlock( )
-				.anAssign(
+				.astAssign(
 					aVar( 'jwig' ),
 					aVar( 'arg' )
 				)
@@ -2431,7 +2431,7 @@ gen.prototype.genFromJSONCreatorParser =
 			.astCase(
 				aStringLiteral( 'ranks' ),
 				astBlock( )
-				.anAssign(
+				.astAssign(
 					aVar( 'ranks' ),
 					aVar( 'arg' )
 				)
@@ -2499,7 +2499,7 @@ gen.prototype.genFromJSONCreatorParser =
 
 		caseBlock =
 			astBlock( )
-			.anAssign( attr.v, arg );
+			.astAssign( attr.v, arg );
 
 		switchExpr =
 			switchExpr
@@ -2515,7 +2515,7 @@ gen.prototype.genFromJSONCreatorParser =
 			'name',
 			aVar( 'json' ),
 			astBlock( )
-			.anAssign(
+			.astAssign(
 				aVar( 'arg' ),
 				aVar( 'json' ).astMember( aVar( 'name' ) )
 			)
@@ -2565,7 +2565,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			.astCase(
 				aStringLiteral( twigId ),
 				astBlock( )
-				.anAssign(
+				.astAssign(
 					aVar( 'twig' ).astMember( aVar( 'key' ) ),
 					astCall(
 						base.astDot( 'createFromJSON' ),
@@ -2585,7 +2585,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 
 	loop =
 		astBlock( )
-		.anAssign(
+		.astAssign(
 			aVar( 'key' ),
 			aVar( 'ranks' ).astMember( aVar( 'a' ) )
 		)
@@ -2597,7 +2597,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			//.astFail( )
 			.astFail( 'JSON ranks/twig mismatch' )
 		)
-		.anAssign(
+		.astAssign(
 			aVar( 'jval' ),
 			aVar( 'jwig' ).astMember( aVar( 'key' ) )
 		)
@@ -2605,7 +2605,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 
 	block =
 		block
-		.anAssign(
+		.astAssign(
 			aVar( 'twig' ),
 			anObjLiteral( )
 		)
@@ -2622,13 +2622,13 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			// FIXME, put into the commalist call
 			astCommaList( )
 			.append(
-				anAssign(
+				astAssign(
 					aVar( 'a' ),
 					aNumberLiteral( 0 )
 				)
 			)
 			.append(
-				anAssign(
+				astAssign(
 					aVar( 'aZ' ),
 					aVar( 'ranks' ).astDot( 'length' )
 				)
@@ -2780,7 +2780,7 @@ gen.prototype.genFromJSONCreator =
 
 	capsule =
 		capsule
-		.anAssign(
+		.astAssign(
 			aVar( this.reference ).astDot( 'createFromJSON' ),
 			astFunc( funcBlock )
 			.Arg(
@@ -2804,7 +2804,7 @@ gen.prototype.genReflection =
 	capsule =
 		capsule
 		.astComment( 'Reflection.' )
-		.anAssign(
+		.astAssign(
 			aVar( 'prototype' ).astDot( 'reflect' ),
 			aStringLiteral( this.id )
 		);
@@ -2812,7 +2812,7 @@ gen.prototype.genReflection =
 	capsule =
 		capsule
 		.astComment( 'Name Reflection.' )
-		.anAssign(
+		.astAssign(
 			aVar( 'prototype' ).astDot( 'reflectName' ),
 			aStringLiteral( this.name )
 		);
@@ -2832,12 +2832,12 @@ gen.prototype.genJionProto =
 	capsule =
 		capsule
 		.astComment( 'Sets values by path.' )
-		.anAssign(
+		.astAssign(
 			aVar( 'prototype' ).astDot( 'setPath' ),
 			aVar( 'jion' ).astDot( 'proto' ).astDot( 'setPath' )
 		)
 		.astComment( 'Gets values by path' )
-		.anAssign(
+		.astAssign(
 			aVar( 'prototype' ).astDot( 'getPath' ),
 			aVar( 'jion' ).astDot( 'proto' ).astDot( 'getPath' )
 		);
@@ -2847,18 +2847,18 @@ gen.prototype.genJionProto =
 		capsule =
 			capsule
 			.astComment( 'Returns a twig by rank.' )
-			.anAssign(
+			.astAssign(
 				aVar( 'prototype' ).astDot( 'atRank' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'atRank' )
 			)
 			.astComment( 'Gets the rank of a key.' )
-			.anAssign(
+			.astAssign(
 				// FIXME use proto
 				aVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'rankOf' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'rankOf' )
 			)
 			.astComment( 'Creates a new unique identifier.' )
-			.anAssign(
+			.astAssign(
 				// FIXME use proto
 				aVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'newUID' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'newUID' )
@@ -2870,7 +2870,7 @@ gen.prototype.genJionProto =
 		capsule =
 			capsule
 			.astComment( 'Appends an entry to the ray.' )
-			.anAssign(
+			.astAssign(
 				aVar( 'prototype' ).astDot( 'append' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'rayAppend' )
 			)
@@ -2886,24 +2886,24 @@ gen.prototype.genJionProto =
 			.astComment(
 				'Gets one entry from the ray.'
 			)
-			.anAssign(
+			.astAssign(
 				aVar( 'prototype' ).astDot( 'get' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'rayGet' )
 			)
 			.astComment( 'Returns a jion with one entry inserted to the ray.' )
-			.anAssign(
+			.astAssign(
 				aVar( 'prototype' ).astDot( 'insert' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'rayInsert' )
 			)
 			.astComment(
 				'Returns the jion with one entry of the ray set.'
 			)
-			.anAssign(
+			.astAssign(
 				aVar( 'prototype' ).astDot( 'set' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'raySet' )
 			)
 			.astComment( 'Returns a jion with one entry from the ray removed.' )
-			.anAssign(
+			.astAssign(
 				aVar( 'prototype' ).astDot( 'remove' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'rayRemove' )
 			);
@@ -2977,7 +2977,7 @@ gen.prototype.genToJSON =
 
 	block =
 		block
-		.anAssign(
+		.astAssign(
 			aVar( 'json' ),
 			astCall(
 				aVar( 'Object' ).astDot( 'freeze' ),
@@ -3117,7 +3117,7 @@ gen.prototype.genEquals =
 			return (
 				capsule
 				.astComment( 'Tests equality of object.' )
-				.anAssign(
+				.astAssign(
 					aVar( 'Constructor' )
 					.astDot( 'prototype' )
 					.astDot( 'equals' ),
@@ -3191,7 +3191,7 @@ gen.prototype.genEquals =
 
 		twigTestLoopBody =
 			astBlock( )
-			.anAssign(
+			.astAssign(
 				vKey,
 				aThis.astDot( 'ranks' ).astMember( vA )
 			)
@@ -3240,12 +3240,12 @@ gen.prototype.genEquals =
 				astBlock( ).aReturn( aFalse )
 			)
 			.astFor(
-				astCommaList( ) // FIXME add anAssign to astCommaList
+				astCommaList( ) // FIXME add astAssign to astCommaList
 				.append(
-					anAssign( aVar( 'a' ), aNumberLiteral( 0 ) )
+					astAssign( aVar( 'a' ), aNumberLiteral( 0 ) )
 				)
 				.append(
-					anAssign(
+					astAssign(
 						aVar( 'aZ' ),
 						aThis
 							.astDot( 'ranks' )
@@ -3314,7 +3314,7 @@ gen.prototype.genEquals =
 
 	capsule =
 		capsule
-		.anAssign(
+		.astAssign(
 			// FIXME use proto
 			aVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'equals' ),
 			astFunc( block )
@@ -3435,7 +3435,7 @@ gen.prototype.genAlike =
 
 		capsule =
 			capsule
-			.anAssign(
+			.astAssign(
 				// FIXME use proto
 				aVar( 'Constructor' )
 				.astDot( 'prototype' )
@@ -3467,7 +3467,7 @@ gen.prototype.genNodeExport =
 		.anIf(
 			aVar( 'SERVER' ),
 			astBlock( )
-			.anAssign(
+			.astAssign(
 				aVar( 'module' ).astDot( 'exports' ),
 				aVar( this.reference )
 			)
