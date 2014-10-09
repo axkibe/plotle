@@ -179,13 +179,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.anOr';
+prototype.reflect = 'ast.astOr';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'anOr';
+prototype.reflectName = 'astOr';
 
 
 /*
