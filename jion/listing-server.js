@@ -57,11 +57,11 @@ module.exports =
 			'src/ast/ast-member.js',
 			'src/ast/ast-new.js',
 			'src/ast/ast-obj-literal.js',
+			'src/ast/ast-or.js',
 
 			'src/ast/a-null.js',
 			'src/ast/a-not.js',
 			'src/ast/a-number-literal.js',
-			'src/ast/an-or.js',
 			'src/ast/a-plus.js',
 			'src/ast/a-plus-assign.js',
 			'src/ast/a-pre-increment.js',

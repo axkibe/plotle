@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.anOr',
+			'ast.astOr',
 		attributes :
 			{
 				left :

@@ -84,8 +84,8 @@ ast =
 			require( './a-number-literal' ),
 		astObjLiteral :
 			require( './ast-obj-literal' ),
-		anOr :
-			require( './an-or' ),
+		astOr :
+			require( './ast-or' ),
 		aPlus :
 			require( './a-plus' ),
 		aPlusAssign :
@@ -536,7 +536,7 @@ shorthand.astObjLiteral =
 /*
 | Shorthand for creating ors.
 */
-shorthand.anOr =
+shorthand.astOr =
 	function(
 		left,
 		right
@@ -553,7 +553,7 @@ shorthand.anOr =
 		args.splice(
 			0,
 			2,
-			ast.anOr.create(
+			ast.astOr.create(
 				'left',
 					left,
 				'right',
@@ -562,7 +562,7 @@ shorthand.anOr =
 		);
 
 		return(
-			shorthand.anOr.apply(
+			shorthand.astOr.apply(
 				this,
 				args
 			)
@@ -570,7 +570,7 @@ shorthand.anOr =
 	}
 
 	return(
-		ast.anOr.create(
+		ast.astOr.create(
 			'left',
 				left,
 			'right',

@@ -99,8 +99,8 @@ var
 		Shorthand.aNumberLiteral,
 	astObjLiteral =
 		Shorthand.astObjLiteral,
-	anOr =
-		Shorthand.anOr,
+	astOr =
+		Shorthand.astOr,
 	aPlus =
 		Shorthand.aPlus,
 	aPlusAssign =
@@ -1441,7 +1441,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.astIf(
-					anOr(
+					astOr(
 						astLessThan(
 							aVar( 'rank' ),
 							aNumberLiteral( 0 )
@@ -1771,7 +1771,7 @@ gen.prototype.genCreatorChecks =
 			case 'Integer' :
 
 				tcheck =
-					anOr(
+					astOr(
 						astDiffers(
 							aTypeof( attr.v ),
 							aStringLiteral( 'number' )
@@ -2129,7 +2129,7 @@ gen.prototype.genCreatorUnchanged =
 				if( attr.allowsNull )
 				{
 					ceq =
-						anOr(
+						astOr(
 							astEquals(
 								attr.v,
 								aVar( 'inherit' ).astDot( attr.assign )
@@ -2143,7 +2143,7 @@ gen.prototype.genCreatorUnchanged =
 				else if( attr.allowsUndefined )
 				{
 					ceq =
-						anOr(
+						astOr(
 							astEquals(
 								attr.v,
 								aVar( 'inherit' ).astDot( attr.assign )
@@ -2610,7 +2610,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			astObjLiteral( )
 		)
 		.astIf(
-			anOr(
+			astOr(
 				aNot( aVar( 'jwig' ) ),
 				aNot( aVar( 'ranks' ) )
 			),
@@ -3049,7 +3049,7 @@ gen.prototype.genAttributeEquals =
 			if( attr.allowsNull)
 			{
 				ceq =
-					anOr(
+					astOr(
 						astEquals( le, re ),
 						astAnd(
 							astDiffers( le, aNull ),
@@ -3060,7 +3060,7 @@ gen.prototype.genAttributeEquals =
 			else if( attr.allowsUndefined )
 			{
 				ceq =
-					anOr(
+					astOr(
 						astEquals( le, re ),
 						astAnd(
 							astDiffers( le, anUndefined ),
@@ -3192,7 +3192,7 @@ gen.prototype.genEquals =
 				aThis.astDot( 'ranks' ).astMember( vA )
 			)
 			.astIf(
-				anOr(
+				astOr(
 					astDiffers(
 						aVar( 'key' ),
 						aVar( 'obj' ).astDot( 'ranks' ).astMember( vA )
@@ -3255,7 +3255,7 @@ gen.prototype.genEquals =
 		block =
 			block
 			.astIf(
-				anOr(
+				astOr(
 					astDiffers(
 						aThis.astDot( 'tree' ),
 						aVar( 'obj' ).astDot( 'tree' )
@@ -3480,7 +3480,7 @@ gen.prototype.genExport =
 		block
 		.aVarDec(
 			this.unit,
-			anOr(
+			astOr(
 				aVar( this.unit ),
 				astObjLiteral( )
 			)

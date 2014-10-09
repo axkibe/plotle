@@ -88,7 +88,7 @@ precTable =
 			-1,
 		'astObjLiteral' :
 			-1,
-		'anOr' :
+		'astOr' :
 			14,
 		'aPlus' :
 			6,
@@ -1000,7 +1000,7 @@ formatInstanceof =
 | Formats a logical or.
 */
 var
-formatAnOr =
+formatOr =
 	function(
 		context,
 		expr
@@ -1011,7 +1011,7 @@ formatAnOr =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.anOr' )
+/**/	if( expr.reflect !== 'ast.astOr' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1021,7 +1021,7 @@ formatAnOr =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.anOr
+			precTable.astOr
 		)
 		+
 		context.sep
@@ -1031,7 +1031,7 @@ formatAnOr =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.anOr
+			precTable.astOr
 		);
 
 	return text;
@@ -2632,8 +2632,8 @@ exprFormatter =
 			formatANumberLiteral,
 		'astObjLiteral' :
 			formatObjLiteral,
-		'anOr' :
-			formatAnOr,
+		'astOr' :
+			formatOr,
 		'aPlus' :
 			formatAPlus,
 		'aPlusAssign' :

@@ -11,7 +11,7 @@ module.exports =
 	'ast.astFunc',
 	'ast.astNew',
 	'ast.astObjLiteral',
-	'ast.anOr',
-	'ast.aVar'
+	'ast.astOr',
+	'ast.astVar'
 */
 ];
