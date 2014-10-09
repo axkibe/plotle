@@ -73,8 +73,8 @@ var
 		Shorthand.astDelete,
 	astDiffers =
 		Shorthand.astDiffers,
-	anEquals =
-		Shorthand.anEquals,
+	astEquals =
+		Shorthand.astEquals,
 	aFalse =
 		Shorthand.aFalse( ),
 	astFile =
@@ -83,22 +83,22 @@ var
 		Shorthand.astFunc,
 	astGreaterThan =
 		Shorthand.astGreaterThan,
-	anIf =
-		Shorthand.anIf,
-	anInstanceof =
-		Shorthand.anInstanceof,
+	astIf =
+		Shorthand.astIf,
+	astInstanceof =
+		Shorthand.astInstanceof,
 	astLessThan =
 		Shorthand.astLessThan,
-	aNew =
-		Shorthand.aNew,
+	astNew =
+		Shorthand.astNew,
 	aNot =
 		Shorthand.aNot,
 	aNull =
 		Shorthand.aNull( ),
 	aNumberLiteral =
 		Shorthand.aNumberLiteral,
-	anObjLiteral =
-		Shorthand.anObjLiteral,
+	astObjLiteral =
+		Shorthand.astObjLiteral,
 	anOr =
 		Shorthand.anOr,
 	aPlus =
@@ -663,7 +663,7 @@ gen.prototype.genNodeIncludes =
 			block
 			.astAssign(
 				aVar( this.unitList[ a ] ),
-				anObjLiteral( )
+				astObjLiteral( )
 			);
 	}
 
@@ -708,7 +708,7 @@ gen.prototype.genNodeIncludes =
 	}
 
 	capsule =
-		capsule.anIf(
+		capsule.astIf(
 			aVar( 'SERVER' ),
 			block
 		);
@@ -770,7 +770,7 @@ gen.prototype.genConstructor =
 		{
 			block =
 				block
-				.anIf(
+				.astIf(
 					astDiffers( attr.v, anUndefined ),
 					astBlock( )
 					.append( assign )
@@ -986,7 +986,7 @@ gen.prototype.genConstructor =
 	capsule = capsule.astComment( 'Jion.' );
 
 	jionObj =
-		anObjLiteral( )
+		astObjLiteral( )
 		.add(
 			'prototype',
 			aVar( 'prototype' )
@@ -1158,7 +1158,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 	}
 
 	thisCheck =
-		anIf(
+		astIf(
 			astDiffers(
 				aThis,
 				aVar( this.reference )
@@ -1174,7 +1174,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 				astBlock( )
 				.astAssign(
 					aVar( 'twig' ),
-					anObjLiteral( )
+					astObjLiteral( )
 				)
 				.astAssign(
 					aVar( 'ranks' ),
@@ -1270,7 +1270,7 @@ gen.prototype.genCreatorFreeStringsParser =
 			.astCase(
 				aStringLiteral( name  ),
 				astBlock( )
-				.anIf(
+				.astIf(
 					astDiffers(
 						aVar( 'arg' ),
 						anUndefined
@@ -1287,7 +1287,7 @@ gen.prototype.genCreatorFreeStringsParser =
 	if( this.twig )
 	{
 		twigDupCheck =
-			anIf(
+			astIf(
 				aNot( aVar( 'twigDup' ) ),
 				astBlock( )
 				.astAssign(
@@ -1329,7 +1329,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.anIf(
+				.astIf(
 					astDiffers(
 						aVar( 'twig' ).astMember( aVar( 'key' ) ),
 						anUndefined
@@ -1371,8 +1371,8 @@ gen.prototype.genCreatorFreeStringsParser =
 						)
 					)
 				)
-				.anIf(
-					anEquals(
+				.astIf(
+					astEquals(
 						aVar( 'twig' ).astMember( aVar( 'key' ) ),
 						anUndefined
 					),
@@ -1424,7 +1424,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						aNumberLiteral( 2 )
 					)
 				)
-				.anIf(
+				.astIf(
 					astDiffers(
 						aVar( 'twig' ).astMember( aVar( 'key' ) ),
 						anUndefined
@@ -1440,7 +1440,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						*/
 					)
 				)
-				.anIf(
+				.astIf(
 					anOr(
 						astLessThan(
 							aVar( 'rank' ),
@@ -1473,8 +1473,8 @@ gen.prototype.genCreatorFreeStringsParser =
 				aStringLiteral( 'twig:remove' ),
 				astBlock( )
 				.append( twigDupCheck )
-				.anIf(
-					anEquals(
+				.astIf(
+					astEquals(
 						aVar( 'twig' ).astMember( aVar( 'arg' ) ),
 						anUndefined
 					),
@@ -1510,7 +1510,7 @@ gen.prototype.genCreatorFreeStringsParser =
 	if( this.ray )
 	{
 		rayDupCheck =
-			anIf(
+			astIf(
 				aNot( aVar( 'rayDup' ) ),
 				astBlock( )
 				.astAssign(
@@ -1649,10 +1649,10 @@ gen.prototype.genCreatorDefaults =
 		{
 			block =
 				block
-				.anIf(
-					anEquals( attr.v, anUndefined ),
+				.astIf(
+					astEquals( attr.v, anUndefined ),
 					astBlock( )
-					.astAssign( attr.v, attr.defaultValue )
+						.astAssign( attr.v, attr.defaultValue )
 				);
 		}
 	}
@@ -1704,8 +1704,8 @@ gen.prototype.genCreatorChecks =
 		if( !attr.allowsUndefined )
 		{
 			check =
-				check.anIf(
-					anEquals( attr.v, anUndefined ),
+				check.astIf(
+					astEquals( attr.v, anUndefined ),
 					astBlock( )
 					//.astFail( 'undefined attribute ' + name )
 					.astFail( )
@@ -1715,8 +1715,8 @@ gen.prototype.genCreatorChecks =
 		if( !attr.allowsNull )
 		{
 			check =
-				check.anIf(
-					anEquals( attr.v, aNull ),
+				check.astIf(
+					astEquals( attr.v, aNull ),
 					astBlock( )
 					//.astFail( 'attribute ' + name + ' must not be null.' )
 					.astFail( )
@@ -1807,7 +1807,7 @@ gen.prototype.genCreatorChecks =
 							aStringLiteral( 'string' )
 						),
 						aNot(
-							anInstanceof(
+							astInstanceof(
 								attr.v,
 								aVar( 'String' )
 							)
@@ -1835,10 +1835,10 @@ gen.prototype.genCreatorChecks =
 		if( cond )
 		{
 			check =
-				check.anIf(
+				check.astIf(
 					cond,
 					astBlock( )
-					.anIf(
+					.astIf(
 						tcheck,
 						tfail
 					)
@@ -1847,7 +1847,7 @@ gen.prototype.genCreatorChecks =
 		else
 		{
 			check =
-				check.anIf(
+				check.astIf(
 					tcheck,
 					tfail
 				);
@@ -2085,7 +2085,7 @@ gen.prototype.genCreatorUnchanged =
 			cond =
 				astAnd(
 					cond,
-					anEquals( attr.v, aNull )
+					astEquals( attr.v, aNull )
 				);
 
 			continue;
@@ -2104,7 +2104,7 @@ gen.prototype.genCreatorUnchanged =
 			case 'String' :
 
 				ceq =
-					anEquals(
+					astEquals(
 						attr.v,
 						aVar( 'inherit' ).astDot( attr.assign )
 					);
@@ -2130,7 +2130,7 @@ gen.prototype.genCreatorUnchanged =
 				{
 					ceq =
 						anOr(
-							anEquals(
+							astEquals(
 								attr.v,
 								aVar( 'inherit' ).astDot( attr.assign )
 							),
@@ -2144,7 +2144,7 @@ gen.prototype.genCreatorUnchanged =
 				{
 					ceq =
 						anOr(
-							anEquals(
+							astEquals(
 								attr.v,
 								aVar( 'inherit' ).astDot( attr.assign )
 							),
@@ -2164,7 +2164,7 @@ gen.prototype.genCreatorUnchanged =
 	}
 
 	block =
-		block.anIf(
+		block.astIf(
 			cond,
 			astBlock( )
 			.aReturn(
@@ -2193,14 +2193,14 @@ gen.prototype.genCreatorReturn =
 	{
 		return (
 			block
-			.anIf(
+			.astIf(
 				aNot(
 					aVar( '_singleton' )
 				),
 				astBlock( )
 				.astAssign(
 					aVar( '_singleton' ),
-					aNew(
+					astNew(
 						astCall(
 							aVar( 'Constructor' )
 						)
@@ -2250,7 +2250,7 @@ gen.prototype.genCreatorReturn =
 
 	return (
 		block.aReturn(
-			aNew( call )
+			astNew( call )
 		)
 	);
 };
@@ -2405,7 +2405,7 @@ gen.prototype.genFromJSONCreatorParser =
 		.astCase(
 			aStringLiteral( 'type' ),
 			astBlock( )
-			.anIf(
+			.astIf(
 				astDiffers(
 					aVar( 'arg' ),
 					aStringLiteral( this.id )
@@ -2589,7 +2589,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			aVar( 'key' ),
 			aVar( 'ranks' ).astMember( aVar( 'a' ) )
 		)
-		.anIf(
+		.astIf(
 			aNot(
 				aVar( 'jwig' ).astMember( aVar( 'key' ) )
 			),
@@ -2607,9 +2607,9 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		block
 		.astAssign(
 			aVar( 'twig' ),
-			anObjLiteral( )
+			astObjLiteral( )
 		)
-		.anIf(
+		.astIf(
 			anOr(
 				aNot( aVar( 'jwig' ) ),
 				aNot( aVar( 'ranks' ) )
@@ -2707,7 +2707,7 @@ gen.prototype.genFromJSONCreatorReturn =
 	}
 
 	return (
-		block.aReturn( aNew( call ) )
+		block.aReturn( astNew( call ) )
 	);
 };
 
@@ -2932,7 +2932,7 @@ gen.prototype.genToJSON =
 		.aVarDec( 'json' );
 
 	olit =
-		anObjLiteral( )
+		astObjLiteral( )
 		.add(
 			'type',
 			aStringLiteral( this.id )
@@ -3032,11 +3032,7 @@ gen.prototype.genAttributeEquals =
 		case 'Object' :
 		case 'String' :
 
-			ceq =
-				anEquals(
-					le,
-					re
-				);
+			ceq = astEquals( le, re );
 
 			break;
 
@@ -3054,7 +3050,7 @@ gen.prototype.genAttributeEquals =
 			{
 				ceq =
 					anOr(
-						anEquals( le, re ),
+						astEquals( le, re ),
 						astAnd(
 							astDiffers( le, aNull ),
 							astCall( le.astDot( 'equals' ), re )
@@ -3065,7 +3061,7 @@ gen.prototype.genAttributeEquals =
 			{
 				ceq =
 					anOr(
-						anEquals( le, re ),
+						astEquals( le, re ),
 						astAnd(
 							astDiffers( le, anUndefined ),
 							astCall( le.astDot( 'equals' ), re )
@@ -3124,7 +3120,7 @@ gen.prototype.genEquals =
 					astFunc(
 						astBlock( )
 						.aReturn(
-							anEquals(
+							astEquals(
 								aThis,
 								aVar( 'obj' )
 							)
@@ -3166,15 +3162,15 @@ gen.prototype.genEquals =
 
 	block =
 		block
-		.anIf(
-			anEquals(
+		.astIf(
+			astEquals(
 				aThis,
 				aVar( 'obj' )
 			),
 			astBlock( )
 			.aReturn( aTrue )
 		)
-		.anIf(
+		.astIf(
 			aNot(
 				aVar( 'obj' )
 			),
@@ -3195,7 +3191,7 @@ gen.prototype.genEquals =
 				vKey,
 				aThis.astDot( 'ranks' ).astMember( vA )
 			)
-			.anIf(
+			.astIf(
 				anOr(
 					astDiffers(
 						aVar( 'key' ),
@@ -3232,7 +3228,7 @@ gen.prototype.genEquals =
 
 		twigTest =
 			astBlock( )
-			.anIf(
+			.astIf(
 				astDiffers(
 					aThis.astDot( 'ranks' ).astDot( 'length' ),
 					aVar( 'obj' ).astDot( 'ranks' ).astDot( 'length' )
@@ -3258,7 +3254,7 @@ gen.prototype.genEquals =
 
 		block =
 			block
-			.anIf(
+			.astIf(
 				anOr(
 					astDiffers(
 						aThis.astDot( 'tree' ),
@@ -3367,18 +3363,14 @@ gen.prototype.genAlike =
 
 		block =
 			astBlock( )
-			.anIf(
-				anEquals(
-					aThis,
-					aVar( 'obj' )
-				),
-				astBlock( )
-				.aReturn( aTrue )
+			.astIf(
+				astEquals( aThis, aVar( 'obj' ) ),
+				// FIXME make an astReturn shorthand that creates a block
+				astBlock( ).aReturn( aTrue )
 			)
-			.anIf(
+			.astIf(
 				aNot( aVar( 'obj' ) ),
-				astBlock( )
-				.aReturn( aFalse )
+				astBlock( ).aReturn( aFalse )
 			);
 
 		if( this.twig )
@@ -3386,11 +3378,11 @@ gen.prototype.genAlike =
 			// FIXME same test as in equals
 			cond =
 				astAnd(
-					anEquals(
+					astEquals(
 						aThis.astDot( 'tree' ),
 						aVar( 'obj' ).astDot( 'tree' )
 					),
-					anEquals(
+					astEquals(
 						aThis.astDot( 'ranks' ),
 						aVar( 'obj' ).astDot( 'ranks' )
 					)
@@ -3464,7 +3456,7 @@ gen.prototype.genNodeExport =
 	return (
 		capsule
 		.astComment( 'Node export.' )
-		.anIf(
+		.astIf(
 			aVar( 'SERVER' ),
 			astBlock( )
 			.astAssign(
@@ -3490,7 +3482,7 @@ gen.prototype.genExport =
 			this.unit,
 			anOr(
 				aVar( this.unit ),
-				anObjLiteral( )
+				astObjLiteral( )
 			)
 		);
 

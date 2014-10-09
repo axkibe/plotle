@@ -1,12 +1,12 @@
 /*
-| Tests for equality.
+| ast new calls
 |
 | Authors: Axel Kittenberger
 */
 
 
 /*
-| Capsule.
+| Capsule
 */
 (function() {
 'use strict';
@@ -19,33 +19,23 @@ if( JION )
 {
 	return {
 		id :
-			'ast.anEquals',
+			'ast.astNew',
+		node :
+			true,
 		attributes :
 			{
-				left :
+				'call' :
 					{
 						comment :
-							'left expression',
+							'the constrcutor call',
 						type :
-							'Object'
+							'ast.astCall'
 					},
-				right :
-					{
-						comment :
-							'right expression',
-						type :
-							'Object'
-					}
-			},
-		node :
-			true
+			}
 	};
 }
 
 
-/*
-| Export.
-*/
 module.exports = require( '../jion/this' )( module );
 
 

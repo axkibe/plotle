@@ -64,7 +64,7 @@ precTable =
 			9,
 		'astDot' :
 			1,
-		'anEquals' :
+		'astEquals' :
 			9,
 		'astFunc' :
 			-1,
@@ -72,13 +72,13 @@ precTable =
 			8,
 		'anIn' :
 			8,
-		'anInstanceof' :
+		'astInstanceof' :
 			8,
 		'astLessThan' :
 			8,
 		'astMember' :
 			1,
-		'aNew' :
+		'astNew' :
 			2,
 		'aNot' :
 			4,
@@ -86,7 +86,7 @@ precTable =
 			-1,
 		'aNumberLiteral' :
 			-1,
-		'anObjLiteral' :
+		'astObjLiteral' :
 			-1,
 		'anOr' :
 			14,
@@ -596,7 +596,7 @@ formatMember =
 | Formats an equality check.
 */
 var
-formatAnEquals =
+formatEquals =
 	function(
 		context,
 		expr
@@ -607,7 +607,7 @@ formatAnEquals =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.anEquals' )
+/**/	if( expr.reflect !== 'ast.astEquals' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -617,16 +617,19 @@ formatAnEquals =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.anEquals
+			precTable.astEquals
 		)
-		+ context.sep
-		+ context.tab
-		+ '==='
-		+ context.sep
-		+ formatExpression(
+		+
+		context.sep + context.tab
+		+
+		'==='
+		+
+		context.sep
+		+
+		formatExpression(
 			context,
 			expr.right,
-			precTable.anEquals
+			precTable.astEquals
 		);
 
 	return text;
@@ -699,7 +702,7 @@ formatIf =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflect !== 'ast.anIf' )
+/**/	if( statement.reflect !== 'ast.astIf' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -952,7 +955,7 @@ formatGreaterThan =
 | Formats an instanceof expression.
 */
 var
-formatAnInstanceof =
+formatInstanceof =
 	function(
 		context,
 		expr
@@ -963,7 +966,7 @@ formatAnInstanceof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.anInstanceof' )
+/**/	if( expr.reflect !== 'ast.astInstanceof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -973,7 +976,7 @@ formatAnInstanceof =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.anInstanceof
+			precTable.astInstanceof
 		)
 		+
 		context.sep
@@ -987,7 +990,7 @@ formatAnInstanceof =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.anInstanceof
+			precTable.astInstanceof
 		);
 
 	return text;
@@ -1372,7 +1375,7 @@ formatStatement =
 
 			break;
 
-		case 'ast.anIf' :
+		case 'ast.astIf' :
 
 			text += formatIf( context, statement );
 
@@ -1499,7 +1502,7 @@ formatStatement =
 		case 'ast.astCall' :
 		case 'ast.astDelete' :
 		case 'ast.astFail' :
-		case 'ast.aNew' :
+		case 'ast.astNew' :
 		case 'ast.aNumberLiteral' :
 		case 'ast.aPlusAssign' :
 		case 'ast.aReturn' :
@@ -1511,7 +1514,7 @@ formatStatement =
 		case 'ast.astCheck' :
 		case 'ast.astFor' :
 		case 'ast.astForIn' :
-		case 'ast.anIf' :
+		case 'ast.astIf' :
 		case 'ast.aSwitch' :
 
 			return text + context.sep;
@@ -1854,7 +1857,7 @@ formatDelete =
 | Formats a new expression.
 */
 var
-formatANew =
+formatNew =
 	function(
 		context,
 		expr
@@ -1863,7 +1866,7 @@ formatANew =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aNew' )
+/**/	if( expr.reflect !== 'ast.astNew' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2016,7 +2019,7 @@ formatArrayLiteral =
 | FUTURE format also inline
 */
 var
-formatAnObjLiteral =
+formatObjLiteral =
 	function(
 		context,
 		objliteral  // FIXME call expr
@@ -2029,7 +2032,7 @@ formatAnObjLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( objliteral.reflect !== 'ast.anObjLiteral' )
+/**/	if( objliteral.reflect !== 'ast.astObjLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2607,28 +2610,28 @@ exprFormatter =
 			formatDiffers,
 		'astDot' :
 			formatDot,
-		'anEquals' :
-			formatAnEquals,
+		'astEquals' :
+			formatEquals,
 		'astFunc' :
 			formatFunc,
 		'astGreaterThan' :
 			formatGreaterThan,
-		'anInstanceof' :
-			formatAnInstanceof,
+		'astInstanceof' :
+			formatInstanceof,
 		'astLessThan' :
 			formatLessThan,
 		'astMember' :
 			formatMember,
-		'aNew' :
-			formatANew,
+		'astNew' :
+			formatNew,
 		'aNot' :
 			formatANot,
 		'aNull' :
 			formatNull,
 		'aNumberLiteral' :
 			formatANumberLiteral,
-		'anObjLiteral' :
-			formatAnObjLiteral,
+		'astObjLiteral' :
+			formatObjLiteral,
 		'anOr' :
 			formatAnOr,
 		'aPlus' :

@@ -72,8 +72,8 @@ var
 | Jion.
 */
 var
-	anEquals =
-	ast.anEquals =
+	astEquals =
+	ast.astEquals =
 		{
 			prototype :
 				prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new anEquals object.
+| Creates a new astEquals object.
 */
-anEquals.create =
+astEquals.create =
 prototype.create =
 	function(
 		// free strings
@@ -96,7 +96,7 @@ prototype.create =
 
 		v_right;
 
-	if( this !== anEquals )
+	if( this !== astEquals )
 	{
 		inherit = this;
 
@@ -179,13 +179,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.anEquals';
+prototype.reflect = 'ast.astEquals';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'anEquals';
+prototype.reflectName = 'astEquals';
 
 
 /*
@@ -227,7 +227,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = anEquals;
+	module.exports = astEquals;
 }
 
 

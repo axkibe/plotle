@@ -37,11 +37,7 @@ if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
 
-	ast = { };
-
 	jion = { };
-
-	ast.astCall = require( '../../src/ast/ast-call' );
 
 	jion.proto = require( '../../src/jion/proto' );
 }
@@ -52,10 +48,13 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		v_call // the constrcutor call
+		v_left, // left expression
+		v_right // right expression
 	)
 	{
-		this.call = v_call;
+		this.left = v_left;
+
+		this.right = v_right;
 
 		jools.immute( this );
 	};
@@ -73,8 +72,8 @@ var
 | Jion.
 */
 var
-	aNew =
-	ast.aNew =
+	anInstanceof =
+	ast.anInstanceof =
 		{
 			prototype :
 				prototype
@@ -82,9 +81,9 @@ var
 
 
 /*
-| Creates a new aNew object.
+| Creates a new anInstanceof object.
 */
-aNew.create =
+anInstanceof.create =
 prototype.create =
 	function(
 		// free strings
@@ -93,13 +92,17 @@ prototype.create =
 	var
 		inherit,
 
-		v_call;
+		v_left,
 
-	if( this !== aNew )
+		v_right;
+
+	if( this !== anInstanceof )
 	{
 		inherit = this;
 
-		v_call = this.call;
+		v_left = this.left;
+
+		v_right = this.right;
 	}
 
 	for(
@@ -114,11 +117,20 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
-			case 'call' :
+			case 'left' :
 
 				if( arg !== undefined )
 				{
-					v_call = arg;
+					v_left = arg;
+				}
+
+				break;
+
+			case 'right' :
+
+				if( arg !== undefined )
+				{
+					v_right = arg;
 				}
 
 				break;
@@ -134,41 +146,46 @@ prototype.create =
 
 /**/if( CHECK )
 /**/{
-/**/	if( v_call === undefined )
+/**/	if( v_left === undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_call === null )
+/**/	if( v_left === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_call.reflectName !== 'astCall' )
+/**/	if( v_right === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_right === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if( inherit && v_call.equals( inherit.call ) )
+	if( inherit && v_left === inherit.left && v_right === inherit.right )
 	{
 		return inherit;
 	}
 
-	return new Constructor( v_call );
+	return new Constructor( v_left, v_right );
 };
 
 
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aNew';
+prototype.reflect = 'ast.astInstanceof';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aNew';
+prototype.reflectName = 'astInstanceof';
 
 
 /*
@@ -201,7 +218,7 @@ Constructor.prototype.equals =
 		return false;
 	}
 
-	return this.call.equals( obj.call );
+	return this.left === obj.left && this.right === obj.right;
 };
 
 
@@ -210,7 +227,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aNew;
+	module.exports = anInstanceof;
 }
 
 

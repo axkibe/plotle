@@ -1,5 +1,5 @@
 /*
-| A call to new
+| Tests if left is an instance of right.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,35 +19,32 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aNew',
-		node :
-			true,
+			'ast.astInstanceof',
 		attributes :
 			{
-				'call' :
+				left :
 					{
 						comment :
-							'the constrcutor call',
+							'left expression',
 						type :
-							'ast.astCall'
+							'Object'
 					},
-			}
+				right :
+					{
+						comment :
+							'right expression',
+						type :
+							'Object'
+					}
+			},
+		node :
+			true
 	};
 }
 
-/*
-| Node imports.
-*/
-var
-	aNew;
 
-aNew =
+module.exports =
 	require( '../jion/this' )( module );
-
-/*
-| Node export.
-*/
-module.exports = aNew;
 
 
 } )( );

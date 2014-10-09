@@ -9,8 +9,8 @@ module.exports =
 	'ast.astAssign',
 	'ast.astCall',
 	'ast.astFunc',
-	'ast.aNew',
-	'ast.anObjLiteral',
+	'ast.astNew',
+	'ast.astObjLiteral',
 	'ast.anOr',
 	'ast.aVar'
 */

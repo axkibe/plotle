@@ -1,12 +1,12 @@
 /*
-| Tests if left is an instance of right.
+| Tests for equality.
 |
 | Authors: Axel Kittenberger
 */
 
 
 /*
-| Capsule
+| Capsule.
 */
 (function() {
 'use strict';
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.anInstanceof',
+			'ast.astEquals',
 		attributes :
 			{
 				left :
@@ -43,8 +43,10 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+/*
+| Export.
+*/
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

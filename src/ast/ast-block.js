@@ -62,10 +62,10 @@ ast =
 			require( './ast-for' ),
 		astForIn :
 			require( './ast-for-in' ),
-		anIf :
-			require( './an-if' ),
-		aNew :
-			require( './a-new' ),
+		astIf :
+			require( './ast-if' ),
+		astNew :
+			require( './ast-new' ),
 		aReturn :
 			require( './a-return' ),
 		aStringLiteral :
@@ -84,7 +84,7 @@ astBlock.prototype.append =
 		statement
 	)
 {
-	return (
+	return(
 		this.create(
 			'twig:add',
 			jools.uid( ), // FIXME
@@ -185,7 +185,7 @@ astBlock.prototype.astComment =
 /*
 | Returns the block with an if appended.
 */
-astBlock.prototype.anIf =
+astBlock.prototype.astIf =
 	function(
 		condition,
 		then,
@@ -194,7 +194,7 @@ astBlock.prototype.anIf =
 {
 	var
 		statement =
-			ast.anIf.create(
+			ast.astIf.create(
 				'condition',
 					condition,
 				'then',
@@ -228,7 +228,7 @@ astBlock.prototype.astFail =
 			);
 	}
 
-	return (
+	return(
 		this.append(
 			ast.astFail.create(
 				'message',
@@ -294,14 +294,14 @@ astBlock.prototype.astForIn =
 /*
 | Shorthand for creating new calls.
 */
-astBlock.prototype.aNew =
+astBlock.prototype.astNew =
 	function(
 		call
 	)
 {
-	return (
+	return(
 		this.append(
-			ast.aNew.create(
+			ast.astNew.create(
 				'call',
 					call
 			)

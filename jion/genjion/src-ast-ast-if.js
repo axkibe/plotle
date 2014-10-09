@@ -234,13 +234,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.anIf';
+prototype.reflect = 'ast.astIf';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'anIf';
+prototype.reflectName = 'astIf';
 
 
 /*

@@ -1,7 +1,5 @@
 /*
-| An object literal.
-|
-| FIXME simply call anObject
+| Ast object literal.
 |
 | Authors: Axel Kittenberger
 */
@@ -21,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.anObjLiteral',
+			'ast.astObjLiteral',
 		node :
 			true,
 		twig :
@@ -29,21 +27,20 @@ if( JION )
 	};
 }
 
-/*
-| Node imports.
-*/
+
 var
-	anObjLiteral;
+	astObjLiteral;
 
 
-anObjLiteral =
-		require( '../jion/this' )( module );
+astObjLiteral =
+module.exports =
+	require( '../jion/this' )( module );
 
 
 /*
 | Returns an object literal with a key-expr pair added.
 */
-anObjLiteral.prototype.add =
+astObjLiteral.prototype.add =
 	function(
 		key,
 		expr
@@ -57,12 +54,6 @@ anObjLiteral.prototype.add =
 		)
 	);
 };
-
-
-/*
-| Node export.
-*/
-module.exports = anObjLiteral;
 
 
 } )( );

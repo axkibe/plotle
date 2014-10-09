@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.anIf',
+			'ast.astIf',
 		attributes :
 			{
 				condition :
@@ -52,38 +52,31 @@ if( JION )
 }
 
 
-/*
-| Node includes.
-*/
 var
-	anIf;
+	astIf;
 
-anIf =
+astIf =
+module.exports =
 	require( '../jion/this' )( module );
+
 
 /*
 | Creates an if with the Elsewise block set.
 |
 | FIXME rename
 */
-anIf.prototype.Elsewise =
+astIf.prototype.Elsewise =
 	function(
 		block
 	)
 {
-	return (
+	return(
 		this.create(
 			'elsewise',
 				block
 		)
 	);
 };
-
-
-/*
-| Node export.
-*/
-module.exports = anIf;
 
 
 } )( );

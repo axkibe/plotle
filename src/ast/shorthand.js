@@ -58,32 +58,32 @@ ast =
 			require( './ast-dot' ),
 		astFile :
 			require( './ast-file' ),
-		anEquals :
-			require( './an-equals' ),
+		astEquals :
+			require( './ast-equals' ),
 		astFunc :
 			require( './ast-func' ),
 		astFuncArg :
 			require( './ast-func-arg' ),
 		astGreaterThan :
 			require( './ast-greater-than' ),
-		anIf :
-			require( './an-if' ),
-		anInstanceof :
-			require( './an-instanceof' ),
+		astIf :
+			require( './ast-if' ),
+		astInstanceof :
+			require( './ast-instanceof' ),
 		astLessThan :
 			require( './ast-less-than' ),
 		astMember :
 			require( './ast-member' ),
-		aNew :
-			require( './a-new' ),
+		astNew :
+			require( './ast-new' ),
 		aNot :
 			require( './a-not' ),
 		aNull :
 			require( './a-null' ),
 		aNumberLiteral :
 			require( './a-number-literal' ),
-		anObjLiteral :
-			require( './an-obj-literal' ),
+		astObjLiteral :
+			require( './ast-obj-literal' ),
 		anOr :
 			require( './an-or' ),
 		aPlus :
@@ -299,14 +299,14 @@ shorthand.astDot =
 /*
 | Shorthand for creating equals.
 */
-shorthand.anEquals =
+shorthand.astEquals =
 	function(
 		left,
 		right
 	)
 {
 	return(
-		ast.anEquals.create(
+		ast.astEquals.create(
 			'left',
 				left,
 			'right',
@@ -374,7 +374,7 @@ shorthand.aFalse =
 /*
 | Shorthand for creating ifs.
 */
-shorthand.anIf =
+shorthand.astIf =
 	function(
 		condition,
 		then,
@@ -382,7 +382,7 @@ shorthand.anIf =
 	)
 {
 	return(
-		ast.anIf.create(
+		ast.astIf.create(
 			'condition',
 				condition,
 			'then',
@@ -424,14 +424,14 @@ shorthand.astFunc =
 /*
 | Shorthand for creating instanceof expressions.
 */
-shorthand.anInstanceof =
+shorthand.astInstanceof =
 	function(
 		left,
 		right
 	)
 {
 	return(
-		ast.anInstanceof.create(
+		ast.astInstanceof.create(
 			'left',
 				left,
 			'right',
@@ -465,13 +465,13 @@ shorthand.astMember =
 /*
 | Shorthand for creating new calls.
 */
-shorthand.aNew =
+shorthand.astNew =
 	function(
 		call
 	)
 {
 	return(
-		ast.aNew.create(
+		ast.astNew.create(
 			'call',
 				call
 		)
@@ -526,10 +526,10 @@ shorthand.aNumberLiteral =
 /*
 | Shorthand for creating object literals.
 */
-shorthand.anObjLiteral =
+shorthand.astObjLiteral =
 	function( )
 {
-	return ast.anObjLiteral.create( );
+	return ast.astObjLiteral.create( );
 };
 
 
