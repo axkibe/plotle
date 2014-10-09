@@ -72,8 +72,8 @@ var
 | Jion.
 */
 var
-	anAnd =
-	ast.anAnd =
+	astAnd =
+	ast.astAnd =
 		{
 			prototype :
 				prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new anAnd object.
+| Creates a new astAnd object.
 */
-anAnd.create =
+astAnd.create =
 prototype.create =
 	function(
 		// free strings
@@ -96,7 +96,7 @@ prototype.create =
 
 		v_right;
 
-	if( this !== anAnd )
+	if( this !== astAnd )
 	{
 		inherit = this;
 
@@ -179,13 +179,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.anAnd';
+prototype.reflect = 'ast.astAnd';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'anAnd';
+prototype.reflectName = 'astAnd';
 
 
 /*
@@ -227,7 +227,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = anAnd;
+	module.exports = astAnd;
 }
 
 

@@ -76,8 +76,8 @@ var
 | Jion.
 */
 var
-	anArrayLiteral =
-	ast.anArrayLiteral =
+	astArrayLiteral =
+	ast.astArrayLiteral =
 		{
 			prototype :
 				prototype
@@ -85,9 +85,9 @@ var
 
 
 /*
-| Creates a new anArrayLiteral object.
+| Creates a new astArrayLiteral object.
 */
-anArrayLiteral.create =
+astArrayLiteral.create =
 prototype.create =
 	function(
 		// free strings
@@ -106,7 +106,7 @@ prototype.create =
 
 		twigDup;
 
-	if( this !== anArrayLiteral )
+	if( this !== astArrayLiteral )
 	{
 		inherit = this;
 
@@ -269,13 +269,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.anArrayLiteral';
+prototype.reflect = 'ast.astArrayLiteral';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'anArrayLiteral';
+prototype.reflectName = 'astArrayLiteral';
 
 
 /*
@@ -321,7 +321,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = anArrayLiteral;
+	module.exports = astArrayLiteral;
 }
 
 

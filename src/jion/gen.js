@@ -55,10 +55,10 @@ var
 | Shorthanding Shorthands.
 */
 var
-	anAnd =
-		Shorthand.anAnd,
-	anArrayLiteral =
-		Shorthand.anArrayLiteral,
+	astAnd =
+		Shorthand.astAnd,
+	astArrayLiteral =
+		Shorthand.astArrayLiteral,
 	anAssign =
 		Shorthand.anAssign,
 	astBlock =
@@ -1178,7 +1178,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 				)
 				.anAssign(
 					aVar( 'ranks' ),
-					anArrayLiteral( )
+					astArrayLiteral( )
 				)
 				.anAssign(
 					aVar( 'twigDup' ),
@@ -1195,7 +1195,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 				astBlock( )
 				.anAssign(
 					aVar( 'ray' ),
-					anArrayLiteral( )
+					astArrayLiteral( )
 				)
 				.anAssign(
 					aVar( 'rayDup' ),
@@ -1745,7 +1745,7 @@ gen.prototype.genCreatorChecks =
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				anAnd(
+				astAnd(
 					astDiffers( attr.v, aNull ),
 					astDiffers( attr.v, anUndefined )
 				);
@@ -1801,7 +1801,7 @@ gen.prototype.genCreatorChecks =
 			case 'String' :
 
 				tcheck =
-					anAnd(
+					astAnd(
 						astDiffers(
 							aTypeof( attr.v ),
 							aStringLiteral( 'string' )
@@ -2055,7 +2055,7 @@ gen.prototype.genCreatorUnchanged =
 	if( this.twig )
 	{
 		cond =
-			anAnd(
+			astAnd(
 				cond,
 				aNot( aVar( 'twigDup' ) )
 			);
@@ -2064,7 +2064,7 @@ gen.prototype.genCreatorUnchanged =
 	if( this.ray )
 	{
 		cond =
-			anAnd(
+			astAnd(
 				cond,
 				aNot( aVar( 'rayDup' ) )
 			);
@@ -2083,7 +2083,7 @@ gen.prototype.genCreatorUnchanged =
 		if( attr.assign === null )
 		{
 			cond =
-				anAnd(
+				astAnd(
 					cond,
 					anEquals( attr.v, aNull )
 				);
@@ -2134,7 +2134,7 @@ gen.prototype.genCreatorUnchanged =
 								attr.v,
 								aVar( 'inherit' ).astDot( attr.assign )
 							),
-							anAnd(
+							astAnd(
 								attr.v,
 								equalsCall
 							)
@@ -2148,7 +2148,7 @@ gen.prototype.genCreatorUnchanged =
 								attr.v,
 								aVar( 'inherit' ).astDot( attr.assign )
 							),
-							anAnd(
+							astAnd(
 								attr.v,
 								equalsCall
 							)
@@ -2160,7 +2160,7 @@ gen.prototype.genCreatorUnchanged =
 				}
 		}
 
-		cond = anAnd( cond, ceq );
+		cond = astAnd( cond, ceq );
 	}
 
 	block =
@@ -3055,7 +3055,7 @@ gen.prototype.genAttributeEquals =
 				ceq =
 					anOr(
 						anEquals( le, re ),
-						anAnd(
+						astAnd(
 							astDiffers( le, aNull ),
 							astCall( le.astDot( 'equals' ), re )
 						)
@@ -3066,7 +3066,7 @@ gen.prototype.genAttributeEquals =
 				ceq =
 					anOr(
 						anEquals( le, re ),
-						anAnd(
+						astAnd(
 							astDiffers( le, anUndefined ),
 							astCall( le.astDot( 'equals' ), re )
 						)
@@ -3300,7 +3300,7 @@ gen.prototype.genEquals =
 		cond =
 			cond === null
 			? ceq
-			: anAnd( cond, ceq );
+			: astAnd( cond, ceq );
 	}
 
 	if( cond )
@@ -3385,7 +3385,7 @@ gen.prototype.genAlike =
 		{
 			// FIXME same test as in equals
 			cond =
-				anAnd(
+				astAnd(
 					anEquals(
 						aThis.astDot( 'tree' ),
 						aVar( 'obj' ).astDot( 'tree' )
@@ -3426,7 +3426,7 @@ gen.prototype.genAlike =
 			cond =
 				cond === null
 				? ceq
-				: anAnd( cond, ceq );
+				: astAnd( cond, ceq );
 		}
 
 		block =

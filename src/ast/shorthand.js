@@ -1,18 +1,19 @@
 /*
 | Various shorthands for abstract syntax trees.
 |
-| FIXME lowercase ShortHand
+| FIXME lowercase shorthand
 |
 | Authors: Axel Kittenberger
 */
 
 
-/*
-| Export.
-*/
 var
-	ShortHand =
-		{ };
+	shorthand;
+
+shorthand =
+module.exports =
+	{ };
+
 
 /*
 | Capsule
@@ -29,10 +30,10 @@ var
 */
 ast =
 	{
-		anAnd :
-			require( './an-and' ),
-		anArrayLiteral :
-			require( './an-array-literal' ),
+		astAnd :
+			require( './ast-and' ),
+		astArrayLiteral :
+			require( './ast-array-literal' ),
 		anAssign :
 			require( './an-assign' ),
 		astBlock :
@@ -109,7 +110,7 @@ ast =
 /*
 | Shorthand for creating ands.
 */
-ShortHand.anAnd =
+shorthand.astAnd =
 	function(
 		left,
 		right
@@ -126,7 +127,7 @@ ShortHand.anAnd =
 		args.splice(
 			0,
 			2,
-			ast.anAnd.create(
+			ast.astAnd.create(
 				'left',
 					left,
 				'right',
@@ -135,7 +136,7 @@ ShortHand.anAnd =
 		);
 
 		return(
-			ShortHand.anAnd.apply(
+			shorthand.astAnd.apply(
 				this,
 				args
 			)
@@ -143,7 +144,7 @@ ShortHand.anAnd =
 	}
 
 	return(
-		ast.anAnd.create(
+		ast.astAnd.create(
 			'left',
 				left,
 			'right',
@@ -156,17 +157,17 @@ ShortHand.anAnd =
 /*
 | Shorthand for creating array literals.
 */
-ShortHand.anArrayLiteral =
+shorthand.astArrayLiteral =
 	function( )
 {
-	return ast.anArrayLiteral.create( );
+	return ast.astArrayLiteral.create( );
 };
 
 
 /*
 | Shorthand for creating assignments.
 */
-ShortHand.anAssign =
+shorthand.anAssign =
 	function(
 		left,
 		right
@@ -186,7 +187,7 @@ ShortHand.anAssign =
 /*
 | Shorthand for creating blocks.
 */
-ShortHand.astBlock =
+shorthand.astBlock =
 	function( )
 {
 	return ast.astBlock.create( );
@@ -196,7 +197,7 @@ ShortHand.astBlock =
 /*
 | Shorthand for creating calls.
 */
-ShortHand.astCall =
+shorthand.astCall =
 	function(
 		func
 		// args
@@ -223,7 +224,7 @@ ShortHand.astCall =
 /*
 | Shorthand for creating conditions.
 */
-ShortHand.astCondition =
+shorthand.astCondition =
 	function(
 		condition,
 		then,
@@ -246,7 +247,7 @@ ShortHand.astCondition =
 /*
 | Shorthand for creating differs.
 */
-ShortHand.astDiffers =
+shorthand.astDiffers =
 	function(
 		left,
 		right
@@ -266,7 +267,7 @@ ShortHand.astDiffers =
 /*
 | Shorthand for creating delete calls.
 */
-ShortHand.astDelete =
+shorthand.astDelete =
 	function(
 		expr
 	)
@@ -278,7 +279,7 @@ ShortHand.astDelete =
 /*
 | Shorthand for creating dots.
 */
-ShortHand.astDot =
+shorthand.astDot =
 	function(
 		expr,
 		member
@@ -298,7 +299,7 @@ ShortHand.astDot =
 /*
 | Shorthand for creating equals.
 */
-ShortHand.anEquals =
+shorthand.anEquals =
 	function(
 		left,
 		right
@@ -318,7 +319,7 @@ ShortHand.anEquals =
 /*
 | Shorthand for creating less-than comparisons.
 */
-ShortHand.astLessThan =
+shorthand.astLessThan =
 	function(
 		left,
 		right
@@ -338,7 +339,7 @@ ShortHand.astLessThan =
 /*
 | Shorthand for creating greater-than comparisons.
 */
-ShortHand.astGreaterThan =
+shorthand.astGreaterThan =
 	function(
 		left,
 		right
@@ -358,7 +359,7 @@ ShortHand.astGreaterThan =
 /*
 | Shorthand for creating number false boolean literal.
 */
-ShortHand.aFalse =
+shorthand.aFalse =
 	function( )
 {
 	return(
@@ -373,7 +374,7 @@ ShortHand.aFalse =
 /*
 | Shorthand for creating ifs.
 */
-ShortHand.anIf =
+shorthand.anIf =
 	function(
 		condition,
 		then,
@@ -396,7 +397,7 @@ ShortHand.anIf =
 /*
 | Shorthand for creating files.
 */
-ShortHand.astFile =
+shorthand.astFile =
 	function( )
 {
 	return ast.astFile.create( );
@@ -406,7 +407,7 @@ ShortHand.astFile =
 /*
 | Shorthand for creating functions.
 */
-ShortHand.astFunc =
+shorthand.astFunc =
 	function(
 		block
 	)
@@ -423,7 +424,7 @@ ShortHand.astFunc =
 /*
 | Shorthand for creating instanceof expressions.
 */
-ShortHand.anInstanceof =
+shorthand.anInstanceof =
 	function(
 		left,
 		right
@@ -444,7 +445,7 @@ ShortHand.anInstanceof =
 /*
 | Shorthand for creating members.
 */
-ShortHand.astMember =
+shorthand.astMember =
 	function(
 		expr,
 		member
@@ -464,7 +465,7 @@ ShortHand.astMember =
 /*
 | Shorthand for creating new calls.
 */
-ShortHand.aNew =
+shorthand.aNew =
 	function(
 		call
 	)
@@ -481,7 +482,7 @@ ShortHand.aNew =
 /*
 | Shorthand for creating negations.
 */
-ShortHand.aNot =
+shorthand.aNot =
 	function(
 		expr
 	)
@@ -498,7 +499,7 @@ ShortHand.aNot =
 /*
 | Shorthand for creating nulls.
 */
-ShortHand.aNull =
+shorthand.aNull =
 	function( )
 {
 	return ast.aNull.create( );
@@ -508,7 +509,7 @@ ShortHand.aNull =
 /*
 | Shorthand for creating number literals.
 */
-ShortHand.aNumberLiteral =
+shorthand.aNumberLiteral =
 	function(
 		number
 	)
@@ -525,7 +526,7 @@ ShortHand.aNumberLiteral =
 /*
 | Shorthand for creating object literals.
 */
-ShortHand.anObjLiteral =
+shorthand.anObjLiteral =
 	function( )
 {
 	return ast.anObjLiteral.create( );
@@ -535,7 +536,7 @@ ShortHand.anObjLiteral =
 /*
 | Shorthand for creating ors.
 */
-ShortHand.anOr =
+shorthand.anOr =
 	function(
 		left,
 		right
@@ -561,7 +562,7 @@ ShortHand.anOr =
 		);
 
 		return(
-			ShortHand.anOr.apply(
+			shorthand.anOr.apply(
 				this,
 				args
 			)
@@ -582,7 +583,7 @@ ShortHand.anOr =
 /*
 | Shorthand for creating pluses.
 */
-ShortHand.aPlus =
+shorthand.aPlus =
 	function(
 		left,
 		right
@@ -608,7 +609,7 @@ ShortHand.aPlus =
 		);
 
 		return(
-			ShortHand.aPlus.apply(
+			shorthand.aPlus.apply(
 				this,
 				args
 			)
@@ -629,7 +630,7 @@ ShortHand.aPlus =
 /*
 | Shorthand for creating plus-assignments.
 */
-ShortHand.aPlusAssign =
+shorthand.aPlusAssign =
 	function(
 		left,
 		right
@@ -650,7 +651,7 @@ ShortHand.aPlusAssign =
 /*
 | Shorthand for creating pre-increments.
 */
-ShortHand.aPreIncrement =
+shorthand.aPreIncrement =
 	function(
 		expr
 	)
@@ -667,7 +668,7 @@ ShortHand.aPreIncrement =
 /*
 | Shorthand for creating string literals.
 */
-ShortHand.aStringLiteral =
+shorthand.aStringLiteral =
 	function(
 		string
 	)
@@ -684,7 +685,7 @@ ShortHand.aStringLiteral =
 /*
 | Shorthand for creating switch statements.
 */
-ShortHand.aSwitch =
+shorthand.aSwitch =
 	function(
 		statement
 	)
@@ -701,7 +702,7 @@ ShortHand.aSwitch =
 /*
 | Shorthand for creating number true boolean literal.
 */
-ShortHand.aTrue =
+shorthand.aTrue =
 	function( )
 {
 	return(
@@ -716,7 +717,7 @@ ShortHand.aTrue =
 /*
 | Shorthand for creating typeofs.
 */
-ShortHand.aTypeof =
+shorthand.aTypeof =
 	function(
 		expr
 	)
@@ -734,7 +735,7 @@ ShortHand.aTypeof =
 /*
 | Shorthand for creating variable uses.
 */
-ShortHand.aVar =
+shorthand.aVar =
 	function(
 		name
 	)
@@ -752,7 +753,7 @@ ShortHand.aVar =
 | Shorthand for variable declerations.
 */
 /*
-ShortHand.aVarDec =
+shorthand.aVarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
@@ -773,7 +774,7 @@ ShortHand.aVarDec =
 /*
 | Shorthand for creating comma lists.
 */
-ShortHand.astCommaList =
+shorthand.astCommaList =
 	function( )
 {
 	return ast.astCommaList.create( );
@@ -784,19 +785,11 @@ ShortHand.astCommaList =
 /*
 | Shorthand for creating vlists.
 */
-ShortHand.aVList =
+shorthand.aVList =
 	function( )
 {
 	return ast.aVList.create( );
 };
-
-
-
-/*
-| Node export.
-*/
-module.exports =
-	ShortHand;
 
 
 } )( );

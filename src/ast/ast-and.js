@@ -1,5 +1,5 @@
 /*
-| A logical and.
+| ast logical and operation.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.anAnd',
+			'ast.astAnd',
 		attributes :
 			{
 				left :
@@ -43,8 +43,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

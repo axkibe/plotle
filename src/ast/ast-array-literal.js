@@ -1,5 +1,5 @@
 /*
-| An array literal in an abstract syntax tree.
+| Array literals in abstract syntax trees.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.anArrayLiteral',
+			'ast.astArrayLiteral',
 		node :
 			true,
 		equals :
@@ -29,20 +29,24 @@ if( JION )
 	};
 }
 
-/*
-| Node imports.
-*/
+
 var
-	AnArrayLiteral =
-		require( '../jion/this' )( module ),
-	jools =
-		require( '../jools/jools' );
+	astArrayLiteral,
+	jools;
+
+
+astArrayLiteral =
+module.exports =
+	require( '../jion/this' )( module );
+
+
+jools = require( '../jools/jools' );
 
 
 /*
 | Returns an array literal with an expression appended.
 */
-AnArrayLiteral.prototype.append =
+astArrayLiteral.prototype.append =
 	function(
 		expr
 	)
@@ -55,12 +59,6 @@ AnArrayLiteral.prototype.append =
 		)
 	);
 };
-
-
-/*
-| Node export.
-*/
-module.exports = AnArrayLiteral;
 
 
 } )( );

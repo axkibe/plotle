@@ -6,7 +6,7 @@
 module.exports =
 [
 	/*
-	'ast.anAnd',
+	'ast.astAnd',
 	'ast.anAssign',
 	'ast.astCall',
 	'ast.astFunc',
