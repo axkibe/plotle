@@ -66,8 +66,8 @@ ast =
 			require( './ast-if' ),
 		astNew :
 			require( './ast-new' ),
-		aReturn :
-			require( './a-return' ),
+		astReturn :
+			require( './ast-return' ),
 		aStringLiteral :
 			require( './a-string-literal' ),
 		aVarDec :
@@ -313,20 +313,20 @@ astBlock.prototype.astNew =
 /*
 | Returns the block with a term appended.
 */
-astBlock.prototype.aReturn =
+astBlock.prototype.astReturn =
 	function(
 		expr
 	)
 {
 	switch( expr.reflect )
 	{
-		case 'ast.aReturn' :
+		case 'ast.astReturn' :
 
 			break;
 
 		default :
 
-			expr = ast.aReturn.create( 'expr', expr );
+			expr = ast.astReturn.create( 'expr', expr );
 
 			break;
 	}

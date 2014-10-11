@@ -69,8 +69,8 @@ var
 | Jion.
 */
 var
-	aReturn =
-	ast.aReturn =
+	astReturn =
+	ast.astReturn =
 		{
 			prototype :
 				prototype
@@ -78,9 +78,9 @@ var
 
 
 /*
-| Creates a new aReturn object.
+| Creates a new astReturn object.
 */
-aReturn.create =
+astReturn.create =
 prototype.create =
 	function(
 		// free strings
@@ -91,7 +91,7 @@ prototype.create =
 
 		v_expr;
 
-	if( this !== aReturn )
+	if( this !== astReturn )
 	{
 		inherit = this;
 
@@ -153,13 +153,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aReturn';
+prototype.reflect = 'ast.astReturn';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aReturn';
+prototype.reflectName = 'astReturn';
 
 
 /*
@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aReturn;
+	module.exports = astReturn;
 }
 
 

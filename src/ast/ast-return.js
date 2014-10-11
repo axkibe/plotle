@@ -1,5 +1,5 @@
 /*
-| Returns statement for abstract syntax trees.
+| abstract syntax tree returns statements.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aReturn',
+			'ast.astReturn',
 		attributes :
 			{
 				expr :
@@ -27,7 +27,7 @@ if( JION )
 						comment :
 							'the expression to return',
 						type :
-							'Object'
+							'Object' // FUTURE ->expression
 					}
 			},
 		node :

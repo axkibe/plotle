@@ -2167,7 +2167,7 @@ gen.prototype.genCreatorUnchanged =
 		block.astIf(
 			cond,
 			astBlock( )
-			.aReturn(
+			.astReturn(
 				aVar( 'inherit' )
 			)
 		);
@@ -2207,7 +2207,7 @@ gen.prototype.genCreatorReturn =
 					)
 				)
 			)
-			.aReturn(
+			.astReturn(
 				aVar( '_singleton' )
 			)
 		);
@@ -2249,7 +2249,7 @@ gen.prototype.genCreatorReturn =
 	}
 
 	return (
-		block.aReturn(
+		block.astReturn(
 			astNew( call )
 		)
 	);
@@ -2707,7 +2707,7 @@ gen.prototype.genFromJSONCreatorReturn =
 	}
 
 	return (
-		block.aReturn( astNew( call ) )
+		block.astReturn( astNew( call ) )
 	);
 };
 
@@ -2984,10 +2984,10 @@ gen.prototype.genToJSON =
 				olit
 			)
 		)
-		.aReturn(
+		.astReturn(
 			astFunc(
 				astBlock( )
-				.aReturn(
+				.astReturn(
 					aVar( 'json' )
 				)
 			)
@@ -3119,7 +3119,7 @@ gen.prototype.genEquals =
 					.astDot( 'equals' ),
 					astFunc(
 						astBlock( )
-						.aReturn(
+						.astReturn(
 							astEquals(
 								aThis,
 								aVar( 'obj' )
@@ -3168,13 +3168,13 @@ gen.prototype.genEquals =
 				aVar( 'obj' )
 			),
 			astBlock( )
-			.aReturn( aTrue )
+			.astReturn( aTrue )
 		)
 		.astIf(
 			astNot(
 				aVar( 'obj' )
 			),
-			astBlock( ).aReturn( aFalse )
+			astBlock( ).astReturn( aFalse )
 		);
 
 	// XXX
@@ -3223,7 +3223,7 @@ gen.prototype.genEquals =
 						)
 					)
 				),
-				astBlock( ).aReturn( aFalse )
+				astBlock( ).astReturn( aFalse )
 			);
 
 		twigTest =
@@ -3233,7 +3233,7 @@ gen.prototype.genEquals =
 					aThis.astDot( 'ranks' ).astDot( 'length' ),
 					aVar( 'obj' ).astDot( 'ranks' ).astDot( 'length' )
 				),
-				astBlock( ).aReturn( aFalse )
+				astBlock( ).astReturn( aFalse )
 			)
 			.astFor(
 				astCommaList( ) // FIXME add astAssign to astCommaList
@@ -3302,11 +3302,11 @@ gen.prototype.genEquals =
 
 	if( cond )
 	{
-		block = block.aReturn( cond );
+		block = block.astReturn( cond );
 	}
 	else
 	{
-		block = block.aReturn( aTrue );
+		block = block.astReturn( aTrue );
 	}
 
 	capsule =
@@ -3367,11 +3367,11 @@ gen.prototype.genAlike =
 			.astIf(
 				astEquals( aThis, aVar( 'obj' ) ),
 				// FIXME make an astReturn shorthand that creates a block
-				astBlock( ).aReturn( aTrue )
+				astBlock( ).astReturn( aTrue )
 			)
 			.astIf(
 				astNot( aVar( 'obj' ) ),
-				astBlock( ).aReturn( aFalse )
+				astBlock( ).astReturn( aFalse )
 			);
 
 		if( this.twig )
@@ -3422,9 +3422,7 @@ gen.prototype.genAlike =
 				: astAnd( cond, ceq );
 		}
 
-		block =
-			block
-			.aReturn( cond );
+		block = block.astReturn( cond );
 
 		capsule =
 			capsule

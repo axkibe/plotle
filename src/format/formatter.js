@@ -1054,7 +1054,7 @@ formatAReturn =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflect !== 'ast.aReturn' )
+/**/	if( statement.reflect !== 'ast.astReturn' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1422,7 +1422,7 @@ formatStatement =
 
 			break;
 
-		case 'ast.aReturn' :
+		case 'ast.astReturn' :
 
 			text += formatAReturn( context, statement );
 
@@ -1505,7 +1505,7 @@ formatStatement =
 		case 'ast.astNew' :
 		case 'ast.astNumberLiteral' :
 		case 'ast.astPlusAssign' :
-		case 'ast.aReturn' :
+		case 'ast.astReturn' :
 		case 'ast.aStringLiteral' :
 		case 'ast.aVar' :
 
