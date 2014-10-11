@@ -86,8 +86,8 @@ ast =
 			require( './ast-obj-literal' ),
 		astOr :
 			require( './ast-or' ),
-		aPlus :
-			require( './a-plus' ),
+		astPlus :
+			require( './ast-plus' ),
 		aPlusAssign :
 			require( './a-plus-assign' ),
 		aPreIncrement :
@@ -583,7 +583,7 @@ shorthand.astOr =
 /*
 | Shorthand for creating pluses.
 */
-shorthand.aPlus =
+shorthand.astPlus =
 	function(
 		left,
 		right
@@ -600,7 +600,7 @@ shorthand.aPlus =
 		args.splice(
 			0,
 			2,
-			ast.aPlus.create(
+			ast.astPlus.create(
 				'left',
 					left,
 				'right',
@@ -609,7 +609,7 @@ shorthand.aPlus =
 		);
 
 		return(
-			shorthand.aPlus.apply(
+			shorthand.astPlus.apply(
 				this,
 				args
 			)
@@ -617,7 +617,7 @@ shorthand.aPlus =
 	}
 
 	return(
-		ast.aPlus.create(
+		ast.astPlus.create(
 			'left',
 				left,
 			'right',

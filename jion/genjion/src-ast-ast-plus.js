@@ -179,13 +179,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aPlus';
+prototype.reflect = 'ast.astPlus';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aPlus';
+prototype.reflectName = 'astPlus';
 
 
 /*

@@ -101,8 +101,8 @@ var
 		Shorthand.astObjLiteral,
 	astOr =
 		Shorthand.astOr,
-	aPlus =
-		Shorthand.aPlus,
+	astPlus =
+		Shorthand.astPlus,
 	aPlusAssign =
 		Shorthand.aPlusAssign,
 	aPreIncrement =
@@ -1243,7 +1243,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		.aVarDec(
 			'arg',
 			aVar( 'arguments' ).astMember(
-				aPlus(
+				astPlus(
 					aVar( 'a' ),
 					astNumberLiteral( 1 )
 				)
@@ -1323,7 +1323,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign(
 					aVar( 'arg' ),
 					aVar( 'arguments' ).astMember(
-						aPlus(
+						astPlus(
 							aPreIncrement( aVar( 'a' ) ),
 							astNumberLiteral( 1 )
 						)
@@ -1337,7 +1337,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astBlock( )
 					.astFail(
 						/*
-						aPlus(
+						astPlus(
 							aStringLiteral( 'key "' ),
 							aVar( 'key' ),
 							aStringLiteral( '" already in use' )
@@ -1365,7 +1365,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign(
 					aVar( 'arg' ),
 					aVar( 'arguments' ).astMember(
-						aPlus(
+						astPlus(
 							aPreIncrement( aVar( 'a' ) ),
 							astNumberLiteral( 1 )
 						)
@@ -1379,7 +1379,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astBlock( )
 					.astFail(
 						/*
-						aPlus(
+						astPlus(
 							aStringLiteral( 'key "' ),
 							aVar( 'key' ),
 							aStringLiteral( '" not in use' )
@@ -1403,7 +1403,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign(
 					aVar( 'rank' ),
 					aVar( 'arguments' ).astMember(
-						aPlus(
+						astPlus(
 							aVar( 'a' ),
 							astNumberLiteral( 2 )
 						)
@@ -1412,7 +1412,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign(
 					aVar( 'arg' ),
 					aVar( 'arguments' ).astMember(
-						aPlus(
+						astPlus(
 							aVar( 'a' ),
 							astNumberLiteral( 3 )
 						)
@@ -1432,7 +1432,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astBlock( )
 					.astFail(
 						/*
-						aPlus(
+						astPlus(
 							aStringLiteral( 'key "' ),
 							aVar( 'key' ),
 							aStringLiteral( '" already in use' )
@@ -1481,7 +1481,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astBlock( )
 					.astFail(
 						/*
-						aPlus(
+						astPlus(
 							aStringLiteral( 'key "' ),
 							aVar( 'arg' ),
 							aStringLiteral( '" not in use' )
@@ -1552,7 +1552,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					aVar( 'arg' ),
 					astNumberLiteral( 0 ),
 					aVar( 'arguments' ).astMember(
-						aPlus(
+						astPlus(
 							aPreIncrement( aVar( 'a' ) ),
 							astNumberLiteral( 1 )
 						)
@@ -1576,7 +1576,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign(
 					aVar( 'ray' ).astMember( aVar( 'arg' ) ),
 					aVar( 'arguments' ).astMember(
-						aPlus(
+						astPlus(
 							aPreIncrement( aVar( 'a' ) ),
 							astNumberLiteral( 1 )
 						)
