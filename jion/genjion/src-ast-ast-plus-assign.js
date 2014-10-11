@@ -72,8 +72,8 @@ var
 | Jion.
 */
 var
-	aPlusAssign =
-	ast.aPlusAssign =
+	astPlusAssign =
+	ast.astPlusAssign =
 		{
 			prototype :
 				prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new aPlusAssign object.
+| Creates a new astPlusAssign object.
 */
-aPlusAssign.create =
+astPlusAssign.create =
 prototype.create =
 	function(
 		// free strings
@@ -96,7 +96,7 @@ prototype.create =
 
 		v_right;
 
-	if( this !== aPlusAssign )
+	if( this !== astPlusAssign )
 	{
 		inherit = this;
 
@@ -179,13 +179,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aPlusAssign';
+prototype.reflect = 'ast.astPlusAssign';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aPlusAssign';
+prototype.reflectName = 'astPlusAssign';
 
 
 /*
@@ -227,7 +227,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aPlusAssign;
+	module.exports = astPlusAssign;
 }
 
 

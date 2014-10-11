@@ -103,8 +103,8 @@ var
 		Shorthand.astOr,
 	astPlus =
 		Shorthand.astPlus,
-	aPlusAssign =
-		Shorthand.aPlusAssign,
+	astPlusAssign =
+		Shorthand.astPlusAssign,
 	aPreIncrement =
 		Shorthand.aPreIncrement,
 	aStringLiteral =
@@ -1419,7 +1419,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.append(
-					aPlusAssign(
+					astPlusAssign(
 						aVar( 'a' ),
 						astNumberLiteral( 2 )
 					)
@@ -1605,7 +1605,7 @@ gen.prototype.genCreatorFreeStringsParser =
 			.aVarDec( 'a', astNumberLiteral( 0 ) )
 			.aVarDec( 'aZ', aVar( 'arguments' ).astDot( 'length' ) ),
 			astLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
-			aPlusAssign( aVar( 'a' ), astNumberLiteral( 2 ) ),
+			astPlusAssign( aVar( 'a' ), astNumberLiteral( 2 ) ),
 			loop
 		);
 

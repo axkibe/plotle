@@ -39,8 +39,8 @@ module.exports =
 			'src/ast/ast-obj-literal.js',
 			'src/ast/ast-or.js',
 			'src/ast/ast-plus.js',
+			'src/ast/ast-plus-assign.js',
 
-			'src/ast/a-plus-assign.js',
 			'src/ast/a-pre-increment.js',
 			'src/ast/a-return.js',
 			'src/ast/a-string-literal.js',

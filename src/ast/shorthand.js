@@ -88,8 +88,8 @@ ast =
 			require( './ast-or' ),
 		astPlus :
 			require( './ast-plus' ),
-		aPlusAssign :
-			require( './a-plus-assign' ),
+		astPlusAssign :
+			require( './ast-plus-assign' ),
 		aPreIncrement :
 			require( './a-pre-increment' ),
 		aStringLiteral :
@@ -630,14 +630,14 @@ shorthand.astPlus =
 /*
 | Shorthand for creating plus-assignments.
 */
-shorthand.aPlusAssign =
+shorthand.astPlusAssign =
 	function(
 		left,
 		right
 	)
 {
 	return(
-		ast.aPlusAssign.create(
+		ast.astPlusAssign.create(
 			'left',
 				left,
 			'right',

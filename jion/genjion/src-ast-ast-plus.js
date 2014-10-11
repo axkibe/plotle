@@ -72,8 +72,8 @@ var
 | Jion.
 */
 var
-	aPlus =
-	ast.aPlus =
+	astPlus =
+	ast.astPlus =
 		{
 			prototype :
 				prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new aPlus object.
+| Creates a new astPlus object.
 */
-aPlus.create =
+astPlus.create =
 prototype.create =
 	function(
 		// free strings
@@ -96,7 +96,7 @@ prototype.create =
 
 		v_right;
 
-	if( this !== aPlus )
+	if( this !== astPlus )
 	{
 		inherit = this;
 
@@ -227,7 +227,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aPlus;
+	module.exports = astPlus;
 }
 
 

@@ -1,5 +1,5 @@
 /*
-| A plus assignment ( += )
+| Ast plus assignment ( += )
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aPlusAssign',
+			'ast.astPlusAssign',
 		attributes :
 			{
 				left :
