@@ -76,10 +76,10 @@ ast =
 			require( './ast-member' ),
 		astNew :
 			require( './ast-new' ),
-		aNot :
-			require( './a-not' ),
-		aNull :
-			require( './a-null' ),
+		astNot :
+			require( './ast-not' ),
+		astNull :
+			require( './ast-null' ),
 		aNumberLiteral :
 			require( './a-number-literal' ),
 		astObjLiteral :
@@ -482,13 +482,13 @@ shorthand.astNew =
 /*
 | Shorthand for creating negations.
 */
-shorthand.aNot =
+shorthand.astNot =
 	function(
 		expr
 	)
 {
 	return(
-		ast.aNot.create(
+		ast.astNot.create(
 			'expr',
 				expr
 		)
@@ -499,10 +499,10 @@ shorthand.aNot =
 /*
 | Shorthand for creating nulls.
 */
-shorthand.aNull =
+shorthand.astNull =
 	function( )
 {
-	return ast.aNull.create( );
+	return ast.astNull.create( );
 };
 
 

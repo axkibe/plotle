@@ -80,9 +80,9 @@ precTable =
 			1,
 		'astNew' :
 			2,
-		'aNot' :
+		'astNot' :
 			4,
-		'aNull' :
+		'astNull' :
 			-1,
 		'aNumberLiteral' :
 			-1,
@@ -1890,7 +1890,7 @@ formatNew =
 | Formats a not expression.
 */
 var
-formatANot =
+formatNot =
 	function(
 		context,
 		expr
@@ -1899,7 +1899,7 @@ formatANot =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aNot' )
+/**/	if( expr.reflect !== 'ast.astNot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1913,7 +1913,7 @@ formatANot =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.aNot
+			precTable.astNot
 		)
 	);
 };
@@ -1931,7 +1931,7 @@ formatNull =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aNull' )
+/**/	if( expr.reflect !== 'ast.astNull' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2624,9 +2624,9 @@ exprFormatter =
 			formatMember,
 		'astNew' :
 			formatNew,
-		'aNot' :
-			formatANot,
-		'aNull' :
+		'astNot' :
+			formatNot,
+		'astNull' :
 			formatNull,
 		'aNumberLiteral' :
 			formatANumberLiteral,

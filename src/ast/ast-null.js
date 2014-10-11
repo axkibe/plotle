@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aNull',
+			'ast.astNull',
 		node :
 			true,
 		equals :

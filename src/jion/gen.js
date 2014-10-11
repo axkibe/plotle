@@ -91,10 +91,10 @@ var
 		Shorthand.astLessThan,
 	astNew =
 		Shorthand.astNew,
-	aNot =
-		Shorthand.aNot,
-	aNull =
-		Shorthand.aNull( ),
+	astNot =
+		Shorthand.astNot,
+	astNull =
+		Shorthand.astNull( ),
 	aNumberLiteral =
 		Shorthand.aNumberLiteral,
 	astObjLiteral =
@@ -361,7 +361,7 @@ gen.prototype._init =
 
 			if( jdv === null )
 			{
-				defaultValue = aNull;
+				defaultValue = astNull;
 			}
 			else if( jdv === undefined )
 			{
@@ -398,7 +398,7 @@ gen.prototype._init =
 				allowsNull :
 					jAttr.allowsNull
 					||
-					defaultValue === aNull,
+					defaultValue === astNull,
 				allowsUndefined :
 					jAttr.allowsUndefined
 					||
@@ -1019,7 +1019,7 @@ gen.prototype.genSingleton =
 		.astComment( 'Singleton' )
 		.aVarDec(
 			'_singleton',
-			aNull
+			astNull
 		)
 	);
 };
@@ -1288,7 +1288,7 @@ gen.prototype.genCreatorFreeStringsParser =
 	{
 		twigDupCheck =
 			astIf(
-				aNot( aVar( 'twigDup' ) ),
+				astNot( aVar( 'twigDup' ) ),
 				astBlock( )
 				.astAssign(
 					aVar( 'twig' ),
@@ -1511,7 +1511,7 @@ gen.prototype.genCreatorFreeStringsParser =
 	{
 		rayDupCheck =
 			astIf(
-				aNot( aVar( 'rayDup' ) ),
+				astNot( aVar( 'rayDup' ) ),
 				astBlock( )
 				.astAssign(
 					aVar( 'ray' ),
@@ -1716,7 +1716,7 @@ gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.astIf(
-					astEquals( attr.v, aNull ),
+					astEquals( attr.v, astNull ),
 					astBlock( )
 					//.astFail( 'attribute ' + name + ' must not be null.' )
 					.astFail( )
@@ -1735,7 +1735,7 @@ gen.prototype.genCreatorChecks =
 		if( attr.allowsNull && !attr.allowsUndefined )
 		{
 			cond =
-				astDiffers( attr.v, aNull );
+				astDiffers( attr.v, astNull );
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
@@ -1746,7 +1746,7 @@ gen.prototype.genCreatorChecks =
 		{
 			cond =
 				astAnd(
-					astDiffers( attr.v, aNull ),
+					astDiffers( attr.v, astNull ),
 					astDiffers( attr.v, anUndefined )
 				);
 		}
@@ -1806,7 +1806,7 @@ gen.prototype.genCreatorChecks =
 							aTypeof( attr.v ),
 							aStringLiteral( 'string' )
 						),
-						aNot(
+						astNot(
 							astInstanceof(
 								attr.v,
 								aVar( 'String' )
@@ -1975,9 +1975,9 @@ gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						astCondition(
-							astDiffers( attr.v, aNull ),
+							astDiffers( attr.v, astNull ),
 							attr.v.astDot( member ),
-							aNull
+							astNull
 						);
 
 				}
@@ -1987,7 +1987,7 @@ gen.prototype.genCreatorConcerns =
 						astCondition(
 							astDiffers( attr.v, anUndefined ),
 							attr.v.astDot( member ),
-							aNull
+							astNull
 						);
 				}
 				else
@@ -2057,7 +2057,7 @@ gen.prototype.genCreatorUnchanged =
 		cond =
 			astAnd(
 				cond,
-				aNot( aVar( 'twigDup' ) )
+				astNot( aVar( 'twigDup' ) )
 			);
 	}
 
@@ -2066,7 +2066,7 @@ gen.prototype.genCreatorUnchanged =
 		cond =
 			astAnd(
 				cond,
-				aNot( aVar( 'rayDup' ) )
+				astNot( aVar( 'rayDup' ) )
 			);
 	}
 
@@ -2085,7 +2085,7 @@ gen.prototype.genCreatorUnchanged =
 			cond =
 				astAnd(
 					cond,
-					astEquals( attr.v, aNull )
+					astEquals( attr.v, astNull )
 				);
 
 			continue;
@@ -2194,7 +2194,7 @@ gen.prototype.genCreatorReturn =
 		return (
 			block
 			.astIf(
-				aNot(
+				astNot(
 					aVar( '_singleton' )
 				),
 				astBlock( )
@@ -2590,7 +2590,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			aVar( 'ranks' ).astMember( aVar( 'a' ) )
 		)
 		.astIf(
-			aNot(
+			astNot(
 				aVar( 'jwig' ).astMember( aVar( 'key' ) )
 			),
 			astBlock( )
@@ -2611,8 +2611,8 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		)
 		.astIf(
 			astOr(
-				aNot( aVar( 'jwig' ) ),
-				aNot( aVar( 'ranks' ) )
+				astNot( aVar( 'jwig' ) ),
+				astNot( aVar( 'ranks' ) )
 			),
 			astBlock( )
 			//.astFail( 'ranks/twig information missing' )
@@ -2668,7 +2668,7 @@ gen.prototype.genFromJSONCreatorReturn =
 		{
 			case 'inherit' :
 
-				call = call.append( aNull );
+				call = call.append( astNull );
 
 				break;
 
@@ -2697,7 +2697,7 @@ gen.prototype.genFromJSONCreatorReturn =
 
 				if( attr.assign === null )
 				{
-					call = call.append( aNull );
+					call = call.append( astNull );
 				}
 				else
 				{
@@ -3052,7 +3052,7 @@ gen.prototype.genAttributeEquals =
 					astOr(
 						astEquals( le, re ),
 						astAnd(
-							astDiffers( le, aNull ),
+							astDiffers( le, astNull ),
 							astCall( le.astDot( 'equals' ), re )
 						)
 					);
@@ -3171,7 +3171,7 @@ gen.prototype.genEquals =
 			.aReturn( aTrue )
 		)
 		.astIf(
-			aNot(
+			astNot(
 				aVar( 'obj' )
 			),
 			astBlock( ).aReturn( aFalse )
@@ -3200,7 +3200,7 @@ gen.prototype.genEquals =
 					astCall(
 						astCondition(
 							aThis.astDot( 'twig' ).astMember( vKey ).astDot( 'equals' ),
-							aNot(
+							astNot(
 								astCall(
 									aThis
 									.astDot( 'twig' )
@@ -3369,7 +3369,7 @@ gen.prototype.genAlike =
 				astBlock( ).aReturn( aTrue )
 			)
 			.astIf(
-				aNot( aVar( 'obj' ) ),
+				astNot( aVar( 'obj' ) ),
 				astBlock( ).aReturn( aFalse )
 			);
 

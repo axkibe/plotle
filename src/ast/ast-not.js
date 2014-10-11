@@ -1,5 +1,5 @@
 /*
-| A negation expression.
+| ast negation expression.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aNot',
+			'ast.astNot',
 		attributes :
 			{
 				expr :
@@ -36,18 +36,8 @@ if( JION )
 }
 
 
-var
-	aNot;
-
-aNot =
-	require( '../jion/this' )( module );
-
-
-/*
-| Node export.
-*/
 module.exports =
-	aNot;
+	require( '../jion/this' )( module );
 
 
 } )( );

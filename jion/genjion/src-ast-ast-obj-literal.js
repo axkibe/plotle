@@ -76,8 +76,8 @@ var
 | Jion.
 */
 var
-	anObjLiteral =
-	ast.anObjLiteral =
+	astObjLiteral =
+	ast.astObjLiteral =
 		{
 			prototype :
 				prototype
@@ -85,9 +85,9 @@ var
 
 
 /*
-| Creates a new anObjLiteral object.
+| Creates a new astObjLiteral object.
 */
-anObjLiteral.create =
+astObjLiteral.create =
 prototype.create =
 	function(
 		// free strings
@@ -106,7 +106,7 @@ prototype.create =
 
 		twigDup;
 
-	if( this !== anObjLiteral )
+	if( this !== astObjLiteral )
 	{
 		inherit = this;
 
@@ -372,7 +372,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = anObjLiteral;
+	module.exports = astObjLiteral;
 }
 
 

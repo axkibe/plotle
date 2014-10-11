@@ -62,8 +62,8 @@ var
 | Jion.
 */
 var
-	aNull =
-	ast.aNull =
+	astNull =
+	ast.astNull =
 		{
 			prototype :
 				prototype
@@ -79,9 +79,9 @@ var
 
 
 /*
-| Creates a new aNull object.
+| Creates a new astNull object.
 */
-aNull.create =
+astNull.create =
 prototype.create =
 	function(
 		// free strings
@@ -90,7 +90,7 @@ prototype.create =
 	var
 		inherit;
 
-	if( this !== aNull )
+	if( this !== astNull )
 	{
 		inherit = this;
 	}
@@ -116,13 +116,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aNull';
+prototype.reflect = 'ast.astNull';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aNull';
+prototype.reflectName = 'astNull';
 
 
 /*
@@ -150,7 +150,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aNull;
+	module.exports = astNull;
 }
 
 

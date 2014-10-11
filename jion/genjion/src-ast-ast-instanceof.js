@@ -72,8 +72,8 @@ var
 | Jion.
 */
 var
-	anInstanceof =
-	ast.anInstanceof =
+	astInstanceof =
+	ast.astInstanceof =
 		{
 			prototype :
 				prototype
@@ -81,9 +81,9 @@ var
 
 
 /*
-| Creates a new anInstanceof object.
+| Creates a new astInstanceof object.
 */
-anInstanceof.create =
+astInstanceof.create =
 prototype.create =
 	function(
 		// free strings
@@ -96,7 +96,7 @@ prototype.create =
 
 		v_right;
 
-	if( this !== anInstanceof )
+	if( this !== astInstanceof )
 	{
 		inherit = this;
 
@@ -227,7 +227,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = anInstanceof;
+	module.exports = astInstanceof;
 }
 
 

@@ -79,8 +79,8 @@ var
 | Jion.
 */
 var
-	anIf =
-	ast.anIf =
+	astIf =
+	ast.astIf =
 		{
 			prototype :
 				prototype
@@ -88,9 +88,9 @@ var
 
 
 /*
-| Creates a new anIf object.
+| Creates a new astIf object.
 */
-anIf.create =
+astIf.create =
 prototype.create =
 	function(
 		// free strings
@@ -105,7 +105,7 @@ prototype.create =
 
 		v_then;
 
-	if( this !== anIf )
+	if( this !== astIf )
 	{
 		inherit = this;
 
@@ -292,7 +292,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = anIf;
+	module.exports = astIf;
 }
 
 
