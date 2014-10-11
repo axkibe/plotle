@@ -95,8 +95,8 @@ var
 		Shorthand.astNot,
 	astNull =
 		Shorthand.astNull( ),
-	aNumberLiteral =
-		Shorthand.aNumberLiteral,
+	astNumberLiteral =
+		Shorthand.astNumberLiteral,
 	astObjLiteral =
 		Shorthand.astObjLiteral,
 	astOr =
@@ -377,7 +377,7 @@ gen.prototype._init =
 			}
 			else if( typeof( jdv ) === 'number' )
 			{
-				defaultValue = aNumberLiteral( jAttr.defaultValue );
+				defaultValue = astNumberLiteral( jAttr.defaultValue );
 			}
 			else if( jools.isString( jdv ) )
 			{
@@ -1245,7 +1245,7 @@ gen.prototype.genCreatorFreeStringsParser =
 			aVar( 'arguments' ).astMember(
 				aPlus(
 					aVar( 'a' ),
-					aNumberLiteral( 1 )
+					astNumberLiteral( 1 )
 				)
 			)
 		);
@@ -1325,7 +1325,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					aVar( 'arguments' ).astMember(
 						aPlus(
 							aPreIncrement( aVar( 'a' ) ),
-							aNumberLiteral( 1 )
+							astNumberLiteral( 1 )
 						)
 					)
 				)
@@ -1367,7 +1367,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					aVar( 'arguments' ).astMember(
 						aPlus(
 							aPreIncrement( aVar( 'a' ) ),
-							aNumberLiteral( 1 )
+							astNumberLiteral( 1 )
 						)
 					)
 				)
@@ -1405,7 +1405,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					aVar( 'arguments' ).astMember(
 						aPlus(
 							aVar( 'a' ),
-							aNumberLiteral( 2 )
+							astNumberLiteral( 2 )
 						)
 					)
 				)
@@ -1414,14 +1414,14 @@ gen.prototype.genCreatorFreeStringsParser =
 					aVar( 'arguments' ).astMember(
 						aPlus(
 							aVar( 'a' ),
-							aNumberLiteral( 3 )
+							astNumberLiteral( 3 )
 						)
 					)
 				)
 				.append(
 					aPlusAssign(
 						aVar( 'a' ),
-						aNumberLiteral( 2 )
+						astNumberLiteral( 2 )
 					)
 				)
 				.astIf(
@@ -1444,7 +1444,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astOr(
 						astLessThan(
 							aVar( 'rank' ),
-							aNumberLiteral( 0 )
+							astNumberLiteral( 0 )
 						),
 						astGreaterThan(
 							aVar( 'rank' ),
@@ -1464,7 +1464,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astCall(
 						aVar( 'ranks' ).astDot( 'splice' ),
 						aVar( 'rank' ),
-						aNumberLiteral( 0 ),
+						astNumberLiteral( 0 ),
 						aVar( 'key' )
 					)
 				)
@@ -1501,7 +1501,7 @@ gen.prototype.genCreatorFreeStringsParser =
 							aVar( 'ranks' ).astDot( 'indexOf' ),
 							aVar( 'arg' )
 						),
-						aNumberLiteral( 1 )
+						astNumberLiteral( 1 )
 					)
 				)
 			);
@@ -1550,11 +1550,11 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astCall(
 					aVar( 'ray' ).astDot( 'splice' ),
 					aVar( 'arg' ),
-					aNumberLiteral( 0 ),
+					astNumberLiteral( 0 ),
 					aVar( 'arguments' ).astMember(
 						aPlus(
 							aPreIncrement( aVar( 'a' ) ),
-							aNumberLiteral( 1 )
+							astNumberLiteral( 1 )
 						)
 					)
 				)
@@ -1566,7 +1566,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astCall(
 					aVar( 'ray' ).astDot( 'splice' ),
 					aVar( 'arg' ),
-					aNumberLiteral( 1 )
+					astNumberLiteral( 1 )
 				)
 			)
 			.astCase(
@@ -1578,7 +1578,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					aVar( 'arguments' ).astMember(
 						aPlus(
 							aPreIncrement( aVar( 'a' ) ),
-							aNumberLiteral( 1 )
+							astNumberLiteral( 1 )
 						)
 					)
 				)
@@ -1602,10 +1602,10 @@ gen.prototype.genCreatorFreeStringsParser =
 		block
 		.astFor(
 			aVList( )
-			.aVarDec( 'a', aNumberLiteral( 0 ) )
+			.aVarDec( 'a', astNumberLiteral( 0 ) )
 			.aVarDec( 'aZ', aVar( 'arguments' ).astDot( 'length' ) ),
 			astLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
-			aPlusAssign( aVar( 'a' ), aNumberLiteral( 2 ) ),
+			aPlusAssign( aVar( 'a' ), astNumberLiteral( 2 ) ),
 			loop
 		);
 
@@ -2624,7 +2624,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			.append(
 				astAssign(
 					aVar( 'a' ),
-					aNumberLiteral( 0 )
+					astNumberLiteral( 0 )
 				)
 			)
 			.append(
@@ -3238,7 +3238,8 @@ gen.prototype.genEquals =
 			.astFor(
 				astCommaList( ) // FIXME add astAssign to astCommaList
 				.append(
-					astAssign( aVar( 'a' ), aNumberLiteral( 0 ) )
+					astAssign( aVar( 'a' ),
+					astNumberLiteral( 0 ) )
 				)
 				.append(
 					astAssign(

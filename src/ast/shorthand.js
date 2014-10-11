@@ -80,8 +80,8 @@ ast =
 			require( './ast-not' ),
 		astNull :
 			require( './ast-null' ),
-		aNumberLiteral :
-			require( './a-number-literal' ),
+		astNumberLiteral :
+			require( './ast-number-literal' ),
 		astObjLiteral :
 			require( './ast-obj-literal' ),
 		astOr :
@@ -509,13 +509,13 @@ shorthand.astNull =
 /*
 | Shorthand for creating number literals.
 */
-shorthand.aNumberLiteral =
+shorthand.astNumberLiteral =
 	function(
 		number
 	)
 {
 	return(
-		ast.aNumberLiteral.create(
+		ast.astNumberLiteral.create(
 			'number',
 				number
 		)

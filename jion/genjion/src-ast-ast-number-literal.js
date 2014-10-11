@@ -158,13 +158,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aNumberLiteral';
+prototype.reflect = 'ast.astNumberLiteral';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aNumberLiteral';
+prototype.reflectName = 'astNumberLiteral';
 
 
 /*

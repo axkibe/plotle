@@ -84,7 +84,7 @@ precTable =
 			4,
 		'astNull' :
 			-1,
-		'aNumberLiteral' :
+		'astNumberLiteral' :
 			-1,
 		'astObjLiteral' :
 			-1,
@@ -1503,7 +1503,7 @@ formatStatement =
 		case 'ast.astDelete' :
 		case 'ast.astFail' :
 		case 'ast.astNew' :
-		case 'ast.aNumberLiteral' :
+		case 'ast.astNumberLiteral' :
 		case 'ast.aPlusAssign' :
 		case 'ast.aReturn' :
 		case 'ast.aStringLiteral' :
@@ -2191,7 +2191,7 @@ formatVar =
 | Formats a string literal use.
 */
 var
-formatANumberLiteral =
+formatNumberLiteral =
 	function(
 		context,
 		expr
@@ -2200,7 +2200,7 @@ formatANumberLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aNumberLiteral' )
+/**/	if( expr.reflect !== 'ast.astNumberLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2628,8 +2628,8 @@ exprFormatter =
 			formatNot,
 		'astNull' :
 			formatNull,
-		'aNumberLiteral' :
-			formatANumberLiteral,
+		'astNumberLiteral' :
+			formatNumberLiteral,
 		'astObjLiteral' :
 			formatObjLiteral,
 		'astOr' :

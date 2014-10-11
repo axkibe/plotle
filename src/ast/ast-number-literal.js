@@ -1,7 +1,7 @@
 /*
 | A number literal.
 |
-| FIXME remove the Literal in name
+| FUTURE remove the Literal in name
 |
 | Authors: Axel Kittenberger
 */
@@ -21,7 +21,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aNumberLiteral',
+			'ast.astNumberLiteral',
 		node :
 			true,
 		attributes :
@@ -37,16 +37,9 @@ if( JION )
 	};
 }
 
-var
-	aNumberLiteral;
 
-aNumberLiteral =
+module.exports =
 	require( '../jion/this' )( module );
-
-/*
-| Node export.
-*/
-module.exports = aNumberLiteral;
 
 
 } )( );

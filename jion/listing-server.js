@@ -58,10 +58,10 @@ module.exports =
 			'src/ast/ast-new.js',
 			'src/ast/ast-not.js',
 			'src/ast/ast-null.js',
+			'src/ast/ast-number-literal.js',
 			'src/ast/ast-obj-literal.js',
 			'src/ast/ast-or.js',
 
-			'src/ast/a-number-literal.js',
 			'src/ast/a-plus.js',
 			'src/ast/a-plus-assign.js',
 			'src/ast/a-pre-increment.js',
