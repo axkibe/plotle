@@ -96,7 +96,7 @@ precTable =
 			17,
 		'astPreIncrement' :
 			3,
-		'aStringLiteral' :
+		'astString' :
 			-1,
 		'aTypeof' :
 			4,
@@ -1506,7 +1506,7 @@ formatStatement =
 		case 'ast.astNumberLiteral' :
 		case 'ast.astPlusAssign' :
 		case 'ast.astReturn' :
-		case 'ast.aStringLiteral' :
+		case 'ast.astString' :
 		case 'ast.aVar' :
 
 			return text + ';' + context.sep;
@@ -2094,7 +2094,7 @@ formatObjLiteral =
 | Formats a pre-increment.
 */
 var
-formatAPreIncrement =
+formatPreIncrement =
 	function(
 		context,
 		expr
@@ -2211,10 +2211,10 @@ formatNumberLiteral =
 
 
 /*
-| Formats a string literal use.
+| Formats a string literal.
 */
 var
-formatAStringLiteral =
+formatString =
 	function(
 		context,
 		expr
@@ -2223,7 +2223,7 @@ formatAStringLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aStringLiteral' )
+/**/	if( expr.reflect !== 'ast.astString' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2639,9 +2639,9 @@ exprFormatter =
 		'astPlusAssign' :
 			formatPlusAssign,
 		'astPreIncrement' :
-			formatAPreIncrement,
-		'aStringLiteral' :
-			formatAStringLiteral,
+			formatPreIncrement,
+		'astString' :
+			formatString,
 		'aTypeof' :
 			formatATypeof,
 		'aVar' :

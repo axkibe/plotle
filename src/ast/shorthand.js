@@ -92,8 +92,8 @@ ast =
 			require( './ast-plus-assign' ),
 		astPreIncrement :
 			require( './ast-pre-increment' ),
-		aStringLiteral :
-			require( './a-string-literal' ),
+		astString :
+			require( './ast-string' ),
 		aSwitch :
 			require( './a-switch' ),
 		aTypeof :
@@ -663,12 +663,12 @@ shorthand.astPreIncrement =
 /*
 | Shorthand for creating string literals.
 */
-shorthand.aStringLiteral =
+shorthand.astString =
 	function(
 		string
 	)
 {
-	return ast.aStringLiteral.create( 'string', string );
+	return ast.astString.create( 'string', string );
 };
 
 

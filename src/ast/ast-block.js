@@ -68,8 +68,8 @@ ast =
 			require( './ast-new' ),
 		astReturn :
 			require( './ast-return' ),
-		aStringLiteral :
-			require( './a-string-literal' ),
+		astString :
+			require( './ast-string' ),
 		aVarDec :
 			require( './a-var-dec' )
 	};
@@ -221,11 +221,7 @@ astBlock.prototype.astFail =
 	}
 	else if( jools.isString( message ) )
 	{
-		message =
-			ast.aStringLiteral.create(
-				'string',
-					message
-			);
+		message = ast.astString.create( 'string', message );
 	}
 
 	return(

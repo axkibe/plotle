@@ -1,8 +1,6 @@
 /*
 | A string literal.
 |
-| FIXME rename aString
-|
 | Authors: Axel Kittenberger
 */
 
@@ -21,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aStringLiteral',
+			'ast.astString',
 		node :
 			true,
 		attributes :
@@ -37,17 +35,9 @@ if( JION )
 	};
 }
 
-var
-	aStringLiteral;
 
-aStringLiteral =
-	require( '../jion/this' )( module );
-
-/*
-| Node export.
-*/
 module.exports =
-	aStringLiteral;
+	require( '../jion/this' )( module );
 
 
 } )( );

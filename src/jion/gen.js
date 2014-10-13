@@ -107,8 +107,8 @@ var
 		Shorthand.astPlusAssign,
 	astPreIncrement =
 		Shorthand.astPreIncrement,
-	aStringLiteral =
-		Shorthand.aStringLiteral,
+	astString =
+		Shorthand.astString,
 	aSwitch =
 		Shorthand.aSwitch,
 	aThis =
@@ -388,7 +388,7 @@ gen.prototype._init =
 					);
 				}
 
-				defaultValue = aStringLiteral( jdv );
+				defaultValue = astString( jdv );
 			}
 		}
 
@@ -647,7 +647,7 @@ gen.prototype.genNodeIncludes =
 			aVar( 'jools' ),
 			astCall(
 				aVar( 'require' ),
-				aStringLiteral( '../../src/jools/jools' )
+				astString( '../../src/jools/jools' )
 			)
 		);
 
@@ -696,7 +696,7 @@ gen.prototype.genNodeIncludes =
 					aVar( unitName ).astDot( typeName ),
 					astCall(
 						aVar( 'require' ),
-						aStringLiteral(
+						astString(
 							'../../src/' +
 								camelCaseToDash( unitName ) +
 								'/' +
@@ -1268,7 +1268,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				aStringLiteral( name  ),
+				astString( name  ),
 				astBlock( )
 				.astIf(
 					astDiffers(
@@ -1313,7 +1313,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				aStringLiteral( 'twig:add' ),
+				astString( 'twig:add' ),
 				astBlock( )
 				.append( twigDupCheck )
 				.astAssign(
@@ -1338,9 +1338,9 @@ gen.prototype.genCreatorFreeStringsParser =
 					.astFail(
 						/*
 						astPlus(
-							aStringLiteral( 'key "' ),
+							astString( 'key "' ),
 							aVar( 'key' ),
-							aStringLiteral( '" already in use' )
+							astString( '" already in use' )
 						)
 						*/
 					)
@@ -1355,7 +1355,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.astCase(
-				aStringLiteral( 'twig:set' ),
+				astString( 'twig:set' ),
 				astBlock( )
 				.append( twigDupCheck )
 				.astAssign(
@@ -1380,9 +1380,9 @@ gen.prototype.genCreatorFreeStringsParser =
 					.astFail(
 						/*
 						astPlus(
-							aStringLiteral( 'key "' ),
+							astString( 'key "' ),
 							aVar( 'key' ),
-							aStringLiteral( '" not in use' )
+							astString( '" not in use' )
 						)
 						*/
 					)
@@ -1393,7 +1393,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.astCase(
-				aStringLiteral( 'twig:insert' ),
+				astString( 'twig:insert' ),
 				astBlock( )
 				.append( twigDupCheck )
 				.astAssign(
@@ -1433,9 +1433,9 @@ gen.prototype.genCreatorFreeStringsParser =
 					.astFail(
 						/*
 						astPlus(
-							aStringLiteral( 'key "' ),
+							astString( 'key "' ),
 							aVar( 'key' ),
-							aStringLiteral( '" already in use' )
+							astString( '" already in use' )
 						)
 						*/
 					)
@@ -1453,7 +1453,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					),
 					astBlock( )
 					.astFail(
-						//aStringLiteral( 'invalid rank' )
+						//astString( 'invalid rank' )
 					)
 				)
 				.astAssign(
@@ -1470,7 +1470,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.astCase(
-				aStringLiteral( 'twig:remove' ),
+				astString( 'twig:remove' ),
 				astBlock( )
 				.append( twigDupCheck )
 				.astIf(
@@ -1482,9 +1482,9 @@ gen.prototype.genCreatorFreeStringsParser =
 					.astFail(
 						/*
 						astPlus(
-							aStringLiteral( 'key "' ),
+							astString( 'key "' ),
 							aVar( 'arg' ),
-							aStringLiteral( '" not in use' )
+							astString( '" not in use' )
 						)
 						*/
 					)
@@ -1529,13 +1529,13 @@ gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				aStringLiteral( 'ray:init' ),
+				astString( 'ray:init' ),
 				astBlock( )
 				.astAssign( aVar( 'ray' ), aVar( 'arg' ) )
 				.astAssign( aVar( 'rayDup' ), aFalse )
 			)
 			.astCase(
-				aStringLiteral( 'ray:append' ),
+				astString( 'ray:append' ),
 				astBlock( )
 				.append( rayDupCheck )
 				.astCall(
@@ -1544,7 +1544,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.astCase(
-				aStringLiteral( 'ray:insert' ),
+				astString( 'ray:insert' ),
 				astBlock( )
 				.append( rayDupCheck )
 				.astCall(
@@ -1560,7 +1560,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.astCase(
-				aStringLiteral( 'ray:remove' ),
+				astString( 'ray:remove' ),
 				astBlock( )
 				.append( rayDupCheck )
 				.astCall(
@@ -1570,7 +1570,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.astCase(
-				aStringLiteral( 'ray:set' ),
+				astString( 'ray:set' ),
 				astBlock( )
 				.append( rayDupCheck )
 				.astAssign(
@@ -1763,7 +1763,7 @@ gen.prototype.genCreatorChecks =
 				tcheck =
 					astDiffers(
 						aTypeof( attr.v ),
-						aStringLiteral( 'boolean' )
+						astString( 'boolean' )
 					);
 
 				break;
@@ -1774,7 +1774,7 @@ gen.prototype.genCreatorChecks =
 					astOr(
 						astDiffers(
 							aTypeof( attr.v ),
-							aStringLiteral( 'number' )
+							astString( 'number' )
 						),
 						astDiffers(
 							astCall(
@@ -1792,7 +1792,7 @@ gen.prototype.genCreatorChecks =
 				tcheck =
 					astDiffers(
 						aTypeof( attr.v ),
-						aStringLiteral( 'number' )
+						astString( 'number' )
 					);
 
 				break;
@@ -1804,7 +1804,7 @@ gen.prototype.genCreatorChecks =
 					astAnd(
 						astDiffers(
 							aTypeof( attr.v ),
-							aStringLiteral( 'string' )
+							astString( 'string' )
 						),
 						astNot(
 							astInstanceof(
@@ -1821,7 +1821,7 @@ gen.prototype.genCreatorChecks =
 				tcheck =
 					astDiffers(
 						attr.v.astDot( 'reflectName' ), // FIXME
-						aStringLiteral( attr.type )
+						astString( attr.type )
 					);
 
 				break;
@@ -2403,12 +2403,12 @@ gen.prototype.genFromJSONCreatorParser =
 			aVar( 'name' )
 		)
 		.astCase(
-			aStringLiteral( 'type' ),
+			astString( 'type' ),
 			astBlock( )
 			.astIf(
 				astDiffers(
 					aVar( 'arg' ),
-					aStringLiteral( this.id )
+					astString( this.id )
 				),
 				astBlock( )
 				// .astFail( 'invalid JSON' )
@@ -2421,7 +2421,7 @@ gen.prototype.genFromJSONCreatorParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				aStringLiteral( 'twig' ),
+				astString( 'twig' ),
 				astBlock( )
 				.astAssign(
 					aVar( 'jwig' ),
@@ -2429,7 +2429,7 @@ gen.prototype.genFromJSONCreatorParser =
 				)
 			)
 			.astCase(
-				aStringLiteral( 'ranks' ),
+				astString( 'ranks' ),
 				astBlock( )
 				.astAssign(
 					aVar( 'ranks' ),
@@ -2504,7 +2504,7 @@ gen.prototype.genFromJSONCreatorParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				aStringLiteral( attr.name ),
+				astString( attr.name ),
 				caseBlock
 			);
 	}
@@ -2563,7 +2563,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		switchExpr =
 			switchExpr
 			.astCase(
-				aStringLiteral( twigId ),
+				astString( twigId ),
 				astBlock( )
 				.astAssign(
 					aVar( 'twig' ).astMember( aVar( 'key' ) ),
@@ -2806,7 +2806,7 @@ gen.prototype.genReflection =
 		.astComment( 'Reflection.' )
 		.astAssign(
 			aVar( 'prototype' ).astDot( 'reflect' ),
-			aStringLiteral( this.id )
+			astString( this.id )
 		);
 
 	capsule =
@@ -2814,7 +2814,7 @@ gen.prototype.genReflection =
 		.astComment( 'Name Reflection.' )
 		.astAssign(
 			aVar( 'prototype' ).astDot( 'reflectName' ),
-			aStringLiteral( this.name )
+			astString( this.name )
 		);
 
 	return capsule;
@@ -2880,7 +2880,7 @@ gen.prototype.genJionProto =
 			.astCall(
 				aVar( 'jools' ).astDot( 'lazyValue' ),
 				aVar( 'prototype' ),
-				aStringLiteral( 'length' ),
+				astString( 'length' ),
 				aVar( 'jion' ).astDot( 'proto' ).astDot( 'rayLength' )
 			)
 			.astComment(
@@ -2935,7 +2935,7 @@ gen.prototype.genToJSON =
 		astObjLiteral( )
 		.add(
 			'type',
-			aStringLiteral( this.id )
+			astString( this.id )
 		);
 
 	for(
@@ -3000,7 +3000,7 @@ gen.prototype.genToJSON =
 			aVar( 'jools' ).astDot( 'lazyValue' ),
 			// FIXME use proto
 			aVar( 'Constructor' ).astDot( 'prototype' ),
-			aStringLiteral( 'toJSON' ),
+			astString( 'toJSON' ),
 			astFunc( block )
 		);
 
