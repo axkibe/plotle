@@ -75,8 +75,8 @@ var
 		Shorthand.astDiffers,
 	astEquals =
 		Shorthand.astEquals,
-	aFalse =
-		Shorthand.aFalse( ),
+	astFalse =
+		Shorthand.astBoolean( false ),
 	astFile =
 		Shorthand.astFile,
 	astFunc =
@@ -111,13 +111,13 @@ var
 		Shorthand.astString,
 	astSwitch =
 		Shorthand.astSwitch,
-	aThis =
+	aThis = //FIXME
 		Shorthand.astVar( 'this' ),
-	aTrue =
-		Shorthand.aTrue( ),
+	astTrue =
+		Shorthand.astBoolean( true ),
 	astTypeof =
 		Shorthand.astTypeof,
-	anUndefined =
+	anUndefined = // FIXME
 		Shorthand.astVar( 'undefined' ),
 	astVar =
 		Shorthand.astVar,
@@ -368,11 +368,11 @@ gen.prototype._init =
 			}
 			else if( jdv === false )
 			{
-				defaultValue = aFalse;
+				defaultValue = astFalse;
 			}
 			else if( jdv === true )
 			{
-				defaultValue = aTrue;
+				defaultValue = astTrue;
 			}
 			else if( typeof( jdv ) === 'number' )
 			{
@@ -1109,7 +1109,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			)
 			.astAssign(
 				astVar( 'twigDup' ),
-				aFalse
+				astFalse
 			);
 	}
 
@@ -1123,7 +1123,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			)
 			.astAssign(
 				astVar( 'rayDup' ),
-				aFalse
+				astFalse
 			);
 	}
 
@@ -1174,7 +1174,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 				)
 				.astAssign(
 					astVar( 'twigDup' ),
-					aTrue
+					astTrue
 				)
 			);
 	}
@@ -1191,7 +1191,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 				)
 				.astAssign(
 					astVar( 'rayDup' ),
-					aTrue
+					astTrue
 				)
 			);
 	}
@@ -1297,7 +1297,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astAssign(
 					astVar( 'twigDup' ),
-					aTrue
+					astTrue
 				)
 			);
 
@@ -1513,7 +1513,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astAssign(
 					astVar( 'rayDup' ),
-					aTrue
+					astTrue
 				)
 			);
 
@@ -1524,7 +1524,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( 'ray:init' ),
 				astBlock( )
 				.astAssign( astVar( 'ray' ), astVar( 'arg' ) )
-				.astAssign( astVar( 'rayDup' ), aFalse )
+				.astAssign( astVar( 'rayDup' ), astFalse )
 			)
 			.astCase(
 				astString( 'ray:append' ),
@@ -2665,7 +2665,7 @@ gen.prototype.genFromJSONCreatorReturn =
 			case 'rayDup' :
 			case 'twigDup' :
 
-				call = call.append( aTrue );
+				call = call.append( astTrue );
 
 				break;
 
@@ -3155,13 +3155,13 @@ gen.prototype.genEquals =
 				astVar( 'obj' )
 			),
 			astBlock( )
-			.astReturn( aTrue )
+			.astReturn( astTrue )
 		)
 		.astIf(
 			astNot(
 				astVar( 'obj' )
 			),
-			astBlock( ).astReturn( aFalse )
+			astBlock( ).astReturn( astFalse )
 		);
 
 	if( this.twig )
@@ -3208,7 +3208,7 @@ gen.prototype.genEquals =
 						)
 					)
 				),
-				astBlock( ).astReturn( aFalse )
+				astBlock( ).astReturn( astFalse )
 			);
 
 		twigTest =
@@ -3218,7 +3218,7 @@ gen.prototype.genEquals =
 					aThis.astDot( 'ranks' ).astDot( 'length' ),
 					astVar( 'obj' ).astDot( 'ranks' ).astDot( 'length' )
 				),
-				astBlock( ).astReturn( aFalse )
+				astBlock( ).astReturn( astFalse )
 			)
 			.astFor(
 				astCommaList( ) // FIXME add astAssign to astCommaList
@@ -3291,7 +3291,7 @@ gen.prototype.genEquals =
 	}
 	else
 	{
-		block = block.astReturn( aTrue );
+		block = block.astReturn( astTrue );
 	}
 
 	capsule =
@@ -3352,11 +3352,11 @@ gen.prototype.genAlike =
 			.astIf(
 				astEquals( aThis, astVar( 'obj' ) ),
 				// FIXME make an astReturn shorthand that creates a block
-				astBlock( ).astReturn( aTrue )
+				astBlock( ).astReturn( astTrue )
 			)
 			.astIf(
 				astNot( astVar( 'obj' ) ),
-				astBlock( ).astReturn( aFalse )
+				astBlock( ).astReturn( astFalse )
 			);
 
 		if( this.twig )

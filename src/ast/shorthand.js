@@ -223,6 +223,19 @@ shorthand.astBlock =
 
 
 /*
+| Shorthand for creating number boolean literals.
+*/
+shorthand.astBoolean =
+	function(
+		value
+	)
+{
+	return astBooleanLiteral.create( 'boolean', value );
+};
+
+
+
+/*
 | Shorthand for creating calls.
 */
 shorthand.astCall =
@@ -381,18 +394,6 @@ shorthand.astGreaterThan =
 				right
 		)
 	);
-};
-
-
-/*
-| Shorthand for creating number false boolean literal.
-|
-| FIXME remove
-*/
-shorthand.aFalse =
-	function( )
-{
-	return astBooleanLiteral.create( 'boolean', false );
 };
 
 
@@ -686,16 +687,6 @@ shorthand.astSwitch =
 	)
 {
 	return astSwitch.create( 'statement', statement );
-};
-
-
-/*
-| Shorthand for creating number true boolean literal.
-*/
-shorthand.aTrue =
-	function( )
-{
-	return astBooleanLiteral.create( 'boolean', true );
 };
 
 
