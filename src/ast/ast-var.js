@@ -42,22 +42,18 @@ if( JION )
 | Import
 */
 var
-	ast,
+	astDot,
+	astMember,
 	astVar;
+
 
 astVar =
 module.exports =
 	require( '../jion/this' )( module );
 
+astDot = require( './ast-dot' );
 
-// FIXME remove ast
-ast =
-	{
-		astDot :
-			require( './ast-dot' ),
-		astMember :
-			require( './ast-member' )
-	};
+astMember = require( './ast-member' );
 
 
 /*
@@ -99,8 +95,8 @@ astVar.prototype.astDot =
 	)
 {
 	// checking if member is a string is done in 'astDot'
-	return (
-		ast.astDot.create(
+	return(
+		astDot.create(
 			'expr',
 				this,
 			'member',
@@ -118,8 +114,8 @@ astVar.prototype.astMember =
 		member // member expression
 	)
 {
-	return (
-		ast.astMember.create(
+	return(
+		astMember.create(
 			'expr',
 				this,
 			'member',
