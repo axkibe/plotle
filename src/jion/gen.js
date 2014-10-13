@@ -3165,8 +3165,6 @@ gen.prototype.genEquals =
 			astBlock( ).astReturn( aFalse )
 		);
 
-	// XXX
-
 	if( this.twig )
 	{
 		vA = astVar( 'a' );

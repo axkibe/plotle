@@ -13,7 +13,7 @@
 
 GLOBAL.APP = 'genjion';
 
-GLOBAL.CHECK = false; // XXX true
+GLOBAL.CHECK = true;
 
 // does load jion code if it is out of date.
 // as genjion is supposed to update it!

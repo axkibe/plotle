@@ -924,21 +924,6 @@ proto.setMark =
 		mark
 	)
 {
-	// XXX
-	/*
-	if( CHECK )
-	{
-		if(
-			mark.caretPath
-			&&
-			mark.caretPath.get( 0 ) === 'space'
-		)
-		{
-			console.log( 'setMark', this.space.getPath( mark.caretPath.chop( 1 ) ) );
-		}
-	}
-	*/
-
 	system.setInput( mark.clipboard );
 
 	this.mark = mark;

@@ -309,7 +309,7 @@ jools.lazyValue(
 			euclid.fabric.create(
 				'width',
 					Math.round(
-						flow.widthUsed * zoom + 5 // XXX
+						flow.widthUsed * zoom + 5
 					),
 				'height',
 					Math.round(
