@@ -24,7 +24,6 @@ if( JION )
 			{
 				name :
 					{
-						// FIXME this is doubled
 						comment :
 							'argument name',
 						type :
@@ -48,7 +47,8 @@ if( JION )
 }
 
 
-module.exports = require( '../jion/this' )( module );
+module.exports =
+	require( '../jion/this' )( module );
 
 
 } )( );

@@ -37,7 +37,8 @@ if( JION )
 var
 	astBlock,
 	ast,
-	jools;
+	jools,
+	shorthand;
 
 
 astBlock =
@@ -76,6 +77,8 @@ ast =
 
 jools = require( '../jools/jools' );
 
+shorthand = require( './shorthand' );
+
 /*
 | Returns the block with a statement appended;
 */
@@ -98,22 +101,15 @@ astBlock.prototype.append =
 */
 astBlock.prototype.astAssign =
 	function(
-		left,
-		right
+		// left,
+		// right
 	)
 {
-	var
-		assign;
-
-	assign =
-		ast.astAssign.create(
-			'left',
-				left,
-			'right',
-				right
-		);
-
-	return this.append( assign );
+	return(
+		this.append(
+			shorthand.astAssign.apply( shorthand, arguments )
+		)
+	);
 };
 
 

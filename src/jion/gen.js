@@ -110,13 +110,13 @@ var
 		Shorthand.astString,
 	astSwitch =
 		Shorthand.astSwitch,
-	aThis = //FIXME
+	astThis =
 		Shorthand.astVar( 'this' ),
 	astTrue =
 		Shorthand.astBoolean( true ),
 	astTypeof =
 		Shorthand.astTypeof,
-	anUndefined = // FIXME
+	astUndefined =
 		Shorthand.astVar( 'undefined' ),
 	astVar =
 		Shorthand.astVar,
@@ -363,7 +363,7 @@ gen.prototype._init =
 			}
 			else if( jdv === undefined )
 			{
-				defaultValue = anUndefined;
+				defaultValue = astUndefined;
 			}
 			else if( jdv === false )
 			{
@@ -400,7 +400,7 @@ gen.prototype._init =
 				allowsUndefined :
 					jAttr.allowsUndefined
 					||
-					defaultValue === anUndefined,
+					defaultValue === astUndefined,
 				assign :
 					assign,
 				comment :
@@ -657,8 +657,7 @@ gen.prototype.genNodeIncludes =
 		a++
 	)
 	{
-		block =
-			block
+		block = block
 			.astAssign(
 				astVar( this.unitList[ a ] ),
 				astObjLiteral( )
@@ -756,7 +755,7 @@ gen.prototype.genConstructor =
 
 		assign =
 			astAssign(
-				aThis.astDot( attr.assign ),
+				astThis.astDot( attr.assign ),
 				attr.v
 			);
 
@@ -769,7 +768,7 @@ gen.prototype.genConstructor =
 			block =
 				block
 				.astIf(
-					astDiffers( attr.v, anUndefined ),
+					astDiffers( attr.v, astUndefined ),
 					astBlock( )
 					.append( assign )
 				);
@@ -781,11 +780,11 @@ gen.prototype.genConstructor =
 		block =
 			block
 			.astAssign(
-				aThis.astDot( 'twig' ),
+				astThis.astDot( 'twig' ),
 				astVar( 'twig' )
 			)
 			.astAssign(
-				aThis.astDot( 'ranks' ),
+				astThis.astDot( 'ranks' ),
 				astVar( 'ranks' )
 			);
 	}
@@ -796,7 +795,7 @@ gen.prototype.genConstructor =
 		block =
 			block
 			.astAssign(
-				aThis.astDot( 'ray' ),
+				astThis.astDot( 'ray' ),
 				astVar( 'ray' )
 			);
 	}
@@ -804,7 +803,7 @@ gen.prototype.genConstructor =
 	// calls the initializer
 	if( this.init )
 	{
-		initCall = astCall( aThis.astDot( '_init' ) );
+		initCall = astCall( astThis.astDot( '_init' ) );
 
 		for(
 			a = 0, aZ = this.init.length;
@@ -848,7 +847,7 @@ gen.prototype.genConstructor =
 		block
 		.astCall(
 			astVar( 'jools' ).astDot( 'immute' ),
-			aThis
+			astThis
 		);
 
 	if( this.twig )
@@ -1087,7 +1086,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			astBlock( )
 			.astAssign(
 				astVar( 'inherit' ),
-				aThis
+				astThis
 			);
 
 	if( this.twig )
@@ -1141,14 +1140,14 @@ gen.prototype.genCreatorInheritanceReceiver =
 			receiver
 			.astAssign(
 				attr.v,
-				aThis.astDot ( attr.assign )
+				astThis.astDot ( attr.assign )
 			);
 	}
 
 	thisCheck =
 		astIf(
 			astDiffers(
-				aThis,
+				astThis,
 				astVar( this.reference )
 			),
 			receiver
@@ -1176,7 +1175,6 @@ gen.prototype.genCreatorInheritanceReceiver =
 
 	if( this.ray )
 	{
-		console.log( thisCheck.reflect ); // XXX
 		thisCheck = thisCheck
 			.astElsewise(
 				astBlock( )
@@ -1260,7 +1258,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astDiffers(
 						astVar( 'arg' ),
-						anUndefined
+						astUndefined
 					),
 					astBlock( )
 					.astAssign(
@@ -1319,7 +1317,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astDiffers(
 						astVar( 'twig' ).astMember( astVar( 'key' ) ),
-						anUndefined
+						astUndefined
 					),
 					astBlock( )
 					.astFail(
@@ -1361,7 +1359,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astEquals(
 						astVar( 'twig' ).astMember( astVar( 'key' ) ),
-						anUndefined
+						astUndefined
 					),
 					astBlock( )
 					.astFail(
@@ -1414,7 +1412,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astDiffers(
 						astVar( 'twig' ).astMember( astVar( 'key' ) ),
-						anUndefined
+						astUndefined
 					),
 					astBlock( )
 					.astFail(
@@ -1463,7 +1461,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astEquals(
 						astVar( 'twig' ).astMember( astVar( 'arg' ) ),
-						anUndefined
+						astUndefined
 					),
 					astBlock( )
 					.astFail(
@@ -1637,7 +1635,7 @@ gen.prototype.genCreatorDefaults =
 			block =
 				block
 				.astIf(
-					astEquals( attr.v, anUndefined ),
+					astEquals( attr.v, astUndefined ),
 					astBlock( )
 						.astAssign( attr.v, attr.defaultValue )
 				);
@@ -1692,7 +1690,7 @@ gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.astIf(
-					astEquals( attr.v, anUndefined ),
+					astEquals( attr.v, astUndefined ),
 					astBlock( )
 					//.astFail( 'undefined attribute ' + name )
 					.astFail( )
@@ -1727,14 +1725,14 @@ gen.prototype.genCreatorChecks =
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				astDiffers( attr.v, anUndefined );
+				astDiffers( attr.v, astUndefined );
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
 				astAnd(
 					astDiffers( attr.v, astNull ),
-					astDiffers( attr.v, anUndefined )
+					astDiffers( attr.v, astUndefined )
 				);
 		}
 		else
@@ -1972,7 +1970,7 @@ gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						astCondition(
-							astDiffers( attr.v, anUndefined ),
+							astDiffers( attr.v, astUndefined ),
 							attr.v.astDot( member ),
 							astNull
 						);
@@ -2934,7 +2932,7 @@ gen.prototype.genToJSON =
 			olit
 			.add(
 				name,
-				aThis.astDot( attr.assign )
+				astThis.astDot( attr.assign )
 			);
 	}
 
@@ -2944,11 +2942,11 @@ gen.prototype.genToJSON =
 			olit
 			.add(
 				'ranks',
-				aThis.astDot( 'ranks' )
+				astThis.astDot( 'ranks' )
 			)
 			.add(
 				'twig',
-				aThis.astDot( 'twig' )
+				astThis.astDot( 'twig' )
 			);
 	}
 
@@ -3039,7 +3037,7 @@ gen.prototype.genAttributeEquals =
 					astOr(
 						astEquals( le, re ),
 						astAnd(
-							astDiffers( le, anUndefined ),
+							astDiffers( le, astUndefined ),
 							astCall( le.astDot( 'equals' ), re )
 						)
 					);
@@ -3097,7 +3095,7 @@ gen.prototype.genEquals =
 						astBlock( )
 						.astReturn(
 							astEquals(
-								aThis,
+								astThis,
 								astVar( 'obj' )
 							)
 						)
@@ -3135,7 +3133,7 @@ gen.prototype.genEquals =
 		block
 		.astIf(
 			astEquals(
-				aThis,
+				astThis,
 				astVar( 'obj' )
 			),
 			astBlock( )
@@ -3158,7 +3156,7 @@ gen.prototype.genEquals =
 			astBlock( )
 			.astAssign(
 				vKey,
-				aThis.astDot( 'ranks' ).astMember( vA )
+				astThis.astDot( 'ranks' ).astMember( vA )
 			)
 			.astIf(
 				astOr(
@@ -3168,10 +3166,10 @@ gen.prototype.genEquals =
 					),
 					astCall(
 						astCondition(
-							aThis.astDot( 'twig' ).astMember( vKey ).astDot( 'equals' ),
+							astThis.astDot( 'twig' ).astMember( vKey ).astDot( 'equals' ),
 							astNot(
 								astCall(
-									aThis
+									astThis
 									.astDot( 'twig' )
 									.astMember( vKey )
 									.astDot( 'equals' ),
@@ -3182,7 +3180,7 @@ gen.prototype.genEquals =
 								)
 							),
 							astDiffers(
-								aThis
+								astThis
 									.astDot( 'twig' )
 									.astMember( vKey ),
 								astVar( 'obj' )
@@ -3199,7 +3197,7 @@ gen.prototype.genEquals =
 			astBlock( )
 			.astIf(
 				astDiffers(
-					aThis.astDot( 'ranks' ).astDot( 'length' ),
+					astThis.astDot( 'ranks' ).astDot( 'length' ),
 					astVar( 'obj' ).astDot( 'ranks' ).astDot( 'length' )
 				),
 				astBlock( ).astReturn( astFalse )
@@ -3213,7 +3211,7 @@ gen.prototype.genEquals =
 				.append(
 					astAssign(
 						astVar( 'aZ' ),
-						aThis
+						astThis
 							.astDot( 'ranks' )
 							.astDot( 'length' ) )
 				),
@@ -3227,11 +3225,11 @@ gen.prototype.genEquals =
 			.astIf(
 				astOr(
 					astDiffers(
-						aThis.astDot( 'tree' ),
+						astThis.astDot( 'tree' ),
 						astVar( 'obj' ).astDot( 'tree' )
 					),
 					astDiffers(
-						aThis.astDot( 'ranks' ),
+						astThis.astDot( 'ranks' ),
 						astVar( 'obj' ).astDot( 'ranks' )
 					)
 				),
@@ -3259,7 +3257,7 @@ gen.prototype.genEquals =
 		ceq =
 			this.genAttributeEquals(
 				name,
-				aThis.astDot( attr.assign ),
+				astThis.astDot( attr.assign ),
 				astVar( 'obj' ).astDot( attr.assign )
 			);
 
@@ -3331,7 +3329,7 @@ gen.prototype.genAlike =
 		block =
 			astBlock( )
 			.astIf(
-				astEquals( aThis, astVar( 'obj' ) ),
+				astEquals( astThis, astVar( 'obj' ) ),
 				// FIXME make an astReturn shorthand that creates a block
 				astBlock( ).astReturn( astTrue )
 			)
@@ -3346,11 +3344,11 @@ gen.prototype.genAlike =
 			cond =
 				astAnd(
 					astEquals(
-						aThis.astDot( 'tree' ),
+						astThis.astDot( 'tree' ),
 						astVar( 'obj' ).astDot( 'tree' )
 					),
 					astEquals(
-						aThis.astDot( 'ranks' ),
+						astThis.astDot( 'ranks' ),
 						astVar( 'obj' ).astDot( 'ranks' )
 					)
 				);
@@ -3378,7 +3376,7 @@ gen.prototype.genAlike =
 			ceq =
 				this.genAttributeEquals(
 					name,
-					aThis.astDot( attr.assign ),
+					astThis.astDot( attr.assign ),
 					astVar( 'obj' ).astDot( attr.assign )
 				);
 
