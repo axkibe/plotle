@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aVar',
+			'ast.astVar',
 		node :
 			true,
 		attributes :
@@ -43,7 +43,12 @@ if( JION )
 */
 var
 	ast,
-	aVar;
+	astVar;
+
+astVar =
+module.exports =
+	require( '../jion/this' )( module );
+
 
 // FIXME remove ast
 ast =
@@ -54,13 +59,11 @@ ast =
 			require( './ast-member' )
 	};
 
-aVar = require( '../jion/this' )( module );
-
 
 /*
 | Initializer.
 */
-aVar.prototype._init =
+astVar.prototype._init =
 	function( )
 {
 	var
@@ -90,7 +93,7 @@ aVar.prototype._init =
 /*
 | Creates a dot member access of a variable.
 */
-aVar.prototype.astDot =
+astVar.prototype.astDot =
 	function(
 		member // member string
 	)
@@ -110,7 +113,7 @@ aVar.prototype.astDot =
 /*
 | Creates a generic member access of a variable.
 */
-aVar.prototype.astMember =
+astVar.prototype.astMember =
 	function(
 		member // member expression
 	)
@@ -124,12 +127,6 @@ aVar.prototype.astMember =
 		)
 	);
 };
-
-
-/*
-| Node export.
-*/
-module.exports = aVar;
 
 
 } )( );

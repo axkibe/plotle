@@ -98,8 +98,8 @@ ast =
 			require( './ast-switch' ),
 		astTypeof :
 			require( './ast-typeof' ),
-		aVar :
-			require( './a-var' ),
+		astVar :
+			require( './ast-var' ),
 		astVarDec :
 			require( './ast-var-dec' ),
 		aVList :
@@ -710,12 +710,12 @@ shorthand.astTypeof =
 /*
 | Shorthand for creating variable uses.
 */
-shorthand.aVar =
+shorthand.astVar =
 	function(
 		name
 	)
 {
-	return ast.aVar.create( 'name', name );
+	return ast.astVar.create( 'name', name );
 };
 
 

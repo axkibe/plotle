@@ -71,8 +71,8 @@ var
 | Jion.
 */
 var
-	aVar =
-	ast.aVar =
+	astVar =
+	ast.astVar =
 		{
 			prototype :
 				prototype
@@ -80,9 +80,9 @@ var
 
 
 /*
-| Creates a new aVar object.
+| Creates a new astVar object.
 */
-aVar.create =
+astVar.create =
 prototype.create =
 	function(
 		// free strings
@@ -93,7 +93,7 @@ prototype.create =
 
 		v_name;
 
-	if( this !== aVar )
+	if( this !== astVar )
 	{
 		inherit = this;
 
@@ -164,13 +164,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aVar';
+prototype.reflect = 'ast.astVar';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aVar';
+prototype.reflectName = 'astVar';
 
 
 /*
@@ -212,7 +212,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aVar;
+	module.exports = astVar;
 }
 
 

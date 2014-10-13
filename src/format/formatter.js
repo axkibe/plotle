@@ -100,7 +100,7 @@ precTable =
 			-1,
 		'astTypeof' :
 			4,
-		'aVar' :
+		'astVar' :
 			-1,
 		'aVList' :
 			-1
@@ -1507,7 +1507,7 @@ formatStatement =
 		case 'ast.astPlusAssign' :
 		case 'ast.astReturn' :
 		case 'ast.astString' :
-		case 'ast.aVar' :
+		case 'ast.astVar' :
 
 			return text + ';' + context.sep;
 
@@ -2177,7 +2177,7 @@ formatVar =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aVar' )
+/**/	if( expr.reflect !== 'ast.astVar' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2644,7 +2644,7 @@ exprFormatter =
 			formatString,
 		'astTypeof' :
 			formatTypeof,
-		'aVar' :
+		'astVar' :
 			formatVar,
 		'aVList' :
 			formatAVList
