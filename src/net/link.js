@@ -830,11 +830,11 @@ link.prototype._sendChanges =
 		link.create(
 			'_outbox',
 //				ccot.changeWrapRay.create( ),
-// XXX
+// TODO
 				link._outbox.remove( 0 ),
 			'_postbox',
 //				link._outbox
-// XXX
+// TODO
 				link._postbox.append( c )
 		);
 

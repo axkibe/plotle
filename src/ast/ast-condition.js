@@ -51,6 +51,7 @@ if( JION )
 	};
 }
 
+
 var
 	astCondition;
 
@@ -63,20 +64,13 @@ module.exports =
 | Creates a condition with the elsewise expression set.
 |
 | FUTURE create this single recreators with jion-gen.
-|
-| FIXME call setElsewise
 */
-astCondition.prototype.Elsewise =
+astCondition.prototype.elsewise =
 	function(
 		expr
 	)
 {
-	return (
-		this.create(
-			'elsewise',
-				expr
-		)
-	);
+	return this.create( 'elsewise', expr );
 };
 
 

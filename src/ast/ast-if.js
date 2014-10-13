@@ -61,11 +61,9 @@ module.exports =
 
 
 /*
-| Creates an if with the Elsewise block set.
-|
-| FIXME rename
+| Creates an if with the elsewise block set.
 */
-astIf.prototype.Elsewise =
+astIf.prototype.elsewise =
 	function(
 		block
 	)

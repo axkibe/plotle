@@ -36,7 +36,7 @@ if( JION )
 | Node imports.
 */
 var
-	ast,
+	astVarDec,
 	astVList,
 	jools;
 
@@ -44,13 +44,7 @@ astVList =
 module.exports =
 	require( '../jion/this' )( module );
 
-ast = // TODO remove ast
-	{
-		astAssign :
-			require( './ast-assign' ),
-		astVarDec :
-			require( './ast-var-dec' ),
-	};
+astVarDec = require( './ast-var-dec' );
 
 jools = require( '../jools/jools' );
 
@@ -68,7 +62,7 @@ astVList.prototype.astVarDec =
 		varDec;
 
 	varDec =
-		ast.astVarDec.create(
+		astVarDec.create(
 			'name',
 				name,
 			'assign',

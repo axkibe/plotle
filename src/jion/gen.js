@@ -1161,9 +1161,8 @@ gen.prototype.genCreatorInheritanceReceiver =
 
 	if( this.twig )
 	{
-		thisCheck =
-			thisCheck
-			.Elsewise( // FIXME rename Elsewise
+		thisCheck = thisCheck
+			.elsewise(
 				astBlock( )
 				.astAssign(
 					astVar( 'twig' ),
@@ -1182,9 +1181,8 @@ gen.prototype.genCreatorInheritanceReceiver =
 
 	if( this.ray )
 	{
-		thisCheck =
-			thisCheck
-			.Elsewise(
+		thisCheck = thisCheck
+			.elsewise(
 				astBlock( )
 				.astAssign(
 					astVar( 'ray' ),
