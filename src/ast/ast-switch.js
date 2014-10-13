@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aSwitch',
+			'ast.astSwitch',
 		attributes :
 			{
 				statement :
@@ -50,18 +50,24 @@ if( JION )
 
 
 var
-	astCase =
-		require( './ast-case' ),
-	jools =
-		require( '../jools/jools' ),
-	aSwitch =
-		require( '../jion/this' )( module );
+	astCase,
+	astSwitch,
+	jools;
+
+
+astSwitch =
+module.exports =
+	require( '../jion/this' )( module );
+
+astCase = require( './ast-case' );
+
+jools = require( '../jools/jools' ),
 
 
 /*
 | Shortcut for appending a case to this switch.
 */
-aSwitch.prototype.astCase =
+astSwitch.prototype.astCase =
 	function(
 		case_or_condition,
 		block
@@ -95,7 +101,7 @@ aSwitch.prototype.astCase =
 /*
 | Shortcut for setting the default case.
 */
-aSwitch.prototype.Default =
+astSwitch.prototype.Default =
 	function(
 		block
 	)
@@ -107,13 +113,6 @@ aSwitch.prototype.Default =
 		)
 	);
 };
-
-
-/*
-| Node export.
-*/
-module.exports =
-	aSwitch;
 
 
 } )( );

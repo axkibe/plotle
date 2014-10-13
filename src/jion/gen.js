@@ -109,8 +109,8 @@ var
 		Shorthand.astPreIncrement,
 	astString =
 		Shorthand.astString,
-	aSwitch =
-		Shorthand.aSwitch,
+	astSwitch =
+		Shorthand.astSwitch,
 	aThis =
 		Shorthand.aVar( 'this' ),
 	aTrue =
@@ -1251,7 +1251,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		);
 
 	switchExpr =
-		aSwitch(
+		astSwitch(
 			aVar( 'arguments' ).astMember( aVar( 'a' ) )
 		);
 
@@ -2399,9 +2399,7 @@ gen.prototype.genFromJSONCreatorParser =
 		switchExpr;
 
 	switchExpr =
-		aSwitch(
-			aVar( 'name' )
-		)
+		astSwitch( aVar( 'name' ) )
 		.astCase(
 			astString( 'type' ),
 			astBlock( )
@@ -2544,7 +2542,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		ut;
 
 	switchExpr =
-		aSwitch(
+		astSwitch(
 			aVar( 'jval' ).astDot( 'type' )
 		);
 

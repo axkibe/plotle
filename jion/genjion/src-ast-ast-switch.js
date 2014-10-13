@@ -346,13 +346,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aSwitch';
+prototype.reflect = 'ast.astSwitch';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aSwitch';
+prototype.reflectName = 'astSwitch';
 
 
 /*

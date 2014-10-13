@@ -94,8 +94,8 @@ ast =
 			require( './ast-pre-increment' ),
 		astString :
 			require( './ast-string' ),
-		aSwitch :
-			require( './a-switch' ),
+		astSwitch :
+			require( './ast-switch' ),
 		aTypeof :
 			require( './a-typeof' ),
 		aVar :
@@ -675,12 +675,12 @@ shorthand.astString =
 /*
 | Shorthand for creating switch statements.
 */
-shorthand.aSwitch =
+shorthand.astSwitch =
 	function(
 		statement
 	)
 {
-	return ast.aSwitch.create( 'statement', statement );
+	return ast.astSwitch.create( 'statement', statement );
 };
 
 
