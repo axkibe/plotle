@@ -44,8 +44,8 @@ module.exports =
 			'src/ast/ast-return.js',
 			'src/ast/ast-string.js',
 			'src/ast/ast-switch.js',
+			'src/ast/ast-typeof.js',
 
-			'src/ast/a-typeof.js',
 			'src/ast/a-var.js',
 			'src/ast/a-var-dec.js',
 			'src/ast/a-vlist.js',

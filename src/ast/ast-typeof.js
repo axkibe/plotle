@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aTypeof',
+			'ast.astTypeof',
 		node :
 			true,
 		attributes :
@@ -30,22 +30,14 @@ if( JION )
 							'the expression to get the type of',
 						type :
 							'Object'
+							// FUTURE ->expression
 					},
 			}
 	};
 }
 
-/*
-| Node imports.
-*/
-var
-	aTypeof =
-		require( '../jion/this' )( module );
 
-/*
-| Node export.
-*/
-module.exports = aTypeof;
+module.exports = require( '../jion/this' )( module );
 
 
 } )( );

@@ -115,8 +115,8 @@ var
 		Shorthand.aVar( 'this' ),
 	aTrue =
 		Shorthand.aTrue( ),
-	aTypeof =
-		Shorthand.aTypeof,
+	astTypeof =
+		Shorthand.astTypeof,
 	anUndefined =
 		Shorthand.aVar( 'undefined' ),
 	aVar =
@@ -1762,7 +1762,7 @@ gen.prototype.genCreatorChecks =
 
 				tcheck =
 					astDiffers(
-						aTypeof( attr.v ),
+						astTypeof( attr.v ),
 						astString( 'boolean' )
 					);
 
@@ -1773,7 +1773,7 @@ gen.prototype.genCreatorChecks =
 				tcheck =
 					astOr(
 						astDiffers(
-							aTypeof( attr.v ),
+							astTypeof( attr.v ),
 							astString( 'number' )
 						),
 						astDiffers(
@@ -1791,7 +1791,7 @@ gen.prototype.genCreatorChecks =
 
 				tcheck =
 					astDiffers(
-						aTypeof( attr.v ),
+						astTypeof( attr.v ),
 						astString( 'number' )
 					);
 
@@ -1803,7 +1803,7 @@ gen.prototype.genCreatorChecks =
 				tcheck =
 					astAnd(
 						astDiffers(
-							aTypeof( attr.v ),
+							astTypeof( attr.v ),
 							astString( 'string' )
 						),
 						astNot(

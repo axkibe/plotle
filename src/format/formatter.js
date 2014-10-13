@@ -98,7 +98,7 @@ precTable =
 			3,
 		'astString' :
 			-1,
-		'aTypeof' :
+		'astTypeof' :
 			4,
 		'aVar' :
 			-1,
@@ -2127,7 +2127,7 @@ formatPreIncrement =
 | Formats a typeof expression.
 */
 var
-formatATypeof =
+formatTypeof =
 	function(
 		context,
 		expr
@@ -2136,7 +2136,7 @@ formatATypeof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aTypeof' )
+/**/	if( expr.reflect !== 'ast.astTypeof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2152,7 +2152,7 @@ formatATypeof =
 		formatExpression(
 			context.Inc,
 			expr.expr,
-			precTable.aTypeof
+			precTable.astTypeof
 		)
 		+
 		context.sep
@@ -2642,8 +2642,8 @@ exprFormatter =
 			formatPreIncrement,
 		'astString' :
 			formatString,
-		'aTypeof' :
-			formatATypeof,
+		'astTypeof' :
+			formatTypeof,
 		'aVar' :
 			formatVar,
 		'aVList' :

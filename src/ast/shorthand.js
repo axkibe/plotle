@@ -96,8 +96,8 @@ ast =
 			require( './ast-string' ),
 		astSwitch :
 			require( './ast-switch' ),
-		aTypeof :
-			require( './a-typeof' ),
+		astTypeof :
+			require( './ast-typeof' ),
 		aVar :
 			require( './a-var' ),
 		aVarDec :
@@ -697,12 +697,12 @@ shorthand.aTrue =
 /*
 | Shorthand for creating typeofs.
 */
-shorthand.aTypeof =
+shorthand.astTypeof =
 	function(
 		expr
 	)
 {
-	return ast.aTypeof.create( 'expr', expr );
+	return ast.astTypeof.create( 'expr', expr );
 };
 
 

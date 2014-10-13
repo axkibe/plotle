@@ -88,8 +88,8 @@ var
 | Jion.
 */
 var
-	aSwitch =
-	ast.aSwitch =
+	astSwitch =
+	ast.astSwitch =
 		{
 			prototype :
 				prototype
@@ -97,9 +97,9 @@ var
 
 
 /*
-| Creates a new aSwitch object.
+| Creates a new astSwitch object.
 */
-aSwitch.create =
+astSwitch.create =
 prototype.create =
 	function(
 		// free strings
@@ -122,7 +122,7 @@ prototype.create =
 
 		v_statement;
 
-	if( this !== aSwitch )
+	if( this !== astSwitch )
 	{
 		inherit = this;
 
@@ -459,7 +459,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aSwitch;
+	module.exports = astSwitch;
 }
 
 

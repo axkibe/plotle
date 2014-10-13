@@ -69,8 +69,8 @@ var
 | Jion.
 */
 var
-	aTypeof =
-	ast.aTypeof =
+	astTypeof =
+	ast.astTypeof =
 		{
 			prototype :
 				prototype
@@ -78,9 +78,9 @@ var
 
 
 /*
-| Creates a new aTypeof object.
+| Creates a new astTypeof object.
 */
-aTypeof.create =
+astTypeof.create =
 prototype.create =
 	function(
 		// free strings
@@ -91,7 +91,7 @@ prototype.create =
 
 		v_expr;
 
-	if( this !== aTypeof )
+	if( this !== astTypeof )
 	{
 		inherit = this;
 
@@ -153,13 +153,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aTypeof';
+prototype.reflect = 'ast.astTypeof';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aTypeof';
+prototype.reflectName = 'astTypeof';
 
 
 /*
@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aTypeof;
+	module.exports = astTypeof;
 }
 
 
