@@ -263,6 +263,24 @@ shorthand.astCall =
 
 
 /*
+| Shorthand for creating comments
+*/
+shorthand.astComment =
+	function(
+		// list of strings
+	)
+{
+	return(
+		astComment.create(
+			'content',
+				Array.prototype.slice.call( arguments )
+		)
+	);
+};
+
+
+
+/*
 | Shorthand for creating conditions.
 */
 shorthand.astCondition =

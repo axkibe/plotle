@@ -39,9 +39,6 @@ if( JION )
 
 
 var
-	// FIXME this should a short hand as well
-	astComment =
-		require( '../ast/ast-comment' ),
 	gen =
 		require( '../jion/this' )( module ),
 	Shorthand =
@@ -67,6 +64,8 @@ var
 		Shorthand.astCall,
 	astCommaList =
 		Shorthand.astCommaList,
+	astComment =
+		Shorthand.astComment,
 	astCondition =
 		Shorthand.astCondition,
 	astDelete =
@@ -2971,8 +2970,7 @@ gen.prototype.genToJSON =
 			)
 		);
 
-	capsule =
-		capsule
+	capsule = capsule
 		.astComment( 'Converts a ' + this.name + ' into JSON.' )
 		.astCall(
 			astVar( 'jools' ).astDot( 'lazyValue' ),
@@ -3120,8 +3118,7 @@ gen.prototype.genEquals =
 			);
 	}
 
-	capsule =
-		capsule
+	capsule = capsule
 		.astComment( 'Tests equality of object.' );
 
 	block = astBlock( );
@@ -3567,13 +3564,10 @@ gen.generate =
 			astFile( )
 			.create(
 				'header',
-					astComment.create(
-						'content',
-							[
-								'This is an auto generated file.',
-								'',
-								'DO NOT EDIT!'
-							]
+					astComment(
+						'This is an auto generated file.',
+						'',
+						'DO NOT EDIT!'
 					),
 				'preamble',
 					gi.genPreamble( ),
