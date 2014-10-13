@@ -94,7 +94,7 @@ precTable =
 			6,
 		'astPlusAssign' :
 			17,
-		'aPreIncrement' :
+		'astPreIncrement' :
 			3,
 		'aStringLiteral' :
 			-1,
@@ -2103,7 +2103,7 @@ formatAPreIncrement =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.aPreIncrement' )
+/**/	if( expr.reflect !== 'ast.astPreIncrement' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2117,7 +2117,7 @@ formatAPreIncrement =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.aPreIncrement
+			precTable.astPreIncrement
 		)
 	);
 };
@@ -2638,7 +2638,7 @@ exprFormatter =
 			formatPlus,
 		'astPlusAssign' :
 			formatPlusAssign,
-		'aPreIncrement' :
+		'astPreIncrement' :
 			formatAPreIncrement,
 		'aStringLiteral' :
 			formatAStringLiteral,

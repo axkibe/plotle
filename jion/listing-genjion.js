@@ -40,9 +40,9 @@ module.exports =
 			'src/ast/ast-or.js',
 			'src/ast/ast-plus.js',
 			'src/ast/ast-plus-assign.js',
+			'src/ast/ast-pre-increment.js',
 			'src/ast/ast-return.js',
 
-			'src/ast/a-pre-increment.js',
 			'src/ast/a-string-literal.js',
 			'src/ast/a-switch.js',
 			'src/ast/a-typeof.js',

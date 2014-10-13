@@ -1,5 +1,5 @@
 /*
-| A pre increment in an abstract syntax tree.
+| Pre increments for abstract syntax trees.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aPreIncrement',
+			'ast.astPreIncrement',
 		attributes :
 			{
 				expr :
@@ -36,18 +36,8 @@ if( JION )
 }
 
 
-var
-	aPreIncrement;
-
-aPreIncrement =
-	require( '../jion/this' )( module );
-
-
-/*
-| Node export.
-*/
 module.exports =
-	aPreIncrement;
+	require( '../jion/this' )( module );
 
 
 } )( );

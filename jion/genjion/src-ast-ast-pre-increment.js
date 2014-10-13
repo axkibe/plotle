@@ -69,8 +69,8 @@ var
 | Jion.
 */
 var
-	aPreIncrement =
-	ast.aPreIncrement =
+	astPreIncrement =
+	ast.astPreIncrement =
 		{
 			prototype :
 				prototype
@@ -78,9 +78,9 @@ var
 
 
 /*
-| Creates a new aPreIncrement object.
+| Creates a new astPreIncrement object.
 */
-aPreIncrement.create =
+astPreIncrement.create =
 prototype.create =
 	function(
 		// free strings
@@ -91,7 +91,7 @@ prototype.create =
 
 		v_expr;
 
-	if( this !== aPreIncrement )
+	if( this !== astPreIncrement )
 	{
 		inherit = this;
 
@@ -153,13 +153,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aPreIncrement';
+prototype.reflect = 'ast.astPreIncrement';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aPreIncrement';
+prototype.reflectName = 'astPreIncrement';
 
 
 /*
@@ -201,7 +201,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aPreIncrement;
+	module.exports = astPreIncrement;
 }
 
 

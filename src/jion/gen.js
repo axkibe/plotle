@@ -105,8 +105,8 @@ var
 		Shorthand.astPlus,
 	astPlusAssign =
 		Shorthand.astPlusAssign,
-	aPreIncrement =
-		Shorthand.aPreIncrement,
+	astPreIncrement =
+		Shorthand.astPreIncrement,
 	aStringLiteral =
 		Shorthand.aStringLiteral,
 	aSwitch =
@@ -1324,7 +1324,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					aVar( 'arg' ),
 					aVar( 'arguments' ).astMember(
 						astPlus(
-							aPreIncrement( aVar( 'a' ) ),
+							astPreIncrement( aVar( 'a' ) ),
 							astNumberLiteral( 1 )
 						)
 					)
@@ -1366,7 +1366,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					aVar( 'arg' ),
 					aVar( 'arguments' ).astMember(
 						astPlus(
-							aPreIncrement( aVar( 'a' ) ),
+							astPreIncrement( aVar( 'a' ) ),
 							astNumberLiteral( 1 )
 						)
 					)
@@ -1553,7 +1553,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astNumberLiteral( 0 ),
 					aVar( 'arguments' ).astMember(
 						astPlus(
-							aPreIncrement( aVar( 'a' ) ),
+							astPreIncrement( aVar( 'a' ) ),
 							astNumberLiteral( 1 )
 						)
 					)
@@ -1577,7 +1577,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					aVar( 'ray' ).astMember( aVar( 'arg' ) ),
 					aVar( 'arguments' ).astMember(
 						astPlus(
-							aPreIncrement( aVar( 'a' ) ),
+							astPreIncrement( aVar( 'a' ) ),
 							astNumberLiteral( 1 )
 						)
 					)
@@ -2634,7 +2634,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 				)
 			),
 			astLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
-			aPreIncrement( aVar( 'a' ) ),
+			astPreIncrement( aVar( 'a' ) ),
 			loop
 		);
 
@@ -3249,7 +3249,7 @@ gen.prototype.genEquals =
 							.astDot( 'length' ) )
 				),
 				astLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
-				aPreIncrement( aVar( 'a' ) ),
+				astPreIncrement( aVar( 'a' ) ),
 				twigTestLoopBody
 			);
 

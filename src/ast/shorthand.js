@@ -90,8 +90,8 @@ ast =
 			require( './ast-plus' ),
 		astPlusAssign :
 			require( './ast-plus-assign' ),
-		aPreIncrement :
-			require( './a-pre-increment' ),
+		astPreIncrement :
+			require( './ast-pre-increment' ),
 		aStringLiteral :
 			require( './a-string-literal' ),
 		aSwitch :
@@ -651,17 +651,12 @@ shorthand.astPlusAssign =
 /*
 | Shorthand for creating pre-increments.
 */
-shorthand.aPreIncrement =
+shorthand.astPreIncrement =
 	function(
 		expr
 	)
 {
-	return(
-		ast.aPreIncrement.create(
-			'expr',
-				expr
-		)
-	);
+	return ast.astPreIncrement.create( 'expr', expr );
 };
 
 
@@ -673,12 +668,7 @@ shorthand.aStringLiteral =
 		string
 	)
 {
-	return(
-		ast.aStringLiteral.create(
-			'string',
-				string
-		)
-	);
+	return ast.aStringLiteral.create( 'string', string );
 };
 
 
@@ -690,12 +680,7 @@ shorthand.aSwitch =
 		statement
 	)
 {
-	return(
-		ast.aSwitch.create(
-			'statement',
-				statement
-		)
-	);
+	return ast.aSwitch.create( 'statement', statement );
 };
 
 
@@ -705,12 +690,7 @@ shorthand.aSwitch =
 shorthand.aTrue =
 	function( )
 {
-	return(
-		ast.astBooleanLiteral.create(
-			'boolean',
-				true
-		)
-	);
+	return ast.astBooleanLiteral.create( 'boolean', true );
 };
 
 
@@ -722,12 +702,7 @@ shorthand.aTypeof =
 		expr
 	)
 {
-	return(
-		ast.aTypeof.create(
-			'expr',
-				expr
-		)
-	);
+	return ast.aTypeof.create( 'expr', expr );
 };
 
 
@@ -740,12 +715,7 @@ shorthand.aVar =
 		name
 	)
 {
-	return(
-		ast.aVar.create(
-			'name',
-				name
-		)
-	);
+	return ast.aVar.create( 'name', name );
 };
 
 
