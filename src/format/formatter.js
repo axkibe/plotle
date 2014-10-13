@@ -102,7 +102,7 @@ precTable =
 			4,
 		'astVar' :
 			-1,
-		'aVList' :
+		'astVList' :
 			-1
 	};
 
@@ -2408,7 +2408,7 @@ formatCommaList =
 | Used in for-loop initializers only.
 */
 var
-formatAVList =
+formatVList =
 	function(
 		context,
 		vList
@@ -2646,8 +2646,8 @@ exprFormatter =
 			formatTypeof,
 		'astVar' :
 			formatVar,
-		'aVList' :
-			formatAVList
+		'astVList' :
+			formatVList
 	};
 
 

@@ -121,8 +121,8 @@ var
 		Shorthand.astVar( 'undefined' ),
 	astVar =
 		Shorthand.astVar,
-	aVList =
-		Shorthand.aVList;
+	astVList =
+		Shorthand.astVList;
 
 /*
 | Converts a camel case string to a dash seperated string.
@@ -1594,7 +1594,7 @@ gen.prototype.genCreatorFreeStringsParser =
 	block =
 		block
 		.astFor(
-			aVList( )
+			astVList( )
 				.astVarDec( 'a', astNumberLiteral( 0 ) )
 				.astVarDec( 'aZ', astVar( 'arguments' ).astDot( 'length' ) ),
 			astLessThan( astVar( 'a' ), astVar( 'aZ' ) ),

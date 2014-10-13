@@ -21,7 +21,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aVList',
+			'ast.astVList',
 		node :
 			true,
 		twig :
@@ -36,23 +36,29 @@ if( JION )
 | Node imports.
 */
 var
-	aVList =
-		require( '../jion/this' )( module ),
-	ast = // TODO remove ast
-		{
-			astAssign :
-				require( './ast-assign' ),
-			astVarDec :
-				require( './ast-var-dec' ),
-		},
-	jools =
-		require( '../jools/jools' );
+	ast,
+	astVList,
+	jools;
+
+astVList =
+module.exports =
+	require( '../jion/this' )( module );
+
+ast = // TODO remove ast
+	{
+		astAssign :
+			require( './ast-assign' ),
+		astVarDec :
+			require( './ast-var-dec' ),
+	};
+
+jools = require( '../jools/jools' );
 
 
 /*
 | Returns the vlist with a variable decleration appended.
 */
-aVList.prototype.astVarDec =
+astVList.prototype.astVarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
@@ -77,12 +83,6 @@ aVList.prototype.astVarDec =
 		)
 	);
 };
-
-
-/*
-| Node export.
-*/
-module.exports = aVList;
 
 
 } )( );

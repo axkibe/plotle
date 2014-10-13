@@ -102,8 +102,8 @@ ast =
 			require( './ast-var' ),
 		astVarDec :
 			require( './ast-var-dec' ),
-		aVList :
-			require( './a-vlist' )
+		astVList :
+			require( './ast-vlist' )
 	};
 
 
@@ -755,10 +755,10 @@ shorthand.astCommaList =
 /*
 | Shorthand for creating vlists.
 */
-shorthand.aVList =
+shorthand.astVList =
 	function( )
 {
-	return ast.aVList.create( );
+	return ast.astVList.create( );
 };
 
 

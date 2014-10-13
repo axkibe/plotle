@@ -76,8 +76,8 @@ var
 | Jion.
 */
 var
-	aVList =
-	ast.aVList =
+	astVList =
+	ast.astVList =
 		{
 			prototype :
 				prototype
@@ -85,9 +85,9 @@ var
 
 
 /*
-| Creates a new aVList object.
+| Creates a new astVList object.
 */
-aVList.create =
+astVList.create =
 prototype.create =
 	function(
 		// free strings
@@ -106,7 +106,7 @@ prototype.create =
 
 		twigDup;
 
-	if( this !== aVList )
+	if( this !== astVList )
 	{
 		inherit = this;
 
@@ -269,13 +269,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.aVList';
+prototype.reflect = 'ast.astVList';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'aVList';
+prototype.reflectName = 'astVList';
 
 
 /*
@@ -372,7 +372,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = aVList;
+	module.exports = astVList;
 }
 
 
