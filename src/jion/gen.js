@@ -597,8 +597,8 @@ gen.prototype.genImports =
 
 	capsule =
 		capsule
-		.aVarDec( 'jion' )
-		.aVarDec( 'jools' );
+		.astVarDec( 'jion' )
+		.astVarDec( 'jools' );
 
 	// FUTURE when type checking is there this might become needed
 	// without jsons
@@ -612,7 +612,7 @@ gen.prototype.genImports =
 		{
 			capsule =
 				capsule
-				.aVarDec( this.unitList[ a ] );
+				.astVarDec( this.unitList[ a ] );
 		}
 	}
 
@@ -955,10 +955,7 @@ gen.prototype.genConstructor =
 	}
 
 	capsule =
-		capsule.aVarDec(
-			'Constructor',
-			constructor
-		);
+		capsule.astVarDec( 'Constructor', constructor );
 
 	// subclass
 	if( this.subclass )
@@ -977,7 +974,7 @@ gen.prototype.genConstructor =
 	capsule =
 		capsule
 		.astComment( 'Prototype shortcut' )
-		.aVarDec(
+		.astVarDec(
 			'prototype',
 			aVar( 'Constructor' ).astDot( 'prototype' )
 		);
@@ -993,7 +990,7 @@ gen.prototype.genConstructor =
 		);
 
 	capsule =
-		capsule.aVarDec(
+		capsule.astVarDec(
 			this.reference,
 			astAssign(
 				aVar( this.unit ).astDot( this.name ),
@@ -1017,10 +1014,7 @@ gen.prototype.genSingleton =
 	return (
 		capsule
 		.astComment( 'Singleton' )
-		.aVarDec(
-			'_singleton',
-			astNull
-		)
+		.astVarDec( '_singleton', astNull )
 	);
 };
 
@@ -1074,7 +1068,7 @@ gen.prototype.genCreatorVariables =
 		a++
 	)
 	{
-		block = block.aVarDec( varList[ a ] );
+		block = block.astVarDec( varList[ a ] );
 	}
 
 	return block;
@@ -1240,7 +1234,7 @@ gen.prototype.genCreatorFreeStringsParser =
 
 	loop =
 		astBlock( )
-		.aVarDec(
+		.astVarDec(
 			'arg',
 			aVar( 'arguments' ).astMember(
 				astPlus(
@@ -1602,8 +1596,8 @@ gen.prototype.genCreatorFreeStringsParser =
 		block
 		.astFor(
 			aVList( )
-			.aVarDec( 'a', astNumberLiteral( 0 ) )
-			.aVarDec( 'aZ', aVar( 'arguments' ).astDot( 'length' ) ),
+				.astVarDec( 'a', astNumberLiteral( 0 ) )
+				.astVarDec( 'aZ', aVar( 'arguments' ).astDot( 'length' ) ),
 			astLessThan( aVar( 'a' ), aVar( 'aZ' ) ),
 			astPlusAssign( aVar( 'a' ), astNumberLiteral( 2 ) ),
 			loop
@@ -2371,7 +2365,7 @@ gen.prototype.genFromJSONCreatorVariables =
 	)
 	{
 		block =
-			block.aVarDec( varList[ a ] );
+			block.astVarDec( varList[ a ] );
 	}
 
 	return block;
@@ -2925,9 +2919,7 @@ gen.prototype.genToJSON =
 		name,
 		olit;
 
-	block =
-		astBlock( )
-		.aVarDec( 'json' );
+	block = astBlock( ).astVarDec( 'json' );
 
 	olit =
 		astObjLiteral( )
@@ -3151,11 +3143,10 @@ gen.prototype.genEquals =
 
 	if( this.twig )
 	{
-		block =
-			block
-			.aVarDec( 'a' )
-			.aVarDec( 'aZ' )
-			.aVarDec( 'key' );
+		block = block
+			.astVarDec( 'a' )
+			.astVarDec( 'aZ' )
+			.astVarDec( 'key' );
 	}
 
 	block =
@@ -3473,9 +3464,8 @@ gen.prototype.genExport =
 {
 	block = block.astComment( 'Export.' );
 
-	block =
-		block
-		.aVarDec(
+	block = block
+		.astVarDec(
 			this.unit,
 			astOr(
 				aVar( this.unit ),

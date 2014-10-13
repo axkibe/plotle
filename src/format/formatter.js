@@ -1336,7 +1336,7 @@ formatStatement =
 		!(
 			lookBehind.reflect === 'ast.aCarDec'
 			&&
-			statement.reflect === 'ast.aVarDec'
+			statement.reflect === 'ast.astVarDec'
 		)
 	)
 	{
@@ -1434,7 +1434,7 @@ formatStatement =
 
 			break;
 
-		case 'ast.aVarDec' :
+		case 'ast.astVarDec' :
 
 			text += formatVarDec( context, statement, lookBehind );
 
@@ -1480,12 +1480,12 @@ formatStatement =
 
 	switch( statement.reflect )
 	{
-		case 'ast.aVarDec' :
+		case 'ast.astVarDec' :
 
 			if(
 				lookAhead
 				&&
-				lookAhead.reflect === 'ast.aVarDec'
+				lookAhead.reflect === 'ast.astVarDec'
 			)
 			{
 				return text += ',\n';
@@ -2281,7 +2281,7 @@ formatVarDec =
 		if(
 			!lookBehind
 			||
-			lookBehind.reflect !== 'ast.aVarDec'
+			lookBehind.reflect !== 'ast.astVarDec'
 		)
 		{
 			if( !context.inline )
@@ -2437,7 +2437,7 @@ formatAVList =
 
 		if( CHECK )
 		{
-			if( varDec.reflect !== 'ast.aVarDec' )
+			if( varDec.reflect !== 'ast.astVarDec' )
 			{
 				throw new Error( );
 			}

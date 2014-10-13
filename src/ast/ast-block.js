@@ -70,8 +70,8 @@ ast =
 			require( './ast-return' ),
 		astString :
 			require( './ast-string' ),
-		aVarDec :
-			require( './a-var-dec' )
+		astVarDec :
+			require( './ast-var-dec' )
 	};
 
 jools = require( '../jools/jools' );
@@ -334,7 +334,7 @@ astBlock.prototype.astReturn =
 /*
 | Returns the block with a variable decleration appended.
 */
-astBlock.prototype.aVarDec =
+astBlock.prototype.astVarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
@@ -344,7 +344,7 @@ astBlock.prototype.aVarDec =
 		varDec;
 
 	varDec =
-		ast.aVarDec.create(
+		ast.astVarDec.create(
 			'name',
 				name,
 			'assign',

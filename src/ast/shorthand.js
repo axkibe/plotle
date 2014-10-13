@@ -100,8 +100,8 @@ ast =
 			require( './ast-typeof' ),
 		aVar :
 			require( './a-var' ),
-		aVarDec :
-			require( './a-var-dec' ),
+		astVarDec :
+			require( './ast-var-dec' ),
 		aVList :
 			require( './a-vlist' )
 	};
@@ -723,14 +723,14 @@ shorthand.aVar =
 | Shorthand for variable declerations.
 */
 /*
-shorthand.aVarDec =
+shorthand.astVarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
 	)
 {
 	return(
-		ast.aVarDec.create(
+		ast.astVarDec.create(
 			'name',
 				name,
 			'assign',

@@ -27,7 +27,7 @@ if( JION )
 		twig :
 			[
 //				FUTURE
-//				'ast.aVarDec'
+//				'ast.astVarDec'
 			]
 	};
 }
@@ -38,12 +38,12 @@ if( JION )
 var
 	aVList =
 		require( '../jion/this' )( module ),
-	ast =
+	ast = // TODO remove ast
 		{
 			astAssign :
 				require( './ast-assign' ),
-			aVarDec :
-				require( './a-var-dec' ),
+			astVarDec :
+				require( './ast-var-dec' ),
 		},
 	jools =
 		require( '../jools/jools' );
@@ -52,22 +52,24 @@ var
 /*
 | Returns the vlist with a variable decleration appended.
 */
-aVList.prototype.aVarDec =
+aVList.prototype.astVarDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
 	)
 {
 	var
-		varDec =
-			ast.aVarDec.create(
-				'name',
-					name,
-				'assign',
-					assign || null
-			);
+		varDec;
 
-	return (
+	varDec =
+		ast.astVarDec.create(
+			'name',
+				name,
+			'assign',
+				assign || null
+		);
+
+	return(
 		this.create(
 			'twig:add',
 			jools.uid( ), // FIXME

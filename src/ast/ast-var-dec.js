@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.aVarDec',
+			'ast.astVarDec',
 		attributes :
 			{
 				name :
@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'Assignment of variable',
 						type :
-							'Object',
+							'Object', // FUTURE ->expression
 						defaultValue :
 							null
 					}
@@ -45,7 +45,8 @@ if( JION )
 }
 
 
-module.exports = require( '../jion/this' )( module );
+module.exports =
+	require( '../jion/this' )( module );
 
 
 } )( );
