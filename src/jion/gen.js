@@ -894,30 +894,26 @@ gen.prototype.genConstructor =
 		{
 			case 'inherit' :
 
-				// TODO Arg --> appendArg
-				constructor =
-					constructor.Arg( 'inherit', 'inheritance' );
+				constructor = constructor.astArg( 'inherit', 'inheritance' );
 
 				break;
 
 			case 'ranks' :
 
-				constructor =
-					constructor.Arg( 'ranks', 'twig ranks' );
+				constructor = constructor.astArg( 'ranks', 'twig ranks' );
 
 				break;
 
 			case 'ray' :
 
-				constructor =
-					constructor.Arg( 'ray', 'ray' );
+				constructor = constructor.astArg( 'ray', 'ray' );
 
 				break;
 
 			case 'rayDup' :
 
 				constructor =
-					constructor.Arg(
+					constructor.astArg(
 						'rayDup',
 						'true if ray is already been duplicated'
 					);
@@ -927,14 +923,14 @@ gen.prototype.genConstructor =
 			case 'twig' :
 
 				constructor =
-					constructor.Arg( 'twig', 'twig' );
+					constructor.astArg( 'twig', 'twig' );
 
 				break;
 
 			case 'twigDup' :
 
 				constructor =
-					constructor.Arg(
+					constructor.astArg(
 						'twigDup',
 						'true if twig is already been duplicated'
 					);
@@ -946,7 +942,7 @@ gen.prototype.genConstructor =
 					this.attributes[ name ];
 
 				constructor =
-					constructor.Arg(
+					constructor.astArg(
 						attr.v.name,
 						attr.comment
 					);
@@ -2285,10 +2281,7 @@ gen.prototype.genCreator =
 
 	creator =
 		astFunc( block )
-		.Arg(
-			null,
-			'free strings'
-		);
+		.astArg( null, 'free strings' );
 
 
 	capsule =
@@ -2773,10 +2766,7 @@ gen.prototype.genFromJSONCreator =
 		.astAssign(
 			astVar( this.reference ).astDot( 'createFromJSON' ),
 			astFunc( funcBlock )
-			.Arg(
-				'json',
-				'the JSON object'
-			)
+			.astArg( 'json', 'the JSON object' )
 		);
 
 	return capsule;
@@ -3114,10 +3104,7 @@ gen.prototype.genEquals =
 							)
 						)
 					)
-					.Arg(
-						'obj',
-						'object to compare to'
-					)
+					.astArg( 'obj', 'object to compare to' )
 				)
 			);
 
@@ -3300,10 +3287,7 @@ gen.prototype.genEquals =
 			// FIXME use proto
 			astVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'equals' ),
 			astFunc( block )
-			.Arg(
-				'obj',
-				'object to compare to'
-			)
+			.astArg( 'obj', 'object to compare to' )
 		);
 
 	return capsule;
@@ -3418,10 +3402,7 @@ gen.prototype.genAlike =
 				.astDot( alikeName ),
 
 				astFunc( block )
-				.Arg(
-					'obj',
-					'object to compare to'
-				)
+				.astArg( 'obj', 'object to compare to' )
 			);
 	}
 

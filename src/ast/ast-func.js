@@ -79,9 +79,8 @@ astFunc.prototype.append =
 /*
 | Convenience shortcut.
 | Returns the function with a an argument appended.
-| FIXME rename
 */
-astFunc.prototype.Arg =
+astFunc.prototype.astArg =
 	function(
 		name,
 		comment
