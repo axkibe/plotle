@@ -1,8 +1,6 @@
 /*
 | Various shorthands for abstract syntax trees.
 |
-| FIXME lowercase shorthand
-|
 | Authors: Axel Kittenberger
 */
 
@@ -23,88 +21,118 @@ module.exports =
 
 
 var
-	ast;
+	astAnd,
+	astArrayLiteral,
+	astAssign,
+	astBlock,
+	astBooleanLiteral,
+	astCall,
+	astCheck,
+	astCommaList,
+	astComment,
+	astCondition,
+	astDelete,
+	astDiffers,
+	astDot,
+	astFile,
+	astEquals,
+	astFunc,
+	astFuncArg,
+	astGreaterThan,
+	astIf,
+	astInstanceof,
+	astLessThan,
+	astMember,
+	astNew,
+	astNot,
+	astNull,
+	astNumberLiteral,
+	astObjLiteral,
+	astOr,
+	astPlus,
+	astPlusAssign,
+	astPreIncrement,
+	astString,
+	astSwitch,
+	astTypeof,
+	astVar,
+	astVarDec,
+	astVList;
 
-/*
-| Import FIXME skip ast table
-*/
-ast =
-	{
-		astAnd :
-			require( './ast-and' ),
-		astArrayLiteral :
-			require( './ast-array-literal' ),
-		astAssign :
-			require( './ast-assign' ),
-		astBlock :
-			require( './ast-block' ),
-		astBooleanLiteral :
-			require( './ast-boolean-literal' ),
-		astCall :
-			require( './ast-call' ),
-		astCheck :
-			require( './ast-check' ),
-		astCommaList :
-			require( './ast-comma-list' ),
-		astComment :
-			require( './ast-comment' ),
-		astCondition :
-			require( './ast-condition' ),
-		astDelete :
-			require( './ast-delete' ),
-		astDiffers :
-			require( './ast-differs' ),
-		astDot :
-			require( './ast-dot' ),
-		astFile :
-			require( './ast-file' ),
-		astEquals :
-			require( './ast-equals' ),
-		astFunc :
-			require( './ast-func' ),
-		astFuncArg :
-			require( './ast-func-arg' ),
-		astGreaterThan :
-			require( './ast-greater-than' ),
-		astIf :
-			require( './ast-if' ),
-		astInstanceof :
-			require( './ast-instanceof' ),
-		astLessThan :
-			require( './ast-less-than' ),
-		astMember :
-			require( './ast-member' ),
-		astNew :
-			require( './ast-new' ),
-		astNot :
-			require( './ast-not' ),
-		astNull :
-			require( './ast-null' ),
-		astNumberLiteral :
-			require( './ast-number-literal' ),
-		astObjLiteral :
-			require( './ast-obj-literal' ),
-		astOr :
-			require( './ast-or' ),
-		astPlus :
-			require( './ast-plus' ),
-		astPlusAssign :
-			require( './ast-plus-assign' ),
-		astPreIncrement :
-			require( './ast-pre-increment' ),
-		astString :
-			require( './ast-string' ),
-		astSwitch :
-			require( './ast-switch' ),
-		astTypeof :
-			require( './ast-typeof' ),
-		astVar :
-			require( './ast-var' ),
-		astVarDec :
-			require( './ast-var-dec' ),
-		astVList :
-			require( './ast-vlist' )
-	};
+
+astAnd = require( './ast-and' );
+
+astArrayLiteral = require( './ast-array-literal' );
+
+astAssign = require( './ast-assign' );
+
+astBlock = require( './ast-block' );
+
+astBooleanLiteral = require( './ast-boolean-literal' );
+
+astCall = require( './ast-call' );
+
+astCheck = require( './ast-check' );
+
+astCommaList = require( './ast-comma-list' );
+
+astComment = require( './ast-comment' );
+
+astCondition = require( './ast-condition' );
+
+astDelete = require( './ast-delete' );
+
+astDiffers = require( './ast-differs' );
+
+astDot = require( './ast-dot' );
+
+astFile = require( './ast-file' );
+
+astEquals = require( './ast-equals' );
+
+astFunc = require( './ast-func' );
+
+astFuncArg = require( './ast-func-arg' );
+
+astGreaterThan = require( './ast-greater-than' );
+
+astIf = require( './ast-if' );
+
+astInstanceof = require( './ast-instanceof' );
+
+astLessThan = require( './ast-less-than' );
+
+astMember = require( './ast-member' );
+
+astNew = require( './ast-new' );
+
+astNot = require( './ast-not' );
+
+astNull = require( './ast-null' );
+
+astNumberLiteral = require( './ast-number-literal' );
+
+astObjLiteral = require( './ast-obj-literal' );
+
+astOr = require( './ast-or' );
+
+astPlus = require( './ast-plus' );
+
+astPlusAssign = require( './ast-plus-assign' );
+
+astPreIncrement = require( './ast-pre-increment' );
+
+astString = require( './ast-string' );
+
+astSwitch = require( './ast-switch' );
+
+astTypeof = require( './ast-typeof' );
+
+astVar = require( './ast-var' );
+
+astVarDec = require( './ast-var-dec' );
+
+astVList = require( './ast-vlist' );
 
 
 /*
@@ -127,7 +155,7 @@ shorthand.astAnd =
 		args.splice(
 			0,
 			2,
-			ast.astAnd.create(
+			astAnd.create(
 				'left',
 					left,
 				'right',
@@ -144,7 +172,7 @@ shorthand.astAnd =
 	}
 
 	return(
-		ast.astAnd.create(
+		astAnd.create(
 			'left',
 				left,
 			'right',
@@ -160,7 +188,7 @@ shorthand.astAnd =
 shorthand.astArrayLiteral =
 	function( )
 {
-	return ast.astArrayLiteral.create( );
+	return astArrayLiteral.create( );
 };
 
 
@@ -174,7 +202,7 @@ shorthand.astAssign =
 	)
 {
 	return(
-		ast.astAssign.create(
+		astAssign.create(
 			'left',
 				left,
 			'right',
@@ -190,7 +218,7 @@ shorthand.astAssign =
 shorthand.astBlock =
 	function( )
 {
-	return ast.astBlock.create( );
+	return astBlock.create( );
 };
 
 
@@ -206,7 +234,7 @@ shorthand.astCall =
 	var
 		call;
 
-	call = ast.astCall.create( 'func', func );
+	call = astCall.create( 'func', func );
 
 	for(
 		var a = 1, aZ = arguments.length;
@@ -232,7 +260,7 @@ shorthand.astCondition =
 	)
 {
 	return(
-		ast.astCondition.create(
+		astCondition.create(
 			'condition',
 				condition,
 			'then',
@@ -254,7 +282,7 @@ shorthand.astDiffers =
 	)
 {
 	return(
-		ast.astDiffers.create(
+		astDiffers.create(
 			'left',
 				left,
 			'right',
@@ -272,7 +300,7 @@ shorthand.astDelete =
 		expr
 	)
 {
-	return ast.astDelete.create( 'expr', expr );
+	return astDelete.create( 'expr', expr );
 };
 
 
@@ -286,7 +314,7 @@ shorthand.astDot =
 	)
 {
 	return(
-		ast.astDot.create(
+		astDot.create(
 			'expr',
 				expr,
 			'member',
@@ -306,7 +334,7 @@ shorthand.astEquals =
 	)
 {
 	return(
-		ast.astEquals.create(
+		astEquals.create(
 			'left',
 				left,
 			'right',
@@ -326,7 +354,7 @@ shorthand.astLessThan =
 	)
 {
 	return(
-		ast.astLessThan.create(
+		astLessThan.create(
 			'left',
 				left,
 			'right',
@@ -346,7 +374,7 @@ shorthand.astGreaterThan =
 	)
 {
 	return(
-		ast.astGreaterThan.create(
+		astGreaterThan.create(
 			'left',
 				left,
 			'right',
@@ -358,16 +386,13 @@ shorthand.astGreaterThan =
 
 /*
 | Shorthand for creating number false boolean literal.
+|
+| FIXME remove
 */
 shorthand.aFalse =
 	function( )
 {
-	return(
-		ast.astBooleanLiteral.create(
-			'boolean',
-				false
-		)
-	);
+	return astBooleanLiteral.create( 'boolean', false );
 };
 
 
@@ -382,7 +407,7 @@ shorthand.astIf =
 	)
 {
 	return(
-		ast.astIf.create(
+		astIf.create(
 			'condition',
 				condition,
 			'then',
@@ -400,7 +425,7 @@ shorthand.astIf =
 shorthand.astFile =
 	function( )
 {
-	return ast.astFile.create( );
+	return astFile.create( );
 };
 
 
@@ -412,12 +437,7 @@ shorthand.astFunc =
 		block
 	)
 {
-	return(
-		ast.astFunc.create(
-			'block',
-				block || null
-		)
-	);
+	return astFunc.create( 'block', block || null );
 };
 
 
@@ -431,7 +451,7 @@ shorthand.astInstanceof =
 	)
 {
 	return(
-		ast.astInstanceof.create(
+		astInstanceof.create(
 			'left',
 				left,
 			'right',
@@ -452,7 +472,7 @@ shorthand.astMember =
 	)
 {
 	return(
-		ast.astMember.create(
+		astMember.create(
 			'expr',
 				expr,
 			'member',
@@ -470,12 +490,7 @@ shorthand.astNew =
 		call
 	)
 {
-	return(
-		ast.astNew.create(
-			'call',
-				call
-		)
-	);
+	return astNew.create( 'call', call );
 };
 
 
@@ -487,12 +502,7 @@ shorthand.astNot =
 		expr
 	)
 {
-	return(
-		ast.astNot.create(
-			'expr',
-				expr
-		)
-	);
+	return astNot.create( 'expr', expr );
 };
 
 
@@ -502,7 +512,7 @@ shorthand.astNot =
 shorthand.astNull =
 	function( )
 {
-	return ast.astNull.create( );
+	return astNull.create( );
 };
 
 
@@ -514,12 +524,7 @@ shorthand.astNumberLiteral =
 		number
 	)
 {
-	return(
-		ast.astNumberLiteral.create(
-			'number',
-				number
-		)
-	);
+	return astNumberLiteral.create( 'number', number );
 };
 
 
@@ -529,7 +534,7 @@ shorthand.astNumberLiteral =
 shorthand.astObjLiteral =
 	function( )
 {
-	return ast.astObjLiteral.create( );
+	return astObjLiteral.create( );
 };
 
 
@@ -553,7 +558,7 @@ shorthand.astOr =
 		args.splice(
 			0,
 			2,
-			ast.astOr.create(
+			astOr.create(
 				'left',
 					left,
 				'right',
@@ -570,7 +575,7 @@ shorthand.astOr =
 	}
 
 	return(
-		ast.astOr.create(
+		astOr.create(
 			'left',
 				left,
 			'right',
@@ -600,7 +605,7 @@ shorthand.astPlus =
 		args.splice(
 			0,
 			2,
-			ast.astPlus.create(
+			astPlus.create(
 				'left',
 					left,
 				'right',
@@ -617,7 +622,7 @@ shorthand.astPlus =
 	}
 
 	return(
-		ast.astPlus.create(
+		astPlus.create(
 			'left',
 				left,
 			'right',
@@ -637,7 +642,7 @@ shorthand.astPlusAssign =
 	)
 {
 	return(
-		ast.astPlusAssign.create(
+		astPlusAssign.create(
 			'left',
 				left,
 			'right',
@@ -656,7 +661,7 @@ shorthand.astPreIncrement =
 		expr
 	)
 {
-	return ast.astPreIncrement.create( 'expr', expr );
+	return astPreIncrement.create( 'expr', expr );
 };
 
 
@@ -668,7 +673,7 @@ shorthand.astString =
 		string
 	)
 {
-	return ast.astString.create( 'string', string );
+	return astString.create( 'string', string );
 };
 
 
@@ -680,7 +685,7 @@ shorthand.astSwitch =
 		statement
 	)
 {
-	return ast.astSwitch.create( 'statement', statement );
+	return astSwitch.create( 'statement', statement );
 };
 
 
@@ -690,7 +695,7 @@ shorthand.astSwitch =
 shorthand.aTrue =
 	function( )
 {
-	return ast.astBooleanLiteral.create( 'boolean', true );
+	return astBooleanLiteral.create( 'boolean', true );
 };
 
 
@@ -702,7 +707,7 @@ shorthand.astTypeof =
 		expr
 	)
 {
-	return ast.astTypeof.create( 'expr', expr );
+	return astTypeof.create( 'expr', expr );
 };
 
 
@@ -715,7 +720,7 @@ shorthand.astVar =
 		name
 	)
 {
-	return ast.astVar.create( 'name', name );
+	return astVar.create( 'name', name );
 };
 
 
@@ -730,7 +735,7 @@ shorthand.astVarDec =
 	)
 {
 	return(
-		ast.astVarDec.create(
+		astVarDec.create(
 			'name',
 				name,
 			'assign',
@@ -747,7 +752,7 @@ shorthand.astVarDec =
 shorthand.astCommaList =
 	function( )
 {
-	return ast.astCommaList.create( );
+	return astCommaList.create( );
 };
 
 
@@ -758,7 +763,7 @@ shorthand.astCommaList =
 shorthand.astVList =
 	function( )
 {
-	return ast.astVList.create( );
+	return astVList.create( );
 };
 
 

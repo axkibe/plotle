@@ -1162,7 +1162,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 	if( this.twig )
 	{
 		thisCheck = thisCheck
-			.elsewise(
+			.astElsewise(
 				astBlock( )
 				.astAssign(
 					astVar( 'twig' ),
@@ -1181,8 +1181,9 @@ gen.prototype.genCreatorInheritanceReceiver =
 
 	if( this.ray )
 	{
+		console.log( thisCheck.reflect ); // XXX
 		thisCheck = thisCheck
-			.elsewise(
+			.astElsewise(
 				astBlock( )
 				.astAssign(
 					astVar( 'ray' ),

@@ -63,7 +63,7 @@ module.exports =
 /*
 | Creates an if with the elsewise block set.
 */
-astIf.prototype.elsewise =
+astIf.prototype.astElsewise =
 	function(
 		block
 	)
