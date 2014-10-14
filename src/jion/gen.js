@@ -1273,10 +1273,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		.astVarDec(
 			'arg',
 			astVar( 'arguments' ).astMember(
-				astPlus(
-					astVar( 'a' ),
-					astNumber( 1 )
-				)
+				astPlus( 'a', 1 )
 			)
 		);
 
@@ -1355,7 +1352,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astVar( 'arguments' ).astMember(
 						astPlus(
 							astPreIncrement( astVar( 'a' ) ),
-							astNumber( 1 )
+							1
 						)
 					)
 				)
@@ -1419,7 +1416,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astAssign(
 					astVar( 'twig' ).astMember( astVar( 'key' ) ),
-					astVar( 'arg' )
+					'arg'
 				)
 			)
 			.astCase(
@@ -1432,21 +1429,13 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astAssign(
 					astVar( 'rank' ),
-					astVar( 'arguments' ).astMember(
-						astPlus(
-							astVar( 'a' ),
-							astNumber( 2 )
-						)
-					)
+					astVar( 'arguments' )
+						.astMember( astPlus( 'a', 2 ) )
 				)
 				.astAssign(
 					astVar( 'arg' ),
-					astVar( 'arguments' ).astMember(
-						astPlus(
-							astVar( 'a' ),
-							astNumber( 3 )
-						)
-					)
+					astVar( 'arguments' )
+						.astMember( astPlus( 'a', 3 ) )
 				)
 				.append(
 					astPlusAssign(
