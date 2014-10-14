@@ -214,7 +214,10 @@ shorthand.astAssign =
 		right
 	)
 {
-	// XXX convert
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
+
 	return(
 		astAssign.create(
 			'left',
@@ -238,6 +241,8 @@ shorthand.astBlock =
 
 /*
 | Shorthand for creating number boolean literals.
+|
+| TODO just make an astTrue and astFalse right away
 */
 shorthand.astBoolean =
 	function(
