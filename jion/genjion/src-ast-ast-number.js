@@ -69,8 +69,8 @@ var
 | Jion.
 */
 var
-	astNumberLiteral =
-	ast.astNumberLiteral =
+	astNumber =
+	ast.astNumber =
 		{
 			prototype :
 				prototype
@@ -78,9 +78,9 @@ var
 
 
 /*
-| Creates a new astNumberLiteral object.
+| Creates a new astNumber object.
 */
-astNumberLiteral.create =
+astNumber.create =
 prototype.create =
 	function(
 		// free strings
@@ -91,7 +91,7 @@ prototype.create =
 
 		v_number;
 
-	if( this !== astNumberLiteral )
+	if( this !== astNumber )
 	{
 		inherit = this;
 
@@ -158,13 +158,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astNumberLiteral';
+prototype.reflect = 'ast.astNumber';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astNumberLiteral';
+prototype.reflectName = 'astNumber';
 
 
 /*
@@ -206,7 +206,7 @@ Constructor.prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = astNumberLiteral;
+	module.exports = astNumber;
 }
 
 

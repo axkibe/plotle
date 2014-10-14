@@ -47,17 +47,14 @@ if( JION )
 
 var
 	astAssign,
-	astVar,
-	jools;
+	tools;
 
 
 astAssign =
 module.exports =
 	require( '../jion/this' )( module );
 
-astVar = require( './ast-var' );
-
-jools = require( '../jools/jools' );
+tools = require( './tools' );
 
 
 /*
@@ -66,17 +63,11 @@ jools = require( '../jools/jools' );
 astAssign.prototype._init =
 	function( )
 {
-	// allows automatic variable generation for comfort.
+	// automatic argument convertion for comfort.
 
-	if( jools.isString( this.left ) )
-	{
-		this.left = astVar.create( 'name', this.left );
-	}
+	this.left = tools.convertArg( this.left );
 
-	if( jools.isString( this.right ) )
-	{
-		this.right = astVar.create( 'name', this.right );
-	}
+	this.right = tools.convertArg( this.right );
 };
 
 

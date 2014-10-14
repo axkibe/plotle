@@ -1,8 +1,6 @@
 /*
 | A number literal.
 |
-| FUTURE remove the Literal in name
-|
 | Authors: Axel Kittenberger
 */
 
@@ -21,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astNumberLiteral',
+			'ast.astNumber',
 		node :
 			true,
 		attributes :
