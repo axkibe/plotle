@@ -32,8 +32,19 @@ if( JION )
 | Node imports.
 */
 var
+	astAssign,
 	astBlock,
-	ast,
+	astCall,
+	astCheck,
+	astComment,
+	astFail,
+	astFor,
+	astForIn,
+	astIf,
+	astNew,
+	astReturn,
+	astString,
+	astVarDec,
 	jools;
 
 
@@ -42,36 +53,32 @@ module.exports =
 	require( '../jion/this' )( module );
 
 
-// FIXME remove ast table
-ast =
-	{
-		astAssign :
-			require( './ast-assign' ),
-		astCall :
-			require( './ast-call' ),
-		astCheck :
-			require( './ast-check' ),
-		astComment :
-			require( './ast-comment' ),
-		astFail :
-			require( './ast-fail' ),
-		astFor :
-			require( './ast-for' ),
-		astForIn :
-			require( './ast-for-in' ),
-		astIf :
-			require( './ast-if' ),
-		astNew :
-			require( './ast-new' ),
-		astReturn :
-			require( './ast-return' ),
-		astString :
-			require( './ast-string' ),
-		astVarDec :
-			require( './ast-var-dec' )
-	};
+astAssign = require( './ast-assign' );
+
+astCall = require( './ast-call' );
+
+astCheck = require( './ast-check' );
+
+astComment = require( './ast-comment' );
+
+astFail = require( './ast-fail' );
+
+astFor = require( './ast-for' );
+
+astForIn = require( './ast-for-in' );
+
+astIf = require( './ast-if' );
+
+astNew = require( './ast-new' );
+
+astReturn = require( './ast-return' );
+
+astString = require( './ast-string' );
+
+astVarDec = require( './ast-var-dec' );
 
 jools = require( '../jools/jools' );
+
 
 /*
 | Returns the block with a statement appended;
@@ -103,7 +110,7 @@ astBlock.prototype.astAssign =
 		assign;
 
 	assign =
-		ast.astAssign.create(
+		astAssign.create(
 			'left',
 				left,
 			'right',
@@ -126,14 +133,14 @@ astBlock.prototype.astCall =
 	var
 		call;
 
-	call = ast.astCall.create( 'func', func );
+	call = astCall.create( 'func', func );
 
 	for(
 		var a = 1, aZ = arguments.length;
 		a < aZ;
 		a++
 	)
-	{
+	{// XXX convertArg
 		call = call.append( arguments[ a ] );
 	}
 
@@ -151,7 +158,7 @@ astBlock.prototype.astCheck =
 {
 	return(
 		this.append(
-			ast.astCheck.create( 'block', block )
+			astCheck.create( 'block', block )
 		)
 	);
 };
@@ -169,7 +176,7 @@ astBlock.prototype.astComment =
 	{
 		// arguments have to be a list of strings otherwise
 		header =
-			ast.astComment.create(
+			astComment.create(
 				'content',
 					Array.prototype.slice.call( arguments )
 			);
@@ -189,18 +196,18 @@ astBlock.prototype.astIf =
 		elsewise
 	)
 {
-	var
-		statement =
-			ast.astIf.create(
+	return(
+		this.append(
+			astIf.create(
 				'condition',
 					condition,
 				'then',
 					then,
 				'elsewise',
 					elsewise || null
-			);
-
-	return this.append( statement );
+			)
+		)
+	);
 };
 
 
@@ -218,12 +225,12 @@ astBlock.prototype.astFail =
 	}
 	else if( jools.isString( message ) )
 	{
-		message = ast.astString.create( 'string', message );
+		message = astString.create( 'string', message );
 	}
 
 	return(
 		this.append(
-			ast.astFail.create(
+			astFail.create(
 				'message',
 					message
 			)
@@ -245,7 +252,7 @@ astBlock.prototype.astFor =
 {
 	var
 		statement =
-			ast.astFor.create(
+			astFor.create(
 				'init',
 					init,
 				'condition',
@@ -272,7 +279,7 @@ astBlock.prototype.astForIn =
 {
 	var
 		statement =
-			ast.astForIn.create(
+			astForIn.create(
 				'variable',
 					variable,
 				'object',
@@ -294,7 +301,7 @@ astBlock.prototype.astNew =
 {
 	return(
 		this.append(
-			ast.astNew.create(
+			astNew.create(
 				'call',
 					call
 			)
@@ -319,7 +326,7 @@ astBlock.prototype.astReturn =
 
 		default :
 
-			expr = ast.astReturn.create( 'expr', expr );
+			expr = astReturn.create( 'expr', expr );
 
 			break;
 	}
@@ -341,7 +348,7 @@ astBlock.prototype.astVarDec =
 		varDec;
 
 	varDec =
-		ast.astVarDec.create(
+		astVarDec.create(
 			'name',
 				name,
 			'assign',
