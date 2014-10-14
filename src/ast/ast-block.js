@@ -28,9 +28,6 @@ if( JION )
 }
 
 
-/*
-| Node imports.
-*/
 var
 	astAssign,
 	astBlock,
@@ -97,6 +94,7 @@ astBlock.prototype.append =
 	);
 };
 
+
 /*
 | Returns the block with an assignment appended.
 */
@@ -106,18 +104,14 @@ astBlock.prototype.astAssign =
 		right
 	)
 {
-	var
-		assign;
-
-	assign =
-		astAssign.create(
-			'left',
-				left,
-			'right',
-				right
-		);
-
-	return this.append( assign );
+	return(
+		this.append(
+			astAssign.create(
+				'left', left,
+				'right', right
+			)
+		)
+	);
 };
 
 
@@ -199,12 +193,9 @@ astBlock.prototype.astIf =
 	return(
 		this.append(
 			astIf.create(
-				'condition',
-					condition,
-				'then',
-					then,
-				'elsewise',
-					elsewise || null
+				'condition', condition,
+				'then', then,
+				'elsewise', elsewise || null
 			)
 		)
 	);
@@ -230,10 +221,7 @@ astBlock.prototype.astFail =
 
 	return(
 		this.append(
-			astFail.create(
-				'message',
-					message
-			)
+			astFail.create( 'message', message )
 		)
 	);
 };
@@ -250,20 +238,16 @@ astBlock.prototype.astFor =
 		block
 	)
 {
-	var
-		statement =
+	return(
+		this.append(
 			astFor.create(
-				'init',
-					init,
-				'condition',
-					condition,
-				'iterate',
-					iterate,
-				'block',
-					block
-			);
-
-	return this.append( statement );
+				'init', init,
+				'condition', condition,
+				'iterate', iterate,
+				'block', block
+			)
+		)
+	);
 };
 
 
@@ -277,18 +261,15 @@ astBlock.prototype.astForIn =
 		block
 	)
 {
-	var
-		statement =
+	return(
+		this.append(
 			astForIn.create(
-				'variable',
-					variable,
-				'object',
-					object,
-				'block',
-					block
-			);
-
-	return this.append( statement );
+				'variable', variable,
+				'object', object,
+				'block', block
+			)
+		)
+	);
 };
 
 /*
@@ -301,10 +282,7 @@ astBlock.prototype.astNew =
 {
 	return(
 		this.append(
-			astNew.create(
-				'call',
-					call
-			)
+			astNew.create( 'call', call )
 		)
 	);
 };
@@ -344,18 +322,14 @@ astBlock.prototype.astVarDec =
 		assign  // variable assignment
 	)
 {
-	var
-		varDec;
-
-	varDec =
-		astVarDec.create(
-			'name',
-				name,
-			'assign',
-				assign || null
-		);
-
-	return this.append( varDec );
+	return(
+		this.append(
+			astVarDec.create(
+				'name', name,
+				'assign', assign || null
+			)
+		)
+	);
 };
 
 

@@ -47,7 +47,9 @@ if( JION )
 					}
 			},
 		node :
-			true
+			true,
+		init :
+			[ ]
 	};
 }
 
@@ -61,6 +63,31 @@ module.exports =
 
 
 /*
+| Initializer.
+*/
+astIf.prototype._init =
+	function( )
+{
+	// automatic block convertion for comfort.
+	if(
+		this.then.reflect !== 'ast.astBlock'
+	)
+	{
+		this.then = astBlock.create( ).append( this.then );
+	}
+
+	if(
+		this.elsewise
+		&&
+		this.elsewise.reflect !== 'ast.astBlock'
+	)
+	{
+		this.elsewise = astBlock.create( ).append( this.elsewise );
+	}
+};
+
+
+/*
 | Creates an if with the elsewise block set.
 */
 astIf.prototype.astElsewise =
@@ -68,12 +95,7 @@ astIf.prototype.astElsewise =
 		block
 	)
 {
-	return(
-		this.create(
-			'elsewise',
-				block
-		)
-	);
+	return this.create( 'elsewise', block );
 };
 
 

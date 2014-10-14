@@ -825,8 +825,7 @@ gen.prototype.genConstructor =
 				block
 				.astIf(
 					astDiffers( attr.v, astUndefined ),
-					astBlock( )
-					.append( assign )
+					astBlock( ).append( assign ) // FIXME
 				);
 		}
 	}
@@ -1448,7 +1447,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astVar( 'arguments' )
 						.astMember( astPlus( 'a', 3 ) )
 				)
-				.append(
+				.append( // FIXME
 					astPlusAssign( 'a', 2 )
 				)
 				.astIf(
@@ -1484,7 +1483,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astVar( 'twig' ).astMember( astVar( 'key' ) ),
 					astVar( 'arg' )
 				)
-				.append(
+				.append( // FIXME
 					astCall(
 						astVar( 'ranks' ).astDot( 'splice' ),
 						astVar( 'rank' ),
@@ -1513,7 +1512,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						*/
 					)
 				)
-				.append(
+				.append( // FIXME
 					astDelete(
 						astVar( 'twig' ).astMember( astVar( 'arg' ) )
 					)
@@ -2527,12 +2526,10 @@ gen.prototype.genFromJSONCreatorParser =
 			astVar( 'json' ),
 			astBlock( )
 			.astAssign(
-				astVar( 'arg' ),
+				'arg',
 				astVar( 'json' ).astMember( astVar( 'name' ) )
 			)
-			.append(
-				nameSwitch
-			)
+			.append( nameSwitch )
 		);
 
 	return block;
@@ -2630,17 +2627,12 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			.astFail( )
 		)
 		.astFor(
-			// FIXME, put into the commalist call
 			astCommaList( )
-			.append(
-				astAssign( 'a', 0 )
-			)
-			.append(
-				astAssign(
+				.astAssign( 'a', 0 )
+				.astAssign(
 					'aZ',
 					astVar( 'ranks' ).astDot( 'length' )
-				)
-			),
+				),
 			astLessThan( 'a', 'aZ' ),
 			astPreIncrement( astVar( 'a' ) ),
 			loop
@@ -3223,16 +3215,12 @@ gen.prototype.genEquals =
 				astReturnFalse
 			)
 			.astFor(
-				astCommaList( ) // FIXME add astAssign to astCommaList
-				.append( // XXX
-					astAssign( 'a', 0 )
-				)
-				.append(
-					astAssign(
+				astCommaList( )
+					.astAssign( 'a', 0 )
+					.astAssign(
 						'aZ',
 						astThis.astDot( 'ranks' ).astDot( 'length' )
-					)
-				),
+					),
 				astLessThan( astVar( 'a' ), astVar( 'aZ' ) ),
 				astPreIncrement( astVar( 'a' ) ),
 				twigTestLoopBody

@@ -29,6 +29,7 @@ if( JION )
 
 
 var
+	astAssign,
 	astCommaList,
 	jools;
 
@@ -37,11 +38,13 @@ astCommaList =
 module.exports =
 	require( '../jion/this' )( module );
 
-jools =
-	require( '../jools/jools' );
+astAssign = require( './ast-assign' );
+
+jools = require( '../jools/jools' );
+
 
 /*
-| Returns the block with a statement appended;
+| Returns the list with an expression appended;
 */
 astCommaList.prototype.append =
 	function(
@@ -53,6 +56,26 @@ astCommaList.prototype.append =
 			'twig:add',
 			jools.uid( ), // FIXME
 			expr
+		)
+	);
+};
+
+
+/*
+| Returns the list with an assignment appended.
+*/
+astCommaList.prototype.astAssign =
+	function(
+		left,
+		right
+	)
+{
+	return(
+		this.append(
+			astAssign.create(
+				'left', left,
+				'right', right
+			)
 		)
 	);
 };
