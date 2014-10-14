@@ -1,9 +1,6 @@
 /*
 | A code block to be generated
 |
-| FIXME: use shorthand calls when cycle require
-|        is no longer an issue.
-|
 | Authors: Axel Kittenberger
 */
 
@@ -37,8 +34,7 @@ if( JION )
 var
 	astBlock,
 	ast,
-	jools,
-	shorthand;
+	jools;
 
 
 astBlock =
@@ -77,8 +73,6 @@ ast =
 
 jools = require( '../jools/jools' );
 
-shorthand = require( './shorthand' );
-
 /*
 | Returns the block with a statement appended;
 */
@@ -101,15 +95,22 @@ astBlock.prototype.append =
 */
 astBlock.prototype.astAssign =
 	function(
-		// left,
-		// right
+		left,
+		right
 	)
 {
-	return(
-		this.append(
-			shorthand.astAssign.apply( shorthand, arguments )
-		)
-	);
+	var
+		assign;
+
+	assign =
+		ast.astAssign.create(
+			'left',
+				left,
+			'right',
+				right
+		);
+
+	return this.append( assign );
 };
 
 

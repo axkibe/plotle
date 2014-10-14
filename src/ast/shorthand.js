@@ -52,6 +52,7 @@ var
 	astPlus,
 	astPlusAssign,
 	astPreIncrement,
+	astReturn,
 	astString,
 	astSwitch,
 	astTypeof,
@@ -121,6 +122,8 @@ astPlus = require( './ast-plus' );
 astPlusAssign = require( './ast-plus-assign' );
 
 astPreIncrement = require( './ast-pre-increment' );
+
+astReturn = require( './ast-return' );
 
 astString = require( './ast-string' );
 
@@ -682,6 +685,26 @@ shorthand.astPreIncrement =
 {
 	return astPreIncrement.create( 'expr', expr );
 };
+
+
+/*
+| Shorthand for creating a block
+| with just a return statement.
+*/
+shorthand.astReturn =
+	function(
+		expr
+	)
+{
+	return(
+		astBlock
+			.create( )
+			.append(
+				astReturn.create( 'expr', expr )
+			)
+	);
+};
+
 
 
 /*

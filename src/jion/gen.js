@@ -48,80 +48,125 @@ var
 	validator =
 		require( './validator' );
 
+var
+	astAnd,
+	astArrayLiteral,
+	astAssign,
+	astBlock,
+	astCall,
+	astCommaList,
+	astComment,
+	astCondition,
+	astDelete,
+	astDiffers,
+	astEquals,
+	astFalse,
+	astFile,
+	astFunc,
+	astGreaterThan,
+	astIf,
+	astInstanceof,
+	astLessThan,
+	astNew,
+	astNot,
+	astNull,
+	astNumberLiteral,
+	astObjLiteral,
+	astOr,
+	astPlus,
+	astPlusAssign,
+	astPreIncrement,
+	astReturn,
+	astReturnFalse,
+	astReturnTrue,
+	astString,
+	astSwitch,
+	astThis,
+	astTrue,
+	astTypeof,
+	astUndefined,
+	astVar,
+	astVList;
+
 /*
 | Shorthanding Shorthands.
 */
-var
-	astAnd =
-		Shorthand.astAnd,
-	astArrayLiteral =
-		Shorthand.astArrayLiteral,
-	astAssign =
-		Shorthand.astAssign,
-	astBlock =
-		Shorthand.astBlock,
-	astCall =
-		Shorthand.astCall,
-	astCommaList =
-		Shorthand.astCommaList,
-	astComment =
-		Shorthand.astComment,
-	astCondition =
-		Shorthand.astCondition,
-	astDelete =
-		Shorthand.astDelete,
-	astDiffers =
-		Shorthand.astDiffers,
-	astEquals =
-		Shorthand.astEquals,
-	astFalse =
-		Shorthand.astBoolean( false ),
-	astFile =
-		Shorthand.astFile,
-	astFunc =
-		Shorthand.astFunc,
-	astGreaterThan =
-		Shorthand.astGreaterThan,
-	astIf =
-		Shorthand.astIf,
-	astInstanceof =
-		Shorthand.astInstanceof,
-	astLessThan =
-		Shorthand.astLessThan,
-	astNew =
-		Shorthand.astNew,
-	astNot =
-		Shorthand.astNot,
-	astNull =
-		Shorthand.astNull( ),
-	astNumberLiteral =
-		Shorthand.astNumberLiteral,
-	astObjLiteral =
-		Shorthand.astObjLiteral,
-	astOr =
-		Shorthand.astOr,
-	astPlus =
-		Shorthand.astPlus,
-	astPlusAssign =
-		Shorthand.astPlusAssign,
-	astPreIncrement =
-		Shorthand.astPreIncrement,
-	astString =
-		Shorthand.astString,
-	astSwitch =
-		Shorthand.astSwitch,
-	astThis =
-		Shorthand.astVar( 'this' ),
-	astTrue =
-		Shorthand.astBoolean( true ),
-	astTypeof =
-		Shorthand.astTypeof,
-	astUndefined =
-		Shorthand.astVar( 'undefined' ),
-	astVar =
-		Shorthand.astVar,
-	astVList =
-		Shorthand.astVList;
+astAnd = Shorthand.astAnd;
+
+astArrayLiteral = Shorthand.astArrayLiteral;
+
+astAssign = Shorthand.astAssign;
+
+astBlock = Shorthand.astBlock;
+
+astCall = Shorthand.astCall;
+
+astCommaList = Shorthand.astCommaList;
+
+astComment = Shorthand.astComment;
+
+astCondition = Shorthand.astCondition;
+
+astDelete = Shorthand.astDelete;
+
+astDiffers = Shorthand.astDiffers;
+
+astEquals = Shorthand.astEquals;
+
+astFalse = Shorthand.astBoolean( false );
+
+astFile = Shorthand.astFile;
+
+astFunc = Shorthand.astFunc;
+
+astGreaterThan = Shorthand.astGreaterThan;
+
+astIf = Shorthand.astIf;
+
+astInstanceof = Shorthand.astInstanceof;
+
+astLessThan = Shorthand.astLessThan;
+
+astNew = Shorthand.astNew;
+
+astNot = Shorthand.astNot;
+
+astNull = Shorthand.astNull( );
+
+astNumberLiteral = Shorthand.astNumberLiteral;
+
+astObjLiteral = Shorthand.astObjLiteral;
+
+astOr = Shorthand.astOr;
+
+astPlus = Shorthand.astPlus;
+
+astPlusAssign = Shorthand.astPlusAssign;
+
+astPreIncrement = Shorthand.astPreIncrement;
+
+astReturn = Shorthand.astReturn;
+
+astString = Shorthand.astString;
+
+astSwitch = Shorthand.astSwitch;
+
+astThis = Shorthand.astVar( 'this' );
+
+astTrue = Shorthand.astBoolean( true );
+
+astTypeof = Shorthand.astTypeof;
+
+astUndefined = Shorthand.astVar( 'undefined' );
+
+astVar = Shorthand.astVar;
+
+astVList = Shorthand.astVList;
+
+astReturnTrue = astReturn( astTrue );
+
+astReturnFalse = astReturn( astFalse );
+
 
 /*
 | Converts a camel case string to a dash seperated string.
@@ -1619,11 +1664,9 @@ gen.prototype.genCreatorDefaults =
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ];
+		name = this.attrList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes[ name ];
 
 		if( json && !attr.json )
 		{
@@ -2151,10 +2194,7 @@ gen.prototype.genCreatorUnchanged =
 	block =
 		block.astIf(
 			cond,
-			astBlock( )
-			.astReturn(
-				astVar( 'inherit' )
-			)
+			astReturn( astVar( 'inherit' ) )
 		);
 
 	return block;
@@ -2192,9 +2232,7 @@ gen.prototype.genCreatorReturn =
 					)
 				)
 			)
-			.astReturn(
-				astVar( '_singleton' )
-			)
+			.astReturn( astVar( '_singleton' ) )
 		);
 	}
 
@@ -2233,11 +2271,7 @@ gen.prototype.genCreatorReturn =
 		}
 	}
 
-	return (
-		block.astReturn(
-			astNew( call )
-		)
-	);
+	return block.astReturn( astNew( call ) );
 };
 
 
@@ -2686,9 +2720,7 @@ gen.prototype.genFromJSONCreatorReturn =
 		}
 	}
 
-	return (
-		block.astReturn( astNew( call ) )
-	);
+	return block.astReturn( astNew( call ) );
 };
 
 
@@ -2950,8 +2982,7 @@ gen.prototype.genToJSON =
 			);
 	}
 
-	block =
-		block
+	block = block
 		.astAssign(
 			astVar( 'json' ),
 			astCall(
@@ -3092,12 +3123,8 @@ gen.prototype.genEquals =
 					.astDot( 'prototype' )
 					.astDot( 'equals' ),
 					astFunc(
-						astBlock( )
-						.astReturn(
-							astEquals(
-								astThis,
-								astVar( 'obj' )
-							)
+						astReturn(
+							astEquals( astThis, astVar( 'obj' ) )
 						)
 					)
 					.astArg( 'obj', 'object to compare to' )
@@ -3136,14 +3163,13 @@ gen.prototype.genEquals =
 				astThis,
 				astVar( 'obj' )
 			),
-			astBlock( )
-			.astReturn( astTrue )
+			astReturn( astTrue )
 		)
 		.astIf(
 			astNot(
 				astVar( 'obj' )
 			),
-			astBlock( ).astReturn( astFalse )
+			astReturnFalse
 		);
 
 	if( this.twig )
@@ -3190,7 +3216,7 @@ gen.prototype.genEquals =
 						)
 					)
 				),
-				astBlock( ).astReturn( astFalse )
+				astReturnFalse
 			);
 
 		twigTest =
@@ -3200,7 +3226,7 @@ gen.prototype.genEquals =
 					astThis.astDot( 'ranks' ).astDot( 'length' ),
 					astVar( 'obj' ).astDot( 'ranks' ).astDot( 'length' )
 				),
-				astBlock( ).astReturn( astFalse )
+				astReturnFalse
 			)
 			.astFor(
 				astCommaList( ) // FIXME add astAssign to astCommaList
@@ -3330,12 +3356,11 @@ gen.prototype.genAlike =
 			astBlock( )
 			.astIf(
 				astEquals( astThis, astVar( 'obj' ) ),
-				// FIXME make an astReturn shorthand that creates a block
-				astBlock( ).astReturn( astTrue )
+				astReturnTrue
 			)
 			.astIf(
 				astNot( astVar( 'obj' ) ),
-				astBlock( ).astReturn( astFalse )
+				astReturnFalse
 			);
 
 		if( this.twig )
