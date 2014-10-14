@@ -38,7 +38,9 @@ if( JION )
 					}
 			},
 		node :
-			true
+			true,
+		init :
+			[ ]
 	};
 }
 
@@ -68,12 +70,12 @@ astAssign.prototype._init =
 
 	if( jools.isString( this.left ) )
 	{
-		this.left = astVar( this.left );
+		this.left = astVar.create( 'name', this.left );
 	}
 
 	if( jools.isString( this.right ) )
 	{
-		this.right = astVar( this.right );
+		this.right = astVar.create( 'name', this.right );
 	}
 };
 

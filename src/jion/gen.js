@@ -687,7 +687,7 @@ gen.prototype.genNodeIncludes =
 	block =
 		astBlock( )
 		.astAssign(
-			astVar( 'jools' ),
+			'jools',
 			astCall(
 				astVar( 'require' ),
 				astString( '../../src/jools/jools' )

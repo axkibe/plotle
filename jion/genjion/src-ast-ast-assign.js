@@ -56,6 +56,8 @@ var Constructor =
 
 		this.right = v_right;
 
+		this._init( );
+
 		jools.immute( this );
 	};
 
