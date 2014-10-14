@@ -696,8 +696,7 @@ gen.prototype.genNodeIncludes =
 
 	capsule = capsule.astComment( 'Node includes.' );
 
-	block =
-		astBlock( )
+	block = astBlock( )
 		.astAssign(
 			'jools',
 			astCall(
@@ -1450,10 +1449,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						.astMember( astPlus( 'a', 3 ) )
 				)
 				.append(
-					astPlusAssign(
-						astVar( 'a' ),
-						astNumber( 2 )
-					)
+					astPlusAssign( 'a', 2 )
 				)
 				.astIf(
 					astDiffers(
@@ -1473,10 +1469,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astIf(
 					astOr(
-						astLessThan(
-							astVar( 'rank' ),
-							astNumber( 0 )
-						),
+						astLessThan( 'rank', 0 ),
 						astGreaterThan(
 							astVar( 'rank' ),
 							astVar( 'ranks' ).astDot( 'length' )
@@ -2640,18 +2633,15 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			// FIXME, put into the commalist call
 			astCommaList( )
 			.append(
-				astAssign(
-					astVar( 'a' ),
-					astNumber( 0 )
-				)
+				astAssign( 'a', 0 )
 			)
 			.append(
 				astAssign(
-					astVar( 'aZ' ),
+					'aZ',
 					astVar( 'ranks' ).astDot( 'length' )
 				)
 			),
-			astLessThan( astVar( 'a' ), astVar( 'aZ' ) ),
+			astLessThan( 'a', 'aZ' ),
 			astPreIncrement( astVar( 'a' ) ),
 			loop
 		);
@@ -3235,7 +3225,7 @@ gen.prototype.genEquals =
 			.astFor(
 				astCommaList( ) // FIXME add astAssign to astCommaList
 				.append( // XXX
-					astAssign( 'a', astNumber( 0 ) )
+					astAssign( 'a', 0 )
 				)
 				.append(
 					astAssign(

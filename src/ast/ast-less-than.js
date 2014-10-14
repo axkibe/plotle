@@ -38,12 +38,40 @@ if( JION )
 					}
 			},
 		node :
-			true
+			true,
+		init :
+			[ ]
 	};
 }
 
 
-module.exports = require( '../jion/this' )( module );
+var
+	astLessThan,
+	tools;
+
+
+astLessThan =
+module.exports =
+	require( '../jion/this' )( module );
+
+tools = require( './tools' );
+
+
+/*
+| Initializer.
+*/
+astLessThan.prototype._init =
+	function( )
+{
+	// automatic argument convertion for comfort.
+
+	this.left = tools.convertArg( this.left );
+
+	this.right = tools.convertArg( this.right );
+};
+
+
+astLessThan.prototype.astIsExpression = true;
 
 
 } )( );
