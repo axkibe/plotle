@@ -50,6 +50,7 @@ if( JION )
 
 
 var
+	astBlock,
 	astCase,
 	astSwitch,
 	jools;
@@ -58,6 +59,8 @@ var
 astSwitch =
 module.exports =
 	require( '../jion/this' )( module );
+
+astBlock = require( './ast-block' );
 
 astCase = require( './ast-case' );
 
@@ -69,26 +72,40 @@ jools = require( '../jools/jools' ),
 */
 astSwitch.prototype.astCase =
 	function(
-		case_or_condition,
-		block
+		coc,   // case_or_condition,
+		code   // block or expression
 	)
 {
 	var
+		block,
 		caseExpr;
 
-	if( case_or_condition.reflect !== 'ast.astCase' )
+	if( code.reflect === 'ast.astBlock' )
+	{
+		block = code;
+	}
+	else if( code.astIsExpression )
+	{
+		block = astBlock.create( ).append( code );
+	}
+	else
+	{
+		throw new Error( );
+	}
+
+	if( coc.reflect !== 'ast.astCase' )
 	{
 		caseExpr =
 			astCase.create(
 				'twig:add',
 					jools.uid( ), // FIXME
-					case_or_condition,
+					coc,
 				'block',
 					block
 			);
 	}
 
-	return (
+	return(
 		this.create(
 			'twig:add',
 			jools.uid( ), // FIXME
@@ -103,10 +120,26 @@ astSwitch.prototype.astCase =
 */
 astSwitch.prototype.Default =
 	function(
-		block
+		code
 	)
 {
-	return (
+	var
+		block;
+
+	if( code.reflect === 'ast.astBlock' )
+	{
+		block = code;
+	}
+	else if( code.astIsExpression )
+	{
+		block = astBlock.create( ).append( code );
+	}
+	else
+	{
+		throw new Error( );
+	}
+
+	return(
 		this.create(
 			'defaultCase',
 			block

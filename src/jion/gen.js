@@ -2362,8 +2362,6 @@ gen.prototype.genFromJSONCreatorVariables =
 
 	if( this.hasJSON )
 	{
-		// FIXME cleanup ifs
-
 		if( this.twig )
 		{
 			varList.push(
@@ -2374,6 +2372,13 @@ gen.prototype.genFromJSONCreatorVariables =
 				'jwig',
 				'ranks',
 				'twig'
+			);
+		}
+
+		if( this.ray )
+		{
+			varList.push(
+				'ray'
 			);
 		}
 	}
@@ -2408,13 +2413,11 @@ gen.prototype.genFromJSONCreatorParser =
 		arg,
 		attr,
 		base,
-		// block built for cases
-		caseBlock,
 		name,
 		// the switch
-		switchExpr;
+		nameSwitch;
 
-	switchExpr =
+	nameSwitch =
 		astSwitch( astVar( 'name' ) )
 		.astCase(
 			astString( 'type' ),
@@ -2432,8 +2435,7 @@ gen.prototype.genFromJSONCreatorParser =
 
 	if( this.twig )
 	{
-		switchExpr =
-			switchExpr
+		nameSwitch = nameSwitch
 			.astCase(
 				astString( 'twig' ),
 				astBlock( )
@@ -2450,6 +2452,11 @@ gen.prototype.genFromJSONCreatorParser =
 					astVar( 'arg' )
 				)
 			);
+	}
+
+	if( this.ray )
+	{
+		//XXX
 	}
 
 	for(
@@ -2511,15 +2518,11 @@ gen.prototype.genFromJSONCreatorParser =
 				}
 		}
 
-		caseBlock =
-			astBlock( )
-			.astAssign( attr.v, arg );
-
-		switchExpr =
-			switchExpr
+		nameSwitch = nameSwitch
 			.astCase(
 				astString( attr.name ),
-				caseBlock
+				astBlock( )
+				.astAssign( attr.v, arg )
 			);
 	}
 
@@ -2534,7 +2537,7 @@ gen.prototype.genFromJSONCreatorParser =
 				astVar( 'json' ).astMember( astVar( 'name' ) )
 			)
 			.append(
-				switchExpr
+				nameSwitch
 			)
 		);
 

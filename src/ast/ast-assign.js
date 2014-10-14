@@ -43,7 +43,15 @@ if( JION )
 }
 
 
-module.exports = require( '../jion/this' )( module );
+var
+	astAssign;
+
+astAssign =
+module.exports =
+	require( '../jion/this' )( module );
+
+
+astAssign.prototype.astIsExpression = true;
 
 
 } )( );
