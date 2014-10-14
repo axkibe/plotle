@@ -39,6 +39,7 @@ var
 	astForIn,
 	astIf,
 	astNew,
+	astPlusAssign,
 	astReturn,
 	astString,
 	astVarDec,
@@ -67,6 +68,8 @@ astForIn = require( './ast-for-in' );
 astIf = require( './ast-if' );
 
 astNew = require( './ast-new' );
+
+astPlusAssign = require( './ast-plus-assign' );
 
 astReturn = require( './ast-return' );
 
@@ -283,6 +286,26 @@ astBlock.prototype.astNew =
 	return(
 		this.append(
 			astNew.create( 'call', call )
+		)
+	);
+};
+
+
+/*
+| Returns the block with a plus-assignment appended.
+*/
+astBlock.prototype.astPlusAssign =
+	function(
+		left,
+		right
+	)
+{
+	return(
+		this.append(
+			astPlusAssign.create(
+				'left', left,
+				'right', right
+			)
 		)
 	);
 };

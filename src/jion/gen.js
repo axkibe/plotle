@@ -1446,9 +1446,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astVar( 'arguments' )
 						.astMember( astPlus( 'a', 3 ) )
 				)
-				.append( // FIXME
-					astPlusAssign( 'a', 2 )
-				)
+				.astPlusAssign( 'a', 2 )
 				.astIf(
 					astDiffers(
 						astVar( 'twig' ).astMember( astVar( 'key' ) ),
