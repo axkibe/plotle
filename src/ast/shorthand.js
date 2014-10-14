@@ -58,7 +58,8 @@ var
 	astTypeof,
 	astVar,
 	astVarDec,
-	astVList;
+	astVList,
+	tools;
 
 
 astAnd = require( './ast-and' );
@@ -137,6 +138,7 @@ astVarDec = require( './ast-var-dec' );
 
 astVList = require( './ast-vlist' );
 
+tools = require( './tools' );
 
 /*
 | Shorthand for creating ands.
@@ -154,6 +156,10 @@ shorthand.astAnd =
 	if( arguments.length > 2 )
 	{
 		args = Array.prototype.slice.call( arguments );
+
+		left = tools.convertArg( left );
+
+		right = tools.convertArg( right );
 
 		args.splice(
 			0,
@@ -173,6 +179,10 @@ shorthand.astAnd =
 			)
 		);
 	}
+
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
 
 	return(
 		astAnd.create(
@@ -204,6 +214,7 @@ shorthand.astAssign =
 		right
 	)
 {
+	// XXX convert
 	return(
 		astAssign.create(
 			'left',

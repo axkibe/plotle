@@ -38,37 +38,18 @@ if( JION )
 					}
 			},
 		node :
-			true,
-		init :
-			[ ]
+			true
 	};
 }
 
 
 var
-	astAssign,
-	tools;
+	astAssign;
 
 
 astAssign =
 module.exports =
 	require( '../jion/this' )( module );
-
-tools = require( './tools' );
-
-
-/*
-| Initializer.
-*/
-astAssign.prototype._init =
-	function( )
-{
-	// automatic argument convertion for comfort.
-
-	this.left = tools.convertArg( this.left );
-
-	this.right = tools.convertArg( this.right );
-};
 
 
 astAssign.prototype.astIsExpression = true;

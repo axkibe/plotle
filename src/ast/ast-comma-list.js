@@ -31,7 +31,8 @@ if( JION )
 var
 	astAssign,
 	astCommaList,
-	jools;
+	jools,
+	tools;
 
 
 astCommaList =
@@ -41,6 +42,8 @@ module.exports =
 astAssign = require( './ast-assign' );
 
 jools = require( '../jools/jools' );
+
+tools = require( './tools' );
 
 
 /*
@@ -70,6 +73,10 @@ astCommaList.prototype.astAssign =
 		right
 	)
 {
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
+
 	return(
 		this.append(
 			astAssign.create(

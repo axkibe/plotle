@@ -43,7 +43,8 @@ var
 	astReturn,
 	astString,
 	astVarDec,
-	jools;
+	jools,
+	tools;
 
 
 astBlock =
@@ -79,6 +80,8 @@ astVarDec = require( './ast-var-dec' );
 
 jools = require( '../jools/jools' );
 
+tools = require( './tools' );
+
 
 /*
 | Returns the block with a statement appended;
@@ -107,6 +110,10 @@ astBlock.prototype.astAssign =
 		right
 	)
 {
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
+
 	return(
 		this.append(
 			astAssign.create(
