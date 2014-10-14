@@ -34,14 +34,14 @@ if( JION )
 						comment :
 							'the then code',
 						type :
-							'ast.astBlock'
+							'Object'
 					},
 				elsewise :
 					{
 						comment :
 							'the else wise',
 						type :
-							'ast.astBlock',
+							'Object',
 						defaultValue :
 							null
 					}
@@ -55,11 +55,14 @@ if( JION )
 
 
 var
+	astBlock,
 	astIf;
 
 astIf =
 module.exports =
 	require( '../jion/this' )( module );
+
+astBlock = require( './ast-block' );
 
 
 /*

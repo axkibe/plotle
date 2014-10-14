@@ -37,11 +37,7 @@ if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
 
-	ast = { };
-
 	jion = { };
-
-	ast.astBlock = require( '../../src/ast/ast-block' );
 
 	jion.proto = require( '../../src/jion/proto' );
 }
@@ -188,25 +184,12 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_elsewise !== null )
-/**/	{
-/**/		if( v_elsewise.reflectName !== 'astBlock' )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-/**/
 /**/	if( v_then === undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_then === null )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_then.reflectName !== 'astBlock' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -217,13 +200,9 @@ prototype.create =
 		&&
 		v_condition === inherit.condition
 		&&
-		(
-			v_elsewise === inherit.elsewise
-			||
-			v_elsewise && v_elsewise.equals( inherit.elsewise )
-		)
+		v_elsewise === inherit.elsewise
 		&&
-		v_then.equals( inherit.then )
+		v_then === inherit.then
 	)
 	{
 		return inherit;
@@ -278,13 +257,9 @@ Constructor.prototype.equals =
 	return (
 		this.condition === obj.condition
 		&&
-		(
-			this.elsewise === obj.elsewise
-			||
-			this.elsewise !== null && this.elsewise.equals( obj.elsewise )
-		)
+		this.elsewise === obj.elsewise
 		&&
-		this.then.equals( obj.then )
+		this.then === obj.then
 	);
 };
 

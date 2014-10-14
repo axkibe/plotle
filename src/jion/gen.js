@@ -821,11 +821,10 @@ gen.prototype.genConstructor =
 		}
 		else
 		{
-			block =
-				block
+			block = block
 				.astIf(
 					astDiffers( attr.v, astUndefined ),
-					astBlock( ).append( assign ) // FIXME
+					assign
 				);
 		}
 	}
