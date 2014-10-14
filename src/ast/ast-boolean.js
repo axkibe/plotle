@@ -20,7 +20,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astBooleanLiteral',
+			'ast.astBoolean',
 		node :
 			true,
 		attributes :
@@ -40,7 +40,8 @@ if( JION )
 /*
 | Node export.
 */
-module.exports = require( '../jion/this' )( module );
+module.exports =
+	require( '../jion/this' )( module );
 
 
 } )( );

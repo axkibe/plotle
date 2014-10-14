@@ -25,7 +25,7 @@ var
 	astArrayLiteral,
 	astAssign,
 	astBlock,
-	astBooleanLiteral,
+	astBoolean,
 	astCall,
 	astCheck,
 	astCommaList,
@@ -69,7 +69,7 @@ astAssign = require( './ast-assign' );
 
 astBlock = require( './ast-block' );
 
-astBooleanLiteral = require( './ast-boolean-literal' );
+astBoolean = require( './ast-boolean' );
 
 astCall = require( './ast-call' );
 
@@ -233,7 +233,7 @@ shorthand.astBoolean =
 		value
 	)
 {
-	return astBooleanLiteral.create( 'boolean', value );
+	return astBoolean.create( 'boolean', value );
 };
 
 

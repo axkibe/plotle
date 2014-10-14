@@ -39,14 +39,24 @@ if( JION )
 
 
 var
-	gen =
-		require( '../jion/this' )( module ),
-	Shorthand =
-		require( '../ast/shorthand' ),
-	jools =
-		require( '../jools/jools' ),
-	validator =
-		require( './validator' );
+	astTools,
+	gen,
+	Shorthand, // XXX
+	jools,
+	validator;
+
+
+gen =
+module.exports =
+	require( '../jion/this' )( module );
+
+Shorthand = require( '../ast/shorthand' );
+
+jools = require( '../jools/jools' );
+
+astTools = require( '../ast/tools' );
+
+validator = require( './validator' );
 
 var
 	astAnd,
@@ -400,6 +410,7 @@ gen.prototype._init =
 		// tests also if defaultValue is defined to be `undefined`
 		if( Object.keys( jAttr ).indexOf( 'defaultValue' ) >= 0 )
 		{
+			//jdv = tools.convertArg( jAttr.defaultValue );
 			jdv = jAttr.defaultValue;
 
 			if( jdv === null )
@@ -638,8 +649,7 @@ gen.prototype.genImports =
 {
 	capsule = capsule.astComment( 'Imports.' );
 
-	capsule =
-		capsule
+	capsule = capsule
 		.astVarDec( 'jion' )
 		.astVarDec( 'jools' );
 
@@ -653,8 +663,7 @@ gen.prototype.genImports =
 			a++
 		)
 		{
-			capsule =
-				capsule
+			capsule = capsule
 				.astVarDec( this.unitList[ a ] );
 		}
 	}
@@ -3595,15 +3604,6 @@ gen.generate =
 
 	return file;
 };
-
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = gen;
-}
 
 
 } )( );

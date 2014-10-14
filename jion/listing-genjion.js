@@ -10,7 +10,7 @@ module.exports =
 			'src/ast/ast-array-literal.js',
 			'src/ast/ast-assign.js',
 			'src/ast/ast-block.js',
-			'src/ast/ast-boolean-literal.js',
+			'src/ast/ast-boolean.js',
 			'src/ast/ast-call.js',
 			'src/ast/ast-case.js',
 			'src/ast/ast-check.js',

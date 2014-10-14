@@ -50,7 +50,7 @@ precTable =
 			-1,
 		'astAssign' :
 			17,
-		'astBooleanLiteral' :
+		'astBoolean' :
 			-1,
 		'astCall' :
 			2,
@@ -1498,7 +1498,7 @@ formatStatement =
 			break;
 
 		case 'ast.astAssign' :
-		case 'ast.astBooleanLiteral' :
+		case 'ast.astBoolean' :
 		case 'ast.astCall' :
 		case 'ast.astDelete' :
 		case 'ast.astFail' :
@@ -1715,7 +1715,7 @@ formatAFail =
 | Formats a boolean literal use.
 */
 var
-formatBooleanLiteral =
+formatBoolean =
 	function(
 		context,
 		expr
@@ -1724,7 +1724,7 @@ formatBooleanLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astBooleanLiteral' )
+/**/	if( expr.reflect !== 'ast.astBoolean' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2596,8 +2596,8 @@ exprFormatter =
 			formatArrayLiteral,
 		'astAssign' :
 			formatAssign,
-		'astBooleanLiteral' :
-			formatBooleanLiteral,
+		'astBoolean' :
+			formatBoolean,
 		'astCall' :
 			formatCall,
 		'astCommaList' :

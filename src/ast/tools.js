@@ -22,6 +22,7 @@ module.exports =
 
 var
 	astNumber,
+	astNull,
 	astVar,
 	jools;
 
@@ -29,6 +30,8 @@ var
 astVar = require( './ast-var' );
 
 astNumber = require( './ast-number' );
+
+astNull = require( './ast-null' );
 
 jools = require( '../jools/jools' );
 
@@ -42,6 +45,26 @@ jools = require( '../jools/jools' );
 tools.convertArg =
 	function( arg )
 {
+	if( arg === null )
+	{
+		return astNull.create( );
+	}
+
+	if( arg === undefined )
+	{
+		return astUndefined.create( );
+	}
+
+	if( arg === true )
+	{
+		return astBoolean.create( 'boolean', true );
+	}
+
+	if( arg === false )
+	{
+		return astBoolean.create( 'boolean', false );
+	}
+
 	if( jools.isString( arg ) )
 	{
 		return astVar.create( 'name', arg );
