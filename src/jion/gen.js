@@ -410,7 +410,6 @@ gen.prototype._init =
 		// tests also if defaultValue is defined to be `undefined`
 		if( Object.keys( jAttr ).indexOf( 'defaultValue' ) >= 0 )
 		{
-			//jdv = tools.convertArg( jAttr.defaultValue );
 			jdv = jAttr.defaultValue;
 
 			if( jdv === null )
@@ -443,6 +442,10 @@ gen.prototype._init =
 				}
 
 				defaultValue = astString( jdv );
+			}
+			else
+			{
+				throw new Error( );
 			}
 		}
 
@@ -1403,7 +1406,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astVar( 'arguments' ).astMember(
 						astPlus(
 							astPreIncrement( astVar( 'a' ) ),
-							astNumber( 1 )
+							1
 						)
 					)
 				)

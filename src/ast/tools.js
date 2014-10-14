@@ -24,7 +24,6 @@ var
 	astBoolean,
 	astNumber,
 	astNull,
-	astUndefined,
 	astVar,
 	jools;
 
@@ -49,6 +48,14 @@ jools = require( '../jools/jools' );
 tools.convertArg =
 	function( arg )
 {
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	if( arg === null )
 	{
 		return astNull.create( );
@@ -78,6 +85,14 @@ tools.convertArg =
 	{
 		return astNumber.create( 'number', arg );
 	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( arg.reflect.substr( 0, 4 ) !== 'ast.' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	return arg;
 };

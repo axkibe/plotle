@@ -53,6 +53,8 @@ var Constructor =
 	{
 		this.expr = v_expr;
 
+		this._init( );
+
 		jools.immute( this );
 	};
 
