@@ -144,8 +144,11 @@ astBlock.prototype.astCall =
 		a < aZ;
 		a++
 	)
-	{// XXX convertArg
-		call = call.addArgument( arguments[ a ] );
+	{
+		call =
+			call.addArgument(
+				tools.convertArg( arguments[ a ] )
+			);
 	}
 
 	return this.append( call );
@@ -307,6 +310,10 @@ astBlock.prototype.astPlusAssign =
 		right
 	)
 {
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
+
 	return(
 		this.append(
 			astPlusAssign.create(
