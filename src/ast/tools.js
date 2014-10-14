@@ -21,17 +21,21 @@ module.exports =
 
 
 var
+	astBoolean,
 	astNumber,
 	astNull,
+	astUndefined,
 	astVar,
 	jools;
 
 
-astVar = require( './ast-var' );
+astBoolean = require( './ast-boolean' );
+
+astNull = require( './ast-null' );
 
 astNumber = require( './ast-number' );
 
-astNull = require( './ast-null' );
+astVar = require( './ast-var' );
 
 jools = require( '../jools/jools' );
 
@@ -52,7 +56,7 @@ tools.convertArg =
 
 	if( arg === undefined )
 	{
-		return astUndefined.create( );
+		return astVar.create( 'name', 'undefined' );
 	}
 
 	if( arg === true )

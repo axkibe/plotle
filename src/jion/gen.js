@@ -41,8 +41,8 @@ if( JION )
 var
 	astTools,
 	gen,
-	Shorthand, // XXX
 	jools,
+	shorthand,
 	validator;
 
 
@@ -50,7 +50,7 @@ gen =
 module.exports =
 	require( '../jion/this' )( module );
 
-Shorthand = require( '../ast/shorthand' );
+shorthand = require( '../ast/shorthand' );
 
 jools = require( '../jools/jools' );
 
@@ -101,77 +101,77 @@ var
 /*
 | Shorthanding Shorthands.
 */
-astAnd = Shorthand.astAnd;
+astAnd = shorthand.astAnd;
 
-astArrayLiteral = Shorthand.astArrayLiteral;
+astArrayLiteral = shorthand.astArrayLiteral;
 
-astAssign = Shorthand.astAssign;
+astAssign = shorthand.astAssign;
 
-astBlock = Shorthand.astBlock;
+astBlock = shorthand.astBlock;
 
-astCall = Shorthand.astCall;
+astCall = shorthand.astCall;
 
-astCommaList = Shorthand.astCommaList;
+astCommaList = shorthand.astCommaList;
 
-astComment = Shorthand.astComment;
+astComment = shorthand.astComment;
 
-astCondition = Shorthand.astCondition;
+astCondition = shorthand.astCondition;
 
-astDelete = Shorthand.astDelete;
+astDelete = shorthand.astDelete;
 
-astDiffers = Shorthand.astDiffers;
+astDiffers = shorthand.astDiffers;
 
-astEquals = Shorthand.astEquals;
+astEquals = shorthand.astEquals;
 
-astFalse = Shorthand.astBoolean( false );
+astFalse = shorthand.astBoolean( false );
 
-astFile = Shorthand.astFile;
+astFile = shorthand.astFile;
 
-astFunc = Shorthand.astFunc;
+astFunc = shorthand.astFunc;
 
-astGreaterThan = Shorthand.astGreaterThan;
+astGreaterThan = shorthand.astGreaterThan;
 
-astIf = Shorthand.astIf;
+astIf = shorthand.astIf;
 
-astInstanceof = Shorthand.astInstanceof;
+astInstanceof = shorthand.astInstanceof;
 
-astLessThan = Shorthand.astLessThan;
+astLessThan = shorthand.astLessThan;
 
-astNew = Shorthand.astNew;
+astNew = shorthand.astNew;
 
-astNot = Shorthand.astNot;
+astNot = shorthand.astNot;
 
-astNull = Shorthand.astNull( );
+astNull = shorthand.astNull( );
 
-astNumber = Shorthand.astNumber;
+astNumber = shorthand.astNumber;
 
-astObjLiteral = Shorthand.astObjLiteral;
+astObjLiteral = shorthand.astObjLiteral;
 
-astOr = Shorthand.astOr;
+astOr = shorthand.astOr;
 
-astPlus = Shorthand.astPlus;
+astPlus = shorthand.astPlus;
 
-astPlusAssign = Shorthand.astPlusAssign;
+astPlusAssign = shorthand.astPlusAssign;
 
-astPreIncrement = Shorthand.astPreIncrement;
+astPreIncrement = shorthand.astPreIncrement;
 
-astReturn = Shorthand.astReturn;
+astReturn = shorthand.astReturn;
 
-astString = Shorthand.astString;
+astString = shorthand.astString;
 
-astSwitch = Shorthand.astSwitch;
+astSwitch = shorthand.astSwitch;
 
-astThis = Shorthand.astVar( 'this' );
+astThis = shorthand.astVar( 'this' );
 
-astTrue = Shorthand.astBoolean( true );
+astTrue = shorthand.astBoolean( true );
 
-astTypeof = Shorthand.astTypeof;
+astTypeof = shorthand.astTypeof;
 
-astUndefined = Shorthand.astVar( 'undefined' );
+astUndefined = shorthand.astVar( 'undefined' );
 
-astVar = Shorthand.astVar;
+astVar = shorthand.astVar;
 
-astVList = Shorthand.astVList;
+astVList = shorthand.astVList;
 
 astReturnTrue = astReturn( astTrue );
 
