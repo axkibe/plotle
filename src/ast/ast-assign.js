@@ -44,11 +44,38 @@ if( JION )
 
 
 var
-	astAssign;
+	astAssign,
+	astVar,
+	jools;
+
 
 astAssign =
 module.exports =
 	require( '../jion/this' )( module );
+
+astVar = require( './ast-var' );
+
+jools = require( '../jools/jools' );
+
+
+/*
+| Initializer.
+*/
+astAssign.prototype._init =
+	function( )
+{
+	// allows automatic variable generation for comfort.
+
+	if( jools.isString( this.left ) )
+	{
+		this.left = astVar( this.left );
+	}
+
+	if( jools.isString( this.right ) )
+	{
+		this.right = astVar( this.right );
+	}
+};
 
 
 astAssign.prototype.astIsExpression = true;
