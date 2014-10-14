@@ -873,8 +873,8 @@ gen.prototype.genConstructor =
 				case 'twigDup' :
 
 					initCall =
-						initCall.append(
-							astVar( this.init[ a ] )
+						initCall.addArgument(
+							astVar( this.init[ a ] ) //XXX
 						);
 
 					continue;
@@ -889,7 +889,7 @@ gen.prototype.genConstructor =
 				);
 			}
 
-			initCall = initCall.append( ( attr.v ) );
+			initCall = initCall.addArgument( ( attr.v ) );
 		}
 
 		block = block.append( initCall );
@@ -897,8 +897,16 @@ gen.prototype.genConstructor =
 
 	// immutes the new object
 	// FIXME use object.freeze and only in checking
-	block =
-		block
+	block = block
+		/*
+		.astCheck(
+			astBlock( )
+				.astCall(
+				astObjectFreezeCall.append
+				( astThis )
+				)
+		);
+		*/
 		.astCall(
 			astVar( 'jools' ).astDot( 'immute' ),
 			astThis
@@ -1971,7 +1979,7 @@ gen.prototype.genCreatorConcerns =
 					);
 				}
 
-				cExpr = cExpr.append( bAttr.v );
+				cExpr = cExpr.addArgument( bAttr.v );
 			}
 		}
 		else
@@ -2249,7 +2257,7 @@ gen.prototype.genCreatorReturn =
 			case 'ray' :
 			case 'rayDup' :
 
-				call = call.append( astVar( name ) );
+				call = call.addArgument( astVar( name ) );
 
 				break;
 
@@ -2257,7 +2265,7 @@ gen.prototype.genCreatorReturn =
 
 				attr = this.attributes[ name ];
 
-				call = call.append( attr.v );
+				call = call.addArgument( attr.v );
 		}
 	}
 
@@ -2665,14 +2673,14 @@ gen.prototype.genFromJSONCreatorReturn =
 		{
 			case 'inherit' :
 
-				call = call.append( astNull );
+				call = call.addArgument( astNull );
 
 				break;
 
 			case 'rayDup' :
 			case 'twigDup' :
 
-				call = call.append( astTrue );
+				call = call.addArgument( astTrue );
 
 				break;
 
@@ -2680,10 +2688,7 @@ gen.prototype.genFromJSONCreatorReturn =
 			case 'ray' :
 			case 'twig' :
 
-				call =
-					call.append(
-						astVar( name )
-					);
+				call = call.addArgument( astVar( name ) ); //XXX
 
 				break;
 
@@ -2694,11 +2699,11 @@ gen.prototype.genFromJSONCreatorReturn =
 
 				if( attr.assign === null )
 				{
-					call = call.append( astNull );
+					call = call.addArgument( astNull );
 				}
 				else
 				{
-					call = call.append( attr.v );
+					call = call.addArgument( attr.v );
 				}
 		}
 	}

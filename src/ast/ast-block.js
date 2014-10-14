@@ -138,7 +138,7 @@ astBlock.prototype.astCall =
 		a++
 	)
 	{// XXX convertArg
-		call = call.append( arguments[ a ] );
+		call = call.addArgument( arguments[ a ] );
 	}
 
 	return this.append( call );

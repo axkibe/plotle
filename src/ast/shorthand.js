@@ -258,7 +258,8 @@ shorthand.astCall =
 		a++
 	)
 	{
-		call = call.append( arguments[ a ] );
+		// XXX convert
+		call = call.addArgument( arguments[ a ] );
 	}
 
 	return call;
@@ -697,8 +698,7 @@ shorthand.astReturn =
 	)
 {
 	return(
-		astBlock
-			.create( )
+		astBlock.create( )
 			.append(
 				astReturn.create( 'expr', expr )
 			)

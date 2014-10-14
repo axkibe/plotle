@@ -52,7 +52,7 @@ jools = require( '../jools/jools' );
 /*
 | Returns a call with a parameter appended
 */
-astCall.prototype.append =
+astCall.prototype.addArgument =
 	function(
 		expr
 	)
