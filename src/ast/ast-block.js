@@ -44,6 +44,7 @@ var
 	astString,
 	astVarDec,
 	jools,
+	shorthand,
 	tools;
 
 
@@ -79,6 +80,8 @@ astString = require( './ast-string' );
 astVarDec = require( './ast-var-dec' );
 
 jools = require( '../jools/jools' );
+
+shorthand = require( './shorthand' );
 
 tools = require( './tools' );
 
@@ -205,11 +208,7 @@ astBlock.prototype.astIf =
 {
 	return(
 		this.append(
-			astIf.create(
-				'condition', condition,
-				'then', then,
-				'elsewise', elsewise || null
-			)
+			shorthand.astIf( condition, then, elsewise )
 		)
 	);
 };
