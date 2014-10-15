@@ -39,7 +39,8 @@ if( JION )
 
 var
 	astCall,
-	jools;
+	jools,
+	tools;
 
 
 astCall =
@@ -47,6 +48,8 @@ module.exports =
 	require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
+
+tools = require( './tools' );
 
 
 /*
@@ -61,7 +64,7 @@ astCall.prototype.addArgument =
 		this.create(
 			'twig:add',
 			jools.uid( ), // FIXME
-			expr
+			tools.convertArg( expr )
 		)
 	);
 };

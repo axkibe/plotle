@@ -861,7 +861,8 @@ gen.prototype.genConstructor =
 
 					initCall =
 						initCall.addArgument(
-							astVar( this.init[ a ] ) //XXX
+							//astVar( this.init[ a ] ) //XXX
+							this.init[ a ]
 						);
 
 					continue;
