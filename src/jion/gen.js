@@ -3191,7 +3191,7 @@ gen.prototype.genEquals =
 						astThis.astDot( 'ranks' ).astDot( 'length' )
 					),
 				astLessThan( astVar( 'a' ), astVar( 'aZ' ) ),
-				astPreIncrement( astVar( 'a' ) ),
+				astPreIncrement( 'a' ),
 				twigTestLoopBody
 			);
 
@@ -3391,9 +3391,8 @@ gen.prototype.genNodeExport =
 		capsule
 		.astComment( 'Node export.' )
 		.astIf(
-			astVar( 'SERVER' ),
-			astBlock( )
-			.astAssign(
+			'SERVER',
+			astAssign(
 				astVar( 'module' ).astDot( 'exports' ),
 				this.reference
 			)
