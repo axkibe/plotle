@@ -696,10 +696,7 @@ gen.prototype.genNodeIncludes =
 	block = astBlock( )
 		.astAssign(
 			'jools',
-			astCall(
-				astVar( 'require' ),
-				astString( '../../src/jools/jools' )
-			)
+			astCall( 'require', astString( '../../src/jools/jools' ) )
 		);
 
 	// generates the unit objects
@@ -745,12 +742,14 @@ gen.prototype.genNodeIncludes =
 				.astAssign(
 					astVar( unitName ).astDot( typeName ),
 					astCall(
-						astVar( 'require' ),
+						'require',
 						astString(
-							'../../src/' +
-								camelCaseToDash( unitName ) +
-								'/' +
-								camelCaseToDash( typeName )
+							'../../src/'
+							+
+							camelCaseToDash( unitName ) +
+							'/'
+							+
+							camelCaseToDash( typeName )
 						)
 					)
 				);
@@ -830,14 +829,8 @@ gen.prototype.genConstructor =
 	{
 		block =
 			block
-			.astAssign(
-				astThis.astDot( 'twig' ),
-				astVar( 'twig' )
-			)
-			.astAssign(
-				astThis.astDot( 'ranks' ),
-				astVar( 'ranks' )
-			);
+			.astAssign( astThis.astDot( 'twig' ), 'twig' )
+			.astAssign( astThis.astDot( 'ranks' ), 'ranks' );
 	}
 
 
@@ -845,10 +838,7 @@ gen.prototype.genConstructor =
 	{
 		block =
 			block
-			.astAssign(
-				astThis.astDot( 'ray' ),
-				astVar( 'ray' )
-			);
+			.astAssign( astThis.astDot( 'ray' ), 'ray' );
 	}
 
 	// calls the initializer
@@ -914,14 +904,8 @@ gen.prototype.genConstructor =
 		// FIXME use object.freeze and only in checking
 		block =
 			block
-			.astCall(
-				astVar( 'jools' ).astDot( 'immute' ),
-				astVar( 'twig' )
-			)
-			.astCall(
-				astVar( 'jools' ).astDot( 'immute' ),
-				astVar( 'ranks' )
-			);
+			.astCall( astVar( 'jools' ).astDot( 'immute' ), 'twig' )
+			.astCall( astVar( 'jools' ).astDot( 'immute' ), 'ranks' );
 	}
 
 	if( this.ray )
@@ -932,7 +916,7 @@ gen.prototype.genConstructor =
 				astBlock( )
 				.astCall(
 					astVar( 'Object' ).astDot( 'freeze' ),
-					astVar( 'ray' )
+					'ray'
 				)
 			);
 	}

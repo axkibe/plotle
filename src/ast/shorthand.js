@@ -251,7 +251,8 @@ shorthand.astCall =
 	var
 		call;
 
-	call = astCall.create( 'func', func );
+	call =
+		astCall.create( 'func', tools.convertArg( func ) );
 
 	for(
 		var a = 1, aZ = arguments.length;
