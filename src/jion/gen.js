@@ -2470,7 +2470,7 @@ gen.prototype.genFromJSONCreatorParser =
 					arg =
 						astCall(
 							base.astDot( 'createFromJSON' ),
-							astVar( 'arg' )
+							'arg'
 						);
 				}
 				else
@@ -3140,14 +3140,18 @@ gen.prototype.genEquals =
 					),
 					astCall(
 						astCondition(
-							astThis.astDot( 'twig' ).astMember( vKey ).astDot( 'equals' ),
+							astThis
+							.astDot( 'twig' )
+							.astMember( vKey )
+							.astDot( 'equals' )
+						,
 							astNot(
 								astCall(
 									astThis
 									.astDot( 'twig' )
 									.astMember( vKey )
-									.astDot( 'equals' ),
-
+									.astDot( 'equals' )
+								,
 									astVar( 'obj' )
 									.astDot( 'twig' )
 									.astMember( vKey )
@@ -3155,11 +3159,12 @@ gen.prototype.genEquals =
 							),
 							astDiffers(
 								astThis
-									.astDot( 'twig' )
-									.astMember( vKey ),
+								.astDot( 'twig' )
+								.astMember( vKey )
+							,
 								astVar( 'obj' )
-									.astDot( 'twig' )
-									.astMember( vKey )
+								.astDot( 'twig' )
+								.astMember( vKey )
 							)
 						)
 					)
