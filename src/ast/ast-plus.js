@@ -39,49 +39,17 @@ if( JION )
 					}
 			},
 		node :
-			true,
-		init :
-			[ ]
+			true
 	};
 }
 
 
 var
-	astPlus,
-	tools;
+	astPlus;
 
 astPlus =
 module.exports =
 	require( '../jion/this' )( module );
-
-tools = require( './tools' );
-
-
-/*
-| Initializer.
-*/
-astPlus.prototype._init =
-	function( )
-{
-	// automatic argument convertion for comfort.
-
-	if( this.left !== tools.convertArg( this.left ) )
-	{
-		throw new Error( );
-	}
-
-	if( this.right !== tools.convertArg( this.right ) )
-	{
-		throw new Error( );
-	}
-
-	/*
-	this.left = tools.convertArg( this.left );
-
-	this.right = tools.convertArg( this.right );
-	*/
-};
-
 
 astPlus.prototype.astIsExpression = true;
 

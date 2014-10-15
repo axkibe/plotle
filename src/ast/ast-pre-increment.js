@@ -31,38 +31,20 @@ if( JION )
 					}
 			},
 		node :
-			true,
-		init :
-			[ ]
+			true
 	};
 }
 
 
 var
-	astPreIncrement,
-	tools;
+	astPreIncrement;
+
 
 astPreIncrement =
 module.exports =
 	require( '../jion/this' )( module );
 
-tools = require( './tools' );
-
-
-/*
-| Initializer.
-*/
-astPreIncrement.prototype._init =
-	function( )
-{
-	// automatic argument convertion for comfort.
-
-	this.expr = tools.convertArg( this.expr );
-};
-
-
 astPreIncrement.prototype.astIsExpression = true;
-
 
 
 } )( );

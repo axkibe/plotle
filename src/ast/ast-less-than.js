@@ -38,38 +38,17 @@ if( JION )
 					}
 			},
 		node :
-			true,
-		init :
-			[ ]
+			true
 	};
 }
 
 
 var
-	astLessThan,
-	tools;
-
+	astLessThan;
 
 astLessThan =
 module.exports =
 	require( '../jion/this' )( module );
-
-tools = require( './tools' );
-
-
-/*
-| Initializer.
-*/
-astLessThan.prototype._init =
-	function( )
-{
-	// automatic argument convertion for comfort.
-
-	this.left = tools.convertArg( this.left );
-
-	this.right = tools.convertArg( this.right );
-};
-
 
 astLessThan.prototype.astIsExpression = true;
 
