@@ -138,7 +138,7 @@ astNew = shorthand.astNew;
 
 astNot = shorthand.astNot;
 
-astNull = shorthand.astNull( );
+astNull = shorthand.astNull;
 
 astNumber = shorthand.astNumber;
 

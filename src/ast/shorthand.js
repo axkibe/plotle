@@ -576,13 +576,10 @@ shorthand.astNot =
 
 
 /*
-| Shorthand for creating nulls.
+| Shorthand for ast nulls.
 */
 shorthand.astNull =
-	function( )
-{
-	return astNull.create( );
-};
+	astNull.create( );
 
 
 /*
