@@ -38,7 +38,8 @@ if( JION )
 var
 	astVarDec,
 	astVList,
-	jools;
+	jools,
+	shorthand;
 
 astVList =
 module.exports =
@@ -48,32 +49,23 @@ astVarDec = require( './ast-var-dec' );
 
 jools = require( '../jools/jools' );
 
+shorthand = require( './shorthand' );
+
 
 /*
 | Returns the vlist with a variable decleration appended.
 */
 astVList.prototype.astVarDec =
 	function(
-		name,   // variable name
-		assign  // variable assignment
+		// name,   // variable name
+		// assign  // variable assignment
 	)
 {
-	var
-		varDec;
-
-	varDec =
-		astVarDec.create(
-			'name',
-				name,
-			'assign',
-				assign || null
-		);
-
 	return(
 		this.create(
 			'twig:add',
 			jools.uid( ), // FIXME
-			varDec
+			shorthand.astVarDec.apply( shorthand, arguments )
 		)
 	);
 };
