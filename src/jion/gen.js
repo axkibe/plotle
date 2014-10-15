@@ -2817,14 +2817,12 @@ gen.prototype.genJionProto =
 			)
 			.astComment( 'Gets the rank of a key.' )
 			.astAssign(
-				// FIXME use proto
-				astVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'rankOf' ),
+				astVar( 'prototype' ).astDot( 'rankOf' ),
 				astVar( 'jion' ).astDot( 'proto' ).astDot( 'rankOf' )
 			)
 			.astComment( 'Creates a new unique identifier.' )
 			.astAssign(
-				// FIXME use proto
-				astVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'newUID' ),
+				astVar( 'prototype' ).astDot( 'newUID' ),
 				astVar( 'jion' ).astDot( 'proto' ).astDot( 'newUID' )
 			);
 	}
@@ -3073,12 +3071,10 @@ gen.prototype.genEquals =
 				capsule
 				.astComment( 'Tests equality of object.' )
 				.astAssign(
-					astVar( 'Constructor' )
-					.astDot( 'prototype' )
-					.astDot( 'equals' ),
+					astVar( 'prototype' ).astDot( 'equals' ),
 					astFunc(
 						astReturn(
-							astEquals( astThis, astVar( 'obj' ) )
+							astEquals( astThis, 'obj' )
 						)
 					)
 					.astArg( 'obj', 'object to compare to' )
@@ -3365,9 +3361,7 @@ gen.prototype.genAlike =
 			capsule
 			.astAssign(
 				// FIXME use proto
-				astVar( 'Constructor' )
-				.astDot( 'prototype' )
-				.astDot( alikeName )
+				astVar( 'prototype' ).astDot( alikeName )
 			,
 				astFunc( block )
 				.astArg( 'obj', 'object to compare to' )

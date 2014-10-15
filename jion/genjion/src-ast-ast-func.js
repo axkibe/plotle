@@ -346,13 +346,13 @@ prototype.atRank = jion.proto.atRank;
 /*
 | Gets the rank of a key.
 */
-Constructor.prototype.rankOf = jion.proto.rankOf;
+prototype.rankOf = jion.proto.rankOf;
 
 
 /*
 | Creates a new unique identifier.
 */
-Constructor.prototype.newUID = jion.proto.newUID;
+prototype.newUID = jion.proto.newUID;
 
 
 /*

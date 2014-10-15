@@ -140,7 +140,7 @@ prototype.getPath = jion.proto.getPath;
 /*
 | Tests equality of object.
 */
-Constructor.prototype.equals =
+prototype.equals =
 	function( obj // object to compare to
 ) { return this === obj; };
 
