@@ -150,12 +150,12 @@ astBlock.prototype.astCall =
 */
 astBlock.prototype.astCheck =
 	function(
-		block
+		// block
 	)
 {
 	return(
 		this.append(
-			astCheck.create( 'block', block )
+			shorthand.astCheck.apply( shorthand, arguments )
 		)
 	);
 };

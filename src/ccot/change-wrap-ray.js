@@ -34,6 +34,8 @@ if( JION )
 			'ccot.changeWrapRay',
 		node :
 			true,
+		json :
+			true,
 		ray :
 			[
 				'ccot.changeWrap'

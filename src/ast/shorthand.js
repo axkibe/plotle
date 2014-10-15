@@ -268,6 +268,29 @@ shorthand.astCall =
 
 
 /*
+| Shorthand for creating ast check blocks.
+*/
+shorthand.astCheck =
+	function(
+		block // or statement/expression
+	)
+{
+	if(
+		block
+		&&
+		block.reflect !== 'ast.astBlock'
+	)
+	{
+		block = astBlock.create( ).append( block );
+	}
+
+	return(
+		astCheck.create( 'block', block )
+	);
+};
+
+
+/*
 | Shorthand for creating comments
 */
 shorthand.astComment =
