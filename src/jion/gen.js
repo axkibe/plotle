@@ -2398,28 +2398,29 @@ gen.prototype.genFromJSONCreatorParser =
 
 	if( this.twig )
 	{
-		nameSwitch = nameSwitch
+		nameSwitch =
+			nameSwitch
 			.astCase(
 				astString( 'twig' ),
-				astBlock( )
-				.astAssign(
-					astVar( 'jwig' ),
-					astVar( 'arg' )
-				)
+				astAssign( 'jwig', 'arg' )
 			)
 			.astCase(
 				astString( 'ranks' ),
-				astBlock( )
-				.astAssign(
-					astVar( 'ranks' ),
-					astVar( 'arg' )
-				)
+				astAssign( 'ranks', 'arg' )
 			);
 	}
 
 	if( this.ray )
 	{
-		//XXX
+		nameSwitch =
+			nameSwitch
+			.astCase(
+				astString( 'ray' ),
+				astAssign(
+					astVar( 'ray' ),
+					astVar( 'arg' )
+				)
+			);
 	}
 
 	for(
@@ -2430,7 +2431,13 @@ gen.prototype.genFromJSONCreatorParser =
 	{
 		name = jsonList[ a ];
 
-		if( name === 'twig' || name === 'ranks' )
+		if(
+			name === 'twig'
+			||
+			name === 'ranks'
+			||
+			name === 'ray'
+		)
 		{
 			continue;
 		}
@@ -2492,8 +2499,10 @@ gen.prototype.genFromJSONCreatorParser =
 	block =
 		block
 		.astForIn(
-			'name',
-			astVar( 'json' ),
+			'name'
+		,
+			astVar( 'json' )
+		,
 			astBlock( )
 			.astAssign(
 				'arg',

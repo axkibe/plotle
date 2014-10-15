@@ -358,8 +358,8 @@ astBlock.prototype.astReturn =
 */
 astBlock.prototype.astVarDec =
 	function(
-		name,   // variable name
-		assign  // variable assignment
+		// name,   // variable name
+		// assign  // variable assignment
 	)
 {
 	return(

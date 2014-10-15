@@ -67,12 +67,12 @@ tools.convertArg =
 
 	if( arg === true )
 	{
-		return shortHand.astTrue;
+		return shorthand.astTrue;
 	}
 
 	if( arg === false )
 	{
-		return shortHand.astFalse;
+		return shorthand.astFalse;
 	}
 
 	if( jools.isString( arg ) )
