@@ -240,21 +240,6 @@ shorthand.astBlock =
 
 
 /*
-| Shorthand for creating number boolean literals.
-|
-| TODO just make an astTrue and astFalse right away
-*/
-shorthand.astBoolean =
-	function(
-		value
-	)
-{
-	return astBoolean.create( 'boolean', value );
-};
-
-
-
-/*
 | Shorthand for creating calls.
 */
 shorthand.astCall =
@@ -401,6 +386,13 @@ shorthand.astEquals =
 		)
 	);
 };
+
+
+/*
+| Shorthand for 'false' literals.
+*/
+shorthand.astFalse =
+	astBoolean.create( 'boolean', false );
 
 
 /*
@@ -807,6 +799,14 @@ shorthand.astSwitch =
 {
 	return astSwitch.create( 'statement', statement );
 };
+
+
+/*
+| Shorthand for 'true' literals.
+*/
+shorthand.astTrue =
+	astBoolean.create( 'boolean', true );
+
 
 
 /*

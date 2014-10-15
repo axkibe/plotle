@@ -120,7 +120,7 @@ astDiffers = shorthand.astDiffers;
 
 astEquals = shorthand.astEquals;
 
-astFalse = shorthand.astBoolean( false );
+astFalse = shorthand.astFalse;
 
 astFile = shorthand.astFile;
 
@@ -160,7 +160,7 @@ astSwitch = shorthand.astSwitch;
 
 astThis = shorthand.astVar( 'this' );
 
-astTrue = shorthand.astBoolean( true );
+astTrue = shorthand.astTrue;
 
 astTypeof = shorthand.astTypeof;
 

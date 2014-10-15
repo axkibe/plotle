@@ -21,14 +21,12 @@ module.exports =
 
 
 var
-	astBoolean,
 	astNumber,
 	astNull,
 	astVar,
-	jools;
+	jools,
+	shorthand;
 
-
-astBoolean = require( './ast-boolean' );
 
 astNull = require( './ast-null' );
 
@@ -38,6 +36,7 @@ astVar = require( './ast-var' );
 
 jools = require( '../jools/jools' );
 
+shorthand = require( './shorthand' );
 
 /*
 | Converts an argument to ast usage.
@@ -68,12 +67,12 @@ tools.convertArg =
 
 	if( arg === true )
 	{
-		return astBoolean.create( 'boolean', true );
+		return shortHand.astTrue;
 	}
 
 	if( arg === false )
 	{
-		return astBoolean.create( 'boolean', false );
+		return shortHand.astFalse;
 	}
 
 	if( jools.isString( arg ) )
