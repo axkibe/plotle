@@ -693,7 +693,8 @@ gen.prototype.genNodeIncludes =
 
 	capsule = capsule.astComment( 'Node includes.' );
 
-	block = astBlock( )
+	block =
+		astBlock( )
 		.astAssign(
 			'jools',
 			astCall( 'require', astString( '../../src/jools/jools' ) )
@@ -707,7 +708,8 @@ gen.prototype.genNodeIncludes =
 		a++
 	)
 	{
-		block = block
+		block =
+			block
 			.astAssign(
 				astVar( this.unitList[ a ] ),
 				astObjLiteral( )
@@ -734,8 +736,7 @@ gen.prototype.genNodeIncludes =
 			b++
 		)
 		{
-			typeName =
-				types[ b ];
+			typeName = types[ b ];
 
 			block =
 				block
@@ -2932,22 +2933,25 @@ gen.prototype.genToJSON =
 	{
 		olit =
 			olit
-			.add(
-				'ranks',
-				astThis.astDot( 'ranks' )
-			)
-			.add(
-				'twig',
-				astThis.astDot( 'twig' )
-			);
+			.add( 'ranks', astThis.astDot( 'ranks' ) )
+			.add( 'twig', astThis.astDot( 'twig' ) );
 	}
 
-	block = block
-		.astAssign(
-			astVar( 'json' ),
-			astCall(
+	if( this.ray )
+	{
+		olit =
+			olit
+			.add( 'ray', astThis.astDot( 'ray' ) );
+	}
+
+	block =
+		block
+		.astAssign( 'json', olit )
+		.astCheck(
+			astBlock( ) // XXX
+			.astCall(
 				astVar( 'Object' ).astDot( 'freeze' ),
-				olit
+				'json'
 			)
 		)
 		.astReturn(
@@ -2959,7 +2963,8 @@ gen.prototype.genToJSON =
 			)
 		);
 
-	capsule = capsule
+	capsule =
+		capsule
 		.astComment( 'Converts a ' + this.name + ' into JSON.' )
 		.astCall(
 			astVar( 'jools' ).astDot( 'lazyValue' ),
@@ -3100,14 +3105,16 @@ gen.prototype.genEquals =
 			);
 	}
 
-	capsule = capsule
+	capsule =
+		capsule
 		.astComment( 'Tests equality of object.' );
 
 	block = astBlock( );
 
 	if( this.twig )
 	{
-		block = block
+		block =
+			block
 			.astVarDec( 'a' )
 			.astVarDec( 'aZ' )
 			.astVarDec( 'key' );
@@ -3414,7 +3421,8 @@ gen.prototype.genExport =
 {
 	block = block.astComment( 'Export.' );
 
-	block = block
+	block =
+		block
 		.astVarDec(
 			this.unit,
 			astOr( this.unit, astObjLiteral( ) )

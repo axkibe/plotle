@@ -502,6 +502,15 @@ shorthand.astFunc =
 		block
 	)
 {
+	if(
+		block
+		&&
+		block.reflect !== 'ast.astBlock'
+	)
+	{
+		block = astBlock.create( ).append( block );
+	}
+
 	return astFunc.create( 'block', block || null );
 };
 
