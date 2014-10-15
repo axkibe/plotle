@@ -3308,7 +3308,7 @@ gen.prototype.genAlike =
 				astReturnTrue
 			)
 			.astIf(
-				astNot( astVar( 'obj' ) ),
+				astNot( 'obj' ),
 				astReturnFalse
 			);
 
@@ -3395,7 +3395,7 @@ gen.prototype.genNodeExport =
 			astBlock( )
 			.astAssign(
 				astVar( 'module' ).astDot( 'exports' ),
-				astVar( this.reference )
+				this.reference
 			)
 		)
 	);
@@ -3413,10 +3413,7 @@ gen.prototype.genExport =
 	block = block
 		.astVarDec(
 			this.unit,
-			astOr(
-				astVar( this.unit ),
-				astObjLiteral( )
-			)
+			astOr( this.unit, astObjLiteral( ) )
 		);
 
 	return block;
