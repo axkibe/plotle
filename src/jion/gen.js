@@ -860,10 +860,7 @@ gen.prototype.genConstructor =
 				case 'twigDup' :
 
 					initCall =
-						initCall.addArgument(
-							//astVar( this.init[ a ] ) //XXX
-							this.init[ a ]
-						);
+						initCall.addArgument( this.init[ a ] );
 
 					continue;
 			}
@@ -2656,7 +2653,7 @@ gen.prototype.genFromJSONCreatorReturn =
 			case 'ray' :
 			case 'twig' :
 
-				call = call.addArgument( astVar( name ) ); //XXX
+				call = call.addArgument( name );
 
 				break;
 
