@@ -1368,7 +1368,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astIf(
 					astDiffers(
-						astVar( 'twig' ).astMember( astVar( 'key' ) ),
+						astVar( 'twig' ).astMember( 'key' ),
 						astUndefined
 					),
 					astBlock( )
@@ -1383,7 +1383,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.astAssign(
-					astVar( 'twig' ).astMember( astVar( 'key' ) ),
+					astVar( 'twig' ).astMember( 'key' ),
 					astVar( 'arg' )
 				)
 				.astCall(
@@ -1425,7 +1425,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.astAssign(
-					astVar( 'twig' ).astMember( astVar( 'key' ) ),
+					astVar( 'twig' ).astMember( 'key' ),
 					'arg'
 				)
 			)
@@ -1450,7 +1450,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astPlusAssign( 'a', 2 )
 				.astIf(
 					astDiffers(
-						astVar( 'twig' ).astMember( astVar( 'key' ) ),
+						astVar( 'twig' ).astMember( 'key' ),
 						astUndefined
 					),
 					astBlock( )
@@ -1478,7 +1478,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.astAssign(
-					astVar( 'twig' ).astMember( astVar( 'key' ) ),
+					astVar( 'twig' ).astMember( 'key' ),
 					astVar( 'arg' )
 				)
 				.astCall(
@@ -1494,7 +1494,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.append( twigDupCheck )
 				.astIf(
 					astEquals(
-						astVar( 'twig' ).astMember( astVar( 'arg' ) ),
+						astVar( 'twig' ).astMember( 'arg' ),
 						astUndefined
 					),
 					astBlock( )
@@ -1591,7 +1591,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astBlock( )
 				.append( rayDupCheck )
 				.astAssign(
-					astVar( 'ray' ).astMember( astVar( 'arg' ) ),
+					astVar( 'ray' ).astMember( 'arg' ),
 					astVar( 'arguments' ).astMember(
 						astPlus(
 							astPreIncrement( astVar( 'a' ) ),
