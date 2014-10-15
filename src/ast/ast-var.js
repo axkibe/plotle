@@ -44,7 +44,8 @@ if( JION )
 var
 	astDot,
 	astMember,
-	astVar;
+	astVar,
+	tools;
 
 
 astVar =
@@ -55,6 +56,7 @@ astDot = require( './ast-dot' );
 
 astMember = require( './ast-member' );
 
+tools = require( './tools' );
 
 /*
 | Initializer.
@@ -119,7 +121,7 @@ astVar.prototype.astMember =
 			'expr',
 				this,
 			'member',
-				member
+				tools.convertArg( member )
 		)
 	);
 };

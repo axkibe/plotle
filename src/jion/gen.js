@@ -67,7 +67,6 @@ var
 	astCommaList,
 	astComment,
 	astCondition,
-	astDelete,
 	astDiffers,
 	astEquals,
 	astFalse,
@@ -116,8 +115,6 @@ astCommaList = shorthand.astCommaList;
 astComment = shorthand.astComment;
 
 astCondition = shorthand.astCondition;
-
-astDelete = shorthand.astDelete;
 
 astDiffers = shorthand.astDiffers;
 
@@ -1289,14 +1286,12 @@ gen.prototype.genCreatorFreeStringsParser =
 		astBlock( )
 		.astVarDec(
 			'arg',
-			astVar( 'arguments' ).astMember(
-				astPlus( 'a', 1 )
-			)
+			astVar( 'arguments' ).astMember( astPlus( 'a', 1 ) )
 		);
 
 	switchExpr =
 		astSwitch(
-			astVar( 'arguments' ).astMember( astVar( 'a' ) )
+			astVar( 'arguments' ).astMember( 'a' )
 		);
 
 	for(
@@ -1366,12 +1361,10 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astAssign(
 					astVar( 'arg' ),
-					astVar( 'arguments' ).astMember(
-						astPlus(
-							astPreIncrement( astVar( 'a' ) ),
-							1
+					astVar( 'arguments' )
+						.astMember(
+							astPlus( astPreIncrement( 'a' ), 1 )
 						)
-					)
 				)
 				.astIf(
 					astDiffers(
@@ -1515,10 +1508,8 @@ gen.prototype.genCreatorFreeStringsParser =
 						*/
 					)
 				)
-				.append( // FIXME
-					astDelete(
-						astVar( 'twig' ).astMember( astVar( 'arg' ) )
-					)
+				.astDelete(
+					astVar( 'twig' ).astMember( 'arg' )
 				)
 				.append(
 					astCall(
