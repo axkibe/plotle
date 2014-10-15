@@ -311,7 +311,7 @@ Constructor.prototype.newUID = jion.proto.newUID;
 /*
 | Tests equality of object.
 */
-Constructor.prototype.equals =
+prototype.equals =
 	function(
 		obj // object to compare to
 	)

@@ -2958,8 +2958,7 @@ gen.prototype.genToJSON =
 		.astComment( 'Converts a ' + this.name + ' into JSON.' )
 		.astCall(
 			astVar( 'jools' ).astDot( 'lazyValue' ),
-			// FIXME use proto
-			astVar( 'Constructor' ).astDot( 'prototype' ),
+			'prototype',
 			astString( 'toJSON' ),
 			astFunc( block )
 		);
@@ -3255,7 +3254,7 @@ gen.prototype.genEquals =
 		capsule
 		.astAssign(
 			// FIXME use proto
-			astVar( 'Constructor' ).astDot( 'prototype' ).astDot( 'equals' ),
+			astVar( 'prototype' ).astDot( 'equals' ),
 			astFunc( block )
 			.astArg( 'obj', 'object to compare to' )
 		);
