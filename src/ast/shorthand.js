@@ -353,6 +353,8 @@ shorthand.astDelete =
 		expr
 	)
 {
+	expr = tools.convertArg( expr );
+
 	return astDelete.create( 'expr', expr );
 };
 

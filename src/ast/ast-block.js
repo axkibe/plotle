@@ -184,6 +184,23 @@ astBlock.prototype.astComment =
 
 
 /*
+| Returns the block with a delete statement appended.
+*/
+astBlock.prototype.astDelete =
+	function(
+		expr
+	)
+{
+	return(
+		this.append(
+			shorthand.astDelete( expr )
+		)
+	);
+
+};
+
+
+/*
 | Returns the block with an if appended.
 */
 astBlock.prototype.astIf =

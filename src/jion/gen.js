@@ -1488,13 +1488,11 @@ gen.prototype.genCreatorFreeStringsParser =
 					astVar( 'twig' ).astMember( astVar( 'key' ) ),
 					astVar( 'arg' )
 				)
-				.append( // FIXME
-					astCall(
-						astVar( 'ranks' ).astDot( 'splice' ),
-						astVar( 'rank' ),
-						astNumber( 0 ),
-						astVar( 'key' )
-					)
+				.astCall(
+					astVar( 'ranks' ).astDot( 'splice' ),
+					'rank',
+					0,
+					'key'
 				)
 			)
 			.astCase(
