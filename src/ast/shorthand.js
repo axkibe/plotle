@@ -384,6 +384,10 @@ shorthand.astEquals =
 		right
 	)
 {
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
+
 	return(
 		astEquals.create(
 			'left',
@@ -404,6 +408,10 @@ shorthand.astLessThan =
 		right
 	)
 {
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
+
 	return(
 		astLessThan.create(
 			'left',
@@ -424,6 +432,10 @@ shorthand.astGreaterThan =
 		right
 	)
 {
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
+
 	return(
 		astGreaterThan.create(
 			'left',
@@ -541,6 +553,8 @@ shorthand.astNot =
 		expr
 	)
 {
+	expr = tools.convertArg( expr );
+
 	return astNot.create( 'expr', expr );
 };
 
@@ -594,6 +608,10 @@ shorthand.astOr =
 	{
 		args = Array.prototype.slice.call( arguments );
 
+		left = tools.convertArg( left );
+
+		right = tools.convertArg( right );
+
 		args.splice(
 			0,
 			2,
@@ -612,6 +630,10 @@ shorthand.astOr =
 			)
 		);
 	}
+
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
 
 	return(
 		astOr.create(
