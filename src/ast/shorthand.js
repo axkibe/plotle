@@ -641,6 +641,10 @@ shorthand.astPlus =
 	{
 		args = Array.prototype.slice.call( arguments );
 
+		left = tools.convertArg( left );
+
+		right = tools.convertArg( right );
+
 		args.splice(
 			0,
 			2,
@@ -659,6 +663,10 @@ shorthand.astPlus =
 			)
 		);
 	}
+
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
 
 	return(
 		astPlus.create(
@@ -680,6 +688,10 @@ shorthand.astPlusAssign =
 		right
 	)
 {
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
+
 	return(
 		astPlusAssign.create(
 			'left',
@@ -700,6 +712,8 @@ shorthand.astPreIncrement =
 		expr
 	)
 {
+	expr = tools.convertArg( expr );
+
 	return astPreIncrement.create( 'expr', expr );
 };
 
@@ -713,6 +727,8 @@ shorthand.astReturn =
 		expr
 	)
 {
+	expr = tools.convertArg( expr );
+
 	return(
 		astBlock.create( )
 			.append(

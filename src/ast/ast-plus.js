@@ -65,9 +65,21 @@ astPlus.prototype._init =
 {
 	// automatic argument convertion for comfort.
 
+	if( this.left !== tools.convertArg( this.left ) )
+	{
+		throw new Error( );
+	}
+
+	if( this.right !== tools.convertArg( this.right ) )
+	{
+		throw new Error( );
+	}
+
+	/*
 	this.left = tools.convertArg( this.left );
 
 	this.right = tools.convertArg( this.right );
+	*/
 };
 
 
