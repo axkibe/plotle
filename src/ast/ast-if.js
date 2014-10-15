@@ -47,9 +47,7 @@ if( JION )
 					}
 			},
 		node :
-			true,
-		init :
-			[ ]
+			true
 	};
 }
 
@@ -63,31 +61,6 @@ module.exports =
 	require( '../jion/this' )( module );
 
 astBlock = require( './ast-block' );
-
-
-/*
-| Initializer.
-*/
-astIf.prototype._init =
-	function( )
-{
-	// automatic block convertion for comfort.
-	if(
-		this.then.reflect !== 'ast.astBlock'
-	)
-	{
-		this.then = astBlock.create( ).append( this.then );
-	}
-
-	if(
-		this.elsewise
-		&&
-		this.elsewise.reflect !== 'ast.astBlock'
-	)
-	{
-		this.elsewise = astBlock.create( ).append( this.elsewise );
-	}
-};
 
 
 /*

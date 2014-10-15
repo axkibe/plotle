@@ -59,8 +59,6 @@ var Constructor =
 
 		this.then = v_then;
 
-		this._init( );
-
 		jools.immute( this );
 	};
 

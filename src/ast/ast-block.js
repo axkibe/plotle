@@ -133,28 +133,15 @@ astBlock.prototype.astAssign =
 */
 astBlock.prototype.astCall =
 	function(
-		func
-		// args
+		// func,
+		// args...
 	)
 {
-	var
-		call;
-
-	call = astCall.create( 'func', func );
-
-	for(
-		var a = 1, aZ = arguments.length;
-		a < aZ;
-		a++
-	)
-	{
-		call =
-			call.addArgument(
-				tools.convertArg( arguments[ a ] )
-			);
-	}
-
-	return this.append( call );
+	return(
+		this.append(
+			shorthand.astCall.apply( shorthand, arguments )
+		)
+	);
 };
 
 

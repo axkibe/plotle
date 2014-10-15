@@ -274,8 +274,10 @@ shorthand.astCall =
 		a++
 	)
 	{
-		// XXX convert
-		call = call.addArgument( arguments[ a ] );
+		call = call
+			.addArgument(
+				tools.convertArg ( arguments[ a ] )
+			);
 	}
 
 	return call;
