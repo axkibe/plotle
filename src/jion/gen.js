@@ -3190,7 +3190,7 @@ gen.prototype.genEquals =
 						'aZ',
 						astThis.astDot( 'ranks' ).astDot( 'length' )
 					),
-				astLessThan( astVar( 'a' ), astVar( 'aZ' ) ),
+				astLessThan( 'a', 'aZ' ),
 				astPreIncrement( 'a' ),
 				twigTestLoopBody
 			);
@@ -3304,7 +3304,7 @@ gen.prototype.genAlike =
 		block =
 			astBlock( )
 			.astIf(
-				astEquals( astThis, astVar( 'obj' ) ),
+				astEquals( astThis, 'obj' ),
 				astReturnTrue
 			)
 			.astIf(
@@ -3368,8 +3368,8 @@ gen.prototype.genAlike =
 				// FIXME use proto
 				astVar( 'Constructor' )
 				.astDot( 'prototype' )
-				.astDot( alikeName ),
-
+				.astDot( alikeName )
+			,
 				astFunc( block )
 				.astArg( 'obj', 'object to compare to' )
 			);
