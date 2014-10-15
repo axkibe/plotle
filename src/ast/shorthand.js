@@ -457,6 +457,26 @@ shorthand.astIf =
 		elsewise
 	)
 {
+	// automatic block convertions for comfort.
+
+	condition = tools.convertArg( condition );
+
+	if(
+		then.reflect !== 'ast.astBlock'
+	)
+	{
+		then = astBlock.create( ).append( then );
+	}
+
+	if(
+		elsewise
+		&&
+		elsewise.reflect !== 'ast.astBlock'
+	)
+	{
+		elsewise = astBlock.create( ).append( elsewise );
+	}
+
 	return(
 		astIf.create(
 			'condition',
