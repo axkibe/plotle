@@ -837,7 +837,6 @@ shorthand.astVar =
 /*
 | Shorthand for variable declerations.
 */
-/*
 shorthand.astVarDec =
 	function(
 		name,   // variable name
@@ -849,11 +848,12 @@ shorthand.astVarDec =
 			'name',
 				name,
 			'assign',
-				assign || null
+				arguments.length > 1
+				? tools.convertArg( assign )
+				: null
 		)
 	);
 };
-*/
 
 
 /*

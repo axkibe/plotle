@@ -364,10 +364,7 @@ astBlock.prototype.astVarDec =
 {
 	return(
 		this.append(
-			astVarDec.create(
-				'name', name,
-				'assign', assign || null
-			)
+			shorthand.astVarDec.apply( shorthand, arguments )
 		)
 	);
 };

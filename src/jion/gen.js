@@ -1516,9 +1516,9 @@ gen.prototype.genCreatorFreeStringsParser =
 						astVar( 'ranks' ).astDot( 'splice' ),
 						astCall(
 							astVar( 'ranks' ).astDot( 'indexOf' ),
-							astVar( 'arg' )
+							'arg'
 						),
-						astNumber( 1 )
+						1
 					)
 				)
 			);
@@ -1566,13 +1566,10 @@ gen.prototype.genCreatorFreeStringsParser =
 				.append( rayDupCheck )
 				.astCall(
 					astVar( 'ray' ).astDot( 'splice' ),
-					astVar( 'arg' ),
-					astNumber( 0 ),
+					'arg',
+					0,
 					astVar( 'arguments' ).astMember(
-						astPlus(
-							astPreIncrement( astVar( 'a' ) ),
-							astNumber( 1 )
-						)
+						astPlus( astPreIncrement( 'a' ), 1 )
 					)
 				)
 			)
@@ -1582,8 +1579,8 @@ gen.prototype.genCreatorFreeStringsParser =
 				.append( rayDupCheck )
 				.astCall(
 					astVar( 'ray' ).astDot( 'splice' ),
-					astVar( 'arg' ),
-					astNumber( 1 )
+					'arg',
+					1
 				)
 			)
 			.astCase(
@@ -1593,10 +1590,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign(
 					astVar( 'ray' ).astMember( 'arg' ),
 					astVar( 'arguments' ).astMember(
-						astPlus(
-							astPreIncrement( astVar( 'a' ) ),
-							astNumber( 1 )
-						)
+						astPlus( astPreIncrement( 'a' ), 1 )
 					)
 				)
 			);
@@ -1621,8 +1615,8 @@ gen.prototype.genCreatorFreeStringsParser =
 			astVList( )
 				.astVarDec( 'a', astNumber( 0 ) )
 				.astVarDec( 'aZ', astVar( 'arguments' ).astDot( 'length' ) ),
-			astLessThan( astVar( 'a' ), astVar( 'aZ' ) ),
-			astPlusAssign( astVar( 'a' ), astNumber( 2 ) ),
+			astLessThan( 'a', 'aZ' ),
+			astPlusAssign( 'a', 2 ),
 			loop
 		);
 
