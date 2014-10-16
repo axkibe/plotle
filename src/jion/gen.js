@@ -1133,6 +1133,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 
 	if( this.twig )
 	{
+		// XXX
 		receiver =
 			receiver
 			.astAssign(
@@ -3123,16 +3124,11 @@ gen.prototype.genEquals =
 	block =
 		block
 		.astIf(
-			astEquals(
-				astThis,
-				astVar( 'obj' )
-			),
-			astReturn( astTrue )
+			astEquals( astThis, 'obj' ),
+			astReturnTrue
 		)
 		.astIf(
-			astNot(
-				astVar( 'obj' )
-			),
+			astNot( 'obj' ),
 			astReturnFalse
 		);
 
@@ -3151,7 +3147,7 @@ gen.prototype.genEquals =
 			.astIf(
 				astOr(
 					astDiffers(
-						astVar( 'key' ),
+						'key',
 						astVar( 'obj' ).astDot( 'ranks' ).astMember( vA )
 					),
 					astCall(

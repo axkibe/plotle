@@ -340,6 +340,10 @@ shorthand.astDiffers =
 		right
 	)
 {
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
+
 	return(
 		astDiffers.create(
 			'left',
