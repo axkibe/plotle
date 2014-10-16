@@ -1133,21 +1133,17 @@ gen.prototype.genCreatorInheritanceReceiver =
 
 	if( this.twig )
 	{
-		// XXX
 		receiver =
 			receiver
 			.astAssign(
-				astVar( 'twig' ),
+				'twig',
 				astVar( 'inherit' ).astDot( 'twig' )
 			)
 			.astAssign(
-				astVar( 'ranks' ),
+				'ranks',
 				astVar( 'inherit' ).astDot( 'ranks' )
 			)
-			.astAssign(
-				astVar( 'twigDup' ),
-				astFalse
-			);
+			.astAssign( 'twigDup', astFalse );
 	}
 
 	if( this.ray )
@@ -1155,11 +1151,11 @@ gen.prototype.genCreatorInheritanceReceiver =
 		receiver =
 			receiver
 			.astAssign(
-				astVar( 'ray' ),
+				'ray',
 				astVar( 'inherit' ).astDot( 'ray' )
 			)
 			.astAssign(
-				astVar( 'rayDup' ),
+				'rayDup',
 				astFalse
 			);
 	}
@@ -1191,7 +1187,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 		astIf(
 			astDiffers(
 				astThis,
-				astVar( this.reference )
+				this.reference
 			),
 			receiver
 		);
@@ -1201,18 +1197,9 @@ gen.prototype.genCreatorInheritanceReceiver =
 		thisCheck = thisCheck
 			.astElsewise(
 				astBlock( )
-				.astAssign(
-					astVar( 'twig' ),
-					astObjLiteral( )
-				)
-				.astAssign(
-					astVar( 'ranks' ),
-					astArrayLiteral( )
-				)
-				.astAssign(
-					astVar( 'twigDup' ),
-					astTrue
-				)
+				.astAssign( 'twig', astObjLiteral( ) )
+				.astAssign( 'ranks', astArrayLiteral( ) )
+				.astAssign( 'twigDup', astTrue )
 			);
 	}
 
@@ -1221,14 +1208,8 @@ gen.prototype.genCreatorInheritanceReceiver =
 		thisCheck = thisCheck
 			.astElsewise(
 				astBlock( )
-				.astAssign(
-					astVar( 'ray' ),
-					astArrayLiteral( )
-				)
-				.astAssign(
-					astVar( 'rayDup' ),
-					astTrue
-				)
+				.astAssign( 'ray', astArrayLiteral( ) )
+				.astAssign( 'rayDup', astTrue )
 			);
 	}
 
@@ -1294,21 +1275,14 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( name  ),
 				astBlock( )
 				.astIf(
-					astDiffers(
-						astVar( 'arg' ),
-						astUndefined
-					),
-					astBlock( )
-					.astAssign(
-						attr.v,
-						astVar( 'arg' )
-					)
+					astDiffers( 'arg', astUndefined ),
+					astAssign( attr.v, 'arg' )
 				)
 			);
 	}
 
 	if( this.twig )
-	{
+	{ // XXX
 		twigDupCheck =
 			astIf(
 				astNot( astVar( 'twigDup' ) ),
