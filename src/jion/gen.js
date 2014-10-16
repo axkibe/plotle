@@ -912,8 +912,7 @@ gen.prototype.genConstructor =
 		block =
 			block
 			.astCheck(
-				astBlock( )
-				.astCall(
+				astCall(
 					astVar( 'Object' ).astDot( 'freeze' ),
 					'ray'
 				)
@@ -2916,8 +2915,7 @@ gen.prototype.genToJSON =
 		block
 		.astAssign( 'json', olit )
 		.astCheck(
-			astBlock( ) // XXX
-			.astCall(
+			astCall(
 				astVar( 'Object' ).astDot( 'freeze' ),
 				'json'
 			)
