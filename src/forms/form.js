@@ -55,10 +55,13 @@ form.init =
 	)
 {
 	var
+		focusAccent,
+		mark,
 		name,
-		widgetProto,
 		path,
-		focusAccent;
+		ranks,
+		twig,
+		widgetProto;
 
 	if( !this.path )
 	{
@@ -71,12 +74,12 @@ form.init =
 		this.view.baseFrame;
 
 	// all components of the form
-	var
-		twig =
-			// FIXME do not copy if this.twig !== inherit.twig
-			jools.copy( this.twig ),
-		ranks =
-			this.ranks;
+	// FIXME do not copy if this.twig !== inherit.twig
+	twig = jools.copy( this.twig );
+
+	mark = this.mark;
+
+	ranks = this.ranks;
 
 	for(
 		var a = 0, aZ = ranks.length;
@@ -95,15 +98,14 @@ form.init =
 
 		if( widgetProto.focusable )
 		{
-			if( this.mark.widgetPath.isEmpty )
+			if( !mark || mark.widgetPath.isEmpty )
 			{
-				focusAccent =
-					false;
+				focusAccent = false;
 			}
 			else
 			{
 				focusAccent =
-					this.mark.widgetPath.get( 4 ) === name;
+					mark.widgetPath.get( 4 ) === name;
 			}
 		}
 
@@ -141,22 +143,18 @@ form.concernsMark =
 		return mark;
 	}
 
-	if( mark.containsPath( path ) )
-	{
-		return mark;
-	}
-	else
-	{
-		return marks.vacant.create( );
-	}
+	return(
+		mark.containsPath( path )
+		? mark
+		: null
+	);
 };
 
 
 /*
 | The disc is shown while a form is shown.
 */
-form.prototype.showDisc =
-	true;
+form.prototype.showDisc = true;
 
 
 /*
@@ -166,9 +164,17 @@ form.prototype._focusedWidget =
 	function( )
 {
 	var
+		mark,
 		path;
 
-	path = this.mark.widgetPath;
+	mark = this.mark;
+
+	if( !mark )
+	{
+		return null;
+	}
+
+	path = mark.widgetPath;
 
 	if( path.length === 0 )
 	{

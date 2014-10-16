@@ -67,7 +67,9 @@ if( JION )
 									]
 							},
 						defaultValue :
-							undefined
+							undefined,
+						allowsNull :
+							true
 					},
 				path :
 					{

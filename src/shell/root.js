@@ -164,7 +164,7 @@ shell.root =
 			'hover',
 				jion.path.empty,
 			'mark',
-				marks.vacant.create( ),
+				null,
 			'path',
 				jion.path.empty
 				.append( 'forms' ),
@@ -205,7 +205,7 @@ shell.root =
 			'hover',
 				jion.path.empty,
 			'mark',
-				marks.vacant.create( ),
+				null,
 			'mode',
 				this._mode,
 			'path',
@@ -221,7 +221,7 @@ shell.root =
 				gruga.createDisc
 		);
 
-	this.mark = marks.vacant.create( );
+	this.mark = null;
 
 	// remembers an aquired visitor user name and passhash
 	// so when logging out from a real user the previous
@@ -345,8 +345,12 @@ proto.update =
 
 	mark = this.space.mark;
 
-	switch( mark.reflect )
+	switch( mark && mark.reflect )
 	{
+		case null :
+
+			break;
+
 		case 'marks.caret' :
 
 			item = space.twig[ mark.path.get( 2 ) ];
@@ -354,7 +358,7 @@ proto.update =
 			if( item === undefined )
 			{
 				// the item holding the caret was removed
-				mark = marks.vacant.create( );
+				mark = null;
 			}
 			else
 			{
@@ -391,7 +395,7 @@ proto.update =
 			if( item === undefined )
 			{
 				// the item holding the caret was removed
-				mark = marks.vacant.create( );
+				mark = null;
 			}
 
 			break;
@@ -403,7 +407,7 @@ proto.update =
 			// tests if the owning item was removed
 			if( item === undefined )
 			{
-				mark = marks.vacant.create( );
+				mark = null;
 			}
 			else
 			{
@@ -464,7 +468,6 @@ proto.update =
 			}
 
 			break;
-
 	}
 
 	// FIXME let the link do the real stuff
@@ -487,10 +490,7 @@ proto.update =
 		);
 
 	this._discJockey =
-		this._discJockey.create(
-			'mark',
-				mark
-		);
+		this._discJockey.create( 'mark', mark );
 
 	this.mark = mark;
 
@@ -500,24 +500,26 @@ proto.update =
 
 /*
 | The shell got or lost the systems focus.
+|
+| FIXME rename setSystemFocus
 */
 proto.setFocus =
 	function(
 		focus
 	)
 {
-	switch( this.mark.reflect )
+	if( this.mark )
 	{
-		case 'marks.caret' :
+		switch( this.mark.reflect )
+		{
+			case 'marks.caret' :
 
-			this.setMark(
-				this.mark.create(
-					'focus',
-						focus
-				)
-			);
+				this.setMark(
+					this.mark.create( 'focus', focus )
+				);
 
 			break;
+		}
 	}
 
 	if( this._$redraw )
@@ -745,31 +747,20 @@ proto.dragStart =
 		bubble,
 		display;
 
-	bubble =
-		null;
-	display =
-		this._getCurrentDisplay( );
+	bubble = null;
+
+	display = this._getCurrentDisplay( );
 
 	if( display && display.showDisc )
 	{
-		bubble =
-			this._discJockey.dragStart(
-				p,
-				shift,
-				ctrl
-			);
+		bubble = this._discJockey.dragStart( p, shift, ctrl );
 	}
 
 	if( bubble === null )
 	{
 		if( display )
 		{
-			bubble =
-				display.dragStart(
-					p,
-					shift,
-					ctrl
-				);
+			bubble = display.dragStart( p, shift, ctrl );
 		}
 	}
 
@@ -891,7 +882,7 @@ proto.mousewheel =
 proto.suggestingKeyboard =
 	function( )
 {
-	return this.mark.hasCaret;
+	return( this.mark !== null && this.mark.hasCaret );
 };
 
 
@@ -903,7 +894,11 @@ proto.setMark =
 		mark
 	)
 {
-	system.setInput( mark.clipboard );
+	system.setInput(
+		mark
+		? mark.clipboard
+		: ''
+	);
 
 	this.mark = mark;
 
@@ -1393,7 +1388,7 @@ proto.onAquireSpace =
 			'hover',
 				jion.path.empty,
 			'mark',
-				marks.vacant.create( ),
+				null,
 			'path',
 				jion.path.empty.append( 'space' ),
 			'view',

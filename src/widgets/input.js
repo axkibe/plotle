@@ -428,17 +428,20 @@ jools.lazyValue(
 			aZ,
 			f,
 			font,
+			mark,
 			pitch,
 			pm,
 			shape,
 			style,
 			value;
 
-		value = this.value;
+		pitch = this._pitch;
 
 		shape = this._shape;
 
-		pitch = this._pitch;
+		value = this.value;
+
+		mark = this.mark;
 
 		f =
 			euclid.fabric.create(
@@ -497,20 +500,17 @@ jools.lazyValue(
 
 
 		if(
-			this.mark.reflect === 'marks.caret'
+			mark
 			&&
-			this.mark.focus
+			mark.reflect === 'marks.caret'
+			&&
+			mark.focus
 		)
 		{
 			this._drawCaret( f );
 		}
 
-
-		f.edge(
-			style,
-			shape,
-			euclid.view.proper
-		);
+		f.edge( style, shape, euclid.view.proper );
 
 		return f;
 	}

@@ -74,9 +74,11 @@ if( JION )
 									]
 							},
 						type :
-							'Object', // FUTURE 'marks.*'
+							'Object', // FUTURE '->marks'
 						defaultValue :
-							undefined
+							undefined,
+						allowsNull :
+							true
 					},
 				path :
 					{
@@ -827,6 +829,8 @@ jools.lazyValue(
 
 
 			if(
+				mark
+				&&
 				mark.reflect === 'marks.caret'
 				&&
 				mark.focus

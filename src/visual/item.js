@@ -76,21 +76,16 @@ item.concernsMark =
 		return undefined;
 	}
 
-	if( path.isEmpty )
+	if( !mark || path.isEmpty )
 	{
-		return marks.vacant.create( );
+		return null;
 	}
 
-	if(
+	return(
 		mark.containsPath( path )
-	)
-	{
-		return mark;
-	}
-	else
-	{
-		return marks.vacant.create( );
-	}
+		? mark
+		: null
+	);
 };
 
 

@@ -15,13 +15,6 @@ widgets = widgets || { };
 
 
 /*
-| Imports
-*/
-var
-	marks;
-
-
-/*
 | Capsule
 */
 ( function( ) {
@@ -58,16 +51,11 @@ widget.concernsMark =
 		return null;
 	}
 
-	if(
+	return(
 		mark.containsPath( path )
-	)
-	{
-		return mark;
-	}
-	else
-	{
-		return marks.vacant.create( );
-	}
+		? mark
+		: null
+	);
 };
 
 

@@ -91,9 +91,11 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Object', // FUTURE 'marks.*',
+							'Object', // FUTURE '->marks',
 						defaultValue :
-							undefined
+							undefined,
+						allowsNull :
+							true
 					},
 				view :
 					{
@@ -199,7 +201,7 @@ doc.prototype._init =
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.mark.hasCaret )
+/**/	if( this.mark && this.mark.hasCaret )
 /**/	{
 /**/		if( !this.twig[ this.mark.caretPath.get( 5 ) ] )
 /**/		{
@@ -678,7 +680,7 @@ doc.prototype.draw =
 		scrollp      // scroll position
 	)
 {
-	// FIXME <pre>
+	// FUTURE <pre>
 	var
 		mark,
 		para,
@@ -691,6 +693,8 @@ doc.prototype.draw =
 	mark = this.mark;
 
 	if(
+		mark
+		&&
 		mark.reflect === 'marks.range'
 		&&
 		mark.itemPath.subPathOf( this.path )

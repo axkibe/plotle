@@ -73,15 +73,14 @@ if( JION )
 								func :
 									'concernsMark',
 								args :
-									[
-										'mark',
-										'path'
-									]
+									[ 'mark', 'path' ]
 							},
 						type :
 							'Object', // FUTURE 'marks.*',
 						defaultValue :
-							undefined
+							undefined,
+						allowsNull :
+							true
 					},
 				path :
 					{
@@ -196,35 +195,25 @@ para.concernsMark =
 		path
 	)
 {
-	if( mark === undefined )
+	if( !mark )
 	{
-		return undefined;
+		return mark;
 	}
 
 	if( mark.reflect === 'marks.range' )
 	{
-		if(
+		return(
 			mark.itemPath.subPathOf( path )
-		)
-		{
-			return mark;
-		}
-		else
-		{
-			return marks.vacant.create( );
-		}
+			? mark
+			: null
+		);
 	}
 
-	if(
+	return(
 		mark.containsPath( path )
-	)
-	{
-		return mark;
-	}
-	else
-	{
-		return marks.vacant.create( );
-	}
+		? mark
+		: null
+	);
 };
 
 
@@ -351,6 +340,8 @@ jools.lazyValue(
 		f.scale( 1 / zoom );
 
 		if(
+			mark
+			&&
 			mark.reflect === 'marks.caret'
 			&&
 			mark.focus

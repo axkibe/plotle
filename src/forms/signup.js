@@ -402,9 +402,7 @@ signUp.prototype.clear =
 		true
 	);
 
-	root.setMark(
-		marks.vacant.create( )
-	);
+	root.setMark( null );
 };
 
 

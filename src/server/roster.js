@@ -748,14 +748,6 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/marks/vacant.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
 			'src/marks/widget.js',
 		'hasJion',
 			true,

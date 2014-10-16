@@ -18,8 +18,7 @@ forms = forms || { };
 | Imports
 */
 var
-	jools,
-	marks;
+	jools;
 
 
 /*
@@ -51,7 +50,9 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Object' // FUTURE 'marks.*'
+							'Object', // FUTURE '->marks'
+						allowsNull :
+							true
 					},
 				path :
 					{
@@ -207,18 +208,11 @@ jockey.concernsMark =
 		mark
 	)
 {
-	if(
-		mark.containsPath(
-			jockey.path
-		)
-	)
-	{
-		return mark;
-	}
-	else
-	{
-		return marks.vacant.create( );
-	}
+	return(
+		mark.containsPath( jockey.path )
+		? mark
+		: null
+	);
 };
 
 

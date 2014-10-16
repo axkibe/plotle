@@ -91,7 +91,9 @@ if( JION )
 						type :
 							'Object', // FUTURE 'marks.*',
 						defaultValue :
-							undefined
+							undefined,
+						allowsNull :
+							true
 					},
 				path :
 					{

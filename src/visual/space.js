@@ -79,7 +79,9 @@ if( JION )
 									[ 'mark' ]
 							},
 						defaultValue :
-							undefined
+							undefined,
+						allowsNull :
+							true
 					},
 				path :
 					{
@@ -224,7 +226,7 @@ space.concernsMark =
 	}
 	else
 	{
-		return marks.vacant.create( );
+		return null;
 	}
 };
 
@@ -246,7 +248,10 @@ space.prototype.focusedItem =
 
 	mark = this.mark;
 
-	path = mark.itemPath;
+	path =
+		mark
+		? mark.itemPath
+		: jion.path.empty;
 
 	if( action )
 	{
@@ -687,7 +692,7 @@ space.prototype.dragStart =
 							p
 					),
 				'mark',
-					marks.vacant.create( ),
+					null,
 				'path',
 					jion.path.empty,
 				'view',
@@ -720,7 +725,7 @@ space.prototype.dragStart =
 				'pnw',
 					view.depoint( p ),
 				'mark',
-					marks.vacant.create( ),
+					null,
 				'path',
 					jion.path.empty,
 				'view',
@@ -753,7 +758,7 @@ space.prototype.dragStart =
 				'hover',
 					jion.path.empty,
 				'mark',
-					marks.vacant.create( ),
+					null,
 				'path',
 					jion.path.empty,
 				'view',
@@ -885,9 +890,7 @@ space.prototype.click =
 
 	// otherwise ...
 
-	root.setMark(
-		marks.vacant.create( )
-	);
+	root.setMark( null );
 
 	return true;
 };

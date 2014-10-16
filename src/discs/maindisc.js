@@ -221,6 +221,8 @@ mainDisc.prototype._init =
 				visible =
 					this.access === 'rw'
 					&&
+					this.mark !== null
+					&&
 					this.mark.itemPath.length > 0;
 
 				break;

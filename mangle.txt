@@ -530,7 +530,6 @@
 . nonExistingSpace
 . nonSpaceTag
 . nonSpaceUser
-. none
 . normal
 . note
 > null
@@ -803,7 +802,6 @@
 . userInput
 > username
 . usernameLabel
-. vacant
 > val
 > value
 . vdis
