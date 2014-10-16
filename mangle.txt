@@ -185,7 +185,6 @@
 . arrow
 . askew
 . assign
-. asyncEvent
 > at
 > at1
 > at2

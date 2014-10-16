@@ -197,8 +197,7 @@ link.prototype._onAuth =
 
 	ok = reply.ok;
 
-	system.asyncEvent(
-		'onAuth',
+	root.onAuth(
 		ok,
 		ok ? reply.user : null,
 		ok ? request.passhash : null,
@@ -250,8 +249,7 @@ link.prototype._onRegister =
 
 	ok = reply.ok;
 
-	system.asyncEvent(
-		'onRegister',
+	root.onRegister(
 		ok,
 		ok ? request.user : null,
 		ok ? request.passhash : null,
@@ -312,10 +310,7 @@ link.prototype._onAquireSpace =
 
 	if( !reply.ok )
 	{
-		system.asyncEvent(
-			'onAquireSpace',
-			reply
-		);
+		root.onAquireSpace( reply );
 
 		this._update( );
 
@@ -327,8 +322,7 @@ link.prototype._onAquireSpace =
 		case 'nonexistent' :
 		case 'no access' :
 
-			system.asyncEvent(
-				'onAquireSpace',
+			root.onAquireSpace(
 				jools.immute(
 					{
 						status :
@@ -377,8 +371,7 @@ link.prototype._onAquireSpace =
 				ccot.changeWrapRay.create( )
 		);
 
-	system.asyncEvent(
-		'onAquireSpace',
+	root.onAquireSpace(
 		jools.immute(
 			{
 				status :
@@ -704,11 +697,7 @@ link.prototype._onUpdate =
 
 	if( report.length > 0 )
 	{
-		system.asyncEvent(
-			'update',
-			cSpace,
-			report
-		);
+		root.update( cSpace, report );
 	}
 
 	if( gotOwnChgs )
@@ -785,7 +774,7 @@ link.prototype.alter =
 
 	link._sendChanges( );
 
-	system.asyncEvent( 'update', result.tree, chgX );
+	root.update( result.tree, chgX );
 
 	return result;
 };
@@ -969,7 +958,7 @@ link.prototype.undo =
 
 	link._sendChanges( );
 
-	system.asyncEvent( 'update', result.tree, chgX );
+	root.update( result.tree, chgX );
 
 	return chgX;
 };
@@ -1062,11 +1051,7 @@ link.prototype.redo =
 
 	link._sendChanges( );
 
-	system.asyncEvent(
-		'update',
-		result.tree,
-		chgX
-	);
+	root.update( result.tree, chgX );
 
 	return chgX;
 };

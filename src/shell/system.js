@@ -96,11 +96,6 @@ _catcher =
 };
 
 
-// XXX
-catcher =
-	_catcher;
-
-
 var
 	// atween is the state where the mouse button went down,
 	// and its yet unsure if this is a click or drag.
@@ -152,6 +147,78 @@ var
 
 	// false, 'atween' or 'drag'
 	_pointingState = false;
+
+/*
+| This public version of the catcher is
+| to be used by asynchronous events
+| (especially network events)
+*/
+catcher =
+	function( func )
+{
+	return function( )
+	{
+		var message;
+
+		if( _failScreen )
+		{
+			return;
+		}
+
+		if(
+			config.devel &&
+			!config.debug.weinre
+		)
+		{
+			func.apply( this, arguments );
+
+			system._repeatHover( );
+
+			system._steerAttention( );
+
+			return;
+		}
+
+		try
+		{
+			func.apply( this, arguments );
+
+			system._repeatHover( );
+
+			system._steerAttention( );
+
+		}
+		catch( e )
+		{
+			try {
+				message =
+					[
+						'OOPS! Internal failure, ',
+							e.name, ': ',
+							e.message, '\n\n',
+						'stack: ',
+							e.stack,
+						'\n\n',
+						'Please report to axkibe@gmail.com'
+					].join('');
+
+				if( !config.debug.weinre )
+				{
+					system.failScreen( message );
+				}
+				else
+				{
+					console.log( message );
+				}
+			}
+			catch ( ee )
+			{
+				console.log( 'error in error:' + ee );
+			}
+		}
+	};
+};
+
 
 /*
 | Creates a catcher that calls a system function.
@@ -284,11 +351,14 @@ var _settings =
 /*
 | An asyncronous event happened
 |
+| TODO remove
+|
 | For example:
 |   message
 |   onArriveAtSpace,
 |   update
 */
+/*
 System.prototype.asyncEvent =
 	function(
 		eventName,
@@ -309,7 +379,7 @@ System.prototype.asyncEvent =
 
 	this._steerAttention( );
 };
-
+*/
 
 /*
 | Replaces the shell by a failscreen
