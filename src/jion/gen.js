@@ -2923,12 +2923,7 @@ gen.prototype.genToJSON =
 			)
 		)
 		.astReturn(
-			astFunc(
-				astBlock( )
-				.astReturn(
-					astVar( 'json' )
-				)
-			)
+			astFunc( astReturn( 'json' ) )
 		);
 
 	capsule =
