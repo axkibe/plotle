@@ -49,7 +49,9 @@ if( JION )
 						json :
 							true,
 						type :
-							'Number'
+							'Number',
+						defaultValue :
+							undefined
 					}
 			},
 		node :
