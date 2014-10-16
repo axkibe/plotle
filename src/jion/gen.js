@@ -1282,26 +1282,26 @@ gen.prototype.genCreatorFreeStringsParser =
 	}
 
 	if( this.twig )
-	{ // XXX
+	{
 		twigDupCheck =
 			astIf(
-				astNot( astVar( 'twigDup' ) ),
+				astNot( 'twigDup' ),
 				astBlock( )
 				.astAssign(
-					astVar( 'twig' ),
+					'twig',
 					astCall(
 						astVar( 'jools' ).astDot( 'copy' ),
-						astVar( 'twig' )
+						'twig'
 					)
 				)
 				.astAssign(
-					astVar( 'ranks' ),
+					'ranks',
 					astCall(
 						astVar( 'ranks' ).astDot( 'slice' )
 					)
 				)
 				.astAssign(
-					astVar( 'twigDup' ),
+					'twigDup',
 					astTrue
 				)
 			);
@@ -1313,22 +1313,21 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( 'twig:add' ),
 				astBlock( )
 				.append( twigDupCheck )
+				.astAssign( 'key', 'arg' )
 				.astAssign(
-					astVar( 'key' ),
-					astVar( 'arg' )
-				)
-				.astAssign(
-					astVar( 'arg' ),
+					'arg'
+				,
 					astVar( 'arguments' )
-						.astMember(
-							astPlus( astPreIncrement( 'a' ), 1 )
-						)
+					.astMember(
+						astPlus( astPreIncrement( 'a' ), 1 )
+					)
 				)
 				.astIf(
 					astDiffers(
 						astVar( 'twig' ).astMember( 'key' ),
 						astUndefined
-					),
+					)
+				,
 					astBlock( )
 					.astFail(
 						/*
@@ -1342,23 +1341,20 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astAssign(
 					astVar( 'twig' ).astMember( 'key' ),
-					astVar( 'arg' )
+					'arg'
 				)
 				.astCall(
 					astVar( 'ranks' ).astDot( 'push' ),
-					astVar( 'key' )
+					'key'
 				)
 			)
 			.astCase(
 				astString( 'twig:set' ),
 				astBlock( )
 				.append( twigDupCheck )
+				.astAssign( 'key', 'arg' )
 				.astAssign(
-					astVar( 'key' ),
-					astVar( 'arg' )
-				)
-				.astAssign(
-					astVar( 'arg' ),
+					'arg',
 					astVar( 'arguments' ).astMember(
 						astPlus(
 							astPreIncrement( astVar( 'a' ) ),
@@ -1391,14 +1387,11 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( 'twig:insert' ),
 				astBlock( )
 				.append( twigDupCheck )
+				.astAssign( 'key', 'arg' )
 				.astAssign(
-					astVar( 'key' ),
-					astVar( 'arg' )
-				)
-				.astAssign(
-					astVar( 'rank' ),
+					'rank',
 					astVar( 'arguments' )
-						.astMember( astPlus( 'a', 2 ) )
+					.astMember( astPlus( 'a', 2 ) )
 				)
 				.astAssign(
 					astVar( 'arg' ),
@@ -1426,7 +1419,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astOr(
 						astLessThan( 'rank', 0 ),
 						astGreaterThan(
-							astVar( 'rank' ),
+							'rank',
 							astVar( 'ranks' ).astDot( 'length' )
 						)
 					),
@@ -1437,7 +1430,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astAssign(
 					astVar( 'twig' ).astMember( 'key' ),
-					astVar( 'arg' )
+					'arg'
 				)
 				.astCall(
 					astVar( 'ranks' ).astDot( 'splice' ),
@@ -1489,7 +1482,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astNot( astVar( 'rayDup' ) ),
 				astBlock( )
 				.astAssign(
-					astVar( 'ray' ),
+					'ray',
 					astCall(
 						astVar( 'ray' ).astDot( 'slice' )
 					)
