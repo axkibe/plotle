@@ -482,14 +482,11 @@ item.prototype.dragStart =
 	sbary = this.scrollbarY;
 
 	if(
-		action.reflect === 'actions.none'
+		action === null
 		&&
 		sbary
 		&&
-		sbary.within(
-			view,
-			p
-		)
+		sbary.within( view, p )
 	)
 	{
 		root.setAction(
@@ -507,10 +504,7 @@ item.prototype.dragStart =
 	}
 
 	if(
-		!this.silhoutte.within(
-			view,
-			p
-		)
+		!this.silhoutte.within( view, p )
 	)
 	{
 		return false;

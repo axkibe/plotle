@@ -910,11 +910,9 @@ space.prototype.dragStop =
 		res,
 		view;
 
-	action =
-		root.action;
+	action = root.action;
 
-	view =
-		this.view;
+	view = this.view;
 
 /**/if( CHECK )
 /**/{
@@ -971,9 +969,7 @@ space.prototype.dragStop =
 
 					if( !ctrl )
 					{
-						root.setAction(
-							actions.none.create( )
-						);
+						root.setAction( null );
 					}
 
 					break;
@@ -1045,9 +1041,7 @@ space.prototype.dragStop =
 
 					if( !ctrl )
 					{
-						root.setAction(
-							actions.none.create( )
-						);
+						root.setAction( null );
 					}
 
 					break;
@@ -1090,9 +1084,7 @@ space.prototype.dragStop =
 
 					if( !ctrl )
 					{
-						root.setAction(
-							actions.none.create( )
-						);
+						root.setAction( null );
 					}
 
 					break;
@@ -1104,15 +1096,9 @@ space.prototype.dragStop =
 
 			break;
 
-		case 'actions.none' :
-
-			break;
-
 		case 'actions.pan' :
 
-			root.setAction(
-				actions.none.create( )
-			);
+			root.setAction( null );
 
 			break;
 
@@ -1123,9 +1109,7 @@ space.prototype.dragStop =
 
 				case 'start' :
 
-					root.setAction(
-						actions.none.create( )
-					);
+					root.setAction( null );
 
 					break;
 
@@ -1144,9 +1128,7 @@ space.prototype.dragStop =
 						);
 					}
 
-					root.setAction(
-						actions.none.create( )
-					);
+					root.setAction( null );
 
 					break;
 
@@ -1198,9 +1180,7 @@ space.prototype.dragStop =
 				}
 			}
 
-			root.setAction(
-				actions.none.create( )
-			);
+			root.setAction( null );
 
 			break;
 
@@ -1240,9 +1220,7 @@ space.prototype.dragStop =
 				}
 			}
 
-			root.setAction(
-				actions.none.create( )
-			);
+			root.setAction( null );
 
 			break;
 
@@ -1257,9 +1235,7 @@ space.prototype.dragStop =
 				ctrl
 			);
 
-			root.setAction(
-				actions.none.create( )
-			);
+			root.setAction( null );
 
 			break;
 
@@ -1297,12 +1273,16 @@ space.prototype.dragMove =
 		resized,
 		zone;
 
-	action =
-		root.action;
-	transItem =
-		null;
-	view =
-		this.view;
+	action = root.action;
+
+	transItem = null;
+
+	view = this.view;
+
+	if( action === null )
+	{
+		return 'pointer';
+	}
 
 	switch( action.reflect )
 	{
@@ -1424,10 +1404,6 @@ space.prototype.dragMove =
 					return 'pointer';
 				}
 			}
-
-			return 'pointer';
-
-		case 'actions.none' :
 
 			return 'pointer';
 

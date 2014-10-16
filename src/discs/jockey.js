@@ -50,7 +50,9 @@ if( JION )
 						comment :
 							'currently active action',
 						type :
-							'Object' // FUTURE 'actions.*'
+							'Object', // FUTURE '->actions'
+						allowsNull :
+							true
 					},
 				hover :
 					{

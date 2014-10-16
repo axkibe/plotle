@@ -632,6 +632,11 @@ createDisc._isActiveButton =
 		wname    // the widget name
 	)
 {
+	if( action === null )
+	{
+		return false;
+	}
+
 	switch( action.reflect )
 	{
 		case 'actions.createGeneric' :

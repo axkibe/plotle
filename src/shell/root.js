@@ -139,7 +139,7 @@ shell.root =
 
 	this.space = null;
 
-	this.action = actions.none.create( );
+	this.action = null;
 
 	this._mode = 'Normal';
 
@@ -201,7 +201,7 @@ shell.root =
 			'access',
 				'',
 			'action',
-				actions.none.create( ),
+				null,
 			'hover',
 				jion.path.empty,
 			'mark',
@@ -309,8 +309,8 @@ proto.setAction =
 /**/if ( CHECK )
 /**/{
 /**/	if(
-/**/		!action
-/**/		||
+/**/		action !== null
+/**/		&&
 /**/		!actions.isAction( action.reflect )
 /**/	)
 /**/	{
@@ -321,10 +321,7 @@ proto.setAction =
 	this.action = action;
 
 	this._discJockey =
-		this._discJockey.create(
-			'action',
-				action
-		);
+		this._discJockey.create( 'action', action );
 
 	this._$redraw = true;
 };
@@ -800,23 +797,13 @@ proto.dragMove =
 
 	action = this.action;
 
-	if( !action )
-	{
-		throw new Error( );
-	}
-
 	cursor = null;
 
 	display = this._getCurrentDisplay( );
 
 	if( display )
 	{
-		cursor =
-			display.dragMove(
-				p,
-				shift,
-				ctrl
-			);
+		cursor = display.dragMove( p, shift, ctrl );
 	}
 
 	if( this._$redraw )
@@ -843,14 +830,6 @@ proto.dragStop =
 		display;
 
 	action = this.action;
-
-/**/if( CHECK )
-/**/{
-/**/	if( !action )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
 
 	display = this._getCurrentDisplay( );
 

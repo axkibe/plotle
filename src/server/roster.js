@@ -770,14 +770,6 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
-			'src/actions/none.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
 			'src/actions/create-generic.js',
 		'hasJion',
 			true,

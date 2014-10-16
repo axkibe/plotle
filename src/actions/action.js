@@ -47,7 +47,6 @@ actions.action =
 /**/			case 'actions.createRelation' :
 /**/			case 'actions.itemDrag' :
 /**/			case 'actions.itemResize' :
-/**/			case 'actions.none' :
 /**/			case 'actions.pan' :
 /**/			case 'actions.scrollY' :
 /**/
