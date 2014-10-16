@@ -170,7 +170,7 @@ astVar = shorthand.astVar;
 
 astVList = shorthand.astVList;
 
-astReturnTrue = astReturn( astTrue );
+astReturnTrue = astReturn( true );
 
 astReturnFalse = astReturn( astFalse );
 
@@ -1199,7 +1199,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 				astBlock( )
 				.astAssign( 'twig', astObjLiteral( ) )
 				.astAssign( 'ranks', astArrayLiteral( ) )
-				.astAssign( 'twigDup', astTrue )
+				.astAssign( 'twigDup', true )
 			);
 	}
 
@@ -1209,7 +1209,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			.astElsewise(
 				astBlock( )
 				.astAssign( 'ray', astArrayLiteral( ) )
-				.astAssign( 'rayDup', astTrue )
+				.astAssign( 'rayDup', true )
 			);
 	}
 
