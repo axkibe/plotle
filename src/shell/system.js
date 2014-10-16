@@ -34,10 +34,14 @@ var
 'use strict';
 
 
+var
+	_catcher;
+
+
 /*
 | Catches all errors a function throws if config.devel is set.
 */
-catcher =
+_catcher =
 	function(
 		func
 	)
@@ -51,7 +55,9 @@ catcher =
 			!config.debug.weinre
 		)
 		{
-			return func.apply( this, arguments );
+			func.apply( this, arguments );
+
+			return;
 		}
 
 		try
@@ -89,6 +95,10 @@ catcher =
 	};
 };
 
+
+// XXX
+catcher =
+	_catcher;
 
 
 var
@@ -154,7 +164,7 @@ var _systemCatcher =
 	return (
 		function( )
 		{
-			catcher( system[ funcName ].apply( system, arguments ) );
+			_catcher( system[ funcName ].apply( system, arguments ) );
 		}
 	);
 };
@@ -446,12 +456,7 @@ System.prototype.setTimer =
 		callback
 	)
 {
-	return window.setTimeout(
-		catcher(
-			callback
-		),
-		time
-	);
+	return window.setTimeout( _catcher( callback ), time );
 };
 
 
@@ -796,11 +801,7 @@ System.prototype._onMouseDown =
 			this._onAtweenTimeCatcher
 		);
 
-	this._pointingHover(
-		p,
-		shift,
-		ctrl
-	);
+	this._pointingHover( p, shift, ctrl );
 
 	return false;
 };
@@ -1654,7 +1655,7 @@ startup = function( )
 	var start;
 
 	start =
-		catcher(
+		_catcher(
 			function( )
 			{
 				system = new System( );
