@@ -1,5 +1,5 @@
 /*
-| The link talks asynchronously with the server.
+| The dodo manages the undo and redo lists.
 |
 | Authors: Axel Kittenberger
 */
@@ -40,7 +40,7 @@ if( JION )
 {
 	return {
 		id :
-			'net.link',
+			'shell.dodo',
 		attributes :
 			{
 				passhash :

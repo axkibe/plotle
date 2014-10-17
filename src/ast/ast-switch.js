@@ -118,7 +118,7 @@ astSwitch.prototype.astCase =
 /*
 | Shortcut for setting the default case.
 */
-astSwitch.prototype.Default =
+astSwitch.prototype.astDefault =
 	function(
 		code
 	)

@@ -64,6 +64,7 @@ var
 	astAssign,
 	astBlock,
 	astCall,
+	astCheck,
 	astCommaList,
 	astComment,
 	astCondition,
@@ -109,6 +110,8 @@ astAssign = shorthand.astAssign;
 astBlock = shorthand.astBlock;
 
 astCall = shorthand.astCall;
+
+astCheck = shorthand.astCheck;
 
 astCommaList = shorthand.astCommaList;
 
@@ -1548,7 +1551,7 @@ gen.prototype.genCreatorFreeStringsParser =
 
 	switchExpr =
 		switchExpr
-		.Default(
+		.astDefault(
 			astBlock( )
 			.astCheck(
 				astBlock( )
@@ -2532,7 +2535,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 
 	switchExpr =
 		switchExpr
-		.Default(
+		.astDefault(
 			astBlock( )
 			//.astFail( 'invalid twig type' )
 			.astFail( )

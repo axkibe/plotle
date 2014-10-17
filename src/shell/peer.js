@@ -30,6 +30,7 @@ var
 
 
 var
+	_alter,
 	change,
 	newItemSign,
 	sign,
@@ -59,6 +60,28 @@ spliceSign =
 	);
 
 peer = { };
+
+
+/*
+| Alters the tree.
+|
+| Feeds the dochains.
+*/
+_alter =
+	function(
+		src,
+		trg
+	)
+{
+	return(
+		root.link.alter(
+			change.create(
+				'src', src,
+				'trg', trg
+			)
+		)
+	);
+};
 
 
 /*
@@ -96,16 +119,7 @@ peer.newNote =
 				null
 		);
 
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					src,
-				'trg',
-					newItemSign
-			)
-		)
-	);
+	return _alter( src, newItemSign );
 };
 
 
@@ -137,16 +151,7 @@ peer.newPortal =
 				null
 		);
 
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					src,
-				'trg',
-					newItemSign
-			)
-		)
-	);
+	return _alter( src, newItemSign );
 };
 
 
@@ -159,22 +164,10 @@ peer.setZone =
 		zone
 	)
 {
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					sign.create(
-						'val',
-							zone
-					),
-				'trg',
-					sign.create(
-						'path',
-							itemPath
-							.chop( )
-							.append( 'zone' )
-					)
-			)
+	return(
+		_alter(
+			sign.create( 'val', zone ),
+			sign.create( 'path', itemPath.chop( ).append( 'zone' ) )
 		)
 	);
 };
@@ -189,22 +182,10 @@ peer.setFontSize =
 		fontsize
 	)
 {
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					sign.create(
-						'val',
-							fontsize
-					),
-				'trg',
-					sign.create(
-						'path',
-							itemPath
-							.chop( )
-							.append( 'fontsize' )
-					)
-			)
+	return(
+		_alter(
+			sign.create( 'val', fontsize ),
+			sign.create( 'path', itemPath.chop( ).append( 'fontsize' ) )
 		)
 	);
 };
@@ -219,22 +200,10 @@ peer.setPNW =
 		pnw
 	)
 {
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					sign.create(
-						'val',
-							pnw
-					),
-				'trg',
-					sign.create(
-						'path',
-							itemPath
-							.chop( )
-							.append( 'pnw' )
-					)
-			)
+	return(
+		_alter(
+			sign.create( 'val', pnw ),
+			sign.create( 'path', itemPath.chop( ).append( 'pnw' ) )
 		)
 	);
 };
@@ -275,16 +244,7 @@ peer.newLabel =
 				null
 		);
 
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					src,
-				'trg',
-					newItemSign
-			)
-		)
-	);
+	return _alter( src, newItemSign );
 };
 
 
@@ -329,16 +289,7 @@ peer.newRelation =
 				null
 		);
 
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					src,
-				'trg',
-					newItemSign
-			)
-		)
-	);
+	return _alter( src, newItemSign );
 };
 
 
@@ -351,15 +302,11 @@ peer.moveToTop =
 		path
 	)
 {
-	root.link.alter(
-		{
-			path :
-				path.chop( )
-		},
-		{
-			rank :
-				0
-		}
+	return(
+		_alter(
+			sign.create( 'path', path.chop( )),
+			sign.create( 'rank', 0 )
+		)
 	);
 };
 */
@@ -375,21 +322,12 @@ peer.insertText =
 		text
 	)
 {
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					sign.create(
-						'val',
-							text
-					),
-				'trg',
-					sign.create(
-						'path',
-							path.chop( 1 ),
-						'at1',
-							offset
-					)
+	return(
+		_alter(
+			sign.create( 'val', text ),
+			sign.create(
+				'path', path.chop( 1 ),
+				'at1', offset
 			)
 		)
 	);
@@ -416,22 +354,14 @@ peer.removeText =
 		throw new Error( 'malformed removeText' );
 	}
 
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					sign.create(
-						'path',
-							path.chop( 1 ),
-						'at1',
-							at1,
-						'at2',
-							at1 + len
-					),
-				'trg',
-					sign.create( )
-					// 'val', null
-			)
+	return(
+		_alter(
+			sign.create(
+				'path', path.chop( 1 ),
+				'at1', at1,
+				'at2', at1 + len
+			),
+			sign.create( )
 		)
 	);
 };
@@ -531,19 +461,13 @@ peer.split =
 		offset
 	)
 {
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					sign.create(
-						'path',
-							path.chop( 1 ),
-						'at1',
-							offset
-					),
-				'trg',
-					spliceSign
-			)
+	return(
+		_alter(
+			sign.create(
+				'path', path.chop( 1 ),
+				'at1', offset
+			),
+			spliceSign
 		)
 	);
 };
@@ -558,18 +482,12 @@ peer.join =
 		at1
 	)
 {
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					spliceSign,
-				'trg',
-					sign.create(
-						'path',
-							path.chop( 1 ),
-						'at1',
-							at1
-					)
+	return(
+		_alter(
+			spliceSign,
+			sign.create(
+				'path', path.chop( 1 ),
+				'at1', at1
 			)
 		)
 	);
@@ -593,31 +511,17 @@ peer.removeItem =
 
 	pivot = root.space.getPath( path.chop( 1 ).shorten( 2 ) );
 
-	/*pivot =
-		root.link.get(
-			path.chop( 1 ).shorten( 2 )
-		);
-	*/
-
 	r1 = pivot.rankOf( key );
 
-	return (
-		root.link.alter(
-			change.create(
-				'src',
-					sign.create(
-						'val',
-							null,
-						'rank',
-							r1
-					),
-				'trg',
-					sign.create(
-						'path',
-							path.chop( 1 ),
-						'rank',
-							null
-					)
+	return(
+		_alter(
+			sign.create(
+				'val', null,
+				'rank', r1
+			),
+			sign.create(
+				'path', path.chop( 1 ),
+				'rank', null
 			)
 		)
 	);
