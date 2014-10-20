@@ -1157,10 +1157,8 @@ proto.setUser =
 {
 	this.link =
 		this.link.create(
-			'username',
-				username,
-			'passhash',
-				passhash
+			'username', username,
+			'passhash', passhash
 		);
 
 	if( username.substr( 0, 5 ) !== 'visit' )
@@ -1252,6 +1250,8 @@ proto.onload =
 		);
 
 	this.link = net.link.create( );
+
+	this.doTracker = shell.doTracker.create( );
 
 	username = window.localStorage.getItem( 'username' );
 

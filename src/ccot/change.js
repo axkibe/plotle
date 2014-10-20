@@ -202,18 +202,7 @@ change.prototype.changeTree =
 	var
 		r;
 
-	jools.log(
-		'change',
-		'src:',
-			this.src,
-		'trg:',
-			this.trg,
-		'type:',
-			this.type
-	);
-
 	// executes the op-handler
-	// FIXME make a switch call around this
 	switch( this.type )
 	{
 		case 'split' :
@@ -966,11 +955,7 @@ change.prototype._changeTreeSplit =
 	{
 		vKey = pivot.newUID( );
 
-		trg =
-			trg.create(
-				'path',
-					src.path.set( -2, vKey )
-			);
+		trg = trg.create( 'path', src.path.set( -2, vKey ) );
 	}
 
 /**/if( CHECK )
@@ -982,7 +967,7 @@ change.prototype._changeTreeSplit =
 /**/	}
 /**/}
 
-	key = path.get( -2 ),
+	key = path.get( -2 );
 
 	kn = pivot.rankOf( key );
 
@@ -1025,10 +1010,8 @@ change.prototype._changeTreeSplit =
 			tree,
 		chg :
 			this.create(
-				'src',
-					src,
-				'trg',
-					trg
+				'src', src,
+				'trg', trg
 			)
 	};
 };

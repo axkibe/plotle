@@ -408,6 +408,14 @@ module.exports =
 	),
 	resource.create(
 		'filePath',
+			'src/shell/do-tracker.js',
+		'hasJion',
+			true,
+		'inBundle',
+			true
+	),
+	resource.create(
+		'filePath',
 			'src/shell/peer.js',
 		'inBundle',
 			true,

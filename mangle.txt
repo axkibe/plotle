@@ -1,3 +1,6 @@
+. doTracker
+. flush
+. track
 . depth
 . 0-line
 > 1

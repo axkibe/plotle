@@ -1670,13 +1670,13 @@ space.prototype.specialKey =
 		{
 			case 'z' :
 
-				root.link.undo( );
+				root.doTracker.undo( );
 
 				return;
 
 			case 'y' :
 
-				root.link.redo( );
+				root.doTracker.redo( );
 
 				return;
 

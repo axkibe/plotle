@@ -18,7 +18,6 @@ net = net || { };
 */
 var
 	ccot,
-	config,
 	jion,
 	jools,
 	root,
@@ -122,24 +121,6 @@ if( JION )
 							// what the client thinks the server thinks
 						type :
 							'Object',
-						defaultValue :
-							null
-					},
-				_undo :
-					{
-						comment :
-							'the undo stack',
-						type :
-							'ccot.changeWrapRay',
-						defaultValue :
-							null
-					},
-				_redo :
-					{
-						comment :
-							'the redo stack',
-						type :
-							'ccot.changeWrapRay',
 						defaultValue :
 							null
 					}
@@ -299,6 +280,8 @@ link.prototype._onAquireSpace =
 	var
 		space;
 
+	root.doTracker.flush( );
+
 	if( !reply.ok )
 	{
 		root.onAquireSpace( reply );
@@ -355,11 +338,7 @@ link.prototype._onAquireSpace =
 			'_postbox',
 				ccot.changeWrapRay.create( ),
 			'_rSeq',
-				reply.seq,
-			'_undo',
-				ccot.changeWrapRay.create( ),
-			'_redo',
-				ccot.changeWrapRay.create( )
+				reply.seq
 		);
 
 	root.onAquireSpace(
@@ -440,14 +419,10 @@ link.prototype._onUpdate =
 		link,
 		outbox,
 		postbox,
-		redo,
 		report,
 		seq,
 		cSpace,
-		rSpace,
-		tfxChgX,
-		u,
-		undo;
+		rSpace;
 
 	link = this;
 
@@ -473,10 +448,6 @@ link.prototype._onUpdate =
 	gotOwnChgs = false;
 
 	seq = reply.seq;
-
-	undo = link._undo;
-
-	redo = link._redo;
 
 	rSpace = link._rSpace;
 
@@ -514,82 +485,6 @@ link.prototype._onUpdate =
 				gotOwnChgs = true;
 
 				continue;
-			}
-
-			// if this was not an own change,
-			// undo and redo queues are adapted.
-
-			for(
-				b = 0, bZ = undo.length;
-				b < bZ;
-				b++
-			)
-			{
-				u = undo.get( b );
-
-				if( u.seq < seq + a )
-				{
-					tfxChgX = u.chgX.transformChangeX( chgX );
-
-					// the change vanished by transformation
-					if( tfxChgX === null )
-					{
-						undo = undo.remove( b-- );
-
-						bZ--;
-
-						continue;
-					}
-
-					undo =
-						undo.set(
-							b,
-							ccot.changeWrap.create(
-								'cid',
-									u.cid,
-								'chgX',
-									tfxChgX,
-								'seq',
-									u.seq
-							)
-						);
-				}
-			}
-
-			for(
-				b = 0, bZ = redo.length;
-				b < bZ;
-				b++
-			)
-			{
-				u = redo.get( b );
-
-				if( u.seq < seq + a )
-				{
-					tfxChgX = u.chgX.transformChangeX( chgX );
-
-					// the change vanished by transformation
-					if( tfxChgX === null )
-					{
-						redo = redo.remove( b-- );
-
-						bZ--;
-
-						continue;
-					}
-
-					redo.set(
-						b,
-						ccot.changeWrap.create(
-							'cid',
-								u.cid,
-							'chgX',
-								u.chgX.transformChangeX( chgX ),
-							'seq',
-								u.seq
-						)
-					);
-				}
 			}
 
 			report = report.append( chgX );
@@ -675,14 +570,10 @@ link.prototype._onUpdate =
 				outbox,
 			'_postbox',
 				postbox,
-			'_redo',
-				redo,
 			'_rSeq',
 				reply.seqZ,
 			'_rSpace',
-				rSpace,
-			'_undo',
-				undo
+				rSpace
 		);
 
 
@@ -707,15 +598,16 @@ link.prototype._onUpdate =
 */
 link.prototype.alter =
 	function(
-		chg
+		change,  // the change to apply on the tree
+		noTrack  // if true do not report the dotracker
+		         // ( for example this is an undo itself )
 	)
 {
 	var
-		c,
+		changeWrap,
 		chgX,
 		link,
-		result,
-		undo;
+		result;
 
 	link = this;
 
@@ -727,41 +619,30 @@ link.prototype.alter =
 /**/	}
 /**/}
 
-	result = chg.changeTree( link._cSpace );
+	result = change.changeTree( link._cSpace );
 
 	chgX = result.chgX;
 
-	c =
+	changeWrap =
 		ccot.changeWrap.create(
-			'cid',
-				jools.uid( ),
-			'chgX',
-				chgX,
-			'seq',
-				link._rSeq
+			'cid', jools.uid( ),
+			'chgX', chgX,
+			'seq', link._rSeq // XXX
 		);
-
-	undo = link._undo;
-
-	undo = undo.append( c );
-
-	if( undo.length > config.maxUndo )
-	{
-		undo = undo.remove( 0 );
-	}
 
 	link =
 	root.link =
 		link.create(
 			'_cSpace',
 				result.tree,
-			'_undo',
-				undo,
 			'_outbox',
-				root.link._outbox.append( c ),
-			'_redo',
-				ccot.changeWrapRay.create( )
+				root.link._outbox.append( changeWrap )
 		);
+
+	if( !noTrack )
+	{
+		root.doTracker.track( changeWrap );
+	}
 
 	link._sendChanges( );
 
@@ -859,192 +740,6 @@ link.prototype._onSendChanges =
 
 		return;
 	}
-};
-
-
-/*
-| Reverts actions from the undo chain.
-*/
-link.prototype.undo =
-	function( )
-{
-	var
-		c,
-		chgX,
-		link,
-		result,
-		undo;
-
-	link = this;
-
-/**/if( CHECK )
-/**/{
-/**/	if( root.link !== link )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	undo = link._undo;
-
-	if( undo.length === 0 )
-	{
-		return;
-	}
-
-	chgX = undo.get( undo.length - 1 ).chgX.invert;
-
-	undo = undo.remove( undo.length - 1 );
-
-	result = chgX.changeTree( link._cSpace );
-
-	if( result === null )
-	{
-		root.link =
-			root.link.create(
-				'_undo',
-					undo
-			);
-
-		return;
-	}
-
-	chgX = result.chgX;
-
-	if( chgX === null )
-	{
-		root.link =
-			root.link.create(
-				'_cSpace',
-					result.tree,
-				'_undo',
-					undo
-			);
-
-		return;
-	}
-
-	c =
-		ccot.changeWrap.create(
-			'cid',
-				jools.uid( ),
-			'chgX',
-				chgX,
-			'seq',
-				link._rSeq
-		);
-
-	link =
-	root.link =
-		root.link.create(
-			'_cSpace',
-				result.tree,
-			'_outbox',
-				link._outbox.append( c ),
-			'_redo',
-				link._redo.append( c ),
-			'_undo',
-				undo
-		);
-
-	link._sendChanges( );
-
-	root.update( result.tree, chgX );
-
-	return chgX;
-};
-
-
-/*
-| Sends the stored changes to remote meshmashine
-*/
-link.prototype.redo =
-	function( )
-{
-	var
-		c,
-		chgX,
-		link,
-		redo,
-		result;
-
-	link = this;
-
-/**/if( CHECK )
-/**/{
-/**/	if( root.link !== link )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	redo = link._redo;
-
-	if( redo.length === 0 )
-	{
-		return;
-	}
-
-	chgX = redo.get( redo.length - 1 ).chgX.invert;
-
-	result = chgX.changeTree( link._cSpace );
-
-	redo = redo.remove( redo.length - 1 );
-
-	if( result === null )
-	{
-		root.link =
-			root.link.create(
-				'_redo',
-					redo
-			);
-
-		return;
-	}
-
-	chgX = result.chgX;
-
-	if( chgX === null )
-	{
-		root.link =
-			root.link.create(
-				'_cSpace',
-					result.tree,
-				'_redo',
-					redo
-			);
-
-		return;
-	}
-
-	c =
-		ccot.changeWrap.create(
-			'cid',
-				jools.uid( ),
-			'chgX',
-				chgX,
-			'seq',
-				link._rSeq
-		);
-
-	link =
-	root.link =
-		root.link.create(
-			'_cSpace',
-				result.tree,
-			'_outbox',
-				link._outbox.append( c ),
-			'_redo',
-				redo,
-			'_undo',
-				link._undo.append(c)
-		);
-
-	link._sendChanges( );
-
-	root.update( result.tree, chgX );
-
-	return chgX;
 };
 
 
