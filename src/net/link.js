@@ -544,14 +544,7 @@ link.prototype._onUpdate =
 			outbox =
 				outbox.set(
 					a,
-					ccot.changeWrap.create(
-						'cid',
-							c.cid,
-						'chgX',
-							chgX,
-						'seq',
-							c.seq
-					)
+					c.create( 'chgX', chgX )
 				);
 
 			cSpace =
@@ -600,7 +593,7 @@ link.prototype.alter =
 	function(
 		change,  // the change to apply on the tree
 		noTrack  // if true do not report the dotracker
-		         // ( for example this is an undo itself )
+		//       // ( for example this is an undo itself )
 	)
 {
 	var

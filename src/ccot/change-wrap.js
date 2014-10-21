@@ -5,6 +5,10 @@
 */
 
 
+var
+	ccot;
+
+
 /*
 | Capsule
 */
@@ -60,13 +64,40 @@ if( JION )
 }
 
 
-/*
-| Exports
-*/
+var
+	changeWrap,
+	jools;
+
+
 if( SERVER )
 {
-	module.exports = require( '../jion/this' )( module );
+	changeWrap =
+	module.exports =
+		require( '../jion/this' )( module );
+
+	jools = require( '../jools/jools' );
 }
+else
+{
+	changeWrap = ccot.changeWrap;
+}
+
+
+/*
+| Creates an inverted changewrap.
+|
+| This one has a distinct change id and no sequence id
+*/
+changeWrap.prototype.invert =
+	function( )
+{
+	return(
+		changeWrap.create(
+			'cid', jools.uid( ),
+			'chgX', this.chgX.invert
+		)
+	);
+};
 
 
 }( ) );
