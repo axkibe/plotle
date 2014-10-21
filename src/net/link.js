@@ -143,12 +143,9 @@ link.prototype.auth =
 {
 	root.ajax.twig.command.request(
 		{
-			cmd :
-				'auth',
-			user :
-				username,
-			passhash :
-				passhash
+			cmd : 'auth',
+			user : username,
+			passhash : passhash
 		},
 		'_onAuth'
 	);
@@ -191,16 +188,11 @@ link.prototype.register =
 {
 	root.ajax.twig.command.request(
 		{
-			cmd :
-				'register',
-			user :
-				username,
-			mail :
-				mail,
-			passhash :
-				passhash,
-			news  :
-				news
+			cmd : 'register',
+			user : username,
+			mail : mail,
+			passhash : passhash,
+			news  : news
 		},
 		'_onRegister'
 	);
@@ -246,22 +238,14 @@ link.prototype.aquireSpace =
 
 	root.ajax.twig.command.request(
 		{
-			cmd :
-				'get',
-			create :
-				create,
-			spaceUser :
-				spaceUser,
-			spaceTag :
-				spaceTag,
-			path :
-				jion.path.empty,
-			passhash :
-				this.passhash,
-			seq :
-				-1,
-			user :
-				this.username
+			cmd : 'get',
+			create : create,
+			spaceUser : spaceUser,
+			spaceTag : spaceTag,
+			path : jion.path.empty,
+			passhash : this.passhash,
+			seq : -1,
+			user : this.username
 		},
 		'_onAquireSpace'
 	);
@@ -299,12 +283,9 @@ link.prototype._onAquireSpace =
 			root.onAquireSpace(
 				jools.immute(
 					{
-						status :
-							reply.status,
-						spaceUser :
-							request.spaceUser,
-						spaceTag :
-							request.spaceTag
+						status : reply.status,
+						spaceUser : request.spaceUser,
+						spaceTag : request.spaceTag
 					}
 				)
 			);
@@ -325,35 +306,23 @@ link.prototype._onAquireSpace =
 
 	root.link =
 		root.link.create(
-			'spaceUser',
-				request.spaceUser,
-			'spaceTag',
-				request.spaceTag,
-			'_cSpace',
-				space,
-			'_rSpace',
-				space,
-			'_outbox',
-				ccot.changeWrapRay.create( ),
-			'_postbox',
-				ccot.changeWrapRay.create( ),
-			'_rSeq',
-				reply.seq
+			'spaceUser', request.spaceUser,
+			'spaceTag', request.spaceTag,
+			'_cSpace', space,
+			'_rSpace', space,
+			'_outbox', ccot.changeWrapRay.create( ),
+			'_postbox', ccot.changeWrapRay.create( ),
+			'_rSeq', reply.seq
 		);
 
 	root.onAquireSpace(
 		jools.immute(
 			{
-				status :
-					reply.status,
-				spaceUser :
-					request.spaceUser,
-				spaceTag :
-					request.spaceTag,
-				space :
-					space,
-				access :
-					reply.access
+				status : reply.status,
+				spaceUser : request.spaceUser,
+				spaceTag : request.spaceTag,
+				space : space,
+				access : reply.access
 			}
 		)
 	);
@@ -379,18 +348,12 @@ link.prototype._update =
 {
 	root.ajax.twig.update.request(
 		{
-			cmd :
-				'update',
-			passhash :
-				this.passhash,
-			spaceUser :
-				this.spaceUser,
-			spaceTag :
-				this.spaceTag,
-			seq :
-				this._rSeq,
-			user :
-				this.username
+			cmd : 'update',
+			passhash : this.passhash,
+			spaceUser : this.spaceUser,
+			spaceTag : this.spaceTag,
+			seq : this._rSeq,
+			user : this.username
 		},
 		'_onUpdate'
 	);
@@ -557,16 +520,11 @@ link.prototype._onUpdate =
 	link =
 	root.link =
 		link.create(
-			'_cSpace',
-				cSpace,
-			'_outbox',
-				outbox,
-			'_postbox',
-				postbox,
-			'_rSeq',
-				reply.seqZ,
-			'_rSpace',
-				rSpace
+			'_cSpace', cSpace,
+			'_outbox', outbox,
+			'_postbox', postbox,
+			'_rSeq', reply.seqZ,
+			'_rSpace', rSpace
 		);
 
 
@@ -694,22 +652,14 @@ link.prototype._sendChanges =
 
 	root.ajax.twig.command.request(
 		{
-			cmd :
-				'alter',
-			spaceUser :
-				link.spaceUser,
-			spaceTag :
-				link.spaceTag,
-			chgX :
-				c.chgX,
-			cid :
-				c.cid,
-			passhash :
-				link.passhash,
-			seq :
-				link._rSeq,
-			user :
-				link.username
+			cmd : 'alter',
+			spaceUser : link.spaceUser,
+			spaceTag : link.spaceTag,
+			chgX : c.chgX,
+			cid : c.cid,
+			passhash : link.passhash,
+			seq : link._rSeq,
+			user : link.username
 		},
 		'_onSendChanges'
 	);
