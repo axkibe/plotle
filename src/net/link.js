@@ -13,6 +13,7 @@ var
 
 net = net || { };
 
+
 /*
 | Imports
 */
@@ -549,14 +550,13 @@ link.prototype._onUpdate =
 */
 link.prototype.alter =
 	function(
-		change,  // the change to apply on the tree
+		changes,  // the change(ray) to apply on the tree
 		noTrack  // if true do not report the dotracker
 		//       // ( for example this is an undo itself )
 	)
 {
 	var
 		changeWrap,
-		chgX,
 		link,
 		result;
 
@@ -570,24 +570,21 @@ link.prototype.alter =
 /**/	}
 /**/}
 
-	result = change.changeTree( link._cSpace );
+	result = changes.changeTree( link._cSpace );
 
-	chgX = result.chgX;
+	changes = result.chgX;
 
 	changeWrap =
 		ccot.changeWrap.create(
 			'cid', jools.uid( ),
-			'chgX', chgX,
-			'seq', link._rSeq // XXX
+			'chgX', changes
 		);
 
 	link =
 	root.link =
 		link.create(
-			'_cSpace',
-				result.tree,
-			'_outbox',
-				root.link._outbox.append( changeWrap )
+			'_cSpace', result.tree,
+			'_outbox', root.link._outbox.append( changeWrap )
 		);
 
 	if( !noTrack )
@@ -597,7 +594,7 @@ link.prototype.alter =
 
 	link._sendChanges( );
 
-	root.update( result.tree, chgX );
+	root.update( result.tree, changes );
 
 	return result;
 };
@@ -610,7 +607,7 @@ link.prototype._sendChanges =
 	function( )
 {
 	var
-		c,
+		changewrap,
 		link;
 
 	link = this;
@@ -635,7 +632,7 @@ link.prototype._sendChanges =
 		return;
 	}
 
-	c = link._outbox.get( 0 );
+	changewrap = link._outbox.get( 0 );
 
 	link =
 	root.link =
@@ -647,7 +644,7 @@ link.prototype._sendChanges =
 			'_postbox',
 //				link._outbox
 // TODO
-				link._postbox.append( c )
+				link._postbox.append( changewrap )
 		);
 
 	root.ajax.twig.command.request(
@@ -655,8 +652,9 @@ link.prototype._sendChanges =
 			cmd : 'alter',
 			spaceUser : link.spaceUser,
 			spaceTag : link.spaceTag,
-			chgX : c.chgX,
-			cid : c.cid,
+//			changewrap : changewrap,
+			chgX : changewrap.chgX,
+			cid : changewrap.cid,
 			passhash : link.passhash,
 			seq : link._rSeq,
 			user : link.username
