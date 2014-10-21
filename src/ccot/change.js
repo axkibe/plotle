@@ -62,6 +62,10 @@ if( JION )
 }
 
 
+var
+	change;
+
+
 /*
 | Node includes.
 */
@@ -86,13 +90,16 @@ if( SERVER )
 			signRay :
 				require( '../ccot/sign-ray'  )
 		};
+
+	change =
+	module.exports =
+		ccot.change;
+}
+else
+{
+	change = ccot.change;
 }
 
-
-var
-	change;
-
-change = ccot.change;
 
 
 /*
@@ -1758,15 +1765,6 @@ change.prototype._transformSignRemove =
 		throw new Error( );
 	}
 };
-
-
-/*
-| Exports
-*/
-if( SERVER )
-{
-	module.exports = change;
-}
 
 
 }( ) );

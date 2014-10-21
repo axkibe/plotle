@@ -652,9 +652,9 @@ link.prototype._sendChanges =
 			cmd : 'alter',
 			spaceUser : link.spaceUser,
 			spaceTag : link.spaceTag,
-//			changewrap : changewrap,
-			chgX : changewrap.chgX,
-			cid : changewrap.cid,
+			changewrap : changewrap,
+//			chgX : changewrap.chgX,
+//			cid : changewrap.cid,
 			passhash : link.passhash,
 			seq : link._rSeq,
 			user : link.username

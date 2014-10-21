@@ -75,7 +75,9 @@ ccot =
 		change :
 			require( '../ccot/change' ),
 		changeRay :
-			require( '../ccot/change-ray' )
+			require( '../ccot/change-ray' ),
+		changeWrap :
+			require( '../ccot/change-wrap' ),
 	};
 
 jion =
@@ -527,10 +529,8 @@ Server.prototype.loadSpace =
 		// FIXME there is something quirky, why isn't *this* a "change"?
 		change =
 			{
-				cid :
-					o.cid,
-				chgX :
-					null
+				cid : o.cid,
+				chgX : null
 			};
 
 		if ( !Array.isArray( o.chgX ) )
@@ -1408,6 +1408,7 @@ Server.prototype.cmdAlter =
 	var
 		a,
 		changes,
+		changewrap,
 		chgX,
 		cid,
 		passhash,
@@ -1422,9 +1423,7 @@ Server.prototype.cmdAlter =
 
 	seq = cmd.seq;
 
-	chgX = cmd.chgX;
-
-	cid = cmd.cid;
+	changewrap = cmd.changewrap;
 
 	spaceUser = cmd.spaceUser;
 
@@ -1466,14 +1465,9 @@ Server.prototype.cmdAlter =
 		throw jools.reject( 'seq missing' );
 	}
 
-	if( chgX === undefined )
+	if( changewrap === undefined )
 	{
-		throw jools.reject( 'chgX missing' );
-	}
-
-	if( cid === undefined )
-	{
-		throw jools.reject( 'cid missing' );
+		throw jools.reject( 'changewrap missing' );
 	}
 
 	spaceName = spaceUser + ':' + spaceTag;
@@ -1494,24 +1488,33 @@ Server.prototype.cmdAlter =
 		seq = seqZ;
 	}
 
-	if( !(seq >= 0 && seq <= seqZ) )
+	if(
+		!jools.isInteger( seq )
+		||
+		seq < 0
+		||
+		seq > seqZ
+	)
 	{
 		throw jools.reject( 'invalid seq' );
 	}
 
+	cid = changewrap.cid;
+
 	try
 	{
-		switch( chgX.type )
+		// TODO let the generator generate better
+		switch( changewrap.chgX.type )
 		{
 			case 'ccot.change' :
 
-				chgX = ccot.change.createFromJSON( chgX );
+				chgX = ccot.change.createFromJSON( changewrap.chgX );
 
 				break;
 
 			case 'ccot.changeRay' :
 
-				chgX = ccot.changeRay.createFromJSON( chgX );
+				chgX = ccot.changeRay.createFromJSON( changewrap.chgX );
 
 				break;
 
@@ -1539,10 +1542,8 @@ Server.prototype.cmdAlter =
 		)
 		{
 			return {
-				ok :
-					true,
-				chgX :
-					chgX
+				ok : true,
+				chgX : chgX
 			};
 		}
 	}
@@ -1554,10 +1555,8 @@ Server.prototype.cmdAlter =
 	)
 	{
 		return {
-			ok :
-				true,
-			chgX :
-				chgX
+			ok : true,
+			chgX : chgX
 		};
 	}
 
@@ -1570,25 +1569,18 @@ Server.prototype.cmdAlter =
 
 	changes[ seqZ ] =
 		{
-			cid :
-				cmd.cid,
-			chgX :
-				chgX
+			cid : cid,
+			chgX : chgX
 		};
 
 	// saves the change(ray) in the database
 	space.$changesDB.insert(
 		{
-			_id :
-				seqZ,
-			cid :
-				cmd.cid,
-			chgX :
-				JSON.parse( JSON.stringify( chgX ) ), // FIXME why copy?
-			user :
-				cmd.user,
-			date :
-				Date.now( )
+			_id : seqZ,
+			cid : cid,
+			chgX : JSON.parse( JSON.stringify( chgX ) ), // FIXME why copy?
+			user : cmd.user,
+			date : Date.now( )
 		},
 
 		function(
@@ -1618,10 +1610,8 @@ Server.prototype.cmdAlter =
 	);
 
 	return {
-		ok :
-			true,
-		chgX :
-			chgX
+		ok : true,
+		chgX : chgX
 	};
 };
 
