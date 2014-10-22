@@ -244,7 +244,7 @@ formatAssign =
 | Formats a comment.
 */
 var
-formatAComment =
+formatComment =
 	function(
 		context,
 		comment
@@ -773,7 +773,7 @@ formatIf =
 | Formats a classical for loop.
 */
 var
-formatAFor =
+formatFor =
 	function(
 		context,
 		forExpr
@@ -1043,7 +1043,7 @@ formatOr =
 | Formats a return statement.
 */
 var
-formatAReturn =
+formatReturn =
 	function(
 		context,
 		statement
@@ -1120,7 +1120,7 @@ formatAReturn =
 | Formats a switch statement
 */
 var
-formatASwitch =
+formatSwitch =
 	function(
 		context,
 		switchExpr
@@ -1358,11 +1358,7 @@ formatStatement =
 
 	if( statement.reflect === 'ast.astComment' )
 	{
-		text +=
-			formatAComment(
-				context,
-				statement
-			);
+		text += formatComment( context, statement );
 
 		return text;
 	}
@@ -1388,7 +1384,7 @@ formatStatement =
 				subtext =
 					context.tab
 					+
-					formatAFail( context.Inline, statement );
+					formatFail( context.Inline, statement );
 			}
 			catch( e )
 			{
@@ -1405,14 +1401,14 @@ formatStatement =
 			}
 			else
 			{
-				text += formatAFail( context, statement );
+				text += formatFail( context, statement );
 			}
 
 			break;
 
 		case 'ast.astFor' :
 
-			text += formatAFor( context, statement );
+			text += formatFor( context, statement );
 
 			break;
 
@@ -1424,13 +1420,13 @@ formatStatement =
 
 		case 'ast.astReturn' :
 
-			text += formatAReturn( context, statement );
+			text += formatReturn( context, statement );
 
 			break;
 
 		case 'ast.astSwitch' :
 
-			text += formatASwitch( context, statement );
+			text += formatSwitch( context, statement );
 
 			break;
 
@@ -1627,7 +1623,7 @@ formatExpression =
 | Formats a fail statement.
 */
 var
-formatAFail =
+formatFail =
 	function(
 		context,
 		fail
@@ -2541,11 +2537,7 @@ formatter.format =
 
 	if( file.header )
 	{
-		text +=
-			formatAComment(
-				context,
-				file.header
-			);
+		text += formatComment( context, file.header );
 
 		doSep = true;
 	}

@@ -324,17 +324,9 @@ astBlock.prototype.astReturn =
 		expr
 	)
 {
-	switch( expr.reflect )
+	if( expr.reflect !== 'ast.astReturn' )
 	{
-		case 'ast.astReturn' :
-
-			break;
-
-		default :
-
-			expr = astReturn.create( 'expr', expr );
-
-			break;
+		expr = astReturn.create( 'expr', tools.convertArg( expr ) );
 	}
 
 	return this.append( expr );

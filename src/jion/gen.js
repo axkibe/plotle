@@ -70,7 +70,6 @@ var
 	astCondition,
 	astDiffers,
 	astEquals,
-	astFalse,
 	astFail,
 	astFile,
 	astFunc,
@@ -93,7 +92,6 @@ var
 	astString,
 	astSwitch,
 	astThis,
-	astTrue,
 	astTypeof,
 	astUndefined,
 	astVar,
@@ -125,8 +123,6 @@ astDiffers = shorthand.astDiffers;
 astEquals = shorthand.astEquals;
 
 astFail = shorthand.astFail;
-
-astFalse = shorthand.astFalse;
 
 astFile = shorthand.astFile;
 
@@ -166,8 +162,6 @@ astSwitch = shorthand.astSwitch;
 
 astThis = shorthand.astVar( 'this' );
 
-astTrue = shorthand.astTrue;
-
 astTypeof = shorthand.astTypeof;
 
 astUndefined = shorthand.astVar( 'undefined' );
@@ -178,7 +172,7 @@ astVList = shorthand.astVList;
 
 astReturnTrue = astReturn( true );
 
-astReturnFalse = astReturn( astFalse );
+astReturnFalse = astReturn( false );
 
 
 /*
@@ -404,11 +398,11 @@ gen.prototype._init =
 			}
 			else if( jdv === false )
 			{
-				defaultValue = astFalse;
+				defaultValue = shorthand.astFalse;
 			}
 			else if( jdv === true )
 			{
-				defaultValue = astTrue;
+				defaultValue = shorthand.astTrue;
 			}
 			else if( typeof( jdv ) === 'number' )
 			{
@@ -1127,7 +1121,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 				'ranks',
 				astVar( 'inherit' ).astDot( 'ranks' )
 			)
-			.astAssign( 'twigDup', astFalse );
+			.astAssign( 'twigDup', false );
 	}
 
 	if( this.ray )
@@ -1138,10 +1132,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 				'ray',
 				astVar( 'inherit' ).astDot( 'ray' )
 			)
-			.astAssign(
-				'rayDup',
-				astFalse
-			);
+			.astAssign( 'rayDup', false );
 	}
 
 	for(
@@ -1284,10 +1275,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						astVar( 'ranks' ).astDot( 'slice' )
 					)
 				)
-				.astAssign(
-					'twigDup',
-					astTrue
-				)
+				.astAssign( 'twigDup', true )
 			);
 
 		// FIXME make a sub-function to add the twigDup stuff
@@ -1473,7 +1461,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astAssign(
 					astVar( 'rayDup' ),
-					astTrue
+					true
 				)
 			);
 
@@ -1483,8 +1471,8 @@ gen.prototype.genCreatorFreeStringsParser =
 			.astCase(
 				astString( 'ray:init' ),
 				astBlock( )
-				.astAssign( astVar( 'ray' ), astVar( 'arg' ) )
-				.astAssign( astVar( 'rayDup' ), astFalse )
+				.astAssign( astVar( 'ray' ), 'arg' )
+				.astAssign( astVar( 'rayDup' ), false )
 			)
 			.astCase(
 				astString( 'ray:append' ),
@@ -2575,7 +2563,7 @@ gen.prototype.genFromJSONCreatorReturn =
 			case 'rayDup' :
 			case 'twigDup' :
 
-				call = call.addArgument( astTrue );
+				call = call.addArgument( true );
 
 				break;
 
@@ -3171,7 +3159,7 @@ gen.prototype.genEquals =
 	}
 	else
 	{
-		block = block.astReturn( astTrue );
+		block = block.astReturn( true );
 	}
 
 	capsule =

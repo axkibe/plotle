@@ -786,6 +786,8 @@ shorthand.astPreIncrement =
 /*
 | Shorthand for creating a block
 | with just a return statement.
+|
+| FIXME, why actually a block?
 */
 shorthand.astReturn =
 	function(
@@ -796,9 +798,9 @@ shorthand.astReturn =
 
 	return(
 		astBlock.create( )
-			.append(
-				astReturn.create( 'expr', expr )
-			)
+		.append(
+			astReturn.create( 'expr', expr )
+		)
 	);
 };
 
