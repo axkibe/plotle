@@ -784,24 +784,14 @@ shorthand.astPreIncrement =
 
 
 /*
-| Shorthand for creating a block
-| with just a return statement.
-|
-| FIXME, why actually a block?
+| Shorthand for creating a return statement
 */
 shorthand.astReturn =
 	function(
 		expr
 	)
 {
-	expr = tools.convertArg( expr );
-
-	return(
-		astBlock.create( )
-		.append(
-			astReturn.create( 'expr', expr )
-		)
-	);
+	return astReturn.create( 'expr', tools.convertArg( expr ) );
 };
 
 
