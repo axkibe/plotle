@@ -620,9 +620,9 @@ gen.prototype.genImports =
 		capsule // block to append to
 	)
 {
-	capsule = capsule.astComment( 'Imports.' );
-
-	capsule = capsule
+	capsule =
+		capsule
+		.astComment( 'Imports.' )
 		.astVarDec( 'jion' )
 		.astVarDec( 'jools' );
 
@@ -636,7 +636,8 @@ gen.prototype.genImports =
 			a++
 		)
 		{
-			capsule = capsule
+			capsule =
+				capsule
 				.astVarDec( this.unitList[ a ] );
 		}
 	}
@@ -791,7 +792,8 @@ gen.prototype.genConstructor =
 		}
 		else
 		{
-			block = block
+			block =
+				block
 				.astIf(
 					astDiffers( attr.v, undefined ),
 					assign
@@ -856,7 +858,8 @@ gen.prototype.genConstructor =
 
 	// immutes the new object
 	// FIXME use object.freeze and only in checking
-	block = block
+	block =
+		block
 		/*
 		.astCheck(
 			astBlock( )
