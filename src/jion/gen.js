@@ -71,6 +71,7 @@ var
 	astDiffers,
 	astEquals,
 	astFalse,
+	astFail,
 	astFile,
 	astFunc,
 	astGreaterThan,
@@ -122,6 +123,8 @@ astCondition = shorthand.astCondition;
 astDiffers = shorthand.astDiffers;
 
 astEquals = shorthand.astEquals;
+
+astFail = shorthand.astFail;
 
 astFalse = shorthand.astFalse;
 
@@ -1648,9 +1651,7 @@ gen.prototype.genCreatorChecks =
 			check =
 				check.astIf(
 					astEquals( av, astUndefined ),
-					astBlock( ) // TODO skip block
-					//.astFail( 'undefined attribute ' + name )
-					.astFail( )
+					astFail( )
 				);
 		}
 
@@ -1659,9 +1660,7 @@ gen.prototype.genCreatorChecks =
 			check =
 				check.astIf(
 					astEquals( av, astNull ),
-					astBlock( ) // TODO skip block
-					//.astFail( 'attribute ' + name + ' must not be null.' )
-					.astFail( )
+					astFail( )
 				);
 		}
 
@@ -1755,18 +1754,14 @@ gen.prototype.genCreatorChecks =
 				break;
 		}
 
-		tfail =
-			astBlock( )
-			//.astFail( 'type mismatch' );
-			.astFail( );
+		tfail = astBlock( ).astFail( );
 
 		if( cond )
 		{
 			check =
 				check.astIf(
 					cond,
-					astBlock( ) // FIXME remove
-					.astIf( tcheck, tfail )
+					astIf( tcheck, tfail )
 				);
 		}
 		else

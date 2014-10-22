@@ -607,7 +607,7 @@ link.prototype._sendChanges =
 	function( )
 {
 	var
-		changewrap,
+		changeWrap,
 		link;
 
 	link = this;
@@ -632,7 +632,7 @@ link.prototype._sendChanges =
 		return;
 	}
 
-	changewrap = link._outbox.get( 0 );
+	changeWrap = link._outbox.get( 0 );
 
 	link =
 	root.link =
@@ -644,7 +644,7 @@ link.prototype._sendChanges =
 			'_postbox',
 //				link._outbox
 // TODO
-				link._postbox.append( changewrap )
+				link._postbox.append( changeWrap )
 		);
 
 	root.ajax.twig.command.request(
@@ -652,9 +652,7 @@ link.prototype._sendChanges =
 			cmd : 'alter',
 			spaceUser : link.spaceUser,
 			spaceTag : link.spaceTag,
-			changewrap : changewrap,
-//			chgX : changewrap.chgX,
-//			cid : changewrap.cid,
+			changeWrap : changeWrap,
 			passhash : link.passhash,
 			seq : link._rSeq,
 			user : link.username

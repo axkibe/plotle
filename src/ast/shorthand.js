@@ -34,6 +34,7 @@ var
 	astDelete,
 	astDiffers,
 	astDot,
+	astFail,
 	astFile,
 	astEquals,
 	astFunc,
@@ -59,6 +60,7 @@ var
 	astVar,
 	astVarDec,
 	astVList,
+	jools,
 	tools;
 
 
@@ -88,9 +90,12 @@ astDiffers = require( './ast-differs' );
 
 astDot = require( './ast-dot' );
 
-astFile = require( './ast-file' );
 
 astEquals = require( './ast-equals' );
+
+astFail = require( './ast-fail' );
+
+astFile = require( './ast-file' );
 
 astFunc = require( './ast-func' );
 
@@ -137,6 +142,8 @@ astVar = require( './ast-var' );
 astVarDec = require( './ast-var-dec' );
 
 astVList = require( './ast-vlist' );
+
+jools = require( '../jools/jools' );
 
 tools = require( './tools' );
 
@@ -403,8 +410,28 @@ shorthand.astEquals =
 /*
 | Shorthand for 'false' literals.
 */
-shorthand.astFalse =
-	astBoolean.create( 'boolean', false );
+shorthand.astFalse = astBoolean.create( 'boolean', false );
+
+
+/*
+| Shorthand for ast code that throws a fail.
+*/
+shorthand.astFail =
+	function(
+		message
+	)
+{
+	if( !message )
+	{
+		message = null;
+	}
+	else if( jools.isString( message ) )
+	{
+		message = astString.create( 'string', message );
+	}
+
+	return astFail.create( 'message', message );
+};
 
 
 /*

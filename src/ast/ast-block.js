@@ -106,6 +106,7 @@ astBlock.prototype.append =
 
 /*
 | Returns the block with an assignment appended.
+| FUTURE use a shorthand
 */
 astBlock.prototype.astAssign =
 	function(
@@ -191,11 +192,7 @@ astBlock.prototype.astDelete =
 		expr
 	)
 {
-	return(
-		this.append(
-			shorthand.astDelete( expr )
-		)
-	);
+	return this.append( shorthand.astDelete( expr ) );
 
 };
 
@@ -226,25 +223,14 @@ astBlock.prototype.astFail =
 		message
 	)
 {
-	if( !message )
-	{
-		message = null;
-	}
-	else if( jools.isString( message ) )
-	{
-		message = astString.create( 'string', message );
-	}
-
-	return(
-		this.append(
-			astFail.create( 'message', message )
-		)
-	);
+	return this.append( shorthand.astFail( message ) );
 };
 
 
 /*
 | Returns the block with a classical for loop appended.
+|
+| FUTURE use a shorthand
 */
 astBlock.prototype.astFor =
 	function(
@@ -269,6 +255,7 @@ astBlock.prototype.astFor =
 
 /*
 | Returns the block with a for-in loop appended.
+| FUTURE use a shorthand
 */
 astBlock.prototype.astForIn =
 	function(
@@ -306,6 +293,7 @@ astBlock.prototype.astNew =
 
 /*
 | Returns the block with a plus-assignment appended.
+| FUTURE use a shorthand
 */
 astBlock.prototype.astPlusAssign =
 	function(

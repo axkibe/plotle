@@ -1408,7 +1408,7 @@ Server.prototype.cmdAlter =
 	var
 		a,
 		changes,
-		changewrap,
+		changeWrap,
 		chgX,
 		cid,
 		passhash,
@@ -1423,7 +1423,7 @@ Server.prototype.cmdAlter =
 
 	seq = cmd.seq;
 
-	changewrap = cmd.changewrap;
+	changeWrap = cmd.changeWrap;
 
 	spaceUser = cmd.spaceUser;
 
@@ -1465,9 +1465,9 @@ Server.prototype.cmdAlter =
 		throw jools.reject( 'seq missing' );
 	}
 
-	if( changewrap === undefined )
+	if( changeWrap === undefined )
 	{
-		throw jools.reject( 'changewrap missing' );
+		throw jools.reject( 'changeWrap missing' );
 	}
 
 	spaceName = spaceUser + ':' + spaceTag;
@@ -1499,22 +1499,22 @@ Server.prototype.cmdAlter =
 		throw jools.reject( 'invalid seq' );
 	}
 
-	cid = changewrap.cid;
+	cid = changeWrap.cid;
 
 	try
 	{
 		// TODO let the generator generate better
-		switch( changewrap.chgX.type )
+		switch( changeWrap.chgX.type )
 		{
 			case 'ccot.change' :
 
-				chgX = ccot.change.createFromJSON( changewrap.chgX );
+				chgX = ccot.change.createFromJSON( changeWrap.chgX );
 
 				break;
 
 			case 'ccot.changeRay' :
 
-				chgX = ccot.changeRay.createFromJSON( changewrap.chgX );
+				chgX = ccot.changeRay.createFromJSON( changeWrap.chgX );
 
 				break;
 

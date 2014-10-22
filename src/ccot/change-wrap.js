@@ -85,7 +85,7 @@ else
 
 
 /*
-| Creates an inverted changewrap.
+| Creates an inverted changeWrap.
 |
 | This one has a distinct change id and no sequence id
 */
