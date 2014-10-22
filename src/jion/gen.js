@@ -79,7 +79,6 @@ var
 	astLessThan,
 	astNew,
 	astNot,
-	astNull,
 	astNumber,
 	astObjLiteral,
 	astOr,
@@ -93,7 +92,6 @@ var
 	astSwitch,
 	astThis,
 	astTypeof,
-	astUndefined,
 	astVar,
 	astVList;
 
@@ -140,8 +138,6 @@ astNew = shorthand.astNew;
 
 astNot = shorthand.astNot;
 
-astNull = shorthand.astNull;
-
 astNumber = shorthand.astNumber;
 
 astObjLiteral = shorthand.astObjLiteral;
@@ -163,8 +159,6 @@ astSwitch = shorthand.astSwitch;
 astThis = shorthand.astVar( 'this' );
 
 astTypeof = shorthand.astTypeof;
-
-astUndefined = shorthand.astVar( 'undefined' );
 
 astVar = shorthand.astVar;
 
@@ -390,11 +384,11 @@ gen.prototype._init =
 
 			if( jdv === null )
 			{
-				defaultValue = astNull;
+				defaultValue = shorthand.astNull;
 			}
 			else if( jdv === undefined )
 			{
-				defaultValue = astUndefined;
+				defaultValue = shorthand.astUndefined;
 			}
 			else if( jdv === false )
 			{
@@ -431,11 +425,11 @@ gen.prototype._init =
 				allowsNull :
 					jAttr.allowsNull
 					||
-					defaultValue === astNull,
+					defaultValue === shorthand.astNull, // XXX equals
 				allowsUndefined :
 					jAttr.allowsUndefined
 					||
-					defaultValue === astUndefined,
+					defaultValue === shorthand.astUndefined, // XXX equals
 				assign :
 					assign,
 				comment :
