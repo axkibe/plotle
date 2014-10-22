@@ -49,15 +49,15 @@ if( SERVER )
 var Constructor =
 	function(
 		v_ast, // current ast entity
-		v_tokens, // ray of tokens to parse
-		v_tpos // current position in token ray
+		v_pos, // current position in token ray
+		v_tokens // ray of tokens to parse
 	)
 	{
 		this.ast = v_ast;
 
-		this.tokens = v_tokens;
+		this.pos = v_pos;
 
-		this.tpos = v_tpos;
+		this.tokens = v_tokens;
 
 		jools.immute( this );
 	};
@@ -97,9 +97,9 @@ prototype.create =
 
 		v_ast,
 
-		v_tokens,
+		v_pos,
 
-		v_tpos;
+		v_tokens;
 
 	if( this !== state )
 	{
@@ -107,9 +107,9 @@ prototype.create =
 
 		v_ast = this.ast;
 
-		v_tokens = this.tokens;
+		v_pos = this.pos;
 
-		v_tpos = this.tpos;
+		v_tokens = this.tokens;
 	}
 
 	for(
@@ -133,20 +133,20 @@ prototype.create =
 
 				break;
 
+			case 'pos' :
+
+				if( arg !== undefined )
+				{
+					v_pos = arg;
+				}
+
+				break;
+
 			case 'tokens' :
 
 				if( arg !== undefined )
 				{
 					v_tokens = arg;
-				}
-
-				break;
-
-			case 'tpos' :
-
-				if( arg !== undefined )
-				{
-					v_tpos = arg;
 				}
 
 				break;
@@ -167,31 +167,31 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
+/**/	if( v_pos === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_pos === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if(
+/**/		typeof( v_pos ) !== 'number'
+/**/		||
+/**/		Math.floor( v_pos ) !== v_pos
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
 /**/	if( v_tokens === undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_tokens === null )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_tpos === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_tpos === null )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if(
-/**/		typeof( v_tpos ) !== 'number'
-/**/		||
-/**/		Math.floor( v_tpos ) !== v_tpos
-/**/	)
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -202,15 +202,15 @@ prototype.create =
 		&&
 		v_ast === inherit.ast
 		&&
-		v_tokens === inherit.tokens
+		v_pos === inherit.pos
 		&&
-		v_tpos === inherit.tpos
+		v_tokens === inherit.tokens
 	)
 	{
 		return inherit;
 	}
 
-	return new Constructor( v_ast, v_tokens, v_tpos );
+	return new Constructor( v_ast, v_pos, v_tokens );
 };
 
 
@@ -259,9 +259,9 @@ prototype.equals =
 	return (
 		this.ast === obj.ast
 		&&
-		this.tokens === obj.tokens
+		this.pos === obj.pos
 		&&
-		this.tpos === obj.tpos
+		this.tokens === obj.tokens
 	);
 };
 

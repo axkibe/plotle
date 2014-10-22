@@ -41,7 +41,7 @@ state = require( './state' );
 
 
 /*
-| Parses a token at tpos from a tokenRay.
+| Parses a token at pos from a tokenRay.
 */
 parseToken =
 	function(
@@ -51,18 +51,33 @@ parseToken =
 	var
 		token;
 
-	token = state.tokens[ state.tpos ];
+	token = state.tokens[ state.pos ];
 
 	switch( token.type )
 	{
 		case 'var' :
 
-			return(
+			if( state.ast !== null )
+			{
+				throw new Error(
+					'parse error'
+				);
+			}
+
+			state =
 				state.create(
-					'tpos', state.tpos + 1,
+					'pos', state.pos + 1,
 					'ast', astVar.create( 'name', token.value )
-				)
-			);
+				);
+
+			return state;
+
+			/*
+			if( state.pos + 1 < state.tokens.length )
+			{
+				parseToken(
+			}
+			*/
 
 		default :
 
@@ -95,7 +110,7 @@ parser.parse =
 		parseToken(
 			state.create(
 				'tokens', tokens,
-				'tpos', 0,
+				'pos', 0,
 				'ast', null
 			)
 		).ast

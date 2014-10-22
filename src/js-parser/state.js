@@ -38,7 +38,7 @@ if( JION )
 						type :
 							'Object' // FUTURE jsLexer.tokenRay
 					},
-				tpos :
+				pos :
 					{
 						comment :
 							'current position in token ray',
@@ -52,8 +52,28 @@ if( JION )
 }
 
 
+var
+	jools,
+	state;
+
+state =
 module.exports =
 	require( '../jion/this' )( module );
+
+jools = require( '../jools/jools' );
+
+
+/*
+| True if pos is at end of the token ray.
+*/
+jools.lazyValue(
+	state.prototype,
+	'reachedEnd',
+	function( )
+	{
+		return pos >= tokens.length
+	}
+);
 
 
 } )( );
