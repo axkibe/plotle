@@ -323,9 +323,9 @@ shorthand.astCondition =
 {
 	return(
 		astCondition.create(
-			'condition', condition,
-			'then', then,
-			'elsewise', elsewise
+			'condition', tools.convertArg( condition ),
+			'then', tools.convertArg( then ),
+			'elsewise', tools.convertArg( elsewise )
 		)
 	);
 };
@@ -619,8 +619,7 @@ shorthand.astNot =
 /*
 | Shorthand for ast nulls.
 */
-shorthand.astNull =
-	astNull.create( );
+shorthand.astNull = astNull.create( );
 
 
 /*

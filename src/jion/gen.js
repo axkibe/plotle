@@ -1893,7 +1893,7 @@ gen.prototype.genCreatorConcerns =
 						astCondition(
 							astDiffers( attr.v, null ),
 							attr.v.astDot( member ),
-							astNull
+							null
 						);
 
 				}
@@ -1903,7 +1903,7 @@ gen.prototype.genCreatorConcerns =
 						astCondition(
 							astDiffers( attr.v, astUndefined ),
 							attr.v.astDot( member ),
-							astNull
+							null
 						);
 				}
 				else
@@ -2568,7 +2568,7 @@ gen.prototype.genFromJSONCreatorReturn =
 		{
 			case 'inherit' :
 
-				call = call.addArgument( astNull );
+				call = call.addArgument( null );
 
 				break;
 
@@ -2594,7 +2594,7 @@ gen.prototype.genFromJSONCreatorReturn =
 
 				if( attr.assign === null )
 				{
-					call = call.addArgument( astNull );
+					call = call.addArgument( null );
 				}
 				else
 				{
