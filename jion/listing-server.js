@@ -73,6 +73,7 @@ module.exports =
 			'src/ast/ast-vlist.js',
 
 			'src/format/context.js',
+			'src/js-lexer/token.js',
 			'src/jion/gen.js'
 		]
 };

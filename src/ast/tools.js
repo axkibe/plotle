@@ -39,7 +39,6 @@ jools = require( '../jools/jools' );
 shorthand = require( './shorthand' );
 
 
-
 /*
 | Tokenizes a javascript string.
 |
