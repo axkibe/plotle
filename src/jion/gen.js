@@ -1033,7 +1033,7 @@ gen.prototype.genSingleton =
 	return (
 		capsule
 		.astComment( 'Singleton' )
-		.astVarDec( '_singleton', astNull )
+		.astVarDec( '_singleton', null )
 	);
 };
 
@@ -1659,7 +1659,7 @@ gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.astIf(
-					astEquals( av, astNull ),
+					astEquals( av, null ),
 					astFail( )
 				);
 		}
@@ -1675,7 +1675,7 @@ gen.prototype.genCreatorChecks =
 
 		if( attr.allowsNull && !attr.allowsUndefined )
 		{
-			cond = astDiffers( av, astNull );
+			cond = astDiffers( av, null );
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
@@ -1685,7 +1685,7 @@ gen.prototype.genCreatorChecks =
 		{
 			cond =
 				astAnd(
-					astDiffers( av, astNull ),
+					astDiffers( av, null ),
 					astDiffers( av, astUndefined )
 				);
 		}
@@ -1891,7 +1891,7 @@ gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						astCondition(
-							astDiffers( attr.v, astNull ),
+							astDiffers( attr.v, null ),
 							attr.v.astDot( member ),
 							astNull
 						);
@@ -1998,11 +1998,7 @@ gen.prototype.genCreatorUnchanged =
 
 		if( attr.assign === null )
 		{
-			cond =
-				astAnd(
-					cond,
-					astEquals( attr.v, astNull )
-				);
+			cond = astAnd( cond, astEquals( attr.v, null ) );
 
 			continue;
 		}
@@ -2939,7 +2935,7 @@ gen.prototype.genAttributeEquals =
 					astOr(
 						astEquals( le, re ),
 						astAnd(
-							astDiffers( le, astNull ),
+							astDiffers( le, null ),
 							astCall( le.astDot( 'equals' ), re )
 						)
 					);
