@@ -25,6 +25,7 @@ var
 	astNull,
 	astVar,
 	jools,
+	lexer,
 	shorthand;
 
 
@@ -36,72 +37,9 @@ astVar = require( './ast-var' );
 
 jools = require( '../jools/jools' );
 
+lexer = require( '../js-lexer/lexer' );
+
 shorthand = require( './shorthand' );
-
-
-/*
-| Tokenizes a javascript string.
-|
-| Returns an array of tokens.
-*/
-tools.tokenize =
-	function( code )
-{
-	var
-		c,
-		ch,
-		cZ,
-		token,
-		tokens;
-
-	if( !jools.isString( code ) )
-	{
-		throw new Error( 'cannot tokenize non-strings' );
-	}
-
-	tokens = [ ];
-
-	for(
-		c = 0, cZ = code.length;
-		c < cZ;
-		c++
-	)
-	{
-		ch = code[ c ];
-
-		if( ch.match( /\s/ ) )
-		{
-			// skips whitespaces
-			continue;
-		}
-
-		if( ch.match(/[a-zA-Z_]/ ) )
-		{
-			token = ch;
-
-			// a name specifier
-			while( c + 1 < cZ && code[ c+ 1 ].match( /[a-zA-Z0-9_]/ ) )
-			{
-				token += code[ ++c ];
-			}
-
-			tokens.push( token );
-
-			continue;
-		}
-
-		if( ch === '.' )
-		{
-			tokens.push( ch );
-
-			continue;
-		}
-
-		throw new Error( 'parse error with: "' + code + '"' );
-	}
-
-	return tokens;
-};
 
 
 /*
@@ -118,14 +56,14 @@ tools.parse =
 		throw new Error( 'cannot parse non-strings' );
 	}
 
-	tokens = tools.tokenize( code );
+	tokens = lexer.tokenize( code );
 
 	if( tokens.length !== 1 )
 	{
 		throw new Error( );
 	}
 
-	return astVar.create( 'name', tokens[ 0 ] );
+	return astVar.create( 'name', tokens[ 0 ].value );
 };
 
 
