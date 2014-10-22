@@ -485,12 +485,9 @@ jools.lazyValue(
 		flow = [ ];
 
 		flow[ line ] = {
-			a :
-				[ ],
-			y :
-				y,
-			o :
-				0
+			a : [ ],
+			y : y,
+			o : 0
 		};
 
 		reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
@@ -532,12 +529,9 @@ jools.lazyValue(
 					line++;
 
 					flow[ line ] = {
-						a :
-							[ ],
-						y :
-							y,
-						o :
-							ca.index
+						a : [ ],
+						y : y,
+						o : ca.index
 					};
 				}
 				else
@@ -549,14 +543,10 @@ jools.lazyValue(
 
 			flow[ line ].a.push(
 				{
-					x :
-						x,
-					w :
-						w,
-					o :
-						ca.index,
-					t :
-						token
+					x : x,
+					w : w,
+					o : ca.index,
+					t : token
 				}
 			);
 

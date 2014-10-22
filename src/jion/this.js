@@ -34,8 +34,9 @@ jionNodeGenerator =
 		outFilename,
 		outStat,
 		si,
-		separator =
-			'/src/';
+		separator;
+
+	separator = '/src/';
 
 	if( !APP )
 	{
@@ -47,17 +48,24 @@ jionNodeGenerator =
 	// gets the server module
 	while( server.parent )
 	{
-		server =
-			server.parent;
+		server = server.parent;
 	}
 
-	si =
-		server.filename.indexOf( separator );
+	si = server.filename.indexOf( separator );
+
+	if( si < 0 )
+	{
+		si = server.filename.indexOf( '/repl' );
+	}
 
 	if( si < 0 )
 	{
 		throw new Error(
-			'root module has no "' + separator + '" separator'
+			'root module ("'
+			+ server.filename
+			+ '") has no "'
+			+ separator
+			+ '" separator'
 		);
 	}
 
@@ -66,12 +74,9 @@ jionNodeGenerator =
 
 	outFilename =
 		'jion/'
-		+
-		APP
-		+
-		'/'
-		+
-		inFilename.replace( /\//g, '-' );
+		+ APP
+		+ '/'
+		+ inFilename.replace( /\//g, '-' );
 
 	inStat = fs.statSync( inFilename );
 

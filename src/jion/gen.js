@@ -1330,7 +1330,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astIf(
 					astEquals(
-						astVar( 'twig' ).astMember( astVar( 'key' ) ),
+						astVar( 'twig' ).astMember( 'key' ),
 						undefined
 					),
 					astBlock( )
@@ -1362,7 +1362,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign(
 					astVar( 'arg' ),
 					astVar( 'arguments' )
-						.astMember( astPlus( 'a', 3 ) )
+					.astMember( astPlus( 'a', 3 ) )
 				)
 				.astPlusAssign( 'a', 2 )
 				.astIf(
@@ -1445,7 +1445,7 @@ gen.prototype.genCreatorFreeStringsParser =
 	{
 		rayDupCheck =
 			astIf(
-				astNot( astVar( 'rayDup' ) ),
+				astNot( 'rayDup' ),
 				astBlock( )
 				.astAssign(
 					'ray',
@@ -1453,10 +1453,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						astVar( 'ray' ).astDot( 'slice' )
 					)
 				)
-				.astAssign(
-					astVar( 'rayDup' ),
-					true
-				)
+				.astAssign( 'rayDup', true )
 			);
 
 		// FIXME make a sub-function to add the twigDup stuff
@@ -1465,8 +1462,8 @@ gen.prototype.genCreatorFreeStringsParser =
 			.astCase(
 				astString( 'ray:init' ),
 				astBlock( )
-				.astAssign( astVar( 'ray' ), 'arg' )
-				.astAssign( astVar( 'rayDup' ), false )
+				.astAssign( 'ray', 'arg' )
+				.astAssign( 'rayDup', false )
 			)
 			.astCase(
 				astString( 'ray:append' ),
@@ -1474,7 +1471,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.append( rayDupCheck )
 				.astCall(
 					astVar( 'ray' ).astDot( 'push' ),
-					astVar( 'arg' )
+					'arg'
 				)
 			)
 			.astCase(
@@ -1830,8 +1827,7 @@ gen.prototype.genCreatorConcerns =
 			}
 			else
 			{
-				cExpr =
-					astCall( astVar( func ) );
+				cExpr = astCall( func );
 			}
 
 			for(
@@ -1955,7 +1951,7 @@ gen.prototype.genCreatorUnchanged =
 		cond =
 			astAnd(
 				cond,
-				astNot( astVar( 'twigDup' ) )
+				astNot( 'twigDup' )
 			);
 	}
 
@@ -1964,7 +1960,7 @@ gen.prototype.genCreatorUnchanged =
 		cond =
 			astAnd(
 				cond,
-				astNot( astVar( 'rayDup' ) )
+				astNot( 'rayDup' )
 			);
 	}
 
@@ -2060,7 +2056,7 @@ gen.prototype.genCreatorUnchanged =
 	block =
 		block.astIf(
 			cond,
-			astReturn( astVar( 'inherit' ) )
+			astReturn( 'inherit' )
 		);
 
 	return block;
@@ -2085,27 +2081,20 @@ gen.prototype.genCreatorReturn =
 		return (
 			block
 			.astIf(
-				astNot(
-					astVar( '_singleton' )
-				),
-				astBlock( )
+				astNot( '_singleton' ),
+				astBlock( ) // XXX
 				.astAssign(
-					astVar( '_singleton' ),
+					'_singleton',
 					astNew(
-						astCall(
-							astVar( 'Constructor' )
-						)
+						astCall( 'Constructor' )
 					)
 				)
 			)
-			.astReturn( astVar( '_singleton' ) )
+			.astReturn( '_singleton' )
 		);
 	}
 
-	call =
-		astCall(
-			astVar( 'Constructor' )
-		);
+	call = astCall( 'Constructor' );
 
 	for(
 		var a = 0, aZ = this.constructorList.length;
@@ -2113,8 +2102,7 @@ gen.prototype.genCreatorReturn =
 		a++
 	)
 	{
-		name =
-			this.constructorList[ a ];
+		name = this.constructorList[ a ];
 
 		switch( name )
 		{
@@ -2284,17 +2272,13 @@ gen.prototype.genFromJSONCreatorParser =
 		nameSwitch;
 
 	nameSwitch =
-		astSwitch( astVar( 'name' ) )
+		astSwitch( 'name' )
 		.astCase(
 			astString( 'type' ),
-			astBlock( )
+			astBlock( ) // XXX
 			.astIf(
-				astDiffers(
-					astVar( 'arg' ),
-					astString( this.id )
-				),
-				astBlock( )
-				// .astFail( 'invalid JSON' )
+				astDiffers( 'arg', astString( this.id ) ),
+				astBlock( ) // XXX
 				.astFail( )
 			)
 		);
@@ -2319,10 +2303,7 @@ gen.prototype.genFromJSONCreatorParser =
 			nameSwitch
 			.astCase(
 				astString( 'ray' ),
-				astAssign(
-					astVar( 'ray' ),
-					astVar( 'arg' )
-				)
+				astAssign( 'ray', 'arg' )
 			);
 	}
 

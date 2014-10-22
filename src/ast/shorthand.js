@@ -816,7 +816,7 @@ shorthand.astSwitch =
 		statement
 	)
 {
-	return astSwitch.create( 'statement', statement );
+	return astSwitch.create( 'statement', tools.convertArg( statement ) );
 };
 
 
