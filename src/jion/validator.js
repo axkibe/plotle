@@ -301,6 +301,48 @@ var _checkRay =
 
 
 /*
+| Checks if an attributes type is valid.
+|
+| This does not include sets, it checks a single type.
+*/
+var _checkAttributeSingleType =
+	function(
+		name, // attribute name
+		type  // the type specifier to check
+	)
+{
+	if( !jools.isString( type ) )
+	{
+		throw new Error(
+			'attribute "' + name + '" has invalid type: ' + type
+		);
+	}
+
+	if( type.indexOf( '.' ) < 0  )
+	{
+		switch( type )
+		{
+			case 'Array' :
+			case 'Boolean' :
+			case 'Integer' :
+			case 'Number' :
+			case 'Object' :
+			case 'String' :
+
+				break;
+
+			default :
+
+				throw new Error(
+					'attribute "' + name + '", type misses unit: ' + type
+				);
+		}
+	}
+};
+
+
+
+/*
 | Checks if a jion attribute definition looks ok.
 */
 var _checkAttribute =
@@ -310,7 +352,10 @@ var _checkAttribute =
 	)
 {
 	var
+		a, aZ,
 		attr,
+		key,
+		type,
 		value;
 
 	if( _attributeBlacklist[ name ] )
@@ -322,14 +367,29 @@ var _checkAttribute =
 
 	attr = jion.attributes[ name ];
 
-	if( !jools.isString( attr.type ) )
+	type = attr.type;
+
+	if( jools.isString( type ) )
+	{
+		_checkAttributeSingleType( name, type );
+	}
+	else if( Array.isArray( type ) )
+	{
+		// for now assuming its okay
+
+		for( a = 0, aZ = type.length; a < aZ; a++ )
+		{
+			_checkAttributeSingleType( name, type[ a ] );
+		}
+	}
+	else
 	{
 		throw new Error(
-			'type is missing from "' + name + '"'
+			'attribute "' + name + '" has invalid type: ' + type
 		);
 	}
 
-	for( var key in attr )
+	for( key in attr )
 	{
 		value = attr[ key ];
 

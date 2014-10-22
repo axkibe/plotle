@@ -44,6 +44,7 @@ if( JION )
 						json :
 							true,
 						type :
+							//[ 'ccot.change', 'ccot.changeRay' ] XXX
 							'Object'
 					},
 				seq :

@@ -186,10 +186,8 @@ shorthand.astAnd =
 
 	return(
 		astAnd.create(
-			'left',
-				left,
-			'right',
-				right
+			'left', left,
+			'right', right
 		)
 	);
 };
@@ -220,10 +218,8 @@ shorthand.astAssign =
 
 	return(
 		astAssign.create(
-			'left',
-				left,
-			'right',
-				right
+			'left', left,
+			'right', right
 		)
 	);
 };
@@ -320,12 +316,9 @@ shorthand.astCondition =
 {
 	return(
 		astCondition.create(
-			'condition',
-				condition,
-			'then',
-				then,
-			'elsewise',
-				elsewise
+			'condition', condition,
+			'then', then,
+			'elsewise', elsewise
 		)
 	);
 };
@@ -346,10 +339,8 @@ shorthand.astDiffers =
 
 	return(
 		astDiffers.create(
-			'left',
-				left,
-			'right',
-				right
+			'left', left,
+			'right', right
 		)
 	);
 };
@@ -380,10 +371,8 @@ shorthand.astDot =
 {
 	return(
 		astDot.create(
-			'expr',
-				expr,
-			'member',
-				member
+			'expr', expr,
+			'member', member
 		)
 	);
 };
@@ -404,10 +393,8 @@ shorthand.astEquals =
 
 	return(
 		astEquals.create(
-			'left',
-				left,
-			'right',
-				right
+			'left', left,
+			'right', right
 		)
 	);
 };
@@ -435,10 +422,8 @@ shorthand.astLessThan =
 
 	return(
 		astLessThan.create(
-			'left',
-				left,
-			'right',
-				right
+			'left', left,
+			'right', right
 		)
 	);
 };
@@ -459,10 +444,8 @@ shorthand.astGreaterThan =
 
 	return(
 		astGreaterThan.create(
-			'left',
-				left,
-			'right',
-				right
+			'left', left,
+			'right', right
 		)
 	);
 };
@@ -500,12 +483,9 @@ shorthand.astIf =
 
 	return(
 		astIf.create(
-			'condition',
-				condition,
-			'then',
-				then,
-			'elsewise',
-				elsewise || null
+			'condition', condition,
+			'then', then,
+			'elsewise', elsewise || null
 		)
 	);
 };
@@ -551,12 +531,14 @@ shorthand.astInstanceof =
 		right
 	)
 {
+	left = tools.convertArg( left );
+
+	right = tools.convertArg( right );
+
 	return(
 		astInstanceof.create(
-			'left',
-				left,
-			'right',
-				right
+			'left', left,
+			'right', right
 		)
 	);
 };
@@ -574,10 +556,8 @@ shorthand.astMember =
 {
 	return(
 		astMember.create(
-			'expr',
-				expr,
-			'member',
-				member
+			'expr', expr,
+			'member', member
 		)
 	);
 };
@@ -663,10 +643,8 @@ shorthand.astOr =
 			0,
 			2,
 			astOr.create(
-				'left',
-					left,
-				'right',
-					right
+				'left', left,
+				'right', right
 			)
 		);
 
@@ -684,10 +662,8 @@ shorthand.astOr =
 
 	return(
 		astOr.create(
-			'left',
-				left,
-			'right',
-				right
+			'left', left,
+			'right', right
 		)
 	);
 };
@@ -718,10 +694,8 @@ shorthand.astPlus =
 			0,
 			2,
 			astPlus.create(
-				'left',
-					left,
-				'right',
-					right
+				'left', left,
+				'right', right
 			)
 		);
 
@@ -739,10 +713,8 @@ shorthand.astPlus =
 
 	return(
 		astPlus.create(
-			'left',
-				left,
-			'right',
-				right
+			'left', left,
+			'right', right
 		)
 	);
 };
@@ -763,10 +735,8 @@ shorthand.astPlusAssign =
 
 	return(
 		astPlusAssign.create(
-			'left',
-				left,
-			'right',
-				right
+			'left', left,
+			'right', right
 		)
 	);
 };

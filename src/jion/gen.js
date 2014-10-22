@@ -300,27 +300,6 @@ gen.prototype._init =
 	{
 		jAttr = jion.attributes[ name ];
 
-		if( jAttr.type.indexOf( '.' ) < 0  )
-		{
-			switch( jAttr.type )
-			{
-				case 'Array' :
-				case 'Boolean' :
-				case 'Integer' :
-				case 'Number' :
-				case 'Object' :
-				case 'String' :
-
-					break;
-
-				default :
-
-					throw new Error(
-						'attribute type misses unit: ' + jAttr.type
-					);
-			}
-		}
-
 		if( jAttr.type.indexOf( '.' ) >= 0 )
 		{
 			attrUnit = jAttr.type.split( '.' )[ 0 ];
@@ -1633,7 +1612,10 @@ gen.prototype.genCreatorChecks =
 	)
 {
 	var
+		a,
 		attr,
+		av,
+		aZ,
 		check,
 		cond,
 		name,
@@ -1642,33 +1624,31 @@ gen.prototype.genCreatorChecks =
 
 	if( checkin )
 	{
-		check =
-			astBlock( );
+		check = astBlock( );
 	}
 	else
 	{
-		check =
-			block;
+		check = block;
 	}
 
 	for(
-		var a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attrList.length;
 		a < aZ;
 		a++
 	)
 	{
-		name =
-			this.attrList[ a ];
+		name = this.attrList[ a ];
 
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes[ name ];
+
+		av = attr.v;
 
 		if( !attr.allowsUndefined )
 		{
 			check =
 				check.astIf(
-					astEquals( attr.v, astUndefined ),
-					astBlock( )
+					astEquals( av, astUndefined ),
+					astBlock( ) // TODO skip block
 					//.astFail( 'undefined attribute ' + name )
 					.astFail( )
 				);
@@ -1678,8 +1658,8 @@ gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.astIf(
-					astEquals( attr.v, astNull ),
-					astBlock( )
+					astEquals( av, astNull ),
+					astBlock( ) // TODO skip block
 					//.astFail( 'attribute ' + name + ' must not be null.' )
 					.astFail( )
 				);
@@ -1696,37 +1676,30 @@ gen.prototype.genCreatorChecks =
 
 		if( attr.allowsNull && !attr.allowsUndefined )
 		{
-			cond =
-				astDiffers( attr.v, astNull );
+			cond = astDiffers( av, astNull );
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
-			cond =
-				astDiffers( attr.v, astUndefined );
+			cond = astDiffers( av, astUndefined );
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
 				astAnd(
-					astDiffers( attr.v, astNull ),
-					astDiffers( attr.v, astUndefined )
+					astDiffers( av, astNull ),
+					astDiffers( av, astUndefined )
 				);
 		}
 		else
 		{
-			cond =
-				null;
+			cond = null;
 		}
 
 		switch( attr.type )
 		{
 			case 'Boolean' :
 
-				tcheck =
-					astDiffers(
-						astTypeof( attr.v ),
-						astString( 'boolean' )
-					);
+				tcheck = astDiffers( astTypeof( av ), astString( 'boolean' ) );
 
 				break;
 
@@ -1735,15 +1708,15 @@ gen.prototype.genCreatorChecks =
 				tcheck =
 					astOr(
 						astDiffers(
-							astTypeof( attr.v ),
+							astTypeof( av ),
 							astString( 'number' )
 						),
 						astDiffers(
 							astCall(
 								astVar( 'Math' ).astDot( 'floor' ),
-								attr.v
+								av
 							),
-							attr.v
+							av
 						)
 					);
 
@@ -1751,11 +1724,7 @@ gen.prototype.genCreatorChecks =
 
 			case 'Number' :
 
-				tcheck =
-					astDiffers(
-						astTypeof( attr.v ),
-						astString( 'number' )
-					);
+				tcheck = astDiffers( astTypeof( av ), astString( 'number' ) );
 
 				break;
 
@@ -1765,14 +1734,11 @@ gen.prototype.genCreatorChecks =
 				tcheck =
 					astAnd(
 						astDiffers(
-							astTypeof( attr.v ),
+							astTypeof( av ),
 							astString( 'string' )
 						),
 						astNot(
-							astInstanceof(
-								attr.v,
-								astVar( 'String' )
-							)
+							astInstanceof( av, 'String' )
 						)
 					);
 
@@ -1782,7 +1748,7 @@ gen.prototype.genCreatorChecks =
 
 				tcheck =
 					astDiffers(
-						attr.v.astDot( 'reflectName' ), // FIXME
+						av.astDot( 'reflectName' ), // FIXME
 						astString( attr.type )
 					);
 
@@ -1799,20 +1765,13 @@ gen.prototype.genCreatorChecks =
 			check =
 				check.astIf(
 					cond,
-					astBlock( )
-					.astIf(
-						tcheck,
-						tfail
-					)
+					astBlock( ) // FIXME remove
+					.astIf( tcheck, tfail )
 				);
 		}
 		else
 		{
-			check =
-				check.astIf(
-					tcheck,
-					tfail
-				);
+			check = check.astIf( tcheck, tfail );
 		}
 	}
 
