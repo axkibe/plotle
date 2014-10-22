@@ -51,6 +51,7 @@ module.exports =
 
 			'src/format/context.js',
 			'src/js-lexer/token.js',
+			'src/js-parser/state.js',
 			'src/jion/gen.js'
 		]
 };

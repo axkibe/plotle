@@ -27,7 +27,8 @@ var
 	astVar,
 	jools,
 	lexer,
-	shorthand;
+	parseToken,
+	state;
 
 
 astVar = require( '../ast/ast-var' );
@@ -35,6 +36,39 @@ astVar = require( '../ast/ast-var' );
 jools = require( '../jools/jools' );
 
 lexer = require( '../js-lexer/lexer' );
+
+state = require( './state' );
+
+
+/*
+| Parses a token at tpos from a tokenRay.
+*/
+parseToken =
+	function(
+		state
+	)
+{
+	var
+		token;
+
+	token = state.tokens[ state.tpos ];
+
+	switch( token.type )
+	{
+		case 'var' :
+
+			return(
+				state.create(
+					'tpos', state.tpos + 1,
+					'ast', astVar.create( 'name', token.value )
+				)
+			);
+
+		default :
+
+			throw new Error( );
+	}
+};
 
 
 /*
@@ -47,30 +81,25 @@ parser.parse =
 //		ast,
 		tokens;
 
-	if( !jools.isString( code ) )
-	{
-		throw new Error( 'cannot parse non-strings' );
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( !jools.isString( code ) )
+/**/	{
+/**/		throw new Error( 'cannot parse non-strings' );
+/**/	}
+/**/}
 
 	tokens = lexer.tokenize( code );
 
-	/*
-	for(
-		var t = 0, tZ = tokens.length;
-		t < tZ;
-		t++
-	)
-	{
-
-	}
-	*/
-
-	if( tokens.length !== 1 )
-	{
-		throw new Error( );
-	}
-
-	return astVar.create( 'name', tokens[ 0 ].value );
+	return(
+		parseToken(
+			state.create(
+				'tokens', tokens,
+				'tpos', 0,
+				'ast', null
+			)
+		).ast
+	);
 };
 
 
