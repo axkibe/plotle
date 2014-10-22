@@ -75,6 +75,11 @@ tools.convertArg =
 		return shorthand.astFalse;
 	}
 
+	if( arg === undefined )
+	{
+		return shorthand.astUndefined;
+	}
+
 	if( jools.isString( arg ) )
 	{
 		return astVar.create( 'name', arg );

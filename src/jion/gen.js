@@ -799,7 +799,7 @@ gen.prototype.genConstructor =
 		{
 			block = block
 				.astIf(
-					astDiffers( attr.v, astUndefined ),
+					astDiffers( attr.v, undefined ),
 					assign
 				);
 		}
@@ -1250,7 +1250,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( name  ),
 				astBlock( )
 				.astIf(
-					astDiffers( 'arg', astUndefined ),
+					astDiffers( 'arg', undefined ),
 					astAssign( attr.v, 'arg' )
 				)
 			);
@@ -1297,7 +1297,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astDiffers(
 						astVar( 'twig' ).astMember( 'key' ),
-						astUndefined
+						undefined
 					)
 				,
 					astBlock( )
@@ -1337,7 +1337,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astEquals(
 						astVar( 'twig' ).astMember( astVar( 'key' ) ),
-						astUndefined
+						undefined
 					),
 					astBlock( )
 					.astFail(
@@ -1374,7 +1374,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astDiffers(
 						astVar( 'twig' ).astMember( 'key' ),
-						astUndefined
+						undefined
 					),
 					astBlock( )
 					.astFail(
@@ -1418,7 +1418,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astEquals(
 						astVar( 'twig' ).astMember( 'arg' ),
-						astUndefined
+						undefined
 					),
 					astBlock( )
 					.astFail(
@@ -1582,7 +1582,7 @@ gen.prototype.genCreatorDefaults =
 			block =
 				block
 				.astIf(
-					astEquals( attr.v, astUndefined ),
+					astEquals( attr.v, undefined ),
 					astBlock( )
 						.astAssign( attr.v, attr.defaultValue )
 				);
@@ -1638,7 +1638,7 @@ gen.prototype.genCreatorChecks =
 		{
 			check =
 				check.astIf(
-					astEquals( av, astUndefined ),
+					astEquals( av, undefined ),
 					astFail( )
 				);
 		}
@@ -1667,14 +1667,14 @@ gen.prototype.genCreatorChecks =
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
-			cond = astDiffers( av, astUndefined );
+			cond = astDiffers( av, undefined );
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
 				astAnd(
 					astDiffers( av, null ),
-					astDiffers( av, astUndefined )
+					astDiffers( av, undefined )
 				);
 		}
 		else
@@ -1889,7 +1889,7 @@ gen.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						astCondition(
-							astDiffers( attr.v, astUndefined ),
+							astDiffers( attr.v, undefined ),
 							attr.v.astDot( member ),
 							null
 						);
@@ -2934,7 +2934,7 @@ gen.prototype.genAttributeEquals =
 					astOr(
 						astEquals( le, re ),
 						astAnd(
-							astDiffers( le, astUndefined ),
+							astDiffers( le, undefined ),
 							astCall( le.astDot( 'equals' ), re )
 						)
 					);

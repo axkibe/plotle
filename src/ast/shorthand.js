@@ -887,6 +887,12 @@ shorthand.astCommaList =
 
 
 /*
+| Shorthand for 'undefined'
+*/
+shorthand.astUndefined = astVar.create( 'name', 'undefined' );
+
+
+/*
 | Shorthand for creating vlists.
 */
 shorthand.astVList =
