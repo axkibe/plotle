@@ -36,6 +36,11 @@ GLOBAL.jools = require( '../jools/jools' );
 
 GLOBAL.astTools = require( '../ast/tools' );
 
+GLOBAL.parser = require( '../js-parser/parser' );
+
+GLOBAL.formatter = require( '../format/formatter' );
+
+GLOBAL.util = require( 'util' );
 
 var
 	repl;

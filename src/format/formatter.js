@@ -147,12 +147,11 @@ formatAnd =
 			expr.left,
 			precTable.astAnd
 		)
-		+
-		context.sep
-		+
-		context.tab + '&&' + context.sep
-		+
-		formatExpression(
+		+ context.sep
+		+ context.tab
+		+ '&&'
+		+ context.sep
+		+ formatExpression(
 			context,
 			expr.right,
 			precTable.astAnd
@@ -304,12 +303,9 @@ formatCheck =
 		);
 
 	return (
-		context.tab + 'if( CHECK )\n'
-		+
-		formatBlock(
-			context,
-			check.block
-		)
+		context.tab
+		+ 'if( CHECK )\n'
+		+ formatBlock( context, check.block )
 	);
 };
 
@@ -331,8 +327,7 @@ formatBlock =
 			'';
 	if(
 		context.inline
-		&&
-		block.ranks.length > 1
+		&& block.ranks.length > 1
 	)
 	{
 		throw 'noinline';
@@ -340,8 +335,7 @@ formatBlock =
 
 	if( !noBrackets )
 	{
-		text =
-			context.tab + '{' + context.sep;
+		text = context.tab + '{' + context.sep;
 
 		blockContext = context.Inc;
 	}
@@ -358,14 +352,17 @@ formatBlock =
 	{
 		text +=
 			formatStatement(
-				blockContext,
-				block.atRank( a ),
-				a > 0 ?
-					block.atRank( a - 1 ) :
-					null,
-				a + 1 < aZ ?
-					block.atRank( a + 1 ) :
-					null
+				blockContext
+			,
+				block.atRank( a )
+			,
+				a > 0
+				?  block.atRank( a - 1 )
+				: null
+			,
+				a + 1 < aZ
+				?  block.atRank( a + 1 )
+				: null
 			);
 	}
 
@@ -1341,18 +1338,16 @@ formatStatement =
 	)
 	{
 		text +=
-			context.check ?
-				'/**/\n'
-				:
-				'\n';
+			context.check
+			? '/**/\n'
+			: '\n';
 
 		if( context.root )
 		{
 			text +=
-				context.check ?
-					'/**/\n'
-					:
-					'\n';
+				context.check
+				?  '/**/\n'
+				: '\n';
 		}
 	}
 
@@ -1383,8 +1378,7 @@ formatStatement =
 			{
 				subtext =
 					context.tab
-					+
-					formatFail( context.Inline, statement );
+					+ formatFail( context.Inline, statement );
 			}
 			catch( e )
 			{
@@ -1442,8 +1436,7 @@ formatStatement =
 			{
 				subtext =
 					context.tab
-					+
-					formatExpression(
+					+ formatExpression(
 						context.Inline,
 						statement,
 						null
@@ -1460,8 +1453,7 @@ formatStatement =
 
 			if( subtext !== null && textLen( subtext ) < MAX_TEXT_WIDTH )
 			{
-				text +=
-					subtext;
+				text += subtext;
 			}
 			else
 			{
@@ -2524,11 +2516,7 @@ formatter.format =
 		text,
 		doSep;
 
-	context =
-		format.context.create(
-			'root',
-				true
-		);
+	context = format.context.create( 'root', true );
 
 	text = '';
 
@@ -2549,12 +2537,7 @@ formatter.format =
 			text += '\n\n';
 		}
 
-		text +=
-			formatBlock(
-				context,
-				file.preamble,
-				true
-			);
+		text += formatBlock( context, file.preamble, true );
 
 		doSep = true;
 	}
@@ -2566,11 +2549,7 @@ formatter.format =
 			text += '\n\n';
 		}
 
-		text +=
-			formatCapsule(
-				context,
-				file.capsule
-			);
+		text += formatCapsule( context, file.capsule );
 	}
 
 	return text;
