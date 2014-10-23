@@ -731,11 +731,7 @@ gen.prototype.genNodeIncludes =
 		}
 	}
 
-	capsule =
-		capsule.astIf(
-			astVar( 'SERVER' ),
-			block
-		);
+	capsule = capsule.astIf( 'SERVER', block );
 
 	return capsule;
 };
@@ -869,18 +865,15 @@ gen.prototype.genConstructor =
 				)
 		);
 		*/
-		.astCall(
-			astVar( 'jools' ).astDot( 'immute' ),
-			astThis
-		);
+		.astCall( 'jools.immute', astThis );
 
 	if( this.twig )
 	{
 		// FIXME use object.freeze and only in checking
 		block =
 			block
-			.astCall( astVar( 'jools' ).astDot( 'immute' ), 'twig' )
-			.astCall( astVar( 'jools' ).astDot( 'immute' ), 'ranks' );
+			.astCall( 'jools.immute', 'twig' )
+			.astCall( 'jools.immute', 'ranks' );
 	}
 
 	if( this.ray )
@@ -888,10 +881,7 @@ gen.prototype.genConstructor =
 		block =
 			block
 			.astCheck(
-				astCall(
-					astVar( 'Object' ).astDot( 'freeze' ),
-					'ray'
-				)
+				astCall( 'Object.freeze', 'ray' )
 			);
 	}
 
@@ -974,8 +964,8 @@ gen.prototype.genConstructor =
 			capsule
 			.astComment( 'Subclass.' )
 			.astCall(
-				astVar( 'jools' ).astDot( 'subclass' ),
-				astVar( 'Constructor' ),
+				'jools.subclass',
+				'Constructor',
 				this.subclass
 			);
 	}
@@ -1101,23 +1091,14 @@ gen.prototype.genCreatorInheritanceReceiver =
 		name,
 		receiver =
 			astBlock( )
-			.astAssign(
-				astVar( 'inherit' ),
-				astThis
-			);
+			.astAssign( 'inherit', astThis );
 
 	if( this.twig )
 	{
 		receiver =
 			receiver
-			.astAssign(
-				'twig',
-				astVar( 'inherit' ).astDot( 'twig' )
-			)
-			.astAssign(
-				'ranks',
-				astVar( 'inherit' ).astDot( 'ranks' )
-			)
+			.astAssign( 'twig', 'inherit.twig' )
+			.astAssign( 'ranks', 'inherit.ranks' )
 			.astAssign( 'twigDup', false );
 	}
 
@@ -1125,10 +1106,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 	{
 		receiver =
 			receiver
-			.astAssign(
-				'ray',
-				astVar( 'inherit' ).astDot( 'ray' )
-			)
+			.astAssign( 'ray', 'inherit.ray' )
 			.astAssign( 'rayDup', false );
 	}
 
@@ -1259,19 +1237,8 @@ gen.prototype.genCreatorFreeStringsParser =
 			astIf(
 				astNot( 'twigDup' ),
 				astBlock( )
-				.astAssign(
-					'twig',
-					astCall(
-						astVar( 'jools' ).astDot( 'copy' ),
-						'twig'
-					)
-				)
-				.astAssign(
-					'ranks',
-					astCall(
-						astVar( 'ranks' ).astDot( 'slice' )
-					)
-				)
+				.astAssign( 'twig', astCall( 'jools.copy', 'twig' ) )
+				.astAssign( 'ranks', astCall( 'ranks.slice' ) )
 				.astAssign( 'twigDup', true )
 			);
 
