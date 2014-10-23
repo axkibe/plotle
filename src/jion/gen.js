@@ -1290,16 +1290,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						astVar( 'twig' ).astMember( 'key' ),
 						undefined
 					),
-					astBlock( ) // XXX
-					.astFail(
-						/*
-						astPlus(
-							astString( 'key "' ),
-							astVar( 'key' ),
-							astString( '" not in use' )
-						)
-						*/
-					)
+					astFail( )
 				)
 				.astAssign(
 					astVar( 'twig' ).astMember( 'key' ),
@@ -1343,10 +1334,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						astLessThan( 'rank', 0 ),
 						astGreaterThan( 'rank', 'ranks.length' )
 					),
-					astBlock( ) // XXX
-					.astFail(
-						//astString( 'invalid rank' )
-					)
+					astFail( )
 				)
 				.astAssign(
 					astVar( 'twig' ).astMember( 'key' ),
