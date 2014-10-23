@@ -1452,7 +1452,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		block
 		.astFor(
 			astVList( )
-				.astVarDec( 'a', astNumber( 0 ) ) //XXX
+				.astVarDec( 'a', 0 )
 				.astVarDec( 'aZ', 'arguments.length' ),
 			astLessThan( 'a', 'aZ' ),
 			astPlusAssign( 'a', 2 ),
