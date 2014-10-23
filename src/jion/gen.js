@@ -720,11 +720,9 @@ gen.prototype.genNodeIncludes =
 						'require',
 						astString(
 							'../../src/'
-							+
-							camelCaseToDash( unitName ) +
-							'/'
-							+
-							camelCaseToDash( typeName )
+							+ camelCaseToDash( unitName )
+							+ '/'
+							+ camelCaseToDash( typeName )
 						)
 					)
 				);
@@ -801,8 +799,8 @@ gen.prototype.genConstructor =
 	{
 		block =
 			block
-			.astAssign( astThis.astDot( 'twig' ), 'twig' )
-			.astAssign( astThis.astDot( 'ranks' ), 'ranks' );
+			.astAssign( 'this.twig', 'twig' )
+			.astAssign( 'this.ranks', 'ranks' );
 	}
 
 
@@ -810,13 +808,13 @@ gen.prototype.genConstructor =
 	{
 		block =
 			block
-			.astAssign( astThis.astDot( 'ray' ), 'ray' );
+			.astAssign( 'this.ray', 'ray' );
 	}
 
 	// calls the initializer
 	if( this.init )
 	{
-		initCall = astCall( astThis.astDot( '_init' ) );
+		initCall = astCall( 'this._init' );
 
 		for(
 			a = 0, aZ = this.init.length;
@@ -976,7 +974,7 @@ gen.prototype.genConstructor =
 		.astComment( 'Prototype shortcut' )
 		.astVarDec(
 			'prototype',
-			astVar( 'Constructor' ).astDot( 'prototype' )
+			'Constructor.prototype'
 		);
 
 	// the exported object
@@ -1279,10 +1277,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astVar( 'twig' ).astMember( 'key' ),
 					'arg'
 				)
-				.astCall(
-					astVar( 'ranks' ).astDot( 'push' ),
-					'key'
-				)
+				.astCall( 'ranks.push', 'key' )
 			)
 			.astCase(
 				astString( 'twig:set' ),
@@ -1303,7 +1298,7 @@ gen.prototype.genCreatorFreeStringsParser =
 						astVar( 'twig' ).astMember( 'key' ),
 						undefined
 					),
-					astBlock( )
+					astBlock( ) // XXX
 					.astFail(
 						/*
 						astPlus(
@@ -1354,12 +1349,9 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astOr(
 						astLessThan( 'rank', 0 ),
-						astGreaterThan(
-							'rank',
-							astVar( 'ranks' ).astDot( 'length' )
-						)
+						astGreaterThan( 'rank', 'ranks.length' )
 					),
-					astBlock( )
+					astBlock( ) // XXX
 					.astFail(
 						//astString( 'invalid rank' )
 					)
@@ -1368,12 +1360,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astVar( 'twig' ).astMember( 'key' ),
 					'arg'
 				)
-				.astCall(
-					astVar( 'ranks' ).astDot( 'splice' ),
-					'rank',
-					0,
-					'key'
-				)
+				.astCall( 'ranks.splice', 'rank', 0, 'key' )
 			)
 			.astCase(
 				astString( 'twig:remove' ),
@@ -1400,11 +1387,8 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.append(
 					astCall(
-						astVar( 'ranks' ).astDot( 'splice' ),
-						astCall(
-							astVar( 'ranks' ).astDot( 'indexOf' ),
-							'arg'
-						),
+						'ranks.splice',
+						astCall( 'ranks.indexOf', 'arg' ),
 						1
 					)
 				)
@@ -1419,9 +1403,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astBlock( )
 				.astAssign(
 					'ray',
-					astCall(
-						astVar( 'ray' ).astDot( 'slice' )
-					)
+					astCall( 'ray.slice' )
 				)
 				.astAssign( 'rayDup', true )
 			);
@@ -1439,17 +1421,14 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( 'ray:append' ),
 				astBlock( )
 				.append( rayDupCheck )
-				.astCall(
-					astVar( 'ray' ).astDot( 'push' ),
-					'arg'
-				)
+				.astCall( 'ray.push', 'arg' )
 			)
 			.astCase(
 				astString( 'ray:insert' ),
 				astBlock( )
 				.append( rayDupCheck )
 				.astCall(
-					astVar( 'ray' ).astDot( 'splice' ),
+					'ray.splice',
 					'arg',
 					0,
 					astVar( 'arguments' ).astMember(
@@ -1461,11 +1440,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( 'ray:remove' ),
 				astBlock( )
 				.append( rayDupCheck )
-				.astCall(
-					astVar( 'ray' ).astDot( 'splice' ),
-					'arg',
-					1
-				)
+				.astCall( 'ray.splice', 'arg', 1 )
 			)
 			.astCase(
 				astString( 'ray:set' ),
@@ -1497,8 +1472,8 @@ gen.prototype.genCreatorFreeStringsParser =
 		block
 		.astFor(
 			astVList( )
-				.astVarDec( 'a', astNumber( 0 ) )
-				.astVarDec( 'aZ', astVar( 'arguments' ).astDot( 'length' ) ),
+				.astVarDec( 'a', astNumber( 0 ) ) //XXX
+				.astVarDec( 'aZ', 'arguments.length' ),
 			astLessThan( 'a', 'aZ' ),
 			astPlusAssign( 'a', 2 ),
 			loop
@@ -1660,10 +1635,7 @@ gen.prototype.genCreatorChecks =
 							astString( 'number' )
 						),
 						astDiffers(
-							astCall(
-								astVar( 'Math' ).astDot( 'floor' ),
-								av
-							),
+							astCall( 'Math.floor', av ),
 							av
 						)
 					);
