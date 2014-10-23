@@ -65,7 +65,7 @@ parseToken =
 
 	switch( token.type )
 	{
-		case 'dot' :
+		case '.' :
 
 			if( !ast )
 			{
@@ -90,6 +90,22 @@ parseToken =
 				);
 
 			break;
+
+		/*
+		case '[' :
+
+			if( !ast )
+			{
+				throw new Error( );
+			}
+
+			state =
+				state.create(
+					'pos', state + 1,
+					'ast', null,
+					'prec', 1
+				);
+		*/
 
 		case 'var' :
 

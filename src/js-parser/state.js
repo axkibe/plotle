@@ -44,6 +44,15 @@ if( JION )
 							'current position in token ray',
 						type :
 							'Integer'
+					},
+				prec :
+					{
+						comment :
+							'current precedence',
+						type :
+							'Integer',
+						defaultValue :
+							null
 					}
 			},
 		node :

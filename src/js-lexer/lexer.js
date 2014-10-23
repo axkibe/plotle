@@ -83,10 +83,25 @@ jsLexer.tokenize =
 
 		if( ch === '.' )
 		{
-			tokens.push( token.create( 'type', 'dot' ) );
+			tokens.push( token.create( 'type', '.' ) );
 
 			continue;
 		}
+
+		if( ch === '[' )
+		{
+			tokens.push( token.create( 'type', '[' ) );
+
+			continue;
+		}
+
+		if( ch === '[' )
+		{
+			tokens.push( token.create( 'type', ']' ) );
+
+			continue;
+		}
+
 
 		throw new Error( 'lexer error with: "' + code + '"' );
 	}
