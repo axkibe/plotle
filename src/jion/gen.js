@@ -2902,7 +2902,7 @@ gen.prototype.genEquals =
 	block =
 		block
 		.astIf(
-			astEquals( astThis, 'obj' ),
+			astEquals( 'this', 'obj' ),
 			astReturnTrue
 		)
 		.astIf(
@@ -2919,7 +2919,7 @@ gen.prototype.genEquals =
 		twigTestLoopBody =
 			astBlock( )
 			.astAssign(
-				vKey,
+				'key',
 				astThis.astDot( 'ranks' ).astMember( vA )
 			)
 			.astIf(
@@ -2974,11 +2974,7 @@ gen.prototype.genEquals =
 			.astFor(
 				astCommaList( )
 					.astAssign( 'a', 0 )
-					.astAssign(
-						'aZ',
-						// XXX
-						astThis.astDot( 'ranks' ).astDot( 'length' )
-					),
+					.astAssign( 'aZ', 'this.ranks.length' ),
 				astLessThan( 'a', 'aZ' ),
 				astPreIncrement( 'a' ),
 				twigTestLoopBody
@@ -2988,14 +2984,8 @@ gen.prototype.genEquals =
 			block
 			.astIf(
 				astOr(
-					astDiffers(
-						astThis.astDot( 'tree' ),
-						astVar( 'obj' ).astDot( 'tree' )
-					),
-					astDiffers(
-						astThis.astDot( 'ranks' ),
-						astVar( 'obj' ).astDot( 'ranks' )
-					)
+					astDiffers( 'this.tree', 'obj.tree' ),
+					astDiffers( 'this.ranks', 'obj.ranks' )
 				),
 				twigTest
 			);
@@ -3044,7 +3034,7 @@ gen.prototype.genEquals =
 		capsule
 		.astAssign(
 			// FIXME use proto
-			astVar( 'prototype' ).astDot( 'equals' ),
+			'prototype.equals',
 			astFunc( block )
 			.astArg( 'obj', 'object to compare to' )
 		);
