@@ -424,30 +424,22 @@ gen.prototype._init =
 			Object.freeze( {
 				allowsNull :
 					jAttr.allowsNull
-					||
-					defaultValue === shorthand.astNull, // XXX equals
+					|| shorthand.astNull.equals( defaultValue ),
 				allowsUndefined :
 					jAttr.allowsUndefined
-					||
-					defaultValue === shorthand.astUndefined, // XXX equals
+					|| shorthand.astUndefined.equals( defaultValue ),
 				assign :
 					assign,
 				comment :
 					jAttr.comment,
 				concerns :
 					jAttr.concerns
-					?
-						Object.freeze( {
-							unit :
-								concernsUnit,
-							type :
-								concernsType,
-							func :
-								jAttr.concerns.func,
-							args :
-								jAttr.concerns.args,
-							member :
-								jAttr.concerns.member
+					? Object.freeze( {
+							unit : concernsUnit,
+							type : concernsType,
+							func : jAttr.concerns.func,
+							args : jAttr.concerns.args,
+							member : jAttr.concerns.member
 						} )
 					: null,
 				defaultValue :
