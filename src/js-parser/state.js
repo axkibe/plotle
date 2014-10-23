@@ -85,4 +85,38 @@ jools.lazyValue(
 );
 
 
+/*
+| The current token
+*/
+jools.lazyValue(
+	state.prototype,
+	'current',
+	function( )
+	{
+		return(
+			this.pos < this.tokens.length
+			?  this.tokens[ this.pos ]
+			: null
+		);
+	}
+);
+
+
+/*
+| The preview token
+*/
+jools.lazyValue(
+	state.prototype,
+	'preview',
+	function( )
+	{
+		return(
+			this.pos + 1 < this.token.length
+			? this.tokens[ this.pos + 1 ]
+			: null
+		);
+	}
+);
+
+
 } )( );
