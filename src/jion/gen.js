@@ -2004,12 +2004,9 @@ gen.prototype.genCreatorReturn =
 			block
 			.astIf(
 				astNot( '_singleton' ),
-				astBlock( ) // XXX
-				.astAssign(
+				astAssign(
 					'_singleton',
-					astNew(
-						astCall( 'Constructor' )
-					)
+					astNew( astCall( 'Constructor' ) )
 				)
 			)
 			.astReturn( '_singleton' )
@@ -2197,11 +2194,9 @@ gen.prototype.genFromJSONCreatorParser =
 		astSwitch( 'name' )
 		.astCase(
 			astString( 'type' ),
-			astBlock( ) // XXX
-			.astIf(
+			astIf(
 				astDiffers( 'arg', astString( this.id ) ),
-				astBlock( ) // XXX
-				.astFail( )
+				astFail( )
 			)
 		);
 

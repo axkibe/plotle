@@ -84,13 +84,9 @@ astSwitch.prototype.astCase =
 	{
 		block = code;
 	}
-	else if( code.astIsExpression )
-	{
-		block = astBlock.create( ).append( code );
-	}
 	else
 	{
-		throw new Error( );
+		block = astBlock.create( ).append( code );
 	}
 
 	if( coc.reflect !== 'ast.astCase' )
