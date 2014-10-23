@@ -29,13 +29,16 @@ if( JION )
 
 
 var
-	astObjLiteral;
+	astObjLiteral,
+	tools;
 
 
 astObjLiteral =
 module.exports =
 	require( '../jion/this' )( module );
 
+
+tools = require( './tools' );
 
 /*
 | Returns an object literal with a key-expr pair added.
@@ -46,11 +49,11 @@ astObjLiteral.prototype.add =
 		expr
 	)
 {
-	return (
+	return(
 		this.create(
 			'twig:add',
 			key,
-			expr
+			tools.convertArg( expr )
 		)
 	);
 };

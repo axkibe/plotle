@@ -2611,16 +2611,15 @@ gen.prototype.genJionProto =
 				'prototype.atRank',
 				'jion.proto.atRank'
 			)
-			// XXX
 			.astComment( 'Gets the rank of a key.' )
 			.astAssign(
-				astVar( 'prototype' ).astDot( 'rankOf' ),
-				astVar( 'jion' ).astDot( 'proto' ).astDot( 'rankOf' )
+				'prototype.rankOf',
+				'jion.proto.rankOf'
 			)
 			.astComment( 'Creates a new unique identifier.' )
 			.astAssign(
-				astVar( 'prototype' ).astDot( 'newUID' ),
-				astVar( 'jion' ).astDot( 'proto' ).astDot( 'newUID' )
+				'prototype.newUID',
+				'jion.proto.newUID'
 			);
 	}
 
@@ -2630,41 +2629,41 @@ gen.prototype.genJionProto =
 			capsule
 			.astComment( 'Appends an entry to the ray.' )
 			.astAssign(
-				astVar( 'prototype' ).astDot( 'append' ),
-				astVar( 'jion' ).astDot( 'proto' ).astDot( 'rayAppend' )
+				'prototype.append',
+				'jion.proto.rayAppend'
 			)
 			.astComment(
 				'Returns the length of the ray.'
 			)
 			.astCall(
-				astVar( 'jools' ).astDot( 'lazyValue' ),
-				astVar( 'prototype' ),
+				'jools.lazyValue',
+				'prototype',
 				astString( 'length' ),
-				astVar( 'jion' ).astDot( 'proto' ).astDot( 'rayLength' )
+				'jion.proto.rayLength'
 			)
 			.astComment(
 				'Gets one entry from the ray.'
 			)
 			.astAssign(
-				astVar( 'prototype' ).astDot( 'get' ),
-				astVar( 'jion' ).astDot( 'proto' ).astDot( 'rayGet' )
+				'prototype.get',
+				'jion.proto.rayGet'
 			)
 			.astComment( 'Returns a jion with one entry inserted to the ray.' )
 			.astAssign(
-				astVar( 'prototype' ).astDot( 'insert' ),
-				astVar( 'jion' ).astDot( 'proto' ).astDot( 'rayInsert' )
+				'prototype.insert',
+				'jion.proto.rayInsert'
 			)
 			.astComment(
 				'Returns the jion with one entry of the ray set.'
 			)
 			.astAssign(
-				astVar( 'prototype' ).astDot( 'set' ),
-				astVar( 'jion' ).astDot( 'proto' ).astDot( 'raySet' )
+				'prototype.set',
+				'jion.proto.raySet'
 			)
 			.astComment( 'Returns a jion with one entry from the ray removed.' )
 			.astAssign(
-				astVar( 'prototype' ).astDot( 'remove' ),
-				astVar( 'jion' ).astDot( 'proto' ).astDot( 'rayRemove' )
+				'prototype.remove',
+				'jion.proto.rayRemove'
 			);
 	}
 
@@ -2722,25 +2721,22 @@ gen.prototype.genToJSON =
 	{
 		olit =
 			olit
-			.add( 'ranks', astThis.astDot( 'ranks' ) )
-			.add( 'twig', astThis.astDot( 'twig' ) );
+			.add( 'ranks', 'this.ranks' )
+			.add( 'twig', 'this.twig' );
 	}
 
 	if( this.ray )
 	{
 		olit =
 			olit
-			.add( 'ray', astThis.astDot( 'ray' ) );
+			.add( 'ray', 'this.ray' );
 	}
 
 	block =
 		block
 		.astAssign( 'json', olit )
 		.astCheck(
-			astCall(
-				astVar( 'Object' ).astDot( 'freeze' ),
-				'json'
-			)
+			astCall( 'Object.freeze', 'json' )
 		)
 		.astReturn(
 			astFunc( astReturn( 'json' ) )
@@ -2750,7 +2746,7 @@ gen.prototype.genToJSON =
 		capsule
 		.astComment( 'Converts a ' + this.name + ' into JSON.' )
 		.astCall(
-			astVar( 'jools' ).astDot( 'lazyValue' ),
+			'jools.lazyValue',
 			'prototype',
 			astString( 'toJSON' ),
 			astFunc( block )
@@ -2866,10 +2862,10 @@ gen.prototype.genEquals =
 				capsule
 				.astComment( 'Tests equality of object.' )
 				.astAssign(
-					astVar( 'prototype' ).astDot( 'equals' ),
+					'prototype.equals',
 					astFunc(
 						astReturn(
-							astEquals( astThis, 'obj' )
+							astEquals( 'this', 'obj' )
 						)
 					)
 					.astArg( 'obj', 'object to compare to' )
@@ -2970,8 +2966,8 @@ gen.prototype.genEquals =
 			astBlock( )
 			.astIf(
 				astDiffers(
-					astThis.astDot( 'ranks' ).astDot( 'length' ),
-					astVar( 'obj' ).astDot( 'ranks' ).astDot( 'length' )
+					'this.ranks.length',
+					'obj.ranks.length'
 				),
 				astReturnFalse
 			)
@@ -2980,6 +2976,7 @@ gen.prototype.genEquals =
 					.astAssign( 'a', 0 )
 					.astAssign(
 						'aZ',
+						// XXX
 						astThis.astDot( 'ranks' ).astDot( 'length' )
 					),
 				astLessThan( 'a', 'aZ' ),
