@@ -71,7 +71,7 @@ jools.lazyValue(
 	'reachedEnd',
 	function( )
 	{
-		return pos >= tokens.length
+		return this.pos >= this.tokens.length;
 	}
 );
 

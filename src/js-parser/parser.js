@@ -24,12 +24,15 @@ module.exports =
 
 
 var
+	astDot,
 	astVar,
 	jools,
 	lexer,
 	parseToken,
 	state;
 
+
+astDot = require( '../ast/ast-dot' );
 
 astVar = require( '../ast/ast-var' );
 
@@ -49,12 +52,45 @@ parseToken =
 	)
 {
 	var
+		ast,
+		name,
+		pos,
 		token;
 
-	token = state.tokens[ state.pos ];
+	pos = state.pos;
+
+	token = state.tokens[ pos ];
+
+	ast = state.ast;
 
 	switch( token.type )
 	{
+		case 'dot' :
+
+			if( !ast )
+			{
+				throw new Error( );
+			}
+
+			name = state.tokens[ pos + 1 ];
+
+			if( name.type !== 'var' )
+			{
+				throw new Error( );
+			}
+
+			state =
+				state.create(
+					'pos', state.pos + 2,
+					'ast',
+						astDot.create(
+							'expr', state.ast,
+							'member', name.value
+						)
+				);
+
+			break;
+
 		case 'var' :
 
 			if( state.ast !== null )
@@ -70,19 +106,19 @@ parseToken =
 					'ast', astVar.create( 'name', token.value )
 				);
 
-			return state;
-
-			/*
-			if( state.pos + 1 < state.tokens.length )
-			{
-				parseToken(
-			}
-			*/
+			break;
 
 		default :
 
 			throw new Error( );
 	}
+
+	if( !state.reachedEnd )
+	{
+		state = parseToken( state );
+	}
+
+	return state;
 };
 
 
