@@ -1648,7 +1648,7 @@ gen.prototype.genCreatorChecks =
 
 				tcheck =
 					astDiffers(
-						av.astDot( 'reflectName' ), // FIXME
+						av.astDot( 'reflectName' ),
 						astString( attr.type )
 					);
 
@@ -2092,10 +2092,7 @@ gen.prototype.genCreator =
 		capsule
 		.astAssign(
 			astVar( this.reference ).astDot( 'create' ),
-			astAssign(
-				astVar( 'prototype' ).astDot( 'create' ),
-				creator
-			)
+			astAssign( 'prototype.create', creator )
 		);
 
 	return capsule;
@@ -2331,10 +2328,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		twigId,
 		ut;
 
-	switchExpr =
-		astSwitch(
-			astVar( 'jval' ).astDot( 'type' )
-		);
+	switchExpr = astSwitch( 'jval.type' );
 
 	for(
 		var a = 0, aZ = this.twigList.length;
@@ -2357,7 +2351,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 					astVar( 'twig' ).astMember( astVar( 'key' ) ),
 					astCall(
 						base.astDot( 'createFromJSON' ),
-						astVar( 'jval' )
+						'jval'
 					)
 				)
 			);
@@ -2393,14 +2387,11 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 
 	block =
 		block
-		.astAssign(
-			astVar( 'twig' ),
-			astObjLiteral( )
-		)
+		.astAssign( 'twig', astObjLiteral( ) )
 		.astIf(
 			astOr(
-				astNot( astVar( 'jwig' ) ),
-				astNot( astVar( 'ranks' ) )
+				astNot( 'jwig' ),
+				astNot( 'ranks' )
 			),
 			astBlock( )
 			//.astFail( 'ranks/twig information missing' )
@@ -2409,12 +2400,9 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		.astFor(
 			astCommaList( )
 				.astAssign( 'a', 0 )
-				.astAssign(
-					'aZ',
-					astVar( 'ranks' ).astDot( 'length' )
-				),
+				.astAssign( 'aZ', 'ranks.length' ),
 			astLessThan( 'a', 'aZ' ),
-			astPreIncrement( astVar( 'a' ) ),
+			astPreIncrement( 'a' ),
 			loop
 		);
 
@@ -2577,7 +2565,7 @@ gen.prototype.genReflection =
 		capsule
 		.astComment( 'Reflection.' )
 		.astAssign(
-			astVar( 'prototype' ).astDot( 'reflect' ),
+			'prototype.reflect',
 			astString( this.id )
 		);
 
@@ -2585,7 +2573,7 @@ gen.prototype.genReflection =
 		capsule
 		.astComment( 'Name Reflection.' )
 		.astAssign(
-			astVar( 'prototype' ).astDot( 'reflectName' ),
+			'prototype.reflectName',
 			astString( this.name )
 		);
 
@@ -2605,13 +2593,13 @@ gen.prototype.genJionProto =
 		capsule
 		.astComment( 'Sets values by path.' )
 		.astAssign(
-			astVar( 'prototype' ).astDot( 'setPath' ),
-			astVar( 'jion' ).astDot( 'proto' ).astDot( 'setPath' )
+			'prototype.setPath',
+			'jion.proto.setPath'
 		)
 		.astComment( 'Gets values by path' )
 		.astAssign(
-			astVar( 'prototype' ).astDot( 'getPath' ),
-			astVar( 'jion' ).astDot( 'proto' ).astDot( 'getPath' )
+			'prototype.getPath',
+			'jion.proto.getPath'
 		);
 
 	if( this.twig )
@@ -2620,9 +2608,10 @@ gen.prototype.genJionProto =
 			capsule
 			.astComment( 'Returns a twig by rank.' )
 			.astAssign(
-				astVar( 'prototype' ).astDot( 'atRank' ),
-				astVar( 'jion' ).astDot( 'proto' ).astDot( 'atRank' )
+				'prototype.atRank',
+				'jion.proto.atRank'
 			)
+			// XXX
 			.astComment( 'Gets the rank of a key.' )
 			.astAssign(
 				astVar( 'prototype' ).astDot( 'rankOf' ),
@@ -3120,14 +3109,8 @@ gen.prototype.genAlike =
 			// FIXME same test as in equals
 			cond =
 				astAnd(
-					astEquals(
-						astThis.astDot( 'tree' ),
-						astVar( 'obj' ).astDot( 'tree' )
-					),
-					astEquals(
-						astThis.astDot( 'ranks' ),
-						astVar( 'obj' ).astDot( 'ranks' )
-					)
+					astEquals( 'this.tree', 'obj.tree' ),
+					astEquals( 'this.ranks', 'obj.ranks' )
 				);
 		}
 
@@ -3193,10 +3176,7 @@ gen.prototype.genNodeExport =
 		.astComment( 'Node export.' )
 		.astIf(
 			'SERVER',
-			astAssign(
-				astVar( 'module' ).astDot( 'exports' ),
-				this.reference
-			)
+			astAssign( 'module.exports', this.reference )
 		)
 	);
 };
