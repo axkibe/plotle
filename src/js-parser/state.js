@@ -86,6 +86,31 @@ jools.lazyValue(
 
 
 /*
+| Advances the state
+*/
+state.prototype.advance =
+	function(
+		ast,   // the current ast node
+		prec,  // new precedence level
+		//     // defaults to current
+		steps  // amount of steps to go
+		//     // defaults to 1
+	)
+{
+	return(
+		this.create(
+			'ast', ast,
+			'prec', prec,
+			'pos',
+				( steps === undefined )
+				? this.pos + 1
+				: this.pos + steps
+		)
+	);
+};
+
+
+/*
 | The current token.
 */
 jools.lazyValue(

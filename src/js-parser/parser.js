@@ -25,6 +25,7 @@ module.exports =
 
 var
 	astDot,
+	astPlus,
 	astMember,
 	astVar,
 	jools,
@@ -36,6 +37,8 @@ var
 astDot = require( '../ast/ast-dot' );
 
 astMember = require( '../ast/ast-member' );
+
+astPlus = require( '../ast/ast-plus' );
 
 astVar = require( '../ast/ast-var' );
 
@@ -49,10 +52,11 @@ state = require( './state' );
 var tokenPrecs = { };
 
 
-tokenPrecs[ 'var' ] = null;
+tokenPrecs[ 'var' ] = -1;
+tokenPrecs[ ']' ] = -1;
 tokenPrecs[ '.' ] = 1;
 tokenPrecs[ '[' ] = 1;
-tokenPrecs[ ']' ] = 99;
+tokenPrecs[ '+' ] = 6;
 
 
 
@@ -196,7 +200,8 @@ parser.parse =
 			state.create(
 				'tokens', tokens,
 				'pos', 0,
-				'ast', null
+				'ast', null,
+				'prec', 99
 			)
 		).ast
 	);
