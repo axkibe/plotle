@@ -1246,10 +1246,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astDiffers( 'twig[ key ]', undefined ),
 					astFail( )
 				)
-				.astAssign(
-					astVar( 'twig' ).astMember( 'key' ),
-					'arg'
-				)
+				.astAssign( 'twig[ key ]', 'arg' )
 				.astCall( 'ranks.push', 'key' )
 			)
 			.astCase(
@@ -1281,10 +1278,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign( 'arg', 'arguments[ a +  3 ]' )
 				.astPlusAssign( 'a', 2 )
 				.astIf(
-					astDiffers(
-						astVar( 'twig' ).astMember( 'key' ),
-						undefined
-					),
+					astDiffers( 'twig[ key ]', undefined ),
 					astFail( )
 				)
 				.astIf(
@@ -1368,7 +1362,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astBlock( )
 				.append( rayDupCheck )
 				.astAssign(
-					astVar( 'ray' ).astMember( 'arg' ),
+					'ray[ arg ]',
 					astVar( 'arguments' ).astMember(
 						astPlus( astPreIncrement( 'a' ), 1 )
 					)
@@ -2240,13 +2234,10 @@ gen.prototype.genFromJSONCreatorParser =
 		.astForIn(
 			'name'
 		,
-			astVar( 'json' )
+			astVar( 'json' ) // XXX
 		,
 			astBlock( )
-			.astAssign(
-				'arg',
-				astVar( 'json' ).astMember( astVar( 'name' ) )
-			)
+			.astAssign( 'arg', 'json[ name ]' )
 			.append( nameSwitch )
 		);
 
@@ -2289,7 +2280,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 				astString( twigId ),
 				astBlock( )
 				.astAssign(
-					astVar( 'twig' ).astMember( astVar( 'key' ) ),
+					'twig[ key ]',
 					astCall(
 						base.astDot( 'createFromJSON' ),
 						'jval'
@@ -2310,19 +2301,17 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		astBlock( )
 		.astAssign(
 			astVar( 'key' ),
-			astVar( 'ranks' ).astMember( astVar( 'a' ) )
+			astVar( 'ranks' ).astMember( 'a' )
 		)
 		.astIf(
 			astNot(
-				astVar( 'jwig' ).astMember( astVar( 'key' ) )
+				astVar( 'jwig' ).astMember( 'key' )
 			),
-			astBlock( )
-			//.astFail( )
-			.astFail( 'JSON ranks/twig mismatch' )
+			astFail( 'JSON ranks/twig mismatch' )
 		)
 		.astAssign(
-			astVar( 'jval' ),
-			astVar( 'jwig' ).astMember( astVar( 'key' ) )
+			'jval',
+			astVar( 'jwig' ).astMember( 'key' )
 		)
 		.append( switchExpr );
 
