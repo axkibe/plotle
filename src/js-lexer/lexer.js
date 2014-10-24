@@ -81,29 +81,21 @@ jsLexer.tokenize =
 			continue;
 		}
 
-		if( ch === '.' )
+		switch( ch )
 		{
-			tokens.push( token.create( 'type', '.' ) );
+			case '.' :
+			case '[' :
+			case ']' :
+			case '+' :
 
-			continue;
+				tokens.push( token.create( 'type', ch ) );
+
+				continue;
+
+			default :
+
+				throw new Error( 'lexer error with: "' + code + '"' );
 		}
-
-		if( ch === '[' )
-		{
-			tokens.push( token.create( 'type', '[' ) );
-
-			continue;
-		}
-
-		if( ch === ']' )
-		{
-			tokens.push( token.create( 'type', ']' ) );
-
-			continue;
-		}
-
-
-		throw new Error( 'lexer error with: "' + code + '"' );
 	}
 
 	return tokens;
