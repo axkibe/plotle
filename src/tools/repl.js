@@ -38,9 +38,23 @@ GLOBAL.astTools = require( '../ast/tools' );
 
 GLOBAL.parser = require( '../js-parser/parser' );
 
+GLOBAL.parse = GLOBAL.parser.parse;
+
 GLOBAL.formatter = require( '../format/formatter' );
 
 GLOBAL.util = require( 'util' );
+
+/*
+| Comfort function, inspects with infinite depth as default.
+*/
+GLOBAL.inspect =
+	function(
+		obj
+	)
+{
+	return GLOBAL.util.inspect( obj, { depth: null } );
+};
+
 
 var
 	repl;
@@ -48,5 +62,6 @@ var
 repl = require( 'repl' );
 
 repl.start( 'ideoloom> ' );
+
 
 } )( );

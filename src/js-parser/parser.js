@@ -55,7 +55,7 @@ state = require( './state' );
 
 tokenPrecs = { };
 
-tokenPrecs[ 'number' ] = -1;
+tokenPrecs.number = -1;
 tokenPrecs[ 'var' ] = -1;
 
 tokenPrecs[ ']' ] = -1;

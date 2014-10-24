@@ -127,4 +127,44 @@ astVar.prototype.astMember =
 };
 
 
+/**/if( CHECK )
+/**/{
+/**/	var
+/**/		util;
+/**/
+/**/	util = require( 'util' );
+/**/
+/***	/
+****	| Custom inspect
+****	/
+***/	astVar.prototype.inspect =
+/**/		function(
+/**/			depth,
+/**/			opts
+/**/		)
+/**/	{
+/**/		var
+/**/			postfix,
+/**/			result;
+/**/
+/**/		if( !opts.ast )
+/**/		{
+/**/			result = 'ast{ ';
+/**/
+/**/			postfix = ' }';
+/**/		}
+/**/		else
+/**/		{
+/**/			result = postfix = '';
+/**/		}
+/**/
+/**/		opts.ast = true;
+/**/
+/**/		result += this.name;
+/**/
+/**/		return result + postfix;
+/**/	};
+/**/}
+
+
 } )( );
