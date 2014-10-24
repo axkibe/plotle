@@ -76,4 +76,46 @@ astMember.prototype.astDot =
 };
 
 
+/**/if( CHECK )
+/**/{
+/**/	var
+/**/		util;
+/**/
+/**/	util = require( 'util' );
+/**/
+/***	/
+****	| Custom inspect
+****	/
+***/	astMember.prototype.inspect =
+/**/		function(
+/**/			depth,
+/**/			opts
+/**/		)
+/**/	{
+/**/		var
+/**/			postfix,
+/**/			result;
+/**/
+/**/		if( !opts.ast )
+/**/		{
+/**/			result = 'ast{ ';
+/**/
+/**/			postfix = ' }';
+/**/		}
+/**/		else
+/**/		{
+/**/			result = postfix = '';
+/**/		}
+/**/
+/**/		opts.ast = true;
+/**/
+/**/		result += util.inspect( this.expr, opts );
+/**/
+/**/		result += '[ ' + util.inspect( this.member, opts ) + ' ]';
+/**/
+/**/		return result + postfix;
+/**/	};
+/**/}
+
+
 } )( );
