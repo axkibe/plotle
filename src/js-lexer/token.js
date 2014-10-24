@@ -68,6 +68,7 @@ token.prototype._init =
 /**/	switch( this.type )
 /**/	{
 /**/		case '.' :
+/**/		case '+' :
 /**/		case '[' :
 /**/		case ']' :
 /**/		case 'string' :

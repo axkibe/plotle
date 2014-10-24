@@ -57,7 +57,6 @@ tokenPrecs[   ']' ] = -1;
 tokenPrecs[   '.' ] =  1;
 tokenPrecs[   '[' ] =  1;
 tokenPrecs[   '+' ] =  6;
-tokenPrecs[   '*' ] =  5;
 
 
 /*
