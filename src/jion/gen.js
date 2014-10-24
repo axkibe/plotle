@@ -2841,10 +2841,7 @@ gen.prototype.genEquals =
 		ceq,
 		name,
 		twigTest,
-		twigTestLoopBody,
-		vA,
-		vKey;
-
+		twigTestLoopBody;
 
 	cond = null;
 
@@ -2912,49 +2909,24 @@ gen.prototype.genEquals =
 
 	if( this.twig )
 	{
-		vA = astVar( 'a' );
-
-		vKey = astVar( 'key' );
-
 		twigTestLoopBody =
 			astBlock( )
-			.astAssign(
-				'key',
-				astThis.astDot( 'ranks' ).astMember( vA )
-			)
+			.astAssign( 'key', 'this.ranks[ a ]' )
 			.astIf(
 				astOr(
-					astDiffers(
-						'key',
-						astVar( 'obj' ).astDot( 'ranks' ).astMember( vA )
-					),
+					astDiffers( 'key', 'obj.ranks[ a ]' ),
 					astCall(
 						astCondition(
-							astThis
-							.astDot( 'twig' )
-							.astMember( vKey )
-							.astDot( 'equals' )
-						,
+							'this.twig[ key ].equals',
 							astNot(
 								astCall(
-									astThis
-									.astDot( 'twig' )
-									.astMember( vKey )
-									.astDot( 'equals' )
-								,
-									astVar( 'obj' )
-									.astDot( 'twig' )
-									.astMember( vKey )
+									'this.twig[ key ].equals',
+									'obj.twig[ key ]'
 								)
 							),
 							astDiffers(
-								astThis
-								.astDot( 'twig' )
-								.astMember( vKey )
-							,
-								astVar( 'obj' )
-								.astDot( 'twig' )
-								.astMember( vKey )
+								'this.twig[ key ]',
+								'obj.twig[ key ]'
 							)
 						)
 					)
