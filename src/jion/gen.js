@@ -170,7 +170,7 @@ astReturnFalse = astReturn( false );
 
 
 /*
-| Converts a camel case string to a dash seperated string.
+| Converts a CamelCaseString to a dash-seperated-string.
 */
 var
 camelCaseToDash =
@@ -2299,19 +2299,14 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 
 	loop =
 		astBlock( )
-		.astAssign(
-			astVar( 'key' ),
-			astVar( 'ranks' ).astMember( 'a' )
-		)
+		.astAssign( 'key', 'ranks[ a ]' )
 		.astIf(
-			astNot(
-				astVar( 'jwig' ).astMember( 'key' )
-			),
+			astNot( 'jwig[ key ]' ),
 			astFail( 'JSON ranks/twig mismatch' )
 		)
 		.astAssign(
 			'jval',
-			astVar( 'jwig' ).astMember( 'key' )
+			'jwig[ key ]'
 		)
 		.append( switchExpr );
 
