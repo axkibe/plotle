@@ -119,7 +119,7 @@ jools.lazyValue(
 	function( )
 	{
 		return(
-			this.pos < this.tokens.length
+			( this.pos < this.tokens.length )
 			?  this.tokens[ this.pos ]
 			: null
 		);
@@ -136,7 +136,7 @@ jools.lazyValue(
 	function( )
 	{
 		return(
-			this.pos + 1 < this.tokens.length
+			( this.pos + 1 < this.tokens.length )
 			? this.tokens[ this.pos + 1 ]
 			: null
 		);

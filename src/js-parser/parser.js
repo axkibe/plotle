@@ -76,9 +76,12 @@ parseToken =
 		ast,
 		name,
 		pos,
+		prec,
 		token;
 
 	pos = state.pos;
+
+	prec = state.prec;
 
 	token = state.current;
 
@@ -149,9 +152,14 @@ parseToken =
 
 			state = parseToken( state );
 
-			if( state.current.type !== ']' )
+			while( state.current.type !== ']' )
 			{
-				throw new Error( );
+				state = parseToken( state );
+
+				if( state.reachedEnd )
+				{
+					throw new Error( );
+				}
 			}
 
 			state =
@@ -169,9 +177,7 @@ parseToken =
 
 			if( state.ast !== null )
 			{
-				throw new Error(
-					'parse error'
-				);
+				throw new Error( 'parse error' );
 			}
 
 			state =
@@ -186,9 +192,7 @@ parseToken =
 
 			if( state.ast !== null )
 			{
-				throw new Error(
-					'parse error'
-				);
+				throw new Error( 'parse error' );
 			}
 
 			state =
@@ -204,15 +208,14 @@ parseToken =
 			throw new Error( );
 	}
 
-	if(
-		!state.reachedEnd
-		&&
-		state.preview
-		&&
-		tokenPrecs[ state.preview.type ] <= state.prec
-	)
+	if( !state.reachedEnd )
 	{
-		state = parseToken( state );
+		if(
+			tokenPrecs[ state.current.type ] < prec
+		)
+		{
+			state = parseToken( state );
+		}
 	}
 
 	return state;
@@ -227,6 +230,7 @@ parser.parse =
 {
 	var
 //		ast,
+		st,
 		tokens;
 
 /**/if( CHECK )
@@ -239,16 +243,20 @@ parser.parse =
 
 	tokens = lexer.tokenize( code );
 
-	return(
-		parseToken(
-			state.create(
-				'tokens', tokens,
-				'pos', 0,
-				'ast', null,
-				'prec', 99
-			)
-		).ast
-	);
+	st =
+		state.create(
+			'tokens', tokens,
+			'pos', 0,
+			'ast', null,
+			'prec', 99
+		);
+
+	while( !st.reachedEnd )
+	{
+		st = parseToken( st );
+	}
+
+	return st.ast;
 };
 
 
