@@ -95,7 +95,7 @@ jsLexer.tokenize =
 			continue;
 		}
 
-		if( ch === '[' )
+		if( ch === ']' )
 		{
 			tokens.push( token.create( 'type', ']' ) );
 

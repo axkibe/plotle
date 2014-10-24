@@ -86,7 +86,7 @@ jools.lazyValue(
 
 
 /*
-| The current token
+| The current token.
 */
 jools.lazyValue(
 	state.prototype,
@@ -103,7 +103,7 @@ jools.lazyValue(
 
 
 /*
-| The preview token
+| The preview token.
 */
 jools.lazyValue(
 	state.prototype,
@@ -111,7 +111,7 @@ jools.lazyValue(
 	function( )
 	{
 		return(
-			this.pos + 1 < this.token.length
+			this.pos + 1 < this.tokens.length
 			? this.tokens[ this.pos + 1 ]
 			: null
 		);

@@ -25,6 +25,7 @@ module.exports =
 
 var
 	astDot,
+	astMember,
 	astVar,
 	jools,
 	lexer,
@@ -34,6 +35,8 @@ var
 
 astDot = require( '../ast/ast-dot' );
 
+astMember = require( '../ast/ast-member' );
+
 astVar = require( '../ast/ast-var' );
 
 jools = require( '../jools/jools' );
@@ -41,6 +44,16 @@ jools = require( '../jools/jools' );
 lexer = require( '../js-lexer/lexer' );
 
 state = require( './state' );
+
+
+var tokenPrecs = { };
+
+
+tokenPrecs[ 'var' ] = null;
+tokenPrecs[ '.' ] = 1;
+tokenPrecs[ '[' ] = 1;
+tokenPrecs[ ']' ] = 99;
+
 
 
 /*
@@ -59,7 +72,7 @@ parseToken =
 
 	pos = state.pos;
 
-	token = state.tokens[ pos ];
+	token = state.current;
 
 	ast = state.ast;
 
@@ -72,7 +85,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			name = state.tokens[ pos + 1 ];
+			name = state.preview;
 
 			if( name.type !== 'var' )
 			{
@@ -91,7 +104,10 @@ parseToken =
 
 			break;
 
-		/*
+		case ']' :
+
+			return state;
+
 		case '[' :
 
 			if( !ast )
@@ -101,11 +117,28 @@ parseToken =
 
 			state =
 				state.create(
-					'pos', state + 1,
-					'ast', null,
-					'prec', 1
+					'pos', state.pos + 1,
+					'ast', null
 				);
-		*/
+
+			state = parseToken( state );
+
+			if( state.current.type !== ']' )
+			{
+				throw new Error( );
+			}
+
+			state =
+				state.create(
+					'pos', state.pos + 1,
+					'ast',
+						astMember.create(
+							'expr', ast,
+							'member', state.ast
+						)
+				);
+
+			break;
 
 		case 'var' :
 
