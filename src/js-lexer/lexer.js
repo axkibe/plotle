@@ -81,6 +81,23 @@ jsLexer.tokenize =
 			continue;
 		}
 
+		if( ch.match(/[0-9]/ ) )
+		{
+			value = ch;
+
+			// a name specifier
+			while( c + 1 < cZ && code[ c+ 1 ].match( /0-9/ ) )
+			{
+				value += code[ ++c ];
+			}
+
+			value = parseInt( value, 10 );
+
+			tokens.push( token.create( 'type', 'number', 'value', value ) );
+
+			continue;
+		}
+
 		switch( ch )
 		{
 			case '.' :

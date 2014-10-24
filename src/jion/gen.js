@@ -1189,15 +1189,9 @@ gen.prototype.genCreatorFreeStringsParser =
 
 	loop =
 		astBlock( )
-		.astVarDec(
-			'arg',
-			astVar( 'arguments' ).astMember( astPlus( 'a', 1 ) )
-		);
+		.astVarDec( 'arg', 'arguments[ a + 1 ]' );
 
-	switchExpr =
-		astSwitch(
-			astVar( 'arguments' ).astMember( 'a' )
-		);
+	switchExpr = astSwitch( 'arguments[ a ]' );
 
 	for(
 		var a = 0, aZ = this.attrList.length;

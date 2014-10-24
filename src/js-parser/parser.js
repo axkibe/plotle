@@ -27,6 +27,7 @@ var
 	astDot,
 	astPlus,
 	astMember,
+	astNumber,
 	astVar,
 	jools,
 	lexer,
@@ -38,6 +39,8 @@ var
 astDot = require( '../ast/ast-dot' );
 
 astMember = require( '../ast/ast-member' );
+
+astNumber = require( '../ast/ast-number' );
 
 astPlus = require( '../ast/ast-plus' );
 
@@ -52,11 +55,13 @@ state = require( './state' );
 
 tokenPrecs = { };
 
+tokenPrecs[ 'number' ] = -1;
 tokenPrecs[ 'var' ] = -1;
-tokenPrecs[   ']' ] = -1;
-tokenPrecs[   '.' ] =  1;
-tokenPrecs[   '[' ] =  1;
-tokenPrecs[   '+' ] =  6;
+
+tokenPrecs[ ']' ] = -1;
+tokenPrecs[ '.' ] =  1;
+tokenPrecs[ '[' ] =  1;
+tokenPrecs[ '+' ] =  6;
 
 
 /*
@@ -123,12 +128,12 @@ parseToken =
 			state = parseToken( state );
 
 			state =
-				state.advance(
-					astPlus.create(
-						'left', ast,
-						'right', state.ast
-					),
-					tokenPrecs[ '+' ]
+				state.create(
+					'ast',
+						astPlus.create(
+							'left', ast,
+							'right', state.ast
+						)
 				);
 
 			break;
@@ -155,7 +160,24 @@ parseToken =
 						'expr', ast,
 						'member', state.ast
 					),
-					tokenPrecs[ '[' ]
+					99 // tokenPrecs[ '[' ]
+				);
+
+			break;
+
+		case 'number' :
+
+			if( state.ast !== null )
+			{
+				throw new Error(
+					'parse error'
+				);
+			}
+
+			state =
+				state.advance(
+					astNumber.create( 'number', token.value ),
+					undefined
 				);
 
 			break;
@@ -172,7 +194,7 @@ parseToken =
 			state =
 				state.advance(
 					astVar.create( 'name', token.value ),
-					tokenPrecs[ 'var' ]
+					undefined
 				);
 
 			break;
