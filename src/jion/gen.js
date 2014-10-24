@@ -1246,18 +1246,8 @@ gen.prototype.genCreatorFreeStringsParser =
 					astDiffers(
 						astVar( 'twig' ).astMember( 'key' ),
 						undefined
-					)
-				,
-					astBlock( )
-					.astFail(
-						/*
-						astPlus(
-							astString( 'key "' ),
-							astVar( 'key' ),
-							astString( '" already in use' )
-						)
-						*/
-					)
+					),
+					astFail( )
 				)
 				.astAssign(
 					astVar( 'twig' ).astMember( 'key' ),
@@ -1296,32 +1286,15 @@ gen.prototype.genCreatorFreeStringsParser =
 				astBlock( )
 				.append( twigDupCheck )
 				.astAssign( 'key', 'arg' )
-				.astAssign(
-					'rank',
-					astVar( 'arguments' )
-					.astMember( astPlus( 'a', 2 ) )
-				)
-				.astAssign(
-					astVar( 'arg' ),
-					astVar( 'arguments' )
-					.astMember( astPlus( 'a', 3 ) )
-				)
+				.astAssign( 'rank', 'arguments[ a + 2 ]' )
+				.astAssign( 'arg', 'arguments[ a +  3 ]' )
 				.astPlusAssign( 'a', 2 )
 				.astIf(
 					astDiffers(
 						astVar( 'twig' ).astMember( 'key' ),
 						undefined
 					),
-					astBlock( )
-					.astFail(
-						/*
-						astPlus(
-							astString( 'key "' ),
-							astVar( 'key' ),
-							astString( '" already in use' )
-						)
-						*/
-					)
+					astFail( )
 				)
 				.astIf(
 					astOr(
@@ -1345,20 +1318,9 @@ gen.prototype.genCreatorFreeStringsParser =
 						astVar( 'twig' ).astMember( 'arg' ),
 						undefined
 					),
-					astBlock( )
-					.astFail(
-						/*
-						astPlus(
-							astString( 'key "' ),
-							astVar( 'arg' ),
-							astString( '" not in use' )
-						)
-						*/
-					)
+					astFail( )
 				)
-				.astDelete(
-					astVar( 'twig' ).astMember( 'arg' )
-				)
+				.astDelete( 'twig[ arg ]' )
 				.append(
 					astCall(
 						'ranks.splice',
