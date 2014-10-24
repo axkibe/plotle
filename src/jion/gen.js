@@ -1243,10 +1243,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.astIf(
-					astDiffers(
-						astVar( 'twig' ).astMember( 'key' ),
-						undefined
-					),
+					astDiffers( 'twig[ key ]', undefined ),
 					astFail( )
 				)
 				.astAssign(
@@ -1270,16 +1267,10 @@ gen.prototype.genCreatorFreeStringsParser =
 					)
 				)
 				.astIf(
-					astEquals(
-						astVar( 'twig' ).astMember( 'key' ),
-						undefined
-					),
+					astEquals( 'twig[ key ]' , undefined ),
 					astFail( )
 				)
-				.astAssign(
-					astVar( 'twig' ).astMember( 'key' ),
-					'arg'
-				)
+				.astAssign( 'twig[ key ]', 'arg' )
 			)
 			.astCase(
 				astString( 'twig:insert' ),
@@ -1303,10 +1294,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					),
 					astFail( )
 				)
-				.astAssign(
-					astVar( 'twig' ).astMember( 'key' ),
-					'arg'
-				)
+				.astAssign( 'twig[ key ]', 'arg' )
 				.astCall( 'ranks.splice', 'rank', 0, 'key' )
 			)
 			.astCase(
@@ -1314,10 +1302,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astBlock( )
 				.append( twigDupCheck )
 				.astIf(
-					astEquals(
-						astVar( 'twig' ).astMember( 'arg' ),
-						undefined
-					),
+					astEquals( 'twig[ arg ]', undefined ),
 					astFail( )
 				)
 				.astDelete( 'twig[ arg ]' )
