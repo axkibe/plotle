@@ -31,7 +31,8 @@ var
 	jools,
 	lexer,
 	parseToken,
-	state;
+	state,
+	tokenPrecs;
 
 
 astDot = require( '../ast/ast-dot' );
@@ -49,15 +50,14 @@ lexer = require( '../js-lexer/lexer' );
 state = require( './state' );
 
 
-var tokenPrecs = { };
-
+tokenPrecs = { };
 
 tokenPrecs[ 'var' ] = -1;
-tokenPrecs[ ']' ] = -1;
-tokenPrecs[ '.' ] = 1;
-tokenPrecs[ '[' ] = 1;
-tokenPrecs[ '+' ] = 6;
-
+tokenPrecs[   ']' ] = -1;
+tokenPrecs[   '.' ] =  1;
+tokenPrecs[   '[' ] =  1;
+tokenPrecs[   '+' ] =  6;
+tokenPrecs[   '*' ] =  5;
 
 
 /*
@@ -102,7 +102,7 @@ parseToken =
 						'expr', state.ast,
 						'member', name.value
 					),
-					null, // TODO
+					tokenPrecs[ '.' ],
 					2
 				);
 
@@ -112,6 +112,28 @@ parseToken =
 
 			return state;
 
+		case '+' :
+
+			if( !ast )
+			{
+				throw new Error( );
+			}
+
+			state = state.advance( null, tokenPrecs[ '+' ] );
+
+			state = parseToken( state );
+
+			state =
+				state.advance(
+					astPlus.create(
+						'left', ast,
+						'right', state.ast
+					),
+					tokenPrecs[ '+' ]
+				);
+
+			break;
+
 		case '[' :
 
 			if( !ast )
@@ -119,7 +141,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			state = state.advance( null, null /*TODO*/ );
+			state = state.advance( null, tokenPrecs[ '[' ] );
 
 			state = parseToken( state );
 
@@ -134,7 +156,7 @@ parseToken =
 						'expr', ast,
 						'member', state.ast
 					),
-					null
+					tokenPrecs[ '[' ]
 				);
 
 			break;
@@ -151,7 +173,7 @@ parseToken =
 			state =
 				state.advance(
 					astVar.create( 'name', token.value ),
-					null /*TODO*/
+					tokenPrecs[ 'var' ]
 				);
 
 			break;
@@ -161,7 +183,13 @@ parseToken =
 			throw new Error( );
 	}
 
-	if( !state.reachedEnd )
+	if(
+		!state.reachedEnd
+		&&
+		state.preview
+		&&
+		tokenPrecs[ state.preview.type ] <= state.prec
+	)
 	{
 		state = parseToken( state );
 	}

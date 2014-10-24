@@ -97,6 +97,15 @@ state.prototype.advance =
 		//     // defaults to 1
 	)
 {
+
+/**/if( CHECK )
+/**/{
+/**/	if( prec === 'undefined' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	return(
 		this.create(
 			'ast', ast,
