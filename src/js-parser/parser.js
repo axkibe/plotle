@@ -97,13 +97,13 @@ parseToken =
 			}
 
 			state =
-				state.create(
-					'pos', state.pos + 2,
-					'ast',
-						astDot.create(
-							'expr', state.ast,
-							'member', name.value
-						)
+				state.advance(
+					astDot.create(
+						'expr', state.ast,
+						'member', name.value
+					),
+					null, // TODO
+					2
 				);
 
 			break;
@@ -119,11 +119,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			state =
-				state.create(
-					'pos', state.pos + 1,
-					'ast', null
-				);
+			state = state.advance( null, null /*TODO*/ );
 
 			state = parseToken( state );
 
@@ -133,13 +129,12 @@ parseToken =
 			}
 
 			state =
-				state.create(
-					'pos', state.pos + 1,
-					'ast',
-						astMember.create(
-							'expr', ast,
-							'member', state.ast
-						)
+				state.advance(
+					astMember.create(
+						'expr', ast,
+						'member', state.ast
+					),
+					null
 				);
 
 			break;
@@ -154,9 +149,9 @@ parseToken =
 			}
 
 			state =
-				state.create(
-					'pos', state.pos + 1,
-					'ast', astVar.create( 'name', token.value )
+				state.advance(
+					astVar.create( 'name', token.value ),
+					null /*TODO*/
 				);
 
 			break;
