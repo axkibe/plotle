@@ -76,7 +76,6 @@ var
 	astGreaterThan,
 	astIf,
 	astInstanceof,
-	astLessThan,
 	astNew,
 	astNot,
 	astNumber,
@@ -130,8 +129,6 @@ astGreaterThan = shorthand.astGreaterThan;
 astIf = shorthand.astIf;
 
 astInstanceof = shorthand.astInstanceof;
-
-astLessThan = shorthand.astLessThan;
 
 astNew = shorthand.astNew;
 
@@ -1184,6 +1181,8 @@ gen.prototype.genCreatorFreeStringsParser =
 		return block;
 	}
 
+	// FIXME replace all arguments.length with aZ
+
 	loop =
 		astBlock( )
 		.astVarDec( 'arg', 'arguments[ a + 1 ]' );
@@ -1265,7 +1264,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 				.astIf(
 					astOr(
-						astLessThan( 'rank', 0 ),
+						'rank < 0',
 						astGreaterThan( 'rank', 'ranks.length' )
 					),
 					astFail( )
@@ -1364,7 +1363,7 @@ gen.prototype.genCreatorFreeStringsParser =
 			astVList( )
 				.astVarDec( 'a', 0 )
 				.astVarDec( 'aZ', 'arguments.length' ),
-			astLessThan( 'a', 'aZ' ),
+			'a < aZ',
 			astPlusAssign( 'a', 2 ),
 			loop
 		);
@@ -2301,7 +2300,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			astCommaList( )
 				.astAssign( 'a', 0 )
 				.astAssign( 'aZ', 'ranks.length' ),
-			astLessThan( 'a', 'aZ' ),
+			'a < aZ',
 			'++a',
 			loop
 		);
@@ -2847,7 +2846,7 @@ gen.prototype.genEquals =
 				astCommaList( )
 					.astAssign( 'a', 0 )
 					.astAssign( 'aZ', 'this.ranks.length' ),
-				astLessThan( 'a', 'aZ' ),
+				'a < aZ',
 				'++a',
 				twigTestLoopBody
 			);
