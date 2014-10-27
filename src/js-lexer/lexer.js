@@ -135,6 +135,44 @@ jsLexer.tokenize =
 
 				continue;
 
+			case '|' :
+
+				if(
+					c + 1 < cZ
+					&&
+					code[ c + 1 ] === '|'
+				)
+				{
+					tokens.push( token.create( 'type', '||' ) );
+
+					c++;
+				}
+				else
+				{
+					throw new Error( 'bitwise or not supported' );
+				}
+
+				continue;
+
+			case '&' :
+
+				if(
+					c + 1 < cZ
+					&&
+					code[ c + 1 ] === '&'
+				)
+				{
+					tokens.push( token.create( 'type', '&&' ) );
+
+					c++;
+				}
+				else
+				{
+					throw new Error( 'bitwise and not supported' );
+				}
+
+				continue;
+
 			default :
 
 				throw new Error( 'lexer error with: "' + code + '"' );

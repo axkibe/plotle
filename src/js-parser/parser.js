@@ -24,6 +24,7 @@ module.exports =
 
 
 var
+	astAnd,
 	astDot,
 	astGreaterThan,
 	astLessThan,
@@ -32,6 +33,7 @@ var
 	astPreIncrement,
 	astNot,
 	astNumber,
+	astOr,
 	astVar,
 	jools,
 	lexer,
@@ -39,6 +41,8 @@ var
 	state,
 	tokenPrecs;
 
+
+astAnd = require( '../ast/ast-and' );
 
 astDot = require( '../ast/ast-dot' );
 
@@ -53,6 +57,8 @@ astNot = require( '../ast/ast-not' );
 astGreaterThan = require( '../ast/ast-greater-than' );
 
 astNumber = require( '../ast/ast-number' );
+
+astOr = require( '../ast/ast-or' );
 
 astPlus = require( '../ast/ast-plus' );
 
@@ -79,6 +85,8 @@ tokenPrecs[ '++' ] =  3; // 4 for postfix
 tokenPrecs[  '!' ] =  4;
 tokenPrecs[  '+' ] =  6;
 tokenPrecs[  '<' ] =  8;
+tokenPrecs[ '&&' ] = 13;
+tokenPrecs[ '||' ] = 14;
 
 
 /*
@@ -221,6 +229,50 @@ parseToken =
 				state.create(
 					'ast',
 						astLessThan.create(
+							'left', ast,
+							'right', state.ast
+						)
+				);
+
+			break;
+
+		case '||' :
+
+			if( !ast )
+			{
+				throw new Error( );
+			}
+
+			state = state.advance( null, tokenPrecs[ '||' ] );
+
+			state = parseToken( state );
+
+			state =
+				state.create(
+					'ast',
+						astOr.create(
+							'left', ast,
+							'right', state.ast
+						)
+				);
+
+			break;
+
+		case '&&' :
+
+			if( !ast )
+			{
+				throw new Error( );
+			}
+
+			state = state.advance( null, tokenPrecs[ '&&' ] );
+
+			state = parseToken( state );
+
+			state =
+				state.create(
+					'ast',
+						astAnd.create(
 							'left', ast,
 							'right', state.ast
 						)

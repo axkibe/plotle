@@ -73,6 +73,8 @@ token.prototype._init =
 /**/		case '>' :
 /**/		case '!' :
 /**/		case '++' :
+/**/		case '||' :
+/**/		case '&&' :
 /**/		case '[' :
 /**/		case ']' :
 /**/		case 'number' :
