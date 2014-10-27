@@ -30,6 +30,7 @@ var
 	astMember,
 	astPlus,
 	astPreIncrement,
+	astNot,
 	astNumber,
 	astVar,
 	jools,
@@ -46,6 +47,8 @@ astGreaterThan = require( '../ast/ast-greater-than' );
 astLessThan = require( '../ast/ast-less-than' );
 
 astMember = require( '../ast/ast-member' );
+
+astNot = require( '../ast/ast-not' );
 
 astGreaterThan = require( '../ast/ast-greater-than' );
 
@@ -73,6 +76,7 @@ tokenPrecs[  ']' ] = -1;
 tokenPrecs[  '.' ] =  1;
 tokenPrecs[  '[' ] =  1;
 tokenPrecs[ '++' ] =  3; // 4 for postfix
+tokenPrecs[  '!' ] =  4;
 tokenPrecs[  '+' ] =  6;
 tokenPrecs[  '<' ] =  8;
 
@@ -132,6 +136,28 @@ parseToken =
 
 			return state;
 
+		case '!' :
+
+			if( ast )
+			{
+				throw new Error( 'parser error' );
+			}
+
+			state = state.advance( null, tokenPrecs[ '!' ] );
+
+			state = parseToken( state );
+
+			state =
+				state.create(
+					'ast',
+						astNot.create(
+							'expr',
+								state.ast
+						)
+				);
+
+			break;
+
 		case '++' :
 
 			if( !ast )
@@ -152,7 +178,7 @@ parseToken =
 			else
 			{
 				throw new Error(
-					'FIXME cannot to postincrement'
+					'FIXME cannot do postincrement'
 				);
 			}
 

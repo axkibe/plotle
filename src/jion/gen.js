@@ -1210,7 +1210,7 @@ gen.prototype.genCreatorFreeStringsParser =
 	{
 		twigDupCheck =
 			astIf(
-				astNot( 'twigDup' ),
+				'!twigDup',
 				astBlock( )
 				.astAssign( 'twig', astCall( 'jools.copy', 'twig' ) )
 				.astAssign( 'ranks', astCall( 'ranks.slice' ) )
@@ -1290,12 +1290,9 @@ gen.prototype.genCreatorFreeStringsParser =
 	{
 		rayDupCheck =
 			astIf(
-				astNot( 'rayDup' ),
+				'!rayDup',
 				astBlock( )
-				.astAssign(
-					'ray',
-					astCall( 'ray.slice' )
-				)
+				.astAssign( 'ray', astCall( 'ray.slice' ) )
 				.astAssign( 'rayDup', true )
 			);
 
@@ -1774,20 +1771,12 @@ gen.prototype.genCreatorUnchanged =
 
 	if( this.twig )
 	{
-		cond =
-			astAnd(
-				cond,
-				astNot( 'twigDup' )
-			);
+		cond = astAnd( cond, '!twigDup' );
 	}
 
 	if( this.ray )
 	{
-		cond =
-			astAnd(
-				cond,
-				astNot( 'rayDup' )
-			);
+		cond = astAnd( cond, '!rayDup' );
 	}
 
 	for(
@@ -1907,7 +1896,7 @@ gen.prototype.genCreatorReturn =
 		return (
 			block
 			.astIf(
-				astNot( '_singleton' ),
+				'!_singleton',
 				astAssign(
 					'_singleton',
 					astNew( astCall( 'Constructor' ) )
@@ -2270,7 +2259,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		astBlock( )
 		.astAssign( 'key', 'ranks[ a ]' )
 		.astIf(
-			astNot( 'jwig[ key ]' ),
+			'!jwig[ key ]',
 			astFail( 'JSON ranks/twig mismatch' )
 		)
 		.astAssign(
@@ -2283,13 +2272,9 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		block
 		.astAssign( 'twig', astObjLiteral( ) )
 		.astIf(
-			astOr(
-				astNot( 'jwig' ),
-				astNot( 'ranks' )
-			),
-			astBlock( )
-			//.astFail( 'ranks/twig information missing' )
-			.astFail( )
+			astOr( '!jwig', '!ranks' ),
+			// ranks/twig information missing
+			astFail( )
 		)
 		.astFor(
 			astCommaList( )
@@ -2796,10 +2781,7 @@ gen.prototype.genEquals =
 			astEquals( 'this', 'obj' ),
 			astReturnTrue
 		)
-		.astIf(
-			astNot( 'obj' ),
-			astReturnFalse
-		);
+		.astIf( '!obj', astReturnFalse );
 
 	if( this.twig )
 	{
@@ -2952,10 +2934,7 @@ gen.prototype.genAlike =
 				astEquals( astThis, 'obj' ),
 				astReturnTrue
 			)
-			.astIf(
-				astNot( 'obj' ),
-				astReturnFalse
-			);
+			.astIf( '!obj', astReturnFalse );
 
 		if( this.twig )
 		{
