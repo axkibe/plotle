@@ -73,7 +73,6 @@ var
 	astFail,
 	astFile,
 	astFunc,
-	astGreaterThan,
 	astIf,
 	astInstanceof,
 	astNew,
@@ -123,8 +122,6 @@ astFail = shorthand.astFail;
 astFile = shorthand.astFile;
 
 astFunc = shorthand.astFunc;
-
-astGreaterThan = shorthand.astGreaterThan;
 
 astIf = shorthand.astIf;
 
@@ -1181,8 +1178,6 @@ gen.prototype.genCreatorFreeStringsParser =
 		return block;
 	}
 
-	// FIXME replace all arguments.length with aZ
-
 	loop =
 		astBlock( )
 		.astVarDec( 'arg', 'arguments[ a + 1 ]' );
@@ -1265,7 +1260,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astIf(
 					astOr(
 						'rank < 0',
-						astGreaterThan( 'rank', 'ranks.length' )
+						'rank > ranks.length'
 					),
 					astFail( )
 				)
