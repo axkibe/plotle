@@ -26,6 +26,7 @@ module.exports =
 var
 	astDot,
 	astPlus,
+	astLessThan,
 	astPreIncrement,
 	astMember,
 	astNumber,
@@ -38,6 +39,8 @@ var
 
 
 astDot = require( '../ast/ast-dot' );
+
+astLessThan = require( '../ast/ast-less-than' );
 
 astMember = require( '../ast/ast-member' );
 
@@ -66,6 +69,7 @@ tokenPrecs[   '.' ] =  1;
 tokenPrecs[   '[' ] =  1;
 tokenPrecs[  '++' ] =  3; // 4 for postfix
 tokenPrecs[   '+' ] =  6;
+tokenPrecs[   '<' ] =  8;
 
 
 /*
@@ -146,6 +150,28 @@ parseToken =
 					'FIXME cannot to postincrement'
 				);
 			}
+
+			break;
+
+		case '<' :
+
+			if( !ast )
+			{
+				throw new Error( );
+			}
+
+			state = state.advance( null, tokenPrecs[ '<' ] );
+
+			state = parseToken( state );
+
+			state =
+				state.create(
+					'ast',
+						astLessThan.create(
+							'left', ast,
+							'right', state.ast
+						)
+				);
 
 			break;
 
