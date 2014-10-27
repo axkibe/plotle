@@ -228,8 +228,7 @@ gen.prototype._init =
 		{
 			jion :
 				{
-					proto :
-						true
+					proto : true
 				}
 		};
 
@@ -1078,7 +1077,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			receiver
 			.ast( 'twig = inherit.twig' )
 			.ast( 'ranks = inherit.ranks' )
-			.astAssign( 'twigDup', false );
+			.ast( 'twigDup = false' );
 	}
 
 	if( this.ray )
@@ -1086,7 +1085,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 		receiver =
 			receiver
 			.ast( 'ray = inherit.ray' )
-			.astAssign( 'rayDup', false );
+			.ast( 'rayDup = false' );
 	}
 
 	for(
@@ -1294,8 +1293,8 @@ gen.prototype.genCreatorFreeStringsParser =
 			.astCase(
 				astString( 'ray:init' ),
 				astBlock( )
-				.astAssign( 'ray', 'arg' )
-				.astAssign( 'rayDup', false )
+				.ast( 'ray = arg' )
+				.ast( 'rayDup = false' )
 			)
 			.astCase(
 				astString( 'ray:append' ),
