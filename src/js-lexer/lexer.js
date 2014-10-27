@@ -106,6 +106,7 @@ jsLexer.tokenize =
 		switch( ch )
 		{
 			case '<' :
+			case '>' :
 			case '.' :
 			case '[' :
 			case ']' :
