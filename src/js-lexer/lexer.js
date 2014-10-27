@@ -105,6 +105,16 @@ jsLexer.tokenize =
 
 		switch( ch )
 		{
+			case '<' :
+			case '>' :
+			case '.' :
+			case '[' :
+			case ']' :
+
+				tokens.push( token.create( 'type', ch ) );
+
+				continue;
+
 			case '=' :
 
 				if(
@@ -134,16 +144,6 @@ jsLexer.tokenize =
 				{
 					tokens.push( token.create( 'type', '=' ) );
 				}
-
-				continue;
-
-			case '<' :
-			case '>' :
-			case '.' :
-			case '[' :
-			case ']' :
-
-				tokens.push( token.create( 'type', ch ) );
 
 				continue;
 
