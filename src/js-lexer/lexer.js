@@ -103,9 +103,27 @@ jsLexer.tokenize =
 			case '.' :
 			case '[' :
 			case ']' :
-			case '+' :
 
 				tokens.push( token.create( 'type', ch ) );
+
+				continue;
+
+			case '+' :
+
+				if(
+					c + 1 < cZ
+					&&
+					code[ c + 1 ] === '+'
+				)
+				{
+					tokens.push( token.create( 'type', '++' ) );
+
+					c++;
+				}
+				else
+				{
+					tokens.push( token.create( 'type', '+' ) );
+				}
 
 				continue;
 

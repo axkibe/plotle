@@ -26,6 +26,7 @@ module.exports =
 var
 	astDot,
 	astPlus,
+	astPreIncrement,
 	astMember,
 	astNumber,
 	astVar,
@@ -44,6 +45,8 @@ astNumber = require( '../ast/ast-number' );
 
 astPlus = require( '../ast/ast-plus' );
 
+astPreIncrement = require( '../ast/ast-pre-increment' );
+
 astVar = require( '../ast/ast-var' );
 
 jools = require( '../jools/jools' );
@@ -56,12 +59,13 @@ state = require( './state' );
 tokenPrecs = { };
 
 tokenPrecs.number = -1;
-tokenPrecs[ 'var' ] = -1;
 
-tokenPrecs[ ']' ] = -1;
-tokenPrecs[ '.' ] =  1;
-tokenPrecs[ '[' ] =  1;
-tokenPrecs[ '+' ] =  6;
+tokenPrecs[ 'var' ] = -1;
+tokenPrecs[   ']' ] = -1;
+tokenPrecs[   '.' ] =  1;
+tokenPrecs[   '[' ] =  1;
+tokenPrecs[  '++' ] =  3; // 4 for postfix
+tokenPrecs[   '+' ] =  6;
 
 
 /*
@@ -118,6 +122,32 @@ parseToken =
 		case ']' :
 
 			return state;
+
+		case '++' :
+
+			if( !ast )
+			{
+				state = state.advance( null, tokenPrecs[ '++' ] );
+
+				state = parseToken( state );
+
+				state =
+					state.create(
+						'ast',
+							astPreIncrement.create(
+								'expr',
+									state.ast
+							)
+					);
+			}
+			else
+			{
+				throw new Error(
+					'FIXME cannot to postincrement'
+				);
+			}
+
+			break;
 
 		case '+' :
 
