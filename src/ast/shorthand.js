@@ -37,6 +37,7 @@ var
 	astFail,
 	astFile,
 	astEquals,
+	astFor,
 	astFunc,
 	astFuncArg,
 	astGreaterThan,
@@ -90,12 +91,13 @@ astDiffers = require( './ast-differs' );
 
 astDot = require( './ast-dot' );
 
-
 astEquals = require( './ast-equals' );
 
 astFail = require( './ast-fail' );
 
 astFile = require( './ast-file' );
+
+astFor = require( './ast-for' );
 
 astFunc = require( './ast-func' );
 
@@ -526,6 +528,40 @@ shorthand.astFile =
 {
 	return astFile.create( );
 };
+
+
+/*
+| Shorthand for creating for loops.
+*/
+shorthand.astFor =
+	function(
+		init,
+		condition,
+		iterate,
+		block
+	)
+{
+	if( block.reflect !== 'ast.astBlock' )
+	{
+		block = astBlock.create( ).append( block );
+	}
+
+	init = tools.convertArg( init );
+
+	condition = tools.convertArg( condition );
+
+	iterate = tools.convertArg( iterate );
+
+	return(
+		astFor.create(
+			'init', init,
+			'condition', condition,
+			'iterate', iterate,
+			'block', block
+		)
+	);
+};
+
 
 
 /*

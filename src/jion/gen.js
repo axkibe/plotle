@@ -84,7 +84,6 @@ var
 	astOr,
 	astPlus,
 	astPlusAssign,
-	astPreIncrement,
 	astReturn,
 	astReturnFalse,
 	astReturnTrue,
@@ -147,8 +146,6 @@ astOr = shorthand.astOr;
 astPlus = shorthand.astPlus;
 
 astPlusAssign = shorthand.astPlusAssign;
-
-astPreIncrement = shorthand.astPreIncrement;
 
 astReturn = shorthand.astReturn;
 
@@ -1247,15 +1244,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astBlock( )
 				.append( twigDupCheck )
 				.astAssign( 'key', 'arg' )
-				.astAssign(
-					'arg',
-					astVar( 'arguments' ).astMember(
-						astPlus(
-							astPreIncrement( astVar( 'a' ) ),
-							1
-						)
-					)
-				)
+				.astAssign( 'arg', 'arguments[ ++a + 1 ]' )
 				.astIf(
 					astEquals( 'twig[ key ]' , undefined ),
 					astFail( )
@@ -1339,9 +1328,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					'ray.splice',
 					'arg',
 					0,
-					astVar( 'arguments' ).astMember(
-						astPlus( astPreIncrement( 'a' ), 1 )
-					)
+					'arguments[ ++a + 1 ]'
 				)
 			)
 			.astCase(
@@ -1354,12 +1341,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( 'ray:set' ),
 				astBlock( )
 				.append( rayDupCheck )
-				.astAssign(
-					'ray[ arg ]',
-					astVar( 'arguments' ).astMember(
-						astPlus( astPreIncrement( 'a' ), 1 )
-					)
-				)
+				.astAssign( 'ray[ arg ]', 'arguments[ ++a + 1 ]' )
 			);
 	}
 
@@ -2320,7 +2302,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 				.astAssign( 'a', 0 )
 				.astAssign( 'aZ', 'ranks.length' ),
 			astLessThan( 'a', 'aZ' ),
-			astPreIncrement( 'a' ),
+			'++a',
 			loop
 		);
 
@@ -2866,7 +2848,7 @@ gen.prototype.genEquals =
 					.astAssign( 'a', 0 )
 					.astAssign( 'aZ', 'this.ranks.length' ),
 				astLessThan( 'a', 'aZ' ),
-				astPreIncrement( 'a' ),
+				'++a',
 				twigTestLoopBody
 			);
 

@@ -242,12 +242,7 @@ astBlock.prototype.astFor =
 {
 	return(
 		this.append(
-			astFor.create(
-				'init', init,
-				'condition', condition,
-				'iterate', iterate,
-				'block', block
-			)
+			shorthand.astFor( init, condition, iterate, block )
 		)
 	);
 };
