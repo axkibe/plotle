@@ -28,8 +28,10 @@ module.exports =
 
 var
 	astAnd,
+	astAssign,
 	astDiffers,
 	astDot,
+	astEquals,
 	astGreaterThan,
 	astLessThan,
 	astMember,
@@ -48,9 +50,13 @@ var
 
 astAnd = require( '../ast/ast-and' );
 
+astAssign = require( '../ast/ast-assign' );
+
 astDiffers = require( '../ast/ast-differs' );
 
 astDot = require( '../ast/ast-dot' );
+
+astEquals = require( '../ast/ast-equals' );
 
 astGreaterThan = require( '../ast/ast-greater-than' );
 
@@ -92,6 +98,7 @@ tokenPrecs[   '!' ] =  4;
 tokenPrecs[   '+' ] =  6;
 tokenPrecs[   '<' ] =  8;
 tokenPrecs[   '>' ] =  8;
+tokenPrecs[ '===' ] =  9;
 tokenPrecs[ '!==' ] =  9;
 tokenPrecs[  '&&' ] = 13;
 tokenPrecs[  '||' ] = 14;
@@ -200,6 +207,28 @@ parseToken =
 
 			break;
 
+		case '===' :
+
+			if( !ast )
+			{
+				throw new Error( );
+			}
+
+			state = state.advance( null, tokenPrecs[ '===' ] );
+
+			state = parseToken( state );
+
+			state =
+				state.create(
+					'ast',
+						astEquals.create(
+							'left', ast,
+							'right', state.ast
+						)
+				);
+
+			break;
+
 		case '!==' :
 
 			if( !ast )
@@ -215,6 +244,28 @@ parseToken =
 				state.create(
 					'ast',
 						astDiffers.create(
+							'left', ast,
+							'right', state.ast
+						)
+				);
+
+			break;
+
+		case '=' :
+
+			if( !ast )
+			{
+				throw new Error( );
+			}
+
+			state = state.advance( null, tokenPrecs[ '=' ] );
+
+			state = parseToken( state );
+
+			state =
+				state.create(
+					'ast',
+						astAssign.create(
 							'left', ast,
 							'right', state.ast
 						)
