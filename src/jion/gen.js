@@ -1116,10 +1116,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 
 	thisCheck =
 		astIf(
-			astDiffers(
-				astThis,
-				this.reference
-			),
+			astDiffers( astThis, this.reference ),
 			receiver
 		);
 
@@ -1200,7 +1197,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( name  ),
 				astBlock( )
 				.astIf(
-					astDiffers( 'arg', undefined ),
+					'arg !== undefined',
 					astAssign( attr.v, 'arg' )
 				)
 			);
@@ -1227,7 +1224,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign( 'key', 'arg' )
 				.astAssign( 'arg', 'arguments[ ++a + 1 ]' )
 				.astIf(
-					astDiffers( 'twig[ key ]', undefined ),
+					'twig[ key ] !== undefined',
 					astFail( )
 				)
 				.astAssign( 'twig[ key ]', 'arg' )
@@ -1254,7 +1251,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign( 'arg', 'arguments[ a +  3 ]' )
 				.astPlusAssign( 'a', 2 )
 				.astIf(
-					astDiffers( 'twig[ key ]', undefined ),
+					'twig[ key ] !== undefined',
 					astFail( )
 				)
 				.astIf(
@@ -2787,7 +2784,7 @@ gen.prototype.genEquals =
 			.astAssign( 'key', 'this.ranks[ a ]' )
 			.astIf(
 				astOr(
-					astDiffers( 'key', 'obj.ranks[ a ]' ),
+					'key !== obj.ranks[ a ]',
 					astCall(
 						astCondition(
 							'this.twig[ key ].equals',
@@ -2810,10 +2807,7 @@ gen.prototype.genEquals =
 		twigTest =
 			astBlock( )
 			.astIf(
-				astDiffers(
-					'this.ranks.length',
-					'obj.ranks.length'
-				),
+				'this.ranks.length !== obj.ranks.length',
 				astReturnFalse
 			)
 			.astFor(
@@ -2829,8 +2823,8 @@ gen.prototype.genEquals =
 			block
 			.astIf(
 				astOr(
-					astDiffers( 'this.tree', 'obj.tree' ),
-					astDiffers( 'this.ranks', 'obj.ranks' )
+					'this.tree !== obj.tree',
+					'this.ranks !== obj.ranks'
 				),
 				twigTest
 			);

@@ -84,16 +84,17 @@ tokenPrecs = { };
 tokenPrecs.number = -1;
 tokenPrecs.identifier = -1;
 
-tokenPrecs[  ']' ] = -1;
-tokenPrecs[  '.' ] =  1;
-tokenPrecs[  '[' ] =  1;
-tokenPrecs[ '++' ] =  3; // 4 for postfix
-tokenPrecs[  '!' ] =  4;
-tokenPrecs[  '+' ] =  6;
-tokenPrecs[  '<' ] =  8;
-tokenPrecs[  '>' ] =  8;
-tokenPrecs[ '&&' ] = 13;
-tokenPrecs[ '||' ] = 14;
+tokenPrecs[   ']' ] = -1;
+tokenPrecs[   '.' ] =  1;
+tokenPrecs[   '[' ] =  1;
+tokenPrecs[  '++' ] =  3; // 4 for postfix
+tokenPrecs[   '!' ] =  4;
+tokenPrecs[   '+' ] =  6;
+tokenPrecs[   '<' ] =  8;
+tokenPrecs[   '>' ] =  8;
+tokenPrecs[ '!==' ] =  9;
+tokenPrecs[  '&&' ] = 13;
+tokenPrecs[  '||' ] = 14;
 
 
 /*
