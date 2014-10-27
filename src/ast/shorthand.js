@@ -166,9 +166,9 @@ shorthand.astAnd =
 	{
 		args = Array.prototype.slice.call( arguments );
 
-		left = tools.convertArg( left );
+		left = tools.convert( left );
 
-		right = tools.convertArg( right );
+		right = tools.convert( right );
 
 		args.splice(
 			0,
@@ -189,9 +189,9 @@ shorthand.astAnd =
 		);
 	}
 
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		astAnd.create(
@@ -221,9 +221,9 @@ shorthand.astAssign =
 		right
 	)
 {
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		astAssign.create(
@@ -257,7 +257,7 @@ shorthand.astCall =
 		call;
 
 	call =
-		astCall.create( 'func', tools.convertArg( func ) );
+		astCall.create( 'func', tools.convert( func ) );
 
 	for(
 		var a = 1, aZ = arguments.length;
@@ -325,9 +325,9 @@ shorthand.astCondition =
 {
 	return(
 		astCondition.create(
-			'condition', tools.convertArg( condition ),
-			'then', tools.convertArg( then ),
-			'elsewise', tools.convertArg( elsewise )
+			'condition', tools.convert( condition ),
+			'then', tools.convert( then ),
+			'elsewise', tools.convert( elsewise )
 		)
 	);
 };
@@ -342,9 +342,9 @@ shorthand.astDiffers =
 		right
 	)
 {
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		astDiffers.create(
@@ -363,7 +363,7 @@ shorthand.astDelete =
 		expr
 	)
 {
-	expr = tools.convertArg( expr );
+	expr = tools.convert( expr );
 
 	return astDelete.create( 'expr', expr );
 };
@@ -396,9 +396,9 @@ shorthand.astEquals =
 		right
 	)
 {
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		astEquals.create(
@@ -445,9 +445,9 @@ shorthand.astLessThan =
 		right
 	)
 {
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		astLessThan.create(
@@ -467,9 +467,9 @@ shorthand.astGreaterThan =
 		right
 	)
 {
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		astGreaterThan.create(
@@ -492,7 +492,7 @@ shorthand.astIf =
 {
 	// automatic block convertions for comfort.
 
-	condition = tools.convertArg( condition );
+	condition = tools.convert( condition );
 
 	if(
 		then.reflect !== 'ast.astBlock'
@@ -546,11 +546,11 @@ shorthand.astFor =
 		block = astBlock.create( ).append( block );
 	}
 
-	init = tools.convertArg( init );
+	init = tools.convert( init );
 
-	condition = tools.convertArg( condition );
+	condition = tools.convert( condition );
 
-	iterate = tools.convertArg( iterate );
+	iterate = tools.convert( iterate );
 
 	return(
 		astFor.create(
@@ -594,9 +594,9 @@ shorthand.astInstanceof =
 		right
 	)
 {
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		astInstanceof.create(
@@ -646,7 +646,7 @@ shorthand.astNot =
 		expr
 	)
 {
-	expr = tools.convertArg( expr );
+	expr = tools.convert( expr );
 
 	return astNot.create( 'expr', expr );
 };
@@ -697,9 +697,9 @@ shorthand.astOr =
 	{
 		args = Array.prototype.slice.call( arguments );
 
-		left = tools.convertArg( left );
+		left = tools.convert( left );
 
-		right = tools.convertArg( right );
+		right = tools.convert( right );
 
 		args.splice(
 			0,
@@ -718,9 +718,9 @@ shorthand.astOr =
 		);
 	}
 
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		astOr.create(
@@ -748,9 +748,9 @@ shorthand.astPlus =
 	{
 		args = Array.prototype.slice.call( arguments );
 
-		left = tools.convertArg( left );
+		left = tools.convert( left );
 
-		right = tools.convertArg( right );
+		right = tools.convert( right );
 
 		args.splice(
 			0,
@@ -769,9 +769,9 @@ shorthand.astPlus =
 		);
 	}
 
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		astPlus.create(
@@ -791,9 +791,9 @@ shorthand.astPlusAssign =
 		right
 	)
 {
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		astPlusAssign.create(
@@ -813,7 +813,7 @@ shorthand.astPreIncrement =
 		expr
 	)
 {
-	expr = tools.convertArg( expr );
+	expr = tools.convert( expr );
 
 	return astPreIncrement.create( 'expr', expr );
 };
@@ -827,7 +827,7 @@ shorthand.astReturn =
 		expr
 	)
 {
-	return astReturn.create( 'expr', tools.convertArg( expr ) );
+	return astReturn.create( 'expr', tools.convert( expr ) );
 };
 
 
@@ -852,7 +852,7 @@ shorthand.astSwitch =
 		statement
 	)
 {
-	return astSwitch.create( 'statement', tools.convertArg( statement ) );
+	return astSwitch.create( 'statement', tools.convert( statement ) );
 };
 
 
@@ -904,7 +904,7 @@ shorthand.astVarDec =
 				name,
 			'assign',
 				arguments.length > 1
-				? tools.convertArg( assign )
+				? tools.convert( assign )
 				: null
 		)
 	);

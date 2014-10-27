@@ -73,9 +73,9 @@ astCommaList.prototype.astAssign =
 		right
 	)
 {
-	left = tools.convertArg( left );
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		this.append(

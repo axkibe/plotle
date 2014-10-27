@@ -105,6 +105,25 @@ astBlock.prototype.append =
 
 
 /*
+| Returns the block with a parsed statement appended.
+*/
+astBlock.prototype.ast =
+	function(
+		statement
+	)
+{
+	return(
+		this.create(
+			'twig:add',
+			jools.uid( ), // FIXME
+			tools.convert( statement )
+		)
+	);
+};
+
+
+
+/*
 | Returns the block with an assignment appended.
 | FUTURE use a shorthand
 */
@@ -114,16 +133,9 @@ astBlock.prototype.astAssign =
 		right
 	)
 {
-	left = tools.convertArg( left );
-
-	right = tools.convertArg( right );
-
 	return(
 		this.append(
-			astAssign.create(
-				'left', left,
-				'right', right
-			)
+			shorthand.astAssign( left, right )
 		)
 	);
 };
@@ -296,9 +308,10 @@ astBlock.prototype.astPlusAssign =
 		right
 	)
 {
-	left = tools.convertArg( left );
+	// TODO shorthand
+	left = tools.convert( left );
 
-	right = tools.convertArg( right );
+	right = tools.convert( right );
 
 	return(
 		this.append(
@@ -321,7 +334,7 @@ astBlock.prototype.astReturn =
 {
 	if( expr.reflect !== 'ast.astReturn' )
 	{
-		expr = astReturn.create( 'expr', tools.convertArg( expr ) );
+		expr = astReturn.create( 'expr', tools.convert( expr ) );
 	}
 
 	return this.append( expr );

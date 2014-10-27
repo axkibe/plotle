@@ -64,7 +64,7 @@ astCall.prototype.addArgument =
 		this.create(
 			'twig:add',
 			jools.uid( ), // FIXME
-			tools.convertArg( expr )
+			tools.convert( expr )
 		)
 	);
 };

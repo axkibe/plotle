@@ -48,7 +48,7 @@ shorthand = require( './shorthand' );
 | simple strings -> astVar
 | simple numbers -> astNumber
 */
-tools.convertArg =
+tools.convert =
 	function( arg )
 {
 /**/if( CHECK )

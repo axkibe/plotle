@@ -53,7 +53,7 @@ astObjLiteral.prototype.add =
 		this.create(
 			'twig:add',
 			key,
-			tools.convertArg( expr )
+			tools.convert( expr )
 		)
 	);
 };

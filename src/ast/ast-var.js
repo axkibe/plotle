@@ -99,10 +99,8 @@ astVar.prototype.astDot =
 	// checking if member is a string is done in 'astDot'
 	return(
 		astDot.create(
-			'expr',
-				this,
-			'member',
-				member
+			'expr', this,
+			'member', member
 		)
 	);
 };
@@ -118,10 +116,8 @@ astVar.prototype.astMember =
 {
 	return(
 		astMember.create(
-			'expr',
-				this,
-			'member',
-				tools.convertArg( member )
+			'expr', this,
+			'member', tools.convert( member )
 		)
 	);
 };
