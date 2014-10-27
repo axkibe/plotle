@@ -1234,14 +1234,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astBlock( )
 				.append( twigDupCheck )
 				.astAssign( 'key', 'arg' )
-				.astAssign(
-					'arg'
-				,
-					astVar( 'arguments' )
-					.astMember(
-						astPlus( astPreIncrement( 'a' ), 1 )
-					)
-				)
+				.astAssign( 'arg', 'arguments[ ++a + 1 ]' )
 				.astIf(
 					astDiffers( 'twig[ key ]', undefined ),
 					astFail( )
