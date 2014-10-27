@@ -75,7 +75,7 @@ token.prototype._init =
 /**/		case ']' :
 /**/		case 'number' :
 /**/		case 'string' :
-/**/		case 'var' :
+/**/		case 'identifier' :
 /**/
 /**/			break;
 /**/

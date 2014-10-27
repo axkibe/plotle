@@ -62,14 +62,14 @@ state = require( './state' );
 tokenPrecs = { };
 
 tokenPrecs.number = -1;
+tokenPrecs.identifier = -1;
 
-tokenPrecs[ 'var' ] = -1;
-tokenPrecs[   ']' ] = -1;
-tokenPrecs[   '.' ] =  1;
-tokenPrecs[   '[' ] =  1;
-tokenPrecs[  '++' ] =  3; // 4 for postfix
-tokenPrecs[   '+' ] =  6;
-tokenPrecs[   '<' ] =  8;
+tokenPrecs[  ']' ] = -1;
+tokenPrecs[  '.' ] =  1;
+tokenPrecs[  '[' ] =  1;
+tokenPrecs[ '++' ] =  3; // 4 for postfix
+tokenPrecs[  '+' ] =  6;
+tokenPrecs[  '<' ] =  8;
 
 
 /*
@@ -106,7 +106,7 @@ parseToken =
 
 			name = state.preview;
 
-			if( name.type !== 'var' )
+			if( name.type !== 'identifier' )
 			{
 				throw new Error( );
 			}
@@ -244,7 +244,7 @@ parseToken =
 
 			break;
 
-		case 'var' :
+		case 'identifier' :
 
 			if( state.ast !== null )
 			{
