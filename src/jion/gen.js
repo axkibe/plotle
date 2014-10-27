@@ -59,6 +59,7 @@ astTools = require( '../ast/tools' );
 validator = require( './validator' );
 
 var
+	ast,
 	astAnd,
 	astArrayLiteral,
 	astAssign,
@@ -95,6 +96,8 @@ var
 /*
 | Shorthanding Shorthands.
 */
+ast = shorthand.ast;
+
 astAnd = shorthand.astAnd;
 
 astArrayLiteral = shorthand.astArrayLiteral;
@@ -1217,7 +1220,7 @@ gen.prototype.genCreatorFreeStringsParser =
 			.astCase(
 				astString( 'twig:add' ),
 				astBlock( )
-				.append( twigDupCheck )
+				.ast( twigDupCheck )
 				.ast( 'key = arg' )
 				.ast( 'arg = arguments[ ++a + 1 ]' )
 				.astIf(
@@ -1230,7 +1233,7 @@ gen.prototype.genCreatorFreeStringsParser =
 			.astCase(
 				astString( 'twig:set' ),
 				astBlock( )
-				.append( twigDupCheck )
+				.ast( twigDupCheck )
 				.ast( 'key = arg' )
 				.ast( 'arg = arguments[ ++a + 1 ]' )
 				.astIf(
@@ -1284,7 +1287,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				'!rayDup',
 				astBlock( )
 				.astAssign( 'ray', astCall( 'ray.slice' ) )
-				.astAssign( 'rayDup', true )
+				.ast( 'rayDup = true' )
 			);
 
 		// FIXME make a sub-function to add the twigDup stuff
@@ -1323,7 +1326,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( 'ray:set' ),
 				astBlock( )
 				.append( rayDupCheck )
-				.astAssign( 'ray[ arg ]', 'arguments[ ++a + 1 ]' )
+				.ast( 'ray[ arg ] = arguments[ ++a + 1 ]' )
 			);
 	}
 
@@ -1391,8 +1394,7 @@ gen.prototype.genCreatorDefaults =
 				block
 				.astIf(
 					astEquals( attr.v, undefined ),
-					astBlock( )
-						.astAssign( attr.v, attr.defaultValue )
+					astAssign( attr.v, attr.defaultValue )
 				);
 		}
 	}
@@ -1732,9 +1734,7 @@ gen.prototype.genCreatorConcerns =
 			}
 		}
 
-		block =
-			block
-			.astAssign( attr.v, cExpr );
+		block = block.astAssign( attr.v, cExpr );
 	}
 
 	return block;
@@ -2087,11 +2087,11 @@ gen.prototype.genFromJSONCreatorParser =
 			nameSwitch
 			.astCase(
 				astString( 'twig' ),
-				astAssign( 'jwig', 'arg' )
+				ast( 'jwig = arg' )
 			)
 			.astCase(
 				astString( 'ranks' ),
-				astAssign( 'ranks', 'arg' )
+				ast( 'ranks = arg' )
 			);
 	}
 
@@ -2101,7 +2101,7 @@ gen.prototype.genFromJSONCreatorParser =
 			nameSwitch
 			.astCase(
 				astString( 'ray' ),
-				astAssign( 'ray', 'arg' )
+				ast( 'ray = arg' )
 			);
 	}
 
@@ -2173,8 +2173,7 @@ gen.prototype.genFromJSONCreatorParser =
 		nameSwitch = nameSwitch
 			.astCase(
 				astString( attr.name ),
-				astBlock( )
-				.astAssign( attr.v, arg )
+				astAssign( attr.v, arg )
 			);
 	}
 

@@ -149,6 +149,26 @@ jools = require( '../jools/jools' );
 
 tools = require( './tools' );
 
+
+/*
+| Shorthand for invoking the convert(parser).
+*/
+shorthand.ast =
+	function( arg )
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return tools.convert( arg );
+};
+
+
 /*
 | Shorthand for creating ands.
 */
