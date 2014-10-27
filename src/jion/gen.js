@@ -782,16 +782,14 @@ gen.prototype.genConstructor =
 	{
 		block =
 			block
-			.astAssign( 'this.twig', 'twig' )
-			.astAssign( 'this.ranks', 'ranks' );
+			.ast( 'this.twig = twig' )
+			.ast( 'this.ranks = ranks' );
 	}
 
 
 	if( this.ray )
 	{
-		block =
-			block
-			.astAssign( 'this.ray', 'ray' );
+		block = block.ast( 'this.ray = ray' );
 	}
 
 	// calls the initializer
@@ -1070,9 +1068,9 @@ gen.prototype.genCreatorInheritanceReceiver =
 		attr,
 		thisCheck,
 		name,
-		receiver =
-			astBlock( )
-			.astAssign( 'inherit', astThis );
+		receiver;
+
+	receiver = astBlock( ).ast( 'inherit = this' );
 
 	if( this.twig )
 	{
