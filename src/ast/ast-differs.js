@@ -43,7 +43,58 @@ if( JION )
 }
 
 
-module.exports = require( '../jion/this' )( module );
+var
+	astDiffers;
+
+astDiffers =
+module.exports =
+	require( '../jion/this' )( module );
+
+
+/**/if( CHECK )
+/**/{
+/**/	var
+/**/		util;
+/**/
+/**/	util = require( 'util' );
+/**/
+/***	/
+****	| Custom inspect
+****	/
+***/	astDiffers.prototype.inspect =
+/**/		function(
+/**/			depth,
+/**/			opts
+/**/		)
+/**/	{
+/**/		var
+/**/			postfix,
+/**/			result;
+/**/
+/**/		if( !opts.ast )
+/**/		{
+/**/			result = 'ast{ ';
+/**/
+/**/			postfix = ' }';
+/**/		}
+/**/		else
+/**/		{
+/**/			result = postfix = '';
+/**/		}
+/**/
+/**/		opts.ast = true;
+/**/
+/**/		result += '( ' +  util.inspect( this.left, opts ) + ' )';
+/**/
+/**/		result += ' !== ';
+/**/
+/**/		result += '( ' +  util.inspect( this.right, opts ) + ' )';
+/**/
+/**/		return result + postfix;
+/**/	};
+/**/}
+
+
 
 
 } )( );

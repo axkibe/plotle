@@ -110,9 +110,40 @@ jsLexer.tokenize =
 			case '.' :
 			case '[' :
 			case ']' :
-			case '!' :
 
 				tokens.push( token.create( 'type', ch ) );
+
+				continue;
+
+			case '!' :
+
+				if(
+					c + 1 < cZ
+					&&
+					code[ c + 1 ] === '='
+				)
+				{
+					if(
+						c + 2 < cZ
+						&&
+						code[ c + 2 ] === '='
+					)
+					{
+						tokens.push( token.create( 'type', '!==' ) );
+
+						c += 2;
+
+						continue;
+					}
+					else
+					{
+						throw new Error( 'Use !== instead of !=');
+					}
+				}
+				else
+				{
+					tokens.push( token.create( 'type', '!' ) );
+				}
 
 				continue;
 

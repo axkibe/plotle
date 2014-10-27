@@ -4,6 +4,9 @@
 | This parser must not use ast-shorthands,
 | because these are using the parser.
 |
+| FUTURE combine all left-right dualistic operators
+|        into one handling.
+|
 | Authors: Axel Kittenberger
 */
 
@@ -25,6 +28,7 @@ module.exports =
 
 var
 	astAnd,
+	astDiffers,
 	astDot,
 	astGreaterThan,
 	astLessThan,
@@ -43,6 +47,8 @@ var
 
 
 astAnd = require( '../ast/ast-and' );
+
+astDiffers = require( '../ast/ast-differs' );
 
 astDot = require( '../ast/ast-dot' );
 
@@ -190,6 +196,28 @@ parseToken =
 					'FIXME cannot do postincrement'
 				);
 			}
+
+			break;
+
+		case '!==' :
+
+			if( !ast )
+			{
+				throw new Error( );
+			}
+
+			state = state.advance( null, tokenPrecs[ '!==' ] );
+
+			state = parseToken( state );
+
+			state =
+				state.create(
+					'ast',
+						astDiffers.create(
+							'left', ast,
+							'right', state.ast
+						)
+				);
 
 			break;
 
