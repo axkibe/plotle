@@ -80,6 +80,8 @@ token.prototype._init =
 /**/		case '&&' :
 /**/		case '===' :
 /**/		case '!==' :
+/**/		case 'true' :
+/**/		case 'false' :
 /**/		case 'number' :
 /**/		case 'string' :
 /**/		case 'identifier' :

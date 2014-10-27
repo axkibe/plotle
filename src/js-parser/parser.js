@@ -29,6 +29,7 @@ module.exports =
 var
 	astAnd,
 	astAssign,
+	astBoolean,
 	astDiffers,
 	astDot,
 	astEquals,
@@ -51,6 +52,8 @@ var
 astAnd = require( '../ast/ast-and' );
 
 astAssign = require( '../ast/ast-assign' );
+
+astBoolean = require( '../ast/ast-boolean' );
 
 astDiffers = require( '../ast/ast-differs' );
 
@@ -89,19 +92,21 @@ tokenPrecs = { };
 
 tokenPrecs.number = -1;
 tokenPrecs.identifier = -1;
+tokenPrecs[  'true' ] = -1;
+tokenPrecs[ 'false' ] = -1;
 
-tokenPrecs[   ']' ] = -1;
-tokenPrecs[   '.' ] =  1;
-tokenPrecs[   '[' ] =  1;
-tokenPrecs[  '++' ] =  3; // 4 for postfix
-tokenPrecs[   '!' ] =  4;
-tokenPrecs[   '+' ] =  6;
-tokenPrecs[   '<' ] =  8;
-tokenPrecs[   '>' ] =  8;
-tokenPrecs[ '===' ] =  9;
-tokenPrecs[ '!==' ] =  9;
-tokenPrecs[  '&&' ] = 13;
-tokenPrecs[  '||' ] = 14;
+tokenPrecs[     ']' ] = -1;
+tokenPrecs[     '.' ] =  1;
+tokenPrecs[     '[' ] =  1;
+tokenPrecs[    '++' ] =  3; // 4 for postfix
+tokenPrecs[     '!' ] =  4;
+tokenPrecs[     '+' ] =  6;
+tokenPrecs[     '<' ] =  8;
+tokenPrecs[     '>' ] =  8;
+tokenPrecs[   '===' ] =  9;
+tokenPrecs[   '!==' ] =  9;
+tokenPrecs[    '&&' ] = 13;
+tokenPrecs[    '||' ] = 14;
 
 
 /*
@@ -425,6 +430,37 @@ parseToken =
 			state =
 				state.advance(
 					astNumber.create( 'number', token.value ),
+					undefined
+				);
+
+			break;
+
+		case 'false' :
+
+			if( state.ast !== null )
+			{
+				throw new Error( 'parse error' );
+			}
+
+			state =
+				state.advance(
+					astBoolean.create( 'boolean', false ),
+					undefined
+				);
+
+			break;
+
+
+		case 'true' :
+
+			if( state.ast !== null )
+			{
+				throw new Error( 'parse error' );
+			}
+
+			state =
+				state.advance(
+					astBoolean.create( 'boolean', true ),
 					undefined
 				);
 

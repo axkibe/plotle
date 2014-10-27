@@ -76,12 +76,28 @@ jsLexer.tokenize =
 				value += code[ ++c ];
 			}
 
-			tokens.push(
-				token.create(
-					'type', 'identifier',
-					'value', value
-				)
-			);
+			switch( value )
+			{
+				case 'false' :
+				case 'true' :
+
+					tokens.push(
+						token.create( 'type', value )
+					);
+
+					continue;
+
+				default :
+
+					tokens.push(
+						token.create(
+							'type', 'identifier',
+							'value', value
+						)
+					);
+
+					continue;
+			}
 
 			continue;
 		}
