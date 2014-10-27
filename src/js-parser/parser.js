@@ -85,6 +85,7 @@ tokenPrecs[ '++' ] =  3; // 4 for postfix
 tokenPrecs[  '!' ] =  4;
 tokenPrecs[  '+' ] =  6;
 tokenPrecs[  '<' ] =  8;
+tokenPrecs[  '>' ] =  8;
 tokenPrecs[ '&&' ] = 13;
 tokenPrecs[ '||' ] = 14;
 

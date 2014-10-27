@@ -1258,10 +1258,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astFail( )
 				)
 				.astIf(
-					astOr(
-						'rank < 0',
-						'rank > ranks.length'
-					),
+					'rank < 0 || rank > ranks.length',
 					astFail( )
 				)
 				.astAssign( 'twig[ key ]', 'arg' )
@@ -2272,7 +2269,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		block
 		.astAssign( 'twig', astObjLiteral( ) )
 		.astIf(
-			astOr( '!jwig', '!ranks' ),
+			'!jwig || !ranks',
 			// ranks/twig information missing
 			astFail( )
 		)
