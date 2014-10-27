@@ -1076,8 +1076,8 @@ gen.prototype.genCreatorInheritanceReceiver =
 	{
 		receiver =
 			receiver
-			.astAssign( 'twig', 'inherit.twig' )
-			.astAssign( 'ranks', 'inherit.ranks' )
+			.ast( 'twig = inherit.twig' )
+			.ast( 'ranks = inherit.ranks' )
 			.astAssign( 'twigDup', false );
 	}
 
@@ -1085,7 +1085,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 	{
 		receiver =
 			receiver
-			.astAssign( 'ray', 'inherit.ray' )
+			.ast( 'ray = inherit.ray' )
 			.astAssign( 'rayDup', false );
 	}
 
@@ -1219,34 +1219,34 @@ gen.prototype.genCreatorFreeStringsParser =
 				astString( 'twig:add' ),
 				astBlock( )
 				.append( twigDupCheck )
-				.astAssign( 'key', 'arg' )
-				.astAssign( 'arg', 'arguments[ ++a + 1 ]' )
+				.ast( 'key = arg' )
+				.ast( 'arg = arguments[ ++a + 1 ]' )
 				.astIf(
 					'twig[ key ] !== undefined',
 					astFail( )
 				)
-				.astAssign( 'twig[ key ]', 'arg' )
+				.ast( 'twig[ key ] = arg' )
 				.astCall( 'ranks.push', 'key' )
 			)
 			.astCase(
 				astString( 'twig:set' ),
 				astBlock( )
 				.append( twigDupCheck )
-				.astAssign( 'key', 'arg' )
-				.astAssign( 'arg', 'arguments[ ++a + 1 ]' )
+				.ast( 'key = arg' )
+				.ast( 'arg = arguments[ ++a + 1 ]' )
 				.astIf(
 					'twig[ key ] === undefined',
 					astFail( )
 				)
-				.astAssign( 'twig[ key ]', 'arg' )
+				.ast( 'twig[ key ] = arg' )
 			)
 			.astCase(
 				astString( 'twig:insert' ),
 				astBlock( )
 				.append( twigDupCheck )
-				.astAssign( 'key', 'arg' )
-				.astAssign( 'rank', 'arguments[ a + 2 ]' )
-				.astAssign( 'arg', 'arguments[ a +  3 ]' )
+				.ast( 'key = arg' )
+				.ast( 'rank = arguments[ a + 2 ]' )
+				.ast( 'arg = arguments[ a +  3 ]' )
 				.astPlusAssign( 'a', 2 )
 				.astIf(
 					'twig[ key ] !== undefined',
@@ -1256,7 +1256,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					'rank < 0 || rank > ranks.length',
 					astFail( )
 				)
-				.astAssign( 'twig[ key ]', 'arg' )
+				.ast( 'twig[ key ] = arg' )
 				.astCall( 'ranks.splice', 'rank', 0, 'key' )
 			)
 			.astCase(
