@@ -1237,7 +1237,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.astAssign( 'key', 'arg' )
 				.astAssign( 'arg', 'arguments[ ++a + 1 ]' )
 				.astIf(
-					astEquals( 'twig[ key ]' , undefined ),
+					'twig[ key ] === undefined',
 					astFail( )
 				)
 				.astAssign( 'twig[ key ]', 'arg' )
@@ -1266,7 +1266,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				astBlock( )
 				.append( twigDupCheck )
 				.astIf(
-					astEquals( 'twig[ arg ]', undefined ),
+					'twig[ arg ] === undefined',
 					astFail( )
 				)
 				.astDelete( 'twig[ arg ]' )
@@ -2734,9 +2734,7 @@ gen.prototype.genEquals =
 				.astAssign(
 					'prototype.equals',
 					astFunc(
-						astReturn(
-							astEquals( 'this', 'obj' )
-						)
+						astReturn( 'this === obj' )
 					)
 					.astArg( 'obj', 'object to compare to' )
 				)
@@ -2771,10 +2769,7 @@ gen.prototype.genEquals =
 
 	block =
 		block
-		.astIf(
-			astEquals( 'this', 'obj' ),
-			astReturnTrue
-		)
+		.astIf( 'this === obj', astReturnTrue )
 		.astIf( '!obj', astReturnFalse );
 
 	if( this.twig )
@@ -2921,10 +2916,7 @@ gen.prototype.genAlike =
 
 		block =
 			astBlock( )
-			.astIf(
-				astEquals( astThis, 'obj' ),
-				astReturnTrue
-			)
+			.astIf( 'this === obj', astReturnTrue )
 			.astIf( '!obj', astReturnFalse );
 
 		if( this.twig )
@@ -2932,8 +2924,8 @@ gen.prototype.genAlike =
 			// FIXME same test as in equals
 			cond =
 				astAnd(
-					astEquals( 'this.tree', 'obj.tree' ),
-					astEquals( 'this.ranks', 'obj.ranks' )
+					'this.tree === obj.tree',
+					'this.ranks === obj.ranks'
 				);
 		}
 
