@@ -185,7 +185,9 @@ handleMonoOps =
 
 	if( ast )
 	{
-		throw new Error( 'parser error' );
+		throw new Error(
+			'FIXME cannot do postfix ops'
+		);
 	}
 
 	state = state.advance( null, spec.precedence );
@@ -347,8 +349,11 @@ tokenSpecs[ '[' ] =
 
 tokenSpecs[ '++' ] =
 	{
-		precedence : 3
+		precedence : 3,
 		// 4 for postfix
+		handler : handleMonoOps,
+		astCreator : astPreIncrement
+		// FUTURE postfixCreator
 	};
 
 tokenSpecs[ '!' ] =
@@ -442,33 +447,6 @@ parseToken =
 
 	switch( token.type )
 	{
-
-		case '++' :
-
-			if( !ast )
-			{
-				state = state.advance( null, tokenSpecs[ '++' ].precedence );
-
-				state = parseToken( state );
-
-				state =
-					state.create(
-						'ast',
-							astPreIncrement.create(
-								'expr',
-									state.ast
-							)
-					);
-			}
-			else
-			{
-				throw new Error(
-					'FIXME cannot do postincrement'
-				);
-			}
-
-			break;
-
 		case '.' :
 		case '!' :
 		case '+' :
@@ -477,6 +455,7 @@ parseToken =
 		case '<' :
 		case '[' :
 		case ']' :
+		case '++' :
 		case '&&' :
 		case '||' :
 		case '!==' :
