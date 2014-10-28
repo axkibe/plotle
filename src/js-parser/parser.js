@@ -48,6 +48,7 @@ var
 	handleDot,
 	handleMonoOps,
 	handleDualisticOps,
+	handleIdentifier,
 	handlePass,
 	handleSquareBrackets,
 	parseToken,
@@ -303,6 +304,30 @@ handlePass =
 
 
 /*
+| Handler for identifiers.
+*/
+handleIdentifier =
+	function(
+		state // current parser state
+		// spec   // operator spec
+	)
+{
+	if( state.ast !== null )
+	{
+		throw new Error( 'parse error' );
+	}
+
+	state =
+		state.advance(
+			astVar.create( 'name', state.current.value ),
+			undefined
+	);
+
+	return state;
+};
+
+
+/*
 | Token specifications.
 */
 tokenSpecs = { };
@@ -314,7 +339,8 @@ tokenSpecs.number =
 
 tokenSpecs.identifier =
 	{
-		precedence : -1
+		precedence : -1,
+		handler : handleIdentifier
 	};
 
 tokenSpecs[ 'true' ] =
@@ -462,6 +488,7 @@ parseToken =
 		case '===' :
 		case 'true' :
 		case 'false' :
+		case 'identifier' :
 
 			state = spec.handler( state, spec );
 
@@ -477,21 +504,6 @@ parseToken =
 			state =
 				state.advance(
 					astNumber.create( 'number', token.value ),
-					undefined
-				);
-
-			break;
-
-		case 'identifier' :
-
-			if( state.ast !== null )
-			{
-				throw new Error( 'parse error' );
-			}
-
-			state =
-				state.advance(
-					astVar.create( 'name', token.value ),
 					undefined
 				);
 
