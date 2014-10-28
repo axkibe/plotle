@@ -213,12 +213,16 @@ tokenSpecs[ '!==' ] =
 
 tokenSpecs[ '&&' ] =
 	{
-		precedence : 13
+		precedence : 13,
+		handler : handlerDualistic,
+		astCreator : astAnd
 	};
 
 tokenSpecs[ '||' ] =
 	{
-		precedence : 14
+		precedence : 14,
+		handler : handlerDualistic,
+		astCreator : astOr
 	};
 
 tokenSpecs[ '=' ] =
@@ -338,54 +342,12 @@ parseToken =
 		case '=' :
 		case '>' :
 		case '<' :
+		case '&&' :
+		case '||' :
 		case '!==' :
 		case '===' :
 
 			state = spec.handler( state, spec );
-
-			break;
-
-		case '||' :
-
-			if( !ast )
-			{
-				throw new Error( );
-			}
-
-			state = state.advance( null, tokenSpecs[ '||' ].precedence );
-
-			state = parseToken( state );
-
-			state =
-				state.create(
-					'ast',
-						astOr.create(
-							'left', ast,
-							'right', state.ast
-						)
-				);
-
-			break;
-
-		case '&&' :
-
-			if( !ast )
-			{
-				throw new Error( );
-			}
-
-			state = state.advance( null, tokenSpecs[ '&&' ].precedence );
-
-			state = parseToken( state );
-
-			state =
-				state.create(
-					'ast',
-						astAnd.create(
-							'left', ast,
-							'right', state.ast
-						)
-				);
 
 			break;
 
