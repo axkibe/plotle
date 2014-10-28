@@ -54,6 +54,7 @@ var
 	handleSquareBrackets,
 	parseToken,
 	state,
+	tokenSpec,
 	tokenSpecs;
 
 
@@ -94,6 +95,8 @@ jools = require( '../jools/jools' );
 lexer = require( '../js-lexer/lexer' );
 
 state = require( './state' );
+
+tokenSpec = require( './token-spec' );
 
 
 /*
@@ -359,134 +362,134 @@ handleIdentifier =
 tokenSpecs = { };
 
 tokenSpecs.number =
-	{
-		prePrec : -1,
-		postPrec : -1,
-		handler : handleNumber
-	};
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
+		'handler', handleNumber
+	);
 
 tokenSpecs.identifier =
-	{
-		prePrec : -1,
-		postPrec : -1,
-		handler : handleIdentifier
-	};
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
+		'handler', handleIdentifier
+	);
 
 tokenSpecs[ 'true' ] =
-	{
-		prePrec : -1,
-		postPrec : -1,
-		handler : handleBooleanLiteral
-	};
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
+		'handler', handleBooleanLiteral
+	);
 
 tokenSpecs[ 'false' ] =
-	{
-		prePrec : -1,
-		postPrec : -1,
-		handler : handleBooleanLiteral
-	};
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
+		'handler', handleBooleanLiteral
+	);
 
 tokenSpecs[ ']' ] =
-	{
-		prePrec : 1,
-		postPrec : 1,
-		handler : handlePass
-	};
+	tokenSpec.create(
+		'prePrec', 1,
+		'postPrec', 1,
+		'handler', handlePass
+	);
 
 tokenSpecs[ '.' ] =
-	{
-		prePrec : 1,
-		postPrec : 1,
-		handler : handleDot
-	};
+	tokenSpec.create(
+		'prePrec', 1,
+		'postPrec', 1,
+		'handler', handleDot
+	);
 
 tokenSpecs[ '[' ] =
-	{
-		prePrec : 1,
-		postPrec : 1,
-		handler : handleSquareBrackets
-	};
+	tokenSpec.create(
+		'prePrec', 1,
+		'postPrec', 1,
+		'handler', handleSquareBrackets
+	);
 
 tokenSpecs[ '++' ] =
-	{
-		prePrec : 3,
-		postPrec : 4,
-		handler : handleMonoOps,
-		astCreator : astPreIncrement
+	tokenSpec.create(
+		'prePrec', 3,
+		'postPrec', 4,
+		'handler', handleMonoOps,
+		'astCreator', astPreIncrement
 		// FUTURE postfixCreator
-	};
+	);
 
 tokenSpecs[ '!' ] =
-	{
-		prePrec : 4,
-		postPrec : 4,
-		handler : handleMonoOps,
-		astCreator : astNot
-	};
+	tokenSpec.create(
+		'prePrec', 4,
+		'postPrec', 4,
+		'handler', handleMonoOps,
+		'astCreator', astNot
+	);
 
 tokenSpecs[ '+' ] =
-	{
-		prePrec : 6,
-		postPrec : 6,
-		handler : handleDualisticOps,
-		astCreator : astPlus
-	};
+	tokenSpec.create(
+		'prePrec', 6,
+		'postPrec', 6,
+		'handler', handleDualisticOps,
+		'astCreator', astPlus
+	);
 
 tokenSpecs[ '<' ] =
-	{
-		prePrec : 8,
-		postPrec : 8,
-		handler : handleDualisticOps,
-		astCreator : astLessThan
-	};
+	tokenSpec.create(
+		'prePrec', 8,
+		'postPrec', 8,
+		'handler', handleDualisticOps,
+		'astCreator', astLessThan
+	);
 
 tokenSpecs[ '>' ] =
-	{
-		prePrec : 8,
-		postPrec : 8,
-		handler : handleDualisticOps,
-		astCreator : astGreaterThan
-	};
+	tokenSpec.create(
+		'prePrec', 8,
+		'postPrec', 8,
+		'handler', handleDualisticOps,
+		'astCreator', astGreaterThan
+	);
 
 tokenSpecs[ '===' ] =
-	{
-		prePrec : 9,
-		postPrec : 9,
-		handler : handleDualisticOps,
-		astCreator : astEquals
-	};
+	tokenSpec.create(
+		'prePrec', 9,
+		'postPrec', 9,
+		'handler', handleDualisticOps,
+		'astCreator', astEquals
+	);
 
 tokenSpecs[ '!==' ] =
-	{
-		prePrec : 9,
-		postPrec : 9,
-		handler : handleDualisticOps,
-		astCreator : astDiffers
-	};
+	tokenSpec.create(
+		'prePrec', 9,
+		'postPrec', 9,
+		'handler', handleDualisticOps,
+		'astCreator', astDiffers
+	);
 
 tokenSpecs[ '&&' ] =
-	{
-		prePrec : 13,
-		postPrec : 13,
-		handler : handleDualisticOps,
-		astCreator : astAnd
-	};
+	tokenSpec.create(
+		'prePrec', 13,
+		'postPrec', 13,
+		'handler', handleDualisticOps,
+		'astCreator', astAnd
+	);
 
 tokenSpecs[ '||' ] =
-	{
-		prePrec : 14,
-		postPrec : 14,
-		handler : handleDualisticOps,
-		astCreator : astOr
-	};
+	tokenSpec.create(
+		'prePrec', 14,
+		'postPrec', 14,
+		'handler', handleDualisticOps,
+		'astCreator', astOr
+	);
 
 tokenSpecs[ '=' ] =
-	{
-		prePrec : 16,
-		postPrec : 16,
-		handler : handleDualisticOps,
-		astCreator : astAssign
-	};
+	tokenSpec.create(
+		'prePrec', 16,
+		'postPrec', 16,
+		'handler', handleDualisticOps,
+		'astCreator', astAssign
+	);
 
 
 /*
