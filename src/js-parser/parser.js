@@ -44,7 +44,9 @@ var
 	astVar,
 	jools,
 	lexer,
-	handleBoolean,
+	handleBooleanLiteral,
+	handleDot,
+	handleMonoOps,
 	handleDualisticOps,
 	handlePass,
 	handleSquareBrackets,
@@ -95,10 +97,10 @@ state = require( './state' );
 /*
 | Handler for boolean literals.
 */
-handleBoolean =
+handleBooleanLiteral =
 	function(
-		state, // current parser state
-		spec   // operator spec
+		state // current parser state
+		// spec   // operator spec
 	)
 {
 	var
@@ -125,6 +127,81 @@ handleBoolean =
 	return state;
 };
 
+
+/*
+| Handler for dots.
+*/
+handleDot =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		ast,
+		name;
+
+	ast = state.ast;
+
+	if( !ast )
+	{
+		throw new Error( );
+	}
+
+	name = state.preview;
+
+	if( name.type !== 'identifier' )
+	{
+		throw new Error( );
+	}
+
+	state =
+		state.advance(
+			astDot.create(
+				'expr', state.ast,
+				'member', name.value
+			),
+			spec.precedence,
+			2
+		);
+
+	return state;
+};
+
+
+/*
+| Generic handler for mono operations.
+*/
+handleMonoOps =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		ast;
+
+	ast = state.ast;
+
+	if( ast )
+	{
+		throw new Error( 'parser error' );
+	}
+
+	state = state.advance( null, spec.precedence );
+
+	state = parseToken( state );
+
+	state =
+		state.create(
+			'ast',
+				spec.astCreator.create(
+					'expr', state.ast
+				)
+		);
+
+	return state;
+};
 
 
 /*
@@ -241,13 +318,13 @@ tokenSpecs.identifier =
 tokenSpecs[ 'true' ] =
 	{
 		precedence : -1,
-		handler : handleBoolean
+		handler : handleBooleanLiteral
 	};
 
 tokenSpecs[ 'false' ] =
 	{
 		precedence : -1,
-		handler : handleBoolean
+		handler : handleBooleanLiteral
 	};
 
 tokenSpecs[ ']' ] =
@@ -258,7 +335,8 @@ tokenSpecs[ ']' ] =
 
 tokenSpecs[ '.' ] =
 	{
-		precedence : 1
+		precedence : 1,
+		handler : handleDot
 	};
 
 tokenSpecs[ '[' ] =
@@ -275,7 +353,9 @@ tokenSpecs[ '++' ] =
 
 tokenSpecs[ '!' ] =
 	{
-		precedence : 4
+		precedence : 4,
+		handler : handleMonoOps,
+		astCreator : astNot
 	};
 
 tokenSpecs[ '+' ] =
@@ -345,7 +425,6 @@ parseToken =
 {
 	var
 		ast,
-		name,
 		pos,
 		prec,
 		spec,
@@ -363,54 +442,6 @@ parseToken =
 
 	switch( token.type )
 	{
-		case '.' :
-
-			if( !ast )
-			{
-				throw new Error( );
-			}
-
-			name = state.preview;
-
-			if( name.type !== 'identifier' )
-			{
-				throw new Error( );
-			}
-
-			state =
-				state.advance(
-					astDot.create(
-						'expr', state.ast,
-						'member', name.value
-					),
-					tokenSpecs[ '.' ].precedence,
-					2
-				);
-
-			break;
-
-
-		case '!' :
-
-			if( ast )
-			{
-				throw new Error( 'parser error' );
-			}
-
-			state = state.advance( null, tokenSpecs[ '!' ].precedence );
-
-			state = parseToken( state );
-
-			state =
-				state.create(
-					'ast',
-						astNot.create(
-							'expr',
-								state.ast
-						)
-				);
-
-			break;
 
 		case '++' :
 
@@ -438,6 +469,8 @@ parseToken =
 
 			break;
 
+		case '.' :
+		case '!' :
 		case '+' :
 		case '=' :
 		case '>' :
