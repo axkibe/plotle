@@ -185,12 +185,16 @@ tokenSpecs[ '+' ] =
 
 tokenSpecs[ '<' ] =
 	{
-		precedence : 8
+		precedence : 8,
+		handler : handlerDualistic,
+		astCreator : astLessThan
 	};
 
 tokenSpecs[ '>' ] =
 	{
-		precedence : 8
+		precedence : 8,
+		handler : handlerDualistic,
+		astCreator : astGreaterThan
 	};
 
 tokenSpecs[ '===' ] =
@@ -332,54 +336,12 @@ parseToken =
 			break;
 
 		case '=' :
+		case '>' :
+		case '<' :
 		case '!==' :
 		case '===' :
 
 			state = spec.handler( state, spec );
-
-			break;
-
-		case '>' :
-
-			if( !ast )
-			{
-				throw new Error( );
-			}
-
-			state = state.advance( null, tokenSpecs[ '<' ].precedence );
-
-			state = parseToken( state );
-
-			state =
-				state.create(
-					'ast',
-						astGreaterThan.create(
-							'left', ast,
-							'right', state.ast
-						)
-				);
-
-			break;
-
-		case '<' :
-
-			if( !ast )
-			{
-				throw new Error( );
-			}
-
-			state = state.advance( null, tokenSpecs[ '<' ].precedence );
-
-			state = parseToken( state );
-
-			state =
-				state.create(
-					'ast',
-						astLessThan.create(
-							'left', ast,
-							'right', state.ast
-						)
-				);
 
 			break;
 
