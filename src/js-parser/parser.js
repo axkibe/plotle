@@ -163,7 +163,7 @@ handleDot =
 				'expr', state.ast,
 				'member', name.value
 			),
-			spec.precedence,
+			spec.prePrec,
 			2
 		);
 
@@ -192,7 +192,7 @@ handleMonoOps =
 		);
 	}
 
-	state = state.advance( null, spec.precedence );
+	state = state.advance( null, spec.prePrec );
 
 	state = parseToken( state );
 
@@ -227,7 +227,7 @@ handleDualisticOps =
 		throw new Error( 'parser error' );
 	}
 
-	state = state.advance( null, spec.precedence );
+	state = state.advance( null, spec.prePrec );
 
 	state = parseToken( state );
 
@@ -263,7 +263,7 @@ handleSquareBrackets =
 		throw new Error( );
 	}
 
-	state = state.advance( null, spec.precedence );
+	state = state.advance( null, spec.prePrec );
 
 	state = parseToken( state );
 
@@ -283,7 +283,7 @@ handleSquareBrackets =
 				'expr', ast,
 				'member', state.ast
 			),
-			99 // tokenSpecs[ '[' ].precedence
+			99 // tokenSpecs[ '[' ].prePrec
 		);
 
 	return state;
@@ -360,50 +360,57 @@ tokenSpecs = { };
 
 tokenSpecs.number =
 	{
-		precedence : -1,
+		prePrec : -1,
+		postPrec : -1,
 		handler : handleNumber
 	};
 
 tokenSpecs.identifier =
 	{
-		precedence : -1,
+		prePrec : -1,
+		postPrec : -1,
 		handler : handleIdentifier
 	};
 
 tokenSpecs[ 'true' ] =
 	{
-		precedence : -1,
+		prePrec : -1,
+		postPrec : -1,
 		handler : handleBooleanLiteral
 	};
 
 tokenSpecs[ 'false' ] =
 	{
-		precedence : -1,
+		prePrec : -1,
+		postPrec : -1,
 		handler : handleBooleanLiteral
 	};
 
 tokenSpecs[ ']' ] =
 	{
-		precedence : 1,
+		prePrec : 1,
+		postPrec : 1,
 		handler : handlePass
 	};
 
 tokenSpecs[ '.' ] =
 	{
-		precedence : 1,
+		prePrec : 1,
+		postPrec : 1,
 		handler : handleDot
 	};
 
 tokenSpecs[ '[' ] =
 	{
-		precedence : 1,
+		prePrec : 1,
+		postPrec : 1,
 		handler : handleSquareBrackets
 	};
 
 tokenSpecs[ '++' ] =
 	{
-		precedence : 3,
-		// 4 for postfix
+		prePrec : 3,
+		postPrec : 4,
 		handler : handleMonoOps,
 		astCreator : astPreIncrement
 		// FUTURE postfixCreator
@@ -411,63 +418,72 @@ tokenSpecs[ '++' ] =
 
 tokenSpecs[ '!' ] =
 	{
-		precedence : 4,
+		prePrec : 4,
+		postPrec : 4,
 		handler : handleMonoOps,
 		astCreator : astNot
 	};
 
 tokenSpecs[ '+' ] =
 	{
-		precedence : 6,
+		prePrec : 6,
+		postPrec : 6,
 		handler : handleDualisticOps,
 		astCreator : astPlus
 	};
 
 tokenSpecs[ '<' ] =
 	{
-		precedence : 8,
+		prePrec : 8,
+		postPrec : 8,
 		handler : handleDualisticOps,
 		astCreator : astLessThan
 	};
 
 tokenSpecs[ '>' ] =
 	{
-		precedence : 8,
+		prePrec : 8,
+		postPrec : 8,
 		handler : handleDualisticOps,
 		astCreator : astGreaterThan
 	};
 
 tokenSpecs[ '===' ] =
 	{
-		precedence : 9,
+		prePrec : 9,
+		postPrec : 9,
 		handler : handleDualisticOps,
 		astCreator : astEquals
 	};
 
 tokenSpecs[ '!==' ] =
 	{
-		precedence : 9,
+		prePrec : 9,
+		postPrec : 9,
 		handler : handleDualisticOps,
 		astCreator : astDiffers
 	};
 
 tokenSpecs[ '&&' ] =
 	{
-		precedence : 13,
+		prePrec : 13,
+		postPrec : 13,
 		handler : handleDualisticOps,
 		astCreator : astAnd
 	};
 
 tokenSpecs[ '||' ] =
 	{
-		precedence : 14,
+		prePrec : 14,
+		postPrec : 14,
 		handler : handleDualisticOps,
 		astCreator : astOr
 	};
 
 tokenSpecs[ '=' ] =
 	{
-		precedence : 16,
+		prePrec : 16,
+		postPrec : 16,
 		handler : handleDualisticOps,
 		astCreator : astAssign
 	};
@@ -494,7 +510,7 @@ parseToken =
 	if(
 		!state.reachedEnd
 		&&
-		tokenSpecs[ state.current.type ].precedence < prec
+		tokenSpecs[ state.current.type ].prePrec < prec
 		&&
 		spec.handler !== handlePass
 	)
