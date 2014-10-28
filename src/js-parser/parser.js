@@ -44,9 +44,10 @@ var
 	astVar,
 	jools,
 	lexer,
+	handlerDualistic,
 	parseToken,
 	state,
-	tokenPrecs;
+	tokenSpecs;
 
 
 astAnd = require( '../ast/ast-and' );
@@ -88,25 +89,136 @@ lexer = require( '../js-lexer/lexer' );
 state = require( './state' );
 
 
-tokenPrecs = { };
+/*
+| Generic handler for dualistic operations
+*/
+handlerDualistic =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		ast;
 
-tokenPrecs.number = -1;
-tokenPrecs.identifier = -1;
-tokenPrecs[  'true' ] = -1;
-tokenPrecs[ 'false' ] = -1;
+	ast = state.ast;
 
-tokenPrecs[     ']' ] = -1;
-tokenPrecs[     '.' ] =  1;
-tokenPrecs[     '[' ] =  1;
-tokenPrecs[    '++' ] =  3; // 4 for postfix
-tokenPrecs[     '!' ] =  4;
-tokenPrecs[     '+' ] =  6;
-tokenPrecs[     '<' ] =  8;
-tokenPrecs[     '>' ] =  8;
-tokenPrecs[   '===' ] =  9;
-tokenPrecs[   '!==' ] =  9;
-tokenPrecs[    '&&' ] = 13;
-tokenPrecs[    '||' ] = 14;
+	if( !ast )
+	{
+		throw new Error( 'parser error' );
+	}
+
+	state = state.advance( null, spec.precedence );
+
+	state = parseToken( state );
+
+	state =
+		state.create(
+			'ast',
+				spec.astCreator.create(
+					'left', ast,
+					'right', state.ast
+				)
+		);
+
+	return state;
+};
+
+
+
+/*
+| Token specifications.
+*/
+tokenSpecs = { };
+
+tokenSpecs.number =
+	{
+		precedence : -1
+	};
+
+tokenSpecs.identifier =
+	{
+		precedence : -1
+	};
+
+tokenSpecs[ 'true' ] =
+	{
+		precedence : -1
+	};
+
+tokenSpecs[ 'false' ] =
+	{
+		precedence : -1
+	};
+
+
+tokenSpecs[ ']' ] =
+	{
+		precedence : 1
+	};
+
+tokenSpecs[ '.' ] =
+	{
+		precedence : 1
+	};
+
+tokenSpecs[ '[' ] =
+	{
+		precedence : 1
+	};
+
+tokenSpecs[ '++' ] =
+	{
+		precedence : 3
+		// 4 for postfix
+	};
+
+tokenSpecs[ '!' ] =
+	{
+		precedence : 4
+	};
+
+tokenSpecs[ '+' ] =
+	{
+		precedence : 6
+	};
+
+tokenSpecs[ '<' ] =
+	{
+		precedence : 8
+	};
+
+tokenSpecs[ '>' ] =
+	{
+		precedence : 8
+	};
+
+tokenSpecs[ '===' ] =
+	{
+		precedence : 9,
+		handler : handlerDualistic,
+		astCreator : astEquals
+	};
+
+tokenSpecs[ '!==' ] =
+	{
+		precedence : 9
+	};
+
+tokenSpecs[ '&&' ] =
+	{
+		precedence : 13
+	};
+
+tokenSpecs[ '||' ] =
+	{
+		precedence : 14
+	};
+
+tokenSpecs[ '=' ] =
+	{
+		precedence : 16
+	};
 
 
 /*
@@ -122,6 +234,7 @@ parseToken =
 		name,
 		pos,
 		prec,
+		spec,
 		token;
 
 	pos = state.pos;
@@ -131,6 +244,8 @@ parseToken =
 	token = state.current;
 
 	ast = state.ast;
+
+	spec = tokenSpecs[ token.type ];
 
 	switch( token.type )
 	{
@@ -154,7 +269,7 @@ parseToken =
 						'expr', state.ast,
 						'member', name.value
 					),
-					tokenPrecs[ '.' ],
+					tokenSpecs[ '.' ].precedence,
 					2
 				);
 
@@ -171,7 +286,7 @@ parseToken =
 				throw new Error( 'parser error' );
 			}
 
-			state = state.advance( null, tokenPrecs[ '!' ] );
+			state = state.advance( null, tokenSpecs[ '!' ].precedence );
 
 			state = parseToken( state );
 
@@ -190,7 +305,7 @@ parseToken =
 
 			if( !ast )
 			{
-				state = state.advance( null, tokenPrecs[ '++' ] );
+				state = state.advance( null, tokenSpecs[ '++' ].precedence );
 
 				state = parseToken( state );
 
@@ -214,23 +329,7 @@ parseToken =
 
 		case '===' :
 
-			if( !ast )
-			{
-				throw new Error( );
-			}
-
-			state = state.advance( null, tokenPrecs[ '===' ] );
-
-			state = parseToken( state );
-
-			state =
-				state.create(
-					'ast',
-						astEquals.create(
-							'left', ast,
-							'right', state.ast
-						)
-				);
+			state = spec.handler( state, spec );
 
 			break;
 
@@ -241,7 +340,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			state = state.advance( null, tokenPrecs[ '!==' ] );
+			state = state.advance( null, tokenSpecs[ '!==' ].precedence );
 
 			state = parseToken( state );
 
@@ -263,7 +362,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			state = state.advance( null, tokenPrecs[ '=' ] );
+			state = state.advance( null, tokenSpecs[ '=' ].precedence );
 
 			state = parseToken( state );
 
@@ -285,7 +384,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			state = state.advance( null, tokenPrecs[ '<' ] );
+			state = state.advance( null, tokenSpecs[ '<' ].precedence );
 
 			state = parseToken( state );
 
@@ -307,7 +406,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			state = state.advance( null, tokenPrecs[ '<' ] );
+			state = state.advance( null, tokenSpecs[ '<' ].precedence );
 
 			state = parseToken( state );
 
@@ -329,7 +428,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			state = state.advance( null, tokenPrecs[ '||' ] );
+			state = state.advance( null, tokenSpecs[ '||' ].precedence );
 
 			state = parseToken( state );
 
@@ -351,7 +450,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			state = state.advance( null, tokenPrecs[ '&&' ] );
+			state = state.advance( null, tokenSpecs[ '&&' ].precedence );
 
 			state = parseToken( state );
 
@@ -373,7 +472,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			state = state.advance( null, tokenPrecs[ '+' ] );
+			state = state.advance( null, tokenSpecs[ '+' ].precedence );
 
 			state = parseToken( state );
 
@@ -395,7 +494,7 @@ parseToken =
 				throw new Error( );
 			}
 
-			state = state.advance( null, tokenPrecs[ '[' ] );
+			state = state.advance( null, tokenSpecs[ '[' ].precedence );
 
 			state = parseToken( state );
 
@@ -415,7 +514,7 @@ parseToken =
 						'expr', ast,
 						'member', state.ast
 					),
-					99 // tokenPrecs[ '[' ]
+					99 // tokenSpecs[ '[' ].precedence
 				);
 
 			break;
@@ -489,7 +588,7 @@ parseToken =
 	if( !state.reachedEnd )
 	{
 		if(
-			tokenPrecs[ state.current.type ] < prec
+			tokenSpecs[ state.current.type ].precedence < prec
 		)
 		{
 			state = parseToken( state );
