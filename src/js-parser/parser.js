@@ -46,8 +46,9 @@ var
 	lexer,
 	handleBooleanLiteral,
 	handleDot,
-	handleMonoOps,
 	handleDualisticOps,
+	handleMonoOps,
+	handleNumber,
 	handleIdentifier,
 	handlePass,
 	handleSquareBrackets,
@@ -304,6 +305,31 @@ handlePass =
 
 
 /*
+| Handler for numeric literals.
+*/
+handleNumber =
+	function(
+		state // current parser state
+		// spec   // operator spec
+	)
+{
+	if( state.ast !== null )
+	{
+		throw new Error( 'parse error' );
+	}
+
+	state =
+		state.advance(
+			astNumber.create( 'number', state.current.value ),
+			undefined
+		);
+
+	return state;
+};
+
+
+
+/*
 | Handler for identifiers.
 */
 handleIdentifier =
@@ -334,7 +360,8 @@ tokenSpecs = { };
 
 tokenSpecs.number =
 	{
-		precedence : -1
+		precedence : -1,
+		handler : handleNumber
 	};
 
 tokenSpecs.identifier =
@@ -489,23 +516,9 @@ parseToken =
 		case 'true' :
 		case 'false' :
 		case 'identifier' :
-
-			state = spec.handler( state, spec );
-
-			break;
-
 		case 'number' :
 
-			if( state.ast !== null )
-			{
-				throw new Error( 'parse error' );
-			}
-
-			state =
-				state.advance(
-					astNumber.create( 'number', token.value ),
-					undefined
-				);
+			state = spec.handler( state, spec );
 
 			break;
 
