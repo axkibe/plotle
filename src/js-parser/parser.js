@@ -482,50 +482,14 @@ parseToken =
 	)
 {
 	var
-		ast,
-		pos,
 		prec,
-		spec,
-		token;
-
-	pos = state.pos;
+		spec;
 
 	prec = state.prec;
 
-	token = state.current;
+	spec = tokenSpecs[ state.current.type ];
 
-	ast = state.ast;
-
-	spec = tokenSpecs[ token.type ];
-
-	switch( token.type )
-	{
-		case '.' :
-		case '!' :
-		case '+' :
-		case '=' :
-		case '>' :
-		case '<' :
-		case '[' :
-		case ']' :
-		case '++' :
-		case '&&' :
-		case '||' :
-		case '!==' :
-		case '===' :
-		case 'true' :
-		case 'false' :
-		case 'identifier' :
-		case 'number' :
-
-			state = spec.handler( state, spec );
-
-			break;
-
-		default :
-
-			throw new Error( );
-	}
+	state = spec.handler( state, spec );
 
 	if(
 		!state.reachedEnd
