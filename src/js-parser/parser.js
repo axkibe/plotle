@@ -44,7 +44,10 @@ var
 	astVar,
 	jools,
 	lexer,
-	handlerDualistic,
+	handleBoolean,
+	handleDualisticOps,
+	handlePass,
+	handleSquareBrackets,
 	parseToken,
 	state,
 	tokenSpecs;
@@ -90,9 +93,44 @@ state = require( './state' );
 
 
 /*
-| Generic handler for dualistic operations
+| Handler for boolean literals.
 */
-handlerDualistic =
+handleBoolean =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		bool;
+
+	if( state.ast !== null )
+	{
+		throw new Error( 'parse error' );
+	}
+
+	switch( state.current.type )
+	{
+		case 'true' : bool = true; break;
+		case 'false' : bool = false; break;
+		default : throw new Error( );
+	}
+
+	state =
+		state.advance(
+			astBoolean.create( 'boolean', bool ),
+			undefined
+		);
+
+	return state;
+};
+
+
+
+/*
+| Generic handler for dualistic operations.
+*/
+handleDualisticOps =
 	function(
 		state, // current parser state
 		spec   // operator spec
@@ -125,6 +163,65 @@ handlerDualistic =
 };
 
 
+/*
+| Handler for [ ].
+*/
+handleSquareBrackets =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		ast;
+
+	ast = state.ast;
+
+	if( !ast )
+	{
+		throw new Error( );
+	}
+
+	state = state.advance( null, spec.precedence );
+
+	state = parseToken( state );
+
+	while( state.current.type !== ']' )
+	{
+		state = parseToken( state );
+
+		if( state.reachedEnd )
+		{
+			throw new Error( );
+		}
+	}
+
+	state =
+		state.advance(
+			astMember.create(
+				'expr', ast,
+				'member', state.ast
+			),
+			99 // tokenSpecs[ '[' ].precedence
+		);
+
+	return state;
+};
+
+
+/*
+| Generic pass handler.
+| It just passes back up
+*/
+handlePass =
+	function(
+		state // current parser state
+		// spec   // operator spec
+	)
+{
+	return state;
+};
+
 
 /*
 | Token specifications.
@@ -143,18 +240,20 @@ tokenSpecs.identifier =
 
 tokenSpecs[ 'true' ] =
 	{
-		precedence : -1
+		precedence : -1,
+		handler : handleBoolean
 	};
 
 tokenSpecs[ 'false' ] =
 	{
-		precedence : -1
+		precedence : -1,
+		handler : handleBoolean
 	};
-
 
 tokenSpecs[ ']' ] =
 	{
-		precedence : 1
+		precedence : 1,
+		handler : handlePass
 	};
 
 tokenSpecs[ '.' ] =
@@ -164,7 +263,8 @@ tokenSpecs[ '.' ] =
 
 tokenSpecs[ '[' ] =
 	{
-		precedence : 1
+		precedence : 1,
+		handler : handleSquareBrackets
 	};
 
 tokenSpecs[ '++' ] =
@@ -180,55 +280,57 @@ tokenSpecs[ '!' ] =
 
 tokenSpecs[ '+' ] =
 	{
-		precedence : 6
+		precedence : 6,
+		handler : handleDualisticOps,
+		astCreator : astPlus
 	};
 
 tokenSpecs[ '<' ] =
 	{
 		precedence : 8,
-		handler : handlerDualistic,
+		handler : handleDualisticOps,
 		astCreator : astLessThan
 	};
 
 tokenSpecs[ '>' ] =
 	{
 		precedence : 8,
-		handler : handlerDualistic,
+		handler : handleDualisticOps,
 		astCreator : astGreaterThan
 	};
 
 tokenSpecs[ '===' ] =
 	{
 		precedence : 9,
-		handler : handlerDualistic,
+		handler : handleDualisticOps,
 		astCreator : astEquals
 	};
 
 tokenSpecs[ '!==' ] =
 	{
 		precedence : 9,
-		handler : handlerDualistic,
+		handler : handleDualisticOps,
 		astCreator : astDiffers
 	};
 
 tokenSpecs[ '&&' ] =
 	{
 		precedence : 13,
-		handler : handlerDualistic,
+		handler : handleDualisticOps,
 		astCreator : astAnd
 	};
 
 tokenSpecs[ '||' ] =
 	{
 		precedence : 14,
-		handler : handlerDualistic,
+		handler : handleDualisticOps,
 		astCreator : astOr
 	};
 
 tokenSpecs[ '=' ] =
 	{
 		precedence : 16,
-		handler : handlerDualistic,
+		handler : handleDualisticOps,
 		astCreator : astAssign
 	};
 
@@ -287,9 +389,6 @@ parseToken =
 
 			break;
 
-		case ']' :
-
-			return state;
 
 		case '!' :
 
@@ -339,69 +438,20 @@ parseToken =
 
 			break;
 
+		case '+' :
 		case '=' :
 		case '>' :
 		case '<' :
+		case '[' :
+		case ']' :
 		case '&&' :
 		case '||' :
 		case '!==' :
 		case '===' :
+		case 'true' :
+		case 'false' :
 
 			state = spec.handler( state, spec );
-
-			break;
-
-		case '+' :
-
-			if( !ast )
-			{
-				throw new Error( );
-			}
-
-			state = state.advance( null, tokenSpecs[ '+' ].precedence );
-
-			state = parseToken( state );
-
-			state =
-				state.create(
-					'ast',
-						astPlus.create(
-							'left', ast,
-							'right', state.ast
-						)
-				);
-
-			break;
-
-		case '[' :
-
-			if( !ast )
-			{
-				throw new Error( );
-			}
-
-			state = state.advance( null, tokenSpecs[ '[' ].precedence );
-
-			state = parseToken( state );
-
-			while( state.current.type !== ']' )
-			{
-				state = parseToken( state );
-
-				if( state.reachedEnd )
-				{
-					throw new Error( );
-				}
-			}
-
-			state =
-				state.advance(
-					astMember.create(
-						'expr', ast,
-						'member', state.ast
-					),
-					99 // tokenSpecs[ '[' ].precedence
-				);
 
 			break;
 
@@ -415,37 +465,6 @@ parseToken =
 			state =
 				state.advance(
 					astNumber.create( 'number', token.value ),
-					undefined
-				);
-
-			break;
-
-		case 'false' :
-
-			if( state.ast !== null )
-			{
-				throw new Error( 'parse error' );
-			}
-
-			state =
-				state.advance(
-					astBoolean.create( 'boolean', false ),
-					undefined
-				);
-
-			break;
-
-
-		case 'true' :
-
-			if( state.ast !== null )
-			{
-				throw new Error( 'parse error' );
-			}
-
-			state =
-				state.advance(
-					astBoolean.create( 'boolean', true ),
 					undefined
 				);
 
@@ -471,14 +490,15 @@ parseToken =
 			throw new Error( );
 	}
 
-	if( !state.reachedEnd )
+	if(
+		!state.reachedEnd
+		&&
+		tokenSpecs[ state.current.type ].precedence < prec
+		&&
+		spec.handler !== handlePass
+	)
 	{
-		if(
-			tokenSpecs[ state.current.type ].precedence < prec
-		)
-		{
-			state = parseToken( state );
-		}
+		state = parseToken( state );
 	}
 
 	return state;
