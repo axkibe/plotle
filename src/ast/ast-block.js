@@ -106,6 +106,15 @@ astBlock.prototype.astAssign =
 		right
 	)
 {
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	return(
 		this.append(
 			shorthand.astAssign( left, right )

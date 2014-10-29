@@ -2209,15 +2209,12 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 
 	loop =
 		astBlock( )
-		.astAssign( 'key', 'ranks[ a ]' )
+		.ast( 'key = ranks[ a ]' )
 		.astIf(
 			'!jwig[ key ]',
 			astFail( 'JSON ranks/twig mismatch' )
 		)
-		.astAssign(
-			'jval',
-			'jwig[ key ]'
-		)
+		.ast( 'jval = jwig[ key ]' )
 		.append( switchExpr );
 
 	block =
@@ -2423,35 +2420,23 @@ gen.prototype.genJionProto =
 	capsule =
 		capsule
 		.astComment( 'Sets values by path.' )
-		.astAssign(
-			'prototype.setPath',
-			'jion.proto.setPath'
-		)
+		.ast( 'prototype.setPath = jion.proto.setPath' )
+
 		.astComment( 'Gets values by path' )
-		.astAssign(
-			'prototype.getPath',
-			'jion.proto.getPath'
-		);
+		.ast( 'prototype.getPath = jion.proto.getPath' );
 
 	if( this.twig )
 	{
 		capsule =
 			capsule
 			.astComment( 'Returns a twig by rank.' )
-			.astAssign(
-				'prototype.atRank',
-				'jion.proto.atRank'
-			)
+			.ast( 'prototype.atRank = jion.proto.atRank' )
+
 			.astComment( 'Gets the rank of a key.' )
-			.astAssign(
-				'prototype.rankOf',
-				'jion.proto.rankOf'
-			)
+			.ast( 'prototype.rankOf = jion.proto.rankOf' )
+
 			.astComment( 'Creates a new unique identifier.' )
-			.astAssign(
-				'prototype.newUID',
-				'jion.proto.newUID'
-			);
+			.ast( 'prototype.newUID = jion.proto.newUID' );
 	}
 
 	if( this.ray )
@@ -2476,7 +2461,7 @@ gen.prototype.genJionProto =
 			.ast( 'prototype.set = jion.proto.raySet' )
 
 			.astComment( 'Returns a jion with one entry from the ray removed.' )
-			.astAssign( 'prototype.remove = jion.proto.rayRemove' );
+			.ast( 'prototype.remove = jion.proto.rayRemove' );
 	}
 
 	return capsule;
@@ -2669,9 +2654,7 @@ gen.prototype.genEquals =
 				.astComment( 'Tests equality of object.' )
 				.astAssign(
 					'prototype.equals',
-					astFunc(
-						astReturn( 'this === obj' )
-					)
+					astFunc( astReturn( 'this === obj' ) )
 					.astArg( 'obj', 'object to compare to' )
 				)
 			);
@@ -2741,8 +2724,8 @@ gen.prototype.genEquals =
 			)
 			.astFor(
 				astCommaList( )
-					.astAssign( 'a', 0 )
-					.astAssign( 'aZ', 'this.ranks.length' ),
+				.astAssign( 'a', 0 )
+				.astAssign( 'aZ', 'this.ranks.length' ),
 				'a < aZ',
 				'++a',
 				twigTestLoopBody
