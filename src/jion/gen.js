@@ -846,7 +846,7 @@ gen.prototype.genConstructor =
 				)
 		);
 		*/
-		.astCall( 'jools.immute', astThis );
+		.ast( 'jools.immute( this )' );
 
 	if( this.twig )
 	{
@@ -1273,7 +1273,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.append(
 					astCall(
 						'ranks.splice',
-						astCall( 'ranks.indexOf', 'arg' ),
+						'ranks.indexOf( arg )',
 						1
 					)
 				)
