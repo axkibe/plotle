@@ -853,8 +853,8 @@ gen.prototype.genConstructor =
 		// FIXME use object.freeze and only in checking
 		block =
 			block
-			.astCall( 'jools.immute', 'twig' )
-			.astCall( 'jools.immute', 'ranks' );
+			.ast( 'jools.immute( twig )' )
+			.ast( 'jools.immute( ranks )' );
 	}
 
 	if( this.ray )
@@ -1209,8 +1209,8 @@ gen.prototype.genCreatorFreeStringsParser =
 			astIf(
 				'!twigDup',
 				astBlock( )
-				.astAssign( 'twig', astCall( 'jools.copy', 'twig' ) )
-				.astAssign( 'ranks', astCall( 'ranks.slice' ) )
+				.astAssign( 'twig', 'jools.copy( twig )' )
+				.astAssign( 'ranks', 'ranks.slice( )' )
 				.astAssign( 'twigDup', true )
 			);
 
@@ -1228,7 +1228,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astFail( )
 				)
 				.ast( 'twig[ key ] = arg' )
-				.astCall( 'ranks.push', 'key' )
+				.ast( 'ranks.push( key )' )
 			)
 			.astCase(
 				astString( 'twig:set' ),
@@ -1259,7 +1259,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astFail( )
 				)
 				.ast( 'twig[ key ] = arg' )
-				.astCall( 'ranks.splice', 'rank', 0, 'key' )
+				.ast( 'ranks.splice( rank, 0, key )' )
 			)
 			.astCase(
 				astString( 'twig:remove' ),
@@ -1286,7 +1286,7 @@ gen.prototype.genCreatorFreeStringsParser =
 			astIf(
 				'!rayDup',
 				astBlock( )
-				.astAssign( 'ray', astCall( 'ray.slice' ) )
+				.astAssign( 'ray', 'ray.slice( )' )
 				.ast( 'rayDup = true' )
 			);
 
