@@ -1287,24 +1287,19 @@ gen.prototype.genCreatorFreeStringsParser =
 				'"ray:append"',
 				astBlock( )
 				.append( rayDupCheck )
-				.astCall( 'ray.push', 'arg' )
+				.ast( 'ray.push( arg )' )
 			)
 			.astCase(
 				'"ray:insert"',
 				astBlock( )
 				.append( rayDupCheck )
-				.astCall(
-					'ray.splice',
-					'arg',
-					0,
-					'arguments[ ++a + 1 ]'
-				)
+				.ast( 'ray.splice( arg, 0, arguments[ ++a + 1 ] )' )
 			)
 			.astCase(
 				'"ray:remove"',
 				astBlock( )
 				.append( rayDupCheck )
-				.astCall( 'ray.splice', 'arg', 1 )
+				.ast( 'ray.splice( arg, 1 ) ' )
 			)
 			.astCase(
 				'"ray:set"',
@@ -2470,12 +2465,10 @@ gen.prototype.genJionProto =
 			.ast( 'prototype.append = jion.proto.rayAppend' )
 
 			.astComment( 'Returns the length of the ray.')
-			.astCall(
-				'jools.lazyValue',
-				'prototype',
-				'"length"',
-				'jion.proto.rayLength'
+			.ast(
+				'jools.lazyValue( prototype, "length", jion.proto.rayLength )'
 			)
+
 			.astComment( 'Gets one entry from the ray.' )
 			.ast( 'prototype.get = jion.proto.rayGet' )
 
