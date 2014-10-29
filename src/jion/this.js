@@ -87,12 +87,10 @@ jionNodeGenerator =
 		if( !FORCE_JION_LOADING )
 		{
 			throw new Error(
-				'Out of date jion: ' +
-					inFilename
-					+
-					' -> '
-					+
-					outFilename
+				'Out of date jion: '
+				+ inFilename
+				+ ' -> '
+				+ outFilename
 			);
 		}
 	}
@@ -100,8 +98,7 @@ jionNodeGenerator =
 	return (
 		require(
 			'../../'
-			+
-			outFilename.substr( 0, outFilename.length - 3 )
+			+ outFilename.substr( 0, outFilename.length - 3 )
 		)
 	);
 };

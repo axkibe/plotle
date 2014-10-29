@@ -30,31 +30,33 @@ if( typeof( require ) === 'undefined' )
 }
 
 var
-	argv =
-		process.argv,
+	argv,
+	fs,
+	vm,
+	jionGenerator,
+	inFilename,
+	input,
+	jion,
+	output,
+	readOptions;
 
-	fs =
-		require( 'fs' ),
+	argv = process.argv,
 
-	vm =
-		require( 'vm' ),
+	fs = require( 'fs' );
 
-	jionGenerator =
-		require( '../jion/generator' ),
+	vm = require( 'vm' );
 
-	input =
-		null,
+	jionGenerator = require( '../jion/generator' );
 
-	jion =
-		null,
+	input = null;
 
-	output =
-		null,
+	jion = null;
+
+	output = null;
 
 	readOptions =
 		{
-			encoding :
-				'utf8'
+			encoding : 'utf8'
 		};
 
 
@@ -67,28 +69,20 @@ if( argv.length !== 3 )
 	process.exit( -1 );
 }
 
-var
-	inFilename =
-		argv[ 2 ];
+inFilename = argv[ 2 ];
 
-input =
-	fs.readFileSync(
-		inFilename,
-		readOptions
-	);
+input = fs.readFileSync( inFilename, readOptions );
 
 jion =
 	vm.runInNewContext(
 		input,
 		{
-			JION :
-				true
+			JION : true
 		},
 		inFilename
 	);
 
-output =
-	jionGenerator( jion );
+output = jionGenerator( jion );
 
 /*
 var
