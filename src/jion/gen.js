@@ -2463,7 +2463,7 @@ gen.prototype.genJionProto =
 	}
 
 	if( this.ray )
-	{ // XXX
+	{
 		capsule =
 			capsule
 			.astComment( 'Appends an entry to the ray.' )
@@ -2477,27 +2477,16 @@ gen.prototype.genJionProto =
 				'jion.proto.rayLength'
 			)
 			.astComment( 'Gets one entry from the ray.' )
-			.astAssign(
-				'prototype.get',
-				'jion.proto.rayGet'
-			)
+			.ast( 'prototype.get = jion.proto.rayGet' )
+
 			.astComment( 'Returns a jion with one entry inserted to the ray.' )
-			.astAssign(
-				'prototype.insert',
-				'jion.proto.rayInsert'
-			)
-			.astComment(
-				'Returns the jion with one entry of the ray set.'
-			)
-			.astAssign(
-				'prototype.set',
-				'jion.proto.raySet'
-			)
+			.ast( 'prototype.insert = jion.proto.rayInsert' )
+
+			.astComment( 'Returns the jion with one entry of the ray set.' )
+			.ast( 'prototype.set = jion.proto.raySet' )
+
 			.astComment( 'Returns a jion with one entry from the ray removed.' )
-			.astAssign(
-				'prototype.remove',
-				'jion.proto.rayRemove'
-			);
+			.astAssign( 'prototype.remove = jion.proto.rayRemove' );
 	}
 
 	return capsule;
@@ -2522,10 +2511,7 @@ gen.prototype.genToJSON =
 
 	olit =
 		astObjLiteral( )
-		.add(
-			'type',
-			astString( this.id )
-		);
+		.add( 'type', astString( this.id ) );
 
 	for(
 		var a = 0, aZ = this.attrList.length;
@@ -2581,7 +2567,7 @@ gen.prototype.genToJSON =
 		.astCall(
 			'jools.lazyValue',
 			'prototype',
-			astString( 'toJSON' ),
+			'"toJSON"',
 			astFunc( block )
 		);
 
