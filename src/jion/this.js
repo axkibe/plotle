@@ -2,8 +2,6 @@
 | Runs the jion generator from node for the
 | module that requires this.
 |
-| FIXME cleanup this file
-|
 | Authors: Axel Kittenberger
 */
 
@@ -16,33 +14,33 @@
 
 
 var
-	fs;
+	fs,
+	jionNodeGenerator;
 
 fs = require( 'fs' );
 
-var
 jionNodeGenerator =
+module.exports =
 	function(
 		module
 	)
 {
 	var
-		server =
-			module,
+		server,
 		inFilename,
 		inStat,
 		outFilename,
 		outStat,
 		si,
 		separator;
+	
+	server = module;
 
 	separator = '/src/';
 
 	if( !APP )
 	{
-		throw new Error(
-			'GLOBAL.APP not set'
-		);
+		throw new Error( 'GLOBAL.APP not set' );
 	}
 
 	// gets the server module
@@ -95,17 +93,13 @@ jionNodeGenerator =
 		}
 	}
 
-	return (
+	return(
 		require(
 			'../../'
 			+ outFilename.substr( 0, outFilename.length - 3 )
 		)
 	);
 };
-
-
-module.exports =
-	jionNodeGenerator;
 
 
 } )( );
