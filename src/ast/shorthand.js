@@ -38,6 +38,7 @@ var
 	astFile,
 	astEquals,
 	astFor,
+	astForIn,
 	astFunc,
 	astFuncArg,
 	astGreaterThan,
@@ -98,6 +99,8 @@ astFail = require( './ast-fail' );
 astFile = require( './ast-file' );
 
 astFor = require( './ast-for' );
+
+astForIn = require( './ast-for-in' );
 
 astFunc = require( './ast-func' );
 
@@ -582,6 +585,34 @@ shorthand.astFor =
 	);
 };
 
+
+/*
+| Shorthand for creating for in loops.
+*/
+shorthand.astForIn =
+	function(
+		variable,
+		object,
+		block
+	)
+{
+	if( block.reflect !== 'ast.astBlock' )
+	{
+		block = astBlock.create( ).append( block );
+	}
+
+	object = tools.convert( object );
+
+	block = tools.convert( block );
+
+	return(
+		astForIn.create(
+			'variable', variable,
+			'object', object,
+			'block', block
+		)
+	);
+};
 
 
 /*

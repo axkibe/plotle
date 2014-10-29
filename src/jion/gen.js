@@ -2172,7 +2172,7 @@ gen.prototype.genFromJSONCreatorParser =
 		block
 		.astForIn(
 			'name',
-			astVar( 'json' ), // XXX
+			'json',
 			astBlock( )
 			.ast( 'arg = json[ name ]' )
 			.append( nameSwitch )

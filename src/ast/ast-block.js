@@ -29,20 +29,11 @@ if( JION )
 
 
 var
-	astAssign,
 	astBlock,
-	astCall,
-	astCheck,
 	astComment,
-	astFail,
-	astFor,
-	astForIn,
-	astIf,
 	astNew,
 	astPlusAssign,
 	astReturn,
-	astString,
-	astVarDec,
 	jools,
 	shorthand,
 	tools;
@@ -53,31 +44,13 @@ module.exports =
 	require( '../jion/this' )( module );
 
 
-astAssign = require( './ast-assign' );
-
-astCall = require( './ast-call' );
-
-astCheck = require( './ast-check' );
-
 astComment = require( './ast-comment' );
-
-astFail = require( './ast-fail' );
-
-astFor = require( './ast-for' );
-
-astForIn = require( './ast-for-in' );
-
-astIf = require( './ast-if' );
 
 astNew = require( './ast-new' );
 
 astPlusAssign = require( './ast-plus-assign' );
 
 astReturn = require( './ast-return' );
-
-astString = require( './ast-string' );
-
-astVarDec = require( './ast-var-dec' );
 
 jools = require( '../jools/jools' );
 
@@ -273,11 +246,7 @@ astBlock.prototype.astForIn =
 {
 	return(
 		this.append(
-			astForIn.create(
-				'variable', variable,
-				'object', object,
-				'block', block
-			)
+			shorthand.astForIn( variable, object, block )
 		)
 	);
 };
