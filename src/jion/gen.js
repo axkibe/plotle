@@ -656,7 +656,8 @@ gen.prototype.genNodeIncludes =
 		astBlock( )
 		.astAssign(
 			'jools',
-			astCall( 'require', astString( '../../src/jools/jools' ) )
+			// XXX
+			astCall( 'require', '"../../src/jools/jools"' )
 		);
 
 	// generates the unit objects
