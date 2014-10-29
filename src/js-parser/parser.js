@@ -41,6 +41,7 @@ var
 	astPreIncrement,
 	astNot,
 	astNumber,
+	astString,
 	astOr,
 	astVar,
 	jools,
@@ -54,6 +55,7 @@ var
 	handleParserError,
 	handlePass,
 	handleRoundBrackets,
+	handleString,
 	handleSquareBrackets,
 	parseToken,
 	state,
@@ -83,8 +85,6 @@ astMember = require( '../ast/ast-member' );
 
 astNot = require( '../ast/ast-not' );
 
-astGreaterThan = require( '../ast/ast-greater-than' );
-
 astNumber = require( '../ast/ast-number' );
 
 astOr = require( '../ast/ast-or' );
@@ -92,6 +92,8 @@ astOr = require( '../ast/ast-or' );
 astPlus = require( '../ast/ast-plus' );
 
 astPreIncrement = require( '../ast/ast-pre-increment' );
+
+astString = require( '../ast/ast-string' );
 
 astVar = require( '../ast/ast-var' );
 
@@ -459,6 +461,55 @@ handleNumber =
 };
 
 
+/*
+| Handler for string literals.
+*/
+handleString =
+	function(
+		state // current parser state
+		// spec   // operator spec
+	)
+{
+	if( state.ast !== null )
+	{
+		throw new Error( 'parse error' );
+	}
+
+	state =
+		state.advance(
+			astString.create( 'string', state.current.value ),
+			undefined
+		);
+
+	return state;
+};
+
+
+
+/*
+| Handler for string literals.
+*/
+handleNumber =
+	function(
+		state // current parser state
+		// spec   // operator spec
+	)
+{
+	if( state.ast !== null )
+	{
+		throw new Error( 'parse error' );
+	}
+
+	state =
+		state.advance(
+			astNumber.create( 'number', state.current.value ),
+			undefined
+		);
+
+	return state;
+};
+
+
 
 /*
 | Handler for identifiers.
@@ -494,6 +545,13 @@ tokenSpecs.number =
 		'prePrec', -1,
 		'postPrec', -1,
 		'handler', handleNumber
+	);
+
+tokenSpecs.string =
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
+		'handler', handleString
 	);
 
 tokenSpecs.identifier =
