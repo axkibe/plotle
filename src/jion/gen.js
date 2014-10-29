@@ -956,10 +956,7 @@ gen.prototype.genConstructor =
 
 	jionObj =
 		astObjLiteral( )
-		.add(
-			'prototype',
-			astVar( 'prototype' )
-		);
+		.add( 'prototype', 'prototype' );
 
 	capsule =
 		capsule.astVarDec(
@@ -1892,7 +1889,7 @@ gen.prototype.genCreatorReturn =
 			case 'ray' :
 			case 'rayDup' :
 
-				call = call.addArgument( astVar( name ) );
+				call = call.addArgument( name );
 
 				break;
 
@@ -2904,8 +2901,7 @@ gen.prototype.genAlike =
 			capsule
 			.astAssign(
 				// FIXME use proto
-				astVar( 'prototype' ).astDot( alikeName )
-			,
+				astVar( 'prototype' ).astDot( alikeName ),
 				astFunc( block )
 				.astArg( 'obj', 'object to compare to' )
 			);
