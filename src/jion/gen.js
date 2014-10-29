@@ -1110,7 +1110,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			receiver
 			.astAssign(
 				attr.v,
-				astThis.astDot ( attr.assign )
+				astThis.astDot( attr.assign )
 			);
 	}
 
@@ -1127,7 +1127,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 				astBlock( )
 				.astAssign( 'twig', astObjLiteral( ) )
 				.astAssign( 'ranks', astArrayLiteral( ) )
-				.astAssign( 'twigDup', true )
+				.ast( 'twigDup = true' )
 			);
 	}
 
@@ -1137,7 +1137,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 			.astElsewise(
 				astBlock( )
 				.astAssign( 'ray', astArrayLiteral( ) )
-				.astAssign( 'rayDup', true )
+				.ast( 'rayDup = true' )
 			);
 	}
 
@@ -1209,9 +1209,9 @@ gen.prototype.genCreatorFreeStringsParser =
 			astIf(
 				'!twigDup',
 				astBlock( )
-				.astAssign( 'twig', 'jools.copy( twig )' )
-				.astAssign( 'ranks', 'ranks.slice( )' )
-				.astAssign( 'twigDup', true )
+				.ast( 'twig = jools.copy( twig )' )
+				.ast( 'ranks = ranks.slice( )' )
+				.ast( 'twigDup = true' )
 			);
 
 		// FIXME make a sub-function to add the twigDup stuff
@@ -1280,7 +1280,7 @@ gen.prototype.genCreatorFreeStringsParser =
 			astIf(
 				'!rayDup',
 				astBlock( )
-				.astAssign( 'ray', 'ray.slice( )' )
+				.ast( 'ray = ray.slice( )' )
 				.ast( 'rayDup = true' )
 			);
 
@@ -1884,7 +1884,7 @@ gen.prototype.genCreatorReturn =
 				'!_singleton',
 				astAssign(
 					'_singleton',
-					astNew( astCall( 'Constructor' ) )
+					astNew( ast( 'Constructor( )' ) )
 				)
 			)
 			.astReturn( '_singleton' )
@@ -2174,12 +2174,10 @@ gen.prototype.genFromJSONCreatorParser =
 	block =
 		block
 		.astForIn(
-			'name'
-		,
-			astVar( 'json' ) // XXX
-		,
+			'name',
+			astVar( 'json' ), // XXX
 			astBlock( )
-			.astAssign( 'arg', 'json[ name ]' )
+			.ast( 'arg = json[ name ]' )
 			.append( nameSwitch )
 		);
 
