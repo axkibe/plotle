@@ -1460,16 +1460,14 @@ gen.prototype.genTypeCheckFailCondition =
 	}
 
 	return(
-		astOr.apply( astOr, condArray )
+		astAnd.apply( astOr, condArray )
 	);
-	
 };
 
 
 
 /*
 | Generates the creators checks.
-| XXX
 */
 gen.prototype.genCreatorChecks =
 	function(
@@ -2074,7 +2072,9 @@ gen.prototype.genFromJSONCreatorParser =
 		base,
 		name,
 		// the switch
-		nameSwitch;
+		nameSwitch,
+		t,
+		tZ;
 
 	nameSwitch =
 		astSwitch( 'name' )
@@ -2149,7 +2149,30 @@ gen.prototype.genFromJSONCreatorParser =
 				}
 				else
 				{
-					throw new Error( 'XXX TODO' );
+					attrCode =
+						astSwitch( attr.v.astDot( 'type' ) )
+						.astDefault( astFail( ) );
+
+					for(
+						t = 0, tZ = attr.type.length;
+						t < tZ;
+						t++
+					)
+					{
+						attrCode =
+							attrCode
+							.astCase(
+								astString( attr.type[ t ] ),
+								astAssign(
+									attr.v,
+									astCall(
+										ast( attr.type[ t ] )
+										.astDot( 'createFromJSON' ),
+										'arg'
+									)
+								)
+							);
+					}
 				}
 		}
 

@@ -44,8 +44,8 @@ if( JION )
 						json :
 							true,
 						type :
-							//[ 'ccot.change', 'ccot.changeRay' ]
-							'Object'
+							[ 'ccot.change', 'ccot.changeRay' ]
+							//'Object'
 					},
 				seq :
 					{
