@@ -109,7 +109,7 @@ astMember.prototype.astDot =
 /**/
 /**/		opts.ast = true;
 /**/
-/**/		result += util.inspect( this.expr, opts );
+/**/		result += '( ' + util.inspect( this.expr, opts ) + ' )';
 /**/
 /**/		result += '[ ' + util.inspect( this.member, opts ) + ' ]';
 /**/

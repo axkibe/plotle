@@ -48,12 +48,41 @@ if( JION )
 
 
 var
-	token;
+	token,
+	tokenList;
 
 
 token =
 module.exports =
 	require( '../jion/this' )( module );
+
+
+/**/if( CHECK )
+/**/{
+/**/	tokenList = { };
+/**/	tokenList[ '=' ] = true;
+/**/	tokenList[ '.' ] = true;
+/**/	tokenList[ ',' ] = true;
+/**/	tokenList[ '+' ] = true;
+/**/	tokenList[ '<' ] = true;
+/**/	tokenList[ '>' ] = true;
+/**/	tokenList[ '!' ] = true;
+/**/	tokenList[ '[' ] = true;
+/**/	tokenList[ ']' ] = true;
+/**/	tokenList[ '(' ] = true;
+/**/	tokenList[ ')' ] = true;
+/**/	tokenList[ '++' ] = true;
+/**/	tokenList[ '||' ] = true;
+/**/	tokenList[ '&&' ] = true;
+/**/	tokenList[ '===' ] = true;
+/**/	tokenList[ '!==' ] = true;
+/**/	tokenList[ 'true' ] = true;
+/**/	tokenList[ 'false' ] = true;
+/**/	tokenList.number = true;
+/**/	tokenList.string = true;
+/**/	tokenList.identifier = true;
+/**/}
+
 
 
 /*
@@ -65,32 +94,9 @@ token.prototype._init =
 
 /**/if( CHECK )
 /**/{
-/**/	switch( this.type )
+/**/	if( !tokenList[ this.type ] )
 /**/	{
-/**/		case '=' :
-/**/		case '.' :
-/**/		case '+' :
-/**/		case '<' :
-/**/		case '>' :
-/**/		case '!' :
-/**/		case '[' :
-/**/		case ']' :
-/**/		case '++' :
-/**/		case '||' :
-/**/		case '&&' :
-/**/		case '===' :
-/**/		case '!==' :
-/**/		case 'true' :
-/**/		case 'false' :
-/**/		case 'number' :
-/**/		case 'string' :
-/**/		case 'identifier' :
-/**/
-/**/			break;
-/**/
-/**/		default :
-/**/
-/**/			throw new Error( );
+/**/		throw new Error( );
 /**/	}
 /**/}
 

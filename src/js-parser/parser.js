@@ -30,6 +30,7 @@ var
 	astAnd,
 	astAssign,
 	astBoolean,
+	astCall,
 	astDiffers,
 	astDot,
 	astEquals,
@@ -50,7 +51,9 @@ var
 	handleMonoOps,
 	handleNumber,
 	handleIdentifier,
+	handleParserError,
 	handlePass,
+	handleRoundBrackets,
 	handleSquareBrackets,
 	parseToken,
 	state,
@@ -63,6 +66,8 @@ astAnd = require( '../ast/ast-and' );
 astAssign = require( '../ast/ast-assign' );
 
 astBoolean = require( '../ast/ast-boolean' );
+
+astCall = require( '../ast/ast-call' );
 
 astDiffers = require( '../ast/ast-differs' );
 
@@ -248,6 +253,107 @@ handleDualisticOps =
 
 
 /*
+| Handler for ( ).
+|
+| This can be grouping or a call.
+*/
+handleRoundBrackets =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		call,
+		ast;
+
+	ast = state.ast;
+
+	if( ast )
+	{
+		// this is a call.
+		call = astCall.create( 'func', ast );
+			
+		state = state.advance( null, spec.postPrec );
+
+		if( state.reachedEnd )
+		{
+			throw new Error( 'missing ")"' );
+		}
+
+		if( state.current.type !== ')' )
+		{
+			// there are arguments
+
+			for( ;; )
+			{
+				state = parseToken( state );
+
+				if( state.reachedEnd )
+				{
+					throw new Error( 'missing ")"' );
+				}
+
+				if( state.ast )
+				{
+					call = call.addArgument( state.ast );
+				}
+
+				if( state.current.type === ')' )
+				{
+					// fiinished call
+					break;
+				}
+
+				if( state.current.type === ',' )
+				{
+					state = state.advance( null, tokenSpecs[ ',' ].prePrec );
+
+					if( state.current.type === ')' )
+					{
+						throw new Error( 'parser error' );
+					}
+
+					continue;
+				}
+
+				throw new Error( 'parser error' );
+			}
+		}
+
+		// advances over closing bracket
+		state = state.advance( call, spec.postPrec );
+
+		return state;
+	}
+
+	// this is a grouping
+
+	state = state.advance( null, spec.prePrec );
+
+	state = parseToken( state );
+
+	while( state.current.type !== ')' )
+	{
+		state = parseToken( state );
+
+		if( state.reachedEnd )
+		{
+			throw new Error( 'missing ")"' );
+		}
+	}
+
+	state =
+		state.advance(
+			state.ast,
+			99 // tokenSpecs[ ')' ].prePrec
+		);
+
+	return state;
+};
+
+
+/*
 | Handler for [ ].
 */
 handleSquareBrackets =
@@ -286,11 +392,25 @@ handleSquareBrackets =
 				'expr', ast,
 				'member', state.ast
 			),
-			99 // tokenSpecs[ '[' ].prePrec
+			99 // tokenSpecs[ ')' ].prePrec
 		);
 
 	return state;
 };
+
+
+/*
+| Generic parser error.
+*/
+handleParserError =
+	function(
+		// state // current parser state
+		// spec   // operator spec
+	)
+{
+	throw new Error( 'parser error' );
+};
+
 
 
 /*
@@ -389,9 +509,30 @@ tokenSpecs[ 'false' ] =
 		'handler', handleBooleanLiteral
 	);
 
-tokenSpecs[ ']' ] =
+tokenSpecs[ '(' ] =
+	tokenSpec.create(
+		'prePrec', 0,
+		'postPrec', 1,
+		'handler', handleRoundBrackets
+	);
+
+tokenSpecs[ ')' ] =
+	tokenSpec.create(
+		'prePrec', 1, // FIXME 99?
+		'postPrec', 1,
+		'handler', handlePass
+	);
+
+tokenSpecs[ '[' ] =
 	tokenSpec.create(
 		'prePrec', 1,
+		'postPrec', 1,
+		'handler', handleSquareBrackets
+	);
+
+tokenSpecs[ ']' ] =
+	tokenSpec.create(
+		'prePrec', 1, // FIXME 99?
 		'postPrec', 1,
 		'handler', handlePass
 	);
@@ -401,13 +542,6 @@ tokenSpecs[ '.' ] =
 		'prePrec', 1,
 		'postPrec', 1,
 		'handler', handleDot
-	);
-
-tokenSpecs[ '[' ] =
-	tokenSpec.create(
-		'prePrec', 1,
-		'postPrec', 1,
-		'handler', handleSquareBrackets
 	);
 
 tokenSpecs[ '++' ] =
@@ -489,6 +623,13 @@ tokenSpecs[ '=' ] =
 		'postPrec', 16,
 		'handler', handleDualisticOps,
 		'astCreator', astAssign
+	);
+
+tokenSpecs[ ',' ] =
+	tokenSpec.create(
+		'prePrec', 19,
+		'postPrec', 19,
+		'handler', handleParserError // FIXME comma sequence
 	);
 
 

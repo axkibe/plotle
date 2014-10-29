@@ -1764,13 +1764,11 @@ formatCall =
 
 	if( call.ranks.length === 0 )
 	{
-		text +=
-			'( )';
+		text += '( )';
 	}
 	else
 	{
-		text +=
-			'(' + context.sep;
+		text += '(' + context.sep;
 
 		for(
 			var a = 0, aZ = call.ranks.length;
@@ -1778,8 +1776,7 @@ formatCall =
 			a++
 		)
 		{
-			arg =
-				call.atRank( a );
+			arg = call.atRank( a );
 
 			text +=
 				formatExpression(
@@ -1790,18 +1787,15 @@ formatCall =
 
 			if( a + 1 < aZ )
 			{
-				text +=
-					',' + context.sep;
+				text += ',' + context.sep;
 			}
 			else
 			{
-				text +=
-					context.sep;
+				text += context.sep;
 			}
 		}
 
-		text +=
-			context.tab + ')';
+		text += context.tab + ')';
 	}
 
 	return text;

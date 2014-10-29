@@ -70,4 +70,72 @@ astCall.prototype.addArgument =
 };
 
 
+/**/if( CHECK )
+/**/{
+/**/	var
+/**/		arg,
+/**/		r, rZ,
+/**/		util;
+/**/
+/**/	util = require( 'util' );
+/**/
+/***	/
+****	| Custom inspect
+****	/
+***/	astCall.prototype.inspect =
+/**/		function(
+/**/			depth,
+/**/			opts
+/**/		)
+/**/	{
+/**/		var
+/**/			postfix,
+/**/			result;
+/**/
+/**/		if( !opts.ast )
+/**/		{
+/**/			result = 'ast{ ';
+/**/
+/**/			postfix = ' }';
+/**/		}
+/**/		else
+/**/		{
+/**/			result = postfix = '';
+/**/		}
+/**/
+/**/		opts.ast = true;
+/**/
+/**/		result += '( ' +  util.inspect( this.func, opts ) + ' )';
+/**/
+/**/		if( this.length === 0 )
+/**/		{
+/**/			result += '( )';
+/**/		}
+/**/		else
+/**/		{
+/**/			result += '( ';
+/**/
+/**/			for(
+/**/				r = 0, rZ = this.ranks.length;
+/**/				r < rZ;
+/**/				r++
+/**/			)
+/**/			{
+/**/				arg = this.atRank( r );
+/**/
+/**/				if( r > 0 )
+/**/				{
+/**/					result += ', ';
+/**/				}
+/**/
+/**/				result += util.inspect( arg, opts );
+/**/			}
+/**/
+/**/			result += ' )';
+/**/		}
+/**/
+/**/		return result + postfix;
+/**/	};
+/**/}
+
 } )( );

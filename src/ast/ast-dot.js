@@ -165,7 +165,7 @@ astDot.prototype.astMember =
 /**/
 /**/		opts.ast = true;
 /**/
-/**/		result += util.inspect( this.expr, opts );
+/**/		result += '( ' + util.inspect( this.expr, opts ) + ' )';
 /**/
 /**/		result += '.' + this.member;
 /**/
