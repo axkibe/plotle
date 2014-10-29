@@ -2188,8 +2188,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 			switchExpr
 			.astCase(
 				astString( twigId ),
-				astBlock( )
-				.astAssign(
+				astAssign(
 					'twig[ key ]',
 					astCall(
 						base.astDot( 'createFromJSON' ),
@@ -2202,9 +2201,8 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 	switchExpr =
 		switchExpr
 		.astDefault(
-			astBlock( )
-			//.astFail( 'invalid twig type' )
-			.astFail( )
+			// invalid twig type
+			astFail( )
 		);
 
 	loop =
