@@ -1381,6 +1381,7 @@ gen.prototype.genCreatorDefaults =
 
 /*
 | Generates the creators checks.
+| XXX
 */
 gen.prototype.genCreatorChecks =
 	function(
@@ -1504,9 +1505,7 @@ gen.prototype.genCreatorChecks =
 				tcheck =
 					astAnd(
 						astDiffers( astTypeof( av ), '"string"' ),
-						astNot(
-							astInstanceof( av, 'String' )
-						)
+						astNot( astInstanceof( av, 'String' ) )
 					);
 
 				break;
@@ -1522,19 +1521,15 @@ gen.prototype.genCreatorChecks =
 				break;
 		}
 
-		tfail = astBlock( ).astFail( );
-
 		if( cond )
 		{
 			check =
-				check.astIf(
-					cond,
-					astIf( tcheck, tfail )
-				);
+				check
+				.astIf( cond, astIf( tcheck, astFail( ) ) );
 		}
 		else
 		{
-			check = check.astIf( tcheck, tfail );
+			check = check.astIf( tcheck, astFail( ) );
 		}
 	}
 

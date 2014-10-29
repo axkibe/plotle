@@ -1537,7 +1537,6 @@ formatExpression =
 
 	if( prec === undefined )
 	{
-		console.log( 'XXX', expr );
 		throw new Error( expr.reflectName );
 	}
 
