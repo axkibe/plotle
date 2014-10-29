@@ -287,7 +287,15 @@ handleRoundBrackets =
 
 			for( ;; )
 			{
-				state = parseToken( state );
+				do{
+					state = parseToken( state );
+				} while(
+					!state.reachedEnd
+					&&
+					state.current.type !== ')'
+					&&
+					state.current.type !== ','
+				);
 
 				if( state.reachedEnd )
 				{
