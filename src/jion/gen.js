@@ -2072,13 +2072,9 @@ gen.prototype.genFromJSONCreatorParser =
 
 	if( this.ray )
 	{
-		// XXX
 		nameSwitch =
 			nameSwitch
-			.astCase(
-				astString( 'ray' ),
-				ast( 'ray = arg' )
-			);
+			.astCase( '"ray"', 'ray = arg' );
 	}
 
 	for(
@@ -2242,8 +2238,8 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 		)
 		.astFor(
 			astCommaList( )
-				.astAssign( 'a', 0 )
-				.astAssign( 'aZ', 'ranks.length' ),
+			.astAssign( 'a', 0 )
+			.astAssign( 'aZ', 'ranks.length' ),
 			'a < aZ',
 			'++a',
 			loop
@@ -2265,7 +2261,7 @@ gen.prototype.genFromJSONCreatorReturn =
 		call,
 		name;
 
-	call = astCall( astVar( 'Constructor' ) );
+	call = ast( 'Constructor( )' );
 
 	for(
 		var a = 0, aZ = this.constructorList.length;
@@ -2467,26 +2463,20 @@ gen.prototype.genJionProto =
 	}
 
 	if( this.ray )
-	{
+	{ // XXX
 		capsule =
 			capsule
 			.astComment( 'Appends an entry to the ray.' )
-			.astAssign(
-				'prototype.append',
-				'jion.proto.rayAppend'
-			)
-			.astComment(
-				'Returns the length of the ray.'
-			)
+			.ast( 'prototype.append = jion.proto.rayAppend' )
+
+			.astComment( 'Returns the length of the ray.')
 			.astCall(
 				'jools.lazyValue',
 				'prototype',
-				astString( 'length' ),
+				'"length"',
 				'jion.proto.rayLength'
 			)
-			.astComment(
-				'Gets one entry from the ray.'
-			)
+			.astComment( 'Gets one entry from the ray.' )
 			.astAssign(
 				'prototype.get',
 				'jion.proto.rayGet'
