@@ -144,7 +144,7 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_call.reflectName !== 'astCall' )
+/**/	if( v_call.reflect !== 'ast.astCall' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

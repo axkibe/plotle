@@ -439,10 +439,8 @@ gen.prototype._init =
 				name :
 					name,
 				type :
-					attrType,
-				unit :
-					attrUnit,
-				v :
+					jAttr.type,
+				v : // FUTURE rename to vName
 					astVar( 'v_' + name )
 			} );
 	}
@@ -545,10 +543,8 @@ gen.prototype._init =
 
 			twig[ twigId ] =
 				Object.freeze( {
-					unit :
-						ut[ 0 ],
-					type :
-						ut[ 1 ]
+					unit : ut[ 0 ],
+					type : ut[ 1 ] // FIXME call it typeName
 				} );
 		}
 
@@ -582,7 +578,7 @@ gen.prototype._init =
 		this.twigList = Object.freeze( twigList );
 	}
 
-	// FIXME make it a astVar
+	// FIXME make it an astVar
 	this.reference =
 		( this.unit === this.name )
 		? this.name + 'Obj'
@@ -962,7 +958,7 @@ gen.prototype.genConstructor =
 		capsule.astVarDec(
 			this.reference,
 			astAssign(
-				astVar( this.unit ).astDot( this.name ),
+				astVar( this.unit ).astDot( this.name ), // FIXME simply ast( this.type )
 				jionObj
 			)
 		);
@@ -1385,39 +1381,35 @@ gen.prototype.genCreatorDefaults =
 */
 gen.prototype.genSingleTypeCheckFailCondition =
 	function(
-		attr
+		avar,
+		type
 	)
 {
-	var
-		av;
-
-	av = attr.v;
-
-	switch( attr.type )
+	switch( type )
 	{
 		case 'Boolean' :
 
-			return astDiffers( astTypeof( av ), '"boolean"' );
+			return astDiffers( astTypeof( avar ), '"boolean"' );
 
 		case 'Integer' :
 
 			return(
 				astOr(
-					astDiffers( astTypeof( av ), '"number"' ),
-					astDiffers( astCall( 'Math.floor', av ), av )
+					astDiffers( astTypeof( avar ), '"number"' ),
+					astDiffers( astCall( 'Math.floor', avar ), avar )
 				)
 			);
 
 		case 'Number' :
 
-			return astDiffers( astTypeof( av ), '"number"' );
+			return astDiffers( astTypeof( avar ), '"number"' );
 
 		case 'String' :
 
 			return(
 				astAnd(
-					astDiffers( astTypeof( av ), '"string"' ),
-					astNot( astInstanceof( av, 'String' ) )
+					astDiffers( astTypeof( avar ), '"string"' ),
+					astNot( astInstanceof( avar, 'String' ) )
 				)
 			);
 
@@ -1425,8 +1417,8 @@ gen.prototype.genSingleTypeCheckFailCondition =
 
 			return(
 				astDiffers(
-					av.astDot( 'reflectName' ),
-					astString( attr.type )
+					avar.astDot( 'reflect' ),
+					astString( type )
 				)
 			);
 	}
@@ -1443,18 +1435,15 @@ gen.prototype.genTypeCheckFailCondition =
 {
 	var
 		a,
-		av,
 		aZ,
 		condArray;
-
-	av = attr.v;
 
 	if(
 		!Array.isArray( attr.type )
 		|| attr.type.length === 1
 	)
 	{
-		return this.genSingleTypeCheckFailCondition( attr );
+		return this.genSingleTypeCheckFailCondition( attr.v, attr.type );
 	}
 
 	condArray = [ ];
@@ -1465,7 +1454,9 @@ gen.prototype.genTypeCheckFailCondition =
 		a++
 	)
 	{
-		condArray.push( this.genSingleTypeCheckFailCondition( attr[ a ] ) );
+		condArray.push(
+			this.genSingleTypeCheckFailCondition( attr.v, attr.type[ a ] )
+		);
 	}
 
 	return(
@@ -2120,10 +2111,8 @@ gen.prototype.genFromJSONCreatorParser =
 
 		if(
 			name === 'twig'
-			||
-			name === 'ranks'
-			||
-			name === 'ray'
+			|| name === 'ranks'
+			|| name === 'ray'
 		)
 		{
 			continue;
@@ -2144,34 +2133,24 @@ gen.prototype.genFromJSONCreatorParser =
 
 			default :
 
-				if( attr.unit )
-				{
-					base = astVar( attr.unit ).astDot( attr.type );
-				}
-				else
+				if( attr.type === 'Object' )
 				{
 					// FUTURE remove this hack to disable
 					// Object.createFromJSON creation
 					// THIS code should not happen in future anyway.
-					base =
-						attr.type !== 'Object'
-						? astVar( attr.type )
-						: null;
+					base = null;
+					
+					arg = astVar( 'arg' );
 				}
-
-				if( base )
+				else
 				{
+					base = ast( attr.type );
+
 					arg =
 						astCall(
 							base.astDot( 'createFromJSON' ),
 							'arg'
 						);
-				}
-				else
-				{
-					// FUTURE remove this hack to disable
-					// Object.createFromJSON creation
-					arg = astVar( 'arg' );
 				}
 		}
 

@@ -305,7 +305,7 @@ prototype.create =
 /**/
 /**/	if( v_defaultCase !== null )
 /**/	{
-/**/		if( v_defaultCase.reflectName !== 'astBlock' )
+/**/		if( v_defaultCase.reflect !== 'ast.astBlock' )
 /**/		{
 /**/			throw new Error( );
 /**/		}
