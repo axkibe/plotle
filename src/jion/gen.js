@@ -2766,23 +2766,21 @@ gen.prototype.genEquals =
 	{
 		twigTestLoopBody =
 			astBlock( )
-			.astAssign( 'key', 'this.ranks[ a ]' )
+			.ast( 'key = this.ranks[ a ]' )
 			.astIf(
 				astOr(
 					'key !== obj.ranks[ a ]',
-					astCall(
-						astCondition(
-							'this.twig[ key ].equals',
-							astNot(
-								astCall(
-									'this.twig[ key ].equals',
-									'obj.twig[ key ]'
-								)
-							),
-							astDiffers(
-								'this.twig[ key ]',
+					astCondition(
+						'this.twig[ key ].equals',
+						astNot(
+							astCall(
+								'this.twig[ key ].equals',
 								'obj.twig[ key ]'
 							)
+						),
+						astDiffers(
+							'this.twig[ key ]',
+							'obj.twig[ key ]'
 						)
 					)
 				),
