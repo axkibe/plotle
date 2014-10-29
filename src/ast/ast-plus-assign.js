@@ -51,7 +51,5 @@ astPlusAssign =
 module.exports =
 	require( '../jion/this' )( module );
 
-astPlusAssign.prototype.astIsExpression = true;
-
 
 } )( );

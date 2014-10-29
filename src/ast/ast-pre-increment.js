@@ -44,9 +44,6 @@ astPreIncrement =
 module.exports =
 	require( '../jion/this' )( module );
 
-// FUTURE is this used??
-astPreIncrement.prototype.astIsExpression = true;
-
 
 /**/if( CHECK )
 /**/{

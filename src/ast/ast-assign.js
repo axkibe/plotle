@@ -52,9 +52,6 @@ module.exports =
 	require( '../jion/this' )( module );
 
 
-astAssign.prototype.astIsExpression = true;
-
-
 /**/if( CHECK )
 /**/{
 /**/	var

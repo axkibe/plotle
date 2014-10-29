@@ -50,8 +50,6 @@ astLessThan =
 module.exports =
 	require( '../jion/this' )( module );
 
-astLessThan.prototype.astIsExpression = true;
-
 
 /**/if( CHECK )
 /**/{

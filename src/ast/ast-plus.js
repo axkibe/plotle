@@ -51,8 +51,6 @@ astPlus =
 module.exports =
 	require( '../jion/this' )( module );
 
-astPlus.prototype.astIsExpression = true;
-
 
 /**/if( CHECK )
 /**/{
