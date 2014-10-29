@@ -1270,13 +1270,7 @@ gen.prototype.genCreatorFreeStringsParser =
 					astFail( )
 				)
 				.astDelete( 'twig[ arg ]' )
-				.append(
-					astCall(
-						'ranks.splice',
-						'ranks.indexOf( arg )',
-						1
-					)
-				)
+				.ast( 'ranks.splice( ranks.indexOf( arg ), 1 )' )
 			);
 	}
 
