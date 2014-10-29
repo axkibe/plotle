@@ -1383,7 +1383,7 @@ gen.prototype.genCreatorDefaults =
 | Generates a type check of a non set variable.
 | It is true if the variable fails the check.
 */
-gen.prototype.genTypeCheckFailCondition =
+gen.prototype.genSingleTypeCheckFailCondition =
 	function(
 		attr
 	)
@@ -1434,6 +1434,49 @@ gen.prototype.genTypeCheckFailCondition =
 
 
 /*
+| Generates a type check of a variable.
+*/
+gen.prototype.genTypeCheckFailCondition =
+	function(
+		attr
+	)
+{
+	var
+		a,
+		av,
+		aZ,
+		condArray;
+
+	av = attr.v;
+
+	if(
+		!Array.isArray( attr.type )
+		|| attr.type.length === 1
+	)
+	{
+		return this.genSingleTypeCheckFailCondition( attr );
+	}
+
+	condArray = [ ];
+
+	for(
+		a = 0, aZ = attr.type.length;
+		a < aZ;
+		a++
+	)
+	{
+		condArray.push( this.genSingleTypeCheckFailCondition( attr[ a ] ) );
+	}
+
+	return(
+		astOr.apply( astOr, condArray )
+	);
+	
+};
+
+
+
+/*
 | Generates the creators checks.
 | XXX
 */
@@ -1451,8 +1494,7 @@ gen.prototype.genCreatorChecks =
 		check,
 		cond,
 		name,
-		tcheck,
-		tfail;
+		tcheck;
 
 	if( checkin )
 	{
