@@ -2066,18 +2066,13 @@ gen.prototype.genFromJSONCreatorParser =
 	{
 		nameSwitch =
 			nameSwitch
-			.astCase(
-				astString( 'twig' ),
-				ast( 'jwig = arg' )
-			)
-			.astCase(
-				astString( 'ranks' ),
-				ast( 'ranks = arg' )
-			);
+			.astCase( '"twig"', 'jwig = arg' )
+			.astCase( '"ranks"', 'ranks = arg' );
 	}
 
 	if( this.ray )
 	{
+		// XXX
 		nameSwitch =
 			nameSwitch
 			.astCase(

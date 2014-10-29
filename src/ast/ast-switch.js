@@ -88,7 +88,7 @@ astSwitch.prototype.astCase =
 	}
 	else
 	{
-		block = astBlock.create( ).append( code );
+		block = astBlock.create( ).append( tools.convert( code ) );
 	}
 
 	if( coc.reflect !== 'ast.astCase' )
