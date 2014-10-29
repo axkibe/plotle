@@ -797,7 +797,7 @@ gen.prototype.genConstructor =
 	// calls the initializer
 	if( this.init )
 	{
-		initCall = astCall( 'this._init' );
+		initCall = ast( 'this._init( )' );
 
 		for(
 			a = 0, aZ = this.init.length;
@@ -862,7 +862,7 @@ gen.prototype.genConstructor =
 		block =
 			block
 			.astCheck(
-				astCall( 'Object.freeze', 'ray' )
+				ast( 'Object.freeze( ray )' )
 			);
 	}
 
