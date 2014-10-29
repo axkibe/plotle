@@ -2069,8 +2069,8 @@ gen.prototype.genFromJSONCreatorParser =
 	var
 		a,
 		aZ,
-		arg,
 		attr,
+		attrCode,
 		base,
 		name,
 		// the switch
@@ -2126,38 +2126,38 @@ gen.prototype.genFromJSONCreatorParser =
 			case 'Integer' :
 			case 'Number' :
 			case 'String' :
+			case 'Object' : // FIXME remove
 
-				arg = astVar( 'arg' );
+				attrCode = astAssign( attr.v, 'arg' );
 
 				break;
 
 			default :
 
-				if( attr.type === 'Object' )
-				{
-					// FUTURE remove this hack to disable
-					// Object.createFromJSON creation
-					// THIS code should not happen in future anyway.
-					base = null;
-					
-					arg = astVar( 'arg' );
-				}
-				else
+				if( !Array.isArray( attr.type ) )
 				{
 					base = ast( attr.type );
 
-					arg =
-						astCall(
-							base.astDot( 'createFromJSON' ),
-							'arg'
+					attrCode =
+						astAssign(
+							attr.v,
+							astCall(
+								ast( attr.type ).astDot( 'createFromJSON' ),
+								'arg'
+							)
 						);
+				}
+				else
+				{
+					throw new Error( 'XXX TODO' );
 				}
 		}
 
-		nameSwitch = nameSwitch
+		nameSwitch =
+			nameSwitch
 			.astCase(
 				astString( attr.name ),
-				astAssign( attr.v, arg )
+				attrCode
 			);
 	}
 
