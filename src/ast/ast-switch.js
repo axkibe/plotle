@@ -53,7 +53,8 @@ var
 	astBlock,
 	astCase,
 	astSwitch,
-	jools;
+	jools,
+	tools;
 
 
 astSwitch =
@@ -66,6 +67,7 @@ astCase = require( './ast-case' );
 
 jools = require( '../jools/jools' ),
 
+tools = require( './tools' ),
 
 /*
 | Shortcut for appending a case to this switch.
@@ -95,7 +97,7 @@ astSwitch.prototype.astCase =
 			astCase.create(
 				'twig:add',
 					jools.uid( ), // FIXME
-					coc,
+					tools.convert( coc ),
 				'block',
 					block
 			);

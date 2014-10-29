@@ -1208,7 +1208,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				astString( 'twig:add' ), // XXX
+				'"twig:add"',
 				astBlock( )
 				.ast( twigDupCheck )
 				.ast( 'key = arg' )
@@ -1221,7 +1221,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.ast( 'ranks.push( key )' )
 			)
 			.astCase(
-				astString( 'twig:set' ),
+				'"twig:set"',
 				astBlock( )
 				.ast( twigDupCheck )
 				.ast( 'key = arg' )
@@ -1233,7 +1233,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.ast( 'twig[ key ] = arg' )
 			)
 			.astCase(
-				astString( 'twig:insert' ),
+				'"twig:insert"',
 				astBlock( )
 				.append( twigDupCheck )
 				.ast( 'key = arg' )
@@ -1252,7 +1252,7 @@ gen.prototype.genCreatorFreeStringsParser =
 				.ast( 'ranks.splice( rank, 0, key )' )
 			)
 			.astCase(
-				astString( 'twig:remove' ),
+				'"twig:remove"',
 				astBlock( )
 				.append( twigDupCheck )
 				.astIf(
@@ -1278,19 +1278,19 @@ gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				astString( 'ray:init' ),
+				'"ray:init"',
 				astBlock( )
 				.ast( 'ray = arg' )
 				.ast( 'rayDup = false' )
 			)
 			.astCase(
-				astString( 'ray:append' ),
+				'"ray:append"',
 				astBlock( )
 				.append( rayDupCheck )
 				.astCall( 'ray.push', 'arg' )
 			)
 			.astCase(
-				astString( 'ray:insert' ),
+				'"ray:insert"',
 				astBlock( )
 				.append( rayDupCheck )
 				.astCall(
@@ -1301,13 +1301,13 @@ gen.prototype.genCreatorFreeStringsParser =
 				)
 			)
 			.astCase(
-				astString( 'ray:remove' ),
+				'"ray:remove"',
 				astBlock( )
 				.append( rayDupCheck )
 				.astCall( 'ray.splice', 'arg', 1 )
 			)
 			.astCase(
-				astString( 'ray:set' ),
+				'"ray:set"',
 				astBlock( )
 				.append( rayDupCheck )
 				.ast( 'ray[ arg ] = arguments[ ++a + 1 ]' )
@@ -1480,7 +1480,7 @@ gen.prototype.genCreatorChecks =
 		{
 			case 'Boolean' :
 
-				tcheck = astDiffers( astTypeof( av ), astString( 'boolean' ) );
+				tcheck = astDiffers( astTypeof( av ), '"boolean"' );
 
 				break;
 
@@ -1490,7 +1490,7 @@ gen.prototype.genCreatorChecks =
 					astOr(
 						astDiffers(
 							astTypeof( av ),
-							astString( 'number' )
+							'"number"'
 						),
 						astDiffers(
 							astCall( 'Math.floor', av ),
@@ -1502,7 +1502,7 @@ gen.prototype.genCreatorChecks =
 
 			case 'Number' :
 
-				tcheck = astDiffers( astTypeof( av ), astString( 'number' ) );
+				tcheck = astDiffers( astTypeof( av ), '"number"' );
 
 				break;
 
@@ -1511,10 +1511,7 @@ gen.prototype.genCreatorChecks =
 
 				tcheck =
 					astAnd(
-						astDiffers(
-							astTypeof( av ),
-							astString( 'string' )
-						),
+						astDiffers( astTypeof( av ), '"string"' ),
 						astNot(
 							astInstanceof( av, 'String' )
 						)
@@ -2058,7 +2055,7 @@ gen.prototype.genFromJSONCreatorParser =
 	nameSwitch =
 		astSwitch( 'name' )
 		.astCase(
-			astString( 'type' ),
+			'"type"',
 			astIf(
 				astDiffers( 'arg', astString( this.id ) ),
 				astFail( )
