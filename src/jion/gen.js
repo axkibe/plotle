@@ -1380,6 +1380,60 @@ gen.prototype.genCreatorDefaults =
 
 
 /*
+| Generates a type check of a non set variable.
+| It is true if the variable fails the check.
+*/
+gen.prototype.genTypeCheckFailCondition =
+	function(
+		attr
+	)
+{
+	var
+		av;
+
+	av = attr.v;
+
+	switch( attr.type )
+	{
+		case 'Boolean' :
+
+			return astDiffers( astTypeof( av ), '"boolean"' );
+
+		case 'Integer' :
+
+			return(
+				astOr(
+					astDiffers( astTypeof( av ), '"number"' ),
+					astDiffers( astCall( 'Math.floor', av ), av )
+				)
+			);
+
+		case 'Number' :
+
+			return astDiffers( astTypeof( av ), '"number"' );
+
+		case 'String' :
+
+			return(
+				astAnd(
+					astDiffers( astTypeof( av ), '"string"' ),
+					astNot( astInstanceof( av, 'String' ) )
+				)
+			);
+
+		default :
+
+			return(
+				astDiffers(
+					av.astDot( 'reflectName' ),
+					astString( attr.type )
+				)
+			);
+	}
+};
+
+
+/*
 | Generates the creators checks.
 | XXX
 */
@@ -1469,57 +1523,7 @@ gen.prototype.genCreatorChecks =
 			cond = null;
 		}
 
-		switch( attr.type )
-		{
-			case 'Boolean' :
-
-				tcheck = astDiffers( astTypeof( av ), '"boolean"' );
-
-				break;
-
-			case 'Integer' :
-
-				tcheck =
-					astOr(
-						astDiffers(
-							astTypeof( av ),
-							'"number"'
-						),
-						astDiffers(
-							astCall( 'Math.floor', av ),
-							av
-						)
-					);
-
-				break;
-
-			case 'Number' :
-
-				tcheck = astDiffers( astTypeof( av ), '"number"' );
-
-				break;
-
-
-			case 'String' :
-
-				tcheck =
-					astAnd(
-						astDiffers( astTypeof( av ), '"string"' ),
-						astNot( astInstanceof( av, 'String' ) )
-					);
-
-				break;
-
-			default :
-
-				tcheck =
-					astDiffers(
-						av.astDot( 'reflectName' ),
-						astString( attr.type )
-					);
-
-				break;
-		}
+		tcheck = this.genTypeCheckFailCondition( attr );
 
 		if( cond )
 		{
