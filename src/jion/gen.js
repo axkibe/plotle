@@ -39,7 +39,6 @@ if( JION )
 
 
 var
-	astTools,
 	gen,
 	jools,
 	shorthand,
@@ -53,8 +52,6 @@ module.exports =
 shorthand = require( '../ast/shorthand' );
 
 jools = require( '../jools/jools' );
-
-astTools = require( '../ast/tools' );
 
 validator = require( './validator' );
 
@@ -666,10 +663,7 @@ gen.prototype.genNodeIncludes =
 	{
 		block =
 			block
-			.astAssign(
-				astVar( this.unitList[ a ] ),
-				astObjLiteral( )
-			);
+			.astAssign( this.unitList[ a ], astObjLiteral( ) );
 	}
 
 	for(
@@ -1191,9 +1185,8 @@ gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				astString( name  ),
-				astBlock( )
-				.astIf(
+				astString( name ),
+				astIf(
 					'arg !== undefined',
 					astAssign( attr.v, 'arg' )
 				)
@@ -1215,7 +1208,7 @@ gen.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				astString( 'twig:add' ),
+				astString( 'twig:add' ), // XXX
 				astBlock( )
 				.ast( twigDupCheck )
 				.ast( 'key = arg' )
