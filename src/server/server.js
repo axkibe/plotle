@@ -1499,36 +1499,21 @@ Server.prototype.cmdAlter =
 		throw jools.reject( 'invalid seq' );
 	}
 
+// XXX
+//	try
+//	{
+		changeWrap = ccot.changeWrap.createFromJSON( changeWrap );
+//	}
+//	catch( err )
+//	{
+//		throw jools.reject(
+//			'invalid cmd: ' + err.message
+//		);
+//	}
+
 	cid = changeWrap.cid;
 
-	try
-	{
-		// TODO let the generator generate better
-		switch( changeWrap.chgX.type )
-		{
-			case 'ccot.change' :
-
-				chgX = ccot.change.createFromJSON( changeWrap.chgX );
-
-				break;
-
-			case 'ccot.changeRay' :
-
-				chgX = ccot.changeRay.createFromJSON( changeWrap.chgX );
-
-				break;
-
-			default :
-
-				throw jools.reject( 'invalid chgX type' );
-		}
-	}
-	catch( err )
-	{
-		throw jools.reject(
-			'invalid cmd: ' + err.message
-		);
-	}
+	chgX = changeWrap.chgX;
 
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )

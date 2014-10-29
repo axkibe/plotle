@@ -172,6 +172,38 @@ camelCaseToDash =
 
 
 /*
+| Splits a type specifier into unit/type
+*/
+var
+splitType =
+	function( type )
+{
+	var
+		result,
+		split;
+
+	split = type.split( '.' );
+
+	if( split.length <= 1 )
+	{
+		return null;
+	}
+
+	result = {
+		unit : split[ 0 ],
+		type : split[ 1 ]
+	};
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( result );
+/**/}
+
+	return result;
+};
+
+
+/*
 | Initializes a generator.
 */
 gen.prototype._init =
@@ -179,13 +211,12 @@ gen.prototype._init =
 {
 	var
 		a,
+		addToUnits,
 		aZ,
 		assign,
 		attr,
 		attributes,
 		attrList,
-		attrType,
-		attrUnit,
 		concerns,
 		concernsParts,
 		concernsType,
@@ -200,8 +231,11 @@ gen.prototype._init =
 		jion,
 		ut,
 		name,
+		split,
 		subParts,
 		// twig id
+		t,
+		tZ,
 		twigId,
 		// processed twig table for generator use
 		twig,
@@ -227,9 +261,36 @@ gen.prototype._init =
 	units =
 		{
 			jion :
+			{
+				proto : true
+			}
+		};
+
+	/*
+	| Adds the type to the units repository
+	*/
+	addToUnits =
+		function( type )
+		{
+			var
+				split;
+
+			split = splitType( type );
+
+			if( !split )
+			{
+				return;
+			}
+
+			if( split )
+			{
+				if( !units[ split.unit ] )
 				{
-					proto : true
+					units[ split.unit ] = { };
 				}
+
+				units[ split.unit ][ split.type ] = true;
+			}
 		};
 
 	this.hasJSON = !!jion.json;
@@ -281,17 +342,20 @@ gen.prototype._init =
 	{
 		jAttr = jion.attributes[ name ];
 
-		if( jAttr.type.indexOf( '.' ) >= 0 )
+		if( !Array.isArray( jAttr.type ) )
 		{
-			attrUnit = jAttr.type.split( '.' )[ 0 ];
-
-			attrType = jAttr.type.split( '.' )[ 1 ];
+			addToUnits( jAttr.type );
 		}
 		else
 		{
-			attrUnit = undefined;
-
-			attrType = jAttr.type;
+			for(
+				t = 0, tZ = jAttr.type.length;
+				t < tZ;
+				t++
+			)
+			{
+				addToUnits( jAttr.type[ t ] );
+			}
 		}
 
 		if( jAttr.json )
@@ -299,22 +363,10 @@ gen.prototype._init =
 			this.hasJSON = true;
 		}
 
-		if( attrUnit )
-		{
-			if( !units[ attrUnit ] )
-			{
-				units[ attrUnit ] = { };
-			}
-
-			units[ attrUnit ][ attrType ] = true;
-		}
-
 		assign =
 			jAttr.assign !== undefined
-				?
-				jAttr.assign
-				:
-				name;
+			? jAttr.assign
+			: name;
 
 		if(
 			assign !== null
@@ -1999,8 +2051,9 @@ gen.prototype.genFromJSONCreatorVariables =
 		aZ,
 		attr,
 		name,
-		varList =
-			[ ];
+		varList;
+
+	varList = [ ];
 
 	for( name in this.attributes )
 	{
@@ -2034,9 +2087,7 @@ gen.prototype.genFromJSONCreatorVariables =
 
 		if( this.ray )
 		{
-			varList.push(
-				'ray'
-			);
+			varList.push( 'ray' );
 		}
 	}
 
@@ -2048,8 +2099,7 @@ gen.prototype.genFromJSONCreatorVariables =
 		a++
 	)
 	{
-		block =
-			block.astVarDec( varList[ a ] );
+		block = block.astVarDec( varList[ a ] );
 	}
 
 	return block;
@@ -2150,7 +2200,7 @@ gen.prototype.genFromJSONCreatorParser =
 				else
 				{
 					attrCode =
-						astSwitch( attr.v.astDot( 'type' ) )
+						astSwitch( 'arg.type' )
 						.astDefault( astFail( ) );
 
 					for(
