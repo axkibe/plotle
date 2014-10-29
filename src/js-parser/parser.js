@@ -166,7 +166,7 @@ handleDot =
 				'expr', state.ast,
 				'member', name.value
 			),
-			spec.prePrec,
+			spec.prec( ast ),
 			2
 		);
 
@@ -513,7 +513,7 @@ parseToken =
 	if(
 		!state.reachedEnd
 		&&
-		tokenSpecs[ state.current.type ].prePrec < prec
+		tokenSpecs[ state.current.type ].prec( state.ast ) < prec
 		&&
 		spec.handler !== handlePass
 	)

@@ -68,10 +68,10 @@ module.exports =
 
 
 /*
-| Returns the precedence of the 
+| Returns the precedence of the
 | token in given ast context
 */
-tokenSpec.prototype.precedence =
+tokenSpec.prototype.prec =
 	function(
 		ast
 	)
