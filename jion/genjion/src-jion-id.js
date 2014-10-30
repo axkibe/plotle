@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,15 +40,15 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		v_name, // the name part of the id if applicable
-		v_unit // the unit part of the id if applicable
-	)
+var
+	Constructor =
+		function(
+			v_name, // the name part of the id if applicable
+			v_unit // the unit part of the id if applicable
+		)
 	{
 		if( v_name !== undefined )
 		{
@@ -67,14 +65,12 @@ var Constructor =
 		jools.immute( this );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -86,7 +82,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new id object.
@@ -207,30 +202,25 @@ prototype.create =
 	return new Constructor( v_name, v_unit );
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'jion.id';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'id';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -253,7 +243,6 @@ prototype.equals =
 	return this.name === obj.name && this.unit === obj.unit;
 };
 
-
 /*
 | Node export.
 */
@@ -263,4 +252,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

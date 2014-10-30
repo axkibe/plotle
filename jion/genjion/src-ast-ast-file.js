@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -48,18 +46,18 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		v_capsule, // the capsule
-		v_hasJSON, // boolean if the jion supports jsonfying
-		v_header, // header comment
-		v_jionID, // the id of the jion associated
-		v_preamble // preamble to capsule
-	)
+var
+	Constructor =
+		function(
+			v_capsule, // the capsule
+			v_hasJSON, // boolean if the jion supports jsonfying
+			v_header, // header comment
+			v_jionID, // the id of the jion associated
+			v_preamble // preamble to capsule
+		)
 	{
 		this.capsule = v_capsule;
 
@@ -74,14 +72,12 @@ var Constructor =
 		jools.immute( this );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -93,7 +89,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new astFile object.
@@ -335,30 +330,25 @@ prototype.create =
 	);
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'ast.astFile';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'astFile';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -403,7 +393,6 @@ prototype.equals =
 	);
 };
 
-
 /*
 | Node export.
 */
@@ -413,4 +402,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

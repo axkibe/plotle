@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,16 +40,16 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		v_condition, // the if condition
-		v_elsewise, // the else wise
-		v_then // the then code
-	)
+var
+	Constructor =
+		function(
+			v_condition, // the if condition
+			v_elsewise, // the else wise
+			v_then // the then code
+		)
 	{
 		this.condition = v_condition;
 
@@ -62,14 +60,12 @@ var Constructor =
 		jools.immute( this );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -81,7 +77,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new astIf object.
@@ -209,30 +204,25 @@ prototype.create =
 	return new Constructor( v_condition, v_elsewise, v_then );
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'ast.astIf';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'astIf';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -261,7 +251,6 @@ prototype.equals =
 	);
 };
 
-
 /*
 | Node export.
 */
@@ -271,4 +260,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

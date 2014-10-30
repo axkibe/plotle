@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,17 +40,17 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		v_check, // true if within optinal CHECK code
-		v_indent, // the indentation
-		v_inline, // true if to be formated inline
-		v_root // true if in root context
-	)
+var
+	Constructor =
+		function(
+			v_check, // true if within optinal CHECK code
+			v_indent, // the indentation
+			v_inline, // true if to be formated inline
+			v_root // true if in root context
+		)
 	{
 		this.check = v_check;
 
@@ -65,14 +63,12 @@ var Constructor =
 		jools.immute( this );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -84,7 +80,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new context object.
@@ -276,30 +271,25 @@ prototype.create =
 	return new Constructor( v_check, v_indent, v_inline, v_root );
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'format.context';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'context';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -330,7 +320,6 @@ prototype.equals =
 	);
 };
 
-
 /*
 | Node export.
 */
@@ -340,4 +329,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,13 +40,12 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function( ) { jools.immute( this ); };
-
+var
+	Constructor =
+		function( ) { jools.immute( this ); };
 
 /*
 | Prototype shortcut
@@ -56,7 +53,6 @@ var Constructor =
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -69,14 +65,12 @@ var
 				prototype
 		};
 
-
 /*
 | Singleton
 */
 var
 	_singleton =
 		null;
-
 
 /*
 | Creates a new astNull object.
@@ -112,30 +106,25 @@ prototype.create =
 	return _singleton;
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'ast.astNull';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'astNull';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -143,7 +132,6 @@ prototype.getPath = jion.proto.getPath;
 prototype.equals =
 	function( obj // object to compare to
 ) { return this === obj; };
-
 
 /*
 | Node export.
@@ -154,4 +142,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

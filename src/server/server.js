@@ -866,17 +866,16 @@ Server.prototype.prepareInventory =
 				uglify.parse(
 					codes[ a ],
 					{
-						filename :
-							resource.filePath,
-						strict :
-							true,
-						toplevel :
-							ast
+						filename : resource.filePath,
+						strict : true,
+						toplevel : ast
 					}
 				);
 		}
 		catch ( e )
 		{
+			console.log( e );
+
 			console.log(
 				'parse error',
 				resource.filePath,

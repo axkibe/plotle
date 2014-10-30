@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,15 +40,15 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		twig, // twig
-		ranks // twig ranks
-	)
+var
+	Constructor =
+		function(
+			twig, // twig
+			ranks // twig ranks
+		)
 	{
 		this.twig = twig;
 
@@ -63,14 +61,12 @@ var Constructor =
 		jools.immute( ranks );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -82,7 +78,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new astArrayLiteral object.
@@ -265,48 +260,40 @@ prototype.create =
 	return new Constructor( twig, ranks );
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'ast.astArrayLiteral';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'astArrayLiteral';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
-
 
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
 
-
 /*
 | Returns a twig by rank.
 */
 prototype.atRank = jion.proto.atRank;
-
 
 /*
 | Gets the rank of a key.
 */
 prototype.rankOf = jion.proto.rankOf;
 
-
 /*
 | Creates a new unique identifier.
 */
 prototype.newUID = jion.proto.newUID;
-
 
 /*
 | Tests equality of object.
@@ -314,7 +301,6 @@ prototype.newUID = jion.proto.newUID;
 prototype.equals =
 	function( obj // object to compare to
 ) { return this === obj; };
-
 
 /*
 | Node export.
@@ -325,4 +311,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

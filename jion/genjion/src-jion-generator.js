@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,14 +40,14 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		v_jion // the jion definition
-	)
+var
+	Constructor =
+		function(
+			v_jion // the jion definition
+		)
 	{
 		this.jion = v_jion;
 
@@ -58,14 +56,12 @@ var Constructor =
 		jools.immute( this );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -77,7 +73,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new generator object.
@@ -151,30 +146,25 @@ prototype.create =
 	return new Constructor( v_jion );
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'jion.generator';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'generator';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -197,7 +187,6 @@ prototype.equals =
 	return this.jion === obj.jion;
 };
 
-
 /*
 | Node export.
 */
@@ -207,4 +196,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,17 +40,17 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		v_astCreator, // For some handlers, the ast creator function for it to call
-		v_handler, // Handler function to be called
-		v_postPrec, // operator precedence in postfix conditions
-		v_prePrec // operator precedence in prefix conditions
-	)
+var
+	Constructor =
+		function(
+			v_astCreator, // For some handlers, the ast creator function for it to call
+			v_handler, // Handler function to be called
+			v_postPrec, // operator precedence in postfix conditions
+			v_prePrec // operator precedence in prefix conditions
+		)
 	{
 		if( v_astCreator !== undefined )
 		{
@@ -68,14 +66,12 @@ var Constructor =
 		jools.immute( this );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -87,7 +83,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new tokenSpec object.
@@ -265,30 +260,25 @@ prototype.create =
 	);
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'jsParser.tokenSpec';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'tokenSpec';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -319,7 +309,6 @@ prototype.equals =
 	);
 };
 
-
 /*
 | Node export.
 */
@@ -329,4 +318,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

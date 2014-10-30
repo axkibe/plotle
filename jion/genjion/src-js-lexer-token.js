@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,15 +40,15 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		v_type, // the token type
-		v_value // the token value
-	)
+var
+	Constructor =
+		function(
+			v_type, // the token type
+			v_value // the token value
+		)
 	{
 		this.type = v_type;
 
@@ -64,14 +62,12 @@ var Constructor =
 		jools.immute( this );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -83,7 +79,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new token object.
@@ -189,30 +184,25 @@ prototype.create =
 	return new Constructor( v_type, v_value );
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'jsLexer.token';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'token';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -235,7 +225,6 @@ prototype.equals =
 	return this.type === obj.type && this.value === obj.value;
 };
 
-
 /*
 | Node export.
 */
@@ -245,4 +234,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

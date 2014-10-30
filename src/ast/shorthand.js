@@ -268,6 +268,34 @@ shorthand.astBlock =
 
 
 /*
+| Shorthand for creating capsule function.
+*/
+shorthand.astCapsule =
+	function(
+		block
+	)
+{
+	if(
+		block
+		&& block.reflect !== 'ast.astBlock'
+	)
+	{
+		block = astBlock.create( ).append( block );
+	}
+
+	return(
+		astCall.create(
+			'func',
+			astFunc.create(
+				'block', block || null,
+				'capsule', true
+			)
+		)
+	);
+};
+
+
+/*
 | Shorthand for creating calls.
 */
 shorthand.astCall =
@@ -279,8 +307,7 @@ shorthand.astCall =
 	var
 		call;
 
-	call =
-		astCall.create( 'func', tools.convert( func ) );
+	call = astCall.create( 'func', tools.convert( func ) );
 
 	for(
 		var a = 1, aZ = arguments.length;

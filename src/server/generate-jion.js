@@ -32,7 +32,7 @@ var
 	fs,
 	generator,
 	jools,
-	result,
+	resultGenjion,
 	sus,
 	vm;
 
@@ -47,11 +47,7 @@ generator = require( '../jion/generator' );
 
 jools = require( '../jools/jools' );
 
-result =
-	{
-		genjion :
-			require( '../result/genjion' )
-	};
+resultGenjion = require( '../result/genjion' );
 
 sus = require( 'suspend' );
 
@@ -68,6 +64,7 @@ generateJion.run =
 	var
 		ast,
 		generate,
+		hasJSON,
 		input,
 		inputFileStat,
 		joi,
@@ -75,15 +72,9 @@ generateJion.run =
 		output,
 		outputFileStat;
 
-	fs.stat(
-		resource.jionSrcPath,
-		sus.fork( )
-	);
+	fs.stat( resource.jionSrcPath, sus.fork( ) );
 
-	fs.stat(
-		resource.filePath,
-		sus.fork( )
-	);
+	fs.stat( resource.filePath, sus.fork( ) );
 
 	try
 	{
@@ -103,10 +94,8 @@ generateJion.run =
 	// true if the jion file needs to created
 	generate =
 		!inputFileStat
-		||
-		!outputFileStat
-		||
-		inputFileStat.mtime > outputFileStat.mtime;
+		|| !outputFileStat
+		|| inputFileStat.mtime > outputFileStat.mtime;
 
 	jools.log(
 		'start',
@@ -129,16 +118,15 @@ generateJion.run =
 		vm.runInNewContext(
 			input,
 			{
-				JION :
-					true
+				JION : true
 			},
 			resource.jionSrcPath
 		);
 
-	ast = generator.generate( jion, !generate );
-
 	if( generate )
 	{
+		ast = generator.generate( jion );
+
 		output = formatter.format( ast );
 
 		if( !config.noWrite )
@@ -164,14 +152,30 @@ generateJion.run =
 			'';
 	}
 
+	hasJSON = false;
+
+	if( jion.json )
+	{
+		hasJSON = true;
+	}
+	else if( jion.attributes )
+	{
+		for( var at in jion.attributes )
+		{
+			if( jion.attributes[ at ].json )
+			{
+				hasJSON = true;
+
+				break;
+			}
+		}
+	}
+
 	return(
-		result.genjion.create(
-			'code',
-				output,
-			'jionID',
-				ast.jionID,
-			'hasJSON',
-				ast.hasJSON
+		resultGenjion.create(
+			'jionID', jion.id,
+			'hasJSON', hasJSON,
+			'code', output
 		)
 	);
 };

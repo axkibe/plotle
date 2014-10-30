@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,20 +40,19 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		v_string // the literal
-	)
+var
+	Constructor =
+		function(
+			v_string // the literal
+		)
 	{
 		this.string = v_string;
 
 		jools.immute( this );
 	};
-
 
 /*
 | Prototype shortcut
@@ -63,7 +60,6 @@ var Constructor =
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -75,7 +71,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new astString object.
@@ -158,30 +153,25 @@ prototype.create =
 	return new Constructor( v_string );
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'ast.astString';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'astString';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -204,7 +194,6 @@ prototype.equals =
 	return this.string === obj.string;
 };
 
-
 /*
 | Node export.
 */
@@ -214,4 +203,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

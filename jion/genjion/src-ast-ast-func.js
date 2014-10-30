@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -46,18 +44,24 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		twig, // twig
-		ranks, // twig ranks
-		v_block // function code
-	)
+var
+	Constructor =
+		function(
+			twig, // twig
+			ranks, // twig ranks
+			v_block, // function code
+			v_capsule // if true its the capsule, to be formatted a little different
+		)
 	{
 		this.block = v_block;
+
+		if( v_capsule !== undefined )
+		{
+			this.capsule = v_capsule;
+		}
 
 		this.twig = twig;
 
@@ -70,14 +74,12 @@ var Constructor =
 		jools.immute( ranks );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -89,7 +91,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new astFunc object.
@@ -113,7 +114,9 @@ prototype.create =
 
 		twigDup,
 
-		v_block;
+		v_block,
+
+		v_capsule;
 
 	if( this !== astFunc )
 	{
@@ -126,6 +129,8 @@ prototype.create =
 		twigDup = false;
 
 		v_block = this.block;
+
+		v_capsule = this.capsule;
 	}
 	else
 	{
@@ -153,6 +158,15 @@ prototype.create =
 				if( arg !== undefined )
 				{
 					v_block = arg;
+				}
+
+				break;
+
+			case 'capsule' :
+
+				if( arg !== undefined )
+				{
+					v_capsule = arg;
 				}
 
 				break;
@@ -278,6 +292,11 @@ prototype.create =
 		v_block = null;
 	}
 
+	if( v_capsule === undefined )
+	{
+		v_capsule = undefined;
+	}
+
 /**/if( CHECK )
 /**/{
 /**/	if( v_block === undefined )
@@ -288,6 +307,19 @@ prototype.create =
 /**/	if( v_block !== null )
 /**/	{
 /**/		if( v_block.reflect !== 'ast.astBlock' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_capsule === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_capsule !== undefined )
+/**/	{
+/**/		if( typeof( v_capsule ) !== 'boolean' )
 /**/		{
 /**/			throw new Error( );
 /**/		}
@@ -304,56 +336,50 @@ prototype.create =
 			||
 			v_block && v_block.equals( inherit.block )
 		)
+		&&
+		v_capsule === inherit.capsule
 	)
 	{
 		return inherit;
 	}
 
-	return new Constructor( twig, ranks, v_block );
+	return new Constructor( twig, ranks, v_block, v_capsule );
 };
-
 
 /*
 | Reflection.
 */
 prototype.reflect = 'ast.astFunc';
 
-
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'astFunc';
-
 
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Returns a twig by rank.
 */
 prototype.atRank = jion.proto.atRank;
 
-
 /*
 | Gets the rank of a key.
 */
 prototype.rankOf = jion.proto.rankOf;
 
-
 /*
 | Creates a new unique identifier.
 */
 prototype.newUID = jion.proto.newUID;
-
 
 /*
 | Tests equality of object.
@@ -413,12 +439,15 @@ prototype.equals =
 	}
 
 	return (
-		this.block === obj.block
-		||
-		this.block !== null && this.block.equals( obj.block )
+		(
+			this.block === obj.block
+			||
+			this.block !== null && this.block.equals( obj.block )
+		)
+		&&
+		this.capsule === obj.capsule
 	);
 };
-
 
 /*
 | Node export.
@@ -429,4 +458,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

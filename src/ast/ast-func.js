@@ -30,6 +30,15 @@ if( JION )
 							'ast.astBlock',
 						defaultValue :
 							null
+					},
+				capsule :
+					{
+						comment :
+							'if true its the capsule, to be formatted a little different',
+						type :
+							'Boolean',
+						defaultValue :
+							undefined
 					}
 			},
 		node :

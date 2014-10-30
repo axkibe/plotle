@@ -44,66 +44,38 @@ format =
 var
 precTable =
 	{
-		'astAnd' :
-			13,
-		'astArrayLiteral' :
-			-1,
-		'astAssign' :
-			17,
-		'astBoolean' :
-			-1,
-		'astCall' :
-			2,
-		'astCommaList' :
-			18,
-		'astCondition' :
-			15,
-		'astDelete' :
-			4,
-		'astDiffers' :
-			9,
-		'astDot' :
-			1,
-		'astEquals' :
-			9,
-		'astFunc' :
-			-1,
-		'astGreaterThan' :
-			8,
-		'anIn' :
-			8,
-		'astInstanceof' :
-			8,
-		'astLessThan' :
-			8,
-		'astMember' :
-			1,
-		'astNew' :
-			2,
-		'astNot' :
-			4,
-		'astNull' :
-			-1,
-		'astNumber' :
-			-1,
-		'astObjLiteral' :
-			-1,
-		'astOr' :
-			14,
-		'astPlus' :
-			6,
-		'astPlusAssign' :
-			17,
-		'astPreIncrement' :
-			3,
-		'astString' :
-			-1,
-		'astTypeof' :
-			4,
-		'astVar' :
-			-1,
-		'astVList' :
-			-1
+		'astAnd' : 13,
+		'astArrayLiteral' : -1,
+		'astAssign' : 17,
+		'astBoolean' : -1,
+		'astCall' : 2,
+		'astCommaList' : 18,
+		'astCondition' : 15,
+		'astDelete' : 4,
+		'astDiffers' : 9,
+		'astDot' : 1,
+		'astEquals' : 9,
+		// this is random guess, must be larger than astCall
+		// so the capsule is generated right.
+		'astFunc' : 3,
+		'astGreaterThan' : 8,
+		'anIn' : 8,
+		'astInstanceof' : 8,
+		'astLessThan' : 8,
+		'astMember' : 1,
+		'astNew' : 2,
+		'astNot' : 4,
+		'astNull' : -1,
+		'astNumber' : -1,
+		'astObjLiteral' : -1,
+		'astOr' : 14,
+		'astPlus' : 6,
+		'astPlusAssign' : 17,
+		'astPreIncrement' : 3,
+		'astString' : -1,
+		'astTypeof' : 4,
+		'astVar' : -1,
+		'astVList' : -1
 	};
 
 
@@ -254,7 +226,8 @@ formatComment =
 		aZ,
 		c,
 		text =
-			'/*' + '\n';
+
+	text = context.tab + '/*' + '\n';
 
 	for(
 		a = 0, aZ = comment.content.length;
@@ -266,17 +239,15 @@ formatComment =
 
 		if( c === '' )
 		{
-			text +=
-				'|' + '\n';
+			text += context.tab + '|' + '\n';
 		}
 		else
 		{
-			text +=
-				'| ' + c + '\n';
+			text += context.tab + '| ' + c + '\n';
 		}
 	}
 
-	text += '*/' + '\n';
+	text += context.tab + '*/' + '\n';
 
 	return text;
 };
@@ -297,10 +268,7 @@ formatCheck =
 		throw new Error( );
 	}
 
-	context =
-		context.create(
-			'check', true
-		);
+	context = context.create( 'check', true );
 
 	return (
 		context.tab
@@ -323,8 +291,10 @@ formatBlock =
 {
 	var
 		blockContext,
-		text =
-			'';
+		text;
+
+	text = '';
+
 	if(
 		context.inline
 		&& block.ranks.length > 1
@@ -468,12 +438,9 @@ formatPlusAssign =
 	var
 		text;
 
-	text =
-		'';
+	text = '';
 
-
-	context =
-		context.IncSame;
+	context = context.IncSame;
 
 	try
 	{
@@ -1218,6 +1185,36 @@ formatSwitch =
 
 
 /*
+| Formats a capsule function.
+*/
+var
+formatCapsuleFunc =
+	function(
+		context,
+		func
+	)
+{
+	var
+		arg,
+		argSpace,
+		comma,
+		text;
+
+	if( func.ranks.length !== 0 )
+	{
+		throw new Error( );
+	}
+
+	text = 'function( ) {\n';
+
+	text += formatBlock( context.Dec, func.block, true );
+
+	text += '\n\n}';
+
+	return text;
+};
+
+/*
 | Formats a function.
 */
 var
@@ -1233,18 +1230,20 @@ formatFunc =
 		comma,
 		text;
 
-	text =
-		context.tab;
+	if( func.capsule )
+	{
+		return formatCapsuleFunc( context, func );
+	}
+
+	text = context.tab;
 
 	if( func.ranks.length === 0 )
 	{
-		text +=
-			'function( )' + context.sep;
+		text += 'function( )' + context.sep;
 	}
 	else
 	{
-		text +=
-			'function(' + context.sep;
+		text += 'function(' + context.sep;
 
 		for(
 			var a = 0, aZ = func.ranks.length;
@@ -1252,54 +1251,38 @@ formatFunc =
 			a++
 		)
 		{
-			arg =
-				func.twig[ func.ranks[ a ] ];
+			arg = func.twig[ func.ranks[ a ] ];
 
 			comma =
-				a + 1 < aZ ?
-					','
-					:
-					'';
+				a + 1 < aZ
+				?  ','
+				: '';
 
 			argSpace =
-				arg.name ?
-					' '
-					:
-					'';
+				arg.name
+				?  ' '
+				: '';
 
 			text +=
 				context.Inc.tab
-				+
-				( arg.name || '' )
-				+
-				comma
-				+
-				(
+				+ ( arg.name || '' )
+				+ comma
+				+ (
 					arg.comment ?
 						argSpace + '// ' + arg.comment
 						:
 						''
 				)
-				+
-				'\n';
+				+ '\n';
 		}
 
-		text +=
-			context.tab + ')' + context.sep;
+		text += context.tab + ')' + context.sep;
 	}
 
-	// In VarDecs function bodies are decremented.
-	if( context.root )
-	{
-		context =
-			context.Dec;
-	}
+	// formats to body at one indentation decremented.
+	context = context.Dec;
 
-	text +=
-		formatBlock(
-			context,
-			func.block
-		);
+	text += formatBlock( context, func.block );
 
 	return text;
 };
@@ -1758,7 +1741,7 @@ formatCall =
 		formatExpression(
 			snuggle ? context.Inline : context,
 			call.func,
-			null
+			precTable.astCall // XXXX
 		);
 
 	if( call.ranks.length === 0 )
@@ -2452,6 +2435,7 @@ formatVList =
 /*
 | Formats the capsule.
 */
+/*
 var
 formatCapsule =
 	function(
@@ -2465,7 +2449,7 @@ formatCapsule =
 	text =
 		'/*\n' +
 		'| Capulse.\n' +
-		'*/\n' +
+		'*\n' +   // FIXME * /
 		'( function( ) {\n' +
 		'\'use strict\';\n' +
 		'\n\n';
@@ -2494,58 +2478,23 @@ formatCapsule =
 
 	return text;
 };
+*/
 
 
 /*
-| Formats a file.
+| Formats a block as file.
 */
 formatter.format =
 	function(
-		file
+		block
 	)
 {
 	var
-		context,
-		text,
-		doSep;
+		context;
 
 	context = format.context.create( 'root', true );
 
-	text = '';
-
-	// do a seperator?
-	doSep = false;
-
-	if( file.header )
-	{
-		text += formatComment( context, file.header );
-
-		doSep = true;
-	}
-
-	if( file.preamble )
-	{
-		if( doSep )
-		{
-			text += '\n\n';
-		}
-
-		text += formatBlock( context, file.preamble, true );
-
-		doSep = true;
-	}
-
-	if( file.capsule )
-	{
-		if( doSep )
-		{
-			text += '\n\n';
-		}
-
-		text += formatCapsule( context, file.capsule );
-	}
-
-	return text;
+	return formatBlock( context, block, true );
 };
 
 

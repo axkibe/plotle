@@ -45,6 +45,7 @@ var
 	astAssign,
 	astBlock,
 	astCall,
+	astCapsule,
 	astCheck,
 	astCommaList,
 	astComment,
@@ -106,6 +107,8 @@ astAssign = shorthand.astAssign;
 astBlock = shorthand.astBlock;
 
 astCall = shorthand.astCall;
+
+astCapsule = shorthand.astCapsule;
 
 astCheck = shorthand.astCheck;
 
@@ -3058,16 +3061,13 @@ generator.prototype.genExport =
 
 
 /*
-| Returns the generated preamble.
+| Generates the preamble.
 */
 generator.prototype.genPreamble =
-	function( )
+	function(
+		block // block to append to
+	)
 {
-	var
-		block;
-
-	block = astBlock( );
-
 	block = this.genExport( block );
 
 	block = this.genImports( block );
@@ -3080,12 +3080,16 @@ generator.prototype.genPreamble =
 | Returns the generated capsule block.
 */
 generator.prototype.genCapsule =
-	function( )
+	function(
+		block // block to append to
+	)
 {
 	var
 		capsule;
 
 	capsule = astBlock( );
+
+	capsule = capsule.append( astString( 'use strict' ) );
 
 	if( this.node )
 	{
@@ -3128,7 +3132,12 @@ generator.prototype.genCapsule =
 		capsule = this.genNodeExport( capsule );
 	}
 
-	return capsule;
+	block =
+		block
+		.astComment( 'Capsule' )
+		.append( astCapsule( capsule ) );
+
+	return block;
 };
 
 
@@ -3137,18 +3146,19 @@ generator.prototype.genCapsule =
 */
 generator.generate =
 	function(
-		jion, // the jion definition
-		skim
+		jion // the jion definition
 	)
 {
 	var
-		file,
+		// file,
+		result,
 		gi;
 
 	validator.check( jion );
 
 	gi = generator.create( 'jion', jion );
 
+	/*
 	if( skim )
 	{
 		file =
@@ -3178,6 +3188,21 @@ generator.generate =
 	}
 
 	return file;
+	*/
+
+	result =
+		astBlock( )
+		.astComment(
+			'This is an auto generated file.',
+			'',
+			'DO NOT EDIT!'
+		);
+
+	result = gi.genPreamble( result );
+
+	result = gi.genCapsule( result );
+
+	return result;
 };
 
 

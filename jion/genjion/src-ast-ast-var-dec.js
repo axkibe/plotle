@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,15 +40,15 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		v_assign, // Assignment of variable
-		v_name // variable name
-	)
+var
+	Constructor =
+		function(
+			v_assign, // Assignment of variable
+			v_name // variable name
+		)
 	{
 		this.assign = v_assign;
 
@@ -59,14 +57,12 @@ var Constructor =
 		jools.immute( this );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -78,7 +74,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new astVarDec object.
@@ -190,30 +185,25 @@ prototype.create =
 	return new Constructor( v_assign, v_name );
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'ast.astVarDec';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'astVarDec';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -236,7 +226,6 @@ prototype.equals =
 	return this.assign === obj.assign && this.name === obj.name;
 };
 
-
 /*
 | Node export.
 */
@@ -246,4 +235,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );

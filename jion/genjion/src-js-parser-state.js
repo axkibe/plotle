@@ -3,8 +3,6 @@
 |
 | DO NOT EDIT!
 */
-
-
 /*
 | Export.
 */
@@ -24,11 +22,11 @@ var
 
 
 /*
-| Capulse.
+| Capsule
 */
-( function( ) {
+(
+function( ) {
 'use strict';
-
 
 /*
 | Node includes.
@@ -42,17 +40,17 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
-
 /*
 | Constructor.
 */
-var Constructor =
-	function(
-		v_ast, // current ast entity
-		v_pos, // current position in token ray
-		v_prec, // current precedence
-		v_tokens // ray of tokens to parse
-	)
+var
+	Constructor =
+		function(
+			v_ast, // current ast entity
+			v_pos, // current position in token ray
+			v_prec, // current precedence
+			v_tokens // ray of tokens to parse
+		)
 	{
 		this.ast = v_ast;
 
@@ -65,14 +63,12 @@ var Constructor =
 		jools.immute( this );
 	};
 
-
 /*
 | Prototype shortcut
 */
 var
 	prototype =
 		Constructor.prototype;
-
 
 /*
 | Jion.
@@ -84,7 +80,6 @@ var
 			prototype :
 				prototype
 		};
-
 
 /*
 | Creates a new state object.
@@ -253,30 +248,25 @@ prototype.create =
 	return new Constructor( v_ast, v_pos, v_prec, v_tokens );
 };
 
-
 /*
 | Reflection.
 */
 prototype.reflect = 'jsParser.state';
-
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'state';
 
-
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
-
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
-
 
 /*
 | Tests equality of object.
@@ -307,7 +297,6 @@ prototype.equals =
 	);
 };
 
-
 /*
 | Node export.
 */
@@ -317,4 +306,5 @@ if( SERVER )
 }
 
 
-} )( );
+}
+)( );
