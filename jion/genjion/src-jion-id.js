@@ -48,13 +48,13 @@ if( SERVER )
 */
 var Constructor =
 	function(
-		v_type, // the type part of the id if applicable
+		v_name, // the name part of the id if applicable
 		v_unit // the unit part of the id if applicable
 	)
 	{
-		if( v_type !== undefined )
+		if( v_name !== undefined )
 		{
-			this.type = v_type;
+			this.name = v_name;
 		}
 
 		if( v_unit !== undefined )
@@ -100,7 +100,7 @@ prototype.create =
 	var
 		inherit,
 
-		v_type,
+		v_name,
 
 		v_unit;
 
@@ -108,7 +108,7 @@ prototype.create =
 	{
 		inherit = this;
 
-		v_type = this.type;
+		v_name = this.name;
 
 		v_unit = this.unit;
 	}
@@ -125,11 +125,11 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
-			case 'type' :
+			case 'name' :
 
 				if( arg !== undefined )
 				{
-					v_type = arg;
+					v_name = arg;
 				}
 
 				break;
@@ -152,9 +152,9 @@ prototype.create =
 		}
 	}
 
-	if( v_type === undefined )
+	if( v_name === undefined )
 	{
-		v_type = undefined;
+		v_name = undefined;
 	}
 
 	if( v_unit === undefined )
@@ -164,17 +164,17 @@ prototype.create =
 
 /**/if( CHECK )
 /**/{
-/**/	if( v_type === null )
+/**/	if( v_name === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_type !== undefined )
+/**/	if( v_name !== undefined )
 /**/	{
 /**/		if(
-/**/			typeof( v_type ) !== 'string'
+/**/			typeof( v_name ) !== 'string'
 /**/			&&
-/**/			!( v_type instanceof String )
+/**/			!( v_name instanceof String )
 /**/		)
 /**/		{
 /**/			throw new Error( );
@@ -199,12 +199,12 @@ prototype.create =
 /**/	}
 /**/}
 
-	if( inherit && v_type === inherit.type && v_unit === inherit.unit )
+	if( inherit && v_name === inherit.name && v_unit === inherit.unit )
 	{
 		return inherit;
 	}
 
-	return new Constructor( v_type, v_unit );
+	return new Constructor( v_name, v_unit );
 };
 
 
@@ -250,7 +250,7 @@ prototype.equals =
 		return false;
 	}
 
-	return this.type === obj.type && this.unit === obj.unit;
+	return this.name === obj.name && this.unit === obj.unit;
 };
 
 

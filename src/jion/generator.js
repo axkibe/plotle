@@ -39,23 +39,6 @@ if( JION )
 
 
 var
-	generator,
-	jools,
-	shorthand,
-	validator;
-
-
-generator =
-module.exports =
-	require( '../jion/this' )( module );
-
-shorthand = require( '../ast/shorthand' );
-
-jools = require( '../jools/jools' );
-
-validator = require( './validator' );
-
-var
 	ast,
 	astAnd,
 	astArrayLiteral,
@@ -88,7 +71,26 @@ var
 	astThis,
 	astTypeof,
 	astVar,
-	astVList;
+	astVList,
+	generator,
+	id,
+	jools,
+	shorthand,
+	validator;
+
+
+generator =
+module.exports =
+	require( '../jion/this' )( module );
+
+id = require( './id' );
+
+shorthand = require( '../ast/shorthand' );
+
+jools = require( '../jools/jools' );
+
+validator = require( './validator' );
+
 
 /*
 | Shorthanding Shorthands.
@@ -158,7 +160,6 @@ astVList = shorthand.astVList;
 astReturnTrue = astReturn( true );
 
 astReturnFalse = astReturn( false );
-
 
 /*
 | Converts a CamelCaseString to a dash-seperated-string.
@@ -302,7 +303,7 @@ generator.prototype._init =
 
 	idParts = jion.id.split( '.' );
 
-	this.id = jion.id;
+	this.id = id.createFromString( jion.id );
 
 	this.unit = idParts[ 0 ];
 
@@ -2132,7 +2133,7 @@ generator.prototype.genFromJSONCreatorParser =
 		.astCase(
 			'"type"',
 			astIf(
-				astDiffers( 'arg', astString( this.id ) ),
+				astDiffers( 'arg', this.id.astString ),
 				astFail( )
 			)
 		);
@@ -2521,17 +2522,14 @@ generator.prototype.genReflection =
 	capsule =
 		capsule
 		.astComment( 'Reflection.' )
-		.astAssign(
-			'prototype.reflect',
-			astString( this.id )
-		);
+		.astAssign( 'prototype.reflect', this.id.astString );
 
 	capsule =
 		capsule
 		.astComment( 'Name Reflection.' )
 		.astAssign(
 			'prototype.reflectName',
-			astString( this.name )
+			astString( this.name ) // XXX
 		);
 
 	return capsule;
@@ -2615,7 +2613,7 @@ generator.prototype.genToJSON =
 
 	olit =
 		astObjLiteral( )
-		.add( 'type', astString( this.id ) );
+		.add( 'type', this.id.astString );
 
 	for(
 		var a = 0, aZ = this.attrList.length;
@@ -3174,7 +3172,7 @@ generator.generate =
 					),
 				'preamble', gi.genPreamble( ),
 				'capsule', gi.genCapsule( ),
-				'jionID', gi.id,
+				'jionID', gi.id.astString.string, // FIXME
 				'hasJSON', gi.hasJSON
 			);
 	}

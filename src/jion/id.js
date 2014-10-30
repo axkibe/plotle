@@ -24,10 +24,10 @@ if( JION )
 			true,
 		attributes :
 			{
-				'type' :
+				'name' :
 					{
 						comment :
-							'the type part of the id if applicable',
+							'the name part of the id if applicable',
 						type :
 							'String',
 						defaultValue :
@@ -50,11 +50,17 @@ if( JION )
 
 
 var
-	id;
+	astString,
+	id,
+	jools;
 
 id =
 module.exports =
 	require( '../jion/this' )( module );
+
+astString = require( '../ast/ast-string.js' );
+
+jools = require( '../jools/jools' );
 
 
 /*
@@ -82,7 +88,7 @@ id.createFromString =
 
 	if( split.length <= 1 )
 	{
-		return id.create( 'type', string );
+		return id.create( 'name', string );
 	}
 
 	if( split.length > 2 )
@@ -93,10 +99,37 @@ id.createFromString =
 	return(
 		id.create(
 			'unit', split[ 0 ],
-			'type', split[ 1 ]
+			'name', split[ 1 ]
 		)
 	);
 };
 
+
+/*
+| This id as astString
+*/
+jools.lazyValue(
+	id.prototype,
+	'astString',
+	function( )
+	{
+		if( this.unit )
+		{
+			return(
+				astString.create(
+					'string', this.unit + '.' + this.name
+				)
+			);
+		}
+		else
+		{
+			return(
+				astString.create(
+					'string', this.name
+				)
+			);
+		}
+	}
+);
 
 } )( );
