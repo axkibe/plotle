@@ -308,10 +308,6 @@ generator.prototype._init =
 
 	this.id = id.createFromString( jion.id );
 
-	this.unit = idParts[ 0 ];
-
-	this.name = idParts[ 1 ];
-
 	if( jion.subclass )
 	{
 		subParts = jion.subclass.split( '.' );
@@ -633,11 +629,10 @@ generator.prototype._init =
 		this.twigList = Object.freeze( twigList );
 	}
 
-	// FIXME make it an astVar
 	this.reference =
-		( this.unit === this.name )
-		? this.name + 'Obj'
-		: this.name;
+		( this.id.unit === this.id.name )
+		? this.id.name + 'Obj'
+		: this.id.name;
 
 	this.equals = jion.equals;
 
@@ -1013,7 +1008,7 @@ generator.prototype.genConstructor =
 		capsule.astVarDec(
 			this.reference,
 			astAssign(
-				astVar( this.unit ).astDot( this.name ), // FIXME simply ast( this.type )
+				astVar( this.id.unit ).astDot( this.id.name ), // XXX this.id.astVar
 				jionObj
 			)
 		);
@@ -2004,7 +1999,7 @@ generator.prototype.genCreator =
 
 	capsule =
 		capsule.astComment(
-			'Creates a new ' + this.name + ' object.'
+			'Creates a new ' + this.id.name + ' object.'
 		);
 
 	block = astBlock( );
@@ -2484,7 +2479,7 @@ generator.prototype.genFromJSONCreator =
 
 	capsule =
 		capsule.astComment(
-			'Creates a new ' + this.name + ' object from JSON.'
+			'Creates a new ' + this.id.name + ' object from JSON.'
 		);
 
 	funcBlock = this.genFromJSONCreatorVariables( astBlock( ) );
@@ -2532,7 +2527,7 @@ generator.prototype.genReflection =
 		.astComment( 'Name Reflection.' )
 		.astAssign(
 			'prototype.reflectName',
-			astString( this.name ) // XXX
+			astString( this.id.name )
 		);
 
 	return capsule;
@@ -2666,7 +2661,7 @@ generator.prototype.genToJSON =
 
 	capsule =
 		capsule
-		.astComment( 'Converts a ' + this.name + ' into JSON.' )
+		.astComment( 'Converts a ' + this.id.name + ' into JSON.' )
 		.astCall(
 			'jools.lazyValue',
 			'prototype',
@@ -3052,8 +3047,8 @@ generator.prototype.genExport =
 	block =
 		block
 		.astVarDec(
-			this.unit,
-			astOr( this.unit, astObjLiteral( ) )
+			this.id.unit,
+			astOr( this.id.unit, astObjLiteral( ) )
 		);
 
 	return block;
