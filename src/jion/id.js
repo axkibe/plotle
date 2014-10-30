@@ -50,18 +50,17 @@ if( JION )
 
 
 var
-	astString,
 	id,
-	jools;
+	jools,
+	shorthand;
 
 id =
 module.exports =
 	require( '../jion/this' )( module );
 
-astString = require( '../ast/ast-string.js' );
-
 jools = require( '../jools/jools' );
 
+shorthand = require( '../ast/shorthand' );
 
 /*
 | Initializer.
@@ -116,20 +115,41 @@ jools.lazyValue(
 		if( this.unit )
 		{
 			return(
-				astString.create(
-					'string', this.unit + '.' + this.name
-				)
+				shorthand.astString( this.unit + '.' + this.name )
 			);
 		}
 		else
 		{
 			return(
-				astString.create(
-					'string', this.name
-				)
+				shorthand.astString( this.name )
 			);
 		}
 	}
 );
+
+
+/*
+| This id as astVariable
+*/
+jools.lazyValue(
+	id.prototype,
+	'astVar',
+	function( )
+	{
+		if( this.unit )
+		{
+			return(
+				shorthand.astVar( this.unit ).astDot( this.name )
+			);
+		}
+		else
+		{
+			return(
+				shorthand.astVar( this.name )
+			);
+		}
+	}
+);
+
 
 } )( );
