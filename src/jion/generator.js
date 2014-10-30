@@ -176,38 +176,6 @@ camelCaseToDash =
 
 
 /*
-| Splits a type specifier into unit/type
-*/
-var
-splitType =
-	function( type )
-{
-	var
-		result,
-		split;
-
-	split = type.split( '.' );
-
-	if( split.length <= 1 )
-	{
-		return null;
-	}
-
-	result = {
-		unit : split[ 0 ],
-		type : split[ 1 ]
-	};
-
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( result );
-/**/}
-
-	return result;
-};
-
-
-/*
 | Initializes a generator.
 */
 generator.prototype._init =
@@ -270,30 +238,22 @@ generator.prototype._init =
 		};
 
 	/*
-	| Adds the type to the units repository
+	| Adds the id to the units repository
 	*/
 	addToUnits =
-		function( type )
+		function( id )
 		{
-			var
-				split;
-
-			split = splitType( type );
-
-			if( !split )
+			if( !id.unit )
 			{
 				return;
 			}
 
-			if( split )
+			if( !units[ id.unit ] )
 			{
-				if( !units[ split.unit ] )
-				{
-					units[ split.unit ] = { };
-				}
-
-				units[ split.unit ][ split.type ] = true;
+				units[ id.unit ] = { };
 			}
+
+			units[ id.unit ][ id.name ] = true;
 		};
 
 	this.hasJSON = !!jion.json;
@@ -343,7 +303,7 @@ generator.prototype._init =
 
 		if( !Array.isArray( jAttr.type ) )
 		{
-			addToUnits( jAttr.type );
+			addToUnits( id.createFromString( jAttr.type ) );
 		}
 		else
 		{
@@ -353,7 +313,7 @@ generator.prototype._init =
 				t++
 			)
 			{
-				addToUnits( jAttr.type[ t ] );
+				addToUnits( id.createFromString( jAttr.type[ t ] ) );
 			}
 		}
 
@@ -2122,7 +2082,7 @@ generator.prototype.genFromJSONCreatorParser =
 		// the switch
 		nameSwitch,
 		rayElementCode,
-		rayType,
+		rayID,
 		t,
 		tZ;
 
@@ -2251,9 +2211,9 @@ generator.prototype.genFromJSONCreatorParser =
 			throw new Error( 'TODO' );
 		}
 
-		rayType = splitType( this.ray[ 0 ] );
+		rayID = id.createFromString( this.ray[ 0 ] );
 
-		if( !rayType )
+		if( !rayID.unit )
 		{
 			throw new Error( 'TODO cannot handle generic types yet' );
 		}
@@ -2264,9 +2224,7 @@ generator.prototype.genFromJSONCreatorParser =
 				astAssign(
 					'ray[ r ]',
 					astCall(
-						astVar( rayType.unit )
-						.astDot( rayType.type )
-						.astDot( 'createFromJSON' ),
+						rayID.astVar.astDot( 'createFromJSON' ),
 						'ray[ r ]'
 					)
 				)
