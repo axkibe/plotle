@@ -3154,7 +3154,7 @@ generator.generate =
 		file =
 			astFile( )
 			.create(
-				'jionID', gi.id,
+				'jionID', gi.id.astString.string,
 				'hasJSON', gi.hasJSON
 			);
 
