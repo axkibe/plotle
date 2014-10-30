@@ -231,7 +231,6 @@ gen.prototype._init =
 		jion,
 		ut,
 		name,
-		split,
 		subParts,
 		// twig id
 		t,
@@ -2087,7 +2086,7 @@ gen.prototype.genFromJSONCreatorVariables =
 
 		if( this.ray )
 		{
-			varList.push( 'ray' );
+			varList.push( 'ray', 'r', 'rZ' );
 		}
 	}
 
@@ -2123,6 +2122,8 @@ gen.prototype.genFromJSONCreatorParser =
 		name,
 		// the switch
 		nameSwitch,
+		rayElementCode,
+		rayType,
 		t,
 		tZ;
 
@@ -2243,6 +2244,46 @@ gen.prototype.genFromJSONCreatorParser =
 			.ast( 'arg = json[ name ]' )
 			.append( nameSwitch )
 		);
+
+	if( this.ray )
+	{
+		if( this.ray.length !== 1 )
+		{
+			throw new Error( 'TODO' );
+		}
+
+		rayType = splitType( this.ray[ 0 ] );
+
+		if( !rayType )
+		{
+			throw new Error( 'TODO cannot handle generic types yet' );
+		}
+
+		rayElementCode =
+			astBlock( )
+			.append(
+				astAssign(
+					'ray[ r ]',
+					astCall(
+						astVar( rayType.unit )
+						.astDot( rayType.type )
+						.astDot( 'createFromJSON' ),
+						'ray[ r ]'
+					)
+				)
+			);
+
+		block =
+			block
+			.astFor(
+				astCommaList( )
+				.astAssign( 'r', 0 )
+				.astAssign( 'rZ', 'ray.length' ),
+				'r < rZ',
+				'++r',
+				rayElementCode
+			);
+	}
 
 	return block;
 };
@@ -2442,10 +2483,7 @@ gen.prototype.genFromJSONCreator =
 			'Creates a new ' + this.name + ' object from JSON.'
 		);
 
-	funcBlock =
-		this.genFromJSONCreatorVariables(
-			astBlock( )
-		);
+	funcBlock = this.genFromJSONCreatorVariables( astBlock( ) );
 
 	funcBlock = this.genFromJSONCreatorParser( funcBlock, jsonList );
 
@@ -2612,16 +2650,14 @@ gen.prototype.genToJSON =
 
 	if( this.ray )
 	{
-		olit =
-			olit
-			.add( 'ray', 'this.ray' );
+		olit = olit.add( 'ray', 'this.ray' );
 	}
 
 	block =
 		block
 		.astAssign( 'json', olit )
 		.astCheck(
-			astCall( 'Object.freeze', 'json' )
+			astCall( 'Object.freeze', 'json' ) // XXX
 		)
 		.astReturn(
 			astFunc( astReturn( 'json' ) )
