@@ -71,8 +71,8 @@ var
 | Jion.
 */
 var
-	gen =
-	jion.gen =
+	generator =
+	jion.generator =
 		{
 			prototype :
 				prototype
@@ -80,9 +80,9 @@ var
 
 
 /*
-| Creates a new gen object.
+| Creates a new generator object.
 */
-gen.create =
+generator.create =
 prototype.create =
 	function(
 		// free strings
@@ -93,7 +93,7 @@ prototype.create =
 
 		v_jion;
 
-	if( this !== gen )
+	if( this !== generator )
 	{
 		inherit = this;
 
@@ -155,13 +155,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'jion.gen';
+prototype.reflect = 'jion.generator';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'gen';
+prototype.reflectName = 'generator';
 
 
 /*
@@ -203,7 +203,7 @@ prototype.equals =
 */
 if( SERVER )
 {
-	module.exports = gen;
+	module.exports = generator;
 }
 
 

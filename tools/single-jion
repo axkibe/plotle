@@ -1,2 +1,0 @@
-#!/bin/bash
-node --harmony tools/joobj-single.js $*

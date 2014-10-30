@@ -40,8 +40,8 @@ var
 		require( 'vm' ),
 	formatter =
 		require( '../format/formatter' ),
-	Generator =
-		require( '../jion/gen' ),
+	generator =
+		require( '../jion/generator' ),
 	jools =
 		require( '../jools/jools' ),
 	ast =
@@ -236,7 +236,7 @@ for(
 				inFilename
 			);
 
-		ast = Generator.generate( jion, false );
+		ast = generator.generate( jion, false );
 
 		output = formatter.format( ast );
 

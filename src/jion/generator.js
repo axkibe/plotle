@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'jion.gen',
+			'jion.generator',
 		node :
 			true,
 		attributes :
@@ -39,13 +39,13 @@ if( JION )
 
 
 var
-	gen,
+	generator,
 	jools,
 	shorthand,
 	validator;
 
 
-gen =
+generator =
 module.exports =
 	require( '../jion/this' )( module );
 
@@ -206,7 +206,7 @@ splitType =
 /*
 | Initializes a generator.
 */
-gen.prototype._init =
+generator.prototype._init =
 	function( )
 {
 	var
@@ -644,7 +644,7 @@ gen.prototype._init =
 /*
 | Generates the imports.
 */
-gen.prototype.genImports =
+generator.prototype.genImports =
 	function(
 		capsule // block to append to
 	)
@@ -678,7 +678,7 @@ gen.prototype.genImports =
 /*
 | Generates the node include.
 */
-gen.prototype.genNodeIncludes =
+generator.prototype.genNodeIncludes =
 	function(
 		capsule // block to append to
 	)
@@ -761,7 +761,7 @@ gen.prototype.genNodeIncludes =
 /*
 | Generates the constructor.
 */
-gen.prototype.genConstructor =
+generator.prototype.genConstructor =
 	function(
 		capsule // block to append to
 	)
@@ -1022,7 +1022,7 @@ gen.prototype.genConstructor =
 /*
 | Generates the singleton decleration.
 */
-gen.prototype.genSingleton =
+generator.prototype.genSingleton =
 	function(
 		capsule // block to append to
 	)
@@ -1038,7 +1038,7 @@ gen.prototype.genSingleton =
 /*
 | Generates the creators variable list.
 */
-gen.prototype.genCreatorVariables =
+generator.prototype.genCreatorVariables =
 	function(
 		block // block to append to
 	)
@@ -1094,7 +1094,7 @@ gen.prototype.genCreatorVariables =
 /*
 | Generates the creators inheritance receiver.
 */
-gen.prototype.genCreatorInheritanceReceiver =
+generator.prototype.genCreatorInheritanceReceiver =
 	function(
 		block // block to append to
 	)
@@ -1184,7 +1184,7 @@ gen.prototype.genCreatorInheritanceReceiver =
 /*
 | Generates the creators free strings parser.
 */
-gen.prototype.genCreatorFreeStringsParser =
+generator.prototype.genCreatorFreeStringsParser =
 	function(
 		block // block to append to
 	)
@@ -1384,7 +1384,7 @@ gen.prototype.genCreatorFreeStringsParser =
 /*
 | Generates the creators default values
 */
-gen.prototype.genCreatorDefaults =
+generator.prototype.genCreatorDefaults =
 	function(
 		block,   // block to append to
 		json     // only do jsons
@@ -1430,7 +1430,7 @@ gen.prototype.genCreatorDefaults =
 | Generates a type check of a non set variable.
 | It is true if the variable fails the check.
 */
-gen.prototype.genSingleTypeCheckFailCondition =
+generator.prototype.genSingleTypeCheckFailCondition =
 	function(
 		avar,
 		type
@@ -1479,7 +1479,7 @@ gen.prototype.genSingleTypeCheckFailCondition =
 /*
 | Generates a type check of a variable.
 */
-gen.prototype.genTypeCheckFailCondition =
+generator.prototype.genTypeCheckFailCondition =
 	function(
 		attr
 	)
@@ -1520,7 +1520,7 @@ gen.prototype.genTypeCheckFailCondition =
 /*
 | Generates the creators checks.
 */
-gen.prototype.genCreatorChecks =
+generator.prototype.genCreatorChecks =
 	function(
 		block, // block to append to
 		checkin  // do checks only when CHECKin
@@ -1638,7 +1638,7 @@ gen.prototype.genCreatorChecks =
 | 'func' is a call to a function
 | 'member' is an access to an attribute ( without call )
 */
-gen.prototype.genCreatorConcerns =
+generator.prototype.genCreatorConcerns =
 	function(
 		block // block to append to
 	)
@@ -1706,7 +1706,7 @@ gen.prototype.genCreatorConcerns =
 				b++
 			)
 			{
-				// FUTURE, make a gen.getCreatorVarName func
+				// FUTURE, make a generator.getCreatorVarName func
 
 				bAttr = this.attributes[ args[ b ] ];
 
@@ -1800,7 +1800,7 @@ gen.prototype.genCreatorConcerns =
 |
 | returning this object if so.
 */
-gen.prototype.genCreatorUnchanged =
+generator.prototype.genCreatorUnchanged =
 	function(
 		block // block to append to
 	)
@@ -1926,7 +1926,7 @@ gen.prototype.genCreatorUnchanged =
 /*
 | Generates the creators return statement
 */
-gen.prototype.genCreatorReturn =
+generator.prototype.genCreatorReturn =
 	function(
 		block // block to append to
 	)
@@ -1989,7 +1989,7 @@ gen.prototype.genCreatorReturn =
 /*
 | Generates the creator.
 */
-gen.prototype.genCreator =
+generator.prototype.genCreator =
 	function(
 		capsule // block to append to
 	)
@@ -2040,7 +2040,7 @@ gen.prototype.genCreator =
 /*
 | Generates the fromJSONCreator's variable list.
 */
-gen.prototype.genFromJSONCreatorVariables =
+generator.prototype.genFromJSONCreatorVariables =
 	function(
 		block // block to append to
 	)
@@ -2107,7 +2107,7 @@ gen.prototype.genFromJSONCreatorVariables =
 /*
 | Generates the fromJSONCreator's JSON parser.
 */
-gen.prototype.genFromJSONCreatorParser =
+generator.prototype.genFromJSONCreatorParser =
 	function(
 		block,   // block to append
 		jsonList
@@ -2292,7 +2292,7 @@ gen.prototype.genFromJSONCreatorParser =
 /*
 | Generates the fromJSONCreator's twig processing.
 */
-gen.prototype.genFromJSONCreatorTwigProcessing =
+generator.prototype.genFromJSONCreatorTwigProcessing =
 	function(
 		block // block to append to
 	)
@@ -2372,7 +2372,7 @@ gen.prototype.genFromJSONCreatorTwigProcessing =
 /*
 | Generates the fromJSONCreator's return statement
 */
-gen.prototype.genFromJSONCreatorReturn =
+generator.prototype.genFromJSONCreatorReturn =
 	function(
 		block // block to append to
 	)
@@ -2438,7 +2438,7 @@ gen.prototype.genFromJSONCreatorReturn =
 /*
 | Generates the fromJSONCreator.
 */
-gen.prototype.genFromJSONCreator =
+generator.prototype.genFromJSONCreator =
 	function(
 		capsule // block to append to
 	)
@@ -2513,7 +2513,7 @@ gen.prototype.genFromJSONCreator =
 /*
 | Generates the node include section.
 */
-gen.prototype.genReflection =
+generator.prototype.genReflection =
 	function(
 		capsule // block to append to
 	)
@@ -2541,7 +2541,7 @@ gen.prototype.genReflection =
 /*
 | Generates the jionProto stuff.
 */
-gen.prototype.genJionProto =
+generator.prototype.genJionProto =
 	function(
 		capsule // block to append to
 	)
@@ -2600,7 +2600,7 @@ gen.prototype.genJionProto =
 /*
 | Generates the toJSON converter.
 */
-gen.prototype.genToJSON =
+generator.prototype.genToJSON =
 	function(
 		capsule // block to append to
 	)
@@ -2680,7 +2680,7 @@ gen.prototype.genToJSON =
 /*
 | Generates the equals condition for an attribute.
 */
-gen.prototype.genAttributeEquals =
+generator.prototype.genAttributeEquals =
 	function(
 		name, // attribute name
 		le, // this value expression
@@ -2750,7 +2750,7 @@ gen.prototype.genAttributeEquals =
 /*
 | Generates the equals test.
 */
-gen.prototype.genEquals =
+generator.prototype.genEquals =
 	function(
 		capsule // block to append to
 	)
@@ -2924,7 +2924,7 @@ gen.prototype.genEquals =
 /*
 | Generates the alike test(s).
 */
-gen.prototype.genAlike =
+generator.prototype.genAlike =
 	function(
 		capsule // block to append to
 	)
@@ -3024,7 +3024,7 @@ gen.prototype.genAlike =
 /*
 | Generates the export.
 */
-gen.prototype.genNodeExport =
+generator.prototype.genNodeExport =
 	function(
 		capsule // block to append to
 	)
@@ -3043,7 +3043,7 @@ gen.prototype.genNodeExport =
 /*
 | Returns the generated export block.
 */
-gen.prototype.genExport =
+generator.prototype.genExport =
 	function( block )
 {
 	block = block.astComment( 'Export.' );
@@ -3062,7 +3062,7 @@ gen.prototype.genExport =
 /*
 | Returns the generated preamble.
 */
-gen.prototype.genPreamble =
+generator.prototype.genPreamble =
 	function( )
 {
 	var
@@ -3081,7 +3081,7 @@ gen.prototype.genPreamble =
 /*
 | Returns the generated capsule block.
 */
-gen.prototype.genCapsule =
+generator.prototype.genCapsule =
 	function( )
 {
 	var
@@ -3137,7 +3137,7 @@ gen.prototype.genCapsule =
 /*
 | Generates code from a jools object definition.
 */
-gen.generate =
+generator.generate =
 	function(
 		jion, // the jion definition
 		skim
@@ -3149,20 +3149,15 @@ gen.generate =
 
 	validator.check( jion );
 
-	gi =
-		gen.create(
-			'jion', jion
-		);
+	gi = generator.create( 'jion', jion );
 
 	if( skim )
 	{
 		file =
 			astFile( )
 			.create(
-				'jionID',
-					gi.id,
-				'hasJSON',
-					gi.hasJSON
+				'jionID', gi.id,
+				'hasJSON', gi.hasJSON
 			);
 
 	}
@@ -3177,14 +3172,10 @@ gen.generate =
 						'',
 						'DO NOT EDIT!'
 					),
-				'preamble',
-					gi.genPreamble( ),
-				'capsule',
-					gi.genCapsule( ),
-				'jionID',
-					gi.id,
-				'hasJSON',
-					gi.hasJSON
+				'preamble', gi.genPreamble( ),
+				'capsule', gi.genCapsule( ),
+				'jionID', gi.id,
+				'hasJSON', gi.hasJSON
 			);
 	}
 

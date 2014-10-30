@@ -43,7 +43,7 @@ formatter = require( '../format/formatter' );
 
 fs = require( 'fs' );
 
-generator = require( '../jion/gen' );
+generator = require( '../jion/generator' );
 
 jools = require( '../jools/jools' );
 
