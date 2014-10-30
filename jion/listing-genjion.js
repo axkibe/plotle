@@ -53,6 +53,7 @@ module.exports =
 			'src/js-lexer/token.js',
 			'src/js-parser/state.js',
 			'src/js-parser/token-spec.js',
-			'src/jion/generator.js'
+			'src/jion/generator.js',
+			'src/jion/id.js'
 		]
 };
