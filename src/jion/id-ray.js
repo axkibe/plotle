@@ -85,7 +85,7 @@ idRay.prototype.createFromArray =
 	}
 
 	return idRay.create( 'ray:init', ray );
-}
+};
 
 
 } )( );

@@ -55,6 +55,7 @@ module.exports =
 			'src/js-parser/token-spec.js',
 			'src/jion/generator.js',
 			'src/jion/id.js',
-			'src/jion/id-ray.js'
+			'src/jion/id-ray.js',
+			'src/jion/id-repository.js'
 		]
 };
