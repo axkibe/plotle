@@ -163,8 +163,8 @@ jools.lazyValue(
 		id,
 		ids,
 		idsl,
-		nn,
-		un,
+		name,
+		unitStr,
 		units,
 		unit;
 
@@ -172,13 +172,13 @@ jools.lazyValue(
 
 	ids = { };
 
-	for( un in units )
+	for( unitStr in units )
 	{
-		unit = units[ un ];
+		unit = units[ unitStr ];
 
-		for( nn in unit )
+		for( name in unit )
 		{
-			id = unit[ nn ];
+			id = unit[ name ];
 
 			ids[ id.string ] = true;
 		}
@@ -194,6 +194,31 @@ jools.lazyValue(
 	return idsl;
 }
 );
+
+
+/*
+| Returns the id names as list of an unit.
+*/
+idRepository.prototype.nameListOfUnit =
+	function(
+		unitStr
+	)
+{
+	var
+		unit,
+		nameList;
+
+	unit = this.units[ unitStr ];
+
+	nameList = Object.keys( unit ).sort( );
+
+	if( CHECK )
+	{
+		Object.freeze( nameList );
+	}
+
+	return nameList;
+};
 
 
 } )( );

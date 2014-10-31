@@ -146,15 +146,11 @@ jools.lazyValue(
 	{
 		if( this.unit )
 		{
-			return(
-				shorthand.astVar( this.unit ).astDot( this.name )
-			);
+			return shorthand.astVar( this.unit ).astDot( this.name );
 		}
 		else
 		{
-			return(
-				shorthand.astVar( this.name )
-			);
+			return shorthand.astVar( this.name );
 		}
 	}
 );
