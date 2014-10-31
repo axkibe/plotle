@@ -187,7 +187,6 @@ generator.prototype._init =
 {
 	var
 		a,
-		addToUnits,
 		aZ,
 		assign,
 		attr,
@@ -203,13 +202,12 @@ generator.prototype._init =
 		jAttr,
 		jdv,
 		jion,
-		ut,
 		name,
 		subID,
 		// twig id
 		t,
 		tZ,
-		twigId,
+		twigID,
 		// processed twig table for generator use
 		twig,
 		// twig map to be used (the definition)
@@ -463,28 +461,19 @@ generator.prototype._init =
 			a++
 		)
 		{
-			// XXX FIXME use id.
-			twigId = twigDef[ a ];
+			twigID = id.createFromString( twigDef[ a ] );
 
-			ut = twigId.split( '.' );
+			units = units.addID( twigID );
 
-			if( ut.length !== 2 )
-			{
-				throw new Error(
-					'invalid twig id: ' + twigId
-				);
-			}
-
-			units = units.addID( id.createFromString( twigId ) );
-
-			twig[ twigId ] =
-				Object.freeze( {
-					unit : ut[ 0 ],
-					type : ut[ 1 ] // FIXME call it typeName
-				} );
+			twig[ twigID.string ] = twigID;
 		}
 
-		this.twig = Object.freeze( twig );
+/**/	if( CHECK )
+/**/	{
+/**/		Object.freeze( twig );
+/**/	}
+
+		this.twig = twig;
 	}
 	else
 	{
@@ -2177,11 +2166,10 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 	)
 {
 	var
-		base,
 		loop,
 		switchExpr,
-		twigId,
-		ut;
+		twigID,
+		twigIDString;
 
 	switchExpr = astSwitch( 'jval.type' );
 
@@ -2191,20 +2179,18 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		a++
 	)
 	{
-		twigId = this.twigList[ a ];
+		twigIDString = this.twigList[ a ];
 
-		ut = this.twig[ twigId ];
-
-		base = astVar( ut.unit ).astDot( ut.type );
+		twigID = this.twig[ twigIDString ];
 
 		switchExpr =
 			switchExpr
 			.astCase(
-				astString( twigId ),
+				twigID.astString,
 				astAssign(
 					'twig[ key ]',
 					astCall(
-						base.astDot( 'createFromJSON' ),
+						twigID.astVar.astDot( 'createFromJSON' ),
 						'jval'
 					)
 				)

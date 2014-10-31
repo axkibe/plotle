@@ -105,6 +105,25 @@ id.createFromString =
 
 
 /*
+| This id as string
+*/
+jools.lazyValue(
+	id.prototype,
+	'string',
+	function( )
+	{
+		if( this.unit )
+		{
+			return this.unit + '.' + this.name;
+		}
+		else
+		{
+			return this.name;
+		}
+	}
+);
+
+/*
 | This id as astString
 */
 jools.lazyValue(
@@ -112,18 +131,7 @@ jools.lazyValue(
 	'astString',
 	function( )
 	{
-		if( this.unit )
-		{
-			return(
-				shorthand.astString( this.unit + '.' + this.name )
-			);
-		}
-		else
-		{
-			return(
-				shorthand.astString( this.name )
-			);
-		}
+		return shorthand.astString( this.string );
 	}
 );
 
