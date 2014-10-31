@@ -212,8 +212,6 @@ generator.prototype._init =
 		twig,
 		// twig map to be used (the definition)
 		twigDef,
-		// twigs sorted alphabetically
-		twigList,
 		// units used
 		units;
 
@@ -442,7 +440,7 @@ generator.prototype._init =
 
 	if( jion.twig )
 	{
-		twig = { };
+		twig = idRepository.create( );
 
 		if( jools.isString( jion.twig ) )
 		{
@@ -463,21 +461,14 @@ generator.prototype._init =
 
 			units = units.addID( twigID );
 
-			twig[ twigID.string ] = twigID;
+			twig = twig.addID( twigID );
 		}
-
-/**/	if( CHECK )
-/**/	{
-/**/		Object.freeze( twig );
-/**/	}
 
 		this.twig = twig;
 	}
 	else
 	{
-		twig =
-		this.twig =
-			null;
+		this.twig = null;
 	}
 
 	if( jion.ray )
@@ -491,13 +482,6 @@ generator.prototype._init =
 	}
 
 	this.units = units;
-
-	if( twig )
-	{
-		twigList = Object.keys( twig ).sort( );
-
-		this.twigList = Object.freeze( twigList );
-	}
 
 	this.reference =
 		( this.id.unit === this.id.name )
@@ -1032,7 +1016,8 @@ generator.prototype.genCreatorInheritanceReceiver =
 
 	if( this.twig )
 	{
-		thisCheck = thisCheck
+		thisCheck =
+			thisCheck
 			.astElsewise(
 				astBlock( )
 				.astAssign( 'twig', astObjLiteral( ) )
@@ -1043,14 +1028,14 @@ generator.prototype.genCreatorInheritanceReceiver =
 
 	if( this.ray )
 	{
-		thisCheck = thisCheck
+		thisCheck =
+			thisCheck
 			.astElsewise(
 				astBlock( )
 				.astAssign( 'ray', astArrayLiteral( ) )
 				.ast( 'rayDup = true' )
 			);
 	}
-
 
 	return block.append( thisCheck );
 };
@@ -1074,10 +1059,8 @@ generator.prototype.genCreatorFreeStringsParser =
 
 	if(
 		!this.twig
-		&&
-		!this.ray
-		&&
-		this.attrList.length === 0
+		&& !this.ray
+		&& this.attrList.length === 0
 	)
 	{
 		// no free strings parses needed
@@ -2168,19 +2151,19 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		loop,
 		switchExpr,
 		twigID,
-		twigIDString;
+		twigList;
 
 	switchExpr = astSwitch( 'jval.type' );
 
+	twigList = this.twig.idList;
+
 	for(
-		var a = 0, aZ = this.twigList.length;
+		var a = 0, aZ = twigList.length;
 		a < aZ;
 		a++
 	)
 	{
-		twigIDString = this.twigList[ a ];
-
-		twigID = this.twig[ twigIDString ];
+		twigID = twigList[ a ];
 
 		switchExpr =
 			switchExpr

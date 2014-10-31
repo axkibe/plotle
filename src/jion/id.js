@@ -105,6 +105,53 @@ id.createFromString =
 
 
 /*
+| Compares two ids.
+*/
+id.compare =
+	function(
+		o1,
+		o2
+	)
+{
+	if( o1.unit === o2.unit )
+	{
+		if( o1.name === o2.name )
+		{
+			return 0;
+		}
+		else if( o1.name > o2.name )
+		{
+			return 1;
+		}
+		else
+		{
+			return -1;
+		}
+	}
+
+	if( !o1.unit && o2.unit )
+	{
+		return 1;
+	}
+
+	if( o1.unit && !o2.unit )
+	{
+		return -1;
+	}
+
+	if( o1.unit > o2.unit )
+	{
+		return 1;
+	}
+	else
+	{
+		return -1;
+	}
+};
+
+
+
+/*
 | This id as string
 */
 jools.lazyValue(

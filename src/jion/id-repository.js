@@ -43,6 +43,7 @@ if( JION )
 
 
 var
+	id,
 	idRepository,
 	jools;
 
@@ -50,6 +51,8 @@ var
 idRepository =
 module.exports =
 	require( '../jion/this' )( module );
+
+id = require( './id' );
 
 jools = require( '../jools/jools' );
 
@@ -152,17 +155,15 @@ jools.lazyValue(
 
 
 /*
-| Returns all id strings as alphasorted list.
+| Returns all ids as alphasorted list.
 */
 jools.lazyValue(
 	idRepository.prototype,
-	'idStringList',
+	'idList',
 	function( )
 {
 	var
-		id,
 		ids,
-		idsl,
 		name,
 		unitStr,
 		units,
@@ -170,7 +171,7 @@ jools.lazyValue(
 
 	units = this.units;
 
-	ids = { };
+	ids = [ ];
 
 	for( unitStr in units )
 	{
@@ -178,20 +179,18 @@ jools.lazyValue(
 
 		for( name in unit )
 		{
-			id = unit[ name ];
-
-			ids[ id.string ] = true;
+			ids.push( unit[ name ] );
 		}
 	}
 
-	idsl = Object.keys( ids ).sort( );
+	ids.sort( id.compare );
 
 /**/if( CHECK )
 /**/{
-/**/	Object.freeze( idsl );
+/**/	Object.freeze( ids );
 /**/}
 
-	return idsl;
+	return ids;
 }
 );
 
