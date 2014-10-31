@@ -566,11 +566,10 @@ generator.prototype.genNodeIncludes =
 		b,
 		bZ,
 		block,
-		typeName,
-		types,
+		name,
+		nameList,
 		unitList,
-		unitName,
-		unit;
+		unitStr;
 
 	capsule = capsule.astComment( 'Node includes.' );
 
@@ -599,34 +598,29 @@ generator.prototype.genNodeIncludes =
 		a++
 	)
 	{
-		unitName = unitList[ a ];
+		unitStr = unitList[ a ];
 
-		// XXX make a proper getter function
-		unit = this.units.units[ unitName ];
-
-		types = Object.keys( unit );
-
-		types.sort( );
+		nameList = this.units.nameListOfUnit( unitStr );
 
 		for(
-			b = 0, bZ = types.length;
+			b = 0, bZ = nameList.length;
 			b < bZ;
 			b++
 		)
 		{
-			typeName = types[ b ];
+			name = nameList[ b ];
 
 			block =
 				block
 				.astAssign(
-					astVar( unitName ).astDot( typeName ),
+					astVar( unitStr ).astDot( name ),
 					astCall(
 						'require',
 						astString(
 							'../../src/'
-							+ camelCaseToDash( unitName )
+							+ camelCaseToDash( unitStr )
 							+ '/'
-							+ camelCaseToDash( typeName )
+							+ camelCaseToDash( name )
 						)
 					)
 				);
