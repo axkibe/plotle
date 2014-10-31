@@ -139,12 +139,14 @@ jools.lazyValue(
 	var
 		ul;
 
-	ul = Object.keys( this.units.units ).sort( );
+	ul = Object.keys( this.units ).sort( );
 
 /**/if( CHECK )
 /**/{
 /**/	Object.freeze( ul );
 /**/}
+
+	return ul;
 }
 );
 
