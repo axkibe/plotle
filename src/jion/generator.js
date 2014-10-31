@@ -227,7 +227,7 @@ generator.prototype._init =
 
 	units = idRepository.create( );
 
-	units = units.addID( id.createFromString( 'jion.proto' ) );
+	units = units.add( id.createFromString( 'jion.proto' ) );
 
 	this.hasJSON = !!jion.json;
 
@@ -245,7 +245,7 @@ generator.prototype._init =
 	{
 		subID = id.createFromString( jion.subclass );
 
-		units = units.addID( subID );
+		units = units.add( subID );
 
 		this.subclass = subID.astVar;
 	}
@@ -256,7 +256,7 @@ generator.prototype._init =
 
 		if( !Array.isArray( jAttr.type ) )
 		{
-			units = units.addID( id.createFromString( jAttr.type ) );
+			units = units.add( id.createFromString( jAttr.type ) );
 		}
 		else
 		{
@@ -266,7 +266,7 @@ generator.prototype._init =
 				t++
 			)
 			{
-				units = units.addID( id.createFromString( jAttr.type[ t ] ) );
+				units = units.add( id.createFromString( jAttr.type[ t ] ) );
 			}
 		}
 
@@ -299,7 +299,7 @@ generator.prototype._init =
 		{
 			concernsID = id.createFromString( concerns.type );
 
-			units = units.addID( concernsID );
+			units = units.add( concernsID );
 		}
 
 		// tests also if defaultValue is defined to be `undefined`
@@ -459,9 +459,9 @@ generator.prototype._init =
 		{
 			twigID = id.createFromString( twigDef[ a ] );
 
-			units = units.addID( twigID );
+			units = units.add( twigID );
 
-			twig = twig.addID( twigID );
+			twig = twig.add( twigID );
 		}
 
 		this.twig = twig;

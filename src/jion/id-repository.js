@@ -76,9 +76,72 @@ idRepository.prototype._init =
 
 
 /*
+| Creates an id repository from an
+| array of id strings.
+*/
+idRepository.createFromIDStrings =
+	function(
+		idStrings
+	)
+{
+	var
+		i,
+		iZ,
+		n,
+		d,
+		unit,
+		units;
+
+	units = { };
+
+/**/if( CHECK )
+/**/{
+/**/	if( !Array.isArray( idStrings ) )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	for(
+		i = 0, iZ = idStrings.length;
+		i < iZ;
+		i++
+	)
+	{
+		d = id.createFromString( idStrings[ i ] );
+
+		unit = units[ d.unit ];
+
+		if( !unit )
+		{
+			units[ d.unit ] =
+			unit =
+				{ };
+		}
+
+		unit[ d.name ] = d;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	for( n in units )
+/**/	{
+/**/		Object.freeze( units[ n ] );
+/**/	}
+/**/
+/**/	Object.freeze( units );
+/**/}
+
+	return idRepository.create( 'units', units );
+};
+
+
+
+
+/*
 | Returns a repository with an id added
 */
-idRepository.prototype.addID =
+idRepository.prototype.add =
 	function(
 		id
 	)
