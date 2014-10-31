@@ -75,6 +75,7 @@ var
 	astVList,
 	generator,
 	id,
+	idRepository,
 	jools,
 	shorthand,
 	validator;
@@ -85,6 +86,8 @@ module.exports =
 	require( '../jion/this' )( module );
 
 id = require( './id' );
+
+idRepository = require( './id-repository' );
 
 shorthand = require( '../ast/shorthand' );
 
@@ -164,6 +167,7 @@ astReturnTrue = astReturn( true );
 
 astReturnFalse = astReturn( false );
 
+
 /*
 | Converts a CamelCaseString to a dash-seperated-string.
 */
@@ -201,7 +205,7 @@ generator.prototype._init =
 		jion,
 		ut,
 		name,
-		subParts,
+		subID,
 		// twig id
 		t,
 		tZ,
@@ -227,32 +231,9 @@ generator.prototype._init =
 
 	twigDef = null;
 
-	units =
-		{
-			jion :
-			{
-				proto : true
-			}
-		};
+	units = idRepository.create( );
 
-	/*
-	| Adds the id to the units repository
-	*/
-	addToUnits =
-		function( id )
-		{
-			if( !id.unit )
-			{
-				return;
-			}
-
-			if( !units[ id.unit ] )
-			{
-				units[ id.unit ] = { };
-			}
-
-			units[ id.unit ][ id.name ] = true;
-		};
+	units = units.addID( id.createFromString( 'jion.proto' ) );
 
 	this.hasJSON = !!jion.json;
 
@@ -268,31 +249,11 @@ generator.prototype._init =
 
 	if( jion.subclass )
 	{
-		subParts = jion.subclass.split( '.' );
+		subID = id.createFromString( jion.subclass );
 
-		if( subParts.length >=  2 )
-		{
-			if( subParts.length > 2 )
-			{
-				throw new Error(
-					'subclass can only have one dot'
-				);
-			}
+		units = units.addID( subID );
 
-			if( !units[ subParts[ 0 ] ] )
-			{
-				units[ subParts[ 0 ] ] = { };
-			}
-
-			units[ subParts[ 0 ] ][ subParts[ 1 ] ] = true;
-
-			this.subclass =
-				astVar( subParts[ 0 ] ).astDot( subParts[ 1 ] );
-		}
-		else
-		{
-			this.subclass = astVar( jion.subclass );
-		}
+		this.subclass = subID.astVar;
 	}
 
 	for( name in jion.attributes || { } )
@@ -301,7 +262,7 @@ generator.prototype._init =
 
 		if( !Array.isArray( jAttr.type ) )
 		{
-			addToUnits( id.createFromString( jAttr.type ) );
+			units = units.addID( id.createFromString( jAttr.type ) );
 		}
 		else
 		{
@@ -311,7 +272,7 @@ generator.prototype._init =
 				t++
 			)
 			{
-				addToUnits( id.createFromString( jAttr.type[ t ] ) );
+				units = units.addID( id.createFromString( jAttr.type[ t ] ) );
 			}
 		}
 
@@ -344,7 +305,7 @@ generator.prototype._init =
 		{
 			concernsID = id.createFromString( concerns.type );
 
-			addToUnits( concernsID );
+			units = units.addID( concernsID );
 		}
 
 		// tests also if defaultValue is defined to be `undefined`
@@ -502,6 +463,7 @@ generator.prototype._init =
 			a++
 		)
 		{
+			// XXX FIXME use id.
 			twigId = twigDef[ a ];
 
 			ut = twigId.split( '.' );
@@ -513,12 +475,7 @@ generator.prototype._init =
 				);
 			}
 
-			if( !units[ ut[ 0 ] ] )
-			{
-				units[ ut[ 0 ] ] = { };
-			}
-
-			units[ ut[ 0 ] ][ ut[ 1 ] ] = true;
+			units = units.addID( id.createFromString( twigId ) );
 
 			twig[ twigId ] =
 				Object.freeze( {
@@ -544,11 +501,13 @@ generator.prototype._init =
 			);
 	}
 
-	unitList = Object.keys( units ).sort( );
+	// XXX use units.list
+
+	unitList = Object.keys( units.units ).sort( );
+
+	this.units = units;
 
 	this.unitList = Object.freeze( unitList );
-
-	this.units = Object.freeze( units );
 
 	if( twig )
 	{
@@ -648,7 +607,8 @@ generator.prototype.genNodeIncludes =
 	{
 		unitName = this.unitList[ a ];
 
-		unit = this.units[ this.unitList[ a ] ];
+		// XXX make a proper getter function
+		unit = this.units.units[ this.unitList[ a ] ];
 
 		types = Object.keys( unit );
 

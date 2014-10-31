@@ -75,7 +75,7 @@ idRepository.prototype._init =
 /*
 | Returns a repository with an id added
 */
-idRepository.addId =
+idRepository.prototype.addID =
 	function(
 		id
 	)
@@ -110,7 +110,7 @@ idRepository.addId =
 
 	unit =
 		unit
-		?  jools.copy( this.unit )
+		?  jools.copy( unit )
 		: { };
 
 	unit[ id.name ] = true;
