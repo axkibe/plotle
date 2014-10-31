@@ -225,7 +225,7 @@ formatComment =
 		a,
 		aZ,
 		c,
-		text =
+		text;
 
 	text = context.tab + '/*' + '\n';
 
@@ -1195,9 +1195,6 @@ formatCapsuleFunc =
 	)
 {
 	var
-		arg,
-		argSpace,
-		comma,
 		text;
 
 	if( func.ranks.length !== 0 )

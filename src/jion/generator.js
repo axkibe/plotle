@@ -190,9 +190,7 @@ generator.prototype._init =
 		attributes,
 		attrList,
 		concerns,
-		concernsParts,
-		concernsType,
-		concernsUnit,
+		concernsID,
 		constructorList,
 		defaultValue,
 		// sorted init list
@@ -329,11 +327,9 @@ generator.prototype._init =
 
 		if(
 			assign !== null
-			||
-			(
+			|| (
 				this.init
-				&&
-				this.init.indexOf( name ) >= 0
+				&& this.init.indexOf( name ) >= 0
 			)
 		)
 		{
@@ -346,36 +342,9 @@ generator.prototype._init =
 
 		if( concerns && concerns.type )
 		{
-			concernsParts = concerns.type.split( '.' );
+			concernsID = id.createFromString( concerns.type );
 
-			if( concernsParts.length > 2 )
-			{
-				throw new Error(
-					'concerns can only have one dot.'
-				);
-			}
-			else if( concernsParts.length === 2 )
-			{
-				concernsUnit = concernsParts[ 0 ];
-
-				concernsType = concernsParts[ 1 ];
-			}
-			else
-			{
-				throw new Error(
-					'concerns misses type.'
-				);
-			}
-
-			if( concernsUnit )
-			{
-				if( !units[ concernsUnit ] )
-				{
-					units[ concernsUnit ] = { };
-				}
-
-				units[ concernsUnit ][ concernsType ] = true;
-			}
+			addToUnits( concernsID );
 		}
 
 		// tests also if defaultValue is defined to be `undefined`
@@ -436,8 +405,7 @@ generator.prototype._init =
 				concerns :
 					jAttr.concerns
 					? Object.freeze( {
-							unit : concernsUnit,
-							type : concernsType,
+							id : concernsID,
 							func : jAttr.concerns.func,
 							args : jAttr.concerns.args,
 							member : jAttr.concerns.member
@@ -1613,10 +1581,9 @@ generator.prototype.genCreatorConcerns =
 		cExpr,
 		concerns,
 		func,
+		id,
 		member,
-		name,
-		type,
-		unit;
+		name;
 
 	for(
 		a = 0, aZ = this.attrList.length;
@@ -1635,24 +1602,19 @@ generator.prototype.genCreatorConcerns =
 			continue;
 		}
 
-		unit = concerns.unit;
-
-		type = concerns.type;
-
 		args = concerns.args;
 
 		func = concerns.func;
+
+		id = concerns.id;
 
 		member = concerns.member;
 
 		if( func )
 		{
-			if( unit )
+			if( id )
 			{
-				cExpr =
-					astCall(
-						astVar( unit ).astDot( type ).astDot( func )
-					);
+				cExpr = astCall( id.astVar.astDot( func ) );
 			}
 			else
 			{
