@@ -34,6 +34,15 @@ if( JION )
 							'Object',
 						defaultValue :
 							undefined
+					},
+				'primitives' :
+					{
+						comment :
+							'set of all primites, that is ids without unit',
+						type :
+							'Object',
+						defaultValue :
+							undefined
 					}
 			},
 		init :
@@ -85,14 +94,13 @@ idRepository.createFromIDStrings =
 	)
 {
 	var
+		d,
 		i,
 		iZ,
 		n,
-		d,
+		primitives,
 		unit,
 		units;
-
-	units = { };
 
 /**/if( CHECK )
 /**/{
@@ -110,78 +118,139 @@ idRepository.createFromIDStrings =
 	{
 		d = id.createFromString( idStrings[ i ] );
 
-		unit = units[ d.unit ];
-
-		if( !unit )
+		if( d.unit )
 		{
-			units[ d.unit ] =
-			unit =
-				{ };
-		}
+			if( !units )
+			{
+				units = { };
+			}
 
-		unit[ d.name ] = d;
+			unit = units[ d.unit ];
+
+			if( !unit )
+			{
+				units[ d.unit ] =
+				unit =
+					{ };
+			}
+
+			unit[ d.name ] = d;
+		}
+		else
+		{
+			if( !primitives )
+			{
+				primitives = { };
+			}
+
+			primitives[ d.name ] = d;
+		}
 	}
 
 /**/if( CHECK )
 /**/{
-/**/	for( n in units )
+/**/	if( units )
 /**/	{
-/**/		Object.freeze( units[ n ] );
+/**/		for( n in units )
+/**/		{
+/**/			Object.freeze( units[ n ] );
+/**/		}
+/**/
+/**/		Object.freeze( units );
 /**/	}
 /**/
-/**/	Object.freeze( units );
+/**/	if( primitives )
+/**/	{
+/**/		Object.freeze( primitives );
+/**/	}
 /**/}
 
-	return idRepository.create( 'units', units );
+	return(
+		idRepository.create(
+			'primitives', primitives,
+			'units', units
+		)
+	);
 };
 
 
 
 
 /*
-| Returns a repository with an id added
+| Returns a repository with
+| an id or another id repository
+| added
 */
 idRepository.prototype.add =
 	function(
-		id
+		d
 	)
 {
 	var
+		primitives,
 		unit,
 		units;
 
 /**/if( CHECK )
 /**/{
-/**/	if( id.reflect !== 'jion.id' )
+/**/	if( d.reflect !== 'jion.id' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if( !id.unit )
+	if( !d.unit )
 	{
-		// simplistic ids are not stored in the repository.
-		return this;
+		if( this.primitives )
+		{
+			if( this.primitives[ d.name ] )
+			{
+				// this repository already has this id.
+				return this;
+			}
+
+			primitives = jools.copy( this.primitives );
+		}
+		else
+		{
+			primitives = { };
+		}
+
+		primitives[ d.name ] = d;
+
+		if( CHECK )
+		{
+			Object.freeze( primitives );
+		}
+
+		return this.create( 'primitives', primitives );
 	}
 
-	unit = this.units[ id.unit ];
-
-	// this repository already has the id.
-	if( unit && unit[ id.name ] )
+	if( this.units )
 	{
-		return this;
-	}
+		unit = this.units[ d.unit ];
 
-	units = jools.copy( this.units );
+		// this repository already has the id.
+		if( unit && unit[ d.name ] )
+		{
+			return this;
+		}
+
+		units = jools.copy( this.units );
+	}
+	else
+	{
+		units = { };
+	}
 
 	unit =
 		unit
 		?  jools.copy( unit )
 		: { };
 
-	unit[ id.name ] = id;
+	unit[ d.name ] = d;
 
-	units[ id.unit ] = unit;
+	units[ d.unit ] = unit;
 
 /**/if( CHECK )
 /**/{
@@ -228,21 +297,35 @@ jools.lazyValue(
 	var
 		ids,
 		name,
+		primitives,
 		unitStr,
 		units,
 		unit;
 
 	units = this.units;
 
+	primitives = this.primitives;
+
 	ids = [ ];
 
-	for( unitStr in units )
+	if( units )
 	{
-		unit = units[ unitStr ];
-
-		for( name in unit )
+		for( unitStr in units )
 		{
-			ids.push( unit[ name ] );
+			unit = units[ unitStr ];
+
+			for( name in unit )
+			{
+				ids.push( unit[ name ] );
+			}
+		}
+	}
+
+	if( primitives )
+	{
+		for( name in primitives )
+		{
+			ids.push( primitives[ name ] );
 		}
 	}
 

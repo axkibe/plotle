@@ -46,9 +46,15 @@ if( SERVER )
 var
 	Constructor =
 		function(
+			v_primitives, // set of all primites, that is ids without unit
 			v_units // a set of all units with all names
 		)
 	{
+		if( v_primitives !== undefined )
+		{
+			this.primitives = v_primitives;
+		}
+
 		if( v_units !== undefined )
 		{
 			this.units = v_units;
@@ -89,11 +95,15 @@ prototype.create =
 	var
 		inherit,
 
+		v_primitives,
+
 		v_units;
 
 	if( this !== idRepository )
 	{
 		inherit = this;
+
+		v_primitives = this.primitives;
 
 		v_units = this.units;
 	}
@@ -110,6 +120,15 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
+			case 'primitives' :
+
+				if( arg !== undefined )
+				{
+					v_primitives = arg;
+				}
+
+				break;
+
 			case 'units' :
 
 				if( arg !== undefined )
@@ -128,6 +147,11 @@ prototype.create =
 		}
 	}
 
+	if( v_primitives === undefined )
+	{
+		v_primitives = undefined;
+	}
+
 	if( v_units === undefined )
 	{
 		v_units = undefined;
@@ -135,18 +159,29 @@ prototype.create =
 
 /**/if( CHECK )
 /**/{
+/**/	if( v_primitives === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
 /**/	if( v_units === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	if( inherit && v_units === inherit.units )
+	if(
+		inherit
+		&&
+		v_primitives === inherit.primitives
+		&&
+		v_units === inherit.units
+	)
 	{
 		return inherit;
 	}
 
-	return new Constructor( v_units );
+	return new Constructor( v_primitives, v_units );
 };
 
 /*
@@ -187,7 +222,7 @@ prototype.equals =
 		return false;
 	}
 
-	return this.units === obj.units;
+	return this.primitives === obj.primitives && this.units === obj.units;
 };
 
 /*
