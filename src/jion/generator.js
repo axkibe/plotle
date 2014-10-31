@@ -890,7 +890,7 @@ generator.prototype.genConstructor =
 		capsule.astVarDec(
 			this.reference,
 			astAssign(
-				astVar( this.id.unit ).astDot( this.id.name ), // XXX this.id.astVar
+				this.id.astVar,
 				jionObj
 			)
 		);
@@ -2524,7 +2524,7 @@ generator.prototype.genToJSON =
 		block
 		.astAssign( 'json', olit )
 		.astCheck(
-			astCall( 'Object.freeze', 'json' ) // XXX
+			ast( 'Object.freeze( json )' )
 		)
 		.astReturn(
 			astFunc( astReturn( 'json' ) )
