@@ -214,8 +214,6 @@ generator.prototype._init =
 		twigDef,
 		// twigs sorted alphabetically
 		twigList,
-		// units sorted alphabetically
-		unitList,
 		// units used
 		units;
 
@@ -484,19 +482,15 @@ generator.prototype._init =
 
 	if( jion.ray )
 	{
-		this.ray =
-			Object.freeze(
-				jion.ray.slice( )
-			);
+		this.ray = jion.ray;
+
+/**/	if( CHECK )
+/**/	{
+/**/		Object.freeze( this.ray );
+/**/	}
 	}
 
-	// XXX use units.list
-
-	unitList = Object.keys( units.units ).sort( );
-
 	this.units = units;
-
-	this.unitList = Object.freeze( unitList );
 
 	if( twig )
 	{
@@ -524,6 +518,11 @@ generator.prototype.genImports =
 		capsule // block to append to
 	)
 {
+	var
+		a,
+		aZ,
+		unitList;
+
 	capsule =
 		capsule
 		.astComment( 'Imports.' )
@@ -531,18 +530,21 @@ generator.prototype.genImports =
 		.astVarDec( 'jools' );
 
 	// FUTURE when type checking is there this might become needed
-	// without jsons
+	// even if not having jsons
+
 	if( this.hasJSON )
 	{
+		unitList = this.units.unitList;
+
 		for(
-			var a = 0, aZ = this.unitList.length;
+			a = 0, aZ = unitList.length;
 			a < aZ;
 			a++
 		)
 		{
 			capsule =
 				capsule
-				.astVarDec( this.unitList[ a ] );
+				.astVarDec( unitList[ a ] );
 		}
 	}
 
@@ -566,6 +568,7 @@ generator.prototype.genNodeIncludes =
 		block,
 		typeName,
 		types,
+		unitList,
 		unitName,
 		unit;
 
@@ -577,27 +580,29 @@ generator.prototype.genNodeIncludes =
 
 	// generates the unit objects
 
+	unitList = this.units.unitList;
+
 	for(
-		a = 0, aZ = this.unitList.length;
+		a = 0, aZ = unitList.length;
 		a < aZ;
 		a++
 	)
 	{
 		block =
 			block
-			.astAssign( this.unitList[ a ], astObjLiteral( ) );
+			.astAssign( unitList[ a ], astObjLiteral( ) );
 	}
 
 	for(
-		a = 0, aZ = this.unitList.length;
+		a = 0, aZ = unitList.length;
 		a < aZ;
 		a++
 	)
 	{
-		unitName = this.unitList[ a ];
+		unitName = unitList[ a ];
 
 		// XXX make a proper getter function
-		unit = this.units.units[ this.unitList[ a ] ];
+		unit = this.units.units[ unitName ];
 
 		types = Object.keys( unit );
 
