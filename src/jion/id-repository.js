@@ -113,7 +113,7 @@ idRepository.prototype.addID =
 		?  jools.copy( unit )
 		: { };
 
-	unit[ id.name ] = true;
+	unit[ id.name ] = id;
 
 	units[ id.unit ] = unit;
 
@@ -126,6 +126,72 @@ idRepository.prototype.addID =
 
 	return this.create( 'units', units );
 };
+
+
+/*
+| Returns all units as alphasorted list.
+*/
+jools.lazyValue(
+	idRepository.prototype,
+	'unitList',
+	function( )
+{
+	var
+		ul;
+
+	ul = Object.keys( this.units.units ).sort( );
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( ul );
+/**/}
+}
+);
+
+
+/*
+| Returns all id strings as alphasorted list.
+*/
+jools.lazyValue(
+	idRepository.prototype,
+	'idStringList',
+	function( )
+{
+	var
+		id,
+		ids,
+		idsl,
+		nn,
+		un,
+		units,
+		unit;
+
+	units = this.units;
+
+	ids = { };
+
+	for( un in units )
+	{
+		unit = units[ un ];
+
+		for( nn in unit )
+		{
+			id = unit[ nn ];
+
+			ids[ id.string ] = true;
+		}
+	}
+
+	idsl = Object.keys( ids ).sort( );
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( idsl );
+/**/}
+
+	return idsl;
+}
+);
 
 
 } )( );
