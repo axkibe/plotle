@@ -181,83 +181,23 @@ idRepository.createFromIDStrings =
 */
 idRepository.prototype.add =
 	function(
-		d
+		o
 	)
 {
-	var
-		primitives,
-		unit,
-		units;
-
-/**/if( CHECK )
-/**/{
-/**/	if( d.reflect !== 'jion.id' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if( !d.unit )
+	switch( o.reflect )
 	{
-		if( this.primitives )
-		{
-			if( this.primitives[ d.name ] )
-			{
-				// this repository already has this id.
-				return this;
-			}
+		case 'jion.id' :
 
-			primitives = jools.copy( this.primitives );
-		}
-		else
-		{
-			primitives = { };
-		}
+			return this._addID( o );
 
-		primitives[ d.name ] = d;
+		case 'jion.idRepository' :
 
-		if( CHECK )
-		{
-			Object.freeze( primitives );
-		}
+			return this._addIDRepository( o );
 
-		return this.create( 'primitives', primitives );
+		default :
+
+			throw new Error( );
 	}
-
-	if( this.units )
-	{
-		unit = this.units[ d.unit ];
-
-		// this repository already has the id.
-		if( unit && unit[ d.name ] )
-		{
-			return this;
-		}
-
-		units = jools.copy( this.units );
-	}
-	else
-	{
-		units = { };
-	}
-
-	unit =
-		unit
-		?  jools.copy( unit )
-		: { };
-
-	unit[ d.name ] = d;
-
-	units[ d.unit ] = unit;
-
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( unit );
-/**/
-/**/	Object.freeze( units );
-/**/}
-
-	return this.create( 'units', units );
 };
 
 
@@ -362,6 +302,182 @@ idRepository.prototype.nameListOfUnit =
 
 	return nameList;
 };
+
+
+/*
+| Returns a repository with an id added.
+*/
+idRepository.prototype._addID =
+	function(
+		d
+	)
+{
+	var
+		primitives,
+		unit,
+		units;
+
+/**/if( CHECK )
+/**/{
+/**/	if( d.reflect !== 'jion.id' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !d.unit )
+	{
+		if( this.primitives )
+		{
+			if( this.primitives[ d.name ] )
+			{
+				// this repository already has this id.
+				return this;
+			}
+
+			primitives = jools.copy( this.primitives );
+		}
+		else
+		{
+			primitives = { };
+		}
+
+		primitives[ d.name ] = d;
+
+		if( CHECK )
+		{
+			Object.freeze( primitives );
+		}
+
+		return this.create( 'primitives', primitives );
+	}
+
+	if( this.units )
+	{
+		unit = this.units[ d.unit ];
+
+		// this repository already has the id.
+		if( unit && unit[ d.name ] )
+		{
+			return this;
+		}
+
+		units = jools.copy( this.units );
+	}
+	else
+	{
+		units = { };
+	}
+
+	unit =
+		unit
+		?  jools.copy( unit )
+		: { };
+
+	unit[ d.name ] = d;
+
+	units[ d.unit ] = unit;
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( unit );
+/**/
+/**/	Object.freeze( units );
+/**/}
+
+	return this.create( 'units', units );
+};
+
+
+/*
+| Returns a repository with an id repository added.
+*/
+idRepository.prototype._addIDRepository =
+	function(
+		idr
+	)
+{
+	var
+		idrUnit,
+		name,
+		primitives,
+		unit,
+		units,
+		unitStr;
+
+/**/if( CHECK )
+/**/{
+/**/	if( idr.reflect !== 'jion.idRepository' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !this.primitives )
+	{
+		primitives = idr.primitives;
+	}
+	else if( idr.primitives )
+	{
+		primitives = jools.copy( this.primitives );
+
+		for( name in idr.primitives )
+		{
+			primitives[ name ] = idr.primitives[ name ];
+		}
+
+/**/	if( CHECK )
+/**/	{
+/**/		Object.freeze( primitives );
+/**/	}
+	}
+
+	if( !this.units )
+	{
+		units = idr.units;
+	}
+	else if( idr.units )
+	{
+		units = jools.copy( this.units );
+
+		for( unitStr in idr.units )
+		{
+			idrUnit = idr.units[ unitStr ];
+
+			if( !units[ unitStr ] )
+			{
+				units[ unitStr ] = idrUnit;
+			}
+			else
+			{
+				unit = jools.copy( units[ unitStr ] );
+
+				for( name in idrUnit )
+				{
+					if( !unit[ name ] )
+					{
+						unit[ name ] = idrUnit[ name ];
+					}
+				}
+			}
+
+		}
+
+/**/	if( CHECK )
+/**/	{
+/**/		Object.freeze( units );
+/**/	}
+	}
+
+	return(
+		this.create(
+			'primitives', primitives,
+			'units', units
+		)
+	);
+};
+
+
 
 
 } )( );
