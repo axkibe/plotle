@@ -187,7 +187,6 @@ generator.prototype._init =
 {
 	var
 		a,
-		aZ,
 		assign,
 		attr,
 		attributes,
@@ -203,13 +202,11 @@ generator.prototype._init =
 		jdv,
 		jion,
 		name,
+		rayDef,
 		subID,
 		// twig id
 		t,
 		tZ,
-		twigID,
-		// processed twig table for generator use
-		twig,
 		// twig map to be used (the definition)
 		twigDef,
 		// units used
@@ -220,10 +217,6 @@ generator.prototype._init =
 	constructorList = [ ];
 
 	jion = this.jion;
-
-	twig = null;
-
-	twigDef = null;
 
 	units = idRepository.create( );
 
@@ -449,11 +442,10 @@ generator.prototype._init =
 			twigDef = jion.twig;
 		}
 
-		twig = idRepository.createFromIDStrings( twigDef );
+		this.twig = idRepository.createFromIDStrings( twigDef );
 
-		units = units.add( twig );
+		units = units.add( this.twig );
 
-		this.twig = twig;
 	}
 	else
 	{
@@ -462,14 +454,24 @@ generator.prototype._init =
 
 	if( jion.ray )
 	{
-		this.ray = jion.ray;
+		this.ray = idRepository.createFromIDStrings( jion.ray );
 
-		// XXX
+		if( jools.isString( jion.ray ) )
+		{
+			rayDef = require( '../typemaps/' + jion.ray.substr( 2 ) );
+		}
+		else
+		{
+			rayDef = jion.ray;
+		}
 
-/**/	if( CHECK )
-/**/	{
-/**/		Object.freeze( this.ray );
-/**/	}
+		this.ray = idRepository.createFromIDStrings( rayDef );
+
+		units = units.add( this.ray );
+	}
+	else
+	{
+		this.ray = null;
 	}
 
 	this.units = units;
@@ -750,6 +752,7 @@ generator.prototype.genConstructor =
 		block =
 			block
 			.astCheck(
+				// FIXME remove ast call
 				ast( 'Object.freeze( ray )' )
 			);
 	}
@@ -1965,8 +1968,11 @@ generator.prototype.genFromJSONCreatorParser =
 		name,
 		// the switch
 		nameSwitch,
-		rayElementCode,
 		rayID,
+		rayIDList,
+		rayLoopSwitch,
+		r,
+		rZ,
 		t,
 		tZ;
 
@@ -2090,29 +2096,31 @@ generator.prototype.genFromJSONCreatorParser =
 
 	if( this.ray )
 	{
-		if( this.ray.length !== 1 )
+		rayIDList = this.ray.idList;
+
+		rayLoopSwitch = astSwitch( 'ray[ r ].reflect' );
+
+		for(
+			r = 0, rZ = rayIDList.length;
+			r < rZ;
+			r++
+		)
 		{
-			throw new Error( 'TODO' );
-		}
+			rayID = rayIDList[ r ];
 
-		rayID = id.createFromString( this.ray[ 0 ] );
-
-		if( !rayID.unit )
-		{
-			throw new Error( 'TODO cannot handle generic types yet' );
-		}
-
-		rayElementCode =
-			astBlock( )
-			.append(
-				astAssign(
-					'ray[ r ]',
-					astCall(
-						rayID.astVar.astDot( 'createFromJSON' ),
-						'ray[ r ]'
+			rayLoopSwitch =
+				rayLoopSwitch
+				.astCase(
+					rayID.astString,
+					astAssign(
+						'ray[ r ]',
+						astCall(
+							rayID.astVar.astDot( 'createFromJSON' ),
+							'ray[ r ]'
+						)
 					)
-				)
-			);
+				);
+		}
 
 		block =
 			block
@@ -2122,7 +2130,7 @@ generator.prototype.genFromJSONCreatorParser =
 				.astAssign( 'rZ', 'ray.length' ),
 				'r < rZ',
 				'++r',
-				rayElementCode
+				rayLoopSwitch
 			);
 	}
 
