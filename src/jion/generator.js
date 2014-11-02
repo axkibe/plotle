@@ -440,8 +440,6 @@ generator.prototype._init =
 
 	if( jion.twig )
 	{
-		twig = idRepository.create( );
-
 		if( jools.isString( jion.twig ) )
 		{
 			twigDef = require( '../typemaps/' + jion.twig.substr( 2 ) );
@@ -451,18 +449,9 @@ generator.prototype._init =
 			twigDef = jion.twig;
 		}
 
-		for(
-			a = 0, aZ = twigDef.length;
-			a < aZ;
-			a++
-		)
-		{
-			twigID = id.createFromString( twigDef[ a ] );
+		twig = idRepository.createFromIDStrings( twigDef );
 
-			units = units.add( twigID );
-
-			twig = twig.add( twigID );
-		}
+		units = units.add( twig );
 
 		this.twig = twig;
 	}
@@ -474,6 +463,8 @@ generator.prototype._init =
 	if( jion.ray )
 	{
 		this.ray = jion.ray;
+
+		// XXX
 
 /**/	if( CHECK )
 /**/	{

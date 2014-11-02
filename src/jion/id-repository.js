@@ -459,6 +459,13 @@ idRepository.prototype._addIDRepository =
 						unit[ name ] = idrUnit[ name ];
 					}
 				}
+
+/**/			if( CHECK )
+/**/			{
+/**/				Object.freeze( unit );
+/**/			}
+
+				units[ unitStr ] = unit;
 			}
 
 		}
