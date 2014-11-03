@@ -19,6 +19,7 @@ var
 
 fs = require( 'fs' );
 
+
 jionNodeGenerator =
 module.exports =
 	function(
@@ -29,11 +30,12 @@ module.exports =
 		server,
 		inFilename,
 		inStat,
+		jion,
 		outFilename,
 		outStat,
 		si,
 		separator;
-	
+
 	server = module;
 
 	separator = '/src/';
@@ -67,8 +69,7 @@ module.exports =
 		);
 	}
 
-	inFilename =
-		module.filename.substring( si + 1 );
+	inFilename = module.filename.substring( si + 1 );
 
 	outFilename =
 		'jion/'
@@ -93,12 +94,17 @@ module.exports =
 		}
 	}
 
-	return(
+	// requires the jion code.
+
+	jion =
 		require(
 			'../../'
 			+ outFilename.substr( 0, outFilename.length - 3 )
 		)
-	);
+
+	module.exports = jion;
+
+	return jion;
 };
 
 

@@ -138,10 +138,4 @@ inventory.prototype.removeResource =
 };
 
 
-/*
-| Module export.
-*/
-module.exports = inventory;
-
-
 } )( );
