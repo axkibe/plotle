@@ -1932,7 +1932,7 @@ generator.prototype.genFromJSONCreatorVariables =
 
 		if( this.ray )
 		{
-			varList.push( 'ray', 'r', 'rZ' );
+			varList.push( 'jray', 'ray', 'r', 'rZ' );
 		}
 	}
 
@@ -1968,11 +1968,6 @@ generator.prototype.genFromJSONCreatorParser =
 		name,
 		// the switch
 		nameSwitch,
-		rayID,
-		rayIDList,
-		rayLoopSwitch,
-		r,
-		rZ,
 		t,
 		tZ;
 
@@ -1998,7 +1993,7 @@ generator.prototype.genFromJSONCreatorParser =
 	{
 		nameSwitch =
 			nameSwitch
-			.astCase( '"ray"', 'ray = arg' );
+			.astCase( '"ray"', 'jray = arg' );
 	}
 
 	for(
@@ -2094,45 +2089,68 @@ generator.prototype.genFromJSONCreatorParser =
 			.append( nameSwitch )
 		);
 
-	if( this.ray )
+	return block;
+};
+
+
+/*
+| Generates the fromJSONCreator's twig processing.
+*/
+generator.prototype.genFromJSONCreatorRayProcessing =
+	function(
+		block // block to append to
+	)
+{
+	var
+		idList,
+		loopSwitch,
+		r,
+		rid,
+		rZ;
+
+	block =
+		block
+		.astIf( '!jray', astFail( ) )
+		.astAssign( 'ray', astArrayLiteral( ) );
+
+	idList = this.ray.idList;
+
+	loopSwitch =
+		astSwitch( 'jray[ r ].type' )
+		.astDefault( astFail( ) );
+
+	for(
+		r = 0, rZ = idList.length;
+		r < rZ;
+		r++
+	)
 	{
-		rayIDList = this.ray.idList;
+		rid = idList[ r ];
 
-		rayLoopSwitch = astSwitch( 'ray[ r ].reflect' );
-
-		for(
-			r = 0, rZ = rayIDList.length;
-			r < rZ;
-			r++
-		)
-		{
-			rayID = rayIDList[ r ];
-
-			rayLoopSwitch =
-				rayLoopSwitch
-				.astCase(
-					rayID.astString,
-					astAssign(
-						'ray[ r ]',
-						astCall(
-							rayID.astVar.astDot( 'createFromJSON' ),
-							'ray[ r ]'
-						)
+		loopSwitch =
+			loopSwitch
+			.astCase(
+				rid.astString,
+				astAssign(
+					'ray[ r ]',
+					astCall(
+						rid.astVar.astDot( 'createFromJSON' ),
+						'jray[ r ]'
 					)
-				);
-		}
-
-		block =
-			block
-			.astFor(
-				astCommaList( )
-				.astAssign( 'r', 0 )
-				.astAssign( 'rZ', 'ray.length' ),
-				'r < rZ',
-				'++r',
-				rayLoopSwitch
+				)
 			);
 	}
+
+	block =
+		block
+		.astFor(
+			astCommaList( )
+			.astAssign( 'r', 0 )
+			.astAssign( 'rZ', 'jray.length' ),
+			'r < rZ',
+			'++r',
+			loopSwitch
+		);
 
 	return block;
 };
@@ -2340,6 +2358,11 @@ generator.prototype.genFromJSONCreator =
 	if( this.twig )
 	{
 		funcBlock = this.genFromJSONCreatorTwigProcessing( funcBlock );
+	}
+
+	if( this.ray )
+	{
+		funcBlock = this.genFromJSONCreatorRayProcessing( funcBlock );
 	}
 
 	funcBlock = this.genFromJSONCreatorReturn( funcBlock );

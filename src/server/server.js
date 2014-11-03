@@ -78,6 +78,8 @@ ccot =
 			require( '../ccot/change-ray' ),
 		changeWrap :
 			require( '../ccot/change-wrap' ),
+		changeWrapRay :
+			require( '../ccot/change-wrap-ray' ),
 	};
 
 jion =
@@ -866,16 +868,17 @@ Server.prototype.prepareInventory =
 				uglify.parse(
 					codes[ a ],
 					{
-						filename : resource.filePath,
-						strict : true,
-						toplevel : ast
+						filename :
+							resource.filePath,
+						strict :
+							true,
+						toplevel :
+							ast
 					}
 				);
 		}
 		catch ( e )
 		{
-			console.log( e );
-
 			console.log(
 				'parse error',
 				resource.filePath,
@@ -1407,7 +1410,7 @@ Server.prototype.cmdAlter =
 	var
 		a,
 		changes,
-		changeWrap,
+		changeWrapRay,
 		chgX,
 		cid,
 		passhash,
@@ -1422,7 +1425,7 @@ Server.prototype.cmdAlter =
 
 	seq = cmd.seq;
 
-	changeWrap = cmd.changeWrap;
+	changeWrapRay = cmd.changeWrapRay;
 
 	spaceUser = cmd.spaceUser;
 
@@ -1464,9 +1467,9 @@ Server.prototype.cmdAlter =
 		throw jools.reject( 'seq missing' );
 	}
 
-	if( changeWrap === undefined )
+	if( changeWrapRay === undefined )
 	{
-		throw jools.reject( 'changeWrap missing' );
+		throw jools.reject( 'changeWrapRay missing' );
 	}
 
 	spaceName = spaceUser + ':' + spaceTag;
@@ -1498,21 +1501,31 @@ Server.prototype.cmdAlter =
 		throw jools.reject( 'invalid seq' );
 	}
 
-// XXX
-//	try
-//	{
-		changeWrap = ccot.changeWrap.createFromJSON( changeWrap );
-//	}
-//	catch( err )
-//	{
-//		throw jools.reject(
-//			'invalid cmd: ' + err.message
-//		);
-//	}
+	try
+	{
+		changeWrapRay = ccot.changeWrapRay.createFromJSON( changeWrapRay );
+	}
+	catch( err )
+	{
+		console.log( err.stack );
 
-	cid = changeWrap.cid;
+		throw jools.reject(
+			'command not valid jion: ' + err.message
+		);
+	}
 
-	chgX = changeWrap.chgX;
+console.log( 'cwr len', changeWrapRay.length );
+
+	if( changeWrapRay.length !== 1 )
+	{
+		throw jools.reject( 'FIXME changeWrapRay.length must be 1' );
+	}
+
+	cid = changeWrapRay.get( 0 ).cid;
+
+	chgX = changeWrapRay.get( 0 ).chgX;
+
+console.log( chgX.reflect );
 
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )

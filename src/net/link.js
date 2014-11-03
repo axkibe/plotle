@@ -608,6 +608,7 @@ link.prototype._sendChanges =
 {
 	var
 		changeWrap,
+		changeWrapRay,
 		link;
 
 	link = this;
@@ -632,7 +633,14 @@ link.prototype._sendChanges =
 		return;
 	}
 
+	// TODO fix
 	changeWrap = link._outbox.get( 0 );
+
+	// TODO remove this workaround
+	changeWrapRay = ccot.changeWrapRay.create( );
+
+	changeWrapRay = changeWrapRay.append( changeWrap );
+
 
 	link =
 	root.link =
@@ -644,7 +652,7 @@ link.prototype._sendChanges =
 			'_postbox',
 //				link._outbox
 // TODO
-				link._postbox.append( changeWrap )
+				changeWrapRay
 		);
 
 	root.ajax.twig.command.request(
@@ -652,7 +660,7 @@ link.prototype._sendChanges =
 			cmd : 'alter',
 			spaceUser : link.spaceUser,
 			spaceTag : link.spaceTag,
-			changeWrap : changeWrap,
+			changeWrapRay : changeWrapRay,
 			passhash : link.passhash,
 			seq : link._rSeq,
 			user : link.username
