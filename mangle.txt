@@ -780,9 +780,11 @@
 > touches
 . track
 . transItem
+. transform
 . transformChange
 . transformChangeRay
-. transformChangeX
+. transformChangeWrap
+. transformChangeWrapRay
 . transformSign
 . transformSignRay
 . transformSignX

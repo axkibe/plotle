@@ -110,35 +110,47 @@ jools.lazyValue(
 
 /*
 | Returns the result of a change
-| transformed by this change ray.
+| transformed by this change-ray.
+|
+| The result can be a change or a change-ray.
 */
 changeRay.prototype.transformChange =
 	function(
-		chg
+		c
 	)
 {
 	var
 		a,
 		aZ,
-		chgX;
+		cx;
 
-	chgX = chg;
+/**/if( CHECK )
+/**/{
+/**/	if( c.reflect !== 'ccot.change' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	cx = c;
 
 	for(
 		a = 0, aZ = this.length;
 		a < aZ;
 		a++)
 	{
-		chgX = this.get( a ).transformChange( chgX );
+		cx = this.get( a ).transformChange( cx );
 	}
 
-	return chgX;
+	return cx;
 };
 
 
 /*
-| Returns the result of a change ray
-| transformed by this change ray.
+| Returns the result of a changeray
+| transformed by this change-ray.
+|
+| The result is a change-ray.
 */
 changeRay.prototype.transformChangeRay =
 	function(
@@ -161,26 +173,57 @@ changeRay.prototype.transformChangeRay =
 		a++
 	)
 	{
-		rX = this.get( a ).transformChangeRay( cray );
-
-		for(
-			b = 0, bZ = rX.length;
-			b < bZ;
-			b++
-		)
-		{
-			y.push(
-				rX.get( b )
-			);
-		}
+		cray = this.get( a ).transformChangeRay( cray );
 	}
 
-	return changeRay.create( 'ray:init', y );
+	return cray;
 };
 
 
 /*
-| Returns the result of a change or change ray
+| Return a change wrap transformed by this change.
+*/
+changeRay.prototype.transformChangeWrap =
+	function(
+		cw
+	)
+{
+	return cw.create( 'chgX', this.transform( cw.chgX ) );
+};
+
+
+/*
+| Return a change wrap transformed by this change.
+*/
+changeRay.prototype.transformChangeWrapRay =
+	function(
+		cwr
+	)
+{
+	var
+		r,
+		rZ,
+		tray;
+
+	tray = [ ];
+
+	for(
+		r = 0, rZ = cwr.length;
+		r < rZ;
+		r++
+	)
+	{
+		tray[ r ] = this.transformChangeWrap( cwr.get( r ) );
+	}
+
+
+	return cwr.create( 'ray:init', tray );
+};
+
+
+/*
+| Returns the result of a
+| change, changeRay, changeWrap or changeWrapRay
 | transformed by this change ray.
 */
 changeRay.prototype.transform =
@@ -197,6 +240,14 @@ changeRay.prototype.transform =
 		case 'ccot.changeRay' :
 
 			return this.transformChangeRay( co );
+
+		case 'ccot.changeWrap' :
+
+			return this.transformChangeWrap( co );
+
+		case 'ccot.changeWrapRay' :
+
+			return this.transformChangeWrapRay( co );
 
 		default :
 

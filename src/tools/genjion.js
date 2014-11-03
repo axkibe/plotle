@@ -1,6 +1,8 @@
 /*
 | Runs the jion generator for a list of files.
 |
+| FUTURE modalirize this a bit.
+|
 | Authors: Axel Kittenberger
 */
 
@@ -160,25 +162,18 @@ for(
 	a++
 )
 {
-	inFilename =
-		listing.list[ a ];
-
+	inFilename = listing.list[ a ];
 
 	outFilename =
 		'./jion/'
-		+
-		listing.app
-		+
-		'/'
-		+
-		inFilename.replace( /\//g, '-' );
+		+ listing.app
+		+ '/'
+		+ inFilename.replace( /\//g, '-' );
 
 	list.push(
 		{
-			inFilename :
-				inFilename,
-			outFilename :
-				outFilename
+			inFilename : inFilename,
+			outFilename : outFilename
 		}
 	);
 }
@@ -220,20 +215,15 @@ for(
 			'Reading ' + file.inFilename
 		);
 
-		input =
-			fs.readFileSync(
-				file.inFilename,
-				readOptions
-			);
+		input = fs.readFileSync( file.inFilename, readOptions );
 
 		jion =
 			vm.runInNewContext(
 				input,
 				{
-					JION :
-						true
+					JION : true
 				},
-				inFilename
+				file.inFilename
 			);
 
 		ast = generator.generate( jion, false );
@@ -245,10 +235,7 @@ for(
 			'Writing ' + file.outFilename
 		);
 
-		fs.writeFileSync(
-			file.outFilename,
-			output
-		);
+		fs.writeFileSync( file.outFilename, output );
 
 		didSomething = true;
 	}

@@ -262,10 +262,8 @@ change.prototype.changeTree =
 
 	return jools.immute(
 		{
-			tree :
-				r.tree,
-			chgX :
-				r.chg
+			tree : r.tree,
+			chgX : r.chg
 		}
 	);
 };
@@ -306,7 +304,7 @@ change.prototype.get =
 */
 change.prototype.transformChange =
 	function(
-		chg
+		c
 	)
 {
 	var
@@ -320,21 +318,17 @@ change.prototype.transformChange =
 
 /**/if( CHECK )
 /**/{
-/**/	if( chg.reflect !== 'ccot.change' )
+/**/	if( c.reflect !== 'ccot.change' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	srcX = this.transformSign( chg.src );
+	srcX = this.transformSign( c.src );
 
-	trgX = this.transformSign( chg.trg );
+	trgX = this.transformSign( c.trg );
 
-	if(
-		srcX === null
-		||
-		trgX === null
-	)
+	if( srcX === null || trgX === null )
 	{
 		return null;
 	}
@@ -435,10 +429,8 @@ change.prototype.transformChange =
 		{
 			y[ a ] =
 				change.create(
-					'src',
-						srcX.get( a ),
-					'trg',
-						trgX
+					'src', srcX.get( a ),
+					'trg', trgX
 				);
 		}
 
@@ -452,6 +444,42 @@ change.prototype.transformChange =
 
 
 /*
+| Returns a change ray transformed by this change.
+*/
+change.prototype.transformChangeRay =
+	function(
+		cray
+	)
+{
+	var
+		r,
+		rZ,
+		tray;
+
+/**/if( CHECK )
+/**/{
+/**/	if( cr.reflect !== 'ccot.changeRay' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	tray = [ ];
+
+	for(
+		r = 0, rZ = cray.length;
+		r < rZ;
+		r++
+	)
+	{
+		tray[ r ] = this.transformChange( cray.get( r ) );
+	}
+
+	return cray.create( 'ray:init', tray );
+};
+
+
+/*
 | Return a change wrap transformed by this change.
 */
 change.prototype.transformChangeWrap =
@@ -459,9 +487,7 @@ change.prototype.transformChangeWrap =
 		cw
 	)
 {
-	return(
-		cw.create( 'chgX', this.transfrom( cw.chgX ) )
-	);
+	return cw.create( 'chgX', this.transform( cw.chgX ) );
 };
 
 
@@ -486,26 +512,11 @@ change.prototype.transformChangeWrapRay =
 		r++
 	)
 	{
-		tray[ r ] = this.transfromChangeWrap( cwr.get( r ) );
+		tray[ r ] = this.transformChangeWrap( cwr.get( r ) );
 	}
 
 
-	return(
-		cwr.create( 'ray:init', tray )
-	);
-};
-
-
-/*
-| Returns a change ray transformed by this change.
-*/
-change.prototype.transformChangeRay =
-	function(
-	//	chgX
-	)
-{
-	throw new Error( );
-	// TODO
+	return cwr.create( 'ray:init', tray );
 };
 
 
@@ -524,6 +535,10 @@ change.prototype.transform =
 
 			return this.transformChange( cx );
 
+		case 'ccot.changeRay' :
+
+			return this.transformChangeRay( cx );
+
 		case 'ccot.changeWrap' :
 
 			return this.transformChangeWrap( cx );
@@ -531,10 +546,6 @@ change.prototype.transform =
 		case 'ccot.changeWrapRay' :
 
 			return this.transformChangeWrapRay( cx );
-
-		case 'ccot.changeRay' :
-
-			return this.transformChangeRay( cx );
 
 		default :
 
@@ -681,10 +692,8 @@ change.prototype._changeTreeSet =
 			tree,
 		chg :
 			this.create(
-				'src',
-					src,
-				'trg',
-					trg
+				'src', src,
+				'trg', trg
 			)
 	};
 };
@@ -735,25 +744,19 @@ change.prototype._changeTreeInsert =
 	trg = trg.affix( 'at2', tat2 );
 
 	nstr =
-		str.substring( 0, trg.at1 ) +
-		src.val +
-		str.substring( trg.at1 );
+		str.substring( 0, trg.at1 )
+		+ src.val
+		+ str.substring( trg.at1 );
 
-	tree =
-		tree.setPath(
-			trg.path,
-			nstr
-		);
+	tree = tree.setPath( trg.path, nstr );
 
 	return {
 		tree :
 			tree,
 		chg :
 			this.create(
-				'src',
-					src,
-				'trg',
-					trg
+				'src', src,
+				'trg', trg
 			)
 	};
 };
@@ -793,20 +796,14 @@ change.prototype._changeTreeRemove =
 
 	if( !jools.isString( str ) )
 	{
-		jools.log(
-			'change',
-			'src.path signates no string'
-		);
+		jools.log( 'change', 'src.path signates no string' );
 
 		return null;
 	}
 
 	if( src.at1 === src.at2 )
 	{
-		jools.log(
-			'change',
-			'removed nothing'
-		);
+		jools.log( 'change', 'removed nothing' );
 
 		return null;
 	}
@@ -836,10 +833,8 @@ change.prototype._changeTreeRemove =
 			tree,
 		chg :
 			this.create(
-				'src',
-					src,
-				'trg',
-					trg
+				'src', src,
+				'trg', trg
 			)
 	};
 };
@@ -923,11 +918,7 @@ change.prototype._changeTreeJoin =
 
 	// FIXME check other keys to be equal
 
-	para1 =
-		para1.create(
-			'text',
-				para1.text + para2.text
-		);
+	para1 = para1.create( 'text', para1.text + para2.text );
 
 	pivot =
 		pivot.create(
@@ -950,10 +941,8 @@ change.prototype._changeTreeJoin =
 			tree,
 		chg :
 			this.create(
-				'src',
-					src,
-				'trg',
-					trg
+				'src', src,
+				'trg', trg
 			)
 	};
 };
@@ -995,10 +984,7 @@ change.prototype._changeTreeSplit =
 
 	text = tree.getPath( path );
 
-	pivot =
-		tree.getPath(
-			path.shorten( 3 )
-		);
+	pivot = tree.getPath( path.shorten( 3 ) );
 
 	jools.check( jools.isString( text ), cm, 'src signates no text' );
 
@@ -1032,17 +1018,9 @@ change.prototype._changeTreeSplit =
 
 	para1 = pivot.twig[ key ];
 
-	para2 =
-		para1.create(
-			'text',
-				text.substring( at1, text.length )
-		);
+	para2 = para1.create( 'text', text.substring( at1, text.length ) );
 
-	para1 =
-		para1.create(
-			'text',
-				text.substring( 0, at1 )
-		);
+	para1 = para1.create( 'text', text.substring( 0, at1 ) );
 
 	pivot =
 		pivot.create(
@@ -1172,17 +1150,15 @@ change.prototype._changeTreeRank =
 			tree,
 		chg :
 			this.create(
-				'src',
-					src,
-				'trg',
-					trg
+				'src', src,
+				'trg', trg
 			)
 	};
 };
 
 
 /*
-| Transforms a signature on a this change
+| Transforms a signature by this change
 |
 | This can possibly return a sign ray.
 */
@@ -1290,6 +1266,8 @@ change.prototype.transformSignRay =
 /*
 | Returns a transformed sign or signRay on this change.
 |
+| FIXME move into generic transform
+|
 | Can possibly transform a sign to a signRay.
 */
 change.prototype.transformSignX =
@@ -1354,7 +1332,7 @@ change.prototype._transformSignSplit =
 			return sign;
 		}
 
-		return (
+		return(
 			sign.create(
 				'path',
 					trg.path,
@@ -1377,7 +1355,7 @@ change.prototype._transformSignSplit =
 	if( sign.at1 >= src.at1 )
 	{
 		// signature goes into splitted line instead
-		return (
+		return(
 			sign.create(
 				'path',
 					trg.path,
@@ -1389,7 +1367,8 @@ change.prototype._transformSignSplit =
 		);
 	}
 
-	// the signature is splited into a part that stays and one that goes to next line.
+	// the signature is splited into a part that stays
+	// and one that goes to next line.
 
 	return(
 		ccot.signRay.create(
@@ -1506,7 +1485,7 @@ change.prototype._transformSignRank =
 		trg.rank > sign.rank
 	)
 	{
-		return (
+		return(
 			sign.create(
 				'rank',
 					sign.rank - 1
@@ -1515,7 +1494,7 @@ change.prototype._transformSignRank =
 	}
 	else if( src.rank > sign.rank && trg.rank <= sign.rank )
 	{
-		return (
+		return(
 			sign.create(
 				'rank',
 					sign.rank + 1
@@ -1722,7 +1701,7 @@ change.prototype._transformSignRemove =
 
 		if( sign.at1 <= src.at2 )
 		{
-			return (
+			return(
 				sign.create(
 					'at1',
 						src.at1
@@ -1730,7 +1709,7 @@ change.prototype._transformSignRemove =
 			);
 		}
 
-		return (
+		return(
 			sign.create(
 				'at1',
 				sign.at1 - len
@@ -1756,21 +1735,20 @@ change.prototype._transformSignRemove =
 	}
 	else if( sign.at1 >= src.at2 )
 	{
-		return (
+		return(
 			sign.create(
-				'at1',
-					sign.at1 - len,
-				'at2',
-					sign.at2 - len
-				)
+				'at1', sign.at1 - len,
+				'at2', sign.at2 - len
+			)
 		);
 	}
 	else if(
-		sign.at1 < src.at1 &&
+		sign.at1 < src.at1
+		&&
 		sign.at2 > src.at2
 	)
 	{
-		return (
+		return(
 			sign.create(
 				'at2',
 					sign.at2 - len
@@ -1791,24 +1769,15 @@ change.prototype._transformSignRemove =
 		sign.at2 <= src.at2
 	)
 	{
-		return (
-			sign.create(
-				'at2',
-					src.at1
-			)
-		);
+		return sign.create( 'at2', src.at1 );
 	}
 	else if(
-		sign.at1 <= src.at2 &&
+		sign.at1 <= src.at2
+		&&
 		sign.at2 > src.at2
 	)
 	{
-		return (
-			sign.create(
-				'at2',
-				src.at2
-			)
-		);
+		return sign.create( 'at2', src.at2 );
 	}
 	else
 	{
