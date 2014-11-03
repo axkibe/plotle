@@ -43,8 +43,7 @@ if( JION )
 }
 
 
-module.exports =
-	require( '../jion/this' )( module );
+require( '../jion/this' )( module );
 
 
 } )( );

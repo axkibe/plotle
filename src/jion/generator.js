@@ -81,9 +81,7 @@ var
 	validator;
 
 
-generator =
-module.exports =
-	require( '../jion/this' )( module );
+generator = require( '../jion/this' )( module );
 
 id = require( './id' );
 

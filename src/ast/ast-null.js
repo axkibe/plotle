@@ -30,11 +30,7 @@ if( JION )
 }
 
 
-/*
-| Node export.
-*/
-module.exports =
-	require( '../jion/this' )( module );
+require( '../jion/this' )( module );
 
 
 } )( );
