@@ -50,28 +50,28 @@ if( JION )
 }
 
 
+var
+	change,
+	changeRay;
+
+
 /*
 | Node includes.
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools'  );
+	changeRay = require( '../jion/this' )( module );
 
-	ccot =
-		{
-			change :
-				require( '../ccot/change' ),
-			changeRay :
-				require( '../jion/this' )( module )
-		};
+	jools = require( '../jools/jools'  );
+
+	change = require( '../ccot/change' );
 }
+else
+{
+	change = ccot.change;
 
-
-var
-	changeRay;
-
-changeRay = ccot.changeRay;
+	changeRay = ccot.changeRay;
+}
 
 
 /*
@@ -343,13 +343,5 @@ changeRay.prototype.transformSign =
 	return signX;
 };
 
-
-/*
-| Exports
-*/
-if( SERVER )
-{
-	module.exports = changeRay;
-}
 
 }( ) );

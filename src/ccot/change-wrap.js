@@ -72,9 +72,7 @@ var
 
 if( SERVER )
 {
-	changeWrap =
-	module.exports =
-		require( '../jion/this' )( module );
+	changeWrap = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
 }

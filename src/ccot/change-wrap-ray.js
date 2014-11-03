@@ -51,7 +51,7 @@ if( JION )
 */
 if( SERVER )
 {
-	module.exports = require( '../jion/this' )( module );
+	require( '../jion/this' )( module );
 }
 
 
