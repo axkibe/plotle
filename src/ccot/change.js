@@ -458,7 +458,7 @@ change.prototype.transformChangeRay =
 
 /**/if( CHECK )
 /**/{
-/**/	if( cr.reflect !== 'ccot.changeRay' )
+/**/	if( cray.reflect !== 'ccot.changeRay' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

@@ -100,7 +100,7 @@ module.exports =
 		require(
 			'../../'
 			+ outFilename.substr( 0, outFilename.length - 3 )
-		)
+		);
 
 	module.exports = jion;
 

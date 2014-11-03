@@ -62,9 +62,7 @@ if( JION )
 var
 	tokenSpec;
 
-tokenSpec =
-module.exports =
-	require( '../jion/this' )( module );
+tokenSpec = require( '../jion/this' )( module );
 
 
 /*

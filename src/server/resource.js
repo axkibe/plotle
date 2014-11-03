@@ -164,21 +164,14 @@ if( JION )
 */
 var
 	jools,
-	resource,
-	server;
+	fileTypes,
+	resource;
+
+resource = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
-server =
-	{
-		fileTypes :
-			require( './file-types' ),
-		resource :
-			require( '../jion/this' )( module )
-	};
-
-
-resource = server.resource;
+fileTypes = require( './file-types' );
 
 
 /*
@@ -202,12 +195,12 @@ resource.prototype._init =
 
 	if( !this.coding )
 	{
-		this.coding = server.fileTypes.coding( this.fileExt );
+		this.coding = fileTypes.coding( this.fileExt );
 	}
 
 	if( !this.mime )
 	{
-		this.mime = server.fileTypes.mime( this.fileExt );
+		this.mime = fileTypes.mime( this.fileExt );
 	}
 };
 
@@ -268,12 +261,6 @@ jools.lazyValue(
 		return fp.split( '.' )[ 1 ];
 	}
 );
-
-
-/*
-| Node export
-*/
-module.exports = resource;
 
 
 } )( );

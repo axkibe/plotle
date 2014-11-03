@@ -65,9 +65,7 @@ var
 	jools,
 	state;
 
-state =
-module.exports =
-	require( '../jion/this' )( module );
+state = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 

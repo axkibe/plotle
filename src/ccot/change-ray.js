@@ -160,9 +160,6 @@ changeRay.prototype.transformChangeRay =
 	var
 		a,
 		aZ,
-		b,
-		bZ,
-		rX,
 		y;
 
 	y = [ ];
@@ -173,7 +170,7 @@ changeRay.prototype.transformChangeRay =
 		a++
 	)
 	{
-		cray = this.get( a ).transformChangeRay( cray );
+		cray = this.get( a ).transform( cray );
 	}
 
 	return cray;
