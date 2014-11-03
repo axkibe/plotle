@@ -73,6 +73,10 @@ if( JION )
 }
 
 
+var
+	path;
+
+
 /*
 | Node imports.
 */
@@ -80,14 +84,12 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	jion.path = require( '../jion/this' )( module );
+	path = require( '../jion/this' )( module );
 }
-
-
-var
-	path;
-
-path = jion.path;
+else
+{
+	path = jion.path;
+}
 
 
 /*
@@ -170,12 +172,10 @@ path.prototype.append =
 
 	arr.push( key );
 
-	return (
+	return(
 		path.create(
-			'array',
-				arr,
-			'_sliced',
-				true
+			'array', arr,
+			'_sliced', true
 		)
 	);
 };
@@ -214,23 +214,19 @@ path.prototype.chop =
 
 	if( n > 0 )
 	{
-		return (
+		return(
 			path.create(
-				'array',
-					arr,
-				'_sliced',
-					true
+				'array', arr,
+				'_sliced', true
 			)
 			.chop( n - 1 )
 		);
 	}
 
-	return (
+	return(
 		path.create(
-			'array',
-				arr,
-			'_sliced',
-				true
+			'array', arr,
+			'_sliced', true
 		)
 	);
 };
@@ -281,12 +277,10 @@ path.prototype.shorten =
 		arr.pop( );
 	}
 
-	return (
+	return(
 		path.create(
-			'array',
-				arr,
-			'_sliced',
-				true
+			'array', arr,
+			'_sliced', true
 		)
 	);
 };
@@ -323,12 +317,10 @@ path.prototype.limit =
 	}
 
 
-	return (
+	return(
 		path.create(
-			'array',
-				this._path.slice( 0, n ),
-			'_sliced',
-				true
+			'array', this._path.slice( 0, n ),
+			'_sliced', true
 		)
 	);
 };
@@ -351,7 +343,7 @@ path.prototype.prepend =
 
 	arr.unshift( key );
 
-	return (
+	return(
 		path.create(
 			'array',
 				arr,
@@ -392,12 +384,10 @@ path.prototype.set =
 
 	arr[ idx ] = key;
 
-	return (
+	return(
 		path.create(
-			'array',
-				arr,
-			'_sliced',
-				true
+			'array', arr,
+			'_sliced', true
 		)
 	);
 };
@@ -471,9 +461,7 @@ path.prototype.subPathOf =
 
 		if( len < 0 )
 		{
-			throw new Error(
-				'subPathOf out of range'
-			);
+			throw new Error( 'subPathOf out of range' );
 		}
 	}
 
@@ -584,19 +572,9 @@ jools.lazyValue(
 */
 path.empty =
 	path.create(
-		'array',
-			[ ],
-		'_sliced',
-			true
+		'array', [ ],
+		'_sliced', true
 	);
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = path;
-}
 
 
 } )( );
