@@ -183,20 +183,20 @@ changeRay.prototype.transformChangeRay =
 | Returns the result of a change or change ray
 | transformed by this change ray.
 */
-changeRay.prototype.transformChangeX =
+changeRay.prototype.transform =
 	function(
-		chgX
+		co
 	)
 {
-	switch( chgX.reflect )
+	switch( co.reflect )
 	{
 		case 'ccot.change' :
 
-			return this.transformChange( chgX );
+			return this.transformChange( co );
 
 		case 'ccot.changeRay' :
 
-			return this.transformChangeRay( chgX );
+			return this.transformChangeRay( co );
 
 		default :
 

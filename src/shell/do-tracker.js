@@ -158,7 +158,7 @@ doTracker.prototype.update =
 
 		if( u.seq < seq + a )
 		{
-			tfxChgX = u.chgX.transformChangeX( chgX );
+			tfxChgX = u.chgX.transform( chgX );
 
 			// the change vanished by transformation
 			if( tfxChgX === null )
@@ -195,7 +195,7 @@ doTracker.prototype.update =
 
 		if( u.seq < seq + a )
 		{
-			tfxChgX = u.chgX.transformChangeX( chgX );
+			tfxChgX = u.chgX.transform( chgX );
 
 			// the change vanished by transformation
 			if( tfxChgX === null )
@@ -213,7 +213,7 @@ doTracker.prototype.update =
 					'cid',
 						u.cid,
 					'chgX',
-						u.chgX.transformChangeX( chgX ),
+						u.chgX.transform( chgX ),
 					'seq',
 						u.seq
 				)

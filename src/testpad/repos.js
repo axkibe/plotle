@@ -239,7 +239,7 @@ proto.alter =
 		s++
 	)
 	{
-		chgX = changes.get( s ).chgX.transformChangeX( chgX );
+		chgX = changes.get( s ).chgX.transform( chgX );
 
 		if( chgX === null )
 		{

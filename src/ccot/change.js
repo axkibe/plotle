@@ -302,7 +302,7 @@ change.prototype.get =
 
 
 /*
-| Returns a change transformed on this change.
+| Returns a change transformed by this change.
 */
 change.prototype.transformChange =
 	function(
@@ -442,11 +442,7 @@ change.prototype.transformChange =
 				);
 		}
 
-		return (
-			ccot.changeRay.create(
-				'ray:init', y
-			)
-		);
+		return ccot.changeRay.create( 'ray:init', y );
 	}
 	else
 	{
@@ -456,7 +452,52 @@ change.prototype.transformChange =
 
 
 /*
-| Returns a change ray transformed on this change.
+| Return a change wrap transformed by this change.
+*/
+change.prototype.transformChangeWrap =
+	function(
+		cw
+	)
+{
+	return(
+		cw.create( 'chgX', this.transfrom( cw.chgX ) )
+	);
+};
+
+
+/*
+| Return a change wrap transformed by this change.
+*/
+change.prototype.transformChangeWrapRay =
+	function(
+		cwr
+	)
+{
+	var
+		r,
+		rZ,
+		tray;
+
+	tray = [ ];
+
+	for(
+		r = 0, rZ = cwr.length;
+		r < rZ;
+		r++
+	)
+	{
+		tray[ r ] = this.transfromChangeWrap( cwr.get( r ) );
+	}
+
+
+	return(
+		cwr.create( 'ray:init', tray )
+	);
+};
+
+
+/*
+| Returns a change ray transformed by this change.
 */
 change.prototype.transformChangeRay =
 	function(
@@ -469,22 +510,31 @@ change.prototype.transformChangeRay =
 
 
 /*
-| Returns a change or a changeRay transformed on this change.
+| Returns a change, changeRay, changeWrap or changeWrapRay
+| transformed on this change.
 */
-change.prototype.transformChangeX =
+change.prototype.transform =
 	function(
-		chgX
+		cx
 	)
 {
-	switch( chgX.reflect )
+	switch( cx.reflect )
 	{
 		case 'ccot.change' :
 
-			return this.transformChange( chgX );
+			return this.transformChange( cx );
+
+		case 'ccot.changeWrap' :
+
+			return this.transformChangeWrap( cx );
+
+		case 'ccot.changeWrapRay' :
+
+			return this.transformChangeWrapRay( cx );
 
 		case 'ccot.changeRay' :
 
-			return this.transformChangeRay( chgX );
+			return this.transformChangeRay( cx );
 
 		default :
 

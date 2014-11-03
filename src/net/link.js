@@ -475,7 +475,7 @@ link.prototype._onUpdate =
 				b++
 			)
 			{
-				chgX = chgX.transformChangeX( report.get( b ) );
+				chgX = chgX.transform( report.get( b ) );
 			}
 
 			// FUTURE adapt changeTree so it
@@ -502,7 +502,7 @@ link.prototype._onUpdate =
 				b++
 			)
 			{
-				chgX = chgX.transformChangeX( report.get( b ) );
+				chgX = chgX.transform( report.get( b ) );
 			}
 
 			outbox =

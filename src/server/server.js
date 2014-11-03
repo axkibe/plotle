@@ -1374,9 +1374,9 @@ Server.prototype.extraMangle =
 	if( missed.length > 0 )
 	{
 		console.log(
-			'extraMangle missed ' +
-				missed.length +
-				' properties: ',
+			'extraMangle missed '
+			+ missed.length
+			+ ' properties: ',
 			missed
 		);
 	}
@@ -1514,8 +1514,6 @@ Server.prototype.cmdAlter =
 		);
 	}
 
-console.log( 'cwr len', changeWrapRay.length );
-
 	if( changeWrapRay.length !== 1 )
 	{
 		throw jools.reject( 'FIXME changeWrapRay.length must be 1' );
@@ -1525,12 +1523,10 @@ console.log( 'cwr len', changeWrapRay.length );
 
 	chgX = changeWrapRay.get( 0 ).chgX;
 
-console.log( chgX.reflect );
-
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )
 	{
-		chgX = changes[ a ].chgX.transformChangeX( chgX );
+		chgX = changes[ a ].chgX.transform( chgX );
 
 		if(
 			chgX === null
