@@ -57,9 +57,7 @@ var
 	jools;
 
 
-idRepository =
-module.exports =
-	require( '../jion/this' )( module );
+idRepository = require( '../jion/this' )( module );
 
 id = require( './id' );
 
@@ -483,8 +481,6 @@ idRepository.prototype._addIDRepository =
 		)
 	);
 };
-
-
 
 
 } )( );

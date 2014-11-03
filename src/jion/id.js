@@ -54,9 +54,7 @@ var
 	jools,
 	shorthand;
 
-id =
-module.exports =
-	require( '../jion/this' )( module );
+id = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
