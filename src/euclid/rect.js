@@ -62,24 +62,30 @@ if( JION )
 	};
 }
 
+var
+	ellipse,
+	point,
+	rect;
 
 /*
 | Node includes.
 */
 if( SERVER )
 {
+	rect = require( '../jion/this' )( module );
+
 	jools = require( '../jools/jools' );
 
-	euclid.point = require( './point' );
-
-	euclid.rect = require( '../jion/this' )( module );
+	point = require( './point' );
 }
+else
+{
+	ellipse = euclid.ellipse;
 
+	point = euclid.point;
 
-var
-	rect;
-
-rect = euclid.rect;
+	rect = euclid.rect;
+}
 
 
 /*
@@ -119,32 +125,25 @@ rect.createArbitrary =
 		p1.y >= p2.y
 	)
 	{
-		pnw = euclid.point.create( 'x', p1.x, 'y', p2.y );
+		pnw = point.create( 'x', p1.x, 'y', p2.y );
 
-		pse = euclid.point.create( 'x', p2.x, 'y', p1.y );
+		pse = point.create( 'x', p2.x, 'y', p1.y );
 	}
 	else if(
 		p1.x >= p2.x &&
 		p2.y >= p1.y
 	)
 	{
-		pnw = euclid.point.create( 'x', p2.x, 'y', p1.y );
+		pnw = point.create( 'x', p2.x, 'y', p1.y );
 
-		pse = euclid.point.create( 'x', p1.x, 'y', p2.y );
+		pse = point.create( 'x', p1.x, 'y', p2.y );
 	}
 	else
 	{
 		throw new Error( );
 	}
 
-	return(
-		rect.create(
-			'pnw',
-				pnw,
-			'pse',
-				pse
-		)
-	);
+	return rect.create( 'pnw', pnw, 'pse', pse );
 };
 
 
@@ -194,10 +193,8 @@ jools.lazyValue(
 		{
 			return(
 				rect.create(
-					'pnw',
-						euclid.point.zero,
-					'pse',
-						this.pse.sub( this.pnw )
+					'pnw', point.zero,
+					'pse', this.pse.sub( this.pnw )
 				)
 			);
 		}
@@ -214,11 +211,9 @@ rect.prototype.computeEllipse =
 	)
 {
 	return(
-		euclid.ellipse.create(
-			'pnw',
-				model.pnw.compute( this ),
-			'pse',
-				model.pse.compute( this )
+		ellipse.create(
+			'pnw', model.pnw.compute( this ),
+			'pse', model.pse.compute( this )
 		)
 	);
 };
@@ -232,11 +227,10 @@ rect.prototype.reduce =
 		margin
 	)
 {
-	// FIXME use reflect when a jion
 
 /**/if( CHECK )
 /**/{
-/**/	if( margin.constructor !== euclid.margin )
+/**/	if( margin.reflect !== 'euclid.margin' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -247,14 +241,14 @@ rect.prototype.reduce =
 	return(
 		rect.create(
 			'pnw',
-				euclid.point.renew(
+				point.renew(
 					this.pnw.x + margin.e,
 					this.pnw.y + margin.n,
 					this.pnw,
 					this.pse
 				),
 			'pse',
-				euclid.point.renew(
+				point.renew(
 					this.pse.x - margin.w,
 					this.pse.y - margin.s,
 					this.pnw,
@@ -295,11 +289,7 @@ rect.prototype.cardinalResize =
 
 			wx = pnw.x;
 
-			ny =
-				Math.min(
-					pnw.y + dy,
-					pse.y - minh
-				);
+			ny = Math.min( pnw.y + dy, pse.y - minh );
 
 			ex = pse.x;
 
@@ -311,17 +301,9 @@ rect.prototype.cardinalResize =
 
 			wx = pnw.x;
 
-			ny =
-				Math.min(
-					pnw.y + dy,
-					pse.y - minh
-				);
+			ny = Math.min( pnw.y + dy, pse.y - minh );
 
-			ex =
-				Math.max(
-					pse.x + dx,
-					pnw.x + minw
-				);
+			ex = Math.max( pse.x + dx, pnw.x + minw );
 
 			sy = pse.y;
 
@@ -333,11 +315,7 @@ rect.prototype.cardinalResize =
 
 			ny = pnw.y;
 
-			ex =
-				Math.max(
-					pse.x + dx,
-					pnw.x + minw
-				),
+			ex = Math.max( pse.x + dx, pnw.x + minw ),
 
 			sy = pse.y;
 
@@ -349,17 +327,9 @@ rect.prototype.cardinalResize =
 
 			ny = pnw.y;
 
-			ex =
-				Math.max(
-					pse.x + dx,
-					pnw.x + minw
-				);
+			ex = Math.max( pse.x + dx, pnw.x + minw );
 
-			sy =
-				Math.max(
-					pse.y + dy,
-					pnw.y + minh
-				);
+			sy = Math.max( pse.y + dy, pnw.y + minh );
 
 			break;
 
@@ -371,41 +341,25 @@ rect.prototype.cardinalResize =
 
 			ex = pse.x;
 
-			sy =
-				Math.max(
-					pse.y + dy,
-					pnw.y + minh
-				);
+			sy = Math.max( pse.y + dy, pnw.y + minh );
 
 			break;
 
 		case 'sw'  :
 
-			wx =
-				Math.min(
-					pnw.x + dx,
-					pse.x - minw
-				);
+			wx = Math.min( pnw.x + dx, pse.x - minw );
 
 			ny = pnw.y;
 
 			ex = pse.x;
 
-			sy =
-				Math.max(
-					pse.y + dy,
-					pnw.y + minh
-				);
+			sy = Math.max( pse.y + dy, pnw.y + minh );
 
 			break;
 
 		case 'w'   :
 
-			wx =
-				Math.min(
-					pnw.x + dx,
-					pse.x - minw
-				);
+			wx = Math.min( pnw.x + dx, pse.x - minw );
 
 			ny = pnw.y;
 
@@ -417,17 +371,9 @@ rect.prototype.cardinalResize =
 
 		case 'nw' :
 
-			wx =
-				Math.min(
-					pnw.x + dx,
-					pse.x - minw
-				);
+			wx = Math.min( pnw.x + dx, pse.x - minw );
 
-			ny =
-				Math.min(
-					pnw.y + dy,
-					pse.y - minh
-				);
+			ny = Math.min( pnw.y + dy, pse.y - minh );
 
 			ex = pse.x;
 
@@ -435,7 +381,7 @@ rect.prototype.cardinalResize =
 
 			break;
 
-		default  :
+		default :
 
 			// unknown cardinal
 			throw new Error( );
@@ -462,11 +408,9 @@ jools.lazyValue(
 	function( )
 	{
 		return(
-			euclid.point.create(
-				'x',
-					jools.half( this.pse.x + this.pnw.x ),
-				'y',
-					jools.half( this.pse.y + this.pnw.y )
+			point.create(
+				'x', jools.half( this.pse.x + this.pnw.x ),
+				'y', jools.half( this.pse.y + this.pnw.y )
 			)
 		);
 	}
@@ -482,11 +426,9 @@ jools.lazyValue(
 	function( )
 	{
 		return(
-			euclid.point.create(
-				'x',
-					jools.half( this.pse.x + this.pnw.x ),
-				'y',
-					this.pnw.y
+			point.create(
+				'x', jools.half( this.pse.x + this.pnw.x ),
+				'y', this.pnw.y
 			)
 		);
 	}
@@ -502,11 +444,9 @@ jools.lazyValue(
 	function( )
 	{
 		return(
-			euclid.point.create(
-				'x',
-					this.pnw.x,
-				'y',
-					jools.half( this.pse.y + this.pnw.y )
+			point.create(
+				'x', this.pnw.x,
+				'y', jools.half( this.pse.y + this.pnw.y )
 			)
 		);
 	}
@@ -522,11 +462,9 @@ jools.lazyValue(
 	function( )
 	{
 		return(
-			euclid.point.create(
-				'x',
-					this.pse.x,
-				'y',
-					jools.half( this.pse.y + this.pnw.y )
+			point.create(
+				'x', this.pse.x,
+				'y', jools.half( this.pse.y + this.pnw.y )
 			)
 		);
 	}
@@ -547,10 +485,8 @@ rect.prototype.add =
 {
 	return(
 		rect.create(
-			'pnw',
-				this.pnw.add( a1, a2 ),
-			'pse',
-				this.pse.add( a1, a2 )
+			'pnw', this.pnw.add( a1, a2 ),
+			'pse', this.pse.add( a1, a2 )
 		)
 	);
 };
@@ -644,12 +580,12 @@ rect.renew =
 
 	if( !pnw )
 	{
-		pnw = euclid.point.create( 'x', wx, 'y', ny );
+		pnw = point.create( 'x', wx, 'y', ny );
 	}
 
 	if( !pse )
 	{
-		pse = euclid.point.create( 'x', ex, 'y', sy );
+		pse = point.create( 'x', ex, 'y', sy );
 	}
 
 	return rect.create( 'pnw', pnw, 'pse', pse );
@@ -670,10 +606,8 @@ rect.prototype.sub =
 {
 	return(
 		rect.create(
-			'pnw',
-				this.pnw.sub( a1, a2 ),
-			'pse',
-				this.pse.sub( a1, a2 )
+			'pnw', this.pnw.sub( a1, a2 ),
+			'pse', this.pse.sub( a1, a2 )
 		)
 	);
 };
@@ -779,7 +713,7 @@ rect.prototype.getProjection =
 
 		if ( x >= wx && x <= ex )
 		{
-			return euclid.point.create( 'x', x, 'y', ny );
+			return point.create( 'x', x, 'y', ny );
 		}
 	}
 
@@ -789,7 +723,7 @@ rect.prototype.getProjection =
 
 		if( x >= wx && x <= ex )
 		{
-			return euclid.point.create( 'x', x, 'y', sy );
+			return point.create( 'x', x, 'y', sy );
 		}
 	}
 
@@ -799,7 +733,7 @@ rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return euclid.point.create( 'x', ex, 'y', y );
+			return point.create( 'x', ex, 'y', y );
 		}
 	}
 
@@ -809,20 +743,12 @@ rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return euclid.point.create( 'x', wx, 'y', y );
+			return point.create( 'x', wx, 'y', y );
 		}
 	}
 
 	return pc;
 };
 
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = rect;
-}
 
 } )( );
