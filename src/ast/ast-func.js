@@ -58,9 +58,7 @@ var
 	jools;
 
 
-astFunc =
-module.exports =
-	require( '../jion/this' )( module );
+astFunc = require( '../jion/this' )( module );
 
 astFuncArg = require( './ast-func-arg' );
 

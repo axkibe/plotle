@@ -41,9 +41,7 @@ var
 	jools,
 	shorthand;
 
-astVList =
-module.exports =
-	require( '../jion/this' )( module );
+astVList = require( '../jion/this' )( module );
 
 astVarDec = require( './ast-var-dec' );
 

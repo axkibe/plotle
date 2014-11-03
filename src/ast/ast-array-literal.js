@@ -35,10 +35,7 @@ var
 	jools;
 
 
-astArrayLiteral =
-module.exports =
-	require( '../jion/this' )( module );
-
+astArrayLiteral = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 

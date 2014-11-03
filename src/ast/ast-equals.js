@@ -46,9 +46,7 @@ if( JION )
 var
 	astEquals;
 
-astEquals =
-module.exports =
-	require( '../jion/this' )( module );
+astEquals = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

@@ -48,9 +48,7 @@ var
 	tools;
 
 
-astVar =
-module.exports =
-	require( '../jion/this' )( module );
+astVar = require( '../jion/this' )( module );
 
 astDot = require( './ast-dot' );
 

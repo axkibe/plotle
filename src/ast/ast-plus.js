@@ -47,9 +47,7 @@ if( JION )
 var
 	astPlus;
 
-astPlus =
-module.exports =
-	require( '../jion/this' )( module );
+astPlus = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

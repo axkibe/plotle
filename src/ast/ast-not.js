@@ -39,9 +39,7 @@ if( JION )
 var
 	astNot;
 
-astNot =
-module.exports =
-	require( '../jion/this' )( module );
+astNot = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

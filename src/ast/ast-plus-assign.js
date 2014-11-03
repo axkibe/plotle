@@ -43,13 +43,7 @@ if( JION )
 }
 
 
-var
-	astPlusAssign;
-
-
-astPlusAssign =
-module.exports =
-	require( '../jion/this' )( module );
+require( '../jion/this' )( module );
 
 
 } )( );

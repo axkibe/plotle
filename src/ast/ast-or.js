@@ -46,9 +46,7 @@ if( JION )
 var
 	astOr;
 
-astOr =
-module.exports =
-	require( '../jion/this' )( module );
+astOr = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

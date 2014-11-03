@@ -47,9 +47,7 @@ var
 	astAssign;
 
 
-astAssign =
-module.exports =
-	require( '../jion/this' )( module );
+astAssign = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
