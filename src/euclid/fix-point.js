@@ -64,21 +64,20 @@ if( JION )
 }
 
 
-/*
-| Node includes.
-*/
-if( SERVER )
-{
-	jools = require( '../jools/jools' );
-
-	euclid.fixPoint = require( '../jion/this' )( module );
-}
-
-
 var
 	fixPoint;
 
-fixPoint = euclid.fixPoint;
+
+if( SERVER )
+{
+	fixPoint = require( '../jion/this' )( module );
+
+	jools = require( '../jools/jools' );
+}
+else
+{
+	fixPoint = euclid.fixPoint;
+}
 
 
 
