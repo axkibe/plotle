@@ -16,7 +16,6 @@ var
 | Imports
 */
 var
-	jion,
 	jools;
 
 
@@ -63,7 +62,10 @@ if( JION )
 
 
 var
-	change;
+	change,
+	changeRay,
+	sign,
+	signRay;
 
 
 /*
@@ -71,33 +73,25 @@ var
 */
 if( SERVER )
 {
+	change = require( '../jion/this' )( module );
+
 	jools = require( '../jools/jools' );
 
-	jion =
-		{
-			path :
-				require( '../jion/path'  )
-		};
+	changeRay = require( '../ccot/change-ray' );
 
-	ccot =
-		{
-			change :
-				require( '../jion/this' )( module ),
-			changeRay :
-				require( '../ccot/change-ray' ),
-			sign :
-				require( '../ccot/sign'  ),
-			signRay :
-				require( '../ccot/sign-ray'  )
-		};
+	sign = require( '../ccot/sign' );
 
-	change =
-	module.exports =
-		ccot.change;
+	signRay = require( '../ccot/sign-ray' );
 }
 else
 {
 	change = ccot.change;
+
+	changeRay = ccot.changeRay;
+
+	sign = ccot.sign;
+
+	signRay = ccot.signRay;
 }
 
 
@@ -415,7 +409,7 @@ change.prototype.transformChange =
 				);
 		}
 
-		return ccot.changeRay.create( 'ray:init', y );
+		return changeRay.create( 'ray:init', y );
 	}
 	else if( srcA && !trgA )
 	{
@@ -434,7 +428,7 @@ change.prototype.transformChange =
 				);
 		}
 
-		return ccot.changeRay.create( 'ray:init', y );
+		return changeRay.create( 'ray:init', y );
 	}
 	else
 	{
@@ -1334,10 +1328,8 @@ change.prototype._transformSignSplit =
 
 		return(
 			sign.create(
-				'path',
-					trg.path,
-				'at1',
-					sign.at1 - src.at1
+				'path', trg.path,
+				'at1', sign.at1 - src.at1
 			)
 		);
 	}
@@ -1357,12 +1349,9 @@ change.prototype._transformSignSplit =
 		// signature goes into splitted line instead
 		return(
 			sign.create(
-				'path',
-					trg.path,
-				'at1',
-					sign.at1 - src.at1,
-				'at2',
-					sign.at2 - src.at1
+				'path', trg.path,
+				'at1', sign.at1 - src.at1,
+				'at2', sign.at2 - src.at1
 			)
 		);
 	}
@@ -1371,20 +1360,16 @@ change.prototype._transformSignSplit =
 	// and one that goes to next line.
 
 	return(
-		ccot.signRay.create(
+		signRay.create(
 			'ray:init',
 				[
 					sign.create(
-						'at2',
-							src.at1
+						'at2', src.at1
 					),
 					sign.create(
-						'path',
-							trg.path,
-						'at1',
-							0,
-						'at2',
-							sign.at2 - src.at1
+						'path', trg.path,
+						'at1', 0,
+						'at2', sign.at2 - src.at1
 					)
 				]
 		)

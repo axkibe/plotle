@@ -118,13 +118,20 @@ if( JION )
 }
 
 
+var
+	sign;
+
+
 /*
 | Node includes.
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools' );
+	sign = require( '../jion/this' )( module );
+
+	jools = require( '../jools/jools' );
+
+	// FUTURE, remove this once createFromJSON is fixed.
 	euclid =
 		{
 			point :
@@ -132,11 +139,7 @@ if( SERVER )
 			rect :
 				require( '../euclid/rect' )
 		};
-	ccot =
-		{
-			sign :
-				require( '../jion/this' )( module )
-		};
+
 	visual =
 		{
 			label :
@@ -149,12 +152,10 @@ if( SERVER )
 				require( '../visual/relation' )
 		};
 }
-
-
-var
-	sign;
-
-sign = ccot.sign;
+else
+{
+	sign = ccot.sign;
+}
 
 
 /*
@@ -259,13 +260,5 @@ sign.prototype.affix =
 	return this.create( key, val );
 };
 
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = sign;
-}
 
 }( ) );

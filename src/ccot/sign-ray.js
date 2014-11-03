@@ -15,13 +15,6 @@ ccot = ccot || { };
 
 
 /*
-| Imports
-*/
-var
-	jools;
-
-
-/*
 | Capsule
 */
 ( function( ) {
@@ -51,31 +44,8 @@ if( JION )
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools'  );
-
-	ccot =
-		{
-			sign :
-				require( '../ccot/sign' ),
-			signRay :
-				require( '../jion/this' )( module )
-		};
+	require( '../jion/this' )( module );
 }
 
-
-var
-	signRay;
-
-signRay = ccot.signRay;
-
-
-/*
-| Exports
-*/
-if( SERVER )
-{
-	module.exports = signRay;
-}
 
 }( ) );
