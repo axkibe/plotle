@@ -134,26 +134,23 @@ if( JION )
 }
 
 
+var
+	label;
+
+
 /*
 | Node includes.
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools' ),
+	jools = require( '../jools/jools' ),
 
-	visual =
-		{
-			label :
-				require( '../jion/this' )( module )
-		};
+	label = require( '../jion/this' )( module );
 }
-
-
-var
-	label;
-
-label = visual.label;
+else
+{
+	label = visual.label;
+}
 
 
 /*
@@ -272,12 +269,10 @@ jools.lazyValue(
 	'silhoutte',
 	function( )
 	{
-		return (
+		return(
 			euclid.rect.create(
-				'pnw',
-					this.zone.pnw,
-				'pse',
-					this.zone.pse.sub( 1, 1 )
+				'pnw', this.zone.pnw,
+				'pse', this.zone.pse.sub( 1, 1 )
 			)
 		);
 	}
@@ -297,16 +292,14 @@ jools.lazyValue(
 
 		zone = this.zone;
 
-		return (
+		return(
 			euclid.rect.create(
 				'pnw',
 					euclid.point.zero,
 				'pse',
 					euclid.point.create(
-						'x',
-							Math.max( zone.width  - 1, 0 ),
-						'y',
-							Math.max( zone.height - 1, 0 )
+						'x', Math.max( zone.width  - 1, 0 ),
+						'y', Math.max( zone.height - 1, 0 )
 					)
 			)
 		);
@@ -355,7 +348,7 @@ label.prototype.dragStop =
 
 		default :
 
-			return (
+			return(
 				visual.docItem.prototype.dragStop.call(
 					this,
 					view,
@@ -428,10 +421,8 @@ label.prototype.draw =
 	)
 {
 	fabric.drawImage(
-		'image',
-			this._fabric,
-		'pnw',
-			this.view.point( this.zone.pnw )
+		'image', this._fabric,
+		'pnw', this.view.point( this.zone.pnw )
 	);
 };
 
@@ -472,14 +463,6 @@ label.prototype.scrollPage =
 	// nada
 };
 
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = label;
-}
 
 
 } )( );
