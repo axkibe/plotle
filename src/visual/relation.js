@@ -154,6 +154,10 @@ if( JION )
 }
 
 
+var
+	label,
+	relation;
+
 /*
 | Node includes.
 */
@@ -161,19 +165,16 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	visual =
-		{
-			label :
-				require( './label' ),
-			relation :
-				require( '../jion/this' )( module )
-		};
+	label = require( './label' );
+
+	relation = require( '../jion/this' )( module );
 }
+else
+{
+	label = visual.label;
 
-var
-	relation;
-
-relation = visual.relation;
+	relation = visual.relation;
+}
 
 
 /*
@@ -184,10 +185,7 @@ relation.prototype._init =
 		inherit
 	)
 {
-	visual.label.prototype._init.call(
-		this,
-		inherit
-	);
+	label.prototype._init.call( this, inherit );
 };
 
 
@@ -304,20 +302,8 @@ relation.prototype.draw =
 		);
 	}
 
-	visual.label.prototype.draw.call(
-		this,
-		fabric
-	);
+	label.prototype.draw.call( this, fabric );
 };
-
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = relation;
-}
 
 
 } )( );

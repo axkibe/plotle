@@ -135,6 +135,10 @@ if( JION )
 	};
 }
 
+
+var
+	portal;
+
 /*
 | Node includes.
 */
@@ -142,18 +146,12 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	visual =
-		{
-			portal :
-				require( '../jion/this' )( module )
-		};
+	portal = require( '../jion/this' )( module );
 }
-
-
-var
-	portal;
-
-portal = visual.portal;
+else
+{
+	portal = visual.portal;
+}
 
 
 /*
@@ -1990,15 +1988,6 @@ portal.prototype._moveTo =
 		false
 	);
 };
-
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = portal;
-}
 
 
 } )( );

@@ -132,6 +132,10 @@ if( JION )
 }
 
 
+var
+	para;
+
+
 /*
 | Node includes.
 */
@@ -139,14 +143,12 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	visual.para = require( '../jion/this' )( module );
+	para = require( '../jion/this' )( module );
 }
-
-
-var
-	para;
-
-para = visual.para;
+else
+{
+	para = visual.para;
+}
 
 
 /*
@@ -1630,15 +1632,6 @@ para.prototype._setMark =
 		);
 	}
 };
-
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = para;
-}
 
 
 } )( );

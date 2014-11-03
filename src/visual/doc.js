@@ -123,6 +123,9 @@ if( JION )
 }
 
 
+var
+	doc;
+
 /*
 | Node includes.
 */
@@ -130,18 +133,13 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	visual =
-		{
-			doc :
-				require( '../jion/this' )( module )
-		};
+	doc = require( '../jion/this' )( module );
+}
+else
+{
+	doc = visual.doc;
 }
 
-
-var
-	doc;
-
-doc = visual.doc;
 
 
 /*
@@ -1076,18 +1074,6 @@ doc.prototype.specialKey =
 		)
 	);
 };
-
-
-
-
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = doc;
-}
 
 
 } )( );

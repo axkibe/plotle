@@ -139,24 +139,21 @@ if( JION )
 	};
 }
 
-/*
-| Node includes.
-*/
-if( SERVER )
-{
-	jools = require( '../jools/jools' );
-
-	visual =
-		{
-			space : require( '../jion/this' )( module )
-		};
-}
-
 
 var
 	space;
 
-space = visual.space;
+
+if( SERVER )
+{
+	jools = require( '../jools/jools' );
+
+	space = require( '../jion/this' )( module );
+}
+else
+{
+	space = visual.space;
+}
 
 
 /*
@@ -1717,15 +1714,6 @@ space.prototype.specialKey =
 		);
 	}
 };
-
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = space;
-}
 
 
 } )( );
