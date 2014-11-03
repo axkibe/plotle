@@ -62,21 +62,20 @@ if( JION )
 }
 
 
-/*
-| Node includes.
-*/
+var
+	point;
+
+
 if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	euclid.point = require( '../jion/this' )( module );
+	point = require( '../jion/this' )( module );
 }
-
-
-var
-	point;
-
-point = euclid.point;
+else
+{
+	point = euclid.point;
+}
 
 
 /*
@@ -96,10 +95,8 @@ point.prototype.add =
 		}
 
 		return point.create(
-			'x',
-				this.x + a1.x,
-			'y',
-				this.y + a1.y
+			'x', this.x + a1.x,
+			'y', this.y + a1.y
 		);
 	}
 	else
@@ -110,10 +107,8 @@ point.prototype.add =
 		}
 
 		return point.create(
-			'x',
-				this.x + a1,
-			'y',
-				this.y + a2
+			'x', this.x + a1,
+			'y', this.y + a2
 		);
 	}
 };
@@ -136,10 +131,8 @@ point.prototype.sub =
 		}
 
 		return point.create(
-			'x',
-				this.x - a1.x,
-			'y',
-				this.y - a1.y
+			'x', this.x - a1.x,
+			'y', this.y - a1.y
 		);
 	}
 	else
@@ -150,10 +143,8 @@ point.prototype.sub =
 		}
 
 		return point.create(
-			'x',
-				this.x - a1,
-			'y',
-				this.y - a2
+			'x', this.x - a1,
+			'y', this.y - a2
 		);
 	}
 };
@@ -175,15 +166,17 @@ point.renew =
 	)
 {
 	var
+		a,
+		aZ,
 		p;
 
 	for(
-		var a = 2, aZ = arguments.length;
+		a = 2, aZ = arguments.length;
 		a < aZ;
 		a++
 	)
 	{
-		p = arguments[a];
+		p = arguments[ a ];
 
 		if(
 			p
@@ -199,12 +192,7 @@ point.renew =
 		}
 	}
 
-	return point.create(
-		'x',
-			x,
-		'y',
-			y
-	);
+	return point.create( 'x', x, 'y', y );
 };
 
 
@@ -219,12 +207,9 @@ point.prototype.fixPoint =
 {
 	return(
 		euclid.fixPoint.create(
-			'anchor',
-				this,
-			'x',
-				x,
-			'y',
-				y
+			'anchor', this,
+			'x', x,
+			'y', y
 		)
 	);
 };
@@ -235,20 +220,9 @@ point.prototype.fixPoint =
 */
 point.zero =
 	point.create(
-		'x',
-			0,
-		'y',
-			0
+		'x', 0,
+		'y', 0
 	);
-
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = point;
-}
 
 
 } )( );

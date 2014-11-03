@@ -77,28 +77,27 @@ if( JION )
 }
 
 
+var
+	point,
+	view;
+
 /*
 | Node includes.
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools' );
+	view = require( '../jion/this' )( module );
 
-	euclid =
-		{
-			point :
-				require( './point' ),
-			view :
-				require( '../jion/this' )( module )
-		};
+	jools = require( '../jools/jools' );
+
+	point = require( './point' );
 }
+else
+{
+	view = euclid.view;
 
-
-var
-	view;
-
-view = euclid.view;
+	point = euclid.point;
+}
 
 
 /*
@@ -252,12 +251,7 @@ jools.lazyValue(
 	'home',
 	function( )
 	{
-		return (
-			this.create(
-				'pan',
-					euclid.point.zero
-			)
-		);
+		return this.create( 'pan', point.zero );
 	}
 );
 
@@ -271,12 +265,10 @@ jools.lazyValue(
 	'sizeOnly',
 	function( )
 	{
-		return (
+		return(
 			this.create(
-				'pan',
-					euclid.point.zero,
-				'fact',
-					0
+				'pan', point.zero,
+				'fact', 0
 			)
 		);
 	}
@@ -299,7 +291,7 @@ view.prototype.point =
 		case 'euclid.point' :
 
 			return(
-				euclid.point.renew(
+				point.renew(
 					this.x( p.x ),
 					this.y( p.y ),
 					p
@@ -311,11 +303,9 @@ view.prototype.point =
 			anchor = p.anchor;
 
 			return(
-				euclid.point.create(
-					'x',
-						this.x( anchor.x ) + p.x,
-					'y',
-						this.y( anchor.y ) + p.y
+				point.create(
+					'x', this.x( anchor.x ) + p.x,
+					'y', this.y( anchor.y ) + p.y
 				)
 			);
 
@@ -343,12 +333,10 @@ view.prototype.depoint =
 /**/	}
 /**/}
 
-	return (
-		euclid.point.create(
-			'x',
-				this.dex( p.x ),
-			'y',
-				this.dey( p.y )
+	return(
+		point.create(
+			'x', this.dex( p.x ),
+			'y', this.dey( p.y )
 		)
 	);
 };
@@ -365,24 +353,22 @@ view.prototype.rect =
 {
 	var
 		pnw,
-		pse;
+		pse,
+		r;
 
 	if( this.zoom === 1 )
 	{
-		var
-			r =
-				( a1.reflect === 'euclid.rect' )
-				?  a1
-				: euclid.rect.create(
-					'pnw',
-						a1,
-					'pse',
-						a2
-				);
+		r =
+			( a1.reflect === 'euclid.rect' )
+			? a1
+			: euclid.rect.create(
+				'pnw', a1,
+				'pse', a2
+			);
 
-		return (
+		return(
 			( this.pan.x === 0 && this.pan.y === 0 )
-			?  r
+			? r
 			: r.add( this.pan )
 		);
 	}
@@ -400,11 +386,11 @@ view.prototype.rect =
 		pse = a2;
 	}
 
-	return euclid.rect.create(
-		'pnw',
-			this.point( pnw ),
-		'pse',
-			this.point( pse )
+	return(
+		euclid.rect.create(
+			'pnw', this.point( pnw ),
+			'pse', this.point( pse )
+		)
 	);
 };
 
@@ -455,21 +441,15 @@ view.prototype.review =
 
 	z1 = Math.pow( 1.1, f1 );
 
-	f =
-		1 / z1
-		-
-		1 / this.zoom;
+	f = 1 / z1 - 1 / this.zoom;
 
 	return(
 		this.create(
-			'fact',
-				f1,
+			'fact', f1,
 			'pan',
-				euclid.point.create(
-					'x',
-						Math.round( pan.x + p.x * f ),
-					'y',
-						Math.round( pan.y + p.y * f )
+				point.create(
+					'x', Math.round( pan.x + p.x * f ),
+					'y', Math.round( pan.y + p.y * f )
 				)
 		)
 	);
@@ -487,13 +467,11 @@ jools.lazyValue(
 		return(
 			euclid.rect.create(
 				'pnw',
-					euclid.point.zero,
+					point.zero,
 				'pse',
-					euclid.point.create(
-						'x',
-							this.width,
-						'y',
-							this.height
+					point.create(
+						'x', this.width,
+						'y', this.height
 					)
 			)
 		);
@@ -506,14 +484,10 @@ jools.lazyValue(
 */
 view.proper =
 	view.create(
-		'height',
-			0,
-		'fact',
-			0,
-		'pan',
-			euclid.point.zero,
-		'width',
-			0
+		'height', 0,
+		'fact', 0,
+		'pan', point.zero,
+		'width', 0
 	);
 
 
