@@ -72,6 +72,9 @@ if( JION )
 }
 
 
+var
+	margin;
+
 /*
 | Node includes.
 */
@@ -79,14 +82,12 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	euclid.margin = require( '../jion/this' )( module );
+	margin = require( '../jion/this' )( module );
 }
-
-
-var
-	margin;
-
-margin = euclid.margin;
+else
+{
+	margin = euclid.margin;
+}
 
 
 /*
@@ -126,4 +127,4 @@ jools.lazyValue(
 );
 
 
-} ) ();
+} )( );
