@@ -51,10 +51,7 @@ var
 	token,
 	tokenList;
 
-
-token =
-module.exports =
-	require( '../jion/this' )( module );
+token = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

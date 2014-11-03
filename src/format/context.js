@@ -247,10 +247,4 @@ jools.lazyValue(
 );
 
 
-/*
-| Node export.
-*/
-module.exports = context;
-
-
 } )( );
