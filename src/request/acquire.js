@@ -1,5 +1,5 @@
 /*
-| A client requests the space tree to be altered.
+| A client wants to acquire a space.
 |
 | Authors: Axel Kittenberger
 */
@@ -28,17 +28,17 @@ if( JION )
 {
 	return {
 		id :
-			'request.alter',
+			'request.acquire',
 		attributes :
 			{
-				changeWrapRay :
+				createMissing :
 					{
 						comment :
-							'the changes to be applied',
+							'if true the space is to be created if missing',
 						json :
 							true,
 						type :
-							'ccot.changeWrapRay'
+							'Boolean'
 					},
 				passhash :
 					{
@@ -48,15 +48,6 @@ if( JION )
 							true,
 						type :
 							'String'
-					},
-				seq :
-					{
-						comment :
-							'sequence number',
-						json :
-							true,
-						type :
-							'Integer'
 					},
 				spaceUser :
 					{

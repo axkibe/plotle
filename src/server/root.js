@@ -101,6 +101,8 @@ postProcessor = require( './post-processor' );
 
 request =
 	{
+		acquire : require( '../request/acquire' ),
+
 		alter : require( '../request/alter' ),
 
 		auth : require( '../request/auth' )
@@ -716,14 +718,10 @@ prototype.prepareInventory =
 	// autogenerates the shell config as resource
 	cconfig =
 		server.resource.create(
-			'data',
-				this.buildShellConfig( ),
-			'filePath',
-				'config.js',
-			'inBundle',
-				true,
-			'inTestPad',
-				true
+			'data', this.buildShellConfig( ),
+			'filePath', 'config.js',
+			'inBundle', true,
+			'inTestPad', true
 		);
 
 	this.inventory =
@@ -991,12 +989,9 @@ prototype.prepareInventory =
 	this.inventory =
 		this.inventory.addResource(
 			server.resource.create(
-				'filePath',
-					bundleFilePath,
-				'maxage',
-					'long',
-				'data',
-					bundle
+				'filePath', bundleFilePath,
+				'maxage', 'long',
+				'data', bundle
 			)
 		);
 
@@ -1439,8 +1434,6 @@ prototype.serveRequestAlter =
 		return jools.reject( 'command not valid jion' );
 	}
 
-console.log( 'RR3', req );
-
 	seq = req.seq;
 
 	changeWrapRay = req.changeWrapRay;
@@ -1672,6 +1665,7 @@ prototype.createSpace =
 
 	spaceName = spaceUser + ':' + spaceTag;
 
+	space =
 	this.$spaces[ spaceName ] =
 		{
 			$changesDB :
@@ -1769,14 +1763,10 @@ prototype.cmdRegister =
 	}
 
 	user = {
-		_id :
-			username,
-		pass :
-			passhash,
-		mail :
-			mail,
-		news :
-			news
+		_id : username,
+		pass : passhash,
+		mail : mail,
+		news : news
 	};
 
 	yield this.$db.users.insert(
@@ -1786,15 +1776,9 @@ prototype.cmdRegister =
 
 	this.$users[ username ] = user;
 
-	yield* this.createSpace(
-		username,
-		'home'
-	);
+	yield* this.createSpace( username, 'home' );
 
-	return {
-		ok :
-			true
-	};
+	return { ok : true };
 };
 
 
@@ -2295,14 +2279,10 @@ prototype.conveyUpdate =
 	}
 
 	return {
-		ok :
-			true,
-		seq :
-			seq,
-		seqZ :
-			seqZ,
-		chgs :
-			chgA
+		ok : true,
+		seq : seq,
+		seqZ : seqZ,
+		chgs : chgA
 	};
 };
 
@@ -2437,49 +2417,40 @@ prototype.testAccess =
 
 
 /*
-| Executes a get command.
+| Serves a get request.
 */
-prototype.cmdGet =
+prototype.serveRequestAcquire =
 	function* (
-		cmd
+		req
 	)
 {
 	var
-		a,
-		b,
 		access,
-		changes,
-		chgX,
-		node,
 		passhash,
-		seq,
-		seqZ,
 		space,
 		spaceName,
 		spaceTag,
 		spaceUser,
-		tree,
 		user;
 
-	passhash = cmd.passhash;
-
-	spaceTag = cmd.spaceTag;
-
-	spaceUser = cmd.spaceUser;
-
-	seq = cmd.seq;
-
-	user = cmd.user;
-
-	if( !cmd.user )
+	try
 	{
-		throw jools.reject('user missing');
+		req = request.acquire.createFromJSON( req );
+	}
+	catch( err )
+	{
+		console.log( err.stack );
+
+		return jools.reject( 'command not valid jion' );
 	}
 
-	if( !cmd.passhash )
-	{
-		throw jools.reject( 'passhash missing' );
-	}
+	passhash = req.passhash;
+
+	spaceTag = req.spaceTag;
+
+	spaceUser = req.spaceUser;
+
+	user = req.user;
 
 	if(
 		this.$users[ user ] === undefined
@@ -2490,36 +2461,18 @@ prototype.cmdGet =
 		throw jools.reject( 'wrong user/password' );
 	}
 
-	if( cmd.seq === undefined )
-	{
-		throw jools.reject( 'seq missing' );
-	}
-
-	if( cmd.path === undefined )
-	{
-		throw jools.reject( 'path missing' );
-	}
-
 	// FIXME test spaceUser/Tag
 
-	spaceName = cmd.spaceUser + ':'  + cmd.spaceTag;
+	spaceName = req.spaceUser + ':'  + req.spaceTag;
 
-	access =
-		this.testAccess(
-			cmd.user,
-			spaceUser,
-			spaceTag
-		);
+	access = this.testAccess( req.user, spaceUser, spaceTag );
 
-	if( access == 'no' )
+	if( access === 'no' )
 	{
 		return {
-			ok :
-				true,
-			access :
-				access,
-			status :
-				'no access'
+			ok : true,
+			access : access,
+			status : 'no access'
 		};
 	}
 
@@ -2527,97 +2480,26 @@ prototype.cmdGet =
 
 	if( !space )
 	{
-		if( cmd.create === true )
+		if( req.createMissing === true )
 		{
-			space =
-				yield* this.createSpace(
-					spaceUser,
-					spaceTag
-				);
+			space = yield* this.createSpace( spaceUser, spaceTag );
 		}
 		else
 		{
 			return {
-				ok :
-					true,
-				access :
-					access,
-				status :
-					'nonexistent'
+				ok : true,
+				access : access,
+				status : 'nonexistent'
 			};
 		}
 	}
 
-	changes = space.$changes,
-
-	seqZ = space.$seqZ;
-
-	if( seq === -1 )
-	{
-		seq = seqZ;
-	}
-	else if( !( seq >= 0 && seq <= seqZ ) )
-	{
-		throw jools.reject( 'invalid seq' );
-	}
-
-	tree = space.$tree;
-
-	// if the requested tree is not the latest, replay it backwards
-	for(
-		a = seqZ - 1;
-		a >= seq;
-		a--
-	)
-	{
-		chgX =
-			changes[ a ].chgX;
-
-		for(
-			b = 0;
-			b < chgX.length;
-			b++
-		)
-		{
-			tree =
-				chgX
-				.get( b )
-				.invert
-				.changeTree( tree )
-				.tree;
-		}
-	}
-
-	// returns the path requested
-
-	try
-	{
-		node =
-			tree.getPath(
-				jion.path.create(
-					'array',
-					cmd.path
-				)
-			);
-	}
-	catch( err )
-	{
-		throw jools.reject(
-			'cannot get path: ' + err.message
-		);
-	}
-
 	return {
-		ok :
-			true,
-		status :
-			'served',
-		access :
-			access,
-		seq :
-			seq,
-		node :
-			node
+		ok : true,
+		status : 'served',
+		access : access,
+		seq : space.$seqZ,
+		node : space.$tree
 	};
 };
 
@@ -3007,15 +2889,15 @@ prototype.ajaxCmd =
 		case 'request.auth' :
 
 			return yield* this.serveRequestAuth( cmd );
+
+		case 'request.acquire' :
+
+			return yield* this.serveRequestAcquire( cmd );
 	}
 
 	// FIXME move all the type
 	switch ( cmd.cmd )
 	{
-		case 'get' :
-
-			return yield* this.cmdGet( cmd );
-
 		case 'register' :
 
 			return yield* this.cmdRegister( cmd );

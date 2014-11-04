@@ -19,7 +19,6 @@ net = net || { };
 */
 var
 	ccot,
-	jion,
 	jools,
 	request,
 	root,
@@ -226,29 +225,28 @@ link.prototype._onRegister =
 /*
 | Aquires a space from the server
 | and starts receiving updates for it.
+|
+| FIXME typo acquireSpace
 */
 link.prototype.aquireSpace =
 	function(
 		spaceUser,
 		spaceTag,
-		create
+		createMissing
 	)
 {
 	// aborts the current running update.
 	root.ajax.twig.update.abortAll( );
 
 	root.ajax.twig.command.request(
-		{
-			cmd : 'get',
-			create : create,
-			spaceUser : spaceUser,
-			spaceTag : spaceTag,
-			path : jion.path.empty,
-			passhash : this.passhash,
-			seq : -1,
-			user : this.username
-		},
-		'_onAquireSpace'
+		request.acquire.create(
+			'createMissing', createMissing,
+			'passhash', this.passhash,
+			'spaceUser', spaceUser,
+			'spaceTag', spaceTag,
+			'user', this.username
+		),
+		'_onAcquireSpace'
 	);
 };
 
@@ -256,7 +254,7 @@ link.prototype.aquireSpace =
 /*
 | A space has been aquired.
 */
-link.prototype._onAquireSpace =
+link.prototype._onAcquireSpace =
 	function(
 		request,
 		reply
@@ -299,7 +297,7 @@ link.prototype._onAquireSpace =
 	if( reply.node.type !== 'visual.space' )
 	{
 		throw new Error(
-			'aquireSpace(): server served no space '
+			'acquireSpace(): server served no space '
 		);
 	}
 
