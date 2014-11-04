@@ -18,6 +18,7 @@ module.exports =
 			'src/ccot/sign.js',
 			'src/ccot/sign-ray.js',
 			'src/request/alter.js',
+			'src/request/auth.js',
 			'src/result/genjion.js',
 			'src/server/resource.js',
 			'src/server/inventory.js',

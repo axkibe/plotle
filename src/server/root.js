@@ -101,7 +101,9 @@ postProcessor = require( './post-processor' );
 
 request =
 	{
-		alter : require( '../request/alter' )
+		alter : require( '../request/alter' ),
+
+		auth : require( '../request/auth' )
 	};
 
 roster = require( './roster' );
@@ -1434,12 +1436,10 @@ prototype.serveRequestAlter =
 	}
 	catch( err )
 	{
-		console.log( err.stack );
-
-		throw jools.reject(
-			'command not valid jion: ' + err.message
-		);
+		return jools.reject( 'command not valid jion' );
 	}
+
+console.log( 'RR3', req );
 
 	seq = req.seq;
 
@@ -1580,11 +1580,11 @@ prototype.serveRequestAlter =
 
 
 /*
-| Executes an auth command.
+| Serves an auth request.
 */
-prototype.cmdAuth =
+prototype.serveRequestAuth =
 	function* (
-		cmd
+		req
 	)
 {
 	var
@@ -1592,19 +1592,20 @@ prototype.cmdAuth =
 		users,
 		val;
 
-	if( cmd.user === undefined )
+	try
 	{
-		throw jools.reject( 'user missing' );
+		req = request.auth.createFromJSON( req );
 	}
-
-	if( cmd.passhash === undefined )
+	catch( err )
 	{
-		throw jools.reject( 'passhash missing' );
+		console.log( err.stack );
+
+		return jools.reject( 'command not valid jion' );
 	}
 
 	users = this.$users;
 
-	if( cmd.user === 'visitor' )
+	if( req.user === 'visitor' )
 	{
 		do
 		{
@@ -1612,33 +1613,27 @@ prototype.cmdAuth =
 
 			uid = 'visitor-' + this.$nextVisitor;
 		}
-		while( users[uid] );
+		while( users[ uid ] );
 
 		users[ uid ] =
 			{
-				user :
-					uid,
-				pass :
-					cmd.passhash,
-				created :
-					Date.now( ),
-				use :
-					Date.now( )
+				user : uid,
+				pass : req.passhash,
+				created : Date.now( ),
+				use : Date.now( )
 			};
 
 		return {
-			ok :
-				true,
-			user:
-				uid
+			ok : true,
+			user : uid
 		};
 	}
 
-	if( !users[ cmd.user ] )
+	if( !users[ req.user ] )
 	{
 		val =
 			yield this.$db.users.findOne(
-				{ _id : cmd.user },
+				{ _id : req.user },
 				sus.resume( )
 			);
 
@@ -1647,27 +1642,23 @@ prototype.cmdAuth =
 			return jools.reject( 'Username unknown' );
 		}
 
-		users[ cmd.user ] =
-			val;
+		users[ req.user ] = val;
 	}
 
-	if( users[cmd.user].pass !== cmd.passhash )
+	if( users[ req.user ].pass !== req.passhash )
 	{
 		return jools.reject( 'Invalid password' );
 	}
 
 	return {
-		ok :
-			true,
-		user :
-			cmd.user
+		ok : true,
+		user : req.user
 	};
 };
 
 
 /*
 | Creates a new space.
-| FIXME uppercase
 */
 prototype.createSpace =
 	function* (
@@ -1676,10 +1667,11 @@ prototype.createSpace =
 	)
 {
 	var
-		spaceName =
-			spaceUser + ':' + spaceTag;
+		space,
+		spaceName;
 
-	var space =
+	spaceName = spaceUser + ':' + spaceTag;
+
 	this.$spaces[ spaceName ] =
 		{
 			$changesDB :
@@ -3011,15 +3003,15 @@ prototype.ajaxCmd =
 		case 'request.alter' :
 
 			return this.serveRequestAlter( cmd );
+
+		case 'request.auth' :
+
+			return yield* this.serveRequestAuth( cmd );
 	}
 
 	// FIXME move all the type
 	switch ( cmd.cmd )
 	{
-		case 'auth' :
-
-			return yield* this.cmdAuth(  cmd );
-
 		case 'get' :
 
 			return yield* this.cmdGet( cmd );

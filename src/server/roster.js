@@ -372,6 +372,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/request/auth.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/net/request-wrap.js',
 		'hasJion', true,
 		'inBundle', true

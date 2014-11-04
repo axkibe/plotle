@@ -229,7 +229,7 @@
 > changeRay
 . changeTree
 > changeWrap
-. changeWrapRay
+> changeWrapRay
 > changedTouches
 . channel
 . channelName
@@ -624,7 +624,7 @@
 > rank
 . rankOf
 > ranks
-. ray
+> ray
 . ray:append
 . ray:init
 . ray:insert

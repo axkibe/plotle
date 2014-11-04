@@ -144,11 +144,10 @@ link.prototype.auth =
 	)
 {
 	root.ajax.twig.command.request(
-		{
-			cmd : 'auth',
-			user : username,
-			passhash : passhash
-		},
+		request.auth.create(
+			'user', username,
+			'passhash', passhash
+		),
 		'_onAuth'
 	);
 };
