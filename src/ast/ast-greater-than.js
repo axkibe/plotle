@@ -46,9 +46,7 @@ if( JION )
 var
 	astGreaterThan;
 
-astGreaterThan =
-module.exports =
-	require( '../jion/this' )( module );
+astGreaterThan = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

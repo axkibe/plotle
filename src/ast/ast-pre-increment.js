@@ -40,9 +40,7 @@ var
 	astPreIncrement;
 
 
-astPreIncrement =
-module.exports =
-	require( '../jion/this' )( module );
+astPreIncrement = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

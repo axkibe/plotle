@@ -40,9 +40,7 @@ if( JION )
 var
 	astBoolean;
 
-astBoolean =
-module.exports =
-	require( '../jion/this' )( module );
+astBoolean = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

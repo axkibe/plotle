@@ -39,10 +39,7 @@ var
 	tools;
 
 
-astBlock =
-module.exports =
-	require( '../jion/this' )( module );
-
+astBlock = require( '../jion/this' )( module );
 
 astComment = require( './ast-comment' );
 

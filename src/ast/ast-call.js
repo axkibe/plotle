@@ -43,9 +43,7 @@ var
 	tools;
 
 
-astCall =
-module.exports =
-	require( '../jion/this' )( module );
+astCall = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 

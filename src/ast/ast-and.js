@@ -46,9 +46,7 @@ if( JION )
 var
 	astAnd;
 
-astAnd =
-module.exports =
-	require( '../jion/this' )( module );
+astAnd = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

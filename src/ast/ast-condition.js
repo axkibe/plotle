@@ -55,9 +55,7 @@ if( JION )
 var
 	astCondition;
 
-astCondition =
-module.exports =
-	require( '../jion/this' )( module );
+astCondition = require( '../jion/this' )( module );
 
 
 /*

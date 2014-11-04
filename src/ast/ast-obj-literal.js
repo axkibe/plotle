@@ -33,9 +33,7 @@ var
 	tools;
 
 
-astObjLiteral =
-module.exports =
-	require( '../jion/this' )( module );
+astObjLiteral = require( '../jion/this' )( module );
 
 
 tools = require( './tools' );

@@ -35,9 +35,7 @@ var
 	tools;
 
 
-astCommaList =
-module.exports =
-	require( '../jion/this' )( module );
+astCommaList = require( '../jion/this' )( module );
 
 astAssign = require( './ast-assign' );
 

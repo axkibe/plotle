@@ -46,9 +46,7 @@ if( JION )
 var
 	astDiffers;
 
-astDiffers =
-module.exports =
-	require( '../jion/this' )( module );
+astDiffers = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

@@ -39,9 +39,7 @@ if( JION )
 var
 	astString;
 
-astString =
-module.exports =
-	require( '../jion/this' )( module );
+astString = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )

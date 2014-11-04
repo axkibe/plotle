@@ -57,9 +57,7 @@ var
 	tools;
 
 
-astSwitch =
-module.exports =
-	require( '../jion/this' )( module );
+astSwitch = require( '../jion/this' )( module );
 
 astBlock = require( './ast-block' );
 
@@ -133,12 +131,7 @@ astSwitch.prototype.astDefault =
 		block = astBlock.create( ).append( tools.convert( code ) );
 	}
 
-	return(
-		this.create(
-			'defaultCase',
-			block
-		)
-	);
+	return this.create( 'defaultCase', block );
 };
 
 

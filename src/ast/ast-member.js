@@ -48,9 +48,7 @@ var
 	astMember;
 
 
-astMember =
-module.exports =
-	require( '../jion/this' )( module );
+astMember = require( '../jion/this' )( module );
 
 
 astDot = require( './ast-dot' );
