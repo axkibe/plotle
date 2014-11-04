@@ -1,5 +1,5 @@
 /*
-| The server-side repository.
+| The root of the server.
 |
 | Authors: Axel Kittenberger
 */
@@ -49,6 +49,7 @@ var
 	jools,
 	maxAge,
 	mongodb,
+	prototype,
 	postProcessor,
 	request,
 	roster,
@@ -131,19 +132,22 @@ zlib = require( 'zlib' );
 
 
 /*
-| Server
+| Constructor.
 */
-var Server =
-function( )
-{
-	// pass
-};
+server.root =
+	function( )
+	{
+		// pass
+	};
+
+
+prototype = server.root.prototype;
 
 
 /*
 | Sets up the server.
 |*/
-Server.prototype.startup =
+prototype.startup =
 	function*( )
 {
 	var
@@ -249,10 +253,7 @@ Server.prototype.startup =
 			result
 		)
 		{
-			sus( requestListener )(
-				request,
-				result
-			);
+			sus( requestListener )( request, result );
 		}
 	).listen(
 		config.port,
@@ -267,7 +268,7 @@ Server.prototype.startup =
 /*
 | Ensures the repository schema version fits this server.
 */
-Server.prototype.checkRepositorySchemaVersion =
+prototype.checkRepositorySchemaVersion =
 	function* ( )
 {
 	var
@@ -313,10 +314,11 @@ Server.prototype.checkRepositorySchemaVersion =
 	yield* this.initRepository( );
 };
 
-/**
+
+/*
 | Initializes a new repository.
 */
-Server.prototype.initRepository =
+prototype.initRepository =
 	function*( )
 {
 	var
@@ -382,7 +384,7 @@ Server.prototype.initRepository =
 /*
 | Ensures there is the root user
 */
-Server.prototype.ensureRootUser =
+prototype.ensureRootUser =
 	function* ( )
 {
 	var
@@ -444,7 +446,7 @@ Server.prototype.ensureRootUser =
 /*
 | loads all spaces and playbacks all changes from the database.
 */
-Server.prototype.loadSpaces =
+prototype.loadSpaces =
 	function*( )
 {
 	var
@@ -476,7 +478,7 @@ Server.prototype.loadSpaces =
 /*
 | load a spaces and playbacks its changes from the database.
 */
-Server.prototype.loadSpace =
+prototype.loadSpace =
 	function* (
 		spaceName
 	)
@@ -560,7 +562,7 @@ Server.prototype.loadSpace =
 | sends a message
 */
 /*
-Server.prototype.sendMessage =
+prototype.sendMessage =
 	function(
 		spaceUser,
 		spaceTag,
@@ -604,7 +606,7 @@ Server.prototype.sendMessage =
 /*
 | Builds the shells config.js file.
 */
-Server.prototype.buildShellConfig =
+prototype.buildShellConfig =
 	function( )
 {
 	var
@@ -691,7 +693,7 @@ Server.prototype.buildShellConfig =
 | Registers and prepares the inventory.
 | also builds the bundle.
 */
-Server.prototype.prepareInventory =
+prototype.prepareInventory =
 	function* ( )
 {
 	var
@@ -1098,7 +1100,7 @@ Server.prototype.prepareInventory =
 | Prepends the flags to cconfig
 | Used by development.
 */
-Server.prototype.prependConfigFlags =
+prototype.prependConfigFlags =
 	function( )
 {
 	var
@@ -1149,7 +1151,7 @@ var b64Count =
 /*
 | Makes additional mangles
 */
-Server.prototype.extraMangle =
+prototype.extraMangle =
 	function(
 		ast,
 		jionIDs
@@ -1403,11 +1405,11 @@ Server.prototype.extraMangle =
 
 
 /*
-| Executes an alter command.
+| Serves an alter request.
 */
-Server.prototype.cmdAlter =
+prototype.serveRequestAlter =
 	function(
-		cmd
+		req
 	)
 {
 	var
@@ -1426,36 +1428,34 @@ Server.prototype.cmdAlter =
 		spaceTag,
 		username;
 
-	seq = cmd.seq;
-
-	changeWrapRay = cmd.changeWrapRay;
-
-	spaceUser = cmd.spaceUser;
-
-	spaceTag = cmd.spaceTag;
-
-	username = cmd.user;
-
-	passhash = cmd.passhash;
-
-	if( username === undefined )
+	try
 	{
-		throw jools.reject( 'user missing' );
+		req = request.alter.createFromJSON( req );
 	}
+	catch( err )
+	{
+		console.log( err.stack );
+
+		throw jools.reject(
+			'command not valid jion: ' + err.message
+		);
+	}
+
+	seq = req.seq;
+
+	changeWrapRay = req.changeWrapRay;
+
+	spaceUser = req.spaceUser;
+
+	spaceTag = req.spaceTag;
+
+	username = req.user;
+
+	passhash = req.passhash;
 
 	if( this.$users[ username ].pass !== passhash )
 	{
 		throw jools.reject( 'invalid pass' );
-	}
-
-	if( spaceUser === undefined )
-	{
-		throw jools.reject( 'spaceUser missing' );
-	}
-
-	if( spaceTag === undefined )
-	{
-		throw jools.reject( 'spaceTag missing' );
 	}
 
 	if(
@@ -1465,24 +1465,9 @@ Server.prototype.cmdAlter =
 		throw jools.reject( 'no access' );
 	}
 
-	if( seq === undefined )
-	{
-		throw jools.reject( 'seq missing' );
-	}
-
-	if( changeWrapRay === undefined )
-	{
-		throw jools.reject( 'changeWrapRay missing' );
-	}
-
 	spaceName = spaceUser + ':' + spaceTag;
 
 	space = this.$spaces[ spaceName ];
-
-	if( space === undefined )
-	{
-		throw jools.reject( 'unknown space' );
-	}
 
 	changes = space.$changes;
 
@@ -1493,29 +1478,11 @@ Server.prototype.cmdAlter =
 		seq = seqZ;
 	}
 
-	if(
-		!jools.isInteger( seq )
-		||
-		seq < 0
-		||
-		seq > seqZ
-	)
+	if( seq < 0 || seq > seqZ )
 	{
 		throw jools.reject( 'invalid seq' );
 	}
 
-	try
-	{
-		changeWrapRay = ccot.changeWrapRay.createFromJSON( changeWrapRay );
-	}
-	catch( err )
-	{
-		console.log( err.stack );
-
-		throw jools.reject(
-			'command not valid jion: ' + err.message
-		);
-	}
 
 	if( changeWrapRay.length !== 1 )
 	{
@@ -1574,8 +1541,8 @@ Server.prototype.cmdAlter =
 		{
 			_id : seqZ,
 			cid : cid,
-			chgX : JSON.parse( JSON.stringify( chgX ) ), // FIXME why copy?
-			user : cmd.user,
+			chgX : JSON.parse( JSON.stringify( chgX ) ), // FIXME
+			user : req.user,
 			date : Date.now( )
 		},
 
@@ -1615,7 +1582,7 @@ Server.prototype.cmdAlter =
 /*
 | Executes an auth command.
 */
-Server.prototype.cmdAuth =
+prototype.cmdAuth =
 	function* (
 		cmd
 	)
@@ -1702,7 +1669,7 @@ Server.prototype.cmdAuth =
 | Creates a new space.
 | FIXME uppercase
 */
-Server.prototype.createSpace =
+prototype.createSpace =
 	function* (
 		spaceUser,
 		spaceTag
@@ -1743,7 +1710,7 @@ Server.prototype.createSpace =
 /*
 | Executes a register command.
 */
-Server.prototype.cmdRegister =
+prototype.cmdRegister =
 	function* (
 		cmd
 	)
@@ -1842,7 +1809,7 @@ Server.prototype.cmdRegister =
 /*
 | Refreshes a users presence timeout.
 */
-Server.prototype.refreshPresence =
+prototype.refreshPresence =
 	function(
 		user,
 		spaceUser,
@@ -1924,7 +1891,7 @@ Server.prototype.refreshPresence =
 /*
 | Establishes a longer user presence for an update that goes into sleep
 */
-Server.prototype.establishPresence =
+prototype.establishPresence =
 	function(
 		user,
 		spaceUser,
@@ -1993,7 +1960,7 @@ Server.prototype.establishPresence =
 /*
 | Destablishes a longer user presence for an update that went out of sleep.
 */
-Server.prototype.destablishPresence =
+prototype.destablishPresence =
 	function(
 		user,
 		spaceUser,
@@ -2036,7 +2003,7 @@ Server.prototype.destablishPresence =
 /*
 | Expires a user presence with zero establishments after timeout
 */
-Server.prototype.expirePresence =
+prototype.expirePresence =
 	function(
 		self,
 		user,
@@ -2073,7 +2040,7 @@ Server.prototype.expirePresence =
 /*
 | Gets new changes or waits for them.
 */
-Server.prototype.cmdUpdate =
+prototype.cmdUpdate =
 	function (
 		cmd,
 		result
@@ -2204,7 +2171,7 @@ Server.prototype.cmdUpdate =
 /*
 | A sleeping update expired.
 */
-Server.prototype.expireSleep =
+prototype.expireSleep =
 	function(
 		self,
 		sleepID
@@ -2278,7 +2245,7 @@ Server.prototype.expireSleep =
 /*
 | A sleeping update closed prematurely.
 */
-Server.prototype.closeSleep =
+prototype.closeSleep =
 	function(
 		sleepID
 	)
@@ -2306,7 +2273,7 @@ Server.prototype.closeSleep =
 /*
 | Returns a result for an update operation.
 */
-Server.prototype.conveyUpdate =
+prototype.conveyUpdate =
 	function(
 		seq,
 		spaceUser,
@@ -2351,7 +2318,7 @@ Server.prototype.conveyUpdate =
 /*
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
-Server.prototype.wake =
+prototype.wake =
 	function(
 		spaceUser,
 		spaceTag
@@ -2370,7 +2337,11 @@ Server.prototype.wake =
 
 	// FIXME cache change lists to answer the same to multiple clients.
 
-	for(a = 0, aZ = sleepKeys.length; a < aZ; a++)
+	for(
+		a = 0, aZ = sleepKeys.length;
+		a < aZ;
+		a++
+	)
 	{
 		sKey = sleepKeys[a];
 
@@ -2425,7 +2396,7 @@ Server.prototype.wake =
 /*
 | Tests if the user has access to a space.
 */
-Server.prototype.testAccess =
+prototype.testAccess =
 	function(
 		user,
 		spaceUser,
@@ -2476,7 +2447,7 @@ Server.prototype.testAccess =
 /*
 | Executes a get command.
 */
-Server.prototype.cmdGet =
+prototype.cmdGet =
 	function* (
 		cmd
 	)
@@ -2662,7 +2633,7 @@ Server.prototype.cmdGet =
 /*
 | Logs and returns a web error
 */
-Server.prototype.webError =
+prototype.webError =
 	function(
 		result,
 		code,
@@ -2672,12 +2643,9 @@ Server.prototype.webError =
 	result.writeHead(
 		code,
 		{
-			'Content-Type' :
-				'text/plain',
-			'Cache-Control' :
-				'no-cache',
-			'Date' :
-				new Date().toUTCString()
+			'Content-Type' : 'text/plain',
+			'Cache-Control' : 'no-cache',
+			'Date' : new Date().toUTCString()
 		}
 	);
 
@@ -2692,7 +2660,7 @@ Server.prototype.webError =
 /*
 | Listens to http requests
 */
-Server.prototype.requestListener =
+prototype.requestListener =
 	function*(
 		request,
 		result
@@ -2889,7 +2857,7 @@ Server.prototype.requestListener =
 /*
 | Handles ajax requests.
 */
-Server.prototype.webAjax =
+prototype.webAjax =
 	function(
 		request,
 		red,
@@ -3032,7 +3000,7 @@ Server.prototype.webAjax =
 /*
 | Executes an ajaxCmd
 */
-Server.prototype.ajaxCmd =
+prototype.ajaxCmd =
 	function*(
 		cmd,
 		result
@@ -3042,7 +3010,7 @@ Server.prototype.ajaxCmd =
 	{
 		case 'request.alter' :
 
-			return this.cmdAlter( cmd );
+			return this.serveRequestAlter( cmd );
 	}
 
 	// FIXME move all the type
@@ -3070,20 +3038,20 @@ Server.prototype.ajaxCmd =
 	}
 };
 
+
 var
 	run;
 
 run =
 	function*( )
 {
-	var
-		server;
+	GLOBAL.root = new server.root( );
 
-	server = new Server( );
-
-	yield* server.startup( );
+	yield* GLOBAL.root.startup( );
 };
 
+
 sus( run )( );
+
 
 } )( );

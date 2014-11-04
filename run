@@ -2,4 +2,4 @@
 set -e
 node --harmony src/tools/genjion.js jion/listing-genjion.js
 node --harmony src/tools/genjion.js jion/listing-server.js
-node --harmony src/server/server.js
+node --harmony src/server/root.js
