@@ -68,9 +68,9 @@ var
 
 if( SERVER )
 {
-	jools = require( '../jools/jools' );
-
 	point = require( '../jion/this' )( module );
+
+	jools = require( '../jools/jools' );
 }
 else
 {

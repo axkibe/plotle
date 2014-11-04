@@ -367,400 +367,259 @@ module.exports =
 			true
 	),
 	resource.create(
-		'filePath',
-			'src/net/request-wrap.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/request/alter.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/net/request-wrap-ray.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/net/request-wrap.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/net/channel.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/net/request-wrap-ray.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/net/ajax.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/net/channel.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/net/link.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/net/ajax.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/shell/do-tracker.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/net/link.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/shell/peer.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/shell/do-tracker.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/icons/normal.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/shell/peer.js',
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/icons/moveto.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/icons/normal.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/icons/remove.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/icons/moveto.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/icons/check.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/icons/remove.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/discs/disc.js',
-		'inBundle',
-			true
+		'filePath', 'src/icons/check.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/discs/createdisc.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/discs/disc.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/discs/maindisc.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/discs/createdisc.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/discs/jockey.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/discs/maindisc.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/result/hover.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/discs/jockey.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/forms/form.js',
-		'inBundle',
-			true
+		'filePath', 'src/result/hover.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/forms/login.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/forms/form.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/forms/signup.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/forms/login.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/forms/space.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/forms/signup.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/forms/moveto.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/forms/space.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/forms/user.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/forms/moveto.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/forms/welcome.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/forms/user.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/forms/no-access-to-space.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/forms/welcome.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/forms/non-existing-space.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/forms/no-access-to-space.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/forms/jockey.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/forms/non-existing-space.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/gruga/maindisc.js',
-		'inBundle',
-			true
+		'filePath', 'src/forms/jockey.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/gruga/createdisc.js',
-		'inBundle',
-			true
+		'filePath', 'src/gruga/maindisc.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/gruga/login.js',
-		'inBundle',
-			true
+		'filePath', 'src/gruga/createdisc.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/gruga/moveto.js',
-		'inBundle',
-			true
+		'filePath', 'src/gruga/login.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/gruga/no-access-to-space.js',
-		'inBundle',
-			true
+		'filePath', 'src/gruga/moveto.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/gruga/non-existing-space.js',
-		'inBundle',
-			true
+		'filePath', 'src/gruga/no-access-to-space.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/gruga/signup.js',
-		'inBundle',
-			true
+		'filePath', 'src/gruga/non-existing-space.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/gruga/space.js',
-		'inBundle',
-			true
+		'filePath', 'src/gruga/signup.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/gruga/user.js',
-		'inBundle',
-			true
+		'filePath', 'src/gruga/space.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/gruga/welcome.js',
-		'inBundle',
-			true
+		'filePath', 'src/gruga/user.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/visual/para.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/gruga/welcome.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/visual/scrollbar.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/visual/para.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/visual/doc.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/visual/scrollbar.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/visual/item.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/visual/doc.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/visual/doc-item.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/visual/item.js',
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/visual/note.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/visual/doc-item.js',
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/visual/label.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/visual/note.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/visual/relation.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/visual/label.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/visual/portal.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/visual/relation.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/visual/space.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/visual/portal.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/shell/stubs.js',
-		'inBundle',
-			true
+		'filePath', 'src/visual/space.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/shell/system.js',
-		'inBundle',
-			true
+		'filePath', 'src/shell/stubs.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/marks/caret.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/shell/system.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/marks/item.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/marks/caret.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/marks/range.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/marks/item.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/marks/widget.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/marks/range.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/marks/widget.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
 		'filePath',
@@ -769,215 +628,137 @@ module.exports =
 			true
 	),
 	resource.create(
-		'filePath',
-			'src/actions/create-generic.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/actions/create-generic.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/actions/create-relation.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/actions/create-relation.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/actions/item-drag.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/actions/item-drag.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/actions/item-resize.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/actions/item-resize.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/actions/pan.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/actions/pan.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/actions/scrolly.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/actions/scrolly.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/shell/root.js',
-		'inBundle',
-			true
+		'filePath', 'src/shell/root.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/shell/fontloader.js',
-		'inBundle',
-			true
+		'filePath', 'src/shell/fontloader.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/style.css',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/style.css',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/boldoblique-webfont.eot',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/boldoblique-webfont.eot',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/boldoblique-webfont.svg',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/boldoblique-webfont.svg',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/boldoblique-webfont.ttf',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/boldoblique-webfont.ttf',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/boldoblique-webfont.woff',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/boldoblique-webfont.woff',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/bold-webfont.eot',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/bold-webfont.eot',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/bold-webfont.svg',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/bold-webfont.svg',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/bold-webfont.ttf',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/bold-webfont.ttf',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/bold-webfont.woff',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/bold-webfont.woff',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/oblique-webfont.eot',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/oblique-webfont.eot',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/oblique-webfont.svg',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/oblique-webfont.svg',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/oblique-webfont.ttf',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/oblique-webfont.ttf',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/oblique-webfont.woff',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/oblique-webfont.woff',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/webfont.eot',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/webfont.eot',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/webfont.svg',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/webfont.svg',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/webfont.ttf',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/webfont.ttf',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'media/dejavusans/webfont.woff',
-		'maxage',
-			'long'
+		'filePath', 'media/dejavusans/webfont.woff',
+		'maxage', 'long'
 	),
 
 	// --- TestPad ---
 	resource.create(
-		'aliases',
-			[ 'testpad.html' ],
-		'filePath',
-			'media/testpad.html',
-		'devel',
-			true,
-		'postProcessor',
-			'testPadHtml'
+		'aliases', [ 'testpad.html' ],
+		'filePath', 'media/testpad.html',
+		'devel', true,
+		'postProcessor', 'testPadHtml'
 	),
 	resource.create(
-		'filePath',
-			'src/testpad/repos.js',
-		'devel',
-			true,
-		'hasJion',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/testpad/repos.js',
+		'devel', true,
+		'hasJion', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/testpad/action.js',
-		'devel',
-			true,
-		'hasJion',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/testpad/action.js',
+		'devel', true,
+		'hasJion', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/testpad/root.js',
-		'devel',
-			true,
-		'hasJion',
-			true,
-		'inTestPad',
-			true
-	),
-	resource.create(
-		'aliases',
-			[ 'torrent/PeridexisErrant%20LNP%20r53.torrent' ],
-		'filePath',
-			'torrent/PeridexisErrant%20LNP%20r53.torrent'
-	),
+		'filePath', 'src/testpad/root.js',
+		'devel', true,
+		'hasJion', true,
+		'inTestPad', true
+	)
 ];
 
 

@@ -17,6 +17,7 @@ module.exports =
 			'src/ccot/change-wrap-ray.js',
 			'src/ccot/sign.js',
 			'src/ccot/sign-ray.js',
+			'src/request/alter.js',
 			'src/result/genjion.js',
 			'src/server/resource.js',
 			'src/server/inventory.js',

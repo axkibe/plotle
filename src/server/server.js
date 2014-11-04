@@ -50,6 +50,7 @@ var
 	maxAge,
 	mongodb,
 	postProcessor,
+	request,
 	roster,
 	server,
 	sha1,
@@ -72,14 +73,13 @@ http = require( 'http' );
 
 ccot =
 	{
-		change :
-			require( '../ccot/change' ),
-		changeRay :
-			require( '../ccot/change-ray' ),
-		changeWrap :
-			require( '../ccot/change-wrap' ),
-		changeWrapRay :
-			require( '../ccot/change-wrap-ray' ),
+		change : require( '../ccot/change' ),
+
+		changeRay : require( '../ccot/change-ray' ),
+
+		changeWrap : require( '../ccot/change-wrap' ),
+
+		changeWrapRay : require( '../ccot/change-wrap-ray' ),
 	};
 
 jion =
@@ -98,14 +98,18 @@ mongodb = require( 'mongodb' );
 
 postProcessor = require( './post-processor' );
 
+request =
+	{
+		alter : require( '../request/alter' )
+	};
+
 roster = require( './roster' );
 
 server =
 	{
-		inventory :
-			require( './inventory' ),
-		resource :
-			require( './resource' )
+		inventory : require( './inventory' ),
+
+		resource : require( './resource' )
 	};
 
 sha1 = require( '../jools/sha1' );
@@ -120,8 +124,7 @@ util = require( 'util' );
 
 visual =
 	{
-		space :
-			require( '../visual/space' )
+		space : require( '../visual/space' )
 	};
 
 zlib = require( 'zlib' );
