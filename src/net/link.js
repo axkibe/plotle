@@ -21,6 +21,7 @@ var
 	ccot,
 	jion,
 	jools,
+	request,
 	root,
 	system,
 	visual;
@@ -656,15 +657,14 @@ link.prototype._sendChanges =
 		);
 
 	root.ajax.twig.command.request(
-		{
-			cmd : 'alter',
-			spaceUser : link.spaceUser,
-			spaceTag : link.spaceTag,
-			changeWrapRay : changeWrapRay,
-			passhash : link.passhash,
-			seq : link._rSeq,
-			user : link.username
-		},
+		request.alter.create(
+			'changeWrapRay', changeWrapRay,
+			'passhash', link.passhash,
+			'seq', link._rSeq,
+			'spaceUser', link.spaceUser,
+			'spaceTag', link.spaceTag,
+			'user', link.username
+		),
 		'_onSendChanges'
 	);
 };

@@ -53,7 +53,10 @@ if( SERVER )
 {
 	changeWrapRay = require( '../jion/this' )( module );
 }
-
+else
+{
+	changeWrapRay = ccot.changeWrapRay;
+}
 
 
 /*

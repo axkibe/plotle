@@ -140,27 +140,13 @@ channel.prototype.request =
 	)
 {
 	var
-		cmd,
 		reqWrap;
-
-	cmd = request.cmd;
-
-/**/if( CHECK )
-/**/{
-/**/	if( !cmd )
-/**/	{
-/**/		throw new Error( 'ajax request.cmd missing' );
-/**/	}
-/**/}
 
 	reqWrap =
 		net.requestWrap.create(
-			'channelName',
-				this.channelName,
-			'receiverFunc',
-				receiverFunc,
-			'request',
-				request
+			'channelName', this.channelName,
+			'receiverFunc', receiverFunc,
+			'request', request
 		);
 
 	if( this._fifo.length === 0 )
@@ -173,10 +159,7 @@ channel.prototype.request =
 		root.ajax.create(
 			'twig:set',
 			this.channelName,
-			this.create(
-				'_fifo',
-					this._fifo.append( reqWrap )
-			)
+			this.create( '_fifo', this._fifo.append( reqWrap ) )
 		);
 };
 

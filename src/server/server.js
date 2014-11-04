@@ -3038,12 +3038,16 @@ Server.prototype.ajaxCmd =
 		result
 	)
 {
-	switch ( cmd.cmd )
+	switch( cmd.type )
 	{
-		case 'alter' :
+		case 'request.alter' :
 
 			return this.cmdAlter( cmd );
+	}
 
+	// FIXME move all the type
+	switch ( cmd.cmd )
+	{
 		case 'auth' :
 
 			return yield* this.cmdAuth(  cmd );
@@ -3062,7 +3066,7 @@ Server.prototype.ajaxCmd =
 
 		default :
 
-			return jools.reject('unknown command');
+			return jools.reject( 'unknown command' );
 	}
 };
 

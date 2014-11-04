@@ -67,9 +67,7 @@ if( JION )
 						defaultValue :
 							null
 					}
-			},
-		init :
-			[ ]
+			}
 	};
 }
 
@@ -78,20 +76,6 @@ var
 	requestWrap;
 
 requestWrap = net.requestWrap;
-
-
-/*
-| Initializer.
-*/
-requestWrap.prototype._init =
-	function( )
-{
-
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( this.request );
-/**/}
-};
 
 
 /*
