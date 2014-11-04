@@ -114,7 +114,7 @@ jools.lazyValue(
 |
 | The result can be a change or a change-ray.
 */
-changeRay.prototype.transformChange =
+changeRay.prototype._transformChange =
 	function(
 		c
 	)
@@ -139,7 +139,7 @@ changeRay.prototype.transformChange =
 		a < aZ;
 		a++)
 	{
-		cx = this.get( a ).transformChange( cx );
+		cx = this.get( a ).transform( cx );
 	}
 
 	return cx;
@@ -232,7 +232,7 @@ changeRay.prototype.transform =
 	{
 		case 'ccot.change' :
 
-			return this.transformChange( co );
+			return this._transformChange( co );
 
 		case 'ccot.changeRay' :
 

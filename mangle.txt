@@ -135,6 +135,10 @@
 . _steerAttention
 . _testInput
 . _testInputCatcher
+. _transformChange
+. _transformChangeRay
+. _transformChangeWrap
+. _transformChangeWrapRay
 . _transformSignInsert
 . _transformSignJoin
 . _transformSignRank
@@ -781,10 +785,6 @@
 . track
 . transItem
 . transform
-. transformChange
-. _transformChangeRay
-. _transformChangeWrap
-. _transformChangeWrapRay
 . transformSign
 . transformSignRay
 . transformSignX

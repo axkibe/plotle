@@ -296,7 +296,7 @@ change.prototype.get =
 /*
 | Returns a change transformed by this change.
 */
-change.prototype.transformChange =
+change.prototype._transformChange =
 	function(
 		c
 	)
@@ -466,7 +466,7 @@ change.prototype._transformChangeRay =
 		r++
 	)
 	{
-		tray[ r ] = this.transformChange( cray.get( r ) );
+		tray[ r ] = this._transformChange( cray.get( r ) );
 	}
 
 	return cray.create( 'ray:init', tray );
@@ -527,7 +527,7 @@ change.prototype.transform =
 	{
 		case 'ccot.change' :
 
-			return this.transformChange( cx );
+			return this._transformChange( cx );
 
 		case 'ccot.changeRay' :
 
