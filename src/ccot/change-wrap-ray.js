@@ -46,13 +46,41 @@ if( JION )
 }
 
 
-/*
-| Exports
-*/
+var
+	changeWrapRay;
+
 if( SERVER )
 {
-	require( '../jion/this' )( module );
+	changeWrapRay = require( '../jion/this' )( module );
 }
+
+
+
+/*
+| Transform cx on this ray of wrapped changes.
+|
+| cx can be a change, changeRay, changeWrap or changeWrapRay.
+*/
+changeWrapRay.prototype.transform =
+	function(
+		cx
+	)
+{
+	var
+		r,
+		rZ;
+
+	for(
+		r = 0, rZ = this.length;
+		r < rZ;
+		r++
+	)
+	{
+		cx = this.get( r ).transform( cx );
+	}
+
+	return cx;
+};
 
 
 }( ) );

@@ -99,4 +99,18 @@ changeWrap.prototype.invert =
 };
 
 
+/*
+| Transform cx on this wrapped change.
+|
+| cx can be a change, changeRay, changeWrap or changeWrapRay.
+*/
+changeWrap.prototype.transform =
+	function(
+		cx
+	)
+{
+	return this.chgX.transform( cx );
+};
+
+
 }( ) );
