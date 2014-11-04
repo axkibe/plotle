@@ -782,9 +782,9 @@
 . transItem
 . transform
 . transformChange
-. transformChangeRay
-. transformChangeWrap
-. transformChangeWrapRay
+. _transformChangeRay
+. _transformChangeWrap
+. _transformChangeWrapRay
 . transformSign
 . transformSignRay
 . transformSignX

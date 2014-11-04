@@ -440,7 +440,7 @@ change.prototype.transformChange =
 /*
 | Returns a change ray transformed by this change.
 */
-change.prototype.transformChangeRay =
+change.prototype._transformChangeRay =
 	function(
 		cray
 	)
@@ -476,7 +476,7 @@ change.prototype.transformChangeRay =
 /*
 | Return a change wrap transformed by this change.
 */
-change.prototype.transformChangeWrap =
+change.prototype._transformChangeWrap =
 	function(
 		cw
 	)
@@ -488,7 +488,7 @@ change.prototype.transformChangeWrap =
 /*
 | Return a change wrap transformed by this change.
 */
-change.prototype.transformChangeWrapRay =
+change.prototype._transformChangeWrapRay =
 	function(
 		cwr
 	)
@@ -506,7 +506,7 @@ change.prototype.transformChangeWrapRay =
 		r++
 	)
 	{
-		tray[ r ] = this.transformChangeWrap( cwr.get( r ) );
+		tray[ r ] = this._transformChangeWrap( cwr.get( r ) );
 	}
 
 
@@ -531,15 +531,15 @@ change.prototype.transform =
 
 		case 'ccot.changeRay' :
 
-			return this.transformChangeRay( cx );
+			return this._transformChangeRay( cx );
 
 		case 'ccot.changeWrap' :
 
-			return this.transformChangeWrap( cx );
+			return this._transformChangeWrap( cx );
 
 		case 'ccot.changeWrapRay' :
 
-			return this.transformChangeWrapRay( cx );
+			return this._transformChangeWrapRay( cx );
 
 		default :
 
