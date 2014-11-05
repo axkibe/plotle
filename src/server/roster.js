@@ -23,348 +23,217 @@ resource = require( './resource' );
 module.exports =
 [
 	resource.create(
-		'aliases',
-			[
-				'ideoloom.html',
-				'index.html',
-				''
-			],
-		'filePath',
-			'media/ideoloom.html',
-		'maxage',
-			'short',
-		'postProcessor',
-			'indexHtml'
+		'aliases', [ 'ideoloom.html', 'index.html', '' ],
+		'filePath', 'media/ideoloom.html',
+		'maxage', 'short',
+		'postProcessor', 'indexHtml'
 	),
 	resource.create(
-		'aliases',
-			[ 'devel.html' ],
-		'filePath',
-			'media/devel.html',
-		'devel',
-			true,
-		'postProcessor',
-			'develHtml'
+		'aliases', [ 'devel.html' ],
+		'filePath', 'media/devel.html',
+		'devel', true,
+		'postProcessor', 'develHtml'
 	),
 	resource.create(
-		'filePath',
-			'media/favicon.ico',
-		'maxage',
-			'long'
+		'filePath', 'media/favicon.ico',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'webfont/webfont.js',
-		'maxage',
-			'long'
+		'filePath', 'webfont/webfont.js',
+		'maxage', 'long'
 	),
 	resource.create(
-		'filePath',
-			'src/jion/proto.js',
-		'inBundle',
-			true,
+		'filePath', 'src/jion/proto.js',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/jools/jools.js',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/jools/sha1.js',
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/jion/path.js',
+		'inBundle', true,
+		'hasJion', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/ccot/sign.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/ccot/sign-ray.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/ccot/change.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/ccot/change-ray.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/ccot/change-wrap.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/ccot/change-wrap-ray.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/euclid/point.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/euclid/fix-point.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/euclid/rect.js',
+		'hasJion', true,
+		'inBundle', true,
 		'inTestPad',
 			true
 	),
 	resource.create(
-		'filePath',
-			'src/jools/jools.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/shell/fontpool.js',
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/jools/sha1.js',
-		'inBundle',
-			true
+		'filePath', 'src/euclid/constants.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/jion/path.js',
-		'inBundle',
-			true,
-		'hasJion',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/euclid/compass.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/ccot/sign.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/euclid/margin.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/ccot/sign-ray.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/euclid/font.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/ccot/change.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/euclid/fabric.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/ccot/change-ray.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/euclid/measure.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/ccot/change-wrap.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/euclid/shape.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/ccot/change-wrap-ray.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/euclid/round-rect.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/point.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/euclid/ellipse.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/fix-point.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/euclid/line.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/rect.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/euclid/arrow.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/shell/fontpool.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/design/anchor-point.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/constants.js',
-		'inBundle',
-			true
+		'filePath', 'src/design/anchor-rect.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/compass.js',
-		'inBundle',
-			true
+		'filePath', 'src/design/anchor-ellipse.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/margin.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true,
-		'inTestPad',
-			true
+		'filePath', 'src/shell/theme.js',
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/font.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/euclid/view.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/fabric.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/widgets/widget.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/measure.js',
-		'inBundle',
-			true
+		'filePath', 'src/widgets/getstyle.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/shape.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/widgets/button.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/round-rect.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/widgets/input.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/ellipse.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/widgets/checkbox.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/line.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/widgets/label.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/euclid/arrow.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
+		'filePath', 'src/shell/style.js',
+		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/design/anchor-point.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/design/anchor-rect.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/design/anchor-ellipse.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/shell/theme.js',
-		'inBundle',
-			true,
-		'inTestPad',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/euclid/view.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/widgets/widget.js',
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/widgets/getstyle.js',
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/widgets/button.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/widgets/input.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/widgets/checkbox.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/widgets/label.js',
-		'hasJion',
-			true,
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/shell/style.js',
-		'inBundle',
-			true
-	),
-	resource.create(
-		'filePath',
-			'src/shell/accent.js',
-		'inBundle',
-			true
+		'filePath', 'src/shell/accent.js',
+		'inBundle', true
 	),
 	resource.create(
 		'filePath', 'src/request/acquire.js',
@@ -383,6 +252,11 @@ module.exports =
 	),
 	resource.create(
 		'filePath', 'src/request/register.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/request/update.js',
 		'hasJion', true,
 		'inBundle', true
 	),

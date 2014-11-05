@@ -1,5 +1,3 @@
-. acquire
-> createMissing
 . 0-line
 > 1
 . Create
@@ -160,6 +158,8 @@
 . aborted
 > abs
 > access
+. acquire
+. acquireSpace
 . action
 > active
 . add
@@ -183,7 +183,6 @@
 > appendChild
 . appendNC
 > apply
-. aquireSpace
 . args
 . array
 . arrivedAtSpace
@@ -258,7 +257,6 @@
 > close
 . closeButton
 > cm
-> cmd
 . color
 . command
 . comment
@@ -285,6 +283,7 @@
 . createGeneric
 . createLabel
 > createLinearGradient
+> createMissing
 . createNote
 . createPortal
 > createRadialGradient

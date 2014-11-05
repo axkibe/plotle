@@ -223,7 +223,7 @@ shell.root =
 
 	this.mark = null;
 
-	// remembers an aquired visitor user name and passhash
+	// remembers an acquired visitor user name and passhash
 	// so when logging out from a real user the previous
 	// visitor is regained.
 	this._$visitUser = null;
@@ -1282,11 +1282,7 @@ proto.moveToSpace =
 		create
 	)
 {
-	this.link.aquireSpace(
-		spaceUser,
-		spaceTag,
-		create
-	);
+	this.link.acquireSpace( spaceUser, spaceTag, create );
 };
 
 
@@ -1364,7 +1360,7 @@ proto.onAcquireSpace =
 		default :
 
 			system.failScreen(
-				'Unknown aquireSpace() status: ' +
+				'Unknown acquireSpace() status: ' +
 				asw.status + ': ' + asw.message
 			);
 

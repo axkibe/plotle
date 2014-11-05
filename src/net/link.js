@@ -224,10 +224,8 @@ link.prototype._onRegister =
 /*
 | Aquires a space from the server
 | and starts receiving updates for it.
-|
-| FIXME typo acquireSpace
 */
-link.prototype.aquireSpace =
+link.prototype.acquireSpace =
 	function(
 		spaceUser,
 		spaceTag,
@@ -251,7 +249,7 @@ link.prototype.aquireSpace =
 
 
 /*
-| A space has been aquired.
+| A space has been acquired.
 */
 link.prototype._onAcquireSpace =
 	function(
@@ -345,14 +343,13 @@ link.prototype._update =
 	function( )
 {
 	root.ajax.twig.update.request(
-		{
-			cmd : 'update',
-			passhash : this.passhash,
-			spaceUser : this.spaceUser,
-			spaceTag : this.spaceTag,
-			seq : this._rSeq,
-			user : this.username
-		},
+		request.update.create(
+			'passhash', this.passhash,
+			'spaceUser', this.spaceUser,
+			'spaceTag', this.spaceTag,
+			'seq', this._rSeq,
+			'user', this.username
+		),
 		'_onUpdate'
 	);
 };

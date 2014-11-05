@@ -107,7 +107,9 @@ request =
 
 		auth : require( '../request/auth' ),
 
-		register : require( '../request/register' )
+		register : require( '../request/register' ),
+
+		update : require( '../request/update' )
 	};
 
 roster = require( './roster' );
@@ -2002,9 +2004,9 @@ prototype.expirePresence =
 /*
 | Gets new changes or waits for them.
 */
-prototype.cmdUpdate =
+prototype.serveRequestUpdate =
 	function (
-		cmd,
+		req,
 		result
 	)
 {
@@ -2012,45 +2014,27 @@ prototype.cmdUpdate =
 		asw,
 		passhash,
 		seq,
+		sleepID,
+		timerID,
 		space,
 		spaceName,
 		spaceUser,
 		spaceTag,
 		user;
 
-	user = cmd.user;
+	user = req.user;
 
-	passhash = cmd.passhash;
+	passhash = req.passhash;
 
-	spaceUser = cmd.spaceUser;
+	spaceUser = req.spaceUser;
 
-	spaceTag = cmd.spaceTag;
+	spaceTag = req.spaceTag;
 
-	seq = cmd.seq;
-
-	if( user === undefined )
-	{
-		throw jools.reject( 'User missing' );
-	}
-
-	if( passhash === undefined )
-	{
-		throw jools.reject( 'Passhash missing' );
-	}
+	seq = req.seq;
 
 	if( this.$users[user].pass !== passhash )
 	{
 		throw jools.reject( 'Invalid password' );
-	}
-
-	if( spaceUser === undefined )
-	{
-		throw jools.reject( 'spaceUser missing' );
-	}
-
-	if( spaceTag === undefined )
-	{
-		throw jools.reject( 'spaceTag missing' );
 	}
 
 	spaceName = spaceUser + ':' + spaceTag,
@@ -2059,39 +2043,28 @@ prototype.cmdUpdate =
 
 	if( !space )
 	{
-		throw jools.reject( 'Unknown space' );
+		return jools.reject( 'Unknown space' );
 	}
 
 	if ( !( seq >= 0 && seq <= space.$seqZ ) )
 	{
-		throw jools.reject( 'Invalid or missing seq: ' + seq );
+		return jools.reject( 'Invalid or missing seq: ' + seq );
 	}
 
-	this.refreshPresence(
-		user,
-		spaceUser,
-		spaceTag
-	);
+	this.refreshPresence( user, spaceUser, spaceTag );
 
-	asw =
-		this.conveyUpdate(
-			seq,
-			spaceUser,
-			spaceTag
-		);
+	asw = this.conveyUpdate( seq, spaceUser, spaceTag );
 
 	// immediate answer?
-	if(
-		asw.chgs.length > 0
-	)
+	if( asw.chgs.length > 0 )
 	{
 		return asw;
 	}
 
 	// if not an immediate anwwer, the request is put to sleep
-	var sleepID = '' + this.$nextSleep++;
+	sleepID = '' + this.$nextSleep++;
 
-	var timerID =
+	timerID =
 		setTimeout(
 			this.expireSleep,
 			60000,
@@ -2101,32 +2074,19 @@ prototype.cmdUpdate =
 
 	this.$upsleep[ sleepID ] =
 		{
-			user :
-				user,
-			seq :
-				seq,
-			timerID :
-				timerID,
-			result :
-				result,
-			spaceUser :
-				spaceUser,
-			spaceTag :
-				spaceTag
+			user : user,
+			seq : seq,
+			timerID : timerID,
+			result : result,
+			spaceUser : spaceUser,
+			spaceTag : spaceTag
 		};
 
-	result.sleepID =
-		sleepID;
+	result.sleepID = sleepID;
 
-	this.establishPresence(
-		user,
-		spaceUser,
-		spaceTag,
-		sleepID
-	);
+	this.establishPresence( user, spaceUser, spaceTag, sleepID );
 
 	return null;
-
 };
 
 
@@ -2785,7 +2745,7 @@ prototype.webAjax =
 
 		try
 		{
-			asw = yield* self.ajaxCmd( cmd, result );
+			asw = yield* self.serveRequest( cmd, result );
 		}
 		catch( err )
 		{
@@ -2817,18 +2777,13 @@ prototype.webAjax =
 
 		result.writeHead( 200,
 			{
-				'Content-Type' :
-					'application/json',
-				'Cache-Control' :
-					'no-cache',
-				'Date' :
-					new Date().toUTCString()
+				'Content-Type' : 'application/json',
+				'Cache-Control' : 'no-cache',
+				'Date' : new Date().toUTCString()
 			}
 		);
 
-		result.end(
-			JSON.stringify( asw )
-		);
+		result.end( JSON.stringify( asw ) );
 	};
 
 	request.on(
@@ -2858,40 +2813,35 @@ prototype.webAjax =
 
 
 /*
-| Executes an ajaxCmd
+| Serves an serveRequest
 */
-prototype.ajaxCmd =
+prototype.serveRequest =
 	function*(
-		cmd,
+		req,
 		result
 	)
 {
-	switch( cmd.type )
+	switch( req.type )
 	{
 		case 'request.alter' :
 
-			return this.serveRequestAlter( cmd );
+			return this.serveRequestAlter( req );
 
 		case 'request.auth' :
 
-			return yield* this.serveRequestAuth( cmd );
+			return yield* this.serveRequestAuth( req );
 
 		case 'request.acquire' :
 
-			return yield* this.serveRequestAcquire( cmd );
+			return yield* this.serveRequestAcquire( req );
 
 		case 'request.register' :
 
-			return yield* this.serveRequestRegister( cmd );
+			return yield* this.serveRequestRegister( req );
 
-	}
+		case 'request.update' :
 
-	// FIXME move all the type
-	switch ( cmd.cmd )
-	{
-		case 'update' :
-
-			return this.cmdUpdate( cmd, result );
+			return this.serveRequestUpdate( req, result );
 
 		default :
 

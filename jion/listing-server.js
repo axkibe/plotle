@@ -21,6 +21,7 @@ module.exports =
 			'src/request/alter.js',
 			'src/request/auth.js',
 			'src/request/register.js',
+			'src/request/update.js',
 			'src/result/genjion.js',
 			'src/server/resource.js',
 			'src/server/inventory.js',
