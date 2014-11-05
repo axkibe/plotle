@@ -1,6 +1,5 @@
 /*
-| A client request authentication to be checked,
-| or to be assigned a visitor-id.
+| A client requests a new user to be registered.
 |
 | Authors: Axel Kittenberger
 */
@@ -29,9 +28,27 @@ if( JION )
 {
 	return {
 		id :
-			'request.auth',
+			'request.register',
 		attributes :
 			{
+				mail :
+					{
+						comment :
+							'email address of the user, can be empty',
+						json :
+							true,
+						type :
+							'String'
+					},
+				news :
+					{
+						comment :
+							'true if the user is okay with the newsletter',
+						json :
+							true,
+						type :
+							'Boolean'
+					},
 				passhash :
 					{
 						comment :
@@ -44,7 +61,7 @@ if( JION )
 				user :
 					{
 						comment :
-							'user/visitor to be authenticated',
+							'user to be registered',
 						json :
 							true,
 						type :

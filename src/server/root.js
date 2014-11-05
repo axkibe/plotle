@@ -105,7 +105,9 @@ request =
 
 		alter : require( '../request/alter' ),
 
-		auth : require( '../request/auth' )
+		auth : require( '../request/auth' ),
+
+		register : require( '../request/register' )
 	};
 
 roster = require( './roster' );
@@ -1694,11 +1696,11 @@ prototype.createSpace =
 
 
 /*
-| Executes a register command.
+| Serves a register request.
 */
-prototype.cmdRegister =
-	function* (
-		cmd
+prototype.serveRequestRegister =
+	function*(
+		req
 	)
 {
 	var
@@ -1708,38 +1710,25 @@ prototype.cmdRegister =
 		news,
 		user;
 
-	username = cmd.user;
-
-	passhash = cmd.passhash;
-
-	mail = cmd.mail;
-
-	news = cmd.news;
-
-	if( username === undefined )
+	try
 	{
-		return jools.reject( 'user missing' );
+		req = request.register.createFromJSON( req );
+	}
+	catch( err )
+	{
+		console.log( err.stack );
+
+		return jools.reject( 'command not valid jion' );
 	}
 
-	if( passhash === undefined )
-	{
-		return jools.reject( 'passhash missing' );
-	}
 
-	if( mail === undefined )
-	{
-		return jools.reject( 'mail missing' );
-	}
+	username = req.user;
 
-	if( news === undefined )
-	{
-		return jools.reject( 'news missing' );
-	}
+	passhash = req.passhash;
 
-	if( typeof( news ) !== 'boolean' )
-	{
-		return jools.reject( 'news not a boolean' );
-	}
+	mail = req.mail;
+
+	news = req.news;
 
 	if( username.substr( 0, 7 ) === 'visitor' )
 	{
@@ -1748,7 +1737,7 @@ prototype.cmdRegister =
 
 	if( username.length < 4 )
 	{
-		throw jools.reject( 'Username too short, min. 4 characters' );
+		return jools.reject( 'Username too short, min. 4 characters' );
 	}
 
 	user =
@@ -1769,10 +1758,7 @@ prototype.cmdRegister =
 		news : news
 	};
 
-	yield this.$db.users.insert(
-		user,
-		sus.resume( )
-	);
+	yield this.$db.users.insert( user, sus.resume( ) );
 
 	this.$users[ username ] = user;
 
@@ -2893,15 +2879,16 @@ prototype.ajaxCmd =
 		case 'request.acquire' :
 
 			return yield* this.serveRequestAcquire( cmd );
+
+		case 'request.register' :
+
+			return yield* this.serveRequestRegister( cmd );
+
 	}
 
 	// FIXME move all the type
 	switch ( cmd.cmd )
 	{
-		case 'register' :
-
-			return yield* this.cmdRegister( cmd );
-
 		case 'update' :
 
 			return this.cmdUpdate( cmd, result );
@@ -2913,19 +2900,14 @@ prototype.ajaxCmd =
 };
 
 
-var
-	run;
-
-run =
+sus(
 	function*( )
 {
 	GLOBAL.root = new server.root( );
 
 	yield* GLOBAL.root.startup( );
-};
-
-
-sus( run )( );
+}
+)( );
 
 
 } )( );

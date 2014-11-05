@@ -1295,7 +1295,7 @@ proto.moveToSpace =
 |
 | FIXME, dont put an asw object here.
 */
-proto.onAquireSpace =
+proto.onAcquireSpace =
 	function(
 		asw
 	)

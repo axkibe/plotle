@@ -382,6 +382,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/request/register.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/net/request-wrap.js',
 		'hasJion', true,
 		'inBundle', true

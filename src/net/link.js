@@ -187,13 +187,12 @@ link.prototype.register =
 	)
 {
 	root.ajax.twig.command.request(
-		{
-			cmd : 'register',
-			user : username,
-			mail : mail,
-			passhash : passhash,
-			news  : news
-		},
+		request.register.create(
+			'user', username,
+			'mail', mail,
+			'passhash', passhash,
+			'news', news
+		),
 		'_onRegister'
 	);
 };
@@ -267,7 +266,7 @@ link.prototype._onAcquireSpace =
 
 	if( !reply.ok )
 	{
-		root.onAquireSpace( reply );
+		root.onAcquireSpace( reply );
 
 		this._update( );
 
@@ -279,7 +278,7 @@ link.prototype._onAcquireSpace =
 		case 'nonexistent' :
 		case 'no access' :
 
-			root.onAquireSpace(
+			root.onAcquireSpace(
 				jools.immute(
 					{
 						status : reply.status,
@@ -314,7 +313,7 @@ link.prototype._onAcquireSpace =
 			'_rSeq', reply.seq
 		);
 
-	root.onAquireSpace(
+	root.onAcquireSpace(
 		jools.immute(
 			{
 				status : reply.status,

@@ -1,3 +1,5 @@
+. acquire
+> createMissing
 . 0-line
 > 1
 . Create
@@ -87,7 +89,7 @@
 . _moveTo
 . _moveToButton
 . _normalize
-. _onAquireSpace
+. _onAcquireSpace
 . _onAtweenTime
 . _onAtweenTimeCatcher
 . _onAuth
@@ -545,7 +547,7 @@
 > offsetTop
 > ok
 . okButton
-. onAquireSpace
+. onAcquireSpace
 . onAuth
 . onRegister
 . onReply
