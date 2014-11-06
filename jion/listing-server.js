@@ -17,6 +17,7 @@ module.exports =
 			'src/ccot/change-wrap-ray.js',
 			'src/ccot/sign.js',
 			'src/ccot/sign-ray.js',
+			'src/fabric/space-ref.js',
 			'src/request/acquire.js',
 			'src/request/alter.js',
 			'src/request/auth.js',

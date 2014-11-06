@@ -49,23 +49,14 @@ if( JION )
 						type :
 							'String'
 					},
-				spaceUser :
+				space :
 					{
 						comment :
-							'user of the space',
+							'the space to acquire',
 						json :
 							true,
 						type :
-							'String'
-					},
-				spaceTag :
-					{
-						comment :
-							'tag of the space',
-						json :
-							true,
-						type :
-							'String'
+							'fabric.spaceRef'
 					},
 				user :
 					{

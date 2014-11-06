@@ -1656,6 +1656,8 @@ prototype.serveRequestAuth =
 
 /*
 | Creates a new space.
+|
+| FIXME hand a spaceRef object
 */
 prototype.createSpace =
 	function* (
@@ -2313,6 +2315,8 @@ prototype.wake =
 
 /*
 | Tests if the user has access to a space.
+|
+| FIXME hand a Spaceref object
 */
 prototype.testAccess =
 	function(
@@ -2374,9 +2378,7 @@ prototype.serveRequestAcquire =
 		access,
 		passhash,
 		space,
-		spaceName,
-		spaceTag,
-		spaceUser,
+		spaceRef,
 		user;
 
 	try
@@ -2392,9 +2394,7 @@ prototype.serveRequestAcquire =
 
 	passhash = req.passhash;
 
-	spaceTag = req.spaceTag;
-
-	spaceUser = req.spaceUser;
+	spaceRef = req.space;
 
 	user = req.user;
 
@@ -2407,11 +2407,7 @@ prototype.serveRequestAcquire =
 		throw jools.reject( 'wrong user/password' );
 	}
 
-	// FIXME test spaceUser/Tag
-
-	spaceName = req.spaceUser + ':'  + req.spaceTag;
-
-	access = this.testAccess( req.user, spaceUser, spaceTag );
+	access = this.testAccess( user, spaceRef.username, spaceRef.tag );
 
 	if( access === 'no' )
 	{
@@ -2422,13 +2418,13 @@ prototype.serveRequestAcquire =
 		};
 	}
 
-	space = this.$spaces[ spaceName ];
+	space = this.$spaces[ spaceRef.fullname ];
 
 	if( !space )
 	{
 		if( req.createMissing === true )
 		{
-			space = yield* this.createSpace( spaceUser, spaceTag );
+			space = yield* this.createSpace( spaceRef.username, spaceRef.tag );
 		}
 		else
 		{

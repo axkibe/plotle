@@ -19,6 +19,7 @@ net = net || { };
 */
 var
 	ccot,
+	fabric,
 	jools,
 	request,
 	root,
@@ -227,6 +228,7 @@ link.prototype._onRegister =
 */
 link.prototype.acquireSpace =
 	function(
+		// FIXME hand a spaceRef
 		spaceUser,
 		spaceTag,
 		createMissing
@@ -239,8 +241,11 @@ link.prototype.acquireSpace =
 		request.acquire.create(
 			'createMissing', createMissing,
 			'passhash', this.passhash,
-			'spaceUser', spaceUser,
-			'spaceTag', spaceTag,
+			'space',
+				fabric.spaceRef.create(
+					'username', spaceUser,
+					'tag', spaceTag
+				),
 			'user', this.username
 		),
 		'_onAcquireSpace'
@@ -280,8 +285,9 @@ link.prototype._onAcquireSpace =
 				jools.immute(
 					{
 						status : reply.status,
-						spaceUser : request.spaceUser,
-						spaceTag : request.spaceTag
+						// FIXME give reference
+						spaceUser : request.space.username,
+						spaceTag : request.space.tag
 					}
 				)
 			);
@@ -302,8 +308,9 @@ link.prototype._onAcquireSpace =
 
 	root.link =
 		root.link.create(
-			'spaceUser', request.spaceUser,
-			'spaceTag', request.spaceTag,
+			// FIXME use spaceRef
+			'spaceUser', request.space.username,
+			'spaceTag', request.space.tag,
 			'_cSpace', space,
 			'_rSpace', space,
 			'_outbox', ccot.changeWrapRay.create( ),
@@ -315,8 +322,9 @@ link.prototype._onAcquireSpace =
 		jools.immute(
 			{
 				status : reply.status,
-				spaceUser : request.spaceUser,
-				spaceTag : request.spaceTag,
+				// FIXME use spaceRef
+				spaceUser : request.space.username,
+				spaceTag : request.space.tag,
 				space : space,
 				access : reply.access
 			}
@@ -347,7 +355,10 @@ link.prototype._update =
 			'passhash', this.passhash,
 			'spaceUser', this.spaceUser,
 			'spaceTag', this.spaceTag,
-			'seq', this._rSeq,
+			'seq',
+				this._rSeq !== null
+				? this._rSeq
+				: -1,
 			'user', this.username
 		),
 		'_onUpdate'

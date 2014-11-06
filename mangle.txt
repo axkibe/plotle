@@ -1,3 +1,5 @@
+. spaceRef
+> tag
 . 0-line
 > 1
 . Create

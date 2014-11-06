@@ -1,24 +1,17 @@
 /*
 | Wrapper around HTML5 canvas.
 |
+| TODO rename canvs
+|
 | Authors: Axel Kittenberger
 */
 
 
-/*
-| Exports
-*/
 var
-	euclid;
+	euclid,
+	jools;
 
 euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
-	jools;
 
 
 /*
