@@ -159,13 +159,13 @@ label.prototype._init =
 
 
 /*
-| Draws the label on the fabric.
+| Displays the label.
 |
-| FIXME use _fabric
+| FUTURE use _display
 */
 label.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
 	if( !this.visible )
@@ -173,13 +173,10 @@ label.prototype.draw =
 		return;
 	}
 
-	fabric.paintText(
-		'text',
-			this.text,
-		'p',
-			this.pos,
-		'font',
-			this.font
+	display.paintText(
+		'text', this.text,
+		'p', this.pos,
+		'font', this.font
 	);
 };
 

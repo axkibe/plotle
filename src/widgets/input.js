@@ -416,11 +416,11 @@ var blackStyle =
 
 
 /*
-| Returns the fabric for the input field.
+| Returns the display for the input field.
 */
 jools.lazyValue(
 	input.prototype,
-	'_fabric',
+	'_display',
 	function( )
 	{
 		var
@@ -444,7 +444,7 @@ jools.lazyValue(
 		mark = this.mark;
 
 		f =
-			euclid.fabric.create(
+			euclid.display.create(
 				'width',
 					shape.width + 1,
 				'height',
@@ -522,14 +522,12 @@ jools.lazyValue(
 */
 input.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
-	fabric.drawImage(
-		'image',
-			this._fabric,
-		'pnw',
-			this.frame.pnw
+	display.drawImage(
+		'image', this._display,
+		'pnw', this.frame.pnw
 	);
 };
 
@@ -544,31 +542,28 @@ input.prototype.locateOffset =
 {
 	// FIXME cache position
 	var
-		font =
-			this.font,
+		font,
+		pitch,
+		value;
 
-		pitch =
-			this._pitch,
+	font = this.font;
 
-		value =
-			this.value;
+	pitch = this._pitch;
+
+	value = this.value;
 
 	if( this.password )
 	{
 		return (
 			euclid.point.create(
 				'x',
-					pitch.x +
-					(
+					pitch.x
+					+ (
 						this.maskWidth( font.size ) +
 						this.maskKern( font.size )
 					) * offset
 					- 1,
-				'y',
-					Math.round(
-						pitch.y +
-						font.size
-					)
+				'y', Math.round( pitch.y + font.size )
 			)
 		);
 	}
@@ -584,11 +579,7 @@ input.prototype.locateOffset =
 							value.substring( 0, offset )
 						)
 					),
-				'y',
-					Math.round(
-						pitch.y +
-						font.size
-					)
+				'y', Math.round( pitch.y + font.size )
 			)
 		);
 	}
@@ -600,29 +591,28 @@ input.prototype.locateOffset =
 */
 input.prototype._drawCaret =
 	function(
-		fabric
+		display
 	)
 {
 	// draws the caret
 	var
-		fs =
-			this.font.size,
+		descend,
+		fs,
+		n,
+		p,
+		s;
 
-		descend =
-			fs * theme.bottombox,
+	fs = this.font.size;
 
-		p =
-			this.locateOffset(
-				this.mark.caretAt
-			),
+	descend = fs * theme.bottombox;
 
-		s =
-			Math.round( p.y + descend + 1 ),
+	p = this.locateOffset( this.mark.caretAt );
 
-		n =
-			s - Math.round( fs + descend );
+	s = Math.round( p.y + descend + 1 );
 
-	fabric.fillRect(
+	n = s - Math.round( fs + descend );
+
+	display.fillRect(
 		'black',
 		p.x,
 		n,
@@ -641,9 +631,9 @@ input.prototype.input =
 	)
 {
 	var
+		at,
 		mark,
 		value,
-		at,
 		maxlen;
 
 	mark = this.mark;
@@ -661,11 +651,7 @@ input.prototype.input =
 		value.length + text.length > maxlen
 	)
 	{
-		text =
-			text.substring(
-				0,
-				maxlen - value.length
-			);
+		text = text.substring( 0, maxlen - value.length );
 	}
 
 	root.setPath(
@@ -677,10 +663,8 @@ input.prototype.input =
 
 	root.setMark(
 		marks.caret.create(
-			'path',
-				mark.caretPath,
-			'at',
-				at + text.length
+			'path', mark.caretPath,
+			'at', at + text.length
 		)
 	);
 };
@@ -713,10 +697,8 @@ input.prototype._keyBackspace =
 
 	root.setMark(
 		marks.caret.create(
-			'path',
-				mark.caretPath,
-			'at',
-				at - 1
+			'path', mark.caretPath,
+			'at', at - 1
 		)
 	);
 };
@@ -753,10 +735,7 @@ input.prototype._keyDel =
 input.prototype._keyEnter =
 	function( )
 {
-	root.cycleFormFocus(
-		this.path.get( 2 ),
-		1
-	);
+	root.cycleFormFocus( this.path.get( 2 ), 1 );
 };
 
 
@@ -793,10 +772,8 @@ input.prototype._keyEnd =
 
 	root.setMark(
 		marks.caret.create(
-			'path',
-				mark.caretPath,
-			'at',
-				this.value.length
+			'path', mark.caretPath,
+			'at', this.value.length
 		)
 	);
 };
@@ -820,10 +797,8 @@ input.prototype._keyLeft =
 
 	root.setMark(
 		marks.caret.create(
-			'path',
-				mark.caretPath,
-			'at',
-				mark.caretAt - 1
+			'path', mark.caretPath,
+			'at', mark.caretAt - 1
 		)
 	);
 };
@@ -847,10 +822,8 @@ input.prototype._keyPos1 =
 
 	root.setMark(
 		marks.caret.create(
-			'path',
-				mark.caretPath,
-			'at',
-				0
+			'path', mark.caretPath,
+			'at', 0
 		)
 	);
 };
@@ -874,10 +847,8 @@ input.prototype._keyRight =
 
 	root.setMark(
 		marks.caret.create(
-			'path',
-				mark.caretPath,
-			'at',
-				mark.caretAt + 1
+			'path', mark.caretPath,
+			'at', mark.caretAt + 1
 		)
 	);
 };
@@ -1016,10 +987,8 @@ input.prototype.pointingHover =
 
 	return(
 		result.hover.create(
-			'path',
-				this.path,
-			'cursor',
-				'text'
+			'path', this.path,
+			'cursor', 'text'
 		)
 	);
 };
@@ -1063,10 +1032,8 @@ input.prototype.click =
 
 	root.setMark(
 		marks.caret.create(
-			'path',
-				this.path,
-			'at',
-				this.getOffsetAt( pp )
+			'path', this.path,
+			'at', this.getOffsetAt( pp )
 		)
 	);
 
@@ -1092,10 +1059,7 @@ jools.lazyValue(
 
 		descend = fs * theme.bottombox;
 
-		p =
-			this.locateOffset(
-				this.mark.caretAt
-			);
+		p = this.locateOffset( this.mark.caretAt );
 
 		s = Math.round( p.y + descend + 1 );
 

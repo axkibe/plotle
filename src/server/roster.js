@@ -141,7 +141,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/euclid/fabric.js',
+		'filePath', 'src/euclid/display.js',
 		'hasJion', true,
 		'inBundle', true
 	),

@@ -251,17 +251,12 @@ var System =
 
 	_canvas = document.getElementById( 'canvas' );
 
-	_height = window.innerHeight - 1;
+	_canvas.width = window.innerWidth - 1;
 
-	this._fabric =
-		euclid.fabric.create(
-			'canvas',
-				_canvas,
-			'width',
-				window.innerWidth - 1,
-			'height',
-				_height
-		);
+	_canvas.height = window.innerHeight - 1;
+
+	this._display =
+		euclid.display.createAroundHTMLCanvas( _canvas );
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
@@ -660,22 +655,21 @@ System.prototype._onResize =
 		// event
 	)
 {
-	_height =
-		window.innerHeight - 1;
-
 	var
-		fabric =
-		this._fabric =
-			this._fabric.create(
-				'width',
-					window.innerWidth - 1,
-				'height',
-					_height
-			);
+		display;
+
+	_height = window.innerHeight - 1;
+
+	display =
+	this._display =
+		this._display.create(
+			'width', window.innerWidth - 1,
+			'height', _height
+		);
 
 	if( root )
 	{
-		root.resize( fabric );
+		root.resize( display );
 	}
 };
 
@@ -1731,7 +1725,7 @@ startup = function( )
 				system = new System( );
 
 				(
-					new shell.root( system._fabric )
+					new shell.root( system._display )
 				).onload( );
 
 				// FIXME work on IOS

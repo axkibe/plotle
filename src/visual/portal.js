@@ -584,14 +584,12 @@ jools.lazyValue(
 */
 portal.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
-	fabric.drawImage(
-		'image',
-			this._fabric,
-		'pnw',
-			this.view.point( this.zone.pnw )
+	display.drawImage(
+		'image', this._display,
+		'pnw', this.view.point( this.zone.pnw )
 	);
 };
 
@@ -621,9 +619,11 @@ portal.prototype.mousewheel =
 | Highlights the portal.
 */
 portal.prototype.highlight =
-	function( fabric )
+	function(
+		display
+	)
 {
-	fabric.edge(
+	display.edge(
 		Style.getStyle(
 			theme.portal.style,
 			'highlight'
@@ -705,11 +705,11 @@ portal.prototype.pointingHover =
 
 
 /*
-| The protal's fabric.
+| Creates the portal's display.
 */
 jools.lazyValue(
 	portal.prototype,
-	'_fabric',
+	'_display',
 	function( )
 	{
 		var
@@ -725,11 +725,9 @@ jools.lazyValue(
 		vzone = this.view.rect( this.zone );
 
 		f =
-			euclid.fabric.create(
-				'width',
-					vzone.width + 2,
-				'height',
-					vzone.height + 2
+			euclid.display.create(
+				'width', vzone.width + 2,
+				'height', vzone.height + 2
 			),
 
 		hview = this.view.home;
@@ -738,10 +736,8 @@ jools.lazyValue(
 
 		section =
 			mark
-			&&
-			mark.hasCaret
-			&&
-			mark.caretPath.get( -1 );
+			&& mark.hasCaret
+			&& mark.caretPath.get( -1 );
 
 		f.fill(
 			Style.getStyle(
@@ -973,11 +969,11 @@ if( SHELL )
 
 
 /*
-| Draws the caret
+| Displays the caret.
 */
 portal.prototype._drawCaret =
 	function(
-		fabric
+		display
 	)
 {
 	var
@@ -1021,8 +1017,8 @@ portal.prototype._drawCaret =
 
 	n = s - Math.round( fs + descend );
 
-	// draws the caret
-	fabric.fillRect(
+	// displays the caret
+	display.fillRect(
 		'black',
 		p.x + fieldPNW.x,
 		n,
@@ -1114,20 +1110,20 @@ portal.prototype._keyBackspace =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		at,
+		mark,
+		section;
 
-		section =
-			mark.caretPath.get( -1 );
+	mark = this.mark;
+
+	section = mark.caretPath.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
 		return;
 	}
 
-	var
-		at =
-			mark.caretAt;
+	at = mark.caretAt;
 
 	if( at <= 0 )
 	{
@@ -1150,11 +1146,13 @@ portal.prototype._keyDown =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		cpos,
+		mark,
+		section;
 
-		section =
-			mark.caretPath.get( -1 );
+	mark = this.mark;
+
+	section = mark.caretPath.get( -1 );
 
 	if(
 		!this._isSection( section )
@@ -1162,9 +1160,6 @@ portal.prototype._keyDown =
 	{
 		return;
 	}
-
-	var
-		cpos;
 
 	switch( section )
 	{

@@ -247,10 +247,10 @@ label.prototype.handles =
 */
 label.prototype.highlight =
 	function(
-		fabric
+		display
 	)
 {
-	fabric.edge(
+	display.edge(
 		Style.getStyle(
 			theme.label.style,
 			'highlight'
@@ -360,43 +360,41 @@ label.prototype.dragStop =
 
 
 /*
-| The label's fabric.
+| The label's display.
 */
 jools.lazyValue(
 	label.prototype,
-	'_fabric',
+	'_display',
 	function( )
 	{
 		var
 			doc,
-			f,
+			display,
 			hview,
 			vzone;
 
 		vzone = this.view.rect( this.zone );
 
-		f =
-			euclid.fabric.create(
-				'width',
-					vzone.width,
-				'height',
-					vzone.height
+		display =
+			euclid.display.create(
+				'width', vzone.width,
+				'height', vzone.height
 			);
 
 		doc = this.doc;
 
 		hview = this.view.home;
 
-		// draws selection and text
+		// displays selection and text
 		doc.draw(
-			f,
+			display,
 			hview,
 			this.zone.width,
 			euclid.point.zero
 		);
 
-		// draws the border
-		f.edge(
+		// displays the border
+		display.edge(
 			Style.getStyle(
 				theme.label.style,
 				'normal'
@@ -405,7 +403,7 @@ jools.lazyValue(
 			hview
 		);
 
-		return f;
+		return display;
 	}
 );
 
@@ -417,11 +415,11 @@ jools.lazyValue(
 */
 label.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
-	fabric.drawImage(
-		'image', this._fabric,
+	display.drawImage(
+		'image', this._display,
 		'pnw', this.view.point( this.zone.pnw )
 	);
 };

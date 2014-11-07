@@ -198,16 +198,16 @@ form.prototype._focusedWidget =
 */
 form.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
 	var
 		r,
 		ranks;
 
-	fabric.paint(
+	display.paint(
 		theme.forms.style,
-		fabric.silhoutte,
+		display.silhoutte,
 		euclid.view.proper
 	);
 
@@ -219,7 +219,7 @@ form.prototype.draw =
 		r--
 	)
 	{
-		this.atRank( r ).draw( fabric );
+		this.atRank( r ).draw( display );
 	}
 };
 

@@ -343,20 +343,16 @@ jools.lazyValue(
 
 
 /*
-| Draws the arrow.
+| Displays the arrow.
 */
 arrow.prototype.draw =
 	function(
-		fabric,
+		display,
 		view,
 		style
 	)
 {
-	fabric.paint(
-		style,
-		this._shape,
-		view
-	);
+	display.paint( style, this._shape, view );
 };
 
 

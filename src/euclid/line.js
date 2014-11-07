@@ -135,16 +135,12 @@ jools.lazyValue(
 */
 line.prototype.draw =
 	function(
-		fabric,
+		display,
 		view,
 		style
 	)
 {
-	fabric.paint(
-		style,
-		this,
-		view
-	);
+	display.paint( style, this, view );
 };
 
 

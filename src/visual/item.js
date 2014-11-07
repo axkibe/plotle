@@ -123,7 +123,7 @@ item.prototype.checkHandles =
 
 	handles = this._handles;
 
-	f = root.fabric;
+	f = root.display;
 
 	d8cwcf = euclid.compass.dir8CWCF;
 
@@ -385,7 +385,7 @@ jools.lazyValue(
 */
 item.prototype.drawHandles =
 	function(
-		fabric,
+		display,
 		view
 	)
 {
@@ -408,14 +408,14 @@ item.prototype.drawHandles =
 	{
 		area = sbary.getArea( view );
 
-		fabric.reverseClip(
+		display.reverseClip(
 			area,
 			euclid.view.proper,
 			-1
 		);
 	}
 
-	fabric.reverseClip(
+	display.reverseClip(
 		this.silhoutte,
 		view,
 		-1
@@ -444,14 +444,14 @@ item.prototype.drawHandles =
 				view.point( h.pc )
 			);
 
-		fabric.paint(
+		display.paint(
 			theme.handle.style,
 			h,
 			fixView
 		);
 	}
 
-	fabric.deClip( );
+	display.deClip( );
 };
 
 

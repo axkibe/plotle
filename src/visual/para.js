@@ -172,17 +172,9 @@ para.prototype._init =
 		inherit.view.zoom === this.view.zoom
 	)
 	{
-		jools.aheadValue(
-			this,
-			'flow',
-			inherit.flow
-		);
+		jools.aheadValue( this, 'flow', inherit.flow );
 
-		jools.aheadValue(
-			this,
-			'_fabric',
-			inherit._fabric
-		);
+		jools.aheadValue( this, '_display', inherit._display );
 	}
 };
 
@@ -264,11 +256,11 @@ jools.lazyValue(
 
 
 /*
-| The para's fabric.
+| The para's display.
 */
 jools.lazyValue(
 	para.prototype,
-	'_fabric',
+	'_display',
 	function( )
 	{
 		var
@@ -297,20 +289,16 @@ jools.lazyValue(
 
 		// adds to width so the caret gets visible.
 		f =
-			euclid.fabric.create(
+			euclid.display.create(
 				'width',
-					Math.round(
-						flow.widthUsed * zoom + 5
-					),
+					Math.round( flow.widthUsed * zoom + 5 ),
 				'height',
-					Math.round(
-						this.height * zoom + 1
-					)
+					Math.round( this.height * zoom + 1 )
 			);
 
 		f.scale( zoom );
 
-		// draws text into the fabric
+		// draws text into the display
 		for(
 			a = 0, aZ = flow.length;
 			a < aZ;
@@ -323,18 +311,14 @@ jools.lazyValue(
 				b = 0, bZ = line.a.length;
 				b < bZ;
 				b++
-		)
+			)
 			{
 				chunk = line.a[ b ];
 
 				f.paintText(
-					'text',
-						chunk.t,
-					'xy',
-						chunk.x,
-						line.y,
-					'font',
-						font
+					'text', chunk.t,
+					'xy', chunk.x, line.y,
+					'font', font
 				);
 			}
 		}
@@ -358,19 +342,17 @@ jools.lazyValue(
 
 
 /*
-| Draws the paragraph in its cache and returns it.
+| Draws the paragraph in a display.
 */
 para.prototype.draw =
 	function(
-		fabric, // the fabric to draw upon
-		pnw     // pnw of this para
+		display, // the display to draw upon
+		pnw      // pnw of this para
 	)
 {
-	fabric.drawImage(
-		'image',
-			this._fabric,
-		'pnw',
-			pnw
+	display.drawImage(
+		'image', this._display,
+		'pnw', pnw
 	);
 };
 
@@ -380,7 +362,7 @@ para.prototype.draw =
 */
 para.prototype._drawCaret =
 	function(
-		fabric
+		display
 	)
 {
 	var
@@ -400,8 +382,8 @@ para.prototype._drawCaret =
 
 	n = s - Math.round( this.fontsize + descend );
 
-	// draws the caret
-	fabric.fillRect(
+	// displays the caret
+	display.fillRect(
 		'black',
 		view.scale( p.x ),
 		view.scale( n ),
@@ -419,10 +401,7 @@ jools.lazyValue(
 	'font',
 	function( )
 	{
-		return fontPool.get(
-			this.fontsize,
-			'la'
-		);
+		return fontPool.get( this.fontsize, 'la' );
 	}
 );
 

@@ -74,34 +74,28 @@ check.prototype._init =
 		euclid.shape.create(
 			'hull',
 				[
-					'start',
-						pc.add( -5,  -3 ),
-					'line',
-						pc.add(  2,   5 ),
-					'line',
-						pc.add( 14, -12 ),
-					'line',
-						pc.add(  2,  -1 ),
-					'line',
-						'close'
+					'start', pc.add( -5,  -3 ),
+					'line', pc.add(  2,   5 ),
+					'line', pc.add( 14, -12 ),
+					'line', pc.add(  2,  -1 ),
+					'line', 'close'
 				],
-			'pc',
-				pc
+			'pc', pc
 		);
 };
 
 
 /*
-| Draws the check button on a fabric.
+| Draws the check button on a display.
 */
 check.prototype.draw =
 	function(
-		fabric,
+		display,
 		style,
 		view
 	)
 {
-	fabric.paint( style, this._check, view );
+	display.paint( style, this._check, view );
 };
 
 

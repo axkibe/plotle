@@ -82,22 +82,14 @@ moveto.prototype._init =
 		euclid.shape.create(
 			'hull',
 				[
-					'start',
-						ap,             // A
-					'line',
-						ap.add(  6,  8 ), // B
-					'line',
-						ap.add(  2,  8 ), // C
-					'line',
-						ap.add(  2, 14 ), // D
-					'line',
-						ap.add( -2, 14 ), // E
-					'line',
-						ap.add( -2,  8 ), // F,
-					'line',
-						ap.add( -6,  8 ), // G,
-					'line',
-						'close'
+					'start', ap,              // A
+					'line', ap.add(  6,  8 ), // B
+					'line', ap.add(  2,  8 ), // C
+					'line', ap.add(  2, 14 ), // D
+					'line', ap.add( -2, 14 ), // E
+					'line', ap.add( -2,  8 ), // F,
+					'line', ap.add( -6,  8 ), // G,
+					'line', 'close'
 				],
 			'pc',
 				ap.add( 0, 7 )
@@ -105,38 +97,34 @@ moveto.prototype._init =
 
 	this._base1 =
 		euclid.rect.create(
-			'pnw',
-				ap.add( -2, 16 ),
-			'pse',
-				ap.add( +2, 17 )
+			'pnw', ap.add( -2, 16 ),
+			'pse', ap.add( +2, 17 )
 		);
 
 	this._base2 =
 		euclid.rect.create(
-			'pnw',
-				ap.add( -2, 19 ),
-			'pse',
-				ap.add( +2, 20 )
+			'pnw', ap.add( -2, 19 ),
+			'pse', ap.add( +2, 20 )
 		);
 
 };
 
 
 /*
-| Draws the moveto button on a fabric
+| Draws the moveto button in a display.
 */
 moveto.prototype.draw =
 	function(
-		fabric,
+		display,
 		style,
 		view
 	)
 {
-	fabric.paint( style, this._arrow, view );
+	display.paint( style, this._arrow, view );
 
-	fabric.paint( style, this._base1, view );
+	display.paint( style, this._base1, view );
 
-	fabric.paint( style, this._base2, view );
+	display.paint( style, this._base2, view );
 };
 
 

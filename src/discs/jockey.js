@@ -280,19 +280,19 @@ jockey.prototype.dragStart =
 
 
 /*
-| Draws the disc panel.
+| Dispalys the disc panel.
 */
 jockey.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
 	if( this.mode === 'Create' )
 	{
-		this.twig.createDisc.draw( fabric );
+		this.twig.createDisc.draw( display );
 	}
 
-	this.twig.mainDisc.draw( fabric );
+	this.twig.mainDisc.draw( display );
 };
 
 
@@ -310,11 +310,7 @@ jockey.prototype.pointingHover =
 		hover;
 
 	hover =
-		this.twig.mainDisc.pointingHover(
-			p,
-			shift,
-			ctrl
-		);
+		this.twig.mainDisc.pointingHover( p, shift, ctrl );
 
 	if( hover !== null )
 	{
@@ -323,13 +319,7 @@ jockey.prototype.pointingHover =
 
 	if( this.mode === 'Create' )
 	{
-		return (
-			this.twig.createDisc.pointingHover(
-				p,
-				shift,
-				ctrl
-			)
-		);
+		return this.twig.createDisc.pointingHover( p, shift, ctrl );
 	}
 
 	return null;

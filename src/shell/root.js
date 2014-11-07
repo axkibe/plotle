@@ -4,22 +4,6 @@
 | Authors: Axel Kittenberger
 */
 
-
-/*
-| Export
-*/
-var
-	root,
-	shell;
-
-root = null;
-
-shell = shell || { };
-
-
-/*
-| Imports
-*/
 var
 	actions,
 	ccot,
@@ -31,8 +15,15 @@ var
 	jools,
 	marks,
 	net,
+	root,
+	shell,
 	system,
 	swatch;
+
+shell = shell || { };
+
+root = null;
+
 
 
 /*
@@ -95,7 +86,7 @@ var
 */
 shell.root =
 	function(
-		fabric
+		display
 	)
 {
 	var
@@ -115,11 +106,7 @@ shell.root =
 
 	canvas = document.createElement( 'canvas' );
 
-	swatch =
-		euclid.fabric.create(
-			'canvas',
-				canvas
-		);
+	swatch = euclid.display.createAroundHTMLCanvas( canvas );
 
 	euclid.measure.init( canvas );
 
@@ -133,7 +120,7 @@ shell.root =
 		);
 	*/
 
-	this.fabric = fabric;
+	this.display = display;
 
 	this.username = null;
 
@@ -154,9 +141,9 @@ shell.root =
 			'fact',
 				0,
 			'width',
-				fabric.width,
+				display.width,
 			'height',
-				fabric.height
+				display.height
 		);
 
 	this._formJockey =
@@ -287,11 +274,11 @@ Object.defineProperty(
 			function( )
 			{
 				var
-					display;
+					screen;
 
-				display = this._getCurrentDisplay( );
+				screen = this._currentScreen( );
 
-				return display && display.attentionCenter;
+				return screen && screen.attentionCenter;
 			}
 	}
 );
@@ -365,10 +352,8 @@ proto.update =
 				sign =
 					chgX.transformSign(
 						ccot.sign.create(
-							'path',
-								mark.path.chop( ),
-							'at1',
-								mark.at
+							'path', mark.path.chop( ),
+							'at1', mark.at
 						)
 					);
 
@@ -377,12 +362,9 @@ proto.update =
 				//   in some cases
 				mark =
 					marks.caret.create(
-						'path',
-							sign.path.prepend( 'space' ),
-						'at',
-							sign.at1,
-						'retainx',
-							mark.retainx
+						'path', sign.path.prepend( 'space' ),
+						'at', sign.at1,
+						'retainx', mark.retainx
 					);
 			}
 
@@ -414,20 +396,16 @@ proto.update =
 				bSign =
 					chgX.transformSign(
 						ccot.sign.create(
-							'path',
-								mark.bPath.chop( ),
-							'at1',
-								mark.bAt
+							'path', mark.bPath.chop( ),
+							'at1', mark.bAt
 						)
 					);
 
 				eSign =
 					chgX.transformSign(
 						ccot.sign.create(
-							'path',
-								mark.ePath.chop( ),
-							'at1',
-								mark.eAt
+							'path', mark.ePath.chop( ),
+							'at1', mark.eAt
 						)
 					);
 
@@ -439,30 +417,21 @@ proto.update =
 				{
 					mark =
 						marks.caret.create(
-							'path',
-								bSign.path.prepend( 'space' ),
-							'at',
-								bSign.at1,
-							'retainx',
-								mark.retainx
+							'path', bSign.path.prepend( 'space' ),
+							'at', bSign.at1,
+							'retainx', mark.retainx
 						);
 				}
 				else
 				{
 					mark =
 						marks.range.create(
-							'doc',
-								item.doc,
-							'bPath',
-								bSign.path.prepend( 'space' ),
-							'bAt',
-								bSign.at1,
-							'ePath',
-								eSign.path.prepend( 'space' ),
-							'eAt',
-								eSign.at1,
-							'retainx',
-								mark.retainx
+							'doc', item.doc,
+							'bPath', bSign.path.prepend( 'space' ),
+							'bAt', bSign.at1,
+							'ePath', eSign.path.prepend( 'space' ),
+							'eAt', eSign.at1,
+							'retainx', mark.retainx
 						);
 				}
 			}
@@ -473,20 +442,13 @@ proto.update =
 	// FIXME let the link do the real stuff
 	this.space =
 		space.create(
-			'spaceUser',
-				this.space.spaceUser,
-			'spaceTag',
-				this.space.spaceTag,
-			'access',
-				this.space.access,
-			'hover',
-				this.space.hover,
-			'mark',
-				mark,
-			'path',
-				this.space.path,
-			'view',
-				this.space.view
+			'spaceUser', this.space.spaceUser,
+			'spaceTag', this.space.spaceTag,
+			'access', this.space.access,
+			'hover', this.space.hover,
+			'mark', mark,
+			'path', this.space.path,
+			'view', this.space.view
 		);
 
 	this._discJockey =
@@ -537,22 +499,22 @@ proto._draw =
 {
 	var
 		display,
-		fabric;
+		screen;
 
-	fabric = this.fabric;
+	display = this.display;
 
-	fabric.clear( );
+	display.clear( );
 
-	display = this._getCurrentDisplay( );
+	screen = this._currentScreen( );
 
-	if( display )
+	if( screen )
 	{
-		display.draw( fabric );
+		screen.draw( display );
 	}
 
-	if( display && display.showDisc )
+	if( screen && screen.showDisc )
 	{
-		this._discJockey.draw( fabric );
+		this._discJockey.draw( display );
 	}
 
 	this._$redraw = false;
@@ -571,9 +533,9 @@ proto.click =
 {
 	var
 		click,
-		display;
+		screen;
 
-	display = this._getCurrentDisplay( ),
+	screen = this._currentScreen( ),
 
 	click =
 		this._discJockey.click(
@@ -584,13 +546,9 @@ proto.click =
 
 	if( click === null )
 	{
-		if( display )
+		if( screen )
 		{
-			display.click(
-				p,
-				shift,
-				ctrl
-			);
+			screen.click( p, shift, ctrl );
 		}
 	}
 
@@ -603,11 +561,11 @@ proto.click =
 
 
 /*
-| Returns current display
+| Returns current screen
 |
-| This is either a visual space or a form
+| This is either a fabric space or a form
 */
-proto._getCurrentDisplay =
+proto._currentScreen =
 	function( )
 {
 	var
@@ -631,9 +589,7 @@ proto._getCurrentDisplay =
 		case 'user' :
 		case 'welcome' :
 
-			return (
-				this._formJockey.get( name )
-			);
+			return this._formJockey.get( name );
 
 		default :
 
@@ -653,14 +609,14 @@ proto.pointingHover =
 	)
 {
 	var
-		display,
-		result;
+		result,
+		screen;
 
-	display = this._getCurrentDisplay( ),
+	screen = this._currentScreen( ),
 
 	result = null;
 
-	if( display && display.showDisc )
+	if( screen && screen.showDisc )
 	{
 		result =
 			this._discJockey.pointingHover(
@@ -691,14 +647,9 @@ proto.pointingHover =
 	}
 
 
-	if( display )
+	if( screen )
 	{
-		result =
-			display.pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+		result = screen.pointingHover( p, shift, ctrl );
 
 /**/	if( CHECK )
 /**/	{
@@ -745,22 +696,22 @@ proto.dragStart =
 {
 	var
 		bubble,
-		display;
+		screen;
 
 	bubble = null;
 
-	display = this._getCurrentDisplay( );
+	screen = this._currentScreen( );
 
-	if( display && display.showDisc )
+	if( screen && screen.showDisc )
 	{
 		bubble = this._discJockey.dragStart( p, shift, ctrl );
 	}
 
 	if( bubble === null )
 	{
-		if( display )
+		if( screen )
 		{
-			bubble = display.dragStart( p, shift, ctrl );
+			bubble = screen.dragStart( p, shift, ctrl );
 		}
 	}
 
@@ -784,17 +735,17 @@ proto.dragMove =
 	var
 		action,
 		cursor,
-		display;
+		screen;
 
 	action = this.action;
 
 	cursor = null;
 
-	display = this._getCurrentDisplay( );
+	screen = this._currentScreen( );
 
-	if( display )
+	if( screen )
 	{
-		cursor = display.dragMove( p, shift, ctrl );
+		cursor = screen.dragMove( p, shift, ctrl );
 	}
 
 	if( this._$redraw )
@@ -818,19 +769,15 @@ proto.dragStop =
 {
 	var
 		action,
-		display;
+		screen;
 
 	action = this.action;
 
-	display = this._getCurrentDisplay( );
+	screen = this._currentScreen( );
 
-	if( display )
+	if( screen )
 	{
-		display.dragStop(
-			p,
-			shift,
-			ctrl
-		);
+		screen.dragStop( p, shift, ctrl );
 	}
 
 	if( this._$redraw )
@@ -854,18 +801,13 @@ proto.mousewheel =
 	// FIXME disc?
 
 	var
-		display;
+		screen;
 
-	display = this._getCurrentDisplay( );
+	screen = this._currentScreen( );
 
-	if( display )
+	if( screen )
 	{
-		display.mousewheel(
-			p,
-			dir,
-			shift,
-			ctrl
-		);
+		screen.mousewheel( p, dir, shift, ctrl );
 	}
 
 	if( this._$redraw )
@@ -876,7 +818,7 @@ proto.mousewheel =
 
 
 /*
-| Returns true if the iPad ought to display
+| Returns true if the iPad ought to showy
 | the virtual keyboard
 */
 proto.suggestingKeyboard =
@@ -1062,18 +1004,14 @@ proto.specialKey =
 	)
 {
 	var
-		display,
-		focusItem;
+		focusItem,
+		screen;
 
-	display = this._getCurrentDisplay( );
+	screen = this._currentScreen( );
 
-	if( display )
+	if( screen )
 	{
-		display.specialKey(
-			key,
-			shift,
-			ctrl
-		);
+		screen.specialKey( key, shift, ctrl );
 	}
 
 	focusItem = this.space.focusedItem( );
@@ -1099,14 +1037,14 @@ proto.input =
 	)
 {
 	var
-		display,
-		focusItem;
+		focusItem,
+		screen;
 
-	display = this._getCurrentDisplay( );
+	screen = this._currentScreen( );
 
-	if( display )
+	if( screen )
 	{
-		display.input( text );
+		screen.input( text );
 
 		focusItem = this.space.focusedItem( );
 
@@ -1128,17 +1066,15 @@ proto.input =
 */
 proto.resize =
 	function(
-		fabric
+		display
 	)
 {
-	this.fabric = fabric;
+	this.display = display;
 
 	this.setView(
 		this.view.create(
-			'height',
-				fabric.height,
-			'width',
-				fabric.width
+			'height', display.height,
+			'width', display.width
 		)
 	);
 
@@ -1375,28 +1311,18 @@ proto.onAcquireSpace =
 
 	this.space =
 		asw.space.create(
-			'spaceUser',
-				spaceUser,
-			'spaceTag',
-				spaceTag,
-			'access',
-				access,
-			'hover',
-				jion.path.empty,
-			'mark',
-				null,
-			'path',
-				jion.path.empty.append( 'space' ),
+			'spaceUser', spaceUser,
+			'spaceTag', spaceTag,
+			'access', access,
+			'hover', jion.path.empty,
+			'mark', null,
+			'path', jion.path.empty.append( 'space' ),
 			'view',
 				euclid.view.create(
-					'fact',
-						0,
-					'height',
-						this.fabric.height,
-					'pan',
-						euclid.point.zero,
-					'width',
-						this.fabric.width
+					'fact', 0,
+					'height', this.display.height,
+					'pan', euclid.point.zero,
+					'width', this.display.width
 				)
 		);
 

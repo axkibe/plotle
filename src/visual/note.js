@@ -254,7 +254,7 @@ note.prototype._init =
 				zone.height - theme.scrollbar.vdis * 2
 		);
 
-	// TODO ahead _fabric if only view changed
+	// TODO ahead _display if only view changed
 };
 
 
@@ -335,39 +335,36 @@ if( SHELL )
 
 
 /*
-| The notes fabric.
+| The notes display.
 */
 jools.lazyValue(
 	note.prototype,
-	'_fabric',
+	'_display',
 	function( )
 	{
 		var
-			vzone =
-				this.view.rect( this.zone ),
+			doc,
+			f,
+			hview,
+			sbary,
+			style,
+			vzone;
 
-			hview =
-				this.view.home,
+		vzone = this.view.rect( this.zone );
 
-			f =
-				euclid.fabric.create(
-					'width',
-						vzone.width + 2,
-					'height',
-						vzone.height + 2
-				),
+		hview = this.view.home;
 
-			doc =
-				this.doc,
+		f =
+			euclid.display.create(
+				'width', vzone.width + 2,
+				'height', vzone.height + 2
+			);
 
-			style =
-				Style.getStyle(
-					theme.note.style,
-					'normal'
-				),
+		doc = this.doc;
 
-			sbary =
-				this.scrollbarY;
+		style = Style.getStyle( theme.note.style, 'normal' );
+
+		sbary = this.scrollbarY;
 
 		f.fill(
 			style,
@@ -404,7 +401,7 @@ jools.lazyValue(
 */
 note.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
 	var
@@ -415,9 +412,9 @@ note.prototype.draw =
 
 	sbary = this.scrollbarY;
 
-	fabric.drawImage(
+	display.drawImage(
 		'image',
-			this._fabric,
+			this._display,
 		'pnw',
 			this.view.point( zone.pnw )
 	);
@@ -425,7 +422,7 @@ note.prototype.draw =
 	// FIXME maybe just set sbary null
 	if( sbary.visible )
 	{
-		sbary.draw( fabric, this.view );
+		sbary.draw( display, this.view );
 	}
 };
 
@@ -529,14 +526,11 @@ jools.lazyValue(
 */
 note.prototype.highlight =
 	function(
-		fabric
+		display
 	)
 {
-	fabric.edge(
-		Style.getStyle(
-			theme.note.style,
-			'highlight'
-		),
+	display.edge(
+		Style.getStyle( theme.note.style, 'highlight' ),
 		this.silhoutte,
 		this.view
 	);

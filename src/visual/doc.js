@@ -668,11 +668,11 @@ doc.prototype._getRangeShape =
 
 
 /*
-| Draws the document on a fabric.
+| Displays the document.
 */
 doc.prototype.draw =
 	function(
-		fabric,      // to draw upon
+		display,     // to display within
 		view,        // current pan/zoom/motion TODO
 		width,       // the width to draw the document with
 		scrollp      // scroll position
@@ -680,6 +680,8 @@ doc.prototype.draw =
 {
 	// FUTURE <pre>
 	var
+		a,
+		aZ,
 		mark,
 		para,
 		p,
@@ -703,7 +705,7 @@ doc.prototype.draw =
 		// FUTURE have shapeRays handled more elegantly
 		if( !Array.isArray( rs ) )
 		{
-			fabric.paint(
+			display.paint(
 				theme.selection.style,
 				rs,
 				view
@@ -712,12 +714,12 @@ doc.prototype.draw =
 		else
 		{
 			for(
-				var a = 0, aZ = rs.length;
+				a = 0, aZ = rs.length;
 				a < aZ;
 				a++
 			)
 			{
-				fabric.paint(
+				display.paint(
 					theme.selection.style,
 					rs[ a ],
 					view
@@ -743,10 +745,7 @@ doc.prototype.draw =
 
 		p = pnw.sub( 0, Math.round( scrollp.y ) );
 
-		para.draw(
-			fabric,
-			view.point( p )
-		);
+		para.draw( display, view.point( p ) );
 	}
 };
 

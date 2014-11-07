@@ -346,11 +346,11 @@ jools.lazyValue(
 
 
 /*
-| Redraws the complete space.
+| Displays the whole space.
 */
 space.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
 	var
@@ -373,17 +373,14 @@ space.prototype.draw =
 		r--
 	)
 	{
-		this.atRank( r ).draw( fabric );
+		this.atRank( r ).draw( display );
 	}
 
 	focus = this.focusedItem( );
 
 	if( focus )
 	{
-		focus.drawHandles(
-			fabric,
-			view
-		);
+		focus.drawHandles( display, view );
 	}
 
 	switch( action && action.reflect )
@@ -392,7 +389,7 @@ space.prototype.draw =
 
 			if( action.start )
 			{
-				action.transItem.draw( fabric );
+				action.transItem.draw( display );
 			}
 
 			break;
@@ -407,7 +404,7 @@ space.prototype.draw =
 							action.fromItemPath.get( -1 )
 						);
 
-				fromItem.highlight( fabric );
+				fromItem.highlight( display );
 
 				toItem = null;
 
@@ -418,7 +415,7 @@ space.prototype.draw =
 							action.toItemPath.get( -1 )
 						);
 
-					toItem.highlight( fabric );
+					toItem.highlight( display );
 				}
 
 				fromSilhoutte = fromItem.silhoutte;
@@ -450,7 +447,7 @@ space.prototype.draw =
 						);
 
 					arrow.draw(
-						fabric,
+						display,
 						view,
 						theme.relation.style
 					);
@@ -462,7 +459,7 @@ space.prototype.draw =
 				{
 					this
 					.getItem( this.hover.get( 2 ) )
-					.highlight( fabric );
+					.highlight( display );
 				}
 			}
 

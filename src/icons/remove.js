@@ -145,16 +145,16 @@ remove.prototype._init =
 
 
 /*
-| Draws the moveto button on a fabric
+| Displays the moveto button.
 */
 remove.prototype.draw =
 	function(
-		fabric,
+		display,
 		style,
 		view
 	)
 {
-	fabric.paint( style, this._x, view );
+	display.paint( style, this._x, view );
 };
 
 

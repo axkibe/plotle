@@ -1,8 +1,6 @@
 /*
 | Wrapper around HTML5 canvas.
 |
-| TODO rename canvs
-|
 | Authors: Axel Kittenberger
 */
 
@@ -28,107 +26,128 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.fabric',
+			'euclid.display',
 		attributes :
 			{
-				canvas :
+				'height' :
 					{
 						comment :
-							'the canvas to wrap around',
-						type :
-							'Object',
-						defaultValue :
-							undefined,
-						assign :
-							null
-					},
-				width :
-					{
-						comment :
-							'width of the fabric',
+							'height of the display',
 						type :
 							'Number', // FIXME Integer
 						defaultValue :
 							undefined
 					},
-				height :
+				'width' :
 					{
 						comment :
-							'height of the fabric',
+							'width of the display',
 						type :
 							'Number', // FIXME Integer
+						defaultValue :
+							undefined
+					},
+				'_cv' :
+					{
+						comment :
+							'the html canvas',
+						type :
+							'Object',
+						defaultValue :
+							undefined
+					},
+				'_cx' :
+					{
+						comment :
+							'the html canvas context',
+						type :
+							'Object',
 						defaultValue :
 							undefined
 					}
 			},
 		init :
-			[ 'canvas', 'inherit' ]
+			[ ]
 	};
 }
 
 
-var fabric;
+var
+	display;
 
-fabric = euclid.fabric;
+display = euclid.display;
 
 
 /*
 | Initializer.
 */
-fabric.prototype._init =
+display.prototype._init =
+	function( )
+{
+	var
+		cv;
+
+	cv = this._cv;
+
+	if( !cv )
+	{
+		cv =
+		this._cv =
+			document.createElement( 'canvas' );
+
+		this._cx = cv.getContext( '2d' );
+	}
+
+	if( cv.width !== this.width )
+	{
+		cv.width = this.width;
+	}
+
+	if( cv.height !== this.height )
+	{
+		cv.height = this.height;
+	}
+};
+
+
+/*
+| Creates a display around an existing HTML canvas.
+*/
+display.createAroundHTMLCanvas =
 	function(
-		canvas,
-		inherit
+		canvas
 	)
 {
 	var
 		cx;
 
-	if( !canvas )
-	{
-		if( inherit && inherit._canvas )
-		{
-			canvas = inherit._canvas;
-		}
-		else
-		{
-			canvas = document.createElement( 'canvas' );
-		}
-	}
+	cx = canvas.getContext( '2d' );
 
-	if( this.width !== undefined )
-	{
-		canvas.width = this.width;
-	}
-	else
-	{
-		this.width = canvas.width;
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( cx._clip !== undefined )
+/**/	{
+/**/		// canvas is already wrapp
+/**/		throw new Error( );
+/**/	}
+/**/}
 
-	if( this.height !== undefined )
-	{
-		canvas.height = this.height;
-	}
-	else
-	{
-		this.height = canvas.height;
-	}
-
-	this._canvas = canvas;
-
-	cx =
-	this._cx =
-		canvas.getContext( '2d' );
-
-	cx._clip = false;
+	return(
+		display.create(
+			'_cv', canvas,
+			'_cx', canvas.getContext( '2d' ),
+			'width', canvas.width,
+			'height', canvas.height
+		)
+	);
 };
 
 
 /*
-| Returns the silhoutte that entails the whole fabric.
+| Returns the silhoutte that entails the whole display.
 */
 jools.lazyValue(
-	fabric.prototype,
+	display.prototype,
 	'silhoutte',
 	function( )
 	{
@@ -148,9 +167,9 @@ jools.lazyValue(
 
 
 /*
-| Clips the fabric into a shape.
+| Clips the display into a shape.
 */
-fabric.prototype.clip =
+display.prototype.clip =
 	function(
 		shape,
 		view,
@@ -192,7 +211,7 @@ fabric.prototype.clip =
 /*
 | Removes the clipping
 */
-fabric.prototype.deClip =
+display.prototype.deClip =
 	function( )
 {
 	var
@@ -226,7 +245,7 @@ fabric.prototype.deClip =
 |    'alpha'
 |
 */
-fabric.prototype.drawImage =
+display.prototype.drawImage =
 	function(
 		// free strings
 	)
@@ -297,7 +316,7 @@ fabric.prototype.drawImage =
 		}
 	}
 
-	if( image.reflect === 'euclid.fabric' )
+	if( image.reflect === 'euclid.display' )
 	{
 		if(
 			!(
@@ -310,7 +329,7 @@ fabric.prototype.drawImage =
 			return;
 		}
 
-		image = image._canvas;
+		image = image._cv;
 	}
 
 /**/if( CHECK )
@@ -361,7 +380,7 @@ fabric.prototype.drawImage =
 /*
 | Draws an edge.
 */
-fabric.prototype.edge =
+display.prototype.edge =
 	function(
 		style,  // the style formated in meshcraft style notation.
 		shape,  // an object which has sketch defined
@@ -406,7 +425,7 @@ fabric.prototype.edge =
 /*
 | Draws a filled area.
 */
-fabric.prototype.fill =
+display.prototype.fill =
 	function(
 		style,   // the style formated in meshcraft style notation.
 		shape,   // an object which has sketch defined
@@ -463,7 +482,7 @@ fabric.prototype.fill =
 | 'rotate' ( degree )
 |      text is rotated by degree
 */
-fabric.prototype.paintText =
+display.prototype.paintText =
 	function(
 		// free strings
 	)
@@ -604,7 +623,7 @@ fabric.prototype.paintText =
 | fillRect( style, pnw, pse ) -or-
 | fillRect( style, nwx, nwy, width, height )
 */
-fabric.prototype.fillRect =
+display.prototype.fillRect =
 	function(
 		style,
 		a1,
@@ -657,10 +676,10 @@ fabric.prototype.fillRect =
 
 
 /*
-| The center point of the fabric.
+| The center point of the display.
 */
 jools.lazyValue(
-	fabric.prototype,
+	display.prototype,
 	'pc',
 	function( )
 	{
@@ -683,7 +702,7 @@ jools.lazyValue(
 | Sets the global alpha
 | FIXME remove
 */
-fabric.prototype.globalAlpha =
+display.prototype.globalAlpha =
 	function( a )
 {
 	this._cx.globalAlpha = a;
@@ -691,9 +710,9 @@ fabric.prototype.globalAlpha =
 
 
 /*
-| The canvas is cleared.
+| The display is cleared.
 */
-fabric.prototype.clear =
+display.prototype.clear =
 	function( )
 {
 	this._cx.clearRect(
@@ -708,7 +727,7 @@ fabric.prototype.clear =
 /*
 | Fills an aera and draws its borders.
 */
-fabric.prototype.paint =
+display.prototype.paint =
 	function(
 		style,
 		shape,
@@ -773,9 +792,9 @@ fabric.prototype.paint =
 
 
 /*
-| Clips the fabric so that the shape is left out.
+| Clips the display so that the shape is left out.
 */
-fabric.prototype.reverseClip =
+display.prototype.reverseClip =
 	function(
 		shape,
 		view,
@@ -783,7 +802,7 @@ fabric.prototype.reverseClip =
 	)
 {
 	var
-		c,
+		cv,
 		cx,
 		h,
 		w;
@@ -798,11 +817,11 @@ fabric.prototype.reverseClip =
 
 	cx = this._cx;
 
-	c = this._canvas;
+	cv = this._cv;
 
-	w = c.width;
+	w = cv.width;
 
-	h = c.height;
+	h = cv.height;
 
 	if( !cx._clip )
 	{
@@ -823,23 +842,18 @@ fabric.prototype.reverseClip =
 
 	cx.lineTo( 0, 0 );
 
-	this._sketch(
-		shape,
-		border,
-		0.5,
-		view
-	);
+	this._sketch( shape, border, 0.5, view );
 
 	cx.clip( );
 };
 
 
 /*
-| Sets the canvas scale
+| Sets the display scale
 |
 | FIXME remove
 */
-fabric.prototype.scale =
+display.prototype.scale =
 	function(
 		s
 	)
@@ -851,7 +865,7 @@ fabric.prototype.scale =
 /*
 | Sets the font.
 */
-fabric.prototype._setFont =
+display.prototype._setFont =
 	function(
 		font
 	)
@@ -912,7 +926,7 @@ fabric.prototype._setFont =
 | euclid.point -or-
 | x / y
 */
-fabric.prototype.withinSketch =
+display.prototype.withinSketch =
 	function(
 		shape,
 		view,
@@ -953,7 +967,7 @@ fabric.prototype.withinSketch =
 /*
 | Returns a HTML5 color style for a meshcraft style notation.
 */
-fabric.prototype._colorStyle =
+display.prototype._colorStyle =
 	function(
 		style,
 		shape,
@@ -1086,7 +1100,7 @@ fabric.prototype._colorStyle =
 /*
 | Draws a single edge.
 */
-fabric.prototype._edge =
+display.prototype._edge =
 	function(
 		style,  // the style formated in meshcraft style notation.
 		shape,  // an object which has sketch defined
@@ -1124,7 +1138,7 @@ fabric.prototype._edge =
 | point in north-west
 | is always considered zero.
 */
-fabric.prototype.pnw =
+display.prototype.pnw =
 	euclid.point.zero;
 
 
@@ -1132,7 +1146,7 @@ fabric.prototype.pnw =
 | Point in south east.
 */
 jools.lazyValue(
-	fabric.prototype,
+	display.prototype,
 	'pse',
 	function( )
 	{
@@ -1151,7 +1165,7 @@ jools.lazyValue(
 /*
 | Sketches a generic ( hull ) shape.
 */
-fabric.prototype._sketchGeneric =
+display.prototype._sketchGeneric =
 	function(
 		shape,
 		border,
@@ -1399,7 +1413,7 @@ fabric.prototype._sketchGeneric =
 /*
 | Draws the rectangle.
 */
-fabric.prototype._sketchRect =
+display.prototype._sketchRect =
 	function(
 		rect,
 		border,
@@ -1439,7 +1453,7 @@ fabric.prototype._sketchRect =
 /*
 | Sketches a shape.
 */
-fabric.prototype._sketch =
+display.prototype._sketch =
 	function(
 		shape,
 		border,

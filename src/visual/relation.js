@@ -245,11 +245,11 @@ relation.spawn =
 
 
 /*
-| Draws the relation on the fabric.
+| Displays the relation.
 */
 relation.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
 	var
@@ -279,7 +279,7 @@ relation.prototype.draw =
 			);
 
 		arrow1.draw(
-			fabric,
+			display,
 			this.view,
 			theme.relation.style
 		);
@@ -296,13 +296,13 @@ relation.prototype.draw =
 			);
 
 		arrow2.draw(
-			fabric,
+			display,
 			this.view,
 			theme.relation.style
 		);
 	}
 
-	label.prototype.draw.call( this, fabric );
+	label.prototype.draw.call( this, display );
 };
 
 

@@ -255,11 +255,11 @@ button.prototype.focusable = true;
 
 
 /*
-| The button's fabric.
+| The button's display.
 */
 jools.lazyValue(
 	button.prototype,
-	'_fabric',
+	'_display',
 	function( )
 	{
 		var
@@ -279,7 +279,7 @@ jools.lazyValue(
 			);
 
 		f =
-			euclid.fabric.create(
+			euclid.display.create(
 				'width',
 					this.frame.width,
 				'height',
@@ -399,7 +399,7 @@ button.prototype.pointingHover =
 			p.sub( this.frame.pnw );
 
 	if(
-		!this._fabric.withinSketch(
+		!this._display.withinSketch(
 			this._shape,
 			euclid.view.proper,
 			pp
@@ -447,7 +447,7 @@ button.prototype.click =
 			p.sub( this.frame.pnw );
 
 	if(!
-		this._fabric.withinSketch(
+		this._display.withinSketch(
 			this._shape,
 			euclid.view.proper,
 			pp
@@ -551,7 +551,7 @@ button.prototype.input =
 */
 button.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
 	if( !this.visible )
@@ -559,11 +559,9 @@ button.prototype.draw =
 		return;
 	}
 
-	fabric.drawImage(
-		'image',
-			this._fabric,
-		'pnw',
-			this.frame.pnw
+	display.drawImage(
+		'image', this._display,
+		'pnw', this.frame.pnw
 	);
 };
 

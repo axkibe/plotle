@@ -318,23 +318,23 @@ jools.lazyValue(
 
 
 /*
-| The disc panel's fabric.
+| The disc panel's display.
 */
 jools.lazyValue(
 	mainDisc.prototype,
-	'_fabric',
+	'_display',
 	function( )
 	{
 		var
-			fabric =
-				euclid.fabric.create(
-					'width',
-						this.style.width,
-					'height',
-						this.style.height
-				);
+			display;
 
-		fabric.fill(
+		display =
+			euclid.display.create(
+				'width', this.style.width,
+				'height', this.style.height
+			);
+
+		display.fill(
 			this.style,
 			this.silhoutte,
 			euclid.view.proper
@@ -346,17 +346,16 @@ jools.lazyValue(
 			r++
 		)
 		{
-			this.atRank( r )
-				.draw( fabric );
+			this.atRank( r ).draw( display );
 		}
 
-		fabric.edge(
+		display.edge(
 			this.style,
 			this.silhoutte,
 			euclid.view.proper
 		);
 
-		return fabric;
+		return display;
 	}
 );
 
@@ -414,14 +413,12 @@ mainDisc.prototype.pushButton =
 */
 mainDisc.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
-	fabric.drawImage(
-		'image',
-			this._fabric,
-		'pnw',
-			this.frame.pnw
+	display.drawImage(
+		'image', this._display,
+		'pnw', this.frame.pnw
 	);
 };
 
@@ -436,23 +433,25 @@ mainDisc.prototype.pointingHover =
 		ctrl
 	)
 {
+	var
+		display,
+		pp,
+		r,
+		reply,
+		rZ;
+
 	// shortcut if p is not near the panel
-	if(
-		!this.frame.within( null, p )
-	)
+	if( !this.frame.within( null, p ) )
 	{
 		return null;
 	}
 
-	var
-		fabric =
-			this._fabric,
+	display = this._display,
 
-		pp =
-			p.sub( this.frame.pnw );
+	pp = p.sub( this.frame.pnw );
 
 	if(
-		!fabric.withinSketch(
+		!display.withinSketch(
 			this.silhoutte,
 			euclid.view.proper,
 			pp
@@ -464,19 +463,14 @@ mainDisc.prototype.pointingHover =
 
 	// this is on the disc
 	for(
-		var r = 0, rZ = this.ranks.length;
+		r = 0, rZ = this.ranks.length;
 		r < rZ;
 		r++
 	)
 	{
-		var
-			reply =
-				this.atRank( r )
-					.pointingHover(
-						pp,
-						shift,
-						ctrl
-					);
+		reply =
+			this.atRank( r )
+			.pointingHover( pp, shift, ctrl );
 
 		if( reply )
 		{
@@ -499,8 +493,11 @@ mainDisc.prototype.click =
 	)
 {
 	var
-		fabric,
-		pp;
+		display,
+		pp,
+		r,
+		reply,
+		rZ;
 
 	// shortcut if p is not near the panel
 	if(
@@ -513,14 +510,12 @@ mainDisc.prototype.click =
 		return null;
 	}
 
-	fabric =
-		this._fabric;
+	display = this._display;
 
-	pp =
-		p.sub( this.frame.pnw );
+	pp = p.sub( this.frame.pnw );
 
 	if(
-		!fabric.withinSketch(
+		!display.withinSketch(
 			this.silhoutte,
 			euclid.view.proper,
 			pp
@@ -532,19 +527,12 @@ mainDisc.prototype.click =
 
 	// this is on the disc
 	for(
-		var r = 0, rZ = this.ranks.length;
+		r = 0, rZ = this.ranks.length;
 		r < rZ;
 		r++
 	)
 	{
-		var
-			reply =
-				this.atRank( r )
-					.click(
-						pp,
-						shift,
-						ctrl
-					);
+		reply = this.atRank( r ).click( pp, shift, ctrl );
 
 		if( reply )
 		{
@@ -604,7 +592,7 @@ mainDisc.prototype.dragStart =
 	}
 
 	if(
-		!this._fabric.withinSketch(
+		!this._display.withinSketch(
 			this.silhoutte,
 			euclid.view.proper,
 			p.sub( this.frame.pnw )

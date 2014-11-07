@@ -241,25 +241,25 @@ createDisc.prototype._init =
 
 
 /*
-| The disc panel's fabric.
+| The disc panel's display.
 */
 jools.lazyValue(
 	createDisc.prototype,
-	'_fabric',
+	'_display',
 	function( )
 	{
 		var
-			fabric;
+			display;
 
-		fabric =
-			euclid.fabric.create(
+		display =
+			euclid.display.create(
 				'width',
 					this.style.width,
 				'height',
 					this.style.height
 			);
 
-		fabric.fill(
+		display.fill(
 			this.style,
 			this.silhoutte,
 			euclid.view.proper
@@ -271,16 +271,16 @@ jools.lazyValue(
 			r++
 		)
 		{
-			this.atRank( r ).draw( fabric );
+			this.atRank( r ).draw( display );
 		}
 
-		fabric.edge(
+		display.edge(
 			this.style,
 			this.silhoutte,
 			euclid.view.proper
 		);
 
-		return fabric;
+		return display;
 	}
 );
 
@@ -394,18 +394,13 @@ createDisc.prototype.pushButton =
 */
 createDisc.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
-	fabric.drawImage(
-		'image',
-			this._fabric,
-		'x',
-			0,
-		'y',
-			jools.half(
-				this.view.height - this.style.height
-			)
+	display.drawImage(
+		'image', this._display,
+		'x', 0,
+		'y', jools.half( this.view.height - this.style.height )
 	);
 };
 
@@ -421,7 +416,7 @@ createDisc.prototype.pointingHover =
 	)
 {
 	var
-		fabric,
+		display,
 		pp,
 		reply;
 
@@ -436,13 +431,13 @@ createDisc.prototype.pointingHover =
 		return null;
 	}
 
-	fabric = this._fabric;
+	display = this._display;
 
 	pp = p.sub( this.frame.pnw );
 
-	// FUTURE optimize by reusing the latest path of this.$fabric
+	// FUTURE optimize by reusing the latest path of this._display
 	if(
-		!fabric.withinSketch(
+		!display.withinSketch(
 			this.silhoutte,
 			euclid.view.proper,
 			pp
@@ -488,7 +483,7 @@ createDisc.prototype.click =
 	)
 {
 	var
-		fabric,
+		display,
 		pp;
 
 	// shortcut if p is not near the panel
@@ -502,13 +497,13 @@ createDisc.prototype.click =
 		return null;
 	}
 
-	fabric = this._fabric,
+	display = this._display,
 
 	pp = p.sub( this.frame.pnw );
 
-	// FIXME Optimize by reusing the latest path of this.$fabric
+	// FIXME Optimize by reusing the latest path of this._display
 	if(
-		!fabric.withinSketch(
+		!display.withinSketch(
 			this.silhoutte,
 			euclid.view.proper,
 			pp
@@ -608,7 +603,7 @@ createDisc.prototype.dragStart =
 	}
 
 	if(
-		!this._fabric.withinSketch(
+		!this._display.withinSketch(
 			this.silhoutte,
 			euclid.view.proper,
 			p.sub( this.frame.pnw )

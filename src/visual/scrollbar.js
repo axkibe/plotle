@@ -123,7 +123,7 @@ scrollbar.prototype._init =
 */
 scrollbar.prototype.draw =
 	function(
-		fabric,
+		display,
 		view
 	)
 {
@@ -136,7 +136,7 @@ scrollbar.prototype.draw =
 /**/	}
 /**/}
 
-	fabric.paint(
+	display.paint(
 		theme.scrollbar.style,
 		this.getArea( view ),
 		euclid.view.proper

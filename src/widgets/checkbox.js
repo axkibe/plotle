@@ -310,11 +310,10 @@ checkbox.prototype.input =
 
 /*
 | Draws the checkbox.
-| FIXME _fabric caching
 */
 checkbox.prototype.draw =
 	function(
-		fabric
+		display
 	)
 {
 	var
@@ -329,23 +328,17 @@ checkbox.prototype.draw =
 		widgets.getStyle(
 			this.style,
 			Accent.state(
-				this.hover
-					&&
-					this.hover.equals( this.path ),
+				this.hover && this.hover.equals( this.path ),
 				this.focusAccent
 			)
 		);
 
-	fabric.paint(
-		style,
-		this.frame,
-		euclid.view.proper
-	);
+	display.paint( style, this.frame, euclid.view.proper );
 
 	if( this.checked )
 	{
 		this.checkIcon.draw(
-			fabric,
+			display,
 			widgets.getStyle(
 				'checkboxCheck',
 				Accent.NORMA
