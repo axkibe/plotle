@@ -112,11 +112,7 @@ astBlock.prototype.astAssign =
 /**/	}
 /**/}
 
-	return(
-		this.append(
-			shorthand.astAssign( left, right )
-		)
-	);
+	return this.append( shorthand.astAssign( left, right ) );
 };
 
 
@@ -283,17 +279,9 @@ astBlock.prototype.astPlusAssign =
 		right
 	)
 {
-	// TODO shorthand
-	left = tools.convert( left );
-
-	right = tools.convert( right );
-
 	return(
 		this.append(
-			astPlusAssign.create(
-				'left', left,
-				'right', right
-			)
+			shorthand.astPlusAssign( left, right )
 		)
 	);
 };
