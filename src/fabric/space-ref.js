@@ -86,4 +86,24 @@ jools.lazyValue(
 );
 
 
+/*
+| Reference to ideolooms home space.
+*/
+spaceRef.ideoloomHome =
+	spaceRef.create(
+		'username', 'ideoloom',
+		'tag', 'home'
+	);
+
+/*
+| Reference to ideolooms sandbox space.
+*/
+spaceRef.ideoloomSandbox =
+	spaceRef.create(
+		'username', 'ideoloom',
+		'tag', 'sandbox'
+	);
+
+
+
 } )( );

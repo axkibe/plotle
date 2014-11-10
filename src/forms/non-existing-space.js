@@ -9,20 +9,16 @@
 
 
 /*
-| Export
-*/
-var
-	forms;
-
-forms = forms || { };
-
-
-/*
 | Imports
 */
 var
+	fabric,
+	forms,
 	jools,
 	root;
+
+
+forms = forms || { };
 
 
 /*
@@ -94,7 +90,6 @@ if( JION )
 					{
 						comment :
 							'the path of the form',
-
 						type :
 							'jion.path',
 						defaultValue :
@@ -189,16 +184,13 @@ nonExistingSpace.prototype._init =
 	this.twig.headline =
 		this.twig.headline.create(
 			'text',
-				this.nonSpaceUser +
-				':' +
-				this.nonSpaceTag +
-				' does not exist.'
+				this.nonSpaceUser
+				+ ':'
+				+ this.nonSpaceTag
+				+ ' does not exist.'
 		);
 
-	forms.form.init.call(
-		this,
-		inherit
-	);
+	forms.form.init.call( this, inherit );
 };
 
 
@@ -236,8 +228,11 @@ nonExistingSpace.prototype.pushButton =
 		case 'yesButton' :
 
 			root.moveToSpace(
-				this.nonSpaceUser,
-				this.nonSpaceTag,
+				// FUTURE have this a reference right away
+				fabric.spaceRef.create(
+					'username', this.nonSpaceUser,
+					'tag', this.nonSpaceTag
+				),
 				true
 			);
 
@@ -250,6 +245,5 @@ nonExistingSpace.prototype.pushButton =
 			throw new Error( );
 	}
 };
-
 
 } )( );

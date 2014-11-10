@@ -5,22 +5,15 @@
 */
 
 
-/*
-| Export
-*/
 var
+	fabric,
 	forms,
-
-forms = forms || { };
-
-
-/*
-| Imports
-*/
-var
 	jools,
 	marks,
 	root;
+
+
+forms = forms || { };
 
 
 /*
@@ -382,11 +375,7 @@ login.prototype.onAuth =
 
 	this.clear( );
 
-	root.moveToSpace(
-		'ideoloom',
-		'home',
-		false
-	);
+	root.moveToSpace( fabric.spaceRef.ideoloomHome, false );
 
 	root.setMode( 'Normal' );
 };

@@ -9,6 +9,7 @@ var
 	ccot,
 	discs,
 	euclid,
+	fabric,
 	forms,
 	gruga,
 	jion,
@@ -1111,7 +1112,7 @@ proto.setUser =
 			this.space.spaceUser !== 'ideoloom'
 		)
 		{
-			this.moveToSpace( 'ideoloom', 'home', false );
+			this.moveToSpace( fabric.spaceRef.ideoloomHome, false );
 		}
 
 		window.localStorage.setItem( 'username', null );
@@ -1209,16 +1210,16 @@ proto.onload =
 /*
 | Moves to space with the name name.
 |
-| if name is null, reloads current space.
+| if spaceRef is null reloads current space
 */
 proto.moveToSpace =
 	function(
-		spaceUser,
-		spaceTag,
-		create
+		spaceRef,     // refrence of type fabric.spaceRef
+		createMissing // if true, non-existing spaces are to be
+		//            // created
 	)
 {
-	this.link.acquireSpace( spaceUser, spaceTag, create );
+	this.link.acquireSpace( spaceRef, createMissing );
 };
 
 
@@ -1383,7 +1384,7 @@ proto.onAuth =
 
 	this.setUser( username, passhash );
 
-	this.moveToSpace( 'ideoloom', 'home', false );
+	this.moveToSpace( fabric.spaceRef.ideoloomHome, false );
 };
 
 
@@ -1433,7 +1434,7 @@ proto.logout =
 			this._$visitPasshash
 		);
 
-		this.moveToSpace( 'ideoloom', 'home', false );
+		this.moveToSpace( fabric.spaceRef.ideoloomHome, false );
 
 		return;
 	}

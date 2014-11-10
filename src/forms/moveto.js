@@ -6,20 +6,16 @@
 
 
 /*
-| Export
-*/
-var
-	forms;
-
-forms = forms || { };
-
-
-/*
 | Imports
 */
 var
+	fabric,
+	forms,
 	jools,
 	root;
+
+
+forms = forms || { };
 
 
 /*
@@ -157,10 +153,9 @@ moveTo.prototype._init =
 	if( this.path )
 	{
 		isGuest =
-			this.username === null ?
-				false
-				:
-				this.username.substr( 0, 7 ) === 'visitor';
+			this.username === null
+			?  false
+			: this.username.substr( 0, 7 ) === 'visitor';
 
 		if( !twigDup )
 		{
@@ -169,17 +164,12 @@ moveTo.prototype._init =
 
 		this.twig.userHomeButton =
 			this.twig.userHomeButton.create(
-				'visible',
-					!isGuest,
-				'text',
-					this.username + '\n' + 'home'
+				'visible', !isGuest,
+				'text', this.username + '\n' + 'home'
 			);
 	}
 
-	forms.form.init.call(
-		this,
-		inherit
-	);
+	forms.form.init.call( this, inherit );
 };
 
 
@@ -204,37 +194,29 @@ moveTo.prototype.pushButton =
 /**/	}
 /**/}
 
-	buttonName =
-		path.get( 4 );
+	buttonName = path.get( 4 );
 
 	switch( buttonName )
 	{
 		case 'ideoloomHomeButton' :
 
-			root.moveToSpace(
-				'ideoloom',
-				'home',
-				false
-			);
-
+			root.moveToSpace( fabric.spaceRef.ideoloomHome, false );
 
 			break;
 
 		case 'ideoloomSandboxButton' :
 
-			root.moveToSpace(
-				'ideoloom',
-				'sandbox',
-				false
-			);
+			root.moveToSpace( fabric.spaceRef.ideoloomSandbox, false );
 
 			break;
 
 		case 'userHomeButton' :
 
 			root.moveToSpace(
-				this.username,
-				'home',
+				fabric.spaceRef.create(
+					'username', this.username,
+					'tag', 'home'
+				),
 				false
 			);
 

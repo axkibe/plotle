@@ -5,20 +5,9 @@
 */
 
 
-/*
-| Export
-*/
-var
-	visual;
-
-visual = visual || { };
-
-
-/*
-| Imports
-*/
 var
 	Accent,
+	fabric,
 	fontPool,
 	euclid,
 	jools,
@@ -27,7 +16,11 @@ var
 	result,
 	root,
 	Style,
-	theme;
+	theme,
+	visual;
+
+
+visual = visual || { };
 
 
 /*
@@ -1972,16 +1965,30 @@ portal.prototype._getOffsetAt =
 
 
 /*
+| The space the portals references as fabric.spaceRef jion.
+*/
+jools.lazyValue(
+	portal.prototype,
+	'spaceRef',
+	function( )
+{
+	return(
+		fabric.spaceRef.create(
+			'username', this.spaceUser,
+			'tag', this.spaceTag
+		)
+	);
+}
+);
+
+
+/*
 | Issues the moveTo action.
 */
 portal.prototype._moveTo =
 	function( )
 {
-	root.moveToSpace(
-		this.spaceUser,
-		this.spaceTag,
-		false
-	);
+	root.moveToSpace( this.spaceRef, false );
 };
 
 

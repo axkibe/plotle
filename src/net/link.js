@@ -19,7 +19,6 @@ net = net || { };
 */
 var
 	ccot,
-	fabric,
 	jools,
 	request,
 	root,
@@ -228,9 +227,7 @@ link.prototype._onRegister =
 */
 link.prototype.acquireSpace =
 	function(
-		// FIXME hand a spaceRef
-		spaceUser,
-		spaceTag,
+		spaceRef,
 		createMissing
 	)
 {
@@ -241,11 +238,7 @@ link.prototype.acquireSpace =
 		request.acquire.create(
 			'createMissing', createMissing,
 			'passhash', this.passhash,
-			'space',
-				fabric.spaceRef.create(
-					'username', spaceUser,
-					'tag', spaceTag
-				),
+			'space', spaceRef,
 			'user', this.username
 		),
 		'_onAcquireSpace'
