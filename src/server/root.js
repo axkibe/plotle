@@ -41,6 +41,7 @@ var
 	ccot,
 	config,
 	db_version,
+	fabric,
 	fs,
 	generateJion,
 	http,
@@ -130,6 +131,11 @@ uglify = require( 'uglify-js' );
 url = require( 'url' );
 
 util = require( 'util' );
+
+fabric =
+	{
+		spaceRef : require( '../fabric/space-ref' )
+	};
 
 visual =
 	{
@@ -1538,7 +1544,7 @@ prototype.serveRequestAlter =
 		{
 			_id : seqZ,
 			cid : cid,
-			chgX : JSON.parse( JSON.stringify( chgX ) ), // FIXME
+			chgX : JSON.parse( JSON.stringify( chgX ) ), // needs to rid info.
 			user : req.user,
 			date : Date.now( )
 		},
@@ -1661,22 +1667,26 @@ prototype.serveRequestAuth =
 */
 prototype.createSpace =
 	function* (
-		spaceUser,
-		spaceTag
+		spaceRef
 	)
 {
 	var
-		space,
-		spaceName;
+		space;
 
-	spaceName = spaceUser + ':' + spaceTag;
+/**/if( CHECK )
+/**/{
+/**/	if( spaceRef.reflect !== 'fabric.spaceRef' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	space =
-	this.$spaces[ spaceName ] =
+	this.$spaces[ spaceRef.fullname ] =
 		{
 			$changesDB :
 				yield this.$db.connection.collection(
-					'changes:' + spaceName,
+					'changes:' + spaceRef.fullname,
 					sus.resume( )
 				),
 			$changes :
@@ -1690,7 +1700,7 @@ prototype.createSpace =
 
 	yield this.$db.spaces.insert(
 		{
-			_id : spaceName
+			_id : spaceRef.fullname
 		},
 		sus.resume( )
 	);
@@ -1766,7 +1776,9 @@ prototype.serveRequestRegister =
 
 	this.$users[ username ] = user;
 
-	yield* this.createSpace( username, 'home' );
+	yield* this.createSpace(
+		fabric.spaceRef.create( 'username', username, 'tag', 'home' )
+	);
 
 	return { ok : true };
 };
@@ -2424,7 +2436,7 @@ prototype.serveRequestAcquire =
 	{
 		if( req.createMissing === true )
 		{
-			space = yield* this.createSpace( spaceRef.username, spaceRef.tag );
+			space = yield* this.createSpace( spaceRef );
 		}
 		else
 		{
