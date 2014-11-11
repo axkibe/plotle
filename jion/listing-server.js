@@ -1,3 +1,8 @@
+/*
+| All jion files to be generated for the use of the ideoloom server.
+|
+| Order does not matter, therefore alphabetically.
+*/
 module.exports =
 {
 	app :
@@ -11,8 +16,6 @@ module.exports =
 			'src/jion/path.js',
 			'src/ccot/change.js',
 			'src/ccot/change-ray.js',
-			// FUTURE check server really using
-			// these two
 			'src/ccot/change-wrap.js',
 			'src/ccot/change-wrap-ray.js',
 			'src/ccot/sign.js',
@@ -24,6 +27,7 @@ module.exports =
 			'src/request/register.js',
 			'src/request/update.js',
 			'src/result/genjion.js',
+			'src/server/repository.js',
 			'src/server/resource.js',
 			'src/server/inventory.js',
 			'src/visual/doc.js',

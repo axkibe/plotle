@@ -53,6 +53,7 @@ var
 	prototype,
 	postProcessor,
 	request,
+	repository,
 	roster,
 	server,
 	sha1,
@@ -99,6 +100,8 @@ maxAge = require( './max-age' );
 mongodb = require( 'mongodb' );
 
 postProcessor = require( './post-processor' );
+
+repository = require( './repository' );
 
 request =
 	{

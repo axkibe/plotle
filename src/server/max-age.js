@@ -1,6 +1,8 @@
 /*
 | Maps a maxage setting to a cache control.
 |
+| FIXME capital MaxAge
+|
 | Authors: Axel Kittenberger
 */
 
@@ -39,14 +41,13 @@ MaxAge.map =
 	)
 {
 	var
-		cc =
-			_mapping[ desc ];
+		cc;
+
+	cc = _mapping[ desc ];
 
 	if( !cc )
 	{
-		throw new Error(
-			'invalid MaxAge mapping'
-		);
+		throw new Error( 'invalid max-age mapping' );
 	}
 
 	return cc;
@@ -56,8 +57,7 @@ MaxAge.map =
 /*
 | Node export.
 */
-module.exports =
-	MaxAge;
+module.exports = MaxAge;
 
 
 } )( );

@@ -1,3 +1,8 @@
+/*
+| All jion files to be generated for the use of genjion.
+|
+| Order does not matter, therefore strictly alphabetically.
+*/
 module.exports =
 {
 	app :
