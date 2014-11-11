@@ -1,5 +1,5 @@
 /*
-| Converts a v6 repository to v7
+| Converts a v7 repository to v8
 |
 | Authors: Axel Kittenberger
 */
@@ -12,24 +12,18 @@ config,
 
 config =
 {
-src :
-{
-	host :
-		'127.0.0.1',
-	port :
-		27017,
-	name :
-		'ideoloom-1'
-},
-trg :
-{
-	host :
-		'127.0.0.1',
-	port :
-		27017,
-	name :
-		'ideoloom-7'
-}
+	src :
+	{
+		host : '127.0.0.1',
+		port : 27017,
+		name : 'ideoloom-7'
+	},
+	trg :
+	{
+		host : '127.0.0.1',
+		port : 27017,
+		name : 'ideoloom-8'
+	}
 };
 
 
@@ -56,8 +50,8 @@ GLOBAL.SHELL = false;
 | Imports
 */
 var
-mongodb,
-sus;
+	mongodb,
+	sus;
 
 mongodb = require( 'mongodb' );
 
@@ -65,45 +59,28 @@ sus = require( 'suspend' );
 
 
 /*
-| Translates a sign.
+| translates a spaces entry
 */
-var translateSign =
-	function(
-		sign
-	)
+function translateSpacesEntry( o )
 {
-	sign.type = 'ccot.sign';
+	var
+		id,
+		r,
+		split;
 
-	return sign;
-};
+	id = o._id;
 
+	split = id.split( ':' );
 
-/*
-| Translates a change.
-*/
-var translateChange =
-	function(
-		chg
-	)
-{
-	switch( chg.chgX.type )
-	{
-		case 'jion.change' :
+	r =
+		{
+			_id : id,
+			username : split[ 0 ],
+			tag : split[ 1 ]
+		};
 
-			chg.chgX.type = 'ccot.change';
-
-			break;
-
-		default :
-			throw new Error( );
-	}
-
-	chg.chgX.src = translateSign( chg.chgX.src );
-
-	chg.chgX.trg = translateSign( chg.chgX.trg );
-
-	return chg;
-};
+	return r;
+}
 
 
 /*
@@ -120,7 +97,6 @@ var run =
 		src,
 		tc,
 		trg,
-		sourceSpaceName,
 		users;
 
 	src = { };
@@ -146,18 +122,14 @@ var run =
 		new mongodb.Db(
 			config.src.name,
 			src.server,
-			{
-				w : 1
-			}
+			{ w : 1 }
 		);
 
 	trg.connector =
 		new mongodb.Db(
 			config.trg.name,
 			trg.server,
-			{
-				w : 1
-			}
+			{ w : 1 }
 		);
 
 	console.log( '* connecting to src' );
@@ -204,19 +176,17 @@ var run =
 			sus.resume( )
 		);
 
-	if( o.version !== 6 )
+	if( o.version !== 7 )
 	{
-		throw new Error( 'src is not a v6 repository' );
+		throw new Error( 'src is not a v7 repository' );
 	}
 
 	console.log( '* creating trg.global' );
 
 	yield trg.global.insert(
 		{
-			_id :
-				'version',
-			version :
-				7
+			_id : 'version',
+			version : 8
 		},
 		sus.resume( )
 	);
@@ -238,10 +208,9 @@ var run =
 		yield trg.users.insert( o, sus.resume( ) );
 	}
 
-	console.log( '* copying src.spaces -> trg.spaces' );
+	console.log( '* translating src.spaces -> trg.spaces' );
 
-	cursor =
-		yield src.spaces.find( sus.resume( ) );
+	cursor = yield src.spaces.find( sus.resume( ) );
 
 	spaces = { };
 
@@ -251,6 +220,8 @@ var run =
 		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
+		o = translateSpacesEntry( o );
+
 		spaces[ o._id ] = o;
 
 		yield trg.spaces.insert( o, sus.resume( ) );
@@ -261,13 +232,13 @@ var run =
 	for( var spaceName in spaces )
 	{
 		console.log(
-			' * copying src.changes.' + sourceSpaceName +
+			' * copying src.changes.' + spaceName +
 			' -> trg.changes.' + spaceName
 		);
 
 		sc =
 			yield src.connection.collection(
-				'changes:' + sourceSpaceName,
+				'changes:' + spaceName,
 				sus.resume( )
 			);
 
@@ -285,8 +256,7 @@ var run =
 			o = yield cursor.nextObject( sus.resume( ) )
 		)
 		{
-			o =
-				translateChange( o );
+			// o = translateChange( o );
 
 			yield tc.insert( o, sus.resume( ) );
 		}

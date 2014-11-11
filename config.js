@@ -60,7 +60,7 @@ config.database.port =
 | Name of the mongodb database
 */
 config.database.name =
-	'ideoloom-7';
+	'ideoloom-8';
 
 
 /*

@@ -63,7 +63,7 @@ var
 	visual,
 	zlib;
 
-db_version = 7;
+db_version = 8;
 
 config = require( '../../config' );
 
@@ -119,7 +119,9 @@ server =
 	{
 		inventory : require( './inventory' ),
 
-		resource : require( './resource' )
+		resource : require( './resource' ),
+
+		spaceBox : require( './space-box' )
 	};
 
 sha1 = require( '../jools/sha1' );
@@ -191,8 +193,7 @@ prototype.startup =
 			config.database.name,
 			db.server,
 			{
-				w :
-					1
+				w : 1
 			}
 		);
 
@@ -359,10 +360,7 @@ prototype.initRepository =
 	{
 		space = initSpaces[ s ];
 
-		jools.log(
-			'start',
-			'  initializing space ' + space
-		);
+		jools.log( 'start', '  initializing space ' + space );
 
 		yield this.$db.spaces.insert(
 			{
@@ -372,10 +370,7 @@ prototype.initRepository =
 		);
 	}
 
-	jools.log(
-		'start',
-		'  initializing global.version'
-	);
+	jools.log( 'start', '  initializing global.version' );
 
 	global =
 		yield this.$db.connection.collection(
@@ -385,10 +380,8 @@ prototype.initRepository =
 
 	yield global.insert(
 		{
-			_id :
-				'version',
-			version :
-				db_version
+			_id : 'version',
+			version : db_version
 		},
 		sus.resume( )
 	);
@@ -466,10 +459,7 @@ prototype.loadSpaces =
 	var
 		cursor;
 
-	jools.log(
-		'start',
-		'loading and replaying all spaces'
-	);
+	jools.log( 'start', 'loading and replaying all spaces' );
 
 	cursor =
 		yield this.$db.spaces.find(
@@ -484,17 +474,22 @@ prototype.loadSpaces =
 		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
-		yield* this.loadSpace( o._id );
+		yield* this.loadSpace(
+			fabric.spaceRef.create(
+				'username', o.username,
+				'tag', o.tag
+			)
+		);
 	}
 };
 
 
 /*
-| load a spaces and playbacks its changes from the database.
+| loads a spaces and playbacks its changes from the database.
 */
 prototype.loadSpace =
 	function* (
-		spaceName
+		spaceRef
 	)
 {
 	var
@@ -505,23 +500,34 @@ prototype.loadSpace =
 
 	jools.log(
 		'start',
-		'loading and replaying all "' + spaceName + '"'
+		'loading and replaying all "' + spaceRef.fullname + '"'
 	);
 
 	space =
-		this.$spaces[ spaceName ] =
-			{
-				$changesDB :
+		this.$spaces[ spaceRef.fullname ] =
+			/*
+			server.spaceBox.create(
+				'changesDB',
 					yield this.$db.connection.collection(
 						'changes:' + spaceName,
 						sus.resume( )
 					),
-				$changes :
-					[ ],
-				$tree :
-					visual.space.create( ),
-				$seqZ :
+				'changes', [ ],
+				'fabric', visual.space.create( ),
+				'seqZ',
 					1
+			);
+			*/
+			{
+				ref : spaceRef,
+				$changesDB :
+					yield this.$db.connection.collection(
+						'changes:' + spaceRef.fullname,
+						sus.resume( )
+					),
+				$changes : [ ],
+				$tree : visual.space.create( ),
+				$seqZ : 1
 			};
 
 	cursor =
@@ -556,7 +562,7 @@ prototype.loadSpace =
 
 		if ( !Array.isArray( o.chgX ) )
 		{
-			o.type = 'change'; // FUTURE this is a hack
+			o.type = 'change'; // FUTURE this is a hack XXX
 
 			change.chgX = ccot.change.createFromJSON( o.chgX );
 		}
@@ -2557,28 +2563,16 @@ prototype.requestListener =
 			// delivers compressed
 			header[ 'Content-Encoding' ] = 'gzip';
 
-			result.writeHead(
-				200,
-				header
-			);
+			result.writeHead( 200, header );
 
-			result.end(
-				resource.gzip,
-				'binary'
-			);
+			result.end( resource.gzip, 'binary' );
 		}
 		else
 		{
 			// delivers uncompressed
-			result.writeHead(
-				200,
-				header
-			);
+			result.writeHead( 200, header );
 
-			result.end(
-				resource.data,
-				resource.coding
-			);
+			result.end( resource.data, resource.coding );
 		}
 
 		return;
@@ -2675,10 +2669,7 @@ prototype.requestListener =
 			);
 	}
 
-	result.end(
-		data,
-		resource.coding
-	);
+	result.end( data, resource.coding );
 };
 
 
