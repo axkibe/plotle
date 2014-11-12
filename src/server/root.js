@@ -180,9 +180,6 @@ prototype.startup =
 
 	this.repository = yield* repository.connect( );
 
-	// all messages
-	this.$messages = [ ];
-
 	// all spaces
 	this.$spaces = { };
 
@@ -364,49 +361,6 @@ prototype.loadSpace =
 };
 
 
-/*
-| sends a message
-*/
-/*
-prototype.sendMessage =
-	function(
-		spaceUser,
-		spaceTag,
-		user,
-		message
-	)
-{
-	this.$messages.push (
-		{
-			spaceUser :
-				spaceUser,
-
-			spaceTag :
-				spaceTag,
-
-			user :
-				user,
-
-			message :
-				message
-		}
-	);
-
-	var
-		self =
-			this;
-
-	process.nextTick(
-		function( )
-		{
-			self.wake(
-				spaceUser,
-				spaceTag
-			);
-		}
-	);
-};
-*/
 
 
 /*
@@ -1203,9 +1157,7 @@ prototype.serveRequestAlter =
 		seq,
 		seqZ,
 		space,
-		spaceName,
-		spaceUser,
-		spaceTag,
+		spaceRef,
 		username;
 
 	try
@@ -1221,9 +1173,7 @@ prototype.serveRequestAlter =
 
 	changeWrapRay = req.changeWrapRay;
 
-	spaceUser = req.spaceUser;
-
-	spaceTag = req.spaceTag;
+	spaceRef = req.spaceRef;
 
 	username = req.user;
 
@@ -1235,15 +1185,13 @@ prototype.serveRequestAlter =
 	}
 
 	if(
-		this.testAccess( username, spaceUser, spaceTag ) !== 'rw'
+		this.testAccess( username, spaceRef.username, spaceRef.tag ) !== 'rw' // FIXME hand spaceRef
 	)
 	{
 		throw jools.reject( 'no access' );
 	}
 
-	spaceName = spaceUser + ':' + spaceTag;
-
-	space = this.$spaces[ spaceName ];
+	space = this.$spaces[ spaceRef.fullname ];
 
 	changes = space.$changes;
 
@@ -1344,7 +1292,7 @@ prototype.serveRequestAlter =
 	process.nextTick(
 		function( )
 		{
-			self.wake( spaceUser, spaceTag );
+			self.wake( spaceRef.username, spaceRef.tag ); // FIXME hand spaceRef
 		}
 	);
 

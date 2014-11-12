@@ -19,6 +19,7 @@ net = net || { };
 */
 var
 	ccot,
+	fabric,
 	jools,
 	request,
 	root,
@@ -658,8 +659,12 @@ link.prototype._sendChanges =
 			'changeWrapRay', changeWrapRay,
 			'passhash', link.passhash,
 			'seq', link._rSeq,
-			'spaceUser', link.spaceUser,
-			'spaceTag', link.spaceTag,
+			'spaceRef',
+				// FIXME get a spaceRef already
+				fabric.spaceRef.create(
+					'username', link.spaceUser,
+					'tag', link.spaceTag
+				),
 			'user', link.username
 		),
 		'_onSendChanges'
@@ -678,11 +683,7 @@ link.prototype._onSendChanges =
 {
 	if( !reply.ok )
 	{
-		system.failScreen(
-			'Server not OK: ' + reply.message
-		);
-
-		return;
+		system.failScreen( 'Server not OK: ' + reply.message );
 	}
 };
 
