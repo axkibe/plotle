@@ -1539,9 +1539,8 @@ prototype.serveRequestUpdate =
 
 	timerID =
 		setTimeout(
-			this.expireSleep,
+			root.expireSleep,
 			60000,
-			this,
 			sleepID
 		);
 
@@ -1566,7 +1565,6 @@ prototype.serveRequestUpdate =
 */
 prototype.expireSleep =
 	function(
-		self,
 		sleepID
 	)
 {
@@ -1578,7 +1576,7 @@ prototype.expireSleep =
 		space,
 		spaceName;
 
-	sleep = self.$upsleep[ sleepID ];
+	sleep = root.$upsleep[ sleepID ];
 
 	// maybe it just had expired at the same time
 	if( !sleep )
@@ -1588,22 +1586,18 @@ prototype.expireSleep =
 
 	spaceName = sleep.spaceUser + ':' + sleep.spaceTag;
 
-	space = self.$spaces[ spaceName ];
+	space = root.$spaces[ spaceName ];
 
 	seqZ = space.$seqZ;
 
-	delete self.$upsleep[ sleepID ];
+	delete root.$upsleep[ sleepID ];
 
 	asw =
 		{
-			ok :
-				true,
-			seq :
-				sleep.seq,
-			seqZ :
-				seqZ,
-			chgs :
-				null
+			ok : true,
+			seq : sleep.seq,
+			seqZ : seqZ,
+			chgs : null
 		};
 
 	jools.log( 'ajax', '->', asw );
@@ -1613,12 +1607,9 @@ prototype.expireSleep =
 	result.writeHead(
 		200,
 		{
-			'Content-Type' :
-				'application/json',
-			'Cache-Control' :
-				'no-cache',
-			'Date' :
-				new Date().toUTCString()
+			'Content-Type' : 'application/json',
+			'Cache-Control' : 'no-cache',
+			'Date' : new Date().toUTCString()
 		}
 	);
 
@@ -2110,10 +2101,7 @@ prototype.webAjax =
 {
 	var
 		handler,
-		self,
 		data;
-
-	self = this;
 
 	data = [ ];
 
@@ -2130,7 +2118,7 @@ prototype.webAjax =
 		{
 			if( result.sleepID )
 			{
-				self.closeSleep( result.sleepID );
+				root.closeSleep( result.sleepID );
 			}
 		}
 	);
@@ -2162,14 +2150,14 @@ prototype.webAjax =
 		}
 		catch( err )
 		{
-			self.webError( result, 400, 'Not valid JSON' );
+			root.webError( result, 400, 'Not valid JSON' );
 
 			return;
 		}
 
 		try
 		{
-			asw = yield* self.serveRequest( cmd, result );
+			asw = yield* root.serveRequest( cmd, result );
 		}
 		catch( err )
 		{
