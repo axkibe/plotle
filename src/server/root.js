@@ -192,10 +192,6 @@ prototype.startup =
 	// table of all cached user credentials
 	this.$users = { };
 
-	// the list where a user is present
-	// user for 'entered' and 'left' messages
-	this.$presences = { };
-
 	yield* this.prepareInventory( );
 
 	yield* this.loadSpaces( );
@@ -272,7 +268,7 @@ prototype.loadSpaces =
 | loads a spaces and playbacks its changes from the database.
 */
 prototype.loadSpace =
-	function* (
+	function*(
 		spaceRef
 	)
 {
@@ -364,10 +360,12 @@ prototype.buildShellConfig =
 	function( )
 {
 	var
-		cconfig =
-			[ ],
+		cconfig,
+		first,
+		k,
+		val;
 
-		k;
+	cconfig = [ ];
 
 	cconfig.push(
 		'var config = {\n',
@@ -379,19 +377,15 @@ prototype.buildShellConfig =
 		'\tdebug   : {\n'
 	);
 
-	var
-		first =
-			true;
+	first = true;
 
 	for( k in config.debug )
 	{
-		var
-			val =
-				config.debug[ k ];
+		val = config.debug[ k ];
 
 		if( !first )
 		{
-			cconfig.push(',\n');
+			cconfig.push( ',\n' );
 		}
 		else
 		{
@@ -413,8 +407,7 @@ prototype.buildShellConfig =
 		'\tlog : {\n'
 	);
 
-	first =
-		true;
+	first = true;
 
 	for( k in config.log )
 	{
@@ -424,8 +417,7 @@ prototype.buildShellConfig =
 		}
 		else
 		{
-			first =
-				false;
+			first = false;
 		}
 
 		cconfig.push(
@@ -448,16 +440,18 @@ prototype.buildShellConfig =
 | also builds the bundle.
 */
 prototype.prepareInventory =
-	function* ( )
+	function*( )
 {
 	var
 		a,
 		ast,
 		aZ,
+		bundle,
 		bundleFilePath,
 		cconfig,
 		code,
 		codes,
+		compressor,
 		gjr,
 		inv,
 		jionIDs,
@@ -541,10 +535,8 @@ prototype.prepareInventory =
 			);
 	}
 
-	var
-		// the bundle itself
-		bundle =
-			[ ];
+	// the bundle itself
+	bundle = [ ];
 
 	// if uglify is turned off
 	// the flags are added before bundle
@@ -655,23 +647,22 @@ prototype.prepareInventory =
 
 		ast.figure_out_scope( );
 
-		var
-			compressor =
-				uglify.Compressor(
+		compressor =
+			uglify.Compressor(
+				{
+					dead_code : true,
+					hoist_vars : true,
+					warnings : false,
+					negate_iife : true,
+					global_defs :
 					{
-						dead_code : true,
-						hoist_vars : true,
-						warnings : false,
-						negate_iife : true,
-						global_defs :
-						{
-							'CHECK' : config.shellCheck,
-							'JION' : false,
-							'SERVER' : false,
-							'SHELL' : true,
-						}
+						'CHECK' : config.shellCheck,
+						'JION' : false,
+						'SERVER' : false,
+						'SHELL' : true,
 					}
-				);
+				}
+			);
 
 		ast = ast.transform( compressor );
 
@@ -1294,7 +1285,7 @@ prototype.serveRequestAlter =
 | Serves an auth request.
 */
 prototype.serveRequestAuth =
-	function* (
+	function*(
 		req
 	)
 {
@@ -1486,237 +1477,6 @@ prototype.serveRequestRegister =
 
 
 /*
-| Refreshes a users presence timeout.
-*/
-prototype.refreshPresence =
-	function(
-		user,
-		spaceUser,
-		spaceTag
-	)
-{
-	var
-		pu,
-		pus,
-		spaceName;
-
-	pu = this.$presences[ user ];
-
-	if( !pu )
-	{
-		pu =
-		this.$presences[ user ] =
-			{
-				spaces : { }
-			};
-	}
-
-	spaceName = spaceUser + ':' + spaceTag,
-
-	pus = pu.spaces[ spaceName ];
-
-	if( !pus )
-	{
-		pus =
-		pu.spaces[ spaceName ] =
-			{
-				establish :
-					0,
-				timerID :
-					null
-			};
-
-		pus.timerID =
-			setTimeout(
-				this.expirePresence,
-				5000,
-				this,
-				user,
-				spaceUser,
-				spaceTag
-			);
-
-		/*
-		this.sendMessage(
-			spaceUser,
-			spaceTag,
-			null,
-			user + ' entered "' + spaceName + '"'
-		);
-		*/
-	}
-	else if( pus.references <= 0 )
-	{
-		if( pus.timerID !== null )
-		{
-			clearTimeout( pus.timerID );
-
-			pus.timerID = null;
-		}
-
-		pus.timerID =
-			setTimeout(
-				this.expirePresence,
-				5000,
-				this,
-				user,
-				spaceUser,
-				spaceTag
-			);
-	}
-};
-
-
-/*
-| Establishes a longer user presence for an update that goes into sleep
-*/
-prototype.establishPresence =
-	function(
-		user,
-		spaceUser,
-		spaceTag
-		// sleepID
-	)
-{
-	var
-		pres,
-		pu,
-		pus,
-		spaceName;
-
-	pres = this.$presences,
-
-	pu = pres[ user ];
-
-	if( !pu )
-	{
-		pu =
-		pres[user] =
-			{
-				spaces :
-					{ }
-			};
-	}
-
-	spaceName = spaceUser + ':' + spaceTag,
-
-	pus = pu.spaces[ spaceName ];
-
-	if( !pus )
-	{
-		pus =
-		pu.spaces[ spaceName ] =
-			{
-				establish :
-					1,
-				timerID :
-					null
-			};
-
-		/*
-		this.sendMessage(
-			spaceUser,
-			spaceTag,
-			null,
-			user + ' entered "' + spaceName + '"'
-		);
-		*/
-	}
-	else
-	{
-		if( pus.timerID !== null )
-		{
-			clearTimeout( pus.timerID );
-
-			pus.timerID = null;
-		}
-
-		pus.establish++;
-	}
-};
-
-
-/*
-| Destablishes a longer user presence for an update that went out of sleep.
-*/
-prototype.destablishPresence =
-	function(
-		user,
-		spaceUser,
-		spaceTag
-	)
-{
-	var
-		pu,
-		pus,
-		spaceName;
-
-	pu = this.$presences[ user ],
-
-	spaceName = spaceUser + ':' + spaceTag,
-
-	pus = pu.spaces[ spaceName ];
-
-	pus.establish--;
-
-	if( pus.establish <= 0 )
-	{
-		if( pus.timerID !== null )
-		{
-			throw new Error( 'Presence timers mixed up.' );
-		}
-
-		pus.timerID =
-			setTimeout(
-				this.expirePresence,
-				5000,
-				this,
-				user,
-				spaceUser,
-				spaceTag
-			);
-	}
-};
-
-
-/*
-| Expires a user presence with zero establishments after timeout
-*/
-prototype.expirePresence =
-	function(
-		self,
-		user,
-		spaceUser,
-		spaceTag
-	)
-{
-	var
-		pu,
-		spaceName;
-
-	spaceName = spaceUser + ':' + spaceTag;
-
-	/*
-	self.sendMessage(
-		spaceUser,
-		spaceTag,
-		null,
-		user + ' left "' + spaceName + '"'
-	);
-	*/
-
-	pu = self.$presences[ user ];
-
-	if( pu.spaces[ spaceName ].establish !== 0 )
-	{
-		throw new Error( 'Something wrong with presences.' );
-	}
-
-	delete pu.spaces[ spaceName ];
-};
-
-
-/*
 | Gets new changes or waits for them.
 */
 prototype.serveRequestUpdate =
@@ -1766,8 +1526,6 @@ prototype.serveRequestUpdate =
 		return jools.reject( 'Invalid or missing seq: ' + seq );
 	}
 
-	this.refreshPresence( user, spaceUser, spaceTag );
-
 	asw = this.conveyUpdate( seq, spaceUser, spaceTag );
 
 	// immediate answer?
@@ -1798,8 +1556,6 @@ prototype.serveRequestUpdate =
 		};
 
 	result.sleepID = sleepID;
-
-	this.establishPresence( user, spaceUser, spaceTag, sleepID );
 
 	return null;
 };
@@ -1837,13 +1593,6 @@ prototype.expireSleep =
 	seqZ = space.$seqZ;
 
 	delete self.$upsleep[ sleepID ];
-
-	//FIXME call it sleep.username
-	self.destablishPresence(
-		sleep.user,
-		sleep.spaceUser,
-		sleep.spaceTag
-	);
 
 	asw =
 		{
@@ -1898,12 +1647,6 @@ prototype.closeSleep =
 	clearTimeout( sleep.timerID );
 
 	delete this.$upsleep[ sleepID ];
-
-	this.destablishPresence(
-		sleep.user,
-		sleep.spaceUser,
-		sleep.spaceTag
-	);
 };
 
 
@@ -1997,12 +1740,6 @@ prototype.wake =
 
 		delete this.$upsleep[ sKey ];
 
-		this.destablishPresence(
-			sleep.user,
-			sleep.spaceUser,
-			sleep.spaceTag
-		);
-
 		asw =
 			this.conveyUpdate(
 				sleep.seq,
@@ -2076,7 +1813,7 @@ prototype.testAccess =
 | Serves a get request.
 */
 prototype.serveRequestAcquire =
-	function* (
+	function*(
 		req
 	)
 {
