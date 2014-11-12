@@ -169,32 +169,29 @@ prototype = server.root.prototype;
 prototype.startup =
 	function*( )
 {
-	var
-		requestListener;
-
 	// the servers inventory
-	this.inventory = server.inventory.create( );
+	root.inventory = server.inventory.create( );
 
-	this.repository = yield* repository.connect( );
+	root.repository = yield* repository.connect( );
 
 	// all spaces
-	this.$spaces = { };
+	root.$spaces = { };
 
 	// a table of all clients waiting for an update
-	this.$upsleep = { };
+	root.$upsleep = { };
 
 	// next upsleepID
-	this.$nextSleep = 1;
+	root.$nextSleep = 1;
 
 	// next visitors ID
-	this.$nextVisitor = 1000;
+	root.$nextVisitor = 1000;
 
 	// table of all cached user credentials
-	this.$users = { };
+	root.$users = { };
 
-	yield* this.prepareInventory( );
+	yield* root.prepareInventory( );
 
-	yield* this.loadSpaces( );
+	yield* root.loadSpaces( );
 
 	jools.log(
 		'start',
@@ -202,23 +199,13 @@ prototype.startup =
 			( config.ip || '*' ) + '/:' + config.port
 	);
 
-	// FIXME this might go simpler
-	requestListener =
-		function*(
-			request,
-			result
-		)
-		{
-			yield* root.requestListener( request, result );
-		};
-
 	yield http.createServer(
 		function(
 			request,
 			result
 		)
 		{
-			sus( requestListener )( request, result );
+			sus( root.requestListener ).call( root, request, result );
 		}
 	).listen(
 		config.port,
@@ -242,7 +229,7 @@ prototype.loadSpaces =
 	jools.log( 'start', 'loading and replaying all spaces' );
 
 	cursor =
-		yield this.repository.spaces.find(
+		yield root.repository.spaces.find(
 			{ },
 			{ sort: '_id' },
 			sus.resume( )
@@ -254,7 +241,7 @@ prototype.loadSpaces =
 		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
-		yield* this.loadSpace(
+		yield* root.loadSpace(
 			fabric.spaceRef.create(
 				'username', o.username,
 				'tag', o.tag
@@ -284,11 +271,11 @@ prototype.loadSpace =
 	);
 
 	space =
-		this.$spaces[ spaceRef.fullname ] =
+		root.$spaces[ spaceRef.fullname ] =
 			/*
 			server.spaceBox.create(
 				'changesDB',
-					yield* this.repository.collection(
+					yield* root.repository.collection(
 						'changes:' + spaceRef.fullname
 					),
 				'changes', [ ],
@@ -300,7 +287,7 @@ prototype.loadSpace =
 			{
 				ref : spaceRef,
 				$changesDB :
-					yield* this.repository.collection(
+					yield* root.repository.collection(
 						'changes:' + spaceRef.fullname
 					),
 				$changes : [ ],
@@ -464,14 +451,14 @@ prototype.prepareInventory =
 	// autogenerates the shell config as resource
 	cconfig =
 		server.resource.create(
-			'data', this.buildShellConfig( ),
+			'data', root.buildShellConfig( ),
 			'filePath', 'config.js',
 			'inBundle', true,
 			'inTestPad', true
 		);
 
-	this.inventory =
-		this.inventory.addResource( cconfig );
+	root.inventory =
+		root.inventory.addResource( cconfig );
 
 	// takes resource from the the roster
 	for(
@@ -490,16 +477,16 @@ prototype.prepareInventory =
 
 		if( resource.hasJion )
 		{
-			this.inventory =
-				this.inventory.addResource( resource.asJion );
+			root.inventory =
+				root.inventory.addResource( resource.asJion );
 		}
 
-		this.inventory =
-			this.inventory.addResource( resource );
+		root.inventory =
+			root.inventory.addResource( resource );
 	}
 
 	// Reads in all files to be cached
-	inv = this.inventory;
+	inv = root.inventory;
 
 	for(
 		a = 0, aZ = inv.ranks.length;
@@ -522,8 +509,8 @@ prototype.prepareInventory =
 			continue;
 		}
 
-		this.inventory =
-			this.inventory.updateResource(
+		root.inventory =
+			root.inventory.updateResource(
 				resource,
 				resource.create(
 					'data',
@@ -543,7 +530,7 @@ prototype.prepareInventory =
 	// creation, otherwise afterwards
 	if( !config.uglify )
 	{
-		this.prependConfigFlags( );
+		root.prependConfigFlags( );
 	}
 
 	jools.log( 'start', 'building bundle' );
@@ -554,12 +541,12 @@ prototype.prepareInventory =
 
 	// loads the files to be bundled
 	for(
-		a = 0, aZ = this.inventory.ranks.length;
+		a = 0, aZ = root.inventory.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		resource = this.inventory.atRank( a );
+		resource = root.inventory.atRank( a );
 
 		if( !resource.inBundle )
 		{
@@ -600,12 +587,12 @@ prototype.prepareInventory =
 	jools.log( 'start', 'parsing bundle' );
 
 	for(
-		a = 0, aZ = this.inventory.ranks.length;
+		a = 0, aZ = root.inventory.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		resource = this.inventory.atRank( a );
+		resource = root.inventory.atRank( a );
 
 		if( !resource.inBundle )
 		{
@@ -638,7 +625,7 @@ prototype.prepareInventory =
 
 	if( config.extraMangle )
 	{
-		this.extraMangle( ast, jionIDs );
+		root.extraMangle( ast, jionIDs );
 	}
 
 	if( config.uglify )
@@ -704,12 +691,12 @@ prototype.prepareInventory =
 
 	// calculates the hash for the bundle
 	bundleFilePath =
-	this.bundleFilePath =
+	root.bundleFilePath =
 		'ideoloom-' + sha1.sha1hex( bundle ) + '.js';
 
 	// registers the bundle as resource
-	this.inventory =
-		this.inventory.addResource(
+	root.inventory =
+		root.inventory.addResource(
 			server.resource.create(
 				'filePath', bundleFilePath,
 				'maxage', 'long',
@@ -724,12 +711,12 @@ prototype.prepareInventory =
 	// creation, otherwise before
 	if( config.uglify )
 	{
-		this.prependConfigFlags( );
+		root.prependConfigFlags( );
 	}
 
 	// post processing
 	inv =
-		this.inventory;
+		root.inventory;
 
 	// loads the files to be bundled
 	for(
@@ -757,14 +744,14 @@ prototype.prepareInventory =
 			);
 		}
 
-		this.inventory =
-			this.inventory.updateResource(
+		root.inventory =
+			root.inventory.updateResource(
 				resource,
 				resource.create(
 					'data',
 						postProcessor[ resource.postProcessor ](
 							resource.data,
-							this.inventory,
+							root.inventory,
 							bundleFilePath
 						)
 				)
@@ -772,7 +759,7 @@ prototype.prepareInventory =
 	}
 
 	inv =
-		this.inventory;
+		root.inventory;
 
 	// prepares the zipped versions
 	for(
@@ -788,8 +775,8 @@ prototype.prepareInventory =
 			continue;
 		}
 
-		this.inventory =
-			this.inventory.updateResource(
+		root.inventory =
+			root.inventory.updateResource(
 				resource,
 				resource.create(
 					'gzip',
@@ -804,13 +791,13 @@ prototype.prepareInventory =
 	jools.log(
 		'start',
 		'uncompressed bundle size is ',
-		this.inventory.twig[ bundleFilePath ].data.length
+		root.inventory.twig[ bundleFilePath ].data.length
 	);
 
 	jools.log(
 		'start',
 		'  compressed bundle size is ',
-		this.inventory.twig[ bundleFilePath ].gzip.length
+		root.inventory.twig[ bundleFilePath ].gzip.length
 	);
 };
 
@@ -825,10 +812,10 @@ prototype.prependConfigFlags =
 	var
 		resource;
 
-	resource = this.inventory.twig[ 'config.js' ];
+	resource = root.inventory.twig[ 'config.js' ];
 
-	this.inventory =
-		this.inventory.updateResource(
+	root.inventory =
+		root.inventory.updateResource(
 			resource,
 			resource.create(
 				'data',
@@ -1164,17 +1151,17 @@ prototype.serveRequestAlter =
 
 	passhash = req.passhash;
 
-	if( this.$users[ username ].pass !== passhash  )
+	if( root.$users[ username ].pass !== passhash  )
 	{
 		throw jools.reject( 'invalid pass' );
 	}
 
-	if( this.testAccess( username, spaceRef ) !== 'rw' )
+	if( root.testAccess( username, spaceRef ) !== 'rw' )
 	{
 		throw jools.reject( 'no access' );
 	}
 
-	space = this.$spaces[ spaceRef.fullname ];
+	space = root.$spaces[ spaceRef.fullname ];
 
 	changes = space.$changes;
 
@@ -1305,15 +1292,15 @@ prototype.serveRequestAuth =
 		return jools.reject( 'command not valid jion' );
 	}
 
-	users = this.$users;
+	users = root.$users;
 
 	if( req.user === 'visitor' )
 	{
 		do
 		{
-			this.$nextVisitor++;
+			root.$nextVisitor++;
 
-			uid = 'visitor-' + this.$nextVisitor;
+			uid = 'visitor-' + root.$nextVisitor;
 		}
 		while( users[ uid ] );
 
@@ -1334,7 +1321,7 @@ prototype.serveRequestAuth =
 	if( !users[ req.user ] )
 	{
 		val =
-			yield this.repository.users.findOne(
+			yield root.repository.users.findOne(
 				{ _id : req.user },
 				sus.resume( )
 			);
@@ -1379,16 +1366,16 @@ prototype.createSpace =
 /**/}
 
 	space =
-	this.$spaces[ spaceRef.fullname ] =
+	root.$spaces[ spaceRef.fullname ] =
 		{
 			$changesDB :
-				yield* this.repository.collection( 'changes:' + spaceRef.fullname ),
+				yield* root.repository.collection( 'changes:' + spaceRef.fullname ),
 			$changes : [ ],
 			$tree : visual.space.create( ),
 			$seqZ : 1
 		};
 
-	yield this.repository.spaces.insert(
+	yield root.repository.spaces.insert(
 		{
 			_id : spaceRef.fullname,
 			username: spaceRef.username,
@@ -1447,7 +1434,7 @@ prototype.serveRequestRegister =
 	}
 
 	user =
-		yield this.repository.users.findOne(
+		yield root.repository.users.findOne(
 			{ _id : username },
 			sus.resume( )
 		);
@@ -1464,11 +1451,11 @@ prototype.serveRequestRegister =
 		news : news
 	};
 
-	yield this.repository.users.insert( user, sus.resume( ) );
+	yield root.repository.users.insert( user, sus.resume( ) );
 
-	this.$users[ username ] = user;
+	root.$users[ username ] = user;
 
-	yield* this.createSpace(
+	yield* root.createSpace(
 		fabric.spaceRef.create( 'username', username, 'tag', 'home' )
 	);
 
@@ -1507,14 +1494,14 @@ prototype.serveRequestUpdate =
 
 	seq = req.seq;
 
-	if( this.$users[user].pass !== passhash )
+	if( root.$users[user].pass !== passhash )
 	{
 		throw jools.reject( 'Invalid password' );
 	}
 
 	spaceName = spaceUser + ':' + spaceTag,
 
-	space = this.$spaces[ spaceName ];
+	space = root.$spaces[ spaceName ];
 
 	if( !space )
 	{
@@ -1526,7 +1513,7 @@ prototype.serveRequestUpdate =
 		return jools.reject( 'Invalid or missing seq: ' + seq );
 	}
 
-	asw = this.conveyUpdate( seq, spaceUser, spaceTag );
+	asw = root.conveyUpdate( seq, spaceUser, spaceTag );
 
 	// immediate answer?
 	if( asw.chgs.length > 0 )
@@ -1535,7 +1522,7 @@ prototype.serveRequestUpdate =
 	}
 
 	// if not an immediate anwwer, the request is put to sleep
-	sleepID = '' + this.$nextSleep++;
+	sleepID = '' + root.$nextSleep++;
 
 	timerID =
 		setTimeout(
@@ -1544,7 +1531,7 @@ prototype.serveRequestUpdate =
 			sleepID
 		);
 
-	this.$upsleep[ sleepID ] =
+	root.$upsleep[ sleepID ] =
 		{
 			user : user,
 			seq : seq,
@@ -1629,7 +1616,7 @@ prototype.closeSleep =
 {
 	var sleep;
 
-	sleep = this.$upsleep[ sleepID ];
+	sleep = root.$upsleep[ sleepID ];
 
 	// maybe it just had expired at the same time
 	if( !sleep )
@@ -1637,7 +1624,7 @@ prototype.closeSleep =
 
 	clearTimeout( sleep.timerID );
 
-	delete this.$upsleep[ sleepID ];
+	delete root.$upsleep[ sleepID ];
 };
 
 
@@ -1660,7 +1647,7 @@ prototype.conveyUpdate =
 
 	spaceName = spaceUser + ':' + spaceTag;
 
-	space = this.$spaces[ spaceName ];
+	space = root.$spaces[ spaceName ];
 
 	changes = space.$changes;
 
@@ -1706,7 +1693,7 @@ prototype.wake =
 
 	spaceTag = spaceRef.tag;
 
-	sleepKeys = Object.keys( this.$upsleep );
+	sleepKeys = Object.keys( root.$upsleep );
 
 	// FIXME cache change lists to answer the same to multiple clients.
 	for(
@@ -1717,7 +1704,7 @@ prototype.wake =
 	{
 		sKey = sleepKeys[a];
 
-		sleep = this.$upsleep[sKey];
+		sleep = root.$upsleep[sKey];
 
 		if(
 			spaceUser !== sleep.spaceUser ||
@@ -1729,10 +1716,10 @@ prototype.wake =
 
 		clearTimeout( sleep.timerID );
 
-		delete this.$upsleep[ sKey ];
+		delete root.$upsleep[ sKey ];
 
 		asw =
-			this.conveyUpdate(
+			root.conveyUpdate(
 				sleep.seq,
 				sleep.spaceUser,
 				sleep.spaceTag
@@ -1833,15 +1820,15 @@ prototype.serveRequestAcquire =
 	user = req.user;
 
 	if(
-		this.$users[ user ] === undefined
+		root.$users[ user ] === undefined
 		||
-		passhash !== this.$users[ user ].pass
+		passhash !== root.$users[ user ].pass
 	)
 	{
 		throw jools.reject( 'wrong user/password' );
 	}
 
-	access = this.testAccess( user, spaceRef );
+	access = root.testAccess( user, spaceRef );
 
 	if( access === 'no' )
 	{
@@ -1852,13 +1839,13 @@ prototype.serveRequestAcquire =
 		};
 	}
 
-	space = this.$spaces[ spaceRef.fullname ];
+	space = root.$spaces[ spaceRef.fullname ];
 
 	if( !space )
 	{
 		if( req.createMissing === true )
 		{
-			space = yield* this.createSpace( spaceRef );
+			space = yield* root.createSpace( spaceRef );
 		}
 		else
 		{
@@ -1935,7 +1922,7 @@ prototype.requestListener =
 		{
 			jools.log( 'web', request.connection.remoteAddress, 'not in whitelist!' );
 
-			this.webError( result, 403, 'Forbidden' );
+			root.webError( result, 403, 'Forbidden' );
 
 			return;
 		}
@@ -1945,14 +1932,14 @@ prototype.requestListener =
 
 	if( pathname === 'mm' )
 	{
-		return this.webAjax( request, red, result );
+		return root.webAjax( request, red, result );
 	}
 
-	resource = this.inventory.twig[ pathname ];
+	resource = root.inventory.twig[ pathname ];
 
 	if( !resource )
 	{
-		this.webError( result, 404, 'Bad Request' );
+		root.webError( result, 404, 'Bad Request' );
 
 		return;
 	}
@@ -1996,7 +1983,7 @@ prototype.requestListener =
 
 	if( !config.develShell )
 	{
-		this.webError( result, 404, 'Bad Request' );
+		root.webError( result, 404, 'Bad Request' );
 	}
 
 	// if the jion is requested generate that one from the file
@@ -2009,7 +1996,7 @@ prototype.requestListener =
 		}
 		catch( e )
 		{
-			this.webError( result, 500, 'Internal Server Error' );
+			root.webError( result, 500, 'Internal Server Error' );
 
 			jools.log(
 				'fail',
@@ -2030,7 +2017,7 @@ prototype.requestListener =
 		}
 		catch( e )
 		{
-			this.webError( result, 500, 'Internal Server Error' );
+			root.webError( result, 500, 'Internal Server Error' );
 
 			jools.log(
 				'fail',
@@ -2054,8 +2041,8 @@ prototype.requestListener =
 		data =
 			postProcessor[ resource.postProcessor ](
 				data,
-				this.inventory,
-				this.bundleFilePath
+				root.inventory,
+				root.bundleFilePath
 			);
 	}
 
@@ -2107,7 +2094,7 @@ prototype.webAjax =
 
 	if( request.method !== 'POST' )
 	{
-		this.webError( result, 400, 'Must use POST' );
+		root.webError( result, 400, 'Must use POST' );
 
 		return;
 	}
@@ -2237,23 +2224,23 @@ prototype.serveRequest =
 	{
 		case 'request.alter' :
 
-			return this.serveRequestAlter( req );
+			return root.serveRequestAlter( req );
 
 		case 'request.auth' :
 
-			return yield* this.serveRequestAuth( req );
+			return yield* root.serveRequestAuth( req );
 
 		case 'request.acquire' :
 
-			return yield* this.serveRequestAcquire( req );
+			return yield* root.serveRequestAcquire( req );
 
 		case 'request.register' :
 
-			return yield* this.serveRequestRegister( req );
+			return yield* root.serveRequestRegister( req );
 
 		case 'request.update' :
 
-			return this.serveRequestUpdate( req, result );
+			return root.serveRequestUpdate( req, result );
 
 		default :
 
