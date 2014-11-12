@@ -170,10 +170,7 @@ prototype.startup =
 	function*( )
 {
 	var
-		requestListener,
-		self;
-
-	self = this;
+		requestListener;
 
 	// the servers inventory
 	this.inventory = server.inventory.create( );
@@ -216,10 +213,7 @@ prototype.startup =
 			result
 		)
 		{
-			yield* self.requestListener(
-				request,
-				result
-			);
+			yield* root.requestListener( request, result );
 		};
 
 	yield http.createServer(
@@ -1179,14 +1173,12 @@ prototype.serveRequestAlter =
 
 	passhash = req.passhash;
 
-	if( this.$users[ username ].pass !== passhash )
+	if( this.$users[ username ].pass !== passhash  )
 	{
 		throw jools.reject( 'invalid pass' );
 	}
 
-	if(
-		this.testAccess( username, spaceRef ) !== 'rw'
-	)
+	if( this.testAccess( username, spaceRef ) !== 'rw' )
 	{
 		throw jools.reject( 'no access' );
 	}
@@ -1284,15 +1276,10 @@ prototype.serveRequestAlter =
 
 	space.$seqZ++;
 
-	var
-		self;
-
-	self = this;
-
 	process.nextTick(
 		function( )
 		{
-			self.wake( spaceRef.username, spaceRef.tag ); // FIXME hand spaceRef
+			root.wake( spaceRef );
 		}
 	);
 
@@ -1966,8 +1953,7 @@ prototype.conveyUpdate =
 */
 prototype.wake =
 	function(
-		spaceUser,
-		spaceTag
+		spaceRef
 	)
 {
 	var
@@ -1977,12 +1963,18 @@ prototype.wake =
 		result,
 		sKey,
 		sleep,
-		sleepKeys;
+		sleepKeys,
+		spaceUser,
+		spaceTag;
+
+	// XXX use spaceRef
+	spaceUser = spaceRef.username;
+
+	spaceTag = spaceRef.tag;
 
 	sleepKeys = Object.keys( this.$upsleep );
 
 	// FIXME cache change lists to answer the same to multiple clients.
-
 	for(
 		a = 0, aZ = sleepKeys.length;
 		a < aZ;

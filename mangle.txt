@@ -735,7 +735,7 @@
 . sizeOnly
 > slice
 > space
-. spaceRef
+> spaceRef
 > spaceTag
 > spaceUser
 . spawn
