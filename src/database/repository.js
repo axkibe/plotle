@@ -23,19 +23,32 @@ if( JION )
 			'server.repository',
 		attributes :
 			{
-				'_connect' :
+				'_connection' :
 					{
 						comment :
 							'the mongoDB connection',
 						type :
 							'Object'
 					},
+				'users' :
+					{
+						comment :
+							'the users collection',
+						type :
+							'Object' // FUTURE
+					},
+				'spaces' :
+					{
+						comment :
+							'the spaces collection',
+						type :
+							'Object' // FUTURE
+					}
 			},
 		node :
 			true
 	};
 }
-
 
 
 var
@@ -47,7 +60,7 @@ var
 	repository,
 	sus,
 	_initRepository,
-	_checkRepositoryVersion;
+	_checkRepository;
 
 db_version = 8;
 
@@ -59,7 +72,7 @@ jools = require( '../jools/jools' );
 
 mongodb = require( 'mongodb' );
 
-sus = require( 'suspend' );
+sus = require( 'suspend' ); // FIXME just give resume
 
 fabric =
 	{
@@ -76,7 +89,6 @@ repository.connect =
 	var
 		connection,
 		connector,
-		db,
 		server,
 		spaces,
 		users;
@@ -102,17 +114,15 @@ repository.connect =
 			{ w : 1 }
 		);
 
-	connection = yield db.connector.open( sus.resume( ) );
+	connection = yield connector.open( sus.resume( ) );
 
-	users =
-		yield db.connection.collection( 'users', sus.resume( ) );
+	users = yield connection.collection( 'users', sus.resume( ) );
 
-	spaces =
-		yield db.connection.collection( 'spaces', sus.resume( ) );
+	spaces = yield connection.collection( 'spaces', sus.resume( ) );
 
 	// checking repo version:
 
-	yield* _checkRepositoryVersion( );
+	yield* _checkRepository( connection );
 
 	return(
 		repository.create(
@@ -125,9 +135,23 @@ repository.connect =
 
 
 /*
+| Returns a collection.
+|
+| FIXME let it return a jion.
+*/
+repository.prototype.collection =
+	function*(
+		name
+	)
+{
+	return yield this._connection.collection( name, sus.resume( ) );
+};
+
+
+/*
 | Ensures the repository schema version fits this server.
 */
-_checkRepositoryVersion =
+_checkRepository =
 	function*(
 		connection
 	)

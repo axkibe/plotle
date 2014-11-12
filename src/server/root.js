@@ -101,7 +101,7 @@ mongodb = require( 'mongodb' );
 
 postProcessor = require( './post-processor' );
 
-repository = require( './repository' );
+repository = require( '../database/repository' );
 
 request =
 	{
@@ -170,7 +170,6 @@ prototype.startup =
 	function*( )
 {
 	var
-		db,
 		requestListener,
 		self;
 
@@ -179,26 +178,7 @@ prototype.startup =
 	// the servers inventory
 	this.inventory = server.inventory.create( );
 
-	// initializes the database
-	db =
-	this.$db =
-		{ };
-
-	db.server =
-		new mongodb.Server(
-			config.database.host,
-			config.database.port,
-			{ }
-		);
-
-	db.connector =
-		new mongodb.Db(
-			config.database.name,
-			db.server,
-			{
-				w : 1
-			}
-		);
+	this.repository = yield* repository.connect( );
 
 	// all messages
 	this.$messages = [ ];
@@ -223,26 +203,6 @@ prototype.startup =
 	this.$presences = { };
 
 	yield* this.prepareInventory( );
-
-	jools.log(
-		'start',
-		'connecting to database',
-		config.database.host + ':' + config.database.port,
-		config.database.name
-	);
-
-	db.connection =
-		yield db.connector.open( sus.resume( ) );
-
-	db.users =
-		yield db.connection.collection( 'users', sus.resume( ) );
-
-	db.spaces =
-		yield db.connection.collection( 'spaces', sus.resume( ) );
-
-	yield* this.checkRepositorySchemaVersion( );
-
-	yield* this.ensureRootUser( );
 
 	yield* this.loadSpaces( );
 
@@ -284,176 +244,6 @@ prototype.startup =
 
 
 /*
-| Ensures the repository schema version fits this server.
-*/
-prototype.checkRepositorySchemaVersion =
-	function* ( )
-{
-	var
-		global,
-		version;
-
-	jools.log(
-		'start',
-		'checking repository schema version'
-	);
-
-	global =
-		yield this.$db.connection.collection(
-			'global',
-			sus.resume( )
-		),
-
-	version =
-		yield global.findOne(
-			{
-				_id : 'version'
-			},
-			sus.resume( )
-		);
-
-	if( version )
-	{
-		if( version.version !== db_version )
-		{
-			throw new Error(
-				'Wrong repository schema version, expected '
-				+ db_version +
-				', got ' +
-				version.version
-			);
-		}
-
-		return;
-	}
-
-	// otherwise initializes the database repository
-
-	yield* this.initRepository( );
-};
-
-
-/*
-| Initializes a new repository.
-*/
-prototype.initRepository =
-	function*( )
-{
-	var
-		global,
-		initSpaces,
-		space;
-
-	jools.log(
-		'start',
-		'found no repository, initializing a new one'
-	);
-
-	initSpaces =
-		[
-			'ideoloom:home',
-			'ideoloom:sandbox'
-		];
-
-	for(
-		var s = 0, sZ = initSpaces.length;
-		s < sZ;
-		s++
-	)
-	{
-		space = initSpaces[ s ];
-
-		jools.log( 'start', '  initializing space ' + space );
-
-		yield this.$db.spaces.insert(
-			{
-				_id : space
-			},
-			sus.resume( )
-		);
-	}
-
-	jools.log( 'start', '  initializing global.version' );
-
-	global =
-		yield this.$db.connection.collection(
-			'global',
-			sus.resume( )
-		);
-
-	yield global.insert(
-		{
-			_id : 'version',
-			version : db_version
-		},
-		sus.resume( )
-	);
-};
-
-
-/*
-| Ensures there is the root user
-*/
-prototype.ensureRootUser =
-	function* ( )
-{
-	var
-		pass,
-		rootUser;
-
-	jools.log(
-		'start',
-		'ensuring existence of the root user'
-	);
-
-	rootUser =
-		yield this.$db.users.findOne(
-			{
-				_id :
-					'root'
-			},
-			sus.resume( )
-		);
-
-	if( !rootUser )
-	{
-		jools.log(
-			'start',
-			'not found! (re)creating the root user'
-		);
-
-		pass = jools.randomPassword( 12 );
-
-		rootUser =
-			{
-				_id :
-					'root',
-				pass :
-					jools.passhash( pass ),
-				clearPass :
-					pass,
-				mail :
-					''
-			};
-
-		yield this.$db.users.insert(
-			rootUser,
-			sus.resume( )
-		);
-	}
-
-	this.$users.ideoloom =
-		rootUser;
-
-	jools.log(
-		'start',
-		'root user\'s clear password is: ',
-		rootUser.clearPass
-	);
-};
-
-
-/*
 | loads all spaces and playbacks all changes from the database.
 */
 prototype.loadSpaces =
@@ -465,7 +255,7 @@ prototype.loadSpaces =
 	jools.log( 'start', 'loading and replaying all spaces' );
 
 	cursor =
-		yield this.$db.spaces.find(
+		yield this.repository.spaces.find(
 			{ },
 			{ sort: '_id' },
 			sus.resume( )
@@ -511,9 +301,8 @@ prototype.loadSpace =
 			/*
 			server.spaceBox.create(
 				'changesDB',
-					yield this.$db.connection.collection(
-						'changes:' + spaceName,
-						sus.resume( )
+					yield* this.repository.collection(
+						'changes:' + spaceRef.fullname
 					),
 				'changes', [ ],
 				'fabric', visual.space.create( ),
@@ -524,9 +313,8 @@ prototype.loadSpace =
 			{
 				ref : spaceRef,
 				$changesDB :
-					yield this.$db.connection.collection(
-						'changes:' + spaceRef.fullname,
-						sus.resume( )
+					yield* this.repository.collection(
+						'changes:' + spaceRef.fullname
 					),
 				$changes : [ ],
 				$tree : visual.space.create( ),
@@ -535,13 +323,8 @@ prototype.loadSpace =
 
 	cursor =
 		yield space.$changesDB.find(
-			{
-				// ...
-			},
-			{
-				sort :
-					'_id'
-			},
+			{ },
+			{ sort : '_id' },
 			sus.resume( )
 		);
 
@@ -730,7 +513,9 @@ prototype.prepareInventory =
 		gjr,
 		inv,
 		jionIDs,
-		resource;
+		resource,
+		sourceMap,
+		stream;
 
 	jools.log( 'start', 'preparing inventory' );
 
@@ -892,12 +677,9 @@ prototype.prepareInventory =
 				uglify.parse(
 					codes[ a ],
 					{
-						filename :
-							resource.filePath,
-						strict :
-							true,
-						toplevel :
-							ast
+						filename : resource.filePath,
+						strict : true,
+						toplevel : ast
 					}
 				);
 		}
@@ -929,24 +711,16 @@ prototype.prepareInventory =
 			compressor =
 				uglify.Compressor(
 					{
-						dead_code :
-							true,
-						hoist_vars :
-							true,
-						warnings :
-							false,
-						negate_iife :
-							true,
+						dead_code : true,
+						hoist_vars : true,
+						warnings : false,
+						negate_iife : true,
 						global_defs :
 						{
-							'CHECK' :
-								config.shellCheck,
-							'JION' :
-								false,
-							'SERVER' :
-								false,
-							'SHELL' :
-								true,
+							'CHECK' : config.shellCheck,
+							'JION' : false,
+							'SERVER' : false,
+							'SHELL' : true,
 						}
 					}
 				);
@@ -959,31 +733,21 @@ prototype.prepareInventory =
 
 		ast.mangle_names(
 			{
-				toplevel :
-					true,
-				except :
-					[ 'WebFont' ]
+				toplevel : true,
+				except : [ 'WebFont' ]
 			}
 		);
 	}
 
-	var
-		sourceMap =
-			uglify.SourceMap(
-				{
-				}
-			),
+	sourceMap = uglify.SourceMap( { } );
 
-		stream =
-			uglify.OutputStream(
-				{
-					beautify :
-						config.beautify,
-
-					source_map:
-						sourceMap
-				}
-			);
+	stream =
+		uglify.OutputStream(
+			{
+				beautify : config.beautify,
+				source_map: sourceMap
+			}
+		);
 
 	ast.print( stream );
 
@@ -1644,7 +1408,7 @@ prototype.serveRequestAuth =
 	if( !users[ req.user ] )
 	{
 		val =
-			yield this.$db.users.findOne(
+			yield this.repository.users.findOne(
 				{ _id : req.user },
 				sus.resume( )
 			);
@@ -1671,11 +1435,9 @@ prototype.serveRequestAuth =
 
 /*
 | Creates a new space.
-|
-| FIXME hand a spaceRef object
 */
 prototype.createSpace =
-	function* (
+	function*(
 		spaceRef
 	)
 {
@@ -1694,22 +1456,17 @@ prototype.createSpace =
 	this.$spaces[ spaceRef.fullname ] =
 		{
 			$changesDB :
-				yield this.$db.connection.collection(
-					'changes:' + spaceRef.fullname,
-					sus.resume( )
-				),
-			$changes :
-				[ ],
-			$tree :
-				visual.space.create( ),
-			$seqZ :
-				1
+				yield* this.repository.collection( 'changes:' + spaceRef.fullname ),
+			$changes : [ ],
+			$tree : visual.space.create( ),
+			$seqZ : 1
 		};
 
-
-	yield this.$db.spaces.insert(
+	yield this.repository.spaces.insert(
 		{
-			_id : spaceRef.fullname
+			_id : spaceRef.fullname,
+			username: spaceRef.username,
+			tag : spaceRef.tag
 		},
 		sus.resume( )
 	);
@@ -1764,7 +1521,7 @@ prototype.serveRequestRegister =
 	}
 
 	user =
-		yield this.$db.users.findOne(
+		yield this.repository.users.findOne(
 			{ _id : username },
 			sus.resume( )
 		);
@@ -1781,7 +1538,7 @@ prototype.serveRequestRegister =
 		news : news
 	};
 
-	yield this.$db.users.insert( user, sus.resume( ) );
+	yield this.repository.users.insert( user, sus.resume( ) );
 
 	this.$users[ username ] = user;
 
