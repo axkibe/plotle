@@ -1258,16 +1258,17 @@ space.prototype.dragMove =
 	var
 		action,
 		align,
-		view,
-		transItem,
+		dy,
 		fs,
 		model,
 		origin,
 		oheight,
 		pd,
 		r,
-		rZ,
 		resized,
+		rZ,
+		transItem,
+		view,
 		zone;
 
 	action = root.action;
@@ -1285,8 +1286,8 @@ space.prototype.dragMove =
 	{
 		case 'actions.createGeneric' :
 
-			model =
-				action.model;
+			model = action.model;
+
 			zone =
 				euclid.rect.createArbitrary(
 					view.depoint( action.start ),
@@ -1297,44 +1298,31 @@ space.prototype.dragMove =
 			{
 				case 'zone' :
 
-					transItem =
-						model.create(
-							'zone',
-								zone
-						);
+					transItem = model.create( 'zone', zone );
 
 					break;
 
 				case 'pnw/fontsize' :
 
-					oheight =
-						model.zone.height;
+					oheight = model.zone.height;
 
 					fs =
 						Math.max(
-							model.doc.fontsize *
-								zone.height / oheight,
+							model.doc.fontsize * zone.height / oheight,
 							theme.label.minSize
 						);
 
-					resized =
-						model.create(
-							'fontsize',
-								fs
-						);
+					resized = model.create( 'fontsize', fs );
 
 					transItem =
 						resized.create(
 							'pnw',
-								( p.x > action.start.x ) ?
-									zone.pnw
-									:
-									euclid.point.create(
-										'x',
-											zone.pse.x - resized.zone.width,
-										'y',
-											zone.pnw.y
-									)
+								( p.x > action.start.x )
+								?  zone.pnw
+								: euclid.point.create(
+									'x', zone.pse.x - resized.zone.width,
+									'y', zone.pnw.y
+								)
 						);
 
 					break;
@@ -1345,10 +1333,7 @@ space.prototype.dragMove =
 			}
 
 			root.setAction(
-				action.create(
-					'transItem',
-						transItem
-				)
+				action.create( 'transItem', transItem )
 			);
 
 			return 'pointer';
@@ -1359,8 +1344,7 @@ space.prototype.dragMove =
 			{
 				// panning while creating a relation
 
-				pd =
-					p.sub( action.start );
+				pd = p.sub( action.start );
 
 				root.setView(
 					view.create(
@@ -1377,10 +1361,8 @@ space.prototype.dragMove =
 
 			root.setAction(
 				action.create(
-					'toItemPath',
-						jion.path.empty,
-					'toPoint',
-						p
+					'toItemPath', jion.path.empty,
+					'toPoint', p
 				)
 			);
 
@@ -1406,8 +1388,7 @@ space.prototype.dragMove =
 
 		case 'actions.pan' :
 
-			pd =
-				p.sub( action.start );
+			pd = p.sub( action.start );
 
 			root.setView(
 				view.create(
@@ -1423,8 +1404,7 @@ space.prototype.dragMove =
 
 		case 'actions.itemDrag' :
 
-			origin =
-				action.origin;
+			origin = action.origin;
 
 			switch( origin.positioning )
 			{
@@ -1454,10 +1434,7 @@ space.prototype.dragMove =
 			}
 
 			root.setAction(
-				action.create(
-					'transItem',
-						transItem
-				)
+				action.create( 'transItem', transItem )
 			);
 
 			return true;
@@ -1491,26 +1468,19 @@ space.prototype.dragMove =
 
 					oheight = origin.zone.height;
 
-					var
-						dy;
-
 					switch( action.align )
 					{
 						case 'ne' :
 						case 'nw' :
 
-							dy =
-								action.start.y -
-								view.dey( p.y );
+							dy = action.start.y - view.dey( p.y );
 
 							break;
 
 						case 'se' :
 						case 'sw' :
 
-							dy =
-								view.dey( p.y ) -
-								action.start.y;
+							dy = view.dey( p.y ) - action.start.y;
 
 							break;
 
@@ -1526,30 +1496,24 @@ space.prototype.dragMove =
 							theme.label.minSize
 						);
 
-					resized =
-						origin.create(
-							'fontsize',
-								fs
-						);
+					resized = origin.create( 'fontsize', fs );
 
 					transItem =
 						resized.create(
 							'pnw',
 								resized.pnw.add(
-									align === 'sw' || align === 'nw' ?
-										Math.round(
-											origin.zone.width -
-												resized.zone.width
-										)
-										:
-										0,
-									align === 'ne' || align === 'nw' ?
-										Math.round(
-											origin.zone.height -
-												resized.zone.height
-										)
-										:
-										0
+									( align === 'sw' || align === 'nw' )
+									?  Math.round(
+										origin.zone.width -
+										resized.zone.width
+									)
+									: 0,
+									( align === 'ne' || align === 'nw' )
+									?  Math.round(
+										origin.zone.height -
+										resized.zone.height
+									)
+									: 0
 								)
 						);
 
@@ -1561,19 +1525,15 @@ space.prototype.dragMove =
 			}
 
 			root.setAction(
-				action.create(
-					'transItem',
-						transItem
-				)
+				action.create( 'transItem', transItem )
 			);
 
 			return true;
 
 		case 'actions.scrollY' :
 
-			this.getItem(
-				action.itemPath.get( -1 )
-			).dragMove(
+			this.getItem( action.itemPath.get( -1 ) )
+			.dragMove(
 				view, // FIXME dont
 				p
 			);
@@ -1601,19 +1561,16 @@ space.prototype.input =
 		mark,
 		path;
 
-	mark =
-		this.mark;
+	mark = this.mark;
 
-	if( !mark.hasCaret )
+	if( !mark || !mark.hasCaret )
 	{
 		return false;
 	}
 
-	path =
-		mark.caretPath;
+	path = mark.caretPath;
 
-	item =
-		this.twig[ path.get( 2 ) ];
+	item = this.twig[ path.get( 2 ) ];
 
 	if( item )
 	{
@@ -1629,17 +1586,11 @@ space.prototype._changeZoom =
 	function( df )
 {
 	var
-		pm =
-			this.view.depoint(
-				this.view.baseFrame.pc
-			);
+		pm;
 
-	root.setView(
-		this.view.review(
-			df,
-			pm
-		)
-	);
+	pm = this.view.depoint( this.view.baseFrame.pc );
+
+	root.setView( this.view.review( df, pm ) );
 };
 
 
@@ -1688,27 +1639,20 @@ space.prototype.specialKey =
 		}
 	}
 
-	mark =
-		this.mark;
+	mark = this.mark;
 
 	if( !mark.hasCaret )
 	{
 		return;
 	}
 
-	path =
-		mark.caretPath;
+	path = mark.caretPath;
 
-	item =
-		this.twig[ path.get( 2 ) ];
+	item = this.twig[ path.get( 2 ) ];
 
 	if( item )
 	{
-		item.specialKey(
-			key,
-			shift,
-			ctrl
-		);
+		item.specialKey( key, shift, ctrl );
 	}
 };
 

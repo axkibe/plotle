@@ -1185,7 +1185,7 @@ prototype.serveRequestAlter =
 	}
 
 	if(
-		this.testAccess( username, spaceRef.username, spaceRef.tag ) !== 'rw' // FIXME hand spaceRef
+		this.testAccess( username, spaceRef ) !== 'rw'
 	)
 	{
 		throw jools.reject( 'no access' );
@@ -2041,28 +2041,16 @@ prototype.wake =
 
 /*
 | Tests if the user has access to a space.
-|
-| FIXME hand a Spaceref object
 */
 prototype.testAccess =
 	function(
 		user,
-		spaceUser,
-		spaceTag
+		spaceRef
 	)
 {
-	if(
-		!isString( spaceUser )
-		||
-		!isString( spaceTag )
-	)
+	if( spaceRef.username == 'ideoloom' )
 	{
-		return 'no';
-	}
-
-	if( spaceUser == 'ideoloom' )
-	{
-		switch( spaceTag )
+		switch( spaceRef.tag )
 		{
 			case 'sandbox' :
 
@@ -2083,7 +2071,7 @@ prototype.testAccess =
 		return 'no';
 	}
 
-	if( user === spaceUser )
+	if( user === spaceRef.user )
 	{
 		return 'rw';
 	}
@@ -2133,7 +2121,7 @@ prototype.serveRequestAcquire =
 		throw jools.reject( 'wrong user/password' );
 	}
 
-	access = this.testAccess( user, spaceRef.username, spaceRef.tag );
+	access = this.testAccess( user, spaceRef );
 
 	if( access === 'no' )
 	{
