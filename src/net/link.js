@@ -1,6 +1,6 @@
 /*
 | The link talks asynchronously with the server.
-|
+| space
 | Authors: Axel Kittenberger
 */
 
@@ -229,7 +229,7 @@ link.prototype.acquireSpace =
 		request.acquire.create(
 			'createMissing', createMissing,
 			'passhash', this.passhash,
-			'space', spaceRef,
+			'spaceRef', spaceRef,
 			'user', this.username
 		),
 		'_onAcquireSpace'
@@ -270,8 +270,8 @@ link.prototype._onAcquireSpace =
 					{
 						status : reply.status,
 						// FIXME give reference
-						spaceUser : req.space.username,
-						spaceTag : req.space.tag
+						spaceUser : req.spaceRef.username,
+						spaceTag : req.spaceRef.tag
 					}
 				)
 			);
@@ -292,7 +292,7 @@ link.prototype._onAcquireSpace =
 
 	root.link =
 		root.link.create(
-			'spaceRef', req.space, // FIXME call it spaceRef
+			'spaceRef', req.spaceRef,
 			'_cSpace', space,
 			'_rSpace', space,
 			'_outbox', ccot.changeWrapRay.create( ),
@@ -305,8 +305,8 @@ link.prototype._onAcquireSpace =
 			{
 				status : reply.status,
 				// FIXME use spaceRef
-				spaceUser : req.space.username,
-				spaceTag : req.space.tag,
+				spaceUser : req.spaceRef.username,
+				spaceTag : req.spaceRef.tag,
 				space : space,
 				access : reply.access
 			}

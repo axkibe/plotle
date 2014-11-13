@@ -1810,7 +1810,7 @@ prototype.serveRequestAcquire =
 
 	passhash = req.passhash;
 
-	spaceRef = req.space;
+	spaceRef = req.spaceRef;
 
 	user = req.user;
 

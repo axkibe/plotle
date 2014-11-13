@@ -49,10 +49,10 @@ if( JION )
 						type :
 							'String'
 					},
-				space :
+				spaceRef :
 					{
 						comment :
-							'the space to acquire',
+							'reference of the space to acquire',
 						json :
 							true,
 						type :
