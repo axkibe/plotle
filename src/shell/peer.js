@@ -89,8 +89,6 @@ _alter =
 */
 peer.newNote =
 	function(
-		spaceUser,
-		spaceTag,
 		zone
 	)
 {
@@ -101,17 +99,14 @@ peer.newNote =
 		sign.create(
 			'val',
 				visual.note.create(
-					'fontsize',
-						13,
-					'zone',
-						zone,
+					'fontsize', 13,
+					'zone', zone,
 					'doc',
 						visual.doc.create(
 							'twig:add',
 							'1',
 							visual.para.create(
-								'text',
-									''
+								'text', ''
 							)
 						)
 				),
@@ -140,12 +135,9 @@ peer.newPortal =
 		sign.create(
 			'val',
 				visual.portal.create(
-					'zone',
-						zone,
-					'spaceUser',
-						destSpaceUser,
-					'spaceTag',
-						destSpaceTag
+					'zone', zone,
+					'spaceUser', destSpaceUser,
+					'spaceTag', destSpaceTag
 				),
 			'rank',
 				null

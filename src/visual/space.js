@@ -328,19 +328,16 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			focus =
-				this.focusedItem( );
+			focus;
+
+		focus = this.focusedItem( );
 
 		if( !focus )
 		{
 			return null;
 		}
 
-		return (
-			this.view.y(
-				focus.attentionCenter
-			)
-		);
+		return this.view.y( focus.attentionCenter );
 	}
 );
 
@@ -357,6 +354,7 @@ space.prototype.draw =
 		action,
 		arrow,
 		focus,
+		fromItem,
 		fromSilhoutte,
 		r,
 		toItem,
@@ -398,11 +396,10 @@ space.prototype.draw =
 
 			if( !action.fromItemPath.isEmpty )
 			{
-				var
-					fromItem =
-						this.getItem(
-							action.fromItemPath.get( -1 )
-						);
+				fromItem =
+					this.getItem(
+						action.fromItemPath.get( -1 )
+					);
 
 				fromItem.highlight( display );
 
@@ -410,10 +407,7 @@ space.prototype.draw =
 
 				if( !action.toItemPath.isEmpty )
 				{
-					toItem =
-						this.getItem(
-							action.toItemPath.get( -1 )
-						);
+					toItem = this.getItem( action.toItemPath.get( -1 ) );
 
 					toItem.highlight( display );
 				}
@@ -432,8 +426,7 @@ space.prototype.draw =
 				else if ( action.relationState === 'hadSelect' )
 				{
 					// arrow points into nowhere
-					toSilhoutte =
-						view.depoint( action.toPoint );
+					toSilhoutte = view.depoint( action.toPoint );
 				}
 
 				if( toSilhoutte )
@@ -493,33 +486,21 @@ space.prototype.mousewheel =
 		r++
 	)
 	{
-		item = this.atRank(r);
+		item = this.atRank( r );
 
-		if (
-			item.mousewheel(
-				view,
-				p,
-				dir,
-				shift,
-				ctrl
-			)
-		)
+		if( item.mousewheel( view, p, dir, shift, ctrl ) )
 		{
 			return true;
 		}
 	}
 
-	if ( dir > 0 )
+	if( dir > 0 )
 	{
-		root.setView(
-			this.view.review( 1, p )
-		);
+		root.setView( this.view.review( 1, p ) );
 	}
 	else
 	{
-		root.setView(
-			this.view.review( -1, p )
-		);
+		root.setView( this.view.review( -1, p ) );
 	}
 
 	return true;
@@ -541,6 +522,7 @@ space.prototype.pointingHover =
 	var
 		a,
 		aZ,
+		com,
 		item,
 		focus,
 		res,
@@ -552,12 +534,7 @@ space.prototype.pointingHover =
 
 	if( focus )
 	{
-		var
-			com =
-				focus.checkHandles(
-					view,
-					p
-				);
+		com = focus.checkHandles( view, p );
 
 		if( com )
 		{
@@ -580,11 +557,7 @@ space.prototype.pointingHover =
 	{
 		item = this.atRank( a ),
 
-		res =
-			item.pointingHover(
-				view,
-				p
-			);
+		res = item.pointingHover( view, p );
 
 		if( res )
 		{
@@ -594,10 +567,8 @@ space.prototype.pointingHover =
 
 	return(
 		result.hover.create(
-			'path',
-				jion.path.empty,
-			'cursor',
-				'pointer'
+			'path', jion.path.empty,
+			'cursor', 'pointer'
 		)
 	);
 };
@@ -617,6 +588,8 @@ space.prototype.dragStart =
 		a,
 		aZ,
 		action,
+		com,
+		dp,
 		focus,
 		item,
 		transItem,
@@ -627,35 +600,21 @@ space.prototype.dragStart =
 	focus = this.focusedItem( );
 
 	// see if the handles were targeted
-	if(
-		this.access == 'rw' &&
-		focus
-	)
+	if( this.access == 'rw' && focus )
 	{
-		var
-			dp,
-			com =
-				focus.checkHandles(
-					view,
-					p
-				);
+		com = focus.checkHandles( view, p );
 
 		if( com )
 		{
 			// resizing
-			dp =
-				view.depoint( p );
+			dp = view.depoint( p );
 
 			root.setAction(
 				actions.itemResize.create(
-					'start',
-						dp,
-					'transItem',
-						focus,
-					'origin',
-						focus,
-					'align',
-						com
+					'start', dp,
+					'transItem', focus,
+					'origin', focus,
+					'align', com
 				)
 			);
 
@@ -671,19 +630,17 @@ space.prototype.dragStart =
 
 	// FIXME simplify
 	if(
-		action &&
-		action.reflect === 'actions.createGeneric' &&
-		action.itemType === 'note'
+		action
+		&& action.reflect === 'actions.createGeneric'
+		&& action.itemType === 'note'
 	)
 	{
 		transItem =
 			Stubs.emptyNote.create(
 				'zone',
 					euclid.rect.create(
-						'pnw',
-							p,  // FIXME why no depoint?
-						'pse',
-							p
+						'pnw', p,  // FIXME why no depoint?
+						'pse', p
 					),
 				'mark',
 					null,
@@ -695,85 +652,62 @@ space.prototype.dragStart =
 
 		root.setAction(
 			action.create(
-				'start',
-					p,
-				'model',
-					transItem,
-				'transItem',
-					transItem
+				'start', p,
+				'model', transItem,
+				'transItem', transItem
 			)
 		);
 
 		return;
 	}
-	else if
-	(
-		action &&
-		action.reflect === 'actions.createGeneric' &&
-		action.itemType === 'label'
-
+	else if(
+		action
+		&& action.reflect === 'actions.createGeneric'
+		&& action.itemType === 'label'
 	)
 	{
 		transItem =
 			Stubs.emptyLabel.create(
-				'pnw',
-					view.depoint( p ),
-				'mark',
-					null,
-				'path',
-					jion.path.empty,
-				'view',
-					view
+				'pnw', view.depoint( p ),
+				'mark', null,
+				'path', jion.path.empty,
+				'view', view
 			);
 
 		root.setAction(
 			action.create(
-				'start',
-					p,
-				'model',
-					transItem,
-				'transItem',
-					transItem
+				'start', p,
+				'model', transItem,
+				'transItem', transItem
 			)
 		);
 
 		return;
 	}
-	else if
-	(
+	else if(
 		action &&
 		action.reflect === 'actions.createGeneric' &&
 		action.itemType === 'portal'
-
 	)
 	{
 		transItem =
 			Stubs.emptyPortal.create(
-				'hover',
-					jion.path.empty,
-				'mark',
-					null,
-				'path',
-					jion.path.empty,
-				'view',
-					view,
+				'hover', jion.path.empty,
+				'mark', null,
+				'path', jion.path.empty,
+				'view', view,
 				'zone',
 					euclid.rect.create(
-						'pnw',
-							p, //FIXME depoint?
-						'pse',
-							p
+						'pnw', p, //FIXME depoint?
+						'pse', p
 					)
 			);
 
 		root.setAction(
 			action.create(
-				'start',
-					p,
-				'model',
-					transItem,
-				'transItem',
-					transItem
+				'start', p,
+				'model', transItem,
+				'transItem', transItem
 			)
 		);
 
@@ -787,8 +721,7 @@ space.prototype.dragStart =
 		a++
 	)
 	{
-		item =
-			this.atRank( a );
+		item = this.atRank( a );
 
 		if(
 			item.dragStart(
@@ -812,12 +745,9 @@ space.prototype.dragStart =
 
 			root.setAction(
 				action.create(
-					'pan',
-						view.pan,
-					'relationState',
-						'pan',
-					'start',
-						p
+					'pan', view.pan,
+					'relationState', 'pan',
+					'start', p
 				)
 			);
 
@@ -827,10 +757,8 @@ space.prototype.dragStart =
 	// otherwise panning is initiated
 	root.setAction(
 		actions.pan.create(
-			'start',
-				p,
-			'pan',
-				view.pan
+			'start', p,
+			'pan', view.pan
 		)
 	);
 
@@ -854,8 +782,7 @@ space.prototype.click =
 		item,
 		view;
 
-	view =
-		this.view;
+	view = this.view;
 
 	// clicked some item?
 	for(
@@ -864,18 +791,10 @@ space.prototype.click =
 		a++
 	)
 	{
-		item =
-			this.atRank( a );
+		item = this.atRank( a );
 
 		if(
-			item.click(
-				this,
-				view,
-				p,
-				shift,
-				ctrl,
-				this.access
-			)
+			item.click( this, view, p, shift, ctrl, this.access )
 		)
 		{
 			return true;
@@ -902,24 +821,28 @@ space.prototype.dragStop =
 {
 	var
 		action,
+		fs,
+		dy,
 		item,
 		key,
+		label,
+		model,
+		note,
+		oheight,
+		portal,
 		res,
-		view;
+		resized,
+		view,
+		zone;
 
 	action = root.action;
 
 	view = this.view;
 
-/**/if( CHECK )
-/**/{
-/**/	if( !action )
-/**/	{
-/**/		throw new Error(
-/**/			'Dragstop without action'
-/**/		);
-/**/	}
-/**/}
+	if( !action )
+	{
+		return;
+	}
 
 	switch( action.reflect )
 	{
@@ -932,35 +855,27 @@ space.prototype.dragStop =
 					// FIXME move to note
 					// ( and all others creators )
 
-					var
-						note =
-							action.transItem.create(
-								'zone',
-									euclid.rect.createArbitrary(
-										view.depoint( action.start ),
-										view.depoint( p )
-									)
-							);
+					note =
+						action.transItem.create(
+							'zone',
+								euclid.rect.createArbitrary(
+									view.depoint( action.start ),
+									view.depoint( p )
+								)
+						);
 
-					res =
-						peer.newNote(
-							this.spaceUser,
-							this.spaceTag,
-							note.zone
-						),
+					res = peer.newNote( note.zone );
 
-					key =
-						res.chgX.trg.path.get( -1 );
+					key = res.chgX.trg.path.get( -1 );
 
 					root.setMark(
 						marks.caret.create(
 							'path',
 								root.
-									space.twig[ key ].
-									doc.
-									atRank( 0 ).textPath,
-							'at',
-								0
+									space.twig[ key ]
+									.doc
+									.atRank( 0 ).textPath,
+							'at', 0
 						)
 					);
 
@@ -973,48 +888,37 @@ space.prototype.dragStop =
 
 				case 'label' :
 
-					var
-						model =
-							action.model,
+					model = action.model;
 
-						zone =
-							euclid.rect.createArbitrary(
-								view.depoint( action.start ),
-								view.depoint( p )
-							),
+					zone =
+						euclid.rect.createArbitrary(
+							view.depoint( action.start ),
+							view.depoint( p )
+						);
 
-						oheight =
-							model.zone.height,
+					oheight = model.zone.height;
 
-						dy =
-							zone.height - oheight,
+					dy = zone.height - oheight;
 
-						fs =
-							Math.max(
-								model.doc.fontsize *
-									( oheight + dy ) / oheight,
-								theme.label.minSize
-						),
+					fs =
+						Math.max(
+							model.doc.fontsize *
+								( oheight + dy ) / oheight,
+							theme.label.minSize
+						);
 
-						resized =
-							action.transItem.create(
-								'fontsize',
-									fs
-							),
+					resized = action.transItem.create( 'fontsize', fs );
 
-						label =
-							resized.create(
-								'pnw',
-									( p.x > action.start.x ) ?
-										zone.pnw
-										:
-										euclid.point.create(
-											'x',
-												zone.pse.x - resized.zone.width,
-											'y',
-												zone.pnw.y
-										)
-							);
+					label =
+						resized.create(
+							'pnw',
+								( p.x > action.start.x )
+								?  zone.pnw
+								: euclid.point.create(
+									'x', zone.pse.x - resized.zone.width,
+									'y', zone.pnw.y
+								)
+						);
 
 					res =
 						peer.newLabel(
@@ -1044,9 +948,6 @@ space.prototype.dragStop =
 					break;
 
 				case 'portal' :
-
-					var
-						portal;
 
 					portal =
 						action.transItem.create(
@@ -1119,10 +1020,7 @@ space.prototype.dragStop =
 								action.toItemPath.get( -1 )
 							);
 
-						item.dragStop(
-							view,
-							p
-						);
+						item.dragStop( view, p );
 					}
 
 					root.setAction( null );
@@ -1132,10 +1030,7 @@ space.prototype.dragStop =
 				case 'pan' :
 
 					root.setAction(
-						action.create(
-							'relationState',
-								'start'
-						)
+						action.create( 'relationState', 'start' )
 					);
 
 					break;
@@ -1225,12 +1120,7 @@ space.prototype.dragStop =
 
 			this.getItem(
 				action.itemPath.get( -1 )
-			).dragStop(
-				view,
-				p,
-				shift,
-				ctrl
-			);
+			).dragStop( view, p, shift, ctrl );
 
 			root.setAction( null );
 

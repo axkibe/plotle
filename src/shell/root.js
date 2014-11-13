@@ -1245,17 +1245,10 @@ proto.onAcquireSpace =
 
 		case 'nonexistent' :
 
-			// FIXME have it use a spaceRef
 			root.setPath(
-				root._formJockey.twig.nonExistingSpace
-					.path.append( 'nonSpaceUser' ),
-				asw.spaceRef.username
-			);
-
-			root.setPath(
-				root._formJockey.twig.nonExistingSpace
-					.path.append( 'nonSpaceTag' ),
-				asw.spaceRef.tag
+				root._formJockey.twig.nonExistingSpace.path
+					.append( 'nonSpaceRef' ),
+				asw.spaceRef
 			);
 
 			root.setMode( 'nonExistingSpace' );

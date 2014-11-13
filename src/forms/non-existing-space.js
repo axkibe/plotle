@@ -12,7 +12,6 @@
 | Imports
 */
 var
-	fabric,
 	forms,
 	jools,
 	root;
@@ -68,21 +67,12 @@ if( JION )
 						defaultValue :
 							null
 					},
-				nonSpaceUser :
+				nonSpaceRef :
 					{
 						comment :
-							'the user part of the non-existing-space',
+							'the non-existing-space',
 						type :
-							'String',
-						defaultValue :
-							undefined
-					},
-				nonSpaceTag :
-					{
-						comment :
-							'the tag part of the non-existing-space',
-						type :
-							'String',
+							'fabric.spaceRef',
 						defaultValue :
 							undefined
 					},
@@ -184,10 +174,9 @@ nonExistingSpace.prototype._init =
 	this.twig.headline =
 		this.twig.headline.create(
 			'text',
-				this.nonSpaceUser
-				+ ':'
-				+ this.nonSpaceTag
-				+ ' does not exist.'
+				this.nonSpaceRef
+				? this.nonSpaceRef.fullname + ' does not exist.'
+				: ''
 		);
 
 	forms.form.init.call( this, inherit );
@@ -227,14 +216,7 @@ nonExistingSpace.prototype.pushButton =
 
 		case 'yesButton' :
 
-			root.moveToSpace(
-				// FUTURE have this a reference right away
-				fabric.spaceRef.create(
-					'username', this.nonSpaceUser,
-					'tag', this.nonSpaceTag
-				),
-				true
-			);
+			root.moveToSpace( this.nonSpaceRef, true );
 
 			root.setMode( 'Normal' );
 
