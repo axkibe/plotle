@@ -1532,7 +1532,7 @@ prototype.serveRequestUpdate =
 		return jools.reject( 'Invalid or missing seq: ' + seq );
 	}
 
-	asw = root.conveyUpdate( seq, spaceRef.username, spaceRef.tag ); // FIXME
+	asw = root.conveyUpdate( seq, spaceRef );
 
 	// immediate answer?
 	if( asw.chgs.length > 0 )
@@ -1556,8 +1556,7 @@ prototype.serveRequestUpdate =
 			seq : seq,
 			timerID : timerID,
 			result : result,
-			spaceUser : spaceRef.username, // XXX
-			spaceTag : spaceRef.tag
+			spaceRef : spaceRef
 		};
 
 	result.sleepID = sleepID;
@@ -1579,8 +1578,7 @@ prototype.expireSleep =
 		result,
 		seqZ,
 		sleep,
-		space,
-		spaceName;
+		space;
 
 	sleep = root.$upsleep[ sleepID ];
 
@@ -1590,9 +1588,7 @@ prototype.expireSleep =
 		return;
 	}
 
-	spaceName = sleep.spaceUser + ':' + sleep.spaceTag;
-
-	space = root.$spaces[ spaceName ];
+	space = root.$spaces[ sleep.spaceRef.fullname ];
 
 	seqZ = space.$seqZ;
 
@@ -1639,7 +1635,9 @@ prototype.closeSleep =
 
 	// maybe it just had expired at the same time
 	if( !sleep )
-		{ return; }
+	{
+		return;
+	}
 
 	clearTimeout( sleep.timerID );
 
@@ -1652,21 +1650,17 @@ prototype.closeSleep =
 */
 prototype.conveyUpdate =
 	function(
-		seq,
-		spaceUser, // XXX
-		spaceTag
+		seq,     // ???
+		spaceRef // reference of space
 	)
 {
 	var
-		spaceName,
 		space,
 		changes,
 		seqZ,
 		chgA;
 
-	spaceName = spaceUser + ':' + spaceTag;
-
-	space = root.$spaces[ spaceName ];
+	space = root.$spaces[ spaceRef.fullname ];
 
 	changes = space.$changes;
 
@@ -1703,14 +1697,7 @@ prototype.wake =
 		result,
 		sKey,
 		sleep,
-		sleepKeys,
-		spaceUser,
-		spaceTag;
-
-	// XXX use spaceRef
-	spaceUser = spaceRef.username;
-
-	spaceTag = spaceRef.tag;
+		sleepKeys;
 
 	sleepKeys = Object.keys( root.$upsleep );
 
@@ -1725,10 +1712,7 @@ prototype.wake =
 
 		sleep = root.$upsleep[sKey];
 
-		if(
-			spaceUser !== sleep.spaceUser ||
-			spaceTag !== sleep.spaceTag
-		)
+		if( !spaceRef.equals( sleep.spaceRef ) )
 		{
 			continue;
 		}
@@ -1737,12 +1721,7 @@ prototype.wake =
 
 		delete root.$upsleep[ sKey ];
 
-		asw =
-			root.conveyUpdate(
-				sleep.seq,
-				sleep.spaceUser,
-				sleep.spaceTag
-			);
+		asw = root.conveyUpdate( sleep.seq, sleep.spaceRef );
 
 		result = sleep.result;
 
@@ -1751,12 +1730,9 @@ prototype.wake =
 		result.writeHead(
 			200,
 			{
-				'Content-Type' :
-					'application/json',
-				'Cache-Control' :
-					'no-cache',
-				'Date' :
-					new Date().toUTCString()
+				'Content-Type' : 'application/json',
+				'Cache-Control' : 'no-cache',
+				'Date' : new Date().toUTCString()
 			}
 		);
 
