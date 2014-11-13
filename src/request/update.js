@@ -51,23 +51,14 @@ if( JION )
 						type :
 							'Integer'
 					},
-				spaceUser :
+				spaceRef :
 					{
 						comment :
-							'user of the space',
+							'reference of space to get updates of',
 						json :
 							true,
 						type :
-							'String'
-					},
-				spaceTag :
-					{
-						comment :
-							'tag of the space',
-						json :
-							true,
-						type :
-							'String'
+							'fabric.spaceRef'
 					},
 				user :
 					{

@@ -158,7 +158,7 @@ link.prototype.auth =
 */
 link.prototype._onAuth =
 	function(
-		request,
+		req,
 		reply
 	)
 {
@@ -170,7 +170,7 @@ link.prototype._onAuth =
 	root.onAuth(
 		ok,
 		ok ? reply.user : null,
-		ok ? request.passhash : null,
+		ok ? req.passhash : null,
 		ok ? null : reply.message
 	);
 };
@@ -204,7 +204,7 @@ link.prototype.register =
 */
 link.prototype._onRegister =
 	function(
-		request,
+		req,
 		reply
 	)
 {
@@ -215,8 +215,8 @@ link.prototype._onRegister =
 
 	root.onRegister(
 		ok,
-		ok ? request.user : null,
-		ok ? request.passhash : null,
+		ok ? req.user : null,
+		ok ? req.passhash : null,
 		ok ? null : reply.message
 	);
 };
@@ -252,7 +252,7 @@ link.prototype.acquireSpace =
 */
 link.prototype._onAcquireSpace =
 	function(
-		request,
+		req,
 		reply
 	)
 {
@@ -280,8 +280,8 @@ link.prototype._onAcquireSpace =
 					{
 						status : reply.status,
 						// FIXME give reference
-						spaceUser : request.space.username,
-						spaceTag : request.space.tag
+						spaceUser : req.space.username,
+						spaceTag : req.space.tag
 					}
 				)
 			);
@@ -303,8 +303,8 @@ link.prototype._onAcquireSpace =
 	root.link =
 		root.link.create(
 			// FIXME use spaceRef
-			'spaceUser', request.space.username,
-			'spaceTag', request.space.tag,
+			'spaceUser', req.space.username,
+			'spaceTag', req.space.tag,
 			'_cSpace', space,
 			'_rSpace', space,
 			'_outbox', ccot.changeWrapRay.create( ),
@@ -317,8 +317,8 @@ link.prototype._onAcquireSpace =
 			{
 				status : reply.status,
 				// FIXME use spaceRef
-				spaceUser : request.space.username,
-				spaceTag : request.space.tag,
+				spaceUser : req.space.username,
+				spaceTag : req.space.tag,
 				space : space,
 				access : reply.access
 			}
@@ -347,8 +347,12 @@ link.prototype._update =
 	root.ajax.twig.update.request(
 		request.update.create(
 			'passhash', this.passhash,
-			'spaceUser', this.spaceUser,
-			'spaceTag', this.spaceTag,
+			'spaceRef',
+				// FIXME get a spaceRef already
+				fabric.spaceRef.create(
+					'username', this.spaceUser,
+					'tag', this.spaceTag
+				),
 			'seq',
 				this._rSeq !== null
 				? this._rSeq
@@ -365,7 +369,7 @@ link.prototype._update =
 */
 link.prototype._onUpdate =
 	function(
-		request,
+		req,
 		reply
 	)
 {

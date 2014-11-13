@@ -1493,18 +1493,25 @@ prototype.serveRequestUpdate =
 		sleepID,
 		timerID,
 		space,
-		spaceName,
-		spaceUser,
-		spaceTag,
+		spaceRef,
 		user;
+
+	try
+	{
+		req = request.update.createFromJSON( req );
+	}
+	catch( err )
+	{
+		console.log( err.stack );
+
+		return jools.reject( 'command not valid jion' );
+	}
 
 	user = req.user;
 
 	passhash = req.passhash;
 
-	spaceUser = req.spaceUser;
-
-	spaceTag = req.spaceTag;
+	spaceRef = req.spaceRef;
 
 	seq = req.seq;
 
@@ -1513,9 +1520,7 @@ prototype.serveRequestUpdate =
 		throw jools.reject( 'Invalid password' );
 	}
 
-	spaceName = spaceUser + ':' + spaceTag,
-
-	space = root.$spaces[ spaceName ];
+	space = root.$spaces[ spaceRef.fullname ];
 
 	if( !space )
 	{
@@ -1527,7 +1532,7 @@ prototype.serveRequestUpdate =
 		return jools.reject( 'Invalid or missing seq: ' + seq );
 	}
 
-	asw = root.conveyUpdate( seq, spaceUser, spaceTag );
+	asw = root.conveyUpdate( seq, spaceRef.username, spaceRef.tag ); // FIXME
 
 	// immediate answer?
 	if( asw.chgs.length > 0 )
@@ -1551,8 +1556,8 @@ prototype.serveRequestUpdate =
 			seq : seq,
 			timerID : timerID,
 			result : result,
-			spaceUser : spaceUser,
-			spaceTag : spaceTag
+			spaceUser : spaceRef.username, // XXX
+			spaceTag : spaceRef.tag
 		};
 
 	result.sleepID = sleepID;
@@ -1648,7 +1653,7 @@ prototype.closeSleep =
 prototype.conveyUpdate =
 	function(
 		seq,
-		spaceUser,
+		spaceUser, // XXX
 		spaceTag
 	)
 {
