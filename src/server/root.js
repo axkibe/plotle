@@ -178,7 +178,7 @@ prototype.create =
 
 	for( arg in this )
 	{
-		if( Object.isOwnProperty( this, arg ) )
+		if( Object.hasOwnProperty( this, arg ) )
 		{
 			replace[ arg ] = this[ arg ];
 		}
@@ -187,10 +187,10 @@ prototype.create =
 	for(
 		a = 0, aZ = arguments.length;
 		a < aZ;
-		a++
+		a += 2
 	)
 	{
-		replace[ arguments[ a ] ] = replace[ arguments[ a + 1 ] ];
+		replace[ arguments[ a ] ] = arguments[ a + 1 ];
 	}
 
 	root = replace;
@@ -206,7 +206,7 @@ prototype.startup =
 	function*( )
 {
 	// the servers inventory
-	root.inventory = server.inventory.create( );
+	root.create( 'inventory', server.inventory.create( ) );
 
 	root.repository = yield* repository.connect( );
 
