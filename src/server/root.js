@@ -495,8 +495,9 @@ prototype.prepareInventory =
 			'inTestPad', true
 		);
 
-	root.inventory =
-		root.inventory.addResource( cconfig );
+	root.create(
+		'inventory', root.inventory.addResource( cconfig )
+	);
 
 	// takes resource from the the roster
 	for(
@@ -505,8 +506,7 @@ prototype.prepareInventory =
 		a++
 	)
 	{
-		resource =
-			roster[ a ];
+		resource = roster[ a ];
 
 		if( resource.devel && !config.develShell )
 		{
@@ -515,12 +515,15 @@ prototype.prepareInventory =
 
 		if( resource.hasJion )
 		{
-			root.inventory =
-				root.inventory.addResource( resource.asJion );
+			root.create(
+				'inventory',
+					root.inventory.addResource( resource.asJion )
+			);
 		}
 
-		root.inventory =
-			root.inventory.addResource( resource );
+		root.create(
+			'inventory', root.inventory.addResource( resource )
+		);
 	}
 
 	// Reads in all files to be cached
@@ -536,28 +539,27 @@ prototype.prepareInventory =
 
 		if(
 			resource.data
-			||
-			resource.inBundle
-			||
-			resource.devel
-			||
-			resource.isJion
+			|| resource.inBundle
+			|| resource.devel
+			|| resource.isJion
 		)
 		{
 			continue;
 		}
 
-		root.inventory =
-			root.inventory.updateResource(
-				resource,
-				resource.create(
-					'data',
-						( yield fs.readFile(
-							resource.filePath,
-							sus.resume( )
-						) )
+		root.create(
+			'inventory',
+				root.inventory.updateResource(
+					resource,
+					resource.create(
+						'data',
+							( yield fs.readFile(
+								resource.filePath,
+								sus.resume( )
+							) )
+					)
 				)
-			);
+		);
 	}
 
 	// the bundle itself
@@ -728,19 +730,21 @@ prototype.prepareInventory =
 	}
 
 	// calculates the hash for the bundle
-	bundleFilePath =
-	root.bundleFilePath =
-		'ideoloom-' + sha1.sha1hex( bundle ) + '.js';
+	bundleFilePath = 'ideoloom-' + sha1.sha1hex( bundle ) + '.js';
+
+	root.create( 'bundleFilePath', bundleFilePath );
 
 	// registers the bundle as resource
-	root.inventory =
-		root.inventory.addResource(
-			server.resource.create(
-				'filePath', bundleFilePath,
-				'maxage', 'long',
-				'data', bundle
+	root.create(
+		'inventory',
+			root.inventory.addResource(
+				server.resource.create(
+					'filePath', bundleFilePath,
+					'maxage', 'long',
+					'data', bundle
+				)
 			)
-		);
+	);
 
 	jools.log( 'start', 'bundle:', bundleFilePath );
 
@@ -753,8 +757,7 @@ prototype.prepareInventory =
 	}
 
 	// post processing
-	inv =
-		root.inventory;
+	inv = root.inventory;
 
 	// loads the files to be bundled
 	for(
@@ -777,8 +780,7 @@ prototype.prepareInventory =
 		if( !postProcessor[ resource.postProcessor ] )
 		{
 			throw new Error(
-				'invalid postProcessor: ' +
-					resource.postProcessor
+				'invalid postProcessor: ' + resource.postProcessor
 			);
 		}
 
@@ -796,8 +798,7 @@ prototype.prepareInventory =
 			);
 	}
 
-	inv =
-		root.inventory;
+	inv = root.inventory;
 
 	// prepares the zipped versions
 	for(
@@ -867,25 +868,29 @@ prototype.prependConfigFlags =
 };
 
 
-// returns a string with a base64 counting
+/*
+| returns a string with a base64 counting
+|
+| FIXME move to jools.
+*/
 var b64Count =
 	function(
 		c
 	)
 {
 	var
-		mask = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_',
+		mask,
+		result;
 
-		result =
-			'';
+	mask = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_';
+
+	result = '';
 
 	do
 	{
-		result =
-			mask[ c & 0x3F ] + result;
+		result = mask[ c & 0x3F ] + result;
 
-		c =
-			c >> 6;
+		c = c >> 6;
 	}
 	while( c > 0 );
 
