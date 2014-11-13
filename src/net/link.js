@@ -19,7 +19,6 @@ net = net || { };
 */
 var
 	ccot,
-	fabric,
 	jools,
 	request,
 	root,
@@ -53,21 +52,12 @@ if( JION )
 						defaultValue :
 							null
 					},
-				spaceTag :
+				spaceRef :
 					{
 						comment :
-							'tag of the current space',
+							'reference to the current space',
 						type :
-							'String',
-						defaultValue :
-							null
-					},
-				spaceUser :
-					{
-						comment :
-							'user of the current space',
-						type :
-							'String',
+							'fabric.spaceRef',
 						defaultValue :
 							null
 					},
@@ -302,9 +292,7 @@ link.prototype._onAcquireSpace =
 
 	root.link =
 		root.link.create(
-			// FIXME use spaceRef
-			'spaceUser', req.space.username,
-			'spaceTag', req.space.tag,
+			'spaceRef', req.space, // FIXME call it spaceRef
 			'_cSpace', space,
 			'_rSpace', space,
 			'_outbox', ccot.changeWrapRay.create( ),
@@ -347,12 +335,7 @@ link.prototype._update =
 	root.ajax.twig.update.request(
 		request.update.create(
 			'passhash', this.passhash,
-			'spaceRef',
-				// FIXME get a spaceRef already
-				fabric.spaceRef.create(
-					'username', this.spaceUser,
-					'tag', this.spaceTag
-				),
+			'spaceRef', this.spaceRef,
 			'seq',
 				this._rSeq !== null
 				? this._rSeq
@@ -663,12 +646,7 @@ link.prototype._sendChanges =
 			'changeWrapRay', changeWrapRay,
 			'passhash', link.passhash,
 			'seq', link._rSeq,
-			'spaceRef',
-				// FIXME get a spaceRef already
-				fabric.spaceRef.create(
-					'username', link.spaceUser,
-					'tag', link.spaceTag
-				),
+			'spaceRef', link.spaceRef,
 			'user', link.username
 		),
 		'_onSendChanges'
