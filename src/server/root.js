@@ -1,6 +1,8 @@
 /*
 | The root of the server.
 |
+| FIXME rename space to spaceBox where applicatble.
+|
 | Authors: Axel Kittenberger
 */
 
@@ -314,29 +316,30 @@ prototype.loadSpace =
 		root.$spaces[ spaceRef.fullname ] =
 			/*
 			server.spaceBox.create(
+				'spaceRef', spaceRef,
 				'changesDB',
 					yield* root.repository.collection(
 						'changes:' + spaceRef.fullname
 					),
 				'changes', [ ],
-				'fabric', visual.space.create( ),
+				'space', visual.space.create( ),
 				'seqZ',
 					1
 			);
 			*/
 			{
-				ref : spaceRef,
-				$changesDB :
+				spaceRef : spaceRef,
+				changesDB :
 					yield* root.repository.collection(
 						'changes:' + spaceRef.fullname
 					),
-				$changes : [ ],
-				$tree : visual.space.create( ),
-				$seqZ : 1
+				changes : [ ],
+				space : visual.space.create( ),
+				seqZ : 1
 			};
 
 	cursor =
-		yield space.$changesDB.find(
+		yield space.changesDB.find(
 			{ },
 			{ sort : '_id' },
 			sus.resume( )
@@ -348,7 +351,7 @@ prototype.loadSpace =
 		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
-		if( o._id !== space.$seqZ )
+		if( o._id !== space.seqZ )
 		{
 			throw new Error( 'sequence mismatch' );
 		}
@@ -371,9 +374,9 @@ prototype.loadSpace =
 			change.chgX = ccot.changeRay.createFromJSON( o.chgX );
 		}
 
-		space.$seqZ++;
+		space.seqZ++;
 
-		space.$tree = change.chgX.changeTree( space.$tree ).tree;
+		space.space = change.chgX.changeTree( space.space ).tree;
 	}
 };
 
@@ -1177,9 +1180,9 @@ prototype.serveRequestAlter =
 
 	space = root.$spaces[ spaceRef.fullname ];
 
-	changes = space.$changes;
+	changes = space.changes;
 
-	seqZ = space.$seqZ;
+	seqZ = space.seqZ;
 
 	if( seq === -1 )
 	{
@@ -1232,9 +1235,9 @@ prototype.serveRequestAlter =
 	}
 
 	// applies the changes
-	result = chgX.changeTree( space.$tree );
+	result = chgX.changeTree( space.space );
 
-	space.$tree = result.tree;
+	space.space = result.tree;
 
 	chgX = result.chgX;
 
@@ -1245,7 +1248,7 @@ prototype.serveRequestAlter =
 		};
 
 	// saves the change(ray) in the database
-	space.$changesDB.insert(
+	space.changesDB.insert(
 		{
 			_id : seqZ,
 			cid : cid,
@@ -1266,7 +1269,7 @@ prototype.serveRequestAlter =
 		}
 	);
 
-	space.$seqZ++;
+	space.seqZ++;
 
 	process.nextTick(
 		function( )
@@ -1382,11 +1385,13 @@ prototype.createSpace =
 	space =
 	root.$spaces[ spaceRef.fullname ] =
 		{
-			$changesDB :
-				yield* root.repository.collection( 'changes:' + spaceRef.fullname ),
-			$changes : [ ],
-			$tree : visual.space.create( ),
-			$seqZ : 1
+			changesDB :
+				yield* root.repository.collection(
+					'changes:' + spaceRef.fullname
+				),
+			changes : [ ],
+			space : visual.space.create( ),
+			seqZ : 1
 		};
 
 	yield root.repository.spaces.insert(
@@ -1527,7 +1532,7 @@ prototype.serveRequestUpdate =
 		return jools.reject( 'Unknown space' );
 	}
 
-	if ( !( seq >= 0 && seq <= space.$seqZ ) )
+	if ( !( seq >= 0 && seq <= space.seqZ ) )
 	{
 		return jools.reject( 'Invalid or missing seq: ' + seq );
 	}
@@ -1590,7 +1595,7 @@ prototype.expireSleep =
 
 	space = root.$spaces[ sleep.spaceRef.fullname ];
 
-	seqZ = space.$seqZ;
+	seqZ = space.seqZ;
 
 	delete root.$upsleep[ sleepID ];
 
@@ -1662,9 +1667,9 @@ prototype.conveyUpdate =
 
 	space = root.$spaces[ spaceRef.fullname ];
 
-	changes = space.$changes;
+	changes = space.changes;
 
-	seqZ = space.$seqZ;
+	seqZ = space.seqZ;
 
 	chgA = [ ];
 
@@ -1822,8 +1827,6 @@ prototype.serveRequestAcquire =
 
 	access = root.testAccess( user, req.spaceRef );
 
-console.log( 'REQ', req.spaceRef );
-
 	if( access === 'no' )
 	{
 		return {
@@ -1855,8 +1858,8 @@ console.log( 'REQ', req.spaceRef );
 		ok : true,
 		status : 'served',
 		access : access,
-		seq : space.$seqZ,
-		node : space.$tree
+		seq : space.seqZ,
+		node : space.space
 	};
 };
 

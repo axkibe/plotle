@@ -1,7 +1,7 @@
 /*
 | Holds a space.
 |
-| FIXME make this work.
+| FIXME move logic into here.
 */
 
 
@@ -22,14 +22,42 @@ if( JION )
 			'server.spaceBox',
 		attributes :
 			{
-				XXXX :
+				spaceRef :
 					{
 						comment :
-							'post processor replacing stuff',
+							'reference to the space',
 						type :
-							'String',
-						defaultValue :
-							undefined
+							'fabric.spaceRef',
+					},
+				changesDB:
+					{
+						comment :
+							'changes database collection',
+						type :
+							'Object'
+					},
+				changes :
+					{
+						// FIXME this should not be zero based
+						// and it should be a changeWrapRay
+						comment :
+							'changes buffer ( in RAM )',
+						type :
+							'Object'
+					},
+				space :
+					{
+						comment :
+							'latest space version',
+						type :
+							'visual.space'
+					},
+				seqZ :
+					{
+						comment :
+							'latest sequence number',
+						type :
+							'Integer'
 					}
 			},
 		node :
