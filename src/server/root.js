@@ -178,7 +178,7 @@ prototype.create =
 
 	for( arg in this )
 	{
-		if( Object.hasOwnProperty( this, arg ) )
+		if( this.hasOwnProperty( arg ) )
 		{
 			replace[ arg ] = this[ arg ];
 		}
@@ -208,22 +208,24 @@ prototype.startup =
 	// the servers inventory
 	root.create( 'inventory', server.inventory.create( ) );
 
-	root.repository = yield* repository.connect( );
+	root.create( 'repository', yield* repository.connect( ) );
 
-	// all spaces
-	root.$spaces = { };
+	root.create(
+		// all spaces
+		'$spaces', { },
 
-	// a table of all clients waiting for an update
-	root.$upsleep = { };
+		// a table of all clients waiting for an update
+		'$upsleep', { },
 
-	// next upsleepID
-	root.$nextSleep = 1;
+		// next upsleepID
+		'$nextSleep', 1,
 
-	// next visitors ID
-	root.$nextVisitor = 1000;
+		// next visitors ID
+		'$nextVisitor', 1000,
 
-	// table of all cached user credentials
-	root.$users = { };
+		// table of all cached user credentials
+		'$users', { }
+	);
 
 	yield* root.prepareInventory( );
 
