@@ -29,6 +29,7 @@ module.exports =
 			'src/request/update.js',
 			'src/result/genjion.js',
 			'src/server/resource.js',
+			'src/server/space-box.js',
 			'src/server/inventory.js',
 			'src/visual/doc.js',
 			'src/visual/label.js',

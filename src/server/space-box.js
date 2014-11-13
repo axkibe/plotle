@@ -63,9 +63,7 @@ if( JION )
 		node :
 			true,
 		init :
-			[ ],
-		twig :
-			'server.space-box'
+			[ ]
 	};
 }
 

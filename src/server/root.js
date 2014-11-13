@@ -305,14 +305,14 @@ prototype.loadSpace =
 		change,
 		cursor,
 		o,
-		space;
+		spaceBox;
 
 	jools.log(
 		'start',
 		'loading and replaying all "' + spaceRef.fullname + '"'
 	);
 
-	space =
+	spaceBox =
 		root.$spaces[ spaceRef.fullname ] =
 			/*
 			server.spaceBox.create(
@@ -339,7 +339,7 @@ prototype.loadSpace =
 			};
 
 	cursor =
-		yield space.changesDB.find(
+		yield spaceBox.changesDB.find(
 			{ },
 			{ sort : '_id' },
 			sus.resume( )
@@ -351,7 +351,7 @@ prototype.loadSpace =
 		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
-		if( o._id !== space.seqZ )
+		if( o._id !== spaceBox.seqZ )
 		{
 			throw new Error( 'sequence mismatch' );
 		}
@@ -374,9 +374,9 @@ prototype.loadSpace =
 			change.chgX = ccot.changeRay.createFromJSON( o.chgX );
 		}
 
-		space.seqZ++;
+		spaceBox.seqZ++; // XXX
 
-		space.space = change.chgX.changeTree( space.space ).tree;
+		spaceBox.space = change.chgX.changeTree( spaceBox.space ).tree; //XXX
 	}
 };
 
@@ -1145,7 +1145,7 @@ prototype.serveRequestAlter =
 		result,
 		seq,
 		seqZ,
-		space,
+		spaceBox,
 		spaceRef,
 		username;
 
@@ -1178,11 +1178,11 @@ prototype.serveRequestAlter =
 		throw jools.reject( 'no access' );
 	}
 
-	space = root.$spaces[ spaceRef.fullname ];
+	spaceBox = root.$spaces[ spaceRef.fullname ];
 
-	changes = space.changes;
+	changes = spaceBox.changes;
 
-	seqZ = space.seqZ;
+	seqZ = spaceBox.seqZ;
 
 	if( seq === -1 )
 	{
@@ -1235,9 +1235,9 @@ prototype.serveRequestAlter =
 	}
 
 	// applies the changes
-	result = chgX.changeTree( space.space );
+	result = chgX.changeTree( spaceBox.space );
 
-	space.space = result.tree;
+	spaceBox.space = result.tree; // XXX
 
 	chgX = result.chgX;
 
@@ -1248,7 +1248,7 @@ prototype.serveRequestAlter =
 		};
 
 	// saves the change(ray) in the database
-	space.changesDB.insert(
+	spaceBox.changesDB.insert(
 		{
 			_id : seqZ,
 			cid : cid,
@@ -1269,7 +1269,7 @@ prototype.serveRequestAlter =
 		}
 	);
 
-	space.seqZ++;
+	spaceBox.seqZ++; // XXX
 
 	process.nextTick(
 		function( )
@@ -1372,7 +1372,7 @@ prototype.createSpace =
 	)
 {
 	var
-		space;
+		spaceBox;
 
 /**/if( CHECK )
 /**/{
@@ -1382,7 +1382,7 @@ prototype.createSpace =
 /**/	}
 /**/}
 
-	space =
+	spaceBox =
 	root.$spaces[ spaceRef.fullname ] =
 		{
 			changesDB :
@@ -1403,7 +1403,7 @@ prototype.createSpace =
 		sus.resume( )
 	);
 
-	return space;
+	return spaceBox;
 };
 
 
@@ -1497,7 +1497,7 @@ prototype.serveRequestUpdate =
 		seq,
 		sleepID,
 		timerID,
-		space,
+		spaceBox,
 		spaceRef,
 		user;
 
@@ -1525,14 +1525,14 @@ prototype.serveRequestUpdate =
 		throw jools.reject( 'Invalid password' );
 	}
 
-	space = root.$spaces[ spaceRef.fullname ];
+	spaceBox = root.$spaces[ spaceRef.fullname ];
 
-	if( !space )
+	if( !spaceBox )
 	{
 		return jools.reject( 'Unknown space' );
 	}
 
-	if ( !( seq >= 0 && seq <= space.seqZ ) )
+	if ( !( seq >= 0 && seq <= spaceBox.seqZ ) )
 	{
 		return jools.reject( 'Invalid or missing seq: ' + seq );
 	}
@@ -1583,7 +1583,7 @@ prototype.expireSleep =
 		result,
 		seqZ,
 		sleep,
-		space;
+		spaceBox;
 
 	sleep = root.$upsleep[ sleepID ];
 
@@ -1593,9 +1593,9 @@ prototype.expireSleep =
 		return;
 	}
 
-	space = root.$spaces[ sleep.spaceRef.fullname ];
+	spaceBox = root.$spaces[ sleep.spaceRef.fullname ];
 
-	seqZ = space.seqZ;
+	seqZ = spaceBox.seqZ;
 
 	delete root.$upsleep[ sleepID ];
 
@@ -1660,22 +1660,23 @@ prototype.conveyUpdate =
 	)
 {
 	var
-		space,
+		c,
 		changes,
+		chgA,
 		seqZ,
-		chgA;
+		spaceBox;
 
-	space = root.$spaces[ spaceRef.fullname ];
+	spaceBox = root.$spaces[ spaceRef.fullname ];
 
-	changes = space.changes;
+	changes = spaceBox.changes;
 
-	seqZ = space.seqZ;
+	seqZ = spaceBox.seqZ;
 
 	chgA = [ ];
 
-	for( var c = seq; c < seqZ; c++ )
+	for( c = seq; c < seqZ; c++ )
 	{
-		chgA.push( changes[c] );
+		chgA.push( changes[ c ] );
 	}
 
 	return {
@@ -1798,7 +1799,7 @@ prototype.serveRequestAcquire =
 	var
 		access,
 		passhash,
-		space,
+		spaceBox,
 		user;
 
 	try
@@ -1836,13 +1837,13 @@ prototype.serveRequestAcquire =
 		};
 	}
 
-	space = root.$spaces[ req.spaceRef.fullname ];
+	spaceBox = root.$spaces[ req.spaceRef.fullname ];
 
-	if( !space )
+	if( !spaceBox )
 	{
 		if( req.createMissing === true )
 		{
-			space = yield* root.createSpace( req.spaceRef );
+			spaceBox = yield* root.createSpace( req.spaceRef );
 		}
 		else
 		{
@@ -1858,8 +1859,8 @@ prototype.serveRequestAcquire =
 		ok : true,
 		status : 'served',
 		access : access,
-		seq : space.seqZ,
-		node : space.space
+		seq : spaceBox.seqZ,
+		node : spaceBox.space
 	};
 };
 
