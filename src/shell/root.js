@@ -1235,9 +1235,7 @@ proto.onAcquireSpace =
 {
 	var
 		access,
-		path,
-		spaceTag,
-		spaceUser;
+		path;
 
 	switch( asw.status )
 	{
@@ -1247,16 +1245,17 @@ proto.onAcquireSpace =
 
 		case 'nonexistent' :
 
+			// FIXME have it use a spaceRef
 			root.setPath(
-				root._formJockey.twig.nonExistingSpace.path
-				.append( 'nonSpaceUser' ),
-				asw.spaceUser
+				root._formJockey.twig.nonExistingSpace
+					.path.append( 'nonSpaceUser' ),
+				asw.spaceRef.username
 			);
 
 			root.setPath(
-				root._formJockey.twig.nonExistingSpace.path
-				.append( 'nonSpaceTag' ),
-				asw.spaceTag
+				root._formJockey.twig.nonExistingSpace
+					.path.append( 'nonSpaceTag' ),
+				asw.spaceRef.tag
 			);
 
 			root.setMode( 'nonExistingSpace' );
@@ -1268,15 +1267,13 @@ proto.onAcquireSpace =
 		case 'no access' :
 
 			// FIXME remove get
-			path =
-				this._formJockey.get( 'noAccessToSpace' ).path;
+			path = this._formJockey.get( 'noAccessToSpace' ).path;
 
+			// FIXME have it use a spaceRef
 			this._formJockey =
 				this._formJockey.create(
-					'spaceUser',
-						asw.spaceUser,
-					'spaceTag',
-						asw.spaceTag
+					'spaceUser', asw.spaceRef.username,
+					'spaceTag', asw.spaceRef.tag
 				);
 
 			root.setMode( 'noAccessToSpace' );
@@ -1287,33 +1284,27 @@ proto.onAcquireSpace =
 
 		case 'connection fail' :
 
-			system.failScreen(
-				'Connection failed: ' +
-				asw.message
-			);
+			system.failScreen( 'Connection failed: ' + asw.message );
 
 			return;
 
 		default :
 
 			system.failScreen(
-				'Unknown acquireSpace() status: ' +
-				asw.status + ': ' + asw.message
+				'Unknown acquireSpace() status: '
+				+ asw.status + ': ' + asw.message
 			);
 
 			return;
 	}
 
-	spaceUser = asw.spaceUser,
-
-	spaceTag = asw.spaceTag,
-
 	access = asw.access;
 
 	this.space =
 		asw.space.create(
-			'spaceUser', spaceUser,
-			'spaceTag', spaceTag,
+			// FUTURE have the server already set this at JSON level
+			'spaceUser', asw.spaceRef.username, // FIXME have it use a ref
+			'spaceTag', asw.spaceRef.tag,
 			'access', access,
 			'hover', jion.path.empty,
 			'mark', null,
@@ -1327,11 +1318,8 @@ proto.onAcquireSpace =
 				)
 		);
 
-	this.arrivedAtSpace(
-		spaceUser,
-		spaceTag,
-		access
-	);
+	// FIXME have it use a spaceRef
+	this.arrivedAtSpace( asw.spaceRef.username, asw.spaceRef.tag, access );
 
 	this._draw( );
 };

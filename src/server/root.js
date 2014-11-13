@@ -1773,7 +1773,7 @@ prototype.testAccess =
 		return 'no';
 	}
 
-	if( user === spaceRef.user )
+	if( user === spaceRef.username )
 	{
 		return 'rw';
 	}
@@ -1794,7 +1794,6 @@ prototype.serveRequestAcquire =
 		access,
 		passhash,
 		space,
-		spaceRef,
 		user;
 
 	try
@@ -1810,8 +1809,6 @@ prototype.serveRequestAcquire =
 
 	passhash = req.passhash;
 
-	spaceRef = req.spaceRef;
-
 	user = req.user;
 
 	if(
@@ -1823,7 +1820,9 @@ prototype.serveRequestAcquire =
 		throw jools.reject( 'wrong user/password' );
 	}
 
-	access = root.testAccess( user, spaceRef );
+	access = root.testAccess( user, req.spaceRef );
+
+console.log( 'REQ', req.spaceRef );
 
 	if( access === 'no' )
 	{
@@ -1834,13 +1833,13 @@ prototype.serveRequestAcquire =
 		};
 	}
 
-	space = root.$spaces[ spaceRef.fullname ];
+	space = root.$spaces[ req.spaceRef.fullname ];
 
 	if( !space )
 	{
 		if( req.createMissing === true )
 		{
-			space = yield* root.createSpace( spaceRef );
+			space = yield* root.createSpace( req.spaceRef );
 		}
 		else
 		{

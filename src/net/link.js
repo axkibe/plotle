@@ -255,7 +255,7 @@ link.prototype._onAcquireSpace =
 	{
 		root.onAcquireSpace( reply );
 
-		this._update( );
+		root.link._update( );
 
 		return;
 	}
@@ -269,23 +269,14 @@ link.prototype._onAcquireSpace =
 				jools.immute(
 					{
 						status : reply.status,
-						// FIXME give reference
-						spaceUser : req.spaceRef.username,
-						spaceTag : req.spaceRef.tag
+						spaceRef : req.spaceRef
 					}
 				)
 			);
 
-			this._update( );
+			root.link._update( );
 
 			return;
-	}
-
-	if( reply.node.type !== 'visual.space' )
-	{
-		throw new Error(
-			'acquireSpace(): server served no space '
-		);
 	}
 
 	space = visual.space.createFromJSON( reply.node );
@@ -304,9 +295,7 @@ link.prototype._onAcquireSpace =
 		jools.immute(
 			{
 				status : reply.status,
-				// FIXME use spaceRef
-				spaceUser : req.spaceRef.username,
-				spaceTag : req.spaceRef.tag,
+				spaceRef : req.spaceRef,
 				space : space,
 				access : reply.access
 			}
