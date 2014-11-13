@@ -124,7 +124,9 @@ server =
 
 		resource : require( './resource' ),
 
-		spaceBox : require( './space-box' )
+		spaceBox : require( './space-box' ),
+
+		tools : require( './tools' )
 	};
 
 sha1 = require( '../jools/sha1' );
@@ -853,49 +855,23 @@ prototype.prependConfigFlags =
 
 	resource = root.inventory.twig[ 'config.js' ];
 
-	root.inventory =
-		root.inventory.updateResource(
-			resource,
-			resource.create(
-				'data',
-					'var JION = false;\n' +
-					'var CHECK = true;\n' +
-					'var SERVER = false;\n' +
-					'var SHELL = true;\n' +
-					resource.data
+	root.create(
+		'inventory',
+			root.inventory.updateResource(
+				resource,
+				resource.create(
+					'data',
+						'var JION = false;\n'
+						+ 'var CHECK = true;\n'
+						+ 'var SERVER = false;\n'
+						+ 'var SHELL = true;\n'
+						+ resource.data
 				)
-		);
+			)
+	);
 };
 
 
-/*
-| returns a string with a base64 counting
-|
-| FIXME move to jools.
-*/
-var b64Count =
-	function(
-		c
-	)
-{
-	var
-		mask,
-		result;
-
-	mask = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_';
-
-	result = '';
-
-	do
-	{
-		result = mask[ c & 0x3F ] + result;
-
-		c = c >> 6;
-	}
-	while( c > 0 );
-
-	return result;
-};
 
 /*
 | Makes additional mangles
@@ -952,14 +928,11 @@ prototype.extraMangle =
 
 	astProps =
 		{
-			'property' :
-				'p',
-			'key' :
-				'p',
+			'property' : 'p',
+			'key' : 'p',
 			// string values are mangled
 			// but do not flag properties missed
-			'value' :
-				's'
+			'value' : 's'
 		};
 
 	// cuts away empty lines
@@ -991,9 +964,7 @@ prototype.extraMangle =
 			);
 		}
 
-		if(
-			mangle[ e ] || noMangle[ e ]
-		)
+		if( mangle[ e ] || noMangle[ e ] )
 		{
 			throw new Error(
 				'double entry: "' + e + '"'
@@ -1042,7 +1013,7 @@ prototype.extraMangle =
 	{
 		at = mangleList[ a ];
 
-		mangle[ at ] = '$$' + b64Count( a );
+		mangle[ at ] = '$$' + server.tools.b64Encode( a );
 	}
 
 	if( !config.noWrite )
