@@ -3,6 +3,8 @@
 |
 | DO NOT EDIT!
 */
+
+
 /*
 | Export.
 */
@@ -18,11 +20,7 @@ jsParser = jsParser || { };
 */
 var
 	jion,
-
-
 	jools,
-
-
 	jion;
 
 
@@ -32,6 +30,7 @@ var
 (
 function( ) {
 'use strict';
+
 
 /*
 | Node includes.
@@ -45,11 +44,13 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
+
 /*
 | Constructor.
 */
 var
 	Constructor;
+
 
 Constructor =
 	function(
@@ -73,19 +74,23 @@ Constructor =
 	jools.immute( this );
 };
 
+
 /*
 | Prototype shortcut
 */
 var
 	prototype;
 
+
 prototype = Constructor.prototype;
+
 
 /*
 | Jion.
 */
 var
 	tokenSpec;
+
 
 tokenSpec =
 jsParser.tokenSpec =
@@ -94,10 +99,12 @@ jsParser.tokenSpec =
 			prototype
 	};
 
+
 if( SERVER )
 {
 	module.exports = tokenSpec;
 }
+
 
 /*
 | Creates a new tokenSpec object.
@@ -110,19 +117,12 @@ prototype.create =
 {
 	var
 		a,
-
 		aZ,
-
 		arg,
-
 		inherit,
-
 		v_astCreator,
-
 		v_handler,
-
 		v_postPrec,
-
 		v_prePrec;
 
 	if( this !== tokenSpec )
@@ -279,25 +279,30 @@ prototype.create =
 	);
 };
 
+
 /*
 | Reflection.
 */
 prototype.reflect = 'jsParser.tokenSpec';
+
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'tokenSpec';
 
+
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
+
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
+
 
 /*
 | Tests equality of object.

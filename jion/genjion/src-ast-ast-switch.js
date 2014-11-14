@@ -3,6 +3,8 @@
 |
 | DO NOT EDIT!
 */
+
+
 /*
 | Export.
 */
@@ -18,14 +20,8 @@ ast = ast || { };
 */
 var
 	jion,
-
-
 	jools,
-
-
 	ast,
-
-
 	jion;
 
 
@@ -35,6 +31,7 @@ var
 (
 function( ) {
 'use strict';
+
 
 /*
 | Node includes.
@@ -54,11 +51,13 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
+
 /*
 | Constructor.
 */
 var
 	Constructor;
+
 
 Constructor =
 	function(
@@ -83,19 +82,23 @@ Constructor =
 	jools.immute( ranks );
 };
 
+
 /*
 | Prototype shortcut
 */
 var
 	prototype;
 
+
 prototype = Constructor.prototype;
+
 
 /*
 | Jion.
 */
 var
 	astSwitch;
+
 
 astSwitch =
 ast.astSwitch =
@@ -104,10 +107,12 @@ ast.astSwitch =
 			prototype
 	};
 
+
 if( SERVER )
 {
 	module.exports = astSwitch;
 }
+
 
 /*
 | Creates a new astSwitch object.
@@ -120,25 +125,15 @@ prototype.create =
 {
 	var
 		a,
-
 		aZ,
-
 		arg,
-
 		inherit,
-
 		key,
-
 		rank,
-
 		ranks,
-
 		twig,
-
 		twigDup,
-
 		v_defaultCase,
-
 		v_statement;
 
 	if( this !== astSwitch )
@@ -359,40 +354,48 @@ prototype.create =
 	return new Constructor( twig, ranks, v_defaultCase, v_statement );
 };
 
+
 /*
 | Reflection.
 */
 prototype.reflect = 'ast.astSwitch';
+
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'astSwitch';
 
+
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
+
 
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
 
+
 /*
 | Returns a twig by rank.
 */
 prototype.atRank = jion.proto.atRank;
+
 
 /*
 | Gets the rank of a key.
 */
 prototype.rankOf = jion.proto.rankOf;
 
+
 /*
 | Creates a new unique identifier.
 */
 prototype.newUID = jion.proto.newUID;
+
 
 /*
 | Tests equality of object.
@@ -404,9 +407,7 @@ prototype.equals =
 {
 	var
 		a,
-
 		aZ,
-
 		key;
 
 	if( this === obj )

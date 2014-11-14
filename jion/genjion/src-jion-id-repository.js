@@ -3,6 +3,8 @@
 |
 | DO NOT EDIT!
 */
+
+
 /*
 | Export.
 */
@@ -18,11 +20,7 @@ jion = jion || { };
 */
 var
 	jion,
-
-
 	jools,
-
-
 	jion;
 
 
@@ -32,6 +30,7 @@ var
 (
 function( ) {
 'use strict';
+
 
 /*
 | Node includes.
@@ -45,11 +44,13 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
+
 /*
 | Constructor.
 */
 var
 	Constructor;
+
 
 Constructor =
 	function(
@@ -72,19 +73,23 @@ Constructor =
 	jools.immute( this );
 };
 
+
 /*
 | Prototype shortcut
 */
 var
 	prototype;
 
+
 prototype = Constructor.prototype;
+
 
 /*
 | Jion.
 */
 var
 	idRepository;
+
 
 idRepository =
 jion.idRepository =
@@ -93,10 +98,12 @@ jion.idRepository =
 			prototype
 	};
 
+
 if( SERVER )
 {
 	module.exports = idRepository;
 }
+
 
 /*
 | Creates a new idRepository object.
@@ -109,15 +116,10 @@ prototype.create =
 {
 	var
 		a,
-
 		aZ,
-
 		arg,
-
 		inherit,
-
 		v_primitives,
-
 		v_units;
 
 	if( this !== idRepository )
@@ -203,25 +205,30 @@ prototype.create =
 	return new Constructor( v_primitives, v_units );
 };
 
+
 /*
 | Reflection.
 */
 prototype.reflect = 'jion.idRepository';
+
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'idRepository';
 
+
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
+
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
+
 
 /*
 | Tests equality of object.

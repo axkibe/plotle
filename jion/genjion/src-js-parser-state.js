@@ -3,6 +3,8 @@
 |
 | DO NOT EDIT!
 */
+
+
 /*
 | Export.
 */
@@ -18,11 +20,7 @@ jsParser = jsParser || { };
 */
 var
 	jion,
-
-
 	jools,
-
-
 	jion;
 
 
@@ -32,6 +30,7 @@ var
 (
 function( ) {
 'use strict';
+
 
 /*
 | Node includes.
@@ -45,11 +44,13 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
+
 /*
 | Constructor.
 */
 var
 	Constructor;
+
 
 Constructor =
 	function(
@@ -70,19 +71,23 @@ Constructor =
 	jools.immute( this );
 };
 
+
 /*
 | Prototype shortcut
 */
 var
 	prototype;
 
+
 prototype = Constructor.prototype;
+
 
 /*
 | Jion.
 */
 var
 	state;
+
 
 state =
 jsParser.state =
@@ -91,10 +96,12 @@ jsParser.state =
 			prototype
 	};
 
+
 if( SERVER )
 {
 	module.exports = state;
 }
+
 
 /*
 | Creates a new state object.
@@ -107,19 +114,12 @@ prototype.create =
 {
 	var
 		a,
-
 		aZ,
-
 		arg,
-
 		inherit,
-
 		v_ast,
-
 		v_pos,
-
 		v_prec,
-
 		v_tokens;
 
 	if( this !== state )
@@ -267,25 +267,30 @@ prototype.create =
 	return new Constructor( v_ast, v_pos, v_prec, v_tokens );
 };
 
+
 /*
 | Reflection.
 */
 prototype.reflect = 'jsParser.state';
+
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'state';
 
+
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
+
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
+
 
 /*
 | Tests equality of object.

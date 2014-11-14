@@ -3,6 +3,8 @@
 |
 | DO NOT EDIT!
 */
+
+
 /*
 | Export.
 */
@@ -18,11 +20,7 @@ format = format || { };
 */
 var
 	jion,
-
-
 	jools,
-
-
 	jion;
 
 
@@ -32,6 +30,7 @@ var
 (
 function( ) {
 'use strict';
+
 
 /*
 | Node includes.
@@ -45,11 +44,13 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
+
 /*
 | Constructor.
 */
 var
 	Constructor;
+
 
 Constructor =
 	function(
@@ -70,19 +71,23 @@ Constructor =
 	jools.immute( this );
 };
 
+
 /*
 | Prototype shortcut
 */
 var
 	prototype;
 
+
 prototype = Constructor.prototype;
+
 
 /*
 | Jion.
 */
 var
 	context;
+
 
 context =
 format.context =
@@ -91,10 +96,12 @@ format.context =
 			prototype
 	};
 
+
 if( SERVER )
 {
 	module.exports = context;
 }
+
 
 /*
 | Creates a new context object.
@@ -107,19 +114,12 @@ prototype.create =
 {
 	var
 		a,
-
 		aZ,
-
 		arg,
-
 		inherit,
-
 		v_check,
-
 		v_indent,
-
 		v_inline,
-
 		v_root;
 
 	if( this !== context )
@@ -290,25 +290,30 @@ prototype.create =
 	return new Constructor( v_check, v_indent, v_inline, v_root );
 };
 
+
 /*
 | Reflection.
 */
 prototype.reflect = 'format.context';
+
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'context';
 
+
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
+
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
+
 
 /*
 | Tests equality of object.

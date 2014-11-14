@@ -1201,11 +1201,14 @@ formatCapsuleFunc =
 		throw new Error( );
 	}
 
-	text = 'function( ) {\n';
-
-	text += formatBlock( context.Dec, func.block, true );
-
-	text += '\n\n}';
+	text =
+		'function( ) {\n'
+		+ formatBlock(
+			context.Dec.create( 'root', true ),
+			func.block,
+			true
+		)
+		+ '\n\n}';
 
 	return text;
 };
@@ -1221,8 +1224,10 @@ formatFunc =
 	)
 {
 	var
+		a,
 		arg,
 		argSpace,
+		aZ,
 		comma,
 		text;
 
@@ -1242,7 +1247,7 @@ formatFunc =
 		text += 'function(' + context.sep;
 
 		for(
-			var a = 0, aZ = func.ranks.length;
+			a = 0, aZ = func.ranks.length;
 			a < aZ;
 			a++
 		)
@@ -1251,12 +1256,12 @@ formatFunc =
 
 			comma =
 				a + 1 < aZ
-				?  ','
+				? ','
 				: '';
 
 			argSpace =
 				arg.name
-				?  ' '
+				? ' '
 				: '';
 
 			text +=
@@ -1264,10 +1269,9 @@ formatFunc =
 				+ ( arg.name || '' )
 				+ comma
 				+ (
-					arg.comment ?
-						argSpace + '// ' + arg.comment
-						:
-						''
+					arg.comment
+					?  argSpace + '// ' + arg.comment
+					: ''
 				)
 				+ '\n';
 		}
@@ -1306,13 +1310,10 @@ formatStatement =
 
 	if(
 		lookBehind
-		&&
-		lookBehind.reflect !== 'ast.astComment'
-		&&
-		!(
-			lookBehind.reflect === 'ast.aCarDec'
-			&&
-			statement.reflect === 'ast.astVarDec'
+		&& lookBehind.reflect !== 'ast.astComment'
+		&& !(
+			lookBehind.reflect === 'ast.astVarDec'
+			&& statement.reflect === 'ast.astVarDec'
 		)
 	)
 	{
@@ -1332,6 +1333,14 @@ formatStatement =
 
 	if( statement.reflect === 'ast.astComment' )
 	{
+		if(
+			lookBehind
+			&& lookBehind.reflect === 'ast.astComment'
+		)
+		{
+			text += '\n\n';
+		}
+
 		text += formatComment( context, statement );
 
 		return text;
@@ -2214,11 +2223,7 @@ formatVarDec =
 
 	text = '';
 
-	if(
-		context.root
-		&&
-		varDec.assign
-	)
+	if( context.root && varDec.assign )
 	{
 		if(
 			varDec.assign.reflect === 'ast.astFunc'
@@ -2228,8 +2233,7 @@ formatVarDec =
 		}
 		else if(
 			varDec.assign.reflect === 'ast.astAssign'
-			&&
-			varDec.assign.right.reflect === 'ast.astFunc'
+			&& varDec.assign.right.reflect === 'ast.astFunc'
 		)
 		{
 			// FUTURUE allow abitrary amount of assignments
@@ -2241,8 +2245,7 @@ formatVarDec =
 	{
 		if(
 			!lookBehind
-			||
-			lookBehind.reflect !== 'ast.astVarDec'
+			|| lookBehind.reflect !== 'ast.astVarDec'
 		)
 		{
 			if( !context.inline )
@@ -2267,29 +2270,25 @@ formatVarDec =
 	else
 	{
 		// root functions are not combined in VarDecs
-		text =
-			context.tab + 'var ' + varDec.name;
+		text = context.tab + 'var ' + varDec.name;
 	}
 
 	if( varDec.assign )
 	{
-		text +=
-			' =' + context.sep;
+		text += ' =' + context.sep;
 
 		if( varDec.assign.reflect !== 'ast.astAssign' )
 		{
 			context = context.Inc;
 		}
 
-		aText =
-			null;
+		aText = null;
 
 		try
 		{
 			aText =
 				context.tab
-				+
-				formatExpression(
+				+ formatExpression(
 					context.Inline,
 					varDec.assign,
 					null

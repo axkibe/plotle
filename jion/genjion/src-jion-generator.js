@@ -3,6 +3,8 @@
 |
 | DO NOT EDIT!
 */
+
+
 /*
 | Export.
 */
@@ -18,11 +20,7 @@ jion = jion || { };
 */
 var
 	jion,
-
-
 	jools,
-
-
 	jion;
 
 
@@ -32,6 +30,7 @@ var
 (
 function( ) {
 'use strict';
+
 
 /*
 | Node includes.
@@ -45,11 +44,13 @@ if( SERVER )
 	jion.proto = require( '../../src/jion/proto' );
 }
 
+
 /*
 | Constructor.
 */
 var
 	Constructor;
+
 
 Constructor =
 	function(
@@ -63,19 +64,23 @@ Constructor =
 	jools.immute( this );
 };
 
+
 /*
 | Prototype shortcut
 */
 var
 	prototype;
 
+
 prototype = Constructor.prototype;
+
 
 /*
 | Jion.
 */
 var
 	generator;
+
 
 generator =
 jion.generator =
@@ -84,10 +89,12 @@ jion.generator =
 			prototype
 	};
 
+
 if( SERVER )
 {
 	module.exports = generator;
 }
+
 
 /*
 | Creates a new generator object.
@@ -100,13 +107,9 @@ prototype.create =
 {
 	var
 		a,
-
 		aZ,
-
 		arg,
-
 		inherit,
-
 		v_jion;
 
 	if( this !== generator )
@@ -165,25 +168,30 @@ prototype.create =
 	return new Constructor( v_jion );
 };
 
+
 /*
 | Reflection.
 */
 prototype.reflect = 'jion.generator';
+
 
 /*
 | Name Reflection.
 */
 prototype.reflectName = 'generator';
 
+
 /*
 | Sets values by path.
 */
 prototype.setPath = jion.proto.setPath;
 
+
 /*
 | Gets values by path
 */
 prototype.getPath = jion.proto.getPath;
+
 
 /*
 | Tests equality of object.
