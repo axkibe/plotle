@@ -918,7 +918,7 @@ generator.prototype.genCreatorVariables =
 
 	if( this.creatorHasFreeStringsParser )
 	{
-		varList.push( 'arg' );
+		varList.push( 'arg', 'a', 'aZ' );
 	}
 
 	if( this.twig )
@@ -1218,9 +1218,9 @@ generator.prototype.genCreatorFreeStringsParser =
 	block =
 		block
 		.astFor(
-			astVList( )
-				.astVarDec( 'a', 0 )
-				.astVarDec( 'aZ', 'arguments.length' ),
+			astCommaList( )
+			.astAssign( 'a', 0 )
+			.astAssign( 'aZ', 'arguments.length' ),
 			'a < aZ',
 			astPlusAssign( 'a', 2 ),
 			loop
@@ -2717,8 +2717,8 @@ generator.prototype.genEquals =
 			)
 			.astFor(
 				astCommaList( )
-				.astAssign( 'a', 0 )
-				.astAssign( 'aZ', 'this.ranks.length' ),
+				.astAssign( 'a', 0 ) // FIXME ast() 
+				.astAssign( 'aZ', 'this.ranks.length' ), // FIXME ast()
 				'a < aZ',
 				'++a',
 				twigTestLoopBody

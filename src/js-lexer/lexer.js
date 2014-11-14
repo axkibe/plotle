@@ -58,6 +58,8 @@ jsLexer.tokenize =
 		c++
 	)
 	{
+		// FUTURE make the loop body a sub func.
+
 		ch = code[ c ];
 
 		if( ch.match( /\s/ ) )
@@ -137,15 +139,15 @@ jsLexer.tokenize =
 				value += code[ c ];
 
 				c++;
-			
+
 				if( c >= cZ )
 				{
 					throw new Error( '" missing' );
 				}
 			}
-			
+
 			tokens.push( token.create( 'type', 'string', 'value', value ) );
-			
+
 			continue;
 		}
 
@@ -168,14 +170,12 @@ jsLexer.tokenize =
 
 				if(
 					c + 1 < cZ
-					&&
-					code[ c + 1 ] === '='
+					&& code[ c + 1 ] === '='
 				)
 				{
 					if(
 						c + 2 < cZ
-						&&
-						code[ c + 2 ] === '='
+						&& code[ c + 2 ] === '='
 					)
 					{
 						tokens.push( token.create( 'type', '===' ) );
@@ -200,14 +200,12 @@ jsLexer.tokenize =
 
 				if(
 					c + 1 < cZ
-					&&
-					code[ c + 1 ] === '='
+					&& code[ c + 1 ] === '='
 				)
 				{
 					if(
 						c + 2 < cZ
-						&&
-						code[ c + 2 ] === '='
+						&& code[ c + 2 ] === '='
 					)
 					{
 						tokens.push( token.create( 'type', '!==' ) );
@@ -232,8 +230,7 @@ jsLexer.tokenize =
 
 				if(
 					c + 1 < cZ
-					&&
-					code[ c + 1 ] === '+'
+					&& code[ c + 1 ] === '+'
 				)
 				{
 					tokens.push( token.create( 'type', '++' ) );
@@ -251,8 +248,7 @@ jsLexer.tokenize =
 
 				if(
 					c + 1 < cZ
-					&&
-					code[ c + 1 ] === '|'
+					&& code[ c + 1 ] === '|'
 				)
 				{
 					tokens.push( token.create( 'type', '||' ) );
@@ -270,8 +266,7 @@ jsLexer.tokenize =
 
 				if(
 					c + 1 < cZ
-					&&
-					code[ c + 1 ] === '&'
+					&& code[ c + 1 ] === '&'
 				)
 				{
 					tokens.push( token.create( 'type', '&&' ) );
