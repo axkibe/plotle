@@ -1,7 +1,3 @@
-. fullname
-. nonSpaceRef
-. ideoloomHome
-. ideoloomSandbox
 . 0-line
 > 1
 . Create
@@ -380,6 +376,7 @@
 . frontAt
 . frontPath
 . fullSkewNW
+. fullname
 . func
 > function
 . generic
@@ -432,7 +429,9 @@
 . iconRemove
 . iconStyle
 . id
+. ideoloomHome
 . ideoloomHomeButton
+. ideoloomSandbox
 . ideoloomSandboxButton
 . ignores
 . immute
@@ -539,6 +538,7 @@
 . noButton
 > node
 . nonExistingSpace
+. nonSpaceRef
 . normal
 . note
 > null
