@@ -58,27 +58,29 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_capsule, // the capsule
-			v_hasJSON, // boolean if the jion supports jsonfying
-			v_header, // header comment
-			v_jionID, // the id of the jion associated
-			v_preamble // preamble to capsule
-		)
-	{
-		this.capsule = v_capsule;
+	Constructor;
 
-		this.hasJSON = v_hasJSON;
+Constructor =
+	function(
+		v_capsule, // the capsule
+		v_hasJSON, // boolean if the jion supports jsonfying
+		v_header, // header comment
+		v_jionID, // the id of the jion associated
+		v_preamble // preamble to capsule
+	)
+{
+	this.capsule = v_capsule;
 
-		this.header = v_header;
+	this.hasJSON = v_hasJSON;
 
-		this.jionID = v_jionID;
+	this.header = v_header;
 
-		this.preamble = v_preamble;
+	this.jionID = v_jionID;
 
-		jools.immute( this );
-	};
+	this.preamble = v_preamble;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -116,6 +118,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_capsule,
@@ -149,9 +153,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

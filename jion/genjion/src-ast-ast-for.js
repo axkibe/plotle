@@ -56,24 +56,26 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_block, // the for block
-			v_condition, // the continue condition
-			v_init, // the initialization
-			v_iterate // the iteration expression
-		)
-	{
-		this.block = v_block;
+	Constructor;
 
-		this.condition = v_condition;
+Constructor =
+	function(
+		v_block, // the for block
+		v_condition, // the continue condition
+		v_init, // the initialization
+		v_iterate // the iteration expression
+	)
+{
+	this.block = v_block;
 
-		this.init = v_init;
+	this.condition = v_condition;
 
-		this.iterate = v_iterate;
+	this.init = v_init;
 
-		jools.immute( this );
-	};
+	this.iterate = v_iterate;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -111,6 +113,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_block,
@@ -140,9 +144,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

@@ -49,18 +49,20 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_left, // left-hand side
-			v_right // right-hand side
-		)
-	{
-		this.left = v_left;
+	Constructor;
 
-		this.right = v_right;
+Constructor =
+	function(
+		v_left, // left-hand side
+		v_right // right-hand side
+	)
+{
+	this.left = v_left;
 
-		jools.immute( this );
-	};
+	this.right = v_right;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -98,6 +100,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_left,
@@ -119,9 +123,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

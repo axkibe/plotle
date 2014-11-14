@@ -49,22 +49,24 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			twig, // twig
-			ranks // twig ranks
-		)
-	{
-		this.twig = twig;
+	Constructor;
 
-		this.ranks = ranks;
+Constructor =
+	function(
+		twig, // twig
+		ranks // twig ranks
+	)
+{
+	this.twig = twig;
 
-		jools.immute( this );
+	this.ranks = ranks;
 
-		jools.immute( twig );
+	jools.immute( this );
 
-		jools.immute( ranks );
-	};
+	jools.immute( twig );
+
+	jools.immute( ranks );
+};
 
 /*
 | Prototype shortcut
@@ -102,6 +104,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		key,
@@ -139,9 +143,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

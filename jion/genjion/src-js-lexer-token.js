@@ -49,23 +49,25 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_type, // the token type
-			v_value // the token value
-		)
+	Constructor;
+
+Constructor =
+	function(
+		v_type, // the token type
+		v_value // the token value
+	)
+{
+	this.type = v_type;
+
+	if( v_value !== undefined )
 	{
-		this.type = v_type;
+		this.value = v_value;
+	}
 
-		if( v_value !== undefined )
-		{
-			this.value = v_value;
-		}
+	this._init( );
 
-		this._init( );
-
-		jools.immute( this );
-	};
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -103,6 +105,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_type,
@@ -124,9 +128,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

@@ -49,18 +49,20 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_assign, // Assignment of variable
-			v_name // variable name
-		)
-	{
-		this.assign = v_assign;
+	Constructor;
 
-		this.name = v_name;
+Constructor =
+	function(
+		v_assign, // Assignment of variable
+		v_name // variable name
+	)
+{
+	this.assign = v_assign;
 
-		jools.immute( this );
-	};
+	this.name = v_name;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -98,6 +100,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_assign,
@@ -119,9 +123,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

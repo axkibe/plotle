@@ -49,8 +49,9 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function( ) { jools.immute( this ); };
+	Constructor;
+
+Constructor = function( ) { jools.immute( this ); };
 
 /*
 | Prototype shortcut
@@ -82,8 +83,9 @@ if( SERVER )
 | Singleton
 */
 var
-	_singleton =
-		null;
+	_singleton;
+
+_singleton = null;
 
 /*
 | Creates a new astNull object.

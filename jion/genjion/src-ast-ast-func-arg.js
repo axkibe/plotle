@@ -49,18 +49,20 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_comment, // argument comment
-			v_name // argument name
-		)
-	{
-		this.comment = v_comment;
+	Constructor;
 
-		this.name = v_name;
+Constructor =
+	function(
+		v_comment, // argument comment
+		v_name // argument name
+	)
+{
+	this.comment = v_comment;
 
-		jools.immute( this );
-	};
+	this.name = v_name;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -98,6 +100,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_comment,
@@ -119,9 +123,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

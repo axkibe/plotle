@@ -49,27 +49,29 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_astCreator, // For some handlers, the ast creator function for it to call
-			v_handler, // Handler function to be called
-			v_postPrec, // operator precedence in postfix conditions
-			v_prePrec // operator precedence in prefix conditions
-		)
+	Constructor;
+
+Constructor =
+	function(
+		v_astCreator, // For some handlers, the ast creator function for it to call
+		v_handler, // Handler function to be called
+		v_postPrec, // operator precedence in postfix conditions
+		v_prePrec // operator precedence in prefix conditions
+	)
+{
+	if( v_astCreator !== undefined )
 	{
-		if( v_astCreator !== undefined )
-		{
-			this.astCreator = v_astCreator;
-		}
+		this.astCreator = v_astCreator;
+	}
 
-		this.handler = v_handler;
+	this.handler = v_handler;
 
-		this.postPrec = v_postPrec;
+	this.postPrec = v_postPrec;
 
-		this.prePrec = v_prePrec;
+	this.prePrec = v_prePrec;
 
-		jools.immute( this );
-	};
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -107,6 +109,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_astCreator,
@@ -136,9 +140,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

@@ -49,24 +49,26 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_ast, // current ast entity
-			v_pos, // current position in token ray
-			v_prec, // current precedence
-			v_tokens // ray of tokens to parse
-		)
-	{
-		this.ast = v_ast;
+	Constructor;
 
-		this.pos = v_pos;
+Constructor =
+	function(
+		v_ast, // current ast entity
+		v_pos, // current position in token ray
+		v_prec, // current precedence
+		v_tokens // ray of tokens to parse
+	)
+{
+	this.ast = v_ast;
 
-		this.prec = v_prec;
+	this.pos = v_pos;
 
-		this.tokens = v_tokens;
+	this.prec = v_prec;
 
-		jools.immute( this );
-	};
+	this.tokens = v_tokens;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -104,6 +106,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_ast,
@@ -133,9 +137,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

@@ -58,28 +58,30 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			twig, // twig
-			ranks, // twig ranks
-			v_defaultCase, // the default block
-			v_statement // the statement expression
-		)
-	{
-		this.defaultCase = v_defaultCase;
+	Constructor;
 
-		this.statement = v_statement;
+Constructor =
+	function(
+		twig, // twig
+		ranks, // twig ranks
+		v_defaultCase, // the default block
+		v_statement // the statement expression
+	)
+{
+	this.defaultCase = v_defaultCase;
 
-		this.twig = twig;
+	this.statement = v_statement;
 
-		this.ranks = ranks;
+	this.twig = twig;
 
-		jools.immute( this );
+	this.ranks = ranks;
 
-		jools.immute( twig );
+	jools.immute( this );
 
-		jools.immute( ranks );
-	};
+	jools.immute( twig );
+
+	jools.immute( ranks );
+};
 
 /*
 | Prototype shortcut
@@ -117,6 +119,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		key,
@@ -162,9 +166,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

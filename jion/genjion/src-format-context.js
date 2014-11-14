@@ -49,24 +49,26 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_check, // true if within optinal CHECK code
-			v_indent, // the indentation
-			v_inline, // true if to be formated inline
-			v_root // true if in root context
-		)
-	{
-		this.check = v_check;
+	Constructor;
 
-		this.indent = v_indent;
+Constructor =
+	function(
+		v_check, // true if within optinal CHECK code
+		v_indent, // the indentation
+		v_inline, // true if to be formated inline
+		v_root // true if in root context
+	)
+{
+	this.check = v_check;
 
-		this.inline = v_inline;
+	this.indent = v_indent;
 
-		this.root = v_root;
+	this.inline = v_inline;
 
-		jools.immute( this );
-	};
+	this.root = v_root;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -104,6 +106,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_check,
@@ -133,9 +137,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

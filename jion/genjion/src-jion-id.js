@@ -49,26 +49,28 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_name, // the name part of the id if applicable
-			v_unit // the unit part of the id if applicable
-		)
+	Constructor;
+
+Constructor =
+	function(
+		v_name, // the name part of the id if applicable
+		v_unit // the unit part of the id if applicable
+	)
+{
+	if( v_name !== undefined )
 	{
-		if( v_name !== undefined )
-		{
-			this.name = v_name;
-		}
+		this.name = v_name;
+	}
 
-		if( v_unit !== undefined )
-		{
-			this.unit = v_unit;
-		}
+	if( v_unit !== undefined )
+	{
+		this.unit = v_unit;
+	}
 
-		this._init( );
+	this._init( );
 
-		jools.immute( this );
-	};
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -106,6 +108,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_name,
@@ -127,9 +131,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

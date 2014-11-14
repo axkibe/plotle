@@ -482,6 +482,11 @@ generator.prototype._init =
 	this.equals = jion.equals;
 
 	this.alike = jion.alike;
+
+	this.creatorHasFreeStringsParser =
+		this.twig
+		|| this.ray
+		|| this.attrList.length > 0;
 };
 
 
@@ -823,7 +828,9 @@ generator.prototype.genConstructor =
 	}
 
 	capsule =
-		capsule.astVarDec( 'Constructor', constructor );
+		capsule
+		.astVarDec( 'Constructor' )
+		.astAssign( 'Constructor', constructor );
 
 	// subclass
 	if( this.subclass )
@@ -880,7 +887,8 @@ generator.prototype.genSingleton =
 	return (
 		capsule
 		.astComment( 'Singleton' )
-		.astVarDec( '_singleton', null )
+		.astVarDec( '_singleton' )
+		.astAssign( '_singleton', null )
 	);
 };
 
@@ -897,8 +905,9 @@ generator.prototype.genCreatorVariables =
 		a,
 		aZ,
 		name,
-		varList =
-			[ ];
+		varList;
+
+	varList = [ ];
 
 	for( name in this.attributes )
 	{
@@ -906,6 +915,11 @@ generator.prototype.genCreatorVariables =
 	}
 
 	varList.push( 'inherit' );
+
+	if( this.creatorHasFreeStringsParser )
+	{
+		varList.push( 'arg' );
+	}
 
 	if( this.twig )
 	{
@@ -920,10 +934,7 @@ generator.prototype.genCreatorVariables =
 
 	if( this.ray )
 	{
-		varList.push(
-			'ray',
-			'rayDup'
-		);
+		varList.push( 'ray', 'rayDup' );
 	}
 
 	varList.sort( );
@@ -1048,20 +1059,9 @@ generator.prototype.genCreatorFreeStringsParser =
 		switchExpr,
 		twigDupCheck;
 
-	if(
-		!this.twig
-		&& !this.ray
-		&& this.attrList.length === 0
-	)
-	{
-		// no free strings parses needed
-		// FIXME check for no arguments
-		return block;
-	}
-
 	loop =
 		astBlock( )
-		.astVarDec( 'arg', 'arguments[ a + 1 ]' );
+		.astAssign( 'arg', 'arguments[ a + 1 ]' );
 
 	switchExpr = astSwitch( 'arguments[ a ]' );
 
@@ -1852,7 +1852,10 @@ generator.prototype.genCreator =
 
 	block = this.genCreatorInheritanceReceiver( block );
 
-	block = this.genCreatorFreeStringsParser( block );
+	if( this.creatorHasFreeStringsParser )
+	{
+		block = this.genCreatorFreeStringsParser( block );
+	}
 
 	block = this.genCreatorDefaults( block, false );
 

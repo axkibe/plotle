@@ -49,18 +49,20 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_expr, // the expression to get the member of
-			v_member // the members expression
-		)
-	{
-		this.expr = v_expr;
+	Constructor;
 
-		this.member = v_member;
+Constructor =
+	function(
+		v_expr, // the expression to get the member of
+		v_member // the members expression
+	)
+{
+	this.expr = v_expr;
 
-		jools.immute( this );
-	};
+	this.member = v_member;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -98,6 +100,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_expr,
@@ -119,9 +123,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

@@ -49,17 +49,19 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_jion // the jion definition
-		)
-	{
-		this.jion = v_jion;
+	Constructor;
 
-		this._init( );
+Constructor =
+	function(
+		v_jion // the jion definition
+	)
+{
+	this.jion = v_jion;
 
-		jools.immute( this );
-	};
+	this._init( );
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -97,6 +99,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_jion;
@@ -114,9 +118,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

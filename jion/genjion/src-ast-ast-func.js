@@ -56,31 +56,33 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			twig, // twig
-			ranks, // twig ranks
-			v_block, // function code
-			v_capsule // if true its the capsule, to be formatted a little different
-		)
+	Constructor;
+
+Constructor =
+	function(
+		twig, // twig
+		ranks, // twig ranks
+		v_block, // function code
+		v_capsule // if true its the capsule, to be formatted a little different
+	)
+{
+	this.block = v_block;
+
+	if( v_capsule !== undefined )
 	{
-		this.block = v_block;
+		this.capsule = v_capsule;
+	}
 
-		if( v_capsule !== undefined )
-		{
-			this.capsule = v_capsule;
-		}
+	this.twig = twig;
 
-		this.twig = twig;
+	this.ranks = ranks;
 
-		this.ranks = ranks;
+	jools.immute( this );
 
-		jools.immute( this );
+	jools.immute( twig );
 
-		jools.immute( twig );
-
-		jools.immute( ranks );
-	};
+	jools.immute( ranks );
+};
 
 /*
 | Prototype shortcut
@@ -118,6 +120,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		key,
@@ -163,9 +167,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

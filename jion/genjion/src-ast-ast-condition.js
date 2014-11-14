@@ -49,21 +49,23 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_condition, // the condition
-			v_elsewise, // the else condition
-			v_then // the then expression
-		)
-	{
-		this.condition = v_condition;
+	Constructor;
 
-		this.elsewise = v_elsewise;
+Constructor =
+	function(
+		v_condition, // the condition
+		v_elsewise, // the else condition
+		v_then // the then expression
+	)
+{
+	this.condition = v_condition;
 
-		this.then = v_then;
+	this.elsewise = v_elsewise;
 
-		jools.immute( this );
-	};
+	this.then = v_then;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -101,6 +103,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_condition,
@@ -126,9 +130,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

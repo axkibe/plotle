@@ -56,21 +56,23 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_block, // the for block
-			v_object, // the object expression to iterate over
-			v_variable // the loop variable
-		)
-	{
-		this.block = v_block;
+	Constructor;
 
-		this.object = v_object;
+Constructor =
+	function(
+		v_block, // the for block
+		v_object, // the object expression to iterate over
+		v_variable // the loop variable
+	)
+{
+	this.block = v_block;
 
-		this.variable = v_variable;
+	this.object = v_object;
 
-		jools.immute( this );
-	};
+	this.variable = v_variable;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -108,6 +110,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_block,
@@ -133,9 +137,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

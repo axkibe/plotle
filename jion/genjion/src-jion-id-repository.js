@@ -49,26 +49,28 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_primitives, // set of all primites, that is ids without unit
-			v_units // a set of all units with all names
-		)
+	Constructor;
+
+Constructor =
+	function(
+		v_primitives, // set of all primites, that is ids without unit
+		v_units // a set of all units with all names
+	)
+{
+	if( v_primitives !== undefined )
 	{
-		if( v_primitives !== undefined )
-		{
-			this.primitives = v_primitives;
-		}
+		this.primitives = v_primitives;
+	}
 
-		if( v_units !== undefined )
-		{
-			this.units = v_units;
-		}
+	if( v_units !== undefined )
+	{
+		this.units = v_units;
+	}
 
-		this._init( );
+	this._init( );
 
-		jools.immute( this );
-	};
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -106,6 +108,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_primitives,
@@ -127,9 +131,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

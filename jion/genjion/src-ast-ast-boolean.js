@@ -49,15 +49,17 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_boolean // the boolean
-		)
-	{
-		this.boolean = v_boolean;
+	Constructor;
 
-		jools.immute( this );
-	};
+Constructor =
+	function(
+		v_boolean // the boolean
+	)
+{
+	this.boolean = v_boolean;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -95,6 +97,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_boolean;
@@ -112,9 +116,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{

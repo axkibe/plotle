@@ -49,15 +49,17 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor =
-		function(
-			v_number // the number
-		)
-	{
-		this.number = v_number;
+	Constructor;
 
-		jools.immute( this );
-	};
+Constructor =
+	function(
+		v_number // the number
+	)
+{
+	this.number = v_number;
+
+	jools.immute( this );
+};
 
 /*
 | Prototype shortcut
@@ -95,6 +97,8 @@ prototype.create =
 	)
 {
 	var
+		arg,
+
 		inherit,
 
 		v_number;
@@ -112,9 +116,7 @@ prototype.create =
 		a += 2
 	)
 	{
-		var
-			arg =
-				arguments[ a + 1 ];
+		arg = arguments[ a + 1 ];
 
 		switch( arguments[ a ] )
 		{
