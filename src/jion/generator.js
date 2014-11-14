@@ -504,10 +504,10 @@ generator.prototype.genImports =
 		.astVarDec( 'jion' )
 		.astVarDec( 'jools' );
 
-	// FUTURE when type checking is there this might become needed
-	// even if not having jsons
+	// FUTURE: when type checking is there,
+	// this might become needed always.
 
-	if( this.hasJSON )
+	if( this.hasJSON || this.node )
 	{
 		unitList = this.units.unitList;
 
@@ -517,9 +517,7 @@ generator.prototype.genImports =
 			a++
 		)
 		{
-			capsule =
-				capsule
-				.astVarDec( unitList[ a ] );
+			capsule = capsule.astVarDec( unitList[ a ] );
 		}
 	}
 

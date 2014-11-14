@@ -1,3 +1,5 @@
+. fullname
+. nonSpaceRef
 . ideoloomHome
 . ideoloomSandbox
 . 0-line
@@ -537,8 +539,6 @@
 . noButton
 > node
 . nonExistingSpace
-. nonSpaceTag
-. nonSpaceUser
 . normal
 . note
 > null
