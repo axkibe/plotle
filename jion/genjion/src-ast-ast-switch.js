@@ -439,11 +439,9 @@ prototype.equals =
 				key !== obj.ranks[ a ]
 				||
 				(
-										this.twig[ key ].equals
-?
-					!this.twig[ key ].equals( obj.twig[ key ] )
-:
-					this.twig[ key ] !== obj.twig[ key ]
+					this.twig[ key ].equals
+					? !this.twig[ key ].equals( obj.twig[ key ] )
+					: this.twig[ key ] !== obj.twig[ key ]
 				)
 			)
 			{

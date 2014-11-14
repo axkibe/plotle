@@ -621,25 +621,24 @@ formatCondition =
 /**/}
 
 	return (
-		context.tab
-		+ formatExpression(
+		formatExpression(
 			context,
 			expr.condition,
 			precTable.astCondition
 		)
 		+ context.sep
-		+ '?'
-		+ context.sep
+		+ context.tab
+		+ '? '
 		+ formatExpression(
-			context,
+			context.Inline,
 			expr.then,
 			precTable.astCondition
 		)
 		+ context.sep
-		+ ':'
-		+ context.sep
+		+ context.tab
+		+ ': '
 		+ formatExpression(
-			context,
+			context.Inline,
 			expr.elsewise,
 			precTable.astCondition
 		)
