@@ -81,11 +81,15 @@ var
 
 astIf =
 ast.astIf =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astIf;
+}
 
 /*
 | Creates a new astIf object.
@@ -259,14 +263,6 @@ prototype.equals =
 		this.then === obj.then
 	);
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astIf;
-}
 
 
 }

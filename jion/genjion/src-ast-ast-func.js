@@ -98,11 +98,15 @@ var
 
 astFunc =
 ast.astFunc =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astFunc;
+}
 
 /*
 | Creates a new astFunc object.
@@ -460,14 +464,6 @@ prototype.equals =
 		this.capsule === obj.capsule
 	);
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astFunc;
-}
 
 
 }

@@ -75,11 +75,15 @@ var
 
 astReturn =
 ast.astReturn =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astReturn;
+}
 
 /*
 | Creates a new astReturn object.
@@ -193,14 +197,6 @@ prototype.equals =
 
 	return this.expr === obj.expr;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astReturn;
-}
 
 
 }

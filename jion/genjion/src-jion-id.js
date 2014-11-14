@@ -86,11 +86,15 @@ var
 
 id =
 jion.id =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = id;
+}
 
 /*
 | Creates a new id object.
@@ -251,14 +255,6 @@ prototype.equals =
 
 	return this.name === obj.name && this.unit === obj.unit;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = id;
-}
 
 
 }

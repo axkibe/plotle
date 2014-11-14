@@ -82,11 +82,15 @@ var
 
 astCheck =
 ast.astCheck =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astCheck;
+}
 
 /*
 | Creates a new astCheck object.
@@ -205,14 +209,6 @@ prototype.equals =
 
 	return this.block.equals( obj.block );
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astCheck;
-}
 
 
 }

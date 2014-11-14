@@ -857,12 +857,11 @@ generator.prototype.genConstructor =
 		.astVarDec( this.reference )
 		.astAssign(
 			this.reference,
-			astAssign(
-				this.id.astVar,
-				this.node
-				? astAssign( 'module.exports', jionObj )
-				: jionObj
-			)
+			astAssign( this.id.astVar, jionObj )
+		)
+		.astIf(
+			'SERVER',
+			astAssign( 'module.exports', this.reference )
 		);
 
 	return capsule;
@@ -2886,25 +2885,6 @@ generator.prototype.genAlike =
 
 
 /*
-| Generates the export.
-*/
-generator.prototype.genNodeExport =
-	function(
-		capsule // block to append to
-	)
-{
-	return (
-		capsule
-		.astComment( 'Node export.' )
-		.astIf(
-			'SERVER',
-			astAssign( 'module.exports', this.reference )
-		)
-	);
-};
-
-
-/*
 | Returns the generated export block.
 */
 generator.prototype.genExport =
@@ -2989,11 +2969,6 @@ generator.prototype.genCapsule =
 	if( this.alike )
 	{
 		capsule = this.genAlike( capsule );
-	}
-
-	if( this.node )
-	{
-		capsule = this.genNodeExport( capsule );
 	}
 
 	block =

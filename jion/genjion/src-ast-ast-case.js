@@ -92,11 +92,15 @@ var
 
 astCase =
 ast.astCase =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astCase;
+}
 
 /*
 | Creates a new astCase object.
@@ -400,14 +404,6 @@ prototype.equals =
 
 	return this.block.equals( obj.block );
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astCase;
-}
 
 
 }

@@ -78,11 +78,15 @@ var
 
 astAssign =
 ast.astAssign =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astAssign;
+}
 
 /*
 | Creates a new astAssign object.
@@ -219,14 +223,6 @@ prototype.equals =
 
 	return this.left === obj.left && this.right === obj.right;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astAssign;
-}
 
 
 }

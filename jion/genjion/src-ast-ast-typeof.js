@@ -75,11 +75,15 @@ var
 
 astTypeof =
 ast.astTypeof =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astTypeof;
+}
 
 /*
 | Creates a new astTypeof object.
@@ -193,14 +197,6 @@ prototype.equals =
 
 	return this.expr === obj.expr;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astTypeof;
-}
 
 
 }

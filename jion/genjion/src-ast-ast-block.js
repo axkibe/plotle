@@ -82,11 +82,15 @@ var
 
 astBlock =
 ast.astBlock =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astBlock;
+}
 
 /*
 | Creates a new astBlock object.
@@ -363,14 +367,6 @@ prototype.equals =
 
 	return true;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astBlock;
-}
 
 
 }

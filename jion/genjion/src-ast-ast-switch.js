@@ -97,11 +97,15 @@ var
 
 astSwitch =
 ast.astSwitch =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astSwitch;
+}
 
 /*
 | Creates a new astSwitch object.
@@ -453,14 +457,6 @@ prototype.equals =
 		this.statement === obj.statement
 	);
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astSwitch;
-}
 
 
 }

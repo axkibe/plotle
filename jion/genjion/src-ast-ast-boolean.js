@@ -75,11 +75,15 @@ var
 
 astBoolean =
 ast.astBoolean =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astBoolean;
+}
 
 /*
 | Creates a new astBoolean object.
@@ -198,14 +202,6 @@ prototype.equals =
 
 	return this.boolean === obj.boolean;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astBoolean;
-}
 
 
 }

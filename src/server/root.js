@@ -1,8 +1,6 @@
 /*
 | The root of the server.
 |
-| FIXME rename space to spaceBox where applicatble.
-|
 | Authors: Axel Kittenberger
 */
 

@@ -75,11 +75,15 @@ var
 
 astDelete =
 ast.astDelete =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astDelete;
+}
 
 /*
 | Creates a new astDelete object.
@@ -193,14 +197,6 @@ prototype.equals =
 
 	return this.expr === obj.expr;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astDelete;
-}
 
 
 }

@@ -75,11 +75,15 @@ var
 
 astComment =
 ast.astComment =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astComment;
+}
 
 /*
 | Creates a new astComment object.
@@ -193,14 +197,6 @@ prototype.equals =
 
 	return this.content.equals( obj.content );
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astComment;
-}
 
 
 }

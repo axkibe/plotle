@@ -75,11 +75,15 @@ var
 
 astFail =
 ast.astFail =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astFail;
+}
 
 /*
 | Creates a new astFail object.
@@ -193,14 +197,6 @@ prototype.equals =
 
 	return this.message === obj.message;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astFail;
-}
 
 
 }

@@ -85,11 +85,15 @@ var
 
 astCall =
 ast.astCall =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astCall;
+}
 
 /*
 | Creates a new astCall object.
@@ -388,14 +392,6 @@ prototype.equals =
 
 	return this.func === obj.func;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astCall;
-}
 
 
 }

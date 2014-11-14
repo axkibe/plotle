@@ -88,11 +88,15 @@ var
 
 astForIn =
 ast.astForIn =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astForIn;
+}
 
 /*
 | Creates a new astForIn object.
@@ -280,14 +284,6 @@ prototype.equals =
 		this.variable === obj.variable
 	);
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astForIn;
-}
 
 
 }

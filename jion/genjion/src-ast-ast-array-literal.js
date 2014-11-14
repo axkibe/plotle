@@ -82,11 +82,15 @@ var
 
 astArrayLiteral =
 ast.astArrayLiteral =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astArrayLiteral;
+}
 
 /*
 | Creates a new astArrayLiteral object.
@@ -310,14 +314,6 @@ prototype.newUID = jion.proto.newUID;
 prototype.equals =
 	function( obj // object to compare to
 ) { return this === obj; };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astArrayLiteral;
-}
 
 
 }

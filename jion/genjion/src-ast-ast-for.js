@@ -91,11 +91,15 @@ var
 
 astFor =
 ast.astFor =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astFor;
+}
 
 /*
 | Creates a new astFor object.
@@ -301,14 +305,6 @@ prototype.equals =
 		this.iterate === obj.iterate
 	);
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astFor;
-}
 
 
 }

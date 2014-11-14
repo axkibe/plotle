@@ -80,11 +80,15 @@ var
 
 astDot =
 ast.astDot =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astDot;
+}
 
 /*
 | Creates a new astDot object.
@@ -236,14 +240,6 @@ prototype.equals =
 
 	return this.expr === obj.expr && this.member === obj.member;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astDot;
-}
 
 
 }

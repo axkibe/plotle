@@ -78,11 +78,15 @@ var
 
 astGreaterThan =
 ast.astGreaterThan =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astGreaterThan;
+}
 
 /*
 | Creates a new astGreaterThan object.
@@ -219,14 +223,6 @@ prototype.equals =
 
 	return this.left === obj.left && this.right === obj.right;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astGreaterThan;
-}
 
 
 }

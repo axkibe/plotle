@@ -77,11 +77,15 @@ var
 
 generator =
 jion.generator =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = generator;
+}
 
 /*
 | Creates a new generator object.
@@ -195,14 +199,6 @@ prototype.equals =
 
 	return this.jion === obj.jion;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = generator;
-}
 
 
 }

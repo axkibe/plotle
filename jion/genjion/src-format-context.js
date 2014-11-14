@@ -84,11 +84,15 @@ var
 
 context =
 format.context =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = context;
+}
 
 /*
 | Creates a new context object.
@@ -328,14 +332,6 @@ prototype.equals =
 		this.root === obj.root
 	);
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = context;
-}
 
 
 }

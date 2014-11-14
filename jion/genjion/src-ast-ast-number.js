@@ -75,11 +75,15 @@ var
 
 astNumber =
 ast.astNumber =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astNumber;
+}
 
 /*
 | Creates a new astNumber object.
@@ -198,14 +202,6 @@ prototype.equals =
 
 	return this.number === obj.number;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astNumber;
-}
 
 
 }

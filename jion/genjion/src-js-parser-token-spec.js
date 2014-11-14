@@ -87,11 +87,15 @@ var
 
 tokenSpec =
 jsParser.tokenSpec =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = tokenSpec;
+}
 
 /*
 | Creates a new tokenSpec object.
@@ -317,14 +321,6 @@ prototype.equals =
 		this.prePrec === obj.prePrec
 	);
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = tokenSpec;
-}
 
 
 }

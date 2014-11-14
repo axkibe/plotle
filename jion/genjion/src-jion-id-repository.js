@@ -86,11 +86,15 @@ var
 
 idRepository =
 jion.idRepository =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = idRepository;
+}
 
 /*
 | Creates a new idRepository object.
@@ -233,14 +237,6 @@ prototype.equals =
 
 	return this.primitives === obj.primitives && this.units === obj.units;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = idRepository;
-}
 
 
 }

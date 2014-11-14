@@ -83,11 +83,15 @@ var
 
 token =
 jsLexer.token =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = token;
+}
 
 /*
 | Creates a new token object.
@@ -233,14 +237,6 @@ prototype.equals =
 
 	return this.type === obj.type && this.value === obj.value;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = token;
-}
 
 
 }

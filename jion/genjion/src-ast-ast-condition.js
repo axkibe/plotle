@@ -81,11 +81,15 @@ var
 
 astCondition =
 ast.astCondition =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astCondition;
+}
 
 /*
 | Creates a new astCondition object.
@@ -259,14 +263,6 @@ prototype.equals =
 		this.then === obj.then
 	);
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astCondition;
-}
 
 
 }

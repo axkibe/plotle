@@ -78,11 +78,15 @@ var
 
 astMember =
 ast.astMember =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astMember;
+}
 
 /*
 | Creates a new astMember object.
@@ -225,14 +229,6 @@ prototype.equals =
 
 	return this.expr === obj.expr && this.member === obj.member;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astMember;
-}
 
 
 }

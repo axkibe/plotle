@@ -82,11 +82,15 @@ var
 
 astNew =
 ast.astNew =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astNew;
+}
 
 /*
 | Creates a new astNew object.
@@ -205,14 +209,6 @@ prototype.equals =
 
 	return this.call.equals( obj.call );
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astNew;
-}
 
 
 }

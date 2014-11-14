@@ -78,11 +78,15 @@ var
 
 astPlus =
 ast.astPlus =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astPlus;
+}
 
 /*
 | Creates a new astPlus object.
@@ -219,14 +223,6 @@ prototype.equals =
 
 	return this.left === obj.left && this.right === obj.right;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astPlus;
-}
 
 
 }

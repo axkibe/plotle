@@ -78,11 +78,15 @@ var
 
 astInstanceof =
 ast.astInstanceof =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astInstanceof;
+}
 
 /*
 | Creates a new astInstanceof object.
@@ -219,14 +223,6 @@ prototype.equals =
 
 	return this.left === obj.left && this.right === obj.right;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astInstanceof;
-}
 
 
 }

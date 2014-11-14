@@ -68,11 +68,15 @@ var
 
 astNull =
 ast.astNull =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astNull;
+}
 
 /*
 | Singleton
@@ -141,14 +145,6 @@ prototype.getPath = jion.proto.getPath;
 prototype.equals =
 	function( obj // object to compare to
 ) { return this === obj; };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astNull;
-}
 
 
 }

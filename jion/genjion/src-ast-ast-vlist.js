@@ -82,11 +82,15 @@ var
 
 astVList =
 ast.astVList =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astVList;
+}
 
 /*
 | Creates a new astVList object.
@@ -363,14 +367,6 @@ prototype.equals =
 
 	return true;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astVList;
-}
 
 
 }

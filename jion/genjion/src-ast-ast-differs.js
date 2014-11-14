@@ -78,11 +78,15 @@ var
 
 astDiffers =
 ast.astDiffers =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astDiffers;
+}
 
 /*
 | Creates a new astDiffers object.
@@ -219,14 +223,6 @@ prototype.equals =
 
 	return this.left === obj.left && this.right === obj.right;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astDiffers;
-}
 
 
 }

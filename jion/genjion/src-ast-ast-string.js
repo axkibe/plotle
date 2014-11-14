@@ -75,11 +75,15 @@ var
 
 astString =
 ast.astString =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astString;
+}
 
 /*
 | Creates a new astString object.
@@ -202,14 +206,6 @@ prototype.equals =
 
 	return this.string === obj.string;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astString;
-}
 
 
 }

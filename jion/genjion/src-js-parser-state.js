@@ -84,11 +84,15 @@ var
 
 state =
 jsParser.state =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = state;
+}
 
 /*
 | Creates a new state object.
@@ -305,14 +309,6 @@ prototype.equals =
 		this.tokens === obj.tokens
 	);
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = state;
-}
 
 
 }

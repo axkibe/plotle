@@ -78,11 +78,15 @@ var
 
 astVarDec =
 ast.astVarDec =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astVarDec;
+}
 
 /*
 | Creates a new astVarDec object.
@@ -234,14 +238,6 @@ prototype.equals =
 
 	return this.assign === obj.assign && this.name === obj.name;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astVarDec;
-}
 
 
 }

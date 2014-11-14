@@ -96,11 +96,15 @@ var
 
 astFile =
 ast.astFile =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astFile;
+}
 
 /*
 | Creates a new astFile object.
@@ -404,14 +408,6 @@ prototype.equals =
 		)
 	);
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astFile;
-}
 
 
 }

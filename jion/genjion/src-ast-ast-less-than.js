@@ -78,11 +78,15 @@ var
 
 astLessThan =
 ast.astLessThan =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astLessThan;
+}
 
 /*
 | Creates a new astLessThan object.
@@ -219,14 +223,6 @@ prototype.equals =
 
 	return this.left === obj.left && this.right === obj.right;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astLessThan;
-}
 
 
 }

@@ -82,11 +82,15 @@ var
 
 astObjLiteral =
 ast.astObjLiteral =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astObjLiteral;
+}
 
 /*
 | Creates a new astObjLiteral object.
@@ -363,14 +367,6 @@ prototype.equals =
 
 	return true;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astObjLiteral;
-}
 
 
 }

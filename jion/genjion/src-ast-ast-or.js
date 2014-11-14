@@ -78,11 +78,15 @@ var
 
 astOr =
 ast.astOr =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astOr;
+}
 
 /*
 | Creates a new astOr object.
@@ -219,14 +223,6 @@ prototype.equals =
 
 	return this.left === obj.left && this.right === obj.right;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astOr;
-}
 
 
 }

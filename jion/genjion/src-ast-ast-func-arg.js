@@ -78,11 +78,15 @@ var
 
 astFuncArg =
 ast.astFuncArg =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astFuncArg;
+}
 
 /*
 | Creates a new astFuncArg object.
@@ -244,14 +248,6 @@ prototype.equals =
 
 	return this.comment === obj.comment && this.name === obj.name;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astFuncArg;
-}
 
 
 }

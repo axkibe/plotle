@@ -78,11 +78,15 @@ var
 
 astAnd =
 ast.astAnd =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astAnd;
+}
 
 /*
 | Creates a new astAnd object.
@@ -219,14 +223,6 @@ prototype.equals =
 
 	return this.left === obj.left && this.right === obj.right;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astAnd;
-}
 
 
 }

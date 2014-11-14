@@ -75,11 +75,15 @@ var
 
 astPreIncrement =
 ast.astPreIncrement =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astPreIncrement;
+}
 
 /*
 | Creates a new astPreIncrement object.
@@ -193,14 +197,6 @@ prototype.equals =
 
 	return this.expr === obj.expr;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astPreIncrement;
-}
 
 
 }

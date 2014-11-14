@@ -82,11 +82,15 @@ var
 
 astCommaList =
 ast.astCommaList =
-module.exports =
 	{
 		prototype :
 			prototype
 	};
+
+if( SERVER )
+{
+	module.exports = astCommaList;
+}
 
 /*
 | Creates a new astCommaList object.
@@ -363,14 +367,6 @@ prototype.equals =
 
 	return true;
 };
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = astCommaList;
-}
 
 
 }
