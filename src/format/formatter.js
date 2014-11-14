@@ -168,9 +168,8 @@ formatAssign =
 
 		subtext =
 			context.tab
-			+
-			formatExpression(
-				context.Inline,
+			+ formatExpression(
+				context.setInline,
 				assign.right,
 				precTable.astAssign
 			);
@@ -449,15 +448,13 @@ formatPlusAssign =
 
 		text =
 			formatExpression(
-				context.Inline,
+				context.setInline,
 				assign.left,
 				precTable.astAssign
 			)
-			+
-			' += '
-			+
-			formatExpression(
-				context.Inline,
+			+ ' += '
+			+ formatExpression(
+				context.setInline,
 				assign.right,
 				precTable.astAssign
 			);
@@ -629,7 +626,7 @@ formatCondition =
 		+ context.tab
 		+ '? '
 		+ formatExpression(
-			context.Inline,
+			context.setInline,
 			expr.then,
 			precTable.astCondition
 		)
@@ -637,7 +634,7 @@ formatCondition =
 		+ context.tab
 		+ ': '
 		+ formatExpression(
-			context.Inline,
+			context.setInline,
 			expr.elsewise,
 			precTable.astCondition
 		)
@@ -678,11 +675,7 @@ formatIf =
 		text =
 			context.tab
 			+ 'if( '
-			+ formatExpression(
-				context.Inline,
-				cond,
-				null
-			)
+			+ formatExpression( context.setInline, cond, null )
 			+ ' )\n';
 	}
 	catch ( e )
@@ -740,36 +733,32 @@ formatFor =
 	forContext = context.inc;
 
 	text =
-		context.tab +
-		'for(\n' +
-		forContext.tab +
-		formatExpression(
-			forContext.Inline,
+		context.tab
+		+ 'for(\n'
+		+ forContext.tab
+		+ formatExpression(
+			forContext.setInline,
 			forExpr.init,
 			null
-		) +
-		';\n' +
-		forContext.tab +
-		formatExpression(
-			forContext.Inline,
+		)
+		+ ';\n'
+		+ forContext.tab
+		+ formatExpression(
+			forContext.setInline,
 			forExpr.condition,
 			null
-		) +
-		';\n' +
-		forContext.tab +
-		formatExpression(
-			forContext.Inline,
+		)
+		+ ';\n'
+		+ forContext.tab
+		+ formatExpression(
+			forContext.setInline,
 			forExpr.iterate,
 			null
-		) +
-		'\n' +
-		context.tab +
-		')\n'
-		+
-		formatBlock(
-			context,
-			forExpr.block
-		);
+		)
+		+ '\n'
+		+ context.tab
+		+ ')\n'
+		+ formatBlock( context, forExpr.block );
 
 	return text;
 };
@@ -790,25 +779,16 @@ formatForIn =
 
 	text =
 		context.tab
-		+
-		'for( var '
-		+
-		expr.variable
-		+
-		' in '
-		+
-		formatExpression(
-			context.Inline,
+		+ 'for( var '
+		+ expr.variable
+		+ ' in '
+		+ formatExpression(
+			context.setInline,
 			expr.object,
 			precTable.anIn
 		)
-		+
-		' )\n'
-		+
-		formatBlock(
-			context,
-			expr.block
-		);
+		+ ' )\n'
+		+ formatBlock( context, expr.block );
 
 	return text;
 };
@@ -841,16 +821,11 @@ formatLessThan =
 			expr.left,
 			precTable.astLessThan
 		)
-		+
-		context.sep
-		+
-		context.tab
-		+
-		'<'
-		+
-		context.sep
-		+
-		formatExpression(
+		+ context.sep
+		+ context.tab
+		+ '<'
+		+ context.sep
+		+ formatExpression(
 			context,
 			expr.right,
 			precTable.astLessThan
@@ -1028,7 +1003,7 @@ formatReturn =
 			'return '
 			+
 			formatExpression(
-				context.Inline,
+				context.setInline,
 				statement.expr,
 				null
 			);
@@ -1089,7 +1064,7 @@ formatSwitch =
 		'switch( '
 		+
 		formatExpression(
-			context.Inline,
+			context.setInline,
 			switchExpr.statement,
 			null
 		)
@@ -1121,26 +1096,21 @@ formatSwitch =
 		{
 			text +=
 				caseContext.tab
-				+
-				'case '
-				+
-				formatExpression(
-					caseContext.Inline,
+				+ 'case '
+				+ formatExpression(
+					caseContext.setInline,
 					caseExpr.atRank( b ),
 					null
 				)
-				+
-				' :\n\n'
-				+
-				formatBlock(
+				+ ' :\n\n'
+				+ formatBlock(
 					caseContext.inc,
 					caseExpr.block,
 					true
 				)
-				+
-				'\n'
-				+
-				caseContext.inc.tab + 'break;\n';
+				+ '\n'
+				+ caseContext.inc.tab
+				+ 'break;\n';
 		}
 	}
 
@@ -1354,7 +1324,7 @@ formatStatement =
 			{
 				subtext =
 					context.tab
-					+ formatFail( context.Inline, statement );
+					+ formatFail( context.setInline, statement );
 			}
 			catch( e )
 			{
@@ -1413,7 +1383,7 @@ formatStatement =
 				subtext =
 					context.tab
 					+ formatExpression(
-						context.Inline,
+						context.setInline,
 						statement,
 						null
 					);
@@ -1549,7 +1519,7 @@ formatExpression =
 		{
 			subtext =
 				subcontext.tab
-				+ formatter( subcontext.Inline, expr );
+				+ formatter( subcontext.setInline, expr );
 		}
 		catch( e )
 		{
@@ -1713,7 +1683,7 @@ formatCall =
 
 	text =
 		formatExpression(
-			snuggle ? context.Inline : context,
+			snuggle ? context.setInline : context,
 			call.func,
 			precTable.astCall // XXXX
 		);
@@ -2245,7 +2215,7 @@ formatVarDec =
 			aText =
 				context.tab
 				+ formatExpression(
-					context.Inline,
+					context.setInline,
 					varDec.assign,
 					null
 				);

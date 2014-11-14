@@ -199,12 +199,10 @@ jools.lazyValue(
 
 /*
 | Sets the context to be inline.
-|
-| FIXME rename
 */
 jools.lazyValue(
 	context.prototype,
-	'Inline',
+	'setInline',
 	function( )
 	{
 		if( this.inline )
@@ -212,12 +210,7 @@ jools.lazyValue(
 			return this;
 		}
 
-		return (
-			this.create(
-				'inline',
-					true
-			)
-		);
+		return( this.create( 'inline', true ) );
 	}
 );
 
