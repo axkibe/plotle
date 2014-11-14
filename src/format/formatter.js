@@ -74,8 +74,7 @@ precTable =
 		'astPreIncrement' : 3,
 		'astString' : -1,
 		'astTypeof' : 4,
-		'astVar' : -1,
-		'astVList' : -1
+		'astVar' : -1
 	};
 
 
@@ -2365,120 +2364,6 @@ formatCommaList =
 
 
 /*
-| Formats a variable list
-|
-| Used in for-loop initializers only.
-*/
-var
-formatVList =
-	function(
-		context,
-		vList
-	)
-{
-	var
-		text =
-			'var ',
-		varDec;
-
-/**/if( CHECK )
-/**/{
-/**/	if( !context.inline )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	for(
-		var a = 0, aZ = vList.ranks.length;
-		a < aZ;
-		a++
-	)
-	{
-		varDec = vList.atRank( a );
-
-		if( CHECK )
-		{
-			if( varDec.reflect !== 'ast.astVarDec' )
-			{
-				throw new Error( );
-			}
-		}
-
-		text += varDec.name;
-
-		if( varDec.assign )
-		{
-			text +=
-				' = ' +
-				formatExpression(
-					context,
-					varDec.assign,
-					precTable.astAssign
-				);
-		}
-
-		if( a + 1 < aZ )
-		{
-			text += ', ';
-		}
-	}
-
-	return text;
-};
-
-
-
-/*
-| Formats the capsule.
-*/
-/*
-var
-formatCapsule =
-	function(
-		context,
-		capsule
-	)
-{
-	var
-		text;
-
-	text =
-		'/*\n' +
-		'| Capulse.\n' +
-		'*\n' +   // FIXME * /
-		'( function( ) {\n' +
-		'\'use strict\';\n' +
-		'\n\n';
-
-	for(
-		var a = 0, aZ = capsule.ranks.length;
-		a < aZ;
-		a++
-	)
-	{
-		text +=
-			formatStatement(
-				context,
-				capsule.atRank( a ),
-				a > 0 ?
-					capsule.atRank( a - 1 ) :
-					null,
-				a + 1 < aZ ?
-					capsule.atRank( a + 1 ) :
-					null
-			);
-	}
-
-	text +=
-		'\n\n} )( );\n';
-
-	return text;
-};
-*/
-
-
-/*
 | Formats a block as file.
 */
 formatter.format =
@@ -2556,9 +2441,7 @@ exprFormatter =
 		'astTypeof' :
 			formatTypeof,
 		'astVar' :
-			formatVar,
-		'astVList' :
-			formatVList
+			formatVar
 	};
 
 

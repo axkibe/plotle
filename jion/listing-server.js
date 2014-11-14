@@ -81,7 +81,6 @@ module.exports =
 			'src/ast/ast-typeof.js',
 			'src/ast/ast-var.js',
 			'src/ast/ast-var-dec.js',
-			'src/ast/ast-vlist.js',
 
 			'src/format/context.js',
 			'src/js-lexer/token.js',

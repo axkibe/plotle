@@ -72,7 +72,6 @@ var
 	astThis,
 	astTypeof,
 	astVar,
-	astVList,
 	generator,
 	id,
 	idRepository,
@@ -158,8 +157,6 @@ astThis = shorthand.astVar( 'this' );
 astTypeof = shorthand.astTypeof;
 
 astVar = shorthand.astVar;
-
-astVList = shorthand.astVList;
 
 astReturnTrue = astReturn( true );
 

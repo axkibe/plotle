@@ -104,6 +104,10 @@ prototype.create =
 	)
 {
 	var
+		a,
+
+		aZ,
+
 		arg,
 
 		inherit,
@@ -138,7 +142,7 @@ prototype.create =
 	}
 
 	for(
-		var a = 0, aZ = arguments.length;
+		a = 0, aZ = arguments.length;
 		a < aZ;
 		a += 2
 	)

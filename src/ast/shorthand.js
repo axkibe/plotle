@@ -61,7 +61,6 @@ var
 	astTypeof,
 	astVar,
 	astVarDec,
-	astVList,
 	jools,
 	tools;
 
@@ -145,8 +144,6 @@ astTypeof = require( './ast-typeof' );
 astVar = require( './ast-var' );
 
 astVarDec = require( './ast-var-dec' );
-
-astVList = require( './ast-vlist' );
 
 jools = require( '../jools/jools' );
 
@@ -1004,16 +1001,6 @@ shorthand.astCommaList =
 | Shorthand for 'undefined'
 */
 shorthand.astUndefined = astVar.create( 'name', 'undefined' );
-
-
-/*
-| Shorthand for creating vlists.
-*/
-shorthand.astVList =
-	function( )
-{
-	return astVList.create( );
-};
 
 
 } )( );
