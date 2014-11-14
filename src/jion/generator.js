@@ -842,10 +842,8 @@ generator.prototype.genConstructor =
 	capsule =
 		capsule
 		.astComment( 'Prototype shortcut' )
-		.astVarDec(
-			'prototype',
-			'Constructor.prototype'
-		);
+		.astVarDec( 'prototype' )
+		.astAssign( 'prototype', 'Constructor.prototype' );
 
 	// the exported object
 	capsule = capsule.astComment( 'Jion.' );
@@ -2912,8 +2910,9 @@ generator.prototype.genExport =
 
 	block =
 		block
-		.astVarDec(
-			this.id.unit,
+		.astVarDec( this.id.unit )
+		.astAssign(
+			astVar( this.id.unit ),
 			astOr( this.id.unit, astObjLiteral( ) )
 		);
 

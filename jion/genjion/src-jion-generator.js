@@ -7,8 +7,10 @@
 | Export.
 */
 var
-	jion =
-		jion || { };
+	jion;
+
+
+jion = jion || { };
 
 
 /*
@@ -63,8 +65,9 @@ var
 | Prototype shortcut
 */
 var
-	prototype =
-		Constructor.prototype;
+	prototype;
+
+prototype = Constructor.prototype;
 
 /*
 | Jion.

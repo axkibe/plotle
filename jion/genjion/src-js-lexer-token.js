@@ -7,8 +7,10 @@
 | Export.
 */
 var
-	jsLexer =
-		jsLexer || { };
+	jsLexer;
+
+
+jsLexer = jsLexer || { };
 
 
 /*
@@ -69,8 +71,9 @@ var
 | Prototype shortcut
 */
 var
-	prototype =
-		Constructor.prototype;
+	prototype;
+
+prototype = Constructor.prototype;
 
 /*
 | Jion.

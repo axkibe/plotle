@@ -7,8 +7,10 @@
 | Export.
 */
 var
-	ast =
-		ast || { };
+	ast;
+
+
+ast = ast || { };
 
 
 /*
@@ -77,8 +79,9 @@ var
 | Prototype shortcut
 */
 var
-	prototype =
-		Constructor.prototype;
+	prototype;
+
+prototype = Constructor.prototype;
 
 /*
 | Jion.

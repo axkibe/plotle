@@ -7,8 +7,10 @@
 | Export.
 */
 var
-	jsParser =
-		jsParser || { };
+	jsParser;
+
+
+jsParser = jsParser || { };
 
 
 /*
@@ -70,8 +72,9 @@ var
 | Prototype shortcut
 */
 var
-	prototype =
-		Constructor.prototype;
+	prototype;
+
+prototype = Constructor.prototype;
 
 /*
 | Jion.
