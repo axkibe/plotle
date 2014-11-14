@@ -64,12 +64,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astNull =
-	ast.astNull =
-		{
-			prototype :
-				prototype
-		};
+	astNull;
+
+astNull =
+ast.astNull =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Singleton

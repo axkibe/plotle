@@ -74,12 +74,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astEquals =
-	ast.astEquals =
-		{
-			prototype :
-				prototype
-		};
+	astEquals;
+
+astEquals =
+ast.astEquals =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astEquals object.

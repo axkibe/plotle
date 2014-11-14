@@ -92,12 +92,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astFile =
-	ast.astFile =
-		{
-			prototype :
-				prototype
-		};
+	astFile;
+
+astFile =
+ast.astFile =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astFile object.

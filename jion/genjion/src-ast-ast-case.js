@@ -88,12 +88,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astCase =
-	ast.astCase =
-		{
-			prototype :
-				prototype
-		};
+	astCase;
+
+astCase =
+ast.astCase =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astCase object.

@@ -71,12 +71,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astNumber =
-	ast.astNumber =
-		{
-			prototype :
-				prototype
-		};
+	astNumber;
+
+astNumber =
+ast.astNumber =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astNumber object.

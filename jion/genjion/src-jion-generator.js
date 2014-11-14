@@ -73,12 +73,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	generator =
-	jion.generator =
-		{
-			prototype :
-				prototype
-		};
+	generator;
+
+generator =
+jion.generator =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new generator object.

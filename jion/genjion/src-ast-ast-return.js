@@ -71,12 +71,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astReturn =
-	ast.astReturn =
-		{
-			prototype :
-				prototype
-		};
+	astReturn;
+
+astReturn =
+ast.astReturn =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astReturn object.

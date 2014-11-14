@@ -74,12 +74,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astDiffers =
-	ast.astDiffers =
-		{
-			prototype :
-				prototype
-		};
+	astDiffers;
+
+astDiffers =
+ast.astDiffers =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astDiffers object.

@@ -83,12 +83,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	tokenSpec =
-	jsParser.tokenSpec =
-		{
-			prototype :
-				prototype
-		};
+	tokenSpec;
+
+tokenSpec =
+jsParser.tokenSpec =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new tokenSpec object.

@@ -80,12 +80,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	state =
-	jsParser.state =
-		{
-			prototype :
-				prototype
-		};
+	state;
+
+state =
+jsParser.state =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new state object.

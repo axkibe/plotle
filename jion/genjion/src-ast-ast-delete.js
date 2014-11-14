@@ -71,12 +71,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astDelete =
-	ast.astDelete =
-		{
-			prototype :
-				prototype
-		};
+	astDelete;
+
+astDelete =
+ast.astDelete =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astDelete object.

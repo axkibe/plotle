@@ -71,12 +71,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astNot =
-	ast.astNot =
-		{
-			prototype :
-				prototype
-		};
+	astNot;
+
+astNot =
+ast.astNot =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astNot object.

@@ -79,12 +79,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	token =
-	jsLexer.token =
-		{
-			prototype :
-				prototype
-		};
+	token;
+
+token =
+jsLexer.token =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new token object.

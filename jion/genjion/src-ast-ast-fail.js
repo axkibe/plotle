@@ -71,12 +71,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astFail =
-	ast.astFail =
-		{
-			prototype :
-				prototype
-		};
+	astFail;
+
+astFail =
+ast.astFail =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astFail object.

@@ -81,12 +81,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astCall =
-	ast.astCall =
-		{
-			prototype :
-				prototype
-		};
+	astCall;
+
+astCall =
+ast.astCall =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astCall object.

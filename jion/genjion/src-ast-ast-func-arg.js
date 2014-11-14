@@ -74,12 +74,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astFuncArg =
-	ast.astFuncArg =
-		{
-			prototype :
-				prototype
-		};
+	astFuncArg;
+
+astFuncArg =
+ast.astFuncArg =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astFuncArg object.

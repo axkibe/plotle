@@ -77,12 +77,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astCondition =
-	ast.astCondition =
-		{
-			prototype :
-				prototype
-		};
+	astCondition;
+
+astCondition =
+ast.astCondition =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astCondition object.

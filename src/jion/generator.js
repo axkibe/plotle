@@ -853,7 +853,9 @@ generator.prototype.genConstructor =
 		.add( 'prototype', 'prototype' );
 
 	capsule =
-		capsule.astVarDec(
+		capsule
+		.astVarDec( this.reference )
+		.astAssign(
 			this.reference,
 			astAssign(
 				this.id.astVar,

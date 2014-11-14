@@ -93,12 +93,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astSwitch =
-	ast.astSwitch =
-		{
-			prototype :
-				prototype
-		};
+	astSwitch;
+
+astSwitch =
+ast.astSwitch =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astSwitch object.

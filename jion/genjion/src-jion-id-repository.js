@@ -82,12 +82,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	idRepository =
-	jion.idRepository =
-		{
-			prototype :
-				prototype
-		};
+	idRepository;
+
+idRepository =
+jion.idRepository =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new idRepository object.

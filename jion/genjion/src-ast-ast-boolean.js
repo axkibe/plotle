@@ -71,12 +71,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astBoolean =
-	ast.astBoolean =
-		{
-			prototype :
-				prototype
-		};
+	astBoolean;
+
+astBoolean =
+ast.astBoolean =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astBoolean object.

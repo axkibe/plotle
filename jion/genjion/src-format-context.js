@@ -80,12 +80,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	context =
-	format.context =
-		{
-			prototype :
-				prototype
-		};
+	context;
+
+context =
+format.context =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new context object.

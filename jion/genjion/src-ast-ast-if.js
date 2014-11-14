@@ -77,12 +77,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astIf =
-	ast.astIf =
-		{
-			prototype :
-				prototype
-		};
+	astIf;
+
+astIf =
+ast.astIf =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astIf object.

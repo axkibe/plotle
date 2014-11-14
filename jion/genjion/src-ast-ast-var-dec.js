@@ -74,12 +74,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astVarDec =
-	ast.astVarDec =
-		{
-			prototype :
-				prototype
-		};
+	astVarDec;
+
+astVarDec =
+ast.astVarDec =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astVarDec object.

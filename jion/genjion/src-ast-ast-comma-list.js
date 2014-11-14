@@ -78,12 +78,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astCommaList =
-	ast.astCommaList =
-		{
-			prototype :
-				prototype
-		};
+	astCommaList;
+
+astCommaList =
+ast.astCommaList =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astCommaList object.

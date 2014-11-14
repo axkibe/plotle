@@ -78,12 +78,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astArrayLiteral =
-	ast.astArrayLiteral =
-		{
-			prototype :
-				prototype
-		};
+	astArrayLiteral;
+
+astArrayLiteral =
+ast.astArrayLiteral =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astArrayLiteral object.

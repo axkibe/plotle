@@ -74,12 +74,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astInstanceof =
-	ast.astInstanceof =
-		{
-			prototype :
-				prototype
-		};
+	astInstanceof;
+
+astInstanceof =
+ast.astInstanceof =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astInstanceof object.

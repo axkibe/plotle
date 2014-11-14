@@ -84,12 +84,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astForIn =
-	ast.astForIn =
-		{
-			prototype :
-				prototype
-		};
+	astForIn;
+
+astForIn =
+ast.astForIn =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astForIn object.

@@ -71,12 +71,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astPreIncrement =
-	ast.astPreIncrement =
-		{
-			prototype :
-				prototype
-		};
+	astPreIncrement;
+
+astPreIncrement =
+ast.astPreIncrement =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astPreIncrement object.

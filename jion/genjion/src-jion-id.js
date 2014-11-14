@@ -82,12 +82,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	id =
-	jion.id =
-		{
-			prototype :
-				prototype
-		};
+	id;
+
+id =
+jion.id =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new id object.

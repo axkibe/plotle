@@ -74,12 +74,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astGreaterThan =
-	ast.astGreaterThan =
-		{
-			prototype :
-				prototype
-		};
+	astGreaterThan;
+
+astGreaterThan =
+ast.astGreaterThan =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astGreaterThan object.

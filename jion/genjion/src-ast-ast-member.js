@@ -74,12 +74,14 @@ prototype = Constructor.prototype;
 | Jion.
 */
 var
-	astMember =
-	ast.astMember =
-		{
-			prototype :
-				prototype
-		};
+	astMember;
+
+astMember =
+ast.astMember =
+	{
+		prototype :
+			prototype
+	};
 
 /*
 | Creates a new astMember object.
