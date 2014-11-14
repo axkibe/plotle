@@ -104,10 +104,12 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			indent =
-				this.indent,
-			tab =
-				'';
+			indent,
+			tab;
+
+		indent = this.indent;
+
+		tab = '';
 
 		if( this.inline )
 		{
@@ -118,14 +120,12 @@ jools.lazyValue(
 		{
 			indent--;
 
-			tab +=
-				'/**/';
+			tab += '/**/';
 		}
 
 		for( var a = 0; a < indent; a++ )
 		{
-			tab +=
-				_tab;
+			tab += _tab;
 		}
 
 		return tab;
@@ -138,47 +138,30 @@ jools.lazyValue(
 */
 jools.lazyValue(
 	context.prototype,
-	'Inc',
+	'inc',
 	function( )
 	{
-		var
-			incSame =
-				this.IncSame,
-
-			inc =
-				incSame.create(
-					'root',
-						false
-				);
-
-		return inc;
+		return this.incSame.create( 'root', false );
 	}
 );
 
 
 /*
 | Increases the indentation.
+|
 | But keeps root context.
 */
 jools.lazyValue(
 	context.prototype,
-	'IncSame',
+	'incSame',
 	function( )
 	{
 		var
 			inc;
 
-		inc =
-			this.create(
-				'indent',
-					this.indent + 1
-			);
+		inc = this.create( 'indent', this.indent + 1 );
 
-		jools.aheadValue(
-			inc,
-			'Dec',
-			this
-		);
+		jools.aheadValue( inc, 'dec', this );
 
 		return inc;
 	}
@@ -191,9 +174,12 @@ jools.lazyValue(
 */
 jools.lazyValue(
 	context.prototype,
-	'Dec',
+	'dec',
 	function( )
 	{
+		var
+			dec;
+
 		if( this.indent <= 0 )
 		{
 			throw new Error( );
@@ -202,20 +188,9 @@ jools.lazyValue(
 		// root stays false, even if it goes back to
 		// zero indent its not the root context
 
-		var
-			dec;
+		dec = this.create( 'indent', this.indent - 1 );
 
-		dec =
-			this.create(
-				'indent',
-					this.indent - 1
-			);
-
-		jools.aheadValue(
-			dec,
-			'Inc',
-			this
-		);
+		jools.aheadValue( dec, 'inc', this );
 
 		return dec;
 	}

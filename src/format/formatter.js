@@ -159,8 +159,7 @@ formatAssign =
 
 	if( assign.right.reflect !== 'ast.astAssign' )
 	{
-		context =
-			context.IncSame;
+		context = context.incSame;
 	}
 
 	try
@@ -306,7 +305,7 @@ formatBlock =
 	{
 		text = context.tab + '{' + context.sep;
 
-		blockContext = context.Inc;
+		blockContext = context.inc;
 	}
 	else
 	{
@@ -439,7 +438,7 @@ formatPlusAssign =
 
 	text = '';
 
-	context = context.IncSame;
+	context = context.incSame;
 
 	try
 	{
@@ -544,7 +543,7 @@ formatMember =
 		+ '['
 		+ context.sep
 		+ formatExpression(
-			context.Inc,
+			context.inc,
 			expr.member,
 			null
 		)
@@ -698,22 +697,15 @@ formatIf =
 	if( text === null || textLen( text ) > MAX_TEXT_WIDTH )
 	{
 		text =
-			context.tab + 'if(\n'
-			+
-			formatExpression(
-				context.Inc,
-				cond,
-				null
-			) + '\n'
-			+
-			context.tab + ')\n';
+			context.tab
+			+ 'if(\n'
+			+ formatExpression( context.inc, cond, null )
+			+ '\n'
+			+ context.tab
+			+ ')\n';
 	}
 
-	text +=
-		formatBlock(
-			context,
-			statement.then
-		);
+	text += formatBlock( context, statement.then );
 
 	if( statement.elsewise )
 	{
@@ -742,9 +734,10 @@ formatFor =
 	)
 {
 	var
-		forContext =
-			context.Inc,
+		forContext,
 		text;
+
+	forContext = context.inc;
 
 	text =
 		context.tab +
@@ -1062,17 +1055,12 @@ formatReturn =
 
 	// no inline mode
 	text =
-		context.tab + 'return (\n'
-		+
-		formatExpression(
-			context.Inc,
-			statement.expr,
-			null
-		)
-		+
-		'\n'
-		+
-		context.tab + ')';
+		context.tab
+		+ 'return (\n'
+		+ formatExpression( context.inc, statement.expr, null )
+		+ '\n'
+		+ context.tab
+		+ ')';
 
 	return text;
 };
@@ -1089,10 +1077,11 @@ formatSwitch =
 	)
 {
 	var
-		caseContext =
-			context.Inc,
+		caseContext,
 		caseExpr,
 		text;
+
+	caseContext = context.inc;
 
 	text =
 		context.tab
@@ -1144,14 +1133,14 @@ formatSwitch =
 				' :\n\n'
 				+
 				formatBlock(
-					caseContext.Inc,
+					caseContext.inc,
 					caseExpr.block,
 					true
 				)
 				+
 				'\n'
 				+
-				caseContext.Inc.tab + 'break;\n';
+				caseContext.inc.tab + 'break;\n';
 		}
 	}
 
@@ -1168,7 +1157,7 @@ formatSwitch =
 			'default :\n\n'
 			+
 			formatBlock(
-				caseContext.Inc,
+				caseContext.inc,
 				switchExpr.defaultCase,
 				true
 			);
@@ -1203,7 +1192,7 @@ formatCapsuleFunc =
 	text =
 		'function( ) {\n'
 		+ formatBlock(
-			context.Dec.create( 'root', true ),
+			context.dec.create( 'root', true ),
 			func.block,
 			true
 		)
@@ -1264,7 +1253,7 @@ formatFunc =
 				: '';
 
 			text +=
-				context.Inc.tab
+				context.inc.tab
 				+ ( arg.name || '' )
 				+ comma
 				+ (
@@ -1279,7 +1268,7 @@ formatFunc =
 	}
 
 	// formats to body at one indentation decremented.
-	context = context.Dec;
+	context = context.dec;
 
 	text += formatBlock( context, func.block );
 
@@ -1534,33 +1523,25 @@ formatExpression =
 		throw new Error( expr.reflectName );
 	}
 
-	bracket =
-		pprec !== null && prec > pprec;
+	bracket = pprec !== null && prec > pprec;
 
-	subcontext =
-		context;
+	subcontext = context;
 
-	text =
-		'';
+	text = '';
 
 	if( bracket )
 	{
-		text =
-			context.tab + '(' + context.sep;
+		text = context.tab + '(' + context.sep;
 
-		subcontext =
-			context.Inc;
+		subcontext = context.inc;
 	}
 
-	subtext =
-		null;
+	subtext = null;
 
 	if(
 		!subcontext.inline
-		&&
-		!bracket
-		&&
-		pprec !== null && prec < pprec
+		&& !bracket
+		&& pprec !== null && prec < pprec
 	)
 	{
 		// tries to go inline
@@ -1568,8 +1549,7 @@ formatExpression =
 		{
 			subtext =
 				subcontext.tab
-				+
-				formatter( subcontext.Inline, expr );
+				+ formatter( subcontext.Inline, expr );
 		}
 		catch( e )
 		{
@@ -1637,49 +1617,41 @@ formatFail =
 	{
 		checkContext = context.create( 'check', true );
 
-		messageContext = checkContext.Inc;
+		messageContext = checkContext.inc;
 
 		result =
 			checkContext.tab
-			+
-			'if( CHECK )'
-			+
-			checkContext.sep + checkContext.tab + '{'
-			+
-			checkContext.sep;
+			+ 'if( CHECK )'
+			+ checkContext.sep
+			+ checkContext.tab
+			+ '{'
+			+ checkContext.sep;
 	}
 
 	result +=
 		messageContext.tab
-		+
-		'throw new Error('
-		+
-		messageContext.sep
-		+
-		formatExpression(
-			messageContext.Inc,
+		+ 'throw new Error('
+		+ messageContext.sep
+		+ formatExpression(
+			messageContext.inc,
 			fail.message,
 			null
 		)
-		+
-		messageContext.sep + messageContext.tab
-		+
-		')';
+		+ messageContext.sep
+		+ messageContext.tab
+		+ ')';
 
 	if( !context.check )
 	{
 		result +=
 			';'
-			+
-			checkContext.sep
-			+
-			checkContext.tab + '}'
-			+
-			checkContext.sep
-			+
-			checkContext.sep
-			+
-			context.tab + 'throw new Error( )';
+			+ checkContext.sep
+			+ checkContext.tab
+			+ '}'
+			+ checkContext.sep
+			+ checkContext.sep
+			+ context.tab
+			+ 'throw new Error( )';
 	}
 
 	return result;
@@ -1709,10 +1681,8 @@ formatBoolean =
 		context.tab +
 		(
 			expr.boolean
-			?
-			'true'
-			:
-			'false'
+			? 'true'
+			: 'false'
 		)
 	);
 };
@@ -1764,12 +1734,7 @@ formatCall =
 		{
 			arg = call.atRank( a );
 
-			text +=
-				formatExpression(
-					context.Inc,
-					arg,
-					null
-				);
+			text += formatExpression( context.inc, arg, null );
 
 			if( a + 1 < aZ )
 			{
@@ -1923,9 +1888,12 @@ formatArrayLiteral =
 	)
 {
 	var
+		a,
+		aZ,
 		key,
-		text =
-			'';
+		text;
+
+	text = '';
 
 /**/if( CHECK )
 /**/{
@@ -1946,37 +1914,31 @@ formatArrayLiteral =
 		throw 'noinline';
 	}
 
-	text +=
-		context.tab + '[\n';
+	text += context.tab + '[\n';
 
 	for(
-		var a = 0, aZ = expr.ranks.length;
+		a = 0, aZ = expr.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		key =
-			expr.ranks[ a ];
+		key = expr.ranks[ a ];
 
 		text +=
 			formatExpression(
-				context.Inc,
+				context.inc,
 				expr.twig[ key ],
 				precTable.astArrayLiteral
 			)
 			+
 			(
-				a + 1 < aZ ?
-				',\n'
-				:
-				'\n'
+				a + 1 < aZ
+				? ',\n'
+				: '\n'
 			);
 	}
 
-	text +=
-		context.tab
-		+
-		']';
+	text += context.tab + ']';
 
 	return text;
 };
@@ -1995,9 +1957,12 @@ formatObjLiteral =
 	)
 {
 	var
+		a,
+		aZ,
 		key,
-		text =
-			'';
+		text;
+
+	text = '';
 
 /**/if( CHECK )
 /**/{
@@ -2018,35 +1983,32 @@ formatObjLiteral =
 		throw 'noinline';
 	}
 
-	text +=
-		context.tab + '{\n';
+	text += context.tab + '{\n';
 
 	for(
-		var a = 0, aZ = objliteral.ranks.length;
+		a = 0, aZ = objliteral.ranks.length;
 		a < aZ;
 		a++
 	)
 	{
-		key =
-			objliteral.ranks[ a ];
+		key = objliteral.ranks[ a ];
 
 		text +=
-			context.Inc.tab
-			+
-			key + ' :\n';
+			context.inc.tab
+			+ key
+			+ ' :\n';
 
 		text +=
 			formatExpression(
-				context.Inc.Inc,
+				context.inc.inc,
 				objliteral.twig[ key ],
 				null // FIXME precTable.Objliteral
 			)
 			+
 			(
-				a + 1 < aZ ?
-				',\n'
-				:
-				'\n'
+				a + 1 < aZ
+				? ',\n'
+				: '\n'
 			);
 	}
 
@@ -2080,10 +2042,8 @@ formatPreIncrement =
 
 	return(
 		context.tab
-		+
-		'++'
-		+
-		formatExpression(
+		+ '++'
+		+ formatExpression(
 			context,
 			expr.expr,
 			precTable.astPreIncrement
@@ -2113,13 +2073,10 @@ formatTypeof =
 
 	return(
 		context.tab
-		+
-		'typeof('
-		+
-		context.sep
-		+
-		formatExpression(
-			context.Inc,
+		+ 'typeof('
+		+ context.sep
+		+ formatExpression(
+			context.inc,
 			expr.expr,
 			precTable.astTypeof
 		)
@@ -2259,7 +2216,7 @@ formatVarDec =
 
 		if( !context.inline )
 		{
-			context = context.Inc;
+			context = context.inc;
 
 			text += context.tab;
 		}
@@ -2278,7 +2235,7 @@ formatVarDec =
 
 		if( varDec.assign.reflect !== 'ast.astAssign' )
 		{
-			context = context.Inc;
+			context = context.inc;
 		}
 
 		aText = null;
@@ -2330,13 +2287,15 @@ formatCommaList =
 	)
 {
 	var
+		a,
+		aZ,
 		expr,
 		text;
 
 	text = '';
 
 	for(
-		var a = 0, aZ = list.ranks.length;
+		a = 0, aZ = list.ranks.length;
 		a < aZ;
 		a++
 	)
@@ -2349,9 +2308,8 @@ formatCommaList =
 				? ( ',' + context.sep )
 				: ''
 			)
-			+
-			formatExpression(
-				context.Inc,
+			+ formatExpression(
+				context.inc,
 				expr,
 				precTable.astCommaList
 			);
