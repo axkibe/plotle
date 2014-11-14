@@ -78,6 +78,7 @@ var
 
 astDiffers =
 ast.astDiffers =
+module.exports =
 	{
 		prototype :
 			prototype

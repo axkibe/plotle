@@ -87,6 +87,7 @@ var
 
 tokenSpec =
 jsParser.tokenSpec =
+module.exports =
 	{
 		prototype :
 			prototype

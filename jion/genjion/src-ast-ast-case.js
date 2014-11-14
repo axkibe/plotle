@@ -92,6 +92,7 @@ var
 
 astCase =
 ast.astCase =
+module.exports =
 	{
 		prototype :
 			prototype

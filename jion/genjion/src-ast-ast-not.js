@@ -75,6 +75,7 @@ var
 
 astNot =
 ast.astNot =
+module.exports =
 	{
 		prototype :
 			prototype

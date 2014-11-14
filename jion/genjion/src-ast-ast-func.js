@@ -98,6 +98,7 @@ var
 
 astFunc =
 ast.astFunc =
+module.exports =
 	{
 		prototype :
 			prototype

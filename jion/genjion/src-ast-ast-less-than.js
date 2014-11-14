@@ -78,6 +78,7 @@ var
 
 astLessThan =
 ast.astLessThan =
+module.exports =
 	{
 		prototype :
 			prototype

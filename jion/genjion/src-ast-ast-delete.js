@@ -75,6 +75,7 @@ var
 
 astDelete =
 ast.astDelete =
+module.exports =
 	{
 		prototype :
 			prototype

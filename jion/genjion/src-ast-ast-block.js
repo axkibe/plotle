@@ -82,6 +82,7 @@ var
 
 astBlock =
 ast.astBlock =
+module.exports =
 	{
 		prototype :
 			prototype

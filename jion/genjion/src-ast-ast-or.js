@@ -78,6 +78,7 @@ var
 
 astOr =
 ast.astOr =
+module.exports =
 	{
 		prototype :
 			prototype

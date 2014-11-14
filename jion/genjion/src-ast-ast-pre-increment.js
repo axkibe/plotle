@@ -75,6 +75,7 @@ var
 
 astPreIncrement =
 ast.astPreIncrement =
+module.exports =
 	{
 		prototype :
 			prototype

@@ -88,6 +88,7 @@ var
 
 astForIn =
 ast.astForIn =
+module.exports =
 	{
 		prototype :
 			prototype

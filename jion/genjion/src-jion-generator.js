@@ -77,6 +77,7 @@ var
 
 generator =
 jion.generator =
+module.exports =
 	{
 		prototype :
 			prototype

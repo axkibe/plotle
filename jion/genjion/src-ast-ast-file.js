@@ -96,6 +96,7 @@ var
 
 astFile =
 ast.astFile =
+module.exports =
 	{
 		prototype :
 			prototype

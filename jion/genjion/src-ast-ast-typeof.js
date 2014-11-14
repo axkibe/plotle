@@ -75,6 +75,7 @@ var
 
 astTypeof =
 ast.astTypeof =
+module.exports =
 	{
 		prototype :
 			prototype

@@ -97,6 +97,7 @@ var
 
 astSwitch =
 ast.astSwitch =
+module.exports =
 	{
 		prototype :
 			prototype

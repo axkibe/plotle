@@ -82,6 +82,7 @@ var
 
 astCheck =
 ast.astCheck =
+module.exports =
 	{
 		prototype :
 			prototype

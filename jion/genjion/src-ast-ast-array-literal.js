@@ -82,6 +82,7 @@ var
 
 astArrayLiteral =
 ast.astArrayLiteral =
+module.exports =
 	{
 		prototype :
 			prototype

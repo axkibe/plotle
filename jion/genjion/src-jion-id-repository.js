@@ -86,6 +86,7 @@ var
 
 idRepository =
 jion.idRepository =
+module.exports =
 	{
 		prototype :
 			prototype

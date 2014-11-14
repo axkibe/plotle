@@ -84,6 +84,7 @@ var
 
 context =
 format.context =
+module.exports =
 	{
 		prototype :
 			prototype

@@ -84,6 +84,7 @@ var
 
 state =
 jsParser.state =
+module.exports =
 	{
 		prototype :
 			prototype

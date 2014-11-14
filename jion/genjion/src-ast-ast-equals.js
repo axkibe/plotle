@@ -78,6 +78,7 @@ var
 
 astEquals =
 ast.astEquals =
+module.exports =
 	{
 		prototype :
 			prototype

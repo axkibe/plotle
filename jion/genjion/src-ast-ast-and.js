@@ -78,6 +78,7 @@ var
 
 astAnd =
 ast.astAnd =
+module.exports =
 	{
 		prototype :
 			prototype

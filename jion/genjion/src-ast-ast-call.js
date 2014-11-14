@@ -85,6 +85,7 @@ var
 
 astCall =
 ast.astCall =
+module.exports =
 	{
 		prototype :
 			prototype

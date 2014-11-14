@@ -78,6 +78,7 @@ var
 
 astAssign =
 ast.astAssign =
+module.exports =
 	{
 		prototype :
 			prototype

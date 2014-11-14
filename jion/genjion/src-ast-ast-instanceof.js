@@ -78,6 +78,7 @@ var
 
 astInstanceof =
 ast.astInstanceof =
+module.exports =
 	{
 		prototype :
 			prototype

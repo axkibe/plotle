@@ -86,6 +86,7 @@ var
 
 id =
 jion.id =
+module.exports =
 	{
 		prototype :
 			prototype

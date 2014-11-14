@@ -75,6 +75,7 @@ var
 
 astNumber =
 ast.astNumber =
+module.exports =
 	{
 		prototype :
 			prototype

@@ -82,6 +82,7 @@ var
 
 astCommaList =
 ast.astCommaList =
+module.exports =
 	{
 		prototype :
 			prototype

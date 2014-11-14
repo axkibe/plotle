@@ -78,6 +78,7 @@ var
 
 astPlus =
 ast.astPlus =
+module.exports =
 	{
 		prototype :
 			prototype

@@ -75,6 +75,7 @@ var
 
 astComment =
 ast.astComment =
+module.exports =
 	{
 		prototype :
 			prototype

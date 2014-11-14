@@ -75,6 +75,7 @@ var
 
 astString =
 ast.astString =
+module.exports =
 	{
 		prototype :
 			prototype

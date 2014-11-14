@@ -82,6 +82,7 @@ var
 
 astNew =
 ast.astNew =
+module.exports =
 	{
 		prototype :
 			prototype

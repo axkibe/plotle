@@ -82,6 +82,7 @@ var
 
 astVList =
 ast.astVList =
+module.exports =
 	{
 		prototype :
 			prototype

@@ -83,6 +83,7 @@ var
 
 token =
 jsLexer.token =
+module.exports =
 	{
 		prototype :
 			prototype

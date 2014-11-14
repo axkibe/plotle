@@ -68,6 +68,7 @@ var
 
 astNull =
 ast.astNull =
+module.exports =
 	{
 		prototype :
 			prototype

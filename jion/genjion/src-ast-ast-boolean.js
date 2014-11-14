@@ -75,6 +75,7 @@ var
 
 astBoolean =
 ast.astBoolean =
+module.exports =
 	{
 		prototype :
 			prototype

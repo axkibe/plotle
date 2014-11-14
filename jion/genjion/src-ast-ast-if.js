@@ -81,6 +81,7 @@ var
 
 astIf =
 ast.astIf =
+module.exports =
 	{
 		prototype :
 			prototype

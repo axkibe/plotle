@@ -77,6 +77,7 @@ var
 
 astVar =
 ast.astVar =
+module.exports =
 	{
 		prototype :
 			prototype

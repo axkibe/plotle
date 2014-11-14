@@ -81,6 +81,7 @@ var
 
 astCondition =
 ast.astCondition =
+module.exports =
 	{
 		prototype :
 			prototype

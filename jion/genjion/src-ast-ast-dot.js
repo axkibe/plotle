@@ -80,6 +80,7 @@ var
 
 astDot =
 ast.astDot =
+module.exports =
 	{
 		prototype :
 			prototype

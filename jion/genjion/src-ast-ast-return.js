@@ -75,6 +75,7 @@ var
 
 astReturn =
 ast.astReturn =
+module.exports =
 	{
 		prototype :
 			prototype

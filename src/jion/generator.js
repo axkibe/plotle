@@ -859,7 +859,9 @@ generator.prototype.genConstructor =
 			this.reference,
 			astAssign(
 				this.id.astVar,
-				jionObj
+				this.node
+				? astAssign( 'module.exports', jionObj )
+				: jionObj
 			)
 		);
 

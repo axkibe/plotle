@@ -75,6 +75,7 @@ var
 
 astFail =
 ast.astFail =
+module.exports =
 	{
 		prototype :
 			prototype

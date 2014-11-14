@@ -78,6 +78,7 @@ var
 
 astGreaterThan =
 ast.astGreaterThan =
+module.exports =
 	{
 		prototype :
 			prototype

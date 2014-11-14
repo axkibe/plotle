@@ -78,6 +78,7 @@ var
 
 astMember =
 ast.astMember =
+module.exports =
 	{
 		prototype :
 			prototype

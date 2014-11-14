@@ -82,6 +82,7 @@ var
 
 astObjLiteral =
 ast.astObjLiteral =
+module.exports =
 	{
 		prototype :
 			prototype
