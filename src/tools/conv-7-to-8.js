@@ -51,15 +51,19 @@ GLOBAL.SHELL = false;
 */
 var
 	mongodb,
+	resume,
+	run,
 	sus;
 
 mongodb = require( 'mongodb' );
 
 sus = require( 'suspend' );
 
+resume = sus.resume;
+
 
 /*
-| translates a spaces entry
+| Translates a spaces entry.
 */
 function translateSpacesEntry( o )
 {
@@ -84,9 +88,21 @@ function translateSpacesEntry( o )
 
 
 /*
+| Translates a change.
+*/
+function translateChange( o )
+{
+	o.type = 'database.changePocket';
+
+	return o;
+}
+
+
+
+/*
 | The main runner.
 */
-var run =
+run =
 	function*( )
 {
 	var
@@ -135,35 +151,35 @@ var run =
 	console.log( '* connecting to src' );
 
 	src.connection =
-		yield src.connector.open( sus.resume( ) );
+		yield src.connector.open( resume( ) );
 
 	console.log( '* connecting to trg' );
 
 	trg.connection =
-		yield trg.connector.open( sus.resume( ) );
+		yield trg.connector.open( resume( ) );
 
 	console.log( '* dropping trg' );
-		yield trg.connection.dropDatabase( sus.resume( ) );
+		yield trg.connection.dropDatabase( resume( ) );
 
 	src.global =
-		yield src.connection.collection( 'global',  sus.resume( ) );
+		yield src.connection.collection( 'global',  resume( ) );
 
 	src.spaces =
-		yield src.connection.collection( 'spaces', sus.resume( ) );
+		yield src.connection.collection( 'spaces', resume( ) );
 
 	src.users =
-		yield src.connection.collection( 'users', sus.resume( ) );
+		yield src.connection.collection( 'users', resume( ) );
 
 	trg.global =
-		yield trg.connection.collection( 'global', sus.resume( ) );
+		yield trg.connection.collection( 'global', resume( ) );
 
 	trg.users =
-		yield trg.connection.collection( 'users', sus.resume( ) );
+		yield trg.connection.collection( 'users', resume( ) );
 
 	trg.spaces =
-		yield trg.connection.collection( 'spaces', sus.resume( ) );
+		yield trg.connection.collection( 'spaces', resume( ) );
 
-	if( ( yield src.global.count( sus.resume( ) ) ) === 0 )
+	if( ( yield src.global.count( resume( ) ) ) === 0 )
 	{
 		console.log( 'ERROR: src has a no "global" collection' );
 
@@ -173,7 +189,7 @@ var run =
 	o =
 		yield src.global.findOne(
 			{ _id : 'version' },
-			sus.resume( )
+			resume( )
 		);
 
 	if( o.version !== 7 )
@@ -188,43 +204,43 @@ var run =
 			_id : 'version',
 			version : 8
 		},
-		sus.resume( )
+		resume( )
 	);
 
 	console.log( '* copying src.users -> trg.users' );
 
-	cursor = yield src.users.find( sus.resume( ) );
+	cursor = yield src.users.find( resume( ) );
 
 	users = { };
 
 	for(
-		o = yield cursor.nextObject( sus.resume( ) );
+		o = yield cursor.nextObject( resume( ) );
 		o !== null;
-		o = yield cursor.nextObject( sus.resume( ) )
+		o = yield cursor.nextObject( resume( ) )
 	)
 	{
 		users[ o._id ] = o;
 
-		yield trg.users.insert( o, sus.resume( ) );
+		yield trg.users.insert( o, resume( ) );
 	}
 
 	console.log( '* translating src.spaces -> trg.spaces' );
 
-	cursor = yield src.spaces.find( sus.resume( ) );
+	cursor = yield src.spaces.find( resume( ) );
 
 	spaces = { };
 
 	for(
-		o = yield cursor.nextObject( sus.resume( ) );
+		o = yield cursor.nextObject( resume( ) );
 		o !== null;
-		o = yield cursor.nextObject( sus.resume( ) )
+		o = yield cursor.nextObject( resume( ) )
 	)
 	{
 		o = translateSpacesEntry( o );
 
 		spaces[ o._id ] = o;
 
-		yield trg.spaces.insert( o, sus.resume( ) );
+		yield trg.spaces.insert( o, resume( ) );
 	}
 
 	console.log( '* copying src.changes.* -> trg.changes.*' );
@@ -239,26 +255,26 @@ var run =
 		sc =
 			yield src.connection.collection(
 				'changes:' + spaceName,
-				sus.resume( )
+				resume( )
 			);
 
 		tc =
 			yield trg.connection.collection(
 				'changes:' + spaceName,
-				sus.resume( )
+				resume( )
 			);
 
-		cursor = yield sc.find( sus.resume( ) );
+		cursor = yield sc.find( resume( ) );
 
 		for(
-			o = yield cursor.nextObject( sus.resume( ) );
+			o = yield cursor.nextObject( resume( ) );
 			o !== null;
-			o = yield cursor.nextObject( sus.resume( ) )
+			o = yield cursor.nextObject( resume( ) )
 		)
 		{
-			// o = translateChange( o );
+			o = translateChange( o );
 
-			yield tc.insert( o, sus.resume( ) );
+			yield tc.insert( o, resume( ) );
 		}
 	}
 

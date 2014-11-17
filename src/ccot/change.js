@@ -16,6 +16,7 @@ var
 | Imports
 */
 var
+	result,
 	jools;
 
 
@@ -64,6 +65,7 @@ if( JION )
 var
 	change,
 	changeRay,
+	resultChangeXChangeTree,
 	sign,
 	signRay;
 
@@ -82,6 +84,8 @@ if( SERVER )
 	sign = require( '../ccot/sign' );
 
 	signRay = require( '../ccot/sign-ray' );
+
+	resultChangeXChangeTree = require( '../result/change-x-change-tree' );
 }
 else
 {
@@ -92,6 +96,8 @@ else
 	sign = ccot.sign;
 
 	signRay = ccot.signRay;
+
+	resultChangeXChangeTree = result.changeXChangeTree;
 }
 
 
@@ -200,66 +206,23 @@ change.prototype.changeTree =
 		tree
 	)
 {
-	var
-		r;
-
 	// executes the op-handler
 	switch( this.type )
 	{
-		case 'split' :
+		case 'split' : return this._changeTreeSplit( tree );
 
-			r = this._changeTreeSplit( tree );
+		case 'join' : return this._changeTreeJoin( tree );
 
-			break;
+		case 'set' : return this._changeTreeSet( tree );
 
-		case 'join' :
+		case 'insert' : return this._changeTreeInsert( tree );
 
-			r = this._changeTreeJoin( tree );
+		case 'remove' : return this._changeTreeRemove( tree );
 
-			break;
+		case 'rank' : return this._changeTreeRank( tree );
 
-		case 'set' :
-
-			r = this._changeTreeSet( tree );
-
-			break;
-
-		case 'insert' :
-
-			r = this._changeTreeInsert( tree );
-
-			break;
-
-		case 'remove' :
-
-			r = this._changeTreeRemove( tree );
-
-			break;
-
-		case 'rank' :
-
-			r = this._changeTreeRank( tree );
-
-			break;
-
-		default :
-
-			throw new Error( );
+		default : throw new Error( );
 	}
-
-
-	// if answer is null the change has vaporated
-	if( r === null )
-	{
-		return null;
-	}
-
-	return jools.immute(
-		{
-			tree : r.tree,
-			chgX : r.chg
-		}
-	);
 };
 
 
@@ -561,6 +524,7 @@ change.prototype._changeTreeSet =
 	var
 		cm,
 		key,
+		orank,
 		pivot,
 		save,
 		src,
@@ -576,17 +540,9 @@ change.prototype._changeTreeSet =
 
 	key = null;
 
-	jools.check(
-		trg.at1 === undefined,
-		cm,
-		'trg.at1 must not exist.'
-	);
+	jools.check( trg.at1 === undefined, cm, 'trg.at1 must not exist.' );
 
-	jools.check(
-		src.val !== undefined,
-		cm,
-		'src.val missing'
-	);
+	jools.check( src.val !== undefined, cm, 'src.val missing' );
 
 	// if $new is given, replaces it with a unique ID
 	if( trg.path.get( -1 ) === '$new' )
@@ -595,16 +551,11 @@ change.prototype._changeTreeSet =
 
 		key = pivot.newUID( );
 
-		trg =
-			trg.create(
-				'path',
-					trg.path.set( -1, key )
-			);
+		trg = trg.create( 'path', trg.path.set( -1, key ) );
 	}
 
 	// Stores the old value for history tracking.
-	save =
-		tree.getPath( trg.path );
+	save = tree.getPath( trg.path );
 
 	if( save === undefined )
 	{
@@ -618,11 +569,7 @@ change.prototype._changeTreeSet =
 	// FIXME simplify
 	if( trg.rank === undefined )
 	{
-		tree =
-			tree.setPath(
-				trg.path,
-				src.val
-			);
+		tree = tree.setPath( trg.path, src.val );
 	}
 	else
 	{
@@ -633,47 +580,25 @@ change.prototype._changeTreeSet =
 
 		if( key === null )
 		{
-			key =
-				trg.path.get( -1 );
+			key = trg.path.get( -1 );
 		}
-
-		var
-			orank;
 
 		if( src.val !== null )
 		{
-			pivot =
-				pivot.create(
-					'twig:insert',
-					key,
-					trg.rank,
-					src.val
-				);
+			pivot = pivot.create( 'twig:insert', key, trg.rank, src.val );
 		}
 		else
 		{
 			orank = pivot.rankOf( key );
 
-			trg =
-				trg.create(
-					'rank',
-						orank
-				);
+			trg = trg.create( 'rank', orank );
 
-			pivot =
-				pivot.create(
-					'twig:remove',
-					key
-				);
+			pivot = pivot.create( 'twig:remove', key );
 		}
 
 		if( trg.path.length > 2 )
 		{
-			tree =
-				tree.setPath(
-					trg.path.shorten( 2 ),
-					pivot
-				);
+			tree = tree.setPath( trg.path.shorten( 2 ), pivot );
 		}
 		else
 		{
@@ -681,15 +606,12 @@ change.prototype._changeTreeSet =
 		}
 	}
 
-	return {
-		tree :
-			tree,
-		chg :
-			this.create(
-				'src', src,
-				'trg', trg
-			)
-	};
+	return(
+		resultChangeXChangeTree.create(
+			'tree', tree,
+			'chgX', this.create( 'src', src, 'trg', trg )
+		)
+	);
 };
 
 
@@ -718,19 +640,11 @@ change.prototype._changeTreeInsert =
 
 	trg = this.trg;
 
-	jools.check(
-		trg.path.reflect === 'jion.path',
-		cm,
-		'trg.path missing'
-	);
+	jools.check( trg.path.reflect === 'jion.path', cm, 'trg.path missing' );
 
 	str = tree.getPath( trg.path );
 
-	jools.check(
-		jools.isString( str ),
-		cm,
-		'trg.path signates no string'
-	);
+	jools.check( jools.isString( str ), cm, 'trg.path signates no string' );
 
 	// where trg span should end
 	tat2 = trg.at1 + src.val.length;
@@ -744,15 +658,12 @@ change.prototype._changeTreeInsert =
 
 	tree = tree.setPath( trg.path, nstr );
 
-	return {
-		tree :
-			tree,
-		chg :
-			this.create(
-				'src', src,
-				'trg', trg
-			)
-	};
+	return(
+		resultChangeXChangeTree.create(
+			'tree', tree,
+			'chgX', this.create( 'src', src, 'trg', trg )
+		)
+	);
 };
 
 
@@ -802,35 +713,20 @@ change.prototype._changeTreeRemove =
 		return null;
 	}
 
-	val =
-		str.substring(
-			src.at1,
-			src.at2
-		);
+	val = str.substring( src.at1, src.at2 );
 
 	trg = trg.affix( 'val', val );
 
-	nstr = (
-		str.substring( 0, src.at1 )
-		+
-		str.substring( src.at2 )
+	nstr = str.substring( 0, src.at1 ) + str.substring( src.at2 );
+
+	tree = tree.setPath( src.path, nstr );
+
+	return(
+		resultChangeXChangeTree.create(
+			'tree', tree,
+			'chgX', this.create( 'src', src, 'trg', trg )
+		)
 	);
-
-	tree =
-		tree.setPath(
-			src.path,
-			nstr
-		);
-
-	return {
-		tree :
-			tree,
-		chg :
-			this.create(
-				'src', src,
-				'trg', trg
-			)
-	};
 };
 
 
@@ -869,20 +765,11 @@ change.prototype._changeTreeJoin =
 
 	at1 = trg.at1;
 
-	jools.check(
-		at1 !== undefined,
-		cm,
-		'trg.at1 missing'
-	);
+	jools.check( at1 !== undefined, cm, 'trg.at1 missing' );
 
-	text =
-		tree.getPath( path );
+	text = tree.getPath( path );
 
-	jools.check(
-		jools.isString( text ),
-		cm,
-		'trg signates no text'
-	);
+	jools.check( jools.isString( text ), cm, 'trg signates no text' );
 
 	key = path.get( -2 );
 
@@ -894,11 +781,7 @@ change.prototype._changeTreeJoin =
 
 	jools.check( kn >= 0, cm, 'invalid line key (1)' );
 
-	jools.check(
-		kn < pivot.ranks.length,
-		cm,
-		'cannot join last line'
-	);
+	jools.check( kn < pivot.ranks.length, cm, 'cannot join last line' );
 
 	key2 = pivot.ranks[ kn + 1 ];
 
@@ -914,31 +797,16 @@ change.prototype._changeTreeJoin =
 
 	para1 = para1.create( 'text', para1.text + para2.text );
 
-	pivot =
-		pivot.create(
-			'twig:set',
-				key,
-				para1,
-			'twig:remove',
-				key2
-		);
+	pivot = pivot.create( 'twig:set', key, para1, 'twig:remove', key2 );
 
-	tree =
-		tree.setPath(
-			path.shorten( 3 ),
-			pivot
-		);
+	tree = tree.setPath( path.shorten( 3 ), pivot );
 
-	// FIXME make a JION
-	return {
-		tree :
-			tree,
-		chg :
-			this.create(
-				'src', src,
-				'trg', trg
-			)
-	};
+	return(
+		resultChangeXChangeTree.create(
+			'tree', tree,
+			'chgX', this.create( 'src', src, 'trg', trg )
+		)
+	);
 };
 
 
@@ -1018,31 +886,18 @@ change.prototype._changeTreeSplit =
 
 	pivot =
 		pivot.create(
-			'twig:set',
-				key,
-				para1,
-			'twig:insert',
-				vKey,
-				kn + 1,
-				para2
+			'twig:set', key, para1,
+			'twig:insert', vKey, kn + 1, para2
 		);
 
-	tree =
-		tree.setPath(
-			path.shorten( 3 ),
-			pivot
-		);
+	tree = tree.setPath( path.shorten( 3 ), pivot );
 
-	// FIXME make a proper jion
-	return {
-		tree :
-			tree,
-		chg :
-			this.create(
-				'src', src,
-				'trg', trg
-			)
-	};
+	return(
+		resultChangeXChangeTree.create(
+			'tree', tree,
+			'chgX', this.create( 'src', src, 'trg', trg )
+		)
+	);
 };
 
 
@@ -1070,25 +925,13 @@ change.prototype._changeTreeRank =
 
 	trg = this.trg;
 
-	jools.check(
-		src.path !== undefined,
-		cm,
-		'src.path not present'
-	);
+	jools.check( src.path !== undefined, cm, 'src.path not present' );
 
-	jools.check(
-		trg.rank !== undefined,
-		cm,
-		'trg.rank not present'
-	);
+	jools.check( trg.rank !== undefined, cm, 'trg.rank not present' );
 
 	pivot = tree.getPath( src.path.shorten( 2 ) );
 
-	jools.check(
-		pivot.ranks !== undefined,
-		cm,
-		'pivot has no ranks'
-	);
+	jools.check( pivot.ranks !== undefined, cm, 'pivot has no ranks' );
 
 	key = src.path.get( -1 );
 
@@ -1110,21 +953,13 @@ change.prototype._changeTreeRank =
 	// FUTURE make a twig:rerank
 	pivot =
 		pivot.create(
-			'twig:remove',
-				key,
-			'twig:insert',
-				key,
-				trg.rank,
-				pivot.twig[ key ]
+			'twig:remove', key,
+			'twig:insert', key, trg.rank, pivot.twig[ key ]
 		);
 
 	if( src.path.length > 2 )
 	{
-		tree =
-			tree.setPath(
-				src.path.shorten( 2 ),
-				pivot
-			);
+		tree = tree.setPath( src.path.shorten( 2 ), pivot );
 	}
 	else
 	{
@@ -1139,16 +974,18 @@ change.prototype._changeTreeRank =
 		tree = pivot;
 	}
 
-	return {
-		tree :
-			tree,
-		chg :
-			this.create(
-				'src', src,
-				'trg', trg
-			)
-	};
+	return(
+		resultChangeXChangeTree.create(
+			'tree', tree,
+			'chgX', this.create( 'src', src, 'trg', trg )
+		)
+	);
 };
+
+
+/****************************************************************************
+*****************************************************************************
+****************************************************************************/
 
 
 /*

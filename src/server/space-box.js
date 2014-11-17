@@ -67,9 +67,16 @@ if( JION )
 
 var
 	ccot,
+	database,
 	resume,
 	spaceBox,
 	visual;
+
+
+database =
+	{
+		changePocket : require( '../database/change-pocket' )
+	};
 
 resume = require( 'suspend' ).resume;
 
@@ -106,6 +113,7 @@ spaceBox.loadSpace =
 		changesDB,
 		chgX,
 		cursor,
+		cp,
 		o,
 		seqZ,
 		space;
@@ -134,23 +142,21 @@ spaceBox.loadSpace =
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
-		if( o._id !== seqZ )
+		cp = database.changePocket.createFromJSON( o );
+
+		if( cp._id !== seqZ )
 		{
 			throw new Error( 'sequence mismatch' );
 		}
 
-		if ( !Array.isArray( o.chgX ) )
-		{
-			o.type = 'change'; // FIXME this is a hack XXX
+		chgX = cp.chgX;
 
-			chgX = ccot.change.createFromJSON( o.chgX );
-		}
-		else
-		{
-			chgX = ccot.changeRay.createFromJSON( o.chgX );
-		}
-
-		seqZ++;
+		// FIXME
+		changes[ seqZ++ ] =
+			{
+				cid : cp.cid,
+				chgX : cp.chgX
+			};
 
 		space = chgX.changeTree( space ).tree;
 	}
@@ -164,8 +170,6 @@ spaceBox.loadSpace =
 			'seqZ', seqZ
 		)
 	);
-
-	// FIXME actually load changes and space and playback.
 };
 
 
@@ -220,12 +224,15 @@ spaceBox.prototype.appendChange =
 	)
 {
 	var
+//		cp,
 		ctr;
 
-	ctr = changeWrap.chgX.changeTree( this.space ); // XXX
+	ctr = changeWrap.chgX.changeTree( this.space ); // XXX remove chgX here
+
+	// cp = changePocket.createFromChangeWrap( changeWrap );
 
 	// saves the change(ray) in the database
-	// FIXME save changeWraps
+	// FIXME save changePockets
 	this._changesDB.insert(
 		{
 			_id : this.seqZ,

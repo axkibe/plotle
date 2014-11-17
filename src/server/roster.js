@@ -63,6 +63,11 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/result/change-x-change-tree.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/ccot/sign.js',
 		'hasJion', true,
 		'inBundle', true,

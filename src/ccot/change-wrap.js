@@ -45,7 +45,6 @@ if( JION )
 							true,
 						type :
 							[ 'ccot.change', 'ccot.changeRay' ]
-							//'Object'
 					},
 				seq :
 					{
@@ -111,6 +110,32 @@ changeWrap.prototype.transform =
 {
 	return this.chgX.transform( cx );
 };
+
+
+/*
+| Performes the wrapped change on a tree.
+*/
+changeWrap.prototype.changeTree =
+	function(
+		tree
+	)
+{
+	var
+		result;
+
+	result = this.chgX.changeTree( tree );
+
+	throw new Error( 'FIXME' );
+
+	/*
+	return(
+		this.create(
+			'chgX', result.chgX
+		)
+	);
+	*/
+};
+
 
 
 }( ) );
