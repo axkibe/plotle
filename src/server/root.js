@@ -38,7 +38,6 @@ GLOBAL.SHELL = false;
 
 
 var
-	ccot,
 	config,
 	db_version,
 	fabric,
@@ -72,17 +71,6 @@ fs = require( 'fs' );
 generateJion = require( './generate-jion' );
 
 http = require( 'http' );
-
-ccot =
-	{
-		change : require( '../ccot/change' ),
-
-		changeRay : require( '../ccot/change-ray' ),
-
-		changeWrap : require( '../ccot/change-wrap' ),
-
-		changeWrapRay : require( '../ccot/change-wrap-ray' ),
-	};
 
 jion =
 	{
@@ -286,7 +274,9 @@ prototype.loadSpaces =
 
 
 /*
-| loads a spaces and playbacks its changes from the database.
+| Loads a spaces and playbacks its changes from the database.
+|
+| FIXME remove
 */
 prototype.loadSpace =
 	function*(
@@ -294,9 +284,6 @@ prototype.loadSpace =
 	)
 {
 	var
-		chgX,
-		cursor,
-		o,
 		spaceBox;
 
 	jools.log(
@@ -307,39 +294,6 @@ prototype.loadSpace =
 	spaceBox =
 	root.$spaces[ spaceRef.fullname ] =
 		yield* server.spaceBox.loadSpace( spaceRef );
-
-	cursor = yield* spaceBox.findAllChanges( );
-
-	for(
-		o = yield cursor.nextObject( sus.resume( ) );
-		o !== null;
-		o = yield cursor.nextObject( sus.resume( ) )
-	)
-	{
-		if( o._id !== spaceBox.seqZ )
-		{
-			throw new Error( 'sequence mismatch' );
-		}
-
-		if ( !Array.isArray( o.chgX ) )
-		{
-			o.type = 'change'; // FUTURE this is a hack XXX
-
-			chgX = ccot.change.createFromJSON( o.chgX );
-		}
-		else
-		{
-			chgX = ccot.changeRay.createFromJSON( o.chgX );
-		}
-
-		// FIXME move this into loadSpace( )
-		spaceBox =
-		root.$spaces[ spaceRef.fullname ] =
-			spaceBox.create(
-				'seqZ', spaceBox.seqZ + 1,
-				'space', chgX.changeTree( spaceBox.space ).tree
-			);
-	}
 };
 
 
@@ -1099,11 +1053,9 @@ prototype.serveRequestAlter =
 {
 	var
 		a,
+		changeWrap,
 		changeWrapRay,
-		chgX,
-		cid,
 		passhash,
-		result,
 		seq,
 		seqZ,
 		spaceBox,
@@ -1153,81 +1105,31 @@ prototype.serveRequestAlter =
 		throw jools.reject( 'invalid seq' );
 	}
 
-
 	if( changeWrapRay.length !== 1 )
 	{
 		throw jools.reject( 'FIXME changeWrapRay.length must be 1' );
 	}
 
-	cid = changeWrapRay.get( 0 ).cid;
-
-	chgX = changeWrapRay.get( 0 ).chgX;
+	changeWrap = changeWrapRay.get( 0 );
 
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )
 	{
-		chgX = spaceBox.changes[ a ].chgX.transform( chgX );
-
-		if(
-			chgX === null
-			||
-			chgX.length === 0
-		)
-		{
-			// the change disipiated.
-			return {
-				ok : true,
-				chgX : chgX
-			};
-		}
+		changeWrap = spaceBox.changes[ a ].chgX.transform( changeWrap );
+		// FIXME remove .chgX. in above call
 	}
-
-	// FUTURE this is currently a double check to the for before
-	if( chgX === null || chgX.length === 0 )
-	{
-		return {
-			ok : true,
-			chgX : chgX
-		};
-	}
-
-	// applies the changes
-	result = chgX.changeTree( spaceBox.space );
-
-	// FIXME changeWrap?
-	spaceBox.changes[ seqZ ] =
-		{
-			cid : cid,
-			chgX : chgX
-		};
 
 	// this does not yield, its write and forget.
 	spaceBox =
-		spaceBox.appendChange(
-			cid,
-			spaceBox.seqZ,
-			result.chgX,
-			req.user
-		);
-
-	// FIXME hthis should be done within aboce call
-
-	spaceBox =
 	root.$spaces[ spaceRef.fullname ] =
-		spaceBox.create(
-			'changes', spaceBox.changes, // FIXME
-			'space', result.tree,
-			'seqZ', spaceBox.seqZ + 1
-		);
-
+		spaceBox.appendChange( changeWrap, req.user );
 
 	process.nextTick(
 		function( ) { root.wake( spaceRef ); }
 	);
 
 	return {
-		ok : true,
-		chgX : result.chgX
+		ok : true
 	};
 };
 

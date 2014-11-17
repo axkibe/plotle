@@ -66,6 +66,7 @@ if( JION )
 }
 
 var
+	ccot,
 	resume,
 	spaceBox,
 	visual;
@@ -73,6 +74,18 @@ var
 resume = require( 'suspend' ).resume;
 
 spaceBox = require( '../jion/this' )( module );
+
+ccot =
+	{
+		// FUTURE double check if all are needed.
+		change : require( '../ccot/change' ),
+
+		changeRay : require( '../ccot/change-ray' ),
+
+		changeWrap : require( '../ccot/change-wrap' ),
+
+		changeWrapRay : require( '../ccot/change-wrap-ray' ),
+	};
 
 visual =
 	{
@@ -88,16 +101,67 @@ spaceBox.loadSpace =
 		spaceRef
 	)
 {
+	var
+		changes,
+		changesDB,
+		chgX,
+		cursor,
+		o,
+		seqZ,
+		space;
+
+	changes = [ ];
+
+	seqZ = 1;
+
+	space = visual.space.create( );
+
+	changesDB =
+		yield* root.repository.collection(
+			'changes:' + spaceRef.fullname
+		);
+
+	cursor =
+		yield changesDB.find(
+			{ },
+			{ sort : '_id' },
+			resume( )
+		);
+
+	for(
+		o = yield cursor.nextObject( resume( ) );
+		o !== null;
+		o = yield cursor.nextObject( resume( ) )
+	)
+	{
+		if( o._id !== seqZ )
+		{
+			throw new Error( 'sequence mismatch' );
+		}
+
+		if ( !Array.isArray( o.chgX ) )
+		{
+			o.type = 'change'; // FIXME this is a hack XXX
+
+			chgX = ccot.change.createFromJSON( o.chgX );
+		}
+		else
+		{
+			chgX = ccot.changeRay.createFromJSON( o.chgX );
+		}
+
+		seqZ++;
+
+		space = chgX.changeTree( space ).tree;
+	}
+
 	return(
 		spaceBox.create(
-			'_changesDB',
-				yield* root.repository.collection(
-					'changes:' + spaceRef.fullname
-				),
-			'changes', [ ],
-			'space', visual.space.create( ),
+			'_changesDB', changesDB,
+			'changes', changes,
+			'space', space,
 			'spaceRef', spaceRef,
-			'seqZ', 1
+			'seqZ', seqZ
 		)
 	);
 
@@ -145,50 +209,29 @@ spaceBox.createSpace =
 
 
 /*
-| Returns a cursor with all changes.
-*/
-spaceBox.prototype.findAllChanges =
-	function*( )
-{
-	return(
-		yield this._changesDB.find(
-			{ },
-			{ sort : '_id' },
-			resume( )
-		)
-	);
-};
-
-
-/*
 | Appends a change.
 |
 | This is currently write and forget to database.
 */
 spaceBox.prototype.appendChange =
 	function(
-		cid,  // FIXME
-		seqZ, // FIXME
-		chgX, // FIXME
-		user  // FIXME
+		changeWrap,
+		user
 	)
 {
+	var
+		ctr;
 
-/**/if( CHECK )
-/**/{
-/**/	if( !this._changesDB )
-/**/	{
-/**/		throw new Error( 'Spacebox not connected' );
-/**/	}
-/**/}
+	ctr = changeWrap.chgX.changeTree( this.space ); // XXX
 
 	// saves the change(ray) in the database
+	// FIXME save changeWraps
 	this._changesDB.insert(
 		{
-			_id : seqZ,
-			cid : cid,
+			_id : this.seqZ,
+			cid : changeWrap.cid,
 			// needs to rid info.
-			chgX : JSON.parse( JSON.stringify( chgX ) ),
+			chgX : JSON.parse( JSON.stringify( ctr.chgX ) ),
 			user : user,
 			date : Date.now( )
 		},
@@ -201,7 +244,20 @@ spaceBox.prototype.appendChange =
 		}
 	);
 
-	return this;
+	// FIXME changeWrap?
+	this.changes[ this.seqZ ] =
+		{
+			cid : changeWrap.cid,
+			chgX : ctr.chgX
+		};
+
+	return(
+		this.create(
+			// FIXME changes
+			'seqZ', this.seqZ + 1,
+			'space', ctr.tree
+		)
+	);
 };
 
 
