@@ -61,7 +61,6 @@ var
 	uglify,
 	url,
 	util,
-	visual,
 	zlib;
 
 db_version = 8;
@@ -142,11 +141,6 @@ util = require( 'util' );
 fabric =
 	{
 		spaceRef : require( '../fabric/space-ref' )
-	};
-
-visual =
-	{
-		space : require( '../visual/space' )
 	};
 
 zlib = require( 'zlib' );
@@ -300,7 +294,7 @@ prototype.loadSpace =
 	)
 {
 	var
-		change,
+		chgX,
 		cursor,
 		o,
 		spaceBox;
@@ -311,37 +305,10 @@ prototype.loadSpace =
 	);
 
 	spaceBox =
-		root.$spaces[ spaceRef.fullname ] =
-			/*
-			server.spaceBox.create(
-				'spaceRef', spaceRef,
-				'changesDB',
-					yield* root.repository.collection(
-						'changes:' + spaceRef.fullname
-					),
-				'changes', [ ],
-				'space', visual.space.create( ),
-				'seqZ',
-					1
-			);
-			*/
-			{
-				spaceRef : spaceRef,
-				changesDB :
-					yield* root.repository.collection(
-						'changes:' + spaceRef.fullname
-					),
-				changes : [ ],
-				space : visual.space.create( ),
-				seqZ : 1
-			};
+	root.$spaces[ spaceRef.fullname ] =
+		yield* server.spaceBox.loadSpace( spaceRef );
 
-	cursor =
-		yield spaceBox.changesDB.find(
-			{ },
-			{ sort : '_id' },
-			sus.resume( )
-		);
+	cursor = yield* spaceBox.findAllChanges( );
 
 	for(
 		o = yield cursor.nextObject( sus.resume( ) );
@@ -354,27 +321,24 @@ prototype.loadSpace =
 			throw new Error( 'sequence mismatch' );
 		}
 
-		// FIXME there is something quirky, why isn't *this* a "change"?
-		change =
-			{
-				cid : o.cid,
-				chgX : null
-			};
-
 		if ( !Array.isArray( o.chgX ) )
 		{
 			o.type = 'change'; // FUTURE this is a hack XXX
 
-			change.chgX = ccot.change.createFromJSON( o.chgX );
+			chgX = ccot.change.createFromJSON( o.chgX );
 		}
 		else
 		{
-			change.chgX = ccot.changeRay.createFromJSON( o.chgX );
+			chgX = ccot.changeRay.createFromJSON( o.chgX );
 		}
 
-		spaceBox.seqZ++; // XXX
-
-		spaceBox.space = change.chgX.changeTree( spaceBox.space ).tree; //XXX
+		// FIXME move this into loadSpace( )
+		spaceBox =
+		root.$spaces[ spaceRef.fullname ] =
+			spaceBox.create(
+				'seqZ', spaceBox.seqZ + 1,
+				'space', chgX.changeTree( spaceBox.space ).tree
+			);
 	}
 };
 
@@ -1135,7 +1099,6 @@ prototype.serveRequestAlter =
 {
 	var
 		a,
-		changes,
 		changeWrapRay,
 		chgX,
 		cid,
@@ -1178,8 +1141,6 @@ prototype.serveRequestAlter =
 
 	spaceBox = root.$spaces[ spaceRef.fullname ];
 
-	changes = spaceBox.changes;
-
 	seqZ = spaceBox.seqZ;
 
 	if( seq === -1 )
@@ -1205,7 +1166,7 @@ prototype.serveRequestAlter =
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )
 	{
-		chgX = changes[ a ].chgX.transform( chgX );
+		chgX = spaceBox.changes[ a ].chgX.transform( chgX );
 
 		if(
 			chgX === null
@@ -1213,6 +1174,7 @@ prototype.serveRequestAlter =
 			chgX.length === 0
 		)
 		{
+			// the change disipiated.
 			return {
 				ok : true,
 				chgX : chgX
@@ -1220,11 +1182,8 @@ prototype.serveRequestAlter =
 		}
 	}
 
-	if(
-		chgX === null
-		||
-		chgX.length === 0
-	)
+	// FUTURE this is currently a double check to the for before
+	if( chgX === null || chgX.length === 0 )
 	{
 		return {
 			ok : true,
@@ -1235,50 +1194,40 @@ prototype.serveRequestAlter =
 	// applies the changes
 	result = chgX.changeTree( spaceBox.space );
 
-	spaceBox.space = result.tree; // XXX
-
-	chgX = result.chgX;
-
-	changes[ seqZ ] =
+	// FIXME changeWrap?
+	spaceBox.changes[ seqZ ] =
 		{
 			cid : cid,
 			chgX : chgX
 		};
 
-	// saves the change(ray) in the database
-	spaceBox.changesDB.insert(
-		{
-			_id : seqZ,
-			cid : cid,
-			chgX : JSON.parse( JSON.stringify( chgX ) ), // needs to rid info.
-			user : req.user,
-			date : Date.now( )
-		},
+	// this does not yield, its write and forget.
+	spaceBox =
+		spaceBox.appendChange(
+			cid,
+			spaceBox.seqZ,
+			result.chgX,
+			req.user
+		);
 
-		function(
-			error
-			// count
-		)
-		{
-			if( error !== null )
-			{
-				throw new Error( 'Database fail!' );
-			}
-		}
-	);
+	// FIXME hthis should be done within aboce call
 
-	spaceBox.seqZ++; // XXX
+	spaceBox =
+	root.$spaces[ spaceRef.fullname ] =
+		spaceBox.create(
+			'changes', spaceBox.changes, // FIXME
+			'space', result.tree,
+			'seqZ', spaceBox.seqZ + 1
+		);
+
 
 	process.nextTick(
-		function( )
-		{
-			root.wake( spaceRef );
-		}
+		function( ) { root.wake( spaceRef ); }
 	);
 
 	return {
 		ok : true,
-		chgX : chgX
+		chgX : result.chgX
 	};
 };
 
@@ -1382,24 +1331,7 @@ prototype.createSpace =
 
 	spaceBox =
 	root.$spaces[ spaceRef.fullname ] =
-		{
-			changesDB :
-				yield* root.repository.collection(
-					'changes:' + spaceRef.fullname
-				),
-			changes : [ ],
-			space : visual.space.create( ),
-			seqZ : 1
-		};
-
-	yield root.repository.spaces.insert(
-		{
-			_id : spaceRef.fullname,
-			username: spaceRef.username,
-			tag : spaceRef.tag
-		},
-		sus.resume( )
-	);
+		yield* server.spaceBox.createSpace( spaceRef );
 
 	return spaceBox;
 };

@@ -52,7 +52,6 @@ var _attributeBlacklist =
 		'ray' : true,
 		'rayDup' : true,
 		'setPath' : true,
-//		'type' : true,
 		'twig' : true,
 		'twigDup' : true
 	} );
