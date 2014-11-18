@@ -18,7 +18,8 @@ ccot = ccot || { };
 | Imports
 */
 var
-	jools;
+	jools,
+	result;
 
 
 /*
@@ -52,12 +53,10 @@ if( JION )
 
 var
 	change,
-	changeRay;
+	changeRay,
+	resultChangeXChangeTree;
 
 
-/*
-| Node includes.
-*/
 if( SERVER )
 {
 	changeRay = require( '../jion/this' )( module );
@@ -65,12 +64,16 @@ if( SERVER )
 	jools = require( '../jools/jools'  );
 
 	change = require( '../ccot/change' );
+
+	resultChangeXChangeTree = require( '../result/change-x-change-tree' );
 }
 else
 {
 	change = ccot.change;
 
 	changeRay = ccot.changeRay;
+
+	resultChangeXChangeTree = result.changeXChangeTree;
 }
 
 
@@ -266,6 +269,8 @@ changeRay.prototype.changeTree =
 {
 	// the ray with the changes applied
 	var
+		a,
+		aZ,
 		chg,
 		cray,
 		cr;
@@ -274,7 +279,7 @@ changeRay.prototype.changeTree =
 
 	// iterates through the change ray
 	for(
-		var a = 0, aZ = this.length;
+		a = 0, aZ = this.length;
 		a < aZ;
 		a++
 	)
@@ -289,14 +294,13 @@ changeRay.prototype.changeTree =
 		cray.push( cr.chg );
 	}
 
-	// FUTURE make a "changeResult" jion.
-	return jools.immute(
-		{
-			tree :
-				tree,
-			chgX :
-				changeRay.create( 'ray:init', cray )
-		}
+	// FUTURE create only a single change when cray.length === 1
+
+	return(
+		resultChangeXChangeTree.create(
+			'tree', tree,
+			'chgX', changeRay.create( 'ray:init', cray )
+		)
 	);
 };
 
