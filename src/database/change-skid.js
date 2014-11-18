@@ -1,5 +1,5 @@
 /*
-| A change pocketed for database storage.
+| A change on a skid for database storage.
 |
 | Authors: Axel Kittenberger
 */
@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'database.changePocket',
+			'database.changeSkid',
 		attributes :
 			{
 				_id :
@@ -37,8 +37,6 @@ if( JION )
 							'change id',
 						json :
 							true,
-							// FIXME it accepted 'true',
-							// jion validator shouldn't
 						type :
 							'String'
 					},
@@ -77,28 +75,28 @@ if( JION )
 
 
 var
-	ccotChangeWrap,
-	changePocket,
+	ccot_changeWrap,
+	changeSkid,
 	jools;
 
-changePocket = require( '../jion/this' )( module );
+changeSkid = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
-ccotChangeWrap = require( '../ccot/change-wrap' );
+ccot_changeWrap = require( '../ccot/change-wrap' );
 
 
 /*
-| Creates a changePocket from a changeWrap.
+| Creates a changeSkid from a changeWrap.
 */
-changePocket.createFromChangeWrap =
+changeSkid.createFromChangeWrap =
 	function(
 		cw,
 		user
 	)
 {
 	return(
-		changePocket.create(
+		changeSkid.create(
 			'_id', cw.seq,
 			'cid', cw.cid,
 			'chgX', cw.chgX,
@@ -110,12 +108,12 @@ changePocket.createFromChangeWrap =
 
 
 jools.lazyValue(
-	changePocket.prototype,
+	changeSkid.prototype,
 	'asChangeWrap',
 	function( )
 {
 	return(
-		ccotChangeWrap.create(
+		ccot_changeWrap.create(
 			'chgX', this.chgX,
 			'cid', this.cid,
 			'seq', this._id
@@ -123,5 +121,6 @@ jools.lazyValue(
 	);
 }
 );
+
 
 }( ) );

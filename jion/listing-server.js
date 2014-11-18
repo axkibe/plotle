@@ -15,7 +15,7 @@ module.exports =
 			'src/ccot/change-wrap-ray.js',
 			'src/ccot/sign.js',
 			'src/ccot/sign-ray.js',
-			'src/database/change-pocket.js',
+			'src/database/change-skid.js',
 			'src/database/repository.js',
 			'src/euclid/margin.js',
 			'src/euclid/point.js',

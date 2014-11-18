@@ -67,16 +67,13 @@ if( JION )
 
 var
 	ccot,
-	database,
+	database_changeSkid,
 	resume,
 	spaceBox,
 	visual;
 
 
-database =
-	{
-		changePocket : require( '../database/change-pocket' )
-	};
+database_changeSkid = require( '../database/change-skid' );
 
 resume = require( 'suspend' ).resume;
 
@@ -142,7 +139,7 @@ spaceBox.loadSpace =
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
-		cp = database.changePocket.createFromJSON( o );
+		cp = database_changeSkid.createFromJSON( o );
 
 		if( cp._id !== seqZ )
 		{
@@ -229,10 +226,10 @@ spaceBox.prototype.appendChange =
 
 	ctr = changeWrap.chgX.changeTree( this.space ); // XXX remove chgX here
 
-	// cp = changePocket.createFromChangeWrap( changeWrap );
+	// cp = database_changeSkid.createFromChangeWrap( changeWrap );
 
 	// saves the change(ray) in the database
-	// FIXME save changePockets
+	// FIXME save changeSkids
 	this._changesDB.insert(
 		{
 			_id : this.seqZ,

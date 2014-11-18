@@ -92,7 +92,7 @@ function translateSpacesEntry( o )
 */
 function translateChange( o )
 {
-	o.type = 'database.changePocket';
+	o.type = 'database.changeSkid';
 
 	return o;
 }
