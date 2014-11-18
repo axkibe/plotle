@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'result.changeXChangeTree',
+			'result.changeTree',
 		attributes :
 			{
 				chgX :
@@ -27,7 +27,9 @@ if( JION )
 						comment :
 							'change or change ray',
 						type :
-							[ 'ccot.change', 'ccot.changeRay' ]
+							[ 'ccot.change', 'ccot.changeRay' ],
+						defaultValue :
+							undefined
 					},
 				tree :
 					{

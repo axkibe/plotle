@@ -29,7 +29,7 @@ module.exports =
 			'src/request/register.js',
 			'src/request/update.js',
 			'src/result/genjion.js',
-			'src/result/change-x-change-tree.js',
+			'src/result/change-tree.js',
 			'src/server/resource.js',
 			'src/server/space-box.js',
 			'src/server/inventory.js',

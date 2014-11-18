@@ -54,7 +54,7 @@ if( JION )
 var
 	change,
 	changeRay,
-	resultChangeXChangeTree;
+	result_changeTree;
 
 
 if( SERVER )
@@ -65,7 +65,7 @@ if( SERVER )
 
 	change = require( '../ccot/change' );
 
-	resultChangeXChangeTree = require( '../result/change-x-change-tree' );
+	result_changeTree = require( '../result/change-tree' );
 }
 else
 {
@@ -73,7 +73,7 @@ else
 
 	changeRay = ccot.changeRay;
 
-	resultChangeXChangeTree = result.changeXChangeTree;
+	result_changeTree = result.changeTree;
 }
 
 
@@ -297,7 +297,7 @@ changeRay.prototype.changeTree =
 	// FUTURE create only a single change when cray.length === 1
 
 	return(
-		resultChangeXChangeTree.create(
+		result_changeTree.create(
 			'tree', tree,
 			'chgX', changeRay.create( 'ray:init', cray )
 		)

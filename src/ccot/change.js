@@ -65,7 +65,7 @@ if( JION )
 var
 	change,
 	changeRay,
-	resultChangeXChangeTree,
+	result_changeTree,
 	sign,
 	signRay;
 
@@ -85,7 +85,7 @@ if( SERVER )
 
 	signRay = require( '../ccot/sign-ray' );
 
-	resultChangeXChangeTree = require( '../result/change-x-change-tree' );
+	result_changeTree = require( '../result/change-tree' );
 }
 else
 {
@@ -97,7 +97,7 @@ else
 
 	signRay = ccot.signRay;
 
-	resultChangeXChangeTree = result.changeXChangeTree;
+	result_changeTree = result.changeTree;
 }
 
 
@@ -607,7 +607,7 @@ change.prototype._changeTreeSet =
 	}
 
 	return(
-		resultChangeXChangeTree.create(
+		result_changeTree.create(
 			'tree', tree,
 			'chgX', this.create( 'src', src, 'trg', trg )
 		)
@@ -659,7 +659,7 @@ change.prototype._changeTreeInsert =
 	tree = tree.setPath( trg.path, nstr );
 
 	return(
-		resultChangeXChangeTree.create(
+		result_changeTree.create(
 			'tree', tree,
 			'chgX', this.create( 'src', src, 'trg', trg )
 		)
@@ -722,7 +722,7 @@ change.prototype._changeTreeRemove =
 	tree = tree.setPath( src.path, nstr );
 
 	return(
-		resultChangeXChangeTree.create(
+		result_changeTree.create(
 			'tree', tree,
 			'chgX', this.create( 'src', src, 'trg', trg )
 		)
@@ -802,7 +802,7 @@ change.prototype._changeTreeJoin =
 	tree = tree.setPath( path.shorten( 3 ), pivot );
 
 	return(
-		resultChangeXChangeTree.create(
+		result_changeTree.create(
 			'tree', tree,
 			'chgX', this.create( 'src', src, 'trg', trg )
 		)
@@ -893,7 +893,7 @@ change.prototype._changeTreeSplit =
 	tree = tree.setPath( path.shorten( 3 ), pivot );
 
 	return(
-		resultChangeXChangeTree.create(
+		result_changeTree.create(
 			'tree', tree,
 			'chgX', this.create( 'src', src, 'trg', trg )
 		)
@@ -975,7 +975,7 @@ change.prototype._changeTreeRank =
 	}
 
 	return(
-		resultChangeXChangeTree.create(
+		result_changeTree.create(
 			'tree', tree,
 			'chgX', this.create( 'src', src, 'trg', trg )
 		)

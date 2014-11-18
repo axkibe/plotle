@@ -125,8 +125,6 @@ changeWrap.prototype.changeTree =
 
 	result = this.chgX.changeTree( tree );
 
-	throw new Error( 'FIXME' );
-
 	/*
 	return(
 		this.create(
