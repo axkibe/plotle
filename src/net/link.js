@@ -1,7 +1,5 @@
 /*
 | The link talks asynchronously with the server.
-| space
-| Authors: Axel Kittenberger
 */
 
 

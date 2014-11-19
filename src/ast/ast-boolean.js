@@ -1,8 +1,6 @@
 /*
 | A boolean literal.
 | ( true or false )
-|
-| Authors: Axel Kittenberger
 */
 
 

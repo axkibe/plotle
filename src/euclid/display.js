@@ -1,7 +1,5 @@
 /*
 | Wrapper around HTML5 canvas.
-|
-| Authors: Axel Kittenberger
 */
 
 

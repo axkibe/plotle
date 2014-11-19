@@ -1,8 +1,7 @@
 /*
 | The welcome form.
-| Shown only after successfull signing up.
 |
-| Authors: Axel Kittenberger
+| Shown only after successfully signing up.
 */
 
 

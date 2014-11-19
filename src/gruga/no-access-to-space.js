@@ -1,7 +1,5 @@
 /*
 | Default design for no-access-to-space form.
-|
-| Authors: Axel Kittenberger
 */
 
 

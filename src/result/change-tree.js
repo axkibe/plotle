@@ -1,7 +1,5 @@
 /*
-| Combined result of a changeTree call from a change or changeRay
-|
-| Authors: Axel Kittenberger
+| Combined result of a changeTree call from a change or changeRay.
 */
 
 

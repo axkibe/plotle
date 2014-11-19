@@ -1,7 +1,5 @@
 /*
-| Converts a v7 repository to v8
-|
-| Authors: Axel Kittenberger
+| Converts a v7 repository to v8.
 */
 
 /*

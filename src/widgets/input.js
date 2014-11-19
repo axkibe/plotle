@@ -1,7 +1,5 @@
 /*
 | An input field.
-|
-| Authors: Axel Kittenberger
 */
 
 

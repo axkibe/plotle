@@ -1,7 +1,5 @@
 /*
 | The move to form.
-|
-| Authors: Axel Kittenberger
 */
 
 

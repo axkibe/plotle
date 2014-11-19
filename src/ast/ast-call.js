@@ -1,7 +1,5 @@
 /*
 | A call in an abstract syntax tree.
-|
-| Authors: Axel Kittenberger
 */
 
 

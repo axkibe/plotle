@@ -1,7 +1,5 @@
 /*
 | A sequence of paragraphs.
-|
-| Authors: Axel Kittenberger
 */
 
 

@@ -1,8 +1,6 @@
 /*
 | A point with fixed view relativ to another anchor point
 | for which view position is applied
-|
-| Authors: Axel Kittenberger
 */
 
 

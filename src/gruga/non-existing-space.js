@@ -1,7 +1,5 @@
 /*
 | Default design for the non-existing-space form.
-|
-| Authors: Axel Kittenberger
 */
 
 

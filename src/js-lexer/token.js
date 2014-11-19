@@ -1,7 +1,5 @@
 /*
 | A lexer token.
-|
-| Authors: Axel Kittenberger
 */
 
 

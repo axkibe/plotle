@@ -1,7 +1,5 @@
 /*
 | A font face style.
-|
-| Authors: Axel Kittenberger
 */
 
 

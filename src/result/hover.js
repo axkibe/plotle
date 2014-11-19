@@ -3,8 +3,6 @@
 |
 | Containts the path of the component being hovered over
 | As well the shape the cursor should get.
-|
-| Authors: Axel Kittenberger
 */
 
 

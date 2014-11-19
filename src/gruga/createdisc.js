@@ -1,7 +1,5 @@
 /*
 | Default design of the creation disc.
-|
-| Authors: Axel Kittenberger
 */
 
 

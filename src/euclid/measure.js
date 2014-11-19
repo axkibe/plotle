@@ -1,9 +1,5 @@
 /*
-|
 | Measures texts.
-|
-| Authors: Axel Kittenberger
-|
 */
 
 

@@ -1,7 +1,5 @@
 /*
 | The dotracker manages the undo and redo stacks.
-|
-| Authors: Axel Kittenberger
 */
 
 

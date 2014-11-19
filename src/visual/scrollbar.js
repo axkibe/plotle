@@ -1,9 +1,7 @@
 /*
-| A scrollbar (used by note)
+| A scrollbar (used by note).
 |
 | Currently there are only vertical scrollbars.
-|
-| Authors: Axel Kittenberger
 */
 
 

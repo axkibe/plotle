@@ -1,7 +1,5 @@
 /*
-| A call to delete
-|
-| Authors: Axel Kittenberger
+| A call to delete.
 */
 
 

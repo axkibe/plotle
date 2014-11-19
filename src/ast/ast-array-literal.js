@@ -1,7 +1,5 @@
 /*
 | Array literals in abstract syntax trees.
-|
-| Authors: Axel Kittenberger
 */
 
 

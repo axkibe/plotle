@@ -1,7 +1,5 @@
 /*
 | The user is dragging an item.
-|
-| Authors: Axel Kittenberger
 */
 
 

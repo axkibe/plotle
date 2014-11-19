@@ -1,7 +1,5 @@
 /*
 | A comma operator list
-|
-| Authors: Axel Kittenberger
 */
 
 

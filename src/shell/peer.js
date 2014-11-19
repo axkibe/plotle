@@ -1,7 +1,5 @@
 /*
 | A peer to a repository.
-|
-| Authors: Axel Kittenberger
 */
 
 

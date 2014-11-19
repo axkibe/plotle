@@ -1,7 +1,5 @@
 /*
 | Tests if left is an instance of right.
-|
-| Authors: Axel Kittenberger
 */
 
 

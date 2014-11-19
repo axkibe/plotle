@@ -2,8 +2,6 @@
 | Conditional expressions in abstract syntax trees.
 |
 | In other words the questionmark semicolon operator.
-|
-| Authors: Axel Kittenberger
 */
 
 

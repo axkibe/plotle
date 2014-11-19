@@ -1,8 +1,6 @@
 /*
 | Runs the jion generator from node for the
 | module that requires this.
-|
-| Authors: Axel Kittenberger
 */
 
 

@@ -1,7 +1,5 @@
 /*
 | A jion id.
-|
-| Authors: Axel Kittenberger
 */
 
 

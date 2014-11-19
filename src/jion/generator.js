@@ -1,7 +1,5 @@
 /*
 | Generates jion objects from a jion definition.
-|
-| Authors: Axel Kittenberger
 */
 
 

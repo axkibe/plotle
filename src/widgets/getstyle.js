@@ -1,7 +1,5 @@
 /*
 | Gets styles by a name.
-|
-| Authors: Axel Kittenberger
 */
 
 

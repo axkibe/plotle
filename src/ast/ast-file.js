@@ -1,7 +1,5 @@
 /*
-| A file to be generated
-|
-| Authors: Axel Kittenberger
+| A file to be generated.
 */
 
 

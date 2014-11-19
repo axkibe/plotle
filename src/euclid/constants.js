@@ -1,7 +1,5 @@
 /*
 | Constans for euclid.
-|
-| Authors: Axel Kittenberger
 */
 
 

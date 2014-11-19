@@ -1,7 +1,5 @@
 /*
 | Fixed tree stubs.
-|
-| Authors: Axel Kittenberger
 */
 
 

@@ -1,7 +1,5 @@
 /*
 | Classical for loops for abstract syntax trees.
-|
-| Authors: Axel Kittenberger
 */
 
 

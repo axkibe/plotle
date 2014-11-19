@@ -1,7 +1,5 @@
 /*
 | A parser state.
-|
-| Authors: Axel Kittenberger
 */
 
 

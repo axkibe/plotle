@@ -1,7 +1,5 @@
 /*
 | AST: test for difference.
-|
-| Authors: Axel Kittenberger
 */
 
 

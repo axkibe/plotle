@@ -1,7 +1,5 @@
 /*
 | ast logical and operation.
-|
-| Authors: Axel Kittenberger
 */
 
 

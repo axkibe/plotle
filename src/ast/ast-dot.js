@@ -1,7 +1,5 @@
 /*
 | Gets a member of a table specified by a literal.
-|
-| Authors: Axel Kittenberger
 */
 
 

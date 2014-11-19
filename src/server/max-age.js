@@ -2,8 +2,6 @@
 | Maps a maxage setting to a cache control.
 |
 | FIXME capital MaxAge
-|
-| Authors: Axel Kittenberger
 */
 
 

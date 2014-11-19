@@ -1,7 +1,5 @@
 /*
 | A ccot change to a tree.
-|
-| Authors: Axel Kittenberger
 */
 
 

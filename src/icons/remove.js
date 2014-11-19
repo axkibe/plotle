@@ -1,7 +1,5 @@
 /*
 | Sketches of the icons on the discs.
-|
-| Authors: Axel Kittenberger
 */
 
 

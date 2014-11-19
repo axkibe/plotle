@@ -1,8 +1,6 @@
 /*
 | Runs the node Read-Eval-Print-Loop for debugging
 | in a ideoloom environment supporting JIONs etc.
-|
-| Authors: Axel Kittenberger
 */
 
 /*

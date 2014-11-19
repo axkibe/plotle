@@ -1,7 +1,5 @@
 /*
 | An ellipse.
-|
-| Authors: Axel Kittenberger
 */
 
 

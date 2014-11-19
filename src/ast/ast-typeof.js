@@ -1,7 +1,5 @@
 /*
 | A Typeof of an expression
-|
-| Authors: Axel Kittenberger
 */
 
 

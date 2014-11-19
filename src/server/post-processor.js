@@ -1,7 +1,5 @@
 /*
-| Post processes resources
-|
-| Authors: Axel Kittenberger
+| Post processes resources.
 */
 
 

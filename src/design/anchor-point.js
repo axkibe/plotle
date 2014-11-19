@@ -1,7 +1,5 @@
 /*
 | A point anchored within a frame.
-|
-| Authors: Axel Kittenberger
 */
 
 

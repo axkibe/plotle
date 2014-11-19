@@ -1,7 +1,5 @@
 /*
 | The root of the server.
-|
-| Authors: Axel Kittenberger
 */
 
 
@@ -1111,6 +1109,12 @@ prototype.serveRequestAlter =
 	}
 
 	changeWrap = changeWrapRay.get( 0 );
+
+
+	if( changeWrap.seq )
+	{
+		throw jools.reject( 'changeWrap.seq must not be set' );
+	}
 
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )

@@ -1,7 +1,5 @@
 /*
-| A checkbox
-|
-| Authors: Axel Kittenberger
+| A checkbox.
 */
 
 

@@ -1,7 +1,5 @@
 /*
 | ast negation expression.
-|
-| Authors: Axel Kittenberger
 */
 
 

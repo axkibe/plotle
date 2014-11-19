@@ -1,7 +1,5 @@
 /*
-| The resource inventory of the server
-|
-. Authors: Axel Kittenberger
+| The resource inventory of the server.
 */
 
 /*

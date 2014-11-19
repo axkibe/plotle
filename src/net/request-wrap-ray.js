@@ -1,7 +1,5 @@
 /*
 | A ray of request wrappings.
-|
-| Authors: Axel Kittenberger
 */
 
 

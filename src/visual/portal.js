@@ -1,7 +1,5 @@
 /*
-| A portal to another space
-|
-| Authors: Axel Kittenberger
+| A portal to another space.
 */
 
 

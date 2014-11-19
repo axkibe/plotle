@@ -1,7 +1,5 @@
 /*
 | The signup form.
-|
-| Authors: Axel Kittenberger
 */
 
 

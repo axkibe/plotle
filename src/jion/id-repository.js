@@ -2,8 +2,6 @@
 | A jion id repository.
 |
 | Is a set of units and names.
-|
-| Authors: Axel Kittenberger
 */
 
 

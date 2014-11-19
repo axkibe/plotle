@@ -1,7 +1,5 @@
 /*
 | A text range.
-|
-| Authors: Axel Kittenberger
 */
 
 

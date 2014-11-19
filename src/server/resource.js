@@ -1,7 +1,5 @@
 /*
 | Something to be REST-served.
-|
-| Authors: Axel Kittenberger
 */
 
 

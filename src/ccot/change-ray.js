@@ -1,7 +1,5 @@
 /*
 | An array of changes to a tree.
-|
-| Authors: Axel Kittenberger
 */
 
 

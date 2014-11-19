@@ -1,7 +1,5 @@
 /*
 | A function.
-|
-| Authors: Axel Kittenberger
 */
 
 

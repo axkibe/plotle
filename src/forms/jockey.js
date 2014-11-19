@@ -1,7 +1,5 @@
 /*
 | The form jockey is the master of all discs
-|
-| Authors: Axel Kittenberger
 */
 
 

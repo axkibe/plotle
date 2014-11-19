@@ -1,7 +1,5 @@
 /*
 | Meshcraft default theme.
-|
-| Authors: Axel Kittenberger
 */
 
 

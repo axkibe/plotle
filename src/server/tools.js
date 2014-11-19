@@ -1,7 +1,5 @@
 /*
-| Various tools for abstract syntax use
-|
-| Authors: Axel Kittenberger
+| Various tools for the server.
 */
 
 

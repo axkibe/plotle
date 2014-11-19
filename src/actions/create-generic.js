@@ -4,8 +4,6 @@
 | Creating a new note.
 | Creating a new label.
 | Creating a new portal.
-|
-| Authors: Axel Kittenberger
 */
 
 

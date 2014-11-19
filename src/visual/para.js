@@ -1,7 +1,5 @@
 /*
 | A visual paragraph.
-|
-| Authors: Axel Kittenberger
 */
 
 

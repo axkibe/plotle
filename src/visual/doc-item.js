@@ -1,7 +1,5 @@
 /*
 | An item with a document.
-|
-| Authors: Axel Kittenberger
 */
 
 

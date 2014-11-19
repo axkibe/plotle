@@ -1,7 +1,5 @@
 /*
-| Relates two items (including other relations)
-|
-| Authors: Axel Kittenberger
+| Relates two items (including other relations).
 */
 
 

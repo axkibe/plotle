@@ -6,8 +6,6 @@
 |
 | FUTURE combine all left-right dualistic operators
 |        into one handling.
-|
-| Authors: Axel Kittenberger
 */
 
 

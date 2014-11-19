@@ -1,7 +1,5 @@
 /*
 | ast test if a > b.
-|
-| Authors: Axel Kittenberger
 */
 
 

@@ -1,7 +1,5 @@
 /*
 | A button.
-|
-| Authors: Axel Kittenberger
 */
 
 

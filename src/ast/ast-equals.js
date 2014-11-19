@@ -1,7 +1,5 @@
 /*
 | Tests for equality.
-|
-| Authors: Axel Kittenberger
 */
 
 

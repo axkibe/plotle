@@ -1,7 +1,5 @@
 /*
 | A reference to a space.
-|
-| Authors: Axel Kittenberger
 */
 
 

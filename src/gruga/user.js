@@ -1,7 +1,5 @@
 /*
 | Default design for the space form.
-|
-| Authors: Axel Kittenberger
 */
 
 

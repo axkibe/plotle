@@ -1,7 +1,5 @@
 /*
 | Switch statements in abstract syntax trees.
-|
-| Authors: Axel Kittenberger
 */
 
 

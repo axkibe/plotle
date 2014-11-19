@@ -1,7 +1,5 @@
 /*
-| Common Javascript Tools for Meshcraft.
-|
-| Authors: Axel Kittenberger
+| Common Javascript Tools for ideoloom.
 */
 
 

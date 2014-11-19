@@ -1,12 +1,11 @@
 /*
 | A change wrapped for transport.
-|
-| Authors: Axel Kittenberger
 */
 
 
 var
-	ccot;
+	ccot,
+	result;
 
 
 /*

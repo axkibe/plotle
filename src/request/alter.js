@@ -1,7 +1,5 @@
 /*
 | A client requests the space tree to be altered.
-|
-| Authors: Axel Kittenberger
 */
 
 

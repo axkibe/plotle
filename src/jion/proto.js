@@ -1,7 +1,5 @@
 /*
 | Common functions for jion-ects.
-|
-| Authors: Axel Kittenberger
 */
 
 var

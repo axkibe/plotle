@@ -1,7 +1,5 @@
 /*
 | A client requests a new user to be registered.
-|
-| Authors: Axel Kittenberger
 */
 
 

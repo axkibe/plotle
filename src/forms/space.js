@@ -1,7 +1,5 @@
 /*
 | The space form.
-|
-| Authors: Axel Kittenberger
 */
 
 

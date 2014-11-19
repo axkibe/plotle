@@ -1,7 +1,5 @@
 /*
 | The "moveto" icon.
-|
-| Authors: Axel Kittenberger
 */
 
 

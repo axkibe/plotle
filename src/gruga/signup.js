@@ -1,7 +1,5 @@
 /*
 | Default design for the signup form.
-|
-| Authors: Axel Kittenberger
 */
 
 

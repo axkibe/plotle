@@ -1,7 +1,5 @@
 /*
 | The visual space.
-|
-| Authors: Axel Kittenberger
 */
 
 

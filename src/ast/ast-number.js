@@ -1,7 +1,5 @@
 /*
 | A number literal.
-|
-| Authors: Axel Kittenberger
 */
 
 

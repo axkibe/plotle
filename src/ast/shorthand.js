@@ -1,7 +1,5 @@
 /*
 | Various shorthands for abstract syntax trees.
-|
-| Authors: Axel Kittenberger
 */
 
 

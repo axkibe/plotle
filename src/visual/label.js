@@ -1,7 +1,5 @@
 /*
 | An item with resizing text.
-|
-| Authors: Axel Kittenberger
 */
 
 

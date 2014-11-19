@@ -1,7 +1,5 @@
 /*
 | Default design for the maindisc.
-|
-| Authors: Axel Kittenberger
 */
 
 

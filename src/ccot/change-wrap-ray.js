@@ -1,7 +1,5 @@
 /*
 | An array of wraped change(rays).
-|
-| Authors: Axel Kittenberger
 */
 
 

@@ -1,7 +1,5 @@
 /*
 | Generates the jion of a resource.
-|
-| Authors: Axel Kittenberger
 */
 
 

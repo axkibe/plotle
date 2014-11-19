@@ -1,8 +1,6 @@
 /*
 | A view on a space determines the current
 | pan, zooming and viewport (size of screen)
-|
-| Authors: Axel Kittenberger
 */
 
 

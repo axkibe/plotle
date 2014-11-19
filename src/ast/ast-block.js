@@ -1,7 +1,5 @@
 /*
 | A code block to be generated
-|
-| Authors: Axel Kittenberger
 */
 
 

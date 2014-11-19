@@ -1,7 +1,5 @@
 /*
 | The creation disc.
-|
-| Authors: Axel Kittenberger
 */
 
 /*

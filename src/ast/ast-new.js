@@ -1,7 +1,5 @@
 /*
 | ast new calls
-|
-| Authors: Axel Kittenberger
 */
 
 

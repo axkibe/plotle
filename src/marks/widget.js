@@ -1,7 +1,5 @@
 /*
 | A single widget marked ( without caret or range )
-|
-| Authors: Axel Kittenberger
 */
 
 

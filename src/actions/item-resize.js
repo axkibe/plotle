@@ -1,7 +1,5 @@
 /*
 | The user is resizing an item.
-|
-| Authors: Axel Kittenberger
 */
 
 

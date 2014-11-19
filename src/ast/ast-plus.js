@@ -1,8 +1,6 @@
 /*
 | A mathematical addition
 | or a string concation.
-|
-| Authors: Axel Kittenberger
 */
 
 

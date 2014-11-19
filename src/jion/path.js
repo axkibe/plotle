@@ -2,8 +2,6 @@
 | A path toward an entity in a tree.
 |
 | FUTURE make it a ray.
-|
-| Authors: Axel Kittenberger
 */
 
 

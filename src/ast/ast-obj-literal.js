@@ -1,7 +1,5 @@
 /*
 | Ast object literal.
-|
-| Authors: Axel Kittenberger
 */
 
 

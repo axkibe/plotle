@@ -1,7 +1,5 @@
 /*
 | A client wants to acquire a space.
-|
-| Authors: Axel Kittenberger
 */
 
 

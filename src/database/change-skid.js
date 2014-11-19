@@ -1,7 +1,5 @@
 /*
 | A change on a skid for database storage.
-|
-| Authors: Axel Kittenberger
 */
 
 
@@ -91,15 +89,16 @@ ccot_changeWrap = require( '../ccot/change-wrap' );
 */
 changeSkid.createFromChangeWrap =
 	function(
-		cw,
-		user
+		changeWrap, // the change wrap to turn into a skid
+		user,       // the user that sent the changeWrap
+		seq         // if undefined assign this seq to changeWrap.
 	)
 {
 	return(
 		changeSkid.create(
-			'_id', cw.seq,
-			'cid', cw.cid,
-			'chgX', cw.chgX,
+			'_id', seq === undefined ? changeWrap.seq : seq,
+			'cid', changeWrap.cid,
+			'chgX', changeWrap.chgX,
 			'user', user,
 			'date', Date.now( )
 		)

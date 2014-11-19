@@ -1,7 +1,5 @@
 /*
 | Optional checks for abstact syntax tree.
-|
-| Authors: Axel Kittenberger
 */
 
 

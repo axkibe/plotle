@@ -1,8 +1,6 @@
 /*
 | Ideoloom connector using the mongodb driver
 | to access an ideoloom repository.
-|
-| Authors: Axel Kittenberger
 */
 
 

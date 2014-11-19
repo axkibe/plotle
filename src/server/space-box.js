@@ -221,26 +221,24 @@ spaceBox.prototype.appendChange =
 	)
 {
 	var
-//		cp,
+		changeSkid,
 		ctr;
+
+/**/if( CHECK )
+/**/{
+/**/	if( changeWrap.seq )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	ctr = changeWrap.changeTree( this.space );
 
-	//XXX
-	//cp = database_changeSkid.createFromChangeWrap( changeWrap );
+	changeSkid = database_changeSkid.createFromChangeWrap( changeWrap, user, this.seqZ );
 
-
-	// saves the change(ray) in the database
-	// FIXME save changeSkids
+	// saves the changeskid in the database
 	this._changesDB.insert(
-		{
-			_id : this.seqZ,
-			cid : changeWrap.cid,
-			// needs to rid info.
-			chgX : JSON.parse( JSON.stringify( ctr.reaction.chgX ) ),
-			user : user,
-			date : Date.now( )
-		},
+		JSON.parse( JSON.stringify( changeSkid ) ),
 		function( error /*, count */ )
 		{
 			if( error !== null )

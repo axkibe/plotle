@@ -1,7 +1,5 @@
 /*
 | A user is creating a new relation.
-|
-| Authors: Axel Kittenberger
 */
 
 

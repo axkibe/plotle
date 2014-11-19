@@ -1,7 +1,5 @@
 /*
 | Everything there is in a space.
-|
-| Authors: Axel Kittenberger
 */
 
 

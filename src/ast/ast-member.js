@@ -1,7 +1,5 @@
 /*
 | ast [ ] operator.
-|
-| Authors: Axel Kittenberger
 */
 
 

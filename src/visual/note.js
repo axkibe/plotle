@@ -2,8 +2,6 @@
 | A fix sized text item.
 |
 | Has a scrollbar.
-|
-| Authors: Axel Kittenberger
 */
 
 /*

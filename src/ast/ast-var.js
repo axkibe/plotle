@@ -1,7 +1,5 @@
 /*
 | A variable reference to be generated
-|
-| Authors: Axel Kittenberger
 */
 
 

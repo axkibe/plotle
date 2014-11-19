@@ -1,7 +1,5 @@
 /*
 | Default design for the login form.
-|
-| Authors: Axel Kittenberger
 */
 
 

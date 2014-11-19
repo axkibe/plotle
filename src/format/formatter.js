@@ -1,7 +1,5 @@
 /*
-| Formats an AST into a .js file
-|
-| Authors: Axel Kittenberger
+| Formats an AST into a .js file.
 */
 
 

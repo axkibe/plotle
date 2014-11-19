@@ -1,7 +1,5 @@
 /*
-| A null to be generated
-|
-| Authors: Axel Kittenberger
+| A null to be generated.
 */
 
 

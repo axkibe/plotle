@@ -1,7 +1,5 @@
 /*
 | A label.
-|
-| Authors: Axel Kittenberger
 */
 
 

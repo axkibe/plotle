@@ -1,7 +1,5 @@
 /*
 | Default design for the welcome form.
-|
-| Authors: Axel Kittenberger
 */
 
 

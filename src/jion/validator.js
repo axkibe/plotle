@@ -1,7 +1,5 @@
 /*
 | Checks if a jion definition is ok.
-|
-| Authors: Axel Kittenberger
 */
 
 

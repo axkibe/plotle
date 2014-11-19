@@ -2,8 +2,6 @@
 | This is a wrapper around HTML5 browsers,
 | creating a more comfortable interface for
 | the shell.
-|
-| Authors: Axel Kittenberger
 */
 
 

@@ -1,7 +1,5 @@
 /*
 | User has no access to a space s/he tried to port to.
-|
-| Authors: Axel Kittenberger
 */
 
 

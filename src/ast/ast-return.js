@@ -1,7 +1,5 @@
 /*
-| abstract syntax tree returns statements.
-|
-| Authors: Axel Kittenberger
+| Abstract syntax tree returns statements.
 */
 
 

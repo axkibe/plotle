@@ -1,7 +1,5 @@
 /*
 | An array of signs.
-|
-| Authors: Axel Kittenberger
 */
 
 

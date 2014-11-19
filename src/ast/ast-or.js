@@ -1,7 +1,5 @@
 /*
 | A logical or.
-|
-| Authors: Axel Kittenberger
 */
 
 

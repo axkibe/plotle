@@ -1,7 +1,5 @@
 /*
 | A line.
-|
-| Authors: Axel Kittenberger
 */
 
 

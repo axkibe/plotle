@@ -1,7 +1,5 @@
 /*
 | Pre increments for abstract syntax trees.
-|
-| Authors: Axel Kittenberger
 */
 
 

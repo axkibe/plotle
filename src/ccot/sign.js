@@ -1,7 +1,5 @@
 /*
 | Signates an entry, string index or string span.
-|
-| Authors: Axel Kittenberger
 */
 
 /*

@@ -1,8 +1,6 @@
 /*
 | A client request authentication to be checked,
 | or to be assigned a visitor-id.
-|
-| Authors: Axel Kittenberger
 */
 
 

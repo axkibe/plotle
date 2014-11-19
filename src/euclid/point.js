@@ -1,7 +1,5 @@
 /*
 | A point in a 2D plane.
-|
-| Authors: Axel Kittenberger
 */
 
 

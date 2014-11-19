@@ -1,7 +1,5 @@
 /*
 | An arrow is a line that can have arrow heads.
-|
-| Authors: Axel Kittenberger
 */
 
 

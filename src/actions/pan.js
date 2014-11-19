@@ -1,7 +1,5 @@
 /*
 | The user is panning the background.
-|
-| Authors: Axel Kittenberger
 */
 
 

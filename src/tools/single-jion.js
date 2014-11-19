@@ -1,7 +1,5 @@
 /*
 | Runs the jion generator for a single file
-|
-| Authors: Axel Kittenberger
 */
 
 /*

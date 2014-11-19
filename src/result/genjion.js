@@ -1,7 +1,5 @@
 /*
 | Result of a jion generation.
-|
-| Authors: Axel Kittenberger
 */
 
 

@@ -1,7 +1,5 @@
 /*
-| the javascript lexer turns a string into a series of tokens.
-|
-| Authors: Axel Kittenberger
+| The javascript lexer turns a string into a series of tokens.
 */
 
 

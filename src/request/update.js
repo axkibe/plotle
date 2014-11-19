@@ -2,8 +2,6 @@
 | A client requests updates to a space.
 |
 | The server might hold the answer back until something happens.
-|
-| Authors: Axel Kittenberger
 */
 
 

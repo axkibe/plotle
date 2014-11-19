@@ -2,8 +2,6 @@
 | The accent (state) of form components.
 |
 | FIXME lowercase
-|
-| Authors: Axel Kittenberger
 */
 
 

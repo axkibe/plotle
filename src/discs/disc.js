@@ -1,7 +1,5 @@
 /*
 | A disc panel.
-|
-| Authors: Axel Kittenberger
 */
 
 

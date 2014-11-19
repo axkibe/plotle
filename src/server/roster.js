@@ -1,7 +1,5 @@
 /*
 | The roster of all resources.
-|
-| Authors: Axel Kittenberger
 */
 
 /*

@@ -2,8 +2,6 @@
 | Runs the jion generator for a list of files.
 |
 | FUTURE modalirize this a bit.
-|
-| Authors: Axel Kittenberger
 */
 
 /*

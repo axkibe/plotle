@@ -1,7 +1,5 @@
 /*
 | The repository simulator does not talk to a server.
-|
-| Authors: Axel Kittenberger
 */
 
 /*

@@ -3,8 +3,6 @@
 |
 | FIXME spaceUser and spaceTag are phony
 |       yet are not looked at by jion
-|
-| Authors: Axel Kittenberger
 */
 
 

@@ -1,7 +1,5 @@
 /*
 | For-in loops in abstract syntax trees.
-|
-| Authors: Axel Kittenberger
 */
 
 

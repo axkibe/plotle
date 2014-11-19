@@ -1,7 +1,5 @@
 /*
 | A rectangle (or a frame)
-|
-| Authors: Axel Kittenberger
 */
 
 

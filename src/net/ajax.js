@@ -1,7 +1,5 @@
 /*
 | Provides AJAX communications with the server.
-|
-| Authors: Axel Kittenberger
 */
 
 

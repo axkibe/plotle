@@ -1,7 +1,5 @@
 /*
 | A wrapper for ajax request.
-|
-| Authors: Axel Kittenberger
 */
 
 

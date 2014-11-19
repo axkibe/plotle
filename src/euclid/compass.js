@@ -1,7 +1,5 @@
 /*
 | Directions on a compass.
-|
-| Authors: Axel Kittenberger
 */
 
 

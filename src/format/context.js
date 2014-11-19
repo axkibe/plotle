@@ -1,7 +1,5 @@
 /*
 | Formating context.
-|
-| Authors: Axel Kittenberger
 */
 
 

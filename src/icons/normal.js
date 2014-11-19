@@ -1,7 +1,5 @@
 /*
 | The "normal" icon.
-|
-| Authors: Axel Kittenberger
 */
 
 

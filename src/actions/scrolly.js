@@ -1,7 +1,5 @@
 /*
 | The user is scrolling a note.
-|
-| Authors: Axel Kittenberger
 */
 
 

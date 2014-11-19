@@ -1,7 +1,5 @@
 /*
 | Maps file types to mimes and encodings.
-|
-| Authors: Axel Kittenberger
 */
 
 /*

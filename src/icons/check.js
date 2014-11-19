@@ -1,8 +1,6 @@
 /*
 | A "check" icon.
 | used on the backbox
-|
-| Authors: Axel Kittenberger
 */
 
 

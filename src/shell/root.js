@@ -1,7 +1,5 @@
 /*
 | The root of the user shell.
-|
-| Authors: Axel Kittenberger
 */
 
 var

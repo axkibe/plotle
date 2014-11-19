@@ -3,8 +3,6 @@
 |
 | Multiple calls into one channel are stacked.
 | Requests to multiple channel are send in parallel.
-|
-| Authors: Axel Kittenberger
 */
 
 

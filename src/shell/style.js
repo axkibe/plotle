@@ -1,7 +1,5 @@
 /*
 | Meshcraft's styles.
-|
-| Authors: Axel Kittenberger
 */
 
 

@@ -1,8 +1,6 @@
 /*
 | Loads the web fonts Meshcraft uses.
 | Starts the browser system when finished.
-|
-| Authors: Axel Kittenberger
 */
 
 

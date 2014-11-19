@@ -1,7 +1,5 @@
 /*
 | The login form.
-|
-| Authors: Axel Kittenberger
 */
 
 

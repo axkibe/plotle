@@ -1,7 +1,5 @@
 /*
 | A string literal.
-|
-| Authors: Axel Kittenberger
 */
 
 

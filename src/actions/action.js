@@ -3,8 +3,6 @@
 |
 | This overlays repository data, so for example a move is not transmitted
 | with every pixel changed but when the the object is released.
-|
-| Authors: Axel Kittenberger
 */
 
 

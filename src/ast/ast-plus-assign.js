@@ -1,7 +1,5 @@
 /*
 | Ast plus assignment ( += )
-|
-| Authors: Axel Kittenberger
 */
 
 

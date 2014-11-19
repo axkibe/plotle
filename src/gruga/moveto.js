@@ -1,7 +1,5 @@
 /*
 | Default design for the the move-to-form.
-|
-| Authors: Axel Kittenberger
 */
 
 

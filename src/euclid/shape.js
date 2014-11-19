@@ -2,8 +2,6 @@
 | A geometric shape.
 |
 | Used by ellipse, roundRect
-|
-| Authors: Axel Kittenberger
 */
 
 

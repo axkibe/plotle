@@ -1,7 +1,5 @@
 /*
 | The user form.
-|
-| Authors: Axel Kittenberger
 */
 
 

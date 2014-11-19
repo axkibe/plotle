@@ -1,7 +1,5 @@
 /*
 | Creates font objects by size and code.
-|
-| Authors: Axel Kittenberger
 */
 
 

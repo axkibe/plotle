@@ -1,7 +1,5 @@
 /*
 | A single item marked ( without caret or range )
-|
-| Authors: Axel Kittenberger
 */
 
 

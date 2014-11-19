@@ -1,7 +1,5 @@
 /*
 | A function argument to be generated
-|
-| Authors: Axel Kittenberger
 */
 
 

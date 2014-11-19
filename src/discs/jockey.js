@@ -1,7 +1,5 @@
 /*
-| The disc jockey is the master of all discs
-|
-| Authors: Axel Kittenberger
+| The disc jockey is the master of all discs.
 */
 
 
