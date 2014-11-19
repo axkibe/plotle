@@ -27,7 +27,11 @@ if( JION )
 						comment :
 							'changes may alter themselves on changing a tree',
 						type :
-							[ 'ccot.change', 'ccot.changeRay' ]
+							[
+								'ccot.change',
+								'ccot.changeRay',
+								'ccot.changeWrap'
+							]
 					},
 				tree :
 					{

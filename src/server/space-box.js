@@ -224,9 +224,11 @@ spaceBox.prototype.appendChange =
 //		cp,
 		ctr;
 
-	ctr = changeWrap.chgX.changeTree( this.space ); // XXX remove chgX here
+	ctr = changeWrap.changeTree( this.space );
 
-	// cp = database_changeSkid.createFromChangeWrap( changeWrap );
+	//XXX
+	//cp = database_changeSkid.createFromChangeWrap( changeWrap );
+
 
 	// saves the change(ray) in the database
 	// FIXME save changeSkids
@@ -235,7 +237,7 @@ spaceBox.prototype.appendChange =
 			_id : this.seqZ,
 			cid : changeWrap.cid,
 			// needs to rid info.
-			chgX : JSON.parse( JSON.stringify( ctr.reaction ) ),
+			chgX : JSON.parse( JSON.stringify( ctr.reaction.chgX ) ),
 			user : user,
 			date : Date.now( )
 		},
@@ -252,7 +254,7 @@ spaceBox.prototype.appendChange =
 	this.changes[ this.seqZ ] =
 		{
 			cid : changeWrap.cid,
-			chgX : ctr.reaction
+			chgX : ctr.reaction.chgX
 		};
 
 	return(

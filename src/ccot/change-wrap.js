@@ -66,7 +66,8 @@ if( JION )
 
 var
 	changeWrap,
-	jools;
+	jools,
+	result_changeTree;
 
 
 if( SERVER )
@@ -74,10 +75,14 @@ if( SERVER )
 	changeWrap = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
+
+	result_changeTree = require( '../result/change-tree' );
 }
 else
 {
 	changeWrap = ccot.changeWrap;
+
+	result_changeTree = result.changeTree;
 }
 
 
@@ -125,14 +130,14 @@ changeWrap.prototype.changeTree =
 
 	result = this.chgX.changeTree( tree );
 
-	throw new Error( 'FIXME' );
-	/*
 	return(
-		this.create(
-			'chgX', result.chgX
+		result_changeTree.create(
+			'reaction',
+				this.create( 'chgX', result.reaction ),
+			'tree',
+				result.tree
 		)
 	);
-	*/
 };
 
 
