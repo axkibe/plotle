@@ -480,16 +480,9 @@ link.prototype._onUpdate =
 				chgX = chgX.transform( report.get( b ) );
 			}
 
-			outbox =
-				outbox.set(
-					a,
-					c.create( 'chgX', chgX )
-				);
+			outbox = outbox.set( a, c.create( 'chgX', chgX ) );
 
-			cSpace =
-				chgX
-				.changeTree( cSpace )
-				.tree;
+			cSpace = chgX.changeTree( cSpace ).tree;
 		}
 	}
 
@@ -547,7 +540,7 @@ link.prototype.alter =
 
 	result = changes.changeTree( link._cSpace );
 
-	changes = result.chgX;
+	changes = result.reaction;
 
 	changeWrap =
 		ccot.changeWrap.create(

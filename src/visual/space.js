@@ -866,7 +866,7 @@ space.prototype.dragStop =
 
 					res = peer.newNote( note.zone );
 
-					key = res.chgX.trg.path.get( -1 );
+					key = res.reaction.trg.path.get( -1 );
 
 					root.setMark(
 						marks.caret.create(
@@ -927,7 +927,7 @@ space.prototype.dragStop =
 							label.doc.fontsize
 						);
 
-					key = res.chgX.trg.path.get( -1 );
+					key = res.reaction.trg.path.get( -1 );
 
 					root.setMark(
 						marks.caret.create(
@@ -965,7 +965,7 @@ space.prototype.dragStop =
 							'home'
 						);
 
-					key = res.chgX.trg.path.get( -1 );
+					key = res.reaction.trg.path.get( -1 );
 
 					root.setMark(
 						marks.caret.create(

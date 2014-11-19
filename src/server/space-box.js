@@ -235,7 +235,7 @@ spaceBox.prototype.appendChange =
 			_id : this.seqZ,
 			cid : changeWrap.cid,
 			// needs to rid info.
-			chgX : JSON.parse( JSON.stringify( ctr.chgX ) ),
+			chgX : JSON.parse( JSON.stringify( ctr.reaction ) ),
 			user : user,
 			date : Date.now( )
 		},
@@ -252,7 +252,7 @@ spaceBox.prototype.appendChange =
 	this.changes[ this.seqZ ] =
 		{
 			cid : changeWrap.cid,
-			chgX : ctr.chgX
+			chgX : ctr.reaction
 		};
 
 	return(
@@ -263,8 +263,6 @@ spaceBox.prototype.appendChange =
 		)
 	);
 };
-
-
 
 
 } )( );

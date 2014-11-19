@@ -22,14 +22,12 @@ if( JION )
 			'result.changeTree',
 		attributes :
 			{
-				chgX :
+				reaction :
 					{
 						comment :
-							'change or change ray',
+							'changes may alter themselves on changing a tree',
 						type :
-							[ 'ccot.change', 'ccot.changeRay' ],
-						defaultValue :
-							undefined
+							[ 'ccot.change', 'ccot.changeRay' ]
 					},
 				tree :
 					{

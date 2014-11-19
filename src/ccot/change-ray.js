@@ -291,7 +291,7 @@ changeRay.prototype.changeTree =
 		// the tree returned by op-handler is the new tree
 		tree = cr.tree;
 
-		cray.push( cr.chg );
+		cray.push( cr.reaction );
 	}
 
 	// FUTURE create only a single change when cray.length === 1
@@ -299,7 +299,7 @@ changeRay.prototype.changeTree =
 	return(
 		result_changeTree.create(
 			'tree', tree,
-			'chgX', changeRay.create( 'ray:init', cray )
+			'reaction', changeRay.create( 'ray:init', cray )
 		)
 	);
 };

@@ -195,12 +195,7 @@ proto.get =
 
 		for( b = 0; b < chgX.length; b++ )
 		{
-			space =
-				chgX
-				.get( 0 )
-				.invert
-				.changeTree( space )
-				.tree;
+			space = chgX.get( 0 ).invert.changeTree( space ).tree;
 		}
 	}
 
@@ -252,12 +247,9 @@ proto.alter =
 	changes =
 		changes.append(
 			ccot.changeWrap.create(
-				'cid',
-					'' + ( nextcid++ ),
-				'chgX',
-					r.chgX,
-				'seq',
-					seq + 1
+				'cid', '' + ( nextcid++ ),
+				'chgX', r.reaction,
+				'seq', seq + 1
 			)
 		);
 
@@ -271,7 +263,7 @@ proto.alter =
 			)
 	);
 
-	return r.chgX;
+	return r.reaction;
 };
 
 

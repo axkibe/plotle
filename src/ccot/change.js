@@ -609,7 +609,7 @@ change.prototype._changeTreeSet =
 	return(
 		result_changeTree.create(
 			'tree', tree,
-			'chgX', this.create( 'src', src, 'trg', trg )
+			'reaction', this.create( 'src', src, 'trg', trg )
 		)
 	);
 };
@@ -661,7 +661,7 @@ change.prototype._changeTreeInsert =
 	return(
 		result_changeTree.create(
 			'tree', tree,
-			'chgX', this.create( 'src', src, 'trg', trg )
+			'reaction', this.create( 'src', src, 'trg', trg )
 		)
 	);
 };
@@ -691,11 +691,7 @@ change.prototype._changeTreeRemove =
 
 	trg = this.trg;
 
-	jools.check(
-		src.path.reflect === 'jion.path',
-		cm,
-		'src.path missing'
-	);
+	jools.check( src.path.reflect === 'jion.path', cm, 'src.path missing' );
 
 	str = tree.getPath( src.path );
 
@@ -724,7 +720,7 @@ change.prototype._changeTreeRemove =
 	return(
 		result_changeTree.create(
 			'tree', tree,
-			'chgX', this.create( 'src', src, 'trg', trg )
+			'reaction', this.create( 'src', src, 'trg', trg )
 		)
 	);
 };
@@ -804,7 +800,7 @@ change.prototype._changeTreeJoin =
 	return(
 		result_changeTree.create(
 			'tree', tree,
-			'chgX', this.create( 'src', src, 'trg', trg )
+			'reaction', this.create( 'src', src, 'trg', trg )
 		)
 	);
 };
@@ -895,7 +891,7 @@ change.prototype._changeTreeSplit =
 	return(
 		result_changeTree.create(
 			'tree', tree,
-			'chgX', this.create( 'src', src, 'trg', trg )
+			'reaction', this.create( 'src', src, 'trg', trg )
 		)
 	);
 };
@@ -977,7 +973,7 @@ change.prototype._changeTreeRank =
 	return(
 		result_changeTree.create(
 			'tree', tree,
-			'chgX', this.create( 'src', src, 'trg', trg )
+			'reaction', this.create( 'src', src, 'trg', trg )
 		)
 	);
 };
