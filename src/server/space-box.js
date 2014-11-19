@@ -1,7 +1,5 @@
 /*
 | Holds a space.
-|
-| FIXME move logic into here.
 */
 
 
@@ -22,14 +20,13 @@ if( JION )
 			'server.spaceBox',
 		attributes :
 			{
-				'changes' :
+				'changeSkids' :
 					{
 						// FIXME this should not be zero based
-						// and it should be a changeWrapRay
 						comment :
-							'changes buffer ( in RAM )',
+							'changeSkids cached in RAM',
 						type :
-							'Object'
+							'database.changeSkidRay'
 					},
 				'seqZ' :
 					{
@@ -68,12 +65,15 @@ if( JION )
 var
 	ccot,
 	database_changeSkid,
+	database_changeSkidRay,
 	resume,
 	spaceBox,
 	visual;
 
 
 database_changeSkid = require( '../database/change-skid' );
+
+database_changeSkidRay = require( '../database/change-skid-ray' );
 
 resume = require( 'suspend' ).resume;
 
@@ -106,16 +106,15 @@ spaceBox.loadSpace =
 	)
 {
 	var
-		changes,
+		changeSkid,
+		changeSkids,
 		changesDB,
-		chgX,
 		cursor,
-		cp,
 		o,
 		seqZ,
 		space;
 
-	changes = [ ];
+	changeSkids = database_changeSkidRay.create( );
 
 	seqZ = 1;
 
@@ -139,29 +138,24 @@ spaceBox.loadSpace =
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
-		cp = database_changeSkid.createFromJSON( o );
+		changeSkid = database_changeSkid.createFromJSON( o );
 
-		if( cp._id !== seqZ )
+		if( changeSkid._id !== seqZ )
 		{
 			throw new Error( 'sequence mismatch' );
 		}
 
-		chgX = cp.chgX;
+		changeSkids =
+			changeSkids.create( 'ray:set', seqZ++, changeSkid );
 
-		// FIXME
-		changes[ seqZ++ ] =
-			{
-				cid : cp.cid,
-				chgX : cp.chgX
-			};
-
-		space = chgX.changeTree( space ).tree;
+		// FIXME remove chgX below
+		space = changeSkid.chgX.changeTree( space ).tree;
 	}
 
 	return(
 		spaceBox.create(
 			'_changesDB', changesDB,
-			'changes', changes,
+			'changeSkids', changeSkids,
 			'space', space,
 			'spaceRef', spaceRef,
 			'seqZ', seqZ
@@ -199,7 +193,7 @@ spaceBox.createSpace =
 				yield* root.repository.collection(
 					'changes:' + spaceRef.fullname
 				),
-			'changes', [ ],
+			'changeSkids', database_changeSkidRay.create( ),
 			'space', visual.space.create( ),
 			'spaceRef', spaceRef,
 			'seqZ', 1
@@ -234,9 +228,14 @@ spaceBox.prototype.appendChange =
 
 	ctr = changeWrap.changeTree( this.space );
 
-	changeSkid = database_changeSkid.createFromChangeWrap( changeWrap, user, this.seqZ );
+	changeSkid =
+		database_changeSkid.createFromChangeWrap(
+			changeWrap,
+			user,
+			this.seqZ
+		);
 
-	// saves the changeskid in the database
+	// saves the changeSkid in the database
 	this._changesDB.insert(
 		JSON.parse( JSON.stringify( changeSkid ) ),
 		function( error /*, count */ )
@@ -248,18 +247,14 @@ spaceBox.prototype.appendChange =
 		}
 	);
 
-	// FIXME changeWrap?
-	this.changes[ this.seqZ ] =
-		{
-			cid : changeWrap.cid,
-			chgX : ctr.reaction.chgX
-		};
-
 	return(
 		this.create(
-			// FIXME changes
 			'seqZ', this.seqZ + 1,
-			'space', ctr.tree
+			'space', ctr.tree,
+			'changeSkids',
+				this.changeSkids.create(
+					'ray:set', this.seqZ, changeSkid
+				)
 		)
 	);
 };

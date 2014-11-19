@@ -1119,7 +1119,7 @@ prototype.serveRequestAlter =
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )
 	{
-		changeWrap = spaceBox.changes[ a ].chgX.transform( changeWrap );
+		changeWrap = spaceBox.changeSkids.get( a ).chgX.transform( changeWrap );
 		// FIXME remove .chgX. in above call
 	}
 
@@ -1497,14 +1497,15 @@ prototype.conveyUpdate =
 {
 	var
 		c,
-		changes,
+		changeSkids,
 		chgA,
 		seqZ,
 		spaceBox;
 
 	spaceBox = root.$spaces[ spaceRef.fullname ];
 
-	changes = spaceBox.changes;
+	// FIXME let the spaceBox return a proper slice
+	changeSkids = spaceBox.changeSkids;
 
 	seqZ = spaceBox.seqZ;
 
@@ -1512,8 +1513,11 @@ prototype.conveyUpdate =
 
 	for( c = seq; c < seqZ; c++ )
 	{
-		chgA.push( changes[ c ] );
+		chgA.push( changeSkids.get( c ).asChangeWrap );
 	}
+
+	// FIXME make a result jion
+	chgA = JSON.parse( JSON.stringify( chgA ) );
 
 	return {
 		ok : true,

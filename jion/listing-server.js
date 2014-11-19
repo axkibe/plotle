@@ -16,6 +16,7 @@ module.exports =
 			'src/ccot/sign.js',
 			'src/ccot/sign-ray.js',
 			'src/database/change-skid.js',
+			'src/database/change-skid-ray.js',
 			'src/database/repository.js',
 			'src/euclid/margin.js',
 			'src/euclid/point.js',

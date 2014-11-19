@@ -94,6 +94,7 @@ changeSkid.createFromChangeWrap =
 		seq         // if undefined assign this seq to changeWrap.
 	)
 {
+	// FUTURE aheadValue changeWrap asChangeWrap
 	return(
 		changeSkid.create(
 			'_id', seq === undefined ? changeWrap.seq : seq,
