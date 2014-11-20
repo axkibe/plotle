@@ -92,11 +92,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	tokenSpec;
-
-
-tokenSpec =
 jsParser_tokenSpec =
 jsParser.tokenSpec =
 	{
@@ -107,14 +102,14 @@ jsParser.tokenSpec =
 
 if( SERVER )
 {
-	module.exports = tokenSpec;
+	module.exports = jsParser_tokenSpec;
 }
 
 
 /*
 | Creates a new tokenSpec object.
 */
-tokenSpec.create =
+jsParser_tokenSpec.create =
 prototype.create =
 	function(
 		// free strings
@@ -130,7 +125,7 @@ prototype.create =
 		v_postPrec,
 		v_prePrec;
 
-	if( this !== tokenSpec )
+	if( this !== jsParser_tokenSpec )
 	{
 		inherit = this;
 

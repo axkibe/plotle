@@ -80,11 +80,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astFail;
-
-
-astFail =
 ast_astFail =
 ast.astFail =
 	{
@@ -95,14 +90,14 @@ ast.astFail =
 
 if( SERVER )
 {
-	module.exports = astFail;
+	module.exports = ast_astFail;
 }
 
 
 /*
 | Creates a new astFail object.
 */
-astFail.create =
+ast_astFail.create =
 prototype.create =
 	function(
 		// free strings
@@ -115,7 +110,7 @@ prototype.create =
 		inherit,
 		v_message;
 
-	if( this !== astFail )
+	if( this !== ast_astFail )
 	{
 		inherit = this;
 

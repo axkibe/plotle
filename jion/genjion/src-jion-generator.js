@@ -82,11 +82,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	generator;
-
-
-generator =
 jion_generator =
 jion.generator =
 	{
@@ -97,14 +92,14 @@ jion.generator =
 
 if( SERVER )
 {
-	module.exports = generator;
+	module.exports = jion_generator;
 }
 
 
 /*
 | Creates a new generator object.
 */
-generator.create =
+jion_generator.create =
 prototype.create =
 	function(
 		// free strings
@@ -117,7 +112,7 @@ prototype.create =
 		inherit,
 		v_jion;
 
-	if( this !== generator )
+	if( this !== jion_generator )
 	{
 		inherit = this;
 

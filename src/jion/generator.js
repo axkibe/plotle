@@ -469,12 +469,6 @@ generator.prototype._init =
 
 	this.units = units;
 
-	// FUTURE remove reference use global all the way
-	this.reference =
-		( this.id.unit === this.id.name )
-		? this.id.name + 'Obj'
-		: this.id.name;
-
 	this.equals = jion.equals;
 
 	this.alike = jion.alike;
@@ -857,17 +851,14 @@ generator.prototype.genConstructor =
 
 	capsule =
 		capsule
-		.astVarDec( this.reference )
 		.astAssign(
-			this.reference,
-			astAssign(
-				this.id.global,
-				astAssign( this.id.astVar, jionObj )
-			)
+			this.id.global,
+			// FUTURE remove old style id.astVar unit.name syntax
+			astAssign( this.id.astVar, jionObj )
 		)
 		.astIf(
 			'SERVER',
-			astAssign( 'module.exports', this.reference )
+			astAssign( 'module.exports', this.id.global )
 		);
 
 	return capsule;
@@ -1011,7 +1002,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 
 	thisCheck =
 		astIf(
-			astDiffers( astThis, this.reference ),
+			astDiffers( astThis, this.id.global ),
 			receiver
 		);
 
@@ -1874,7 +1865,7 @@ generator.prototype.genCreator =
 	capsule =
 		capsule
 		.astAssign(
-			astVar( this.reference ).astDot( 'create' ),
+			astVar( this.id.global ).astDot( 'create' ),
 			astAssign( 'prototype.create', creator )
 		);
 
@@ -2369,7 +2360,7 @@ generator.prototype.genFromJSONCreator =
 	capsule =
 		capsule
 		.astAssign(
-			astVar( this.reference ).astDot( 'createFromJSON' ),
+			astVar( this.id.global ).astDot( 'createFromJSON' ),
 			astFunc( funcBlock )
 			.astArg( 'json', 'the JSON object' )
 		);

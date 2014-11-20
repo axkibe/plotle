@@ -86,11 +86,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astCondition;
-
-
-astCondition =
 ast_astCondition =
 ast.astCondition =
 	{
@@ -101,14 +96,14 @@ ast.astCondition =
 
 if( SERVER )
 {
-	module.exports = astCondition;
+	module.exports = ast_astCondition;
 }
 
 
 /*
 | Creates a new astCondition object.
 */
-astCondition.create =
+ast_astCondition.create =
 prototype.create =
 	function(
 		// free strings
@@ -123,7 +118,7 @@ prototype.create =
 		v_elsewise,
 		v_then;
 
-	if( this !== astCondition )
+	if( this !== ast_astCondition )
 	{
 		inherit = this;
 

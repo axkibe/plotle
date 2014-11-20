@@ -83,11 +83,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astGreaterThan;
-
-
-astGreaterThan =
 ast_astGreaterThan =
 ast.astGreaterThan =
 	{
@@ -98,14 +93,14 @@ ast.astGreaterThan =
 
 if( SERVER )
 {
-	module.exports = astGreaterThan;
+	module.exports = ast_astGreaterThan;
 }
 
 
 /*
 | Creates a new astGreaterThan object.
 */
-astGreaterThan.create =
+ast_astGreaterThan.create =
 prototype.create =
 	function(
 		// free strings
@@ -119,7 +114,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== astGreaterThan )
+	if( this !== ast_astGreaterThan )
 	{
 		inherit = this;
 

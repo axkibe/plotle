@@ -90,11 +90,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astCall;
-
-
-astCall =
 ast_astCall =
 ast.astCall =
 	{
@@ -105,14 +100,14 @@ ast.astCall =
 
 if( SERVER )
 {
-	module.exports = astCall;
+	module.exports = ast_astCall;
 }
 
 
 /*
 | Creates a new astCall object.
 */
-astCall.create =
+ast_astCall.create =
 prototype.create =
 	function(
 		// free strings
@@ -130,7 +125,7 @@ prototype.create =
 		twigDup,
 		v_func;
 
-	if( this !== astCall )
+	if( this !== ast_astCall )
 	{
 		inherit = this;
 

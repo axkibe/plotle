@@ -89,11 +89,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	state;
-
-
-state =
 jsParser_state =
 jsParser.state =
 	{
@@ -104,14 +99,14 @@ jsParser.state =
 
 if( SERVER )
 {
-	module.exports = state;
+	module.exports = jsParser_state;
 }
 
 
 /*
 | Creates a new state object.
 */
-state.create =
+jsParser_state.create =
 prototype.create =
 	function(
 		// free strings
@@ -127,7 +122,7 @@ prototype.create =
 		v_prec,
 		v_tokens;
 
-	if( this !== state )
+	if( this !== jsParser_state )
 	{
 		inherit = this;
 

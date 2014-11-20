@@ -83,11 +83,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astPlusAssign;
-
-
-astPlusAssign =
 ast_astPlusAssign =
 ast.astPlusAssign =
 	{
@@ -98,14 +93,14 @@ ast.astPlusAssign =
 
 if( SERVER )
 {
-	module.exports = astPlusAssign;
+	module.exports = ast_astPlusAssign;
 }
 
 
 /*
 | Creates a new astPlusAssign object.
 */
-astPlusAssign.create =
+ast_astPlusAssign.create =
 prototype.create =
 	function(
 		// free strings
@@ -119,7 +114,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== astPlusAssign )
+	if( this !== ast_astPlusAssign )
 	{
 		inherit = this;
 

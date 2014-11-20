@@ -80,11 +80,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astPreIncrement;
-
-
-astPreIncrement =
 ast_astPreIncrement =
 ast.astPreIncrement =
 	{
@@ -95,14 +90,14 @@ ast.astPreIncrement =
 
 if( SERVER )
 {
-	module.exports = astPreIncrement;
+	module.exports = ast_astPreIncrement;
 }
 
 
 /*
 | Creates a new astPreIncrement object.
 */
-astPreIncrement.create =
+ast_astPreIncrement.create =
 prototype.create =
 	function(
 		// free strings
@@ -115,7 +110,7 @@ prototype.create =
 		inherit,
 		v_expr;
 
-	if( this !== astPreIncrement )
+	if( this !== ast_astPreIncrement )
 	{
 		inherit = this;
 

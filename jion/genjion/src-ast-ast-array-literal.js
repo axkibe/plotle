@@ -87,11 +87,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astArrayLiteral;
-
-
-astArrayLiteral =
 ast_astArrayLiteral =
 ast.astArrayLiteral =
 	{
@@ -102,14 +97,14 @@ ast.astArrayLiteral =
 
 if( SERVER )
 {
-	module.exports = astArrayLiteral;
+	module.exports = ast_astArrayLiteral;
 }
 
 
 /*
 | Creates a new astArrayLiteral object.
 */
-astArrayLiteral.create =
+ast_astArrayLiteral.create =
 prototype.create =
 	function(
 		// free strings
@@ -126,7 +121,7 @@ prototype.create =
 		twig,
 		twigDup;
 
-	if( this !== astArrayLiteral )
+	if( this !== ast_astArrayLiteral )
 	{
 		inherit = this;
 

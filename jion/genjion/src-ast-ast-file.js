@@ -99,11 +99,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astFile;
-
-
-astFile =
 ast_astFile =
 ast.astFile =
 	{
@@ -114,14 +109,14 @@ ast.astFile =
 
 if( SERVER )
 {
-	module.exports = astFile;
+	module.exports = ast_astFile;
 }
 
 
 /*
 | Creates a new astFile object.
 */
-astFile.create =
+ast_astFile.create =
 prototype.create =
 	function(
 		// free strings
@@ -138,7 +133,7 @@ prototype.create =
 		v_jionID,
 		v_preamble;
 
-	if( this !== astFile )
+	if( this !== ast_astFile )
 	{
 		inherit = this;
 

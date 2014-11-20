@@ -100,11 +100,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astSwitch;
-
-
-astSwitch =
 ast_astSwitch =
 ast.astSwitch =
 	{
@@ -115,14 +110,14 @@ ast.astSwitch =
 
 if( SERVER )
 {
-	module.exports = astSwitch;
+	module.exports = ast_astSwitch;
 }
 
 
 /*
 | Creates a new astSwitch object.
 */
-astSwitch.create =
+ast_astSwitch.create =
 prototype.create =
 	function(
 		// free strings
@@ -141,7 +136,7 @@ prototype.create =
 		v_defaultCase,
 		v_statement;
 
-	if( this !== astSwitch )
+	if( this !== ast_astSwitch )
 	{
 		inherit = this;
 

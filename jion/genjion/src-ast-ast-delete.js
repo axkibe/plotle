@@ -80,11 +80,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astDelete;
-
-
-astDelete =
 ast_astDelete =
 ast.astDelete =
 	{
@@ -95,14 +90,14 @@ ast.astDelete =
 
 if( SERVER )
 {
-	module.exports = astDelete;
+	module.exports = ast_astDelete;
 }
 
 
 /*
 | Creates a new astDelete object.
 */
-astDelete.create =
+ast_astDelete.create =
 prototype.create =
 	function(
 		// free strings
@@ -115,7 +110,7 @@ prototype.create =
 		inherit,
 		v_expr;
 
-	if( this !== astDelete )
+	if( this !== ast_astDelete )
 	{
 		inherit = this;
 

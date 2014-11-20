@@ -83,11 +83,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astFuncArg;
-
-
-astFuncArg =
 ast_astFuncArg =
 ast.astFuncArg =
 	{
@@ -98,14 +93,14 @@ ast.astFuncArg =
 
 if( SERVER )
 {
-	module.exports = astFuncArg;
+	module.exports = ast_astFuncArg;
 }
 
 
 /*
 | Creates a new astFuncArg object.
 */
-astFuncArg.create =
+ast_astFuncArg.create =
 prototype.create =
 	function(
 		// free strings
@@ -119,7 +114,7 @@ prototype.create =
 		v_comment,
 		v_name;
 
-	if( this !== astFuncArg )
+	if( this !== ast_astFuncArg )
 	{
 		inherit = this;
 

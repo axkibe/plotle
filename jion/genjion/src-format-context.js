@@ -89,11 +89,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	context;
-
-
-context =
 format_context =
 format.context =
 	{
@@ -104,14 +99,14 @@ format.context =
 
 if( SERVER )
 {
-	module.exports = context;
+	module.exports = format_context;
 }
 
 
 /*
 | Creates a new context object.
 */
-context.create =
+format_context.create =
 prototype.create =
 	function(
 		// free strings
@@ -127,7 +122,7 @@ prototype.create =
 		v_inline,
 		v_root;
 
-	if( this !== context )
+	if( this !== format_context )
 	{
 		inherit = this;
 

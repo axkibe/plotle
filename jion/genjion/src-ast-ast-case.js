@@ -95,11 +95,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astCase;
-
-
-astCase =
 ast_astCase =
 ast.astCase =
 	{
@@ -110,14 +105,14 @@ ast.astCase =
 
 if( SERVER )
 {
-	module.exports = astCase;
+	module.exports = ast_astCase;
 }
 
 
 /*
 | Creates a new astCase object.
 */
-astCase.create =
+ast_astCase.create =
 prototype.create =
 	function(
 		// free strings
@@ -135,7 +130,7 @@ prototype.create =
 		twigDup,
 		v_block;
 
-	if( this !== astCase )
+	if( this !== ast_astCase )
 	{
 		inherit = this;
 

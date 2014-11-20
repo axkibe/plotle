@@ -87,11 +87,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astObjLiteral;
-
-
-astObjLiteral =
 ast_astObjLiteral =
 ast.astObjLiteral =
 	{
@@ -102,14 +97,14 @@ ast.astObjLiteral =
 
 if( SERVER )
 {
-	module.exports = astObjLiteral;
+	module.exports = ast_astObjLiteral;
 }
 
 
 /*
 | Creates a new astObjLiteral object.
 */
-astObjLiteral.create =
+ast_astObjLiteral.create =
 prototype.create =
 	function(
 		// free strings
@@ -126,7 +121,7 @@ prototype.create =
 		twig,
 		twigDup;
 
-	if( this !== astObjLiteral )
+	if( this !== ast_astObjLiteral )
 	{
 		inherit = this;
 

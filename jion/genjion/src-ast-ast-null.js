@@ -72,11 +72,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astNull;
-
-
-astNull =
 ast_astNull =
 ast.astNull =
 	{
@@ -87,7 +82,7 @@ ast.astNull =
 
 if( SERVER )
 {
-	module.exports = astNull;
+	module.exports = ast_astNull;
 }
 
 
@@ -104,7 +99,7 @@ _singleton = null;
 /*
 | Creates a new astNull object.
 */
-astNull.create =
+ast_astNull.create =
 prototype.create =
 	function(
 		// free strings
@@ -113,7 +108,7 @@ prototype.create =
 	var
 		inherit;
 
-	if( this !== astNull )
+	if( this !== ast_astNull )
 	{
 		inherit = this;
 	}

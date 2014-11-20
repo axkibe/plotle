@@ -88,11 +88,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	token;
-
-
-token =
 jsLexer_token =
 jsLexer.token =
 	{
@@ -103,14 +98,14 @@ jsLexer.token =
 
 if( SERVER )
 {
-	module.exports = token;
+	module.exports = jsLexer_token;
 }
 
 
 /*
 | Creates a new token object.
 */
-token.create =
+jsLexer_token.create =
 prototype.create =
 	function(
 		// free strings
@@ -124,7 +119,7 @@ prototype.create =
 		v_type,
 		v_value;
 
-	if( this !== token )
+	if( this !== jsLexer_token )
 	{
 		inherit = this;
 

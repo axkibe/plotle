@@ -87,11 +87,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astCommaList;
-
-
-astCommaList =
 ast_astCommaList =
 ast.astCommaList =
 	{
@@ -102,14 +97,14 @@ ast.astCommaList =
 
 if( SERVER )
 {
-	module.exports = astCommaList;
+	module.exports = ast_astCommaList;
 }
 
 
 /*
 | Creates a new astCommaList object.
 */
-astCommaList.create =
+ast_astCommaList.create =
 prototype.create =
 	function(
 		// free strings
@@ -126,7 +121,7 @@ prototype.create =
 		twig,
 		twigDup;
 
-	if( this !== astCommaList )
+	if( this !== ast_astCommaList )
 	{
 		inherit = this;
 

@@ -83,11 +83,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astVarDec;
-
-
-astVarDec =
 ast_astVarDec =
 ast.astVarDec =
 	{
@@ -98,14 +93,14 @@ ast.astVarDec =
 
 if( SERVER )
 {
-	module.exports = astVarDec;
+	module.exports = ast_astVarDec;
 }
 
 
 /*
 | Creates a new astVarDec object.
 */
-astVarDec.create =
+ast_astVarDec.create =
 prototype.create =
 	function(
 		// free strings
@@ -119,7 +114,7 @@ prototype.create =
 		v_assign,
 		v_name;
 
-	if( this !== astVarDec )
+	if( this !== ast_astVarDec )
 	{
 		inherit = this;
 

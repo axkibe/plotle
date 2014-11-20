@@ -91,11 +91,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	idRepository;
-
-
-idRepository =
 jion_idRepository =
 jion.idRepository =
 	{
@@ -106,14 +101,14 @@ jion.idRepository =
 
 if( SERVER )
 {
-	module.exports = idRepository;
+	module.exports = jion_idRepository;
 }
 
 
 /*
 | Creates a new idRepository object.
 */
-idRepository.create =
+jion_idRepository.create =
 prototype.create =
 	function(
 		// free strings
@@ -127,7 +122,7 @@ prototype.create =
 		v_primitives,
 		v_units;
 
-	if( this !== idRepository )
+	if( this !== jion_idRepository )
 	{
 		inherit = this;
 

@@ -80,11 +80,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astComment;
-
-
-astComment =
 ast_astComment =
 ast.astComment =
 	{
@@ -95,14 +90,14 @@ ast.astComment =
 
 if( SERVER )
 {
-	module.exports = astComment;
+	module.exports = ast_astComment;
 }
 
 
 /*
 | Creates a new astComment object.
 */
-astComment.create =
+ast_astComment.create =
 prototype.create =
 	function(
 		// free strings
@@ -115,7 +110,7 @@ prototype.create =
 		inherit,
 		v_content;
 
-	if( this !== astComment )
+	if( this !== ast_astComment )
 	{
 		inherit = this;
 

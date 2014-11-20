@@ -83,11 +83,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astDiffers;
-
-
-astDiffers =
 ast_astDiffers =
 ast.astDiffers =
 	{
@@ -98,14 +93,14 @@ ast.astDiffers =
 
 if( SERVER )
 {
-	module.exports = astDiffers;
+	module.exports = ast_astDiffers;
 }
 
 
 /*
 | Creates a new astDiffers object.
 */
-astDiffers.create =
+ast_astDiffers.create =
 prototype.create =
 	function(
 		// free strings
@@ -119,7 +114,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== astDiffers )
+	if( this !== ast_astDiffers )
 	{
 		inherit = this;
 

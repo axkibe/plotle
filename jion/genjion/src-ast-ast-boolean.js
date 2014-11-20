@@ -80,11 +80,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astBoolean;
-
-
-astBoolean =
 ast_astBoolean =
 ast.astBoolean =
 	{
@@ -95,14 +90,14 @@ ast.astBoolean =
 
 if( SERVER )
 {
-	module.exports = astBoolean;
+	module.exports = ast_astBoolean;
 }
 
 
 /*
 | Creates a new astBoolean object.
 */
-astBoolean.create =
+ast_astBoolean.create =
 prototype.create =
 	function(
 		// free strings
@@ -115,7 +110,7 @@ prototype.create =
 		inherit,
 		v_boolean;
 
-	if( this !== astBoolean )
+	if( this !== ast_astBoolean )
 	{
 		inherit = this;
 

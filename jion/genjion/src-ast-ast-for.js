@@ -94,11 +94,6 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-var
-	astFor;
-
-
-astFor =
 ast_astFor =
 ast.astFor =
 	{
@@ -109,14 +104,14 @@ ast.astFor =
 
 if( SERVER )
 {
-	module.exports = astFor;
+	module.exports = ast_astFor;
 }
 
 
 /*
 | Creates a new astFor object.
 */
-astFor.create =
+ast_astFor.create =
 prototype.create =
 	function(
 		// free strings
@@ -132,7 +127,7 @@ prototype.create =
 		v_init,
 		v_iterate;
 
-	if( this !== astFor )
+	if( this !== ast_astFor )
 	{
 		inherit = this;
 
