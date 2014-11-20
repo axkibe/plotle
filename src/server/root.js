@@ -1119,7 +1119,7 @@ prototype.serveRequestAlter =
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )
 	{
-		changeWrap = spaceBox.changeSkids.get( a ).transform( changeWrap );
+		changeWrap = spaceBox.getChangeSkid( a ).transform( changeWrap );
 	}
 
 	// this does not yield, its write and forget.
@@ -1496,15 +1496,11 @@ prototype.conveyUpdate =
 {
 	var
 		c,
-		changeSkids,
 		chgA,
 		seqZ,
 		spaceBox;
 
 	spaceBox = root.$spaces[ spaceRef.fullname ];
-
-	// FIXME let the spaceBox return a proper slice
-	changeSkids = spaceBox.changeSkids;
 
 	seqZ = spaceBox.seqZ;
 
@@ -1512,7 +1508,7 @@ prototype.conveyUpdate =
 
 	for( c = seq; c < seqZ; c++ )
 	{
-		chgA.push( changeSkids.get( c ).asChangeWrap );
+		chgA.push( spaceBox.getChangeSkid( c ).asChangeWrap );
 	}
 
 	// FIXME make a result jion

@@ -20,14 +20,6 @@ if( JION )
 			'server.spaceBox',
 		attributes :
 			{
-				'changeSkids' :
-					{
-						// FIXME this should not be zero based
-						comment :
-							'changeSkids cached in RAM',
-						type :
-							'database.changeSkidRay'
-					},
 				'seqZ' :
 					{
 						comment :
@@ -55,6 +47,14 @@ if( JION )
 							'changes database collection',
 						type :
 							'Object'
+					},
+				'_changeSkids' :
+					{
+						// FIXME this should not be zero based
+						comment :
+							'changeSkids cached in RAM',
+						type :
+							'database.changeSkidRay'
 					}
 			},
 		node :
@@ -154,11 +154,11 @@ spaceBox.loadSpace =
 
 	return(
 		spaceBox.create(
-			'_changesDB', changesDB,
-			'changeSkids', changeSkids,
 			'space', space,
 			'spaceRef', spaceRef,
-			'seqZ', seqZ
+			'seqZ', seqZ,
+			'_changesDB', changesDB,
+			'_changeSkids', changeSkids
 		)
 	);
 };
@@ -189,14 +189,14 @@ spaceBox.createSpace =
 
 	return(
 		spaceBox.create(
+			'space', visual.space.create( ),
+			'spaceRef', spaceRef,
+			'seqZ', 1,
 			'_changesDB',
 				yield* root.repository.collection(
 					'changes:' + spaceRef.fullname
 				),
-			'changeSkids', database_changeSkidRay.create( ),
-			'space', visual.space.create( ),
-			'spaceRef', spaceRef,
-			'seqZ', 1
+			'_changeSkids', database_changeSkidRay.create( )
 		)
 	);
 
@@ -251,12 +251,24 @@ spaceBox.prototype.appendChange =
 		this.create(
 			'seqZ', this.seqZ + 1,
 			'space', ctr.tree,
-			'changeSkids',
-				this.changeSkids.create(
+			'_changeSkids',
+				this._changeSkids.create(
 					'ray:set', this.seqZ, changeSkid
 				)
 		)
 	);
+};
+
+
+/*
+| Returns the change skid by its sequence.
+*/
+spaceBox.prototype.getChangeSkid =
+	function(
+		seq
+	)
+{
+	return this._changeSkids.get( seq );
 };
 
 
