@@ -123,4 +123,17 @@ jools.lazyValue(
 );
 
 
+/*
+| Returns a changy thing
+| transformed on this changeSkid
+*/
+changeSkid.prototype.transform =
+	function(
+		cyt // a changy thing ( change, changeRay, changeWrap, etc. )
+	)
+{
+	return this.chgX.transform( cyt );
+};
+
+
 }( ) );

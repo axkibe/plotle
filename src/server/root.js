@@ -1119,8 +1119,7 @@ prototype.serveRequestAlter =
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )
 	{
-		changeWrap = spaceBox.changeSkids.get( a ).chgX.transform( changeWrap );
-		// FIXME remove .chgX. in above call
+		changeWrap = spaceBox.changeSkids.get( a ).transform( changeWrap );
 	}
 
 	// this does not yield, its write and forget.
