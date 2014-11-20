@@ -15,6 +15,10 @@ var
 jion = jion || { };
 
 
+var
+	jion_id;
+
+
 /*
 | Imports.
 */
@@ -92,6 +96,7 @@ var
 
 
 id =
+jion_id =
 jion.id =
 	{
 		prototype :

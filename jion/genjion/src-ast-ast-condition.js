@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astCondition;
+
+
 /*
 | Imports.
 */
@@ -87,6 +91,7 @@ var
 
 
 astCondition =
+ast_astCondition =
 ast.astCondition =
 	{
 		prototype :

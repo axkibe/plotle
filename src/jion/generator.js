@@ -469,6 +469,7 @@ generator.prototype._init =
 
 	this.units = units;
 
+	// FUTURE remove reference use global all the way
 	this.reference =
 		( this.id.unit === this.id.name )
 		? this.id.name + 'Obj'
@@ -859,7 +860,10 @@ generator.prototype.genConstructor =
 		.astVarDec( this.reference )
 		.astAssign(
 			this.reference,
-			astAssign( this.id.astVar, jionObj )
+			astAssign(
+				this.id.global,
+				astAssign( this.id.astVar, jionObj )
+			)
 		)
 		.astIf(
 			'SERVER',
@@ -2890,6 +2894,8 @@ generator.prototype.genExport =
 {
 	block = block.astComment( 'Export.' );
 
+	// old style FIXME remove
+
 	block =
 		block
 		.astVarDec( this.id.unit )
@@ -2897,7 +2903,13 @@ generator.prototype.genExport =
 			astVar( this.id.unit ),
 			astOr( this.id.unit, astObjLiteral( ) )
 		);
-
+	
+	// new style
+	
+	block =
+		block
+		.astVarDec( this.id.global );
+	
 	return block;
 };
 
@@ -2933,6 +2945,8 @@ generator.prototype.genCapsule =
 
 	capsule = capsule.append( astString( 'use strict' ) );
 
+	// FUTURE remove this.node
+	// and always make an if( SERVER ) around it.
 	if( this.node )
 	{
 		capsule = this.genNodeIncludes( capsule );

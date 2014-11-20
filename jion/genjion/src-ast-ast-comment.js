@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astComment;
+
+
 /*
 | Imports.
 */
@@ -81,6 +85,7 @@ var
 
 
 astComment =
+ast_astComment =
 ast.astComment =
 	{
 		prototype :

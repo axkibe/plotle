@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astTypeof;
+
+
 /*
 | Imports.
 */
@@ -81,6 +85,7 @@ var
 
 
 astTypeof =
+ast_astTypeof =
 ast.astTypeof =
 	{
 		prototype :

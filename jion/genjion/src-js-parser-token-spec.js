@@ -15,6 +15,10 @@ var
 jsParser = jsParser || { };
 
 
+var
+	jsParser_tokenSpec;
+
+
 /*
 | Imports.
 */
@@ -93,6 +97,7 @@ var
 
 
 tokenSpec =
+jsParser_tokenSpec =
 jsParser.tokenSpec =
 	{
 		prototype :

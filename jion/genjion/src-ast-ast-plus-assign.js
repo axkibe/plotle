@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astPlusAssign;
+
+
 /*
 | Imports.
 */
@@ -84,6 +88,7 @@ var
 
 
 astPlusAssign =
+ast_astPlusAssign =
 ast.astPlusAssign =
 	{
 		prototype :

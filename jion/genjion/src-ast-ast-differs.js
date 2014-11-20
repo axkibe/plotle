@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astDiffers;
+
+
 /*
 | Imports.
 */
@@ -84,6 +88,7 @@ var
 
 
 astDiffers =
+ast_astDiffers =
 ast.astDiffers =
 	{
 		prototype :

@@ -180,7 +180,30 @@ jools.lazyValue(
 
 
 /*
+| This id as global varname
+*/
+jools.lazyValue(
+	id.prototype,
+	'global',
+	function( )
+	{
+		if( this.unit )
+		{
+			return this.unit + '_' + this.name;
+		}
+		else
+		{
+			return this.name;
+		}
+	}
+);
+
+
+
+/*
 | This id as astVariable
+|
+| FIXME use newstyle global
 */
 jools.lazyValue(
 	id.prototype,

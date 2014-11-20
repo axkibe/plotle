@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astCase;
+
+
 /*
 | Imports.
 */
@@ -96,6 +100,7 @@ var
 
 
 astCase =
+ast_astCase =
 ast.astCase =
 	{
 		prototype :

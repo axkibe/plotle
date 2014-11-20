@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astForIn;
+
+
 /*
 | Imports.
 */
@@ -92,6 +96,7 @@ var
 
 
 astForIn =
+ast_astForIn =
 ast.astForIn =
 	{
 		prototype :

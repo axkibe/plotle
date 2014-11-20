@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astCall;
+
+
 /*
 | Imports.
 */
@@ -91,6 +95,7 @@ var
 
 
 astCall =
+ast_astCall =
 ast.astCall =
 	{
 		prototype :

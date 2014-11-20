@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astReturn;
+
+
 /*
 | Imports.
 */
@@ -81,6 +85,7 @@ var
 
 
 astReturn =
+ast_astReturn =
 ast.astReturn =
 	{
 		prototype :

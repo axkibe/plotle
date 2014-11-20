@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astEquals;
+
+
 /*
 | Imports.
 */
@@ -84,6 +88,7 @@ var
 
 
 astEquals =
+ast_astEquals =
 ast.astEquals =
 	{
 		prototype :

@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astCommaList;
+
+
 /*
 | Imports.
 */
@@ -88,6 +92,7 @@ var
 
 
 astCommaList =
+ast_astCommaList =
 ast.astCommaList =
 	{
 		prototype :

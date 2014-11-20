@@ -15,6 +15,10 @@ var
 jsParser = jsParser || { };
 
 
+var
+	jsParser_state;
+
+
 /*
 | Imports.
 */
@@ -90,6 +94,7 @@ var
 
 
 state =
+jsParser_state =
 jsParser.state =
 	{
 		prototype :

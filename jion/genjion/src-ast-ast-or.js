@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astOr;
+
+
 /*
 | Imports.
 */
@@ -84,6 +88,7 @@ var
 
 
 astOr =
+ast_astOr =
 ast.astOr =
 	{
 		prototype :

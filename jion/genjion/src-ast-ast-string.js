@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astString;
+
+
 /*
 | Imports.
 */
@@ -81,6 +85,7 @@ var
 
 
 astString =
+ast_astString =
 ast.astString =
 	{
 		prototype :

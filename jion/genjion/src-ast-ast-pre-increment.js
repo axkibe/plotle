@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astPreIncrement;
+
+
 /*
 | Imports.
 */
@@ -81,6 +85,7 @@ var
 
 
 astPreIncrement =
+ast_astPreIncrement =
 ast.astPreIncrement =
 	{
 		prototype :

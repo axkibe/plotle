@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astBoolean;
+
+
 /*
 | Imports.
 */
@@ -81,6 +85,7 @@ var
 
 
 astBoolean =
+ast_astBoolean =
 ast.astBoolean =
 	{
 		prototype :

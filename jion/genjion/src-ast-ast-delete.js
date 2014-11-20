@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astDelete;
+
+
 /*
 | Imports.
 */
@@ -81,6 +85,7 @@ var
 
 
 astDelete =
+ast_astDelete =
 ast.astDelete =
 	{
 		prototype :

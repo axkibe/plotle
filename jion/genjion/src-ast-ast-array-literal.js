@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astArrayLiteral;
+
+
 /*
 | Imports.
 */
@@ -88,6 +92,7 @@ var
 
 
 astArrayLiteral =
+ast_astArrayLiteral =
 ast.astArrayLiteral =
 	{
 		prototype :

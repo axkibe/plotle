@@ -15,6 +15,10 @@ var
 format = format || { };
 
 
+var
+	format_context;
+
+
 /*
 | Imports.
 */
@@ -90,6 +94,7 @@ var
 
 
 context =
+format_context =
 format.context =
 	{
 		prototype :

@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astFail;
+
+
 /*
 | Imports.
 */
@@ -81,6 +85,7 @@ var
 
 
 astFail =
+ast_astFail =
 ast.astFail =
 	{
 		prototype :

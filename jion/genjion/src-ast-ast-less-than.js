@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astLessThan;
+
+
 /*
 | Imports.
 */
@@ -84,6 +88,7 @@ var
 
 
 astLessThan =
+ast_astLessThan =
 ast.astLessThan =
 	{
 		prototype :

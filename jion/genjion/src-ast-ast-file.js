@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astFile;
+
+
 /*
 | Imports.
 */
@@ -100,6 +104,7 @@ var
 
 
 astFile =
+ast_astFile =
 ast.astFile =
 	{
 		prototype :

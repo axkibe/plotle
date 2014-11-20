@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astSwitch;
+
+
 /*
 | Imports.
 */
@@ -101,6 +105,7 @@ var
 
 
 astSwitch =
+ast_astSwitch =
 ast.astSwitch =
 	{
 		prototype :

@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astNot;
+
+
 /*
 | Imports.
 */
@@ -81,6 +85,7 @@ var
 
 
 astNot =
+ast_astNot =
 ast.astNot =
 	{
 		prototype :

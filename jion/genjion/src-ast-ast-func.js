@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astFunc;
+
+
 /*
 | Imports.
 */
@@ -102,6 +106,7 @@ var
 
 
 astFunc =
+ast_astFunc =
 ast.astFunc =
 	{
 		prototype :

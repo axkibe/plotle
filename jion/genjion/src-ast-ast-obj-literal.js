@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astObjLiteral;
+
+
 /*
 | Imports.
 */
@@ -88,6 +92,7 @@ var
 
 
 astObjLiteral =
+ast_astObjLiteral =
 ast.astObjLiteral =
 	{
 		prototype :

@@ -15,6 +15,10 @@ var
 ast = ast || { };
 
 
+var
+	ast_astNew;
+
+
 /*
 | Imports.
 */
@@ -86,6 +90,7 @@ var
 
 
 astNew =
+ast_astNew =
 ast.astNew =
 	{
 		prototype :

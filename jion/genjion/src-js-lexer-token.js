@@ -15,6 +15,10 @@ var
 jsLexer = jsLexer || { };
 
 
+var
+	jsLexer_token;
+
+
 /*
 | Imports.
 */
@@ -89,6 +93,7 @@ var
 
 
 token =
+jsLexer_token =
 jsLexer.token =
 	{
 		prototype :

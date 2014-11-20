@@ -15,6 +15,10 @@ var
 jion = jion || { };
 
 
+var
+	jion_generator;
+
+
 /*
 | Imports.
 */
@@ -83,6 +87,7 @@ var
 
 
 generator =
+jion_generator =
 jion.generator =
 	{
 		prototype :
