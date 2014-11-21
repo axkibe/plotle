@@ -49,7 +49,12 @@ var
 	mongodb,
 	prototype,
 	postProcessor,
-	request,
+	reply_acquire,
+	request_acquire,
+	request_alter,
+	request_auth,
+	request_register,
+	request_update,
 	repository,
 	roster,
 	server,
@@ -88,18 +93,17 @@ postProcessor = require( './post-processor' );
 
 repository = require( '../database/repository' );
 
-request =
-	{
-		acquire : require( '../request/acquire' ),
+reply_acquire = require( '../reply/acquire' );
 
-		alter : require( '../request/alter' ),
+request_acquire = require( '../request/acquire' );
 
-		auth : require( '../request/auth' ),
+request_alter = require( '../request/alter' );
 
-		register : require( '../request/register' ),
+request_auth = require( '../request/auth' );
 
-		update : require( '../request/update' )
-	};
+request_register = require( '../request/register' );
+
+request_update = require( '../request/update' );
 
 roster = require( './roster' );
 
@@ -1062,7 +1066,7 @@ prototype.serveRequestAlter =
 
 	try
 	{
-		req = request.alter.createFromJSON( req );
+		req = request_alter.createFromJSON( req );
 	}
 	catch( err )
 	{
@@ -1152,7 +1156,7 @@ prototype.serveRequestAuth =
 
 	try
 	{
-		req = request.auth.createFromJSON( req );
+		req = request_auth.createFromJSON( req );
 	}
 	catch( err )
 	{
@@ -1259,7 +1263,7 @@ prototype.serveRequestRegister =
 
 	try
 	{
-		req = request.register.createFromJSON( req );
+		req = request_register.createFromJSON( req );
 	}
 	catch( err )
 	{
@@ -1338,7 +1342,7 @@ prototype.serveRequestUpdate =
 
 	try
 	{
-		req = request.update.createFromJSON( req );
+		req = request_update.createFromJSON( req );
 	}
 	catch( err )
 	{
@@ -1639,7 +1643,7 @@ prototype.serveRequestAcquire =
 
 	try
 	{
-		req = request.acquire.createFromJSON( req );
+		req = request_acquire.createFromJSON( req );
 	}
 	catch( err )
 	{
@@ -1658,18 +1662,19 @@ prototype.serveRequestAcquire =
 		passhash !== root.$users[ user ].pass
 	)
 	{
-		throw jools.reject( 'wrong user/password' );
+		return jools.reject( 'wrong user/password' );
 	}
 
 	access = root.testAccess( user, req.spaceRef );
 
 	if( access === 'no' )
 	{
-		return {
-			ok : true,
-			access : access,
-			status : 'no access'
-		};
+		return(
+			reply_acquire.create(
+				'access', access,
+				'status', 'no access'
+			)
+		);
 	}
 
 	spaceBox = root.$spaces[ req.spaceRef.fullname ];
@@ -1682,21 +1687,23 @@ prototype.serveRequestAcquire =
 		}
 		else
 		{
-			return {
-				ok : true,
-				access : access,
-				status : 'nonexistent'
-			};
+			return(
+				reply_acquire.create(
+					'access', access,
+					'status', 'nonexistent'
+				)
+			);
 		}
 	}
 
-	return {
-		ok : true,
-		status : 'served',
-		access : access,
-		seq : spaceBox.seqZ,
-		node : spaceBox.space
-	};
+	return(
+		reply_acquire.create(
+			'status', 'served',
+			'access', access,
+			'seq', spaceBox.seqZ,
+			'space', spaceBox.space
+		)
+	);
 };
 
 

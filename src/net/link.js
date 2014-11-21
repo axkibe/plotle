@@ -19,9 +19,9 @@ var
 	ccot,
 	jools,
 	request,
+	reply_acquire,
 	root,
-	system,
-	visual;
+	system;
 
 
 /*
@@ -240,17 +240,15 @@ link.prototype.acquireSpace =
 */
 link.prototype._onAcquireSpace =
 	function(
-		req,
+		req, // FIXME rename request
 		reply
 	)
 {
-	var
-		space;
-
 	root.doTracker.flush( );
 
-	if( !reply.ok )
+	if( reply.type !== 'reply.acquire' )
 	{
+		// FIXME === 'reply.error'
 		root.onAcquireSpace( reply );
 
 		root.link._update( );
@@ -258,12 +256,15 @@ link.prototype._onAcquireSpace =
 		return;
 	}
 
+	reply = reply_acquire.createFromJSON( reply );
+
 	switch( reply.status )
 	{
 		case 'nonexistent' :
 		case 'no access' :
 
 			root.onAcquireSpace(
+				// FIXME this is strange
 				jools.immute(
 					{
 						status : reply.status,
@@ -277,24 +278,23 @@ link.prototype._onAcquireSpace =
 			return;
 	}
 
-	space = visual.space.createFromJSON( reply.node );
-
 	root.link =
 		root.link.create(
 			'spaceRef', req.spaceRef,
-			'_cSpace', space,
-			'_rSpace', space,
+			'_cSpace', reply.space,
+			'_rSpace', reply.space,
 			'_outbox', ccot.changeWrapRay.create( ),
 			'_postbox', ccot.changeWrapRay.create( ),
 			'_rSeq', reply.seq
 		);
 
 	root.onAcquireSpace(
+		// FIXME also this remote object
 		jools.immute(
 			{
 				status : reply.status,
 				spaceRef : req.spaceRef,
-				space : space,
+				space : reply.space,
 				access : reply.access
 			}
 		)

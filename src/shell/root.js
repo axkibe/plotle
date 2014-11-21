@@ -1291,6 +1291,8 @@ proto.onAcquireSpace =
 
 	access = asw.access;
 
+	console.log( 'ASW', asw );
+
 	this.space =
 		asw.space.create(
 			// FUTURE have the server already set this at JSON level

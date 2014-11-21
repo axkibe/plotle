@@ -24,6 +24,7 @@ module.exports =
 			'src/euclid/view.js',
 			'src/fabric/space-ref.js',
 			'src/jion/path.js',
+			'src/reply/acquire.js',
 			'src/request/acquire.js',
 			'src/request/alter.js',
 			'src/request/auth.js',
