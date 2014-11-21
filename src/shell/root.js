@@ -1282,16 +1282,16 @@ proto.onAcquireSpace =
 		default :
 
 			system.failScreen(
-				'Unknown acquireSpace() status: '
-				+ asw.status + ': ' + asw.message
+				'Unknown acquireSpace( ) status: '
+				+ asw.status
+				+ ': '
+				+ asw.message
 			);
 
 			return;
 	}
 
 	access = asw.access;
-
-	console.log( 'ASW', asw );
 
 	this.space =
 		asw.space.create(

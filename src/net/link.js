@@ -2,7 +2,6 @@
 | The link talks asynchronously with the server.
 */
 
-
 /*
 | Export
 */
@@ -18,7 +17,11 @@ net = net || { };
 var
 	ccot,
 	jools,
-	request,
+	request_acquire,
+	request_alter,
+	request_auth,
+	request_register,
+	request_update,
 	reply_acquire,
 	root,
 	system;
@@ -132,7 +135,7 @@ link.prototype.auth =
 	)
 {
 	root.ajax.twig.command.request(
-		request.auth.create(
+		request_auth.create(
 			'user', username,
 			'passhash', passhash
 		),
@@ -146,7 +149,7 @@ link.prototype.auth =
 */
 link.prototype._onAuth =
 	function(
-		req,
+		request,
 		reply
 	)
 {
@@ -158,7 +161,7 @@ link.prototype._onAuth =
 	root.onAuth(
 		ok,
 		ok ? reply.user : null,
-		ok ? req.passhash : null,
+		ok ? request.passhash : null,
 		ok ? null : reply.message
 	);
 };
@@ -176,7 +179,7 @@ link.prototype.register =
 	)
 {
 	root.ajax.twig.command.request(
-		request.register.create(
+		request_register.create(
 			'user', username,
 			'mail', mail,
 			'passhash', passhash,
@@ -192,7 +195,7 @@ link.prototype.register =
 */
 link.prototype._onRegister =
 	function(
-		req,
+		request,
 		reply
 	)
 {
@@ -203,8 +206,8 @@ link.prototype._onRegister =
 
 	root.onRegister(
 		ok,
-		ok ? req.user : null,
-		ok ? req.passhash : null,
+		ok ? request.user : null,
+		ok ? request.passhash : null,
 		ok ? null : reply.message
 	);
 };
@@ -224,7 +227,7 @@ link.prototype.acquireSpace =
 	root.ajax.twig.update.abortAll( );
 
 	root.ajax.twig.command.request(
-		request.acquire.create(
+		request_acquire.create(
 			'createMissing', createMissing,
 			'passhash', this.passhash,
 			'spaceRef', spaceRef,
@@ -240,15 +243,14 @@ link.prototype.acquireSpace =
 */
 link.prototype._onAcquireSpace =
 	function(
-		req, // FIXME rename request
+		request,
 		reply
 	)
 {
 	root.doTracker.flush( );
 
-	if( reply.type !== 'reply.acquire' )
+	if( reply.type === 'reply.error' )
 	{
-		// FIXME === 'reply.error'
 		root.onAcquireSpace( reply );
 
 		root.link._update( );
@@ -268,7 +270,7 @@ link.prototype._onAcquireSpace =
 				jools.immute(
 					{
 						status : reply.status,
-						spaceRef : req.spaceRef
+						spaceRef : request.spaceRef
 					}
 				)
 			);
@@ -280,7 +282,7 @@ link.prototype._onAcquireSpace =
 
 	root.link =
 		root.link.create(
-			'spaceRef', req.spaceRef,
+			'spaceRef', request.spaceRef,
 			'_cSpace', reply.space,
 			'_rSpace', reply.space,
 			'_outbox', ccot.changeWrapRay.create( ),
@@ -293,7 +295,7 @@ link.prototype._onAcquireSpace =
 		jools.immute(
 			{
 				status : reply.status,
-				spaceRef : req.spaceRef,
+				spaceRef : request.spaceRef,
 				space : reply.space,
 				access : reply.access
 			}
@@ -320,7 +322,7 @@ link.prototype._update =
 	function( )
 {
 	root.ajax.twig.update.request(
-		request.update.create(
+		request_update.create(
 			'passhash', this.passhash,
 			'spaceRef', this.spaceRef,
 			'seq',
@@ -339,7 +341,7 @@ link.prototype._update =
 */
 link.prototype._onUpdate =
 	function(
-		req,
+		request,
 		reply
 	)
 {
@@ -622,7 +624,7 @@ link.prototype._sendChanges =
 		);
 
 	root.ajax.twig.command.request(
-		request.alter.create(
+		request_alter.create(
 			'changeWrapRay', changeWrapRay,
 			'passhash', link.passhash,
 			'seq', link._rSeq,

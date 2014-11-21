@@ -226,10 +226,8 @@ jools.reject =
 	jools.log( 'reject', 'reject', message );
 
 	return {
-		ok :
-			false,
-		message :
-			message
+		ok : false,
+		message : message
 	};
 };
 

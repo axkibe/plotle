@@ -49,7 +49,9 @@ var
 	mongodb,
 	prototype,
 	postProcessor,
+	replyError,
 	reply_acquire,
+	reply_error,
 	request_acquire,
 	request_alter,
 	request_auth,
@@ -1587,6 +1589,27 @@ prototype.wake =
 
 
 /*
+| Creates a reject error for all
+| serve* functions
+*/
+replyError =
+	function(
+		message
+	)
+{
+	if( config.develServer )
+	{
+		// in devel mode any failure is fatal.
+		throw new Error( message );
+	}
+
+	jools.log( 'reject', 'reject', message );
+
+	return reply_error.create( 'message', message );
+};
+
+
+/*
 | Tests if the user has access to a space.
 */
 prototype.testAccess =
@@ -1649,7 +1672,7 @@ prototype.serveRequestAcquire =
 	{
 		console.log( err.stack );
 
-		return jools.reject( 'command not valid jion' );
+		return replyError( 'command not valid jion' );
 	}
 
 	passhash = req.passhash;
@@ -1662,7 +1685,7 @@ prototype.serveRequestAcquire =
 		passhash !== root.$users[ user ].pass
 	)
 	{
-		return jools.reject( 'wrong user/password' );
+		return replyError( 'wrong user/password' );
 	}
 
 	access = root.testAccess( user, req.spaceRef );
