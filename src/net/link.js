@@ -15,14 +15,16 @@ net = net || { };
 | Imports
 */
 var
-	ccot,
+	ccot_change,
+	ccot_changeRay,
+	ccot_changeWrap,
+	ccot_changeWrapRay,
 	jools,
 	request_acquire,
 	request_alter,
 	request_auth,
 	request_register,
 	request_update,
-	reply_acquire,
 	reply_alter,
 	root,
 	system;
@@ -286,8 +288,8 @@ link.prototype._onAcquireSpace =
 			'spaceRef', request.spaceRef,
 			'_cSpace', reply.space,
 			'_rSpace', reply.space,
-			'_outbox', ccot.changeWrapRay.create( ),
-			'_postbox', ccot.changeWrapRay.create( ),
+			'_outbox', ccot_changeWrapRay.create( ),
+			'_postbox', ccot_changeWrapRay.create( ),
 			'_rSeq', reply.seq
 		);
 
@@ -383,7 +385,7 @@ link.prototype._onUpdate =
 
 	chgs = reply.chgs;
 
-	report = ccot.changeRay.create( );
+	report = ccot_changeRay.create( );
 
 	gotOwnChgs = false;
 
@@ -405,7 +407,7 @@ link.prototype._onUpdate =
 			a++
 		)
 		{
-			chgX = ccot.change.createFromJSON( chgs[ a ].chgX );
+			chgX = ccot_change.createFromJSON( chgs[ a ].chgX );
 
 			cid = chgs[ a ].cid;
 
@@ -544,7 +546,7 @@ link.prototype.alter =
 	changes = result.reaction;
 
 	changeWrap =
-		ccot.changeWrap.create(
+		ccot_changeWrap.create(
 			'cid', jools.uid( ),
 			'chgX', changes
 		);
@@ -606,7 +608,7 @@ link.prototype._sendChanges =
 	changeWrap = link._outbox.get( 0 );
 
 	// TODO remove this workaround
-	changeWrapRay = ccot.changeWrapRay.create( );
+	changeWrapRay = ccot_changeWrapRay.create( );
 
 	changeWrapRay = changeWrapRay.append( changeWrap );
 
@@ -615,7 +617,7 @@ link.prototype._sendChanges =
 	root.link =
 		link.create(
 			'_outbox',
-//				ccot.changeWrapRay.create( ),
+//				ccot_changeWrapRay.create( ),
 // TODO
 				link._outbox.remove( 0 ),
 			'_postbox',
