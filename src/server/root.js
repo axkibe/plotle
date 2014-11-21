@@ -51,6 +51,7 @@ var
 	postProcessor,
 	replyError,
 	reply_acquire,
+	reply_alter,
 	reply_error,
 	request_acquire,
 	request_alter,
@@ -96,6 +97,8 @@ postProcessor = require( './post-processor' );
 repository = require( '../database/repository' );
 
 reply_acquire = require( '../reply/acquire' );
+
+reply_alter = require( '../reply/alter' );
 
 request_acquire = require( '../request/acquire' );
 
@@ -1072,7 +1075,7 @@ prototype.serveRequestAlter =
 	}
 	catch( err )
 	{
-		return jools.reject( 'command not valid jion' );
+		return replyError( 'command not valid jion' );
 	}
 
 	seq = req.seq;
@@ -1087,12 +1090,12 @@ prototype.serveRequestAlter =
 
 	if( root.$users[ username ].pass !== passhash  )
 	{
-		throw jools.reject( 'invalid pass' );
+		return replyError( 'invalid pass' );
 	}
 
 	if( root.testAccess( username, spaceRef ) !== 'rw' )
 	{
-		throw jools.reject( 'no access' );
+		return replyError( 'no access' );
 	}
 
 	spaceBox = root.$spaces[ spaceRef.fullname ];
@@ -1106,20 +1109,19 @@ prototype.serveRequestAlter =
 
 	if( seq < 0 || seq > seqZ )
 	{
-		throw jools.reject( 'invalid seq' );
+		return replyError( 'invalid seq' );
 	}
 
 	if( changeWrapRay.length !== 1 )
 	{
-		throw jools.reject( 'FIXME changeWrapRay.length must be 1' );
+		return replyError( 'FIXME changeWrapRay.length must be 1' );
 	}
 
 	changeWrap = changeWrapRay.get( 0 );
 
-
 	if( changeWrap.seq )
 	{
-		throw jools.reject( 'changeWrap.seq must not be set' );
+		return replyError( 'changeWrap.seq must not be set' );
 	}
 
 	// translates the changes if not most recent
@@ -1137,9 +1139,7 @@ prototype.serveRequestAlter =
 		function( ) { root.wake( spaceRef ); }
 	);
 
-	return {
-		ok : true
-	};
+	return reply_alter.create( );
 };
 
 

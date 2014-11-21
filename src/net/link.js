@@ -23,6 +23,7 @@ var
 	request_register,
 	request_update,
 	reply_acquire,
+	reply_alter,
 	root,
 	system;
 
@@ -645,7 +646,7 @@ link.prototype._onSendChanges =
 		reply
 	)
 {
-	if( !reply.ok )
+	if( reply.type === 'reply.alter' )
 	{
 		system.failScreen( 'Server not OK: ' + reply.message );
 	}
