@@ -7,7 +7,8 @@
 | Export
 */
 var
-	visual;
+	visual,
+	visual_docItem;
 
 visual = visual || { };
 
@@ -40,7 +41,11 @@ if( SERVER )
 /*
 | Constructor
 */
-var docItem =
+var
+	docItem;
+
+docItem =
+visual_docItem =
 visual.docItem =
 	function( )
 {
@@ -52,10 +57,7 @@ visual.docItem =
 // FIXME this is ugly
 if( !SERVER )
 {
-	jools.subclass(
-		docItem,
-		visual.item
-	);
+	jools.subclass( docItem, visual.item );
 }
 
 

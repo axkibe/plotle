@@ -7,7 +7,8 @@
 | Export
 */
 var
-	widgets;
+	widgets,
+	widgets_widget;
 
 widgets = widgets || { };
 
@@ -23,10 +24,11 @@ widgets = widgets || { };
 | Constructor.
 */
 var
-	widget;
+	widget; // FUTURE
 
 widget =
-widgets.widget =
+widgets.widget = // FUTURE
+widgets_widget =
 	function( )
 {
 	// initializing abstract

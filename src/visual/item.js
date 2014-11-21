@@ -7,10 +7,10 @@
 | Export
 */
 var
-	visual;
+	visual,
+	visual_item;
 
-visual =
-	visual || { };
+visual = visual || { };
 
 
 /*
@@ -39,8 +39,7 @@ var
 */
 if( SERVER )
 {
-	jools =
-		require( '../jools/jools' );
+	jools = require( '../jools/jools' );
 }
 
 
@@ -48,10 +47,11 @@ if( SERVER )
 | Constructor
 */
 var
-	item;
+	item; // FUTURE
 
 item =
-visual.item =
+visual.item = // FUTURE
+visual_item =
 	function( )
 {
 	// this is an abstract class

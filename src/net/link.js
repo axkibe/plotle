@@ -25,7 +25,7 @@ var
 	request_auth,
 	request_register,
 	request_update,
-	reply_alter,
+	reply_acquire,
 	root,
 	system;
 

@@ -7,7 +7,8 @@
 | Export
 */
 var
-	forms;
+	forms,
+	forms_jockey;
 
 forms = forms || { };
 
@@ -123,9 +124,11 @@ if( JION )
 
 
 var
-	jockey;
+	jockey; // FUTURE remove
 
-jockey = forms.jockey;
+jockey =
+forms_jockey =
+	forms.jockey;
 
 
 /*

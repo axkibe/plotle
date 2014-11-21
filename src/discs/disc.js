@@ -6,7 +6,9 @@
 /*
 | Export
 */
-var discs;
+var
+	discs,
+	discs_disc;
 
 discs = discs || { };
 
@@ -32,7 +34,8 @@ var
 */
 var
 disc =
-discs.disc =
+discs_disc =
+discs.disc = // FUTURE remove
 	function( )
 {
 	// abstract should not be constructed.

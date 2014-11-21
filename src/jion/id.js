@@ -203,21 +203,14 @@ jools.lazyValue(
 /*
 | This id as astVariable
 |
-| FIXME use newstyle global
+| FIXME rename astGlobal
 */
 jools.lazyValue(
 	id.prototype,
 	'astVar',
 	function( )
 	{
-		if( this.unit )
-		{
-			return shorthand.astVar( this.unit ).astDot( this.name );
-		}
-		else
-		{
-			return shorthand.astVar( this.name );
-		}
+		return shorthand.astVar( this.global );
 	}
 );
 

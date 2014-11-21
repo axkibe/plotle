@@ -23,10 +23,10 @@ var
 | Imports.
 */
 var
-	jion,
 	jools,
-	ast,
-	jion;
+	ast_astBlock,
+	ast_astComment,
+	jion_proto;
 
 
 /*
@@ -44,15 +44,11 @@ if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
 
-	ast = { };
+	ast_astBlock = require( '../../src/ast/ast-block' );
 
-	jion = { };
+	ast_astComment = require( '../../src/ast/ast-comment' );
 
-	ast.astBlock = require( '../../src/ast/ast-block' );
-
-	ast.astComment = require( '../../src/ast/ast-comment' );
-
-	jion.proto = require( '../../src/jion/proto' );
+	jion_proto = require( '../../src/jion/proto' );
 }
 
 
@@ -365,13 +361,13 @@ prototype.reflectName = 'astFile';
 /*
 | Sets values by path.
 */
-prototype.setPath = jion.proto.setPath;
+prototype.setPath = jion_proto.setPath;
 
 
 /*
 | Gets values by path
 */
-prototype.getPath = jion.proto.getPath;
+prototype.getPath = jion_proto.getPath;
 
 
 /*

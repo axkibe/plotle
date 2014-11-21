@@ -4,7 +4,8 @@
 
 var
 	jools,
-	jion;
+	jion, // FUTURE remove
+	jion_proto;
 
 
 jion = jion || { };
@@ -16,13 +17,19 @@ jion = jion || { };
 (function( ) {
 'use strict';
 
-var
-	proto;
 
-
-proto =
 jion.proto =
+jion_proto =
 	{ };
+
+/*
+| Node export.
+*/
+if( SERVER )
+{
+	module.exports = jion_proto;
+}
+
 
 
 /*
@@ -37,7 +44,7 @@ if( SERVER )
 /*
 | Sets a key of a sub node described by a path.
 */
-jion.proto.setPath =
+jion_proto.setPath =
 	function(
 		path,  // path to set
 		value, // value to set to
@@ -129,7 +136,7 @@ jion.proto.setPath =
 /*
 | Gets a key of a sub node described by a path.
 */
-proto.getPath =
+jion_proto.getPath =
 	function(
 		path,  // path to set
 		pos    // position in the path
@@ -192,7 +199,7 @@ proto.getPath =
 /*
 | Returns a twig node by its rank.
 */
-proto.atRank =
+jion_proto.atRank =
 	function(
 		rank
 	)
@@ -204,7 +211,7 @@ proto.atRank =
 /*
 | Creates a new unique identifier.
 */
-proto.newUID =
+jion_proto.newUID =
 	function( )
 {
 	var
@@ -227,7 +234,7 @@ proto.newUID =
 |
 | FIXME make a joolsLazyfunc
 */
-proto.rankOf =
+jion_proto.rankOf =
 	function(
 		key
 	)
@@ -286,7 +293,7 @@ proto.rankOf =
 /*
 | Appends an element to a ray.
 */
-proto.rayAppend =
+jion_proto.rayAppend =
 	function(
 		e
 	)
@@ -298,7 +305,7 @@ proto.rayAppend =
 /*
 | Returns the length of a ray.
 */
-proto.rayLength =
+jion_proto.rayLength =
 	function( )
 {
 	return this.ray.length;
@@ -308,7 +315,7 @@ proto.rayLength =
 /*
 | Gets one element of a ray.
 */
-proto.rayGet =
+jion_proto.rayGet =
 	function(
 		idx
 	)
@@ -320,7 +327,7 @@ proto.rayGet =
 /*
 | Returns a ray with one element inserted.
 */
-proto.rayInsert =
+jion_proto.rayInsert =
 	function(
 		idx,
 		e
@@ -333,7 +340,7 @@ proto.rayInsert =
 /*
 | Returns a ray with one element removed.
 */
-proto.rayRemove =
+jion_proto.rayRemove =
 	function(
 		idx
 	)
@@ -345,7 +352,7 @@ proto.rayRemove =
 /*
 | Returns a ray with one element altered.
 */
-proto.raySet =
+jion_proto.raySet =
 	function(
 		idx,
 		e
@@ -354,15 +361,6 @@ proto.raySet =
 	return this.create( 'ray:set', idx, e );
 };
 
-
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = proto;
-}
 
 
 } )( );

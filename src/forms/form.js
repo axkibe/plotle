@@ -7,7 +7,8 @@
 | Export
 */
 var
-	forms;
+	forms,
+	forms_form;
 
 forms = forms || { };
 
@@ -33,10 +34,11 @@ var
 
 
 var
-	form;
+	form; // FUTURE remove
 
 form =
-forms.form =
+forms.form = // FUTURE remove
+forms_form =
 	function( )
 {
 	// initializing abstract

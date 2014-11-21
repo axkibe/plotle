@@ -2,7 +2,6 @@
 | Generates jion objects from a jion definition.
 */
 
-
 /*
 | Capsule.
 */
@@ -180,6 +179,7 @@ generator.prototype._init =
 {
 	var
 		a,
+		aid,
 		assign,
 		attr,
 		attributes,
@@ -189,7 +189,6 @@ generator.prototype._init =
 		constructorList,
 		defaultValue,
 		// sorted init list
-		idParts,
 		inits,
 		jAttr,
 		jdv,
@@ -223,8 +222,6 @@ generator.prototype._init =
 
 	this.singleton = !!jion.singleton;
 
-	idParts = jion.id.split( '.' );
-
 	this.id = id.createFromString( jion.id );
 
 	if( jion.subclass )
@@ -239,20 +236,26 @@ generator.prototype._init =
 	for( name in jion.attributes || { } )
 	{
 		jAttr = jion.attributes[ name ];
-
+		
 		if( !Array.isArray( jAttr.type ) )
 		{
-			units = units.add( id.createFromString( jAttr.type ) );
+			aid = id.createFromString( jAttr.type );
+
+			units = units.add( aid );
 		}
 		else
 		{
+			aid = [ ]; // FUTURE idRay
+
 			for(
 				t = 0, tZ = jAttr.type.length;
 				t < tZ;
 				t++
 			)
 			{
-				units = units.add( id.createFromString( jAttr.type[ t ] ) );
+				aid[ t ] = id.createFromString( jAttr.type[ t ] );
+
+				units = units.add( aid[ t ] );
 			}
 		}
 
@@ -358,8 +361,8 @@ generator.prototype._init =
 					jAttr.json,
 				name :
 					name,
-				type :
-					jAttr.type,
+				id :
+					aid,
 				v : // FUTURE rename to vName
 					astVar( 'v_' + name )
 			} );
@@ -491,28 +494,41 @@ generator.prototype.genImports =
 	var
 		a,
 		aZ,
+		b,
+		bZ,
+		nameList,
 		unitList;
 
 	capsule =
 		capsule
 		.astComment( 'Imports.' )
-		.astVarDec( 'jion' )
 		.astVarDec( 'jools' );
 
 	// FUTURE: when type checking is there,
 	// this might become needed always.
 
-	if( this.hasJSON || this.node )
-	{
-		unitList = this.units.unitList;
+	unitList = this.units.unitList;
 
+	// FUTURE this is akward
+	// just put them all together into one simple id list
+	for(
+		a = 0, aZ = unitList.length;
+		a < aZ;
+		a++
+	)
+	{
+		nameList = this.units.nameListOfUnit( unitList[ a ] );
+		
 		for(
-			a = 0, aZ = unitList.length;
-			a < aZ;
-			a++
+			b = 0, bZ = nameList.length;
+			b < bZ;
+			b++
 		)
 		{
-			capsule = capsule.astVarDec( unitList[ a ] );
+			capsule =
+				capsule.astVarDec(
+					unitList[ a ] + '_' + nameList[ b ]
+				);
 		}
 	}
 
@@ -555,17 +571,6 @@ generator.prototype.genNodeIncludes =
 		a++
 	)
 	{
-		block =
-			block
-			.astAssign( unitList[ a ], astObjLiteral( ) );
-	}
-
-	for(
-		a = 0, aZ = unitList.length;
-		a < aZ;
-		a++
-	)
-	{
 		unitStr = unitList[ a ];
 
 		nameList = this.units.nameListOfUnit( unitStr );
@@ -581,7 +586,7 @@ generator.prototype.genNodeIncludes =
 			block =
 				block
 				.astAssign(
-					astVar( unitStr ).astDot( name ),
+					astVar( unitStr + '_' + name ),
 					astCall(
 						'require',
 						astString(
@@ -854,7 +859,10 @@ generator.prototype.genConstructor =
 		.astAssign(
 			this.id.global,
 			// FUTURE remove old style id.astVar unit.name syntax
-			astAssign( this.id.astVar, jionObj )
+			astAssign(
+				ast( this.id.string ),
+				jionObj
+			)
 		)
 		.astIf(
 			'SERVER',
@@ -1267,15 +1275,16 @@ generator.prototype.genCreatorDefaults =
 
 /*
 | Generates a type check of a non set variable.
+|
 | It is true if the variable fails the check.
 */
-generator.prototype.genSingleTypeCheckFailCondition =
+generator.prototype.genSingleTypeCheckFailCondition = // XXX
 	function(
 		avar,
-		type
+		id
 	)
 {
-	switch( type )
+	switch( id.string )
 	{
 		case 'Boolean' :
 
@@ -1305,12 +1314,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		default :
 
-			return(
-				astDiffers(
-					avar.astDot( 'reflect' ),
-					astString( type )
-				)
-			);
+			return astDiffers( avar.astDot( 'reflect' ), id.astString );
 	}
 };
 
@@ -1329,23 +1333,23 @@ generator.prototype.genTypeCheckFailCondition =
 		condArray;
 
 	if(
-		!Array.isArray( attr.type )
-		|| attr.type.length === 1
+		!Array.isArray( attr.id )
+		|| attr.id.length === 1
 	)
 	{
-		return this.genSingleTypeCheckFailCondition( attr.v, attr.type );
+		return this.genSingleTypeCheckFailCondition( attr.v, attr.id );
 	}
 
 	condArray = [ ];
 
 	for(
-		a = 0, aZ = attr.type.length;
+		a = 0, aZ = attr.id.length;
 		a < aZ;
 		a++
 	)
 	{
 		condArray.push(
-			this.genSingleTypeCheckFailCondition( attr.v, attr.type[ a ] )
+			this.genSingleTypeCheckFailCondition( attr.v, attr.id[ a ] )
 		);
 	}
 
@@ -1414,7 +1418,7 @@ generator.prototype.genCreatorChecks =
 				);
 		}
 
-		switch( attr.type )
+		switch( attr.id.string )
 		{
 			case 'Array' :
 			case 'Function' :
@@ -1676,7 +1680,7 @@ generator.prototype.genCreatorUnchanged =
 
 		// FIXME use genAttributeEquals
 
-		switch( attr.type )
+		switch( attr.id.string )
 		{
 			case 'Array' : // FIXME
 			case 'Boolean' :
@@ -1954,7 +1958,6 @@ generator.prototype.genFromJSONCreatorParser =
 		aZ,
 		attr,
 		attrCode,
-		base,
 		name,
 		// the switch
 		nameSwitch,
@@ -2005,7 +2008,7 @@ generator.prototype.genFromJSONCreatorParser =
 
 		attr = this.attributes[ name ];
 
-		switch( attr.type )
+		switch( attr.id.string )
 		{
 			case 'Boolean' :
 			case 'Integer' :
@@ -2019,15 +2022,13 @@ generator.prototype.genFromJSONCreatorParser =
 
 			default :
 
-				if( !Array.isArray( attr.type ) )
+				if( !Array.isArray( attr.id ) )
 				{
-					base = ast( attr.type );
-
 					attrCode =
 						astAssign(
 							attr.v,
 							astCall(
-								ast( attr.type ).astDot( 'createFromJSON' ),
+								attr.id.astVar.astDot( 'createFromJSON' ),
 								'arg'
 							)
 						);
@@ -2039,7 +2040,7 @@ generator.prototype.genFromJSONCreatorParser =
 						.astDefault( astFail( ) );
 
 					for(
-						t = 0, tZ = attr.type.length;
+						t = 0, tZ = attr.id.length;
 						t < tZ;
 						t++
 					)
@@ -2047,11 +2048,11 @@ generator.prototype.genFromJSONCreatorParser =
 						attrCode =
 							attrCode
 							.astCase(
-								astString( attr.type[ t ] ),
+								attr.id[ t ].astString,
 								astAssign(
 									attr.v,
 									astCall(
-										ast( attr.type[ t ] )
+										attr.id[ t ].astVar
 										.astDot( 'createFromJSON' ),
 										'arg'
 									)
@@ -2405,23 +2406,23 @@ generator.prototype.genJionProto =
 	capsule =
 		capsule
 		.astComment( 'Sets values by path.' )
-		.ast( 'prototype.setPath = jion.proto.setPath' )
+		.ast( 'prototype.setPath = jion_proto.setPath' )
 
 		.astComment( 'Gets values by path' )
-		.ast( 'prototype.getPath = jion.proto.getPath' );
+		.ast( 'prototype.getPath = jion_proto.getPath' );
 
 	if( this.twig )
 	{
 		capsule =
 			capsule
 			.astComment( 'Returns a twig by rank.' )
-			.ast( 'prototype.atRank = jion.proto.atRank' )
+			.ast( 'prototype.atRank = jion_proto.atRank' )
 
 			.astComment( 'Gets the rank of a key.' )
-			.ast( 'prototype.rankOf = jion.proto.rankOf' )
+			.ast( 'prototype.rankOf = jion_proto.rankOf' )
 
 			.astComment( 'Creates a new unique identifier.' )
-			.ast( 'prototype.newUID = jion.proto.newUID' );
+			.ast( 'prototype.newUID = jion_proto.newUID' );
 	}
 
 	if( this.ray )
@@ -2429,24 +2430,24 @@ generator.prototype.genJionProto =
 		capsule =
 			capsule
 			.astComment( 'Appends an entry to the ray.' )
-			.ast( 'prototype.append = jion.proto.rayAppend' )
+			.ast( 'prototype.append = jion_proto.rayAppend' )
 
 			.astComment( 'Returns the length of the ray.')
 			.ast(
-				'jools.lazyValue( prototype, "length", jion.proto.rayLength )'
+				'jools.lazyValue( prototype, "length", jion_proto.rayLength )'
 			)
 
 			.astComment( 'Gets one entry from the ray.' )
-			.ast( 'prototype.get = jion.proto.rayGet' )
+			.ast( 'prototype.get = jion_proto.rayGet' )
 
 			.astComment( 'Returns a jion with one entry inserted to the ray.' )
-			.ast( 'prototype.insert = jion.proto.rayInsert' )
+			.ast( 'prototype.insert = jion_proto.rayInsert' )
 
 			.astComment( 'Returns the jion with one entry of the ray set.' )
-			.ast( 'prototype.set = jion.proto.raySet' )
+			.ast( 'prototype.set = jion_proto.raySet' )
 
 			.astComment( 'Returns a jion with one entry from the ray removed.' )
-			.ast( 'prototype.remove = jion.proto.rayRemove' );
+			.ast( 'prototype.remove = jion_proto.rayRemove' );
 	}
 
 	return capsule;
@@ -2549,7 +2550,7 @@ generator.prototype.genAttributeEquals =
 
 	attr = this.attributes[ name ];
 
-	switch( attr.type )
+	switch( attr.id.string )
 	{
 		case 'Boolean' :
 		case 'Integer' :
@@ -2936,12 +2937,7 @@ generator.prototype.genCapsule =
 
 	capsule = capsule.append( astString( 'use strict' ) );
 
-	// FUTURE remove this.node
-	// and always make an if( SERVER ) around it.
-	if( this.node )
-	{
-		capsule = this.genNodeIncludes( capsule );
-	}
+	capsule = this.genNodeIncludes( capsule );
 
 	capsule = this.genConstructor( capsule );
 

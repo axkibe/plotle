@@ -67,7 +67,9 @@ if( JION )
 						json :
 							true,
 						type :
-							'visual.space'
+							'visual.space',
+						defaultValue :
+							undefined
 					}
 
 			},

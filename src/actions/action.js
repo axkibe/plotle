@@ -10,7 +10,8 @@
 | Export
 */
 var
-	actions;
+	actions,
+	actions_action;
 
 actions = actions || { };
 
@@ -23,6 +24,7 @@ actions = actions || { };
 
 
 actions.action =
+actions_action =
 	function( )
 {
 	// initializing abstract
