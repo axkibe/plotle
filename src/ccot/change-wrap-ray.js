@@ -30,8 +30,6 @@ if( JION )
 	return {
 		id :
 			'ccot.changeWrapRay',
-		node :
-			true,
 		json :
 			true,
 		ray :

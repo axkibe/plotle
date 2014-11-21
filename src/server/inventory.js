@@ -17,8 +17,6 @@ if( JION )
 	return {
 		id :
 			'server.inventory',
-		node :
-			true,
 		twig :
 			[
 				'server.resource'

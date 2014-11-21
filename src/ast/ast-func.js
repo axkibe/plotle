@@ -39,8 +39,6 @@ if( JION )
 							undefined
 					}
 			},
-		node :
-			true,
 		twig :
 			[
 //				FUTURE

@@ -68,9 +68,7 @@ if( JION )
 					}
 			},
 		init :
-			[ ],
-		node :
-			true
+			[ ]
 	};
 }
 

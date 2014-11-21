@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'ast.astBlock',
-		node :
-			true,
 		twig :
 			'->statement'
 	};

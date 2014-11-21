@@ -20,8 +20,6 @@ if( JION )
 	return {
 		id :
 			'jion.idRepository',
-		node :
-			true,
 		attributes :
 			{
 				'units' :

@@ -35,8 +35,6 @@ if( JION )
 	return {
 		id :
 			'ccot.changeRay',
-		node :
-			true,
 		equals :
 			false,
 		json :

@@ -53,9 +53,7 @@ if( JION )
 						type :
 							'ccot.sign'
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

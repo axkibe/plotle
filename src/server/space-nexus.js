@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'server.spaceNexus',
-		node :
-			true,
 		set :
 			[ 'server.spaceBox' ]
 	};

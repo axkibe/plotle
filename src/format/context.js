@@ -54,9 +54,7 @@ if( JION )
 						type :
 							'Boolean'
 					},
-			},
-		node :
-			true
+			}
 	};
 }
 

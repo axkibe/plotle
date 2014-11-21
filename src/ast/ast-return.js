@@ -27,9 +27,7 @@ if( JION )
 						type :
 							'Object' // FUTURE ->expression
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

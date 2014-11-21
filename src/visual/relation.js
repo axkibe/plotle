@@ -144,8 +144,6 @@ if( JION )
 			[
 				'inherit'
 			],
-		node :
-			true,
 		subclass :
 			'visual.label'
 	};

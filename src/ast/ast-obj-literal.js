@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'ast.astObjLiteral',
-		node :
-			true,
 		twig :
 			'->statement'
 	};

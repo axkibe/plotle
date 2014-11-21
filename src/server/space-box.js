@@ -56,9 +56,7 @@ if( JION )
 						type :
 							'database.changeSkidRay'
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

@@ -150,8 +150,6 @@ if( JION )
 							undefined
 					}
 			},
-		node :
-			true,
 		init :
 			[ ]
 	};

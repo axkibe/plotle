@@ -123,8 +123,6 @@ if( JION )
 				'inherit',
 				'twigDup'
 			],
-		node :
-			true,
 		json :
 			true,
 		twig :

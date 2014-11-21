@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'ast.astArrayLiteral',
-		node :
-			true,
 		equals :
 			'primitive', // FUTURE
 		twig :

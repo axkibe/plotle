@@ -65,9 +65,7 @@ if( JION )
 						type :
 							'Number'
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

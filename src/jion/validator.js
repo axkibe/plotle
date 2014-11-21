@@ -65,7 +65,6 @@ var _jionWhitelist =
 		'id' : true,
 		'init' : true,
 		'json' : true,
-		'node' : true,
 		'equals' : true,
 		'subclass' : true,
 		'singleton' : true,

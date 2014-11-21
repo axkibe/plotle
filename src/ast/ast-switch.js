@@ -37,8 +37,6 @@ if( JION )
 							null
 					}
 			},
-		node :
-			true,
 		twig :
 			[
 				'ast.astCase'

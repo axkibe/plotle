@@ -48,9 +48,7 @@ if( JION )
 						type :
 							'String'
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

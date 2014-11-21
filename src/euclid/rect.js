@@ -54,9 +54,7 @@ if( JION )
 						type :
 							'euclid.point'
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

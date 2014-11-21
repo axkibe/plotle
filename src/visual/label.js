@@ -124,8 +124,6 @@ if( JION )
 			},
 		init :
 			[ ],
-		node :
-			true,
 		subclass :
 			'visual.docItem'
 	};

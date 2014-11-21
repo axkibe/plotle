@@ -27,8 +27,6 @@ if( JION )
 	return {
 		id :
 			'ccot.signRay',
-		node :
-			true,
 		ray :
 			[ 'ccot.sign' ],
 		equals :

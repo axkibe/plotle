@@ -25,10 +25,7 @@ request = request || { };
 if( JION )
 {
 	return {
-		id :
-			'reply.alter',
-		node :
-			true
+		id : 'reply.alter'
 	};
 }
 

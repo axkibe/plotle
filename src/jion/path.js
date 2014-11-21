@@ -63,8 +63,6 @@ if( JION )
 			},
 		init :
 			[ 'array', '_sliced' ],
-		node :
-			true,
 		equals :
 			false
 	};

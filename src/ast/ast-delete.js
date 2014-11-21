@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'ast.astDelete',
-		node :
-			true,
 		attributes :
 			{
 				'expr' :

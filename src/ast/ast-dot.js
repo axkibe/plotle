@@ -35,8 +35,6 @@ if( JION )
 							'String'
 					}
 			},
-		node :
-			true,
 		init :
 			[ ]
 	};

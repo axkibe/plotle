@@ -36,9 +36,7 @@ if( JION )
 						defaultValue :
 							null
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

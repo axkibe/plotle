@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'ast.astVar',
-		node :
-			true,
 		attributes :
 			{
 				'name' :

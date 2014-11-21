@@ -27,9 +27,7 @@ if( JION )
 						type :
 							'Array'
 					},
-			},
-		node :
-			true
+			}
 	};
 }
 

@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'ast.astTypeof',
-		node :
-			true,
 		attributes :
 			{
 				'expr' :

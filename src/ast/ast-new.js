@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'ast.astNew',
-		node :
-			true,
 		attributes :
 			{
 				'call' :

@@ -19,8 +19,6 @@ if( JION )
 	return {
 		id :
 			'ast.astBoolean',
-		node :
-			true,
 		attributes :
 			{
 				'boolean' :

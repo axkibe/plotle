@@ -65,9 +65,7 @@ if( JION )
 						type :
 							'Object' // FUTURE Date
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

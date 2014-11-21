@@ -28,8 +28,6 @@ if( JION )
 							'ast.astBlock'
 					}
 			},
-		node :
-			true,
 		twig :
 			'->expression',
 	};

@@ -114,9 +114,7 @@ if( JION )
 		twig :
 			[
 				'visual.para'
-			],
-		node :
-			true
+			]
 	};
 }
 

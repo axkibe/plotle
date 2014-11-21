@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'ast.astString',
-		node :
-			true,
 		attributes :
 			{
 				'string' :

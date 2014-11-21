@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'ast.astCommaList',
-		node :
-			true,
 		twig :
 			'->expression'
 	};

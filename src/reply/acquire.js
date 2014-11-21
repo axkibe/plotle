@@ -72,9 +72,7 @@ if( JION )
 							undefined
 					}
 
-			},
-		node :
-			true
+			}
 	};
 }
 

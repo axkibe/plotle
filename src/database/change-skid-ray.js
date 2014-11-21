@@ -24,9 +24,7 @@ if( JION )
 		id :
 			'database.changeSkidRay',
 		ray :
-			[ 'database.changeSkid' ],
-		node :
-			true
+			[ 'database.changeSkid' ]
 	};
 }
 

@@ -123,9 +123,7 @@ if( JION )
 		init :
 			[
 				'inherit'
-			],
-		node :
-			true
+			]
 	};
 }
 

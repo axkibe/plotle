@@ -17,8 +17,6 @@ if( JION )
 	return {
 		id :
 			'jion.generator',
-		node :
-			true,
 		attributes :
 			{
 				'jion' :
@@ -217,8 +215,6 @@ generator.prototype._init =
 	this.hasJSON = !!jion.json;
 
 	this.init = jion.init;
-
-	this.node = !!jion.node;
 
 	this.singleton = !!jion.singleton;
 

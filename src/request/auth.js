@@ -49,9 +49,7 @@ if( JION )
 							'String'
 					}
 
-			},
-		node :
-			true
+			}
 	};
 }
 

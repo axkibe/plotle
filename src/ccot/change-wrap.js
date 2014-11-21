@@ -56,9 +56,7 @@ if( JION )
 						defaultValue :
 							undefined
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

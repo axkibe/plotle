@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'jion.id',
-		node :
-			true,
 		attributes :
 			{
 				'name' :

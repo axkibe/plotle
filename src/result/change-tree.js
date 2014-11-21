@@ -38,9 +38,7 @@ if( JION )
 						type :
 							'Object'
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

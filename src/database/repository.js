@@ -42,9 +42,7 @@ if( JION )
 						type :
 							'Object' // FUTURE
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

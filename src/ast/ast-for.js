@@ -48,9 +48,7 @@ if( JION )
 						type :
 							'ast.astBlock'
 					}
-			},
-		node :
-			true
+			}
 	};
 }
 

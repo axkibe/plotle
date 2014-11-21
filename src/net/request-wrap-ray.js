@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'net.requestWrapRay',
-		node :
-			true,
 		ray :
 			[
 				'net.requestWrap'

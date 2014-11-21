@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'ast.astNull',
-		node :
-			true,
 		equals :
 			'primitive',
 		singleton :
