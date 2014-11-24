@@ -58,7 +58,7 @@ if( JION )
 						type :
 							'fabric.spaceRef'
 					},
-				user :
+				username :
 					{
 						comment :
 							'user requesting the change',

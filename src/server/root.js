@@ -1062,7 +1062,7 @@ prototype.extraMangle =
 */
 prototype.serveRequestAlter =
 	function(
-		req
+		request
 	)
 {
 	var
@@ -1078,22 +1078,22 @@ prototype.serveRequestAlter =
 
 	try
 	{
-		req = request_alter.createFromJSON( req );
+		request = request_alter.createFromJSON( request );
 	}
 	catch( err )
 	{
 		return replyError( 'command not valid jion' );
 	}
 
-	seq = req.seq;
+	seq = request.seq;
 
-	changeWrapRay = req.changeWrapRay;
+	changeWrapRay = request.changeWrapRay;
 
-	spaceRef = req.spaceRef;
+	spaceRef = request.spaceRef;
 
-	username = req.user;
+	username = request.user;
 
-	passhash = req.passhash;
+	passhash = request.passhash;
 
 	if( root.$users[ username ].pass !== passhash  )
 	{
@@ -1140,7 +1140,7 @@ prototype.serveRequestAlter =
 	// this does not yield, its write and forget.
 	spaceBox =
 	root.$spaces[ spaceRef.fullname ] =
-		spaceBox.appendChange( changeWrap, req.user );
+		spaceBox.appendChange( changeWrap, request.user );
 
 	process.nextTick(
 		function( ) { root.wake( spaceRef ); }
@@ -1155,7 +1155,7 @@ prototype.serveRequestAlter =
 */
 prototype.serveRequestAuth =
 	function*(
-		req
+		request
 	)
 {
 	var
@@ -1165,7 +1165,7 @@ prototype.serveRequestAuth =
 
 	try
 	{
-		req = request_auth.createFromJSON( req );
+		request = request_auth.createFromJSON( request );
 	}
 	catch( err )
 	{
@@ -1176,7 +1176,7 @@ prototype.serveRequestAuth =
 
 	users = root.$users;
 
-	if( req.username === 'visitor' )
+	if( request.username === 'visitor' )
 	{
 		do
 		{
@@ -1190,7 +1190,7 @@ prototype.serveRequestAuth =
 			// FUTURE
 			{
 				user : uid, /* username */
-				pass : req.passhash,
+				pass : request.passhash,
 				created : Date.now( ),
 				use : Date.now( )
 			};
@@ -1198,11 +1198,11 @@ prototype.serveRequestAuth =
 		return reply_auth.create( 'username', uid );
 	}
 
-	if( !users[ req.username ] )
+	if( !users[ request.username ] )
 	{
 		val =
 			yield root.repository.users.findOne(
-				{ _id : req.username },
+				{ _id : request.username },
 				sus.resume( )
 			);
 
@@ -1211,15 +1211,15 @@ prototype.serveRequestAuth =
 			return replyError( 'Username unknown' );
 		}
 
-		users[ req.username ] = val;
+		users[ request.username ] = val;
 	}
 
-	if( users[ req.username ].pass !== req.passhash )
+	if( users[ request.username ].pass !== request.passhash )
 	{
 		return replyError( 'Invalid password' );
 	}
 
-	return reply_auth.create( 'username', req.username );
+	return reply_auth.create( 'username', request.username );
 };
 
 
@@ -1255,7 +1255,7 @@ prototype.createSpace =
 */
 prototype.serveRequestRegister =
 	function*(
-		req
+		request
 	)
 {
 	var
@@ -1267,7 +1267,7 @@ prototype.serveRequestRegister =
 
 	try
 	{
-		req = request_register.createFromJSON( req );
+		request = request_register.createFromJSON( request );
 	}
 	catch( err )
 	{
@@ -1277,13 +1277,13 @@ prototype.serveRequestRegister =
 	}
 
 
-	username = req.user;
+	username = request.user;
 
-	passhash = req.passhash;
+	passhash = request.passhash;
 
-	mail = req.mail;
+	mail = request.mail;
 
-	news = req.news;
+	news = request.news;
 
 	if( username.substr( 0, 7 ) === 'visitor' )
 	{
@@ -1330,7 +1330,7 @@ prototype.serveRequestRegister =
 */
 prototype.serveRequestUpdate =
 	function (
-		req,
+		request,
 		result
 	)
 {
@@ -1342,11 +1342,11 @@ prototype.serveRequestUpdate =
 		timerID,
 		spaceBox,
 		spaceRef,
-		user;
+		username;
 
 	try
 	{
-		req = request_update.createFromJSON( req );
+		request = request_update.createFromJSON( request );
 	}
 	catch( err )
 	{
@@ -1355,15 +1355,15 @@ prototype.serveRequestUpdate =
 		return jools.reject( 'command not valid jion' );
 	}
 
-	user = req.user;
+	username = request.username;
 
-	passhash = req.passhash;
+	passhash = request.passhash;
 
-	spaceRef = req.spaceRef;
+	spaceRef = request.spaceRef;
 
-	seq = req.seq;
+	seq = request.seq;
 
-	if( root.$users[user].pass !== passhash )
+	if( root.$users[ username ].pass !== passhash )
 	{
 		throw jools.reject( 'Invalid password' );
 	}
@@ -1400,7 +1400,7 @@ prototype.serveRequestUpdate =
 
 	root.$upsleep[ sleepID ] =
 		{
-			user : user,
+			user : username,
 			seq : seq,
 			timerID : timerID,
 			result : result,
@@ -1657,18 +1657,18 @@ prototype.testAccess =
 */
 prototype.serveRequestAcquire =
 	function*(
-		req
+		request
 	)
 {
 	var
 		access,
 		passhash,
 		spaceBox,
-		user;
+		username;
 
 	try
 	{
-		req = request_acquire.createFromJSON( req );
+		request = request_acquire.createFromJSON( request );
 	}
 	catch( err )
 	{
@@ -1677,20 +1677,20 @@ prototype.serveRequestAcquire =
 		return replyError( 'command not valid jion' );
 	}
 
-	passhash = req.passhash;
+	passhash = request.passhash;
 
-	user = req.user;
+	username = request.username;
 
 	if(
-		root.$users[ user ] === undefined
+		root.$users[ username ] === undefined
 		||
-		passhash !== root.$users[ user ].pass
+		passhash !== root.$users[ username ].pass
 	)
 	{
-		return replyError( 'wrong user/password' );
+		return replyError( 'wrong username/password' );
 	}
 
-	access = root.testAccess( user, req.spaceRef );
+	access = root.testAccess( username, request.spaceRef );
 
 	if( access === 'no' )
 	{
@@ -1702,13 +1702,13 @@ prototype.serveRequestAcquire =
 		);
 	}
 
-	spaceBox = root.$spaces[ req.spaceRef.fullname ];
+	spaceBox = root.$spaces[ request.spaceRef.fullname ];
 
 	if( !spaceBox )
 	{
-		if( req.createMissing === true )
+		if( request.createMissing === true )
 		{
-			spaceBox = yield* root.createSpace( req.spaceRef );
+			spaceBox = yield* root.createSpace( request.spaceRef );
 		}
 		else
 		{
@@ -2081,31 +2081,31 @@ prototype.webAjax =
 */
 prototype.serveRequest =
 	function*(
-		req,
+		request,
 		result
 	)
 {
-	switch( req.type )
+	switch( request.type )
 	{
 		case 'request.alter' :
 
-			return root.serveRequestAlter( req );
+			return root.serveRequestAlter( request );
 
 		case 'request.auth' :
 
-			return yield* root.serveRequestAuth( req );
+			return yield* root.serveRequestAuth( request );
 
 		case 'request.acquire' :
 
-			return yield* root.serveRequestAcquire( req );
+			return yield* root.serveRequestAcquire( request );
 
 		case 'request.register' :
 
-			return yield* root.serveRequestRegister( req );
+			return yield* root.serveRequestRegister( request );
 
 		case 'request.update' :
 
-			return root.serveRequestUpdate( req, result );
+			return root.serveRequestUpdate( request, result );
 
 		default :
 

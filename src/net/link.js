@@ -224,7 +224,7 @@ link.prototype.acquireSpace =
 			'createMissing', createMissing,
 			'passhash', this.passhash,
 			'spaceRef', spaceRef,
-			'user', this.username
+			'username', this.username
 		),
 		'_onAcquireSpace'
 	);
@@ -322,7 +322,7 @@ link.prototype._update =
 				this._rSeq !== null
 				? this._rSeq
 				: -1,
-			'user', this.username
+			'username', this.username
 		),
 		'_onUpdate'
 	);
