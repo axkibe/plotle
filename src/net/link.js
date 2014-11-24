@@ -139,7 +139,7 @@ link.prototype.auth =
 {
 	root.ajax.twig.command.request(
 		request_auth.create(
-			'user', username,
+			'username', username,
 			'passhash', passhash
 		),
 		'_onAuth'
@@ -156,17 +156,7 @@ link.prototype._onAuth =
 		reply
 	)
 {
-	var
-		ok;
-
-	ok = reply.ok;
-
-	root.onAuth(
-		ok,
-		ok ? reply.user : null,
-		ok ? request.passhash : null,
-		ok ? null : reply.message
-	);
+	root.onAuth( request, reply );
 };
 
 

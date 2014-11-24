@@ -254,6 +254,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/reply/auth.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/reply/error.js',
 		'hasJion', true,
 		'inBundle', true

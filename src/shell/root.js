@@ -1323,22 +1323,16 @@ proto.onAcquireSpace =
 */
 proto.onAuth =
 	function(
-		ok,
-		username,
-		passhash,
-		message
+		request,
+		reply
 	)
 {
 	// if in login mode this is a tempted login
 
 	if( this._mode === 'login' )
 	{
-		this._formJockey.get( 'login' ).onAuth(
-			ok,
-			username,
-			passhash,
-			message
-		);
+		// XXX
+		this._formJockey.get( 'login' ).onAuth( request, reply );
 
 		return;
 	}
@@ -1346,11 +1340,11 @@ proto.onAuth =
 	// otherwise this is an onload login
 	// or logout.
 
-	if( !ok )
+	if( reply.type !== 'reply.auth' )
 	{
 		// when logging in with a real user failed
 		// takes a visitor instead
-		if( username !== 'visitor' )
+		if( request.username !== 'visitor' )
 		{
 			this.link.auth( 'visitor', jools.uid( ) );
 
@@ -1358,12 +1352,12 @@ proto.onAuth =
 		}
 
 		// if even that failed, bailing to failScreen
-		system.failScreen( message );
+		system.failScreen( reply.message );
 
 		return;
 	}
 
-	this.setUser( username, passhash );
+	this.setUser( reply.username, request.passhash );
 
 	this.moveToSpace( fabric.spaceRef.ideoloomHome, false );
 };

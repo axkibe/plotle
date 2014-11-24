@@ -26,6 +26,7 @@ module.exports =
 			'src/jion/path.js',
 			'src/reply/acquire.js',
 			'src/reply/alter.js',
+			'src/reply/auth.js',
 			'src/reply/error.js',
 			'src/request/acquire.js',
 			'src/request/alter.js',

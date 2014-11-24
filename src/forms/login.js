@@ -322,19 +322,20 @@ login.prototype.specialKey =
 */
 login.prototype.onAuth =
 	function(
-		ok,
-		username,
-		passhash,
-		message
+		request,
+		reply
 	)
 {
 	var
+		message,
 		twig;
 
 	twig = this.twig;
 
-	if( !ok )
+	if( reply.type !== 'reply.auth' )
 	{
+		message = reply.message;
+
 		root.setPath(
 			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			message
@@ -344,10 +345,8 @@ login.prototype.onAuth =
 		{
 			root.setMark(
 				marks.caret.create(
-					'path',
-						twig.userInput.path,
-					'at',
-						twig.userInput.value.length
+					'path', twig.userInput.path,
+					'at', twig.userInput.value.length
 				)
 			);
 		}
@@ -355,10 +354,8 @@ login.prototype.onAuth =
 		{
 			root.setMark(
 				marks.caret.create(
-					'path',
-						twig.passwordInput.path,
-					'at',
-						twig.passwordInput.value.length
+					'path', twig.passwordInput.path,
+					'at', twig.passwordInput.value.length
 				)
 			);
 		}
@@ -366,10 +363,7 @@ login.prototype.onAuth =
 		return;
 	}
 
-	root.setUser(
-		username,
-		passhash
-	);
+	root.setUser( reply.username, request.passhash );
 
 	this.clear( );
 

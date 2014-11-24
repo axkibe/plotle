@@ -1,5 +1,7 @@
 /*
 | The root of the server.
+|
+| TODO remove all reject
 */
 
 
@@ -52,6 +54,7 @@ var
 	replyError,
 	reply_acquire,
 	reply_alter,
+	reply_auth,
 	reply_error,
 	request_acquire,
 	request_alter,
@@ -99,6 +102,10 @@ repository = require( '../database/repository' );
 reply_acquire = require( '../reply/acquire' );
 
 reply_alter = require( '../reply/alter' );
+
+reply_auth = require( '../reply/auth' );
+
+reply_error = require( '../reply/error' );
 
 request_acquire = require( '../request/acquire' );
 
@@ -1164,12 +1171,12 @@ prototype.serveRequestAuth =
 	{
 		console.log( err.stack );
 
-		return jools.reject( 'command not valid jion' );
+		return replyError( 'command not valid jion' );
 	}
 
 	users = root.$users;
 
-	if( req.user === 'visitor' )
+	if( req.username === 'visitor' )
 	{
 		do
 		{
@@ -1180,44 +1187,39 @@ prototype.serveRequestAuth =
 		while( users[ uid ] );
 
 		users[ uid ] =
+			// FUTURE
 			{
-				user : uid,
+				user : uid, /* username */
 				pass : req.passhash,
 				created : Date.now( ),
 				use : Date.now( )
 			};
 
-		return {
-			ok : true,
-			user : uid
-		};
+		return reply_auth.create( 'username', uid );
 	}
 
-	if( !users[ req.user ] )
+	if( !users[ req.username ] )
 	{
 		val =
 			yield root.repository.users.findOne(
-				{ _id : req.user },
+				{ _id : req.username },
 				sus.resume( )
 			);
 
 		if( val === null )
 		{
-			return jools.reject( 'Username unknown' );
+			return replyError( 'Username unknown' );
 		}
 
-		users[ req.user ] = val;
+		users[ req.username ] = val;
 	}
 
-	if( users[ req.user ].pass !== req.passhash )
+	if( users[ req.username ].pass !== req.passhash )
 	{
-		return jools.reject( 'Invalid password' );
+		return replyError( 'Invalid password' );
 	}
 
-	return {
-		ok : true,
-		user : req.user
-	};
+	return reply_auth.create( 'username', req.username );
 };
 
 

@@ -32,8 +32,6 @@ var
 /*
 | Constructor
 */
-var
-disc =
 discs_disc =
 discs.disc = // FUTURE remove
 	function( )
@@ -47,7 +45,7 @@ discs.disc = // FUTURE remove
 /*
 | Common initializer.
 */
-disc._init =
+discs_disc._init =
 	function(
 		// inherit
 	)

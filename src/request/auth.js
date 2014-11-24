@@ -39,7 +39,7 @@ if( JION )
 						type :
 							'String'
 					},
-				user :
+				username :
 					{
 						comment :
 							'user/visitor to be authenticated',
