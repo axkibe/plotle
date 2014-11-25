@@ -54,23 +54,6 @@ tools = require( './tools' );
 
 
 /*
-| Returns the block with a statement appended;
-*/
-astBlock.prototype.append =
-	function(
-		statement
-	)
-{
-	return(
-		this.create(
-			'ray:append',
-			statement
-		)
-	);
-};
-
-
-/*
 | Returns the block with a parsed statement appended.
 */
 astBlock.prototype.ast =
@@ -78,12 +61,7 @@ astBlock.prototype.ast =
 		statement
 	)
 {
-	return(
-		this.create(
-			'ray:append',
-			tools.convert( statement )
-		)
-	);
+	return this.append( tools.convert( statement ) );
 };
 
 
