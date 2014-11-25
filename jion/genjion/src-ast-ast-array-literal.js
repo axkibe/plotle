@@ -55,19 +55,17 @@ var
 
 Constructor =
 	function(
-		twig, // twig
-		ranks // twig ranks
+		ray // ray
 	)
 {
-	this.twig = twig;
-
-	this.ranks = ranks;
+	this.ray = ray;
 
 	jools.immute( this );
 
-	jools.immute( twig );
-
-	jools.immute( ranks );
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( ray );
+/**/}
 };
 
 
@@ -112,29 +110,22 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
-		key,
-		rank,
-		ranks,
-		twig,
-		twigDup;
+		ray,
+		rayDup;
 
 	if( this !== ast_astArrayLiteral )
 	{
 		inherit = this;
 
-		twig = inherit.twig;
+		ray = inherit.ray;
 
-		ranks = inherit.ranks;
-
-		twigDup = false;
+		rayDup = false;
 	}
 	else
 	{
-		twig = { };
+		ray = [ ];
 
-		ranks = [ ];
-
-		twigDup = true;
+		rayDup = true;
 	}
 
 	for(
@@ -147,110 +138,63 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
-			case 'twig:add' :
+			case 'ray:init' :
 
-				if( !twigDup )
-				{
-					twig = jools.copy( twig );
+				ray = arg;
 
-					ranks = ranks.slice( );
-
-					twigDup = true;
-				}
-
-				key = arg;
-
-				arg = arguments[ ++a + 1 ];
-
-				if( twig[ key ] !== undefined )
-				{
-					throw new Error( );
-				}
-
-				twig[ key ] = arg;
-
-				ranks.push( key );
+				rayDup = false;
 
 				break;
 
-			case 'twig:set' :
+			case 'ray:append' :
 
-				if( !twigDup )
+				if( !rayDup )
 				{
-					twig = jools.copy( twig );
+					ray = ray.slice( );
 
-					ranks = ranks.slice( );
-
-					twigDup = true;
+					rayDup = true;
 				}
 
-				key = arg;
-
-				arg = arguments[ ++a + 1 ];
-
-				if( twig[ key ] === undefined )
-				{
-					throw new Error( );
-				}
-
-				twig[ key ] = arg;
+				ray.push( arg );
 
 				break;
 
-			case 'twig:insert' :
+			case 'ray:insert' :
 
-				if( !twigDup )
+				if( !rayDup )
 				{
-					twig = jools.copy( twig );
+					ray = ray.slice( );
 
-					ranks = ranks.slice( );
-
-					twigDup = true;
+					rayDup = true;
 				}
 
-				key = arg;
-
-				rank = arguments[ a + 2 ];
-
-				arg = arguments[ a + 3 ];
-
-				a += 2;
-
-				if( twig[ key ] !== undefined )
-				{
-					throw new Error( );
-				}
-
-				if( rank < 0 || rank > ranks.length )
-				{
-					throw new Error( );
-				}
-
-				twig[ key ] = arg;
-
-				ranks.splice( rank, 0, key );
+				ray.splice( arg, 0, arguments[ ++a + 1 ] );
 
 				break;
 
-			case 'twig:remove' :
+			case 'ray:remove' :
 
-				if( !twigDup )
+				if( !rayDup )
 				{
-					twig = jools.copy( twig );
+					ray = ray.slice( );
 
-					ranks = ranks.slice( );
-
-					twigDup = true;
+					rayDup = true;
 				}
 
-				if( twig[ arg ] === undefined )
+				ray.splice( arg, 1 );
+
+				break;
+
+			case 'ray:set' :
+
+				if( !rayDup )
 				{
-					throw new Error( );
+					ray = ray.slice( );
+
+					rayDup = true;
 				}
 
-				delete twig[ arg ];
-
-				ranks.splice( ranks.indexOf( arg ), 1 );
+				ray[ arg ] = arguments[ ++a + 1 ];
 
 				break;
 
@@ -267,12 +211,12 @@ prototype.create =
 /**/{
 /**/}
 
-	if( inherit && !twigDup )
+	if( inherit && !rayDup )
 	{
 		return inherit;
 	}
 
-	return new Constructor( twig, ranks );
+	return new Constructor( ray );
 };
 
 
@@ -301,21 +245,39 @@ prototype.getPath = jion_proto.getPath;
 
 
 /*
-| Returns a twig by rank.
+| Appends an entry to the ray.
 */
-prototype.atRank = jion_proto.atRank;
+prototype.append = jion_proto.rayAppend;
 
 
 /*
-| Gets the rank of a key.
+| Returns the length of the ray.
 */
-prototype.rankOf = jion_proto.rankOf;
+jools.lazyValue( prototype, 'length', jion_proto.rayLength );
 
 
 /*
-| Creates a new unique identifier.
+| Gets one entry from the ray.
 */
-prototype.newUID = jion_proto.newUID;
+prototype.get = jion_proto.rayGet;
+
+
+/*
+| Returns a jion with one entry inserted to the ray.
+*/
+prototype.insert = jion_proto.rayInsert;
+
+
+/*
+| Returns the jion with one entry of the ray set.
+*/
+prototype.set = jion_proto.raySet;
+
+
+/*
+| Returns a jion with one entry from the ray removed.
+*/
+prototype.remove = jion_proto.rayRemove;
 
 
 /*

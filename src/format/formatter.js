@@ -1853,7 +1853,6 @@ formatArrayLiteral =
 	var
 		a,
 		aZ,
-		key,
 		text;
 
 	text = '';
@@ -1867,7 +1866,7 @@ formatArrayLiteral =
 /**/}
 
 
-	if( expr.ranks.length === 0 )
+	if( expr.length === 0 )
 	{
 		return context.tab + '[ ]';
 	}
@@ -1880,21 +1879,18 @@ formatArrayLiteral =
 	text += context.tab + '[\n';
 
 	for(
-		a = 0, aZ = expr.ranks.length;
+		a = 0, aZ = expr.length;
 		a < aZ;
 		a++
 	)
 	{
-		key = expr.ranks[ a ];
-
 		text +=
 			formatExpression(
 				context.inc,
-				expr.twig[ key ],
+				expr.get( a ),
 				precTable.astArrayLiteral
 			)
-			+
-			(
+			+ (
 				a + 1 < aZ
 				? ',\n'
 				: '\n'

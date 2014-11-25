@@ -20,38 +20,14 @@ if( JION )
 			'ast.astArrayLiteral',
 		equals :
 			'primitive', // FUTURE
-		twig :
-			'->expression'
+		ray :
+			// '->expression' // FUTURE
+			[ ]
 	};
 }
 
 
-var
-	astArrayLiteral,
-	jools;
-
-
-astArrayLiteral = require( '../jion/this' )( module );
-
-jools = require( '../jools/jools' );
-
-
-/*
-| Returns an array literal with an expression appended.
-*/
-astArrayLiteral.prototype.append =
-	function(
-		expr
-	)
-{
-	return (
-		this.create(
-			'twig:add',
-			jools.uid( ), // FIXME
-			expr
-		)
-	);
-};
+require( '../jion/this' )( module );
 
 
 } )( );
