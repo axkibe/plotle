@@ -40,7 +40,7 @@ GLOBAL.SHELL = false;
 var
 	config,
 	db_version,
-	fabric,
+	fabric_spaceRef,
 	fs,
 	generateJion,
 	http,
@@ -51,17 +51,8 @@ var
 	mongodb,
 	prototype,
 	postProcessor,
-	replyError,
-	reply_acquire,
-	reply_alter,
-	reply_auth,
-	reply_error,
-	request_acquire,
-	request_alter,
-	request_auth,
-	request_register,
-	request_update,
 	repository,
+	requestHandler,
 	roster,
 	server,
 	sha1,
@@ -99,23 +90,7 @@ postProcessor = require( './post-processor' );
 
 repository = require( '../database/repository' );
 
-reply_acquire = require( '../reply/acquire' );
-
-reply_alter = require( '../reply/alter' );
-
-reply_auth = require( '../reply/auth' );
-
-reply_error = require( '../reply/error' );
-
-request_acquire = require( '../request/acquire' );
-
-request_alter = require( '../request/alter' );
-
-request_auth = require( '../request/auth' );
-
-request_register = require( '../request/register' );
-
-request_update = require( '../request/update' );
+requestHandler = require( './request-handler' );
 
 roster = require( './roster' );
 
@@ -140,10 +115,7 @@ url = require( 'url' );
 
 util = require( 'util' );
 
-fabric =
-	{
-		spaceRef : require( '../fabric/space-ref' )
-	};
+fabric_spaceRef = require( '../fabric/space-ref' );
 
 zlib = require( 'zlib' );
 
@@ -278,7 +250,7 @@ prototype.loadSpaces =
 	)
 	{
 		yield* root.loadSpace(
-			fabric.spaceRef.create(
+			fabric_spaceRef.create(
 				'username', o.username,
 				'tag', o.tag
 			)
@@ -1058,172 +1030,6 @@ prototype.extraMangle =
 
 
 /*
-| Serves an alter request.
-*/
-prototype.serveRequestAlter =
-	function(
-		request
-	)
-{
-	var
-		a,
-		changeWrap,
-		changeWrapRay,
-		passhash,
-		seq,
-		seqZ,
-		spaceBox,
-		spaceRef,
-		username;
-
-	try
-	{
-		request = request_alter.createFromJSON( request );
-	}
-	catch( err )
-	{
-		return replyError( 'command not valid jion' );
-	}
-
-	seq = request.seq;
-
-	changeWrapRay = request.changeWrapRay;
-
-	spaceRef = request.spaceRef;
-
-	username = request.username;
-
-	passhash = request.passhash;
-
-	if( root.$users[ username ].pass !== passhash  )
-	{
-		return replyError( 'invalid pass' );
-	}
-
-	if( root.testAccess( username, spaceRef ) !== 'rw' )
-	{
-		return replyError( 'no access' );
-	}
-
-	spaceBox = root.$spaces[ spaceRef.fullname ];
-
-	seqZ = spaceBox.seqZ;
-
-	if( seq === -1 )
-	{
-		seq = seqZ;
-	}
-
-	if( seq < 0 || seq > seqZ )
-	{
-		return replyError( 'invalid seq' );
-	}
-
-	if( changeWrapRay.length !== 1 )
-	{
-		return replyError( 'FIXME changeWrapRay.length must be 1' );
-	}
-
-	changeWrap = changeWrapRay.get( 0 );
-
-	if( changeWrap.seq )
-	{
-		return replyError( 'changeWrap.seq must not be set' );
-	}
-
-	// translates the changes if not most recent
-	for( a = seq; a < seqZ; a++ )
-	{
-		changeWrap = spaceBox.getChangeSkid( a ).transform( changeWrap );
-	}
-
-	// this does not yield, its write and forget.
-	spaceBox =
-	root.$spaces[ spaceRef.fullname ] =
-		spaceBox.appendChange( changeWrap, request.username );
-
-	process.nextTick(
-		function( ) { root.wake( spaceRef ); }
-	);
-
-	return reply_alter.create( );
-};
-
-
-/*
-| Serves an auth request.
-*/
-prototype.serveRequestAuth =
-	function*(
-		request
-	)
-{
-	var
-		uid,
-		users,
-		val;
-
-	try
-	{
-		request = request_auth.createFromJSON( request );
-	}
-	catch( err )
-	{
-		console.log( err.stack );
-
-		return replyError( 'command not valid jion' );
-	}
-
-	users = root.$users;
-
-	if( request.username === 'visitor' )
-	{
-		do
-		{
-			root.$nextVisitor++;
-
-			uid = 'visitor-' + root.$nextVisitor;
-		}
-		while( users[ uid ] );
-
-		users[ uid ] =
-			// FUTURE
-			{
-				username : uid,
-				pass : request.passhash,
-				created : Date.now( ),
-				use : Date.now( )
-			};
-
-		return reply_auth.create( 'username', uid );
-	}
-
-	if( !users[ request.username ] )
-	{
-		val =
-			yield root.repository.users.findOne(
-				{ _id : request.username },
-				sus.resume( )
-			);
-
-		if( val === null )
-		{
-			return replyError( 'Username unknown' );
-		}
-
-		users[ request.username ] = val;
-	}
-
-	if( users[ request.username ].pass !== request.passhash )
-	{
-		return replyError( 'Invalid password' );
-	}
-
-	return reply_auth.create( 'username', request.username );
-};
-
-
-/*
 | Creates a new space.
 */
 prototype.createSpace =
@@ -1247,169 +1053,6 @@ prototype.createSpace =
 		yield* server.spaceBox.createSpace( spaceRef );
 
 	return spaceBox;
-};
-
-
-/*
-| Serves a register request.
-*/
-prototype.serveRequestRegister =
-	function*(
-		request
-	)
-{
-	var
-		mail,
-		news,
-		passhash,
-		user,
-		username;
-
-	try
-	{
-		request = request_register.createFromJSON( request );
-	}
-	catch( err )
-	{
-		console.log( err.stack );
-
-		return jools.reject( 'command not valid jion' );
-	}
-
-
-	username = request.username;
-
-	passhash = request.passhash;
-
-	mail = request.mail;
-
-	news = request.news;
-
-	if( username.substr( 0, 7 ) === 'visitor' )
-	{
-		return jools.reject( 'Username must not start with "visitor"' );
-	}
-
-	if( username.length < 4 )
-	{
-		return jools.reject( 'Username too short, min. 4 characters' );
-	}
-
-	user =
-		yield root.repository.users.findOne(
-			{ _id : username },
-			sus.resume( )
-		);
-
-	if( user !== null )
-	{
-		return jools.reject( 'Username already taken' );
-	}
-
-	user = {
-		_id : username,
-		pass : passhash,
-		mail : mail,
-		news : news
-	};
-
-	yield root.repository.users.insert( user, sus.resume( ) );
-
-	root.$users[ username ] = user;
-
-	yield* root.createSpace(
-		fabric.spaceRef.create( 'username', username, 'tag', 'home' )
-	);
-
-	return { ok : true };
-};
-
-
-/*
-| Gets new changes or waits for them.
-*/
-prototype.serveRequestUpdate =
-	function (
-		request,
-		result
-	)
-{
-	var
-		asw,
-		passhash,
-		seq,
-		sleepID,
-		timerID,
-		spaceBox,
-		spaceRef,
-		username;
-
-	try
-	{
-		request = request_update.createFromJSON( request );
-	}
-	catch( err )
-	{
-		console.log( err.stack );
-
-		return jools.reject( 'command not valid jion' );
-	}
-
-	username = request.username;
-
-	passhash = request.passhash;
-
-	spaceRef = request.spaceRef;
-
-	seq = request.seq;
-
-	if( root.$users[ username ].pass !== passhash )
-	{
-		throw jools.reject( 'Invalid password' );
-	}
-
-	spaceBox = root.$spaces[ spaceRef.fullname ];
-
-	if( !spaceBox )
-	{
-		return jools.reject( 'Unknown space' );
-	}
-
-	if ( !( seq >= 0 && seq <= spaceBox.seqZ ) )
-	{
-		return jools.reject( 'Invalid or missing seq: ' + seq );
-	}
-
-	asw = root.conveyUpdate( seq, spaceRef );
-
-	// immediate answer?
-	if( asw.chgs.length > 0 )
-	{
-		return asw;
-	}
-
-	// if not an immediate anwwer, the request is put to sleep
-	sleepID = '' + root.$nextSleep++;
-
-	timerID =
-		setTimeout(
-			root.expireSleep,
-			60000,
-			sleepID
-		);
-
-	root.$upsleep[ sleepID ] =
-		{
-			username : username,
-			seq : seq,
-			timerID : timerID,
-			result : result,
-			spaceRef : spaceRef
-		};
-
-	result.sleepID = sleepID;
-
-	return null;
 };
 
 
@@ -1591,27 +1234,6 @@ prototype.wake =
 
 
 /*
-| Creates a reject error for all
-| serve* functions
-*/
-replyError =
-	function(
-		message
-	)
-{
-	if( config.develServer )
-	{
-		// in devel mode any failure is fatal.
-		throw new Error( message );
-	}
-
-	jools.log( 'reject', 'reject', message );
-
-	return reply_error.create( 'message', message );
-};
-
-
-/*
 | Tests if the user has access to a space.
 */
 prototype.testAccess =
@@ -1649,86 +1271,6 @@ prototype.testAccess =
 	}
 
 	return 'no';
-};
-
-
-/*
-| Serves a get request.
-*/
-prototype.serveRequestAcquire =
-	function*(
-		request
-	)
-{
-	var
-		access,
-		passhash,
-		spaceBox,
-		username;
-
-	try
-	{
-		request = request_acquire.createFromJSON( request );
-	}
-	catch( err )
-	{
-		console.log( err.stack );
-
-		return replyError( 'command not valid jion' );
-	}
-
-	passhash = request.passhash;
-
-	username = request.username;
-
-	if(
-		root.$users[ username ] === undefined
-		||
-		passhash !== root.$users[ username ].pass
-	)
-	{
-		return replyError( 'wrong username/password' );
-	}
-
-	access = root.testAccess( username, request.spaceRef );
-
-	if( access === 'no' )
-	{
-		return(
-			reply_acquire.create(
-				'access', access,
-				'status', 'no access'
-			)
-		);
-	}
-
-	spaceBox = root.$spaces[ request.spaceRef.fullname ];
-
-	if( !spaceBox )
-	{
-		if( request.createMissing === true )
-		{
-			spaceBox = yield* root.createSpace( request.spaceRef );
-		}
-		else
-		{
-			return(
-				reply_acquire.create(
-					'access', access,
-					'status', 'nonexistent'
-				)
-			);
-		}
-	}
-
-	return(
-		reply_acquire.create(
-			'status', 'served',
-			'access', access,
-			'seq', spaceBox.seqZ,
-			'space', spaceBox.space
-		)
-	);
 };
 
 
@@ -2009,7 +1551,7 @@ prototype.webAjax =
 
 		try
 		{
-			asw = yield* root.serveRequest( cmd, result );
+			asw = yield* requestHandler.serve( cmd, result );
 		}
 		catch( err )
 		{
@@ -2073,44 +1615,6 @@ prototype.webAjax =
 		}
 	);
 	*/
-};
-
-
-/*
-| Serves an serveRequest
-*/
-prototype.serveRequest =
-	function*(
-		request,
-		result
-	)
-{
-	switch( request.type )
-	{
-		case 'request.alter' :
-
-			return root.serveRequestAlter( request );
-
-		case 'request.auth' :
-
-			return yield* root.serveRequestAuth( request );
-
-		case 'request.acquire' :
-
-			return yield* root.serveRequestAcquire( request );
-
-		case 'request.register' :
-
-			return yield* root.serveRequestRegister( request );
-
-		case 'request.update' :
-
-			return root.serveRequestUpdate( request, result );
-
-		default :
-
-			return jools.reject( 'unknown command' );
-	}
 };
 
 
