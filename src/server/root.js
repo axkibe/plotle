@@ -1137,44 +1137,6 @@ prototype.closeSleep =
 
 
 /*
-| Returns a result for an update operation.
-*/
-prototype.conveyUpdate =
-	function(
-		seq,     // ???
-		spaceRef // reference of space
-	)
-{
-	var
-		c,
-		chgA,
-		seqZ,
-		spaceBox;
-
-	spaceBox = root.$spaces[ spaceRef.fullname ];
-
-	seqZ = spaceBox.seqZ;
-
-	chgA = [ ];
-
-	for( c = seq; c < seqZ; c++ )
-	{
-		chgA.push( spaceBox.getChangeSkid( c ).asChangeWrap );
-	}
-
-	// FIXME make a result jion
-	chgA = JSON.parse( JSON.stringify( chgA ) );
-
-	return {
-		ok : true,
-		seq : seq,
-		seqZ : seqZ,
-		chgs : chgA
-	};
-};
-
-
-/*
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
 prototype.wake =
@@ -1213,7 +1175,7 @@ prototype.wake =
 
 		delete root.$upsleep[ sKey ];
 
-		asw = root.conveyUpdate( sleep.seq, sleep.spaceRef );
+		asw = requestHandler.conveyUpdate( sleep.seq, sleep.spaceRef );
 
 		result = sleep.result;
 

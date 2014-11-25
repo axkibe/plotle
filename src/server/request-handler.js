@@ -380,7 +380,7 @@ serveUpdate =
 		return jools.reject( 'Invalid or missing seq: ' + seq );
 	}
 
-	asw = root.conveyUpdate( seq, spaceRef );
+	asw = requestHandler.conveyUpdate( seq, spaceRef );
 
 	// immediate answer?
 	if( asw.chgs.length > 0 )
@@ -490,6 +490,44 @@ serveAcquire =
 			'space', spaceBox.space
 		)
 	);
+};
+
+
+/*
+| Returns a result for an update operation.
+*/
+requestHandler.conveyUpdate =
+	function(
+		seq,     // get updates since this sequence
+		spaceRef // reference of space
+	)
+{
+	var
+		c,
+		chgA,
+		seqZ,
+		spaceBox;
+
+	spaceBox = root.$spaces[ spaceRef.fullname ];
+
+	seqZ = spaceBox.seqZ;
+
+	chgA = [ ];
+
+	for( c = seq; c < seqZ; c++ )
+	{
+		chgA.push( spaceBox.getChangeSkid( c ).asChangeWrap );
+	}
+
+	// FIXME make a result jion
+	chgA = JSON.parse( JSON.stringify( chgA ) );
+
+	return {
+		ok : true,
+		seq : seq,
+		seqZ : seqZ,
+		chgs : chgA
+	};
 };
 
 
