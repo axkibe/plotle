@@ -173,7 +173,7 @@ link.prototype.register =
 {
 	root.ajax.twig.command.request(
 		request_register.create(
-			'user', username,
+			'username', username,
 			'mail', mail,
 			'passhash', passhash,
 			'news', news
@@ -197,9 +197,10 @@ link.prototype._onRegister =
 
 	ok = reply.ok;
 
+	// FUTURE pass request / reply
 	root.onRegister(
 		ok,
-		ok ? request.user : null,
+		ok ? request.username : null,
 		ok ? request.passhash : null,
 		ok ? null : reply.message
 	);
@@ -622,7 +623,7 @@ link.prototype._sendChanges =
 			'passhash', link.passhash,
 			'seq', link._rSeq,
 			'spaceRef', link.spaceRef,
-			'user', link.username
+			'username', link.username
 		),
 		'_onSendChanges'
 	);

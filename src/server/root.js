@@ -1091,7 +1091,7 @@ prototype.serveRequestAlter =
 
 	spaceRef = request.spaceRef;
 
-	username = request.user;
+	username = request.username;
 
 	passhash = request.passhash;
 
@@ -1140,7 +1140,7 @@ prototype.serveRequestAlter =
 	// this does not yield, its write and forget.
 	spaceBox =
 	root.$spaces[ spaceRef.fullname ] =
-		spaceBox.appendChange( changeWrap, request.user );
+		spaceBox.appendChange( changeWrap, request.username );
 
 	process.nextTick(
 		function( ) { root.wake( spaceRef ); }
@@ -1189,7 +1189,7 @@ prototype.serveRequestAuth =
 		users[ uid ] =
 			// FUTURE
 			{
-				user : uid, /* username */
+				username : uid,
 				pass : request.passhash,
 				created : Date.now( ),
 				use : Date.now( )
@@ -1259,11 +1259,11 @@ prototype.serveRequestRegister =
 	)
 {
 	var
-		username,
-		passhash,
 		mail,
 		news,
-		user;
+		passhash,
+		user,
+		username;
 
 	try
 	{
@@ -1277,7 +1277,7 @@ prototype.serveRequestRegister =
 	}
 
 
-	username = request.user;
+	username = request.username;
 
 	passhash = request.passhash;
 
@@ -1400,7 +1400,7 @@ prototype.serveRequestUpdate =
 
 	root.$upsleep[ sleepID ] =
 		{
-			user : username,
+			username : username,
 			seq : seq,
 			timerID : timerID,
 			result : result,
@@ -1616,7 +1616,7 @@ replyError =
 */
 prototype.testAccess =
 	function(
-		user,
+		username,
 		spaceRef
 	)
 {
@@ -1630,7 +1630,7 @@ prototype.testAccess =
 
 			case 'home' :
 
-				return user === config.admin ? 'rw' : 'ro';
+				return username === config.admin ? 'rw' : 'ro';
 
 			default :
 
@@ -1638,12 +1638,12 @@ prototype.testAccess =
 		}
 	}
 
-	if( user.substring( 0, 7 ) === 'visitor' )
+	if( username.substring( 0, 7 ) === 'visitor' )
 	{
 		return 'no';
 	}
 
-	if( user === spaceRef.username )
+	if( username === spaceRef.username )
 	{
 		return 'rw';
 	}

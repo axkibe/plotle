@@ -56,7 +56,7 @@ if( JION )
 						type :
 							'String'
 					},
-				user :
+				username :
 					{
 						comment :
 							'user to be registered',

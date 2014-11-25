@@ -7,7 +7,10 @@
 | Export
 */
 var
-	PostProcessor =
+	postProcessor;
+
+postProcessor =
+module.exports =
 		{ };
 
 
@@ -27,9 +30,9 @@ var
 
 
 /*
-| PostProcessor for devel.html
+| postProcessor for devel.html
 */
-PostProcessor.develHtml =
+postProcessor.develHtml =
 	function(
 		data,        // the data
 		inventory    // the server inventory
@@ -86,7 +89,7 @@ PostProcessor.develHtml =
 /*
 | PostProcessor for testpad.html
 */
-PostProcessor.testPadHtml =
+postProcessor.testPadHtml =
 	function(
 		data,        // the data
 		inventory    // the server inventory
@@ -144,7 +147,7 @@ PostProcessor.testPadHtml =
 /*
 | PostProcessor for index.html
 */
-PostProcessor.indexHtml =
+postProcessor.indexHtml =
 	function(
 		data,          // the data
 		inventory,     // the server inventory
@@ -162,12 +165,6 @@ PostProcessor.indexHtml =
 		)
 	);
 };
-
-
-/*
-| Node export
-*/
-module.exports = PostProcessor;
 
 
 } )( );
