@@ -285,15 +285,13 @@ formatBlock =
 	)
 {
 	var
+		a, aZ,
 		blockContext,
 		text;
 
 	text = '';
 
-	if(
-		context.inline
-		&& block.ranks.length > 1
-	)
+	if( context.inline && block.length > 1 )
 	{
 		throw 'noinline';
 	}
@@ -310,24 +308,21 @@ formatBlock =
 	}
 
 	for(
-		var a = 0, aZ = block.ranks.length;
+		a = 0, aZ = block.length;
 		a < aZ;
 		a++
 	)
 	{
 		text +=
 			formatStatement(
-				blockContext
-			,
-				block.atRank( a )
-			,
+				blockContext,
+				block.get( a ),
 				a > 0
-				?  block.atRank( a - 1 )
-				: null
-			,
+					?  block.get( a - 1 )
+					: null,
 				a + 1 < aZ
-				?  block.atRank( a + 1 )
-				: null
+					?  block.get( a + 1 )
+					: null
 			);
 	}
 

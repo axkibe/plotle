@@ -18,8 +18,9 @@ if( JION )
 	return {
 		id :
 			'ast.astBlock',
-		twig :
-			'->statement'
+		ray :
+			// '->statement' FUTURE
+			[ ]
 	};
 }
 
@@ -62,8 +63,7 @@ astBlock.prototype.append =
 {
 	return(
 		this.create(
-			'twig:add',
-			jools.uid( ), // FIXME
+			'ray:append',
 			statement
 		)
 	);
@@ -80,8 +80,7 @@ astBlock.prototype.ast =
 {
 	return(
 		this.create(
-			'twig:add',
-			jools.uid( ), // FIXME
+			'ray:append',
 			tools.convert( statement )
 		)
 	);

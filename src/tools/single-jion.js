@@ -8,17 +8,13 @@
 (function( ) {
 'use strict';
 
-GLOBAL.CHECK =
-	true;
+GLOBAL.CHECK = true;
 
-GLOBAL.JION =
-	false;
+GLOBAL.JION = false;
 
-GLOBAL.SERVER =
-	true;
+GLOBAL.SERVER = true;
 
-GLOBAL.SHELL =
-	false;
+GLOBAL.SHELL = false;
 
 if( typeof( require ) === 'undefined' )
 {
