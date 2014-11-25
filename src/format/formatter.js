@@ -1147,7 +1147,7 @@ formatCapsuleFunc =
 	var
 		text;
 
-	if( func.ranks.length !== 0 )
+	if( func.length !== 0 )
 	{
 		throw new Error( );
 	}
@@ -1189,7 +1189,7 @@ formatFunc =
 
 	text = context.tab;
 
-	if( func.ranks.length === 0 )
+	if( func.length === 0 )
 	{
 		text += 'function( )' + context.sep;
 	}
@@ -1198,22 +1198,16 @@ formatFunc =
 		text += 'function(' + context.sep;
 
 		for(
-			a = 0, aZ = func.ranks.length;
+			a = 0, aZ = func.length;
 			a < aZ;
 			a++
 		)
 		{
-			arg = func.twig[ func.ranks[ a ] ];
+			arg = func.get( a );
 
-			comma =
-				a + 1 < aZ
-				? ','
-				: '';
+			comma = a + 1 < aZ ? ',' : '';
 
-			argSpace =
-				arg.name
-				? ' '
-				: '';
+			argSpace = arg.name ? ' ' : '';
 
 			text +=
 				context.inc.tab

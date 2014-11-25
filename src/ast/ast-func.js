@@ -39,7 +39,7 @@ if( JION )
 							undefined
 					}
 			},
-		twig :
+		ray :
 			[
 //				FUTURE
 //				'ast.FuncArg'
@@ -50,38 +50,16 @@ if( JION )
 
 var
 	astFuncArg,
-	astFunc,
-	jools;
+	astFunc;
 
 
 astFunc = require( '../jion/this' )( module );
 
 astFuncArg = require( './ast-func-arg' );
 
-jools = require( '../jools/jools' );
-
-
-/*
-| Returns the function with a an argument appended.
-*/
-astFunc.prototype.append =
-	function(
-		arg
-	)
-{
-	return(
-		this.create(
-			'twig:add',
-			jools.uid( ), // FIXME
-			arg
-		)
-	);
-};
-
-
 /*
 | Convenience shortcut.
-| Returns the function with a an argument appended.
+| Returns the function with an argument appended.
 */
 astFunc.prototype.astArg =
 	function(
@@ -92,10 +70,8 @@ astFunc.prototype.astArg =
 	return(
 		this.append(
 			astFuncArg.create(
-				'name',
-					name,
-				'comment',
-					comment
+				'name', name,
+				'comment', comment
 			)
 		)
 	);
