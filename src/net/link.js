@@ -195,7 +195,7 @@ link.prototype._onRegister =
 	var
 		ok;
 
-	ok = reply.ok;
+	ok = reply.type === 'reply.register';
 
 	// FUTURE pass request / reply
 	root.onRegister(

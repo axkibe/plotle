@@ -1654,7 +1654,6 @@ formatCall =
 {
 	var
 		a, aZ,
-		arg,
 		text;
 
 /**/if( CHECK )

@@ -1,5 +1,5 @@
 /*
-| The servers replies to a clients alter request.
+| The servers replies to a succesful clients register request.
 */
 
 
@@ -16,7 +16,7 @@
 if( JION )
 {
 	return {
-		id : 'reply.alter',
+		id : 'reply.register',
 		json : true
 	};
 }

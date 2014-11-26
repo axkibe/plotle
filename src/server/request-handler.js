@@ -20,6 +20,7 @@ var
 	reply_alter,
 	reply_auth,
 	reply_error,
+	reply_register,
 	request_acquire,
 	request_alter,
 	request_auth,
@@ -47,6 +48,8 @@ reply_alter = require( '../reply/alter' );
 reply_auth = require( '../reply/auth' );
 
 reply_error = require( '../reply/error' );
+
+reply_register = require( '../reply/register' );
 
 request_acquire = require( '../request/acquire' );
 
@@ -273,7 +276,7 @@ serveRegister =
 	{
 		console.log( err.stack );
 
-		return jools.reject( 'command not valid jion' );
+		return replyError( 'command not valid jion' );
 	}
 
 
@@ -287,12 +290,12 @@ serveRegister =
 
 	if( username.substr( 0, 7 ) === 'visitor' )
 	{
-		return jools.reject( 'Username must not start with "visitor"' );
+		return replyError( 'Username must not start with "visitor"' );
 	}
 
 	if( username.length < 4 )
 	{
-		return jools.reject( 'Username too short, min. 4 characters' );
+		return replyError( 'Username too short, min. 4 characters' );
 	}
 
 	user =
@@ -303,7 +306,7 @@ serveRegister =
 
 	if( user !== null )
 	{
-		return jools.reject( 'Username already taken' );
+		return replyError( 'Username already taken' );
 	}
 
 	user = {
@@ -321,7 +324,7 @@ serveRegister =
 		fabric_spaceRef.create( 'username', username, 'tag', 'home' )
 	);
 
-	return { ok : true };
+	return reply_register.create( );
 };
 
 
@@ -363,7 +366,11 @@ serveUpdate =
 
 	seq = request.seq;
 
-	if( root.$users[ username ].pass !== passhash )
+	if(
+		!root.$users[ username ]
+		||
+		root.$users[ username ].pass !== passhash
+	)
 	{
 		throw jools.reject( 'Invalid password' );
 	}
@@ -564,7 +571,7 @@ requestHandler.serve =
 
 		default :
 
-			return jools.reject( 'unknown command' );
+			return replyError( 'unknown command' );
 	}
 };
 
