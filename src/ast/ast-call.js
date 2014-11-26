@@ -28,8 +28,9 @@ if( JION )
 							'Object' // Expression
 					},
 			},
-		twig :
-			'->expression',
+		ray :
+			[ ]
+			// FUTURE '->expression',
 	};
 }
 
@@ -54,13 +55,7 @@ astCall.prototype.addArgument =
 		expr
 	)
 {
-	return (
-		this.create(
-			'twig:add',
-			jools.uid( ), // FIXME
-			tools.convert( expr )
-		)
-	);
+	return this.append( tools.convert( expr ) );
 };
 
 

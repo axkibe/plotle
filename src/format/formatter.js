@@ -1653,6 +1653,7 @@ formatCall =
 	)
 {
 	var
+		a, aZ,
 		arg,
 		text;
 
@@ -1671,7 +1672,7 @@ formatCall =
 			precTable.astCall // XXXX
 		);
 
-	if( call.ranks.length === 0 )
+	if( call.length === 0 )
 	{
 		text += '( )';
 	}
@@ -1680,14 +1681,12 @@ formatCall =
 		text += '(' + context.sep;
 
 		for(
-			var a = 0, aZ = call.ranks.length;
+			a = 0, aZ = call.length;
 			a < aZ;
 			a++
 		)
 		{
-			arg = call.atRank( a );
-
-			text += formatExpression( context.inc, arg, null );
+			text += formatExpression( context.inc, call.get( a ), null );
 
 			if( a + 1 < aZ )
 			{
