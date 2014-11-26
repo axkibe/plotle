@@ -265,8 +265,7 @@ changeRay.prototype.changeTree =
 {
 	// the ray with the changes applied
 	var
-		a,
-		aZ,
+		a, aZ,
 		chg,
 		cray,
 		cr;
@@ -280,6 +279,7 @@ changeRay.prototype.changeTree =
 		a++
 	)
 	{
+		// FIXME remove 'chg' var
 		chg = this.get( a );
 
 		cr = chg.changeTree( tree );

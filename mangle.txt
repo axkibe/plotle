@@ -245,7 +245,6 @@
 . checkboxCheck
 . checked
 > chgX
-> chgs
 . chop
 > cid
 . clear
@@ -696,7 +695,6 @@
 > selectionStart
 > send
 > seq
-> seqZ
 > set
 . setAction
 . setCapture

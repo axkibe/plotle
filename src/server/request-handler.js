@@ -12,6 +12,7 @@
 
 var
 	requestHandler,
+	ccot_changeWrapRay,
 	config,
 	fabric_spaceRef,
 	jools,
@@ -21,6 +22,7 @@ var
 	reply_auth,
 	reply_error,
 	reply_register,
+	reply_update,
 	request_acquire,
 	request_alter,
 	request_auth,
@@ -39,6 +41,8 @@ module.exports =
 
 config = require( '../../config' );
 
+ccot_changeWrapRay = require( '../ccot/change-wrap-ray' );
+
 jools = require( '../jools/jools' );
 
 reply_acquire = require( '../reply/acquire' );
@@ -50,6 +54,8 @@ reply_auth = require( '../reply/auth' );
 reply_error = require( '../reply/error' );
 
 reply_register = require( '../reply/register' );
+
+reply_update = require( '../reply/update' );
 
 request_acquire = require( '../request/acquire' );
 
@@ -390,7 +396,8 @@ serveUpdate =
 	asw = requestHandler.conveyUpdate( seq, spaceRef );
 
 	// immediate answer?
-	if( asw.chgs.length > 0 )
+	// FIXME handle length === 0 issues
+	if( asw.changeWrapRay && asw.changeWrapRay.length > 0 )
 	{
 		return asw;
 	}
@@ -519,6 +526,7 @@ requestHandler.conveyUpdate =
 
 	seqZ = spaceBox.seqZ;
 
+	// FUTURE have the spaceBox deliver a changeWrapRay
 	chgA = [ ];
 
 	for( c = seq; c < seqZ; c++ )
@@ -527,14 +535,15 @@ requestHandler.conveyUpdate =
 	}
 
 	// FIXME make a result jion
-	chgA = JSON.parse( JSON.stringify( chgA ) );
+	// XXX chgA = JSON.parse( JSON.stringify( chgA ) );
 
-	return {
-		ok : true,
-		seq : seq,
-		seqZ : seqZ,
-		chgs : chgA
-	};
+	return(
+		reply_update.create(
+			'seq', seq,
+			'changeWrapRay',
+				ccot_changeWrapRay.create( 'ray:init', chgA )
+		)
+	);
 };
 
 

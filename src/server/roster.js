@@ -269,6 +269,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/reply/update.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/request/acquire.js',
 		'hasJion', true,
 		'inBundle', true

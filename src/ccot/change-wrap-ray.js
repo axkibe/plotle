@@ -15,6 +15,11 @@ ccot = ccot || { };
 /*
 | Imports
 */
+
+var
+	result_changeTree;
+
+
 /*
 | Capsule
 */
@@ -48,11 +53,58 @@ var
 if( SERVER )
 {
 	changeWrapRay = require( '../jion/this' )( module );
+
+	result_changeTree = require( '../result/change-tree' );
 }
 else
 {
 	changeWrapRay = ccot.changeWrapRay;
 }
+
+
+/*
+| Performes the wraped-change-(rays) on a tree.
+|
+| FIXME trace if a single change has changed and create
+| a new array only then
+*/
+changeWrapRay.prototype.changeTree =
+	function(
+		tree
+	)
+{
+	// the ray with the changes applied
+	var
+		a, aZ,
+		cRay,
+		cr;
+
+	cRay = [ ];
+
+	// iterates through the change ray
+	for(
+		a = 0, aZ = this.length;
+		a < aZ;
+		a++
+	)
+	{
+		cr = this.get( a ).changeTree( tree );
+
+		// the tree returned by op-handler is the new tree
+		tree = cr.tree;
+
+		cRay.push( cr.reaction );
+	}
+
+	// FUTURE create only a single change when cray.length === 1
+
+	return(
+		result_changeTree.create(
+			'tree', tree,
+			'reaction', changeWrapRay.create( 'ray:init', cRay )
+		)
+	);
+};
 
 
 /*

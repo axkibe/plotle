@@ -114,6 +114,7 @@ changeWrap.prototype.transform =
 };
 
 
+
 /*
 | Performes the wrapped change on a tree.
 */
@@ -129,10 +130,8 @@ changeWrap.prototype.changeTree =
 
 	return(
 		result_changeTree.create(
-			'reaction',
-				this.create( 'chgX', result.reaction ),
-			'tree',
-				result.tree
+			'reaction', this.create( 'chgX', result.reaction ),
+			'tree', result.tree
 		)
 	);
 };

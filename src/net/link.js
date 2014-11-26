@@ -15,7 +15,6 @@ net = net || { };
 | Imports
 */
 var
-	ccot_change,
 	ccot_changeRay,
 	ccot_changeWrap,
 	ccot_changeWrapRay,
@@ -26,6 +25,7 @@ var
 	request_register,
 	request_update,
 	reply_acquire,
+	reply_update,
 	root,
 	system;
 
@@ -346,8 +346,8 @@ link.prototype._onUpdate =
 		bZ,
 		c,
 		chgX,
-		chgs,
-		cid,
+		changeWrap,
+		changeWrapRay,
 		gotOwnChgs,
 		link,
 		outbox,
@@ -367,14 +367,16 @@ link.prototype._onUpdate =
 /**/	}
 /**/}
 
-	if( !reply.ok )
+	if( reply.type !== 'reply.update' )
 	{
 		system.failScreen( reply.message );
 
 		return;
 	}
 
-	chgs = reply.chgs;
+	reply = reply_update.createFromJSON( reply );
+
+	changeWrapRay = reply.changeWrapRay;
 
 	report = ccot_changeRay.create( );
 
@@ -387,30 +389,29 @@ link.prototype._onUpdate =
 	// if this wasn't an empty timeout
 	// process the received changes
 
-	if( chgs && chgs.length > 0 )
+	// FUTURE fix these length === 0 cases
+	if( changeWrapRay && changeWrapRay.length > 0 )
 	{
 
 		postbox = this._postbox;
 
 		for(
-			a = 0, aZ = chgs.length;
+			a = 0, aZ = changeWrapRay.length;
 			a < aZ;
 			a++
 		)
 		{
-			chgX = ccot_change.createFromJSON( chgs[ a ].chgX );
-
-			cid = chgs[ a ].cid;
+			changeWrap = changeWrapRay.get( a );
 
 			// changes the clients understanding of the server tree
-			rSpace = chgX.changeTree( rSpace ).tree;
+			rSpace = changeWrap.changeTree( rSpace ).tree;
 
 			// if the cid is the one in the postbox the client
 			// received the update of its own change.
 			if(
 				postbox.length > 0
 				&&
-				postbox.get( 0 ).cid === cid
+				postbox.get( 0 ).cid === changeWrap.cid
 			)
 			{
 				postbox = postbox.remove( 0 );
@@ -420,7 +421,9 @@ link.prototype._onUpdate =
 				continue;
 			}
 
-			report = report.append( chgX );
+			// FIXME this fails if a changeRay is returned
+			// in the changeWrap
+			report = report.append( changeWrap.chgX );
 		}
 
 		// adapts all queued changes
@@ -486,7 +489,7 @@ link.prototype._onUpdate =
 			'_cSpace', cSpace,
 			'_outbox', outbox,
 			'_postbox', postbox,
-			'_rSeq', reply.seqZ,
+			'_rSeq', reply.seq + changeWrapRay.length,
 			'_rSpace', rSpace
 		);
 
@@ -639,7 +642,7 @@ link.prototype._onSendChanges =
 		reply
 	)
 {
-	if( reply.type === 'reply.alter' )
+	if( reply.type !== 'reply.alter' )
 	{
 		system.failScreen( 'Server not OK: ' + reply.message );
 	}

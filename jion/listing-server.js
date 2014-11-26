@@ -29,6 +29,7 @@ module.exports =
 			'src/reply/auth.js',
 			'src/reply/error.js',
 			'src/reply/register.js',
+			'src/reply/update.js',
 			'src/request/acquire.js',
 			'src/request/alter.js',
 			'src/request/auth.js',
