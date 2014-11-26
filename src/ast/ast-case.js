@@ -28,8 +28,10 @@ if( JION )
 							'ast.astBlock'
 					}
 			},
-		twig :
-			'->expression',
+		// ray contains multiple alternatives for the same case block.
+		ray :
+			// '->expression', FUTURE
+			[ ]
 	};
 }
 

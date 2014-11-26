@@ -89,8 +89,7 @@ astSwitch.prototype.astCase =
 	{
 		caseExpr =
 			astCase.create(
-				'twig:add',
-					jools.uid( ), // FIXME
+				'ray:append',
 					tools.convert( coc ),
 				'block',
 					block

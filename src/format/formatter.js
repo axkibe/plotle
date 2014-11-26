@@ -1045,6 +1045,8 @@ formatSwitch =
 	)
 {
 	var
+		b,
+		bZ,
 		caseContext,
 		caseExpr,
 		text;
@@ -1072,8 +1074,7 @@ formatSwitch =
 		a++
 	)
 	{
-		caseExpr =
-			switchExpr.atRank( a );
+		caseExpr = switchExpr.atRank( a );
 
 		if( a > 0 )
 		{
@@ -1081,8 +1082,10 @@ formatSwitch =
 				'\n';
 		}
 
+		// FIXME this is broken for
+		// caseExpr.length > 1
 		for(
-			var b = 0, bZ = caseExpr.ranks.length;
+			b = 0, bZ = caseExpr.length;
 			b < bZ;
 			b++
 		)
@@ -1092,7 +1095,7 @@ formatSwitch =
 				+ 'case '
 				+ formatExpression(
 					caseContext.setInline,
-					caseExpr.atRank( b ),
+					caseExpr.get( b ),
 					null
 				)
 				+ ' :\n\n'
@@ -1111,8 +1114,7 @@ formatSwitch =
 	{
 		if( switchExpr.ranks.length > 0 )
 		{
-			text +=
-				'\n';
+			text += '\n';
 		}
 
 		text +=
@@ -1126,9 +1128,7 @@ formatSwitch =
 			);
 	}
 
-	text +=
-		context.tab +
-		'}';
+	text += context.tab + '}';
 
 	return text;
 };
