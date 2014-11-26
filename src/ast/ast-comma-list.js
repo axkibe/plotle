@@ -18,8 +18,9 @@ if( JION )
 	return {
 		id :
 			'ast.astCommaList',
-		twig :
-			'->expression'
+		ray :
+			// '->expression' FUTURE
+			[ ]
 	};
 }
 
@@ -38,24 +39,6 @@ astAssign = require( './ast-assign' );
 jools = require( '../jools/jools' );
 
 tools = require( './tools' );
-
-
-/*
-| Returns the list with an expression appended;
-*/
-astCommaList.prototype.append =
-	function(
-		expr
-	)
-{
-	return(
-		this.create(
-			'twig:add',
-			jools.uid( ), // FIXME
-			expr
-		)
-	);
-};
 
 
 /*

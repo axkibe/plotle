@@ -2242,19 +2242,16 @@ formatCommaList =
 	var
 		a,
 		aZ,
-		expr,
 		text;
 
 	text = '';
 
 	for(
-		a = 0, aZ = list.ranks.length;
+		a = 0, aZ = list.length;
 		a < aZ;
 		a++
 	)
 	{
-		expr = list.atRank( a );
-
 		text +=
 			(
 				a > 0
@@ -2263,7 +2260,7 @@ formatCommaList =
 			)
 			+ formatExpression(
 				context.inc,
-				expr,
+				list.get( a ),
 				precTable.astCommaList
 			);
 	}
