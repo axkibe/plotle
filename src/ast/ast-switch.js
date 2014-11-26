@@ -37,7 +37,7 @@ if( JION )
 							null
 					}
 			},
-		twig :
+		ray :
 			[
 				'ast.astCase'
 			]
@@ -62,6 +62,7 @@ astCase = require( './ast-case' );
 jools = require( '../jools/jools' ),
 
 tools = require( './tools' ),
+
 
 /*
 | Shortcut for appending a case to this switch.
@@ -89,20 +90,12 @@ astSwitch.prototype.astCase =
 	{
 		caseExpr =
 			astCase.create(
-				'ray:append',
-					tools.convert( coc ),
-				'block',
-					block
+				'ray:append', tools.convert( coc ),
+				'block', block
 			);
 	}
 
-	return(
-		this.create(
-			'twig:add',
-			jools.uid( ), // FIXME
-			caseExpr
-		)
-	);
+	return this.append( caseExpr );
 };
 
 

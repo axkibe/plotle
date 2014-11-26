@@ -1045,8 +1045,8 @@ formatSwitch =
 	)
 {
 	var
-		b,
-		bZ,
+		a, aZ,
+		b, bZ,
 		caseContext,
 		caseExpr,
 		text;
@@ -1055,31 +1055,27 @@ formatSwitch =
 
 	text =
 		context.tab
-		+
-		'switch( '
-		+
-		formatExpression(
+		+ 'switch( '
+		+ formatExpression(
 			context.setInline,
 			switchExpr.statement,
 			null
 		)
-		+
-		' )\n'
-		+
-		context.tab + '{\n';
+		+ ' )\n'
+		+ context.tab
+		+ '{\n';
 
 	for(
-		var a = 0, aZ = switchExpr.ranks.length;
+		a = 0, aZ = switchExpr.length;
 		a < aZ;
 		a++
 	)
 	{
-		caseExpr = switchExpr.atRank( a );
+		caseExpr = switchExpr.get( a );
 
 		if( a > 0 )
 		{
-			text +=
-				'\n';
+			text += '\n';
 		}
 
 		// FIXME this is broken for
@@ -1112,7 +1108,7 @@ formatSwitch =
 
 	if( switchExpr.defaultCase )
 	{
-		if( switchExpr.ranks.length > 0 )
+		if( switchExpr.length > 0 )
 		{
 			text += '\n';
 		}
