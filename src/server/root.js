@@ -1057,62 +1057,6 @@ prototype.createSpace =
 
 
 /*
-| A sleeping update expired.
-*/
-prototype.expireSleep =
-	function(
-		sleepID
-	)
-{
-	var
-		asw,
-		result,
-		seqZ,
-		sleep,
-		spaceBox;
-
-	sleep = root.$upsleep[ sleepID ];
-
-	// maybe it just had expired at the same time
-	if( !sleep )
-	{
-		return;
-	}
-
-	spaceBox = root.$spaces[ sleep.spaceRef.fullname ];
-
-	seqZ = spaceBox.seqZ;
-
-	delete root.$upsleep[ sleepID ];
-
-	asw =
-		{
-			ok : true,
-			seq : sleep.seq,
-			seqZ : seqZ,
-			chgs : null
-		};
-
-	jools.log( 'ajax', '->', asw );
-
-	result = sleep.result;
-
-	result.writeHead(
-		200,
-		{
-			'Content-Type' : 'application/json',
-			'Cache-Control' : 'no-cache',
-			'Date' : new Date().toUTCString()
-		}
-	);
-
-	result.end(
-		JSON.stringify( asw )
-	);
-};
-
-
-/*
 | A sleeping update closed prematurely.
 */
 prototype.closeSleep =

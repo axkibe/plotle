@@ -160,17 +160,17 @@ serveAlter =
 		return replyError( 'FIXME changeWrapRay.length must be 1' );
 	}
 
+	// translates the changes if not most recent
+	for( a = seq; a < seqZ; a++ )
+	{
+		changeWrap = spaceBox.getChangeSkid( a ).transform( changeWrapRay );
+	}
+
 	changeWrap = changeWrapRay.get( 0 );
 
 	if( changeWrap.seq )
 	{
 		return replyError( 'changeWrap.seq must not be set' );
-	}
-
-	// translates the changes if not most recent
-	for( a = seq; a < seqZ; a++ )
-	{
-		changeWrap = spaceBox.getChangeSkid( a ).transform( changeWrap );
 	}
 
 	// this does not yield, its write and forget.
@@ -407,7 +407,7 @@ serveUpdate =
 
 	timerID =
 		setTimeout(
-			root.expireSleep,
+			requestHandler.expireUpdateSleep,
 			60000,
 			sleepID
 		);
@@ -545,6 +545,63 @@ requestHandler.conveyUpdate =
 		)
 	);
 };
+
+
+/*
+| A sleeping update expired.
+*/
+requestHandler.expireUpdateSleep =
+	function(
+		sleepID
+	)
+{
+	var
+		asw,
+		result,
+		seqZ,
+		sleep,
+		spaceBox;
+
+	sleep = root.$upsleep[ sleepID ];
+
+	// maybe it just had expired at the same time
+	if( !sleep )
+	{
+		return;
+	}
+
+	spaceBox = root.$spaces[ sleep.spaceRef.fullname ];
+
+	seqZ = spaceBox.seqZ;
+
+	delete root.$upsleep[ sleepID ]; // FIXME
+
+	asw =
+		reply_update.create(
+			'seq', sleep.seq,
+			'changeWrapRay', ccot_changeWrapRay.create( )
+		)
+
+	// FUTURE this should be in the ajax/http part
+	//        of the server
+	jools.log( 'ajax', '->', asw );
+
+	result = sleep.result;
+
+	result.writeHead(
+		200,
+		{
+			'Content-Type' : 'application/json',
+			'Cache-Control' : 'no-cache',
+			'Date' : new Date().toUTCString()
+		}
+	);
+
+	result.end(
+		JSON.stringify( asw )
+	);
+};
+
 
 
 /*

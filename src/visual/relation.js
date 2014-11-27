@@ -222,7 +222,7 @@ relation.spawn =
 			item2.key
 		);
 
-	key = result.chgX.trg.path.get( -1 );
+	key = result.reaction.trg.path.get( -1 );
 
 	root.setMark(
 		marks.caret.create(
