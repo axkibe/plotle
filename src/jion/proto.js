@@ -303,6 +303,27 @@ jion_proto.rayAppend =
 
 
 /*
+| Appends an element to a ray.
+*/
+jion_proto.rayAppendRay =
+	function(
+		ray
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.reflect !== ray.reflect )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return this.create( 'ray:init', this.ray.concat( ray.ray ) );
+};
+
+
+/*
 | Returns the length of a ray.
 */
 jion_proto.rayLength =

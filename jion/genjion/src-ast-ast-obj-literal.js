@@ -149,7 +149,7 @@ prototype.create =
 		{
 			case 'twig:add' :
 
-				if( !twigDup )
+				if( twigDup !== true )
 				{
 					twig = jools.copy( twig );
 
@@ -175,7 +175,7 @@ prototype.create =
 
 			case 'twig:set' :
 
-				if( !twigDup )
+				if( twigDup !== true )
 				{
 					twig = jools.copy( twig );
 
@@ -199,7 +199,7 @@ prototype.create =
 
 			case 'twig:insert' :
 
-				if( !twigDup )
+				if( twigDup !== true )
 				{
 					twig = jools.copy( twig );
 
@@ -234,7 +234,7 @@ prototype.create =
 
 			case 'twig:remove' :
 
-				if( !twigDup )
+				if( twigDup !== true )
 				{
 					twig = jools.copy( twig );
 
@@ -267,7 +267,7 @@ prototype.create =
 /**/{
 /**/}
 
-	if( inherit && !twigDup )
+	if( inherit && twigDup === false )
 	{
 		return inherit;
 	}

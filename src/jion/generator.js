@@ -232,7 +232,7 @@ generator.prototype._init =
 	for( name in jion.attributes || { } )
 	{
 		jAttr = jion.attributes[ name ];
-		
+
 		if( !Array.isArray( jAttr.type ) )
 		{
 			aid = id.createFromString( jAttr.type );
@@ -514,7 +514,7 @@ generator.prototype.genImports =
 	)
 	{
 		nameList = this.units.nameListOfUnit( unitList[ a ] );
-		
+
 		for(
 			b = 0, bZ = nameList.length;
 			b < bZ;
@@ -1084,7 +1084,7 @@ generator.prototype.genCreatorFreeStringsParser =
 	{
 		twigDupCheck =
 			astIf(
-				'!twigDup',
+				'twigDup !== true',
 				astBlock( )
 				.ast( 'twig = jools.copy( twig )' )
 				.ast( 'ranks = ranks.slice( )' )
@@ -1168,7 +1168,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				'"ray:init"',
 				astBlock( )
 				.ast( 'ray = arg' )
-				.ast( 'rayDup = false' )
+				.astAssign( 'rayDup', astString( 'init' ) )
 			)
 			.astCase(
 				'"ray:append"',
@@ -1649,7 +1649,7 @@ generator.prototype.genCreatorUnchanged =
 
 	if( this.twig )
 	{
-		cond = astAnd( cond, '!twigDup' );
+		cond = astAnd( cond, 'twigDup === false' );
 	}
 
 	if( this.ray )
@@ -2427,6 +2427,9 @@ generator.prototype.genJionProto =
 			capsule
 			.astComment( 'Appends an entry to the ray.' )
 			.ast( 'prototype.append = jion_proto.rayAppend' )
+
+			.astComment( 'Appends an entry to the ray.' )
+			.ast( 'prototype.appendRay = jion_proto.rayAppendRay' )
 
 			.astComment( 'Returns the length of the ray.')
 			.ast(

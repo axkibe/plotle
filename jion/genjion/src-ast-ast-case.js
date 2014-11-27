@@ -160,7 +160,7 @@ prototype.create =
 
 				ray = arg;
 
-				rayDup = false;
+				rayDup = 'init';
 
 				break;
 
@@ -280,6 +280,12 @@ prototype.getPath = jion_proto.getPath;
 | Appends an entry to the ray.
 */
 prototype.append = jion_proto.rayAppend;
+
+
+/*
+| Appends an entry to the ray.
+*/
+prototype.appendRay = jion_proto.rayAppendRay;
 
 
 /*

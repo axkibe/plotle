@@ -247,24 +247,11 @@ spaceBox.prototype.appendChanges =
 		}
 	);
 
-
-	// FIXME, replace following with an appendRay call
-	changeSkids = this._changeSkids;
-
-	for(
-		var a = 0, aZ = changeSkidRay.length;
-		a < aZ;
-		a++
-	)
-	{
-		changeSkids = changeSkids.append( changeSkidRay.get( a ) );
-	}
-
 	return(
 		this.create(
-			'seqZ', this.seqZ + changeWrapRay.length,
+			'seqZ', this.seqZ + changeSkidRay.length,
 			'space', ctr.tree,
-			'_changeSkids', changeSkids
+			'_changeSkids', this._changeSkids.appendRay( changeSkidRay )
 		)
 	);
 };

@@ -1,3 +1,5 @@
+. concat
+. rayAppendRay
 . error
 . reaction
 . 0-line
