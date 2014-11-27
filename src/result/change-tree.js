@@ -28,7 +28,8 @@ if( JION )
 							[
 								'ccot.change',
 								'ccot.changeRay',
-								'ccot.changeWrap'
+								'ccot.changeWrap',
+								'ccot.changeWrapRay'
 							]
 					},
 				tree :

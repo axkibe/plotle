@@ -206,36 +206,38 @@ spaceBox.createSpace =
 |
 | This is currently write and forget to database.
 */
-spaceBox.prototype.appendChange =
+spaceBox.prototype.appendChanges =
 	function(
-		changeWrap,
+		changeWrapRay,
 		user
 	)
 {
 	var
-		changeSkid,
+		changeSkidRay,
+		changeSkids,
 		ctr;
 
 /**/if( CHECK )
 /**/{
-/**/	if( changeWrap.seq )
+/**/	if( changeWrapRay.length === 0 )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	ctr = changeWrap.changeTree( this.space );
+	// FUTURE return tree directly
+	ctr = changeWrapRay.changeTree( this.space );
 
-	changeSkid =
-		database_changeSkid.createFromChangeWrap(
-			changeWrap,
+	changeSkidRay =
+		database_changeSkidRay.createFromChangeWrapRay(
+			changeWrapRay,
 			user,
 			this.seqZ
 		);
 
 	// saves the changeSkid in the database
 	this._changesDB.insert(
-		JSON.parse( JSON.stringify( changeSkid ) ),
+		JSON.parse( JSON.stringify( changeSkidRay ) ).ray,
 		function( error /*, count */ )
 		{
 			if( error !== null )
@@ -245,14 +247,24 @@ spaceBox.prototype.appendChange =
 		}
 	);
 
+
+	// FIXME, replace following with an appendRay call
+	changeSkids = this._changeSkids;
+
+	for(
+		var a = 0, aZ = changeSkidRay.length;
+		a < aZ;
+		a++
+	)
+	{
+		changeSkids = changeSkids.append( changeSkidRay.get( a ) );
+	}
+
 	return(
 		this.create(
-			'seqZ', this.seqZ + 1,
+			'seqZ', this.seqZ + changeWrapRay.length,
 			'space', ctr.tree,
-			'_changeSkids',
-				this._changeSkids.create(
-					'ray:set', this.seqZ, changeSkid
-				)
+			'_changeSkids', changeSkids
 		)
 	);
 };

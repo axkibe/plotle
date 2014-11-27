@@ -103,7 +103,6 @@ serveAlter =
 {
 	var
 		a,
-		changeWrap,
 		changeWrapRay,
 		passhash,
 		seq,
@@ -155,28 +154,16 @@ serveAlter =
 		return replyError( 'invalid seq' );
 	}
 
-	if( changeWrapRay.length !== 1 )
-	{
-		return replyError( 'FIXME changeWrapRay.length must be 1' );
-	}
-
 	// translates the changes if not most recent
 	for( a = seq; a < seqZ; a++ )
 	{
-		changeWrap = spaceBox.getChangeSkid( a ).transform( changeWrapRay );
-	}
-
-	changeWrap = changeWrapRay.get( 0 );
-
-	if( changeWrap.seq )
-	{
-		return replyError( 'changeWrap.seq must not be set' );
+		changeWrapRay = spaceBox.getChangeSkid( a ).transform( changeWrapRay );
 	}
 
 	// this does not yield, its write and forget.
 	spaceBox =
 	root.$spaces[ spaceRef.fullname ] =
-		spaceBox.appendChange( changeWrap, request.username );
+		spaceBox.appendChanges( changeWrapRay, request.username );
 
 	process.nextTick(
 		function( ) { root.wake( spaceRef ); }
@@ -396,8 +383,7 @@ serveUpdate =
 	asw = requestHandler.conveyUpdate( seq, spaceRef );
 
 	// immediate answer?
-	// FIXME handle length === 0 issues
-	if( asw.changeWrapRay && asw.changeWrapRay.length > 0 )
+	if( asw.changeWrapRay.length > 0 )
 	{
 		return asw;
 	}
@@ -534,9 +520,6 @@ requestHandler.conveyUpdate =
 		chgA.push( spaceBox.getChangeSkid( c ).asChangeWrap );
 	}
 
-	// FIXME make a result jion
-	// XXX chgA = JSON.parse( JSON.stringify( chgA ) );
-
 	return(
 		reply_update.create(
 			'seq', seq,
@@ -580,7 +563,7 @@ requestHandler.expireUpdateSleep =
 		reply_update.create(
 			'seq', sleep.seq,
 			'changeWrapRay', ccot_changeWrapRay.create( )
-		)
+		);
 
 	// FUTURE this should be in the ajax/http part
 	//        of the server
