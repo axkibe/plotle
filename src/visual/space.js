@@ -1492,8 +1492,7 @@ space.prototype.specialKey =
 {
 	var
 		item,
-		mark,
-		path;
+		mark;
 
 	if( ctrl )
 	{
@@ -1527,14 +1526,12 @@ space.prototype.specialKey =
 
 	mark = this.mark;
 
-	if( !mark.hasCaret )
+	if( !mark || !mark.hasCaret )
 	{
 		return;
 	}
 
-	path = mark.caretPath;
-
-	item = this.twig[ path.get( 2 ) ];
+	item = this.twig[ mark.caretPath.get( 2 ) ];
 
 	if( item )
 	{

@@ -214,7 +214,6 @@ spaceBox.prototype.appendChanges =
 {
 	var
 		changeSkidRay,
-		changeSkids,
 		ctr;
 
 /**/if( CHECK )

@@ -384,16 +384,23 @@ link.prototype._onUpdate =
 
 	seq = reply.seq;
 
-	rSpace = link._rSpace;
-
 	// if this wasn't an empty timeout
 	// process the received changes
+
+	// adapts all queued unsend changes (postbox)
+	// and
+	// rebuilds the clients understanding of its own tree
+
+	cSpace =
+	rSpace =
+		link._rSpace;
 
 	// FUTURE fix these length === 0 cases
 	if( changeWrapRay && changeWrapRay.length > 0 )
 	{
-
 		postbox = this._postbox;
+
+		outbox = this._outbox;
 
 		for(
 			a = 0, aZ = changeWrapRay.length;
@@ -404,7 +411,9 @@ link.prototype._onUpdate =
 			changeWrap = changeWrapRay.get( a );
 
 			// changes the clients understanding of the server tree
-			rSpace = changeWrap.changeTree( rSpace ).tree;
+			cSpace =
+			rSpace =
+				changeWrap.changeTree( rSpace ).tree;
 
 			// if the cid is the one in the postbox the client
 			// received the update of its own change.
@@ -421,66 +430,19 @@ link.prototype._onUpdate =
 				continue;
 			}
 
+			// otherwise it was a foreign change
+
 			// FIXME this fails if a changeRay is returned
 			// in the changeWrap
 			report = report.append( changeWrap.chgX );
 		}
 
-		// adapts all queued changes
-		// and
-		// rebuilds the clients understanding of its own tree
-		outbox = this._outbox;
+		cSpace = postbox.changeTree( cSpace ).tree;
 
-		cSpace = rSpace;
+		// transforms the outbox by the foreign changes
+		outbox = report.transform( outbox );
 
-		for(
-			a = 0, aZ = postbox.length;
-			a < aZ;
-			a++
-		)
-		{
-			chgX = postbox.get( a ).chgX;
-
-			for(
-				b = 0, bZ = report.length;
-				b < bZ;
-				b++
-			)
-			{
-				chgX = chgX.transform( report.get( b ) );
-			}
-
-			// FUTURE adapt changeTree so it
-			//        optionally does not create result
-			//        intermediary objects but returns
-			//        the tree directly
-			cSpace = chgX.changeTree( cSpace ).tree;
-		}
-
-		// transforms the outbox
-		for(
-			a = 0, aZ = outbox.length;
-			a < aZ;
-			a++
-		)
-		{
-			c = outbox.get( a );
-
-			chgX = c.chgX;
-
-			for(
-				b = 0, bZ = report.length;
-				b < bZ;
-				b++
-			)
-			{
-				chgX = chgX.transform( report.get( b ) );
-			}
-
-			outbox = outbox.set( a, c.create( 'chgX', chgX ) );
-
-			cSpace = chgX.changeTree( cSpace ).tree;
-		}
+		cSpace = outbox.changeTree( cSpace ).tree;
 	}
 
 	link =
@@ -572,9 +534,8 @@ link.prototype._sendChanges =
 	function( )
 {
 	var
-		changeWrap,
-		changeWrapRay,
-		link;
+		link,
+		outbox;
 
 	link = this;
 
@@ -598,31 +559,18 @@ link.prototype._sendChanges =
 		return;
 	}
 
-	// TODO fix
-	changeWrap = link._outbox.get( 0 );
-
-	// TODO remove this workaround
-	changeWrapRay = ccot_changeWrapRay.create( );
-
-	changeWrapRay = changeWrapRay.append( changeWrap );
-
+	outbox = link._outbox;
 
 	link =
 	root.link =
 		link.create(
-			'_outbox',
-//				ccot_changeWrapRay.create( ),
-// TODO
-				link._outbox.remove( 0 ),
-			'_postbox',
-//				link._outbox
-// TODO
-				changeWrapRay
+			'_outbox', ccot_changeWrapRay.create( ),
+			'_postbox', outbox
 		);
 
 	root.ajax.twig.command.request(
 		request_alter.create(
-			'changeWrapRay', changeWrapRay,
+			'changeWrapRay', outbox,
 			'passhash', link.passhash,
 			'seq', link._rSeq,
 			'spaceRef', link.spaceRef,

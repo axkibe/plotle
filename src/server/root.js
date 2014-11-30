@@ -302,8 +302,7 @@ prototype.buildShellConfig =
 	cconfig.push(
 		'var config = {\n',
 		'\tdevel   : ',
-			config.develShell,
-			',\n',
+			config.develShell, ',\n',
 		'\tmaxUndo : ',
 			config.maxUndo, ',\n',
 		'\tdebug   : {\n'
@@ -531,142 +530,143 @@ prototype.prepareInventory =
 		codes[ a ] = code;
 	}
 
-	jools.log( 'start', 'parsing bundle' );
-
-	for(
-		a = 0, aZ = root.inventory.ranks.length;
-		a < aZ;
-		a++
-	)
+	if( !config.develNoBundle )
 	{
-		resource = root.inventory.atRank( a );
+		jools.log( 'start', 'parsing bundle' );
 
-		if( !resource.inBundle )
+		for(
+			a = 0, aZ = root.inventory.ranks.length;
+			a < aZ;
+			a++
+		)
 		{
-			continue;
+			resource = root.inventory.atRank( a );
+
+			if( !resource.inBundle )
+			{
+				continue;
+			}
+
+			try{
+				ast =
+					uglify.parse(
+						codes[ a ],
+						{
+							filename : resource.filePath,
+							strict : true,
+							toplevel : ast
+						}
+					);
+			}
+			catch ( e )
+			{
+				console.log(
+					'parse error',
+					resource.filePath,
+					'line',
+					e.line
+				);
+
+				throw e;
+			}
 		}
 
-		try{
-			ast =
-				uglify.parse(
-					codes[ a ],
+		if( config.extraMangle )
+		{
+			root.extraMangle( ast, jionIDs );
+		}
+
+		if( config.uglify )
+		{
+			jools.log( 'start', 'uglifying bundle' );
+
+			ast.figure_out_scope( );
+
+			compressor =
+				uglify.Compressor(
 					{
-						filename : resource.filePath,
-						strict : true,
-						toplevel : ast
+						dead_code : true,
+						hoist_vars : true,
+						warnings : false,
+						negate_iife : true,
+						global_defs :
+						{
+							'CHECK' : config.shellCheck,
+							'JION' : false,
+							'SERVER' : false,
+							'SHELL' : true,
+						}
 					}
 				);
-		}
-		catch ( e )
-		{
-			console.log(
-				'parse error',
-				resource.filePath,
-				'line',
-				e.line
-			);
 
-			throw e;
-		}
-	}
+			ast = ast.transform( compressor );
 
-	if( config.extraMangle )
-	{
-		root.extraMangle( ast, jionIDs );
-	}
+			ast.figure_out_scope( );
 
-	if( config.uglify )
-	{
-		jools.log( 'start', 'uglifying bundle' );
+			ast.compute_char_frequency( );
 
-		ast.figure_out_scope( );
-
-		compressor =
-			uglify.Compressor(
+			ast.mangle_names(
 				{
-					dead_code : true,
-					hoist_vars : true,
-					warnings : false,
-					negate_iife : true,
-					global_defs :
-					{
-						'CHECK' : config.shellCheck,
-						'JION' : false,
-						'SERVER' : false,
-						'SHELL' : true,
-					}
+					toplevel : true,
+					except : [ 'WebFont' ]
+				}
+			);
+		}
+
+		sourceMap = uglify.SourceMap( { } );
+
+		stream =
+			uglify.OutputStream(
+				{
+					beautify : config.beautify,
+					source_map: sourceMap
 				}
 			);
 
-		ast = ast.transform( compressor );
+		ast.print( stream );
 
-		ast.figure_out_scope( );
+		bundle = stream.toString( );
 
-		ast.compute_char_frequency( );
+		if( !config.noWrite )
+		{
+			yield fs.writeFile(
+				'report/source.map',
+				sourceMap.toString( ),
+				sus.resume( )
+			);
+		}
 
-		ast.mangle_names(
-			{
-				toplevel : true,
-				except : [ 'WebFont' ]
-			}
-		);
-	}
+		// calculates the hash for the bundle
+		bundleFilePath = 'ideoloom-' + sha1.sha1hex( bundle ) + '.js';
 
-	sourceMap = uglify.SourceMap( { } );
+		root.create( 'bundleFilePath', bundleFilePath );
 
-	stream =
-		uglify.OutputStream(
-			{
-				beautify : config.beautify,
-				source_map: sourceMap
-			}
-		);
-
-	ast.print( stream );
-
-	bundle =
-		stream.toString( );
-
-	if( !config.noWrite )
-	{
-		yield fs.writeFile(
-			'report/source.map',
-			sourceMap.toString( ),
-			sus.resume( )
-		);
-	}
-
-	// calculates the hash for the bundle
-	bundleFilePath = 'ideoloom-' + sha1.sha1hex( bundle ) + '.js';
-
-	root.create( 'bundleFilePath', bundleFilePath );
-
-	// registers the bundle as resource
-	root.create(
-		'inventory',
-			root.inventory.addResource(
-				server.resource.create(
-					'filePath', bundleFilePath,
-					'maxage', 'long',
-					'data', bundle
+		// registers the bundle as resource
+		root.create(
+			'inventory',
+				root.inventory.addResource(
+					server.resource.create(
+						'filePath', bundleFilePath,
+						'maxage', 'long',
+						'data', bundle
+					)
 				)
-			)
-	);
+		);
 
-	jools.log( 'start', 'bundle:', bundleFilePath );
+		jools.log( 'start', 'bundle:', bundleFilePath );
 
-	// if uglify is turned on
-	// the flags are added after bundle
-	// creation, otherwise before
-	if( config.uglify )
-	{
-		root.prependConfigFlags( );
+		// if uglify is turned on
+		// the flags are added after bundle
+		// creation, otherwise before
+		if( config.uglify )
+		{
+			root.prependConfigFlags( );
+		}
 	}
 
 	// post processing
 	inv = root.inventory;
 
-	// loads the files to be bundled
 	for(
 		a = 0, aZ = inv.ranks.length;
 		a < aZ;
@@ -734,17 +734,20 @@ prototype.prepareInventory =
 			);
 	}
 
-	jools.log(
-		'start',
-		'uncompressed bundle size is ',
-		root.inventory.twig[ bundleFilePath ].data.length
-	);
+	if( !config.develNoBundle )
+	{
+		jools.log(
+			'start',
+			'uncompressed bundle size is ',
+			root.inventory.twig[ bundleFilePath ].data.length
+		);
 
-	jools.log(
-		'start',
-		'  compressed bundle size is ',
-		root.inventory.twig[ bundleFilePath ].gzip.length
-	);
+		jools.log(
+			'start',
+			'  compressed bundle size is ',
+			root.inventory.twig[ bundleFilePath ].gzip.length
+		);
+	}
 };
 
 
@@ -1516,7 +1519,7 @@ prototype.webAjax =
 				{
 					sus( handler )( );
 				},
-				1880
+				2880
 			);
 		}
 	);

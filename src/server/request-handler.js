@@ -508,9 +508,12 @@ requestHandler.conveyUpdate =
 		seqZ,
 		spaceBox;
 
+
 	spaceBox = root.$spaces[ spaceRef.fullname ];
 
 	seqZ = spaceBox.seqZ;
+
+	console.log( 'CUTODO', seq, seqZ );
 
 	// FUTURE have the spaceBox deliver a changeWrapRay
 	chgA = [ ];

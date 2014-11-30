@@ -220,7 +220,7 @@ jools.lazyValue(
 			path,
 			key;
 
-		if( !this.mark.hasCaret )
+		if( !this.mark || !this.mark.hasCaret )
 		{
 			return 0;
 		}

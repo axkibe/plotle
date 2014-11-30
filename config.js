@@ -20,8 +20,7 @@ module.exports =
 /*
 | an additional admin user
 */
-config.admin =
-	'axel';
+config.admin = 'axel';
 
 
 /*
@@ -38,112 +37,102 @@ config.ip =
 /*
 | The port to listen on.
 */
-config.port =
-	8833;
+config.port = 8833;
 
 
 /*
 | Host the mongodb database runs on
 */
-config.database.host =
-	'127.0.0.1';
+config.database.host = '127.0.0.1';
 
 
 /*
 | Port the mongodb database runs on
 */
-config.database.port =
-	27017;
+config.database.port = 27017;
 
 
 /*
 | Name of the mongodb database
 */
-config.database.name =
-	'ideoloom-8';
+config.database.name = 'ideoloom-8';
 
 
 /*
 | Determines the amound of checking and complaining if things go wrong.
 */
-config.develShell =
-//	false &&
-	true;
+config.develShell = true;
+
+
+/*
+| Do not provide a bundle.
+| Only to be used with develShell
+*/
+config.develNoBundle = true;
+
 
 /*
 | If true checking code is turned on in shell
 */
-config.shellCheck =
-	true;
+config.shellCheck = true;
+
 
 /*
 | If the server is in devel mode,
 | it will die on a command it considers unacceptable.
 */
-config.develServer =
-	false &&
-	true;
+config.develServer = false;
 
 
 /*
 | Does not write stuff on server startup
 */
-config.noWrite =
-//	true ||
-	false;
+config.noWrite = false;
+
 
 /*
 | If true "uglifies" the javascript pack, minimizing its size.
 */
-config.uglify =
-//	true ||
-	false;
+config.uglify = false;
 
 
 /*
 | If true does extra mangles on output compression
 */
-config.extraMangle =
-	true;
+config.extraMangle = false;
 
 
 /*
 | If true "beautifies" uglify output.
 */
-config.beautify =
-//	false &&
-	true;
+config.beautify = true;
 
 
 /*
 | Max. number of undo events queued.
 */
-config.maxUndo =
-	5000;
+config.maxUndo = 5000;
 
 
 /*
 | If true formats messages and JSON with whitespace/newlines
 */
-config.debug.puffed =
-	true;
+config.debug.puffed = true;
 
 
 /*
 | If true ensures that objects that should not be immutable
 | are made immutable. Turned off on releases for performance.
 */
-config.debug.immute =
-	false;
+config.debug.immute = false;
 
 
 /*
 | Activates all hacks needed to debug the client with weinre.
 | Set to false/null or the address of the weinre server
 */
-config.debug.weinre =
-	false &&
-	'192.168.77.1:8080';
+config.debug.weinre = false;
+//config.debug.weinre = '192.168.77.1:8080';
 
 
 /*
@@ -161,37 +150,21 @@ config.whiteList =
 | enable specific logging categories
 */
 config.log  = {
-	all :
-		false,
-	ajax :
-		false,
-	change :
-		false,
-	news :
-		false,
-	debug :
-		true,
-	fail :
-		true,
-	genjion :
-		true,
-	twig :
-		false,
-	peer :
-		false,
-	report :
-		false,
-	start :
-		true,
-	shell :
-		true,
-	tfx :
-		false,
-	tree :
-		false,
-	web :
-		true,
-	warn :
-		true
+	all : false,
+	ajax : false,
+	change : false,
+	news : false,
+	debug : true,
+	fail : true,
+	genjion : true,
+	twig : false,
+	peer : false,
+	report : false,
+	start : true,
+	shell : true,
+	tfx : false,
+	tree : false,
+	web : true,
+	warn : true
 };
 
