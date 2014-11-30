@@ -112,7 +112,7 @@ spaceBox.loadSpace =
 		seqZ,
 		space;
 
-	changeSkids = database_changeSkidRay.create( );
+	changeSkids = database_changeSkidRay.create( 'ray:init', [ null ] );
 
 	seqZ = 1;
 
@@ -194,7 +194,7 @@ spaceBox.createSpace =
 				yield* root.repository.collection(
 					'changes:' + spaceRef.fullname
 				),
-			'_changeSkids', database_changeSkidRay.create( )
+			'_changeSkids', database_changeSkidRay.create( 'ray:init', [ null ] )
 		)
 	);
 

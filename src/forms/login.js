@@ -208,14 +208,15 @@ login.prototype.login =
 	function( )
 {
 	var
-		twig =
-			this.twig,
+		twig,
+		user,
+		pass;
 
-		user =
-			twig.userInput.value,
+	twig = this.twig;
 
-		pass =
-			twig.passwordInput.value;
+	user = twig.userInput.value;
+
+	pass = twig.passwordInput.value;
 
 	if( user.length < 4 )
 	{
@@ -226,12 +227,9 @@ login.prototype.login =
 
 		root.setMark(
 			marks.caret.create(
-				'path',
-					twig.userInput.path,
-				'at',
-					user.length,
-				'retainx',
-					null
+				'path', twig.userInput.path,
+				'at', user.length,
+				'retainx', null
 			)
 		);
 
@@ -247,12 +245,9 @@ login.prototype.login =
 
 		root.setMark(
 			marks.caret.create(
-				'path',
-					twig.userInput.path,
-				'at',
-					0,
-				'retainx',
-					null
+				'path', twig.userInput.path,
+				'at', 0,
+				'retainx', null
 			)
 		);
 
@@ -268,10 +263,8 @@ login.prototype.login =
 
 		root.setMark(
 			marks.caret.create(
-				'path',
-					twig.passwordInput.path,
-				'at',
-					pass.length
+				'path', twig.passwordInput.path,
+				'at', pass.length
 			)
 		);
 

@@ -351,12 +351,11 @@ signUp.prototype.onRegister =
 		return;
 	}
 
-	root.setUser(
-		user,
-		passhash
-	);
+	root.setUser( user, passhash );
 
 	this.clear( );
+
+	root.moveToSpace( fabric.spaceRef.ideoloomHome, false );
 
 	root.setMode( 'welcome' );
 };
