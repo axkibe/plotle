@@ -4,8 +4,10 @@
 
 
 var
-	ccot,
-	result;
+	ccot_changeWrap,
+	jools,
+	result,
+	result_changeTree;
 
 
 /*
@@ -61,26 +63,15 @@ if( JION )
 }
 
 
-var
-	changeWrap,
-	jools,
-	result_changeTree;
-
-
 if( SERVER )
 {
-	changeWrap = require( '../jion/this' )( module );
+	ccot_changeWrap = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
 
 	result_changeTree = require( '../result/change-tree' );
 }
-else
-{
-	changeWrap = ccot.changeWrap;
 
-	result_changeTree = result.changeTree;
-}
 
 
 /*
@@ -88,11 +79,11 @@ else
 |
 | This one has a distinct change id and no sequence id
 */
-changeWrap.prototype.invert =
+ccot_changeWrap.prototype.invert =
 	function( )
 {
 	return(
-		changeWrap.create(
+		ccot_changeWrap.create(
 			'cid', jools.uid( ),
 			'chgX', this.chgX.invert
 		)
@@ -105,7 +96,7 @@ changeWrap.prototype.invert =
 |
 | cx can be a change, changeRay, changeWrap or changeWrapRay.
 */
-changeWrap.prototype.transform =
+ccot_changeWrap.prototype.transform =
 	function(
 		cx
 	)
@@ -118,7 +109,7 @@ changeWrap.prototype.transform =
 /*
 | Performes the wrapped change on a tree.
 */
-changeWrap.prototype.changeTree =
+ccot_changeWrap.prototype.changeTree =
 	function(
 		tree
 	)
