@@ -61,7 +61,6 @@ if( JION )
 }
 
 var
-	ccot,
 	database_changeSkid,
 	database_changeSkidRay,
 	resume,
@@ -76,18 +75,6 @@ database_changeSkidRay = require( '../database/change-skid-ray' );
 resume = require( 'suspend' ).resume;
 
 spaceBox = require( '../jion/this' )( module );
-
-ccot =
-	{
-		// FUTURE double check if all are needed.
-		change : require( '../ccot/change' ),
-
-		changeRay : require( '../ccot/change-ray' ),
-
-		changeWrap : require( '../ccot/change-wrap' ),
-
-		changeWrapRay : require( '../ccot/change-wrap-ray' ),
-	};
 
 visual =
 	{

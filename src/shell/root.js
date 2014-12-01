@@ -4,7 +4,7 @@
 
 var
 	actions,
-	ccot,
+	ccot_sign,
 	discs,
 	euclid,
 	fabric,
@@ -350,7 +350,7 @@ proto.update =
 			{
 				sign =
 					chgX.transformSign(
-						ccot.sign.create(
+						ccot_sign.create(
 							'path', mark.path.chop( ),
 							'at1', mark.at
 						)
@@ -394,7 +394,7 @@ proto.update =
 			{
 				bSign =
 					chgX.transformSign(
-						ccot.sign.create(
+						ccot_sign.create(
 							'path', mark.bPath.chop( ),
 							'at1', mark.bAt
 						)
@@ -402,7 +402,7 @@ proto.update =
 
 				eSign =
 					chgX.transformSign(
-						ccot.sign.create(
+						ccot_sign.create(
 							'path', mark.ePath.chop( ),
 							'at1', mark.eAt
 						)

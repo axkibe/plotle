@@ -12,7 +12,6 @@ var config =
 module.exports =
 	{
 		database : { },
-
 		debug : { }
 	};
 
@@ -26,12 +25,8 @@ config.admin = 'axel';
 /*
 | The interface to listen on,.
 |   null       means listens on all interfaces.
-|  '127.0.0.1' means localhost (IPV4)
 */
-config.ip =
-	//'127.0.0.1';
-	//'192.168.88.1';
-	null;
+config.ip = null;
 
 
 /*
@@ -59,7 +54,7 @@ config.database.name = 'ideoloom-8';
 
 
 /*
-| Determines the amound of checking and complaining if things go wrong.
+| Determines the amount of checking and complaining if things go wrong.
 */
 config.develShell = true;
 
