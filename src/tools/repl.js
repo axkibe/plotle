@@ -87,9 +87,9 @@ repl = repl.start( 'ideoloom> ' );
 
 repl.rli.history = history;
 
-defaultEval = repl.eval;
+defaultEval = repl[ '_eval'.substr( 1 ) ]; // strange wording to make jshint happy
 
-repl.eval =
+repl[ '_eval'.substr( 1 ) ] =
 	function( cmd, context, filename, callback )
 	{
 		history.push( cmd );

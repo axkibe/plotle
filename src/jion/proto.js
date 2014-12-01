@@ -197,18 +197,6 @@ jion_proto.getPath =
 
 
 /*
-| Returns a twig node by its rank.
-*/
-jion_proto.atRank =
-	function(
-		rank
-	)
-{
-	return this.twig[ this.ranks[ rank ] ];
-};
-
-
-/*
 | Creates a new unique identifier.
 */
 jion_proto.newUID =
@@ -224,69 +212,6 @@ jion_proto.newUID =
 		?  u
 		: this.newUID( )
 	);
-};
-
-
-/*
-| Returns the rank of the key
-|
-| This means it returns the index of key in the ranks array.
-|
-| FIXME make a joolsLazyfunc
-*/
-jion_proto.rankOf =
-	function(
-		key
-	)
-{
-	var
-		rank,
-		ranks,
-		rof;
-
-	ranks = this.ranks;
-
-/**/if( CHECK )
-/**/{
-/**/	if( !Array.isArray( ranks ) )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( !jools.isString( key ) )
-/**/	{
-/**/		throw new Error(
-/**/			'key no string'
-/**/		);
-/**/	}
-/**/}
-
-	// checks ranking cache
-	rof = this._$rof;
-
-	if( !rof )
-	{
-		Object.defineProperty(
-			this,
-			'_$rof',
-			rof = { }
-		);
-	}
-
-	rank = rof[ key ];
-
-	if( rank !== undefined )
-	{
-		return rank;
-	}
-
-	rank =
-	rof[ key ] =
-		this.twig[ key ] !== undefined ?
-			ranks.indexOf( key ) :
-			-1;
-
-	return rank;
 };
 
 
@@ -381,6 +306,106 @@ jion_proto.raySet =
 {
 	return this.create( 'ray:set', idx, e );
 };
+
+
+
+/*
+| Returns a twig node by its rank.
+*/
+jion_proto.atRank =
+jion_proto.twigAtRank =
+	function(
+		rank
+	)
+{
+	return this.twig[ this.ranks[ rank ] ];
+};
+
+
+
+/*
+| Returns the length of a ray.
+*/
+jion_proto.twigGetKey =
+	function( idx )
+{
+	return this.ranks[ idx ];
+};
+
+
+/*
+| Returns the length of a ray.
+*/
+jion_proto.twigLength =
+	function( )
+{
+	return this.ranks.length;
+};
+
+
+/*
+| Returns the rank of the key
+|
+| This means it returns the index of key in the ranks array.
+|
+| FIXME make a joolsLazyfunc
+*/
+jion_proto.rankOf =
+jion_proto.twigRankOf =
+	function(
+		key
+	)
+{
+	var
+		rank,
+		ranks,
+		rof;
+
+	ranks = this.ranks;
+
+/**/if( CHECK )
+/**/{
+/**/	if( !Array.isArray( ranks ) )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( !jools.isString( key ) )
+/**/	{
+/**/		throw new Error(
+/**/			'key no string'
+/**/		);
+/**/	}
+/**/}
+
+	// checks ranking cache
+	rof = this._$rof;
+
+	if( !rof )
+	{
+		Object.defineProperty(
+			this,
+			'_$rof',
+			rof = { }
+		);
+	}
+
+	rank = rof[ key ];
+
+	if( rank !== undefined )
+	{
+		return rank;
+	}
+
+	rank =
+	rof[ key ] =
+		this.twig[ key ] !== undefined ?
+			ranks.indexOf( key ) :
+			-1;
+
+	return rank;
+};
+
 
 
 

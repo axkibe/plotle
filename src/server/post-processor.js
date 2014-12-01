@@ -48,7 +48,7 @@ postProcessor.develHtml =
 	data = data + '';
 
 	for(
-		var a = 0, aZ = inventory.ranks.length;
+		var a = 0, aZ = inventory.length;
 		a < aZ;
 		a++
 	)
@@ -105,7 +105,7 @@ postProcessor.testPadHtml =
 	data = data + '';
 
 	for(
-		var a = 0, aZ = inventory.ranks.length;
+		var a = 0, aZ = inventory.length;
 		a < aZ;
 		a++
 	)

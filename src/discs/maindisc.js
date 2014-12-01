@@ -166,6 +166,12 @@ mainDisc.prototype._init =
 	)
 {
 	var
+		path,
+		r,
+		rZ,
+		text,
+		twig,
+		visible,
 		wname;
 
 	if( !this.path )
@@ -178,22 +184,15 @@ mainDisc.prototype._init =
 		inherit
 	);
 
-	var
-		twig =
-			jools.copy( this.twig ), // FIXME only if needed
-		path,
-		ranks =
-			this.ranks,
-		text,
-		visible;
+	twig = jools.copy( this.twig ); // FIXME only if needed
 
 	for(
-		var r = 0, rZ = ranks.length;
+		r = 0, rZ = this.length;
 		r < rZ;
 		r++
 	)
 	{
-		wname = ranks[ r ];
+		wname = this.getKey( r );
 
 		text = undefined;
 
@@ -262,8 +261,7 @@ mainDisc.prototype._init =
 
 		if( twig[ wname ].path )
 		{
-			path =
-				undefined;
+			path = undefined;
 		}
 		else
 		{
@@ -275,23 +273,16 @@ mainDisc.prototype._init =
 
 		twig[ wname ] =
 			twig[ wname ].create(
-				'hover',
-					this.hover,
-				'focusAccent',
-					this.mode === wname,
-				'path',
-					path,
-				'superFrame',
-					this.frame.zeropnw,
-				'text',
-					text,
-				'visible',
-					visible
+				'hover', this.hover,
+				'focusAccent', this.mode === wname,
+				'path', path,
+				'superFrame', this.frame.zeropnw,
+				'text', text,
+				'visible', visible
 			);
 	}
 
-	this.twig =
-		twig;
+	this.twig = twig;
 };
 
 
@@ -324,7 +315,9 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			display;
+			display,
+			r,
+			rZ;
 
 		display =
 			euclid.display.create(
@@ -339,7 +332,7 @@ jools.lazyValue(
 		);
 
 		for(
-			var r = 0, rZ = this.ranks.length;
+			r = 0, rZ = this.length;
 			r < rZ;
 			r++
 		)

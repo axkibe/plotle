@@ -303,13 +303,25 @@ prototype.getPath = jion_proto.getPath;
 /*
 | Returns a twig by rank.
 */
-prototype.atRank = jion_proto.atRank;
+prototype.atRank = jion_proto.twigAtRank;
 
 
 /*
 | Gets the rank of a key.
 */
-prototype.rankOf = jion_proto.rankOf;
+prototype.rankOf = jion_proto.twigRankOf;
+
+
+/*
+| Gets the rank of a key.
+*/
+prototype.getKey = jion_proto.twigGetKey;
+
+
+/*
+| Returns the length of the twig.
+*/
+jools.lazyValue( prototype, 'length', jion_proto.twigLength );
 
 
 /*

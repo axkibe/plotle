@@ -2409,10 +2409,18 @@ generator.prototype.genJionProto =
 		capsule =
 			capsule
 			.astComment( 'Returns a twig by rank.' )
-			.ast( 'prototype.atRank = jion_proto.atRank' )
+			.ast( 'prototype.atRank = jion_proto.twigAtRank' )
 
 			.astComment( 'Gets the rank of a key.' )
-			.ast( 'prototype.rankOf = jion_proto.rankOf' )
+			.ast( 'prototype.rankOf = jion_proto.twigRankOf' )
+
+			.astComment( 'Gets the rank of a key.' )
+			.ast( 'prototype.getKey = jion_proto.twigGetKey' )
+
+			.astComment( 'Returns the length of the twig.')
+			.ast(
+				'jools.lazyValue( prototype, "length", jion_proto.twigLength )'
+			)
 
 			.astComment( 'Creates a new unique identifier.' )
 			.ast( 'prototype.newUID = jion_proto.newUID' );
