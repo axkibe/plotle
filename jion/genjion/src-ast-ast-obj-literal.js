@@ -283,6 +283,12 @@ prototype.reflect = 'ast.astObjLiteral';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astObjLiteral';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astObjLiteral';

@@ -202,6 +202,12 @@ prototype.reflect = 'ast.astMember';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astMember';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astMember';

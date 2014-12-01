@@ -176,6 +176,12 @@ prototype.reflect = 'ast.astBoolean';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astBoolean';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astBoolean';

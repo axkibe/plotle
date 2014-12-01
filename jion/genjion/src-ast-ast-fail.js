@@ -171,6 +171,12 @@ prototype.reflect = 'ast.astFail';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astFail';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astFail';

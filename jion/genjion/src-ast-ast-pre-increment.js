@@ -171,6 +171,12 @@ prototype.reflect = 'ast.astPreIncrement';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astPreIncrement';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astPreIncrement';

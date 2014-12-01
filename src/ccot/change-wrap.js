@@ -6,7 +6,6 @@
 var
 	ccot_changeWrap,
 	jools,
-	result,
 	result_changeTree;
 
 

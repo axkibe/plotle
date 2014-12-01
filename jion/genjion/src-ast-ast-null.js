@@ -135,6 +135,12 @@ prototype.reflect = 'ast.astNull';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astNull';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astNull';

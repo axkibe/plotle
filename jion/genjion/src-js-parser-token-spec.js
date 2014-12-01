@@ -284,6 +284,12 @@ prototype.reflect = 'jsParser.tokenSpec';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'jsParser_tokenSpec';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'tokenSpec';

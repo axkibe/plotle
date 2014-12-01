@@ -264,6 +264,12 @@ prototype.reflect = 'ast.astFor';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astFor';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astFor';

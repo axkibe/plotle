@@ -272,6 +272,12 @@ prototype.reflect = 'jsParser.state';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'jsParser_state';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'state';

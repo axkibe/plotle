@@ -227,6 +227,12 @@ prototype.reflect = 'ast.astArrayLiteral';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astArrayLiteral';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astArrayLiteral';

@@ -196,6 +196,12 @@ prototype.reflect = 'ast.astGreaterThan';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astGreaterThan';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astGreaterThan';

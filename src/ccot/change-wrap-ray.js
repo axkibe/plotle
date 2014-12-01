@@ -3,20 +3,8 @@
 */
 
 
-/*
-| Export
-*/
 var
-	ccot;
-
-ccot = ccot || { };
-
-
-/*
-| Imports
-*/
-
-var
+	ccot_changeWrapRay,
 	result_changeTree;
 
 
@@ -47,18 +35,12 @@ if( JION )
 }
 
 
-var
-	changeWrapRay;
 
 if( SERVER )
 {
-	changeWrapRay = require( '../jion/this' )( module );
+	ccot_changeWrapRay = require( '../jion/this' )( module );
 
 	result_changeTree = require( '../result/change-tree' );
-}
-else
-{
-	changeWrapRay = ccot.changeWrapRay;
 }
 
 
@@ -68,7 +50,7 @@ else
 | FIXME trace if a single change has changed and create
 | a new array only then
 */
-changeWrapRay.prototype.changeTree =
+ccot_changeWrapRay.prototype.changeTree =
 	function(
 		tree
 	)
@@ -101,7 +83,7 @@ changeWrapRay.prototype.changeTree =
 	return(
 		result_changeTree.create(
 			'tree', tree,
-			'reaction', changeWrapRay.create( 'ray:init', cRay )
+			'reaction', ccot_changeWrapRay.create( 'ray:init', cRay )
 		)
 	);
 };
@@ -112,7 +94,7 @@ changeWrapRay.prototype.changeTree =
 |
 | cx can be a change, changeRay, changeWrap or changeWrapRay.
 */
-changeWrapRay.prototype.transform =
+ccot_changeWrapRay.prototype.transform =
 	function(
 		cx
 	)

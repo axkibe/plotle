@@ -171,6 +171,12 @@ prototype.reflect = 'ast.astDelete';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astDelete';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astDelete';

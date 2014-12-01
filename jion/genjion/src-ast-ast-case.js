@@ -259,6 +259,12 @@ prototype.reflect = 'ast.astCase';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astCase';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astCase';

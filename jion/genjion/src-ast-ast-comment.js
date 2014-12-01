@@ -171,6 +171,12 @@ prototype.reflect = 'ast.astComment';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astComment';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astComment';

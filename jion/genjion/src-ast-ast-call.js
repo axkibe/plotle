@@ -251,6 +251,12 @@ prototype.reflect = 'ast.astCall';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astCall';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astCall';

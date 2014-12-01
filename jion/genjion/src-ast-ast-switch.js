@@ -302,6 +302,12 @@ prototype.reflect = 'ast.astSwitch';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astSwitch';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astSwitch';

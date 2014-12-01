@@ -196,6 +196,12 @@ prototype.reflect = 'ast.astOr';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astOr';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astOr';

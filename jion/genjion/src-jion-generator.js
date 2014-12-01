@@ -173,6 +173,12 @@ prototype.reflect = 'jion.generator';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'jion_generator';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'generator';

@@ -229,6 +229,12 @@ prototype.reflect = 'ast.astCondition';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astCondition';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astCondition';

@@ -213,6 +213,12 @@ prototype.reflect = 'ast.astDot';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astDot';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astDot';

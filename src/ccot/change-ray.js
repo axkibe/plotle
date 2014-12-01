@@ -3,21 +3,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	ccot;
-
-ccot = ccot || { };
-
-
-/*
-| Imports
-*/
-var
+	ccot_changeRay,
 	jools,
-	result;
+	result_changeTree;
 
 
 /*
@@ -47,29 +36,14 @@ if( JION )
 }
 
 
-var
-	change,
-	changeRay,
-	result_changeTree;
-
 
 if( SERVER )
 {
-	changeRay = require( '../jion/this' )( module );
+	ccot_changeRay = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools'  );
 
-	change = require( '../ccot/change' );
-
 	result_changeTree = require( '../result/change-tree' );
-}
-else
-{
-	change = ccot.change;
-
-	changeRay = ccot.changeRay;
-
-	result_changeTree = result.changeTree;
 }
 
 
@@ -77,7 +51,7 @@ else
 | Returns a change ray with inverted changes.
 */
 jools.lazyValue(
-	changeRay.prototype,
+	ccot_changeRay.prototype,
 	'invert',
 	function( )
 	{
@@ -98,7 +72,7 @@ jools.lazyValue(
 			rc[ a ] = this.ray[ a ].invert;
 		}
 
-		inv = changeRay.create( 'ray:init', rc );
+		inv = ccot_changeRay.create( 'ray:init', rc );
 
 		// TODO aheadValue on inv.
 
@@ -113,7 +87,7 @@ jools.lazyValue(
 |
 | The result can be a change or a change-ray.
 */
-changeRay.prototype._transformChange =
+ccot_changeRay.prototype._transformChange =
 	function(
 		c
 	)
@@ -151,7 +125,7 @@ changeRay.prototype._transformChange =
 |
 | The result is a change-ray.
 */
-changeRay.prototype._transformChangeRay =
+ccot_changeRay.prototype._transformChangeRay =
 	function(
 		cray
 	)
@@ -179,7 +153,7 @@ changeRay.prototype._transformChangeRay =
 /*
 | Return a change wrap transformed by this change.
 */
-changeRay.prototype._transformChangeWrap =
+ccot_changeRay.prototype._transformChangeWrap =
 	function(
 		cw
 	)
@@ -191,7 +165,7 @@ changeRay.prototype._transformChangeWrap =
 /*
 | Return a change wrap transformed by this change.
 */
-changeRay.prototype._transformChangeWrapRay =
+ccot_changeRay.prototype._transformChangeWrapRay =
 	function(
 		cwr
 	)
@@ -222,7 +196,7 @@ changeRay.prototype._transformChangeWrapRay =
 | change, changeRay, changeWrap or changeWrapRay
 | transformed by this change ray.
 */
-changeRay.prototype.transform =
+ccot_changeRay.prototype.transform =
 	function(
 		co
 	)
@@ -258,7 +232,7 @@ changeRay.prototype.transform =
 | FIXME trace if a signle change has changed and create
 | a new array only then
 */
-changeRay.prototype.changeTree =
+ccot_changeRay.prototype.changeTree =
 	function(
 		tree
 	)
@@ -295,7 +269,7 @@ changeRay.prototype.changeTree =
 	return(
 		result_changeTree.create(
 			'tree', tree,
-			'reaction', changeRay.create( 'ray:init', cray )
+			'reaction', ccot_changeRay.create( 'ray:init', cray )
 		)
 	);
 };
@@ -306,7 +280,7 @@ changeRay.prototype.changeTree =
 |
 | If the signature is a span, it can transform to a sign-ray.
 */
-changeRay.prototype.transformSign =
+ccot_changeRay.prototype.transformSign =
 	function(
 		sign
 	)

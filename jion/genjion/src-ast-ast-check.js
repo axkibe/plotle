@@ -179,6 +179,12 @@ prototype.reflect = 'ast.astCheck';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astCheck';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astCheck';

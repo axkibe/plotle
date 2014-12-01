@@ -171,6 +171,12 @@ prototype.reflect = 'ast.astNot';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astNot';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astNot';

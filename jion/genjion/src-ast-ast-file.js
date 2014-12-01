@@ -353,6 +353,12 @@ prototype.reflect = 'ast.astFile';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astFile';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astFile';

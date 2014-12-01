@@ -171,6 +171,12 @@ prototype.reflect = 'ast.astTypeof';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astTypeof';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astTypeof';

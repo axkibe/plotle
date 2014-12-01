@@ -227,6 +227,12 @@ prototype.reflect = 'ast.astBlock';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astBlock';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astBlock';

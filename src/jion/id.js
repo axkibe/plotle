@@ -77,7 +77,8 @@ id.createFromString =
 	var
 		split;
 
-	split = string.split( '.' );
+	// split = string.split( '_' ); FUTURE
+	split = string.split( /[_.]/g );
 
 	if( split.length <= 1 )
 	{
@@ -146,7 +147,7 @@ id.compare =
 
 
 /*
-| This id as string
+| This id as string.
 */
 jools.lazyValue(
 	id.prototype,
@@ -164,6 +165,26 @@ jools.lazyValue(
 	}
 );
 
+
+/*
+| This id as string in new underscore format.
+*/
+jools.lazyValue(
+	id.prototype,
+	'string_',
+	function( )
+	{
+		if( this.unit )
+		{
+			return this.unit + '_' + this.name;
+		}
+		else
+		{
+			return this.name;
+		}
+	}
+);
+
 /*
 | This id as astString
 */
@@ -173,6 +194,19 @@ jools.lazyValue(
 	function( )
 	{
 		return shorthand.astString( this.string );
+	}
+);
+
+
+/*
+| This id as astString in new underscore forrmat.
+*/
+jools.lazyValue(
+	id.prototype,
+	'astString_',
+	function( )
+	{
+		return shorthand.astString( this.string_ );
 	}
 );
 

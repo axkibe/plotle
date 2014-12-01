@@ -196,6 +196,12 @@ prototype.reflect = 'ast.astInstanceof';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astInstanceof';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astInstanceof';

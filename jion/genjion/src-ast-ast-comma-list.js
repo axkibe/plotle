@@ -227,6 +227,12 @@ prototype.reflect = 'ast.astCommaList';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astCommaList';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astCommaList';

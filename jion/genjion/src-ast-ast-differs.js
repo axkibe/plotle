@@ -196,6 +196,12 @@ prototype.reflect = 'ast.astDiffers';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astDiffers';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astDiffers';

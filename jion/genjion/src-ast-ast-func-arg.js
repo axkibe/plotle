@@ -221,6 +221,12 @@ prototype.reflect = 'ast.astFuncArg';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astFuncArg';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astFuncArg';

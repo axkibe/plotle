@@ -210,6 +210,12 @@ prototype.reflect = 'jsLexer.token';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'jsLexer_token';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'token';

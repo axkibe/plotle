@@ -2,6 +2,7 @@
 | Generates jion objects from a jion definition.
 */
 
+
 /*
 | Capsule.
 */
@@ -2375,6 +2376,11 @@ generator.prototype.genReflection =
 		capsule
 		.astComment( 'Reflection.' )
 		.astAssign( 'prototype.reflect', this.id.astString );
+
+	capsule =
+		capsule
+		.astComment( 'Reflection_.' )
+		.astAssign( 'prototype.reflect_', this.id.astString_ );
 
 	capsule =
 		capsule

@@ -180,6 +180,12 @@ prototype.reflect = 'ast.astString';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astString';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astString';

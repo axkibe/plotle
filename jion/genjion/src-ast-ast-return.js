@@ -171,6 +171,12 @@ prototype.reflect = 'ast.astReturn';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astReturn';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astReturn';

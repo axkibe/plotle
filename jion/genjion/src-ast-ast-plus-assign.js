@@ -196,6 +196,12 @@ prototype.reflect = 'ast.astPlusAssign';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astPlusAssign';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astPlusAssign';

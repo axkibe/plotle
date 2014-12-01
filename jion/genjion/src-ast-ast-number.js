@@ -176,6 +176,12 @@ prototype.reflect = 'ast.astNumber';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astNumber';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astNumber';

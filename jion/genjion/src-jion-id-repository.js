@@ -210,6 +210,12 @@ prototype.reflect = 'jion.idRepository';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'jion_idRepository';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'idRepository';

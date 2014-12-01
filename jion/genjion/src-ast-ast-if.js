@@ -229,6 +229,12 @@ prototype.reflect = 'ast.astIf';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astIf';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astIf';

@@ -196,6 +196,12 @@ prototype.reflect = 'ast.astEquals';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astEquals';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astEquals';

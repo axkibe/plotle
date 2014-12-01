@@ -182,6 +182,12 @@ prototype.reflect = 'ast.astVar';
 
 
 /*
+| Reflection_.
+*/
+prototype.reflect_ = 'ast_astVar';
+
+
+/*
 | Name Reflection.
 */
 prototype.reflectName = 'astVar';
