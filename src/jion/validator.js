@@ -314,7 +314,8 @@ var _checkAttributeSingleType =
 		);
 	}
 
-	if( type.indexOf( '.' ) < 0  )
+	// FUTURE _ only
+	if( type.indexOf( '.' ) < 0 && type.indexOf( '_' ) < 0 )
 	{
 		switch( type )
 		{
@@ -494,7 +495,7 @@ validator.check =
 		throw new Error( 'id missing' );
 	}
 
-	idParts = jion.id.split( '.' );
+	idParts = jion.id.split( /[_.]/g ); // FUTURE _ only
 
 	if( idParts.length !== 2 )
 	{

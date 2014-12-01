@@ -3,18 +3,11 @@
 */
 
 
-/*
-| Export.
-*/
 var
-	ccot;
-
-
-/*
-| Imports
-*/
-var
-	result,
+	ccot_change,
+	ccot_changeRay,
+	ccot_signRay,
+	result_changeTree,
 	jools;
 
 
@@ -32,7 +25,7 @@ if( JION )
 {
 	return {
 		id :
-			'ccot.change',
+			'ccot_change',
 		attributes :
 			{
 				src :
@@ -58,42 +51,20 @@ if( JION )
 }
 
 
-var
-	change,
-	changeRay,
-	result_changeTree,
-	sign,
-	signRay;
-
-
 /*
 | Node includes.
 */
 if( SERVER )
 {
-	change = require( '../jion/this' )( module );
+	ccot_change = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
 
-	changeRay = require( '../ccot/change-ray' );
+	ccot_changeRay = require( '../ccot/change-ray' );
 
-	sign = require( '../ccot/sign' );
-
-	signRay = require( '../ccot/sign-ray' );
+	ccot_signRay = require( '../ccot/sign-ray' );
 
 	result_changeTree = require( '../result/change-tree' );
-}
-else
-{
-	change = ccot.change;
-
-	changeRay = ccot.changeRay;
-
-	sign = ccot.sign;
-
-	signRay = ccot.signRay;
-
-	result_changeTree = result.changeTree;
 }
 
 
@@ -102,7 +73,7 @@ else
 | The type of this change.
 */
 jools.lazyValue(
-	change.prototype,
+	ccot_change.prototype,
 	'type',
 	function( )
 	{
@@ -172,7 +143,7 @@ jools.lazyValue(
 | Returns the inversion to this change.
 */
 jools.lazyValue(
-	change.prototype,
+	ccot_change.prototype,
 	'invert',
 	function( )
 	{
@@ -180,11 +151,9 @@ jools.lazyValue(
 			r;
 
 		r =
-			change.create(
-				'src',
-				this.trg,
-				'trg',
-					this.src
+			ccot_change.create(
+				'src', this.trg,
+				'trg', this.src
 			);
 
 		// TODO aheadValue
@@ -197,7 +166,7 @@ jools.lazyValue(
 /*
 | Performes this change on a tree.
 */
-change.prototype.changeTree =
+ccot_change.prototype.changeTree =
 	function(
 		tree
 	)
@@ -227,14 +196,14 @@ change.prototype.changeTree =
 | Change emulates a changeRay with the length of 1.
 | FIXME check if needed
 */
-change.prototype.length = 1;
+ccot_change.prototype.length = 1;
 
 
 /*
 | change emulates a changeRay with the length of 1.
 | FIXME check if needed
 */
-change.prototype.get =
+ccot_change.prototype.get =
 	function(
 		idx
 	)
@@ -255,7 +224,7 @@ change.prototype.get =
 /*
 | Returns a change transformed by this change.
 */
-change.prototype._transformChange =
+ccot_change.prototype._transformChange =
 	function(
 		c
 	)
@@ -345,7 +314,7 @@ change.prototype._transformChange =
 		}
 
 		return(
-			change.create(
+			ccot_change.create(
 				'src', srcX,
 				'trg', trgX
 			)
@@ -362,13 +331,13 @@ change.prototype._transformChange =
 		)
 		{
 			y[ a ] =
-				change.create(
+				ccot_change.create(
 					'src', srcX,
 					'trg', trgX.get( a )
 				);
 		}
 
-		return changeRay.create( 'ray:init', y );
+		return ccot_changeRay.create( 'ray:init', y );
 	}
 	else if( srcA && !trgA )
 	{
@@ -381,13 +350,13 @@ change.prototype._transformChange =
 		)
 		{
 			y[ a ] =
-				change.create(
+				ccot_change.create(
 					'src', srcX.get( a ),
 					'trg', trgX
 				);
 		}
 
-		return changeRay.create( 'ray:init', y );
+		return ccot_changeRay.create( 'ray:init', y );
 	}
 	else
 	{
@@ -399,7 +368,7 @@ change.prototype._transformChange =
 /*
 | Returns a change ray transformed by this change.
 */
-change.prototype._transformChangeRay =
+ccot_change.prototype._transformChangeRay =
 	function(
 		cray
 	)
@@ -435,7 +404,7 @@ change.prototype._transformChangeRay =
 /*
 | Return a change wrap transformed by this change.
 */
-change.prototype._transformChangeWrap =
+ccot_change.prototype._transformChangeWrap =
 	function(
 		cw
 	)
@@ -447,7 +416,7 @@ change.prototype._transformChangeWrap =
 /*
 | Return a change wrap transformed by this change.
 */
-change.prototype._transformChangeWrapRay =
+ccot_change.prototype._transformChangeWrapRay =
 	function(
 		cwr
 	)
@@ -477,7 +446,7 @@ change.prototype._transformChangeWrapRay =
 | Returns a change, changeRay, changeWrap or changeWrapRay
 | transformed on this change.
 */
-change.prototype.transform =
+ccot_change.prototype.transform =
 	function(
 		cx
 	)
@@ -512,7 +481,7 @@ change.prototype.transform =
 |
 | A new item is inserted or replaces an existing.
 */
-change.prototype._changeTreeSet =
+ccot_change.prototype._changeTreeSet =
 	function(
 		tree
 	)
@@ -616,7 +585,7 @@ change.prototype._changeTreeSet =
 |
 | A string is inserted into a string item.
 */
-change.prototype._changeTreeInsert =
+ccot_change.prototype._changeTreeInsert =
 	function(
 		tree
 	)
@@ -668,7 +637,7 @@ change.prototype._changeTreeInsert =
 |
 | A part of a string item is removed.
 */
-change.prototype._changeTreeRemove =
+ccot_change.prototype._changeTreeRemove =
 	function(
 		tree
 	)
@@ -727,7 +696,7 @@ change.prototype._changeTreeRemove =
 |
 | Two texts are joined into one.
 */
-change.prototype._changeTreeJoin =
+ccot_change.prototype._changeTreeJoin =
 	function(
 		tree
 	)
@@ -807,7 +776,7 @@ change.prototype._changeTreeJoin =
 |
 | A text is split into two.
 */
-change.prototype._changeTreeSplit =
+ccot_change.prototype._changeTreeSplit =
 	function(
 		tree
 	)
@@ -898,7 +867,7 @@ change.prototype._changeTreeSplit =
 |
 | A tree's rank is changed.
 */
-change.prototype._changeTreeRank =
+ccot_change.prototype._changeTreeRank =
 	function(
 		tree
 	)
@@ -985,7 +954,7 @@ change.prototype._changeTreeRank =
 |
 | This can possibly return a sign ray.
 */
-change.prototype.transformSign =
+ccot_change.prototype.transformSign =
 	function(
 		sign
 	)
@@ -1031,7 +1000,7 @@ change.prototype.transformSign =
 /*
 | Returns a transformed signRay on this change.
 */
-change.prototype.transformSignRay =
+ccot_change.prototype.transformSignRay =
 	function(
 		signray
 	)
@@ -1093,7 +1062,7 @@ change.prototype.transformSignRay =
 |
 | Can possibly transform a sign to a signRay.
 */
-change.prototype.transformSignX =
+ccot_change.prototype.transformSignX =
 	function(
 		signX
 	)
@@ -1119,7 +1088,7 @@ change.prototype.transformSignX =
 /*
 | Transforms a signature on one a split.
 */
-change.prototype._transformSignSplit =
+ccot_change.prototype._transformSignSplit =
 	function(
 		sign
 	)
@@ -1189,12 +1158,10 @@ change.prototype._transformSignSplit =
 	// and one that goes to next line.
 
 	return(
-		signRay.create(
+		ccot_signRay.create(
 			'ray:init',
 				[
-					sign.create(
-						'at2', src.at1
-					),
+					sign.create( 'at2', src.at1 ),
 					sign.create(
 						'path', trg.path,
 						'at1', 0,
@@ -1208,7 +1175,7 @@ change.prototype._transformSignSplit =
 /*
 | Transforms a signature on a join.
 */
-change.prototype._transformSignJoin =
+ccot_change.prototype._transformSignJoin =
 	function(
 		sign
 	)
@@ -1243,10 +1210,8 @@ change.prototype._transformSignJoin =
 	{
 		return(
 			sign.create(
-				'path',
-					trg.path,
-				'at1',
-					sign.at1 + trg.at1
+				'path', trg.path,
+				'at1', sign.at1 + trg.at1
 			)
 		);
 	}
@@ -1254,12 +1219,9 @@ change.prototype._transformSignJoin =
 	{
 		return(
 			sign.create(
-				'path',
-					trg.path,
-				'at1',
-					sign.at1 + trg.at1,
-				'at2',
-					sign.at2 + trg.at1
+				'path', trg.path,
+				'at1', sign.at1 + trg.at1,
+				'at2', sign.at2 + trg.at1
 			)
 		);
 	}
@@ -1268,7 +1230,7 @@ change.prototype._transformSignJoin =
 /*
 | Transforms a signature on a rank
 */
-change.prototype._transformSignRank =
+ccot_change.prototype._transformSignRank =
 	function(
 		sign
 	)
@@ -1299,21 +1261,11 @@ change.prototype._transformSignRank =
 		trg.rank > sign.rank
 	)
 	{
-		return(
-			sign.create(
-				'rank',
-					sign.rank - 1
-			)
-		);
+		return sign.create( 'rank', sign.rank - 1 );
 	}
 	else if( src.rank > sign.rank && trg.rank <= sign.rank )
 	{
-		return(
-			sign.create(
-				'rank',
-					sign.rank + 1
-			)
-		);
+		return sign.create( 'rank', sign.rank + 1 );
 	}
 };
 
@@ -1322,7 +1274,7 @@ change.prototype._transformSignRank =
 /*
 | Transforms a signature on a join.
 */
-change.prototype._transformSignSet =
+ccot_change.prototype._transformSignSet =
 	function(
 		sign
 	)
@@ -1337,12 +1289,9 @@ change.prototype._transformSignSet =
 
 	if(
 		sign.rank === undefined
-		||
-		trg.rank === undefined
-		||
-		!trg.path
-		||
-		!trg.path.subPathOf( sign.path, - 1 )
+		|| trg.rank === undefined
+		|| !trg.path
+		|| !trg.path.subPathOf( sign.path, - 1 )
 	)
 	{
 		return sign;
@@ -1352,41 +1301,25 @@ change.prototype._transformSignSet =
 	{
 		if( sign.rank >= trg.rank )
 		{
-			sign =
-				sign.create(
-					'rank',
-						sign.rank - 1
-				);
+			sign = sign.create( 'rank', sign.rank - 1 );
 		}
 	}
 	else if( src.rank === null )
 	{
 		if( sign.rank >= src.rank )
 		{
-			sign =
-				sign.create(
-					'rank',
-						sign.rank + 1
-				);
+			sign = sign.create( 'rank', sign.rank + 1 );
 		}
 	}
 	else
 	{
 		if( src.rank <= sign.rank && trg.rank > sign.rank )
 		{
-			sign =
-				sign.create(
-					'rank',
-						sign.rank - 1
-				);
+			sign = sign.create( 'rank', sign.rank - 1 );
 		}
 		else if( src.rank > sign.rank && trg.rank <= sign.rank )
 		{
-			sign =
-				sign.create(
-					'rank',
-						sign.rank + 1
-				);
+			sign = sign.create( 'rank', sign.rank + 1 );
 		}
 	}
 
@@ -1397,7 +1330,7 @@ change.prototype._transformSignSet =
 /*
 | Transforms a sign on an insert.
 */
-change.prototype._transformSignInsert =
+ccot_change.prototype._transformSignInsert =
 	function(
 		sign
 	)
@@ -1413,8 +1346,7 @@ change.prototype._transformSignInsert =
 
 	if(
 		!trg.path
-		||
-		!trg.path.equals( sign.path )
+		|| !trg.path.equals( sign.path )
 	)
 	{
 		return sign;
@@ -1439,21 +1371,14 @@ change.prototype._transformSignInsert =
 	{
 		return(
 			sign.create(
-				'at1',
-					sign.at1 + len,
-				'at2',
-					sign.at2 + len
+				'at1', sign.at1 + len,
+				'at2', sign.at2 + len
 			)
 		);
 	}
 	else
 	{
-		return(
-			sign.create(
-				'at1',
-					sign.at1 + len
-			)
-		);
+		return sign.create( 'at1', sign.at1 + len );
 	}
 };
 
@@ -1461,7 +1386,7 @@ change.prototype._transformSignInsert =
 /*
 | Transforms a signature on a remove
 */
-change.prototype._transformSignRemove =
+ccot_change.prototype._transformSignRemove =
 	function(
 		sign
 	)
@@ -1515,24 +1440,14 @@ change.prototype._transformSignRemove =
 
 		if( sign.at1 <= src.at2 )
 		{
-			return(
-				sign.create(
-					'at1',
-						src.at1
-				)
-			);
+			return sign.create( 'at1', src.at1 );
 		}
 
-		return(
-			sign.create(
-				'at1',
-				sign.at1 - len
-			)
-		);
+		return sign.create( 'at1', sign.at1 - len );
 	}
 
 	// More complicated signature is affected.
-	// Supposedly its a remove as well.
+	// Supposedly ;its a remove as well.
 	//
 	//                     ............
 	// src (removed span)      ######
@@ -1562,12 +1477,7 @@ change.prototype._transformSignRemove =
 		sign.at2 > src.at2
 	)
 	{
-		return(
-			sign.create(
-				'at2',
-					sign.at2 - len
-			)
-		);
+		return sign.create( 'at2', sign.at2 - len );
 	}
 	else if(
 		sign.at1 >= src.at1

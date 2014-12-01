@@ -4,15 +4,6 @@
 
 
 /*
-| Export
-*/
-var
-	ccot;
-
-ccot = ccot || { };
-
-
-/*
 | Capsule
 */
 ( function( ) {
@@ -26,9 +17,9 @@ if( JION )
 {
 	return {
 		id :
-			'ccot.signRay',
+			'ccot_signRay',
 		ray :
-			[ 'ccot.sign' ],
+			[ 'ccot_sign' ],
 		equals :
 			false
 	};

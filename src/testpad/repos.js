@@ -15,7 +15,7 @@ testpad = testpad || { };
 | Imports
 */
 var
-	ccot,
+	ccot_changeWrapRay,
 	euclid,
 	jools,
 	root,
@@ -141,7 +141,7 @@ proto._init =
 
 	if( this._changes === null )
 	{
-		this._changes = ccot.changeWrapRay.create( );
+		this._changes = ccot_changeWrapRay.create( );
 	}
 
 	if( this.seq === null )
@@ -244,7 +244,7 @@ proto.alter =
 
 	changes =
 		changes.append(
-			ccot.changeWrap.create(
+			ccot_changeWrap.create(
 				'cid', '' + ( nextcid++ ),
 				'chgX', r.reaction,
 				'seq', seq + 1

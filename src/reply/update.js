@@ -36,7 +36,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'ccot.changeWrapRay'
+							'ccot_changeWrapRay'
 					}
 			}
 	};
