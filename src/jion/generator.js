@@ -36,7 +36,6 @@ if( JION )
 var
 	ast,
 	astAnd,
-	astArrayLiteral,
 	astAssign,
 	astBlock,
 	astCall,
@@ -94,8 +93,6 @@ validator = require( './validator' );
 ast = shorthand.ast;
 
 astAnd = shorthand.astAnd;
-
-astArrayLiteral = shorthand.astArrayLiteral;
 
 astAssign = shorthand.astAssign;
 
@@ -1017,7 +1014,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 			.astElsewise(
 				astBlock( )
 				.astAssign( 'twig', astObjLiteral( ) )
-				.astAssign( 'ranks', astArrayLiteral( ) )
+				.ast( 'ranks = [ ]' )
 				.ast( 'twigDup = true' )
 			);
 	}
@@ -1028,7 +1025,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 			thisCheck
 			.astElsewise(
 				astBlock( )
-				.astAssign( 'ray', astArrayLiteral( ) )
+				.ast( 'ray = [ ]' )
 				.ast( 'rayDup = true' )
 			);
 	}
@@ -2098,7 +2095,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	block =
 		block
 		.astIf( '!jray', astFail( ) )
-		.astAssign( 'ray', astArrayLiteral( ) );
+		.ast( 'ray = [ ]' );
 
 	idList = this.ray.idList;
 
