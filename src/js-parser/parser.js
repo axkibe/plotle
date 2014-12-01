@@ -26,6 +26,7 @@ module.exports =
 
 var
 	astAnd,
+	astArrayLiteral,
 	astAssign,
 	astBoolean,
 	astCall,
@@ -62,6 +63,8 @@ var
 
 
 astAnd = require( '../ast/ast-and' );
+
+astArrayLiteral = require( '../ast/ast-array-literal' );
 
 astAssign = require( '../ast/ast-assign' );
 
@@ -273,7 +276,7 @@ handleRoundBrackets =
 	{
 		// this is a call.
 		call = astCall.create( 'func', ast );
-			
+
 		state = state.advance( null, spec.postPrec );
 
 		if( state.reachedEnd )
@@ -371,13 +374,75 @@ handleSquareBrackets =
 	)
 {
 	var
+		alit,
 		ast;
 
 	ast = state.ast;
 
 	if( !ast )
 	{
-		throw new Error( );
+		// this is an array literal
+		alit = astArrayLiteral.create( );
+
+		state = state.advance( null, spec.postPrec );
+
+		if( state.reachedEnd )
+		{
+			throw new Error( 'missing "]"' );
+		}
+
+		if( state.current.type !== ']' )
+		{
+			// there are elements
+
+			for( ;; )
+			{
+				do{
+					state = parseToken( state );
+				} while(
+					!state.reachedEnd
+					&&
+					state.current.type !== ']'
+					&&
+					state.current.type !== ','
+				);
+
+				if( state.reachedEnd )
+				{
+					throw new Error( 'missing "]"' );
+				}
+
+				if( state.ast )
+				{
+					alit = alit.append( state.ast );
+				}
+
+				if( state.current.type === ']' )
+				{
+					// fiinished array literal
+					break;
+				}
+
+				if( state.current.type === ',' )
+				{
+					state = state.advance( null, tokenSpecs[ ',' ].prePrec );
+
+					if( state.current.type === ']' )
+					{
+						throw new Error( 'parser error' );
+					}
+
+					continue;
+				}
+
+				throw new Error( 'parser error' );
+			}
+		}
+
+		// advances over closing square bracket
+		state = state.advance( alit, spec.postPrec );
+
+		return state;
 	}
 
 	state = state.advance( null, spec.prePrec );

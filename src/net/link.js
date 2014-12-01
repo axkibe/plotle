@@ -342,10 +342,6 @@ link.prototype._onUpdate =
 	var
 		a,
 		aZ,
-		b,
-		bZ,
-		c,
-		chgX,
 		changeWrap,
 		changeWrapRay,
 		gotOwnChgs,

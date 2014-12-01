@@ -16,6 +16,7 @@ forms = forms || { };
 | Imports
 */
 var
+	fabric,
 	jools,
 	marks,
 	root;

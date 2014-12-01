@@ -55,11 +55,56 @@ GLOBAL.inspect =
 
 
 var
+	defaultEval,
+	fs,
+	history,
+	historyFileName,
 	repl;
+
+historyFileName = 'report/repl-history';
+
+fs = require( 'fs' );
 
 repl = require( 'repl' );
 
-repl.start( 'ideoloom> ' );
+try
+{
+	history = fs.readFileSync( historyFileName );
+
+	history = history + '';
+
+	history = history.split( '\n' );
+}
+catch( err )
+{
+	history = [ ];
+}
+
+repl = repl.start( 'ideoloom> ' );
+
+repl.rli.history = history;
+
+defaultEval = repl.eval;
+
+repl.eval =
+	function( cmd, context, filename, callback )
+	{
+		fs.appendFile(
+			historyFileName,
+			cmd,
+			function( error )
+			{
+				if( error )
+				{
+					console.log(
+						'ERROR: cannot append to ' + historyFileName
+					);
+				}
+			}
+		);
+
+		defaultEval.call( repl, cmd, context, filename, callback );
+	};
 
 
 } )( );
