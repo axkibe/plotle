@@ -59,9 +59,12 @@ var
 	fs,
 	history,
 	historyFileName,
+	maxHistory,
 	repl;
 
 historyFileName = 'report/repl-history';
+
+maxHistory = 1000;
 
 fs = require( 'fs' );
 
@@ -89,22 +92,23 @@ defaultEval = repl.eval;
 repl.eval =
 	function( cmd, context, filename, callback )
 	{
-		fs.appendFile(
-			historyFileName,
-			cmd,
-			function( error )
-			{
-				if( error )
-				{
-					console.log(
-						'ERROR: cannot append to ' + historyFileName
-					);
-				}
-			}
-		);
+		history.push( cmd );
+
+		if( history.length > maxHistory )
+		{
+			history.unshift( );
+		}
 
 		defaultEval.call( repl, cmd, context, filename, callback );
 	};
+
+repl.on(
+	'exit',
+	function( )
+	{
+		fs.writeFileSync( historyFileName, history.join( '\n' ) );
+	}
+);
 
 
 } )( );
