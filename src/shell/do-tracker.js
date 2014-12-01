@@ -3,22 +3,11 @@
 */
 
 
-/*
-| Export
-*/
 var
-	shell;
-
-shell = shell || { };
-
-
-/*
-| Imports
-*/
-var
-	ccot,
+	ccot_changeWrapRay,
 	config,
-	root;
+	root,
+	shell_doTracker;
 
 /*
 | Capsule
@@ -59,21 +48,19 @@ if( JION )
 	};
 }
 
-var doTracker = shell.doTracker;
-
 
 /*
 | Flushes the stacks.
 */
-doTracker.prototype.flush =
+shell_doTracker.prototype.flush =
 	function(
 
 	)
 {
 	root.doTracker =
 		this.create(
-			'_undo', ccot.changeWrapRay.create( ),
-			'_redo', ccot.changeWrapRay.create( )
+			'_undo', ccot_changeWrapRay.create( ),
+			'_redo', ccot_changeWrapRay.create( )
 		);
 };
 
@@ -82,7 +69,7 @@ doTracker.prototype.flush =
 | Reporting the doTracker something has been altered.
 | It will track it on the undo stack.
 */
-doTracker.prototype.track =
+shell_doTracker.prototype.track =
 	function(
 		changeWrap
 	)
@@ -102,7 +89,7 @@ doTracker.prototype.track =
 	root.doTracker =
 		this.create(
 			'_undo', undo,
-			'_redo', ccot.changeWrapRay.create( )
+			'_redo', ccot_changeWrapRay.create( )
 		);
 };
 
@@ -114,7 +101,7 @@ doTracker.prototype.track =
 | now enriched with sequence ids as well as genuine updates
 | from others.
 */
-doTracker.prototype.update =
+shell_doTracker.prototype.update =
 	function(
 		changeWrapRay
 	)
@@ -171,13 +158,10 @@ doTracker.prototype.update =
 			undo =
 				undo.set(
 					b,
-					ccot.changeWrap.create(
-						'cid',
-							u.cid,
-						'chgX',
-							tfxChgX,
-						'seq',
-							u.seq
+					ccot_changeWrap.create(
+						'cid', u.cid,
+						'chgX', tfxChgX,
+						'seq', u.seq
 					)
 				);
 		}
@@ -207,7 +191,7 @@ doTracker.prototype.update =
 
 			redo.set(
 				b,
-				ccot.changeWrap.create(
+				ccot_changeWrap.create(
 					'cid',
 						u.cid,
 					'chgX',
@@ -225,7 +209,7 @@ doTracker.prototype.update =
 /*
 | Reverts actions from the undo stack.
 */
-doTracker.prototype.undo =
+shell_doTracker.prototype.undo =
 	function( )
 {
 	var
@@ -264,7 +248,7 @@ doTracker.prototype.undo =
 /*
 | Reverts undos from the redo stack.
 */
-doTracker.prototype.redo =
+shell_doTracker.prototype.redo =
 	function( )
 {
 	var
