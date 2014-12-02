@@ -3,22 +3,11 @@
 */
 
 
-/*
-| Export
-*/
-var
-	gruga;
-
-gruga = gruga || { };
-
-
-/*
-| Imports
-*/
 var
 	design,
 	fontPool,
 	forms,
+	gruga_signUp,
 	widgets;
 
 /*
@@ -61,7 +50,7 @@ var
 /*
 | Layout
 */
-gruga.signUp =
+gruga_signUp =
 	forms.signUp.create(
 		'twig:add',
 		'headline',

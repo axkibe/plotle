@@ -3,22 +3,11 @@
 */
 
 
-/*
-| Export
-*/
-var
-	gruga;
-
-gruga = gruga || { };
-
-
-/*
-| Imports
-*/
 var
 	design,
 	fontPool,
 	forms,
+	gruga_welcome,
 	widgets;
 
 
@@ -49,7 +38,7 @@ var
 /*
 | Layout
 */
-gruga.welcome =
+gruga_welcome =
 	forms.welcome.create(
 		'twig:add',
 		'headline',

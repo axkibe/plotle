@@ -3,22 +3,11 @@
 */
 
 
-/*
-| Export
-*/
-var
-	gruga;
-
-gruga = gruga || { };
-
-
-/*
-| Imports
-*/
 var
 	design,
 	discs,
 	fontPool,
+	gruga_mainDisc,
 	widgets;
 
 
@@ -120,7 +109,7 @@ dv =
 		}
 	};
 
-gruga.mainDisc =
+gruga_mainDisc =
 	discs.mainDisc.create(
 		'twig:add',
 			'Normal',

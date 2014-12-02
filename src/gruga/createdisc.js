@@ -3,22 +3,11 @@
 */
 
 
-/*
-| Export
-*/
-var
-	gruga;
-
-gruga = gruga || { };
-
-
-/*
-| Imports
-*/
 var
 	design,
 	discs,
 	fontPool,
+	gruga_createDisc,
 	widgets;
 
 /*
@@ -78,7 +67,7 @@ dv =
 		}
 	};
 
-gruga.createDisc =
+gruga_createDisc =
 	discs.createDisc.create(
 		'twig:add',
 		'createNote',

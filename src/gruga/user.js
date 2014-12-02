@@ -3,22 +3,11 @@
 */
 
 
-/*
-| Export
-*/
-var
-	gruga;
-
-gruga = gruga || { };
-
-
-/*
-| Imports
-*/
 var
 	design,
 	fontPool,
 	forms,
+	gruga_user,
 	widgets;
 
 /*
@@ -47,7 +36,7 @@ var closeButton =
 /*
 | Layout
 */
-gruga.user =
+gruga_user =
 	forms.user.create(
 		'twig:add',
 		'headline',
