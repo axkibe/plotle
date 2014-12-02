@@ -5,13 +5,11 @@
 
 var
 	fabric,
-	forms,
+	forms_form,
+	forms_login,
 	jools,
 	marks,
 	root;
-
-
-forms = forms || { };
 
 
 /*
@@ -28,7 +26,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms.login',
+			'forms_login',
 		attributes :
 			{
 				hover :
@@ -47,7 +45,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms.form',
+									'forms_form',
 								func :
 									'concernsMark',
 								args :
@@ -119,7 +117,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.form',
+			'forms_form',
 		init :
 			[
 				'inherit'
@@ -130,21 +128,15 @@ if( JION )
 }
 
 
-var
-	login;
-
-login = forms.login;
-
-
 /*
 | The login form.
 */
-login.prototype._init =
+forms_login.prototype._init =
 	function(
 		inherit
 	)
 {
-	forms.form.init.call(
+	forms_form.init.call(
 		this,
 		inherit
 	);
@@ -154,7 +146,7 @@ login.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-login.prototype.pushButton =
+forms_login.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -204,7 +196,7 @@ login.prototype.pushButton =
 /*
 | Logins the user
 */
-login.prototype.login =
+forms_login.prototype.login =
 	function( )
 {
 	var
@@ -278,7 +270,7 @@ login.prototype.login =
 /*
 | User is pressing a special key.
 */
-login.prototype.specialKey =
+forms_login.prototype.specialKey =
 	function(
 		key,
 		shift,
@@ -300,7 +292,7 @@ login.prototype.specialKey =
 	}
 
 	return (
-		forms.form.prototype.specialKey.call(
+		forms_form.prototype.specialKey.call(
 			this,
 			key,
 			shift,
@@ -313,7 +305,7 @@ login.prototype.specialKey =
 /*
 | an auth ( login ) operation completed.
 */
-login.prototype.onAuth =
+forms_login.prototype.onAuth =
 	function(
 		request,
 		reply
@@ -369,7 +361,7 @@ login.prototype.onAuth =
 /*
 | Clears all fields
 */
-login.prototype.clear =
+forms_login.prototype.clear =
 	function( )
 {
 	// FUTURE combine calls
