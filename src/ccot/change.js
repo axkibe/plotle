@@ -2,7 +2,6 @@
 | A ccot change to a tree.
 */
 
-
 var
 	ccot_change,
 	ccot_changeRay,
@@ -35,7 +34,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'ccot.sign'
+							'ccot_sign'
 					},
 				trg :
 					{
@@ -44,7 +43,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'ccot.sign'
+							'ccot_sign'
 					}
 			}
 	};
@@ -240,7 +239,7 @@ ccot_change.prototype._transformChange =
 
 /**/if( CHECK )
 /**/{
-/**/	if( c.reflect !== 'ccot.change' )
+/**/	if( c.reflect_ !== 'ccot_change' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -255,15 +254,15 @@ ccot_change.prototype._transformChange =
 		return null;
 	}
 
-	switch( srcX.reflect )
+	switch( srcX.reflect_ )
 	{
-		case 'ccot.sign' :
+		case 'ccot_sign' :
 
 			srcA = false;
 
 			break;
 
-		case 'ccot.signRay' :
+		case 'ccot_signRay' :
 
 			srcA = true;
 
@@ -274,15 +273,15 @@ ccot_change.prototype._transformChange =
 			throw new Error( );
 	}
 
-	switch( trgX.reflect )
+	switch( trgX.reflect_ )
 	{
-		case 'ccot.sign' :
+		case 'ccot_sign' :
 
 			trgA = false;
 
 			break;
 
-		case 'ccot.signRay' :
+		case 'ccot_signRay' :
 
 			trgA = true;
 
@@ -380,7 +379,7 @@ ccot_change.prototype._transformChangeRay =
 
 /**/if( CHECK )
 /**/{
-/**/	if( cray.reflect !== 'ccot.changeRay' )
+/**/	if( cray.reflect_ !== 'ccot_changeRay' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -451,21 +450,21 @@ ccot_change.prototype.transform =
 		cx
 	)
 {
-	switch( cx.reflect )
+	switch( cx.reflect_ )
 	{
-		case 'ccot.change' :
+		case 'ccot_change' :
 
 			return this._transformChange( cx );
 
-		case 'ccot.changeRay' :
+		case 'ccot_changeRay' :
 
 			return this._transformChangeRay( cx );
 
-		case 'ccot.changeWrap' :
+		case 'ccot_changeWrap' :
 
 			return this._transformChangeWrap( cx );
 
-		case 'ccot.changeWrapRay' :
+		case 'ccot_changeWrapRay' :
 
 			return this._transformChangeWrapRay( cx );
 
@@ -1026,15 +1025,15 @@ ccot_change.prototype.transformSignRay =
 			continue;
 		}
 
-		switch( cx.reflect )
+		switch( cx.reflect_ )
 		{
-			case 'ccot.sign' :
+			case 'ccot_sign' :
 
 				signray = signray.set( a, cx );
 
 				break;
 
-			case 'ccot.signRay' :
+			case 'ccot_signRay' :
 
 				for(
 					b = 0, bZ = cx.length;
@@ -1067,14 +1066,14 @@ ccot_change.prototype.transformSignX =
 		signX
 	)
 {
-	switch( signX.reflect )
+	switch( signX.reflect_ )
 	{
 
-		case 'ccot.sign' :
+		case 'ccot_sign' :
 
 			return this.transformSign( signX );
 
-		case 'ccot.signRay' :
+		case 'ccot_signRay' :
 
 			return this.transformSignRay( signX );
 

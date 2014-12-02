@@ -45,7 +45,7 @@ if( JION )
 						json :
 							true,
 						type :
-							[ 'ccot.change', 'ccot.changeRay' ]
+							[ 'ccot_change', 'ccot_changeRay' ]
 					},
 				user :
 					{

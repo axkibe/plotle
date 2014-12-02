@@ -88,7 +88,7 @@ if( JION )
 						comment :
 							'changes to be send to the server',
 						type :
-							'ccot.changeWrapRay',
+							'ccot_changeWrapRay',
 						defaultValue :
 							null
 					},
@@ -97,7 +97,7 @@ if( JION )
 						comment :
 							'changes that are currently on the way',
 						type :
-							'ccot.changeWrapRay',
+							'ccot_changeWrapRay',
 						defaultValue :
 							null
 					},

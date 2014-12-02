@@ -2,22 +2,15 @@
 | Signates an entry, string index or string span.
 */
 
-/*
-| Exports
-*/
 var
-	ccot;
-
-ccot = ccot || { };
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	ccot_sign,
+	euclid_point,
+	euclid_rect,
 	jools,
-	visual;
+	visual_label,
+	visual_note,
+	visual_portal,
+	visual_relation;
 
 
 /*
@@ -34,7 +27,7 @@ if( JION )
 {
 	return {
 		id :
-			'ccot.sign',
+			'ccot_sign',
 		attributes :
 			{
 				at1 :
@@ -114,50 +107,34 @@ if( JION )
 }
 
 
-var
-	sign;
-
-
 /*
 | Node includes.
 */
 if( SERVER )
 {
-	sign = require( '../jion/this' )( module );
+	ccot_sign = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
 
 	// FUTURE, remove this once createFromJSON is fixed.
-	euclid =
-		{
-			point :
-				require( '../euclid/point' ),
-			rect :
-				require( '../euclid/rect' )
-		};
+	euclid_point = require( '../euclid/point' );
 
-	visual =
-		{
-			label :
-				require( '../visual/label' ),
-			note :
-				require( '../visual/note' ),
-			portal :
-				require( '../visual/portal' ),
-			relation :
-				require( '../visual/relation' )
-		};
-}
-else
-{
-	sign = ccot.sign;
+	euclid_rect = require( '../euclid/rect' );
+
+	visual_label = require( '../visual/label' );
+
+	visual_note = require( '../visual/note' );
+
+	visual_portal = require( '../visual/portal' );
+
+	visual_relation = require( '../visual/relation' );
 }
 
 
 /*
 | Initializer.
 */
-sign.prototype._init =
+ccot_sign.prototype._init =
 	function( )
 {
 	// FIXME remove this hack and enable
@@ -174,37 +151,37 @@ sign.prototype._init =
 		{
 			case 'euclid.point' :
 
-				this.val = euclid.point.createFromJSON( val );
+				this.val = euclid_point.createFromJSON( val );
 
 				break;
 
 			case 'euclid.rect' :
 
-				this.val = euclid.rect.createFromJSON( val );
+				this.val = euclid_rect.createFromJSON( val );
 
 				break;
 
 			case 'visual.label' :
 
-				this.val = visual.label.createFromJSON( val );
+				this.val = visual_label.createFromJSON( val );
 
 				break;
 
 			case 'visual.note' :
 
-				this.val = visual.note.createFromJSON( val );
+				this.val = visual_note.createFromJSON( val );
 
 				break;
 
 			case 'visual.portal' :
 
-				this.val = visual.portal.createFromJSON( val );
+				this.val = visual_portal.createFromJSON( val );
 
 				break;
 
 			case 'visual.relation' :
 
-				this.val = visual.relation.createFromJSON( val );
+				this.val = visual_relation.createFromJSON( val );
 
 				break;
 
@@ -226,7 +203,7 @@ sign.prototype._init =
 |
 | FUTURE simplify
 */
-sign.prototype.affix =
+ccot_sign.prototype.affix =
 	function(
 		key,  // key to affix at
 		val   // value to affix

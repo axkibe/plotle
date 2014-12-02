@@ -23,14 +23,14 @@ if( JION )
 {
 	return {
 		id :
-			'ccot.changeRay',
+			'ccot_changeRay',
 		equals :
 			false,
 		json :
 			true,
 		ray :
 			[
-				'ccot.change'
+				'ccot_change'
 			]
 	};
 }
@@ -99,7 +99,7 @@ ccot_changeRay.prototype._transformChange =
 
 /**/if( CHECK )
 /**/{
-/**/	if( c.reflect !== 'ccot.change' )
+/**/	if( c.reflect_ !== 'ccot_change' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -201,21 +201,21 @@ ccot_changeRay.prototype.transform =
 		co
 	)
 {
-	switch( co.reflect )
+	switch( co.reflect_ )
 	{
-		case 'ccot.change' :
+		case 'ccot_change' :
 
 			return this._transformChange( co );
 
-		case 'ccot.changeRay' :
+		case 'ccot_changeRay' :
 
 			return this._transformChangeRay( co );
 
-		case 'ccot.changeWrap' :
+		case 'ccot_changeWrap' :
 
 			return this._transformChangeWrap( co );
 
-		case 'ccot.changeWrapRay' :
+		case 'ccot_changeWrapRay' :
 
 			return this._transformChangeWrapRay( co );
 
@@ -288,7 +288,7 @@ ccot_changeRay.prototype.transformSign =
 
 /**/if( CHECK )
 /**/{
-/**/	if( sign.reflect !== 'ccot.sign' )
+/**/	if( sign.reflect_ !== 'ccot_sign' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
