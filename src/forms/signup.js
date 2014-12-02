@@ -4,19 +4,12 @@
 
 
 /*
-| Export
-*/
-var
-	forms;
-
-forms = forms || { };
-
-
-/*
 | Imports
 */
 var
 	fabric,
+	forms_form,
+	forms_signUp,
 	jools,
 	marks,
 	root;
@@ -36,7 +29,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms.signUp',
+			'forms_signUp',
 		attributes :
 			{
 				hover :
@@ -57,7 +50,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms.form',
+									'forms_form',
 								func :
 									'concernsMark',
 								args :
@@ -127,7 +120,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.form',
+			'forms_form',
 		init :
 			[
 				'inherit'
@@ -141,7 +134,7 @@ if( JION )
 var
 	signUp;
 
-signUp = forms.signUp;
+signUp = forms_signUp;
 
 /*
 | The signup form.
@@ -151,7 +144,7 @@ signUp.prototype._init =
 		inherit
 	)
 {
-	forms.form.init.call(
+	forms_form.init.call(
 		this,
 		inherit
 	);

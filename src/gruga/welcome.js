@@ -6,7 +6,7 @@
 var
 	design,
 	fontPool,
-	forms,
+	forms_welcome,
 	gruga_welcome,
 	widgets;
 
@@ -39,7 +39,7 @@ var
 | Layout
 */
 gruga_welcome =
-	forms.welcome.create(
+	forms_welcome.create(
 		'twig:add',
 		'headline',
 			widgets.label.create(

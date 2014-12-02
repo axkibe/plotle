@@ -3,19 +3,9 @@
 */
 
 
-/*
-| Export
-*/
 var
-	forms;
-
-forms = forms || { };
-
-
-/*
-| Imports
-*/
-var
+	forms_form,
+	forms_user,
 	jools,
 	root;
 
@@ -34,7 +24,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms.user',
+			'forms_user',
 		attributes :
 			{
 				hover :
@@ -55,7 +45,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms.form',
+									'forms_form',
 								func :
 									'concernsMark',
 								args :
@@ -124,7 +114,7 @@ if( JION )
 			},
 
 		subclass :
-			'forms.form',
+			'forms_form',
 
 		init :
 			[
@@ -139,7 +129,7 @@ if( JION )
 var
 	user;
 
-user = forms.user;
+user = forms_user;
 
 
 /*
@@ -223,10 +213,7 @@ user.prototype._init =
 				!isGuest
 		);
 
-	forms.form.init.call(
-		this,
-		inherit
-	);
+	forms_form.init.call( this, inherit );
 };
 
 

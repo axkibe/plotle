@@ -6,7 +6,7 @@
 var
 	design,
 	fontPool,
-	forms,
+	forms_signUp,
 	gruga_signUp,
 	widgets;
 
@@ -51,7 +51,7 @@ var
 | Layout
 */
 gruga_signUp =
-	forms.signUp.create(
+	forms_signUp.create(
 		'twig:add',
 		'headline',
 			widgets.label.create(

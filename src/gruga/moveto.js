@@ -6,7 +6,7 @@
 var
 	design,
 	fontPool,
-	forms,
+	forms_moveTo,
 	gruga_moveTo,
 	widgets;
 
@@ -57,7 +57,7 @@ var
 | Layout
 */
 gruga_moveTo =
-	forms.moveTo.create(
+	forms_moveTo.create(
 		'twig:add',
 		'headline',
 			widgets.label.create(

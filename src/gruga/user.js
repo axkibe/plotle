@@ -6,7 +6,7 @@
 var
 	design,
 	fontPool,
-	forms,
+	forms_user,
 	gruga_user,
 	widgets;
 
@@ -37,7 +37,7 @@ var closeButton =
 | Layout
 */
 gruga_user =
-	forms.user.create(
+	forms_user.create(
 		'twig:add',
 		'headline',
 			widgets.label.create(
