@@ -23,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'ccot.changeWrap',
+			'ccot_changeWrap',
 		attributes :
 			{
 				cid :
@@ -44,7 +44,7 @@ if( JION )
 						json :
 							true,
 						type :
-							[ 'ccot.change', 'ccot.changeRay' ]
+							[ 'ccot_change', 'ccot_changeRay' ]
 					},
 				seq :
 					{

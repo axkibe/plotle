@@ -22,13 +22,11 @@ if( JION )
 {
 	return {
 		id :
-			'ccot.changeWrapRay',
+			'ccot_changeWrapRay',
 		json :
 			true,
 		ray :
-			[
-				'ccot.changeWrap'
-			],
+			[ 'ccot_changeWrap' ],
 		equals :
 			'primitive'
 	};

@@ -31,7 +31,7 @@ if( JION )
 						comment :
 							'the undo stack',
 						type :
-							'ccot.changeWrapRay',
+							'ccot_changeWrapRay',
 						defaultValue :
 							null
 					},
@@ -40,7 +40,7 @@ if( JION )
 						comment :
 							'the redo stack',
 						type :
-							'ccot.changeWrapRay',
+							'ccot_changeWrapRay',
 						defaultValue :
 							null
 					}
