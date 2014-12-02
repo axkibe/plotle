@@ -116,104 +116,12 @@ jools.limit =
 
 
 /*
-| Builds a fail message.
-*/
-var fail =
-	function(
-		args,
-		aoffset
-	)
-{
-	var
-		a =
-			Array.prototype.slice.call(
-				args,
-				aoffset,
-				args.length
-			);
-
-	for(
-		var i = 2;
-		i < arguments.length;
-		i++
-	)
-	{
-		a.push( arguments[ i ] );
-	}
-
-	var
-		b =
-			a.slice( );
-
-	b.unshift( 'fail' );
-
-	jools.log.apply(
-		null,
-		b
-	);
-
-	throw jools.reject( a.join(' ') );
-};
-
-
-
-/*
-| Throws a reject if v is not within limits
-*/
-jools.checkLimits =
-	function(
-		v,
-		low,
-		high
-	)
-{
-	if ( v < low || v > high )
-	{
-		fail(
-			arguments,
-			3,
-			low,
-			'<=',
-			v,
-			'<=',
-			high
-		);
-	}
-};
-
-
-/*
 | Hashes the password.
 */
 jools.passhash =
 	function( pass )
 {
 	return sha1hex( pass + '-meshcraft-8833' );
-};
-
-
-/*
-| Returns a rejection error.
-|
-| FUTURE remove
-*/
-jools.reject =
-	function(
-		message
-	)
-{
-	// in devel mode any failure is fatal.
-	if( jools.devel )
-	{
-		throw new Error( message );
-	}
-
-	jools.log( 'reject', 'reject', message );
-
-	return {
-		ok : false,
-		message : message
-	};
 };
 
 
@@ -306,20 +214,14 @@ if( !Object.defineProperty )
 
 if( !Object.freeze )
 {
-	console.log(
-		'Using legacy Object.freeze'
-	);
+	console.log( 'Using legacy Object.freeze' );
 
-	Object.freeze =
-		function( )
-		{
-		};
+	Object.freeze = function( ) { };
 }
 
 
 /*
 | Subclassing helper.
-|
 */
 jools.subclass =
 	function(

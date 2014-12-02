@@ -312,7 +312,6 @@ jion_proto.raySet =
 /*
 | Returns a twig node by its rank.
 */
-jion_proto.atRank =
 jion_proto.twigAtRank =
 	function(
 		rank
@@ -350,7 +349,6 @@ jion_proto.twigLength =
 |
 | FIXME make a joolsLazyfunc
 */
-jion_proto.rankOf =
 jion_proto.twigRankOf =
 	function(
 		key
