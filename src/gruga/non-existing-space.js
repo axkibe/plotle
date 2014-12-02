@@ -4,7 +4,9 @@
 
 
 var
-	design,
+	design_anchorEllipse,
+	design_anchorPoint,
+	design_anchorRect,
 	fontPool,
 	forms_nonExistingSpace,
 	gruga_nonExistingSpace,
@@ -58,13 +60,10 @@ gruga_nonExistingSpace =
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							-120
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', -120
 					)
 			),
 		'twig:add',
@@ -75,13 +74,10 @@ gruga_nonExistingSpace =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-								'c',
-						'x',
-							0,
-						'y',
-							-50
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', -50
 					)
 			),
 		'twig:add',
@@ -90,26 +86,18 @@ gruga_nonExistingSpace =
 				'style',
 					'genericButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									noButton.w,
-								'y',
-									noButton.n
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', noButton.w,
+								'y', noButton.n
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									noButton.w +
-									noButton.width,
-								'y',
-									noButton.n +
-									noButton.height
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', noButton.w + noButton.width,
+								'y', noButton.n + noButton.height
 							)
 					),
 				'text',
@@ -117,9 +105,9 @@ gruga_nonExistingSpace =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'yesButton',
@@ -127,26 +115,18 @@ gruga_nonExistingSpace =
 				'style',
 					'genericButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									yesButton.w,
-								'y',
-									yesButton.n
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', yesButton.w,
+								'y', yesButton.n
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									yesButton.w +
-									yesButton.width,
-								'y',
-									yesButton.n +
-									yesButton.height
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', yesButton.w + yesButton.width,
+								'y', yesButton.n + yesButton.height
 							)
 					),
 				'text',
@@ -154,9 +134,9 @@ gruga_nonExistingSpace =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			)
 	);
 

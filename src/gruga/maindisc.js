@@ -4,7 +4,9 @@
 
 
 var
-	design,
+	design_anchorEllipse,
+	design_anchorPoint,
+	design_anchorRect,
 	discs,
 	fontPool,
 	gruga_mainDisc,
@@ -121,28 +123,22 @@ gruga_mainDisc =
 				'iconStyle',
 					'iconNormal',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.normal.x,
-								'y',
-									dv.normal.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.normal.x,
+								'y', dv.normal.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.normal.x + dv.generic.width,
-								'y',
-									dv.normal.y + dv.generic.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.normal.x + dv.generic.width,
+								'y', dv.normal.y + dv.generic.height
 							)
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'Create',
@@ -156,30 +152,24 @@ gruga_mainDisc =
 				'font',
 					dv.generic.font,
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.create.x,
-								'y',
-									dv.create.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.create.x,
+								'y', dv.create.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.create.x + dv.generic.width,
-								'y',
-									dv.create.y + dv.generic.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.create.x + dv.generic.width,
+								'y', dv.create.y + dv.generic.height
 							)
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'Remove',
@@ -193,28 +183,22 @@ gruga_mainDisc =
 				'visible',
 					false,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.remove.x,
-								'y',
-									dv.remove.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.remove.x,
+								'y', dv.remove.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.remove.x + dv.generic.width,
-								'y',
-									dv.remove.y + dv.generic.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.remove.x + dv.generic.width,
+								'y', dv.remove.y + dv.generic.height
 							)
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'moveTo',
@@ -228,28 +212,22 @@ gruga_mainDisc =
 				'visible',
 					false,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.moveto.x,
-								'y',
-									dv.moveto.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.moveto.x,
+								'y', dv.moveto.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.moveto.x + dv.generic.width,
-								'y',
-									dv.moveto.y + dv.generic.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.moveto.x + dv.generic.width,
+								'y', dv.moveto.y + dv.generic.height
 							)
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'space',
@@ -257,24 +235,18 @@ gruga_mainDisc =
 				'style',
 					'mainButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.space.x,
-								'y',
-									dv.space.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.space.x,
+								'y', dv.space.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.space.x + dv.space.width,
-								'y',
-									dv.space.y + dv.space.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.space.x + dv.space.width,
+								'y', dv.space.y + dv.space.height
 							)
 					),
 				'text',
@@ -282,20 +254,17 @@ gruga_mainDisc =
 				'font',
 					fontPool.get( 12, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'shape',
-					design.anchorEllipse.create(
+					design_anchorEllipse.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									-60,
-								'y',
-									0
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', -60,
+								'y', 0
 							),
 						'pse',
-							design.anchorPoint.PSE_M1
+							design_anchorPoint.PSE_M1
 					),
 				'textRotation',
 					- Math.PI / 2
@@ -306,24 +275,18 @@ gruga_mainDisc =
 				'style',
 					'mainButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.user.x,
-								'y',
-									dv.user.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.user.x,
+								'y', dv.user.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.user.x + dv.user.width,
-								'y',
-									dv.user.y + dv.user.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.user.x + dv.user.width,
+								'y', dv.user.y + dv.user.height
 							)
 					),
 				'text',
@@ -331,20 +294,17 @@ gruga_mainDisc =
 				'font',
 					fontPool.get( 12, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'shape',
-					design.anchorEllipse.create(
+					design_anchorEllipse.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									-70,
-								'y',
-									0
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', -70,
+								'y', 0
 							),
 						'pse',
-							design.anchorPoint.PSE_M1
+							design_anchorPoint.PSE_M1
 					),
 				'textRotation',
 						( -Math.PI / 2 )
@@ -363,30 +323,24 @@ gruga_mainDisc =
 				'font',
 					fontPool.get( 13, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.login.x,
-								'y',
-									dv.login.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.login.x,
+								'y', dv.login.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.login.x + dv.generic.width,
-								'y',
-									dv.login.y + dv.generic.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.login.x + dv.generic.width,
+								'y', dv.login.y + dv.generic.height
 							)
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 			'signUp',
@@ -402,30 +356,24 @@ gruga_mainDisc =
 				'font',
 					fontPool.get( 13, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.signup.x,
-								'y',
-									dv.signup.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.signup.x,
+								'y', dv.signup.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.signup.x + dv.generic.width,
-								'y',
-									dv.signup.y + dv.generic.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.signup.x + dv.generic.width,
+								'y', dv.signup.y + dv.generic.height
 							)
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			)
 	);
 
