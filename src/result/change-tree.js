@@ -26,10 +26,10 @@ if( JION )
 							'changes may alter themselves on changing a tree',
 						type :
 							[
-								'ccot.change',
-								'ccot.changeRay',
-								'ccot.changeWrap',
-								'ccot.changeWrapRay'
+								'ccot_change',
+								'ccot_changeRay',
+								'ccot_changeWrap',
+								'ccot_changeWrapRay'
 							]
 					},
 				tree :

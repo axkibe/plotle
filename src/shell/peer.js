@@ -3,19 +3,11 @@
 */
 
 
-/*
-| Export
-*/
 var
-	peer;
-
-
-/*
-| Imports
-*/
-var
-	ccot,
+	ccot_change,
+	ccot_sign,
 	jion,
+	peer,
 	root,
 	visual;
 
@@ -28,20 +20,16 @@ var
 
 
 var
-	_alter,
-	change,
+	alter,
 	newItemSign,
-	sign,
 	spliceSign;
 
 
-change = ccot.change;
-
-sign = ccot.sign;
-
-// sign for a new item
+/*
+| sign for a new item
+*/
 newItemSign =
-	sign.create(
+	ccot_sign.create(
 		'path',
 			jion.path.empty
 			.append( 'twig' )
@@ -50,12 +38,10 @@ newItemSign =
 			0
 	);
 
-// sign for split/join
-spliceSign =
-	sign.create(
-		'proc',
-			'splice'
-	);
+/*
+| sign for split/join.
+*/
+spliceSign = ccot_sign.create( 'proc', 'splice' );
 
 peer = { };
 
@@ -65,7 +51,7 @@ peer = { };
 |
 | Feeds the dochains.
 */
-_alter =
+alter =
 	function(
 		src,
 		trg
@@ -73,7 +59,7 @@ _alter =
 {
 	return(
 		root.link.alter(
-			change.create(
+			ccot_change.create(
 				'src', src,
 				'trg', trg
 			)
@@ -94,7 +80,7 @@ peer.newNote =
 		src;
 
 	src =
-		sign.create(
+		ccot_sign.create(
 			'val',
 				visual.note.create(
 					'fontsize', 13,
@@ -112,7 +98,7 @@ peer.newNote =
 				null
 		);
 
-	return _alter( src, newItemSign );
+	return alter( src, newItemSign );
 };
 
 
@@ -130,7 +116,7 @@ peer.newPortal =
 		src;
 
 	src =
-		sign.create(
+		ccot_sign.create(
 			'val',
 				visual.portal.create(
 					'zone', zone,
@@ -141,7 +127,7 @@ peer.newPortal =
 				null
 		);
 
-	return _alter( src, newItemSign );
+	return alter( src, newItemSign );
 };
 
 
@@ -155,9 +141,9 @@ peer.setZone =
 	)
 {
 	return(
-		_alter(
-			sign.create( 'val', zone ),
-			sign.create( 'path', itemPath.chop( ).append( 'zone' ) )
+		alter(
+			ccot_sign.create( 'val', zone ),
+			ccot_sign.create( 'path', itemPath.chop( ).append( 'zone' ) )
 		)
 	);
 };
@@ -173,9 +159,9 @@ peer.setFontSize =
 	)
 {
 	return(
-		_alter(
-			sign.create( 'val', fontsize ),
-			sign.create( 'path', itemPath.chop( ).append( 'fontsize' ) )
+		alter(
+			ccot_sign.create( 'val', fontsize ),
+			ccot_sign.create( 'path', itemPath.chop( ).append( 'fontsize' ) )
 		)
 	);
 };
@@ -191,9 +177,9 @@ peer.setPNW =
 	)
 {
 	return(
-		_alter(
-			sign.create( 'val', pnw ),
-			sign.create( 'path', itemPath.chop( ).append( 'pnw' ) )
+		alter(
+			ccot_sign.create( 'val', pnw ),
+			ccot_sign.create( 'path', itemPath.chop( ).append( 'pnw' ) )
 		)
 	);
 };
@@ -213,28 +199,23 @@ peer.newLabel =
 		src;
 
 	src =
-		sign.create(
+		ccot_sign.create(
 			'val',
 				visual.label.create(
-					'fontsize',
-						fontsize,
-					'pnw',
-						pnw,
+					'fontsize', fontsize,
+					'pnw', pnw,
 					'doc',
 						visual.doc.create(
 							'twig:add',
 							'1',
-							visual.para.create(
-								'text',
-									text
-							)
+							visual.para.create( 'text', text )
 						)
 				),
 			'rank',
 				null
 		);
 
-	return _alter( src, newItemSign );
+	return alter( src, newItemSign );
 };
 
 
@@ -254,32 +235,25 @@ peer.newRelation =
 		src;
 
 	src =
-		sign.create(
+		ccot_sign.create(
 			'val',
 				visual.relation.create(
-					'item1key',
-						item1key,
-					'item2key',
-						item2key,
-					'pnw',
-						pnw,
-					'fontsize',
-						fontsize,
+					'item1key', item1key,
+					'item2key', item2key,
+					'pnw', pnw,
+					'fontsize', fontsize,
 					'doc',
 						visual.doc.create(
 							'twig:add',
 							'1',
-							visual.para.create(
-								'text',
-									text
-							)
+							visual.para.create( 'text', text )
 						)
 				),
 			'rank',
 				null
 		);
 
-	return _alter( src, newItemSign );
+	return alter( src, newItemSign );
 };
 
 
@@ -293,9 +267,9 @@ peer.moveToTop =
 	)
 {
 	return(
-		_alter(
-			sign.create( 'path', path.chop( )),
-			sign.create( 'rank', 0 )
+		alter(
+			ccot_sign.create( 'path', path.chop( )),
+			ccot_sign.create( 'rank', 0 )
 		)
 	);
 };
@@ -313,9 +287,9 @@ peer.insertText =
 	)
 {
 	return(
-		_alter(
-			sign.create( 'val', text ),
-			sign.create(
+		alter(
+			ccot_sign.create( 'val', text ),
+			ccot_sign.create(
 				'path', path.chop( 1 ),
 				'at1', offset
 			)
@@ -345,13 +319,13 @@ peer.removeText =
 	}
 
 	return(
-		_alter(
-			sign.create(
+		alter(
+			ccot_sign.create(
 				'path', path.chop( 1 ),
 				'at1', at1,
 				'at2', at1 + len
 			),
-			sign.create( )
+			ccot_sign.create( )
 		)
 	);
 };
@@ -452,8 +426,8 @@ peer.split =
 	)
 {
 	return(
-		_alter(
-			sign.create(
+		alter(
+			ccot_sign.create(
 				'path', path.chop( 1 ),
 				'at1', offset
 			),
@@ -473,9 +447,9 @@ peer.join =
 	)
 {
 	return(
-		_alter(
+		alter(
 			spliceSign,
-			sign.create(
+			ccot_sign.create(
 				'path', path.chop( 1 ),
 				'at1', at1
 			)
@@ -504,12 +478,12 @@ peer.removeItem =
 	r1 = pivot.rankOf( key );
 
 	return(
-		_alter(
-			sign.create(
+		alter(
+			ccot_sign.create(
 				'val', null,
 				'rank', r1
 			),
-			sign.create(
+			ccot_sign.create(
 				'path', path.chop( 1 ),
 				'rank', null
 			)

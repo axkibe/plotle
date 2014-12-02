@@ -15,6 +15,7 @@ testpad = testpad || { };
 | Imports
 */
 var
+	ccot_changeWrap,
 	ccot_changeWrapRay,
 	euclid,
 	jools,
