@@ -4,7 +4,9 @@
 
 
 var
-	design,
+	design_anchorEllipse,
+	design_anchorPoint,
+	design_anchorRect,
 	fontPool,
 	forms_noAccessToSpace,
 	gruga_noAccessToSpace,
@@ -47,13 +49,10 @@ gruga_noAccessToSpace =
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							-120
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', -120
 					)
 			),
 		'twig:add',
@@ -64,13 +63,10 @@ gruga_noAccessToSpace =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							-50
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', -50
 					)
 			),
 		'twig:add',
@@ -79,26 +75,18 @@ gruga_noAccessToSpace =
 				'style',
 					'genericButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									okButton.w,
-								'y',
-									okButton.n
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', okButton.w,
+								'y', okButton.n
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									okButton.w +
-									okButton.width,
-								'y',
-									okButton.n +
-									okButton.height
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', okButton.w + okButton.width,
+								'y', okButton.n + okButton.height
 							)
 					),
 				'text',
@@ -106,9 +94,9 @@ gruga_noAccessToSpace =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			)
 	);
 

@@ -3,19 +3,9 @@
 */
 
 
-/*
-| Export
-*/
 var
-	design;
-
-design = design || { };
-
-
-/*
-| Import
-*/
-var
+	design_anchorEllipse,
+	design_anchorPoint,
 	euclid;
 
 /*
@@ -32,7 +22,7 @@ if( JION )
 {
 	return {
 		id :
-			'design.anchorEllipse',
+			'design_anchorEllipse',
 		attributes :
 			{
 				pnw :
@@ -40,43 +30,35 @@ if( JION )
 						comment :
 							'point in north-west',
 						type :
-							'design.anchorPoint'
+							'design_anchorPoint'
 					},
 				pse :
 					{
 						comment :
 							'point in south-east',
 						type :
-							'design.anchorPoint'
+							'design_anchorPoint'
 					}
 			}
 	};
 }
 
 
-var
-	anchorEllipse;
-
-anchorEllipse = design.anchorEllipse;
-
-
 /*
 | ellipse filling the full frame
 | skewed a little to north west
 */
-anchorEllipse.fullSkewNW =
-	anchorEllipse.create(
-		'pnw',
-			design.anchorPoint.PNW,
-		'pse',
-			design.anchorPoint.PSE_M1
+design_anchorEllipse.fullSkewNW =
+	design_anchorEllipse.create(
+		'pnw', design_anchorPoint.PNW,
+		'pse', design_anchorPoint.PSE_M1
 	);
 
 
 /*
 | Computes a rect modelled relative to this rect.
 */
-anchorEllipse.prototype.compute =
+design_anchorEllipse.prototype.compute =
 	function(
 		frame
 	)

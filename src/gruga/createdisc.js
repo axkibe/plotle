@@ -4,7 +4,9 @@
 
 
 var
-	design,
+	design_anchorEllipse,
+	design_anchorPoint,
+	design_anchorRect,
 	discs,
 	fontPool,
 	gruga_createDisc,
@@ -79,30 +81,24 @@ gruga_createDisc =
 				'font',
 					dv.generic.font,
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.note.x,
-								'y',
-									dv.note.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.note.x,
+								'y', dv.note.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.note.x + dv.generic.width,
-								'y',
-									dv.note.y + dv.generic.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.note.x + dv.generic.width,
+								'y', dv.note.y + dv.generic.height
 							)
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'createLabel',
@@ -114,30 +110,24 @@ gruga_createDisc =
 				'font',
 					dv.generic.font,
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.label.x,
-								'y',
-									dv.label.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.label.x,
+								'y', dv.label.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.label.x + dv.generic.width,
-								'y',
-									dv.label.y + dv.generic.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.label.x + dv.generic.width,
+								'y', dv.label.y + dv.generic.height
 							)
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'createRelation',
@@ -151,30 +141,24 @@ gruga_createDisc =
 				'font',
 					dv.generic.font,
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.relation.x,
-								'y',
-									dv.relation.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.relation.x,
+								'y', dv.relation.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.relation.x + dv.generic.width,
-								'y',
-									dv.relation.y + dv.generic.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.relation.x + dv.generic.width,
+								'y', dv.relation.y + dv.generic.height
 							)
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'createPortal',
@@ -186,30 +170,24 @@ gruga_createDisc =
 				'font',
 					dv.generic.font,
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.portal.x,
-								'y',
-									dv.portal.y
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.portal.x,
+								'y', dv.portal.y
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'nw',
-								'x',
-									dv.portal.x + dv.generic.width,
-								'y',
-									dv.portal.y + dv.generic.height
+							design_anchorPoint.create(
+								'anchor', 'nw',
+								'x', dv.portal.x + dv.generic.width,
+								'y', dv.portal.y + dv.generic.height
 							)
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			)
 	);
 
