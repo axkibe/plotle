@@ -4,7 +4,9 @@
 
 
 var
-	design,
+	design_anchorEllipse,
+	design_anchorPoint,
+	design_anchorRect,
 	fontPool,
 	forms_user,
 	gruga_user,
@@ -46,13 +48,10 @@ gruga_user =
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							-120
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', -120
 					)
 			),
 		'twig:add',
@@ -63,13 +62,10 @@ gruga_user =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							-50
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', -50
 					)
 			),
 		'twig:add',
@@ -80,7 +76,7 @@ gruga_user =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.anchorPoint.PC
+					design_anchorPoint.PC
 			),
 		'twig:add',
 		'visitor3',
@@ -90,13 +86,10 @@ gruga_user =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							20
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', 20
 					)
 			),
 		'twig:add',
@@ -107,13 +100,10 @@ gruga_user =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							40
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', 40
 					)
 			),
 		'twig:add',
@@ -124,13 +114,10 @@ gruga_user =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							-50
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', -50
 					)
 			),
 		'twig:add',
@@ -141,13 +128,10 @@ gruga_user =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							-10
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', -10
 					)
 			),
 		'twig:add',
@@ -158,13 +142,10 @@ gruga_user =
 				'font',
 					fontPool.get( 16, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							10
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', 10
 					)
 			),
 		'twig:add',
@@ -173,26 +154,18 @@ gruga_user =
 				'style',
 					'genericButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									closeButton.w,
-								'y',
-									closeButton.n
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', closeButton.w,
+								'y', closeButton.n
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									closeButton.w +
-									closeButton.width,
-								'y',
-									closeButton.n +
-									closeButton.height
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', closeButton.w + closeButton.width,
+								'y', closeButton.n + closeButton.height
 							)
 					),
 				'text',
@@ -200,9 +173,9 @@ gruga_user =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			)
 	);
 
