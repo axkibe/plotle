@@ -5,7 +5,7 @@
 
 var
 	design,
-	forms,
+	forms_login,
 	fontPool,
 	gruga_login,
 	widgets;
@@ -49,7 +49,7 @@ var
 | Layout
 */
 gruga_login =
-	forms.login.create(
+	forms_login.create(
 		'twig:add',
 		'headline',
 			widgets.label.create(

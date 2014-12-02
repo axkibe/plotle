@@ -7,10 +7,7 @@
 | Export
 */
 var
-	forms,
 	forms_form;
-
-forms = forms || { };
 
 
 /*
@@ -33,7 +30,6 @@ var
 'use strict';
 
 
-forms.form = // FUTURE remove
 forms_form =
 	function( )
 {

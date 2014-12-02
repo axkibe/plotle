@@ -10,12 +10,10 @@
 | Imports
 */
 var
-	forms,
+	forms_form,
+	forms_nonExistingSpace,
 	jools,
 	root;
-
-
-forms = forms || { };
 
 
 /*
@@ -32,7 +30,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms.nonExistingSpace',
+			'forms_nonExistingSpace',
 		attributes :
 			{
 				hover :
@@ -53,7 +51,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms.form',
+									'forms_form',
 								func :
 									'concernsMark',
 								args :
@@ -132,7 +130,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.form',
+			'forms_form',
 		init :
 			[
 				'inherit',
@@ -144,16 +142,11 @@ if( JION )
 }
 
 
-var
-	nonExistingSpace;
-
-nonExistingSpace = forms.nonExistingSpace;
-
 
 /*
 | The space does not exist form.
 */
-nonExistingSpace.prototype._init =
+forms_nonExistingSpace.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -177,14 +170,14 @@ nonExistingSpace.prototype._init =
 				: ''
 		);
 
-	forms.form.init.call( this, inherit );
+	forms_form.init.call( this, inherit );
 };
 
 
 /*
 | A button of the form has been pushed.
 */
-nonExistingSpace.prototype.pushButton =
+forms_nonExistingSpace.prototype.pushButton =
 	function(
 		path
 		// shift,

@@ -5,19 +5,9 @@
 */
 
 
-/*
-| Export
-*/
 var
-	forms;
-
-forms = forms || { };
-
-
-/*
-| Imports
-*/
-var
+	forms_form,
+	forms_welcome,
 	jools,
 	root;
 
@@ -36,7 +26,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms.welcome',
+			'forms_welcome',
 		attributes :
 			{
 				hover :
@@ -57,7 +47,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms.form',
+									'forms_form',
 								func :
 									'concernsMark',
 								args :
@@ -125,12 +115,9 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.form',
+			'forms_form',
 		init :
-			[
-				'inherit',
-				'twigDup'
-			],
+			[ 'inherit', 'twigDup' ],
 		twig :
 			'->form-widgets'
 	};
@@ -140,7 +127,7 @@ if( JION )
 var
 	welcome;
 
-welcome = forms.welcome;
+welcome = forms_welcome;
 
 
 /*
@@ -164,14 +151,10 @@ welcome.prototype._init =
 
 	this.twig.headline =
 		this.twig.headline.create(
-			'text',
-				'welcome ' + ( this.username || '' ) + '!'
+			'text', 'welcome ' + ( this.username || '' ) + '!'
 		);
 
-	forms.form.init.call(
-		this,
-		inherit
-	);
+	forms_form.init.call( this, inherit );
 };
 
 
@@ -185,6 +168,8 @@ welcome.prototype.pushButton =
 		// ctrl
 	)
 {
+	var
+		buttonName;
 
 /**/if( CHECK )
 /**/{
@@ -194,9 +179,7 @@ welcome.prototype.pushButton =
 /**/	}
 /**/}
 
-	var
-		buttonName =
-			path.get( 4 );
+	buttonName = path.get( 4 );
 
 	switch( buttonName )
 	{

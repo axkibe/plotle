@@ -5,7 +5,7 @@
 
 var
 	design,
-	forms,
+	forms_space,
 	fontPool,
 	gruga_space,
 	widgets;
@@ -38,7 +38,7 @@ var
 | Layout
 */
 gruga_space =
-	forms.space.create(
+	forms_space.create(
 		'twig:add',
 		'headline',
 			widgets.label.create(

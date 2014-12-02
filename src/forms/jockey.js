@@ -7,10 +7,7 @@
 | Export
 */
 var
-	forms,
 	forms_jockey;
-
-forms = forms || { };
 
 
 /*
@@ -34,7 +31,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms.jockey',
+			'forms_jockey',
 		attributes :
 			{
 				hover :
@@ -101,7 +98,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.form',
+			'forms_form',
 		init :
 			[
 				'twigDup'
@@ -109,32 +106,24 @@ if( JION )
 		twig :
 			[
 				/* FUTURE
-				'forms.login',
-				'forms.moveTo',
-				'forms.noAccessToSpace',
-				'forms.nonExistingSpace',
-				'forms.signUp',
-				'forms.space',
-				'forms.user',
-				'forms.welcome'
+				'forms_login',
+				'forms_moveTo',
+				'forms_noAccessToSpace',
+				'forms_nonExistingSpace',
+				'forms_signUp',
+				'forms_space',
+				'forms_user',
+				'forms_welcome'
 				*/
 			]
 	};
 }
 
 
-var
-	jockey; // FUTURE remove
-
-jockey =
-forms_jockey =
-	forms.jockey;
-
-
 /*
 | Initializer.
 */
-jockey.prototype._init =
+forms_jockey.prototype._init =
 	function(
 		twigDup
 	)
@@ -204,13 +193,13 @@ jockey.prototype._init =
 /*
 | Returns the mark if the form jockey concerns a mark.
 */
-jockey.concernsMark =
+forms_jockey.concernsMark =
 	function(
 		mark
 	)
 {
 	return(
-		mark.containsPath( jockey.path )
+		mark.containsPath( forms_jockey.path )
 		? mark
 		: null
 	);
@@ -220,7 +209,7 @@ jockey.concernsMark =
 /*
 | Returns the appropriate form.
 */
-jockey.prototype.get =
+forms_jockey.prototype.get =
 	function(
 		name
 	)
@@ -232,7 +221,7 @@ jockey.prototype.get =
 /*
 | Cycles the focus in a form
 */
-jockey.prototype.cycleFocus =
+forms_jockey.prototype.cycleFocus =
 	function(
 		formName,
 		dir
@@ -254,7 +243,7 @@ jockey.prototype.cycleFocus =
 /*
 | A button has been pushed.
 */
-jockey.prototype.pushButton =
+forms_jockey.prototype.pushButton =
 	function(
 		path
 	)

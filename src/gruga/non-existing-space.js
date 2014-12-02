@@ -6,7 +6,7 @@
 var
 	design,
 	fontPool,
-	forms,
+	forms_nonExistingSpace,
 	gruga_nonExistingSpace,
 	widgets;
 
@@ -49,7 +49,7 @@ var
 | Layout
 */
 gruga_nonExistingSpace =
-	forms.nonExistingSpace.create(
+	forms_nonExistingSpace.create(
 		'twig:add',
 		'headline',
 			widgets.label.create(

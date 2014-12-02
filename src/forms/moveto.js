@@ -3,17 +3,12 @@
 */
 
 
-/*
-| Imports
-*/
 var
 	fabric,
-	forms,
+	forms_form,
+	forms_moveTo,
 	jools,
 	root;
-
-
-forms = forms || { };
 
 
 /*
@@ -30,7 +25,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms.moveTo',
+			'forms_moveTo',
 		attributes :
 			{
 				hover :
@@ -51,7 +46,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms.form',
+									'forms_form',
 								func :
 									'concernsMark',
 								args :
@@ -119,12 +114,9 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.form',
+			'forms_form',
 		init :
-			[
-				'inherit',
-				'twigDup'
-			],
+			[ 'inherit', 'twigDup' ],
 		twig :
 			'->form-widgets'
 	};
@@ -133,7 +125,7 @@ if( JION )
 var
 	moveTo;
 
-moveTo = forms.moveTo;
+moveTo = forms_moveTo;
 
 
 /*
@@ -167,7 +159,7 @@ moveTo.prototype._init =
 			);
 	}
 
-	forms.form.init.call( this, inherit );
+	forms_form.init.call( this, inherit );
 };
 
 

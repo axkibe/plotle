@@ -3,19 +3,9 @@
 */
 
 
-/*
-| Export
-*/
 var
-	forms;
-
-forms = forms || { };
-
-
-/*
-| Imports
-*/
-var
+	forms_form,
+	forms_noAccessToSpace,
 	root;
 
 
@@ -33,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms.noAccessToSpace',
+			'forms_noAccessToSpace',
 		attributes :
 			{
 				hover :
@@ -54,7 +44,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms.form',
+									'forms_form',
 								func :
 									'concernsMark',
 								args :
@@ -124,48 +114,39 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.form',
+			'forms_form',
 		init :
-			[
-				'inherit'
-			],
+			[ 'inherit' ],
 		twig :
 			'->form-widgets'
 	};
 }
 
 
-var
-	noAccessToSpace;
-
-noAccessToSpace = forms.noAccessToSpace;
-
-
 /*
 | The no access to space form.
 */
-noAccessToSpace.prototype._init =
+forms_noAccessToSpace.prototype._init =
 	function(
 		inherit
 	)
 {
-	forms.form.init.call(
-		this,
-		inherit
-	);
+	forms_form.init.call( this, inherit );
 };
 
 
 /*
 | A button of the form has been pushed.
 */
-noAccessToSpace.prototype.pushButton =
+forms_noAccessToSpace.prototype.pushButton =
 	function(
 		path
 		// shift,
 		// ctrl
 	)
 {
+	var
+		buttonName;
 
 /**/if( CHECK )
 /**/{
@@ -175,9 +156,7 @@ noAccessToSpace.prototype.pushButton =
 /**/	}
 /**/}
 
-	var
-		buttonName =
-			path.get( 4 );
+	buttonName = path.get( 4 );
 
 	switch( buttonName )
 	{

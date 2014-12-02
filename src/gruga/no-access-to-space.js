@@ -6,7 +6,7 @@
 var
 	design,
 	fontPool,
-	forms,
+	forms_noAccessToSpace,
 	gruga_noAccessToSpace,
 	widgets;
 
@@ -38,7 +38,7 @@ var
 | Layout
 */
 gruga_noAccessToSpace =
-	forms.noAccessToSpace.create(
+	forms_noAccessToSpace.create(
 		'twig:add',
 		'headline',
 			widgets.label.create(

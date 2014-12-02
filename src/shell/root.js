@@ -8,7 +8,7 @@ var
 	discs,
 	euclid,
 	fabric,
-	forms,
+	forms_jockey,
 	gruga_createDisc,
 	gruga_login,
 	gruga_mainDisc,
@@ -144,51 +144,26 @@ shell.root =
 	view =
 	this.view =
 		euclid.view.create(
-			'pan',
-				euclid.point.zero,
-			'fact',
-				0,
-			'width',
-				display.width,
-			'height',
-				display.height
+			'pan', euclid.point.zero,
+			'fact', 0,
+			'width', display.width,
+			'height', display.height
 		);
 
 	this._formJockey =
-		forms.jockey.create(
-			'hover',
-				jion.path.empty,
-			'mark',
-				null,
-			'path',
-				jion.path.empty
-				.append( 'forms' ),
-			'view',
-				view,
-			'twig:add',
-			'login',
-				gruga_login,
-			'twig:add',
-			'moveTo',
-				gruga_moveTo,
-			'twig:add',
-			'noAccessToSpace',
-				gruga_noAccessToSpace,
-			'twig:add',
-			'nonExistingSpace',
-				gruga_nonExistingSpace,
-			'twig:add',
-			'signUp',
-				gruga_signUp,
-			'twig:add',
-			'space',
-				gruga_space,
-			'twig:add',
-			'user',
-				gruga_user,
-			'twig:add',
-			'welcome',
-				gruga_welcome
+		forms_jockey.create(
+			'hover', jion.path.empty,
+			'mark', null,
+			'path', jion.path.empty.append( 'forms' ),
+			'view', view,
+			'twig:add', 'login', gruga_login,
+			'twig:add', 'moveTo', gruga_moveTo,
+			'twig:add', 'noAccessToSpace', gruga_noAccessToSpace,
+			'twig:add', 'nonExistingSpace', gruga_nonExistingSpace,
+			'twig:add', 'signUp', gruga_signUp,
+			'twig:add', 'space', gruga_space,
+			'twig:add', 'user', gruga_user,
+			'twig:add', 'welcome', gruga_welcome
 		);
 
 	this._discJockey =

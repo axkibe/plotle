@@ -41,7 +41,9 @@ var
 
 newList =
 	{
-		'ccot' : true
+		'ccot' : true,
+		'forms' : true,
+		'gruga' : true
 	};
 
 

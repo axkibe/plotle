@@ -3,19 +3,9 @@
 */
 
 
-/*
-| Export
-*/
 var
-	forms;
-
-forms = forms || { };
-
-
-/*
-| Imports
-*/
-var
+	forms_form,
+	forms_space,
 	jools,
 	root;
 
@@ -34,7 +24,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms.space',
+			'forms_space',
 		attributes :
 			{
 				hover :
@@ -55,7 +45,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms.form',
+									'forms_form',
 								func :
 									'concernsMark',
 								args :
@@ -123,7 +113,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms.form',
+			'forms_form',
 		init :
 			[
 				'inherit',
@@ -135,16 +125,10 @@ if( JION )
 }
 
 
-var
-	space;
-
-space = forms.space;
-
-
 /*
 | The space form.
 */
-space.prototype._init =
+forms_space.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -164,17 +148,14 @@ space.prototype._init =
 			);
 	}
 
-	forms.form.init.call(
-		this,
-		inherit
-	);
+	forms_form.init.call( this, inherit );
 };
 
 
 /*
 | A button of the form has been pushed.
 */
-space.prototype.pushButton =
+forms_space.prototype.pushButton =
 	function(
 		path
 		// shift,
