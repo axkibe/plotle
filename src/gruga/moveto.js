@@ -4,7 +4,9 @@
 
 
 var
-	design,
+	design_anchorEllipse,
+	design_anchorPoint,
+	design_anchorRect,
 	fontPool,
 	forms_moveTo,
 	gruga_moveTo,
@@ -66,13 +68,10 @@ gruga_moveTo =
 				'font',
 					fontPool.get( 22, 'ca' ),
 				'designPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							-150
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', -150
 					)
 			),
 		'twig:add',
@@ -81,26 +80,18 @@ gruga_moveTo =
 				'style',
 					'portalButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									ideoloomHomeButton.w,
-								'y',
-									ideoloomHomeButton.n
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', ideoloomHomeButton.w,
+								'y', ideoloomHomeButton.n
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									ideoloomHomeButton.w +
-									ideoloomHomeButton.width,
-								'y',
-									ideoloomHomeButton.n +
-									ideoloomHomeButton.height
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', ideoloomHomeButton.w + ideoloomHomeButton.width,
+								'y', ideoloomHomeButton.n + ideoloomHomeButton.height
 							)
 					),
 				'text',
@@ -110,16 +101,13 @@ gruga_moveTo =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', 0
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'ideoloomSandboxButton',
@@ -127,20 +115,16 @@ gruga_moveTo =
 				'style',
 					'portalButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									ideoloomSandboxButton.w,
-								'y',
-									ideoloomSandboxButton.n
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', ideoloomSandboxButton.w,
+								'y', ideoloomSandboxButton.n
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
+							design_anchorPoint.create(
+								'anchor', 'c',
 								'x',
 									ideoloomSandboxButton.w +
 									ideoloomSandboxButton.width,
@@ -156,16 +140,13 @@ gruga_moveTo =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', 0
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'userHomeButton',
@@ -173,26 +154,18 @@ gruga_moveTo =
 				'style',
 					'portalButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									userHomeButton.w,
-								'y',
-									userHomeButton.n
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', userHomeButton.w,
+								'y', userHomeButton.n
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									userHomeButton.w +
-									userHomeButton.width,
-								'y',
-									userHomeButton.n +
-									userHomeButton.height
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', userHomeButton.w + userHomeButton.width,
+								'y', userHomeButton.n + userHomeButton.height
 							)
 					),
 				'text',
@@ -202,16 +175,13 @@ gruga_moveTo =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							0,
-						'y',
-							0
+					design_anchorPoint.create(
+						'anchor', 'c',
+						'x', 0,
+						'y', 0
 					),
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			)
 	);
 

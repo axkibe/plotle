@@ -1,24 +1,14 @@
 /*
 | A point anchored within a frame.
+|
+| FIXME uppercase names
 */
 
 
-/*
-| Export
-*/
 var
-	design;
-
-
-design = design || { };
-
-
-/*
-| Import
-*/
-var
-	jools,
-	euclid;
+	design_anchorPoint,
+	euclid,
+	jools;
 
 /*
 | Capsule
@@ -32,34 +22,29 @@ var
 */
 if( JION )
 {
-	return {
+	return{
 		id :
-			'design.anchorPoint',
+			'design_anchorPoint',
 		attributes :
 			{
 				anchor :
 					{
 						comment :
 							'compass of the anchor',
-
 						type :
 							'String'
 					},
-
 				x :
 					{
 						comment :
 							'x-distance',
-
 						type :
 							'Integer'
 					},
-
 				y :
 					{
 						comment :
 							'y-distance',
-
 						type :
 							'Integer'
 					}
@@ -68,69 +53,51 @@ if( JION )
 }
 
 
-var
-	anchorPoint;
-
-anchorPoint = design.anchorPoint;
-
-
 /*
 | Point in center.
 */
-anchorPoint.PC =
-	anchorPoint.create(
-		'anchor',
-			'c',
-		'x',
-			0,
-		'y',
-			0
+design_anchorPoint.PC =
+	design_anchorPoint.create(
+		'anchor', 'c',
+		'x', 0,
+		'y', 0
 	);
 
 
 /*
 | Point in north west.
 */
-anchorPoint.PNW =
-	anchorPoint.create(
-		'anchor',
-			'nw',
-		'x',
-			0,
-		'y',
-			0
+design_anchorPoint.PNW =
+	design_anchorPoint.create(
+		'anchor', 'nw',
+		'x', 0,
+		'y', 0
 	);
 
 /*
 | Point in south east.
 */
-anchorPoint.PSE =
-	anchorPoint.create(
-		'anchor',
-			'se',
-		'x',
-			0,
-		'y',
-			0
+design_anchorPoint.PSE =
+	design_anchorPoint.create(
+		'anchor', 'se',
+		'x', 0,
+		'y', 0
 	);
 
 /*
 | Point in south east minus 1.
 */
-anchorPoint.PSE_M1 =
-	anchorPoint.create(
-		'anchor',
-			'se',
-		'x',
-			-1,
-		'y',
-			-1
+design_anchorPoint.PSE_M1 =
+	design_anchorPoint.create(
+		'anchor', 'se',
+		'x', -1,
+		'y', -1
 	);
 
 /*
 | Computes the anchorPoint to an euclid one.
 */
-anchorPoint.prototype.compute =
+design_anchorPoint.prototype.compute =
 	function(
 		frame
 	)
@@ -158,99 +125,74 @@ anchorPoint.prototype.compute =
 	{
 		case 'c'  :
 
-			return (
+			return(
 				euclid.point.create(
-					'x',
-						half( pnw.x + pse.x ) + this.x,
-					'y',
-						half( pnw.y + pse.y ) + this.y
+					'x', half( pnw.x + pse.x ) + this.x,
+					'y', half( pnw.y + pse.y ) + this.y
 				)
 			);
 
 		case 'n'  :
 
-			return (
+			return(
 				euclid.point.create(
-					'x',
-						half( pnw.x + pse.x ) + this.x,
-					'y',
-						pnw.y + this.y
+					'x', half( pnw.x + pse.x ) + this.x,
+					'y', pnw.y + this.y
 				)
 			);
 
 		case 'ne' :
 
-			return (
+			return(
 				euclid.point.create(
-					'x',
-						pse.x + this.x,
-					'y',
-						pnw.y + this.y
+					'x', pse.x + this.x,
+					'y', pnw.y + this.y
 				)
 			);
 
 		case 'e'  :
 
-			return (
+			return(
 				euclid.point.create(
-					'x',
-						pse.x + this.x,
-					'y',
-						half( pnw.y + pse.y ) + this.y
+					'x', pse.x + this.x,
+					'y', half( pnw.y + pse.y ) + this.y
 				)
 			);
 
 		case 'se' :
 
-			return (
-				pse.add(
-					this.x,
-					this.y
-				)
-			);
+			return pse.add( this.x, this.y );
 
 		case 's'  :
 
-			return (
+			return(
 				euclid.point.create(
-					'x',
-						half( pnw.x + pse.x ) + this.x,
-					'y',
-						pse.y + this.y
+					'x', half( pnw.x + pse.x ) + this.x,
+					'y', pse.y + this.y
 				)
 			);
 
 		case 'sw' :
 
-			return (
+			return(
 				euclid.point.create(
-					'x',
-						pnw.x + this.x,
-					'y',
-						pse.y + this.y
+					'x', pnw.x + this.x,
+					'y', pse.y + this.y
 				)
 			);
 
 		case 'w'  :
 
-			return (
+			return(
 				euclid.point.create(
-					'x',
-						pnw.x + this.x,
-					'y',
-						half( pnw.y + pse.y ) +
-						this.y
+					'x', pnw.x + this.x,
+					'y', half( pnw.y + pse.y ) + this.y
 				)
 			);
 
 		case 'nw' :
 
-			return (
-				pnw.add(
-					this.x,
-					this.y
-				)
-			);
+			return pnw.add( this.x, this.y );
 
 		default :
 

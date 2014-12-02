@@ -3,21 +3,8 @@
 */
 
 
-/*
-| Export
-*/
 var
-	design;
-
-
-design =
-	design || { };
-
-
-/*
-| Import
-*/
-var
+	design_anchorRect,
 	euclid;
 
 /*
@@ -34,7 +21,7 @@ if( JION )
 {
 	return {
 		id :
-			'design.anchorRect',
+			'design_anchorRect',
 		attributes :
 			{
 				pnw :
@@ -42,7 +29,7 @@ if( JION )
 						comment :
 							'point in north-west',
 						type :
-							'design.anchorPoint'
+							'design_anchorPoint'
 					},
 
 				pse :
@@ -50,32 +37,24 @@ if( JION )
 						comment :
 							'point in south-east',
 						type :
-							'design.anchorPoint'
+							'design_anchorPoint'
 					}
 			}
 	};
 }
 
 
-var
-	anchorRect;
-
-anchorRect = design.anchorRect;
-
-
 /*
 | Computes a rect modelled relative to this rect.
 */
-anchorRect.prototype.compute =
+design_anchorRect.prototype.compute =
 	function(
 		frame
 	)
 {
 	return euclid.rect.create(
-		'pnw',
-			this.pnw.compute( frame ),
-		'pse',
-			this.pse.compute( frame )
+		'pnw', this.pnw.compute( frame ),
+		'pse', this.pse.compute( frame )
 	);
 };
 

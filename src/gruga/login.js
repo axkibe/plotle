@@ -4,7 +4,9 @@
 
 
 var
-	design,
+	design_anchorEllipse,
+	design_anchorPoint,
+	design_anchorRect,
 	forms_login,
 	fontPool,
 	gruga_login,
@@ -58,7 +60,7 @@ gruga_login =
 				'font',
 					fontPool.get( 22, 'la' ),
 				'designPos',
-					design.anchorPoint.create(
+					design_anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -75,7 +77,7 @@ gruga_login =
 				'font',
 					fontPool.get( 16, 'la' ),
 				'designPos',
-					design.anchorPoint.create(
+					design_anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -92,7 +94,7 @@ gruga_login =
 				'font',
 					fontPool.get( 16, 'la' ),
 				'designPos',
-					design.anchorPoint.create(
+					design_anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -109,7 +111,7 @@ gruga_login =
 				'font',
 					fontPool.get( 14, 'car' ),
 				'designPos',
-					design.anchorPoint.create(
+					design_anchorPoint.create(
 						'anchor',
 							'c',
 						'x',
@@ -128,24 +130,18 @@ gruga_login =
 				'maxlen',
 					100,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									-80,
-								'y',
-									-67
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', -80,
+								'y', -67
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									130,
-								'y',
-									-42
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', 130,
+								'y', -42
 							)
 					)
 			),
@@ -161,24 +157,18 @@ gruga_login =
 				'maxlen',
 					100,
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									-80,
-								'y',
-									-27
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', -80,
+								'y', -27
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									130,
-								'y',
-									-2
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', 130,
+								'y', -2
 							)
 					)
 			),
@@ -188,26 +178,18 @@ gruga_login =
 				'style',
 					'genericButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									loginButton.w,
-								'y',
-									loginButton.n
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', loginButton.w,
+								'y', loginButton.n
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									loginButton.w +
-									loginButton.width,
-								'y',
-									loginButton.n +
-									loginButton.height
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', loginButton.w + loginButton.width,
+								'y', loginButton.n + loginButton.height
 							)
 					),
 				'text',
@@ -215,9 +197,9 @@ gruga_login =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'closeButton',
@@ -225,26 +207,18 @@ gruga_login =
 				'style',
 					'genericButton',
 				'designFrame',
-					design.anchorRect.create(
+					design_anchorRect.create(
 						'pnw',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									closeButton.w,
-								'y',
-									closeButton.n
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', closeButton.w,
+								'y', closeButton.n
 							),
 						'pse',
-							design.anchorPoint.create(
-								'anchor',
-									'c',
-								'x',
-									closeButton.w +
-									closeButton.width,
-								'y',
-									closeButton.n +
-									closeButton.height
+							design_anchorPoint.create(
+								'anchor', 'c',
+								'x', closeButton.w + closeButton.width,
+								'y', closeButton.n + closeButton.height
 							)
 					),
 				'text',
@@ -252,9 +226,9 @@ gruga_login =
 				'font',
 					fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design.anchorPoint.PC,
+					design_anchorPoint.PC,
 				'shape',
-					design.anchorEllipse.fullSkewNW
+					design_anchorEllipse.fullSkewNW
 			)
 	);
 

@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'designed position of the text',
 						type :
-							'design.anchorPoint'
+							'design_anchorPoint'
 					},
 				hover :
 					{
