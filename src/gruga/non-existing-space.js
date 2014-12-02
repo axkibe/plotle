@@ -7,7 +7,7 @@ var
 	design,
 	fontPool,
 	forms,
-	gruga_nonExistigSpace,
+	gruga_nonExistingSpace,
 	widgets;
 
 
