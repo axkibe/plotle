@@ -54,7 +54,7 @@ if( JION )
 						comment :
 							'designed frame (using anchors',
 						type :
-							'design.anchorRect'
+							'design_anchorRect'
 					},
 				// FIXME deduce from mark
 				focusAccent :
@@ -154,15 +154,11 @@ checkbox.prototype._init =
 {
 	if( this.superFrame )
 	{
-		this.frame =
-			this.designFrame.compute(
-				this.superFrame
-			);
+		this.frame = this.designFrame.compute( this.superFrame );
 	}
 	else
 	{
-		this.frame =
-			null;
+		this.frame = null;
 	}
 
 };
@@ -176,11 +172,7 @@ jools.lazyValue(
 	'checkIcon',
 	function( )
 	{
-		return(
-			icons.check.create(
-				'pc', this.frame.pc
-			)
-		);
+		return icons.check.create( 'pc', this.frame.pc );
 	}
 );
 
@@ -231,12 +223,7 @@ checkbox.prototype.click =
 		return null;
 	}
 
-	if(
-		this.frame.within(
-			euclid.view.proper,
-			p
-		)
-	)
+	if( this.frame.within( euclid.view.proper, p ) )
 	{
 		root.setPath(
 			this.path.append( 'checked' ),

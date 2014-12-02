@@ -156,21 +156,6 @@ var fail =
 };
 
 
-/*
-| Throws a reject if condition is not met.
-*/
-jools.check =
-	function( condition )
-{
-	if( !condition )
-	{
-		fail(
-			arguments,
-			1
-		);
-	}
-};
-
 
 /*
 | Throws a reject if v is not within limits

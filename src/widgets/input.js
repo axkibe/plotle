@@ -47,7 +47,7 @@ if( JION )
 						comment :
 							'designed frame (using anchors',
 						type :
-							'design.anchorRect'
+							'design_anchorRect'
 					},
 				// FIXME deduce from mark
 				focusAccent :
@@ -194,20 +194,14 @@ input.prototype._init =
 	{
 		frame =
 		this.frame =
-			this.designFrame.compute(
-				this.superFrame
-			);
+			this.designFrame.compute( this.superFrame );
 
 		this._shape =
 			euclid.roundRect.create(
-				'pnw',
-					euclid.point.zero,
-				'pse',
-					frame.pse.sub( frame.pnw ),
-				'a',
-					7,
-				'b',
-					3
+				'pnw', euclid.point.zero,
+				'pse', frame.pse.sub( frame.pnw ),
+				'a', 7,
+				'b', 3
 			);
 	}
 	else
@@ -219,16 +213,14 @@ input.prototype._init =
 	}
 
 
-	this._pitch =
-		input._pitch;
+	this._pitch = input._pitch;
 };
 
 
 /*
 | Default distance of text
 */
-input._pitch =
-	euclid.point.create( 'x', 8, 'y', 3 );
+input._pitch = euclid.point.create( 'x', 8, 'y', 3 );
 
 
 /*
@@ -266,10 +258,7 @@ input.prototype.getOffsetAt =
 
 	if( password )
 	{
-		mw =
-			this.maskWidth( font.size )
-			+
-			this.maskKern( font.size );
+		mw = this.maskWidth( font.size ) + this.maskKern( font.size );
 	}
 
 	for( a = 0; a < value.length; a++ )

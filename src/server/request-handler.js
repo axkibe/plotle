@@ -154,16 +154,30 @@ serveAlter =
 		return replyError( 'invalid seq' );
 	}
 
-	// translates the changes if not most recent
-	for( a = seq; a < seqZ; a++ )
+	try
 	{
-		changeWrapRay = spaceBox.getChangeSkid( a ).transform( changeWrapRay );
-	}
+		// translates the changes if not most recent
+		for( a = seq; a < seqZ; a++ )
+		{
+			changeWrapRay = spaceBox.getChangeSkid( a ).transform( changeWrapRay );
+		}
 
-	// this does not yield, its write and forget.
-	spaceBox =
-	root.$spaces[ spaceRef.fullname ] =
-		spaceBox.appendChanges( changeWrapRay, request.username );
+		// this does not yield, its write and forget.
+		spaceBox =
+		root.$spaces[ spaceRef.fullname ] =
+			spaceBox.appendChanges( changeWrapRay, request.username );
+	}
+	catch( error )
+	{
+		if( error.nonFatal && !config.develServer )
+		{
+			return replyError( error.message );
+		}
+		else
+		{
+			throw error;
+		}
+	}
 
 	process.nextTick(
 		function( ) { root.wake( spaceRef ); }
@@ -348,7 +362,7 @@ serveUpdate =
 	{
 		console.log( err.stack );
 
-		return jools.reject( 'command not valid jion' );
+		return replyError( 'command not valid jion' );
 	}
 
 	username = request.username;
@@ -365,19 +379,19 @@ serveUpdate =
 		root.$users[ username ].pass !== passhash
 	)
 	{
-		throw jools.reject( 'Invalid password' );
+		return replyError( 'Invalid password' );
 	}
 
 	spaceBox = root.$spaces[ spaceRef.fullname ];
 
 	if( !spaceBox )
 	{
-		return jools.reject( 'Unknown space' );
+		return replyError( 'Unknown space' );
 	}
 
 	if ( !( seq >= 0 && seq <= spaceBox.seqZ ) )
 	{
-		return jools.reject( 'Invalid or missing seq: ' + seq );
+		return replyError( 'Invalid or missing seq: ' + seq );
 	}
 
 	asw = requestHandler.conveyUpdate( seq, spaceRef );

@@ -67,6 +67,38 @@ if( SERVER )
 }
 
 
+var
+	check;
+
+/*
+| Comfort routine, fails if condition is false.
+|
+| The error is marked non fatal for the server,
+| since a faulty client can raise it and is not necessarily
+| a coding error on the server.
+*/
+check =
+	function(
+		condition, // condition to check
+		place,     // place where check happens
+		message    // message to throw when it fails
+	)
+{
+	var
+		err;
+
+	if( condition )
+	{
+		return;
+	}
+
+	err = new Error( place + ' ' + message );
+
+	err.nonFatal = true;
+
+	throw err;
+};
+
 
 /*
 | The type of this change.
@@ -504,9 +536,9 @@ ccot_change.prototype._changeTreeSet =
 
 	key = null;
 
-	jools.check( trg.at1 === undefined, cm, 'trg.at1 must not exist.' );
+	check( trg.at1 === undefined, cm, 'trg.at1 must not exist.' );
 
-	jools.check( src.val !== undefined, cm, 'src.val missing' );
+	check( src.val !== undefined, cm, 'src.val missing' );
 
 	// if $new is given, replaces it with a unique ID
 	if( trg.path.get( -1 ) === '$new' )
@@ -604,11 +636,11 @@ ccot_change.prototype._changeTreeInsert =
 
 	trg = this.trg;
 
-	jools.check( trg.path.reflect === 'jion.path', cm, 'trg.path missing' );
+	check( trg.path.reflect === 'jion.path', cm, 'trg.path missing' );
 
 	str = tree.getPath( trg.path );
 
-	jools.check( jools.isString( str ), cm, 'trg.path signates no string' );
+	check( jools.isString( str ), cm, 'trg.path signates no string' );
 
 	// where trg span should end
 	tat2 = trg.at1 + src.val.length;
@@ -655,7 +687,7 @@ ccot_change.prototype._changeTreeRemove =
 
 	trg = this.trg;
 
-	jools.check( src.path.reflect === 'jion.path', cm, 'src.path missing' );
+	check( src.path.reflect === 'jion.path', cm, 'src.path missing' );
 
 	str = tree.getPath( src.path );
 
@@ -725,23 +757,23 @@ ccot_change.prototype._changeTreeJoin =
 
 	at1 = trg.at1;
 
-	jools.check( at1 !== undefined, cm, 'trg.at1 missing' );
+	check( at1 !== undefined, cm, 'trg.at1 missing' );
 
 	text = tree.getPath( path );
 
-	jools.check( jools.isString( text ), cm, 'trg signates no text' );
+	check( jools.isString( text ), cm, 'trg signates no text' );
 
 	key = path.get( -2 );
 
 	pivot = tree.getPath( path.shorten( 3 ) );
 
-	jools.check( pivot.ranks, cm, 'pivot has no ranks' );
+	check( pivot.ranks, cm, 'pivot has no ranks' );
 
 	kn = pivot.rankOf( key );
 
-	jools.check( kn >= 0, cm, 'invalid line key (1)' );
+	check( kn >= 0, cm, 'invalid line key (1)' );
 
-	jools.check( kn < pivot.ranks.length, cm, 'cannot join last line' );
+	check( kn < pivot.ranks.length, cm, 'cannot join last line' );
 
 	key2 = pivot.ranks[ kn + 1 ];
 
@@ -808,9 +840,9 @@ ccot_change.prototype._changeTreeSplit =
 
 	pivot = tree.getPath( path.shorten( 3 ) );
 
-	jools.check( jools.isString( text ), cm, 'src signates no text' );
+	check( jools.isString( text ), cm, 'src signates no text' );
 
-	jools.check( pivot.ranks, cm, 'pivot has no ranks' );
+	check( pivot.ranks, cm, 'pivot has no ranks' );
 
 	if( trg.path !== undefined )
 	{
@@ -836,7 +868,7 @@ ccot_change.prototype._changeTreeSplit =
 
 	kn = pivot.rankOf( key );
 
-	jools.check( kn >= 0, cm, 'invalid line key ( 2 )' );
+	check( kn >= 0, cm, 'invalid line key ( 2 )' );
 
 	para1 = pivot.twig[ key ];
 
@@ -885,24 +917,19 @@ ccot_change.prototype._changeTreeRank =
 
 	trg = this.trg;
 
-	jools.check( src.path !== undefined, cm, 'src.path not present' );
+	check( src.path !== undefined, cm, 'src.path not present' );
 
-	jools.check( trg.rank !== undefined, cm, 'trg.rank not present' );
+	check( trg.rank !== undefined, cm, 'trg.rank not present' );
 
 	pivot = tree.getPath( src.path.shorten( 2 ) );
 
-	jools.check( pivot.ranks !== undefined, cm, 'pivot has no ranks' );
+	check( pivot.ranks !== undefined, cm, 'pivot has no ranks' );
 
 	key = src.path.get( -1 );
 
 	orank = pivot.rankOf( key );
 
-	if ( orank < 0 )
-	{
-		throw jools.reject(
-			'invalid key :' + key
-		);
-	}
+	check( orank >= 0, cm, 'invalid key' );
 
 	// FIXME if (orank === trg.rank) return null;
 

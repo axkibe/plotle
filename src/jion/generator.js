@@ -42,6 +42,7 @@ var
 newList =
 	{
 		'ccot' : true,
+		'design' : true,
 		'forms' : true,
 		'gruga' : true
 	};
