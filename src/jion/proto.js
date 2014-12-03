@@ -266,6 +266,19 @@ jion_proto.rayGet =
 		idx
 	)
 {
+	if( idx < 0 )
+	{
+		idx += this.length;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( idx < 0 || idx >= this.length )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+	
 	return this.ray[ idx ];
 };
 
@@ -304,6 +317,19 @@ jion_proto.raySet =
 		e
 	)
 {
+	if( idx < 0 )
+	{
+		idx += this.length;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( idx < 0 || idx >= this.length )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+	
 	return this.create( 'ray:set', idx, e );
 };
 

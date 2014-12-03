@@ -96,7 +96,7 @@ repl[ '_eval'.substr( 1 ) ] =
 
 		if( history.length > maxHistory )
 		{
-			history.unshift( );
+			history.shift( );
 		}
 
 		defaultEval.call( repl, cmd, context, filename, callback );

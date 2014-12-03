@@ -5,18 +5,8 @@
 */
 
 
-/*
-| Export.
-*/
 var
-	jion;
-
-jion = jion || { };
-
-/*
-| Imports.
-*/
-var
+	jion_path,
 	jools;
 
 
@@ -34,43 +24,13 @@ if( JION )
 {
 	return {
 		id :
-			'jion.path',
-		attributes :
-			{
-				'array' :
-				{
-					comment :
-						'the ajax path',
-					type :
-						'Object',
-					assign :
-						null,
-					defaultValue :
-						undefined
-				},
-
-				'_sliced' :
-				{
-					comment :
-						'true if the array is already sliced',
-					type :
-						'Boolean',
-					assign :
-						null,
-					defaultValue :
-						undefined
-				}
-			},
-		init :
-			[ 'array', '_sliced' ],
+			'jion_path',
+		ray :
+			[ 'String' ],
 		equals :
 			false
 	};
 }
-
-
-var
-	path;
 
 
 /*
@@ -78,125 +38,32 @@ var
 */
 if( SERVER )
 {
+	jion_path = require( '../jion/this' )( module );
+
 	jools = require( '../jools/jools' );
-
-	path = require( '../jion/this' )( module );
 }
-else
-{
-	path = jion.path;
-}
-
-
-/*
-| Initializer.
-*/
-path.prototype._init =
-	function(
-		array,
-		_sliced
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( !Array.isArray( array ) )
-/**/	{
-/**/		throw new Error(
-/**/			'path array not an array'
-/**/		);
-/**/	}
-/**/}
-
-	if( _sliced !== true )
-	{
-		array = array.slice( );
-	}
-
-	this.length = array.length;
-
-/**/if( CHECK )
-/**/{
-/**/	array = Object.freeze( array );
-/**/}
-
-	this._path = array;
-};
-
-
-/*
-| Returns the arc at index i.
-|
-| FIXME base indizes on strings instead of numbers
-*/
-path.prototype.get =
-	function(
-		idx
-	)
-{
-	if( idx < 0 )
-	{
-		idx += this.length;
-	}
-
-/**/if( CHECK )
-/**/{
-/**/	if( idx < 0 || idx >= this.length )
-/**/	{
-/**/		throw new Error( 'invalid get: ' + idx );
-/**/	}
-/**/}
-
-	return this._path[ idx ];
-};
 
 
 /*
 | Returns a path with key appended
-|
-| FIXME cache
 */
 jools.lazyFunctionString(
-	path.prototype,
+	jion_path.prototype,
 	'append',
 	function( key )
-{
-	var
-		arr;
-
-	arr = this._path.slice( );
-
-	arr.push( key );
-
-	return(
-		path.create(
-			'array', arr,
-			'_sliced', true
-		)
-	);
-}
+	{
+		return this.create( 'ray:append', key );
+	}
 );
 
 
 /*
 | Same as append but without caching.
 */
-path.prototype.appendNC =
+jion_path.prototype.appendNC =
 	function( key )
 {
-	var
-		arr;
-
-	arr = this._path.slice( );
-
-	arr.push( key );
-
-	return(
-		path.create(
-			'array', arr,
-			'_sliced', true
-		)
-	);
+	return this.create( 'ray:append', key );
 };
 
 
@@ -205,41 +72,30 @@ path.prototype.appendNC =
 |
 | FIXME cache
 */
-path.prototype.chop =
+jion_path.prototype.chop =
 	function(
 		n // if not undefined chop this amount of items;
 		//// defaults to 1
 	)
 {
 	var
-		arr;
+		ray;
 
 	if( n === 0 )
 	{
 		return this;
 	}
 
-	arr = this._path.slice( );
+	ray = this.ray.slice( );
 
-	arr.shift( );
+	ray.shift( );
 
 	if( n > 0 )
 	{
-		return(
-			path.create(
-				'array', arr,
-				'_sliced', true
-			)
-			.chop( n - 1 )
-		);
+		return this.create( 'ray:init', ray ).chop( n - 1 );
 	}
 
-	return(
-		path.create(
-			'array', arr,
-			'_sliced', true
-		)
-	);
+	return this.create( 'ray:init', ray );
 };
 
 
@@ -249,15 +105,16 @@ path.prototype.chop =
 |
 | FUTURE cache
 */
-path.prototype.shorten =
+jion_path.prototype.shorten =
 	function(
 		n
 	)
 {
 	var
-		arr;
+		a,
+		ray;
 
-	arr = this._path.slice( );
+	ray = this.ray.slice( );
 
 	if( n === undefined )
 	{
@@ -268,32 +125,21 @@ path.prototype.shorten =
 /**/{
 /**/	if( n > this.length )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid shorten'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
 	if( n === this.length )
 	{
-		return path.empty;
+		return jion_path.empty;
 	}
 
-	for(
-		var a = 0;
-		a < n;
-		a++
-	)
+	for( a = 0; a < n; a++ )
 	{
-		arr.pop( );
+		ray.pop( );
 	}
 
-	return(
-		path.create(
-			'array', arr,
-			'_sliced', true
-		)
-	);
+	return this.create( 'ray:init', ray );
 };
 
 
@@ -302,7 +148,7 @@ path.prototype.shorten =
 |
 | FIXME cache
 */
-path.prototype.limit =
+jion_path.prototype.limit =
 	function(
 		n
 	)
@@ -324,87 +170,40 @@ path.prototype.limit =
 
 	if( n === 0 )
 	{
-		return path.empty;
+		return jion_path.empty;
 	}
 
 
-	return(
-		path.create(
-			'array', this._path.slice( 0, n ),
-			'_sliced', true
-		)
-	);
+	return this.create( 'ray:init', this.ray.slice( 0, n ) );
 };
 
 /*
 | Returns a path with the first item prepended.
 |
 | FIXME cache
-| FIXME call Prepend
 */
-path.prototype.prepend =
+jion_path.prototype.prepend =
 	function(
 		key
 	)
 {
 	var
-		arr;
+		ray;
 
-	arr = this._path.slice( );
+	ray = this.ray.slice( );
 
-	arr.unshift( key );
+	ray.unshift( key );
 
-	return(
-		path.create(
-			'array',
-				arr,
-			'_sliced',
-				true
-		)
-	);
-};
-
-
-/*
-| Returns a path with key indexed by i set
-*/
-path.prototype.set =
-	function( idx, key )
-{
-	var
-		arr;
-
-	arr = this._path.slice( );
-
-	if( idx < 0 )
-	{
-		idx +=
-			this.length;
-	}
-
-/**/if( CHECK )
-/**/{
-/**/	if( idx < 0 || idx >= this.length )
-/**/	{
-/**/		throw new Error( 'invalid get' );
-/**/	}
-/**/}
-
-	arr[ idx ] = key;
-
-	return(
-		path.create(
-			'array', arr,
-			'_sliced', true
-		)
-	);
+	return this.create( 'ray:init', ray );
 };
 
 
 /*
 | Returns true if this path is the same as another.
+|
+| FIXME this ought to be autocreated
 */
-path.prototype.equals =
+jion_path.prototype.equals =
 	function( o )
 {
 	var
@@ -421,9 +220,9 @@ path.prototype.equals =
 		return true;
 	}
 
-	tp = this._path,
+	tp = this.ray,
 
-	op = o._path;
+	op = o.ray;
 
 	if( tp.length !== op.length )
 	{
@@ -447,7 +246,7 @@ path.prototype.equals =
 |
 | FIXME: optimize by using local variables
 */
-path.prototype.subPathOf =
+jion_path.prototype.subPathOf =
 	function(
 		o,     // the other path
 		len    // the length of this path to consider.
@@ -484,7 +283,7 @@ path.prototype.subPathOf =
 		a++
 	)
 	{
-		if( this._path[ a ] !== o._path[ a ] )
+		if( this.ray[ a ] !== o.ray[ a ] )
 		{
 			return false;
 		}
@@ -498,7 +297,7 @@ path.prototype.subPathOf =
 | Turns the path to a string.
 */
 jools.lazyValue(
-	path.prototype,
+	jion_path.prototype,
 	'string',
 	function( )
 	{
@@ -506,9 +305,9 @@ jools.lazyValue(
 			a,
 			aZ,
 			b,
-			path;
+			ray;
 
-		path = this._path,
+		ray = this.ray,
 
 		b = [ '[ '[ 0 ] ]; // FUTURE jshint bug
 
@@ -520,7 +319,7 @@ jools.lazyValue(
 		{
 			b.push(
 				( a > 0 ?  ', ' : ' ' ),
-				path[ a ]
+				ray[ a ]
 			);
 		}
 
@@ -534,7 +333,7 @@ jools.lazyValue(
 /*
 | CreateFromJSON
 */
-path.createFromJSON =
+jion_path.createFromJSON =
 	function( json )
 {
 	// FIXME this is a dirty hack and ought to be removed.
@@ -548,17 +347,17 @@ path.createFromJSON =
 		throw new Error( 'invalid JSON, path is no array' );
 	}
 
-	return path.create( 'array', json );
+	return jion_path.create( 'ray:init', json );
 };
 
 
 /*
 | Jsonfy.
 */
-path.prototype.toJSON =
+jion_path.prototype.toJSON =
 	function( )
 {
-	return this._path;
+	return this.ray;
 };
 
 
@@ -566,7 +365,7 @@ path.prototype.toJSON =
 | Returns true is this path is empty.
 */
 jools.lazyValue(
-	path.prototype,
+	jion_path.prototype,
 	'isEmpty',
 	function( )
 	{
@@ -578,11 +377,7 @@ jools.lazyValue(
 /*
 | An empty path.
 */
-path.empty =
-	path.create(
-		'array', [ ],
-		'_sliced', true
-	);
+jion_path.empty = jion_path.create( 'ray:init', [ ] );
 
 
 } )( );
