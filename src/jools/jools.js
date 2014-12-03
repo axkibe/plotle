@@ -315,7 +315,6 @@ jools.lazyValue =
 			// this clever overriding does not work in IE9 :-(
 			// or Android 2.2 Browser
 			// get : function() { return fixate(this, key, getter.call(this)); },
-
 			get : function( )
 			{
 				var
@@ -323,7 +322,7 @@ jools.lazyValue =
 
 /**/			if( CHECK )
 /**/			{
-/**/				if( this.__lazy[ key ] )
+/**/				if( this.__lazy[ key ] !== undefined )
 /**/				{
 /**/					return this.__lazy[ key ];
 /**/				}
@@ -356,6 +355,57 @@ jools.lazyValue =
 
 
 /*
+| A lazy value is computed and fixated before it is needed.
+*/
+jools.aheadValue =
+	function(
+		obj,
+		key,
+		value
+	)
+{
+	var
+		ckey;
+
+/**/if( CHECK )
+/**/{
+/**/	if( value === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( obj.__lazy[ key ] !== undefined )
+/**/	{
+/**/		if( obj.__lazy[ key ] !== value )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/
+/**/		return value;
+/**/	}
+/**/
+/**/	return(
+/**/		obj.__lazy[ key ] = value
+/**/	);
+/**/}
+	else
+	{
+		ckey = '__lazy_' + key;
+
+		if( obj[ ckey ] !== undefined )
+		{
+			if( obj[ ckey ] !== value )
+			{
+				throw new Error( );
+			}
+		}
+
+		return jools.innumerable( obj, ckey, value );
+	}
+};
+
+
+/*
 | A value is computed and fixated only when needed.
 */
 jools.lazyFunctionString =
@@ -380,7 +430,7 @@ jools.lazyFunctionString =
 /**/		{
 /**/			ckey = key + '__' + str;
 /**/
-/**/			if( this.__lazy[ ckey ] )
+/**/			if( this.__lazy[ ckey ] !== undefined )
 /**/			{
 /**/				return this.__lazy[ ckey ];
 /**/			}
@@ -409,45 +459,6 @@ jools.lazyFunctionString =
 	};
 };
 
-
-/*
-| A lazy value is computed and fixated before it is needed.
-*/
-jools.aheadValue =
-	function(
-		obj,
-		key,
-		value
-	)
-{
-	var
-		ckey,
-		desc,
-		proto;
-
-	ckey = '_lazy_' + key;
-
-/**/if( CHECK )
-/**/{
-/**/	proto =	Object.getPrototypeOf( obj );
-/**/
-/**/	desc = Object.getOwnPropertyDescriptor( proto, key	);
-/**/
-/**/	if( !desc || typeof( desc.get ) !== 'function' )
-/**/	{
-/**/		// aheadValue not a lazyValue
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( obj[ ckey ] )
-/**/	{
-/**/		// aheadValue already computed
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return jools.innumerable( obj, ckey, value );
-};
 
 
 /*

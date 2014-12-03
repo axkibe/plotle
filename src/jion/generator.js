@@ -630,6 +630,7 @@ generator.prototype.genConstructor =
 		attr,
 		block,
 		constructor,
+		freezeBlock,
 		initCall,
 		jionObj,
 		name;
@@ -737,39 +738,31 @@ generator.prototype.genConstructor =
 		block = block.append( initCall );
 	}
 
+
 	// immutes the new object
-	// FIXME use object.freeze and only in checking
-	block =
-		block
-		/*
-		.astCheck(
-			astBlock( )
-				.astCall(
-				astObjectFreezeCall.append
-				( astThis )
-				)
-		);
-		*/
-		.ast( 'jools.immute( this )' );
+	freezeBlock = astBlock( );
 
 	if( this.twig )
 	{
 		// FIXME use object.freeze and only in checking
-		block =
-			block
-			.ast( 'jools.immute( twig )' )
-			.ast( 'jools.immute( ranks )' );
+		freezeBlock =
+			freezeBlock
+			.ast( 'Object.freeze( twig )' )
+			.ast( 'Object.freeze( ranks )' );
 	}
 
 	if( this.ray )
 	{
-		block =
-			block
-			.astCheck(
-				// FIXME remove ast call
-				ast( 'Object.freeze( ray )' )
-			);
+		freezeBlock =
+			freezeBlock
+			.ast( 'Object.freeze( ray )' );
 	}
+
+	freezeBlock =
+		freezeBlock
+		.ast( 'Object.freeze( this )' );
+
+	block = block.astCheck( freezeBlock );
 
 	constructor = astFunc( block );
 

@@ -72,11 +72,14 @@ Constructor =
 
 	this.ranks = ranks;
 
-	jools.immute( this );
-
-	jools.immute( twig );
-
-	jools.immute( ranks );
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( twig );
+/**/
+/**/	Object.freeze( ranks );
+/**/
+/**/	Object.freeze( this );
+/**/}
 };
 
 

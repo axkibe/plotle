@@ -81,11 +81,11 @@ Constructor =
 
 	this.ray = ray;
 
-	jools.immute( this );
-
 /**/if( CHECK )
 /**/{
 /**/	Object.freeze( ray );
+/**/
+/**/	Object.freeze( this );
 /**/}
 };
 

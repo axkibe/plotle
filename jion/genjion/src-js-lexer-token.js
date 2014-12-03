@@ -77,7 +77,10 @@ Constructor =
 
 	this._init( );
 
-	jools.immute( this );
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( this );
+/**/}
 };
 
 

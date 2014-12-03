@@ -78,7 +78,10 @@ Constructor =
 
 	this.tokens = v_tokens;
 
-	jools.immute( this );
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( this );
+/**/}
 };
 
 

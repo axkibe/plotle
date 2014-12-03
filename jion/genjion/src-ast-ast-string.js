@@ -69,7 +69,10 @@ Constructor =
 
 	this.string = v_string;
 
-	jools.immute( this );
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( this );
+/**/}
 };
 
 

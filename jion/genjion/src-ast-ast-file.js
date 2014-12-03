@@ -87,7 +87,10 @@ Constructor =
 
 	this.preamble = v_preamble;
 
-	jools.immute( this );
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( this );
+/**/}
 };
 
 

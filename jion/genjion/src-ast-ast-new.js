@@ -72,7 +72,10 @@ Constructor =
 
 	this.call = v_call;
 
-	jools.immute( this );
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( this );
+/**/}
 };
 
 

@@ -69,7 +69,10 @@ Constructor =
 
 	this.boolean = v_boolean;
 
-	jools.immute( this );
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( this );
+/**/}
 };
 
 

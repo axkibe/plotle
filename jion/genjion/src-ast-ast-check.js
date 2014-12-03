@@ -72,7 +72,10 @@ Constructor =
 
 	this.block = v_block;
 
-	jools.immute( this );
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( this );
+/**/}
 };
 
 

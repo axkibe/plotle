@@ -172,22 +172,23 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			ha,
-			zone,
-			wx,
-			ny,
-			ex,
-			sy,
-			mx,
-			my,
+			a,
+			a2,
+			asw,
+			b,
+			b2,
 			dcx,
 			dcy,
 			dex,
 			dey,
-			a,
-			b,
-			a2,
-			b2;
+			ex,
+			ha,
+			ny,
+			mx,
+			my,
+			sy,
+			wx,
+			zone;
 
 		ha = this.handles;
 
@@ -243,7 +244,7 @@ jools.lazyValue(
 			dcy = b;
 		}
 
-		return jools.immute(
+		asw =
 			{
 				// ellipse bezier height
 				// TODO remove?
@@ -372,8 +373,14 @@ jools.lazyValue(
 								'y', my + b
 							)
 					)
-			}
-		);
+			};
+
+/**/	if( CHECK )
+/**/	{
+/**/		Object.freeze( asw );
+/**/	}
+
+		return asw;
 	}
 );
 

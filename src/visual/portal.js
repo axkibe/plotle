@@ -238,26 +238,29 @@ if( SHELL )
 | Resize handles to show on portals.
 */
 portal.prototype.handles =
-	jools.immute(
-		{
-			n :
-				true,
-			ne :
-				true,
-			e :
-				true,
-			se :
-				true,
-			s :
-				true,
-			sw :
-				true,
-			w :
-				true,
-			nw :
-				true
-		}
-	);
+	{
+		n :
+			true,
+		ne :
+			true,
+		e :
+			true,
+		se :
+			true,
+		s :
+			true,
+		sw :
+			true,
+		w :
+			true,
+		nw :
+			true
+	};
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( portal.prototype.handles );
+/**/}
 
 
 /*
@@ -853,26 +856,18 @@ if( SHELL )
 	| Font for spacesUser/Tag
 	*/
 	portal.prototype._fonts =
-		jools.immute( {
-			spaceUser :
-				fontPool.get(
-					13,
-					'la'
-				),
+		{
+			spaceUser : fontPool.get( 13, 'la' ),
 
-			spaceTag :
-				fontPool.get(
-					13,
-					'la'
-				),
+			spaceTag : fontPool.get( 13, 'la' ),
 
-			moveTo :
-				fontPool.get(
-					13,
-					'cm'
-				)
-		} );
+			moveTo : fontPool.get( 13, 'cm' )
+		};
 
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( portal.prototype._fonts );
+/**/}
 
 	/*
 	| Returns the point of a given offset.
