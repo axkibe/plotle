@@ -224,18 +224,17 @@ label.prototype.positioning =
 | Resize handles to show on labels
 */
 label.prototype.handles =
-	jools.immute(
-		{
-			ne :
-				true,
-			se :
-				true,
-			sw :
-				true,
-			nw :
-				true
-		}
-	);
+	{
+		ne : true,
+		se : true,
+		sw : true,
+		nw : true
+	};
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( label.prototype.handles );
+/**/}
 
 
 /*

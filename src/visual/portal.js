@@ -190,31 +190,6 @@ portal.prototype._init =
 					)
 			);
 	}
-
-	// FIXME once path caching is here this can go
-	if( !this.path.isEmpty )
-	{
-		// paths to spaceUser and spaceTag
-
-		this.subPaths =
-			jools.immute(
-				{
-					moveToButton :
-						this.path.append( 'moveToButton' ),
-
-					spaceUser :
-						this.path.append( 'spaceUser' ),
-
-					spaceTag :
-						this.path.append( 'spaceTag' )
-				}
-			);
-	}
-	else
-	{
-		this.subPaths =
-			null;
-	}
 };
 
 
@@ -293,12 +268,10 @@ jools.lazyValue(
 	'silhoutte',
 	function( )
 	{
-		return (
+		return(
 			euclid.ellipse.create(
-				'pnw',
-					this.zone.pnw,
-				'pse',
-					this.zone.pse
+				'pnw', this.zone.pnw,
+				'pse', this.zone.pse
 			)
 		);
 	}
@@ -313,16 +286,14 @@ jools.lazyValue(
 	'zeroSilhoutte',
 	function( )
 	{
-		return (
+		return(
 			euclid.ellipse.create(
 				'pnw',
 					euclid.point.zero,
 				'pse',
 					euclid.point.create(
-						'x',
-							this.zone.width,
-						'y',
-							this.zone.height
+						'x', this.zone.width,
+						'y', this.zone.height
 				)
 			)
 		);
@@ -350,8 +321,7 @@ portal.prototype.dragStop =
 		case 'actions.itemDrag' :
 		case 'actions.itemResize' :
 
-			zone =
-				this.zone;
+			zone = this.zone;
 
 			if(
 				zone.width < theme.portal.minWidth ||
@@ -367,10 +337,7 @@ portal.prototype.dragStop =
 				return;
 			}
 
-			peer.setZone(
-				this.path,
-				zone
-			);
+			peer.setZone( this.path, zone );
 
 			return true;
 
@@ -471,13 +438,8 @@ portal.prototype.click =
 			mark =
 				root.setMark(
 					marks.caret.create(
-						'path',
-							this.subPaths[ field ],
-						'at',
-							this._getOffsetAt(
-								field,
-								pp.x
-							)
+						'path', this.path.append( field  ),
+						'at', this._getOffsetAt( field, pp.x )
 					)
 				);
 
@@ -493,10 +455,7 @@ portal.prototype.click =
 	)
 	{
 		root.setMark(
-			marks.item.create(
-				'path',
-					this.path
-			)
+			marks.item.create( 'path', this.path )
 		);
 	}
 
@@ -595,7 +554,7 @@ portal.prototype.mousewheel =
 		// ctrl
 	)
 {
-	return (
+	return(
 		this.silhoutte.within(
 			view,
 			p
@@ -669,23 +628,19 @@ portal.prototype.pointingHover =
 			)
 	)
 	{
-		return (
+		return(
 			result.hover.create(
-				'path',
-					this.subPaths.moveToButton,
-				'cursor',
-					'default'
+				'path', this.path.append( 'moveToButton' ),
+				'cursor', 'default'
 			)
 		);
 	}
 	else
 	{
-		return (
+		return(
 			result.hover.create(
-				'path',
-					this.path,
-				'cursor',
-					'default'
+				'path', this.path,
+				'cursor', 'default'
 			)
 		);
 	}
@@ -737,13 +692,9 @@ jools.lazyValue(
 			hview
 		);
 
-		if( this.subPaths )
+		if( !this.path.isEmpty )
 		{
-			f.clip(
-				this.zeroSilhoutte,
-				hview,
-				0
-			);
+			f.clip( this.zeroSilhoutte, hview, 0 );
 
 			fieldSpaceUser = this._fieldSpaceUser;
 
@@ -755,7 +706,9 @@ jools.lazyValue(
 				Style.getStyle(
 					theme.portal.moveTo.style,
 					Accent.state(
-						this.hover.equals(  this.subPaths.moveToButton ),
+						this.hover.equals( 
+							this.path.append( 'moveToButton' )
+						),
 						section === 'moveToButton'
 					)
 				),
@@ -886,7 +839,7 @@ portal.prototype.input =
 		var line = rx[ 1 ];
 
 		peer.insertText(
-			this.subPaths[ section ],
+			this.path.append( section ),
 			mark.caretAt,
 			line
 		);
@@ -1120,7 +1073,7 @@ portal.prototype._keyBackspace =
 	}
 
 	peer.removeText(
-		this.subPaths[ section ],
+		this.path.append( section ),
 		at - 1,
 		1
 	);
@@ -1558,7 +1511,7 @@ portal.prototype._keyDel =
 	}
 
 	peer.removeText(
-		this.subPaths[ section ],
+		this.path.append( section ),
 		at,
 		1
 	);
