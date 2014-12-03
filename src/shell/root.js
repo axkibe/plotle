@@ -219,10 +219,7 @@ proto.setMode =
 	this._mode = mode;
 
 	this._discJockey =
-		this._discJockey.create(
-			'mode',
-				mode
-		);
+		this._discJockey.create( 'mode', mode );
 
 	this._redraw = true;
 };
@@ -570,7 +567,7 @@ proto._currentScreen =
 
 
 /*
-| User is hovering his/her point ( mouse move )
+| User is hovering his/her pointing device ( mouse move )
 */
 proto.pointingHover =
 	function(
@@ -589,18 +586,13 @@ proto.pointingHover =
 
 	if( screen && screen.showDisc )
 	{
-		result =
-			this._discJockey.pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+		result = this._discJockey.pointingHover( p, shift, ctrl );
 
 		if( result )
 		{
 /**/		if( CHECK )
 /**/		{
-/**/			if( result.reflect !== 'result.hover' )
+/**/			if( result.reflect_ !== 'result_hover' )
 /**/			{
 /**/				throw new Error( );
 /**/			}
@@ -913,7 +905,7 @@ proto._setHover =
 
 	this._hoverPath = path;
 
-	root._$redraw = true;
+	root._redraw = true;
 };
 
 

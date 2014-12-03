@@ -156,10 +156,33 @@ path.prototype.get =
 |
 | FIXME cache
 */
-path.prototype.append =
-	function(
-		key
-	)
+jools.lazyFunctionString(
+	path.prototype,
+	'append',
+	function( key )
+{
+	var
+		arr;
+
+	arr = this._path.slice( );
+
+	arr.push( key );
+
+	return(
+		path.create(
+			'array', arr,
+			'_sliced', true
+		)
+	);
+}
+);
+
+
+/*
+| Same as append but without caching.
+*/
+path.prototype.appendNC =
+	function( key )
 {
 	var
 		arr;
@@ -175,14 +198,6 @@ path.prototype.append =
 		)
 	);
 };
-
-
-/*
-| Same as append but without caching.
-*/
-path.prototype.appendNC =
-	path.prototype.append;
-
 
 
 /*
@@ -354,10 +369,7 @@ path.prototype.prepend =
 | Returns a path with key indexed by i set
 */
 path.prototype.set =
-	function(
-		idx,
-		key
-	)
+	function( idx, key )
 {
 	var
 		arr;
