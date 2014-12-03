@@ -50,7 +50,8 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor;
+	Constructor,
+	prototype;
 
 
 Constructor =
@@ -59,6 +60,14 @@ Constructor =
 		v_func // the function to call
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( prototype.__lazy )
+/**/	{
+/**/		this.__lazy = { };
+/**/	}
+/**/}
+
 	this.func = v_func;
 
 	this.ray = ray;
@@ -75,10 +84,6 @@ Constructor =
 /*
 | Prototype shortcut
 */
-var
-	prototype;
-
-
 prototype = Constructor.prototype;
 
 

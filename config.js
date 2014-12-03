@@ -94,7 +94,7 @@ config.uglify = false;
 /*
 | If true does extra mangles on output compression
 */
-config.extraMangle = false;
+config.extraMangle = true;
 
 
 /*

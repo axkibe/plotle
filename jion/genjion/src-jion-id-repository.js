@@ -50,7 +50,8 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor;
+	Constructor,
+	prototype;
 
 
 Constructor =
@@ -59,6 +60,14 @@ Constructor =
 		v_units // a set of all units with all names
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( prototype.__lazy )
+/**/	{
+/**/		this.__lazy = { };
+/**/	}
+/**/}
+
 	if( v_primitives !== undefined )
 	{
 		this.primitives = v_primitives;
@@ -78,10 +87,6 @@ Constructor =
 /*
 | Prototype shortcut
 */
-var
-	prototype;
-
-
 prototype = Constructor.prototype;
 
 

@@ -634,9 +634,18 @@ generator.prototype.genConstructor =
 		jionObj,
 		name;
 
-	capsule = capsule.astComment( 'Constructor.' );
+	capsule =
+		capsule
+		.astComment( 'Constructor.' );
 
-	block = astBlock( );
+	block =
+		astBlock( )
+		.astCheck(
+			astIf(
+				'prototype.__lazy',
+				astAssign( 'this.__lazy', astObjLiteral( ) )
+			)
+		);
 
 	// assigns the variables
 	for(
@@ -834,6 +843,7 @@ generator.prototype.genConstructor =
 	capsule =
 		capsule
 		.astVarDec( 'Constructor' )
+		.astVarDec( 'prototype' )
 		.astAssign( 'Constructor', constructor );
 
 	// subclass
@@ -853,7 +863,6 @@ generator.prototype.genConstructor =
 	capsule =
 		capsule
 		.astComment( 'Prototype shortcut' )
-		.astVarDec( 'prototype' )
 		.astAssign( 'prototype', 'Constructor.prototype' );
 
 	// the exported object
@@ -2435,7 +2444,11 @@ generator.prototype.genJionProto =
 			.ast( 'prototype.atRank = jion_proto.twigAtRank' )
 
 			.astComment( 'Gets the rank of a key.' )
-			.ast( 'prototype.rankOf = jion_proto.twigRankOf' )
+			.ast(
+				'jools.lazyFunctionString( '
+				+ 'prototype, "rankOf", jion_proto.twigRankOf '
+				+ ')'
+			)
 
 			.astComment( 'Gets the rank of a key.' )
 			.ast( 'prototype.getKey = jion_proto.twigGetKey' )

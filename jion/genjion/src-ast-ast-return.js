@@ -50,7 +50,8 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor;
+	Constructor,
+	prototype;
 
 
 Constructor =
@@ -58,6 +59,14 @@ Constructor =
 		v_expr // the expression to return
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( prototype.__lazy )
+/**/	{
+/**/		this.__lazy = { };
+/**/	}
+/**/}
+
 	this.expr = v_expr;
 
 	jools.immute( this );
@@ -67,10 +76,6 @@ Constructor =
 /*
 | Prototype shortcut
 */
-var
-	prototype;
-
-
 prototype = Constructor.prototype;
 
 

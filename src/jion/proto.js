@@ -343,65 +343,27 @@ jion_proto.twigLength =
 
 
 /*
-| Returns the rank of the key
+| Returns the rank of the key.
 |
 | This means it returns the index of key in the ranks array.
-|
-| FIXME make a joolsLazyfunc
 */
 jion_proto.twigRankOf =
-	function(
-		key
-	)
+	function( key )
 {
-	var
-		rank,
-		ranks,
-		rof;
-
-	ranks = this.ranks;
 
 /**/if( CHECK )
 /**/{
-/**/	if( !Array.isArray( ranks ) )
+/**/	if( !jools.isString( key ) )
 /**/	{
 /**/		throw new Error( );
 /**/	}
-/**/
-/**/	if( !jools.isString( key ) )
-/**/	{
-/**/		throw new Error(
-/**/			'key no string'
-/**/		);
-/**/	}
 /**/}
 
-	// checks ranking cache
-	rof = this._$rof;
-
-	if( !rof )
-	{
-		Object.defineProperty(
-			this,
-			'_$rof',
-			rof = { }
-		);
-	}
-
-	rank = rof[ key ];
-
-	if( rank !== undefined )
-	{
-		return rank;
-	}
-
-	rank =
-	rof[ key ] =
-		this.twig[ key ] !== undefined ?
-			ranks.indexOf( key ) :
-			-1;
-
-	return rank;
+	return(
+		this.twig[ key ] !== undefined
+		?  this.ranks.indexOf( key )
+		: -1
+	);
 };
 
 

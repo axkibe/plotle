@@ -1,8 +1,3 @@
-. appendRay
-. concat
-. rayAppendRay
-. error
-. reaction
 . 0-line
 > 1
 . Create
@@ -22,10 +17,10 @@
 . PSE_M1
 > Portal
 . Remove
-. _$redraw
-. _$rof
-. _$visitPasshash
-. _$visitUser
+. _redraw
+. _visitPasshash
+. _visitUser
+. __lazy
 . _arrow
 . _backAt
 . _backPath
@@ -187,6 +182,7 @@
 . append
 > appendChild
 . appendNC
+. appendRay
 > apply
 . args
 . array
@@ -243,7 +239,6 @@
 . check
 . checkHandles
 . checkIcon
-. checkLimits
 . checkbox
 . checkboxCheck
 . checked
@@ -266,6 +261,7 @@
 . compass
 . compute
 . computeEllipse
+. concat
 . concerns
 . concernsHover
 . concernsMark
@@ -346,6 +342,7 @@
 . ensureInt
 . enter
 . equals
+. error
 . errorLabel
 > exec
 . exports
@@ -370,7 +367,6 @@
 . focusedItem
 > font
 > fontsize
-. form
 . forms
 . frame
 > freeze
@@ -392,6 +388,7 @@
 > getElementById
 > getHours
 > getItem
+. getKey
 > getMinutes
 > getMonth
 . getOffsetAt
@@ -472,6 +469,7 @@
 . keyNonGrata
 > la
 . label
+. lazyFunctionString
 . lazyValue
 > left
 > length
@@ -540,6 +538,7 @@
 . noAccessToSpace
 . noButton
 . nonExistingSpace
+. nonFatal
 . nonSpaceRef
 . normal
 . note
@@ -636,11 +635,13 @@
 . ray:remove
 . ray:set
 . rayAppend
+. rayAppendRay
 . rayGet
 . rayInsert
 . rayLength
 . rayRemove
 . raySet
+. reaction
 > readyState
 . receiverFunc
 > rect
@@ -648,8 +649,8 @@
 . reduce
 . reflect
 . reflectName
+. reflect_
 > register
-. reject
 > relation
 . relationState
 > releaseCapture
@@ -801,6 +802,10 @@
 . twig:insert
 . twig:remove
 . twig:set
+. twigAtRank
+. twigGetKey
+. twigLength
+. twigRankOf
 > type
 . uid
 > undefined

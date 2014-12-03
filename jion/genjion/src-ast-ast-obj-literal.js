@@ -50,7 +50,8 @@ if( SERVER )
 | Constructor.
 */
 var
-	Constructor;
+	Constructor,
+	prototype;
 
 
 Constructor =
@@ -59,6 +60,14 @@ Constructor =
 		ranks // twig ranks
 	)
 {
+/**/if( CHECK )
+/**/{
+/**/	if( prototype.__lazy )
+/**/	{
+/**/		this.__lazy = { };
+/**/	}
+/**/}
+
 	this.twig = twig;
 
 	this.ranks = ranks;
@@ -74,10 +83,6 @@ Constructor =
 /*
 | Prototype shortcut
 */
-var
-	prototype;
-
-
 prototype = Constructor.prototype;
 
 
@@ -315,7 +320,7 @@ prototype.atRank = jion_proto.twigAtRank;
 /*
 | Gets the rank of a key.
 */
-prototype.rankOf = jion_proto.twigRankOf;
+jools.lazyFunctionString( prototype, 'rankOf', jion_proto.twigRankOf );
 
 
 /*

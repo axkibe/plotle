@@ -61,7 +61,7 @@ jools.MAX_INTEGER = 9007199254740992;
 jools.isInteger =
 	function( o )
 {
-	return (
+	return(
 		typeof( o ) === 'number'
 		&&
 		Math.floor( o ) === o
@@ -75,7 +75,7 @@ jools.isInteger =
 jools.isString  =
 	function( o )
 {
-	return (
+	return(
 		typeof( o ) === 'string'
 		||
 		( o instanceof String )
@@ -302,6 +302,12 @@ jools.lazyValue =
 		getter
 	)
 {
+
+/**/if( CHECK )
+/**/{
+/**/	proto.__lazy = true;
+/**/}
+
 	Object.defineProperty(
 		proto,
 		key,
@@ -315,20 +321,34 @@ jools.lazyValue =
 				var
 					ckey;
 
-				ckey = '_lazy_' + key;
-
-				if( this[ ckey ] !== undefined )
+/**/			if( CHECK )
+/**/			{
+/**/				if( this.__lazy[ key ] )
+/**/				{
+/**/					return this.__lazy[ key ];
+/**/				}
+/**/
+/**/				return(
+/**/					this.__lazy[ key ] = getter.call( this )
+/**/				);
+/**/			}
+				else
 				{
-					return this[ ckey ];
-				}
+					ckey = '__lazy_' + key;
 
-				return (
-					jools.innumerable(
-						this,
-						ckey,
-						getter.call( this )
-					)
-				);
+					if( this[ ckey ] !== undefined )
+					{
+						return this[ ckey ];
+					}
+
+					return(
+						jools.innumerable(
+							this,
+							ckey,
+							getter.call( this )
+						)
+					);
+				}
 			}
 		}
 	);
@@ -338,47 +358,56 @@ jools.lazyValue =
 /*
 | A value is computed and fixated only when needed.
 */
-/*
-jools.lazyFunction =
+jools.lazyFunctionString =
 	function(
 		proto,
 		key,
 		getter
 	)
 {
-	var func;
+/**/if( CHECK )
+/**/{
+/**/	proto.__lazy = true;
+/**/}
 
-	func =
-		function( )
-		{
-			var
-				ckey;
+	proto[ key ] =
+		function( str )
+	{
+		var
+			ckey;
 
-			ckey = '_lazy_' + key;
-
-			if( this[ ckey ] !== undefined )
+/**/		if( CHECK )
+/**/		{
+/**/			ckey = key + '__' + str;
+/**/
+/**/			if( this.__lazy[ ckey ] )
+/**/			{
+/**/				return this.__lazy[ ckey ];
+/**/			}
+/**/
+/**/			return(
+/**/				this.__lazy[ ckey ] = getter.call( this, str )
+/**/			);
+/**/		}
+			else
 			{
-				return this[ ckey ];
+				ckey = '__lazy_' + key + '__' + str;
+
+				if( this[ ckey ] !== undefined )
+				{
+					return this[ ckey ];
+				}
+
+				return(
+					jools.innumerable(
+						this,
+						ckey,
+						getter.call( this, str )
+					)
+				);
 			}
-
-			return (
-				jools.innumerable(
-					this,
-					ckey,
-					getter.call( this )
-				)
-			);
-		};
-
-	Object.defineProperty(
-		proto,
-		key,
-		{
-			get : func
-		}
-	);
+	};
 };
-*/
 
 
 /*
@@ -392,21 +421,17 @@ jools.aheadValue =
 	)
 {
 	var
-		ckey;
+		ckey,
+		desc,
+		proto;
 
 	ckey = '_lazy_' + key;
 
 /**/if( CHECK )
 /**/{
-/**/	var
-/**/		proto =
-/**/			Object.getPrototypeOf( obj ),
+/**/	proto =	Object.getPrototypeOf( obj );
 /**/
-/**/		desc =
-/**/			Object.getOwnPropertyDescriptor(
-/**/				proto,
-/**/				key
-/**/			);
+/**/	desc = Object.getOwnPropertyDescriptor( proto, key	);
 /**/
 /**/	if( !desc || typeof( desc.get ) !== 'function' )
 /**/	{
@@ -421,13 +446,7 @@ jools.aheadValue =
 /**/	}
 /**/}
 
-	return (
-		jools.innumerable(
-			obj,
-			ckey,
-			value
-		)
-	);
+	return jools.innumerable( obj, ckey, value );
 };
 
 
@@ -475,16 +494,12 @@ jools.matches =
 		return true;
 	}
 
-	if(
-		!o1.equals
-		||
-		!o2.equals
-	)
+	if( !o1.equals || !o2.equals )
 	{
 		return false;
 	}
 
-	return( o1.equals( o2 ) );
+	return o1.equals( o2 );
 };
 
 
@@ -636,8 +651,11 @@ var _inspect =
 		case 'array' :
 
 			array.push( '[' );
+
 			if( puffed )
-				{ array.push( '\n' ); }
+			{
+				array.push( '\n' );
+			}
 
 			for( var a = 0, aZ = o.length; a < aZ; a++)
 			{
@@ -648,7 +666,9 @@ var _inspect =
 				}
 
 				if( puffed )
-					{ _pushindent( indent + 1, array ); }
+				{
+					_pushindent( indent + 1, array );
+				}
 
 				_inspect(
 					o[ a ],
@@ -659,6 +679,7 @@ var _inspect =
 			}
 
 			first = true;
+
 			for( k in o )
 			{
 				if(
@@ -807,11 +828,7 @@ jools.logNew =
 		return;
 	}
 
-	jools.log(
-		'news',
-		entity.reflect,
-		path.string
-	);
+	jools.log( 'news', entity.reflect, path.string );
 };
 
 
@@ -821,13 +838,14 @@ jools.logNew =
 jools.debug =
 	function( )
 {
+	var a;
+
 	if( !config.log.debug )
 	{
 		return;
 	}
 
-	var a =
-		_timestamp( [ ] );
+	a = _timestamp( [ ] );
 
 	a.push( '(debug) ' );
 
@@ -838,17 +856,10 @@ jools.debug =
 			a.push(' ');
 		}
 
-		_inspect(
-			arguments[ i ],
-			a,
-			0,
-			[ ]
-		);
+		_inspect( arguments[ i ], a, 0, [ ] );
 	}
 
-	console.log(
-		a.join( '' )
-	);
+	console.log( a.join( '' ) );
 };
 
 
@@ -860,12 +871,7 @@ jools.inspect =
 {
 	var a = [ ];
 
-	_inspect(
-		o,
-		a,
-		0,
-		[ ]
-	);
+	_inspect( o, a, 0, [ ] );
 
 	return a.join( '' );
 };
@@ -879,23 +885,27 @@ jools.immute =
 		obj
 	)
 {
+	var
+		a, aZ,
+		desc,
+		name,
+		names;
+
 	// for releases immute checking is disabled in favor of speed
 	if( !config.debug.immute )
 	{
 		return obj;
 	}
 
-	var
-		names =
-			Object.getOwnPropertyNames( obj );
+	names = Object.getOwnPropertyNames( obj );
 
 	for(
-		var a = 0, aZ = names.length;
+		a = 0, aZ = names.length;
 		a < aZ;
 		a++
 	)
 	{
-		var name = names[ a ];
+		name = names[ a ];
 
 		if(
 			name.substring( 0, 1 ) === '$' ||
@@ -905,7 +915,7 @@ jools.immute =
 			continue;
 		}
 
-		var desc =
+		desc =
 			Object.getOwnPropertyDescriptor(
 				obj,
 				names[ a ]
@@ -920,11 +930,7 @@ jools.immute =
 
 		desc.writable = false;
 
-		Object.defineProperty(
-			obj,
-			name,
-			desc
-		);
+		Object.defineProperty( obj, name, desc );
 	}
 
 	return obj;
@@ -946,23 +952,9 @@ jools.keyNonGrata =
 		obj,
 		key,
 		{
-			get :
-				function( )
-				{
-					throw new Error(
-						// 'accessed key non grata! ' + key
-					);
-				},
+			get : function( ) { throw new Error( ); },
 
-			set :
-				function(
-					// v
-				)
-				{
-					throw new Error(
-						// 'accessed key non grata! ' + key
-					);
-				}
+			set : function( ) { throw new Error( ); }
 		}
 	);
 };
@@ -986,5 +978,3 @@ if( SERVER )
 
 
 } )( );
-
-

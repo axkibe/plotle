@@ -184,9 +184,9 @@ shell.root =
 	// remembers an acquired visitor user name and passhash
 	// so when logging out from a real user the previous
 	// visitor is regained.
-	this._$visitUser = null;
+	this._visitUser = null;
 
-	this._$visitPasshash = null;
+	this._visitPasshash = null;
 
 	this._draw( );
 };
@@ -224,7 +224,7 @@ proto.setMode =
 				mode
 		);
 
-	this._$redraw = true;
+	this._redraw = true;
 };
 
 
@@ -281,7 +281,7 @@ proto.setAction =
 	this._discJockey =
 		this._discJockey.create( 'action', action );
 
-	this._$redraw = true;
+	this._redraw = true;
 };
 
 
@@ -455,7 +455,7 @@ proto.setFocus =
 		}
 	}
 
-	if( this._$redraw )
+	if( this._redraw )
 	{
 		this._draw( );
 	}
@@ -488,7 +488,7 @@ proto._draw =
 		this._discJockey.draw( display );
 	}
 
-	this._$redraw = false;
+	this._redraw = false;
 };
 
 
@@ -524,7 +524,7 @@ proto.click =
 	}
 
 
-	if( this._$redraw )
+	if( this._redraw )
 	{
 		this._draw( );
 	}
@@ -608,7 +608,7 @@ proto.pointingHover =
 
 			root._setHover( result.path );
 
-			if( this._$redraw )
+			if( this._redraw )
 			{
 				this._draw( );
 			}
@@ -636,7 +636,7 @@ proto.pointingHover =
 
 		root._setHover( result.path );
 
-		if( this._$redraw )
+		if( this._redraw )
 		{
 			this._draw( );
 		}
@@ -644,7 +644,7 @@ proto.pointingHover =
 		return result.cursor;
 	}
 
-	if( this._$redraw )
+	if( this._redraw )
 	{
 		this._draw( );
 	}
@@ -686,7 +686,7 @@ proto.dragStart =
 		}
 	}
 
-	if( this._$redraw )
+	if( this._redraw )
 	{
 		this._draw( );
 	}
@@ -719,7 +719,7 @@ proto.dragMove =
 		cursor = screen.dragMove( p, shift, ctrl );
 	}
 
-	if( this._$redraw )
+	if( this._redraw )
 	{
 		this._draw( );
 	}
@@ -751,7 +751,7 @@ proto.dragStop =
 		screen.dragStop( p, shift, ctrl );
 	}
 
-	if( this._$redraw )
+	if( this._redraw )
 	{
 		this._draw( );
 	}
@@ -781,7 +781,7 @@ proto.mousewheel =
 		screen.mousewheel( p, dir, shift, ctrl );
 	}
 
-	if( this._$redraw )
+	if( this._redraw )
 	{
 		this._draw( );
 	}
@@ -821,7 +821,7 @@ proto.setMark =
 
 	this._discJockey = this._discJockey.create( 'mark', mark );
 
-	this._$redraw = true;
+	this._redraw = true;
 };
 
 
@@ -959,8 +959,7 @@ proto.setPath =
 			throw new Error( );
 	}
 
-	root._$redraw =
-		true;
+	root._redraw = true;
 };
 
 
@@ -992,7 +991,7 @@ proto.specialKey =
 		focusItem.scrollMarkIntoView( );
 	}
 
-	if( this._$redraw )
+	if( this._redraw )
 	{
 		this._draw( );
 	}
@@ -1025,7 +1024,7 @@ proto.input =
 		}
 	}
 
-	if( this._$redraw )
+	if( this._redraw )
 	{
 		this._draw( );
 	}
@@ -1089,9 +1088,9 @@ proto.setUser =
 
 		window.localStorage.setItem( 'passhash', null );
 
-		this._$visitUser = username;
+		this._visitUser = username;
 
-		this._$visitPasshash = passhash;
+		this._visitPasshash = passhash;
 	}
 
 	this.username = username;
@@ -1121,7 +1120,7 @@ proto.setView =
 
 	this._formJockey = this._formJockey.create( 'view', view );
 
-	this._$redraw = true;
+	this._redraw = true;
 };
 
 
@@ -1377,8 +1376,8 @@ proto.logout =
 	if( this._$visitUser )
 	{
 		this.setUser(
-			this._$visitUser,
-			this._$visitPasshash
+			this._visitUser,
+			this._visitPasshash
 		);
 
 		this.moveToSpace( fabric.spaceRef.ideoloomHome, false );
