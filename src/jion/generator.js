@@ -1298,7 +1298,7 @@ generator.prototype.genCreatorDefaults =
 |
 | It is true if the variable fails the check.
 */
-generator.prototype.genSingleTypeCheckFailCondition = // XXX
+generator.prototype.genSingleTypeCheckFailCondition =
 	function(
 		avar,
 		id

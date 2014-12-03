@@ -1668,7 +1668,7 @@ formatCall =
 		formatExpression(
 			snuggle ? context.setInline : context,
 			call.func,
-			precTable.astCall // XXXX
+			precTable.astCall
 		);
 
 	if( call.length === 0 )

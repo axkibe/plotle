@@ -245,7 +245,7 @@ link.prototype._onAcquireSpace =
 
 	if( reply.type === 'reply.error' )
 	{
-		root.onAcquireSpace( reply );
+		root.onAcquireSpace( request.spaceRef, reply );
 
 		root.link._update( );
 
@@ -259,15 +259,7 @@ link.prototype._onAcquireSpace =
 		case 'nonexistent' :
 		case 'no access' :
 
-			root.onAcquireSpace(
-				// FIXME this is strange
-				jools.immute(
-					{
-						status : reply.status,
-						spaceRef : request.spaceRef
-					}
-				)
-			);
+			root.onAcquireSpace( request.spaceRef, reply );
 
 			root.link._update( );
 
@@ -284,17 +276,7 @@ link.prototype._onAcquireSpace =
 			'_rSeq', reply.seq
 		);
 
-	root.onAcquireSpace(
-		// FIXME also this remote object
-		jools.immute(
-			{
-				status : reply.status,
-				spaceRef : request.spaceRef,
-				space : reply.space,
-				access : reply.access
-			}
-		)
-	);
+	root.onAcquireSpace( request.spaceRef, reply );
 
 	// waits a second before going into update cycle, so safari
 	// stops its wheely thing.

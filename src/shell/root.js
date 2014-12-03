@@ -1194,19 +1194,18 @@ proto.moveToSpace =
 
 /*
 | Receiving a moveTo event
-|
-| FIXME, dont put an asw object here.
 */
 proto.onAcquireSpace =
 	function(
-		asw
+		spaceRef,
+		reply
 	)
 {
 	var
 		access,
 		path;
 
-	switch( asw.status )
+	switch( reply.status )
 	{
 		case 'served' :
 
@@ -1217,7 +1216,7 @@ proto.onAcquireSpace =
 			root.setPath(
 				root._formJockey.twig.nonExistingSpace.path
 					.append( 'nonSpaceRef' ),
-				asw.spaceRef
+				spaceRef
 			);
 
 			root.setMode( 'nonExistingSpace' );
@@ -1234,8 +1233,8 @@ proto.onAcquireSpace =
 			// FIXME have it use a spaceRef
 			this._formJockey =
 				this._formJockey.create(
-					'spaceUser', asw.spaceRef.username,
-					'spaceTag', asw.spaceRef.tag
+					'spaceUser', spaceRef.username,
+					'spaceTag', spaceRef.tag
 				);
 
 			root.setMode( 'noAccessToSpace' );
@@ -1244,31 +1243,20 @@ proto.onAcquireSpace =
 
 			return;
 
-		case 'connection fail' :
-
-			system.failScreen( 'Connection failed: ' + asw.message );
-
-			return;
-
 		default :
 
-			system.failScreen(
-				'Unknown acquireSpace( ) status: '
-				+ asw.status
-				+ ': '
-				+ asw.message
-			);
+			system.failScreen( 'Unknown acquireSpace( ) status' );
 
 			return;
 	}
 
-	access = asw.access;
+	access = reply.access;
 
 	this.space =
-		asw.space.create(
+		reply.space.create(
 			// FUTURE have the server already set this at JSON level
-			'spaceUser', asw.spaceRef.username, // FIXME have it use a ref
-			'spaceTag', asw.spaceRef.tag,
+			'spaceUser', spaceRef.username, // FIXME have it use a ref
+			'spaceTag', spaceRef.tag,
 			'access', access,
 			'hover', jion.path.empty,
 			'mark', null,
@@ -1282,8 +1270,8 @@ proto.onAcquireSpace =
 				)
 		);
 
-	// FIXME have it use a spaceRef
-	this.arrivedAtSpace( asw.spaceRef.username, asw.spaceRef.tag, access );
+	// FIXME have it use a spaceRef XXX
+	this.arrivedAtSpace( spaceRef.username, spaceRef.tag, access );
 
 	this._draw( );
 };
@@ -1401,20 +1389,15 @@ proto.arrivedAtSpace =
 {
 	this._discJockey =
 		this._discJockey.create(
-			'access',
-				access,
-			'spaceUser',
-				spaceUser,
-			'spaceTag',
-				spaceTag
+			'access', access,
+			'spaceUser', spaceUser,
+			'spaceTag', spaceTag
 		);
 
 	this._formJockey =
 		this._formJockey.create(
-			'spaceUser',
-				spaceUser,
-			'spaceTag',
-				spaceTag
+			'spaceUser', spaceUser,
+			'spaceTag', spaceTag
 		);
 
 	root.setMode( 'Normal' );
