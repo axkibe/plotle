@@ -4,10 +4,11 @@
 
 
 var
-	euclid,
+	euclid_constants,
+	euclid_display,
+	euclid_point,
+	euclid_rect,
 	jools;
-
-euclid = euclid || { };
 
 
 /*
@@ -24,7 +25,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.display',
+			'euclid_display',
 		attributes :
 			{
 				'height' :
@@ -70,16 +71,10 @@ if( JION )
 }
 
 
-var
-	display;
-
-display = euclid.display;
-
-
 /*
 | Initializer.
 */
-display.prototype._init =
+euclid_display.prototype._init =
 	function( )
 {
 	var
@@ -111,7 +106,7 @@ display.prototype._init =
 /*
 | Creates a display around an existing HTML canvas.
 */
-display.createAroundHTMLCanvas =
+euclid_display.createAroundHTMLCanvas =
 	function(
 		canvas
 	)
@@ -131,7 +126,7 @@ display.createAroundHTMLCanvas =
 /**/}
 
 	return(
-		display.create(
+		euclid_display.create(
 			'_cv', canvas,
 			'_cx', canvas.getContext( '2d' ),
 			'width', canvas.width,
@@ -145,16 +140,16 @@ display.createAroundHTMLCanvas =
 | Returns the silhoutte that entails the whole display.
 */
 jools.lazyValue(
-	display.prototype,
+	euclid_display.prototype,
 	'silhoutte',
 	function( )
 	{
 		return(
-			euclid.rect.create(
+			euclid_rect.create(
 				'pnw',
-					euclid.point.zero,
+					euclid_point.zero,
 				'pse',
-					euclid.point.create(
+					euclid_point.create(
 						'x', this.width,
 						'y', this.height
 					)
@@ -167,7 +162,7 @@ jools.lazyValue(
 /*
 | Clips the display into a shape.
 */
-display.prototype.clip =
+euclid_display.prototype.clip =
 	function(
 		shape,
 		view,
@@ -209,7 +204,7 @@ display.prototype.clip =
 /*
 | Removes the clipping
 */
-display.prototype.deClip =
+euclid_display.prototype.deClip =
 	function( )
 {
 	var
@@ -243,7 +238,7 @@ display.prototype.deClip =
 |    'alpha'
 |
 */
-display.prototype.drawImage =
+euclid_display.prototype.drawImage =
 	function(
 		// free strings
 	)
@@ -314,7 +309,7 @@ display.prototype.drawImage =
 		}
 	}
 
-	if( image.reflect === 'euclid.display' )
+	if( image.reflect_ === 'euclid_display' )
 	{
 		if(
 			!(
@@ -378,7 +373,7 @@ display.prototype.drawImage =
 /*
 | Draws an edge.
 */
-display.prototype.edge =
+euclid_display.prototype.edge =
 	function(
 		style,  // the style formated in meshcraft style notation.
 		shape,  // an object which has sketch defined
@@ -423,7 +418,7 @@ display.prototype.edge =
 /*
 | Draws a filled area.
 */
-display.prototype.fill =
+euclid_display.prototype.fill =
 	function(
 		style,   // the style formated in meshcraft style notation.
 		shape,   // an object which has sketch defined
@@ -480,7 +475,7 @@ display.prototype.fill =
 | 'rotate' ( degree )
 |      text is rotated by degree
 */
-display.prototype.paintText =
+euclid_display.prototype.paintText =
 	function(
 		// free strings
 	)
@@ -621,7 +616,7 @@ display.prototype.paintText =
 | fillRect( style, pnw, pse ) -or-
 | fillRect( style, nwx, nwy, width, height )
 */
-display.prototype.fillRect =
+euclid_display.prototype.fillRect =
 	function(
 		style,
 		a1,
@@ -639,7 +634,7 @@ display.prototype.fillRect =
 
 	if( typeof( a1 ) === 'object' )
 	{
-		if( a1.reflect === 'euclid.rect' )
+		if( a1.reflect_ === 'euclid_rect' )
 		{
 			return this._cx.fillRect(
 				a1.pnw.x,
@@ -648,7 +643,7 @@ display.prototype.fillRect =
 				a1.pse.y
 			);
 		}
-		else if( a1.reflect === 'euclid.point' )
+		else if( a1.reflect_ === 'euclid_point' )
 		{
 			return this._cx.fillRect(
 				a1.x,
@@ -677,7 +672,7 @@ display.prototype.fillRect =
 | The center point of the display.
 */
 jools.lazyValue(
-	display.prototype,
+	euclid_display.prototype,
 	'pc',
 	function( )
 	{
@@ -689,9 +684,7 @@ jools.lazyValue(
 
 		y = jools.half( this.height );
 
-		return (
-			euclid.point.create( 'x', x, 'y', y )
-		);
+		return euclid_point.create( 'x', x, 'y', y );
 	}
 );
 
@@ -700,7 +693,7 @@ jools.lazyValue(
 | Sets the global alpha
 | FIXME remove
 */
-display.prototype.globalAlpha =
+euclid_display.prototype.globalAlpha =
 	function( a )
 {
 	this._cx.globalAlpha = a;
@@ -708,9 +701,9 @@ display.prototype.globalAlpha =
 
 
 /*
-| The display is cleared.
+| Thedisplay is cleared.
 */
-display.prototype.clear =
+euclid_display.prototype.clear =
 	function( )
 {
 	this._cx.clearRect(
@@ -725,7 +718,7 @@ display.prototype.clear =
 /*
 | Fills an aera and draws its borders.
 */
-display.prototype.paint =
+euclid_display.prototype.paint =
 	function(
 		style,
 		shape,
@@ -792,7 +785,7 @@ display.prototype.paint =
 /*
 | Clips the display so that the shape is left out.
 */
-display.prototype.reverseClip =
+euclid_display.prototype.reverseClip =
 	function(
 		shape,
 		view,
@@ -851,7 +844,7 @@ display.prototype.reverseClip =
 |
 | FIXME remove
 */
-display.prototype.scale =
+euclid_display.prototype.scale =
 	function(
 		s
 	)
@@ -863,7 +856,7 @@ display.prototype.scale =
 /*
 | Sets the font.
 */
-display.prototype._setFont =
+euclid_display.prototype._setFont =
 	function(
 		font
 	)
@@ -924,7 +917,7 @@ display.prototype._setFont =
 | euclid.point -or-
 | x / y
 */
-display.prototype.withinSketch =
+euclid_display.prototype.withinSketch =
 	function(
 		shape,
 		view,
@@ -943,7 +936,7 @@ display.prototype.withinSketch =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( p.reflect !== 'euclid.point' )
+/**/	if( p.reflect_ !== 'euclid_point' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -965,7 +958,7 @@ display.prototype.withinSketch =
 /*
 | Returns a HTML5 color style for a meshcraft style notation.
 */
-display.prototype._colorStyle =
+euclid_display.prototype._colorStyle =
 	function(
 		style,
 		shape,
@@ -1098,7 +1091,7 @@ display.prototype._colorStyle =
 /*
 | Draws a single edge.
 */
-display.prototype._edge =
+euclid_display.prototype._edge =
 	function(
 		style,  // the style formated in meshcraft style notation.
 		shape,  // an object which has sketch defined
@@ -1136,24 +1129,21 @@ display.prototype._edge =
 | point in north-west
 | is always considered zero.
 */
-display.prototype.pnw =
-	euclid.point.zero;
+euclid_display.prototype.pnw = euclid_point.zero;
 
 
 /*
 | Point in south east.
 */
 jools.lazyValue(
-	display.prototype,
+	euclid_display.prototype,
 	'pse',
 	function( )
 	{
 		return (
-			euclid.point.create(
-				'x',
-					this.width,
-				'y',
-					this.height
+			euclid_point.create(
+				'x', this.width,
+				'y', this.height
 			)
 		);
 	}
@@ -1163,7 +1153,7 @@ jools.lazyValue(
 /*
 | Sketches a generic ( hull ) shape.
 */
-display.prototype._sketchGeneric =
+euclid_display.prototype._sketchGeneric =
 	function(
 		shape,
 		border,
@@ -1411,7 +1401,7 @@ display.prototype._sketchGeneric =
 /*
 | Draws the rectangle.
 */
-display.prototype._sketchRect =
+euclid_display.prototype._sketchRect =
 	function(
 		rect,
 		border,
@@ -1451,7 +1441,7 @@ display.prototype._sketchRect =
 /*
 | Sketches a shape.
 */
-display.prototype._sketch =
+euclid_display.prototype._sketch =
 	function(
 		shape,
 		border,
@@ -1464,9 +1454,9 @@ display.prototype._sketch =
 		shape = shape.shape;
 	}
 
-	switch( shape.reflect )
+	switch( shape.reflect_ )
 	{
-		case 'euclid.rect' :
+		case 'euclid_rect' :
 
 			return(
 				this._sketchRect(

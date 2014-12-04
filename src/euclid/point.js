@@ -3,20 +3,11 @@
 */
 
 
-/*
-| Exports
-*/
 var
-	euclid;
-
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
+	euclid_fixPoint,
+	euclid_point,
 	jools;
+
 
 /*
 | Capsule
@@ -32,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.point',
+			'euclid_point',
 		attributes :
 			{
 				x :
@@ -58,26 +49,18 @@ if( JION )
 }
 
 
-var
-	point;
-
-
 if( SERVER )
 {
-	point = require( '../jion/this' )( module );
+	euclid_point = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
-}
-else
-{
-	point = euclid.point;
 }
 
 
 /*
 | Adds two points or x/y values, returns a new point.
 */
-point.prototype.add =
+euclid_point.prototype.add =
 	function(
 		a1,
 		a2
@@ -90,7 +73,7 @@ point.prototype.add =
 			return this;
 		}
 
-		return point.create(
+		return euclid_point.create(
 			'x', this.x + a1.x,
 			'y', this.y + a1.y
 		);
@@ -102,7 +85,7 @@ point.prototype.add =
 			return this;
 		}
 
-		return point.create(
+		return euclid_point.create(
 			'x', this.x + a1,
 			'y', this.y + a2
 		);
@@ -113,7 +96,7 @@ point.prototype.add =
 /*
 | Subtracts a points (or x/y from this), returns new point
 */
-point.prototype.sub =
+euclid_point.prototype.sub =
 	function(
 		a1,
 		a2
@@ -126,7 +109,7 @@ point.prototype.sub =
 			return this;
 		}
 
-		return point.create(
+		return euclid_point.create(
 			'x', this.x - a1.x,
 			'y', this.y - a1.y
 		);
@@ -138,7 +121,7 @@ point.prototype.sub =
 			return this;
 		}
 
-		return point.create(
+		return euclid_point.create(
 			'x', this.x - a1,
 			'y', this.y - a2
 		);
@@ -155,7 +138,7 @@ point.prototype.sub =
 |
 | point.renew(x, y, p1, p2, p3, ...)
 */
-point.renew =
+euclid_point.renew =
 	function(
 		x,
 		y
@@ -176,33 +159,30 @@ point.renew =
 
 		if(
 			p
-			&&
-			p.reflect === 'euclid.point'
-			&&
-			p.x === x
-			&&
-			p.y === y
+			&& p.reflect === 'euclid_point'
+			&& p.x === x
+			&& p.y === y
 		)
 		{
 			return p;
 		}
 	}
 
-	return point.create( 'x', x, 'y', y );
+	return euclid_point.create( 'x', x, 'y', y );
 };
 
 
 /*
 | Creates a fix point anchored to this point.
 */
-point.prototype.fixPoint =
+euclid_point.prototype.fixPoint =
 	function(
 		x,
 		y
 	)
 {
 	return(
-		euclid.fixPoint.create(
+		euclid_fixPoint.create(
 			'anchor', this,
 			'x', x,
 			'y', y
@@ -214,8 +194,8 @@ point.prototype.fixPoint =
 /*
 | Shortcut for point at 0/0.
 */
-point.zero =
-	point.create(
+euclid_point.zero =
+	euclid_point.create(
 		'x', 0,
 		'y', 0
 	);
