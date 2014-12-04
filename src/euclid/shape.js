@@ -5,20 +5,9 @@
 */
 
 
-/*
-| Export
-*/
 var
-	euclid;
-
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	euclid_point,
+	euclid_shape,
 	swatch;
 
 
@@ -36,7 +25,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.shape',
+			'euclid_shape',
 		attributes :
 			{
 				hull :
@@ -51,7 +40,7 @@ if( JION )
 						comment :
 							'center point',
 						type :
-							'euclid.point'
+							'euclid_point'
 					}
 			},
 
@@ -61,16 +50,10 @@ if( JION )
 }
 
 
-var
-	shape;
-
-shape = euclid.shape;
-
-
 /*
 | Gets the source of a projection to p.
 */
-shape.prototype.getProjection =
+euclid_shape.prototype.getProjection =
 	function(
 		p
 	)
@@ -220,12 +203,10 @@ shape.prototype.getProjection =
 						Math.max( pc.y, p.y  ) >= piy
 					)
 					{
-						return (
-							euclid.point.create(
-								'x',
-									pix,
-								'y',
-									piy
+						return(
+							euclid_point.create(
+								'x', pix,
+								'y', piy
 							)
 						);
 					}
@@ -287,34 +268,28 @@ shape.prototype.getProjection =
 				{
 					if( p.y > cy )
 					{
-						return (
-							euclid.point.create(
-								'x',
-									cx,
-								'y',
-									cy + b
+						return(
+							euclid_point.create(
+								'x', cx,
+								'y', cy + b
 							)
 						);
 					}
 					else if( p.y < cy )
 					{
-						return (
-							euclid.point.create(
-								'x',
-									cx,
-								'y',
-									cy - b
+						return(
+							euclid_point.create(
+								'x', cx,
+								'y', cy - b
 							)
 						);
 					}
 					else if( p.y === cy )
 					{
-						return (
-							euclid.point.create(
-								'x',
-									cx,
-								'y',
-									cy
+						return(
+							euclid_point.create(
+								'x', cx,
+								'y', cy
 							)
 						);
 					}
@@ -375,7 +350,7 @@ shape.prototype.getProjection =
 						)
 					)
 					{
-						return euclid.point.create( 'x', x, 'y', y );
+						return euclid_point.create( 'x', x, 'y', y );
 					}
 				}
 
@@ -400,17 +375,13 @@ shape.prototype.getProjection =
 /*
 | Returns true if point is within the shape.
 */
-shape.prototype.within =
+euclid_shape.prototype.within =
 	function(
 		view,
 		p
 	)
 {
-	return swatch.withinSketch(
-		this,
-		view,
-		p
-	);
+	return swatch.withinSketch( this, view, p );
 };
 
 

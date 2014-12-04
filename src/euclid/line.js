@@ -3,20 +3,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	euclid;
-
-
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
+	euclid_line,
+	euclid_point,
+	euclid_rect,
 	jools;
 
 
@@ -34,7 +24,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.line',
+			'euclid_line',
 		attributes :
 			{
 				p1 :
@@ -42,31 +32,25 @@ if( JION )
 						comment :
 							'first point',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				p2 :
 					{
 						comment :
 							'second point',
 						type :
-							'euclid.point'
+							'euclid_point'
 					}
 			}
 	};
 }
 
 
-var
-	line;
-
-line = euclid.line;
-
-
 /*
 | The zone of the line.
 */
 jools.lazyValue(
-	line.prototype,
+	euclid_line.prototype,
 	'zone',
 	function( )
 	{
@@ -79,16 +63,16 @@ jools.lazyValue(
 		p2 = this.p2;
 
 		return(
-			euclid.rect.create(
+			euclid_rect.create(
 				'pnw',
-					euclid.point.renew(
+					euclid_point.renew(
 						Math.min( p1.x, p2.x ),
 						Math.min( p1.y, p2.y ),
 						p1,
 						p2
 					),
 				'pse',
-					euclid.point.renew(
+					euclid_point.renew(
 						Math.max( p1.x, p2.x ),
 						Math.max( p1.y, p2.y ),
 						p1,
@@ -104,7 +88,7 @@ jools.lazyValue(
 | The point at center.
 */
 jools.lazyValue(
-	line.prototype,
+	euclid_line.prototype,
 	'pc',
 	function( )
 	{
@@ -117,11 +101,9 @@ jools.lazyValue(
 		p2 = this.p2;
 
 		return(
-			euclid.point.create(
-				'x',
-					jools.half( p1.x + p2.x ),
-				'y',
-					jools.half( p1.y + p2.y )
+			euclid_point.create(
+				'x', jools.half( p1.x + p2.x ),
+				'y', jools.half( p1.y + p2.y )
 			)
 		);
 	}
@@ -131,7 +113,7 @@ jools.lazyValue(
 /*
 | Draws the line.
 */
-line.prototype.draw =
+euclid_line.prototype.draw =
 	function(
 		display,
 		view,

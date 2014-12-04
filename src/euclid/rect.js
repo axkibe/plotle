@@ -226,7 +226,7 @@ rect.prototype.reduce =
 
 /**/if( CHECK )
 /**/{
-/**/	if( margin.reflect !== 'euclid.margin' )
+/**/	if( margin.reflect_ !== 'euclid_margin' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
