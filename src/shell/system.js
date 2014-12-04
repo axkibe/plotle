@@ -324,21 +324,21 @@ var System =
 | Default system behavior settings
 */
 var _settings =
-	jools.immute(
-		{
-			// blink speed of the caret.
-			caretBlinkSpeed :
-				530,
+	{
+		// blink speed of the caret.
+		caretBlinkSpeed : 530,
 
-			// milliseconds after mouse down, dragging starts
-			dragtime :
-				400,
+		// milliseconds after mouse down, dragging starts
+		dragtime : 400,
 
-			// pixels after mouse down and move, dragging starts
-			dragbox :
-				10
-		}
-	);
+		// pixels after mouse down and move, dragging starts
+		dragbox : 10
+	};
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( _settings );
+/**/}
 
 
 /*

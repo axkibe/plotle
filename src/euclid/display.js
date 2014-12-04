@@ -1260,7 +1260,7 @@ display.prototype._sketchGeneric =
 
 				pn = hull[ h + 2 ];
 
-				magic = euclid.constants.magic;
+				magic = euclid_constants.magic;
 
 				break;
 

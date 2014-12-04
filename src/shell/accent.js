@@ -13,13 +13,6 @@ var
 
 
 /*
-| Imports
-*/
-var
-	jools;
-
-
-/*
 | Capsule
 */
 ( function( ) {
@@ -29,11 +22,8 @@ var
 Accent =
 	{
 		NORMA : 0,
-
 		HOVER : 1,
-
 		FOCUS : 2,
-
 		HOFOC : 3
 	};
 
@@ -71,7 +61,5 @@ Accent.state =
 	}
 };
 
-
-jools.immute( Accent );
 
 } )( );

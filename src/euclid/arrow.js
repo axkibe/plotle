@@ -1,22 +1,13 @@
 /*
-| An arrow is a line that can have arrow heads.
+| An arrow is a line with arrow heads.
 */
 
 
-/*
-| Export
-*/
 var
-	euclid;
-
-
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
+	euclid_arrow,
+	euclid_line,
+	euclid_shape,
+	euclid_view,
 	jools;
 
 
@@ -34,7 +25,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.arrow',
+			'euclid_arrow',
 		attributes :
 			{
 				p1 :
@@ -42,7 +33,7 @@ if( JION )
 						comment :
 							'first point',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				p1end :
 					{
@@ -58,7 +49,7 @@ if( JION )
 						comment :
 							'second point',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				p2end :
 					{
@@ -75,17 +66,14 @@ if( JION )
 
 
 var
-	arrow,
 	arrowSize;
-
-arrow = euclid.arrow;
 
 arrowSize = 12;
 
 /*
 | Returns the arrow connecting shape1 to shape2
 */
-arrow.connect =
+euclid_arrow.connect =
 	function(
 		shape1,  // a rect or point
 		end1,    // 'normal' or 'arrow'
@@ -111,7 +99,7 @@ arrow.connect =
 /**/	}
 /**/}
 
-	if( shape1.reflect === 'euclid.point' )
+	if( shape1.reflect === 'euclid_point' )
 	{
 		pc1 = shape1;
 	}
@@ -120,7 +108,7 @@ arrow.connect =
 		pc1 = shape1.pc;
 	}
 
-	if( shape2.reflect === 'euclid.point' )
+	if( shape2.reflect === 'euclid_point' )
 	{
 		pc2 = shape2;
 	}
@@ -129,11 +117,11 @@ arrow.connect =
 		pc2 = shape2.pc;
 	}
 
-	if( shape1.reflect === 'euclid.point' )
+	if( shape1.reflect === 'euclid_point' )
 	{
 		p1 = shape1;
 	}
-	else if( shape1.within( euclid.view.proper, pc2 ) )
+	else if( shape1.within( euclid_view.proper, pc2 ) )
 	{
 		p1 = pc1;
 	}
@@ -142,11 +130,11 @@ arrow.connect =
 		p1 = shape1.getProjection( pc2 );
 	}
 
-	if( shape2.reflect === 'euclid.point' )
+	if( shape2.reflect === 'euclid_point' )
 	{
 		p2 = shape2;
 	}
-	else if( shape2.within( euclid.view.proper, pc1 ) )
+	else if( shape2.within( euclid_view.proper, pc1 ) )
 	{
 		p2 = pc2;
 	}
@@ -156,15 +144,11 @@ arrow.connect =
 	}
 
 	return(
-		arrow.create(
-			'p1',
-				p1,
-			'p1end',
-				end1,
-			'p2',
-				p2,
-			'p2end',
-				end2
+		euclid_arrow.create(
+			'p1', p1,
+			'p1end', end1,
+			'p2', p2,
+			'p2end', end2
 		)
 	);
 };
@@ -174,16 +158,14 @@ arrow.connect =
 | The line of the arrow.
 */
 jools.lazyValue(
-	arrow.prototype,
+	euclid_arrow.prototype,
 	'line',
 	function( )
 	{
 		return(
-			euclid.line.create(
-				'p1',
-					this.p1,
-				'p2',
-					this.p2
+			euclid_line.create(
+				'p1', this.p1,
+				'p2', this.p2
 			)
 		);
 	}
@@ -194,7 +176,7 @@ jools.lazyValue(
 | The zone of the arrow.
 */
 jools.lazyValue(
-	arrow.prototype,
+	euclid_arrow.prototype,
 	'zone',
 	function( )
 	{
@@ -207,7 +189,7 @@ jools.lazyValue(
 | The point at center.
 */
 jools.lazyValue(
-	arrow.prototype,
+	euclid_arrow.prototype,
 	'pc',
 	function( )
 	{
@@ -220,7 +202,7 @@ jools.lazyValue(
 | Returns the shape of the arrow.
 */
 jools.lazyValue(
-	arrow.prototype,
+	euclid_arrow.prototype,
 	'_shape',
 	function( )
 	{
@@ -247,10 +229,7 @@ jools.lazyValue(
 		{
 			case 'normal':
 
-				hull.push(
-					'start',
-						p1
-				);
+				hull.push( 'start', p1 );
 
 				break;
 
@@ -264,10 +243,7 @@ jools.lazyValue(
 		{
 			case 'normal' :
 
-				hull.push(
-					'line',
-						p2
-				);
+				hull.push( 'line', p2 );
 
 				break;
 
@@ -323,17 +299,12 @@ jools.lazyValue(
 				throw new Error( );
 		}
 
-		hull.push(
-			'0-line',
-				'close'
-		);
+		hull.push( '0-line', 'close' );
 
 		return(
-			euclid.shape.create(
-				'hull',
-					hull,
-				'pc',
-					this.pc
+			euclid_shape.create(
+				'hull', hull,
+				'pc', this.pc
 			)
 		);
 	}
@@ -343,7 +314,7 @@ jools.lazyValue(
 /*
 | Displays the arrow.
 */
-arrow.prototype.draw =
+euclid_arrow.prototype.draw =
 	function(
 		display,
 		view,

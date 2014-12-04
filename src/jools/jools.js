@@ -889,66 +889,6 @@ jools.inspect =
 
 
 /*
-| Makes an object immutable
-*/
-jools.immute =
-	function(
-		obj
-	)
-{
-	var
-		a, aZ,
-		desc,
-		name,
-		names;
-
-	// for releases immute checking is disabled in favor of speed
-	if( !config.debug.immute )
-	{
-		return obj;
-	}
-
-	names = Object.getOwnPropertyNames( obj );
-
-	for(
-		a = 0, aZ = names.length;
-		a < aZ;
-		a++
-	)
-	{
-		name = names[ a ];
-
-		if(
-			name.substring( 0, 1 ) === '$' ||
-			name.substring( 0, 2 ) === '_$'
-		)
-		{
-			continue;
-		}
-
-		desc =
-			Object.getOwnPropertyDescriptor(
-				obj,
-				names[ a ]
-			);
-
-		if( !desc.configurable )
-		{
-			continue;
-		}
-
-		desc.configurable = false;
-
-		desc.writable = false;
-
-		Object.defineProperty( obj, name, desc );
-	}
-
-	return obj;
-};
-
-
-/*
 | Makes a key not to be accessed.
 |
 | Used for developing during changes

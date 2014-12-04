@@ -190,8 +190,6 @@ ccot_sign.prototype._init =
 				throw new Error( 'invalid val type: ' + val.type );
 		}
 	}
-
-	jools.immute( this );
 };
 
 

@@ -116,13 +116,6 @@ config.debug.puffed = true;
 
 
 /*
-| If true ensures that objects that should not be immutable
-| are made immutable. Turned off on releases for performance.
-*/
-config.debug.immute = false;
-
-
-/*
 | Activates all hacks needed to debug the client with weinre.
 | Set to false/null or the address of the weinre server
 */

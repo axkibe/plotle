@@ -3,19 +3,8 @@
 */
 
 
-/*
-| Exports
-*/
 var
-	euclid;
-
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var jools;
+	euclid_constants;
 
 
 /*
@@ -25,17 +14,13 @@ var jools;
 'use strict';
 
 
-var constants;
-
-constants = euclid.constants = { };
-
-/*
-|'magic' number to approximate ellipses with beziers.
-*/
-constants.magic = 0.551784;
-
-
-jools.immute( constants );
+euclid_constants =
+	{
+		/*
+		|'magic' number to approximate ellipses with beziers.
+		*/
+		magic : 0.551784
+	};
 
 
 } )( );

@@ -427,26 +427,21 @@ note.prototype.draw =
 | Resize handles to show on notes.
 */
 note.prototype.handles =
-	jools.immute(
-		{
-			n :
-				true,
-			ne :
-				true,
-			e :
-				true,
-			se :
-				true,
-			s :
-				true,
-			sw :
-				true,
-			w :
-				true,
-			nw :
-				true
-		}
-	);
+	{
+		n : true,
+		ne : true,
+		e : true,
+		se : true,
+		s : true,
+		sw : true,
+		w : true,
+		nw : true
+	};
+
+/**/if( CHECK )
+/**/{
+/**/	Object.freeze( note.prototype.handles );
+/**/}
 
 
 /*
