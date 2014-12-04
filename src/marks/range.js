@@ -99,31 +99,21 @@ jools.lazyValue(
 	'frontPath',
 	function( )
 	{
-		if( !this._frontPath )
-		{
-			this._normalize( );
-		}
+		this._normalize( );
 
-		return this._frontPath;
+		return this.frontPath;
 	}
 );
 
 
-/*
-| The begin or end offset,
-| dependening on which comes first in the doc.
-*/
 jools.lazyValue(
 	range.prototype,
 	'frontAt',
 	function( )
 	{
-		if( !this._frontPath )
-		{
-			this._normalize( );
-		}
+		this._normalize( );
 
-		return this._frontAt;
+		return this.frontAt;
 	}
 );
 
@@ -137,12 +127,9 @@ jools.lazyValue(
 	'backPath',
 	function( )
 	{
-		if( !this._backPath )
-		{
-			this._normalize( );
-		}
+		this._normalize( );
 
-		return this._backPath;
+		return this.backPath;
 	}
 );
 
@@ -156,12 +143,9 @@ jools.lazyValue(
 	'backAt',
 	function( )
 	{
-		if( !this._backPath )
-		{
-			this._normalize( );
-		}
+		this._normalize( );
 
-		return this._backAt;
+		return this.backAt;
 	}
 );
 
@@ -289,7 +273,7 @@ jools.lazyValue(
 		if( frontPath.equals( backPath ) )
 		{
 			text = doc.twig[ frontKey ].text;
-		
+
 			return text.substring( frontAt, backAt );
 		}
 
@@ -342,9 +326,7 @@ jools.lazyValue(
 
 
 /*
-| Sets _front/_back so _front is before _back.
-|
-| FIXME remove
+| Sets front/back so front is before back.
 */
 range.prototype._normalize =
 	function( )
@@ -359,51 +341,44 @@ range.prototype._normalize =
 		ek,
 		er;
 
-	bPath =
-		this.bPath,
+	bPath = this.bPath,
 
-	bAt =
-		this.bAt,
+	bAt = this.bAt,
 
-	ePath =
-		this.ePath,
+	ePath = this.ePath,
 
-	eAt =
-		this.eAt;
+	eAt = this.eAt;
 
 
 	if( bPath.equals( ePath ) )
 	{
 		if( bAt <= eAt )
 		{
-			this._frontPath =
-				bPath;
-			this._frontAt =
-				bAt;
-			this._backPath =
-				ePath;
-			this._backAt =
-				eAt;
+			jools.aheadValue( this, 'frontPath', bPath );
+
+			jools.aheadValue( this, 'frontAt', bAt );
+
+			jools.aheadValue( this, 'backPath', ePath );
+
+			jools.aheadValue( this, 'backAt', eAt );
 		}
 		else
 		{
-			this._frontPath =
-				ePath;
-			this._frontAt =
-				eAt;
-			this._backPath =
-				bPath;
-			this._backAt =
-				bAt;
+			jools.aheadValue( this, 'frontPath', ePath );
+
+			jools.aheadValue( this, 'frontAt', eAt );
+
+			jools.aheadValue( this, 'backPath', bPath );
+
+			jools.aheadValue( this, 'backAt', bAt );
 		}
 
 		return;
 	}
 
-	bk =
-		bPath.get( -2 ),
-	ek =
-		ePath.get( -2 );
+	bk = bPath.get( -2 );
+
+	ek = ePath.get( -2 );
 
 	if( CHECK )
 	{
@@ -413,32 +388,29 @@ range.prototype._normalize =
 		}
 	}
 
-	br =
-		this.doc.rankOf( bk );
-	er =
-		this.doc.rankOf( ek );
+	br = this.doc.rankOf( bk );
+
+	er = this.doc.rankOf( ek );
 
 	if( br < er )
 	{
-		this._frontPath =
-			bPath;
-		this._frontAt =
-			bAt;
-		this._backPath =
-			ePath;
-		this._backAt =
-			eAt;
+		jools.aheadValue( this, 'frontPath', bPath );
+
+		jools.aheadValue( this, 'frontAt', bAt );
+
+		jools.aheadValue( this, 'backPath', ePath );
+
+		jools.aheadValue( this, 'backAt', eAt );
 	}
 	else
 	{
-		this._frontPath =
-			ePath;
-		this._frontAt =
-			eAt;
-		this._backPath =
-			bPath;
-		this._backAt =
-			bAt;
+		jools.aheadValue( this, 'frontPath', ePath );
+
+		jools.aheadValue( this, 'frontAt', eAt );
+
+		jools.aheadValue( this, 'backPath', bPath );
+
+		jools.aheadValue( this, 'backAt', bAt );
 	}
 };
 

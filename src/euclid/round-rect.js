@@ -17,19 +17,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	euclid;
-
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
+	euclid_point,
+	euclid_roundRect,
+	euclid_shape,
 	jools;
 
 
@@ -48,7 +39,7 @@ if( JION )
 	return {
 
 		id :
-			'euclid.roundRect',
+			'euclid_roundRect',
 		attributes :
 			{
 				pnw :
@@ -56,14 +47,14 @@ if( JION )
 						comment :
 							'point in north west',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				pse :
 					{
 						comment :
 							'point in south east',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				a :
 					{
@@ -92,16 +83,10 @@ if( JION )
 }
 
 
-var
-	roundRect;
-
-roundRect = euclid.roundRect;
-
-
 /*
 | Initializes the round rect.
 */
-roundRect.prototype._init =
+euclid_roundRect.prototype._init =
 	function(
 		pnw,
 		pse,
@@ -110,38 +95,26 @@ roundRect.prototype._init =
 	)
 {
 	var
-		pne =
-			euclid.point.create( 'x', pse.x, 'y', pnw.y ),
+		pne,
+		psw;
+		
+	pne = euclid_point.create( 'x', pse.x, 'y', pnw.y );
 
-		psw =
-			euclid.point.create( 'x', pnw.x, 'y', pse.y );
+	psw = euclid_point.create( 'x', pnw.x, 'y', pse.y );
 
 	this.shape =
-		euclid.shape.create(
+		euclid_shape.create(
 			'hull',
 				[
-					'start',
-						pnw.add( 0 , b ),
-					'round',
-						'clockwise',
-						pnw.add( a , 0 ),
-					'line',
-						pne.sub( a , 0 ),
-					'round',
-						'clockwise',
-						pne.add( 0 , b ),
-					'line',
-						pse.sub( 0 , b ),
-					'round',
-						'clockwise',
-						pse.sub( a , 0 ),
-					'line',
-						psw.add( a , 0 ),
-					'round',
-						'clockwise',
-						psw.sub( 0 , b ),
-					'line',
-						'close'
+					'start', pnw.add( 0 , b ),
+					'round', 'clockwise', pnw.add( a , 0 ),
+					'line', pne.sub( a , 0 ),
+					'round', 'clockwise', pne.add( 0 , b ),
+					'line', pse.sub( 0 , b ),
+					'round', 'clockwise', pse.sub( a , 0 ),
+					'line', psw.add( a , 0 ),
+					'round', 'clockwise', psw.sub( 0 , b ),
+					'line', 'close'
 				],
 			'pc',
 				this.pc
@@ -153,16 +126,14 @@ roundRect.prototype._init =
 | point in the center
 */
 jools.lazyValue(
-	roundRect.prototype,
+	euclid_roundRect.prototype,
 	'pc',
 	function( )
 	{
-		return (
-			euclid.point.create(
-				'x',
-					jools.half( this.pse.x + this.pnw.x ),
-				'y',
-					jools.half( this.pse.y + this.pnw.y )
+		return(
+			euclid_point.create(
+				'x', jools.half( this.pse.x + this.pnw.x ),
+				'y', jools.half( this.pse.y + this.pnw.y )
 			)
 		);
 	}
@@ -173,7 +144,7 @@ jools.lazyValue(
 | Rectangle width.
 */
 jools.lazyValue(
-	roundRect.prototype,
+	euclid_roundRect.prototype,
 	'width',
 	function( )
 	{
@@ -185,7 +156,7 @@ jools.lazyValue(
 | Rectangle height.
 */
 jools.lazyValue(
-	roundRect.prototype,
+	euclid_roundRect.prototype,
 	'height',
 	function( )
 	{
@@ -197,7 +168,7 @@ jools.lazyValue(
 /*
 | Returns true if point is within the ellipse.
 */
-roundRect.prototype.within =
+euclid_roundRect.prototype.within =
 	function
 	(
 		view,
@@ -229,7 +200,7 @@ roundRect.prototype.within =
 /*
 | Gets the source of a projection to p.
 */
-roundRect.prototype.getProjection =
+euclid_roundRect.prototype.getProjection =
 	function
 	(
 		// ...

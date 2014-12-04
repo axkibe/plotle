@@ -7,7 +7,7 @@
 
 var
 	design_anchorPoint,
-	euclid,
+	euclid_point,
 	jools;
 
 /*
@@ -109,7 +109,7 @@ design_anchorPoint.prototype.compute =
 
 /**/if( CHECK )
 /**/{
-/**/	if( frame.reflect !== 'euclid.rect' )
+/**/	if( frame.reflect_ !== 'euclid_rect' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -126,7 +126,7 @@ design_anchorPoint.prototype.compute =
 		case 'c'  :
 
 			return(
-				euclid.point.create(
+				euclid_point.create(
 					'x', half( pnw.x + pse.x ) + this.x,
 					'y', half( pnw.y + pse.y ) + this.y
 				)
@@ -135,7 +135,7 @@ design_anchorPoint.prototype.compute =
 		case 'n'  :
 
 			return(
-				euclid.point.create(
+				euclid_point.create(
 					'x', half( pnw.x + pse.x ) + this.x,
 					'y', pnw.y + this.y
 				)
@@ -144,7 +144,7 @@ design_anchorPoint.prototype.compute =
 		case 'ne' :
 
 			return(
-				euclid.point.create(
+				euclid_point.create(
 					'x', pse.x + this.x,
 					'y', pnw.y + this.y
 				)
@@ -153,7 +153,7 @@ design_anchorPoint.prototype.compute =
 		case 'e'  :
 
 			return(
-				euclid.point.create(
+				euclid_point.create(
 					'x', pse.x + this.x,
 					'y', half( pnw.y + pse.y ) + this.y
 				)
@@ -166,7 +166,7 @@ design_anchorPoint.prototype.compute =
 		case 's'  :
 
 			return(
-				euclid.point.create(
+				euclid_point.create(
 					'x', half( pnw.x + pse.x ) + this.x,
 					'y', pse.y + this.y
 				)
@@ -175,7 +175,7 @@ design_anchorPoint.prototype.compute =
 		case 'sw' :
 
 			return(
-				euclid.point.create(
+				euclid_point.create(
 					'x', pnw.x + this.x,
 					'y', pse.y + this.y
 				)
@@ -184,7 +184,7 @@ design_anchorPoint.prototype.compute =
 		case 'w'  :
 
 			return(
-				euclid.point.create(
+				euclid_point.create(
 					'x', pnw.x + this.x,
 					'y', half( pnw.y + pse.y ) + this.y
 				)
