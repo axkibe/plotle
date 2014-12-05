@@ -4,24 +4,18 @@
 | Has a scrollbar.
 */
 
-/*
-| Export
-*/
 var
-	visual;
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	euclid_display,
+	euclid_point,
+	euclid_rect,
+	euclid_roundRect,
 	jools,
 	peer,
 	root,
 	Style,
 	system,
-	theme;
+	theme,
+	visual;
 
 
 /*
@@ -116,7 +110,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view',
+							'euclid_view',
 						defaultValue :
 							undefined
 					},
@@ -125,7 +119,7 @@ if( JION )
 						comment :
 							'the notes zone',
 						type :
-							'euclid.rect',
+							'euclid_rect',
 						json :
 							true
 					}
@@ -188,19 +182,13 @@ note.prototype._init =
 	{
 		zone =
 		this.zone =
-			euclid.rect.create(
+			euclid_rect.create(
 				'pnw',
 					zone.pnw,
 				'pse',
 					zone.pnw.add(
-						Math.max(
-							minWidth,
-							zone.width
-						),
-						Math.max(
-							minHeight,
-							zone.height
-						)
+						Math.max( minWidth, zone.width ),
+						Math.max( minHeight, zone.height )
 					)
 			);
 	}
@@ -238,11 +226,9 @@ note.prototype._init =
 			'max',
 				this.doc.height,
 			'pnw',
-				euclid.point.create(
-					'x',
-						zone.pse.x,
-					'y',
-						zone.pnw.y + theme.scrollbar.vdis
+				euclid_point.create(
+					'x', zone.pse.x,
+					'y', zone.pnw.y + theme.scrollbar.vdis
 				),
 			'pos',
 				this.scrolly,
@@ -351,7 +337,7 @@ jools.lazyValue(
 		hview = this.view.home;
 
 		f =
-			euclid.display.create(
+			euclid_display.create(
 				'width', vzone.width + 2,
 				'height', vzone.height + 2
 			);
@@ -373,11 +359,9 @@ jools.lazyValue(
 			f,
 			hview,
 			this.zone.width,
-			euclid.point.create(
-				'x',
-					0,
-				'y',
-					sbary.pos
+			euclid_point.create(
+				'x', 0,
+				'y', sbary.pos
 			)
 		);
 
@@ -453,24 +437,21 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			zone =
-				this.zone,
+			zone,
+			cr;
 
-			cr =
-				theme.note.cornerRadius;
+		zone = this.zone;
 
-			return (
-				euclid.roundRect.create(
-					'pnw',
-						zone.pnw,
-					'pse',
-						zone.pse,
-					'a',
-						cr,
-					'b',
-						cr
-				)
-			);
+		cr = theme.note.cornerRadius;
+
+		return (
+			euclid_roundRect.create(
+				'pnw', zone.pnw,
+				'pse', zone.pse,
+				'a', cr,
+				'b', cr
+			)
+		);
 	}
 );
 
@@ -492,20 +473,15 @@ jools.lazyValue(
 		cr = theme.note.cornerRadius;
 
 		return (
-			euclid.roundRect.create(
-				'pnw',
-					euclid.point.zero,
+			euclid_roundRect.create(
+				'pnw', euclid_point.zero,
 				'pse',
-					euclid.point.create(
-						'x',
-							zone.width,
-						'y',
-							zone.height
+					euclid_point.create(
+						'x', zone.width,
+						'y', zone.height
 					),
-				'a',
-					cr,
-				'b',
-					cr
+				'a', cr,
+				'b', cr
 			)
 		);
 	}

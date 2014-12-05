@@ -5,20 +5,12 @@
 */
 
 
-/*
-| Export
-*/
 var
-	visual;
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	euclid_roundRect,
+	euclid_view,
 	jools,
-	theme;
+	theme,
+	visual;
 
 
 /*
@@ -64,7 +56,7 @@ if( JION )
 						comment :
 							'point in north west',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				size :
 					{
@@ -137,7 +129,7 @@ scrollbar.prototype.draw =
 	display.paint(
 		theme.scrollbar.style,
 		this.getArea( view ),
-		euclid.view.proper
+		euclid_view.proper
 	);
 };
 
@@ -182,21 +174,11 @@ scrollbar.prototype.getArea =
 	s05 = jools.half( ths.strength );
 
 	return (
-		euclid.roundRect.create(
-			'pnw',
-				view.point(
-					pnw.add( 0, sy )
-				)
-				.add( -s05, 0 ),
-			'pse',
-				view.point(
-					pnw.add( 0, sy + map )
-				)
-				.add( s05, 0 ),
-			'a',
-				ths.ellipseA,
-			'b',
-				ths.ellipseB
+		euclid_roundRect.create(
+			'pnw', view.point( pnw.add( 0, sy ) ).add( -s05, 0 ),
+			'pse', view.point( pnw.add( 0, sy + map ) ).add( s05, 0 ),
+			'a', ths.ellipseA,
+			'b', ths.ellipseB
 		)
 	);
 };
