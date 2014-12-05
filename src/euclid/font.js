@@ -3,20 +3,8 @@
 */
 
 
-/*
-| Export
-*/
 var
-	euclid;
-
-
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
+	euclid_font,
 	jools;
 
 
@@ -34,7 +22,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.font',
+			'euclid_font',
 		attributes :
 			{
 				size :
@@ -81,7 +69,7 @@ if( JION )
 | The CSS-string for this font.
 */
 jools.lazyValue(
-	euclid.font.prototype,
+	euclid_font.prototype,
 	'css',
 	function( )
 	{

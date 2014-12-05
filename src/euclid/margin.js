@@ -1,17 +1,10 @@
 /*
 | Holds information of inner or outer distances.
-|
-| FIXME, make it a jion.
 */
 
 
-/*
-| Exports
-*/
 var
-	euclid;
-
-euclid = euclid || { };
+	euclid_margin;
 
 
 /*
@@ -34,7 +27,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.margin',
+			'euclid_margin',
 		attributes :
 			{
 				n :
@@ -70,9 +63,6 @@ if( JION )
 }
 
 
-var
-	margin;
-
 /*
 | Node includes.
 */
@@ -80,19 +70,15 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	margin = require( '../jion/this' )( module );
-}
-else
-{
-	margin = euclid.margin;
+	euclid_margin = require( '../jion/this' )( module );
 }
 
 
 /*
 | A margin with all distances 0.
 */
-margin.zero =
-	margin.create(
+euclid_margin.zero =
+	euclid_margin.create(
 		'n', 0,
 		'e', 0,
 		's', 0,
@@ -103,7 +89,7 @@ margin.zero =
 | east + west margin = x
 */
 jools.lazyValue(
-	margin.prototype,
+	euclid_margin.prototype,
 	'x',
 	function( )
 	{
@@ -116,7 +102,7 @@ jools.lazyValue(
 | north + south margin = y
 */
 jools.lazyValue(
-	margin.prototype,
+	euclid_margin.prototype,
 	'y',
 	function( )
 	{

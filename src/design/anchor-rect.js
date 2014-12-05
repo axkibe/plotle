@@ -5,7 +5,7 @@
 
 var
 	design_anchorRect,
-	euclid;
+	euclid_rect;
 
 /*
 | Capsule
@@ -52,7 +52,7 @@ design_anchorRect.prototype.compute =
 		frame
 	)
 {
-	return euclid.rect.create(
+	return euclid_rect.create(
 		'pnw', this.pnw.compute( frame ),
 		'pse', this.pse.compute( frame )
 	);

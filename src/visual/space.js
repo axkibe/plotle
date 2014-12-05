@@ -22,7 +22,7 @@ var
 	peer,
 	result,
 	root,
-	Stubs,
+	shell_stubs,
 	theme;
 
 
@@ -632,7 +632,7 @@ space.prototype.dragStart =
 	)
 	{
 		transItem =
-			Stubs.emptyNote.create(
+			shell_stubs.emptyNote.create(
 				'zone',
 					euclid.rect.create(
 						'pnw', p,  // FIXME why no depoint?
@@ -663,7 +663,7 @@ space.prototype.dragStart =
 	)
 	{
 		transItem =
-			Stubs.emptyLabel.create(
+			shell_stubs.emptyLabel.create(
 				'pnw', view.depoint( p ),
 				'mark', null,
 				'path', jion.path.empty,
@@ -687,7 +687,7 @@ space.prototype.dragStart =
 	)
 	{
 		transItem =
-			Stubs.emptyPortal.create(
+			shell_stubs.emptyPortal.create(
 				'hover', jion.path.empty,
 				'mark', null,
 				'path', jion.path.empty,

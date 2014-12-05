@@ -3,25 +3,20 @@
 */
 
 
-/*
-| Export
-*/
-var
-	widgets;
-
-widgets = widgets || { };
-
-
-/*
-| Imports
-*/
 var
 	Accent,
-	euclid,
-	icons,
+	euclid_display,
+	euclid_view,
+	icons_moveto,
+	icons_normal,
+	icons_remove,
 	jools,
 	result,
-	root;
+	root,
+	widgets;
+
+
+widgets = widgets || { }; // FIXME
 
 
 /*
@@ -63,7 +58,7 @@ if( JION )
 						comment :
 							'font of the text',
 						type :
-							'euclid.font',
+							'euclid_font',
 						defaultValue :
 							null
 					},
@@ -140,7 +135,7 @@ if( JION )
 						comment :
 							'the frame the widget resides in',
 						type :
-							'euclid.rect',
+							'euclid_rect',
 						defaultValue :
 							null
 					},
@@ -231,7 +226,16 @@ button.prototype._init =
 
 	if( this.icon )
 	{
-		this._icon = icons[ this.icon ].create( );
+		switch( this.icon )
+		{
+			case 'moveto' : this._icon = icons_moveto.create( ); break;
+
+			case 'normal' : this._icon = icons_normal.create( ); break;
+
+			case 'remove' : this._icon = icons_remove.create( ); break;
+
+			default : throw new Error( );
+		}
 	}
 
 	// if true repeats the push action if held down
@@ -271,24 +275,14 @@ jools.lazyValue(
 			);
 
 		f =
-			euclid.display.create(
-				'width',
-					this.frame.width,
-				'height',
-					this.frame.height
+			euclid_display.create(
+				'width', this.frame.width,
+				'height', this.frame.height
 			);
 
-		style =
-			widgets.getStyle(
-				this.style,
-				accent
-			);
+		style = widgets.getStyle( this.style, accent );
 
-		f.paint(
-			style,
-			this._shape,
-			euclid.view.proper
-		);
+		f.paint( style, this._shape, euclid_view.proper );
 
 		if( this.text )
 		{
@@ -305,14 +299,10 @@ jools.lazyValue(
 			if( newline === null )
 			{
 				f.paintText(
-					'text',
-						this.text,
-					'p',
-						textPos,
-					'font',
-						font,
-					'rotate',
-						this.textRotation
+					'text', this.text,
+					'p', textPos,
+					'font', font,
+					'rotate', this.textRotation
 				);
 			}
 			else
@@ -337,13 +327,9 @@ jools.lazyValue(
 				)
 				{
 					f.paintText(
-						'text',
-							text[ a ],
-						'xy',
-							x,
-							y,
-						'font',
-							font
+						'text', text[ a ],
+						'xy', x, y,
+						'font', font
 					);
 				}
 			}
@@ -353,11 +339,8 @@ jools.lazyValue(
 		{
 			this._icon.draw(
 				f,
-				widgets.getStyle(
-					this.iconStyle,
-					Accent.NORMA
-				),
-				euclid.view.proper
+				widgets.getStyle( this.iconStyle, Accent.NORMA ),
+				euclid_view.proper
 			);
 		}
 
@@ -374,26 +357,24 @@ button.prototype.pointingHover =
 		p
 	)
 {
+	var
+		pp;
+
 	if(
 		!this.visible
 		||
-		!this.frame.within(
-			euclid.view.proper,
-			p
-		)
+		!this.frame.within( euclid_view.proper, p )
 	)
 	{
 		return null;
 	}
 
-	var
-		pp =
-			p.sub( this.frame.pnw );
+	pp = p.sub( this.frame.pnw );
 
 	if(
 		!this._display.withinSketch(
 			this._shape,
-			euclid.view.proper,
+			euclid_view.proper,
 			pp
 		)
 	)
@@ -403,10 +384,8 @@ button.prototype.pointingHover =
 
 	return(
 		result.hover.create(
-			'path',
-				this.path,
-			'cursor',
-				'default'
+			'path', this.path,
+			'cursor', 'default'
 		)
 	);
 };
@@ -422,26 +401,24 @@ button.prototype.click =
 		// ctrl
 	)
 {
+	var
+		pp;
+
 	if(
 		!this.visible
 		||
-		!this.frame.within(
-			euclid.view.proper,
-			p
-		)
+		!this.frame.within( euclid_view.proper, p )
 	)
 	{
 		return null;
 	}
 
-	var
-		pp =
-			p.sub( this.frame.pnw );
+	pp = p.sub( this.frame.pnw );
 
 	if(!
 		this._display.withinSketch(
 			this._shape,
-			euclid.view.proper,
+			euclid_view.proper,
 			pp
 		)
 	)

@@ -2,21 +2,10 @@
 | Sketches of the icons on the discs.
 */
 
-
-/*
-| Export
-*/
 var
-	icons;
-
-icons = icons || { };
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	icons_remove,
+	euclid_point,
+	euclid_shape,
 	jools;
 
 
@@ -34,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'icons.remove',
+			'icons_remove',
 		singleton :
 			true,
 		equals :
@@ -43,13 +32,6 @@ if( JION )
 			[ ]
 	};
 }
-
-
-
-var
-	remove;
-
-remove = icons.remove;
 
 
 /*
@@ -65,7 +47,7 @@ remove = icons.remove;
 |  M**L   J**SE
 |
 */
-remove.prototype._init =
+icons_remove.prototype._init =
 	function( )
 {
 	var
@@ -76,32 +58,32 @@ remove.prototype._init =
 		pc;
 
 	pnw =
-		euclid.point.create(
+		euclid_point.create(
 			'x', 17,
 			'y', 16
 		);
 
 	pse =
-		euclid.point.create(
+		euclid_point.create(
 			'x', 28,
 			'y', 27
 		);
 
 	pne =
-		euclid.point.create(
+		euclid_point.create(
 			'x', pse.x,
 			'y', pnw.y
 		);
 
 	psw =
-		euclid.point.create(
+		euclid_point.create(
 			'x', pnw.x,
 			'y', pse.y
 		);
 
 	pc =
 		// FUTURE make it an euclid middle call
-		euclid.point.create(
+		euclid_point.create(
 			'x', jools.half( pnw.x + pse.x ),
 			'y', jools.half( pnw.y + pse.y )
 		);
@@ -115,7 +97,7 @@ remove.prototype._init =
 	var ch = 2;
 
 	this._x =
-		euclid.shape.create(
+		euclid_shape.create(
 			'hull',
 				[
 					'start', pnw,                 // A
@@ -145,7 +127,7 @@ remove.prototype._init =
 /*
 | Displays the moveto button.
 */
-remove.prototype.draw =
+icons_remove.prototype.draw =
 	function(
 		display,
 		style,

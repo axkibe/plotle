@@ -3,18 +3,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	Stubs =
-		null;
-
-/*
-| Imports
-*/
-var
-	euclid,
+	euclid_point,
+	euclid_rect,
+	shell_stubs,
 	theme,
 	visual;
 
@@ -30,13 +22,13 @@ var
 /*
 | Constructor.
 */
-Stubs = { };
+shell_stubs = { };
 
 
-Stubs.emptyLabel =
+shell_stubs.emptyLabel =
 	visual.label.create(
 		'pnw',
-			euclid.point.zero,
+			euclid_point.zero,
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'doc',
@@ -51,37 +43,28 @@ Stubs.emptyLabel =
 	);
 
 
-Stubs.emptyNote =
+shell_stubs.emptyNote =
 	visual.note.create(
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'zone',
-			euclid.rect.create(
-				'pnw',
-					euclid.point.zero,
-				'pse',
-					euclid.point.zero
+			euclid_rect.create(
+				'pnw', euclid_point.zero,
+				'pse', euclid_point.zero
 			),
 		'doc',
 			visual.doc.create(
-				'twig:add',
-				'1',
-				visual.para.create(
-					'text',
-						''
-				)
+				'twig:add', '1', visual.para.create( 'text', '' )
 			)
 	);
 
 
-Stubs.emptyPortal =
+shell_stubs.emptyPortal =
 	visual.portal.create(
 		'zone',
-			euclid.rect.create(
-				'pnw',
-					euclid.point.zero,
-				'pse',
-					euclid.point.zero
+			euclid_rect.create(
+				'pnw', euclid_point.zero,
+				'pse', euclid_point.zero
 			),
 		'spaceUser',
 			'',

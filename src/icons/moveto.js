@@ -3,20 +3,11 @@
 */
 
 
-/*
-| Export
-*/
 var
-	icons;
-
-icons = icons || { };
-
-
-/*
-| Imports
-*/
-var
-	euclid;
+	euclid_point,
+	euclid_rect,
+	euclid_shape,
+	icons_moveto;
 
 
 /*
@@ -33,7 +24,7 @@ if( JION )
 {
 	return {
 		id :
-			'icons.moveto',
+			'icons_moveto',
 		singleton :
 			true,
 		equals :
@@ -42,11 +33,6 @@ if( JION )
 			[ ]
 	};
 }
-
-var
-	moveto;
-
-moveto = icons.moveto;
 
 
 /*
@@ -65,19 +51,19 @@ moveto = icons.moveto;
 |      H***I
 |      K***J
 */
-moveto.prototype._init =
+icons_moveto.prototype._init =
 	function( )
 {
 	var ap;
 
 	ap =
-		euclid.point.create(
+		euclid_point.create(
 			'x', 22,
 			'y', 11
 		);
 
 	this._arrow =
-		euclid.shape.create(
+		euclid_shape.create(
 			'hull',
 				[
 					'start', ap,              // A
@@ -94,13 +80,13 @@ moveto.prototype._init =
 		);
 
 	this._base1 =
-		euclid.rect.create(
+		euclid_rect.create(
 			'pnw', ap.add( -2, 16 ),
 			'pse', ap.add( +2, 17 )
 		);
 
 	this._base2 =
-		euclid.rect.create(
+		euclid_rect.create(
 			'pnw', ap.add( -2, 19 ),
 			'pse', ap.add( +2, 20 )
 		);
@@ -111,7 +97,7 @@ moveto.prototype._init =
 /*
 | Draws the moveto button in a display.
 */
-moveto.prototype.draw =
+icons_moveto.prototype.draw =
 	function(
 		display,
 		style,

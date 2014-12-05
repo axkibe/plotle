@@ -4,23 +4,17 @@
 
 
 /*
-| Export
-*/
-var
-	widgets;
-
-widgets = widgets || { };
-
-
-/*
 | Imports
 */
 var
 	Accent,
-	euclid,
-	icons,
+	euclid_view,
+	icons_check,
 	jools,
-	root;
+	root,
+	widgets;
+
+widgets = widgets || { }; //TODO
 
 
 /*
@@ -112,7 +106,7 @@ if( JION )
 						comment :
 							'the frame the widget resides in',
 						type :
-							'euclid.rect',
+							'euclid_rect',
 						defaultValue :
 							null
 					},
@@ -172,7 +166,7 @@ jools.lazyValue(
 	'checkIcon',
 	function( )
 	{
-		return icons.check.create( 'pc', this.frame.pc );
+		return icons_check.create( 'pc', this.frame.pc );
 	}
 );
 
@@ -223,7 +217,7 @@ checkbox.prototype.click =
 		return null;
 	}
 
-	if( this.frame.within( euclid.view.proper, p ) )
+	if( this.frame.within( euclid_view.proper, p ) )
 	{
 		root.setPath(
 			this.path.append( 'checked' ),
@@ -318,17 +312,14 @@ checkbox.prototype.draw =
 			)
 		);
 
-	display.paint( style, this.frame, euclid.view.proper );
+	display.paint( style, this.frame, euclid_view.proper );
 
 	if( this.checked )
 	{
 		this.checkIcon.draw(
 			display,
-			widgets.getStyle(
-				'checkboxCheck',
-				Accent.NORMA
-			),
-			euclid.view.proper
+			widgets.getStyle( 'checkboxCheck', Accent.NORMA ),
+			euclid_view.proper
 		);
 	}
 };

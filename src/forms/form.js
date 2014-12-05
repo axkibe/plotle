@@ -3,18 +3,9 @@
 */
 
 
-/*
-| Export
-*/
 var
-	forms_form;
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	forms_form,
+	euclid_view,
 	jion,
 	jools,
 	marks,
@@ -200,7 +191,7 @@ forms_form.prototype.draw =
 	display.paint(
 		theme.forms.style,
 		display.silhoutte,
-		euclid.view.proper
+		euclid_view.proper
 	);
 
 	ranks = this.ranks;

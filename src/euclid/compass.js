@@ -3,13 +3,8 @@
 */
 
 
-/*
-| Export
-*/
 var
-	euclid;
-
-euclid = euclid || { };
+	euclid_compass;
 
 
 /*
@@ -19,19 +14,13 @@ euclid = euclid || { };
 'use strict';
 
 
-/*
-| Constructor.
-*/
-var
-	compass =
-	euclid.compass =
-		{ };
+euclid_compass = { };
 
 
 /*
 | all 8 directions, clock wise, corners first
 */
-compass.dir8CWCF = [
+euclid_compass.dir8CWCF = [
 	'nw',
 	'ne',
 	'se',
@@ -42,5 +31,10 @@ compass.dir8CWCF = [
 	'w'
 ];
 
+
+if( CHECK )
+{
+	Object.freeze( euclid_compass.dir8CWCF );
+}
 
 } )( );

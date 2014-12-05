@@ -4,20 +4,9 @@
 */
 
 
-/*
-| Export
-*/
 var
-	icons;
-
-icons = icons || { };
-
-
-/*
-| Imports
-*/
-var
-	euclid;
+	euclid,
+	icons_check;
 
 
 /*
@@ -34,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'icons.check',
+			'icons_check',
 		attributes :
 			{
 				pc :
@@ -51,16 +40,10 @@ if( JION )
 }
 
 
-var
-	check;
-
-check = icons.check;
-
-
 /*
 | Sketches the normal button's icon.
 */
-check.prototype._init =
+icons_check.prototype._init =
 	function( )
 {
 	var
@@ -86,7 +69,7 @@ check.prototype._init =
 /*
 | Draws the check button on a display.
 */
-check.prototype.draw =
+icons_check.prototype.draw =
 	function(
 		display,
 		style,

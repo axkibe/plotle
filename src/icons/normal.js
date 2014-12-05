@@ -3,20 +3,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	icons;
-
-icons = icons || { };
-
-
-/*
-| Imports
-*/
-var
-	euclid;
+	icons_normal,
+	euclid_point,
+	euclid_shape;
 
 
 /*
@@ -33,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'icons.normal',
+			'icons_normal',
 		singleton :
 			true,
 		equals :
@@ -42,12 +32,6 @@ if( JION )
 			[ ]
 	};
 }
-
-
-var
-	normal;
-
-normal = icons.normal;
 
 
 /*
@@ -66,20 +50,20 @@ normal = icons.normal;
 |          **
 |           ED
 */
-normal.prototype._init =
+icons_normal.prototype._init =
 	function( )
 {
 	var
 		ap;
 
 	ap =
-		euclid.point.create(
+		euclid_point.create(
 			'x', 18,
 			'y', 12
 		);
 
 	this._arrow =
-		euclid.shape.create(
+		euclid_shape.create(
 			'hull',
 				[
 					'start', ap,                // A
@@ -100,7 +84,7 @@ normal.prototype._init =
 /*
 | Draws the moveto button in a display.
 */
-normal.prototype.draw =
+icons_normal.prototype.draw =
 	function(
 		display,
 		style,

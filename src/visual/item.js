@@ -19,6 +19,7 @@ visual = visual || { };
 var
 	actions,
 	euclid,
+	euclid_compass,
 	jion,
 	jools,
 	marks,
@@ -123,7 +124,7 @@ item.prototype.checkHandles =
 
 	f = root.display;
 
-	d8cwcf = euclid.compass.dir8CWCF;
+	d8cwcf = euclid_compass.dir8CWCF;
 
 	for(
 		var a = 0, aZ = d8cwcf.length;
@@ -403,7 +404,7 @@ item.prototype.drawHandles =
 		handles,
 		sbary;
 
-	d8cwcf = euclid.compass.dir8CWCF;
+	d8cwcf = euclid_compass.dir8CWCF;
 
 	handles = this._handles;
 

@@ -6,7 +6,7 @@
 var
 	design_anchorEllipse,
 	design_anchorPoint,
-	euclid;
+	euclid_ellipse;
 
 /*
 | Capsule
@@ -63,12 +63,10 @@ design_anchorEllipse.prototype.compute =
 		frame
 	)
 {
-	return (
-		euclid.ellipse.create(
-			'pnw',
-				this.pnw.compute( frame ),
-			'pse',
-				this.pse.compute( frame )
+	return(
+		euclid_ellipse.create(
+			'pnw', this.pnw.compute( frame ),
+			'pse', this.pse.compute( frame )
 		)
 	);
 };

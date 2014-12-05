@@ -16,7 +16,8 @@ discs = discs || { };
 */
 var
 	actions,
-	euclid,
+	euclid_display,
+	euclid_view,
 	jion,
 	jools,
 	root;
@@ -131,7 +132,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view',
+							'euclid_view',
 						concerns :
 							{
 								member :
@@ -250,18 +251,12 @@ jools.lazyValue(
 			display;
 
 		display =
-			euclid.display.create(
-				'width',
-					this.style.width,
-				'height',
-					this.style.height
+			euclid_display.create(
+				'width', this.style.width,
+				'height', this.style.height
 			);
 
-		display.fill(
-			this.style,
-			this.silhoutte,
-			euclid.view.proper
-		);
+		display.fill( this.style, this.silhoutte, euclid_view.proper );
 
 		for(
 			var r = 0, rZ = this.ranks.length;
@@ -272,11 +267,7 @@ jools.lazyValue(
 			this.atRank( r ).draw( display );
 		}
 
-		display.edge(
-			this.style,
-			this.silhoutte,
-			euclid.view.proper
-		);
+		display.edge( this.style, this.silhoutte, euclid_view.proper );
 
 		return display;
 	}
@@ -435,11 +426,7 @@ createDisc.prototype.pointingHover =
 
 	// FUTURE optimize by reusing the latest path of this._display
 	if(
-		!display.withinSketch(
-			this.silhoutte,
-			euclid.view.proper,
-			pp
-		)
+		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
 	)
 	{
 		return null;
@@ -503,7 +490,7 @@ createDisc.prototype.click =
 	if(
 		!display.withinSketch(
 			this.silhoutte,
-			euclid.view.proper,
+			euclid_view.proper,
 			pp
 		)
 	)
@@ -603,7 +590,7 @@ createDisc.prototype.dragStart =
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			euclid.view.proper,
+			euclid_view.proper,
 			p.sub( this.frame.pnw )
 		)
 	)
