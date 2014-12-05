@@ -3,25 +3,16 @@
 */
 
 
-/*
-| Export
-*/
 var
-	visual;
-
-visual = visual || { };
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	euclid_arrow,
 	jools,
 	marks,
 	peer,
 	root,
-	theme;
+	theme,
+	visual;
+
+visual = visual || { }; // TODO
 
 
 /*
@@ -103,7 +94,7 @@ if( JION )
 						comment :
 							'point in the north-west',
 						type :
-							'euclid.point',
+							'euclid_point',
 						json :
 							true
 					},
@@ -135,7 +126,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view',
+							'euclid_view',
 						defaultValue :
 							undefined
 					}
@@ -201,11 +192,9 @@ relation.spawn =
 		result;
 
 	arrow =
-		euclid.arrow.connect(
-			item1.silhoutte,
-			null,
-			item2.silhoutte,
-			null
+		euclid_arrow.connect(
+			item1.silhoutte, null,
+			item2.silhoutte, null
 		);
 
 	pnw =
@@ -267,11 +256,9 @@ relation.prototype.draw =
 	if( item1 )
 	{
 		arrow1 =
-			euclid.arrow.connect(
-				item1.silhoutte,
-				'normal',
-				zone,
-				'normal'
+			euclid_arrow.connect(
+				item1.silhoutte, 'normal',
+				zone, 'normal'
 			);
 
 		arrow1.draw(
@@ -284,11 +271,9 @@ relation.prototype.draw =
 	if( item2 )
 	{
 		arrow2 =
-			euclid.arrow.connect(
-				zone,
-				'normal',
-				item2.silhoutte,
-				'arrow'
+			euclid_arrow.connect(
+				zone, 'normal',
+				item2.silhoutte, 'arrow'
 			);
 
 		arrow2.draw(

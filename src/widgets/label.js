@@ -64,7 +64,7 @@ if( JION )
 						comment :
 							'font of the text',
 						type :
-							'euclid.font',
+							'euclid_font',
 						defaultValue :
 							null
 					},
@@ -102,7 +102,7 @@ if( JION )
 						comment :
 							'the frame the widget resides in',
 						type :
-							'euclid.rect',
+							'euclid_rect',
 						defaultValue :
 							null
 					},

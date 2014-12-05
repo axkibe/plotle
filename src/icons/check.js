@@ -5,7 +5,7 @@
 
 
 var
-	euclid,
+	euclid_shape,
 	icons_check;
 
 
@@ -31,7 +31,7 @@ if( JION )
 						comment :
 							'center of the check',
 						type :
-							'euclid.point'
+							'euclid_point'
 					}
 			},
 		init :
@@ -52,7 +52,7 @@ icons_check.prototype._init =
 	pc = this.pc;
 
 	this._check =
-		euclid.shape.create(
+		euclid_shape.create(
 			'hull',
 				[
 					'start', pc.add( -5,  -3 ),

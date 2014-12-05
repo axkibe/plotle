@@ -36,7 +36,7 @@ if( JION )
 						comment :
 							'mouse down point on start of scrolling',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				startPos :
 					{

@@ -4,20 +4,9 @@
 */
 
 
-/*
-| Exports
-*/
 var
-	euclid;
+	euclid_fixPoint;
 
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
-	jools;
 
 /*
 | Capsule
@@ -33,7 +22,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.fixPoint',
+			'euclid_fixPoint',
 		attributes :
 			{
 				x :
@@ -55,36 +44,16 @@ if( JION )
 						comment :
 							'anchor',
 						type :
-							'euclid.point'
+							'euclid_point'
 					}
 			}
 	};
 }
 
 
-var
-	fixPoint;
-
-
 if( SERVER )
 {
-	fixPoint = require( '../jion/this' )( module );
-
-	jools = require( '../jools/jools' );
-}
-else
-{
-	fixPoint = euclid.fixPoint;
-}
-
-
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = fixPoint;
+	euclid_fixPoint = require( '../jion/this' )( module );
 }
 
 
