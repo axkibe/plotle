@@ -17,7 +17,12 @@ widgets = widgets || { };
 */
 var
 	Accent,
-	euclid,
+	euclid_display,
+	euclid_ellipse,
+	euclid_measure,
+	euclid_point,
+	euclid_roundRect,
+	euclid_view,
 	jools,
 	marks,
 	result,
@@ -85,7 +90,7 @@ if( JION )
 						comment :
 							'font of the text',
 						type :
-							'euclid.font'
+							'euclid_font'
 					},
 				mark :
 					{
@@ -138,7 +143,7 @@ if( JION )
 						comment :
 							'the frame the widget resides in',
 						type :
-							'euclid.rect',
+							'euclid_rect',
 						defaultValue :
 							null
 					},
@@ -197,8 +202,8 @@ input.prototype._init =
 			this.designFrame.compute( this.superFrame );
 
 		this._shape =
-			euclid.roundRect.create(
-				'pnw', euclid.point.zero,
+			euclid_roundRect.create(
+				'pnw', euclid_point.zero,
 				'pse', frame.pse.sub( frame.pnw ),
 				'a', 7,
 				'b', 3
@@ -220,7 +225,7 @@ input.prototype._init =
 /*
 | Default distance of text
 */
-input._pitch = euclid.point.create( 'x', 8, 'y', 3 );
+input._pitch = euclid_point.create( 'x', 8, 'y', 3 );
 
 
 /*
@@ -271,11 +276,7 @@ input.prototype.getOffsetAt =
 		}
 		else
 		{
-			x2 =
-				euclid.measure.width(
-					font,
-					value.substr( 0, a )
-				);
+			x2 = euclid_measure.width( font, value.substr( 0, a ) );
 		}
 
 		if( x2 >= dx )
@@ -346,7 +347,7 @@ jools.lazyValue(
 
 		value = this.value;
 
-		view = euclid.view.proper;
+		view = euclid_view.proper;
 
 		size = this.font.size;
 
@@ -374,14 +375,14 @@ jools.lazyValue(
 		)
 		{
 			pm[ a ] =
-				euclid.ellipse.create(
+				euclid_ellipse.create(
 					'pnw',
-						euclid.point.create(
+						euclid_point.create(
 							'x', x,
 							'y', y - h
 						),
 					'pse',
-						euclid.point.create(
+						euclid_point.create(
 							'x', x + w,
 							'y', y + h
 						)
@@ -431,11 +432,9 @@ jools.lazyValue(
 		mark = this.mark;
 
 		f =
-			euclid.display.create(
-				'width',
-					shape.width + 1,
-				'height',
-					shape.height + 1
+			euclid_display.create(
+				'width', shape.width + 1,
+				'height', shape.height + 1
 			);
 
 		style =
@@ -452,7 +451,7 @@ jools.lazyValue(
 		f.fill(
 			style,
 			shape,
-			euclid.view.proper
+			euclid_view.proper
 		);
 
 		if( this.password )
@@ -468,7 +467,7 @@ jools.lazyValue(
 				f.fill(
 					blackStyle,
 					pm[ a ],
-					euclid.view.proper
+					euclid_view.proper
 				);
 			}
 		}
@@ -497,7 +496,7 @@ jools.lazyValue(
 			this._drawCaret( f );
 		}
 
-		f.edge( style, shape, euclid.view.proper );
+		f.edge( style, shape, euclid_view.proper );
 
 		return f;
 	}
@@ -542,7 +541,7 @@ input.prototype.locateOffset =
 	if( this.password )
 	{
 		return (
-			euclid.point.create(
+			euclid_point.create(
 				'x',
 					pitch.x
 					+ (
@@ -557,11 +556,11 @@ input.prototype.locateOffset =
 	else
 	{
 		return (
-			euclid.point.create(
+			euclid_point.create(
 				'x',
 					Math.round(
 						pitch.x +
-						euclid.measure.width(
+						euclid_measure.width(
 							font,
 							value.substring( 0, offset )
 						)
@@ -950,11 +949,7 @@ input.prototype.pointingHover =
 	var
 		pp;
 
-	if(
-		!this.frame.within(
-			euclid.view.proper,
-			p
-		)
+	if( !this.frame.within( euclid_view.proper, p )
 	)
 	{
 		return null;
@@ -962,12 +957,7 @@ input.prototype.pointingHover =
 
 	pp = p.sub( this.frame.pnw );
 
-	if(
-		!this._shape.within(
-			euclid.view.proper,
-			pp
-		)
-	)
+	if( !this._shape.within( euclid_view.proper, pp ) )
 	{
 		return null;
 	}
@@ -997,7 +987,7 @@ input.prototype.click =
 	if(
 		p === null ||
 		!this.frame.within(
-			euclid.view.proper,
+			euclid_view.proper,
 			p
 		)
 	)
@@ -1009,7 +999,7 @@ input.prototype.click =
 
 	if(
 		!this._shape.within(
-			euclid.view.proper,
+			euclid_view.proper,
 			pp
 		)
 	)

@@ -1,5 +1,8 @@
 /*
 | Meshcraft default theme.
+|
+| FIXME call shell_theme
+| FUTURE remove and put it all to gruga
 */
 
 
@@ -8,16 +11,8 @@
 
 */
 var
-	theme;
-
-theme = null;
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	theme,
+	euclid_margin,
 	fontPool;
 
 /*
@@ -79,7 +74,7 @@ theme =
 			30,
 
 		innerMargin  :
-			euclid.margin.create(
+			euclid_margin.create(
 				'n', 4,
 				'e', 5,
 				's', 4,
@@ -156,7 +151,7 @@ theme =
 		style : 'label',
 
 		innerMargin  :
-			euclid.margin.create(
+			euclid_margin.create(
 				'n', 1,
 				'e', 1,
 				's', 1,
@@ -482,7 +477,7 @@ theme =
 		},
 
 		innerMargin :
-			euclid.margin.create(
+			euclid_margin.create(
 				'n', 1,
 				'e', 1,
 				's', 1,

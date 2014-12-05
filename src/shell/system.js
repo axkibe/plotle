@@ -10,19 +10,14 @@
 */
 var
 	catcher,
-	system,
-	startup;
-
-
-/*
-| Imports
-*/
-var
 	config,
-	euclid,
+	euclid_display,
+	euclid_point,
 	jools,
 	root,
-	shell;
+	shell,
+	startup,
+	system;
 
 
 /*
@@ -253,8 +248,7 @@ var System =
 
 	_canvas.height = window.innerHeight - 1;
 
-	this._display =
-		euclid.display.createAroundHTMLCanvas( _canvas );
+	this._display = euclid_display.createAroundHTMLCanvas( _canvas );
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
@@ -340,39 +334,6 @@ var _settings =
 /**/	Object.freeze( _settings );
 /**/}
 
-
-/*
-| An asyncronous event happened
-|
-| TODO remove
-|
-| For example:
-|   message
-|   onArriveAtSpace,
-|   update
-*/
-/*
-System.prototype.asyncEvent =
-	function(
-		eventName,
-		a1,
-		a2,
-		a3,
-		a4
-	)
-{
-	if( _failScreen )
-	{
-		return;
-	}
-
-	root[ eventName ]( a1, a2, a3, a4 );
-
-	this._repeatHover( );
-
-	this._steerAttention( );
-};
-*/
 
 /*
 | Replaces the shell by a failscreen
@@ -470,9 +431,7 @@ System.prototype.restartBlinker =
 
 	if( this._blinkTimer )
 	{
-		clearInterval(
-			this._blinkTimer
-		);
+		clearInterval( this._blinkTimer );
 	}
 
 	this._blinkTimer = setInterval(
@@ -490,22 +449,15 @@ System.prototype.setInput =
 		text
 	)
 {
-	// TODO
-	var
-		hi =
-			_hiddenInput;
-
-	hi.value =
 	_inputVal =
+	_hiddenInput.value =
 		'' + text;
 
-	hi.selectionStart =
-		0;
+	_hiddenInput.selectionStart = 0;
 
 	if( text !== '' )
 	{
-		hi.selectionEnd =
-			text.length;
+		_hiddenInput.selectionEnd = text.length;
 	}
 };
 
@@ -820,6 +772,12 @@ System.prototype._onMouseDown =
 		event
 	)
 {
+	var
+		canvas,
+		ctrl,
+		p,
+		shift;
+
 	event.preventDefault( );
 
 	if(
@@ -834,18 +792,17 @@ System.prototype._onMouseDown =
 	// Opera requires focusing the window first
 	window.focus( );
 
-	var
-		canvas = _canvas,
+	canvas = _canvas;
 
-		p =
-			euclid.point.create(
-				'x', event.pageX - canvas.offsetLeft,
-				'y', event.pageY - canvas.offsetTop
-			),
+	p =
+		euclid_point.create(
+			'x', event.pageX - canvas.offsetLeft,
+			'y', event.pageY - canvas.offsetTop
+		);
 
-		shift = event.shiftKey,
+	shift = event.shiftKey,
 
-		ctrl = event.ctrlKey || event.metaKey;
+	ctrl = event.ctrlKey || event.metaKey;
 
 	_pointingState = 'atween';
 
@@ -948,11 +905,9 @@ System.prototype._onMouseMove =
 		shift;
 
 	p =
-		euclid.point.create(
-			'x',
-				event.pageX - _canvas.offsetLeft,
-			'y',
-				event.pageY - _canvas.offsetTop
+		euclid_point.create(
+			'x', event.pageX - _canvas.offsetLeft,
+			'y', event.pageY - _canvas.offsetTop
 		);
 
 	shift = event.shiftKey;
@@ -988,18 +943,9 @@ System.prototype._onMouseMove =
 
 				_pointingState = 'drag';
 
-				root.dragStart(
-					_atweenPos,
-					shift,
-					ctrl
-				);
+				root.dragStart( _atweenPos, shift, ctrl );
 
-				cursor =
-					root.dragMove(
-						p,
-						shift,
-						ctrl
-					);
+				cursor = root.dragMove( p, shift, ctrl );
 
 				_resetAtweenState( );
 
@@ -1057,16 +1003,14 @@ System.prototype._onMouseUp =
 	this._releaseEvents( );
 
 	p =
-		euclid.point.create(
-			'x',
-				event.pageX - _canvas.offsetLeft,
-			'y',
-				event.pageY - _canvas.offsetTop
+		euclid_point.create(
+			'x', event.pageX - _canvas.offsetLeft,
+			'y', event.pageY - _canvas.offsetTop
 		);
-	shift =
-		event.shiftKey;
-	ctrl =
-		event.ctrlKey || event.metaKey;
+
+	shift = event.shiftKey;
+
+	ctrl = event.ctrlKey || event.metaKey;
 
 	switch( _pointingState )
 	{
@@ -1080,17 +1024,9 @@ System.prototype._onMouseUp =
 			// not having moved out of 'dragbox'.
 			clearTimeout( _atweenTimer );
 
-			root.click(
-				p,
-				shift,
-				ctrl
-			);
+			root.click( p, shift, ctrl );
 
-			this._pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+			this._pointingHover( p, shift, ctrl );
 
 			this._steerAttention( );
 
@@ -1102,22 +1038,13 @@ System.prototype._onMouseUp =
 
 		case 'drag' :
 
-			root.dragStop(
-				p,
-				shift,
-				ctrl
-			);
+			root.dragStop( p, shift, ctrl );
 
-			this._pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+			this._pointingHover( p, shift, ctrl );
 
 			this._steerAttention( );
 
-			_pointingState =
-				false;
+			_pointingState = false;
 
 			break;
 
@@ -1143,11 +1070,9 @@ System.prototype._onMouseWheel =
 		p;
 
 	p =
-		euclid.point.create(
-			'x',
-				event.pageX - _canvas.offsetLeft,
-			'y',
-				event.pageY - _canvas.offsetTop
+		euclid_point.create(
+			'x', event.pageX - _canvas.offsetLeft,
+			'y', event.pageY - _canvas.offsetTop
 		);
 
 	if( event.wheelDelta !== undefined )
@@ -1185,6 +1110,11 @@ System.prototype._onTouchStart =
 		event
 	)
 {
+	var
+		p,
+		shift,
+		ctrl;
+
 	event.preventDefault( );
 
 	// for now ignore multi-touches
@@ -1193,20 +1123,15 @@ System.prototype._onTouchStart =
 		return false;
 	}
 
-	var
-		p =
-			euclid.point.create(
-				'x',
-					event.pageX - _canvas.offsetLeft,
-				'y',
-					event.pageY - _canvas.offsetTop
-			),
+	p =
+		euclid_point.create(
+			'x', event.pageX - _canvas.offsetLeft,
+			'y', event.pageY - _canvas.offsetTop
+		),
 
-		shift =
-			event.shiftKey,
+	shift = event.shiftKey;
 
-		ctrl =
-			event.ctrlKey || event.metaKey;
+	ctrl = event.ctrlKey || event.metaKey;
 
 	_pointingState = 'atween';
 
@@ -1237,7 +1162,11 @@ System.prototype._onTouchMove =
 	)
 {
 	var
-		dragbox;
+		ctrl,
+		cursor,
+		dragbox,
+		p,
+		shift;
 
 	event.preventDefault();
 
@@ -1247,33 +1176,23 @@ System.prototype._onTouchMove =
 		return false;
 	}
 
-	var
-		p =
-			euclid.point.create(
-				'x',
-					event.pageX - _canvas.offsetLeft,
-				'y',
-					event.pageY - _canvas.offsetTop
-			),
+	p =
+		euclid_point.create(
+			'x', event.pageX - _canvas.offsetLeft,
+			'y', event.pageY - _canvas.offsetTop
+		),
 
-		shift =
-			event.shiftKey,
+	shift = event.shiftKey;
 
-		ctrl =
-			event.ctrlKey || event.metaKey,
+	ctrl = event.ctrlKey || event.metaKey;
 
-		cursor =
-			null;
+	cursor = null;
 
 	switch( _pointingState )
 	{
 		case false:
 
-			this._pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+			this._pointingHover( p, shift, ctrl );
 
 			break;
 
@@ -1292,18 +1211,9 @@ System.prototype._onTouchMove =
 
 				_pointingState = 'drag';
 
-				root.dragStart(
-					_atweenPos,
-					shift,
-					ctrl
-				);
+				root.dragStart( _atweenPos, shift, ctrl );
 
-				cursor =
-					root.dragMove(
-						p,
-						shift,
-						ctrl
-					);
+				cursor = root.dragMove( p, shift, ctrl );
 
 				_resetAtweenState( );
 
@@ -1319,12 +1229,7 @@ System.prototype._onTouchMove =
 
 		case 'drag':
 
-			cursor =
-				root.dragMove(
-					p,
-					shift,
-					ctrl
-				);
+			cursor = root.dragMove( p, shift, ctrl );
 
 			break;
 
@@ -1360,7 +1265,7 @@ System.prototype._onTouchEnd =
 	this._releaseEvents( );
 
 	p =
-		euclid.point.create(
+		euclid_point.create(
 			'x',
 				event.changedTouches[ 0 ].pageX -
 				_canvas.offsetLeft,
@@ -1386,17 +1291,9 @@ System.prototype._onTouchEnd =
 
 			clearTimeout( _atweenTimer );
 
-			root.click(
-				p,
-				shift,
-				ctrl
-			);
+			root.click( p, shift, ctrl );
 
-			this._pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+			this._pointingHover( p, shift, ctrl );
 
 			this._steerAttention( );
 
@@ -1414,16 +1311,11 @@ System.prototype._onTouchEnd =
 				ctrl
 			);
 
-			this._pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+			this._pointingHover( p, shift, ctrl );
 
 			this._steerAttention( );
 
-			_pointingState =
-				false;
+			_pointingState = false;
 
 			break;
 

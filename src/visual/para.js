@@ -7,22 +7,16 @@
 | Export
 */
 var
-	visual;
-
-visual = visual || { };
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	euclid_display,
+	euclid_measure,
+	euclid_point,
 	fontPool,
 	jools,
 	marks,
 	peer,
 	root,
-	theme;
+	theme,
+	visual_para;
 
 
 /*
@@ -39,7 +33,7 @@ if( JION )
 {
 	return {
 		id :
-			'visual.para',
+			'visual_para',
 		attributes :
 			{
 				flowWidth :
@@ -67,7 +61,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'visual.para',
+									'visual_para',
 								func :
 									'concernsMark',
 								args :
@@ -85,7 +79,7 @@ if( JION )
 						comment :
 							'the path of the para',
 						type :
-							'jion.path',
+							'jion_path',
 						defaultValue :
 							undefined
 					},
@@ -105,7 +99,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view',
+							'euclid_view',
 						defaultValue :
 							undefined
 					}
@@ -114,22 +108,14 @@ if( JION )
 			{
 				alikeIgnoringView :
 					{
-						ignores :
-							{
-								'view' : true
-							}
+						ignores : { 'view' : true }
 					}
 			},
 		init :
-			[
-				'inherit'
-			]
+			[ 'inherit' ]
 	};
 }
 
-
-var
-	para;
 
 
 /*
@@ -137,20 +123,16 @@ var
 */
 if( SERVER )
 {
-	jools = require( '../jools/jools' );
+	visual_para = require( '../jion/this' )( module );
 
-	para = require( '../jion/this' )( module );
-}
-else
-{
-	para = visual.para;
+	jools = require( '../jools/jools' );
 }
 
 
 /*
 | Initializer.
 */
-para.prototype._init =
+visual_para.prototype._init =
 	function(
 		inherit
 	)
@@ -179,7 +161,7 @@ para.prototype._init =
 | Returns the mark if an item with 'path' concerns about
 | the mark.
 */
-para.concernsMark =
+visual_para.concernsMark =
 	function(
 		mark,
 		path
@@ -212,7 +194,7 @@ para.concernsMark =
 | It is the last path entry.
 */
 jools.lazyValue(
-	para.prototype,
+	visual_para.prototype,
 	'key',
 	function( )
 	{
@@ -225,7 +207,7 @@ jools.lazyValue(
 | The attention center.
 */
 jools.lazyValue(
-	para.prototype,
+	visual_para.prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -255,7 +237,7 @@ jools.lazyValue(
 | The para's display.
 */
 jools.lazyValue(
-	para.prototype,
+	visual_para.prototype,
 	'_display',
 	function( )
 	{
@@ -285,11 +267,9 @@ jools.lazyValue(
 
 		// adds to width so the caret gets visible.
 		f =
-			euclid.display.create(
-				'width',
-					Math.round( flow.widthUsed * zoom + 5 ),
-				'height',
-					Math.round( this.height * zoom + 1 )
+			euclid_display.create(
+				'width', Math.round( flow.widthUsed * zoom + 5 ),
+				'height', Math.round( this.height * zoom + 1 )
 			);
 
 		f.scale( zoom );
@@ -340,7 +320,7 @@ jools.lazyValue(
 /*
 | Draws the paragraph in a display.
 */
-para.prototype.draw =
+visual_para.prototype.draw =
 	function(
 		display, // the display to draw upon
 		pnw      // pnw of this para
@@ -356,7 +336,7 @@ para.prototype.draw =
 /*
 | Draws the caret.
 */
-para.prototype._drawCaret =
+visual_para.prototype._drawCaret =
 	function(
 		display
 	)
@@ -393,7 +373,7 @@ para.prototype._drawCaret =
 | The font for this para.
 */
 jools.lazyValue(
-	para.prototype,
+	visual_para.prototype,
 	'font',
 	function( )
 	{
@@ -408,7 +388,7 @@ jools.lazyValue(
 | FUTURE make this a proper jion.
 */
 jools.lazyValue(
-	para.prototype,
+	visual_para.prototype,
 	'flow',
 	function( )
 	{
@@ -455,7 +435,7 @@ jools.lazyValue(
 
 		y = Math.round( font.size );
 
-		space = euclid.measure.width( font, ' ' );
+		space = euclid_measure.width( font, ' ' );
 
 		line = 0;
 
@@ -479,7 +459,7 @@ jools.lazyValue(
 			// a token is a word plus following hard spaces
 			token = ca[ 1 ] + ca[ 2 ] + ca[ 3 ];
 
-			w = euclid.measure.width( font, token );
+			w = euclid_measure.width( font, token );
 
 			xw = x + w;
 
@@ -550,7 +530,7 @@ jools.lazyValue(
 | The height of the para.
 */
 jools.lazyValue(
-	para.prototype,
+	visual_para.prototype,
 	'height',
 	function( )
 	{
@@ -567,7 +547,7 @@ jools.lazyValue(
 /*
 | Returns the offset by an x coordinate in a flow.
 */
-para.prototype.getOffsetAt =
+visual_para.prototype.getOffsetAt =
 	function(
 		line,
 		x
@@ -633,11 +613,7 @@ para.prototype.getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 =
-			euclid.measure.width(
-				font,
-				text.substr( 0, a )
-			);
+		x2 = euclid_measure.width( font, text.substr( 0, a ) );
 
 		if( x2 >= dx )
 		{
@@ -665,7 +641,7 @@ para.prototype.getOffsetAt =
 | FUTURE: Use lazy value and use two functions
 |         for p and line which aheadValue each other.
 */
-para.prototype.locateOffset =
+visual_para.prototype.locateOffset =
 	function(
 		offset    // the offset to get the point from.
 	)
@@ -720,11 +696,11 @@ para.prototype.locateOffset =
 	if( token )
 	{
 		p =
-			euclid.point.create(
+			euclid_point.create(
 				'x',
 					Math.round(
 						token.x +
-						euclid.measure.width(
+						euclid_measure.width(
 							font,
 							text.substring( token.o, offset )
 						)
@@ -736,7 +712,7 @@ para.prototype.locateOffset =
 	else
 	{
 		p =
-			euclid.point.create(
+			euclid_point.create(
 				'x', 0,
 				'y', line.y
 			);
@@ -762,7 +738,7 @@ para.prototype.locateOffset =
 /*
 | Returns the offset closest to a point.
 */
-para.prototype.getPointOffset =
+visual_para.prototype.getPointOffset =
 	function(
 		item,
 		point     // the point to look for
@@ -794,7 +770,7 @@ para.prototype.getPointOffset =
 /*
 | A text has been inputed.
 */
-para.prototype.input =
+visual_para.prototype.input =
 	function(
 		text,
 		item
@@ -870,7 +846,7 @@ para.prototype.input =
 /*
 | Handles a special key.
 */
-para.prototype.specialKey =
+visual_para.prototype.specialKey =
 	function(
 		key,
 		item,
@@ -999,7 +975,7 @@ para.prototype.specialKey =
 | The path to the .text attribute
 */
 jools.lazyValue(
-	para.prototype,
+	visual_para.prototype,
 	'textPath',
 	function( )
 	{
@@ -1065,7 +1041,7 @@ _keyMap =
 /*
 | Backspace pressed.
 */
-para.prototype._keyBackspace =
+visual_para.prototype._keyBackspace =
 	function(
 		item,
 		doc,
@@ -1107,7 +1083,7 @@ para.prototype._keyBackspace =
 /*
 | Del-key pressed.
 */
-para.prototype._keyDel =
+visual_para.prototype._keyDel =
 	function(
 		item,
 		doc,
@@ -1146,7 +1122,7 @@ para.prototype._keyDel =
 /*
 | Down arrow pressed.
 */
-para.prototype._keyDown =
+visual_para.prototype._keyDown =
 	function(
 		item,
 		doc,
@@ -1212,7 +1188,7 @@ para.prototype._keyDown =
 /*
 | End-key pressed.
 */
-para.prototype._keyEnd =
+visual_para.prototype._keyEnd =
 	function(
 		item,
 		doc,
@@ -1235,7 +1211,7 @@ para.prototype._keyEnd =
 /*
 | Enter-key pressed
 */
-para.prototype._keyEnter =
+visual_para.prototype._keyEnter =
 	function(
 		item,
 		doc,
@@ -1252,7 +1228,7 @@ para.prototype._keyEnter =
 /*
 | Left arrow pressed.
 */
-para.prototype._keyLeft =
+visual_para.prototype._keyLeft =
 	function(
 		item,
 		doc,
@@ -1313,7 +1289,7 @@ para.prototype._keyLeft =
 |
 | FUTURE maintain relative scroll pos
 */
-para.prototype._pageUpDown =
+visual_para.prototype._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
 		item,     // TODO remove
@@ -1383,7 +1359,7 @@ para.prototype._pageUpDown =
 /*
 | PageDown key pressed.
 */
-para.prototype._keyPageDown =
+visual_para.prototype._keyPageDown =
 	function(
 		item,
 		doc,
@@ -1408,7 +1384,7 @@ para.prototype._keyPageDown =
 /*
 | PageUp key pressed.
 */
-para.prototype._keyPageUp =
+visual_para.prototype._keyPageUp =
 	function(
 		item,
 		doc,
@@ -1433,7 +1409,7 @@ para.prototype._keyPageUp =
 /*
 | Pos1-key pressed.
 */
-para.prototype._keyPos1 =
+visual_para.prototype._keyPos1 =
 	function(
 		item,
 		doc,
@@ -1456,7 +1432,7 @@ para.prototype._keyPos1 =
 /*
 | Right arrow pressed.
 */
-para.prototype._keyRight =
+visual_para.prototype._keyRight =
 	function(
 		item,
 		doc,
@@ -1503,7 +1479,7 @@ para.prototype._keyRight =
 /*
 | Up arrow pressed.
 */
-para.prototype._keyUp =
+visual_para.prototype._keyUp =
 	function(
 		item,
 		doc,
@@ -1565,7 +1541,7 @@ para.prototype._keyUp =
 /*
 | Sets the users caret or range
 */
-para.prototype._setMark =
+visual_para.prototype._setMark =
 	function(
 		at,      // position to mark caret (or end of range)
 		retainx, // retains this x position when moving up/down

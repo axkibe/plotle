@@ -3,19 +3,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	euclid;
-
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
+	euclid_ellipse,
+	euclid_point,
+	euclid_shape,
 	jools;
 
 
@@ -33,7 +24,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.ellipse',
+			'euclid_ellipse',
 		attributes :
 			{
 				pnw :
@@ -41,14 +32,14 @@ if( JION )
 						comment :
 							'point in north west',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				pse :
 					{
 						comment :
 							'point in south east',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				// FIXME make proper optionals
 				gradientPC :
@@ -56,7 +47,7 @@ if( JION )
 						comment :
 							'center for gradient',
 						type :
-							'euclid.point',
+							'euclid_point',
 						defaultValue :
 							null,
 						assign :
@@ -94,16 +85,10 @@ if( JION )
 }
 
 
-var
-	ellipse;
-
-ellipse = euclid.ellipse;
-
-
 /*
 | Initialization.
 */
-ellipse.prototype._init =
+euclid_ellipse.prototype._init =
 	function(
 		pnw,
 		pse
@@ -138,32 +123,23 @@ ellipse.prototype._init =
 	mx = jools.half(wx + ex);
 
 	// cardinal points
-	pw = euclid.point.create( 'x', wx, 'y', my );
+	pw = euclid_point.create( 'x', wx, 'y', my );
 
-	pn = euclid.point.create( 'x', mx, 'y', ny );
+	pn = euclid_point.create( 'x', mx, 'y', ny );
 
-	pe = euclid.point.create( 'x', ex, 'y', my );
+	pe = euclid_point.create( 'x', ex, 'y', my );
 
-	ps = euclid.point.create( 'x', mx, 'y', sy );
+	ps = euclid_point.create( 'x', mx, 'y', sy );
 
 	this.shape =
-		euclid.shape.create(
+		euclid_shape.create(
 			'hull',
 				[
-					'start',
-						pw,
-					'round',
-						'clockwise',
-						pn,
-					'round',
-						'clockwise',
-						pe,
-					'round',
-						'clockwise',
-						ps,
-					'round',
-						'clockwise',
-						'close'
+					'start', pw,
+					'round', 'clockwise', pn,
+					'round', 'clockwise', pe,
+					'round', 'clockwise', ps,
+					'round', 'clockwise', 'close'
 				],
 			'pc',
 				this.pc
@@ -175,16 +151,14 @@ ellipse.prototype._init =
 | Center point of an ellipse.
 */
 jools.lazyValue(
-	ellipse.prototype,
+	euclid_ellipse.prototype,
 	'pc',
-	function()
+	function( )
 	{
-		return (
-			euclid.point.create(
-				'x',
-					jools.half( this.pnw.x + this.pse.x ),
-				'y',
-					jools.half( this.pnw.y + this.pse.y )
+		return(
+			euclid_point.create(
+				'x', jools.half( this.pnw.x + this.pse.x ),
+				'y', jools.half( this.pnw.y + this.pse.y )
 			)
 		);
 	}
@@ -195,7 +169,7 @@ jools.lazyValue(
 | Gradient's center point.
 */
 jools.lazyValue(
-	ellipse.prototype,
+	euclid_ellipse.prototype,
 	'gradientPC',
 	function( )
 	{
@@ -205,12 +179,10 @@ jools.lazyValue(
 			return this._gradientPC;
 		}
 
-		return (
-			euclid.point.create(
-				'x',
-					jools.half( this.pnw.x + this.pse.x ),
-				'y',
-					jools.half( this.pnw.y + this.pse.y )
+		return(
+			euclid_point.create(
+				'x', jools.half( this.pnw.x + this.pse.x ),
+				'y', jools.half( this.pnw.y + this.pse.y )
 			)
 		);
 	}
@@ -221,7 +193,7 @@ jools.lazyValue(
 | Gradient inner radius.
 */
 jools.lazyValue(
-	ellipse.prototype,
+	euclid_ellipse.prototype,
 	'gradientR1',
 	function( )
 	{
@@ -248,7 +220,7 @@ jools.lazyValue(
 | Gradient inner radius.
 */
 jools.lazyValue(
-	ellipse.prototype,
+	euclid_ellipse.prototype,
 	'gradientR0',
 	function( )
 	{
@@ -266,7 +238,7 @@ jools.lazyValue(
 /*
 | Returns true if point is within the ellipse.
 */
-ellipse.prototype.within =
+euclid_ellipse.prototype.within =
 	function
 	(
 		view,
@@ -279,39 +251,29 @@ ellipse.prototype.within =
 	pp = view.depoint( p );
 
 	if(
-		pp.x < this.pnw.x ||
-		pp.y < this.pnw.y ||
-		pp.x > this.pse.x ||
-		pp.y > this.pse.y
+		pp.x < this.pnw.x
+		|| pp.y < this.pnw.y
+		|| pp.x > this.pse.x
+		|| pp.y > this.pse.y
 	)
 	{
 		return false;
 	}
 
-	return(
-		this.shape.within(
-			view,
-			p
-		)
-	);
+	return this.shape.within( view, p);
 };
 
 
 /*
 | Gets the source of a projection to p.
 */
-ellipse.prototype.getProjection =
+euclid_ellipse.prototype.getProjection =
 	function
 	(
 		// ...
 	)
 {
-	return(
-		this.shape.getProjection.apply(
-			this.shape,
-			arguments
-		)
-	);
+	return this.shape.getProjection.apply( this.shape, arguments );
 };
 
 

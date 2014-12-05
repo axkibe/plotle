@@ -3,19 +3,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	euclid;
-
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
+	euclid_ellipse,
+	euclid_point,
+	euclid_rect,
 	jools;
 
 
@@ -33,7 +24,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.rect',
+			'euclid_rect',
 		attributes :
 			{
 				pnw :
@@ -43,7 +34,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				pse :
 					{
@@ -52,42 +43,30 @@ if( JION )
 						json :
 							'true',
 						type :
-							'euclid.point'
+							'euclid_point'
 					}
 			}
 	};
 }
 
-var
-	ellipse,
-	point,
-	rect;
 
 /*
 | Node includes.
 */
 if( SERVER )
 {
-	rect = require( '../jion/this' )( module );
+	euclid_rect = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
 
-	point = require( './point' );
-}
-else
-{
-	ellipse = euclid.ellipse;
-
-	point = euclid.point;
-
-	rect = euclid.rect;
+	euclid_point = require( './point' );
 }
 
 
 /*
 | Creates a rect by two arbitrary corner points
 */
-rect.createArbitrary =
+euclid_rect.createArbitrary =
 	function(
 		p1,
 		p2
@@ -121,25 +100,25 @@ rect.createArbitrary =
 		p1.y >= p2.y
 	)
 	{
-		pnw = point.create( 'x', p1.x, 'y', p2.y );
+		pnw = euclid_point.create( 'x', p1.x, 'y', p2.y );
 
-		pse = point.create( 'x', p2.x, 'y', p1.y );
+		pse = euclid_point.create( 'x', p2.x, 'y', p1.y );
 	}
 	else if(
 		p1.x >= p2.x &&
 		p2.y >= p1.y
 	)
 	{
-		pnw = point.create( 'x', p2.x, 'y', p1.y );
+		pnw = euclid_point.create( 'x', p2.x, 'y', p1.y );
 
-		pse = point.create( 'x', p1.x, 'y', p2.y );
+		pse = euclid_point.create( 'x', p1.x, 'y', p2.y );
 	}
 	else
 	{
 		throw new Error( );
 	}
 
-	return rect.create( 'pnw', pnw, 'pse', pse );
+	return euclid_rect.create( 'pnw', pnw, 'pse', pse );
 };
 
 
@@ -147,7 +126,7 @@ rect.createArbitrary =
 | Rectangle width.
 */
 jools.lazyValue(
-	rect.prototype,
+	euclid_rect.prototype,
 	'width',
 	function( )
 	{
@@ -160,7 +139,7 @@ jools.lazyValue(
 | Rectangle height.
 */
 jools.lazyValue(
-	rect.prototype,
+	euclid_rect.prototype,
 	'height',
 	function( )
 	{
@@ -173,7 +152,7 @@ jools.lazyValue(
 | A rectangle of same size with pnw at 0/0
 */
 jools.lazyValue(
-	rect.prototype,
+	euclid_rect.prototype,
 	'zeropnw',
 	function( )
 	{
@@ -188,8 +167,8 @@ jools.lazyValue(
 		else
 		{
 			return(
-				rect.create(
-					'pnw', point.zero,
+				euclid_rect.create(
+					'pnw', euclid_point.zero,
 					'pse', this.pse.sub( this.pnw )
 				)
 			);
@@ -201,13 +180,13 @@ jools.lazyValue(
 /*
 | Computes an ellipse modelled relative to this rect.
 */
-rect.prototype.computeEllipse =
+euclid_rect.prototype.computeEllipse =
 	function(
 		model
 	)
 {
 	return(
-		ellipse.create(
+		euclid_ellipse.create(
 			'pnw', model.pnw.compute( this ),
 			'pse', model.pse.compute( this )
 		)
@@ -218,7 +197,7 @@ rect.prototype.computeEllipse =
 /*
 | Returns a rectangle thats reduced on every side by a margin object
 */
-rect.prototype.reduce =
+euclid_rect.prototype.reduce =
 	function(
 		margin
 	)
@@ -235,16 +214,16 @@ rect.prototype.reduce =
 	// allows margins to reduce the rect to zero size without erroring.
 
 	return(
-		rect.create(
+		euclid_rect.create(
 			'pnw',
-				point.renew(
+				euclid_point.renew(
 					this.pnw.x + margin.e,
 					this.pnw.y + margin.n,
 					this.pnw,
 					this.pse
 				),
 			'pse',
-				point.renew(
+				euclid_point.renew(
 					this.pse.x - margin.w,
 					this.pse.y - margin.s,
 					this.pnw,
@@ -258,7 +237,7 @@ rect.prototype.reduce =
 /*
 | Returns a resized rect with cardinal limits.
 */
-rect.prototype.cardinalResize =
+euclid_rect.prototype.cardinalResize =
 	function(
 		cardinal,  // 'n', 'ne', 'e', etc.
 		dx,        // x-difference
@@ -383,15 +362,8 @@ rect.prototype.cardinalResize =
 			throw new Error( );
 	}
 
-	return(
-		rect.renew(
-			wx,
-			ny,
-			ex,
-			sy,
-			this
-		)
-	);
+	// FIXME just call this.create
+	return euclid_rect.renew( wx, ny, ex, sy, this );
 };
 
 
@@ -399,12 +371,12 @@ rect.prototype.cardinalResize =
 | Point in the center.
 */
 jools.lazyValue(
-	rect.prototype,
+	euclid_rect.prototype,
 	'pc',
 	function( )
 	{
 		return(
-			point.create(
+			euclid_point.create(
 				'x', jools.half( this.pse.x + this.pnw.x ),
 				'y', jools.half( this.pse.y + this.pnw.y )
 			)
@@ -417,12 +389,12 @@ jools.lazyValue(
 | Point in the north.
 */
 jools.lazyValue(
-	rect.prototype,
+	euclid_rect.prototype,
 	'pn',
 	function( )
 	{
 		return(
-			point.create(
+			euclid_point.create(
 				'x', jools.half( this.pse.x + this.pnw.x ),
 				'y', this.pnw.y
 			)
@@ -435,12 +407,12 @@ jools.lazyValue(
 | West point.
 */
 jools.lazyValue(
-	rect.prototype,
+	euclid_rect.prototype,
 	'w',
 	function( )
 	{
 		return(
-			point.create(
+			euclid_point.create(
 				'x', this.pnw.x,
 				'y', jools.half( this.pse.y + this.pnw.y )
 			)
@@ -453,12 +425,12 @@ jools.lazyValue(
 | East point.
 */
 jools.lazyValue(
-	rect.prototype,
+	euclid_rect.prototype,
 	'e',
 	function( )
 	{
 		return(
-			point.create(
+			euclid_point.create(
 				'x', this.pse.x,
 				'y', jools.half( this.pse.y + this.pnw.y )
 			)
@@ -473,14 +445,14 @@ jools.lazyValue(
 | add( point )   -or-
 | add( x, y  )
 */
-rect.prototype.add =
+euclid_rect.prototype.add =
 	function(
 		a1,
 		a2
 	)
 {
 	return(
-		rect.create(
+		euclid_rect.create(
 			'pnw', this.pnw.add( a1, a2 ),
 			'pse', this.pse.add( a1, a2 )
 		)
@@ -491,7 +463,7 @@ rect.prototype.add =
 /*
 | Creates a new rect.
 */
-rect.renew =
+euclid_rect.renew =
 	function(
 		wx,
 		ny,
@@ -576,15 +548,15 @@ rect.renew =
 
 	if( !pnw )
 	{
-		pnw = point.create( 'x', wx, 'y', ny );
+		pnw = euclid_point.create( 'x', wx, 'y', ny );
 	}
 
 	if( !pse )
 	{
-		pse = point.create( 'x', ex, 'y', sy );
+		pse = euclid_point.create( 'x', ex, 'y', sy );
 	}
 
-	return rect.create( 'pnw', pnw, 'pse', pse );
+	return euclid_rect.create( 'pnw', pnw, 'pse', pse );
 };
 
 
@@ -594,14 +566,14 @@ rect.renew =
 | sub(point)   -or-
 | sub(x, y)
 */
-rect.prototype.sub =
+euclid_rect.prototype.sub =
 	function(
 		a1,
 		a2
 	)
 {
 	return(
-		rect.create(
+		euclid_rect.create(
 			'pnw', this.pnw.sub( a1, a2 ),
 			'pse', this.pse.sub( a1, a2 )
 		)
@@ -612,7 +584,7 @@ rect.prototype.sub =
 /*
 | Returns true if this rectangle is the same as another
 */
-rect.prototype.equals =
+euclid_rect.prototype.equals =
 	function(
 		r
 	)
@@ -631,7 +603,7 @@ rect.prototype.equals =
 /*
 | Returns true if point is within this rect.
 */
-rect.prototype.within =
+euclid_rect.prototype.within =
 	function(
 		view,
 		p
@@ -673,7 +645,7 @@ rect.prototype.within =
 | Returns the point where a ray going from
 | center of the rect (pc) to p intersects with the rect.
 */
-rect.prototype.getProjection =
+euclid_rect.prototype.getProjection =
 	function(
 		p
 	)
@@ -709,7 +681,7 @@ rect.prototype.getProjection =
 
 		if ( x >= wx && x <= ex )
 		{
-			return point.create( 'x', x, 'y', ny );
+			return euclid_point.create( 'x', x, 'y', ny );
 		}
 	}
 
@@ -719,7 +691,7 @@ rect.prototype.getProjection =
 
 		if( x >= wx && x <= ex )
 		{
-			return point.create( 'x', x, 'y', sy );
+			return euclid_point.create( 'x', x, 'y', sy );
 		}
 	}
 
@@ -729,7 +701,7 @@ rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return point.create( 'x', ex, 'y', y );
+			return euclid_point.create( 'x', ex, 'y', y );
 		}
 	}
 
@@ -739,7 +711,7 @@ rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return point.create( 'x', wx, 'y', y );
+			return euclid_point.create( 'x', wx, 'y', y );
 		}
 	}
 

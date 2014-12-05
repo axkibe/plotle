@@ -3,10 +3,8 @@
 */
 
 
-/*
-| Exports
-*/
-var euclid;
+var
+	euclid_measure;
 
 
 /*
@@ -19,8 +17,7 @@ var euclid;
 /*
 | Singleton
 */
-var measure =
-euclid.measure =
+euclid_measure =
 {
 
 	/*
@@ -29,7 +26,7 @@ euclid.measure =
 	init :
 		function( canvas )
 	{
-		measure._cx =
+		euclid_measure._cx =
 			canvas.getContext( '2d' );
 	},
 
@@ -46,7 +43,7 @@ euclid.measure =
 		var
 			cx;
 
-		cx = measure._cx;
+		cx = euclid_measure._cx;
 
 		if( cx.font !== font.css )
 		{

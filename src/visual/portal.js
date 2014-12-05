@@ -7,7 +7,13 @@ var
 	Accent,
 	fabric,
 	fontPool,
-	euclid,
+	euclid_display,
+	euclid_ellipse,
+	euclid_measure,
+	euclid_point,
+	euclid_rect,
+	euclid_roundRect,
+	euclid_view,
 	jools,
 	marks,
 	peer,
@@ -103,7 +109,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view',
+							'euclid_view',
 						defaultValue :
 							undefined
 					},
@@ -112,7 +118,7 @@ if( JION )
 						comment :
 							'the portals zone',
 						type :
-							'euclid.rect',
+							'euclid_rect',
 						json :
 							true
 					}
@@ -174,19 +180,12 @@ portal.prototype._init =
 	{
 		zone =
 		this.zone =
-			euclid.rect.create(
-				'pnw',
-					zone.pnw,
+			euclid_rect.create(
+				'pnw', zone.pnw,
 				'pse',
 					zone.pnw.add(
-						Math.max(
-							minWidth,
-							zone.width
-						),
-						Math.max(
-							minHeight,
-							zone.height
-						)
+						Math.max( minWidth, zone.width ),
+						Math.max( minHeight, zone.height )
 					)
 			);
 	}
@@ -272,7 +271,7 @@ jools.lazyValue(
 	function( )
 	{
 		return(
-			euclid.ellipse.create(
+			euclid_ellipse.create(
 				'pnw', this.zone.pnw,
 				'pse', this.zone.pse
 			)
@@ -290,11 +289,11 @@ jools.lazyValue(
 	function( )
 	{
 		return(
-			euclid.ellipse.create(
+			euclid_ellipse.create(
 				'pnw',
-					euclid.point.zero,
+					euclid_point.zero,
 				'pse',
-					euclid.point.create(
+					euclid_point.create(
 						'x', this.zone.width,
 						'y', this.zone.height
 				)
@@ -403,10 +402,7 @@ portal.prototype.click =
 
 	if(
 		moveToButton.shape
-		.within(
-			euclid.view.proper,
-			pp
-		)
+		.within( euclid_view.proper, pp )
 	)
 	{
 		this._moveTo( );
@@ -431,11 +427,7 @@ portal.prototype.click =
 		sf = this[ fieldLazyName ];
 
 		if(
-			sf.silhoutte
-				.within(
-					euclid.view.proper,
-					pp
-				)
+			sf.silhoutte.within( euclid_view.proper, pp )
 		)
 		{
 			mark =
@@ -624,11 +616,7 @@ portal.prototype.pointingHover =
 		.sub( zone.pnw );
 
 	if(
-		moveToButton.shape
-			.within(
-				euclid.view.proper,
-				pp
-			)
+		moveToButton.shape.within( euclid_view.proper, pp )
 	)
 	{
 		return(
@@ -672,7 +660,7 @@ jools.lazyValue(
 		vzone = this.view.rect( this.zone );
 
 		f =
-			euclid.display.create(
+			euclid_display.create(
 				'width', vzone.width + 2,
 				'height', vzone.height + 2
 			),
@@ -887,15 +875,12 @@ if( SHELL )
 
 		text = this[ section ];
 
-		return euclid.point.create(
+		return euclid_point.create(
 			'x',
 				Math.round(
-					euclid.measure.width(
+					euclid_measure.width(
 						font,
-						text.substring(
-							0,
-							offset
-						)
+						text.substring( 0, offset )
 					)
 				),
 			'y',
@@ -1676,11 +1661,9 @@ jools.lazyValue(
 		rounding = pmtTheme.rounding;
 
 		pnw =
-			euclid.point.create(
-				'x',
-					jools.half( zone.width - width ),
-				'y',
-					jools.half( zone.height ) + 10
+			euclid_point.create(
+				'x', jools.half( zone.width - width ),
+				'y', jools.half( zone.height ) + 10
 			),
 
 		pse = pnw.add( width, height );
@@ -1688,23 +1671,17 @@ jools.lazyValue(
 		result =
 			{
 				shape :
-					euclid.roundRect.create(
-						'pnw',
-							pnw,
-						'pse',
-							pse,
-						'a',
-							rounding,
-						'b',
-							rounding
+					euclid_roundRect.create(
+						'pnw', pnw,
+						'pse', pse,
+						'a', rounding,
+						'b', rounding
 					),
 
 				textCenter :
-					euclid.point.create(
-						'x',
-							jools.half( pnw.x + pse.x ),
-						'y',
-							jools.half( pnw.y + pse.y )
+					euclid_point.create(
+						'x', jools.half( pnw.x + pse.x ),
+						'y', jools.half( pnw.y + pse.y )
 					)
 			};
 
@@ -1745,7 +1722,7 @@ portal.prototype._prepareField =
 	text = this[ section ];
 
 	width =
-		euclid.measure.width(
+		euclid_measure.width(
 			this._fonts[ section ],
 			text
 		);
@@ -1756,54 +1733,33 @@ portal.prototype._prepareField =
 		basePNW === null
 		?
 		(
-			euclid.point.create(
-				'x',
-					jools.half( zone.width - width ),
-				'y',
-					Math.round(
-						jools.half( zone.height ) - 30
-					)
+			euclid_point.create(
+				'x', jools.half( zone.width - width ),
+				'y', Math.round( jools.half( zone.height ) - 30 )
 			)
 		)
 		:
 		(
-			euclid.point.create(
-				'x',
-					jools.half( zone.width - width ),
-				'y',
-					basePNW.y + 23
+			euclid_point.create(
+				'x', jools.half( zone.width - width ),
+				'y', basePNW.y + 23
 			)
 		);
 
 	silhoutte =
-		euclid.roundRect.create(
-			'pnw',
-				pnw.sub(
-					pitch,
-					height
-				),
-			'pse',
-				pnw.add(
-					Math.round( width ) + pitch,
-					pitch
-				),
-			'a',
-				rounding,
-			'b',
-				rounding
+		euclid_roundRect.create(
+			'pnw', pnw.sub( pitch, height ),
+			'pse', pnw.add( Math.round( width ) + pitch, pitch ),
+			'a', rounding,
+			'b', rounding
 		);
 
 	return {
-		text :
-			text,
-		width :
-			width,
-		height :
-			height,
-		pnw :
-			pnw,
-		silhoutte :
-			silhoutte
+		text : text,
+		width : width,
+		height : height,
+		pnw : pnw,
+		silhoutte : silhoutte
 	};
 };
 
@@ -1884,11 +1840,7 @@ portal.prototype._getOffsetAt =
 	{
 		x1 = x2;
 
-		x2 =
-			euclid.measure.width(
-				font,
-				value.substr( 0, a )
-			);
+		x2 = euclid_measure.width( font, value.substr( 0, a ) );
 
 		if( x2 >= dx )
 		{

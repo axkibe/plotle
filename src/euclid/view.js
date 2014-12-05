@@ -4,19 +4,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	euclid;
-
-euclid = euclid || { };
-
-
-/*
-| Imports
-*/
-var
+	euclid_point,
+	euclid_rect,
+	euclid_view,
 	jools,
 	theme;
 
@@ -35,7 +26,7 @@ if( JION )
 {
 	return {
 		id :
-			'euclid.view',
+			'euclid_view',
 		attributes :
 			{
 				fact :
@@ -57,7 +48,7 @@ if( JION )
 						comment :
 							'point in north west (equals panning)',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				width :
 					{
@@ -73,33 +64,23 @@ if( JION )
 }
 
 
-var
-	point,
-	view;
-
 /*
 | Node includes.
 */
 if( SERVER )
 {
-	view = require( '../jion/this' )( module );
+	euclid_view = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
 
-	point = require( './point' );
-}
-else
-{
-	view = euclid.view;
-
-	point = euclid.point;
+	euclid_point = require( './point' );
 }
 
 
 /*
 | Initializer.
 */
-view.prototype._init =
+euclid_view.prototype._init =
 	function( )
 {
 	if( SHELL )
@@ -123,7 +104,7 @@ view.prototype._init =
 /*
 | Returns the scaled distance of d
 */
-view.prototype.scale =
+euclid_view.prototype.scale =
 	function(
 		d
 	)
@@ -135,7 +116,7 @@ view.prototype.scale =
 /*
 | Returns the x value for a point for this view.
 */
-view.prototype.x =
+euclid_view.prototype.x =
 	function(
 		x
 	)
@@ -161,7 +142,7 @@ view.prototype.x =
 /*
 | Returns the original x value for a point in this view.
 */
-view.prototype.dex =
+euclid_view.prototype.dex =
 	function(
 		x
 	)
@@ -186,7 +167,7 @@ view.prototype.dex =
 /*
 | Returns the y value for a point for this view.
 */
-view.prototype.y =
+euclid_view.prototype.y =
 	function(
 		y
 	)
@@ -213,7 +194,7 @@ view.prototype.y =
 /*
 | Returns the original y value for a point in this view.
 */
-view.prototype.dey =
+euclid_view.prototype.dey =
 	function(
 		y
 	)
@@ -243,11 +224,11 @@ view.prototype.dey =
 | FUTURE remove?
 */
 jools.lazyValue(
-	view.prototype,
+	euclid_view.prototype,
 	'home',
 	function( )
 	{
-		return this.create( 'pan', point.zero );
+		return this.create( 'pan', euclid_point.zero );
 	}
 );
 
@@ -257,13 +238,13 @@ jools.lazyValue(
 | A view with pan zero and fact zero
 */
 jools.lazyValue(
-	view.prototype,
+	euclid_view.prototype,
 	'sizeOnly',
 	function( )
 	{
 		return(
 			this.create(
-				'pan', point.zero,
+				'pan', euclid_point.zero,
 				'fact', 0
 			)
 		);
@@ -274,7 +255,7 @@ jools.lazyValue(
 /*
 | Returns a point repositioned to the current view.
 */
-view.prototype.point =
+euclid_view.prototype.point =
 	function(
 		p
 	)
@@ -282,24 +263,24 @@ view.prototype.point =
 	var
 		anchor;
 
-	switch( p.reflect )
+	switch( p.reflect_ )
 	{
-		case 'euclid.point' :
+		case 'euclid_point' :
 
 			return(
-				point.renew(
+				euclid_point.renew(
 					this.x( p.x ),
 					this.y( p.y ),
 					p
 				)
 			);
 
-		case 'euclid.fixPoint' :
+		case 'euclid_fixPoint' :
 
 			anchor = p.anchor;
 
 			return(
-				point.create(
+				euclid_point.create(
 					'x', this.x( anchor.x ) + p.x,
 					'y', this.y( anchor.y ) + p.y
 				)
@@ -315,7 +296,7 @@ view.prototype.point =
 /*
 | Returns the original position of repositioned point.
 */
-view.prototype.depoint =
+euclid_view.prototype.depoint =
 	function(
 		p
 	)
@@ -323,14 +304,14 @@ view.prototype.depoint =
 
 /**/if( CHECK )
 /**/{
-/**/	if( p.reflect !== 'euclid.point' )
+/**/	if( p.reflect_ !== 'euclid_point' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
 	return(
-		point.create(
+		euclid_point.create(
 			'x', this.dex( p.x ),
 			'y', this.dey( p.y )
 		)
@@ -341,7 +322,7 @@ view.prototype.depoint =
 /*
 | Returns a rect repositioned and resized to the current view.
 */
-view.prototype.rect =
+euclid_view.prototype.rect =
 	function(
 		a1,
 		a2
@@ -355,9 +336,9 @@ view.prototype.rect =
 	if( this.zoom === 1 )
 	{
 		r =
-			( a1.reflect === 'euclid.rect' )
+			( a1.reflect_ === 'euclid_rect' )
 			? a1
-			: euclid.rect.create(
+			: euclid_rect.create(
 				'pnw', a1,
 				'pse', a2
 			);
@@ -369,7 +350,7 @@ view.prototype.rect =
 		);
 	}
 
-	if( a1.reflect === 'euclid.rect' )
+	if( a1.reflect_ === 'euclid_rect' )
 	{
 		pnw = a1.pnw;
 
@@ -383,7 +364,7 @@ view.prototype.rect =
 	}
 
 	return(
-		euclid.rect.create(
+		euclid_rect.create(
 			'pnw', this.point( pnw ),
 			'pse', this.point( pse )
 		)
@@ -407,7 +388,7 @@ view.prototype.rect =
 |
 | -> k1 = p *(1 / z1 - 1 / z0) + k0
 */
-view.prototype.review =
+euclid_view.prototype.review =
 	function(
 		df,
 		p
@@ -443,7 +424,7 @@ view.prototype.review =
 		this.create(
 			'fact', f1,
 			'pan',
-				point.create(
+				euclid_point.create(
 					'x', Math.round( pan.x + p.x * f ),
 					'y', Math.round( pan.y + p.y * f )
 				)
@@ -456,16 +437,15 @@ view.prototype.review =
 | The zero based frame of this view.
 */
 jools.lazyValue(
-	view.prototype,
+	euclid_view.prototype,
 	'baseFrame',
 	function( )
 	{
 		return(
-			euclid.rect.create(
-				'pnw',
-					point.zero,
+			euclid_rect.create(
+				'pnw', euclid_point.zero,
 				'pse',
-					point.create(
+					euclid_point.create(
 						'x', this.width,
 						'y', this.height
 					)
@@ -478,11 +458,11 @@ jools.lazyValue(
 /*
 | Proper is the view at point zero with zero zoom.
 */
-view.proper =
-	view.create(
+euclid_view.proper =
+	euclid_view.create(
 		'height', 0,
 		'fact', 0,
-		'pan', point.zero,
+		'pan', euclid_point.zero,
 		'width', 0
 	);
 

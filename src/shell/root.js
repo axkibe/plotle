@@ -6,7 +6,10 @@ var
 	actions,
 	ccot_sign,
 	discs,
-	euclid,
+	euclid_display,
+	euclid_measure,
+	euclid_point,
+	euclid_view,
 	fabric,
 	forms_jockey,
 	gruga_createDisc,
@@ -114,18 +117,15 @@ shell.root =
 
 	canvas = document.createElement( 'canvas' );
 
-	swatch = euclid.display.createAroundHTMLCanvas( canvas );
+	swatch = euclid_display.createAroundHTMLCanvas( canvas );
 
-	euclid.measure.init( canvas );
+	euclid_measure.init( canvas );
 
 	/*
 	this._fontWFont = fontPool.get( 20, 'la' );
 
 	this._fontWatch =
-		euclid.measure.width(
-			this._fontWFont,
-			'ArchLoom$8833'
-		);
+		euclid_measure.width( this._fontWFont, 'ideoloom$8833' );
 	*/
 
 	this.display = display;
@@ -143,8 +143,8 @@ shell.root =
 
 	view =
 	this.view =
-		euclid.view.create(
-			'pan', euclid.point.zero,
+		euclid_view.create(
+			'pan', euclid_point.zero,
 			'fact', 0,
 			'width', display.width,
 			'height', display.height
@@ -300,13 +300,13 @@ proto.update =
 
 	mark = this.space.mark;
 
-	switch( mark && mark.reflect )
+	switch( mark && mark.reflect_ )
 	{
 		case null :
 
 			break;
 
-		case 'marks.caret' :
+		case 'marks_caret' :
 
 			item = space.twig[ mark.path.get( 2 ) ];
 
@@ -338,7 +338,7 @@ proto.update =
 
 			break;
 
-		case 'marks.item' :
+		case 'marks_item' :
 
 			item = space.twig[ mark.path.get( 2 ) ];
 
@@ -350,7 +350,7 @@ proto.update =
 
 			break;
 
-		case 'marks.range' :
+		case 'marks_range' :
 
 			item = space.twig[ mark.bPath.get( 2 ) ];
 
@@ -440,9 +440,9 @@ proto.setFocus =
 {
 	if( this.mark )
 	{
-		switch( this.mark.reflect )
+		switch( this.mark.reflect_ )
 		{
-			case 'marks.caret' :
+			case 'marks_caret' :
 
 				this.setMark(
 					this.mark.create( 'focus', focus )
@@ -619,7 +619,7 @@ proto.pointingHover =
 /**/		if(
 /**/			!result
 /**/			||
-/**/			result.reflect !== 'result.hover'
+/**/			result.reflect_ !== 'result_hover'
 /**/		)
 /**/		{
 /**/			throw new Error( );
@@ -1254,10 +1254,10 @@ proto.onAcquireSpace =
 			'mark', null,
 			'path', jion.path.empty.append( 'space' ),
 			'view',
-				euclid.view.create(
+				euclid_view.create(
 					'fact', 0,
 					'height', this.display.height,
-					'pan', euclid.point.zero,
+					'pan', euclid_point.zero,
 					'width', this.display.width
 				)
 		);

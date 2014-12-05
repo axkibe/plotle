@@ -173,26 +173,16 @@ proto._init =
 		elements =
 		this.elements =
 			{
-				measure :
-					null,
-				pad :
-					null,
-				input :
-					null,
-				beep :
-					null,
-				send :
-					null,
-				cancel :
-					null,
-				upnow :
-					null,
-				up :
-					null,
-				now :
-					null,
-				down :
-					null
+				measure : null,
+				pad : null,
+				input : null,
+				beep : null,
+				send : null,
+				cancel : null,
+				upnow : null,
+				up : null,
+				now : null,
+				down : null
 			};
 
 		for( id in elements )
