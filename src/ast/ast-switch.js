@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astSwitch',
+			'ast_astSwitch',
 		attributes :
 			{
 				statement :
@@ -32,32 +32,32 @@ if( JION )
 						comment :
 							'the default block',
 						type :
-							'ast.astBlock',
+							'ast_astBlock',
 						defaultValue :
 							null
 					}
 			},
 		ray :
 			[
-				'ast.astCase'
+				'ast_astCase'
 			]
 	};
 }
 
 
 var
-	astBlock,
-	astCase,
-	astSwitch,
+	ast_block,
+	ast_case,
+	ast_switch,
 	jools,
 	tools;
 
 
-astSwitch = require( '../jion/this' )( module );
+ast_switch = require( '../jion/this' )( module );
 
-astBlock = require( './ast-block' );
+ast_block = require( './ast-block' );
 
-astCase = require( './ast-case' );
+ast_case = require( './ast-case' );
 
 jools = require( '../jools/jools' ),
 
@@ -67,7 +67,7 @@ tools = require( './tools' ),
 /*
 | Shortcut for appending a case to this switch.
 */
-astSwitch.prototype.astCase =
+ast_switch.prototype.astCase =
 	function(
 		coc,   // case_or_condition,
 		code   // block or expression
@@ -77,19 +77,19 @@ astSwitch.prototype.astCase =
 		block,
 		caseExpr;
 
-	if( code.reflect === 'ast.astBlock' )
+	if( code.reflect_ === 'ast_astBlock' )
 	{
 		block = code;
 	}
 	else
 	{
-		block = astBlock.create( ).append( tools.convert( code ) );
+		block = ast_block.create( ).append( tools.convert( code ) );
 	}
 
-	if( coc.reflect !== 'ast.astCase' )
+	if( coc.reflect_ !== 'ast_astCase' )
 	{
 		caseExpr =
-			astCase.create(
+			ast_case.create(
 				'ray:append', tools.convert( coc ),
 				'block', block
 			);
@@ -102,7 +102,7 @@ astSwitch.prototype.astCase =
 /*
 | Shortcut for setting the default case.
 */
-astSwitch.prototype.astDefault =
+ast_switch.prototype.astDefault =
 	function(
 		code
 	)
@@ -110,13 +110,13 @@ astSwitch.prototype.astDefault =
 	var
 		block;
 
-	if( code.reflect === 'ast.astBlock' )
+	if( code.reflect_ === 'ast_astBlock' )
 	{
 		block = code;
 	}
 	else
 	{
-		block = astBlock.create( ).append( tools.convert( code ) );
+		block = ast_block.create( ).append( tools.convert( code ) );
 	}
 
 	return this.create( 'defaultCase', block );

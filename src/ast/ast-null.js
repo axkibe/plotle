@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astNull',
+			'ast_astNull',
 		equals :
 			'primitive',
 		singleton :

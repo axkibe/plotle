@@ -40,9 +40,9 @@ if( JION )
 
 
 var
-	astEquals;
+	ast_equals;
 
-astEquals = require( '../jion/this' )( module );
+ast_equals = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -55,7 +55,7 @@ astEquals = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astEquals.prototype.inspect =
+***/	ast_equals.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts
