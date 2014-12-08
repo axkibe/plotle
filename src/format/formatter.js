@@ -155,7 +155,7 @@ formatAssign =
 		+ ' ='
 		+ context.sep;
 
-	if( assign.right.reflect !== 'ast.astAssign' )
+	if( assign.right.reflect_ !== 'ast_astAssign' )
 	{
 		context = context.incSame;
 	}
@@ -350,7 +350,7 @@ formatDiffers =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astDiffers' )
+/**/	if( expr.reflect_ !== 'ast_astDiffers' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -389,7 +389,7 @@ formatPlus =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astPlus' )
+/**/	if( expr.reflect_ !== 'ast_astPlus' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -488,7 +488,7 @@ formatDot =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astDot' )
+/**/	if( expr.reflect_ !== 'ast_astDot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -518,7 +518,7 @@ formatMember =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astMember' )
+/**/	if( expr.reflect_ !== 'ast_astMember' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -559,7 +559,7 @@ formatEquals =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astEquals' )
+/**/	if( expr.reflect_ !== 'ast_astEquals' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -571,14 +571,11 @@ formatEquals =
 			expr.left,
 			precTable.astEquals
 		)
-		+
-		context.sep + context.tab
-		+
-		'==='
-		+
-		context.sep
-		+
-		formatExpression(
+		+ context.sep
+		+ context.tab
+		+ '==='
+		+ context.sep
+		+ formatExpression(
 			context,
 			expr.right,
 			precTable.astEquals
@@ -603,7 +600,7 @@ formatCondition =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astCondition' )
+/**/	if( expr.reflect_ !== 'ast_astCondition' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -653,7 +650,7 @@ formatIf =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflect !== 'ast.astIf' )
+/**/	if( statement.reflect_ !== 'ast_astIf' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -802,7 +799,7 @@ formatLessThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astLessThan' )
+/**/	if( expr.reflect_ !== 'ast_astLessThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -843,7 +840,7 @@ formatGreaterThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astGreaterThan' )
+/**/	if( expr.reflect_ !== 'ast_astGreaterThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -889,7 +886,7 @@ formatInstanceof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astInstanceof' )
+/**/	if( expr.reflect_ !== 'ast_astInstanceof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -901,16 +898,11 @@ formatInstanceof =
 			expr.left,
 			precTable.astInstanceof
 		)
-		+
-		context.sep
-		+
-		context.tab
-		+
-		'instanceof'
-		+
-		context.sep
-		+
-		formatExpression(
+		+ context.sep
+		+ context.tab
+		+ 'instanceof'
+		+ context.sep
+		+ formatExpression(
 			context,
 			expr.right,
 			precTable.astInstanceof

@@ -32,7 +32,7 @@ GLOBAL.SHELL = false;
 */
 GLOBAL.jools = require( '../jools/jools' );
 
-GLOBAL.astTools = require( '../ast/tools' );
+GLOBAL.ast_tools = require( '../ast/tools' );
 
 GLOBAL.parser = require( '../js-parser/parser' );
 

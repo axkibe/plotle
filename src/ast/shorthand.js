@@ -21,8 +21,8 @@ module.exports =
 var
 	astAnd,
 	astArrayLiteral,
-	astAssign,
-	astBlock,
+	ast_assign,
+	ast_block,
 	astBoolean,
 	astCall,
 	astCheck,
@@ -67,9 +67,9 @@ astAnd = require( './ast-and' );
 
 astArrayLiteral = require( './ast-array-literal' );
 
-astAssign = require( './ast-assign' );
+ast_assign = require( './ast-assign' );
 
-astBlock = require( './ast-block' );
+ast_block = require( './ast-block' );
 
 astBoolean = require( './ast-boolean' );
 
@@ -244,7 +244,7 @@ shorthand.astAssign =
 	right = tools.convert( right );
 
 	return(
-		astAssign.create(
+		ast_assign.create(
 			'left', left,
 			'right', right
 		)
@@ -258,7 +258,7 @@ shorthand.astAssign =
 shorthand.astBlock =
 	function( )
 {
-	return astBlock.create( );
+	return ast_block.create( );
 };
 
 
@@ -275,7 +275,7 @@ shorthand.astCapsule =
 		&& block.reflect_ !== 'ast_astBlock'
 	)
 	{
-		block = astBlock.create( ).append( block );
+		block = ast_block.create( ).append( block );
 	}
 
 	return(
@@ -331,7 +331,7 @@ shorthand.astCheck =
 		block.reflect_ !== 'ast_astBlock'
 	)
 	{
-		block = astBlock.create( ).append( block );
+		block = ast_block.create( ).append( block );
 	}
 
 	return(
@@ -543,7 +543,7 @@ shorthand.astIf =
 		then.reflect_ !== 'ast_astBlock'
 	)
 	{
-		then = astBlock.create( ).append( then );
+		then = ast_block.create( ).append( then );
 	}
 
 	if(
@@ -552,7 +552,7 @@ shorthand.astIf =
 		elsewise.reflect_ !== 'ast_astBlock'
 	)
 	{
-		elsewise = astBlock.create( ).append( elsewise );
+		elsewise = ast_block.create( ).append( elsewise );
 	}
 
 	return(
@@ -588,7 +588,7 @@ shorthand.astFor =
 {
 	if( block.reflect_ !== 'ast_astBlock' )
 	{
-		block = astBlock.create( ).append( block );
+		block = ast_block.create( ).append( block );
 	}
 
 	init = tools.convert( init );
@@ -620,7 +620,7 @@ shorthand.astForIn =
 {
 	if( block.reflect_ !== 'ast_astBlock' )
 	{
-		block = astBlock.create( ).append( block );
+		block = ast_block.create( ).append( block );
 	}
 
 	object = tools.convert( object );
@@ -651,7 +651,7 @@ shorthand.astFunc =
 		block.reflect_ !== 'ast_astBlock'
 	)
 	{
-		block = astBlock.create( ).append( block );
+		block = ast_block.create( ).append( block );
 	}
 
 	return astFunc.create( 'block', block || null );

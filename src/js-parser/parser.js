@@ -25,24 +25,24 @@ module.exports =
 
 
 var
-	astAnd,
-	astArrayLiteral,
-	astAssign,
-	astBoolean,
-	astCall,
-	astDiffers,
-	astDot,
-	astEquals,
-	astGreaterThan,
-	astLessThan,
-	astMember,
-	astPlus,
-	astPreIncrement,
-	astNot,
-	astNumber,
-	astString,
-	astOr,
-	astVar,
+	ast_and,
+	ast_arrayLiteral,
+	ast_assign,
+	ast_boolean,
+	ast_call,
+	ast_differs,
+	ast_dot,
+	ast_equals,
+	ast_greaterThan,
+	ast_lessThan,
+	ast_member,
+	ast_not,
+	ast_number,
+	ast_or,
+	ast_plus,
+	ast_preIncrement,
+	ast_string,
+	ast_var,
 	jools,
 	lexer,
 	handleBooleanLiteral,
@@ -62,41 +62,41 @@ var
 	tokenSpecs;
 
 
-astAnd = require( '../ast/ast-and' );
+ast_and = require( '../ast/ast-and' );
 
-astArrayLiteral = require( '../ast/ast-array-literal' );
+ast_arrayLiteral = require( '../ast/ast-array-literal' );
 
-astAssign = require( '../ast/ast-assign' );
+ast_assign = require( '../ast/ast-assign' );
 
-astBoolean = require( '../ast/ast-boolean' );
+ast_boolean = require( '../ast/ast-boolean' );
 
-astCall = require( '../ast/ast-call' );
+ast_call = require( '../ast/ast-call' );
 
-astDiffers = require( '../ast/ast-differs' );
+ast_differs = require( '../ast/ast-differs' );
 
-astDot = require( '../ast/ast-dot' );
+ast_dot = require( '../ast/ast-dot' );
 
-astEquals = require( '../ast/ast-equals' );
+ast_equals = require( '../ast/ast-equals' );
 
-astGreaterThan = require( '../ast/ast-greater-than' );
+ast_greaterThan = require( '../ast/ast-greater-than' );
 
-astLessThan = require( '../ast/ast-less-than' );
+ast_lessThan = require( '../ast/ast-less-than' );
 
-astMember = require( '../ast/ast-member' );
+ast_member = require( '../ast/ast-member' );
 
-astNot = require( '../ast/ast-not' );
+ast_not = require( '../ast/ast-not' );
 
-astNumber = require( '../ast/ast-number' );
+ast_number = require( '../ast/ast-number' );
 
-astOr = require( '../ast/ast-or' );
+ast_or = require( '../ast/ast-or' );
 
-astPlus = require( '../ast/ast-plus' );
+ast_plus = require( '../ast/ast-plus' );
 
-astPreIncrement = require( '../ast/ast-pre-increment' );
+ast_preIncrement = require( '../ast/ast-pre-increment' );
 
-astString = require( '../ast/ast-string' );
+ast_string = require( '../ast/ast-string' );
 
-astVar = require( '../ast/ast-var' );
+ast_var = require( '../ast/ast-var' );
 
 jools = require( '../jools/jools' );
 
@@ -133,7 +133,7 @@ handleBooleanLiteral =
 
 	state =
 		state.advance(
-			astBoolean.create( 'boolean', bool ),
+			ast_boolean.create( 'boolean', bool ),
 			undefined
 		);
 
@@ -170,7 +170,7 @@ handleDot =
 
 	state =
 		state.advance(
-			astDot.create(
+			ast_dot.create(
 				'expr', state.ast,
 				'member', name.value
 			),
@@ -275,7 +275,7 @@ handleRoundBrackets =
 	if( ast )
 	{
 		// this is a call.
-		call = astCall.create( 'func', ast );
+		call = ast_call.create( 'func', ast );
 
 		state = state.advance( null, spec.postPrec );
 
@@ -382,7 +382,7 @@ handleSquareBrackets =
 	if( !ast )
 	{
 		// this is an array literal
-		alit = astArrayLiteral.create( );
+		alit = ast_arrayLiteral.create( );
 
 		state = state.advance( null, spec.postPrec );
 
@@ -461,7 +461,7 @@ handleSquareBrackets =
 
 	state =
 		state.advance(
-			astMember.create(
+			ast_member.create(
 				'expr', ast,
 				'member', state.ast
 			),
@@ -516,7 +516,7 @@ handleNumber =
 
 	state =
 		state.advance(
-			astNumber.create( 'number', state.current.value ),
+			ast_number.create( 'number', state.current.value ),
 			undefined
 		);
 
@@ -540,7 +540,7 @@ handleString =
 
 	state =
 		state.advance(
-			astString.create( 'string', state.current.value ),
+			ast_string.create( 'string', state.current.value ),
 			undefined
 		);
 
@@ -565,7 +565,7 @@ handleNumber =
 
 	state =
 		state.advance(
-			astNumber.create( 'number', state.current.value ),
+			ast_number.create( 'number', state.current.value ),
 			undefined
 		);
 
@@ -590,7 +590,7 @@ handleIdentifier =
 
 	state =
 		state.advance(
-			astVar.create( 'name', state.current.value ),
+			ast_var.create( 'name', state.current.value ),
 			undefined
 	);
 
@@ -678,7 +678,7 @@ tokenSpecs[ '++' ] =
 		'prePrec', 3,
 		'postPrec', 4,
 		'handler', handleMonoOps,
-		'astCreator', astPreIncrement
+		'astCreator', ast_preIncrement
 		// FUTURE postfixCreator
 	);
 
@@ -687,7 +687,7 @@ tokenSpecs[ '!' ] =
 		'prePrec', 4,
 		'postPrec', 4,
 		'handler', handleMonoOps,
-		'astCreator', astNot
+		'astCreator', ast_not
 	);
 
 tokenSpecs[ '+' ] =
@@ -695,7 +695,7 @@ tokenSpecs[ '+' ] =
 		'prePrec', 6,
 		'postPrec', 6,
 		'handler', handleDualisticOps,
-		'astCreator', astPlus
+		'astCreator', ast_plus
 	);
 
 tokenSpecs[ '<' ] =
@@ -703,7 +703,7 @@ tokenSpecs[ '<' ] =
 		'prePrec', 8,
 		'postPrec', 8,
 		'handler', handleDualisticOps,
-		'astCreator', astLessThan
+		'astCreator', ast_lessThan
 	);
 
 tokenSpecs[ '>' ] =
@@ -711,7 +711,7 @@ tokenSpecs[ '>' ] =
 		'prePrec', 8,
 		'postPrec', 8,
 		'handler', handleDualisticOps,
-		'astCreator', astGreaterThan
+		'astCreator', ast_greaterThan
 	);
 
 tokenSpecs[ '===' ] =
@@ -719,7 +719,7 @@ tokenSpecs[ '===' ] =
 		'prePrec', 9,
 		'postPrec', 9,
 		'handler', handleDualisticOps,
-		'astCreator', astEquals
+		'astCreator', ast_equals
 	);
 
 tokenSpecs[ '!==' ] =
@@ -727,7 +727,7 @@ tokenSpecs[ '!==' ] =
 		'prePrec', 9,
 		'postPrec', 9,
 		'handler', handleDualisticOps,
-		'astCreator', astDiffers
+		'astCreator', ast_differs
 	);
 
 tokenSpecs[ '&&' ] =
@@ -735,7 +735,7 @@ tokenSpecs[ '&&' ] =
 		'prePrec', 13,
 		'postPrec', 13,
 		'handler', handleDualisticOps,
-		'astCreator', astAnd
+		'astCreator', ast_and
 	);
 
 tokenSpecs[ '||' ] =
@@ -743,7 +743,7 @@ tokenSpecs[ '||' ] =
 		'prePrec', 14,
 		'postPrec', 14,
 		'handler', handleDualisticOps,
-		'astCreator', astOr
+		'astCreator', ast_or
 	);
 
 tokenSpecs[ '=' ] =
@@ -751,7 +751,7 @@ tokenSpecs[ '=' ] =
 		'prePrec', 16,
 		'postPrec', 16,
 		'handler', handleDualisticOps,
-		'astCreator', astAssign
+		'astCreator', ast_assign
 	);
 
 tokenSpecs[ ',' ] =
