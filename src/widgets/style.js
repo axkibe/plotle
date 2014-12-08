@@ -6,11 +6,7 @@
 var
 	Accent, // FIXME
 	Style, // FIXME
-	widgets_style,
-	widgets; // FIXME
-
-widgets = widgets || { }; // FIXME
-
+	widgets_style;
 
 
 /*
@@ -25,7 +21,6 @@ widgets_style = { };
 /*
 | Gets a style by its name.
 */
-widgets.getStyle = // FIXME
 widgets_style.get =
 	function(
 		name,

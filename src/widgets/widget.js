@@ -7,10 +7,7 @@
 | Export
 */
 var
-	widgets,
 	widgets_widget;
-
-widgets = widgets || { };
 
 
 /*
@@ -23,11 +20,6 @@ widgets = widgets || { };
 /*
 | Constructor.
 */
-var
-	widget; // FUTURE
-
-widget =
-widgets.widget = // FUTURE
 widgets_widget =
 	function( )
 {
@@ -40,7 +32,7 @@ widgets_widget =
 | Returns the mark if an item with
 | 'path' concerns about the mark.
 */
-widget.concernsMark =
+widgets_widget.concernsMark =
 	function(
 		mark,
 		path
@@ -63,7 +55,7 @@ widget.concernsMark =
 | Returns the hover path if an item with
 | 'path' concerns about the hover.
 */
-widget.concernsHover =
+widgets_widget.concernsHover =
 	function(
 		hover,
 		path
