@@ -10,7 +10,9 @@ var
 	forms_login,
 	fontPool,
 	gruga_login,
-	widgets;
+	widgets_button,
+	widgets_input,
+	widgets_label;
 
 
 /*
@@ -24,26 +26,19 @@ var
 	// login control
 	loginButton =
 	{
-		width :
-			70,
-		height :
-			70,
-		w :
-			95,
-		n :
-			28
+		width : 70,
+		height : 70,
+		w : 95,
+		n : 28
 	},
+
 	// Close control
 	closeButton =
 	{
-		width :
-			50,
-		height :
-			50,
-		w :
-			180,
-		n :
-			38
+		width : 50,
+		height : 50,
+		w : 180,
+		n : 38
 	};
 
 
@@ -54,81 +49,64 @@ gruga_login =
 	forms_login.create(
 		'twig:add',
 		'headline',
-			widgets.label.create(
+			widgets_label.create(
 				'text',
 					'Log In',
 				'font',
 					fontPool.get( 22, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-225,
-						'y',
-							-112
+						'anchor', 'c',
+						'x', -225,
+						'y', -112
 					)
 			),
 		'twig:add',
 		'usernameLabel',
-			widgets.label.create(
+			widgets_label.create(
 				'text',
 					'username',
 				'font',
 					fontPool.get( 16, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-175,
-						'y',
-							-49
+						'anchor', 'c',
+						'x', -175,
+						'y', -49
 					)
 			),
 		'twig:add',
 		'passwordLabel',
-			widgets.label.create(
+			widgets_label.create(
 				'text',
 					'password',
 				'font',
 					fontPool.get( 16, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-175,
-						'y',
-							-9
+						'anchor', 'c',
+						'x', -175,
+						'y', -9
 					)
 			),
 		'twig:add',
 		'errorLabel',
-			widgets.label.create(
-				'text',
-					'',
-				'font',
-					fontPool.get( 14, 'car' ),
+			widgets_label.create(
+				'text', '',
+				'font', fontPool.get( 14, 'car' ),
 				'designPos',
 					design_anchorPoint.create(
-						'anchor',
-							'c',
-						'x',
-							-20,
-						'y',
-							-83
+						'anchor', 'c',
+						'x', -20,
+						'y', -83
 					)
 			),
 		'twig:add',
 		'userInput',
-			widgets.input.create(
-				'style',
-					'input',
-				'font',
-					fontPool.get( 14, 'la' ),
-				'maxlen',
-					100,
+			widgets_input.create(
+				'style', 'input',
+				'font', fontPool.get( 14, 'la' ),
+				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -147,15 +125,11 @@ gruga_login =
 			),
 		'twig:add',
 		'passwordInput',
-			widgets.input.create(
-				'password',
-					true,
-				'style',
-					'input',
-				'font',
-					fontPool.get( 14, 'la' ),
-				'maxlen',
-					100,
+			widgets_input.create(
+				'password', true,
+				'style', 'input',
+				'font', fontPool.get( 14, 'la' ),
+				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -174,9 +148,8 @@ gruga_login =
 			),
 		'twig:add',
 		'loginButton',
-			widgets.button.create(
-				'style',
-					'genericButton',
+			widgets_button.create(
+				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -192,20 +165,15 @@ gruga_login =
 								'y', loginButton.n + loginButton.height
 							)
 					),
-				'text',
-					'log in',
-				'font',
-					fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'text', 'log in',
+				'font', fontPool.get( 14, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
+				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'closeButton',
-			widgets.button.create(
-				'style',
-					'genericButton',
+			widgets_button.create(
+				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -221,14 +189,10 @@ gruga_login =
 								'y', closeButton.n + closeButton.height
 							)
 					),
-				'text',
-					'close',
-				'font',
-					fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'text', 'close',
+				'font', fontPool.get( 14, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
+				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
 

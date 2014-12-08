@@ -10,7 +10,8 @@ var
 	fontPool,
 	forms_user,
 	gruga_user,
-	widgets;
+	widgets_button,
+	widgets_label;
 
 /*
 | Capsule
@@ -24,14 +25,10 @@ var
 */
 var closeButton =
 {
-	width :
-		50,
-	height :
-		50,
-	w :
-		180,
-	n :
-		38
+	width : 50,
+	height : 50,
+	w : 180,
+	n : 38
 };
 
 
@@ -42,11 +39,9 @@ gruga_user =
 	forms_user.create(
 		'twig:add',
 		'headline',
-			widgets.label.create(
-				'text',
-					'Hello',
-				'font',
-					fontPool.get( 22, 'ca' ),
+			widgets_label.create(
+				'text', 'Hello',
+				'font', fontPool.get( 22, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -56,11 +51,9 @@ gruga_user =
 			),
 		'twig:add',
 		'visitor1',
-			widgets.label.create(
-				'text',
-					'You\'re currently an anonymous visitor!',
-				'font',
-					fontPool.get( 16, 'ca' ),
+			widgets_label.create(
+				'text', 'You\'re currently an anonymous visitor!',
+				'font', fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -70,21 +63,16 @@ gruga_user =
 			),
 		'twig:add',
 		'visitor2',
-			widgets.label.create(
-				'text',
-					'Click on "sign up" or "log in"',
-				'font',
-					fontPool.get( 16, 'ca' ),
-				'designPos',
-					design_anchorPoint.PC
+			widgets_label.create(
+				'text', 'Click on "sign up" or "log in"',
+				'font', fontPool.get( 16, 'ca' ),
+				'designPos', design_anchorPoint.PC
 			),
 		'twig:add',
 		'visitor3',
-			widgets.label.create(
-				'text',
-					'on the control disc to the left',
-				'font',
-					fontPool.get( 16, 'ca' ),
+			widgets_label.create(
+				'text', 'on the control disc to the left',
+				'font', fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -94,11 +82,9 @@ gruga_user =
 			),
 		'twig:add',
 		'visitor4',
-			widgets.label.create(
-				'text',
-					'to register as an user.',
-				'font',
-					fontPool.get( 16, 'ca' ),
+			widgets_label.create(
+				'text', 'to register as an user.',
+				'font', fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -108,11 +94,9 @@ gruga_user =
 			),
 		'twig:add',
 		'greeting1',
-			widgets.label.create(
-				'text',
-					'This is your profile page!',
-				'font',
-					fontPool.get( 16, 'ca' ),
+			widgets_label.create(
+				'text', 'This is your profile page!',
+				'font', fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -122,11 +106,9 @@ gruga_user =
 			),
 		'twig:add',
 		'greeting2',
-			widgets.label.create(
-				'text',
-					'In future you will be able to do stuff here,',
-				'font',
-					fontPool.get( 16, 'ca' ),
+			widgets_label.create(
+				'text', 'In future you will be able to do stuff here,',
+				'font', fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -136,11 +118,9 @@ gruga_user =
 			),
 		'twig:add',
 		'greeting3',
-			widgets.label.create(
-				'text',
-					'like for example change your password.',
-				'font',
-					fontPool.get( 16, 'ca' ),
+			widgets_label.create(
+				'text', 'like for example change your password.',
+				'font', fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -150,9 +130,8 @@ gruga_user =
 			),
 		'twig:add',
 		'closeButton',
-			widgets.button.create(
-				'style',
-					'genericButton',
+			widgets_button.create(
+				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -168,14 +147,10 @@ gruga_user =
 								'y', closeButton.n + closeButton.height
 							)
 					),
-				'text',
-					'close',
-				'font',
-					fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'text', 'close',
+				'font', fontPool.get( 14, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
+				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
 
