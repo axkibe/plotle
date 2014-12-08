@@ -104,7 +104,7 @@ formatAnd =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astAnd' )
+/**/	if( expr.reflect_ !== 'ast_astAnd' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -926,7 +926,7 @@ formatOr =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astOr' )
+/**/	if( expr.reflect_ !== 'ast_astOr' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -969,7 +969,7 @@ formatReturn =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflect !== 'ast.astReturn' )
+/**/	if( statement.reflect_ !== 'ast_astReturn' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1243,10 +1243,10 @@ formatStatement =
 
 	if(
 		lookBehind
-		&& lookBehind.reflect !== 'ast.astComment'
+		&& lookBehind.reflect_ !== 'ast_astComment'
 		&& !(
-			lookBehind.reflect === 'ast.astVarDec'
-			&& statement.reflect === 'ast.astVarDec'
+			lookBehind.reflect_ === 'ast_astVarDec'
+			&& statement.reflect_ === 'ast_astVarDec'
 		)
 	)
 	{
@@ -1264,11 +1264,11 @@ formatStatement =
 		}
 	}
 
-	if( statement.reflect === 'ast.astComment' )
+	if( statement.reflect_ === 'ast_astComment' )
 	{
 		if(
 			lookBehind
-			&& lookBehind.reflect === 'ast.astComment'
+			&& lookBehind.reflect_ === 'ast_astComment'
 		)
 		{
 			text += '\n\n';
@@ -1279,21 +1279,21 @@ formatStatement =
 		return text;
 	}
 
-	switch( statement.reflect )
+	switch( statement.reflect_ )
 	{
-		case 'ast.astCheck' :
+		case 'ast_astCheck' :
 
 			text += formatCheck( context, statement );
 
 			break;
 
-		case 'ast.astIf' :
+		case 'ast_astIf' :
 
 			text += formatIf( context, statement );
 
 			break;
 
-		case 'ast.astFail' :
+		case 'ast_astFail' :
 
 			try
 			{
@@ -1321,31 +1321,31 @@ formatStatement =
 
 			break;
 
-		case 'ast.astFor' :
+		case 'ast_astFor' :
 
 			text += formatFor( context, statement );
 
 			break;
 
-		case 'ast.astForIn' :
+		case 'ast_astForIn' :
 
 			text += formatForIn( context, statement );
 
 			break;
 
-		case 'ast.astReturn' :
+		case 'ast_astReturn' :
 
 			text += formatReturn( context, statement );
 
 			break;
 
-		case 'ast.astSwitch' :
+		case 'ast_astSwitch' :
 
 			text += formatSwitch( context, statement );
 
 			break;
 
-		case 'ast.astVarDec' :
+		case 'ast_astVarDec' :
 
 			text += formatVarDec( context, statement, lookBehind );
 
@@ -1387,14 +1387,14 @@ formatStatement =
 			}
 	}
 
-	switch( statement.reflect )
+	switch( statement.reflect_ )
 	{
-		case 'ast.astVarDec' :
+		case 'ast_astVarDec' :
 
 			if(
 				lookAhead
 				&&
-				lookAhead.reflect === 'ast.astVarDec'
+				lookAhead.reflect_ === 'ast_astVarDec'
 			)
 			{
 				return text += ',\n';
@@ -1406,31 +1406,31 @@ formatStatement =
 
 			break;
 
-		case 'ast.astAssign' :
-		case 'ast.astBoolean' :
-		case 'ast.astCall' :
-		case 'ast.astDelete' :
-		case 'ast.astFail' :
-		case 'ast.astNew' :
-		case 'ast.astNumber' :
-		case 'ast.astPlusAssign' :
-		case 'ast.astReturn' :
-		case 'ast.astString' :
-		case 'ast.astVar' :
+		case 'ast_astAssign' :
+		case 'ast_astBoolean' :
+		case 'ast_astCall' :
+		case 'ast_astDelete' :
+		case 'ast_astFail' :
+		case 'ast_astNew' :
+		case 'ast_astNumber' :
+		case 'ast_astPlusAssign' :
+		case 'ast_astReturn' :
+		case 'ast_astString' :
+		case 'ast_astVar' :
 
 			return text + ';' + context.sep;
 
-		case 'ast.astCheck' :
-		case 'ast.astFor' :
-		case 'ast.astForIn' :
-		case 'ast.astIf' :
-		case 'ast.astSwitch' :
+		case 'ast_astCheck' :
+		case 'ast_astFor' :
+		case 'ast_astForIn' :
+		case 'ast_astIf' :
+		case 'ast_astSwitch' :
 
 			return text + context.sep;
 
 		default :
 
-			throw new Error( statement.reflect );
+			throw new Error( );
 	}
 };
 
@@ -1539,7 +1539,7 @@ formatFail =
 
 /**/if( CHECK )
 /**/{
-/**/	if( fail.reflect !== 'ast.astFail' )
+/**/	if( fail.reflect_ !== 'ast_astFail' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1616,7 +1616,7 @@ formatBoolean =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astBoolean' )
+/**/	if( expr.reflect_ !== 'ast_astBoolean' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1650,7 +1650,7 @@ formatCall =
 
 /**/if( CHECK )
 /**/{
-/**/	if( call.reflect !== 'ast.astCall' )
+/**/	if( call.reflect_ !== 'ast_astCall' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1709,7 +1709,7 @@ formatDelete =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astDelete' )
+/**/	if( expr.reflect_ !== 'ast_astDelete' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1717,10 +1717,8 @@ formatDelete =
 
 	return(
 		context.tab
-		+
-		'delete '
-		+
-		formatExpression(
+		+ 'delete '
+		+ formatExpression(
 			context,
 			expr.expr,
 			precTable.astDelete
@@ -1743,7 +1741,7 @@ formatNew =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astNew' )
+/**/	if( expr.reflect_ !== 'ast_astNew' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1776,7 +1774,7 @@ formatNot =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astNot' )
+/**/	if( expr.reflect_ !== 'ast_astNot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1808,7 +1806,7 @@ formatNull =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astNull' )
+/**/	if( expr.reflect_ !== 'ast_astNull' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1839,7 +1837,7 @@ formatArrayLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astArrayLiteral' )
+/**/	if( expr.reflect_ !== 'ast_astArrayLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1905,7 +1903,7 @@ formatObjLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( objliteral.reflect !== 'ast.astObjLiteral' )
+/**/	if( objliteral.reflect_ !== 'ast_astObjLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1973,7 +1971,7 @@ formatPreIncrement =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astPreIncrement' )
+/**/	if( expr.reflect_ !== 'ast_astPreIncrement' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2004,7 +2002,7 @@ formatTypeof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astTypeof' )
+/**/	if( expr.reflect_ !== 'ast_astTypeof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2042,7 +2040,7 @@ formatVar =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astVar' )
+/**/	if( expr.reflect_ !== 'ast_astVar' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2065,7 +2063,7 @@ formatNumber =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astNumber' )
+/**/	if( expr.reflect_ !== 'ast_astNumber' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2088,7 +2086,7 @@ formatString =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast.astString' )
+/**/	if( expr.reflect_ !== 'ast_astString' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2121,14 +2119,14 @@ formatVarDec =
 	if( context.root && varDec.assign )
 	{
 		if(
-			varDec.assign.reflect === 'ast.astFunc'
+			varDec.assign.reflect_ === 'ast_astFunc'
 		)
 		{
 			isRootFunc = true;
 		}
 		else if(
-			varDec.assign.reflect === 'ast.astAssign'
-			&& varDec.assign.right.reflect === 'ast.astFunc'
+			varDec.assign.reflect_ === 'ast_astAssign'
+			&& varDec.assign.right.reflect_ === 'ast_astFunc'
 		)
 		{
 			// FUTURUE allow abitrary amount of assignments
@@ -2140,7 +2138,7 @@ formatVarDec =
 	{
 		if(
 			!lookBehind
-			|| lookBehind.reflect !== 'ast.astVarDec'
+			|| lookBehind.reflect_ !== 'ast_astVarDec'
 		)
 		{
 			if( !context.inline )
@@ -2172,7 +2170,7 @@ formatVarDec =
 	{
 		text += ' =' + context.sep;
 
-		if( varDec.assign.reflect !== 'ast.astAssign' )
+		if( varDec.assign.reflect_ !== 'ast_astAssign' )
 		{
 			context = context.inc;
 		}
