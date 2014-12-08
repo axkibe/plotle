@@ -10,7 +10,8 @@ var
 	fontPool,
 	forms_noAccessToSpace,
 	gruga_noAccessToSpace,
-	widgets;
+	widgets_button,
+	widgets_label;
 
 /*
 | Capsule
@@ -25,14 +26,10 @@ var
 	*/
 	okButton =
 	{
-		width :
-			50,
-		height :
-			50,
-		w :
-			180,
-		n :
-			38
+		width : 50,
+		height : 50,
+		w : 180,
+		n : 38
 	};
 
 
@@ -41,13 +38,10 @@ var
 */
 gruga_noAccessToSpace =
 	forms_noAccessToSpace.create(
-		'twig:add',
-		'headline',
-			widgets.label.create(
-				'text',
-					'',
-				'font',
-					fontPool.get( 22, 'ca' ),
+		'twig:add', 'headline',
+			widgets_label.create(
+				'text', '',
+				'font', fontPool.get( 22, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -55,13 +49,11 @@ gruga_noAccessToSpace =
 						'y', -120
 					)
 			),
-		'twig:add',
-		'message1',
-			widgets.label.create(
+		'twig:add', 'message1',
+			widgets_label.create(
 				'text',
 					'Sorry, you cannot port to this space or create it.',
-				'font',
-					fontPool.get( 16, 'ca' ),
+				'font', fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -69,9 +61,8 @@ gruga_noAccessToSpace =
 						'y', -50
 					)
 			),
-		'twig:add',
-		'okButton',
-			widgets.button.create(
+		'twig:add', 'okButton',
+			widgets_button.create(
 				'style',
 					'genericButton',
 				'designFrame',

@@ -3,8 +3,8 @@
 */
 module.exports =
 [
-	'widgets.button',
-	'widgets.checkbox',
-	'widgets.input',
-	'widgets.label'
+	'widgets_button',
+	'widgets_checkbox',
+	'widgets_input',
+	'widgets_label'
 ];

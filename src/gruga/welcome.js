@@ -10,7 +10,8 @@ var
 	fontPool,
 	forms_welcome,
 	gruga_welcome,
-	widgets;
+	widgets_button,
+	widgets_label;
 
 
 /*
@@ -26,14 +27,10 @@ var
 	*/
 	closeButton =
 	{
-		width :
-			50,
-		height :
-			50,
-		w :
-			180,
-		n :
-			38
+		width : 50,
+		height : 50,
+		w : 180,
+		n : 38
 	};
 
 
@@ -42,13 +39,10 @@ var
 */
 gruga_welcome =
 	forms_welcome.create(
-		'twig:add',
-		'headline',
-			widgets.label.create(
-				'text',
-					'welcome',
-				'font',
-					fontPool.get( 22, 'ca' ),
+		'twig:add', 'headline',
+			widgets_label.create(
+				'text', 'welcome',
+				'font', fontPool.get( 22, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -56,13 +50,10 @@ gruga_welcome =
 						'y', -120
 					)
 			),
-		'twig:add',
-		'message1',
-			widgets.label.create(
-				'text',
-					'Your registration was successful :-)',
-				'font',
-					fontPool.get( 16, 'ca' ),
+		'twig:add', 'message1',
+			widgets_label.create(
+				'text', 'Your registration was successful :-)',
+				'font', fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -70,11 +61,9 @@ gruga_welcome =
 						'y', -50
 					)
 			),
-		'twig:add',
-		'closeButton',
-			widgets.button.create(
-				'style',
-					'genericButton',
+		'twig:add', 'closeButton',
+			widgets_button.create(
+				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -90,14 +79,10 @@ gruga_welcome =
 								'y', closeButton.n + closeButton.height
 							)
 					),
-				'text',
-					'close',
-				'font',
-					fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'text', 'close',
+				'font', fontPool.get( 14, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
+				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
 

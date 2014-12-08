@@ -10,7 +10,7 @@ var
 	discs,
 	fontPool,
 	gruga_mainDisc,
-	widgets;
+	widgets_button;
 
 
 /*
@@ -113,15 +113,11 @@ dv =
 
 gruga_mainDisc =
 	discs.mainDisc.create(
-		'twig:add',
-			'Normal',
-			widgets.button.create(
-				'style',
-					'mainButton',
-				'icon',
-					'normal',
-				'iconStyle',
-					'iconNormal',
+		'twig:add', 'Normal',
+			widgets_button.create(
+				'style', 'mainButton',
+				'icon', 'normal',
+				'iconStyle', 'iconNormal',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -140,19 +136,13 @@ gruga_mainDisc =
 				'shape',
 					design_anchorEllipse.fullSkewNW
 			),
-		'twig:add',
-			'Create',
-			widgets.button.create(
-				'style',
-					'mainButton',
-				'visible',
-					false,
-				'text',
-					'new',
-				'font',
-					dv.generic.font,
-				'textDesignPos',
-					design_anchorPoint.PC,
+		'twig:add', 'Create',
+			widgets_button.create(
+				'style', 'mainButton',
+				'visible', false,
+				'text', 'new',
+				'font', dv.generic.font,
+				'textDesignPos', design_anchorPoint.PC,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -171,17 +161,12 @@ gruga_mainDisc =
 				'shape',
 					design_anchorEllipse.fullSkewNW
 			),
-		'twig:add',
-			'Remove',
-			widgets.button.create(
-				'style',
-					'mainButton',
-				'icon',
-					'remove',
-				'iconStyle',
-					'iconRemove',
-				'visible',
-					false,
+		'twig:add', 'Remove',
+			widgets_button.create(
+				'style', 'mainButton',
+				'icon', 'remove',
+				'iconStyle', 'iconRemove',
+				'visible', false,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -200,17 +185,12 @@ gruga_mainDisc =
 				'shape',
 					design_anchorEllipse.fullSkewNW
 			),
-		'twig:add',
-			'moveTo',
-			widgets.button.create(
-				'style',
-					'mainButton',
-				'icon',
-					'moveto',
-				'iconStyle',
-					'iconNormal',
-				'visible',
-					false,
+		'twig:add', 'moveTo',
+			widgets_button.create(
+				'style', 'mainButton',
+				'icon', 'moveto',
+				'iconStyle', 'iconNormal',
+				'visible', false,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -226,14 +206,11 @@ gruga_mainDisc =
 								'y', dv.moveto.y + dv.generic.height
 							)
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			),
-		'twig:add',
-			'space',
-			widgets.button.create(
-				'style',
-					'mainButton',
+		'twig:add', 'space',
+			widgets_button.create(
+				'style', 'mainButton',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -249,12 +226,9 @@ gruga_mainDisc =
 								'y', dv.space.y + dv.space.height
 							)
 					),
-				'text',
-					'',
-				'font',
-					fontPool.get( 12, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
+				'text', '',
+				'font', fontPool.get( 12, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
 				'shape',
 					design_anchorEllipse.create(
 						'pnw',
@@ -266,14 +240,11 @@ gruga_mainDisc =
 						'pse',
 							design_anchorPoint.PSE_M1
 					),
-				'textRotation',
-					- Math.PI / 2
+				'textRotation', - Math.PI / 2
 			),
-		'twig:add',
-			'user',
-			widgets.button.create(
-				'style',
-					'mainButton',
+		'twig:add', 'user',
+			widgets_button.create(
+				'style', 'mainButton',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -289,12 +260,9 @@ gruga_mainDisc =
 								'y', dv.user.y + dv.user.height
 							)
 					),
-				'text',
-					'',
-				'font',
-					fontPool.get( 12, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
+				'text', '',
+				'font', fontPool.get( 12, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
 				'shape',
 					design_anchorEllipse.create(
 						'pnw',
@@ -306,24 +274,16 @@ gruga_mainDisc =
 						'pse',
 							design_anchorPoint.PSE_M1
 					),
-				'textRotation',
-						( -Math.PI / 2 )
+				'textRotation', ( -Math.PI / 2 )
 			),
-		'twig:add',
-			'login',
-			widgets.button.create(
-				'style',
-					'mainButton',
-				'visible',
-					false,
-				'text',
-					'log\nin',
-				'textNewline',
-					14,
-				'font',
-					fontPool.get( 13, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
+		'twig:add', 'login',
+			widgets_button.create(
+				'style', 'mainButton',
+				'visible', false,
+				'text', 'log\nin',
+				'textNewline', 14,
+				'font', fontPool.get( 13, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -339,24 +299,16 @@ gruga_mainDisc =
 								'y', dv.login.y + dv.generic.height
 							)
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			),
-		'twig:add',
-			'signUp',
-			widgets.button.create(
-				'style',
-					'mainButton',
-				'visible',
-					false,
-				'text',
-					'sign\nup',
-				'textNewline',
-					14,
-				'font',
-					fontPool.get( 13, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
+		'twig:add', 'signUp',
+			widgets_button.create(
+				'style', 'mainButton',
+				'visible', false,
+				'text', 'sign\nup',
+				'textNewline', 14,
+				'font', fontPool.get( 13, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -372,8 +324,7 @@ gruga_mainDisc =
 								'y', dv.signup.y + dv.generic.height
 							)
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
 
