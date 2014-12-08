@@ -7,26 +7,21 @@
 | Export
 */
 var
-	visual,
-	visual_item;
-
-visual = visual || { };
-
-
-/*
-| Imports
-*/
-var
 	actions,
-	euclid,
 	euclid_compass,
+	euclid_ellipse,
+	euclid_point,
+	euclid_view,
 	jion,
 	jools,
 	marks,
 	result,
 	root,
-	theme;
+	theme,
+	visual,
+	visual_item;
 
+visual = visual || { }; // FIXME
 
 /*
 | Capsule
@@ -257,14 +252,14 @@ jools.lazyValue(
 				nw :
 					ha.nw
 					&&
-					euclid.ellipse.create(
+					euclid_ellipse.create(
 						'pnw',
-							euclid.point.create(
+							euclid_point.create(
 								'x', wx - dcx,
 								'y', ny - dcy
 							),
 						'pse',
-							euclid.point.create(
+							euclid_point.create(
 								'x', wx - dcx + a2,
 								'y', ny - dcy + b2
 							)
@@ -272,14 +267,14 @@ jools.lazyValue(
 				n :
 					ha.n
 					&&
-					euclid.ellipse.create(
+					euclid_ellipse.create(
 						'pnw',
-							euclid.point.create(
+							euclid_point.create(
 								'x', mx - a,
 								'y', ny - dey
 							),
 						'pse',
-							euclid.point.create(
+							euclid_point.create(
 								'x', mx + a,
 								'y', ny - dey + b2
 							)
@@ -287,14 +282,14 @@ jools.lazyValue(
 				ne :
 					ha.ne
 					&&
-					euclid.ellipse.create(
+					euclid_ellipse.create(
 						'pnw',
-							euclid.point.create(
+							euclid_point.create(
 								'x', ex + dcx - a2,
 								'y', ny - dcy
 							),
 						'pse',
-							euclid.point.create(
+							euclid_point.create(
 								'x', ex + dex,
 								'y', ny - dcy + b2
 							)
@@ -302,14 +297,14 @@ jools.lazyValue(
 				e :
 					ha.e
 					&&
-					euclid.ellipse.create(
+					euclid_ellipse.create(
 						'pnw',
-							euclid.point.create(
+							euclid_point.create(
 								'x', ex + dex - a2,
 								'y', my - b
 							),
 						'pse',
-							euclid.point.create(
+							euclid_point.create(
 								'x', ex + dex,
 								'y', my + b
 							)
@@ -317,14 +312,14 @@ jools.lazyValue(
 				se :
 					ha.se
 					&&
-					euclid.ellipse.create(
+					euclid_ellipse.create(
 						'pnw',
-							euclid.point.create(
+							euclid_point.create(
 								'x', ex + dcx - a2,
 								'y', sy + dcy - b2
 							),
 						'pse',
-							euclid.point.create(
+							euclid_point.create(
 								'x', ex + dcx,
 								'y', sy + dcx
 							)
@@ -332,14 +327,14 @@ jools.lazyValue(
 				s :
 					ha.s
 					&&
-					euclid.ellipse.create(
+					euclid_ellipse.create(
 						'pnw',
-							euclid.point.create(
+							euclid_point.create(
 								'x', mx - a,
 								'y', sy + dey -b2
 							),
 						'pse',
-							euclid.point.create(
+							euclid_point.create(
 								'x', mx + a,
 								'y', sy + dey
 							)
@@ -347,14 +342,14 @@ jools.lazyValue(
 				sw :
 					ha.sw
 					&&
-					euclid.ellipse.create(
+					euclid_ellipse.create(
 						'pnw',
-							euclid.point.create(
+							euclid_point.create(
 								'x', wx - dcx,
 								'y', sy + dcy - b2
 							),
 						'pse',
-							euclid.point.create(
+							euclid_point.create(
 								'x', wx - dcx + a2,
 								'y', sy + dcy
 							)
@@ -362,14 +357,14 @@ jools.lazyValue(
 				w :
 					ha.w
 					&&
-					euclid.ellipse.create(
+					euclid_ellipse.create(
 						'pnw',
-							euclid.point.create(
+							euclid_point.create(
 								'x', wx - dex,
 								'y', my - b
 							),
 						'pse',
-							euclid.point.create(
+							euclid_point.create(
 								'x', wx - dex + a2,
 								'y', my + b
 							)
@@ -414,11 +409,7 @@ item.prototype.drawHandles =
 	{
 		area = sbary.getArea( view );
 
-		display.reverseClip(
-			area,
-			euclid.view.proper,
-			-1
-		);
+		display.reverseClip( area, euclid_view.proper, -1 );
 	}
 
 	display.reverseClip(

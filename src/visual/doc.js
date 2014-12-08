@@ -3,23 +3,15 @@
 */
 
 
-/*
-| Export
-*/
 var
-	peer,
-	visual;
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	euclid_point,
+	euclid_shape,
 	fontPool,
+	peer,
 	jools,
 	root,
-	theme;
+	theme,
+	visual;
 
 
 /*
@@ -62,7 +54,7 @@ if( JION )
 						comment :
 							'inner margin of the doc',
 						type :
-							'euclid.margin',
+							'euclid_margin',
 						defaultValue :
 							undefined
 					},
@@ -100,21 +92,17 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view',
+							'euclid_view',
 						defaultValue :
 							undefined
 					}
 			},
 		init :
-			[
-				'twigDup'
-			],
+			[ 'twigDup' ],
 		json :
 			true,
 		twig :
-			[
-				'visual.para'
-			]
+			[ 'visual.para' ]
 	};
 }
 
@@ -376,22 +364,17 @@ doc.prototype._getRangeShape =
 		// FIXME return a rect-ray
 
 		return(
-			euclid.shape.create(
+			euclid_shape.create(
 				'hull',
 					[
-						'start',
-							fp.add( 0, descend ),
-						'line',
-							fp.add( 0, -ascend ),
-						'line',
-							bp.add( 0, -ascend ),
-						'line',
-							bp.add( 0, descend ),
-						'line',
-							'close'
+						'start', fp.add( 0, descend ),
+						'line', fp.add( 0, -ascend ),
+						'line', bp.add( 0, -ascend ),
+						'line', bp.add( 0, descend ),
+						'line', 'close'
 					],
 				'pc',
-					euclid.point.create(
+					euclid_point.create(
 						'x', jools.half( fp.x + bp.x ),
 						'y', jools.half( fp.y + bp.y )
 					)
@@ -420,26 +403,26 @@ doc.prototype._getRangeShape =
 
 		return(
 			[
-				euclid.shape.create(
+				euclid_shape.create(
 					'hull',
 						[
 							'start',
-								euclid.point.create(
+								euclid_point.create(
 									'x', rx,
 									'y', fp.y - ascend
 								),
 							'line',
-								euclid.point.create(
+								euclid_point.create(
 									'x', fp.x,
 									'y', fp.y - ascend
 								),
 							'line',
-								euclid.point.create(
+								euclid_point.create(
 									'x', fp.x,
 									'y', fp.y + descend
 								),
 							'line',
-								euclid.point.create(
+								euclid_point.create(
 									'x', rx,
 									'y', fp.y + descend
 								),
@@ -447,31 +430,31 @@ doc.prototype._getRangeShape =
 								'close'
 						],
 					'pc',
-						euclid.point.create(
+						euclid_point.create(
 							'x', jools.half( fp.x + rx ),
 							'y', jools.half( 2 * fp.y - ascend + descend )
 						)
 				),
-				euclid.shape.create(
+				euclid_shape.create(
 					'hull',
 						[
 							'start',
-								euclid.point.create(
+								euclid_point.create(
 									'x', lx,
 									'y', bp.y - ascend
 								),
 							'line',
-								euclid.point.create(
+								euclid_point.create(
 									'x', bp.x,
 									'y', bp.y - ascend
 								),
 							'line',
-								euclid.point.create(
+								euclid_point.create(
 									'x', bp.x,
 									'y', bp.y + descend
 								),
 							'line',
-								euclid.point.create(
+								euclid_point.create(
 									'x', lx,
 									'y', bp.y + descend
 								),
@@ -479,7 +462,7 @@ doc.prototype._getRangeShape =
 								'close'
 						],
 					'pc',
-						euclid.point.create(
+						euclid_point.create(
 							'x', jools.half( fp.x + rx ),
 							'y', jools.half( 2 * fp.y - ascend + descend )
 						)
@@ -557,46 +540,46 @@ doc.prototype._getRangeShape =
 		if( frontAt > 0 )
 		{
 			return(
-				euclid.shape.create(
+				euclid_shape.create(
 					'hull',
 						[
 							'start', // 1
-								euclid.point.create(
+								euclid_point.create(
 									'x', rx,
 									'y', b2y + descend
 								),
 							'line', // 2
-								euclid.point.create(
+								euclid_point.create(
 									'x', bp.x,
 									'y', b2y + descend
 								),
 							'line', // 3
-								euclid.point.create(
+								euclid_point.create(
 									'x', bp.x,
 									'y', bp.y + descend
 								),
 							'line', // 4
-								euclid.point.create(
+								euclid_point.create(
 									'x', lx,
 									'y', bp.y + descend
 								),
 							'0-line', // 5
-								euclid.point.create(
+								euclid_point.create(
 									'x', lx,
 									'y', f2y - ascend
 								),
 							'line', // 6
-								euclid.point.create(
+								euclid_point.create(
 									'x', fp.x,
 									'y', f2y - ascend
 								),
 							'line', // 7
-								euclid.point.create(
+								euclid_point.create(
 									'x', fp.x,
 									'y', fp.y - ascend
 								),
 							'line', // 8
-								euclid.point.create(
+								euclid_point.create(
 									'x', rx,
 									'y', fp.y - ascend
 								),
@@ -604,7 +587,7 @@ doc.prototype._getRangeShape =
 								'close'
 						],
 					'pc',
-						euclid.point.create(
+						euclid_point.create(
 							'x', jools.half( rx + lx ),
 							'y', jools.half( b2y + descend + f2y - ascend )
 						)
@@ -614,36 +597,36 @@ doc.prototype._getRangeShape =
 		else
 		{
 			return(
-				euclid.shape.create(
+				euclid_shape.create(
 					'hull',
 						[
 							'start', // 1
-								euclid.point.create(
+								euclid_point.create(
 									'x', rx,
 									'y', b2y + descend
 								),
 							'line', // 2
-								euclid.point.create(
+								euclid_point.create(
 									'x', bp.x,
 									'y', b2y + descend
 								),
 							'line', // 3
-								euclid.point.create(
+								euclid_point.create(
 									'x', bp.x,
 									'y', bp.y + descend
 								),
 							'line', // 4
-								euclid.point.create(
+								euclid_point.create(
 									'x', lx,
 									'y', bp.y + descend
 								),
 							'0-line', // 7
-								euclid.point.create(
+								euclid_point.create(
 									'x', lx,
 									'y', fp.y - ascend
 								),
 							'line', // 8
-								euclid.point.create(
+								euclid_point.create(
 									'x', rx,
 									'y', fp.y - ascend
 								),
@@ -651,7 +634,7 @@ doc.prototype._getRangeShape =
 								'close'
 						],
 					'pc',
-						euclid.point.create(
+						euclid_point.create(
 							'x', jools.half( rx + lx ),
 							'y', jools.half( b2y + descend + f2y - ascend )
 						)
@@ -784,11 +767,9 @@ jools.lazyValue(
 			flow = para.flow;
 
 			pnws[ ranks[ r ] ] =
-				euclid.point.create(
-					'x',
-						innerMargin.w,
-					'y',
-						Math.round( y )
+				euclid_point.create(
+					'x', innerMargin.w,
+					'y', Math.round( y )
 				);
 
 			y += flow.height + paraSep;
