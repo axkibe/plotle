@@ -10,7 +10,7 @@ var
 	discs,
 	fontPool,
 	gruga_createDisc,
-	widgets;
+	widgets_button;
 
 /*
 | Capsule
@@ -73,15 +73,11 @@ gruga_createDisc =
 	discs.createDisc.create(
 		'twig:add',
 		'createNote',
-			widgets.button.create(
-				'style',
-					'createButton',
-				'text',
-					'Note',
-				'font',
-					dv.generic.font,
-				'textDesignPos',
-					design_anchorPoint.PC,
+			widgets_button.create(
+				'style', 'createButton',
+				'text', 'Note',
+				'font', dv.generic.font,
+				'textDesignPos', design_anchorPoint.PC,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -102,15 +98,11 @@ gruga_createDisc =
 			),
 		'twig:add',
 		'createLabel',
-			widgets.button.create(
-				'style',
-					'createButton',
-				'text',
-					'Label',
-				'font',
-					dv.generic.font,
-				'textDesignPos',
-					design_anchorPoint.PC,
+			widgets_button.create(
+				'style', 'createButton',
+				'text', 'Label',
+				'font', dv.generic.font,
+				'textDesignPos', design_anchorPoint.PC,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -131,17 +123,12 @@ gruga_createDisc =
 			),
 		'twig:add',
 		'createRelation',
-			widgets.button.create(
-				'style',
-					'createButton',
-				'text',
-					'Rela-\ntion',
-				'textNewline',
-					20,
-				'font',
-					dv.generic.font,
-				'textDesignPos',
-					design_anchorPoint.PC,
+			widgets_button.create(
+				'style', 'createButton',
+				'text', 'Rela-\ntion',
+				'textNewline', 20,
+				'font', dv.generic.font,
+				'textDesignPos', design_anchorPoint.PC,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -162,15 +149,11 @@ gruga_createDisc =
 			),
 		'twig:add',
 		'createPortal',
-			widgets.button.create(
-				'style',
-					'createButton',
-				'text',
-					'Portal',
-				'font',
-					dv.generic.font,
-				'textDesignPos',
-					design_anchorPoint.PC,
+			widgets_button.create(
+				'style', 'createButton',
+				'text', 'Portal',
+				'font', dv.generic.font,
+				'textDesignPos', design_anchorPoint.PC,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -186,8 +169,7 @@ gruga_createDisc =
 								'y', dv.portal.y + dv.generic.height
 							)
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
 

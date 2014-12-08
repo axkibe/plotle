@@ -10,7 +10,8 @@ var
 	fontPool,
 	forms_nonExistingSpace,
 	gruga_nonExistingSpace,
-	widgets;
+	widgets_button,
+	widgets_label;
 
 
 /*
@@ -23,27 +24,19 @@ var
 	// 'no' control
 	noButton =
 	{
-		width :
-			75,
-		height :
-			75,
-		w :
-			-100,
-		n :
-			28
+		width : 75,
+		height : 75,
+		w : -100,
+		n : 28
 	},
 
 	// yes control
 	yesButton =
 	{
-		width :
-			75,
-		height :
-			75,
-		w :
-			25,
-		n :
-			28
+		width : 75,
+		height : 75,
+		w : 25,
+		n : 28
 	};
 
 
@@ -54,11 +47,9 @@ gruga_nonExistingSpace =
 	forms_nonExistingSpace.create(
 		'twig:add',
 		'headline',
-			widgets.label.create(
-				'text',
-					'',
-				'font',
-					fontPool.get( 22, 'ca' ),
+			widgets_label.create(
+				'text', '',
+				'font', fontPool.get( 22, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -68,7 +59,7 @@ gruga_nonExistingSpace =
 			),
 		'twig:add',
 		'message1',
-			widgets.label.create(
+			widgets_label.create(
 				'text',
 					'Do you want to create it?',
 				'font',
@@ -82,7 +73,7 @@ gruga_nonExistingSpace =
 			),
 		'twig:add',
 		'noButton',
-			widgets.button.create(
+			widgets_button.create(
 				'style',
 					'genericButton',
 				'designFrame',
@@ -100,20 +91,15 @@ gruga_nonExistingSpace =
 								'y', noButton.n + noButton.height
 							)
 					),
-				'text',
-					'No',
-				'font',
-					fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'text', 'No',
+				'font', fontPool.get( 14, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
+				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'yesButton',
-			widgets.button.create(
-				'style',
-					'genericButton',
+			widgets_button.create(
+				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -129,14 +115,10 @@ gruga_nonExistingSpace =
 								'y', yesButton.n + yesButton.height
 							)
 					),
-				'text',
-					'Yes',
-				'font',
-					fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'text', 'Yes',
+				'font', fontPool.get( 14, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
+				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
 

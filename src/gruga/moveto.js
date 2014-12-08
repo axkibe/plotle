@@ -10,7 +10,8 @@ var
 	fontPool,
 	forms_moveTo,
 	gruga_moveTo,
-	widgets;
+	widgets_button,
+	widgets_label;
 
 /*
 | Capsule
@@ -22,36 +23,26 @@ var
 var
 	ideoloomHomeButton =
 	{
-		w :
-			-145,
-		n :
-			-100,
-		width :
-			130,
-		height :
-			130
+		w : -145,
+		n : -100,
+		width : 130,
+		height : 130
 	},
+
 	ideoloomSandboxButton =
 	{
-		w :
-			15,
-		n :
-			-100,
-		width :
-			130,
-		height :
-			130
+		w : 15,
+		n : -100,
+		width : 130,
+		height : 130
 	},
+
 	userHomeButton =
 	{
-		w :
-			-145,
-		n :
-			60,
-		width :
-			130,
-		height :
-			130
+		w : -145,
+		n : 60,
+		width : 130,
+		height : 130
 	};
 
 
@@ -62,11 +53,9 @@ gruga_moveTo =
 	forms_moveTo.create(
 		'twig:add',
 		'headline',
-			widgets.label.create(
-				'text',
-					'move to another space',
-				'font',
-					fontPool.get( 22, 'ca' ),
+			widgets_label.create(
+				'text', 'move to another space',
+				'font', fontPool.get( 22, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -76,9 +65,8 @@ gruga_moveTo =
 			),
 		'twig:add',
 		'ideoloomHomeButton',
-			widgets.button.create(
-				'style',
-					'portalButton',
+			widgets_button.create(
+				'style', 'portalButton',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -90,16 +78,17 @@ gruga_moveTo =
 						'pse',
 							design_anchorPoint.create(
 								'anchor', 'c',
-								'x', ideoloomHomeButton.w + ideoloomHomeButton.width,
-								'y', ideoloomHomeButton.n + ideoloomHomeButton.height
+								'x',
+									ideoloomHomeButton.w
+									+ ideoloomHomeButton.width,
+								'y',
+									ideoloomHomeButton.n
+									+ ideoloomHomeButton.height
 							)
 					),
-				'text',
-					'ideoloom\nhome',
-				'textNewline',
-					25,
-				'font',
-					fontPool.get( 14, 'cm' ),
+				'text', 'ideoloom\nhome',
+				'textNewline', 25,
+				'font', fontPool.get( 14, 'cm' ),
 				'textDesignPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -111,7 +100,7 @@ gruga_moveTo =
 			),
 		'twig:add',
 		'ideoloomSandboxButton',
-			widgets.button.create(
+			widgets_button.create(
 				'style',
 					'portalButton',
 				'designFrame',
@@ -150,9 +139,8 @@ gruga_moveTo =
 			),
 		'twig:add',
 		'userHomeButton',
-			widgets.button.create(
-				'style',
-					'portalButton',
+			widgets_button.create(
+				'style', 'portalButton',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -168,20 +156,16 @@ gruga_moveTo =
 								'y', userHomeButton.n + userHomeButton.height
 							)
 					),
-				'text',
-					'your\nhome',
-				'textNewline',
-					25,
-				'font',
-					fontPool.get( 14, 'cm' ),
+				'text', 'your\nhome',
+				'textNewline', 25,
+				'font', fontPool.get( 14, 'cm' ),
 				'textDesignPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', 0
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
 
