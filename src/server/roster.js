@@ -207,7 +207,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/widgets/getstyle.js',
+		'filePath', 'src/widgets/style.js',
 		'inBundle', true
 	),
 	resource.create(

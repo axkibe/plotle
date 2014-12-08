@@ -13,10 +13,8 @@ var
 	jools,
 	result,
 	root,
-	widgets;
-
-
-widgets = widgets || { }; // FIXME
+	widgets, // FIXME
+	widgets_button;
 
 
 /*
@@ -33,7 +31,7 @@ if( JION )
 {
 	return {
 		id :
-			'widgets.button',
+			'widgets_button',
 		attributes :
 			{
 				designFrame :
@@ -73,14 +71,11 @@ if( JION )
 						concerns :
 							{
 								type :
-									'widgets.widget',
+									'widgets_widget',
 								func :
 									'concernsHover',
 								args :
-									[
-										'hover',
-										'path'
-									]
+									[ 'hover', 'path' ]
 							}
 					},
 				icon :
@@ -199,16 +194,10 @@ if( JION )
 }
 
 
-var
-	button;
-
-button = widgets.button;
-
-
 /*
 | Initializes the widget.
 */
-button.prototype._init =
+widgets_button.prototype._init =
 	function( )
 {
 	if( this.superFrame )
@@ -247,14 +236,14 @@ button.prototype._init =
 /*
 | Buttons are focusable.
 */
-button.prototype.focusable = true;
+widgets_button.prototype.focusable = true;
 
 
 /*
 | The button's display.
 */
 jools.lazyValue(
-	button.prototype,
+	widgets_button.prototype,
 	'_display',
 	function( )
 	{
@@ -352,7 +341,7 @@ jools.lazyValue(
 /*
 | Mouse hover.
 */
-button.prototype.pointingHover =
+widgets_button.prototype.pointingHover =
 	function(
 		p
 	)
@@ -394,7 +383,7 @@ button.prototype.pointingHover =
 /*
 | User clicked.
 */
-button.prototype.click =
+widgets_button.prototype.click =
 	function(
 		p
 		// shift,
@@ -470,7 +459,7 @@ button.prototype.click =
 /*
 | Special keys for buttons having focus
 */
-button.prototype.specialKey =
+widgets_button.prototype.specialKey =
 	function(
 		key,
 		owner
@@ -504,7 +493,7 @@ button.prototype.specialKey =
 /*
 | Any normal key for a button having focus triggers a push.
 */
-button.prototype.input =
+widgets_button.prototype.input =
 	function(
 		// text
 	)
@@ -518,7 +507,7 @@ button.prototype.input =
 /*
 | Draws the button.
 */
-button.prototype.draw =
+widgets_button.prototype.draw =
 	function(
 		display
 	)
@@ -540,7 +529,7 @@ button.prototype.draw =
 |
 | FIXME refix
 */
-button.prototype.dragStop =
+widgets_button.prototype.dragStop =
 	function( )
 {
 	/*

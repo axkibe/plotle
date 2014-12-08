@@ -3,21 +3,14 @@
 */
 
 
-/*
-| Export
-*/
 var
-	widgets;
+	Accent, // FIXME
+	Style, // FIXME
+	widgets_style,
+	widgets; // FIXME
 
-widgets = widgets || { };
+widgets = widgets || { }; // FIXME
 
-
-/*
-| Imports
-*/
-var
-	Accent,
-	Style;
 
 
 /*
@@ -27,18 +20,22 @@ var
 'use strict';
 
 
+widgets_style = { };
+
 /*
 | Gets a style by its name.
 */
-widgets.getStyle =
+widgets.getStyle = // FIXME
+widgets_style.get =
 	function(
 		name,
 		accent
 	)
 {
 	var
-		style =
-			Style.styles[ name ];
+		style;
+
+	style = Style.styles[ name ];
 
 	if( !style )
 	{
@@ -51,47 +48,36 @@ widgets.getStyle =
 	{
 		case Accent.NORMA :
 
-			style =
-				style.normal;
+			style = style.normal;
 
 			break;
 
 		case Accent.HOVER :
 
-			style =
-				style.hover;
+			style = style.hover;
 
 			break;
 
 		case Accent.FOCUS :
 
-			style =
-				style.focus;
+			style = style.focus;
 
 			break;
 
 		case Accent.HOFOC :
 
-			style =
-				style.hofoc;
+			style = style.hofoc;
 
 			break;
 
 		default :
 
-			throw new Error(
-				'Invalid accent: ' + accent
-			);
+			throw new Error( );
 	}
 
 	if( !style )
 	{
-		throw new Error(
-			'Style ' +
-			name +
-			' does not have requested accent: ' +
-			accent
-		);
+		throw new Error( );
 	}
 
 	return style;
