@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astDiffers',
+			'ast_astDiffers',
 		attributes :
 			{
 				left :
