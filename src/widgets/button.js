@@ -13,8 +13,8 @@ var
 	jools,
 	result,
 	root,
-	widgets, // FIXME
-	widgets_button;
+	widgets_button,
+	widgets_style;
 
 
 /*
@@ -269,7 +269,7 @@ jools.lazyValue(
 				'height', this.frame.height
 			);
 
-		style = widgets.getStyle( this.style, accent );
+		style = widgets_style.get( this.style, accent );
 
 		f.paint( style, this._shape, euclid_view.proper );
 
@@ -328,7 +328,7 @@ jools.lazyValue(
 		{
 			this._icon.draw(
 				f,
-				widgets.getStyle( this.iconStyle, Accent.NORMA ),
+				widgets_style.get( this.iconStyle, Accent.NORMA ),
 				euclid_view.proper
 			);
 		}
