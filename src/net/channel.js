@@ -6,19 +6,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	net;
-
-net = net || { };
-
-
-/*
-| Imports
-*/
-var
+	net_channel,
+	net_requestWrap,
+	net_requestWrapRay,
 	root;
 
 /*
@@ -35,7 +26,7 @@ if( JION )
 {
 	return {
 		id :
-			'net.channel',
+			'net_channel',
 		attributes :
 			{
 				path :
@@ -50,7 +41,7 @@ if( JION )
 						comment :
 							'the fifo of requests',
 						type :
-							'net.requestWrapRay',
+							'net_requestWrapRay',
 						defaultValue :
 							null
 					}
@@ -61,16 +52,10 @@ if( JION )
 }
 
 
-var
-	channel;
-
-channel = net.channel;
-
-
 /*
 | Initializer.
 */
-channel.prototype._init =
+net_channel.prototype._init =
 	function( )
 {
 	var
@@ -93,7 +78,7 @@ channel.prototype._init =
 
 	if( !this._fifo )
 	{
-		this._fifo = net.requestWrapRay.create( );
+		this._fifo = net_requestWrapRay.create( );
 	}
 };
 
@@ -101,7 +86,7 @@ channel.prototype._init =
 /*
 | Aborts all pending requests.
 */
-channel.prototype.abortAll =
+net_channel.prototype.abortAll =
 	function( )
 {
 	if( this._fifo.length === 0 )
@@ -118,8 +103,7 @@ channel.prototype.abortAll =
 			'twig:set',
 			this.channelName,
 			this.create(
-				'_fifo',
-					net.requestWrapRay.create( )
+				'_fifo', net_requestWrapRay.create( )
 			)
 		);
 };
@@ -131,7 +115,7 @@ channel.prototype.abortAll =
 | FUTURE currently the receiver is hardcoded to be 'root.link'.
 |    when the root became a JION allow receiverPaths
 */
-channel.prototype.request =
+net_channel.prototype.request =
 	function(
 		request,       // request
 		receiverFunc   // the receivers func to call
@@ -141,7 +125,7 @@ channel.prototype.request =
 		reqWrap;
 
 	reqWrap =
-		net.requestWrap.create(
+		net_requestWrap.create(
 			'channelName', this.channelName,
 			'receiverFunc', receiverFunc,
 			'request', request
@@ -165,7 +149,7 @@ channel.prototype.request =
 /*
 | The top request on the channel has received a reply
 */
-channel.prototype.onReply =
+net_channel.prototype.onReply =
 	function(
 		wrap,
 		reply

@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astLessThan',
+			'ast_astLessThan',
 		attributes :
 			{
 				left :
@@ -40,9 +40,9 @@ if( JION )
 
 
 var
-	astLessThan;
+	ast_lessThan;
 
-astLessThan = require( '../jion/this' )( module );
+ast_lessThan = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -55,7 +55,7 @@ astLessThan = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astLessThan.prototype.inspect =
+***/	ast_lessThan.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

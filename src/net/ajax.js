@@ -4,14 +4,6 @@
 
 
 /*
-| Export
-*/
-var
-	net;
-
-net = net || { };
-
-/*
 | Capsule
 */
 ( function( ) {
@@ -25,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'net.ajax',
+			'net_ajax',
 		attributes :
 			{
 				'path' :
@@ -37,9 +29,7 @@ if( JION )
 				}
 			},
 		twig :
-			[
-				'net.channel'
-			]
+			[ 'net_channel' ]
 	};
 }
 
