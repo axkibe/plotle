@@ -36,7 +36,7 @@ if( JION )
 						comment :
 							'starting pan when panning during creation',
 						type :
-							'euclid.point',
+							'euclid_point',
 						defaultValue :
 							null
 					},
@@ -52,7 +52,7 @@ if( JION )
 						comment :
 							'the arrow destination while its floating',
 						type :
-							'euclid.point',
+							'euclid_point',
 						defaultValue :
 							null
 					},
@@ -70,7 +70,7 @@ if( JION )
 						comment :
 							'mouse down point on drag creation',
 						type :
-							'euclid.point',
+							'euclid_point',
 						defaultValue :
 							null
 					}

@@ -3,17 +3,9 @@
 */
 
 
-/*
-| Imports
-*/
 var
-	euclid;
-
-/*
-| Exports
-*/
-var
-	fontPool;
+	euclid_font,
+	fontPool;  // TODO shell_fontPool
 
 /*
 | Capsule
@@ -189,17 +181,12 @@ fontPool.get =
 
 	f =
 	c[ size ] =
-		euclid.font.create(
-			'family',
-				style.family,
-			'fill',
-				style.fill,
-			'align',
-				style.align,
-			'base',
-				style.base,
-			'size',
-				size
+		euclid_font.create(
+			'family', style.family,
+			'fill', style.fill,
+			'align', style.align,
+			'base', style.base,
+			'size', size
 		);
 
 	return f;

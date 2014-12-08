@@ -119,11 +119,10 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view',
+							'euclid_view',
 						concerns :
 							{
-								member :
-									'sizeOnly'
+								member : 'sizeOnly'
 							},
 						defaultValue :
 							undefined

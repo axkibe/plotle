@@ -17,7 +17,8 @@ testpad = testpad || { };
 var
 	ccot_changeWrap,
 	ccot_changeWrapRay,
-	euclid,
+	euclid_point,
+	euclid_rect,
 	jools,
 	root,
 	visual;
@@ -123,19 +124,19 @@ proto._init =
 								)
 						),
 					'zone',
-						euclid.rect.create(
+						euclid_rect.create(
 							'pnw',
-								euclid.point.create(
+								euclid_point.create(
 									'x', 0,
 									'y', 0
-							),
-						'pse',
-							euclid.point.create(
-								'x', 100,
-								'y', 100
-							)
-					),
-				'fontsize', 13
+								),
+							'pse',
+								euclid_point.create(
+									'x', 100,
+									'y', 100
+								)
+						),
+					'fontsize', 13
 			)
 		);
 	}

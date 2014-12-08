@@ -8,19 +8,14 @@
 */
 var
 	discs,
-	discs_disc;
-
-discs = discs || { };
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	discs_disc,
+	euclid_ellipse,
+	euclid_point,
+	euclid_rect,
 	jools,
 	theme;
 
+discs = discs || { }; // FIXME
 
 /*
 | Capsule
@@ -73,45 +68,35 @@ discs_disc._init =
 	ny = jools.half( this.view.height - height );
 
 	this.frame =
-		euclid.rect.create(
+		euclid_rect.create(
 			'pnw',
-				euclid.point.create(
-					'x',
-						0,
-					'y',
-						ny
+				euclid_point.create(
+					'x', 0,
+					'y', ny
 				),
 			'pse',
-				euclid.point.create(
-					'x',
-						width,
-					'y',
-						ny + height
+				euclid_point.create(
+					'x', width,
+					'y', ny + height
 				)
 		);
 
 	this.silhoutte =
-		euclid.ellipse.create(
+		euclid_ellipse.create(
 			'pnw',
-				euclid.point.create(
-					'x',
-						width - 1 - ew,
-					'y',
-						0 - jools.half( eh - height )
+				euclid_point.create(
+					'x', width - 1 - ew,
+					'y', 0 - jools.half( eh - height )
 				),
 			'pse',
-				euclid.point.create(
-					'x',
-						width - 1,
-					'y',
-						height + jools.half( eh - height )
+				euclid_point.create(
+					'x', width - 1,
+					'y', height + jools.half( eh - height )
 				),
 			'gradientPC',
-				euclid.point.create(
-					'x',
-						-600,
-					'y',
-						jools.half( height )
+				euclid_point.create(
+					'x', -600,
+					'y', jools.half( height )
 				),
 			'gradientR1',
 				650

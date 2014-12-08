@@ -29,14 +29,14 @@ if( JION )
 						comment :
 							'mouse down point on start of scrolling',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				pan :
 					{
 						comment :
 							'pan position on start',
 						type :
-							'euclid.point'
+							'euclid_point'
 					}
 			}
 	};

@@ -8,18 +8,13 @@
 */
 var
 	discs,
-	peer;
-
-discs = discs || { };
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	euclid_display,
+	euclid_view,
+	peer,
 	jools,
 	root;
+
+discs = discs || { }; // FIXME
 
 /*
 | Capsule
@@ -124,11 +119,10 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view',
+							'euclid_view',
 						concerns :
 							{
-								member :
-									'sizeOnly'
+								member : 'sizeOnly'
 							},
 						defaultValue :
 							null
@@ -320,7 +314,7 @@ jools.lazyValue(
 			rZ;
 
 		display =
-			euclid.display.create(
+			euclid_display.create(
 				'width', this.style.width,
 				'height', this.style.height
 			);
@@ -328,7 +322,7 @@ jools.lazyValue(
 		display.fill(
 			this.style,
 			this.silhoutte,
-			euclid.view.proper
+			euclid_view.proper
 		);
 
 		for(
@@ -343,7 +337,7 @@ jools.lazyValue(
 		display.edge(
 			this.style,
 			this.silhoutte,
-			euclid.view.proper
+			euclid_view.proper
 		);
 
 		return display;
@@ -442,11 +436,7 @@ mainDisc.prototype.pointingHover =
 	pp = p.sub( this.frame.pnw );
 
 	if(
-		!display.withinSketch(
-			this.silhoutte,
-			euclid.view.proper,
-			pp
-		)
+		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
 	)
 	{
 		return null;
@@ -506,11 +496,7 @@ mainDisc.prototype.click =
 	pp = p.sub( this.frame.pnw );
 
 	if(
-		!display.withinSketch(
-			this.silhoutte,
-			euclid.view.proper,
-			pp
-		)
+		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
 	)
 	{
 		return null;
@@ -585,7 +571,7 @@ mainDisc.prototype.dragStart =
 	if(
 		!this._display.withinSketch(
 			this.silhoutte,
-			euclid.view.proper,
+			euclid_view.proper,
 			p.sub( this.frame.pnw )
 		)
 	)

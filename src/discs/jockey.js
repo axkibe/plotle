@@ -98,7 +98,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view'
+							'euclid_view'
 					},
 				spaceUser :
 					{

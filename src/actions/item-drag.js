@@ -36,7 +36,7 @@ if( JION )
 						comment :
 							'mouse down point on drag creation',
 						type :
-							'euclid.point'
+							'euclid_point'
 					},
 				transItem :
 					{

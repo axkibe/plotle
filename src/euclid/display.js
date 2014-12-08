@@ -914,7 +914,7 @@ euclid_display.prototype._setFont =
 /*
 | Returns true if a point is in a sketch.
 |
-| euclid.point -or-
+| euclid_point -or-
 | x / y
 */
 euclid_display.prototype.withinSketch =

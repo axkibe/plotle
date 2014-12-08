@@ -43,6 +43,7 @@ newList =
 	{
 		'ccot' : true,
 		'design' : true,
+		'euclid' : true,
 		'forms' : true,
 		'gruga' : true
 	};
