@@ -3,18 +3,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	visual;
-
-
-/*
-| Imports
-*/
-var
-	euclid,
+	euclid_display,
+	euclid_point,
+	euclid_rect,
 	jools,
 	peer,
 	root,
@@ -84,7 +76,7 @@ if( JION )
 						comment :
 							'point in the north-west',
 						type :
-							'euclid.point',
+							'euclid_point',
 						json :
 							true
 					},
@@ -117,7 +109,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view',
+							'euclid_view',
 						defaultValue :
 							undefined
 					}
@@ -194,21 +186,14 @@ label.prototype._init =
 	pnw = this.pnw;
 
 	this.zone =
-		euclid.rect.create(
+		euclid_rect.create(
 			'pnw',
 				pnw,
 			'pse',
 				pnw.add(
-					Math.round(
-						Math.max(
-							doc.widthUsed + 4,
-							height / 4
-						)
-					),
-					Math.round(
-						height + 2
-					)
-			)
+					Math.round( Math.max( doc.widthUsed + 4, height / 4 ) ),
+					Math.round( height + 2)
+				)
 		);
 };
 
@@ -265,7 +250,7 @@ jools.lazyValue(
 	function( )
 	{
 		return(
-			euclid.rect.create(
+			euclid_rect.create(
 				'pnw', this.zone.pnw,
 				'pse', this.zone.pse.sub( 1, 1 )
 			)
@@ -288,11 +273,10 @@ jools.lazyValue(
 		zone = this.zone;
 
 		return(
-			euclid.rect.create(
-				'pnw',
-					euclid.point.zero,
+			euclid_rect.create(
+				'pnw', euclid_point.zero,
 				'pse',
-					euclid.point.create(
+					euclid_point.create(
 						'x', Math.max( zone.width  - 1, 0 ),
 						'y', Math.max( zone.height - 1, 0 )
 					)
@@ -371,7 +355,7 @@ jools.lazyValue(
 		vzone = this.view.rect( this.zone );
 
 		display =
-			euclid.display.create(
+			euclid_display.create(
 				'width', vzone.width,
 				'height', vzone.height
 			);
@@ -385,7 +369,7 @@ jools.lazyValue(
 			display,
 			hview,
 			this.zone.width,
-			euclid.point.zero
+			euclid_point.zero
 		);
 
 		// displays the border

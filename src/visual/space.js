@@ -3,19 +3,11 @@
 */
 
 
-/*
-| Export
-*/
-var
-	visual;
-
-
-/*
-| Imports
-*/
 var
 	actions,
-	euclid,
+	euclid_arrow,
+	euclid_point,
+	euclid_rect,
 	jion,
 	jools,
 	marks,
@@ -23,7 +15,8 @@ var
 	result,
 	root,
 	shell_stubs,
-	theme;
+	theme,
+	visual;
 
 
 /*
@@ -113,7 +106,7 @@ if( JION )
 						comment :
 							'the current view',
 						type :
-							'euclid.view',
+							'euclid_view',
 						defaultValue :
 							undefined
 					}
@@ -428,11 +421,9 @@ space.prototype.draw =
 				if( toSilhoutte )
 				{
 					arrow =
-						euclid.arrow.connect(
-							fromSilhoutte,
-							'normal',
-							toSilhoutte,
-							'arrow'
+						euclid_arrow.connect(
+							fromSilhoutte, 'normal',
+							toSilhoutte, 'arrow'
 						);
 
 					arrow.draw(
@@ -634,7 +625,7 @@ space.prototype.dragStart =
 		transItem =
 			shell_stubs.emptyNote.create(
 				'zone',
-					euclid.rect.create(
+					euclid_rect.create(
 						'pnw', p,  // FIXME why no depoint?
 						'pse', p
 					),
@@ -693,7 +684,7 @@ space.prototype.dragStart =
 				'path', jion.path.empty,
 				'view', view,
 				'zone',
-					euclid.rect.create(
+					euclid_rect.create(
 						'pnw', p, //FIXME depoint?
 						'pse', p
 					)
@@ -854,7 +845,7 @@ space.prototype.dragStop =
 					note =
 						action.transItem.create(
 							'zone',
-								euclid.rect.createArbitrary(
+								euclid_rect.createArbitrary(
 									view.depoint( action.start ),
 									view.depoint( p )
 								)
@@ -887,7 +878,7 @@ space.prototype.dragStop =
 					model = action.model;
 
 					zone =
-						euclid.rect.createArbitrary(
+						euclid_rect.createArbitrary(
 							view.depoint( action.start ),
 							view.depoint( p )
 						);
@@ -910,7 +901,7 @@ space.prototype.dragStop =
 							'pnw',
 								( p.x > action.start.x )
 								?  zone.pnw
-								: euclid.point.create(
+								: euclid_point.create(
 									'x', zone.pse.x - resized.zone.width,
 									'y', zone.pnw.y
 								)
@@ -948,7 +939,7 @@ space.prototype.dragStop =
 					portal =
 						action.transItem.create(
 							'zone',
-								euclid.rect.createArbitrary(
+								euclid_rect.createArbitrary(
 									view.depoint( action.start ),
 									view.depoint( p )
 								)
@@ -1175,7 +1166,7 @@ space.prototype.dragMove =
 			model = action.model;
 
 			zone =
-				euclid.rect.createArbitrary(
+				euclid_rect.createArbitrary(
 					view.depoint( action.start ),
 					view.depoint( p )
 				);
@@ -1205,7 +1196,7 @@ space.prototype.dragMove =
 							'pnw',
 								( p.x > action.start.x )
 								?  zone.pnw
-								: euclid.point.create(
+								: euclid_point.create(
 									'x', zone.pse.x - resized.zone.width,
 									'y', zone.pnw.y
 								)
