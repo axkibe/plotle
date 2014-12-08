@@ -10,7 +10,10 @@ var
 	fontPool,
 	forms_signUp,
 	gruga_signUp,
-	widgets;
+	widgets_button,
+	widgets_checkbox,
+	widgets_input,
+	widgets_label;
 
 /*
 | Capsule
@@ -24,28 +27,20 @@ var
 	*/
 	signupButton =
 	{
-		width :
-			70,
-		height :
-			70,
-		w :
-			95,
-		n :
-			95
+		width : 70,
+		height : 70,
+		w : 95,
+		n : 95
 	},
 	/*
 	| Close control
 	*/
 	closeButton =
 	{
-		width :
-			50,
-		height :
-			50,
-		w :
-			180,
-		n :
-			105
+		width : 50,
+		height : 50,
+		w : 180,
+		n : 105
 	};
 
 
@@ -56,11 +51,9 @@ gruga_signUp =
 	forms_signUp.create(
 		'twig:add',
 		'headline',
-			widgets.label.create(
-				'text',
-					'Sign Up',
-				'font',
-					fontPool.get( 22, 'la' ),
+			widgets_label.create(
+				'text', 'Sign Up',
+				'font', fontPool.get( 22, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -70,11 +63,9 @@ gruga_signUp =
 			),
 		'twig:add',
 		'usernameLabel',
-			widgets.label.create(
-				'text',
-					'username',
-				'font',
-					fontPool.get( 16, 'ra' ),
+			widgets_label.create(
+				'text', 'username',
+				'font', fontPool.get( 16, 'ra' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -84,11 +75,9 @@ gruga_signUp =
 			),
 		'twig:add',
 		'emailLabel',
-			widgets.label.create(
-				'text',
-					'email',
-				'font',
-					fontPool.get( 16, 'ra' ),
+			widgets_label.create(
+				'text', 'email',
+				'font', fontPool.get( 16, 'ra' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -98,11 +87,9 @@ gruga_signUp =
 			),
 		'twig:add',
 		'passwordLabel',
-			widgets.label.create(
-				'text',
-					'password',
-				'font',
-					fontPool.get( 16, 'ra' ),
+			widgets_label.create(
+				'text', 'password',
+				'font', fontPool.get( 16, 'ra' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -112,11 +99,9 @@ gruga_signUp =
 			),
 		'twig:add',
 		'password2Label',
-			widgets.label.create(
-				'text',
-					'repeat password',
-				'font',
-					fontPool.get( 16, 'ra' ),
+			widgets_label.create(
+				'text', 'repeat password',
+				'font', fontPool.get( 16, 'ra' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -126,11 +111,9 @@ gruga_signUp =
 			),
 		'twig:add',
 		'newsletterLabel',
-			widgets.label.create(
-				'text',
-					'newsletter',
-				'font',
-					fontPool.get( 16, 'ra' ),
+			widgets_label.create(
+				'text', 'newsletter',
+				'font', fontPool.get( 16, 'ra' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -140,11 +123,9 @@ gruga_signUp =
 			),
 		'twig:add',
 		'errorLabel',
-			widgets.label.create(
-				'text',
-					'',
-				'font',
-					fontPool.get( 14, 'car' ),
+			widgets_label.create(
+				'text', '',
+				'font', fontPool.get( 14, 'car' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -154,13 +135,10 @@ gruga_signUp =
 			),
 		'twig:add',
 		'userInput',
-			widgets.input.create(
-				'style',
-					'input',
-				'font',
-					fontPool.get( 14, 'la' ),
-				'maxlen',
-					100,
+			widgets_input.create(
+				'style', 'input',
+				'font', fontPool.get( 14, 'la' ),
+				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -179,13 +157,10 @@ gruga_signUp =
 			),
 		'twig:add',
 		'emailInput',
-			widgets.input.create(
-				'style',
-					'input',
-				'font',
-					fontPool.get( 14, 'la' ),
-				'maxlen',
-					100,
+			widgets_input.create(
+				'style', 'input',
+				'font', fontPool.get( 14, 'la' ),
+				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -204,15 +179,11 @@ gruga_signUp =
 			),
 		'twig:add',
 		'passwordInput',
-			widgets.input.create(
-				'password',
-					true,
-				'style',
-					'input',
-				'font',
-					fontPool.get( 14, 'la' ),
-				'maxlen',
-					100,
+			widgets_input.create(
+				'password', true,
+				'style', 'input',
+				'font', fontPool.get( 14, 'la' ),
+				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -231,15 +202,11 @@ gruga_signUp =
 			),
 		'twig:add',
 		'password2Input',
-			widgets.input.create(
-				'password',
-					true,
-				'style',
-					'input',
-				'font',
-					fontPool.get( 14, 'la' ),
-				'maxlen',
-					100,
+			widgets_input.create(
+				'password', true,
+				'style', 'input',
+				'font', fontPool.get( 14, 'la' ),
+				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -258,7 +225,7 @@ gruga_signUp =
 			),
 		'twig:add',
 		'newsletterCheckBox',
-			widgets.checkbox.create(
+			widgets_checkbox.create(
 				'style',
 					'checkbox',
 				'checked',
@@ -281,11 +248,9 @@ gruga_signUp =
 			),
 		'twig:add',
 		'newsletter2Label',
-			widgets.label.create(
-				'text',
-					'Updates and News',
-				'font',
-					fontPool.get( 12, 'la' ),
+			widgets_label.create(
+				'text', 'Updates and News',
+				'font', fontPool.get( 12, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -295,11 +260,10 @@ gruga_signUp =
 			),
 		'twig:add',
 		'newsletter3Label',
-			widgets.label.create(
+			widgets_label.create(
 				'text',
 					'Never going to be more than an email a month. For sure!',
-				'font',
-					fontPool.get( 12, 'la' ),
+				'font', fontPool.get( 12, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -309,7 +273,7 @@ gruga_signUp =
 			),
 		'twig:add',
 		'signupButton',
-			widgets.button.create(
+			widgets_button.create(
 				'style',
 					'genericButton',
 				'designFrame',
@@ -338,7 +302,7 @@ gruga_signUp =
 			),
 		'twig:add',
 		'closeButton',
-			widgets.button.create(
+			widgets_button.create(
 				'style',
 					'genericButton',
 				'designFrame',
