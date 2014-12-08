@@ -25,7 +25,9 @@ var
 	jion,
 	jools,
 	marks,
-	net,
+	net_ajax,
+	net_channel,
+	net_link,
 	root,
 	shell,
 	system,
@@ -1130,24 +1132,19 @@ proto.onload =
 	ajaxPath = jion.path.empty.append( 'ajax' );
 
 	this.ajax =
-		net.ajax.create(
-			'path',
-				ajaxPath,
-			'twig:add',
-			'command',
-				net.channel.create(
-					'path',
-						ajaxPath.append( 'command' )
+		net_ajax.create(
+			'path', ajaxPath,
+			'twig:add', 'command',
+				net_channel.create(
+					'path', ajaxPath.append( 'command' )
 				),
-			'twig:add',
-			'update',
-				net.channel.create(
-					'path',
-						ajaxPath.append( 'update' )
+			'twig:add', 'update',
+				net_channel.create(
+					'path', ajaxPath.append( 'update' )
 				)
 		);
 
-	this.link = net.link.create( );
+	this.link = net_link.create( );
 
 	this.doTracker = shell.doTracker.create( );
 

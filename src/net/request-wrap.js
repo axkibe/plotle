@@ -3,15 +3,10 @@
 */
 
 
-/*
-| Export
-*/
 var
 	catcher,
-	net,
+	net_requestWrap,
 	root;
-
-net = net || { };
 
 
 /*
@@ -32,7 +27,7 @@ if( JION )
 {
 	return {
 		id :
-			'net.requestWrap',
+			'net_requestWrap',
 		attributes :
 			{
 				channelName :
@@ -70,18 +65,12 @@ if( JION )
 }
 
 
-var
-	requestWrap;
-
-requestWrap = net.requestWrap;
-
-
 /*
 | Aborts the request if it is active.
 |
 | Returns true if the request has been aborted.
 */
-requestWrap.prototype.abort =
+net_requestWrap.prototype.abort =
 	function( )
 {
 	if( this._xhr )
@@ -169,7 +158,7 @@ _onReplyCatcher = null;
 /*
 | Sends the wrapped request.
 */
-requestWrap.prototype.send =
+net_requestWrap.prototype.send =
 	function( )
 {
 	var

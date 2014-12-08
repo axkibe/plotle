@@ -17,11 +17,9 @@ if( JION )
 {
 	return {
 		id :
-			'net.requestWrapRay',
+			'net_requestWrapRay',
 		ray :
-			[
-				'net.requestWrap'
-			],
+			[ 'net_requestWrap' ],
 		equals :
 			'primitive'
 	};

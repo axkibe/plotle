@@ -2,23 +2,12 @@
 | The link talks asynchronously with the server.
 */
 
-/*
-| Export
-*/
-var
-	net;
-
-net = net || { };
-
-
-/*
-| Imports
-*/
 var
 	ccot_changeRay,
 	ccot_changeWrap,
 	ccot_changeWrapRay,
 	jools,
+	net_link,
 	request_acquire,
 	request_alter,
 	request_auth,
@@ -44,7 +33,7 @@ if( JION )
 {
 	return {
 		id :
-			'net.link',
+			'net_link',
 		attributes :
 			{
 				passhash :
@@ -124,14 +113,12 @@ if( JION )
 	};
 }
 
-var link = net.link;
-
 
 /*
 | Checks with server if a username / passhash
 | combo is valid.
 */
-link.prototype.auth =
+net_link.prototype.auth =
 	function(
 		username,
 		passhash
@@ -150,7 +137,7 @@ link.prototype.auth =
 /*
 | Received an auth reply.
 */
-link.prototype._onAuth =
+net_link.prototype._onAuth =
 	function(
 		request,
 		reply
@@ -163,7 +150,7 @@ link.prototype._onAuth =
 /*
 | Tries to registers a new user.
 */
-link.prototype.register =
+net_link.prototype.register =
 	function(
 		username,
 		mail,
@@ -186,7 +173,7 @@ link.prototype.register =
 /*
 | Received a register reply.
 */
-link.prototype._onRegister =
+net_link.prototype._onRegister =
 	function(
 		request,
 		reply
@@ -211,7 +198,7 @@ link.prototype._onRegister =
 | Aquires a space from the server
 | and starts receiving updates for it.
 */
-link.prototype.acquireSpace =
+net_link.prototype.acquireSpace =
 	function(
 		spaceRef,
 		createMissing
@@ -235,7 +222,7 @@ link.prototype.acquireSpace =
 /*
 | A space has been acquired.
 */
-link.prototype._onAcquireSpace =
+net_link.prototype._onAcquireSpace =
 	function(
 		request,
 		reply
@@ -294,7 +281,7 @@ link.prototype._onAcquireSpace =
 /*
 | Sends an update request to the server and computes its answer.
 */
-link.prototype._update =
+net_link.prototype._update =
 	function( )
 {
 	root.ajax.twig.update.request(
@@ -315,7 +302,7 @@ link.prototype._update =
 /*
 | Received an update.
 */
-link.prototype._onUpdate =
+net_link.prototype._onUpdate =
 	function(
 		request,
 		reply
@@ -453,7 +440,7 @@ link.prototype._onUpdate =
 /*
 | Alters the tree.
 */
-link.prototype.alter =
+net_link.prototype.alter =
 	function(
 		changes,  // the change(ray) to apply on the tree
 		noTrack  // if true do not report the dotracker
@@ -508,7 +495,7 @@ link.prototype.alter =
 /*
 | Sends the stored changes to server.
 */
-link.prototype._sendChanges =
+net_link.prototype._sendChanges =
 	function( )
 {
 	var
@@ -562,7 +549,7 @@ link.prototype._sendChanges =
 /*
 | Received a reply of a sendChanges request.
 */
-link.prototype._onSendChanges =
+net_link.prototype._onSendChanges =
 	function(
 		request,
 		reply
