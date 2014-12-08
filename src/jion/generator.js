@@ -45,7 +45,8 @@ newList =
 		'design' : true,
 		'euclid' : true,
 		'forms' : true,
-		'gruga' : true
+		'gruga' : true,
+		'widgets' : true
 	};
 
 
