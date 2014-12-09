@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	format;
-
-
-format = format || { };
-
-
-var
 	format_context;
 
 
@@ -95,7 +88,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 format_context =
-format.context =
 	{
 		prototype :
 			prototype

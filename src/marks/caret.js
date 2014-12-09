@@ -14,7 +14,7 @@ var
 | Imports
 */
 var
-	jion,
+	jion_path,
 	jools;
 
 
@@ -40,7 +40,7 @@ if( JION )
 						comment :
 							'path of the caret',
 						type :
-							'jion.path'
+							'jion_path'
 					},
 				at :
 					{
@@ -126,7 +126,7 @@ jools.lazyValue(
 			this.path.get( 0 ) !== 'space'
 		)
 		{
-			return jion.path.empty;
+			return jion_path.empty;
 		}
 
 		return this.path.limit( 3 );
@@ -148,7 +148,7 @@ jools.lazyValue(
 			this.path.get( 0 ) !== 'forms'
 		)
 		{
-			return jion.path.empty;
+			return jion_path.empty;
 		}
 
 		return this.path.limit( 5 );

@@ -34,24 +34,24 @@ var
 	output,
 	readOptions;
 
-	argv = process.argv,
+argv = process.argv;
 
-	fs = require( 'fs' );
+fs = require( 'fs' );
 
-	vm = require( 'vm' );
+vm = require( 'vm' );
 
-	jionGenerator = require( '../jion/generator' );
+jionGenerator = require( '../jion/generator' );
 
-	input = null;
+input = null;
 
-	jion = null;
+jion = null;
 
-	output = null;
+output = null;
 
-	readOptions =
-		{
-			encoding : 'utf8'
-		};
+readOptions =
+	{
+		encoding : 'utf8'
+	};
 
 
 if( argv.length !== 3 )

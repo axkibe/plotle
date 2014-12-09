@@ -46,6 +46,7 @@ newList =
 		'database' : true,
 		'design' : true,
 		'euclid' : true,
+		'format' : true,
 		'forms' : true,
 		'gruga' : true,
 		'net' : true,

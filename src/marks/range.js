@@ -14,7 +14,7 @@ var
 | Imports
 */
 var
-	jion,
+	jion_path,
 	jools;
 
 
@@ -40,7 +40,7 @@ if( JION )
 						comment :
 							'path of the begin of the range',
 						type :
-							'jion.path'
+							'jion_path'
 					},
 				bAt :
 					{
@@ -61,7 +61,7 @@ if( JION )
 						comment :
 							'path of the end of the range',
 						type :
-							'jion.path'
+							'jion_path'
 					},
 				eAt :
 					{
@@ -199,7 +199,7 @@ jools.lazyValue(
 	{
 		if( this.bPath.length < 3 )
 		{
-			return jion.path.empty;
+			return jion_path.empty;
 		}
 
 		return this.bPath.limit( 3 );

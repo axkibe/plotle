@@ -16,7 +16,7 @@ discs = discs || { };
 | Imports
 */
 var
-	jion,
+	jion_path,
 	jools;
 
 /*
@@ -57,7 +57,7 @@ if( JION )
 						comment :
 							'the widget hovered upon',
 						type :
-							'jion.path'
+							'jion_path'
 					},
 				mark :
 					{
@@ -91,7 +91,7 @@ if( JION )
 						comment :
 							'path of the disc',
 						type :
-							'jion.path'
+							'jion_path'
 					},
 				view :
 					{
@@ -197,10 +197,8 @@ jockey.prototype._init =
 				'hover',
 					// FIXME make a concernsHover in the disc
 					( this.hover.isEmpty || this.hover.get( 2 ) !== name )
-						?
-						jion.path.empty
-						:
-						this.hover,
+					?  jion_path.empty
+					: this.hover,
 				'mark',
 					this.mark,
 				'mode',
