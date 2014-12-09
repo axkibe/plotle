@@ -52,6 +52,7 @@ newList =
 		'marks' : true,
 		'net' : true,
 		'reply' : true,
+		'request' : true,
 		'widgets' : true
 	};
 
