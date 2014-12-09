@@ -636,7 +636,7 @@ ccot_change.prototype._changeTreeInsert =
 
 	trg = this.trg;
 
-	check( trg.path.reflect === 'jion.path', cm, 'trg.path missing' );
+	check( trg.path.reflect_ === 'jion_path', cm, 'trg.path missing' );
 
 	str = tree.getPath( trg.path );
 
@@ -687,7 +687,7 @@ ccot_change.prototype._changeTreeRemove =
 
 	trg = this.trg;
 
-	check( src.path.reflect === 'jion.path', cm, 'src.path missing' );
+	check( src.path.reflect_ === 'jion_path', cm, 'src.path missing' );
 
 	str = tree.getPath( src.path );
 

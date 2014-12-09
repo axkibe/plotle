@@ -9,7 +9,7 @@ var
 	discs,
 	euclid_display,
 	euclid_view,
-	jion,
+	jion_path,
 	jools,
 	root;
 
@@ -56,7 +56,7 @@ if( JION )
 						comment :
 							'the widget hovered upon',
 						type :
-							'jion.path',
+							'jion_path',
 						defaultValue :
 							null
 					},
@@ -83,7 +83,7 @@ if( JION )
 						comment :
 							'path of the disc',
 						type :
-							'jion.path',
+							'jion_path',
 						defaultValue :
 							undefined
 					},
@@ -335,9 +335,9 @@ createDisc.prototype.pushButton =
 
 			root.setAction(
 				actions_createRelation.create(
-					'fromItemPath', jion.path.empty,
+					'fromItemPath', jion_path.empty,
 					'relationState', 'start',
-					'toItemPath', jion.path.empty
+					'toItemPath', jion_path.empty
 				)
 			);
 

@@ -337,7 +337,7 @@ jion_path.createFromJSON =
 	function( json )
 {
 	// FIXME this is a dirty hack and ought to be removed.
-	if( json.reflect === 'jion.path' )
+	if( json.reflect_ === 'jion_path' )
 	{
 		return json;
 	}

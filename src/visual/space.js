@@ -8,7 +8,7 @@ var
 	euclid_arrow,
 	euclid_point,
 	euclid_rect,
-	jion,
+	jion_path,
 	jools,
 	marks,
 	peer,
@@ -50,7 +50,7 @@ if( JION )
 						comment :
 							'node currently hovered upon',
 						type :
-							'jion.path',
+							'jion_path',
 						defaultValue :
 							undefined
 					},
@@ -79,7 +79,7 @@ if( JION )
 						comment :
 							'the path of the space',
 						type :
-							'jion.path',
+							'jion_path',
 						defaultValue :
 							undefined
 					},
@@ -204,7 +204,7 @@ space.concernsMark =
 		!mark
 		||
 		mark.containsPath(
-			jion.path.empty.append( 'space' )
+			jion_path.empty.append( 'space' )
 		)
 	)
 	{
@@ -237,7 +237,7 @@ space.prototype.focusedItem =
 	path =
 		mark
 		? mark.itemPath
-		: jion.path.empty;
+		: jion_path.empty;
 
 	if( action )
 	{
@@ -527,10 +527,8 @@ space.prototype.pointingHover =
 		{
 			return(
 				result.hover.create(
-					'path',
-						jion.path.empty,
-					'cursor',
-						com + '-resize'
+					'path', jion_path.empty,
+					'cursor', com + '-resize'
 				)
 			);
 		}
@@ -554,7 +552,7 @@ space.prototype.pointingHover =
 
 	return(
 		result.hover.create(
-			'path', jion.path.empty,
+			'path', jion_path.empty,
 			'cursor', 'pointer'
 		)
 	);
@@ -629,12 +627,9 @@ space.prototype.dragStart =
 						'pnw', p,  // FIXME why no depoint?
 						'pse', p
 					),
-				'mark',
-					null,
-				'path',
-					jion.path.empty,
-				'view',
-					view
+				'mark', null,
+				'path', jion_path.empty,
+				'view', view
 			);
 
 		root.setAction(
@@ -657,7 +652,7 @@ space.prototype.dragStart =
 			shell_stubs.emptyLabel.create(
 				'pnw', view.depoint( p ),
 				'mark', null,
-				'path', jion.path.empty,
+				'path', jion_path.empty,
 				'view', view
 			);
 
@@ -679,9 +674,9 @@ space.prototype.dragStart =
 	{
 		transItem =
 			shell_stubs.emptyPortal.create(
-				'hover', jion.path.empty,
+				'hover', jion_path.empty,
 				'mark', null,
-				'path', jion.path.empty,
+				'path', jion_path.empty,
 				'view', view,
 				'zone',
 					euclid_rect.create(
@@ -1238,7 +1233,7 @@ space.prototype.dragMove =
 
 			root.setAction(
 				action.create(
-					'toItemPath', jion.path.empty,
+					'toItemPath', jion_path.empty,
 					'toPoint', p
 				)
 			);

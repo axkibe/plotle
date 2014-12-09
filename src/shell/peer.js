@@ -6,7 +6,7 @@
 var
 	ccot_change,
 	ccot_sign,
-	jion,
+	jion_path,
 	peer,
 	root,
 	visual;
@@ -31,7 +31,7 @@ var
 newItemSign =
 	ccot_sign.create(
 		'path',
-			jion.path.empty
+			jion_path.empty
 			.append( 'twig' )
 			.append( '$new' ),
 		'rank',

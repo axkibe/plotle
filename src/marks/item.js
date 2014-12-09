@@ -14,7 +14,7 @@ var
 | Imports
 */
 var
-	jion,
+	jion_path,
 	jools;
 
 
@@ -40,7 +40,7 @@ if( JION )
 						comment :
 							'path of the item',
 						type :
-							'jion.path'
+							'jion_path'
 					}
 			}
 	};
@@ -83,7 +83,7 @@ jools.lazyValue(
 	'widgetPath',
 	function( )
 	{
-		return jion.path.empty;
+		return jion_path.empty;
 	}
 );
 

@@ -59,7 +59,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'jion.path',
+							'jion_path',
 						defaultValue :
 							undefined
 					},

@@ -27,7 +27,7 @@ if( JION )
 						comment :
 							'path to the item being scrolled',
 						type :
-							'jion.path'
+							'jion_path'
 					},
 				start :
 					{

@@ -7,7 +7,7 @@
 | Imports
 */
 var
-	jion,
+	jion_path,
 	jools,
 	peer,
 	testpad;
@@ -123,7 +123,7 @@ proto = testpad.root.prototype;
 root = null;
 
 _noteDocPath =
-	jion.path.empty
+	jion_path.empty
 	.append( 'space' )
 	.append( 'twig' )
 	.append( 'testnote' )

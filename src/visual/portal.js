@@ -49,7 +49,7 @@ if( JION )
 						comment :
 							'node currently hovered upon',
 						type :
-							'jion.path',
+							'jion_path',
 						// FIXME undefined
 						defaultValue :
 							null
@@ -65,10 +65,7 @@ if( JION )
 								func :
 									'concernsMark',
 								args :
-									[
-										'mark',
-										'path'
-									]
+									[ 'mark', 'path' ]
 							},
 						type :
 							'Object', // FUTURE '->marks'
@@ -82,7 +79,7 @@ if( JION )
 						comment :
 							'the path of the doc',
 						type :
-							'jion.path',
+							'jion_path',
 						defaultValue :
 							undefined
 					},

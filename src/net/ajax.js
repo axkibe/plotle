@@ -25,7 +25,7 @@ if( JION )
 					comment :
 						'the ajax path',
 					type :
-						'jion.path'
+						'jion_path'
 				}
 			},
 		twig :

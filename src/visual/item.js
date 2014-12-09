@@ -11,7 +11,7 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_view,
-	jion,
+	jion_path,
 	jools,
 	marks,
 	result,
@@ -520,7 +520,7 @@ item.prototype.dragStart =
 		root.setAction(
 			actions_createRelation.create(
 				'fromItemPath', this.path,
-				'toItemPath', jion.path.empty,
+				'toItemPath', jion_path.empty,
 				'relationState', 'hadSelect',
 				'toPoint', p
 			)
@@ -537,8 +537,7 @@ item.prototype.dragStart =
 		{
 			root.setMark(
 				marks.item.create(
-					'path',
-						this.path
+					'path', this.path
 				)
 			);
 		}

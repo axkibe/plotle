@@ -27,7 +27,7 @@ if( JION )
 						comment :
 							'the item the relation goes from',
 						type :
-							'jion.path'
+							'jion_path'
 					},
 				pan :
 					{
@@ -43,7 +43,7 @@ if( JION )
 						comment :
 							'the item the relation goes to',
 						type :
-							'jion.path'
+							'jion_path'
 					},
 				toPoint :
 					{

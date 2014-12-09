@@ -6,7 +6,7 @@
 var
 	forms_form,
 	euclid_view,
-	jion,
+	jion_path,
 	jools,
 	marks,
 	result,
@@ -274,10 +274,8 @@ forms_form.prototype.pointingHover =
 
 	return(
 		result.hover.create(
-			'path',
-				jion.path.empty,
-			'cursor',
-				'default'
+			'path', jion_path.empty,
+			'cursor', 'default'
 		)
 	);
 };
