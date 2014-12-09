@@ -49,6 +49,7 @@ newList =
 		'format' : true,
 		'forms' : true,
 		'gruga' : true,
+		'marks' : true,
 		'net' : true,
 		'widgets' : true
 	};
