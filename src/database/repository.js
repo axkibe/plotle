@@ -92,20 +92,22 @@ repository.connect =
 	jools.log(
 		'start',
 		'connecting to database',
-		config.database.host + ':' + config.database.port,
-		config.database.name
+		config.database_host
+		+ ':'
+		+ config.database_port,
+		config.database_name
 	);
 
 	server =
 		new mongodb.Server(
-			config.database.host,
-			config.database.port,
+			config.database_host,
+			config.database_port,
 			{ }
 		);
 
 	connector =
 		new mongodb.Db(
-			config.database.name,
+			config.database_name,
 			server,
 			{ w : 1 }
 		);

@@ -11,7 +11,6 @@
 var config =
 module.exports =
 	{
-		database : { },
 		debug : { }
 	};
 
@@ -38,19 +37,19 @@ config.port = 8833;
 /*
 | Host the mongodb database runs on
 */
-config.database.host = '127.0.0.1';
+config.database_host = '127.0.0.1';
 
 
 /*
 | Port the mongodb database runs on
 */
-config.database.port = 27017;
+config.database_port = 27017;
 
 
 /*
 | Name of the mongodb database
 */
-config.database.name = 'ideoloom-8';
+config.database_name = 'ideoloom-8';
 
 
 /*
