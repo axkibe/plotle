@@ -39,7 +39,7 @@ if( JION )
 						comment :
 							'the widget hovered upon',
 						type :
-							'jion.path'
+							'jion_path'
 					},
 				mark :
 					{
@@ -55,7 +55,7 @@ if( JION )
 						comment :
 							'the path of the form jockey',
 						type :
-							'jion.path'
+							'jion_path'
 					},
 				spaceUser :
 					{

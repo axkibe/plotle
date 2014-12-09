@@ -22,7 +22,7 @@ var
 	gruga_space,
 	gruga_user,
 	gruga_welcome,
-	jion,
+	jion_path,
 	jools,
 	marks,
 	net_ajax,
@@ -141,7 +141,7 @@ shell.root =
 	this._mode = 'Normal';
 
 	// path of currently hovered thing
-	this._hoverPath = jion.path.empty;
+	this._hoverPath = jion_path.empty;
 
 	view =
 	this.view =
@@ -154,9 +154,9 @@ shell.root =
 
 	this._formJockey =
 		forms_jockey.create(
-			'hover', jion.path.empty,
+			'hover', jion_path.empty,
 			'mark', null,
-			'path', jion.path.empty.append( 'forms' ),
+			'path', jion_path.empty.append( 'forms' ),
 			'view', view,
 			'twig:add', 'login', gruga_login,
 			'twig:add', 'moveTo', gruga_moveTo,
@@ -172,10 +172,10 @@ shell.root =
 		discs.jockey.create(
 			'access', '',
 			'action', null,
-			'hover', jion.path.empty,
+			'hover', jion_path.empty,
 			'mark', null,
 			'mode', this._mode,
-			'path', jion.path.empty.append( 'discs' ),
+			'path', jion_path.empty.append( 'discs' ),
 			'view', view,
 			'twig:add', 'mainDisc', gruga_mainDisc,
 			'twig:add', 'createDisc', gruga_createDisc
@@ -880,29 +880,26 @@ proto._setHover =
 		this._discJockey.create(
 			// FIXME make concernsHover
 			'hover',
-				path.isEmpty || path.get( 0 ) !== 'discs' ?
-					jion.path.empty
-					:
-					path
+				path.isEmpty || path.get( 0 ) !== 'discs'
+				? jion_path.empty
+				: path
 		);
 
 	this._formJockey =
 		this._formJockey.create(
 			'hover',
 				// FIXME make a concernsHover
-				path.isEmpty || path.get( 0 ) !== 'forms' ?
-					jion.path.empty
-					:
-					path
+				path.isEmpty || path.get( 0 ) !== 'forms'
+				? jion_path.empty
+				: path
 		);
 
 	this.space =
 		this.space.create(
 			'hover',
-				path.isEmpty || path.get( 0 ) !== 'space' ?
-					jion.path.empty
-					:
-					path
+				path.isEmpty || path.get( 0 ) !== 'space'
+				? jion_path.empty
+				: path
 		);
 
 	this._hoverPath = path;
@@ -1129,7 +1126,7 @@ proto.onload =
 		passhash,
 		username;
 
-	ajaxPath = jion.path.empty.append( 'ajax' );
+	ajaxPath = jion_path.empty.append( 'ajax' );
 
 	this.ajax =
 		net_ajax.create(
@@ -1247,9 +1244,9 @@ proto.onAcquireSpace =
 			'spaceUser', spaceRef.username, // FIXME have it use a ref
 			'spaceTag', spaceRef.tag,
 			'access', access,
-			'hover', jion.path.empty,
+			'hover', jion_path.empty,
 			'mark', null,
-			'path', jion.path.empty.append( 'space' ),
+			'path', jion_path.empty.append( 'space' ),
 			'view',
 				euclid_view.create(
 					'fact', 0,

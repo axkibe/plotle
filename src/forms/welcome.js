@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'the widget hovered upon',
 						type :
-							'jion.path',
+							'jion_path',
 						defaultValue :
 							null
 					},
@@ -51,10 +51,7 @@ if( JION )
 								func :
 									'concernsMark',
 								args :
-									[
-										'mark',
-										'path'
-									]
+									[ 'mark', 'path' ]
 							},
 						defaultValue :
 							null
@@ -64,7 +61,7 @@ if( JION )
 						comment :
 							'the path of the form',
 						type :
-							'jion.path',
+							'jion_path',
 						defaultValue :
 							undefined
 					},
