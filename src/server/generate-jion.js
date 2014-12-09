@@ -26,7 +26,7 @@ generateJion =
 */
 var
 	config,
-	formatter,
+	format_formatter,
 	fs,
 	generator,
 	jools,
@@ -37,7 +37,7 @@ var
 
 config = require( '../../config' );
 
-formatter = require( '../format/formatter' );
+format_formatter = require( '../format/formatter' );
 
 fs = require( 'fs' );
 
@@ -125,7 +125,7 @@ generateJion.run =
 	{
 		ast = generator.generate( jion );
 
-		output = formatter.format( ast );
+		output = format_formatter.format( ast );
 
 		if( !config.noWrite )
 		{

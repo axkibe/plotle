@@ -3,6 +3,9 @@
 */
 
 
+var
+	format_context;
+
 /*
 | Capsule
 */
@@ -17,7 +20,7 @@ if( JION )
 {
 	return {
 		id :
-			'format.context',
+			'format_context',
 		attributes :
 			{
 				indent :
@@ -62,18 +65,13 @@ if( JION )
 /*
 | Tabbing format.
 */
-var
-	_tab = '\t';
+var _tab = '\t';
 
 
-/*
-| Node imports.
-*/
 var
-	context,
 	jools;
 
-context = require( '../jion/this' )( module );
+format_context = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
@@ -82,7 +80,7 @@ jools = require( '../jools/jools' );
 | Seperator is a space when inline otherwise a newline.
 */
 jools.lazyValue(
-	context.prototype,
+	format_context.prototype,
 	'sep',
 	function( )
 	{
@@ -95,7 +93,7 @@ jools.lazyValue(
 | Transforms the context into a tab indentation.
 */
 jools.lazyValue(
-	context.prototype,
+	format_context.prototype,
 	'tab',
 	function( )
 	{
@@ -133,7 +131,7 @@ jools.lazyValue(
 | Increases the indentation.
 */
 jools.lazyValue(
-	context.prototype,
+	format_context.prototype,
 	'inc',
 	function( )
 	{
@@ -148,7 +146,7 @@ jools.lazyValue(
 | But keeps root context.
 */
 jools.lazyValue(
-	context.prototype,
+	format_context.prototype,
 	'incSame',
 	function( )
 	{
@@ -169,7 +167,7 @@ jools.lazyValue(
 | Decreases the indentation.
 */
 jools.lazyValue(
-	context.prototype,
+	format_context.prototype,
 	'dec',
 	function( )
 	{
@@ -197,7 +195,7 @@ jools.lazyValue(
 | Sets the context to be inline.
 */
 jools.lazyValue(
-	context.prototype,
+	format_context.prototype,
 	'setInline',
 	function( )
 	{
