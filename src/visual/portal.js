@@ -5,7 +5,7 @@
 
 var
 	Accent,
-	fabric,
+	fabric_spaceRef,
 	fontPool,
 	euclid_display,
 	euclid_ellipse,
@@ -1861,7 +1861,7 @@ portal.prototype._getOffsetAt =
 
 
 /*
-| The space the portals references as fabric.spaceRef jion.
+| The space the portals references as fabric_spaceRef jion.
 */
 jools.lazyValue(
 	portal.prototype,
@@ -1869,7 +1869,7 @@ jools.lazyValue(
 	function( )
 {
 	return(
-		fabric.spaceRef.create(
+		fabric_spaceRef.create(
 			'username', this.spaceUser,
 			'tag', this.spaceTag
 		)

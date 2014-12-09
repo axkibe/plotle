@@ -4,7 +4,7 @@
 
 
 var
-	fabric,
+	fabric_spaceRef,
 	forms_form,
 	forms_login,
 	jools,
@@ -351,7 +351,7 @@ forms_login.prototype.onAuth =
 
 	this.clear( );
 
-	root.moveToSpace( fabric.spaceRef.ideoloomHome, false );
+	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 
 	root.setMode( 'Normal' );
 };

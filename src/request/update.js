@@ -28,7 +28,7 @@ if( JION )
 {
 	return {
 		id :
-			'request.update',
+			'request_update',
 		attributes :
 			{
 				passhash :
@@ -56,7 +56,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'fabric.spaceRef'
+							'fabric_spaceRef'
 					},
 				username :
 					{

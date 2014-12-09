@@ -4,12 +4,7 @@
 
 
 var
-	fabric;
-
-fabric = fabric || { };
-
-
-var
+	fabric_spaceRef,
 	jools;
 
 
@@ -27,7 +22,7 @@ if( JION )
 {
 	return {
 		id :
-			'fabric.spaceRef',
+			'fabric_spaceRef',
 		attributes :
 			{
 				username :
@@ -53,19 +48,12 @@ if( JION )
 }
 
 
-var
-	spaceRef;
-
 
 if( SERVER )
 {
-	spaceRef = require( '../jion/this' )( module );
+	fabric_spaceRef = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
-}
-else
-{
-	spaceRef = fabric.spaceRef;
 }
 
 
@@ -73,7 +61,7 @@ else
 | Returns the space's full name.
 */
 jools.lazyValue(
-	spaceRef.prototype,
+	fabric_spaceRef.prototype,
 	'fullname',
 	function( )
 {
@@ -85,8 +73,8 @@ jools.lazyValue(
 /*
 | Reference to ideolooms home space.
 */
-spaceRef.ideoloomHome =
-	spaceRef.create(
+fabric_spaceRef.ideoloomHome =
+	fabric_spaceRef.create(
 		'username', 'ideoloom',
 		'tag', 'home'
 	);
@@ -94,8 +82,8 @@ spaceRef.ideoloomHome =
 /*
 | Reference to ideolooms sandbox space.
 */
-spaceRef.ideoloomSandbox =
-	spaceRef.create(
+fabric_spaceRef.ideoloomSandbox =
+	fabric_spaceRef.create(
 		'username', 'ideoloom',
 		'tag', 'sandbox'
 	);

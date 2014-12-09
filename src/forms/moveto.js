@@ -4,7 +4,7 @@
 
 
 var
-	fabric,
+	fabric_spaceRef,
 	forms_form,
 	forms_moveTo,
 	jools,
@@ -189,20 +189,20 @@ moveTo.prototype.pushButton =
 	{
 		case 'ideoloomHomeButton' :
 
-			root.moveToSpace( fabric.spaceRef.ideoloomHome, false );
+			root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 
 			break;
 
 		case 'ideoloomSandboxButton' :
 
-			root.moveToSpace( fabric.spaceRef.ideoloomSandbox, false );
+			root.moveToSpace( fabric_spaceRef.ideoloomSandbox, false );
 
 			break;
 
 		case 'userHomeButton' :
 
 			root.moveToSpace(
-				fabric.spaceRef.create(
+				fabric_spaceRef.create(
 					'username', this.username,
 					'tag', 'home'
 				),

@@ -50,7 +50,7 @@ if( JION )
 						comment :
 							'reference to the current space',
 						type :
-							'fabric.spaceRef',
+							'fabric_spaceRef',
 						defaultValue :
 							null
 					},

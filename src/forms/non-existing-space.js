@@ -55,10 +55,7 @@ if( JION )
 								func :
 									'concernsMark',
 								args :
-									[
-										'mark',
-										'path'
-									]
+									[ 'mark', 'path' ]
 							},
 						defaultValue :
 							null
@@ -68,7 +65,7 @@ if( JION )
 						comment :
 							'the non-existing-space',
 						type :
-							'fabric.spaceRef',
+							'fabric_spaceRef',
 						defaultValue :
 							undefined
 					},

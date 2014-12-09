@@ -10,7 +10,7 @@ var
 	euclid_measure,
 	euclid_point,
 	euclid_view,
-	fabric,
+	fabric_spaceRef,
 	forms_jockey,
 	gruga_createDisc,
 	gruga_login,
@@ -1075,7 +1075,7 @@ proto.setUser =
 			this.space.spaceUser !== 'ideoloom'
 		)
 		{
-			this.moveToSpace( fabric.spaceRef.ideoloomHome, false );
+			this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 		}
 
 		window.localStorage.setItem( 'username', null );
@@ -1172,7 +1172,7 @@ proto.onload =
 */
 proto.moveToSpace =
 	function(
-		spaceRef,     // refrence of type fabric.spaceRef
+		spaceRef,     // reference of type fabric_spaceRef
 		createMissing // if true, non-existing spaces are to be
 		//            // created
 	)
@@ -1307,7 +1307,7 @@ proto.onAuth =
 
 	this.setUser( reply.username, request.passhash );
 
-	this.moveToSpace( fabric.spaceRef.ideoloomHome, false );
+	this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 };
 
 
@@ -1357,7 +1357,7 @@ proto.logout =
 			this._visitPasshash
 		);
 
-		this.moveToSpace( fabric.spaceRef.ideoloomHome, false );
+		this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 
 		return;
 	}

@@ -1045,7 +1045,7 @@ prototype.createSpace =
 
 /**/if( CHECK )
 /**/{
-/**/	if( spaceRef.reflect !== 'fabric.spaceRef' )
+/**/	if( spaceRef.reflect_ !== 'fabric_spaceRef' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

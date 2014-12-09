@@ -26,7 +26,7 @@ if( JION )
 {
 	return {
 		id :
-			'request.acquire',
+			'request_acquire',
 		attributes :
 			{
 				createMissing :
@@ -54,7 +54,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'fabric.spaceRef'
+							'fabric_spaceRef'
 					},
 				username :
 					{

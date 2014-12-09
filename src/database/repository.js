@@ -50,7 +50,7 @@ if( JION )
 var
 	config,
 	db_version,
-	fabric,
+	fabric_spaceRef,
 	jools,
 	mongodb,
 	repository,
@@ -70,10 +70,7 @@ mongodb = require( 'mongodb' );
 
 sus = require( 'suspend' ); // FIXME just give resume
 
-fabric =
-	{
-		spaceRef : require( '../fabric/space-ref' )
-	};
+fabric_spaceRef = require( '../fabric/space-ref' );
 
 /*
 | Returns a repository object with
@@ -214,11 +211,11 @@ _initRepository =
 
 	initSpaces =
 		[
-			fabric.spaceRef.create(
+			fabric_spaceRef.create(
 				'username', 'ideoloom',
 				'tag', 'home'
 			),
-			fabric.spaceRef.create(
+			fabric_spaceRef.create(
 				'username', 'ideoloom',
 				'tag', 'sandbox'
 			)

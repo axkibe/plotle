@@ -26,7 +26,7 @@ if( JION )
 {
 	return {
 		id :
-			'request.alter',
+			'request_alter',
 		attributes :
 			{
 				changeWrapRay :
@@ -63,7 +63,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'fabric.spaceRef'
+							'fabric_spaceRef'
 					},
 				username :
 					{

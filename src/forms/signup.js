@@ -7,7 +7,7 @@
 | Imports
 */
 var
-	fabric,
+	fabric_spaceRef,
 	forms_form,
 	forms_signUp,
 	jools,
@@ -349,7 +349,7 @@ signUp.prototype.onRegister =
 
 	this.clear( );
 
-	root.moveToSpace( fabric.spaceRef.ideoloomHome, false );
+	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 
 	root.setMode( 'welcome' );
 };
@@ -368,30 +368,15 @@ signUp.prototype.clear =
 
 	// FUTURE make this in one call, somehow
 
-	root.setPath(
-		twig.userInput.path.append( 'value' ),
-		''
-	);
+	root.setPath( twig.userInput.path.append( 'value' ), '' );
 
-	root.setPath(
-		twig.emailInput.path.append( 'value' ),
-		''
-	);
+	root.setPath( twig.emailInput.path.append( 'value' ), '' );
 
-	root.setPath(
-		twig.passwordInput.path.append( 'value' ),
-		''
-	);
+	root.setPath( twig.passwordInput.path.append( 'value' ), '' );
 
-	root.setPath(
-		twig.password2Input.path.append( 'value' ),
-		''
-	);
+	root.setPath( twig.password2Input.path.append( 'value' ), '' );
 
-	root.setPath(
-		twig.newsletterCheckBox.path.append( 'checked' ),
-		true
-	);
+	root.setPath( twig.newsletterCheckBox.path.append( 'checked' ), true );
 
 	root.setMark( null );
 };
