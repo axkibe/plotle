@@ -3,19 +3,10 @@
 */
 
 
-/*
-| Export
-*/
-var
-	marks;
-
-
-/*
-| Imports
-*/
 var
 	jion_path,
-	jools;
+	jools,
+	marks_item;
 
 
 /*
@@ -32,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'marks.item',
+			'marks_item',
 		attributes :
 			{
 				path :
@@ -47,26 +38,20 @@ if( JION )
 }
 
 
-var
-	item;
-
-item = marks.item;
-
-
 /*
 | A caret mark has a caret.
 |
 | (the text range is the other mark
 |  which has this too )
 */
-item.prototype.hasCaret = false;
+marks_item.prototype.hasCaret = false;
 
 
 /*
 | The item's path.
 */
 jools.lazyValue(
-	item.prototype,
+	marks_item.prototype,
 	'itemPath',
 	function( )
 	{
@@ -79,7 +64,7 @@ jools.lazyValue(
 | The widget's path.
 */
 jools.lazyValue(
-	item.prototype,
+	marks_item.prototype,
 	'widgetPath',
 	function( )
 	{
@@ -94,14 +79,14 @@ jools.lazyValue(
 |
 | FIXME write something
 */
-item.prototype.clipboard = '';
+marks_item.prototype.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-item.prototype.containsPath =
+marks_item.prototype.containsPath =
 	function(
 		path
 	)

@@ -3,19 +3,10 @@
 */
 
 
-/*
-| Export
-*/
-var
-	marks;
-
-
-/*
-| Imports
-*/
 var
 	jion_path,
-	jools;
+	jools,
+	marks_range;
 
 
 /*
@@ -32,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'marks.range',
+			'marks_range',
 		attributes :
 			{
 				bPath :
@@ -84,18 +75,12 @@ if( JION )
 }
 
 
-var
-	range;
-
-range = marks.range;
-
-
 /*
 | The begin or end path,
 | dependening on which comes first in the doc.
 */
 jools.lazyValue(
-	range.prototype,
+	marks_range.prototype,
 	'frontPath',
 	function( )
 	{
@@ -107,7 +92,7 @@ jools.lazyValue(
 
 
 jools.lazyValue(
-	range.prototype,
+	marks_range.prototype,
 	'frontAt',
 	function( )
 	{
@@ -123,7 +108,7 @@ jools.lazyValue(
 | dependening on which comes last in the doc.
 */
 jools.lazyValue(
-	range.prototype,
+	marks_range.prototype,
 	'backPath',
 	function( )
 	{
@@ -139,7 +124,7 @@ jools.lazyValue(
 | dependening on which comes last in the doc.
 */
 jools.lazyValue(
-	range.prototype,
+	marks_range.prototype,
 	'backAt',
 	function( )
 	{
@@ -156,7 +141,7 @@ jools.lazyValue(
 | The caretPath and caretAt are identical to
 | ePath and eAt
 */
-range.prototype.hasCaret = true;
+marks_range.prototype.hasCaret = true;
 
 
 /*
@@ -165,7 +150,7 @@ range.prototype.hasCaret = true;
 | This allows a common interface with text range.
 */
 jools.lazyValue(
-	range.prototype,
+	marks_range.prototype,
 	'caretPath',
 	function( )
 	{
@@ -180,7 +165,7 @@ jools.lazyValue(
 | This allows a common interface with text range.
 */
 jools.lazyValue(
-	range.prototype,
+	marks_range.prototype,
 	'caretAt',
 	function( )
 	{
@@ -193,7 +178,7 @@ jools.lazyValue(
 | The item's path.
 */
 jools.lazyValue(
-	range.prototype,
+	marks_range.prototype,
 	'itemPath',
 	function( )
 	{
@@ -211,7 +196,7 @@ jools.lazyValue(
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-range.prototype.containsPath =
+marks_range.prototype.containsPath =
 	function(
 		path
 	)
@@ -238,7 +223,7 @@ range.prototype.containsPath =
 | The content the mark puts into the clipboard.
 */
 jools.lazyValue(
-	range.prototype,
+	marks_range.prototype,
 	'clipboard',
 	function( )
 	{
@@ -312,7 +297,7 @@ jools.lazyValue(
 | True if begin equals end
 */
 jools.lazyValue(
-	range.prototype,
+	marks_range.prototype,
 	'empty',
 	function( )
 	{
@@ -328,7 +313,7 @@ jools.lazyValue(
 /*
 | Sets front/back so front is before back.
 */
-range.prototype._normalize =
+marks_range.prototype._normalize =
 	function( )
 {
 	var

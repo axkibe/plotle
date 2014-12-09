@@ -78,7 +78,7 @@ if( JION )
 									[ 'mark', 'path' ]
 							},
 						type :
-							'Object', // FUTURE 'marks.*',
+							'Object', // FUTURE 'marks_',
 						defaultValue :
 							undefined,
 						allowsNull :

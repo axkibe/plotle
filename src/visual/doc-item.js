@@ -18,7 +18,7 @@ visual = visual || { };
 */
 var
 	jools,
-	marks,
+	marks_caret,
 	root;
 
 
@@ -200,11 +200,9 @@ docItem.prototype.click =
 			);
 
 		root.setMark(
-			marks.caret.create(
-				'path',
-					para.textPath,
-				'at',
-					at
+			marks_caret.create(
+				'path', para.textPath,
+				'at', at
 			)
 		);
 	}
@@ -213,11 +211,9 @@ docItem.prototype.click =
 		para = doc.atRank( doc.ranks.length - 1 );
 
 		root.setMark(
-			marks.caret.create(
-				'path',
-					para.textPath,
-				'at',
-					para.text.length
+			marks_caret.create(
+				'path', para.textPath,
+				'at', para.text.length
 			)
 		);
 	}
@@ -234,12 +230,7 @@ docItem.prototype.input =
 		text
 	)
 {
-	return (
-		this.doc.input(
-			text,
-			this
-		)
-	);
+	return this.doc.input( text, this );
 };
 
 

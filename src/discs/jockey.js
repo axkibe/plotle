@@ -75,7 +75,7 @@ if( JION )
 									]
 							},
 						type :
-							'Object', // FUTURE '->marks'
+							'Object', // FUTURE 'marks_'
 						allowsNull :
 							true
 					},

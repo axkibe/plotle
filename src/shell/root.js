@@ -24,7 +24,8 @@ var
 	gruga_welcome,
 	jion_path,
 	jools,
-	marks,
+	marks_caret,
+	marks_range,
 	net_ajax,
 	net_channel,
 	net_link,
@@ -331,7 +332,7 @@ proto.update =
 				//   keeping retainx might not be correct
 				//   in some cases
 				mark =
-					marks.caret.create(
+					marks_caret.create(
 						'path', sign.path.prepend( 'space' ),
 						'at', sign.at1,
 						'retainx', mark.retainx
@@ -386,7 +387,7 @@ proto.update =
 				)
 				{
 					mark =
-						marks.caret.create(
+						marks_caret.create(
 							'path', bSign.path.prepend( 'space' ),
 							'at', bSign.at1,
 							'retainx', mark.retainx
@@ -395,7 +396,7 @@ proto.update =
 				else
 				{
 					mark =
-						marks.range.create(
+						marks_range.create(
 							'doc', item.doc,
 							'bPath', bSign.path.prepend( 'space' ),
 							'bAt', bSign.at1,

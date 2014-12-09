@@ -13,7 +13,7 @@ var
 	euclid_view,
 	jion_path,
 	jools,
-	marks,
+	marks_item,
 	result,
 	root,
 	theme,
@@ -536,9 +536,7 @@ item.prototype.dragStart =
 		if( root.space.focusedItem( ) !== this )
 		{
 			root.setMark(
-				marks.item.create(
-					'path', this.path
-				)
+				marks_item.create( 'path', this.path )
 			);
 		}
 
