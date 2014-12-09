@@ -12,7 +12,8 @@ var
 	euclid_point,
 	fontPool,
 	jools,
-	marks,
+	marks_caret,
+	marks_range,
 	peer,
 	root,
 	theme,
@@ -68,7 +69,7 @@ if( JION )
 									[ 'mark', 'path' ]
 							},
 						type :
-							'Object', // FUTURE 'marks.*',
+							'Object', // FUTURE 'marks_',
 						defaultValue :
 							undefined,
 						allowsNull :
@@ -172,7 +173,7 @@ visual_para.concernsMark =
 		return mark;
 	}
 
-	if( mark.reflect === 'marks.range' )
+	if( mark.reflect_ === 'marks_range' )
 	{
 		return(
 			mark.itemPath.subPathOf( path )
@@ -303,10 +304,8 @@ jools.lazyValue(
 
 		if(
 			mark
-			&&
-			mark.reflect === 'marks.caret'
-			&&
-			mark.focus
+			&& mark.reflect_ === 'marks_caret'
+			&& mark.focus
 		)
 		{
 			this._drawCaret( f );
@@ -880,17 +879,12 @@ visual_para.prototype.specialKey =
 				v1 = doc.atRank( doc.ranks.length - 1 );
 
 				root.setMark(
-					marks.range.create(
-						'doc',
-							doc,
-						'bPath',
-							v0.textPath,
-						'bAt',
-							0,
-						'ePath',
-							v1.textPath,
-						'eAt',
-							v1.text.length
+					marks_range.create(
+						'doc', doc,
+						'bPath', v0.textPath,
+						'bAt', 0,
+						'ePath', v1.textPath,
+						'eAt', v1.text.length
 					)
 				);
 
@@ -908,9 +902,9 @@ visual_para.prototype.specialKey =
 
 	retainx = null;
 
-	switch( mark.reflect )
+	switch( mark.reflect_ )
 	{
-		case 'marks.caret' :
+		case 'marks_caret' :
 
 /**/		if( CHECK )
 /**/		{
@@ -933,7 +927,7 @@ visual_para.prototype.specialKey =
 
 			break;
 
-		case 'marks.range' :
+		case 'marks_range' :
 
 /**/		if( CHECK )
 /**/		{
@@ -1553,32 +1547,23 @@ visual_para.prototype._setMark =
 	if( !bPath )
 	{
 		return root.setMark(
-			marks.caret.create(
-				'path',
-					this.textPath,
-				'at',
-					at,
-				'retainx',
-					retainx
+			marks_caret.create(
+				'path', this.textPath,
+				'at', at,
+				'retainx', retainx
 			)
 		);
 	}
 	else
 	{
 		return root.setMark(
-			marks.range.create(
-				'doc',
-					doc,
-				'bPath',
-					bPath,
-				'bAt',
-					bAt,
-				'ePath',
-					this.textPath,
-				'eAt',
-					at,
-				'retainx',
-					retainx
+			marks_range.create(
+				'doc', doc,
+				'bPath', bPath,
+				'bAt', bAt,
+				'ePath', this.textPath,
+				'eAt', at,
+				'retainx', retainx
 			)
 		);
 	}

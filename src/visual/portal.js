@@ -15,7 +15,8 @@ var
 	euclid_roundRect,
 	euclid_view,
 	jools,
-	marks,
+	marks_caret,
+	marks_item,
 	peer,
 	result,
 	root,
@@ -68,7 +69,7 @@ if( JION )
 									[ 'mark', 'path' ]
 							},
 						type :
-							'Object', // FUTURE '->marks'
+							'Object', // FUTURE '->marks_'
 						defaultValue :
 							undefined,
 						allowsNull :
@@ -429,7 +430,7 @@ portal.prototype.click =
 		{
 			mark =
 				root.setMark(
-					marks.caret.create(
+					marks_caret.create(
 						'path', this.path.append( field  ),
 						'at', this._getOffsetAt( field, pp.x )
 					)
@@ -447,7 +448,7 @@ portal.prototype.click =
 	)
 	{
 		root.setMark(
-			marks.item.create( 'path', this.path )
+			marks_item.create( 'path', this.path )
 		);
 	}
 
@@ -754,10 +755,8 @@ jools.lazyValue(
 
 			if(
 				mark
-				&&
-				mark.reflect === 'marks.caret'
-				&&
-				mark.focus
+				&& mark.reflect_ === 'marks_caret'
+				&& mark.focus
 			)
 			{
 				this._drawCaret( f );
@@ -1091,7 +1090,7 @@ portal.prototype._keyDown =
 				);
 
 			root.setMark(
-				marks.caret.create(
+				marks_caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1112,7 +1111,7 @@ portal.prototype._keyDown =
 		case 'spaceTag' :
 
 			root.setMark(
-				marks.caret.create(
+				marks_caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1129,7 +1128,7 @@ portal.prototype._keyDown =
 		case 'moveToButton' :
 
 			root.setMark(
-				marks.caret.create(
+				marks_caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1196,7 +1195,7 @@ portal.prototype._keyLeft =
 		}
 
 		root.setMark(
-			marks.caret.create(
+			marks_caret.create(
 				'path',
 					// FIXME rather user this.path
 					mark.caretPath.set(
@@ -1215,7 +1214,7 @@ portal.prototype._keyLeft =
 	}
 
 	root.setMark(
-		marks.caret.create(
+		marks_caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1270,14 +1269,9 @@ portal.prototype._keyTab =
 	}
 
 	root.setMark(
-		marks.caret.create(
-			'path',
-				mark.caretPath.set(
-					mark.caretPath.length - 1,
-					cycle
-				),
-			'at',
-				0
+		marks_caret.create(
+			'path', mark.caretPath.set( mark.caretPath.length - 1, cycle ),
+			'at', 0
 		)
 	);
 };
@@ -1309,7 +1303,7 @@ portal.prototype._keyUp =
 		case 'spaceUser' :
 
 			root.setMark(
-				marks.caret.create(
+				marks_caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1331,7 +1325,7 @@ portal.prototype._keyUp =
 				);
 
 			root.setMark(
-				marks.caret.create(
+				marks_caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1351,7 +1345,7 @@ portal.prototype._keyUp =
 		case 'moveToButton' :
 
 			root.setMark(
-				marks.caret.create(
+				marks_caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1427,7 +1421,7 @@ portal.prototype._keyRight =
 		}
 
 		root.setMark(
-			marks.caret.create(
+			marks_caret.create(
 				'path', // FIXME this.paths
 					mark.caretPath.set(
 						mark.caretPath.length - 1,
@@ -1442,11 +1436,9 @@ portal.prototype._keyRight =
 	}
 
 	root.setMark(
-		marks.caret.create(
-			'path',
-				mark.caretPath,
-			'at',
-				mark.caretAt + 1
+		marks_caret.create(
+			'path', mark.caretPath,
+			'at', mark.caretAt + 1
 		)
 	);
 
@@ -1529,11 +1521,9 @@ portal.prototype._keyEnd =
 	}
 
 	root.setMark(
-		marks.caret.create(
-			'path',
-				mark.caretPath,
-			'at',
-				value.length
+		marks_caret.create(
+			'path', mark.caretPath,
+			'at', value.length
 		)
 	);
 };
@@ -1579,14 +1569,10 @@ portal.prototype._keyEnter =
 	if( cycle )
 	{
 		root.setMark(
-			marks.caret.create(
+			marks_caret.create(
 				'path',
-					mark.caretPath.set(
-						mark.caretPath.length - 1,
-						cycle
-					),
-				'at',
-					0
+					mark.caretPath.set( mark.caretPath.length - 1, cycle ),
+				'at', 0
 			)
 		);
 	}

@@ -6,7 +6,7 @@
 var
 	euclid_arrow,
 	jools,
-	marks,
+	marks_caret,
 	peer,
 	root,
 	theme,
@@ -112,7 +112,7 @@ if( JION )
 									[ 'mark', 'path' ]
 							},
 						type :
-							'Object', // FUTURE '->marks',
+							'Object', // FUTURE '->marks_',
 						defaultValue :
 							undefined,
 						allowsNull :
@@ -211,7 +211,7 @@ relation.spawn =
 	key = result.reaction.trg.path.get( -1 );
 
 	root.setMark(
-		marks.caret.create(
+		marks_caret.create(
 			'path',
 				root
 				.space

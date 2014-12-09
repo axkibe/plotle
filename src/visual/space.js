@@ -10,7 +10,7 @@ var
 	euclid_rect,
 	jion_path,
 	jools,
-	marks,
+	marks_caret,
 	peer,
 	result,
 	root,
@@ -851,7 +851,7 @@ space.prototype.dragStop =
 					key = res.reaction.trg.path.get( -1 );
 
 					root.setMark(
-						marks.caret.create(
+						marks_caret.create(
 							'path',
 								root.
 									space.twig[ key ]
@@ -912,7 +912,7 @@ space.prototype.dragStop =
 					key = res.reaction.trg.path.get( -1 );
 
 					root.setMark(
-						marks.caret.create(
+						marks_caret.create(
 							'path',
 								root.space
 								.twig[ key ]
@@ -950,7 +950,7 @@ space.prototype.dragStop =
 					key = res.reaction.trg.path.get( -1 );
 
 					root.setMark(
-						marks.caret.create(
+						marks_caret.create(
 							'path',
 								root
 								.space

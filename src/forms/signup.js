@@ -11,7 +11,7 @@ var
 	forms_form,
 	forms_signUp,
 	jools,
-	marks,
+	marks_caret,
 	root;
 
 
@@ -226,11 +226,9 @@ signUp.prototype.signup =
 		);
 
 		root.setMark(
-			marks.caret.create(
-				'path',
-					twig.userInput.path,
-				'at',
-					user.length
+			marks_caret.create(
+				'path', twig.userInput.path,
+				'at', user.length
 			)
 		);
 
@@ -245,11 +243,9 @@ signUp.prototype.signup =
 		);
 
 		root.setMark(
-			marks.caret.create(
-				'path',
-					twig.userInput.path,
-				'at',
-					0
+			marks_caret.create(
+				'path', twig.userInput.path,
+				'at', 0
 			)
 		);
 
@@ -264,11 +260,9 @@ signUp.prototype.signup =
 		);
 
 		root.setMark(
-			marks.caret.create(
-				'path',
-					twig.passwordInput.path,
-				'at',
-					pass.length
+			marks_caret.create(
+				'path', twig.passwordInput.path,
+				'at', pass.length
 			)
 		);
 
@@ -283,11 +277,9 @@ signUp.prototype.signup =
 		);
 
 		root.setMark(
-			marks.caret.create(
-				'path',
-					twig.password2Input.path,
-				'at',
-					pass2.length
+			marks_caret.create(
+				'path', twig.password2Input.path,
+				'at', pass2.length
 			)
 		);
 
@@ -330,11 +322,9 @@ signUp.prototype.onRegister =
 		if( message.search( /Username/ ) >= 0 )
 		{
 			root.setMark(
-				marks.caret.create(
-					'path',
-						twig.userInput.path,
-					'at',
-						twig.userInput.value.length
+				marks_caret.create(
+					'path', twig.userInput.path,
+					'at', twig.userInput.value.length
 				)
 			);
 		}

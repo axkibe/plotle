@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Object', // FUTURE '->marks'
+							'Object', // FUTURE 'marks_'
 						allowsNull :
 							true
 					},

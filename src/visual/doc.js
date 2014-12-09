@@ -282,7 +282,7 @@ doc.prototype._getRangeShape =
 
 /**/if( CHECK )
 /**/{
-/**/	if( mark.reflect !== 'marks.range' )
+/**/	if( mark.reflect_ !== 'marks_range' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -674,7 +674,7 @@ doc.prototype.draw =
 	if(
 		mark
 		&&
-		mark.reflect === 'marks.range'
+		mark.reflect_ === 'marks_range'
 		&&
 		mark.itemPath.subPathOf( this.path )
 	)
@@ -951,9 +951,8 @@ doc.prototype.input =
 	path = this.mark.caretPath;
 
 	if(
-		mark.reflect === 'marks.range'
-		&&
-		!mark.empty
+		mark.reflect_ === 'marks_range'
+		&& !mark.empty
 	)
 	{
 		peer.removeRange(
@@ -1000,7 +999,7 @@ doc.prototype.specialKey =
 	}
 
 	if(
-		mark.reflect === 'marks.range'
+		mark.reflect_ === 'marks_range'
 		&&
 		!mark.empty
 	)
