@@ -85,12 +85,41 @@ function translateSpacesEntry( o )
 }
 
 
+function translateTypes( o )
+{
+	var
+		key;
+
+	if( o.type )
+	{
+		o.type = o.type.replace( /\./g, '_' );
+	}
+
+
+	for( key in o )
+	{
+		if(
+			!o.hasOwnProperty( o, key )
+			||
+			key === 'type'
+		)
+		{
+			continue;
+		}
+
+		translateTypes( o[ key ] );
+	}
+}
+
+
 /*
 | Translates a change.
 */
 function translateChange( o )
 {
-	o.type = 'database.changeSkid';
+	o.type = 'database_changeSkid';
+
+	translateTypes( o );
 
 	return o;
 }

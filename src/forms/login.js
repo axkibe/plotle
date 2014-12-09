@@ -316,7 +316,7 @@ forms_login.prototype.onAuth =
 
 	twig = this.twig;
 
-	if( reply.type !== 'reply.auth' )
+	if( reply.type !== 'reply_auth' )
 	{
 		message = reply.message;
 

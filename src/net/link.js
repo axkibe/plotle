@@ -182,7 +182,7 @@ net_link.prototype._onRegister =
 	var
 		ok;
 
-	ok = reply.type === 'reply.register';
+	ok = reply.type === 'reply_register';
 
 	// FUTURE pass request / reply
 	root.onRegister(
@@ -230,7 +230,7 @@ net_link.prototype._onAcquireSpace =
 {
 	root.doTracker.flush( );
 
-	if( reply.type === 'reply.error' )
+	if( reply.type === 'reply_error' )
 	{
 		root.onAcquireSpace( request.spaceRef, reply );
 
@@ -332,7 +332,7 @@ net_link.prototype._onUpdate =
 /**/	}
 /**/}
 
-	if( reply.type !== 'reply.update' )
+	if( reply.type !== 'reply_update' )
 	{
 		system.failScreen( reply.message );
 
@@ -555,7 +555,7 @@ net_link.prototype._onSendChanges =
 		reply
 	)
 {
-	if( reply.type !== 'reply.alter' )
+	if( reply.type !== 'reply_alter' )
 	{
 		system.failScreen( 'Server not OK: ' + reply.message );
 	}

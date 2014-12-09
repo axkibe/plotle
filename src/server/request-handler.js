@@ -613,23 +613,23 @@ requestHandler.serve =
 {
 	switch( request.type )
 	{
-		case 'request.alter' :
+		case 'request_alter' :
 
 			return serveAlter( request );
 
-		case 'request.auth' :
+		case 'request_auth' :
 
 			return yield* serveAuth( request );
 
-		case 'request.acquire' :
+		case 'request_acquire' :
 
 			return yield* serveAcquire( request );
 
-		case 'request.register' :
+		case 'request_register' :
 
 			return yield* serveRegister( request );
 
-		case 'request.update' :
+		case 'request_update' :
 
 			return serveUpdate( request, result );
 

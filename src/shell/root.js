@@ -1288,7 +1288,7 @@ proto.onAuth =
 	// otherwise this is an onload login
 	// or logout.
 
-	if( reply.type !== 'reply.auth' )
+	if( reply.type !== 'reply_auth' )
 	{
 		// when logging in with a real user failed
 		// takes a visitor instead
