@@ -1987,7 +1987,10 @@ generator.prototype.genFromJSONCreatorParser =
 		.astCase(
 			'"type"',
 			astIf(
-				astDiffers( 'arg', this.id.astString ),
+				astAnd(
+					astDiffers( 'arg', this.id.astString ),  // FIXME remove
+					astDiffers( 'arg', this.id.astString_ )
+				),
 				astFail( )
 			)
 		);
@@ -2065,8 +2068,19 @@ generator.prototype.genFromJSONCreatorParser =
 					{
 						attrCode =
 							attrCode
-							.astCase(
+							.astCase( // TODO remove
 								attr.id[ t ].astString,
+								astAssign(
+									attr.v,
+									astCall(
+										attr.id[ t ].astVar
+										.astDot( 'createFromJSON' ),
+										'arg'
+									)
+								)
+							)
+							.astCase(
+								attr.id[ t ].astString_,
 								astAssign(
 									attr.v,
 									astCall(
@@ -2138,8 +2152,18 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 
 		loopSwitch =
 			loopSwitch
-			.astCase(
+			.astCase( // TODO remove
 				rid.astString,
+				astAssign(
+					'ray[ r ]',
+					astCall(
+						rid.astVar.astDot( 'createFromJSON' ),
+						'jray[ r ]'
+					)
+				)
+			)
+			.astCase(
+				rid.astString_,
 				astAssign(
 					'ray[ r ]',
 					astCall(
@@ -2193,8 +2217,18 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 
 		switchExpr =
 			switchExpr
-			.astCase(
+			.astCase( // TODO remove
 				twigID.astString,
+				astAssign(
+					'twig[ key ]',
+					astCall(
+						twigID.astVar.astDot( 'createFromJSON' ),
+						'jval'
+					)
+				)
+			)
+			.astCase(
+				twigID.astString_,
 				astAssign(
 					'twig[ key ]',
 					astCall(
@@ -2510,7 +2544,7 @@ generator.prototype.genToJSON =
 
 	olit =
 		astObjLiteral( )
-		.add( 'type', this.id.astString );
+		.add( 'type', this.id.astString_ );
 
 	for(
 		var a = 0, aZ = this.attrList.length;
