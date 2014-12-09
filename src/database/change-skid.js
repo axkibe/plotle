@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'database.changeSkid',
+			'database_changeSkid',
 		attributes :
 			{
 				_id :

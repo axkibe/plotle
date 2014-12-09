@@ -43,6 +43,7 @@ newList =
 	{
 		'actions' : true,
 		'ccot' : true,
+		'database' : true,
 		'design' : true,
 		'euclid' : true,
 		'forms' : true,

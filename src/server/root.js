@@ -39,6 +39,7 @@ GLOBAL.SHELL = false;
 
 var
 	config,
+	database_repository,
 	db_version,
 	fabric_spaceRef,
 	fs,
@@ -51,7 +52,6 @@ var
 	mongodb,
 	prototype,
 	postProcessor,
-	repository,
 	requestHandler,
 	roster,
 	server,
@@ -88,7 +88,7 @@ mongodb = require( 'mongodb' );
 
 postProcessor = require( './post-processor' );
 
-repository = require( '../database/repository' );
+database_repository = require( '../database/repository' );
 
 requestHandler = require( './request-handler' );
 
@@ -178,7 +178,7 @@ prototype.startup =
 	// the servers inventory
 	root.create( 'inventory', server.inventory.create( ) );
 
-	root.create( 'repository', yield* repository.connect( ) );
+	root.create( 'repository', yield* database_repository.connect( ) );
 
 	root.create(
 		// all spaces

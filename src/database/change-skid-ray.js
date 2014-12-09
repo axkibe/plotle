@@ -27,9 +27,9 @@ if( JION )
 {
 	return {
 		id :
-			'database.changeSkidRay',
+			'database_changeSkidRay',
 		ray :
-			[ 'database.changeSkid' ],
+			[ 'database_changeSkid' ],
 		json :
 			true,
 	};

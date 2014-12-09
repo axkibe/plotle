@@ -54,7 +54,7 @@ if( JION )
 						comment :
 							'changeSkids cached in RAM',
 						type :
-							'database.changeSkidRay'
+							'database_changeSkidRay'
 					}
 			}
 	};
