@@ -549,10 +549,8 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath',
-			'src/actions/action.js',
-		'inBundle',
-			true
+		'filePath', 'src/actions/is-action.js',
+		'inBundle', true
 	),
 	resource.create(
 		'filePath', 'src/actions/create-generic.js',

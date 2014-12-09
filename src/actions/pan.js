@@ -17,9 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'actions.pan',
-		subclass :
-			'actions.action',
+			'actions_pan',
 		equals :
 			'primitive',
 		attributes :

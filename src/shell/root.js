@@ -3,7 +3,7 @@
 */
 
 var
-	actions,
+	actions_isAction,
 	ccot_sign,
 	discs,
 	euclid_display,
@@ -268,7 +268,7 @@ proto.setAction =
 /**/	if(
 /**/		action !== null
 /**/		&&
-/**/		!actions.isAction( action.reflect )
+/**/		!actions_isAction( action )
 /**/	)
 /**/	{
 /**/		throw new Error( );

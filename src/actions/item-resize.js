@@ -17,9 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'actions.itemResize',
-		subclass :
-			'actions.action',
+			'actions_itemResize',
 		equals :
 			'primitive',
 		attributes :

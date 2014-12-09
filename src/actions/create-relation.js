@@ -17,9 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'actions.createRelation',
-		subclass :
-			'actions.action',
+			'actions_createRelation',
 		equals :
 			'primitive',
 		attributes :

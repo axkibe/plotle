@@ -302,10 +302,10 @@ label.prototype.dragStop =
 
 	action = root.action;
 
-	switch( action.reflect )
+	switch( action.reflect_ )
 	{
-		case 'actions.itemDrag' :
-		case 'actions.itemResize' :
+		case 'actions_itemDrag' :
+		case 'actions_itemResize' :
 
 			zone = this.zone,
 

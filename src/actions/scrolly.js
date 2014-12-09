@@ -17,9 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'actions.scrollY',
-		subclass :
-			'actions.action',
+			'actions_scrollY',
 		equals :
 			'primitive',
 		attributes :

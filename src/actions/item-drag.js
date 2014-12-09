@@ -17,9 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'actions.itemDrag',
-		subclass :
-			'actions.action',
+			'actions_itemDrag',
 		equals :
 			'primitive',
 		attributes :

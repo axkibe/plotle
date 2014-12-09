@@ -262,9 +262,9 @@ note.prototype.dragStop =
 
 	action = root.action;
 
-	switch( action.reflect )
+	switch( action.reflect_ )
 	{
-		case 'actions.itemResize' :
+		case 'actions_itemResize' :
 
 			zone = this.zone;
 

@@ -41,6 +41,7 @@ var
 
 newList =
 	{
+		'actions' : true,
 		'ccot' : true,
 		'design' : true,
 		'euclid' : true,

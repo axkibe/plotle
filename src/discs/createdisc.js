@@ -2,26 +2,19 @@
 | The creation disc.
 */
 
-/*
-| Export
-*/
+
 var
-	discs;
-
-discs = discs || { };
-
-
-/*
-| Imports
-*/
-var
-	actions,
+	actions_createGeneric,
+	actions_createRelation,
+	discs,
 	euclid_display,
 	euclid_view,
 	jion,
 	jools,
 	root;
 
+
+discs = discs || { }; // FIXME
 
 /*
 | Capsule
@@ -54,7 +47,7 @@ if( JION )
 						comment :
 							'currently active action',
 						type :
-							'Object',  // FUTURE 'actions.*',
+							'Object',  // FUTURE 'actions_*',
 						defaultValue :
 							null
 					},
@@ -302,15 +295,11 @@ createDisc.prototype.pushButton =
 		case 'createLabel' :
 
 			root.setAction(
-				actions.createGeneric.create(
-					'itemType',
-						'label',
-					'model',
-						null,
-					'start',
-						null,
-					'transItem',
-						null
+				actions_createGeneric.create(
+					'itemType', 'label',
+					'model', null,
+					'start', null,
+					'transItem', null
 				)
 			);
 
@@ -319,15 +308,11 @@ createDisc.prototype.pushButton =
 		case 'createNote' :
 
 			root.setAction(
-				actions.createGeneric.create(
-					'itemType',
-						'note',
-					'model',
-						null,
-					'start',
-						null,
-					'transItem',
-						null
+				actions_createGeneric.create(
+					'itemType', 'note',
+					'model', null,
+					'start', null,
+					'transItem', null
 				)
 			);
 
@@ -336,15 +321,11 @@ createDisc.prototype.pushButton =
 		case 'createPortal' :
 
 			root.setAction(
-				actions.createGeneric.create(
-					'itemType',
-						'portal',
-					'model',
-						null,
-					'start',
-						null,
-					'transItem',
-						null
+				actions_createGeneric.create(
+					'itemType', 'portal',
+					'model', null,
+					'start', null,
+					'transItem', null
 				)
 			);
 
@@ -353,13 +334,10 @@ createDisc.prototype.pushButton =
 		case 'createRelation' :
 
 			root.setAction(
-				actions.createRelation.create(
-					'fromItemPath',
-						jion.path.empty,
-					'relationState',
-						'start',
-					'toItemPath',
-						jion.path.empty
+				actions_createRelation.create(
+					'fromItemPath', jion.path.empty,
+					'relationState', 'start',
+					'toItemPath', jion.path.empty
 				)
 			);
 
@@ -367,12 +345,7 @@ createDisc.prototype.pushButton =
 
 		default :
 
-			throw new Error(
-				CHECK &&
-				(
-					'unknown button:' + buttonName
-				)
-			);
+			throw new Error( );
 	}
 
 };
@@ -617,9 +590,9 @@ createDisc._isActiveButton =
 		return false;
 	}
 
-	switch( action.reflect )
+	switch( action.reflect_ )
 	{
-		case 'actions.createGeneric' :
+		case 'actions_createGeneric' :
 
 			switch( action.itemType )
 			{
@@ -649,7 +622,7 @@ createDisc._isActiveButton =
 
 			break;
 
-		case 'actions.createRelation' :
+		case 'actions_createRelation' :
 
 			return wname === 'createRelation';
 

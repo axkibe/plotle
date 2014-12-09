@@ -1,19 +1,10 @@
 /*
-| An users action in the making.
-|
-| This overlays repository data, so for example a move is not transmitted
-| with every pixel changed but when the the object is released.
+| Tests is an action is an action.
 */
 
 
-/*
-| Export
-*/
 var
-	actions,
-	actions_action;
-
-actions = actions || { };
+	actions_isAction;
 
 
 /*
@@ -23,32 +14,23 @@ actions = actions || { };
 'use strict';
 
 
-actions.action =
-actions_action =
-	function( )
-{
-	// initializing abstract
-	throw new Error( );
-};
-
-
 /**/if( CHECK )
 /**/{
 /**		*
 ***		| Returns true if the reflection string is an action
 ***     | FUTURE remove by generic typecheck
 ***		*
-***/	actions.isAction =
-/**/		function( reflect )
+***/	actions_isAction =
+/**/		function( action )
 /**/	{
-/**/		switch ( reflect )
+/**/		switch ( action.reflect_ )
 /**/		{
-/**/			case 'actions.createGeneric' :
-/**/			case 'actions.createRelation' :
-/**/			case 'actions.itemDrag' :
-/**/			case 'actions.itemResize' :
-/**/			case 'actions.pan' :
-/**/			case 'actions.scrollY' :
+/**/			case 'actions_createGeneric' :
+/**/			case 'actions_createRelation' :
+/**/			case 'actions_itemDrag' :
+/**/			case 'actions_itemResize' :
+/**/			case 'actions_pan' :
+/**/			case 'actions_scrollY' :
 /**/
 /**/				return true;
 /**/

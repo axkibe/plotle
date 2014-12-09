@@ -3,11 +3,10 @@
 */
 
 
-/*
-| Export
-*/
 var
-	actions,
+	actions_createRelation,
+	actions_itemDrag,
+	actions_scrollY,
 	euclid_compass,
 	euclid_ellipse,
 	euclid_point,
@@ -482,13 +481,10 @@ item.prototype.dragStart =
 	)
 	{
 		root.setAction(
-			actions.scrollY.create(
-				'itemPath',
-					this.path,
-				'start',
-					p,
-				'startPos',
-					sbary.pos
+			actions_scrollY.create(
+				'itemPath', this.path,
+				'start', p,
+				'startPos', sbary.pos
 			)
 		);
 
@@ -502,18 +498,15 @@ item.prototype.dragStart =
 		return false;
 	}
 
-	switch( action && action.reflect )
+	switch( action && action.reflect_ )
 	{
-		case 'actions.createRelation' :
+		case 'actions_createRelation' :
 
 			root.setAction(
 				action.create(
-					'fromItemPath',
-						this.path,
-					'relationState',
-						'hadSelect',
-					'toPoint',
-						p
+					'fromItemPath', this.path,
+					'relationState', 'hadSelect',
+					'toPoint', p
 				)
 			);
 
@@ -525,15 +518,11 @@ item.prototype.dragStart =
 		// relation binding
 
 		root.setAction(
-			actions.createRelation.create(
-				'fromItemPath',
-					this.path,
-				'toItemPath',
-					jion.path.empty,
-				'relationState',
-					'hadSelect',
-				'toPoint',
-					p
+			actions_createRelation.create(
+				'fromItemPath', this.path,
+				'toItemPath', jion.path.empty,
+				'relationState', 'hadSelect',
+				'toPoint', p
 			)
 		);
 
@@ -555,13 +544,10 @@ item.prototype.dragStart =
 		}
 
 		root.setAction(
-			actions.itemDrag.create(
-				'start',
-					view.depoint( p ),
-				'transItem',
-					this,
-				'origin',
-					this
+			actions_itemDrag.create(
+				'start', view.depoint( p ),
+				'transItem', this,
+				'origin', this
 			)
 		);
 
@@ -594,9 +580,9 @@ item.prototype.dragMove =
 
 	action = root.action;
 
-	switch( action.reflect )
+	switch( action.reflect_ )
 	{
-		case 'actions.createRelation' :
+		case 'actions_createRelation' :
 
 			if(
 				!this.zone.within(
@@ -617,7 +603,7 @@ item.prototype.dragMove =
 
 			return true;
 
-		case 'actions.scrollY' :
+		case 'actions_scrollY' :
 
 			start = action.start,
 
@@ -659,16 +645,11 @@ item.prototype.dragStop =
 
 	action = root.action;
 
-	switch( action.reflect )
+	switch( action.reflect_ )
 	{
-		case 'actions.createRelation' :
+		case 'actions_createRelation' :
 
-			if(
-				!this.zone.within(
-					view,
-					p
-				)
-			)
+			if( !this.zone.within( view, p ) )
 			{
 				return false;
 			}
