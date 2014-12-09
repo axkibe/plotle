@@ -28,44 +28,61 @@ GLOBAL.SHELL = false;
 
 var
 	a,
+	all,
+	ast,
 	aZ,
 	arg,
-	argV =
-		process.argv,
-	didSomething =
-		false,
-	fs =
-		require( 'fs' ),
-	vm =
-		require( 'vm' ),
-	formatter =
-		require( '../format/formatter' ),
-	generator =
-		require( '../jion/generator' ),
-	jools =
-		require( '../jools/jools' ),
-	ast =
-		null,
+	argV,
+	didSomething,
 	file,
-	all =
-		false,
+	fs,
+	format_formatter,
+	generator,
 	inFilename,
 	inStat,
-	input =
-		null,
-	listing =
-		null,
-	listingName =
-		null,
-	list =
-		[ ],
-	jion =
-		null,
+	jion,
+	jools,
+	input,
+	listing,
+	listingName,
+	list,
 	outFilename,
 	outStat,
-	output =
-		null,
-	readOptions =
+	output,
+	readOptions,
+	vm;
+
+argV = process.argv;
+
+didSomething = false;
+
+fs = require( 'fs' );
+
+vm = require( 'vm' );
+
+format_formatter = require( '../format/formatter' );
+
+generator = require( '../jion/generator' );
+
+jools = require( '../jools/jools' );
+
+ast = null;
+
+all = false;
+
+input = null;
+
+listing = null;
+
+listingName = null;
+
+list = [ ];
+
+jion = null;
+
+output = null;
+
+readOptions =
 		{
 			encoding :
 				'utf8'
@@ -226,7 +243,7 @@ for(
 
 		ast = generator.generate( jion, false );
 
-		output = formatter.format( ast );
+		output = format_formatter.format( ast );
 
 		jools.log(
 			'genjion',

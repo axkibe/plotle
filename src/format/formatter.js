@@ -3,13 +3,9 @@
 */
 
 
-/*
-| Export
-*/
 var
-	formatter;
-
-formatter = { };
+	format_context,
+	format_formatter;
 
 
 /*
@@ -18,22 +14,19 @@ formatter = { };
 (function() {
 'use strict';
 
+
 /*
 | Constants.
 */
 var MAX_TEXT_WIDTH = 79;
 
-/*
-| Node imports.
-*/
-var
-	format;
 
-format =
-	{
-		context :
-			require( './context' )
-	};
+
+format_formatter =
+module.exports =
+	{ };
+
+format_context = require( './context' );
 
 
 /*
@@ -2256,7 +2249,7 @@ formatCommaList =
 /*
 | Formats a block as file.
 */
-formatter.format =
+format_formatter.format =
 	function(
 		block
 	)
@@ -2264,7 +2257,7 @@ formatter.format =
 	var
 		context;
 
-	context = format.context.create( 'root', true );
+	context = format_context.create( 'root', true );
 
 	return formatBlock( context, block, true );
 };
@@ -2335,13 +2328,6 @@ exprFormatter =
 	};
 
 
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = formatter;
-}
 
 
 } )( );
