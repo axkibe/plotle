@@ -414,11 +414,7 @@ createDisc.prototype.pointingHover =
 	{
 		reply =
 			this.atRank( r )
-				.pointingHover(
-					pp,
-					shift,
-					ctrl
-				);
+			.pointingHover( pp, shift, ctrl );
 
 		if( reply )
 		{
@@ -442,7 +438,8 @@ createDisc.prototype.click =
 {
 	var
 		display,
-		pp;
+		pp,
+		reply;
 
 	// shortcut if p is not near the panel
 	if(
@@ -478,14 +475,9 @@ createDisc.prototype.click =
 		r++
 	)
 	{
-		var
-			reply =
-				this.atRank( r )
-					.click(
-						pp,
-						shift,
-						ctrl
-					);
+		reply =
+			this.atRank( r )
+			.click( pp, shift, ctrl );
 
 		if( reply )
 		{

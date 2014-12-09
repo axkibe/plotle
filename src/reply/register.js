@@ -16,7 +16,7 @@
 if( JION )
 {
 	return {
-		id : 'reply.register',
+		id : 'reply_register',
 		json : true
 	};
 }

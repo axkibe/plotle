@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'reply.update',
+			'reply_update',
 		attributes :
 			{
 				seq :

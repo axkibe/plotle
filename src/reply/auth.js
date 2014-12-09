@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'reply.auth',
+			'reply_auth',
 		attributes :
 			{
 				username :

@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'reply.error',
+			'reply_error',
 		attributes :
 			{
 				message :

@@ -16,7 +16,7 @@
 if( JION )
 {
 	return {
-		id : 'reply.alter',
+		id : 'reply_alter',
 		json : true
 	};
 }

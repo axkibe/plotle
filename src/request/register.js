@@ -4,15 +4,6 @@
 
 
 /*
-| Exports
-*/
-var
-	request;
-
-request = request || { };
-
-
-/*
 | Capsule
 */
 ( function( ) {
@@ -26,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'request.register',
+			'request_register',
 		attributes :
 			{
 				mail :

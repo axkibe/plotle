@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'reply.acquire',
+			'reply_acquire',
 		attributes :
 			{
 				status :

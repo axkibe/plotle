@@ -1324,9 +1324,12 @@ proto.onRegister =
 
 	if( this._mode !== 'signUp' )
 	{
-		console.log(
-			'ignoring a register reply, since out of signup form'
-		);
+/**/	if( CHECK )
+/**/	{
+/**/		console.log(
+/**/			'ignoring a register reply, since out of signup form'
+/**/		);
+/**/	}
 
 		return;
 	}

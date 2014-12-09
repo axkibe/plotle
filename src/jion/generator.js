@@ -51,6 +51,7 @@ newList =
 		'gruga' : true,
 		'marks' : true,
 		'net' : true,
+		'reply' : true,
 		'widgets' : true
 	};
 

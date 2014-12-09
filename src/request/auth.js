@@ -5,15 +5,6 @@
 
 
 /*
-| Exports
-*/
-var
-	request;
-
-request = request || { };
-
-
-/*
 | Capsule
 */
 ( function( ) {
@@ -27,7 +18,7 @@ if( JION )
 {
 	return {
 		id :
-			'request.auth',
+			'request_auth',
 		attributes :
 			{
 				passhash :

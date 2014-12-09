@@ -4,15 +4,6 @@
 
 
 /*
-| Exports
-*/
-var
-	request;
-
-request = request || { };
-
-
-/*
 | Capsule
 */
 ( function( ) {
