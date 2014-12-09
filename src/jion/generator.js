@@ -82,7 +82,7 @@ var
 	astReturn,
 	astReturnFalse,
 	astReturnTrue,
-	astString,
+	_string,
 	astSwitch,
 	astThis,
 	astTypeof,
@@ -161,7 +161,7 @@ astPlusAssign = shorthand.astPlusAssign;
 
 astReturn = shorthand.astReturn;
 
-astString = shorthand.astString;
+_string = shorthand.astString;
 
 astSwitch = shorthand.astSwitch;
 
@@ -339,7 +339,7 @@ generator.prototype._init =
 					);
 				}
 
-				defaultValue = astString( jdv );
+				defaultValue = _string( jdv );
 			}
 			else
 			{
@@ -603,7 +603,7 @@ generator.prototype.genNodeIncludes =
 					astVar( unitStr + '_' + name ),
 					astCall(
 						'require',
-						astString(
+						_string(
 							'../../src/'
 							+ camelCaseToDash( unitStr )
 							+ '/'
@@ -1094,7 +1094,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				astString( name ),
+				_string( name ),
 				astIf(
 					'arg !== undefined',
 					astAssign( attr.v, 'arg' )
@@ -1190,7 +1190,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				'"ray:init"',
 				astBlock( )
 				.ast( 'ray = arg' )
-				.astAssign( 'rayDup', astString( 'init' ) )
+				.ast( 'rayDup = "init"' )
 			)
 			.astCase(
 				'"ray:append"',
@@ -1332,7 +1332,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		default :
 
-			return astDiffers( avar.astDot( 'reflect' ), id.astString );
+			return astDiffers( avar.astDot( 'reflect_' ), id.astString_ );
 	}
 };
 
@@ -1987,10 +1987,7 @@ generator.prototype.genFromJSONCreatorParser =
 		.astCase(
 			'"type"',
 			astIf(
-				astAnd(
-					astDiffers( 'arg', this.id.astString ),  // FIXME remove
-					astDiffers( 'arg', this.id.astString_ )
-				),
+				astDiffers( 'arg', this.id.astString_ ),
 				astFail( )
 			)
 		);
@@ -2068,17 +2065,6 @@ generator.prototype.genFromJSONCreatorParser =
 					{
 						attrCode =
 							attrCode
-							.astCase( // TODO remove
-								attr.id[ t ].astString,
-								astAssign(
-									attr.v,
-									astCall(
-										attr.id[ t ].astVar
-										.astDot( 'createFromJSON' ),
-										'arg'
-									)
-								)
-							)
 							.astCase(
 								attr.id[ t ].astString_,
 								astAssign(
@@ -2097,7 +2083,7 @@ generator.prototype.genFromJSONCreatorParser =
 		nameSwitch =
 			nameSwitch
 			.astCase(
-				astString( attr.name ),
+				_string( attr.name ),
 				attrCode
 			);
 	}
@@ -2152,16 +2138,6 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 
 		loopSwitch =
 			loopSwitch
-			.astCase( // TODO remove
-				rid.astString,
-				astAssign(
-					'ray[ r ]',
-					astCall(
-						rid.astVar.astDot( 'createFromJSON' ),
-						'jray[ r ]'
-					)
-				)
-			)
 			.astCase(
 				rid.astString_,
 				astAssign(
@@ -2217,16 +2193,6 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 
 		switchExpr =
 			switchExpr
-			.astCase( // TODO remove
-				twigID.astString,
-				astAssign(
-					'twig[ key ]',
-					astCall(
-						twigID.astVar.astDot( 'createFromJSON' ),
-						'jval'
-					)
-				)
-			)
 			.astCase(
 				twigID.astString_,
 				astAssign(
@@ -2430,6 +2396,7 @@ generator.prototype.genReflection =
 		capsule // block to append to
 	)
 {
+	// XXX remove
 	capsule =
 		capsule
 		.astComment( 'Reflection.' )
@@ -2445,7 +2412,7 @@ generator.prototype.genReflection =
 		.astComment( 'Name Reflection.' )
 		.astAssign(
 			'prototype.reflectName',
-			astString( this.id.name )
+			_string( this.id.name )
 		);
 
 	return capsule;
@@ -3009,7 +2976,7 @@ generator.prototype.genCapsule =
 
 	capsule = astBlock( );
 
-	capsule = capsule.append( astString( 'use strict' ) );
+	capsule = capsule.append( _string( 'use strict' ) );
 
 	capsule = this.genNodeIncludes( capsule );
 

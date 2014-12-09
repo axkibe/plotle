@@ -88,21 +88,33 @@ function translateSpacesEntry( o )
 function translateTypes( o )
 {
 	var
-		key;
+		a, aZ,
+		key,
+		keys;
+
+	try
+	{
+		keys = Object.keys( o );
+	}
+	catch( err )
+	{
+		return o;
+	}
 
 	if( o.type )
 	{
 		o.type = o.type.replace( /\./g, '_' );
 	}
 
-
-	for( key in o )
+	for(
+		a = 0, aZ = keys.length;
+		a < aZ;
+		a++
+	)
 	{
-		if(
-			!o.hasOwnProperty( o, key )
-			||
-			key === 'type'
-		)
+		key = keys[ a ];
+
+		if( key === 'type' )
 		{
 			continue;
 		}

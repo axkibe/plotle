@@ -210,7 +210,7 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_block.reflect !== 'ast.astBlock' )
+/**/	if( v_block.reflect_ !== 'ast_astBlock' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

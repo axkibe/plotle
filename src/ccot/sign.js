@@ -149,37 +149,37 @@ ccot_sign.prototype._init =
 	{
 		switch( val.type )
 		{
-			case 'euclid.point' :
+			case 'euclid_point' :
 
 				this.val = euclid_point.createFromJSON( val );
 
 				break;
 
-			case 'euclid.rect' :
+			case 'euclid_rect' :
 
 				this.val = euclid_rect.createFromJSON( val );
 
 				break;
 
-			case 'visual.label' :
+			case 'visual_label' :
 
 				this.val = visual_label.createFromJSON( val );
 
 				break;
 
-			case 'visual.note' :
+			case 'visual_note' :
 
 				this.val = visual_note.createFromJSON( val );
 
 				break;
 
-			case 'visual.portal' :
+			case 'visual_portal' :
 
 				this.val = visual_portal.createFromJSON( val );
 
 				break;
 
-			case 'visual.relation' :
+			case 'visual_relation' :
 
 				this.val = visual_relation.createFromJSON( val );
 

@@ -267,7 +267,7 @@ prototype.create =
 /**/
 /**/	if( v_block !== null )
 /**/	{
-/**/		if( v_block.reflect !== 'ast.astBlock' )
+/**/		if( v_block.reflect_ !== 'ast_astBlock' )
 /**/		{
 /**/			throw new Error( );
 /**/		}

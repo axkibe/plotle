@@ -250,7 +250,7 @@ prototype.create =
 /**/
 /**/	if( v_capsule !== null )
 /**/	{
-/**/		if( v_capsule.reflect !== 'ast.astBlock' )
+/**/		if( v_capsule.reflect_ !== 'ast_astBlock' )
 /**/		{
 /**/			throw new Error( );
 /**/		}
@@ -276,7 +276,7 @@ prototype.create =
 /**/
 /**/	if( v_header !== null )
 /**/	{
-/**/		if( v_header.reflect !== 'ast.astComment' )
+/**/		if( v_header.reflect_ !== 'ast_astComment' )
 /**/		{
 /**/			throw new Error( );
 /**/		}
@@ -306,7 +306,7 @@ prototype.create =
 /**/
 /**/	if( v_preamble !== null )
 /**/	{
-/**/		if( v_preamble.reflect !== 'ast.astBlock' )
+/**/		if( v_preamble.reflect_ !== 'ast_astBlock' )
 /**/		{
 /**/			throw new Error( );
 /**/		}
