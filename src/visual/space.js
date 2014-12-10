@@ -121,7 +121,7 @@ if( JION )
 		twig :
 			[
 				'fabric_note',
-				'visual.label',
+				'fabric_label',
 				'fabric_relation',
 				'fabric_portal'
 			]

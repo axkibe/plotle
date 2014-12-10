@@ -5,15 +5,13 @@
 
 var
 	euclid_arrow,
+	fabric_label,
 	fabric_relation,
 	jools,
 	marks_caret,
 	root,
 	shell_peer,
-	theme,
-	visual;
-
-visual = visual || { }; // TODO
+	theme;
 
 
 /*
@@ -134,29 +132,21 @@ if( JION )
 				'inherit'
 			],
 		subclass :
-			'visual.label'
+			'fabric_label'
 	};
 }
 
-
-var
-	label;
 
 /*
 | Node includes.
 */
 if( SERVER )
 {
+	fabric_relation = require( '../jion/this' )( module );
+
 	jools = require( '../jools/jools' );
 
-	//label = require( './label' ); FIXME
-	label = require( '../visual/label' );
-
-	fabric_relation = require( '../jion/this' )( module );
-}
-else
-{
-	label = visual.label;
+	fabric_label = require( './label' );
 }
 
 
@@ -168,7 +158,7 @@ fabric_relation.prototype._init =
 		inherit
 	)
 {
-	label.prototype._init.call( this, inherit );
+	fabric_label.prototype._init.call( this, inherit );
 };
 
 
@@ -279,7 +269,7 @@ fabric_relation.prototype.draw =
 		);
 	}
 
-	label.prototype.draw.call( this, display );
+	fabric_label.prototype.draw.call( this, display );
 };
 
 

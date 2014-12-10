@@ -7,6 +7,7 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_rect,
+	fabric_label,
 	jools,
 	root,
 	shell_peer,
@@ -29,7 +30,7 @@ if( JION )
 {
 	return {
 		id :
-			'visual.label',
+			'fabric_label',
 		attributes :
 			{
 				doc :
@@ -122,29 +123,21 @@ if( JION )
 }
 
 
-var
-	label;
-
-
 /*
 | Node includes.
 */
 if( SERVER )
 {
-	jools = require( '../jools/jools' ),
+	fabric_label = require( '../jion/this' )( module );
 
-	label = require( '../jion/this' )( module );
-}
-else
-{
-	label = visual.label;
+	jools = require( '../jools/jools' );
 }
 
 
 /*
 | Initializer.
 */
-label.prototype._init =
+fabric_label.prototype._init =
 	function( )
 {
 	var
@@ -201,14 +194,13 @@ label.prototype._init =
 /*
 | Labels use pnw/fontsize for positioning
 */
-label.prototype.positioning =
-	'pnw/fontsize';
+fabric_label.prototype.positioning = 'pnw/fontsize';
 
 
 /*
 | Resize handles to show on labels
 */
-label.prototype.handles =
+fabric_label.prototype.handles =
 	{
 		ne : true,
 		se : true,
@@ -218,14 +210,14 @@ label.prototype.handles =
 
 /**/if( CHECK )
 /**/{
-/**/	Object.freeze( label.prototype.handles );
+/**/	Object.freeze( fabric_label.prototype.handles );
 /**/}
 
 
 /*
 | Highlights the label.
 */
-label.prototype.highlight =
+fabric_label.prototype.highlight =
 	function(
 		display
 	)
@@ -242,7 +234,7 @@ label.prototype.highlight =
 | The label's silhoutte.
 */
 jools.lazyValue(
-	label.prototype,
+	fabric_label.prototype,
 	'silhoutte',
 	function( )
 	{
@@ -260,7 +252,7 @@ jools.lazyValue(
 | The items silhoutte anchored at zero.
 */
 jools.lazyValue(
-	label.prototype,
+	fabric_label.prototype,
 	'zeroSilhoutte',
 	function( )
 	{
@@ -286,7 +278,7 @@ jools.lazyValue(
 /*
 | Sets the items position and size aften an action.
 */
-label.prototype.dragStop =
+fabric_label.prototype.dragStop =
 	function(
 		view,
 		p
@@ -339,7 +331,7 @@ label.prototype.dragStop =
 | The label's display.
 */
 jools.lazyValue(
-	label.prototype,
+	fabric_label.prototype,
 	'_display',
 	function( )
 	{
@@ -386,7 +378,7 @@ jools.lazyValue(
 |
 | FIXME: move the common stuff into visual.item.draw()
 */
-label.prototype.draw =
+fabric_label.prototype.draw =
 	function(
 		display
 	)
@@ -401,7 +393,7 @@ label.prototype.draw =
 /*
 | Mouse wheel turned.
 */
-label.prototype.mousewheel =
+fabric_label.prototype.mousewheel =
 	function(
 		// view,
 		// p,
@@ -416,7 +408,7 @@ label.prototype.mousewheel =
 /*
 | Dummy since a label does not scroll.
 */
-label.prototype.scrollMarkIntoView =
+fabric_label.prototype.scrollMarkIntoView =
 	function( )
 {
 	// nada
@@ -426,7 +418,7 @@ label.prototype.scrollMarkIntoView =
 /*
 | Dummy since a label does not scroll.
 */
-label.prototype.scrollPage =
+fabric_label.prototype.scrollPage =
 	function(
 		// up
 	)

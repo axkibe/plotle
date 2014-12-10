@@ -107,6 +107,8 @@ function translateTypes( o )
 
 		switch( o.type )
 		{
+			case 'visual_label' : o.type = 'fabric_label'; break;
+
 			case 'visual_note' : o.type = 'fabric_note'; break;
 
 			case 'visual_portal' : o.type = 'fabric_portal'; break;

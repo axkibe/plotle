@@ -6,6 +6,7 @@
 var
 	euclid_point,
 	euclid_rect,
+	fabric_label,
 	fabric_note,
 	fabric_portal,
 	shell_stubs,
@@ -28,7 +29,7 @@ shell_stubs = { };
 
 
 shell_stubs.emptyLabel =
-	visual.label.create(
+	fabric_label.create(
 		'pnw',
 			euclid_point.zero,
 		'fontsize',

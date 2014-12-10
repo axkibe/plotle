@@ -6,11 +6,11 @@ var
 	ccot_sign,
 	euclid_point,
 	euclid_rect,
+	fabric_label,
 	fabric_note,
 	fabric_portal,
 	fabric_relation,
-	jools,
-	visual_label;
+	jools;
 
 
 /*
@@ -121,7 +121,7 @@ if( SERVER )
 
 	euclid_rect = require( '../euclid/rect' );
 
-	visual_label = require( '../visual/label' );
+	fabric_label = require( '../fabric/label' );
 
 	fabric_note = require( '../fabric/note' );
 
@@ -161,9 +161,9 @@ ccot_sign.prototype._init =
 
 				break;
 
-			case 'visual_label' :
+			case 'fabric_label' :
 
-				this.val = visual_label.createFromJSON( val );
+				this.val = fabric_label.createFromJSON( val );
 
 				break;
 

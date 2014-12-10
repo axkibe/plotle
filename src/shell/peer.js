@@ -6,6 +6,7 @@
 var
 	ccot_change,
 	ccot_sign,
+	fabric_label,
 	fabric_note,
 	fabric_portal,
 	fabric_relation,
@@ -201,7 +202,7 @@ shell_peer.newLabel =
 	src =
 		ccot_sign.create(
 			'val',
-				visual.label.create(
+				fabric_label.create(
 					'fontsize', fontsize,
 					'pnw', pnw,
 					'doc',

@@ -500,7 +500,7 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/visual/label.js',
+		'filePath', 'src/fabric/label.js',
 		'hasJion', true,
 		'inBundle', true
 	),
