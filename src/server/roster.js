@@ -494,7 +494,7 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/visual/note.js',
+		'filePath', 'src/fabric/note.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -510,7 +510,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/visual/portal.js',
+		'filePath', 'src/fabric/portal.js',
 		'hasJion', true,
 		'inBundle', true
 	),

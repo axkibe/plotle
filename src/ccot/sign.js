@@ -6,10 +6,10 @@ var
 	ccot_sign,
 	euclid_point,
 	euclid_rect,
+	fabric_note,
+	fabric_portal,
 	jools,
 	visual_label,
-	visual_note,
-	visual_portal,
 	visual_relation;
 
 
@@ -123,9 +123,9 @@ if( SERVER )
 
 	visual_label = require( '../visual/label' );
 
-	visual_note = require( '../visual/note' );
+	fabric_note = require( '../fabric/note' );
 
-	visual_portal = require( '../visual/portal' );
+	fabric_portal = require( '../fabric/portal' );
 
 	visual_relation = require( '../visual/relation' );
 }
@@ -167,15 +167,15 @@ ccot_sign.prototype._init =
 
 				break;
 
-			case 'visual_note' :
+			case 'fabric_note' :
 
-				this.val = visual_note.createFromJSON( val );
+				this.val = fabric_note.createFromJSON( val );
 
 				break;
 
-			case 'visual_portal' :
+			case 'fabric_portal' :
 
-				this.val = visual_portal.createFromJSON( val );
+				this.val = fabric_portal.createFromJSON( val );
 
 				break;
 

@@ -9,13 +9,15 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
+	fabric_note,
 	jools,
 	shell_peer,
 	shell_style,
 	root,
 	system,
 	theme,
-	visual;
+	visual_docItem,
+	visual_scrollbar;
 
 
 /*
@@ -32,7 +34,7 @@ if( JION )
 {
 	return {
 		id :
-			'visual.note',
+			'fabric_note',
 		attributes :
 			{
 				doc :
@@ -40,7 +42,7 @@ if( JION )
 						comment :
 							'the notes document',
 						type :
-							'visual.doc',
+							'visual_doc',
 						json :
 							true
 					},
@@ -71,7 +73,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'visual.item',
+									'visual_item',
 								func :
 									'concernsMark',
 								args :
@@ -124,7 +126,7 @@ if( JION )
 		init :
 			[ ],
 		subclass :
-			'visual.docItem'
+			'visual_docItem'
 	};
 }
 
@@ -133,25 +135,16 @@ if( JION )
 */
 if( SERVER )
 {
+	fabric_note = require( '../jion/this' )( module );
+
 	jools = require( '../jools/jools' );
-
-	visual =
-		{
-			note :
-				require( '../jion/this' )( module )
-		};
 }
-
-var
-	note;
-
-note = visual.note;
 
 
 /*
 | Initializer.
 */
-note.prototype._init =
+fabric_note.prototype._init =
 	function( )
 {
 	var
@@ -197,18 +190,12 @@ note.prototype._init =
 		this.doc.create(
 			'flowWidth', // FUTURE remove?
 				zone.width - theme.note.innerMargin.x,
-			'fontsize',
-				this.fontsize,
-			'innerMargin',
-				theme.note.innerMargin,
-			'mark',
-				this.mark,
-			'paraSep',
-				jools.half( this.fontsize ),
-			'path',
-				docPath,
-			'view',
-				this.view
+			'fontsize', this.fontsize,
+			'innerMargin', theme.note.innerMargin,
+			'mark', this.mark,
+			'paraSep', jools.half( this.fontsize ),
+			'path', docPath,
+			'view', this.view
 		);
 
 	if( this.scrolly === undefined )
@@ -217,20 +204,16 @@ note.prototype._init =
 	}
 
 	this.scrollbarY =
-		visual.scrollbar.create(
-			'aperture',
-				zone.height - theme.note.innerMargin.y,
-			'max',
-				this.doc.height,
+		visual_scrollbar.create(
+			'aperture', zone.height - theme.note.innerMargin.y,
+			'max', this.doc.height,
 			'pnw',
 				euclid_point.create(
 					'x', zone.pse.x,
 					'y', zone.pnw.y + theme.scrollbar.vdis
 				),
-			'pos',
-				this.scrolly,
-			'size',
-				zone.height - theme.scrollbar.vdis * 2
+			'pos', this.scrolly,
+			'size', zone.height - theme.scrollbar.vdis * 2
 		);
 
 	// TODO ahead _display if only view changed
@@ -240,14 +223,14 @@ note.prototype._init =
 /*
 | Notes use zone for positioning
 */
-note.prototype.positioning =
+fabric_note.prototype.positioning =
 	'zone';
 
 
 /*
 | Sets the items position and size after an action.
 */
-note.prototype.dragStop =
+fabric_note.prototype.dragStop =
 	function(
 		view,
 		p
@@ -288,7 +271,7 @@ note.prototype.dragStop =
 		default :
 
 			return (
-				visual.docItem.prototype.dragStop.call(
+				visual_docItem.prototype.dragStop.call(
 					this,
 					view,
 					p
@@ -303,13 +286,13 @@ if( SHELL )
 	/*
 	| Minimum height.
 	*/
-	note.prototype.minHeight = theme.note.minHeight;
+	fabric_note.prototype.minHeight = theme.note.minHeight;
 
 
 	/*
 	| Minimum width.
 	*/
-	note.prototype.minWidth = theme.note.minWidth;
+	fabric_note.prototype.minWidth = theme.note.minWidth;
 }
 
 
@@ -317,7 +300,7 @@ if( SHELL )
 | The notes display.
 */
 jools.lazyValue(
-	note.prototype,
+	fabric_note.prototype,
 	'_display',
 	function( )
 	{
@@ -376,7 +359,7 @@ jools.lazyValue(
 /*
 | Draws the note.
 */
-note.prototype.draw =
+fabric_note.prototype.draw =
 	function(
 		display
 	)
@@ -407,7 +390,7 @@ note.prototype.draw =
 /*
 | Resize handles to show on notes.
 */
-note.prototype.handles =
+fabric_note.prototype.handles =
 	{
 		n : true,
 		ne : true,
@@ -421,7 +404,7 @@ note.prototype.handles =
 
 /**/if( CHECK )
 /**/{
-/**/	Object.freeze( note.prototype.handles );
+/**/	Object.freeze( fabric_note.prototype.handles );
 /**/}
 
 
@@ -429,7 +412,7 @@ note.prototype.handles =
 | The notes silhoutte.
 */
 jools.lazyValue(
-	note.prototype,
+	fabric_note.prototype,
 	'silhoutte',
 	function( )
 	{
@@ -457,7 +440,7 @@ jools.lazyValue(
 | The notes silhoutte anchored at zero.
 */
 jools.lazyValue(
-	note.prototype,
+	fabric_note.prototype,
 	'zeroSilhoutte',
 	function( )
 	{
@@ -488,7 +471,7 @@ jools.lazyValue(
 /*
 | Highlights the note.
 */
-note.prototype.highlight =
+fabric_note.prototype.highlight =
 	function(
 		display
 	)
@@ -504,7 +487,7 @@ note.prototype.highlight =
 /*
 | Scrolls the note so the caret comes into view.
 */
-note.prototype.scrollMarkIntoView =
+fabric_note.prototype.scrollMarkIntoView =
 	function( )
 {
 	var
@@ -580,7 +563,7 @@ note.prototype.scrollMarkIntoView =
 /*
 | Mouse wheel turned.
 */
-note.prototype.mousewheel =
+fabric_note.prototype.mousewheel =
 	function(
 		view,
 		p,
@@ -607,15 +590,6 @@ note.prototype.mousewheel =
 
 	return true;
 };
-
-
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = note;
-}
 
 
 } )( );

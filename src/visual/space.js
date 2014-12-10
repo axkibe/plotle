@@ -120,10 +120,10 @@ if( JION )
 			true,
 		twig :
 			[
-				'visual.note',
+				'fabric_note',
 				'visual.label',
 				'visual.relation',
-				'visual.portal'
+				'fabric_portal'
 			]
 	};
 }

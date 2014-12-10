@@ -104,6 +104,13 @@ function translateTypes( o )
 	if( o.type )
 	{
 		o.type = o.type.replace( /\./g, '_' );
+
+		switch( o.type )
+		{
+			case 'visual_note' : o.type = 'fabric_note'; break;
+
+			case 'visual_portal' : o.type = 'fabric_portal'; break;
+		}
 	}
 
 	for(
@@ -200,23 +207,17 @@ run =
 	console.log( '* dropping trg' );
 		yield trg.connection.dropDatabase( resume( ) );
 
-	src.global =
-		yield src.connection.collection( 'global',  resume( ) );
+	src.global = yield src.connection.collection( 'global',  resume( ) );
 
-	src.spaces =
-		yield src.connection.collection( 'spaces', resume( ) );
+	src.spaces = yield src.connection.collection( 'spaces', resume( ) );
 
-	src.users =
-		yield src.connection.collection( 'users', resume( ) );
+	src.users = yield src.connection.collection( 'users', resume( ) );
 
-	trg.global =
-		yield trg.connection.collection( 'global', resume( ) );
+	trg.global = yield trg.connection.collection( 'global', resume( ) );
 
-	trg.users =
-		yield trg.connection.collection( 'users', resume( ) );
+	trg.users = yield trg.connection.collection( 'users', resume( ) );
 
-	trg.spaces =
-		yield trg.connection.collection( 'spaces', resume( ) );
+	trg.spaces = yield trg.connection.collection( 'spaces', resume( ) );
 
 	if( ( yield src.global.count( resume( ) ) ) === 0 )
 	{

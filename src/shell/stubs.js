@@ -6,6 +6,8 @@
 var
 	euclid_point,
 	euclid_rect,
+	fabric_note,
+	fabric_portal,
 	shell_stubs,
 	theme,
 	visual;
@@ -44,7 +46,7 @@ shell_stubs.emptyLabel =
 
 
 shell_stubs.emptyNote =
-	visual.note.create(
+	fabric_note.create(
 		'fontsize',
 			theme.note.fontsize, // FIXME
 		'zone',
@@ -60,7 +62,7 @@ shell_stubs.emptyNote =
 
 
 shell_stubs.emptyPortal =
-	visual.portal.create(
+	fabric_portal.create(
 		'zone',
 			euclid_rect.create(
 				'pnw', euclid_point.zero,

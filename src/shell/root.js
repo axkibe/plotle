@@ -30,6 +30,7 @@ var
 	net_channel,
 	net_link,
 	root,
+	shell_doTracker,
 	shell_root,
 	system,
 	swatch;

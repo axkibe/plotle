@@ -234,7 +234,7 @@ var _systemCatcher =
 /*
 | The system.
 */
-var System =
+var shell_system =
 	function( )
 {
 	if( system )
@@ -338,7 +338,7 @@ var _settings =
 /*
 | Replaces the shell by a failscreen
 */
-System.prototype.failScreen =
+shell_system.prototype.failScreen =
 	function(
 		message
 	)
@@ -413,7 +413,7 @@ System.prototype.failScreen =
 /*
 | Cancels a timer
 */
-System.prototype.cancelTimer =
+shell_system.prototype.cancelTimer =
 	function( id )
 {
 	return window.clearTimeout( id );
@@ -423,7 +423,7 @@ System.prototype.cancelTimer =
 /*
 | (Re)Starts the blink timer
 */
-System.prototype.restartBlinker =
+shell_system.prototype.restartBlinker =
 	function( )
 {
 	// double uses the blink timer
@@ -444,7 +444,7 @@ System.prototype.restartBlinker =
 /*
 | Sets the hidden input field (text selection)
 */
-System.prototype.setInput =
+shell_system.prototype.setInput =
 	function(
 		text
 	)
@@ -465,7 +465,7 @@ System.prototype.setInput =
 /*
 | Sets a timer with an error catcher
 */
-System.prototype.setTimer =
+shell_system.prototype.setTimer =
 	function(
 		time,
 		callback
@@ -478,7 +478,7 @@ System.prototype.setTimer =
 /*
 | Pixels to scroll on a wheel event
 */
-System.prototype.textWheelSpeed =
+shell_system.prototype.textWheelSpeed =
 	12 * 5;
 
 
@@ -488,7 +488,7 @@ System.prototype.textWheelSpeed =
 /*
 | Blinks the caret
 */
-System.prototype._blink =
+shell_system.prototype._blink =
 	function( )
 {
 	if( _failScreen )
@@ -520,7 +520,7 @@ _resetAtweenState =
 /*
 | timeout after mouse down so dragging starts
 */
-System.prototype._onAtweenTime =
+shell_system.prototype._onAtweenTime =
 	function( )
 {
 	var
@@ -566,7 +566,7 @@ System.prototype._onAtweenTime =
 /*
 | Lost focus.
 */
-System.prototype._onSystemBlur =
+shell_system.prototype._onSystemBlur =
 	function(
 		// event
 	)
@@ -575,7 +575,7 @@ System.prototype._onSystemBlur =
 };
 
 
-System.prototype._onHiddenInputBlur =
+shell_system.prototype._onHiddenInputBlur =
 	function(
 		// event
 	)
@@ -588,7 +588,7 @@ System.prototype._onHiddenInputBlur =
 /*
 | Got focus.
 */
-System.prototype._onSystemFocus =
+shell_system.prototype._onSystemFocus =
 	function(
 		// event
 	)
@@ -600,7 +600,7 @@ System.prototype._onSystemFocus =
 /*
 | Window is being resized.
 */
-System.prototype._onResize =
+shell_system.prototype._onResize =
 	function(
 		// event
 	)
@@ -627,7 +627,7 @@ System.prototype._onResize =
 /*
 | Captures all mouseevents event beyond the canvas (for dragging)
 */
-System.prototype._captureEvents =
+shell_system.prototype._captureEvents =
 	function( )
 {
 	if( this._useCapture )
@@ -647,7 +647,7 @@ System.prototype._captureEvents =
 | Key down on hidden input field.
 | Used when suggesting a keyboard.
 */
-System.prototype._onKeyDown =
+shell_system.prototype._onKeyDown =
 	function(
 		event
 	)
@@ -675,7 +675,7 @@ System.prototype._onKeyDown =
 /*
 | Hidden input key press.
 */
-System.prototype._onKeyPress =
+shell_system.prototype._onKeyPress =
 	function(
 		event
 	)
@@ -739,7 +739,7 @@ System.prototype._onKeyPress =
 /*
 | Hidden input key up.
 */
-System.prototype._onKeyUp =
+shell_system.prototype._onKeyUp =
 	function(
 		// event
 	)
@@ -753,7 +753,7 @@ System.prototype._onKeyUp =
 /*
 | Disables context menues.
 */
-System.prototype._onContextMenu =
+shell_system.prototype._onContextMenu =
 	function(
 		event
 	)
@@ -767,7 +767,7 @@ System.prototype._onContextMenu =
 /*
 | Mouse down event.
 */
-System.prototype._onMouseDown =
+shell_system.prototype._onMouseDown =
 	function(
 		event
 	)
@@ -829,7 +829,7 @@ System.prototype._onMouseDown =
 /*
 | Handles hovering of the pointing device.
 */
-System.prototype._pointingHover =
+shell_system.prototype._pointingHover =
 	function(
 		p,
 		shift,
@@ -864,7 +864,7 @@ System.prototype._pointingHover =
 |
 | Used by asyncEvents so the hoveringState is corrected.
 */
-System.prototype._repeatHover =
+shell_system.prototype._repeatHover =
 	function( )
 {
 	var
@@ -892,7 +892,7 @@ System.prototype._repeatHover =
 /*
 | Mouse move event.
 */
-System.prototype._onMouseMove =
+shell_system.prototype._onMouseMove =
 	function(
 		event
 	)
@@ -988,7 +988,7 @@ System.prototype._onMouseMove =
 /*
 | Mouse up event.
 */
-System.prototype._onMouseUp =
+shell_system.prototype._onMouseUp =
 	function(
 		event
 	)
@@ -1060,7 +1060,7 @@ System.prototype._onMouseUp =
 /*
 | The mouse wheel is being turned.
 */
-System.prototype._onMouseWheel =
+shell_system.prototype._onMouseWheel =
 	function(
 		event
 	)
@@ -1105,7 +1105,7 @@ System.prototype._onMouseWheel =
 /*
 | The user is touching something ( on mobile devices )
 */
-System.prototype._onTouchStart =
+shell_system.prototype._onTouchStart =
 	function(
 		event
 	)
@@ -1156,7 +1156,7 @@ System.prototype._onTouchStart =
 /*
 | The use is moving the touch ( on mobile devices )
 */
-System.prototype._onTouchMove =
+shell_system.prototype._onTouchMove =
 	function(
 		event
 	)
@@ -1246,7 +1246,7 @@ System.prototype._onTouchMove =
 /*
 | The using is lifting his/her finger ( on mobile devices)
 */
-System.prototype._onTouchEnd =
+shell_system.prototype._onTouchEnd =
 	function( event )
 {
 	var
@@ -1331,7 +1331,7 @@ System.prototype._onTouchEnd =
 /*
 | Stops capturing all mouseevents
 */
-System.prototype._releaseEvents =
+shell_system.prototype._releaseEvents =
 	function( )
 {
 	if ( this._useCapture )
@@ -1351,7 +1351,7 @@ System.prototype._releaseEvents =
 /*
 | A special key is being pressed.
 */
-System.prototype._specialKey =
+shell_system.prototype._specialKey =
 	function(
 		keyCode,
 		shift,
@@ -1518,25 +1518,21 @@ System.prototype._specialKey =
 /*
 | Tests if the hidden input field got data
 */
-System.prototype._testInput =
+shell_system.prototype._testInput =
 	function( )
 {
 	var
-		hi =
-			_hiddenInput,
+		hi,
+		text;
 
-		text =
-			hi.value;
+	hi = _hiddenInput;
+
+	text = hi.value;
 
 	// works around opera quirks inserting CR characters
-	text =
-		text.replace( /\r/g, '' );
+	text = text.replace( /\r/g, '' );
 
-	if(
-		text === _inputVal
-		||
-		!root
-	)
+	if( text === _inputVal || !root )
 	{
 		return;
 	}
@@ -1545,8 +1541,7 @@ System.prototype._testInput =
 	_inputVal =
 		'';
 
-	hi.selectionStart =
-		0;
+	hi.selectionStart = 0;
 
 	root.input( text );
 
@@ -1561,7 +1556,7 @@ System.prototype._testInput =
 | and if takes care the caret is scrolled into
 | visible screen area
 */
-System.prototype._steerAttention =
+shell_system.prototype._steerAttention =
 	function( )
 {
 	var
@@ -1612,7 +1607,7 @@ startup = function( )
 		_catcher(
 			function( )
 			{
-				system = new System( );
+				system = new shell_system( );
 
 				(
 					new shell_root( system._display )

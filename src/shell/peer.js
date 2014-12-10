@@ -6,6 +6,8 @@
 var
 	ccot_change,
 	ccot_sign,
+	fabric_note,
+	fabric_portal,
 	jion_path,
 	shell_peer,
 	root,
@@ -82,16 +84,13 @@ shell_peer.newNote =
 	src =
 		ccot_sign.create(
 			'val',
-				visual.note.create(
+				fabric_note.create(
 					'fontsize', 13,
 					'zone', zone,
 					'doc',
 						visual.doc.create(
-							'twig:add',
-							'1',
-							visual.para.create(
-								'text', ''
-							)
+							'twig:add', '1',
+							visual.para.create( 'text', '' )
 						)
 				),
 			'rank',
@@ -118,7 +117,7 @@ shell_peer.newPortal =
 	src =
 		ccot_sign.create(
 			'val',
-				visual.portal.create(
+				fabric_portal.create(
 					'zone', zone,
 					'spaceUser', destSpaceUser,
 					'spaceTag', destSpaceTag

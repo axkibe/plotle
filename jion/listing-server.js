@@ -22,6 +22,8 @@ module.exports =
 			'src/euclid/point.js',
 			'src/euclid/rect.js',
 			'src/euclid/view.js',
+			'src/fabric/note.js',
+			'src/fabric/portal.js',
 			'src/fabric/space-ref.js',
 			'src/jion/path.js',
 			'src/reply/acquire.js',
@@ -42,9 +44,7 @@ module.exports =
 			'src/server/inventory.js',
 			'src/visual/doc.js',
 			'src/visual/label.js',
-			'src/visual/note.js',
 			'src/visual/para.js',
-			'src/visual/portal.js',
 			'src/visual/relation.js',
 			'src/visual/space.js',
 
