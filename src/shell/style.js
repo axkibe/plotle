@@ -1,21 +1,11 @@
 /*
-| Meshcraft's styles.
+| Styles.
 */
 
 
-/*
-| Imports
-*/
 var
-	Accent;
-
-
-/*
-| Export
-*/
-var
-	Style =
-		null;
+	shell_accent,
+	shell_style;
 
 /*
 | Capsule
@@ -24,11 +14,10 @@ var
 'use strict';
 
 
-Style =
-	{ };
+shell_style = { };
 
 
-Style.styles =
+shell_style.styles =
 {
 	mainButton :
 	{
@@ -888,14 +877,16 @@ Style.styles =
 /*
 | Gets a style by its name.
 */
-Style.getStyle =
+shell_style.getStyle =
 	function(
 		name,
 		accent
 	)
 {
-	var style =
-		Style.styles[ name ];
+	var
+		style;
+
+	style = shell_style.styles[ name ];
 
 	if( !style )
 	{
@@ -906,31 +897,27 @@ Style.getStyle =
 
 	switch( accent )
 	{
-		case Accent.NORMA :
+		case shell_accent.NORMA :
 
-			style =
-				style.normal;
-
-			break;
-
-		case Accent.HOVER :
-
-			style =
-				style.hover;
+			style = style.normal;
 
 			break;
 
-		case Accent.FOCUS :
+		case shell_accent.HOVER :
 
-			style =
-				style.focus;
+			style = style.hover;
 
 			break;
 
-		case Accent.HOFOC :
+		case shell_accent.FOCUS :
 
-			style =
-				style.hofoc;
+			style = style.focus;
+
+			break;
+
+		case shell_accent.HOFOC :
+
+			style = style.hofoc;
 
 			break;
 
@@ -942,20 +929,13 @@ Style.getStyle =
 			}
 			else
 			{
-				throw new Error(
-					'Invalid accent: ' + accent
-				);
+				throw new Error( );
 			}
 	}
 
 	if( !style )
 	{
-		throw new Error(
-			'Style ' +
-			name +
-			' does not have requested accent: ' +
-			accent
-		);
+		throw new Error( );
 	}
 
 	return style;

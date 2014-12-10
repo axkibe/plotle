@@ -7,7 +7,6 @@
 | Imports
 */
 var
-	Accent,
 	euclid_display,
 	euclid_ellipse,
 	euclid_measure,
@@ -18,6 +17,7 @@ var
 	marks_caret,
 	result_hover,
 	root,
+	shell_accent,
 	theme,
 	widgets_input,
 	widgets_style;
@@ -426,7 +426,7 @@ jools.lazyValue(
 		style =
 			widgets_style.get(
 				this.style,
-				Accent.state(
+				shell_accent.state(
 					false, // FIXME
 					this.focusAccent
 				)

@@ -14,8 +14,8 @@ var
 	jools,
 	marks_caret,
 	marks_range,
-	peer,
 	root,
+	shell_peer,
 	theme,
 	visual_para;
 
@@ -806,7 +806,7 @@ visual_para.prototype.input =
 	{
 		line = rx[ 1 ];
 
-		peer.insertText(
+		shell_peer.insertText(
 			textPath,
 			caretAt,
 			line
@@ -817,10 +817,7 @@ visual_para.prototype.input =
 			// FIXME, somehow use changes
 			// over return values more elegantly
 			r =
-				peer.split(
-					textPath,
-					caretAt + line.length
-				);
+				shell_peer.split( textPath, caretAt + line.length );
 
 			doc =
 				r.tree.getPath(
@@ -1051,11 +1048,7 @@ visual_para.prototype._keyBackspace =
 
 	if( at > 0 )
 	{
-		peer.removeText(
-			this.textPath,
-			at - 1,
-			1
-		);
+		shell_peer.removeText( this.textPath, at - 1, 1 );
 
 		return;
 	}
@@ -1066,10 +1059,7 @@ visual_para.prototype._keyBackspace =
 	{
 		ve = doc.atRank( r - 1 );
 
-		peer.join(
-			ve.textPath,
-			ve.text.length
-		);
+		shell_peer.join( ve.textPath, ve.text.length );
 	}
 };
 
@@ -1092,11 +1082,7 @@ visual_para.prototype._keyDel =
 
 	if( at < this.text.length )
 	{
-		peer.removeText(
-			this.textPath,
-			at,
-			1
-		);
+		shell_peer.removeText( this.textPath, at, 1 );
 
 		return;
 	}
@@ -1105,7 +1091,7 @@ visual_para.prototype._keyDel =
 
 	if( r < doc.ranks.length - 1 )
 	{
-		peer.join(
+		shell_peer.join(
 			this.textPath,
 			this.text.length
 		);
@@ -1215,7 +1201,7 @@ visual_para.prototype._keyEnter =
 		// bAt
 	)
 {
-	peer.split( this.textPath, at );
+	shell_peer.split( this.textPath, at );
 };
 
 

@@ -23,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'shell.doTracker',
+			'shell_doTracker',
 		attributes :
 			{
 				_undo :

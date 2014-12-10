@@ -11,9 +11,9 @@ var
 	jion_path,
 	jools,
 	marks_caret,
-	peer,
 	result_hover,
 	root,
+	shell_peer,
 	shell_stubs,
 	theme,
 	visual;
@@ -846,7 +846,7 @@ space.prototype.dragStop =
 								)
 						);
 
-					res = peer.newNote( note.zone );
+					res = shell_peer.newNote( note.zone );
 
 					key = res.reaction.trg.path.get( -1 );
 
@@ -903,7 +903,7 @@ space.prototype.dragStop =
 						);
 
 					res =
-						peer.newLabel(
+						shell_peer.newLabel(
 							label.pnw,
 							'Label',
 							label.doc.fontsize
@@ -941,7 +941,7 @@ space.prototype.dragStop =
 						);
 
 					res =
-						peer.newPortal(
+						shell_peer.newPortal(
 							portal.zone,
 							root.username, // FIXME
 							'home'
@@ -1032,7 +1032,7 @@ space.prototype.dragStop =
 				{
 					case 'zone' :
 
-						peer.setZone(
+						shell_peer.setZone(
 							action.transItem.path,
 							action.transItem.zone
 						);
@@ -1041,7 +1041,7 @@ space.prototype.dragStop =
 
 					case 'pnw/fontsize' :
 
-						peer.setPNW(
+						shell_peer.setPNW(
 							action.transItem.path,
 							action.transItem.zone.pnw
 						);
@@ -1067,7 +1067,7 @@ space.prototype.dragStop =
 				{
 					case 'zone' :
 
-						peer.setZone(
+						shell_peer.setZone(
 							action.transItem.path,
 							action.transItem.zone
 						);
@@ -1076,12 +1076,12 @@ space.prototype.dragStop =
 
 					case 'pnw/fontsize' :
 
-						peer.setPNW(
+						shell_peer.setPNW(
 							action.transItem.path,
 							action.transItem.zone.pnw
 						);
 
-						peer.setFontSize(
+						shell_peer.setFontSize(
 							action.transItem.path,
 							action.transItem.doc.fontsize
 						);

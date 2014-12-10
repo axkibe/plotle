@@ -9,7 +9,7 @@
 var
 	jion_path,
 	jools,
-	peer,
+	shell_peer,
 	testpad;
 
 /*
@@ -582,7 +582,7 @@ proto.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			peer.insertText(
+			shell_peer.insertText(
 				path,
 				action.at,
 				action.value
@@ -601,7 +601,7 @@ proto.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			peer.removeText(
+			shell_peer.removeText(
 				path,
 				action.at,
 				action.at2 - action.at
@@ -627,7 +627,7 @@ proto.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			peer.split( path, action.at );
+			shell_peer.split( path, action.at );
 
 			break;
 
@@ -639,7 +639,7 @@ proto.send =
 				.append( doc.ranks[ action.line - 1] )
 				.append( 'text' );
 
-			peer.join(
+			shell_peer.join(
 				path,
 				doc.twig[ doc.ranks[ action.line - 1 ] ].text.length
 			);

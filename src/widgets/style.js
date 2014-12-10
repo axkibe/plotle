@@ -4,8 +4,8 @@
 
 
 var
-	Accent, // FIXME
-	Style, // FIXME
+	shell_accent,
+	shell_style,
 	widgets_style;
 
 
@@ -30,7 +30,7 @@ widgets_style.get =
 	var
 		style;
 
-	style = Style.styles[ name ];
+	style = shell_style.styles[ name ];
 
 	if( !style )
 	{
@@ -41,25 +41,25 @@ widgets_style.get =
 
 	switch( accent )
 	{
-		case Accent.NORMA :
+		case shell_accent.NORMA :
 
 			style = style.normal;
 
 			break;
 
-		case Accent.HOVER :
+		case shell_accent.HOVER :
 
 			style = style.hover;
 
 			break;
 
-		case Accent.FOCUS :
+		case shell_accent.FOCUS :
 
 			style = style.focus;
 
 			break;
 
-		case Accent.HOFOC :
+		case shell_accent.HOFOC :
 
 			style = style.hofoc;
 

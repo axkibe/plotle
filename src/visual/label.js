@@ -8,9 +8,9 @@ var
 	euclid_point,
 	euclid_rect,
 	jools,
-	peer,
 	root,
-	Style,
+	shell_peer,
+	shell_style,
 	theme,
 	visual;
 
@@ -231,10 +231,7 @@ label.prototype.highlight =
 	)
 {
 	display.edge(
-		Style.getStyle(
-			theme.label.style,
-			'highlight'
-		),
+		shell_style.getStyle( theme.label.style, 'highlight' ),
 		this.silhoutte,
 		this.view
 	);
@@ -315,12 +312,12 @@ label.prototype.dragStop =
 				!this.pnw.equals( zone.pnw )
 			)
 			{
-				peer.setPNW( this.path, zone.pnw );
+				shell_peer.setPNW( this.path, zone.pnw );
 			}
 
 			if( fontsize !== this.fontsize )
 			{
-				peer.setFontSize( this.path, fontsize );
+				shell_peer.setFontSize( this.path, fontsize );
 			}
 
 			break;
@@ -374,10 +371,7 @@ jools.lazyValue(
 
 		// displays the border
 		display.edge(
-			Style.getStyle(
-				theme.label.style,
-				'normal'
-			),
+			shell_style.getStyle( theme.label.style, 'normal' ),
 			this.zeroSilhoutte,
 			hview
 		);

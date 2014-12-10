@@ -3,19 +3,8 @@
 */
 
 
-/*
-| Export
-*/
 var
-	discs;
-
-discs = discs || { };
-
-
-/*
-| Imports
-*/
-var
+	discs_jockey,
 	jion_path,
 	jools;
 
@@ -33,7 +22,7 @@ if( JION )
 {
 	return {
 		id :
-			'discs.jockey',
+			'discs_jockey',
 		attributes :
 			{
 				access :
@@ -66,7 +55,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'discs.jockey',
+									'discs_jockey',
 								func :
 									'concernsMark',
 								args :
@@ -129,21 +118,18 @@ if( JION )
 					}
 			},
 		subclass :
-			'discs.disc',
+			'discs_disc',
 		init :
 			[ ],
 		twig :
-			[
-				'discs.mainDisc',
-				'discs.createDisc'
-			]
+			[ 'discs_mainDisc', 'discs_createDisc' ]
 	};
 }
 
 var
 	jockey;
 
-jockey = discs.jockey;
+jockey = discs_jockey;
 
 
 /*

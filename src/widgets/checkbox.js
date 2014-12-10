@@ -7,11 +7,11 @@
 | Imports
 */
 var
-	Accent,
 	euclid_view,
 	icons_check,
 	jools,
 	root,
+	shell_accent,
 	widgets_checkbox,
 	widgets_style;
 
@@ -296,7 +296,7 @@ widgets_checkbox.prototype.draw =
 	style =
 		widgets_style.get(
 			this.style,
-			Accent.state(
+			shell_accent.state(
 				this.hover && this.hover.equals( this.path ),
 				this.focusAccent
 			)
@@ -308,7 +308,7 @@ widgets_checkbox.prototype.draw =
 	{
 		this.checkIcon.draw(
 			display,
-			widgets_style.get( 'checkboxCheck', Accent.NORMA ),
+			widgets_style.get( 'checkboxCheck', shell_accent.NORMA ),
 			euclid_view.proper
 		);
 	}

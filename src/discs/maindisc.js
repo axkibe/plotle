@@ -7,14 +7,13 @@
 | Export
 */
 var
-	discs,
+	discs_disc,
+	discs_mainDisc,
 	euclid_display,
 	euclid_view,
-	peer,
 	jools,
-	root;
-
-discs = discs || { }; // FIXME
+	root,
+	shell_peer;
 
 /*
 | Capsule
@@ -30,7 +29,7 @@ if( JION )
 {
 	return {
 		id :
-			'discs.mainDisc',
+			'discs_mainDisc',
 		attributes :
 			{
 				access :
@@ -129,7 +128,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'discs.disc',
+			'discs_disc',
 		init :
 			[
 				'inherit'
@@ -145,16 +144,10 @@ if( JION )
 }
 
 
-var
-	mainDisc;
-
-mainDisc = discs.mainDisc;
-
-
 /*
 | Initializes the main disc.
 */
-mainDisc.prototype._init =
+discs_mainDisc.prototype._init =
 	function(
 		inherit
 	)
@@ -173,10 +166,7 @@ mainDisc.prototype._init =
 		return;
 	}
 
-	discs.disc._init.call(
-		this,
-		inherit
-	);
+	discs_disc._init.call( this, inherit );
 
 	twig = jools.copy( this.twig ); // FIXME only if needed
 
@@ -286,7 +276,7 @@ mainDisc.prototype._init =
 | FUTURE make user an own object.
 */
 jools.lazyValue(
-	mainDisc.prototype,
+	discs_mainDisc.prototype,
 	'_userIsGuest',
 	function( )
 	{
@@ -304,7 +294,7 @@ jools.lazyValue(
 | The disc panel's display.
 */
 jools.lazyValue(
-	mainDisc.prototype,
+	discs_mainDisc.prototype,
 	'_display',
 	function( )
 	{
@@ -348,7 +338,7 @@ jools.lazyValue(
 /*
 | A button of the main disc has been pushed.
 */
-mainDisc.prototype.pushButton =
+discs_mainDisc.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -384,7 +374,7 @@ mainDisc.prototype.pushButton =
 
 	if( buttonName === 'Remove' )
 	{
-		peer.removeItem( this.mark.itemPath );
+		shell_peer.removeItem( this.mark.itemPath );
 	}
 	else
 	{
@@ -396,7 +386,7 @@ mainDisc.prototype.pushButton =
 /*
 | Draws the disc panel.
 */
-mainDisc.prototype.draw =
+discs_mainDisc.prototype.draw =
 	function(
 		display
 	)
@@ -411,7 +401,7 @@ mainDisc.prototype.draw =
 /*
 | Returns true if point is on the disc panel.
 */
-mainDisc.prototype.pointingHover =
+discs_mainDisc.prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -466,7 +456,7 @@ mainDisc.prototype.pointingHover =
 /*
 | Checks if the user clicked something on the panel
 */
-mainDisc.prototype.click =
+discs_mainDisc.prototype.click =
 	function(
 		p,
 		shift,
@@ -524,7 +514,7 @@ mainDisc.prototype.click =
 /*
 | User is inputing text.
 */
-mainDisc.prototype.input =
+discs_mainDisc.prototype.input =
 	function(
 		// text
 	)
@@ -536,7 +526,7 @@ mainDisc.prototype.input =
 /*
 | User is pressing a special key.
 */
-mainDisc.prototype.specialKey =
+discs_mainDisc.prototype.specialKey =
 	function(
 		// key,
 		// shift,
@@ -550,7 +540,7 @@ mainDisc.prototype.specialKey =
 /*
 | Start of a dragging operation.
 */
-mainDisc.prototype.dragStart =
+discs_mainDisc.prototype.dragStart =
 	function(
 		p
 		// shift,

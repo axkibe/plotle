@@ -4,7 +4,6 @@
 
 
 var
-	Accent,
 	euclid_display,
 	euclid_view,
 	icons_moveto,
@@ -13,6 +12,7 @@ var
 	jools,
 	result_hover,
 	root,
+	shell_accent,
 	widgets_button,
 	widgets_style;
 
@@ -256,10 +256,9 @@ jools.lazyValue(
 			textPos;
 
 		accent =
-			Accent.state(
+			shell_accent.state(
 				this.hover
-					&&
-					this.hover.equals( this.path ),
+				&& this.hover.equals( this.path ),
 				this.focusAccent
 			);
 
@@ -328,7 +327,7 @@ jools.lazyValue(
 		{
 			this._icon.draw(
 				f,
-				widgets_style.get( this.iconStyle, Accent.NORMA ),
+				widgets_style.get( this.iconStyle, shell_accent.NORMA ),
 				euclid_view.proper
 			);
 		}

@@ -10,9 +10,9 @@ var
 	euclid_rect,
 	euclid_roundRect,
 	jools,
-	peer,
+	shell_peer,
+	shell_style,
 	root,
-	Style,
 	system,
 	theme,
 	visual;
@@ -281,7 +281,7 @@ note.prototype.dragStop =
 				return;
 			}
 
-			peer.setZone( this.path, zone );
+			shell_peer.setZone( this.path, zone );
 
 			return true;
 
@@ -341,7 +341,7 @@ jools.lazyValue(
 
 		doc = this.doc;
 
-		style = Style.getStyle( theme.note.style, 'normal' );
+		style = shell_style.getStyle( theme.note.style, 'normal' );
 
 		sbary = this.scrollbarY;
 
@@ -494,7 +494,7 @@ note.prototype.highlight =
 	)
 {
 	display.edge(
-		Style.getStyle( theme.note.style, 'highlight' ),
+		shell_style.getStyle( theme.note.style, 'highlight' ),
 		this.silhoutte,
 		this.view
 	);

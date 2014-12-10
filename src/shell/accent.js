@@ -1,7 +1,5 @@
 /*
 | The accent (state) of form components.
-|
-| FIXME lowercase
 */
 
 
@@ -9,7 +7,7 @@
 | Export
 */
 var
-	Accent;
+	shell_accent;
 
 
 /*
@@ -19,7 +17,7 @@ var
 'use strict';
 
 
-Accent =
+shell_accent =
 	{
 		NORMA : 0,
 		HOVER : 1,
@@ -31,7 +29,7 @@ Accent =
 /*
 | Turns the hover and focus state to an accent enum.
 */
-Accent.state =
+shell_accent.state =
 	function(
 		hover,
 		focus
@@ -41,22 +39,22 @@ Accent.state =
 	{
 		if( focus )
 		{
-			return Accent.HOFOC;
+			return shell_accent.HOFOC;
 		}
 		else
 		{
-			return Accent.HOVER;
+			return shell_accent.HOVER;
 		}
 	}
 	else
 	{
 		if( focus )
 		{
-			return Accent.FOCUS;
+			return shell_accent.FOCUS;
 		}
 		else
 		{
-			return Accent.NORMA;
+			return shell_accent.NORMA;
 		}
 	}
 };

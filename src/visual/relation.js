@@ -7,8 +7,8 @@ var
 	euclid_arrow,
 	jools,
 	marks_caret,
-	peer,
 	root,
+	shell_peer,
 	theme,
 	visual;
 
@@ -200,7 +200,7 @@ relation.spawn =
 		);
 
 	result =
-		peer.newRelation(
+		shell_peer.newRelation(
 			pnw,
 			'relates to',
 			20,

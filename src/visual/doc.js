@@ -7,9 +7,9 @@ var
 	euclid_point,
 	euclid_shape,
 	fontPool,
-	peer,
 	jools,
 	root,
+	shell_peer,
 	theme,
 	visual;
 
@@ -955,7 +955,7 @@ doc.prototype.input =
 		&& !mark.empty
 	)
 	{
-		peer.removeRange(
+		shell_peer.removeRange(
 			mark.frontPath,
 			mark.frontAt,
 			mark.backPath,
@@ -1009,7 +1009,7 @@ doc.prototype.specialKey =
 			case 'backspace' :
 			case 'del' :
 
-				peer.removeRange(
+				shell_peer.removeRange(
 					mark.frontPath,
 					mark.frontAt,
 					mark.backPath,
@@ -1020,7 +1020,7 @@ doc.prototype.specialKey =
 
 			case 'enter' :
 
-				peer.removeRange(
+				shell_peer.removeRange(
 					mark.frontPath,
 					mark.frontAt,
 					mark.backPath,

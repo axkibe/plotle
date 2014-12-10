@@ -4,7 +4,6 @@
 
 
 var
-	Accent,
 	fabric_spaceRef,
 	fontPool,
 	euclid_display,
@@ -17,15 +16,16 @@ var
 	jools,
 	marks_caret,
 	marks_item,
-	peer,
 	result_hover,
 	root,
-	Style,
+	shell_accent,
+	shell_peer,
+	shell_style,
 	theme,
 	visual;
 
 
-visual = visual || { };
+visual = visual || { }; // FIXME
 
 
 /*
@@ -337,7 +337,7 @@ portal.prototype.dragStop =
 				return;
 			}
 
-			peer.setZone( this.path, zone );
+			shell_peer.setZone( this.path, zone );
 
 			return true;
 
@@ -565,7 +565,7 @@ portal.prototype.highlight =
 	)
 {
 	display.edge(
-		Style.getStyle(
+		shell_style.getStyle(
 			theme.portal.style,
 			'highlight'
 		),
@@ -673,7 +673,7 @@ jools.lazyValue(
 			&& mark.caretPath.get( -1 );
 
 		f.fill(
-			Style.getStyle(
+			shell_style.getStyle(
 				theme.portal.style,
 				'normal'
 			),
@@ -692,10 +692,10 @@ jools.lazyValue(
 			moveToButton = this._moveToButton;
 
 			f.paint(
-				Style.getStyle(
+				shell_style.getStyle(
 					theme.portal.moveTo.style,
-					Accent.state(
-						this.hover.equals( 
+					shell_accent.state(
+						this.hover.equals(
 							this.path.append( 'moveToButton' )
 						),
 						section === 'moveToButton'
@@ -706,7 +706,7 @@ jools.lazyValue(
 			);
 
 			f.paint(
-				Style.getStyle(
+				shell_style.getStyle(
 					theme.portal.input.style,
 					'normal'
 				),
@@ -715,7 +715,7 @@ jools.lazyValue(
 			);
 
 			f.paint(
-				Style.getStyle(
+				shell_style.getStyle(
 					theme.portal.input.style,
 					'normal'
 				),
@@ -771,10 +771,7 @@ jools.lazyValue(
 		// everything else
 
 		f.edge(
-			Style.getStyle(
-				theme.portal.style,
-				'normal'
-			),
+			shell_style.getStyle( theme.portal.style, 'normal' ),
 			this.zeroSilhoutte,
 			hview
 		);
@@ -825,7 +822,7 @@ portal.prototype.input =
 	{
 		var line = rx[ 1 ];
 
-		peer.insertText(
+		shell_peer.insertText(
 			this.path.append( section ),
 			mark.caretAt,
 			line
@@ -1048,7 +1045,7 @@ portal.prototype._keyBackspace =
 		return;
 	}
 
-	peer.removeText(
+	shell_peer.removeText(
 		this.path.append( section ),
 		at - 1,
 		1
@@ -1479,7 +1476,7 @@ portal.prototype._keyDel =
 		return;
 	}
 
-	peer.removeText(
+	shell_peer.removeText(
 		this.path.append( section ),
 		at,
 		1
