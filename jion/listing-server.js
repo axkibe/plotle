@@ -38,7 +38,7 @@ module.exports =
 			'src/result/genjion.js',
 			'src/result/change-tree.js',
 			'src/server/resource.js',
-			'src/server/space-box.js',
+			'src/server/spaceBox.js',
 			'src/server/inventory.js',
 			'src/visual/doc.js',
 			'src/visual/label.js',

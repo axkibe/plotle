@@ -77,11 +77,11 @@ jools = require( '../jools/jools' );
 
 isString = jools.isString;
 
-server_maxAge = require( './max-age' );
+server_maxAge = require( './maxAge' );
 
 mongodb = require( 'mongodb' );
 
-server_postProcessor = require( './post-processor' );
+server_postProcessor = require( './postProcessor' );
 
 database_repository = require( '../database/repository' );
 
