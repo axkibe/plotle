@@ -10,7 +10,7 @@ var
 	euclid_display,
 	euclid_measure,
 	euclid_point,
-	fontPool,
+	shell_fontPool,
 	jools,
 	marks_caret,
 	marks_range,
@@ -376,7 +376,7 @@ jools.lazyValue(
 	'font',
 	function( )
 	{
-		return fontPool.get( this.fontsize, 'la' );
+		return shell_fontPool.get( this.fontsize, 'la' );
 	}
 );
 

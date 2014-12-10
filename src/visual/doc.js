@@ -6,9 +6,9 @@
 var
 	euclid_point,
 	euclid_shape,
-	fontPool,
 	jools,
 	root,
+	shell_fontPool,
 	shell_peer,
 	theme,
 	visual;
@@ -882,7 +882,7 @@ jools.lazyValue(
 	'font',
 	function( )
 	{
-		return fontPool.get( this.fontsize, 'la' );
+		return shell_fontPool.get( this.fontsize, 'la' );
 	}
 );
 

@@ -30,11 +30,9 @@ var
 	net_channel,
 	net_link,
 	root,
-	shell,
+	shell_root,
 	system,
 	swatch;
-
-shell = shell || { };
 
 root = null;
 
@@ -98,7 +96,7 @@ var
 /*
 | Constructor.
 */
-shell.root =
+shell_root =
 	function(
 		display
 	)
@@ -125,7 +123,7 @@ shell.root =
 	euclid_measure.init( canvas );
 
 	/*
-	this._fontWFont = fontPool.get( 20, 'la' );
+	this._fontWFont = shell_fontPool.get( 20, 'la' );
 
 	this._fontWatch =
 		euclid_measure.width( this._fontWFont, 'ideoloom$8833' );
@@ -198,7 +196,7 @@ shell.root =
 var
 	proto;
 
-proto = shell.root.prototype,
+proto = shell_root.prototype,
 
 
 /*
@@ -1144,7 +1142,7 @@ proto.onload =
 
 	this.link = net_link.create( );
 
-	this.doTracker = shell.doTracker.create( );
+	this.doTracker = shell_doTracker.create( );
 
 	username = window.localStorage.getItem( 'username' );
 

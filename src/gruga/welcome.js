@@ -7,7 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	fontPool,
+	shell_fontPool,
 	forms_welcome,
 	gruga_welcome,
 	widgets_button,
@@ -42,7 +42,7 @@ gruga_welcome =
 		'twig:add', 'headline',
 			widgets_label.create(
 				'text', 'welcome',
-				'font', fontPool.get( 22, 'ca' ),
+				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -53,7 +53,7 @@ gruga_welcome =
 		'twig:add', 'message1',
 			widgets_label.create(
 				'text', 'Your registration was successful :-)',
-				'font', fontPool.get( 16, 'ca' ),
+				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -80,7 +80,7 @@ gruga_welcome =
 							)
 					),
 				'text', 'close',
-				'font', fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_anchorPoint.PC,
 				'shape', design_anchorEllipse.fullSkewNW
 			)

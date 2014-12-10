@@ -8,8 +8,8 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	forms_space,
-	fontPool,
 	gruga_space,
+	shell_fontPool,
 	widgets_button,
 	widgets_label;
 
@@ -41,7 +41,7 @@ gruga_space =
 		'twig:add', 'headline',
 			widgets_label.create(
 				'text', '',
-				'font', fontPool.get( 22, 'ca' ),
+				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -52,7 +52,7 @@ gruga_space =
 		'twig:add', 'message1',
 			widgets_label.create(
 				'text', 'In future space settings can be altered here.',
-				'font', fontPool.get( 16, 'ca' ),
+				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -79,7 +79,7 @@ gruga_space =
 							)
 					),
 				'text', 'close',
-				'font', fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_anchorPoint.PC,
 				'shape', design_anchorEllipse.fullSkewNW
 			)

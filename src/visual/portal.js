@@ -5,7 +5,6 @@
 
 var
 	fabric_spaceRef,
-	fontPool,
 	euclid_display,
 	euclid_ellipse,
 	euclid_measure,
@@ -19,6 +18,7 @@ var
 	result_hover,
 	root,
 	shell_accent,
+	shell_fontPool,
 	shell_peer,
 	shell_style,
 	theme,
@@ -838,11 +838,11 @@ if( SHELL )
 	*/
 	portal.prototype._fonts =
 		{
-			spaceUser : fontPool.get( 13, 'la' ),
+			spaceUser : shell_fontPool.get( 13, 'la' ),
 
-			spaceTag : fontPool.get( 13, 'la' ),
+			spaceTag : shell_fontPool.get( 13, 'la' ),
 
-			moveTo : fontPool.get( 13, 'cm' )
+			moveTo : shell_fontPool.get( 13, 'cm' )
 		};
 
 /**/if( CHECK )

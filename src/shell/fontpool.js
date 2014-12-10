@@ -5,7 +5,7 @@
 
 var
 	euclid_font,
-	fontPool;  // TODO shell_fontPool
+	shell_fontPool;
 
 /*
 | Capsule
@@ -25,7 +25,7 @@ _settedDefaultFonts = false;
 /*
 | Constructor.
 */
-fontPool = { };
+shell_fontPool = { };
 
 
 var
@@ -90,7 +90,7 @@ _styles =
 /*
 | Sets the default font
 */
-fontPool.setDefaultFonts =
+shell_fontPool.setDefaultFonts =
 	function(
 		normal,
 		bold
@@ -136,7 +136,7 @@ fontPool.setDefaultFonts =
 /*
 | Gets a fontstlye by size and its code
 */
-fontPool.get =
+shell_fontPool.get =
 	function(
 		size,
 		code
@@ -195,7 +195,7 @@ fontPool.get =
 
 /**/if( CHECK )
 /**/{
-/**/	Object.freeze( fontPool );
+/**/	Object.freeze( shell_fontPool );
 /**/}
 
 

@@ -15,7 +15,7 @@ var
 	euclid_point,
 	jools,
 	root,
-	shell,
+	shell_root,
 	startup,
 	system;
 
@@ -1615,7 +1615,7 @@ startup = function( )
 				system = new System( );
 
 				(
-					new shell.root( system._display )
+					new shell_root( system._display )
 				).onload( );
 
 				// FIXME work on IOS

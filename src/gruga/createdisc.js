@@ -8,8 +8,8 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	discs_createDisc,
-	fontPool,
 	gruga_createDisc,
+	shell_fontPool,
 	widgets_button;
 
 /*
@@ -33,7 +33,7 @@ dv =
 			height :
 				70,
 			font :
-				fontPool.get( 16, 'cm' )
+				shell_fontPool.get( 16, 'cm' )
 		},
 
 		note :

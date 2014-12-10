@@ -8,8 +8,8 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	forms_login,
-	fontPool,
 	gruga_login,
+	shell_fontPool,
 	widgets_button,
 	widgets_input,
 	widgets_label;
@@ -53,7 +53,7 @@ gruga_login =
 				'text',
 					'Log In',
 				'font',
-					fontPool.get( 22, 'la' ),
+					shell_fontPool.get( 22, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -67,7 +67,7 @@ gruga_login =
 				'text',
 					'username',
 				'font',
-					fontPool.get( 16, 'la' ),
+					shell_fontPool.get( 16, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -81,7 +81,7 @@ gruga_login =
 				'text',
 					'password',
 				'font',
-					fontPool.get( 16, 'la' ),
+					shell_fontPool.get( 16, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -93,7 +93,7 @@ gruga_login =
 		'errorLabel',
 			widgets_label.create(
 				'text', '',
-				'font', fontPool.get( 14, 'car' ),
+				'font', shell_fontPool.get( 14, 'car' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -105,7 +105,7 @@ gruga_login =
 		'userInput',
 			widgets_input.create(
 				'style', 'input',
-				'font', fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
@@ -128,7 +128,7 @@ gruga_login =
 			widgets_input.create(
 				'password', true,
 				'style', 'input',
-				'font', fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
@@ -166,7 +166,7 @@ gruga_login =
 							)
 					),
 				'text', 'log in',
-				'font', fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_anchorPoint.PC,
 				'shape', design_anchorEllipse.fullSkewNW
 			),
@@ -190,7 +190,7 @@ gruga_login =
 							)
 					),
 				'text', 'close',
-				'font', fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_anchorPoint.PC,
 				'shape', design_anchorEllipse.fullSkewNW
 			)

@@ -7,9 +7,9 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	fontPool,
 	forms_nonExistingSpace,
 	gruga_nonExistingSpace,
+	shell_fontPool,
 	widgets_button,
 	widgets_label;
 
@@ -49,7 +49,7 @@ gruga_nonExistingSpace =
 		'headline',
 			widgets_label.create(
 				'text', '',
-				'font', fontPool.get( 22, 'ca' ),
+				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -63,7 +63,7 @@ gruga_nonExistingSpace =
 				'text',
 					'Do you want to create it?',
 				'font',
-					fontPool.get( 16, 'ca' ),
+					shell_fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -92,7 +92,7 @@ gruga_nonExistingSpace =
 							)
 					),
 				'text', 'No',
-				'font', fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_anchorPoint.PC,
 				'shape', design_anchorEllipse.fullSkewNW
 			),
@@ -116,7 +116,7 @@ gruga_nonExistingSpace =
 							)
 					),
 				'text', 'Yes',
-				'font', fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_anchorPoint.PC,
 				'shape', design_anchorEllipse.fullSkewNW
 			)

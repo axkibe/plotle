@@ -7,9 +7,9 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	fontPool,
 	forms_moveTo,
 	gruga_moveTo,
+	shell_fontPool,
 	widgets_button,
 	widgets_label;
 
@@ -55,7 +55,7 @@ gruga_moveTo =
 		'headline',
 			widgets_label.create(
 				'text', 'move to another space',
-				'font', fontPool.get( 22, 'ca' ),
+				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -88,7 +88,7 @@ gruga_moveTo =
 					),
 				'text', 'ideoloom\nhome',
 				'textNewline', 25,
-				'font', fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -127,7 +127,7 @@ gruga_moveTo =
 				'textNewline',
 					25,
 				'font',
-					fontPool.get( 14, 'cm' ),
+					shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -158,7 +158,7 @@ gruga_moveTo =
 					),
 				'text', 'your\nhome',
 				'textNewline', 25,
-				'font', fontPool.get( 14, 'cm' ),
+				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
 					design_anchorPoint.create(
 						'anchor', 'c',

@@ -7,7 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	fontPool,
+	shell_fontPool,
 	forms_signUp,
 	gruga_signUp,
 	widgets_button,
@@ -53,7 +53,7 @@ gruga_signUp =
 		'headline',
 			widgets_label.create(
 				'text', 'Sign Up',
-				'font', fontPool.get( 22, 'la' ),
+				'font', shell_fontPool.get( 22, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -65,7 +65,7 @@ gruga_signUp =
 		'usernameLabel',
 			widgets_label.create(
 				'text', 'username',
-				'font', fontPool.get( 16, 'ra' ),
+				'font', shell_fontPool.get( 16, 'ra' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -77,7 +77,7 @@ gruga_signUp =
 		'emailLabel',
 			widgets_label.create(
 				'text', 'email',
-				'font', fontPool.get( 16, 'ra' ),
+				'font', shell_fontPool.get( 16, 'ra' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -89,7 +89,7 @@ gruga_signUp =
 		'passwordLabel',
 			widgets_label.create(
 				'text', 'password',
-				'font', fontPool.get( 16, 'ra' ),
+				'font', shell_fontPool.get( 16, 'ra' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -101,7 +101,7 @@ gruga_signUp =
 		'password2Label',
 			widgets_label.create(
 				'text', 'repeat password',
-				'font', fontPool.get( 16, 'ra' ),
+				'font', shell_fontPool.get( 16, 'ra' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -113,7 +113,7 @@ gruga_signUp =
 		'newsletterLabel',
 			widgets_label.create(
 				'text', 'newsletter',
-				'font', fontPool.get( 16, 'ra' ),
+				'font', shell_fontPool.get( 16, 'ra' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -125,7 +125,7 @@ gruga_signUp =
 		'errorLabel',
 			widgets_label.create(
 				'text', '',
-				'font', fontPool.get( 14, 'car' ),
+				'font', shell_fontPool.get( 14, 'car' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -137,7 +137,7 @@ gruga_signUp =
 		'userInput',
 			widgets_input.create(
 				'style', 'input',
-				'font', fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
@@ -159,7 +159,7 @@ gruga_signUp =
 		'emailInput',
 			widgets_input.create(
 				'style', 'input',
-				'font', fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
@@ -182,7 +182,7 @@ gruga_signUp =
 			widgets_input.create(
 				'password', true,
 				'style', 'input',
-				'font', fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
@@ -205,7 +205,7 @@ gruga_signUp =
 			widgets_input.create(
 				'password', true,
 				'style', 'input',
-				'font', fontPool.get( 14, 'la' ),
+				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
 					design_anchorRect.create(
@@ -250,7 +250,7 @@ gruga_signUp =
 		'newsletter2Label',
 			widgets_label.create(
 				'text', 'Updates and News',
-				'font', fontPool.get( 12, 'la' ),
+				'font', shell_fontPool.get( 12, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -263,7 +263,7 @@ gruga_signUp =
 			widgets_label.create(
 				'text',
 					'Never going to be more than an email a month. For sure!',
-				'font', fontPool.get( 12, 'la' ),
+				'font', shell_fontPool.get( 12, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -294,7 +294,7 @@ gruga_signUp =
 				'text',
 					'sign up',
 				'font',
-					fontPool.get( 14, 'cm' ),
+					shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
 					design_anchorPoint.PC,
 				'shape',
@@ -323,7 +323,7 @@ gruga_signUp =
 				'text',
 					'close',
 				'font',
-					fontPool.get( 14, 'cm' ),
+					shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
 					design_anchorPoint.PC,
 				'shape',

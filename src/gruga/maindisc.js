@@ -8,8 +8,8 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	discs_mainDisc,
-	fontPool,
 	gruga_mainDisc,
+	shell_fontPool,
 	widgets_button;
 
 
@@ -35,7 +35,7 @@ dv =
 			height :
 				44,
 			font :
-				fontPool.get( 14, 'cm' )
+				shell_fontPool.get( 14, 'cm' )
 		},
 
 		normal :
@@ -227,7 +227,7 @@ gruga_mainDisc =
 							)
 					),
 				'text', '',
-				'font', fontPool.get( 12, 'cm' ),
+				'font', shell_fontPool.get( 12, 'cm' ),
 				'textDesignPos', design_anchorPoint.PC,
 				'shape',
 					design_anchorEllipse.create(
@@ -261,7 +261,7 @@ gruga_mainDisc =
 							)
 					),
 				'text', '',
-				'font', fontPool.get( 12, 'cm' ),
+				'font', shell_fontPool.get( 12, 'cm' ),
 				'textDesignPos', design_anchorPoint.PC,
 				'shape',
 					design_anchorEllipse.create(
@@ -282,7 +282,7 @@ gruga_mainDisc =
 				'visible', false,
 				'text', 'log\nin',
 				'textNewline', 14,
-				'font', fontPool.get( 13, 'cm' ),
+				'font', shell_fontPool.get( 13, 'cm' ),
 				'textDesignPos', design_anchorPoint.PC,
 				'designFrame',
 					design_anchorRect.create(
@@ -307,7 +307,7 @@ gruga_mainDisc =
 				'visible', false,
 				'text', 'sign\nup',
 				'textNewline', 14,
-				'font', fontPool.get( 13, 'cm' ),
+				'font', shell_fontPool.get( 13, 'cm' ),
 				'textDesignPos', design_anchorPoint.PC,
 				'designFrame',
 					design_anchorRect.create(

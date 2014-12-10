@@ -7,9 +7,9 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	fontPool,
 	forms_noAccessToSpace,
 	gruga_noAccessToSpace,
+	shell_fontPool,
 	widgets_button,
 	widgets_label;
 
@@ -41,7 +41,7 @@ gruga_noAccessToSpace =
 		'twig:add', 'headline',
 			widgets_label.create(
 				'text', '',
-				'font', fontPool.get( 22, 'ca' ),
+				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -51,9 +51,8 @@ gruga_noAccessToSpace =
 			),
 		'twig:add', 'message1',
 			widgets_label.create(
-				'text',
-					'Sorry, you cannot port to this space or create it.',
-				'font', fontPool.get( 16, 'ca' ),
+				'text', 'Sorry, you cannot port to this space or create it.',
+				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -63,8 +62,7 @@ gruga_noAccessToSpace =
 			),
 		'twig:add', 'okButton',
 			widgets_button.create(
-				'style',
-					'genericButton',
+				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -80,14 +78,10 @@ gruga_noAccessToSpace =
 								'y', okButton.n + okButton.height
 							)
 					),
-				'text',
-					'ok',
-				'font',
-					fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.PC,
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'text', 'ok',
+				'font', shell_fontPool.get( 14, 'cm' ),
+				'textDesignPos', design_anchorPoint.PC,
+				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
 

@@ -13,7 +13,7 @@
 var
 	theme,
 	euclid_margin,
-	fontPool;
+	shell_fontPool;
 
 /*
 | Capsule
@@ -25,7 +25,7 @@ var
 /*
 | The default fonts
 */
-fontPool.setDefaultFonts(
+shell_fontPool.setDefaultFonts(
 	'DejaVuSans,sans-serif',
 	'DejaVuSansBold,sans-serif'
 );
