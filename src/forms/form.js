@@ -10,7 +10,7 @@ var
 	jools,
 	marks_caret,
 	marks_widget,
-	result,
+	result_hover,
 	root,
 	theme;
 
@@ -274,7 +274,7 @@ forms_form.prototype.pointingHover =
 	}
 
 	return(
-		result.hover.create(
+		result_hover.create(
 			'path', jion_path.empty,
 			'cursor', 'default'
 		)

@@ -161,14 +161,14 @@ if( JION )
 */
 var
 	jools,
-	fileTypes,
+	server_fileTypes,
 	resource;
 
 resource = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
-fileTypes = require( './file-types' );
+server_fileTypes = require( './fileTypes' );
 
 
 /*
@@ -192,12 +192,12 @@ resource.prototype._init =
 
 	if( !this.coding )
 	{
-		this.coding = fileTypes.coding( this.fileExt );
+		this.coding = server_fileTypes.coding( this.fileExt );
 	}
 
 	if( !this.mime )
 	{
-		this.mime = fileTypes.mime( this.fileExt );
+		this.mime = server_fileTypes.mime( this.fileExt );
 	}
 };
 

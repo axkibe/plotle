@@ -20,7 +20,7 @@ if( JION )
 {
 	return {
 		id :
-			'result.hover',
+			'result_hover',
 		attributes :
 			{
 				cursor :

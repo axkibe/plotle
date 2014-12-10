@@ -12,7 +12,7 @@ var
 	jools,
 	marks_caret,
 	peer,
-	result,
+	result_hover,
 	root,
 	shell_stubs,
 	theme,
@@ -526,7 +526,7 @@ space.prototype.pointingHover =
 		if( com )
 		{
 			return(
-				result.hover.create(
+				result_hover.create(
 					'path', jion_path.empty,
 					'cursor', com + '-resize'
 				)
@@ -551,7 +551,7 @@ space.prototype.pointingHover =
 	}
 
 	return(
-		result.hover.create(
+		result_hover.create(
 			'path', jion_path.empty,
 			'cursor', 'pointer'
 		)

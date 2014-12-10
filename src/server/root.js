@@ -1,7 +1,5 @@
 /*
 | The root of the server.
-|
-| TODO remove all reject
 */
 
 
@@ -43,18 +41,21 @@ var
 	db_version,
 	fabric_spaceRef,
 	fs,
-	generateJion,
+	server_generateJion,
 	http,
 	isString,
-	jion,
 	jools,
-	maxAge,
 	mongodb,
 	prototype,
-	postProcessor,
-	requestHandler,
+	server_requestHandler,
 	roster,
-	server,
+	server_inventory,
+	server_maxAge,
+	server_postProcessor,
+	server_resource,
+	server_root,
+	server_spaceBox,
+	server_tools,
 	sha1,
 	sus,
 	uglify,
@@ -68,42 +69,33 @@ config = require( '../../config' );
 
 fs = require( 'fs' );
 
-generateJion = require( './generate-jion' );
+server_generateJion = require( './generateJion' );
 
 http = require( 'http' );
-
-jion =
-	{
-		path :
-			require( '../jion/path' ),
-	};
 
 jools = require( '../jools/jools' );
 
 isString = jools.isString;
 
-maxAge = require( './max-age' );
+server_maxAge = require( './max-age' );
 
 mongodb = require( 'mongodb' );
 
-postProcessor = require( './post-processor' );
+server_postProcessor = require( './post-processor' );
 
 database_repository = require( '../database/repository' );
 
-requestHandler = require( './request-handler' );
+server_requestHandler = require( './requestHandler' );
 
 roster = require( './roster' );
 
-server =
-	{
-		inventory : require( './inventory' ),
+server_inventory = require( './inventory' );
 
-		resource : require( './resource' ),
+server_resource = require( './resource' );
 
-		spaceBox : require( './space-box' ),
+server_spaceBox = require( './spaceBox' );
 
-		tools : require( './tools' )
-	};
+server_tools = require( './tools' );
 
 sha1 = require( '../jools/sha1' );
 
@@ -123,14 +115,14 @@ zlib = require( 'zlib' );
 /*
 | Constructor.
 */
-server.root =
+server_root =
 	function( )
 	{
 		// pass
 	};
 
 
-prototype = server.root.prototype;
+prototype = server_root.prototype;
 
 /*
 | create replacement until root is a JION
@@ -144,7 +136,7 @@ prototype.create =
 		aZ,
 		replace;
 
-	replace = new server.root( );
+	replace = new server_root( );
 
 	for( arg in this )
 	{
@@ -176,7 +168,7 @@ prototype.startup =
 	function*( )
 {
 	// the servers inventory
-	root.create( 'inventory', server.inventory.create( ) );
+	root.create( 'inventory', server_inventory.create( ) );
 
 	root.create( 'repository', yield* database_repository.connect( ) );
 
@@ -279,7 +271,7 @@ prototype.loadSpace =
 
 	spaceBox =
 	root.$spaces[ spaceRef.fullname ] =
-		yield* server.spaceBox.loadSpace( spaceRef );
+		yield* server_spaceBox.loadSpace( spaceRef );
 };
 
 
@@ -394,7 +386,7 @@ prototype.prepareInventory =
 
 	// autogenerates the shell config as resource
 	cconfig =
-		server.resource.create(
+		server_resource.create(
 			'data', root.buildShellConfig( ),
 			'filePath', 'config.js',
 			'inBundle', true,
@@ -501,7 +493,7 @@ prototype.prepareInventory =
 
 		if( resource.isJion )
 		{
-			gjr = yield* generateJion.run( resource );
+			gjr = yield* server_generateJion.run( resource );
 
 			jionIDs[ gjr.jionID ] = gjr.hasJSON;
 
@@ -645,7 +637,7 @@ prototype.prepareInventory =
 		root.create(
 			'inventory',
 				root.inventory.addResource(
-					server.resource.create(
+					server_resource.create(
 						'filePath', bundleFilePath,
 						'maxage', 'long',
 						'data', bundle
@@ -684,7 +676,7 @@ prototype.prepareInventory =
 			continue;
 		}
 
-		if( !postProcessor[ resource.postProcessor ] )
+		if( !server_postProcessor[ resource.postProcessor ] )
 		{
 			throw new Error(
 				'invalid postProcessor: ' + resource.postProcessor
@@ -696,7 +688,7 @@ prototype.prepareInventory =
 				resource,
 				resource.create(
 					'data',
-						postProcessor[ resource.postProcessor ](
+						server_postProcessor[ resource.postProcessor ](
 							resource.data,
 							root.inventory,
 							bundleFilePath
@@ -921,7 +913,7 @@ prototype.extraMangle =
 	{
 		at = mangleList[ a ];
 
-		mangle[ at ] = '$$' + server.tools.b64Encode( a );
+		mangle[ at ] = '$$' + server_tools.b64Encode( a );
 	}
 
 	if( !config.noWrite )
@@ -1053,7 +1045,7 @@ prototype.createSpace =
 
 	spaceBox =
 	root.$spaces[ spaceRef.fullname ] =
-		yield* server.spaceBox.createSpace( spaceRef );
+		yield* server_spaceBox.createSpace( spaceRef );
 
 	return spaceBox;
 };
@@ -1122,7 +1114,7 @@ prototype.wake =
 
 		delete root.$upsleep[ sKey ];
 
-		asw = requestHandler.conveyUpdate( sleep.seq, sleep.spaceRef );
+		asw = server_requestHandler.conveyUpdate( sleep.seq, sleep.spaceRef );
 
 		result = sleep.result;
 
@@ -1269,12 +1261,9 @@ prototype.requestListener =
 
 		header =
 			{
-				'Content-Type' :
-					resource.mime,
-				'Cache-Control' :
-					maxAge.map( resource.maxage ),
-				'Date' :
-					new Date().toUTCString()
+				'Content-Type' : resource.mime,
+				'Cache-Control' : server_maxAge.map( resource.maxage ),
+				'Date' : new Date().toUTCString()
 			};
 
 		if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
@@ -1306,7 +1295,7 @@ prototype.requestListener =
 	if( resource.isJion )
 	{
 		try{
-			gjr = yield* generateJion.run( resource );
+			gjr = yield* server_generateJion.run( resource );
 
 			data = gjr.code;
 		}
@@ -1346,16 +1335,16 @@ prototype.requestListener =
 
 	if( resource.postProcessor )
 	{
-		if( !postProcessor[ resource.postProcessor ] )
+		if( !server_postProcessor[ resource.postProcessor ] )
 		{
 			throw new Error(
-				'invalid postProcessor: ' +
-					resource.postProcessor
+				'invalid postProcessor: '
+				+ resource.postProcessor
 			);
 		}
 
 		data =
-			postProcessor[ resource.postProcessor ](
+			server_postProcessor[ resource.postProcessor ](
 				data,
 				root.inventory,
 				root.bundleFilePath
@@ -1460,7 +1449,7 @@ prototype.webAjax =
 
 		try
 		{
-			asw = yield* requestHandler.serve( cmd, result );
+			asw = yield* server_requestHandler.serve( cmd, result );
 		}
 		catch( err )
 		{
@@ -1530,7 +1519,7 @@ prototype.webAjax =
 sus(
 	function*( )
 {
-	GLOBAL.root = new server.root( );
+	GLOBAL.root = new server_root( );
 
 	yield* GLOBAL.root.startup( );
 }

@@ -14,7 +14,7 @@ var
 	jion_path,
 	jools,
 	marks_item,
-	result,
+	result_hover,
 	root,
 	theme,
 	visual,
@@ -690,11 +690,9 @@ item.prototype.pointingHover =
 	)
 	{
 		return(
-			result.hover.create(
-				'path',
-					this.path,
-				'cursor',
-					'default'
+			result_hover.create(
+				'path', this.path,
+				'cursor', 'default'
 			)
 		);
 	}
@@ -710,11 +708,9 @@ item.prototype.pointingHover =
 	}
 
 	return(
-		result.hover.create(
-			'path',
-				this.path,
-			'cursor',
-				'default'
+		result_hover.create(
+			'path', this.path,
+			'cursor', 'default'
 		)
 	);
 };

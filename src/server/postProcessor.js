@@ -7,11 +7,7 @@
 | Export
 */
 var
-	postProcessor;
-
-postProcessor =
-module.exports =
-		{ };
+	server_postProcessor;
 
 
 /*
@@ -21,18 +17,21 @@ module.exports =
 'use strict';
 
 
-/*
-| Imports
-*/
+server_postProcessor =
+module.exports =
+		{ };
+
+
 var
-	config =
-		require( '../../config' );
+	config;
+
+config = require( '../../config' );
 
 
 /*
 | postProcessor for devel.html
 */
-postProcessor.develHtml =
+server_postProcessor.develHtml =
 	function(
 		data,        // the data
 		inventory    // the server inventory
@@ -89,7 +88,7 @@ postProcessor.develHtml =
 /*
 | PostProcessor for testpad.html
 */
-postProcessor.testPadHtml =
+server_postProcessor.testPadHtml =
 	function(
 		data,        // the data
 		inventory    // the server inventory
@@ -147,7 +146,7 @@ postProcessor.testPadHtml =
 /*
 | PostProcessor for index.html
 */
-postProcessor.indexHtml =
+server_postProcessor.indexHtml =
 	function(
 		data,          // the data
 		inventory,     // the server inventory

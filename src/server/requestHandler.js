@@ -11,7 +11,7 @@
 
 
 var
-	requestHandler,
+	server_requestHandler,
 	ccot_changeWrapRay,
 	config,
 	fabric_spaceRef,
@@ -35,7 +35,7 @@ var
 	serveUpdate,
 	resume;
 
-requestHandler =
+server_requestHandler =
 module.exports =
 	{ };
 
@@ -394,7 +394,7 @@ serveUpdate =
 		return replyError( 'Invalid or missing seq: ' + seq );
 	}
 
-	asw = requestHandler.conveyUpdate( seq, spaceRef );
+	asw = server_requestHandler.conveyUpdate( seq, spaceRef );
 
 	// immediate answer?
 	if( asw.changeWrapRay.length > 0 )
@@ -407,7 +407,7 @@ serveUpdate =
 
 	timerID =
 		setTimeout(
-			requestHandler.expireUpdateSleep,
+			server_requestHandler.expireUpdateSleep,
 			60000,
 			sleepID
 		);
@@ -510,7 +510,7 @@ serveAcquire =
 /*
 | Returns a result for an update operation.
 */
-requestHandler.conveyUpdate =
+server_requestHandler.conveyUpdate =
 	function(
 		seq,     // get updates since this sequence
 		spaceRef // reference of space
@@ -548,7 +548,7 @@ requestHandler.conveyUpdate =
 /*
 | A sleeping update expired.
 */
-requestHandler.expireUpdateSleep =
+server_requestHandler.expireUpdateSleep =
 	function(
 		sleepID
 	)
@@ -605,7 +605,7 @@ requestHandler.expireUpdateSleep =
 /*
 | Serves an serveRequest
 */
-requestHandler.serve =
+server_requestHandler.serve =
 	function*(
 		request,
 		result

@@ -7,10 +7,10 @@
 | Export
 */
 var
-	generateJion;
+	server_generateJion;
 
 module.exports =
-generateJion =
+server_generateJion =
 	{ };
 
 
@@ -30,7 +30,7 @@ var
 	fs,
 	generator,
 	jools,
-	resultGenjion,
+	result_genjion,
 	sus,
 	vm;
 
@@ -45,7 +45,7 @@ generator = require( '../jion/generator' );
 
 jools = require( '../jools/jools' );
 
-resultGenjion = require( '../result/genjion' );
+result_genjion = require( '../result/genjion' );
 
 sus = require( 'suspend' );
 
@@ -54,7 +54,7 @@ vm = require( 'vm' );
 /*
 | Runs a generate jion operation.
 */
-generateJion.run =
+server_generateJion.run =
 	function*(
 		resource
 	)
@@ -170,7 +170,7 @@ generateJion.run =
 	}
 
 	return(
-		resultGenjion.create(
+		result_genjion.create(
 			'jionID', jion.id,
 			'hasJSON', hasJSON,
 			'code', output

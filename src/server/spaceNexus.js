@@ -17,9 +17,9 @@ if( JION )
 {
 	return {
 		id :
-			'server.spaceNexus',
+			'server_spaceNexus',
 		set :
-			[ 'server.spaceBox' ]
+			[ 'server_spaceBox' ]
 	};
 }
 

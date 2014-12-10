@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'result.genjion',
+			'result_genjion',
 		attributes :
 			{
 				code :

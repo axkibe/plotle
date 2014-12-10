@@ -18,7 +18,7 @@ var
 	marks_caret,
 	marks_item,
 	peer,
-	result,
+	result_hover,
 	root,
 	Style,
 	theme,
@@ -618,7 +618,7 @@ portal.prototype.pointingHover =
 	)
 	{
 		return(
-			result.hover.create(
+			result_hover.create(
 				'path', this.path.append( 'moveToButton' ),
 				'cursor', 'default'
 			)
@@ -627,7 +627,7 @@ portal.prototype.pointingHover =
 	else
 	{
 		return(
-			result.hover.create(
+			result_hover.create(
 				'path', this.path,
 				'cursor', 'default'
 			)

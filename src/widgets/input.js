@@ -16,7 +16,7 @@ var
 	euclid_view,
 	jools,
 	marks_caret,
-	result,
+	result_hover,
 	root,
 	theme,
 	widgets_input,
@@ -947,7 +947,7 @@ widgets_input.prototype.pointingHover =
 	}
 
 	return(
-		result.hover.create(
+		result_hover.create(
 			'path', this.path,
 			'cursor', 'text'
 		)

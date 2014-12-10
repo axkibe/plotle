@@ -11,7 +11,7 @@ var
 	icons_normal,
 	icons_remove,
 	jools,
-	result,
+	result_hover,
 	root,
 	widgets_button,
 	widgets_style;
@@ -372,7 +372,7 @@ widgets_button.prototype.pointingHover =
 	}
 
 	return(
-		result.hover.create(
+		result_hover.create(
 			'path', this.path,
 			'cursor', 'default'
 		)

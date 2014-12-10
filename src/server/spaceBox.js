@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'server.spaceBox',
+			'server_spaceBox',
 		attributes :
 			{
 				'seqZ' :
@@ -32,14 +32,14 @@ if( JION )
 						comment :
 							'latest space version',
 						type :
-							'visual.space'
+							'visual_space'
 					},
 				'spaceRef' :
 					{
 						comment :
 							'reference to the space',
 						type :
-							'fabric.spaceRef',
+							'fabric_spaceRef',
 					},
 				'_changesDB' :
 					{
@@ -64,9 +64,10 @@ var
 	database_changeSkid,
 	database_changeSkidRay,
 	resume,
-	spaceBox,
-	visual;
+	server_spaceBox,
+	visual_space;
 
+server_spaceBox = require( '../jion/this' )( module );
 
 database_changeSkid = require( '../database/change-skid' );
 
@@ -74,18 +75,13 @@ database_changeSkidRay = require( '../database/change-skid-ray' );
 
 resume = require( 'suspend' ).resume;
 
-spaceBox = require( '../jion/this' )( module );
-
-visual =
-	{
-		space : require( '../visual/space' )
-	};
+visual_space = require( '../visual/space' );
 
 
 /*
 | Loads a space from the db and returns the spaceBox for it.
 */
-spaceBox.loadSpace =
+server_spaceBox.loadSpace =
 	function*(
 		spaceRef
 	)
@@ -103,7 +99,7 @@ spaceBox.loadSpace =
 
 	seqZ = 1;
 
-	space = visual.space.create( );
+	space = visual_space.create( );
 
 	changesDB =
 		yield* root.repository.collection(
@@ -138,7 +134,7 @@ spaceBox.loadSpace =
 	}
 
 	return(
-		spaceBox.create(
+		server_spaceBox.create(
 			'space', space,
 			'spaceRef', spaceRef,
 			'seqZ', seqZ,
@@ -152,7 +148,7 @@ spaceBox.loadSpace =
 /*
 | Creates a new space and returns the spaceBox for it.
 */
-spaceBox.createSpace =
+server_spaceBox.createSpace =
 	function*(
 		spaceRef
 	)
@@ -173,8 +169,8 @@ spaceBox.createSpace =
 	);
 
 	return(
-		spaceBox.create(
-			'space', visual.space.create( ),
+		server_spaceBox.create(
+			'space', visual_space.create( ),
 			'spaceRef', spaceRef,
 			'seqZ', 1,
 			'_changesDB',
@@ -193,7 +189,7 @@ spaceBox.createSpace =
 |
 | This is currently write and forget to database.
 */
-spaceBox.prototype.appendChanges =
+server_spaceBox.prototype.appendChanges =
 	function(
 		changeWrapRay,
 		user
@@ -246,7 +242,7 @@ spaceBox.prototype.appendChanges =
 /*
 | Returns the change skid by its sequence.
 */
-spaceBox.prototype.getChangeSkid =
+server_spaceBox.prototype.getChangeSkid =
 	function(
 		seq
 	)
