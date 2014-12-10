@@ -5,7 +5,7 @@
 var
 	actions_isAction,
 	ccot_sign,
-	discs,
+	discs_jockey,
 	euclid_display,
 	euclid_measure,
 	euclid_point,
@@ -170,7 +170,7 @@ shell.root =
 		);
 
 	this._discJockey =
-		discs.jockey.create(
+		discs_jockey.create(
 			'access', '',
 			'action', null,
 			'hover', jion_path.empty,

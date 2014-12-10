@@ -7,7 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	discs,
+	discs_mainDisc,
 	fontPool,
 	gruga_mainDisc,
 	widgets_button;
@@ -112,7 +112,7 @@ dv =
 	};
 
 gruga_mainDisc =
-	discs.mainDisc.create(
+	discs_mainDisc.create(
 		'twig:add', 'Normal',
 			widgets_button.create(
 				'style', 'mainButton',

@@ -7,15 +7,12 @@
 | Export
 */
 var
-	discs,
 	discs_disc,
 	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
 	jools,
 	theme;
-
-discs = discs || { }; // FIXME
 
 /*
 | Capsule
@@ -28,7 +25,6 @@ discs = discs || { }; // FIXME
 | Constructor
 */
 discs_disc =
-discs.disc = // FUTURE remove
 	function( )
 {
 	// abstract should not be constructed.

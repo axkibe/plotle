@@ -6,15 +6,14 @@
 var
 	actions_createGeneric,
 	actions_createRelation,
-	discs,
+	discs_createDisc,
+	discs_disc,
 	euclid_display,
 	euclid_view,
 	jion_path,
 	jools,
 	root;
 
-
-discs = discs || { }; // FIXME
 
 /*
 | Capsule
@@ -30,7 +29,7 @@ if( JION )
 {
 	return {
 		id :
-			'discs.createDisc',
+			'discs_createDisc',
 		attributes :
 			{
 				access :
@@ -136,28 +135,19 @@ if( JION )
 					}
 			},
 		subclass :
-			'discs.disc',
+			'discs_disc',
 		init :
-			[
-				'inherit',
-				'twigDup'
-			],
+			[ 'inherit', 'twigDup' ],
 		twig :
 			'->form-widgets'
 	};
 }
 
 
-var
-	createDisc;
-
-createDisc = discs.createDisc;
-
-
 /*
 | Initializes the create disc.
 */
-createDisc.prototype._init =
+discs_createDisc.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -172,18 +162,14 @@ createDisc.prototype._init =
 		return;
 	}
 
-	discs.disc._init.call(
-		this,
-		inherit
-	);
+	discs_disc._init.call( this, inherit );
 
 	twig =
 		twigDup
-			?  this.twig
-			: jools.copy( this.twig );
+		? this.twig
+		: jools.copy( this.twig );
 
-	ranks =
-		this.ranks;
+	ranks = this.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -196,10 +182,7 @@ createDisc.prototype._init =
 				ranks[ r ],
 			path,
 			focusAccent =
-				createDisc._isActiveButton(
-					this.action,
-					wname
-				);
+				discs_createDisc._isActiveButton( this.action, wname );
 
 		if( twig[ wname ].path )
 		{
@@ -236,7 +219,7 @@ createDisc.prototype._init =
 | The disc panel's display.
 */
 jools.lazyValue(
-	createDisc.prototype,
+	discs_createDisc.prototype,
 	'_display',
 	function( )
 	{
@@ -270,7 +253,7 @@ jools.lazyValue(
 /*
 | A button of the main disc has been pushed.
 */
-createDisc.prototype.pushButton =
+discs_createDisc.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -354,7 +337,7 @@ createDisc.prototype.pushButton =
 /*
 | Draws the disc panel.
 */
-createDisc.prototype.draw =
+discs_createDisc.prototype.draw =
 	function(
 		display
 	)
@@ -370,7 +353,7 @@ createDisc.prototype.draw =
 /*
 | Returns true if point is on the disc panel.
 */
-createDisc.prototype.pointingHover =
+discs_createDisc.prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -429,7 +412,7 @@ createDisc.prototype.pointingHover =
 /*
 | Checks if the user clicked something on the panel.
 */
-createDisc.prototype.click =
+discs_createDisc.prototype.click =
 	function(
 		p,
 		shift,
@@ -492,7 +475,7 @@ createDisc.prototype.click =
 /*
 | User is inputing text.
 */
-createDisc.prototype.input =
+discs_createDisc.prototype.input =
 	function(
 		// text
 	)
@@ -504,23 +487,19 @@ createDisc.prototype.input =
 /*
 | Cycles the focus
 */
-createDisc.prototype.cycleFocus =
+discs_createDisc.prototype.cycleFocus =
 	function(
 		// dir
 	)
 {
-	throw new Error(
-		CHECK
-		&&
-		'not implemented'
-	);
+	throw new Error( );
 };
 
 
 /*
 | User is pressing a special key.
 */
-createDisc.prototype.specialKey =
+discs_createDisc.prototype.specialKey =
 	function(
 	//	key,
 	//	shift,
@@ -534,7 +513,7 @@ createDisc.prototype.specialKey =
 /*
 | Start of a dragging operation.
 */
-createDisc.prototype.dragStart =
+discs_createDisc.prototype.dragStart =
 	function(
 		p
 		// shift,
@@ -571,7 +550,7 @@ createDisc.prototype.dragStart =
 | Returns true if the button called 'wname'
 | should be highlighted for current 'action'
 */
-createDisc._isActiveButton =
+discs_createDisc._isActiveButton =
 	function(
 		action,  // the action
 		wname    // the widget name
