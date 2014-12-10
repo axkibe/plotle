@@ -11,6 +11,7 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_view,
+	fabric_relation,
 	jion_path,
 	jools,
 	marks_item,
@@ -651,7 +652,7 @@ item.prototype.dragStop =
 				return false;
 			}
 
-			visual.relation.spawn(
+			fabric_relation.spawn(
 				root.space.getItem(
 					action.fromItemPath.get( -1 )
 				),

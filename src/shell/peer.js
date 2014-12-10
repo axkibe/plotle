@@ -8,6 +8,7 @@ var
 	ccot_sign,
 	fabric_note,
 	fabric_portal,
+	fabric_relation,
 	jion_path,
 	shell_peer,
 	root,
@@ -236,7 +237,7 @@ shell_peer.newRelation =
 	src =
 		ccot_sign.create(
 			'val',
-				visual.relation.create(
+				fabric_relation.create(
 					'item1key', item1key,
 					'item2key', item2key,
 					'pnw', pnw,

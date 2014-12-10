@@ -110,6 +110,8 @@ function translateTypes( o )
 			case 'visual_note' : o.type = 'fabric_note'; break;
 
 			case 'visual_portal' : o.type = 'fabric_portal'; break;
+
+			case 'visual_relation' : o.type = 'fabric_relation'; break;
 		}
 	}
 

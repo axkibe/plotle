@@ -505,7 +505,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/visual/relation.js',
+		'filePath', 'src/fabric/relation.js',
 		'hasJion', true,
 		'inBundle', true
 	),

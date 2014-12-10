@@ -5,6 +5,7 @@
 
 var
 	euclid_arrow,
+	fabric_relation,
 	jools,
 	marks_caret,
 	root,
@@ -29,7 +30,7 @@ if( JION )
 {
 	return {
 		id :
-			'visual.relation',
+			'fabric_relation',
 		attributes :
 			{
 				doc :
@@ -139,8 +140,7 @@ if( JION )
 
 
 var
-	label,
-	relation;
+	label;
 
 /*
 | Node includes.
@@ -149,22 +149,21 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	label = require( './label' );
+	//label = require( './label' ); FIXME
+	label = require( '../visual/label' );
 
-	relation = require( '../jion/this' )( module );
+	fabric_relation = require( '../jion/this' )( module );
 }
 else
 {
 	label = visual.label;
-
-	relation = visual.relation;
 }
 
 
 /*
 | Initializer.
 */
-relation.prototype._init =
+fabric_relation.prototype._init =
 	function(
 		inherit
 	)
@@ -176,7 +175,7 @@ relation.prototype._init =
 /*
 | Creates a new relation by specifing its relates.
 */
-relation.spawn =
+fabric_relation.spawn =
 	function(
 		item1,
 		item2
@@ -229,7 +228,7 @@ relation.spawn =
 /*
 | Displays the relation.
 */
-relation.prototype.draw =
+fabric_relation.prototype.draw =
 	function(
 		display
 	)

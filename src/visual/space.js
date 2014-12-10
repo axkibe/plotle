@@ -122,7 +122,7 @@ if( JION )
 			[
 				'fabric_note',
 				'visual.label',
-				'visual.relation',
+				'fabric_relation',
 				'fabric_portal'
 			]
 	};

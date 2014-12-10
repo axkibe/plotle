@@ -24,6 +24,7 @@ module.exports =
 			'src/euclid/view.js',
 			'src/fabric/note.js',
 			'src/fabric/portal.js',
+			'src/fabric/relation.js',
 			'src/fabric/space-ref.js',
 			'src/jion/path.js',
 			'src/reply/acquire.js',
@@ -45,7 +46,6 @@ module.exports =
 			'src/visual/doc.js',
 			'src/visual/label.js',
 			'src/visual/para.js',
-			'src/visual/relation.js',
 			'src/visual/space.js',
 
 			// built-in genjion

@@ -8,9 +8,9 @@ var
 	euclid_rect,
 	fabric_note,
 	fabric_portal,
+	fabric_relation,
 	jools,
-	visual_label,
-	visual_relation;
+	visual_label;
 
 
 /*
@@ -127,7 +127,7 @@ if( SERVER )
 
 	fabric_portal = require( '../fabric/portal' );
 
-	visual_relation = require( '../visual/relation' );
+	fabric_relation = require( '../fabric/relation' );
 }
 
 
@@ -179,9 +179,9 @@ ccot_sign.prototype._init =
 
 				break;
 
-			case 'visual_relation' :
+			case 'fabric_relation' :
 
-				this.val = visual_relation.createFromJSON( val );
+				this.val = fabric_relation.createFromJSON( val );
 
 				break;
 
