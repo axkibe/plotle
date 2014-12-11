@@ -102,7 +102,7 @@ if( JION )
 		json :
 			true,
 		twig :
-			[ 'visual.para' ]
+			[ 'fabric_para' ]
 	};
 }
 

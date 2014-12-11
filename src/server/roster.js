@@ -467,7 +467,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/visual/para.js',
+		'filePath', 'src/fabric/para.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true

@@ -20,6 +20,7 @@ var
 	euclid_point,
 	euclid_rect,
 	fabric_note,
+	fabric_para,
 	jools,
 	root,
 	visual;
@@ -104,21 +105,18 @@ proto._init =
 				fabric_note.create(
 					'doc',
 						visual.doc.create(
-							'twig:add',
-							'1',
-								visual.para.create(
+							'twig:add', '1',
+								fabric_para.create(
 									'text',
 										'Why would I want to know that?'
 								),
-							'twig:add',
-							'2',
-								visual.para.create(
+							'twig:add', '2',
+								fabric_para.create(
 									'text',
 										'Can we have Bender Burgers again?'
 								),
-							'twig:add',
-							'3',
-								visual.para.create(
+							'twig:add', '3',
+								fabric_para.create(
 									'text',
 										'And so we say goodbye to ' +
 										'our beloved pet, Nibbler.'

@@ -8,6 +8,7 @@ var
 	ccot_sign,
 	fabric_label,
 	fabric_note,
+	fabric_para,
 	fabric_portal,
 	fabric_relation,
 	jion_path,
@@ -92,7 +93,7 @@ shell_peer.newNote =
 					'doc',
 						visual.doc.create(
 							'twig:add', '1',
-							visual.para.create( 'text', '' )
+							fabric_para.create( 'text', '' )
 						)
 				),
 			'rank',
@@ -209,7 +210,7 @@ shell_peer.newLabel =
 						visual.doc.create(
 							'twig:add',
 							'1',
-							visual.para.create( 'text', text )
+							fabric_para.create( 'text', text )
 						)
 				),
 			'rank',
@@ -247,7 +248,7 @@ shell_peer.newRelation =
 						visual.doc.create(
 							'twig:add',
 							'1',
-							visual.para.create( 'text', text )
+							fabric_para.create( 'text', text )
 						)
 				),
 			'rank',

@@ -8,6 +8,7 @@ var
 	euclid_rect,
 	fabric_label,
 	fabric_note,
+	fabric_para,
 	fabric_portal,
 	shell_stubs,
 	theme,
@@ -38,9 +39,8 @@ shell_stubs.emptyLabel =
 			visual.doc.create(
 				'twig:add',
 				'1',
-				visual.para.create(
-					'text',
-						'Label'
+				fabric_para.create(
+					'text', 'Label'
 				)
 			)
 	);
@@ -57,7 +57,7 @@ shell_stubs.emptyNote =
 			),
 		'doc',
 			visual.doc.create(
-				'twig:add', '1', visual.para.create( 'text', '' )
+				'twig:add', '1', fabric_para.create( 'text', '' )
 			)
 	);
 

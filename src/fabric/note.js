@@ -517,7 +517,7 @@ fabric_note.prototype.scrollMarkIntoView =
 
 /**/if( CHECK )
 /**/{
-/**/	if( para.reflect !== 'visual.para' )
+/**/	if( para.reflect_ !== 'fabric_para' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -531,11 +531,7 @@ fabric_note.prototype.scrollMarkIntoView =
 
 	descend = fs * theme.bottombox;
 
-	p =
-		para.locateOffset(
-			mark.caretAt
-		).p;
-
+	p = para.locateOffset( mark.caretAt).p;
 
 	pnw = this.doc.getPNW( para.key );
 

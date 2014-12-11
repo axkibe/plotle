@@ -10,14 +10,14 @@ var
 	euclid_display,
 	euclid_measure,
 	euclid_point,
-	shell_fontPool,
+	fabric_para,
 	jools,
 	marks_caret,
 	marks_range,
 	root,
+	shell_fontPool,
 	shell_peer,
-	theme,
-	visual_para;
+	theme;
 
 
 /*
@@ -34,7 +34,7 @@ if( JION )
 {
 	return {
 		id :
-			'visual_para',
+			'fabric_para',
 		attributes :
 			{
 				flowWidth :
@@ -62,7 +62,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'visual_para',
+									'fabric_para',
 								func :
 									'concernsMark',
 								args :
@@ -124,7 +124,7 @@ if( JION )
 */
 if( SERVER )
 {
-	visual_para = require( '../jion/this' )( module );
+	fabric_para = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
 }
@@ -133,7 +133,7 @@ if( SERVER )
 /*
 | Initializer.
 */
-visual_para.prototype._init =
+fabric_para.prototype._init =
 	function(
 		inherit
 	)
@@ -162,7 +162,7 @@ visual_para.prototype._init =
 | Returns the mark if an item with 'path' concerns about
 | the mark.
 */
-visual_para.concernsMark =
+fabric_para.concernsMark =
 	function(
 		mark,
 		path
@@ -195,7 +195,7 @@ visual_para.concernsMark =
 | It is the last path entry.
 */
 jools.lazyValue(
-	visual_para.prototype,
+	fabric_para.prototype,
 	'key',
 	function( )
 	{
@@ -208,7 +208,7 @@ jools.lazyValue(
 | The attention center.
 */
 jools.lazyValue(
-	visual_para.prototype,
+	fabric_para.prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -238,7 +238,7 @@ jools.lazyValue(
 | The para's display.
 */
 jools.lazyValue(
-	visual_para.prototype,
+	fabric_para.prototype,
 	'_display',
 	function( )
 	{
@@ -319,7 +319,7 @@ jools.lazyValue(
 /*
 | Draws the paragraph in a display.
 */
-visual_para.prototype.draw =
+fabric_para.prototype.draw =
 	function(
 		display, // the display to draw upon
 		pnw      // pnw of this para
@@ -335,7 +335,7 @@ visual_para.prototype.draw =
 /*
 | Draws the caret.
 */
-visual_para.prototype._drawCaret =
+fabric_para.prototype._drawCaret =
 	function(
 		display
 	)
@@ -372,7 +372,7 @@ visual_para.prototype._drawCaret =
 | The font for this para.
 */
 jools.lazyValue(
-	visual_para.prototype,
+	fabric_para.prototype,
 	'font',
 	function( )
 	{
@@ -387,7 +387,7 @@ jools.lazyValue(
 | FUTURE make this a proper jion.
 */
 jools.lazyValue(
-	visual_para.prototype,
+	fabric_para.prototype,
 	'flow',
 	function( )
 	{
@@ -529,7 +529,7 @@ jools.lazyValue(
 | The height of the para.
 */
 jools.lazyValue(
-	visual_para.prototype,
+	fabric_para.prototype,
 	'height',
 	function( )
 	{
@@ -546,7 +546,7 @@ jools.lazyValue(
 /*
 | Returns the offset by an x coordinate in a flow.
 */
-visual_para.prototype.getOffsetAt =
+fabric_para.prototype.getOffsetAt =
 	function(
 		line,
 		x
@@ -640,7 +640,7 @@ visual_para.prototype.getOffsetAt =
 | FUTURE: Use lazy value and use two functions
 |         for p and line which aheadValue each other.
 */
-visual_para.prototype.locateOffset =
+fabric_para.prototype.locateOffset =
 	function(
 		offset    // the offset to get the point from.
 	)
@@ -737,7 +737,7 @@ visual_para.prototype.locateOffset =
 /*
 | Returns the offset closest to a point.
 */
-visual_para.prototype.getPointOffset =
+fabric_para.prototype.getPointOffset =
 	function(
 		item,
 		point     // the point to look for
@@ -769,7 +769,7 @@ visual_para.prototype.getPointOffset =
 /*
 | A text has been inputed.
 */
-visual_para.prototype.input =
+fabric_para.prototype.input =
 	function(
 		text,
 		item
@@ -842,7 +842,7 @@ visual_para.prototype.input =
 /*
 | Handles a special key.
 */
-visual_para.prototype.specialKey =
+fabric_para.prototype.specialKey =
 	function(
 		key,
 		item,
@@ -966,7 +966,7 @@ visual_para.prototype.specialKey =
 | The path to the .text attribute
 */
 jools.lazyValue(
-	visual_para.prototype,
+	fabric_para.prototype,
 	'textPath',
 	function( )
 	{
@@ -1032,7 +1032,7 @@ _keyMap =
 /*
 | Backspace pressed.
 */
-visual_para.prototype._keyBackspace =
+fabric_para.prototype._keyBackspace =
 	function(
 		item,
 		doc,
@@ -1067,7 +1067,7 @@ visual_para.prototype._keyBackspace =
 /*
 | Del-key pressed.
 */
-visual_para.prototype._keyDel =
+fabric_para.prototype._keyDel =
 	function(
 		item,
 		doc,
@@ -1102,7 +1102,7 @@ visual_para.prototype._keyDel =
 /*
 | Down arrow pressed.
 */
-visual_para.prototype._keyDown =
+fabric_para.prototype._keyDown =
 	function(
 		item,
 		doc,
@@ -1168,7 +1168,7 @@ visual_para.prototype._keyDown =
 /*
 | End-key pressed.
 */
-visual_para.prototype._keyEnd =
+fabric_para.prototype._keyEnd =
 	function(
 		item,
 		doc,
@@ -1191,7 +1191,7 @@ visual_para.prototype._keyEnd =
 /*
 | Enter-key pressed
 */
-visual_para.prototype._keyEnter =
+fabric_para.prototype._keyEnter =
 	function(
 		item,
 		doc,
@@ -1208,7 +1208,7 @@ visual_para.prototype._keyEnter =
 /*
 | Left arrow pressed.
 */
-visual_para.prototype._keyLeft =
+fabric_para.prototype._keyLeft =
 	function(
 		item,
 		doc,
@@ -1269,7 +1269,7 @@ visual_para.prototype._keyLeft =
 |
 | FUTURE maintain relative scroll pos
 */
-visual_para.prototype._pageUpDown =
+fabric_para.prototype._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
 		item,     // TODO remove
@@ -1339,7 +1339,7 @@ visual_para.prototype._pageUpDown =
 /*
 | PageDown key pressed.
 */
-visual_para.prototype._keyPageDown =
+fabric_para.prototype._keyPageDown =
 	function(
 		item,
 		doc,
@@ -1364,7 +1364,7 @@ visual_para.prototype._keyPageDown =
 /*
 | PageUp key pressed.
 */
-visual_para.prototype._keyPageUp =
+fabric_para.prototype._keyPageUp =
 	function(
 		item,
 		doc,
@@ -1389,7 +1389,7 @@ visual_para.prototype._keyPageUp =
 /*
 | Pos1-key pressed.
 */
-visual_para.prototype._keyPos1 =
+fabric_para.prototype._keyPos1 =
 	function(
 		item,
 		doc,
@@ -1412,7 +1412,7 @@ visual_para.prototype._keyPos1 =
 /*
 | Right arrow pressed.
 */
-visual_para.prototype._keyRight =
+fabric_para.prototype._keyRight =
 	function(
 		item,
 		doc,
@@ -1459,7 +1459,7 @@ visual_para.prototype._keyRight =
 /*
 | Up arrow pressed.
 */
-visual_para.prototype._keyUp =
+fabric_para.prototype._keyUp =
 	function(
 		item,
 		doc,
@@ -1521,7 +1521,7 @@ visual_para.prototype._keyUp =
 /*
 | Sets the users caret or range
 */
-visual_para.prototype._setMark =
+fabric_para.prototype._setMark =
 	function(
 		at,      // position to mark caret (or end of range)
 		retainx, // retains this x position when moving up/down
