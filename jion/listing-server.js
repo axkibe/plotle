@@ -22,6 +22,7 @@ module.exports =
 			'src/euclid/point.js',
 			'src/euclid/rect.js',
 			'src/euclid/view.js',
+			'src/fabric/doc.js',
 			'src/fabric/label.js',
 			'src/fabric/note.js',
 			'src/fabric/para.js',
@@ -46,7 +47,6 @@ module.exports =
 			'src/server/resource.js',
 			'src/server/spaceBox.js',
 			'src/server/inventory.js',
-			'src/visual/doc.js',
 
 			// built-in genjion
 			'src/ast/ast-and.js',

@@ -6,12 +6,12 @@
 var
 	euclid_point,
 	euclid_shape,
+	fabric_doc,
 	jools,
 	root,
 	shell_fontPool,
 	shell_peer,
-	theme,
-	visual;
+	theme;
 
 
 /*
@@ -28,7 +28,7 @@ if( JION )
 {
 	return {
 		id :
-			'visual.doc',
+			'fabric_doc',
 		attributes :
 			{
 				flowWidth :
@@ -107,9 +107,6 @@ if( JION )
 }
 
 
-var
-	doc;
-
 /*
 | Node includes.
 */
@@ -117,19 +114,14 @@ if( SERVER )
 {
 	jools = require( '../jools/jools' );
 
-	doc = require( '../jion/this' )( module );
+	fabric_doc = require( '../jion/this' )( module );
 }
-else
-{
-	doc = visual.doc;
-}
-
 
 
 /*
 | Initializer.
 */
-doc.prototype._init =
+fabric_doc.prototype._init =
 	function(
 		twigDup
 	)
@@ -200,7 +192,7 @@ doc.prototype._init =
 | Returns the attention center.
 */
 jools.lazyValue(
-	doc.prototype,
+	fabric_doc.prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -239,7 +231,7 @@ jools.lazyValue(
 |
 | FIXME, remove parameters and make lazy
 */
-doc.prototype._getRangeShape =
+fabric_doc.prototype._getRangeShape =
 	function(
 		width,       // width the doc is drawn
 		scrollp      // scroll position of the doc
@@ -649,7 +641,7 @@ doc.prototype._getRangeShape =
 /*
 | Displays the document.
 */
-doc.prototype.draw =
+fabric_doc.prototype.draw =
 	function(
 		display,     // to display within
 		view,        // current pan/zoom/motion TODO
@@ -733,7 +725,7 @@ doc.prototype.draw =
 | The para pnws.
 */
 jools.lazyValue(
-	doc.prototype,
+	fabric_doc.prototype,
 	'paraPNWs',
 	function( )
 	{
@@ -784,7 +776,7 @@ jools.lazyValue(
 | The height of the document.
 */
 jools.lazyValue(
-	doc.prototype,
+	fabric_doc.prototype,
 	'height',
 	function( )
 	{
@@ -832,7 +824,7 @@ jools.lazyValue(
 /*
 | returns the north-west point of the paragraph with the key 'key'.
 */
-doc.prototype.getPNW =
+fabric_doc.prototype.getPNW =
 	function(
 		key
 	)
@@ -845,7 +837,7 @@ doc.prototype.getPNW =
 | The width actually used by the document.
 */
 jools.lazyValue(
-	doc.prototype,
+	fabric_doc.prototype,
 	'widthUsed',
 	function( )
 	{
@@ -878,7 +870,7 @@ jools.lazyValue(
 | The default font for the document.
 */
 jools.lazyValue(
-	doc.prototype,
+	fabric_doc.prototype,
 	'font',
 	function( )
 	{
@@ -890,7 +882,7 @@ jools.lazyValue(
 /*
 | Returns the paragraph at point
 */
-doc.prototype.getParaAtPoint =
+fabric_doc.prototype.getParaAtPoint =
 	function(
 		item, // TODO remove
 		p
@@ -931,7 +923,7 @@ doc.prototype.getParaAtPoint =
 /*
 | A text has been inputed.
 */
-doc.prototype.input =
+fabric_doc.prototype.input =
 	function(
 		text,
 		item
@@ -980,7 +972,7 @@ doc.prototype.input =
 /*
 | Handles a special key.
 */
-doc.prototype.specialKey =
+fabric_doc.prototype.specialKey =
 	function(
 		key,
 		item, // TODO remove ?

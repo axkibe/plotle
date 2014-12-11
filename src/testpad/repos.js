@@ -19,12 +19,12 @@ var
 	ccot_changeWrapRay,
 	euclid_point,
 	euclid_rect,
+	fabric_doc,
 	fabric_note,
 	fabric_para,
 	fabric_space,
 	jools,
-	root,
-	visual;
+	root;
 
 
 /*
@@ -105,7 +105,7 @@ proto._init =
 				'testnote',
 				fabric_note.create(
 					'doc',
-						visual.doc.create(
+						fabric_doc.create(
 							'twig:add', '1',
 								fabric_para.create(
 									'text',

@@ -6,13 +6,13 @@
 var
 	euclid_point,
 	euclid_rect,
+	fabric_doc,
 	fabric_label,
 	fabric_note,
 	fabric_para,
 	fabric_portal,
 	shell_stubs,
-	theme,
-	visual;
+	theme;
 
 
 /*
@@ -31,12 +31,10 @@ shell_stubs = { };
 
 shell_stubs.emptyLabel =
 	fabric_label.create(
-		'pnw',
-			euclid_point.zero,
-		'fontsize',
-			theme.note.fontsize, // FIXME
+		'pnw', euclid_point.zero,
+		'fontsize', theme.note.fontsize, // FIXME
 		'doc',
-			visual.doc.create(
+			fabric_doc.create(
 				'twig:add',
 				'1',
 				fabric_para.create(
@@ -48,15 +46,14 @@ shell_stubs.emptyLabel =
 
 shell_stubs.emptyNote =
 	fabric_note.create(
-		'fontsize',
-			theme.note.fontsize, // FIXME
+		'fontsize', theme.note.fontsize, // FIXME
 		'zone',
 			euclid_rect.create(
 				'pnw', euclid_point.zero,
 				'pse', euclid_point.zero
 			),
 		'doc',
-			visual.doc.create(
+			fabric_doc.create(
 				'twig:add', '1', fabric_para.create( 'text', '' )
 			)
 	);
@@ -69,10 +66,8 @@ shell_stubs.emptyPortal =
 				'pnw', euclid_point.zero,
 				'pse', euclid_point.zero
 			),
-		'spaceUser',
-			'',
-		'spaceTag',
-			''
+		'spaceUser', '',
+		'spaceTag', ''
 	);
 
 

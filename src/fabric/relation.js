@@ -36,7 +36,7 @@ if( JION )
 						comment :
 							'the labels document',
 						type :
-							'visual.doc',
+							'fabric_doc',
 						json :
 							true
 					},

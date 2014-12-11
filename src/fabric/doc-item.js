@@ -7,11 +7,8 @@
 | Export
 */
 var
-	fabric_item,
-	visual,
-	visual_docItem;
-
-visual = visual || { };
+	fabric_docItem,
+	fabric_item;
 
 
 /*
@@ -42,12 +39,7 @@ if( SERVER )
 /*
 | Constructor
 */
-var
-	docItem;
-
-docItem =
-visual_docItem =
-visual.docItem =
+fabric_docItem =
 	function( )
 {
 	// initializing abstract.
@@ -58,14 +50,14 @@ visual.docItem =
 // FIXME this is ugly
 if( !SERVER )
 {
-	jools.subclass( docItem, fabric_item );
+	jools.subclass( fabric_docItem, fabric_item );
 }
 
 
 /*
 | Sets the items position and size after an action.
 */
-docItem.prototype.dragStop =
+fabric_docItem.prototype.dragStop =
 	function(
 		view,
 		p
@@ -85,7 +77,7 @@ docItem.prototype.dragStop =
 | The attention center.
 */
 jools.lazyValue(
-	docItem.prototype,
+	fabric_docItem.prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -113,7 +105,7 @@ jools.lazyValue(
 /*
 | Returns the para at point. FIXME, honor scroll here.
 */
-docItem.prototype.getParaAtPoint =
+fabric_docItem.prototype.getParaAtPoint =
 	function(
 		p
 	)
@@ -133,7 +125,7 @@ docItem.prototype.getParaAtPoint =
 /*
 | Sees if this item is being clicked.
 */
-docItem.prototype.click =
+fabric_docItem.prototype.click =
 	function(
 		space,
 		view,
@@ -226,7 +218,7 @@ docItem.prototype.click =
 /*
 | A text has been inputed.
 */
-docItem.prototype.input =
+fabric_docItem.prototype.input =
 	function(
 		text
 	)
@@ -238,7 +230,7 @@ docItem.prototype.input =
 /*
 | Handles a special key.
 */
-docItem.prototype.specialKey =
+fabric_docItem.prototype.specialKey =
 	function(
 		key,
 		shift,

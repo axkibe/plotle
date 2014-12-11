@@ -478,7 +478,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/visual/doc.js',
+		'filePath', 'src/fabric/doc.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -489,7 +489,7 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/visual/doc-item.js',
+		'filePath', 'src/fabric/doc-item.js',
 		'inBundle', true,
 		'inTestPad', true
 	),

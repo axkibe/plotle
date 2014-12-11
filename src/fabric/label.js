@@ -7,13 +7,13 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_rect,
+	fabric_docItem,
 	fabric_label,
 	jools,
 	root,
 	shell_peer,
 	shell_style,
-	theme,
-	visual;
+	theme;
 
 
 /*
@@ -38,7 +38,7 @@ if( JION )
 						comment :
 							'the labels document',
 						type :
-							'visual.doc',
+							'fabric_doc',
 						json :
 							true
 					},
@@ -115,7 +115,7 @@ if( JION )
 		init :
 			[ ],
 		subclass :
-			'visual.docItem'
+			'fabric_docItem'
 	};
 }
 
@@ -314,11 +314,7 @@ fabric_label.prototype.dragStop =
 		default :
 
 			return(
-				visual.docItem.prototype.dragStop.call(
-					this,
-					view,
-					p
-				)
+				fabric_docItem.prototype.dragStop.call( this, view, p )
 			);
 	}
 };

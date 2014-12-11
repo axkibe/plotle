@@ -9,6 +9,7 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
+	fabric_docItem,
 	fabric_note,
 	jools,
 	shell_peer,
@@ -16,7 +17,6 @@ var
 	root,
 	system,
 	theme,
-	visual_docItem,
 	visual_scrollbar;
 
 
@@ -42,7 +42,7 @@ if( JION )
 						comment :
 							'the notes document',
 						type :
-							'visual_doc',
+							'fabric_doc',
 						json :
 							true
 					},
@@ -126,7 +126,7 @@ if( JION )
 		init :
 			[ ],
 		subclass :
-			'visual_docItem'
+			'fabric_docItem'
 	};
 }
 
@@ -271,7 +271,7 @@ fabric_note.prototype.dragStop =
 		default :
 
 			return (
-				visual_docItem.prototype.dragStop.call(
+				fabric_docItem.prototype.dragStop.call(
 					this,
 					view,
 					p

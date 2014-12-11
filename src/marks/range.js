@@ -45,7 +45,7 @@ if( JION )
 						comment :
 							'the document the range belongs to',
 						type :
-							'visual.doc'
+							'fabric_doc'
 					},
 				ePath :
 					{

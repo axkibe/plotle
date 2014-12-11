@@ -6,6 +6,7 @@
 var
 	ccot_change,
 	ccot_sign,
+	fabric_doc,
 	fabric_label,
 	fabric_note,
 	fabric_para,
@@ -13,8 +14,7 @@ var
 	fabric_relation,
 	jion_path,
 	shell_peer,
-	root,
-	visual;
+	root;
 
 
 /*
@@ -91,7 +91,7 @@ shell_peer.newNote =
 					'fontsize', 13,
 					'zone', zone,
 					'doc',
-						visual.doc.create(
+						fabric_doc.create(
 							'twig:add', '1',
 							fabric_para.create( 'text', '' )
 						)
@@ -207,7 +207,7 @@ shell_peer.newLabel =
 					'fontsize', fontsize,
 					'pnw', pnw,
 					'doc',
-						visual.doc.create(
+						fabric_doc.create(
 							'twig:add',
 							'1',
 							fabric_para.create( 'text', text )
@@ -245,7 +245,7 @@ shell_peer.newRelation =
 					'pnw', pnw,
 					'fontsize', fontsize,
 					'doc',
-						visual.doc.create(
+						fabric_doc.create(
 							'twig:add',
 							'1',
 							fabric_para.create( 'text', text )

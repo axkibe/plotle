@@ -12,6 +12,7 @@ var
 	euclid_rect,
 	euclid_roundRect,
 	euclid_view,
+	fabric_item,
 	fabric_portal,
 	jools,
 	marks_caret,
@@ -22,11 +23,8 @@ var
 	shell_fontPool,
 	shell_peer,
 	shell_style,
-	theme,
-	visual;
+	theme;
 
-
-visual = visual || { }; // FIXME
 
 
 /*
