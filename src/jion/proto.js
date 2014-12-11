@@ -238,7 +238,7 @@ jion_proto.rayAppendRay =
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.reflect !== ray.reflect )
+/**/	if( this.reflect_ !== ray.reflect_ )
 /**/	{
 /**/		throw new Error( );
 /**/	}

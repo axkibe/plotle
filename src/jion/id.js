@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'jion.id',
+			'jion_id',
 		attributes :
 			{
 				'name' :
@@ -46,11 +46,11 @@ if( JION )
 
 
 var
-	id,
+	jion_id,
 	jools,
 	shorthand;
 
-id = require( '../jion/this' )( module );
+jion_id = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
@@ -59,7 +59,7 @@ shorthand = require( '../ast/shorthand' );
 /*
 | Initializer.
 */
-id.prototype._init =
+jion_id.prototype._init =
 	function( )
 {
 	// FIXME?
@@ -69,7 +69,7 @@ id.prototype._init =
 /*
 | Create the id from a string specifier.
 */
-id.createFromString =
+jion_id.createFromString =
 	function(
 		string
 	)
@@ -82,7 +82,7 @@ id.createFromString =
 
 	if( split.length <= 1 )
 	{
-		return id.create( 'name', string );
+		return jion_id.create( 'name', string );
 	}
 
 	if( split.length > 2 )
@@ -91,7 +91,7 @@ id.createFromString =
 	}
 
 	return(
-		id.create(
+		jion_id.create(
 			'unit', split[ 0 ],
 			'name', split[ 1 ]
 		)
@@ -102,7 +102,7 @@ id.createFromString =
 /*
 | Compares two ids.
 */
-id.compare =
+jion_id.compare =
 	function(
 		o1,
 		o2
@@ -150,7 +150,7 @@ id.compare =
 | This id as string.
 */
 jools.lazyValue(
-	id.prototype,
+	jion_id.prototype,
 	'string',
 	function( )
 	{
@@ -170,7 +170,7 @@ jools.lazyValue(
 | This id as string in new underscore format.
 */
 jools.lazyValue(
-	id.prototype,
+	jion_id.prototype,
 	'string_',
 	function( )
 	{
@@ -189,7 +189,7 @@ jools.lazyValue(
 | This id as astString
 */
 jools.lazyValue(
-	id.prototype,
+	jion_id.prototype,
 	'astString',
 	function( )
 	{
@@ -202,7 +202,7 @@ jools.lazyValue(
 | This id as astString in new underscore forrmat.
 */
 jools.lazyValue(
-	id.prototype,
+	jion_id.prototype,
 	'astString_',
 	function( )
 	{
@@ -215,7 +215,7 @@ jools.lazyValue(
 | This id as global varname
 */
 jools.lazyValue(
-	id.prototype,
+	jion_id.prototype,
 	'global',
 	function( )
 	{
@@ -238,7 +238,7 @@ jools.lazyValue(
 | FIXME rename astGlobal
 */
 jools.lazyValue(
-	id.prototype,
+	jion_id.prototype,
 	'astVar',
 	function( )
 	{

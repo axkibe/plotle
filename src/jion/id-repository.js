@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'jion.idRepository',
+			'jion_idRepository',
 		attributes :
 			{
 				'units' :
@@ -48,14 +48,14 @@ if( JION )
 
 
 var
-	id,
-	idRepository,
+	jion_id,
+	jion_idRepository,
 	jools;
 
 
-idRepository = require( '../jion/this' )( module );
+jion_idRepository = require( '../jion/this' )( module );
 
-id = require( './id' );
+jion_id = require( './id' );
 
 jools = require( '../jools/jools' );
 
@@ -63,7 +63,7 @@ jools = require( '../jools/jools' );
 /*
 | Initializer.
 */
-idRepository.prototype._init =
+jion_idRepository.prototype._init =
 	function( )
 {
 	if( !this.units )
@@ -82,7 +82,7 @@ idRepository.prototype._init =
 | Creates an id repository from an
 | array of id strings.
 */
-idRepository.createFromIDStrings =
+jion_idRepository.createFromIDStrings =
 	function(
 		idStrings
 	)
@@ -110,7 +110,7 @@ idRepository.createFromIDStrings =
 		i++
 	)
 	{
-		d = id.createFromString( idStrings[ i ] );
+		d = jion_id.createFromString( idStrings[ i ] );
 
 		if( d.unit )
 		{
@@ -160,7 +160,7 @@ idRepository.createFromIDStrings =
 /**/}
 
 	return(
-		idRepository.create(
+		jion_idRepository.create(
 			'primitives', primitives,
 			'units', units
 		)
@@ -173,18 +173,18 @@ idRepository.createFromIDStrings =
 | an id or another id repository
 | added
 */
-idRepository.prototype.add =
+jion_idRepository.prototype.add =
 	function(
 		o
 	)
 {
-	switch( o.reflect )
+	switch( o.reflect_ )
 	{
-		case 'jion.id' :
+		case 'jion_id' :
 
 			return this._addID( o );
 
-		case 'jion.idRepository' :
+		case 'jion_idRepository' :
 
 			return this._addIDRepository( o );
 
@@ -199,7 +199,7 @@ idRepository.prototype.add =
 | Returns all units as alphasorted list.
 */
 jools.lazyValue(
-	idRepository.prototype,
+	jion_idRepository.prototype,
 	'unitList',
 	function( )
 {
@@ -222,7 +222,7 @@ jools.lazyValue(
 | Returns all ids as alphasorted list.
 */
 jools.lazyValue(
-	idRepository.prototype,
+	jion_idRepository.prototype,
 	'idList',
 	function( )
 {
@@ -261,7 +261,7 @@ jools.lazyValue(
 		}
 	}
 
-	ids.sort( id.compare );
+	ids.sort( jion_id.compare );
 
 /**/if( CHECK )
 /**/{
@@ -276,7 +276,7 @@ jools.lazyValue(
 /*
 | Returns the id names as list of an unit.
 */
-idRepository.prototype.nameListOfUnit =
+jion_idRepository.prototype.nameListOfUnit =
 	function(
 		unitStr
 	)
@@ -301,7 +301,7 @@ idRepository.prototype.nameListOfUnit =
 /*
 | Returns a repository with an id added.
 */
-idRepository.prototype._addID =
+jion_idRepository.prototype._addID =
 	function(
 		d
 	)
@@ -313,7 +313,7 @@ idRepository.prototype._addID =
 
 /**/if( CHECK )
 /**/{
-/**/	if( d.reflect !== 'jion.id' )
+/**/	if( d.reflect_ !== 'jion_id' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -386,7 +386,7 @@ idRepository.prototype._addID =
 /*
 | Returns a repository with an id repository added.
 */
-idRepository.prototype._addIDRepository =
+jion_idRepository.prototype._addIDRepository =
 	function(
 		idr
 	)
@@ -401,7 +401,7 @@ idRepository.prototype._addIDRepository =
 
 /**/if( CHECK )
 /**/{
-/**/	if( idr.reflect !== 'jion.idRepository' )
+/**/	if( idr.reflect_ !== 'jion_idRepository' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

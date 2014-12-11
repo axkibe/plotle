@@ -130,7 +130,7 @@ astBlock.prototype.astComment =
 		header
 	)
 {
-	if( header.reflect !== 'ast.astComment' )
+	if( header.reflect_ !== 'ast_astComment' )
 	{
 		// arguments have to be a list of strings otherwise
 		header =
@@ -268,7 +268,7 @@ astBlock.prototype.astReturn =
 		expr
 	)
 {
-	if( expr.reflect !== 'ast.astReturn' )
+	if( expr.reflect_ !== 'ast_astReturn' )
 	{
 		expr = astReturn.create( 'expr', tools.convert( expr ) );
 	}

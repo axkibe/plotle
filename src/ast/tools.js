@@ -94,7 +94,7 @@ tools.convert =
 
 /**/if( CHECK )
 /**/{
-/**/	if( arg.reflect.substr( 0, 4 ) !== 'ast.' )
+/**/	if( arg.reflect_.substr( 0, 4 ) !== 'ast_' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
