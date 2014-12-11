@@ -63,7 +63,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'visual.item',
+									'fabric_item',
 								func :
 									'concernsMark',
 								args :
@@ -125,7 +125,7 @@ if( JION )
 		init :
 			[ ],
 		subclass :
-			'visual.item'
+			'fabric_item'
 	};
 }
 
@@ -329,7 +329,7 @@ fabric_portal.prototype.dragStop =
 		default :
 
 			return(
-				visual.item.prototype.dragStop.call(
+				fabric_item.prototype.dragStop.call(
 					this,
 					view,
 					p

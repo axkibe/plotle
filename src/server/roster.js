@@ -484,7 +484,7 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/visual/item.js',
+		'filePath', 'src/fabric/item.js',
 		'inBundle', true,
 		'inTestPad', true
 	),

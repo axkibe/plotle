@@ -7,6 +7,7 @@
 | Export
 */
 var
+	fabric_item,
 	visual,
 	visual_docItem;
 
@@ -57,7 +58,7 @@ visual.docItem =
 // FIXME this is ugly
 if( !SERVER )
 {
-	jools.subclass( docItem, visual.item );
+	jools.subclass( docItem, fabric_item );
 }
 
 
@@ -71,7 +72,7 @@ docItem.prototype.dragStop =
 	)
 {
 	return(
-		visual.item.prototype.dragStop.call(
+		fabric_item.prototype.dragStop.call(
 			this,
 			view,
 			p

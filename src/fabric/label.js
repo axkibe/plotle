@@ -88,14 +88,11 @@ if( JION )
 						concerns :
 							{
 								type :
-									'visual.item',
+									'fabric_item',
 								func :
 									'concernsMark',
 								args :
-									[
-										'mark',
-										'path'
-									]
+									[ 'mark', 'path' ]
 							},
 
 						type :
@@ -376,7 +373,7 @@ jools.lazyValue(
 /*
 | Draws the label.
 |
-| FIXME: move the common stuff into visual.item.draw()
+| FIXME: move the common stuff into fabric_item.draw()
 */
 fabric_label.prototype.draw =
 	function(

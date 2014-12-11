@@ -11,17 +11,14 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_view,
+	fabric_item,
 	fabric_relation,
 	jion_path,
 	jools,
 	marks_item,
 	result_hover,
 	root,
-	theme,
-	visual,
-	visual_item;
-
-visual = visual || { }; // FIXME
+	theme;
 
 /*
 | Capsule
@@ -39,15 +36,7 @@ if( SERVER )
 }
 
 
-/*
-| Constructor
-*/
-var
-	item; // FUTURE
-
-item =
-visual.item = // FUTURE
-visual_item =
+fabric_item =
 	function( )
 {
 	// this is an abstract class
@@ -55,11 +44,17 @@ visual_item =
 };
 
 
+if( SERVER )
+{
+	module.exports = fabric_item;
+}
+
+
 /*
 | Returns the mark if an item with 'path' concerns about
 | the mark.
 */
-item.concernsMark =
+fabric_item.concernsMark =
 	function(
 		mark,
 		path
@@ -88,7 +83,7 @@ item.concernsMark =
 | It is the last path entry.
 */
 jools.lazyValue(
-	item.prototype,
+	fabric_item.prototype,
 	'key',
 	function( )
 	{
@@ -101,7 +96,7 @@ jools.lazyValue(
 | Returns the compass direction of the handle
 | if p is on a resizer handle.
 */
-item.prototype.checkHandles =
+fabric_item.prototype.checkHandles =
 	function(
 		view,
 		p
@@ -163,7 +158,7 @@ item.prototype.checkHandles =
 | FUTURE use fixPoints
 */
 jools.lazyValue(
-	item.prototype,
+	fabric_item.prototype,
 	'_handles',
 	function( )
 	{
@@ -384,7 +379,7 @@ jools.lazyValue(
 /*
 | Draws the handles of an item ( resize, itemmenu )
 */
-item.prototype.drawHandles =
+fabric_item.prototype.drawHandles =
 	function(
 		display,
 		view
@@ -456,7 +451,7 @@ item.prototype.drawHandles =
 /*
 | Checks if a dragStart targets this item.
 */
-item.prototype.dragStart =
+fabric_item.prototype.dragStart =
 	function(
 		view,
 		p,
@@ -561,7 +556,7 @@ item.prototype.dragStart =
 /*
 | A move during an action.
 */
-item.prototype.dragMove =
+fabric_item.prototype.dragMove =
 	function(
 		view,
 		p
@@ -632,7 +627,7 @@ item.prototype.dragMove =
 /*
 | Sets the items position and size after an action.
 */
-item.prototype.dragStop =
+fabric_item.prototype.dragStop =
 	function(
 		view,
 		p
@@ -673,7 +668,7 @@ item.prototype.dragStop =
 |
 | Checks if this item reacts on this.
 */
-item.prototype.pointingHover =
+fabric_item.prototype.pointingHover =
 	function(
 		view,
 		p
@@ -722,7 +717,7 @@ item.prototype.pointingHover =
 |
 | FIXME, make this correct.
 */
-item.prototype.equals =
+fabric_item.prototype.equals =
 	function(
 		obj
 	)
@@ -731,12 +726,5 @@ item.prototype.equals =
 };
 
 
-/*
-| Node export.
-*/
-if( SERVER )
-{
-	module.exports = item;
-}
 
 } )( );

@@ -104,7 +104,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'visual.item',
+									'fabric_item',
 								func :
 									'concernsMark',
 								args :

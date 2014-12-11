@@ -289,7 +289,7 @@ fabric_space.prototype.getItem =
 
 
 /*
-| Returns the visual item by a given tree-rank.
+| Returns the item by a given tree-rank.
 */
 fabric_space.prototype.atRank =
 	function(
