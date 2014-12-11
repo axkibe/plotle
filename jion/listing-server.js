@@ -27,6 +27,7 @@ module.exports =
 			'src/fabric/para.js',
 			'src/fabric/portal.js',
 			'src/fabric/relation.js',
+			'src/fabric/space.js',
 			'src/fabric/space-ref.js',
 			'src/jion/path.js',
 			'src/reply/acquire.js',
@@ -46,7 +47,6 @@ module.exports =
 			'src/server/spaceBox.js',
 			'src/server/inventory.js',
 			'src/visual/doc.js',
-			'src/visual/space.js',
 
 			// built-in genjion
 			'src/ast/ast-and.js',

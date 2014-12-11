@@ -8,6 +8,7 @@ var
 	euclid_arrow,
 	euclid_point,
 	euclid_rect,
+	fabric_space,
 	jion_path,
 	jools,
 	marks_caret,
@@ -15,8 +16,7 @@ var
 	root,
 	shell_peer,
 	shell_stubs,
-	theme,
-	visual;
+	theme;
 
 
 /*
@@ -33,7 +33,7 @@ if( JION )
 {
 	return {
 		id :
-			'visual.space',
+			'fabric_space',
 		attributes :
 			{
 				access :
@@ -63,7 +63,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'visual.space',
+									'fabric_space',
 								func :
 									'concernsMark',
 								args :
@@ -129,26 +129,18 @@ if( JION )
 }
 
 
-var
-	space;
-
-
 if( SERVER )
 {
-	jools = require( '../jools/jools' );
+	fabric_space = require( '../jion/this' )( module );
 
-	space = require( '../jion/this' )( module );
-}
-else
-{
-	space = visual.space;
+	jools = require( '../jools/jools' );
 }
 
 
 /*
 | Initializer.
 */
-space.prototype._init =
+fabric_space.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -187,13 +179,13 @@ space.prototype._init =
 /*
 | The disc is shown while a space is shown.
 */
-space.prototype.showDisc = true;
+fabric_space.prototype.showDisc = true;
 
 
 /*
 | Returns the mark if the form jockey concerns a mark.
 */
-space.concernsMark =
+fabric_space.concernsMark =
 	function(
 		mark
 	)
@@ -222,7 +214,7 @@ space.concernsMark =
 |
 | FIXME handle this more gracefully
 */
-space.prototype.focusedItem =
+fabric_space.prototype.focusedItem =
 	function( )
 {
 	var
@@ -269,7 +261,7 @@ space.prototype.focusedItem =
 /*
 | Returns an item by its key.
 */
-space.prototype.getItem =
+fabric_space.prototype.getItem =
 	function(
 		key
 	)
@@ -299,7 +291,7 @@ space.prototype.getItem =
 /*
 | Returns the visual item by a given tree-rank.
 */
-space.prototype.atRank =
+fabric_space.prototype.atRank =
 	function(
 		rank
 	)
@@ -312,7 +304,7 @@ space.prototype.atRank =
 | The attention center.
 */
 jools.lazyValue(
-	space.prototype,
+	fabric_space.prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -334,7 +326,7 @@ jools.lazyValue(
 /*
 | Displays the whole space.
 */
-space.prototype.draw =
+fabric_space.prototype.draw =
 	function(
 		display
 	)
@@ -451,7 +443,7 @@ space.prototype.draw =
 /*
 | Mouse wheel
 */
-space.prototype.mousewheel =
+fabric_space.prototype.mousewheel =
 	function(
 		p,
 		dir,
@@ -499,7 +491,7 @@ space.prototype.mousewheel =
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-space.prototype.pointingHover =
+fabric_space.prototype.pointingHover =
 	function(
 		p
 		// shift,
@@ -562,7 +554,7 @@ space.prototype.pointingHover =
 /*
 | Starts an operation with the mouse button held down.
 */
-space.prototype.dragStart =
+fabric_space.prototype.dragStart =
 	function(
 		p,
 		shift,
@@ -751,7 +743,7 @@ space.prototype.dragStart =
 /*
 | A mouse click.
 */
-space.prototype.click =
+fabric_space.prototype.click =
 	function(
 		p,
 		shift,
@@ -794,7 +786,7 @@ space.prototype.click =
 /*
 | Stops an operation with the mouse button held down.
 */
-space.prototype.dragStop =
+fabric_space.prototype.dragStop =
 	function(
 		p,
 		shift,
@@ -853,10 +845,10 @@ space.prototype.dragStop =
 					root.setMark(
 						marks_caret.create(
 							'path',
-								root.
-									space.twig[ key ]
-									.doc
-									.atRank( 0 ).textPath,
+								root
+								.space.twig[ key ]
+								.doc
+								.atRank( 0 ).textPath,
 							'at', 0
 						)
 					);
@@ -914,7 +906,8 @@ space.prototype.dragStop =
 					root.setMark(
 						marks_caret.create(
 							'path',
-								root.space
+								root
+								.space
 								.twig[ key ]
 								.doc.atRank( 0 ).textPath,
 							'at',
@@ -1120,7 +1113,7 @@ space.prototype.dragStop =
 /*
 | Moving during an operation with the mouse button held down.
 */
-space.prototype.dragMove =
+fabric_space.prototype.dragMove =
 	function(
 		p
 		// shift,
@@ -1423,7 +1416,7 @@ space.prototype.dragMove =
 /*
 | Text input
 */
-space.prototype.input =
+fabric_space.prototype.input =
 	function(
 		text
 	)
@@ -1454,7 +1447,7 @@ space.prototype.input =
 /*
 | Changes the zoom factor ( around center )
 */
-space.prototype._changeZoom =
+fabric_space.prototype._changeZoom =
 	function( df )
 {
 	var
@@ -1469,7 +1462,7 @@ space.prototype._changeZoom =
 /*
 | User pressed a special key.
 */
-space.prototype.specialKey =
+fabric_space.prototype.specialKey =
 	function(
 		key,
 		shift,

@@ -515,7 +515,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/visual/space.js',
+		'filePath', 'src/fabric/space.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true

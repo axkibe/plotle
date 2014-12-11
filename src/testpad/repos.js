@@ -21,6 +21,7 @@ var
 	euclid_rect,
 	fabric_note,
 	fabric_para,
+	fabric_space,
 	jools,
 	root,
 	visual;
@@ -49,7 +50,7 @@ if( JION )
 						comment :
 							'the action the user is preparing',
 						type :
-							'visual.space',
+							'fabric_space',
 						defaultValue :
 							null
 					},
@@ -99,7 +100,7 @@ proto._init =
 	if( this.space === null )
 	{
 		this.space  =
-			visual.space.create(
+			fabric_space.create(
 				'twig:add',
 				'testnote',
 				fabric_note.create(

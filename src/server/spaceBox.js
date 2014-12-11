@@ -32,7 +32,7 @@ if( JION )
 						comment :
 							'latest space version',
 						type :
-							'visual_space'
+							'fabric_space'
 					},
 				'spaceRef' :
 					{
@@ -65,7 +65,7 @@ var
 	database_changeSkidRay,
 	resume,
 	server_spaceBox,
-	visual_space;
+	fabric_space;
 
 server_spaceBox = require( '../jion/this' )( module );
 
@@ -75,7 +75,7 @@ database_changeSkidRay = require( '../database/change-skid-ray' );
 
 resume = require( 'suspend' ).resume;
 
-visual_space = require( '../visual/space' );
+fabric_space = require( '../fabric/space' );
 
 
 /*
@@ -99,7 +99,7 @@ server_spaceBox.loadSpace =
 
 	seqZ = 1;
 
-	space = visual_space.create( );
+	space = fabric_space.create( );
 
 	changesDB =
 		yield* root.repository.collection(
@@ -170,7 +170,7 @@ server_spaceBox.createSpace =
 
 	return(
 		server_spaceBox.create(
-			'space', visual_space.create( ),
+			'space', fabric_space.create( ),
 			'spaceRef', spaceRef,
 			'seqZ', 1,
 			'_changesDB',

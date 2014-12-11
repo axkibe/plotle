@@ -58,7 +58,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'visual.space',
+							'fabric_space',
 						defaultValue :
 							undefined
 					}
