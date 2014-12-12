@@ -39,7 +39,7 @@ if( JION )
 var
 	ast,
 	_and,
-	astAssign,
+	$assign,
 	astBlock,
 	astCall,
 	astCapsule,
@@ -97,7 +97,7 @@ ast = shorthand.ast;
 
 _and = shorthand.astAnd;
 
-astAssign = shorthand.astAssign;
+$assign = shorthand.$assign;
 
 astBlock = shorthand.astBlock;
 
@@ -581,7 +581,7 @@ generator.prototype.genNodeIncludes =
 
 			block =
 				block
-				.astAssign(
+				.$assign(
 					astVar( unitStr + '_' + name ),
 					astCall(
 						'require',
@@ -631,7 +631,7 @@ generator.prototype.genConstructor =
 		.astCheck(
 			astIf(
 				'prototype.__lazy',
-				astAssign( 'this.__lazy', astObjLiteral( ) )
+				$assign( 'this.__lazy', astObjLiteral( ) )
 			)
 		);
 
@@ -652,7 +652,7 @@ generator.prototype.genConstructor =
 		}
 
 		assign =
-			astAssign(
+			$assign(
 				astThis.astDot( attr.assign ),
 				attr.v
 			);
@@ -824,7 +824,7 @@ generator.prototype.genConstructor =
 		capsule
 		.astVarDec( 'Constructor' )
 		.astVarDec( 'prototype' )
-		.astAssign( 'Constructor', constructor );
+		.$assign( 'Constructor', constructor );
 
 	// subclass
 	if( this.subclass )
@@ -843,7 +843,7 @@ generator.prototype.genConstructor =
 	capsule =
 		capsule
 		.astComment( 'Prototype shortcut' )
-		.astAssign( 'prototype', 'Constructor.prototype' );
+		.$assign( 'prototype', 'Constructor.prototype' );
 
 	// the exported object
 	capsule = capsule.astComment( 'Jion.' );
@@ -854,13 +854,13 @@ generator.prototype.genConstructor =
 
 	capsule =
 		capsule
-		.astAssign( this.id.global, jionObj );
+		.$assign( this.id.global, jionObj );
 
 	capsule =
 		capsule
 		.astIf(
 			'SERVER',
-			astAssign( 'module.exports', this.id.global )
+			$assign( 'module.exports', this.id.global )
 		);
 
 	return capsule;
@@ -880,7 +880,7 @@ generator.prototype.genSingleton =
 		capsule
 		.astComment( 'Singleton' )
 		.astVarDec( '_singleton' )
-		.astAssign( '_singleton', null )
+		.$assign( '_singleton', null )
 	);
 };
 
@@ -996,7 +996,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 
 		receiver =
 			receiver
-			.astAssign(
+			.$assign(
 				attr.v,
 				astThis.astDot( attr.assign )
 			);
@@ -1014,7 +1014,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 			thisCheck
 			.astElsewise(
 				astBlock( )
-				.astAssign( 'twig', astObjLiteral( ) )
+				.$assign( 'twig', astObjLiteral( ) )
 				.ast( 'ranks = [ ]' )
 				.ast( 'twigDup = true' )
 			);
@@ -1053,7 +1053,7 @@ generator.prototype.genCreatorFreeStringsParser =
 
 	loop =
 		astBlock( )
-		.astAssign( 'arg', 'arguments[ a + 1 ]' );
+		.$assign( 'arg', 'arguments[ a + 1 ]' );
 
 	switchExpr = astSwitch( 'arguments[ a ]' );
 
@@ -1073,7 +1073,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				_string( name ),
 				astIf(
 					'arg !== undefined',
-					astAssign( attr.v, 'arg' )
+					$assign( attr.v, 'arg' )
 				)
 			);
 	}
@@ -1211,8 +1211,8 @@ generator.prototype.genCreatorFreeStringsParser =
 		block
 		.astFor(
 			astCommaList( )
-			.astAssign( 'a', 0 )
-			.astAssign( 'aZ', 'arguments.length' ),
+			.$assign( 'a', 0 )
+			.$assign( 'aZ', 'arguments.length' ),
 			'a < aZ',
 			astPlusAssign( 'a', 2 ),
 			loop
@@ -1258,7 +1258,7 @@ generator.prototype.genCreatorDefaults =
 				block
 				.astIf(
 					astEquals( attr.v, undefined ),
-					astAssign( attr.v, attr.defaultValue )
+					$assign( attr.v, attr.defaultValue )
 				);
 		}
 	}
@@ -1619,7 +1619,7 @@ generator.prototype.genCreatorConcerns =
 			}
 		}
 
-		block = block.astAssign( attr.v, cExpr );
+		block = block.$assign( attr.v, cExpr );
 	}
 
 	return block;
@@ -1767,7 +1767,7 @@ generator.prototype.genCreatorReturn =
 			block
 			.astIf(
 				'!_singleton',
-				astAssign(
+				$assign(
 					'_singleton',
 					astNew( ast( 'Constructor( )' ) )
 				)
@@ -1856,9 +1856,9 @@ generator.prototype.genCreator =
 
 	capsule =
 		capsule
-		.astAssign(
+		.$assign(
 			astVar( this.id.global ).astDot( 'create' ),
-			astAssign( 'prototype.create', creator )
+			$assign( 'prototype.create', creator )
 		);
 
 	return capsule;
@@ -2004,7 +2004,7 @@ generator.prototype.genFromJSONCreatorParser =
 			case 'String' :
 			case 'Object' : // FIXME remove
 
-				attrCode = astAssign( attr.v, 'arg' );
+				attrCode = $assign( attr.v, 'arg' );
 
 				break;
 
@@ -2013,7 +2013,7 @@ generator.prototype.genFromJSONCreatorParser =
 				if( !Array.isArray( attr.id ) )
 				{
 					attrCode =
-						astAssign(
+						$assign(
 							attr.v,
 							astCall(
 								attr.id.astVar.astDot( 'createFromJSON' ),
@@ -2037,7 +2037,7 @@ generator.prototype.genFromJSONCreatorParser =
 							attrCode
 							.astCase(
 								attr.id[ t ].astString_,
-								astAssign(
+								$assign(
 									attr.v,
 									astCall(
 										attr.id[ t ].astVar
@@ -2110,7 +2110,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 			loopSwitch
 			.astCase(
 				rid.astString_,
-				astAssign(
+				$assign(
 					'ray[ r ]',
 					astCall(
 						rid.astVar.astDot( 'createFromJSON' ),
@@ -2124,8 +2124,8 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 		block
 		.astFor(
 			astCommaList( )
-			.astAssign( 'r', 0 )
-			.astAssign( 'rZ', 'jray.length' ),
+			.$assign( 'r', 0 )
+			.$assign( 'rZ', 'jray.length' ),
 			'r < rZ',
 			'++r',
 			loopSwitch
@@ -2165,7 +2165,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 			switchExpr
 			.astCase(
 				twigID.astString_,
-				astAssign(
+				$assign(
 					'twig[ key ]',
 					astCall(
 						twigID.astVar.astDot( 'createFromJSON' ),
@@ -2194,7 +2194,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 
 	block =
 		block
-		.astAssign( 'twig', astObjLiteral( ) )
+		.$assign( 'twig', astObjLiteral( ) )
 		.astIf(
 			'!jwig || !ranks',
 			// ranks/twig information missing
@@ -2202,8 +2202,8 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		)
 		.astFor(
 			astCommaList( )
-			.astAssign( 'a', 0 )
-			.astAssign( 'aZ', 'ranks.length' ),
+			.$assign( 'a', 0 )
+			.$assign( 'aZ', 'ranks.length' ),
 			'a < aZ',
 			'++a',
 			loop
@@ -2348,7 +2348,7 @@ generator.prototype.genFromJSONCreator =
 
 	capsule =
 		capsule
-		.astAssign(
+		.$assign(
 			astVar( this.id.global ).astDot( 'createFromJSON' ),
 			astFunc( funcBlock )
 			.astArg( 'json', 'the JSON object' )
@@ -2369,12 +2369,12 @@ generator.prototype.genReflection =
 	capsule =
 		capsule
 		.astComment( 'Reflection.' )
-		.astAssign( 'prototype.reflect', this.id.astString_ );
+		.$assign( 'prototype.reflect', this.id.astString_ );
 
 	capsule =
 		capsule
 		.astComment( 'Name Reflection.' )
-		.astAssign(
+		.$assign(
 			'prototype.reflectName',
 			_string( this.id.name )
 		);
@@ -2515,7 +2515,7 @@ generator.prototype.genToJSON =
 
 	block =
 		block
-		.astAssign( 'json', olit )
+		.$assign( 'json', olit )
 		.astCheck(
 			ast( 'Object.freeze( json )' )
 		)
@@ -2639,7 +2639,7 @@ generator.prototype.genEquals =
 			return (
 				capsule
 				.astComment( 'Tests equality of object.' )
-				.astAssign(
+				.$assign(
 					'prototype.equals',
 					astFunc( astReturn( 'this === obj' ) )
 					.astArg( 'obj', 'object to compare to' )
@@ -2711,8 +2711,8 @@ generator.prototype.genEquals =
 			)
 			.astFor(
 				astCommaList( )
-				.astAssign( 'a', 0 ) // FIXME ast() 
-				.astAssign( 'aZ', 'this.ranks.length' ), // FIXME ast()
+				.$assign( 'a', 0 ) // FIXME ast() 
+				.$assign( 'aZ', 'this.ranks.length' ), // FIXME ast()
 				'a < aZ',
 				'++a',
 				twigTestLoopBody
@@ -2770,7 +2770,7 @@ generator.prototype.genEquals =
 
 	capsule =
 		capsule
-		.astAssign(
+		.$assign(
 			// FIXME use proto
 			'prototype.equals',
 			astFunc( block )
@@ -2869,7 +2869,7 @@ generator.prototype.genAlike =
 
 		capsule =
 			capsule
-			.astAssign(
+			.$assign(
 				// FIXME use proto
 				astVar( 'prototype' ).astDot( alikeName ),
 				astFunc( block )

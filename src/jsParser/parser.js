@@ -66,7 +66,7 @@ ast_and = require( '../ast/and' );
 
 ast_arrayLiteral = require( '../ast/arrayLiteral' );
 
-ast_assign = require( '../ast/ast-assign' );
+ast_assign = require( '../ast/assign' );
 
 ast_boolean = require( '../ast/ast-boolean' );
 

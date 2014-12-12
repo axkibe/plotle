@@ -6,13 +6,13 @@
 module.exports =
 [
 	/*
-	'ast_astAnd',
-	'ast_astAssign',
-	'ast_astCall',
-	'ast_astFunc',
-	'ast_astNew',
-	'ast_astObjLiteral',
-	'ast_astOr',
-	'ast_astVar'
+	'ast_and',
+	'ast_assign',
+	'ast_call',
+	'ast_func',
+	'ast_new',
+	'ast_objLiteral',
+	'ast_or',
+	'ast_var'
 	*/
 ];

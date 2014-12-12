@@ -70,7 +70,7 @@ astBlock.prototype.ast =
 | Returns the block with an assignment appended.
 | FUTURE use a shorthand
 */
-astBlock.prototype.astAssign =
+astBlock.prototype.$assign =
 	function(
 		left,
 		right
@@ -85,7 +85,7 @@ astBlock.prototype.astAssign =
 /**/	}
 /**/}
 
-	return this.append( shorthand.astAssign( left, right ) );
+	return this.append( shorthand.$assign( left, right ) );
 };
 
 

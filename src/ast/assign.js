@@ -17,7 +17,7 @@ if( JION )
 {
 	return{
 		id :
-			'ast_astAssign',
+			'ast_assign',
 		attributes :
 			{
 				left :
@@ -40,10 +40,10 @@ if( JION )
 
 
 var
-	astAssign;
+	ast_assign;
 
 
-astAssign = require( '../jion/this' )( module );
+ast_assign = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -56,7 +56,7 @@ astAssign = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astAssign.prototype.inspect =
+***/	ast_assign.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

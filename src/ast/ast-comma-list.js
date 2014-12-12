@@ -26,7 +26,7 @@ if( JION )
 
 
 var
-	astAssign,
+	ast_assign,
 	astCommaList,
 	jools,
 	tools;
@@ -34,7 +34,7 @@ var
 
 astCommaList = require( '../jion/this' )( module );
 
-astAssign = require( './ast-assign' );
+ast_assign = require( './assign' );
 
 jools = require( '../jools/jools' );
 
@@ -44,7 +44,7 @@ tools = require( './tools' );
 /*
 | Returns the list with an assignment appended.
 */
-astCommaList.prototype.astAssign =
+astCommaList.prototype.$assign =
 	function(
 		left,
 		right
@@ -56,7 +56,7 @@ astCommaList.prototype.astAssign =
 
 	return(
 		this.append(
-			astAssign.create(
+			ast_assign.create(
 				'left', left,
 				'right', right
 			)

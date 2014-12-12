@@ -37,7 +37,7 @@ precTable =
 	{
 		'ast_and' : 13,
 		'ast_arrayLiteral' : -1,
-		'astAssign' : 17,
+		'ast_assign' : 17,
 		'astBoolean' : -1,
 		'astCall' : 2,
 		'astCommaList' : 18,
@@ -143,12 +143,12 @@ formatAssign =
 		formatExpression(
 			context,
 			assign.left,
-			precTable.astAssign
+			precTable.ast_assign
 		)
 		+ ' ='
 		+ context.sep;
 
-	if( assign.right.reflect !== 'ast_astAssign' )
+	if( assign.right.reflect !== 'ast_assign' )
 	{
 		context = context.incSame;
 	}
@@ -162,7 +162,7 @@ formatAssign =
 			+ formatExpression(
 				context.setInline,
 				assign.right,
-				precTable.astAssign
+				precTable.ast_assign
 			);
 	}
 	catch( e )
@@ -190,7 +190,7 @@ formatAssign =
 			formatExpression(
 				context,
 				assign.right,
-				precTable.astAssign
+				precTable.ast_assign
 			);
 	}
 
@@ -436,13 +436,13 @@ formatPlusAssign =
 			formatExpression(
 				context.setInline,
 				assign.left,
-				precTable.astAssign
+				precTable.ast_assign
 			)
 			+ ' += '
 			+ formatExpression(
 				context.setInline,
 				assign.right,
-				precTable.astAssign
+				precTable.ast_assign
 			);
 	}
 	catch( e )
@@ -1399,7 +1399,7 @@ formatStatement =
 
 			break;
 
-		case 'ast_astAssign' :
+		case 'ast_assign' :
 		case 'ast_astBoolean' :
 		case 'ast_astCall' :
 		case 'ast_astDelete' :
@@ -2119,7 +2119,7 @@ formatVarDec =
 			isRootFunc = true;
 		}
 		else if(
-			varDec.assign.reflect === 'ast_astAssign'
+			varDec.assign.reflect === 'ast_assign'
 			&& varDec.assign.right.reflect === 'ast_astFunc'
 		)
 		{
@@ -2164,7 +2164,7 @@ formatVarDec =
 	{
 		text += ' =' + context.sep;
 
-		if( varDec.assign.reflect !== 'ast_astAssign' )
+		if( varDec.assign.reflect !== 'ast_assign' )
 		{
 			context = context.inc;
 		}
@@ -2272,7 +2272,7 @@ exprFormatter =
 	{
 		'ast_and' : formatAnd,
 		'ast_arrayLiteral' : formatArrayLiteral,
-		'astAssign' : formatAssign,
+		'ast_assign' : formatAssign,
 		'astBoolean' : formatBoolean,
 		'astCall' : formatCall,
 		'astCommaList' : formatCommaList,

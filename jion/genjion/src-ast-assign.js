@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astAssign;
+	ast_assign;
 
 
 /*
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astAssign =
+ast_assign =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astAssign =
 
 if( SERVER )
 {
-	module.exports = ast_astAssign;
+	module.exports = ast_assign;
 }
 
 
 /*
-| Creates a new astAssign object.
+| Creates a new assign object.
 */
-ast_astAssign.create =
+ast_assign.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== ast_astAssign )
+	if( this !== ast_assign )
 	{
 		inherit = this;
 
@@ -192,13 +192,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astAssign';
+prototype.reflect = 'ast_assign';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astAssign';
+prototype.reflectName = 'assign';
 
 
 /*

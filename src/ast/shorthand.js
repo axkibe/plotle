@@ -67,7 +67,7 @@ ast_and = require( './and' );
 
 ast_arrayLiteral = require( './arrayLiteral' );
 
-ast_assign = require( './ast-assign' );
+ast_assign = require( './assign' );
 
 ast_block = require( './ast-block' );
 
@@ -218,7 +218,7 @@ shorthand.astArrayLiteral =
 /*
 | Shorthand for creating assignments.
 */
-shorthand.astAssign =
+shorthand.$assign =
 	function(
 		left,
 		right
