@@ -10,7 +10,7 @@ var
 	euclid_view,
 	jools,
 	theme,
-	visual_scroll;
+	visual_scrollbar;
 
 
 /*
