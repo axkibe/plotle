@@ -64,7 +64,7 @@ var
 	astReturn,
 	astReturnFalse,
 	astReturnTrue,
-	_string,
+	$string,
 	astSwitch,
 	astThis,
 	astTypeof,
@@ -143,7 +143,7 @@ astPlusAssign = shorthand.astPlusAssign;
 
 astReturn = shorthand.astReturn;
 
-_string = shorthand.astString;
+$string = shorthand.$string;
 
 astSwitch = shorthand.astSwitch;
 
@@ -321,7 +321,7 @@ generator.prototype._init =
 					);
 				}
 
-				defaultValue = _string( jdv );
+				defaultValue = $string( jdv );
 			}
 			else
 			{
@@ -585,7 +585,7 @@ generator.prototype.genNodeIncludes =
 					astVar( unitStr + '_' + name ),
 					astCall(
 						'require',
-						_string(
+						$string(
 							'../../src/'
 							+ camelCaseToDash( unitStr )
 							+ '/'
@@ -1070,7 +1070,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		switchExpr =
 			switchExpr
 			.astCase(
-				_string( name ),
+				$string( name ),
 				astIf(
 					'arg !== undefined',
 					$assign( attr.v, 'arg' )
@@ -2053,7 +2053,7 @@ generator.prototype.genFromJSONCreatorParser =
 		nameSwitch =
 			nameSwitch
 			.astCase(
-				_string( attr.name ),
+				$string( attr.name ),
 				attrCode
 			);
 	}
@@ -2376,7 +2376,7 @@ generator.prototype.genReflection =
 		.astComment( 'Name Reflection.' )
 		.$assign(
 			'prototype.reflectName',
-			_string( this.id.name )
+			$string( this.id.name )
 		);
 
 	return capsule;
@@ -2926,7 +2926,7 @@ generator.prototype.genCapsule =
 
 	capsule = astBlock( );
 
-	capsule = capsule.append( _string( 'use strict' ) );
+	capsule = capsule.append( $string( 'use strict' ) );
 
 	capsule = this.genNodeIncludes( capsule );
 

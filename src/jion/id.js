@@ -197,7 +197,7 @@ jools.lazyValue(
 	'astString',
 	function( )
 	{
-		return shorthand.astString( this.string );
+		return shorthand.$string( this.string );
 	}
 );
 
@@ -210,7 +210,7 @@ jools.lazyValue(
 	'astString_',
 	function( )
 	{
-		return shorthand.astString( this.string_ );
+		return shorthand.$string( this.string_ );
 	}
 );
 

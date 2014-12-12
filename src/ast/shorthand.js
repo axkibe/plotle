@@ -893,7 +893,7 @@ shorthand.astReturn =
 /*
 | Shorthand for creating string literals.
 */
-shorthand.astString =
+shorthand.$string =
 	function(
 		string
 	)
