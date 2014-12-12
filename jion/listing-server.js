@@ -55,7 +55,7 @@ module.exports =
 			'src/ast/block.js',
 			'src/ast/boolean.js',
 			'src/ast/call.js',
-			'src/ast/ast-case.js',
+			'src/ast/case.js',
 			'src/ast/ast-check.js',
 			'src/ast/ast-comma-list.js',
 			'src/ast/ast-comment.js',

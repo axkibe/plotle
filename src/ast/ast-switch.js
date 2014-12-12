@@ -38,9 +38,7 @@ if( JION )
 					}
 			},
 		ray :
-			[
-				'ast_astCase'
-			]
+			[ 'ast_case' ]
 	};
 }
 
@@ -57,7 +55,7 @@ ast_switch = require( '../jion/this' )( module );
 
 ast_block = require( './block' );
 
-ast_case = require( './ast-case' );
+ast_case = require( './case' );
 
 jools = require( '../jools/jools' ),
 
@@ -67,7 +65,7 @@ tools = require( './tools' ),
 /*
 | Shortcut for appending a case to this switch.
 */
-ast_switch.prototype.astCase =
+ast_switch.prototype.$case =
 	function(
 		coc,   // case_or_condition,
 		code   // block or expression
@@ -86,7 +84,7 @@ ast_switch.prototype.astCase =
 		block = ast_block.create( ).append( tools.convert( code ) );
 	}
 
-	if( coc.reflect !== 'ast_astCase' )
+	if( coc.reflect !== 'ast_case' )
 	{
 		caseExpr =
 			ast_case.create(

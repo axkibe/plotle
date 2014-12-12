@@ -17,8 +17,8 @@ var
 */
 var
 	jools,
-	ast_astCase,
 	ast_block,
+	ast_case,
 	jion_proto;
 
 
@@ -37,9 +37,9 @@ if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
 
-	ast_astCase = require( '../../src/ast/ast-case' );
-
 	ast_block = require( '../../src/ast/block' );
+
+	ast_case = require( '../../src/ast/case' );
 
 	jion_proto = require( '../../src/jion/proto' );
 }

@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astCase;
+	ast_case;
 
 
 /*
@@ -86,7 +86,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astCase =
+ast_case =
 	{
 		prototype :
 			prototype
@@ -95,14 +95,14 @@ ast_astCase =
 
 if( SERVER )
 {
-	module.exports = ast_astCase;
+	module.exports = ast_case;
 }
 
 
 /*
-| Creates a new astCase object.
+| Creates a new case object.
 */
-ast_astCase.create =
+ast_case.create =
 prototype.create =
 	function(
 		// free strings
@@ -117,7 +117,7 @@ prototype.create =
 		rayDup,
 		v_block;
 
-	if( this !== ast_astCase )
+	if( this !== ast_case )
 	{
 		inherit = this;
 
@@ -252,13 +252,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astCase';
+prototype.reflect = 'ast_case';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astCase';
+prototype.reflectName = 'case';
 
 
 /*

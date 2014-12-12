@@ -1069,7 +1069,7 @@ generator.prototype.genCreatorFreeStringsParser =
 
 		switchExpr =
 			switchExpr
-			.astCase(
+			.$case(
 				$string( name ),
 				astIf(
 					'arg !== undefined',
@@ -1092,7 +1092,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		// FIXME make a sub-function to add the twigDup stuff
 		switchExpr =
 			switchExpr
-			.astCase(
+			.$case(
 				'"twig:add"',
 				$block( )
 				.ast( twigDupCheck )
@@ -1105,7 +1105,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				.ast( 'twig[ key ] = arg' )
 				.ast( 'ranks.push( key )' )
 			)
-			.astCase(
+			.$case(
 				'"twig:set"',
 				$block( )
 				.ast( twigDupCheck )
@@ -1117,7 +1117,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				)
 				.ast( 'twig[ key ] = arg' )
 			)
-			.astCase(
+			.$case(
 				'"twig:insert"',
 				$block( )
 				.append( twigDupCheck )
@@ -1136,7 +1136,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				.ast( 'twig[ key ] = arg' )
 				.ast( 'ranks.splice( rank, 0, key )' )
 			)
-			.astCase(
+			.$case(
 				'"twig:remove"',
 				$block( )
 				.append( twigDupCheck )
@@ -1162,31 +1162,31 @@ generator.prototype.genCreatorFreeStringsParser =
 		// FIXME make a sub-function to add the twigDup stuff
 		switchExpr =
 			switchExpr
-			.astCase(
+			.$case(
 				'"ray:init"',
 				$block( )
 				.ast( 'ray = arg' )
 				.ast( 'rayDup = "init"' )
 			)
-			.astCase(
+			.$case(
 				'"ray:append"',
 				$block( )
 				.append( rayDupCheck )
 				.ast( 'ray.push( arg )' )
 			)
-			.astCase(
+			.$case(
 				'"ray:insert"',
 				$block( )
 				.append( rayDupCheck )
 				.ast( 'ray.splice( arg, 0, arguments[ ++a + 1 ] )' )
 			)
-			.astCase(
+			.$case(
 				'"ray:remove"',
 				$block( )
 				.append( rayDupCheck )
 				.ast( 'ray.splice( arg, 1 ) ' )
 			)
-			.astCase(
+			.$case(
 				'"ray:set"',
 				$block( )
 				.append( rayDupCheck )
@@ -1950,7 +1950,7 @@ generator.prototype.genFromJSONCreatorParser =
 
 	nameSwitch =
 		astSwitch( 'name' )
-		.astCase(
+		.$case(
 			'"type"',
 			astIf(
 				astDiffers( 'arg', this.id.astString ),
@@ -1962,15 +1962,15 @@ generator.prototype.genFromJSONCreatorParser =
 	{
 		nameSwitch =
 			nameSwitch
-			.astCase( '"twig"', 'jwig = arg' )
-			.astCase( '"ranks"', 'ranks = arg' );
+			.$case( '"twig"', 'jwig = arg' )
+			.$case( '"ranks"', 'ranks = arg' );
 	}
 
 	if( this.ray )
 	{
 		nameSwitch =
 			nameSwitch
-			.astCase( '"ray"', 'jray = arg' );
+			.$case( '"ray"', 'jray = arg' );
 	}
 
 	for(
@@ -2031,7 +2031,7 @@ generator.prototype.genFromJSONCreatorParser =
 					{
 						attrCode =
 							attrCode
-							.astCase(
+							.$case(
 								attr.id[ t ].astString,
 								$assign(
 									attr.v,
@@ -2048,7 +2048,7 @@ generator.prototype.genFromJSONCreatorParser =
 
 		nameSwitch =
 			nameSwitch
-			.astCase(
+			.$case(
 				$string( attr.name ),
 				attrCode
 			);
@@ -2104,7 +2104,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 
 		loopSwitch =
 			loopSwitch
-			.astCase(
+			.$case(
 				rid.astString,
 				$assign(
 					'ray[ r ]',
@@ -2159,7 +2159,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 
 		switchExpr =
 			switchExpr
-			.astCase(
+			.$case(
 				twigID.astString,
 				$assign(
 					'twig[ key ]',
