@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astCommaList',
+			'ast_commaList',
 		ray :
 			// '->expression' FUTURE
 			[ ]
@@ -27,12 +27,12 @@ if( JION )
 
 var
 	ast_assign,
-	astCommaList,
+	ast_commaList,
 	jools,
 	tools;
 
 
-astCommaList = require( '../jion/this' )( module );
+ast_commaList = require( '../jion/this' )( module );
 
 ast_assign = require( './assign' );
 
@@ -44,7 +44,7 @@ tools = require( './tools' );
 /*
 | Returns the list with an assignment appended.
 */
-astCommaList.prototype.$assign =
+ast_commaList.prototype.$assign =
 	function(
 		left,
 		right

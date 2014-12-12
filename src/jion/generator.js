@@ -44,7 +44,7 @@ var
 	$call,
 	astCapsule,
 	$check,
-	astCommaList,
+	$commaList,
 	astComment,
 	astCondition,
 	astDiffers,
@@ -107,7 +107,7 @@ astCapsule = shorthand.astCapsule;
 
 $check = shorthand.$check;
 
-astCommaList = shorthand.astCommaList;
+$commaList = shorthand.$commaList;
 
 astComment = shorthand.astComment;
 
@@ -1210,7 +1210,7 @@ generator.prototype.genCreatorFreeStringsParser =
 	block =
 		block
 		.astFor(
-			astCommaList( )
+			$commaList( )
 			.$assign( 'a', 0 )
 			.$assign( 'aZ', 'arguments.length' ),
 			'a < aZ',
@@ -2119,7 +2119,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	block =
 		block
 		.astFor(
-			astCommaList( )
+			$commaList( )
 			.$assign( 'r', 0 )
 			.$assign( 'rZ', 'jray.length' ),
 			'r < rZ',
@@ -2197,7 +2197,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 			astFail( )
 		)
 		.astFor(
-			astCommaList( )
+			$commaList( )
 			.$assign( 'a', 0 )
 			.$assign( 'aZ', 'ranks.length' ),
 			'a < aZ',
@@ -2706,8 +2706,8 @@ generator.prototype.genEquals =
 				astReturnFalse
 			)
 			.astFor(
-				astCommaList( )
-				.$assign( 'a', 0 ) // FIXME ast() 
+				$commaList( )
+				.$assign( 'a', 0 ) // FIXME ast()
 				.$assign( 'aZ', 'this.ranks.length' ), // FIXME ast()
 				'a < aZ',
 				'++a',

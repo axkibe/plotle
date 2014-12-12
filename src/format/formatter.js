@@ -40,7 +40,7 @@ precTable =
 		'ast_assign' : 17,
 		'ast_boolean' : -1,
 		'ast_call' : 2,
-		'astCommaList' : 18,
+		'ast_commaList' : 18,
 		'astCondition' : 15,
 		'astDelete' : 4,
 		'astDiffers' : 9,
@@ -2239,7 +2239,7 @@ formatCommaList =
 			+ formatExpression(
 				context.inc,
 				list.get( a ),
-				precTable.astCommaList
+				precTable.ast_commaList
 			);
 	}
 
@@ -2275,7 +2275,7 @@ exprFormatter =
 		'ast_assign' : formatAssign,
 		'ast_boolean' : formatBoolean,
 		'ast_call' : formatCall,
-		'astCommaList' : formatCommaList,
+		'ast_commaList' : formatCommaList,
 		'astCondition' : formatCondition,
 		'astDelete' : formatDelete,
 		'astDiffers' : formatDiffers,

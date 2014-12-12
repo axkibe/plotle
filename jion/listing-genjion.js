@@ -19,7 +19,7 @@ module.exports =
 			'src/ast/call.js',
 			'src/ast/case.js',
 			'src/ast/check.js',
-			'src/ast/ast-comma-list.js',
+			'src/ast/commaList.js',
 			'src/ast/ast-comment.js',
 			'src/ast/ast-condition.js',
 			'src/ast/ast-delete.js',

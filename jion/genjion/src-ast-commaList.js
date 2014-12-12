@@ -220,13 +220,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astCommaList';
+prototype.reflect = 'ast_commaList';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astCommaList';
+prototype.reflectName = 'commaList';
 
 
 /*
