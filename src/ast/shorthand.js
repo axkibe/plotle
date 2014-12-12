@@ -19,7 +19,7 @@ module.exports =
 
 
 var
-	astAnd,
+	ast_and,
 	astArrayLiteral,
 	ast_assign,
 	ast_block,
@@ -63,7 +63,7 @@ var
 	tools;
 
 
-astAnd = require( './ast-and' );
+ast_and = require( './and' );
 
 astArrayLiteral = require( './ast-array-literal' );
 
@@ -191,32 +191,17 @@ shorthand.astAnd =
 		args.splice(
 			0,
 			2,
-			astAnd.create(
-				'left',
-					left,
-				'right',
-					right
-			)
+			ast_and.create( 'left', left, 'right', right )
 		);
 
-		return(
-			shorthand.astAnd.apply(
-				this,
-				args
-			)
-		);
+		return shorthand.astAnd.apply( this, args );
 	}
 
 	left = tools.convert( left );
 
 	right = tools.convert( right );
 
-	return(
-		astAnd.create(
-			'left', left,
-			'right', right
-		)
-	);
+	return ast_and.create( 'left', left, 'right', right );
 };
 
 

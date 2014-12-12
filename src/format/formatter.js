@@ -35,7 +35,7 @@ format_context = require( './context' );
 var
 precTable =
 	{
-		'astAnd' : 13,
+		'ast_and' : 13,
 		'astArrayLiteral' : -1,
 		'astAssign' : 17,
 		'astBoolean' : -1,
@@ -97,7 +97,7 @@ formatAnd =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astAnd' )
+/**/	if( expr.reflect !== 'ast_and' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -107,7 +107,7 @@ formatAnd =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.astAnd
+			precTable.ast_and
 		)
 		+ context.sep
 		+ context.tab
@@ -116,7 +116,7 @@ formatAnd =
 		+ formatExpression(
 			context,
 			expr.right,
-			precTable.astAnd
+			precTable.ast_and
 		);
 
 	return text;
@@ -1447,14 +1447,15 @@ formatExpression =
 		subtext,
 		text;
 
-	prec = precTable[ expr.reflectName ];
+	// FIXME remove reflectName
+	prec = precTable[ expr.reflectName ] || precTable[ expr.reflect ];
 
 	if( prec === undefined )
 	{
 		throw new Error( expr.reflectName );
 	}
 
-	formatter = exprFormatter[ expr.reflectName ];
+	formatter = exprFormatter[ expr.reflectName ] || exprFormatter[ expr.reflect ];
 
 	if( !formatter )
 	{
@@ -2269,62 +2270,34 @@ format_formatter.format =
 var
 exprFormatter =
 	{
-		'astAnd' :
-			formatAnd,
-		'astArrayLiteral' :
-			formatArrayLiteral,
-		'astAssign' :
-			formatAssign,
-		'astBoolean' :
-			formatBoolean,
-		'astCall' :
-			formatCall,
-		'astCommaList' :
-			formatCommaList,
-		'astCondition' :
-			formatCondition,
-		'astDelete' :
-			formatDelete,
-		'astDiffers' :
-			formatDiffers,
-		'astDot' :
-			formatDot,
-		'astEquals' :
-			formatEquals,
-		'astFunc' :
-			formatFunc,
-		'astGreaterThan' :
-			formatGreaterThan,
-		'astInstanceof' :
-			formatInstanceof,
-		'astLessThan' :
-			formatLessThan,
-		'astMember' :
-			formatMember,
-		'astNew' :
-			formatNew,
-		'astNot' :
-			formatNot,
-		'astNull' :
-			formatNull,
-		'astNumber' :
-			formatNumber,
-		'astObjLiteral' :
-			formatObjLiteral,
-		'astOr' :
-			formatOr,
-		'astPlus' :
-			formatPlus,
-		'astPlusAssign' :
-			formatPlusAssign,
-		'astPreIncrement' :
-			formatPreIncrement,
-		'astString' :
-			formatString,
-		'astTypeof' :
-			formatTypeof,
-		'astVar' :
-			formatVar
+		'ast_and' : formatAnd,
+		'astArrayLiteral' : formatArrayLiteral,
+		'astAssign' : formatAssign,
+		'astBoolean' : formatBoolean,
+		'astCall' : formatCall,
+		'astCommaList' : formatCommaList,
+		'astCondition' : formatCondition,
+		'astDelete' : formatDelete,
+		'astDiffers' : formatDiffers,
+		'astDot' : formatDot,
+		'astEquals' : formatEquals,
+		'astFunc' : formatFunc,
+		'astGreaterThan' : formatGreaterThan,
+		'astInstanceof' : formatInstanceof,
+		'astLessThan' : formatLessThan,
+		'astMember' : formatMember,
+		'astNew' : formatNew,
+		'astNot' : formatNot,
+		'astNull' : formatNull,
+		'astNumber' : formatNumber,
+		'astObjLiteral' : formatObjLiteral,
+		'astOr' : formatOr,
+		'astPlus' : formatPlus,
+		'astPlusAssign' : formatPlusAssign,
+		'astPreIncrement' : formatPreIncrement,
+		'astString' : formatString,
+		'astTypeof' : formatTypeof,
+		'astVar' : formatVar
 	};
 
 

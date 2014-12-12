@@ -49,7 +49,7 @@ module.exports =
 			'src/server/inventory.js',
 
 			// built-in genjion
-			'src/ast/ast-and.js',
+			'src/ast/and.js',
 			'src/ast/ast-array-literal.js',
 			'src/ast/ast-assign.js',
 			'src/ast/ast-block.js',

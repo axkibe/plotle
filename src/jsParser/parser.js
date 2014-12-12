@@ -62,7 +62,7 @@ var
 	tokenSpecs;
 
 
-ast_and = require( '../ast/ast-and' );
+ast_and = require( '../ast/and' );
 
 ast_arrayLiteral = require( '../ast/ast-array-literal' );
 

@@ -38,7 +38,7 @@ if( JION )
 
 var
 	ast,
-	astAnd,
+	_and,
 	astAssign,
 	astBlock,
 	astCall,
@@ -95,7 +95,7 @@ validator = require( './validator' );
 */
 ast = shorthand.ast;
 
-astAnd = shorthand.astAnd;
+_and = shorthand.astAnd;
 
 astAssign = shorthand.astAssign;
 
@@ -1300,7 +1300,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 		case 'String' :
 
 			return(
-				astAnd(
+				_and(
 					astDiffers( astTypeof( avar ), '"string"' ),
 					astNot( astInstanceof( avar, 'String' ) )
 				)
@@ -1348,7 +1348,7 @@ generator.prototype.genTypeCheckFailCondition =
 	}
 
 	return(
-		astAnd.apply( astOr, condArray )
+		_and.apply( astOr, condArray )
 	);
 };
 
@@ -1432,7 +1432,7 @@ generator.prototype.genCreatorChecks =
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				astAnd(
+				_and(
 					astDiffers( av, null ),
 					astDiffers( av, undefined )
 				);
@@ -1647,12 +1647,12 @@ generator.prototype.genCreatorUnchanged =
 
 	if( this.twig )
 	{
-		cond = astAnd( cond, 'twigDup === false' );
+		cond = _and( cond, 'twigDup === false' );
 	}
 
 	if( this.ray )
 	{
-		cond = astAnd( cond, '!rayDup' );
+		cond = _and( cond, '!rayDup' );
 	}
 
 	for(
@@ -1667,7 +1667,7 @@ generator.prototype.genCreatorUnchanged =
 
 		if( attr.assign === null )
 		{
-			cond = astAnd( cond, astEquals( attr.v, null ) );
+			cond = _and( cond, astEquals( attr.v, null ) );
 
 			continue;
 		}
@@ -1715,10 +1715,7 @@ generator.prototype.genCreatorUnchanged =
 								attr.v,
 								astVar( 'inherit' ).astDot( attr.assign )
 							),
-							astAnd(
-								attr.v,
-								equalsCall
-							)
+							_and( attr.v, equalsCall )
 						);
 				}
 				else if( attr.allowsUndefined )
@@ -1729,10 +1726,7 @@ generator.prototype.genCreatorUnchanged =
 								attr.v,
 								astVar( 'inherit' ).astDot( attr.assign )
 							),
-							astAnd(
-								attr.v,
-								equalsCall
-							)
+							_and( attr.v, equalsCall )
 						);
 				}
 				else
@@ -1741,7 +1735,7 @@ generator.prototype.genCreatorUnchanged =
 				}
 		}
 
-		cond = astAnd( cond, ceq );
+		cond = _and( cond, ceq );
 	}
 
 	block =
@@ -2586,7 +2580,7 @@ generator.prototype.genAttributeEquals =
 				ceq =
 					astOr(
 						astEquals( le, re ),
-						astAnd(
+						_and(
 							astDiffers( le, null ),
 							astCall( le.astDot( 'equals' ), re )
 						)
@@ -2597,7 +2591,7 @@ generator.prototype.genAttributeEquals =
 				ceq =
 					astOr(
 						astEquals( le, re ),
-						astAnd(
+						_and(
 							astDiffers( le, undefined ),
 							astCall( le.astDot( 'equals' ), re )
 						)
@@ -2762,7 +2756,7 @@ generator.prototype.genEquals =
 		cond =
 			cond === null
 			? ceq
-			: astAnd( cond, ceq );
+			: _and( cond, ceq );
 	}
 
 	if( cond )
@@ -2833,7 +2827,7 @@ generator.prototype.genAlike =
 		{
 			// FIXME same test as in equals
 			cond =
-				astAnd(
+				_and(
 					'this.tree === obj.tree',
 					'this.ranks === obj.ranks'
 				);
@@ -2868,7 +2862,7 @@ generator.prototype.genAlike =
 			cond =
 				cond === null
 				? ceq
-				: astAnd( cond, ceq );
+				: _and( cond, ceq );
 		}
 
 		block = block.astReturn( cond );
