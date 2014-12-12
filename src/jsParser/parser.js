@@ -100,7 +100,7 @@ ast_var = require( '../ast/ast-var' );
 
 jools = require( '../jools/jools' );
 
-lexer = require( '../js-lexer/lexer' );
+lexer = require( '../jsLexer/lexer' );
 
 state = require( './state' );
 

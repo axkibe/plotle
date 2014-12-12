@@ -35,7 +35,7 @@ astVar = require( './ast-var' );
 
 jools = require( '../jools/jools' );
 
-parser = require( '../js-parser/parser' );
+parser = require( '../jsParser/parser' );
 
 shorthand = require( './shorthand' );
 

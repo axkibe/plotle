@@ -34,7 +34,7 @@ GLOBAL.jools = require( '../jools/jools' );
 
 GLOBAL.ast_tools = require( '../ast/tools' );
 
-GLOBAL.parser = require( '../js-parser/parser' );
+GLOBAL.parser = require( '../jsParser/parser' );
 
 GLOBAL.parse = GLOBAL.parser.parse;
 
