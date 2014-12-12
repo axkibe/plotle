@@ -77,11 +77,6 @@ jion_id.createFromString =
 	var
 		split;
 
-	if( string.indexOf( '.' ) >= 0 )
-	{
-		throw new Error( string ); // FIXME remove
-	}
-
 	split = string.split( '_' );
 
 	if( split.length <= 1 )
@@ -160,26 +155,6 @@ jools.lazyValue(
 	{
 		if( this.unit )
 		{
-			return this.unit + '.' + this.name;
-		}
-		else
-		{
-			return this.name;
-		}
-	}
-);
-
-
-/*
-| This id as string in new underscore format.
-*/
-jools.lazyValue(
-	jion_id.prototype,
-	'string_',
-	function( )
-	{
-		if( this.unit )
-		{
 			return this.unit + '_' + this.name;
 		}
 		else
@@ -188,6 +163,7 @@ jools.lazyValue(
 		}
 	}
 );
+
 
 /*
 | This id as astString
@@ -201,18 +177,6 @@ jools.lazyValue(
 	}
 );
 
-
-/*
-| This id as astString in new underscore forrmat.
-*/
-jools.lazyValue(
-	jion_id.prototype,
-	'astString_',
-	function( )
-	{
-		return shorthand.$string( this.string_ );
-	}
-);
 
 
 /*

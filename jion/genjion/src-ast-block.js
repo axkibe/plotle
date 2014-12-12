@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astBlock;
+	ast_block;
 
 
 /*
@@ -80,7 +80,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astBlock =
+ast_block =
 	{
 		prototype :
 			prototype
@@ -89,14 +89,14 @@ ast_astBlock =
 
 if( SERVER )
 {
-	module.exports = ast_astBlock;
+	module.exports = ast_block;
 }
 
 
 /*
-| Creates a new astBlock object.
+| Creates a new block object.
 */
-ast_astBlock.create =
+ast_block.create =
 prototype.create =
 	function(
 		// free strings
@@ -110,7 +110,7 @@ prototype.create =
 		ray,
 		rayDup;
 
-	if( this !== ast_astBlock )
+	if( this !== ast_block )
 	{
 		inherit = this;
 
@@ -220,13 +220,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astBlock';
+prototype.reflect = 'ast_block';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astBlock';
+prototype.reflectName = 'block';
 
 
 /*

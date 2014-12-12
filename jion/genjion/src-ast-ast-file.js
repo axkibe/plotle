@@ -17,8 +17,8 @@ var
 */
 var
 	jools,
-	ast_astBlock,
 	ast_astComment,
+	ast_block,
 	jion_proto;
 
 
@@ -37,9 +37,9 @@ if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
 
-	ast_astBlock = require( '../../src/ast/ast-block' );
-
 	ast_astComment = require( '../../src/ast/ast-comment' );
+
+	ast_block = require( '../../src/ast/block' );
 
 	jion_proto = require( '../../src/jion/proto' );
 }
@@ -242,7 +242,7 @@ prototype.create =
 /**/
 /**/	if( v_capsule !== null )
 /**/	{
-/**/		if( v_capsule.reflect !== 'ast_astBlock' )
+/**/		if( v_capsule.reflect !== 'ast_block' )
 /**/		{
 /**/			throw new Error( );
 /**/		}
@@ -298,7 +298,7 @@ prototype.create =
 /**/
 /**/	if( v_preamble !== null )
 /**/	{
-/**/		if( v_preamble.reflect !== 'ast_astBlock' )
+/**/		if( v_preamble.reflect !== 'ast_block' )
 /**/		{
 /**/			throw new Error( );
 /**/		}

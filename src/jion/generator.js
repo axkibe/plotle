@@ -40,7 +40,7 @@ var
 	ast,
 	$and,
 	$assign,
-	astBlock,
+	$block,
 	astCall,
 	astCapsule,
 	astCheck,
@@ -99,7 +99,7 @@ $and = shorthand.$and;
 
 $assign = shorthand.$assign;
 
-astBlock = shorthand.astBlock;
+$block = shorthand.$block;
 
 astCall = shorthand.astCall;
 
@@ -554,7 +554,7 @@ generator.prototype.genNodeIncludes =
 	capsule = capsule.astComment( 'Node includes.' );
 
 	block =
-		astBlock( )
+		$block( )
 		.ast( 'jools = require( "../../src/jools/jools" )' );
 
 	// generates the unit objects
@@ -627,7 +627,7 @@ generator.prototype.genConstructor =
 		.astComment( 'Constructor.' );
 
 	block =
-		astBlock( )
+		$block( )
 		.astCheck(
 			astIf(
 				'prototype.__lazy',
@@ -727,7 +727,7 @@ generator.prototype.genConstructor =
 
 
 	// immutes the new object
-	freezeBlock = astBlock( );
+	freezeBlock = $block( );
 
 	if( this.twig )
 	{
@@ -960,7 +960,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 		name,
 		receiver;
 
-	receiver = astBlock( ).ast( 'inherit = this' );
+	receiver = $block( ).ast( 'inherit = this' );
 
 	if( this.twig )
 	{
@@ -1013,7 +1013,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 		thisCheck =
 			thisCheck
 			.astElsewise(
-				astBlock( )
+				$block( )
 				.$assign( 'twig', astObjLiteral( ) )
 				.ast( 'ranks = [ ]' )
 				.ast( 'twigDup = true' )
@@ -1025,7 +1025,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 		thisCheck =
 			thisCheck
 			.astElsewise(
-				astBlock( )
+				$block( )
 				.ast( 'ray = [ ]' )
 				.ast( 'rayDup = true' )
 			);
@@ -1052,7 +1052,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		twigDupCheck;
 
 	loop =
-		astBlock( )
+		$block( )
 		.$assign( 'arg', 'arguments[ a + 1 ]' );
 
 	switchExpr = astSwitch( 'arguments[ a ]' );
@@ -1083,7 +1083,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		twigDupCheck =
 			astIf(
 				'twigDup !== true',
-				astBlock( )
+				$block( )
 				.ast( 'twig = jools.copy( twig )' )
 				.ast( 'ranks = ranks.slice( )' )
 				.ast( 'twigDup = true' )
@@ -1094,7 +1094,7 @@ generator.prototype.genCreatorFreeStringsParser =
 			switchExpr
 			.astCase(
 				'"twig:add"',
-				astBlock( )
+				$block( )
 				.ast( twigDupCheck )
 				.ast( 'key = arg' )
 				.ast( 'arg = arguments[ ++a + 1 ]' )
@@ -1107,7 +1107,7 @@ generator.prototype.genCreatorFreeStringsParser =
 			)
 			.astCase(
 				'"twig:set"',
-				astBlock( )
+				$block( )
 				.ast( twigDupCheck )
 				.ast( 'key = arg' )
 				.ast( 'arg = arguments[ ++a + 1 ]' )
@@ -1119,7 +1119,7 @@ generator.prototype.genCreatorFreeStringsParser =
 			)
 			.astCase(
 				'"twig:insert"',
-				astBlock( )
+				$block( )
 				.append( twigDupCheck )
 				.ast( 'key = arg' )
 				.ast( 'rank = arguments[ a + 2 ]' )
@@ -1138,7 +1138,7 @@ generator.prototype.genCreatorFreeStringsParser =
 			)
 			.astCase(
 				'"twig:remove"',
-				astBlock( )
+				$block( )
 				.append( twigDupCheck )
 				.astIf(
 					'twig[ arg ] === undefined',
@@ -1154,7 +1154,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		rayDupCheck =
 			astIf(
 				'!rayDup',
-				astBlock( )
+				$block( )
 				.ast( 'ray = ray.slice( )' )
 				.ast( 'rayDup = true' )
 			);
@@ -1164,31 +1164,31 @@ generator.prototype.genCreatorFreeStringsParser =
 			switchExpr
 			.astCase(
 				'"ray:init"',
-				astBlock( )
+				$block( )
 				.ast( 'ray = arg' )
 				.ast( 'rayDup = "init"' )
 			)
 			.astCase(
 				'"ray:append"',
-				astBlock( )
+				$block( )
 				.append( rayDupCheck )
 				.ast( 'ray.push( arg )' )
 			)
 			.astCase(
 				'"ray:insert"',
-				astBlock( )
+				$block( )
 				.append( rayDupCheck )
 				.ast( 'ray.splice( arg, 0, arguments[ ++a + 1 ] )' )
 			)
 			.astCase(
 				'"ray:remove"',
-				astBlock( )
+				$block( )
 				.append( rayDupCheck )
 				.ast( 'ray.splice( arg, 1 ) ' )
 			)
 			.astCase(
 				'"ray:set"',
-				astBlock( )
+				$block( )
 				.append( rayDupCheck )
 				.ast( 'ray[ arg ] = arguments[ ++a + 1 ]' )
 			);
@@ -1197,9 +1197,9 @@ generator.prototype.genCreatorFreeStringsParser =
 	switchExpr =
 		switchExpr
 		.astDefault(
-			astBlock( )
+			$block( )
 			.astCheck(
-				astBlock( )
+				$block( )
 				//.astFail( 'invalid argument' )
 				.astFail( )
 			)
@@ -1308,7 +1308,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		default :
 
-			return astDiffers( avar.astDot( 'reflect' ), id.astString_ );
+			return astDiffers( avar.astDot( 'reflect' ), id.astString );
 	}
 };
 
@@ -1375,7 +1375,7 @@ generator.prototype.genCreatorChecks =
 
 	if( checkin )
 	{
-		check = astBlock( );
+		check = $block( );
 	}
 	else
 	{
@@ -1828,7 +1828,7 @@ generator.prototype.genCreator =
 			'Creates a new ' + this.id.name + ' object.'
 		);
 
-	block = astBlock( );
+	block = $block( );
 
 	block = this.genCreatorVariables( block );
 
@@ -1957,7 +1957,7 @@ generator.prototype.genFromJSONCreatorParser =
 		.astCase(
 			'"type"',
 			astIf(
-				astDiffers( 'arg', this.id.astString_ ),
+				astDiffers( 'arg', this.id.astString ),
 				astFail( )
 			)
 		);
@@ -2036,7 +2036,7 @@ generator.prototype.genFromJSONCreatorParser =
 						attrCode =
 							attrCode
 							.astCase(
-								attr.id[ t ].astString_,
+								attr.id[ t ].astString,
 								$assign(
 									attr.v,
 									astCall(
@@ -2063,7 +2063,7 @@ generator.prototype.genFromJSONCreatorParser =
 		.astForIn(
 			'name',
 			'json',
-			astBlock( )
+			$block( )
 			.ast( 'arg = json[ name ]' )
 			.append( nameSwitch )
 		);
@@ -2109,7 +2109,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 		loopSwitch =
 			loopSwitch
 			.astCase(
-				rid.astString_,
+				rid.astString,
 				$assign(
 					'ray[ r ]',
 					astCall(
@@ -2164,7 +2164,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		switchExpr =
 			switchExpr
 			.astCase(
-				twigID.astString_,
+				twigID.astString,
 				$assign(
 					'twig[ key ]',
 					astCall(
@@ -2183,7 +2183,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		);
 
 	loop =
-		astBlock( )
+		$block( )
 		.ast( 'key = ranks[ a ]' )
 		.astIf(
 			'!jwig[ key ]',
@@ -2326,7 +2326,7 @@ generator.prototype.genFromJSONCreator =
 			'Creates a new ' + this.id.name + ' object from JSON.'
 		);
 
-	funcBlock = this.genFromJSONCreatorVariables( astBlock( ) );
+	funcBlock = this.genFromJSONCreatorVariables( $block( ) );
 
 	funcBlock = this.genFromJSONCreatorParser( funcBlock, jsonList );
 
@@ -2369,7 +2369,7 @@ generator.prototype.genReflection =
 	capsule =
 		capsule
 		.astComment( 'Reflection.' )
-		.$assign( 'prototype.reflect', this.id.astString_ );
+		.$assign( 'prototype.reflect', this.id.astString );
 
 	capsule =
 		capsule
@@ -2471,11 +2471,11 @@ generator.prototype.genToJSON =
 		name,
 		olit;
 
-	block = astBlock( ).astVarDec( 'json' );
+	block = $block( ).astVarDec( 'json' );
 
 	olit =
 		astObjLiteral( )
-		.add( 'type', this.id.astString_ );
+		.add( 'type', this.id.astString );
 
 	for(
 		var a = 0, aZ = this.attrList.length;
@@ -2662,7 +2662,7 @@ generator.prototype.genEquals =
 		capsule
 		.astComment( 'Tests equality of object.' );
 
-	block = astBlock( );
+	block = $block( );
 
 	if( this.twig )
 	{
@@ -2681,7 +2681,7 @@ generator.prototype.genEquals =
 	if( this.twig )
 	{
 		twigTestLoopBody =
-			astBlock( )
+			$block( )
 			.ast( 'key = this.ranks[ a ]' )
 			.astIf(
 				astOr(
@@ -2704,7 +2704,7 @@ generator.prototype.genEquals =
 			);
 
 		twigTest =
-			astBlock( )
+			$block( )
 			.astIf(
 				'this.ranks.length !== obj.ranks.length',
 				astReturnFalse
@@ -2819,7 +2819,7 @@ generator.prototype.genAlike =
 		capsule = capsule.astComment( 'Tests partial equality.' );
 
 		block =
-			astBlock( )
+			$block( )
 			.astIf( 'this === obj', astReturnTrue )
 			.astIf( '!obj', astReturnFalse );
 
@@ -2924,7 +2924,7 @@ generator.prototype.genCapsule =
 	var
 		capsule;
 
-	capsule = astBlock( );
+	capsule = $block( );
 
 	capsule = capsule.append( $string( 'use strict' ) );
 
@@ -2987,40 +2987,8 @@ generator.generate =
 
 	gi = generator.create( 'jion', jion );
 
-	/*
-	if( skim )
-	{
-		file =
-			astFile( )
-			.create(
-				'jionID', gi.id.astString.string,
-				'hasJSON', gi.hasJSON
-			);
-
-	}
-	else
-	{
-		file =
-			astFile( )
-			.create(
-				'header',
-					astComment(
-						'This is an auto generated file.',
-						'',
-						'DO NOT EDIT!'
-					),
-				'preamble', gi.genPreamble( ),
-				'capsule', gi.genCapsule( ),
-				'jionID', gi.id.astString.string, // FIXME
-				'hasJSON', gi.hasJSON
-			);
-	}
-
-	return file;
-	*/
-
 	result =
-		astBlock( )
+		$block( )
 		.astComment(
 			'This is an auto generated file.',
 			'',

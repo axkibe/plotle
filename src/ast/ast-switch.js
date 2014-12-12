@@ -32,7 +32,7 @@ if( JION )
 						comment :
 							'the default block',
 						type :
-							'ast_astBlock',
+							'ast_block',
 						defaultValue :
 							null
 					}
@@ -55,7 +55,7 @@ var
 
 ast_switch = require( '../jion/this' )( module );
 
-ast_block = require( './ast-block' );
+ast_block = require( './block' );
 
 ast_case = require( './ast-case' );
 
@@ -77,7 +77,7 @@ ast_switch.prototype.astCase =
 		block,
 		caseExpr;
 
-	if( code.reflect === 'ast_astBlock' )
+	if( code.reflect === 'ast_block' )
 	{
 		block = code;
 	}
@@ -110,7 +110,7 @@ ast_switch.prototype.astDefault =
 	var
 		block;
 
-	if( code.reflect === 'ast_astBlock' )
+	if( code.reflect === 'ast_block' )
 	{
 		block = code;
 	}

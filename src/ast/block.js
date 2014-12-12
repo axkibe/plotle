@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astBlock',
+			'ast_block',
 		ray :
 			// '->statement' FUTURE
 			[ ]
@@ -26,7 +26,7 @@ if( JION )
 
 
 var
-	astBlock,
+	ast_block,
 	astComment,
 	astNew,
 	astPlusAssign,
@@ -36,7 +36,7 @@ var
 	tools;
 
 
-astBlock = require( '../jion/this' )( module );
+ast_block = require( '../jion/this' )( module );
 
 astComment = require( './ast-comment' );
 
@@ -56,7 +56,7 @@ tools = require( './tools' );
 /*
 | Returns the block with a parsed statement appended.
 */
-astBlock.prototype.ast =
+ast_block.prototype.ast =
 	function(
 		statement
 	)
@@ -70,7 +70,7 @@ astBlock.prototype.ast =
 | Returns the block with an assignment appended.
 | FUTURE use a shorthand
 */
-astBlock.prototype.$assign =
+ast_block.prototype.$assign =
 	function(
 		left,
 		right
@@ -92,7 +92,7 @@ astBlock.prototype.$assign =
 /*
 | Recreates the block with a call appended.
 */
-astBlock.prototype.astCall =
+ast_block.prototype.astCall =
 	function(
 		// func,
 		// args...
@@ -109,7 +109,7 @@ astBlock.prototype.astCall =
 /*
 | Returns the block with a check appended.
 */
-astBlock.prototype.astCheck =
+ast_block.prototype.astCheck =
 	function(
 		// block
 	)
@@ -125,7 +125,7 @@ astBlock.prototype.astCheck =
 /*
 | Returns the block with a comment appended.
 */
-astBlock.prototype.astComment =
+ast_block.prototype.astComment =
 	function(
 		header
 	)
@@ -147,7 +147,7 @@ astBlock.prototype.astComment =
 /*
 | Returns the block with a delete statement appended.
 */
-astBlock.prototype.astDelete =
+ast_block.prototype.astDelete =
 	function(
 		expr
 	)
@@ -160,7 +160,7 @@ astBlock.prototype.astDelete =
 /*
 | Returns the block with an if appended.
 */
-astBlock.prototype.astIf =
+ast_block.prototype.astIf =
 	function(
 		condition,
 		then,
@@ -178,7 +178,7 @@ astBlock.prototype.astIf =
 /*
 | Returns the block with a error throwing appended.
 */
-astBlock.prototype.astFail =
+ast_block.prototype.astFail =
 	function(
 		message
 	)
@@ -192,7 +192,7 @@ astBlock.prototype.astFail =
 |
 | FUTURE use a shorthand
 */
-astBlock.prototype.astFor =
+ast_block.prototype.astFor =
 	function(
 		init,
 		condition,
@@ -212,7 +212,7 @@ astBlock.prototype.astFor =
 | Returns the block with a for-in loop appended.
 | FUTURE use a shorthand
 */
-astBlock.prototype.astForIn =
+ast_block.prototype.astForIn =
 	function(
 		variable,
 		object,
@@ -229,7 +229,7 @@ astBlock.prototype.astForIn =
 /*
 | Shorthand for creating new calls.
 */
-astBlock.prototype.astNew =
+ast_block.prototype.astNew =
 	function(
 		call
 	)
@@ -246,7 +246,7 @@ astBlock.prototype.astNew =
 | Returns the block with a plus-assignment appended.
 | FUTURE use a shorthand
 */
-astBlock.prototype.astPlusAssign =
+ast_block.prototype.astPlusAssign =
 	function(
 		left,
 		right
@@ -263,7 +263,7 @@ astBlock.prototype.astPlusAssign =
 /*
 | Returns the block with a term appended.
 */
-astBlock.prototype.astReturn =
+ast_block.prototype.astReturn =
 	function(
 		expr
 	)
@@ -280,7 +280,7 @@ astBlock.prototype.astReturn =
 /*
 | Returns the block with a variable decleration appended.
 */
-astBlock.prototype.astVarDec =
+ast_block.prototype.astVarDec =
 	function(
 		// name,   // variable name
 		// assign  // variable assignment

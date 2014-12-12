@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'the for block',
 						type :
-							'ast_astBlock'
+							'ast_block'
 					}
 			}
 	};

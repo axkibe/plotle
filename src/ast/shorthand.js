@@ -69,7 +69,7 @@ ast_arrayLiteral = require( './arrayLiteral' );
 
 ast_assign = require( './assign' );
 
-ast_block = require( './ast-block' );
+ast_block = require( './block' );
 
 astBoolean = require( './ast-boolean' );
 
@@ -240,7 +240,7 @@ shorthand.$assign =
 /*
 | Shorthand for creating blocks.
 */
-shorthand.astBlock =
+shorthand.$block =
 	function( )
 {
 	return ast_block.create( );
@@ -257,7 +257,7 @@ shorthand.astCapsule =
 {
 	if(
 		block
-		&& block.reflect !== 'ast_astBlock'
+		&& block.reflect !== 'ast_block'
 	)
 	{
 		block = ast_block.create( ).append( block );
@@ -313,7 +313,7 @@ shorthand.astCheck =
 	if(
 		block
 		&&
-		block.reflect !== 'ast_astBlock'
+		block.reflect !== 'ast_block'
 	)
 	{
 		block = ast_block.create( ).append( block );
@@ -525,7 +525,7 @@ shorthand.astIf =
 	condition = tools.convert( condition );
 
 	if(
-		then.reflect !== 'ast_astBlock'
+		then.reflect !== 'ast_block'
 	)
 	{
 		then = ast_block.create( ).append( then );
@@ -534,7 +534,7 @@ shorthand.astIf =
 	if(
 		elsewise
 		&&
-		elsewise.reflect !== 'ast_astBlock'
+		elsewise.reflect !== 'ast_block'
 	)
 	{
 		elsewise = ast_block.create( ).append( elsewise );
@@ -571,7 +571,7 @@ shorthand.astFor =
 		block
 	)
 {
-	if( block.reflect !== 'ast_astBlock' )
+	if( block.reflect !== 'ast_block' )
 	{
 		block = ast_block.create( ).append( block );
 	}
@@ -603,7 +603,7 @@ shorthand.astForIn =
 		block
 	)
 {
-	if( block.reflect !== 'ast_astBlock' )
+	if( block.reflect !== 'ast_block' )
 	{
 		block = ast_block.create( ).append( block );
 	}
@@ -633,7 +633,7 @@ shorthand.astFunc =
 	if(
 		block
 		&&
-		block.reflect !== 'ast_astBlock'
+		block.reflect !== 'ast_block'
 	)
 	{
 		block = ast_block.create( ).append( block );

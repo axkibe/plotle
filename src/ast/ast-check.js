@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the code block',
 						type :
-							'ast_astBlock'
+							'ast_block'
 					}
 			}
 	};

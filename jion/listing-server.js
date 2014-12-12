@@ -52,7 +52,7 @@ module.exports =
 			'src/ast/and.js',
 			'src/ast/arrayLiteral.js',
 			'src/ast/assign.js',
-			'src/ast/ast-block.js',
+			'src/ast/block.js',
 			'src/ast/ast-boolean.js',
 			'src/ast/ast-call.js',
 			'src/ast/ast-case.js',

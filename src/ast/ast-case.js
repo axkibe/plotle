@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the statement',
 						type :
-							'ast_astBlock'
+							'ast_block'
 					}
 			},
 		// ray contains multiple alternatives for the same case block.

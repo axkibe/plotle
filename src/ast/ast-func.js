@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'function code',
 						type :
-							'ast_astBlock',
+							'ast_block',
 						defaultValue :
 							null
 					},

@@ -49,14 +49,11 @@ if( JION )
 
 
 var
-	astBlock,
 	astIf;
 
 astIf =
 module.exports =
 	require( '../jion/this' )( module );
-
-astBlock = require( './ast-block' );
 
 
 /*
