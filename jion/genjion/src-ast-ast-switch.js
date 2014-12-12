@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	ast;
-
-
-ast = ast || { };
-
-
-var
 	ast_astSwitch;
 
 
@@ -100,7 +93,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 ast_astSwitch =
-ast.astSwitch =
 	{
 		prototype :
 			prototype
@@ -302,12 +294,6 @@ prototype.create =
 
 /*
 | Reflection.
-*/
-prototype.reflect = 'ast_astSwitch';
-
-
-/*
-| Reflection_.
 */
 prototype.reflect = 'ast_astSwitch';
 

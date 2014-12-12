@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	ast;
-
-
-ast = ast || { };
-
-
-var
 	ast_astCase;
 
 
@@ -94,7 +87,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 ast_astCase =
-ast.astCase =
 	{
 		prototype :
 			prototype

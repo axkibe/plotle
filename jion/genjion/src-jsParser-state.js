@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	jsParser;
-
-
-jsParser = jsParser || { };
-
-
-var
 	jsParser_state;
 
 
@@ -95,7 +88,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 jsParser_state =
-jsParser.state =
 	{
 		prototype :
 			prototype

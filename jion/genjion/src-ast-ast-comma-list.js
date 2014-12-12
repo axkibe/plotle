@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	ast;
-
-
-ast = ast || { };
-
-
-var
 	ast_astCommaList;
 
 
@@ -88,7 +81,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 ast_astCommaList =
-ast.astCommaList =
 	{
 		prototype :
 			prototype

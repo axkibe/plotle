@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	jsLexer;
-
-
-jsLexer = jsLexer || { };
-
-
-var
 	jsLexer_token;
 
 
@@ -94,7 +87,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 jsLexer_token =
-jsLexer.token =
 	{
 		prototype :
 			prototype

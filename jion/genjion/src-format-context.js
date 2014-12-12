@@ -295,12 +295,6 @@ prototype.reflect = 'format_context';
 
 
 /*
-| Reflection_.
-*/
-prototype.reflect = 'format_context';
-
-
-/*
 | Name Reflection.
 */
 prototype.reflectName = 'context';

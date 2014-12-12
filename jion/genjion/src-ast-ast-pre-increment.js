@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	ast;
-
-
-ast = ast || { };
-
-
-var
 	ast_astPreIncrement;
 
 
@@ -86,7 +79,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 ast_astPreIncrement =
-ast.astPreIncrement =
 	{
 		prototype :
 			prototype

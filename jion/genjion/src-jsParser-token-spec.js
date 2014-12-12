@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	jsParser;
-
-
-jsParser = jsParser || { };
-
-
-var
 	jsParser_tokenSpec;
 
 
@@ -98,7 +91,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 jsParser_tokenSpec =
-jsParser.tokenSpec =
 	{
 		prototype :
 			prototype

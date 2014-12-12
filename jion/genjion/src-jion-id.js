@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	jion;
-
-
-jion = jion || { };
-
-
-var
 	jion_id;
 
 
@@ -97,7 +90,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 jion_id =
-jion.id =
 	{
 		prototype :
 			prototype

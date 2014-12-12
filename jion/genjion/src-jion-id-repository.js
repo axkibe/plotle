@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	jion;
-
-
-jion = jion || { };
-
-
-var
 	jion_idRepository;
 
 
@@ -97,7 +90,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 jion_idRepository =
-jion.idRepository =
 	{
 		prototype :
 			prototype
@@ -213,12 +205,6 @@ prototype.create =
 
 /*
 | Reflection.
-*/
-prototype.reflect = 'jion_idRepository';
-
-
-/*
-| Reflection_.
 */
 prototype.reflect = 'jion_idRepository';
 

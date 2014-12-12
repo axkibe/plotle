@@ -9,13 +9,6 @@
 | Export.
 */
 var
-	ast;
-
-
-ast = ast || { };
-
-
-var
 	ast_astNumber;
 
 
@@ -86,7 +79,6 @@ prototype = Constructor.prototype;
 | Jion.
 */
 ast_astNumber =
-ast.astNumber =
 	{
 		prototype :
 			prototype
@@ -179,12 +171,6 @@ prototype.create =
 
 /*
 | Reflection.
-*/
-prototype.reflect = 'ast_astNumber';
-
-
-/*
-| Reflection_.
 */
 prototype.reflect = 'ast_astNumber';
 

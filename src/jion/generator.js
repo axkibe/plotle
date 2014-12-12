@@ -35,28 +35,6 @@ if( JION )
 	};
 }
 
-/* FUTURE remove newlist when all done */
-var
-	newList;
-
-newList =
-	{
-		'actions' : true,
-		'ccot' : true,
-		'database' : true,
-		'design' : true,
-		'euclid' : true,
-		'format' : true,
-		'forms' : true,
-		'gruga' : true,
-		'marks' : true,
-		'net' : true,
-		'reply' : true,
-		'request' : true,
-		'widgets' : true
-	};
-
-
 
 var
 	ast,
@@ -876,13 +854,7 @@ generator.prototype.genConstructor =
 
 	capsule =
 		capsule
-		.astAssign(
-			this.id.global,
-			// FUTURE remove old style id.astVar unit.name syntax
-			!newList[ this.id.unit ]
-			? astAssign( ast( this.id.string ), jionObj )
-			: jionObj
-		);
+		.astAssign( this.id.global, jionObj );
 
 	capsule =
 		capsule
@@ -2922,20 +2894,6 @@ generator.prototype.genExport =
 	function( block )
 {
 	block = block.astComment( 'Export.' );
-
-	// FUTURE old style FIXME remove
-	if( !newList[ this.id.unit ] )
-	{
-		block =
-			block
-			.astVarDec( this.id.unit )
-			.astAssign(
-				astVar( this.id.unit ),
-				astOr( this.id.unit, astObjLiteral( ) )
-			);
-	}
-
-	// new style
 
 	block =
 		block
