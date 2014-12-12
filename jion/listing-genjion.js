@@ -54,9 +54,9 @@ module.exports =
 			'src/ast/ast-var-dec.js',
 
 			'src/format/context.js',
-			'src/js-lexer/token.js',
-			'src/js-parser/state.js',
-			'src/js-parser/token-spec.js',
+			'src/jsLexer/token.js',
+			'src/jsParser/state.js',
+			'src/jsParser/token-spec.js',
 			'src/jion/generator.js',
 			'src/jion/id.js',
 			'src/jion/id-repository.js'
