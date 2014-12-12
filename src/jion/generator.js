@@ -41,7 +41,7 @@ var
 	$and,
 	$assign,
 	$block,
-	astCall,
+	$call,
 	astCapsule,
 	astCheck,
 	astCommaList,
@@ -101,7 +101,7 @@ $assign = shorthand.$assign;
 
 $block = shorthand.$block;
 
-astCall = shorthand.astCall;
+$call = shorthand.$call;
 
 astCapsule = shorthand.astCapsule;
 
@@ -302,11 +302,11 @@ generator.prototype._init =
 			}
 			else if( jdv === false )
 			{
-				defaultValue = shorthand.astFalse;
+				defaultValue = shorthand.$false;
 			}
 			else if( jdv === true )
 			{
-				defaultValue = shorthand.astTrue;
+				defaultValue = shorthand.$true;
 			}
 			else if( typeof( jdv ) === 'number' )
 			{
@@ -583,7 +583,7 @@ generator.prototype.genNodeIncludes =
 				block
 				.$assign(
 					astVar( unitStr + '_' + name ),
-					astCall(
+					$call(
 						'require',
 						$string(
 							'../../src/'
@@ -832,7 +832,7 @@ generator.prototype.genConstructor =
 		capsule =
 			capsule
 			.astComment( 'Subclass.' )
-			.astCall(
+			.$call(
 				'jools.subclass',
 				'Constructor',
 				this.subclass
@@ -1289,7 +1289,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 			return(
 				astOr(
 					astDiffers( astTypeof( avar ), '"number"' ),
-					astDiffers( astCall( 'Math.floor', avar ), avar )
+					astDiffers( $call( 'Math.floor', avar ), avar )
 				)
 			);
 
@@ -1524,11 +1524,11 @@ generator.prototype.genCreatorConcerns =
 		{
 			if( id )
 			{
-				cExpr = astCall( id.astVar.astDot( func ) );
+				cExpr = $call( id.astVar.astDot( func ) );
 			}
 			else
 			{
-				cExpr = astCall( func );
+				cExpr = $call( func );
 			}
 
 			for(
@@ -1587,16 +1587,12 @@ generator.prototype.genCreatorConcerns =
 				}
 				else
 				{
-					cExpr =
-						attr.v.astDot( member );
+					cExpr = attr.v.astDot( member );
 				}
 			}
 			else
 			{
-				cExpr =
-					astCall(
-						attr.v.astDot( member )
-					);
+				cExpr = $call( attr.v.astDot( member ) );
 
 				for(
 					b = 0, bZ = args.length;
@@ -1695,7 +1691,7 @@ generator.prototype.genCreatorUnchanged =
 			default :
 
 				equalsCall =
-					astCall(
+					$call(
 						attr.v.astDot( 'equals' ),
 						astVar( 'inherit' ).astDot( attr.assign )
 					);
@@ -1776,7 +1772,7 @@ generator.prototype.genCreatorReturn =
 		);
 	}
 
-	call = astCall( 'Constructor' );
+	call = $call( 'Constructor' );
 
 	for(
 		var a = 0, aZ = this.constructorList.length;
@@ -2015,7 +2011,7 @@ generator.prototype.genFromJSONCreatorParser =
 					attrCode =
 						$assign(
 							attr.v,
-							astCall(
+							$call(
 								attr.id.astVar.astDot( 'createFromJSON' ),
 								'arg'
 							)
@@ -2039,7 +2035,7 @@ generator.prototype.genFromJSONCreatorParser =
 								attr.id[ t ].astString,
 								$assign(
 									attr.v,
-									astCall(
+									$call(
 										attr.id[ t ].astVar
 										.astDot( 'createFromJSON' ),
 										'arg'
@@ -2112,7 +2108,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 				rid.astString,
 				$assign(
 					'ray[ r ]',
-					astCall(
+					$call(
 						rid.astVar.astDot( 'createFromJSON' ),
 						'jray[ r ]'
 					)
@@ -2167,7 +2163,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 				twigID.astString,
 				$assign(
 					'twig[ key ]',
-					astCall(
+					$call(
 						twigID.astVar.astDot( 'createFromJSON' ),
 						'jval'
 					)
@@ -2526,7 +2522,7 @@ generator.prototype.genToJSON =
 	capsule =
 		capsule
 		.astComment( 'Converts a ' + this.id.name + ' into JSON.' )
-		.astCall(
+		.$call(
 			'jools.lazyValue',
 			'prototype',
 			'"toJSON"',
@@ -2582,7 +2578,7 @@ generator.prototype.genAttributeEquals =
 						astEquals( le, re ),
 						$and(
 							astDiffers( le, null ),
-							astCall( le.astDot( 'equals' ), re )
+							$call( le.astDot( 'equals' ), re )
 						)
 					);
 			}
@@ -2593,13 +2589,13 @@ generator.prototype.genAttributeEquals =
 						astEquals( le, re ),
 						$and(
 							astDiffers( le, undefined ),
-							astCall( le.astDot( 'equals' ), re )
+							$call( le.astDot( 'equals' ), re )
 						)
 					);
 			}
 			else
 			{
-				ceq = astCall( le.astDot( 'equals' ), re );
+				ceq = $call( le.astDot( 'equals' ), re );
 			}
 	}
 
@@ -2689,7 +2685,7 @@ generator.prototype.genEquals =
 					astCondition(
 						'this.twig[ key ].equals',
 						astNot(
-							astCall(
+							$call(
 								'this.twig[ key ].equals',
 								'obj.twig[ key ]'
 							)

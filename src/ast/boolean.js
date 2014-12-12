@@ -18,7 +18,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astBoolean',
+			'ast_boolean',
 		attributes :
 			{
 				'boolean' :
@@ -34,9 +34,9 @@ if( JION )
 
 
 var
-	astBoolean;
+	ast_boolean;
 
-astBoolean = require( '../jion/this' )( module );
+ast_boolean = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -49,7 +49,7 @@ astBoolean = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astBoolean.prototype.inspect =
+***/	ast_boolean.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

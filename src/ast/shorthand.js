@@ -23,8 +23,8 @@ var
 	ast_arrayLiteral,
 	ast_assign,
 	ast_block,
-	astBoolean,
-	astCall,
+	ast_boolean,
+	ast_call,
 	astCheck,
 	astCommaList,
 	astComment,
@@ -71,9 +71,9 @@ ast_assign = require( './assign' );
 
 ast_block = require( './block' );
 
-astBoolean = require( './ast-boolean' );
+ast_boolean = require( './boolean' );
 
-astCall = require( './ast-call' );
+ast_call = require( './call' );
 
 astCheck = require( './ast-check' );
 
@@ -249,6 +249,8 @@ shorthand.$block =
 
 /*
 | Shorthand for creating capsule function.
+|
+| FIXME used?
 */
 shorthand.astCapsule =
 	function(
@@ -264,7 +266,7 @@ shorthand.astCapsule =
 	}
 
 	return(
-		astCall.create(
+		ast_call.create(
 			'func',
 			astFunc.create(
 				'block', block || null,
@@ -278,7 +280,7 @@ shorthand.astCapsule =
 /*
 | Shorthand for creating calls.
 */
-shorthand.astCall =
+shorthand.$call =
 	function(
 		func
 		// args
@@ -287,7 +289,7 @@ shorthand.astCall =
 	var
 		call;
 
-	call = astCall.create( 'func', tools.convert( func ) );
+	call = ast_call.create( 'func', tools.convert( func ) );
 
 	for(
 		var a = 1, aZ = arguments.length;
@@ -442,7 +444,7 @@ shorthand.astEquals =
 /*
 | Shorthand for 'false' literals.
 */
-shorthand.astFalse = astBoolean.create( 'boolean', false );
+shorthand.$false = ast_boolean.create( 'boolean', false );
 
 
 /*
@@ -917,8 +919,7 @@ shorthand.astSwitch =
 /*
 | Shorthand for 'true' literals.
 */
-shorthand.astTrue =
-	astBoolean.create( 'boolean', true );
+shorthand.$true = ast_boolean.create( 'boolean', true );
 
 
 

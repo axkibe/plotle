@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astCall',
+			'ast_call',
 		attributes :
 			{
 				'func' :
@@ -35,12 +35,12 @@ if( JION )
 }
 
 var
-	astCall,
+	ast_call,
 	jools,
 	tools;
 
 
-astCall = require( '../jion/this' )( module );
+ast_call = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
@@ -50,7 +50,7 @@ tools = require( './tools' );
 /*
 | Returns a call with a parameter appended
 */
-astCall.prototype.addArgument =
+ast_call.prototype.addArgument =
 	function(
 		expr
 	)
@@ -71,7 +71,7 @@ astCall.prototype.addArgument =
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astCall.prototype.inspect =
+***/	ast_call.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

@@ -92,7 +92,7 @@ ast_block.prototype.$assign =
 /*
 | Recreates the block with a call appended.
 */
-ast_block.prototype.astCall =
+ast_block.prototype.$call =
 	function(
 		// func,
 		// args...
@@ -100,7 +100,7 @@ ast_block.prototype.astCall =
 {
 	return(
 		this.append(
-			shorthand.astCall.apply( shorthand, arguments )
+			shorthand.$call.apply( shorthand, arguments )
 		)
 	);
 };

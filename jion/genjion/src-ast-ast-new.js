@@ -17,7 +17,7 @@ var
 */
 var
 	jools,
-	ast_astCall,
+	ast_call,
 	jion_proto;
 
 
@@ -36,7 +36,7 @@ if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
 
-	ast_astCall = require( '../../src/ast/ast-call' );
+	ast_call = require( '../../src/ast/call' );
 
 	jion_proto = require( '../../src/jion/proto' );
 }
@@ -157,7 +157,7 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_call.reflect !== 'ast_astCall' )
+/**/	if( v_call.reflect !== 'ast_call' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

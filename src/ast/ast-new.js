@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the constrcutor call',
 						type :
-							'ast_astCall'
+							'ast_call'
 					},
 			}
 	};

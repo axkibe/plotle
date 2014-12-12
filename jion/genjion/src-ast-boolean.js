@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astBoolean;
+	ast_boolean;
 
 
 /*
@@ -78,7 +78,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astBoolean =
+ast_boolean =
 	{
 		prototype :
 			prototype
@@ -87,14 +87,14 @@ ast_astBoolean =
 
 if( SERVER )
 {
-	module.exports = ast_astBoolean;
+	module.exports = ast_boolean;
 }
 
 
 /*
-| Creates a new astBoolean object.
+| Creates a new boolean object.
 */
-ast_astBoolean.create =
+ast_boolean.create =
 prototype.create =
 	function(
 		// free strings
@@ -107,7 +107,7 @@ prototype.create =
 		inherit,
 		v_boolean;
 
-	if( this !== ast_astBoolean )
+	if( this !== ast_boolean )
 	{
 		inherit = this;
 
@@ -172,13 +172,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astBoolean';
+prototype.reflect = 'ast_boolean';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astBoolean';
+prototype.reflectName = 'boolean';
 
 
 /*

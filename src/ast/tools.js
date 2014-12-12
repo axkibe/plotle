@@ -69,12 +69,12 @@ tools.convert =
 
 	if( arg === true )
 	{
-		return shorthand.astTrue;
+		return shorthand.$true;
 	}
 
 	if( arg === false )
 	{
-		return shorthand.astFalse;
+		return shorthand.$false;
 	}
 
 	if( arg === undefined )

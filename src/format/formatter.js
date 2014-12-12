@@ -38,15 +38,15 @@ precTable =
 		'ast_and' : 13,
 		'ast_arrayLiteral' : -1,
 		'ast_assign' : 17,
-		'astBoolean' : -1,
-		'astCall' : 2,
+		'ast_boolean' : -1,
+		'ast_call' : 2,
 		'astCommaList' : 18,
 		'astCondition' : 15,
 		'astDelete' : 4,
 		'astDiffers' : 9,
 		'astDot' : 1,
 		'astEquals' : 9,
-		// this is random guess, must be larger than astCall
+		// this is random guess, must be larger than call
 		// so the capsule is generated right.
 		'astFunc' : 3,
 		'astGreaterThan' : 8,
@@ -1400,8 +1400,8 @@ formatStatement =
 			break;
 
 		case 'ast_assign' :
-		case 'ast_astBoolean' :
-		case 'ast_astCall' :
+		case 'ast_boolean' :
+		case 'ast_call' :
 		case 'ast_astDelete' :
 		case 'ast_astFail' :
 		case 'ast_astNew' :
@@ -1610,7 +1610,7 @@ formatBoolean =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astBoolean' )
+/**/	if( expr.reflect !== 'ast_boolean' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1644,7 +1644,7 @@ formatCall =
 
 /**/if( CHECK )
 /**/{
-/**/	if( call.reflect !== 'ast_astCall' )
+/**/	if( call.reflect !== 'ast_call' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1654,7 +1654,7 @@ formatCall =
 		formatExpression(
 			snuggle ? context.setInline : context,
 			call.func,
-			precTable.astCall
+			precTable.ast_call
 		);
 
 	if( call.length === 0 )
@@ -2273,8 +2273,8 @@ exprFormatter =
 		'ast_and' : formatAnd,
 		'ast_arrayLiteral' : formatArrayLiteral,
 		'ast_assign' : formatAssign,
-		'astBoolean' : formatBoolean,
-		'astCall' : formatCall,
+		'ast_boolean' : formatBoolean,
+		'ast_call' : formatCall,
 		'astCommaList' : formatCommaList,
 		'astCondition' : formatCondition,
 		'astDelete' : formatDelete,

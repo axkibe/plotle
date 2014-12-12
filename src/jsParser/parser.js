@@ -68,9 +68,9 @@ ast_arrayLiteral = require( '../ast/arrayLiteral' );
 
 ast_assign = require( '../ast/assign' );
 
-ast_boolean = require( '../ast/ast-boolean' );
+ast_boolean = require( '../ast/boolean' );
 
-ast_call = require( '../ast/ast-call' );
+ast_call = require( '../ast/call' );
 
 ast_differs = require( '../ast/ast-differs' );
 
