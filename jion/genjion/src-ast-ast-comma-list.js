@@ -228,13 +228,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astCommaList';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astCommaList';
+prototype.reflect = 'ast_astCommaList';
 
 
 /*

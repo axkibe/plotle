@@ -175,13 +175,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astPreIncrement';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astPreIncrement';
+prototype.reflect = 'ast_astPreIncrement';
 
 
 /*

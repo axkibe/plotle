@@ -143,13 +143,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astNull';
+prototype.reflect = 'ast_astNull';
 
 
 /*
 | Reflection_.
 */
-prototype.reflect_ = 'ast_astNull';
+prototype.reflect = 'ast_astNull';
 
 
 /*

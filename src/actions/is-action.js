@@ -23,7 +23,7 @@ var
 ***/	actions_isAction =
 /**/		function( action )
 /**/	{
-/**/		switch ( action.reflect_ )
+/**/		switch ( action.reflect )
 /**/		{
 /**/			case 'actions_createGeneric' :
 /**/			case 'actions_createRelation' :

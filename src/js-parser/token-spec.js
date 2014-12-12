@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'jsParser.tokenSpec',
+			'jsParser_tokenSpec',
 		attributes :
 			{
 				prePrec :

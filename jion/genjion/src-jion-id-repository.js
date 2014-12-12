@@ -214,13 +214,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'jion.idRepository';
+prototype.reflect = 'jion_idRepository';
 
 
 /*
 | Reflection_.
 */
-prototype.reflect_ = 'jion_idRepository';
+prototype.reflect = 'jion_idRepository';
 
 
 /*

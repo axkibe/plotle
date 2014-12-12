@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astNew',
+			'ast_astNew',
 		attributes :
 			{
 				'call' :
@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the constrcutor call',
 						type :
-							'ast.astCall'
+							'ast_astCall'
 					},
 			}
 	};

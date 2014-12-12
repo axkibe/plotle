@@ -272,7 +272,7 @@ shorthand.astCapsule =
 {
 	if(
 		block
-		&& block.reflect_ !== 'ast_astBlock'
+		&& block.reflect !== 'ast_astBlock'
 	)
 	{
 		block = ast_block.create( ).append( block );
@@ -328,7 +328,7 @@ shorthand.astCheck =
 	if(
 		block
 		&&
-		block.reflect_ !== 'ast_astBlock'
+		block.reflect !== 'ast_astBlock'
 	)
 	{
 		block = ast_block.create( ).append( block );
@@ -540,7 +540,7 @@ shorthand.astIf =
 	condition = tools.convert( condition );
 
 	if(
-		then.reflect_ !== 'ast_astBlock'
+		then.reflect !== 'ast_astBlock'
 	)
 	{
 		then = ast_block.create( ).append( then );
@@ -549,7 +549,7 @@ shorthand.astIf =
 	if(
 		elsewise
 		&&
-		elsewise.reflect_ !== 'ast_astBlock'
+		elsewise.reflect !== 'ast_astBlock'
 	)
 	{
 		elsewise = ast_block.create( ).append( elsewise );
@@ -586,7 +586,7 @@ shorthand.astFor =
 		block
 	)
 {
-	if( block.reflect_ !== 'ast_astBlock' )
+	if( block.reflect !== 'ast_astBlock' )
 	{
 		block = ast_block.create( ).append( block );
 	}
@@ -618,7 +618,7 @@ shorthand.astForIn =
 		block
 	)
 {
-	if( block.reflect_ !== 'ast_astBlock' )
+	if( block.reflect !== 'ast_astBlock' )
 	{
 		block = ast_block.create( ).append( block );
 	}
@@ -648,7 +648,7 @@ shorthand.astFunc =
 	if(
 		block
 		&&
-		block.reflect_ !== 'ast_astBlock'
+		block.reflect !== 'ast_astBlock'
 	)
 	{
 		block = ast_block.create( ).append( block );

@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astFail',
+			'ast_astFail',
 		attributes :
 			{
 				message :

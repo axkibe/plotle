@@ -242,7 +242,7 @@ fabric_note.prototype.dragStop =
 
 	action = root.action;
 
-	switch( action.reflect_ )
+	switch( action.reflect )
 	{
 		case 'actions_itemResize' :
 
@@ -517,7 +517,7 @@ fabric_note.prototype.scrollMarkIntoView =
 
 /**/if( CHECK )
 /**/{
-/**/	if( para.reflect_ !== 'fabric_para' )
+/**/	if( para.reflect !== 'fabric_para' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

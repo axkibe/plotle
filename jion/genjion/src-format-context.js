@@ -291,13 +291,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'format.context';
+prototype.reflect = 'format_context';
 
 
 /*
 | Reflection_.
 */
-prototype.reflect_ = 'format_context';
+prototype.reflect = 'format_context';
 
 
 /*

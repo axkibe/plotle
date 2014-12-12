@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astNot',
+			'ast_astNot',
 		attributes :
 			{
 				expr :

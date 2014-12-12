@@ -252,13 +252,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astCall';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astCall';
+prototype.reflect = 'ast_astCall';
 
 
 /*

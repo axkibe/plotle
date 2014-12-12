@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astString',
+			'ast_astString',
 		attributes :
 			{
 				'string' :

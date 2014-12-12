@@ -17,7 +17,7 @@ if( JION )
 {
 	return{
 		id :
-			'ast.astAssign',
+			'ast_astAssign',
 		attributes :
 			{
 				left :

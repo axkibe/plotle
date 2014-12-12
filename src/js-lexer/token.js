@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'jsLexer.token',
+			'jsLexer_token',
 		attributes :
 			{
 				type :

@@ -200,13 +200,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astGreaterThan';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astGreaterThan';
+prototype.reflect = 'ast_astGreaterThan';
 
 
 /*

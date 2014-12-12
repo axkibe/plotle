@@ -109,7 +109,7 @@ design_anchorPoint.prototype.compute =
 
 /**/if( CHECK )
 /**/{
-/**/	if( frame.reflect_ !== 'euclid_rect' )
+/**/	if( frame.reflect !== 'euclid_rect' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

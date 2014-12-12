@@ -186,13 +186,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astVar';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astVar';
+prototype.reflect = 'ast_astVar';
 
 
 /*

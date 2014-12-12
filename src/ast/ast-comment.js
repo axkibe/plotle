@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astComment',
+			'ast_astComment',
 		attributes :
 			{
 				content :

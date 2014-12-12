@@ -561,7 +561,7 @@ discs_createDisc._isActiveButton =
 		return false;
 	}
 
-	switch( action.reflect_ )
+	switch( action.reflect )
 	{
 		case 'actions_createGeneric' :
 

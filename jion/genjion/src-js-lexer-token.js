@@ -214,13 +214,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'jsLexer.token';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'jsLexer_token';
+prototype.reflect = 'jsLexer_token';
 
 
 /*

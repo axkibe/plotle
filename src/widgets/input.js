@@ -473,7 +473,7 @@ jools.lazyValue(
 
 		if(
 			mark
-			&& mark.reflect_ === 'marks_caret'
+			&& mark.reflect === 'marks_caret'
 			&& mark.focus
 		)
 		{

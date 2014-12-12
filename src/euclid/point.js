@@ -159,7 +159,7 @@ euclid_point.renew =
 
 		if(
 			p
-			&& p.reflect_ === 'euclid_point'
+			&& p.reflect === 'euclid_point'
 			&& p.x === x
 			&& p.y === y
 		)

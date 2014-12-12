@@ -215,13 +215,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astVarDec';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astVarDec';
+prototype.reflect = 'ast_astVarDec';
 
 
 /*

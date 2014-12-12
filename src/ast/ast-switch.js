@@ -77,7 +77,7 @@ ast_switch.prototype.astCase =
 		block,
 		caseExpr;
 
-	if( code.reflect_ === 'ast_astBlock' )
+	if( code.reflect === 'ast_astBlock' )
 	{
 		block = code;
 	}
@@ -86,7 +86,7 @@ ast_switch.prototype.astCase =
 		block = ast_block.create( ).append( tools.convert( code ) );
 	}
 
-	if( coc.reflect_ !== 'ast_astCase' )
+	if( coc.reflect !== 'ast_astCase' )
 	{
 		caseExpr =
 			ast_case.create(
@@ -110,7 +110,7 @@ ast_switch.prototype.astDefault =
 	var
 		block;
 
-	if( code.reflect_ === 'ast_astBlock' )
+	if( code.reflect === 'ast_astBlock' )
 	{
 		block = code;
 	}

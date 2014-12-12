@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'jion.generator',
+			'jion_generator',
 		attributes :
 			{
 				'jion' :
@@ -232,7 +232,7 @@ generator.prototype._init =
 
 	units = idRepository.create( );
 
-	units = units.add( id.createFromString( 'jion.proto' ) );
+	units = units.add( id.createFromString( 'jion_proto' ) );
 
 	this.hasJSON = !!jion.json;
 
@@ -1336,7 +1336,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		default :
 
-			return astDiffers( avar.astDot( 'reflect_' ), id.astString_ );
+			return astDiffers( avar.astDot( 'reflect' ), id.astString_ );
 	}
 };
 
@@ -2400,16 +2400,10 @@ generator.prototype.genReflection =
 		capsule // block to append to
 	)
 {
-	// XXX remove
 	capsule =
 		capsule
 		.astComment( 'Reflection.' )
-		.astAssign( 'prototype.reflect', this.id.astString );
-
-	capsule =
-		capsule
-		.astComment( 'Reflection_.' )
-		.astAssign( 'prototype.reflect_', this.id.astString_ );
+		.astAssign( 'prototype.reflect', this.id.astString_ );
 
 	capsule =
 		capsule

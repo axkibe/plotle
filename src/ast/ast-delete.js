@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astDelete',
+			'ast_astDelete',
 		attributes :
 			{
 				'expr' :

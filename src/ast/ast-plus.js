@@ -18,7 +18,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astPlus',
+			'ast_astPlus',
 		attributes :
 			{
 				left :

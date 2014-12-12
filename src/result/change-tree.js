@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'result.changeTree',
+			'result_changeTree',
 		attributes :
 			{
 				reaction :

@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astGreaterThan',
+			'ast_astGreaterThan',
 		attributes :
 			{
 				left :

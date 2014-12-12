@@ -21,7 +21,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astArrayLiteral',
+			'ast_astArrayLiteral',
 		equals :
 			'primitive', // FUTURE
 		ray :

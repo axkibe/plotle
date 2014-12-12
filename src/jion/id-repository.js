@@ -178,7 +178,7 @@ jion_idRepository.prototype.add =
 		o
 	)
 {
-	switch( o.reflect_ )
+	switch( o.reflect )
 	{
 		case 'jion_id' :
 
@@ -313,7 +313,7 @@ jion_idRepository.prototype._addID =
 
 /**/if( CHECK )
 /**/{
-/**/	if( d.reflect_ !== 'jion_id' )
+/**/	if( d.reflect !== 'jion_id' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -401,7 +401,7 @@ jion_idRepository.prototype._addIDRepository =
 
 /**/if( CHECK )
 /**/{
-/**/	if( idr.reflect_ !== 'jion_idRepository' )
+/**/	if( idr.reflect !== 'jion_idRepository' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

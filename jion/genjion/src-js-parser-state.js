@@ -276,13 +276,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'jsParser.state';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'jsParser_state';
+prototype.reflect = 'jsParser_state';
 
 
 /*

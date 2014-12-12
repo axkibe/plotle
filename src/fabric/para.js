@@ -173,7 +173,7 @@ fabric_para.concernsMark =
 		return mark;
 	}
 
-	if( mark.reflect_ === 'marks_range' )
+	if( mark.reflect === 'marks_range' )
 	{
 		return(
 			mark.itemPath.subPathOf( path )
@@ -304,7 +304,7 @@ jools.lazyValue(
 
 		if(
 			mark
-			&& mark.reflect_ === 'marks_caret'
+			&& mark.reflect === 'marks_caret'
 			&& mark.focus
 		)
 		{
@@ -899,7 +899,7 @@ fabric_para.prototype.specialKey =
 
 	retainx = null;
 
-	switch( mark.reflect_ )
+	switch( mark.reflect )
 	{
 		case 'marks_caret' :
 

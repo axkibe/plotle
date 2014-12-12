@@ -494,7 +494,7 @@ fabric_item.prototype.dragStart =
 		return false;
 	}
 
-	switch( action && action.reflect_ )
+	switch( action && action.reflect )
 	{
 		case 'actions_createRelation' :
 
@@ -573,7 +573,7 @@ fabric_item.prototype.dragMove =
 
 	action = root.action;
 
-	switch( action.reflect_ )
+	switch( action.reflect )
 	{
 		case 'actions_createRelation' :
 
@@ -638,7 +638,7 @@ fabric_item.prototype.dragStop =
 
 	action = root.action;
 
-	switch( action.reflect_ )
+	switch( action.reflect )
 	{
 		case 'actions_createRelation' :
 

@@ -10,7 +10,7 @@ var
 	euclid_view,
 	jools,
 	theme,
-	visual;
+	visual_scroll;
 
 
 /*
@@ -27,7 +27,7 @@ if( JION )
 {
 	return {
 		id :
-			'visual.scrollbar',
+			'visual_scrollbar',
 		attributes :
 			{
 				pos :
@@ -72,16 +72,10 @@ if( JION )
 }
 
 
-var
-	scrollbar;
-
-scrollbar = visual.scrollbar;
-
-
 /*
 | Initializer.
 */
-scrollbar.prototype._init =
+visual_scrollbar.prototype._init =
 	function( )
 {
 	this.visible = this.max > this.aperture;
@@ -111,7 +105,7 @@ scrollbar.prototype._init =
 /*
 | Draws the scrollbar.
 */
-scrollbar.prototype.draw =
+visual_scrollbar.prototype.draw =
 	function(
 		display,
 		view
@@ -139,7 +133,7 @@ scrollbar.prototype.draw =
 |
 | FIXME use fixPoints
 */
-scrollbar.prototype.getArea =
+visual_scrollbar.prototype.getArea =
 	function(
 		view
 	)
@@ -187,7 +181,7 @@ scrollbar.prototype.getArea =
 /*
 | Returns true if p is within the scrollbar.
 */
-scrollbar.prototype.within =
+visual_scrollbar.prototype.within =
 	function(
 		view,
 		p
@@ -220,7 +214,7 @@ scrollbar.prototype.within =
 /*
 | Returns the value of pos change for d pixels in the current zone.
 */
-scrollbar.prototype.scale =
+visual_scrollbar.prototype.scale =
 	function(
 		d
 	)

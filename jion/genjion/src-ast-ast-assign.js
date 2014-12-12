@@ -200,13 +200,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astAssign';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astAssign';
+prototype.reflect = 'ast_astAssign';
 
 
 /*

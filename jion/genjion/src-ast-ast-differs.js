@@ -200,13 +200,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astDiffers';
+prototype.reflect = 'ast_astDiffers';
 
 
 /*
 | Reflection_.
 */
-prototype.reflect_ = 'ast_astDiffers';
+prototype.reflect = 'ast_astDiffers';
 
 
 /*

@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astCall',
+			'ast_astCall',
 		attributes :
 			{
 				'func' :

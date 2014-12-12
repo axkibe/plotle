@@ -175,13 +175,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astNot';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astNot';
+prototype.reflect = 'ast_astNot';
 
 
 /*

@@ -271,7 +271,7 @@ ccot_change.prototype._transformChange =
 
 /**/if( CHECK )
 /**/{
-/**/	if( c.reflect_ !== 'ccot_change' )
+/**/	if( c.reflect !== 'ccot_change' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -286,7 +286,7 @@ ccot_change.prototype._transformChange =
 		return null;
 	}
 
-	switch( srcX.reflect_ )
+	switch( srcX.reflect )
 	{
 		case 'ccot_sign' :
 
@@ -305,7 +305,7 @@ ccot_change.prototype._transformChange =
 			throw new Error( );
 	}
 
-	switch( trgX.reflect_ )
+	switch( trgX.reflect )
 	{
 		case 'ccot_sign' :
 
@@ -411,7 +411,7 @@ ccot_change.prototype._transformChangeRay =
 
 /**/if( CHECK )
 /**/{
-/**/	if( cray.reflect_ !== 'ccot_changeRay' )
+/**/	if( cray.reflect !== 'ccot_changeRay' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -482,7 +482,7 @@ ccot_change.prototype.transform =
 		cx
 	)
 {
-	switch( cx.reflect_ )
+	switch( cx.reflect )
 	{
 		case 'ccot_change' :
 
@@ -636,7 +636,7 @@ ccot_change.prototype._changeTreeInsert =
 
 	trg = this.trg;
 
-	check( trg.path.reflect_ === 'jion_path', cm, 'trg.path missing' );
+	check( trg.path.reflect === 'jion_path', cm, 'trg.path missing' );
 
 	str = tree.getPath( trg.path );
 
@@ -687,7 +687,7 @@ ccot_change.prototype._changeTreeRemove =
 
 	trg = this.trg;
 
-	check( src.path.reflect_ === 'jion_path', cm, 'src.path missing' );
+	check( src.path.reflect === 'jion_path', cm, 'src.path missing' );
 
 	str = tree.getPath( src.path );
 
@@ -1052,7 +1052,7 @@ ccot_change.prototype.transformSignRay =
 			continue;
 		}
 
-		switch( cx.reflect_ )
+		switch( cx.reflect )
 		{
 			case 'ccot_sign' :
 
@@ -1093,7 +1093,7 @@ ccot_change.prototype.transformSignX =
 		signX
 	)
 {
-	switch( signX.reflect_ )
+	switch( signX.reflect )
 	{
 
 		case 'ccot_sign' :

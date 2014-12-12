@@ -233,13 +233,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astIf';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astIf';
+prototype.reflect = 'ast_astIf';
 
 
 /*

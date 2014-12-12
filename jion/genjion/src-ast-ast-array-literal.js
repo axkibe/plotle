@@ -228,13 +228,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astArrayLiteral';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astArrayLiteral';
+prototype.reflect = 'ast_astArrayLiteral';
 
 
 /*

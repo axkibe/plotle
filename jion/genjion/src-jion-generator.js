@@ -177,13 +177,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'jion.generator';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'jion_generator';
+prototype.reflect = 'jion_generator';
 
 
 /*

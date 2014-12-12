@@ -175,13 +175,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astReturn';
+prototype.reflect = 'ast_astReturn';
 
 
 /*
 | Reflection_.
 */
-prototype.reflect_ = 'ast_astReturn';
+prototype.reflect = 'ast_astReturn';
 
 
 /*

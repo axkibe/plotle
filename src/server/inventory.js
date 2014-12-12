@@ -16,11 +16,9 @@ if( JION )
 {
 	return {
 		id :
-			'server.inventory',
+			'server_inventory',
 		twig :
-			[
-				'server.resource'
-			]
+			[ 'server_resource' ]
 	};
 }
 

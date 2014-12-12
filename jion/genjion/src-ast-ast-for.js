@@ -210,7 +210,7 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_block.reflect_ !== 'ast_astBlock' )
+/**/	if( v_block.reflect !== 'ast_astBlock' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -268,13 +268,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astFor';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astFor';
+prototype.reflect = 'ast_astFor';
 
 
 /*

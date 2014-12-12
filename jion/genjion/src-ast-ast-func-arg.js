@@ -225,13 +225,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astFuncArg';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astFuncArg';
+prototype.reflect = 'ast_astFuncArg';
 
 
 /*

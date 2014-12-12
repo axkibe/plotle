@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astForIn',
+			'ast_astForIn',
 		attributes :
 			{
 				variable :
@@ -39,7 +39,7 @@ if( JION )
 						comment :
 							'the for block',
 						type :
-							'ast.astBlock'
+							'ast_astBlock'
 					}
 			}
 	};

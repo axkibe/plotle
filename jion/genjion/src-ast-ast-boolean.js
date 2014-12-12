@@ -180,13 +180,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astBoolean';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astBoolean';
+prototype.reflect = 'ast_astBoolean';
 
 
 /*

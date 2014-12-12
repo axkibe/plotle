@@ -299,7 +299,7 @@ fabric_portal.prototype.dragStop =
 
 	action = root.action;
 
-	switch( action.reflect_ )
+	switch( action.reflect )
 	{
 		case 'actions_itemDrag' :
 		case 'actions_itemResize' :
@@ -738,7 +738,7 @@ jools.lazyValue(
 
 			if(
 				mark
-				&& mark.reflect_ === 'marks_caret'
+				&& mark.reflect === 'marks_caret'
 				&& mark.focus
 			)
 			{

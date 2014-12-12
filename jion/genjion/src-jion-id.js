@@ -232,13 +232,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'jion.id';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'jion_id';
+prototype.reflect = 'jion_id';
 
 
 /*

@@ -288,13 +288,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'jsParser.tokenSpec';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'jsParser_tokenSpec';
+prototype.reflect = 'jsParser_tokenSpec';
 
 
 /*

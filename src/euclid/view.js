@@ -263,7 +263,7 @@ euclid_view.prototype.point =
 	var
 		anchor;
 
-	switch( p.reflect_ )
+	switch( p.reflect )
 	{
 		case 'euclid_point' :
 
@@ -304,7 +304,7 @@ euclid_view.prototype.depoint =
 
 /**/if( CHECK )
 /**/{
-/**/	if( p.reflect_ !== 'euclid_point' )
+/**/	if( p.reflect !== 'euclid_point' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -336,7 +336,7 @@ euclid_view.prototype.rect =
 	if( this.zoom === 1 )
 	{
 		r =
-			( a1.reflect_ === 'euclid_rect' )
+			( a1.reflect === 'euclid_rect' )
 			? a1
 			: euclid_rect.create(
 				'pnw', a1,
@@ -350,7 +350,7 @@ euclid_view.prototype.rect =
 		);
 	}
 
-	if( a1.reflect_ === 'euclid_rect' )
+	if( a1.reflect === 'euclid_rect' )
 	{
 		pnw = a1.pnw;
 

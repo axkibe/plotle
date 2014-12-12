@@ -287,13 +287,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astObjLiteral';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astObjLiteral';
+prototype.reflect = 'ast_astObjLiteral';
 
 
 /*

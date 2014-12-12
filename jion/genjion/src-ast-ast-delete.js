@@ -175,13 +175,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astDelete';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astDelete';
+prototype.reflect = 'ast_astDelete';
 
 
 /*

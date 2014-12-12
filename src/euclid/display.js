@@ -309,7 +309,7 @@ euclid_display.prototype.drawImage =
 		}
 	}
 
-	if( image.reflect_ === 'euclid_display' )
+	if( image.reflect === 'euclid_display' )
 	{
 		if(
 			!(
@@ -634,7 +634,7 @@ euclid_display.prototype.fillRect =
 
 	if( typeof( a1 ) === 'object' )
 	{
-		if( a1.reflect_ === 'euclid_rect' )
+		if( a1.reflect === 'euclid_rect' )
 		{
 			return this._cx.fillRect(
 				a1.pnw.x,
@@ -643,7 +643,7 @@ euclid_display.prototype.fillRect =
 				a1.pse.y
 			);
 		}
-		else if( a1.reflect_ === 'euclid_point' )
+		else if( a1.reflect === 'euclid_point' )
 		{
 			return this._cx.fillRect(
 				a1.x,
@@ -936,7 +936,7 @@ euclid_display.prototype.withinSketch =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( p.reflect_ !== 'euclid_point' )
+/**/	if( p.reflect !== 'euclid_point' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1454,7 +1454,7 @@ euclid_display.prototype._sketch =
 		shape = shape.shape;
 	}
 
-	switch( shape.reflect_ )
+	switch( shape.reflect )
 	{
 		case 'euclid_rect' :
 

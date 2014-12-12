@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astFunc',
+			'ast_astFunc',
 		attributes :
 			{
 				block :
@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'function code',
 						type :
-							'ast.astBlock',
+							'ast_astBlock',
 						defaultValue :
 							null
 					},

@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astIf',
+			'ast_astIf',
 		attributes :
 			{
 				condition :

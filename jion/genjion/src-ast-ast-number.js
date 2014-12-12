@@ -180,13 +180,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astNumber';
+prototype.reflect = 'ast_astNumber';
 
 
 /*
 | Reflection_.
 */
-prototype.reflect_ = 'ast_astNumber';
+prototype.reflect = 'ast_astNumber';
 
 
 /*

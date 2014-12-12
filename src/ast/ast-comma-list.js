@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astCommaList',
+			'ast_astCommaList',
 		ray :
 			// '->expression' FUTURE
 			[ ]

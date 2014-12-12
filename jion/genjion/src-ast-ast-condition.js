@@ -233,13 +233,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astCondition';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astCondition';
+prototype.reflect = 'ast_astCondition';
 
 
 /*

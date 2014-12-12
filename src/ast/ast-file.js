@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astFile',
+			'ast_astFile',
 		attributes :
 			{
 				header :
@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'header comment',
 						type :
-							'ast.astComment',
+							'ast_astComment',
 						defaultValue :
 							null
 					},
@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'preamble to capsule',
 						type :
-							'ast.astBlock',
+							'ast_astBlock',
 						defaultValue :
 							null
 					},
@@ -43,7 +43,7 @@ if( JION )
 						comment :
 							'the capsule',
 						type :
-							'ast.astBlock',
+							'ast_astBlock',
 						defaultValue :
 							null
 					},

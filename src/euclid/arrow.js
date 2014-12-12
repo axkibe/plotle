@@ -99,7 +99,7 @@ euclid_arrow.connect =
 /**/	}
 /**/}
 
-	if( shape1.reflect_ === 'euclid_point' )
+	if( shape1.reflect === 'euclid_point' )
 	{
 		pc1 = shape1;
 	}
@@ -108,7 +108,7 @@ euclid_arrow.connect =
 		pc1 = shape1.pc;
 	}
 
-	if( shape2.reflect_ === 'euclid_point' )
+	if( shape2.reflect === 'euclid_point' )
 	{
 		pc2 = shape2;
 	}
@@ -117,7 +117,7 @@ euclid_arrow.connect =
 		pc2 = shape2.pc;
 	}
 
-	if( shape1.reflect_ === 'euclid_point' )
+	if( shape1.reflect === 'euclid_point' )
 	{
 		p1 = shape1;
 	}
@@ -130,7 +130,7 @@ euclid_arrow.connect =
 		p1 = shape1.getProjection( pc2 );
 	}
 
-	if( shape2.reflect_ === 'euclid_point' )
+	if( shape2.reflect === 'euclid_point' )
 	{
 		p2 = shape2;
 	}

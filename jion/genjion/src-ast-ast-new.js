@@ -165,7 +165,7 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_call.reflect_ !== 'ast_astCall' )
+/**/	if( v_call.reflect !== 'ast_astCall' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -183,13 +183,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astNew';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astNew';
+prototype.reflect = 'ast_astNew';
 
 
 /*

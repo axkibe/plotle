@@ -77,8 +77,12 @@ jion_id.createFromString =
 	var
 		split;
 
-	// split = string.split( '_' ); FUTURE
-	split = string.split( /[_.]/g );
+	if( string.indexOf( '.' ) >= 0 )
+	{
+		throw new Error( string ); // FIXME remove
+	}
+
+	split = string.split( '_' );
 
 	if( split.length <= 1 )
 	{

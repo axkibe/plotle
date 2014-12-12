@@ -184,13 +184,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astString';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astString';
+prototype.reflect = 'ast_astString';
 
 
 /*

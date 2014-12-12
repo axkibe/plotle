@@ -233,7 +233,7 @@ fabric_space.prototype.focusedItem =
 
 	if( action )
 	{
-		switch( action.reflect_ )
+		switch( action.reflect )
 		{
 			case 'actions_itemDrag' :
 			case 'actions_itemResize' :
@@ -271,7 +271,7 @@ fabric_space.prototype.getItem =
 
 	action = root.action;
 
-	switch( action && action.reflect_ )
+	switch( action && action.reflect )
 	{
 		case 'actions_itemDrag' :
 		case 'actions_itemResize' :
@@ -362,7 +362,7 @@ fabric_space.prototype.draw =
 		focus.drawHandles( display, view );
 	}
 
-	switch( action && action.reflect_ )
+	switch( action && action.reflect )
 	{
 		case 'actions_createGeneric' :
 
@@ -608,7 +608,7 @@ fabric_space.prototype.dragStart =
 	// FIXME simplify
 	if(
 		action
-		&& action.reflect_ === 'actions_createGeneric'
+		&& action.reflect === 'actions_createGeneric'
 		&& action.itemType === 'note'
 	)
 	{
@@ -636,7 +636,7 @@ fabric_space.prototype.dragStart =
 	}
 	else if(
 		action
-		&& action.reflect_ === 'actions_createGeneric'
+		&& action.reflect === 'actions_createGeneric'
 		&& action.itemType === 'label'
 	)
 	{
@@ -660,7 +660,7 @@ fabric_space.prototype.dragStart =
 	}
 	else if(
 		action &&
-		action.reflect_ === 'actions_createGeneric' &&
+		action.reflect === 'actions_createGeneric' &&
 		action.itemType === 'portal'
 	)
 	{
@@ -713,7 +713,7 @@ fabric_space.prototype.dragStart =
 
 	// starts a panning operation instead
 
-	switch( action && action.reflect_ )
+	switch( action && action.reflect )
 	{
 		case 'actions_createRelation' :
 
@@ -818,7 +818,7 @@ fabric_space.prototype.dragStop =
 		return;
 	}
 
-	switch( action.reflect_ )
+	switch( action.reflect )
 	{
 		case 'actions_createGeneric' :
 
@@ -1147,7 +1147,7 @@ fabric_space.prototype.dragMove =
 		return 'pointer';
 	}
 
-	switch( action.reflect_ )
+	switch( action.reflect )
 	{
 		case 'actions_createGeneric' :
 

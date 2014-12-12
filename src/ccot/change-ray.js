@@ -99,7 +99,7 @@ ccot_changeRay.prototype._transformChange =
 
 /**/if( CHECK )
 /**/{
-/**/	if( c.reflect_ !== 'ccot_change' )
+/**/	if( c.reflect !== 'ccot_change' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -201,7 +201,7 @@ ccot_changeRay.prototype.transform =
 		co
 	)
 {
-	switch( co.reflect_ )
+	switch( co.reflect )
 	{
 		case 'ccot_change' :
 
@@ -288,7 +288,7 @@ ccot_changeRay.prototype.transformSign =
 
 /**/if( CHECK )
 /**/{
-/**/	if( sign.reflect_ !== 'ccot_sign' )
+/**/	if( sign.reflect !== 'ccot_sign' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

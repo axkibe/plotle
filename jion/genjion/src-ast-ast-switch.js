@@ -262,7 +262,7 @@ prototype.create =
 /**/
 /**/	if( v_defaultCase !== null )
 /**/	{
-/**/		if( v_defaultCase.reflect_ !== 'ast_astBlock' )
+/**/		if( v_defaultCase.reflect !== 'ast_astBlock' )
 /**/		{
 /**/			throw new Error( );
 /**/		}
@@ -303,13 +303,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astSwitch';
+prototype.reflect = 'ast_astSwitch';
 
 
 /*
 | Reflection_.
 */
-prototype.reflect_ = 'ast_astSwitch';
+prototype.reflect = 'ast_astSwitch';
 
 
 /*

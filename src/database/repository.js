@@ -18,7 +18,7 @@ if( JION )
 {
 	return {
 		id :
-			'server.repository',
+			'server_repository',
 		attributes :
 			{
 				'_connection' :

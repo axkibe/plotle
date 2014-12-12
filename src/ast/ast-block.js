@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astBlock',
+			'ast_astBlock',
 		ray :
 			// '->statement' FUTURE
 			[ ]
@@ -130,7 +130,7 @@ astBlock.prototype.astComment =
 		header
 	)
 {
-	if( header.reflect_ !== 'ast_astComment' )
+	if( header.reflect !== 'ast_astComment' )
 	{
 		// arguments have to be a list of strings otherwise
 		header =
@@ -268,7 +268,7 @@ astBlock.prototype.astReturn =
 		expr
 	)
 {
-	if( expr.reflect_ !== 'ast_astReturn' )
+	if( expr.reflect !== 'ast_astReturn' )
 	{
 		expr = astReturn.create( 'expr', tools.convert( expr ) );
 	}

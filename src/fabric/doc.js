@@ -274,7 +274,7 @@ fabric_doc.prototype._getRangeShape =
 
 /**/if( CHECK )
 /**/{
-/**/	if( mark.reflect_ !== 'marks_range' )
+/**/	if( mark.reflect !== 'marks_range' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -666,7 +666,7 @@ fabric_doc.prototype.draw =
 	if(
 		mark
 		&&
-		mark.reflect_ === 'marks_range'
+		mark.reflect === 'marks_range'
 		&&
 		mark.itemPath.subPathOf( this.path )
 	)
@@ -943,7 +943,7 @@ fabric_doc.prototype.input =
 	path = this.mark.caretPath;
 
 	if(
-		mark.reflect_ === 'marks_range'
+		mark.reflect === 'marks_range'
 		&& !mark.empty
 	)
 	{
@@ -991,7 +991,7 @@ fabric_doc.prototype.specialKey =
 	}
 
 	if(
-		mark.reflect_ === 'marks_range'
+		mark.reflect === 'marks_range'
 		&&
 		!mark.empty
 	)

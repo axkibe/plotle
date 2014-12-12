@@ -97,7 +97,7 @@ formatAnd =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astAnd' )
+/**/	if( expr.reflect !== 'ast_astAnd' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -148,7 +148,7 @@ formatAssign =
 		+ ' ='
 		+ context.sep;
 
-	if( assign.right.reflect_ !== 'ast_astAssign' )
+	if( assign.right.reflect !== 'ast_astAssign' )
 	{
 		context = context.incSame;
 	}
@@ -343,7 +343,7 @@ formatDiffers =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astDiffers' )
+/**/	if( expr.reflect !== 'ast_astDiffers' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -382,7 +382,7 @@ formatPlus =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astPlus' )
+/**/	if( expr.reflect !== 'ast_astPlus' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -481,7 +481,7 @@ formatDot =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astDot' )
+/**/	if( expr.reflect !== 'ast_astDot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -511,7 +511,7 @@ formatMember =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astMember' )
+/**/	if( expr.reflect !== 'ast_astMember' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -552,7 +552,7 @@ formatEquals =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astEquals' )
+/**/	if( expr.reflect !== 'ast_astEquals' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -593,7 +593,7 @@ formatCondition =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astCondition' )
+/**/	if( expr.reflect !== 'ast_astCondition' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -643,7 +643,7 @@ formatIf =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflect_ !== 'ast_astIf' )
+/**/	if( statement.reflect !== 'ast_astIf' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -792,7 +792,7 @@ formatLessThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astLessThan' )
+/**/	if( expr.reflect !== 'ast_astLessThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -833,7 +833,7 @@ formatGreaterThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astGreaterThan' )
+/**/	if( expr.reflect !== 'ast_astGreaterThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -879,7 +879,7 @@ formatInstanceof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astInstanceof' )
+/**/	if( expr.reflect !== 'ast_astInstanceof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -919,7 +919,7 @@ formatOr =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astOr' )
+/**/	if( expr.reflect !== 'ast_astOr' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -962,7 +962,7 @@ formatReturn =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflect_ !== 'ast_astReturn' )
+/**/	if( statement.reflect !== 'ast_astReturn' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1236,10 +1236,10 @@ formatStatement =
 
 	if(
 		lookBehind
-		&& lookBehind.reflect_ !== 'ast_astComment'
+		&& lookBehind.reflect !== 'ast_astComment'
 		&& !(
-			lookBehind.reflect_ === 'ast_astVarDec'
-			&& statement.reflect_ === 'ast_astVarDec'
+			lookBehind.reflect === 'ast_astVarDec'
+			&& statement.reflect === 'ast_astVarDec'
 		)
 	)
 	{
@@ -1257,11 +1257,11 @@ formatStatement =
 		}
 	}
 
-	if( statement.reflect_ === 'ast_astComment' )
+	if( statement.reflect === 'ast_astComment' )
 	{
 		if(
 			lookBehind
-			&& lookBehind.reflect_ === 'ast_astComment'
+			&& lookBehind.reflect === 'ast_astComment'
 		)
 		{
 			text += '\n\n';
@@ -1272,7 +1272,7 @@ formatStatement =
 		return text;
 	}
 
-	switch( statement.reflect_ )
+	switch( statement.reflect )
 	{
 		case 'ast_astCheck' :
 
@@ -1380,14 +1380,14 @@ formatStatement =
 			}
 	}
 
-	switch( statement.reflect_ )
+	switch( statement.reflect )
 	{
 		case 'ast_astVarDec' :
 
 			if(
 				lookAhead
 				&&
-				lookAhead.reflect_ === 'ast_astVarDec'
+				lookAhead.reflect === 'ast_astVarDec'
 			)
 			{
 				return text += ',\n';
@@ -1532,7 +1532,7 @@ formatFail =
 
 /**/if( CHECK )
 /**/{
-/**/	if( fail.reflect_ !== 'ast_astFail' )
+/**/	if( fail.reflect !== 'ast_astFail' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1609,7 +1609,7 @@ formatBoolean =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astBoolean' )
+/**/	if( expr.reflect !== 'ast_astBoolean' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1643,7 +1643,7 @@ formatCall =
 
 /**/if( CHECK )
 /**/{
-/**/	if( call.reflect_ !== 'ast_astCall' )
+/**/	if( call.reflect !== 'ast_astCall' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1702,7 +1702,7 @@ formatDelete =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astDelete' )
+/**/	if( expr.reflect !== 'ast_astDelete' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1734,7 +1734,7 @@ formatNew =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astNew' )
+/**/	if( expr.reflect !== 'ast_astNew' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1767,7 +1767,7 @@ formatNot =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astNot' )
+/**/	if( expr.reflect !== 'ast_astNot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1799,7 +1799,7 @@ formatNull =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astNull' )
+/**/	if( expr.reflect !== 'ast_astNull' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1830,7 +1830,7 @@ formatArrayLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astArrayLiteral' )
+/**/	if( expr.reflect !== 'ast_astArrayLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1896,7 +1896,7 @@ formatObjLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( objliteral.reflect_ !== 'ast_astObjLiteral' )
+/**/	if( objliteral.reflect !== 'ast_astObjLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1964,7 +1964,7 @@ formatPreIncrement =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astPreIncrement' )
+/**/	if( expr.reflect !== 'ast_astPreIncrement' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1995,7 +1995,7 @@ formatTypeof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astTypeof' )
+/**/	if( expr.reflect !== 'ast_astTypeof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2033,7 +2033,7 @@ formatVar =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astVar' )
+/**/	if( expr.reflect !== 'ast_astVar' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2056,7 +2056,7 @@ formatNumber =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astNumber' )
+/**/	if( expr.reflect !== 'ast_astNumber' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2079,7 +2079,7 @@ formatString =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect_ !== 'ast_astString' )
+/**/	if( expr.reflect !== 'ast_astString' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2112,14 +2112,14 @@ formatVarDec =
 	if( context.root && varDec.assign )
 	{
 		if(
-			varDec.assign.reflect_ === 'ast_astFunc'
+			varDec.assign.reflect === 'ast_astFunc'
 		)
 		{
 			isRootFunc = true;
 		}
 		else if(
-			varDec.assign.reflect_ === 'ast_astAssign'
-			&& varDec.assign.right.reflect_ === 'ast_astFunc'
+			varDec.assign.reflect === 'ast_astAssign'
+			&& varDec.assign.right.reflect === 'ast_astFunc'
 		)
 		{
 			// FUTURUE allow abitrary amount of assignments
@@ -2131,7 +2131,7 @@ formatVarDec =
 	{
 		if(
 			!lookBehind
-			|| lookBehind.reflect_ !== 'ast_astVarDec'
+			|| lookBehind.reflect !== 'ast_astVarDec'
 		)
 		{
 			if( !context.inline )
@@ -2163,7 +2163,7 @@ formatVarDec =
 	{
 		text += ' =' + context.sep;
 
-		if( varDec.assign.reflect_ !== 'ast_astAssign' )
+		if( varDec.assign.reflect !== 'ast_astAssign' )
 		{
 			context = context.inc;
 		}

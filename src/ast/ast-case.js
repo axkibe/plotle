@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astCase',
+			'ast_astCase',
 		attributes :
 			{
 				block :
@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the statement',
 						type :
-							'ast.astBlock'
+							'ast_astBlock'
 					}
 			},
 		// ray contains multiple alternatives for the same case block.

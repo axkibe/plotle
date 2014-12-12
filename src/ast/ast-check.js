@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astCheck',
+			'ast_astCheck',
 		attributes :
 			{
 				'block' :
@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the code block',
 						type :
-							'ast.astBlock'
+							'ast_astBlock'
 					}
 			}
 	};

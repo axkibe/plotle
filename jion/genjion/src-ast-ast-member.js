@@ -206,13 +206,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast.astMember';
-
-
-/*
-| Reflection_.
-*/
-prototype.reflect_ = 'ast_astMember';
+prototype.reflect = 'ast_astMember';
 
 
 /*

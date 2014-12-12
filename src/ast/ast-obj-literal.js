@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast.astObjLiteral',
+			'ast_astObjLiteral',
 		twig :
 			'->statement'
 	};
