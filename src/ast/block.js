@@ -109,14 +109,14 @@ ast_block.prototype.$call =
 /*
 | Returns the block with a check appended.
 */
-ast_block.prototype.astCheck =
+ast_block.prototype.$check =
 	function(
 		// block
 	)
 {
 	return(
 		this.append(
-			shorthand.astCheck.apply( shorthand, arguments )
+			shorthand.$check.apply( shorthand, arguments )
 		)
 	);
 };

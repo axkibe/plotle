@@ -25,7 +25,7 @@ var
 	ast_block,
 	ast_boolean,
 	ast_call,
-	astCheck,
+	ast_check,
 	astCommaList,
 	astComment,
 	astCondition,
@@ -75,7 +75,7 @@ ast_boolean = require( './boolean' );
 
 ast_call = require( './call' );
 
-astCheck = require( './ast-check' );
+ast_check = require( './check' );
 
 astCommaList = require( './ast-comma-list' );
 
@@ -307,22 +307,18 @@ shorthand.$call =
 /*
 | Shorthand for creating ast check blocks.
 */
-shorthand.astCheck =
+shorthand.$check =
 	function(
 		block // or statement/expression
 	)
 {
-	if(
-		block
-		&&
-		block.reflect !== 'ast_block'
-	)
+	if( block && block.reflect !== 'ast_block' )
 	{
 		block = ast_block.create( ).append( block );
 	}
 
 	return(
-		astCheck.create( 'block', block )
+		ast_check.create( 'block', block )
 	);
 };
 

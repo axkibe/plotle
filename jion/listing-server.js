@@ -56,7 +56,7 @@ module.exports =
 			'src/ast/boolean.js',
 			'src/ast/call.js',
 			'src/ast/case.js',
-			'src/ast/ast-check.js',
+			'src/ast/check.js',
 			'src/ast/ast-comma-list.js',
 			'src/ast/ast-comment.js',
 			'src/ast/ast-condition.js',

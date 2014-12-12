@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astCheck;
+	ast_check;
 
 
 /*
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astCheck =
+ast_check =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astCheck =
 
 if( SERVER )
 {
-	module.exports = ast_astCheck;
+	module.exports = ast_check;
 }
 
 
 /*
-| Creates a new astCheck object.
+| Creates a new check object.
 */
-ast_astCheck.create =
+ast_check.create =
 prototype.create =
 	function(
 		// free strings
@@ -110,7 +110,7 @@ prototype.create =
 		inherit,
 		v_block;
 
-	if( this !== ast_astCheck )
+	if( this !== ast_check )
 	{
 		inherit = this;
 
@@ -175,13 +175,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astCheck';
+prototype.reflect = 'ast_check';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astCheck';
+prototype.reflectName = 'check';
 
 
 /*

@@ -43,7 +43,7 @@ var
 	$block,
 	$call,
 	astCapsule,
-	astCheck,
+	$check,
 	astCommaList,
 	astComment,
 	astCondition,
@@ -105,7 +105,7 @@ $call = shorthand.$call;
 
 astCapsule = shorthand.astCapsule;
 
-astCheck = shorthand.astCheck;
+$check = shorthand.$check;
 
 astCommaList = shorthand.astCommaList;
 
@@ -628,7 +628,7 @@ generator.prototype.genConstructor =
 
 	block =
 		$block( )
-		.astCheck(
+		.$check(
 			astIf(
 				'prototype.__lazy',
 				$assign( 'this.__lazy', astObjLiteral( ) )
@@ -749,7 +749,7 @@ generator.prototype.genConstructor =
 		freezeBlock
 		.ast( 'Object.freeze( this )' );
 
-	block = block.astCheck( freezeBlock );
+	block = block.$check( freezeBlock );
 
 	constructor = astFunc( block );
 
@@ -1198,7 +1198,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		switchExpr
 		.astDefault(
 			$block( )
-			.astCheck(
+			.$check(
 				$block( )
 				//.astFail( 'invalid argument' )
 				.astFail( )
@@ -1462,7 +1462,7 @@ generator.prototype.genCreatorChecks =
 
 	if( checkin )
 	{
-		block = block.astCheck( check );
+		block = block.$check( check );
 	}
 
 	return block;
@@ -2512,7 +2512,7 @@ generator.prototype.genToJSON =
 	block =
 		block
 		.$assign( 'json', olit )
-		.astCheck(
+		.$check(
 			ast( 'Object.freeze( json )' )
 		)
 		.astReturn(
