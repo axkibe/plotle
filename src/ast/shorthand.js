@@ -170,7 +170,7 @@ shorthand.ast =
 /*
 | Shorthand for creating ands.
 */
-shorthand.astAnd =
+shorthand.$and =
 	function(
 		left,
 		right
@@ -194,7 +194,7 @@ shorthand.astAnd =
 			ast_and.create( 'left', left, 'right', right )
 		);
 
-		return shorthand.astAnd.apply( this, args );
+		return shorthand.$and.apply( this, args );
 	}
 
 	left = tools.convert( left );

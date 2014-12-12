@@ -38,7 +38,7 @@ if( JION )
 
 var
 	ast,
-	_and,
+	$and,
 	$assign,
 	astBlock,
 	astCall,
@@ -95,7 +95,7 @@ validator = require( './validator' );
 */
 ast = shorthand.ast;
 
-_and = shorthand.astAnd;
+$and = shorthand.$and;
 
 $assign = shorthand.$assign;
 
@@ -1300,7 +1300,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 		case 'String' :
 
 			return(
-				_and(
+				$and(
 					astDiffers( astTypeof( avar ), '"string"' ),
 					astNot( astInstanceof( avar, 'String' ) )
 				)
@@ -1348,7 +1348,7 @@ generator.prototype.genTypeCheckFailCondition =
 	}
 
 	return(
-		_and.apply( astOr, condArray )
+		$and.apply( astOr, condArray )
 	);
 };
 
@@ -1432,7 +1432,7 @@ generator.prototype.genCreatorChecks =
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
-				_and(
+				$and(
 					astDiffers( av, null ),
 					astDiffers( av, undefined )
 				);
@@ -1647,12 +1647,12 @@ generator.prototype.genCreatorUnchanged =
 
 	if( this.twig )
 	{
-		cond = _and( cond, 'twigDup === false' );
+		cond = $and( cond, 'twigDup === false' );
 	}
 
 	if( this.ray )
 	{
-		cond = _and( cond, '!rayDup' );
+		cond = $and( cond, '!rayDup' );
 	}
 
 	for(
@@ -1667,7 +1667,7 @@ generator.prototype.genCreatorUnchanged =
 
 		if( attr.assign === null )
 		{
-			cond = _and( cond, astEquals( attr.v, null ) );
+			cond = $and( cond, astEquals( attr.v, null ) );
 
 			continue;
 		}
@@ -1715,7 +1715,7 @@ generator.prototype.genCreatorUnchanged =
 								attr.v,
 								astVar( 'inherit' ).astDot( attr.assign )
 							),
-							_and( attr.v, equalsCall )
+							$and( attr.v, equalsCall )
 						);
 				}
 				else if( attr.allowsUndefined )
@@ -1726,7 +1726,7 @@ generator.prototype.genCreatorUnchanged =
 								attr.v,
 								astVar( 'inherit' ).astDot( attr.assign )
 							),
-							_and( attr.v, equalsCall )
+							$and( attr.v, equalsCall )
 						);
 				}
 				else
@@ -1735,7 +1735,7 @@ generator.prototype.genCreatorUnchanged =
 				}
 		}
 
-		cond = _and( cond, ceq );
+		cond = $and( cond, ceq );
 	}
 
 	block =
@@ -2580,7 +2580,7 @@ generator.prototype.genAttributeEquals =
 				ceq =
 					astOr(
 						astEquals( le, re ),
-						_and(
+						$and(
 							astDiffers( le, null ),
 							astCall( le.astDot( 'equals' ), re )
 						)
@@ -2591,7 +2591,7 @@ generator.prototype.genAttributeEquals =
 				ceq =
 					astOr(
 						astEquals( le, re ),
-						_and(
+						$and(
 							astDiffers( le, undefined ),
 							astCall( le.astDot( 'equals' ), re )
 						)
@@ -2756,7 +2756,7 @@ generator.prototype.genEquals =
 		cond =
 			cond === null
 			? ceq
-			: _and( cond, ceq );
+			: $and( cond, ceq );
 	}
 
 	if( cond )
@@ -2827,7 +2827,7 @@ generator.prototype.genAlike =
 		{
 			// FIXME same test as in equals
 			cond =
-				_and(
+				$and(
 					'this.tree === obj.tree',
 					'this.ranks === obj.ranks'
 				);
@@ -2862,7 +2862,7 @@ generator.prototype.genAlike =
 			cond =
 				cond === null
 				? ceq
-				: _and( cond, ceq );
+				: $and( cond, ceq );
 		}
 
 		block = block.astReturn( cond );
