@@ -64,7 +64,7 @@ var
 
 ast_and = require( '../ast/and' );
 
-ast_arrayLiteral = require( '../ast/ast-array-literal' );
+ast_arrayLiteral = require( '../ast/arrayLiteral' );
 
 ast_assign = require( '../ast/ast-assign' );
 

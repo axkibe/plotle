@@ -36,7 +36,7 @@ var
 precTable =
 	{
 		'ast_and' : 13,
-		'astArrayLiteral' : -1,
+		'ast_arrayLiteral' : -1,
 		'astAssign' : 17,
 		'astBoolean' : -1,
 		'astCall' : 2,
@@ -1831,7 +1831,7 @@ formatArrayLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astArrayLiteral' )
+/**/	if( expr.reflect !== 'ast_arrayLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1860,7 +1860,7 @@ formatArrayLiteral =
 			formatExpression(
 				context.inc,
 				expr.get( a ),
-				precTable.astArrayLiteral
+				precTable.ast_arrayLiteral
 			)
 			+ (
 				a + 1 < aZ
@@ -2271,7 +2271,7 @@ var
 exprFormatter =
 	{
 		'ast_and' : formatAnd,
-		'astArrayLiteral' : formatArrayLiteral,
+		'ast_arrayLiteral' : formatArrayLiteral,
 		'astAssign' : formatAssign,
 		'astBoolean' : formatBoolean,
 		'astCall' : formatCall,

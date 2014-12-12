@@ -4,7 +4,7 @@
 
 
 var
-	astArrayLiteral;
+	ast_arrayLiteral;
 
 
 /*
@@ -21,7 +21,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astArrayLiteral',
+			'ast_arrayLiteral',
 		equals :
 			'primitive', // FUTURE
 		ray :
@@ -31,7 +31,7 @@ if( JION )
 }
 
 
-astArrayLiteral = require( '../jion/this' )( module );
+ast_arrayLiteral = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -46,7 +46,7 @@ astArrayLiteral = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astArrayLiteral.prototype.inspect =
+***/	ast_arrayLiteral.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

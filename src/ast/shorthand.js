@@ -20,7 +20,7 @@ module.exports =
 
 var
 	ast_and,
-	astArrayLiteral,
+	ast_arrayLiteral,
 	ast_assign,
 	ast_block,
 	astBoolean,
@@ -65,7 +65,7 @@ var
 
 ast_and = require( './and' );
 
-astArrayLiteral = require( './ast-array-literal' );
+ast_arrayLiteral = require( './arrayLiteral' );
 
 ast_assign = require( './ast-assign' );
 
@@ -211,7 +211,7 @@ shorthand.astAnd =
 shorthand.astArrayLiteral =
 	function( )
 {
-	return astArrayLiteral.create( );
+	return ast_arrayLiteral.create( );
 };
 
 

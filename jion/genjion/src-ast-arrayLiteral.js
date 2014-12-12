@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astArrayLiteral;
+	ast_arrayLiteral;
 
 
 /*
@@ -80,7 +80,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astArrayLiteral =
+ast_arrayLiteral =
 	{
 		prototype :
 			prototype
@@ -89,14 +89,14 @@ ast_astArrayLiteral =
 
 if( SERVER )
 {
-	module.exports = ast_astArrayLiteral;
+	module.exports = ast_arrayLiteral;
 }
 
 
 /*
-| Creates a new astArrayLiteral object.
+| Creates a new arrayLiteral object.
 */
-ast_astArrayLiteral.create =
+ast_arrayLiteral.create =
 prototype.create =
 	function(
 		// free strings
@@ -110,7 +110,7 @@ prototype.create =
 		ray,
 		rayDup;
 
-	if( this !== ast_astArrayLiteral )
+	if( this !== ast_arrayLiteral )
 	{
 		inherit = this;
 
@@ -220,13 +220,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astArrayLiteral';
+prototype.reflect = 'ast_arrayLiteral';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astArrayLiteral';
+prototype.reflectName = 'arrayLiteral';
 
 
 /*
