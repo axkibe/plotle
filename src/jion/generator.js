@@ -45,7 +45,7 @@ var
 	astCapsule,
 	$check,
 	$commaList,
-	astComment,
+	$comment,
 	astCondition,
 	astDiffers,
 	astEquals,
@@ -109,7 +109,7 @@ $check = shorthand.$check;
 
 $commaList = shorthand.$commaList;
 
-astComment = shorthand.astComment;
+$comment = shorthand.$comment;
 
 astCondition = shorthand.astCondition;
 
@@ -497,7 +497,7 @@ generator.prototype.genImports =
 
 	capsule =
 		capsule
-		.astComment( 'Imports.' )
+		.$comment( 'Imports.' )
 		.astVarDec( 'jools' );
 
 	// FUTURE: when type checking is there,
@@ -551,7 +551,7 @@ generator.prototype.genNodeIncludes =
 		unitList,
 		unitStr;
 
-	capsule = capsule.astComment( 'Node includes.' );
+	capsule = capsule.$comment( 'Node includes.' );
 
 	block =
 		$block( )
@@ -623,8 +623,7 @@ generator.prototype.genConstructor =
 		name;
 
 	capsule =
-		capsule
-		.astComment( 'Constructor.' );
+		capsule.$comment( 'Constructor.' );
 
 	block =
 		$block( )
@@ -831,7 +830,7 @@ generator.prototype.genConstructor =
 	{
 		capsule =
 			capsule
-			.astComment( 'Subclass.' )
+			.$comment( 'Subclass.' )
 			.$call(
 				'jools.subclass',
 				'Constructor',
@@ -842,11 +841,11 @@ generator.prototype.genConstructor =
 	// prototype shortcut
 	capsule =
 		capsule
-		.astComment( 'Prototype shortcut' )
+		.$comment( 'Prototype shortcut' )
 		.$assign( 'prototype', 'Constructor.prototype' );
 
 	// the exported object
-	capsule = capsule.astComment( 'Jion.' );
+	capsule = capsule.$comment( 'Jion.' );
 
 	jionObj =
 		astObjLiteral( )
@@ -878,7 +877,7 @@ generator.prototype.genSingleton =
 {
 	return (
 		capsule
-		.astComment( 'Singleton' )
+		.$comment( 'Singleton' )
 		.astVarDec( '_singleton' )
 		.$assign( '_singleton', null )
 	);
@@ -1820,7 +1819,7 @@ generator.prototype.genCreator =
 		creator;
 
 	capsule =
-		capsule.astComment(
+		capsule.$comment(
 			'Creates a new ' + this.id.name + ' object.'
 		);
 
@@ -2318,7 +2317,7 @@ generator.prototype.genFromJSONCreator =
 	jsonList.sort( );
 
 	capsule =
-		capsule.astComment(
+		capsule.$comment(
 			'Creates a new ' + this.id.name + ' object from JSON.'
 		);
 
@@ -2364,12 +2363,12 @@ generator.prototype.genReflection =
 {
 	capsule =
 		capsule
-		.astComment( 'Reflection.' )
+		.$comment( 'Reflection.' )
 		.$assign( 'prototype.reflect', this.id.astString );
 
 	capsule =
 		capsule
-		.astComment( 'Name Reflection.' )
+		.$comment( 'Name Reflection.' )
 		.$assign(
 			'prototype.reflectName',
 			$string( this.id.name )
@@ -2389,35 +2388,35 @@ generator.prototype.genJionProto =
 {
 	capsule =
 		capsule
-		.astComment( 'Sets values by path.' )
+		.$comment( 'Sets values by path.' )
 		.ast( 'prototype.setPath = jion_proto.setPath' )
 
-		.astComment( 'Gets values by path' )
+		.$comment( 'Gets values by path' )
 		.ast( 'prototype.getPath = jion_proto.getPath' );
 
 	if( this.twig )
 	{
 		capsule =
 			capsule
-			.astComment( 'Returns a twig by rank.' )
+			.$comment( 'Returns a twig by rank.' )
 			.ast( 'prototype.atRank = jion_proto.twigAtRank' )
 
-			.astComment( 'Gets the rank of a key.' )
+			.$comment( 'Gets the rank of a key.' )
 			.ast(
 				'jools.lazyFunctionString( '
 				+ 'prototype, "rankOf", jion_proto.twigRankOf '
 				+ ')'
 			)
 
-			.astComment( 'Gets the rank of a key.' )
+			.$comment( 'Gets the rank of a key.' )
 			.ast( 'prototype.getKey = jion_proto.twigGetKey' )
 
-			.astComment( 'Returns the length of the twig.')
+			.$comment( 'Returns the length of the twig.')
 			.ast(
 				'jools.lazyValue( prototype, "length", jion_proto.twigLength )'
 			)
 
-			.astComment( 'Creates a new unique identifier.' )
+			.$comment( 'Creates a new unique identifier.' )
 			.ast( 'prototype.newUID = jion_proto.newUID' );
 	}
 
@@ -2425,27 +2424,27 @@ generator.prototype.genJionProto =
 	{
 		capsule =
 			capsule
-			.astComment( 'Appends an entry to the ray.' )
+			.$comment( 'Appends an entry to the ray.' )
 			.ast( 'prototype.append = jion_proto.rayAppend' )
 
-			.astComment( 'Appends an entry to the ray.' )
+			.$comment( 'Appends an entry to the ray.' )
 			.ast( 'prototype.appendRay = jion_proto.rayAppendRay' )
 
-			.astComment( 'Returns the length of the ray.')
+			.$comment( 'Returns the length of the ray.')
 			.ast(
 				'jools.lazyValue( prototype, "length", jion_proto.rayLength )'
 			)
 
-			.astComment( 'Gets one entry from the ray.' )
+			.$comment( 'Gets one entry from the ray.' )
 			.ast( 'prototype.get = jion_proto.rayGet' )
 
-			.astComment( 'Returns a jion with one entry inserted to the ray.' )
+			.$comment( 'Returns a jion with one entry inserted to the ray.' )
 			.ast( 'prototype.insert = jion_proto.rayInsert' )
 
-			.astComment( 'Returns the jion with one entry of the ray set.' )
+			.$comment( 'Returns the jion with one entry of the ray set.' )
 			.ast( 'prototype.set = jion_proto.raySet' )
 
-			.astComment( 'Returns a jion with one entry from the ray removed.' )
+			.$comment( 'Returns a jion with one entry from the ray removed.' )
 			.ast( 'prototype.remove = jion_proto.rayRemove' );
 	}
 
@@ -2521,7 +2520,7 @@ generator.prototype.genToJSON =
 
 	capsule =
 		capsule
-		.astComment( 'Converts a ' + this.id.name + ' into JSON.' )
+		.$comment( 'Converts a ' + this.id.name + ' into JSON.' )
 		.$call(
 			'jools.lazyValue',
 			'prototype',
@@ -2634,7 +2633,7 @@ generator.prototype.genEquals =
 
 			return (
 				capsule
-				.astComment( 'Tests equality of object.' )
+				.$comment( 'Tests equality of object.' )
 				.$assign(
 					'prototype.equals',
 					astFunc( astReturn( 'this === obj' ) )
@@ -2656,7 +2655,7 @@ generator.prototype.genEquals =
 
 	capsule =
 		capsule
-		.astComment( 'Tests equality of object.' );
+		.$comment( 'Tests equality of object.' );
 
 	block = $block( );
 
@@ -2812,7 +2811,7 @@ generator.prototype.genAlike =
 
 		ignores = this.alike[ alikeName ].ignores;
 
-		capsule = capsule.astComment( 'Tests partial equality.' );
+		capsule = capsule.$comment( 'Tests partial equality.' );
 
 		block =
 			$block( )
@@ -2883,7 +2882,7 @@ generator.prototype.genAlike =
 generator.prototype.genExport =
 	function( block )
 {
-	block = block.astComment( 'Export.' );
+	block = block.$comment( 'Export.' );
 
 	block =
 		block
@@ -2959,7 +2958,7 @@ generator.prototype.genCapsule =
 
 	block =
 		block
-		.astComment( 'Capsule' )
+		.$comment( 'Capsule' )
 		.append( astCapsule( capsule ) );
 
 	return block;
@@ -2985,7 +2984,7 @@ generator.generate =
 
 	result =
 		$block( )
-		.astComment(
+		.$comment(
 			'This is an auto generated file.',
 			'',
 			'DO NOT EDIT!'

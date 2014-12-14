@@ -27,7 +27,7 @@ var
 	ast_call,
 	ast_check,
 	ast_commaList,
-	astComment,
+	ast_comment,
 	astCondition,
 	astDelete,
 	astDiffers,
@@ -79,7 +79,7 @@ ast_check = require( './check' );
 
 ast_commaList = require( './commaList' );
 
-astComment = require( './ast-comment' );
+ast_comment = require( './comment' );
 
 astCondition = require( './ast-condition' );
 
@@ -326,15 +326,14 @@ shorthand.$check =
 /*
 | Shorthand for creating comments
 */
-shorthand.astComment =
+shorthand.$comment =
 	function(
 		// list of strings
 	)
 {
 	return(
-		astComment.create(
-			'content',
-				Array.prototype.slice.call( arguments )
+		ast_comment.create(
+			'content', Array.prototype.slice.call( arguments )
 		)
 	);
 };

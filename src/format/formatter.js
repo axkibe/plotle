@@ -1236,7 +1236,7 @@ formatStatement =
 
 	if(
 		lookBehind
-		&& lookBehind.reflect !== 'ast_astComment'
+		&& lookBehind.reflect !== 'ast_comment'
 		&& !(
 			lookBehind.reflect === 'ast_astVarDec'
 			&& statement.reflect === 'ast_astVarDec'
@@ -1257,11 +1257,11 @@ formatStatement =
 		}
 	}
 
-	if( statement.reflect === 'ast_astComment' )
+	if( statement.reflect === 'ast_comment' )
 	{
 		if(
 			lookBehind
-			&& lookBehind.reflect === 'ast_astComment'
+			&& lookBehind.reflect === 'ast_comment'
 		)
 		{
 			text += '\n\n';

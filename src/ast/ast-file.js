@@ -1,5 +1,7 @@
 /*
 | A file to be generated.
+|
+| FIXME remove
 */
 
 
@@ -25,7 +27,7 @@ if( JION )
 						comment :
 							'header comment',
 						type :
-							'ast_astComment',
+							'ast_comment',
 						defaultValue :
 							null
 					},

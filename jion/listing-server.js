@@ -58,7 +58,7 @@ module.exports =
 			'src/ast/case.js',
 			'src/ast/check.js',
 			'src/ast/commaList.js',
-			'src/ast/ast-comment.js',
+			'src/ast/comment.js',
 			'src/ast/ast-condition.js',
 			'src/ast/ast-delete.js',
 			'src/ast/ast-differs.js',

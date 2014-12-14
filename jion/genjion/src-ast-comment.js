@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astComment;
+	ast_comment;
 
 
 /*
@@ -78,7 +78,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astComment =
+ast_comment =
 	{
 		prototype :
 			prototype
@@ -87,14 +87,14 @@ ast_astComment =
 
 if( SERVER )
 {
-	module.exports = ast_astComment;
+	module.exports = ast_comment;
 }
 
 
 /*
-| Creates a new astComment object.
+| Creates a new comment object.
 */
-ast_astComment.create =
+ast_comment.create =
 prototype.create =
 	function(
 		// free strings
@@ -107,7 +107,7 @@ prototype.create =
 		inherit,
 		v_content;
 
-	if( this !== ast_astComment )
+	if( this !== ast_comment )
 	{
 		inherit = this;
 
@@ -167,13 +167,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astComment';
+prototype.reflect = 'ast_comment';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astComment';
+prototype.reflectName = 'comment';
 
 
 /*

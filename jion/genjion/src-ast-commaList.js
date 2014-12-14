@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astCommaList;
+	ast_commaList;
 
 
 /*
@@ -80,7 +80,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astCommaList =
+ast_commaList =
 	{
 		prototype :
 			prototype
@@ -89,14 +89,14 @@ ast_astCommaList =
 
 if( SERVER )
 {
-	module.exports = ast_astCommaList;
+	module.exports = ast_commaList;
 }
 
 
 /*
-| Creates a new astCommaList object.
+| Creates a new commaList object.
 */
-ast_astCommaList.create =
+ast_commaList.create =
 prototype.create =
 	function(
 		// free strings
@@ -110,7 +110,7 @@ prototype.create =
 		ray,
 		rayDup;
 
-	if( this !== ast_astCommaList )
+	if( this !== ast_commaList )
 	{
 		inherit = this;
 

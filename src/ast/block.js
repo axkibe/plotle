@@ -27,7 +27,7 @@ if( JION )
 
 var
 	ast_block,
-	astComment,
+	ast_comment,
 	astNew,
 	astPlusAssign,
 	astReturn,
@@ -38,7 +38,7 @@ var
 
 ast_block = require( '../jion/this' )( module );
 
-astComment = require( './ast-comment' );
+ast_comment = require( './comment' );
 
 astNew = require( './ast-new' );
 
@@ -125,16 +125,16 @@ ast_block.prototype.$check =
 /*
 | Returns the block with a comment appended.
 */
-ast_block.prototype.astComment =
+ast_block.prototype.$comment =
 	function(
 		header
 	)
 {
-	if( header.reflect !== 'ast_astComment' )
+	if( header.reflect !== 'ast_comment' )
 	{
 		// arguments have to be a list of strings otherwise
 		header =
-			astComment.create(
+			ast_comment.create(
 				'content',
 					Array.prototype.slice.call( arguments )
 			);
