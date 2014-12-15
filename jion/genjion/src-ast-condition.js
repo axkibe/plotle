@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astCondition;
+	ast_condition;
 
 
 /*
@@ -84,7 +84,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astCondition =
+ast_condition =
 	{
 		prototype :
 			prototype
@@ -93,14 +93,14 @@ ast_astCondition =
 
 if( SERVER )
 {
-	module.exports = ast_astCondition;
+	module.exports = ast_condition;
 }
 
 
 /*
-| Creates a new astCondition object.
+| Creates a new condition object.
 */
-ast_astCondition.create =
+ast_condition.create =
 prototype.create =
 	function(
 		// free strings
@@ -115,7 +115,7 @@ prototype.create =
 		v_elsewise,
 		v_then;
 
-	if( this !== ast_astCondition )
+	if( this !== ast_condition )
 	{
 		inherit = this;
 
@@ -225,13 +225,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astCondition';
+prototype.reflect = 'ast_condition';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astCondition';
+prototype.reflectName = 'condition';
 
 
 /*

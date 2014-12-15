@@ -21,7 +21,7 @@ module.exports =
 			'src/ast/check.js',
 			'src/ast/commaList.js',
 			'src/ast/comment.js',
-			'src/ast/ast-condition.js',
+			'src/ast/condition.js',
 			'src/ast/ast-delete.js',
 			'src/ast/ast-differs.js',
 			'src/ast/ast-dot.js',

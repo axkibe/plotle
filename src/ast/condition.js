@@ -19,7 +19,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astCondition',
+			'ast_condition',
 		attributes :
 			{
 				condition :
@@ -49,9 +49,9 @@ if( JION )
 
 
 var
-	astCondition;
+	ast_condition;
 
-astCondition = require( '../jion/this' )( module );
+ast_condition = require( '../jion/this' )( module );
 
 
 /*
@@ -59,7 +59,7 @@ astCondition = require( '../jion/this' )( module );
 |
 | FUTURE create this single recreators with jion-gen.
 */
-astCondition.prototype.elsewise =
+ast_condition.prototype.elsewise =
 	function(
 		expr
 	)

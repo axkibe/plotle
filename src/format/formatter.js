@@ -41,7 +41,7 @@ precTable =
 		'ast_boolean' : -1,
 		'ast_call' : 2,
 		'ast_commaList' : 18,
-		'astCondition' : 15,
+		'ast_condition' : 15,
 		'astDelete' : 4,
 		'astDiffers' : 9,
 		'astDot' : 1,
@@ -593,7 +593,7 @@ formatCondition =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astCondition' )
+/**/	if( expr.reflect !== 'ast_condition' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -603,7 +603,7 @@ formatCondition =
 		formatExpression(
 			context,
 			expr.condition,
-			precTable.astCondition
+			precTable.ast_condition
 		)
 		+ context.sep
 		+ context.tab
@@ -611,7 +611,7 @@ formatCondition =
 		+ formatExpression(
 			context.setInline,
 			expr.then,
-			precTable.astCondition
+			precTable.ast_condition
 		)
 		+ context.sep
 		+ context.tab
@@ -619,7 +619,7 @@ formatCondition =
 		+ formatExpression(
 			context.setInline,
 			expr.elsewise,
-			precTable.astCondition
+			precTable.ast_condition
 		)
 	);
 };
@@ -2276,7 +2276,7 @@ exprFormatter =
 		'ast_boolean' : formatBoolean,
 		'ast_call' : formatCall,
 		'ast_commaList' : formatCommaList,
-		'astCondition' : formatCondition,
+		'ast_condition' : formatCondition,
 		'astDelete' : formatDelete,
 		'astDiffers' : formatDiffers,
 		'astDot' : formatDot,

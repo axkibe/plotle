@@ -46,7 +46,7 @@ var
 	$check,
 	$commaList,
 	$comment,
-	astCondition,
+	$condition,
 	astDiffers,
 	astEquals,
 	astFail,
@@ -111,7 +111,7 @@ $commaList = shorthand.$commaList;
 
 $comment = shorthand.$comment;
 
-astCondition = shorthand.astCondition;
+$condition = shorthand.$condition;
 
 astDiffers = shorthand.astDiffers;
 
@@ -1568,7 +1568,7 @@ generator.prototype.genCreatorConcerns =
 				else if( attr.allowsNull )
 				{
 					cExpr =
-						astCondition(
+						$condition(
 							astDiffers( attr.v, null ),
 							attr.v.astDot( member ),
 							null
@@ -1578,7 +1578,7 @@ generator.prototype.genCreatorConcerns =
 				else if( attr.allowsUndefined )
 				{
 					cExpr =
-						astCondition(
+						$condition(
 							astDiffers( attr.v, undefined ),
 							attr.v.astDot( member ),
 							null
@@ -2681,7 +2681,7 @@ generator.prototype.genEquals =
 			.astIf(
 				astOr(
 					'key !== obj.ranks[ a ]',
-					astCondition(
+					$condition(
 						'this.twig[ key ].equals',
 						astNot(
 							$call(

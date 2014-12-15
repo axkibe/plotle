@@ -28,7 +28,7 @@ var
 	ast_check,
 	ast_commaList,
 	ast_comment,
-	astCondition,
+	ast_condition,
 	astDelete,
 	astDiffers,
 	astDot,
@@ -81,7 +81,7 @@ ast_commaList = require( './commaList' );
 
 ast_comment = require( './comment' );
 
-astCondition = require( './ast-condition' );
+ast_condition = require( './condition' );
 
 astDelete = require( './ast-delete' );
 
@@ -343,7 +343,7 @@ shorthand.$comment =
 /*
 | Shorthand for creating conditions.
 */
-shorthand.astCondition =
+shorthand.$condition =
 	function(
 		condition,
 		then,
@@ -351,7 +351,7 @@ shorthand.astCondition =
 	)
 {
 	return(
-		astCondition.create(
+		ast_condition.create(
 			'condition', tools.convert( condition ),
 			'then', tools.convert( then ),
 			'elsewise', tools.convert( elsewise )
