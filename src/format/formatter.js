@@ -45,7 +45,7 @@ precTable =
 		'ast_delete' : 4,
 		'ast_differs' : 9,
 		'ast_dot' : 1,
-		'astEquals' : 9,
+		'ast_equals' : 9,
 		// this is random guess, must be larger than call
 		// so the capsule is generated right.
 		'astFunc' : 3,
@@ -552,7 +552,7 @@ formatEquals =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astEquals' )
+/**/	if( expr.reflect !== 'ast_equals' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -562,7 +562,7 @@ formatEquals =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.astEquals
+			precTable.ast_equals
 		)
 		+ context.sep
 		+ context.tab
@@ -571,7 +571,7 @@ formatEquals =
 		+ formatExpression(
 			context,
 			expr.right,
-			precTable.astEquals
+			precTable.ast_equals
 		);
 
 	return text;
@@ -2280,7 +2280,7 @@ exprFormatter =
 		'ast_delete' : formatDelete,
 		'ast_differs' : formatDiffers,
 		'ast_dot' : formatDot,
-		'astEquals' : formatEquals,
+		'ast_equals' : formatEquals,
 		'astFunc' : formatFunc,
 		'astGreaterThan' : formatGreaterThan,
 		'astInstanceof' : formatInstanceof,

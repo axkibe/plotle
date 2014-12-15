@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astEquals;
+	ast_equals;
 
 
 /*
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astEquals =
+ast_equals =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astEquals =
 
 if( SERVER )
 {
-	module.exports = ast_astEquals;
+	module.exports = ast_equals;
 }
 
 
 /*
-| Creates a new astEquals object.
+| Creates a new equals object.
 */
-ast_astEquals.create =
+ast_equals.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== ast_astEquals )
+	if( this !== ast_equals )
 	{
 		inherit = this;
 
@@ -192,13 +192,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astEquals';
+prototype.reflect = 'ast_equals';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astEquals';
+prototype.reflectName = 'equals';
 
 
 /*

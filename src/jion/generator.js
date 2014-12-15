@@ -48,7 +48,7 @@ var
 	$comment,
 	$condition,
 	$differs,
-	astEquals,
+	$equals,
 	astFail,
 	astFile,
 	astFunc,
@@ -115,7 +115,7 @@ $condition = shorthand.$condition;
 
 $differs = shorthand.$differs;
 
-astEquals = shorthand.astEquals;
+$equals = shorthand.$equals;
 
 astFail = shorthand.astFail;
 
@@ -1256,7 +1256,7 @@ generator.prototype.genCreatorDefaults =
 			block =
 				block
 				.astIf(
-					astEquals( attr.v, undefined ),
+					$equals( attr.v, undefined ),
 					$assign( attr.v, attr.defaultValue )
 				);
 		}
@@ -1397,7 +1397,7 @@ generator.prototype.genCreatorChecks =
 		{
 			check =
 				check.astIf(
-					astEquals( av, undefined ),
+					$equals( av, undefined ),
 					astFail( )
 				);
 		}
@@ -1406,7 +1406,7 @@ generator.prototype.genCreatorChecks =
 		{
 			check =
 				check.astIf(
-					astEquals( av, null ),
+					$equals( av, null ),
 					astFail( )
 				);
 		}
@@ -1662,7 +1662,7 @@ generator.prototype.genCreatorUnchanged =
 
 		if( attr.assign === null )
 		{
-			cond = $and( cond, astEquals( attr.v, null ) );
+			cond = $and( cond, $equals( attr.v, null ) );
 
 			continue;
 		}
@@ -1680,7 +1680,7 @@ generator.prototype.genCreatorUnchanged =
 			case 'String' :
 
 				ceq =
-					astEquals(
+					$equals(
 						attr.v,
 						astVar( 'inherit' ).$dot( attr.assign )
 					);
@@ -1706,7 +1706,7 @@ generator.prototype.genCreatorUnchanged =
 				{
 					ceq =
 						astOr(
-							astEquals(
+							$equals(
 								attr.v,
 								astVar( 'inherit' ).$dot( attr.assign )
 							),
@@ -1717,7 +1717,7 @@ generator.prototype.genCreatorUnchanged =
 				{
 					ceq =
 						astOr(
-							astEquals(
+							$equals(
 								attr.v,
 								astVar( 'inherit' ).$dot( attr.assign )
 							),
@@ -2556,7 +2556,7 @@ generator.prototype.genAttributeEquals =
 		case 'Object' :
 		case 'String' :
 
-			ceq = astEquals( le, re );
+			ceq = $equals( le, re );
 
 			break;
 
@@ -2574,7 +2574,7 @@ generator.prototype.genAttributeEquals =
 			{
 				ceq =
 					astOr(
-						astEquals( le, re ),
+						$equals( le, re ),
 						$and(
 							$differs( le, null ),
 							$call( le.$dot( 'equals' ), re )
@@ -2585,7 +2585,7 @@ generator.prototype.genAttributeEquals =
 			{
 				ceq =
 					astOr(
-						astEquals( le, re ),
+						$equals( le, re ),
 						$and(
 							$differs( le, undefined ),
 							$call( le.$dot( 'equals' ), re )

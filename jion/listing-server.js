@@ -63,7 +63,7 @@ module.exports =
 			'src/ast/delete.js',
 			'src/ast/differs.js',
 			'src/ast/dot.js',
-			'src/ast/ast-equals.js',
+			'src/ast/equals.js',
 			'src/ast/ast-fail.js',
 			'src/ast/ast-file.js',
 			'src/ast/ast-for.js',

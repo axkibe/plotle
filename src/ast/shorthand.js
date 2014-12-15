@@ -32,9 +32,9 @@ var
 	ast_delete,
 	ast_differs,
 	ast_dot,
+	ast_equals,
 	astFail,
 	astFile,
-	astEquals,
 	astFor,
 	astForIn,
 	astFunc,
@@ -89,7 +89,7 @@ ast_differs = require( './differs' );
 
 ast_dot = require( './dot' );
 
-astEquals = require( './ast-equals' );
+ast_equals = require( './equals' );
 
 astFail = require( './ast-fail' );
 
@@ -407,7 +407,7 @@ shorthand.$dot =
 /*
 | Shorthand for creating equals.
 */
-shorthand.astEquals =
+shorthand.$equals =
 	function(
 		left,
 		right
@@ -417,12 +417,7 @@ shorthand.astEquals =
 
 	right = tools.convert( right );
 
-	return(
-		astEquals.create(
-			'left', left,
-			'right', right
-		)
-	);
+	return ast_equals.create( 'left', left, 'right', right );
 };
 
 

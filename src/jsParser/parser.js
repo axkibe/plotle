@@ -76,7 +76,7 @@ ast_differs = require( '../ast/differs' );
 
 ast_dot = require( '../ast/dot' );
 
-ast_equals = require( '../ast/ast-equals' );
+ast_equals = require( '../ast/equals' );
 
 ast_greaterThan = require( '../ast/ast-greater-than' );
 
