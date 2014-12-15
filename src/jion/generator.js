@@ -1143,7 +1143,7 @@ generator.prototype.genCreatorFreeStringsParser =
 					'twig[ arg ] === undefined',
 					astFail( )
 				)
-				.astDelete( 'twig[ arg ]' )
+				.$delete( 'twig[ arg ]' )
 				.ast( 'ranks.splice( ranks.indexOf( arg ), 1 )' )
 			);
 	}

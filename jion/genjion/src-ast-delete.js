@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astDelete;
+	ast_delete;
 
 
 /*
@@ -78,7 +78,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astDelete =
+ast_delete =
 	{
 		prototype :
 			prototype
@@ -87,14 +87,14 @@ ast_astDelete =
 
 if( SERVER )
 {
-	module.exports = ast_astDelete;
+	module.exports = ast_delete;
 }
 
 
 /*
-| Creates a new astDelete object.
+| Creates a new delete object.
 */
-ast_astDelete.create =
+ast_delete.create =
 prototype.create =
 	function(
 		// free strings
@@ -107,7 +107,7 @@ prototype.create =
 		inherit,
 		v_expr;
 
-	if( this !== ast_astDelete )
+	if( this !== ast_delete )
 	{
 		inherit = this;
 
@@ -167,13 +167,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astDelete';
+prototype.reflect = 'ast_delete';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astDelete';
+prototype.reflectName = 'delete';
 
 
 /*

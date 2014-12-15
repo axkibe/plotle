@@ -22,7 +22,7 @@ module.exports =
 			'src/ast/commaList.js',
 			'src/ast/comment.js',
 			'src/ast/condition.js',
-			'src/ast/ast-delete.js',
+			'src/ast/delete.js',
 			'src/ast/ast-differs.js',
 			'src/ast/ast-dot.js',
 			'src/ast/ast-equals.js',

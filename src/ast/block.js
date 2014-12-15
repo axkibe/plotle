@@ -147,12 +147,12 @@ ast_block.prototype.$comment =
 /*
 | Returns the block with a delete statement appended.
 */
-ast_block.prototype.astDelete =
+ast_block.prototype.$delete =
 	function(
 		expr
 	)
 {
-	return this.append( shorthand.astDelete( expr ) );
+	return this.append( shorthand.$delete( expr ) );
 
 };
 

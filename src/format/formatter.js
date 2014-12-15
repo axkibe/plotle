@@ -42,7 +42,7 @@ precTable =
 		'ast_call' : 2,
 		'ast_commaList' : 18,
 		'ast_condition' : 15,
-		'astDelete' : 4,
+		'ast_delete' : 4,
 		'astDiffers' : 9,
 		'astDot' : 1,
 		'astEquals' : 9,
@@ -1402,7 +1402,7 @@ formatStatement =
 		case 'ast_assign' :
 		case 'ast_boolean' :
 		case 'ast_call' :
-		case 'ast_astDelete' :
+		case 'ast_delete' :
 		case 'ast_astFail' :
 		case 'ast_astNew' :
 		case 'ast_astNumber' :
@@ -1703,7 +1703,7 @@ formatDelete =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astDelete' )
+/**/	if( expr.reflect !== 'ast_delete' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1715,7 +1715,7 @@ formatDelete =
 		+ formatExpression(
 			context,
 			expr.expr,
-			precTable.astDelete
+			precTable.ast_delete
 		)
 	);
 };
@@ -2277,7 +2277,7 @@ exprFormatter =
 		'ast_call' : formatCall,
 		'ast_commaList' : formatCommaList,
 		'ast_condition' : formatCondition,
-		'astDelete' : formatDelete,
+		'ast_delete' : formatDelete,
 		'astDiffers' : formatDiffers,
 		'astDot' : formatDot,
 		'astEquals' : formatEquals,

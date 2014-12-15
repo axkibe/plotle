@@ -29,7 +29,7 @@ var
 	ast_commaList,
 	ast_comment,
 	ast_condition,
-	astDelete,
+	ast_delete,
 	astDiffers,
 	astDot,
 	astFail,
@@ -83,7 +83,7 @@ ast_comment = require( './comment' );
 
 ast_condition = require( './condition' );
 
-astDelete = require( './ast-delete' );
+ast_delete = require( './delete' );
 
 astDiffers = require( './ast-differs' );
 
@@ -385,14 +385,14 @@ shorthand.astDiffers =
 /*
 | Shorthand for creating delete calls.
 */
-shorthand.astDelete =
+shorthand.$delete =
 	function(
 		expr
 	)
 {
 	expr = tools.convert( expr );
 
-	return astDelete.create( 'expr', expr );
+	return ast_delete.create( 'expr', expr );
 };
 
 
