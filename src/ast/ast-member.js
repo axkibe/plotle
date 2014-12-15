@@ -40,33 +40,26 @@ if( JION )
 
 
 var
-	astDot,
+	ast_dot,
 	astMember;
 
 
 astMember = require( '../jion/this' )( module );
 
 
-astDot = require( './ast-dot' );
+ast_dot = require( './dot' );
 
 
 /*
 | Creates a dot member access of a dot.
 */
-astMember.prototype.astDot =
+astMember.prototype.$dot =
 	function(
 		member // member string
 	)
 {
-	// checks if member is a string is done in 'astDot'
-	return(
-		astDot.create(
-			'expr',
-				this,
-			'member',
-				member
-		)
-	);
+	// checks if member is a string is done in 'ast_dot.create'
+	return ast_dot.create( 'expr', this, 'member', member );
 };
 
 

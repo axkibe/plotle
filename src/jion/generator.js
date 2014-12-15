@@ -652,7 +652,7 @@ generator.prototype.genConstructor =
 
 		assign =
 			$assign(
-				astThis.astDot( attr.assign ),
+				astThis.$dot( attr.assign ),
 				attr.v
 			);
 
@@ -997,7 +997,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 			receiver
 			.$assign(
 				attr.v,
-				astThis.astDot( attr.assign )
+				astThis.$dot( attr.assign )
 			);
 	}
 
@@ -1307,7 +1307,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		default :
 
-			return $differs( avar.astDot( 'reflect' ), id.astString );
+			return $differs( avar.$dot( 'reflect' ), id.astString );
 	}
 };
 
@@ -1523,7 +1523,7 @@ generator.prototype.genCreatorConcerns =
 		{
 			if( id )
 			{
-				cExpr = $call( id.astVar.astDot( func ) );
+				cExpr = $call( id.astVar.$dot( func ) );
 			}
 			else
 			{
@@ -1570,7 +1570,7 @@ generator.prototype.genCreatorConcerns =
 					cExpr =
 						$condition(
 							$differs( attr.v, null ),
-							attr.v.astDot( member ),
+							attr.v.$dot( member ),
 							null
 						);
 
@@ -1580,18 +1580,18 @@ generator.prototype.genCreatorConcerns =
 					cExpr =
 						$condition(
 							$differs( attr.v, undefined ),
-							attr.v.astDot( member ),
+							attr.v.$dot( member ),
 							null
 						);
 				}
 				else
 				{
-					cExpr = attr.v.astDot( member );
+					cExpr = attr.v.$dot( member );
 				}
 			}
 			else
 			{
-				cExpr = $call( attr.v.astDot( member ) );
+				cExpr = $call( attr.v.$dot( member ) );
 
 				for(
 					b = 0, bZ = args.length;
@@ -1682,7 +1682,7 @@ generator.prototype.genCreatorUnchanged =
 				ceq =
 					astEquals(
 						attr.v,
-						astVar( 'inherit' ).astDot( attr.assign )
+						astVar( 'inherit' ).$dot( attr.assign )
 					);
 
 				break;
@@ -1691,8 +1691,8 @@ generator.prototype.genCreatorUnchanged =
 
 				equalsCall =
 					$call(
-						attr.v.astDot( 'equals' ),
-						astVar( 'inherit' ).astDot( attr.assign )
+						attr.v.$dot( 'equals' ),
+						astVar( 'inherit' ).$dot( attr.assign )
 					);
 
 				if( attr.allowsNull && attr.allowsUndefined )
@@ -1708,7 +1708,7 @@ generator.prototype.genCreatorUnchanged =
 						astOr(
 							astEquals(
 								attr.v,
-								astVar( 'inherit' ).astDot( attr.assign )
+								astVar( 'inherit' ).$dot( attr.assign )
 							),
 							$and( attr.v, equalsCall )
 						);
@@ -1719,7 +1719,7 @@ generator.prototype.genCreatorUnchanged =
 						astOr(
 							astEquals(
 								attr.v,
-								astVar( 'inherit' ).astDot( attr.assign )
+								astVar( 'inherit' ).$dot( attr.assign )
 							),
 							$and( attr.v, equalsCall )
 						);
@@ -1852,7 +1852,7 @@ generator.prototype.genCreator =
 	capsule =
 		capsule
 		.$assign(
-			astVar( this.id.global ).astDot( 'create' ),
+			astVar( this.id.global ).$dot( 'create' ),
 			$assign( 'prototype.create', creator )
 		);
 
@@ -2011,7 +2011,7 @@ generator.prototype.genFromJSONCreatorParser =
 						$assign(
 							attr.v,
 							$call(
-								attr.id.astVar.astDot( 'createFromJSON' ),
+								attr.id.astVar.$dot( 'createFromJSON' ),
 								'arg'
 							)
 						);
@@ -2036,7 +2036,7 @@ generator.prototype.genFromJSONCreatorParser =
 									attr.v,
 									$call(
 										attr.id[ t ].astVar
-										.astDot( 'createFromJSON' ),
+										.$dot( 'createFromJSON' ),
 										'arg'
 									)
 								)
@@ -2108,7 +2108,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 				$assign(
 					'ray[ r ]',
 					$call(
-						rid.astVar.astDot( 'createFromJSON' ),
+						rid.astVar.$dot( 'createFromJSON' ),
 						'jray[ r ]'
 					)
 				)
@@ -2163,7 +2163,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 				$assign(
 					'twig[ key ]',
 					$call(
-						twigID.astVar.astDot( 'createFromJSON' ),
+						twigID.astVar.$dot( 'createFromJSON' ),
 						'jval'
 					)
 				)
@@ -2344,7 +2344,7 @@ generator.prototype.genFromJSONCreator =
 	capsule =
 		capsule
 		.$assign(
-			astVar( this.id.global ).astDot( 'createFromJSON' ),
+			astVar( this.id.global ).$dot( 'createFromJSON' ),
 			astFunc( funcBlock )
 			.astArg( 'json', 'the JSON object' )
 		);
@@ -2491,7 +2491,7 @@ generator.prototype.genToJSON =
 			olit
 			.add(
 				name,
-				astThis.astDot( attr.assign )
+				astThis.$dot( attr.assign )
 			);
 	}
 
@@ -2577,7 +2577,7 @@ generator.prototype.genAttributeEquals =
 						astEquals( le, re ),
 						$and(
 							$differs( le, null ),
-							$call( le.astDot( 'equals' ), re )
+							$call( le.$dot( 'equals' ), re )
 						)
 					);
 			}
@@ -2588,13 +2588,13 @@ generator.prototype.genAttributeEquals =
 						astEquals( le, re ),
 						$and(
 							$differs( le, undefined ),
-							$call( le.astDot( 'equals' ), re )
+							$call( le.$dot( 'equals' ), re )
 						)
 					);
 			}
 			else
 			{
-				ceq = $call( le.astDot( 'equals' ), re );
+				ceq = $call( le.$dot( 'equals' ), re );
 			}
 	}
 
@@ -2744,8 +2744,8 @@ generator.prototype.genEquals =
 		ceq =
 			this.genAttributeEquals(
 				name,
-				astThis.astDot( attr.assign ),
-				astVar( 'obj' ).astDot( attr.assign )
+				astThis.$dot( attr.assign ),
+				astVar( 'obj' ).$dot( attr.assign )
 			);
 
 		cond =
@@ -2850,8 +2850,8 @@ generator.prototype.genAlike =
 			ceq =
 				this.genAttributeEquals(
 					name,
-					astThis.astDot( attr.assign ),
-					astVar( 'obj' ).astDot( attr.assign )
+					astThis.$dot( attr.assign ),
+					astVar( 'obj' ).$dot( attr.assign )
 				);
 
 			cond =
@@ -2866,7 +2866,7 @@ generator.prototype.genAlike =
 			capsule
 			.$assign(
 				// FIXME use proto
-				astVar( 'prototype' ).astDot( alikeName ),
+				astVar( 'prototype' ).$dot( alikeName ),
 				astFunc( block )
 				.astArg( 'obj', 'object to compare to' )
 			);

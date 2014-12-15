@@ -74,7 +74,7 @@ ast_call = require( '../ast/call' );
 
 ast_differs = require( '../ast/differs' );
 
-ast_dot = require( '../ast/ast-dot' );
+ast_dot = require( '../ast/dot' );
 
 ast_equals = require( '../ast/ast-equals' );
 

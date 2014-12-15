@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astDot;
+	ast_dot;
 
 
 /*
@@ -83,7 +83,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astDot =
+ast_dot =
 	{
 		prototype :
 			prototype
@@ -92,14 +92,14 @@ ast_astDot =
 
 if( SERVER )
 {
-	module.exports = ast_astDot;
+	module.exports = ast_dot;
 }
 
 
 /*
-| Creates a new astDot object.
+| Creates a new dot object.
 */
-ast_astDot.create =
+ast_dot.create =
 prototype.create =
 	function(
 		// free strings
@@ -113,7 +113,7 @@ prototype.create =
 		v_expr,
 		v_member;
 
-	if( this !== ast_astDot )
+	if( this !== ast_dot )
 	{
 		inherit = this;
 
@@ -209,13 +209,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astDot';
+prototype.reflect = 'ast_dot';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astDot';
+prototype.reflectName = 'dot';
 
 
 /*

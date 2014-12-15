@@ -38,7 +38,7 @@ if( JION )
 | Import
 */
 var
-	astDot,
+	ast_dot,
 	astMember,
 	astVar,
 	tools;
@@ -46,7 +46,7 @@ var
 
 astVar = require( '../jion/this' )( module );
 
-astDot = require( './ast-dot' );
+ast_dot = require( './dot' );
 
 astMember = require( './ast-member' );
 
@@ -85,18 +85,14 @@ astVar.prototype._init =
 /*
 | Creates a dot member access of a variable.
 */
-astVar.prototype.astDot =
+astVar.prototype.$dot =
 	function(
 		member // member string
 	)
 {
-	// checking if member is a string is done in 'astDot'
-	return(
-		astDot.create(
-			'expr', this,
-			'member', member
-		)
-	);
+	// checking if member is a string is done in 'ast_dot.create'
+
+	return ast_dot.create( 'expr', this, 'member', member );
 };
 
 

@@ -31,7 +31,7 @@ var
 	ast_condition,
 	ast_delete,
 	ast_differs,
-	astDot,
+	ast_dot,
 	astFail,
 	astFile,
 	astEquals,
@@ -87,7 +87,7 @@ ast_delete = require( './delete' );
 
 ast_differs = require( './differs' );
 
-astDot = require( './ast-dot' );
+ast_dot = require( './dot' );
 
 astEquals = require( './ast-equals' );
 
@@ -394,18 +394,13 @@ shorthand.$delete =
 /*
 | Shorthand for creating dots.
 */
-shorthand.astDot =
+shorthand.$dot =
 	function(
 		expr,
 		member
 	)
 {
-	return(
-		astDot.create(
-			'expr', expr,
-			'member', member
-		)
-	);
+	return ast_dot.create( 'expr', expr, 'member', member );
 };
 
 

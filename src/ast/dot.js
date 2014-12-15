@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astDot',
+			'ast_dot',
 		attributes :
 			{
 				expr :
@@ -46,11 +46,11 @@ if( JION )
 | Import
 */
 var
-	astDot,
+	ast_dot,
 	astMember;
 
 
-astDot = require( '../jion/this' )( module );
+ast_dot = require( '../jion/this' )( module );
 
 astMember = require( './ast-member' );
 
@@ -58,7 +58,7 @@ astMember = require( './ast-member' );
 /*
 | Initializer.
 */
-astDot.prototype._init =
+ast_dot.prototype._init =
 	function( )
 {
 	var
@@ -88,28 +88,21 @@ astDot.prototype._init =
 /*
 | Creates a dot member access of a dot.
 */
-astDot.prototype.astDot =
+ast_dot.prototype.$dot =
 	function(
 		member // member string
 	)
 {
-	// checks if member is a string is done in 'astDot'
+	// checks if member is a string is done in 'ast_dot.create'
 
-	return (
-		astDot.create(
-			'expr',
-				this,
-			'member',
-				member
-		)
-	);
+	return ast_dot.create( 'expr', this, 'member', member );
 };
 
 
 /*
 | Creates a generic member access of a variable.
 */
-astDot.prototype.astMember =
+ast_dot.prototype.astMember =
 	function(
 		member // member expression
 	)
@@ -135,7 +128,7 @@ astDot.prototype.astMember =
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astDot.prototype.inspect =
+***/	ast_dot.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

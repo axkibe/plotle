@@ -44,7 +44,7 @@ precTable =
 		'ast_condition' : 15,
 		'ast_delete' : 4,
 		'ast_differs' : 9,
-		'astDot' : 1,
+		'ast_dot' : 1,
 		'astEquals' : 9,
 		// this is random guess, must be larger than call
 		// so the capsule is generated right.
@@ -481,7 +481,7 @@ formatDot =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astDot' )
+/**/	if( expr.reflect !== 'ast_dot' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -491,7 +491,7 @@ formatDot =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.astDot
+			precTable.ast_dot
 		)
 		+ '.'
 		+ expr.member
@@ -2279,7 +2279,7 @@ exprFormatter =
 		'ast_condition' : formatCondition,
 		'ast_delete' : formatDelete,
 		'ast_differs' : formatDiffers,
-		'astDot' : formatDot,
+		'ast_dot' : formatDot,
 		'astEquals' : formatEquals,
 		'astFunc' : formatFunc,
 		'astGreaterThan' : formatGreaterThan,
