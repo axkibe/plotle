@@ -30,7 +30,7 @@ var
 	ast_comment,
 	ast_condition,
 	ast_delete,
-	astDiffers,
+	ast_differs,
 	astDot,
 	astFail,
 	astFile,
@@ -85,7 +85,7 @@ ast_condition = require( './condition' );
 
 ast_delete = require( './delete' );
 
-astDiffers = require( './ast-differs' );
+ast_differs = require( './differs' );
 
 astDot = require( './ast-dot' );
 
@@ -363,7 +363,7 @@ shorthand.$condition =
 /*
 | Shorthand for creating differs.
 */
-shorthand.astDiffers =
+shorthand.$differs =
 	function(
 		left,
 		right
@@ -373,12 +373,7 @@ shorthand.astDiffers =
 
 	right = tools.convert( right );
 
-	return(
-		astDiffers.create(
-			'left', left,
-			'right', right
-		)
-	);
+	return ast_differs.create( 'left', left, 'right', right );
 };
 
 

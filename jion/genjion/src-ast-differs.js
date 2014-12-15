@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astDiffers;
+	ast_differs;
 
 
 /*
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astDiffers =
+ast_differs =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astDiffers =
 
 if( SERVER )
 {
-	module.exports = ast_astDiffers;
+	module.exports = ast_differs;
 }
 
 
 /*
-| Creates a new astDiffers object.
+| Creates a new differs object.
 */
-ast_astDiffers.create =
+ast_differs.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== ast_astDiffers )
+	if( this !== ast_differs )
 	{
 		inherit = this;
 
@@ -192,13 +192,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astDiffers';
+prototype.reflect = 'ast_differs';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astDiffers';
+prototype.reflectName = 'differs';
 
 
 /*

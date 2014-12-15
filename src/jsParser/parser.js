@@ -72,7 +72,7 @@ ast_boolean = require( '../ast/boolean' );
 
 ast_call = require( '../ast/call' );
 
-ast_differs = require( '../ast/ast-differs' );
+ast_differs = require( '../ast/differs' );
 
 ast_dot = require( '../ast/ast-dot' );
 

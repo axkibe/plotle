@@ -23,7 +23,7 @@ module.exports =
 			'src/ast/comment.js',
 			'src/ast/condition.js',
 			'src/ast/delete.js',
-			'src/ast/ast-differs.js',
+			'src/ast/differs.js',
 			'src/ast/ast-dot.js',
 			'src/ast/ast-equals.js',
 			'src/ast/ast-fail.js',

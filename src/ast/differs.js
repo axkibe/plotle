@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astDiffers',
+			'ast_differs',
 		attributes :
 			{
 				left :
@@ -40,9 +40,9 @@ if( JION )
 
 
 var
-	astDiffers;
+	ast_differs;
 
-astDiffers = require( '../jion/this' )( module );
+ast_differs = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -55,7 +55,7 @@ astDiffers = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astDiffers.prototype.inspect =
+***/	ast_differs.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

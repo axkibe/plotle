@@ -47,7 +47,7 @@ var
 	$commaList,
 	$comment,
 	$condition,
-	astDiffers,
+	$differs,
 	astEquals,
 	astFail,
 	astFile,
@@ -113,7 +113,7 @@ $comment = shorthand.$comment;
 
 $condition = shorthand.$condition;
 
-astDiffers = shorthand.astDiffers;
+$differs = shorthand.$differs;
 
 astEquals = shorthand.astEquals;
 
@@ -665,7 +665,7 @@ generator.prototype.genConstructor =
 			block =
 				block
 				.astIf(
-					astDiffers( attr.v, undefined ),
+					$differs( attr.v, undefined ),
 					assign
 				);
 		}
@@ -1003,7 +1003,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 
 	thisCheck =
 		astIf(
-			astDiffers( astThis, this.id.global ),
+			$differs( astThis, this.id.global ),
 			receiver
 		);
 
@@ -1281,33 +1281,33 @@ generator.prototype.genSingleTypeCheckFailCondition =
 	{
 		case 'Boolean' :
 
-			return astDiffers( astTypeof( avar ), '"boolean"' );
+			return $differs( astTypeof( avar ), '"boolean"' );
 
 		case 'Integer' :
 
 			return(
 				astOr(
-					astDiffers( astTypeof( avar ), '"number"' ),
-					astDiffers( $call( 'Math.floor', avar ), avar )
+					$differs( astTypeof( avar ), '"number"' ),
+					$differs( $call( 'Math.floor', avar ), avar )
 				)
 			);
 
 		case 'Number' :
 
-			return astDiffers( astTypeof( avar ), '"number"' );
+			return $differs( astTypeof( avar ), '"number"' );
 
 		case 'String' :
 
 			return(
 				$and(
-					astDiffers( astTypeof( avar ), '"string"' ),
+					$differs( astTypeof( avar ), '"string"' ),
 					astNot( astInstanceof( avar, 'String' ) )
 				)
 			);
 
 		default :
 
-			return astDiffers( avar.astDot( 'reflect' ), id.astString );
+			return $differs( avar.astDot( 'reflect' ), id.astString );
 	}
 };
 
@@ -1422,18 +1422,18 @@ generator.prototype.genCreatorChecks =
 
 		if( attr.allowsNull && !attr.allowsUndefined )
 		{
-			cond = astDiffers( av, null );
+			cond = $differs( av, null );
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
-			cond = astDiffers( av, undefined );
+			cond = $differs( av, undefined );
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
 			cond =
 				$and(
-					astDiffers( av, null ),
-					astDiffers( av, undefined )
+					$differs( av, null ),
+					$differs( av, undefined )
 				);
 		}
 		else
@@ -1569,7 +1569,7 @@ generator.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						$condition(
-							astDiffers( attr.v, null ),
+							$differs( attr.v, null ),
 							attr.v.astDot( member ),
 							null
 						);
@@ -1579,7 +1579,7 @@ generator.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						$condition(
-							astDiffers( attr.v, undefined ),
+							$differs( attr.v, undefined ),
 							attr.v.astDot( member ),
 							null
 						);
@@ -1952,7 +1952,7 @@ generator.prototype.genFromJSONCreatorParser =
 		.$case(
 			'"type"',
 			astIf(
-				astDiffers( 'arg', this.id.astString ),
+				$differs( 'arg', this.id.astString ),
 				astFail( )
 			)
 		);
@@ -2576,7 +2576,7 @@ generator.prototype.genAttributeEquals =
 					astOr(
 						astEquals( le, re ),
 						$and(
-							astDiffers( le, null ),
+							$differs( le, null ),
 							$call( le.astDot( 'equals' ), re )
 						)
 					);
@@ -2587,7 +2587,7 @@ generator.prototype.genAttributeEquals =
 					astOr(
 						astEquals( le, re ),
 						$and(
-							astDiffers( le, undefined ),
+							$differs( le, undefined ),
 							$call( le.astDot( 'equals' ), re )
 						)
 					);
@@ -2684,12 +2684,12 @@ generator.prototype.genEquals =
 					$condition(
 						'this.twig[ key ].equals',
 						astNot(
-							$call(
+							$call( // FIXME
 								'this.twig[ key ].equals',
 								'obj.twig[ key ]'
 							)
 						),
-						astDiffers(
+						$differs( // FIXME
 							'this.twig[ key ]',
 							'obj.twig[ key ]'
 						)

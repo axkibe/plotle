@@ -43,7 +43,7 @@ precTable =
 		'ast_commaList' : 18,
 		'ast_condition' : 15,
 		'ast_delete' : 4,
-		'astDiffers' : 9,
+		'ast_differs' : 9,
 		'astDot' : 1,
 		'astEquals' : 9,
 		// this is random guess, must be larger than call
@@ -343,7 +343,7 @@ formatDiffers =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astDiffers' )
+/**/	if( expr.reflect !== 'ast_differs' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -353,14 +353,14 @@ formatDiffers =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.astDiffers
+			precTable.ast_differs
 		)
 		+ context.sep
 		+ context.tab + '!==' + context.sep
 		+ formatExpression(
 			context,
 			expr.right,
-			precTable.astDiffers
+			precTable.ast_differs
 		);
 
 	return text;
@@ -2278,7 +2278,7 @@ exprFormatter =
 		'ast_commaList' : formatCommaList,
 		'ast_condition' : formatCondition,
 		'ast_delete' : formatDelete,
-		'astDiffers' : formatDiffers,
+		'ast_differs' : formatDiffers,
 		'astDot' : formatDot,
 		'astEquals' : formatEquals,
 		'astFunc' : formatFunc,
