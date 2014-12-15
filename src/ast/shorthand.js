@@ -33,7 +33,7 @@ var
 	ast_differs,
 	ast_dot,
 	ast_equals,
-	astFail,
+	ast_fail,
 	astFile,
 	astFor,
 	astForIn,
@@ -91,7 +91,7 @@ ast_dot = require( './dot' );
 
 ast_equals = require( './equals' );
 
-astFail = require( './ast-fail' );
+ast_fail = require( './fail' );
 
 astFile = require( './ast-file' );
 
@@ -430,7 +430,7 @@ shorthand.$false = ast_boolean.create( 'boolean', false );
 /*
 | Shorthand for ast code that throws a fail.
 */
-shorthand.astFail =
+shorthand.$fail =
 	function(
 		message
 	)
@@ -444,7 +444,7 @@ shorthand.astFail =
 		message = astString.create( 'string', message );
 	}
 
-	return astFail.create( 'message', message );
+	return ast_fail.create( 'message', message );
 };
 
 

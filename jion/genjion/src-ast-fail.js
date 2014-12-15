@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astFail;
+	ast_fail;
 
 
 /*
@@ -78,7 +78,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astFail =
+ast_fail =
 	{
 		prototype :
 			prototype
@@ -87,14 +87,14 @@ ast_astFail =
 
 if( SERVER )
 {
-	module.exports = ast_astFail;
+	module.exports = ast_fail;
 }
 
 
 /*
-| Creates a new astFail object.
+| Creates a new fail object.
 */
-ast_astFail.create =
+ast_fail.create =
 prototype.create =
 	function(
 		// free strings
@@ -107,7 +107,7 @@ prototype.create =
 		inherit,
 		v_message;
 
-	if( this !== ast_astFail )
+	if( this !== ast_fail )
 	{
 		inherit = this;
 
@@ -167,13 +167,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astFail';
+prototype.reflect = 'ast_fail';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astFail';
+prototype.reflectName = 'fail';
 
 
 /*

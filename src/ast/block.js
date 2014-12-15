@@ -178,12 +178,12 @@ ast_block.prototype.astIf =
 /*
 | Returns the block with a error throwing appended.
 */
-ast_block.prototype.astFail =
+ast_block.prototype.$fail =
 	function(
 		message
 	)
 {
-	return this.append( shorthand.astFail( message ) );
+	return this.append( shorthand.$fail( message ) );
 };
 
 

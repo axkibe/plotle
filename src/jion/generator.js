@@ -49,7 +49,7 @@ var
 	$condition,
 	$differs,
 	$equals,
-	astFail,
+	$fail,
 	astFile,
 	astFunc,
 	astIf,
@@ -117,7 +117,7 @@ $differs = shorthand.$differs;
 
 $equals = shorthand.$equals;
 
-astFail = shorthand.astFail;
+$fail = shorthand.$fail;
 
 astFile = shorthand.astFile;
 
@@ -1099,7 +1099,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				.ast( 'arg = arguments[ ++a + 1 ]' )
 				.astIf(
 					'twig[ key ] !== undefined',
-					astFail( )
+					$fail( )
 				)
 				.ast( 'twig[ key ] = arg' )
 				.ast( 'ranks.push( key )' )
@@ -1112,7 +1112,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				.ast( 'arg = arguments[ ++a + 1 ]' )
 				.astIf(
 					'twig[ key ] === undefined',
-					astFail( )
+					$fail( )
 				)
 				.ast( 'twig[ key ] = arg' )
 			)
@@ -1126,11 +1126,11 @@ generator.prototype.genCreatorFreeStringsParser =
 				.astPlusAssign( 'a', 2 )
 				.astIf(
 					'twig[ key ] !== undefined',
-					astFail( )
+					$fail( )
 				)
 				.astIf(
 					'rank < 0 || rank > ranks.length',
-					astFail( )
+					$fail( )
 				)
 				.ast( 'twig[ key ] = arg' )
 				.ast( 'ranks.splice( rank, 0, key )' )
@@ -1141,7 +1141,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				.append( twigDupCheck )
 				.astIf(
 					'twig[ arg ] === undefined',
-					astFail( )
+					$fail( )
 				)
 				.$delete( 'twig[ arg ]' )
 				.ast( 'ranks.splice( ranks.indexOf( arg ), 1 )' )
@@ -1197,11 +1197,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		switchExpr
 		.astDefault(
 			$block( )
-			.$check(
-				$block( )
-				//.astFail( 'invalid argument' )
-				.astFail( )
-			)
+			.$check( $block( ).$fail( ) ) // FIXME remove $block
 		);
 
 	loop = loop.append( switchExpr );
@@ -1398,7 +1394,7 @@ generator.prototype.genCreatorChecks =
 			check =
 				check.astIf(
 					$equals( av, undefined ),
-					astFail( )
+					$fail( )
 				);
 		}
 
@@ -1407,7 +1403,7 @@ generator.prototype.genCreatorChecks =
 			check =
 				check.astIf(
 					$equals( av, null ),
-					astFail( )
+					$fail( )
 				);
 		}
 
@@ -1447,11 +1443,11 @@ generator.prototype.genCreatorChecks =
 		{
 			check =
 				check
-				.astIf( cond, astIf( tcheck, astFail( ) ) );
+				.astIf( cond, astIf( tcheck, $fail( ) ) );
 		}
 		else
 		{
-			check = check.astIf( tcheck, astFail( ) );
+			check = check.astIf( tcheck, $fail( ) );
 		}
 	}
 
@@ -1953,7 +1949,7 @@ generator.prototype.genFromJSONCreatorParser =
 			'"type"',
 			astIf(
 				$differs( 'arg', this.id.astString ),
-				astFail( )
+				$fail( )
 			)
 		);
 
@@ -2020,7 +2016,7 @@ generator.prototype.genFromJSONCreatorParser =
 				{
 					attrCode =
 						astSwitch( 'arg.type' )
-						.astDefault( astFail( ) );
+						.astDefault( $fail( ) );
 
 					for(
 						t = 0, tZ = attr.id.length;
@@ -2084,14 +2080,14 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 
 	block =
 		block
-		.astIf( '!jray', astFail( ) )
+		.astIf( '!jray', $fail( ) )
 		.ast( 'ray = [ ]' );
 
 	idList = this.ray.idList;
 
 	loopSwitch =
 		astSwitch( 'jray[ r ].type' )
-		.astDefault( astFail( ) );
+		.astDefault( $fail( ) );
 
 	for(
 		r = 0, rZ = idList.length;
@@ -2174,7 +2170,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		switchExpr
 		.astDefault(
 			// invalid twig type
-			astFail( )
+			$fail( )
 		);
 
 	loop =
@@ -2182,7 +2178,8 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		.ast( 'key = ranks[ a ]' )
 		.astIf(
 			'!jwig[ key ]',
-			astFail( 'JSON ranks/twig mismatch' )
+			// JSON ranks/twig mismatch
+			$fail( )
 		)
 		.ast( 'jval = jwig[ key ]' )
 		.append( switchExpr );
@@ -2193,7 +2190,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		.astIf(
 			'!jwig || !ranks',
 			// ranks/twig information missing
-			astFail( )
+			$fail( )
 		)
 		.astFor(
 			$commaList( )

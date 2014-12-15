@@ -1286,7 +1286,7 @@ formatStatement =
 
 			break;
 
-		case 'ast_astFail' :
+		case 'ast_fail' :
 
 			try
 			{
@@ -1403,7 +1403,7 @@ formatStatement =
 		case 'ast_boolean' :
 		case 'ast_call' :
 		case 'ast_delete' :
-		case 'ast_astFail' :
+		case 'ast_fail' :
 		case 'ast_astNew' :
 		case 'ast_astNumber' :
 		case 'ast_astPlusAssign' :
@@ -1533,7 +1533,7 @@ formatFail =
 
 /**/if( CHECK )
 /**/{
-/**/	if( fail.reflect !== 'ast_astFail' )
+/**/	if( fail.reflect !== 'ast_fail' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
