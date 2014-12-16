@@ -53,7 +53,7 @@ var
 	$func,
 	$if,
 	$instanceof,
-	astNew,
+	$new,
 	astNot,
 	astNumber,
 	astObjLiteral,
@@ -124,7 +124,7 @@ $if = shorthand.$if;
 
 $instanceof = shorthand.$instanceof;
 
-astNew = shorthand.astNew;
+$new = shorthand.$new;
 
 astNot = shorthand.astNot;
 
@@ -1757,7 +1757,7 @@ generator.prototype.genCreatorReturn =
 				'!_singleton',
 				$assign(
 					'_singleton',
-					astNew( ast( 'Constructor( )' ) )
+					$new( ast( 'Constructor( )' ) )
 				)
 			)
 			.astReturn( '_singleton' )
@@ -1795,7 +1795,7 @@ generator.prototype.genCreatorReturn =
 		}
 	}
 
-	return block.astReturn( astNew( call ) );
+	return block.astReturn( $new( call ) );
 };
 
 
@@ -2263,7 +2263,7 @@ generator.prototype.genFromJSONCreatorReturn =
 		}
 	}
 
-	return block.astReturn( astNew( call ) );
+	return block.astReturn( $new( call ) );
 };
 
 

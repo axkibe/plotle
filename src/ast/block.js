@@ -28,7 +28,7 @@ if( JION )
 var
 	ast_block,
 	ast_comment,
-	astNew,
+	ast_new,
 	astPlusAssign,
 	astReturn,
 	jools,
@@ -40,7 +40,7 @@ ast_block = require( '../jion/this' )( module );
 
 ast_comment = require( './comment' );
 
-astNew = require( './ast-new' );
+ast_new = require( './new' );
 
 astPlusAssign = require( './ast-plus-assign' );
 
@@ -225,16 +225,13 @@ ast_block.prototype.$forIn =
 /*
 | Shorthand for creating new calls.
 */
-ast_block.prototype.astNew =
+ast_block.prototype.$new =
 	function(
 		call
 	)
 {
-	return(
-		this.append(
-			astNew.create( 'call', call )
-		)
-	);
+	// FIXME use shorthand
+	return this.append( ast_new.create( 'call', call ) );
 };
 
 

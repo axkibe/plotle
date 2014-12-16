@@ -54,7 +54,7 @@ precTable =
 		'ast_instanceof' : 8,
 		'ast_lessThan' : 8,
 		'ast_member' : 1,
-		'astNew' : 2,
+		'ast_new' : 2,
 		'astNot' : 4,
 		'astNull' : -1,
 		'astNumber' : -1,
@@ -1404,7 +1404,7 @@ formatStatement =
 		case 'ast_call' :
 		case 'ast_delete' :
 		case 'ast_fail' :
-		case 'ast_astNew' :
+		case 'ast_new' :
 		case 'ast_astNumber' :
 		case 'ast_astPlusAssign' :
 		case 'ast_astReturn' :
@@ -1735,7 +1735,7 @@ formatNew =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astNew' )
+/**/	if( expr.reflect !== 'ast_new' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1743,10 +1743,8 @@ formatNew =
 
 	return(
 		context.tab
-		+
-		'new '
-		+
-		formatCall(
+		+ 'new '
+		+ formatCall(
 			context,
 			expr.call,
 			true
@@ -2286,7 +2284,7 @@ exprFormatter =
 		'ast_instanceof' : formatInstanceof,
 		'ast_lessThan' : formatLessThan,
 		'ast_member' : formatMember,
-		'astNew' : formatNew,
+		'ast_new' : formatNew,
 		'astNot' : formatNot,
 		'astNull' : formatNull,
 		'astNumber' : formatNumber,
