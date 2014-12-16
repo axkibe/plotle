@@ -57,7 +57,7 @@ precTable =
 		'ast_new' : 2,
 		'ast_not' : 4,
 		'ast_null' : -1,
-		'astNumber' : -1,
+		'ast_number' : -1,
 		'astObjLiteral' : -1,
 		'astOr' : 14,
 		'astPlus' : 6,
@@ -1405,7 +1405,7 @@ formatStatement =
 		case 'ast_delete' :
 		case 'ast_fail' :
 		case 'ast_new' :
-		case 'ast_astNumber' :
+		case 'ast_number' :
 		case 'ast_astPlusAssign' :
 		case 'ast_astReturn' :
 		case 'ast_astString' :
@@ -2053,7 +2053,7 @@ formatNumber =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astNumber' )
+/**/	if( expr.reflect !== 'ast_number' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2285,7 +2285,7 @@ exprFormatter =
 		'ast_new' : formatNew,
 		'ast_not' : formatNot,
 		'ast_null' : formatNull,
-		'astNumber' : formatNumber,
+		'ast_number' : formatNumber,
 		'astObjLiteral' : formatObjLiteral,
 		'astOr' : formatOr,
 		'astPlus' : formatPlus,

@@ -86,7 +86,7 @@ ast_member = require( '../ast/member' );
 
 ast_not = require( '../ast/not' );
 
-ast_number = require( '../ast/ast-number' );
+ast_number = require( '../ast/number' );
 
 ast_or = require( '../ast/ast-or' );
 

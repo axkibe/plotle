@@ -19,7 +19,7 @@ module.exports =
 
 
 var
-	astNumber,
+	ast_number,
 	ast_null,
 	astVar,
 	jools,
@@ -29,7 +29,7 @@ var
 
 ast_null = require( './null' );
 
-astNumber = require( './ast-number' );
+ast_number = require( './number' );
 
 astVar = require( './ast-var' );
 
@@ -44,7 +44,7 @@ shorthand = require( './shorthand' );
 | Converts an argument to ast usage.
 |
 | simple strings -> astVar
-| simple numbers -> astNumber
+| simple numbers -> ast_number
 */
 tools.convert =
 	function( arg )
@@ -89,7 +89,7 @@ tools.convert =
 
 	if( typeof( arg ) === 'number' )
 	{
-		return astNumber.create( 'number', arg );
+		return ast_number.create( 'number', arg );
 	}
 
 /**/if( CHECK )

@@ -55,7 +55,7 @@ var
 	$instanceof,
 	$new,
 	$not,
-	astNumber,
+	$number,
 	astObjLiteral,
 	astOr,
 	astPlus,
@@ -128,7 +128,7 @@ $new = shorthand.$new;
 
 $not = shorthand.$not;
 
-astNumber = shorthand.astNumber;
+$number = shorthand.$number;
 
 astObjLiteral = shorthand.astObjLiteral;
 
@@ -307,7 +307,7 @@ generator.prototype._init =
 			}
 			else if( typeof( jdv ) === 'number' )
 			{
-				defaultValue = astNumber( jAttr.defaultValue );
+				defaultValue = $number( jAttr.defaultValue );
 			}
 			else if( jools.isString( jdv ) )
 			{

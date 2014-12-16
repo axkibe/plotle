@@ -39,7 +39,7 @@ module.exports =
 			'src/ast/new.js',
 			'src/ast/not.js',
 			'src/ast/null.js',
-			'src/ast/ast-number.js',
+			'src/ast/number.js',
 			'src/ast/ast-obj-literal.js',
 			'src/ast/ast-or.js',
 			'src/ast/ast-plus.js',

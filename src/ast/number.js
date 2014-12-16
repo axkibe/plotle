@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astNumber',
+			'ast_number',
 		attributes :
 			{
 				'number' :
@@ -32,9 +32,9 @@ if( JION )
 }
 
 var
-	astNumber;
+	ast_number;
 
-astNumber = require( '../jion/this' )( module );
+ast_number = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -47,7 +47,7 @@ astNumber = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astNumber.prototype.inspect =
+***/	ast_number.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts
