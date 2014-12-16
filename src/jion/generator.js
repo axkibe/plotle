@@ -50,7 +50,6 @@ var
 	$differs,
 	$equals,
 	$fail,
-	astFile,
 	astFunc,
 	astIf,
 	astInstanceof,
@@ -118,8 +117,6 @@ $differs = shorthand.$differs;
 $equals = shorthand.$equals;
 
 $fail = shorthand.$fail;
-
-astFile = shorthand.astFile;
 
 astFunc = shorthand.astFunc;
 
@@ -1204,7 +1201,7 @@ generator.prototype.genCreatorFreeStringsParser =
 
 	block =
 		block
-		.astFor(
+		.$for(
 			$commaList( )
 			.$assign( 'a', 0 )
 			.$assign( 'aZ', 'arguments.length' ),
@@ -2051,7 +2048,7 @@ generator.prototype.genFromJSONCreatorParser =
 
 	block =
 		block
-		.astForIn(
+		.$forIn(
 			'name',
 			'json',
 			$block( )
@@ -2113,7 +2110,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 
 	block =
 		block
-		.astFor(
+		.$for(
 			$commaList( )
 			.$assign( 'r', 0 )
 			.$assign( 'rZ', 'jray.length' ),
@@ -2192,7 +2189,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 			// ranks/twig information missing
 			$fail( )
 		)
-		.astFor(
+		.$for(
 			$commaList( )
 			.$assign( 'a', 0 )
 			.$assign( 'aZ', 'ranks.length' ),
@@ -2701,7 +2698,7 @@ generator.prototype.genEquals =
 				'this.ranks.length !== obj.ranks.length',
 				astReturnFalse
 			)
-			.astFor(
+			.$for(
 				$commaList( )
 				.$assign( 'a', 0 ) // FIXME ast()
 				.$assign( 'aZ', 'this.ranks.length' ), // FIXME ast()

@@ -1314,13 +1314,13 @@ formatStatement =
 
 			break;
 
-		case 'ast_astFor' :
+		case 'ast_for' :
 
 			text += formatFor( context, statement );
 
 			break;
 
-		case 'ast_astForIn' :
+		case 'ast_forIn' :
 
 			text += formatForIn( context, statement );
 
@@ -1414,8 +1414,8 @@ formatStatement =
 			return text + ';' + context.sep;
 
 		case 'ast_check' :
-		case 'ast_astFor' :
-		case 'ast_astForIn' :
+		case 'ast_for' :
+		case 'ast_forIn' :
 		case 'ast_astIf' :
 		case 'ast_astSwitch' :
 

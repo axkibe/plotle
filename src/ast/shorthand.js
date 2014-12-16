@@ -34,9 +34,8 @@ var
 	ast_dot,
 	ast_equals,
 	ast_fail,
-	astFile,
-	astFor,
-	astForIn,
+	ast_for,
+	ast_forIn,
 	astFunc,
 	astFuncArg,
 	astGreaterThan,
@@ -93,11 +92,9 @@ ast_equals = require( './equals' );
 
 ast_fail = require( './fail' );
 
-astFile = require( './ast-file' );
+ast_for = require( './for' );
 
-astFor = require( './ast-for' );
-
-astForIn = require( './ast-for-in' );
+ast_forIn = require( './forIn' );
 
 astFunc = require( './ast-func' );
 
@@ -533,19 +530,9 @@ shorthand.astIf =
 
 
 /*
-| Shorthand for creating files.
-*/
-shorthand.astFile =
-	function( )
-{
-	return astFile.create( );
-};
-
-
-/*
 | Shorthand for creating for loops.
 */
-shorthand.astFor =
+shorthand.$for =
 	function(
 		init,
 		condition,
@@ -565,7 +552,7 @@ shorthand.astFor =
 	iterate = tools.convert( iterate );
 
 	return(
-		astFor.create(
+		ast_for.create(
 			'init', init,
 			'condition', condition,
 			'iterate', iterate,
@@ -578,7 +565,7 @@ shorthand.astFor =
 /*
 | Shorthand for creating for in loops.
 */
-shorthand.astForIn =
+shorthand.$forIn =
 	function(
 		variable,
 		object,
@@ -595,7 +582,7 @@ shorthand.astForIn =
 	block = tools.convert( block );
 
 	return(
-		astForIn.create(
+		ast_forIn.create(
 			'variable', variable,
 			'object', object,
 			'block', block

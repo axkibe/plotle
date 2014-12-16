@@ -192,7 +192,7 @@ ast_block.prototype.$fail =
 |
 | FUTURE use a shorthand
 */
-ast_block.prototype.astFor =
+ast_block.prototype.$for =
 	function(
 		init,
 		condition,
@@ -200,11 +200,7 @@ ast_block.prototype.astFor =
 		block
 	)
 {
-	return(
-		this.append(
-			shorthand.astFor( init, condition, iterate, block )
-		)
-	);
+	return this.append( shorthand.$for( init, condition, iterate, block ) );
 };
 
 
@@ -212,7 +208,7 @@ ast_block.prototype.astFor =
 | Returns the block with a for-in loop appended.
 | FUTURE use a shorthand
 */
-ast_block.prototype.astForIn =
+ast_block.prototype.$forIn =
 	function(
 		variable,
 		object,
@@ -221,7 +217,7 @@ ast_block.prototype.astForIn =
 {
 	return(
 		this.append(
-			shorthand.astForIn( variable, object, block )
+			shorthand.$forIn( variable, object, block )
 		)
 	);
 };

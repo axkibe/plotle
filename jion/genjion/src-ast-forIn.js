@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astFor;
+	ast_forIn;
 
 
 /*
@@ -53,9 +53,8 @@ var
 Constructor =
 	function(
 		v_block, // the for block
-		v_condition, // the continue condition
-		v_init, // the initialization
-		v_iterate // the iteration expression
+		v_object, // the object expression to iterate over
+		v_variable // the loop variable
 	)
 {
 /**/if( CHECK )
@@ -68,11 +67,9 @@ Constructor =
 
 	this.block = v_block;
 
-	this.condition = v_condition;
+	this.object = v_object;
 
-	this.init = v_init;
-
-	this.iterate = v_iterate;
+	this.variable = v_variable;
 
 /**/if( CHECK )
 /**/{
@@ -90,7 +87,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astFor =
+ast_forIn =
 	{
 		prototype :
 			prototype
@@ -99,14 +96,14 @@ ast_astFor =
 
 if( SERVER )
 {
-	module.exports = ast_astFor;
+	module.exports = ast_forIn;
 }
 
 
 /*
-| Creates a new astFor object.
+| Creates a new forIn object.
 */
-ast_astFor.create =
+ast_forIn.create =
 prototype.create =
 	function(
 		// free strings
@@ -118,21 +115,18 @@ prototype.create =
 		arg,
 		inherit,
 		v_block,
-		v_condition,
-		v_init,
-		v_iterate;
+		v_object,
+		v_variable;
 
-	if( this !== ast_astFor )
+	if( this !== ast_forIn )
 	{
 		inherit = this;
 
 		v_block = this.block;
 
-		v_condition = this.condition;
+		v_object = this.object;
 
-		v_init = this.init;
-
-		v_iterate = this.iterate;
+		v_variable = this.variable;
 	}
 
 	for(
@@ -154,29 +148,20 @@ prototype.create =
 
 				break;
 
-			case 'condition' :
+			case 'object' :
 
 				if( arg !== undefined )
 				{
-					v_condition = arg;
+					v_object = arg;
 				}
 
 				break;
 
-			case 'init' :
+			case 'variable' :
 
 				if( arg !== undefined )
 				{
-					v_init = arg;
-				}
-
-				break;
-
-			case 'iterate' :
-
-				if( arg !== undefined )
-				{
-					v_iterate = arg;
+					v_variable = arg;
 				}
 
 				break;
@@ -207,32 +192,31 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_condition === undefined )
+/**/	if( v_object === undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_condition === null )
+/**/	if( v_object === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_init === undefined )
+/**/	if( v_variable === undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_init === null )
+/**/	if( v_variable === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_iterate === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_iterate === null )
+/**/	if(
+/**/		typeof( v_variable ) !== 'string'
+/**/		&&
+/**/		!( v_variable instanceof String )
+/**/	)
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -243,30 +227,28 @@ prototype.create =
 		&&
 		v_block.equals( inherit.block )
 		&&
-		v_condition === inherit.condition
+		v_object === inherit.object
 		&&
-		v_init === inherit.init
-		&&
-		v_iterate === inherit.iterate
+		v_variable === inherit.variable
 	)
 	{
 		return inherit;
 	}
 
-	return new Constructor( v_block, v_condition, v_init, v_iterate );
+	return new Constructor( v_block, v_object, v_variable );
 };
 
 
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astFor';
+prototype.reflect = 'ast_forIn';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astFor';
+prototype.reflectName = 'forIn';
 
 
 /*
@@ -302,11 +284,9 @@ prototype.equals =
 	return (
 		this.block.equals( obj.block )
 		&&
-		this.condition === obj.condition
+		this.object === obj.object
 		&&
-		this.init === obj.init
-		&&
-		this.iterate === obj.iterate
+		this.variable === obj.variable
 	);
 };
 

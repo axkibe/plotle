@@ -1,5 +1,5 @@
 /*
-| Classical for loops for abstract syntax trees.
+| For-in loops in abstract syntax trees.
 */
 
 
@@ -17,27 +17,20 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astFor',
+			'ast_forIn',
 		attributes :
 			{
-				init :
+				variable :
 					{
 						comment :
-							'the initialization',
+							'the loop variable',
 						type :
-							'Object'
+							'String'
 					},
-				condition :
+				object :
 					{
 						comment :
-							'the continue condition',
-						type :
-							'Object'
-					},
-				iterate :
-					{
-						comment :
-							'the iteration expression',
+							'the object expression to iterate over',
 						type :
 							'Object'
 					},
