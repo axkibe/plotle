@@ -20,14 +20,14 @@ module.exports =
 
 var
 	astNumber,
-	astNull,
+	ast_null,
 	astVar,
 	jools,
 	parser,
 	shorthand;
 
 
-astNull = require( './ast-null' );
+ast_null = require( './null' );
 
 astNumber = require( './ast-number' );
 
@@ -59,7 +59,7 @@ tools.convert =
 
 	if( arg === null )
 	{
-		return astNull.create( );
+		return ast_null.create( );
 	}
 
 	if( arg === undefined )

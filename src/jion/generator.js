@@ -291,7 +291,7 @@ generator.prototype._init =
 
 			if( jdv === null )
 			{
-				defaultValue = shorthand.astNull;
+				defaultValue = shorthand.$null;
 			}
 			else if( jdv === undefined )
 			{
@@ -331,7 +331,7 @@ generator.prototype._init =
 			Object.freeze( {
 				allowsNull :
 					jAttr.allowsNull
-					|| shorthand.astNull.equals( defaultValue ),
+					|| shorthand.$null.equals( defaultValue ),
 				allowsUndefined :
 					jAttr.allowsUndefined
 					|| shorthand.astUndefined.equals( defaultValue ),

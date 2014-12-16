@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astNull;
+	ast_null;
 
 
 /*
@@ -74,7 +74,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astNull =
+ast_null =
 	{
 		prototype :
 			prototype
@@ -83,7 +83,7 @@ ast_astNull =
 
 if( SERVER )
 {
-	module.exports = ast_astNull;
+	module.exports = ast_null;
 }
 
 
@@ -98,9 +98,9 @@ _singleton = null;
 
 
 /*
-| Creates a new astNull object.
+| Creates a new null object.
 */
-ast_astNull.create =
+ast_null.create =
 prototype.create =
 	function(
 		// free strings
@@ -109,7 +109,7 @@ prototype.create =
 	var
 		inherit;
 
-	if( this !== ast_astNull )
+	if( this !== ast_null )
 	{
 		inherit = this;
 	}
@@ -135,13 +135,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astNull';
+prototype.reflect = 'ast_null';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astNull';
+prototype.reflectName = 'null';
 
 
 /*

@@ -56,7 +56,7 @@ precTable =
 		'ast_member' : 1,
 		'ast_new' : 2,
 		'ast_not' : 4,
-		'astNull' : -1,
+		'ast_null' : -1,
 		'astNumber' : -1,
 		'astObjLiteral' : -1,
 		'astOr' : 14,
@@ -1796,7 +1796,7 @@ formatNull =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astNull' )
+/**/	if( expr.reflect !== 'ast_null' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2284,7 +2284,7 @@ exprFormatter =
 		'ast_member' : formatMember,
 		'ast_new' : formatNew,
 		'ast_not' : formatNot,
-		'astNull' : formatNull,
+		'ast_null' : formatNull,
 		'astNumber' : formatNumber,
 		'astObjLiteral' : formatObjLiteral,
 		'astOr' : formatOr,

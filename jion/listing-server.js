@@ -76,7 +76,7 @@ module.exports =
 			'src/ast/member.js',
 			'src/ast/new.js',
 			'src/ast/not.js',
-			'src/ast/ast-null.js',
+			'src/ast/null.js',
 			'src/ast/ast-number.js',
 			'src/ast/ast-obj-literal.js',
 			'src/ast/ast-or.js',

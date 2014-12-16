@@ -45,7 +45,7 @@ var
 	ast_member,
 	ast_new,
 	ast_not,
-	astNull,
+	ast_null,
 	astNumber,
 	astObjLiteral,
 	astOr,
@@ -114,7 +114,7 @@ ast_new = require( './new' );
 
 ast_not = require( './not' );
 
-astNull = require( './ast-null' );
+ast_null = require( './null' );
 
 astNumber = require( './ast-number' );
 
@@ -672,7 +672,7 @@ shorthand.$not =
 /*
 | Shorthand for ast nulls.
 */
-shorthand.astNull = astNull.create( );
+shorthand.$null = ast_null.create( );
 
 
 /*
