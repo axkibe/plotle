@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astGreaterThan;
+	ast_greaterThan;
 
 
 /*
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astGreaterThan =
+ast_greaterThan =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astGreaterThan =
 
 if( SERVER )
 {
-	module.exports = ast_astGreaterThan;
+	module.exports = ast_greaterThan;
 }
 
 
 /*
-| Creates a new astGreaterThan object.
+| Creates a new greaterThan object.
 */
-ast_astGreaterThan.create =
+ast_greaterThan.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== ast_astGreaterThan )
+	if( this !== ast_greaterThan )
 	{
 		inherit = this;
 

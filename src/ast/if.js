@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astIf',
+			'ast_if',
 		attributes :
 			{
 				condition :
@@ -49,9 +49,9 @@ if( JION )
 
 
 var
-	astIf;
+	ast_if;
 
-astIf =
+ast_if =
 module.exports =
 	require( '../jion/this' )( module );
 
@@ -59,7 +59,7 @@ module.exports =
 /*
 | Creates an if with the elsewise block set.
 */
-astIf.prototype.astElsewise =
+ast_if.prototype.$elsewise =
 	function(
 		block
 	)

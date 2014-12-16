@@ -39,7 +39,7 @@ var
 	ast_func,
 	ast_funcArg,
 	ast_greaterThan,
-	astIf,
+	ast_if,
 	astInstanceof,
 	astLessThan,
 	astMember,
@@ -102,7 +102,7 @@ ast_funcArg = require( './funcArg' );
 
 ast_greaterThan = require( './greaterThan' );
 
-astIf = require( './ast-if' );
+ast_if = require( './if' );
 
 astInstanceof = require( './ast-instanceof' );
 
@@ -492,7 +492,7 @@ shorthand.ast_greaterThan =
 /*
 | Shorthand for creating ifs.
 */
-shorthand.astIf =
+shorthand.$if =
 	function(
 		condition,
 		then,
@@ -520,7 +520,7 @@ shorthand.astIf =
 	}
 
 	return(
-		astIf.create(
+		ast_if.create(
 			'condition', condition,
 			'then', then,
 			'elsewise', elsewise || null

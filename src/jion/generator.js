@@ -51,7 +51,7 @@ var
 	$equals,
 	$fail,
 	$func,
-	astIf,
+	$if,
 	astInstanceof,
 	astNew,
 	astNot,
@@ -120,7 +120,7 @@ $fail = shorthand.$fail;
 
 $func = shorthand.$func;
 
-astIf = shorthand.astIf;
+$if = shorthand.$if;
 
 astInstanceof = shorthand.astInstanceof;
 
@@ -593,7 +593,7 @@ generator.prototype.genNodeIncludes =
 		}
 	}
 
-	capsule = capsule.astIf( 'SERVER', block );
+	capsule = capsule.$if( 'SERVER', block );
 
 	return capsule;
 };
@@ -625,7 +625,7 @@ generator.prototype.genConstructor =
 	block =
 		$block( )
 		.$check(
-			astIf(
+			$if(
 				'prototype.__lazy',
 				$assign( 'this.__lazy', astObjLiteral( ) )
 			)
@@ -661,7 +661,7 @@ generator.prototype.genConstructor =
 		{
 			block =
 				block
-				.astIf(
+				.$if(
 					$differs( attr.v, undefined ),
 					assign
 				);
@@ -854,7 +854,7 @@ generator.prototype.genConstructor =
 
 	capsule =
 		capsule
-		.astIf(
+		.$if(
 			'SERVER',
 			$assign( 'module.exports', this.id.global )
 		);
@@ -999,7 +999,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 	}
 
 	thisCheck =
-		astIf(
+		$if(
 			$differs( astThis, this.id.global ),
 			receiver
 		);
@@ -1008,7 +1008,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 	{
 		thisCheck =
 			thisCheck
-			.astElsewise(
+			.$elsewise(
 				$block( )
 				.$assign( 'twig', astObjLiteral( ) )
 				.ast( 'ranks = [ ]' )
@@ -1020,7 +1020,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 	{
 		thisCheck =
 			thisCheck
-			.astElsewise(
+			.$elsewise(
 				$block( )
 				.ast( 'ray = [ ]' )
 				.ast( 'rayDup = true' )
@@ -1067,7 +1067,7 @@ generator.prototype.genCreatorFreeStringsParser =
 			switchExpr
 			.$case(
 				$string( name ),
-				astIf(
+				$if(
 					'arg !== undefined',
 					$assign( attr.v, 'arg' )
 				)
@@ -1077,7 +1077,7 @@ generator.prototype.genCreatorFreeStringsParser =
 	if( this.twig )
 	{
 		twigDupCheck =
-			astIf(
+			$if(
 				'twigDup !== true',
 				$block( )
 				.ast( 'twig = jools.copy( twig )' )
@@ -1094,7 +1094,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				.ast( twigDupCheck )
 				.ast( 'key = arg' )
 				.ast( 'arg = arguments[ ++a + 1 ]' )
-				.astIf(
+				.$if(
 					'twig[ key ] !== undefined',
 					$fail( )
 				)
@@ -1107,7 +1107,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				.ast( twigDupCheck )
 				.ast( 'key = arg' )
 				.ast( 'arg = arguments[ ++a + 1 ]' )
-				.astIf(
+				.$if(
 					'twig[ key ] === undefined',
 					$fail( )
 				)
@@ -1121,11 +1121,11 @@ generator.prototype.genCreatorFreeStringsParser =
 				.ast( 'rank = arguments[ a + 2 ]' )
 				.ast( 'arg = arguments[ a +  3 ]' )
 				.astPlusAssign( 'a', 2 )
-				.astIf(
+				.$if(
 					'twig[ key ] !== undefined',
 					$fail( )
 				)
-				.astIf(
+				.$if(
 					'rank < 0 || rank > ranks.length',
 					$fail( )
 				)
@@ -1136,7 +1136,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				'"twig:remove"',
 				$block( )
 				.append( twigDupCheck )
-				.astIf(
+				.$if(
 					'twig[ arg ] === undefined',
 					$fail( )
 				)
@@ -1148,7 +1148,7 @@ generator.prototype.genCreatorFreeStringsParser =
 	if( this.ray )
 	{
 		rayDupCheck =
-			astIf(
+			$if(
 				'!rayDup',
 				$block( )
 				.ast( 'ray = ray.slice( )' )
@@ -1248,7 +1248,7 @@ generator.prototype.genCreatorDefaults =
 		{
 			block =
 				block
-				.astIf(
+				.$if(
 					$equals( attr.v, undefined ),
 					$assign( attr.v, attr.defaultValue )
 				);
@@ -1389,7 +1389,7 @@ generator.prototype.genCreatorChecks =
 		if( !attr.allowsUndefined )
 		{
 			check =
-				check.astIf(
+				check.$if(
 					$equals( av, undefined ),
 					$fail( )
 				);
@@ -1398,7 +1398,7 @@ generator.prototype.genCreatorChecks =
 		if( !attr.allowsNull )
 		{
 			check =
-				check.astIf(
+				check.$if(
 					$equals( av, null ),
 					$fail( )
 				);
@@ -1440,11 +1440,11 @@ generator.prototype.genCreatorChecks =
 		{
 			check =
 				check
-				.astIf( cond, astIf( tcheck, $fail( ) ) );
+				.$if( cond, $if( tcheck, $fail( ) ) );
 		}
 		else
 		{
-			check = check.astIf( tcheck, $fail( ) );
+			check = check.$if( tcheck, $fail( ) );
 		}
 	}
 
@@ -1727,7 +1727,7 @@ generator.prototype.genCreatorUnchanged =
 	}
 
 	block =
-		block.astIf(
+		block.$if(
 			cond,
 			astReturn( 'inherit' )
 		);
@@ -1753,7 +1753,7 @@ generator.prototype.genCreatorReturn =
 	{
 		return (
 			block
-			.astIf(
+			.$if(
 				'!_singleton',
 				$assign(
 					'_singleton',
@@ -1944,7 +1944,7 @@ generator.prototype.genFromJSONCreatorParser =
 		astSwitch( 'name' )
 		.$case(
 			'"type"',
-			astIf(
+			$if(
 				$differs( 'arg', this.id.astString ),
 				$fail( )
 			)
@@ -2077,7 +2077,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 
 	block =
 		block
-		.astIf( '!jray', $fail( ) )
+		.$if( '!jray', $fail( ) )
 		.ast( 'ray = [ ]' );
 
 	idList = this.ray.idList;
@@ -2173,7 +2173,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 	loop =
 		$block( )
 		.ast( 'key = ranks[ a ]' )
-		.astIf(
+		.$if(
 			'!jwig[ key ]',
 			// JSON ranks/twig mismatch
 			$fail( )
@@ -2184,7 +2184,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 	block =
 		block
 		.$assign( 'twig', astObjLiteral( ) )
-		.astIf(
+		.$if(
 			'!jwig || !ranks',
 			// ranks/twig information missing
 			$fail( )
@@ -2664,15 +2664,15 @@ generator.prototype.genEquals =
 
 	block =
 		block
-		.astIf( 'this === obj', astReturnTrue )
-		.astIf( '!obj', astReturnFalse );
+		.$if( 'this === obj', astReturnTrue )
+		.$if( '!obj', astReturnFalse );
 
 	if( this.twig )
 	{
 		twigTestLoopBody =
 			$block( )
 			.ast( 'key = this.ranks[ a ]' )
-			.astIf(
+			.$if(
 				astOr(
 					'key !== obj.ranks[ a ]',
 					$condition(
@@ -2694,7 +2694,7 @@ generator.prototype.genEquals =
 
 		twigTest =
 			$block( )
-			.astIf(
+			.$if(
 				'this.ranks.length !== obj.ranks.length',
 				astReturnFalse
 			)
@@ -2709,7 +2709,7 @@ generator.prototype.genEquals =
 
 		block =
 			block
-			.astIf(
+			.$if(
 				astOr(
 					'this.tree !== obj.tree',
 					'this.ranks !== obj.ranks'
@@ -2809,8 +2809,8 @@ generator.prototype.genAlike =
 
 		block =
 			$block( )
-			.astIf( 'this === obj', astReturnTrue )
-			.astIf( '!obj', astReturnFalse );
+			.$if( 'this === obj', astReturnTrue )
+			.$if( '!obj', astReturnFalse );
 
 		if( this.twig )
 		{

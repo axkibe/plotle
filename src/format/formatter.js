@@ -643,7 +643,7 @@ formatIf =
 
 /**/if( CHECK )
 /**/{
-/**/	if( statement.reflect !== 'ast_astIf' )
+/**/	if( statement.reflect !== 'ast_if' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1280,7 +1280,7 @@ formatStatement =
 
 			break;
 
-		case 'ast_astIf' :
+		case 'ast_if' :
 
 			text += formatIf( context, statement );
 
@@ -1416,7 +1416,7 @@ formatStatement =
 		case 'ast_check' :
 		case 'ast_for' :
 		case 'ast_forIn' :
-		case 'ast_astIf' :
+		case 'ast_if' :
 		case 'ast_astSwitch' :
 
 			return text + context.sep;

@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astIf;
+	ast_if;
 
 
 /*
@@ -84,7 +84,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astIf =
+ast_if =
 	{
 		prototype :
 			prototype
@@ -93,14 +93,14 @@ ast_astIf =
 
 if( SERVER )
 {
-	module.exports = ast_astIf;
+	module.exports = ast_if;
 }
 
 
 /*
-| Creates a new astIf object.
+| Creates a new if object.
 */
-ast_astIf.create =
+ast_if.create =
 prototype.create =
 	function(
 		// free strings
@@ -115,7 +115,7 @@ prototype.create =
 		v_elsewise,
 		v_then;
 
-	if( this !== ast_astIf )
+	if( this !== ast_if )
 	{
 		inherit = this;
 
@@ -225,13 +225,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astIf';
+prototype.reflect = 'ast_if';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astIf';
+prototype.reflectName = 'if';
 
 
 /*

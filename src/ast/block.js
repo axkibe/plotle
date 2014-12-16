@@ -160,7 +160,7 @@ ast_block.prototype.$delete =
 /*
 | Returns the block with an if appended.
 */
-ast_block.prototype.astIf =
+ast_block.prototype.$if =
 	function(
 		condition,
 		then,
@@ -169,7 +169,7 @@ ast_block.prototype.astIf =
 {
 	return(
 		this.append(
-			shorthand.astIf( condition, then, elsewise )
+			shorthand.$if( condition, then, elsewise )
 		)
 	);
 };
