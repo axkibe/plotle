@@ -52,7 +52,7 @@ var
 	$fail,
 	$func,
 	$if,
-	astInstanceof,
+	$instanceof,
 	astNew,
 	astNot,
 	astNumber,
@@ -122,7 +122,7 @@ $func = shorthand.$func;
 
 $if = shorthand.$if;
 
-astInstanceof = shorthand.astInstanceof;
+$instanceof = shorthand.$instanceof;
 
 astNew = shorthand.astNew;
 
@@ -1294,7 +1294,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 			return(
 				$and(
 					$differs( astTypeof( avar ), '"string"' ),
-					astNot( astInstanceof( avar, 'String' ) )
+					astNot( $instanceof( avar, 'String' ) )
 				)
 			);
 

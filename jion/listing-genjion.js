@@ -33,7 +33,7 @@ module.exports =
 			'src/ast/funcArg.js',
 			'src/ast/greaterThan.js',
 			'src/ast/if.js',
-			'src/ast/ast-instanceof.js',
+			'src/ast/instanceof.js',
 			'src/ast/ast-less-than.js',
 			'src/ast/ast-member.js',
 			'src/ast/ast-new.js',

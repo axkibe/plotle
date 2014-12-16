@@ -40,7 +40,7 @@ var
 	ast_funcArg,
 	ast_greaterThan,
 	ast_if,
-	astInstanceof,
+	ast_instanceof,
 	astLessThan,
 	astMember,
 	astNew,
@@ -104,7 +104,7 @@ ast_greaterThan = require( './greaterThan' );
 
 ast_if = require( './if' );
 
-astInstanceof = require( './ast-instanceof' );
+ast_instanceof = require( './instanceof' );
 
 astLessThan = require( './ast-less-than' );
 
@@ -615,7 +615,7 @@ shorthand.$func =
 /*
 | Shorthand for creating instanceof expressions.
 */
-shorthand.astInstanceof =
+shorthand.$instanceof =
 	function(
 		left,
 		right
@@ -626,7 +626,7 @@ shorthand.astInstanceof =
 	right = tools.convert( right );
 
 	return(
-		astInstanceof.create(
+		ast_instanceof.create(
 			'left', left,
 			'right', right
 		)

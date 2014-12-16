@@ -50,8 +50,8 @@ precTable =
 		// so the capsule is generated right.
 		'ast_func' : 3,
 		'ast_greaterThan' : 8,
-		'anIn' : 8,
-		'astInstanceof' : 8,
+		'ast_in' : 8,
+		'ast_instanceof' : 8,
 		'astLessThan' : 8,
 		'astMember' : 1,
 		'astNew' : 2,
@@ -768,7 +768,7 @@ formatForIn =
 		+ formatExpression(
 			context.setInline,
 			expr.object,
-			precTable.anIn
+			precTable.ast_in
 		)
 		+ ' )\n'
 		+ formatBlock( context, expr.block );
@@ -879,7 +879,7 @@ formatInstanceof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astInstanceof' )
+/**/	if( expr.reflect !== 'ast_instanceof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -889,7 +889,7 @@ formatInstanceof =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.astInstanceof
+			precTable.ast_instanceof
 		)
 		+ context.sep
 		+ context.tab
@@ -898,7 +898,7 @@ formatInstanceof =
 		+ formatExpression(
 			context,
 			expr.right,
-			precTable.astInstanceof
+			precTable.ast_instanceof
 		);
 
 	return text;
@@ -2283,7 +2283,7 @@ exprFormatter =
 		'ast_equals' : formatEquals,
 		'ast_func' : formatFunc,
 		'ast_greaterThan' : formatGreaterThan,
-		'astInstanceof' : formatInstanceof,
+		'ast_instanceof' : formatInstanceof,
 		'astLessThan' : formatLessThan,
 		'astMember' : formatMember,
 		'astNew' : formatNew,

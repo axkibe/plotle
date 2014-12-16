@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astInstanceof',
+			'ast_instanceof',
 		attributes :
 			{
 				left :
