@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astNot',
+			'ast_not',
 		attributes :
 			{
 				expr :
@@ -33,9 +33,9 @@ if( JION )
 
 
 var
-	astNot;
+	ast_not;
 
-astNot = require( '../jion/this' )( module );
+ast_not = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -48,7 +48,7 @@ astNot = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astNot.prototype.inspect =
+***/	ast_not.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

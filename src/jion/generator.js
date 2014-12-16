@@ -54,7 +54,7 @@ var
 	$if,
 	$instanceof,
 	$new,
-	astNot,
+	$not,
 	astNumber,
 	astObjLiteral,
 	astOr,
@@ -126,7 +126,7 @@ $instanceof = shorthand.$instanceof;
 
 $new = shorthand.$new;
 
-astNot = shorthand.astNot;
+$not = shorthand.$not;
 
 astNumber = shorthand.astNumber;
 
@@ -1294,7 +1294,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 			return(
 				$and(
 					$differs( astTypeof( avar ), '"string"' ),
-					astNot( $instanceof( avar, 'String' ) )
+					$not( $instanceof( avar, 'String' ) )
 				)
 			);
 
@@ -2677,7 +2677,7 @@ generator.prototype.genEquals =
 					'key !== obj.ranks[ a ]',
 					$condition(
 						'this.twig[ key ].equals',
-						astNot(
+						$not(
 							$call( // FIXME
 								'this.twig[ key ].equals',
 								'obj.twig[ key ]'

@@ -44,7 +44,7 @@ var
 	ast_lessThan,
 	ast_member,
 	ast_new,
-	astNot,
+	ast_not,
 	astNull,
 	astNumber,
 	astObjLiteral,
@@ -112,7 +112,7 @@ ast_member = require( './member' );
 
 ast_new = require( './new' );
 
-astNot = require( './ast-not' );
+ast_not = require( './not' );
 
 astNull = require( './ast-null' );
 
@@ -658,14 +658,14 @@ shorthand.$new =
 /*
 | Shorthand for creating negations.
 */
-shorthand.astNot =
+shorthand.$not =
 	function(
 		expr
 	)
 {
 	expr = tools.convert( expr );
 
-	return astNot.create( 'expr', expr );
+	return ast_not.create( 'expr', expr );
 };
 
 

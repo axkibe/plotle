@@ -55,7 +55,7 @@ precTable =
 		'ast_lessThan' : 8,
 		'ast_member' : 1,
 		'ast_new' : 2,
-		'astNot' : 4,
+		'ast_not' : 4,
 		'astNull' : -1,
 		'astNumber' : -1,
 		'astObjLiteral' : -1,
@@ -1766,7 +1766,7 @@ formatNot =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astNot' )
+/**/	if( expr.reflect !== 'ast_not' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1774,13 +1774,11 @@ formatNot =
 
 	return(
 		context.tab
-		+
-		'!'
-		+
-		formatExpression(
+		+ '!'
+		+ formatExpression(
 			context,
 			expr.expr,
-			precTable.astNot
+			precTable.ast_not
 		)
 	);
 };
@@ -2285,7 +2283,7 @@ exprFormatter =
 		'ast_lessThan' : formatLessThan,
 		'ast_member' : formatMember,
 		'ast_new' : formatNew,
-		'astNot' : formatNot,
+		'ast_not' : formatNot,
 		'astNull' : formatNull,
 		'astNumber' : formatNumber,
 		'astObjLiteral' : formatObjLiteral,
