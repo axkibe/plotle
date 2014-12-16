@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astNot;
+	ast_not;
 
 
 /*
@@ -78,7 +78,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astNot =
+ast_not =
 	{
 		prototype :
 			prototype
@@ -87,14 +87,14 @@ ast_astNot =
 
 if( SERVER )
 {
-	module.exports = ast_astNot;
+	module.exports = ast_not;
 }
 
 
 /*
-| Creates a new astNot object.
+| Creates a new not object.
 */
-ast_astNot.create =
+ast_not.create =
 prototype.create =
 	function(
 		// free strings
@@ -107,7 +107,7 @@ prototype.create =
 		inherit,
 		v_expr;
 
-	if( this !== ast_astNot )
+	if( this !== ast_not )
 	{
 		inherit = this;
 
@@ -167,13 +167,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astNot';
+prototype.reflect = 'ast_not';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astNot';
+prototype.reflectName = 'not';
 
 
 /*
