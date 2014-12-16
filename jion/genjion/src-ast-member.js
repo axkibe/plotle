@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astMember;
+	ast_member;
 
 
 /*
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astMember =
+ast_member =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astMember =
 
 if( SERVER )
 {
-	module.exports = ast_astMember;
+	module.exports = ast_member;
 }
 
 
 /*
-| Creates a new astMember object.
+| Creates a new member object.
 */
-ast_astMember.create =
+ast_member.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 		v_expr,
 		v_member;
 
-	if( this !== ast_astMember )
+	if( this !== ast_member )
 	{
 		inherit = this;
 
@@ -198,13 +198,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astMember';
+prototype.reflect = 'ast_member';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astMember';
+prototype.reflectName = 'member';
 
 
 /*

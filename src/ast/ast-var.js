@@ -39,7 +39,7 @@ if( JION )
 */
 var
 	ast_dot,
-	astMember,
+	ast_member,
 	astVar,
 	tools;
 
@@ -48,7 +48,7 @@ astVar = require( '../jion/this' )( module );
 
 ast_dot = require( './dot' );
 
-astMember = require( './ast-member' );
+ast_member = require( './member' );
 
 tools = require( './tools' );
 
@@ -99,13 +99,13 @@ astVar.prototype.$dot =
 /*
 | Creates a generic member access of a variable.
 */
-astVar.prototype.astMember =
+astVar.prototype.$member =
 	function(
 		member // member expression
 	)
 {
 	return(
-		astMember.create(
+		ast_member.create(
 			'expr', this,
 			'member', tools.convert( member )
 		)

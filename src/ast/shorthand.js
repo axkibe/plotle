@@ -42,7 +42,7 @@ var
 	ast_if,
 	ast_instanceof,
 	ast_lessThan,
-	astMember,
+	ast_member,
 	astNew,
 	astNot,
 	astNull,
@@ -108,7 +108,7 @@ ast_instanceof = require( './instanceof' );
 
 ast_lessThan = require( './lessThan' );
 
-astMember = require( './ast-member' );
+ast_member = require( './member' );
 
 astNew = require( './ast-new' );
 
@@ -633,18 +633,13 @@ shorthand.$instanceof =
 /*
 | Shorthand for creating members.
 */
-shorthand.astMember =
+shorthand.$member =
 	function(
 		expr,
 		member
 	)
 {
-	return(
-		astMember.create(
-			'expr', expr,
-			'member', member
-		)
-	);
+	return ast_member.create( 'expr', expr, 'member', member );
 };
 
 

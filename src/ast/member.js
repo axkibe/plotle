@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astMember',
+			'ast_member',
 		attributes :
 			{
 				expr :
@@ -41,10 +41,10 @@ if( JION )
 
 var
 	ast_dot,
-	astMember;
+	ast_member;
 
 
-astMember = require( '../jion/this' )( module );
+ast_member = require( '../jion/this' )( module );
 
 
 ast_dot = require( './dot' );
@@ -53,7 +53,7 @@ ast_dot = require( './dot' );
 /*
 | Creates a dot member access of a dot.
 */
-astMember.prototype.$dot =
+ast_member.prototype.$dot =
 	function(
 		member // member string
 	)
@@ -73,7 +73,7 @@ astMember.prototype.$dot =
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astMember.prototype.inspect =
+***/	ast_member.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

@@ -47,12 +47,12 @@ if( JION )
 */
 var
 	ast_dot,
-	astMember;
+	ast_member;
 
 
 ast_dot = require( '../jion/this' )( module );
 
-astMember = require( './ast-member' );
+ast_member = require( './member' );
 
 
 /*
@@ -102,19 +102,12 @@ ast_dot.prototype.$dot =
 /*
 | Creates a generic member access of a variable.
 */
-ast_dot.prototype.astMember =
+ast_dot.prototype.$member =
 	function(
 		member // member expression
 	)
 {
-	return(
-		astMember.create(
-			'expr',
-				this,
-			'member',
-				member
-		)
-	);
+	return ast_member.create( 'expr', this, 'member', member );
 };
 
 

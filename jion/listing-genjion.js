@@ -35,7 +35,7 @@ module.exports =
 			'src/ast/if.js',
 			'src/ast/instanceof.js',
 			'src/ast/lessThan.js',
-			'src/ast/ast-member.js',
+			'src/ast/member.js',
 			'src/ast/ast-new.js',
 			'src/ast/ast-not.js',
 			'src/ast/ast-null.js',

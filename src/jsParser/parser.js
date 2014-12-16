@@ -82,7 +82,7 @@ ast_greaterThan = require( '../ast/greaterThan' );
 
 ast_lessThan = require( '../ast/lessThan' );
 
-ast_member = require( '../ast/ast-member' );
+ast_member = require( '../ast/member' );
 
 ast_not = require( '../ast/ast-not' );
 

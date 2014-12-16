@@ -53,7 +53,7 @@ precTable =
 		'ast_in' : 8,
 		'ast_instanceof' : 8,
 		'ast_lessThan' : 8,
-		'astMember' : 1,
+		'ast_member' : 1,
 		'astNew' : 2,
 		'astNot' : 4,
 		'astNull' : -1,
@@ -511,7 +511,7 @@ formatMember =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astMember' )
+/**/	if( expr.reflect !== 'ast_member' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -521,7 +521,7 @@ formatMember =
 		formatExpression(
 			context,
 			expr.expr,
-			precTable.astMember
+			precTable.ast_member
 		)
 		+ '['
 		+ context.sep
@@ -2285,7 +2285,7 @@ exprFormatter =
 		'ast_greaterThan' : formatGreaterThan,
 		'ast_instanceof' : formatInstanceof,
 		'ast_lessThan' : formatLessThan,
-		'astMember' : formatMember,
+		'ast_member' : formatMember,
 		'astNew' : formatNew,
 		'astNot' : formatNot,
 		'astNull' : formatNull,
