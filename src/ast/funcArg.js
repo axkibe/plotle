@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astFuncArg',
+			'ast_funcArg',
 		attributes :
 			{
 				name :

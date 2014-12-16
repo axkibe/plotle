@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astGreaterThan',
+			'ast_greaterThan',
 		attributes :
 			{
 				left :
@@ -40,9 +40,9 @@ if( JION )
 
 
 var
-	astGreaterThan;
+	ast_greaterThan;
 
-astGreaterThan = require( '../jion/this' )( module );
+ast_greaterThan = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -55,7 +55,7 @@ astGreaterThan = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astGreaterThan.prototype.inspect =
+***/	ast_greaterThan.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

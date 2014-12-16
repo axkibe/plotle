@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astFunc;
+	ast_func;
 
 
 /*
@@ -92,7 +92,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astFunc =
+ast_func =
 	{
 		prototype :
 			prototype
@@ -101,14 +101,14 @@ ast_astFunc =
 
 if( SERVER )
 {
-	module.exports = ast_astFunc;
+	module.exports = ast_func;
 }
 
 
 /*
-| Creates a new astFunc object.
+| Creates a new func object.
 */
-ast_astFunc.create =
+ast_func.create =
 prototype.create =
 	function(
 		// free strings
@@ -124,7 +124,7 @@ prototype.create =
 		v_block,
 		v_capsule;
 
-	if( this !== ast_astFunc )
+	if( this !== ast_func )
 	{
 		inherit = this;
 
@@ -303,13 +303,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astFunc';
+prototype.reflect = 'ast_func';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astFunc';
+prototype.reflectName = 'func';
 
 
 /*

@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astFuncArg;
+	ast_funcArg;
 
 
 /*
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astFuncArg =
+ast_funcArg =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astFuncArg =
 
 if( SERVER )
 {
-	module.exports = ast_astFuncArg;
+	module.exports = ast_funcArg;
 }
 
 
 /*
-| Creates a new astFuncArg object.
+| Creates a new funcArg object.
 */
-ast_astFuncArg.create =
+ast_funcArg.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 		v_comment,
 		v_name;
 
-	if( this !== ast_astFuncArg )
+	if( this !== ast_funcArg )
 	{
 		inherit = this;
 
@@ -217,13 +217,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astFuncArg';
+prototype.reflect = 'ast_funcArg';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astFuncArg';
+prototype.reflectName = 'funcArg';
 
 
 /*

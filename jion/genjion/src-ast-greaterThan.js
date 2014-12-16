@@ -192,13 +192,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astGreaterThan';
+prototype.reflect = 'ast_greaterThan';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astGreaterThan';
+prototype.reflectName = 'greaterThan';
 
 
 /*

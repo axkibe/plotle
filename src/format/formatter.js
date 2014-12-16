@@ -48,8 +48,8 @@ precTable =
 		'ast_equals' : 9,
 		// this is random guess, must be larger than call
 		// so the capsule is generated right.
-		'astFunc' : 3,
-		'astGreaterThan' : 8,
+		'ast_func' : 3,
+		'ast_greaterThan' : 8,
 		'anIn' : 8,
 		'astInstanceof' : 8,
 		'astLessThan' : 8,
@@ -833,7 +833,7 @@ formatGreaterThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astGreaterThan' )
+/**/	if( expr.reflect !== 'ast_greaterThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -843,7 +843,7 @@ formatGreaterThan =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.astGreaterThan
+			precTable.ast_greaterThan
 		)
 		+
 		context.sep
@@ -857,7 +857,7 @@ formatGreaterThan =
 		formatExpression(
 			context,
 			expr.right,
-			precTable.astGreaterThan
+			precTable.ast_greaterThan
 		);
 
 	return text;
@@ -2113,14 +2113,14 @@ formatVarDec =
 	if( context.root && varDec.assign )
 	{
 		if(
-			varDec.assign.reflect === 'ast_astFunc'
+			varDec.assign.reflect === 'ast_func'
 		)
 		{
 			isRootFunc = true;
 		}
 		else if(
 			varDec.assign.reflect === 'ast_assign'
-			&& varDec.assign.right.reflect === 'ast_astFunc'
+			&& varDec.assign.right.reflect === 'ast_func'
 		)
 		{
 			// FUTURUE allow abitrary amount of assignments
@@ -2281,8 +2281,8 @@ exprFormatter =
 		'ast_differs' : formatDiffers,
 		'ast_dot' : formatDot,
 		'ast_equals' : formatEquals,
-		'astFunc' : formatFunc,
-		'astGreaterThan' : formatGreaterThan,
+		'ast_func' : formatFunc,
+		'ast_greaterThan' : formatGreaterThan,
 		'astInstanceof' : formatInstanceof,
 		'astLessThan' : formatLessThan,
 		'astMember' : formatMember,

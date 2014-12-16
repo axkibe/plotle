@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astFunc',
+			'ast_func',
 		attributes :
 			{
 				block :
@@ -49,19 +49,19 @@ if( JION )
 
 
 var
-	astFuncArg,
-	astFunc;
+	ast_funcArg,
+	ast_func;
 
 
-astFunc = require( '../jion/this' )( module );
+ast_func = require( '../jion/this' )( module );
 
-astFuncArg = require( './ast-func-arg' );
+ast_funcArg = require( './funcArg' );
 
 /*
 | Convenience shortcut.
 | Returns the function with an argument appended.
 */
-astFunc.prototype.astArg =
+ast_func.prototype.$arg =
 	function(
 		name,
 		comment
@@ -69,7 +69,7 @@ astFunc.prototype.astArg =
 {
 	return(
 		this.append(
-			astFuncArg.create(
+			ast_funcArg.create(
 				'name', name,
 				'comment', comment
 			)

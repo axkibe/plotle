@@ -36,9 +36,9 @@ var
 	ast_fail,
 	ast_for,
 	ast_forIn,
-	astFunc,
-	astFuncArg,
-	astGreaterThan,
+	ast_func,
+	ast_funcArg,
+	ast_greaterThan,
 	astIf,
 	astInstanceof,
 	astLessThan,
@@ -96,11 +96,11 @@ ast_for = require( './for' );
 
 ast_forIn = require( './forIn' );
 
-astFunc = require( './ast-func' );
+ast_func = require( './func' );
 
-astFuncArg = require( './ast-func-arg' );
+ast_funcArg = require( './funcArg' );
 
-astGreaterThan = require( './ast-greater-than' );
+ast_greaterThan = require( './greaterThan' );
 
 astIf = require( './ast-if' );
 
@@ -265,7 +265,7 @@ shorthand.astCapsule =
 	return(
 		ast_call.create(
 			'func',
-			astFunc.create(
+			ast_func.create(
 				'block', block || null,
 				'capsule', true
 			)
@@ -470,7 +470,7 @@ shorthand.astLessThan =
 /*
 | Shorthand for creating greater-than comparisons.
 */
-shorthand.astGreaterThan =
+shorthand.ast_greaterThan =
 	function(
 		left,
 		right
@@ -481,7 +481,7 @@ shorthand.astGreaterThan =
 	right = tools.convert( right );
 
 	return(
-		astGreaterThan.create(
+		ast_greaterThan.create(
 			'left', left,
 			'right', right
 		)
@@ -594,7 +594,7 @@ shorthand.$forIn =
 /*
 | Shorthand for creating functions.
 */
-shorthand.astFunc =
+shorthand.$func =
 	function(
 		block
 	)
@@ -608,7 +608,7 @@ shorthand.astFunc =
 		block = ast_block.create( ).append( block );
 	}
 
-	return astFunc.create( 'block', block || null );
+	return ast_func.create( 'block', block || null );
 };
 
 

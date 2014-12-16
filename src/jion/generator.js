@@ -50,7 +50,7 @@ var
 	$differs,
 	$equals,
 	$fail,
-	astFunc,
+	$func,
 	astIf,
 	astInstanceof,
 	astNew,
@@ -118,7 +118,7 @@ $equals = shorthand.$equals;
 
 $fail = shorthand.$fail;
 
-astFunc = shorthand.astFunc;
+$func = shorthand.$func;
 
 astIf = shorthand.astIf;
 
@@ -747,7 +747,7 @@ generator.prototype.genConstructor =
 
 	block = block.$check( freezeBlock );
 
-	constructor = astFunc( block );
+	constructor = $func( block );
 
 	for(
 		a = 0, aZ = this.constructorList.length;
@@ -761,26 +761,26 @@ generator.prototype.genConstructor =
 		{
 			case 'inherit' :
 
-				constructor = constructor.astArg( 'inherit', 'inheritance' );
+				constructor = constructor.$arg( 'inherit', 'inheritance' );
 
 				break;
 
 			case 'ranks' :
 
-				constructor = constructor.astArg( 'ranks', 'twig ranks' );
+				constructor = constructor.$arg( 'ranks', 'twig ranks' );
 
 				break;
 
 			case 'ray' :
 
-				constructor = constructor.astArg( 'ray', 'ray' );
+				constructor = constructor.$arg( 'ray', 'ray' );
 
 				break;
 
 			case 'rayDup' :
 
 				constructor =
-					constructor.astArg(
+					constructor.$arg(
 						'rayDup',
 						'true if ray is already been duplicated'
 					);
@@ -790,14 +790,14 @@ generator.prototype.genConstructor =
 			case 'twig' :
 
 				constructor =
-					constructor.astArg( 'twig', 'twig' );
+					constructor.$arg( 'twig', 'twig' );
 
 				break;
 
 			case 'twigDup' :
 
 				constructor =
-					constructor.astArg(
+					constructor.$arg(
 						'twigDup',
 						'true if twig is already been duplicated'
 					);
@@ -809,7 +809,7 @@ generator.prototype.genConstructor =
 					this.attributes[ name ];
 
 				constructor =
-					constructor.astArg(
+					constructor.$arg(
 						attr.v.name,
 						attr.comment
 					);
@@ -1838,8 +1838,8 @@ generator.prototype.genCreator =
 	block = this.genCreatorReturn( block );
 
 	creator =
-		astFunc( block )
-		.astArg( null, 'free strings' );
+		$func( block )
+		.$arg( null, 'free strings' );
 
 
 	capsule =
@@ -2339,8 +2339,8 @@ generator.prototype.genFromJSONCreator =
 		capsule
 		.$assign(
 			astVar( this.id.global ).$dot( 'createFromJSON' ),
-			astFunc( funcBlock )
-			.astArg( 'json', 'the JSON object' )
+			$func( funcBlock )
+			.$arg( 'json', 'the JSON object' )
 		);
 
 	return capsule;
@@ -2509,7 +2509,7 @@ generator.prototype.genToJSON =
 			ast( 'Object.freeze( json )' )
 		)
 		.astReturn(
-			astFunc( astReturn( 'json' ) )
+			$func( astReturn( 'json' ) )
 		);
 
 	capsule =
@@ -2519,7 +2519,7 @@ generator.prototype.genToJSON =
 			'jools.lazyValue',
 			'prototype',
 			'"toJSON"',
-			astFunc( block )
+			$func( block )
 		);
 
 	return capsule;
@@ -2630,8 +2630,8 @@ generator.prototype.genEquals =
 				.$comment( 'Tests equality of object.' )
 				.$assign(
 					'prototype.equals',
-					astFunc( astReturn( 'this === obj' ) )
-					.astArg( 'obj', 'object to compare to' )
+					$func( astReturn( 'this === obj' ) )
+					.$arg( 'obj', 'object to compare to' )
 				)
 			);
 
@@ -2762,8 +2762,8 @@ generator.prototype.genEquals =
 		.$assign(
 			// FIXME use proto
 			'prototype.equals',
-			astFunc( block )
-			.astArg( 'obj', 'object to compare to' )
+			$func( block )
+			.$arg( 'obj', 'object to compare to' )
 		);
 
 	return capsule;
@@ -2861,8 +2861,8 @@ generator.prototype.genAlike =
 			.$assign(
 				// FIXME use proto
 				astVar( 'prototype' ).$dot( alikeName ),
-				astFunc( block )
-				.astArg( 'obj', 'object to compare to' )
+				$func( block )
+				.$arg( 'obj', 'object to compare to' )
 			);
 	}
 
