@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astLessThan',
+			'ast_lessThan',
 		attributes :
 			{
 				left :

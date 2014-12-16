@@ -52,7 +52,7 @@ precTable =
 		'ast_greaterThan' : 8,
 		'ast_in' : 8,
 		'ast_instanceof' : 8,
-		'astLessThan' : 8,
+		'ast_lessThan' : 8,
 		'astMember' : 1,
 		'astNew' : 2,
 		'astNot' : 4,
@@ -792,7 +792,7 @@ formatLessThan =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astLessThan' )
+/**/	if( expr.reflect !== 'ast_lessThan' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -802,7 +802,7 @@ formatLessThan =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.astLessThan
+			precTable.ast_lessThan
 		)
 		+ context.sep
 		+ context.tab
@@ -811,7 +811,7 @@ formatLessThan =
 		+ formatExpression(
 			context,
 			expr.right,
-			precTable.astLessThan
+			precTable.ast_lessThan
 		);
 
 	return text;
@@ -2284,7 +2284,7 @@ exprFormatter =
 		'ast_func' : formatFunc,
 		'ast_greaterThan' : formatGreaterThan,
 		'ast_instanceof' : formatInstanceof,
-		'astLessThan' : formatLessThan,
+		'ast_lessThan' : formatLessThan,
 		'astMember' : formatMember,
 		'astNew' : formatNew,
 		'astNot' : formatNot,

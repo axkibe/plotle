@@ -41,7 +41,7 @@ var
 	ast_greaterThan,
 	ast_if,
 	ast_instanceof,
-	astLessThan,
+	ast_lessThan,
 	astMember,
 	astNew,
 	astNot,
@@ -106,7 +106,7 @@ ast_if = require( './if' );
 
 ast_instanceof = require( './instanceof' );
 
-astLessThan = require( './ast-less-than' );
+ast_lessThan = require( './lessThan' );
 
 astMember = require( './ast-member' );
 
@@ -448,7 +448,7 @@ shorthand.$fail =
 /*
 | Shorthand for creating less-than comparisons.
 */
-shorthand.astLessThan =
+shorthand.$lessThan =
 	function(
 		left,
 		right
@@ -458,12 +458,7 @@ shorthand.astLessThan =
 
 	right = tools.convert( right );
 
-	return(
-		astLessThan.create(
-			'left', left,
-			'right', right
-		)
-	);
+	return ast_lessThan.create( 'left', left, 'right', right );
 };
 
 

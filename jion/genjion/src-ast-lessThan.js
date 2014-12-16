@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astLessThan;
+	ast_lessThan;
 
 
 /*
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astLessThan =
+ast_lessThan =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astLessThan =
 
 if( SERVER )
 {
-	module.exports = ast_astLessThan;
+	module.exports = ast_lessThan;
 }
 
 
 /*
-| Creates a new astLessThan object.
+| Creates a new lessThan object.
 */
-ast_astLessThan.create =
+ast_lessThan.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== ast_astLessThan )
+	if( this !== ast_lessThan )
 	{
 		inherit = this;
 
@@ -192,13 +192,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astLessThan';
+prototype.reflect = 'ast_lessThan';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astLessThan';
+prototype.reflectName = 'lessThan';
 
 
 /*
