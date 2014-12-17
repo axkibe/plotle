@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astPreIncrement',
+			'ast_preIncrement',
 		attributes :
 			{
 				expr :
@@ -33,10 +33,10 @@ if( JION )
 
 
 var
-	astPreIncrement;
+	ast_preIncrement;
 
 
-astPreIncrement = require( '../jion/this' )( module );
+ast_preIncrement = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -49,7 +49,7 @@ astPreIncrement = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astPreIncrement.prototype.inspect =
+***/	ast_preIncrement.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

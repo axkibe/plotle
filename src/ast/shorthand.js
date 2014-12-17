@@ -51,7 +51,7 @@ var
 	ast_or,
 	ast_plus,
 	ast_plusAssign,
-	astPreIncrement,
+	ast_preIncrement,
 	astReturn,
 	astString,
 	astSwitch,
@@ -126,7 +126,7 @@ ast_plus = require( './plus' );
 
 ast_plusAssign = require( './plusAssign' );
 
-astPreIncrement = require( './ast-pre-increment' );
+ast_preIncrement = require( './preIncrement' );
 
 astReturn = require( './ast-return' );
 
@@ -807,14 +807,14 @@ shorthand.$plusAssign =
 /*
 | Shorthand for creating pre-increments.
 */
-shorthand.astPreIncrement =
+shorthand.$preIncrement =
 	function(
 		expr
 	)
 {
 	expr = tools.convert( expr );
 
-	return astPreIncrement.create( 'expr', expr );
+	return ast_preIncrement.create( 'expr', expr );
 };
 
 

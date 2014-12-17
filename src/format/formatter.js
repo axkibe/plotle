@@ -62,7 +62,7 @@ precTable =
 		'ast_or' : 14,
 		'ast_plus' : 6,
 		'ast_plusAssign' : 17,
-		'astPreIncrement' : 3,
+		'ast_preIncrement' : 3,
 		'astString' : -1,
 		'astTypeof' : 4,
 		'astVar' : -1
@@ -1960,7 +1960,7 @@ formatPreIncrement =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astPreIncrement' )
+/**/	if( expr.reflect !== 'ast_preIncrement' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1972,7 +1972,7 @@ formatPreIncrement =
 		+ formatExpression(
 			context,
 			expr.expr,
-			precTable.astPreIncrement
+			precTable.preIncrement
 		)
 	);
 };
@@ -2289,7 +2289,7 @@ exprFormatter =
 		'ast_or' : formatOr,
 		'ast_plus' : formatPlus,
 		'ast_plusAssign' : formatPlusAssign,
-		'astPreIncrement' : formatPreIncrement,
+		'ast_preIncrement' : formatPreIncrement,
 		'astString' : formatString,
 		'astTypeof' : formatTypeof,
 		'astVar' : formatVar
