@@ -57,7 +57,7 @@ var
 	ast_switch,
 	ast_typeof,
 	ast_var,
-	astVarDec,
+	ast_varDec,
 	jools,
 	tools;
 
@@ -138,7 +138,7 @@ ast_typeof = require( './typeof' );
 
 ast_var = require( './var' );
 
-astVarDec = require( './ast-var-dec' );
+ast_varDec = require( './varDec' );
 
 jools = require( '../jools/jools' );
 
@@ -890,14 +890,14 @@ shorthand.$var =
 /*
 | Shorthand for variable declerations.
 */
-shorthand.astVarDec =
+shorthand.$varDec =
 	function(
 		name,   // variable name
 		assign  // variable assignment
 	)
 {
 	return(
-		astVarDec.create(
+		ast_varDec.create(
 			'name',
 				name,
 			'assign',

@@ -496,7 +496,7 @@ generator.prototype.genImports =
 	capsule =
 		capsule
 		.$comment( 'Imports.' )
-		.astVarDec( 'jools' );
+		.$varDec( 'jools' );
 
 	// FUTURE: when type checking is there,
 	// this might become needed always.
@@ -520,7 +520,7 @@ generator.prototype.genImports =
 		)
 		{
 			capsule =
-				capsule.astVarDec(
+				capsule.$varDec(
 					unitList[ a ] + '_' + nameList[ b ]
 				);
 		}
@@ -819,8 +819,8 @@ generator.prototype.genConstructor =
 
 	capsule =
 		capsule
-		.astVarDec( 'Constructor' )
-		.astVarDec( 'prototype' )
+		.$varDec( 'Constructor' )
+		.$varDec( 'prototype' )
 		.$assign( 'Constructor', constructor );
 
 	// subclass
@@ -876,7 +876,7 @@ generator.prototype.genSingleton =
 	return (
 		capsule
 		.$comment( 'Singleton' )
-		.astVarDec( '_singleton' )
+		.$varDec( '_singleton' )
 		.$assign( '_singleton', null )
 	);
 };
@@ -934,7 +934,7 @@ generator.prototype.genCreatorVariables =
 		a++
 	)
 	{
-		block = block.astVarDec( varList[ a ] );
+		block = block.$varDec( varList[ a ] );
 	}
 
 	return block;
@@ -1914,7 +1914,7 @@ generator.prototype.genFromJSONCreatorVariables =
 		a++
 	)
 	{
-		block = block.astVarDec( varList[ a ] );
+		block = block.$varDec( varList[ a ] );
 	}
 
 	return block;
@@ -2460,7 +2460,7 @@ generator.prototype.genToJSON =
 		name,
 		olit;
 
-	block = $block( ).astVarDec( 'json' );
+	block = $block( ).$varDec( 'json' );
 
 	olit =
 		$objLiteral( )
@@ -2657,9 +2657,9 @@ generator.prototype.genEquals =
 	{
 		block =
 			block
-			.astVarDec( 'a' )
-			.astVarDec( 'aZ' )
-			.astVarDec( 'key' );
+			.$varDec( 'a' )
+			.$varDec( 'aZ' )
+			.$varDec( 'key' );
 	}
 
 	block =
@@ -2880,7 +2880,7 @@ generator.prototype.genExport =
 
 	block =
 		block
-		.astVarDec( this.id.global );
+		.$varDec( this.id.global );
 
 	return block;
 };

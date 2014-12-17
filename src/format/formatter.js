@@ -1237,8 +1237,8 @@ formatStatement =
 		lookBehind
 		&& lookBehind.reflect !== 'ast_comment'
 		&& !(
-			lookBehind.reflect === 'ast_astVarDec'
-			&& statement.reflect === 'ast_astVarDec'
+			lookBehind.reflect === 'ast_varDec'
+			&& statement.reflect === 'ast_varDec'
 		)
 	)
 	{
@@ -1337,7 +1337,7 @@ formatStatement =
 
 			break;
 
-		case 'ast_astVarDec' :
+		case 'ast_varDec' :
 
 			text += formatVarDec( context, statement, lookBehind );
 
@@ -1381,12 +1381,12 @@ formatStatement =
 
 	switch( statement.reflect )
 	{
-		case 'ast_astVarDec' :
+		case 'ast_varDec' :
 
 			if(
 				lookAhead
 				&&
-				lookAhead.reflect === 'ast_astVarDec'
+				lookAhead.reflect === 'ast_varDec'
 			)
 			{
 				return text += ',\n';
@@ -2127,7 +2127,7 @@ function(
 		{
 				if(
 								!lookBehind
-								|| lookBehind.reflect !== 'ast_astVarDec'
+								|| lookBehind.reflect !== 'ast_varDec'
 				  )
 				{
 						if( !context.inline )

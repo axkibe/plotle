@@ -88,7 +88,7 @@ module.exports =
 			'src/ast/switch.js',
 			'src/ast/typeof.js',
 			'src/ast/var.js',
-			'src/ast/ast-var-dec.js',
+			'src/ast/varDec.js',
 
 			'src/format/context.js',
 			'src/jsLexer/token.js',

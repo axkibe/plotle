@@ -267,7 +267,7 @@ ast_block.prototype.$return =
 /*
 | Returns the block with a variable decleration appended.
 */
-ast_block.prototype.astVarDec =
+ast_block.prototype.$varDec =
 	function(
 		// name,   // variable name
 		// assign  // variable assignment
@@ -275,7 +275,7 @@ ast_block.prototype.astVarDec =
 {
 	return(
 		this.append(
-			shorthand.astVarDec.apply( shorthand, arguments )
+			shorthand.$varDec.apply( shorthand, arguments )
 		)
 	);
 };
