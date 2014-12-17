@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astReturn',
+			'ast_return',
 		attributes :
 			{
 				expr :

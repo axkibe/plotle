@@ -45,7 +45,7 @@ module.exports =
 			'src/ast/plus.js',
 			'src/ast/plusAssign.js',
 			'src/ast/preIncrement.js',
-			'src/ast/ast-return.js',
+			'src/ast/return.js',
 			'src/ast/ast-string.js',
 			'src/ast/ast-switch.js',
 			'src/ast/ast-typeof.js',

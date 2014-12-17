@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astReturn;
+	ast_return;
 
 
 /*
@@ -78,7 +78,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astReturn =
+ast_return =
 	{
 		prototype :
 			prototype
@@ -87,14 +87,14 @@ ast_astReturn =
 
 if( SERVER )
 {
-	module.exports = ast_astReturn;
+	module.exports = ast_return;
 }
 
 
 /*
-| Creates a new astReturn object.
+| Creates a new return object.
 */
-ast_astReturn.create =
+ast_return.create =
 prototype.create =
 	function(
 		// free strings
@@ -107,7 +107,7 @@ prototype.create =
 		inherit,
 		v_expr;
 
-	if( this !== ast_astReturn )
+	if( this !== ast_return )
 	{
 		inherit = this;
 
@@ -167,13 +167,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astReturn';
+prototype.reflect = 'ast_return';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astReturn';
+prototype.reflectName = 'return';
 
 
 /*

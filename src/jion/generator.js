@@ -60,9 +60,9 @@ var
 	$or,
 	$plus,
 	$plusAssign,
-	astReturn,
-	astReturnFalse,
-	astReturnTrue,
+	$return,
+	$returnFalse,
+	$returnTrue,
 	$string,
 	astSwitch,
 	astThis,
@@ -138,7 +138,7 @@ $plus = shorthand.$plus;
 
 $plusAssign = shorthand.$plusAssign;
 
-astReturn = shorthand.astReturn;
+$return = shorthand.$return;
 
 $string = shorthand.$string;
 
@@ -150,9 +150,10 @@ astTypeof = shorthand.astTypeof;
 
 astVar = shorthand.astVar;
 
-astReturnTrue = astReturn( true );
+// FUTURE remove this two
+$returnTrue = $return( true );
 
-astReturnFalse = astReturn( false );
+$returnFalse = $return( false );
 
 
 /*
@@ -1727,7 +1728,7 @@ generator.prototype.genCreatorUnchanged =
 	block =
 		block.$if(
 			cond,
-			astReturn( 'inherit' )
+			$return( 'inherit' )
 		);
 
 	return block;
@@ -1758,7 +1759,7 @@ generator.prototype.genCreatorReturn =
 					$new( ast( 'Constructor( )' ) )
 				)
 			)
-			.astReturn( '_singleton' )
+			.$return( '_singleton' )
 		);
 	}
 
@@ -1793,7 +1794,7 @@ generator.prototype.genCreatorReturn =
 		}
 	}
 
-	return block.astReturn( $new( call ) );
+	return block.$return( $new( call ) );
 };
 
 
@@ -2261,7 +2262,7 @@ generator.prototype.genFromJSONCreatorReturn =
 		}
 	}
 
-	return block.astReturn( $new( call ) );
+	return block.$return( $new( call ) );
 };
 
 
@@ -2506,8 +2507,8 @@ generator.prototype.genToJSON =
 		.$check(
 			ast( 'Object.freeze( json )' )
 		)
-		.astReturn(
-			$func( astReturn( 'json' ) )
+		.$return(
+			$func( $return( 'json' ) )
 		);
 
 	capsule =
@@ -2628,7 +2629,7 @@ generator.prototype.genEquals =
 				.$comment( 'Tests equality of object.' )
 				.$assign(
 					'prototype.equals',
-					$func( astReturn( 'this === obj' ) )
+					$func( $return( 'this === obj' ) )
 					.$arg( 'obj', 'object to compare to' )
 				)
 			);
@@ -2662,8 +2663,8 @@ generator.prototype.genEquals =
 
 	block =
 		block
-		.$if( 'this === obj', astReturnTrue )
-		.$if( '!obj', astReturnFalse );
+		.$if( 'this === obj', $returnTrue )
+		.$if( '!obj', $returnFalse );
 
 	if( this.twig )
 	{
@@ -2687,14 +2688,14 @@ generator.prototype.genEquals =
 						)
 					)
 				),
-				astReturnFalse
+				$returnFalse
 			);
 
 		twigTest =
 			$block( )
 			.$if(
 				'this.ranks.length !== obj.ranks.length',
-				astReturnFalse
+				$returnFalse
 			)
 			.$for(
 				$commaList( )
@@ -2748,11 +2749,11 @@ generator.prototype.genEquals =
 
 	if( cond )
 	{
-		block = block.astReturn( cond );
+		block = block.$return( cond );
 	}
 	else
 	{
-		block = block.astReturn( true );
+		block = block.$return( true );
 	}
 
 	capsule =
@@ -2807,8 +2808,8 @@ generator.prototype.genAlike =
 
 		block =
 			$block( )
-			.$if( 'this === obj', astReturnTrue )
-			.$if( '!obj', astReturnFalse );
+			.$if( 'this === obj', $returnTrue )
+			.$if( '!obj', $returnFalse );
 
 		if( this.twig )
 		{
@@ -2852,7 +2853,7 @@ generator.prototype.genAlike =
 				: $and( cond, ceq );
 		}
 
-		block = block.astReturn( cond );
+		block = block.$return( cond );
 
 		capsule =
 			capsule

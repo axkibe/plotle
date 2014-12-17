@@ -29,7 +29,7 @@ var
 	ast_block,
 	ast_comment,
 	ast_new,
-	astReturn,
+	ast_return,
 	jools,
 	shorthand,
 	tools;
@@ -41,7 +41,7 @@ ast_comment = require( './comment' );
 
 ast_new = require( './new' );
 
-astReturn = require( './ast-return' );
+ast_return = require( './return' );
 
 jools = require( '../jools/jools' );
 
@@ -249,14 +249,15 @@ ast_block.prototype.$plusAssign =
 /*
 | Returns the block with a term appended.
 */
-ast_block.prototype.astReturn =
+ast_block.prototype.$return =
 	function(
 		expr
 	)
 {
-	if( expr.reflect !== 'ast_astReturn' )
+	// FUTURE use shorthand
+	if( expr.reflect !== 'ast_return' )
 	{
-		expr = astReturn.create( 'expr', tools.convert( expr ) );
+		expr = ast_return.create( 'expr', tools.convert( expr ) );
 	}
 
 	return this.append( expr );

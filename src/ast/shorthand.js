@@ -52,7 +52,7 @@ var
 	ast_plus,
 	ast_plusAssign,
 	ast_preIncrement,
-	astReturn,
+	ast_return,
 	astString,
 	astSwitch,
 	astTypeof,
@@ -128,7 +128,7 @@ ast_plusAssign = require( './plusAssign' );
 
 ast_preIncrement = require( './preIncrement' );
 
-astReturn = require( './ast-return' );
+ast_return = require( './return' );
 
 astString = require( './ast-string' );
 
@@ -821,12 +821,12 @@ shorthand.$preIncrement =
 /*
 | Shorthand for creating a return statement
 */
-shorthand.astReturn =
+shorthand.$return =
 	function(
 		expr
 	)
 {
-	return astReturn.create( 'expr', tools.convert( expr ) );
+	return ast_return.create( 'expr', tools.convert( expr ) );
 };
 
 
