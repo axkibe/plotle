@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astVar',
+			'ast_var',
 		attributes :
 			{
 				'name' :
@@ -40,11 +40,11 @@ if( JION )
 var
 	ast_dot,
 	ast_member,
-	astVar,
+	ast_var,
 	tools;
 
 
-astVar = require( '../jion/this' )( module );
+ast_var = require( '../jion/this' )( module );
 
 ast_dot = require( './dot' );
 
@@ -55,7 +55,7 @@ tools = require( './tools' );
 /*
 | Initializer.
 */
-astVar.prototype._init =
+ast_var.prototype._init =
 	function( )
 {
 	var
@@ -85,7 +85,7 @@ astVar.prototype._init =
 /*
 | Creates a dot member access of a variable.
 */
-astVar.prototype.$dot =
+ast_var.prototype.$dot =
 	function(
 		member // member string
 	)
@@ -99,7 +99,7 @@ astVar.prototype.$dot =
 /*
 | Creates a generic member access of a variable.
 */
-astVar.prototype.$member =
+ast_var.prototype.$member =
 	function(
 		member // member expression
 	)
@@ -123,7 +123,7 @@ astVar.prototype.$member =
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astVar.prototype.inspect =
+***/	ast_var.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

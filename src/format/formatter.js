@@ -65,7 +65,7 @@ precTable =
 		'ast_preIncrement' : 3,
 		'ast_string' : -1,
 		'ast_typeof' : 4,
-		'astVar' : -1
+		'ast_var' : -1
 	};
 
 
@@ -1408,7 +1408,7 @@ formatStatement =
 		case 'ast_plusAssign' :
 		case 'ast_return' :
 		case 'ast_string' :
-		case 'ast_astVar' :
+		case 'ast_var' :
 
 			return text + ';' + context.sep;
 
@@ -2029,242 +2029,242 @@ formatVar =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astVar' )
+/**/	if( expr.reflect !== 'ast_var' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	return context.tab + expr.name;
+return context.tab + expr.name;
 };
 
 
 /*
-| Formats a string literal use.
-*/
+   | Formats a string literal use.
+ */
 var
-formatNumber =
-	function(
-		context,
-		expr
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_number' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return context.tab + '' + expr.number;
-};
-
-
-/*
-| Formats a string literal.
-*/
-var
-formatString =
-	function(
-		context,
-		expr
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_string' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return context.tab + '\'' + expr.string + '\'';
-};
-
-/*
-| Formats a variable declaration.
-*/
-var
-formatVarDec =
-	function(
-		context,
-		varDec,
-		lookBehind
-	)
-{
-	var
-		aText,       // formated assignment
-		isRootFunc,
-		text;
-
-	// true when this is a root function
-	isRootFunc = false;
-
-	text = '';
-
-	if( context.root && varDec.assign )
-	{
-		if(
-			varDec.assign.reflect === 'ast_func'
+		formatNumber =
+function(
+				context,
+				expr
 		)
-		{
-			isRootFunc = true;
-		}
-		else if(
-			varDec.assign.reflect === 'ast_assign'
-			&& varDec.assign.right.reflect === 'ast_func'
-		)
-		{
-			// FUTURUE allow abitrary amount of assignments
-			isRootFunc = true;
-		}
-	}
+{
 
-	if( !isRootFunc )
-	{
-		if(
-			!lookBehind
-			|| lookBehind.reflect !== 'ast_astVarDec'
-		)
-		{
-			if( !context.inline )
-			{
-				text += context.tab + 'var' + '\n';
-			}
-			else
-			{
-				text += 'var ';
-			}
-		}
+		/**/if( CHECK )
+				/**/{
+						/**/	if( expr.reflect !== 'ast_number' )
+								/**/	{
+										/**/		throw new Error( );
+										/**/	}
+						/**/}
 
-		if( !context.inline )
-		{
-			context = context.inc;
-
-			text += context.tab;
-		}
-
-		text += varDec.name;
-	}
-	else
-	{
-		// root functions are not combined in VarDecs
-		text = context.tab + 'var ' + varDec.name;
-	}
-
-	if( varDec.assign )
-	{
-		text += ' =' + context.sep;
-
-		if( varDec.assign.reflect !== 'ast_assign' )
-		{
-			context = context.inc;
-		}
-
-		aText = null;
-
-		try
-		{
-			aText =
-				context.tab
-				+ formatExpression(
-					context.setInline,
-					varDec.assign,
-					null
-				);
-		}
-		catch ( e )
-		{
-			// rethrows any real error
-			if( e !== 'noinline' )
-			{
-				throw e;
-			}
-		}
-
-		if( aText === null || textLen( aText ) > MAX_TEXT_WIDTH )
-		{
-			aText =
-				formatExpression(
-					context,
-					varDec.assign,
-					null
-				);
-		}
-
-		text += aText;
-	}
-
-	return text;
+		return context.tab + '' + expr.number;
 };
 
 
 /*
-| Formats a comma list operator
-*/
+   | Formats a string literal.
+ */
 var
-formatCommaList =
-	function(
-		context,
-		list
-	)
+		formatString =
+function(
+				context,
+				expr
+		)
 {
-	var
-		a,
-		aZ,
-		text;
 
-	text = '';
+		/**/if( CHECK )
+				/**/{
+						/**/	if( expr.reflect !== 'ast_string' )
+								/**/	{
+										/**/		throw new Error( );
+										/**/	}
+						/**/}
 
-	for(
-		a = 0, aZ = list.length;
-		a < aZ;
-		a++
-	)
-	{
-		text +=
-			(
-				a > 0
-				? ( ',' + context.sep )
-				: ''
-			)
-			+ formatExpression(
-				context.inc,
-				list.get( a ),
-				precTable.ast_commaList
-			);
-	}
+		return context.tab + '\'' + expr.string + '\'';
+};
 
-	return text;
+/*
+   | Formats a variable declaration.
+ */
+var
+		formatVarDec =
+function(
+				context,
+				varDec,
+				lookBehind
+		)
+{
+		var
+				aText,       // formated assignment
+				isRootFunc,
+				text;
+
+		// true when this is a root function
+		isRootFunc = false;
+
+		text = '';
+
+		if( context.root && varDec.assign )
+		{
+				if(
+								varDec.assign.reflect === 'ast_func'
+				  )
+				{
+						isRootFunc = true;
+				}
+				else if(
+								varDec.assign.reflect === 'ast_assign'
+								&& varDec.assign.right.reflect === 'ast_func'
+					   )
+				{
+						// FUTURUE allow abitrary amount of assignments
+						isRootFunc = true;
+				}
+		}
+
+		if( !isRootFunc )
+		{
+				if(
+								!lookBehind
+								|| lookBehind.reflect !== 'ast_astVarDec'
+				  )
+				{
+						if( !context.inline )
+						{
+								text += context.tab + 'var' + '\n';
+						}
+						else
+						{
+								text += 'var ';
+						}
+				}
+
+				if( !context.inline )
+				{
+						context = context.inc;
+
+						text += context.tab;
+				}
+
+				text += varDec.name;
+		}
+		else
+		{
+				// root functions are not combined in VarDecs
+				text = context.tab + 'var ' + varDec.name;
+		}
+
+		if( varDec.assign )
+		{
+				text += ' =' + context.sep;
+
+				if( varDec.assign.reflect !== 'ast_assign' )
+				{
+						context = context.inc;
+				}
+
+				aText = null;
+
+				try
+				{
+						aText =
+								context.tab
+								+ formatExpression(
+												context.setInline,
+												varDec.assign,
+												null
+												);
+				}
+				catch ( e )
+				{
+						// rethrows any real error
+						if( e !== 'noinline' )
+						{
+								throw e;
+						}
+				}
+
+				if( aText === null || textLen( aText ) > MAX_TEXT_WIDTH )
+				{
+						aText =
+								formatExpression(
+												context,
+												varDec.assign,
+												null
+												);
+				}
+
+				text += aText;
+		}
+
+		return text;
 };
 
 
 /*
-| Formats a block as file.
-*/
-format_formatter.format =
-	function(
-		block
-	)
+   | Formats a comma list operator
+ */
+var
+		formatCommaList =
+function(
+				context,
+				list
+		)
 {
-	var
-		context;
+		var
+				a,
+				aZ,
+				text;
 
-	context = format_context.create( 'root', true );
+		text = '';
 
-	return formatBlock( context, block, true );
+		for(
+						a = 0, aZ = list.length;
+						a < aZ;
+						a++
+		   )
+		{
+				text +=
+						(
+						 a > 0
+						 ? ( ',' + context.sep )
+						 : ''
+						)
+						+ formatExpression(
+										context.inc,
+										list.get( a ),
+										precTable.ast_commaList
+										);
+		}
+
+		return text;
 };
 
 
 /*
-| Table of all expression formatters.
-*/
+   | Formats a block as file.
+ */
+		format_formatter.format =
+function(
+				block
+		)
+{
+		var
+				context;
+
+		context = format_context.create( 'root', true );
+
+		return formatBlock( context, block, true );
+};
+
+
+/*
+   | Table of all expression formatters.
+ */
 var
 exprFormatter =
-	{
+{
 		'ast_and' : formatAnd,
 		'ast_arrayLiteral' : formatArrayLiteral,
 		'ast_assign' : formatAssign,
@@ -2292,8 +2292,8 @@ exprFormatter =
 		'ast_preIncrement' : formatPreIncrement,
 		'ast_string' : formatString,
 		'ast_typeof' : formatTypeof,
-		'astVar' : formatVar
-	};
+		'ast_var' : formatVar
+};
 
 
 

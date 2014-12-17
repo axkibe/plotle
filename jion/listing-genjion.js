@@ -49,7 +49,7 @@ module.exports =
 			'src/ast/string.js',
 			'src/ast/switch.js',
 			'src/ast/typeof.js',
-			'src/ast/ast-var.js',
+			'src/ast/var.js',
 			'src/ast/ast-var-dec.js',
 
 			'src/format/context.js',

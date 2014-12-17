@@ -56,7 +56,7 @@ var
 	ast_string,
 	ast_switch,
 	ast_typeof,
-	astVar,
+	ast_var,
 	astVarDec,
 	jools,
 	tools;
@@ -136,7 +136,7 @@ ast_switch = require( './switch' );
 
 ast_typeof = require( './typeof' );
 
-astVar = require( './ast-var' );
+ast_var = require( './var' );
 
 astVarDec = require( './ast-var-dec' );
 
@@ -878,12 +878,12 @@ shorthand.$typeof =
 /*
 | Shorthand for creating variable uses.
 */
-shorthand.astVar =
+shorthand.$var =
 	function(
 		name
 	)
 {
-	return astVar.create( 'name', name );
+	return ast_var.create( 'name', name );
 };
 
 
@@ -922,8 +922,9 @@ shorthand.$commaList =
 
 /*
 | Shorthand for 'undefined'
+| FIXME $undefined
 */
-shorthand.astUndefined = astVar.create( 'name', 'undefined' );
+shorthand.astUndefined = ast_var.create( 'name', 'undefined' );
 
 
 } )( );

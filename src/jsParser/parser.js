@@ -96,7 +96,7 @@ ast_preIncrement = require( '../ast/preIncrement' );
 
 ast_string = require( '../ast/string' );
 
-ast_var = require( '../ast/ast-var' );
+ast_var = require( '../ast/var' );
 
 jools = require( '../jools/jools' );
 

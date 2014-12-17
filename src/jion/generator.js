@@ -67,7 +67,7 @@ var
 	$switch,
 	astThis, // FIXME
 	$typeof,
-	astVar,
+	$var,
 	generator,
 	id,
 	idRepository,
@@ -144,11 +144,11 @@ $string = shorthand.$string;
 
 $switch = shorthand.$switch;
 
-astThis = shorthand.astVar( 'this' );
+astThis = shorthand.$var( 'this' );
 
 $typeof = shorthand.$typeof;
 
-astVar = shorthand.astVar;
+$var = shorthand.$var;
 
 // FUTURE remove this two
 $returnTrue = $return( true );
@@ -224,7 +224,7 @@ generator.prototype._init =
 
 		units = units.add( subID );
 
-		this.subclass = subID.astVar;
+		this.subclass = subID.$var;
 	}
 
 	for( name in jion.attributes || { } )
@@ -358,7 +358,7 @@ generator.prototype._init =
 				id :
 					aid,
 				v : // FUTURE rename to vName
-					astVar( 'v_' + name )
+					$var( 'v_' + name )
 			} );
 	}
 
@@ -580,7 +580,7 @@ generator.prototype.genNodeIncludes =
 			block =
 				block
 				.$assign(
-					astVar( unitStr + '_' + name ),
+					$var( unitStr + '_' + name ),
 					$call(
 						'require',
 						$string(
@@ -1515,7 +1515,7 @@ generator.prototype.genCreatorConcerns =
 		{
 			if( id )
 			{
-				cExpr = $call( id.astVar.$dot( func ) );
+				cExpr = $call( id.$var.$dot( func ) );
 			}
 			else
 			{
@@ -1630,7 +1630,7 @@ generator.prototype.genCreatorUnchanged =
 		equalsCall,
 		name;
 
-	cond = astVar( 'inherit' );
+	cond = $var( 'inherit' );
 
 	if( this.twig )
 	{
@@ -1674,7 +1674,8 @@ generator.prototype.genCreatorUnchanged =
 				ceq =
 					$equals(
 						attr.v,
-						astVar( 'inherit' ).$dot( attr.assign )
+						// FIXME make a $inherit shortcut
+						$var( 'inherit' ).$dot( attr.assign )
 					);
 
 				break;
@@ -1684,7 +1685,7 @@ generator.prototype.genCreatorUnchanged =
 				equalsCall =
 					$call(
 						attr.v.$dot( 'equals' ),
-						astVar( 'inherit' ).$dot( attr.assign )
+						$var( 'inherit' ).$dot( attr.assign )
 					);
 
 				if( attr.allowsNull && attr.allowsUndefined )
@@ -1700,7 +1701,7 @@ generator.prototype.genCreatorUnchanged =
 						$or(
 							$equals(
 								attr.v,
-								astVar( 'inherit' ).$dot( attr.assign )
+								$var( 'inherit' ).$dot( attr.assign )
 							),
 							$and( attr.v, equalsCall )
 						);
@@ -1711,7 +1712,7 @@ generator.prototype.genCreatorUnchanged =
 						$or(
 							$equals(
 								attr.v,
-								astVar( 'inherit' ).$dot( attr.assign )
+								$var( 'inherit' ).$dot( attr.assign )
 							),
 							$and( attr.v, equalsCall )
 						);
@@ -1844,7 +1845,7 @@ generator.prototype.genCreator =
 	capsule =
 		capsule
 		.$assign(
-			astVar( this.id.global ).$dot( 'create' ),
+			$var( this.id.global ).$dot( 'create' ),
 			$assign( 'prototype.create', creator )
 		);
 
@@ -2003,7 +2004,7 @@ generator.prototype.genFromJSONCreatorParser =
 						$assign(
 							attr.v,
 							$call(
-								attr.id.astVar.$dot( 'createFromJSON' ),
+								attr.id.$var.$dot( 'createFromJSON' ),
 								'arg'
 							)
 						);
@@ -2027,7 +2028,7 @@ generator.prototype.genFromJSONCreatorParser =
 								$assign(
 									attr.v,
 									$call(
-										attr.id[ t ].astVar
+										attr.id[ t ].$var
 										.$dot( 'createFromJSON' ),
 										'arg'
 									)
@@ -2100,7 +2101,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 				$assign(
 					'ray[ r ]',
 					$call(
-						rid.astVar.$dot( 'createFromJSON' ),
+						rid.$var.$dot( 'createFromJSON' ),
 						'jray[ r ]'
 					)
 				)
@@ -2155,7 +2156,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 				$assign(
 					'twig[ key ]',
 					$call(
-						twigID.astVar.$dot( 'createFromJSON' ),
+						twigID.$var.$dot( 'createFromJSON' ),
 						'jval'
 					)
 				)
@@ -2337,7 +2338,7 @@ generator.prototype.genFromJSONCreator =
 	capsule =
 		capsule
 		.$assign(
-			astVar( this.id.global ).$dot( 'createFromJSON' ),
+			$var( this.id.global ).$dot( 'createFromJSON' ),
 			$func( funcBlock )
 			.$arg( 'json', 'the JSON object' )
 		);
@@ -2738,7 +2739,7 @@ generator.prototype.genEquals =
 			this.genAttributeEquals(
 				name,
 				astThis.$dot( attr.assign ),
-				astVar( 'obj' ).$dot( attr.assign )
+				$var( 'obj' ).$dot( attr.assign )
 			);
 
 		cond =
@@ -2844,7 +2845,7 @@ generator.prototype.genAlike =
 				this.genAttributeEquals(
 					name,
 					astThis.$dot( attr.assign ),
-					astVar( 'obj' ).$dot( attr.assign )
+					$var( 'obj' ).$dot( attr.assign )
 				);
 
 			cond =
@@ -2859,7 +2860,7 @@ generator.prototype.genAlike =
 			capsule
 			.$assign(
 				// FIXME use proto
-				astVar( 'prototype' ).$dot( alikeName ),
+				$var( 'prototype' ).$dot( alikeName ),
 				$func( block )
 				.$arg( 'obj', 'object to compare to' )
 			);
