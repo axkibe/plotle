@@ -37,7 +37,7 @@ if( JION )
 
 
 var
-	ast,
+	ast, // FIXME
 	$and,
 	$assign,
 	$block,
@@ -65,8 +65,8 @@ var
 	$returnTrue,
 	$string,
 	$switch,
-	astThis,
-	astTypeof,
+	astThis, // FIXME
+	$typeof,
 	astVar,
 	generator,
 	id,
@@ -146,7 +146,7 @@ $switch = shorthand.$switch;
 
 astThis = shorthand.astVar( 'this' );
 
-astTypeof = shorthand.astTypeof;
+$typeof = shorthand.$typeof;
 
 astVar = shorthand.astVar;
 
@@ -1275,26 +1275,26 @@ generator.prototype.genSingleTypeCheckFailCondition =
 	{
 		case 'Boolean' :
 
-			return $differs( astTypeof( avar ), '"boolean"' );
+			return $differs( $typeof( avar ), '"boolean"' );
 
 		case 'Integer' :
 
 			return(
 				$or(
-					$differs( astTypeof( avar ), '"number"' ),
+					$differs( $typeof( avar ), '"number"' ),
 					$differs( $call( 'Math.floor', avar ), avar )
 				)
 			);
 
 		case 'Number' :
 
-			return $differs( astTypeof( avar ), '"number"' );
+			return $differs( $typeof( avar ), '"number"' );
 
 		case 'String' :
 
 			return(
 				$and(
-					$differs( astTypeof( avar ), '"string"' ),
+					$differs( $typeof( avar ), '"string"' ),
 					$not( $instanceof( avar, 'String' ) )
 				)
 			);

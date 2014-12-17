@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astTypeof',
+			'ast_typeof',
 		attributes :
 			{
 				'expr' :

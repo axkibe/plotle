@@ -55,7 +55,7 @@ var
 	ast_return,
 	ast_string,
 	ast_switch,
-	astTypeof,
+	ast_typeof,
 	astVar,
 	astVarDec,
 	jools,
@@ -134,7 +134,7 @@ ast_string = require( './string' );
 
 ast_switch = require( './switch' );
 
-astTypeof = require( './ast-typeof' );
+ast_typeof = require( './typeof' );
 
 astVar = require( './ast-var' );
 
@@ -865,12 +865,12 @@ shorthand.$true = ast_boolean.create( 'boolean', true );
 /*
 | Shorthand for creating typeofs.
 */
-shorthand.astTypeof =
+shorthand.$typeof =
 	function(
 		expr
 	)
 {
-	return astTypeof.create( 'expr', expr );
+	return ast_typeof.create( 'expr', expr );
 };
 
 

@@ -64,7 +64,7 @@ precTable =
 		'ast_plusAssign' : 17,
 		'ast_preIncrement' : 3,
 		'ast_string' : -1,
-		'astTypeof' : 4,
+		'ast_typeof' : 4,
 		'astVar' : -1
 	};
 
@@ -1991,7 +1991,7 @@ formatTypeof =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astTypeof' )
+/**/	if( expr.reflect !== 'ast_typeof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2004,7 +2004,7 @@ formatTypeof =
 		+ formatExpression(
 			context.inc,
 			expr.expr,
-			precTable.astTypeof
+			precTable.ast_typeof
 		)
 		+
 		context.sep
@@ -2291,7 +2291,7 @@ exprFormatter =
 		'ast_plusAssign' : formatPlusAssign,
 		'ast_preIncrement' : formatPreIncrement,
 		'ast_string' : formatString,
-		'astTypeof' : formatTypeof,
+		'ast_typeof' : formatTypeof,
 		'astVar' : formatVar
 	};
 

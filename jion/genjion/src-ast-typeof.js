@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astTypeof;
+	ast_typeof;
 
 
 /*
@@ -78,7 +78,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astTypeof =
+ast_typeof =
 	{
 		prototype :
 			prototype
@@ -87,14 +87,14 @@ ast_astTypeof =
 
 if( SERVER )
 {
-	module.exports = ast_astTypeof;
+	module.exports = ast_typeof;
 }
 
 
 /*
-| Creates a new astTypeof object.
+| Creates a new typeof object.
 */
-ast_astTypeof.create =
+ast_typeof.create =
 prototype.create =
 	function(
 		// free strings
@@ -107,7 +107,7 @@ prototype.create =
 		inherit,
 		v_expr;
 
-	if( this !== ast_astTypeof )
+	if( this !== ast_typeof )
 	{
 		inherit = this;
 
@@ -167,13 +167,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astTypeof';
+prototype.reflect = 'ast_typeof';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astTypeof';
+prototype.reflectName = 'typeof';
 
 
 /*

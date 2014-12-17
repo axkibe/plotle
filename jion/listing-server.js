@@ -86,7 +86,7 @@ module.exports =
 			'src/ast/return.js',
 			'src/ast/string.js',
 			'src/ast/switch.js',
-			'src/ast/ast-typeof.js',
+			'src/ast/typeof.js',
 			'src/ast/ast-var.js',
 			'src/ast/ast-var-dec.js',
 
