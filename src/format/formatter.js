@@ -60,8 +60,8 @@ precTable =
 		'ast_number' : -1,
 		'ast_objLiteral' : -1,
 		'ast_or' : 14,
-		'astPlus' : 6,
-		'astPlusAssign' : 17,
+		'ast_plus' : 6,
+		'ast_plusAssign' : 17,
 		'astPreIncrement' : 3,
 		'astString' : -1,
 		'astTypeof' : 4,
@@ -382,7 +382,7 @@ formatPlus =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astPlus' )
+/**/	if( expr.reflect !== 'ast_plus' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -392,7 +392,7 @@ formatPlus =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.astPlus
+			precTable.ast_plus
 		)
 		+ context.sep
 		+ context.tab
@@ -401,7 +401,7 @@ formatPlus =
 		+ formatExpression(
 			context,
 			expr.right,
-			precTable.astPlus
+			precTable.ast_plus
 		);
 
 	return text;
@@ -1405,7 +1405,7 @@ formatStatement =
 		case 'ast_fail' :
 		case 'ast_new' :
 		case 'ast_number' :
-		case 'ast_astPlusAssign' :
+		case 'ast_plusAssign' :
 		case 'ast_astReturn' :
 		case 'ast_astString' :
 		case 'ast_astVar' :
@@ -2287,8 +2287,8 @@ exprFormatter =
 		'ast_number' : formatNumber,
 		'ast_objLiteral' : formatObjLiteral,
 		'ast_or' : formatOr,
-		'astPlus' : formatPlus,
-		'astPlusAssign' : formatPlusAssign,
+		'ast_plus' : formatPlus,
+		'ast_plusAssign' : formatPlusAssign,
 		'astPreIncrement' : formatPreIncrement,
 		'astString' : formatString,
 		'astTypeof' : formatTypeof,

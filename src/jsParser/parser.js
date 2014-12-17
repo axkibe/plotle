@@ -90,7 +90,7 @@ ast_number = require( '../ast/number' );
 
 ast_or = require( '../ast/or' );
 
-ast_plus = require( '../ast/ast-plus' );
+ast_plus = require( '../ast/plus' );
 
 ast_preIncrement = require( '../ast/ast-pre-increment' );
 

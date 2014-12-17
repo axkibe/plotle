@@ -49,8 +49,8 @@ var
 	ast_number,
 	ast_objLiteral,
 	ast_or,
-	astPlus,
-	astPlusAssign,
+	ast_plus,
+	ast_plusAssign,
 	astPreIncrement,
 	astReturn,
 	astString,
@@ -122,9 +122,9 @@ ast_objLiteral = require( './objLiteral' );
 
 ast_or = require( './or' );
 
-astPlus = require( './ast-plus' );
+ast_plus = require( './plus' );
 
-astPlusAssign = require( './ast-plus-assign' );
+ast_plusAssign = require( './plusAssign' );
 
 astPreIncrement = require( './ast-pre-increment' );
 
@@ -746,7 +746,7 @@ shorthand.$or =
 /*
 | Shorthand for creating pluses.
 */
-shorthand.astPlus =
+shorthand.$plus =
 	function(
 		left,
 		right
@@ -767,14 +767,11 @@ shorthand.astPlus =
 		args.splice(
 			0,
 			2,
-			astPlus.create(
-				'left', left,
-				'right', right
-			)
+			ast_plus.create( 'left', left, 'right', right )
 		);
 
 		return(
-			shorthand.astPlus.apply(
+			shorthand.$plus.apply(
 				this,
 				args
 			)
@@ -785,19 +782,14 @@ shorthand.astPlus =
 
 	right = tools.convert( right );
 
-	return(
-		astPlus.create(
-			'left', left,
-			'right', right
-		)
-	);
+	return ast_plus.create( 'left', left, 'right', right );
 };
 
 
 /*
 | Shorthand for creating plus-assignments.
 */
-shorthand.astPlusAssign =
+shorthand.$plusAssign =
 	function(
 		left,
 		right
@@ -807,12 +799,7 @@ shorthand.astPlusAssign =
 
 	right = tools.convert( right );
 
-	return(
-		astPlusAssign.create(
-			'left', left,
-			'right', right
-		)
-	);
+	return ast_plusAssign.create( 'left', left, 'right', right );
 };
 
 

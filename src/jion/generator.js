@@ -58,8 +58,8 @@ var
 	$number,
 	$objLiteral,
 	$or,
-	astPlus,
-	astPlusAssign,
+	$plus,
+	$plusAssign,
 	astReturn,
 	astReturnFalse,
 	astReturnTrue,
@@ -134,9 +134,9 @@ $objLiteral = shorthand.$objLiteral;
 
 $or = shorthand.$or;
 
-astPlus = shorthand.astPlus;
+$plus = shorthand.$plus;
 
-astPlusAssign = shorthand.astPlusAssign;
+$plusAssign = shorthand.$plusAssign;
 
 astReturn = shorthand.astReturn;
 
@@ -1120,7 +1120,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				.ast( 'key = arg' )
 				.ast( 'rank = arguments[ a + 2 ]' )
 				.ast( 'arg = arguments[ a +  3 ]' )
-				.astPlusAssign( 'a', 2 )
+				.$plusAssign( 'a', 2 )
 				.$if(
 					'twig[ key ] !== undefined',
 					$fail( )
@@ -1206,7 +1206,7 @@ generator.prototype.genCreatorFreeStringsParser =
 			.$assign( 'a', 0 )
 			.$assign( 'aZ', 'arguments.length' ),
 			'a < aZ',
-			astPlusAssign( 'a', 2 ),
+			$plusAssign( 'a', 2 ),
 			loop
 		);
 

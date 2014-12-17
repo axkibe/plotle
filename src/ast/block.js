@@ -29,7 +29,6 @@ var
 	ast_block,
 	ast_comment,
 	ast_new,
-	astPlusAssign,
 	astReturn,
 	jools,
 	shorthand,
@@ -41,8 +40,6 @@ ast_block = require( '../jion/this' )( module );
 ast_comment = require( './comment' );
 
 ast_new = require( './new' );
-
-astPlusAssign = require( './ast-plus-assign' );
 
 astReturn = require( './ast-return' );
 
@@ -239,17 +236,13 @@ ast_block.prototype.$new =
 | Returns the block with a plus-assignment appended.
 | FUTURE use a shorthand
 */
-ast_block.prototype.astPlusAssign =
+ast_block.prototype.$plusAssign =
 	function(
 		left,
 		right
 	)
 {
-	return(
-		this.append(
-			shorthand.astPlusAssign( left, right )
-		)
-	);
+	return this.append( shorthand.$plusAssign( left, right ) );
 };
 
 

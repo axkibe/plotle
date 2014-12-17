@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astPlus;
+	ast_astPlusAssign;
 
 
 /*
@@ -49,8 +49,8 @@ var
 
 Constructor =
 	function(
-		v_left, // left expression
-		v_right // right expression
+		v_left, // left-hand side
+		v_right // right-hand side
 	)
 {
 /**/if( CHECK )
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astPlus =
+ast_astPlusAssign =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astPlus =
 
 if( SERVER )
 {
-	module.exports = ast_astPlus;
+	module.exports = ast_astPlusAssign;
 }
 
 
 /*
-| Creates a new astPlus object.
+| Creates a new astPlusAssign object.
 */
-ast_astPlus.create =
+ast_astPlusAssign.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== ast_astPlus )
+	if( this !== ast_astPlusAssign )
 	{
 		inherit = this;
 
@@ -192,13 +192,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astPlus';
+prototype.reflect = 'ast_plusAssign';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astPlus';
+prototype.reflectName = 'plusAssign';
 
 
 /*

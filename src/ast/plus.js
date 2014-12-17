@@ -18,7 +18,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astPlus',
+			'ast_plus',
 		attributes :
 			{
 				left :
@@ -41,9 +41,9 @@ if( JION )
 
 
 var
-	astPlus;
+	ast_plus;
 
-astPlus = require( '../jion/this' )( module );
+ast_plus = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -56,7 +56,7 @@ astPlus = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astPlus.prototype.inspect =
+***/	ast_plus.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts
