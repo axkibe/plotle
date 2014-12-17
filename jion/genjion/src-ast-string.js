@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astString;
+	ast_string;
 
 
 /*
@@ -78,7 +78,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astString =
+ast_string =
 	{
 		prototype :
 			prototype
@@ -87,14 +87,14 @@ ast_astString =
 
 if( SERVER )
 {
-	module.exports = ast_astString;
+	module.exports = ast_string;
 }
 
 
 /*
-| Creates a new astString object.
+| Creates a new string object.
 */
-ast_astString.create =
+ast_string.create =
 prototype.create =
 	function(
 		// free strings
@@ -107,7 +107,7 @@ prototype.create =
 		inherit,
 		v_string;
 
-	if( this !== ast_astString )
+	if( this !== ast_string )
 	{
 		inherit = this;
 

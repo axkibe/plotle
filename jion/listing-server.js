@@ -85,7 +85,7 @@ module.exports =
 			'src/ast/preIncrement.js',
 			'src/ast/return.js',
 			'src/ast/string.js',
-			'src/ast/ast-switch.js',
+			'src/ast/switch.js',
 			'src/ast/ast-typeof.js',
 			'src/ast/ast-var.js',
 			'src/ast/ast-var-dec.js',

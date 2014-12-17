@@ -1331,7 +1331,7 @@ formatStatement =
 
 			break;
 
-		case 'ast_astSwitch' :
+		case 'ast_switch' :
 
 			text += formatSwitch( context, statement );
 
@@ -1416,7 +1416,7 @@ formatStatement =
 		case 'ast_for' :
 		case 'ast_forIn' :
 		case 'ast_if' :
-		case 'ast_astSwitch' :
+		case 'ast_switch' :
 
 			return text + context.sep;
 

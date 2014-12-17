@@ -64,7 +64,7 @@ var
 	$returnFalse,
 	$returnTrue,
 	$string,
-	astSwitch,
+	$switch,
 	astThis,
 	astTypeof,
 	astVar,
@@ -142,7 +142,7 @@ $return = shorthand.$return;
 
 $string = shorthand.$string;
 
-astSwitch = shorthand.astSwitch;
+$switch = shorthand.$switch;
 
 astThis = shorthand.astVar( 'this' );
 
@@ -1052,7 +1052,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		$block( )
 		.$assign( 'arg', 'arguments[ a + 1 ]' );
 
-	switchExpr = astSwitch( 'arguments[ a ]' );
+	switchExpr = $switch( 'arguments[ a ]' );
 
 	for(
 		var a = 0, aZ = this.attrList.length;
@@ -1940,7 +1940,7 @@ generator.prototype.genFromJSONCreatorParser =
 		tZ;
 
 	nameSwitch =
-		astSwitch( 'name' )
+		$switch( 'name' )
 		.$case(
 			'"type"',
 			$if(
@@ -2011,7 +2011,7 @@ generator.prototype.genFromJSONCreatorParser =
 				else
 				{
 					attrCode =
-						astSwitch( 'arg.type' )
+						$switch( 'arg.type' )
 						.astDefault( $fail( ) );
 
 					for(
@@ -2082,8 +2082,8 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	idList = this.ray.idList;
 
 	loopSwitch =
-		astSwitch( 'jray[ r ].type' )
-		.astDefault( $fail( ) );
+		$switch( 'jray[ r ].type' )
+		.astDefault( $fail( ) ); // FIXME $default
 
 	for(
 		r = 0, rZ = idList.length;
@@ -2136,7 +2136,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		twigID,
 		twigList;
 
-	switchExpr = astSwitch( 'jval.type' );
+	switchExpr = $switch( 'jval.type' );
 
 	twigList = this.twig.idList;
 

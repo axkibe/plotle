@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astSwitch;
+	ast_switch;
 
 
 /*
@@ -92,7 +92,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astSwitch =
+ast_switch =
 	{
 		prototype :
 			prototype
@@ -101,14 +101,14 @@ ast_astSwitch =
 
 if( SERVER )
 {
-	module.exports = ast_astSwitch;
+	module.exports = ast_switch;
 }
 
 
 /*
-| Creates a new astSwitch object.
+| Creates a new switch object.
 */
-ast_astSwitch.create =
+ast_switch.create =
 prototype.create =
 	function(
 		// free strings
@@ -124,7 +124,7 @@ prototype.create =
 		v_defaultCase,
 		v_statement;
 
-	if( this !== ast_astSwitch )
+	if( this !== ast_switch )
 	{
 		inherit = this;
 
@@ -295,13 +295,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astSwitch';
+prototype.reflect = 'ast_switch';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astSwitch';
+prototype.reflectName = 'switch';
 
 
 /*

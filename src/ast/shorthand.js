@@ -54,7 +54,7 @@ var
 	ast_preIncrement,
 	ast_return,
 	ast_string,
-	astSwitch,
+	ast_switch,
 	astTypeof,
 	astVar,
 	astVarDec,
@@ -132,7 +132,7 @@ ast_return = require( './return' );
 
 ast_string = require( './string' );
 
-astSwitch = require( './ast-switch' );
+ast_switch = require( './switch' );
 
 astTypeof = require( './ast-typeof' );
 
@@ -846,12 +846,12 @@ shorthand.$string =
 /*
 | Shorthand for creating switch statements.
 */
-shorthand.astSwitch =
+shorthand.$switch =
 	function(
 		statement
 	)
 {
-	return astSwitch.create( 'statement', tools.convert( statement ) );
+	return ast_switch.create( 'statement', tools.convert( statement ) );
 };
 
 

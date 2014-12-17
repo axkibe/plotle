@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astSwitch',
+			'ast_switch',
 		attributes :
 			{
 				statement :
