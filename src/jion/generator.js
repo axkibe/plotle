@@ -57,7 +57,7 @@ var
 	$not,
 	$number,
 	$objLiteral,
-	astOr,
+	$or,
 	astPlus,
 	astPlusAssign,
 	astReturn,
@@ -132,7 +132,7 @@ $number = shorthand.$number;
 
 $objLiteral = shorthand.$objLiteral;
 
-astOr = shorthand.astOr;
+$or = shorthand.$or;
 
 astPlus = shorthand.astPlus;
 
@@ -1279,7 +1279,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 		case 'Integer' :
 
 			return(
-				astOr(
+				$or(
 					$differs( astTypeof( avar ), '"number"' ),
 					$differs( $call( 'Math.floor', avar ), avar )
 				)
@@ -1339,9 +1339,7 @@ generator.prototype.genTypeCheckFailCondition =
 		);
 	}
 
-	return(
-		$and.apply( astOr, condArray )
-	);
+	return $and.apply( $and, condArray );
 };
 
 
@@ -1698,7 +1696,7 @@ generator.prototype.genCreatorUnchanged =
 				if( attr.allowsNull )
 				{
 					ceq =
-						astOr(
+						$or(
 							$equals(
 								attr.v,
 								astVar( 'inherit' ).$dot( attr.assign )
@@ -1709,7 +1707,7 @@ generator.prototype.genCreatorUnchanged =
 				else if( attr.allowsUndefined )
 				{
 					ceq =
-						astOr(
+						$or(
 							$equals(
 								attr.v,
 								astVar( 'inherit' ).$dot( attr.assign )
@@ -2567,7 +2565,7 @@ generator.prototype.genAttributeEquals =
 			if( attr.allowsNull)
 			{
 				ceq =
-					astOr(
+					$or(
 						$equals( le, re ),
 						$and(
 							$differs( le, null ),
@@ -2578,7 +2576,7 @@ generator.prototype.genAttributeEquals =
 			else if( attr.allowsUndefined )
 			{
 				ceq =
-					astOr(
+					$or(
 						$equals( le, re ),
 						$and(
 							$differs( le, undefined ),
@@ -2673,7 +2671,7 @@ generator.prototype.genEquals =
 			$block( )
 			.ast( 'key = this.ranks[ a ]' )
 			.$if(
-				astOr(
+				$or(
 					'key !== obj.ranks[ a ]',
 					$condition(
 						'this.twig[ key ].equals',
@@ -2710,7 +2708,7 @@ generator.prototype.genEquals =
 		block =
 			block
 			.$if(
-				astOr(
+				$or(
 					'this.tree !== obj.tree',
 					'this.ranks !== obj.ranks'
 				),

@@ -79,7 +79,7 @@ module.exports =
 			'src/ast/null.js',
 			'src/ast/number.js',
 			'src/ast/objLiteral.js',
-			'src/ast/ast-or.js',
+			'src/ast/or.js',
 			'src/ast/ast-plus.js',
 			'src/ast/ast-plus-assign.js',
 			'src/ast/ast-pre-increment.js',

@@ -59,7 +59,7 @@ precTable =
 		'ast_null' : -1,
 		'ast_number' : -1,
 		'ast_objLiteral' : -1,
-		'astOr' : 14,
+		'ast_or' : 14,
 		'astPlus' : 6,
 		'astPlusAssign' : 17,
 		'astPreIncrement' : 3,
@@ -919,7 +919,7 @@ formatOr =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astOr' )
+/**/	if( expr.reflect !== 'ast_or' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -929,17 +929,16 @@ formatOr =
 		formatExpression(
 			context,
 			expr.left,
-			precTable.astOr
+			precTable.ast_or
 		)
-		+
-		context.sep
-		+
-		context.tab + '||' + context.sep
-		+
-		formatExpression(
+		+ context.sep
+		+ context.tab
+		+ '||'
+		+ context.sep
+		+ formatExpression(
 			context,
 			expr.right,
-			precTable.astOr
+			precTable.ast_or
 		);
 
 	return text;
@@ -2287,7 +2286,7 @@ exprFormatter =
 		'ast_null' : formatNull,
 		'ast_number' : formatNumber,
 		'ast_objLiteral' : formatObjLiteral,
-		'astOr' : formatOr,
+		'ast_or' : formatOr,
 		'astPlus' : formatPlus,
 		'astPlusAssign' : formatPlusAssign,
 		'astPreIncrement' : formatPreIncrement,

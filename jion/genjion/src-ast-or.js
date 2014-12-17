@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astOr;
+	ast_or;
 
 
 /*
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astOr =
+ast_or =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astOr =
 
 if( SERVER )
 {
-	module.exports = ast_astOr;
+	module.exports = ast_or;
 }
 
 
 /*
-| Creates a new astOr object.
+| Creates a new or object.
 */
-ast_astOr.create =
+ast_or.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 		v_left,
 		v_right;
 
-	if( this !== ast_astOr )
+	if( this !== ast_or )
 	{
 		inherit = this;
 
@@ -192,13 +192,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astOr';
+prototype.reflect = 'ast_or';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astOr';
+prototype.reflectName = 'or';
 
 
 /*

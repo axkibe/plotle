@@ -48,7 +48,7 @@ var
 	ast_null,
 	ast_number,
 	ast_objLiteral,
-	astOr,
+	ast_or,
 	astPlus,
 	astPlusAssign,
 	astPreIncrement,
@@ -120,7 +120,7 @@ ast_number = require( './number' );
 
 ast_objLiteral = require( './objLiteral' );
 
-astOr = require( './ast-or' );
+ast_or = require( './or' );
 
 astPlus = require( './ast-plus' );
 
@@ -700,7 +700,7 @@ shorthand.$objLiteral =
 /*
 | Shorthand for creating ors.
 */
-shorthand.astOr =
+shorthand.$or =
 	function(
 		left,
 		right
@@ -721,14 +721,14 @@ shorthand.astOr =
 		args.splice(
 			0,
 			2,
-			astOr.create(
+			ast_or.create(
 				'left', left,
 				'right', right
 			)
 		);
 
 		return(
-			shorthand.astOr.apply(
+			shorthand.$or.apply(
 				this,
 				args
 			)
@@ -739,12 +739,7 @@ shorthand.astOr =
 
 	right = tools.convert( right );
 
-	return(
-		astOr.create(
-			'left', left,
-			'right', right
-		)
-	);
+	return ast_or.create( 'left', left, 'right', right );
 };
 
 

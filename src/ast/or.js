@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astOr',
+			'ast_or',
 		attributes :
 			{
 				left :
@@ -40,9 +40,9 @@ if( JION )
 
 
 var
-	astOr;
+	ast_or;
 
-astOr = require( '../jion/this' )( module );
+ast_or = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -55,7 +55,7 @@ astOr = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astOr.prototype.inspect =
+***/	ast_or.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

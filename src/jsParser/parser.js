@@ -88,7 +88,7 @@ ast_not = require( '../ast/not' );
 
 ast_number = require( '../ast/number' );
 
-ast_or = require( '../ast/ast-or' );
+ast_or = require( '../ast/or' );
 
 ast_plus = require( '../ast/ast-plus' );
 
