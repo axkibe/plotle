@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astObjLiteral',
+			'ast_objLiteral',
 		twig :
 			'->statement'
 	};
@@ -25,11 +25,11 @@ if( JION )
 
 
 var
-	astObjLiteral,
+	ast_objLiteral,
 	tools;
 
 
-astObjLiteral = require( '../jion/this' )( module );
+ast_objLiteral = require( '../jion/this' )( module );
 
 
 tools = require( './tools' );
@@ -37,7 +37,7 @@ tools = require( './tools' );
 /*
 | Returns an object literal with a key-expr pair added.
 */
-astObjLiteral.prototype.add =
+ast_objLiteral.prototype.add =
 	function(
 		key,
 		expr

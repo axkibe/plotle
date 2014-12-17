@@ -58,7 +58,7 @@ precTable =
 		'ast_not' : 4,
 		'ast_null' : -1,
 		'ast_number' : -1,
-		'astObjLiteral' : -1,
+		'ast_objLiteral' : -1,
 		'astOr' : 14,
 		'astPlus' : 6,
 		'astPlusAssign' : 17,
@@ -1893,7 +1893,7 @@ formatObjLiteral =
 
 /**/if( CHECK )
 /**/{
-/**/	if( objliteral.reflect !== 'ast_astObjLiteral' )
+/**/	if( objliteral.reflect !== 'ast_objLiteral' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2286,7 +2286,7 @@ exprFormatter =
 		'ast_not' : formatNot,
 		'ast_null' : formatNull,
 		'ast_number' : formatNumber,
-		'astObjLiteral' : formatObjLiteral,
+		'ast_objLiteral' : formatObjLiteral,
 		'astOr' : formatOr,
 		'astPlus' : formatPlus,
 		'astPlusAssign' : formatPlusAssign,

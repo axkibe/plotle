@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astObjLiteral;
+	ast_objLiteral;
 
 
 /*
@@ -85,7 +85,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astObjLiteral =
+ast_objLiteral =
 	{
 		prototype :
 			prototype
@@ -94,14 +94,14 @@ ast_astObjLiteral =
 
 if( SERVER )
 {
-	module.exports = ast_astObjLiteral;
+	module.exports = ast_objLiteral;
 }
 
 
 /*
-| Creates a new astObjLiteral object.
+| Creates a new objLiteral object.
 */
-ast_astObjLiteral.create =
+ast_objLiteral.create =
 prototype.create =
 	function(
 		// free strings
@@ -118,7 +118,7 @@ prototype.create =
 		twig,
 		twigDup;
 
-	if( this !== ast_astObjLiteral )
+	if( this !== ast_objLiteral )
 	{
 		inherit = this;
 
@@ -279,13 +279,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astObjLiteral';
+prototype.reflect = 'ast_objLiteral';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astObjLiteral';
+prototype.reflectName = 'objLiteral';
 
 
 /*

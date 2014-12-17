@@ -47,7 +47,7 @@ var
 	ast_not,
 	ast_null,
 	ast_number,
-	astObjLiteral,
+	ast_objLiteral,
 	astOr,
 	astPlus,
 	astPlusAssign,
@@ -118,7 +118,7 @@ ast_null = require( './null' );
 
 ast_number = require( './number' );
 
-astObjLiteral = require( './ast-obj-literal' );
+ast_objLiteral = require( './objLiteral' );
 
 astOr = require( './ast-or' );
 
@@ -690,10 +690,10 @@ shorthand.$number =
 /*
 | Shorthand for creating object literals.
 */
-shorthand.astObjLiteral =
+shorthand.$objLiteral =
 	function( )
 {
-	return astObjLiteral.create( );
+	return ast_objLiteral.create( );
 };
 
 

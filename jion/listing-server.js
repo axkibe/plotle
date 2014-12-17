@@ -78,7 +78,7 @@ module.exports =
 			'src/ast/not.js',
 			'src/ast/null.js',
 			'src/ast/number.js',
-			'src/ast/ast-obj-literal.js',
+			'src/ast/objLiteral.js',
 			'src/ast/ast-or.js',
 			'src/ast/ast-plus.js',
 			'src/ast/ast-plus-assign.js',

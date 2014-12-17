@@ -56,7 +56,7 @@ var
 	$new,
 	$not,
 	$number,
-	astObjLiteral,
+	$objLiteral,
 	astOr,
 	astPlus,
 	astPlusAssign,
@@ -130,7 +130,7 @@ $not = shorthand.$not;
 
 $number = shorthand.$number;
 
-astObjLiteral = shorthand.astObjLiteral;
+$objLiteral = shorthand.$objLiteral;
 
 astOr = shorthand.astOr;
 
@@ -627,7 +627,7 @@ generator.prototype.genConstructor =
 		.$check(
 			$if(
 				'prototype.__lazy',
-				$assign( 'this.__lazy', astObjLiteral( ) )
+				$assign( 'this.__lazy', $objLiteral( ) )
 			)
 		);
 
@@ -845,7 +845,7 @@ generator.prototype.genConstructor =
 	capsule = capsule.$comment( 'Jion.' );
 
 	jionObj =
-		astObjLiteral( )
+		$objLiteral( )
 		.add( 'prototype', 'prototype' );
 
 	capsule =
@@ -1010,7 +1010,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 			thisCheck
 			.$elsewise(
 				$block( )
-				.$assign( 'twig', astObjLiteral( ) )
+				.$assign( 'twig', $objLiteral( ) )
 				.ast( 'ranks = [ ]' )
 				.ast( 'twigDup = true' )
 			);
@@ -2183,7 +2183,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 
 	block =
 		block
-		.$assign( 'twig', astObjLiteral( ) )
+		.$assign( 'twig', $objLiteral( ) )
 		.$if(
 			'!jwig || !ranks',
 			// ranks/twig information missing
@@ -2463,7 +2463,7 @@ generator.prototype.genToJSON =
 	block = $block( ).astVarDec( 'json' );
 
 	olit =
-		astObjLiteral( )
+		$objLiteral( )
 		.add( 'type', this.id.astString );
 
 	for(
