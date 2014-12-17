@@ -1301,7 +1301,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		default :
 
-			return $differs( avar.$dot( 'reflect' ), id.astString );
+			return $differs( avar.$dot( 'reflect' ), id.$string );
 	}
 };
 
@@ -1944,7 +1944,7 @@ generator.prototype.genFromJSONCreatorParser =
 		.$case(
 			'"type"',
 			$if(
-				$differs( 'arg', this.id.astString ),
+				$differs( 'arg', this.id.$string ),
 				$fail( )
 			)
 		);
@@ -2023,7 +2023,7 @@ generator.prototype.genFromJSONCreatorParser =
 						attrCode =
 							attrCode
 							.$case(
-								attr.id[ t ].astString,
+								attr.id[ t ].$string,
 								$assign(
 									attr.v,
 									$call(
@@ -2096,7 +2096,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 		loopSwitch =
 			loopSwitch
 			.$case(
-				rid.astString,
+				rid.$string,
 				$assign(
 					'ray[ r ]',
 					$call(
@@ -2151,7 +2151,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		switchExpr =
 			switchExpr
 			.$case(
-				twigID.astString,
+				twigID.$string,
 				$assign(
 					'twig[ key ]',
 					$call(
@@ -2357,7 +2357,7 @@ generator.prototype.genReflection =
 	capsule =
 		capsule
 		.$comment( 'Reflection.' )
-		.$assign( 'prototype.reflect', this.id.astString );
+		.$assign( 'prototype.reflect', this.id.$string );
 
 	capsule =
 		capsule
@@ -2463,7 +2463,7 @@ generator.prototype.genToJSON =
 
 	olit =
 		$objLiteral( )
-		.add( 'type', this.id.astString );
+		.add( 'type', this.id.$string );
 
 	for(
 		var a = 0, aZ = this.attrList.length;

@@ -53,7 +53,7 @@ var
 	ast_plusAssign,
 	ast_preIncrement,
 	ast_return,
-	astString,
+	ast_string,
 	astSwitch,
 	astTypeof,
 	astVar,
@@ -130,7 +130,7 @@ ast_preIncrement = require( './preIncrement' );
 
 ast_return = require( './return' );
 
-astString = require( './ast-string' );
+ast_string = require( './string' );
 
 astSwitch = require( './ast-switch' );
 
@@ -438,7 +438,7 @@ shorthand.$fail =
 	}
 	else if( jools.isString( message ) )
 	{
-		message = astString.create( 'string', message );
+		message = ast_string.create( 'string', message );
 	}
 
 	return ast_fail.create( 'message', message );
@@ -839,7 +839,7 @@ shorthand.$string =
 		string
 	)
 {
-	return astString.create( 'string', string );
+	return ast_string.create( 'string', string );
 };
 
 

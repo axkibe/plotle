@@ -176,13 +176,13 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'ast_astString';
+prototype.reflect = 'ast_string';
 
 
 /*
 | Name Reflection.
 */
-prototype.reflectName = 'astString';
+prototype.reflectName = 'string';
 
 
 /*

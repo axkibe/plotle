@@ -94,7 +94,7 @@ ast_plus = require( '../ast/plus' );
 
 ast_preIncrement = require( '../ast/preIncrement' );
 
-ast_string = require( '../ast/ast-string' );
+ast_string = require( '../ast/string' );
 
 ast_var = require( '../ast/ast-var' );
 

@@ -63,7 +63,7 @@ precTable =
 		'ast_plus' : 6,
 		'ast_plusAssign' : 17,
 		'ast_preIncrement' : 3,
-		'astString' : -1,
+		'ast_string' : -1,
 		'astTypeof' : 4,
 		'astVar' : -1
 	};
@@ -1407,7 +1407,7 @@ formatStatement =
 		case 'ast_number' :
 		case 'ast_plusAssign' :
 		case 'ast_return' :
-		case 'ast_astString' :
+		case 'ast_string' :
 		case 'ast_astVar' :
 
 			return text + ';' + context.sep;
@@ -2075,7 +2075,7 @@ formatString =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_astString' )
+/**/	if( expr.reflect !== 'ast_string' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -2290,7 +2290,7 @@ exprFormatter =
 		'ast_plus' : formatPlus,
 		'ast_plusAssign' : formatPlusAssign,
 		'ast_preIncrement' : formatPreIncrement,
-		'astString' : formatString,
+		'ast_string' : formatString,
 		'astTypeof' : formatTypeof,
 		'astVar' : formatVar
 	};

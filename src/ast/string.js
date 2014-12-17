@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_astString',
+			'ast_string',
 		attributes :
 			{
 				'string' :
@@ -33,9 +33,9 @@ if( JION )
 
 
 var
-	astString;
+	ast_string;
 
-astString = require( '../jion/this' )( module );
+ast_string = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -48,7 +48,7 @@ astString = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	astString.prototype.inspect =
+***/	ast_string.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

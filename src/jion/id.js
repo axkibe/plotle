@@ -166,11 +166,11 @@ jools.lazyValue(
 
 
 /*
-| This id as astString
+| This id as ast string.
 */
 jools.lazyValue(
 	jion_id.prototype,
-	'astString',
+	'$string',
 	function( )
 	{
 		return shorthand.$string( this.string );
