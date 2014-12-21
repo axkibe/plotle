@@ -80,7 +80,7 @@ generator = require( '../jion/this' )( module );
 
 id = require( './id' );
 
-idRepository = require( './id-repository' );
+idRepository = require( './idRepository' );
 
 shorthand = require( '../ast/shorthand' );
 
@@ -154,17 +154,6 @@ $var = shorthand.$var;
 $returnTrue = $return( true );
 
 $returnFalse = $return( false );
-
-
-/*
-| Converts a CamelCaseString to a dash-seperated-string.
-*/
-var
-camelCaseToDash =
-	function( s )
-{
-	return s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase( );
-};
 
 
 /*
@@ -585,9 +574,9 @@ generator.prototype.genNodeIncludes =
 						'require',
 						$string(
 							'../../src/'
-							+ camelCaseToDash( unitStr )
+							+ unitStr
 							+ '/'
-							+ camelCaseToDash( name )
+							+ name
 						)
 					)
 				);

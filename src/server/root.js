@@ -107,7 +107,7 @@ url = require( 'url' );
 
 util = require( 'util' );
 
-fabric_spaceRef = require( '../fabric/space-ref' );
+fabric_spaceRef = require( '../fabric/spaceRef' );
 
 zlib = require( 'zlib' );
 
@@ -1449,6 +1449,16 @@ prototype.webAjax =
 
 		try
 		{
+			// FIXME remove
+			if( cmd.type === 'request_alter' )
+			{
+				console.log( 'DELAYING');
+
+				yield setTimeout( sus.resume( ), 10000 );
+
+				console.log( 'EOD');
+			}
+
 			asw = yield* server_requestHandler.serve( cmd, result );
 		}
 		catch( err )
@@ -1497,22 +1507,6 @@ prototype.webAjax =
 			sus( handler )( );
 		}
 	);
-
-	/*
-	request.on(
-		'end',
-		function( )
-		{
-			setTimeout(
-				function( )
-				{
-					sus( handler )( );
-				},
-				2880
-			);
-		}
-	);
-	*/
 };
 
 

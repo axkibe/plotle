@@ -9,7 +9,7 @@
 | Export.
 */
 var
-	ast_astVarDec;
+	ast_varDec;
 
 
 /*
@@ -81,7 +81,7 @@ prototype = Constructor.prototype;
 /*
 | Jion.
 */
-ast_astVarDec =
+ast_varDec =
 	{
 		prototype :
 			prototype
@@ -90,14 +90,14 @@ ast_astVarDec =
 
 if( SERVER )
 {
-	module.exports = ast_astVarDec;
+	module.exports = ast_varDec;
 }
 
 
 /*
-| Creates a new astVarDec object.
+| Creates a new varDec object.
 */
-ast_astVarDec.create =
+ast_varDec.create =
 prototype.create =
 	function(
 		// free strings
@@ -111,7 +111,7 @@ prototype.create =
 		v_assign,
 		v_name;
 
-	if( this !== ast_astVarDec )
+	if( this !== ast_varDec )
 	{
 		inherit = this;
 

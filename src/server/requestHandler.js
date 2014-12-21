@@ -41,7 +41,7 @@ module.exports =
 
 config = require( '../../config' );
 
-ccot_changeWrapRay = require( '../ccot/change-wrap-ray' );
+ccot_changeWrapRay = require( '../ccot/changeWrapRay' );
 
 jools = require( '../jools/jools' );
 
@@ -69,7 +69,7 @@ request_update = require( '../request/update' );
 
 resume = require( 'suspend' ).resume;
 
-fabric_spaceRef = require( '../fabric/space-ref' );
+fabric_spaceRef = require( '../fabric/spaceRef' );
 
 
 /*
@@ -159,7 +159,8 @@ serveAlter =
 		// translates the changes if not most recent
 		for( a = seq; a < seqZ; a++ )
 		{
-			changeWrapRay = spaceBox.getChangeSkid( a ).transform( changeWrapRay );
+			changeWrapRay =
+				spaceBox.getChangeSkid( a ).transform( changeWrapRay );
 		}
 
 		// this does not yield, its write and forget.

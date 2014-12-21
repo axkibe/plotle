@@ -44,7 +44,14 @@ if( JION )
 						json :
 							true,
 						type :
-							[ 'ccot_change', 'ccot_changeRay' ]
+							[ 'ccot_change', 'ccot_changeRay' ],
+						allowsNull :
+							true
+							// in case of transformation the change
+							// can evaporate, the changeWrap needs to
+							// be kept alive though so the client
+							// can be notified of its change to
+							// have arrived, albeit it had no effect.
 					},
 				seq :
 					{
@@ -68,7 +75,7 @@ if( SERVER )
 
 	jools = require( '../jools/jools' );
 
-	result_changeTree = require( '../result/change-tree' );
+	result_changeTree = require( '../result/changeTree' );
 }
 
 
@@ -114,16 +121,23 @@ ccot_changeWrap.prototype.changeTree =
 	)
 {
 	var
-		result;
+		result,
+		reaction;
 
-	result = this.chgX.changeTree( tree );
+	if( this.chgX !== null )
+	{
+		result = this.chgX.changeTree( tree );
 
-	return(
-		result_changeTree.create(
-			'reaction', this.create( 'chgX', result.reaction ),
-			'tree', result.tree
-		)
-	);
+		reaction = this.create( 'chgX', result.reaction );
+
+		tree = result.tree;
+	}
+	else
+	{
+		reaction = this;
+	}
+
+	return result_changeTree.create( 'reaction', reaction, 'tree', tree );
 };
 
 

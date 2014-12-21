@@ -69,9 +69,9 @@ var
 
 server_spaceBox = require( '../jion/this' )( module );
 
-database_changeSkid = require( '../database/change-skid' );
+database_changeSkid = require( '../database/changeSkid' );
 
-database_changeSkidRay = require( '../database/change-skid-ray' );
+database_changeSkidRay = require( '../database/changeSkidRay' );
 
 resume = require( 'suspend' ).resume;
 

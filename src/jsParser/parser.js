@@ -104,7 +104,7 @@ lexer = require( '../jsLexer/lexer' );
 
 state = require( './state' );
 
-tokenSpec = require( './token-spec' );
+tokenSpec = require( './tokenSpec' );
 
 
 /*

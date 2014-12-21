@@ -38,7 +38,7 @@ if( JION )
 
 database_changeSkidRay = require( '../jion/this' )( module );
 
-database_changeSkid = require( './change-skid' );
+database_changeSkid = require( './changeSkid' );
 
 
 /*
@@ -55,11 +55,13 @@ database_changeSkidRay.createFromChangeWrapRay =
 	)
 {
 	var
-		a, aZ,
+		a,
+		aZ,
+		cw,
+		cs,
 		ray;
 
 	ray = [ ];
-
 
 	for(
 		a = 0, aZ = changeWrapRay.length;
@@ -67,13 +69,26 @@ database_changeSkidRay.createFromChangeWrapRay =
 		a++
 	)
 	{
-		ray.push(
-			database_changeSkid.createFromChangeWrap(
-				changeWrapRay.get( a ),
-				user,
-				seq++
-			)
-		);
+		cw = changeWrapRay.get( a );
+
+		if( cw === null )
+		{
+			continue;
+		}
+
+		cs = database_changeSkid.createFromChangeWrap( cw, user, seq++ );
+
+		if( cs === null )
+		{
+			continue;
+		}
+
+		ray.push( cs );
+	}
+
+	if( ray.length === 0 )
+	{
+		return null;
 	}
 
 	return database_changeSkidRay.create( 'ray:init', ray );

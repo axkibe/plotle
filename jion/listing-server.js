@@ -10,13 +10,13 @@ module.exports =
 	list :
 		[
 			'src/ccot/change.js',
-			'src/ccot/change-ray.js',
-			'src/ccot/change-wrap.js',
-			'src/ccot/change-wrap-ray.js',
+			'src/ccot/changeRay.js',
+			'src/ccot/changeWrap.js',
+			'src/ccot/changeWrapRay.js',
 			'src/ccot/sign.js',
-			'src/ccot/sign-ray.js',
-			'src/database/change-skid.js',
-			'src/database/change-skid-ray.js',
+			'src/ccot/signRay.js',
+			'src/database/changeSkid.js',
+			'src/database/changeSkidRay.js',
 			'src/database/repository.js',
 			'src/euclid/margin.js',
 			'src/euclid/point.js',
@@ -29,7 +29,7 @@ module.exports =
 			'src/fabric/portal.js',
 			'src/fabric/relation.js',
 			'src/fabric/space.js',
-			'src/fabric/space-ref.js',
+			'src/fabric/spaceRef.js',
 			'src/jion/path.js',
 			'src/reply/acquire.js',
 			'src/reply/alter.js',
@@ -43,7 +43,7 @@ module.exports =
 			'src/request/register.js',
 			'src/request/update.js',
 			'src/result/genjion.js',
-			'src/result/change-tree.js',
+			'src/result/changeTree.js',
 			'src/server/resource.js',
 			'src/server/spaceBox.js',
 			'src/server/inventory.js',
@@ -93,9 +93,9 @@ module.exports =
 			'src/format/context.js',
 			'src/jsLexer/token.js',
 			'src/jsParser/state.js',
-			'src/jsParser/token-spec.js',
+			'src/jsParser/tokenSpec.js',
 			'src/jion/generator.js',
 			'src/jion/id.js',
-			'src/jion/id-repository.js'
+			'src/jion/idRepository.js'
 		]
 };

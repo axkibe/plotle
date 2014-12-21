@@ -70,7 +70,7 @@ mongodb = require( 'mongodb' );
 
 sus = require( 'suspend' ); // FIXME just give resume
 
-fabric_spaceRef = require( '../fabric/space-ref' );
+fabric_spaceRef = require( '../fabric/spaceRef' );
 
 /*
 | Returns a repository object with

@@ -322,6 +322,7 @@ net_link.prototype._onUpdate =
 		cSpace,
 		rSpace;
 
+	console.log( 'update', reply );
 	link = this;
 
 /**/if( CHECK )
@@ -402,6 +403,8 @@ net_link.prototype._onUpdate =
 			report = report.append( changeWrap.chgX );
 		}
 
+		postbox = changeWrapRay.transform( postbox );
+
 		cSpace = postbox.changeTree( cSpace ).tree;
 
 		// transforms the outbox by the foreign changes
@@ -428,7 +431,12 @@ net_link.prototype._onUpdate =
 
 	if( gotOwnChgs )
 	{
+		console.log( 'got own changes' );
 		link._sendChanges( );
+	}
+	else
+	{
+		console.log( 'no self changes' );
 	}
 
 	// issues the following update
@@ -515,12 +523,14 @@ net_link.prototype._sendChanges =
 	// already sending?
 	if( link._postbox.length > 0 )
 	{
+		console.log( 'aready sending' );
 		return;
 	}
 
 	// nothing to send?
 	if( link._outbox.length === 0 )
 	{
+		console.log( 'nothing to send' );
 		return;
 	}
 

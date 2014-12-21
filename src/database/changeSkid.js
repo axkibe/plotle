@@ -79,7 +79,7 @@ changeSkid = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
-ccot_changeWrap = require( '../ccot/change-wrap' );
+ccot_changeWrap = require( '../ccot/changeWrap' );
 
 
 /*
@@ -93,15 +93,23 @@ changeSkid.createFromChangeWrap =
 	)
 {
 	// FUTURE aheadValue changeWrap asChangeWrap
-	return(
-		changeSkid.create(
-			'_id', seq === undefined ? changeWrap.seq : seq,
-			'cid', changeWrap.cid,
-			'chgX', changeWrap.chgX,
-			'user', user,
-			'date', Date.now( )
-		)
-	);
+
+	if( changeWrap.chgX !== null )
+	{
+		return(
+			changeSkid.create(
+				'_id', seq === undefined ? changeWrap.seq : seq,
+				'cid', changeWrap.cid,
+				'chgX', changeWrap.chgX,
+				'user', user,
+				'date', Date.now( )
+			)
+		);
+	}
+	else
+	{
+		return null;
+	}
 };
 
 

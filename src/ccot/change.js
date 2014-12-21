@@ -59,11 +59,11 @@ if( SERVER )
 
 	jools = require( '../jools/jools' );
 
-	ccot_changeRay = require( '../ccot/change-ray' );
+	ccot_changeRay = require( '../ccot/changeRay' );
 
-	ccot_signRay = require( '../ccot/sign-ray' );
+	ccot_signRay = require( '../ccot/signRay' );
 
-	result_changeTree = require( '../result/change-tree' );
+	result_changeTree = require( '../result/changeTree' );
 }
 
 
@@ -482,6 +482,11 @@ ccot_change.prototype.transform =
 		cx
 	)
 {
+	if( cx === null )
+	{
+		return null;
+	}
+
 	switch( cx.reflect )
 	{
 		case 'ccot_change' :

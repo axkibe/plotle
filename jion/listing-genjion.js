@@ -55,9 +55,9 @@ module.exports =
 			'src/format/context.js',
 			'src/jsLexer/token.js',
 			'src/jsParser/state.js',
-			'src/jsParser/token-spec.js',
+			'src/jsParser/tokenSpec.js',
 			'src/jion/generator.js',
 			'src/jion/id.js',
-			'src/jion/id-repository.js'
+			'src/jion/idRepository.js'
 		]
 };

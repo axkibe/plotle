@@ -43,7 +43,7 @@ if( SERVER )
 
 	jools = require( '../jools/jools'  );
 
-	result_changeTree = require( '../result/change-tree' );
+	result_changeTree = require( '../result/changeTree' );
 }
 
 

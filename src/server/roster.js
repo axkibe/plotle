@@ -61,7 +61,7 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/result/change-tree.js',
+		'filePath', 'src/result/changeTree.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -72,7 +72,7 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/ccot/sign-ray.js',
+		'filePath', 'src/ccot/signRay.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -84,19 +84,19 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/ccot/change-ray.js',
+		'filePath', 'src/ccot/changeRay.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/ccot/change-wrap.js',
+		'filePath', 'src/ccot/changeWrap.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/ccot/change-wrap-ray.js',
+		'filePath', 'src/ccot/changeWrapRay.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -108,7 +108,7 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/euclid/fix-point.js',
+		'filePath', 'src/euclid/fixPoint.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -158,7 +158,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/euclid/round-rect.js',
+		'filePath', 'src/euclid/roundRect.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -178,17 +178,17 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/design/anchor-point.js',
+		'filePath', 'src/design/anchorPoint.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/design/anchor-rect.js',
+		'filePath', 'src/design/anchorRect.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/design/anchor-ellipse.js',
+		'filePath', 'src/design/anchorEllipse.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -239,7 +239,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/fabric/space-ref.js',
+		'filePath', 'src/fabric/spaceRef.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -299,12 +299,12 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/net/request-wrap.js',
+		'filePath', 'src/net/requestWrap.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/net/request-wrap-ray.js',
+		'filePath', 'src/net/requestWrapRay.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -324,7 +324,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/shell/do-tracker.js',
+		'filePath', 'src/shell/doTracker.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -412,12 +412,12 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/no-access-to-space.js',
+		'filePath', 'src/forms/noAccessToSpace.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/non-existing-space.js',
+		'filePath', 'src/forms/nonExistingSpace.js',
 		'hasJion', true,
 		'inBundle', true
 	),
@@ -443,11 +443,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/gruga/no-access-to-space.js',
+		'filePath', 'src/gruga/noAccessToSpace.js',
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/gruga/non-existing-space.js',
+		'filePath', 'src/gruga/nonExistingSpace.js',
 		'inBundle', true
 	),
 	resource.create(
@@ -489,7 +489,7 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/fabric/doc-item.js',
+		'filePath', 'src/fabric/docItem.js',
 		'inBundle', true,
 		'inTestPad', true
 	),
@@ -549,26 +549,26 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/is-action.js',
+		'filePath', 'src/actions/isAction.js',
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/create-generic.js',
+		'filePath', 'src/actions/createGeneric.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/create-relation.js',
+		'filePath', 'src/actions/createRelation.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/item-drag.js',
+		'filePath', 'src/actions/itemDrag.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/item-resize.js',
+		'filePath', 'src/actions/itemResize.js',
 		'hasJion', true,
 		'inBundle', true
 	),
