@@ -67,6 +67,8 @@ var
 	server_spaceBox,
 	fabric_space;
 
+var jools = require( '../jools/jools' );
+
 server_spaceBox = require( '../jion/this' )( module );
 
 database_changeSkid = require( '../database/changeSkid' );
@@ -129,8 +131,8 @@ server_spaceBox.loadSpace =
 		changeSkids =
 			changeSkids.create( 'ray:set', seqZ++, changeSkid );
 
-		// FIXME remove chgX below
-		space = changeSkid.chgX.changeTree( space ).tree;
+		// FIXME remove changeRay below
+		space = changeSkid.changeRay.changeTree( space ).tree;
 	}
 
 	return(
@@ -224,6 +226,8 @@ server_spaceBox.prototype.appendChanges =
 		{
 			if( error !== null )
 			{
+				jools.log( true, error, changeSkidRay );
+
 				throw new Error( 'Database error' );
 			}
 		}

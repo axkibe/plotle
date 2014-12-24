@@ -37,14 +37,14 @@ if( JION )
 						type :
 							'String'
 					},
-				chgX :
+				changeRay :
 					{
 						comment :
 							'change or change ray',
 						json :
 							true,
 						type :
-							[ 'ccot_change', 'ccot_changeRay' ],
+							'ccot_changeRay',
 						allowsNull :
 							true
 							// in case of transformation the change
@@ -91,7 +91,7 @@ ccot_changeWrap.prototype.invert =
 	return(
 		ccot_changeWrap.create(
 			'cid', jools.uid( ),
-			'chgX', this.chgX.invert
+			'changeRay', this.changeRay.invert
 		)
 	);
 };
@@ -107,7 +107,7 @@ ccot_changeWrap.prototype.transform =
 		cx
 	)
 {
-	return this.chgX.transform( cx );
+	return this.changeRay.transform( cx );
 };
 
 
@@ -121,23 +121,16 @@ ccot_changeWrap.prototype.changeTree =
 	)
 {
 	var
-		result,
-		reaction;
+		result;
 
-	if( this.chgX !== null )
-	{
-		result = this.chgX.changeTree( tree );
+	result = this.changeRay.changeTree( tree );
 
-		reaction = this.create( 'chgX', result.reaction );
-
-		tree = result.tree;
-	}
-	else
-	{
-		reaction = this;
-	}
-
-	return result_changeTree.create( 'reaction', reaction, 'tree', tree );
+	return(
+		result_changeTree.create(
+			'reaction', this.create( 'changeRay', result.reaction ),
+			'tree', result.tree
+		)
+	);
 };
 
 

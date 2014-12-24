@@ -1,5 +1,7 @@
 /*
 | A change on a skid for database storage.
+|
+| FUTURE only have it changeRays for simplicity.
 */
 
 
@@ -38,14 +40,14 @@ if( JION )
 						type :
 							'String'
 					},
-				chgX :
+				changeRay :
 					{
 						comment :
 							'change or change ray',
 						json :
 							true,
 						type :
-							[ 'ccot_change', 'ccot_changeRay' ]
+							'ccot_changeRay'
 					},
 				user :
 					{
@@ -94,13 +96,13 @@ changeSkid.createFromChangeWrap =
 {
 	// FUTURE aheadValue changeWrap asChangeWrap
 
-	if( changeWrap.chgX !== null )
+	if( changeWrap.changeRay !== null )
 	{
 		return(
 			changeSkid.create(
 				'_id', seq === undefined ? changeWrap.seq : seq,
 				'cid', changeWrap.cid,
-				'chgX', changeWrap.chgX,
+				'changeRay', changeWrap.changeRay,
 				'user', user,
 				'date', Date.now( )
 			)
@@ -120,7 +122,7 @@ jools.lazyValue(
 {
 	return(
 		ccot_changeWrap.create(
-			'chgX', this.chgX,
+			'changeRay', this.changeRay,
 			'cid', this.cid,
 			'seq', this._id
 		)
@@ -138,7 +140,7 @@ changeSkid.prototype.transform =
 		cyt // a changy thing ( change, changeRay, changeWrap, etc. )
 	)
 {
-	return this.chgX.transform( cyt );
+	return this.changeRay.transform( cyt );
 };
 
 

@@ -143,7 +143,7 @@ shell_doTracker.prototype.update =
 
 		if( u.seq < seq + a )
 		{
-			tfxChgX = u.chgX.transform( chgX );
+			tfxChgX = u.changeRay.transform( changeRay );
 
 			// the change vanished by transformation
 			if( tfxChgX === null )
@@ -160,7 +160,7 @@ shell_doTracker.prototype.update =
 					b,
 					ccot_changeWrap.create(
 						'cid', u.cid,
-						'chgX', tfxChgX,
+						'changeRay', tfxChgX,
 						'seq', u.seq
 					)
 				);
@@ -177,7 +177,7 @@ shell_doTracker.prototype.update =
 
 		if( u.seq < seq + a )
 		{
-			tfxChgX = u.chgX.transform( chgX );
+			tfxChgX = u.changeRay.transform( changeRay );
 
 			// the change vanished by transformation
 			if( tfxChgX === null )
@@ -192,12 +192,9 @@ shell_doTracker.prototype.update =
 			redo.set(
 				b,
 				ccot_changeWrap.create(
-					'cid',
-						u.cid,
-					'chgX',
-						u.chgX.transform( chgX ),
-					'seq',
-						u.seq
+					'cid', u.cid,
+					'changeRay', u.changeRay.transform( changeRay ),
+					'seq', u.seq
 				)
 			);
 		}
@@ -241,7 +238,7 @@ shell_doTracker.prototype.undo =
 			'_redo', this._redo.append( changeWrap )
 		);
 
-	root.link.alter( changeWrap.chgX.invert, true /* noTrack */ );
+	root.link.alter( changeWrap.changeRay.invert, true /* noTrack */ );
 };
 
 
@@ -280,7 +277,7 @@ shell_doTracker.prototype.redo =
 			'_undo', this._undo.append( changeWrap )
 		);
 
-	root.link.alter( changeWrap.chgX, true /* noTrack */ );
+	root.link.alter( changeWrap.changeRay, true /* noTrack */ );
 };
 
 

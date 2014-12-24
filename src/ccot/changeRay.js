@@ -25,16 +25,17 @@ if( JION )
 		id :
 			'ccot_changeRay',
 		equals :
-			false,
+			'primitive',
 		json :
 			true,
 		ray :
 			[
 				'ccot_change'
-			]
+			],
+		init :
+			[ ]
 	};
 }
-
 
 
 if( SERVER )
@@ -45,6 +46,25 @@ if( SERVER )
 
 	result_changeTree = require( '../result/changeTree' );
 }
+
+
+/*
+| Initializer. Remove CHECK and init again.
+*/
+ccot_changeRay.prototype._init =
+	function( )
+{
+	var
+		a, aZ;
+
+	for( a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		if( !this.ray[ a ] )
+		{
+			throw new Error( );
+		}
+	}
+};
 
 
 /*
@@ -158,7 +178,7 @@ ccot_changeRay.prototype._transformChangeWrap =
 		cw
 	)
 {
-	return cw.create( 'chgX', this.transform( cw.chgX ) );
+	return cw.create( 'changeRay', this.transform( cw.changeRay ) );
 };
 
 
@@ -255,6 +275,11 @@ ccot_changeRay.prototype.changeTree =
 	{
 		// FIXME remove 'chg' var
 		chg = this.get( a );
+
+		if( chg === null )
+		{
+			jools.log( true, 'WTF', this, a );
+		}
 
 		cr = chg.changeTree( tree );
 

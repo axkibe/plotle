@@ -504,7 +504,7 @@ fabric_space.prototype.pointingHover =
 		com,
 		item,
 		focus,
-		res,
+		result,
 		view;
 
 	view = this.view,
@@ -534,11 +534,11 @@ fabric_space.prototype.pointingHover =
 	{
 		item = this.atRank( a ),
 
-		res = item.pointingHover( view, p );
+		result = item.pointingHover( view, p );
 
-		if( res )
+		if( result )
 		{
-			return res;
+			return result;
 		}
 	}
 
@@ -804,7 +804,7 @@ fabric_space.prototype.dragStop =
 		note,
 		oheight,
 		portal,
-		res,
+		result,
 		resized,
 		view,
 		zone;
@@ -838,9 +838,9 @@ fabric_space.prototype.dragStop =
 								)
 						);
 
-					res = shell_peer.newNote( note.zone );
+					result = shell_peer.newNote( note.zone );
 
-					key = res.reaction.trg.path.get( -1 );
+					key = result.reaction.get( 0 ).trg.path.get( -1 );
 
 					root.setMark(
 						marks_caret.create(
@@ -894,14 +894,14 @@ fabric_space.prototype.dragStop =
 								)
 						);
 
-					res =
+					result =
 						shell_peer.newLabel(
 							label.pnw,
 							'Label',
 							label.doc.fontsize
 						);
 
-					key = res.reaction.trg.path.get( -1 );
+					key = result.reaction.get( 0 ).trg.path.get( -1 );
 
 					root.setMark(
 						marks_caret.create(
@@ -933,14 +933,14 @@ fabric_space.prototype.dragStop =
 								)
 						);
 
-					res =
+					result =
 						shell_peer.newPortal(
 							portal.zone,
 							root.username, // FIXME
 							'home'
 						);
 
-					key = res.reaction.trg.path.get( -1 );
+					key = result.reaction.get( 0 ).trg.path.get( -1 );
 
 					root.setMark(
 						marks_caret.create(

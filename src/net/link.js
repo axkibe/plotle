@@ -397,10 +397,7 @@ net_link.prototype._onUpdate =
 			}
 
 			// otherwise it was a foreign change
-
-			// FIXME this fails if a changeRay is returned
-			// in the changeWrap
-			report = report.append( changeWrap.chgX );
+			report = report.appendRay( changeWrap.changeRay );
 		}
 
 		postbox = changeWrapRay.transform( postbox );
@@ -456,6 +453,7 @@ net_link.prototype.alter =
 	)
 {
 	var
+		changeRay,
 		changeWrap,
 		link,
 		result;
@@ -470,14 +468,33 @@ net_link.prototype.alter =
 /**/	}
 /**/}
 
-	result = changes.changeTree( link._cSpace );
+	switch( changes.reflect )
+	{
+		case 'ccot_change' :
 
-	changes = result.reaction;
+			changeRay = ccot_changeRay.create( 'ray:init', [ changes ] );
+
+			break;
+
+		case 'ccot_changeRay' :
+
+			changeRay = changes;
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
+
+	result = changeRay.changeTree( link._cSpace );
+
+	changeRay = result.reaction;
 
 	changeWrap =
 		ccot_changeWrap.create(
 			'cid', jools.uid( ),
-			'chgX', changes
+			'changeRay', changeRay
 		);
 
 	link =
@@ -494,7 +511,7 @@ net_link.prototype.alter =
 
 	link._sendChanges( );
 
-	root.update( result.tree, changes );
+	root.update( result.tree, changeRay );
 
 	return result;
 };

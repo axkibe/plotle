@@ -44,9 +44,6 @@ if( SERVER )
 
 /*
 | Performes the wraped-change-(rays) on a tree.
-|
-| FIXME trace if a single change has changed and create
-| a new array only then
 */
 ccot_changeWrapRay.prototype.changeTree =
 	function(
@@ -75,8 +72,6 @@ ccot_changeWrapRay.prototype.changeTree =
 
 		cRay.push( cr.reaction );
 	}
-
-	// FUTURE create only a single change when cray.length === 1
 
 	return(
 		result_changeTree.create(

@@ -405,8 +405,10 @@ ccot_change.prototype._transformChangeRay =
 	)
 {
 	var
+		change,
 		r,
 		rZ,
+		tr,
 		tray;
 
 /**/if( CHECK )
@@ -420,12 +422,19 @@ ccot_change.prototype._transformChangeRay =
 	tray = [ ];
 
 	for(
-		r = 0, rZ = cray.length;
+		r = 0, rZ = cray.length, tr = 0;
 		r < rZ;
 		r++
 	)
 	{
-		tray[ r ] = this._transformChange( cray.get( r ) );
+		change = this._transformChange( cray.get( r ) );
+
+		if( change !== null )
+		{
+			// nulled changes are sliced out.
+
+			tray[ tr++ ] = change;
+		}
 	}
 
 	return cray.create( 'ray:init', tray );
@@ -440,7 +449,7 @@ ccot_change.prototype._transformChangeWrap =
 		cw
 	)
 {
-	return cw.create( 'chgX', this.transform( cw.chgX ) );
+	return cw.create( 'changeRay', this.transform( cw.changeRay ) );
 };
 
 

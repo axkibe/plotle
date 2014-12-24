@@ -278,7 +278,7 @@ jion_proto.rayGet =
 /**/		throw new Error( );
 /**/	}
 /**/}
-	
+
 	return this.ray[ idx ];
 };
 

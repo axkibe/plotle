@@ -86,11 +86,6 @@ database_changeSkidRay.createFromChangeWrapRay =
 		ray.push( cs );
 	}
 
-	if( ray.length === 0 )
-	{
-		return null;
-	}
-
 	return database_changeSkidRay.create( 'ray:init', ray );
 };
 
