@@ -661,6 +661,14 @@ ccot_change.prototype._changeTreeInsert =
 
 	trg = trg.affix( 'at2', tat2 );
 
+/**/if( CHECK )
+/**/{
+/**/	if( trg.at1 > str.length )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	nstr =
 		str.substring( 0, trg.at1 )
 		+ src.val

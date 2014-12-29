@@ -1454,7 +1454,7 @@ prototype.webAjax =
 			{
 				console.log( 'DELAYING');
 
-				yield setTimeout( sus.resume( ), 10000 );
+				yield setTimeout( sus.resume( ), 5000 );
 
 				console.log( 'EOD');
 			}

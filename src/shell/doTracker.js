@@ -107,6 +107,9 @@ shell_doTracker.prototype.update =
 	)
 {
 	var
+		a,
+		aZ,
+		cw,
 		undo,
 		redo;
 
@@ -128,78 +131,65 @@ shell_doTracker.prototype.update =
 		return;
 	}
 
-	/*
-	Adapts the doTracker stacks
+	// Adapts the doTracker stacks
 
-	XXX TODO
+	// FUTURE this can be optimized
+	//        by skipping all non-relevant
+	//        loop iterations.
 
 	for(
-		b = 0, bZ = undo.length;
-		b < bZ;
-		b++
+		a = 0, aZ = undo.length;
+		a < aZ;
+		a++
 	)
 	{
-		u = undo.get( b );
+		cw = undo.get( a );
 
-		if( u.seq < seq + a )
+		console.log( 'UT', cw.seq, changeWrapRay.get( 0 ).seq );
+
+		if( cw.seq < changeWrapRay.get( 0 ).seq )
 		{
-			tfxChgX = u.changeRay.transform( changeRay );
+			cw = changeWrapRay.transform( cw );
 
 			// the change vanished by transformation
-			if( tfxChgX === null )
+			if( cw === null )
 			{
-				undo = undo.remove( b-- );
+				undo = undo.remove( a-- );
 
-				bZ--;
+				aZ--;
 
 				continue;
 			}
 
-			undo =
-				undo.set(
-					b,
-					ccot_changeWrap.create(
-						'cid', u.cid,
-						'changeRay', tfxChgX,
-						'seq', u.seq
-					)
-				);
+			undo = undo.set( a, cw );
 		}
 	}
 
 	for(
-		b = 0, bZ = redo.length;
-		b < bZ;
-		b++
+		a = 0, aZ = redo.length;
+		a < aZ;
+		a++
 	)
 	{
-		u = redo.get( b );
+		cw = redo.get( a );
 
-		if( u.seq < seq + a )
+		if( cw.seq < changeWrapRay.get( 0 ).seq )
 		{
-			tfxChgX = u.changeRay.transform( changeRay );
+			cw = changeWrapRay.transform( cw );
 
 			// the change vanished by transformation
-			if( tfxChgX === null )
+			if( cw === null )
 			{
-				redo = redo.remove( b-- );
+				redo = redo.remove( a-- );
 
-				bZ--;
+				aZ--;
 
 				continue;
 			}
 
-			redo.set(
-				b,
-				ccot_changeWrap.create(
-					'cid', u.cid,
-					'changeRay', u.changeRay.transform( changeRay ),
-					'seq', u.seq
-				)
-			);
+			redo = redo.set( a, cw );
 		}
 	}
-	*/
 };
 
 
