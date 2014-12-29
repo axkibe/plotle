@@ -239,6 +239,10 @@ ccot_changeRay.prototype.transform =
 
 			return this._transformChangeWrapRay( co );
 
+		case 'ccot_sign' :
+
+			return this._transformSign( co );
+
 		default :
 
 			throw new Error( );
@@ -305,7 +309,7 @@ ccot_changeRay.prototype.changeTree =
 |
 | If the signature is a span, it can transform to a sign-ray.
 */
-ccot_changeRay.prototype.transformSign =
+ccot_changeRay.prototype._transformSign =
 	function(
 		sign
 	)
@@ -336,7 +340,7 @@ ccot_changeRay.prototype.transformSign =
 		t++
 	)
 	{
-		signX = this.get( t ).transformSignX( signX );
+		signX = this.get( t ).transform( signX );
 	}
 
 	return signX;

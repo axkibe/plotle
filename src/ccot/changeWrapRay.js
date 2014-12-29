@@ -85,7 +85,7 @@ ccot_changeWrapRay.prototype.changeTree =
 /*
 | Transform cx on this ray of wrapped changes.
 |
-| cx can be a change, changeRay, changeWrap or changeWrapRay.
+| cx can be a change, changeRay, changeWrap or changeWrapRay, sign
 */
 ccot_changeWrapRay.prototype.transform =
 	function(

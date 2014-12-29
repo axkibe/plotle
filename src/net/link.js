@@ -343,7 +343,7 @@ net_link.prototype._onUpdate =
 
 	changeWrapRay = reply.changeWrapRay;
 
-	report = ccot_changeRay.create( );
+	report = ccot_changeWrapRay.create( );
 
 	gotOwnChgs = false;
 
@@ -396,7 +396,7 @@ net_link.prototype._onUpdate =
 			}
 
 			// otherwise it was a foreign change
-			report = report.appendRay( changeWrap.changeRay );
+			report = report.append( changeWrap );
 		}
 
 		postbox = changeWrapRay.transform( postbox );

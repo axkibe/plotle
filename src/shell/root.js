@@ -290,7 +290,7 @@ proto.setAction =
 proto.update =
 	function(
 		space,
-		changeRay
+		changeWrapRay
 	)
 {
 	var
@@ -320,7 +320,7 @@ proto.update =
 			else
 			{
 				sign =
-					changeRay.transformSign(
+					changeWrapRay.transform(
 						ccot_sign.create(
 							'path', mark.path.chop( ),
 							'at1', mark.at
@@ -364,7 +364,7 @@ proto.update =
 			else
 			{
 				bSign =
-					changeRay.transformSign(
+					changeWrapRay.transform(
 						ccot_sign.create(
 							'path', mark.bPath.chop( ),
 							'at1', mark.bAt
@@ -372,7 +372,7 @@ proto.update =
 					);
 
 				eSign =
-					changeRay.transformSign(
+					changeWrapRay.transform(
 						ccot_sign.create(
 							'path', mark.ePath.chop( ),
 							'at1', mark.eAt

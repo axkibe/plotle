@@ -277,9 +277,9 @@ ccot_change.prototype._transformChange =
 /**/	}
 /**/}
 
-	srcX = this.transformSign( c.src );
+	srcX = this._transformSign( c.src );
 
-	trgX = this.transformSign( c.trg );
+	trgX = this._transformSign( c.trg );
 
 	if( srcX === null || trgX === null )
 	{
@@ -513,6 +513,14 @@ ccot_change.prototype.transform =
 		case 'ccot_changeWrapRay' :
 
 			return this._transformChangeWrapRay( cx );
+
+		case 'ccot_sign' :
+
+			return this._transformSign( cx );
+
+		case 'ccot_signRay' :
+
+			return this._transformSignRay( cx );
 
 		default :
 
@@ -1002,7 +1010,7 @@ ccot_change.prototype._changeTreeRank =
 |
 | This can possibly return a sign ray.
 */
-ccot_change.prototype.transformSign =
+ccot_change.prototype._transformSign =
 	function(
 		sign
 	)
@@ -1048,7 +1056,7 @@ ccot_change.prototype.transformSign =
 /*
 | Returns a transformed signRay on this change.
 */
-ccot_change.prototype.transformSignRay =
+ccot_change.prototype._transformSignRay =
 	function(
 		signray
 	)
@@ -1065,7 +1073,7 @@ ccot_change.prototype.transformSignRay =
 		a++
 	)
 	{
-		cx = this.transformSign( signray.get( a ) );
+		cx = this._transformSign( signray.get( a ) );
 
 		if( cx === null )
 		{
@@ -1099,36 +1107,6 @@ ccot_change.prototype.transformSignRay =
 
 				throw new Error( );
 		}
-	}
-};
-
-
-/*
-| Returns a transformed sign or signRay on this change.
-|
-| FIXME move into generic transform
-|
-| Can possibly transform a sign to a signRay.
-*/
-ccot_change.prototype.transformSignX =
-	function(
-		signX
-	)
-{
-	switch( signX.reflect )
-	{
-
-		case 'ccot_sign' :
-
-			return this.transformSign( signX );
-
-		case 'ccot_signRay' :
-
-			return this.transformSignRay( signX );
-
-		default :
-
-			throw new Error( );
 	}
 };
 
