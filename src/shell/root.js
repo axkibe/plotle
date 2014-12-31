@@ -421,8 +421,9 @@ proto.update =
 			'view', this.space.view
 		);
 
-	this._discJockey =
-		this._discJockey.create( 'mark', mark );
+	this.doTracker = this.doTracker.update( changeWrapRay );
+
+	this._discJockey = this._discJockey.create( 'mark', mark );
 
 	this.mark = mark;
 

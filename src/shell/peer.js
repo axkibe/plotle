@@ -54,7 +54,7 @@ shell_peer = { };
 /*
 | Alters the tree.
 |
-| Feeds the dochains.
+| Feeds the doTracker.
 */
 alter =
 	function(
@@ -64,9 +64,12 @@ alter =
 {
 	return(
 		root.link.alter(
-			ccot_change.create(
-				'src', src,
-				'trg', trg
+			ccot_changeRay.create(
+				'ray:set', 0,
+				ccot_change.create(
+					'src', src,
+					'trg', trg
+				)
 			)
 		)
 	);

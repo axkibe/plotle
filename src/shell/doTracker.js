@@ -57,6 +57,7 @@ shell_doTracker.prototype.flush =
 
 	)
 {
+	// FIXME
 	root.doTracker =
 		this.create(
 			'_undo', ccot_changeWrapRay.create( ),
@@ -86,6 +87,7 @@ shell_doTracker.prototype.track =
 		undo = undo.remove( 0 );
 	}
 
+	// FIXME
 	root.doTracker =
 		this.create(
 			'_undo', undo,
@@ -190,6 +192,8 @@ shell_doTracker.prototype.update =
 			redo = redo.set( a, cw );
 		}
 	}
+
+	return this.create( '_undo', undo, '_redo', redo );
 };
 
 

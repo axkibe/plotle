@@ -441,13 +441,12 @@ net_link.prototype._onUpdate =
 */
 net_link.prototype.alter =
 	function(
-		changes,  // the change(ray) to apply on the tree
-		noTrack  // if true do not report the dotracker
-		//       // ( for example this is an undo itself )
+		changeRay, // the changeRay to apply on the tree
+		noTrack    // if true do not report the dotracker
+		//         // ( for example this is an undo itself )
 	)
 {
 	var
-		changeRay,
 		changeWrap,
 		link,
 		result;
@@ -461,25 +460,6 @@ net_link.prototype.alter =
 /**/		throw new Error( );
 /**/	}
 /**/}
-
-	switch( changes.reflect )
-	{
-		case 'ccot_change' :
-
-			changeRay = ccot_changeRay.create( 'ray:init', [ changes ] );
-
-			break;
-
-		case 'ccot_changeRay' :
-
-			changeRay = changes;
-
-			break;
-
-		default :
-
-			throw new Error( );
-	}
 
 	result = changeRay.changeTree( link._cSpace );
 
