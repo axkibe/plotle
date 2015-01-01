@@ -111,6 +111,8 @@ shell_doTracker.prototype.update =
 	var
 		a,
 		aZ,
+		b,
+		bZ,
 		cw,
 		undo,
 		redo;
@@ -123,14 +125,52 @@ shell_doTracker.prototype.update =
 /**/	}
 /**/}
 
+	if( changeWrapRay.length === 0 )
+	{
+		// nothing to do
+
+		return;
+	}
+
 	undo = this._undo;
 
 	redo = this._redo;
 
-	// nothing to do
-	if( changeWrapRay.length === 0 )
+	// updates any new sequence IDs received
+	// from peer.
+
+	// FUTURE this can seriously optimized
+	for(
+		a = 0, aZ = changeWrapRay.length;
+		a < aZ;
+		a++
+	)
 	{
-		return;
+		cw = changeWrapRay.get( a );
+
+		for(
+			b = 0, bZ = undo.length;
+			b < bZ;
+			b++
+		)
+		{
+			if( cw.cid === undo.get( b ).cid )
+			{
+				undo = undo.set( b, cw );
+			}
+		}
+
+		for(
+			b = 0, bZ = redo.length;
+			b < bZ;
+			b++
+		)
+		{
+			if( cw.cid === redo.get( b ).cid )
+			{
+				redo = redo.set( b, cw );
+			}
+		}
 	}
 
 	// Adapts the doTracker stacks

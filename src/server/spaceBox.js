@@ -67,8 +67,6 @@ var
 	server_spaceBox,
 	fabric_space;
 
-var jools = require( '../jools/jools' );
-
 server_spaceBox = require( '../jion/this' )( module );
 
 database_changeSkid = require( '../database/changeSkid' );
