@@ -11,7 +11,7 @@ var
 	fabric_label,
 	jools,
 	root,
-	shell_peer,
+	shell_alter,
 	shell_style,
 	theme;
 
@@ -301,12 +301,12 @@ fabric_label.prototype.dragStop =
 				!this.pnw.equals( zone.pnw )
 			)
 			{
-				shell_peer.setPNW( this.path, zone.pnw );
+				shell_alter.setPNW( this.path, zone.pnw );
 			}
 
 			if( fontsize !== this.fontsize )
 			{
-				shell_peer.setFontSize( this.path, fontsize );
+				shell_alter.setFontSize( this.path, fontsize );
 			}
 
 			break;

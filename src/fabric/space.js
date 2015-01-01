@@ -14,7 +14,7 @@ var
 	marks_caret,
 	result_hover,
 	root,
-	shell_peer,
+	shell_alter,
 	shell_stubs,
 	theme;
 
@@ -838,7 +838,7 @@ fabric_space.prototype.dragStop =
 								)
 						);
 
-					result = shell_peer.newNote( note.zone );
+					result = shell_alter.newNote( note.zone );
 
 					key = result.reaction.get( 0 ).trg.path.get( -1 );
 
@@ -895,7 +895,7 @@ fabric_space.prototype.dragStop =
 						);
 
 					result =
-						shell_peer.newLabel(
+						shell_alter.newLabel(
 							label.pnw,
 							'Label',
 							label.doc.fontsize
@@ -934,7 +934,7 @@ fabric_space.prototype.dragStop =
 						);
 
 					result =
-						shell_peer.newPortal(
+						shell_alter.newPortal(
 							portal.zone,
 							root.username, // FIXME
 							'home'
@@ -1025,7 +1025,7 @@ fabric_space.prototype.dragStop =
 				{
 					case 'zone' :
 
-						shell_peer.setZone(
+						shell_alter.setZone(
 							action.transItem.path,
 							action.transItem.zone
 						);
@@ -1034,7 +1034,7 @@ fabric_space.prototype.dragStop =
 
 					case 'pnw/fontsize' :
 
-						shell_peer.setPNW(
+						shell_alter.setPNW(
 							action.transItem.path,
 							action.transItem.zone.pnw
 						);
@@ -1060,7 +1060,7 @@ fabric_space.prototype.dragStop =
 				{
 					case 'zone' :
 
-						shell_peer.setZone(
+						shell_alter.setZone(
 							action.transItem.path,
 							action.transItem.zone
 						);
@@ -1069,12 +1069,12 @@ fabric_space.prototype.dragStop =
 
 					case 'pnw/fontsize' :
 
-						shell_peer.setPNW(
+						shell_alter.setPNW(
 							action.transItem.path,
 							action.transItem.zone.pnw
 						);
 
-						shell_peer.setFontSize(
+						shell_alter.setFontSize(
 							action.transItem.path,
 							action.transItem.doc.fontsize
 						);

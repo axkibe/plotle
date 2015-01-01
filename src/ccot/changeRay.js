@@ -29,11 +29,7 @@ if( JION )
 		json :
 			true,
 		ray :
-			[
-				'ccot_change'
-			],
-		init :
-			[ ]
+			[ 'ccot_change' ]
 	};
 }
 
@@ -46,25 +42,6 @@ if( SERVER )
 
 	result_changeTree = require( '../result/changeTree' );
 }
-
-
-/*
-| Initializer. Remove CHECK and init again.
-*/
-ccot_changeRay.prototype._init =
-	function( )
-{
-	var
-		a, aZ;
-
-	for( a = 0, aZ = this.length; a < aZ; a++ )
-	{
-		if( !this.ray[ a ] )
-		{
-			throw new Error( );
-		}
-	}
-};
 
 
 /*
@@ -264,7 +241,6 @@ ccot_changeRay.prototype.changeTree =
 	// the ray with the changes applied
 	var
 		a, aZ,
-		chg,
 		cray,
 		cr;
 
@@ -277,15 +253,7 @@ ccot_changeRay.prototype.changeTree =
 		a++
 	)
 	{
-		// FIXME remove 'chg' var
-		chg = this.get( a );
-
-		if( chg === null )
-		{
-			jools.log( true, 'WTF', this, a );
-		}
-
-		cr = chg.changeTree( tree );
+		cr = this.get( a ).changeTree( tree );
 
 		// the tree returned by op-handler is the new tree
 		tree = cr.tree;

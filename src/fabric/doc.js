@@ -10,7 +10,7 @@ var
 	jools,
 	root,
 	shell_fontPool,
-	shell_peer,
+	shell_alter,
 	theme;
 
 
@@ -947,7 +947,7 @@ fabric_doc.prototype.input =
 		&& !mark.empty
 	)
 	{
-		shell_peer.removeRange(
+		shell_alter.removeRange(
 			mark.frontPath,
 			mark.frontAt,
 			mark.backPath,
@@ -1001,7 +1001,7 @@ fabric_doc.prototype.specialKey =
 			case 'backspace' :
 			case 'del' :
 
-				shell_peer.removeRange(
+				shell_alter.removeRange(
 					mark.frontPath,
 					mark.frontAt,
 					mark.backPath,
@@ -1012,7 +1012,7 @@ fabric_doc.prototype.specialKey =
 
 			case 'enter' :
 
-				shell_peer.removeRange(
+				shell_alter.removeRange(
 					mark.frontPath,
 					mark.frontAt,
 					mark.backPath,

@@ -329,7 +329,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/shell/peer.js',
+		'filePath', 'src/shell/alter.js',
 		'inBundle', true,
 		'inTestPad', true
 	),

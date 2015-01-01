@@ -3,10 +3,7 @@
 */
 
 var
-	ccot_changeRay,
-	ccot_changeWrap,
 	ccot_changeWrapRay,
-	jools,
 	net_link,
 	request_acquire,
 	request_alter,
@@ -441,13 +438,10 @@ net_link.prototype._onUpdate =
 */
 net_link.prototype.alter =
 	function(
-		changeRay, // the changeRay to apply on the tree
-		noTrack    // if true do not report the dotracker
-		//         // ( for example this is an undo itself )
+		changeWrap // the changeWrap to apply to tree
 	)
 {
 	var
-		changeWrap,
 		link,
 		result;
 
@@ -461,15 +455,9 @@ net_link.prototype.alter =
 /**/	}
 /**/}
 
-	result = changeRay.changeTree( link._cSpace );
+	result = changeWrap.changeTree( link._cSpace );
 
-	changeRay = result.reaction;
-
-	changeWrap =
-		ccot_changeWrap.create(
-			'cid', jools.uid( ),
-			'changeRay', changeRay
-		);
+	changeWrap = result.reaction;
 
 	link =
 	root.link =
@@ -478,14 +466,9 @@ net_link.prototype.alter =
 			'_outbox', root.link._outbox.append( changeWrap )
 		);
 
-	if( !noTrack )
-	{
-		root.doTracker.track( changeWrap );
-	}
-
 	link._sendChanges( );
 
-	root.update( result.tree, changeRay );
+	root.update( result.tree, changeWrap );
 
 	return result;
 };

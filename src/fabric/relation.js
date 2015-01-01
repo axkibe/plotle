@@ -10,7 +10,7 @@ var
 	jools,
 	marks_caret,
 	root,
-	shell_peer,
+	shell_alter,
 	theme;
 
 
@@ -189,7 +189,7 @@ fabric_relation.spawn =
 		);
 
 	result =
-		shell_peer.newRelation(
+		shell_alter.newRelation(
 			pnw,
 			'relates to',
 			20,

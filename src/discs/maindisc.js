@@ -13,7 +13,7 @@ var
 	euclid_view,
 	jools,
 	root,
-	shell_peer;
+	shell_alter;
 
 /*
 | Capsule
@@ -374,7 +374,7 @@ discs_mainDisc.prototype.pushButton =
 
 	if( buttonName === 'Remove' )
 	{
-		shell_peer.removeItem( this.mark.itemPath );
+		shell_alter.removeItem( this.mark.itemPath );
 	}
 	else
 	{

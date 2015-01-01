@@ -1,10 +1,12 @@
 /*
-| A peer to a repository.
+| Routines to alter the data tree.
 */
 
 
 var
 	ccot_change,
+	ccot_changeRay,
+	ccot_changeWrap,
 	ccot_sign,
 	fabric_doc,
 	fabric_label,
@@ -13,7 +15,8 @@ var
 	fabric_portal,
 	fabric_relation,
 	jion_path,
-	shell_peer,
+	jools,
+	shell_alter,
 	root;
 
 
@@ -48,7 +51,7 @@ newItemSign =
 */
 spliceSign = ccot_sign.create( 'proc', 'splice' );
 
-shell_peer = { };
+shell_alter = { };
 
 
 /*
@@ -62,24 +65,35 @@ alter =
 		trg
 	)
 {
-	return(
-		root.link.alter(
-			ccot_changeRay.create(
-				'ray:set', 0,
-				ccot_change.create(
-					'src', src,
-					'trg', trg
+	var
+		changeWrap,
+		result;
+
+	changeWrap =
+		ccot_changeWrap.create(
+			'cid', jools.uid( ),
+			'changeRay',
+				ccot_changeRay.create(
+					'ray:set', 0,
+					ccot_change.create(
+						'src', src,
+						'trg', trg
+					)
 				)
-			)
-		)
-	);
+		);
+
+	result = root.link.alter( changeWrap );
+
+	root.doTracker.track( result.reaction );
+
+	return result;
 };
 
 
 /*
 | Creates a new note.
 */
-shell_peer.newNote =
+shell_alter.newNote =
 	function(
 		zone
 	)
@@ -110,7 +124,7 @@ shell_peer.newNote =
 /*
 | Creates a new portal.
 */
-shell_peer.newPortal =
+shell_alter.newPortal =
 	function(
 		zone,           // the zone of the potal
 		destSpaceUser,  // the user of the space the portal leads to
@@ -139,7 +153,7 @@ shell_peer.newPortal =
 /*
 | Sets the zone for item.
 */
-shell_peer.setZone =
+shell_alter.setZone =
 	function(
 		itemPath,
 		zone
@@ -157,7 +171,7 @@ shell_peer.setZone =
 /*
 | Sets an items fontsize.
 */
-shell_peer.setFontSize =
+shell_alter.setFontSize =
 	function(
 		itemPath,
 		fontsize
@@ -175,7 +189,7 @@ shell_peer.setFontSize =
 /*
 | Sets an items pnw (point in north-west)
 */
-shell_peer.setPNW =
+shell_alter.setPNW =
 	function(
 		itemPath,
 		pnw
@@ -193,7 +207,7 @@ shell_peer.setPNW =
 /*
 | Creates a new label.
 */
-shell_peer.newLabel =
+shell_alter.newLabel =
 	function(
 		pnw,
 		text,
@@ -227,7 +241,7 @@ shell_peer.newLabel =
 /*
 | Creates a new relation.
 */
-shell_peer.newRelation =
+shell_alter.newRelation =
 	function(
 		pnw,
 		text,
@@ -266,7 +280,7 @@ shell_peer.newRelation =
 | Moves an item's z-index up to top.
 */
 /*
-shell_peer.moveToTop =
+shell_alter.moveToTop =
 	function(
 		path
 	)
@@ -284,7 +298,7 @@ shell_peer.moveToTop =
 /*
 | Inserts some text.
 */
-shell_peer.insertText =
+shell_alter.insertText =
 	function(
 		path,
 		offset,
@@ -306,7 +320,7 @@ shell_peer.insertText =
 /*
 | Removes some text within one node.
 */
-shell_peer.removeText =
+shell_alter.removeText =
 	function(
 		path,
 		at1,
@@ -339,7 +353,7 @@ shell_peer.removeText =
 /*
 | Removes a text spawning over several entities.
 */
-shell_peer.removeRange =
+shell_alter.removeRange =
 	function(
 		path1,
 		at1,
@@ -370,7 +384,7 @@ shell_peer.removeRange =
 
 	if ( path1.equals( path2 ) )
 	{
-		shell_peer.removeText(
+		shell_alter.removeText(
 			path1,
 			at1,
 			at2 - at1
@@ -395,7 +409,7 @@ shell_peer.removeRange =
 		r++
 	)
 	{
-		shell_peer.join(
+		shell_alter.join(
 			path1,
 			root.space.getPath( path1.chop( 1 ) ).length
 		);
@@ -403,21 +417,21 @@ shell_peer.removeRange =
 
 	len2 = root.space.getPath( path1.chop( 1 ) ).length;
 
-	shell_peer.join( path1, len2 );
+	shell_alter.join( path1, len2 );
 
 	if( len2 - at1 + at2 === 0 )
 	{
 		return;
 	}
 
-	shell_peer.removeText( path1, at1, len2 - at1 + at2 );
+	shell_alter.removeText( path1, at1, len2 - at1 + at2 );
 };
 
 
 /*
 | Splits a text node.
 */
-shell_peer.split =
+shell_alter.split =
 	function(
 		path,
 		offset
@@ -438,7 +452,7 @@ shell_peer.split =
 /*
 | Joins a text node with its next one.
 */
-shell_peer.join =
+shell_alter.join =
 	function(
 		path,
 		at1
@@ -459,7 +473,7 @@ shell_peer.join =
 /*
 | Removes an item.
 */
-shell_peer.removeItem =
+shell_alter.removeItem =
 	function(
 		path
 	)

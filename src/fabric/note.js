@@ -12,7 +12,7 @@ var
 	fabric_docItem,
 	fabric_note,
 	jools,
-	shell_peer,
+	shell_alter,
 	shell_style,
 	root,
 	system,
@@ -264,7 +264,7 @@ fabric_note.prototype.dragStop =
 				return;
 			}
 
-			shell_peer.setZone( this.path, zone );
+			shell_alter.setZone( this.path, zone );
 
 			return true;
 

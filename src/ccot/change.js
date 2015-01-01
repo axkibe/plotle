@@ -39,7 +39,7 @@ if( JION )
 				trg :
 					{
 						comment :
-							'source signature',
+							'target signature',
 						json :
 							'true',
 						type :

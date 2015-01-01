@@ -232,7 +232,7 @@ shell_doTracker.prototype.undo =
 			'_redo', this._redo.append( changeWrap )
 		);
 
-	root.link.alter( changeWrap.changeRay.invert, true /* noTrack */ );
+	root.link.alter( changeWrap.createInvert( ) );
 };
 
 
@@ -271,7 +271,7 @@ shell_doTracker.prototype.redo =
 			'_undo', this._undo.append( changeWrap )
 		);
 
-	root.link.alter( changeWrap.changeRay, true /* noTrack */ );
+	root.link.alter( changeWrap.createCopy( ) );
 };
 
 

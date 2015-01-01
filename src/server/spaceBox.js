@@ -226,8 +226,6 @@ server_spaceBox.prototype.appendChanges =
 		{
 			if( error !== null )
 			{
-				jools.log( true, error, changeSkidRay );
-
 				throw new Error( 'Database error' );
 			}
 		}

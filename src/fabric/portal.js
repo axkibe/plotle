@@ -20,8 +20,8 @@ var
 	result_hover,
 	root,
 	shell_accent,
+	shell_alter,
 	shell_fontPool,
-	shell_peer,
 	shell_style,
 	theme;
 
@@ -320,7 +320,7 @@ fabric_portal.prototype.dragStop =
 				return;
 			}
 
-			shell_peer.setZone( this.path, zone );
+			shell_alter.setZone( this.path, zone );
 
 			return true;
 
@@ -805,7 +805,7 @@ fabric_portal.prototype.input =
 	{
 		var line = rx[ 1 ];
 
-		shell_peer.insertText(
+		shell_alter.insertText(
 			this.path.append( section ),
 			mark.caretAt,
 			line
@@ -1028,7 +1028,7 @@ fabric_portal.prototype._keyBackspace =
 		return;
 	}
 
-	shell_peer.removeText(
+	shell_alter.removeText(
 		this.path.append( section ),
 		at - 1,
 		1
@@ -1459,7 +1459,7 @@ fabric_portal.prototype._keyDel =
 		return;
 	}
 
-	shell_peer.removeText(
+	shell_alter.removeText(
 		this.path.append( section ),
 		at,
 		1

@@ -290,7 +290,7 @@ proto.setAction =
 proto.update =
 	function(
 		space,
-		changeWrapRay
+		changes
 	)
 {
 	var
@@ -320,7 +320,7 @@ proto.update =
 			else
 			{
 				sign =
-					changeWrapRay.transform(
+					changes.transform(
 						ccot_sign.create(
 							'path', mark.path.chop( ),
 							'at1', mark.at
@@ -364,7 +364,7 @@ proto.update =
 			else
 			{
 				bSign =
-					changeWrapRay.transform(
+					changes.transform(
 						ccot_sign.create(
 							'path', mark.bPath.chop( ),
 							'at1', mark.bAt
@@ -372,7 +372,7 @@ proto.update =
 					);
 
 				eSign =
-					changeWrapRay.transform(
+					changes.transform(
 						ccot_sign.create(
 							'path', mark.ePath.chop( ),
 							'at1', mark.eAt
@@ -420,8 +420,6 @@ proto.update =
 			'path', this.space.path,
 			'view', this.space.view
 		);
-
-	this.doTracker = this.doTracker.update( changeWrapRay );
 
 	this._discJockey = this._discJockey.create( 'mark', mark );
 

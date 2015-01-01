@@ -16,7 +16,7 @@ var
 	marks_range,
 	root,
 	shell_fontPool,
-	shell_peer,
+	shell_alter,
 	theme;
 
 
@@ -806,7 +806,7 @@ fabric_para.prototype.input =
 	{
 		line = rx[ 1 ];
 
-		shell_peer.insertText(
+		shell_alter.insertText(
 			textPath,
 			caretAt,
 			line
@@ -817,7 +817,7 @@ fabric_para.prototype.input =
 			// FIXME, somehow use changes
 			// over return values more elegantly
 			r =
-				shell_peer.split( textPath, caretAt + line.length );
+				shell_alter.split( textPath, caretAt + line.length );
 
 			doc =
 				r.tree.getPath(
@@ -1048,7 +1048,7 @@ fabric_para.prototype._keyBackspace =
 
 	if( at > 0 )
 	{
-		shell_peer.removeText( this.textPath, at - 1, 1 );
+		shell_alter.removeText( this.textPath, at - 1, 1 );
 
 		return;
 	}
@@ -1059,7 +1059,7 @@ fabric_para.prototype._keyBackspace =
 	{
 		ve = doc.atRank( r - 1 );
 
-		shell_peer.join( ve.textPath, ve.text.length );
+		shell_alter.join( ve.textPath, ve.text.length );
 	}
 };
 
@@ -1082,7 +1082,7 @@ fabric_para.prototype._keyDel =
 
 	if( at < this.text.length )
 	{
-		shell_peer.removeText( this.textPath, at, 1 );
+		shell_alter.removeText( this.textPath, at, 1 );
 
 		return;
 	}
@@ -1091,7 +1091,7 @@ fabric_para.prototype._keyDel =
 
 	if( r < doc.ranks.length - 1 )
 	{
-		shell_peer.join(
+		shell_alter.join(
 			this.textPath,
 			this.text.length
 		);
@@ -1201,7 +1201,7 @@ fabric_para.prototype._keyEnter =
 		// bAt
 	)
 {
-	shell_peer.split( this.textPath, at );
+	shell_alter.split( this.textPath, at );
 };
 
 
