@@ -58,10 +58,10 @@ Constructor =
 /**/	}
 /**/}
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
 };
 
 

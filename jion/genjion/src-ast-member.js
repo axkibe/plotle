@@ -65,10 +65,10 @@ Constructor =
 
 	this.member = v_member;
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
 };
 
 

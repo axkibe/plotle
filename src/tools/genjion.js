@@ -21,6 +21,8 @@ GLOBAL.FORCE_JION_LOADING = true;
 
 GLOBAL.JION = false;
 
+GLOBAL.FREEZE = true;
+
 GLOBAL.SERVER = true;
 
 GLOBAL.SHELL = false;

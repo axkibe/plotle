@@ -107,6 +107,16 @@ function translateTypes( o )
 
 		switch( o.type )
 		{
+			case 'Note' : o.type = 'fabric_note'; break;
+
+			case 'Doc' : o.type = 'fabric_doc'; break;
+
+			case 'Para' : o.type = 'fabric_para'; break;
+
+			case 'Point' : o.type = 'euclid_point'; break;
+
+			case 'Rect' : o.type = 'euclid_rect'; break;
+
 			case 'visual_doc' : o.type = 'fabric_doc'; break;
 
 			case 'visual_label' : o.type = 'fabric_label'; break;
@@ -120,6 +130,35 @@ function translateTypes( o )
 			case 'visual_relation' : o.type = 'fabric_relation'; break;
 		}
 	}
+
+	var extra =
+	{
+		'Label' : true,
+		'Note' : true,
+		'Para' : true,
+		'Portal' : true,
+		'Relation' : true
+	};
+
+	if( o.twig && extra[ o.twig.type ] === true )
+	{
+		for( key in o.twig )
+		{
+			if( key === 'type' )
+			{
+				console.log( 'Extra translate', o.type, o.twig.type );
+			}
+			else
+			{
+				o[ key ] = o.twig[ key ];
+			}
+		}
+
+		delete o.twig;
+
+		keys = Object.keys( o );
+	}
+
 
 	for(
 		a = 0, aZ = keys.length;
@@ -144,7 +183,22 @@ function translateTypes( o )
 */
 function translateChange( o )
 {
+	var
+		chgX;
+
+	chgX = o.chgX,
+
+	delete o.chgX;
+
 	o.type = 'database_changeSkid';
+
+	o.changeRay = {
+		type : 'ccot_changeRay',
+		ray :
+			Array.isArray( chgX )
+			? chgX
+			: [ chgX ]
+	};
 
 	translateTypes( o );
 

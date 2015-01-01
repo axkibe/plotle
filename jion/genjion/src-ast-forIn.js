@@ -71,10 +71,10 @@ Constructor =
 
 	this.variable = v_variable;
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
 };
 
 

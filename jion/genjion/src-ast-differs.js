@@ -65,10 +65,10 @@ Constructor =
 
 	this.right = v_right;
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
 };
 
 

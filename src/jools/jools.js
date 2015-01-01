@@ -303,7 +303,7 @@ jools.lazyValue =
 	)
 {
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	proto.__lazy = true;
 /**/}
@@ -320,7 +320,7 @@ jools.lazyValue =
 				var
 					ckey;
 
-/**/			if( CHECK )
+/**/			if( FREEZE )
 /**/			{
 /**/				if( this.__lazy[ key ] !== undefined )
 /**/				{
@@ -331,7 +331,7 @@ jools.lazyValue =
 /**/					this.__lazy[ key ] = getter.call( this )
 /**/				);
 /**/			}
-				else
+/**/			else
 				{
 					ckey = '__lazy_' + key;
 
@@ -367,7 +367,7 @@ jools.aheadValue =
 	var
 		ckey;
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	if( value === undefined )
 /**/	{
@@ -388,7 +388,7 @@ jools.aheadValue =
 /**/		obj.__lazy[ key ] = value
 /**/	);
 /**/}
-	else
+/**/else
 	{
 		ckey = '__lazy_' + key;
 
@@ -415,7 +415,7 @@ jools.lazyFunctionString =
 		getter
 	)
 {
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	proto.__lazy = true;
 /**/}
@@ -426,36 +426,36 @@ jools.lazyFunctionString =
 		var
 			ckey;
 
-/**/		if( CHECK )
+/**/	if( FREEZE )
+/**/	{
+/**/		ckey = key + '__' + str;
+/**/
+/**/		if( this.__lazy[ ckey ] !== undefined )
 /**/		{
-/**/			ckey = key + '__' + str;
-/**/
-/**/			if( this.__lazy[ ckey ] !== undefined )
-/**/			{
-/**/				return this.__lazy[ ckey ];
-/**/			}
-/**/
-/**/			return(
-/**/				this.__lazy[ ckey ] = getter.call( this, str )
-/**/			);
+/**/			return this.__lazy[ ckey ];
 /**/		}
-			else
+/**/
+/**/		return(
+/**/			this.__lazy[ ckey ] = getter.call( this, str )
+/**/		);
+/**/	}
+/**/	else
+		{
+			ckey = '__lazy_' + key + '__' + str;
+
+			if( this[ ckey ] !== undefined )
 			{
-				ckey = '__lazy_' + key + '__' + str;
-
-				if( this[ ckey ] !== undefined )
-				{
-					return this[ ckey ];
-				}
-
-				return(
-					jools.innumerable(
-						this,
-						ckey,
-						getter.call( this, str )
-					)
-				);
+				return this[ ckey ];
 			}
+
+			return(
+				jools.innumerable(
+					this,
+					ckey,
+					getter.call( this, str )
+				)
+			);
+		}
 	};
 };
 

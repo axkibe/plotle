@@ -18,6 +18,7 @@
 		"APP" : true,
 		"CHECK" : true,
 		"FORCE_JION_LOADING" : true,
+		"FREEZE" : true,
 		"JION" : true,
 		"SHELL" : true,
 		"SHELLAPP" : true,

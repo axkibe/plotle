@@ -205,7 +205,7 @@ fabric_label.prototype.handles =
 		nw : true
 	};
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( fabric_label.prototype.handles );
 /**/}

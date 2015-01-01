@@ -70,11 +70,11 @@ jion_idRepository.prototype._init =
 	{
 		this.units = { };
 
-/**/	if( CHECK )
+/**/	if( FREEZE )
 /**/	{
 /**/		Object.freeze( this.units );
 /**/	}
-/**/}
+	}
 };
 
 
@@ -141,7 +141,7 @@ jion_idRepository.createFromIDStrings =
 		}
 	}
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	if( units )
 /**/	{
@@ -208,7 +208,7 @@ jools.lazyValue(
 
 	ul = Object.keys( this.units ).sort( );
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( ul );
 /**/}
@@ -263,7 +263,7 @@ jools.lazyValue(
 
 	ids.sort( jion_id.compare );
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( ids );
 /**/}
@@ -289,10 +289,10 @@ jion_idRepository.prototype.nameListOfUnit =
 
 	nameList = Object.keys( unit ).sort( );
 
-	if( CHECK )
-	{
-		Object.freeze( nameList );
-	}
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( nameList );
+/**/}
 
 	return nameList;
 };
@@ -338,10 +338,10 @@ jion_idRepository.prototype._addID =
 
 		primitives[ d.name ] = d;
 
-		if( CHECK )
-		{
-			Object.freeze( primitives );
-		}
+/**/	if( FREEZE )
+/**/	{
+/**/		Object.freeze( primitives );
+/**/	}
 
 		return this.create( 'primitives', primitives );
 	}
@@ -372,7 +372,7 @@ jion_idRepository.prototype._addID =
 
 	units[ d.unit ] = unit;
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( unit );
 /**/
@@ -454,7 +454,7 @@ jion_idRepository.prototype._addIDRepository =
 					}
 				}
 
-/**/			if( CHECK )
+/**/			if( FREEZE )
 /**/			{
 /**/				Object.freeze( unit );
 /**/			}
@@ -464,7 +464,7 @@ jion_idRepository.prototype._addIDRepository =
 
 		}
 
-/**/	if( CHECK )
+/**/	if( FREEZE )
 /**/	{
 /**/		Object.freeze( units );
 /**/	}

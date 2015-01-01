@@ -68,7 +68,27 @@ config.develNoBundle = true;
 /*
 | If true checking code is turned on in shell
 */
-config.shellCheck = true;
+config.shell_check = true;
+
+
+/*
+| If true freezing objects is turned on in shell
+*/
+config.shell_check = true;
+
+
+/*
+| If true checking code is turned on in shell
+*/
+config.server_check = true;
+
+
+/*
+| If true freezing objects is turned on in shell
+|
+| NOTE: this make the server very slow!
+*/
+config.server_freeze = false;
 
 
 /*
@@ -99,7 +119,7 @@ config.extraMangle = true;
 /*
 | If true "beautifies" uglify output.
 */
-config.beautify = true;
+config.beautify = false;
 
 
 /*

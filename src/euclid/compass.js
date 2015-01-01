@@ -32,9 +32,9 @@ euclid_compass.dir8CWCF = [
 ];
 
 
-if( CHECK )
-{
-	Object.freeze( euclid_compass.dir8CWCF );
-}
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( euclid_compass.dir8CWCF );
+/**/}
 
 } )( );

@@ -62,10 +62,10 @@ Constructor =
 
 	this.number = v_number;
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
 };
 
 

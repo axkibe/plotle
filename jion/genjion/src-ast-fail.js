@@ -62,10 +62,10 @@ Constructor =
 
 	this.message = v_message;
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
 };
 
 

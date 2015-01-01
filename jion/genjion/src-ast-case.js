@@ -68,12 +68,12 @@ Constructor =
 
 	this.ray = ray;
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( ray );
-/**/
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( ray );
+
+		Object.freeze( this );
+	}
 };
 
 

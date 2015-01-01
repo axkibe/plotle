@@ -9,6 +9,7 @@
 ( function( ) {
 'use strict';
 
+var config = require( '../../config' );
 
 /*
 | Globals.
@@ -22,8 +23,11 @@ GLOBAL.FORCE_JION_LOADING = false;
 // under
 GLOBAL.SHELLAPP = 'shell';
 
-// server keeps checking on by default
-GLOBAL.CHECK = true;
+// server checking
+GLOBAL.CHECK = config.server_check;
+
+// server object freezing
+GLOBAL.FREEZE = config.server_freeze;
 
 // this is not a jion creation
 GLOBAL.JION = false;
@@ -34,9 +38,7 @@ GLOBAL.SERVER = true;
 // and not a shell
 GLOBAL.SHELL = false;
 
-
 var
-	config,
 	database_repository,
 	db_version,
 	fabric_spaceRef,
@@ -64,8 +66,6 @@ var
 	zlib;
 
 db_version = 8;
-
-config = require( '../../config' );
 
 fs = require( 'fs' );
 
@@ -583,7 +583,8 @@ prototype.prepareInventory =
 						negate_iife : true,
 						global_defs :
 						{
-							'CHECK' : config.shellCheck,
+							'CHECK' : config.shell_check,
+							'FREEZE' : config.shell_freeze,
 							'JION' : false,
 							'SERVER' : false,
 							'SHELL' : true,
@@ -745,6 +746,7 @@ prototype.prepareInventory =
 
 /*
 | Prepends the flags to cconfig
+|
 | Used by development.
 */
 prototype.prependConfigFlags =
@@ -762,7 +764,8 @@ prototype.prependConfigFlags =
 				resource.create(
 					'data',
 						'var JION = false;\n'
-						+ 'var CHECK = true;\n'
+						+ 'var CHECK = ' + config.shell_check + ';\n'
+						+ 'var FREEZE = ' + config.shell_freeze + ';\n'
 						+ 'var SERVER = false;\n'
 						+ 'var SHELL = true;\n'
 						+ resource.data
@@ -1449,7 +1452,7 @@ prototype.webAjax =
 
 		try
 		{
-			// FIXME remove
+			/* FUTURE REMOTE
 			if( cmd.type === 'request_alter' )
 			{
 				console.log( 'DELAYING');
@@ -1458,6 +1461,7 @@ prototype.webAjax =
 
 				console.log( 'EOD');
 			}
+			*/
 
 			asw = yield* server_requestHandler.serve( cmd, result );
 		}

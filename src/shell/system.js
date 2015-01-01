@@ -329,7 +329,7 @@ var _settings =
 		dragbox : 10
 	};
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( _settings );
 /**/}

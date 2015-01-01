@@ -32,7 +32,7 @@ _mapping =
 	};
 
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( _mapping );
 /**/}

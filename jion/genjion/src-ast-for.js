@@ -74,10 +74,10 @@ Constructor =
 
 	this.iterate = v_iterate;
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
 };
 
 

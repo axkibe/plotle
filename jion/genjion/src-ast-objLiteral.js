@@ -65,14 +65,14 @@ Constructor =
 
 	this.ranks = ranks;
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( twig );
-/**/
-/**/	Object.freeze( ranks );
-/**/
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( twig );
+
+		Object.freeze( ranks );
+
+		Object.freeze( this );
+	}
 };
 
 

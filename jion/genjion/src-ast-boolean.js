@@ -62,10 +62,10 @@ Constructor =
 
 	this.boolean = v_boolean;
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
 };
 
 

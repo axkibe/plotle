@@ -717,15 +717,14 @@ fabric_para.prototype.locateOffset =
 			);
 	}
 
+	// FUTURE make it a jion result
 	result =
 		{
-			p :
-				p,
-			line :
-				lineN
+			p : p,
+			line : lineN
 		};
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( result );
 /**/}
@@ -990,41 +989,20 @@ var
 
 _keyMap =
 	{
-		'backspace' :
-			'_keyBackspace',
-
-		'del' :
-			'_keyDel',
-
-		'down' :
-			'_keyDown',
-
-		'end' :
-			'_keyEnd',
-
-		'enter' :
-			'_keyEnter',
-
-		'left' :
-			'_keyLeft',
-
-		'pagedown' :
-			'_keyPageDown',
-
-		'pageup' :
-			'_keyPageUp',
-
-		'pos1' :
-			'_keyPos1',
-
-		'right' :
-			'_keyRight',
-
-		'up' :
-			'_keyUp'
+		'backspace' : '_keyBackspace',
+		'del' : '_keyDel',
+		'down' : '_keyDown',
+		'end' : '_keyEnd',
+		'enter' : '_keyEnter',
+		'left' : '_keyLeft',
+		'pagedown' : '_keyPageDown',
+		'pageup' : '_keyPageUp',
+		'pos1' : '_keyPos1',
+		'right' : '_keyRight',
+		'up' : '_keyUp'
 	};
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( _keyMap );
 /**/}

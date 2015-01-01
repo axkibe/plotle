@@ -71,10 +71,10 @@ Constructor =
 
 	this.tokens = v_tokens;
 
-/**/if( CHECK )
-/**/{
-/**/	Object.freeze( this );
-/**/}
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
 };
 
 

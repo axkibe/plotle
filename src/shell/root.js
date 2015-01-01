@@ -55,42 +55,46 @@ var
 /**/if( CHECK )
 /**/{
 /**/	_modes =
-/**/		Object.freeze( {
+/**/		{
 /**/			// Creating a new item.
-/**/			'Create' :
-/**/				true,
+/**/			'Create' : true,
+/**/
 /**/			// Help.
-/**/			'Help' :
-/**/				true,
+/**/			'Help' : true,
+/**/
 /**/			// Logging in.
-/**/			'login' :
-/**/				true,
+/**/			'login' : true,
+/**/
 /**/			// Moveing To another space.
-/**/			'moveTo' :
-/**/				true,
+/**/			'moveTo' : true,
+/**/
 /**/			// Standard selection, moving stuff around.
-/**/			'Normal' :
-/**/				true,
+/**/			'Normal' : true,
+/**/
 /**/			// User does not have access to a space.
-/**/			'noAccessToSpace' :
-/**/				true,
+/**/			'noAccessToSpace' : true,
+/**/
 /**/			// space does not exist,
 /**/			// but user is allowed to create it.
-/**/			'nonExistingSpace' :
-/**/				true,
+/**/			'nonExistingSpace' : true,
+/**/
 /**/			// Signing up
-/**/			'signUp' :
-/**/				true,
+/**/			'signUp' : true,
+/**/
 /**/			// space view
-/**/			'space' :
-/**/				true,
+/**/			'space' : true,
+/**/
 /**/			// user view
-/**/			'user' :
-/**/				true,
+/**/			'user' : true,
+/**/
 /**/			// welcome view
-/**/			'welcome' :
-/**/				true
-/**/		} );
+/**/			'welcome' : true
+/**/		};
+/**/}
+/**/
+/**/if( CHECK && FREEZE )
+/**/{
+/**/	Object.freeze( _modes );
 /**/}
 
 

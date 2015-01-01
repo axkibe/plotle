@@ -366,7 +366,7 @@ jools.lazyValue(
 					)
 			};
 
-/**/	if( CHECK )
+/**/	if( FREEZE )
 /**/	{
 /**/		Object.freeze( asw );
 /**/	}

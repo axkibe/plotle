@@ -144,4 +144,16 @@ changeSkid.prototype.transform =
 };
 
 
+/*
+| changes a data tree.
+*/
+changeSkid.prototype.changeTree =
+	function(
+		tree
+	)
+{
+	return this.changeRay.changeTree( tree );
+};
+
+
 }( ) );

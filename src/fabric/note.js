@@ -402,7 +402,7 @@ fabric_note.prototype.handles =
 		nw : true
 	};
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( fabric_note.prototype.handles );
 /**/}

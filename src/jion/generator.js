@@ -318,7 +318,7 @@ generator.prototype._init =
 
 		attr =
 		attributes[ name ] =
-			Object.freeze( {
+			Object.freeze( { // FIXME
 				allowsNull :
 					jAttr.allowsNull
 					|| shorthand.$null.equals( defaultValue ),
@@ -331,7 +331,7 @@ generator.prototype._init =
 					jAttr.comment,
 				concerns :
 					jAttr.concerns
-					? Object.freeze( {
+					? Object.freeze( { // FIXME
 							id : concernsID,
 							func : jAttr.concerns.func,
 							args : jAttr.concerns.args,
@@ -352,6 +352,13 @@ generator.prototype._init =
 	}
 
 	attrList = Object.keys( attributes ).sort ( );
+
+	if( FREEZE )
+	{
+		Object.freeze( attrList );
+
+		Object.freeze( attributes );
+	}
 
 	this.attrList = Object.freeze( attrList );
 
@@ -408,7 +415,12 @@ generator.prototype._init =
 		}
 	}
 
-	this.constructorList = Object.freeze( constructorList );
+	if( FREEZE )
+	{
+		Object.freeze( constructorList );
+	}
+
+	this.constructorList = constructorList;
 
 	if( jion.twig )
 	{
@@ -735,7 +747,7 @@ generator.prototype.genConstructor =
 		freezeBlock
 		.ast( 'Object.freeze( this )' );
 
-	block = block.$check( freezeBlock );
+	block = block.$if( 'FREEZE', freezeBlock );
 
 	constructor = $func( block );
 
@@ -2494,7 +2506,8 @@ generator.prototype.genToJSON =
 	block =
 		block
 		.$assign( 'json', olit )
-		.$check(
+		.$if(
+			'FREEZE',
 			ast( 'Object.freeze( json )' )
 		)
 		.$return(

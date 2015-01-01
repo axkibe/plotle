@@ -50,9 +50,8 @@ if( JION )
 							'node currently hovered upon',
 						type :
 							'jion_path',
-						// FIXME undefined
 						defaultValue :
-							null
+							undefined
 					},
 				mark :
 					{
@@ -186,14 +185,12 @@ fabric_portal.prototype._init =
 */
 var _spaceFields =
 	{
-		spaceUser :
-			'_fieldSpaceUser',
-		spaceTag :
-				'_fieldSpaceTag'
+		spaceUser : '_fieldSpaceUser',
+		spaceTag : '_fieldSpaceTag'
 	};
 
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( _spaceFields );
 /**/}
@@ -237,7 +234,7 @@ fabric_portal.prototype.handles =
 		nw : true
 	};
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( fabric_portal.prototype.handles );
 /**/}
@@ -828,7 +825,7 @@ if( SHELL )
 			moveTo : shell_fontPool.get( 13, 'cm' )
 		};
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( fabric_portal.prototype._fonts );
 /**/}
@@ -1648,7 +1645,7 @@ jools.lazyValue(
 					)
 			};
 
-/**/	if( CHECK )
+/**/	if( FREEZE )
 /**/	{
 /**/		Object.freeze( result );
 /**/	}

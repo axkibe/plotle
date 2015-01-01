@@ -193,7 +193,7 @@ shell_fontPool.get =
 };
 
 
-/**/if( CHECK )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( shell_fontPool );
 /**/}

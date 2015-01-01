@@ -129,8 +129,7 @@ server_spaceBox.loadSpace =
 		changeSkids =
 			changeSkids.create( 'ray:set', seqZ++, changeSkid );
 
-		// FIXME remove changeRay below
-		space = changeSkid.changeRay.changeTree( space ).tree;
+		space = changeSkid.changeTree( space ).tree;
 	}
 
 	return(

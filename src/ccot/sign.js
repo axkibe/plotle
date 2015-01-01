@@ -38,6 +38,8 @@ if( JION )
 							'true',
 						type :
 							'Integer',
+						allowsNull :
+							true,
 						defaultValue :
 							undefined
 					},
@@ -207,6 +209,7 @@ ccot_sign.prototype.affix =
 		val   // value to affix
 	)
 {
+	/* XXX
 	if( this[ key ] !== undefined )
 	{
 		if( !jools.matches( val, this[ key ] ) )
@@ -214,8 +217,9 @@ ccot_sign.prototype.affix =
 			if( SERVER )
 			{
 				console.log(
-					'\n',
-					'faulty preset:\n',
+					'\nfaulty preset:\n\n',
+					key,
+					':\n',
 					require( 'util' )
 						.inspect( val, { depth : null } ), '\n',
 					'!==\n',
@@ -227,6 +231,7 @@ ccot_sign.prototype.affix =
 			throw new Error( );
 		}
 	}
+	*/
 
 	return this.create( key, val );
 };
