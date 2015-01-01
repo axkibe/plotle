@@ -105,7 +105,7 @@ config.beautify = true;
 /*
 | Max. number of undo events queued.
 */
-config.maxUndo = 5000;
+config.maxUndo = 1000;
 
 
 /*
