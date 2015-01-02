@@ -197,7 +197,7 @@ fabric_relation.spawn =
 			item2.key
 		);
 
-	key = result.reaction.trg.path.get( -1 );
+	key = result.reaction.changeRay.get( 0 ).trg.path.get( -1 );
 
 	root.setMark(
 		marks_caret.create(

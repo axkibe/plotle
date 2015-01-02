@@ -840,7 +840,8 @@ fabric_space.prototype.dragStop =
 
 					result = shell_alter.newNote( note.zone );
 
-					key = result.reaction.get( 0 ).trg.path.get( -1 );
+					key =
+						result.reaction.changeRay.get( 0 ).trg.path.get( -1 );
 
 					root.setMark(
 						marks_caret.create(
@@ -901,7 +902,8 @@ fabric_space.prototype.dragStop =
 							label.doc.fontsize
 						);
 
-					key = result.reaction.get( 0 ).trg.path.get( -1 );
+					key =
+						result.reaction.changeRay.get( 0 ).trg.path.get( -1 );
 
 					root.setMark(
 						marks_caret.create(
@@ -940,7 +942,8 @@ fabric_space.prototype.dragStop =
 							'home'
 						);
 
-					key = result.reaction.get( 0 ).trg.path.get( -1 );
+					key =
+						result.reaction.changeRay.get( 0 ).trg.path.get( -1 );
 
 					root.setMark(
 						marks_caret.create(
