@@ -31,7 +31,7 @@ config.ip = null;
 /*
 | The port to listen on.
 */
-config.port = 80;
+config.port = 8833;
 
 
 /*
@@ -55,26 +55,26 @@ config.database_name = 'ideoloom-8';
 /*
 | Determines the amount of checking and complaining if things go wrong.
 */
-config.develShell = false;
+config.develShell = true;
 
 
 /*
 | Do not provide a bundle.
 | Only to be used with develShell
 */
-config.develNoBundle = false;
+config.develNoBundle = true;
 
 
 /*
 | If true checking code is turned on in shell
 */
-config.shell_check = false;
+config.shell_check = true;
 
 
 /*
 | If true freezing objects is turned on in shell
 */
-config.shell_freeze = false;
+config.shell_freeze = true;
 
 
 /*
@@ -107,7 +107,7 @@ config.noWrite = false;
 /*
 | If true "uglifies" the javascript pack, minimizing its size.
 */
-config.uglify = true;
+config.uglify = false;
 
 
 /*
@@ -131,7 +131,7 @@ config.maxUndo = 1000;
 /*
 | If true formats messages and JSON with whitespace/newlines
 */
-config.debug.puffed = false;
+config.debug.puffed = true;
 
 
 /*
@@ -145,15 +145,13 @@ config.debug.weinre = false;
 /*
 | If set, accept only connections from these addresses
 */
-config.whiteList = null;
-	/*
+config.whiteList =
 	{
 		'127.0.0.1' : true,
 		'::ffff:127.0.0.1' : true,
 		'131.130.188.200' : true,
 		'::ffff:131.130.188.224' : true
 	};
-	*/
 
 /*
 | enable specific logging categories

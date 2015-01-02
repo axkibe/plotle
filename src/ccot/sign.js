@@ -209,7 +209,7 @@ ccot_sign.prototype.affix =
 		val   // value to affix
 	)
 {
-	/* XXX
+	/* TODO
 	if( this[ key ] !== undefined )
 	{
 		if( !jools.matches( val, this[ key ] ) )

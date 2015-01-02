@@ -178,13 +178,7 @@ forms_login.prototype.pushButton =
 
 		default :
 
-			throw new Error(
-				CHECK
-				&&
-				(
-					'unknown button pushed: ' + buttonName
-				)
-			);
+			throw new Error( );
 	}
 };
 

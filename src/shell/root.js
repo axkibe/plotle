@@ -1259,8 +1259,7 @@ proto.onAcquireSpace =
 				)
 		);
 
-	// FIXME have it use a spaceRef XXX
-	this.arrivedAtSpace( spaceRef.username, spaceRef.tag, access );
+	this.arrivedAtSpace( spaceRef, access );
 
 	this._draw( );
 };
@@ -1279,7 +1278,6 @@ proto.onAuth =
 
 	if( this._mode === 'login' )
 	{
-		// XXX
 		this._formJockey.get( 'login' ).onAuth( request, reply );
 
 		return;
@@ -1374,22 +1372,21 @@ proto.logout =
 */
 proto.arrivedAtSpace =
 	function(
-		spaceUser,
-		spaceTag,
+		spaceRef,
 		access
 	)
 {
 	this._discJockey =
 		this._discJockey.create(
 			'access', access,
-			'spaceUser', spaceUser,
-			'spaceTag', spaceTag
+			'spaceUser', spaceRef.username, // FIXME
+			'spaceTag', spaceRef.tag // FIXME
 		);
 
 	this._formJockey =
 		this._formJockey.create(
-			'spaceUser', spaceUser,
-			'spaceTag', spaceTag
+			'spaceUser', spaceRef.username, // FIXME
+			'spaceTag', spaceRef.tag // FIXME
 		);
 
 	root.setMode( 'Normal' );
