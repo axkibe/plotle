@@ -1353,7 +1353,7 @@ proto.onRegister =
 proto.logout =
 	function( )
 {
-	if( this._$visitUser )
+	if( this._visitUser )
 	{
 		this.setUser(
 			this._visitUser,

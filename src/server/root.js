@@ -1452,7 +1452,8 @@ prototype.webAjax =
 
 		try
 		{
-			/* FUTURE REMOTE
+			// FUTURE REMOTE
+			/*
 			if( cmd.type === 'request_alter' )
 			{
 				console.log( 'DELAYING');
@@ -1473,11 +1474,7 @@ prototype.webAjax =
 			}
 			else
 			{
-				jools.log(
-					'web',
-					'not ok',
-					err.message
-				);
+				jools.log( 'web', 'not ok', err.message );
 
 				asw = {
 					ok : false,

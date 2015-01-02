@@ -111,8 +111,6 @@ shell_doTracker.prototype.update =
 	var
 		a,
 		aZ,
-		b,
-		bZ,
 		cw,
 		undo,
 		redo;
@@ -129,55 +127,14 @@ shell_doTracker.prototype.update =
 	{
 		// nothing to do
 
-		return;
+		return this;
 	}
 
 	undo = this._undo;
 
 	redo = this._redo;
 
-	// updates any new sequence IDs received
-	// from peer.
-
-	// FUTURE this can seriously optimized
-	for(
-		a = 0, aZ = changeWrapRay.length;
-		a < aZ;
-		a++
-	)
-	{
-		cw = changeWrapRay.get( a );
-
-		for(
-			b = 0, bZ = undo.length;
-			b < bZ;
-			b++
-		)
-		{
-			if( cw.cid === undo.get( b ).cid )
-			{
-				undo = undo.set( b, cw );
-			}
-		}
-
-		for(
-			b = 0, bZ = redo.length;
-			b < bZ;
-			b++
-		)
-		{
-			if( cw.cid === redo.get( b ).cid )
-			{
-				redo = redo.set( b, cw );
-			}
-		}
-	}
-
 	// Adapts the doTracker stacks
-
-	// FUTURE this can be optimized
-	//        by skipping all non-relevant
-	//        loop iterations.
 
 	for(
 		a = 0, aZ = undo.length;
@@ -187,24 +144,19 @@ shell_doTracker.prototype.update =
 	{
 		cw = undo.get( a );
 
-		console.log( 'UT', cw.seq, changeWrapRay.get( 0 ).seq );
+		cw = changeWrapRay.transform( cw );
 
-		if( cw.seq < changeWrapRay.get( 0 ).seq )
+		// the change vanished by transformation
+		if( cw === null )
 		{
-			cw = changeWrapRay.transform( cw );
+			undo = undo.remove( a-- );
 
-			// the change vanished by transformation
-			if( cw === null )
-			{
-				undo = undo.remove( a-- );
+			aZ--;
 
-				aZ--;
-
-				continue;
-			}
-
-			undo = undo.set( a, cw );
+			continue;
 		}
+
+		undo = undo.set( a, cw );
 	}
 
 	for(
@@ -215,22 +167,19 @@ shell_doTracker.prototype.update =
 	{
 		cw = redo.get( a );
 
-		if( cw.seq < changeWrapRay.get( 0 ).seq )
+		cw = changeWrapRay.transform( cw );
+
+		// the change vanished by transformation
+		if( cw === null )
 		{
-			cw = changeWrapRay.transform( cw );
+			redo = redo.remove( a-- );
 
-			// the change vanished by transformation
-			if( cw === null )
-			{
-				redo = redo.remove( a-- );
+			aZ--;
 
-				aZ--;
-
-				continue;
-			}
-
-			redo = redo.set( a, cw );
+			continue;
 		}
+
+		redo = redo.set( a, cw );
 	}
 
 	return this.create( '_undo', undo, '_redo', redo );
@@ -266,13 +215,15 @@ shell_doTracker.prototype.undo =
 
 	undo = undo.remove( undo.length - 1 );
 
+	changeWrap = changeWrap.createInvert( );
+
 	root.doTracker =
 		this.create(
 			'_undo', undo,
 			'_redo', this._redo.append( changeWrap )
 		);
 
-	root.link.alter( changeWrap.createInvert( ) );
+	root.link.alter( changeWrap );
 };
 
 
@@ -303,6 +254,8 @@ shell_doTracker.prototype.redo =
 
 	changeWrap = redo.get( redo.length - 1 );
 
+	changeWrap = changeWrap.createInvert( );
+
 	redo = redo.remove( redo.length - 1 );
 
 	root.doTracker =
@@ -311,7 +264,7 @@ shell_doTracker.prototype.redo =
 			'_undo', this._undo.append( changeWrap )
 		);
 
-	root.link.alter( changeWrap.createCopy( ) );
+	root.link.alter( changeWrap );
 };
 
 

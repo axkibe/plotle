@@ -55,26 +55,26 @@ config.database_name = 'ideoloom-8';
 /*
 | Determines the amount of checking and complaining if things go wrong.
 */
-config.develShell = true;
+config.develShell = false;
 
 
 /*
 | Do not provide a bundle.
 | Only to be used with develShell
 */
-config.develNoBundle = true;
+config.develNoBundle = false;
 
 
 /*
 | If true checking code is turned on in shell
 */
-config.shell_check = true;
+config.shell_check = false;
 
 
 /*
 | If true freezing objects is turned on in shell
 */
-config.shell_check = true;
+config.shell_freeze = false;
 
 
 /*
@@ -107,7 +107,7 @@ config.noWrite = false;
 /*
 | If true "uglifies" the javascript pack, minimizing its size.
 */
-config.uglify = false;
+config.uglify = true;
 
 
 /*
@@ -131,7 +131,7 @@ config.maxUndo = 1000;
 /*
 | If true formats messages and JSON with whitespace/newlines
 */
-config.debug.puffed = true;
+config.debug.puffed = false;
 
 
 /*
@@ -145,13 +145,15 @@ config.debug.weinre = false;
 /*
 | If set, accept only connections from these addresses
 */
-config.whiteList =
+config.whiteList = null;
+	/*
 	{
 		'127.0.0.1' : true,
 		'::ffff:127.0.0.1' : true,
 		'131.130.188.200' : true,
 		'::ffff:131.130.188.224' : true
 	};
+	*/
 
 /*
 | enable specific logging categories

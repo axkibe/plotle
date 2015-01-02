@@ -419,11 +419,12 @@ net_link.prototype._onUpdate =
 
 	if( report.length > 0 )
 	{
-		root.update( cSpace, report, changeWrapRay );
+		root.update( cSpace, report );
 	}
 
 	// FUTURE
-	root.doTracker = root.doTracker.update( changeWrapRay );
+	//root.doTracker = root.doTracker.update( changeWrapRay );
+	root.doTracker = root.doTracker.update( report );
 
 	if( gotOwnChgs )
 	{

@@ -79,22 +79,6 @@ if( SERVER )
 }
 
 
-
-/*
-| Creates a copy of the change wrap
-| with a new change id and no sequence id.
-*/
-ccot_changeWrap.prototype.createCopy =
-	function( )
-{
-	return(
-		ccot_changeWrap.create(
-			'cid', jools.uid( ),
-			'changeRay', this.changeRay
-		)
-	);
-};
-
 /*
 | Creates an inverted changeWrap.
 |

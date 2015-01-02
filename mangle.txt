@@ -17,13 +17,8 @@
 . PSE_M1
 > Portal
 . Remove
-. _redraw
-. _visitPasshash
-. _visitUser
 . __lazy
 . _arrow
-. _backAt
-. _backPath
 . _base1
 . _base2
 . _blink
@@ -56,8 +51,6 @@
 . _font
 . _fonts
 . _formJockey
-. _frontAt
-. _frontPath
 . _getOffsetAt
 . _getRangeShape
 . _gradientPC
@@ -81,7 +74,6 @@
 . _keyRight
 . _keyTab
 . _keyUp
-. _lazy_
 . _locateOffset
 . _mode
 . _moveTo
@@ -112,7 +104,6 @@
 . _outbox
 . _pageUpDown
 . _passMask
-. _path
 . _pitch
 . _pointingHover
 . _postbox
@@ -120,6 +111,7 @@
 . _rSeq
 . _rSpace
 . _redo
+. _redraw
 . _releaseEvents
 . _repeatHover
 . _sendChanges
@@ -130,7 +122,6 @@
 . _sketch
 . _sketchGeneric
 . _sketchRect
-. _sliced
 . _specialKey
 . _steerAttention
 . _testInput
@@ -139,9 +130,11 @@
 . _transformChangeRay
 . _transformChangeWrap
 . _transformChangeWrapRay
+. _transformSign
 . _transformSignInsert
 . _transformSignJoin
 . _transformSignRank
+. _transformSignRay
 . _transformSignRemove
 . _transformSignSet
 . _transformSignSplit
@@ -149,6 +142,8 @@
 . _update
 . _useCapture
 . _userIsGuest
+. _visitPasshash
+. _visitUser
 . _widgetPath
 . _x
 . _xhr
@@ -242,7 +237,6 @@
 . checkbox
 . checkboxCheck
 . checked
-> chgX
 . chop
 > cid
 . clear
@@ -258,16 +252,13 @@
 . color
 . command
 . comment
-. compass
 . compute
 . computeEllipse
 . concat
 . concerns
 . concernsHover
 . concernsMark
-> configurable
 . connect
-. constants
 . containsPath
 > content
 . copy
@@ -281,6 +272,7 @@
 > createElement
 . createFromJSON
 . createGeneric
+. createInvert
 . createLabel
 > createLinearGradient
 > createMissing
@@ -300,7 +292,6 @@
 > defineProperty
 . del
 . depoint
-. depth
 . designFrame
 . designPos
 > detail
@@ -314,7 +305,6 @@
 > display
 . doTracker
 > doc
-. docItem
 . down
 . dragMove
 . dragStart
@@ -392,14 +382,11 @@
 > getMinutes
 > getMonth
 . getOffsetAt
-> getOwnPropertyDescriptor
-> getOwnPropertyNames
 . getPNW
 . getParaAtPoint
 . getPath
 . getPointOffset
 . getProjection
-> getPrototypeOf
 > getSeconds
 . getStyle
 > globalAlpha
@@ -434,7 +421,6 @@
 . ideoloomSandbox
 . ideoloomSandboxButton
 . ignores
-. immute
 > index
 > indexOf
 . inherit
@@ -448,7 +434,6 @@
 . insertText
 . inspect
 . invert
-. isAction
 > isArray
 . isEmpty
 . isInteger
@@ -503,7 +488,6 @@
 . maxSize
 . maxUndo
 . maxlen
-. measure
 > measureText
 . member
 > message
@@ -649,7 +633,6 @@
 . reduce
 . reflect
 . reflectName
-. reflect_
 > register
 > relation
 . relationState
@@ -676,7 +659,6 @@
 . reverseClip
 . review
 . right
-. root
 . rotate
 > round
 . roundRect
@@ -763,7 +745,6 @@
 . styles
 . sub
 . subPathOf
-. subPaths
 . subclass
 > substr
 > substring
@@ -792,9 +773,6 @@
 . track
 . transItem
 . transform
-. transformSign
-. transformSignRay
-. transformSignX
 > tree
 > trg
 > twig
