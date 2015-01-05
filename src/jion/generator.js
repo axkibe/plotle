@@ -213,7 +213,7 @@ generator.prototype._init =
 
 		units = units.add( subID );
 
-		this.subclass = subID.$var;
+		this.subclass = subID.$global;
 	}
 
 	for( name in jion.attributes || { } )
@@ -846,7 +846,7 @@ generator.prototype.genConstructor =
 		capsule
 		.$comment( 'Prototype shortcut' )
 		.$assign( 'prototype', 'Constructor.prototype' )
-		.$assign( this.id.$var.$dot( 'prototype' ), 'prototype' );
+		.$assign( this.id.$global.$dot( 'prototype' ), 'prototype' );
 
 	return capsule;
 };
@@ -1503,7 +1503,7 @@ generator.prototype.genCreatorConcerns =
 		{
 			if( id )
 			{
-				cExpr = $call( id.$var.$dot( func ) );
+				cExpr = $call( id.$global.$dot( func ) );
 			}
 			else
 			{
@@ -1992,7 +1992,7 @@ generator.prototype.genFromJSONCreatorParser =
 						$assign(
 							attr.v,
 							$call(
-								attr.id.$var.$dot( 'createFromJSON' ),
+								attr.id.$global.$dot( 'createFromJSON' ),
 								'arg'
 							)
 						);
@@ -2089,7 +2089,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 				$assign(
 					'ray[ r ]',
 					$call(
-						rid.$var.$dot( 'createFromJSON' ),
+						rid.$global.$dot( 'createFromJSON' ),
 						'jray[ r ]'
 					)
 				)
@@ -2144,7 +2144,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 				$assign(
 					'twig[ key ]',
 					$call(
-						twigID.$var.$dot( 'createFromJSON' ),
+						twigID.$global.$dot( 'createFromJSON' ),
 						'jval'
 					)
 				)

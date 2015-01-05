@@ -199,18 +199,28 @@ jools.lazyValue(
 );
 
 
-
 /*
 | This id as ast variable
-|
-| FIXME rename $global
+*/
+jools.lazyValue(
+	jion_id.prototype,
+	'$global',
+	function( )
+	{
+		return shorthand.$var( this.global );
+	}
+);
+
+
+/*
+| This id as ast variable.
 */
 jools.lazyValue(
 	jion_id.prototype,
 	'$var',
 	function( )
 	{
-		return shorthand.$var( this.global );
+		throw new Error( 'TODO' );
 	}
 );
 
