@@ -11,10 +11,15 @@
 
 var config = require( '../../config' );
 
+config.database_version = 8;
+
 /*
 | Globals.
 */
 GLOBAL.APP = 'server';
+
+// used only for repository convertion tools
+GLOBAL.CONVERT = false;
 
 // does not load jion code if out of date.
 GLOBAL.FORCE_JION_LOADING = false;
@@ -40,7 +45,6 @@ GLOBAL.SHELL = false;
 
 var
 	database_repository,
-	db_version,
 	fabric_spaceRef,
 	fs,
 	server_generateJion,
@@ -64,8 +68,6 @@ var
 	url,
 	util,
 	zlib;
-
-db_version = 8;
 
 fs = require( 'fs' );
 
@@ -170,7 +172,9 @@ prototype.startup =
 	// the servers inventory
 	root.create( 'inventory', server_inventory.create( ) );
 
-	root.create( 'repository', yield* database_repository.connect( ) );
+	root.create(
+		'repository', yield* database_repository.connect( config )
+	);
 
 	root.create(
 		// all spaces
@@ -224,7 +228,8 @@ prototype.loadSpaces =
 	function*( )
 {
 	var
-		cursor;
+		cursor,
+		spaceRef;
 
 	jools.log( 'start', 'loading and replaying all spaces' );
 
@@ -241,40 +246,21 @@ prototype.loadSpaces =
 		o = yield cursor.nextObject( sus.resume( ) )
 	)
 	{
-		yield* root.loadSpace(
+		spaceRef =
 			fabric_spaceRef.create(
 				'username', o.username,
 				'tag', o.tag
-			)
+			);
+
+		jools.log(
+			'start',
+			'loading and replaying all "' + spaceRef.fullname + '"'
 		);
+
+		root.$spaces[ spaceRef.fullname ] =
+			yield* server_spaceBox.loadSpace( spaceRef );
 	}
 };
-
-
-/*
-| Loads a spaces and playbacks its changes from the database.
-|
-| FIXME remove
-*/
-prototype.loadSpace =
-	function*(
-		spaceRef
-	)
-{
-	var
-		spaceBox;
-
-	jools.log(
-		'start',
-		'loading and replaying all "' + spaceRef.fullname + '"'
-	);
-
-	spaceBox =
-	root.$spaces[ spaceRef.fullname ] =
-		yield* server_spaceBox.loadSpace( spaceRef );
-};
-
-
 
 
 /*
@@ -584,6 +570,7 @@ prototype.prepareInventory =
 						global_defs :
 						{
 							'CHECK' : config.shell_check,
+							'CONVERT' : false,
 							'FREEZE' : config.shell_freeze,
 							'JION' : false,
 							'SERVER' : false,
@@ -765,6 +752,7 @@ prototype.prependConfigFlags =
 					'data',
 						'var JION = false;\n'
 						+ 'var CHECK = ' + config.shell_check + ';\n'
+						+ 'var CONVERT = false;\n'
 						+ 'var FREEZE = ' + config.shell_freeze + ';\n'
 						+ 'var SERVER = false;\n'
 						+ 'var SHELL = true;\n'

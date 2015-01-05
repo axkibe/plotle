@@ -48,27 +48,21 @@ if( JION )
 
 
 var
-	config,
-	db_version,
+	checkRepository,
 	fabric_spaceRef,
+	initRepository,
 	jools,
 	mongodb,
 	repository,
-	sus,
-	_initRepository,
-	_checkRepository;
-
-db_version = 8;
+	resume;
 
 repository = require( '../jion/this' )( module );
-
-config = require( '../../config' );
 
 jools = require( '../jools/jools' );
 
 mongodb = require( 'mongodb' );
 
-sus = require( 'suspend' ); // FIXME just give resume
+resume = require( 'suspend' ).resume;
 
 fabric_spaceRef = require( '../fabric/spaceRef' );
 
@@ -77,7 +71,9 @@ fabric_spaceRef = require( '../fabric/spaceRef' );
 | an active connection.
 */
 repository.connect =
-	function*( )
+	function*(
+		config
+	)
 {
 	var
 		connection,
@@ -89,9 +85,7 @@ repository.connect =
 	jools.log(
 		'start',
 		'connecting to database',
-		config.database_host
-		+ ':'
-		+ config.database_port,
+		config.database_host + ':' + config.database_port,
 		config.database_name
 	);
 
@@ -109,15 +103,15 @@ repository.connect =
 			{ w : 1 }
 		);
 
-	connection = yield connector.open( sus.resume( ) );
+	connection = yield connector.open( resume( ) );
 
-	users = yield connection.collection( 'users', sus.resume( ) );
+	users = yield connection.collection( 'users', resume( ) );
 
-	spaces = yield connection.collection( 'spaces', sus.resume( ) );
+	spaces = yield connection.collection( 'spaces', resume( ) );
 
 	// checking repo version:
 
-	yield* _checkRepository( connection );
+	yield* checkRepository( connection, config );
 
 	return(
 		repository.create(
@@ -139,16 +133,27 @@ repository.prototype.collection =
 		name
 	)
 {
-	return yield this._connection.collection( name, sus.resume( ) );
+	return yield this._connection.collection( name, resume( ) );
+};
+
+
+/*
+| Closes the connection.
+*/
+repository.prototype.close =
+	function( )
+{
+	this._connection.close( );
 };
 
 
 /*
 | Ensures the repository schema version fits this server.
 */
-_checkRepository =
+checkRepository =
 	function*(
-		connection
+		connection,
+		config
 	)
 {
 	var
@@ -160,18 +165,18 @@ _checkRepository =
 		'checking repository schema version'
 	);
 
-	global = yield connection.collection( 'global', sus.resume( ) ),
+	global = yield connection.collection( 'global', resume( ) ),
 
-	version = yield global.findOne( { _id : 'version' }, sus.resume( ) );
+	version = yield global.findOne( { _id : 'version' }, resume( ) );
 
 	if( version )
 	{
-		if( version.version !== db_version )
+		if( version.version !== config.database_version )
 		{
 			throw new Error(
 				'Wrong repository schema version, expected '
-				+ db_version +
-				', got ' +
+				+ config.database_version +
+				', but got ' +
 				version.version
 			);
 		}
@@ -180,7 +185,7 @@ _checkRepository =
 	{
 		// otherwise initializes the database repository
 
-		yield* _initRepository( connection );
+		yield* initRepository( connection, config );
 	}
 };
 
@@ -188,9 +193,10 @@ _checkRepository =
 /*
 | Initializes a new repository.
 */
-_initRepository =
+initRepository =
 	function*(
-		connection
+		connection,
+		config
 	)
 {
 	var
@@ -201,8 +207,7 @@ _initRepository =
 		sr,
 		sZ;
 
-	spaces =
-		yield connection.collection( 'spaces', sus.resume( ) );
+	spaces = yield connection.collection( 'spaces', resume( ) );
 
 	jools.log(
 		'start',
@@ -237,24 +242,20 @@ _initRepository =
 				username : sr.username,
 				tag : sr.tag
 			},
-			sus.resume( )
+			resume( )
 		);
 	}
 
 	jools.log( 'start', '  initializing global.version' );
 
-	global =
-		yield connection.collection(
-			'global',
-			sus.resume( )
-		);
+	global = yield connection.collection( 'global', resume( ) );
 
 	yield global.insert(
 		{
 			_id : 'version',
-			version : db_version
+			version : config.database_version
 		},
-		sus.resume( )
+		resume( )
 	);
 };
 

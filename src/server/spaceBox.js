@@ -126,10 +126,25 @@ server_spaceBox.loadSpace =
 			throw new Error( 'sequence mismatch' );
 		}
 
-		changeSkids =
-			changeSkids.create( 'ray:set', seqZ++, changeSkid );
+		if( !CONVERT ) // XXX
+		{
+			// FUTURE there is no need to load the past into memory
+			changeSkids =
+				changeSkids.create( 'ray:set', seqZ++, changeSkid );
 
-		space = changeSkid.changeTree( space ).tree;
+			space = changeSkid.changeTree( space ).tree;
+		}
+		else
+		{
+			var result;
+
+			result = changeSkid.changeTree( space );
+
+			changeSkids =
+				changeSkids.create( 'ray:set', seqZ++, result.reflection );
+
+			space = result.tree;
+		}
 	}
 
 	return(

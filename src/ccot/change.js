@@ -1373,6 +1373,7 @@ ccot_change.prototype._transformSignInsert =
 	if(
 		!trg.path
 		|| !trg.path.equals( sign.path )
+		|| !sign.at1
 	)
 	{
 		return sign;

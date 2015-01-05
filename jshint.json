@@ -17,6 +17,7 @@
 	{
 		"APP" : true,
 		"CHECK" : true,
+		"CONVERT" : true,
 		"FORCE_JION_LOADING" : true,
 		"FREEZE" : true,
 		"JION" : true,
