@@ -29,7 +29,9 @@ if( JION )
 								'ccot_change',
 								'ccot_changeRay',
 								'ccot_changeWrap',
-								'ccot_changeWrapRay'
+								'ccot_changeWrapRay',
+								'database_changeSkid',
+								'database_changeSkidRay'
 							]
 					},
 				tree :

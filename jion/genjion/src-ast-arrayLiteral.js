@@ -12,6 +12,16 @@ var
 	ast_arrayLiteral;
 
 
+if( SERVER )
+{
+	ast_arrayLiteral = module.exports;
+}
+else
+{
+	ast_arrayLiteral = { };
+}
+
+
 /*
 | Imports.
 */
@@ -77,20 +87,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_arrayLiteral =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_arrayLiteral;
-}
+ast_arrayLiteral.prototype = prototype;
 
 
 /*

@@ -12,6 +12,16 @@ var
 	ast_differs;
 
 
+if( SERVER )
+{
+	ast_differs = module.exports;
+}
+else
+{
+	ast_differs = { };
+}
+
+
 /*
 | Imports.
 */
@@ -78,20 +88,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_differs =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_differs;
-}
+ast_differs.prototype = prototype;
 
 
 /*

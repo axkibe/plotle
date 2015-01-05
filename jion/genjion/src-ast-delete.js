@@ -12,6 +12,16 @@ var
 	ast_delete;
 
 
+if( SERVER )
+{
+	ast_delete = module.exports;
+}
+else
+{
+	ast_delete = { };
+}
+
+
 /*
 | Imports.
 */
@@ -75,20 +85,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_delete =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_delete;
-}
+ast_delete.prototype = prototype;
 
 
 /*

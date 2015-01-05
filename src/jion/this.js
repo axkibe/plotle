@@ -100,6 +100,17 @@ module.exports =
 			+ outFilename.substr( 0, outFilename.length - 3 )
 		);
 
+	// bug workaround for circular references
+	for( var k in jion )
+	{
+		if( !jion.hasOwnProperty( k ) )
+		{
+			continue;
+		}
+
+		module.exports[ k ] = jion[ k ];
+	}
+
 	module.exports = jion;
 
 	return jion;

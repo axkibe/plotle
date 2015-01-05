@@ -12,6 +12,16 @@ var
 	ast_greaterThan;
 
 
+if( SERVER )
+{
+	ast_greaterThan = module.exports;
+}
+else
+{
+	ast_greaterThan = { };
+}
+
+
 /*
 | Imports.
 */
@@ -78,20 +88,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_greaterThan =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_greaterThan;
-}
+ast_greaterThan.prototype = prototype;
 
 
 /*

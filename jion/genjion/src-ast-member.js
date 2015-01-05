@@ -12,6 +12,16 @@ var
 	ast_member;
 
 
+if( SERVER )
+{
+	ast_member = module.exports;
+}
+else
+{
+	ast_member = { };
+}
+
+
 /*
 | Imports.
 */
@@ -78,20 +88,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_member =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_member;
-}
+ast_member.prototype = prototype;
 
 
 /*

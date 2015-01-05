@@ -12,6 +12,16 @@ var
 	format_context;
 
 
+if( SERVER )
+{
+	format_context = module.exports;
+}
+else
+{
+	format_context = { };
+}
+
+
 /*
 | Imports.
 */
@@ -84,20 +94,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-format_context =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = format_context;
-}
+format_context.prototype = prototype;
 
 
 /*

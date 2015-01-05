@@ -12,6 +12,16 @@ var
 	ast_var;
 
 
+if( SERVER )
+{
+	ast_var = module.exports;
+}
+else
+{
+	ast_var = { };
+}
+
+
 /*
 | Imports.
 */
@@ -77,20 +87,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_var =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_var;
-}
+ast_var.prototype = prototype;
 
 
 /*

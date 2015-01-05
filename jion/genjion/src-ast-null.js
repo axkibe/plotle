@@ -12,6 +12,16 @@ var
 	ast_null;
 
 
+if( SERVER )
+{
+	ast_null = module.exports;
+}
+else
+{
+	ast_null = { };
+}
+
+
 /*
 | Imports.
 */
@@ -71,20 +81,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_null =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_null;
-}
+ast_null.prototype = prototype;
 
 
 /*

@@ -12,6 +12,16 @@ var
 	ast_preIncrement;
 
 
+if( SERVER )
+{
+	ast_preIncrement = module.exports;
+}
+else
+{
+	ast_preIncrement = { };
+}
+
+
 /*
 | Imports.
 */
@@ -75,20 +85,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_preIncrement =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_preIncrement;
-}
+ast_preIncrement.prototype = prototype;
 
 
 /*

@@ -12,6 +12,16 @@ var
 	ast_assign;
 
 
+if( SERVER )
+{
+	ast_assign = module.exports;
+}
+else
+{
+	ast_assign = { };
+}
+
+
 /*
 | Imports.
 */
@@ -78,20 +88,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_assign =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_assign;
-}
+ast_assign.prototype = prototype;
 
 
 /*

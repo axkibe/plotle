@@ -12,6 +12,16 @@ var
 	jion_idRepository;
 
 
+if( SERVER )
+{
+	jion_idRepository = module.exports;
+}
+else
+{
+	jion_idRepository = { };
+}
+
+
 /*
 | Imports.
 */
@@ -86,20 +96,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-jion_idRepository =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = jion_idRepository;
-}
+jion_idRepository.prototype = prototype;
 
 
 /*

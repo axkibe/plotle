@@ -40,7 +40,7 @@ if( JION )
 				flowWidth :
 					{
 						comment :
-							'width of the para its flow',
+							'width of the para flow',
 						type :
 							'Number',
 						defaultValue :

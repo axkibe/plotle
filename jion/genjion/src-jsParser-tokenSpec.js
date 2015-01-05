@@ -12,6 +12,16 @@ var
 	jsParser_tokenSpec;
 
 
+if( SERVER )
+{
+	jsParser_tokenSpec = module.exports;
+}
+else
+{
+	jsParser_tokenSpec = { };
+}
+
+
 /*
 | Imports.
 */
@@ -87,20 +97,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-jsParser_tokenSpec =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = jsParser_tokenSpec;
-}
+jsParser_tokenSpec.prototype = prototype;
 
 
 /*

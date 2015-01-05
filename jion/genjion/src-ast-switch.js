@@ -12,6 +12,16 @@ var
 	ast_switch;
 
 
+if( SERVER )
+{
+	ast_switch = module.exports;
+}
+else
+{
+	ast_switch = { };
+}
+
+
 /*
 | Imports.
 */
@@ -89,20 +99,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_switch =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_switch;
-}
+ast_switch.prototype = prototype;
 
 
 /*

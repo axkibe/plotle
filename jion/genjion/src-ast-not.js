@@ -12,6 +12,16 @@ var
 	ast_not;
 
 
+if( SERVER )
+{
+	ast_not = module.exports;
+}
+else
+{
+	ast_not = { };
+}
+
+
 /*
 | Imports.
 */
@@ -75,20 +85,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_not =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_not;
-}
+ast_not.prototype = prototype;
 
 
 /*

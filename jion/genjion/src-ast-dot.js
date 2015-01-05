@@ -12,6 +12,16 @@ var
 	ast_dot;
 
 
+if( SERVER )
+{
+	ast_dot = module.exports;
+}
+else
+{
+	ast_dot = { };
+}
+
+
 /*
 | Imports.
 */
@@ -80,20 +90,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_dot =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_dot;
-}
+ast_dot.prototype = prototype;
 
 
 /*

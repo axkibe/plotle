@@ -12,6 +12,16 @@ var
 	jsLexer_token;
 
 
+if( SERVER )
+{
+	jsLexer_token = module.exports;
+}
+else
+{
+	jsLexer_token = { };
+}
+
+
 /*
 | Imports.
 */
@@ -83,20 +93,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-jsLexer_token =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = jsLexer_token;
-}
+jsLexer_token.prototype = prototype;
 
 
 /*

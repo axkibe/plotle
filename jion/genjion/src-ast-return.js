@@ -12,6 +12,16 @@ var
 	ast_return;
 
 
+if( SERVER )
+{
+	ast_return = module.exports;
+}
+else
+{
+	ast_return = { };
+}
+
+
 /*
 | Imports.
 */
@@ -75,20 +85,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_return =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_return;
-}
+ast_return.prototype = prototype;
 
 
 /*

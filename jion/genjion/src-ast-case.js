@@ -12,6 +12,16 @@ var
 	ast_case;
 
 
+if( SERVER )
+{
+	ast_case = module.exports;
+}
+else
+{
+	ast_case = { };
+}
+
+
 /*
 | Imports.
 */
@@ -83,20 +93,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_case =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_case;
-}
+ast_case.prototype = prototype;
 
 
 /*

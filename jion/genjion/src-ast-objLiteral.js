@@ -12,6 +12,16 @@ var
 	ast_objLiteral;
 
 
+if( SERVER )
+{
+	ast_objLiteral = module.exports;
+}
+else
+{
+	ast_objLiteral = { };
+}
+
+
 /*
 | Imports.
 */
@@ -82,20 +92,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_objLiteral =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_objLiteral;
-}
+ast_objLiteral.prototype = prototype;
 
 
 /*

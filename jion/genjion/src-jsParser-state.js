@@ -12,6 +12,16 @@ var
 	jsParser_state;
 
 
+if( SERVER )
+{
+	jsParser_state = module.exports;
+}
+else
+{
+	jsParser_state = { };
+}
+
+
 /*
 | Imports.
 */
@@ -84,20 +94,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-jsParser_state =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = jsParser_state;
-}
+jsParser_state.prototype = prototype;
 
 
 /*

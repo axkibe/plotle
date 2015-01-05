@@ -12,6 +12,16 @@ var
 	ast_boolean;
 
 
+if( SERVER )
+{
+	ast_boolean = module.exports;
+}
+else
+{
+	ast_boolean = { };
+}
+
+
 /*
 | Imports.
 */
@@ -75,20 +85,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_boolean =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_boolean;
-}
+ast_boolean.prototype = prototype;
 
 
 /*

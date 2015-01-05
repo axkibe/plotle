@@ -49,7 +49,7 @@ config.database_port = 27017;
 /*
 | Name of the mongodb database
 */
-config.database_name = 'ideoloom-8';
+config.database_name = 'ideoloom-9';
 
 
 /*

@@ -12,6 +12,16 @@ var
 	ast_lessThan;
 
 
+if( SERVER )
+{
+	ast_lessThan = module.exports;
+}
+else
+{
+	ast_lessThan = { };
+}
+
+
 /*
 | Imports.
 */
@@ -78,20 +88,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_lessThan =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_lessThan;
-}
+ast_lessThan.prototype = prototype;
 
 
 /*

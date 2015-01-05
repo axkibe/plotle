@@ -12,6 +12,16 @@ var
 	ast_commaList;
 
 
+if( SERVER )
+{
+	ast_commaList = module.exports;
+}
+else
+{
+	ast_commaList = { };
+}
+
+
 /*
 | Imports.
 */
@@ -77,20 +87,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_commaList =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_commaList;
-}
+ast_commaList.prototype = prototype;
 
 
 /*

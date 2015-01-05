@@ -578,6 +578,11 @@ generator.prototype.genNodeIncludes =
 		{
 			name = nameList[ b ];
 
+			if( unitStr + '_' + name === this.id.global )
+			{
+				continue;
+			}
+
 			block =
 				block
 				.$assign(
@@ -618,7 +623,6 @@ generator.prototype.genConstructor =
 		constructor,
 		freezeBlock,
 		initCall,
-		jionObj,
 		name;
 
 	capsule =
@@ -841,25 +845,8 @@ generator.prototype.genConstructor =
 	capsule =
 		capsule
 		.$comment( 'Prototype shortcut' )
-		.$assign( 'prototype', 'Constructor.prototype' );
-
-	// the exported object
-	capsule = capsule.$comment( 'Jion.' );
-
-	jionObj =
-		$objLiteral( )
-		.add( 'prototype', 'prototype' );
-
-	capsule =
-		capsule
-		.$assign( this.id.global, jionObj );
-
-	capsule =
-		capsule
-		.$if(
-			'SERVER',
-			$assign( 'module.exports', this.id.global )
-		);
+		.$assign( 'prototype', 'Constructor.prototype' )
+		.$assign( this.id.$var.$dot( 'prototype' ), 'prototype' );
 
 	return capsule;
 };
@@ -2878,13 +2865,16 @@ generator.prototype.genAlike =
 generator.prototype.genExport =
 	function( block )
 {
-	block = block.$comment( 'Export.' );
-
-	block =
+	return(
 		block
-		.$varDec( this.id.global );
-
-	return block;
+		.$comment( 'Export.' )
+		.$varDec( this.id.global )
+		.$if(
+			'SERVER',
+			$assign( this.id.global, 'module.exports' ),
+			$assign( this.id.global, $objLiteral( ) )
+		)
+	);
 };
 
 

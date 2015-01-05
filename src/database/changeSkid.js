@@ -78,9 +78,9 @@ var
 	jools,
 	result_changeTree;
 
-jools = require( '../jools/jools' );
-
 changeSkid = require( '../jion/this' )( module );
+
+jools = require( '../jools/jools' );
 
 ccot_changeWrap = require( '../ccot/changeWrap' );
 

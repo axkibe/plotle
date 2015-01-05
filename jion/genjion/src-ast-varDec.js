@@ -12,6 +12,16 @@ var
 	ast_varDec;
 
 
+if( SERVER )
+{
+	ast_varDec = module.exports;
+}
+else
+{
+	ast_varDec = { };
+}
+
+
 /*
 | Imports.
 */
@@ -78,20 +88,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_varDec =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_varDec;
-}
+ast_varDec.prototype = prototype;
 
 
 /*

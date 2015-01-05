@@ -194,11 +194,7 @@ euclid_point.prototype.fixPoint =
 /*
 | Shortcut for point at 0/0.
 */
-euclid_point.zero =
-	euclid_point.create(
-		'x', 0,
-		'y', 0
-	);
+euclid_point.zero = euclid_point.create( 'x', 0, 'y', 0 );
 
 
 } )( );

@@ -12,6 +12,16 @@ var
 	ast_instanceof;
 
 
+if( SERVER )
+{
+	ast_instanceof = module.exports;
+}
+else
+{
+	ast_instanceof = { };
+}
+
+
 /*
 | Imports.
 */
@@ -78,20 +88,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_instanceof =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_instanceof;
-}
+ast_instanceof.prototype = prototype;
 
 
 /*

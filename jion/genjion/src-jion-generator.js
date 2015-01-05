@@ -12,6 +12,16 @@ var
 	jion_generator;
 
 
+if( SERVER )
+{
+	jion_generator = module.exports;
+}
+else
+{
+	jion_generator = { };
+}
+
+
 /*
 | Imports.
 */
@@ -77,20 +87,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-jion_generator =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = jion_generator;
-}
+jion_generator.prototype = prototype;
 
 
 /*

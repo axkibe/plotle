@@ -12,6 +12,16 @@ var
 	ast_comment;
 
 
+if( SERVER )
+{
+	ast_comment = module.exports;
+}
+else
+{
+	ast_comment = { };
+}
+
+
 /*
 | Imports.
 */
@@ -75,20 +85,7 @@ Constructor =
 prototype = Constructor.prototype;
 
 
-/*
-| Jion.
-*/
-ast_comment =
-	{
-		prototype :
-			prototype
-	};
-
-
-if( SERVER )
-{
-	module.exports = ast_comment;
-}
+ast_comment.prototype = prototype;
 
 
 /*

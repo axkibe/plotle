@@ -629,7 +629,6 @@ ccot_change.prototype._changeTreeInsert =
 		nstr,
 		src,
 		str,
-		tat2,
 		trg;
 
 
@@ -645,24 +644,26 @@ ccot_change.prototype._changeTreeInsert =
 
 	check( jools.isString( str ), cm, 'trg.path signates no string' );
 
-	// where trg span should end
-	tat2 = trg.at1 + src.val.length;
+	trg = trg.affix( 'at2', trg.at1 + src.val.length );
 
-	trg = trg.affix( 'at2', tat2 );
-
-/**/if( false && !CONVERT ) // XXX
+/**/if( !CONVERT ) // XXX
 /**/{
 /**/	if( trg.at1 > str.length )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
-/*
 	else
 	{
-		trg = trg.create( 'at1', str.length );
+		if( trg.at1 > str.length )
+		{
+			trg =
+				trg.create(
+					'at1', str.length,
+					'at2', str.length + src.val.length
+				);
+		}
 	}
-*/
 
 	nstr =
 		str.substring( 0, trg.at1 )
