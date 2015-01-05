@@ -114,11 +114,15 @@ run =
 	function*( )
 {
 	var
+		a,
+		aZ,
 		cursor,
 		o,
 		spaces,
+		spaceBox,
 		spaceRef,
 		srcConfig,
+		trgChanges,
 		srcDatabase,
 		trgGlobal,
 		trgUsers,
@@ -143,18 +147,15 @@ run =
 
 	trgConnection = yield* connectToTarget( );
 
-	/*
 	console.log( '* dropping trg' );
-		yield trgConnection.dropDatabase( resume( ) );
-	*/
+
+	yield trgConnection.dropDatabase( resume( ) );
 
 	trgGlobal = yield trgConnection.collection( 'global', resume( ) );
 
 	trgUsers = yield trgConnection.collection( 'users', resume( ) );
 
 	trgSpaces = yield trgConnection.collection( 'spaces', resume( ) );
-
-	/*
 
 	console.log( '* creating trg.global' );
 
@@ -165,7 +166,6 @@ run =
 		},
 		resume( )
 	);
-	*/
 
 	console.log( '* copying src.users -> trg.users' );
 
@@ -179,7 +179,7 @@ run =
 	{
 		console.log( ' * ' + o._id );
 
-//		yield trg.users.insert( o, resume( ) );
+		yield trgUsers.insert( o, resume( ) );
 	}
 
 	console.log( '* loading and replaying all spaces' );
@@ -205,67 +205,31 @@ run =
 				'tag', o.tag
 			);
 
-		console.log(
-			' * loading and replaying all "' + spaceRef.fullname + '"'
-		);
+		console.log( ' * loading and replaying "' + spaceRef.fullname + '"' );
 
 		spaces[ spaceRef.fullname ] =
+		spaceBox =
 			yield* server_spaceBox.loadSpace( spaceRef );
-	}
 
+		console.log( ' * writing "' + spaceRef.fullname + '"' );
 
-	/*
-	console.log( '* translating src.spaces -> trg.spaces' );
+		yield trgSpaces.insert( o, resume( ) );
 
-	cursor = yield src.spaces.find( resume( ) );
-
-	spaces = { };
-
-	for(
-		o = yield cursor.nextObject( resume( ) );
-		o !== null;
-		o = yield cursor.nextObject( resume( ) )
-	)
-	{
-		spaces[ o._id ] = o;
-
-		yield trg.spaces.insert( o, resume( ) );
-	}
-
-	// console.log( '* copying src.changes.* -> trg.changes.*' );
-
-	for( var spaceName in spaces )
-	{
-		console.log(
-			' * loading src.changes.' + spaceName
-		);
-
-		sc =
-			yield src.connection.collection(
-				'changes:' + spaceName,
-				resume( )
-			);
-
-		tc =
-			yield trg.connection.collection(
-				'changes:' + spaceName,
-				resume( )
-			);
-
-		cursor = yield sc.find( resume( ) );
+		trgChanges =
+			trgConnection.collection( 'changes:' + spaceRef.fullname );
 
 		for(
-			o = yield cursor.nextObject( resume( ) );
-			o !== null;
-			o = yield cursor.nextObject( resume( ) )
+			a = 1, aZ = spaceBox._changeSkids.length;
+			a < aZ;
+			a++
 		)
 		{
-			o = translateChange( o );
-
-			yield tc.insert( o, resume( ) );
+			yield trgChanges.insert(
+				JSON.parse( JSON.stringify( spaceBox._changeSkids.get( a ) ) ),
+				resume( )
+			);
 		}
 	}
-	*/
 
 	console.log( '* closing connections' );
 

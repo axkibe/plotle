@@ -195,7 +195,7 @@ proto.get =
 
 		for( b = 0; b < chgX.length; b++ )
 		{
-			space = chgX.get( 0 ).invert.changeTree( space ).tree;
+			space = chgX.get( 0 ).invert.changeTree( space, 'tree' );
 		}
 	}
 
@@ -242,7 +242,7 @@ proto.alter =
 		}
 	}
 
-	r = chgX.changeTree( this.space );
+	r = chgX.changeTree( this.space, 'combined' );
 
 	changes =
 		changes.append(
@@ -256,10 +256,8 @@ proto.alter =
 	root.create(
 		'link',
 			this.create(
-				'_changes',
-					changes,
-				'space',
-					r.tree
+				'_changes', changes,
+				'space', r.tree
 			)
 	);
 

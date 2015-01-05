@@ -189,23 +189,33 @@ jools.lazyValue(
 */
 ccot_change.prototype.changeTree =
 	function(
-		tree
+		tree,
+		resultModality  // 'combined', 'tree' or 'reaction'
 	)
 {
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 2 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	// executes the op-handler
 	switch( this.type )
 	{
-		case 'split' : return this._changeTreeSplit( tree );
+		case 'rank' : return this._changeTreeRank( tree, resultModality );
 
-		case 'join' : return this._changeTreeJoin( tree );
+		case 'remove' : return this._changeTreeRemove( tree, resultModality );
 
-		case 'set' : return this._changeTreeSet( tree );
+		case 'split' : return this._changeTreeSplit( tree, resultModality );
 
-		case 'insert' : return this._changeTreeInsert( tree );
+		case 'join' : return this._changeTreeJoin( tree, resultModality );
 
-		case 'remove' : return this._changeTreeRemove( tree );
+		case 'set' : return this._changeTreeSet( tree, resultModality );
 
-		case 'rank' : return this._changeTreeRank( tree );
+		case 'insert' : return this._changeTreeInsert( tree, resultModality );
 
 		default : throw new Error( );
 	}
@@ -288,19 +298,11 @@ ccot_change.prototype._transformChange =
 	{
 		// FIXME check in ray conditions too if this happens
 		if(
-			(
-				srcX.proc === 'splice'
-				||
-				trgX.proc === 'splice'
-			)
-			&&
-			(
-				srcX.path.equals( trgX.path )
-			)
+			( srcX.proc === 'splice' || trgX.proc === 'splice')
+			&& srcX.path.equals( trgX.path )
 		)
 		{
 			// splice transformed to equalness
-
 			return null;
 		}
 
@@ -496,7 +498,8 @@ ccot_change.prototype.transform =
 */
 ccot_change.prototype._changeTreeSet =
 	function(
-		tree
+		tree,
+		resultModality
 	)
 {
 	var
@@ -584,12 +587,29 @@ ccot_change.prototype._changeTreeSet =
 		}
 	}
 
-	return(
-		result_changeTree.create(
-			'tree', tree,
-			'reaction', this.create( 'src', src, 'trg', trg )
-		)
-	);
+	switch( resultModality )
+	{
+		case 'combined' :
+
+			return(
+				result_changeTree.create(
+					'reaction', this.create( 'src', src, 'trg', trg ),
+					'tree', tree
+				)
+			);
+
+		case 'reaction' :
+
+			return this.create( 'src', src, 'trg', trg );
+
+		case 'tree' :
+
+			return tree;
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 
@@ -600,7 +620,8 @@ ccot_change.prototype._changeTreeSet =
 */
 ccot_change.prototype._changeTreeInsert =
 	function(
-		tree
+		tree,
+		resultModality
 	)
 {
 	var
@@ -629,13 +650,19 @@ ccot_change.prototype._changeTreeInsert =
 
 	trg = trg.affix( 'at2', tat2 );
 
-/**/if( false && CHECK ) // TODO
+/**/if( false && !CONVERT ) // XXX
 /**/{
 /**/	if( trg.at1 > str.length )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
+/*
+	else
+	{
+		trg = trg.create( 'at1', str.length );
+	}
+*/
 
 	nstr =
 		str.substring( 0, trg.at1 )
@@ -644,12 +671,29 @@ ccot_change.prototype._changeTreeInsert =
 
 	tree = tree.setPath( trg.path, nstr );
 
-	return(
-		result_changeTree.create(
-			'tree', tree,
-			'reaction', this.create( 'src', src, 'trg', trg )
-		)
-	);
+	switch( resultModality )
+	{
+		case 'combined' :
+
+			return(
+				result_changeTree.create(
+					'reaction', this.create( 'src', src, 'trg', trg ),
+					'tree', tree
+				)
+			);
+
+		case 'reaction' :
+
+			return this.create( 'src', src, 'trg', trg );
+
+		case 'tree' :
+
+			return tree;
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 
@@ -660,7 +704,8 @@ ccot_change.prototype._changeTreeInsert =
 */
 ccot_change.prototype._changeTreeRemove =
 	function(
-		tree
+		tree,
+		resultModality
 	)
 {
 	var
@@ -703,12 +748,29 @@ ccot_change.prototype._changeTreeRemove =
 
 	tree = tree.setPath( src.path, nstr );
 
-	return(
-		result_changeTree.create(
-			'tree', tree,
-			'reaction', this.create( 'src', src, 'trg', trg )
-		)
-	);
+	switch( resultModality )
+	{
+		case 'combined' :
+
+			return(
+				result_changeTree.create(
+					'reaction', this.create( 'src', src, 'trg', trg ),
+					'tree', tree
+				)
+			);
+
+		case 'reaction' :
+
+			return this.create( 'src', src, 'trg', trg );
+
+		case 'tree' :
+
+			return tree;
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 
@@ -719,7 +781,8 @@ ccot_change.prototype._changeTreeRemove =
 */
 ccot_change.prototype._changeTreeJoin =
 	function(
-		tree
+		tree,
+		resultModality
 	)
 {
 	var
@@ -783,12 +846,29 @@ ccot_change.prototype._changeTreeJoin =
 
 	tree = tree.setPath( path.shorten( 3 ), pivot );
 
-	return(
-		result_changeTree.create(
-			'tree', tree,
-			'reaction', this.create( 'src', src, 'trg', trg )
-		)
-	);
+	switch( resultModality )
+	{
+		case 'combined' :
+
+			return(
+				result_changeTree.create(
+					'reaction', this.create( 'src', src, 'trg', trg ),
+					'tree', tree
+				)
+			);
+
+		case 'reaction' :
+
+			return this.create( 'src', src, 'trg', trg );
+
+		case 'tree' :
+
+			return tree;
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 
@@ -799,7 +879,8 @@ ccot_change.prototype._changeTreeJoin =
 */
 ccot_change.prototype._changeTreeSplit =
 	function(
-		tree
+		tree,
+		resultModality
 	)
 {
 	var
@@ -874,12 +955,29 @@ ccot_change.prototype._changeTreeSplit =
 
 	tree = tree.setPath( path.shorten( 3 ), pivot );
 
-	return(
-		result_changeTree.create(
-			'tree', tree,
-			'reaction', this.create( 'src', src, 'trg', trg )
-		)
-	);
+	switch( resultModality )
+	{
+		case 'combined' :
+
+			return(
+				result_changeTree.create(
+					'reaction', this.create( 'src', src, 'trg', trg ),
+					'tree', tree
+				)
+			);
+
+		case 'reaction' :
+
+			return this.create( 'src', src, 'trg', trg );
+
+		case 'tree' :
+
+			return tree;
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 
@@ -890,7 +988,8 @@ ccot_change.prototype._changeTreeSplit =
 */
 ccot_change.prototype._changeTreeRank =
 	function(
-		tree
+		tree,
+		resultModality
 	)
 {
 	var
@@ -951,12 +1050,29 @@ ccot_change.prototype._changeTreeRank =
 		tree = pivot;
 	}
 
-	return(
-		result_changeTree.create(
-			'tree', tree,
-			'reaction', this.create( 'src', src, 'trg', trg )
-		)
-	);
+	switch( resultModality )
+	{
+		case 'combined' :
+
+			return(
+				result_changeTree.create(
+					'reaction', this.create( 'src', src, 'trg', trg ),
+					'tree', tree
+				)
+			);
+
+		case 'reaction' :
+
+			return this.create( 'src', src, 'trg', trg );
+
+		case 'tree' :
+
+			return tree;
+
+		default :
+
+			throw new Error( );
+	}
 };
 
 

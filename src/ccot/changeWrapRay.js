@@ -47,7 +47,8 @@ if( SERVER )
 */
 ccot_changeWrapRay.prototype.changeTree =
 	function(
-		tree
+		tree,
+		resultModality
 	)
 {
 	// the ray with the changes applied
@@ -55,6 +56,8 @@ ccot_changeWrapRay.prototype.changeTree =
 		a, aZ,
 		cRay,
 		cr;
+
+	// FUTURE in case of resultModality === tree skip building cRay
 
 	cRay = [ ];
 
@@ -65,7 +68,7 @@ ccot_changeWrapRay.prototype.changeTree =
 		a++
 	)
 	{
-		cr = this.get( a ).changeTree( tree );
+		cr = this.get( a ).changeTree( tree, 'combined' ); // FUTURE
 
 		// the tree returned by op-handler is the new tree
 		tree = cr.tree;
@@ -73,12 +76,25 @@ ccot_changeWrapRay.prototype.changeTree =
 		cRay.push( cr.reaction );
 	}
 
-	return(
-		result_changeTree.create(
-			'tree', tree,
-			'reaction', ccot_changeWrapRay.create( 'ray:init', cRay )
-		)
-	);
+	switch( resultModality )
+	{
+		case 'combined' :
+
+			return(
+				result_changeTree.create(
+					'tree', tree,
+					'reaction', ccot_changeWrapRay.create( 'ray:init', cRay )
+				)
+			);
+
+		case 'reaction' :
+
+			return ccot_changeWrapRay.create( 'ray:init', cRay );
+
+		case 'tree' :
+
+			return tree;
+	}
 };
 
 

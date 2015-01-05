@@ -375,7 +375,7 @@ net_link.prototype._onUpdate =
 			// changes the clients understanding of the server tree
 			cSpace =
 			rSpace =
-				changeWrap.changeTree( rSpace ).tree;
+				changeWrap.changeTree( rSpace, 'tree' );
 
 			// if the cid is the one in the postbox the client
 			// received the update of its own change.
@@ -398,12 +398,12 @@ net_link.prototype._onUpdate =
 
 		postbox = changeWrapRay.transform( postbox );
 
-		cSpace = postbox.changeTree( cSpace ).tree;
+		cSpace = postbox.changeTree( cSpace, 'tree' );
 
 		// transforms the outbox by the foreign changes
 		outbox = report.transform( outbox );
 
-		cSpace = outbox.changeTree( cSpace ).tree;
+		cSpace = outbox.changeTree( cSpace, 'tree' );
 	}
 
 	link =
@@ -459,7 +459,7 @@ net_link.prototype.alter =
 /**/	}
 /**/}
 
-	result = changeWrap.changeTree( link._cSpace );
+	result = changeWrap.changeTree( link._cSpace, 'combined' );
 
 	changeWrap = result.reaction;
 

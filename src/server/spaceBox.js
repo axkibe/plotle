@@ -130,16 +130,16 @@ server_spaceBox.loadSpace =
 			changeSkids =
 				changeSkids.create( 'ray:set', seqZ++, changeSkid );
 
-			space = changeSkid.changeTree( space ).tree;
+			space = changeSkid.changeTree( space, 'tree' );
 		}
 		else
 		{
 			var result;
 
-			result = changeSkid.changeTree( space );
+			result = changeSkid.changeTree( space, 'combined' );
 
 			changeSkids =
-				changeSkids.create( 'ray:set', seqZ++, result.reflection );
+				changeSkids.create( 'ray:set', seqZ++, result.reaction );
 
 			space = result.tree;
 		}
@@ -189,7 +189,8 @@ server_spaceBox.createSpace =
 				yield* root.repository.collection(
 					'changes:' + spaceRef.fullname
 				),
-			'_changeSkids', database_changeSkidRay.create( 'ray:init', [ null ] )
+			'_changeSkids',
+				database_changeSkidRay.create( 'ray:init', [ null ] )
 		)
 	);
 
@@ -209,7 +210,7 @@ server_spaceBox.prototype.appendChanges =
 {
 	var
 		changeSkidRay,
-		ctr;
+		result;
 
 /**/if( CHECK )
 /**/{
@@ -219,8 +220,9 @@ server_spaceBox.prototype.appendChanges =
 /**/	}
 /**/}
 
-	// FUTURE return tree directly
-	ctr = changeWrapRay.changeTree( this.space );
+	result = changeWrapRay.changeTree( this.space, 'combined' );
+
+	// FIXME XXX use the reaction!
 
 	changeSkidRay =
 		database_changeSkidRay.createFromChangeWrapRay(
@@ -244,7 +246,7 @@ server_spaceBox.prototype.appendChanges =
 	return(
 		this.create(
 			'seqZ', this.seqZ + changeSkidRay.length,
-			'space', ctr.tree,
+			'space', result.tree,
 			'_changeSkids', this._changeSkids.appendRay( changeSkidRay )
 		)
 	);

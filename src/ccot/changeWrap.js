@@ -116,20 +116,34 @@ ccot_changeWrap.prototype.transform =
 */
 ccot_changeWrap.prototype.changeTree =
 	function(
-		tree
+		tree,
+		resultModality
 	)
 {
 	var
 		result;
 
-	result = this.changeRay.changeTree( tree );
+	result = this.changeRay.changeTree( tree, resultModality );
 
-	return(
-		result_changeTree.create(
-			'reaction', this.create( 'changeRay', result.reaction ),
-			'tree', result.tree
-		)
-	);
+	switch( resultModality )
+	{
+		case 'combined' :
+
+			return(
+				result_changeTree.create(
+					'reaction', this.create( 'changeRay', result.reaction ),
+					'tree', result.tree
+				)
+			);
+
+		case 'reaction' :
+
+			return this.create( 'changeRay', result );
+
+		case 'tree' :
+
+			return result;
+	}
 };
 
 

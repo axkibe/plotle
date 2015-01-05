@@ -47,17 +47,18 @@ var
 	database_repository,
 	fabric_spaceRef,
 	fs,
-	server_generateJion,
 	http,
 	isString,
 	jools,
 	mongodb,
 	prototype,
-	server_requestHandler,
+	resume,
 	roster,
+	server_generateJion,
 	server_inventory,
 	server_maxAge,
 	server_postProcessor,
+	server_requestHandler,
 	server_resource,
 	server_root,
 	server_spaceBox,
@@ -102,6 +103,8 @@ server_tools = require( './tools' );
 sha1 = require( '../jools/sha1' );
 
 sus = require( 'suspend' );
+
+resume = sus.resume;
 
 uglify = require( 'uglify-js' );
 
@@ -211,11 +214,7 @@ prototype.startup =
 		{
 			sus( root.requestListener ).call( root, request, result );
 		}
-	).listen(
-		config.port,
-		config.ip,
-		sus.resume( )
-	);
+	).listen( config.port, config.ip, resume( ) );
 
 	jools.log( 'start', 'server running' );
 };
@@ -229,6 +228,7 @@ prototype.loadSpaces =
 {
 	var
 		cursor,
+		o,
 		spaceRef;
 
 	jools.log( 'start', 'loading and replaying all spaces' );
@@ -237,13 +237,13 @@ prototype.loadSpaces =
 		yield root.repository.spaces.find(
 			{ },
 			{ sort: '_id' },
-			sus.resume( )
+			resume( )
 		);
 
 	for(
-		var o = yield cursor.nextObject( sus.resume( ) );
+		o = yield cursor.nextObject( resume( ) );
 		o !== null;
-		o = yield cursor.nextObject( sus.resume( ) )
+		o = yield cursor.nextObject( resume( ) )
 	)
 	{
 		spaceRef =
@@ -254,7 +254,7 @@ prototype.loadSpaces =
 
 		jools.log(
 			'start',
-			'loading and replaying all "' + spaceRef.fullname + '"'
+			'loading and replaying "' + spaceRef.fullname + '"'
 		);
 
 		root.$spaces[ spaceRef.fullname ] =
@@ -439,7 +439,7 @@ prototype.prepareInventory =
 						'data',
 							( yield fs.readFile(
 								resource.filePath,
-								sus.resume( )
+								resume( )
 							) )
 					)
 				)
@@ -493,11 +493,10 @@ prototype.prepareInventory =
 					(
 						yield fs.readFile(
 							resource.filePath,
-							sus.resume( )
+							resume( )
 						)
 					)
-					+
-					'';
+					+ '';
 			}
 			else
 			{
@@ -612,7 +611,7 @@ prototype.prepareInventory =
 			yield fs.writeFile(
 				'report/source.map',
 				sourceMap.toString( ),
-				sus.resume( )
+				resume( )
 			);
 		}
 
@@ -706,10 +705,7 @@ prototype.prepareInventory =
 				resource,
 				resource.create(
 					'gzip',
-						yield zlib.gzip(
-							resource.data,
-							sus.resume( )
-						)
+						yield zlib.gzip( resource.data, resume( ) )
 				)
 			);
 	}
@@ -1305,11 +1301,7 @@ prototype.requestListener =
 	else
 	{
 		try {
-			data =
-				yield fs.readFile(
-					resource.filePath,
-					sus.resume( )
-				);
+			data = yield fs.readFile( resource.filePath, resume( ) );
 		}
 		catch( e )
 		{
@@ -1446,7 +1438,7 @@ prototype.webAjax =
 			{
 				console.log( 'DELAYING');
 
-				yield setTimeout( sus.resume( ), 5000 );
+				yield setTimeout( resume( ), 5000 );
 
 				console.log( 'EOD');
 			}

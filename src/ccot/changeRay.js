@@ -229,13 +229,11 @@ ccot_changeRay.prototype.transform =
 
 /*
 | Performes this change-ray on a tree.
-|
-| FIXME trace if a signle change has changed and create
-| a new array only then
 */
 ccot_changeRay.prototype.changeTree =
 	function(
-		tree
+		tree,
+		resultModality
 	)
 {
 	// the ray with the changes applied
@@ -244,6 +242,7 @@ ccot_changeRay.prototype.changeTree =
 		cray,
 		cr;
 
+	// FUTURE if resultModality is skip cray
 	cray = [ ];
 
 	// iterates through the change ray
@@ -253,7 +252,7 @@ ccot_changeRay.prototype.changeTree =
 		a++
 	)
 	{
-		cr = this.get( a ).changeTree( tree );
+		cr = this.get( a ).changeTree( tree, 'combined' );
 
 		// the tree returned by op-handler is the new tree
 		tree = cr.tree;
@@ -261,14 +260,25 @@ ccot_changeRay.prototype.changeTree =
 		cray.push( cr.reaction );
 	}
 
-	// FUTURE create only a single change when cray.length === 1
+	switch( resultModality )
+	{
+		case 'combined' :
 
-	return(
-		result_changeTree.create(
-			'tree', tree,
-			'reaction', ccot_changeRay.create( 'ray:init', cray )
-		)
-	);
+			return(
+				result_changeTree.create(
+					'reaction', ccot_changeRay.create( 'ray:init', cray ),
+					'tree', tree
+				)
+			);
+
+		case 'reaction' :
+
+			return ccot_changeRay.create( 'ray:init', cray );
+
+		case 'tree' :
+
+			return tree;
+	}
 };
 
 
