@@ -209,12 +209,11 @@ ccot_sign.prototype.affix =
 		val   // value to affix
 	)
 {
-	/* TODO
 	if( this[ key ] !== undefined )
 	{
 		if( !jools.matches( val, this[ key ] ) )
 		{
-			if( SERVER )
+			if( SERVER && !CONVERT ) // XXX
 			{
 				console.log(
 					'\nfaulty preset:\n\n',
@@ -231,7 +230,6 @@ ccot_sign.prototype.affix =
 			throw new Error( );
 		}
 	}
-	*/
 
 	return this.create( key, val );
 };
