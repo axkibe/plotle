@@ -30,7 +30,7 @@ if( JION )
 				src :
 					{
 						comment :
-							'source signature',
+							'source sign',
 						json :
 							'true',
 						type :
@@ -39,7 +39,7 @@ if( JION )
 				trg :
 					{
 						comment :
-							'target signature',
+							'target sign',
 						json :
 							'true',
 						type :
@@ -1006,7 +1006,7 @@ ccot_change.prototype._changeTreeRank =
 
 
 /*
-| Transforms a signature by this change
+| Transforms a sign by this change
 |
 | This can possibly return a sign ray.
 */
@@ -1112,7 +1112,7 @@ ccot_change.prototype._transformSignRay =
 
 
 /*
-| Transforms a signature on one a split.
+| Transforms a sign on a split.
 */
 ccot_change.prototype._transformSignSplit =
 	function(
@@ -1139,10 +1139,8 @@ ccot_change.prototype._transformSignSplit =
 	}
 
 	// FIXME form ranks
-	// simpler case signature is only one point
-	if(
-		sign.at2 === undefined
-	)
+	// simpler case sign is only one point
+	if( sign.at2 === undefined )
 	{
 
 		if( sign.at1 < src.at1 )
@@ -1158,7 +1156,7 @@ ccot_change.prototype._transformSignSplit =
 		);
 	}
 
-	// A more complicated signature is affected.
+	// A more complicated sign is affected.
 	//                   ............
 	// Span                  mmmmm
 	// Splits cases:      1    2    3
@@ -1170,7 +1168,7 @@ ccot_change.prototype._transformSignSplit =
 
 	if( sign.at1 >= src.at1 )
 	{
-		// signature goes into splitted line instead
+		// sign goes into splitted line instead
 		return(
 			sign.create(
 				'path', trg.path,
@@ -1180,7 +1178,7 @@ ccot_change.prototype._transformSignSplit =
 		);
 	}
 
-	// the signature is splited into a part that stays
+	// the sign is splited into a part that stays
 	// and one that goes to next line.
 
 	return(
@@ -1199,7 +1197,7 @@ ccot_change.prototype._transformSignSplit =
 };
 
 /*
-| Transforms a signature on a join.
+| Transforms a sign on a join.
 */
 ccot_change.prototype._transformSignJoin =
 	function(
@@ -1232,6 +1230,10 @@ ccot_change.prototype._transformSignJoin =
 
 	// FUTURE? transform ranks
 
+	if( sign.at1 === undefined && sign.at2 === undefined )
+	{
+		return sign.create( 'path', trg.path );
+	}
 	if( sign.at2 === undefined )
 	{
 		return(
@@ -1254,7 +1256,7 @@ ccot_change.prototype._transformSignJoin =
 };
 
 /*
-| Transforms a signature on a rank
+| Transforms a sign on a rank.
 */
 ccot_change.prototype._transformSignRank =
 	function(
@@ -1298,7 +1300,7 @@ ccot_change.prototype._transformSignRank =
 
 
 /*
-| Transforms a signature on a join.
+| Transforms a sign on a join.
 */
 ccot_change.prototype._transformSignSet =
 	function(
@@ -1373,7 +1375,7 @@ ccot_change.prototype._transformSignInsert =
 	if(
 		!trg.path
 		|| !trg.path.equals( sign.path )
-		|| !sign.at1
+		|| sign.at1 === undefined
 	)
 	{
 		return sign;
@@ -1411,7 +1413,7 @@ ccot_change.prototype._transformSignInsert =
 
 
 /*
-| Transforms a signature on a remove
+| Transforms a sign on a remove
 */
 ccot_change.prototype._transformSignRemove =
 	function(
@@ -1447,7 +1449,7 @@ ccot_change.prototype._transformSignRemove =
 
 	len = src.at2 - src.at1;
 
-	// simpler case signature is only one point
+	// simpler case sign is only one point
 	if( sign.at2 === undefined )
 	{
 		if( sign.at1 === undefined )
@@ -1473,7 +1475,7 @@ ccot_change.prototype._transformSignRemove =
 		return sign.create( 'at1', sign.at1 - len );
 	}
 
-	// More complicated signature is affected.
+	// More complicated sign is affected.
 	// Supposedly ;its a remove as well.
 	//
 	//                     ............
