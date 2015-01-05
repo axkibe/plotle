@@ -136,7 +136,8 @@ run =
 
 	srcDatabase = yield* database_repository.connect( srcConfig );
 
-	root.database = srcDatabase;
+	// spaceBox is using this global
+	root.repository = srcDatabase;
 
 	console.log( '* connecting to trg' );
 
@@ -176,12 +177,14 @@ run =
 		o = yield cursor.nextObject( resume( ) )
 	)
 	{
-		console.log( o._id );
+		console.log( ' * ' + o._id );
 
 //		yield trg.users.insert( o, resume( ) );
 	}
 
 	console.log( '* loading and replaying all spaces' );
+
+	spaces = { };
 
 	cursor =
 		yield srcDatabase.spaces.find(

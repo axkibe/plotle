@@ -102,9 +102,7 @@ server_spaceBox.loadSpace =
 	space = fabric_space.create( );
 
 	changesDB =
-		yield* root.repository.collection(
-			'changes:' + spaceRef.fullname
-		);
+		yield* root.repository.collection( 'changes:' + spaceRef.fullname );
 
 	cursor =
 		yield changesDB.find(

@@ -121,37 +121,27 @@ jools.lazyValue(
 		{
 			type = 'split';
 		}
-		else if(
-			src.proc === 'splice'
-		)
+		else if( src.proc === 'splice' )
 		{
 			type = 'join';
 		}
-		else if(
-			src.val !== undefined && trg.at1 === undefined
-		)
+		else if( src.val !== undefined && trg.at1 === undefined )
 		{
 			type = 'set';
 		}
-		else if(
-			src.val !== undefined && trg.at1 !== undefined
-		)
+		else if( src.val !== undefined && trg.at1 !== undefined )
 		{
 			type = 'insert';
 		}
 		else if(
 			src.at1 !== undefined
-			&&
-			src.at2 !== undefined
-			&&
-			trg.at1 === undefined
+			&& src.at2 !== undefined
+			&& trg.at1 === undefined
 		)
 		{
 			type = 'remove';
 		}
-		else if(
-			trg.rank !== undefined
-		)
+		else if( trg.rank !== undefined )
 		{
 			type = 'rank';
 		}
@@ -219,36 +209,6 @@ ccot_change.prototype.changeTree =
 
 		default : throw new Error( );
 	}
-};
-
-
-
-/*
-| Change emulates a changeRay with the length of 1.
-| FIXME check if needed
-*/
-ccot_change.prototype.length = 1;
-
-
-/*
-| change emulates a changeRay with the length of 1.
-| FIXME check if needed
-*/
-ccot_change.prototype.get =
-	function(
-		idx
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( idx !== 0 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return this;
 };
 
 
