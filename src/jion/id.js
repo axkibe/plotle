@@ -81,10 +81,22 @@ jion_id.createFromString =
 
 	if( split.length <= 1 )
 	{
+		switch( string )
+		{
+			case 'Array' : break; // FIXME
+			case 'Boolean' : break;
+			case 'Integer' : break;
+			case 'Number' : break;
+			case 'Object' : break;
+			case 'String' : break;
+
+			default : throw new Error( 'bad id: ' + string );
+		}
+
 		return jion_id.create( 'name', string );
 	}
 
-	if( split.length > 2 )
+	if( split.length !== 2 )
 	{
 		throw new Error( );
 	}

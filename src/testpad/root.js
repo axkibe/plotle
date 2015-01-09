@@ -3,20 +3,15 @@
 */
 
 
-/*
-| Imports
-*/
 var
 	jion_path,
 	jools,
+	root,
 	shell_alter,
-	testpad;
-
-/*
-| Export
-*/
-var
-	root;
+	testpad_action,
+	testpad_doTracker,
+	testpad_repository,
+	testpad_root;
 
 
 /*
@@ -33,7 +28,7 @@ if( JION )
 {
 	return {
 		id :
-			'testpad.root',
+			'testpad_root',
 		attributes :
 			{
 				action :
@@ -41,7 +36,7 @@ if( JION )
 						comment :
 							'the action the user is preparing',
 						type :
-							'testpad.action',
+							'testpad_action',
 						defaultValue :
 							null
 					},
@@ -100,11 +95,22 @@ if( JION )
 							false
 					},
 				link :
+					// name is "link" since shell_alter
+					// calls it like that
 					{
 						comment :
 							'the testing repository',
 						type :
-							'testpad.repos',
+							'testpad_repository',
+						defaultValue :
+							null
+					},
+				doTracker :
+					{
+						comment :
+							'just a dummy for testpad',
+						type :
+							'testpad_doTracker',
 						defaultValue :
 							null
 					},
@@ -115,14 +121,12 @@ if( JION )
 }
 
 var
-	proto,
-	_noteDocPath;
-
-proto = testpad.root.prototype;
+	isSpecialKey,
+	noteDocPath;
 
 root = null;
 
-_noteDocPath =
+noteDocPath =
 	jion_path.empty
 	.append( 'space' )
 	.append( 'twig' )
@@ -151,7 +155,7 @@ var _bind =
 /*
 | Initializer.
 */
-proto._init =
+testpad_root.prototype._init =
 	function( )
 {
 	var
@@ -239,12 +243,17 @@ proto._init =
 
 	if( !this.link )
 	{
-		this.link = testpad.repos.create( );
+		this.link = testpad_repository.create( );
+	}
+
+	if( !this.doTracker )
+	{
+		this.doTracker = testpad_doTracker.create( );
 	}
 
 	doc =
 	this._doc =
-		this.link.get( _noteDocPath.chop( 1 ) );
+		this.link.get( noteDocPath.chop( 1 ) );
 
 	elements.now.innerHTML = '' + this.link.seq;
 
@@ -272,6 +281,7 @@ proto._init =
 			jools.limit(
 				0,
 				this.cursorAt,
+				// FIXME rankAt
 				doc.twig[ doc.ranks[ this.cursorLine ] ].text.length
 			);
 	}
@@ -292,7 +302,7 @@ proto._init =
 /*
 | Returns true if a keyCode is known to be a "special key".
 */
-var _isSpecialKey =
+isSpecialKey =
 	function( keyCode )
 {
 	switch( keyCode )
@@ -318,7 +328,7 @@ var _isSpecialKey =
 /*
 | Mouse down event on pad -> focuses the hidden input,
 */
-proto.onMouseDown =
+testpad_root.prototype.onMouseDown =
 	function(
 		event
 	)
@@ -388,7 +398,7 @@ proto.onMouseDown =
 /*
 | Captures all mouse events.
 */
-proto.captureEvents =
+testpad_root.prototype.captureEvents =
 	function( )
 {
 	var
@@ -412,7 +422,7 @@ proto.captureEvents =
 /*
 | Stops capturing all mouse events.
 */
-proto.releaseEvents =
+testpad_root.prototype.releaseEvents =
 	function( )
 {
 	var
@@ -435,7 +445,7 @@ proto.releaseEvents =
 /*
 | Mouse button released.
 */
-proto.onMouseUp =
+testpad_root.prototype.onMouseUp =
 	function(
 		event
 	)
@@ -457,7 +467,7 @@ proto.onMouseUp =
 /*
 | Mouse clicked on pad.
 */
-proto.onMouseClick =
+testpad_root.prototype.onMouseClick =
 	function(
 		event
 	)
@@ -470,7 +480,7 @@ proto.onMouseClick =
 | Mouse moved over pad
 | (or while dragging around it).
 */
-proto.onMouseMove =
+testpad_root.prototype.onMouseMove =
 	function(
 		event
 	)
@@ -485,12 +495,12 @@ proto.onMouseMove =
 /*
 | Key down event to ( hidden ) input.
 */
-proto.onKeyDown =
+testpad_root.prototype.onKeyDown =
 	function(
 		event
 	)
 {
-	if( _isSpecialKey( event.keyCode ) )
+	if( isSpecialKey( event.keyCode ) )
 	{
 		event.preventDefault( );
 
@@ -506,7 +516,7 @@ proto.onKeyDown =
 /*
 | Press event to (hidden) input.
 */
-proto.onKeyPress =
+testpad_root.prototype.onKeyPress =
 	function(
 		// event
 	)
@@ -518,7 +528,7 @@ proto.onKeyPress =
 /*
 | Up event to (hidden) input.
 */
-proto.onKeyUp =
+testpad_root.prototype.onKeyUp =
 	function(
 		// event
 	)
@@ -530,7 +540,7 @@ proto.onKeyUp =
 /*
 | Hidden input got focus.
 */
-proto.onFocus =
+testpad_root.prototype.onFocus =
 	function( )
 {
 	root.create( 'haveFocus', true );
@@ -540,7 +550,7 @@ proto.onFocus =
 /*
 | Hidden input lost focus.
 */
-proto.onBlur =
+testpad_root.prototype.onBlur =
 	function( )
 {
 	root.create( 'haveFocus', false );
@@ -550,7 +560,7 @@ proto.onBlur =
 /*
 | Sends the current action.
 */
-proto.send =
+testpad_root.prototype.send =
 	function( )
 {
 	var
@@ -577,7 +587,7 @@ proto.send =
 			// FIXME path is set in all cases equally, so
 			//       move it up
 			path =
-				_noteDocPath
+				noteDocPath
 				.append( 'twig' )
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
@@ -596,7 +606,7 @@ proto.send =
 		case 'remove' :
 
 			path =
-				_noteDocPath
+				noteDocPath
 				.append( 'twig' )
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
@@ -622,7 +632,7 @@ proto.send =
 		case 'split' :
 
 			path =
-				_noteDocPath
+				noteDocPath
 				.append( 'twig' )
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
@@ -634,7 +644,7 @@ proto.send =
 		case 'join' :
 
 			path =
-				_noteDocPath
+				noteDocPath
 				.append( 'twig' )
 				.append( doc.ranks[ action.line - 1] )
 				.append( 'text' );
@@ -665,7 +675,7 @@ proto.send =
 /*
 | Cancels the current action.
 */
-proto.onCancelButton =
+testpad_root.prototype.onCancelButton =
 	function( )
 {
 	root.create( 'action', null );
@@ -675,7 +685,7 @@ proto.onCancelButton =
 /*
 | Displays a beep message.
 */
-proto.beep =
+testpad_root.prototype.beep =
 	function( )
 {
 	root.elements.beep.innerHTML = 'BEEP!';
@@ -695,7 +705,7 @@ proto.beep =
 /*
 | Clears the beep message.
 */
-proto.clearBeep =
+testpad_root.prototype.clearBeep =
 	function( )
 {
 	root.elements.beep.innerHTML = '';
@@ -709,7 +719,7 @@ proto.clearBeep =
 /*
 | Aquires non-special input from (hidden) input.
 */
-proto.testInput =
+testpad_root.prototype.testInput =
 	function( )
 {
 	var
@@ -742,15 +752,11 @@ proto.testInput =
 	{
 		root.create(
 			'action',
-			testpad.action.create(
-				'command',
-					'insert',
-				'line',
-					cursorLine,
-				'at',
-					cursorAt,
-				'value',
-					text
+			testpad_action.create(
+				'command', 'insert',
+				'line', cursorLine,
+				'at', cursorAt,
+				'value', text
 			)
 		);
 
@@ -783,7 +789,7 @@ proto.testInput =
 /*
 | Handles all kind of special keys.
 */
-proto.inputSpecialKey =
+testpad_root.prototype.inputSpecialKey =
 	function(
 		keyCode,
 		ctrl
@@ -826,11 +832,9 @@ proto.inputSpecialKey =
 
 				root.create(
 					'action',
-						testpad.action.create(
-							'command',
-								'join',
-							'line',
-								cursorLine
+						testpad_action.create(
+							'command', 'join',
+							'line', cursorLine
 						)
 				);
 
@@ -841,18 +845,13 @@ proto.inputSpecialKey =
 			{
 				root.create(
 					'action',
-						testpad.action.create(
-							'command',
-								'remove',
-							'line',
-								cursorLine,
-						'at',
-							cursorAt - 1,
-						'at2',
-							cursorAt
+						testpad_action.create(
+							'command', 'remove',
+							'line', cursorLine,
+						'at', cursorAt - 1,
+						'at2', cursorAt
 					),
-					'cursorAt',
-						cursorAt - 1
+					'cursorAt', cursorAt - 1
 				);
 
 				return;
@@ -904,13 +903,10 @@ proto.inputSpecialKey =
 
 			root.create(
 				'action',
-					testpad.action.create(
-						'command',
-							'split',
-						'line',
-							cursorLine,
-						'at',
-							cursorAt
+					testpad_action.create(
+						'command', 'split',
+						'line', cursorLine,
+						'at', cursorAt
 					)
 			);
 
@@ -1056,15 +1052,11 @@ proto.inputSpecialKey =
 			{
 				root.create(
 					'action',
-						testpad.action.create(
-							'command',
-								'remove',
-							'line',
-								cursorLine,
-							'at',
-								cursorAt,
-							'at2',
-								cursorAt + 1
+						testpad_action.create(
+							'command', 'remove',
+							'line', cursorLine,
+							'at', cursorAt,
+							'at2', cursorAt + 1
 						),
 					'cursorAt',
 						cursorAt + 1
@@ -1102,7 +1094,7 @@ proto.inputSpecialKey =
 /*
 | Button update-to-now has been clicked.
 */
-proto.onUpNowButton =
+testpad_root.prototype.onUpNowButton =
 	function( )
 {
 	root.create(
@@ -1117,7 +1109,7 @@ proto.onUpNowButton =
 /*
 | Button one-up-the-sequence has been clicked.
 */
-proto.onUpButton =
+testpad_root.prototype.onUpButton =
 	function( )
 {
 	root.create(
@@ -1132,7 +1124,7 @@ proto.onUpButton =
 /*
 | Button one-down-the-sequence has been clicked.
 */
-proto.onDownButton =
+testpad_root.prototype.onDownButton =
 	function( )
 {
 	root.create(
@@ -1147,7 +1139,7 @@ proto.onDownButton =
 /*
 | Cretes a screen for current data.
 */
-proto.makeScreen =
+testpad_root.prototype.makeScreen =
 	function(
 		doc
 	)
@@ -1350,7 +1342,7 @@ proto.makeScreen =
 | Generates the noDataScreen.
 | FIXME lazyFixate
 */
-proto.noDataScreen =
+testpad_root.prototype.noDataScreen =
 	function( )
 {
 	// no data
@@ -1388,7 +1380,7 @@ proto.noDataScreen =
 window.onload =
 	function( )
 {
-	testpad.root.create( );
+	testpad_root.create( );
 
 	root.elements.input.focus( );
 };

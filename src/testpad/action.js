@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'testpad.action',
+			'testpad_action',
 		attributes :
 			{
 				command :

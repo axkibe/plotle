@@ -33,6 +33,7 @@ module.exports =
 		'postProcessor', 'develHtml'
 	),
 	resource.create(
+		'aliases', [ 'favicon.ico' ],
 		'filePath', 'media/favicon.ico',
 		'maxage', 'long'
 	),
@@ -63,7 +64,8 @@ module.exports =
 	resource.create(
 		'filePath', 'src/result/changeTree.js',
 		'hasJion', true,
-		'inBundle', true
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
 		'filePath', 'src/ccot/sign.js',
@@ -667,7 +669,13 @@ module.exports =
 		'postProcessor', 'testPadHtml'
 	),
 	resource.create(
-		'filePath', 'src/testpad/repos.js',
+		'filePath', 'src/testpad/repository.js',
+		'devel', true,
+		'hasJion', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/testpad/doTracker.js',
 		'devel', true,
 		'hasJion', true,
 		'inTestPad', true

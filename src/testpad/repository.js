@@ -2,20 +2,7 @@
 | The repository simulator does not talk to a server.
 */
 
-/*
-| Export
-*/
 var
-	testpad;
-
-testpad = testpad || { };
-
-
-/*
-| Imports
-*/
-var
-	ccot_changeWrap,
 	ccot_changeWrapRay,
 	euclid_point,
 	euclid_rect,
@@ -24,7 +11,8 @@ var
 	fabric_para,
 	fabric_space,
 	jools,
-	root;
+	root,
+	testpad_repository;
 
 
 /*
@@ -41,7 +29,7 @@ if( JION )
 {
 	return {
 		id :
-			'testpad.repos',
+			'testpad_repository',
 		attributes :
 			{
 				// TODO _space
@@ -63,12 +51,12 @@ if( JION )
 						defaultValue :
 							null
 					},
-				_changes :
+				_changeWrapRay :
 					{
 						comment :
-							'history of the space changes',
+							'history of all changes',
 						type :
-							'ccot.changeWrapRay',
+							'ccot_changeWrapRay',
 						defaultValue :
 							null
 					},
@@ -80,20 +68,14 @@ if( JION )
 
 
 var
-	nextcid,
-	proto,
-	repos;
+	nextcid;
 
 nextcid = 1001;
-
-repos = testpad.repos;
-
-proto = repos.prototype;
 
 /*
 | Initializer.
 */
-proto._init =
+testpad_repository.prototype._init =
 	function( )
 {
 	// the current space;
@@ -105,45 +87,52 @@ proto._init =
 				'testnote',
 				fabric_note.create(
 					'doc',
+						/*
 						fabric_doc.create(
 							'twig:add', '1',
 								fabric_para.create(
-									'text',
-										'Why would I want to know that?'
+									'text', 'Why would I want to know that?'
 								),
 							'twig:add', '2',
 								fabric_para.create(
-									'text',
-										'Can we have Bender Burgers again?'
+									'text', 'Can we have Bender Burgers again?'
 								),
 							'twig:add', '3',
 								fabric_para.create(
-									'text',
-										'And so we say goodbye to ' +
-										'our beloved pet, Nibbler.'
+									'text', 'And so we say goodbye to '
+									+ 'our beloved pet, Nibbler.'
+								)
+						),
+						*/
+						fabric_doc.create(
+							'twig:add', '1',
+								fabric_para.create(
+									'text', 'Ameno'
+								),
+							'twig:add', '2',
+								fabric_para.create(
+									'text', 'Latire'
+								),
+							'twig:add', '3',
+								fabric_para.create(
+									'text', 'Dori me'
 								)
 						),
 					'zone',
 						euclid_rect.create(
 							'pnw',
-								euclid_point.create(
-									'x', 0,
-									'y', 0
-								),
+								euclid_point.create( 'x', 0, 'y', 0 ),
 							'pse',
-								euclid_point.create(
-									'x', 100,
-									'y', 100
-								)
+								euclid_point.create( 'x', 100, 'y', 100 )
 						),
 					'fontsize', 13
 			)
 		);
 	}
 
-	if( this._changes === null )
+	if( this._changeWrapRay === null )
 	{
-		this._changes = ccot_changeWrapRay.create( );
+		this._changeWrapRay = ccot_changeWrapRay.create( );
 	}
 
 	if( this.seq === null )
@@ -151,14 +140,14 @@ proto._init =
 		this.seq = 0;
 	}
 
-	this.seq = jools.limit( 0, this.seq, this._changes.length );
+	this.seq = jools.limit( 0, this.seq, this._changeWrapRay.length );
 };
 
 
 /*
 | Gets a twig.
 */
-proto.get =
+testpad_repository.prototype.get =
 	function(
 		path,
 		len
@@ -166,16 +155,15 @@ proto.get =
 {
 	var
 		a,
-		b,
-		changes,
-		chgX,
+		cwRay,
+		changeRay,
 		cZ,
 		seq,
 		space;
 
-	changes = this._changes;
+	cwRay = this._changeWrapRay;
 
-	cZ = changes.length;
+	cZ = cwRay.length;
 
 	seq = this.seq;
 
@@ -191,12 +179,9 @@ proto.get =
 	// rewinds stuff
 	for( a = cZ - 1; a >= seq; a-- )
 	{
-		chgX = changes.get( a ).chgX;
+		changeRay = cwRay.get( a ).changeRay;
 
-		for( b = 0; b < chgX.length; b++ )
-		{
-			space = chgX.get( 0 ).invert.changeTree( space, 'tree' );
-		}
+		space = changeRay.invert.changeTree( space, 'tree' );
 	}
 
 	// returns the path requested
@@ -205,63 +190,48 @@ proto.get =
 
 
 /*
-| Alters the tree
+| Alters the tree.
 */
-proto.alter =
+testpad_repository.prototype.alter =
 	function(
-		chg
+		cw  // changeWrap
 	)
 {
 	var
-		chgX,
-		changes,
-		cZ,
+		cwRay,
 		r,
 		s,
+		sZ,
 		seq;
 
-	changes = this._changes;
-
-	cZ = changes.length;
-
-	chgX = chg;
+	cwRay = this._changeWrapRay;
 
 	seq = this.seq;
 
 	for(
-		s = seq;
-		s < cZ;
+		s = seq, sZ = cwRay.length;
+		s < sZ;
 		s++
 	)
 	{
-		chgX = changes.get( s ).chgX.transform( chgX );
-
-		if( chgX === null )
-		{
-			return null;
-		}
+		cw = cwRay.get( s ).transform( cw );
 	}
 
-	r = chgX.changeTree( this.space, 'combined' );
+	r = cw.changeTree( this.space, 'combined' );
 
-	changes =
-		changes.append(
-			ccot_changeWrap.create(
-				'cid', '' + ( nextcid++ ),
-				'chgX', r.reaction,
-				'seq', seq + 1
-			)
-		);
+	cw = r.reaction.create( 'seq', seq + 1 );
+
+	cwRay = cwRay.append( cw );
 
 	root.create(
 		'link',
 			this.create(
-				'_changes', changes,
+				'_changeWrapRay', cwRay,
 				'space', r.tree
 			)
 	);
 
-	return r.reaction;
+	return r.create( 'reaction', cw );
 };
 
 
