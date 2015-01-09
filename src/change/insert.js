@@ -172,7 +172,7 @@ change_insert.prototype.transform =
 		case 'change_insert' :
 		case 'change_remove' :
 
-			return this._transformInsert( cx );
+			return this._transformTextChange( cx );
 
 		case 'change_ray' :
 
