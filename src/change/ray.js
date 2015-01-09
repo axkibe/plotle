@@ -207,15 +207,15 @@ change_ray.prototype.transform =
 
 	switch( co.reflect )
 	{
-		case 'ccot_changeRay' :
+		case 'change_ray' :
 
 			return this._transformChangeRay( co );
 
-		case 'ccot_changeWrap' :
+		case 'change_wrap' :
 
 			return this._transformChangeWrap( co );
 
-		case 'ccot_changeWrapRay' :
+		case 'change_wrapRay' :
 
 			return this._transformChangeWrapRay( co );
 

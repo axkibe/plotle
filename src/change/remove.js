@@ -25,7 +25,7 @@ if( JION )
 {
 	return {
 		id :
-			'change_insert',
+			'change_remove',
 		attributes :
 			{
 				path :
@@ -76,13 +76,13 @@ if( JION )
 */
 if( SERVER )
 {
-	change_insert = require( '../jion/this' )( module );
+	change_remove = require( '../jion/this' )( module );
 
 	change_generic = require( './generic' );
 
 	change_error = require( './error' );
 
-	change_remove = require( './remove' );
+	change_insert = require( './insert' );
 
 	jools = require( '../jools/jools' );
 
@@ -93,15 +93,12 @@ if( SERVER )
 /*
 | Initializer.
 */
-change_insert.prototype._init =
+change_remove.prototype._init =
 	function ( )
 {
 	if( this.at1 + this.val.length !== this.at2 )
 	{
-		throw change_error(
-			'insert.at1 + insert.val.length '
-			+ '!== insert.at2'
-		);
+		throw change_error( 'remove.at1 + remove.val.length !== remove.at2' );
 	}
 };
 
@@ -110,7 +107,7 @@ change_insert.prototype._init =
 | Returns the inversion to this change.
 */
 jools.lazyValue(
-	change_insert.prototype,
+	change_remove.prototype,
 	'invert',
 	function( )
 	{
@@ -118,7 +115,7 @@ jools.lazyValue(
 			inv;
 
 		inv =
-			change_remove.create(
+			change_insert.create(
 				'path', this.path,
 				'val', this.val,
 				'at1', this.at1,
@@ -135,29 +132,29 @@ jools.lazyValue(
 /*
 | Returns a change ray transformed by this change.
 */
-change_insert.prototype._transformChangeRay =
-	change_generic.transformChangeRay;
+change_remove.prototype._transformChangeRay =
+	change_remove.transformChangeRay;
 
 
 /*
 | Return a change wrap transformed by this change.
 */
-change_insert.prototype._transformChangeWrap =
-	change_generic.transformChangeWrap;
+change_remove.prototype._transformChangeWrap =
+	change_remove.transformChangeWrap;
 
 
 /*
 | Return a change wrap transformed by this change.
 */
-change_insert.prototype._transformChangeWrapRay =
-	change_generic.transformChangeWrapRay;
+change_remove.prototype._transformChangeWrapRay =
+	change_remove.transformChangeWrapRay;
 
 
 /*
 | Returns a change, changeRay, changeWrap or changeWrapRay
 | transformed on this change.
 */
-change_insert.prototype.transform =
+change_remove.prototype.transform =
 	function(
 		cx
 	)
@@ -170,9 +167,12 @@ change_insert.prototype.transform =
 	switch( cx.reflect )
 	{
 		case 'change_insert' :
-		case 'change_remove' :
 
 			return this._transformInsert( cx );
+
+		case 'change_remove' :
+
+			return this._transformRemove( cx );
 
 		case 'change_ray' :
 
@@ -196,33 +196,36 @@ change_insert.prototype.transform =
 /*
 | Performs the insertion change on a tree.
 */
-change_insert.prototype.changeTree =
+change_remove.prototype.changeTree =
 	function(
 		tree,
 		resultModality
 	)
 {
 	var
-		s;
+		s,
+		val;
 
 	s = tree.getPath( this.path );
 
 	if( !jools.isString( s ) )
 	{
-		throw change_error( 'insert.path signates no string' );
+		throw change_error( 'remove.path signates no string' );
 	}
 
-	if( this.at1 > s.length )
+	val = s.substring( this.at1, this.at2 );
+
+	if( val !== this.val )
 	{
-		throw new Error( );
+		throw change_error( 'remove.val wrong: ' + val + ' !== ' + this.val );
 	}
+
 
 	tree =
 		tree.setPath(
 			this.path,
 			s.substring( 0, this.at1 )
-			+ this.val
-			+ s.substring( this.at1 )
+			+ s.substring( this.at2 )
 		);
 
 	// FIXME remove
@@ -253,10 +256,10 @@ change_insert.prototype.changeTree =
 
 
 /*
-| Transforms another insert/remove change
-| considering this insert actually came first.
+| Transforms an insert change
+| considering this remove actually came first.
 */
-change_insert.prototype._transformTextChange =
+change_remove.prototype._transformInsert =
 	function(
 		cx
 	)
@@ -266,10 +269,7 @@ change_insert.prototype._transformTextChange =
 
 /**/if( CHECK )
 /**/{
-/**/	if(
-/**/		cx.reflect !== 'change_insert'
-/**/		&& cx.reflect !== 'change_remove'
-/**/	)
+/**/	if( cx.reflect !== 'change_insert' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -288,12 +288,102 @@ change_insert.prototype._transformTextChange =
 	{
 		len = this.val.length;
 
+		return cx.create( 'at1', cx.at1 - len, 'at2', cx.at2 - len );
+	}
+};
+
+
+/*
+| Transforms another remove change.
+| considering this remove actually came first.
+*/
+change_remove.prototype._transformRemove =
+	function(
+		cx
+	)
+{
+	var
+		len;
+
+/**/if( CHECK )
+/**/{
+/**/	if( cx.reflect !== 'change_remove' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !this.path.equals( cx.path ) )
+	{
+		return cx;
+	}
+
+	len = this.at2 - this.at1;
+
+	// text            tttttttttttt
+	// this remove        ######
+	// case 0:        xxx '    '      cx to left, no effect
+	// case 1:            '    ' xxx  cx to right, move to left
+	// case 2:          xxXXXXXXx     cx both sides reduced
+	// case 3:            ' XX '      cx fully gone
+	// case 4:          xxXX   '      cx partially reduced
+	// case 5:            '   XXxx    cx partially reduced
+
+	if( cx.at2 <= this.at1 )
+	{
+		// case 0
+		return cx;
+	}
+	else if( cx.at1 >= this.at2 )
+	{
+		// case 1
 		return(
 			cx.create(
-				'at1', cx.at1 + len,
-				'at2', cx.at2 + len
+				'at1', cx.at1 - len,
+				'at2', cx.at2 - len
 			)
 		);
+	}
+	else if( cx.at1 < this.at1 && cx.at2 > this.at2 )
+	{
+		// case 2
+		return(
+			cx.create(
+				'at2', cx.at2 - len,
+				'val',
+					cx.val.substring( 0, this.at1 - cx.at1 )
+					+ cx.val.substring( this.at2 - cx.at1 )
+			)
+		);
+	}
+	else if( cx.at1 >= this.at1 && cx.at2 <= this.at2 )
+	{
+		// case 3
+		return null;
+	}
+	else if( cx.at1 < this.at1 && cx.at2 <= this.at2 )
+	{
+		// case 4
+		return(
+			cx.create(
+				'at2', this.at1,
+				'val', cx.val.substring( 0, this.at1 - cx.at1 )
+			)
+		);
+	}
+	else if( cx.at1 <= this.at2 && cx.at2 > this.at2 )
+	{
+		// case 5
+		return(
+			cx.create(
+				'at2', this.at2,
+				'val', cx.val.substring( this.at2 - cx.at1 )
+			)
+		);
+	}
+	else
+	{
+		throw new Error( );
 	}
 };
 

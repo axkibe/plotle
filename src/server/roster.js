@@ -103,6 +103,48 @@ module.exports =
 		'inBundle', true,
 		'inTestPad', true
 	),
+
+	resource.create(
+		'filePath', 'src/change/generic.js',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/change/error.js',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/change/insert.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/change/remove.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/change/ray.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/change/wrap.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/change/wrapRay.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+
 	resource.create(
 		'filePath', 'src/euclid/point.js',
 		'hasJion', true,

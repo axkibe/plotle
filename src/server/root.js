@@ -11,7 +11,7 @@
 
 var config = require( '../../config' );
 
-config.database_version = 9;
+config.database_version = 10;
 
 /*
 | Globals.

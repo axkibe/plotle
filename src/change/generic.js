@@ -33,9 +33,31 @@ else
 
 
 /*
+| Returns true when 'o' is a change.
+*/
+change_generic.isChange =
+	function(
+		o
+	)
+{
+	switch( o.reflect )
+	{
+		case 'change_insert' :
+		case 'change_remove' :
+
+			return true;
+
+		default :
+
+			return false;
+	}
+};
+
+
+/*
 | Returns a change ray transformed by this change.
 */
-change_generic.prototype.transformChangeRay =
+change_generic.transformChangeRay =
 	function(
 		cRay
 	)
@@ -94,7 +116,7 @@ change_generic.transformChangeWrap =
 /*
 | Return a change wrap transformed by this change.
 */
-change_generic.prototype.transformChangeWrapRay =
+change_generic.transformChangeWrapRay =
 	function(
 		cwRay
 	)

@@ -1,5 +1,7 @@
 /*
 | Combined result of a changeTree call from a change or changeRay.
+|
+| FIXME remove this all together.
 */
 
 
@@ -26,6 +28,13 @@ if( JION )
 							'changes may alter themselves on changing a tree',
 						type :
 							[
+								'change_insert',
+								'change_remove',
+								'change_ray',
+								'change_wrap',
+								'change_wrapRay',
+
+								// TODO remove ccot
 								'ccot_change',
 								'ccot_changeRay',
 								'ccot_changeWrap',

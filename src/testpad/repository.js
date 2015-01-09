@@ -3,7 +3,7 @@
 */
 
 var
-	ccot_changeWrapRay,
+	change_wrapRay,
 	euclid_point,
 	euclid_rect,
 	fabric_doc,
@@ -56,7 +56,7 @@ if( JION )
 						comment :
 							'history of all changes',
 						type :
-							'ccot_changeWrapRay',
+							'change_wrapRay',
 						defaultValue :
 							null
 					},
@@ -132,7 +132,7 @@ testpad_repository.prototype._init =
 
 	if( this._changeWrapRay === null )
 	{
-		this._changeWrapRay = ccot_changeWrapRay.create( );
+		this._changeWrapRay = change_wrapRay.create( );
 	}
 
 	if( this.seq === null )

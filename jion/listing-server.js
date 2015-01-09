@@ -15,6 +15,13 @@ module.exports =
 			'src/ccot/changeWrapRay.js',
 			'src/ccot/sign.js',
 			'src/ccot/signRay.js',
+
+			'src/change/insert.js',
+			'src/change/ray.js',
+			'src/change/remove.js',
+			'src/change/wrap.js',
+			'src/change/wrapRay.js',
+
 			'src/database/changeSkid.js',
 			'src/database/changeSkidRay.js',
 			'src/database/repository.js',

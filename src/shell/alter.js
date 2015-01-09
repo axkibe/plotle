@@ -4,17 +4,16 @@
 
 
 var
-	ccot_change,
-	ccot_changeRay,
-	ccot_changeWrap,
-	ccot_sign,
-	fabric_doc,
-	fabric_label,
-	fabric_note,
-	fabric_para,
-	fabric_portal,
-	fabric_relation,
-	jion_path,
+	change_insert,
+	change_ray,
+	change_wrap,
+	//fabric_doc,
+	//fabric_label,
+	//fabric_note,
+	//fabric_para,
+	//fabric_portal,
+	//fabric_relation,
+	//jion_path,
 	jools,
 	shell_alter,
 	root;
@@ -28,14 +27,14 @@ var
 
 
 var
-	alter,
-	newItemSign,
-	spliceSign;
+	alter;
 
 
 /*
 | sign for a new item
+| TODO remove
 */
+/*
 newItemSign =
 	ccot_sign.create(
 		'path',
@@ -45,11 +44,14 @@ newItemSign =
 		'rank',
 			0
 	);
+*/
 
 /*
 | sign for split/join.
 */
+/* TODO remove
 spliceSign = ccot_sign.create( 'proc', 'splice' );
+*/
 
 shell_alter = { };
 
@@ -61,8 +63,7 @@ shell_alter = { };
 */
 alter =
 	function(
-		src,
-		trg
+		change
 	)
 {
 	var
@@ -70,16 +71,10 @@ alter =
 		result;
 
 	changeWrap =
-		ccot_changeWrap.create(
+		change_wrap.create(
 			'cid', jools.uid( ),
 			'changeRay',
-				ccot_changeRay.create(
-					'ray:set', 0,
-					ccot_change.create(
-						'src', src,
-						'trg', trg
-					)
-				)
+				change_ray.create( 'ray:set', 0, change )
 		);
 
 	result = root.link.alter( changeWrap );
@@ -95,9 +90,11 @@ alter =
 */
 shell_alter.newNote =
 	function(
-		zone
+		// zone
 	)
 {
+	throw new Error( );
+	/*
 	var
 		src;
 
@@ -118,6 +115,7 @@ shell_alter.newNote =
 		);
 
 	return alter( src, newItemSign );
+	*/
 };
 
 
@@ -126,11 +124,14 @@ shell_alter.newNote =
 */
 shell_alter.newPortal =
 	function(
-		zone,           // the zone of the potal
-		destSpaceUser,  // the user of the space the portal leads to
-		destSpaceTag    // the tag of the space the portal leads to
+		// zone,           // the zone of the potal
+		// destSpaceUser,  // the user of the space the portal leads to
+		// destSpaceTag    // the tag of the space the portal leads to
 	)
 {
+	throw new Error( );
+
+	/*
 	var
 		src;
 
@@ -147,6 +148,7 @@ shell_alter.newPortal =
 		);
 
 	return alter( src, newItemSign );
+	*/
 };
 
 
@@ -155,16 +157,20 @@ shell_alter.newPortal =
 */
 shell_alter.setZone =
 	function(
-		itemPath,
-		zone
+		// itemPath,
+		// zone
 	)
 {
+	throw new Error( );
+
+	/*
 	return(
 		alter(
 			ccot_sign.create( 'val', zone ),
 			ccot_sign.create( 'path', itemPath.chop( ).append( 'zone' ) )
 		)
 	);
+	*/
 };
 
 
@@ -173,16 +179,20 @@ shell_alter.setZone =
 */
 shell_alter.setFontSize =
 	function(
-		itemPath,
-		fontsize
+		// itemPath,
+		// fontsize
 	)
 {
+	throw new Error( );
+
+	/*
 	return(
 		alter(
 			ccot_sign.create( 'val', fontsize ),
 			ccot_sign.create( 'path', itemPath.chop( ).append( 'fontsize' ) )
 		)
 	);
+	*/
 };
 
 
@@ -191,16 +201,20 @@ shell_alter.setFontSize =
 */
 shell_alter.setPNW =
 	function(
-		itemPath,
-		pnw
+		// itemPath,
+		// pnw
 	)
 {
+	throw new Error( );
+
+	/*
 	return(
 		alter(
 			ccot_sign.create( 'val', pnw ),
 			ccot_sign.create( 'path', itemPath.chop( ).append( 'pnw' ) )
 		)
 	);
+	*/
 };
 
 
@@ -209,11 +223,14 @@ shell_alter.setPNW =
 */
 shell_alter.newLabel =
 	function(
-		pnw,
-		text,
-		fontsize
+		// pnw,
+		// text,
+		// fontsize
 	)
 {
+	throw new Error( );
+
+	/*
 	var
 		src;
 
@@ -235,6 +252,7 @@ shell_alter.newLabel =
 		);
 
 	return alter( src, newItemSign );
+	*/
 };
 
 
@@ -243,13 +261,16 @@ shell_alter.newLabel =
 */
 shell_alter.newRelation =
 	function(
-		pnw,
-		text,
-		fontsize,
-		item1key,
-		item2key
+		// pnw,
+		// text,
+		// fontsize,
+		// item1key,
+		// item2key
 	)
 {
+	throw new Error( );
+
+	/*
 	var
 		src;
 
@@ -273,6 +294,7 @@ shell_alter.newRelation =
 		);
 
 	return alter( src, newItemSign );
+	*/
 };
 
 
@@ -301,16 +323,17 @@ shell_alter.moveToTop =
 shell_alter.insertText =
 	function(
 		path,
-		offset,
-		text
+		at1,
+		val
 	)
 {
 	return(
 		alter(
-			ccot_sign.create( 'val', text ),
-			ccot_sign.create(
+			change_insert.create(
+				'val', val,
 				'path', path.chop( 1 ),
-				'at1', offset
+				'at1', at1,
+				'at2', at1 + val.length
 			)
 		)
 	);
@@ -322,11 +345,12 @@ shell_alter.insertText =
 */
 shell_alter.removeText =
 	function(
-		path,
-		at1,
-		len
+		// path,
+		// at1,
+		// len
 	)
 {
+	/*
 	if( len === 0 )
 	{
 		return null;
@@ -347,6 +371,9 @@ shell_alter.removeText =
 			ccot_sign.create( )
 		)
 	);
+	*/
+
+	throw new Error( );
 };
 
 
@@ -355,12 +382,15 @@ shell_alter.removeText =
 */
 shell_alter.removeRange =
 	function(
-		path1,
-		at1,
-		path2,
-		at2
+		// path1,
+		// at1,
+		// path2,
+		// at2
 	)
 {
+	throw new Error( );
+
+	/*
 	var
 		k1,
 		k2,
@@ -370,17 +400,17 @@ shell_alter.removeRange =
 		r1,
 		r2;
 
-/**/if( CHECK )
-/**/{
-/**/	if(
-/**/		path1.get( -1 ) !== 'text'
-/**/		||
-/**/		path2.get( -1 ) !== 'text'
-/**/	)
-/**/	{
-/**/		throw new Error( 'invalid path' );
-/**/	}
-/**/}
+**if( CHECK )
+**{
+**	if(
+**		path1.get( -1 ) !== 'text'
+**		||
+**		path2.get( -1 ) !== 'text'
+**	)
+**	{
+**		throw new Error( 'invalid path' );
+**	}
+**}
 
 	if ( path1.equals( path2 ) )
 	{
@@ -425,6 +455,7 @@ shell_alter.removeRange =
 	}
 
 	shell_alter.removeText( path1, at1, len2 - at1 + at2 );
+	*/
 };
 
 
@@ -433,10 +464,12 @@ shell_alter.removeRange =
 */
 shell_alter.split =
 	function(
-		path,
-		offset
+		// path,
+		// offset
 	)
 {
+	throw new Error( );
+	/*
 	return(
 		alter(
 			ccot_sign.create(
@@ -446,6 +479,7 @@ shell_alter.split =
 			spliceSign
 		)
 	);
+	*/
 };
 
 
@@ -454,10 +488,12 @@ shell_alter.split =
 */
 shell_alter.join =
 	function(
-		path,
-		at1
+		// path,
+		// at1
 	)
 {
+	throw new Error( );
+	/*
 	return(
 		alter(
 			spliceSign,
@@ -467,6 +503,7 @@ shell_alter.join =
 			)
 		)
 	);
+	*/
 };
 
 
@@ -475,9 +512,12 @@ shell_alter.join =
 */
 shell_alter.removeItem =
 	function(
-		path
+		// path
 	)
 {
+	throw new Error( );
+
+	/*
 	var
 		key,
 		pivot,
@@ -501,6 +541,7 @@ shell_alter.removeItem =
 			)
 		)
 	);
+	*/
 };
 
 
