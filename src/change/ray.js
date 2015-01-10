@@ -157,7 +157,13 @@ change_ray.prototype._transformChangeWrap =
 		cw
 	)
 {
-	return cw.create( 'changeRay', this.transform( cw.changeRay ) );
+	var
+		result;
+
+	// FIXME simplify
+	result = this.transform( cw.changeRay );
+
+	return cw.create( 'changeRay', result );
 };
 
 

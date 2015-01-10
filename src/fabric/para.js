@@ -1026,6 +1026,7 @@ fabric_para.prototype._keyBackspace =
 
 	if( at > 0 )
 	{
+		// XXX
 		shell_alter.removeText( this.textPath, at - 1, 1 );
 
 		return;
@@ -1060,6 +1061,7 @@ fabric_para.prototype._keyDel =
 
 	if( at < this.text.length )
 	{
+		// XXX
 		shell_alter.removeText( this.textPath, at, 1 );
 
 		return;

@@ -1025,6 +1025,7 @@ fabric_portal.prototype._keyBackspace =
 		return;
 	}
 
+	// XXX
 	shell_alter.removeText(
 		this.path.append( section ),
 		at - 1,
@@ -1456,6 +1457,7 @@ fabric_portal.prototype._keyDel =
 		return;
 	}
 
+	// XXX
 	shell_alter.removeText(
 		this.path.append( section ),
 		at,

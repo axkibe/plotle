@@ -5,6 +5,7 @@
 
 var
 	change_insert,
+	change_remove,
 	change_ray,
 	change_wrap,
 	//fabric_doc,
@@ -345,35 +346,26 @@ shell_alter.insertText =
 */
 shell_alter.removeText =
 	function(
-		// path,
-		// at1,
-		// len
+		path,
+		at1,
+		val
 	)
 {
-	/*
-	if( len === 0 )
+	if( val.length === 0 )
 	{
 		return null;
 	}
 
-	if( len < 0 )
-	{
-		throw new Error( 'malformed removeText' );
-	}
-
 	return(
 		alter(
-			ccot_sign.create(
+			change_remove.create(
 				'path', path.chop( 1 ),
 				'at1', at1,
-				'at2', at1 + len
-			),
-			ccot_sign.create( )
+				'at2', at1 + val.length,
+				'val', val
+			)
 		)
 	);
-	*/
-
-	throw new Error( );
 };
 
 

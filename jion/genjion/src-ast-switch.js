@@ -359,32 +359,8 @@ prototype.remove = jion_proto.rayRemove;
 | Tests equality of object.
 */
 prototype.equals =
-	function(
-		obj // object to compare to
-	)
-{
-	if( this === obj )
-	{
-		return true;
-	}
-
-	if( !obj )
-	{
-		return false;
-	}
-
-	return (
-		(
-			this.defaultCase === obj.defaultCase
-			||
-			this.defaultCase !== null
-			&&
-			this.defaultCase.equals( obj.defaultCase )
-		)
-		&&
-		this.statement === obj.statement
-	);
-};
+	function( obj // object to compare to
+) { return this === obj; };
 
 
 }

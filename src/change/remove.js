@@ -133,21 +133,21 @@ jools.lazyValue(
 | Returns a change ray transformed by this change.
 */
 change_remove.prototype._transformChangeRay =
-	change_remove.transformChangeRay;
+	change_generic.transformChangeRay;
 
 
 /*
 | Return a change wrap transformed by this change.
 */
 change_remove.prototype._transformChangeWrap =
-	change_remove.transformChangeWrap;
+	change_generic.transformChangeWrap;
 
 
 /*
 | Return a change wrap transformed by this change.
 */
 change_remove.prototype._transformChangeWrapRay =
-	change_remove.transformChangeWrapRay;
+	change_generic.transformChangeWrapRay;
 
 
 /*
@@ -331,12 +331,14 @@ change_remove.prototype._transformRemove =
 
 	if( cx.at2 <= this.at1 )
 	{
-		// case 0
+		// console.log( 'case 0' );
+
 		return cx;
 	}
 	else if( cx.at1 >= this.at2 )
 	{
-		// case 1
+		// console.log( 'case 1' );
+
 		return(
 			cx.create(
 				'at1', cx.at1 - len,
@@ -346,7 +348,8 @@ change_remove.prototype._transformRemove =
 	}
 	else if( cx.at1 < this.at1 && cx.at2 > this.at2 )
 	{
-		// case 2
+		// console.log( 'case 2' );
+
 		return(
 			cx.create(
 				'at2', cx.at2 - len,
@@ -358,12 +361,14 @@ change_remove.prototype._transformRemove =
 	}
 	else if( cx.at1 >= this.at1 && cx.at2 <= this.at2 )
 	{
-		// case 3
+		// console.log( 'case 3' );
+
 		return null;
 	}
 	else if( cx.at1 < this.at1 && cx.at2 <= this.at2 )
 	{
-		// case 4
+		// console.log( 'case 4' );
+
 		return(
 			cx.create(
 				'at2', this.at1,
@@ -373,10 +378,12 @@ change_remove.prototype._transformRemove =
 	}
 	else if( cx.at1 <= this.at2 && cx.at2 > this.at2 )
 	{
-		// case 5
+		// console.log( 'case 5' );
+
 		return(
 			cx.create(
-				'at2', this.at2,
+				'at1', this.at1,
+				'at2', this.at1 + cx.at2 - this.at2,
 				'val', cx.val.substring( this.at2 - cx.at1 )
 			)
 		);

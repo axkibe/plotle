@@ -598,8 +598,7 @@ testpad_root.prototype.send =
 				action.value
 			);
 
-			cursorAt =
-				this.cursorAt + action.value.length;
+			cursorAt = this.cursorAt + action.value.length;
 
 			break;
 
@@ -614,17 +613,17 @@ testpad_root.prototype.send =
 			shell_alter.removeText(
 				path,
 				action.at,
-				action.at2 - action.at
+				doc.atRank( action.line ).text.substring(
+					action.at2, action.at
+				)
 			);
 
 			if(
 				this.cursorLine == action.line
-				&&
-				this.cursorAt >= action.at2
+				&& this.cursorAt >= action.at2
 			)
 			{
-				cursorAt =
-					this.cursorAt - ( action.at2 - action.at );
+				cursorAt = this.cursorAt - ( action.at2 - action.at );
 			}
 
 			break;
@@ -1146,18 +1145,22 @@ testpad_root.prototype.makeScreen =
 {
 	var
 		a,
-		action =
-			this.action,
+		action,
 		aZ,
 		b,
 		bZ,
 		line,
-		lines =
-			[ ],
-		ranks =
-			doc.ranks,
-		twig =
-			doc.twig;
+		lines,
+		ranks,
+		twig;
+
+	action = this.action;
+
+	lines = [ ];
+
+	ranks = doc.ranks;
+
+	twig = doc.twig;
 
 	// splits up the doc into
 	// an array of lines which are
@@ -1168,9 +1171,8 @@ testpad_root.prototype.makeScreen =
 		a++
 	)
 	{
-		lines.push(
-			twig[ ranks[ a ] ].text.split( '' )
-		);
+		// FIXME use atRank
+		lines.push( twig[ ranks[ a ] ].text.split( '' ) );
 	}
 
 	// replaces HTML entities
@@ -1180,8 +1182,7 @@ testpad_root.prototype.makeScreen =
 		a++
 	)
 	{
-		line =
-			lines[ a ];
+		line = lines[ a ];
 
 		for(
 			b = 0, bZ = line.length;
@@ -1193,29 +1194,25 @@ testpad_root.prototype.makeScreen =
 			{
 				case '&' :
 
-					line[ b ] =
-						'&amp;';
+					line[ b ] = '&amp;';
 
 					break;
 
 				case '"' :
 
-					line[ b ] =
-						'&quot;';
+					line[ b ] = '&quot;';
 
 					break;
 
 				case '<' :
 
-					line[ b ] =
-						'&lt;';
+					line[ b ] = '&lt;';
 
 					break;
 
 				case '>' :
 
-					line[ b ] =
-						'&gt;';
+					line[ b ] = '&gt;';
 
 					break;
 			}

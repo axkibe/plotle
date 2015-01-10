@@ -2598,13 +2598,22 @@ generator.prototype.genEquals =
 		block,
 		cond,
 		ceq,
+		equals,
 		name,
 		twigTest,
 		twigTestLoopBody;
 
 	cond = null;
 
-	switch( this.equals )
+	equals = this.equals;
+
+	if( this.ray )
+	{
+		// FUTURE make a full ray test
+		equals = 'primitive';
+	}
+
+	switch( equals )
 	{
 		case false :
 
