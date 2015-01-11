@@ -98,7 +98,14 @@ change_remove.prototype._init =
 {
 	if( this.at1 + this.val.length !== this.at2 )
 	{
-		throw change_error( 'remove.at1 + remove.val.length !== remove.at2' );
+		throw change_error(
+			'remove.at1 + remove.val.length !== remove.at2'
+		);
+	}
+
+	if( this.at1 < 0 || this.at2 < 0 )
+	{
+		throw change_error( 'remove.at1|at2 negative' );
 	}
 };
 
@@ -203,17 +210,17 @@ change_remove.prototype.changeTree =
 	)
 {
 	var
-		s,
+		text,
 		val;
 
-	s = tree.getPath( this.path );
+	text = tree.getPath( this.path );
 
-	if( !jools.isString( s ) )
+	if( !jools.isString( text ) )
 	{
 		throw change_error( 'remove.path signates no string' );
 	}
 
-	val = s.substring( this.at1, this.at2 );
+	val = text.substring( this.at1, this.at2 );
 
 	if( val !== this.val )
 	{
@@ -224,8 +231,8 @@ change_remove.prototype.changeTree =
 	tree =
 		tree.setPath(
 			this.path,
-			s.substring( 0, this.at1 )
-			+ s.substring( this.at2 )
+			text.substring( 0, this.at1 )
+			+ text.substring( this.at2 )
 		);
 
 	// FIXME remove

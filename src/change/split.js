@@ -1,12 +1,12 @@
 /*
-| A text insertion change.
+| A text ( para ) is splited.
 */
 
 var
 	change_generic,
 	change_error,
-	change_insert,
-	change_remove,
+	change_split,
+	change_join,
 	result_changeTree,
 	jools;
 
@@ -25,26 +25,17 @@ if( JION )
 {
 	return {
 		id :
-			'change_insert',
+			'change_split',
 		attributes :
 			{
 				path :
 					{
 						comment :
-							'insert at this path',
+							'split at this path',
 						json :
 							'true',
 						type :
 							'jion_path'
-					},
-				val :
-					{
-						comment :
-							'source sign',
-						json :
-							'true',
-						type :
-							'String'
 					},
 				at1 :
 					{
@@ -55,14 +46,14 @@ if( JION )
 						type :
 							'Integer'
 					},
-				at2 :
+				path2 :
 					{
 						comment :
-							'insert ends here ( must be at1 + val.length )',
+							'split created this new/next path',
 						json :
 							'true',
 						type :
-							'Integer'
+							'jion_path'
 					}
 			},
 		init :
@@ -76,13 +67,13 @@ if( JION )
 */
 if( SERVER )
 {
-	change_insert = require( '../jion/this' )( module );
+	change_split = require( '../jion/this' )( module );
 
 	change_generic = require( './generic' );
 
 	change_error = require( './error' );
 
-	change_remove = require( './remove' );
+	change_join = require( './remove' );
 
 	jools = require( '../jools/jools' );
 
@@ -93,20 +84,12 @@ if( SERVER )
 /*
 | Initializer.
 */
-change_insert.prototype._init =
+change_split.prototype._init =
 	function ( )
 {
-	if( this.at1 + this.val.length !== this.at2 )
-	{
-		throw change_error(
-			'insert.at1 + insert.val.length '
-			+ '!== insert.at2'
-		);
-	}
-
 	if( this.at1 < 0 || this.at2 < 0 )
 	{
-		throw change_error( 'insert.at1|at2 negative' );
+		throw change_error( 'split.at1 negative' );
 	}
 };
 
@@ -115,7 +98,7 @@ change_insert.prototype._init =
 | Returns the inversion to this change.
 */
 jools.lazyValue(
-	change_insert.prototype,
+	change_split.prototype,
 	'invert',
 	function( )
 	{
@@ -123,11 +106,10 @@ jools.lazyValue(
 			inv;
 
 		inv =
-			change_remove.create(
+			change_join.create(
 				'path', this.path,
-				'val', this.val,
 				'at1', this.at1,
-				'at2', this.at2
+				'path2', this.path2
 			);
 
 		// FIXME aheadValue inv to be this
@@ -140,21 +122,21 @@ jools.lazyValue(
 /*
 | Returns a change ray transformed by this change.
 */
-change_insert.prototype._transformChangeRay =
+change_split.prototype._transformChangeRay =
 	change_generic.transformChangeRay;
 
 
 /*
 | Return a change wrap transformed by this change.
 */
-change_insert.prototype._transformChangeWrap =
+change_split.prototype._transformChangeWrap =
 	change_generic.transformChangeWrap;
 
 
 /*
 | Return a change wrap transformed by this change.
 */
-change_insert.prototype._transformChangeWrapRay =
+change_split.prototype._transformChangeWrapRay =
 	change_generic.transformChangeWrapRay;
 
 
@@ -162,7 +144,7 @@ change_insert.prototype._transformChangeWrapRay =
 | Returns a change, changeRay, changeWrap or changeWrapRay
 | transformed on this change.
 */
-change_insert.prototype.transform =
+change_split.prototype.transform =
 	function(
 		cx
 	)
@@ -177,7 +159,7 @@ change_insert.prototype.transform =
 		case 'change_insert' :
 		case 'change_remove' :
 
-			return this._transformTextChange( cx );
+			return cx;
 
 		case 'change_ray' :
 
@@ -201,34 +183,80 @@ change_insert.prototype.transform =
 /*
 | Performs the insertion change on a tree.
 */
-change_insert.prototype.changeTree =
+change_split.prototype.changeTree =
 	function(
 		tree,
 		resultModality
 	)
 {
 	var
+		at1,
+		key,
+		key2,
+		rank1,
+		path,
+		para1,
+		para2,
+		pivot,
 		text;
 
-	text = tree.getPath( this.path );
+	at1 = this.at1;
+
+	path = this.path;
+
+	text = tree.getPath( path );
 
 	if( !jools.isString( text ) )
 	{
-		throw change_error( 'insert.path signates no string' );
+		throw change_error( 'split.path signates no string' );
 	}
 
-	if( this.at1 > text.length )
+	pivot = tree.getPath( path.shorten( 3 ) );
+
+	if( !pivot.ranks )
 	{
-		throw change_error( 'insert.at1 invalid' );
+		throw change_error( 'split.pivot not ranked' );
 	}
 
-	tree =
-		tree.setPath(
-			this.path,
-			text.substring( 0, this.at1 )
-			+ this.val
-			+ text.substring( this.at1 )
+	if( at1 > text.length )
+	{
+		throw change_error( 'split.at1 invalid' );
+	}
+
+	if( !this.path2.shorten( 2 ).subPathOf( path ) )
+	{
+		throw change_error( 'split.path2 invaldid' );
+	}
+
+	key = path.get( -2 );
+
+	key2 = this.path2.get( -2 );
+
+	if( pivot.twig[ key2 ] )
+	{
+		throw change_error( 'split.path2 already exists' );
+	}
+
+	para1 = pivot.twig[ key ];
+
+	rank1 = pivot.rankOf( key );
+
+	if( rank1 < 0 )
+	{
+		throw change_error( 'split has no rank' );
+	}
+
+	para1 = para1.create( 'text', text.substring( 0, at1 ) );
+
+	para2 = para1.create( 'text', text.substring( at1 ) );
+
+	pivot =
+		pivot.create(
+			'twig:set', key, para1,
+			'twig:insert', key2, rank1 + 1, para2
 		);
+
+	tree = tree.setPath( path.shorten( 3 ), pivot );
 
 	// FIXME remove
 	switch( resultModality )
@@ -253,52 +281,6 @@ change_insert.prototype.changeTree =
 		default :
 
 			throw new Error( );
-	}
-};
-
-
-/*
-| Transforms another insert/remove change
-| considering this insert actually came first.
-*/
-change_insert.prototype._transformTextChange =
-	function(
-		cx
-	)
-{
-	var
-		len;
-
-/**/if( CHECK )
-/**/{
-/**/	if(
-/**/		cx.reflect !== 'change_insert'
-/**/		&& cx.reflect !== 'change_remove'
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if( !this.path.equals( cx.path ) )
-	{
-		return cx;
-	}
-
-	if( cx.at1 < this.at1 )
-	{
-		return cx;
-	}
-	else
-	{
-		len = this.val.length;
-
-		return(
-			cx.create(
-				'at1', cx.at1 + len,
-				'at2', cx.at2 + len
-			)
-		);
 	}
 };
 
