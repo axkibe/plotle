@@ -156,6 +156,12 @@ change_split.prototype.transform =
 
 	switch( cx.reflect )
 	{
+		case 'change_split' :
+		case 'change_join' :
+
+			// XXX TODO
+			return cx;
+
 		case 'change_insert' :
 		case 'change_remove' :
 
@@ -193,16 +199,19 @@ change_split.prototype.changeTree =
 		at1,
 		key,
 		key2,
-		rank1,
 		path,
+		path2,
 		para1,
 		para2,
 		pivot,
+		rank1,
 		text;
 
 	at1 = this.at1;
 
 	path = this.path;
+
+	path2 = this.path2;
 
 	text = tree.getPath( path );
 
@@ -220,17 +229,17 @@ change_split.prototype.changeTree =
 
 	if( at1 > text.length )
 	{
-		throw change_error( 'split.at1 invalid' );
+		throw change_error( 'split.at1 > text.length' );
 	}
 
-	if( !this.path2.shorten( 2 ).subPathOf( path ) )
+	if( !path2.shorten( 2 ).subPathOf( path ) )
 	{
-		throw change_error( 'split.path2 invaldid' );
+		throw change_error( 'split.path2 not a subPath' );
 	}
 
 	key = path.get( -2 );
 
-	key2 = this.path2.get( -2 );
+	key2 = path2.get( -2 );
 
 	if( pivot.twig[ key2 ] )
 	{

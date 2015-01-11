@@ -815,8 +815,9 @@ fabric_para.prototype.input =
 		{
 			// FIXME, somehow use changes
 			// over return values more elegantly
-			r =
-				shell_alter.split( textPath, caretAt + line.length );
+
+			// XXX TODO
+			r = shell_alter.split( textPath, caretAt + line.length );
 
 			doc =
 				r.tree.getPath(
@@ -1038,6 +1039,7 @@ fabric_para.prototype._keyBackspace =
 	{
 		ve = doc.atRank( r - 1 );
 
+		// XXX TODO
 		shell_alter.join( ve.textPath, ve.text.length );
 	}
 };
@@ -1071,6 +1073,7 @@ fabric_para.prototype._keyDel =
 
 	if( r < doc.ranks.length - 1 )
 	{
+		// XXX TODO
 		shell_alter.join(
 			this.textPath,
 			this.text.length
@@ -1181,6 +1184,7 @@ fabric_para.prototype._keyEnter =
 		// bAt
 	)
 {
+	// XXX TODO
 	shell_alter.split( this.textPath, at );
 };
 

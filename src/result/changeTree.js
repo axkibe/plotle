@@ -29,8 +29,10 @@ if( JION )
 						type :
 							[
 								'change_insert',
+								'change_join',
 								'change_remove',
 								'change_ray',
+								'change_split',
 								'change_wrap',
 								'change_wrapRay',
 

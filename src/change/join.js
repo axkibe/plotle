@@ -25,13 +25,13 @@ if( JION )
 {
 	return {
 		id :
-			'change_split',
+			'change_join',
 		attributes :
 			{
 				path :
 					{
 						comment :
-							'split at this path',
+							'join at this path',
 						json :
 							'true',
 						type :
@@ -40,7 +40,7 @@ if( JION )
 				at1 :
 					{
 						comment :
-							'insert at this place begin',
+							'join at this place ( must be length of text )',
 						json :
 							'true',
 						type :
@@ -49,7 +49,7 @@ if( JION )
 				path2 :
 					{
 						comment :
-							'split created this new/next path',
+							'join this ( must be after path )',
 						json :
 							'true',
 						type :
@@ -67,13 +67,13 @@ if( JION )
 */
 if( SERVER )
 {
-	change_split = require( '../jion/this' )( module );
+	change_join = require( '../jion/this' )( module );
 
 	change_generic = require( './generic' );
 
 	change_error = require( './error' );
 
-	change_join = require( './remove' );
+	change_split = require( './remove' );
 
 	jools = require( '../jools/jools' );
 
@@ -84,7 +84,7 @@ if( SERVER )
 /*
 | Initializer.
 */
-change_split.prototype._init =
+change_join.prototype._init =
 	function ( )
 {
 	if( this.at1 < 0 || this.at2 < 0 )
@@ -98,7 +98,7 @@ change_split.prototype._init =
 | Returns the inversion to this change.
 */
 jools.lazyValue(
-	change_split.prototype,
+	change_join.prototype,
 	'invert',
 	function( )
 	{
@@ -106,7 +106,7 @@ jools.lazyValue(
 			inv;
 
 		inv =
-			change_join.create(
+			change_split.create(
 				'path', this.path,
 				'at1', this.at1,
 				'path2', this.path2
@@ -122,21 +122,21 @@ jools.lazyValue(
 /*
 | Returns a change ray transformed by this change.
 */
-change_split.prototype._transformChangeRay =
+change_join.prototype._transformChangeRay =
 	change_generic.transformChangeRay;
 
 
 /*
 | Return a change wrap transformed by this change.
 */
-change_split.prototype._transformChangeWrap =
+change_join.prototype._transformChangeWrap =
 	change_generic.transformChangeWrap;
 
 
 /*
 | Return a change wrap transformed by this change.
 */
-change_split.prototype._transformChangeWrapRay =
+change_join.prototype._transformChangeWrapRay =
 	change_generic.transformChangeWrapRay;
 
 
@@ -144,7 +144,7 @@ change_split.prototype._transformChangeWrapRay =
 | Returns a change, changeRay, changeWrap or changeWrapRay
 | transformed on this change.
 */
-change_split.prototype.transform =
+change_join.prototype.transform =
 	function(
 		cx
 	)
@@ -156,6 +156,12 @@ change_split.prototype.transform =
 
 	switch( cx.reflect )
 	{
+		case 'change_split' :
+		case 'change_join' :
+
+			// XXX TODO
+			return cx;
+
 		case 'change_insert' :
 		case 'change_remove' :
 
@@ -183,7 +189,7 @@ change_split.prototype.transform =
 /*
 | Performs the insertion change on a tree.
 */
-change_split.prototype.changeTree =
+change_join.prototype.changeTree =
 	function(
 		tree,
 		resultModality
@@ -193,67 +199,86 @@ change_split.prototype.changeTree =
 		at1,
 		key,
 		key2,
-		rank1,
 		path,
+		path2,
 		para1,
 		para2,
 		pivot,
-		text;
+		rank1,
+		rank2,
+		text,
+		text2;
 
 	at1 = this.at1;
 
 	path = this.path;
 
+	path2 = this.path2;
+
 	text = tree.getPath( path );
+
+	text2 = tree.getPath( path2 );
 
 	if( !jools.isString( text ) )
 	{
-		throw change_error( 'split.path signates no string' );
+		throw change_error( 'join.path signates no string' );
+	}
+
+	if( !jools.isString( text2 ) )
+	{
+		throw change_error( 'join.path2 signates no string' );
 	}
 
 	pivot = tree.getPath( path.shorten( 3 ) );
 
 	if( !pivot.ranks )
 	{
-		throw change_error( 'split.pivot not ranked' );
+		throw change_error( 'join.pivot not ranked' );
 	}
 
-	if( at1 > text.length )
+	if( at1 !== text.length )
 	{
-		throw change_error( 'split.at1 invalid' );
+		throw change_error( 'join.at1 !== text.length' );
 	}
 
-	if( !this.path2.shorten( 2 ).subPathOf( path ) )
+	if( !path2.shorten( 2 ).subPathOf( path ) )
 	{
-		throw change_error( 'split.path2 invaldid' );
+		throw change_error( 'join.path2 not a subPath' );
 	}
 
 	key = path.get( -2 );
 
-	key2 = this.path2.get( -2 );
-
-	if( pivot.twig[ key2 ] )
-	{
-		throw change_error( 'split.path2 already exists' );
-	}
+	key2 = path2.get( -2 );
 
 	para1 = pivot.twig[ key ];
 
+	para2 = pivot.twig[ key2 ];
+
 	rank1 = pivot.rankOf( key );
+
+	rank2 = pivot.rankOf( key2 );
 
 	if( rank1 < 0 )
 	{
-		throw change_error( 'split has no rank' );
+		throw change_error( 'join.path has no rank' );
 	}
 
-	para1 = para1.create( 'text', text.substring( 0, at1 ) );
+	if( rank2 < 0 )
+	{
+		throw change_error( 'join.path2 has no rank' );
+	}
 
-	para2 = para1.create( 'text', text.substring( at1 ) );
+	if( rank1 + 1 !== rank2 )
+	{
+		throw change_error( 'join ranks not sequential' );
+	}
+
+	para1 = para1.create( 'text', para1.text + para2.text );
 
 	pivot =
 		pivot.create(
 			'twig:set', key, para1,
-			'twig:insert', key2, rank1 + 1, para2
+			'twig:remove', key2
 		);
 
 	tree = tree.setPath( path.shorten( 3 ), pivot );

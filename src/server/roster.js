@@ -105,17 +105,23 @@ module.exports =
 	),
 
 	resource.create(
-		'filePath', 'src/change/generic.js',
-		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
 		'filePath', 'src/change/error.js',
 		'inBundle', true,
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/change/generic.js',
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
 		'filePath', 'src/change/insert.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/change/join.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true
@@ -128,6 +134,12 @@ module.exports =
 	),
 	resource.create(
 		'filePath', 'src/change/ray.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/change/split.js',
 		'hasJion', true,
 		'inBundle', true,
 		'inTestPad', true

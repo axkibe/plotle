@@ -567,7 +567,8 @@ testpad_root.prototype.send =
 		action,
 		cursorAt,
 		doc,
-		path;
+		path,
+		path2;
 
 	action = this.action;
 
@@ -592,11 +593,7 @@ testpad_root.prototype.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			shell_alter.insertText(
-				path,
-				action.at,
-				action.value
-			);
+			shell_alter.insertText( path, action.at, action.value );
 
 			cursorAt = this.cursorAt + action.value.length;
 
@@ -636,7 +633,11 @@ testpad_root.prototype.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			shell_alter.split( path, action.at );
+			shell_alter.split(
+				path,
+				path.set( -2, jools.uid( ) ),
+				action.at
+			);
 
 			break;
 
@@ -645,12 +646,19 @@ testpad_root.prototype.send =
 			path =
 				noteDocPath
 				.append( 'twig' )
-				.append( doc.ranks[ action.line - 1] )
+				.append( doc.ranks[ action.line - 1 ] )
+				.append( 'text' );
+
+			path2 =
+				noteDocPath
+				.append( 'twig' )
+				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
 			shell_alter.join(
 				path,
-				doc.twig[ doc.ranks[ action.line - 1 ] ].text.length
+				path2,
+				doc.atRank( action.line - 1 ).text.length
 			);
 
 			break;

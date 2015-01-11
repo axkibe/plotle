@@ -173,6 +173,12 @@ change_remove.prototype.transform =
 
 	switch( cx.reflect )
 	{
+		case 'change_join' :
+		case 'change_split' :
+
+			// TODO XXX
+			return cx;
+
 		case 'change_insert' :
 
 			return this._transformInsert( cx );

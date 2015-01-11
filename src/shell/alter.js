@@ -5,8 +5,10 @@
 
 var
 	change_insert,
+	change_join,
 	change_remove,
 	change_ray,
+	change_split,
 	change_wrap,
 	//fabric_doc,
 	//fabric_label,
@@ -30,29 +32,6 @@ var
 var
 	alter;
 
-
-/*
-| sign for a new item
-| TODO remove
-*/
-/*
-newItemSign =
-	ccot_sign.create(
-		'path',
-			jion_path.empty
-			.append( 'twig' )
-			.append( '$new' ),
-		'rank',
-			0
-	);
-*/
-
-/*
-| sign for split/join.
-*/
-/* TODO remove
-spliceSign = ccot_sign.create( 'proc', 'splice' );
-*/
 
 shell_alter = { };
 
@@ -456,22 +435,20 @@ shell_alter.removeRange =
 */
 shell_alter.split =
 	function(
-		// path,
-		// offset
+		path,
+		path2,
+		at1
 	)
 {
-	throw new Error( );
-	/*
 	return(
 		alter(
-			ccot_sign.create(
+			change_split.create(
 				'path', path.chop( 1 ),
-				'at1', offset
-			),
-			spliceSign
+				'path2', path2.chop( 1 ),
+				'at1', at1
+			)
 		)
 	);
-	*/
 };
 
 
@@ -480,22 +457,20 @@ shell_alter.split =
 */
 shell_alter.join =
 	function(
-		// path,
-		// at1
+		path,
+		path2,
+		at1
 	)
 {
-	throw new Error( );
-	/*
 	return(
 		alter(
-			spliceSign,
-			ccot_sign.create(
+			change_join.create(
 				'path', path.chop( 1 ),
+				'path2', path2.chop( 1 ),
 				'at1', at1
 			)
 		)
 	);
-	*/
 };
 
 
