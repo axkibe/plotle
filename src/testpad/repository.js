@@ -115,7 +115,7 @@ testpad_repository.prototype._init =
 								),
 							'twig:add', '3',
 								fabric_para.create(
-									'text', 'Dori me'
+									'text', 'Dorime'
 								)
 						),
 					'zone',
@@ -214,9 +214,7 @@ testpad_repository.prototype.alter =
 		s++
 	)
 	{
-		console.log( 'CW1', s, cw );
 		cw = cwRay.get( s ).transform( cw );
-		console.log( 'CW2', s, cw );
 	}
 
 	r = cw.changeTree( this.space, 'combined' );

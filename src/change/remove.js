@@ -176,8 +176,7 @@ change_remove.prototype.transform =
 		case 'change_join' :
 		case 'change_split' :
 
-			// TODO XXX
-			return cx;
+			return this._transformJoinSplit( cx );
 
 		case 'change_insert' :
 
@@ -406,6 +405,74 @@ change_remove.prototype._transformRemove =
 		throw new Error( );
 	}
 };
+
+
+/*
+| Transforms a join or split change.
+| considering this remove actually came first.
+*/
+change_remove.prototype._transformJoinSplit =
+	function(
+		cx
+	)
+{
+	var
+		len;
+
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		cx.reflect !== 'change_join'
+/**/		&& cx.reflect !== 'change_split'
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	console.log( 'TJS' );
+
+	if( !this.path.equals( cx.path ) )
+	{
+		return cx;
+	}
+
+	// text    ttttttttttttt
+	// remove     ' XXXX '
+	// case 0     ^   '  '      split left
+	// case 1         ^  '      split middle
+	// case 2            ^      split right
+
+
+	if( this.at1 >= cx.at1 )
+	{
+		// case 0
+
+		// the remove happens fully in the line to be
+		// splitted so no change
+		return cx;
+	}
+	else if( this.at2 > cx.at1 )
+	{
+		// case 1
+
+		// the remove shifts the split on its left end
+
+		return cx.create( 'at1', this.at1 );
+	}
+	else
+	{
+		// case 2
+
+		// the remove shifts the split by its length
+		// joins are always case 2 since join.at1 == text.length
+
+		len = this.val.length;
+
+		return cx.create( 'at1', cx.at1 - len );
+	}
+};
+
 
 
 }( ) );

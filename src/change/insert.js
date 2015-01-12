@@ -177,13 +177,12 @@ change_insert.prototype.transform =
 		case 'change_join' :
 		case 'change_split' :
 
-			// TODO XXX
-			return cx;
+			return this._transformJoinSplit( cx );
 
 		case 'change_insert' :
 		case 'change_remove' :
 
-			return this._transformTextChange( cx );
+			return this._transformInsertRemove( cx );
 
 		case 'change_ray' :
 
@@ -267,7 +266,7 @@ change_insert.prototype.changeTree =
 | Transforms another insert/remove change
 | considering this insert actually came first.
 */
-change_insert.prototype._transformTextChange =
+change_insert.prototype._transformInsertRemove =
 	function(
 		cx
 	)
@@ -305,6 +304,52 @@ change_insert.prototype._transformTextChange =
 				'at2', cx.at2 + len
 			)
 		);
+	}
+};
+
+
+/*
+| Transforms a join or split change.
+| considering this insert actually came first.
+*/
+change_insert.prototype._transformJoinSplit =
+	function(
+		cx
+	)
+{
+	var
+		len;
+
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		cx.reflect !== 'change_join'
+/**/		&& cx.reflect !== 'change_split'
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !this.path.equals( cx.path ) )
+	{
+		return cx;
+	}
+
+	if( this.at1 > cx.at1 )
+	{
+		// this insert is in the line to be splited
+		// so no need to change the split
+
+		// for joins this cannot happen anyway
+
+		return cx;
+	}
+	else
+	{
+		len = this.val.length;
+
+		return cx.create( 'at1', cx.at1 + len );
 	}
 };
 
