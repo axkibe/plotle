@@ -3,20 +3,9 @@
 */
 
 
-/*
-| Export
-*/
-var
-	jools;
-
-jools = { };
-
-
-/*
-| Imports
-*/
 var
 	config,
+	jools,
 	sha1hex;
 
 
@@ -30,16 +19,20 @@ var
 if( SERVER )
 {
 	// in node
+	jools = module.exports;
+
 	config = require( '../../config' );
 
 	sha1hex = require( './sha1' ).sha1hex;
 
-	jools.devel = config.develServer;
+	jools.devel = config.server_devel;
 }
 else
 {
 	// in shell
-	jools.devel = config.develShell;
+	jools = { };
+
+	jools.devel = config.shell_devel;
 }
 
 
@@ -917,15 +910,6 @@ jools.half =
 	return Math.round( v / 2 );
 };
 
-
-
-/*
-| Node export
-*/
-if( SERVER )
-{
-	module.exports = jools;
-}
 
 
 } )( );

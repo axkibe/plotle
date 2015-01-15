@@ -3,15 +3,15 @@
 */
 
 var
-	ccot_changeWrapRay,
+	change_wrapRay,
 	net_link,
+	reply_acquire,
+	reply_update,
 	request_acquire,
 	request_alter,
 	request_auth,
 	request_register,
 	request_update,
-	reply_acquire,
-	reply_update,
 	root,
 	system;
 
@@ -74,7 +74,7 @@ if( JION )
 						comment :
 							'changes to be send to the server',
 						type :
-							'ccot_changeWrapRay',
+							'change_wrapRay',
 						defaultValue :
 							null
 					},
@@ -83,7 +83,7 @@ if( JION )
 						comment :
 							'changes that are currently on the way',
 						type :
-							'ccot_changeWrapRay',
+							'change_wrapRay',
 						defaultValue :
 							null
 					},
@@ -255,8 +255,8 @@ net_link.prototype._onAcquireSpace =
 			'spaceRef', request.spaceRef,
 			'_cSpace', reply.space,
 			'_rSpace', reply.space,
-			'_outbox', ccot_changeWrapRay.create( ),
-			'_postbox', ccot_changeWrapRay.create( ),
+			'_outbox', change_wrapRay.create( ),
+			'_postbox', change_wrapRay.create( ),
 			'_rSeq', reply.seq
 		);
 
@@ -340,7 +340,7 @@ net_link.prototype._onUpdate =
 
 	changeWrapRay = reply.changeWrapRay;
 
-	report = ccot_changeWrapRay.create( );
+	report = change_wrapRay.create( );
 
 	gotOwnChgs = false;
 
@@ -515,7 +515,7 @@ net_link.prototype._sendChanges =
 	link =
 	root.link =
 		link.create(
-			'_outbox', ccot_changeWrapRay.create( ),
+			'_outbox', change_wrapRay.create( ),
 			'_postbox', outbox
 		);
 

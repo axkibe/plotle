@@ -280,7 +280,7 @@ prototype.buildShellConfig =
 	cconfig.push(
 		'var config = {\n',
 		'\tdevel   : ',
-			config.develShell, ',\n',
+			config.shell_devel, ',\n',
 		'\tmaxUndo : ',
 			config.maxUndo, ',\n',
 		'\tdebug   : {\n'
@@ -392,7 +392,7 @@ prototype.prepareInventory =
 	{
 		resource = roster[ a ];
 
-		if( resource.devel && !config.develShell )
+		if( resource.devel && !config.shell_devel )
 		{
 			continue;
 		}
@@ -1273,7 +1273,7 @@ prototype.requestListener =
 		return;
 	}
 
-	if( !config.develShell )
+	if( !config.shell_devel )
 	{
 		root.webError( result, 404, 'Bad Request' );
 	}

@@ -87,101 +87,9 @@ if( SERVER )
 change_join.prototype._init =
 	function ( )
 {
-	if( this.at1 < 0 || this.at2 < 0 )
+	if( this.at1 < 0 )
 	{
-		throw change_error( 'split.at1 negative' );
-	}
-};
-
-
-/*
-| Returns the inversion to this change.
-*/
-jools.lazyValue(
-	change_join.prototype,
-	'invert',
-	function( )
-	{
-		var
-			inv;
-
-		inv =
-			change_split.create(
-				'path', this.path,
-				'at1', this.at1,
-				'path2', this.path2
-			);
-
-		// FIXME aheadValue inv to be this
-
-		return inv;
-	}
-);
-
-
-/*
-| Returns a change ray transformed by this change.
-*/
-change_join.prototype._transformChangeRay =
-	change_generic.transformChangeRay;
-
-
-/*
-| Return a change wrap transformed by this change.
-*/
-change_join.prototype._transformChangeWrap =
-	change_generic.transformChangeWrap;
-
-
-/*
-| Return a change wrap transformed by this change.
-*/
-change_join.prototype._transformChangeWrapRay =
-	change_generic.transformChangeWrapRay;
-
-
-/*
-| Returns a change, changeRay, changeWrap or changeWrapRay
-| transformed on this change.
-*/
-change_join.prototype.transform =
-	function(
-		cx
-	)
-{
-	if( cx === null )
-	{
-		return null;
-	}
-
-	switch( cx.reflect )
-	{
-		case 'change_split' :
-		case 'change_join' :
-
-			// XXX TODO
-			return cx;
-
-		case 'change_insert' :
-		case 'change_remove' :
-
-			return cx;
-
-		case 'change_ray' :
-
-			return this._transformChangeRay( cx );
-
-		case 'change_wrap' :
-
-			return this._transformChangeWrap( cx );
-
-		case 'change_wrapRay' :
-
-			return this._transformChangeWrapRay( cx );
-
-		default :
-
-			throw new Error( );
+		throw change_error( 'join.at1 negative' );
 	}
 };
 
@@ -307,6 +215,168 @@ change_join.prototype.changeTree =
 
 			throw new Error( );
 	}
+};
+
+
+/*
+| Returns the inversion to this change.
+*/
+jools.lazyValue(
+	change_join.prototype,
+	'invert',
+	function( )
+	{
+		var
+			inv;
+
+		inv =
+			change_split.create(
+				'path', this.path,
+				'at1', this.at1,
+				'path2', this.path2
+			);
+
+		// FIXME aheadValue inv to be this
+
+		return inv;
+	}
+);
+
+
+/*
+| Returns a change, changeRay, changeWrap or changeWrapRay
+| transformed on this change.
+*/
+change_join.prototype.transform =
+	function(
+		cx
+	)
+{
+	if( cx === null )
+	{
+		return null;
+	}
+
+	switch( cx.reflect )
+	{
+		case 'change_join' :
+		case 'change_split' :
+
+			return this._transformJoinSplit( cx );
+
+		case 'change_insert' :
+		case 'change_remove' :
+
+			return this._transformInsertRemove( cx );
+
+		case 'change_ray' :
+
+			return this._transformChangeRay( cx );
+
+		case 'change_wrap' :
+
+			return this._transformChangeWrap( cx );
+
+		case 'change_wrapRay' :
+
+			return this._transformChangeWrapRay( cx );
+
+		default :
+
+			throw new Error( );
+	}
+};
+
+
+/*
+| Returns a change ray transformed by this change.
+*/
+change_join.prototype._transformChangeRay =
+	change_generic.transformChangeRay;
+
+
+/*
+| Returns a change wrap transformed by this change.
+*/
+change_join.prototype._transformChangeWrap =
+	change_generic.transformChangeWrap;
+
+
+/*
+| Returns a change wrap transformed by this change.
+*/
+change_join.prototype._transformChangeWrapRay =
+	change_generic.transformChangeWrapRay;
+
+
+/*
+| Transforms an insert/remove change
+| considering this join actually came first.
+*/
+change_join.prototype._transformInsertRemove =
+	function(
+		cx
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		cx.reflect !== 'change_insert'
+/**/		&& cx.reflect !== 'change_remove'
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !this.path2.equals( cx.path ) )
+	{
+		return cx;
+	}
+
+	return(
+		cx.create(
+			'path', this.path,
+			'at1', cx.at1 + this.at1,
+			'at2', cx.at2 + this.at1
+		)
+	);
+};
+
+
+/*
+| Transforms an join/split change
+| considering this join actually came first.
+*/
+change_join.prototype._transformJoinSplit =
+	function(
+		cx
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		cx.reflect !== 'change_join'
+/**/		&& cx.reflect !== 'change_split'
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !this.path2.equals( cx.path ) )
+	{
+		return cx;
+	}
+
+	return(
+		cx.create(
+			'path', this.path,
+			'at1', cx.at1 + this.at1
+		)
+	);
 };
 
 

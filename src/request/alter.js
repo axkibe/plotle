@@ -27,7 +27,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'ccot_changeWrapRay'
+							'change_wrapRay'
 					},
 				passhash :
 					{

@@ -8,15 +8,16 @@ var
 	change_join,
 	change_remove,
 	change_ray,
+	change_set,
 	change_split,
 	change_wrap,
-	//fabric_doc,
-	//fabric_label,
+	fabric_doc,
+	fabric_label,
 	//fabric_note,
-	//fabric_para,
+	fabric_para,
 	//fabric_portal,
 	//fabric_relation,
-	//jion_path,
+	jion_path,
 	jools,
 	shell_alter,
 	root;
@@ -203,36 +204,38 @@ shell_alter.setPNW =
 */
 shell_alter.newLabel =
 	function(
-		// pnw,
-		// text,
-		// fontsize
+		pnw,
+		text,
+		fontsize
 	)
 {
-	throw new Error( );
-
-	/*
 	var
-		src;
+		key,
+		val;
 
-	src =
-		ccot_sign.create(
-			'val',
-				fabric_label.create(
-					'fontsize', fontsize,
-					'pnw', pnw,
-					'doc',
-						fabric_doc.create(
-							'twig:add',
-							'1',
-							fabric_para.create( 'text', text )
-						)
-				),
-			'rank',
-				null
+	val =
+		fabric_label.create(
+			'fontsize', fontsize,
+			'pnw', pnw,
+			'doc',
+				fabric_doc.create(
+					'twig:add', '1',
+					fabric_para.create( 'text', text )
+				)
 		);
 
-	return alter( src, newItemSign );
-	*/
+	key = jools.uid( );
+
+	alter(
+		change_set.create(
+			'val', val,
+			'path',
+				jion_path.empty.append( 'twig' ).append( key ),
+			'rank', root.space.length
+		)
+	);
+
+	return key;
 };
 
 

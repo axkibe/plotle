@@ -20,6 +20,7 @@ module.exports =
 			'src/change/join.js',
 			'src/change/ray.js',
 			'src/change/remove.js',
+			'src/change/set.js',
 			'src/change/split.js',
 			'src/change/wrap.js',
 			'src/change/wrapRay.js',

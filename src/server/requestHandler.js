@@ -81,7 +81,7 @@ replyError =
 		message
 	)
 {
-	if( config.develServer )
+	if( config.server_devel )
 	{
 		// in devel mode any failure is fatal.
 		throw new Error( message );
@@ -111,14 +111,17 @@ serveAlter =
 		spaceRef,
 		username;
 
-	try
-	{
+//  XXX
+//	try
+//	{
+		jools.log( true, request );
+
 		request = request_alter.createFromJSON( request );
-	}
-	catch( err )
-	{
-		return replyError( 'command not valid jion' );
-	}
+//	}
+//	catch( err )
+//	{
+//		return replyError( 'command not valid jion' );
+//	}
 
 	seq = request.seq;
 
@@ -170,7 +173,7 @@ serveAlter =
 	}
 	catch( error )
 	{
-		if( error.nonFatal && !config.develServer )
+		if( error.nonFatal && !config.server_devel )
 		{
 			return replyError( error.message );
 		}

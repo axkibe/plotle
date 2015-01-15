@@ -895,15 +895,12 @@ fabric_space.prototype.dragStop =
 								)
 						);
 
-					result =
+					key =
 						shell_alter.newLabel(
 							label.pnw,
 							'Label',
 							label.doc.fontsize
 						);
-
-					key =
-						result.reaction.changeRay.get( 0 ).trg.path.get( -1 );
 
 					root.setMark(
 						marks_caret.create(
@@ -912,8 +909,7 @@ fabric_space.prototype.dragStop =
 								.space
 								.twig[ key ]
 								.doc.atRank( 0 ).textPath,
-							'at',
-								0
+							'at', 0
 						)
 					);
 

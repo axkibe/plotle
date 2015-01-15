@@ -139,6 +139,12 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/change/set.js',
+		'hasJion', true,
+		'inBundle', true,
+		'inTestPad', true
+	),
+	resource.create(
 		'filePath', 'src/change/split.js',
 		'hasJion', true,
 		'inBundle', true,

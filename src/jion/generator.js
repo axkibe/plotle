@@ -183,6 +183,7 @@ generator.prototype._init =
 		subID,
 		// twig id
 		t,
+		type,
 		tZ,
 		// twig map to be used (the definition)
 		twigDef,
@@ -220,9 +221,16 @@ generator.prototype._init =
 	{
 		jAttr = jion.attributes[ name ];
 
-		if( !Array.isArray( jAttr.type ) )
+		type = jAttr.type;
+
+		if( jools.isString( type ) && type.substring( 0, 2 ) === '->' )
 		{
-			aid = id.createFromString( jAttr.type );
+			type = require( '../typemaps/' + type.substring( 2 ) );
+		}
+
+		if( !Array.isArray( type ) )
+		{
+			aid = id.createFromString( type );
 
 			units = units.add( aid );
 		}
@@ -231,12 +239,12 @@ generator.prototype._init =
 			aid = [ ]; // FUTURE idRay
 
 			for(
-				t = 0, tZ = jAttr.type.length;
+				t = 0, tZ = type.length;
 				t < tZ;
 				t++
 			)
 			{
-				aid[ t ] = id.createFromString( jAttr.type[ t ] );
+				aid[ t ] = id.createFromString( type[ t ] );
 
 				units = units.add( aid[ t ] );
 			}
@@ -426,7 +434,7 @@ generator.prototype._init =
 	{
 		if( jools.isString( jion.twig ) )
 		{
-			twigDef = require( '../typemaps/' + jion.twig.substr( 2 ) );
+			twigDef = require( '../typemaps/' + jion.twig.substring( 2 ) );
 		}
 		else
 		{
@@ -449,7 +457,7 @@ generator.prototype._init =
 
 		if( jools.isString( jion.ray ) )
 		{
-			rayDef = require( '../typemaps/' + jion.ray.substr( 2 ) );
+			rayDef = require( '../typemaps/' + jion.ray.substring( 2 ) );
 		}
 		else
 		{
@@ -1961,11 +1969,7 @@ generator.prototype.genFromJSONCreatorParser =
 	{
 		name = jsonList[ a ];
 
-		if(
-			name === 'twig'
-			|| name === 'ranks'
-			|| name === 'ray'
-		)
+		if( name === 'twig' || name === 'ranks' || name === 'ray' )
 		{
 			continue;
 		}
@@ -2016,7 +2020,7 @@ generator.prototype.genFromJSONCreatorParser =
 								$assign(
 									attr.v,
 									$call(
-										attr.id[ t ].$var
+										attr.id[ t ].$global
 										.$dot( 'createFromJSON' ),
 										'arg'
 									)
@@ -2024,6 +2028,16 @@ generator.prototype.genFromJSONCreatorParser =
 							);
 					}
 				}
+		}
+
+		if( attr.allowsNull )
+		{
+			attrCode =
+				$if(
+					'arg === null ',
+					$assign( attr.v, null ),
+					attrCode
+				);
 		}
 
 		nameSwitch =

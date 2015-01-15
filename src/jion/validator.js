@@ -7,16 +7,8 @@
 | Exports.
 */
 var
+	jools,
 	validator;
-
-validator = { };
-
-
-/*
-| Imports.
-*/
-var
-	jools;
 
 
 /*
@@ -25,6 +17,24 @@ var
 (function( ) {
 'use strict';
 
+
+
+if( SERVER )
+{
+	validator = module.exports;
+}
+else
+{
+	validator = { };
+}
+
+
+var
+	attributeBlacklist,
+	checkAttribute,
+	checkAttributeSingleType,
+	checkRay,
+	jionWhitelist;
 
 /*
 | Node includes.
@@ -38,7 +48,7 @@ if( SERVER )
 /*
 | Attributes must not be named like these.
 */
-var _attributeBlacklist =
+attributeBlacklist =
 	Object.freeze( {
 		'atRank' : true,
 		'create' : true,
@@ -58,7 +68,7 @@ var _attributeBlacklist =
 /*
 | A jion definition may have these.
 */
-var _jionWhitelist =
+jionWhitelist =
 	Object.freeze( {
 		'alike' : true,
 		'attributes' : true,
@@ -235,7 +245,7 @@ var _checkTwig =
 /*
 | Checks the ray definition.
 */
-var _checkRay =
+checkRay =
 	function(
 		jion // the jion definition
 	)
@@ -301,7 +311,7 @@ var _checkRay =
 |
 | This does not include sets, it checks a single type.
 */
-var _checkAttributeSingleType =
+checkAttributeSingleType =
 	function(
 		name, // attribute name
 		type  // the type specifier to check
@@ -314,8 +324,12 @@ var _checkAttributeSingleType =
 		);
 	}
 
-	// FUTURE _ only
-	if( type.indexOf( '.' ) < 0 && type.indexOf( '_' ) < 0 )
+	if( type.substring( 0, 2 ) === '->' )
+	{
+		return;
+	}
+
+	if( type.indexOf( '_' ) < 0 )
 	{
 		switch( type )
 		{
@@ -342,7 +356,7 @@ var _checkAttributeSingleType =
 /*
 | Checks if a jion attribute definition looks ok.
 */
-var _checkAttribute =
+checkAttribute =
 	function(
 		jion,	// the jion definition
 		name	// the attribute name
@@ -355,7 +369,7 @@ var _checkAttribute =
 		type,
 		value;
 
-	if( _attributeBlacklist[ name ] )
+	if( attributeBlacklist[ name ] )
 	{
 		throw new Error(
 			'attribute must not be named "' + name + '"'
@@ -368,7 +382,7 @@ var _checkAttribute =
 
 	if( jools.isString( type ) )
 	{
-		_checkAttributeSingleType( name, type );
+		checkAttributeSingleType( name, type );
 	}
 	else if( Array.isArray( type ) )
 	{
@@ -376,7 +390,7 @@ var _checkAttribute =
 
 		for( a = 0, aZ = type.length; a < aZ; a++ )
 		{
-			_checkAttributeSingleType( name, type[ a ] );
+			checkAttributeSingleType( name, type[ a ] );
 		}
 	}
 	else
@@ -482,7 +496,7 @@ validator.check =
 
 	for( name in jion )
 	{
-		if( !_jionWhitelist[ name ] )
+		if( !jionWhitelist[ name ] )
 		{
 			throw new Error(
 				'invalid jion parameter: ' + name
@@ -525,7 +539,7 @@ validator.check =
 	{
 		for( name in attr )
 		{
-			_checkAttribute( jion, name );
+			checkAttribute( jion, name );
 		}
 	}
 
@@ -548,18 +562,9 @@ validator.check =
 
 	if( jion.ray )
 	{
-		_checkRay( jion );
+		checkRay( jion );
 	}
 };
-
-
-/*
-| Node export
-*/
-if( SERVER )
-{
-	module.exports = validator;
-}
 
 
 } )( );

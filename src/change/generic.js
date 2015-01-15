@@ -101,7 +101,7 @@ change_generic.transformChangeRay =
 
 
 /*
-| Return a change wrap transformed by this change.
+| Returns a change wrap transformed by this change.
 */
 change_generic.transformChangeWrap =
 	function(
@@ -114,7 +114,7 @@ change_generic.transformChangeWrap =
 
 
 /*
-| Return a change wrap transformed by this change.
+| Returns a change wrap transformed by this change.
 */
 change_generic.transformChangeWrapRay =
 	function(

@@ -55,7 +55,7 @@ config.database_name = 'ideoloom-10';
 /*
 | Determines the amount of checking and complaining if things go wrong.
 */
-config.develShell = true;
+config.shell_devel = true;
 
 
 /*
@@ -95,7 +95,7 @@ config.server_freeze = false;
 | If the server is in devel mode,
 | it will die on a command it considers unacceptable.
 */
-config.develServer = false;
+config.server_devel = false;
 
 
 /*
@@ -167,6 +167,7 @@ config.log  = {
 	twig : false,
 	peer : false,
 	report : false,
+	reject : true,
 	start : true,
 	shell : true,
 	tfx : false,

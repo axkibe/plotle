@@ -5,6 +5,7 @@
 var
 	change_generic,
 	change_error,
+	change_ray,
 	change_split,
 	change_join,
 	result_changeTree,
@@ -73,6 +74,8 @@ if( SERVER )
 
 	change_error = require( './error' );
 
+	change_ray = require( './ray' );
+
 	change_join = require( './remove' );
 
 	jools = require( '../jools/jools' );
@@ -87,101 +90,9 @@ if( SERVER )
 change_split.prototype._init =
 	function ( )
 {
-	if( this.at1 < 0 || this.at2 < 0 )
+	if( this.at1 < 0 )
 	{
 		throw change_error( 'split.at1 negative' );
-	}
-};
-
-
-/*
-| Returns the inversion to this change.
-*/
-jools.lazyValue(
-	change_split.prototype,
-	'invert',
-	function( )
-	{
-		var
-			inv;
-
-		inv =
-			change_join.create(
-				'path', this.path,
-				'at1', this.at1,
-				'path2', this.path2
-			);
-
-		// FIXME aheadValue inv to be this
-
-		return inv;
-	}
-);
-
-
-/*
-| Returns a change ray transformed by this change.
-*/
-change_split.prototype._transformChangeRay =
-	change_generic.transformChangeRay;
-
-
-/*
-| Return a change wrap transformed by this change.
-*/
-change_split.prototype._transformChangeWrap =
-	change_generic.transformChangeWrap;
-
-
-/*
-| Return a change wrap transformed by this change.
-*/
-change_split.prototype._transformChangeWrapRay =
-	change_generic.transformChangeWrapRay;
-
-
-/*
-| Returns a change, changeRay, changeWrap or changeWrapRay
-| transformed on this change.
-*/
-change_split.prototype.transform =
-	function(
-		cx
-	)
-{
-	if( cx === null )
-	{
-		return null;
-	}
-
-	switch( cx.reflect )
-	{
-		case 'change_split' :
-		case 'change_join' :
-
-			// XXX TODO
-			return cx;
-
-		case 'change_insert' :
-		case 'change_remove' :
-
-			return cx;
-
-		case 'change_ray' :
-
-			return this._transformChangeRay( cx );
-
-		case 'change_wrap' :
-
-			return this._transformChangeWrap( cx );
-
-		case 'change_wrapRay' :
-
-			return this._transformChangeWrapRay( cx );
-
-		default :
-
-			throw new Error( );
 	}
 };
 
@@ -290,6 +201,255 @@ change_split.prototype.changeTree =
 		default :
 
 			throw new Error( );
+	}
+};
+
+
+/*
+| Returns the inversion to this change.
+*/
+jools.lazyValue(
+	change_split.prototype,
+	'invert',
+	function( )
+	{
+		var
+			inv;
+
+		inv =
+			change_join.create(
+				'path', this.path,
+				'at1', this.at1,
+				'path2', this.path2
+			);
+
+		// FIXME aheadValue inv to be this
+
+		return inv;
+	}
+);
+
+
+/*
+| Returns a change, changeRay, changeWrap or changeWrapRay
+| transformed on this change.
+*/
+change_split.prototype.transform =
+	function(
+		cx
+	)
+{
+	if( cx === null )
+	{
+		return null;
+	}
+
+	switch( cx.reflect )
+	{
+		case 'change_join' :
+		case 'change_split' :
+
+			return this._transformJoinSplit( cx );
+
+		case 'change_insert' :
+
+			return this._transformInsert( cx );
+
+		case 'change_remove' :
+
+			return this._transformRemove( cx );
+
+		case 'change_ray' :
+
+			return this._transformChangeRay( cx );
+
+		case 'change_wrap' :
+
+			return this._transformChangeWrap( cx );
+
+		case 'change_wrapRay' :
+
+			return this._transformChangeWrapRay( cx );
+
+		default :
+
+			throw new Error( );
+	}
+};
+
+
+/*
+| Returns a change ray transformed by this change.
+*/
+change_split.prototype._transformChangeRay =
+	change_generic.transformChangeRay;
+
+
+/*
+| Returns a change wrap transformed by this change.
+*/
+change_split.prototype._transformChangeWrap =
+	change_generic.transformChangeWrap;
+
+
+/*
+| Returns a change wrap transformed by this change.
+*/
+change_split.prototype._transformChangeWrapRay =
+	change_generic.transformChangeWrapRay;
+
+
+/*
+| Transforms an insert change
+| considering this split actually came first.
+*/
+change_split.prototype._transformInsert =
+	function(
+		cx
+	)
+{
+	console.log( 'transform insert by split' );
+
+/**/if( CHECK )
+/**/{
+/**/	if( cx.reflect !== 'change_insert' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !this.path.equals( cx.path ) )
+	{
+		return cx;
+	}
+
+	if( cx.at1 <= this.at1 )
+	{
+		return cx;
+	}
+	else
+	{
+		// insert is changed to happen
+		// in the splitted line
+		return(
+			cx.create(
+				'path', this.path2,
+				'at1', cx.at1 - this.at1,
+				'at2', cx.at2 - this.at1
+			)
+		);
+	}
+};
+
+
+/*
+| Transforms a join/split change
+| considering this split actually came first.
+*/
+change_split.prototype._transformJoinSplit =
+	function(
+		cx
+	)
+{
+	console.log( 'transform join by split' );
+
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		cx.reflect !== 'change_join'
+/**/		&& cx.reflect !== 'change_split'
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( !this.path.equals( cx.path ) )
+	{
+		return cx;
+	}
+
+	if( cx.at1 <= this.at1 )
+	{
+		return cx;
+	}
+	else
+	{
+		// join/split is changed to happen
+		// in the splitted line
+		return(
+			cx.create(
+				'path', this.path2,
+				'at1', cx.at1 - this.at1
+			)
+		);
+	}
+};
+
+/*
+| Transforms a remove change
+| considering this split actually came first.
+*/
+change_split.prototype._transformRemove =
+	function(
+		cx
+	)
+{
+	console.log( 'transform remove by split' );
+
+/**/if( CHECK )
+/**/{
+/**/	if( cx.reflect !== 'change_remove' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	// text    ttttttttttttt
+	// split         ^
+	// case 0    XXX '          remove left
+	// case 1      XXYXX        remove is split
+	// case 2        ' XXXX     remove right
+
+	if( !this.path.equals( cx.path ) )
+	{
+		return cx;
+	}
+
+	if( cx.at2 <= this.at1 )
+	{
+		// case 0, the remove is not affect
+
+		return cx;
+	}
+	else if( cx.at1 >= this.at1 )
+	{
+		// case 2, the remove happend in splited line
+
+		return cx.create(
+			'path', this.path2,
+			'at1', cx.at1 - this.at1,
+			'at2', cx.at2 - this.at1
+		);
+	}
+	else
+	{
+		// case 1, the remove is split into two removes
+		return change_ray.create(
+			'ray:init',
+			[
+				cx.create(
+					'at2', this.at1,
+					'val', cx.val.substring( 0, this.at1 - cx.at1 )
+				),
+				cx.create(
+					'at1', 0,
+					'at2', cx.at2 - this.at1,
+					'path', this.path2,
+					'val', cx.val.substring( this.at1 - cx.at1 )
+				)
+			]
+		);
 	}
 };
 

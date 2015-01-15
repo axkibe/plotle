@@ -28,7 +28,13 @@ if( JION )
 		json :
 			true,
 		ray :
-			[ 'change_insert' ]
+			[
+				'change_insert',
+				'change_join',
+				'change_remove',
+				'change_set',
+				'change_split'
+			]
 	};
 }
 
@@ -150,7 +156,7 @@ change_ray.prototype._transformChangeRay =
 
 
 /*
-| Return a change wrap transformed by this change.
+| Returns a change wrap transformed by this change.
 */
 change_ray.prototype._transformChangeWrap =
 	function(
@@ -168,7 +174,7 @@ change_ray.prototype._transformChangeWrap =
 
 
 /*
-| Return a change wrap transformed by this change.
+| Returns a change wrap transformed by this change.
 */
 change_ray.prototype._transformChangeWrapRay =
 	function(
