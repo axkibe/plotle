@@ -4,7 +4,8 @@
 
 var
 	actions_isAction,
-	ccot_sign,
+	change_wrap,
+	change_ray,
 	discs_jockey,
 	euclid_display,
 	euclid_measure,
@@ -24,8 +25,6 @@ var
 	gruga_welcome,
 	jion_path,
 	jools,
-	marks_caret,
-	marks_range,
 	net_ajax,
 	net_channel,
 	net_link,
@@ -198,37 +197,63 @@ shell_root =
 };
 
 
-var
-	proto;
+/*
+| Alters the tree.
+|
+| Feeds the doTracker.
+*/
+shell_root.prototype.alter =
+	function(
+		change
+	)
+{
+	var
+		changeWrap,
+		result;
 
-proto = shell_root.prototype,
+	changeWrap =
+		change_wrap.create(
+			'cid', jools.uid( ),
+			'changeRay',
+				change_ray.create( 'ray:set', 0, change )
+		);
+
+	result = root.link.alter( changeWrap );
+
+	// FIXME remove reaction
+	root.doTracker.track( result.reaction );
+
+	// FIXME return nothing!
+	return result;
+};
+
 
 
 /*
-| Changes the mode.
+| A space finished loading.
 */
-proto.setMode =
+shell_root.prototype.arrivedAtSpace =
 	function(
-		mode
+		spaceRef,
+		access
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( !_modes[ mode ] )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid mode : ' + mode
-/**/		);
-/**/	}
-/**/}
-
-	this._mode = mode;
-
 	this._discJockey =
-		this._discJockey.create( 'mode', mode );
+		this._discJockey.create(
+			'access', access,
+			'spaceUser', spaceRef.username, // FIXME
+			'spaceTag', spaceRef.tag // FIXME
+		);
 
-	this._redraw = true;
+	this._formJockey =
+		this._formJockey.create(
+			'spaceUser', spaceRef.username, // FIXME
+			'spaceTag', spaceRef.tag // FIXME
+		);
+
+	root.setMode( 'Normal' );
 };
+
 
 
 /*
@@ -241,7 +266,7 @@ proto.setMode =
 | when the keyboard is visible.
 */
 Object.defineProperty(
-	proto,
+	shell_root.prototype,
 	'attentionCenter',
 	{
 		get :
@@ -259,245 +284,9 @@ Object.defineProperty(
 
 
 /*
-| Sets the current action.
-*/
-proto.setAction =
-	function(
-		action
-	)
-{
-
-/**/if ( CHECK )
-/**/{
-/**/	if(
-/**/		action !== null
-/**/		&&
-/**/		!actions_isAction( action )
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	this.action = action;
-
-	this._discJockey =
-		this._discJockey.create( 'action', action );
-
-	this._redraw = true;
-};
-
-
-/*
-| The link is reporting updates.
-*/
-proto.update =
-	function(
-		space,
-		changes
-	)
-{
-	var
-		bSign,
-		eSign,
-		mark,
-		sign,
-		item;
-
-	mark = this.space.mark;
-
-	switch( mark && mark.reflect )
-	{
-		case null :
-
-			break;
-
-		case 'marks_caret' :
-
-			item = space.twig[ mark.path.get( 2 ) ];
-
-			if( item === undefined )
-			{
-				// the item holding the caret was removed
-				mark = null;
-			}
-			else
-			{
-				sign =
-					changes.transform(
-						ccot_sign.create(
-							'path', mark.path.chop( ),
-							'at1', mark.at
-						)
-					);
-
-				// FIXME
-				//   keeping retainx might not be correct
-				//   in some cases
-				mark =
-					marks_caret.create(
-						'path', sign.path.prepend( 'space' ),
-						'at', sign.at1,
-						'retainx', mark.retainx
-					);
-			}
-
-			break;
-
-		case 'marks_item' :
-
-			item = space.twig[ mark.path.get( 2 ) ];
-
-			if( item === undefined )
-			{
-				// the item holding the caret was removed
-				mark = null;
-			}
-
-			break;
-
-		case 'marks_range' :
-
-			item = space.twig[ mark.bPath.get( 2 ) ];
-
-			// tests if the owning item was removed
-			if( item === undefined )
-			{
-				mark = null;
-			}
-			else
-			{
-				bSign =
-					changes.transform(
-						ccot_sign.create(
-							'path', mark.bPath.chop( ),
-							'at1', mark.bAt
-						)
-					);
-
-				eSign =
-					changes.transform(
-						ccot_sign.create(
-							'path', mark.ePath.chop( ),
-							'at1', mark.eAt
-						)
-					);
-
-				// tests if the range collapsed to a simple caret.
-				if(
-					bSign.path.equals( eSign.path ) &&
-					bSign.at1 === eSign.at1
-				)
-				{
-					mark =
-						marks_caret.create(
-							'path', bSign.path.prepend( 'space' ),
-							'at', bSign.at1,
-							'retainx', mark.retainx
-						);
-				}
-				else
-				{
-					mark =
-						marks_range.create(
-							'doc', item.doc,
-							'bPath', bSign.path.prepend( 'space' ),
-							'bAt', bSign.at1,
-							'ePath', eSign.path.prepend( 'space' ),
-							'eAt', eSign.at1,
-							'retainx', mark.retainx
-						);
-				}
-			}
-
-			break;
-	}
-
-	// FIXME let the link do the real stuff
-	this.space =
-		space.create(
-			'spaceUser', this.space.spaceUser,
-			'spaceTag', this.space.spaceTag,
-			'access', this.space.access,
-			'hover', this.space.hover,
-			'mark', mark,
-			'path', this.space.path,
-			'view', this.space.view
-		);
-
-	this._discJockey = this._discJockey.create( 'mark', mark );
-
-	this.mark = mark;
-
-	this._draw( );
-};
-
-
-/*
-| The shell got or lost the systems focus.
-|
-| FIXME rename setSystemFocus
-*/
-proto.setFocus =
-	function(
-		focus
-	)
-{
-	if( this.mark )
-	{
-		switch( this.mark.reflect )
-		{
-			case 'marks_caret' :
-
-				this.setMark(
-					this.mark.create( 'focus', focus )
-				);
-
-			break;
-		}
-	}
-
-	if( this._redraw )
-	{
-		this._draw( );
-	}
-};
-
-
-/*
-| Draws everything.
-*/
-proto._draw =
-	function( )
-{
-	var
-		display,
-		screen;
-
-	display = this.display;
-
-	display.clear( );
-
-	screen = this._currentScreen( );
-
-	if( screen )
-	{
-		screen.draw( display );
-	}
-
-	if( screen && screen.showDisc )
-	{
-		this._discJockey.draw( display );
-	}
-
-	this._redraw = false;
-};
-
-
-/*
 | User clicked.
 */
-proto.click =
+shell_root.prototype.click =
 	function(
 		p,
 		shift,
@@ -534,47 +323,112 @@ proto.click =
 
 
 /*
-| Returns current screen
-|
-| This is either a fabric space or a form
+| Sets the current action.
 */
-proto._currentScreen =
-	function( )
+shell_root.prototype.setAction =
+	function(
+		action
+	)
 {
-	var
-		name;
 
-	name = this._mode;
+/**/if ( CHECK )
+/**/{
+/**/	if(
+/**/		action !== null
+/**/		&&
+/**/		!actions_isAction( action )
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
-	switch( name )
+	this.action = action;
+
+	this._discJockey =
+		this._discJockey.create( 'action', action );
+
+	this._redraw = true;
+};
+
+
+/*
+| The shell got or lost the systems focus.
+|
+| FIXME rename setSystemFocus
+*/
+shell_root.prototype.setFocus =
+	function(
+		focus
+	)
+{
+	if( this.mark )
 	{
-		case 'Create' :
-		case 'Normal' :
+		switch( this.mark.reflect )
+		{
+			case 'marks_caret' :
 
-			return this.space;
+				this.setMark(
+					this.mark.create( 'focus', focus )
+				);
 
-		case 'login' :
-		case 'moveTo' :
-		case 'noAccessToSpace' :
-		case 'nonExistingSpace' :
-		case 'signUp' :
-		case 'space' :
-		case 'user' :
-		case 'welcome' :
+			break;
+		}
+	}
 
-			return this._formJockey.get( name );
-
-		default :
-
-			throw new Error( 'unknown mode: ' + name );
+	if( this._redraw )
+	{
+		this._draw( );
 	}
 };
 
 
 /*
+| Changes the mode.
+*/
+shell_root.prototype.setMode =
+	function(
+		mode
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( !_modes[ mode ] )
+/**/	{
+/**/		throw new Error(
+/**/			'invalid mode : ' + mode
+/**/		);
+/**/	}
+/**/}
+
+	this._mode = mode;
+
+	this._discJockey =
+		this._discJockey.create( 'mode', mode );
+
+	this._redraw = true;
+};
+
+
+/*
+| Cycles focus in a form.
+*/
+shell_root.prototype.cycleFormFocus =
+	function(
+		name,
+		dir
+	)
+{
+	this._formJockey.cycleFocus( name, dir );
+};
+
+
+
+
+/*
 | User is hovering his/her pointing device ( mouse move )
 */
-proto.pointingHover =
+shell_root.prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -655,7 +509,7 @@ proto.pointingHover =
 |
 | Mouse down or finger on screen.
 */
-proto.dragStart =
+shell_root.prototype.dragStart =
 	function(
 		p,
 		shift,
@@ -693,7 +547,7 @@ proto.dragStart =
 /*
 | Moving during an operation with the mouse button held down.
 */
-proto.dragMove =
+shell_root.prototype.dragMove =
 	function(
 		p,
 		shift,
@@ -728,7 +582,7 @@ proto.dragMove =
 /*
 | Stops an operation with the mouse button held down.
 */
-proto.dragStop =
+shell_root.prototype.dragStop =
 	function(
 		p,
 		shift,
@@ -756,9 +610,31 @@ proto.dragStop =
 
 
 /*
+| Logs out the current user
+*/
+shell_root.prototype.logout =
+	function( )
+{
+	if( this._visitUser )
+	{
+		this.setUser(
+			this._visitUser,
+			this._visitPasshash
+		);
+
+		this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+
+		return;
+	}
+
+	root.link.auth( 'visitor', jools.uid( ) );
+};
+
+
+/*
 | Mouse wheel is being turned.
 */
-proto.mousewheel =
+shell_root.prototype.mousewheel =
 	function(
 		p,
 		dir,
@@ -786,20 +662,9 @@ proto.mousewheel =
 
 
 /*
-| Returns true if the iPad ought to showy
-| the virtual keyboard
-*/
-proto.suggestingKeyboard =
-	function( )
-{
-	return( this.mark !== null && this.mark.hasCaret );
-};
-
-
-/*
 | Sets the user's mark.
 */
-proto.setMark =
+shell_root.prototype.setMark =
 	function(
 		mark
 	)
@@ -823,98 +688,9 @@ proto.setMark =
 
 
 /*
-| Cycles focus in a form.
-*/
-proto.cycleFormFocus =
-	function(
-		name,
-		dir
-	)
-{
-	this._formJockey.cycleFocus( name, dir );
-};
-
-
-/*
-| A button has been pushed.
-*/
-proto.pushButton =
-	function( path )
-{
-	switch( path.get( 0 ) )
-	{
-		case 'discs' :
-
-			return this._discJockey.pushButton(
-				path,
-				false,
-				false
-			);
-
-		case 'forms' :
-
-			return this._formJockey.pushButton(
-				path,
-				false,
-				false
-			);
-
-		default :
-
-			throw new Error( 'invalid path' );
-	}
-};
-
-
-/*
-| Sets a hovered component.
-*/
-proto._setHover =
-	function(
-		path
-	)
-{
-	if( this._hoverPath.equals( path ) )
-	{
-		return;
-	}
-
-	this._discJockey =
-		this._discJockey.create(
-			// FIXME make concernsHover
-			'hover',
-				path.isEmpty || path.get( 0 ) !== 'discs'
-				? jion_path.empty
-				: path
-		);
-
-	this._formJockey =
-		this._formJockey.create(
-			'hover',
-				// FIXME make a concernsHover
-				path.isEmpty || path.get( 0 ) !== 'forms'
-				? jion_path.empty
-				: path
-		);
-
-	this.space =
-		this.space.create(
-			'hover',
-				path.isEmpty || path.get( 0 ) !== 'space'
-				? jion_path.empty
-				: path
-		);
-
-	this._hoverPath = path;
-
-	root._redraw = true;
-};
-
-
-/*
 | Sets the trait(s) of item(s).
 */
-proto.setPath =
+shell_root.prototype.setPath =
 	function(
 		path,
 		value
@@ -960,7 +736,7 @@ proto.setPath =
 /*
 | User is pressing a special key.
 */
-proto.specialKey =
+shell_root.prototype.specialKey =
 	function(
 		key,
 		shift,
@@ -992,10 +768,151 @@ proto.specialKey =
 };
 
 
+
+/*
+| Returns true if the iPad ought to showy
+| the virtual keyboard
+*/
+shell_root.prototype.suggestingKeyboard =
+	function( )
+{
+	return( this.mark !== null && this.mark.hasCaret );
+};
+
+
+
+/*
+| A button has been pushed.
+*/
+shell_root.prototype.pushButton =
+	function( path )
+{
+	switch( path.get( 0 ) )
+	{
+		case 'discs' :
+
+			return this._discJockey.pushButton(
+				path,
+				false,
+				false
+			);
+
+		case 'forms' :
+
+			return this._formJockey.pushButton(
+				path,
+				false,
+				false
+			);
+
+		default :
+
+			throw new Error( 'invalid path' );
+	}
+};
+
+
+/*
+| The link is reporting updates.
+*/
+shell_root.prototype.update =
+	function(
+		space,
+		changes
+	)
+{
+	var
+		mark;
+
+	mark = this.space.mark;
+
+	switch( mark && mark.reflect )
+	{
+		case null :
+
+			break;
+
+		case 'marks_caret' :
+		case 'marks_item' :
+		case 'marks_range' :
+
+			if( mark.path.get( 0 ) === 'space' )
+			{
+				mark = changes.transform( mark );
+			}
+
+			break;
+	}
+
+	// FIXME let the link do the real stuff
+	this.space =
+		space.create(
+			'spaceUser', this.space.spaceUser,
+			'spaceTag', this.space.spaceTag,
+			'access', this.space.access,
+			'hover', this.space.hover,
+			'mark', mark,
+			'path', this.space.path,
+			'view', this.space.view
+		);
+
+	this._discJockey = this._discJockey.create( 'mark', mark );
+
+	this.mark = mark;
+
+	this._draw( );
+};
+
+
+/*
+| Sets a hovered component.
+*/
+shell_root.prototype._setHover =
+	function(
+		path
+	)
+{
+	if( this._hoverPath.equals( path ) )
+	{
+		return;
+	}
+
+	this._discJockey =
+		this._discJockey.create(
+			// FIXME make concernsHover
+			'hover',
+				path.isEmpty || path.get( 0 ) !== 'discs'
+				? jion_path.empty
+				: path
+		);
+
+	this._formJockey =
+		this._formJockey.create(
+			'hover',
+				// FIXME make a concernsHover
+				path.isEmpty || path.get( 0 ) !== 'forms'
+				? jion_path.empty
+				: path
+		);
+
+	this.space =
+		this.space.create(
+			'hover',
+				path.isEmpty || path.get( 0 ) !== 'space'
+				? jion_path.empty
+				: path
+		);
+
+	this._hoverPath = path;
+
+	root._redraw = true;
+};
+
+
 /*
 | User entered normal text (one character or more).
 */
-proto.input =
+shell_root.prototype.input =
 	function(
 		text
 	)
@@ -1028,7 +945,7 @@ proto.input =
 /*
 | The window has been resized.
 */
-proto.resize =
+shell_root.prototype.resize =
 	function(
 		display
 	)
@@ -1049,7 +966,7 @@ proto.resize =
 /*
 | Sets the current user
 */
-proto.setUser =
+shell_root.prototype.setUser =
 	function(
 		username,
 		passhash
@@ -1098,7 +1015,7 @@ proto.setUser =
 /*
 | Sets the current view ( of the space )
 */
-proto.setView =
+shell_root.prototype.setView =
 	function(
 		view
 	)
@@ -1119,58 +1036,11 @@ proto.setView =
 
 
 /*
-| Called when loading the website
-*/
-proto.onload =
-	function( )
-{
-	var
-		ajaxPath,
-		passhash,
-		username;
-
-	ajaxPath = jion_path.empty.append( 'ajax' );
-
-	this.ajax =
-		net_ajax.create(
-			'path', ajaxPath,
-			'twig:add', 'command',
-				net_channel.create(
-					'path', ajaxPath.append( 'command' )
-				),
-			'twig:add', 'update',
-				net_channel.create(
-					'path', ajaxPath.append( 'update' )
-				)
-		);
-
-	this.link = net_link.create( );
-
-	this.doTracker = shell_doTracker.create( );
-
-	username = window.localStorage.getItem( 'username' );
-
-	if( username )
-	{
-		passhash = window.localStorage.getItem( 'passhash' );
-	}
-	else
-	{
-		username = 'visitor';
-
-		passhash = jools.uid( );
-	}
-
-	this.link.auth( username, passhash );
-};
-
-
-/*
 | Moves to space with the name name.
 |
 | if spaceRef is null reloads current space
 */
-proto.moveToSpace =
+shell_root.prototype.moveToSpace =
 	function(
 		spaceRef,     // reference of type fabric_spaceRef
 		createMissing // if true, non-existing spaces are to be
@@ -1184,7 +1054,7 @@ proto.moveToSpace =
 /*
 | Receiving a moveTo event
 */
-proto.onAcquireSpace =
+shell_root.prototype.onAcquireSpace =
 	function(
 		spaceRef,
 		reply
@@ -1268,7 +1138,7 @@ proto.onAcquireSpace =
 /*
 | Received an 'auth' reply.
 */
-proto.onAuth =
+shell_root.prototype.onAuth =
 	function(
 		request,
 		reply
@@ -1310,9 +1180,57 @@ proto.onAuth =
 
 
 /*
+| Called when loading the website
+| FIXME call onLoad
+*/
+shell_root.prototype.onload =
+	function( )
+{
+	var
+		ajaxPath,
+		passhash,
+		username;
+
+	ajaxPath = jion_path.empty.append( 'ajax' );
+
+	this.ajax =
+		net_ajax.create(
+			'path', ajaxPath,
+			'twig:add', 'command',
+				net_channel.create(
+					'path', ajaxPath.append( 'command' )
+				),
+			'twig:add', 'update',
+				net_channel.create(
+					'path', ajaxPath.append( 'update' )
+				)
+		);
+
+	this.link = net_link.create( );
+
+	this.doTracker = shell_doTracker.create( );
+
+	username = window.localStorage.getItem( 'username' );
+
+	if( username )
+	{
+		passhash = window.localStorage.getItem( 'passhash' );
+	}
+	else
+	{
+		username = 'visitor';
+
+		passhash = jools.uid( );
+	}
+
+	this.link.auth( username, passhash );
+};
+
+
+/*
 | Received a 'register' reply.
 */
-proto.onRegister =
+shell_root.prototype.onRegister =
 	function(
 		ok,
 		username,
@@ -1346,50 +1264,70 @@ proto.onRegister =
 
 
 /*
-| Logs out the current user
+| Returns current screen
+|
+| This is either a fabric space or a form
 */
-proto.logout =
+shell_root.prototype._currentScreen =
 	function( )
 {
-	if( this._visitUser )
+	var
+		name;
+
+	name = this._mode;
+
+	switch( name )
 	{
-		this.setUser(
-			this._visitUser,
-			this._visitPasshash
-		);
+		case 'Create' :
+		case 'Normal' :
 
-		this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+			return this.space;
 
-		return;
+		case 'login' :
+		case 'moveTo' :
+		case 'noAccessToSpace' :
+		case 'nonExistingSpace' :
+		case 'signUp' :
+		case 'space' :
+		case 'user' :
+		case 'welcome' :
+
+			return this._formJockey.get( name );
+
+		default :
+
+			throw new Error( 'unknown mode: ' + name );
 	}
-
-	root.link.auth( 'visitor', jools.uid( ) );
 };
 
 
 /*
-| A space finished loading.
+| Draws everything.
 */
-proto.arrivedAtSpace =
-	function(
-		spaceRef,
-		access
-	)
+shell_root.prototype._draw =
+	function( )
 {
-	this._discJockey =
-		this._discJockey.create(
-			'access', access,
-			'spaceUser', spaceRef.username, // FIXME
-			'spaceTag', spaceRef.tag // FIXME
-		);
+	var
+		display,
+		screen;
 
-	this._formJockey =
-		this._formJockey.create(
-			'spaceUser', spaceRef.username, // FIXME
-			'spaceTag', spaceRef.tag // FIXME
-		);
+	display = this.display;
 
-	root.setMode( 'Normal' );
+	display.clear( );
+
+	screen = this._currentScreen( );
+
+	if( screen )
+	{
+		screen.draw( display );
+	}
+
+	if( screen && screen.showDisc )
+	{
+		this._discJockey.draw( display );
+	}
+
+	this._redraw = false;
 };
 
 

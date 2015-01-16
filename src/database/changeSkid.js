@@ -47,7 +47,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'ccot_changeRay'
+							'change_ray'
 					},
 				user :
 					{
@@ -73,7 +73,7 @@ if( JION )
 
 
 var
-	ccot_changeWrap,
+	change_wrap,
 	changeSkid,
 	jools,
 	result_changeTree;
@@ -82,7 +82,7 @@ changeSkid = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
-ccot_changeWrap = require( '../ccot/changeWrap' );
+change_wrap = require( '../change/wrap' );
 
 result_changeTree = require( '../result/changeTree' );
 
@@ -123,7 +123,7 @@ jools.lazyValue(
 	function( )
 {
 	return(
-		ccot_changeWrap.create(
+		change_wrap.create(
 			'changeRay', this.changeRay,
 			'cid', this.cid,
 			'seq', this._id

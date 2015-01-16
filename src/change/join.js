@@ -259,6 +259,16 @@ change_join.prototype.transform =
 
 	switch( cx.reflect )
 	{
+		case 'marks_caret' :
+		case 'marks_range' :
+
+			return this._transformMark( cx );
+
+		case 'marks_item' :
+		case 'marks_widget' :
+
+			return cx;
+
 		case 'change_join' :
 		case 'change_split' :
 
@@ -378,6 +388,36 @@ change_join.prototype._transformJoinSplit =
 		)
 	);
 };
+
+
+/*
+| Transforms a mark by this join.
+*/
+change_join.prototype._transformMark =
+	function(
+		mark
+	)
+{
+	if( !this.path2.equals( mark.path.chop( ) ) )
+	{
+		return mark;
+	}
+
+	if( mark.at2 === undefined )
+	{
+		return(
+			mark.create(
+				'path', this.path.prepend( mark.path.get( 0 ) ),
+				'at1', mark.at1 + this.at1
+			)
+		);
+	}
+	else
+	{
+		throw new Error( 'XXX TODO' );
+	}
+};
+
 
 
 }( ) );

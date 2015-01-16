@@ -214,6 +214,16 @@ change_remove.prototype.transform =
 
 	switch( cx.reflect )
 	{
+		case 'marks_caret' :
+		case 'marks_range' :
+
+			return this._transformMark( cx );
+
+		case 'marks_item' :
+		case 'marks_widget' :
+
+			return cx;
+
 		case 'change_join' :
 		case 'change_split' :
 
@@ -296,11 +306,63 @@ change_remove.prototype._transformInsert =
 	{
 		return cx;
 	}
-	else
+	else if( cx.at1 <= this.at2 )
+	{
+		return cx.create( 'at1', this.at1, 'at2', this.at1 + cx.val.length );
+	}
 	{
 		len = this.val.length;
 
 		return cx.create( 'at1', cx.at1 - len, 'at2', cx.at2 - len );
+	}
+};
+
+
+/*
+| Transforms a mark by this insert.
+*/
+change_remove.prototype._transformMark =
+	function(
+		mark
+	)
+{
+	var
+		len;
+
+	if( !this.path.equals( mark.path.chop( ) ) )
+	{
+		return mark;
+	}
+
+	if( mark.at1 < this.at1 )
+	{
+		return mark;
+	}
+	else if( mark.at1 <= this.at2 )
+	{
+		if( mark.at2 === undefined )
+		{
+			return mark.create( 'at1', this.at1 );
+		}
+		else
+		{
+			len = this.val.length;
+
+			return mark.create( 'at1', this.at1, 'at2', mark.at2 - len );
+		}
+	}
+	else
+	{
+		len = this.val.length;
+
+		if( mark.at2 === undefined )
+		{
+			return mark.create( 'at1', mark.at1 - len );
+		}
+		else
+		{
+			return mark.create( 'at1', mark.at1 - len, 'at2', mark.at2 - len );
+		}
 	}
 };
 

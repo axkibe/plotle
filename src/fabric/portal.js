@@ -4,7 +4,7 @@
 
 
 var
-	fabric_spaceRef,
+	change_insert,
 	euclid_display,
 	euclid_ellipse,
 	euclid_measure,
@@ -14,6 +14,7 @@ var
 	euclid_view,
 	fabric_item,
 	fabric_portal,
+	fabric_spaceRef,
 	jools,
 	marks_caret,
 	marks_item,
@@ -770,6 +771,7 @@ fabric_portal.prototype.input =
 	)
 {
 	var
+		line,
 		reg,
 		rx,
 		mark,
@@ -795,17 +797,20 @@ fabric_portal.prototype.input =
 
 	// ignores newlines
 	for(
-		rx = reg.exec(text);
+		rx = reg.exec( text );
 		rx !== null;
 		rx = reg.exec( text )
 	)
 	{
-		var line = rx[ 1 ];
+		line = rx[ 1 ];
 
-		shell_alter.insertText(
-			this.path.append( section ),
-			mark.caretAt,
-			line
+		root.alter(
+			change_insert.create(
+				'val', line,
+				'path', this.path.append( section ).chop( 1 ),
+				'at1', mark.caretAt,
+				'at2', mark.caretAt + line.length
+			)
 		);
 	}
 };

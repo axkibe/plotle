@@ -12,7 +12,7 @@
 
 var
 	server_requestHandler,
-	ccot_changeWrapRay,
+	change_wrapRay,
 	config,
 	fabric_spaceRef,
 	jools,
@@ -41,7 +41,7 @@ module.exports =
 
 config = require( '../../config' );
 
-ccot_changeWrapRay = require( '../ccot/changeWrapRay' );
+change_wrapRay = require( '../change/wrapRay' );
 
 jools = require( '../jools/jools' );
 
@@ -111,17 +111,14 @@ serveAlter =
 		spaceRef,
 		username;
 
-//  XXX
-//	try
-//	{
-		jools.log( true, request );
-
+	try
+	{
 		request = request_alter.createFromJSON( request );
-//	}
-//	catch( err )
-//	{
-//		return replyError( 'command not valid jion' );
-//	}
+	}
+	catch( err )
+	{
+		return replyError( 'command not valid jion' );
+	}
 
 	seq = request.seq;
 
@@ -543,7 +540,7 @@ server_requestHandler.conveyUpdate =
 		reply_update.create(
 			'seq', seq,
 			'changeWrapRay',
-				ccot_changeWrapRay.create( 'ray:init', chgA )
+				change_wrapRay.create( 'ray:init', chgA )
 		)
 	);
 };
@@ -581,7 +578,7 @@ server_requestHandler.expireUpdateSleep =
 	asw =
 		reply_update.create(
 			'seq', sleep.seq,
-			'changeWrapRay', ccot_changeWrapRay.create( )
+			'changeWrapRay', change_wrapRay.create( )
 		);
 
 	// FUTURE this should be in the ajax/http part
@@ -599,9 +596,7 @@ server_requestHandler.expireUpdateSleep =
 		}
 	);
 
-	result.end(
-		JSON.stringify( asw )
-	);
+	result.end( JSON.stringify( asw ) );
 };
 
 

@@ -5,9 +5,13 @@
 var
 	actions_itemResize,
 	actions_pan,
+	change_set,
 	euclid_arrow,
 	euclid_point,
 	euclid_rect,
+	fabric_doc,
+	fabric_label,
+	fabric_para,
 	fabric_space,
 	jion_path,
 	jools,
@@ -806,6 +810,7 @@ fabric_space.prototype.dragStop =
 		portal,
 		result,
 		resized,
+		val,
 		view,
 		zone;
 
@@ -895,12 +900,31 @@ fabric_space.prototype.dragStop =
 								)
 						);
 
-					key =
-						shell_alter.newLabel(
-							label.pnw,
-							'Label',
-							label.doc.fontsize
-						);
+					key = jools.uid( );
+
+					// FIXME might take label right away!
+					val =
+						fabric_label.create(
+							'fontsize', label.doc.fontsize,
+							'pnw', label.pnw,
+							'doc',
+								fabric_doc.create(
+								'twig:add', '1',
+								fabric_para.create( 'text', 'Label' )
+							)
+					);
+
+					root.alter(
+						change_set.create(
+							'val', val,
+							'path',
+								jion_path.empty
+								.append( 'twig' )
+								.append( key ),
+							'rank', root.space.length
+						)
+					);
+
 
 					root.setMark(
 						marks_caret.create(

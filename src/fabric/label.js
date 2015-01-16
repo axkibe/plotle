@@ -155,20 +155,13 @@ fabric_label.prototype._init =
 	doc =
 	this.doc =
 		this.doc.create(
-			'flowWidth',
-				0,
-			'fontsize',
-				this.fontsize,
-			'innerMargin',
-				theme.label.innerMargin,
-			'mark',
-				this.mark,
-			'paraSep',
-				Math.round( this.fontsize / 20 ),
-			'path',
-				docPath,
-			'view',
-				this.view
+			'flowWidth', 0,
+			'fontsize', this.fontsize,
+			'innerMargin', theme.label.innerMargin,
+			'mark', this.mark,
+			'paraSep', Math.round( this.fontsize / 20 ),
+			'path', docPath,
+			'view', this.view
 		);
 
 	height = doc.height,

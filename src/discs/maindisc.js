@@ -9,11 +9,11 @@
 var
 	discs_disc,
 	discs_mainDisc,
+	change_set,
 	euclid_display,
 	euclid_view,
 	jools,
-	root,
-	shell_alter;
+	root;
 
 /*
 | Capsule
@@ -361,11 +361,7 @@ discs_mainDisc.prototype.pushButton =
 
 	buttonName = path.get( 4 );
 
-	if(
-		buttonName === 'login'
-		&&
-		!this._userIsGuest
-	)
+	if( buttonName === 'login' && !this._userIsGuest )
 	{
 		root.logout( );
 
@@ -374,7 +370,14 @@ discs_mainDisc.prototype.pushButton =
 
 	if( buttonName === 'Remove' )
 	{
-		shell_alter.removeItem( this.mark.itemPath );
+		root.alter(
+			change_set.create(
+				'path', this.mark.itemPath.chop( ),
+				'val', null,
+				'prev', root.space.getPath( this.mark.itemPath.chop( ) ),
+				'rank', root.space.rankOf( this.mark.itemPath.get( 2 ) )
+			)
+		);
 	}
 	else
 	{

@@ -246,6 +246,16 @@ change_split.prototype.transform =
 
 	switch( cx.reflect )
 	{
+		case 'marks_caret' :
+		case 'marks_range' :
+
+			return this._transformMark( cx );
+
+		case 'marks_item' :
+		case 'marks_widget' :
+
+			return cx;
+
 		case 'change_join' :
 		case 'change_split' :
 
@@ -385,6 +395,41 @@ change_split.prototype._transformJoinSplit =
 		);
 	}
 };
+
+
+/*
+| Transforms a mark by this split.
+*/
+change_split.prototype._transformMark =
+	function(
+		mark
+	)
+{
+	if( !this.path.equals( mark.path.chop( ) ) )
+	{
+		return mark;
+	}
+
+	if( mark.at2 === undefined )
+	{
+		if( mark.at1 < this.at1 )
+		{
+			return mark;
+		}
+
+		return(
+			mark.create(
+				'path', this.path2.prepend( mark.path.get( 0 ) ),
+				'at1', mark.at1 - this.at1
+			)
+		);
+	}
+	else
+	{
+		throw new Error( 'XXX TODO' );
+	}
+};
+
 
 /*
 | Transforms a remove change

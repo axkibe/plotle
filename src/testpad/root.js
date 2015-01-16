@@ -4,6 +4,9 @@
 
 
 var
+	change_insert,
+	change_ray,
+	change_wrap,
 	jion_path,
 	jools,
 	root,
@@ -97,6 +100,7 @@ if( JION )
 				link :
 					// name is "link" since shell_alter
 					// calls it like that
+					// FIXME fix this once shell_alter is gone
 					{
 						comment :
 							'the testing repository',
@@ -105,6 +109,7 @@ if( JION )
 						defaultValue :
 							null
 					},
+				// FIXME remove this once shell_alter is gone
 				doTracker :
 					{
 						comment :
@@ -128,7 +133,7 @@ root = null;
 
 noteDocPath =
 	jion_path.empty
-	.append( 'space' )
+	.append( 'space' ) // FIXME, this isn't needed
 	.append( 'twig' )
 	.append( 'testnote' )
 	.append( 'doc' );
@@ -322,6 +327,34 @@ isSpecialKey =
 		default :
 			return false;
 	}
+};
+
+
+/*
+| Alters the tree.
+|
+| Feeds the doTracker.
+*/
+testpad_root.prototype.alter =
+	function(
+		change
+	)
+{
+	var
+		changeWrap,
+		result;
+
+	changeWrap =
+		change_wrap.create(
+			'cid', jools.uid( ),
+			'changeRay',
+				change_ray.create( 'ray:set', 0, change )
+		);
+
+	result = root.link.alter( changeWrap );
+
+	// FIXME return nothing!
+	return result;
 };
 
 
@@ -593,7 +626,14 @@ testpad_root.prototype.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			shell_alter.insertText( path, action.at, action.value );
+			root.alter(
+				change_insert.create(
+					'val', action.value,
+					'path', path.chop( ),
+					'at1', action.at,
+					'at2', action.at + action.value.length
+				)
+			);
 
 			cursorAt = this.cursorAt + action.value.length;
 
@@ -669,12 +709,9 @@ testpad_root.prototype.send =
 	}
 
 	root.create(
-		'action',
-			null,
-		'cursorAt',
-			cursorAt,
-		'link',
-			root.link.create( 'seq', jools.MAX_INTEGER )
+		'action', null,
+		'cursorAt', cursorAt,
+		'link', root.link.create( 'seq', jools.MAX_INTEGER )
 	);
 };
 

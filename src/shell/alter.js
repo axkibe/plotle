@@ -4,24 +4,10 @@
 
 
 var
-	change_insert,
 	change_join,
 	change_remove,
-	change_ray,
-	change_set,
 	change_split,
-	change_wrap,
-	fabric_doc,
-	fabric_label,
-	//fabric_note,
-	fabric_para,
-	//fabric_portal,
-	//fabric_relation,
-	jion_path,
-	jools,
-	shell_alter,
-	root;
-
+	shell_alter;
 
 /*
 | Capsule
@@ -35,35 +21,6 @@ var
 
 
 shell_alter = { };
-
-
-/*
-| Alters the tree.
-|
-| Feeds the doTracker.
-*/
-alter =
-	function(
-		change
-	)
-{
-	var
-		changeWrap,
-		result;
-
-	changeWrap =
-		change_wrap.create(
-			'cid', jools.uid( ),
-			'changeRay',
-				change_ray.create( 'ray:set', 0, change )
-		);
-
-	result = root.link.alter( changeWrap );
-
-	root.doTracker.track( result.reaction );
-
-	return result;
-};
 
 
 /*
@@ -200,46 +157,6 @@ shell_alter.setPNW =
 
 
 /*
-| Creates a new label.
-*/
-shell_alter.newLabel =
-	function(
-		pnw,
-		text,
-		fontsize
-	)
-{
-	var
-		key,
-		val;
-
-	val =
-		fabric_label.create(
-			'fontsize', fontsize,
-			'pnw', pnw,
-			'doc',
-				fabric_doc.create(
-					'twig:add', '1',
-					fabric_para.create( 'text', text )
-				)
-		);
-
-	key = jools.uid( );
-
-	alter(
-		change_set.create(
-			'val', val,
-			'path',
-				jion_path.empty.append( 'twig' ).append( key ),
-			'rank', root.space.length
-		)
-	);
-
-	return key;
-};
-
-
-/*
 | Creates a new relation.
 */
 shell_alter.newRelation =
@@ -298,29 +215,6 @@ shell_alter.moveToTop =
 	);
 };
 */
-
-
-/*
-| Inserts some text.
-*/
-shell_alter.insertText =
-	function(
-		path,
-		at1,
-		val
-	)
-{
-	return(
-		alter(
-			change_insert.create(
-				'val', val,
-				'path', path.chop( 1 ),
-				'at1', at1,
-				'at2', at1 + val.length
-			)
-		)
-	);
-};
 
 
 /*
@@ -474,44 +368,6 @@ shell_alter.join =
 			)
 		)
 	);
-};
-
-
-/*
-| Removes an item.
-*/
-shell_alter.removeItem =
-	function(
-		// path
-	)
-{
-	throw new Error( );
-
-	/*
-	var
-		key,
-		pivot,
-		r1;
-
-	key = path.get( -1 );
-
-	pivot = root.space.getPath( path.chop( 1 ).shorten( 2 ) );
-
-	r1 = pivot.rankOf( key );
-
-	return(
-		alter(
-			ccot_sign.create(
-				'val', null,
-				'rank', r1
-			),
-			ccot_sign.create(
-				'path', path.chop( 1 ),
-				'rank', null
-			)
-		)
-	);
-	*/
 };
 
 

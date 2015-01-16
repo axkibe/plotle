@@ -43,7 +43,9 @@ if( JION )
 						json :
 							'true',
 						type :
-							'->space-val'
+							'->space-val',
+						allowsNull :
+							true
 					},
 				prev :
 					{
@@ -131,7 +133,12 @@ change_set.prototype.changeTree =
 
 	if(
 		prev !== this.prev
-		&& ( !this.prev || !this.prev.equals( prev ) )
+		&&
+		(
+			!this.prev
+			||
+			JSON.stringify( this.prev ) !== JSON.stringify( prev )
+		)
 	)
 	{
 		throw change_error( 'set.prev doesn\'t match' );
@@ -251,7 +258,17 @@ change_set.prototype.transform =
 
 	switch( cx.reflect )
 	{
-		case 'change_join' :
+		case 'marks_caret' :
+		case 'marks_range' :
+		case 'marks_item' :
+
+			return this._transformMark( cx );
+
+		case 'marks_widget' :
+
+			return cx;
+
+	case 'change_join' :
 		case 'change_split' :
 		case 'change_insert' :
 		case 'change_remove' :
@@ -279,6 +296,31 @@ change_set.prototype.transform =
 
 			throw new Error( );
 	}
+};
+
+
+/*
+| Transforms a mark by this set.
+*/
+change_set.prototype._transformMark =
+	function(
+		mark
+	)
+{
+	if( !this.path.equals( mark.path.chop( ) ) )
+	{
+		return mark;
+	}
+
+	// this change removes the item.
+	if( this.val === null )
+	{
+		return null;
+	}
+
+	console.log( 'this shouldn\'t ever happen' );
+
+	return mark;
 };
 
 

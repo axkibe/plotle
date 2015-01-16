@@ -43,7 +43,10 @@ change_generic.isChange =
 	switch( o.reflect )
 	{
 		case 'change_insert' :
+		case 'change_join' :
 		case 'change_remove' :
+		case 'change_set' :
+		case 'change_split' :
 
 			return true;
 

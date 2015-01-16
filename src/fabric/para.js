@@ -7,6 +7,7 @@
 | Export
 */
 var
+	change_insert,
 	euclid_display,
 	euclid_measure,
 	euclid_point,
@@ -805,10 +806,13 @@ fabric_para.prototype.input =
 	{
 		line = rx[ 1 ];
 
-		shell_alter.insertText(
-			textPath,
-			caretAt,
-			line
+		root.alter(
+			change_insert.create(
+				'val', line,
+				'path', textPath.chop( 1 ),
+				'at1', caretAt,
+				'at2', caretAt + line.length
+			)
 		);
 
 		if( rx[ 2 ] )

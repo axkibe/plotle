@@ -92,7 +92,7 @@ jools.lazyValue(
 |
 | The result can be a change or a change_ray.
 */
-change_ray.prototype._transformChange =
+change_ray.prototype._transformSingle =
 	function(
 		c
 	)
@@ -104,10 +104,7 @@ change_ray.prototype._transformChange =
 
 /**/if( CHECK )
 /**/{
-/**/	if( !change_generic.isChange( c ) )
-/**/	{
-/**/		throw new Error( );
-/**/	}
+/**/	// FIXME check if its a change or mark
 /**/}
 
 	cx = c;
@@ -212,11 +209,6 @@ change_ray.prototype.transform =
 		co
 	)
 {
-	if( change_generic.isChange( co ) )
-	{
-		return this._transformChange( co );
-	}
-
 	switch( co.reflect )
 	{
 		case 'change_ray' :
@@ -233,7 +225,7 @@ change_ray.prototype.transform =
 
 		default :
 
-			throw new Error( );
+			return this._transformSingle( co );
 	}
 };
 
