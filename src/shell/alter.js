@@ -4,7 +4,6 @@
 
 
 var
-	change_join,
 	shell_alter;
 
 /*
@@ -12,10 +11,6 @@ var
 */
 (function( ) {
 'use strict';
-
-
-var
-	alter;
 
 
 shell_alter = { };
@@ -294,28 +289,6 @@ shell_alter.removeRange =
 
 	shell_alter.removeText( path1, at1, len2 - at1 + at2 );
 	*/
-};
-
-
-/*
-| Joins a text node with its next one.
-*/
-shell_alter.join =
-	function(
-		path,
-		path2,
-		at1
-	)
-{
-	return(
-		alter(
-			change_join.create(
-				'path', path.chop( 1 ),
-				'path2', path2.chop( 1 ),
-				'at1', at1
-			)
-		)
-	);
 };
 
 

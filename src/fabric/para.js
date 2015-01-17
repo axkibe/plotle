@@ -5,6 +5,7 @@
 
 var
 	change_insert,
+	change_join,
 	change_remove,
 	change_split,
 	euclid_display,
@@ -16,7 +17,6 @@ var
 	marks_range,
 	root,
 	shell_fontPool,
-	shell_alter,
 	theme;
 
 
@@ -1030,8 +1030,13 @@ fabric_para.prototype._keyBackspace =
 	{
 		ve = doc.atRank( r - 1 );
 
-		// XXX TODO
-		shell_alter.join( ve.textPath, ve.text.length );
+		root.alter(
+			change_join.create(
+				'path', ve.textPath.chop( ),
+				'path2', this.textPath.chop( ),
+				'at1', ve.text.length
+			)
+		);
 	}
 };
 
@@ -1070,10 +1075,12 @@ fabric_para.prototype._keyDel =
 
 	if( r < doc.ranks.length - 1 )
 	{
-		// XXX TODO
-		shell_alter.join(
-			this.textPath,
-			this.text.length
+		root.alter(
+			change_join.create(
+				'path', doc.atRank( r + 1).textPath.chop( ),
+				'path2', this.textPath.chop( ),
+				'at1', this.text.length
+			)
 		);
 	}
 };

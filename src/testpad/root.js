@@ -7,6 +7,7 @@
 
 var
 	change_insert,
+	change_join,
 	change_remove,
 	change_ray,
 	change_split,
@@ -704,10 +705,12 @@ testpad_root.prototype.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			shell_alter.join(
-				path,
-				path2,
-				doc.atRank( action.line - 1 ).text.length
+			root.alter(
+				change_join.create(
+					'path', path.chop( ),
+					'path2', path2.chop( ),
+					'at1', doc.atRank( action.line - 1 ).text.length
+				)
 			);
 
 			break;
@@ -1381,8 +1384,7 @@ testpad_root.prototype.makeScreen =
 		a++
 	)
 	{
-		lines[ a ] =
-			lines[ a ].join( '' );
+		lines[ a ] = lines[ a ].join( '' );
 	}
 
 	return lines.join( '\n' );
