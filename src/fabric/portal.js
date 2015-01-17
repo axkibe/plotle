@@ -5,6 +5,7 @@
 
 var
 	change_insert,
+	change_remove,
 	euclid_display,
 	euclid_ellipse,
 	euclid_measure,
@@ -1030,11 +1031,13 @@ fabric_portal.prototype._keyBackspace =
 		return;
 	}
 
-	// XXX
-	shell_alter.removeText(
-		this.path.append( section ),
-		at - 1,
-		1
+	root.alter(
+		change_remove.create(
+			'path', this.path.append( section ).chop( ),
+			'at1', at - 1,
+			'at2', at,
+			'val', this[ section ].substring( at - 1, at )
+		)
 	);
 };
 
@@ -1462,11 +1465,13 @@ fabric_portal.prototype._keyDel =
 		return;
 	}
 
-	// XXX
-	shell_alter.removeText(
-		this.path.append( section ),
-		at,
-		1
+	root.alter(
+		change_remove.create(
+			'path', this.path.append( section ).chop( ),
+			'at1', at,
+			'at2', at + 1,
+			'val', this[ section ].substring( at - 1, at )
+		)
 	);
 };
 

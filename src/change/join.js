@@ -408,7 +408,7 @@ change_join.prototype._transformMark =
 		return(
 			mark.create(
 				'path', this.path.prepend( mark.path.get( 0 ) ),
-				'at1', mark.at1 + this.at1
+				'at', mark.at + this.at1
 			)
 		);
 	}

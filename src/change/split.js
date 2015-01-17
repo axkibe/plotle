@@ -412,7 +412,7 @@ change_split.prototype._transformMark =
 
 	if( mark.at2 === undefined )
 	{
-		if( mark.at1 < this.at1 )
+		if( mark.at < this.at1 )
 		{
 			return mark;
 		}
@@ -420,7 +420,7 @@ change_split.prototype._transformMark =
 		return(
 			mark.create(
 				'path', this.path2.prepend( mark.path.get( 0 ) ),
-				'at1', mark.at1 - this.at1
+				'at', mark.at - this.at1
 			)
 		);
 	}

@@ -1,13 +1,12 @@
 /*
-| A visual paragraph.
+| A paragraph.
 */
 
 
-/*
-| Export
-*/
 var
 	change_insert,
+	change_remove,
+	change_split,
 	euclid_display,
 	euclid_measure,
 	euclid_point,
@@ -779,18 +778,15 @@ fabric_para.prototype.input =
 		caretAt,
 		doc,
 		line,
-		paraKey,
 		path,
+		path2,
 		reg,
-		r,
 		rx,
 		textPath;
 
 	reg = /([^\n]+)(\n?)/g;
 
 	path = this.path;
-
-	paraKey = this.key;
 
 	textPath = this.textPath;
 
@@ -817,25 +813,17 @@ fabric_para.prototype.input =
 
 		if( rx[ 2 ] )
 		{
-			// FIXME, somehow use changes
-			// over return values more elegantly
+			path2 = textPath.set( -2, jools.uid( ) );
 
-			// XXX TODO
-			r = shell_alter.split( textPath, caretAt + line.length );
+			root.alter(
+				change_split.create(
+					'path', textPath.chop( ),
+					'path2', path2.chop( ),
+					'at1', caretAt + line.length
+				)
+			);
 
-			doc =
-				r.tree.getPath(
-					path.chop( ).limit( 3 )
-				);
-
-			paraKey =
-				doc.ranks[
-					doc.rankOf( paraKey ) + 1
-				];
-
-			path = path.limit( 5 ).append( paraKey );
-
-			textPath = path.append( 'text' );
+			path = path2;
 
 			caretAt = 0;
 		}
@@ -954,14 +942,7 @@ fabric_para.prototype.specialKey =
 
 	if( keyHandler )
 	{
-		this[ keyHandler ](
-			item,
-			doc,
-			at,
-			retainx,
-			bPath,
-			bAt
-		);
+		this[ keyHandler ]( item, doc, at, retainx, bPath, bAt );
 	}
 };
 
@@ -1031,8 +1012,14 @@ fabric_para.prototype._keyBackspace =
 
 	if( at > 0 )
 	{
-		// XXX
-		shell_alter.removeText( this.textPath, at - 1, 1 );
+		root.alter(
+			change_remove.create(
+				'path', this.textPath.chop( 1 ),
+				'at1', at - 1,
+				'at2', at,
+				'val', this.text.substring( at - 1, at )
+			)
+		);
 
 		return;
 	}
@@ -1067,8 +1054,14 @@ fabric_para.prototype._keyDel =
 
 	if( at < this.text.length )
 	{
-		// XXX
-		shell_alter.removeText( this.textPath, at, 1 );
+		root.alter(
+			change_remove.create(
+				'path', this.textPath.chop( 1 ),
+				'at1', at,
+				'at2', at + 1,
+				'val', this.text.substring( at, at + 1 )
+			)
+		);
 
 		return;
 	}
@@ -1188,8 +1181,18 @@ fabric_para.prototype._keyEnter =
 		// bAt
 	)
 {
-	// XXX TODO
-	shell_alter.split( this.textPath, at );
+	var
+		tpc;
+
+	tpc = this.textPath.chop( );
+
+	root.alter(
+		change_split.create(
+			'path', tpc,
+			'path2', tpc.set( -2, jools.uid( ) ),
+			'at1', at
+		)
+	);
 };
 
 

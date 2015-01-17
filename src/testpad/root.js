@@ -1,11 +1,15 @@
 /*
 | A testing pad for the CC/OT engine.
+|
+| FIXME remove space from path an all the chopping
 */
 
 
 var
 	change_insert,
+	change_remove,
 	change_ray,
+	change_split,
 	change_wrap,
 	jion_path,
 	jools,
@@ -647,11 +651,14 @@ testpad_root.prototype.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			shell_alter.removeText(
-				path,
-				action.at,
-				doc.atRank( action.line ).text.substring(
-					action.at2, action.at
+			root.alter(
+				change_remove.create(
+					'val',
+						doc.atRank( action.line ).text
+						.substring( action.at2, action.at ),
+					'path', path.chop( ),
+					'at1', action.at,
+					'at2', action.at2
 				)
 			);
 
@@ -673,10 +680,12 @@ testpad_root.prototype.send =
 				.append( doc.ranks[ action.line ] )
 				.append( 'text' );
 
-			shell_alter.split(
-				path,
-				path.set( -2, jools.uid( ) ),
-				action.at
+			root.alter(
+				change_split.create(
+					'path', path.chop( ),
+					'path2', path.set( -2, jools.uid( ) ).chop( ),
+					'at1', action.at
+				)
 			);
 
 			break;

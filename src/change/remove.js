@@ -334,21 +334,19 @@ change_remove.prototype._transformMark =
 		return mark;
 	}
 
-	if( mark.at1 < this.at1 )
+	if( mark.at < this.at1 )
 	{
 		return mark;
 	}
-	else if( mark.at1 <= this.at2 )
+	else if( mark.at <= this.at2 )
 	{
 		if( mark.at2 === undefined )
 		{
-			return mark.create( 'at1', this.at1 );
+			return mark.create( 'at', this.at1 );
 		}
 		else
 		{
-			len = this.val.length;
-
-			return mark.create( 'at1', this.at1, 'at2', mark.at2 - len );
+			throw new Error( 'XXX TODO' );
 		}
 	}
 	else
@@ -357,11 +355,11 @@ change_remove.prototype._transformMark =
 
 		if( mark.at2 === undefined )
 		{
-			return mark.create( 'at1', mark.at1 - len );
+			return mark.create( 'at', mark.at - len );
 		}
 		else
 		{
-			return mark.create( 'at1', mark.at1 - len, 'at2', mark.at2 - len );
+			throw new Error( 'XXX TODO' );
 		}
 	}
 };

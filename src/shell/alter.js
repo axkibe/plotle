@@ -5,8 +5,6 @@
 
 var
 	change_join,
-	change_remove,
-	change_split,
 	shell_alter;
 
 /*
@@ -218,34 +216,6 @@ shell_alter.moveToTop =
 
 
 /*
-| Removes some text within one node.
-*/
-shell_alter.removeText =
-	function(
-		path,
-		at1,
-		val
-	)
-{
-	if( val.length === 0 )
-	{
-		return null;
-	}
-
-	return(
-		alter(
-			change_remove.create(
-				'path', path.chop( 1 ),
-				'at1', at1,
-				'at2', at1 + val.length,
-				'val', val
-			)
-		)
-	);
-};
-
-
-/*
 | Removes a text spawning over several entities.
 */
 shell_alter.removeRange =
@@ -324,28 +294,6 @@ shell_alter.removeRange =
 
 	shell_alter.removeText( path1, at1, len2 - at1 + at2 );
 	*/
-};
-
-
-/*
-| Splits a text node.
-*/
-shell_alter.split =
-	function(
-		path,
-		path2,
-		at1
-	)
-{
-	return(
-		alter(
-			change_split.create(
-				'path', path.chop( 1 ),
-				'path2', path2.chop( 1 ),
-				'at1', at1
-			)
-		)
-	);
 };
 
 

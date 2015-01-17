@@ -336,7 +336,7 @@ change_insert.prototype._transformMark =
 		return mark;
 	}
 
-	if( mark.at1 < this.at1 )
+	if( mark.at < this.at1 )
 	{
 		return mark;
 	}
@@ -346,11 +346,11 @@ change_insert.prototype._transformMark =
 
 		if( mark.at2 === undefined )
 		{
-			return mark.create( 'at1', mark.at1 + len );
+			return mark.create( 'at', mark.at + len );
 		}
 		else
 		{
-			return mark.create( 'at1', mark.at1 + len, 'at2', mark.at2 + len );
+			throw new Error( 'XXX TODO' );
 		}
 	}
 };
