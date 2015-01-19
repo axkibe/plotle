@@ -18,7 +18,6 @@ var
 	marks_caret,
 	result_hover,
 	root,
-	shell_alter,
 	shell_stubs,
 	theme;
 
@@ -810,7 +809,6 @@ fabric_space.prototype.dragStop =
 		note,
 		oheight,
 		portal,
-		result,
 		resized,
 		val,
 		view,
@@ -961,29 +959,31 @@ fabric_space.prototype.dragStop =
 								euclid_rect.createArbitrary(
 									view.depoint( action.start ),
 									view.depoint( p )
-								)
+								),
+							'spaceUser', root.username,
+							'spaceTag', 'home'
 						);
 
-					result =
-						shell_alter.newPortal(
-							portal.zone,
-							root.username, // FIXME
-							'home'
-						);
+					key = jools.uid( );
 
-					key =
-						result.reaction.changeRay.get( 0 ).trg.path.get( -1 );
+					root.alter(
+						change_set.create(
+							'path',
+								jion_path.empty
+								.append( 'twig' )
+								.append( key ),
+							'val', portal,
+							'prev', null,
+							'rank', root.space.length
+						)
+					);
 
 					root.setMark(
 						marks_caret.create(
 							'path',
-								root
-								.space
-								.twig[ key ]
-								.path
+								root.space.twig[ key ].path
 								.append( 'spaceUser' ),
-							'at',
-								0
+							'at', 0
 						)
 					);
 

@@ -12,7 +12,6 @@ var
 	fabric_label,
 	jools,
 	root,
-	shell_alter,
 	shell_style,
 	theme;
 
@@ -267,7 +266,9 @@ jools.lazyValue(
 
 
 /*
-| Sets the items position and size aften an action.
+| Sets the items position and size after an action.
+|
+| FIXME, is this ever called???
 */
 fabric_label.prototype.dragStop =
 	function(
@@ -277,6 +278,7 @@ fabric_label.prototype.dragStop =
 {
 	var
 		action,
+		changes,
 		fontsize,
 		zone;
 
@@ -291,9 +293,11 @@ fabric_label.prototype.dragStop =
 
 			fontsize = this.doc.font.size;
 
+			changes = [ ];
+
 			if( !this.pnw.equals( zone.pnw ) )
 			{
-				root.alter(
+				changes.push(
 					change_set.create(
 						'path', this.path.chop( ).append( 'pnw' ),
 						'val', zone.pnw,
@@ -304,8 +308,16 @@ fabric_label.prototype.dragStop =
 
 			if( fontsize !== this.fontsize )
 			{
-				shell_alter.setFontSize( this.path, fontsize );
+				changes.push(
+					change_set.create(
+						'path', this.path.chop( ).append( 'fontsize' ),
+						'val', fontsize,
+						'prev', this.fontsize
+					)
+				);
 			}
+
+			root.alter.apply( root, changes );
 
 			break;
 

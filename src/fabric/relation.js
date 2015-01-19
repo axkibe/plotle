@@ -4,13 +4,16 @@
 
 
 var
+	change_set,
 	euclid_arrow,
+	fabric_doc,
 	fabric_label,
+	fabric_para,
 	fabric_relation,
+	jion_path,
 	jools,
 	marks_caret,
 	root,
-	shell_alter,
 	theme;
 
 
@@ -175,7 +178,7 @@ fabric_relation.spawn =
 		arrow,
 		key,
 		pnw,
-		result;
+		val;
 
 	arrow =
 		euclid_arrow.connect(
@@ -183,33 +186,35 @@ fabric_relation.spawn =
 			item2.silhoutte, null
 		);
 
-	pnw =
-		arrow.pc.sub(
-			theme.relation.spawnOffset
+	pnw = arrow.pc.sub( theme.relation.spawnOffset );
+
+	val =
+		fabric_relation.create(
+			'pnw', pnw,
+			'doc',
+				fabric_doc.create(
+					'twig:add', '1',
+					fabric_para.create( 'text', 'relates to' )
+				),
+			'fontsize', 20,
+			'item1key', item1.key,
+			'item2key', item2.key
 		);
 
-	result =
-		shell_alter.newRelation(
-			pnw,
-			'relates to',
-			20,
-			item1.key,
-			item2.key
-		);
+	key = jools.uid( );
 
-	key = result.reaction.changeRay.get( 0 ).trg.path.get( -1 );
+	root.alter(
+		change_set.create(
+			'val', val,
+			'path', jion_path.empty.append( 'twig' ).append( key ),
+			'rank', root.space.length
+		)
+	);
 
 	root.setMark(
 		marks_caret.create(
-			'path',
-				root
-				.space
-				.twig[ key ]
-				.doc
-				.atRank( 0 )
-				.textPath,
-			'at',
-				0
+			'path', root.space.twig[ key ].doc.atRank( 0 ).textPath,
+			'at', 0
 		)
 	);
 };
