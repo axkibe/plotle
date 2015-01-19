@@ -5,6 +5,7 @@
 */
 
 var
+	change_set,
 	euclid_display,
 	euclid_point,
 	euclid_rect,
@@ -12,7 +13,6 @@ var
 	fabric_docItem,
 	fabric_note,
 	jools,
-	shell_alter,
 	shell_style,
 	root,
 	system,
@@ -264,7 +264,13 @@ fabric_note.prototype.dragStop =
 				return;
 			}
 
-			shell_alter.setZone( this.path, zone );
+			root.alter(
+				change_set.create(
+					'path', this.path.chop( ).append( 'zone' ),
+					'val', zone,
+					'prev', this.zone
+				)
+			);
 
 			return true;
 

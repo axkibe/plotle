@@ -95,7 +95,7 @@ config.server_freeze = false;
 | If the server is in devel mode,
 | it will die on a command it considers unacceptable.
 */
-config.server_devel = false;
+config.server_devel = true;
 
 
 /*

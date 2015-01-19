@@ -43,7 +43,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'->space-val',
+							'->spaceVal',
 						allowsNull :
 							true
 					},
@@ -54,7 +54,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'->space-val',
+							'->spaceVal',
 						defaultValue :
 							null
 					},
@@ -66,8 +66,8 @@ if( JION )
 							'true',
 						type :
 							'Integer',
-						defaultValue :
-							null
+						allowsUndefined :
+							true
 					}
 			},
 		init :
@@ -101,7 +101,7 @@ change_set.prototype._init =
 {
 	// FUTURE make "NotNegativeInteger" a json type
 
-	if( this.rank !== null && this.rank < 0 )
+	if( this.rank !== undefined && this.rank < 0 )
 	{
 		throw change_error( 'set.rank negative' );
 	}

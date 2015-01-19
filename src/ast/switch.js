@@ -100,7 +100,7 @@ ast_switch.prototype.$case =
 /*
 | Shortcut for setting the default case.
 */
-ast_switch.prototype.astDefault =
+ast_switch.prototype.$default =
 	function(
 		code
 	)

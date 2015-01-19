@@ -111,13 +111,20 @@ serveAlter =
 		spaceRef,
 		username;
 
-	try
+	if( !config.server_devel )
+	{
+		try
+		{
+			request = request_alter.createFromJSON( request );
+		}
+		catch( err )
+		{
+			return replyError( 'command not valid jion' );
+		}
+	}
+	else
 	{
 		request = request_alter.createFromJSON( request );
-	}
-	catch( err )
-	{
-		return replyError( 'command not valid jion' );
 	}
 
 	seq = request.seq;

@@ -41,7 +41,56 @@ if( JION )
 }
 
 
-require( '../jion/this' )( module );
+var
+	ast_varDec;
 
+ast_varDec = require( '../jion/this' )( module );
+
+
+/**/if( CHECK )
+/**/{
+/**/	var
+/**/		util;
+/**/
+/**/	util = require( 'util' );
+/**/
+/***	/
+****	| Custom inspect
+****	/
+***/	ast_varDec.prototype.inspect =
+/**/		function(
+/**/			depth,
+/**/			opts
+/**/		)
+/**/	{
+/**/		var
+/**/			postfix,
+/**/			result;
+/**/
+/**/		if( !opts.ast )
+/**/		{
+/**/			result = 'ast{ ';
+/**/
+/**/			postfix = ' }';
+/**/		}
+/**/		else
+/**/		{
+/**/			result = postfix = '';
+/**/		}
+/**/
+/**/		opts.ast = true;
+/**/
+/**/		result += 'var ';
+/**/
+/**/		result += this.name;
+/**/
+/**/		if( this.assign )
+/**/		{
+/**/			result += util.inspect( this.assign, opts );
+/**/		}
+/**/
+/**/		return result + postfix;
+/**/	};
+/**/}
 
 } )( );

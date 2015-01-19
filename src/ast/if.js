@@ -49,11 +49,12 @@ if( JION )
 
 
 var
+	ast_block,
 	ast_if;
 
-ast_if =
-module.exports =
-	require( '../jion/this' )( module );
+ast_if = require( '../jion/this' )( module );
+
+ast_block = require( './block' );
 
 
 /*
@@ -61,10 +62,15 @@ module.exports =
 */
 ast_if.prototype.$elsewise =
 	function(
-		block
+		elsewise
 	)
 {
-	return this.create( 'elsewise', block );
+	if( elsewise.reflect !== 'ast_block' )
+	{
+		elsewise = ast_block.create( ).append( elsewise );
+	}
+
+	return this.create( 'elsewise', elsewise );
 };
 
 

@@ -4,6 +4,7 @@
 
 
 var
+	change_set,
 	euclid_display,
 	euclid_point,
 	euclid_rect,
@@ -290,11 +291,15 @@ fabric_label.prototype.dragStop =
 
 			fontsize = this.doc.font.size;
 
-			if(
-				!this.pnw.equals( zone.pnw )
-			)
+			if( !this.pnw.equals( zone.pnw ) )
 			{
-				shell_alter.setPNW( this.path, zone.pnw );
+				root.alter(
+					change_set.create(
+						'path', this.path.chop( ).append( 'pnw' ),
+						'val', zone.pnw,
+						'prev', this.pnw
+					)
+				);
 			}
 
 			if( fontsize !== this.fontsize )

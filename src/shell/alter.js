@@ -17,40 +17,6 @@ shell_alter = { };
 
 
 /*
-| Creates a new note.
-*/
-shell_alter.newNote =
-	function(
-		// zone
-	)
-{
-	throw new Error( );
-	/*
-	var
-		src;
-
-	src =
-		ccot_sign.create(
-			'val',
-				fabric_note.create(
-					'fontsize', 13,
-					'zone', zone,
-					'doc',
-						fabric_doc.create(
-							'twig:add', '1',
-							fabric_para.create( 'text', '' )
-						)
-				),
-			'rank',
-				null
-		);
-
-	return alter( src, newItemSign );
-	*/
-};
-
-
-/*
 | Creates a new portal.
 */
 shell_alter.newPortal =
@@ -79,28 +45,6 @@ shell_alter.newPortal =
 		);
 
 	return alter( src, newItemSign );
-	*/
-};
-
-
-/*
-| Sets the zone for item.
-*/
-shell_alter.setZone =
-	function(
-		// itemPath,
-		// zone
-	)
-{
-	throw new Error( );
-
-	/*
-	return(
-		alter(
-			ccot_sign.create( 'val', zone ),
-			ccot_sign.create( 'path', itemPath.chop( ).append( 'zone' ) )
-		)
-	);
 	*/
 };
 

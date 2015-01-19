@@ -789,6 +789,8 @@ fabric_space.prototype.click =
 
 /*
 | Stops an operation with the mouse button held down.
+|
+| FUTURE split this up
 */
 fabric_space.prototype.dragStop =
 	function(
@@ -843,10 +845,18 @@ fabric_space.prototype.dragStop =
 								)
 						);
 
-					result = shell_alter.newNote( note.zone );
+					key = jools.uid( );
 
-					key =
-						result.reaction.changeRay.get( 0 ).trg.path.get( -1 );
+					root.alter(
+						change_set.create(
+							'val', note,
+							'path',
+								jion_path.empty
+								.append( 'twig' )
+								.append( key ),
+							'rank', root.space.length
+						)
+					);
 
 					root.setMark(
 						marks_caret.create(
@@ -924,7 +934,6 @@ fabric_space.prototype.dragStop =
 							'rank', root.space.length
 						)
 					);
-
 
 					root.setMark(
 						marks_caret.create(
@@ -1048,18 +1057,32 @@ fabric_space.prototype.dragStop =
 				{
 					case 'zone' :
 
-						shell_alter.setZone(
-							action.transItem.path,
-							action.transItem.zone
+						root.alter(
+							change_set.create(
+								'path',
+									action.transItem.path
+									.chop( ).append( 'zone' ),
+								'val',
+									action.transItem.zone,
+								'prev',
+									action.origin.zone
+							)
 						);
 
 						break;
 
 					case 'pnw/fontsize' :
 
-						shell_alter.setPNW(
-							action.transItem.path,
-							action.transItem.zone.pnw
+						root.alter(
+							change_set.create(
+								'path',
+									action.transItem.path
+									.chop( ).append( 'pnw' ),
+								'val',
+									action.transItem.zone.pnw,
+								'prev',
+									action.origin.zone.pnw
+							)
 						);
 
 						break;
@@ -1083,23 +1106,42 @@ fabric_space.prototype.dragStop =
 				{
 					case 'zone' :
 
-						shell_alter.setZone(
-							action.transItem.path,
-							action.transItem.zone
+						root.alter(
+							change_set.create(
+								'path',
+									action.transItem.path
+									.chop( ).append( 'zone' ),
+								'val',
+									action.transItem.zone,
+								'prev',
+									action.origin.zone
+							)
 						);
 
 						break;
 
 					case 'pnw/fontsize' :
 
-						shell_alter.setPNW(
-							action.transItem.path,
-							action.transItem.zone.pnw
-						);
-
-						shell_alter.setFontSize(
-							action.transItem.path,
-							action.transItem.doc.fontsize
+						root.alter(
+							change_set.create(
+								'path',
+									action.transItem.path
+									.chop( ).append( 'pnw' ),
+								'val',
+									action.transItem.zone.pnw,
+								'prev',
+									action.origin.zone.pnw
+							),
+							change_set.create(
+								'path',
+									action.transItem.path
+									.chop( ).append( 'fontsize' ),
+								'val',
+									// FUTURE why doc?
+									action.transItem.doc.fontsize,
+								'prev',
+									action.origin.fontsize
+							)
 						);
 
 						break;

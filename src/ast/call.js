@@ -105,12 +105,12 @@ ast_call.prototype.addArgument =
 /**/			result += '( ';
 /**/
 /**/			for(
-/**/				r = 0, rZ = this.ranks.length;
+/**/				r = 0, rZ = this.ray.length;
 /**/				r < rZ;
 /**/				r++
 /**/			)
 /**/			{
-/**/				arg = this.atRank( r );
+/**/				arg = this.ray[ r ];
 /**/
 /**/				if( r > 0 )
 /**/				{

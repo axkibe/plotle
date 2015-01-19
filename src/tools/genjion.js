@@ -10,6 +10,7 @@
 (function( ) {
 'use strict';
 
+Error.stackTraceLimit = 99999;
 
 GLOBAL.APP = 'genjion';
 

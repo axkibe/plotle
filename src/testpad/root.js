@@ -15,7 +15,6 @@ var
 	jion_path,
 	jools,
 	root,
-	shell_alter,
 	testpad_action,
 	testpad_doTracker,
 	testpad_repository,

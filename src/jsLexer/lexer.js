@@ -80,6 +80,7 @@ jsLexer.tokenize =
 			{
 				case 'false' :
 				case 'true' :
+				case 'typeof' :
 
 					tokens.push(
 						token.create( 'type', value )

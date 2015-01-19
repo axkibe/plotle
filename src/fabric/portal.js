@@ -6,6 +6,7 @@
 var
 	change_insert,
 	change_remove,
+	change_set,
 	euclid_display,
 	euclid_ellipse,
 	euclid_measure,
@@ -22,7 +23,6 @@ var
 	result_hover,
 	root,
 	shell_accent,
-	shell_alter,
 	shell_fontPool,
 	shell_style,
 	theme;
@@ -319,7 +319,13 @@ fabric_portal.prototype.dragStop =
 				return;
 			}
 
-			shell_alter.setZone( this.path, zone );
+			root.alter(
+				change_set.create(
+					'path', this.path.chop( ).append( 'zone' ),
+					'val', zone,
+					'prev', this.zone
+				)
+			);
 
 			return true;
 

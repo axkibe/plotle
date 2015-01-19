@@ -65,7 +65,7 @@ var
 	$returnTrue,
 	$string,
 	$switch,
-	astThis, // FIXME
+	$this,
 	$typeof,
 	$var,
 	generator,
@@ -144,7 +144,7 @@ $string = shorthand.$string;
 
 $switch = shorthand.$switch;
 
-astThis = shorthand.$var( 'this' );
+$this = shorthand.$var( 'this' );
 
 $typeof = shorthand.$typeof;
 
@@ -663,7 +663,7 @@ generator.prototype.genConstructor =
 
 		assign =
 			$assign(
-				astThis.$dot( attr.assign ),
+				$this.$dot( attr.assign ),
 				attr.v
 			);
 
@@ -991,13 +991,13 @@ generator.prototype.genCreatorInheritanceReceiver =
 			receiver
 			.$assign(
 				attr.v,
-				astThis.$dot( attr.assign )
+				$this.$dot( attr.assign )
 			);
 	}
 
 	thisCheck =
 		$if(
-			$differs( astThis, this.id.global ),
+			$differs( $this, this.id.global ),
 			receiver
 		);
 
@@ -1189,7 +1189,7 @@ generator.prototype.genCreatorFreeStringsParser =
 
 	switchExpr =
 		switchExpr
-		.astDefault(
+		.$default(
 			$block( )
 			.$check( $block( ).$fail( ) ) // FIXME remove $block
 		);
@@ -1917,6 +1917,153 @@ generator.prototype.genFromJSONCreatorVariables =
 };
 
 /*
+| Generates a fromJSONCreator's JSON parser for one attribute
+*/
+generator.prototype.genFromJSONCreatorAttributeParser =
+	function(
+		attr
+	)
+{
+	var
+		code, // code to return
+		cSwitch, // the code switch
+		mif, // the multi if
+		sif, // a signle if
+		t,
+		tZ;
+
+	switch( attr.id.string )
+	{
+		case 'Boolean' :
+		case 'Integer' :
+		case 'Number' :
+		case 'String' :
+		case 'Object' : // FIXME remove
+
+			code = $assign( attr.v, 'arg' );
+
+			break;
+
+		default :
+
+			if( !Array.isArray( attr.id ) )
+			{
+				code =
+					$assign(
+						attr.v,
+						$call(
+							attr.id.$global.$dot( 'createFromJSON' ),
+							'arg'
+						)
+					);
+			}
+			else
+			{
+				mif = null;
+
+				code = $block( );
+
+				cSwitch = null;
+
+				for(
+					t = 0, tZ = attr.id.length;
+					t < tZ;
+					t++
+				)
+				{
+					switch( attr.id[ t ].string )
+					{
+						case 'Number' :
+
+							sif =
+								$if(
+									$equals( $typeof( 'arg' ), '"number"' ),
+									$assign( attr.v, 'arg' )
+								);
+
+							break;
+
+						default :
+
+							sif = null;
+
+							break;
+					}
+
+					if( sif )
+					{
+						if( !mif )
+						{
+							mif = sif;
+						}
+						else
+						{
+							mif = mif.$elsewise( sif );
+						}
+					}
+					else
+					{
+						if( cSwitch === null )
+						{
+							cSwitch =
+								$switch( 'arg.type' )
+								.$default( $fail( ) );
+						}
+
+						cSwitch =
+							cSwitch
+							.$case(
+								attr.id[ t ].$string,
+								$assign(
+									attr.v,
+									$call(
+										attr.id[ t ].$global
+										.$dot( 'createFromJSON' ),
+										'arg'
+									)
+								)
+							);
+					}
+				}
+
+				if( mif )
+				{
+					if( cSwitch )
+					{
+						code = mif.$elsewise( cSwitch ); //XXX
+					}
+					else
+					{
+						code = mif;
+					}
+				}
+				else
+				{
+					if( !cSwitch )
+					{
+						throw new Error( );
+					}
+
+					code = cSwitch;
+				}
+			}
+	}
+
+	if( attr.allowsNull )
+	{
+		code =
+			$if(
+				'arg === null ',
+				/* then */ $assign( attr.v, null ),
+				/* else */ code
+			);
+	}
+
+	return code;
+};
+
+
+/*
 | Generates the fromJSONCreator's JSON parser.
 */
 generator.prototype.genFromJSONCreatorParser =
@@ -1929,12 +2076,9 @@ generator.prototype.genFromJSONCreatorParser =
 		a,
 		aZ,
 		attr,
-		attrCode,
 		name,
 		// the switch
-		nameSwitch,
-		t,
-		tZ;
+		nameSwitch;
 
 	nameSwitch =
 		$switch( 'name' )
@@ -1976,75 +2120,11 @@ generator.prototype.genFromJSONCreatorParser =
 
 		attr = this.attributes[ name ];
 
-		switch( attr.id.string )
-		{
-			case 'Boolean' :
-			case 'Integer' :
-			case 'Number' :
-			case 'String' :
-			case 'Object' : // FIXME remove
-
-				attrCode = $assign( attr.v, 'arg' );
-
-				break;
-
-			default :
-
-				if( !Array.isArray( attr.id ) )
-				{
-					attrCode =
-						$assign(
-							attr.v,
-							$call(
-								attr.id.$global.$dot( 'createFromJSON' ),
-								'arg'
-							)
-						);
-				}
-				else
-				{
-					attrCode =
-						$switch( 'arg.type' )
-						.astDefault( $fail( ) );
-
-					for(
-						t = 0, tZ = attr.id.length;
-						t < tZ;
-						t++
-					)
-					{
-						attrCode =
-							attrCode
-							.$case(
-								attr.id[ t ].$string,
-								$assign(
-									attr.v,
-									$call(
-										attr.id[ t ].$global
-										.$dot( 'createFromJSON' ),
-										'arg'
-									)
-								)
-							);
-					}
-				}
-		}
-
-		if( attr.allowsNull )
-		{
-			attrCode =
-				$if(
-					'arg === null ',
-					$assign( attr.v, null ),
-					attrCode
-				);
-		}
-
 		nameSwitch =
 			nameSwitch
 			.$case(
 				$string( attr.name ),
-				attrCode
+				this.genFromJSONCreatorAttributeParser( attr )
 			);
 	}
 
@@ -2086,7 +2166,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 
 	loopSwitch =
 		$switch( 'jray[ r ].type' )
-		.astDefault( $fail( ) ); // FIXME $default
+		.$default( $fail( ) );
 
 	for(
 		r = 0, rZ = idList.length;
@@ -2167,7 +2247,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 
 	switchExpr =
 		switchExpr
-		.astDefault(
+		.$default(
 			// invalid twig type
 			$fail( )
 		);
@@ -2487,7 +2567,7 @@ generator.prototype.genToJSON =
 			olit
 			.add(
 				name,
-				astThis.$dot( attr.assign )
+				$this.$dot( attr.assign )
 			);
 	}
 
@@ -2750,7 +2830,7 @@ generator.prototype.genEquals =
 		ceq =
 			this.genAttributeEquals(
 				name,
-				astThis.$dot( attr.assign ),
+				$this.$dot( attr.assign ),
 				$var( 'obj' ).$dot( attr.assign )
 			);
 
@@ -2844,11 +2924,7 @@ generator.prototype.genAlike =
 
 			attr = this.attributes[ name ];
 
-			if(
-				attr.assign === null
-				||
-				ignores[ name ]
-			)
+			if( attr.assign === null || ignores[ name ] )
 			{
 				continue;
 			}
@@ -2856,7 +2932,7 @@ generator.prototype.genAlike =
 			ceq =
 				this.genAttributeEquals(
 					name,
-					astThis.$dot( attr.assign ),
+					$this.$dot( attr.assign ),
 					$var( 'obj' ).$dot( attr.assign )
 				);
 

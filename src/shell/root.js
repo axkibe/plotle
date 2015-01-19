@@ -204,18 +204,20 @@ shell_root =
 */
 shell_root.prototype.alter =
 	function(
-		change
+		// change or several changes
 	)
 {
 	var
+		changeRay,
 		changeWrap,
 		result;
+
+	changeRay = change_ray.create( 'ray:init', arguments );
 
 	changeWrap =
 		change_wrap.create(
 			'cid', jools.uid( ),
-			'changeRay',
-				change_ray.create( 'ray:set', 0, change )
+			'changeRay', changeRay
 		);
 
 	result = root.link.alter( changeWrap );

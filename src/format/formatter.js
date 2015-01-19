@@ -7,7 +7,6 @@ var
 	format_context,
 	format_formatter;
 
-
 /*
 | Capsule
 */
@@ -310,12 +309,8 @@ formatBlock =
 			formatStatement(
 				blockContext,
 				block.get( a ),
-				a > 0
-					?  block.get( a - 1 )
-					: null,
-				a + 1 < aZ
-					?  block.get( a + 1 )
-					: null
+				a > 0 ?  block.get( a - 1 ) : null,
+				a + 1 < aZ ?  block.get( a + 1 ) : null
 			);
 	}
 
@@ -1451,7 +1446,7 @@ formatExpression =
 
 	if( prec === undefined )
 	{
-		throw new Error( expr.reflectName );
+		throw new Error( 'cannot handle: ' + expr.reflectName );
 	}
 
 	formatter = exprFormatter[ expr.reflectName ] || exprFormatter[ expr.reflect ];
@@ -2243,25 +2238,25 @@ function(
 
 
 /*
-   | Formats a block as file.
- */
-		format_formatter.format =
-function(
-				block
-		)
+| Formats a block as file.
+*/
+format_formatter.format =
+	function(
+		block
+	)
 {
-		var
-				context;
+	var
+		context;
 
-		context = format_context.create( 'root', true );
+	context = format_context.create( 'root', true );
 
-		return formatBlock( context, block, true );
+	return formatBlock( context, block, true );
 };
 
 
 /*
-   | Table of all expression formatters.
- */
+| Table of all expression formatters.
+*/
 var
 exprFormatter =
 {

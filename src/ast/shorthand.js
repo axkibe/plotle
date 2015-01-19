@@ -870,7 +870,7 @@ shorthand.$typeof =
 		expr
 	)
 {
-	return ast_typeof.create( 'expr', expr );
+	return ast_typeof.create( 'expr', tools.convert( expr ) );
 };
 
 
