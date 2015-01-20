@@ -10,7 +10,6 @@ var
 	jools,
 	root,
 	shell_fontPool,
-	shell_alter,
 	theme;
 
 
@@ -242,10 +241,9 @@ fabric_doc.prototype._getRangeShape =
 		b2Key,
 		b2Para,
 		b2y,
-		backAt,
+		back,
 		backFlow,
 		backKey,
-		backPath,
 		backPara,
 		backPnw,
 		backRank,
@@ -258,11 +256,10 @@ fabric_doc.prototype._getRangeShape =
 		fo,
 		fontsize,
 		fp,
-		frontAt,
+		front,
 		frontFlow,
 		frontKey,
 		frontPara,
-		frontPath,
 		frontPnw,
 		frontRank,
 		innerMargin,
@@ -280,17 +277,13 @@ fabric_doc.prototype._getRangeShape =
 /**/	}
 /**/}
 
-	frontPath = mark.frontPath;
+	front = mark.front;
 
-	frontAt = mark.frontAt;
+	back = mark.back;
 
-	backPath = mark.backPath;
+	frontKey = front.path.get( -2 );
 
-	backAt = mark.backAt;
-
-	frontKey = frontPath.get( -2 );
-
-	backKey = backPath.get( -2 );
+	backKey = back.path.get( -2 );
 
 	frontPnw = this.getPNW( frontKey );
 
@@ -300,9 +293,9 @@ fabric_doc.prototype._getRangeShape =
 
 	backPara = this.twig[ backKey ];
 
-	fo = frontPara.locateOffset( frontAt );
+	fo = frontPara.locateOffset( front.at );
 
-	bo = backPara.locateOffset( backAt );
+	bo = backPara.locateOffset( back.at );
 
 	fp = fo.p;
 
@@ -529,7 +522,7 @@ fabric_doc.prototype._getRangeShape =
 		}
 
 
-		if( frontAt > 0 )
+		if( front.at > 0 )
 		{
 			return(
 				euclid_shape.create(
@@ -945,12 +938,7 @@ fabric_doc.prototype.input =
 		&& !mark.empty
 	)
 	{
-		shell_alter.removeRange(
-			mark.frontPath,
-			mark.frontAt,
-			mark.backPath,
-			mark.backAt
-		);
+		root.space.removeRange( mark.front, mark.back );
 
 		// FIXME this is an akward workaround
 
@@ -998,44 +986,24 @@ fabric_doc.prototype.specialKey =
 			case 'backspace' :
 			case 'del' :
 
-				shell_alter.removeRange(
-					mark.frontPath,
-					mark.frontAt,
-					mark.backPath,
-					mark.backAt
-				);
+				root.space.removeRange( mark.front, mark.back );
 
 				return true;
 
 			case 'enter' :
 
-				shell_alter.removeRange(
-					mark.frontPath,
-					mark.frontAt,
-					mark.backPath,
-					mark.backAt
-				);
+				root.space.removeRange( mark.front, mark.back );
 
-				root.specialKey(
-					key,
-					shift,
-					ctrl
-				);
+				root.specialKey( key, shift, ctrl );
 
 				return true;
 		}
 	}
 
-
-	return (
+	return(
 		this
 		.twig[ mark.caretPath.get( 5 ) ]
-		.specialKey(
-			key,
-			item,
-			shift,
-			ctrl
-		)
+		.specialKey( key, item, shift, ctrl )
 	);
 };
 

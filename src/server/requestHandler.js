@@ -383,8 +383,7 @@ serveUpdate =
 
 	if(
 		!root.$users[ username ]
-		||
-		root.$users[ username ].pass !== passhash
+		|| root.$users[ username ].pass !== passhash
 	)
 	{
 		return replyError( 'Invalid password' );

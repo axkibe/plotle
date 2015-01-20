@@ -591,6 +591,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/mark/text.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/mark/caret.js',
 		'hasJion', true,
 		'inBundle', true

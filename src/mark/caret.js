@@ -6,7 +6,8 @@
 var
 	jion_path,
 	jools,
-	mark_caret;
+	mark_caret,
+	mark_text;
 
 
 /*
@@ -144,6 +145,7 @@ jools.lazyValue(
 | The caret's path.
 |
 | This allows a common interface with text range.
+| FIXME remove
 */
 jools.lazyValue(
 	mark_caret.prototype,
@@ -159,6 +161,7 @@ jools.lazyValue(
 | The caret's offset.
 |
 | This allows a common interface with text range.
+| FIXME remove
 */
 jools.lazyValue(
 	mark_caret.prototype,
@@ -166,6 +169,27 @@ jools.lazyValue(
 	function( )
 	{
 		return this.at;
+	}
+);
+
+
+/*
+| The caret mark
+|
+| This allows a common interface with text range.
+| FIXME remove
+*/
+jools.lazyValue(
+	mark_caret.prototype,
+	'caret',
+	function( )
+	{
+		return(
+			mark_text.create(
+				'at', this.at,
+				'path', this.path
+			)
+		);
 	}
 );
 

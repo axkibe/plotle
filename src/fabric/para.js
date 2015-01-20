@@ -15,6 +15,7 @@ var
 	jools,
 	mark_caret,
 	mark_range,
+	mark_text,
 	root,
 	shell_fontPool,
 	theme;
@@ -844,8 +845,7 @@ fabric_para.prototype.specialKey =
 {
 	var
 		at,
-		bAt,
-		bPath,
+		begin,
 		doc,
 		keyHandler,
 		mark,
@@ -870,10 +870,16 @@ fabric_para.prototype.specialKey =
 				root.setMark(
 					mark_range.create(
 						'doc', doc,
-						'bPath', v0.textPath,
-						'bAt', 0,
-						'ePath', v1.textPath,
-						'eAt', v1.text.length
+						'begin',
+							mark_text.create(
+								'path', v0.textPath,
+								'at', 0
+							),
+						'end',
+							mark_text.create(
+								'path', v1.textPath,
+								'at', v1.text.length
+							)
 					)
 				);
 
@@ -885,9 +891,7 @@ fabric_para.prototype.specialKey =
 
 	at = null;
 
-	bPath = null;
-
-	bAt = null;
+	begin = null;
 
 	retainx = null;
 
@@ -909,9 +913,7 @@ fabric_para.prototype.specialKey =
 
 			if( shift )
 			{
-				bPath = mark.caretPath;
-
-				bAt = mark.caretAt;
+				begin = mark.caret;
 			}
 
 			break;
@@ -932,9 +934,7 @@ fabric_para.prototype.specialKey =
 
 			if( shift )
 			{
-				bPath = mark.bPath;
-
-				bAt = mark.bAt;
+				begin = mark.begin;
 			}
 
 			break;
@@ -942,7 +942,7 @@ fabric_para.prototype.specialKey =
 
 	if( keyHandler )
 	{
-		this[ keyHandler ]( item, doc, at, retainx, bPath, bAt );
+		this[ keyHandler ]( item, doc, at, retainx, begin );
 	}
 };
 
@@ -1001,9 +1001,8 @@ fabric_para.prototype._keyBackspace =
 		item,
 		doc,
 		at
-		// retainx
-		// bPath,
-		// bAt
+		// retainx,
+		// begin
 	)
 {
 	var
@@ -1050,8 +1049,7 @@ fabric_para.prototype._keyDel =
 		doc,
 		at
 		// retainx,
-		// bPath,
-		// bAt
+		// begin
 	)
 {
 	var
@@ -1095,8 +1093,7 @@ fabric_para.prototype._keyDown =
 		doc,
 		at,
 		retainx,
-		bPath,
-		bAt
+		begin //XXX
 	)
 {
 	var
@@ -1124,8 +1121,7 @@ fabric_para.prototype._keyDown =
 				x
 			),
 			x,
-			bPath,
-			bAt,
+			begin,
 			doc
 		);
 
@@ -1141,13 +1137,7 @@ fabric_para.prototype._keyDown =
 
 		at = ve.getOffsetAt( 0, x );
 
-		ve._setMark(
-			at,
-			x,
-			bPath,
-			bAt,
-			doc
-		);
+		ve._setMark( at, x, begin, doc );
 	}
 };
 
@@ -1161,17 +1151,10 @@ fabric_para.prototype._keyEnd =
 		doc,
 		at,
 		retainx,
-		bPath,
-		bAt
+		begin
 	)
 {
-	this._setMark(
-		this.text.length,
-		null,
-		bPath,
-		bAt,
-		doc
-	);
+	this._setMark( this.text.length, null, begin, doc );
 };
 
 
@@ -1184,8 +1167,7 @@ fabric_para.prototype._keyEnter =
 		doc,
 		at
 		// retainx,
-		// bPath,
-		// bAt
+		// begin
 	)
 {
 	var
@@ -1212,8 +1194,7 @@ fabric_para.prototype._keyLeft =
 		doc,
 		at,
 		retainx,
-		bPath,
-		bAt
+		begin
 	)
 {
 	var
@@ -1222,13 +1203,7 @@ fabric_para.prototype._keyLeft =
 
 	if( at > 0 )
 	{
-		this._setMark(
-			at - 1,
-			null,
-			bPath,
-			bAt,
-			doc
-		);
+		this._setMark( at - 1, null, begin, doc );
 
 		return;
 	}
@@ -1239,25 +1214,13 @@ fabric_para.prototype._keyLeft =
 	{
 		ve = doc.atRank( r - 1 );
 
-		ve._setMark(
-			ve.text.length,
-			null,
-			bPath,
-			bAt,
-			doc
-		);
+		ve._setMark( ve.text.length, null, begin, doc );
 
 		return;
 	}
 	else
 	{
-		this._setMark(
-			at,
-			null,
-			bPath,
-			bAt,
-			doc
-		);
+		this._setMark( at, null, begin, doc );
 	}
 };
 
@@ -1274,8 +1237,7 @@ fabric_para.prototype._pageUpDown =
 		doc,
 		at,
 		retainx,
-		bPath,
-		bAt
+		begin
 	)
 {
 
@@ -1327,8 +1289,7 @@ fabric_para.prototype._pageUpDown =
 	tpara._setMark(
 		at,
 		retainx,
-		bPath,
-		bAt,
+		begin,
 		doc
 	);
 };
@@ -1343,8 +1304,7 @@ fabric_para.prototype._keyPageDown =
 		doc,
 		at,
 		retainx,
-		bPath,
-		bAt
+		begin
 	)
 {
 	this._pageUpDown(
@@ -1353,8 +1313,7 @@ fabric_para.prototype._keyPageDown =
 		doc,
 		at,
 		retainx,
-		bPath,
-		bAt
+		begin
 	);
 };
 
@@ -1368,19 +1327,10 @@ fabric_para.prototype._keyPageUp =
 		doc,
 		at,
 		retainx,
-		bPath,
-		bAt
+		begin
 	)
 {
-	this._pageUpDown(
-		-1,
-		item,
-		doc,
-		at,
-		retainx,
-		bPath,
-		bAt
-	);
+	this._pageUpDown( -1, item, doc, at, retainx, begin );
 };
 
 
@@ -1393,17 +1343,10 @@ fabric_para.prototype._keyPos1 =
 		doc,
 		at,
 		retainx,
-		bPath,
-		bAt
+		begin
 	)
 {
-	this._setMark(
-		0,
-		null,
-		bPath,
-		bAt,
-		doc
-	);
+	this._setMark( 0, null, begin, doc );
 };
 
 
@@ -1416,8 +1359,7 @@ fabric_para.prototype._keyRight =
 		doc,
 		at,
 		retainx,
-		bPath,
-		bAt
+		begin
 	)
 {
 	var
@@ -1429,8 +1371,7 @@ fabric_para.prototype._keyRight =
 		this._setMark(
 			at + 1,
 			null,
-			bPath,
-			bAt,
+			begin,
 			doc
 		);
 
@@ -1443,13 +1384,7 @@ fabric_para.prototype._keyRight =
 	{
 		ve = doc.atRank( r + 1 );
 
-		ve._setMark(
-			0,
-			null,
-			bPath,
-			bAt,
-			doc
-		);
+		ve._setMark( 0, null, begin, doc );
 	}
 };
 
@@ -1463,8 +1398,7 @@ fabric_para.prototype._keyUp =
 		doc,
 		at,
 		retainx,
-		bPath,
-		bAt
+		begin
 	)
 {
 	var
@@ -1485,13 +1419,7 @@ fabric_para.prototype._keyUp =
 		// stay within this para
 		at = this.getOffsetAt( cpos.line - 1, x );
 
-		this._setMark(
-			at,
-			x,
-			bPath,
-			bAt,
-			doc
-		);
+		this._setMark( at, x, begin, doc );
 
 		return;
 	}
@@ -1505,13 +1433,7 @@ fabric_para.prototype._keyUp =
 
 		at = ve.getOffsetAt( ve.flow.length - 1, x );
 
-		ve._setMark(
-			at,
-			x,
-			bPath,
-			bAt,
-			doc
-		);
+		ve._setMark( at, x, begin, doc );
 	}
 };
 
@@ -1523,12 +1445,11 @@ fabric_para.prototype._setMark =
 	function(
 		at,      // position to mark caret (or end of range)
 		retainx, // retains this x position when moving up/down
-		bPath,   // begin path when marking a range
-		bAt,     // begin at   when marking a range
+		begin,   // begin when marking a range
 		doc      // range mark need this
 	)
 {
-	if( !bPath )
+	if( !begin )
 	{
 		return root.setMark(
 			mark_caret.create(
@@ -1543,10 +1464,12 @@ fabric_para.prototype._setMark =
 		return root.setMark(
 			mark_range.create(
 				'doc', doc,
-				'bPath', bPath,
-				'bAt', bAt,
-				'ePath', this.textPath,
-				'eAt', at,
+				'begin', begin,
+				'end',
+					mark_text.create(
+						'path', this.textPath,
+						'at', at
+					),
 				'retainx', retainx
 			)
 		);

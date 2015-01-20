@@ -230,7 +230,6 @@ shell_root.prototype.alter =
 };
 
 
-
 /*
 | A space finished loading.
 */

@@ -26,19 +26,12 @@ if( JION )
 			'mark_range',
 		attributes :
 			{
-				bPath :
+				begin :
 					{
 						comment :
-							'path of the begin of the range',
+							'begin of the range',
 						type :
-							'jion_path'
-					},
-				bAt :
-					{
-						comment :
-							'offset of the begin of the range',
-						type :
-							'Integer'
+							'mark_text'
 					},
 				doc :
 					{
@@ -47,19 +40,12 @@ if( JION )
 						type :
 							'fabric_doc'
 					},
-				ePath :
+				end :
 					{
 						comment :
-							'path of the end of the range',
+							'end of the range',
 						type :
-							'jion_path'
-					},
-				eAt :
-					{
-						comment :
-							'offset of the end of the range',
-						type :
-							'Integer'
+							'mark_text'
 					},
 				retainx :
 					{
@@ -81,24 +67,12 @@ if( JION )
 */
 jools.lazyValue(
 	mark_range.prototype,
-	'frontPath',
+	'front',
 	function( )
 	{
 		this._normalize( );
 
-		return this.frontPath;
-	}
-);
-
-
-jools.lazyValue(
-	mark_range.prototype,
-	'frontAt',
-	function( )
-	{
-		this._normalize( );
-
-		return this.frontAt;
+		return this.front;
 	}
 );
 
@@ -109,37 +83,22 @@ jools.lazyValue(
 */
 jools.lazyValue(
 	mark_range.prototype,
-	'backPath',
+	'back',
 	function( )
 	{
 		this._normalize( );
 
-		return this.backPath;
+		return this.back;
 	}
 );
 
-
-/*
-| The begin or end path,
-| dependening on which comes last in the doc.
-*/
-jools.lazyValue(
-	mark_range.prototype,
-	'backAt',
-	function( )
-	{
-		this._normalize( );
-
-		return this.backAt;
-	}
-);
 
 
 /*
 | Ranges also have caret capabilities.
 |
 | The caretPath and caretAt are identical to
-| ePath and eAt
+| end.path and end.at
 */
 mark_range.prototype.hasCaret = true;
 
@@ -154,7 +113,7 @@ jools.lazyValue(
 	'caretPath',
 	function( )
 	{
-		return this.ePath;
+		return this.end.path;
 	}
 );
 
@@ -169,7 +128,7 @@ jools.lazyValue(
 	'caretAt',
 	function( )
 	{
-		return this.eAt;
+		return this.end.at;
 	}
 );
 
@@ -182,12 +141,12 @@ jools.lazyValue(
 	'itemPath',
 	function( )
 	{
-		if( this.bPath.length < 3 )
+		if( this.begin.path.length < 3 )
 		{
 			return jion_path.empty;
 		}
 
-		return this.bPath.limit( 3 );
+		return this.begin.path.limit( 3 );
 	}
 );
 
@@ -210,10 +169,13 @@ mark_range.prototype.containsPath =
 /**/	}
 /**/}
 
-	return (
-		path.subPathOf( this.bPath )
+	// FIXME, shouldn't this also
+	// check paths of stuff inbetween?
+
+	return(
+		path.subPathOf( this.begin.path )
 		||
-		path.subPathOf( this.ePath )
+		path.subPathOf( this.end.path )
 	);
 };
 
@@ -228,38 +190,32 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			backAt,
+			back,
 			backKey,
 			backText,
-			backPath,
 			buf,
 			doc,
-			frontAt,
+			front,
 			frontKey,
 			frontText,
-			frontPath,
 			r, rZ,
 			text;
 
-		frontPath = this.frontPath;
+		front = this.front;
 
-		frontAt = this.frontAt;
-
-		backPath = this.backPath;
-
-		backAt = this.backAt;
+		back = this.back;
 
 		doc = this.doc;
 
-		frontKey = frontPath.get( -2 );
+		frontKey = front.path.get( -2 );
 
-		backKey = backPath.get( -2 );
+		backKey = back.path.get( -2 );
 
-		if( frontPath.equals( backPath ) )
+		if( front.path.equals( back.path ) )
 		{
 			text = doc.twig[ frontKey ].text;
 
-			return text.substring( frontAt, backAt );
+			return text.substring( front.at, back.at );
 		}
 
 		frontText = doc.twig[ frontKey ].text;
@@ -268,7 +224,7 @@ jools.lazyValue(
 
 		buf =
 			[
-				frontText.substring( frontAt, frontText.length )
+				frontText.substring( front.at, frontText.length )
 			];
 
 		for(
@@ -285,7 +241,7 @@ jools.lazyValue(
 
 		buf.push(
 			'\n',
-			backText.substring( 0, backAt )
+			backText.substring( 0, back.at )
 		);
 
 		return buf.join( '' );
@@ -301,11 +257,7 @@ jools.lazyValue(
 	'empty',
 	function( )
 	{
-		return (
-			this.bPath.equals( this.ePath )
-			&&
-			this.bAt === this.eAt
-		);
+		return this.begin.equals( this.end );
 	}
 );
 
@@ -317,61 +269,46 @@ mark_range.prototype._normalize =
 	function( )
 {
 	var
-		bAt,
-		bPath,
+		begin,
 		bk,
 		br,
-		eAt,
-		ePath,
+		end,
 		ek,
 		er;
 
-	bPath = this.bPath,
+	begin = this.begin;
 
-	bAt = this.bAt,
+	end = this.end;
 
-	ePath = this.ePath,
-
-	eAt = this.eAt;
-
-
-	if( bPath.equals( ePath ) )
+	if( begin.path.equals( end.path ) )
 	{
-		if( bAt <= eAt )
+		if( begin.at <= end.at )
 		{
-			jools.aheadValue( this, 'frontPath', bPath );
+			jools.aheadValue( this, 'front', begin );
 
-			jools.aheadValue( this, 'frontAt', bAt );
-
-			jools.aheadValue( this, 'backPath', ePath );
-
-			jools.aheadValue( this, 'backAt', eAt );
+			jools.aheadValue( this, 'back', end );
 		}
 		else
 		{
-			jools.aheadValue( this, 'frontPath', ePath );
+			jools.aheadValue( this, 'front', end );
 
-			jools.aheadValue( this, 'frontAt', eAt );
-
-			jools.aheadValue( this, 'backPath', bPath );
-
-			jools.aheadValue( this, 'backAt', bAt );
+			jools.aheadValue( this, 'back', begin );
 		}
 
 		return;
 	}
 
-	bk = bPath.get( -2 );
+	bk = begin.path.get( -2 );
 
-	ek = ePath.get( -2 );
+	ek = end.path.get( -2 );
 
-	if( CHECK )
-	{
-		if( bk === ek )
-		{
-			throw new Error( 'bk === ek' );
-		}
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( bk === ek )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	br = this.doc.rankOf( bk );
 
@@ -379,23 +316,15 @@ mark_range.prototype._normalize =
 
 	if( br < er )
 	{
-		jools.aheadValue( this, 'frontPath', bPath );
+		jools.aheadValue( this, 'front', begin );
 
-		jools.aheadValue( this, 'frontAt', bAt );
-
-		jools.aheadValue( this, 'backPath', ePath );
-
-		jools.aheadValue( this, 'backAt', eAt );
+		jools.aheadValue( this, 'back', end );
 	}
 	else
 	{
-		jools.aheadValue( this, 'frontPath', ePath );
+		jools.aheadValue( this, 'front', end );
 
-		jools.aheadValue( this, 'frontAt', eAt );
-
-		jools.aheadValue( this, 'backPath', bPath );
-
-		jools.aheadValue( this, 'backAt', bAt );
+		jools.aheadValue( this, 'back', begin );
 	}
 };
 

@@ -16,7 +16,6 @@ var
 	jools,
 	root,
 	testpad_action,
-	testpad_doTracker,
 	testpad_repository,
 	testpad_root;
 
@@ -102,8 +101,6 @@ if( JION )
 							false
 					},
 				link :
-					// name is "link" since shell_alter
-					// calls it like that
 					// FIXME fix this once shell_alter is gone
 					{
 						comment :
@@ -112,17 +109,7 @@ if( JION )
 							'testpad_repository',
 						defaultValue :
 							null
-					},
-				// FIXME remove this once shell_alter is gone
-				doTracker :
-					{
-						comment :
-							'just a dummy for testpad',
-						type :
-							'testpad_doTracker',
-						defaultValue :
-							null
-					},
+					}
 			},
 		init :
 			[ ]
@@ -255,11 +242,6 @@ testpad_root.prototype._init =
 		this.link = testpad_repository.create( );
 	}
 
-	if( !this.doTracker )
-	{
-		this.doTracker = testpad_doTracker.create( );
-	}
-
 	doc =
 	this._doc =
 		this.link.get( noteDocPath.chop( 1 ) );
@@ -336,8 +318,6 @@ isSpecialKey =
 
 /*
 | Alters the tree.
-|
-| Feeds the doTracker.
 */
 testpad_root.prototype.alter =
 	function(

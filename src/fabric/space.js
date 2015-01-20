@@ -5,6 +5,7 @@
 var
 	actions_itemResize,
 	actions_pan,
+	change_remove,
 	change_set,
 	euclid_arrow,
 	euclid_point,
@@ -1510,17 +1511,88 @@ fabric_space.prototype.input =
 
 
 /*
-| Changes the zoom factor ( around center )
+| Removes a text spawning over several entities.
 */
-fabric_space.prototype._changeZoom =
-	function( df )
+fabric_space.prototype.removeRange =
+	function(
+		front,
+		back
+	)
 {
-	var
-		pm;
+//	var
+		// k1,
+		// k2,
+		// len2,
+		// pivot,
+		// r,
+		// r1,
+		// r2;
 
-	pm = this.view.depoint( this.view.baseFrame.pc );
+/**/if( CHECK )
+/**/{
+/**/	if(
+/**/		front.path.get( -1 ) !== 'text'
+/**/		|| back.path.get( -1 ) !== 'text'
+/**/		|| front.path.get( 0 ) !== 'space'
+/**/		|| back.path.get( 0 ) !== 'space'
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
-	root.setView( this.view.review( df, pm ) );
+	if ( front.path.equals( back.path ) )
+	{
+		root.alter(
+			change_remove.create(
+				'path', front.path,
+				'at1', front.at,
+				'at2', back.at,
+				'val',
+					root.space.getPath( front.path.chop( ) )
+					.substring( front.at, back.at )
+			)
+		);
+
+		return;
+	}
+
+	throw new Error( );
+
+	/*
+	k1 = front.path.get( -2 );
+
+	k2 = back.path.get( -2 );
+
+	pivot = root.space.getPath( front.path.chop( ).shorten( 3 ) );
+
+	r1 = pivot.rankOf( k1 );
+
+	r2 = pivot.rankOf( k2 );
+
+	for(
+		r = r1;
+		r < r2 - 1;
+		r++
+	)
+	{
+		join(
+			path1,
+			root.space.getPath( path1.chop( 1 ) ).length
+		);
+	}
+
+	len2 = root.space.getPath( path1.chop( 1 ) ).length;
+
+	join( path1, len2 );
+
+	if( len2 - at1 + at2 === 0 )
+	{
+		return;
+	}
+
+	removeText( path1, at1, len2 - at1 + at2 );
+	*/
 };
 
 
@@ -1581,6 +1653,21 @@ fabric_space.prototype.specialKey =
 	{
 		item.specialKey( key, shift, ctrl );
 	}
+};
+
+
+/*
+| Changes the zoom factor ( around center )
+*/
+fabric_space.prototype._changeZoom =
+	function( df )
+{
+	var
+		pm;
+
+	pm = this.view.depoint( this.view.baseFrame.pc );
+
+	root.setView( this.view.review( df, pm ) );
 };
 
 
