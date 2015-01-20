@@ -307,7 +307,7 @@ change_set.prototype._transformMark =
 		mark
 	)
 {
-	if( !this.path.equals( mark.path.chop( ) ) )
+	if( !this.path.equals( mark.path.chop ) )
 	{
 		return mark;
 	}

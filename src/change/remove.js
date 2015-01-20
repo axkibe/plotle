@@ -329,7 +329,7 @@ change_remove.prototype._transformMark =
 	var
 		len;
 
-	if( !this.path.equals( mark.path.chop( ) ) )
+	if( !this.path.equals( mark.path.chop ) )
 	{
 		return mark;
 	}

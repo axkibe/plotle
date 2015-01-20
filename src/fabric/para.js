@@ -806,7 +806,7 @@ fabric_para.prototype.input =
 		root.alter(
 			change_insert.create(
 				'val', line,
-				'path', textPath.chop( 1 ),
+				'path', textPath.chop,
 				'at1', caretAt,
 				'at2', caretAt + line.length
 			)
@@ -818,8 +818,8 @@ fabric_para.prototype.input =
 
 			root.alter(
 				change_split.create(
-					'path', textPath.chop( ),
-					'path2', path2.chop( ),
+					'path', textPath.chop,
+					'path2', path2.chop,
 					'at1', caretAt + line.length
 				)
 			);
@@ -1013,7 +1013,7 @@ fabric_para.prototype._keyBackspace =
 	{
 		root.alter(
 			change_remove.create(
-				'path', this.textPath.chop( 1 ),
+				'path', this.textPath.chop,
 				'at1', at - 1,
 				'at2', at,
 				'val', this.text.substring( at - 1, at )
@@ -1031,8 +1031,8 @@ fabric_para.prototype._keyBackspace =
 
 		root.alter(
 			change_join.create(
-				'path', ve.textPath.chop( ),
-				'path2', this.textPath.chop( ),
+				'path', ve.textPath.chop,
+				'path2', this.textPath.chop,
 				'at1', ve.text.length
 			)
 		);
@@ -1059,7 +1059,7 @@ fabric_para.prototype._keyDel =
 	{
 		root.alter(
 			change_remove.create(
-				'path', this.textPath.chop( 1 ),
+				'path', this.textPath.chop,
 				'at1', at,
 				'at2', at + 1,
 				'val', this.text.substring( at, at + 1 )
@@ -1075,8 +1075,8 @@ fabric_para.prototype._keyDel =
 	{
 		root.alter(
 			change_join.create(
-				'path', doc.atRank( r + 1).textPath.chop( ),
-				'path2', this.textPath.chop( ),
+				'path', doc.atRank( r + 1).textPath.chop,
+				'path2', this.textPath.chop,
 				'at1', this.text.length
 			)
 		);
@@ -1173,7 +1173,7 @@ fabric_para.prototype._keyEnter =
 	var
 		tpc;
 
-	tpc = this.textPath.chop( );
+	tpc = this.textPath.chop;
 
 	root.alter(
 		change_split.create(

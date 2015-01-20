@@ -321,7 +321,7 @@ fabric_portal.prototype.dragStop =
 
 			root.alter(
 				change_set.create(
-					'path', this.path.chop( ).append( 'zone' ),
+					'path', this.path.chop.append( 'zone' ),
 					'val', zone,
 					'prev', this.zone
 				)
@@ -814,7 +814,7 @@ fabric_portal.prototype.input =
 		root.alter(
 			change_insert.create(
 				'val', line,
-				'path', this.path.append( section ).chop( 1 ),
+				'path', this.path.append( section ).chop,
 				'at1', mark.caretAt,
 				'at2', mark.caretAt + line.length
 			)
@@ -1039,7 +1039,7 @@ fabric_portal.prototype._keyBackspace =
 
 	root.alter(
 		change_remove.create(
-			'path', this.path.append( section ).chop( ),
+			'path', this.path.append( section ).chop,
 			'at1', at - 1,
 			'at2', at,
 			'val', this[ section ].substring( at - 1, at )
@@ -1472,7 +1472,7 @@ fabric_portal.prototype._keyDel =
 
 	root.alter(
 		change_remove.create(
-			'path', this.path.append( section ).chop( ),
+			'path', this.path.append( section ).chop,
 			'at1', at,
 			'at2', at + 1,
 			'val', this[ section ].substring( at - 1, at )

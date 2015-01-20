@@ -391,11 +391,6 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/shell/alter.js',
-		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
 		'filePath', 'src/icons/normal.js',
 		'hasJion', true,
 		'inBundle', true

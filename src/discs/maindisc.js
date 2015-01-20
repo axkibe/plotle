@@ -372,9 +372,9 @@ discs_mainDisc.prototype.pushButton =
 	{
 		root.alter(
 			change_set.create(
-				'path', this.mark.itemPath.chop( ),
+				'path', this.mark.itemPath.chop,
 				'val', null,
-				'prev', root.space.getPath( this.mark.itemPath.chop( ) ),
+				'prev', root.space.getPath( this.mark.itemPath.chop ),
 				'rank', root.space.rankOf( this.mark.itemPath.get( 2 ) )
 			)
 		);

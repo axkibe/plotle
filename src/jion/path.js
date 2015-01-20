@@ -70,33 +70,23 @@ jion_path.prototype.appendNC =
 /*
 | Returns a path with the first items chopped of.
 |
-| FIXME cache
+| FIXME aheadValue
 */
-jion_path.prototype.chop =
-	function(
-		n // if not undefined chop this amount of items;
-		//// defaults to 1
-	)
-{
-	var
-		ray;
-
-	if( n === 0 )
+jools.lazyValue(
+	jion_path.prototype,
+	'chop',
+	function( )
 	{
-		return this;
+		var
+			ray;
+
+		ray = this.ray.slice( );
+
+		ray.shift( );
+
+		return this.create( 'ray:init', ray );
 	}
-
-	ray = this.ray.slice( );
-
-	ray.shift( );
-
-	if( n > 0 )
-	{
-		return this.create( 'ray:init', ray ).chop( n - 1 );
-	}
-
-	return this.create( 'ray:init', ray );
-};
+);
 
 
 

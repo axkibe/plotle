@@ -266,7 +266,7 @@ fabric_note.prototype.dragStop =
 
 			root.alter(
 				change_set.create(
-					'path', this.path.chop( ).append( 'zone' ),
+					'path', this.path.chop.append( 'zone' ),
 					'val', zone,
 					'prev', this.zone
 				)

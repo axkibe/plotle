@@ -244,7 +244,7 @@ testpad_root.prototype._init =
 
 	doc =
 	this._doc =
-		this.link.get( noteDocPath.chop( 1 ) );
+		this.link.get( noteDocPath.chop );
 
 	elements.now.innerHTML = '' + this.link.seq;
 
@@ -613,7 +613,7 @@ testpad_root.prototype.send =
 			root.alter(
 				change_insert.create(
 					'val', action.value,
-					'path', path.chop( ),
+					'path', path.chop,
 					'at1', action.at,
 					'at2', action.at + action.value.length
 				)
@@ -636,7 +636,7 @@ testpad_root.prototype.send =
 					'val',
 						doc.atRank( action.line ).text
 						.substring( action.at2, action.at ),
-					'path', path.chop( ),
+					'path', path.chop,
 					'at1', action.at,
 					'at2', action.at2
 				)
@@ -662,8 +662,8 @@ testpad_root.prototype.send =
 
 			root.alter(
 				change_split.create(
-					'path', path.chop( ),
-					'path2', path.set( -2, jools.uid( ) ).chop( ),
+					'path', path.chop,
+					'path2', path.set( -2, jools.uid( ) ).chop,
 					'at1', action.at
 				)
 			);
@@ -686,8 +686,8 @@ testpad_root.prototype.send =
 
 			root.alter(
 				change_join.create(
-					'path', path.chop( ),
-					'path2', path2.chop( ),
+					'path', path.chop,
+					'path2', path2.chop,
 					'at1', doc.atRank( action.line - 1 ).text.length
 				)
 			);

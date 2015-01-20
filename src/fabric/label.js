@@ -299,7 +299,7 @@ fabric_label.prototype.dragStop =
 			{
 				changes.push(
 					change_set.create(
-						'path', this.path.chop( ).append( 'pnw' ),
+						'path', this.path.chop.append( 'pnw' ),
 						'val', zone.pnw,
 						'prev', this.pnw
 					)
@@ -310,7 +310,7 @@ fabric_label.prototype.dragStop =
 			{
 				changes.push(
 					change_set.create(
-						'path', this.path.chop( ).append( 'fontsize' ),
+						'path', this.path.chop.append( 'fontsize' ),
 						'val', fontsize,
 						'prev', this.fontsize
 					)

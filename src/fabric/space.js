@@ -1062,7 +1062,7 @@ fabric_space.prototype.dragStop =
 							change_set.create(
 								'path',
 									action.transItem.path
-									.chop( ).append( 'zone' ),
+									.chop.append( 'zone' ),
 								'val',
 									action.transItem.zone,
 								'prev',
@@ -1078,7 +1078,7 @@ fabric_space.prototype.dragStop =
 							change_set.create(
 								'path',
 									action.transItem.path
-									.chop( ).append( 'pnw' ),
+									.chop.append( 'pnw' ),
 								'val',
 									action.transItem.zone.pnw,
 								'prev',
@@ -1111,7 +1111,7 @@ fabric_space.prototype.dragStop =
 							change_set.create(
 								'path',
 									action.transItem.path
-									.chop( ).append( 'zone' ),
+									.chop.append( 'zone' ),
 								'val',
 									action.transItem.zone,
 								'prev',
@@ -1127,7 +1127,7 @@ fabric_space.prototype.dragStop =
 							change_set.create(
 								'path',
 									action.transItem.path
-									.chop( ).append( 'pnw' ),
+									.chop.append( 'pnw' ),
 								'val',
 									action.transItem.zone.pnw,
 								'prev',
@@ -1136,7 +1136,7 @@ fabric_space.prototype.dragStop =
 							change_set.create(
 								'path',
 									action.transItem.path
-									.chop( ).append( 'fontsize' ),
+									.chop.append( 'fontsize' ),
 								'val',
 									// FUTURE why doc?
 									action.transItem.doc.fontsize,
@@ -1545,11 +1545,11 @@ fabric_space.prototype.removeRange =
 	{
 		root.alter(
 			change_remove.create(
-				'path', front.path,
+				'path', front.path.chop,
 				'at1', front.at,
 				'at2', back.at,
 				'val',
-					root.space.getPath( front.path.chop( ) )
+					root.space.getPath( front.path.chop )
 					.substring( front.at, back.at )
 			)
 		);
@@ -1564,7 +1564,7 @@ fabric_space.prototype.removeRange =
 
 	k2 = back.path.get( -2 );
 
-	pivot = root.space.getPath( front.path.chop( ).shorten( 3 ) );
+	pivot = root.space.getPath( front.path.chop.shorten( 3 ) );
 
 	r1 = pivot.rankOf( k1 );
 
@@ -1578,11 +1578,11 @@ fabric_space.prototype.removeRange =
 	{
 		join(
 			path1,
-			root.space.getPath( path1.chop( 1 ) ).length
+			root.space.getPath( path1.chop ).length
 		);
 	}
 
-	len2 = root.space.getPath( path1.chop( 1 ) ).length;
+	len2 = root.space.getPath( path1.chop ).length;
 
 	join( path1, len2 );
 
