@@ -101,7 +101,7 @@ if( JION )
 							false
 					},
 				link :
-					// FIXME fix this once shell_alter is gone
+					// FIXME call this repository
 					{
 						comment :
 							'the testing repository',
