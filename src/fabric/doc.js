@@ -81,7 +81,7 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Object', // FUTURE '->marks_',
+							'Object', // FUTURE '->mark',
 						defaultValue :
 							undefined,
 						allowsNull :
@@ -274,7 +274,7 @@ fabric_doc.prototype._getRangeShape =
 
 /**/if( CHECK )
 /**/{
-/**/	if( mark.reflect !== 'marks_range' )
+/**/	if( mark.reflect !== 'mark_range' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -665,10 +665,8 @@ fabric_doc.prototype.draw =
 
 	if(
 		mark
-		&&
-		mark.reflect === 'marks_range'
-		&&
-		mark.itemPath.subPathOf( this.path )
+		&& mark.reflect === 'mark_range'
+		&& mark.itemPath.subPathOf( this.path )
 	)
 	{
 		rs = this._getRangeShape( width, scrollp );
@@ -943,7 +941,7 @@ fabric_doc.prototype.input =
 	path = this.mark.caretPath;
 
 	if(
-		mark.reflect === 'marks_range'
+		mark.reflect === 'mark_range'
 		&& !mark.empty
 	)
 	{
@@ -991,9 +989,8 @@ fabric_doc.prototype.specialKey =
 	}
 
 	if(
-		mark.reflect === 'marks_range'
-		&&
-		!mark.empty
+		mark.reflect === 'mark_range'
+		&& !mark.empty
 	)
 	{
 		switch( key )

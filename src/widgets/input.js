@@ -14,7 +14,7 @@ var
 	euclid_roundRect,
 	euclid_view,
 	jools,
-	marks_caret,
+	mark_caret,
 	result_hover,
 	root,
 	shell_accent,
@@ -101,7 +101,7 @@ if( JION )
 									]
 							},
 						type :
-							'Object', // FUTURE 'marks_*',
+							'Object', // FUTURE 'mark*',
 						defaultValue :
 							null
 					},
@@ -473,7 +473,7 @@ jools.lazyValue(
 
 		if(
 			mark
-			&& mark.reflect === 'marks_caret'
+			&& mark.reflect === 'mark_caret'
 			&& mark.focus
 		)
 		{
@@ -632,7 +632,7 @@ widgets_input.prototype.input =
 	);
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', mark.caretPath,
 			'at', at + text.length
 		)
@@ -666,7 +666,7 @@ widgets_input.prototype._keyBackspace =
 	);
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', mark.caretPath,
 			'at', at - 1
 		)
@@ -741,7 +741,7 @@ widgets_input.prototype._keyEnd =
 	}
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', mark.caretPath,
 			'at', this.value.length
 		)
@@ -766,7 +766,7 @@ widgets_input.prototype._keyLeft =
 	}
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', mark.caretPath,
 			'at', mark.caretAt - 1
 		)
@@ -791,7 +791,7 @@ widgets_input.prototype._keyPos1 =
 	}
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', mark.caretPath,
 			'at', 0
 		)
@@ -816,7 +816,7 @@ widgets_input.prototype._keyRight =
 	}
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', mark.caretPath,
 			'at', mark.caretAt + 1
 		)
@@ -992,7 +992,7 @@ widgets_input.prototype.click =
 	}
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', this.path,
 			'at', this.getOffsetAt( pp )
 		)

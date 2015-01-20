@@ -47,7 +47,7 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Object', // FUTURE 'marks_',
+							'Object', // FUTURE '->mark',
 						concerns :
 							{
 								type :

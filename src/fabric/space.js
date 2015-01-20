@@ -15,7 +15,7 @@ var
 	fabric_space,
 	jion_path,
 	jools,
-	marks_caret,
+	mark_caret,
 	result_hover,
 	root,
 	shell_stubs,
@@ -857,7 +857,7 @@ fabric_space.prototype.dragStop =
 					);
 
 					root.setMark(
-						marks_caret.create(
+						mark_caret.create(
 							'path',
 								root
 								.space.twig[ key ]
@@ -934,7 +934,7 @@ fabric_space.prototype.dragStop =
 					);
 
 					root.setMark(
-						marks_caret.create(
+						mark_caret.create(
 							'path',
 								root
 								.space
@@ -979,7 +979,7 @@ fabric_space.prototype.dragStop =
 					);
 
 					root.setMark(
-						marks_caret.create(
+						mark_caret.create(
 							'path',
 								root.space.twig[ key ].path
 								.append( 'spaceUser' ),

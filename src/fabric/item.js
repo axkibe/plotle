@@ -15,7 +15,7 @@ var
 	fabric_relation,
 	jion_path,
 	jools,
-	marks_item,
+	mark_item,
 	result_hover,
 	root,
 	theme;
@@ -532,7 +532,7 @@ fabric_item.prototype.dragStart =
 		if( root.space.focusedItem( ) !== this )
 		{
 			root.setMark(
-				marks_item.create( 'path', this.path )
+				mark_item.create( 'path', this.path )
 			);
 		}
 

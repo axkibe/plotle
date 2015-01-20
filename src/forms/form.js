@@ -8,8 +8,8 @@ var
 	euclid_view,
 	jion_path,
 	jools,
-	marks_caret,
-	marks_widget,
+	mark_caret,
+	mark_widget,
 	result_hover,
 	root,
 	theme;
@@ -413,7 +413,7 @@ forms_form.prototype.cycleFocus =
 			if( ve.caretable )
 			{
 				root.setMark(
-					marks_caret.create(
+					mark_caret.create(
 						'path', ve.path,
 						'at', 0
 					)
@@ -422,7 +422,7 @@ forms_form.prototype.cycleFocus =
 			else
 			{
 				root.setMark(
-					marks_widget.create(
+					mark_widget.create(
 						'path', ve.path
 					)
 				);

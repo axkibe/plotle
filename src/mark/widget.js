@@ -1,12 +1,12 @@
 /*
-| A single item marked ( without caret or range )
+| A single widget marked ( without caret or range )
 */
 
 
 var
 	jion_path,
 	jools,
-	marks_item;
+	mark_widget;
 
 
 /*
@@ -23,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'marks_item',
+			'mark_widget',
 		attributes :
 			{
 				path :
@@ -44,18 +44,18 @@ if( JION )
 | (the text range is the other mark
 |  which has this too )
 */
-marks_item.prototype.hasCaret = false;
+mark_widget.prototype.hasCaret = false;
 
 
 /*
 | The item's path.
 */
 jools.lazyValue(
-	marks_item.prototype,
+	mark_widget.prototype,
 	'itemPath',
 	function( )
 	{
-		return this.path;
+		return jion_path.empty;
 	}
 );
 
@@ -64,29 +64,27 @@ jools.lazyValue(
 | The widget's path.
 */
 jools.lazyValue(
-	marks_item.prototype,
+	mark_widget.prototype,
 	'widgetPath',
 	function( )
 	{
-		return jion_path.empty;
+		return this.path;
 	}
 );
 
 
-
 /*
 | The content the mark puts into the clipboard.
-|
-| FIXME write something
 */
-marks_item.prototype.clipboard = '';
+mark_widget.prototype.clipboard =
+	'';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-marks_item.prototype.containsPath =
+mark_widget.prototype.containsPath =
 	function(
 		path
 	)
@@ -96,9 +94,7 @@ marks_item.prototype.containsPath =
 /**/{
 /**/	if( path.length === 0 )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid empty path'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 

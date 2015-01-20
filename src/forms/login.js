@@ -8,7 +8,7 @@ var
 	forms_form,
 	forms_login,
 	jools,
-	marks_caret,
+	mark_caret,
 	root;
 
 
@@ -52,7 +52,7 @@ if( JION )
 									[ 'mark', 'path' ]
 							},
 						type :
-							'Object', // FUTURE 'marks_*',
+							'Object', // FUTURE 'mark',
 						defaultValue :
 							null
 					},
@@ -208,7 +208,7 @@ forms_login.prototype.login =
 		);
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', twig.userInput.path,
 				'at', user.length,
 				'retainx', null
@@ -226,7 +226,7 @@ forms_login.prototype.login =
 		);
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', twig.userInput.path,
 				'at', 0,
 				'retainx', null
@@ -244,7 +244,7 @@ forms_login.prototype.login =
 		);
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', twig.passwordInput.path,
 				'at', pass.length
 			)
@@ -319,7 +319,7 @@ forms_login.prototype.onAuth =
 		if( message.search( /Username/ ) >= 0 )
 		{
 			root.setMark(
-				marks_caret.create(
+				mark_caret.create(
 					'path', twig.userInput.path,
 					'at', twig.userInput.value.length
 				)
@@ -328,7 +328,7 @@ forms_login.prototype.onAuth =
 		else
 		{
 			root.setMark(
-				marks_caret.create(
+				mark_caret.create(
 					'path', twig.passwordInput.path,
 					'at', twig.passwordInput.value.length
 				)

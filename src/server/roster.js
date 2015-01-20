@@ -591,22 +591,22 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/marks/caret.js',
+		'filePath', 'src/mark/caret.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/marks/item.js',
+		'filePath', 'src/mark/item.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/marks/range.js',
+		'filePath', 'src/mark/range.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/marks/widget.js',
+		'filePath', 'src/mark/widget.js',
 		'hasJion', true,
 		'inBundle', true
 	),

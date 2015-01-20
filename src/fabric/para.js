@@ -13,8 +13,8 @@ var
 	euclid_point,
 	fabric_para,
 	jools,
-	marks_caret,
-	marks_range,
+	mark_caret,
+	mark_range,
 	root,
 	shell_fontPool,
 	theme;
@@ -69,7 +69,7 @@ if( JION )
 									[ 'mark', 'path' ]
 							},
 						type :
-							'Object', // FUTURE 'marks_',
+							'Object', // FUTURE 'mark_',
 						defaultValue :
 							undefined,
 						allowsNull :
@@ -173,7 +173,7 @@ fabric_para.concernsMark =
 		return mark;
 	}
 
-	if( mark.reflect === 'marks_range' )
+	if( mark.reflect === 'mark_range' )
 	{
 		return(
 			mark.itemPath.subPathOf( path )
@@ -304,7 +304,7 @@ jools.lazyValue(
 
 		if(
 			mark
-			&& mark.reflect === 'marks_caret'
+			&& mark.reflect === 'mark_caret'
 			&& mark.focus
 		)
 		{
@@ -868,7 +868,7 @@ fabric_para.prototype.specialKey =
 				v1 = doc.atRank( doc.ranks.length - 1 );
 
 				root.setMark(
-					marks_range.create(
+					mark_range.create(
 						'doc', doc,
 						'bPath', v0.textPath,
 						'bAt', 0,
@@ -893,7 +893,7 @@ fabric_para.prototype.specialKey =
 
 	switch( mark.reflect )
 	{
-		case 'marks_caret' :
+		case 'mark_caret' :
 
 /**/		if( CHECK )
 /**/		{
@@ -916,7 +916,7 @@ fabric_para.prototype.specialKey =
 
 			break;
 
-		case 'marks_range' :
+		case 'mark_range' :
 
 /**/		if( CHECK )
 /**/		{
@@ -1525,13 +1525,13 @@ fabric_para.prototype._setMark =
 		retainx, // retains this x position when moving up/down
 		bPath,   // begin path when marking a range
 		bAt,     // begin at   when marking a range
-		doc      // range marks need this
+		doc      // range mark need this
 	)
 {
 	if( !bPath )
 	{
 		return root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', this.textPath,
 				'at', at,
 				'retainx', retainx
@@ -1541,7 +1541,7 @@ fabric_para.prototype._setMark =
 	else
 	{
 		return root.setMark(
-			marks_range.create(
+			mark_range.create(
 				'doc', doc,
 				'bPath', bPath,
 				'bAt', bAt,

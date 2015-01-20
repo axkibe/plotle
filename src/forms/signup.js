@@ -11,7 +11,7 @@ var
 	forms_form,
 	forms_signUp,
 	jools,
-	marks_caret,
+	mark_caret,
 	root;
 
 
@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Object', // FUTURE 'marks_'
+							'Object', // FUTURE 'mark_'
 						concerns :
 							{
 								type :
@@ -226,7 +226,7 @@ signUp.prototype.signup =
 		);
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', twig.userInput.path,
 				'at', user.length
 			)
@@ -243,7 +243,7 @@ signUp.prototype.signup =
 		);
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', twig.userInput.path,
 				'at', 0
 			)
@@ -260,7 +260,7 @@ signUp.prototype.signup =
 		);
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', twig.passwordInput.path,
 				'at', pass.length
 			)
@@ -277,7 +277,7 @@ signUp.prototype.signup =
 		);
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', twig.password2Input.path,
 				'at', pass2.length
 			)
@@ -322,7 +322,7 @@ signUp.prototype.onRegister =
 		if( message.search( /Username/ ) >= 0 )
 		{
 			root.setMark(
-				marks_caret.create(
+				mark_caret.create(
 					'path', twig.userInput.path,
 					'at', twig.userInput.value.length
 				)

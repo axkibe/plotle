@@ -368,7 +368,7 @@ shell_root.prototype.setFocus =
 	{
 		switch( this.mark.reflect )
 		{
-			case 'marks_caret' :
+			case 'mark_caret' :
 
 				this.setMark(
 					this.mark.create( 'focus', focus )
@@ -834,9 +834,9 @@ shell_root.prototype.update =
 
 			break;
 
-		case 'marks_caret' :
-		case 'marks_item' :
-		case 'marks_range' :
+		case 'mark_caret' :
+		case 'mark_item' :
+		case 'mark_range' :
 
 			if( mark.path.get( 0 ) === 'space' )
 			{

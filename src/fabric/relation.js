@@ -12,7 +12,7 @@ var
 	fabric_relation,
 	jion_path,
 	jools,
-	marks_caret,
+	mark_caret,
 	root,
 	theme;
 
@@ -114,7 +114,7 @@ if( JION )
 									[ 'mark', 'path' ]
 							},
 						type :
-							'Object', // FUTURE '->marks_',
+							'Object', // FUTURE '->mark_',
 						defaultValue :
 							undefined,
 						allowsNull :
@@ -212,7 +212,7 @@ fabric_relation.spawn =
 	);
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', root.space.twig[ key ].doc.atRank( 0 ).textPath,
 			'at', 0
 		)

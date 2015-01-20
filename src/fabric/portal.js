@@ -18,8 +18,8 @@ var
 	fabric_portal,
 	fabric_spaceRef,
 	jools,
-	marks_caret,
-	marks_item,
+	mark_caret,
+	mark_item,
 	result_hover,
 	root,
 	shell_accent,
@@ -69,7 +69,7 @@ if( JION )
 									[ 'mark', 'path' ]
 							},
 						type :
-							'Object', // FUTURE '->marks_'
+							'Object', // FUTURE '->mark'
 						defaultValue :
 							undefined,
 						allowsNull :
@@ -418,7 +418,7 @@ fabric_portal.prototype.click =
 		{
 			mark =
 				root.setMark(
-					marks_caret.create(
+					mark_caret.create(
 						'path', this.path.append( field  ),
 						'at', this._getOffsetAt( field, pp.x )
 					)
@@ -436,7 +436,7 @@ fabric_portal.prototype.click =
 	)
 	{
 		root.setMark(
-			marks_item.create( 'path', this.path )
+			mark_item.create( 'path', this.path )
 		);
 	}
 
@@ -743,7 +743,7 @@ jools.lazyValue(
 
 			if(
 				mark
-				&& mark.reflect === 'marks_caret'
+				&& mark.reflect === 'mark_caret'
 				&& mark.focus
 			)
 			{
@@ -1082,7 +1082,7 @@ fabric_portal.prototype._keyDown =
 				);
 
 			root.setMark(
-				marks_caret.create(
+				mark_caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1103,7 +1103,7 @@ fabric_portal.prototype._keyDown =
 		case 'spaceTag' :
 
 			root.setMark(
-				marks_caret.create(
+				mark_caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1120,7 +1120,7 @@ fabric_portal.prototype._keyDown =
 		case 'moveToButton' :
 
 			root.setMark(
-				marks_caret.create(
+				mark_caret.create(
 					'path',
 						// FIXME use this paths
 						mark.caretPath.set(
@@ -1187,7 +1187,7 @@ fabric_portal.prototype._keyLeft =
 		}
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path',
 					// FIXME rather user this.path
 					mark.caretPath.set(
@@ -1206,7 +1206,7 @@ fabric_portal.prototype._keyLeft =
 	}
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path',
 				mark.caretPath,
 			'at',
@@ -1261,7 +1261,7 @@ fabric_portal.prototype._keyTab =
 	}
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', mark.caretPath.set( mark.caretPath.length - 1, cycle ),
 			'at', 0
 		)
@@ -1295,7 +1295,7 @@ fabric_portal.prototype._keyUp =
 		case 'spaceUser' :
 
 			root.setMark(
-				marks_caret.create(
+				mark_caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1317,7 +1317,7 @@ fabric_portal.prototype._keyUp =
 				);
 
 			root.setMark(
-				marks_caret.create(
+				mark_caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1337,7 +1337,7 @@ fabric_portal.prototype._keyUp =
 		case 'moveToButton' :
 
 			root.setMark(
-				marks_caret.create(
+				mark_caret.create(
 					'path', // FIXME this.paths
 						mark.caretPath.set(
 							mark.caretPath.length - 1,
@@ -1413,14 +1413,13 @@ fabric_portal.prototype._keyRight =
 		}
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', // FIXME this.paths
 					mark.caretPath.set(
 						mark.caretPath.length - 1,
 						cycle
 					),
-				'at',
-					0
+				'at', 0
 			)
 		);
 
@@ -1428,7 +1427,7 @@ fabric_portal.prototype._keyRight =
 	}
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', mark.caretPath,
 			'at', mark.caretAt + 1
 		)
@@ -1516,7 +1515,7 @@ fabric_portal.prototype._keyEnd =
 	}
 
 	root.setMark(
-		marks_caret.create(
+		mark_caret.create(
 			'path', mark.caretPath,
 			'at', value.length
 		)
@@ -1564,7 +1563,7 @@ fabric_portal.prototype._keyEnter =
 	if( cycle )
 	{
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path',
 					mark.caretPath.set( mark.caretPath.length - 1, cycle ),
 				'at', 0

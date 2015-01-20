@@ -258,13 +258,13 @@ change_set.prototype.transform =
 
 	switch( cx.reflect )
 	{
-		case 'marks_caret' :
-		case 'marks_range' :
-		case 'marks_item' :
+		case 'mark_caret' :
+		case 'mark_range' :
+		case 'mark_item' :
 
 			return this._transformMark( cx );
 
-		case 'marks_widget' :
+		case 'mark_widget' :
 
 			return cx;
 

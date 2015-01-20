@@ -6,7 +6,7 @@
 var
 	jion_path,
 	jools,
-	marks_range;
+	mark_range;
 
 
 /*
@@ -23,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'marks_range',
+			'mark_range',
 		attributes :
 			{
 				bPath :
@@ -80,7 +80,7 @@ if( JION )
 | dependening on which comes first in the doc.
 */
 jools.lazyValue(
-	marks_range.prototype,
+	mark_range.prototype,
 	'frontPath',
 	function( )
 	{
@@ -92,7 +92,7 @@ jools.lazyValue(
 
 
 jools.lazyValue(
-	marks_range.prototype,
+	mark_range.prototype,
 	'frontAt',
 	function( )
 	{
@@ -108,7 +108,7 @@ jools.lazyValue(
 | dependening on which comes last in the doc.
 */
 jools.lazyValue(
-	marks_range.prototype,
+	mark_range.prototype,
 	'backPath',
 	function( )
 	{
@@ -124,7 +124,7 @@ jools.lazyValue(
 | dependening on which comes last in the doc.
 */
 jools.lazyValue(
-	marks_range.prototype,
+	mark_range.prototype,
 	'backAt',
 	function( )
 	{
@@ -141,7 +141,7 @@ jools.lazyValue(
 | The caretPath and caretAt are identical to
 | ePath and eAt
 */
-marks_range.prototype.hasCaret = true;
+mark_range.prototype.hasCaret = true;
 
 
 /*
@@ -150,7 +150,7 @@ marks_range.prototype.hasCaret = true;
 | This allows a common interface with text range.
 */
 jools.lazyValue(
-	marks_range.prototype,
+	mark_range.prototype,
 	'caretPath',
 	function( )
 	{
@@ -165,7 +165,7 @@ jools.lazyValue(
 | This allows a common interface with text range.
 */
 jools.lazyValue(
-	marks_range.prototype,
+	mark_range.prototype,
 	'caretAt',
 	function( )
 	{
@@ -178,7 +178,7 @@ jools.lazyValue(
 | The item's path.
 */
 jools.lazyValue(
-	marks_range.prototype,
+	mark_range.prototype,
 	'itemPath',
 	function( )
 	{
@@ -196,7 +196,7 @@ jools.lazyValue(
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-marks_range.prototype.containsPath =
+mark_range.prototype.containsPath =
 	function(
 		path
 	)
@@ -223,7 +223,7 @@ marks_range.prototype.containsPath =
 | The content the mark puts into the clipboard.
 */
 jools.lazyValue(
-	marks_range.prototype,
+	mark_range.prototype,
 	'clipboard',
 	function( )
 	{
@@ -297,7 +297,7 @@ jools.lazyValue(
 | True if begin equals end
 */
 jools.lazyValue(
-	marks_range.prototype,
+	mark_range.prototype,
 	'empty',
 	function( )
 	{
@@ -313,7 +313,7 @@ jools.lazyValue(
 /*
 | Sets front/back so front is before back.
 */
-marks_range.prototype._normalize =
+mark_range.prototype._normalize =
 	function( )
 {
 	var

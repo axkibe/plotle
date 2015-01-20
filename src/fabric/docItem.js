@@ -16,7 +16,7 @@ var
 */
 var
 	jools,
-	marks_caret,
+	mark_caret,
 	root;
 
 
@@ -193,7 +193,7 @@ fabric_docItem.prototype.click =
 			);
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', para.textPath,
 				'at', at
 			)
@@ -204,7 +204,7 @@ fabric_docItem.prototype.click =
 		para = doc.atRank( doc.ranks.length - 1 );
 
 		root.setMark(
-			marks_caret.create(
+			mark_caret.create(
 				'path', para.textPath,
 				'at', para.text.length
 			)
