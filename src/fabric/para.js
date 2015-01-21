@@ -783,8 +783,7 @@ fabric_para.prototype.input =
 		textPath,
 		textPath2,
 		reg,
-		rx,
-		textPath;
+		rx;
 
 	changes = [ ];
 

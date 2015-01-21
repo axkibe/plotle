@@ -137,7 +137,12 @@ change_set.prototype.changeTree =
 		(
 			!this.prev
 			||
-			JSON.stringify( this.prev ) !== JSON.stringify( prev )
+			// FUTURE optimize this
+			!this.equals(
+				change_set.createFromJSON(
+					JSON.parse( JSON.stringify( this.create( 'prev', prev ) ) )
+				)
+			)
 		)
 	)
 	{

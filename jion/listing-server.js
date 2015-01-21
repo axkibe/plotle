@@ -25,13 +25,19 @@ module.exports =
 			'src/change/wrap.js',
 			'src/change/wrapRay.js',
 
+			'src/database9/changeSkid.js', // XXX
+			'src/database9/changeSkidRay.js',
+			'src/database9/repository.js',
+
 			'src/database/changeSkid.js',
 			'src/database/changeSkidRay.js',
 			'src/database/repository.js',
+
 			'src/euclid/margin.js',
 			'src/euclid/point.js',
 			'src/euclid/rect.js',
 			'src/euclid/view.js',
+
 			'src/fabric/doc.js',
 			'src/fabric/label.js',
 			'src/fabric/note.js',
@@ -40,22 +46,28 @@ module.exports =
 			'src/fabric/relation.js',
 			'src/fabric/space.js',
 			'src/fabric/spaceRef.js',
+
 			'src/jion/path.js',
+
 			'src/reply/acquire.js',
 			'src/reply/alter.js',
 			'src/reply/auth.js',
 			'src/reply/error.js',
 			'src/reply/register.js',
 			'src/reply/update.js',
+
 			'src/request/acquire.js',
 			'src/request/alter.js',
 			'src/request/auth.js',
 			'src/request/register.js',
 			'src/request/update.js',
+
 			'src/result/genjion.js',
 			'src/result/changeTree.js',
+
 			'src/server/resource.js',
 			'src/server/spaceBox.js',
+			'src/server/spaceBox9.js', // XXX
 			'src/server/inventory.js',
 
 			// built-in genjion
@@ -101,9 +113,12 @@ module.exports =
 			'src/ast/varDec.js',
 
 			'src/format/context.js',
+
 			'src/jsLexer/token.js',
+
 			'src/jsParser/state.js',
 			'src/jsParser/tokenSpec.js',
+
 			'src/jion/generator.js',
 			'src/jion/id.js',
 			'src/jion/idRepository.js'
