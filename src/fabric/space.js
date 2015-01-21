@@ -5,6 +5,7 @@
 var
 	actions_itemResize,
 	actions_pan,
+	change_join,
 	change_remove,
 	change_set,
 	euclid_arrow,
@@ -1519,14 +1520,16 @@ fabric_space.prototype.removeRange =
 		back
 	)
 {
-//	var
-		// k1,
-		// k2,
-		// len2,
-		// pivot,
-		// r,
-		// r1,
-		// r2;
+	var
+		changes,
+		k1,
+		k2,
+		pivot,
+		r,
+		r1,
+		r2,
+		text,
+		ve;
 
 /**/if( CHECK )
 /**/{
@@ -1557,9 +1560,8 @@ fabric_space.prototype.removeRange =
 		return;
 	}
 
-	throw new Error( );
+	changes = [ ];
 
-	/*
 	k1 = front.path.get( -2 );
 
 	k2 = back.path.get( -2 );
@@ -1570,29 +1572,43 @@ fabric_space.prototype.removeRange =
 
 	r2 = pivot.rankOf( k2 );
 
+	text = root.space.getPath( front.path.chop );
+
 	for(
 		r = r1;
-		r < r2 - 1;
+		r < r2;
 		r++
 	)
 	{
-		join(
-			path1,
-			root.space.getPath( path1.chop ).length
+		ve = pivot.atRank( r + 1 );
+
+		changes.push(
+			change_join.create(
+				'path', front.path.chop,
+				'path2', ve.textPath.chop,
+				'at1', text.length
+			)
 		);
+
+		text += ve.text;
 	}
 
-	len2 = root.space.getPath( path1.chop ).length;
+	text =
+		text.substring(
+			front.at,
+			text.length - ve.text.length + back.at
+		);
 
-	join( path1, len2 );
+	changes.push(
+		change_remove.create(
+			'path', front.path.chop,
+			'at1', front.at,
+			'at2', front.at + text.length,
+			'val', text
+		)
+	);
 
-	if( len2 - at1 + at2 === 0 )
-	{
-		return;
-	}
-
-	removeText( path1, at1, len2 - at1 + at2 );
-	*/
+	root.alter.apply( root.alter, changes );
 };
 
 

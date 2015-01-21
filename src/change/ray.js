@@ -73,7 +73,7 @@ jools.lazyValue(
 			a++
 		)
 		{
-			iRay[ a ] = this.ray[ a ].invert;
+			iRay[ a ] = this.ray[ aZ - 1 - a ].invert;
 		}
 
 		result = change_ray.create( 'ray:init', iRay );
