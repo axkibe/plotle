@@ -268,7 +268,7 @@ change_set.prototype.transform =
 
 			return cx;
 
-	case 'change_join' :
+		case 'change_join' :
 		case 'change_split' :
 		case 'change_insert' :
 		case 'change_remove' :
@@ -318,9 +318,8 @@ change_set.prototype._transformMark =
 		return null;
 	}
 
-	console.log( 'this shouldn\'t ever happen' );
-
-	return mark;
+	// this shouldnt ever happen
+	throw new Error( );
 };
 
 

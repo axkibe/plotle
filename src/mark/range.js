@@ -56,9 +56,40 @@ if( JION )
 						defaultValue :
 							null
 					}
-			}
+			},
+		init :
+			[ ]
 	};
 }
+
+
+/*
+| Initializer
+*/
+mark_range.prototype._init =
+	function( )
+{
+	var
+		p,
+		bZ,
+		eZ;
+
+	for(
+		p = 0, bZ = this.begin.path.length, eZ = this.end.path.length;
+		p < bZ && p < eZ;
+		p++
+	);
+
+/**/if( CHECK )
+/**/{
+/**/	if( p === 0 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	this.path = this.begin.path.limit( p );
+};
 
 
 /*

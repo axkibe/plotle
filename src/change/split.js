@@ -247,9 +247,12 @@ change_split.prototype.transform =
 	switch( cx.reflect )
 	{
 		case 'mark_caret' :
+
+			return this._transformTextMark( cx );
+
 		case 'mark_range' :
 
-			return this._transformMark( cx );
+			return this._transformRangeMark( cx );
 
 		case 'mark_item' :
 		case 'mark_widget' :
@@ -318,7 +321,7 @@ change_split.prototype._transformInsert =
 		cx
 	)
 {
-	console.log( 'transform insert by split' );
+	//console.log( 'transform insert by split' );
 
 /**/if( CHECK )
 /**/{
@@ -361,7 +364,7 @@ change_split.prototype._transformJoinSplit =
 		cx
 	)
 {
-	console.log( 'transform join by split' );
+	//console.log( 'transform join by split' );
 
 /**/if( CHECK )
 /**/{
@@ -398,9 +401,9 @@ change_split.prototype._transformJoinSplit =
 
 
 /*
-| Transforms a mark by this split.
+| Transforms a text mark by this split.
 */
-change_split.prototype._transformMark =
+change_split.prototype._transformTextMark =
 	function(
 		mark
 	)
@@ -410,25 +413,25 @@ change_split.prototype._transformMark =
 		return mark;
 	}
 
-	if( mark.at2 === undefined )
+	if( mark.at < this.at1 )
 	{
-		if( mark.at < this.at1 )
-		{
-			return mark;
-		}
+		return mark;
+	}
 
-		return(
-			mark.create(
-				'path', this.path2.prepend( mark.path.get( 0 ) ),
-				'at', mark.at - this.at1
-			)
-		);
-	}
-	else
-	{
-		throw new Error( 'XXX TODO' );
-	}
+	return(
+		mark.create(
+			'path', this.path2.prepend( mark.path.get( 0 ) ),
+			'at', mark.at - this.at1
+		)
+	);
 };
+
+
+/*
+| Transforms a range mark by this split.
+*/
+change_split.prototype._transformRangeMark =
+	change_generic.transformRangeMark;
 
 
 /*
@@ -440,7 +443,7 @@ change_split.prototype._transformRemove =
 		cx
 	)
 {
-	console.log( 'transform remove by split' );
+	//console.log( 'transform remove by split' );
 
 /**/if( CHECK )
 /**/{

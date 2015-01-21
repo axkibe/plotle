@@ -214,9 +214,12 @@ change_insert.prototype.transform =
 	switch( cx.reflect )
 	{
 		case 'mark_caret' :
+
+			return this._transformTextMark( cx );
+
 		case 'mark_range' :
 
-			return this._transformMark( cx );
+			return this._transformRangeMark( cx );
 
 		case 'mark_item' :
 		case 'mark_widget' :
@@ -321,9 +324,16 @@ change_insert.prototype._transformInsertRemove =
 
 
 /*
-| Transforms a mark by this insert.
+| Transforms a range mark by this insert.
 */
-change_insert.prototype._transformMark =
+change_insert.prototype._transformRangeMark =
+	change_generic.transformRangeMark;
+
+
+/*
+| Transforms a text mark by this insert.
+*/
+change_insert.prototype._transformTextMark =
 	function(
 		mark
 	)
@@ -344,14 +354,7 @@ change_insert.prototype._transformMark =
 	{
 		len = this.val.length;
 
-		if( mark.at2 === undefined )
-		{
-			return mark.create( 'at', mark.at + len );
-		}
-		else
-		{
-			throw new Error( 'XXX TODO' );
-		}
+		return mark.create( 'at', mark.at + len );
 	}
 };
 

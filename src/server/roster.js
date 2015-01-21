@@ -735,12 +735,6 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/testpad/doTracker.js',
-		'devel', true,
-		'hasJion', true,
-		'inTestPad', true
-	),
-	resource.create(
 		'filePath', 'src/testpad/action.js',
 		'devel', true,
 		'hasJion', true,

@@ -260,9 +260,12 @@ change_join.prototype.transform =
 	switch( cx.reflect )
 	{
 		case 'mark_caret' :
+
+			return this._transformTextMark( cx );
+
 		case 'mark_range' :
 
-			return this._transformMark( cx );
+			return this._transformRangeMark( cx );
 
 		case 'mark_item' :
 		case 'mark_widget' :
@@ -393,7 +396,7 @@ change_join.prototype._transformJoinSplit =
 /*
 | Transforms a mark by this join.
 */
-change_join.prototype._transformMark =
+change_join.prototype._transformTextMark =
 	function(
 		mark
 	)
@@ -403,21 +406,20 @@ change_join.prototype._transformMark =
 		return mark;
 	}
 
-	if( mark.at2 === undefined )
-	{
-		return(
-			mark.create(
-				'path', this.path.prepend( mark.path.get( 0 ) ),
-				'at', mark.at + this.at1
-			)
-		);
-	}
-	else
-	{
-		throw new Error( 'XXX TODO' );
-	}
+	return(
+		mark.create(
+			'path', this.path.prepend( mark.path.get( 0 ) ),
+			'at', mark.at + this.at1
+		)
+	);
 };
 
+
+/*
+| Transforms a range mark by this join.
+*/
+change_join.prototype._transformRangeMark =
+	change_generic.transformRangeMark;
 
 
 }( ) );

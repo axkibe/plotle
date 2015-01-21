@@ -145,4 +145,21 @@ change_generic.transformChangeWrapRay =
 };
 
 
+/*
+| Transforms a range mark by this change.
+*/
+change_generic.transformRangeMark =
+	function(
+		mark
+	)
+{
+	return(
+		mark.create(
+			'begin', this._transformTextMark( mark.begin ),
+			'end', this._transformTextMark( mark.end )
+		)
+	);
+};
+
+
 }( ) );

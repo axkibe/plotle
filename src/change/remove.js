@@ -215,9 +215,13 @@ change_remove.prototype.transform =
 	switch( cx.reflect )
 	{
 		case 'mark_caret' :
+
+			return this._transformTextMark( cx );
+
 		case 'mark_range' :
 
-			return this._transformMark( cx );
+			return this._transformRangeMark( cx );
+
 
 		case 'mark_item' :
 		case 'mark_widget' :
@@ -319,9 +323,16 @@ change_remove.prototype._transformInsert =
 
 
 /*
-| Transforms a mark by this insert.
+| Transforms a range mark by this remove.
 */
-change_remove.prototype._transformMark =
+change_remove.prototype._transformRangeMark =
+	change_generic.transformRangeMark;
+
+
+/*
+| Transforms a text mark by this insert.
+*/
+change_remove.prototype._transformTextMark =
 	function(
 		mark
 	)
@@ -340,27 +351,13 @@ change_remove.prototype._transformMark =
 	}
 	else if( mark.at <= this.at2 )
 	{
-		if( mark.at2 === undefined )
-		{
-			return mark.create( 'at', this.at1 );
-		}
-		else
-		{
-			throw new Error( 'XXX TODO' );
-		}
+		return mark.create( 'at', this.at1 );
 	}
 	else
 	{
 		len = this.val.length;
 
-		if( mark.at2 === undefined )
-		{
-			return mark.create( 'at', mark.at - len );
-		}
-		else
-		{
-			throw new Error( 'XXX TODO' );
-		}
+		return mark.create( 'at', mark.at - len );
 	}
 };
 
@@ -489,8 +486,6 @@ change_remove.prototype._transformJoinSplit =
 /**/		throw new Error( );
 /**/	}
 /**/}
-
-	console.log( 'TJS' );
 
 	if( !this.path.equals( cx.path ) )
 	{
