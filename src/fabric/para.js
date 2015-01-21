@@ -777,17 +777,18 @@ fabric_para.prototype.input =
 {
 	var
 		caretAt,
+		changes,
 		doc,
 		line,
-		path,
-		path2,
+		textPath,
+		textPath2,
 		reg,
 		rx,
 		textPath;
 
-	reg = /([^\n]+)(\n?)/g;
+	changes = [ ];
 
-	path = this.path;
+	reg = /([^\n]+)(\n?)/g;
 
 	textPath = this.textPath;
 
@@ -803,7 +804,7 @@ fabric_para.prototype.input =
 	{
 		line = rx[ 1 ];
 
-		root.alter(
+		changes.push(
 			change_insert.create(
 				'val', line,
 				'path', textPath.chop,
@@ -814,21 +815,23 @@ fabric_para.prototype.input =
 
 		if( rx[ 2 ] )
 		{
-			path2 = textPath.set( -2, jools.uid( ) );
+			textPath2 = textPath.set( -2, jools.uid( ) );
 
-			root.alter(
+			changes.push(
 				change_split.create(
 					'path', textPath.chop,
-					'path2', path2.chop,
+					'path2', textPath2.chop,
 					'at1', caretAt + line.length
 				)
 			);
 
-			path = path2;
+			textPath = textPath2;
 
 			caretAt = 0;
 		}
 	}
+
+	root.alter.apply( root, changes );
 };
 
 
