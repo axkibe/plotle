@@ -507,7 +507,7 @@ prototype.prepareInventory =
 		codes[ a ] = code;
 	}
 
-	if( !config.develNoBundle )
+	if( !config.shell_noBundle )
 	{
 		jools.log( 'start', 'parsing bundle' );
 
@@ -710,7 +710,7 @@ prototype.prepareInventory =
 			);
 	}
 
-	if( !config.develNoBundle )
+	if( !config.shell_noBundle )
 	{
 		jools.log(
 			'start',

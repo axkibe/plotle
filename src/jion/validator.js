@@ -75,7 +75,7 @@ jionWhitelist =
 		'id' : true,
 		'init' : true,
 		'json' : true,
-		'equals' : true,
+		'equals' : true, // XXX
 		'subclass' : true,
 		'singleton' : true,
 		'ray' : true,

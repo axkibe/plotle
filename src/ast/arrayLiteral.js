@@ -22,8 +22,6 @@ if( JION )
 	return {
 		id :
 			'ast_arrayLiteral',
-		equals :
-			'primitive', // FUTURE
 		ray :
 			// '->expression' // FUTURE
 			[ ]

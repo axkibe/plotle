@@ -9,7 +9,6 @@
 . allowsUndefined
 . back
 > begin
-. depth
 . front
 . isChange
 > path2
@@ -49,12 +48,6 @@
 . _blinkTimer
 . _cSpace
 . _captureEvents
-. _changeTreeInsert
-. _changeTreeJoin
-. _changeTreeRank
-. _changeTreeRemove
-. _changeTreeSet
-. _changeTreeSplit
 . _changeZoom
 . _check
 . _clip
@@ -149,18 +142,9 @@
 . _steerAttention
 . _testInput
 . _testInputCatcher
-. _transformChange
 . _transformChangeRay
 . _transformChangeWrap
 . _transformChangeWrapRay
-. _transformSign
-. _transformSignInsert
-. _transformSignJoin
-. _transformSignRank
-. _transformSignRay
-. _transformSignRemove
-. _transformSignSet
-. _transformSignSplit
 . _undo
 . _update
 . _useCapture
@@ -183,7 +167,6 @@
 . add
 > addColorStop
 > addEventListener
-. affix
 . aheadValue
 > ajax
 . align
@@ -244,7 +227,6 @@
 > change
 > changeRay
 . changeTree
-> changeWrap
 > changeWrapRay
 > changedTouches
 . channel
@@ -603,8 +585,6 @@
 > pow
 . prepend
 > preventDefault
-. prissy
-> proc
 . proper
 . proto
 > prototype
@@ -710,8 +690,6 @@
 > shiftKey
 . shorten
 . showDisc
-> sign
-> signRay
 . signUp
 . signup
 . signupButton
@@ -731,7 +709,6 @@
 > splice
 > split
 > sqrt
-> src
 > stack
 > start
 . startPos
@@ -777,7 +754,6 @@
 . transItem
 . transform
 > tree
-> trg
 > twig
 . twig:add
 . twig:insert

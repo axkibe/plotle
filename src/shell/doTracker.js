@@ -4,7 +4,7 @@
 
 
 var
-	ccot_changeWrapRay,
+	change_wrapRay,
 	config,
 	root,
 	shell_doTracker;
@@ -31,7 +31,7 @@ if( JION )
 						comment :
 							'the undo stack',
 						type :
-							'ccot_changeWrapRay',
+							'change_wrapRay',
 						defaultValue :
 							null
 					},
@@ -40,7 +40,7 @@ if( JION )
 						comment :
 							'the redo stack',
 						type :
-							'ccot_changeWrapRay',
+							'change_wrapRay',
 						defaultValue :
 							null
 					}
@@ -60,8 +60,8 @@ shell_doTracker.prototype.flush =
 	// FIXME
 	root.doTracker =
 		this.create(
-			'_undo', ccot_changeWrapRay.create( ),
-			'_redo', ccot_changeWrapRay.create( )
+			'_undo', change_wrapRay.create( ),
+			'_redo', change_wrapRay.create( )
 		);
 };
 
@@ -91,7 +91,7 @@ shell_doTracker.prototype.track =
 	root.doTracker =
 		this.create(
 			'_undo', undo,
-			'_redo', ccot_changeWrapRay.create( )
+			'_redo', change_wrapRay.create( )
 		);
 };
 

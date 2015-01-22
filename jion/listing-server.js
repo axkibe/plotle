@@ -9,13 +9,6 @@ module.exports =
 		'server',
 	list :
 		[
-			'src/ccot/change.js',
-			'src/ccot/changeRay.js',
-			'src/ccot/changeWrap.js',
-			'src/ccot/changeWrapRay.js',
-			'src/ccot/sign.js',
-			'src/ccot/signRay.js',
-
 			'src/change/insert.js',
 			'src/change/join.js',
 			'src/change/ray.js',

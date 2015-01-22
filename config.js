@@ -62,8 +62,7 @@ config.shell_devel = true;
 | Do not provide a bundle.
 | Only to be used with develShell
 */
-// XXX
-config.develNoBundle = true;
+config.shell_noBundle = false;
 
 
 /*

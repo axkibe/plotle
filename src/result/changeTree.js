@@ -36,12 +36,6 @@ if( JION )
 								'change_split',
 								'change_wrap',
 								'change_wrapRay',
-
-								// TODO remove ccot
-								'ccot_change',
-								'ccot_changeRay',
-								'ccot_changeWrap',
-								'ccot_changeWrapRay',
 								'database_changeSkid',
 								'database_changeSkidRay'
 							]

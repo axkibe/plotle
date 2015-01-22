@@ -67,42 +67,6 @@ module.exports =
 		'inBundle', true,
 		'inTestPad', true
 	),
-	resource.create(
-		'filePath', 'src/ccot/sign.js',
-		'hasJion', true,
-		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
-		'filePath', 'src/ccot/signRay.js',
-		'hasJion', true,
-		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
-		'filePath', 'src/ccot/change.js',
-		'hasJion', true,
-		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
-		'filePath', 'src/ccot/changeRay.js',
-		'hasJion', true,
-		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
-		'filePath', 'src/ccot/changeWrap.js',
-		'hasJion', true,
-		'inBundle', true,
-		'inTestPad', true
-	),
-	resource.create(
-		'filePath', 'src/ccot/changeWrapRay.js',
-		'hasJion', true,
-		'inBundle', true,
-		'inTestPad', true
-	),
 
 	resource.create(
 		'filePath', 'src/change/error.js',

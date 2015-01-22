@@ -24,8 +24,6 @@ if( JION )
 	return {
 		id :
 			'ccot_changeRay',
-		equals :
-			'primitive',
 		json :
 			true,
 		ray :

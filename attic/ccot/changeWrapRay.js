@@ -26,9 +26,7 @@ if( JION )
 		json :
 			true,
 		ray :
-			[ 'ccot_changeWrap' ],
-		equals :
-			'primitive'
+			[ 'ccot_changeWrap' ]
 	};
 }
 
