@@ -1158,6 +1158,9 @@ generator.prototype.genCreatorFreeStringsParser =
 			.$case(
 				'"ray:init"',
 				$block( )
+				.$check(
+					$if( $not( 'Array.isArray( arg )' ), $fail( ) ) // FIXME ! instead of $not
+				)
 				.ast( 'ray = arg' )
 				.ast( 'rayDup = "init"' )
 			)
@@ -2692,22 +2695,15 @@ generator.prototype.genEquals =
 		block,
 		cond,
 		ceq,
-		equals,
 		name,
+		rayTest,
+		rayTestLoopBody,
 		twigTest,
 		twigTestLoopBody;
 
 	cond = null;
 
-	equals = this.equals;
-
-	if( this.ray )
-	{
-		// FUTURE make a full ray test
-		equals = 'primitive';
-	}
-
-	switch( equals )
+	switch( this.equals )
 	{
 		case false :
 
@@ -2745,13 +2741,19 @@ generator.prototype.genEquals =
 
 	block = $block( );
 
-	if( this.twig )
+	if( this.twig || this.ray )
 	{
 		block =
 			block
 			.$varDec( 'a' )
-			.$varDec( 'aZ' )
-			.$varDec( 'key' );
+			.$varDec( 'aZ' );
+
+		if( this.twig )
+		{
+			block =
+				block
+				.$varDec( 'key' );
+		}
 	}
 
 	block =
@@ -2769,16 +2771,9 @@ generator.prototype.genEquals =
 					'key !== obj.ranks[ a ]',
 					$condition(
 						'this.twig[ key ].equals',
-						$not(
-							$call( // FIXME
-								'this.twig[ key ].equals',
-								'obj.twig[ key ]'
-							)
-						),
-						$differs( // FIXME
-							'this.twig[ key ]',
-							'obj.twig[ key ]'
-						)
+						// '!this.twig[ key ].equals( obj.twig[ key ] )', FIXME
+						$not( 'this.twig[ key ].equals( obj.twig[ key ] )' ),
+						'this.twig[ key ] !== obj.twig[ key ]'
 					)
 				),
 				$returnFalse
@@ -2810,7 +2805,40 @@ generator.prototype.genEquals =
 			);
 	}
 
-	// FIXME this.ray!
+	if( this.ray )
+	{
+		rayTestLoopBody =
+			$block( )
+			.$if(
+				$and(
+					'this.ray[ a ] !== obj.ray[ a ]',
+					$or(
+						// '!this.ray[ a ].equals', FIXME
+						$not( 'this.ray[ a ].equals' ),
+						$not( 'this.ray[ a ].equals( obj.ray[ a ] )' ) // FIXME parser !
+					)
+				),
+				$returnFalse
+			);
+
+		rayTest =
+			$block( )
+			.$if(
+				'this.ray.length !== obj.ray.length',
+				$returnFalse
+			)
+			.$for(
+				$commaList( )
+				.$assign( 'a', 0 ) // FIXME ast()
+				// FIXME ast(), this.length
+				.$assign( 'aZ', 'this.ray.length' ),
+				'a < aZ',
+				'++a',
+				rayTestLoopBody
+			);
+
+		block = block.$if( 'this.ray !== obj.ray', rayTest );
+	}
 
 	for(
 		var a = 0, aZ = this.attrList.length;

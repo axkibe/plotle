@@ -317,7 +317,7 @@ fabric_label.prototype.dragStop =
 				);
 			}
 
-			root.alter.apply( root, changes );
+			root.alter( changes );
 
 			break;
 

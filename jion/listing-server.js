@@ -25,10 +25,6 @@ module.exports =
 			'src/change/wrap.js',
 			'src/change/wrapRay.js',
 
-			'src/database9/changeSkid.js', // XXX
-			'src/database9/changeSkidRay.js',
-			'src/database9/repository.js',
-
 			'src/database/changeSkid.js',
 			'src/database/changeSkidRay.js',
 			'src/database/repository.js',
@@ -67,7 +63,6 @@ module.exports =
 
 			'src/server/resource.js',
 			'src/server/spaceBox.js',
-			'src/server/spaceBox9.js', // XXX
 			'src/server/inventory.js',
 
 			// built-in genjion

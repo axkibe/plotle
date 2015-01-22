@@ -204,7 +204,8 @@ shell_root =
 */
 shell_root.prototype.alter =
 	function(
-		// change or several changes
+		a1 // change, several changes or array of changes
+		// // ...
 	)
 {
 	var
@@ -212,7 +213,18 @@ shell_root.prototype.alter =
 		changeWrap,
 		result;
 
-	changeRay = change_ray.create( 'ray:init', arguments );
+	if( Array.isArray( a1 ) )
+	{
+		changeRay = change_ray.create( 'ray:init', a1 );
+	}
+	else
+	{
+		changeRay =
+			change_ray.create(
+				'ray:init',
+				Array.prototype.slice.apply( arguments )
+			);
+	}
 
 	changeWrap =
 		change_wrap.create(

@@ -830,7 +830,7 @@ fabric_para.prototype.input =
 		}
 	}
 
-	root.alter.apply( root, changes );
+	root.alter( changes );
 };
 
 

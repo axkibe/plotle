@@ -498,17 +498,14 @@ shorthand.$if =
 
 	condition = tools.convert( condition );
 
-	if(
-		then.reflect !== 'ast_block'
-	)
+	if( then.reflect !== 'ast_block' )
 	{
 		then = ast_block.create( ).append( then );
 	}
 
 	if(
 		elsewise
-		&&
-		elsewise.reflect !== 'ast_block'
+		&& elsewise.reflect !== 'ast_block'
 	)
 	{
 		elsewise = ast_block.create( ).append( elsewise );

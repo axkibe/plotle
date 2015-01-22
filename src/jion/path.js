@@ -26,9 +26,7 @@ if( JION )
 		id :
 			'jion_path',
 		ray :
-			[ 'String' ],
-		equals :
-			false
+			[ 'String' ]
 	};
 }
 
@@ -193,6 +191,7 @@ jion_path.prototype.prepend =
 |
 | FIXME this ought to be autocreated
 */
+/*
 jion_path.prototype.equals =
 	function( o )
 {
@@ -229,6 +228,7 @@ jion_path.prototype.equals =
 
 	return true;
 };
+*/
 
 
 /*

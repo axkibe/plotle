@@ -1608,7 +1608,7 @@ fabric_space.prototype.removeRange =
 		)
 	);
 
-	root.alter.apply( root, changes );
+	root.alter( changes );
 };
 
 

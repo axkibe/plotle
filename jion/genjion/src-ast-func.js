@@ -170,6 +170,14 @@ prototype.create =
 
 			case 'ray:init' :
 
+/**/			if( CHECK )
+/**/			{
+/**/				if( !Array.isArray( arg ) )
+/**/				{
+/**/					throw new Error( );
+/**/				}
+/**/			}
+
 				ray = arg;
 
 				rayDup = 'init';
@@ -367,8 +375,62 @@ prototype.remove = jion_proto.rayRemove;
 | Tests equality of object.
 */
 prototype.equals =
-	function( obj // object to compare to
-) { return this === obj; };
+	function(
+		obj // object to compare to
+	)
+{
+	var
+		a,
+		aZ;
+
+	if( this === obj )
+	{
+		return true;
+	}
+
+	if( !obj )
+	{
+		return false;
+	}
+
+	if( this.ray !== obj.ray )
+	{
+		if( this.ray.length !== obj.ray.length )
+		{
+			return false;
+		}
+
+		for(
+			a = 0, aZ = this.ray.length;
+			a < aZ;
+			++a
+		)
+		{
+			if(
+				this.ray[ a ] !== obj.ray[ a ]
+				&&
+				(
+					!this.ray[ a ].equals
+					||
+					!this.ray[ a ].equals( obj.ray[ a ] )
+				)
+			)
+			{
+				return false;
+			}
+		}
+	}
+
+	return (
+		(
+			this.block === obj.block
+			||
+			this.block !== null && this.block.equals( obj.block )
+		)
+		&&
+		this.capsule === obj.capsule
+	);
+};
 
 
 }

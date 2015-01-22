@@ -62,6 +62,7 @@ config.shell_devel = true;
 | Do not provide a bundle.
 | Only to be used with develShell
 */
+// XXX
 config.develNoBundle = true;
 
 
@@ -95,7 +96,7 @@ config.server_freeze = false;
 | If the server is in devel mode,
 | it will die on a command it considers unacceptable.
 */
-config.server_devel = true;
+config.server_devel = false;
 
 
 /*

@@ -134,6 +134,14 @@ prototype.create =
 		{
 			case 'ray:init' :
 
+/**/			if( CHECK )
+/**/			{
+/**/				if( !Array.isArray( arg ) )
+/**/				{
+/**/					throw new Error( );
+/**/				}
+/**/			}
+
 				ray = arg;
 
 				rayDup = 'init';
