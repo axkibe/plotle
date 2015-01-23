@@ -1152,8 +1152,9 @@ jools.lazyValue(
 
 /*
 | Sketches a generic ( hull ) shape.
+| XXX remove
 */
-euclid_display.prototype._sketchGeneric =
+euclid_display.prototype._sketchHull =
 	function(
 		shape,
 		border,
@@ -1399,6 +1400,192 @@ euclid_display.prototype._sketchGeneric =
 
 
 /*
+| Sketches a generic shape.
+*/
+euclid_display.prototype._sketchShape =
+	function(
+		shape,
+		border,
+		twist,
+		view
+	)
+{
+	var
+		cx,
+		dx,
+		dxy,
+		dy,
+		a,
+		aZ,
+		magic,
+		posx,
+		posy,
+		pc,
+		pp,
+		pn,
+		pStart,
+		section;
+
+	cx = this._cx;
+
+	magic = euclid_constants.magic;
+
+/**/if( CHECK )
+/**/{
+/**/	if( shape.length === undefined || shape.length === 0 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( shape.get( 0 ).reflect !== 'shapeSection_start' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	pStart = view.point( shape.get( 0 ).p );
+
+	pc = view.point( shape.pc );
+
+	pStart =
+		pStart.add(
+			pStart.x > pc.x
+				?  -border
+				: ( pStart.x < pc.x ? border : 0 ),
+			pStart.y > pc.y
+				?  -border
+				: ( pStart.y < pc.y ? border : 0 )
+		);
+
+	pp = pStart;
+
+	pn = null;
+
+	cx.moveTo( pStart.x + twist, pStart.y + twist );
+
+	// FUTURE why not store the point?
+	posx = pStart.x;
+	posy = pStart.y;
+
+	for(
+		a = 1, aZ = shape.length;
+		a < aZ;
+		a++
+	)
+	{
+
+/**/	if( CHECK )
+/**/	{
+/**/		if( !pStart )
+/**/		{
+/**/			// there was a close before end?
+/**/			throw new Error( );
+/**/		}
+/**/	}
+
+		section = shape.get( a );
+
+		if( section.close )
+		{
+			pn = pStart;
+
+			pStart = null;
+		}
+		else
+		{
+			pn = view.point( section.p );
+
+			if( border !== 0 )
+			{
+				pn =
+					pn.add(
+						pn.x > pc.x
+							?  -border
+							: ( pn.x < pc.x ?  border : 0 ),
+						pn.y > pc.y
+							?  -border
+							: ( pn.y < pc.y ?  border : 0 )
+					);
+			}
+		}
+
+		switch( section.reflect )
+		{
+
+			case 'shapeSection_line' :
+
+				cx.lineTo( pn.x + twist, pn.y + twist );
+
+				break;
+
+			case 'shapeSection_flyLine' :
+
+				if( twist )
+				{
+					cx.moveTo( pn.x + twist, pn.y + twist );
+				}
+				else
+				{
+					cx.lineTo( pn.x + twist, pn.y + twist );
+				}
+
+				break;
+
+			case 'shapeSection_round' :
+
+				dx = pn.x - pp.x;
+
+				dy = pn.y - pp.y;
+
+				dxy = dx * dy;
+
+				switch( section.rotation )
+				{
+					case 'clockwise' :
+
+						cx.bezierCurveTo(
+							posx + twist + ( dxy > 0 ? magic * dx : 0 ),
+							posy + twist + ( dxy < 0 ? magic * dy : 0 ),
+							pn.x + twist - ( dxy < 0 ? magic * dx : 0 ),
+							pn.y + twist - ( dxy > 0 ? magic * dy : 0 ),
+							pn.x + twist,
+							pn.y + twist
+						);
+
+						break;
+
+					default :
+
+						// unknown rotation
+						throw new Error( );
+				}
+
+				break;
+
+			default :
+
+				// unknown hull section.
+				throw new Error( );
+		}
+
+		posx = pn.x;
+
+		posy = pn.y;
+
+		pp = pn;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( pStart !== null )
+/**/	{
+/**/		// hull did not close
+/**/		throw new Error( );
+/**/	}
+/**/}
+};
+
+/*
 | Draws the rectangle.
 */
 euclid_display.prototype._sketchRect =
@@ -1458,26 +1645,15 @@ euclid_display.prototype._sketch =
 	{
 		case 'euclid_rect' :
 
-			return(
-				this._sketchRect(
-					shape,
-					border,
-					twist,
-					view
-				)
-			);
+			return this._sketchRect( shape, border, twist, view );
 	}
 
 	if( shape.hull )
 	{
-		return(
-			this._sketchGeneric(
-				shape,
-				border,
-				twist,
-				view
-			)
-		);
+		if( shape.ray.length === 0 ) //XXX
+		return this._sketchHull( shape, border, twist, view );
+		else
+		return this._sketchShape( shape, border, twist, view );
 	}
 
 	throw new Error( );

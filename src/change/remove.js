@@ -366,10 +366,10 @@ change_remove.prototype._transformRemove =
 	// this remove        ######
 	// case 0:        xxx '    '      cx to left, no effect
 	// case 1:            '    ' xxx  cx to right, move to left
-	// case 2:          xxXXXXXXx     cx both sides reduced
-	// case 3:            ' XX '      cx fully gone
-	// case 4:          xxXX   '      cx partially reduced
-	// case 5:            '   XXxx    cx partially reduced
+	// case 2:          xx******x     cx both sides reduced
+	// case 3:            ' ** '      cx fully gone
+	// case 4:          xx**   '      cx partially reduced
+	// case 5:            '   **xx    cx partially reduced
 
 	if( cx.at2 <= this.at1 )
 	{
@@ -466,7 +466,7 @@ change_remove.prototype._transformJoinSplit =
 	}
 
 	// text    ttttttttttttt
-	// remove     ' XXXX '
+	// remove     ' xxxx '
 	// case 0     ^   '  '      split left
 	// case 1         ^  '      split middle
 	// case 2            ^      split right

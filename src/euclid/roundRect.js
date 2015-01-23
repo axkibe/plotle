@@ -21,7 +21,10 @@ var
 	euclid_point,
 	euclid_roundRect,
 	euclid_shape,
-	jools;
+	jools,
+	shapeSection_line,
+	shapeSection_round,
+	shapeSection_start;
 
 
 /*
@@ -73,12 +76,7 @@ if( JION )
 			},
 
 		init :
-			[
-				'pnw',
-				'pse',
-				'a',
-				'b'
-			]
+			[ 'pnw', 'pse', 'a', 'b' ]
 	};
 }
 
@@ -115,6 +113,40 @@ euclid_roundRect.prototype._init =
 					'line', psw.add( a , 0 ),
 					'round', 'clockwise', psw.sub( 0 , b ),
 					'line', 'close'
+				],
+			'ray:init',
+				[
+					shapeSection_start.create(
+						'p', pnw.add( 0 , b )
+					),
+					shapeSection_round.create(
+						'p', pnw.add( a , 0 ),
+						'rotation', 'clockwise'
+					),
+					shapeSection_line.create(
+						'p', pne.sub( a , 0 )
+					),
+					shapeSection_round.create(
+						'p', pne.add( 0 , b ),
+						'rotation', 'clockwise'
+					),
+					shapeSection_line.create(
+						'p', pse.sub( 0 , b )
+					),
+					shapeSection_round.create(
+						'p', pse.sub( a , 0 ),
+						'rotation', 'clockwise'
+					),
+					shapeSection_line.create(
+						'p', psw.add( a , 0 )
+					),
+					shapeSection_round.create(
+						'p', psw.sub( 0 , b ),
+						'rotation', 'clockwise'
+					),
+					shapeSection_line.create(
+						'close', true
+					)
 				],
 			'pc',
 				this.pc

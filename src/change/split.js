@@ -428,9 +428,9 @@ change_split.prototype._transformRemove =
 
 	// text    ttttttttttttt
 	// split         ^
-	// case 0    XXX '          remove left
-	// case 1      XXYXX        remove is split
-	// case 2        ' XXXX     remove right
+	// case 0    xxx '          remove left
+	// case 1      xxxxx        remove is split
+	// case 2        ' xxxx     remove right
 
 	if( !this.path.equals( cx.path ) )
 	{

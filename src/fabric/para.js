@@ -1095,7 +1095,7 @@ fabric_para.prototype._keyDown =
 		doc,
 		at,
 		retainx,
-		begin //XXX
+		begin
 	)
 {
 	var

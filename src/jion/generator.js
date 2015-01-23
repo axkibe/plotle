@@ -2031,7 +2031,7 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 				{
 					if( cSwitch )
 					{
-						code = mif.$elsewise( cSwitch ); //XXX
+						code = mif.$elsewise( cSwitch );
 					}
 					else
 					{
