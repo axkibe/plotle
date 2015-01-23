@@ -124,25 +124,11 @@ server_spaceBox.loadSpace =
 			throw new Error( 'sequence mismatch' );
 		}
 
-		if( !CONVERT ) // XXX
-		{
-			// FUTURE there is no need to load the past into memory
-			changeSkids =
-				changeSkids.create( 'ray:set', seqZ++, changeSkid );
+		// FUTURE there is no need to load the past into memory
+		changeSkids =
+			changeSkids.create( 'ray:set', seqZ++, changeSkid );
 
-			space = changeSkid.changeTree( space, 'tree' );
-		}
-		else
-		{
-			var result;
-
-			result = changeSkid.changeTree( space, 'combined' );
-
-			changeSkids =
-				changeSkids.create( 'ray:set', seqZ++, result.reaction );
-
-			space = result.tree;
-		}
+		space = changeSkid.changeTree( space );
 	}
 
 	return(
@@ -210,7 +196,7 @@ server_spaceBox.prototype.appendChanges =
 {
 	var
 		changeSkidRay,
-		result;
+		tree;
 
 /**/if( CHECK )
 /**/{
@@ -220,9 +206,7 @@ server_spaceBox.prototype.appendChanges =
 /**/	}
 /**/}
 
-	result = changeWrapRay.changeTree( this.space, 'combined' );
-
-	// FIXME XXX use the reaction!
+	tree = changeWrapRay.changeTree( this.space );
 
 	changeSkidRay =
 		database_changeSkidRay.createFromChangeWrapRay(
@@ -246,7 +230,7 @@ server_spaceBox.prototype.appendChanges =
 	return(
 		this.create(
 			'seqZ', this.seqZ + changeSkidRay.length,
-			'space', result.tree,
+			'space', tree,
 			'_changeSkids', this._changeSkids.appendRay( changeSkidRay )
 		)
 	);

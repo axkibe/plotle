@@ -6,8 +6,7 @@
 var
 	change_generic,
 	change_ray,
-	jools,
-	result_changeTree;
+	jools;
 
 
 /*
@@ -46,8 +45,6 @@ if( SERVER )
 	change_generic = require( './generic' );
 
 	jools = require( '../jools/jools'  );
-
-	result_changeTree = require( '../result/changeTree' );
 }
 
 
@@ -235,18 +232,12 @@ change_ray.prototype.transform =
 */
 change_ray.prototype.changeTree =
 	function(
-		tree,
-		resultModality
+		tree
 	)
 {
 	// the ray with the changes applied
 	var
-		a, aZ,
-		cRay,
-		cr;
-
-	// FUTURE if resultModality is skip cRay
-	cRay = [ ];
+		a, aZ;
 
 	// iterates through the change ray
 	for(
@@ -255,33 +246,11 @@ change_ray.prototype.changeTree =
 		a++
 	)
 	{
-		cr = this.get( a ).changeTree( tree, 'combined' );
-
 		// the tree returned by op-handler is the new tree
-		tree = cr.tree;
-
-		cRay.push( cr.reaction );
+		tree = this.get( a ).changeTree( tree );
 	}
 
-	switch( resultModality )
-	{
-		case 'combined' :
-
-			return(
-				result_changeTree.create(
-					'reaction', change_ray.create( 'ray:init', cRay ),
-					'tree', tree
-				)
-			);
-
-		case 'reaction' :
-
-			return change_ray.create( 'ray:init', cRay );
-
-		case 'tree' :
-
-			return tree;
-	}
+	return tree;
 };
 
 

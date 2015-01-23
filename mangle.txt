@@ -613,7 +613,6 @@
 . rayLength
 . rayRemove
 . raySet
-. reaction
 > readyState
 . receiverFunc
 > rect

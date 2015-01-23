@@ -75,8 +75,7 @@ if( JION )
 var
 	change_wrap,
 	changeSkid,
-	jools,
-	result_changeTree;
+	jools;
 
 changeSkid = require( '../jion/this' )( module );
 
@@ -84,7 +83,6 @@ jools = require( '../jools/jools' );
 
 change_wrap = require( '../change/wrap' );
 
-result_changeTree = require( '../result/changeTree' );
 
 /*
 | Creates a changeSkid from a changeWrap.
@@ -151,43 +149,10 @@ changeSkid.prototype.transform =
 */
 changeSkid.prototype.changeTree =
 	function(
-		tree,
-		resultModality
+		tree
 	)
 {
-	var
-		result;
-
-	switch( resultModality )
-	{
-		case 'combined' :
-
-			result = this.changeRay.changeTree( tree, 'combined' );
-
-			return(
-				result_changeTree.create(
-					'reaction', this.create( 'changeRay', result.reaction ),
-					'tree', result.tree
-				)
-			);
-
-		case 'reaction' :
-
-			return(
-				this.create(
-					'changeRay',
-						this.changeRay.changeTree( tree, 'reaction' )
-				)
-			);
-
-		case 'tree' :
-
-			return this.changeRay.changeTree( tree, 'tree' );
-
-		default :
-
-			throw new Error( );
-	}
+	return this.changeRay.changeTree( tree );
 };
 
 

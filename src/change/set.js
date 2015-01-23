@@ -6,7 +6,6 @@ var
 	change_generic,
 	change_error,
 	change_set,
-	result_changeTree,
 	jools;
 
 
@@ -88,8 +87,6 @@ if( SERVER )
 	change_error = require( './error' );
 
 	jools = require( '../jools/jools' );
-
-	result_changeTree = require( '../result/changeTree' );
 }
 
 
@@ -113,8 +110,7 @@ change_set.prototype._init =
 */
 change_set.prototype.changeTree =
 	function(
-		tree,
-		resultModality
+		tree
 	)
 {
 	var
@@ -198,30 +194,7 @@ change_set.prototype.changeTree =
 		}
 	}
 
-	// FIXME remove
-	switch( resultModality )
-	{
-		case 'combined' :
-
-			return(
-				result_changeTree.create(
-					'reaction', this,
-					'tree', tree
-				)
-			);
-
-		case 'reaction' :
-
-			return this;
-
-		case 'tree' :
-
-			return tree;
-
-		default :
-
-			throw new Error( );
-	}
+	return tree;
 };
 
 

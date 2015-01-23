@@ -18,9 +18,6 @@ config.database_version = 10;
 */
 GLOBAL.APP = 'server';
 
-// used only for repository convertion tools
-GLOBAL.CONVERT = false;
-
 // does not load jion code if out of date.
 GLOBAL.FORCE_JION_LOADING = false;
 

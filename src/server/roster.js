@@ -62,13 +62,6 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/result/changeTree.js',
-		'hasJion', true,
-		'inBundle', true,
-		'inTestPad', true
-	),
-
-	resource.create(
 		'filePath', 'src/change/error.js',
 		'inBundle', true,
 		'inTestPad', true

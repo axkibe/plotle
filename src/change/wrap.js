@@ -5,8 +5,7 @@
 
 var
 	change_wrap,
-	jools,
-	result_changeTree;
+	jools;
 
 
 /*
@@ -74,8 +73,6 @@ if( SERVER )
 	change_wrap = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
-
-	result_changeTree = require( '../result/changeTree' );
 }
 
 
@@ -116,34 +113,10 @@ change_wrap.prototype.transform =
 */
 change_wrap.prototype.changeTree =
 	function(
-		tree,
-		resultModality
+		tree
 	)
 {
-	var
-		result;
-
-	result = this.changeRay.changeTree( tree, resultModality );
-
-	switch( resultModality )
-	{
-		case 'combined' :
-
-			return(
-				result_changeTree.create(
-					'reaction', this.create( 'changeRay', result.reaction ),
-					'tree', result.tree
-				)
-			);
-
-		case 'reaction' :
-
-			return this.create( 'changeRay', result );
-
-		case 'tree' :
-
-			return result;
-	}
+	return this.changeRay.changeTree( tree );
 };
 
 

@@ -181,7 +181,7 @@ testpad_repository.prototype.get =
 	{
 		changeRay = cwRay.get( a ).changeRay;
 
-		space = changeRay.invert.changeTree( space, 'tree' );
+		space = changeRay.invert.changeTree( space );
 	}
 
 	// returns the path requested
@@ -199,10 +199,10 @@ testpad_repository.prototype.alter =
 {
 	var
 		cwRay,
-		r,
 		s,
 		sZ,
-		seq;
+		seq,
+		tree;
 
 	cwRay = this._changeWrapRay;
 
@@ -217,21 +217,15 @@ testpad_repository.prototype.alter =
 		cw = cwRay.get( s ).transform( cw );
 	}
 
-	r = cw.changeTree( this.space, 'combined' );
-
-	cw = r.reaction.create( 'seq', seq + 1 );
-
-	cwRay = cwRay.append( cw );
+	tree = cw.changeTree( this.space );
 
 	root.create(
 		'link',
 			this.create(
 				'_changeWrapRay', cwRay,
-				'space', r.tree
+				'space', tree
 			)
 	);
-
-	return r.create( 'reaction', cw );
 };
 
 

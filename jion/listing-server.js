@@ -52,7 +52,6 @@ module.exports =
 			'src/request/update.js',
 
 			'src/result/genjion.js',
-			'src/result/changeTree.js',
 
 			'src/server/resource.js',
 			'src/server/spaceBox.js',

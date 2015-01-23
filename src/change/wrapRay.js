@@ -4,8 +4,7 @@
 
 
 var
-	change_wrapRay,
-	result_changeTree;
+	change_wrapRay;
 
 
 /*
@@ -35,8 +34,6 @@ if( JION )
 if( SERVER )
 {
 	change_wrapRay = require( '../jion/this' )( module );
-
-	result_changeTree = require( '../result/changeTree' );
 }
 
 
@@ -45,19 +42,11 @@ if( SERVER )
 */
 change_wrapRay.prototype.changeTree =
 	function(
-		tree,
-		resultModality
+		tree
 	)
 {
-	// the ray with the changes applied
 	var
-		a, aZ,
-		cRay,
-		cr;
-
-	// FUTURE in case of resultModality === tree skip building cRay
-
-	cRay = [ ];
+		a, aZ;
 
 	// iterates through the change ray
 	for(
@@ -66,33 +55,10 @@ change_wrapRay.prototype.changeTree =
 		a++
 	)
 	{
-		cr = this.get( a ).changeTree( tree, 'combined' ); // FUTURE
-
-		// the tree returned by op-handler is the new tree
-		tree = cr.tree;
-
-		cRay.push( cr.reaction );
+		tree = this.get( a ).changeTree( tree );
 	}
 
-	switch( resultModality )
-	{
-		case 'combined' :
-
-			return(
-				result_changeTree.create(
-					'tree', tree,
-					'reaction', change_wrapRay.create( 'ray:init', cRay )
-				)
-			);
-
-		case 'reaction' :
-
-			return change_wrapRay.create( 'ray:init', cRay );
-
-		case 'tree' :
-
-			return tree;
-	}
+	return tree;
 };
 
 

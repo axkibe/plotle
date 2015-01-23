@@ -4,7 +4,6 @@
 
 var
 	change_generic,
-	result_changeTree,
 	jools;
 
 
@@ -23,8 +22,6 @@ if( SERVER )
 	change_generic = module.exports;
 
 	jools = require( '../jools/jools' );
-
-	result_changeTree = require( '../result/changeTree' );
 }
 else
 {

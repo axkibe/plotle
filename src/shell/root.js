@@ -210,8 +210,7 @@ shell_root.prototype.alter =
 {
 	var
 		changeRay,
-		changeWrap,
-		result;
+		changeWrap;
 
 	if( Array.isArray( a1 ) )
 	{
@@ -232,13 +231,9 @@ shell_root.prototype.alter =
 			'changeRay', changeRay
 		);
 
-	result = root.link.alter( changeWrap );
+	root.link.alter( changeWrap );
 
-	// FIXME remove reaction
-	root.doTracker.track( result.reaction );
-
-	// FIXME return nothing!
-	return result;
+	root.doTracker.track( changeWrap );
 };
 
 

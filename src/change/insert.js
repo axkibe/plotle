@@ -7,7 +7,6 @@ var
 	change_error,
 	change_insert,
 	change_remove,
-	result_changeTree,
 	jools;
 
 
@@ -85,8 +84,6 @@ if( SERVER )
 	change_remove = require( './remove' );
 
 	jools = require( '../jools/jools' );
-
-	result_changeTree = require( '../result/changeTree' );
 }
 
 
@@ -116,8 +113,7 @@ change_insert.prototype._init =
 */
 change_insert.prototype.changeTree =
 	function(
-		tree,
-		resultModality
+		tree
 	)
 {
 	var
@@ -143,30 +139,7 @@ change_insert.prototype.changeTree =
 			+ text.substring( this.at1 )
 		);
 
-	// FIXME remove
-	switch( resultModality )
-	{
-		case 'combined' :
-
-			return(
-				result_changeTree.create(
-					'reaction', this,
-					'tree', tree
-				)
-			);
-
-		case 'reaction' :
-
-			return this;
-
-		case 'tree' :
-
-			return tree;
-
-		default :
-
-			throw new Error( );
-	}
+	return tree;
 };
 
 
