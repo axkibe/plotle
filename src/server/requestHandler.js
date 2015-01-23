@@ -111,8 +111,6 @@ serveAlter =
 		spaceRef,
 		username;
 
-	jools.log( true, 'ALTER', request ); //XXX
-
 	if( !config.server_devel )
 	{
 		try
