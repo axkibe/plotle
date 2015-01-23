@@ -8,6 +8,9 @@ var
 	euclid_line,
 	euclid_shape,
 	euclid_view,
+	shapeSection_flyLine,
+	shapeSection_line,
+	shapeSection_start,
 	jools;
 
 
@@ -66,9 +69,16 @@ if( JION )
 
 
 var
-	arrowSize;
+	arrowSize,
+	cos,
+	sin;
 
 arrowSize = 12;
+
+cos = Math.cos;
+
+sin = Math.sin;
+
 
 /*
 | Returns the arrow connecting shape1 to shape2
@@ -209,27 +219,27 @@ jools.lazyValue(
 		var
 			ad,
 			arrowBase,
-			cos,
 			d,
-			hull,
 			p1,
 			p2,
 			ms,
 			round,
-			sin;
+			sections;
 
 		p1 = this.p1;
 
 		p2 = this.p2;
 
-		hull = [ ];
+		sections = [ ];
 
 		// FUTURE, allow arrows on p1.
 		switch( this.p1end )
 		{
 			case 'normal':
 
-				hull.push( 'start', p1 );
+				sections.push(
+					shapeSection_start.create( 'p', p1 )
+				);
 
 				break;
 
@@ -243,15 +253,13 @@ jools.lazyValue(
 		{
 			case 'normal' :
 
-				hull.push( 'line', p2 );
+				sections.push(
+					shapeSection_line.create( 'p', p2 )
+				);
 
 				break;
 
 			case 'arrow' :
-
-				cos = Math.cos;
-
-				sin = Math.sin;
 
 				round = Math.round;
 
@@ -271,23 +279,24 @@ jools.lazyValue(
 						-round( ms * sin( d ) )
 					);
 
-				hull.push(
-					'line',
-						arrowBase,
-					'line',
-						p2.fixPoint(
-							-round( arrowSize * cos( d - ad ) ),
-							-round( arrowSize * sin( d - ad ) )
-						),
-					'line',
-						p2,
-					'line',
-						p2.fixPoint(
-							-round( arrowSize * cos( d + ad ) ),
-							-round( arrowSize * sin( d + ad ) )
-						),
-					'line',
-						arrowBase
+				sections.push(
+					shapeSection_line.create( 'p', arrowBase ),
+					shapeSection_line.create(
+						'p',
+							p2.fixPoint(
+								-round( arrowSize * cos( d - ad ) ),
+								-round( arrowSize * sin( d - ad ) )
+							)
+					),
+					shapeSection_line.create( 'p', p2 ),
+					shapeSection_line.create(
+						'p',
+							p2.fixPoint(
+								-round( arrowSize * cos( d + ad ) ),
+								-round( arrowSize * sin( d + ad ) )
+							)
+					),
+					shapeSection_line.create( 'p', arrowBase )
 				);
 
 
@@ -299,11 +308,13 @@ jools.lazyValue(
 				throw new Error( );
 		}
 
-		hull.push( '0-line', 'close' );
+		sections.push(
+			shapeSection_flyLine.create( 'close', true )
+		);
 
 		return(
 			euclid_shape.create(
-				'hull', hull,
+				'ray:init', sections,
 				'pc', this.pc
 			)
 		);

@@ -1648,7 +1648,7 @@ euclid_display.prototype._sketch =
 			return this._sketchRect( shape, border, twist, view );
 	}
 
-	if( shape.hull )
+	if( shape.hull || shape.ray ) // XXX
 	{
 		if( shape.ray.length === 0 ) //XXX
 		return this._sketchHull( shape, border, twist, view );

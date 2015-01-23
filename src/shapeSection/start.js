@@ -29,7 +29,7 @@ if( JION )
 						comment :
 							'start here',
 						type :
-							'euclid_point'
+							[ 'euclid_point', 'euclid_fixPoint' ]
 					}
 			}
 	};

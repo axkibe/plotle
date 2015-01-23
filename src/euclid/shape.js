@@ -28,12 +28,15 @@ if( JION )
 			'euclid_shape',
 		attributes :
 			{
+				// XXX
 				hull :
 					{
 						comment :
 							'hull definition',
 						type :
-							'Array'
+							'Array',
+						allowsUndefined :
+							true
 					},
 				pc :
 					{

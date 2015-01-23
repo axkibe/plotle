@@ -28,7 +28,7 @@ if( JION )
 						comment :
 							'connect to',
 						type :
-							'euclid_point',
+							[ 'euclid_point', 'euclid_fixPoint' ],
 						allowsUndefined :
 							true
 					},

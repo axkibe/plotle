@@ -7,7 +7,9 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_shape,
-	icons_moveto;
+	icons_moveto,
+	shapeSection_start,
+	shapeSection_line;
 
 
 /*
@@ -64,19 +66,18 @@ icons_moveto.prototype._init =
 
 	this._arrow =
 		euclid_shape.create(
-			'hull',
+			'ray:init',
 				[
-					'start', ap,              // A
-					'line', ap.add(  6,  8 ), // B
-					'line', ap.add(  2,  8 ), // C
-					'line', ap.add(  2, 14 ), // D
-					'line', ap.add( -2, 14 ), // E
-					'line', ap.add( -2,  8 ), // F,
-					'line', ap.add( -6,  8 ), // G,
-					'line', 'close'
+					shapeSection_start.create( 'p', ap ), // A
+					shapeSection_line.create( 'p', ap.add(  6,  8 ) ), // B
+					shapeSection_line.create( 'p', ap.add(  2,  8 ) ), // C
+					shapeSection_line.create( 'p', ap.add(  2, 14 ) ), // D
+					shapeSection_line.create( 'p', ap.add( -2, 14 ) ), // E
+					shapeSection_line.create( 'p', ap.add( -2,  8 ) ), // F,
+					shapeSection_line.create( 'p', ap.add( -6,  8 ) ), // G,
+					shapeSection_line.create( 'close', true )
 				],
-			'pc',
-				ap.add( 0, 7 )
+			'pc', ap.add( 0, 7 )
 		);
 
 	this._base1 =
