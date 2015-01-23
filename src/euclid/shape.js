@@ -96,9 +96,8 @@ euclid_shape.prototype.getProjection =
 /**/{
 /**/	if( hull[ 0 ] !== 'start' )
 /**/	{
-/**/		throw new Error(
-/**/			'hull must have start at [0]'
-/**/		);
+/**/		// hull must have start at [0]
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -114,9 +113,8 @@ euclid_shape.prototype.getProjection =
 /**/	{
 /**/		if( !pstart )
 /**/		{
-/**/			throw new Error(
-/**/				'hull closed prematurely'
-/**/			);
+/**/			// hull closed prematurely
+/**/			throw new Error( );
 /**/		}
 /**/	}
 
