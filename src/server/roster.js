@@ -172,6 +172,26 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/shapeSection/flyLine.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/shapeSection/line.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/shapeSection/round.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/shapeSection/start.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/euclid/shape.js',
 		'hasJion', true,
 		'inBundle', true

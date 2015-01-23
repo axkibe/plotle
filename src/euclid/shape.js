@@ -245,15 +245,11 @@ euclid_shape.prototype.getProjection =
 
 				if(
 					(
-						( p.x < cx || dy <= 0 )
-						&&
-						( p.x > cx || dy >= 0 )
+						( p.x < cx || dy <= 0 ) && ( p.x > cx || dy >= 0 )
 					)
 					||
 					(
-						( p.y < cy || dx >= 0 )
-						&&
-						( p.y > cy || dx <= 0 )
+						( p.y < cy || dx >= 0 ) && ( p.y > cy || dx <= 0 )
 					)
 				)
 				{
@@ -266,30 +262,15 @@ euclid_shape.prototype.getProjection =
 				{
 					if( p.y > cy )
 					{
-						return(
-							euclid_point.create(
-								'x', cx,
-								'y', cy + b
-							)
-						);
+						return euclid_point.create( 'x', cx, 'y', cy + b );
 					}
 					else if( p.y < cy )
 					{
-						return(
-							euclid_point.create(
-								'x', cx,
-								'y', cy - b
-							)
-						);
+						return euclid_point.create( 'x', cx, 'y', cy - b );
 					}
 					else if( p.y === cy )
 					{
-						return(
-							euclid_point.create(
-								'x', cx,
-								'y', cy
-							)
-						);
+						return euclid_point.create( 'x', cx, 'y', cy );
 					}
 				}
 				else

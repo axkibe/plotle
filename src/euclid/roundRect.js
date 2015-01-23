@@ -97,7 +97,7 @@ euclid_roundRect.prototype._init =
 	var
 		pne,
 		psw;
-		
+
 	pne = euclid_point.create( 'x', pse.x, 'y', pnw.y );
 
 	psw = euclid_point.create( 'x', pnw.x, 'y', pse.y );
