@@ -260,6 +260,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'jion_id' )
+	{
+		return false;
+	}
+
 	return this.name === obj.name && this.unit === obj.unit;
 };
 

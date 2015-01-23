@@ -243,6 +243,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_varDec' )
+	{
+		return false;
+	}
+
 	return this.assign === obj.assign && this.name === obj.name;
 };
 

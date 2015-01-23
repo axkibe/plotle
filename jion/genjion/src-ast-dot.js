@@ -245,6 +245,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_dot' )
+	{
+		return false;
+	}
+
 	return this.expr === obj.expr && this.member === obj.member;
 };
 

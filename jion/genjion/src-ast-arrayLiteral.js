@@ -310,6 +310,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_arrayLiteral' )
+	{
+		return false;
+	}
+
 	if( this.ray !== obj.ray )
 	{
 		if( this.ray.length !== obj.ray.length )

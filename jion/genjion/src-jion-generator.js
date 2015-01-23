@@ -205,6 +205,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'jion_generator' )
+	{
+		return false;
+	}
+
 	return this.jion === obj.jion;
 };
 

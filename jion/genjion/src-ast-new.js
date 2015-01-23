@@ -211,6 +211,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_new' )
+	{
+		return false;
+	}
+
 	return this.call.equals( obj.call );
 };
 

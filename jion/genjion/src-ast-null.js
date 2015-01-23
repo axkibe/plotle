@@ -157,8 +157,27 @@ prototype.getPath = jion_proto.getPath;
 | Tests equality of object.
 */
 prototype.equals =
-	function( obj // object to compare to
-) { return this === obj; };
+	function(
+		obj // object to compare to
+	)
+{
+	if( this === obj )
+	{
+		return true;
+	}
+
+	if( !obj )
+	{
+		return false;
+	}
+
+	if( obj.reflect !== 'ast_null' )
+	{
+		return false;
+	}
+
+	return true;
+};
 
 
 }

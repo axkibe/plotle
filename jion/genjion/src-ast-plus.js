@@ -228,6 +228,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_plus' )
+	{
+		return false;
+	}
+
 	return this.left === obj.left && this.right === obj.right;
 };
 

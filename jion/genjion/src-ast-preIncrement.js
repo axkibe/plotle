@@ -203,6 +203,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_preIncrement' )
+	{
+		return false;
+	}
+
 	return this.expr === obj.expr;
 };
 

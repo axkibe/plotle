@@ -327,6 +327,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'format_context' )
+	{
+		return false;
+	}
+
 	return (
 		this.check === obj.check
 		&&

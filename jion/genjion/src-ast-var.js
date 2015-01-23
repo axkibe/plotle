@@ -214,6 +214,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_var' )
+	{
+		return false;
+	}
+
 	return this.name === obj.name;
 };
 

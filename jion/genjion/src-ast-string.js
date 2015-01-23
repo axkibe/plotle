@@ -212,6 +212,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_string' )
+	{
+		return false;
+	}
+
 	return this.string === obj.string;
 };
 

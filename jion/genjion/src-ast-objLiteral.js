@@ -350,6 +350,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_objLiteral' )
+	{
+		return false;
+	}
+
 	if( this.tree !== obj.tree || this.ranks !== obj.ranks )
 	{
 		if( this.ranks.length !== obj.ranks.length )

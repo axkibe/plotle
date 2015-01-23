@@ -253,6 +253,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_funcArg' )
+	{
+		return false;
+	}
+
 	return this.comment === obj.comment && this.name === obj.name;
 };
 

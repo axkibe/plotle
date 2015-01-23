@@ -208,6 +208,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_number' )
+	{
+		return false;
+	}
+
 	return this.number === obj.number;
 };
 

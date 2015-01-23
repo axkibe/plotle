@@ -304,6 +304,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'jsParser_state' )
+	{
+		return false;
+	}
+
 	return (
 		this.ast === obj.ast
 		&&

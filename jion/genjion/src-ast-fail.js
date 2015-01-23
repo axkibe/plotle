@@ -203,6 +203,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_fail' )
+	{
+		return false;
+	}
+
 	return this.message === obj.message;
 };
 

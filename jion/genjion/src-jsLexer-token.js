@@ -242,6 +242,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'jsLexer_token' )
+	{
+		return false;
+	}
+
 	return this.type === obj.type && this.value === obj.value;
 };
 

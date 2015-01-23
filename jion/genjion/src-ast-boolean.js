@@ -208,6 +208,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_boolean' )
+	{
+		return false;
+	}
+
 	return this.boolean === obj.boolean;
 };
 

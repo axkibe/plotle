@@ -242,6 +242,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'jion_idRepository' )
+	{
+		return false;
+	}
+
 	return this.primitives === obj.primitives && this.units === obj.units;
 };
 

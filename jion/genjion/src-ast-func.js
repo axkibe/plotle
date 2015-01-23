@@ -393,6 +393,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_func' )
+	{
+		return false;
+	}
+
 	if( this.ray !== obj.ray )
 	{
 		if( this.ray.length !== obj.ray.length )

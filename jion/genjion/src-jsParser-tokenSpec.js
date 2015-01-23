@@ -316,6 +316,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'jsParser_tokenSpec' )
+	{
+		return false;
+	}
+
 	return (
 		this.astCreator === obj.astCreator
 		&&

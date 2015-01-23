@@ -203,6 +203,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_comment' )
+	{
+		return false;
+	}
+
 	return this.content.equals( obj.content );
 };
 

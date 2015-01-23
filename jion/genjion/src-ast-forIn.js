@@ -278,6 +278,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_forIn' )
+	{
+		return false;
+	}
+
 	return (
 		this.block.equals( obj.block )
 		&&

@@ -2730,14 +2730,10 @@ generator.prototype.genEquals =
 
 		default :
 
-			throw new Error(
-				'invalid equals value'
-			);
+			throw new Error( );
 	}
 
-	capsule =
-		capsule
-		.$comment( 'Tests equality of object.' );
+	capsule = capsule.$comment( 'Tests equality of object.' );
 
 	block = $block( );
 
@@ -2759,7 +2755,8 @@ generator.prototype.genEquals =
 	block =
 		block
 		.$if( 'this === obj', $returnTrue )
-		.$if( '!obj', $returnFalse );
+		.$if( '!obj', $returnFalse )
+		.$if( $differs( 'obj.reflect', this.id.$string ), $returnFalse );
 
 	if( this.twig )
 	{

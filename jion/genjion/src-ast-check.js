@@ -211,6 +211,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_check' )
+	{
+		return false;
+	}
+
 	return this.block.equals( obj.block );
 };
 

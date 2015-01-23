@@ -261,6 +261,11 @@ prototype.equals =
 		return false;
 	}
 
+	if( obj.reflect !== 'ast_condition' )
+	{
+		return false;
+	}
+
 	return (
 		this.condition === obj.condition
 		&&
