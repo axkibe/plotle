@@ -43,7 +43,8 @@ if( JION )
 							'euclid_point'
 					}
 			},
-
+		ray :
+			'->shapeSection',
 		equals :
 			'primitive'
 	};

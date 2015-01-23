@@ -453,8 +453,6 @@ generator.prototype._init =
 
 	if( jion.ray )
 	{
-		this.ray = idRepository.createFromIDStrings( jion.ray );
-
 		if( jools.isString( jion.ray ) )
 		{
 			rayDef = require( '../typemaps/' + jion.ray.substring( 2 ) );
