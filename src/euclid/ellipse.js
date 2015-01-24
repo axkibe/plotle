@@ -7,7 +7,9 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_shape,
-	jools;
+	jools,
+	shapeSection_round,
+	shapeSection_start;
 
 
 /*
@@ -133,16 +135,29 @@ euclid_ellipse.prototype._init =
 
 	this.shape =
 		euclid_shape.create(
-			'hull',
-				[
-					'start', pw,
-					'round', 'clockwise', pn,
-					'round', 'clockwise', pe,
-					'round', 'clockwise', ps,
-					'round', 'clockwise', 'close'
-				],
-			'pc',
-				this.pc
+			'ray:init',
+			[
+				shapeSection_start.create(
+					'p', pw
+				),
+				shapeSection_round.create(
+					'rotation', 'clockwise',
+					'p', pn
+				),
+				shapeSection_round.create(
+					'rotation', 'clockwise',
+					'p', pe
+				),
+				shapeSection_round.create(
+					'rotation', 'clockwise',
+					'p', ps
+				),
+				shapeSection_round.create(
+					'rotation', 'clockwise',
+					'close', true
+				)
+			],
+			'pc', this.pc
 		);
 };
 
