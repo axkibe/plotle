@@ -6,7 +6,9 @@
 
 var
 	euclid_shape,
-	icons_check;
+	icons_check,
+	shapeSection_line,
+	shapeSection_start;
 
 
 /*
@@ -53,14 +55,14 @@ icons_check.prototype._init =
 
 	this._check =
 		euclid_shape.create(
-			'hull',
-				[
-					'start', pc.add( -5,  -3 ),
-					'line', pc.add(  2,   5 ),
-					'line', pc.add( 14, -12 ),
-					'line', pc.add(  2,  -1 ),
-					'line', 'close'
-				],
+			'ray:init',
+			[
+				shapeSection_start.create( 'p', pc.add( -5,  -3 ) ),
+				shapeSection_line.create( 'p', pc.add(  2,   5 ) ),
+				shapeSection_line.create( 'p', pc.add( 14, -12 ) ),
+				shapeSection_line.create( 'p', pc.add(  2,  -1 ) ),
+				shapeSection_line.create( 'close', true )
+			],
 			'pc', pc
 		);
 };
