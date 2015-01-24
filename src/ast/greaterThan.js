@@ -25,14 +25,14 @@ if( JION )
 						comment :
 							'left expression',
 						type :
-							'Object'
+							'->astExpression'
 					},
 				right :
 					{
 						comment :
 							'right expression',
 						type :
-							'Object'
+							'->astExpression'
 					}
 			}
 	};
