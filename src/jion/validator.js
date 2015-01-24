@@ -75,7 +75,7 @@ jionWhitelist =
 		'id' : true,
 		'init' : true,
 		'json' : true,
-		'equals' : true, // XXX
+		'equals' : true, // XX
 		'subclass' : true,
 		'singleton' : true,
 		'ray' : true,
@@ -337,7 +337,7 @@ checkAttributeSingleType =
 			case 'Boolean' :
 			case 'Integer' :
 			case 'Number' :
-			case 'Object' :
+			case 'Object' : // XX
 			case 'String' :
 
 				break;
