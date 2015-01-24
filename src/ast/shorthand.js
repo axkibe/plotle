@@ -330,7 +330,7 @@ shorthand.$comment =
 {
 	return(
 		ast_comment.create(
-			'content', Array.prototype.slice.call( arguments )
+			'ray:init', Array.prototype.slice.call( arguments )
 		)
 	);
 };

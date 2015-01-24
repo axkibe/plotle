@@ -132,8 +132,7 @@ ast_block.prototype.$comment =
 		// arguments have to be a list of strings otherwise
 		header =
 			ast_comment.create(
-				'content',
-					Array.prototype.slice.call( arguments )
+				'ray:init', Array.prototype.slice.call( arguments )
 			);
 	}
 

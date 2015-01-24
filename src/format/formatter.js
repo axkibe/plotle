@@ -217,12 +217,12 @@ formatComment =
 	text = context.tab + '/*' + '\n';
 
 	for(
-		a = 0, aZ = comment.content.length;
+		a = 0, aZ = comment.length;
 		a < aZ;
 		a++
 	)
 	{
-		c = comment.content[ a ];
+		c = comment.get( a );
 
 		if( c === '' )
 		{

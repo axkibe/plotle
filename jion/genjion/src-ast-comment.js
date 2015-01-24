@@ -59,7 +59,7 @@ var
 
 Constructor =
 	function(
-		v_content // comment content
+		ray // ray
 	)
 {
 /**/if( CHECK )
@@ -70,10 +70,12 @@ Constructor =
 /**/	}
 /**/}
 
-	this.content = v_content;
+	this.ray = ray;
 
 	if( FREEZE )
 	{
+		Object.freeze( ray );
+
 		Object.freeze( this );
 	}
 };
@@ -102,13 +104,22 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
-		v_content;
+		ray,
+		rayDup;
 
 	if( this !== ast_comment )
 	{
 		inherit = this;
 
-		v_content = this.content;
+		ray = inherit.ray;
+
+		rayDup = false;
+	}
+	else
+	{
+		ray = [ ];
+
+		rayDup = true;
 	}
 
 	for(
@@ -121,12 +132,71 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
-			case 'content' :
+			case 'ray:init' :
 
-				if( arg !== undefined )
+/**/			if( CHECK )
+/**/			{
+/**/				if( !Array.isArray( arg ) )
+/**/				{
+/**/					throw new Error( );
+/**/				}
+/**/			}
+
+				ray = arg;
+
+				rayDup = 'init';
+
+				break;
+
+			case 'ray:append' :
+
+				if( !rayDup )
 				{
-					v_content = arg;
+					ray = ray.slice( );
+
+					rayDup = true;
 				}
+
+				ray.push( arg );
+
+				break;
+
+			case 'ray:insert' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray.splice( arg, 0, arguments[ ++a + 1 ] );
+
+				break;
+
+			case 'ray:remove' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray.splice( arg, 1 );
+
+				break;
+
+			case 'ray:set' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray[ arg ] = arguments[ ++a + 1 ];
 
 				break;
 
@@ -141,23 +211,14 @@ prototype.create =
 
 /**/if( CHECK )
 /**/{
-/**/	if( v_content === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_content === null )
-/**/	{
-/**/		throw new Error( );
-/**/	}
 /**/}
 
-	if( inherit && v_content === inherit.content )
+	if( inherit && !rayDup )
 	{
 		return inherit;
 	}
 
-	return new Constructor( v_content );
+	return new Constructor( ray );
 };
 
 
@@ -186,6 +247,48 @@ prototype.getPath = jion_proto.getPath;
 
 
 /*
+| Appends an entry to the ray.
+*/
+prototype.append = jion_proto.rayAppend;
+
+
+/*
+| Appends an entry to the ray.
+*/
+prototype.appendRay = jion_proto.rayAppendRay;
+
+
+/*
+| Returns the length of the ray.
+*/
+jools.lazyValue( prototype, 'length', jion_proto.rayLength );
+
+
+/*
+| Gets one entry from the ray.
+*/
+prototype.get = jion_proto.rayGet;
+
+
+/*
+| Returns a jion with one entry inserted to the ray.
+*/
+prototype.insert = jion_proto.rayInsert;
+
+
+/*
+| Returns the jion with one entry of the ray set.
+*/
+prototype.set = jion_proto.raySet;
+
+
+/*
+| Returns a jion with one entry from the ray removed.
+*/
+prototype.remove = jion_proto.rayRemove;
+
+
+/*
 | Tests equality of object.
 */
 prototype.equals =
@@ -193,6 +296,10 @@ prototype.equals =
 		obj // object to compare to
 	)
 {
+	var
+		a,
+		aZ;
+
 	if( this === obj )
 	{
 		return true;
@@ -208,7 +315,35 @@ prototype.equals =
 		return false;
 	}
 
-	return this.content.equals( obj.content );
+	if( this.ray !== obj.ray )
+	{
+		if( this.ray.length !== obj.ray.length )
+		{
+			return false;
+		}
+
+		for(
+			a = 0, aZ = this.ray.length;
+			a < aZ;
+			++a
+		)
+		{
+			if(
+				this.ray[ a ] !== obj.ray[ a ]
+				&&
+				(
+					!this.ray[ a ].equals
+					||
+					!this.ray[ a ].equals( obj.ray[ a ] )
+				)
+			)
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
 };
 
 

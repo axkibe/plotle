@@ -18,16 +18,8 @@ if( JION )
 	return {
 		id :
 			'ast_comment',
-		attributes :
-			{
-				content :
-					{
-						comment :
-							'comment content',
-						type :
-							'Array'
-					},
-			}
+		ray :
+			[ 'String' ]
 	};
 }
 
