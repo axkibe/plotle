@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the expression to get the member of',
 						type :
-							'Object' // FUTURE ->expression
+							'->astExpression'
 					},
 				member :
 					{

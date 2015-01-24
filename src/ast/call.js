@@ -25,12 +25,13 @@ if( JION )
 						comment :
 							'the function to call',
 						type :
-							'Object' // Expression
+							// '->astExpression'
+							'Object'
 					},
 			},
 		ray :
 			[ ]
-			// FUTURE '->expression',
+			// FUTURE '->expression' Object,
 	};
 }
 
