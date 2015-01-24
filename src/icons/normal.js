@@ -28,8 +28,6 @@ if( JION )
 			'icons_normal',
 		singleton :
 			true,
-		equals :
-			'primitive',
 		init :
 			[ ]
 	};

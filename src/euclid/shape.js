@@ -37,9 +37,7 @@ if( JION )
 					}
 			},
 		ray :
-			'->shapeSection',
-		equals :
-			'primitive'
+			'->shapeSection'
 	};
 }
 

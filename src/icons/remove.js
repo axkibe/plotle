@@ -28,8 +28,6 @@ if( JION )
 			'icons_remove',
 		singleton :
 			true,
-		equals :
-			'primitive',
 		init :
 			[ ]
 	};

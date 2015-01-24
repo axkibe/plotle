@@ -29,8 +29,6 @@ if( JION )
 			'icons_moveto',
 		singleton :
 			true,
-		equals :
-			'primitive',
 		init :
 			[ ]
 	};
