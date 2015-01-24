@@ -114,7 +114,7 @@ if( JION )
 		init :
 			[ 'inherit' ],
 		twig :
-			'->form-widgets'
+			'->formWidgets'
 	};
 }
 

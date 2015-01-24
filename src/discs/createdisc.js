@@ -139,7 +139,7 @@ if( JION )
 		init :
 			[ 'inherit', 'twigDup' ],
 		twig :
-			'->form-widgets'
+			'->formWidgets'
 	};
 }
 

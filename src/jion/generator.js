@@ -1402,8 +1402,6 @@ generator.prototype.genCreatorChecks =
 
 		switch( attr.id.string )
 		{
-			case 'Array' :
-			case 'Function' :
 			case 'Object' :
 
 				continue;
@@ -1660,12 +1658,10 @@ generator.prototype.genCreatorUnchanged =
 
 		switch( attr.id.string )
 		{
-			case 'Array' : // FIXME
 			case 'Boolean' :
-			case 'Function' :
 			case 'Integer' :
 			case 'Number' :
-			case 'Object' :
+			case 'Object' : // FIXME
 			case 'String' :
 
 				ceq =

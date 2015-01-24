@@ -123,7 +123,7 @@ if( JION )
 				'inherit'
 			],
 		twig :
-			'->form-widgets'
+			'->formWidgets'
 	};
 }
 

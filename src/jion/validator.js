@@ -333,11 +333,10 @@ checkAttributeSingleType =
 	{
 		switch( type )
 		{
-			case 'Array' : // XXX
 			case 'Boolean' :
 			case 'Integer' :
 			case 'Number' :
-			case 'Object' : // XX
+			case 'Object' : // XXX
 			case 'String' :
 
 				break;

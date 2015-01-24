@@ -116,7 +116,7 @@ if( JION )
 				'twigDup'
 			],
 		twig :
-			'->form-widgets'
+			'->formWidgets'
 	};
 }
 
