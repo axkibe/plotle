@@ -19,9 +19,7 @@ if( JION )
 		id :
 			'net_requestWrapRay',
 		ray :
-			[ 'net_requestWrap' ],
-		equals :
-			'primitive'
+			[ 'net_requestWrap' ]
 	};
 }
 
