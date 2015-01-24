@@ -102,18 +102,6 @@ euclid_roundRect.prototype._init =
 
 	this.shape =
 		euclid_shape.create(
-			'hull',
-				[
-					'start', pnw.add( 0 , b ),
-					'round', 'clockwise', pnw.add( a , 0 ),
-					'line', pne.sub( a , 0 ),
-					'round', 'clockwise', pne.add( 0 , b ),
-					'line', pse.sub( 0 , b ),
-					'round', 'clockwise', pse.sub( a , 0 ),
-					'line', psw.add( a , 0 ),
-					'round', 'clockwise', psw.sub( 0 , b ),
-					'line', 'close'
-				],
 			'ray:init',
 				[
 					shapeSection_start.create(
