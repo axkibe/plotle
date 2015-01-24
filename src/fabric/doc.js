@@ -9,6 +9,9 @@ var
 	fabric_doc,
 	jools,
 	root,
+	shapeSection_start,
+	shapeSection_flyLine,
+	shapeSection_line,
 	shell_fontPool,
 	theme;
 
@@ -265,7 +268,9 @@ fabric_doc.prototype._getRangeShape =
 		innerMargin,
 		lx,
 		mark,
-		rx;
+		rx,
+		sections,
+		sections2;
 
 	mark = this.mark;
 
@@ -340,24 +345,23 @@ fabric_doc.prototype._getRangeShape =
 
 	f2Para = f2Key && this.twig[ f2Key ];
 
-	if(
-		frontKey === backKey &&
-		fo.line === bo.line
-	)
+	if( frontKey === backKey && fo.line === bo.line )
 	{
 		// fp o******o bp
 		// FIXME return a rect-ray
 
+		sections =
+		[
+			shapeSection_start.create( 'p', fp.add( 0, descend ) ),
+			shapeSection_line.create( 'p', fp.add( 0, -ascend ) ),
+			shapeSection_line.create( 'p', bp.add( 0, -ascend ) ),
+			shapeSection_line.create( 'p', bp.add( 0, descend ) ),
+			shapeSection_line.create( 'close', true )
+		];
+
 		return(
 			euclid_shape.create(
-				'hull',
-					[
-						'start', fp.add( 0, descend ),
-						'line', fp.add( 0, -ascend ),
-						'line', bp.add( 0, -ascend ),
-						'line', bp.add( 0, descend ),
-						'line', 'close'
-					],
+				'ray:init', sections,
 				'pc',
 					euclid_point.create(
 						'x', jools.half( fp.x + bp.x ),
@@ -370,10 +374,7 @@ fabric_doc.prototype._getRangeShape =
 		bp.x < fp.x
 		&&
 		(
-			(
-				frontKey === backKey &&
-				fo.line + 1 === bo.line
-			)
+			frontKey === backKey && fo.line + 1 === bo.line
 			||
 			(
 				f2Key === backKey &&
@@ -386,34 +387,46 @@ fabric_doc.prototype._getRangeShape =
 		//         fp o****
 		// ****o bp
 
+		sections =
+		[
+			shapeSection_start.create(
+				'p', euclid_point.create( 'x', rx, 'y', fp.y - ascend )
+			),
+			shapeSection_line.create(
+				'p', euclid_point.create( 'x', fp.x, 'y', fp.y - ascend )
+			),
+			shapeSection_line.create(
+				'p', euclid_point.create( 'x', fp.x, 'y', fp.y + descend )
+			),
+			shapeSection_line.create(
+				'p', euclid_point.create( 'x', rx, 'y', fp.y + descend )
+			),
+			shapeSection_flyLine.create(
+				'close', true
+			),
+		];
+
+		sections2 =
+		[
+			shapeSection_start.create(
+				'p', euclid_point.create( 'x', lx, 'y', bp.y - ascend )
+			),
+			shapeSection_line.create(
+				'p', euclid_point.create( 'x', bp.x, 'y', bp.y - ascend )
+			),
+			shapeSection_line.create(
+				'p', euclid_point.create( 'x', bp.x, 'y', bp.y + descend )
+			),
+			shapeSection_line.create(
+				'p', euclid_point.create( 'x', lx, 'y', bp.y + descend )
+			),
+			shapeSection_flyLine.create( 'close', true )
+		];
+
 		return(
 			[
 				euclid_shape.create(
-					'hull',
-						[
-							'start',
-								euclid_point.create(
-									'x', rx,
-									'y', fp.y - ascend
-								),
-							'line',
-								euclid_point.create(
-									'x', fp.x,
-									'y', fp.y - ascend
-								),
-							'line',
-								euclid_point.create(
-									'x', fp.x,
-									'y', fp.y + descend
-								),
-							'line',
-								euclid_point.create(
-									'x', rx,
-									'y', fp.y + descend
-								),
-							'0-line',
-								'close'
-						],
+					'ray:init', sections,
 					'pc',
 						euclid_point.create(
 							'x', jools.half( fp.x + rx ),
@@ -421,31 +434,7 @@ fabric_doc.prototype._getRangeShape =
 						)
 				),
 				euclid_shape.create(
-					'hull',
-						[
-							'start',
-								euclid_point.create(
-									'x', lx,
-									'y', bp.y - ascend
-								),
-							'line',
-								euclid_point.create(
-									'x', bp.x,
-									'y', bp.y - ascend
-								),
-							'line',
-								euclid_point.create(
-									'x', bp.x,
-									'y', bp.y + descend
-								),
-							'line',
-								euclid_point.create(
-									'x', lx,
-									'y', bp.y + descend
-								),
-							'0-line',
-								'close'
-						],
+					'ray:init', sections2,
 					'pc',
 						euclid_point.create(
 							'x', jools.half( fp.x + rx ),
@@ -524,53 +513,72 @@ fabric_doc.prototype._getRangeShape =
 
 		if( front.at > 0 )
 		{
+			sections =
+			[
+				shapeSection_start.create( // 1
+					'p',
+					euclid_point.create(
+						'x', rx,
+						'y', b2y + descend
+					)
+				),
+				shapeSection_line.create( // 2
+					'p',
+					euclid_point.create(
+						'x', bp.x,
+						'y', b2y + descend
+					)
+				),
+				shapeSection_line.create( // 3
+					'p',
+					euclid_point.create(
+						'x', bp.x,
+						'y', bp.y + descend
+					)
+				),
+				shapeSection_line.create( // 4
+					'p',
+					euclid_point.create(
+						'x', lx,
+						'y', bp.y + descend
+					)
+				),
+				shapeSection_flyLine.create( // 5
+					'p',
+					euclid_point.create(
+						'x', lx,
+						'y', f2y - ascend
+					)
+				),
+				shapeSection_line.create( // 6
+					'p',
+					euclid_point.create(
+						'x', fp.x,
+						'y', f2y - ascend
+					)
+				),
+				shapeSection_line.create( // 7
+					'p',
+					euclid_point.create(
+						'x', fp.x,
+						'y', fp.y - ascend
+					)
+				),
+				shapeSection_line.create( // 8
+					'p',
+					euclid_point.create(
+						'x', rx,
+						'y', fp.y - ascend
+					)
+				),
+				shapeSection_flyLine.create(
+					'close', true
+				)
+			];
+
 			return(
 				euclid_shape.create(
-					'hull',
-						[
-							'start', // 1
-								euclid_point.create(
-									'x', rx,
-									'y', b2y + descend
-								),
-							'line', // 2
-								euclid_point.create(
-									'x', bp.x,
-									'y', b2y + descend
-								),
-							'line', // 3
-								euclid_point.create(
-									'x', bp.x,
-									'y', bp.y + descend
-								),
-							'line', // 4
-								euclid_point.create(
-									'x', lx,
-									'y', bp.y + descend
-								),
-							'0-line', // 5
-								euclid_point.create(
-									'x', lx,
-									'y', f2y - ascend
-								),
-							'line', // 6
-								euclid_point.create(
-									'x', fp.x,
-									'y', f2y - ascend
-								),
-							'line', // 7
-								euclid_point.create(
-									'x', fp.x,
-									'y', fp.y - ascend
-								),
-							'line', // 8
-								euclid_point.create(
-									'x', rx,
-									'y', fp.y - ascend
-								),
-							'0-line',
-								'close'
-						],
+					'ray:init', sections,
 					'pc',
 						euclid_point.create(
 							'x', jools.half( rx + lx ),
@@ -581,43 +589,57 @@ fabric_doc.prototype._getRangeShape =
 		}
 		else
 		{
+				sections =
+				[
+					shapeSection_start.create( // 1
+						'p',
+						euclid_point.create(
+							'x', rx,
+							'y', b2y + descend
+						)
+					),
+					shapeSection_line.create( // 2
+						'p',
+						euclid_point.create(
+							'x', bp.x,
+							'y', b2y + descend
+						)
+					),
+					shapeSection_line.create( // 3
+						'p',
+						euclid_point.create(
+							'x', bp.x,
+							'y', bp.y + descend
+						)
+					),
+					shapeSection_line.create( // 4
+						'p',
+						euclid_point.create(
+							'x', lx,
+							'y', bp.y + descend
+						)
+					),
+					shapeSection_flyLine.create( // 7
+						'p',
+						euclid_point.create(
+							'x', lx,
+							'y', fp.y - ascend
+						)
+					),
+					shapeSection_line.create( // 8
+						'p',
+						euclid_point.create(
+							'x', rx,
+							'y', fp.y - ascend
+						)
+					),
+					shapeSection_flyLine.create(
+						'close', true
+					)
+				];
 			return(
 				euclid_shape.create(
-					'hull',
-						[
-							'start', // 1
-								euclid_point.create(
-									'x', rx,
-									'y', b2y + descend
-								),
-							'line', // 2
-								euclid_point.create(
-									'x', bp.x,
-									'y', b2y + descend
-								),
-							'line', // 3
-								euclid_point.create(
-									'x', bp.x,
-									'y', bp.y + descend
-								),
-							'line', // 4
-								euclid_point.create(
-									'x', lx,
-									'y', bp.y + descend
-								),
-							'0-line', // 7
-								euclid_point.create(
-									'x', lx,
-									'y', fp.y - ascend
-								),
-							'line', // 8
-								euclid_point.create(
-									'x', rx,
-									'y', fp.y - ascend
-								),
-							'0-line',
-								'close'
-						],
+					'ray:init', sections,
 					'pc',
 						euclid_point.create(
 							'x', jools.half( rx + lx ),
