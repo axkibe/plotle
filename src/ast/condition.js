@@ -27,21 +27,21 @@ if( JION )
 						comment :
 							'the condition',
 						type :
-							'Object'
+							'->astExpression'
 					},
 				then :
 					{
 						comment :
 							'the then expression',
 						type :
-							'Object'
+							'->astExpression'
 					},
 				elsewise :
 					{
 						comment :
 							'the else condition',
 						type :
-							'Object'
+							'->astExpression'
 					}
 			}
 	};
