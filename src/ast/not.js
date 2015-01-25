@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the expression to negate',
 						type :
-							'Object'
+							'->astExpression'
 					}
 			}
 	};

@@ -25,8 +25,7 @@ if( JION )
 						comment :
 							'the expression to get the type of',
 						type :
-							'Object'
-							// FUTURE ->expression
+							'->astExpression'
 					},
 			}
 	};
