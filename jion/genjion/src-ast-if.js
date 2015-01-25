@@ -30,6 +30,7 @@ var
 	ast_and,
 	ast_arrayLiteral,
 	ast_assign,
+	ast_block,
 	ast_boolean,
 	ast_call,
 	ast_commaList,
@@ -78,6 +79,8 @@ if( SERVER )
 	ast_arrayLiteral = require( '../../src/ast/arrayLiteral' );
 
 	ast_assign = require( '../../src/ast/assign' );
+
+	ast_block = require( '../../src/ast/block' );
 
 	ast_boolean = require( '../../src/ast/boolean' );
 
@@ -336,12 +339,25 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
+/**/	if( v_elsewise !== null )
+/**/	{
+/**/		if( v_elsewise.reflect !== 'ast_block' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
 /**/	if( v_then === undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_then === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_then.reflect !== 'ast_block' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -352,9 +368,13 @@ prototype.create =
 		&&
 		v_condition.equals( inherit.condition )
 		&&
-		v_elsewise === inherit.elsewise
+		(
+			v_elsewise === inherit.elsewise
+			||
+			v_elsewise && v_elsewise.equals( inherit.elsewise )
+		)
 		&&
-		v_then === inherit.then
+		v_then.equals( inherit.then )
 	)
 	{
 		return inherit;
@@ -414,9 +434,13 @@ prototype.equals =
 	return (
 		this.condition.equals( obj.condition )
 		&&
-		this.elsewise === obj.elsewise
+		(
+			this.elsewise === obj.elsewise
+			||
+			this.elsewise !== null && this.elsewise.equals( obj.elsewise )
+		)
 		&&
-		this.then === obj.then
+		this.then.equals( obj.then )
 	);
 };
 
