@@ -32,7 +32,7 @@ if( JION )
 						comment :
 							'Assignment of variable',
 						type :
-							'Object', // FUTURE ->expression
+							'->astExpression',
 						defaultValue :
 							null
 					}

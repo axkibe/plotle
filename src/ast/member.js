@@ -25,14 +25,14 @@ if( JION )
 						comment :
 							'the expression to get the member of',
 						type :
-							'Object'
+							'->astExpression'
 					},
 				member :
 					{
 						comment :
 							'the members expression',
 						type :
-							'Object'
+							'->astExpression'
 					}
 			}
 	};

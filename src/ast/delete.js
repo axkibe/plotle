@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the expression to delete',
 						type :
-							'Object'
+							'->astExpression'
 					},
 			}
 	};

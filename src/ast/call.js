@@ -29,8 +29,7 @@ if( JION )
 					},
 			},
 		ray :
-			[ ]
-			// FUTURE '->expression' Object,
+			'->astExpression'
 	};
 }
 

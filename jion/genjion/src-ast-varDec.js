@@ -27,6 +27,34 @@ else
 */
 var
 	jools,
+	ast_and,
+	ast_arrayLiteral,
+	ast_assign,
+	ast_boolean,
+	ast_call,
+	ast_commaList,
+	ast_condition,
+	ast_delete,
+	ast_differs,
+	ast_dot,
+	ast_equals,
+	ast_func,
+	ast_greaterThan,
+	ast_instanceof,
+	ast_lessThan,
+	ast_member,
+	ast_new,
+	ast_not,
+	ast_null,
+	ast_number,
+	ast_objLiteral,
+	ast_or,
+	ast_plus,
+	ast_plusAssign,
+	ast_preIncrement,
+	ast_string,
+	ast_typeof,
+	ast_var,
 	jion_proto;
 
 
@@ -44,6 +72,62 @@ function( ) {
 if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
+
+	ast_and = require( '../../src/ast/and' );
+
+	ast_arrayLiteral = require( '../../src/ast/arrayLiteral' );
+
+	ast_assign = require( '../../src/ast/assign' );
+
+	ast_boolean = require( '../../src/ast/boolean' );
+
+	ast_call = require( '../../src/ast/call' );
+
+	ast_commaList = require( '../../src/ast/commaList' );
+
+	ast_condition = require( '../../src/ast/condition' );
+
+	ast_delete = require( '../../src/ast/delete' );
+
+	ast_differs = require( '../../src/ast/differs' );
+
+	ast_dot = require( '../../src/ast/dot' );
+
+	ast_equals = require( '../../src/ast/equals' );
+
+	ast_func = require( '../../src/ast/func' );
+
+	ast_greaterThan = require( '../../src/ast/greaterThan' );
+
+	ast_instanceof = require( '../../src/ast/instanceof' );
+
+	ast_lessThan = require( '../../src/ast/lessThan' );
+
+	ast_member = require( '../../src/ast/member' );
+
+	ast_new = require( '../../src/ast/new' );
+
+	ast_not = require( '../../src/ast/not' );
+
+	ast_null = require( '../../src/ast/null' );
+
+	ast_number = require( '../../src/ast/number' );
+
+	ast_objLiteral = require( '../../src/ast/objLiteral' );
+
+	ast_or = require( '../../src/ast/or' );
+
+	ast_plus = require( '../../src/ast/plus' );
+
+	ast_plusAssign = require( '../../src/ast/plusAssign' );
+
+	ast_preIncrement = require( '../../src/ast/preIncrement' );
+
+	ast_string = require( '../../src/ast/string' );
+
+	ast_typeof = require( '../../src/ast/typeof' );
+
+	ast_var = require( '../../src/ast/var' );
 
 	jion_proto = require( '../../src/jion/proto' );
 }
@@ -166,6 +250,70 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
+/**/	if( v_assign !== null )
+/**/	{
+/**/		if(
+/**/			v_assign.reflect !== 'ast_and'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_assign'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_boolean'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_call'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_commaList'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_condition'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_delete'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_differs'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_dot'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_equals'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_func'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_member'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_new'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_not'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_null'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_number'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_or'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_plus'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_string'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_typeof'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_var'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
 /**/	if( v_name === undefined )
 /**/	{
 /**/		throw new Error( );
@@ -189,7 +337,11 @@ prototype.create =
 	if(
 		inherit
 		&&
-		v_assign === inherit.assign
+		(
+			v_assign === inherit.assign
+			||
+			v_assign && v_assign.equals( inherit.assign )
+		)
 		&&
 		v_name === inherit.name
 	)
@@ -248,7 +400,15 @@ prototype.equals =
 		return false;
 	}
 
-	return this.assign === obj.assign && this.name === obj.name;
+	return (
+		(
+			this.assign === obj.assign
+			||
+			this.assign !== null && this.assign.equals( obj.assign )
+		)
+		&&
+		this.name === obj.name
+	);
 };
 
 
