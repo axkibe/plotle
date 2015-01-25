@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the function to call',
 						type :
-							'Object'
+							'->astExpression'
 					},
 			},
 		ray :

@@ -13,9 +13,12 @@
 
 var
 	fs,
-	jionNodeGenerator;
+	jionNodeGenerator,
+	vm;
 
 fs = require( 'fs' );
+
+vm = require( 'vm' );
 
 
 jionNodeGenerator =
@@ -25,14 +28,15 @@ module.exports =
 	)
 {
 	var
-		server,
+		context,
 		inFilename,
 		inStat,
 		jion,
 		outFilename,
 		outStat,
-		si,
-		separator;
+		server,
+		separator,
+		si;
 
 	server = module;
 
@@ -92,28 +96,43 @@ module.exports =
 		}
 	}
 
-	// requires the jion code.
+	// loads the jion code.
 
-	jion =
-		require(
-			'../../'
-			+ outFilename.substr( 0, outFilename.length - 3 )
-		);
+	// runs the jion code with this module context
+	// so module.exports match exactly even with
+	// circula references
+	context = { };
 
-	// bug workaround for circular references
-	for( var k in jion )
+	for( var k in GLOBAL )
 	{
-		if( !jion.hasOwnProperty( k ) )
+		if( !GLOBAL.hasOwnProperty( k ) )
 		{
 			continue;
 		}
 
-		module.exports[ k ] = jion[ k ];
+		context[ k ] = GLOBAL[ k ];
 	}
 
-	module.exports = jion;
+	context.module = module;
 
-	return jion;
+	// currently paths matches of this.require
+	// and the jion require places. However
+	// this might need some path adapting if things
+	// change
+	context.require =
+		function( path )
+		{
+			return require( path );
+		};
+
+	jion =
+	vm.runInNewContext(
+		fs.readFileSync( outFilename ) + '',
+		context,
+		outFilename
+	);
+
+	return module.exports;
 };
 
 
