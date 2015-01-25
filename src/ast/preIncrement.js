@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the expression to pre increment',
 						type :
-							'Object'
+							'->astExpression'
 					}
 			}
 	};

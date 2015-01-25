@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the error message expression',
 						type :
-							'Object',
+							'->astExpression',
 						defaultValue :
 							null
 					}

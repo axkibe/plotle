@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the statement expression',
 						type :
-							'Object' // FUTURE ast.*
+							'->astExpression'
 					},
 				defaultCase :
 					{

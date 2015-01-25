@@ -32,7 +32,7 @@ if( JION )
 						comment :
 							'the object expression to iterate over',
 						type :
-							'Object'
+							'->astExpression'
 					},
 				block :
 					{
