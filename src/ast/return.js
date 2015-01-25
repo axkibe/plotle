@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the expression to return',
 						type :
-							'Object' // FUTURE ->expression
+							'->astExpression'
 					}
 			}
 	};
