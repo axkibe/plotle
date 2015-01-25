@@ -25,21 +25,21 @@ if( JION )
 						comment :
 							'the initialization',
 						type :
-							'Object'
+							'->astExpression'
 					},
 				condition :
 					{
 						comment :
 							'the continue condition',
 						type :
-							'Object'
+							'->astExpression'
 					},
 				iterate :
 					{
 						comment :
 							'the iteration expression',
 						type :
-							'Object'
+							'->astExpression'
 					},
 				block :
 					{

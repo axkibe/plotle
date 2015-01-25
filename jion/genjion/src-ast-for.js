@@ -27,7 +27,35 @@ else
 */
 var
 	jools,
+	ast_and,
+	ast_arrayLiteral,
+	ast_assign,
 	ast_block,
+	ast_boolean,
+	ast_call,
+	ast_commaList,
+	ast_condition,
+	ast_delete,
+	ast_differs,
+	ast_dot,
+	ast_equals,
+	ast_func,
+	ast_greaterThan,
+	ast_instanceof,
+	ast_lessThan,
+	ast_member,
+	ast_new,
+	ast_not,
+	ast_null,
+	ast_number,
+	ast_objLiteral,
+	ast_or,
+	ast_plus,
+	ast_plusAssign,
+	ast_preIncrement,
+	ast_string,
+	ast_typeof,
+	ast_var,
 	jion_proto;
 
 
@@ -46,7 +74,63 @@ if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
 
+	ast_and = require( '../../src/ast/and' );
+
+	ast_arrayLiteral = require( '../../src/ast/arrayLiteral' );
+
+	ast_assign = require( '../../src/ast/assign' );
+
 	ast_block = require( '../../src/ast/block' );
+
+	ast_boolean = require( '../../src/ast/boolean' );
+
+	ast_call = require( '../../src/ast/call' );
+
+	ast_commaList = require( '../../src/ast/commaList' );
+
+	ast_condition = require( '../../src/ast/condition' );
+
+	ast_delete = require( '../../src/ast/delete' );
+
+	ast_differs = require( '../../src/ast/differs' );
+
+	ast_dot = require( '../../src/ast/dot' );
+
+	ast_equals = require( '../../src/ast/equals' );
+
+	ast_func = require( '../../src/ast/func' );
+
+	ast_greaterThan = require( '../../src/ast/greaterThan' );
+
+	ast_instanceof = require( '../../src/ast/instanceof' );
+
+	ast_lessThan = require( '../../src/ast/lessThan' );
+
+	ast_member = require( '../../src/ast/member' );
+
+	ast_new = require( '../../src/ast/new' );
+
+	ast_not = require( '../../src/ast/not' );
+
+	ast_null = require( '../../src/ast/null' );
+
+	ast_number = require( '../../src/ast/number' );
+
+	ast_objLiteral = require( '../../src/ast/objLiteral' );
+
+	ast_or = require( '../../src/ast/or' );
+
+	ast_plus = require( '../../src/ast/plus' );
+
+	ast_plusAssign = require( '../../src/ast/plusAssign' );
+
+	ast_preIncrement = require( '../../src/ast/preIncrement' );
+
+	ast_string = require( '../../src/ast/string' );
+
+	ast_typeof = require( '../../src/ast/typeof' );
+
+	ast_var = require( '../../src/ast/var' );
 
 	jion_proto = require( '../../src/jion/proto' );
 }
@@ -214,12 +298,134 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
+/**/	if(
+/**/		v_condition.reflect !== 'ast_and'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_arrayLiteral'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_assign'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_boolean'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_call'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_commaList'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_condition'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_delete'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_differs'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_dot'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_equals'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_func'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_greaterThan'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_instanceof'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_lessThan'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_member'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_new'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_not'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_null'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_number'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_objLiteral'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_or'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_plus'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_plusAssign'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_preIncrement'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_string'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_typeof'
+/**/		&&
+/**/		v_condition.reflect !== 'ast_var'
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
 /**/	if( v_init === undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_init === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if(
+/**/		v_init.reflect !== 'ast_and'
+/**/		&&
+/**/		v_init.reflect !== 'ast_arrayLiteral'
+/**/		&&
+/**/		v_init.reflect !== 'ast_assign'
+/**/		&&
+/**/		v_init.reflect !== 'ast_boolean'
+/**/		&&
+/**/		v_init.reflect !== 'ast_call'
+/**/		&&
+/**/		v_init.reflect !== 'ast_commaList'
+/**/		&&
+/**/		v_init.reflect !== 'ast_condition'
+/**/		&&
+/**/		v_init.reflect !== 'ast_delete'
+/**/		&&
+/**/		v_init.reflect !== 'ast_differs'
+/**/		&&
+/**/		v_init.reflect !== 'ast_dot'
+/**/		&&
+/**/		v_init.reflect !== 'ast_equals'
+/**/		&&
+/**/		v_init.reflect !== 'ast_func'
+/**/		&&
+/**/		v_init.reflect !== 'ast_greaterThan'
+/**/		&&
+/**/		v_init.reflect !== 'ast_instanceof'
+/**/		&&
+/**/		v_init.reflect !== 'ast_lessThan'
+/**/		&&
+/**/		v_init.reflect !== 'ast_member'
+/**/		&&
+/**/		v_init.reflect !== 'ast_new'
+/**/		&&
+/**/		v_init.reflect !== 'ast_not'
+/**/		&&
+/**/		v_init.reflect !== 'ast_null'
+/**/		&&
+/**/		v_init.reflect !== 'ast_number'
+/**/		&&
+/**/		v_init.reflect !== 'ast_objLiteral'
+/**/		&&
+/**/		v_init.reflect !== 'ast_or'
+/**/		&&
+/**/		v_init.reflect !== 'ast_plus'
+/**/		&&
+/**/		v_init.reflect !== 'ast_plusAssign'
+/**/		&&
+/**/		v_init.reflect !== 'ast_preIncrement'
+/**/		&&
+/**/		v_init.reflect !== 'ast_string'
+/**/		&&
+/**/		v_init.reflect !== 'ast_typeof'
+/**/		&&
+/**/		v_init.reflect !== 'ast_var'
+/**/	)
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -233,6 +439,67 @@ prototype.create =
 /**/	{
 /**/		throw new Error( );
 /**/	}
+/**/
+/**/	if(
+/**/		v_iterate.reflect !== 'ast_and'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_arrayLiteral'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_assign'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_boolean'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_call'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_commaList'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_condition'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_delete'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_differs'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_dot'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_equals'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_func'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_greaterThan'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_instanceof'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_lessThan'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_member'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_new'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_not'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_null'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_number'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_objLiteral'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_or'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_plus'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_plusAssign'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_preIncrement'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_string'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_typeof'
+/**/		&&
+/**/		v_iterate.reflect !== 'ast_var'
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
 /**/}
 
 	if(
@@ -240,11 +507,11 @@ prototype.create =
 		&&
 		v_block.equals( inherit.block )
 		&&
-		v_condition === inherit.condition
+		v_condition.equals( inherit.condition )
 		&&
-		v_init === inherit.init
+		v_init.equals( inherit.init )
 		&&
-		v_iterate === inherit.iterate
+		v_iterate.equals( inherit.iterate )
 	)
 	{
 		return inherit;
@@ -304,11 +571,11 @@ prototype.equals =
 	return (
 		this.block.equals( obj.block )
 		&&
-		this.condition === obj.condition
+		this.condition.equals( obj.condition )
 		&&
-		this.init === obj.init
+		this.init.equals( obj.init )
 		&&
-		this.iterate === obj.iterate
+		this.iterate.equals( obj.iterate )
 	);
 };
 

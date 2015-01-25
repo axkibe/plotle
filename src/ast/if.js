@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the if condition',
 						type :
-							'Object'
+							'->astExpression'
 					},
 				then :
 					{
