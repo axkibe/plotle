@@ -53,7 +53,7 @@ tools = require( './tools' );
 /*
 | Returns the block with a parsed statement appended.
 */
-ast_block.prototype.ast =
+ast_block.prototype.$ =
 	function(
 		statement
 	)

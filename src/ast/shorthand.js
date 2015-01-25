@@ -148,7 +148,7 @@ tools = require( './tools' );
 /*
 | Shorthand for invoking the convert(parser).
 */
-shorthand.ast =
+shorthand.$ =
 	function( arg )
 {
 

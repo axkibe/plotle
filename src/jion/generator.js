@@ -37,7 +37,7 @@ if( JION )
 
 
 var
-	ast, // FIXME
+	$,
 	$and,
 	$assign,
 	$block,
@@ -92,7 +92,7 @@ validator = require( './validator' );
 /*
 | Shorthanding Shorthands.
 */
-ast = shorthand.ast;
+$ = shorthand.$;
 
 $and = shorthand.$and;
 
@@ -560,7 +560,7 @@ generator.prototype.genNodeIncludes =
 
 	block =
 		$block( )
-		.ast( 'jools = require( "../../src/jools/jools" )' );
+		.$( 'jools = require( "../../src/jools/jools" )' );
 
 	// generates the unit objects
 
@@ -684,20 +684,20 @@ generator.prototype.genConstructor =
 	{
 		block =
 			block
-			.ast( 'this.twig = twig' )
-			.ast( 'this.ranks = ranks' );
+			.$( 'this.twig = twig' )
+			.$( 'this.ranks = ranks' );
 	}
 
 
 	if( this.ray )
 	{
-		block = block.ast( 'this.ray = ray' );
+		block = block.$( 'this.ray = ray' );
 	}
 
 	// calls the initializer
 	if( this.init )
 	{
-		initCall = ast( 'this._init( )' );
+		initCall = $( 'this._init( )' );
 
 		for(
 			a = 0, aZ = this.init.length;
@@ -742,20 +742,20 @@ generator.prototype.genConstructor =
 		// FIXME use object.freeze and only in checking
 		freezeBlock =
 			freezeBlock
-			.ast( 'Object.freeze( twig )' )
-			.ast( 'Object.freeze( ranks )' );
+			.$( 'Object.freeze( twig )' )
+			.$( 'Object.freeze( ranks )' );
 	}
 
 	if( this.ray )
 	{
 		freezeBlock =
 			freezeBlock
-			.ast( 'Object.freeze( ray )' );
+			.$( 'Object.freeze( ray )' );
 	}
 
 	freezeBlock =
 		freezeBlock
-		.ast( 'Object.freeze( this )' );
+		.$( 'Object.freeze( this )' );
 
 	block = block.$if( 'FREEZE', freezeBlock );
 
@@ -951,23 +951,23 @@ generator.prototype.genCreatorInheritanceReceiver =
 		name,
 		receiver;
 
-	receiver = $block( ).ast( 'inherit = this' );
+	receiver = $block( ).$( 'inherit = this' );
 
 	if( this.twig )
 	{
 		receiver =
 			receiver
-			.ast( 'twig = inherit.twig' )
-			.ast( 'ranks = inherit.ranks' )
-			.ast( 'twigDup = false' );
+			.$( 'twig = inherit.twig' )
+			.$( 'ranks = inherit.ranks' )
+			.$( 'twigDup = false' );
 	}
 
 	if( this.ray )
 	{
 		receiver =
 			receiver
-			.ast( 'ray = inherit.ray' )
-			.ast( 'rayDup = false' );
+			.$( 'ray = inherit.ray' )
+			.$( 'rayDup = false' );
 	}
 
 	for(
@@ -1006,8 +1006,8 @@ generator.prototype.genCreatorInheritanceReceiver =
 			.$elsewise(
 				$block( )
 				.$assign( 'twig', $objLiteral( ) )
-				.ast( 'ranks = [ ]' )
-				.ast( 'twigDup = true' )
+				.$( 'ranks = [ ]' )
+				.$( 'twigDup = true' )
 			);
 	}
 
@@ -1017,8 +1017,8 @@ generator.prototype.genCreatorInheritanceReceiver =
 			thisCheck
 			.$elsewise(
 				$block( )
-				.ast( 'ray = [ ]' )
-				.ast( 'rayDup = true' )
+				.$( 'ray = [ ]' )
+				.$( 'rayDup = true' )
 			);
 	}
 
@@ -1075,9 +1075,9 @@ generator.prototype.genCreatorFreeStringsParser =
 			$if(
 				'twigDup !== true',
 				$block( )
-				.ast( 'twig = jools.copy( twig )' )
-				.ast( 'ranks = ranks.slice( )' )
-				.ast( 'twigDup = true' )
+				.$( 'twig = jools.copy( twig )' )
+				.$( 'ranks = ranks.slice( )' )
+				.$( 'twigDup = true' )
 			);
 
 		// FIXME make a sub-function to add the twigDup stuff
@@ -1086,36 +1086,36 @@ generator.prototype.genCreatorFreeStringsParser =
 			.$case(
 				'"twig:add"',
 				$block( )
-				.ast( twigDupCheck )
-				.ast( 'key = arg' )
-				.ast( 'arg = arguments[ ++a + 1 ]' )
+				.$( twigDupCheck )
+				.$( 'key = arg' )
+				.$( 'arg = arguments[ ++a + 1 ]' )
 				.$if(
 					'twig[ key ] !== undefined',
 					$fail( )
 				)
-				.ast( 'twig[ key ] = arg' )
-				.ast( 'ranks.push( key )' )
+				.$( 'twig[ key ] = arg' )
+				.$( 'ranks.push( key )' )
 			)
 			.$case(
 				'"twig:set"',
 				$block( )
-				.ast( twigDupCheck )
-				.ast( 'key = arg' )
-				.ast( 'arg = arguments[ ++a + 1 ]' )
+				.$( twigDupCheck )
+				.$( 'key = arg' )
+				.$( 'arg = arguments[ ++a + 1 ]' )
 				.$if(
 					'twig[ key ] === undefined',
 					$fail( )
 				)
-				.ast( 'twig[ key ] = arg' )
+				.$( 'twig[ key ] = arg' )
 			)
 			.$case(
 				'"twig:insert"',
 				$block( )
 				.append( twigDupCheck )
-				.ast( 'key = arg' )
-				.ast( 'rank = arguments[ a + 2 ]' )
-				.ast( 'arg = arguments[ a +  3 ]' )
-				.$plusAssign( 'a', 2 )
+				.$( 'key = arg' )
+				.$( 'rank = arguments[ a + 2 ]' )
+				.$( 'arg = arguments[ a +  3 ]' )
+				.$plusAssign( 'a', 2 ) // FIXME
 				.$if(
 					'twig[ key ] !== undefined',
 					$fail( )
@@ -1124,8 +1124,8 @@ generator.prototype.genCreatorFreeStringsParser =
 					'rank < 0 || rank > ranks.length',
 					$fail( )
 				)
-				.ast( 'twig[ key ] = arg' )
-				.ast( 'ranks.splice( rank, 0, key )' )
+				.$( 'twig[ key ] = arg' )
+				.$( 'ranks.splice( rank, 0, key )' )
 			)
 			.$case(
 				'"twig:remove"',
@@ -1135,8 +1135,8 @@ generator.prototype.genCreatorFreeStringsParser =
 					'twig[ arg ] === undefined',
 					$fail( )
 				)
-				.$delete( 'twig[ arg ]' )
-				.ast( 'ranks.splice( ranks.indexOf( arg ), 1 )' )
+				.$delete( 'twig[ arg ]' ) // FIXME
+				.$( 'ranks.splice( ranks.indexOf( arg ), 1 )' )
 			);
 	}
 
@@ -1146,8 +1146,8 @@ generator.prototype.genCreatorFreeStringsParser =
 			$if(
 				'!rayDup',
 				$block( )
-				.ast( 'ray = ray.slice( )' )
-				.ast( 'rayDup = true' )
+				.$( 'ray = ray.slice( )' )
+				.$( 'rayDup = true' )
 			);
 
 		// FIXME make a sub-function to add the twigDup stuff
@@ -1159,32 +1159,32 @@ generator.prototype.genCreatorFreeStringsParser =
 				.$check(
 					$if( $not( 'Array.isArray( arg )' ), $fail( ) ) // FIXME ! instead of $not
 				)
-				.ast( 'ray = arg' )
-				.ast( 'rayDup = "init"' )
+				.$( 'ray = arg' )
+				.$( 'rayDup = "init"' )
 			)
 			.$case(
 				'"ray:append"',
 				$block( )
 				.append( rayDupCheck )
-				.ast( 'ray.push( arg )' )
+				.$( 'ray.push( arg )' )
 			)
 			.$case(
 				'"ray:insert"',
 				$block( )
 				.append( rayDupCheck )
-				.ast( 'ray.splice( arg, 0, arguments[ ++a + 1 ] )' )
+				.$( 'ray.splice( arg, 0, arguments[ ++a + 1 ] )' )
 			)
 			.$case(
 				'"ray:remove"',
 				$block( )
 				.append( rayDupCheck )
-				.ast( 'ray.splice( arg, 1 ) ' )
+				.$( 'ray.splice( arg, 1 ) ' )
 			)
 			.$case(
 				'"ray:set"',
 				$block( )
 				.append( rayDupCheck )
-				.ast( 'ray[ arg ] = arguments[ ++a + 1 ]' )
+				.$( 'ray[ arg ] = arguments[ ++a + 1 ]' )
 			);
 	}
 
@@ -1750,7 +1750,7 @@ generator.prototype.genCreatorReturn =
 				'!_singleton',
 				$assign(
 					'_singleton',
-					$new( ast( 'Constructor( )' ) )
+					$new( $( 'Constructor( )' ) ) // FIXME
 				)
 			)
 			.$return( '_singleton' )
@@ -2131,7 +2131,7 @@ generator.prototype.genFromJSONCreatorParser =
 			'name',
 			'json',
 			$block( )
-			.ast( 'arg = json[ name ]' )
+			.$( 'arg = json[ name ]' )
 			.append( nameSwitch )
 		);
 
@@ -2157,7 +2157,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	block =
 		block
 		.$if( '!jray', $fail( ) )
-		.ast( 'ray = [ ]' );
+		.$( 'ray = [ ]' );
 
 	idList = this.ray.idList;
 
@@ -2251,13 +2251,13 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 
 	loop =
 		$block( )
-		.ast( 'key = ranks[ a ]' )
+		.$( 'key = ranks[ a ]' )
 		.$if(
 			'!jwig[ key ]',
 			// JSON ranks/twig mismatch
 			$fail( )
 		)
-		.ast( 'jval = jwig[ key ]' )
+		.$( 'jval = jwig[ key ]' )
 		.append( switchExpr );
 
 	block =
@@ -2293,7 +2293,7 @@ generator.prototype.genFromJSONCreatorReturn =
 		call,
 		name;
 
-	call = ast( 'Constructor( )' );
+	call = $( 'Constructor( )' );
 
 	for(
 		var a = 0, aZ = this.constructorList.length;
@@ -2462,35 +2462,35 @@ generator.prototype.genJionProto =
 	capsule =
 		capsule
 		.$comment( 'Sets values by path.' )
-		.ast( 'prototype.setPath = jion_proto.setPath' )
+		.$( 'prototype.setPath = jion_proto.setPath' )
 
 		.$comment( 'Gets values by path' )
-		.ast( 'prototype.getPath = jion_proto.getPath' );
+		.$( 'prototype.getPath = jion_proto.getPath' );
 
 	if( this.twig )
 	{
 		capsule =
 			capsule
 			.$comment( 'Returns a twig by rank.' )
-			.ast( 'prototype.atRank = jion_proto.twigAtRank' )
+			.$( 'prototype.atRank = jion_proto.twigAtRank' )
 
 			.$comment( 'Gets the rank of a key.' )
-			.ast(
+			.$(
 				'jools.lazyFunctionString( '
 				+ 'prototype, "rankOf", jion_proto.twigRankOf '
 				+ ')'
 			)
 
 			.$comment( 'Gets the rank of a key.' )
-			.ast( 'prototype.getKey = jion_proto.twigGetKey' )
+			.$( 'prototype.getKey = jion_proto.twigGetKey' )
 
 			.$comment( 'Returns the length of the twig.')
-			.ast(
+			.$(
 				'jools.lazyValue( prototype, "length", jion_proto.twigLength )'
 			)
 
 			.$comment( 'Creates a new unique identifier.' )
-			.ast( 'prototype.newUID = jion_proto.newUID' );
+			.$( 'prototype.newUID = jion_proto.newUID' );
 	}
 
 	if( this.ray )
@@ -2498,27 +2498,27 @@ generator.prototype.genJionProto =
 		capsule =
 			capsule
 			.$comment( 'Appends an entry to the ray.' )
-			.ast( 'prototype.append = jion_proto.rayAppend' )
+			.$( 'prototype.append = jion_proto.rayAppend' )
 
 			.$comment( 'Appends an entry to the ray.' )
-			.ast( 'prototype.appendRay = jion_proto.rayAppendRay' )
+			.$( 'prototype.appendRay = jion_proto.rayAppendRay' )
 
 			.$comment( 'Returns the length of the ray.')
-			.ast(
+			.$(
 				'jools.lazyValue( prototype, "length", jion_proto.rayLength )'
 			)
 
 			.$comment( 'Gets one entry from the ray.' )
-			.ast( 'prototype.get = jion_proto.rayGet' )
+			.$( 'prototype.get = jion_proto.rayGet' )
 
 			.$comment( 'Returns a jion with one entry inserted to the ray.' )
-			.ast( 'prototype.insert = jion_proto.rayInsert' )
+			.$( 'prototype.insert = jion_proto.rayInsert' )
 
 			.$comment( 'Returns the jion with one entry of the ray set.' )
-			.ast( 'prototype.set = jion_proto.raySet' )
+			.$( 'prototype.set = jion_proto.raySet' )
 
 			.$comment( 'Returns a jion with one entry from the ray removed.' )
-			.ast( 'prototype.remove = jion_proto.rayRemove' );
+			.$( 'prototype.remove = jion_proto.rayRemove' );
 	}
 
 	return capsule;
@@ -2586,7 +2586,7 @@ generator.prototype.genToJSON =
 		.$assign( 'json', olit )
 		.$if(
 			'FREEZE',
-			ast( 'Object.freeze( json )' )
+			$( 'Object.freeze( json )' )
 		)
 		.$return(
 			$func( $return( 'json' ) )
@@ -2756,7 +2756,7 @@ generator.prototype.genEquals =
 	{
 		twigTestLoopBody =
 			$block( )
-			.ast( 'key = this.ranks[ a ]' )
+			.$( 'key = this.ranks[ a ]' )
 			.$if(
 				$or(
 					'key !== obj.ranks[ a ]',
@@ -2778,8 +2778,8 @@ generator.prototype.genEquals =
 			)
 			.$for(
 				$commaList( )
-				.$assign( 'a', 0 ) // FIXME ast()
-				.$assign( 'aZ', 'this.ranks.length' ), // FIXME ast()
+				.$assign( 'a', 0 ) // FIXME $()
+				.$assign( 'aZ', 'this.ranks.length' ), // FIXME $()
 				'a < aZ',
 				'++a',
 				twigTestLoopBody
@@ -2820,8 +2820,8 @@ generator.prototype.genEquals =
 			)
 			.$for(
 				$commaList( )
-				.$assign( 'a', 0 ) // FIXME ast()
-				// FIXME ast(), this.length
+				.$assign( 'a', 0 ) // FIXME $()
+				// FIXME $(), this.length
 				.$assign( 'aZ', 'this.ray.length' ),
 				'a < aZ',
 				'++a',
