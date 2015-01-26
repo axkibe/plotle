@@ -15,6 +15,10 @@
 */
 GLOBAL.APP = 'server';
 
+// repl runs in full checking
+// mode even with freezes.
+GLOBAL.FREEZE = true;
+
 GLOBAL.CHECK = true;
 
 // does load jion code if it is out of date.

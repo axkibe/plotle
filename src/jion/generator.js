@@ -293,7 +293,7 @@ generator.prototype._init =
 			}
 			else if( jdv === undefined )
 			{
-				defaultValue = shorthand.astUndefined;
+				defaultValue = shorthand.$undefined;
 			}
 			else if( jdv === false )
 			{
@@ -332,7 +332,7 @@ generator.prototype._init =
 					|| shorthand.$null.equals( defaultValue ),
 				allowsUndefined :
 					jAttr.allowsUndefined
-					|| shorthand.astUndefined.equals( defaultValue ),
+					|| shorthand.$undefined.equals( defaultValue ),
 				assign :
 					assign,
 				comment :

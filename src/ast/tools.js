@@ -79,7 +79,7 @@ tools.convert =
 
 	if( arg === undefined )
 	{
-		return shorthand.astUndefined;
+		return shorthand.$undefined;
 	}
 
 	if( jools.isString( arg ) )

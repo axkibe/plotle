@@ -566,7 +566,6 @@ prototype.prepareInventory =
 						global_defs :
 						{
 							'CHECK' : config.shell_check,
-							'CONVERT' : false,
 							'FREEZE' : config.shell_freeze,
 							'JION' : false,
 							'SERVER' : false,
@@ -745,7 +744,6 @@ prototype.prependConfigFlags =
 					'data',
 						'var JION = false;\n'
 						+ 'var CHECK = ' + config.shell_check + ';\n'
-						+ 'var CONVERT = false;\n'
 						+ 'var FREEZE = ' + config.shell_freeze + ';\n'
 						+ 'var SERVER = false;\n'
 						+ 'var SHELL = true;\n'

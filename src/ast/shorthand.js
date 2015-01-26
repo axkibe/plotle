@@ -919,9 +919,8 @@ shorthand.$commaList =
 
 /*
 | Shorthand for 'undefined'
-| FIXME $undefined
 */
-shorthand.astUndefined = ast_var.create( 'name', 'undefined' );
+shorthand.$undefined = ast_var.create( 'name', 'undefined' );
 
 
 } )( );
