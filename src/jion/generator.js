@@ -739,7 +739,6 @@ generator.prototype.genConstructor =
 
 	if( this.twig )
 	{
-		// FIXME use object.freeze and only in checking
 		freezeBlock =
 			freezeBlock
 			.$( 'Object.freeze( twig )' )
@@ -1115,7 +1114,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				.$( 'key = arg' )
 				.$( 'rank = arguments[ a + 2 ]' )
 				.$( 'arg = arguments[ a +  3 ]' )
-				.$plusAssign( 'a', 2 ) // FIXME
+				.$( 'a += 2' )
 				.$if(
 					'twig[ key ] !== undefined',
 					$fail( )
@@ -2803,9 +2802,8 @@ generator.prototype.genEquals =
 				$and(
 					'this.ray[ a ] !== obj.ray[ a ]',
 					$or(
-						// '!this.ray[ a ].equals', FIXME
-						$not( 'this.ray[ a ].equals' ),
-						$not( 'this.ray[ a ].equals( obj.ray[ a ] )' ) // FIXME parser !
+						'!this.ray[ a ].equals',
+						'!this.ray[ a ].equals( obj.ray[ a ] )'
 					)
 				),
 				$returnFalse

@@ -34,12 +34,14 @@ var
 	ast_dot,
 	ast_equals,
 	ast_greaterThan,
+	ast_instanceof,
 	ast_lessThan,
 	ast_member,
 	ast_not,
 	ast_number,
 	ast_or,
 	ast_plus,
+	ast_plusAssign,
 	ast_preIncrement,
 	ast_string,
 	ast_var,
@@ -80,6 +82,8 @@ ast_equals = require( '../ast/equals' );
 
 ast_greaterThan = require( '../ast/greaterThan' );
 
+ast_instanceof = require( '../ast/instanceof' );
+
 ast_lessThan = require( '../ast/lessThan' );
 
 ast_member = require( '../ast/member' );
@@ -91,6 +95,8 @@ ast_number = require( '../ast/number' );
 ast_or = require( '../ast/or' );
 
 ast_plus = require( '../ast/plus' );
+
+ast_plusAssign = require( '../ast/plusAssign' );
 
 ast_preIncrement = require( '../ast/preIncrement' );
 
@@ -605,6 +611,22 @@ handleIdentifier =
 */
 tokenSpecs = { };
 
+tokenSpecs.identifier =
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
+		'handler', handleIdentifier
+	);
+
+tokenSpecs[ 'instanceof' ] =
+	tokenSpec.create(
+		'prePrec', 11,
+		'postPrec', 11,
+		'handler', handleDualisticOps,
+		'astCreator', ast_instanceof
+	);
+
+
 tokenSpecs.number =
 	tokenSpec.create(
 		'prePrec', -1,
@@ -617,13 +639,6 @@ tokenSpecs.string =
 		'prePrec', -1,
 		'postPrec', -1,
 		'handler', handleString
-	);
-
-tokenSpecs.identifier =
-	tokenSpec.create(
-		'prePrec', -1,
-		'postPrec', -1,
-		'handler', handleIdentifier
 	);
 
 tokenSpecs[ 'true' ] =
@@ -756,11 +771,12 @@ tokenSpecs[ '=' ] =
 		'astCreator', ast_assign
 	);
 
-tokenSpecs[ ',' ] =
+tokenSpecs[ '+=' ] =
 	tokenSpec.create(
-		'prePrec', 19,
-		'postPrec', 19,
-		'handler', handleParserError // FIXME comma sequence
+		'prePrec', 16,
+		'postPrec', 16,
+		'handler', handleDualisticOps,
+		'astCreator', ast_plusAssign
 	);
 
 /*
@@ -773,6 +789,14 @@ tokenSpecs.sequence =
 		'postPrec', 18,
 		'handler', handleParserError // FIXME comma sequence
 	);
+
+tokenSpecs[ ',' ] =
+	tokenSpec.create(
+		'prePrec', 19,
+		'postPrec', 19,
+		'handler', handleParserError // FIXME comma sequence
+	);
+
 
 /*
 | Parses a token at pos from a tokenRay.

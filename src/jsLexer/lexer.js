@@ -79,6 +79,7 @@ jsLexer.tokenize =
 			switch( value )
 			{
 				case 'false' :
+				case 'instanceof' :
 				case 'true' :
 				case 'typeof' :
 
@@ -227,12 +228,15 @@ jsLexer.tokenize =
 
 			case '+' :
 
-				if(
-					c + 1 < cZ
-					&& code[ c + 1 ] === '+'
-				)
+				if( c + 1 < cZ && code[ c + 1 ] === '+' )
 				{
 					tokens.push( token.create( 'type', '++' ) );
+
+					c++;
+				}
+				else if( c + 1 < cZ && code[ c + 1 ] === '=' )
+				{
+					tokens.push( token.create( 'type', '+=' ) );
 
 					c++;
 				}
