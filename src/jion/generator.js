@@ -1157,7 +1157,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				'"ray:init"',
 				$block( )
 				.$check(
-					$if( $not( 'Array.isArray( arg )' ), $fail( ) ) // FIXME ! instead of $not
+					$if( '!Array.isArray( arg )', $fail( ) )
 				)
 				.$( 'ray = arg' )
 				.$( 'rayDup = "init"' )
