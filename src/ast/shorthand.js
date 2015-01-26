@@ -920,7 +920,14 @@ shorthand.$commaList =
 /*
 | Shorthand for 'undefined'
 */
-shorthand.$undefined = ast_var.create( 'name', 'undefined' );
+jools.lazyValue(
+	shorthand,
+	'$undefined',
+	function( )
+	{
+		return ast_var.create( 'name', 'undefined' );
+	}
+);
 
 
 } )( );

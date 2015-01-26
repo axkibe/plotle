@@ -87,7 +87,7 @@ catch( err )
 	history = [ ];
 }
 
-repl = repl.start( 'ideoloom> ' );
+repl = repl.start( 'repl> ' );
 
 repl.rli.history = history;
 
