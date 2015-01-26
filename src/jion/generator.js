@@ -2762,8 +2762,7 @@ generator.prototype.genEquals =
 					'key !== obj.ranks[ a ]',
 					$condition(
 						'this.twig[ key ].equals',
-						// '!this.twig[ key ].equals( obj.twig[ key ] )', FIXME
-						$not( 'this.twig[ key ].equals( obj.twig[ key ] )' ),
+						'!this.twig[ key ].equals( obj.twig[ key ] )', // XXX
 						'this.twig[ key ] !== obj.twig[ key ]'
 					)
 				),

@@ -290,9 +290,11 @@ handleRoundBrackets =
 
 			for( ;; )
 			{
-				do{
+				do
+				{
 					state = parseToken( state );
-				} while(
+				}
+				while(
 					!state.reachedEnd
 					&&
 					state.current.type !== ')'
@@ -312,13 +314,13 @@ handleRoundBrackets =
 
 				if( state.current.type === ')' )
 				{
-					// fiinished call
+					// finished call
 					break;
 				}
 
 				if( state.current.type === ',' )
 				{
-					state = state.advance( null, tokenSpecs[ ',' ].prePrec );
+					state = state.advance( null, tokenSpecs.sequence.prePrec );
 
 					if( state.current.type === ')' )
 					{
@@ -761,6 +763,16 @@ tokenSpecs[ ',' ] =
 		'handler', handleParserError // FIXME comma sequence
 	);
 
+/*
+| This is a phony token that ought to never come from lexer
+| used to differencate ',' operator from ',' sequences
+*/
+tokenSpecs.sequence =
+	tokenSpec.create(
+		'prePrec', 18,
+		'postPrec', 18,
+		'handler', handleParserError // FIXME comma sequence
+	);
 
 /*
 | Parses a token at pos from a tokenRay.
@@ -783,7 +795,8 @@ parseToken =
 	if(
 		!state.reachedEnd
 		&&
-		tokenSpecs[ state.current.type ].prec( state.ast ) < prec
+		// tokenSpecs[ state.current.type ].prec( state.ast ) < prec  //XXX
+		tokenSpecs[ state.current.type ].prec( state.ast ) <= prec
 		&&
 		spec.handler !== handlePass
 	)

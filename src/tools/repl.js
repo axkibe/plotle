@@ -42,6 +42,8 @@ GLOBAL.parser = require( '../jsParser/parser' );
 
 GLOBAL.parse = GLOBAL.parser.parse;
 
+GLOBAL.$ = GLOBAL.parser.parse;
+
 GLOBAL.format_formatter = require( '../format/formatter' );
 
 GLOBAL.util = require( 'util' );
