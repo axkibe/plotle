@@ -30,6 +30,7 @@ var
 	formatAnd,
 	formatAssign,
 	formatBlock,
+	formatCapsuleFunc,
 	formatCheck,
 	formatCommaList,
 	formatComment,
@@ -40,11 +41,15 @@ var
 	formatFor,
 	formatGreaterThan,
 	formatIf,
+	formatInstanceof,
 	formatLessThan,
 	formatMember,
+	formatNumber,
 	formatPlus,
 	formatPlusAssign,
 	formatString,
+	formatTypeof,
+	formatVar,
 	formatVarDec,
 	textLen,
 	precTable;
@@ -275,6 +280,36 @@ formatBlock =
 
 
 /*
+| Formats a capsule function.
+*/
+formatCapsuleFunc =
+	function(
+		context,
+		func
+	)
+{
+	var
+		text;
+
+	if( func.length !== 0 )
+	{
+		throw new Error( );
+	}
+
+	text =
+		'function( ) {\n'
+		+ formatBlock(
+			context.dec.create( 'root', true ),
+			func.block,
+			true
+		)
+		+ '\n\n}';
+
+	return text;
+};
+
+
+/*
 | Formats a conditional checking code.
 */
 formatCheck =
@@ -337,6 +372,46 @@ formatComment =
 
 	return text;
 };
+
+
+/*
+| Formats a comma list operator
+*/
+formatCommaList =
+	function(
+		context,
+		list
+	)
+{
+	var
+		a,
+		aZ,
+		text;
+
+	text = '';
+
+	for(
+		a = 0, aZ = list.length;
+		a < aZ;
+		a++
+	)
+	{
+		text +=
+			(
+			 a > 0
+			 ? ( ',' + context.sep )
+			 : ''
+			)
+			+ formatExpression(
+				context.inc,
+				list.get( a ),
+				precTable.ast_commaList
+			);
+	}
+
+	return text;
+};
+
 
 
 /*
@@ -687,6 +762,46 @@ formatIf =
 
 
 /*
+| Formats an instanceof expression.
+*/
+formatInstanceof =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_instanceof' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			context,
+			expr.left,
+			precTable.ast_instanceof
+		)
+		+ context.sep
+		+ context.tab
+		+ 'instanceof'
+		+ context.sep
+		+ formatExpression(
+			context,
+			expr.right,
+			precTable.ast_instanceof
+		);
+
+	return text;
+};
+
+
+/*
 | Formats a less-than check.
 */
 formatLessThan =
@@ -863,46 +978,6 @@ formatPlusAssign =
 	throw 'FUTURE: implement noinline +=';
 };
 
-
-/*
-| Formats an instanceof expression.
-*/
-var
-formatInstanceof =
-	function(
-		context,
-		expr
-	)
-{
-	var
-		text;
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_instanceof' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	text =
-		formatExpression(
-			context,
-			expr.left,
-			precTable.ast_instanceof
-		)
-		+ context.sep
-		+ context.tab
-		+ 'instanceof'
-		+ context.sep
-		+ formatExpression(
-			context,
-			expr.right,
-			precTable.ast_instanceof
-		);
-
-	return text;
-};
 
 /*
 | Formats a logical or.
@@ -1115,34 +1190,39 @@ formatSwitch =
 
 
 /*
-| Formats a capsule function.
+| Formats a typeof expression.
 */
-var
-formatCapsuleFunc =
+formatTypeof =
 	function(
 		context,
-		func
+		expr
 	)
 {
-	var
-		text;
 
-	if( func.length !== 0 )
-	{
-		throw new Error( );
-	}
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_typeof' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
-	text =
-		'function( ) {\n'
-		+ formatBlock(
-			context.dec.create( 'root', true ),
-			func.block,
-			true
+	return(
+		context.tab
+		+ 'typeof('
+		+ context.sep
+		+ formatExpression(
+			context.inc,
+			expr.expr,
+			precTable.ast_typeof
 		)
-		+ '\n\n}';
-
-	return text;
+		+
+		context.sep
+		+
+		')'
+	);
 };
+
 
 /*
 | Formats a function.
@@ -1978,48 +2058,11 @@ formatPreIncrement =
 };
 
 
-/*
-| Formats a typeof expression.
-*/
-var
-formatTypeof =
-	function(
-		context,
-		expr
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_typeof' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return(
-		context.tab
-		+ 'typeof('
-		+ context.sep
-		+ formatExpression(
-			context.inc,
-			expr.expr,
-			precTable.ast_typeof
-		)
-		+
-		context.sep
-		+
-		')'
-	);
-};
-
-
 
 
 /*
 | Formats a variable use.
 */
-var
 formatVar =
 	function(
 		context,
@@ -2035,30 +2078,29 @@ formatVar =
 /**/	}
 /**/}
 
-return context.tab + expr.name;
+	return context.tab + expr.name;
 };
 
 
 /*
-   | Formats a string literal use.
- */
-var
-		formatNumber =
-function(
-				context,
-				expr
-		)
+| Formats a string literal use.
+*/
+formatNumber =
+	function(
+		context,
+		expr
+	)
 {
 
-		/**/if( CHECK )
-				/**/{
-						/**/	if( expr.reflect !== 'ast_number' )
-								/**/	{
-										/**/		throw new Error( );
-										/**/	}
-						/**/}
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_number' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
-		return context.tab + '' + expr.number;
+	return context.tab + '' + expr.number;
 };
 
 
@@ -2201,45 +2243,6 @@ formatVarDec =
 
 
 /*
-| Formats a comma list operator
-*/
-formatCommaList =
-	function(
-		context,
-		list
-	)
-{
-	var
-		a,
-		aZ,
-		text;
-
-	text = '';
-
-	for(
-		a = 0, aZ = list.length;
-		a < aZ;
-		a++
-	)
-	{
-		text +=
-			(
-			 a > 0
-			 ? ( ',' + context.sep )
-			 : ''
-			)
-			+ formatExpression(
-				context.inc,
-				list.get( a ),
-				precTable.ast_commaList
-			);
-	}
-
-	return text;
-};
-
-
-/*
 | Formats a block as file.
 */
 format_formatter.format =
@@ -2261,34 +2264,34 @@ format_formatter.format =
 */
 exprFormatter =
 {
-		'ast_and' : formatAnd,
-		'ast_arrayLiteral' : formatArrayLiteral,
-		'ast_assign' : formatAssign,
-		'ast_boolean' : formatBoolean,
-		'ast_call' : formatCall,
-		'ast_commaList' : formatCommaList,
-		'ast_condition' : formatCondition,
-		'ast_delete' : formatDelete,
-		'ast_differs' : formatDiffers,
-		'ast_dot' : formatDot,
-		'ast_equals' : formatEquals,
-		'ast_func' : formatFunc,
-		'ast_greaterThan' : formatGreaterThan,
-		'ast_instanceof' : formatInstanceof,
-		'ast_lessThan' : formatLessThan,
-		'ast_member' : formatMember,
-		'ast_new' : formatNew,
-		'ast_not' : formatNot,
-		'ast_null' : formatNull,
-		'ast_number' : formatNumber,
-		'ast_objLiteral' : formatObjLiteral,
-		'ast_or' : formatOr,
-		'ast_plus' : formatPlus,
-		'ast_plusAssign' : formatPlusAssign,
-		'ast_preIncrement' : formatPreIncrement,
-		'ast_string' : formatString,
-		'ast_typeof' : formatTypeof,
-		'ast_var' : formatVar
+	'ast_and' : formatAnd,
+	'ast_arrayLiteral' : formatArrayLiteral,
+	'ast_assign' : formatAssign,
+	'ast_boolean' : formatBoolean,
+	'ast_call' : formatCall,
+	'ast_commaList' : formatCommaList,
+	'ast_condition' : formatCondition,
+	'ast_delete' : formatDelete,
+	'ast_differs' : formatDiffers,
+	'ast_dot' : formatDot,
+	'ast_equals' : formatEquals,
+	'ast_func' : formatFunc,
+	'ast_greaterThan' : formatGreaterThan,
+	'ast_instanceof' : formatInstanceof,
+	'ast_lessThan' : formatLessThan,
+	'ast_member' : formatMember,
+	'ast_new' : formatNew,
+	'ast_not' : formatNot,
+	'ast_null' : formatNull,
+	'ast_number' : formatNumber,
+	'ast_objLiteral' : formatObjLiteral,
+	'ast_or' : formatOr,
+	'ast_plus' : formatPlus,
+	'ast_plusAssign' : formatPlusAssign,
+	'ast_preIncrement' : formatPreIncrement,
+	'ast_string' : formatString,
+	'ast_typeof' : formatTypeof,
+	'ast_var' : formatVar
 };
 
 
