@@ -78,6 +78,7 @@ jsLexer.tokenize =
 
 			switch( value )
 			{
+				case 'delete' :
 				case 'false' :
 				case 'instanceof' :
 				case 'true' :

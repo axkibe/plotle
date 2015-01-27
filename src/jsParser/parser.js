@@ -30,6 +30,7 @@ var
 	ast_assign,
 	ast_boolean,
 	ast_call,
+	ast_delete,
 	ast_differs,
 	ast_dot,
 	ast_equals,
@@ -73,6 +74,8 @@ ast_assign = require( '../ast/assign' );
 ast_boolean = require( '../ast/boolean' );
 
 ast_call = require( '../ast/call' );
+
+ast_delete = require( '../ast/delete' );
 
 ast_differs = require( '../ast/differs' );
 
@@ -705,6 +708,14 @@ tokenSpecs[ '!' ] =
 		'postPrec', 4,
 		'handler', handleMonoOps,
 		'astCreator', ast_not
+	);
+
+tokenSpecs[ 'delete' ] =
+	tokenSpec.create(
+		'prePrec', 4,
+		'postPrec', 4,
+		'handler', handleMonoOps,
+		'astCreator', ast_delete
 	);
 
 tokenSpecs[ '+' ] =
