@@ -1134,7 +1134,7 @@ generator.prototype.genCreatorFreeStringsParser =
 					'twig[ arg ] === undefined',
 					$fail( )
 				)
-				.$delete( 'twig[ arg ]' ) // FIXME
+				.$( 'delete twig[ arg ]' )
 				.$( 'ranks.splice( ranks.indexOf( arg ), 1 )' )
 			);
 	}
