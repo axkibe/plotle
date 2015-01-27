@@ -1747,10 +1747,7 @@ generator.prototype.genCreatorReturn =
 			block
 			.$if(
 				'!_singleton',
-				$assign(
-					'_singleton',
-					$new( $( 'Constructor( )' ) ) // FIXME
-				)
+				$( '_singleton = new Constructor( )' )
 			)
 			.$return( '_singleton' )
 		);
