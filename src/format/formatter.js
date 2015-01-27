@@ -28,26 +28,42 @@ module.exports =
 var
 	exprFormatter,
 	formatAnd,
+	formatArrayLiteral,
 	formatAssign,
 	formatBlock,
+	formatBoolean,
+	formatCall,
 	formatCapsuleFunc,
 	formatCheck,
 	formatCommaList,
 	formatComment,
 	formatCondition,
+	formatDelete,
 	formatDiffers,
 	formatDot,
 	formatEquals,
+	formatExpression,
+	formatFail,
 	formatFor,
+	formatForIn,
+	formatFunc,
 	formatGreaterThan,
 	formatIf,
 	formatInstanceof,
 	formatLessThan,
 	formatMember,
+	formatNew,
+	formatNot,
 	formatNumber,
+	formatNull,
+	formatOr,
 	formatPlus,
 	formatPlusAssign,
+	formatPreIncrement,
+	formatReturn,
+	formatStatement,
 	formatString,
+	formatSwitch,
 	formatTypeof,
 	formatVar,
 	formatVarDec,
@@ -143,6 +159,70 @@ formatAnd =
 			expr.right,
 			precTable.ast_and
 		);
+
+	return text;
+};
+
+
+/*
+| Formats an array literal.
+|
+| FUTURE format also inline
+*/
+formatArrayLiteral =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		a,
+		aZ,
+		text;
+
+	text = '';
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_arrayLiteral' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+
+	if( expr.length === 0 )
+	{
+		return context.tab + '[ ]';
+	}
+
+	if( context.inline )
+	{
+		throw 'noinline';
+	}
+
+	text += context.tab + '[\n';
+
+	for(
+		a = 0, aZ = expr.length;
+		a < aZ;
+		a++
+	)
+	{
+		text +=
+			formatExpression(
+				context.inc,
+				expr.get( a ),
+				precTable.ast_arrayLiteral
+			)
+			+ (
+				a + 1 < aZ
+				? ',\n'
+				: '\n'
+			);
+	}
+
+	text += context.tab + ']';
 
 	return text;
 };
@@ -280,6 +360,97 @@ formatBlock =
 
 
 /*
+| Formats a boolean literal use.
+*/
+formatBoolean =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_boolean' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return (
+		context.tab +
+		(
+			expr.boolean
+			? 'true'
+			: 'false'
+		)
+	);
+};
+
+
+/*
+| Formats a call.
+*/
+formatCall =
+	function(
+		context,
+		call,
+		snuggle
+	)
+{
+	var
+		a, aZ,
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( call.reflect !== 'ast_call' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			snuggle ? context.setInline : context,
+			call.func,
+			precTable.ast_call
+		);
+
+	if( call.length === 0 )
+	{
+		text += '( )';
+	}
+	else
+	{
+		text += '(' + context.sep;
+
+		for(
+			a = 0, aZ = call.length;
+			a < aZ;
+			a++
+		)
+		{
+			text += formatExpression( context.inc, call.get( a ), null );
+
+			if( a + 1 < aZ )
+			{
+				text += ',' + context.sep;
+			}
+			else
+			{
+				text += context.sep;
+			}
+		}
+
+		text += context.tab + ')';
+	}
+
+	return text;
+};
+
+
+/*
 | Formats a capsule function.
 */
 formatCapsuleFunc =
@@ -334,6 +505,45 @@ formatCheck =
 
 
 /*
+| Formats a comma list operator
+*/
+formatCommaList =
+	function(
+		context,
+		list
+	)
+{
+	var
+		a,
+		aZ,
+		text;
+
+	text = '';
+
+	for(
+		a = 0, aZ = list.length;
+		a < aZ;
+		a++
+	)
+	{
+		text +=
+			(
+			 a > 0
+			 ? ( ',' + context.sep )
+			 : ''
+			)
+			+ formatExpression(
+				context.inc,
+				list.get( a ),
+				precTable.ast_commaList
+			);
+	}
+
+	return text;
+};
+
+
+/*
 | Formats a comment.
 */
 formatComment =
@@ -372,46 +582,6 @@ formatComment =
 
 	return text;
 };
-
-
-/*
-| Formats a comma list operator
-*/
-formatCommaList =
-	function(
-		context,
-		list
-	)
-{
-	var
-		a,
-		aZ,
-		text;
-
-	text = '';
-
-	for(
-		a = 0, aZ = list.length;
-		a < aZ;
-		a++
-	)
-	{
-		text +=
-			(
-			 a > 0
-			 ? ( ',' + context.sep )
-			 : ''
-			)
-			+ formatExpression(
-				context.inc,
-				list.get( a ),
-				precTable.ast_commaList
-			);
-	}
-
-	return text;
-};
-
 
 
 /*
@@ -455,6 +625,36 @@ formatCondition =
 			context.setInline,
 			expr.elsewise,
 			precTable.ast_condition
+		)
+	);
+};
+
+
+/*
+| Formats a delete expression.
+*/
+formatDelete =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_delete' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return(
+		context.tab
+		+ 'delete '
+		+ formatExpression(
+			context,
+			expr.expr,
+			precTable.ast_delete
 		)
 	);
 };
@@ -515,7 +715,7 @@ formatDot =
 /**/	}
 /**/}
 
-	return (
+	return(
 		formatExpression(
 			context,
 			expr.expr,
@@ -564,6 +764,175 @@ formatEquals =
 		);
 
 	return text;
+};
+
+
+/*
+| Formats an expression.
+*/
+formatExpression =
+	function(
+		context, // context to be formated in
+		expr,    // the expression to format
+		pprec    // the operator precedence of the parenting expresson
+	)
+{
+	var
+		bracket,
+		formatter,
+		prec,
+		subcontext,
+		subtext,
+		text;
+
+	// FIXME remove reflectName
+	prec = precTable[ expr.reflectName ] || precTable[ expr.reflect ];
+
+	if( prec === undefined )
+	{
+		throw new Error( 'cannot handle: ' + expr.reflectName );
+	}
+
+	formatter =
+		exprFormatter[ expr.reflectName ]
+		|| exprFormatter[ expr.reflect ];
+
+	if( !formatter )
+	{
+		throw new Error( expr.reflectName );
+	}
+
+	bracket = pprec !== null && prec > pprec;
+
+	subcontext = context;
+
+	text = '';
+
+	if( bracket )
+	{
+		text = context.tab + '(' + context.sep;
+
+		subcontext = context.inc;
+	}
+
+	subtext = null;
+
+	if(
+		!subcontext.inline
+		&& !bracket
+		&& pprec !== null && prec < pprec
+	)
+	{
+		// tries to go inline
+		try
+		{
+			subtext =
+				subcontext.tab
+				+ formatter( subcontext.setInline, expr );
+		}
+		catch( e )
+		{
+			// rethrows any real error
+			if( e !== 'noinline' )
+			{
+				throw e;
+			}
+		}
+	}
+
+	if( subtext === null || textLen( subtext ) > MAX_TEXT_WIDTH )
+	{
+		subtext = formatter( subcontext, expr );
+	}
+
+	text += subtext;
+
+	if( bracket )
+	{
+		text += context.sep + context.tab + ')';
+	}
+
+	return text;
+};
+
+
+/*
+| Formats a fail statement.
+*/
+formatFail =
+	function(
+		context,
+		fail
+	)
+{
+	var
+		checkContext,
+		messageContext,
+		result;
+
+/**/if( CHECK )
+/**/{
+/**/	if( fail.reflect !== 'ast_fail' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( fail.message === null )
+	{
+		return (
+			context.tab + 'throw new Error( )'
+		);
+	}
+
+	if( context.check )
+	{
+		messageContext = context;
+
+		result = '';
+	}
+	else
+	{
+		checkContext = context.create( 'check', true );
+
+		messageContext = checkContext.inc;
+
+		result =
+			checkContext.tab
+			+ 'if( CHECK )'
+			+ checkContext.sep
+			+ checkContext.tab
+			+ '{'
+			+ checkContext.sep;
+	}
+
+	result +=
+		messageContext.tab
+		+ 'throw new Error('
+		+ messageContext.sep
+		+ formatExpression(
+			messageContext.inc,
+			fail.message,
+			null
+		)
+		+ messageContext.sep
+		+ messageContext.tab
+		+ ')';
+
+	if( !context.check )
+	{
+		result +=
+			';'
+			+ checkContext.sep
+			+ checkContext.tab
+			+ '}'
+			+ checkContext.sep
+			+ checkContext.sep
+			+ context.tab
+			+ 'throw new Error( )';
+	}
+
+	return result;
 };
 
 
@@ -617,7 +986,6 @@ formatFor =
 /*
 | Formats a for-in loop.
 */
-var
 formatForIn =
 	function(
 		context,
@@ -639,6 +1007,74 @@ formatForIn =
 		)
 		+ ' )\n'
 		+ formatBlock( context, expr.block );
+
+	return text;
+};
+
+
+/*
+| Formats a function.
+*/
+formatFunc =
+	function(
+		context,
+		func
+	)
+{
+	var
+		a,
+		arg,
+		argSpace,
+		aZ,
+		comma,
+		text;
+
+	if( func.capsule )
+	{
+		return formatCapsuleFunc( context, func );
+	}
+
+	text = context.tab;
+
+	if( func.length === 0 )
+	{
+		text += 'function( )' + context.sep;
+	}
+	else
+	{
+		text += 'function(' + context.sep;
+
+		for(
+			a = 0, aZ = func.length;
+			a < aZ;
+			a++
+		)
+		{
+			arg = func.get( a );
+
+			comma = a + 1 < aZ ? ',' : '';
+
+			argSpace = arg.name ? ' ' : '';
+
+			text +=
+				context.inc.tab
+				+ ( arg.name || '' )
+				+ comma
+				+ (
+					arg.comment
+					?  argSpace + '// ' + arg.comment
+					: ''
+				)
+				+ '\n';
+		}
+
+		text += context.tab + ')' + context.sep;
+	}
+
+	// formats to body at one indentation decremented.
+	context = context.dec;
+
+	text += formatBlock( context, func.block );
 
 	return text;
 };
@@ -880,6 +1316,149 @@ formatMember =
 
 
 /*
+| Formats a new expression.
+*/
+formatNew =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_new' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return(
+		context.tab
+		+ 'new '
+		+ formatCall(
+			context,
+			expr.call,
+			true
+		)
+	);
+};
+
+
+/*
+| Formats a not expression.
+*/
+formatNot =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_not' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return(
+		context.tab
+		+ '!'
+		+ formatExpression(
+			context,
+			expr.expr,
+			precTable.ast_not
+		)
+	);
+};
+
+
+/*
+| Formats a null.
+*/
+formatNull =
+	function(
+		context,
+		expr
+	)
+{
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_null' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return context.tab + 'null';
+};
+
+
+/*
+| Formats a string literal use.
+*/
+formatNumber =
+	function(
+		context,
+		expr
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_number' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return context.tab + '' + expr.number;
+};
+
+
+/*
+| Formats a logical or.
+*/
+formatOr =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_or' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			context,
+			expr.left,
+			precTable.ast_or
+		)
+		+ context.sep
+		+ context.tab
+		+ '||'
+		+ context.sep
+		+ formatExpression(
+			context,
+			expr.right,
+			precTable.ast_or
+		);
+
+	return text;
+};
+
+
+/*
 | Formats a Plus.
 */
 formatPlus =
@@ -980,51 +1559,40 @@ formatPlusAssign =
 
 
 /*
-| Formats a logical or.
+| Formats a pre-increment.
 */
-var
-formatOr =
+formatPreIncrement =
 	function(
 		context,
 		expr
 	)
 {
-	var
-		text;
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_or' )
+/**/	if( expr.reflect !== 'ast_preIncrement' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	text =
-		formatExpression(
-			context,
-			expr.left,
-			precTable.ast_or
-		)
-		+ context.sep
-		+ context.tab
-		+ '||'
-		+ context.sep
+	return(
+		context.tab
+		+ '++'
 		+ formatExpression(
 			context,
-			expr.right,
-			precTable.ast_or
-		);
-
-	return text;
+			expr.expr,
+			precTable.preIncrement
+		)
+	);
 };
+
 
 
 
 /*
 | Formats a return statement.
 */
-var
 formatReturn =
 	function(
 		context,
@@ -1094,209 +1662,8 @@ formatReturn =
 
 
 /*
-| Formats a switch statement
-*/
-var
-formatSwitch =
-	function(
-		context,
-		switchExpr
-	)
-{
-	var
-		a, aZ,
-		b, bZ,
-		caseContext,
-		caseExpr,
-		text;
-
-	caseContext = context.inc;
-
-	text =
-		context.tab
-		+ 'switch( '
-		+ formatExpression(
-			context.setInline,
-			switchExpr.statement,
-			null
-		)
-		+ ' )\n'
-		+ context.tab
-		+ '{\n';
-
-	for(
-		a = 0, aZ = switchExpr.length;
-		a < aZ;
-		a++
-	)
-	{
-		caseExpr = switchExpr.get( a );
-
-		if( a > 0 )
-		{
-			text += '\n';
-		}
-
-		// FIXME this is broken for
-		// caseExpr.length > 1
-		for(
-			b = 0, bZ = caseExpr.length;
-			b < bZ;
-			b++
-		)
-		{
-			text +=
-				caseContext.tab
-				+ 'case '
-				+ formatExpression(
-					caseContext.setInline,
-					caseExpr.get( b ),
-					null
-				)
-				+ ' :\n\n'
-				+ formatBlock(
-					caseContext.inc,
-					caseExpr.block,
-					true
-				)
-				+ '\n'
-				+ caseContext.inc.tab
-				+ 'break;\n';
-		}
-	}
-
-	if( switchExpr.defaultCase )
-	{
-		if( switchExpr.length > 0 )
-		{
-			text += '\n';
-		}
-
-		text +=
-			caseContext.tab +
-			'default :\n\n'
-			+
-			formatBlock(
-				caseContext.inc,
-				switchExpr.defaultCase,
-				true
-			);
-	}
-
-	text += context.tab + '}';
-
-	return text;
-};
-
-
-/*
-| Formats a typeof expression.
-*/
-formatTypeof =
-	function(
-		context,
-		expr
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_typeof' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return(
-		context.tab
-		+ 'typeof('
-		+ context.sep
-		+ formatExpression(
-			context.inc,
-			expr.expr,
-			precTable.ast_typeof
-		)
-		+
-		context.sep
-		+
-		')'
-	);
-};
-
-
-/*
-| Formats a function.
-*/
-var
-formatFunc =
-	function(
-		context,
-		func
-	)
-{
-	var
-		a,
-		arg,
-		argSpace,
-		aZ,
-		comma,
-		text;
-
-	if( func.capsule )
-	{
-		return formatCapsuleFunc( context, func );
-	}
-
-	text = context.tab;
-
-	if( func.length === 0 )
-	{
-		text += 'function( )' + context.sep;
-	}
-	else
-	{
-		text += 'function(' + context.sep;
-
-		for(
-			a = 0, aZ = func.length;
-			a < aZ;
-			a++
-		)
-		{
-			arg = func.get( a );
-
-			comma = a + 1 < aZ ? ',' : '';
-
-			argSpace = arg.name ? ' ' : '';
-
-			text +=
-				context.inc.tab
-				+ ( arg.name || '' )
-				+ comma
-				+ (
-					arg.comment
-					?  argSpace + '// ' + arg.comment
-					: ''
-				)
-				+ '\n';
-		}
-
-		text += context.tab + ')' + context.sep;
-	}
-
-	// formats to body at one indentation decremented.
-	context = context.dec;
-
-	text += formatBlock( context, func.block );
-
-	return text;
-};
-
-
-/*
 | Formats a statement.
 */
-var
 formatStatement =
 	function(
 		context,    // context to be formated in
@@ -1508,179 +1875,9 @@ formatStatement =
 
 
 /*
-| Formats an expression.
+| Formats a string literal.
 */
-var
-formatExpression =
-	function(
-		context, // context to be formated in
-		expr,    // the expression to format
-		pprec    // the operator precedence of the parenting expresson
-	)
-{
-	var
-		bracket,
-		formatter,
-		prec,
-		subcontext,
-		subtext,
-		text;
-
-	// FIXME remove reflectName
-	prec = precTable[ expr.reflectName ] || precTable[ expr.reflect ];
-
-	if( prec === undefined )
-	{
-		throw new Error( 'cannot handle: ' + expr.reflectName );
-	}
-
-	formatter = exprFormatter[ expr.reflectName ] || exprFormatter[ expr.reflect ];
-
-	if( !formatter )
-	{
-		throw new Error( expr.reflectName );
-	}
-
-	bracket = pprec !== null && prec > pprec;
-
-	subcontext = context;
-
-	text = '';
-
-	if( bracket )
-	{
-		text = context.tab + '(' + context.sep;
-
-		subcontext = context.inc;
-	}
-
-	subtext = null;
-
-	if(
-		!subcontext.inline
-		&& !bracket
-		&& pprec !== null && prec < pprec
-	)
-	{
-		// tries to go inline
-		try
-		{
-			subtext =
-				subcontext.tab
-				+ formatter( subcontext.setInline, expr );
-		}
-		catch( e )
-		{
-			// rethrows any real error
-			if( e !== 'noinline' )
-			{
-				throw e;
-			}
-		}
-	}
-
-	if( subtext === null || textLen( subtext ) > MAX_TEXT_WIDTH )
-	{
-		subtext = formatter( subcontext, expr );
-	}
-
-	text += subtext;
-
-	if( bracket )
-	{
-		text += context.sep + context.tab + ')';
-	}
-
-	return text;
-};
-
-
-/*
-| Formats a fail statement.
-*/
-var
-formatFail =
-	function(
-		context,
-		fail
-	)
-{
-	var
-		checkContext,
-		messageContext,
-		result;
-
-/**/if( CHECK )
-/**/{
-/**/	if( fail.reflect !== 'ast_fail' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	if( fail.message === null )
-	{
-		return (
-			context.tab + 'throw new Error( )'
-		);
-	}
-
-	if( context.check )
-	{
-		messageContext = context;
-
-		result = '';
-	}
-	else
-	{
-		checkContext = context.create( 'check', true );
-
-		messageContext = checkContext.inc;
-
-		result =
-			checkContext.tab
-			+ 'if( CHECK )'
-			+ checkContext.sep
-			+ checkContext.tab
-			+ '{'
-			+ checkContext.sep;
-	}
-
-	result +=
-		messageContext.tab
-		+ 'throw new Error('
-		+ messageContext.sep
-		+ formatExpression(
-			messageContext.inc,
-			fail.message,
-			null
-		)
-		+ messageContext.sep
-		+ messageContext.tab
-		+ ')';
-
-	if( !context.check )
-	{
-		result +=
-			';'
-			+ checkContext.sep
-			+ checkContext.tab
-			+ '}'
-			+ checkContext.sep
-			+ checkContext.sep
-			+ context.tab
-			+ 'throw new Error( )';
-	}
-
-	return result;
-};
-
-
-/*
-| Formats a boolean literal use.
-*/
-var
-formatBoolean =
+formatString =
 	function(
 		context,
 		expr
@@ -1689,264 +1886,145 @@ formatBoolean =
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_boolean' )
+/**/	if( expr.reflect !== 'ast_string' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	return (
-		context.tab +
-		(
-			expr.boolean
-			? 'true'
-			: 'false'
-		)
-	);
+	return context.tab + '\'' + expr.string + '\'';
 };
 
 
 /*
-| Formats a call.
+| Formats a switch statement
 */
-var
-formatCall =
+formatSwitch =
 	function(
 		context,
-		call,
-		snuggle
-	)
-{
-	var
-		a, aZ,
-		text;
-
-/**/if( CHECK )
-/**/{
-/**/	if( call.reflect !== 'ast_call' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	text =
-		formatExpression(
-			snuggle ? context.setInline : context,
-			call.func,
-			precTable.ast_call
-		);
-
-	if( call.length === 0 )
-	{
-		text += '( )';
-	}
-	else
-	{
-		text += '(' + context.sep;
-
-		for(
-			a = 0, aZ = call.length;
-			a < aZ;
-			a++
-		)
-		{
-			text += formatExpression( context.inc, call.get( a ), null );
-
-			if( a + 1 < aZ )
-			{
-				text += ',' + context.sep;
-			}
-			else
-			{
-				text += context.sep;
-			}
-		}
-
-		text += context.tab + ')';
-	}
-
-	return text;
-};
-
-
-/*
-| Formats a delete expression.
-*/
-var
-formatDelete =
-	function(
-		context,
-		expr
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_delete' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return(
-		context.tab
-		+ 'delete '
-		+ formatExpression(
-			context,
-			expr.expr,
-			precTable.ast_delete
-		)
-	);
-};
-
-
-
-/*
-| Formats a new expression.
-*/
-var
-formatNew =
-	function(
-		context,
-		expr
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_new' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return(
-		context.tab
-		+ 'new '
-		+ formatCall(
-			context,
-			expr.call,
-			true
-		)
-	);
-};
-
-
-/*
-| Formats a not expression.
-*/
-var
-formatNot =
-	function(
-		context,
-		expr
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_not' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return(
-		context.tab
-		+ '!'
-		+ formatExpression(
-			context,
-			expr.expr,
-			precTable.ast_not
-		)
-	);
-};
-
-
-/*
-| Formats a null.
-*/
-var
-formatNull =
-	function(
-		context,
-		expr
-	)
-{
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_null' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return context.tab + 'null';
-};
-
-
-/*
-| Formats an array literal.
-|
-| FUTURE format also inline
-*/
-var
-formatArrayLiteral =
-	function(
-		context,
-		expr
+		switchExpr
 	)
 {
 	var
 		a,
 		aZ,
+		b,
+		bZ,
+		caseContext,
+		caseExpr,
 		text;
 
-	text = '';
+	caseContext = context.inc;
+
+	text =
+		context.tab
+		+ 'switch( '
+		+ formatExpression(
+			context.setInline,
+			switchExpr.statement,
+			null
+		)
+		+ ' )\n'
+		+ context.tab
+		+ '{\n';
+
+	for(
+		a = 0, aZ = switchExpr.length;
+		a < aZ;
+		a++
+	)
+	{
+		caseExpr = switchExpr.get( a );
+
+		if( a > 0 )
+		{
+			text += '\n';
+		}
+
+		// FIXME this is broken for
+		// caseExpr.length > 1
+		for(
+			b = 0, bZ = caseExpr.length;
+			b < bZ;
+			b++
+		)
+		{
+			text +=
+				caseContext.tab
+				+ 'case '
+				+ formatExpression(
+					caseContext.setInline,
+					caseExpr.get( b ),
+					null
+				)
+				+ ' :\n\n'
+				+ formatBlock(
+					caseContext.inc,
+					caseExpr.block,
+					true
+				)
+				+ '\n'
+				+ caseContext.inc.tab
+				+ 'break;\n';
+		}
+	}
+
+	if( switchExpr.defaultCase )
+	{
+		if( switchExpr.length > 0 )
+		{
+			text += '\n';
+		}
+
+		text +=
+			caseContext.tab +
+			'default :\n\n'
+			+
+			formatBlock(
+				caseContext.inc,
+				switchExpr.defaultCase,
+				true
+			);
+	}
+
+	text += context.tab + '}';
+
+	return text;
+};
+
+
+/*
+| Formats a typeof expression.
+*/
+formatTypeof =
+	function(
+		context,
+		expr
+	)
+{
 
 /**/if( CHECK )
 /**/{
-/**/	if( expr.reflect !== 'ast_arrayLiteral' )
+/**/	if( expr.reflect !== 'ast_typeof' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-
-	if( expr.length === 0 )
-	{
-		return context.tab + '[ ]';
-	}
-
-	if( context.inline )
-	{
-		throw 'noinline';
-	}
-
-	text += context.tab + '[\n';
-
-	for(
-		a = 0, aZ = expr.length;
-		a < aZ;
-		a++
-	)
-	{
-		text +=
-			formatExpression(
-				context.inc,
-				expr.get( a ),
-				precTable.ast_arrayLiteral
-			)
-			+ (
-				a + 1 < aZ
-				? ',\n'
-				: '\n'
-			);
-	}
-
-	text += context.tab + ']';
-
-	return text;
+	return(
+		context.tab
+		+ 'typeof('
+		+ context.sep
+		+ formatExpression(
+			context.inc,
+			expr.expr,
+			precTable.ast_typeof
+		)
+		+
+		context.sep
+		+
+		')'
+	);
 };
 
 
@@ -2028,39 +2106,6 @@ formatObjLiteral =
 
 
 /*
-| Formats a pre-increment.
-*/
-var
-formatPreIncrement =
-	function(
-		context,
-		expr
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_preIncrement' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return(
-		context.tab
-		+ '++'
-		+ formatExpression(
-			context,
-			expr.expr,
-			precTable.preIncrement
-		)
-	);
-};
-
-
-
-
-/*
 | Formats a variable use.
 */
 formatVar =
@@ -2079,50 +2124,6 @@ formatVar =
 /**/}
 
 	return context.tab + expr.name;
-};
-
-
-/*
-| Formats a string literal use.
-*/
-formatNumber =
-	function(
-		context,
-		expr
-	)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_number' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return context.tab + '' + expr.number;
-};
-
-
-/*
-| Formats a string literal.
-*/
-formatString =
-function(
-	context,
-	expr
-		)
-{
-
-/**/if( CHECK )
-/**/{
-/**/	if( expr.reflect !== 'ast_string' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return context.tab + '\'' + expr.string + '\'';
 };
 
 
