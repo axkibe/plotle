@@ -38,6 +38,7 @@ var
 	ast_instanceof,
 	ast_lessThan,
 	ast_member,
+	ast_new,
 	ast_not,
 	ast_number,
 	ast_or,
@@ -52,6 +53,7 @@ var
 	handleDot,
 	handleDualisticOps,
 	handleMonoOps,
+	handleNew,
 	handleNumber,
 	handleIdentifier,
 	handleParserError,
@@ -90,6 +92,8 @@ ast_instanceof = require( '../ast/instanceof' );
 ast_lessThan = require( '../ast/lessThan' );
 
 ast_member = require( '../ast/member' );
+
+ast_new = require( '../ast/new' );
 
 ast_not = require( '../ast/not' );
 
@@ -192,6 +196,42 @@ handleDot =
 
 
 /*
+| Generic handler for dualistic operations.
+*/
+handleDualisticOps =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		ast;
+
+	ast = state.ast;
+
+	if( !ast )
+	{
+		throw new Error( 'parser error' );
+	}
+
+	state = state.advance( null, spec.prePrec );
+
+	state = parseToken( state );
+
+	state =
+		state.create(
+			'ast',
+				spec.astCreator.create(
+					'left', ast,
+					'right', state.ast
+				)
+		);
+
+	return state;
+};
+
+
+/*
 | Generic handler for mono operations.
 */
 handleMonoOps =
@@ -229,9 +269,9 @@ handleMonoOps =
 
 
 /*
-| Generic handler for dualistic operations.
+| Handler for new operations.
 */
-handleDualisticOps =
+handleNew =
 	function(
 		state, // current parser state
 		spec   // operator spec
@@ -242,9 +282,9 @@ handleDualisticOps =
 
 	ast = state.ast;
 
-	if( !ast )
+	if( ast )
 	{
-		throw new Error( 'parser error' );
+		throw new Error( 'parse error' );
 	}
 
 	state = state.advance( null, spec.prePrec );
@@ -254,14 +294,14 @@ handleDualisticOps =
 	state =
 		state.create(
 			'ast',
-				spec.astCreator.create(
-					'left', ast,
-					'right', state.ast
+				ast_new.create(
+					'call', state.ast
 				)
 		);
 
 	return state;
 };
+
 
 
 /*
@@ -621,15 +661,6 @@ tokenSpecs.identifier =
 		'handler', handleIdentifier
 	);
 
-tokenSpecs[ 'instanceof' ] =
-	tokenSpec.create(
-		'prePrec', 11,
-		'postPrec', 11,
-		'handler', handleDualisticOps,
-		'astCreator', ast_instanceof
-	);
-
-
 tokenSpecs.number =
 	tokenSpec.create(
 		'prePrec', -1,
@@ -691,6 +722,13 @@ tokenSpecs[ '.' ] =
 		'prePrec', 1,
 		'postPrec', 1,
 		'handler', handleDot
+	);
+
+tokenSpecs[ 'new' ] =
+	tokenSpec.create(
+		'prePrec', 1,
+		'postPrec', 1,
+		'handler', handleNew
 	);
 
 tokenSpecs[ '++' ] =
@@ -756,6 +794,14 @@ tokenSpecs[ '!==' ] =
 		'postPrec', 9,
 		'handler', handleDualisticOps,
 		'astCreator', ast_differs
+	);
+
+tokenSpecs[ 'instanceof' ] =
+	tokenSpec.create(
+		'prePrec', 11,
+		'postPrec', 11,
+		'handler', handleDualisticOps,
+		'astCreator', ast_instanceof
 	);
 
 tokenSpecs[ '&&' ] =
