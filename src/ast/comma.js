@@ -45,9 +45,57 @@ var
 
 ast_comma = require( '../jion/this' )( module );
 
-// jools = require( '../jools/jools' );
 
-// tools = require( './tools' );
+var
+	ast_comma;
+
+ast_comma = require( '../jion/this' )( module );
+
+
+/**/if( CHECK )
+/**/{
+/**/	var
+/**/		util;
+/**/
+/**/	util = require( 'util' );
+/**/
+/***	/
+****	| Custom inspect
+****	/
+***/	ast_comma.prototype.inspect =
+/**/		function(
+/**/			depth,
+/**/			opts
+/**/		)
+/**/	{
+/**/		var
+/**/			postfix,
+/**/			result;
+/**/
+/**/		if( !opts.ast )
+/**/		{
+/**/			result = 'ast{ ';
+/**/
+/**/			postfix = ' }';
+/**/		}
+/**/		else
+/**/		{
+/**/			result = postfix = '';
+/**/		}
+/**/
+/**/		opts.ast = true;
+/**/
+/**/		result += '( ' +  util.inspect( this.left, opts ) + ' )';
+/**/
+/**/		result += ', ';
+/**/
+/**/		result += '( ' +  util.inspect( this.right, opts ) + ' )';
+/**/
+/**/		return result + postfix;
+/**/	};
+/**/}
+
+
 
 
 } )( );

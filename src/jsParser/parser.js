@@ -30,6 +30,7 @@ var
 	ast_assign,
 	ast_boolean,
 	ast_call,
+	ast_comma,
 	ast_delete,
 	ast_differs,
 	ast_dot,
@@ -76,6 +77,8 @@ ast_assign = require( '../ast/assign' );
 ast_boolean = require( '../ast/boolean' );
 
 ast_call = require( '../ast/call' );
+
+ast_comma = require( '../ast/comma' );
 
 ast_delete = require( '../ast/delete' );
 
@@ -844,14 +847,15 @@ tokenSpecs.sequence =
 	tokenSpec.create(
 		'prePrec', 18,
 		'postPrec', 18,
-		'handler', handleParserError // FIXME comma sequence
+		'handler', handleParserError
 	);
 
 tokenSpecs[ ',' ] =
 	tokenSpec.create(
 		'prePrec', 19,
 		'postPrec', 19,
-		'handler', handleParserError // FIXME comma sequence
+		'handler', handleDualisticOps,
+		'astCreator', ast_comma
 	);
 
 
