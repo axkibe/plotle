@@ -36,7 +36,6 @@ var
 	formatCapsuleFunc,
 	formatCheck,
 	formatComma,
-	formatCommaList, //XXX
 	formatComment,
 	formatCondition,
 	formatDelete,
@@ -85,7 +84,6 @@ precTable =
 		'ast_boolean' : -1,
 		'ast_call' : 2,
 		'ast_comma' : 18,
-		'ast_commaList' : 18,
 		'ast_condition' : 15,
 		'ast_delete' : 4,
 		'ast_differs' : 9,
@@ -540,44 +538,6 @@ formatComma =
 			expr.right,
 			precTable.ast_comma
 		);
-
-	return text;
-};
-
-/*
-| Formats a comma list operator
-*/
-formatCommaList =
-	function(
-		context,
-		list
-	)
-{
-	var
-		a,
-		aZ,
-		text;
-
-	text = '';
-
-	for(
-		a = 0, aZ = list.length;
-		a < aZ;
-		a++
-	)
-	{
-		text +=
-			(
-			 a > 0
-			 ? ( ',' + context.sep )
-			 : ''
-			)
-			+ formatExpression(
-				context.inc,
-				list.get( a ),
-				precTable.ast_commaList
-			);
-	}
 
 	return text;
 };
@@ -2311,7 +2271,6 @@ exprFormatter =
 	'ast_boolean' : formatBoolean,
 	'ast_call' : formatCall,
 	'ast_comma' : formatComma,
-	'ast_commaList' : formatCommaList, // XXX
 	'ast_condition' : formatCondition,
 	'ast_delete' : formatDelete,
 	'ast_differs' : formatDiffers,

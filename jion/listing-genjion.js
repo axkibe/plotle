@@ -20,7 +20,6 @@ module.exports =
 			'src/ast/case.js',
 			'src/ast/check.js',
 			'src/ast/comma.js',
-			'src/ast/commaList.js', // XXX
 			'src/ast/comment.js',
 			'src/ast/condition.js',
 			'src/ast/delete.js',

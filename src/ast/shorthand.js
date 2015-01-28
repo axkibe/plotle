@@ -27,7 +27,6 @@ var
 	ast_call,
 	ast_check,
 	ast_comma,
-	ast_commaList, //XXX
 	ast_comment,
 	ast_condition,
 	ast_delete,
@@ -78,8 +77,6 @@ ast_call = require( './call' );
 ast_check = require( './check' );
 
 ast_comma = require( './comma' );
-
-ast_commaList = require( './commaList' );
 
 ast_comment = require( './comment' );
 
@@ -945,17 +942,6 @@ shorthand.$varDec =
 		)
 	);
 };
-
-
-/*
-| Shorthand for creating comma lists.
-*/
-shorthand.$commaList =
-	function( )
-{
-	return ast_commaList.create( );
-};
-
 
 
 /*

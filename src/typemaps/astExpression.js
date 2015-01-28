@@ -9,7 +9,6 @@ module.exports =
 	'ast_boolean',
 	'ast_call',
 	'ast_comma',
-	'ast_commaList', // XXX
 	'ast_condition',
 	'ast_delete',
 	'ast_differs',

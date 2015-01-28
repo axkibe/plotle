@@ -45,7 +45,6 @@ var
 	astCapsule,
 	$check,
 	$comma,
-	$commaList, // XXX
 	$comment,
 	$condition,
 	$differs,
@@ -108,8 +107,6 @@ astCapsule = shorthand.astCapsule;
 $check = shorthand.$check;
 
 $comma = shorthand.$comma;
-
-$commaList = shorthand.$commaList;
 
 $comment = shorthand.$comment;
 

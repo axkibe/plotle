@@ -33,7 +33,6 @@ var
 	ast_boolean,
 	ast_call,
 	ast_comma,
-	ast_commaList,
 	ast_condition,
 	ast_delete,
 	ast_differs,
@@ -85,8 +84,6 @@ if( SERVER )
 	ast_call = require( '../../src/ast/call' );
 
 	ast_comma = require( '../../src/ast/comma' );
-
-	ast_commaList = require( '../../src/ast/commaList' );
 
 	ast_condition = require( '../../src/ast/condition' );
 
@@ -265,8 +262,6 @@ prototype.create =
 /**/		v_expr.reflect !== 'ast_call'
 /**/		&&
 /**/		v_expr.reflect !== 'ast_comma'
-/**/		&&
-/**/		v_expr.reflect !== 'ast_commaList'
 /**/		&&
 /**/		v_expr.reflect !== 'ast_condition'
 /**/		&&
