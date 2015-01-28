@@ -1206,11 +1206,6 @@ generator.prototype.genCreatorFreeStringsParser =
 				'a = 0',
 				'aZ = arguments.length'
 			),
-			/*XXX
-			$commaList( )
-			.$assign( 'a', 0 )
-			.$assign( 'aZ', 'arguments.length' ),
-			*/
 			'a < aZ',
 			$plusAssign( 'a', 2 ),
 			loop
@@ -2195,9 +2190,10 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	block =
 		block
 		.$for(
-			$commaList( )
-			.$assign( 'r', 0 )
-			.$assign( 'rZ', 'jray.length' ),
+			$comma(
+				'r = 0',
+				'rZ = jray.length'
+			),
 			'r < rZ',
 			'++r',
 			loopSwitch
@@ -2274,9 +2270,10 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 			$fail( )
 		)
 		.$for(
-			$commaList( )
-			.$assign( 'a', 0 )
-			.$assign( 'aZ', 'ranks.length' ),
+			$comma(
+				'a = 0',
+				'aZ = ranks.length'
+			),
 			'a < aZ',
 			'++a',
 			loop
@@ -2781,9 +2778,10 @@ generator.prototype.genEquals =
 				$returnFalse
 			)
 			.$for(
-				$commaList( )
-				.$assign( 'a', 0 ) // FIXME $()
-				.$assign( 'aZ', 'this.ranks.length' ), // FIXME $()
+				$comma(
+					'a = 0',
+					'aZ = this.ranks.length'
+				),
 				'a < aZ',
 				'++a',
 				twigTestLoopBody
@@ -2822,10 +2820,11 @@ generator.prototype.genEquals =
 				$returnFalse
 			)
 			.$for(
-				$commaList( )
-				.$assign( 'a', 0 ) // FIXME $()
-				// FIXME $(), this.length
-				.$assign( 'aZ', 'this.ray.length' ),
+				$comma(
+					'a = 0',
+					// FIXME this.length
+					'aZ = this.ray.length'
+				),
 				'a < aZ',
 				'++a',
 				rayTestLoopBody
