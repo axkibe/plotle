@@ -44,7 +44,8 @@ var
 	$call,
 	astCapsule,
 	$check,
-	$commaList,
+	$comma,
+	$commaList, // XXX
 	$comment,
 	$condition,
 	$differs,
@@ -105,6 +106,8 @@ $call = shorthand.$call;
 astCapsule = shorthand.astCapsule;
 
 $check = shorthand.$check;
+
+$comma = shorthand.$comma;
 
 $commaList = shorthand.$commaList;
 
@@ -1199,9 +1202,15 @@ generator.prototype.genCreatorFreeStringsParser =
 	block =
 		block
 		.$for(
+			$comma(
+				'a = 0',
+				'aZ = arguments.length'
+			),
+			/*XXX
 			$commaList( )
 			.$assign( 'a', 0 )
 			.$assign( 'aZ', 'arguments.length' ),
+			*/
 			'a < aZ',
 			$plusAssign( 'a', 2 ),
 			loop

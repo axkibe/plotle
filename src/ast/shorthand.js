@@ -26,7 +26,8 @@ var
 	ast_boolean,
 	ast_call,
 	ast_check,
-	ast_commaList,
+	ast_comma,
+	ast_commaList, //XXX
 	ast_comment,
 	ast_condition,
 	ast_delete,
@@ -75,6 +76,8 @@ ast_boolean = require( './boolean' );
 ast_call = require( './call' );
 
 ast_check = require( './check' );
+
+ast_comma = require( './comma' );
 
 ast_commaList = require( './commaList' );
 
@@ -317,6 +320,44 @@ shorthand.$check =
 	return(
 		ast_check.create( 'block', block )
 	);
+};
+
+
+/*
+| Shorthand for creating comma operators
+*/
+shorthand.$comma =
+	function(
+		left,
+		right
+		// or more
+	)
+{
+	var
+		args;
+
+	if( arguments.length > 2 )
+	{
+		args = Array.prototype.slice.call( arguments );
+
+		left = tools.convert( left );
+
+		right = tools.convert( right );
+
+		args.splice(
+			0,
+			2,
+			ast_comma.create( 'left', left, 'right', right )
+		);
+
+		return shorthand.$comma.apply( this, args );
+	}
+
+	left = tools.convert( left );
+
+	right = tools.convert( right );
+
+	return ast_comma.create( 'left', left, 'right', right );
 };
 
 

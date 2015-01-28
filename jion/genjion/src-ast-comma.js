@@ -32,6 +32,7 @@ var
 	ast_assign,
 	ast_boolean,
 	ast_call,
+	ast_comma,
 	ast_commaList,
 	ast_condition,
 	ast_delete,
@@ -261,6 +262,8 @@ prototype.create =
 /**/		&&
 /**/		v_left.reflect !== 'ast_call'
 /**/		&&
+/**/		v_left.reflect !== 'ast_comma'
+/**/		&&
 /**/		v_left.reflect !== 'ast_commaList'
 /**/		&&
 /**/		v_left.reflect !== 'ast_condition'
@@ -331,6 +334,8 @@ prototype.create =
 /**/		v_right.reflect !== 'ast_boolean'
 /**/		&&
 /**/		v_right.reflect !== 'ast_call'
+/**/		&&
+/**/		v_right.reflect !== 'ast_comma'
 /**/		&&
 /**/		v_right.reflect !== 'ast_commaList'
 /**/		&&

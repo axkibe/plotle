@@ -8,7 +8,8 @@ module.exports =
 	'ast_assign',
 	'ast_boolean',
 	'ast_call',
-	'ast_commaList',
+	'ast_comma',
+	'ast_commaList', // XXX
 	'ast_condition',
 	'ast_delete',
 	'ast_differs',
