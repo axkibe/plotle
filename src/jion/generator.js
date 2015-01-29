@@ -44,7 +44,6 @@ var
 	$call,
 	astCapsule,
 	$check,
-	$comma,
 	$comment,
 	$condition,
 	$differs,
@@ -105,8 +104,6 @@ $call = shorthand.$call;
 astCapsule = shorthand.astCapsule;
 
 $check = shorthand.$check;
-
-$comma = shorthand.$comma;
 
 $comment = shorthand.$comment;
 
@@ -1199,10 +1196,7 @@ generator.prototype.genCreatorFreeStringsParser =
 	block =
 		block
 		.$for(
-			$comma(
-				'a = 0',
-				'aZ = arguments.length'
-			),
+			'a = 0, aZ = arguments.length',
 			'a < aZ',
 			$plusAssign( 'a', 2 ),
 			loop
@@ -2187,10 +2181,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	block =
 		block
 		.$for(
-			$comma(
-				'r = 0',
-				'rZ = jray.length'
-			),
+			'r = 0, rZ = jray.length',
 			'r < rZ',
 			'++r',
 			loopSwitch
@@ -2267,10 +2258,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 			$fail( )
 		)
 		.$for(
-			$comma(
-				'a = 0',
-				'aZ = ranks.length'
-			),
+			'a = 0, aZ = ranks.length',
 			'a < aZ',
 			'++a',
 			loop
@@ -2771,14 +2759,12 @@ generator.prototype.genEquals =
 		twigTest =
 			$block( )
 			.$if(
+				// FUTURE this.length vs. obj.length
 				'this.ranks.length !== obj.ranks.length',
 				$returnFalse
 			)
 			.$for(
-				$comma(
-					'a = 0',
-					'aZ = this.ranks.length'
-				),
+				'a = 0, aZ = this.ranks.length',
 				'a < aZ',
 				'++a',
 				twigTestLoopBody
@@ -2817,11 +2803,8 @@ generator.prototype.genEquals =
 				$returnFalse
 			)
 			.$for(
-				$comma(
-					'a = 0',
-					// FIXME this.length
-					'aZ = this.ray.length'
-				),
+				// this.length?
+				'a = 0, aZ = this.ray.length',
 				'a < aZ',
 				'++a',
 				rayTestLoopBody

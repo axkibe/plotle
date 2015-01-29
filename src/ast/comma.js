@@ -42,13 +42,6 @@ if( JION )
 var
 	ast_comma;
 
-
-ast_comma = require( '../jion/this' )( module );
-
-
-var
-	ast_comma;
-
 ast_comma = require( '../jion/this' )( module );
 
 
