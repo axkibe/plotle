@@ -702,7 +702,7 @@ tokenSpecs[ '(' ] =
 		'prePrec', 0,
 		'postPrec', 1,
 		'handler', handleRoundBrackets,
-		'associativity', 'n/a'
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ ')' ] =
@@ -739,8 +739,8 @@ tokenSpecs[ '.' ] =
 
 tokenSpecs[ 'new' ] =
 	tokenSpec.create(
-		'prePrec', 1,
-		'postPrec', 1,
+		'prePrec', 2, // XXX
+		'postPrec', 2, // XXX
 		'handler', handleNew,
 		'associativity', 'r2l'
 	);
@@ -913,7 +913,7 @@ parseToken =
 				nextSpec.prec( state.ast ) < prec
 				|| (
 					nextSpec.prec( state.ast ) === prec
-//					&& nextSpec.associativity === 'r2l'
+					&& curSpec.associativity === 'l2r'
 				)
 			)
 			&& curSpec.handler !== handlePass
