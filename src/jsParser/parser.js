@@ -4,8 +4,7 @@
 | This parser must not use ast-shorthands,
 | because these are using the parser.
 |
-| FUTURE combine all left-right dualistic operators
-|        into one handling.
+| FIXME remove all advance
 */
 
 
@@ -148,9 +147,9 @@ handleBooleanLiteral =
 	}
 
 	state =
-		state.advance(
-			ast_boolean.create( 'boolean', bool ),
-			undefined
+		state.create(
+			'ast', ast_boolean.create( 'boolean', bool ),
+			'pos', state.pos + 1
 		);
 
 	return state;
@@ -185,13 +184,14 @@ handleDot =
 	}
 
 	state =
-		state.advance(
-			ast_dot.create(
-				'expr', state.ast,
-				'member', name.value
-			),
-			spec.prec( ast ),
-			2
+		state.create(
+			'ast',
+				ast_dot.create(
+					'expr', state.ast,
+					'member', name.value
+				),
+			'prec', spec.prec( ast ),
+			'pos', state.pos + 2
 		);
 
 	return state;
@@ -208,16 +208,24 @@ handleDualisticOps =
 	)
 {
 	var
-		ast;
+		ast,
+		prec;
 
 	ast = state.ast;
+
+	prec = state.prec;
 
 	if( !ast )
 	{
 		throw new Error( 'parser error' );
 	}
 
-	state = state.advance( null, spec.prePrec );
+	state =
+		state.create(
+			'ast', null,
+			'prec', spec.prePrec,
+			'pos', state.pos + 1
+		);
 
 	state = parseToken( state );
 
@@ -227,7 +235,8 @@ handleDualisticOps =
 				spec.astCreator.create(
 					'left', ast,
 					'right', state.ast
-				)
+				),
+			'prec', prec
 		);
 
 	return state;
@@ -255,16 +264,19 @@ handleMonoOps =
 		);
 	}
 
-	state = state.advance( null, spec.prePrec );
+	state =
+		state.create(
+			'ast', null,
+			'prec', spec.prePrec,
+			'pos', state.pos + 1
+		);
 
 	state = parseToken( state );
 
 	state =
 		state.create(
 			'ast',
-				spec.astCreator.create(
-					'expr', state.ast
-				)
+				spec.astCreator.create( 'expr', state.ast )
 		);
 
 	return state;
@@ -290,7 +302,12 @@ handleNew =
 		throw new Error( 'parse error' );
 	}
 
-	state = state.advance( null, spec.prePrec );
+	state =
+		state.create(
+			'ast', null,
+			'prec', spec.prePrec,
+			'pos', state.pos + 1
+		);
 
 	state = parseToken( state );
 
@@ -329,7 +346,12 @@ handleRoundBrackets =
 		// this is a call.
 		call = ast_call.create( 'func', ast );
 
-		state = state.advance( null, spec.postPrec );
+		state =
+			state.create(
+				'ast', null,
+				'prec', spec.postPrec,
+				'pos', state.pos + 1
+			);
 
 		if( state.reachedEnd )
 		{
@@ -372,7 +394,12 @@ handleRoundBrackets =
 
 				if( state.current.type === ',' )
 				{
-					state = state.advance( null, tokenSpecs.sequence.prePrec );
+					state =
+						state.create(
+							'ast', null,
+							'prec', tokenSpecs.sequence.prePrec,
+							'pos', state.pos + 1
+						);
 
 					if( state.current.type === ')' )
 					{
@@ -387,7 +414,12 @@ handleRoundBrackets =
 		}
 
 		// advances over closing bracket
-		state = state.advance( call, spec.postPrec );
+		state =
+			state.create(
+				'ast', call,
+				'prec', spec.postPrec,
+				'pos', state.pos + 1
+			);
 
 		return state;
 	}
@@ -438,7 +470,12 @@ handleSquareBrackets =
 		// this is an array literal
 		alit = ast_arrayLiteral.create( );
 
-		state = state.advance( null, spec.postPrec );
+		state =
+			state.create(
+				'ast', null,
+				'prec', spec.postPrec,
+				'pos', state.pos + 1
+			);
 
 		if( state.reachedEnd )
 		{
@@ -479,7 +516,12 @@ handleSquareBrackets =
 
 				if( state.current.type === ',' )
 				{
-					state = state.advance( null, tokenSpecs[ ',' ].prePrec );
+					state =
+						state.create(
+							'ast', null,
+							'prec', tokenSpecs[ ',' ].prePrec,
+							'pos', state.pos + 1
+						);
 
 					if( state.current.type === ']' )
 					{
@@ -494,7 +536,12 @@ handleSquareBrackets =
 		}
 
 		// advances over closing square bracket
-		state = state.advance( alit, spec.postPrec );
+		state =
+			state.create(
+				'ast', alit,
+				'prec', spec.postPrec,
+				'pos', state.pos + 1
+			);
 
 		return state;
 	}
@@ -569,9 +616,9 @@ handleNumber =
 	}
 
 	state =
-		state.advance(
-			ast_number.create( 'number', state.current.value ),
-			undefined
+		state.create(
+			'ast', ast_number.create( 'number', state.current.value ),
+			'pos', state.pos + 1
 		);
 
 	return state;
@@ -593,9 +640,9 @@ handleString =
 	}
 
 	state =
-		state.advance(
-			ast_string.create( 'string', state.current.value ),
-			undefined
+		state.create(
+			'ast', ast_string.create( 'string', state.current.value ),
+			'pos', state.pos + 1
 		);
 
 	return state;
@@ -618,9 +665,9 @@ handleNumber =
 	}
 
 	state =
-		state.advance(
-			ast_number.create( 'number', state.current.value ),
-			undefined
+		state.create(
+			'ast', ast_number.create( 'number', state.current.value ),
+			'pos', state.pos + 1
 		);
 
 	return state;
@@ -643,10 +690,10 @@ handleIdentifier =
 	}
 
 	state =
-		state.advance(
-			ast_var.create( 'name', state.current.value ),
-			undefined
-	);
+		state.create(
+			'ast', ast_var.create( 'name', state.current.value ),
+			'pos', state.pos + 1
+		);
 
 	return state;
 };
@@ -779,7 +826,7 @@ tokenSpecs[ '+' ] =
 		'postPrec', 6,
 		'handler', handleDualisticOps,
 		'astCreator', ast_plus,
-		'associativity', 'r2l'
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ '<' ] =
@@ -896,7 +943,10 @@ parseToken =
 	var
 		prec,
 		curSpec,
+		curState,
 		nextSpec;
+
+	curState = state;
 
 	prec = state.prec;
 
@@ -913,7 +963,7 @@ parseToken =
 				nextSpec.prec( state.ast ) < prec
 				|| (
 					nextSpec.prec( state.ast ) === prec
-					&& curSpec.associativity === 'l2r'
+//					&& nextSpec.associativity === 'r2l'
 				)
 			)
 			&& curSpec.handler !== handlePass
