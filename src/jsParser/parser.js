@@ -661,77 +661,88 @@ tokenSpecs.identifier =
 	tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
-		'handler', handleIdentifier
+		'handler', handleIdentifier,
+		'associativity', 'n/a'
 	);
 
 tokenSpecs.number =
 	tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
-		'handler', handleNumber
+		'handler', handleNumber,
+		'associativity', 'n/a'
 	);
 
 tokenSpecs.string =
 	tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
-		'handler', handleString
+		'handler', handleString,
+		'associativity', 'n/a'
 	);
 
 tokenSpecs[ 'true' ] =
 	tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
-		'handler', handleBooleanLiteral
+		'handler', handleBooleanLiteral,
+		'associativity', 'n/a'
 	);
 
 tokenSpecs[ 'false' ] =
 	tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
-		'handler', handleBooleanLiteral
+		'handler', handleBooleanLiteral,
+		'associativity', 'n/a'
 	);
 
 tokenSpecs[ '(' ] =
 	tokenSpec.create(
 		'prePrec', 0,
 		'postPrec', 1,
-		'handler', handleRoundBrackets
+		'handler', handleRoundBrackets,
+		'associativity', 'n/a'
 	);
 
 tokenSpecs[ ')' ] =
 	tokenSpec.create(
 		'prePrec', 1, // FIXME 99?
 		'postPrec', 1,
-		'handler', handlePass
+		'handler', handlePass,
+		'associativity', 'n/a'
 	);
 
 tokenSpecs[ '[' ] =
 	tokenSpec.create(
 		'prePrec', 1,
 		'postPrec', 1,
-		'handler', handleSquareBrackets
+		'handler', handleSquareBrackets,
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ ']' ] =
 	tokenSpec.create(
-		'prePrec', 1, // FIXME 99?
+		'prePrec', 1, // 99?
 		'postPrec', 1,
-		'handler', handlePass
+		'handler', handlePass,
+		'associativity', 'n/a'
 	);
 
 tokenSpecs[ '.' ] =
 	tokenSpec.create(
 		'prePrec', 1,
 		'postPrec', 1,
-		'handler', handleDot
+		'handler', handleDot,
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ 'new' ] =
 	tokenSpec.create(
 		'prePrec', 1,
 		'postPrec', 1,
-		'handler', handleNew
+		'handler', handleNew,
+		'associativity', 'r2l'
 	);
 
 tokenSpecs[ '++' ] =
@@ -739,8 +750,9 @@ tokenSpecs[ '++' ] =
 		'prePrec', 3,
 		'postPrec', 4,
 		'handler', handleMonoOps,
-		'astCreator', ast_preIncrement
+		'astCreator', ast_preIncrement,
 		// FUTURE postfixCreator
+		'associativity', 'n/a'
 	);
 
 tokenSpecs[ '!' ] =
@@ -748,7 +760,8 @@ tokenSpecs[ '!' ] =
 		'prePrec', 4,
 		'postPrec', 4,
 		'handler', handleMonoOps,
-		'astCreator', ast_not
+		'astCreator', ast_not,
+		'associativity', 'r2l'
 	);
 
 tokenSpecs[ 'delete' ] =
@@ -756,7 +769,8 @@ tokenSpecs[ 'delete' ] =
 		'prePrec', 4,
 		'postPrec', 4,
 		'handler', handleMonoOps,
-		'astCreator', ast_delete
+		'astCreator', ast_delete,
+		'associativity', 'r2l'
 	);
 
 tokenSpecs[ '+' ] =
@@ -764,7 +778,8 @@ tokenSpecs[ '+' ] =
 		'prePrec', 6,
 		'postPrec', 6,
 		'handler', handleDualisticOps,
-		'astCreator', ast_plus
+		'astCreator', ast_plus,
+		'associativity', 'r2l'
 	);
 
 tokenSpecs[ '<' ] =
@@ -772,7 +787,8 @@ tokenSpecs[ '<' ] =
 		'prePrec', 8,
 		'postPrec', 8,
 		'handler', handleDualisticOps,
-		'astCreator', ast_lessThan
+		'astCreator', ast_lessThan,
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ '>' ] =
@@ -780,7 +796,8 @@ tokenSpecs[ '>' ] =
 		'prePrec', 8,
 		'postPrec', 8,
 		'handler', handleDualisticOps,
-		'astCreator', ast_greaterThan
+		'astCreator', ast_greaterThan,
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ '===' ] =
@@ -788,7 +805,8 @@ tokenSpecs[ '===' ] =
 		'prePrec', 9,
 		'postPrec', 9,
 		'handler', handleDualisticOps,
-		'astCreator', ast_equals
+		'astCreator', ast_equals,
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ '!==' ] =
@@ -796,7 +814,8 @@ tokenSpecs[ '!==' ] =
 		'prePrec', 9,
 		'postPrec', 9,
 		'handler', handleDualisticOps,
-		'astCreator', ast_differs
+		'astCreator', ast_differs,
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ 'instanceof' ] =
@@ -804,7 +823,8 @@ tokenSpecs[ 'instanceof' ] =
 		'prePrec', 11,
 		'postPrec', 11,
 		'handler', handleDualisticOps,
-		'astCreator', ast_instanceof
+		'astCreator', ast_instanceof,
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ '&&' ] =
@@ -812,7 +832,8 @@ tokenSpecs[ '&&' ] =
 		'prePrec', 13,
 		'postPrec', 13,
 		'handler', handleDualisticOps,
-		'astCreator', ast_and
+		'astCreator', ast_and,
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ '||' ] =
@@ -820,7 +841,8 @@ tokenSpecs[ '||' ] =
 		'prePrec', 14,
 		'postPrec', 14,
 		'handler', handleDualisticOps,
-		'astCreator', ast_or
+		'astCreator', ast_or,
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ '=' ] =
@@ -828,7 +850,8 @@ tokenSpecs[ '=' ] =
 		'prePrec', 16,
 		'postPrec', 16,
 		'handler', handleDualisticOps,
-		'astCreator', ast_assign
+		'astCreator', ast_assign,
+		'associativity', 'r2l'
 	);
 
 tokenSpecs[ '+=' ] =
@@ -836,7 +859,8 @@ tokenSpecs[ '+=' ] =
 		'prePrec', 16,
 		'postPrec', 16,
 		'handler', handleDualisticOps,
-		'astCreator', ast_plusAssign
+		'astCreator', ast_plusAssign,
+		'associativity', 'r2l'
 	);
 
 /*
@@ -847,7 +871,8 @@ tokenSpecs.sequence =
 	tokenSpec.create(
 		'prePrec', 18,
 		'postPrec', 18,
-		'handler', handleParserError
+		'handler', handleParserError,
+		'associativity', 'l2r'
 	);
 
 tokenSpecs[ ',' ] =
@@ -855,7 +880,8 @@ tokenSpecs[ ',' ] =
 		'prePrec', 19,
 		'postPrec', 19,
 		'handler', handleDualisticOps,
-		'astCreator', ast_comma
+		'astCreator', ast_comma,
+		'associativity', 'l2r'
 	);
 
 

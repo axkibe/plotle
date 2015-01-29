@@ -59,6 +59,7 @@ var
 
 Constructor =
 	function(
+		v_associativity, // "r2l", "l2r" or "n/a"
 		v_astCreator, // For some handlers, the ast creator function for it to call
 		v_handler, // Handler function to be called
 		v_postPrec, // operator precedence in postfix conditions
@@ -73,6 +74,8 @@ Constructor =
 /**/	}
 /**/}
 
+	this.associativity = v_associativity;
+
 	if( v_astCreator !== undefined )
 	{
 		this.astCreator = v_astCreator;
@@ -83,6 +86,8 @@ Constructor =
 	this.postPrec = v_postPrec;
 
 	this.prePrec = v_prePrec;
+
+	this._init( );
 
 	if( FREEZE )
 	{
@@ -114,6 +119,7 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
+		v_associativity,
 		v_astCreator,
 		v_handler,
 		v_postPrec,
@@ -122,6 +128,8 @@ prototype.create =
 	if( this !== jsParser_tokenSpec )
 	{
 		inherit = this;
+
+		v_associativity = this.associativity;
 
 		v_astCreator = this.astCreator;
 
@@ -142,6 +150,15 @@ prototype.create =
 
 		switch( arguments[ a ] )
 		{
+			case 'associativity' :
+
+				if( arg !== undefined )
+				{
+					v_associativity = arg;
+				}
+
+				break;
+
 			case 'astCreator' :
 
 				if( arg !== undefined )
@@ -194,6 +211,25 @@ prototype.create =
 
 /**/if( CHECK )
 /**/{
+/**/	if( v_associativity === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_associativity === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if(
+/**/		typeof( v_associativity ) !== 'string'
+/**/		&&
+/**/		!( v_associativity instanceof String )
+/**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
 /**/	if( v_astCreator === null )
 /**/	{
 /**/		throw new Error( );
@@ -251,6 +287,8 @@ prototype.create =
 	if(
 		inherit
 		&&
+		v_associativity === inherit.associativity
+		&&
 		v_astCreator === inherit.astCreator
 		&&
 		v_handler === inherit.handler
@@ -265,6 +303,7 @@ prototype.create =
 
 	return (
 		new Constructor(
+			v_associativity,
 			v_astCreator,
 			v_handler,
 			v_postPrec,
@@ -322,6 +361,8 @@ prototype.equals =
 	}
 
 	return (
+		this.associativity === obj.associativity
+		&&
 		this.astCreator === obj.astCreator
 		&&
 		this.handler === obj.handler
