@@ -895,24 +895,32 @@ parseToken =
 {
 	var
 		prec,
-		spec;
+		curSpec,
+		nextSpec;
 
 	prec = state.prec;
 
-	spec = tokenSpecs[ state.current.type ];
+	curSpec = tokenSpecs[ state.current.type ];
 
-	state = spec.handler( state, spec );
+	state = curSpec.handler( state, curSpec );
 
-	if(
-		!state.reachedEnd
-		&&
-		// tokenSpecs[ state.current.type ].prec( state.ast ) < prec  //XXX
-		tokenSpecs[ state.current.type ].prec( state.ast ) <= prec
-		&&
-		spec.handler !== handlePass
-	)
+	if( !state.reachedEnd )
 	{
-		state = parseToken( state );
+		nextSpec = tokenSpecs[ state.current.type ];
+
+		if(
+			(
+				nextSpec.prec( state.ast ) < prec
+				|| (
+					nextSpec.prec( state.ast ) === prec
+//					&& nextSpec.associativity === 'r2l'
+				)
+			)
+			&& curSpec.handler !== handlePass
+		)
+		{
+			state = parseToken( state );
+		}
 	}
 
 	return state;
