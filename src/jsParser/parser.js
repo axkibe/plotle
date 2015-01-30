@@ -346,7 +346,7 @@ handleRoundBrackets =
 		state =
 			state.create(
 				'ast', null,
-				'prec', spec.postPrec,
+				'spec', spec,
 				'pos', state.pos + 1
 			);
 
