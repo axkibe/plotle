@@ -414,7 +414,7 @@ handleRoundBrackets =
 		state =
 			state.create(
 				'ast', call,
-				'prec', spec.postPrec,
+				'spec', spec,
 				'pos', state.pos + 1
 			);
 
@@ -475,7 +475,7 @@ handleSquareBrackets =
 		state =
 			state.create(
 				'ast', null,
-				'prec', spec.postPrec,
+				'spec', spec,
 				'pos', state.pos + 1
 			);
 
@@ -541,7 +541,7 @@ handleSquareBrackets =
 		state =
 			state.create(
 				'ast', alit,
-				'prec', spec.postPrec,
+				'spec', spec,
 				'pos', state.pos + 1
 			);
 
@@ -551,7 +551,7 @@ handleSquareBrackets =
 	state =
 		state.create(
 			'ast', null,
-			'prec', spec.prePrec,
+			'spec', spec,
 			'pos', state.pos + 1
 		);
 
