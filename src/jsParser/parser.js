@@ -444,7 +444,7 @@ handleRoundBrackets =
 
 	state =
 		state.create(
-			'prec', 99, // tokenSpecs[ ')' ].prePrec
+			'spec', tokenSpecs[ ')' ],
 			'pos', state.pos + 1
 		);
 
@@ -574,8 +574,7 @@ handleSquareBrackets =
 					'expr', ast,
 					'member', state.ast
 				),
-			'prec',
-				99, // tokenSpecs[ ')' ].prePrec
+			'spec', tokenSpecs[ ')' ],
 			'pos', state.pos + 1
 		);
 
