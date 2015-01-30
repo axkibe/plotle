@@ -264,7 +264,7 @@ handleMonoOps =
 	state =
 		state.create(
 			'ast', null,
-			'prec', spec.prePrec,
+			'spec', spec,
 			'pos', state.pos + 1
 		);
 
@@ -302,7 +302,7 @@ handleNew =
 	state =
 		state.create(
 			'ast', null,
-			'prec', spec.prePrec,
+			'spec', spec,
 			'pos', state.pos + 1
 		);
 
@@ -394,7 +394,7 @@ handleRoundBrackets =
 					state =
 						state.create(
 							'ast', null,
-							'prec', tokenSpecs.sequence.prePrec,
+							'spec', tokenSpecs.sequence,
 							'pos', state.pos + 1
 						);
 
@@ -426,7 +426,7 @@ handleRoundBrackets =
 	state =
 		state.create(
 			'ast', null,
-			'prec', spec.prePrec,
+			'spec', spec,
 			'pos', state.pos + 1
 		);
 
@@ -521,7 +521,7 @@ handleSquareBrackets =
 					state =
 						state.create(
 							'ast', null,
-							'prec', tokenSpecs[ ',' ].prePrec,
+							'spec', tokenSpecs[ ',' ],
 							'pos', state.pos + 1
 						);
 
