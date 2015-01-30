@@ -940,6 +940,17 @@ tokenSpecs[ ',' ] =
 		'associativity', 'l2r'
 	);
 
+// phony spec that cannot be created
+// by lexer denoting start of parsing
+tokenSpecs.start =
+	tokenSpec.create(
+		'prePrec', 99,
+		'postPrec', 99,
+		'handler', handleParserError,
+		'associativity', 'n/a'
+	);
+
+
 
 /*
 | Parses a token at pos from a tokenRay.
@@ -1011,8 +1022,8 @@ parser.parse =
 		state.create(
 			'tokens', tokens,
 			'pos', 0,
-			'ast', null,
-			'prec', 99
+			'spec', tokenSpecs.start,
+			'ast', null
 		);
 
 	while( !st.reachedEnd )
