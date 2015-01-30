@@ -49,7 +49,7 @@ if( JION )
 						comment :
 							'Handler function to be called',
 						type :
-							'Object',
+							'Object', // FUTURE
 					},
 				astCreator :
 					{
