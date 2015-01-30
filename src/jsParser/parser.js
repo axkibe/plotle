@@ -233,8 +233,7 @@ handleDualisticOps =
 				spec.astCreator.create(
 					'left', ast,
 					'right', state.ast
-				),
-			'prec', prec
+				)
 		);
 
 	return state;
