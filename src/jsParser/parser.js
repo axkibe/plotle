@@ -273,7 +273,8 @@ handleMonoOps =
 	state =
 		state.create(
 			'ast',
-				spec.astCreator.create( 'expr', state.ast )
+				spec.astCreator.create( 'expr', state.ast ),
+			'spec', spec // XXX
 		);
 
 	return state;
@@ -961,14 +962,11 @@ parseToken =
 	)
 {
 	var
-		prec,
 		curSpec,
 		curState,
 		nextSpec;
 
 	curState = state;
-
-	prec = state.prec;
 
 	curSpec = tokenSpecs[ state.current.type ];
 
@@ -980,15 +978,19 @@ parseToken =
 
 		if(
 			(
-				nextSpec.prec( state.ast ) < prec
+				nextSpec.prec( state.ast ) < curState.prec
 				|| (
-					nextSpec.prec( state.ast ) === prec
-//					&& nextSpec.associativity === 'r2l'
+					nextSpec.prec( state.ast ) === curState.prec
+					&&
+					curState.spec.associativity === 'r2l'
 				)
 			)
 			&& curSpec.handler !== handlePass
 		)
 		{
+			// reset the operator precedence to current
+			state = state.create( 'spec', curState.spec );
+
 			state = parseToken( state );
 		}
 	}
