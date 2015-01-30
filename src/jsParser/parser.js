@@ -3,8 +3,6 @@
 |
 | This parser must not use ast-shorthands,
 | because these are using the parser.
-|
-| FIXME remove all advance
 */
 
 
@@ -426,7 +424,12 @@ handleRoundBrackets =
 
 	// this is a grouping
 
-	state = state.advance( null, spec.prePrec );
+	state =
+		state.create(
+			'ast', null,
+			'prec', spec.prePrec,
+			'pos', state.pos + 1
+		);
 
 	state = parseToken( state );
 
@@ -441,9 +444,9 @@ handleRoundBrackets =
 	}
 
 	state =
-		state.advance(
-			state.ast,
-			99 // tokenSpecs[ ')' ].prePrec
+		state.create(
+			'prec', 99, // tokenSpecs[ ')' ].prePrec
+			'pos', state.pos + 1
 		);
 
 	return state;
@@ -546,7 +549,12 @@ handleSquareBrackets =
 		return state;
 	}
 
-	state = state.advance( null, spec.prePrec );
+	state =
+		state.create(
+			'ast', null,
+			'prec', spec.prePrec,
+			'pos', state.pos + 1
+		);
 
 	state = parseToken( state );
 
@@ -561,12 +569,15 @@ handleSquareBrackets =
 	}
 
 	state =
-		state.advance(
-			ast_member.create(
-				'expr', ast,
-				'member', state.ast
-			),
-			99 // tokenSpecs[ ')' ].prePrec
+		state.create(
+			'ast',
+				ast_member.create(
+					'expr', ast,
+					'member', state.ast
+				),
+			'prec',
+				99, // tokenSpecs[ ')' ].prePrec
+			'pos', state.pos + 1
 		);
 
 	return state;
