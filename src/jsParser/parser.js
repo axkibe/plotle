@@ -188,7 +188,7 @@ handleDot =
 					'expr', state.ast,
 					'member', name.value
 				),
-			'prec', spec.prec( ast ),
+			'spec', spec,
 			'pos', state.pos + 2
 		);
 
