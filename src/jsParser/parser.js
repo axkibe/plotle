@@ -221,7 +221,7 @@ handleDualisticOps =
 	state =
 		state.create(
 			'ast', null,
-			'prec', spec.prePrec,
+			'spec', spec,
 			'pos', state.pos + 1
 		);
 
