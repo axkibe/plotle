@@ -764,8 +764,8 @@ tokenSpecs[ '(' ] =
 
 tokenSpecs[ ')' ] =
 	tokenSpec.create(
-		'prePrec', 1, // FIXME 99?
-		'postPrec', 1,
+		'prePrec', 1,
+		'postPrec', 99,
 		'handler', handlePass,
 		'associativity', 'n/a'
 	);
