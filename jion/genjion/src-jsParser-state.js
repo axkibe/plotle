@@ -64,7 +64,6 @@ Constructor =
 	function(
 		v_ast, // current ast entity
 		v_pos, // current position in token ray
-		v_prec, // current precedence
 		v_spec, // current precedence spec
 		v_tokens // ray of tokens to parse
 	)
@@ -81,13 +80,9 @@ Constructor =
 
 	this.pos = v_pos;
 
-	this.prec = v_prec;
-
 	this.spec = v_spec;
 
 	this.tokens = v_tokens;
-
-	this._init( v_spec );
 
 	if( FREEZE )
 	{
@@ -121,7 +116,6 @@ prototype.create =
 		inherit,
 		v_ast,
 		v_pos,
-		v_prec,
 		v_spec,
 		v_tokens;
 
@@ -132,8 +126,6 @@ prototype.create =
 		v_ast = this.ast;
 
 		v_pos = this.pos;
-
-		v_prec = this.prec;
 
 		v_spec = this.spec;
 
@@ -168,15 +160,6 @@ prototype.create =
 
 				break;
 
-			case 'prec' :
-
-				if( arg !== undefined )
-				{
-					v_prec = arg;
-				}
-
-				break;
-
 			case 'spec' :
 
 				if( arg !== undefined )
@@ -204,11 +187,6 @@ prototype.create =
 		}
 	}
 
-	if( v_prec === undefined )
-	{
-		v_prec = null;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_ast === undefined )
@@ -233,23 +211,6 @@ prototype.create =
 /**/	)
 /**/	{
 /**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_prec === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_prec !== null )
-/**/	{
-/**/		if(
-/**/			typeof( v_prec ) !== 'number'
-/**/			||
-/**/			Math.floor( v_prec ) !== v_prec
-/**/		)
-/**/		{
-/**/			throw new Error( );
-/**/		}
 /**/	}
 /**/
 /**/	if( v_spec === undefined )
@@ -285,8 +246,6 @@ prototype.create =
 		&&
 		v_pos === inherit.pos
 		&&
-		v_prec === inherit.prec
-		&&
 		v_spec.equals( inherit.spec )
 		&&
 		v_tokens === inherit.tokens
@@ -295,7 +254,7 @@ prototype.create =
 		return inherit;
 	}
 
-	return new Constructor( v_ast, v_pos, v_prec, v_spec, v_tokens );
+	return new Constructor( v_ast, v_pos, v_spec, v_tokens );
 };
 
 
@@ -350,8 +309,6 @@ prototype.equals =
 		this.ast === obj.ast
 		&&
 		this.pos === obj.pos
-		&&
-		this.prec === obj.prec
 		&&
 		this.spec.equals( obj.spec )
 		&&

@@ -43,15 +43,6 @@ if( JION )
 						type :
 							'Integer'
 					},
-				prec : // XXX remove
-					{
-						comment :
-							'current precedence',
-						type :
-							'Integer',
-						defaultValue :
-							null
-					},
 				spec :
 					{
 						comment :
@@ -60,8 +51,6 @@ if( JION )
 							'jsParser_tokenSpec'
 					}
 			},
-		init :
-			[ 'spec' ] // XXX no spec
 	};
 }
 
@@ -76,17 +65,16 @@ jools = require( '../jools/jools' );
 
 
 /*
-| Initializer.
+| The current token.
 */
-state.prototype._init =
-	function( spec )
-{
-	// XXX replace with ahead
-	if( spec )
+jools.lazyValue(
+	state.prototype,
+	'prec',
+	function( )
 	{
-		this.prec = spec.prec( this.ast );
+		return this.spec.prec( this.ast );
 	}
-};
+);
 
 
 /*
