@@ -1850,6 +1850,7 @@ formatStatement =
 		case 'ast_call' :
 		case 'ast_delete' :
 		case 'ast_fail' :
+		case 'ast_member' :
 		case 'ast_new' :
 		case 'ast_number' :
 		case 'ast_plusAssign' :
@@ -1869,7 +1870,7 @@ formatStatement =
 
 		default :
 
-			throw new Error( );
+			throw new Error( statement.reflect );
 	}
 };
 

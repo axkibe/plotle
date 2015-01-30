@@ -57,11 +57,7 @@ if( JION )
 						comment :
 							'current precedence spec',
 						type :
-							'jsParser_tokenSpec',
-						defaultValue :
-							undefined, // XXX required
-						assign :
-							null // XXX
+							'jsParser_tokenSpec'
 					}
 			},
 		init :

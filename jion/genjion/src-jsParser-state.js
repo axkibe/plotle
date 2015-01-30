@@ -83,6 +83,8 @@ Constructor =
 
 	this.prec = v_prec;
 
+	this.spec = v_spec;
+
 	this.tokens = v_tokens;
 
 	this._init( v_spec );
@@ -132,6 +134,8 @@ prototype.create =
 		v_pos = this.pos;
 
 		v_prec = this.prec;
+
+		v_spec = this.spec;
 
 		v_tokens = this.tokens;
 	}
@@ -205,11 +209,6 @@ prototype.create =
 		v_prec = null;
 	}
 
-	if( v_spec === undefined )
-	{
-		v_spec = undefined;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_ast === undefined )
@@ -253,17 +252,19 @@ prototype.create =
 /**/		}
 /**/	}
 /**/
+/**/	if( v_spec === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
 /**/	if( v_spec === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_spec !== undefined )
+/**/	if( v_spec.reflect !== 'jsParser_tokenSpec' )
 /**/	{
-/**/		if( v_spec.reflect !== 'jsParser_tokenSpec' )
-/**/		{
-/**/			throw new Error( );
-/**/		}
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_tokens === undefined )
@@ -286,7 +287,7 @@ prototype.create =
 		&&
 		v_prec === inherit.prec
 		&&
-		v_spec === null
+		v_spec.equals( inherit.spec )
 		&&
 		v_tokens === inherit.tokens
 	)
@@ -351,6 +352,8 @@ prototype.equals =
 		this.pos === obj.pos
 		&&
 		this.prec === obj.prec
+		&&
+		this.spec.equals( obj.spec )
 		&&
 		this.tokens === obj.tokens
 	);
