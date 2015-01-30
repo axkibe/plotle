@@ -65,6 +65,7 @@ Constructor =
 		v_ast, // current ast entity
 		v_pos, // current position in token ray
 		v_prec, // current precedence
+		v_spec, // current precedence spec
 		v_tokens // ray of tokens to parse
 	)
 {
@@ -84,7 +85,7 @@ Constructor =
 
 	this.tokens = v_tokens;
 
-	this._init( );
+	this._init( v_spec );
 
 	if( FREEZE )
 	{
@@ -293,7 +294,7 @@ prototype.create =
 		return inherit;
 	}
 
-	return new Constructor( v_ast, v_pos, v_prec, v_tokens );
+	return new Constructor( v_ast, v_pos, v_prec, v_spec, v_tokens );
 };
 
 

@@ -65,7 +65,7 @@ if( JION )
 					}
 			},
 		init :
-			[ ]
+			[ 'spec' ] // XXX no spec
 	};
 }
 
@@ -83,12 +83,12 @@ jools = require( '../jools/jools' );
 | Initializer.
 */
 state.prototype._init =
-	function( )
+	function( spec )
 {
 	// XXX replace with ahead
-	if( this.spec )
+	if( spec )
 	{
-		this.prec = this.spec.prec( this.ast );
+		this.prec = spec.prec( this.ast );
 	}
 };
 
