@@ -43,7 +43,7 @@ if( JION )
 						type :
 							'Integer'
 					},
-				prec :
+				prec : // XXX remove
 					{
 						comment :
 							'current precedence',
@@ -51,8 +51,21 @@ if( JION )
 							'Integer',
 						defaultValue :
 							null
+					},
+				spec :
+					{
+						comment :
+							'current precedence spec',
+						type :
+							'jsParser_tokenSpec',
+						defaultValue :
+							undefined, // XXX required
+						assign :
+							null // XXX
 					}
-			}
+			},
+		init :
+			[ ]
 	};
 }
 
@@ -64,6 +77,20 @@ var
 state = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
+
+
+/*
+| Initializer.
+*/
+state.prototype._init =
+	function( )
+{
+	// XXX replace with ahead
+	if( this.spec )
+	{
+		this.prec = this.spec.prec( this.ast );
+	}
+};
 
 
 /*

@@ -27,7 +27,8 @@ else
 */
 var
 	jools,
-	jion_proto;
+	jion_proto,
+	jsParser_tokenSpec;
 
 
 /*
@@ -46,6 +47,8 @@ if( SERVER )
 	jools = require( '../../src/jools/jools' );
 
 	jion_proto = require( '../../src/jion/proto' );
+
+	jsParser_tokenSpec = require( '../../src/jsParser/tokenSpec' );
 }
 
 
@@ -81,6 +84,8 @@ Constructor =
 
 	this.tokens = v_tokens;
 
+	this._init( );
+
 	if( FREEZE )
 	{
 		Object.freeze( this );
@@ -114,6 +119,7 @@ prototype.create =
 		v_ast,
 		v_pos,
 		v_prec,
+		v_spec,
 		v_tokens;
 
 	if( this !== jsParser_state )
@@ -166,6 +172,15 @@ prototype.create =
 
 				break;
 
+			case 'spec' :
+
+				if( arg !== undefined )
+				{
+					v_spec = arg;
+				}
+
+				break;
+
 			case 'tokens' :
 
 				if( arg !== undefined )
@@ -187,6 +202,11 @@ prototype.create =
 	if( v_prec === undefined )
 	{
 		v_prec = null;
+	}
+
+	if( v_spec === undefined )
+	{
+		v_spec = undefined;
 	}
 
 /**/if( CHECK )
@@ -232,6 +252,19 @@ prototype.create =
 /**/		}
 /**/	}
 /**/
+/**/	if( v_spec === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_spec !== undefined )
+/**/	{
+/**/		if( v_spec.reflect !== 'jsParser_tokenSpec' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
 /**/	if( v_tokens === undefined )
 /**/	{
 /**/		throw new Error( );
@@ -251,6 +284,8 @@ prototype.create =
 		v_pos === inherit.pos
 		&&
 		v_prec === inherit.prec
+		&&
+		v_spec === null
 		&&
 		v_tokens === inherit.tokens
 	)
