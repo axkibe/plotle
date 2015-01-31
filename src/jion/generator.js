@@ -1442,18 +1442,24 @@ generator.prototype.genCreatorChecks =
 		}
 	}
 
+	// XXX
 	/*
 	if( this.ray )
 	{
-		$for(
-			'a = 0, aZ = this.ray.length',
-			'a < aZ',
-			'++a',
-			$if(
-				this.genTypeCheckFailCondition( XXX ),
-
-			)
-		)
+		check =
+			check
+			.$for(
+				'a = 0, aZ = ray.length',
+				'a < aZ',
+				'++a',
+				$if(
+					this.genTypeCheckFailCondition(
+						$( 'ray[ a ]' ),
+						this.ray
+					),
+					$fail( )
+				)
+			);
 	}
 	*/
 

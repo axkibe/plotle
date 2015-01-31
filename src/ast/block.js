@@ -19,8 +19,7 @@ if( JION )
 		id :
 			'ast_block',
 		ray :
-			// '->statement' FUTURE
-			[ ]
+			'->astStatement'
 	};
 }
 
