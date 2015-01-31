@@ -159,11 +159,6 @@ prototype.create =
 		}
 	}
 
-	if( v_value === undefined )
-	{
-		v_value = undefined;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_type === undefined )

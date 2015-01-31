@@ -162,16 +162,6 @@ prototype.create =
 		}
 	}
 
-	if( v_primitives === undefined )
-	{
-		v_primitives = undefined;
-	}
-
-	if( v_units === undefined )
-	{
-		v_units = undefined;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_primitives === null )

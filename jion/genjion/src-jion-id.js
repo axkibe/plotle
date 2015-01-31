@@ -162,16 +162,6 @@ prototype.create =
 		}
 	}
 
-	if( v_name === undefined )
-	{
-		v_name = undefined;
-	}
-
-	if( v_unit === undefined )
-	{
-		v_unit = undefined;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_name === null )

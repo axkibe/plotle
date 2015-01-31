@@ -1236,7 +1236,11 @@ generator.prototype.genCreatorDefaults =
 			continue;
 		}
 
-		if( attr.defaultValue !== null )
+		if(
+			attr.defaultValue !== null
+			&&
+			!attr.defaultValue.equals( shorthand.$undefined )
+		)
 		{
 			block =
 				block

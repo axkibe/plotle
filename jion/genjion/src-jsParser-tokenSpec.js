@@ -204,11 +204,6 @@ prototype.create =
 		}
 	}
 
-	if( v_astCreator === undefined )
-	{
-		v_astCreator = undefined;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_associativity === undefined )

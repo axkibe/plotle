@@ -250,11 +250,6 @@ prototype.create =
 		v_block = null;
 	}
 
-	if( v_capsule === undefined )
-	{
-		v_capsule = undefined;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_block === undefined )
