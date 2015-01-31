@@ -1440,11 +1440,7 @@ generator.prototype.genCreatorChecks =
 		}
 	}
 
-
-	// FIXME, in case of check is empty
-	//        do not append
-
-	if( checkin )
+	if( checkin && check.length > 0 )
 	{
 		block = block.$check( check );
 	}

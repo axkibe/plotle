@@ -260,10 +260,6 @@ prototype.create =
 		}
 	}
 
-/**/if( CHECK )
-/**/{
-/**/}
-
 	if( inherit && twigDup === false )
 	{
 		return inherit;

@@ -209,10 +209,6 @@ prototype.create =
 		}
 	}
 
-/**/if( CHECK )
-/**/{
-/**/}
-
 	if( inherit && !rayDup )
 	{
 		return inherit;

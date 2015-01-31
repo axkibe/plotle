@@ -111,10 +111,6 @@ prototype.create =
 		inherit = this;
 	}
 
-/**/if( CHECK )
-/**/{
-/**/}
-
 	if( inherit )
 	{
 		return inherit;
