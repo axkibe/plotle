@@ -147,7 +147,6 @@ $typeof = shorthand.$typeof;
 
 $var = shorthand.$var;
 
-// FUTURE remove this two
 $returnTrue = $return( true );
 
 $returnFalse = $return( false );
@@ -1306,7 +1305,8 @@ generator.prototype.genSingleTypeCheckFailCondition =
 */
 generator.prototype.genTypeCheckFailCondition =
 	function(
-		attr
+		avar,  // the variable to check
+		idx  // the id or idRay it has to match
 	)
 {
 	var
@@ -1314,24 +1314,26 @@ generator.prototype.genTypeCheckFailCondition =
 		aZ,
 		condArray;
 
-	if(
-		!Array.isArray( attr.id )
-		|| attr.id.length === 1
-	)
+	if( !Array.isArray( idx ) )
 	{
-		return this.genSingleTypeCheckFailCondition( attr.v, attr.id );
+		return this.genSingleTypeCheckFailCondition( avar, idx );
+	}
+
+	if( idx.length === 1 )
+	{
+		return this.genSingleTypeCheckFailCondition( avar, idx[ 0 ] );
 	}
 
 	condArray = [ ];
 
 	for(
-		a = 0, aZ = attr.id.length;
+		a = 0, aZ = idx.length;
 		a < aZ;
 		a++
 	)
 	{
 		condArray.push(
-			this.genSingleTypeCheckFailCondition( attr.v, attr.id[ a ] )
+			this.genSingleTypeCheckFailCondition( avar, idx[ a ] )
 		);
 	}
 
@@ -1426,7 +1428,7 @@ generator.prototype.genCreatorChecks =
 			cond = null;
 		}
 
-		tcheck = this.genTypeCheckFailCondition( attr );
+		tcheck = this.genTypeCheckFailCondition( attr.v, attr.id );
 
 		if( cond )
 		{
@@ -1439,6 +1441,21 @@ generator.prototype.genCreatorChecks =
 			check = check.$if( tcheck, $fail( ) );
 		}
 	}
+
+	/*
+	if( this.ray )
+	{
+		$for(
+			'a = 0, aZ = this.ray.length',
+			'a < aZ',
+			'++a',
+			$if(
+				this.genTypeCheckFailCondition( XXX ),
+
+			)
+		)
+	}
+	*/
 
 	if( checkin && check.length > 0 )
 	{
