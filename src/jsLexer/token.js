@@ -64,6 +64,8 @@ token = require( '../jion/this' )( module );
 /**/	tokenList[ ']' ] = true;
 /**/	tokenList[ '(' ] = true;
 /**/	tokenList[ ')' ] = true;
+/**/	tokenList[ '{' ] = true;
+/**/	tokenList[ '}' ] = true;
 /**/	tokenList[ '++' ] = true;
 /**/	tokenList[ '+=' ] = true;
 /**/	tokenList[ '||' ] = true;

@@ -39,6 +39,7 @@ var
 	ast_new,
 	ast_not,
 	ast_number,
+	ast_objLiteral,
 	ast_or,
 	ast_plus,
 	ast_plusAssign,
@@ -54,6 +55,7 @@ var
 	handleNew,
 	handleNumber,
 	handleIdentifier,
+	handleObjectLiteral,
 	handleParserError,
 	handlePass,
 	handleRoundBrackets,
@@ -98,6 +100,8 @@ ast_new = require( '../ast/new' );
 ast_not = require( '../ast/not' );
 
 ast_number = require( '../ast/number' );
+
+ast_objLiteral = require( '../ast/objLiteral' );
 
 ast_or = require( '../ast/or' );
 
@@ -453,6 +457,59 @@ handleRoundBrackets =
 
 
 /*
+| Handler for { } Object literals
+*/
+handleObjectLiteral =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		olit,
+		ast;
+
+	ast = state.ast;
+
+	if( ast )
+	{
+		throw new Error( 'parser error' );
+	}
+
+	// this is an array literal
+	olit = ast_objLiteral.create( );
+
+	state =
+		state.create(
+			'ast', null,
+			'spec', spec,
+			'pos', state.pos + 1
+		);
+
+	if( state.reachedEnd )
+	{
+		throw new Error( 'missing "}"' );
+	}
+
+	if( state.current.type !== '}' )
+	{
+		// FUTURE cannot handle element currently
+		throw new Error( );
+	}
+
+	// advances over closing square bracket
+	state =
+		state.create(
+			'ast', olit,
+			'spec', spec,
+			'pos', state.pos + 1
+		);
+
+	return state;
+};
+
+
+/*
 | Handler for [ ].
 */
 handleSquareBrackets =
@@ -750,6 +807,22 @@ tokenSpecs[ 'false' ] =
 		'prePrec', -1,
 		'postPrec', -1,
 		'handler', handleBooleanLiteral,
+		'associativity', 'n/a'
+	);
+
+tokenSpecs[ '{' ] =
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
+		'handler', handleObjectLiteral,
+		'associativity', 'n/a'
+	);
+
+tokenSpecs[ '}' ] =
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
+		'handler', handleParserError,
 		'associativity', 'n/a'
 	);
 

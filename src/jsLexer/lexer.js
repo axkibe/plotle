@@ -159,10 +159,12 @@ jsLexer.tokenize =
 			case '>' :
 			case '.' :
 			case ',' :
-			case '[' :
-			case ']' :
 			case '(' :
 			case ')' :
+			case '[' :
+			case ']' :
+			case '{' :
+			case '}' :
 
 				tokens.push( token.create( 'type', ch ) );
 

@@ -951,7 +951,10 @@ generator.prototype.genCreatorVariables =
 		varList.push( 'arg', 'a', 'aZ' );
 	}
 
-	// XXX group
+	if( this.group )
+	{
+		varList.push( 'o', 'g', 'gZ', 'group', 'groupDup' );
+	}
 
 	if( this.ray )
 	{
@@ -996,13 +999,12 @@ generator.prototype.genCreatorInheritanceReceiver =
 
 	receiver = $block( ).$( 'inherit = this' );
 
-	if( this.twig )
+	if( this.group )
 	{
 		receiver =
 			receiver
-			.$( 'twig = inherit.twig' )
-			.$( 'ranks = inherit.ranks' )
-			.$( 'twigDup = false' );
+			.$( 'group = inherit.group' )
+			.$( 'groupDup = false' );
 	}
 
 	if( this.ray )
@@ -1011,6 +1013,15 @@ generator.prototype.genCreatorInheritanceReceiver =
 			receiver
 			.$( 'ray = inherit.ray' )
 			.$( 'rayDup = false' );
+	}
+
+	if( this.twig )
+	{
+		receiver =
+			receiver
+			.$( 'twig = inherit.twig' )
+			.$( 'ranks = inherit.ranks' )
+			.$( 'twigDup = false' );
 	}
 
 	for(
@@ -1042,15 +1053,14 @@ generator.prototype.genCreatorInheritanceReceiver =
 			receiver
 		);
 
-	if( this.twig )
+	if( this.group )
 	{
 		thisCheck =
 			thisCheck
 			.$elsewise(
 				$block( )
-				.$assign( 'twig', $objLiteral( ) )
-				.$( 'ranks = [ ]' )
-				.$( 'twigDup = true' )
+				.$( 'group = { }' )
+				.$( 'groupDup = true' )
 			);
 	}
 
@@ -1062,6 +1072,19 @@ generator.prototype.genCreatorInheritanceReceiver =
 				$block( )
 				.$( 'ray = [ ]' )
 				.$( 'rayDup = true' )
+			);
+	}
+
+	if( this.twig )
+	{
+		thisCheck =
+			thisCheck
+			.$elsewise(
+				$block( )
+				//.$assign( 'twig', $objLiteral( ) )
+				.$( 'twig = { }' )
+				.$( 'ranks = [ ]' )
+				.$( 'twigDup = true' )
 			);
 	}
 
