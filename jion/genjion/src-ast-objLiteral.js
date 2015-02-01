@@ -110,6 +110,7 @@ prototype.create =
 		arg,
 		inherit,
 		key,
+		o,
 		rank,
 		ranks,
 		twig,
@@ -259,6 +260,23 @@ prototype.create =
 /**/			}
 		}
 	}
+
+/**/if( CHECK )
+/**/{
+/**/	for(
+/**/		a = 0, aZ = ranks.length;
+/**/		a < aZ;
+/**/		++a
+/**/	)
+/**/	{
+/**/		o = twig[ ranks[ a ] ];
+/**/
+/**/		if( undefined && undefined )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
 
 	if( inherit && twigDup === false )
 	{

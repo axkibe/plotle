@@ -901,12 +901,12 @@ generator.prototype.genCreatorVariables =
 
 	if( this.twig )
 	{
-		varList.push( 'key', 'rank', 'ranks', 'twig', 'twigDup' );
+		varList.push( 'o', 'key', 'rank', 'ranks', 'twig', 'twigDup' );
 	}
 
 	if( this.ray )
 	{
-		varList.push( 'r', 'ray', 'rayDup' );
+		varList.push( 'o', 'ray', 'rayDup' );
 	}
 
 	varList.sort( );
@@ -1353,7 +1353,7 @@ generator.prototype.genTypeCheckFailCondition =
 generator.prototype.genCreatorChecks =
 	function(
 		block, // block to append to
-		checkin  // do checks only when CHECKin
+		checking  // do checks only when CHECKin
 	)
 {
 	var
@@ -1366,7 +1366,7 @@ generator.prototype.genCreatorChecks =
 		name,
 		tcheck;
 
-	if( checkin )
+	if( checking )
 	{
 		check = $block( );
 	}
@@ -1456,10 +1456,10 @@ generator.prototype.genCreatorChecks =
 				'a < aZ',
 				'++a',
 				$block( )
-				.$( 'r = ray[ a ]' )
+				.$( 'o = ray[ a ]' )
 				.$if(
 					this.genTypeCheckFailCondition(
-						$( 'r' ),
+						$( 'o' ),
 						this.ray.idList
 					),
 					$fail( )
@@ -1467,7 +1467,28 @@ generator.prototype.genCreatorChecks =
 			);
 	}
 
-	if( checkin && check.length > 0 )
+	if( this.twig )
+	{
+		// FUTURE check if ranks and twig keys match
+		check =
+			check
+			.$for(
+				'a = 0, aZ = ranks.length',
+				'a < aZ',
+				'++a',
+				$block( )
+				.$( 'o = twig[ ranks[ a ] ]' )
+				.$if(
+					this.genTypeCheckFailCondition(
+						$( 'o' ),
+						this.twig.idList
+					),
+					$fail( )
+				)
+			);
+	}
+
+	if( checking && check.length > 0 )
 	{
 		block = block.$check( check );
 	}
@@ -2442,8 +2463,6 @@ generator.prototype.genFromJSONCreator =
 
 	funcBlock = this.genCreatorDefaults( funcBlock, true );
 
-	funcBlock = this.genCreatorChecks( funcBlock, false );
-
 	if( this.twig )
 	{
 		funcBlock = this.genFromJSONCreatorTwigProcessing( funcBlock );
@@ -2453,6 +2472,8 @@ generator.prototype.genFromJSONCreator =
 	{
 		funcBlock = this.genFromJSONCreatorRayProcessing( funcBlock );
 	}
+
+	funcBlock = this.genCreatorChecks( funcBlock, false );
 
 	funcBlock = this.genFromJSONCreatorReturn( funcBlock );
 

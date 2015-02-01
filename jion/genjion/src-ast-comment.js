@@ -104,7 +104,7 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
-		r,
+		o,
 		ray,
 		rayDup;
 
@@ -218,9 +218,9 @@ prototype.create =
 /**/		++a
 /**/	)
 /**/	{
-/**/		r = ray[ a ];
+/**/		o = ray[ a ];
 /**/
-/**/		if( typeof( r ) !== 'string' && !( r instanceof String ) )
+/**/		if( typeof( o ) !== 'string' && !( o instanceof String ) )
 /**/		{
 /**/			throw new Error( );
 /**/		}

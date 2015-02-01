@@ -189,7 +189,7 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
-		r,
+		o,
 		ray,
 		rayDup,
 		v_func;
@@ -386,64 +386,64 @@ prototype.create =
 /**/		++a
 /**/	)
 /**/	{
-/**/		r = ray[ a ];
+/**/		o = ray[ a ];
 /**/
 /**/		if(
-/**/			r.reflect !== 'ast_and'
+/**/			o.reflect !== 'ast_and'
 /**/			&&
-/**/			r.reflect !== 'ast_arrayLiteral'
+/**/			o.reflect !== 'ast_arrayLiteral'
 /**/			&&
-/**/			r.reflect !== 'ast_assign'
+/**/			o.reflect !== 'ast_assign'
 /**/			&&
-/**/			r.reflect !== 'ast_boolean'
+/**/			o.reflect !== 'ast_boolean'
 /**/			&&
-/**/			r.reflect !== 'ast_call'
+/**/			o.reflect !== 'ast_call'
 /**/			&&
-/**/			r.reflect !== 'ast_comma'
+/**/			o.reflect !== 'ast_comma'
 /**/			&&
-/**/			r.reflect !== 'ast_condition'
+/**/			o.reflect !== 'ast_condition'
 /**/			&&
-/**/			r.reflect !== 'ast_delete'
+/**/			o.reflect !== 'ast_delete'
 /**/			&&
-/**/			r.reflect !== 'ast_differs'
+/**/			o.reflect !== 'ast_differs'
 /**/			&&
-/**/			r.reflect !== 'ast_dot'
+/**/			o.reflect !== 'ast_dot'
 /**/			&&
-/**/			r.reflect !== 'ast_equals'
+/**/			o.reflect !== 'ast_equals'
 /**/			&&
-/**/			r.reflect !== 'ast_func'
+/**/			o.reflect !== 'ast_func'
 /**/			&&
-/**/			r.reflect !== 'ast_greaterThan'
+/**/			o.reflect !== 'ast_greaterThan'
 /**/			&&
-/**/			r.reflect !== 'ast_instanceof'
+/**/			o.reflect !== 'ast_instanceof'
 /**/			&&
-/**/			r.reflect !== 'ast_lessThan'
+/**/			o.reflect !== 'ast_lessThan'
 /**/			&&
-/**/			r.reflect !== 'ast_member'
+/**/			o.reflect !== 'ast_member'
 /**/			&&
-/**/			r.reflect !== 'ast_new'
+/**/			o.reflect !== 'ast_new'
 /**/			&&
-/**/			r.reflect !== 'ast_not'
+/**/			o.reflect !== 'ast_not'
 /**/			&&
-/**/			r.reflect !== 'ast_null'
+/**/			o.reflect !== 'ast_null'
 /**/			&&
-/**/			r.reflect !== 'ast_number'
+/**/			o.reflect !== 'ast_number'
 /**/			&&
-/**/			r.reflect !== 'ast_objLiteral'
+/**/			o.reflect !== 'ast_objLiteral'
 /**/			&&
-/**/			r.reflect !== 'ast_or'
+/**/			o.reflect !== 'ast_or'
 /**/			&&
-/**/			r.reflect !== 'ast_plus'
+/**/			o.reflect !== 'ast_plus'
 /**/			&&
-/**/			r.reflect !== 'ast_plusAssign'
+/**/			o.reflect !== 'ast_plusAssign'
 /**/			&&
-/**/			r.reflect !== 'ast_preIncrement'
+/**/			o.reflect !== 'ast_preIncrement'
 /**/			&&
-/**/			r.reflect !== 'ast_string'
+/**/			o.reflect !== 'ast_string'
 /**/			&&
-/**/			r.reflect !== 'ast_typeof'
+/**/			o.reflect !== 'ast_typeof'
 /**/			&&
-/**/			r.reflect !== 'ast_var'
+/**/			o.reflect !== 'ast_var'
 /**/		)
 /**/		{
 /**/			throw new Error( );

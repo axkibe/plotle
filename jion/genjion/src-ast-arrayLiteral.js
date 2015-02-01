@@ -104,7 +104,7 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
-		r,
+		o,
 		ray,
 		rayDup;
 
@@ -218,7 +218,7 @@ prototype.create =
 /**/		++a
 /**/	)
 /**/	{
-/**/		r = ray[ a ];
+/**/		o = ray[ a ];
 /**/
 /**/		if( undefined && undefined )
 /**/		{
