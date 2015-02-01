@@ -27,6 +27,7 @@ else
 */
 var
 	jools,
+	ast_var,
 	jion_id,
 	jion_proto;
 
@@ -45,6 +46,8 @@ function( ) {
 if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
+
+	ast_var = require( '../../src/ast/var' );
 
 	jion_id = require( '../../src/jion/id' );
 
@@ -373,11 +376,6 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_defaultValue === null )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
 /**/	if( v_id === undefined )
 /**/	{
 /**/		throw new Error( );
@@ -437,7 +435,7 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_v.reflect !== 'jion_id' )
+/**/	if( v_v.reflect !== 'ast_var' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

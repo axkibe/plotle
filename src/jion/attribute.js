@@ -70,7 +70,9 @@ if( JION )
 						type :
 							'Object', // FIXME
 						defaultValue :
-							undefined
+							undefined,
+						allowsNull :
+							true // FIXME should be ast
 					},
 				json :
 					{
@@ -101,7 +103,7 @@ if( JION )
 							'attribute variable used in generate',
 							// FIXME name vVar
 						type :
-							'jion_id'
+							'ast_var'
 					}
 			}
 	};

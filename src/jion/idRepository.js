@@ -3,7 +3,7 @@
 |
 | Is a set of units and names.
 |
-| FUTURE change it to idRay
+| FIXME remove
 */
 
 

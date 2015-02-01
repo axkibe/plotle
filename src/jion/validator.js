@@ -53,6 +53,7 @@ attributeBlacklist =
 		'atRank' : true,
 		'create' : true,
 		'getPath' : true,
+		'group' : true,
 		'inherit' : true,
 		'newUID' : true,
 		'ranks' : true,
@@ -76,6 +77,7 @@ jionWhitelist =
 		'init' : true,
 		'json' : true,
 		'equals' : true, // XX
+		'group' : true,
 		'subclass' : true,
 		'singleton' : true,
 		'ray' : true,
@@ -205,9 +207,7 @@ var _checkTwig =
 		twig = require( '../typemaps/' + twig.substr( 2 ) + '.js' );
 	}
 
-	if(
-		!( Array.isArray( twig ) )
-	)
+	if( !( Array.isArray( twig ) ) )
 	{
 		throw new Error(
 			'twig definition must be an Array or a typemap to one'
