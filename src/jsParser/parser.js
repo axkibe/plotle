@@ -272,9 +272,8 @@ handleMonoOps =
 
 	state =
 		state.create(
-			'ast',
-				spec.astCreator.create( 'expr', state.ast ),
-			'spec', spec // XXX
+			'ast', spec.astCreator.create( 'expr', state.ast ),
+			'spec', spec
 		);
 
 	return state;
@@ -796,8 +795,8 @@ tokenSpecs[ '.' ] =
 
 tokenSpecs[ 'new' ] =
 	tokenSpec.create(
-		'prePrec', 2, // XXX
-		'postPrec', 2, // XXX
+		'prePrec', 2,
+		'postPrec', 2,
 		'handler', handleNew,
 		'associativity', 'r2l'
 	);

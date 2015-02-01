@@ -510,9 +510,8 @@ shorthand.$lessThan =
 
 /*
 | Shorthand for creating greater-than comparisons.
-| XXX
 */
-shorthand.ast_greaterThan =
+shorthand.$greaterThan =
 	function(
 		left,
 		right
