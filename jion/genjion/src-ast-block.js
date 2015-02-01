@@ -36,6 +36,7 @@ var
 	ast_comma,
 	ast_comment,
 	ast_condition,
+	ast_continue,
 	ast_delete,
 	ast_differs,
 	ast_dot,
@@ -99,6 +100,8 @@ if( SERVER )
 	ast_comment = require( '../../src/ast/comment' );
 
 	ast_condition = require( '../../src/ast/condition' );
+
+	ast_continue = require( '../../src/ast/continue' );
 
 	ast_delete = require( '../../src/ast/delete' );
 
@@ -215,6 +218,7 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
+		r,
 		ray,
 		rayDup;
 
@@ -319,6 +323,99 @@ prototype.create =
 /**/			}
 		}
 	}
+
+/**/if( CHECK )
+/**/{
+/**/	for(
+/**/		a = 0, aZ = ray.length;
+/**/		a < aZ;
+/**/		++a
+/**/	)
+/**/	{
+/**/		r = ray[ a ];
+/**/
+/**/		if(
+/**/			r.reflect !== 'ast_and'
+/**/			&&
+/**/			r.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			r.reflect !== 'ast_assign'
+/**/			&&
+/**/			r.reflect !== 'ast_boolean'
+/**/			&&
+/**/			r.reflect !== 'ast_call'
+/**/			&&
+/**/			r.reflect !== 'ast_check'
+/**/			&&
+/**/			r.reflect !== 'ast_comma'
+/**/			&&
+/**/			r.reflect !== 'ast_comment'
+/**/			&&
+/**/			r.reflect !== 'ast_condition'
+/**/			&&
+/**/			r.reflect !== 'ast_continue'
+/**/			&&
+/**/			r.reflect !== 'ast_delete'
+/**/			&&
+/**/			r.reflect !== 'ast_differs'
+/**/			&&
+/**/			r.reflect !== 'ast_dot'
+/**/			&&
+/**/			r.reflect !== 'ast_equals'
+/**/			&&
+/**/			r.reflect !== 'ast_fail'
+/**/			&&
+/**/			r.reflect !== 'ast_for'
+/**/			&&
+/**/			r.reflect !== 'ast_forIn'
+/**/			&&
+/**/			r.reflect !== 'ast_func'
+/**/			&&
+/**/			r.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			r.reflect !== 'ast_if'
+/**/			&&
+/**/			r.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			r.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			r.reflect !== 'ast_member'
+/**/			&&
+/**/			r.reflect !== 'ast_new'
+/**/			&&
+/**/			r.reflect !== 'ast_not'
+/**/			&&
+/**/			r.reflect !== 'ast_null'
+/**/			&&
+/**/			r.reflect !== 'ast_number'
+/**/			&&
+/**/			r.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			r.reflect !== 'ast_or'
+/**/			&&
+/**/			r.reflect !== 'ast_plus'
+/**/			&&
+/**/			r.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			r.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			r.reflect !== 'ast_return'
+/**/			&&
+/**/			r.reflect !== 'ast_string'
+/**/			&&
+/**/			r.reflect !== 'ast_switch'
+/**/			&&
+/**/			r.reflect !== 'ast_typeof'
+/**/			&&
+/**/			r.reflect !== 'ast_var'
+/**/			&&
+/**/			r.reflect !== 'ast_varDec'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
 
 	if( inherit && !rayDup )
 	{

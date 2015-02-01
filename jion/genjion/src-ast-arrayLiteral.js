@@ -104,6 +104,7 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
+		r,
 		ray,
 		rayDup;
 
@@ -208,6 +209,23 @@ prototype.create =
 /**/			}
 		}
 	}
+
+/**/if( CHECK )
+/**/{
+/**/	for(
+/**/		a = 0, aZ = ray.length;
+/**/		a < aZ;
+/**/		++a
+/**/	)
+/**/	{
+/**/		r = ray[ a ];
+/**/
+/**/		if( undefined && undefined )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
 
 	if( inherit && !rayDup )
 	{

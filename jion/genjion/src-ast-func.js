@@ -116,6 +116,7 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
+		r,
 		ray,
 		rayDup,
 		v_block,
@@ -273,6 +274,20 @@ prototype.create =
 /**/	if( v_capsule !== undefined )
 /**/	{
 /**/		if( typeof( v_capsule ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	for(
+/**/		a = 0, aZ = ray.length;
+/**/		a < aZ;
+/**/		++a
+/**/	)
+/**/	{
+/**/		r = ray[ a ];
+/**/
+/**/		if( undefined && undefined )
 /**/		{
 /**/			throw new Error( );
 /**/		}

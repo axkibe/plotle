@@ -906,8 +906,7 @@ generator.prototype.genCreatorVariables =
 
 	if( this.ray )
 	{
-		// varList.push( 'r', 'ray', 'rayDup' ); XXX
-		varList.push( 'ray', 'rayDup' );
+		varList.push( 'r', 'ray', 'rayDup' );
 	}
 
 	varList.sort( );
@@ -1277,7 +1276,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		case 'Null' :
 
-			return $differs( avar, 'null' );
+			throw new Error( );
 
 		case 'Number' :
 
@@ -1331,6 +1330,13 @@ generator.prototype.genTypeCheckFailCondition =
 		a++
 	)
 	{
+		if( idx[ a ].string === 'Null' )
+		{
+			condArray.unshift( $differs( avar, 'null' ) );
+
+			continue;
+		}
+
 		condArray.push(
 			this.genSingleTypeCheckFailCondition( avar, idx[ a ] )
 		);
@@ -1441,8 +1447,6 @@ generator.prototype.genCreatorChecks =
 		}
 	}
 
-	// XXX
-	/*
 	if( this.ray )
 	{
 		check =
@@ -1462,7 +1466,6 @@ generator.prototype.genCreatorChecks =
 				)
 			);
 	}
-	*/
 
 	if( checkin && check.length > 0 )
 	{
@@ -2226,7 +2229,8 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 				$block( )
 				.$(' jray [ r ] = null' )
 				.$continue( )
-			);
+			)
+			.append( loopSwitch );
 	}
 
 	block =

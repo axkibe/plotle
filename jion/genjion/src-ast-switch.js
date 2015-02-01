@@ -200,6 +200,7 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
+		r,
 		ray,
 		rayDup,
 		v_defaultCase,
@@ -418,6 +419,20 @@ prototype.create =
 /**/	)
 /**/	{
 /**/		throw new Error( );
+/**/	}
+/**/
+/**/	for(
+/**/		a = 0, aZ = ray.length;
+/**/		a < aZ;
+/**/		++a
+/**/	)
+/**/	{
+/**/		r = ray[ a ];
+/**/
+/**/		if( r.reflect !== 'ast_case' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
 /**/}
 

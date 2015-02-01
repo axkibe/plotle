@@ -12,6 +12,7 @@ module.exports =
 	'ast_comma',
 	'ast_comment',
 	'ast_condition',
+	'ast_continue',
 	'ast_delete',
 	'ast_differs',
 	'ast_dot',

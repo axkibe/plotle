@@ -110,6 +110,7 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
+		r,
 		ray,
 		rayDup,
 		v_block;
@@ -242,6 +243,20 @@ prototype.create =
 /**/	if( v_block.reflect !== 'ast_block' )
 /**/	{
 /**/		throw new Error( );
+/**/	}
+/**/
+/**/	for(
+/**/		a = 0, aZ = ray.length;
+/**/		a < aZ;
+/**/		++a
+/**/	)
+/**/	{
+/**/		r = ray[ a ];
+/**/
+/**/		if( undefined && undefined )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
 /**/}
 
