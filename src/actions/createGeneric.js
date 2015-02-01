@@ -39,7 +39,7 @@ if( JION )
 						comment :
 							'the transient item in creation',
 						type :
-							'Object', // FUTURE 'items.*',
+							'->fabricItems',
 						allowsNull :
 							true
 					},
@@ -48,7 +48,7 @@ if( JION )
 						comment :
 							'a transient item used as model',
 						type :
-							'Object', // FUTURE visual.*
+							'->fabricItems',
 						allowsNull :
 							true
 					},

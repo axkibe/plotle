@@ -19,7 +19,7 @@ if( JION )
 		id :
 			'ast_objLiteral',
 		twig :
-			'->statement'
+			'->astStatement'
 	};
 }
 

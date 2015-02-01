@@ -27,6 +27,44 @@ else
 */
 var
 	jools,
+	ast_and,
+	ast_arrayLiteral,
+	ast_assign,
+	ast_boolean,
+	ast_call,
+	ast_check,
+	ast_comma,
+	ast_comment,
+	ast_condition,
+	ast_continue,
+	ast_delete,
+	ast_differs,
+	ast_dot,
+	ast_equals,
+	ast_fail,
+	ast_for,
+	ast_forIn,
+	ast_func,
+	ast_greaterThan,
+	ast_if,
+	ast_instanceof,
+	ast_lessThan,
+	ast_member,
+	ast_new,
+	ast_not,
+	ast_null,
+	ast_number,
+	ast_objLiteral,
+	ast_or,
+	ast_plus,
+	ast_plusAssign,
+	ast_preIncrement,
+	ast_return,
+	ast_string,
+	ast_switch,
+	ast_typeof,
+	ast_var,
+	ast_varDec,
 	jion_proto;
 
 
@@ -44,6 +82,80 @@ function( ) {
 if( SERVER )
 {
 	jools = require( '../../src/jools/jools' );
+
+	ast_and = require( '../../src/ast/and' );
+
+	ast_arrayLiteral = require( '../../src/ast/arrayLiteral' );
+
+	ast_assign = require( '../../src/ast/assign' );
+
+	ast_boolean = require( '../../src/ast/boolean' );
+
+	ast_call = require( '../../src/ast/call' );
+
+	ast_check = require( '../../src/ast/check' );
+
+	ast_comma = require( '../../src/ast/comma' );
+
+	ast_comment = require( '../../src/ast/comment' );
+
+	ast_condition = require( '../../src/ast/condition' );
+
+	ast_continue = require( '../../src/ast/continue' );
+
+	ast_delete = require( '../../src/ast/delete' );
+
+	ast_differs = require( '../../src/ast/differs' );
+
+	ast_dot = require( '../../src/ast/dot' );
+
+	ast_equals = require( '../../src/ast/equals' );
+
+	ast_fail = require( '../../src/ast/fail' );
+
+	ast_for = require( '../../src/ast/for' );
+
+	ast_forIn = require( '../../src/ast/forIn' );
+
+	ast_func = require( '../../src/ast/func' );
+
+	ast_greaterThan = require( '../../src/ast/greaterThan' );
+
+	ast_if = require( '../../src/ast/if' );
+
+	ast_instanceof = require( '../../src/ast/instanceof' );
+
+	ast_lessThan = require( '../../src/ast/lessThan' );
+
+	ast_member = require( '../../src/ast/member' );
+
+	ast_new = require( '../../src/ast/new' );
+
+	ast_not = require( '../../src/ast/not' );
+
+	ast_null = require( '../../src/ast/null' );
+
+	ast_number = require( '../../src/ast/number' );
+
+	ast_or = require( '../../src/ast/or' );
+
+	ast_plus = require( '../../src/ast/plus' );
+
+	ast_plusAssign = require( '../../src/ast/plusAssign' );
+
+	ast_preIncrement = require( '../../src/ast/preIncrement' );
+
+	ast_return = require( '../../src/ast/return' );
+
+	ast_string = require( '../../src/ast/string' );
+
+	ast_switch = require( '../../src/ast/switch' );
+
+	ast_typeof = require( '../../src/ast/typeof' );
+
+	ast_var = require( '../../src/ast/var' );
+
+	ast_varDec = require( '../../src/ast/varDec' );
 
 	jion_proto = require( '../../src/jion/proto' );
 }
@@ -271,7 +383,83 @@ prototype.create =
 /**/	{
 /**/		o = twig[ ranks[ a ] ];
 /**/
-/**/		if( undefined && undefined )
+/**/		if(
+/**/			o.reflect !== 'ast_and'
+/**/			&&
+/**/			o.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			o.reflect !== 'ast_assign'
+/**/			&&
+/**/			o.reflect !== 'ast_boolean'
+/**/			&&
+/**/			o.reflect !== 'ast_call'
+/**/			&&
+/**/			o.reflect !== 'ast_check'
+/**/			&&
+/**/			o.reflect !== 'ast_comma'
+/**/			&&
+/**/			o.reflect !== 'ast_comment'
+/**/			&&
+/**/			o.reflect !== 'ast_condition'
+/**/			&&
+/**/			o.reflect !== 'ast_continue'
+/**/			&&
+/**/			o.reflect !== 'ast_delete'
+/**/			&&
+/**/			o.reflect !== 'ast_differs'
+/**/			&&
+/**/			o.reflect !== 'ast_dot'
+/**/			&&
+/**/			o.reflect !== 'ast_equals'
+/**/			&&
+/**/			o.reflect !== 'ast_fail'
+/**/			&&
+/**/			o.reflect !== 'ast_for'
+/**/			&&
+/**/			o.reflect !== 'ast_forIn'
+/**/			&&
+/**/			o.reflect !== 'ast_func'
+/**/			&&
+/**/			o.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			o.reflect !== 'ast_if'
+/**/			&&
+/**/			o.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			o.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			o.reflect !== 'ast_member'
+/**/			&&
+/**/			o.reflect !== 'ast_new'
+/**/			&&
+/**/			o.reflect !== 'ast_not'
+/**/			&&
+/**/			o.reflect !== 'ast_null'
+/**/			&&
+/**/			o.reflect !== 'ast_number'
+/**/			&&
+/**/			o.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			o.reflect !== 'ast_or'
+/**/			&&
+/**/			o.reflect !== 'ast_plus'
+/**/			&&
+/**/			o.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			o.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			o.reflect !== 'ast_return'
+/**/			&&
+/**/			o.reflect !== 'ast_string'
+/**/			&&
+/**/			o.reflect !== 'ast_switch'
+/**/			&&
+/**/			o.reflect !== 'ast_typeof'
+/**/			&&
+/**/			o.reflect !== 'ast_var'
+/**/			&&
+/**/			o.reflect !== 'ast_varDec'
+/**/		)
 /**/		{
 /**/			throw new Error( );
 /**/		}
