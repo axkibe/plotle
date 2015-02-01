@@ -187,51 +187,6 @@ jion_path.prototype.prepend =
 
 
 /*
-| Returns true if this path is the same as another.
-|
-| FIXME this ought to be autocreated
-*/
-/*
-jion_path.prototype.equals =
-	function( o )
-{
-	var
-		op,
-		tp;
-
-	if( !o )
-	{
-		return false;
-	}
-
-	if( this === o )
-	{
-		return true;
-	}
-
-	tp = this.ray,
-
-	op = o.ray;
-
-	if( tp.length !== op.length )
-	{
-		return false;
-	}
-
-	for( var k in tp )
-	{
-		if( tp[ k ] !== op[ k ] )
-		{
-			return false;
-		}
-	}
-
-	return true;
-};
-*/
-
-
-/*
 | True if this path is a subPath of another.
 |
 | FIXME: optimize by using local variables

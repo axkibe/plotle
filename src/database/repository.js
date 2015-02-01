@@ -18,7 +18,7 @@ if( JION )
 {
 	return {
 		id :
-			'server_repository', // TODO FIXME
+			'server_repository',
 		attributes :
 			{
 				'_connection' :
@@ -258,7 +258,6 @@ initRepository =
 		resume( )
 	);
 };
-
 
 
 } )( );
