@@ -65,7 +65,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'Object' // FUTURE Date
+							'Integer'
 					}
 			}
 	};
