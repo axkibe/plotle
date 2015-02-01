@@ -101,14 +101,12 @@ module.exports =
 			'src/ast/varDec.js',
 
 			'src/format/context.js',
-
 			'src/jsLexer/token.js',
-
-			'src/jsParser/state.js',
-			'src/jsParser/tokenSpec.js',
-
+			'src/jion/attribute.js',
 			'src/jion/generator.js',
 			'src/jion/id.js',
-			'src/jion/idRepository.js'
+			'src/jion/idRepository.js',
+			'src/jsParser/state.js',
+			'src/jsParser/tokenSpec.js'
 		]
 };
