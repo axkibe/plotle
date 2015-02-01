@@ -32,14 +32,20 @@ var
 	ast_assign,
 	ast_boolean,
 	ast_call,
+	ast_check,
 	ast_comma,
+	ast_comment,
 	ast_condition,
 	ast_delete,
 	ast_differs,
 	ast_dot,
 	ast_equals,
+	ast_fail,
+	ast_for,
+	ast_forIn,
 	ast_func,
 	ast_greaterThan,
+	ast_if,
 	ast_instanceof,
 	ast_lessThan,
 	ast_member,
@@ -52,9 +58,12 @@ var
 	ast_plus,
 	ast_plusAssign,
 	ast_preIncrement,
+	ast_return,
 	ast_string,
+	ast_switch,
 	ast_typeof,
 	ast_var,
+	ast_varDec,
 	jion_proto;
 
 
@@ -83,7 +92,11 @@ if( SERVER )
 
 	ast_call = require( '../../src/ast/call' );
 
+	ast_check = require( '../../src/ast/check' );
+
 	ast_comma = require( '../../src/ast/comma' );
+
+	ast_comment = require( '../../src/ast/comment' );
 
 	ast_condition = require( '../../src/ast/condition' );
 
@@ -95,9 +108,17 @@ if( SERVER )
 
 	ast_equals = require( '../../src/ast/equals' );
 
+	ast_fail = require( '../../src/ast/fail' );
+
+	ast_for = require( '../../src/ast/for' );
+
+	ast_forIn = require( '../../src/ast/forIn' );
+
 	ast_func = require( '../../src/ast/func' );
 
 	ast_greaterThan = require( '../../src/ast/greaterThan' );
+
+	ast_if = require( '../../src/ast/if' );
 
 	ast_instanceof = require( '../../src/ast/instanceof' );
 
@@ -123,11 +144,17 @@ if( SERVER )
 
 	ast_preIncrement = require( '../../src/ast/preIncrement' );
 
+	ast_return = require( '../../src/ast/return' );
+
 	ast_string = require( '../../src/ast/string' );
+
+	ast_switch = require( '../../src/ast/switch' );
 
 	ast_typeof = require( '../../src/ast/typeof' );
 
 	ast_var = require( '../../src/ast/var' );
+
+	ast_varDec = require( '../../src/ast/varDec' );
 
 	jion_proto = require( '../../src/jion/proto' );
 }
@@ -188,6 +215,7 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
+		r,
 		ray,
 		rayDup;
 

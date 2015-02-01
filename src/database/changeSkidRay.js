@@ -29,7 +29,7 @@ if( JION )
 		id :
 			'database_changeSkidRay',
 		ray :
-			[ 'database_changeSkid' ],
+			[ 'database_changeSkid', 'Null' ],
 		json :
 			true,
 	};

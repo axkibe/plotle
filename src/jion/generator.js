@@ -901,18 +901,12 @@ generator.prototype.genCreatorVariables =
 
 	if( this.twig )
 	{
-		varList.push(
-			'key',
-			'rank',
-			'ranks',
-			'twig',
-			'twigDup'
-		);
+		varList.push( 'key', 'rank', 'ranks', 'twig', 'twigDup' );
 	}
 
 	if( this.ray )
 	{
-		varList.push( 'ray', 'rayDup' );
+		varList.push( 'r', 'ray', 'rayDup' );
 	}
 
 	varList.sort( );
@@ -1280,6 +1274,10 @@ generator.prototype.genSingleTypeCheckFailCondition =
 				)
 			);
 
+		case 'Null' :
+
+			return $differs( avar, 'null' );
+
 		case 'Number' :
 
 			return $differs( $typeof( avar ), '"number"' );
@@ -1452,10 +1450,12 @@ generator.prototype.genCreatorChecks =
 				'a = 0, aZ = ray.length',
 				'a < aZ',
 				'++a',
-				$if(
+				$block( )
+				.$( 'r = ray[ a ]' )
+				.$if(
 					this.genTypeCheckFailCondition(
-						$( 'ray[ a ]' ),
-						this.ray
+						$( 'r' ),
+						this.ray.idList
 					),
 					$fail( )
 				)
