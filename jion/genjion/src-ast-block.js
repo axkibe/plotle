@@ -215,7 +215,6 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
-		r,
 		ray,
 		rayDup;
 

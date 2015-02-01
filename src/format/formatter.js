@@ -38,6 +38,7 @@ var
 	formatComma,
 	formatComment,
 	formatCondition,
+	formatContinue,
 	formatDelete,
 	formatDiffers,
 	formatDot,
@@ -628,6 +629,29 @@ formatCondition =
 		)
 	);
 };
+
+
+/*
+| Formats a continue statement.
+*/
+formatContinue =
+	function(
+		context,
+		statement
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( statement.reflect !== 'ast_continue' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return context.tab + 'continue';
+};
+
 
 
 /*
@@ -1726,6 +1750,12 @@ formatStatement =
 
 			break;
 
+		case 'ast_continue' :
+
+			text += formatContinue( context, statement );
+
+			break;
+
 		case 'ast_if' :
 
 			text += formatIf( context, statement );
@@ -1848,6 +1878,7 @@ formatStatement =
 		case 'ast_assign' :
 		case 'ast_boolean' :
 		case 'ast_call' :
+		case 'ast_continue' :
 		case 'ast_delete' :
 		case 'ast_fail' :
 		case 'ast_member' :

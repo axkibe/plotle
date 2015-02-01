@@ -906,7 +906,8 @@ generator.prototype.genCreatorVariables =
 
 	if( this.ray )
 	{
-		varList.push( 'r', 'ray', 'rayDup' );
+		// varList.push( 'r', 'ray', 'rayDup' ); XXX
+		varList.push( 'ray', 'rayDup' );
 	}
 
 	varList.sort( );
@@ -2162,11 +2163,15 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	)
 {
 	var
+		haveNull,
 		idList,
+		loopBody,
 		loopSwitch,
 		r,
 		rid,
 		rZ;
+
+	haveNull = false;
 
 	block =
 		block
@@ -2187,6 +2192,13 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	{
 		rid = idList[ r ];
 
+		if( rid.string === 'Null' )
+		{
+			haveNull = true;
+
+			continue;
+		}
+
 		loopSwitch =
 			loopSwitch
 			.$case(
@@ -2201,13 +2213,29 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 			);
 	}
 
+	if( !haveNull )
+	{
+		loopBody = loopSwitch;
+	}
+	else
+	{
+		loopBody =
+			$block( ).
+			$if(
+				'ray[ r ] === null',
+				$block( )
+				.$(' jray [ r ] = null' )
+				.$continue( )
+			);
+	}
+
 	block =
 		block
 		.$for(
 			'r = 0, rZ = jray.length',
 			'r < rZ',
 			'++r',
-			loopSwitch
+			loopBody
 		);
 
 	return block;

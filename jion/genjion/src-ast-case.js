@@ -110,7 +110,6 @@ prototype.create =
 		aZ,
 		arg,
 		inherit,
-		r,
 		ray,
 		rayDup,
 		v_block;

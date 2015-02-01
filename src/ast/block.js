@@ -138,6 +138,16 @@ ast_block.prototype.$comment =
 	return this.append( header );
 };
 
+/*
+| Returns the block with a continue statement appended.
+*/
+ast_block.prototype.$continue =
+	function(
+	)
+{
+	return this.append( shorthand.$continue );
+};
+
 
 /*
 | Returns the block with a delete statement appended.

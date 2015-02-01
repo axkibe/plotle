@@ -29,6 +29,7 @@ var
 	ast_comma,
 	ast_comment,
 	ast_condition,
+	ast_continue,
 	ast_delete,
 	ast_differs,
 	ast_dot,
@@ -81,6 +82,8 @@ ast_comma = require( './comma' );
 ast_comment = require( './comment' );
 
 ast_condition = require( './condition' );
+
+ast_continue = require( './continue' );
 
 ast_delete = require( './delete' );
 
@@ -396,6 +399,11 @@ shorthand.$condition =
 
 
 /*
+| Shorthand for ast continue.
+*/
+shorthand.$continue = ast_continue.create( );
+
+/*
 | Shorthand for creating differs.
 */
 shorthand.$differs =
@@ -502,6 +510,7 @@ shorthand.$lessThan =
 
 /*
 | Shorthand for creating greater-than comparisons.
+| XXX
 */
 shorthand.ast_greaterThan =
 	function(
