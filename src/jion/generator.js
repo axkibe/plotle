@@ -906,7 +906,7 @@ generator.prototype.genCreatorVariables =
 
 	if( this.ray )
 	{
-		varList.push( 'o', 'ray', 'rayDup' );
+		varList.push( 'o', 'r', 'rZ', 'ray', 'rayDup' );
 	}
 
 	varList.sort( );
@@ -1352,8 +1352,8 @@ generator.prototype.genTypeCheckFailCondition =
 */
 generator.prototype.genCreatorChecks =
 	function(
-		block, // block to append to
-		checking  // do checks only when CHECKin
+		block,  // block to append to
+		json    // do checks for fromJSONCreator
 	)
 {
 	var
@@ -1366,13 +1366,13 @@ generator.prototype.genCreatorChecks =
 		name,
 		tcheck;
 
-	if( checking )
+	if( json )
 	{
-		check = $block( );
+		check = block;
 	}
 	else
 	{
-		check = block;
+		check = $block( );
 	}
 
 	for(
@@ -1385,12 +1385,18 @@ generator.prototype.genCreatorChecks =
 
 		attr = this.attributes[ name ];
 
+		if( json && !attr.json )
+		{
+			continue;
+		}
+
 		av = attr.v;
 
 		if( !attr.allowsUndefined )
 		{
 			check =
-				check.$if(
+				check
+				.$if(
 					$equals( av, undefined ),
 					$fail( )
 				);
@@ -1399,7 +1405,8 @@ generator.prototype.genCreatorChecks =
 		if( !attr.allowsNull )
 		{
 			check =
-				check.$if(
+				check
+				.$if(
 					$equals( av, null ),
 					$fail( )
 				);
@@ -1452,11 +1459,11 @@ generator.prototype.genCreatorChecks =
 		check =
 			check
 			.$for(
-				'a = 0, aZ = ray.length',
-				'a < aZ',
-				'++a',
+				'r = 0, rZ = ray.length',
+				'r < rZ',
+				'++r',
 				$block( )
-				.$( 'o = ray[ a ]' )
+				.$( 'o = ray[ r ]' )
 				.$if(
 					this.genTypeCheckFailCondition(
 						$( 'o' ),
@@ -1488,12 +1495,21 @@ generator.prototype.genCreatorChecks =
 			);
 	}
 
-	if( checking && check.length > 0 )
+	if( !json )
 	{
-		block = block.$check( check );
+		if( check.length > 0 )
+		{
+ 			return block.$check( check );
+		}
+		else
+		{
+			return block;
+		}
 	}
-
-	return block;
+	else
+	{
+		return check;
+	}
 };
 
 
@@ -1861,7 +1877,7 @@ generator.prototype.genCreator =
 
 	block = this.genCreatorDefaults( block, false );
 
-	block = this.genCreatorChecks( block, true );
+	block = this.genCreatorChecks( block, false );
 
 	block = this.genCreatorConcerns( block );
 
@@ -1927,6 +1943,7 @@ generator.prototype.genFromJSONCreatorVariables =
 				'key',
 				'jval',
 				'jwig',
+				'o',
 				'ranks',
 				'twig'
 			);
@@ -1934,7 +1951,7 @@ generator.prototype.genFromJSONCreatorVariables =
 
 		if( this.ray )
 		{
-			varList.push( 'jray', 'ray', 'r', 'rZ' );
+			varList.push( 'jray', 'o', 'ray', 'r', 'rZ' );
 		}
 	}
 
@@ -2473,7 +2490,7 @@ generator.prototype.genFromJSONCreator =
 		funcBlock = this.genFromJSONCreatorRayProcessing( funcBlock );
 	}
 
-	funcBlock = this.genCreatorChecks( funcBlock, false );
+	funcBlock = this.genCreatorChecks( funcBlock, true );
 
 	funcBlock = this.genFromJSONCreatorReturn( funcBlock );
 

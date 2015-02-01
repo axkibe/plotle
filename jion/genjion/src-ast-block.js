@@ -219,6 +219,8 @@ prototype.create =
 		arg,
 		inherit,
 		o,
+		r,
+		rZ,
 		ray,
 		rayDup;
 
@@ -327,12 +329,12 @@ prototype.create =
 /**/if( CHECK )
 /**/{
 /**/	for(
-/**/		a = 0, aZ = ray.length;
-/**/		a < aZ;
-/**/		++a
+/**/		r = 0, rZ = ray.length;
+/**/		r < rZ;
+/**/		++r
 /**/	)
 /**/	{
-/**/		o = ray[ a ];
+/**/		o = ray[ r ];
 /**/
 /**/		if(
 /**/			o.reflect !== 'ast_and'

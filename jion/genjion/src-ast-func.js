@@ -117,6 +117,8 @@ prototype.create =
 		arg,
 		inherit,
 		o,
+		r,
+		rZ,
 		ray,
 		rayDup,
 		v_block,
@@ -280,12 +282,12 @@ prototype.create =
 /**/	}
 /**/
 /**/	for(
-/**/		a = 0, aZ = ray.length;
-/**/		a < aZ;
-/**/		++a
+/**/		r = 0, rZ = ray.length;
+/**/		r < rZ;
+/**/		++r
 /**/	)
 /**/	{
-/**/		o = ray[ a ];
+/**/		o = ray[ r ];
 /**/
 /**/		if( undefined && undefined )
 /**/		{
