@@ -169,22 +169,19 @@ generator.prototype._init =
 		concernsID,
 		constructorList,
 		defaultValue,
-		// sorted init list
-		inits,
+		groupDef,
+		inits, // sorted init list
 		jAttr,
 		jdv,
 		jion,
 		name,
 		rayDef,
-		subID,
-		// twig id
+		subID, // twig id
 		t,
 		type,
 		tZ,
-		// twig map to be used (the definition)
-		twigDef,
-		// units used
-		units;
+		twigDef, // twig map to be used (the definition)
+		units; // units used
 
 	attributes = { };
 
@@ -370,16 +367,21 @@ generator.prototype._init =
 
 	constructorList.sort( );
 
-	if( jion.twig )
+	if( jion.group )
 	{
-		constructorList.unshift( 'ranks' );
-
-		constructorList.unshift( 'twig' );
+		constructorList.unshift( 'group' );
 	}
 
 	if( jion.ray )
 	{
 		constructorList.unshift( 'ray' );
+	}
+
+	if( jion.twig )
+	{
+		constructorList.unshift( 'ranks' );
+
+		constructorList.unshift( 'twig' );
 	}
 
 	if( jion.init )
@@ -403,6 +405,8 @@ generator.prototype._init =
 			{
 				case 'inherit' :
 				case 'twigDup' :
+				case 'group' :
+				case 'groupDup' :
 				case 'ray' :
 				case 'rayDup' :
 
@@ -426,25 +430,24 @@ generator.prototype._init =
 
 	this.constructorList = constructorList;
 
-	if( jion.twig )
+	if( jion.group )
 	{
-		if( jools.isString( jion.twig ) )
+		if( jools.isString( jion.group ) )
 		{
-			twigDef = require( '../typemaps/' + jion.twig.substring( 2 ) );
+			groupDef = require( '../typemaps/' + jion.group.substring( 2 ) );
 		}
 		else
 		{
-			twigDef = jion.twig;
+			groupDef = jion.group;
 		}
 
-		this.twig = idRepository.createFromIDStrings( twigDef );
+		this.group = idRepository.createFromIDStrings( groupDef );
 
-		units = units.add( this.twig );
-
+		units = units.add( this.group );
 	}
 	else
 	{
-		this.twig = null;
+		this.group = null;
 	}
 
 	if( jion.ray )
@@ -467,6 +470,27 @@ generator.prototype._init =
 		this.ray = null;
 	}
 
+	if( jion.twig )
+	{
+		if( jools.isString( jion.twig ) )
+		{
+			twigDef = require( '../typemaps/' + jion.twig.substring( 2 ) );
+		}
+		else
+		{
+			twigDef = jion.twig;
+		}
+
+		this.twig = idRepository.createFromIDStrings( twigDef );
+
+		units = units.add( this.twig );
+
+	}
+	else
+	{
+		this.twig = null;
+	}
+
 	this.units = units;
 
 	this.equals = jion.equals;
@@ -474,8 +498,9 @@ generator.prototype._init =
 	this.alike = jion.alike;
 
 	this.creatorHasFreeStringsParser =
-		this.twig
+		this.group
 		|| this.ray
+		|| this.twig
 		|| this.attrList.length > 0;
 };
 
@@ -676,18 +701,22 @@ generator.prototype.genConstructor =
 		}
 	}
 
+	if( this.group )
+	{
+		block = block.$( 'this.group = group' );
+	}
+
+	if( this.ray )
+	{
+		block = block.$( 'this.ray = ray' );
+	}
+
 	if( this.twig )
 	{
 		block =
 			block
 			.$( 'this.twig = twig' )
 			.$( 'this.ranks = ranks' );
-	}
-
-
-	if( this.ray )
-	{
-		block = block.$( 'this.ray = ray' );
 	}
 
 	// calls the initializer
@@ -733,12 +762,11 @@ generator.prototype.genConstructor =
 	// immutes the new object
 	freezeBlock = $block( );
 
-	if( this.twig )
+	if( this.group )
 	{
 		freezeBlock =
 			freezeBlock
-			.$( 'Object.freeze( twig )' )
-			.$( 'Object.freeze( ranks )' );
+			.$( 'Object.freeze( group )' );
 	}
 
 	if( this.ray )
@@ -746,6 +774,14 @@ generator.prototype.genConstructor =
 		freezeBlock =
 			freezeBlock
 			.$( 'Object.freeze( ray )' );
+	}
+
+	if( this.twig )
+	{
+		freezeBlock =
+			freezeBlock
+			.$( 'Object.freeze( twig )' )
+			.$( 'Object.freeze( ranks )' );
 	}
 
 	freezeBlock =
@@ -769,6 +805,22 @@ generator.prototype.genConstructor =
 			case 'inherit' :
 
 				constructor = constructor.$arg( 'inherit', 'inheritance' );
+
+				break;
+
+			case 'group' :
+
+				constructor = constructor.$arg( 'group', 'group' );
+
+				break;
+
+			case 'groupDup' :
+
+				constructor =
+					constructor.$arg(
+						'groupDup',
+						'true if group is already been duplicated'
+					);
 
 				break;
 
@@ -899,14 +951,16 @@ generator.prototype.genCreatorVariables =
 		varList.push( 'arg', 'a', 'aZ' );
 	}
 
-	if( this.twig )
-	{
-		varList.push( 'o', 'key', 'rank', 'ranks', 'twig', 'twigDup' );
-	}
+	// XXX group
 
 	if( this.ray )
 	{
 		varList.push( 'o', 'r', 'rZ', 'ray', 'rayDup' );
+	}
+
+	if( this.twig )
+	{
+		varList.push( 'o', 'key', 'rank', 'ranks', 'twig', 'twigDup' );
 	}
 
 	varList.sort( );
