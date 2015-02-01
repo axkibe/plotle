@@ -47,6 +47,7 @@ var
 	ast_string,
 	ast_var,
 	jools,
+	jsParser_tokenSpec,
 	lexer,
 	handleBooleanLiteral,
 	handleDot,
@@ -63,7 +64,6 @@ var
 	handleSquareBrackets,
 	parseToken,
 	state,
-	tokenSpec,
 	tokenSpecs;
 
 
@@ -121,7 +121,7 @@ lexer = require( '../jsLexer/lexer' );
 
 state = require( './state' );
 
-tokenSpec = require( './tokenSpec' );
+jsParser_tokenSpec = require( './tokenSpec' );
 
 
 /*
@@ -771,7 +771,7 @@ handleIdentifier =
 tokenSpecs = { };
 
 tokenSpecs.identifier =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
 		'handler', handleIdentifier,
@@ -779,7 +779,7 @@ tokenSpecs.identifier =
 	);
 
 tokenSpecs.number =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
 		'handler', handleNumber,
@@ -787,7 +787,7 @@ tokenSpecs.number =
 	);
 
 tokenSpecs.string =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
 		'handler', handleString,
@@ -795,7 +795,7 @@ tokenSpecs.string =
 	);
 
 tokenSpecs[ 'true' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
 		'handler', handleBooleanLiteral,
@@ -803,7 +803,7 @@ tokenSpecs[ 'true' ] =
 	);
 
 tokenSpecs[ 'false' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
 		'handler', handleBooleanLiteral,
@@ -811,7 +811,7 @@ tokenSpecs[ 'false' ] =
 	);
 
 tokenSpecs[ '{' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
 		'handler', handleObjectLiteral,
@@ -819,7 +819,7 @@ tokenSpecs[ '{' ] =
 	);
 
 tokenSpecs[ '}' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', -1,
 		'postPrec', -1,
 		'handler', handleParserError,
@@ -827,7 +827,7 @@ tokenSpecs[ '}' ] =
 	);
 
 tokenSpecs[ '(' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 0,
 		'postPrec', 1,
 		'handler', handleRoundBrackets,
@@ -835,7 +835,7 @@ tokenSpecs[ '(' ] =
 	);
 
 tokenSpecs[ ')' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 1,
 		'postPrec', 99,
 		'handler', handlePass,
@@ -843,7 +843,7 @@ tokenSpecs[ ')' ] =
 	);
 
 tokenSpecs[ '[' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 1,
 		'postPrec', 1,
 		'handler', handleSquareBrackets,
@@ -851,7 +851,7 @@ tokenSpecs[ '[' ] =
 	);
 
 tokenSpecs[ ']' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 1, // 99?
 		'postPrec', 1,
 		'handler', handlePass,
@@ -859,7 +859,7 @@ tokenSpecs[ ']' ] =
 	);
 
 tokenSpecs[ '.' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 1,
 		'postPrec', 1,
 		'handler', handleDot,
@@ -867,7 +867,7 @@ tokenSpecs[ '.' ] =
 	);
 
 tokenSpecs[ 'new' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 2,
 		'postPrec', 2,
 		'handler', handleNew,
@@ -875,7 +875,7 @@ tokenSpecs[ 'new' ] =
 	);
 
 tokenSpecs[ '++' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 3,
 		'postPrec', 4,
 		'handler', handleMonoOps,
@@ -885,7 +885,7 @@ tokenSpecs[ '++' ] =
 	);
 
 tokenSpecs[ '!' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 4,
 		'postPrec', 4,
 		'handler', handleMonoOps,
@@ -894,7 +894,7 @@ tokenSpecs[ '!' ] =
 	);
 
 tokenSpecs[ 'delete' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 4,
 		'postPrec', 4,
 		'handler', handleMonoOps,
@@ -903,7 +903,7 @@ tokenSpecs[ 'delete' ] =
 	);
 
 tokenSpecs[ '+' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 6,
 		'postPrec', 6,
 		'handler', handleDualisticOps,
@@ -912,7 +912,7 @@ tokenSpecs[ '+' ] =
 	);
 
 tokenSpecs[ '<' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 8,
 		'postPrec', 8,
 		'handler', handleDualisticOps,
@@ -921,7 +921,7 @@ tokenSpecs[ '<' ] =
 	);
 
 tokenSpecs[ '>' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 8,
 		'postPrec', 8,
 		'handler', handleDualisticOps,
@@ -930,7 +930,7 @@ tokenSpecs[ '>' ] =
 	);
 
 tokenSpecs[ '===' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 9,
 		'postPrec', 9,
 		'handler', handleDualisticOps,
@@ -939,7 +939,7 @@ tokenSpecs[ '===' ] =
 	);
 
 tokenSpecs[ '!==' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 9,
 		'postPrec', 9,
 		'handler', handleDualisticOps,
@@ -948,7 +948,7 @@ tokenSpecs[ '!==' ] =
 	);
 
 tokenSpecs[ 'instanceof' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 11,
 		'postPrec', 11,
 		'handler', handleDualisticOps,
@@ -957,7 +957,7 @@ tokenSpecs[ 'instanceof' ] =
 	);
 
 tokenSpecs[ '&&' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 13,
 		'postPrec', 13,
 		'handler', handleDualisticOps,
@@ -966,7 +966,7 @@ tokenSpecs[ '&&' ] =
 	);
 
 tokenSpecs[ '||' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 14,
 		'postPrec', 14,
 		'handler', handleDualisticOps,
@@ -975,7 +975,7 @@ tokenSpecs[ '||' ] =
 	);
 
 tokenSpecs[ '=' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 16,
 		'postPrec', 16,
 		'handler', handleDualisticOps,
@@ -984,7 +984,7 @@ tokenSpecs[ '=' ] =
 	);
 
 tokenSpecs[ '+=' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 16,
 		'postPrec', 16,
 		'handler', handleDualisticOps,
@@ -997,7 +997,7 @@ tokenSpecs[ '+=' ] =
 | used to differencate ',' operator from ',' sequences
 */
 tokenSpecs.sequence =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 18,
 		'postPrec', 18,
 		'handler', handleParserError,
@@ -1005,7 +1005,7 @@ tokenSpecs.sequence =
 	);
 
 tokenSpecs[ ',' ] =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 19,
 		'postPrec', 19,
 		'handler', handleDualisticOps,
@@ -1016,7 +1016,7 @@ tokenSpecs[ ',' ] =
 // phony spec that cannot be created
 // by lexer denoting start of parsing
 tokenSpecs.start =
-	tokenSpec.create(
+	jsParser_tokenSpec.create(
 		'prePrec', 99,
 		'postPrec', 99,
 		'handler', handleParserError,
@@ -1039,6 +1039,8 @@ parseToken =
 		nextSpec;
 
 	curState = state;
+
+console.log( state.ast !== null );
 
 	curSpec = tokenSpecs[ state.current.type ];
 
