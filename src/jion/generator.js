@@ -1268,8 +1268,7 @@ generator.prototype.genCreatorFreeStringsParser =
 	block =
 		block
 		.$for(
-			// 'a = 0, aZ = arguments.length', // FIXME
-			'( a = 0 ), ( aZ = arguments.length )',
+			'a = 0, aZ = arguments.length',
 			'a < aZ',
 			$plusAssign( 'a', 2 ),
 			loop
@@ -1539,8 +1538,7 @@ generator.prototype.genCreatorChecks =
 		check =
 			check
 			.$for(
-				// 'r = 0, rZ = ray.length', FIXME
-				'( r = 0 ), ( rZ = ray.length )',
+				'r = 0, rZ = ray.length',
 				'r < rZ',
 				'++r',
 				$block( )
@@ -1561,8 +1559,7 @@ generator.prototype.genCreatorChecks =
 		check =
 			check
 			.$for(
-				// 'a = 0, aZ = ranks.length', FIXME
-				'( a = 0 ), ( aZ = ranks.length )',
+				'a = 0, aZ = ranks.length',
 				'a < aZ',
 				'++a',
 				$block( )
@@ -1892,8 +1889,7 @@ generator.prototype.genCreatorReturn =
 			block
 			.$if(
 				'!_singleton',
-				// $( '_singleton = new Constructor( )' ) FIXME
-				$assign( '_singleton', $new( $call( 'Constructor' ) ) )
+				$( '_singleton = new Constructor( )' )
 			)
 			.$return( '_singleton' )
 		);
@@ -2361,8 +2357,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	block =
 		block
 		.$for(
-			// '( r = 0 ), ( rZ = jray.length )', FIXME
-			'( r = 0 ), ( rZ = jray.length )',
+			'r = 0, rZ = jray.length',
 			'r < rZ',
 			'++r',
 			loopBody
@@ -2441,8 +2436,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 			$fail( )
 		)
 		.$for(
-			// 'a = 0, aZ = ranks.length', FIXME
-			'( a = 0 ), ( aZ = ranks.length )',
+			'a = 0, aZ = ranks.length',
 			'a < aZ',
 			'++a',
 			loop
@@ -2952,8 +2946,7 @@ generator.prototype.genEquals =
 				$returnFalse
 			)
 			.$for(
-				// 'a = 0, aZ = this.ranks.length', FIXME
-				'( a = 0 ), ( aZ = this.ranks.length )',
+				'a = 0, aZ = this.ranks.length',
 				'a < aZ',
 				'++a',
 				twigTestLoopBody
@@ -2993,8 +2986,7 @@ generator.prototype.genEquals =
 			)
 			.$for(
 				// this.length?
-				// 'a = 0, aZ = this.ray.length', FIXME
-				'( a = 0 ), ( aZ = this.ray.length )',
+				'a = 0, aZ = this.ray.length',
 				'a < aZ',
 				'++a',
 				rayTestLoopBody
