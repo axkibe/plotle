@@ -216,6 +216,61 @@ jion_proto.newUID =
 
 
 /*
+| Gets one entry from the group.
+*/
+jion_proto.groupGet =
+	function( k )
+{
+	return this.group[ k ];
+};
+
+
+/*
+| Returns the size of the group.
+*/
+jion_proto.groupKeys =
+	function( )
+{
+	return Object.keys( this.group );
+};
+
+
+/*
+| Returns the jion with one entry of the ray set.
+*/
+jion_proto.groupSet =
+	function(
+		key,
+		e
+	)
+{
+	return this.create( 'group:set', key, e );
+};
+
+
+/*
+| Returns the size of the group.
+*/
+jion_proto.groupSize =
+	function( )
+{
+	return this.keys.length;
+};
+
+
+/*
+| Returns a jion with one entry from the ray removed.
+*/
+jion_proto.groupRemove =
+	function(
+		key
+	)
+{
+	return this.create( 'group:remove', key );
+};
+
+
+/*
 | Appends an element to a ray.
 */
 jion_proto.rayAppend =
@@ -329,7 +384,7 @@ jion_proto.raySet =
 /**/		throw new Error( );
 /**/	}
 /**/}
-	
+
 	return this.create( 'ray:set', idx, e );
 };
 
@@ -352,7 +407,9 @@ jion_proto.twigAtRank =
 | Returns the length of a ray.
 */
 jion_proto.twigGetKey =
-	function( idx )
+	function(
+		idx
+	)
 {
 	return this.ranks[ idx ];
 };
@@ -374,7 +431,9 @@ jion_proto.twigLength =
 | This means it returns the index of key in the ranks array.
 */
 jion_proto.twigRankOf =
-	function( key )
+	function(
+		key
+	)
 {
 
 /**/if( CHECK )

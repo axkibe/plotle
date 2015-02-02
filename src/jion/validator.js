@@ -61,6 +61,7 @@ attributeBlacklist =
 		'ray' : true,
 		'rayDup' : true,
 		'setPath' : true,
+		'size' : true,
 		'twig' : true,
 		'twigDup' : true
 	} );
