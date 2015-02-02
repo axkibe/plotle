@@ -1019,26 +1019,16 @@ parseToken =
 	)
 {
 	var
-		curState,
 		nextSpec,
 		tokenSpec;
 
-	curState = state;
-
 	tokenSpec = getSpec( state.ast, state.current );
 
-//	console.log( 'H>', state.current.type, state.current.value, tokenSpec.prec );
-
 	state = tokenSpec.handler( state, tokenSpec );
-
-//	console.log( '<H', state.ast );
 
 	while( !state.reachedEnd )
 	{
 		nextSpec = getSpec( state.ast, state.current );
-
-//		console.log( 'C', curState.current.type, curState.current.value || '', spec.prec );
-//		console.log( 'N', state.current.type, state.current.value || '', nextSpec.prec );
 
 		if(
 			nextSpec.prec > spec.prec
@@ -1055,24 +1045,9 @@ parseToken =
 			break;
 		}
 
-				/*
-				|| (
-					nextSpec.prec === curState.spec.prec
-					&&
-					curState.spec.associativity === 'r2l'
-				)
-				*/
-			//&& curState.spec.handler !== handlePass
-			//&& spec.handler !== handlePass
-
-//		console.log( '->' );
-
 		state = parseToken( state, nextSpec );
 
-//		console.log( '<-' );
 	}
-
-//	console.log( '' );
 
 	return state;
 };
@@ -1085,7 +1060,6 @@ parser.parse =
 	function( code )
 {
 	var
-//		ast,
 		st,
 		tokens;
 
