@@ -42,6 +42,13 @@ if( JION )
 							'current position in token ray',
 						type :
 							'Integer'
+					},
+				spec :
+					{
+						comment :
+							'current precedence spec',
+						type :
+							'jsParser_tokenSpec'
 					}
 			},
 	};
@@ -55,6 +62,19 @@ var
 state = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
+
+
+/*
+| The current token.
+*/
+jools.lazyValue(
+	state.prototype,
+	'prec',
+	function( )
+	{
+		return this.spec.prec( this.ast );
+	}
+);
 
 
 /*

@@ -27,7 +27,8 @@ else
 */
 var
 	jools,
-	jion_proto;
+	jion_proto,
+	jsParser_tokenSpec;
 
 
 /*
@@ -46,6 +47,8 @@ if( SERVER )
 	jools = require( '../../src/jools/jools' );
 
 	jion_proto = require( '../../src/jion/proto' );
+
+	jsParser_tokenSpec = require( '../../src/jsParserOld/tokenSpec' );
 }
 
 
@@ -61,6 +64,7 @@ Constructor =
 	function(
 		v_ast, // current ast entity
 		v_pos, // current position in token ray
+		v_spec, // current precedence spec
 		v_tokens // ray of tokens to parse
 	)
 {
@@ -75,6 +79,8 @@ Constructor =
 	this.ast = v_ast;
 
 	this.pos = v_pos;
+
+	this.spec = v_spec;
 
 	this.tokens = v_tokens;
 
@@ -110,6 +116,7 @@ prototype.create =
 		inherit,
 		v_ast,
 		v_pos,
+		v_spec,
 		v_tokens;
 
 	if( this !== jsParser_state )
@@ -119,6 +126,8 @@ prototype.create =
 		v_ast = this.ast;
 
 		v_pos = this.pos;
+
+		v_spec = this.spec;
 
 		v_tokens = this.tokens;
 	}
@@ -147,6 +156,15 @@ prototype.create =
 				if( arg !== undefined )
 				{
 					v_pos = arg;
+				}
+
+				break;
+
+			case 'spec' :
+
+				if( arg !== undefined )
+				{
+					v_spec = arg;
 				}
 
 				break;
@@ -195,6 +213,21 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
+/**/	if( v_spec === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_spec === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_spec.reflect !== 'jsParserOld_tokenSpec' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
 /**/	if( v_tokens === undefined )
 /**/	{
 /**/		throw new Error( );
@@ -213,20 +246,22 @@ prototype.create =
 		&&
 		v_pos === inherit.pos
 		&&
+		v_spec.equals( inherit.spec )
+		&&
 		v_tokens === inherit.tokens
 	)
 	{
 		return inherit;
 	}
 
-	return new Constructor( v_ast, v_pos, v_tokens );
+	return new Constructor( v_ast, v_pos, v_spec, v_tokens );
 };
 
 
 /*
 | Reflection.
 */
-prototype.reflect = 'jsParser_state';
+prototype.reflect = 'jsParserOld_state';
 
 
 /*
@@ -265,7 +300,7 @@ prototype.equals =
 		return false;
 	}
 
-	if( obj.reflect !== 'jsParser_state' )
+	if( obj.reflect !== 'jsParserOld_state' )
 	{
 		return false;
 	}
@@ -274,6 +309,8 @@ prototype.equals =
 		this.ast === obj.ast
 		&&
 		this.pos === obj.pos
+		&&
+		this.spec.equals( obj.spec )
 		&&
 		this.tokens === obj.tokens
 	);

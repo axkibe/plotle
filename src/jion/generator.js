@@ -1101,6 +1101,8 @@ generator.prototype.genCreatorFreeStringsParser =
 	)
 {
 	var
+		a,
+		aZ,
 		attr,
 		loop,
 		name,
@@ -1115,7 +1117,7 @@ generator.prototype.genCreatorFreeStringsParser =
 	switchExpr = $switch( 'arguments[ a ]' );
 
 	for(
-		var a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attrList.length;
 		a < aZ;
 		a++
 	)
@@ -1266,7 +1268,8 @@ generator.prototype.genCreatorFreeStringsParser =
 	block =
 		block
 		.$for(
-			'a = 0, aZ = arguments.length',
+			// 'a = 0, aZ = arguments.length', // FIXME
+			'( a = 0 ), ( aZ = arguments.length )',
 			'a < aZ',
 			$plusAssign( 'a', 2 ),
 			loop
@@ -1536,7 +1539,8 @@ generator.prototype.genCreatorChecks =
 		check =
 			check
 			.$for(
-				'r = 0, rZ = ray.length',
+				// 'r = 0, rZ = ray.length', FIXME
+				'( r = 0 ), ( rZ = ray.length )',
 				'r < rZ',
 				'++r',
 				$block( )
@@ -1557,7 +1561,8 @@ generator.prototype.genCreatorChecks =
 		check =
 			check
 			.$for(
-				'a = 0, aZ = ranks.length',
+				// 'a = 0, aZ = ranks.length', FIXME
+				'( a = 0 ), ( aZ = ranks.length )',
 				'a < aZ',
 				'++a',
 				$block( )
@@ -1754,6 +1759,8 @@ generator.prototype.genCreatorUnchanged =
 	)
 {
 	var
+		a,
+		aZ,
 		attr,
 		ceq,
 		cond,
@@ -1773,7 +1780,7 @@ generator.prototype.genCreatorUnchanged =
 	}
 
 	for(
-		var a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attrList.length;
 		a < aZ;
 		a++
 	)
@@ -1873,6 +1880,8 @@ generator.prototype.genCreatorReturn =
 	)
 {
 	var
+		a,
+		aZ,
 		attr,
 		call,
 		name;
@@ -1883,7 +1892,8 @@ generator.prototype.genCreatorReturn =
 			block
 			.$if(
 				'!_singleton',
-				$( '_singleton = new Constructor( )' )
+				// $( '_singleton = new Constructor( )' ) FIXME
+				$assign( '_singleton', $new( $call( 'Constructor' ) ) )
 			)
 			.$return( '_singleton' )
 		);
@@ -1892,7 +1902,7 @@ generator.prototype.genCreatorReturn =
 	call = $call( 'Constructor' );
 
 	for(
-		var a = 0, aZ = this.constructorList.length;
+		a = 0, aZ = this.constructorList.length;
 		a < aZ;
 		a++
 	)
@@ -2351,7 +2361,8 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	block =
 		block
 		.$for(
-			'r = 0, rZ = jray.length',
+			// '( r = 0 ), ( rZ = jray.length )', FIXME
+			'( r = 0 ), ( rZ = jray.length )',
 			'r < rZ',
 			'++r',
 			loopBody
@@ -2370,6 +2381,8 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 	)
 {
 	var
+		a,
+		aZ,
 		loop,
 		switchExpr,
 		twigID,
@@ -2380,7 +2393,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 	twigList = this.twig.idList;
 
 	for(
-		var a = 0, aZ = twigList.length;
+		a = 0, aZ = twigList.length;
 		a < aZ;
 		a++
 	)
@@ -2428,7 +2441,8 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 			$fail( )
 		)
 		.$for(
-			'a = 0, aZ = ranks.length',
+			// 'a = 0, aZ = ranks.length', FIXME
+			'( a = 0 ), ( aZ = ranks.length )',
 			'a < aZ',
 			'++a',
 			loop
@@ -2446,6 +2460,8 @@ generator.prototype.genFromJSONCreatorReturn =
 	)
 {
 	var
+		a,
+		aZ,
 		attr,
 		call,
 		name;
@@ -2453,7 +2469,7 @@ generator.prototype.genFromJSONCreatorReturn =
 	call = $( 'Constructor( )' );
 
 	for(
-		var a = 0, aZ = this.constructorList.length;
+		a = 0, aZ = this.constructorList.length;
 		a < aZ;
 		a++
 	)
@@ -2691,6 +2707,8 @@ generator.prototype.genToJSON =
 	)
 {
 	var
+		a,
+		aZ,
 		attr,
 		block,
 		name,
@@ -2703,7 +2721,7 @@ generator.prototype.genToJSON =
 		.add( 'type', this.id.$string );
 
 	for(
-		var a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attrList.length;
 		a < aZ;
 		a++
 	)
@@ -2934,7 +2952,8 @@ generator.prototype.genEquals =
 				$returnFalse
 			)
 			.$for(
-				'a = 0, aZ = this.ranks.length',
+				// 'a = 0, aZ = this.ranks.length', FIXME
+				'( a = 0 ), ( aZ = this.ranks.length )',
 				'a < aZ',
 				'++a',
 				twigTestLoopBody
@@ -2974,7 +2993,8 @@ generator.prototype.genEquals =
 			)
 			.$for(
 				// this.length?
-				'a = 0, aZ = this.ray.length',
+				// 'a = 0, aZ = this.ray.length', FIXME
+				'( a = 0 ), ( aZ = this.ray.length )',
 				'a < aZ',
 				'++a',
 				rayTestLoopBody

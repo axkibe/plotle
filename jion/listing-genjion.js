@@ -60,6 +60,9 @@ module.exports =
 			'src/jion/idRepository.js',
 			'src/jsLexer/token.js',
 			'src/jsParser/state.js',
-			'src/jsParser/tokenSpec.js'
+			'src/jsParser/spec.js',
+
+			'src/jsParserOld/state.js', // XXX
+			'src/jsParserOld/tokenSpec.js' // XXX
 		]
 };

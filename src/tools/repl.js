@@ -13,7 +13,10 @@
 /*
 | Global Constants
 */
-GLOBAL.APP = 'server';
+Error.stackTraceLimit = 99999;
+
+//GLOBAL.APP = 'server';
+GLOBAL.APP = 'genjion';
 
 // repl runs in full checking
 // mode even with freezes.
@@ -93,7 +96,8 @@ repl = repl.start( 'repl> ' );
 
 repl.rli.history = history;
 
-defaultEval = repl[ '_eval'.substr( 1 ) ]; // strange wording to make jshint happy
+// strange wording to make jshint happy
+defaultEval = repl[ '_eval'.substr( 1 ) ];
 
 repl[ '_eval'.substr( 1 ) ] =
 	function( cmd, context, filename, callback )

@@ -1880,6 +1880,7 @@ formatStatement =
 		case 'ast_call' :
 		case 'ast_continue' :
 		case 'ast_delete' :
+		case 'ast_dot' :
 		case 'ast_fail' :
 		case 'ast_member' :
 		case 'ast_new' :

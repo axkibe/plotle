@@ -39,16 +39,13 @@ var
 	ast_new,
 	ast_not,
 	ast_number,
-	ast_objLiteral,
 	ast_or,
 	ast_plus,
 	ast_plusAssign,
 	ast_preIncrement,
 	ast_string,
 	ast_var,
-	getSpec,
 	jools,
-	jsParser_spec,
 	lexer,
 	handleBooleanLiteral,
 	handleDot,
@@ -57,7 +54,6 @@ var
 	handleNew,
 	handleNumber,
 	handleIdentifier,
-	handleObjectLiteral,
 	handleParserError,
 	handlePass,
 	handleRoundBrackets,
@@ -65,8 +61,8 @@ var
 	handleSquareBrackets,
 	parseToken,
 	state,
-	leftSpecs,
-	rightSpecs;
+	tokenSpec,
+	tokenSpecs;
 
 
 ast_and = require( '../ast/and' );
@@ -103,8 +99,6 @@ ast_not = require( '../ast/not' );
 
 ast_number = require( '../ast/number' );
 
-ast_objLiteral = require( '../ast/objLiteral' );
-
 ast_or = require( '../ast/or' );
 
 ast_plus = require( '../ast/plus' );
@@ -123,7 +117,7 @@ lexer = require( '../jsLexer/lexer' );
 
 state = require( './state' );
 
-jsParser_spec = require( './spec' );
+tokenSpec = require( './tokenSpec' );
 
 
 /*
@@ -165,8 +159,8 @@ handleBooleanLiteral =
 */
 handleDot =
 	function(
-		state // current parser state
-		// spec   // operator spec
+		state, // current parser state
+		spec   // operator spec
 	)
 {
 	var
@@ -194,6 +188,7 @@ handleDot =
 					'expr', state.ast,
 					'member', name.value
 				),
+			'spec', spec,
 			'pos', state.pos + 2
 		);
 
@@ -211,9 +206,12 @@ handleDualisticOps =
 	)
 {
 	var
-		ast;
+		ast,
+		prec;
 
 	ast = state.ast;
+
+	prec = state.prec;
 
 	if( !ast )
 	{
@@ -223,10 +221,11 @@ handleDualisticOps =
 	state =
 		state.create(
 			'ast', null,
+			'spec', spec,
 			'pos', state.pos + 1
 		);
 
-	state = parseToken( state, spec );
+	state = parseToken( state );
 
 	state =
 		state.create(
@@ -265,14 +264,17 @@ handleMonoOps =
 	state =
 		state.create(
 			'ast', null,
+			'spec', spec,
 			'pos', state.pos + 1
 		);
 
-	state = parseToken( state, spec );
+	state = parseToken( state );
 
 	state =
 		state.create(
-			'ast', spec.astCreator.create( 'expr', state.ast )
+			'ast',
+				spec.astCreator.create( 'expr', state.ast ),
+			'spec', spec // XXX
 		);
 
 	return state;
@@ -301,10 +303,11 @@ handleNew =
 	state =
 		state.create(
 			'ast', null,
+			'spec', spec,
 			'pos', state.pos + 1
 		);
 
-	state = parseToken( state, spec );
+	state = parseToken( state );
 
 	state =
 		state.create(
@@ -344,6 +347,7 @@ handleRoundBrackets =
 		state =
 			state.create(
 				'ast', null,
+				'spec', spec,
 				'pos', state.pos + 1
 			);
 
@@ -360,7 +364,7 @@ handleRoundBrackets =
 			{
 				do
 				{
-					state = parseToken( state, spec );
+					state = parseToken( state );
 				}
 				while(
 					!state.reachedEnd
@@ -391,6 +395,7 @@ handleRoundBrackets =
 					state =
 						state.create(
 							'ast', null,
+							'spec', tokenSpecs.sequence,
 							'pos', state.pos + 1
 						);
 
@@ -410,6 +415,7 @@ handleRoundBrackets =
 		state =
 			state.create(
 				'ast', call,
+				'spec', spec,
 				'pos', state.pos + 1
 			);
 
@@ -421,14 +427,15 @@ handleRoundBrackets =
 	state =
 		state.create(
 			'ast', null,
+			'spec', spec,
 			'pos', state.pos + 1
 		);
 
-	state = parseToken( state, spec );
+	state = parseToken( state );
 
 	while( state.current.type !== ')' )
 	{
-		state = parseToken( state, spec );
+		state = parseToken( state );
 
 		if( state.reachedEnd )
 		{
@@ -436,56 +443,9 @@ handleRoundBrackets =
 		}
 	}
 
-	state = state.create( 'pos', state.pos + 1 );
-
-	return state;
-};
-
-
-/*
-| Handler for { } Object literals
-*/
-handleObjectLiteral =
-	function(
-		state // current parser state
-		// spec   // operator spec
-	)
-{
-	var
-		olit,
-		ast;
-
-	ast = state.ast;
-
-	if( ast )
-	{
-		throw new Error( 'parser error' );
-	}
-
-	// this is an array literal
-	olit = ast_objLiteral.create( );
-
 	state =
 		state.create(
-			'ast', null,
-			'pos', state.pos + 1
-		);
-
-	if( state.reachedEnd )
-	{
-		throw new Error( 'missing "}"' );
-	}
-
-	if( state.current.type !== '}' )
-	{
-		// FUTURE cannot handle element currently
-		throw new Error( );
-	}
-
-	// advances over closing square bracket
-	state =
-		state.create(
-			'ast', olit,
+			'spec', tokenSpecs[ ')' ],
 			'pos', state.pos + 1
 		);
 
@@ -516,6 +476,7 @@ handleSquareBrackets =
 		state =
 			state.create(
 				'ast', null,
+				'spec', spec,
 				'pos', state.pos + 1
 			);
 
@@ -531,7 +492,7 @@ handleSquareBrackets =
 			for( ;; )
 			{
 				do{
-					state = parseToken( state, spec );
+					state = parseToken( state );
 				} while(
 					!state.reachedEnd
 					&&
@@ -561,6 +522,7 @@ handleSquareBrackets =
 					state =
 						state.create(
 							'ast', null,
+							'spec', tokenSpecs[ ',' ],
 							'pos', state.pos + 1
 						);
 
@@ -580,6 +542,7 @@ handleSquareBrackets =
 		state =
 			state.create(
 				'ast', alit,
+				'spec', spec,
 				'pos', state.pos + 1
 			);
 
@@ -589,14 +552,15 @@ handleSquareBrackets =
 	state =
 		state.create(
 			'ast', null,
+			'spec', spec,
 			'pos', state.pos + 1
 		);
 
-	state = parseToken( state, spec );
+	state = parseToken( state );
 
 	while( state.current.type !== ']' )
 	{
-		state = parseToken( state, spec );
+		state = parseToken( state );
 
 		if( state.reachedEnd )
 		{
@@ -611,6 +575,7 @@ handleSquareBrackets =
 					'expr', ast,
 					'member', state.ast
 				),
+			'spec', tokenSpecs[ ')' ],
 			'pos', state.pos + 1
 		);
 
@@ -647,6 +612,30 @@ handlePass =
 
 
 /*
+| Handler for numeric literals.
+*/
+handleNumber =
+	function(
+		state // current parser state
+		// spec   // operator spec
+	)
+{
+	if( state.ast !== null )
+	{
+		throw new Error( 'parse error' );
+	}
+
+	state =
+		state.create(
+			'ast', ast_number.create( 'number', state.current.value ),
+			'pos', state.pos + 1
+		);
+
+	return state;
+};
+
+
+/*
 | Handler for string literals.
 */
 handleString =
@@ -655,6 +644,11 @@ handleString =
 		// spec   // operator spec
 	)
 {
+	if( state.ast !== null )
+	{
+		throw new Error( 'parse error' );
+	}
+
 	state =
 		state.create(
 			'ast', ast_string.create( 'string', state.current.value ),
@@ -665,8 +659,9 @@ handleString =
 };
 
 
+
 /*
-| Handler for numeric literals.
+| Handler for string literals.
 */
 handleNumber =
 	function(
@@ -674,6 +669,11 @@ handleNumber =
 		// spec   // operator spec
 	)
 {
+	if( state.ast !== null )
+	{
+		throw new Error( 'parse error' );
+	}
+
 	state =
 		state.create(
 			'ast', ast_number.create( 'number', state.current.value ),
@@ -694,6 +694,11 @@ handleIdentifier =
 		// spec   // operator spec
 	)
 {
+	if( state.ast !== null )
+	{
+		throw new Error( 'parse error' );
+	}
+
 	state =
 		state.create(
 			'ast', ast_var.create( 'name', state.current.value ),
@@ -705,244 +710,211 @@ handleIdentifier =
 
 
 /*
-| Left token specifications for unary operants.
-| They are consulted when the current parse buffer is empty.
+| Token specifications.
 */
-leftSpecs = { };
+tokenSpecs = { };
 
-leftSpecs.identifier =
-	jsParser_spec.create(
-		'prec', -1,
+tokenSpecs.identifier =
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
 		'handler', handleIdentifier,
 		'associativity', 'n/a'
 	);
 
-leftSpecs.number =
-	jsParser_spec.create(
-		'prec', -1,
+tokenSpecs.number =
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
 		'handler', handleNumber,
 		'associativity', 'n/a'
 	);
 
-leftSpecs.string =
-	jsParser_spec.create(
-		'prec', -1,
+tokenSpecs.string =
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
 		'handler', handleString,
 		'associativity', 'n/a'
 	);
 
-leftSpecs[ 'true' ] =
-	jsParser_spec.create(
-		'prec', -1,
+tokenSpecs[ 'true' ] =
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
 		'handler', handleBooleanLiteral,
 		'associativity', 'n/a'
 	);
 
-leftSpecs[ 'false' ] =
-	jsParser_spec.create(
-		'prec', -1,
+tokenSpecs[ 'false' ] =
+	tokenSpec.create(
+		'prePrec', -1,
+		'postPrec', -1,
 		'handler', handleBooleanLiteral,
 		'associativity', 'n/a'
 	);
 
-leftSpecs[ '[' ] =
-	jsParser_spec.create(
-		'prec', 1,
-		'handler', handleSquareBrackets, // FIXME handleArrayLit
-		'associativity', 'l2r'
-	);
-
-leftSpecs[ '{' ] =
-	jsParser_spec.create(
-		'prec', -1,
-		'handler', handleObjectLiteral,
-		'associativity', 'n/a'
-	);
-
-leftSpecs[ '(' ] =
-	jsParser_spec.create(
-		'prec', 0,
+tokenSpecs[ '(' ] =
+	tokenSpec.create(
+		'prePrec', 0,
+		'postPrec', 1,
 		'handler', handleRoundBrackets,
 		'associativity', 'l2r'
 	);
 
-leftSpecs[ 'new' ] =
-	jsParser_spec.create(
-		'prec', 2,
+tokenSpecs[ ')' ] =
+	tokenSpec.create(
+		'prePrec', 1,
+		'postPrec', 99,
+		'handler', handlePass,
+		'associativity', 'n/a'
+	);
+
+tokenSpecs[ '[' ] =
+	tokenSpec.create(
+		'prePrec', 1,
+		'postPrec', 1,
+		'handler', handleSquareBrackets,
+		'associativity', 'l2r'
+	);
+
+tokenSpecs[ ']' ] =
+	tokenSpec.create(
+		'prePrec', 1, // 99?
+		'postPrec', 1,
+		'handler', handlePass,
+		'associativity', 'n/a'
+	);
+
+tokenSpecs[ '.' ] =
+	tokenSpec.create(
+		'prePrec', 1,
+		'postPrec', 1,
+		'handler', handleDot,
+		'associativity', 'l2r'
+	);
+
+tokenSpecs[ 'new' ] =
+	tokenSpec.create(
+		'prePrec', 2, // XXX
+		'postPrec', 2, // XXX
 		'handler', handleNew,
 		'associativity', 'r2l'
 	);
 
-leftSpecs[ '++' ] =
-	jsParser_spec.create(
-		'prec', 3,
+tokenSpecs[ '++' ] =
+	tokenSpec.create(
+		'prePrec', 3,
+		'postPrec', 4,
 		'handler', handleMonoOps,
 		'astCreator', ast_preIncrement,
+		// FUTURE postfixCreator
 		'associativity', 'n/a'
 	);
 
-leftSpecs[ '!' ] =
-	jsParser_spec.create(
-		'prec', 4,
+tokenSpecs[ '!' ] =
+	tokenSpec.create(
+		'prePrec', 4,
+		'postPrec', 4,
 		'handler', handleMonoOps,
 		'astCreator', ast_not,
 		'associativity', 'r2l'
 	);
 
-leftSpecs[ 'delete' ] =
-	jsParser_spec.create(
-		'prec', 4,
+tokenSpecs[ 'delete' ] =
+	tokenSpec.create(
+		'prePrec', 4,
+		'postPrec', 4,
 		'handler', handleMonoOps,
 		'astCreator', ast_delete,
 		'associativity', 'r2l'
 	);
 
-/*
-| This is a phony token that ought to never come from lexer
-| used to differencate ',' operator from ',' sequences
-| FIXME check if needed
-*/
-leftSpecs.sequence =
-	jsParser_spec.create(
-		'prec', 18,
-		'handler', handleParserError,
-		'associativity', 'l2r'
-	);
-
-leftSpecs[ ',' ] =
-	jsParser_spec.create(
-		'prec', 19,
-		'handler', handleDualisticOps,
-		'astCreator', ast_comma,
-		'associativity', 'l2r'
-	);
-
-// phony spec that cannot be created
-// by lexer denoting start of parsing
-leftSpecs.start =
-	jsParser_spec.create(
-		'prec', 99,
-		'handler', handleParserError,
-		'associativity', 'n/a'
-	);
-
-
-/*
-| Right token specifications for unary operants.
-| They are consulted when the current parse buffer is empty.
-*/
-rightSpecs = { };
-
-rightSpecs[ '(' ] =
-	jsParser_spec.create(
-		'prec', 1,
-		'handler', handleRoundBrackets,
-		'associativity', 'l2r'
-	);
-
-rightSpecs[ ')' ] =
-	jsParser_spec.create(
-		'prec', 98,
-		'handler', handlePass,
-		'associativity', 'n/a'
-	);
-
-rightSpecs[ '[' ] =
-	jsParser_spec.create(
-		'prec', 1,
-		'handler', handleSquareBrackets, // FIXME handleMember
-		'associativity', 'l2r'
-	);
-
-rightSpecs[ ']' ] =
-	jsParser_spec.create(
-		'prec', 1, // 98?
-		'handler', handlePass,
-		'associativity', 'n/a'
-	);
-
-rightSpecs[ '.' ] =
-	jsParser_spec.create(
-		'prec', 1,
-		'handler', handleDot,
-		'associativity', 'l2r'
-	);
-
-rightSpecs[ '+' ] =
-	jsParser_spec.create(
-		'prec', 6,
+tokenSpecs[ '+' ] =
+	tokenSpec.create(
+		'prePrec', 6,
+		'postPrec', 6,
 		'handler', handleDualisticOps,
 		'astCreator', ast_plus,
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ '<' ] =
-	jsParser_spec.create(
-		'prec', 8,
+tokenSpecs[ '<' ] =
+	tokenSpec.create(
+		'prePrec', 8,
+		'postPrec', 8,
 		'handler', handleDualisticOps,
 		'astCreator', ast_lessThan,
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ '>' ] =
-	jsParser_spec.create(
-		'prec', 8,
+tokenSpecs[ '>' ] =
+	tokenSpec.create(
+		'prePrec', 8,
+		'postPrec', 8,
 		'handler', handleDualisticOps,
 		'astCreator', ast_greaterThan,
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ '===' ] =
-	jsParser_spec.create(
-		'prec', 9,
+tokenSpecs[ '===' ] =
+	tokenSpec.create(
+		'prePrec', 9,
+		'postPrec', 9,
 		'handler', handleDualisticOps,
 		'astCreator', ast_equals,
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ '!==' ] =
-	jsParser_spec.create(
-		'prec', 9,
+tokenSpecs[ '!==' ] =
+	tokenSpec.create(
+		'prePrec', 9,
+		'postPrec', 9,
 		'handler', handleDualisticOps,
 		'astCreator', ast_differs,
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ 'instanceof' ] =
-	jsParser_spec.create(
-		'prec', 11,
+tokenSpecs[ 'instanceof' ] =
+	tokenSpec.create(
+		'prePrec', 11,
+		'postPrec', 11,
 		'handler', handleDualisticOps,
 		'astCreator', ast_instanceof,
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ '&&' ] =
-	jsParser_spec.create(
-		'prec', 13,
+tokenSpecs[ '&&' ] =
+	tokenSpec.create(
+		'prePrec', 13,
+		'postPrec', 13,
 		'handler', handleDualisticOps,
 		'astCreator', ast_and,
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ '||' ] =
-	jsParser_spec.create(
-		'prec', 14,
+tokenSpecs[ '||' ] =
+	tokenSpec.create(
+		'prePrec', 14,
+		'postPrec', 14,
 		'handler', handleDualisticOps,
 		'astCreator', ast_or,
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ '=' ] =
-	jsParser_spec.create(
-		'prec', 16,
+tokenSpecs[ '=' ] =
+	tokenSpec.create(
+		'prePrec', 16,
+		'postPrec', 16,
 		'handler', handleDualisticOps,
 		'astCreator', ast_assign,
 		'associativity', 'r2l'
 	);
 
-rightSpecs[ '+=' ] =
-	jsParser_spec.create(
-		'prec', 16,
+tokenSpecs[ '+=' ] =
+	tokenSpec.create(
+		'prePrec', 16,
+		'postPrec', 16,
 		'handler', handleDualisticOps,
 		'astCreator', ast_plusAssign,
 		'associativity', 'r2l'
@@ -951,19 +923,19 @@ rightSpecs[ '+=' ] =
 /*
 | This is a phony token that ought to never come from lexer
 | used to differencate ',' operator from ',' sequences
-|
-| FIXME check if needed
 */
-rightSpecs.sequence =
-	jsParser_spec.create(
-		'prec', 18,
+tokenSpecs.sequence =
+	tokenSpec.create(
+		'prePrec', 18,
+		'postPrec', 18,
 		'handler', handleParserError,
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ ',' ] =
-	jsParser_spec.create(
-		'prec', 19,
+tokenSpecs[ ',' ] =
+	tokenSpec.create(
+		'prePrec', 19,
+		'postPrec', 19,
 		'handler', handleDualisticOps,
 		'astCreator', ast_comma,
 		'associativity', 'l2r'
@@ -971,42 +943,14 @@ rightSpecs[ ',' ] =
 
 // phony spec that cannot be created
 // by lexer denoting start of parsing
-rightSpecs.start =
-	jsParser_spec.create(
-		'prec', 98,
+tokenSpecs.start =
+	tokenSpec.create(
+		'prePrec', 99,
+		'postPrec', 99,
 		'handler', handleParserError,
 		'associativity', 'n/a'
 	);
 
-
-/*
-| Returns the spec for a state
-*/
-getSpec =
-	function(
-		ast,
-		token
-	)
-{
-	var
-		spec;
-
-	if( ast === null )
-	{
-		spec = leftSpecs[ token.type ];
-	}
-	else
-	{
-		spec = rightSpecs[ token.type ];
-	}
-
-	if( !spec )
-	{
-		throw new Error( 'unexpected ' + token.type );
-	}
-
-	return spec;
-};
 
 
 /*
@@ -1014,60 +958,42 @@ getSpec =
 */
 parseToken =
 	function(
-		state,
-		spec
+		state
 	)
 {
 	var
+		curSpec,
 		curState,
-		nextSpec,
-		tokenSpec;
+		nextSpec;
 
 	curState = state;
 
-	tokenSpec = getSpec( state.ast, state.current );
+	curSpec = tokenSpecs[ state.current.type ];
 
-	console.log( 'H>', state.current.type, state.current.value, tokenSpec.prec );
+	state = curSpec.handler( state, curSpec );
 
-	state = tokenSpec.handler( state, tokenSpec );
-
-	console.log( '<H', state.ast );
-
-	while( !state.reachedEnd )
+	if( !state.reachedEnd )
 	{
-		nextSpec = getSpec( state.ast, state.current );
-		console.log( 'C', curState.current.type, curState.current.value || '', spec.prec );
-		console.log( 'N', state.current.type, state.current.value || '', nextSpec.prec );
+		nextSpec = tokenSpecs[ state.current.type ];
 
 		if(
-			nextSpec.prec > spec.prec
-			||
 			(
-				nextSpec.prec === spec.prec
-				&&
-				spec.associativity === 'l2r'
-			)
-		)
-		{
-			break;
-		}
-
-				/*
+				nextSpec.prec( state.ast ) < curState.prec
 				|| (
-					nextSpec.prec === curState.spec.prec
+					nextSpec.prec( state.ast ) === curState.prec
 					&&
 					curState.spec.associativity === 'r2l'
 				)
-				*/
-			//&& curState.spec.handler !== handlePass
-			//&& spec.handler !== handlePass
+			)
+			&& curSpec.handler !== handlePass
+		)
+		{
+			// reset the operator precedence to current
+			state = state.create( 'spec', curState.spec );
 
-		console.log( '->' );
-		state = parseToken( state, nextSpec );
-		console.log( '<-' );
+			state = parseToken( state );
+		}
 	}
-
-	console.log( '' );
 
 	return state;
 };
@@ -1098,14 +1024,13 @@ parser.parse =
 		state.create(
 			'tokens', tokens,
 			'pos', 0,
+			'spec', tokenSpecs.start,
 			'ast', null
 		);
 
-		st = parseToken( st, leftSpecs.start );
-
-	if( !st.reachedEnd )
+	while( !st.reachedEnd )
 	{
-		throw new Error( 'internal fail, premature end' );
+		st = parseToken( st );
 	}
 
 	return st.ast;
