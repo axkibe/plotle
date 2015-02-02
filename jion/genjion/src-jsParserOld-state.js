@@ -48,7 +48,7 @@ if( SERVER )
 
 	jion_proto = require( '../../src/jion/proto' );
 
-	jsParser_tokenSpec = require( '../../src/jsParserOld/tokenSpec' );
+	jsParser_tokenSpec = require( '../../src/jsParser/tokenSpec' );
 }
 
 
@@ -223,7 +223,7 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_spec.reflect !== 'jsParserOld_tokenSpec' )
+/**/	if( v_spec.reflect !== 'jsParser_tokenSpec' )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -261,7 +261,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'jsParserOld_state';
+prototype.reflect = 'jsParser_state';
 
 
 /*
@@ -300,7 +300,7 @@ prototype.equals =
 		return false;
 	}
 
-	if( obj.reflect !== 'jsParserOld_state' )
+	if( obj.reflect !== 'jsParser_state' )
 	{
 		return false;
 	}

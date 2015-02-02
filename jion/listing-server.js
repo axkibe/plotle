@@ -107,6 +107,6 @@ module.exports =
 			'src/jion/id.js',
 			'src/jion/idRepository.js',
 			'src/jsParser/state.js',
-			'src/jsParser/tokenSpec.js'
+			'src/jsParser/spec.js'
 		]
 };

@@ -311,7 +311,7 @@ prototype.create =
 /*
 | Reflection.
 */
-prototype.reflect = 'jsParserOld_tokenSpec';
+prototype.reflect = 'jsParser_tokenSpec';
 
 
 /*
@@ -350,7 +350,7 @@ prototype.equals =
 		return false;
 	}
 
-	if( obj.reflect !== 'jsParserOld_tokenSpec' )
+	if( obj.reflect !== 'jsParser_tokenSpec' )
 	{
 		return false;
 	}
