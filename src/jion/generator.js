@@ -69,7 +69,7 @@ var
 	$var,
 	jion_id,
 	generator,
-	jion_idRepository,
+	jion_idGroup,
 	jion_validator,
 	jools,
 	shorthand;
@@ -79,7 +79,7 @@ generator = require( '../jion/this' )( module );
 
 jion_id = require( './id' );
 
-jion_idRepository = require( './idGroup' );
+jion_idGroup = require( './idGroup' );
 
 shorthand = require( '../ast/shorthand' );
 
@@ -189,7 +189,7 @@ generator.prototype._init =
 
 	jion = this.jion;
 
-	units = jion_idRepository.create( );
+	units = jion_idGroup.create( );
 
 	//units = units.set( jion_id.createFromString( 'jion_proto' ) );
 	units = units.add( jion_id.createFromString( 'jion_proto' ) );
@@ -442,7 +442,7 @@ generator.prototype._init =
 			groupDef = jion.group;
 		}
 
-		this.group = jion_idRepository.createFromIDStrings( groupDef );
+		this.group = jion_idGroup.createFromIDStrings( groupDef );
 
 		units = units.addGroup( this.group );
 	}
@@ -462,7 +462,7 @@ generator.prototype._init =
 			rayDef = jion.ray;
 		}
 
-		this.ray = jion_idRepository.createFromIDStrings( rayDef );
+		this.ray = jion_idGroup.createFromIDStrings( rayDef );
 
 		units = units.addGroup( this.ray );
 	}
@@ -482,7 +482,7 @@ generator.prototype._init =
 			twigDef = jion.twig;
 		}
 
-		this.twig = jion_idRepository.createFromIDStrings( twigDef );
+		this.twig = jion_idGroup.createFromIDStrings( twigDef );
 
 		units = units.addGroup( this.twig );
 

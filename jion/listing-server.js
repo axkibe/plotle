@@ -107,7 +107,6 @@ module.exports =
 			'src/jion/generator.js',
 			'src/jion/id.js',
 			'src/jion/idGroup.js',
-			'src/jion/idRepository.js', // FIXME
 			'src/jsParser/state.js',
 			'src/jsParser/spec.js'
 		]
