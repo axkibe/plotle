@@ -219,19 +219,85 @@ jion_proto.newUID =
 | Gets one entry from the group.
 */
 jion_proto.groupGet =
-	function( k )
+	function(
+		key
+	)
 {
-	return this.group[ k ];
+	return this.group[ key ];
 };
 
 
 /*
-| Returns the size of the group.
+| Returns the group with another group added,
+| overwriting collisions.
+*/
+jion_proto.groupAddGroup =
+	function(
+		group
+	)
+{
+	var
+		g,
+		k;
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.reflect !== group.reflect )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	g = jools.copy( this.group );
+
+	for( k in group.group )
+	{
+		g[ k ] = group.group[ k ];
+	}
+
+	return this.create( 'group:init', g );
+};
+
+
+/*
+| Returns the keys of the group.
 */
 jion_proto.groupKeys =
 	function( )
 {
-	return Object.keys( this.group );
+	var
+		keys;
+
+	keys = Object.keys( this.group );
+
+	if( FREEZE )
+	{
+		Object.freeze( keys );
+	}
+
+	return keys;
+};
+
+
+/*
+| Returns the sorted keys of the group.
+*/
+jion_proto.groupSortedKeys =
+	function( )
+{
+	var
+		keys;
+
+	keys = this.keys;
+
+	keys = keys.slice( ).sort( );
+
+	if( FREEZE )
+	{
+		Object.freeze( keys );
+	}
+
+	return keys;
 };
 
 

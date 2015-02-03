@@ -57,7 +57,8 @@ module.exports =
 			'src/jion/attribute.js',
 			'src/jion/generator.js',
 			'src/jion/id.js',
-			'src/jion/idRepository.js',
+			'src/jion/idGroup.js',
+			'src/jion/idRepository.js', // TODO
 			'src/jsLexer/token.js',
 			'src/jsParser/state.js',
 			'src/jsParser/spec.js'

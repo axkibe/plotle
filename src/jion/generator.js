@@ -1631,7 +1631,7 @@ generator.prototype.genCreatorChecks =
 	{
 		if( check.length > 0 )
 		{
- 			return block.$check( check );
+			return block.$check( check );
 		}
 		else
 		{
@@ -2811,6 +2811,12 @@ generator.prototype.genJionProto =
 			capsule
 			.$comment( 'Returns the group keys.')
 			.$( 'jools.lazyValue( prototype, "keys", jion_proto.groupKeys )' )
+
+			.$comment( 'Returns the group keys.')
+			.$( 'jools.lazyValue( prototype, "sortedKeys", jion_proto.groupSortedKeys )' )
+
+			.$comment( 'Adds another group to this group, overwriting collisions.' )
+			.$( 'prototype.addGroup = jion_proto.groupAddGroup' )
 
 			.$comment( 'Returns the size of the group.')
 			.$( 'jools.lazyValue( prototype, "size", jion_proto.groupSize )' )
