@@ -53,9 +53,10 @@ module.exports =
 
 			'src/result/genjion.js',
 
+			'src/server/inventory.js',
 			'src/server/resource.js',
 			'src/server/spaceBox.js',
-			'src/server/inventory.js',
+			'src/server/spaceNexus.js',
 
 			// built-in genjion
 			'src/ast/and.js',

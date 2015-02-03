@@ -18,10 +18,13 @@ if( JION )
 	return {
 		id :
 			'server_spaceNexus',
-		set :
+		group :
 			[ 'server_spaceBox' ]
 	};
 }
+
+
+require( '../jion/this' )( module );
 
 
 } )( );

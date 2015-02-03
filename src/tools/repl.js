@@ -15,8 +15,8 @@
 */
 Error.stackTraceLimit = 99999;
 
-//GLOBAL.APP = 'server';
-GLOBAL.APP = 'genjion';
+GLOBAL.APP = 'server';
+//GLOBAL.APP = 'genjion';
 
 // repl runs in full checking
 // mode even with freezes.
@@ -94,7 +94,7 @@ catch( err )
 
 repl = repl.start( 'repl> ' );
 
-repl.rli.history = history;
+repl.rli.history = history.reverse( );
 
 // strange wording to make jshint happy
 defaultEval = repl[ '_eval'.substr( 1 ) ];
@@ -102,11 +102,19 @@ defaultEval = repl[ '_eval'.substr( 1 ) ];
 repl[ '_eval'.substr( 1 ) ] =
 	function( cmd, context, filename, callback )
 	{
-		history.push( cmd );
+		var
+			c;
 
-		if( history.length > maxHistory )
+		c = cmd.trim( );
+
+		if( c !== '' )
 		{
-			history.shift( );
+			history.push( c );
+
+			if( history.length > maxHistory )
+			{
+				history.shift( );
+			}
 		}
 
 		defaultEval.call( repl, cmd, context, filename, callback );

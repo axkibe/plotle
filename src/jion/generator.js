@@ -953,7 +953,7 @@ generator.prototype.genCreatorVariables =
 
 	if( this.group )
 	{
-		varList.push( 'o', 'g', 'gZ', 'group', 'groupDup' );
+		varList.push( 'o', 'group', 'groupDup' );
 	}
 
 	if( this.ray )
@@ -1161,7 +1161,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				'"group:set"',
 				$block( )
 				.append( groupDupCheck )
-				.$( 'group[ arg ] = arguments[ ++a + 1 ] )' )
+				.$( 'group[ arg ] = arguments[ ++a + 1 ]' )
 			)
 			.$case(
 				'"group:remove"',
@@ -1565,6 +1565,25 @@ generator.prototype.genCreatorChecks =
 		{
 			check = check.$if( tcheck, $fail( ) );
 		}
+	}
+
+	if( this.group )
+	{
+		check =
+			check
+			.$forIn(
+				'k',
+				'group',
+				$block( )
+				.$( 'o = group[ k ]' )
+				.$if(
+					this.genTypeCheckFailCondition(
+						$( 'o' ),
+						this.group.idList
+					),
+					$fail( )
+				)
+			);
 	}
 
 	if( this.ray )
@@ -3079,19 +3098,19 @@ generator.prototype.genEquals =
 
 	block = $block( );
 
-	if( this.group || this.ray || this.twig )
+	if( this.ray || this.twig )
 	{
 		block =
 			block
 			.$varDec( 'a' )
 			.$varDec( 'aZ' );
+	}
 
-		if( this.twig )
-		{
-			block =
-				block
-				.$varDec( 'key' );
-		}
+	if( this.twig )
+	{
+		block =
+			block
+			.$varDec( 'key' );
 	}
 
 	block =
