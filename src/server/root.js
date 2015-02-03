@@ -59,6 +59,7 @@ var
 	server_resource,
 	server_root,
 	server_spaceBox,
+	server_spaceNexus,
 	server_tools,
 	sha1,
 	sus,
@@ -94,6 +95,8 @@ server_inventory = require( './inventory' );
 server_resource = require( './resource' );
 
 server_spaceBox = require( './spaceBox' );
+
+server_spaceNexus = require( './spaceNexus' );
 
 server_tools = require( './tools' );
 
@@ -178,7 +181,7 @@ prototype.startup =
 
 	root.create(
 		// all spaces
-		'$spaces', { },
+		'spaces', server_spaceNexus.create( ),
 
 		// a table of all clients waiting for an update
 		'$upsleep', { },
@@ -254,8 +257,12 @@ prototype.loadSpaces =
 			'loading and replaying "' + spaceRef.fullname + '"'
 		);
 
-		root.$spaces[ spaceRef.fullname ] =
-			yield* server_spaceBox.loadSpace( spaceRef );
+		root.spaces = // FIXME
+			root.spaces.create(
+				'group:set',
+				spaceRef.fullname,
+				yield* server_spaceBox.loadSpace( spaceRef )
+			);
 	}
 };
 
@@ -1026,8 +1033,10 @@ prototype.createSpace =
 /**/}
 
 	spaceBox =
-	root.$spaces[ spaceRef.fullname ] =
 		yield* server_spaceBox.createSpace( spaceRef );
+
+	root.spaces = // FIXME
+		root.spaces.create( 'group:set', spaceRef.fullname, spaceBox );
 
 	return spaceBox;
 };

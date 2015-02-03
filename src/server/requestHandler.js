@@ -147,7 +147,7 @@ serveAlter =
 		return replyError( 'no access' );
 	}
 
-	spaceBox = root.$spaces[ spaceRef.fullname ];
+	spaceBox = root.spaces.get( spaceRef.fullname );
 
 	seqZ = spaceBox.seqZ;
 
@@ -172,8 +172,10 @@ serveAlter =
 
 		// this does not yield, its write and forget.
 		spaceBox =
-		root.$spaces[ spaceRef.fullname ] =
 			spaceBox.appendChanges( changeWrapRay, request.username );
+
+		root.spaces = // FIXME
+			root.spaces.create( 'group:set', spaceRef.fullname, spaceBox );
 	}
 	catch( error )
 	{
@@ -389,7 +391,7 @@ serveUpdate =
 		return replyError( 'Invalid password' );
 	}
 
-	spaceBox = root.$spaces[ spaceRef.fullname ];
+	spaceBox = root.spaces.get( spaceRef.fullname );
 
 	if( !spaceBox )
 	{
@@ -484,7 +486,7 @@ serveAcquire =
 		);
 	}
 
-	spaceBox = root.$spaces[ request.spaceRef.fullname ];
+	spaceBox = root.spaces.get( request.spaceRef.fullname );
 
 	if( !spaceBox )
 	{
@@ -530,7 +532,7 @@ server_requestHandler.conveyUpdate =
 		spaceBox;
 
 
-	spaceBox = root.$spaces[ spaceRef.fullname ];
+	spaceBox = root.spaces.get( spaceRef.fullname );
 
 	seqZ = spaceBox.seqZ;
 
@@ -575,7 +577,7 @@ server_requestHandler.expireUpdateSleep =
 		return;
 	}
 
-	spaceBox = root.$spaces[ sleep.spaceRef.fullname ];
+	spaceBox = root.spaces.get( sleep.spaceRef.fullname );
 
 	seqZ = spaceBox.seqZ;
 
