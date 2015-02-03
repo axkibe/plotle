@@ -67,25 +67,25 @@ var
 	$this,
 	$typeof,
 	$var,
+	jion_id,
 	generator,
-	id,
-	idRepository,
+	jion_idRepository,
+	jion_validator,
 	jools,
-	shorthand,
-	validator;
+	shorthand;
 
 
 generator = require( '../jion/this' )( module );
 
-id = require( './id' );
+jion_id = require( './id' );
 
-idRepository = require( './idRepository' );
+jion_idRepository = require( './idRepository' );
 
 shorthand = require( '../ast/shorthand' );
 
 jools = require( '../jools/jools' );
 
-validator = require( './validator' );
+jion_validator = require( './validator' );
 
 
 /*
@@ -189,9 +189,10 @@ generator.prototype._init =
 
 	jion = this.jion;
 
-	units = idRepository.create( );
+	units = jion_idRepository.create( );
 
-	units = units.add( id.createFromString( 'jion_proto' ) );
+	//units = units.set( jion_id.createFromString( 'jion_proto' ) );
+	units = units.add( jion_id.createFromString( 'jion_proto' ) );
 
 	this.hasJSON = !!jion.json;
 
@@ -199,11 +200,11 @@ generator.prototype._init =
 
 	this.singleton = !!jion.singleton;
 
-	this.id = id.createFromString( jion.id );
+	this.id = jion_id.createFromString( jion.id );
 
 	if( jion.subclass )
 	{
-		subID = id.createFromString( jion.subclass );
+		subID = jion_id.createFromString( jion.subclass );
 
 		units = units.add( subID );
 
@@ -223,7 +224,7 @@ generator.prototype._init =
 
 		if( !Array.isArray( type ) )
 		{
-			aid = id.createFromString( type );
+			aid = jion_id.createFromString( type );
 
 			units = units.add( aid );
 		}
@@ -237,7 +238,7 @@ generator.prototype._init =
 				t++
 			)
 			{
-				aid[ t ] = id.createFromString( type[ t ] );
+				aid[ t ] = jion_id.createFromString( type[ t ] );
 
 				units = units.add( aid[ t ] );
 			}
@@ -270,7 +271,7 @@ generator.prototype._init =
 
 		if( concerns && concerns.type )
 		{
-			concernsID = id.createFromString( concerns.type );
+			concernsID = jion_id.createFromString( concerns.type );
 
 			units = units.add( concernsID );
 		}
@@ -441,7 +442,7 @@ generator.prototype._init =
 			groupDef = jion.group;
 		}
 
-		this.group = idRepository.createFromIDStrings( groupDef );
+		this.group = jion_idRepository.createFromIDStrings( groupDef );
 
 		units = units.add( this.group );
 	}
@@ -461,7 +462,7 @@ generator.prototype._init =
 			rayDef = jion.ray;
 		}
 
-		this.ray = idRepository.createFromIDStrings( rayDef );
+		this.ray = jion_idRepository.createFromIDStrings( rayDef );
 
 		units = units.add( this.ray );
 	}
@@ -481,7 +482,7 @@ generator.prototype._init =
 			twigDef = jion.twig;
 		}
 
-		this.twig = idRepository.createFromIDStrings( twigDef );
+		this.twig = jion_idRepository.createFromIDStrings( twigDef );
 
 		units = units.add( this.twig );
 
@@ -3480,7 +3481,7 @@ generator.generate =
 		result,
 		gi;
 
-	validator.check( jion );
+	jion_validator.check( jion );
 
 	gi = generator.create( 'jion', jion );
 

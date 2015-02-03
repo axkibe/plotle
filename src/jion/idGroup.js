@@ -83,6 +83,24 @@ jion_idGroup.createFromIDStrings =
 
 
 /*
+| Returns an idGroup with an id added.
+*/
+jion_idGroup.prototype.add =
+	function(
+		id
+	)
+{
+	return(
+		this.create(
+			'group:set',
+			id.string,
+			id
+		)
+	);
+};
+
+
+/*
 | Returns all units as alphasorted list.
 */
 jools.lazyValue(
