@@ -114,6 +114,8 @@ jools.lazyValue(
 		il,
 		keys;
 
+	il = [ ];
+
 	keys = this.sortedKeys;
 
 	for(
@@ -122,7 +124,7 @@ jools.lazyValue(
 		a++
 	)
 	{
-		il[ a ] = this.get[ keys[ a ] ];
+		il[ a ] = this.get( keys[ a ] );
 	}
 
 /**/if( FREEZE )
@@ -170,7 +172,7 @@ jools.lazyValue(
 	}
 
 
-	ul = Object.keys( this.units ).sort( );
+	ul = Object.keys( units ).sort( );
 
 /**/if( FREEZE )
 /**/{
@@ -200,6 +202,8 @@ jion_idGroup.prototype.nameListOfUnit =
 		nameList;
 
 	keys = this.sortedKeys;
+
+	nameList = [ ];
 
 	for(
 		a = 0, aZ = keys.length;

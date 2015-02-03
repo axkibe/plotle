@@ -79,7 +79,7 @@ generator = require( '../jion/this' )( module );
 
 jion_id = require( './id' );
 
-jion_idRepository = require( './idRepository' );
+jion_idRepository = require( './idGroup' );
 
 shorthand = require( '../ast/shorthand' );
 
@@ -444,7 +444,7 @@ generator.prototype._init =
 
 		this.group = jion_idRepository.createFromIDStrings( groupDef );
 
-		units = units.add( this.group );
+		units = units.addGroup( this.group );
 	}
 	else
 	{
@@ -464,7 +464,7 @@ generator.prototype._init =
 
 		this.ray = jion_idRepository.createFromIDStrings( rayDef );
 
-		units = units.add( this.ray );
+		units = units.addGroup( this.ray );
 	}
 	else
 	{
@@ -484,7 +484,7 @@ generator.prototype._init =
 
 		this.twig = jion_idRepository.createFromIDStrings( twigDef );
 
-		units = units.add( this.twig );
+		units = units.addGroup( this.twig );
 
 	}
 	else
