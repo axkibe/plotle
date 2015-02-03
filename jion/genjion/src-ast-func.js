@@ -299,7 +299,7 @@ prototype.create =
 	if(
 		inherit
 		&&
-		!rayDup
+		rayDup === false
 		&&
 		(
 			v_block === inherit.block

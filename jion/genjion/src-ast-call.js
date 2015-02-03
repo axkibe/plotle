@@ -453,7 +453,7 @@ prototype.create =
 /**/	}
 /**/}
 
-	if( inherit && !rayDup && v_func.equals( inherit.func ) )
+	if( inherit && rayDup === false && v_func.equals( inherit.func ) )
 	{
 		return inherit;
 	}

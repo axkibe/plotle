@@ -419,7 +419,7 @@ prototype.create =
 /**/	}
 /**/}
 
-	if( inherit && !rayDup )
+	if( inherit && rayDup === false )
 	{
 		return inherit;
 	}

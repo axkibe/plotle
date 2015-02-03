@@ -262,7 +262,7 @@ prototype.create =
 /**/	}
 /**/}
 
-	if( inherit && !rayDup && v_block.equals( inherit.block ) )
+	if( inherit && rayDup === false && v_block.equals( inherit.block ) )
 	{
 		return inherit;
 	}

@@ -31,6 +31,9 @@ else
 
 var
 	attributeBlacklist,
+	attributeGroupBlacklist,
+	attributeRayBlacklist,
+	attributeTwigBlacklist,
 	checkAttribute,
 	checkAttributeSingleType,
 	checkRay,
@@ -50,20 +53,39 @@ if( SERVER )
 */
 attributeBlacklist =
 	Object.freeze( {
-		'atRank' : true,
 		'create' : true,
 		'getPath' : true,
-		'group' : true,
 		'inherit' : true,
-		'newUID' : true,
+		'setPath' : true
+	} );
+
+/*
+| Groups must not have these attributes.
+*/
+attributeGroupBlacklist =
+	Object.freeze( {
+		'group' : true,
+		'size' : true
+	} );
+
+/*
+| Rays must not have these attributes.
+*/
+attributeRayBlacklist =
+	Object.freeze( {
+		'length' : true,
+		'ray' : true
+	} );
+
+/*
+| Twigs must not have these attributes.
+*/
+attributeTwigBlacklist =
+	Object.freeze( {
+		'atRank' : true,
 		'ranks' : true,
 		'rankOf' : true,
-		'ray' : true,
-		'rayDup' : true,
-		'setPath' : true,
-		'size' : true,
-		'twig' : true,
-		'twigDup' : true
+		'twig' : true
 	} );
 
 
@@ -373,6 +395,27 @@ checkAttribute =
 	{
 		throw new Error(
 			'attribute must not be named "' + name + '"'
+		);
+	}
+
+	if( jion.group && attributeGroupBlacklist[ name ] )
+	{
+		throw new Error(
+			'groups must not have an attribute named "' + name + '"'
+		);
+	}
+
+	if( jion.group && attributeRayBlacklist[ name ] )
+	{
+		throw new Error(
+			'rays must not have an attribute named "' + name + '"'
+		);
+	}
+
+	if( jion.group && attributeTwigBlacklist[ name ] )
+	{
+		throw new Error(
+			'twigs must not have an attribute named "' + name + '"'
 		);
 	}
 

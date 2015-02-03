@@ -441,7 +441,7 @@ prototype.create =
 	if(
 		inherit
 		&&
-		!rayDup
+		rayDup === false
 		&&
 		(
 			v_defaultCase === inherit.defaultCase
