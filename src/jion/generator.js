@@ -69,6 +69,7 @@ var
 	$var,
 	jion_id,
 	generator,
+	jion_concern,
 	jion_idGroup,
 	jion_validator,
 	jools,
@@ -84,6 +85,8 @@ jion_idGroup = require( './idGroup' );
 shorthand = require( '../ast/shorthand' );
 
 jools = require( '../jools/jools' );
+
+jion_concern = require( './concern' );
 
 jion_validator = require( './validator' );
 
@@ -305,6 +308,16 @@ generator.prototype._init =
 			{
 				throw new Error( );
 			}
+		}
+
+		if( jAttr.concerns )
+		{
+			jion_concern.create( // FIXME
+				'id', concernsID,
+				'func', jAttr.concerns.func,
+				'args', jAttr.concerns.args,
+				'member', jAttr.concerns.member
+			);
 		}
 
 		attr =

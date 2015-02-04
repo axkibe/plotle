@@ -55,6 +55,7 @@ module.exports =
 
 			'src/format/context.js',
 			'src/jion/attribute.js',
+			'src/jion/concern.js',
 			'src/jion/generator.js',
 			'src/jion/id.js',
 			'src/jion/idGroup.js',
