@@ -70,6 +70,7 @@ var
 	jion_id,
 	generator,
 	jion_attribute,
+	jion_attributeGroup,
 	jion_concern,
 	jion_idGroup,
 	jion_stringRay,
@@ -89,6 +90,8 @@ jion_stringRay = require( './stringRay' );
 jools = require( '../jools/jools' );
 
 jion_attribute = require( './attribute' );
+
+jion_attributeGroup = require( './attributeGroup' );
 
 jion_concern = require( './concern' );
 
@@ -189,7 +192,7 @@ generator.prototype._init =
 		twigDef, // twig map to be used (the definition)
 		units; // units used
 
-	attributes = { };
+	attributes = jion_attributeGroup.create( );
 
 	constructorList = [ ];
 
@@ -316,7 +319,6 @@ generator.prototype._init =
 		}
 
 		attr =
-		attributes[ name ] =
 			jion_attribute.create(
 				'allowsNull',
 					jAttr.allowsNull
@@ -353,20 +355,20 @@ generator.prototype._init =
 				'v', // FUTURE rename to creatorVar
 					$var( 'v_' + name )
 			);
+
+		attributes = attributes.set( name, attr );
 	}
 
-	attrList = Object.keys( attributes ).sort ( );
+	attrList = attributes.sortedKeys; // FIXME remove
 
 	if( FREEZE )
 	{
-		Object.freeze( attrList );
-
 		Object.freeze( attributes );
 	}
 
 	this.attrList = Object.freeze( attrList );
 
-	this.attributes = Object.freeze( attributes );
+	this.attributes = attributes;
 
 	constructorList.sort( );
 
@@ -399,7 +401,7 @@ generator.prototype._init =
 		{
 			name = jion.init[ a ];
 
-			if( attributes[ name ] )
+			if( attributes.get( name ) )
 			{
 				continue;
 			}
@@ -676,7 +678,7 @@ generator.prototype.genConstructor =
 	{
 		name = this.attrList[ a ];
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		if( attr.assign === null )
 		{
@@ -746,7 +748,7 @@ generator.prototype.genConstructor =
 					continue;
 			}
 
-			attr = this.attributes[ name ];
+			attr = this.attributes.get( name );
 
 			if( !attr )
 			{
@@ -868,7 +870,7 @@ generator.prototype.genConstructor =
 			default :
 
 				attr =
-					this.attributes[ name ];
+					this.attributes.get( name );
 
 				constructor =
 					constructor.$arg(
@@ -942,9 +944,9 @@ generator.prototype.genCreatorVariables =
 
 	varList = [ ];
 
-	for( name in this.attributes )
+	for( name in this.attributes.group )
 	{
-		varList.push( this.attributes[ name ].v.name );
+		varList.push( this.attributes.get( name ).v.name );
 	}
 
 	varList.push( 'inherit' );
@@ -1035,7 +1037,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 	{
 		name = this.attrList[ a ];
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		if( attr.assign === null )
 		{
@@ -1128,7 +1130,7 @@ generator.prototype.genCreatorFreeStringsParser =
 	{
 		name = this.attrList[ a ];
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		switchExpr =
 			switchExpr
@@ -1338,7 +1340,7 @@ generator.prototype.genCreatorDefaults =
 	{
 		name = this.attrList[ a ];
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		if( json && !attr.json )
 		{
@@ -1514,7 +1516,7 @@ generator.prototype.genCreatorChecks =
 	{
 		name = this.attrList[ a ];
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		if( json && !attr.json )
 		{
@@ -1691,7 +1693,7 @@ generator.prototype.genCreatorConcerns =
 	{
 		name = this.attrList[ a ];
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		concerns = attr.concerns;
 
@@ -1727,7 +1729,7 @@ generator.prototype.genCreatorConcerns =
 			{
 				// FUTURE, make a generator.getCreatorVarName func
 
-				bAttr = this.attributes[ args.get( b ) ];
+				bAttr = this.attributes.get( args.get( b ) );
 
 				if( !bAttr )
 				{
@@ -1788,7 +1790,7 @@ generator.prototype.genCreatorConcerns =
 					b++
 				)
 				{
-					bAttr = this.attributes[ args.get( b ) ];
+					bAttr = this.attributes.get( args.get( b ) );
 
 					if( !bAttr )
 					{
@@ -1853,7 +1855,7 @@ generator.prototype.genCreatorUnchanged =
 	{
 		name = this.attrList[ a ];
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		if( attr.assign === null )
 		{
@@ -1991,7 +1993,7 @@ generator.prototype.genCreatorReturn =
 
 			default :
 
-				attr = this.attributes[ name ];
+				attr = this.attributes.get( name );
 
 				call = call.addArgument( attr.v );
 		}
@@ -2072,10 +2074,9 @@ generator.prototype.genFromJSONCreatorVariables =
 
 	varList = [ ];
 
-	for( name in this.attributes )
+	for( name in this.attributes.group )
 	{
-		attr =
-			this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		if( attr.assign === null )
 		{
@@ -2345,7 +2346,7 @@ generator.prototype.genFromJSONCreatorParser =
 			continue;
 		}
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		nameSwitch =
 			nameSwitch
@@ -2675,8 +2676,7 @@ generator.prototype.genFromJSONCreatorReturn =
 
 			default :
 
-				attr =
-					this.attributes[ name ];
+				attr = this.attributes.get( name );
 
 				if( attr.assign === null )
 				{
@@ -2721,7 +2721,7 @@ generator.prototype.genFromJSONCreator =
 	{
 		name = this.attrList[ a ];
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		if( attr.json )
 		{
@@ -2933,7 +2933,7 @@ generator.prototype.genToJSON =
 	{
 		name = this.attrList[ a ];
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		if( !attr.json )
 		{
@@ -3005,7 +3005,7 @@ generator.prototype.genAttributeEquals =
 		attr,
 		ceq;
 
-	attr = this.attributes[ name ];
+	attr = this.attributes.get( name );
 
 	switch( attr.id.string )
 	{
@@ -3251,7 +3251,7 @@ generator.prototype.genEquals =
 	{
 		name = this.attrList[ a ];
 
-		attr = this.attributes[ name ];
+		attr = this.attributes.get( name );
 
 		if( attr.assign === null )
 		{
@@ -3353,7 +3353,7 @@ generator.prototype.genAlike =
 		{
 			name = this.attrList[ a ];
 
-			attr = this.attributes[ name ];
+			attr = this.attributes.get( name );
 
 			if( attr.assign === null || ignores[ name ] )
 			{
