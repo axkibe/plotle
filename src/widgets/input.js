@@ -154,7 +154,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							''
+							'""'
 					},
 				visible :
 					{

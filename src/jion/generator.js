@@ -280,7 +280,7 @@ generator.prototype._init =
 		{
 			jdv = jAttr.defaultValue;
 
-			if( jools.isString( jdv ) && jdv[ 0 ] === '"' )
+			if( jools.isString( jdv ) )
 			{
 				// nextStyle
 				// XXX
