@@ -177,9 +177,7 @@ generator.prototype._init =
 		name,
 		rayDef,
 		subID, // twig id
-		t,
 		type,
-		tZ,
 		twigDef, // twig map to be used (the definition)
 		units; // units used
 
@@ -230,18 +228,9 @@ generator.prototype._init =
 		}
 		else
 		{
-			aid = [ ]; // FUTURE idRay
+			aid = jion_idGroup.createFromIDStrings( type );
 
-			for(
-				t = 0, tZ = type.length;
-				t < tZ;
-				t++
-			)
-			{
-				aid[ t ] = jion_id.createFromString( type[ t ] );
-
-				units = units.add( aid[ t ] );
-			}
+			units = units.addGroup( aid );
 		}
 
 		if( jAttr.json )
@@ -1418,7 +1407,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 generator.prototype.genTypeCheckFailCondition =
 	function(
 		avar,  // the variable to check
-		idx  // the id or idRay it has to match
+		idx  // the id or idGroup it has to match
 	)
 {
 	var
@@ -1426,17 +1415,32 @@ generator.prototype.genTypeCheckFailCondition =
 		aZ,
 		condArray;
 
-	if( !Array.isArray( idx ) )
+	if( idx.reflect === 'jion_id' )
 	{
 		return this.genSingleTypeCheckFailCondition( avar, idx );
 	}
 
-	if( idx.length === 1 )
+/**/if( CHECK )
+/**/{
+/**/	if( idx.reflect !== 'jion_idGroup' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( idx.size === 1 )
 	{
-		return this.genSingleTypeCheckFailCondition( avar, idx[ 0 ] );
+		return(
+			this.genSingleTypeCheckFailCondition(
+				avar,
+				idx.get( idx.keys[ 0 ] )
+			)
+		);
 	}
 
 	condArray = [ ];
+
+	idx = idx.idList; // FIXME do not reuse var
 
 	for(
 		a = 0, aZ = idx.length;
@@ -1528,7 +1532,7 @@ generator.prototype.genCreatorChecks =
 
 		switch( attr.id.string )
 		{
-			case 'Object' :
+			case 'Object' : // FIXME
 
 				continue;
 		}
@@ -1578,10 +1582,7 @@ generator.prototype.genCreatorChecks =
 				$block( )
 				.$( 'o = group[ k ]' )
 				.$if(
-					this.genTypeCheckFailCondition(
-						$( 'o' ),
-						this.group.idList
-					),
+					this.genTypeCheckFailCondition( $( 'o' ), this.group ),
 					$fail( )
 				)
 			);
@@ -1598,10 +1599,7 @@ generator.prototype.genCreatorChecks =
 				$block( )
 				.$( 'o = ray[ r ]' )
 				.$if(
-					this.genTypeCheckFailCondition(
-						$( 'o' ),
-						this.ray.idList
-					),
+					this.genTypeCheckFailCondition( $( 'o' ), this.ray ),
 					$fail( )
 				)
 			);
@@ -1621,7 +1619,7 @@ generator.prototype.genCreatorChecks =
 				.$if(
 					this.genTypeCheckFailCondition(
 						$( 'o' ),
-						this.twig.idList
+						this.twig
 					),
 					$fail( )
 				)
@@ -2129,6 +2127,7 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 	var
 		code, // code to return
 		cSwitch, // the code switch
+		idList,
 		mif, // the multi if
 		sif, // a signle if
 		t,
@@ -2148,7 +2147,7 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 
 		default :
 
-			if( !Array.isArray( attr.id ) )
+			if( attr.id.reflect === 'jion_id' )
 			{
 				code =
 					$assign(
@@ -2167,13 +2166,15 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 
 				cSwitch = null;
 
+				idList = attr.id.idList;
+
 				for(
-					t = 0, tZ = attr.id.length;
+					t = 0, tZ = idList.length;
 					t < tZ;
 					t++
 				)
 				{
-					switch( attr.id[ t ].string )
+					switch( idList[ t ].string )
 					{
 						case 'Number' :
 
@@ -2215,11 +2216,11 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 						cSwitch =
 							cSwitch
 							.$case(
-								attr.id[ t ].$string,
+								idList[ t ].$string,
 								$assign(
 									attr.v,
 									$call(
-										attr.id[ t ].$global
+										idList[ t ].$global
 										.$dot( 'createFromJSON' ),
 										'arg'
 									)
