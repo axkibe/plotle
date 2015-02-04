@@ -310,16 +310,6 @@ generator.prototype._init =
 			}
 		}
 
-		if( jAttr.concerns )
-		{
-			jion_concern.create( // FIXME
-				'id', concernsID,
-				'func', jAttr.concerns.func,
-				'args', jAttr.concerns.args,
-				'member', jAttr.concerns.member
-			);
-		}
-
 		attr =
 		attributes[ name ] =
 			Object.freeze( { // FIXME
@@ -335,12 +325,12 @@ generator.prototype._init =
 					jAttr.comment,
 				concerns :
 					jAttr.concerns
-					? Object.freeze( { // FIXME
-							id : concernsID,
-							func : jAttr.concerns.func,
-							args : jAttr.concerns.args,
-							member : jAttr.concerns.member
-						} )
+					? jion_concern.create(
+						'id', concernsID,
+						'func', jAttr.concerns.func,
+						'args', jAttr.concerns.args,
+						'member', jAttr.concerns.member
+					)
 					: null,
 				defaultValue :
 					defaultValue,
