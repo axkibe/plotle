@@ -1720,12 +1720,14 @@ generator.prototype.genCreatorConcerns =
 			{
 				// FUTURE, make a generator.getCreatorVarName func
 
+				// bAttr = this.attributes[ args.get( b ) ]; XXX
 				bAttr = this.attributes[ args[ b ] ];
 
 				if( !bAttr )
 				{
 					throw new Error(
-						'unknown attribute: ' + args[ b ]
+						//'unknown attribute: ' + args.get( b )
+						'unknown attribute: ' + args[ b ] // XXX
 					);
 				}
 
@@ -1781,12 +1783,13 @@ generator.prototype.genCreatorConcerns =
 					b++
 				)
 				{
-					bAttr =
-						this.attributes[ args[ b ] ];
+					// bAttr = this.attributes[ args.get( b ) ]; XXX
+					bAttr = this.attributes[ args[ b ] ];
 
 					if( !bAttr )
 					{
 						throw new Error(
+							// 'unknown attribute: ' + args.get( b ) XXX
 							'unknown attribute: ' + args[ b ]
 						);
 					}

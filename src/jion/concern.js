@@ -43,7 +43,8 @@ if( JION )
 						comment :
 							'concerns arguments',
 						type :
-							'Object', // FIXME
+//							'jion_stringRay',
+							'Object',
 						defaultValue :
 							undefined
 					},

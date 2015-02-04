@@ -108,6 +108,7 @@ module.exports =
 			'src/jion/generator.js',
 			'src/jion/id.js',
 			'src/jion/idGroup.js',
+			'src/jion/stringRay.js',
 			'src/jsParser/state.js',
 			'src/jsParser/spec.js'
 		]
