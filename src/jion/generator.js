@@ -280,7 +280,13 @@ generator.prototype._init =
 		{
 			jdv = jAttr.defaultValue;
 
-			if( jdv === null )
+			if( jools.isString( jdv ) && jdv[ 0 ] === '"' )
+			{
+				// nextStyle
+				// XXX
+				defaultValue = $( jdv );
+			}
+			else if( jdv === null )
 			{
 				defaultValue = shorthand.$null;
 			}
@@ -302,13 +308,6 @@ generator.prototype._init =
 			}
 			else if( jools.isString( jdv ) )
 			{
-				if( jdv[ 0 ] === "'" )
-				{
-					throw new Error(
-						'invalid default Value: ' + jdv
-					);
-				}
-
 				defaultValue = $string( jdv );
 			}
 			else

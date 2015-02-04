@@ -443,6 +443,16 @@ checkAttribute =
 		);
 	}
 
+	// XXXXXXXXXXXXXX
+	if( attr.defaultValue )
+	{
+		if( typeof( attr.defaultValue ) === 'string' && attr.defaultValue[ 0 ] !== '"' )
+		{
+			throw new Error( 'got a string' );
+		}
+	}
+	// XXXXXXXXXXXXX
+
 	for( key in attr )
 	{
 		value = attr[ key ];
@@ -459,10 +469,8 @@ checkAttribute =
 				{
 					throw new Error(
 						jion.id
-						+
-						': '
-						+
-						'defaultValue \"null\" implies allowsNull'
+						+ ': '
+						+ 'defaultValue \"null\" implies allowsNull'
 					);
 				}
 
@@ -474,10 +482,8 @@ checkAttribute =
 				{
 					throw new Error(
 						jion.id
-						+
-						': '
-						+
-						'defaultValue \"undefined\" implies allowsUndefined'
+						+ ': '
+						+ 'defaultValue \"undefined\" implies allowsUndefined'
 					);
 				}
 

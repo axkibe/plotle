@@ -128,7 +128,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							'none'
+							'"none"'
 					},
 				mime :
 					{
