@@ -29,6 +29,7 @@ var
 	jools,
 	ast_var,
 	jion_id,
+	jion_idGroup,
 	jion_proto;
 
 
@@ -50,6 +51,8 @@ if( SERVER )
 	ast_var = require( '../../src/ast/var' );
 
 	jion_id = require( '../../src/jion/id' );
+
+	jion_idGroup = require( '../../src/jion/idGroup' );
 
 	jion_proto = require( '../../src/jion/proto' );
 }
@@ -386,7 +389,11 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_id.reflect !== 'jion_id' )
+/**/	if(
+/**/		v_id.reflect !== 'jion_id'
+/**/		&&
+/**/		v_id.reflect !== 'jion_idGroup'
+/**/	)
 /**/	{
 /**/		throw new Error( );
 /**/	}

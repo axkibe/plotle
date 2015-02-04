@@ -95,7 +95,7 @@ if( JION )
 						comment :
 							'attribute type id',
 						type :
-							'jion_id'
+							[ 'jion_id', 'jion_idGroup' ]
 					},
 				v :
 					{

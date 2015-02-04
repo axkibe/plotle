@@ -69,6 +69,7 @@ var
 	$var,
 	jion_id,
 	generator,
+	jion_attribute,
 	jion_concern,
 	jion_idGroup,
 	jion_validator,
@@ -85,6 +86,8 @@ jion_idGroup = require( './idGroup' );
 shorthand = require( '../ast/shorthand' );
 
 jools = require( '../jools/jools' );
+
+jion_attribute = require( './attribute' );
 
 jion_concern = require( './concern' );
 
@@ -312,18 +315,18 @@ generator.prototype._init =
 
 		attr =
 		attributes[ name ] =
-			Object.freeze( { // FIXME
-				allowsNull :
+			jion_attribute.create(
+				'allowsNull',
 					jAttr.allowsNull
 					|| shorthand.$null.equals( defaultValue ),
-				allowsUndefined :
+				'allowsUndefined',
 					jAttr.allowsUndefined
 					|| shorthand.$undefined.equals( defaultValue ),
-				assign :
+				'assign',
 					assign,
-				comment :
+				'comment',
 					jAttr.comment,
-				concerns :
+				'concerns',
 					jAttr.concerns
 					? jion_concern.create(
 						'id', concernsID,
@@ -332,17 +335,17 @@ generator.prototype._init =
 						'member', jAttr.concerns.member
 					)
 					: null,
-				defaultValue :
+				'defaultValue',
 					defaultValue,
-				json :
-					jAttr.json,
-				name :
+				'json',
+					!!jAttr.json,
+				'name',
 					name,
-				id :
+				'id',
 					aid,
-				v : // FUTURE rename to vName
+				'v', // FUTURE rename to creatorVar
 					$var( 'v_' + name )
-			} );
+			);
 	}
 
 	attrList = Object.keys( attributes ).sort ( );
