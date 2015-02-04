@@ -72,6 +72,7 @@ var
 	jion_attribute,
 	jion_concern,
 	jion_idGroup,
+	jion_stringRay,
 	jion_validator,
 	jools,
 	shorthand;
@@ -83,7 +84,7 @@ jion_id = require( './id' );
 
 jion_idGroup = require( './idGroup' );
 
-shorthand = require( '../ast/shorthand' );
+jion_stringRay = require( './stringRay' );
 
 jools = require( '../jools/jools' );
 
@@ -93,6 +94,7 @@ jion_concern = require( './concern' );
 
 jion_validator = require( './validator' );
 
+shorthand = require( '../ast/shorthand' );
 
 /*
 | Shorthanding Shorthands.
@@ -331,7 +333,12 @@ generator.prototype._init =
 					? jion_concern.create(
 						'id', concernsID,
 						'func', jAttr.concerns.func,
-						'args', jAttr.concerns.args,
+						'args',
+							jAttr.concerns.args
+							&&
+							jion_stringRay.create(
+								'ray:init', jAttr.concerns.args
+							),
 						'member', jAttr.concerns.member
 					)
 					: null,
@@ -1720,14 +1727,12 @@ generator.prototype.genCreatorConcerns =
 			{
 				// FUTURE, make a generator.getCreatorVarName func
 
-				// bAttr = this.attributes[ args.get( b ) ]; XXX
-				bAttr = this.attributes[ args[ b ] ];
+				bAttr = this.attributes[ args.get( b ) ];
 
 				if( !bAttr )
 				{
 					throw new Error(
-						//'unknown attribute: ' + args.get( b )
-						'unknown attribute: ' + args[ b ] // XXX
+						'unknown attribute: ' + args.get( b )
 					);
 				}
 
@@ -1783,14 +1788,12 @@ generator.prototype.genCreatorConcerns =
 					b++
 				)
 				{
-					// bAttr = this.attributes[ args.get( b ) ]; XXX
-					bAttr = this.attributes[ args[ b ] ];
+					bAttr = this.attributes[ args.get( b ) ];
 
 					if( !bAttr )
 					{
 						throw new Error(
-							// 'unknown attribute: ' + args.get( b ) XXX
-							'unknown attribute: ' + args[ b ]
+							'unknown attribute: ' + args.get( b )
 						);
 					}
 
