@@ -249,10 +249,8 @@ shorthand.$block =
 
 /*
 | Shorthand for creating capsule function.
-|
-| FIXME used?
 */
-shorthand.astCapsule =
+shorthand.$capsule =
 	function(
 		block
 	)

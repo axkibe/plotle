@@ -104,6 +104,7 @@ module.exports =
 			'src/format/context.js',
 			'src/jsLexer/token.js',
 			'src/jion/attribute.js',
+			'src/jion/attributeGroup.js',
 			'src/jion/concern.js',
 			'src/jion/generator.js',
 			'src/jion/id.js',

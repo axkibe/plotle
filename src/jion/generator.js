@@ -42,7 +42,7 @@ var
 	$assign,
 	$block,
 	$call,
-	astCapsule,
+	$capsule,
 	$check,
 	$comment,
 	$condition,
@@ -109,7 +109,7 @@ $block = shorthand.$block;
 
 $call = shorthand.$call;
 
-astCapsule = shorthand.astCapsule;
+$capsule = shorthand.$capsule;
 
 $check = shorthand.$check;
 
@@ -3475,7 +3475,7 @@ generator.prototype.genCapsule =
 	block =
 		block
 		.$comment( 'Capsule' )
-		.append( astCapsule( capsule ) );
+		.append( $capsule( capsule ) );
 
 	return block;
 };
