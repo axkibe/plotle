@@ -175,7 +175,6 @@ generator.prototype._init =
 		assign,
 		attr,
 		attributes,
-		attrList,
 		concerns,
 		concernsID,
 		constructorList,
@@ -359,15 +358,6 @@ generator.prototype._init =
 		attributes = attributes.set( name, attr );
 	}
 
-	attrList = attributes.sortedKeys; // FIXME remove
-
-	if( FREEZE )
-	{
-		Object.freeze( attributes );
-	}
-
-	this.attrList = Object.freeze( attrList );
-
 	this.attributes = attributes;
 
 	constructorList.sort( );
@@ -506,7 +496,7 @@ generator.prototype._init =
 		this.group
 		|| this.ray
 		|| this.twig
-		|| this.attrList.length > 0;
+		|| this.attributes.size > 0;
 };
 
 
@@ -671,12 +661,12 @@ generator.prototype.genConstructor =
 
 	// assigns the variables
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)
 	{
-		name = this.attrList[ a ];
+		name = this.attributes.sortedKeys[ a ];
 
 		attr = this.attributes.get( name );
 
@@ -1030,12 +1020,12 @@ generator.prototype.genCreatorInheritanceReceiver =
 	}
 
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)
 	{
-		name = this.attrList[ a ];
+		name = this.attributes.sortedKeys[ a ];
 
 		attr = this.attributes.get( name );
 
@@ -1123,12 +1113,12 @@ generator.prototype.genCreatorFreeStringsParser =
 	switchExpr = $switch( 'arguments[ a ]' );
 
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)
 	{
-		name = this.attrList[ a ];
+		name = this.attributes.sortedKeys[ a ];
 
 		attr = this.attributes.get( name );
 
@@ -1333,12 +1323,12 @@ generator.prototype.genCreatorDefaults =
 		name;
 
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)
 	{
-		name = this.attrList[ a ];
+		name = this.attributes.sortedKeys[ a ];
 
 		attr = this.attributes.get( name );
 
@@ -1509,12 +1499,12 @@ generator.prototype.genCreatorChecks =
 	}
 
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)
 	{
-		name = this.attrList[ a ];
+		name = this.attributes.sortedKeys[ a ];
 
 		attr = this.attributes.get( name );
 
@@ -1686,12 +1676,12 @@ generator.prototype.genCreatorConcerns =
 		name;
 
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)
 	{
-		name = this.attrList[ a ];
+		name = this.attributes.sortedKeys[ a ];
 
 		attr = this.attributes.get( name );
 
@@ -1848,12 +1838,12 @@ generator.prototype.genCreatorUnchanged =
 	}
 
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)
 	{
-		name = this.attrList[ a ];
+		name = this.attributes.sortedKeys[ a ];
 
 		attr = this.attributes.get( name );
 
@@ -2714,12 +2704,12 @@ generator.prototype.genFromJSONCreator =
 	jsonList = [ ];
 
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)
 	{
-		name = this.attrList[ a ];
+		name = this.attributes.sortedKeys[ a ];
 
 		attr = this.attributes.get( name );
 
@@ -2926,12 +2916,12 @@ generator.prototype.genToJSON =
 		.add( 'type', this.id.$string );
 
 	for(
-		a = 0, aZ = this.attrList.length;
+		a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)
 	{
-		name = this.attrList[ a ];
+		name = this.attributes.sortedKeys[ a ];
 
 		attr = this.attributes.get( name );
 
@@ -3244,12 +3234,12 @@ generator.prototype.genEquals =
 	}
 
 	for(
-		var a = 0, aZ = this.attrList.length;
+		var a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)
 	{
-		name = this.attrList[ a ];
+		name = this.attributes.sortedKeys[ a ];
 
 		attr = this.attributes.get( name );
 
@@ -3346,12 +3336,12 @@ generator.prototype.genAlike =
 		}
 
 		for(
-			a = 0, aZ = this.attrList.length;
+			a = 0, aZ = this.attributes.size;
 			a < aZ;
 			a++
 		)
 		{
-			name = this.attrList[ a ];
+			name = this.attributes.sortedKeys[ a ];
 
 			attr = this.attributes.get( name );
 
