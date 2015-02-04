@@ -28,7 +28,8 @@ else
 var
 	jools,
 	jion_id,
-	jion_proto;
+	jion_proto,
+	jion_stringRay;
 
 
 /*
@@ -49,6 +50,8 @@ if( SERVER )
 	jion_id = require( '../../src/jion/id' );
 
 	jion_proto = require( '../../src/jion/proto' );
+
+	jion_stringRay = require( '../../src/jion/stringRay' );
 }
 
 
@@ -206,6 +209,14 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
+/**/	if( v_args !== undefined )
+/**/	{
+/**/		if( v_args.reflect !== 'jion_stringRay' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
 /**/	if( v_func === null )
 /**/	{
 /**/		throw new Error( );
@@ -257,7 +268,11 @@ prototype.create =
 	if(
 		inherit
 		&&
-		v_args === inherit.args
+		(
+			v_args === inherit.args
+			||
+			v_args && v_args.equals( inherit.args )
+		)
 		&&
 		v_func === inherit.func
 		&&
@@ -325,7 +340,11 @@ prototype.equals =
 	}
 
 	return (
-		this.args === obj.args
+		(
+			this.args === obj.args
+			||
+			this.args !== undefined && this.args.equals( obj.args )
+		)
 		&&
 		this.func === obj.func
 		&&
