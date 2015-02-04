@@ -55,7 +55,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				hover :
 					{
@@ -64,7 +64,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							null,
+							'null',
 						concerns :
 							{
 								type :
@@ -103,7 +103,7 @@ if( JION )
 						type :
 							'Object', // FUTURE 'mark*',
 						defaultValue :
-							null
+							'null'
 					},
 				maxlen :
 					{
@@ -119,7 +119,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				path :
 					{
@@ -128,7 +128,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							null
+							'null'
 					},
 				superFrame :
 					{
@@ -137,7 +137,7 @@ if( JION )
 						type :
 							'euclid_rect',
 						defaultValue :
-							null
+							'null'
 					},
 				style :
 					{
@@ -163,7 +163,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							true
+							'true'
 					}
 			},
 		init :

@@ -36,7 +36,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					}
 			}
 	};

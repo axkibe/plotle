@@ -32,7 +32,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							null
 					},
@@ -50,7 +50,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							null
 					},
@@ -61,7 +61,7 @@ if( JION )
 						type :
 							'euclid_font',
 						defaultValue :
-							null
+							'null'
 					},
 				mark :
 					{
@@ -70,7 +70,7 @@ if( JION )
 						type :
 							'Object', // FUTURE '->mark',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							null
 					},
@@ -81,7 +81,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							null
+							'null'
 					},
 				path :
 					{
@@ -90,7 +90,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							null
+							'null'
 					},
 				superFrame :
 					{
@@ -99,7 +99,7 @@ if( JION )
 						type :
 							'euclid_rect',
 						defaultValue :
-							null
+							'null'
 					},
 				text :
 					{
@@ -115,7 +115,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							true
+							'true'
 					}
 			},
 		init :

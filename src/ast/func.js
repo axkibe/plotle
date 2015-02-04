@@ -27,7 +27,7 @@ if( JION )
 						type :
 							'ast_block',
 						defaultValue :
-							null
+							'null'
 					},
 				capsule :
 					{
@@ -36,7 +36,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		ray :

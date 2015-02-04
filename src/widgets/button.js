@@ -49,7 +49,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				font :
 					{
@@ -58,7 +58,7 @@ if( JION )
 						type :
 							'euclid_font',
 						defaultValue :
-							null
+							'null'
 					},
 				hover :
 					{
@@ -67,7 +67,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							null,
+							'null',
 						concerns :
 							{
 								type :
@@ -86,7 +86,7 @@ if( JION )
 							'String',
 						defaultValue :
 							// TODO undefiend
-							null
+							'null'
 					},
 				iconStyle :
 					{
@@ -95,7 +95,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					},
 				mark :
 					{
@@ -104,7 +104,7 @@ if( JION )
 						type :
 							'Object', // FUTURE '->mark'
 						defaultValue :
-							null,
+							'null',
 						assign :
 							null
 					},
@@ -115,7 +115,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							null
+							'null'
 					},
 				shape :
 					{
@@ -132,7 +132,7 @@ if( JION )
 						type :
 							'euclid_rect',
 						defaultValue :
-							null
+							'null'
 					},
 				style :
 					{
@@ -149,7 +149,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					},
 				textDesignPos :
 					{
@@ -158,7 +158,7 @@ if( JION )
 						type :
 							'design_anchorPoint',
 						defaultValue :
-							null
+							'null'
 					},
 				textNewline :
 					{
@@ -167,7 +167,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							null
+							'null'
 					},
 				textRotation :
 					{
@@ -176,7 +176,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							null
+							'null'
 					},
 				visible :
 					{
@@ -185,7 +185,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							true
+							'true'
 					}
 			},
 		init :

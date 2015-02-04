@@ -48,7 +48,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							null
+							'null'
 					},
 				focus :
 					{
@@ -57,7 +57,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							true
+							'true'
 					}
 			},
 		init :

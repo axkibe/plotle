@@ -284,7 +284,19 @@ generator.prototype._init =
 			{
 				// nextStyle
 				// XXX
-				defaultValue = $( jdv );
+				if( jdv === 'undefined' )
+				{
+					defaultValue = shorthand.$undefined;
+				}
+				else if( jdv === 'null' )
+				{
+					// XXX remove
+					defaultValue = shorthand.$null;
+				}
+				else
+				{
+					defaultValue = $( jdv );
+				}
 			}
 			else if( jdv === null )
 			{
@@ -305,10 +317,6 @@ generator.prototype._init =
 			else if( typeof( jdv ) === 'number' )
 			{
 				defaultValue = $number( jAttr.defaultValue );
-			}
-			else if( jools.isString( jdv ) )
-			{
-				defaultValue = $string( jdv );
 			}
 			else
 			{

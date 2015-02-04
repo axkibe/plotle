@@ -444,11 +444,11 @@ checkAttribute =
 	}
 
 	// XXXXXXXXXXXXXX
-	if( attr.defaultValue )
+	if( Object.keys( attr ).indexOf( 'defaultValue' ) >= 0 )
 	{
-		if( typeof( attr.defaultValue ) === 'string' && attr.defaultValue[ 0 ] !== '"' )
+		if( typeof( attr.defaultValue ) !== 'string' )
 		{
-			throw new Error( 'got a string' );
+			throw new Error( 'not a string' );
 		}
 	}
 	// XXXXXXXXXXXXX
