@@ -189,6 +189,11 @@ prototype.create =
 		}
 	}
 
+	if( v_associativity === undefined )
+	{
+		v_associativity = 'n/a';
+	}
+
 /**/if( CHECK )
 /**/{
 /**/	if( v_associativity === undefined )

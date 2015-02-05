@@ -1546,7 +1546,7 @@ generator.prototype.genCreatorChecks =
 		switch( attr.id.string )
 		{
 			case 'Object' : // FIXME
-			case 'Protean' :
+			case 'protean' :
 
 				continue;
 		}
@@ -1871,7 +1871,7 @@ generator.prototype.genCreatorUnchanged =
 			case 'Integer' :
 			case 'Number' :
 			case 'Object' : // FIXME
-			case 'Protean' :
+			case 'protean' :
 			case 'String' :
 
 				ceq =
@@ -2153,7 +2153,7 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 		case 'Number' :
 		case 'String' :
 		case 'Object' : // FIXME remove
-		case 'Protean' :
+		case 'protean' :
 
 			code = $assign( attr.v, 'arg' );
 

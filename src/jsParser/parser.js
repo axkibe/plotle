@@ -732,43 +732,37 @@ leftSpecs = { };
 leftSpecs.identifier =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleIdentifier,
-		'associativity', 'n/a'
+		'handler', handleIdentifier
 	);
 
 leftSpecs.null =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleNull,
-		'associativity', 'n/a'
+		'handler', handleNull
 	);
 
 leftSpecs.number =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleNumber,
-		'associativity', 'n/a'
+		'handler', handleNumber
 	);
 
 leftSpecs.string =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleString,
-		'associativity', 'n/a'
+		'handler', handleString
 	);
 
 leftSpecs[ 'true' ] =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleBooleanLiteral,
-		'associativity', 'n/a'
+		'handler', handleBooleanLiteral
 	);
 
 leftSpecs[ 'false' ] =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleBooleanLiteral,
-		'associativity', 'n/a'
+		'handler', handleBooleanLiteral
 	);
 
 leftSpecs[ '[' ] =
@@ -781,8 +775,7 @@ leftSpecs[ '[' ] =
 leftSpecs[ '{' ] =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleObjectLiteral,
-		'associativity', 'n/a'
+		'handler', handleObjectLiteral
 	);
 
 leftSpecs[ '(' ] =
@@ -803,8 +796,7 @@ leftSpecs[ '++' ] =
 	jsParser_spec.create(
 		'prec', 3,
 		'handler', handleMonoOps,
-		'astCreator', ast_preIncrement,
-		'associativity', 'n/a'
+		'astCreator', ast_preIncrement
 	);
 
 leftSpecs[ '!' ] =
@@ -848,8 +840,7 @@ leftSpecs[ ',' ] =
 leftSpecs.start =
 	jsParser_spec.create(
 		'prec', 99,
-		'handler', handleParserError,
-		'associativity', 'n/a'
+		'handler', handleParserError
 	);
 
 
@@ -869,8 +860,7 @@ rightSpecs[ '(' ] =
 rightSpecs[ ')' ] =
 	jsParser_spec.create(
 		'prec', 98,
-		'handler', handlePass,
-		'associativity', 'n/a'
+		'handler', handlePass
 	);
 
 rightSpecs[ '[' ] =
@@ -883,8 +873,7 @@ rightSpecs[ '[' ] =
 rightSpecs[ ']' ] =
 	jsParser_spec.create(
 		'prec', 1, // 98?
-		'handler', handlePass,
-		'associativity', 'n/a'
+		'handler', handlePass
 	);
 
 rightSpecs[ '.' ] =
@@ -1000,8 +989,7 @@ rightSpecs[ ',' ] =
 rightSpecs.start =
 	jsParser_spec.create(
 		'prec', 98,
-		'handler', handleParserError,
-		'associativity', 'n/a'
+		'handler', handleParserError
 	);
 
 

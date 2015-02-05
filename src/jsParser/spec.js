@@ -29,6 +29,8 @@ if( JION )
 							// not applicable
 						type :
 							'String',
+						defaultValue :
+							'"n/a"'
 					},
 				prec :
 					{

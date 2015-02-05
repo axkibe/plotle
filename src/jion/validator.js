@@ -360,7 +360,7 @@ checkAttributeSingleType =
 			case 'Integer' :
 			case 'Number' :
 			case 'Object' : // XXX
-			case 'Protean' : // XXX
+			case 'protean' :
 			case 'String' :
 
 				break;
