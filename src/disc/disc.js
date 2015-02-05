@@ -7,7 +7,7 @@
 | Export
 */
 var
-	discs_disc,
+	disc_disc,
 	euclid_ellipse,
 	euclid_point,
 	euclid_rect,
@@ -24,7 +24,7 @@ var
 /*
 | Constructor
 */
-discs_disc =
+disc_disc =
 	function( )
 {
 	// abstract should not be constructed.
@@ -36,7 +36,7 @@ discs_disc =
 /*
 | Common initializer.
 */
-discs_disc._init =
+disc_disc._init =
 	function(
 		// inherit
 	)

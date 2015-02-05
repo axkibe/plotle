@@ -4,7 +4,7 @@
 
 
 var
-	discs_jockey,
+	disc_jockey,
 	jion_path,
 	jools;
 
@@ -22,7 +22,7 @@ if( JION )
 {
 	return {
 		id :
-			'discs_jockey',
+			'disc_jockey',
 		attributes :
 			{
 				access :
@@ -55,7 +55,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'discs_jockey',
+									'disc_jockey',
 								func :
 									'concernsMark',
 								args :
@@ -118,18 +118,18 @@ if( JION )
 					}
 			},
 		subclass :
-			'discs_disc',
+			'disc_disc',
 		init :
 			[ ],
 		twig :
-			[ 'discs_mainDisc', 'discs_createDisc' ]
+			[ 'disc_mainDisc', 'disc_createDisc' ]
 	};
 }
 
 var
 	jockey;
 
-jockey = discs_jockey;
+jockey = disc_jockey;
 
 
 /*

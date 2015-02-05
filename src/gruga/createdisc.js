@@ -7,7 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	discs_createDisc,
+	disc_createDisc,
 	gruga_createDisc,
 	shell_fontPool,
 	widget_button;
@@ -70,7 +70,7 @@ dv =
 	};
 
 gruga_createDisc =
-	discs_createDisc.create(
+	disc_createDisc.create(
 		'twig:add',
 		'createNote',
 			widget_button.create(

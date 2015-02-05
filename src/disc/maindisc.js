@@ -7,8 +7,8 @@
 | Export
 */
 var
-	discs_disc,
-	discs_mainDisc,
+	disc_disc,
+	disc_mainDisc,
 	change_set,
 	euclid_display,
 	euclid_view,
@@ -29,7 +29,7 @@ if( JION )
 {
 	return {
 		id :
-			'discs_mainDisc',
+			'disc_mainDisc',
 		attributes :
 			{
 				access :
@@ -128,7 +128,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'discs_disc',
+			'disc_disc',
 		init :
 			[
 				'inherit'
@@ -147,7 +147,7 @@ if( JION )
 /*
 | Initializes the main disc.
 */
-discs_mainDisc.prototype._init =
+disc_mainDisc.prototype._init =
 	function(
 		inherit
 	)
@@ -166,7 +166,7 @@ discs_mainDisc.prototype._init =
 		return;
 	}
 
-	discs_disc._init.call( this, inherit );
+	disc_disc._init.call( this, inherit );
 
 	twig = jools.copy( this.twig ); // FIXME only if needed
 
@@ -276,7 +276,7 @@ discs_mainDisc.prototype._init =
 | FUTURE make user an own object.
 */
 jools.lazyValue(
-	discs_mainDisc.prototype,
+	disc_mainDisc.prototype,
 	'_userIsGuest',
 	function( )
 	{
@@ -294,7 +294,7 @@ jools.lazyValue(
 | The disc panel's display.
 */
 jools.lazyValue(
-	discs_mainDisc.prototype,
+	disc_mainDisc.prototype,
 	'_display',
 	function( )
 	{
@@ -338,7 +338,7 @@ jools.lazyValue(
 /*
 | A button of the main disc has been pushed.
 */
-discs_mainDisc.prototype.pushButton =
+disc_mainDisc.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -389,7 +389,7 @@ discs_mainDisc.prototype.pushButton =
 /*
 | Draws the disc panel.
 */
-discs_mainDisc.prototype.draw =
+disc_mainDisc.prototype.draw =
 	function(
 		display
 	)
@@ -404,7 +404,7 @@ discs_mainDisc.prototype.draw =
 /*
 | Returns true if point is on the disc panel.
 */
-discs_mainDisc.prototype.pointingHover =
+disc_mainDisc.prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -459,7 +459,7 @@ discs_mainDisc.prototype.pointingHover =
 /*
 | Checks if the user clicked something on the panel
 */
-discs_mainDisc.prototype.click =
+disc_mainDisc.prototype.click =
 	function(
 		p,
 		shift,
@@ -517,7 +517,7 @@ discs_mainDisc.prototype.click =
 /*
 | User is inputing text.
 */
-discs_mainDisc.prototype.input =
+disc_mainDisc.prototype.input =
 	function(
 		// text
 	)
@@ -529,7 +529,7 @@ discs_mainDisc.prototype.input =
 /*
 | User is pressing a special key.
 */
-discs_mainDisc.prototype.specialKey =
+disc_mainDisc.prototype.specialKey =
 	function(
 		// key,
 		// shift,
@@ -543,7 +543,7 @@ discs_mainDisc.prototype.specialKey =
 /*
 | Start of a dragging operation.
 */
-discs_mainDisc.prototype.dragStart =
+disc_mainDisc.prototype.dragStart =
 	function(
 		p
 		// shift,

@@ -388,21 +388,21 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/discs/disc.js',
+		'filePath', 'src/disc/disc.js',
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/discs/createdisc.js',
+		'filePath', 'src/disc/createdisc.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/discs/maindisc.js',
+		'filePath', 'src/disc/maindisc.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/discs/jockey.js',
+		'filePath', 'src/disc/jockey.js',
 		'hasJion', true,
 		'inBundle', true
 	),

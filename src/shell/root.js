@@ -6,7 +6,7 @@ var
 	action_isAction,
 	change_wrap,
 	change_ray,
-	discs_jockey,
+	disc_jockey,
 	euclid_display,
 	euclid_measure,
 	euclid_point,
@@ -172,13 +172,13 @@ shell_root =
 		);
 
 	this._discJockey =
-		discs_jockey.create(
+		disc_jockey.create(
 			'access', '',
 			'action', null,
 			'hover', jion_path.empty,
 			'mark', null,
 			'mode', this._mode,
-			'path', jion_path.empty.append( 'discs' ),
+			'path', jion_path.empty.append( 'disc' ),
 			'view', view,
 			'twig:add', 'mainDisc', gruga_mainDisc,
 			'twig:add', 'createDisc', gruga_createDisc
@@ -706,7 +706,7 @@ shell_root.prototype.setPath =
 {
 	switch( path.get( 0 ) )
 	{
-		case 'discs' :
+		case 'disc' :
 
 			throw new Error( 'FIXME' );
 
@@ -797,7 +797,7 @@ shell_root.prototype.pushButton =
 {
 	switch( path.get( 0 ) )
 	{
-		case 'discs' :
+		case 'disc' :
 
 			return this._discJockey.pushButton(
 				path,
@@ -889,7 +889,7 @@ shell_root.prototype._setHover =
 		this._discJockey.create(
 			// FIXME make concernsHover
 			'hover',
-				path.isEmpty || path.get( 0 ) !== 'discs'
+				path.isEmpty || path.get( 0 ) !== 'disc'
 				? jion_path.empty
 				: path
 		);
