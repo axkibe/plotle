@@ -1,17 +1,12 @@
 /*
-| User has no access to a space he tried to port to.
-|
-| FIXME spaceUser and spaceTag are phony
-|       yet are not looked at by jion
+| The move to form.
 */
 
 
-/*
-| Imports
-*/
 var
-	forms_form,
-	forms_nonExistingSpace,
+	fabric_spaceRef,
+	form_form,
+	form_moveTo,
 	jools,
 	root;
 
@@ -30,7 +25,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms_nonExistingSpace',
+			'form_moveTo',
 		attributes :
 			{
 				hover :
@@ -47,27 +42,21 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Object', // FUTURE '->mark',
+							'Object', // FUTURE: '->mark',
 						concerns :
 							{
 								type :
-									'forms_form',
+									'form_form',
 								func :
 									'concernsMark',
 								args :
-									[ 'mark', 'path' ]
+									[
+										'mark',
+										'path'
+									]
 							},
 						defaultValue :
 							'null'
-					},
-				nonSpaceRef :
-					{
-						comment :
-							'the non-existing-space',
-						type :
-							'fabric_spaceRef',
-						defaultValue :
-							'undefined'
 					},
 				path :
 					{
@@ -107,9 +96,7 @@ if( JION )
 						type :
 							'string',
 						defaultValue :
-							'null',
-						assign :
-							null
+							'null'
 					},
 				view :
 					{
@@ -126,54 +113,59 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms_form',
+			'form_form',
 		init :
-			[
-				'inherit',
-				'twigDup'
-			],
+			[ 'inherit', 'twigDup' ],
 		twig :
 			'->formWidgets'
 	};
 }
 
+var
+	moveTo;
+
+moveTo = form_moveTo;
 
 
 /*
-| The space does not exist form.
+| The moveto form.
 */
-forms_nonExistingSpace.prototype._init =
+moveTo.prototype._init =
 	function(
 		inherit,
 		twigDup
 	)
 {
-	if( !this.path )
+	var
+		isGuest;
+
+	if( this.path )
 	{
-		return;
+		isGuest =
+			this.username === null
+			?  false
+			: this.username.substr( 0, 7 ) === 'visitor';
+
+		if( !twigDup )
+		{
+			this.twig = jools.copy( this.twig );
+		}
+
+		this.twig.userHomeButton =
+			this.twig.userHomeButton.create(
+				'visible', !isGuest,
+				'text', this.username + '\n' + 'home'
+			);
 	}
 
-	if( !twigDup )
-	{
-		this.twig = jools.copy( this.twig );
-	}
-
-	this.twig.headline =
-		this.twig.headline.create(
-			'text',
-				this.nonSpaceRef
-				? this.nonSpaceRef.fullname + ' does not exist.'
-				: ''
-		);
-
-	forms_form.init.call( this, inherit );
+	form_form.init.call( this, inherit );
 };
 
 
 /*
 | A button of the form has been pushed.
 */
-forms_nonExistingSpace.prototype.pushButton =
+moveTo.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -195,17 +187,27 @@ forms_nonExistingSpace.prototype.pushButton =
 
 	switch( buttonName )
 	{
-		case 'noButton' :
+		case 'ideoloomHomeButton' :
 
-			root.setMode( 'Normal' );
+			root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 
 			break;
 
-		case 'yesButton' :
+		case 'ideoloomSandboxButton' :
 
-			root.moveToSpace( this.nonSpaceRef, true );
+			root.moveToSpace( fabric_spaceRef.ideoloomSandbox, false );
 
-			root.setMode( 'Normal' );
+			break;
+
+		case 'userHomeButton' :
+
+			root.moveToSpace(
+				fabric_spaceRef.create(
+					'username', this.username,
+					'tag', 'home'
+				),
+				false
+			);
 
 			break;
 
@@ -215,4 +217,5 @@ forms_nonExistingSpace.prototype.pushButton =
 	}
 };
 
-} )( );
+})( );
+

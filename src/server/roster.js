@@ -412,51 +412,51 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/form.js',
+		'filePath', 'src/form/form.js',
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/login.js',
+		'filePath', 'src/form/login.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/signup.js',
+		'filePath', 'src/form/signup.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/space.js',
+		'filePath', 'src/form/space.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/moveto.js',
+		'filePath', 'src/form/moveto.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/user.js',
+		'filePath', 'src/form/user.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/welcome.js',
+		'filePath', 'src/form/welcome.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/noAccessToSpace.js',
+		'filePath', 'src/form/noAccessToSpace.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/nonExistingSpace.js',
+		'filePath', 'src/form/nonExistingSpace.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/forms/jockey.js',
+		'filePath', 'src/form/jockey.js',
 		'hasJion', true,
 		'inBundle', true
 	),

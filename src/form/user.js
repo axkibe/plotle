@@ -4,8 +4,8 @@
 
 
 var
-	forms_form,
-	forms_user,
+	form_form,
+	form_user,
 	jools,
 	root;
 
@@ -24,7 +24,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms_user',
+			'form_user',
 		attributes :
 			{
 				hover :
@@ -45,7 +45,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms_form',
+									'form_form',
 								func :
 									'concernsMark',
 								args :
@@ -110,7 +110,7 @@ if( JION )
 			},
 
 		subclass :
-			'forms_form',
+			'form_form',
 
 		init :
 			[
@@ -125,7 +125,7 @@ if( JION )
 var
 	user;
 
-user = forms_user;
+user = form_user;
 
 
 /*
@@ -209,7 +209,7 @@ user.prototype._init =
 				!isGuest
 		);
 
-	forms_form.init.call( this, inherit );
+	form_form.init.call( this, inherit );
 };
 
 

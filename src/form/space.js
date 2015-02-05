@@ -1,13 +1,11 @@
 /*
-| The welcome form.
-|
-| Shown only after successfully signing up.
+| The space form.
 */
 
 
 var
-	forms_form,
-	forms_welcome,
+	form_form,
+	form_space,
 	jools,
 	root;
 
@@ -26,7 +24,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms_welcome',
+			'form_space',
 		attributes :
 			{
 				hover :
@@ -47,14 +45,16 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms_form',
+									'form_form',
 								func :
 									'concernsMark',
 								args :
 									[ 'mark', 'path' ]
 							},
 						defaultValue :
-							'null'
+							'undefined',
+						allowsNull :
+							true
 					},
 				path :
 					{
@@ -72,9 +72,7 @@ if( JION )
 						type :
 							'string',
 						defaultValue :
-							'undefined',
-						assign :
-							null
+							'undefined'
 					},
 				spaceTag :
 					{
@@ -83,9 +81,7 @@ if( JION )
 						type :
 							'string',
 						defaultValue :
-							'undefined',
-						assign :
-							null
+							'undefined'
 					},
 				username :
 					{
@@ -94,7 +90,9 @@ if( JION )
 						type :
 							'string',
 						defaultValue :
-							'null'
+							'null',
+						assign :
+							null
 					},
 				view :
 					{
@@ -111,53 +109,49 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms_form',
+			'form_form',
 		init :
-			[ 'inherit', 'twigDup' ],
+			[
+				'inherit',
+				'twigDup'
+			],
 		twig :
 			'->formWidgets'
 	};
 }
 
 
-var
-	welcome;
-
-welcome = forms_welcome;
-
-
 /*
-| The welcome form.
+| The space form.
 */
-welcome.prototype._init =
+form_space.prototype._init =
 	function(
 		inherit,
 		twigDup
 	)
 {
-	if( !this.path )
+	if( this.path )
 	{
-		return;
+		if( !twigDup )
+		{
+			this.twig = jools.copy( this.twig );
+		}
+
+		this.twig.headline =
+			this.twig.headline.create(
+				'text',
+					this.spaceUser + ':' + this.spaceTag
+			);
 	}
 
-	if( !twigDup )
-	{
-		this.twig = jools.copy( this.twig );
-	}
-
-	this.twig.headline =
-		this.twig.headline.create(
-			'text', 'welcome ' + ( this.username || '' ) + '!'
-		);
-
-	forms_form.init.call( this, inherit );
+	form_form.init.call( this, inherit );
 };
 
 
 /*
 | A button of the form has been pushed.
 */
-welcome.prototype.pushButton =
+form_space.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -190,6 +184,5 @@ welcome.prototype.pushButton =
 			throw new Error( );
 	}
 };
-
 
 } )( );

@@ -1,11 +1,18 @@
 /*
-| User has no access to a space s/he tried to port to.
+| User has no access to a space he tried to port to.
+|
+| FIXME spaceUser and spaceTag are phony
+|       yet are not looked at by jion
 */
 
 
+/*
+| Imports
+*/
 var
-	forms_form,
-	forms_noAccessToSpace,
+	form_form,
+	form_nonExistingSpace,
+	jools,
 	root;
 
 
@@ -23,7 +30,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms_noAccessToSpace',
+			'form_nonExistingSpace',
 		attributes :
 			{
 				hover :
@@ -44,7 +51,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms_form',
+									'form_form',
 								func :
 									'concernsMark',
 								args :
@@ -52,6 +59,15 @@ if( JION )
 							},
 						defaultValue :
 							'null'
+					},
+				nonSpaceRef :
+					{
+						comment :
+							'the non-existing-space',
+						type :
+							'fabric_spaceRef',
+						defaultValue :
+							'undefined'
 					},
 				path :
 					{
@@ -110,31 +126,54 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms_form',
+			'form_form',
 		init :
-			[ 'inherit' ],
+			[
+				'inherit',
+				'twigDup'
+			],
 		twig :
 			'->formWidgets'
 	};
 }
 
 
+
 /*
-| The no access to space form.
+| The space does not exist form.
 */
-forms_noAccessToSpace.prototype._init =
+form_nonExistingSpace.prototype._init =
 	function(
-		inherit
+		inherit,
+		twigDup
 	)
 {
-	forms_form.init.call( this, inherit );
+	if( !this.path )
+	{
+		return;
+	}
+
+	if( !twigDup )
+	{
+		this.twig = jools.copy( this.twig );
+	}
+
+	this.twig.headline =
+		this.twig.headline.create(
+			'text',
+				this.nonSpaceRef
+				? this.nonSpaceRef.fullname + ' does not exist.'
+				: ''
+		);
+
+	form_form.init.call( this, inherit );
 };
 
 
 /*
 | A button of the form has been pushed.
 */
-forms_noAccessToSpace.prototype.pushButton =
+form_nonExistingSpace.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -156,7 +195,15 @@ forms_noAccessToSpace.prototype.pushButton =
 
 	switch( buttonName )
 	{
-		case 'okButton' :
+		case 'noButton' :
+
+			root.setMode( 'Normal' );
+
+			break;
+
+		case 'yesButton' :
+
+			root.moveToSpace( this.nonSpaceRef, true );
 
 			root.setMode( 'Normal' );
 
@@ -167,6 +214,5 @@ forms_noAccessToSpace.prototype.pushButton =
 			throw new Error( );
 	}
 };
-
 
 } )( );

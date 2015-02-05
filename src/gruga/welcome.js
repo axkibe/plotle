@@ -8,7 +8,7 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	shell_fontPool,
-	forms_welcome,
+	form_welcome,
 	gruga_welcome,
 	widget_button,
 	widget_label;
@@ -38,7 +38,7 @@ var
 | Layout
 */
 gruga_welcome =
-	forms_welcome.create(
+	form_welcome.create(
 		'twig:add', 'headline',
 			widget_label.create(
 				'text', 'welcome',

@@ -130,7 +130,7 @@ jools.lazyValue(
 		if(
 			this.path.length < 5
 			||
-			this.path.get( 0 ) !== 'forms'
+			this.path.get( 0 ) !== 'form'
 		)
 		{
 			return jion_path.empty;

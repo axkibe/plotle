@@ -1,12 +1,13 @@
 /*
-| The move to form.
+| The welcome form.
+|
+| Shown only after successfully signing up.
 */
 
 
 var
-	fabric_spaceRef,
-	forms_form,
-	forms_moveTo,
+	form_form,
+	form_welcome,
 	jools,
 	root;
 
@@ -25,7 +26,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms_moveTo',
+			'form_welcome',
 		attributes :
 			{
 				hover :
@@ -42,18 +43,15 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Object', // FUTURE: '->mark',
+							'Object', // FUTURE '->mark',
 						concerns :
 							{
 								type :
-									'forms_form',
+									'form_form',
 								func :
 									'concernsMark',
 								args :
-									[
-										'mark',
-										'path'
-									]
+									[ 'mark', 'path' ]
 							},
 						defaultValue :
 							'null'
@@ -113,7 +111,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms_form',
+			'form_form',
 		init :
 			[ 'inherit', 'twigDup' ],
 		twig :
@@ -121,51 +119,45 @@ if( JION )
 	};
 }
 
-var
-	moveTo;
 
-moveTo = forms_moveTo;
+var
+	welcome;
+
+welcome = form_welcome;
 
 
 /*
-| The moveto form.
+| The welcome form.
 */
-moveTo.prototype._init =
+welcome.prototype._init =
 	function(
 		inherit,
 		twigDup
 	)
 {
-	var
-		isGuest;
-
-	if( this.path )
+	if( !this.path )
 	{
-		isGuest =
-			this.username === null
-			?  false
-			: this.username.substr( 0, 7 ) === 'visitor';
-
-		if( !twigDup )
-		{
-			this.twig = jools.copy( this.twig );
-		}
-
-		this.twig.userHomeButton =
-			this.twig.userHomeButton.create(
-				'visible', !isGuest,
-				'text', this.username + '\n' + 'home'
-			);
+		return;
 	}
 
-	forms_form.init.call( this, inherit );
+	if( !twigDup )
+	{
+		this.twig = jools.copy( this.twig );
+	}
+
+	this.twig.headline =
+		this.twig.headline.create(
+			'text', 'welcome ' + ( this.username || '' ) + '!'
+		);
+
+	form_form.init.call( this, inherit );
 };
 
 
 /*
 | A button of the form has been pushed.
 */
-moveTo.prototype.pushButton =
+welcome.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -187,27 +179,9 @@ moveTo.prototype.pushButton =
 
 	switch( buttonName )
 	{
-		case 'ideoloomHomeButton' :
+		case 'closeButton' :
 
-			root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
-
-			break;
-
-		case 'ideoloomSandboxButton' :
-
-			root.moveToSpace( fabric_spaceRef.ideoloomSandbox, false );
-
-			break;
-
-		case 'userHomeButton' :
-
-			root.moveToSpace(
-				fabric_spaceRef.create(
-					'username', this.username,
-					'tag', 'home'
-				),
-				false
-			);
+			root.setMode( 'Normal' );
 
 			break;
 
@@ -217,5 +191,5 @@ moveTo.prototype.pushButton =
 	}
 };
 
-})( );
 
+} )( );

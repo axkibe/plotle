@@ -1,15 +1,12 @@
 /*
-| The signup form.
+| The login form.
 */
 
 
-/*
-| Imports
-*/
 var
 	fabric_spaceRef,
-	forms_form,
-	forms_signUp,
+	form_form,
+	form_login,
 	jools,
 	mark_caret,
 	root;
@@ -18,7 +15,7 @@ var
 /*
 | Capsule
 */
-( function( ) {
+(function( ) {
 'use strict';
 
 
@@ -29,7 +26,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms_signUp',
+			'form_login',
 		attributes :
 			{
 				hover :
@@ -40,22 +37,22 @@ if( JION )
 							'jion_path',
 						defaultValue :
 							'null'
-			},
+					},
 				mark :
 					{
 						comment :
 							'the users mark',
-						type :
-							'Object', // FUTURE 'mark_'
 						concerns :
 							{
 								type :
-									'forms_form',
+									'form_form',
 								func :
 									'concernsMark',
 								args :
 									[ 'mark', 'path' ]
 							},
+						type :
+							'Object', // FUTURE 'mark',
 						defaultValue :
 							'null'
 					},
@@ -109,15 +106,14 @@ if( JION )
 							'euclid_view',
 						concerns :
 							{
-								member :
-									'sizeOnly'
+								member : 'sizeOnly'
 							},
 						defaultValue :
 							'undefined'
 					}
 			},
 		subclass :
-			'forms_form',
+			'form_form',
 		init :
 			[
 				'inherit'
@@ -128,20 +124,15 @@ if( JION )
 }
 
 
-var
-	signUp;
-
-signUp = forms_signUp;
-
 /*
-| The signup form.
+| The login form.
 */
-signUp.prototype._init =
+form_login.prototype._init =
 	function(
 		inherit
 	)
 {
-	forms_form.init.call(
+	form_form.init.call(
 		this,
 		inherit
 	);
@@ -151,7 +142,7 @@ signUp.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-signUp.prototype.pushButton =
+form_login.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -173,9 +164,9 @@ signUp.prototype.pushButton =
 
 	switch( buttonName )
 	{
-		case 'signupButton' :
+		case 'loginButton' :
 
-			this.signup( );
+			this.login( );
 
 			break;
 
@@ -187,36 +178,27 @@ signUp.prototype.pushButton =
 
 		default :
 
-/**/		throw new Error( );
+			throw new Error( );
 	}
 };
 
+
 /*
-| Signs a new user up
+| Logins the user
 */
-signUp.prototype.signup =
+form_login.prototype.login =
 	function( )
 {
 	var
 		twig,
 		user,
-		email,
-		pass,
-		pass2,
-		newsletter;
+		pass;
 
 	twig = this.twig;
 
 	user = twig.userInput.value;
 
-	email = twig.emailInput.value;
-
 	pass = twig.passwordInput.value;
-
-	pass2 = twig.password2Input.value;
-
-	newsletter = twig.newsletterCheckBox.checked;
-
 
 	if( user.length < 4 )
 	{
@@ -228,7 +210,8 @@ signUp.prototype.signup =
 		root.setMark(
 			mark_caret.create(
 				'path', twig.userInput.path,
-				'at', user.length
+				'at', user.length,
+				'retainx', null
 			)
 		);
 
@@ -245,7 +228,8 @@ signUp.prototype.signup =
 		root.setMark(
 			mark_caret.create(
 				'path', twig.userInput.path,
-				'at', 0
+				'at', 0,
+				'retainx', null
 			)
 		);
 
@@ -269,53 +253,66 @@ signUp.prototype.signup =
 		return;
 	}
 
-	if( pass !== pass2 )
-	{
-		root.setPath(
-			this._widgetPath( 'errorLabel' ).append( 'text' ),
-			'Passwords do not match'
-		);
+	root.link.auth( user, jools.passhash( pass ) );
+};
 
-		root.setMark(
-			mark_caret.create(
-				'path', twig.password2Input.path,
-				'at', pass2.length
-			)
-		);
+
+/*
+| User is pressing a special key.
+*/
+form_login.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
+{
+	// a return in the password field is made
+	// to be a login command right away
+
+	if(
+		key === 'enter' &&
+		this.mark.caretPath &&
+		this.mark.caretPath.get( 2 ) === 'passwordInput'
+	)
+	{
+		this.login( );
 
 		return;
 	}
 
-	root.link.register(
-		user,
-		email,
-		jools.passhash( pass ),
-		newsletter
+	return (
+		form_form.prototype.specialKey.call(
+			this,
+			key,
+			shift,
+			ctrl
+		)
 	);
 };
 
 
 /*
-| A register operation completed.
+| an auth ( login ) operation completed.
 */
-signUp.prototype.onRegister =
+form_login.prototype.onAuth =
 	function(
-		ok,
-		user,
-		passhash,
-		message
+		request,
+		reply
 	)
 {
 	var
-		twig =
-			this.twig;
+		message,
+		twig;
 
-	if( !ok )
+	twig = this.twig;
+
+	if( reply.type !== 'reply_auth' )
 	{
+		message = reply.message;
+
 		root.setPath(
-			this
-			._widgetPath( 'errorLabel' )
-			.append( 'text' ),
+			this._widgetPath( 'errorLabel' ).append( 'text' ),
 			message
 		);
 
@@ -328,42 +325,45 @@ signUp.prototype.onRegister =
 				)
 			);
 		}
+		else
+		{
+			root.setMark(
+				mark_caret.create(
+					'path', twig.passwordInput.path,
+					'at', twig.passwordInput.value.length
+				)
+			);
+		}
 
 		return;
 	}
 
-	root.setUser( user, passhash );
+	root.setUser( reply.username, request.passhash );
 
 	this.clear( );
 
 	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 
-	root.setMode( 'welcome' );
+	root.setMode( 'Normal' );
 };
 
 
 /*
 | Clears all fields
 */
-signUp.prototype.clear =
+form_login.prototype.clear =
 	function( )
 {
-	var
-		twig;
+	// FUTURE combine calls
+	root.setPath(
+		this._widgetPath( 'userInput' ).append( 'value' ),
+		''
+	);
 
-	twig = this.twig;
-
-	// FUTURE make this in one call, somehow
-
-	root.setPath( twig.userInput.path.append( 'value' ), '' );
-
-	root.setPath( twig.emailInput.path.append( 'value' ), '' );
-
-	root.setPath( twig.passwordInput.path.append( 'value' ), '' );
-
-	root.setPath( twig.password2Input.path.append( 'value' ), '' );
-
-	root.setPath( twig.newsletterCheckBox.path.append( 'checked' ), true );
+	root.setPath(
+		this._widgetPath( 'passwordInput' ).append( 'value' ),
+		''
+	);
 
 	root.setMark( null );
 };

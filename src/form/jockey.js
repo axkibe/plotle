@@ -7,7 +7,7 @@
 | Export
 */
 var
-	forms_jockey;
+	form_jockey;
 
 
 /*
@@ -31,7 +31,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms_jockey',
+			'form_jockey',
 		attributes :
 			{
 				hover :
@@ -97,7 +97,7 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms_form',
+			'form_form',
 		init :
 			[
 				'twigDup'
@@ -105,14 +105,14 @@ if( JION )
 		twig :
 			[
 				/* FUTURE
-				'forms_login',
-				'forms_moveTo',
-				'forms_noAccessToSpace',
-				'forms_nonExistingSpace',
-				'forms_signUp',
-				'forms_space',
-				'forms_user',
-				'forms_welcome'
+				'form_login',
+				'form_moveTo',
+				'form_noAccessToSpace',
+				'form_nonExistingSpace',
+				'form_signUp',
+				'form_space',
+				'form_user',
+				'form_welcome'
 				*/
 			]
 	};
@@ -122,7 +122,7 @@ if( JION )
 /*
 | Initializer.
 */
-forms_jockey.prototype._init =
+form_jockey.prototype._init =
 	function(
 		twigDup
 	)
@@ -192,13 +192,13 @@ forms_jockey.prototype._init =
 /*
 | Returns the mark if the form jockey concerns a mark.
 */
-forms_jockey.concernsMark =
+form_jockey.concernsMark =
 	function(
 		mark
 	)
 {
 	return(
-		mark.containsPath( forms_jockey.path )
+		mark.containsPath( form_jockey.path )
 		? mark
 		: null
 	);
@@ -208,7 +208,7 @@ forms_jockey.concernsMark =
 /*
 | Returns the appropriate form.
 */
-forms_jockey.prototype.get =
+form_jockey.prototype.get =
 	function(
 		name
 	)
@@ -220,7 +220,7 @@ forms_jockey.prototype.get =
 /*
 | Cycles the focus in a form
 */
-forms_jockey.prototype.cycleFocus =
+form_jockey.prototype.cycleFocus =
 	function(
 		formName,
 		dir
@@ -242,7 +242,7 @@ forms_jockey.prototype.cycleFocus =
 /*
 | A button has been pushed.
 */
-forms_jockey.prototype.pushButton =
+form_jockey.prototype.pushButton =
 	function(
 		path
 	)
@@ -252,12 +252,9 @@ forms_jockey.prototype.pushButton =
 /**/{
 /**/	if(
 /**/		path.length < 3
-/**/		||
-/**/		path.get( 0 ) !== 'forms'
-/**/		||
-/**/		path.get( 1 ) !== 'twig'
-/**/		||
-/**/		!this.twig[ path.get( 2 ) ]
+/**/		|| path.get( 0 ) !== 'form'
+/**/		|| path.get( 1 ) !== 'twig'
+/**/		|| !this.twig[ path.get( 2 ) ]
 /**/	)
 /**/	{
 /**/		throw new Error( );

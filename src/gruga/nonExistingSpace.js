@@ -7,7 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	forms_nonExistingSpace,
+	form_nonExistingSpace,
 	gruga_nonExistingSpace,
 	shell_fontPool,
 	widget_button,
@@ -44,7 +44,7 @@ var
 | Layout
 */
 gruga_nonExistingSpace =
-	forms_nonExistingSpace.create(
+	form_nonExistingSpace.create(
 		'twig:add',
 		'headline',
 			widget_label.create(

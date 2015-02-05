@@ -7,7 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	forms_space,
+	form_space,
 	gruga_space,
 	shell_fontPool,
 	widget_button,
@@ -37,7 +37,7 @@ var
 | Layout
 */
 gruga_space =
-	forms_space.create(
+	form_space.create(
 		'twig:add', 'headline',
 			widget_label.create(
 				'text', '',

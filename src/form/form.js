@@ -4,7 +4,7 @@
 
 
 var
-	forms_form,
+	form_form,
 	euclid_view,
 	jion_path,
 	jools,
@@ -22,7 +22,7 @@ var
 'use strict';
 
 
-forms_form =
+form_form =
 	function( )
 {
 	// initializing abstract
@@ -33,7 +33,7 @@ forms_form =
 /*
 | Constructor
 */
-forms_form.init =
+form_form.init =
 	function(
 		// inherit
 	)
@@ -116,7 +116,7 @@ forms_form.init =
 | Returns the mark if a form with 'path' concerns about
 | 'mark'.
 */
-forms_form.concernsMark =
+form_form.concernsMark =
 	function(
 		mark,
 		path
@@ -138,13 +138,13 @@ forms_form.concernsMark =
 /*
 | The disc is shown while a form is shown.
 */
-forms_form.prototype.showDisc = true;
+form_form.prototype.showDisc = true;
 
 
 /*
 | Returns the focused item.
 */
-forms_form.prototype._focusedWidget =
+form_form.prototype._focusedWidget =
 	function( )
 {
 	var
@@ -180,7 +180,7 @@ forms_form.prototype._focusedWidget =
 /*
 | Draws the form.
 */
-forms_form.prototype.draw =
+form_form.prototype.draw =
 	function(
 		display
 	)
@@ -190,7 +190,7 @@ forms_form.prototype.draw =
 		ranks;
 
 	display.paint(
-		theme.forms.style,
+		theme.form.style,
 		display.silhoutte,
 		euclid_view.proper
 	);
@@ -211,7 +211,7 @@ forms_form.prototype.draw =
 /*
 | Moving during an operation with the mouse button held down.
 */
-forms_form.prototype.dragMove =
+form_form.prototype.dragMove =
 	function(
 		// p
 		// shift,
@@ -225,7 +225,7 @@ forms_form.prototype.dragMove =
 /*
 | Stops an operation with the mouse button held down.
 */
-forms_form.prototype.dragStop =
+form_form.prototype.dragStop =
 	function(
 		//p,
 		//shift,
@@ -239,7 +239,7 @@ forms_form.prototype.dragStop =
 /*
 | Returns true if point is on this panel.
 */
-forms_form.prototype.pointingHover =
+form_form.prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -285,7 +285,7 @@ forms_form.prototype.pointingHover =
 /*
 | User clicked
 */
-forms_form.prototype.click =
+form_form.prototype.click =
 	function(
 		p,
 		shift,
@@ -326,7 +326,7 @@ forms_form.prototype.click =
 |
 | Mouse down or finger on screen.
 */
-forms_form.prototype.dragStart =
+form_form.prototype.dragStart =
 	function(
 		// p,
 		// shift,
@@ -340,7 +340,7 @@ forms_form.prototype.dragStart =
 /*
 | User is inputing text.
 */
-forms_form.prototype.input =
+form_form.prototype.input =
 	function(
 		text
 	)
@@ -362,7 +362,7 @@ forms_form.prototype.input =
 /*
 | Cycles the focus
 */
-forms_form.prototype.cycleFocus =
+form_form.prototype.cycleFocus =
 	function(
 		dir
 	)
@@ -437,7 +437,7 @@ forms_form.prototype.cycleFocus =
 /*
 | User is pressing a special key.
 */
-forms_form.prototype.specialKey =
+form_form.prototype.specialKey =
 	function(
 		key,
 		shift,
@@ -475,7 +475,7 @@ forms_form.prototype.specialKey =
 /*
 | A button of the form has been pushed.
 */
-forms_form.prototype.pushButton =
+form_form.prototype.pushButton =
 	function(
 		// buttonName
 	)
@@ -488,7 +488,7 @@ forms_form.prototype.pushButton =
 /*
 | Mouse wheel
 */
-forms_form.prototype.mousewheel =
+form_form.prototype.mousewheel =
 	function(
 		// p,
 		// dir,
@@ -505,7 +505,7 @@ forms_form.prototype.mousewheel =
 |
 | FIXME make this go away.
 */
-forms_form.prototype._widgetPath =
+form_form.prototype._widgetPath =
 	function(
 		widgetName
 	)
@@ -529,7 +529,7 @@ forms_form.prototype._widgetPath =
 | The attention center.
 */
 jools.lazyValue(
-	forms_form.prototype,
+	form_form.prototype,
 	'attentionCenter',
 	function( )
 	{

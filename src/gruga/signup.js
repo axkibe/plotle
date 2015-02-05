@@ -8,7 +8,7 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	shell_fontPool,
-	forms_signUp,
+	form_signUp,
 	gruga_signUp,
 	widget_button,
 	widget_checkbox,
@@ -48,7 +48,7 @@ var
 | Layout
 */
 gruga_signUp =
-	forms_signUp.create(
+	form_signUp.create(
 		'twig:add',
 		'headline',
 			widget_label.create(

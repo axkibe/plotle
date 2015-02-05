@@ -12,7 +12,7 @@ var
 	euclid_point,
 	euclid_view,
 	fabric_spaceRef,
-	forms_jockey,
+	form_jockey,
 	gruga_createDisc,
 	gruga_login,
 	gruga_mainDisc,
@@ -156,10 +156,10 @@ shell_root =
 		);
 
 	this._formJockey =
-		forms_jockey.create(
+		form_jockey.create(
 			'hover', jion_path.empty,
 			'mark', null,
-			'path', jion_path.empty.append( 'forms' ),
+			'path', jion_path.empty.append( 'form' ),
 			'view', view,
 			'twig:add', 'login', gruga_login,
 			'twig:add', 'moveTo', gruga_moveTo,
@@ -710,7 +710,7 @@ shell_root.prototype.setPath =
 
 			throw new Error( 'FIXME' );
 
-		case 'forms' :
+		case 'form' :
 
 			this._formJockey =
 				this._formJockey.setPath(
@@ -805,7 +805,7 @@ shell_root.prototype.pushButton =
 				false
 			);
 
-		case 'forms' :
+		case 'form' :
 
 			return this._formJockey.pushButton(
 				path,
@@ -898,7 +898,7 @@ shell_root.prototype._setHover =
 		this._formJockey.create(
 			'hover',
 				// FIXME make a concernsHover
-				path.isEmpty || path.get( 0 ) !== 'forms'
+				path.isEmpty || path.get( 0 ) !== 'form'
 				? jion_path.empty
 				: path
 		);

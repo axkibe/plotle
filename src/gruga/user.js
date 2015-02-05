@@ -7,7 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	forms_user,
+	form_user,
 	gruga_user,
 	shell_fontPool,
 	widget_button,
@@ -36,7 +36,7 @@ var closeButton =
 | Layout
 */
 gruga_user =
-	forms_user.create(
+	form_user.create(
 		'twig:add',
 		'headline',
 			widget_label.create(

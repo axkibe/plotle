@@ -1,12 +1,11 @@
 /*
-| The space form.
+| User has no access to a space s/he tried to port to.
 */
 
 
 var
-	forms_form,
-	forms_space,
-	jools,
+	form_form,
+	form_noAccessToSpace,
 	root;
 
 
@@ -24,7 +23,7 @@ if( JION )
 {
 	return {
 		id :
-			'forms_space',
+			'form_noAccessToSpace',
 		attributes :
 			{
 				hover :
@@ -45,16 +44,14 @@ if( JION )
 						concerns :
 							{
 								type :
-									'forms_form',
+									'form_form',
 								func :
 									'concernsMark',
 								args :
 									[ 'mark', 'path' ]
 							},
 						defaultValue :
-							'undefined',
-						allowsNull :
-							true
+							'null'
 					},
 				path :
 					{
@@ -72,7 +69,9 @@ if( JION )
 						type :
 							'string',
 						defaultValue :
-							'undefined'
+							'undefined',
+						assign :
+							null
 					},
 				spaceTag :
 					{
@@ -81,7 +80,9 @@ if( JION )
 						type :
 							'string',
 						defaultValue :
-							'undefined'
+							'undefined',
+						assign :
+							null
 					},
 				username :
 					{
@@ -109,12 +110,9 @@ if( JION )
 					}
 			},
 		subclass :
-			'forms_form',
+			'form_form',
 		init :
-			[
-				'inherit',
-				'twigDup'
-			],
+			[ 'inherit' ],
 		twig :
 			'->formWidgets'
 	};
@@ -122,36 +120,21 @@ if( JION )
 
 
 /*
-| The space form.
+| The no access to space form.
 */
-forms_space.prototype._init =
+form_noAccessToSpace.prototype._init =
 	function(
-		inherit,
-		twigDup
+		inherit
 	)
 {
-	if( this.path )
-	{
-		if( !twigDup )
-		{
-			this.twig = jools.copy( this.twig );
-		}
-
-		this.twig.headline =
-			this.twig.headline.create(
-				'text',
-					this.spaceUser + ':' + this.spaceTag
-			);
-	}
-
-	forms_form.init.call( this, inherit );
+	form_form.init.call( this, inherit );
 };
 
 
 /*
 | A button of the form has been pushed.
 */
-forms_space.prototype.pushButton =
+form_noAccessToSpace.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -173,7 +156,7 @@ forms_space.prototype.pushButton =
 
 	switch( buttonName )
 	{
-		case 'closeButton' :
+		case 'okButton' :
 
 			root.setMode( 'Normal' );
 
@@ -184,5 +167,6 @@ forms_space.prototype.pushButton =
 			throw new Error( );
 	}
 };
+
 
 } )( );

@@ -7,7 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	forms_login,
+	form_login,
 	gruga_login,
 	shell_fontPool,
 	widget_button,
@@ -46,7 +46,7 @@ var
 | Layout
 */
 gruga_login =
-	forms_login.create(
+	form_login.create(
 		'twig:add',
 		'headline',
 			widget_label.create(

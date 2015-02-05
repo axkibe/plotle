@@ -296,9 +296,9 @@ theme =
 
 
 	/*
-	| Forms
+	| Form
 	*/
-	forms :
+	form :
 	{
 		style :
 		{

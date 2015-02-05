@@ -7,7 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	forms_moveTo,
+	form_moveTo,
 	gruga_moveTo,
 	shell_fontPool,
 	widget_button,
@@ -50,7 +50,7 @@ var
 | Layout
 */
 gruga_moveTo =
-	forms_moveTo.create(
+	form_moveTo.create(
 		'twig:add',
 		'headline',
 			widget_label.create(

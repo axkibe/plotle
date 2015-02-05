@@ -7,7 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	forms_noAccessToSpace,
+	form_noAccessToSpace,
 	gruga_noAccessToSpace,
 	shell_fontPool,
 	widget_button,
@@ -37,7 +37,7 @@ var
 | Layout
 */
 gruga_noAccessToSpace =
-	forms_noAccessToSpace.create(
+	form_noAccessToSpace.create(
 		'twig:add', 'headline',
 			widget_label.create(
 				'text', '',
