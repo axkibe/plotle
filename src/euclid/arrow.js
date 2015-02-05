@@ -43,7 +43,7 @@ if( JION )
 						comment :
 							'end style of first point',
 						type :
-							'String',
+							'string',
 						allowsNull :
 							true
 					},
@@ -59,7 +59,7 @@ if( JION )
 						comment :
 							'end style of second point',
 						type :
-							'String',
+							'string',
 						allowsNull :
 							true
 					}

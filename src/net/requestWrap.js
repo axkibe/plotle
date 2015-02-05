@@ -35,7 +35,7 @@ if( JION )
 						comment :
 							'name of the channel the request belongs to',
 						type :
-							'String'
+							'string'
 					},
 				request :
 					{
@@ -49,7 +49,7 @@ if( JION )
 						comment :
 							'name of the receiver function to call',
 						type :
-							'String'
+							'string'
 					},
 				_xhr :
 					{

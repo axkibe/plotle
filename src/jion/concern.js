@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'concerns function to call',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined'
 					},
@@ -52,7 +52,7 @@ if( JION )
 						comment :
 							'concerns member call',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined'
 					}

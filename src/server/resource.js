@@ -36,7 +36,7 @@ if( JION )
 						comment :
 							'"binary" or "utf-8"',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							// by default determined from file extension
 							'undefined' // FIXME why not undefined?
@@ -64,7 +64,7 @@ if( JION )
 						comment :
 							'source file of a jion',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined'
 					},
@@ -82,7 +82,7 @@ if( JION )
 						comment :
 							'path of the resources file',
 						type :
-							'String',
+							'string',
 						allowsNull :
 							true
 					},
@@ -127,7 +127,7 @@ if( JION )
 						comment :
 							'"none", "short" or "long"',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'"none"'
 					},
@@ -136,7 +136,7 @@ if( JION )
 						comment :
 							'mime type',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							// by default determined from file extension
 							'undefined'
@@ -146,7 +146,7 @@ if( JION )
 						comment :
 							'post processor replacing stuff',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined'
 					}

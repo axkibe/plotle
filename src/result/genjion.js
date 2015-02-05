@@ -25,14 +25,14 @@ if( JION )
 						comment :
 							'the generated code',
 						type :
-							'String'
+							'string'
 					},
 				jionID :
 					{
 						comment :
 							'the id of the jion',
 						type :
-							'String'
+							'string'
 					},
 				hasJSON :
 					{

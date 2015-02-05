@@ -28,7 +28,7 @@ if( JION )
 							// left to right
 							// not applicable
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'"n/a"'
 					},

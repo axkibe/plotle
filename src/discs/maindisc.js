@@ -37,7 +37,7 @@ if( JION )
 						comment :
 							'users access to current space',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null'
 					},
@@ -73,7 +73,7 @@ if( JION )
 						comment :
 							'current mode the UI is in',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null'
 					},
@@ -91,7 +91,7 @@ if( JION )
 						comment :
 							'owner of currently loaded space',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null'
 					},
@@ -100,7 +100,7 @@ if( JION )
 						comment :
 							'name of currently loaded space',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null'
 					},
@@ -109,7 +109,7 @@ if( JION )
 						comment :
 							'currently logged in user',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null'
 					},

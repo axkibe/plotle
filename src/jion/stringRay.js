@@ -19,7 +19,7 @@ if( JION )
 		id :
 			'jion_stringRay',
 		ray :
-			[ 'String' ]
+			[ 'string' ]
 	};
 }
 

@@ -32,7 +32,7 @@ if( JION )
 						comment :
 							'compass of the anchor',
 						type :
-							'String'
+							'string'
 					},
 				x :
 					{

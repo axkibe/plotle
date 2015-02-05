@@ -145,14 +145,14 @@ if( JION )
 						comment :
 							'name of the style used',
 						type :
-							'String'
+							'string'
 					},
 				value :
 					{
 						comment :
 							'the value in the input box',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'""'
 					},

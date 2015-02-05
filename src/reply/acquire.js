@@ -27,7 +27,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					},
 				access :
 					{
@@ -36,7 +36,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined'
 					},

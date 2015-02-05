@@ -43,7 +43,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'String'
+							'string'
 					},
 				at1 :
 					{

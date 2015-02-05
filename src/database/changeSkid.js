@@ -38,7 +38,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					},
 				changeRay :
 					{
@@ -56,7 +56,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					},
 				date :
 					{

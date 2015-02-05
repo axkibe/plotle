@@ -32,7 +32,7 @@ if( JION )
 						comment :
 							'the members name',
 						type :
-							'String'
+							'string'
 					}
 			},
 		init :

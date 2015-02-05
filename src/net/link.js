@@ -38,7 +38,7 @@ if( JION )
 						comment :
 							'password hashcode of current user',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null'
 					},
@@ -56,7 +56,7 @@ if( JION )
 						comment :
 							'currently logged in user',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null'
 					},

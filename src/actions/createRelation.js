@@ -61,7 +61,7 @@ if( JION )
 						comment :
 							'the state of the relation creation',
 						type :
-							'String'
+							'string'
 					},
 				start :
 					{

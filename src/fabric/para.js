@@ -92,7 +92,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String',
+							'string',
 						defaultValue : // TODO
 							'null'
 					},

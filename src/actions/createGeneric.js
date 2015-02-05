@@ -32,7 +32,7 @@ if( JION )
 							'item type to be created',
 						// FIXME make list of possibilities
 						type :
-							'String'
+							'string'
 					},
 				transItem :
 					{

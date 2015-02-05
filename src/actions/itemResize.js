@@ -27,7 +27,7 @@ if( JION )
 						comment :
 							'alignment ( compass ) of the resize action',
 						type :
-							'String'
+							'string'
 					},
 				transItem :
 					{

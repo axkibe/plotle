@@ -26,7 +26,7 @@ if( JION )
 		id :
 			'jion_path',
 		ray :
-			[ 'String' ]
+			[ 'string' ]
 	};
 }
 

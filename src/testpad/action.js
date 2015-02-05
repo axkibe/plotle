@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'action command',
 						type :
-							'String'
+							'string'
 					},
 				line :
 					{
@@ -41,7 +41,7 @@ if( JION )
 						type :
 							'integer',
 						defaultValue :
-							undefined,
+							'undefined',
 					},
 				at2 :
 					{
@@ -50,16 +50,16 @@ if( JION )
 						type :
 							'integer',
 						defaultValue :
-							undefined,
+							'undefined',
 					},
 				value :
 					{
 						comment :
 							'action carries value',
 						type :
-							'String',
+							'string',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			}
 	};

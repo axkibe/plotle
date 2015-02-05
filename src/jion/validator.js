@@ -248,7 +248,7 @@ var _checkTwig =
 		if( !jools.isString( entry ) )
 		{
 			throw new Error(
-				'twig definition entry not a String'
+				'twig definition entry not a string'
 			);
 		}
 
@@ -312,7 +312,7 @@ checkRay =
 		if( !jools.isString( entry ) )
 		{
 			throw new Error(
-				'twig definition entry not a String'
+				'twig definition entry not a string'
 			);
 		}
 

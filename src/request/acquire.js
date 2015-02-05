@@ -36,7 +36,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					},
 				spaceRef :
 					{
@@ -54,7 +54,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					}
 
 			}

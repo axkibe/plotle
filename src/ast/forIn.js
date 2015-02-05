@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the loop variable',
 						type :
-							'String'
+							'string'
 					},
 				object :
 					{

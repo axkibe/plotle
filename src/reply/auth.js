@@ -27,7 +27,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					}
 			}
 	};

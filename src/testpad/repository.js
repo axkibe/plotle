@@ -40,7 +40,7 @@ if( JION )
 						type :
 							'fabric_space',
 						defaultValue :
-							null
+							'null'
 					},
 				seq :
 					{
@@ -49,7 +49,7 @@ if( JION )
 						type :
 							'integer',
 						defaultValue :
-							null
+							'null'
 					},
 				_changeWrapRay :
 					{
@@ -58,7 +58,7 @@ if( JION )
 						type :
 							'change_wrapRay',
 						defaultValue :
-							null
+							'null'
 					},
 			},
 		init :

@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the literal',
 						type :
-							'String'
+							'string'
 					}
 			}
 	};

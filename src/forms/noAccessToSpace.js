@@ -67,7 +67,7 @@ if( JION )
 						comment :
 							'the user of the current space',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined',
 						assign :
@@ -78,7 +78,7 @@ if( JION )
 						comment :
 							'tag of the current space',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined',
 						assign :
@@ -89,7 +89,7 @@ if( JION )
 						comment :
 							'currently logged in user',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null',
 						assign :

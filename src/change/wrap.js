@@ -34,7 +34,7 @@ if( JION )
 							// FIXME it accepted 'true',
 							// jion validator shouldn't
 						type :
-							'String'
+							'string'
 					},
 				changeRay :
 					{

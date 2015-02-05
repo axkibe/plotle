@@ -28,7 +28,7 @@ if( JION )
 						comment :
 							'the cursor to display',
 						type :
-							'String'
+							'string'
 					},
 				path :
 					{

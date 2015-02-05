@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'argument name',
 						type :
-							'String',
+							'string',
 						allowsNull :
 							true
 					},
@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'argument comment',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null'
 					}

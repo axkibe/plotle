@@ -29,7 +29,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					},
 				seq :
 					{
@@ -56,7 +56,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					}
 
 			}

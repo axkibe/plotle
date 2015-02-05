@@ -36,7 +36,7 @@ if( JION )
 						comment :
 							'currently only "clockwise" supported',
 						type :
-							'String',
+							'string',
 					},
 				close :
 					{

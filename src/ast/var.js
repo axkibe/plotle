@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the variable name',
 						type :
-							'String'
+							'string'
 					}
 			},
 		init :

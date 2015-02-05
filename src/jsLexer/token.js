@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the token type',
 						type :
-							'String'
+							'string'
 					},
 				value :
 					{

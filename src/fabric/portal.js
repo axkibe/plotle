@@ -89,7 +89,7 @@ if( JION )
 						comment :
 							'owner of the space the portal goes to',
 						type :
-							'String',
+							'string',
 						json :
 							true
 					},
@@ -98,7 +98,7 @@ if( JION )
 						comment :
 							'tag of the space the portal goes to',
 						type :
-							'String',
+							'string',
 						json :
 							true
 					},

@@ -106,7 +106,7 @@ if( JION )
 						comment :
 							'the label text',
 						type :
-							'String'
+							'string'
 					},
 				visible :
 					{

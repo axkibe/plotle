@@ -32,7 +32,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					},
 				tag :
 					{
@@ -41,7 +41,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					}
 			}
 	};

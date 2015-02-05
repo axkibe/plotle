@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'rights the current user has for this space',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined'
 					},
@@ -93,7 +93,7 @@ if( JION )
 						comment :
 							'owner of the space',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined'
 					},
@@ -102,7 +102,7 @@ if( JION )
 						comment :
 							'name of the space',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined'
 					},

@@ -43,7 +43,7 @@ if( JION )
 						comment :
 							'variable name to assign to',
 						type :
-							'String',
+							'string',
 						allowsNull :
 							true
 					},
@@ -52,7 +52,7 @@ if( JION )
 						comment :
 							'comment',
 						type :
-							'String'
+							'string'
 					},
 				concerns :
 					{
@@ -86,7 +86,7 @@ if( JION )
 						comment :
 							'attribute name',
 						type :
-							'String'
+							'string'
 					},
 				id :
 					{

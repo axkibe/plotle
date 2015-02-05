@@ -37,28 +37,28 @@ if( JION )
 						comment :
 							'font family',
 						type :
-							'String'
+							'string'
 					},
 				align :
 					{
 						comment :
 							'horizonal alignment',
 						type :
-							'String'
+							'string'
 					},
 				fill :
 					{
 						comment :
 							'font color',
 						type :
-							'String'
+							'string'
 					},
 				base :
 					{
 						comment :
 							'vertical alignment',
 						type :
-							'String'
+							'string'
 					}
 			}
 	};

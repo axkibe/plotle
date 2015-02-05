@@ -27,7 +27,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					},
 				news :
 					{
@@ -45,7 +45,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					},
 				username :
 					{
@@ -54,7 +54,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'String'
+							'string'
 					}
 
 			}

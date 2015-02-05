@@ -112,7 +112,7 @@ if( JION )
 						comment :
 							'name of the style used',
 						type :
-							'String'
+							'string'
 					},
 				visible :
 					{

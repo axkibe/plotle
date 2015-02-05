@@ -83,7 +83,7 @@ if( JION )
 						comment :
 							'icon to display',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							// TODO undefiend
 							'null'
@@ -93,7 +93,7 @@ if( JION )
 						comment :
 							'icon style to display',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null'
 					},
@@ -140,14 +140,14 @@ if( JION )
 						comment :
 							'name of the style used',
 						type :
-							'String'
+							'string'
 					},
 				text :
 					{
 						comment :
 							'the text written in the button',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'null'
 					},
