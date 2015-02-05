@@ -32,14 +32,14 @@ if( JION )
 						comment :
 							'action affects at line',
 						type :
-							'Integer'
+							'integer'
 					},
 				at :
 					{
 						comment :
 							'action affects offset',
 						type :
-							'Integer',
+							'integer',
 						defaultValue :
 							undefined,
 					},
@@ -48,7 +48,7 @@ if( JION )
 						comment :
 							'action affects offset (span end)',
 						type :
-							'Integer',
+							'integer',
 						defaultValue :
 							undefined,
 					},

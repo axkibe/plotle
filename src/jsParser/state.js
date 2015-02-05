@@ -41,7 +41,7 @@ if( JION )
 						comment :
 							'current position in token ray',
 						type :
-							'Integer'
+							'integer'
 					}
 			},
 	};

@@ -64,7 +64,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'Integer',
+							'integer',
 						allowsUndefined :
 							true
 					}
@@ -96,7 +96,7 @@ if( SERVER )
 change_set.prototype._init =
 	function ( )
 {
-	// FUTURE make "NotNegativeInteger" a json type
+	// FUTURE make "nonnegativeInteger" a json type
 
 	if( this.rank !== undefined && this.rank < 0 )
 	{

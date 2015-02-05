@@ -33,7 +33,7 @@ if( JION )
 						comment :
 							'height of the display',
 						type :
-							'Number', // FIXME Integer
+							'Number', // FIXME integer
 						defaultValue :
 							'undefined'
 					},
@@ -42,7 +42,7 @@ if( JION )
 						comment :
 							'width of the display',
 						type :
-							'Number', // FIXME Integer
+							'Number', // FIXME integer
 						defaultValue :
 							'undefined'
 					},

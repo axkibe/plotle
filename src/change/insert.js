@@ -52,7 +52,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'Integer'
+							'integer'
 					},
 				at2 :
 					{
@@ -61,7 +61,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'Integer'
+							'integer'
 					}
 			},
 		init :

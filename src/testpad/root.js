@@ -60,7 +60,7 @@ if( JION )
 						comment :
 							'offset cursor is at',
 						type :
-							'Integer',
+							'integer',
 						defaultValue :
 							null // FUTURE 0
 					},
@@ -69,7 +69,7 @@ if( JION )
 						comment :
 							'line cursor is in',
 						type :
-							'Integer',
+							'integer',
 						defaultValue :
 							null // FUTURE 0
 					},

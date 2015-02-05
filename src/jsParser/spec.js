@@ -37,7 +37,7 @@ if( JION )
 						comment :
 							'operator precedence',
 						type :
-							'Integer'
+							'integer'
 					},
 				handler :
 					{

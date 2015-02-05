@@ -38,7 +38,7 @@ if( JION )
 						comment :
 							'offset of the caret',
 						type :
-							'Integer'
+							'integer'
 					}
 			},
 		init :

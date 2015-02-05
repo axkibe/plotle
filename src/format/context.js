@@ -28,7 +28,7 @@ if( JION )
 						comment :
 							'the indentation',
 						type :
-							'Integer',
+							'integer',
 						defaultValue :
 							'0'
 					},

@@ -43,7 +43,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'Integer'
+							'integer'
 					},
 				path2 :
 					{

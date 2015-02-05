@@ -41,7 +41,7 @@ if( JION )
 						comment :
 							'current height of screen',
 						type :
-							'Integer'
+							'integer'
 					},
 				pan :
 					{
@@ -55,7 +55,7 @@ if( JION )
 						comment :
 							'current width of screen',
 						type :
-							'Integer'
+							'integer'
 					}
 			},
 		init :

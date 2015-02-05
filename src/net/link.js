@@ -92,7 +92,7 @@ if( JION )
 						comment :
 							'the remote sequence number',
 						type :
-							'Integer',
+							'integer',
 						defaultValue :
 							'null'
 					},

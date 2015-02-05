@@ -47,7 +47,7 @@ if( JION )
 						comment :
 							'current sequence numer',
 						type :
-							'Integer',
+							'integer',
 						defaultValue :
 							null
 					},

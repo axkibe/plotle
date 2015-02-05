@@ -110,7 +110,7 @@ if( JION )
 						comment :
 							'maximum input length',
 						type :
-							'Integer'
+							'integer'
 					},
 				password :
 					{

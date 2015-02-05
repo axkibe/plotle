@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'latest sequence number',
 						type :
-							'Integer'
+							'integer'
 					},
 				'space' :
 					{

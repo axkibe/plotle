@@ -39,14 +39,14 @@ if( JION )
 						comment :
 							'x-distance',
 						type :
-							'Integer'
+							'integer'
 					},
 				y :
 					{
 						comment :
 							'y-distance',
 						type :
-							'Integer'
+							'integer'
 					}
 			}
 	};
