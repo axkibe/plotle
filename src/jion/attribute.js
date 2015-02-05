@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'attribute may be null',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},
@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'attribute may be undefined',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},
@@ -77,7 +77,7 @@ if( JION )
 						comment :
 							'include in JSON export/import',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},

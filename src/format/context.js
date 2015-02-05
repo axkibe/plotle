@@ -37,7 +37,7 @@ if( JION )
 						comment :
 							'true if within optinal CHECK code',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},
@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'true if to be formated inline',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},
@@ -55,7 +55,7 @@ if( JION )
 						comment :
 							'true if in root context',
 						type :
-							'Boolean'
+							'boolean'
 					},
 			}
 	};

@@ -36,7 +36,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'Boolean'
+							'boolean'
 					},
 				passhash :
 					{

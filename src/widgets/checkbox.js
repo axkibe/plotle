@@ -38,7 +38,7 @@ if( JION )
 						comment :
 							'true if the checkbox is checked',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},
@@ -55,7 +55,7 @@ if( JION )
 						comment :
 							'true if the widget got focus',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},
@@ -119,7 +119,7 @@ if( JION )
 						comment :
 							'if false the button is hidden',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'true'
 					}

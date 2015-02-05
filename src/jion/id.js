@@ -83,7 +83,9 @@ jion_id.createFromString =
 	{
 		switch( string )
 		{
-			case 'Boolean' : break;
+			// FIXME all lowercase
+			case 'boolean' : break;
+			case 'Boolean' : break; // XXX
 			case 'Integer' : break;
 			case 'Null' : break;
 			case 'Number' : break;

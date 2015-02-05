@@ -26,7 +26,7 @@ if( JION )
 						comment :
 							'the boolean',
 						type :
-							'Boolean'
+							'boolean'
 					}
 			}
 	};

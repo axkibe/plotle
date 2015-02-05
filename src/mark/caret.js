@@ -55,7 +55,7 @@ if( JION )
 						comment :
 							'the shell has the system focus',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'true'
 					}

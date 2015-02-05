@@ -55,7 +55,7 @@ if( JION )
 						comment :
 							'if true is only loaded in devel mode',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},
@@ -91,7 +91,7 @@ if( JION )
 						comment :
 							'true if this resource has a jion def.',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},
@@ -100,7 +100,7 @@ if( JION )
 						comment :
 							'true if this resource is in the bundle',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},
@@ -109,7 +109,7 @@ if( JION )
 						comment :
 							'true if this resource is in the testpad',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},
@@ -118,7 +118,7 @@ if( JION )
 						comment :
 							'true if this resource is a jion.',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'false'
 					},

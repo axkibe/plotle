@@ -1377,7 +1377,8 @@ generator.prototype.genSingleTypeCheckFailCondition =
 {
 	switch( id.string )
 	{
-		case 'Boolean' :
+		case 'boolean' :
+		case 'Boolean' : // XXX
 
 			return $differs( $typeof( avar ), '"boolean"' );
 
@@ -1867,7 +1868,8 @@ generator.prototype.genCreatorUnchanged =
 
 		switch( attr.id.string )
 		{
-			case 'Boolean' :
+			case 'boolean' :
+			case 'Boolean' : // XXX
 			case 'Integer' :
 			case 'Number' :
 			case 'Object' : // FIXME
@@ -2148,7 +2150,8 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 
 	switch( attr.id.string )
 	{
-		case 'Boolean' :
+		case 'boolean' :
+		case 'Boolean' : // XXX
 		case 'Integer' :
 		case 'Number' :
 		case 'String' :
@@ -3010,7 +3013,8 @@ generator.prototype.genAttributeEquals =
 
 	switch( attr.id.string )
 	{
-		case 'Boolean' :
+		case 'boolean' :
+		case 'Boolean' : // XXX
 		case 'Integer' :
 		case 'Number' :
 		case 'Object' :

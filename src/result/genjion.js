@@ -39,7 +39,7 @@ if( JION )
 						comment :
 							'true if generated jion supports json',
 						type :
-							'Boolean'
+							'boolean'
 					}
 			}
 	};

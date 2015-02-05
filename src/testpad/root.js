@@ -87,7 +87,7 @@ if( JION )
 						comment :
 							'true when having focus',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							false
 					},
@@ -96,7 +96,7 @@ if( JION )
 						comment :
 							'true when mouse button is held down',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							false
 					},

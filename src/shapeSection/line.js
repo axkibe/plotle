@@ -36,7 +36,7 @@ if( JION )
 						comment :
 							'true if this closes the shape',
 						type :
-							'Boolean',
+							'boolean',
 						allowsUndefined :
 							true
 					}

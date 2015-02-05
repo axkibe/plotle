@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'if true its the capsule, to be formatted a little different',
 						type :
-							'Boolean',
+							'boolean',
 						defaultValue :
 							'undefined'
 					}
