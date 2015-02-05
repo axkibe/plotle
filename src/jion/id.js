@@ -86,8 +86,8 @@ jion_id.createFromString =
 			// FIXME all lowercase
 			case 'boolean' : break;
 			case 'integer' : break;
-			case 'Null' : break;
-			case 'Number' : break;
+			case 'Null' : break; // XXX
+			case 'number' : break;
 			case 'Object' : break; // FIXME
 			case 'protean' : break;
 			case 'String' : break;

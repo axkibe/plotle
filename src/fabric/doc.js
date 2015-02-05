@@ -38,7 +38,7 @@ if( JION )
 						comment :
 							'width of the para its flow',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'undefined'
 					},
@@ -47,7 +47,7 @@ if( JION )
 						comment :
 							'size of the font',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'undefined'
 					},
@@ -65,7 +65,7 @@ if( JION )
 						comment :
 							'vertical seperation of paragraphs',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'undefined'
 					},

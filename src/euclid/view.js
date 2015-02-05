@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'zooming factor of view',
 						type :
-							'Number'
+							'number'
 					},
 				height :
 					{

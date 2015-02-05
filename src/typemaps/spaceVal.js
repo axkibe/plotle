@@ -10,5 +10,5 @@ module.exports =
 	'fabric_portal',
 	'fabric_para',
 	'fabric_relation',
-	'Number'
+	'number'
 ];

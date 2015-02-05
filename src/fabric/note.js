@@ -51,7 +51,7 @@ if( JION )
 						comment :
 							'the fontsize of the note',
 						type :
-							'Number',
+							'number',
 						json :
 							true
 					},
@@ -100,7 +100,7 @@ if( JION )
 						comment :
 							'vertical scroll position',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'undefined'
 					},

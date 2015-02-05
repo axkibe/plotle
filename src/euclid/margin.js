@@ -35,28 +35,28 @@ if( JION )
 						comment :
 							'n margin',
 						type :
-							'Number'
+							'number'
 					},
 				e :
 					{
 						comment :
 							'e margin',
 						type :
-							'Number'
+							'number'
 					},
 				s :
 					{
 						comment :
 							's margin',
 						type :
-							'Number'
+							'number'
 					},
 				w :
 					{
 						comment :
 							'w margin',
 						type :
-							'Number'
+							'number'
 					}
 			}
 	};

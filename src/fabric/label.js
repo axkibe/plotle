@@ -47,7 +47,7 @@ if( JION )
 						comment :
 							'the fontsize of the label',
 						type :
-							'Number',
+							'number',
 						json :
 							true
 					},

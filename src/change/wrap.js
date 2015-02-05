@@ -59,7 +59,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'undefined'
 					}

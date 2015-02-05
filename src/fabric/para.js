@@ -43,7 +43,7 @@ if( JION )
 						comment :
 							'width of the para flow',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'undefined'
 					},
@@ -52,7 +52,7 @@ if( JION )
 						comment :
 							'size of the font',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'undefined'
 					},

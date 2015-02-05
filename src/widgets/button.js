@@ -165,7 +165,7 @@ if( JION )
 						comment :
 							'vertical distance of newline',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'null'
 					},
@@ -174,7 +174,7 @@ if( JION )
 						comment :
 							'rotation of the text',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'null'
 					},

@@ -35,21 +35,21 @@ if( JION )
 						comment :
 							'position of the scrollbar',
 						type :
-							'Number'
+							'number'
 					},
 				aperture :
 					{
 						comment :
 							'the size of the bar',
 						type :
-							'Number'
+							'number'
 					},
 				max :
 					{
 						comment :
 							'maximum position',
 						type :
-							'Number'
+							'number'
 					},
 				pnw :
 					{
@@ -63,7 +63,7 @@ if( JION )
 						comment :
 							'size',
 						type :
-							'Number'
+							'number'
 					}
 			},
 		init :

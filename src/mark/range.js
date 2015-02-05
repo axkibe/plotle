@@ -52,7 +52,7 @@ if( JION )
 						comment :
 							'x-position of the caret kept',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'null'
 					}

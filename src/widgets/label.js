@@ -79,7 +79,7 @@ if( JION )
 						comment :
 							'vertical distance of newline',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'null'
 					},

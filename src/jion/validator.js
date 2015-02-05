@@ -359,7 +359,7 @@ checkAttributeSingleType =
 			// FIXME uppercase
 			case 'boolean' :
 			case 'integer' :
-			case 'Number' :
+			case 'number' :
 			case 'Object' : // XXX
 			case 'protean' :
 			case 'String' :

@@ -30,14 +30,14 @@ if( JION )
 						comment :
 							'x distance to anchor',
 						type :
-							'Number'
+							'number'
 					},
 				y :
 					{
 						comment :
 							'y distance to anchor',
 						type :
-							'Number'
+							'number'
 					},
 				anchor :
 					{

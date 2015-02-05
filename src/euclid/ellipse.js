@@ -60,7 +60,7 @@ if( JION )
 						comment :
 							'inner radius for circle gradients',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'null',
 						assign :
@@ -71,7 +71,7 @@ if( JION )
 						comment :
 							'outer radius for circle gradients',
 						type :
-							'Number',
+							'number',
 						defaultValue :
 							'null',
 						assign :

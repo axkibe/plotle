@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the number',
 						type :
-							'Number'
+							'number'
 					}
 			}
 	};

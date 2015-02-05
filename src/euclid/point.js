@@ -33,7 +33,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'Number'
+							'number'
 					},
 				y :
 					{
@@ -42,7 +42,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'Number'
+							'number'
 					}
 			}
 	};

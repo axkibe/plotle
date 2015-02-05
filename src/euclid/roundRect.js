@@ -64,14 +64,14 @@ if( JION )
 						comment :
 							'horizontal rounding',
 						type :
-							'Number'
+							'number'
 					},
 				b :
 					{
 						comment :
 							'vertical rounding',
 						type :
-							'Number'
+							'number'
 					}
 			},
 

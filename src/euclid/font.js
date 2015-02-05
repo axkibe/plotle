@@ -30,7 +30,7 @@ if( JION )
 						comment :
 							'font size',
 						type :
-							'Number'
+							'number'
 					},
 				family :
 					{

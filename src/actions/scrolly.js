@@ -41,7 +41,7 @@ if( JION )
 						comment :
 							'position of the scrollbar on start of scrolling',
 						type :
-							'Number'
+							'number'
 					}
 			}
 	};

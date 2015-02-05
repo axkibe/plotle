@@ -29,7 +29,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'Number',
+							'number',
 					},
 				cid :
 					{
