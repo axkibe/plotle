@@ -200,7 +200,6 @@ generator.prototype._init =
 
 	units = jion_idGroup.create( );
 
-	//units = units.set( jion_id.createFromString( 'jion_proto' ) );
 	units = units.add( jion_id.createFromString( 'jion_proto' ) );
 
 	this.hasJSON = !!jion.json;
@@ -1399,6 +1398,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 			return $differs( $typeof( avar ), '"number"' );
 
 		case 'String' :
+		case 'string' :
 
 			return(
 				$and(
@@ -1873,6 +1873,7 @@ generator.prototype.genCreatorUnchanged =
 			case 'Object' : // FIXME
 			case 'protean' :
 			case 'String' :
+			case 'string' :
 
 				ceq =
 					$equals(
@@ -2151,9 +2152,10 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 		case 'boolean' :
 		case 'integer' :
 		case 'number' :
-		case 'String' :
 		case 'Object' : // FIXME remove
 		case 'protean' :
+		case 'String' :
+		case 'string' :
 
 			code = $assign( attr.v, 'arg' );
 
@@ -3015,6 +3017,7 @@ generator.prototype.genAttributeEquals =
 		case 'number' :
 		case 'Object' :
 		case 'String' :
+		case 'string' :
 
 			ceq = $equals( le, re );
 
