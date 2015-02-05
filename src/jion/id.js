@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the name part of the id if applicable',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined'
 					},
@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'the unit part of the id if applicable',
 						type :
-							'String',
+							'string',
 						defaultValue :
 							'undefined'
 					}
@@ -90,7 +90,6 @@ jion_id.createFromString =
 			case 'number' : break;
 			case 'Object' : break; // FIXME
 			case 'protean' : break;
-			case 'String' : break;
 			case 'string' : break;
 			case 'Undefined' : break;
 
