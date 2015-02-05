@@ -68,11 +68,9 @@ if( JION )
 						comment :
 							'default value',
 						type :
-							'Object', // FIXME
+							'->astExpression',
 						defaultValue :
-							'undefined',
-						allowsNull :
-							true // FIXME should be ast
+							'undefined'
 					},
 				json :
 					{

@@ -264,7 +264,7 @@ generator.prototype._init =
 			constructorList.push( name );
 		}
 
-		defaultValue = null;
+		defaultValue = undefined;
 
 		concerns = jAttr.concerns;
 
@@ -1345,7 +1345,7 @@ generator.prototype.genCreatorDefaults =
 		}
 
 		if(
-			attr.defaultValue !== null
+			attr.defaultValue !== undefined
 			&&
 			!attr.defaultValue.equals( shorthand.$undefined )
 		)
