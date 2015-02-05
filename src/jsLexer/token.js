@@ -73,6 +73,7 @@ token = require( '../jion/this' )( module );
 /**/	tokenList[ '===' ] = true;
 /**/	tokenList[ '!==' ] = true;
 /**/	tokenList[ 'new' ] = true;
+/**/	tokenList[ 'null' ] = true;
 /**/	tokenList[ 'true' ] = true;
 /**/	tokenList[ 'false' ] = true;
 /**/	tokenList[ 'delete' ] = true;

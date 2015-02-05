@@ -38,6 +38,7 @@ var
 	ast_member,
 	ast_new,
 	ast_not,
+	ast_null,
 	ast_number,
 	ast_objLiteral,
 	ast_or,
@@ -56,6 +57,7 @@ var
 	handleMonoOps,
 	handleNew,
 	handleNumber,
+	handleNull,
 	handleIdentifier,
 	handleObjectLiteral,
 	handleParserError,
@@ -101,6 +103,8 @@ ast_new = require( '../ast/new' );
 
 ast_not = require( '../ast/not' );
 
+ast_null = require( '../ast/null' );
+
 ast_number = require( '../ast/number' );
 
 ast_objLiteral = require( '../ast/objLiteral' );
@@ -137,11 +141,6 @@ handleBooleanLiteral =
 {
 	var
 		bool;
-
-	if( state.ast !== null )
-	{
-		throw new Error( 'parse error' );
-	}
 
 	switch( state.current.type )
 	{
@@ -666,6 +665,26 @@ handleString =
 
 
 /*
+| Handler for null.
+*/
+handleNull =
+	function(
+		state // current parser state
+		// spec   // operator spec
+	)
+{
+	state =
+		state.create(
+			'ast', ast_null.create( ),
+			'pos', state.pos + 1
+		);
+
+	return state;
+};
+
+
+
+/*
 | Handler for numeric literals.
 */
 handleNumber =
@@ -714,6 +733,13 @@ leftSpecs.identifier =
 	jsParser_spec.create(
 		'prec', -1,
 		'handler', handleIdentifier,
+		'associativity', 'n/a'
+	);
+
+leftSpecs.null =
+	jsParser_spec.create(
+		'prec', -1,
+		'handler', handleNull,
 		'associativity', 'n/a'
 	);
 

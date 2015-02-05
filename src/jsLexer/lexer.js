@@ -82,6 +82,7 @@ jsLexer.tokenize =
 				case 'false' :
 				case 'instanceof' :
 				case 'new' :
+				case 'null' :
 				case 'true' :
 				case 'typeof' :
 
