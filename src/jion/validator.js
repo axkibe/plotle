@@ -356,14 +356,12 @@ checkAttributeSingleType =
 	{
 		switch( type )
 		{
-			// FIXME uppercase
 			case 'boolean' :
 			case 'integer' :
 			case 'number' :
 			case 'Object' : // XXX
 			case 'protean' :
 			case 'string' :
-			case 'String' :
 
 				break;
 

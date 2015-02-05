@@ -1397,7 +1397,6 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 			return $differs( $typeof( avar ), '"number"' );
 
-		case 'String' :
 		case 'string' :
 
 			return(
@@ -1872,7 +1871,6 @@ generator.prototype.genCreatorUnchanged =
 			case 'number' :
 			case 'Object' : // FIXME
 			case 'protean' :
-			case 'String' :
 			case 'string' :
 
 				ceq =
@@ -2154,7 +2152,6 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 		case 'number' :
 		case 'Object' : // FIXME remove
 		case 'protean' :
-		case 'String' :
 		case 'string' :
 
 			code = $assign( attr.v, 'arg' );
@@ -3016,7 +3013,6 @@ generator.prototype.genAttributeEquals =
 		case 'integer' :
 		case 'number' :
 		case 'Object' :
-		case 'String' :
 		case 'string' :
 
 			ceq = $equals( le, re );
