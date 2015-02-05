@@ -286,8 +286,8 @@ fabric_label.prototype.dragStop =
 
 	switch( action.reflect )
 	{
-		case 'actions_itemDrag' :
-		case 'actions_itemResize' :
+		case 'action_itemDrag' :
+		case 'action_itemResize' :
 
 			zone = this.zone,
 

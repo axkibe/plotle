@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'actions_itemResize',
+			'action_itemResize',
 		equals :
 			'primitive',
 		attributes :

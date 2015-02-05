@@ -588,36 +588,36 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/isAction.js',
+		'filePath', 'src/action/isAction.js',
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/createGeneric.js',
+		'filePath', 'src/action/createGeneric.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/createRelation.js',
+		'filePath', 'src/action/createRelation.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/itemDrag.js',
+		'filePath', 'src/action/itemDrag.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/itemResize.js',
+		'filePath', 'src/action/itemResize.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/pan.js',
+		'filePath', 'src/action/pan.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/actions/scrolly.js',
+		'filePath', 'src/action/scrolly.js',
 		'hasJion', true,
 		'inBundle', true
 	),

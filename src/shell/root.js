@@ -3,7 +3,7 @@
 */
 
 var
-	actions_isAction,
+	action_isAction,
 	change_wrap,
 	change_ray,
 	discs_jockey,
@@ -344,7 +344,7 @@ shell_root.prototype.setAction =
 /**/	if(
 /**/		action !== null
 /**/		&&
-/**/		!actions_isAction( action )
+/**/		!action_isAction( action )
 /**/	)
 /**/	{
 /**/		throw new Error( );

@@ -3,8 +3,8 @@
 */
 
 var
-	actions_itemResize,
-	actions_pan,
+	action_itemResize,
+	action_pan,
 	change_join,
 	change_remove,
 	change_set,
@@ -240,8 +240,8 @@ fabric_space.prototype.focusedItem =
 	{
 		switch( action.reflect )
 		{
-			case 'actions_itemDrag' :
-			case 'actions_itemResize' :
+			case 'action_itemDrag' :
+			case 'action_itemResize' :
 
 				if( action.transItem.path.subPathOf( path ) )
 				{
@@ -278,8 +278,8 @@ fabric_space.prototype.getItem =
 
 	switch( action && action.reflect )
 	{
-		case 'actions_itemDrag' :
-		case 'actions_itemResize' :
+		case 'action_itemDrag' :
+		case 'action_itemResize' :
 
 			if( action.transItem.key === key )
 			{
@@ -369,7 +369,7 @@ fabric_space.prototype.draw =
 
 	switch( action && action.reflect )
 	{
-		case 'actions_createGeneric' :
+		case 'action_createGeneric' :
 
 			if( action.start )
 			{
@@ -378,7 +378,7 @@ fabric_space.prototype.draw =
 
 			break;
 
-		case 'actions_createRelation' :
+		case 'action_createRelation' :
 
 			if( !action.fromItemPath.isEmpty )
 			{
@@ -592,7 +592,7 @@ fabric_space.prototype.dragStart =
 			dp = view.depoint( p );
 
 			root.setAction(
-				actions_itemResize.create(
+				action_itemResize.create(
 					'start', dp,
 					'transItem', focus,
 					'origin', focus,
@@ -613,7 +613,7 @@ fabric_space.prototype.dragStart =
 	// FIXME simplify
 	if(
 		action
-		&& action.reflect === 'actions_createGeneric'
+		&& action.reflect === 'action_createGeneric'
 		&& action.itemType === 'note'
 	)
 	{
@@ -641,7 +641,7 @@ fabric_space.prototype.dragStart =
 	}
 	else if(
 		action
-		&& action.reflect === 'actions_createGeneric'
+		&& action.reflect === 'action_createGeneric'
 		&& action.itemType === 'label'
 	)
 	{
@@ -665,7 +665,7 @@ fabric_space.prototype.dragStart =
 	}
 	else if(
 		action &&
-		action.reflect === 'actions_createGeneric' &&
+		action.reflect === 'action_createGeneric' &&
 		action.itemType === 'portal'
 	)
 	{
@@ -720,7 +720,7 @@ fabric_space.prototype.dragStart =
 
 	switch( action && action.reflect )
 	{
-		case 'actions_createRelation' :
+		case 'action_createRelation' :
 
 			root.setAction(
 				action.create(
@@ -735,7 +735,7 @@ fabric_space.prototype.dragStart =
 
 	// otherwise panning is initiated
 	root.setAction(
-		actions_pan.create(
+		action_pan.create(
 			'start', p,
 			'pan', view.pan
 		)
@@ -827,7 +827,7 @@ fabric_space.prototype.dragStop =
 
 	switch( action.reflect )
 	{
-		case 'actions_createGeneric' :
+		case 'action_createGeneric' :
 
 			switch( action.itemType )
 			{
@@ -1003,13 +1003,13 @@ fabric_space.prototype.dragStop =
 
 			break;
 
-		case 'actions_pan' :
+		case 'action_pan' :
 
 			root.setAction( null );
 
 			break;
 
-		case 'actions_createRelation' :
+		case 'action_createRelation' :
 
 			switch( action.relationState )
 			{
@@ -1051,7 +1051,7 @@ fabric_space.prototype.dragStop =
 
 			break;
 
-		case 'actions_itemDrag' :
+		case 'action_itemDrag' :
 
 			if( !action.transItem.zone.equals( action.origin.zone ) )
 			{
@@ -1099,7 +1099,7 @@ fabric_space.prototype.dragStop =
 
 			break;
 
-		case 'actions_itemResize' :
+		case 'action_itemResize' :
 
 			if( !action.transItem.zone.equals( action.origin.zone ) )
 			{
@@ -1158,7 +1158,7 @@ fabric_space.prototype.dragStop =
 
 			break;
 
-		case 'actions_scrollY' :
+		case 'action_scrollY' :
 
 			this.getItem(
 				action.itemPath.get( -1 )
@@ -1216,7 +1216,7 @@ fabric_space.prototype.dragMove =
 
 	switch( action.reflect )
 	{
-		case 'actions_createGeneric' :
+		case 'action_createGeneric' :
 
 			model = action.model;
 
@@ -1270,7 +1270,7 @@ fabric_space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'actions_createRelation' :
+		case 'action_createRelation' :
 
 			if( action.relationState === 'pan' )
 			{
@@ -1318,7 +1318,7 @@ fabric_space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'actions_pan' :
+		case 'action_pan' :
 
 			pd = p.sub( action.start );
 
@@ -1334,7 +1334,7 @@ fabric_space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'actions_itemDrag' :
+		case 'action_itemDrag' :
 
 			origin = action.origin;
 
@@ -1372,7 +1372,7 @@ fabric_space.prototype.dragMove =
 			return true;
 
 
-		case 'actions_itemResize' :
+		case 'action_itemResize' :
 
 			origin = action.origin;
 
@@ -1462,7 +1462,7 @@ fabric_space.prototype.dragMove =
 
 			return true;
 
-		case 'actions_scrollY' :
+		case 'action_scrollY' :
 
 			this.getItem( action.itemPath.get( -1 ) )
 			.dragMove(

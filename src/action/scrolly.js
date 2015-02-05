@@ -1,5 +1,5 @@
 /*
-| The user is dragging an item.
+| The user is scrolling a note.
 */
 
 
@@ -17,31 +17,31 @@ if( JION )
 {
 	return {
 		id :
-			'actions_itemDrag',
+			'action_scrollY',
 		equals :
 			'primitive',
 		attributes :
 			{
-				origin :
+				itemPath :
 					{
 						comment :
-							'the item being dragged',
+							'path to the item being scrolled',
 						type :
-							'Object' // FUTURE items.*
+							'jion_path'
 					},
 				start :
 					{
 						comment :
-							'mouse down point on drag creation',
+							'mouse down point on start of scrolling',
 						type :
 							'euclid_point'
 					},
-				transItem :
+				startPos :
 					{
 						comment :
-							'the transient item while it is dragged',
+							'position of the scrollbar on start of scrolling',
 						type :
-							'Object' // FUTURE items.*
+							'number'
 					}
 			}
 	};

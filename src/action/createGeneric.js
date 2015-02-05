@@ -21,7 +21,7 @@ if( JION )
 {
 	return {
 		id :
-			'actions_createGeneric',
+			'action_createGeneric',
 		equals :
 			'primitive',
 		attributes :

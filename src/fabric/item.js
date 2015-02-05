@@ -4,9 +4,9 @@
 
 
 var
-	actions_createRelation,
-	actions_itemDrag,
-	actions_scrollY,
+	action_createRelation,
+	action_itemDrag,
+	action_scrollY,
 	euclid_compass,
 	euclid_ellipse,
 	euclid_point,
@@ -477,7 +477,7 @@ fabric_item.prototype.dragStart =
 	)
 	{
 		root.setAction(
-			actions_scrollY.create(
+			action_scrollY.create(
 				'itemPath', this.path,
 				'start', p,
 				'startPos', sbary.pos
@@ -496,7 +496,7 @@ fabric_item.prototype.dragStart =
 
 	switch( action && action.reflect )
 	{
-		case 'actions_createRelation' :
+		case 'action_createRelation' :
 
 			root.setAction(
 				action.create(
@@ -514,7 +514,7 @@ fabric_item.prototype.dragStart =
 		// relation binding
 
 		root.setAction(
-			actions_createRelation.create(
+			action_createRelation.create(
 				'fromItemPath', this.path,
 				'toItemPath', jion_path.empty,
 				'relationState', 'hadSelect',
@@ -537,7 +537,7 @@ fabric_item.prototype.dragStart =
 		}
 
 		root.setAction(
-			actions_itemDrag.create(
+			action_itemDrag.create(
 				'start', view.depoint( p ),
 				'transItem', this,
 				'origin', this
@@ -575,7 +575,7 @@ fabric_item.prototype.dragMove =
 
 	switch( action.reflect )
 	{
-		case 'actions_createRelation' :
+		case 'action_createRelation' :
 
 			if(
 				!this.zone.within(
@@ -596,7 +596,7 @@ fabric_item.prototype.dragMove =
 
 			return true;
 
-		case 'actions_scrollY' :
+		case 'action_scrollY' :
 
 			start = action.start,
 
@@ -640,7 +640,7 @@ fabric_item.prototype.dragStop =
 
 	switch( action.reflect )
 	{
-		case 'actions_createRelation' :
+		case 'action_createRelation' :
 
 			if( !this.zone.within( view, p ) )
 			{

@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'actions_createRelation',
+			'action_createRelation',
 		equals :
 			'primitive',
 		attributes :

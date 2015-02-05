@@ -4,8 +4,8 @@
 
 
 var
-	actions_createGeneric,
-	actions_createRelation,
+	action_createGeneric,
+	action_createRelation,
 	discs_createDisc,
 	discs_disc,
 	euclid_display,
@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'currently active action',
 						type :
-							'Object',  // FUTURE 'actions_*',
+							'Object',  // FUTURE 'action_*',
 						defaultValue :
 							'null'
 					},
@@ -278,7 +278,7 @@ discs_createDisc.prototype.pushButton =
 		case 'createLabel' :
 
 			root.setAction(
-				actions_createGeneric.create(
+				action_createGeneric.create(
 					'itemType', 'label',
 					'model', null,
 					'start', null,
@@ -291,7 +291,7 @@ discs_createDisc.prototype.pushButton =
 		case 'createNote' :
 
 			root.setAction(
-				actions_createGeneric.create(
+				action_createGeneric.create(
 					'itemType', 'note',
 					'model', null,
 					'start', null,
@@ -304,7 +304,7 @@ discs_createDisc.prototype.pushButton =
 		case 'createPortal' :
 
 			root.setAction(
-				actions_createGeneric.create(
+				action_createGeneric.create(
 					'itemType', 'portal',
 					'model', null,
 					'start', null,
@@ -317,7 +317,7 @@ discs_createDisc.prototype.pushButton =
 		case 'createRelation' :
 
 			root.setAction(
-				actions_createRelation.create(
+				action_createRelation.create(
 					'fromItemPath', jion_path.empty,
 					'relationState', 'start',
 					'toItemPath', jion_path.empty
@@ -563,7 +563,7 @@ discs_createDisc._isActiveButton =
 
 	switch( action.reflect )
 	{
-		case 'actions_createGeneric' :
+		case 'action_createGeneric' :
 
 			switch( action.itemType )
 			{
@@ -593,7 +593,7 @@ discs_createDisc._isActiveButton =
 
 			break;
 
-		case 'actions_createRelation' :
+		case 'action_createRelation' :
 
 			return wname === 'createRelation';
 

@@ -4,7 +4,7 @@
 
 
 var
-	actions_isAction;
+	action_isAction;
 
 
 /*
@@ -20,17 +20,17 @@ var
 ***		| Returns true if the reflection string is an action
 ***     | FUTURE remove by generic typecheck
 ***		*
-***/	actions_isAction =
+***/	action_isAction =
 /**/		function( action )
 /**/	{
 /**/		switch ( action.reflect )
 /**/		{
-/**/			case 'actions_createGeneric' :
-/**/			case 'actions_createRelation' :
-/**/			case 'actions_itemDrag' :
-/**/			case 'actions_itemResize' :
-/**/			case 'actions_pan' :
-/**/			case 'actions_scrollY' :
+/**/			case 'action_createGeneric' :
+/**/			case 'action_createRelation' :
+/**/			case 'action_itemDrag' :
+/**/			case 'action_itemResize' :
+/**/			case 'action_pan' :
+/**/			case 'action_scrollY' :
 /**/
 /**/				return true;
 /**/

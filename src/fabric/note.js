@@ -244,7 +244,7 @@ fabric_note.prototype.dragStop =
 
 	switch( action.reflect )
 	{
-		case 'actions_itemResize' :
+		case 'action_itemResize' :
 
 			zone = this.zone;
 

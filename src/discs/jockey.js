@@ -37,7 +37,7 @@ if( JION )
 						comment :
 							'currently active action',
 						type :
-							'Object', // FUTURE '->actions_*'
+							'Object', // FUTURE '->action_*'
 						allowsNull :
 							true
 					},

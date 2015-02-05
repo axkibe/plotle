@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'actions_pan',
+			'action_pan',
 		equals :
 			'primitive',
 		attributes :
