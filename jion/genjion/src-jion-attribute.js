@@ -55,6 +55,7 @@ var
 	ast_string,
 	ast_typeof,
 	ast_var,
+	jion_concern,
 	jion_id,
 	jion_idGroup,
 	jion_proto;
@@ -130,6 +131,8 @@ if( SERVER )
 	ast_typeof = require( '../../src/ast/typeof' );
 
 	ast_var = require( '../../src/ast/var' );
+
+	jion_concern = require( '../../src/jion/concern' );
 
 	jion_id = require( '../../src/jion/id' );
 
@@ -460,6 +463,14 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
+/**/	if( v_concerns !== null )
+/**/	{
+/**/		if( v_concerns.reflect !== 'jion_concern' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
 /**/	if( v_defaultValue === null )
 /**/	{
 /**/		throw new Error( );
@@ -609,7 +620,11 @@ prototype.create =
 		&&
 		v_comment === inherit.comment
 		&&
-		v_concerns === inherit.concerns
+		(
+			v_concerns === inherit.concerns
+			||
+			v_concerns && v_concerns.equals( inherit.concerns )
+		)
 		&&
 		(
 			v_defaultValue === inherit.defaultValue
@@ -702,7 +717,11 @@ prototype.equals =
 		&&
 		this.comment === obj.comment
 		&&
-		this.concerns === obj.concerns
+		(
+			this.concerns === obj.concerns
+			||
+			this.concerns !== null && this.concerns.equals( obj.concerns )
+		)
 		&&
 		(
 			this.defaultValue === obj.defaultValue

@@ -59,7 +59,7 @@ if( JION )
 						comment :
 							'concerns function call',
 						type :
-							'Object', // FIXME
+							'jion_concern',
 						defaultValue :
 							'null'
 					},
