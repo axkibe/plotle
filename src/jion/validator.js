@@ -360,6 +360,7 @@ checkAttributeSingleType =
 			case 'Integer' :
 			case 'Number' :
 			case 'Object' : // XXX
+			case 'Protean' : // XXX
 			case 'String' :
 
 				break;
@@ -443,16 +444,6 @@ checkAttribute =
 		);
 	}
 
-	// XXXXXXXXXXXXXX
-	if( Object.keys( attr ).indexOf( 'defaultValue' ) >= 0 )
-	{
-		if( typeof( attr.defaultValue ) !== 'string' )
-		{
-			throw new Error( 'not a string' );
-		}
-	}
-	// XXXXXXXXXXXXX
-
 	for( key in attr )
 	{
 		value = attr[ key ];
@@ -460,6 +451,11 @@ checkAttribute =
 		switch( key )
 		{
 			case 'defaultValue' :
+
+				if( !jools.isString( attr.defaultValue ) )
+				{
+					throw new Error( 'defaultValue not a string expression' );
+				}
 
 				break;
 

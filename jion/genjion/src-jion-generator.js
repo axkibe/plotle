@@ -70,9 +70,7 @@ Constructor =
 /**/	}
 /**/}
 
-	this.jion = v_jion;
-
-	this._init( );
+	this._init( v_jion );
 
 	if( FREEZE )
 	{
@@ -109,8 +107,6 @@ prototype.create =
 	if( this !== jion_generator )
 	{
 		inherit = this;
-
-		v_jion = this.jion;
 	}
 
 	for(
@@ -154,7 +150,7 @@ prototype.create =
 /**/	}
 /**/}
 
-	if( inherit && v_jion === inherit.jion )
+	if( inherit && v_jion === null )
 	{
 		return inherit;
 	}
@@ -210,7 +206,7 @@ prototype.equals =
 		return false;
 	}
 
-	return this.jion === obj.jion;
+	return true;
 };
 
 

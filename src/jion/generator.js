@@ -27,11 +27,13 @@ if( JION )
 						comment :
 							'the jion definition',
 						type :
-							'Object'
+							'Object',
+						assign :
+							null
 					}
 			},
 		init :
-			[ ]
+			[ 'jion' ]
 	};
 }
 
@@ -167,7 +169,9 @@ $returnFalse = $return( false );
 | Initializes a generator.
 */
 generator.prototype._init =
-	function( )
+	function(
+		jion
+	)
 {
 	var
 		a,
@@ -183,7 +187,6 @@ generator.prototype._init =
 		inits, // sorted init list
 		jAttr,
 		jdv,
-		jion,
 		name,
 		rayDef,
 		subID, // twig id
@@ -194,8 +197,6 @@ generator.prototype._init =
 	attributes = jion_attributeGroup.create( );
 
 	constructorList = [ ];
-
-	jion = this.jion;
 
 	units = jion_idGroup.create( );
 
@@ -1545,6 +1546,7 @@ generator.prototype.genCreatorChecks =
 		switch( attr.id.string )
 		{
 			case 'Object' : // FIXME
+			case 'Protean' :
 
 				continue;
 		}
@@ -1869,6 +1871,7 @@ generator.prototype.genCreatorUnchanged =
 			case 'Integer' :
 			case 'Number' :
 			case 'Object' : // FIXME
+			case 'Protean' :
 			case 'String' :
 
 				ceq =
@@ -2150,6 +2153,7 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 		case 'Number' :
 		case 'String' :
 		case 'Object' : // FIXME remove
+		case 'Protean' :
 
 			code = $assign( attr.v, 'arg' );
 

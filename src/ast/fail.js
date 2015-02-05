@@ -28,7 +28,6 @@ if( JION )
 							'->astExpression',
 						defaultValue :
 							'null'
-//							null
 					}
 			}
 	};
