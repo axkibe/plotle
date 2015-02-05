@@ -10,7 +10,7 @@ var
 	discs_mainDisc,
 	gruga_mainDisc,
 	shell_fontPool,
-	widgets_button;
+	widget_button;
 
 
 /*
@@ -114,7 +114,7 @@ dv =
 gruga_mainDisc =
 	discs_mainDisc.create(
 		'twig:add', 'Normal',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'mainButton',
 				'icon', 'normal',
 				'iconStyle', 'iconNormal',
@@ -137,7 +137,7 @@ gruga_mainDisc =
 					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add', 'Create',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'mainButton',
 				'visible', false,
 				'text', 'new',
@@ -162,7 +162,7 @@ gruga_mainDisc =
 					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add', 'Remove',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'mainButton',
 				'icon', 'remove',
 				'iconStyle', 'iconRemove',
@@ -186,7 +186,7 @@ gruga_mainDisc =
 					design_anchorEllipse.fullSkewNW
 			),
 		'twig:add', 'moveTo',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'mainButton',
 				'icon', 'moveto',
 				'iconStyle', 'iconNormal',
@@ -209,7 +209,7 @@ gruga_mainDisc =
 				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add', 'space',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'mainButton',
 				'designFrame',
 					design_anchorRect.create(
@@ -243,7 +243,7 @@ gruga_mainDisc =
 				'textRotation', - Math.PI / 2
 			),
 		'twig:add', 'user',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'mainButton',
 				'designFrame',
 					design_anchorRect.create(
@@ -277,7 +277,7 @@ gruga_mainDisc =
 				'textRotation', ( -Math.PI / 2 )
 			),
 		'twig:add', 'login',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'mainButton',
 				'visible', false,
 				'text', 'log\nin',
@@ -302,7 +302,7 @@ gruga_mainDisc =
 				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add', 'signUp',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'mainButton',
 				'visible', false,
 				'text', 'sign\nup',

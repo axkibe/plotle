@@ -4,7 +4,7 @@
 
 
 var
-	widgets_label;
+	widget_label;
 
 
 /*
@@ -21,7 +21,7 @@ if( JION )
 {
 	return {
 		id :
-			'widgets_label',
+			'widget_label',
 		attributes :
 			{
 				// FIXME deduce from mark
@@ -127,7 +127,7 @@ if( JION )
 /*
 | Initializes the widget.
 */
-widgets_label.prototype._init =
+widget_label.prototype._init =
 	function( )
 {
 	if( this.superFrame )
@@ -150,7 +150,7 @@ widgets_label.prototype._init =
 |
 | FUTURE use _display
 */
-widgets_label.prototype.draw =
+widget_label.prototype.draw =
 	function(
 		display
 	)
@@ -171,7 +171,7 @@ widgets_label.prototype.draw =
 /*
 | User is hovering his/her pointer ( mouse move )
 */
-widgets_label.prototype.pointingHover =
+widget_label.prototype.pointingHover =
 	function(
 		// p,
 		// shift,
@@ -185,7 +185,7 @@ widgets_label.prototype.pointingHover =
 /*
 | User clicked.
 */
-widgets_label.prototype.click =
+widget_label.prototype.click =
 	function(
 		// p,
 		// shift,

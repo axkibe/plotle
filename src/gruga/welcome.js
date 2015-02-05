@@ -10,8 +10,8 @@ var
 	shell_fontPool,
 	forms_welcome,
 	gruga_welcome,
-	widgets_button,
-	widgets_label;
+	widget_button,
+	widget_label;
 
 
 /*
@@ -40,7 +40,7 @@ var
 gruga_welcome =
 	forms_welcome.create(
 		'twig:add', 'headline',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'welcome',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
@@ -51,7 +51,7 @@ gruga_welcome =
 					)
 			),
 		'twig:add', 'message1',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'Your registration was successful :-)',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
@@ -62,7 +62,7 @@ gruga_welcome =
 					)
 			),
 		'twig:add', 'closeButton',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(

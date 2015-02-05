@@ -10,8 +10,8 @@ var
 	forms_user,
 	gruga_user,
 	shell_fontPool,
-	widgets_button,
-	widgets_label;
+	widget_button,
+	widget_label;
 
 /*
 | Capsule
@@ -39,7 +39,7 @@ gruga_user =
 	forms_user.create(
 		'twig:add',
 		'headline',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'Hello',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
@@ -51,7 +51,7 @@ gruga_user =
 			),
 		'twig:add',
 		'visitor1',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'You\'re currently an anonymous visitor!',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
@@ -63,14 +63,14 @@ gruga_user =
 			),
 		'twig:add',
 		'visitor2',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'Click on "sign up" or "log in"',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos', design_anchorPoint.PC
 			),
 		'twig:add',
 		'visitor3',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'on the control disc to the left',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
@@ -82,7 +82,7 @@ gruga_user =
 			),
 		'twig:add',
 		'visitor4',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'to register as an user.',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
@@ -94,7 +94,7 @@ gruga_user =
 			),
 		'twig:add',
 		'greeting1',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'This is your profile page!',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
@@ -106,7 +106,7 @@ gruga_user =
 			),
 		'twig:add',
 		'greeting2',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'In future you will be able to do stuff here,',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
@@ -118,7 +118,7 @@ gruga_user =
 			),
 		'twig:add',
 		'greeting3',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'like for example change your password.',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
@@ -130,7 +130,7 @@ gruga_user =
 			),
 		'twig:add',
 		'closeButton',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(

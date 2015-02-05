@@ -10,9 +10,9 @@ var
 	forms_login,
 	gruga_login,
 	shell_fontPool,
-	widgets_button,
-	widgets_input,
-	widgets_label;
+	widget_button,
+	widget_input,
+	widget_label;
 
 
 /*
@@ -49,7 +49,7 @@ gruga_login =
 	forms_login.create(
 		'twig:add',
 		'headline',
-			widgets_label.create(
+			widget_label.create(
 				'text',
 					'Log In',
 				'font',
@@ -63,7 +63,7 @@ gruga_login =
 			),
 		'twig:add',
 		'usernameLabel',
-			widgets_label.create(
+			widget_label.create(
 				'text',
 					'username',
 				'font',
@@ -77,7 +77,7 @@ gruga_login =
 			),
 		'twig:add',
 		'passwordLabel',
-			widgets_label.create(
+			widget_label.create(
 				'text',
 					'password',
 				'font',
@@ -91,7 +91,7 @@ gruga_login =
 			),
 		'twig:add',
 		'errorLabel',
-			widgets_label.create(
+			widget_label.create(
 				'text', '',
 				'font', shell_fontPool.get( 14, 'car' ),
 				'designPos',
@@ -103,7 +103,7 @@ gruga_login =
 			),
 		'twig:add',
 		'userInput',
-			widgets_input.create(
+			widget_input.create(
 				'style', 'input',
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
@@ -125,7 +125,7 @@ gruga_login =
 			),
 		'twig:add',
 		'passwordInput',
-			widgets_input.create(
+			widget_input.create(
 				'password', true,
 				'style', 'input',
 				'font', shell_fontPool.get( 14, 'la' ),
@@ -148,7 +148,7 @@ gruga_login =
 			),
 		'twig:add',
 		'loginButton',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(
@@ -172,7 +172,7 @@ gruga_login =
 			),
 		'twig:add',
 		'closeButton',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(

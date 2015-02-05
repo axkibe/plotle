@@ -13,8 +13,8 @@ var
 	result_hover,
 	root,
 	shell_accent,
-	widgets_button,
-	widgets_style;
+	widget_button,
+	widget_style;
 
 
 /*
@@ -31,7 +31,7 @@ if( JION )
 {
 	return {
 		id :
-			'widgets_button',
+			'widget_button',
 		attributes :
 			{
 				designFrame :
@@ -71,7 +71,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'widgets_widget',
+									'widget_widget',
 								func :
 									'concernsHover',
 								args :
@@ -197,7 +197,7 @@ if( JION )
 /*
 | Initializes the widget.
 */
-widgets_button.prototype._init =
+widget_button.prototype._init =
 	function( )
 {
 	if( this.superFrame )
@@ -236,14 +236,14 @@ widgets_button.prototype._init =
 /*
 | Buttons are focusable.
 */
-widgets_button.prototype.focusable = true;
+widget_button.prototype.focusable = true;
 
 
 /*
 | The button's display.
 */
 jools.lazyValue(
-	widgets_button.prototype,
+	widget_button.prototype,
 	'_display',
 	function( )
 	{
@@ -268,7 +268,7 @@ jools.lazyValue(
 				'height', this.frame.height
 			);
 
-		style = widgets_style.get( this.style, accent );
+		style = widget_style.get( this.style, accent );
 
 		f.paint( style, this._shape, euclid_view.proper );
 
@@ -327,7 +327,7 @@ jools.lazyValue(
 		{
 			this._icon.draw(
 				f,
-				widgets_style.get( this.iconStyle, shell_accent.NORMA ),
+				widget_style.get( this.iconStyle, shell_accent.NORMA ),
 				euclid_view.proper
 			);
 		}
@@ -340,7 +340,7 @@ jools.lazyValue(
 /*
 | Mouse hover.
 */
-widgets_button.prototype.pointingHover =
+widget_button.prototype.pointingHover =
 	function(
 		p
 	)
@@ -382,7 +382,7 @@ widgets_button.prototype.pointingHover =
 /*
 | User clicked.
 */
-widgets_button.prototype.click =
+widget_button.prototype.click =
 	function(
 		p
 		// shift,
@@ -458,7 +458,7 @@ widgets_button.prototype.click =
 /*
 | Special keys for buttons having focus
 */
-widgets_button.prototype.specialKey =
+widget_button.prototype.specialKey =
 	function(
 		key,
 		owner
@@ -492,7 +492,7 @@ widgets_button.prototype.specialKey =
 /*
 | Any normal key for a button having focus triggers a push.
 */
-widgets_button.prototype.input =
+widget_button.prototype.input =
 	function(
 		// text
 	)
@@ -506,7 +506,7 @@ widgets_button.prototype.input =
 /*
 | Draws the button.
 */
-widgets_button.prototype.draw =
+widget_button.prototype.draw =
 	function(
 		display
 	)
@@ -528,7 +528,7 @@ widgets_button.prototype.draw =
 |
 | FIXME refix
 */
-widgets_button.prototype.dragStop =
+widget_button.prototype.dragStop =
 	function( )
 {
 	/*

@@ -19,8 +19,8 @@ var
 	root,
 	shell_accent,
 	theme,
-	widgets_input,
-	widgets_style;
+	widget_input,
+	widget_style;
 
 
 /*
@@ -37,7 +37,7 @@ if( JION )
 {
 	return {
 		id :
-			'widgets_input',
+			'widget_input',
 		attributes :
 			{
 				designFrame :
@@ -68,7 +68,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'widgets_widget',
+									'widget_widget',
 								func :
 									'concernsHover',
 								args :
@@ -91,7 +91,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'widgets_widget',
+									'widget_widget',
 								func :
 									'concernsMark',
 								args :
@@ -175,7 +175,7 @@ if( JION )
 /*
 | Initializes the widget.
 */
-widgets_input.prototype._init =
+widget_input.prototype._init =
 	function( )
 {
 	var
@@ -204,20 +204,20 @@ widgets_input.prototype._init =
 	}
 
 
-	this._pitch = widgets_input._pitch;
+	this._pitch = widget_input._pitch;
 };
 
 
 /*
 | Default distance of text
 */
-widgets_input._pitch = euclid_point.create( 'x', 8, 'y', 3 );
+widget_input._pitch = euclid_point.create( 'x', 8, 'y', 3 );
 
 
 /*
 | Returns the offset nearest to point p.
 */
-widgets_input.prototype.getOffsetAt =
+widget_input.prototype.getOffsetAt =
 	function(
 		p
 	)
@@ -287,7 +287,7 @@ widgets_input.prototype.getOffsetAt =
 /*
 | Returns the width of a character for password masks.
 */
-widgets_input.prototype.maskWidth =
+widget_input.prototype.maskWidth =
 	function(
 		size
 	)
@@ -299,7 +299,7 @@ widgets_input.prototype.maskWidth =
 /*
 | Returns the kerning of characters for password masks.
 */
-widgets_input.prototype.maskKern =
+widget_input.prototype.maskKern =
 	function(
 		size
 	)
@@ -313,7 +313,7 @@ widgets_input.prototype.maskKern =
 | representing the password mask.
 */
 jools.lazyValue(
-	widgets_input.prototype,
+	widget_input.prototype,
 	'_passMask',
 	function( )
 	{
@@ -393,7 +393,7 @@ var blackStyle =
 | Returns the display for the input field.
 */
 jools.lazyValue(
-	widgets_input.prototype,
+	widget_input.prototype,
 	'_display',
 	function( )
 	{
@@ -424,7 +424,7 @@ jools.lazyValue(
 			);
 
 		style =
-			widgets_style.get(
+			widget_style.get(
 				this.style,
 				shell_accent.state(
 					false, // FIXME
@@ -490,7 +490,7 @@ jools.lazyValue(
 /*
 | Draws the input field.
 */
-widgets_input.prototype.draw =
+widget_input.prototype.draw =
 	function(
 		display
 	)
@@ -505,7 +505,7 @@ widgets_input.prototype.draw =
 /*
 | Returns the point of a given offset.
 */
-widgets_input.prototype.locateOffset =
+widget_input.prototype.locateOffset =
 	function(
 		offset // the offset to get the point from.
 	)
@@ -559,7 +559,7 @@ widgets_input.prototype.locateOffset =
 /*
 | Draws the caret
 */
-widgets_input.prototype._drawCaret =
+widget_input.prototype._drawCaret =
 	function(
 		display
 	)
@@ -595,7 +595,7 @@ widgets_input.prototype._drawCaret =
 /*
 | User input.
 */
-widgets_input.prototype.input =
+widget_input.prototype.input =
 	function(
 		text
 	)
@@ -643,7 +643,7 @@ widgets_input.prototype.input =
 /*
 | User pressed backspace.
 */
-widgets_input.prototype._keyBackspace =
+widget_input.prototype._keyBackspace =
 	function( )
 {
 	var
@@ -677,7 +677,7 @@ widgets_input.prototype._keyBackspace =
 /*
 | User pressed del.
 */
-widgets_input.prototype._keyDel =
+widget_input.prototype._keyDel =
 	function( )
 {
 	var
@@ -702,7 +702,7 @@ widgets_input.prototype._keyDel =
 /*
 | User pressed return key.
 */
-widgets_input.prototype._keyEnter =
+widget_input.prototype._keyEnter =
 	function( )
 {
 	root.cycleFormFocus( this.path.get( 2 ), 1 );
@@ -712,7 +712,7 @@ widgets_input.prototype._keyEnter =
 /*
 | User pressed down key.
 */
-widgets_input.prototype._keyDown =
+widget_input.prototype._keyDown =
 	function(
 		owner
 	)
@@ -724,7 +724,7 @@ widgets_input.prototype._keyDown =
 /*
 | User pressed end key.
 */
-widgets_input.prototype._keyEnd =
+widget_input.prototype._keyEnd =
 	function( )
 {
 	var
@@ -752,7 +752,7 @@ widgets_input.prototype._keyEnd =
 /*
 | User pressed left key.
 */
-widgets_input.prototype._keyLeft =
+widget_input.prototype._keyLeft =
 	function( )
 {
 	var
@@ -777,7 +777,7 @@ widgets_input.prototype._keyLeft =
 /*
 | User pressed pos1 key
 */
-widgets_input.prototype._keyPos1 =
+widget_input.prototype._keyPos1 =
 	function( )
 {
 	var
@@ -802,7 +802,7 @@ widgets_input.prototype._keyPos1 =
 /*
 | User pressed right key
 */
-widgets_input.prototype._keyRight =
+widget_input.prototype._keyRight =
 	function( )
 {
 	var
@@ -827,7 +827,7 @@ widgets_input.prototype._keyRight =
 /*
 | User pressed up key.
 */
-widgets_input.prototype._keyUp =
+widget_input.prototype._keyUp =
 	function(
 		owner
 	)
@@ -841,7 +841,7 @@ widgets_input.prototype._keyUp =
 /*
 | User pressed a special key
 */
-widgets_input.prototype.specialKey =
+widget_input.prototype.specialKey =
 	function(
 		key,
 		owner
@@ -911,19 +911,19 @@ widgets_input.prototype.specialKey =
 /*
 | Inputs can hold a caret.
 */
-widgets_input.prototype.caretable = true;
+widget_input.prototype.caretable = true;
 
 
 /*
 | Inputs are focusable
 */
-widgets_input.prototype.focusable = true;
+widget_input.prototype.focusable = true;
 
 
 /*
 | Mouse hover
 */
-widgets_input.prototype.pointingHover =
+widget_input.prototype.pointingHover =
 	function(
 		p
 		// shift,
@@ -958,7 +958,7 @@ widgets_input.prototype.pointingHover =
 /*
 | User clicked.
 */
-widgets_input.prototype.click =
+widget_input.prototype.click =
 	function(
 		p
 		// shift
@@ -1006,7 +1006,7 @@ widgets_input.prototype.click =
 | The attention center.
 */
 jools.lazyValue(
-	widgets_input.prototype,
+	widget_input.prototype,
 	'attentionCenter',
 	function( )
 	{

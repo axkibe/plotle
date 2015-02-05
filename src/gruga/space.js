@@ -10,8 +10,8 @@ var
 	forms_space,
 	gruga_space,
 	shell_fontPool,
-	widgets_button,
-	widgets_label;
+	widget_button,
+	widget_label;
 
 
 /*
@@ -39,7 +39,7 @@ var
 gruga_space =
 	forms_space.create(
 		'twig:add', 'headline',
-			widgets_label.create(
+			widget_label.create(
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
@@ -50,7 +50,7 @@ gruga_space =
 					)
 			),
 		'twig:add', 'message1',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'In future space settings can be altered here.',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
@@ -61,7 +61,7 @@ gruga_space =
 					)
 			),
 		'twig:add', 'closeButton',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(

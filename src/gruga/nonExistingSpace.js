@@ -10,8 +10,8 @@ var
 	forms_nonExistingSpace,
 	gruga_nonExistingSpace,
 	shell_fontPool,
-	widgets_button,
-	widgets_label;
+	widget_button,
+	widget_label;
 
 
 /*
@@ -47,7 +47,7 @@ gruga_nonExistingSpace =
 	forms_nonExistingSpace.create(
 		'twig:add',
 		'headline',
-			widgets_label.create(
+			widget_label.create(
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
@@ -59,7 +59,7 @@ gruga_nonExistingSpace =
 			),
 		'twig:add',
 		'message1',
-			widgets_label.create(
+			widget_label.create(
 				'text',
 					'Do you want to create it?',
 				'font',
@@ -73,7 +73,7 @@ gruga_nonExistingSpace =
 			),
 		'twig:add',
 		'noButton',
-			widgets_button.create(
+			widget_button.create(
 				'style',
 					'genericButton',
 				'designFrame',
@@ -98,7 +98,7 @@ gruga_nonExistingSpace =
 			),
 		'twig:add',
 		'yesButton',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(

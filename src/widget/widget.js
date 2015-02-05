@@ -7,7 +7,7 @@
 | Export
 */
 var
-	widgets_widget;
+	widget_widget;
 
 
 /*
@@ -20,7 +20,7 @@ var
 /*
 | Constructor.
 */
-widgets_widget =
+widget_widget =
 	function( )
 {
 	// initializing abstract
@@ -32,7 +32,7 @@ widgets_widget =
 | Returns the mark if an item with
 | 'path' concerns about the mark.
 */
-widgets_widget.concernsMark =
+widget_widget.concernsMark =
 	function(
 		mark,
 		path
@@ -55,7 +55,7 @@ widgets_widget.concernsMark =
 | Returns the hover path if an item with
 | 'path' concerns about the hover.
 */
-widgets_widget.concernsHover =
+widget_widget.concernsHover =
 	function(
 		hover,
 		path

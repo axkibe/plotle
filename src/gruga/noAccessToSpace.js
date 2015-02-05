@@ -10,8 +10,8 @@ var
 	forms_noAccessToSpace,
 	gruga_noAccessToSpace,
 	shell_fontPool,
-	widgets_button,
-	widgets_label;
+	widget_button,
+	widget_label;
 
 /*
 | Capsule
@@ -39,7 +39,7 @@ var
 gruga_noAccessToSpace =
 	forms_noAccessToSpace.create(
 		'twig:add', 'headline',
-			widgets_label.create(
+			widget_label.create(
 				'text', '',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
@@ -50,7 +50,7 @@ gruga_noAccessToSpace =
 					)
 			),
 		'twig:add', 'message1',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'Sorry, you cannot port to this space or create it.',
 				'font', shell_fontPool.get( 16, 'ca' ),
 				'designPos',
@@ -61,7 +61,7 @@ gruga_noAccessToSpace =
 					)
 			),
 		'twig:add', 'okButton',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'genericButton',
 				'designFrame',
 					design_anchorRect.create(

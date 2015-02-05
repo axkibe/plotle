@@ -6,7 +6,7 @@
 var
 	shell_accent,
 	shell_style,
-	widgets_style;
+	widget_style;
 
 
 /*
@@ -16,12 +16,12 @@ var
 'use strict';
 
 
-widgets_style = { };
+widget_style = { };
 
 /*
 | Gets a style by its name.
 */
-widgets_style.get =
+widget_style.get =
 	function(
 		name,
 		accent

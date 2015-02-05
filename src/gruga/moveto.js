@@ -10,8 +10,8 @@ var
 	forms_moveTo,
 	gruga_moveTo,
 	shell_fontPool,
-	widgets_button,
-	widgets_label;
+	widget_button,
+	widget_label;
 
 /*
 | Capsule
@@ -53,7 +53,7 @@ gruga_moveTo =
 	forms_moveTo.create(
 		'twig:add',
 		'headline',
-			widgets_label.create(
+			widget_label.create(
 				'text', 'move to another space',
 				'font', shell_fontPool.get( 22, 'ca' ),
 				'designPos',
@@ -65,7 +65,7 @@ gruga_moveTo =
 			),
 		'twig:add',
 		'ideoloomHomeButton',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'portalButton',
 				'designFrame',
 					design_anchorRect.create(
@@ -100,7 +100,7 @@ gruga_moveTo =
 			),
 		'twig:add',
 		'ideoloomSandboxButton',
-			widgets_button.create(
+			widget_button.create(
 				'style',
 					'portalButton',
 				'designFrame',
@@ -139,7 +139,7 @@ gruga_moveTo =
 			),
 		'twig:add',
 		'userHomeButton',
-			widgets_button.create(
+			widget_button.create(
 				'style', 'portalButton',
 				'designFrame',
 					design_anchorRect.create(

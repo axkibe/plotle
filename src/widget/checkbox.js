@@ -12,8 +12,8 @@ var
 	jools,
 	root,
 	shell_accent,
-	widgets_checkbox,
-	widgets_style;
+	widget_checkbox,
+	widget_style;
 
 
 /*
@@ -30,7 +30,7 @@ if( JION )
 {
 	return {
 		id :
-			'widgets_checkbox',
+			'widget_checkbox',
 		attributes :
 			{
 				checked :
@@ -70,7 +70,7 @@ if( JION )
 						concerns :
 							{
 								type :
-									'widgets_widget',
+									'widget_widget',
 								func :
 									'concernsHover',
 								args :
@@ -133,7 +133,7 @@ if( JION )
 /*
 | Initializes the widget.
 */
-widgets_checkbox.prototype._init =
+widget_checkbox.prototype._init =
 	function( )
 {
 	if( this.superFrame )
@@ -152,7 +152,7 @@ widgets_checkbox.prototype._init =
 | The check icon of the check box
 */
 jools.lazyValue(
-	widgets_checkbox.prototype,
+	widget_checkbox.prototype,
 	'checkIcon',
 	function( )
 	{
@@ -164,13 +164,13 @@ jools.lazyValue(
 /*
 | CheckBoxes are focusable.
 */
-widgets_checkbox.prototype.focusable = true;
+widget_checkbox.prototype.focusable = true;
 
 
 /*
 | Mouse hover.
 */
-widgets_checkbox.prototype.pointingHover =
+widget_checkbox.prototype.pointingHover =
 	function(
 		// p
 	)
@@ -182,7 +182,7 @@ widgets_checkbox.prototype.pointingHover =
 /*
 | checkbox is being changed.
 */
-widgets_checkbox.prototype.change =
+widget_checkbox.prototype.change =
 	function(
 		// shift,
 		// ctrl
@@ -195,7 +195,7 @@ widgets_checkbox.prototype.change =
 /*
 | User clicked.
 */
-widgets_checkbox.prototype.click =
+widget_checkbox.prototype.click =
 	function(
 		p
 		// shift,
@@ -226,7 +226,7 @@ widgets_checkbox.prototype.click =
 /*
 | Special keys for buttons having focus
 */
-widgets_checkbox.prototype.specialKey =
+widget_checkbox.prototype.specialKey =
 	function(
 		key,
 		owner
@@ -263,7 +263,7 @@ widgets_checkbox.prototype.specialKey =
 /*
 | Any normal key for a checkbox triggers it to flip
 */
-widgets_checkbox.prototype.input =
+widget_checkbox.prototype.input =
 	function(
 		// text
 	)
@@ -280,7 +280,7 @@ widgets_checkbox.prototype.input =
 /*
 | Draws the checkbox.
 */
-widgets_checkbox.prototype.draw =
+widget_checkbox.prototype.draw =
 	function(
 		display
 	)
@@ -294,7 +294,7 @@ widgets_checkbox.prototype.draw =
 	}
 
 	style =
-		widgets_style.get(
+		widget_style.get(
 			this.style,
 			shell_accent.state(
 				this.hover && this.hover.equals( this.path ),
@@ -308,7 +308,7 @@ widgets_checkbox.prototype.draw =
 	{
 		this.checkIcon.draw(
 			display,
-			widgets_style.get( 'checkboxCheck', shell_accent.NORMA ),
+			widget_style.get( 'checkboxCheck', shell_accent.NORMA ),
 			euclid_view.proper
 		);
 	}

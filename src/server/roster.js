@@ -242,30 +242,30 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/widgets/widget.js',
+		'filePath', 'src/widget/widget.js',
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/widgets/style.js',
+		'filePath', 'src/widget/style.js',
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/widgets/button.js',
+		'filePath', 'src/widget/button.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/widgets/input.js',
+		'filePath', 'src/widget/input.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/widgets/checkbox.js',
+		'filePath', 'src/widget/checkbox.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/widgets/label.js',
+		'filePath', 'src/widget/label.js',
 		'hasJion', true,
 		'inBundle', true
 	),
