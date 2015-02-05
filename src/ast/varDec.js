@@ -34,7 +34,7 @@ if( JION )
 						type :
 							'->astExpression',
 						defaultValue :
-							null
+							'null'
 					}
 			}
 	};

@@ -54,7 +54,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							null
+							'null'
 					}
 			},
 		init :

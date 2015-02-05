@@ -28,7 +28,8 @@ if( JION )
 							'Object',
 						defaultValue :
 							// by default determined from filePath
-							null
+							// FIXME why not undefined?
+							'null'
 					},
 				coding :
 					{
@@ -38,7 +39,7 @@ if( JION )
 							'String',
 						defaultValue :
 							// by default determined from file extension
-							undefined
+							'undefined' // FIXME why not undefined?
 					},
 				data :
 					{
@@ -47,7 +48,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				devel :
 					{
@@ -56,7 +57,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				jionSrcPath :
 					{
@@ -65,7 +66,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				gzip :
 					{
@@ -74,7 +75,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				filePath :
 					{
@@ -92,7 +93,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				inBundle :
 					{
@@ -101,7 +102,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				inTestPad :
 					{
@@ -110,7 +111,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				isJion :
 					{
@@ -119,7 +120,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				maxage :
 					{
@@ -138,7 +139,7 @@ if( JION )
 							'String',
 						defaultValue :
 							// by default determined from file extension
-							undefined
+							'undefined'
 					},
 				postProcessor :
 					{
@@ -147,7 +148,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		init :

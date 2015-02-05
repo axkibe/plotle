@@ -58,7 +58,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							null
+							'null'
 					}
 			}
 	};

@@ -45,7 +45,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				fontsize :
 					{
@@ -54,7 +54,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				mark :
 					{
@@ -72,7 +72,7 @@ if( JION )
 						type :
 							'Object', // FUTURE 'mark_',
 						defaultValue :
-							undefined,
+							'undefined',
 						allowsNull :
 							true
 					},
@@ -83,7 +83,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				text :
 					{
@@ -94,7 +94,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue : // TODO
-							null
+							'null'
 					},
 				view :
 					{
@@ -103,7 +103,7 @@ if( JION )
 						type :
 							'euclid_view',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		alike :

@@ -53,7 +53,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				mark :
 					{
@@ -71,7 +71,7 @@ if( JION )
 						type :
 							'Object', // FUTURE '->mark'
 						defaultValue :
-							undefined,
+							'undefined',
 						allowsNull :
 							true
 					},
@@ -82,7 +82,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				spaceUser :
 					{
@@ -109,7 +109,7 @@ if( JION )
 						type :
 							'euclid_view',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				zone :
 					{

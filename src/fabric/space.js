@@ -48,7 +48,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				hover :
 					{
@@ -57,7 +57,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				mark :
 					{
@@ -75,7 +75,7 @@ if( JION )
 									[ 'mark' ]
 							},
 						defaultValue :
-							undefined,
+							'undefined',
 						allowsNull :
 							true
 					},
@@ -86,7 +86,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				spaceUser :
 					{
@@ -95,7 +95,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				spaceTag :
 					{
@@ -104,7 +104,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				view :
 					{
@@ -113,7 +113,7 @@ if( JION )
 						type :
 							'euclid_view',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		init :

@@ -34,7 +34,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							null
+							'null'
 					},
 				mark :
 					{
@@ -52,7 +52,7 @@ if( JION )
 									[ 'mark', 'path' ]
 							},
 						defaultValue :
-							undefined,
+							'undefined',
 						allowsNull :
 							true
 					},
@@ -63,7 +63,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				spaceUser :
 					{
@@ -72,7 +72,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				spaceTag :
 					{
@@ -81,7 +81,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				username :
 					{
@@ -90,7 +90,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							null
 					},
@@ -105,7 +105,7 @@ if( JION )
 								member : 'sizeOnly'
 							},
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		subclass :

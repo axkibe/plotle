@@ -27,7 +27,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				'unit' :
 					{
@@ -36,7 +36,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		init :

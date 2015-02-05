@@ -61,7 +61,7 @@ if( JION )
 							null,
 						// FIXME make defaultValue undefined for server
 						defaultValue :
-							null
+							'null'
 					},
 				path :
 					{
@@ -70,7 +70,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				pnw :
 					{
@@ -98,7 +98,7 @@ if( JION )
 						type :
 							'Object', // FUTURE '->mark',
 						defaultValue :
-							undefined,
+							'undefined',
 						allowsNull :
 							true
 					},
@@ -109,7 +109,7 @@ if( JION )
 						type :
 							'euclid_view',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		init :

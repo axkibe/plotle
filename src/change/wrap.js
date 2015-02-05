@@ -61,7 +61,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			}
 	};

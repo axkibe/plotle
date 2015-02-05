@@ -40,7 +40,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					},
 				spaceRef :
 					{
@@ -49,7 +49,7 @@ if( JION )
 						type :
 							'fabric_spaceRef',
 						defaultValue :
-							null
+							'null'
 					},
 				username :
 					{
@@ -58,7 +58,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					},
 				_cSpace :
 					{
@@ -67,7 +67,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							null
+							'null'
 					},
 				_outbox :
 					{
@@ -76,7 +76,7 @@ if( JION )
 						type :
 							'change_wrapRay',
 						defaultValue :
-							null
+							'null'
 					},
 				_postbox :
 					{
@@ -85,7 +85,7 @@ if( JION )
 						type :
 							'change_wrapRay',
 						defaultValue :
-							null
+							'null'
 					},
 				_rSeq :
 					{
@@ -94,7 +94,7 @@ if( JION )
 						type :
 							'Integer',
 						defaultValue :
-							null
+							'null'
 					},
 				_rSpace :
 					{
@@ -104,7 +104,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							null
+							'null'
 					}
 			}
 	};

@@ -27,7 +27,7 @@ if( JION )
 						type :
 							'jion_id',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				func :
 					{
@@ -36,7 +36,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				args :
 					{
@@ -45,7 +45,7 @@ if( JION )
 						type :
 							'jion_stringRay',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				member :
 					{
@@ -54,7 +54,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			}
 	};

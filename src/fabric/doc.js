@@ -40,7 +40,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				fontsize :
 					{
@@ -49,7 +49,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				innerMargin :
 					{
@@ -58,7 +58,7 @@ if( JION )
 						type :
 							'euclid_margin',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				paraSep :
 					{
@@ -67,7 +67,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				path :
 					{
@@ -76,7 +76,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				mark :
 					{
@@ -85,7 +85,7 @@ if( JION )
 						type :
 							'Object', // FUTURE '->mark',
 						defaultValue :
-							undefined,
+							'undefined',
 						allowsNull :
 							true
 					},
@@ -96,7 +96,7 @@ if( JION )
 						type :
 							'euclid_view',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		init :

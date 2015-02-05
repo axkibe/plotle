@@ -64,7 +64,7 @@ if( JION )
 						assign :
 							null,
 						defaultValue :
-							null
+							'null'
 					},
 				mark :
 					{
@@ -82,7 +82,7 @@ if( JION )
 						type :
 							'Object', // FUTURE '->mark',
 						defaultValue :
-							undefined,
+							'undefined',
 						allowsNull :
 							true
 					},
@@ -93,7 +93,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				scrolly :
 					{
@@ -102,7 +102,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				view :
 					{
@@ -111,7 +111,7 @@ if( JION )
 						type :
 							'euclid_view',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				zone :
 					{

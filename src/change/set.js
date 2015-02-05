@@ -55,7 +55,7 @@ if( JION )
 						type :
 							'->spaceVal',
 						defaultValue :
-							null
+							'null'
 					},
 				rank :
 					{

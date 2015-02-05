@@ -38,7 +38,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				seq :
 					{
@@ -49,7 +49,7 @@ if( JION )
 						type :
 							'Integer',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				space :
 					{
@@ -60,7 +60,7 @@ if( JION )
 						type :
 							'fabric_space',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 
 			}

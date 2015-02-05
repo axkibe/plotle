@@ -43,7 +43,7 @@ if( JION )
 						type :
 							'net_requestWrapRay',
 						defaultValue :
-							null
+							'null'
 					}
 			},
 		init :

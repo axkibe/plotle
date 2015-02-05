@@ -51,7 +51,7 @@ if( JION )
 						type :
 							'euclid_point',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							'_gradientPC'
 					},
@@ -62,7 +62,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							'_gradientR0'
 					},
@@ -73,7 +73,7 @@ if( JION )
 						type :
 							'Number',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							'_gradientR1'
 					}

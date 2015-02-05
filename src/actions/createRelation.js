@@ -36,7 +36,7 @@ if( JION )
 						type :
 							'euclid_point',
 						defaultValue :
-							null
+							'null'
 					},
 				toItemPath :
 					{
@@ -52,7 +52,7 @@ if( JION )
 						type :
 							'euclid_point',
 						defaultValue :
-							null
+							'null'
 					},
 				// FIXME rename
 				// FIXME make a defined state list
@@ -70,7 +70,7 @@ if( JION )
 						type :
 							'euclid_point',
 						defaultValue :
-							null
+							'null'
 					}
 			}
 	};

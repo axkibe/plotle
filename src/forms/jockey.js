@@ -64,7 +64,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				spaceTag :
 					{
@@ -73,7 +73,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				username :
 					{
@@ -82,7 +82,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					},
 				view :
 					{

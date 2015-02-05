@@ -40,7 +40,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							null
+							'null'
 					},
 				mark :
 					{
@@ -58,7 +58,7 @@ if( JION )
 									[ 'mark', 'path' ]
 							},
 						defaultValue :
-							null
+							'null'
 					},
 				nonSpaceRef :
 					{
@@ -67,7 +67,7 @@ if( JION )
 						type :
 							'fabric_spaceRef',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				path :
 					{
@@ -76,7 +76,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				spaceUser :
 					{
@@ -85,7 +85,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined,
+							'undefined',
 						assign :
 							null
 					},
@@ -96,7 +96,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							undefined,
+							'undefined',
 						assign :
 							null
 					},
@@ -107,7 +107,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							null
 					},
@@ -122,7 +122,7 @@ if( JION )
 								member : 'sizeOnly'
 							},
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		subclass :

@@ -35,7 +35,7 @@ if( JION )
 						type :
 							'Number', // FIXME Integer
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				'width' :
 					{
@@ -44,7 +44,7 @@ if( JION )
 						type :
 							'Number', // FIXME Integer
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				'_cv' :
 					{
@@ -53,7 +53,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				'_cx' :
 					{
@@ -62,7 +62,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		init :

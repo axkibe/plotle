@@ -34,7 +34,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							undefined
+							'undefined'
 					}
 			},
 		init :

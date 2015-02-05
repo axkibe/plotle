@@ -30,7 +30,7 @@ if( JION )
 						type :
 							'Integer',
 						defaultValue :
-							0
+							'0'
 					},
 				check :
 					{
@@ -39,7 +39,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				inline :
 					{
@@ -48,7 +48,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				root :
 					{

@@ -96,7 +96,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					},
 				spaceTag :
 					{
@@ -105,7 +105,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					},
 				username :
 					{
@@ -114,7 +114,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					}
 			},
 		subclass :

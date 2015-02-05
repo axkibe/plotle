@@ -41,7 +41,7 @@ if( JION )
 						type :
 							'ast_block',
 						defaultValue :
-							null
+							'null'
 					}
 			}
 	};

@@ -27,7 +27,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				allowsUndefined :
 					{
@@ -36,7 +36,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				assign :
 					{
@@ -61,7 +61,7 @@ if( JION )
 						type :
 							'Object', // FIXME
 						defaultValue :
-							null
+							'null'
 					},
 				defaultValue :
 					{
@@ -70,7 +70,7 @@ if( JION )
 						type :
 							'Object', // FIXME
 						defaultValue :
-							undefined,
+							'undefined',
 						allowsNull :
 							true // FIXME should be ast
 					},
@@ -81,7 +81,7 @@ if( JION )
 						type :
 							'Boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				name :
 					{

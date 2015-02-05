@@ -33,7 +33,7 @@ if( JION )
 						type :
 							'change_wrapRay',
 						defaultValue :
-							null
+							'null'
 					},
 				_redo :
 					{
@@ -42,7 +42,7 @@ if( JION )
 						type :
 							'change_wrapRay',
 						defaultValue :
-							null
+							'null'
 					}
 			}
 	};

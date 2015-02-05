@@ -39,7 +39,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					},
 				action :
 					{
@@ -48,7 +48,7 @@ if( JION )
 						type :
 							'Object',  // FUTURE 'actions_*',
 						defaultValue :
-							null
+							'null'
 					},
 				hover :
 					{
@@ -57,7 +57,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							null
+							'null'
 					},
 				mark :
 					{
@@ -66,7 +66,7 @@ if( JION )
 						type :
 							'Object', // FUTURE '->mark',
 						defaultValue :
-							null
+							'null'
 					},
 				mode :
 					{
@@ -75,7 +75,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null
+							'null'
 					},
 				path :
 					{
@@ -84,7 +84,7 @@ if( JION )
 						type :
 							'jion_path',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				spaceUser :
 					{
@@ -93,7 +93,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							null
 					},
@@ -104,7 +104,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							null
 					},
@@ -115,7 +115,7 @@ if( JION )
 						type :
 							'String',
 						defaultValue :
-							null,
+							'null',
 						assign :
 							null
 					},
@@ -131,7 +131,7 @@ if( JION )
 									'sizeOnly'
 							},
 						defaultValue :
-							null
+							'null'
 					}
 			},
 		subclass :
