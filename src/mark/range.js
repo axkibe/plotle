@@ -63,6 +63,14 @@ if( JION )
 }
 
 
+if( SERVER )
+{
+	jools = require( '../jools/jools' );
+
+	mark_range = require( '../jion/this' )( module );
+}
+
+
 /*
 | Initializer
 */

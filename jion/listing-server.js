@@ -36,6 +36,12 @@ module.exports =
 			'src/fabric/space.js',
 			'src/fabric/spaceRef.js',
 
+			'src/mark/caret.js',
+			'src/mark/item.js',
+			'src/mark/range.js',
+			'src/mark/text.js',
+			'src/mark/widget.js',
+
 			'src/jion/path.js',
 
 			'src/reply/acquire.js',

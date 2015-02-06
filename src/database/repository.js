@@ -26,21 +26,21 @@ if( JION )
 						comment :
 							'the mongoDB connection',
 						type :
-							'Object'
+							'protean'
 					},
 				'users' :
 					{
 						comment :
 							'the users collection',
 						type :
-							'Object' // FUTURE
+							'protean'
 					},
 				'spaces' :
 					{
 						comment :
 							'the spaces collection',
 						type :
-							'Object' // FUTURE
+							'protean'
 					}
 			}
 	};

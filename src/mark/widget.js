@@ -38,6 +38,14 @@ if( JION )
 }
 
 
+if( SERVER )
+{
+	jools = require( '../jools/jools' );
+
+	mark_widget = require( '../jion/this' )( module );
+}
+
+
 /*
 | A caret mark has a caret.
 |

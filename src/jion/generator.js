@@ -1895,25 +1895,7 @@ generator.prototype.genCreatorUnchanged =
 						$var( 'inherit' ).$dot( attr.assign )
 					);
 
-				if( attr.allowsNull && attr.allowsUndefined )
-				{
-					throw new Error(
-						'cannot have allowsNull and allowsUndefined'
-					);
-				}
-
-				if( attr.allowsNull )
-				{
-					ceq =
-						$or(
-							$equals(
-								attr.v,
-								$var( 'inherit' ).$dot( attr.assign )
-							),
-							$and( attr.v, equalsCall )
-						);
-				}
-				else if( attr.allowsUndefined )
+				if( attr.allowsNull || attr.allowsUndefined )
 				{
 					ceq =
 						$or(

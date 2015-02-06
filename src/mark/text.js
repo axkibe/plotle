@@ -47,6 +47,12 @@ if( JION )
 }
 
 
+if( SERVER )
+{
+	mark_text = require( '../jion/this' )( module );
+}
+
+
 /*
 | Initializer.
 */
