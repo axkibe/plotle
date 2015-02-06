@@ -230,6 +230,11 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
+/**/	if( typeof( v_handler ) !== 'function' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
 /**/	if( v_prec === undefined )
 /**/	{
 /**/		throw new Error( );
@@ -328,7 +333,7 @@ prototype.equals =
 		&&
 		this.astCreator === obj.astCreator
 		&&
-		this.handler === obj.handler
+		this.handler.equals( obj.handler )
 		&&
 		this.prec === obj.prec
 	);

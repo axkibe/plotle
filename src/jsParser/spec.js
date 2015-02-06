@@ -44,7 +44,7 @@ if( JION )
 						comment :
 							'Handler function to be called',
 						type :
-							'Object', // FUTURE
+							'function',
 					},
 				astCreator :
 					{
