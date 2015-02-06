@@ -1370,7 +1370,7 @@ generator.prototype.genCreatorDefaults =
 */
 generator.prototype.genSingleTypeCheckFailCondition =
 	function(
-		avar,
+		aVar,
 		id
 	)
 {
@@ -1378,16 +1378,20 @@ generator.prototype.genSingleTypeCheckFailCondition =
 	{
 		case 'boolean' :
 
-			return $differs( $typeof( avar ), '"boolean"' );
+			return $differs( $typeof( aVar ), '"boolean"' );
 
 		case 'integer' :
 
 			return(
 				$or(
-					$differs( $typeof( avar ), '"number"' ),
-					$differs( $call( 'Math.floor', avar ), avar )
+					$differs( $typeof( aVar ), '"number"' ),
+					$differs( $call( 'Math.floor', aVar ), aVar )
 				)
 			);
+
+		case 'function' :
+
+			return $differs( $typeof( aVar ), '"function"' );
 
 		case 'null' :
 
@@ -1395,20 +1399,20 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		case 'number' :
 
-			return $differs( $typeof( avar ), '"number"' );
+			return $differs( $typeof( aVar ), '"number"' );
 
 		case 'string' :
 
 			return(
 				$and(
-					$differs( $typeof( avar ), '"string"' ),
-					$not( $instanceof( avar, 'String' ) )
+					$differs( $typeof( aVar ), '"string"' ),
+					$not( $instanceof( aVar, 'String' ) )
 				)
 			);
 
 		default :
 
-			return $differs( avar.$dot( 'reflect' ), id.$string );
+			return $differs( aVar.$dot( 'reflect' ), id.$string );
 	}
 };
 
@@ -1418,7 +1422,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 */
 generator.prototype.genTypeCheckFailCondition =
 	function(
-		avar,  // the variable to check
+		aVar,  // the variable to check
 		idx  // the id or idGroup it has to match
 	)
 {
@@ -1429,7 +1433,7 @@ generator.prototype.genTypeCheckFailCondition =
 
 	if( idx.reflect === 'jion_id' )
 	{
-		return this.genSingleTypeCheckFailCondition( avar, idx );
+		return this.genSingleTypeCheckFailCondition( aVar, idx );
 	}
 
 /**/if( CHECK )
@@ -1444,7 +1448,7 @@ generator.prototype.genTypeCheckFailCondition =
 	{
 		return(
 			this.genSingleTypeCheckFailCondition(
-				avar,
+				aVar,
 				idx.get( idx.keys[ 0 ] )
 			)
 		);
@@ -1462,13 +1466,13 @@ generator.prototype.genTypeCheckFailCondition =
 	{
 		if( idx[ a ].string === 'null' )
 		{
-			condArray.unshift( $differs( avar, 'null' ) );
+			condArray.unshift( $differs( aVar, 'null' ) );
 
 			continue;
 		}
 
 		condArray.push(
-			this.genSingleTypeCheckFailCondition( avar, idx[ a ] )
+			this.genSingleTypeCheckFailCondition( aVar, idx[ a ] )
 		);
 	}
 
@@ -1867,6 +1871,7 @@ generator.prototype.genCreatorUnchanged =
 		switch( attr.id.string )
 		{
 			case 'boolean' :
+			case 'function' :
 			case 'integer' :
 			case 'number' :
 			case 'Object' : // FIXME
@@ -2151,7 +2156,7 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 		case 'integer' :
 		case 'number' :
 		case 'Object' : // FIXME remove
-		case 'protean' :
+		case 'protean' : // FIXME remove
 		case 'string' :
 
 			code = $assign( attr.v, 'arg' );
