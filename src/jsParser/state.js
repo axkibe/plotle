@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'current ast entity',
 						type :
-							'Object',
+							'->astStatement',
 						allowsNull :
 							true
 					},
