@@ -184,9 +184,35 @@ prototype.create =
 /**/	{
 /**/		throw new Error( );
 /**/	}
+/**/
+/**/	if( v_value !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_value ) !== 'boolean'
+/**/			&&
+/**/			typeof( v_value ) !== 'number'
+/**/			&&
+/**/			typeof( v_value ) !== 'string'
+/**/			&&
+/**/			!( v_value instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
 /**/}
 
-	if( inherit && v_type === inherit.type && v_value === inherit.value )
+	if(
+		inherit
+		&&
+		v_type === inherit.type
+		&&
+		(
+			v_value === inherit.value
+			||
+			v_value && v_value.equals( inherit.value )
+		)
+	)
 	{
 		return inherit;
 	}
@@ -242,7 +268,15 @@ prototype.equals =
 		return false;
 	}
 
-	return this.type === obj.type && this.value === obj.value;
+	return (
+		this.type === obj.type
+		&&
+		(
+			this.value === obj.value
+			||
+			this.value !== undefined && this.value.equals( obj.value )
+		)
+	);
 };
 
 

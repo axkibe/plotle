@@ -27,7 +27,7 @@ if( JION )
 						comment :
 							'the jion definition',
 						type :
-							'Object',
+							'protean',
 						assign :
 							null
 					}

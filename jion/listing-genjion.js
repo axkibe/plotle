@@ -62,6 +62,7 @@ module.exports =
 			'src/jion/idGroup.js',
 			'src/jion/stringRay.js',
 			'src/jsLexer/token.js',
+			'src/jsLexer/tokenRay.js',
 			'src/jsParser/state.js',
 			'src/jsParser/spec.js'
 		]

@@ -20,13 +20,15 @@ module.exports =
 
 var
 	jools,
-	token;
+	jsLexer_token,
+	jsLexer_tokenRay;
 
 
 jools = require( '../jools/jools' );
 
-token = require( './token' );
+jsLexer_token = require( './token' );
 
+jsLexer_tokenRay = require( './tokenRay' );
 
 /*
 | Tokenizes a javascript string.
@@ -87,7 +89,7 @@ jsLexer.tokenize =
 				case 'typeof' :
 
 					tokens.push(
-						token.create( 'type', value )
+						jsLexer_token.create( 'type', value )
 					);
 
 					continue;
@@ -95,7 +97,7 @@ jsLexer.tokenize =
 				default :
 
 					tokens.push(
-						token.create(
+						jsLexer_token.create(
 							'type', 'identifier',
 							'value', value
 						)
@@ -119,7 +121,9 @@ jsLexer.tokenize =
 
 			value = parseInt( value, 10 );
 
-			tokens.push( token.create( 'type', 'number', 'value', value ) );
+			tokens.push(
+				jsLexer_token.create( 'type', 'number', 'value', value )
+			);
 
 			continue;
 		}
@@ -149,7 +153,9 @@ jsLexer.tokenize =
 				}
 			}
 
-			tokens.push( token.create( 'type', 'string', 'value', value ) );
+			tokens.push(
+				jsLexer_token.create( 'type', 'string', 'value', value )
+			);
 
 			continue;
 		}
@@ -167,7 +173,9 @@ jsLexer.tokenize =
 			case '{' :
 			case '}' :
 
-				tokens.push( token.create( 'type', ch ) );
+				tokens.push(
+					jsLexer_token.create( 'type', ch )
+				);
 
 				continue;
 
@@ -183,7 +191,9 @@ jsLexer.tokenize =
 						&& code[ c + 2 ] === '='
 					)
 					{
-						tokens.push( token.create( 'type', '===' ) );
+						tokens.push(
+							jsLexer_token.create( 'type', '===' )
+						);
 
 						c += 2;
 
@@ -196,7 +206,9 @@ jsLexer.tokenize =
 				}
 				else
 				{
-					tokens.push( token.create( 'type', '=' ) );
+					tokens.push(
+						jsLexer_token.create( 'type', '=' )
+					);
 				}
 
 				continue;
@@ -213,7 +225,9 @@ jsLexer.tokenize =
 						&& code[ c + 2 ] === '='
 					)
 					{
-						tokens.push( token.create( 'type', '!==' ) );
+						tokens.push(
+							jsLexer_token.create( 'type', '!==' )
+						);
 
 						c += 2;
 
@@ -226,7 +240,9 @@ jsLexer.tokenize =
 				}
 				else
 				{
-					tokens.push( token.create( 'type', '!' ) );
+					tokens.push(
+						jsLexer_token.create( 'type', '!' )
+					);
 				}
 
 				continue;
@@ -235,19 +251,25 @@ jsLexer.tokenize =
 
 				if( c + 1 < cZ && code[ c + 1 ] === '+' )
 				{
-					tokens.push( token.create( 'type', '++' ) );
+					tokens.push(
+						jsLexer_token.create( 'type', '++' )
+					);
 
 					c++;
 				}
 				else if( c + 1 < cZ && code[ c + 1 ] === '=' )
 				{
-					tokens.push( token.create( 'type', '+=' ) );
+					tokens.push(
+						jsLexer_token.create( 'type', '+=' )
+					);
 
 					c++;
 				}
 				else
 				{
-					tokens.push( token.create( 'type', '+' ) );
+					tokens.push(
+						jsLexer_token.create( 'type', '+' )
+					);
 				}
 
 				continue;
@@ -259,7 +281,9 @@ jsLexer.tokenize =
 					&& code[ c + 1 ] === '|'
 				)
 				{
-					tokens.push( token.create( 'type', '||' ) );
+					tokens.push(
+						jsLexer_token.create( 'type', '||' )
+					);
 
 					c++;
 				}
@@ -277,7 +301,9 @@ jsLexer.tokenize =
 					&& code[ c + 1 ] === '&'
 				)
 				{
-					tokens.push( token.create( 'type', '&&' ) );
+					tokens.push(
+						jsLexer_token.create( 'type', '&&' )
+					);
 
 					c++;
 				}
@@ -294,7 +320,7 @@ jsLexer.tokenize =
 		}
 	}
 
-	return tokens;
+	return jsLexer_tokenRay.create( 'ray:init', tokens );
 };
 
 

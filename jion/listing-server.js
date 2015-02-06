@@ -103,6 +103,7 @@ module.exports =
 
 			'src/format/context.js',
 			'src/jsLexer/token.js',
+			'src/jsLexer/tokenRay.js',
 			'src/jion/attribute.js',
 			'src/jion/attributeGroup.js',
 			'src/jion/concern.js',

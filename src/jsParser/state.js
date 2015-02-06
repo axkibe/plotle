@@ -80,7 +80,7 @@ jools.lazyValue(
 	{
 		return(
 			( this.pos < this.tokens.length )
-			?  this.tokens[ this.pos ]
+			?  this.tokens.get( this.pos )
 			: null
 		);
 	}
@@ -97,7 +97,7 @@ jools.lazyValue(
 	{
 		return(
 			( this.pos + 1 < this.tokens.length )
-			? this.tokens[ this.pos + 1 ]
+			? this.tokens.get( this.pos + 1 )
 			: null
 		);
 	}

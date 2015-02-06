@@ -32,7 +32,7 @@ if( JION )
 						comment :
 							'the token value',
 						type :
-							'Object',
+							[ 'number', 'boolean', 'string' ],
 						defaultValue :
 							'undefined'
 					}
