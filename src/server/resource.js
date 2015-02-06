@@ -23,7 +23,7 @@ if( JION )
 				aliases :
 					{
 						comment :
-							'the list of aliases this is server under',
+							'the list of aliases this is served under',
 						type :
 							'Object',
 						defaultValue :

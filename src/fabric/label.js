@@ -96,7 +96,7 @@ if( JION )
 							},
 
 						type :
-							'Object', // FUTURE '->mark',
+							'->mark',
 						defaultValue :
 							'undefined',
 						allowsNull :
@@ -197,6 +197,7 @@ fabric_label.prototype.handles =
 		sw : true,
 		nw : true
 	};
+
 
 /**/if( FREEZE )
 /**/{

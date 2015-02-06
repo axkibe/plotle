@@ -360,7 +360,7 @@ checkAttributeSingleType =
 			case 'function' :
 			case 'integer' :
 			case 'number' :
-			case 'Object' : // XXX
+//			case 'Object' : // XXX
 			case 'protean' :
 			case 'string' :
 
