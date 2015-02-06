@@ -86,12 +86,13 @@ jion_id.createFromString =
 			// FIXME all lowercase
 			case 'boolean' : break;
 			case 'integer' : break;
-			case 'Null' : break; // XXX
+			case 'function' : break;
+			case 'null' : break;
 			case 'number' : break;
 			case 'Object' : break; // FIXME
 			case 'protean' : break;
 			case 'string' : break;
-			case 'Undefined' : break;
+			case 'undefined' : break;
 
 			default : throw new Error( 'bad id: ' + string );
 		}

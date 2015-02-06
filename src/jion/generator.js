@@ -1389,7 +1389,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 				)
 			);
 
-		case 'Null' :
+		case 'null' :
 
 			throw new Error( );
 
@@ -1460,7 +1460,7 @@ generator.prototype.genTypeCheckFailCondition =
 		a++
 	)
 	{
-		if( idx[ a ].string === 'Null' )
+		if( idx[ a ].string === 'null' )
 		{
 			condArray.unshift( $differs( avar, 'null' ) );
 
@@ -2407,7 +2407,7 @@ generator.prototype.genFromJSONCreatorGroupProcessing =
 	{
 		gid = idList[ g ];
 
-		if( gid.string === 'Null' )
+		if( gid.string === 'null' )
 		{
 			haveNull = true;
 
@@ -2494,7 +2494,7 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 	{
 		rid = idList[ r ];
 
-		if( rid.string === 'Null' )
+		if( rid.string === 'null' )
 		{
 			haveNull = true;
 
