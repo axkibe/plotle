@@ -52,7 +52,7 @@ if( JION )
 							'For some handlers, the ast creator function'
 							+ ' for it to call',
 						type :
-							'Object',
+							'protean', // FUTURE
 						defaultValue :
 							'undefined'
 					}
