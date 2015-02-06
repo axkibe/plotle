@@ -34,7 +34,7 @@ if( JION )
 						comment :
 							'ray of tokens to parse',
 						type :
-							'Object' // FUTURE jsLexer.tokenRay
+							'jsLexer_tokenRay'
 					},
 				pos :
 					{

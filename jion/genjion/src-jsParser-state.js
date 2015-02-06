@@ -27,7 +27,8 @@ else
 */
 var
 	jools,
-	jion_proto;
+	jion_proto,
+	jsLexer_tokenRay;
 
 
 /*
@@ -46,6 +47,8 @@ if( SERVER )
 	jools = require( '../../src/jools/jools' );
 
 	jion_proto = require( '../../src/jion/proto' );
+
+	jsLexer_tokenRay = require( '../../src/jsLexer/tokenRay' );
 }
 
 
@@ -204,6 +207,11 @@ prototype.create =
 /**/	{
 /**/		throw new Error( );
 /**/	}
+/**/
+/**/	if( v_tokens.reflect !== 'jsLexer_tokenRay' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
 /**/}
 
 	if(
@@ -213,7 +221,7 @@ prototype.create =
 		&&
 		v_pos === inherit.pos
 		&&
-		v_tokens === inherit.tokens
+		v_tokens.equals( inherit.tokens )
 	)
 	{
 		return inherit;
@@ -275,7 +283,7 @@ prototype.equals =
 		&&
 		this.pos === obj.pos
 		&&
-		this.tokens === obj.tokens
+		this.tokens.equals( obj.tokens )
 	);
 };
 
