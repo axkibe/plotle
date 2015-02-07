@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'currently active action',
 						type :
-							'Object', // FUTURE 'action_*',
+							'->action',
 						defaultValue :
 							'null'
 					},
@@ -64,7 +64,7 @@ if( JION )
 						comment :
 							'the users mark',
 						type :
-							'Object', // FUTURE '->mark',
+							'->mark',
 						defaultValue :
 							'null'
 					},
