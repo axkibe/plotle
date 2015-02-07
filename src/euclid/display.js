@@ -51,7 +51,7 @@ if( JION )
 						comment :
 							'the html canvas',
 						type :
-							'Object',
+							'protean',
 						defaultValue :
 							'undefined'
 					},
@@ -60,7 +60,7 @@ if( JION )
 						comment :
 							'the html canvas context',
 						type :
-							'Object',
+							'protean',
 						defaultValue :
 							'undefined'
 					}

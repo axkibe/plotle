@@ -42,7 +42,7 @@ if( JION )
 						comment :
 							'the actual request',
 						type :
-							'Object'
+							'->request'
 					},
 				receiverFunc :
 					{
@@ -56,7 +56,7 @@ if( JION )
 						comment :
 							'the underlaying "XMLHttpRequest"',
 						type :
-							'Object',
+							'protean',
 						defaultValue :
 							'null'
 					}

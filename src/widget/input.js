@@ -101,7 +101,7 @@ if( JION )
 									]
 							},
 						type :
-							'Object', // FUTURE 'mark*',
+							'->mark',
 						defaultValue :
 							'null'
 					},

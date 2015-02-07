@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'changes database collection',
 						type :
-							'Object'
+							'protean'
 					},
 				'_changeSkids' :
 					{
