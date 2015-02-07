@@ -1,4 +1,16 @@
-. 0-line
+. form
+. _sketchShape
+> group
+. groupGet
+. groupAddGroup
+. groupKeys
+. groupRemove
+. groupSet
+. groupSize
+. groupSortedKeys
+. keys
+. rotation
+> sort
 > 1
 . Create
 . FOCUS
@@ -114,7 +126,6 @@
 . _setMark
 . _shape
 . _sketch
-. _sketchGeneric
 . _sketchRect
 . _specialKey
 . _steerAttention
@@ -343,7 +354,6 @@
 . focusedItem
 > font
 > fontsize
-. forms
 . frame
 > freeze
 > fromCharCode
@@ -395,7 +405,6 @@
 > home
 . horizontal
 . hover
-. hull
 . icon
 . iconNormal
 . iconRemove
