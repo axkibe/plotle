@@ -46,7 +46,7 @@ if( JION )
 						comment :
 							'cached or auto generated data',
 						type :
-							'Object',
+							'protean',
 						defaultValue :
 							'undefined'
 					},
@@ -73,7 +73,7 @@ if( JION )
 						comment :
 							'cached or auto generated zip data',
 						type :
-							'Object',
+							'protean',
 						defaultValue :
 							'undefined'
 					},

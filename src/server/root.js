@@ -1257,7 +1257,7 @@ prototype.requestListener =
 				'Date' : new Date().toUTCString()
 			};
 
-		if( aenc && aenc.indexOf( 'gzip' ) >= 0 )
+		if( false && aenc && aenc.indexOf( 'gzip' ) >= 0 ) // XXX
 		{
 			// delivers compressed
 			header[ 'Content-Encoding' ] = 'gzip';
