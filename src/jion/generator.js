@@ -495,8 +495,6 @@ generator.prototype._init =
 
 	this.units = units;
 
-	this.equals = jion.equals;
-
 	this.alike = jion.alike;
 
 	this.creatorHasFreeStringsParser =
@@ -3070,36 +3068,6 @@ generator.prototype.genEquals =
 		twigTestLoopBody;
 
 	cond = null;
-
-	switch( this.equals )
-	{
-		case false :
-
-			return capsule;
-
-		case 'primitive' :
-
-			// FUTURE remove
-
-			return (
-				capsule
-				.$comment( 'Tests equality of object.' )
-				.$assign(
-					'prototype.equals',
-					$func( $return( 'this === obj' ) )
-					.$arg( 'obj', 'object to compare to' )
-				)
-			);
-
-		case true :
-		case undefined :
-
-			break;
-
-		default :
-
-			throw new Error( );
-	}
 
 	capsule = capsule.$comment( 'Tests equality of object.' );
 
