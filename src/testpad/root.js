@@ -44,7 +44,7 @@ if( JION )
 						type :
 							'testpad_action',
 						defaultValue :
-							null
+							'null'
 					},
 				beepTimer :
 					{
@@ -53,7 +53,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							null
+							'null'
 					},
 				cursorAt :
 					{
@@ -62,7 +62,7 @@ if( JION )
 						type :
 							'integer',
 						defaultValue :
-							null // FUTURE 0
+							'null' // FUTURE 0
 					},
 				cursorLine :
 					{
@@ -71,7 +71,7 @@ if( JION )
 						type :
 							'integer',
 						defaultValue :
-							null // FUTURE 0
+							'null' // FUTURE 0
 					},
 				elements :
 					{
@@ -80,7 +80,7 @@ if( JION )
 						type :
 							'Object',
 						defaultValue :
-							undefined
+							'undefined'
 					},
 				haveFocus :
 					{
@@ -89,7 +89,7 @@ if( JION )
 						type :
 							'boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				mouseDown :
 					{
@@ -98,7 +98,7 @@ if( JION )
 						type :
 							'boolean',
 						defaultValue :
-							false
+							'false'
 					},
 				link :
 					// FIXME call this repository
@@ -108,7 +108,7 @@ if( JION )
 						type :
 							'testpad_repository',
 						defaultValue :
-							null
+							'null'
 					}
 			},
 		init :
