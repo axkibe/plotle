@@ -25,7 +25,7 @@ if( JION )
 						comment :
 							'the list of aliases this is served under',
 						type :
-							'Object',
+							'jion_stringRay',
 						defaultValue :
 							// by default determined from filePath
 							// FIXME why not undefined?
@@ -161,11 +161,14 @@ if( JION )
 | Imports.
 */
 var
+	jion_stringRay,
 	jools,
 	server_fileTypes,
 	resource;
 
 resource = require( '../jion/this' )( module );
+
+jion_stringRay = require( '../jion/stringRay' );
 
 jools = require( '../jools/jools' );
 
@@ -188,7 +191,10 @@ resource.prototype._init =
 	if( !this.aliases )
 	{
 		this.aliases =
-			[ filePath.replace( /\//g, '-' ) ];
+			jion_stringRay.create(
+				'ray:init',
+				[ filePath.replace( /\//g, '-' ) ]
+			);
 	}
 
 	if( !this.coding )
@@ -217,22 +223,15 @@ jools.lazyValue(
 		}
 
 		return this.create(
-			'aliases',
-				null,
-			'jionSrcPath',
-				this.filePath,
+			'aliases', null,
+			'jionSrcPath', this.filePath,
 			'filePath',
 				'jion/'
-				+
-				SHELLAPP
-				+
-				'/'
-				+
-				this.filePath.replace( /\//g, '-' ),
-			'hasJion',
-				false,
-			'isJion',
-				true
+				+ SHELLAPP
+				+ '/'
+				+ this.filePath.replace( /\//g, '-' ),
+			'hasJion', false,
+			'isJion', true
 		);
 	}
 );

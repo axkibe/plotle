@@ -13,27 +13,32 @@
 | Imports
 */
 var
-	resource;
+	jion_stringRay,
+	resource,
+	stringRay;
+
+jion_stringRay = require( '../jion/stringRay' );
 
 resource = require( './resource' );
 
+stringRay = jion_stringRay.stringRay;
 
 module.exports =
 [
 	resource.create(
-		'aliases', [ 'ideoloom.html', 'index.html', '' ],
+		'aliases', stringRay( [ 'ideoloom.html', 'index.html', '' ] ),
 		'filePath', 'media/ideoloom.html',
 		'maxage', 'short',
 		'postProcessor', 'indexHtml'
 	),
 	resource.create(
-		'aliases', [ 'devel.html' ],
+		'aliases', stringRay( [ 'devel.html' ] ),
 		'filePath', 'media/devel.html',
 		'devel', true,
 		'postProcessor', 'develHtml'
 	),
 	resource.create(
-		'aliases', [ 'favicon.ico' ],
+		'aliases', stringRay( [ 'favicon.ico' ] ),
 		'filePath', 'media/favicon.ico',
 		'maxage', 'long'
 	),
@@ -700,7 +705,7 @@ module.exports =
 
 	// --- TestPad ---
 	resource.create(
-		'aliases', [ 'testpad.html' ],
+		'aliases', stringRay( [ 'testpad.html' ] ),
 		'filePath', 'media/testpad.html',
 		'devel', true,
 		'postProcessor', 'testPadHtml'

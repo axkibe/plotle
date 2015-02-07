@@ -53,7 +53,7 @@ inventory.prototype.addResource =
 		inv =
 			inv.create(
 				'twig:add',
-				res.aliases[ a ],
+				res.aliases.get( a ),
 				res
 			);
 	}
@@ -85,7 +85,7 @@ inventory.prototype.updateResource =
 		a++
 	)
 	{
-		alias = newRes.aliases[ a ];
+		alias = newRes.aliases.get( a );
 
 		inv =
 			inv.create(
@@ -123,7 +123,7 @@ inventory.prototype.removeResource =
 		inv =
 			inv.create(
 				'twig:remove',
-				res.aliases[ a ],
+				res.aliases.get( a ),
 				res
 			);
 	}

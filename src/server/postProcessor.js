@@ -58,7 +58,7 @@ server_postProcessor.develHtml =
 		{
 			devels.push(
 				'<script src="'
-				+ resource.aliases[ 0 ]
+				+ resource.aliases.get( 0 )
 				+ '" type="text/javascript"></script>'
 			);
 		}
@@ -115,7 +115,7 @@ server_postProcessor.testPadHtml =
 		{
 			devels.push(
 				'<script src="'
-				+ resource.aliases[ 0 ]
+				+ resource.aliases.get( 0 )
 				+ '" type="text/javascript"></script>'
 			);
 		}

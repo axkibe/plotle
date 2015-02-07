@@ -102,8 +102,7 @@ server_generateJion.run =
 			? 'generating '
 			: 'loading '
 		)
-		+
-		resource.aliases[ 0 ]
+		+ resource.aliases.get( 0 )
 	);
 
 	input =
