@@ -403,7 +403,7 @@ fabric_doc.prototype._getRangeShape =
 			),
 			shapeSection_flyLine.create(
 				'close', true
-			),
+			)
 		];
 
 		sections2 =
