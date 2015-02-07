@@ -65,7 +65,7 @@ if( JION )
 						comment :
 							'the current space',
 						type :
-							'Object',
+							'fabric_space',
 						defaultValue :
 							'null'
 					},
@@ -102,7 +102,7 @@ if( JION )
 							'the remote space',
 							// what the client thinks the server thinks
 						type :
-							'Object',
+							'fabric_space',
 						defaultValue :
 							'null'
 					}

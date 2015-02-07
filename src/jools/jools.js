@@ -298,7 +298,7 @@ jools.lazyValue =
 
 /**/if( FREEZE )
 /**/{
-/**/	proto.__lazy = true;
+/**/	proto.__lazy = { };
 /**/}
 
 	Object.defineProperty(
