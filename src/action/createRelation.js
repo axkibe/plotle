@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'action_createRelation',
-		equals :
-			'primitive',
 		attributes :
 			{
 				fromItemPath :

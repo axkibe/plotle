@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'action_itemResize',
-		equals :
-			'primitive',
 		attributes :
 			{
 				align :

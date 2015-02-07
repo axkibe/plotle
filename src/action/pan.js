@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'action_pan',
-		equals :
-			'primitive',
 		attributes :
 			{
 				start :

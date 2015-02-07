@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'action_scrollY',
-		equals :
-			'primitive',
 		attributes :
 			{
 				itemPath :

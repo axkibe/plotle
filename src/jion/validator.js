@@ -99,7 +99,6 @@ jionWhitelist =
 		'id' : true,
 		'init' : true,
 		'json' : true,
-		'equals' : true, // XX
 		'group' : true,
 		'subclass' : true,
 		'singleton' : true,

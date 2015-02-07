@@ -18,8 +18,6 @@ if( JION )
 	return {
 		id :
 			'action_itemDrag',
-		equals :
-			'primitive',
 		attributes :
 			{
 				origin :
