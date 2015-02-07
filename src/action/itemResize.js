@@ -34,14 +34,14 @@ if( JION )
 						comment :
 							'the transient item while it is dragged',
 						type :
-							'Object' // FUTURE items.*
+							'->fabricItems'
 					},
 				origin :
 					{
 						comment :
 							'the item being resized',
 						type :
-							'Object' // FUTURE items.*
+							'->fabricItems'
 					},
 				start :
 					{
