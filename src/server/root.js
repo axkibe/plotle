@@ -1420,7 +1420,6 @@ prototype.webAjax =
 
 		query = data.join( '' ),
 
-
 		jools.log( 'ajax', '<-', query );
 
 		try

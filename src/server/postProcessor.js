@@ -57,9 +57,9 @@ server_postProcessor.develHtml =
 		if( resource.inBundle )
 		{
 			devels.push(
-				'<script src="' +
-					resource.aliases[ 0 ] +
-					'" type="text/javascript"></script>'
+				'<script src="'
+				+ resource.aliases[ 0 ]
+				+ '" type="text/javascript"></script>'
 			);
 		}
 	}
@@ -75,9 +75,9 @@ server_postProcessor.develHtml =
 		data =
 			data.replace(
 				/<!--WEINRE.*>/,
-				'<script src="http://' +
-					config.debug.weinre +
-					'/target/target-script-min.js"></script>'
+				'<script src="http://'
+				+ config.debug.weinre
+				+ '/target/target-script-min.js"></script>'
 			);
 	}
 
@@ -114,9 +114,9 @@ server_postProcessor.testPadHtml =
 		if( resource.inTestPad )
 		{
 			devels.push(
-				'<script src="' +
-					resource.aliases[ 0 ] +
-					'" type="text/javascript"></script>'
+				'<script src="'
+				+ resource.aliases[ 0 ]
+				+ '" type="text/javascript"></script>'
 			);
 		}
 	}
@@ -133,9 +133,9 @@ server_postProcessor.testPadHtml =
 		data =
 			data.replace(
 				/<!--WEINRE.*>/,
-				'<script src="http://' +
-					config.debug.weinre +
-					'/target/target-script-min.js"></script>'
+				'<script src="http://'
+				+ config.debug.weinre
+				+ '/target/target-script-min.js"></script>'
 			);
 	}
 
@@ -158,9 +158,9 @@ server_postProcessor.indexHtml =
 	return (
 		data.replace(
 			/<!--COPACK.*>/,
-			'<script src="' +
-				bundleFilePath +
-				'" type="text/javascript"></script>'
+			'<script src="'
+			+ bundleFilePath
+			+ '" type="text/javascript"></script>'
 		)
 	);
 };
