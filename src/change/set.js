@@ -42,9 +42,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'->spaceVal',
-						allowsNull :
-							true
+							'->spaceVal'
 					},
 				prev :
 					{
@@ -53,20 +51,7 @@ if( JION )
 						json :
 							'true',
 						type :
-							'->spaceVal',
-						defaultValue :
-							'null'
-					},
-				rank :
-					{
-						comment :
-							'rank of new node',
-						json :
-							'true',
-						type :
-							'integer',
-						allowsUndefined :
-							true
+							'->spaceVal'
 					}
 			},
 		init :
@@ -97,11 +82,6 @@ change_set.prototype._init =
 	function ( )
 {
 	// FUTURE make "nonnegativeInteger" a json type
-
-	if( this.rank !== undefined && this.rank < 0 )
-	{
-		throw change_error( 'set.rank negative' );
-	}
 };
 
 
@@ -114,26 +94,14 @@ change_set.prototype.changeTree =
 	)
 {
 	var
-		key,
-		pivot,
-		prev,
-		rank;
+		prev;
 
 	// Stores the old value for history tracking.
 	prev = tree.getPath( this.path );
 
-	// FIXME
-	if( !CONVERT )
+	if( !this.val )
 	{
-		if( this.rank !== undefined )
-		{
-			throw new Error( );
-		}
-
-		if( !this.val )
-		{
-			throw new Error( );
-		}
+		throw new Error( );
 	}
 
 
@@ -163,51 +131,7 @@ change_set.prototype.changeTree =
 		throw change_error( 'set.prev doesn\'t match' );
 	}
 
-	if( this.rank === undefined )
-	{
-		tree = tree.setPath( this.path, this.val );
-	}
-	else
-	{
-		if( this.path.get( -2 ) !== 'twig' )
-		{
-			throw change_error( 'set.path( -2 ) with rank not twig' );
-		}
-
-		pivot = tree.getPath( this.path.shorten( 2 ) );
-
-		key = this.path.get( -1 );
-
-		rank = pivot.rankOf( key );
-
-		if( rank < 0 )
-		{
-			rank = pivot.length;
-		}
-
-		if( rank !== this.rank )
-		{
-			throw change_error( 'set.rank doesn\'t match' );
-		}
-
-		if( this.val !== null )
-		{
-			pivot = pivot.create( 'twig:insert', key, this.rank, this.val );
-		}
-		else
-		{
-			pivot = pivot.create( 'twig:remove', key );
-		}
-
-		if( this.path.length > 2 )
-		{
-			tree = tree.setPath( this.path.shorten( 2 ), pivot );
-		}
-		else
-		{
-			tree = pivot;
-		}
-	}
+	tree = tree.setPath( this.path, this.val );
 
 	return tree;
 };
@@ -306,12 +230,6 @@ change_set.prototype._transformMark =
 	if( !this.path.equals( mark.path.chop ) )
 	{
 		return mark;
-	}
-
-	// this change removes the item.
-	if( this.val === null )
-	{
-		return null;
 	}
 
 	// this shouldnt ever happen
