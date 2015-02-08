@@ -55,7 +55,7 @@ config.database_name = 'ideoloom-10';
 /*
 | Determines the amount of checking and complaining if things go wrong.
 */
-config.shell_devel = true;
+config.shell_devel = false;
 
 
 /*
@@ -63,7 +63,7 @@ config.shell_devel = true;
 | Only to be used with develShell
 */
 config.shell_noBundle = false;
-config.shell_noBundle = true;
+//config.shell_noBundle = true;
 
 
 /*
@@ -114,13 +114,13 @@ config.uglify = false;
 /*
 | If true does extra mangles on output compression
 */
-config.extraMangle = true;
+config.extraMangle = false;
 
 
 /*
 | If true "beautifies" uglify output.
 */
-config.beautify = false;
+config.beautify = true;
 
 
 /*

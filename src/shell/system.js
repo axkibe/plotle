@@ -216,11 +216,13 @@ var _systemCatcher =
 		funcName  // name of the function to call
 	)
 {
-	return (
-		function( )
-		{
-			_catcher( system[ funcName ].apply( system, arguments ) );
-		}
+	return(
+		_catcher(
+			function( )
+			{
+				system[ funcName ].apply( system, arguments );
+			}
+		)
 	);
 };
 

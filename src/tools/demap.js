@@ -11,9 +11,8 @@ SourceMap = require( 'source-map' );
 
 trace =
 	[
-		{ line: 3, column : 12182 },
-		{ line: 3, column : 19787 },
-		{ line: 3, column : 19278 }
+		{ line: 8, column : 567 },
+		{ line: 8, column : 3192 },
 	];
 
 map = fs.readFileSync( process.argv[ 2 ] );

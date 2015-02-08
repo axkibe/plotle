@@ -204,7 +204,6 @@
 . backspace
 . base
 . baseFrame
-. bb
 > begin
 > beginPath
 > bezierCurveTo
@@ -623,7 +622,6 @@
 . reflect
 . reflectName
 > register
-. reject
 > relation
 . relationState
 > releaseCapture
@@ -709,7 +707,7 @@
 > spaceUser
 . spawn
 . spawnOffset
-> specialKey
+. specialKey
 > splice
 > split
 > sqrt
