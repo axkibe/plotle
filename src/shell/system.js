@@ -41,12 +41,10 @@ _catcher =
 {
 	return function( )
 	{
-		var message;
+		var
+			message;
 
-		if(
-			config.devel &&
-			!config.debug.weinre
-		)
+		if( config.devel && !config.debug.weinre )
 		{
 			func.apply( this, arguments );
 
@@ -63,10 +61,10 @@ _catcher =
 				message =
 					[
 						'OOPS! Internal failure, ',
-							e.name, ': ',
-							e.message, '\n\n',
+						e.name, ': ',
+						e.message, '\n\n',
 						'stack: ',
-							e.stack,
+						e.stack,
 						'\n\n',
 						'Please report to axkibe@gmail.com'
 					].join('');
@@ -158,10 +156,7 @@ catcher =
 			return;
 		}
 
-		if(
-			config.devel &&
-			!config.debug.weinre
-		)
+		if( config.devel && !config.debug.weinre )
 		{
 			func.apply( this, arguments );
 
@@ -187,10 +182,10 @@ catcher =
 				message =
 					[
 						'OOPS! Internal failure, ',
-							e.name, ': ',
-							e.message, '\n\n',
+						e.name, ': ',
+						e.message, '\n\n',
 						'stack: ',
-							e.stack,
+						e.stack,
 						'\n\n',
 						'Please report to axkibe@gmail.com'
 					].join('');

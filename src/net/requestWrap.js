@@ -151,8 +151,8 @@ _onReply =
 	channel.onReply( wrap, reply );
 };
 
-_onReplyCatcher = null;
 
+_onReplyCatcher = null;
 
 
 /*

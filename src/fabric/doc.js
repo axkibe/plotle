@@ -659,12 +659,10 @@ fabric_doc.prototype._getRangeShape =
 fabric_doc.prototype.draw =
 	function(
 		display,     // to display within
-		view,        // current pan/zoom/motion TODO
 		width,       // the width to draw the document with
 		scrollp      // scroll position
 	)
 {
-	// FUTURE <pre>
 	var
 		a,
 		aZ,
@@ -675,6 +673,14 @@ fabric_doc.prototype.draw =
 		pnws,
 		ranks,
 		rs;
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	mark = this.mark;
 
@@ -692,7 +698,7 @@ fabric_doc.prototype.draw =
 			display.paint(
 				theme.selection.style,
 				rs,
-				view
+				this.view
 			);
 		}
 		else
@@ -706,7 +712,7 @@ fabric_doc.prototype.draw =
 				display.paint(
 					theme.selection.style,
 					rs[ a ],
-					view
+					this.view
 				);
 			}
 		}
@@ -729,7 +735,7 @@ fabric_doc.prototype.draw =
 
 		p = pnw.sub( 0, Math.round( scrollp.y ) );
 
-		para.draw( display, view.point( p ) );
+		para.draw( display, this.view.point( p ) );
 	}
 };
 

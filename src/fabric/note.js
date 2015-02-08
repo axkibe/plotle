@@ -195,7 +195,7 @@ fabric_note.prototype._init =
 			'mark', this.mark,
 			'paraSep', jools.half( this.fontsize ),
 			'path', docPath,
-			'view', this.view
+			'view', this.view.home
 		);
 
 	if( this.scrolly === undefined )
@@ -343,7 +343,6 @@ jools.lazyValue(
 		// draws selection and text
 		doc.draw(
 			f,
-			hview,
 			this.zone.width,
 			euclid_point.create(
 				'x', 0,
@@ -379,10 +378,8 @@ fabric_note.prototype.draw =
 	sbary = this.scrollbarY;
 
 	display.drawImage(
-		'image',
-			this._display,
-		'pnw',
-			this.view.point( zone.pnw )
+		'image', this._display,
+		'pnw', this.view.point( zone.pnw )
 	);
 
 	// FIXME maybe just set sbary null

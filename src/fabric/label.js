@@ -161,7 +161,7 @@ fabric_label.prototype._init =
 			'mark', this.mark,
 			'paraSep', Math.round( this.fontsize / 20 ),
 			'path', docPath,
-			'view', this.view
+			'view', this.view.home
 		);
 
 	height = doc.height,
@@ -342,7 +342,6 @@ jools.lazyValue(
 		var
 			doc,
 			display,
-			hview,
 			vzone;
 
 		vzone = this.view.rect( this.zone );
@@ -355,12 +354,9 @@ jools.lazyValue(
 
 		doc = this.doc;
 
-		hview = this.view.home;
-
 		// displays selection and text
 		doc.draw(
 			display,
-			hview,
 			this.zone.width,
 			euclid_point.zero
 		);
@@ -369,7 +365,7 @@ jools.lazyValue(
 		display.edge(
 			shell_style.getStyle( theme.label.style, 'normal' ),
 			this.zeroSilhoutte,
-			hview
+			this.view.home
 		);
 
 		return display;
