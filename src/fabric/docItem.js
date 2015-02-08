@@ -115,10 +115,7 @@ fabric_docItem.prototype.getParaAtPoint =
 		return null;
 	}
 
-	return this.doc.getParaAtPoint(
-		this,
-		p
-	);
+	return this.doc.getParaAtPoint( p );
 };
 
 

@@ -897,7 +897,6 @@ jools.lazyValue(
 */
 fabric_doc.prototype.getParaAtPoint =
 	function(
-		item, // TODO remove
 		p
 	)
 {
@@ -907,6 +906,14 @@ fabric_doc.prototype.getParaAtPoint =
 		pnws,
 		ranks,
 		twig;
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 1 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	pnws = this.paraPNWs;
 

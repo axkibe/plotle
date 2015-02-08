@@ -1273,7 +1273,7 @@ fabric_para.prototype._pageUpDown =
 			pnw.y + zone.height * dir
 		),
 
-	tpara = doc.getParaAtPoint( item, tp );
+	tpara = doc.getParaAtPoint( tp );
 
 	if( tpara === null )
 	{
