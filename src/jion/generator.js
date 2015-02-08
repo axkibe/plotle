@@ -275,52 +275,17 @@ generator.prototype._init =
 			units = units.add( concernsID );
 		}
 
-		// tests also if defaultValue is defined to be `undefined`
-		if( Object.keys( jAttr ).indexOf( 'defaultValue' ) >= 0 )
-		{
-			jdv = jAttr.defaultValue;
+		jdv = jAttr.defaultValue;
 
-			if( jools.isString( jdv ) )
-			{
-				// nextStyle
-				// XXX
-				if( jdv === 'undefined' )
-				{
-					defaultValue = shorthand.$undefined;
-				}
-				else if( jdv === 'null' )
-				{
-					// XXX remove
-					defaultValue = shorthand.$null;
-				}
-				else
-				{
-					defaultValue = $( jdv );
-				}
-			}
-			else if( jdv === null )
-			{
-				defaultValue = shorthand.$null;
-			}
-			else if( jdv === undefined )
+		if( jdv )
+		{
+			if( jdv === 'undefined' )
 			{
 				defaultValue = shorthand.$undefined;
 			}
-			else if( jdv === false )
-			{
-				defaultValue = shorthand.$false;
-			}
-			else if( jdv === true )
-			{
-				defaultValue = shorthand.$true;
-			}
-			else if( typeof( jdv ) === 'number' )
-			{
-				defaultValue = $number( jAttr.defaultValue );
-			}
 			else
 			{
-				throw new Error( );
+				defaultValue = $( jdv );
 			}
 		}
 
