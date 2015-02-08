@@ -6,9 +6,9 @@
 var
 	euclid_display,
 	euclid_view,
-	icons_moveto,
-	icons_normal,
-	icons_remove,
+	icon_moveto,
+	icon_normal,
+	icon_remove,
 	jools,
 	result_hover,
 	root,
@@ -85,8 +85,7 @@ if( JION )
 						type :
 							'string',
 						defaultValue :
-							// TODO undefiend
-							'null'
+							'undefined'
 					},
 				iconStyle :
 					{
@@ -217,11 +216,11 @@ widget_button.prototype._init =
 	{
 		switch( this.icon )
 		{
-			case 'moveto' : this._icon = icons_moveto.create( ); break;
+			case 'moveto' : this._icon = icon_moveto.create( ); break;
 
-			case 'normal' : this._icon = icons_normal.create( ); break;
+			case 'normal' : this._icon = icon_normal.create( ); break;
 
-			case 'remove' : this._icon = icons_remove.create( ); break;
+			case 'remove' : this._icon = icon_remove.create( ); break;
 
 			default : throw new Error( );
 		}

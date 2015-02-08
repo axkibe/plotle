@@ -6,7 +6,7 @@
 
 var
 	euclid_shape,
-	icons_check,
+	icon_check,
 	shapeSection_line,
 	shapeSection_start;
 
@@ -25,7 +25,7 @@ if( JION )
 {
 	return {
 		id :
-			'icons_check',
+			'icon_check',
 		attributes :
 			{
 				pc :
@@ -45,7 +45,7 @@ if( JION )
 /*
 | Sketches the normal button's icon.
 */
-icons_check.prototype._init =
+icon_check.prototype._init =
 	function( )
 {
 	var
@@ -71,7 +71,7 @@ icons_check.prototype._init =
 /*
 | Draws the check button on a display.
 */
-icons_check.prototype.draw =
+icon_check.prototype.draw =
 	function(
 		display,
 		style,

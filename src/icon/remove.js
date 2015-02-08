@@ -3,7 +3,7 @@
 */
 
 var
-	icons_remove,
+	icon_remove,
 	euclid_point,
 	euclid_shape,
 	shapeSection_line,
@@ -25,7 +25,7 @@ if( JION )
 {
 	return {
 		id :
-			'icons_remove',
+			'icon_remove',
 		singleton :
 			true,
 		init :
@@ -47,7 +47,7 @@ if( JION )
 |  M**L   J**SE
 |
 */
-icons_remove.prototype._init =
+icon_remove.prototype._init =
 	function( )
 {
 	var
@@ -113,7 +113,7 @@ icons_remove.prototype._init =
 /*
 | Displays the moveto button.
 */
-icons_remove.prototype.draw =
+icon_remove.prototype.draw =
 	function(
 		display,
 		style,

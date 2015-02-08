@@ -4,7 +4,7 @@
 
 
 var
-	icons_normal,
+	icon_normal,
 	euclid_point,
 	euclid_shape,
 	shapeSection_start,
@@ -25,7 +25,7 @@ if( JION )
 {
 	return {
 		id :
-			'icons_normal',
+			'icon_normal',
 		singleton :
 			true,
 		init :
@@ -50,7 +50,7 @@ if( JION )
 |          **
 |           ED
 */
-icons_normal.prototype._init =
+icon_normal.prototype._init =
 	function( )
 {
 	var
@@ -84,7 +84,7 @@ icons_normal.prototype._init =
 /*
 | Draws the moveto button in a display.
 */
-icons_normal.prototype.draw =
+icon_normal.prototype.draw =
 	function(
 		display,
 		style,

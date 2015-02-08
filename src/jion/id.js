@@ -228,17 +228,4 @@ jools.lazyValue(
 );
 
 
-/*
-| This id as ast variable.
-*/
-jools.lazyValue(
-	jion_id.prototype,
-	'$var',
-	function( )
-	{
-		throw new Error( 'TODO' );
-	}
-);
-
-
 } )( );

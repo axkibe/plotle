@@ -7,7 +7,7 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_shape,
-	icons_moveto,
+	icon_moveto,
 	shapeSection_start,
 	shapeSection_line;
 
@@ -26,7 +26,7 @@ if( JION )
 {
 	return {
 		id :
-			'icons_moveto',
+			'icon_moveto',
 		singleton :
 			true,
 		init :
@@ -51,7 +51,7 @@ if( JION )
 |      H***I
 |      K***J
 */
-icons_moveto.prototype._init =
+icon_moveto.prototype._init =
 	function( )
 {
 	var ap;
@@ -96,7 +96,7 @@ icons_moveto.prototype._init =
 /*
 | Draws the moveto button in a display.
 */
-icons_moveto.prototype.draw =
+icon_moveto.prototype.draw =
 	function(
 		display,
 		style,

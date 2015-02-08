@@ -373,22 +373,22 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/icons/normal.js',
+		'filePath', 'src/icon/normal.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/icons/moveto.js',
+		'filePath', 'src/icon/moveto.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/icons/remove.js',
+		'filePath', 'src/icon/remove.js',
 		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/icons/check.js',
+		'filePath', 'src/icon/check.js',
 		'hasJion', true,
 		'inBundle', true
 	),

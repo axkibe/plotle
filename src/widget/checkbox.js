@@ -8,7 +8,7 @@
 */
 var
 	euclid_view,
-	icons_check,
+	icon_check,
 	jools,
 	root,
 	shell_accent,
@@ -156,7 +156,7 @@ jools.lazyValue(
 	'checkIcon',
 	function( )
 	{
-		return icons_check.create( 'pc', this.frame.pc );
+		return icon_check.create( 'pc', this.frame.pc );
 	}
 );
 
