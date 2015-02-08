@@ -16,7 +16,6 @@ var
 	jools,
 	root,
 	testpad_action,
-	testpad_repository,
 	testpad_root;
 
 
@@ -49,7 +48,7 @@ if( JION )
 				beepTimer :
 					{
 						comment :
-							'removed the beep',
+							'removes the beep',
 						type :
 							'protean',
 						defaultValue :
@@ -62,7 +61,7 @@ if( JION )
 						type :
 							'integer',
 						defaultValue :
-							'null' // FUTURE 0
+							'0'
 					},
 				cursorLine :
 					{
@@ -71,7 +70,7 @@ if( JION )
 						type :
 							'integer',
 						defaultValue :
-							'null' // FUTURE 0
+							'0'
 					},
 				elements :
 					{
@@ -107,7 +106,7 @@ if( JION )
 						type :
 							'testpad_repository',
 						defaultValue :
-							'null'
+							'testpad_repository.create( )'
 					}
 			},
 		init :
@@ -236,45 +235,21 @@ testpad_root.prototype._init =
 	elements.cancel.disabled =
 		!this.action;
 
-	if( !this.repository )
-	{
-		this.repository = testpad_repository.create( );
-	}
-
 	doc =
 	this._doc =
 		this.repository.get( noteDocPath.chop );
 
 	elements.now.innerHTML = '' + this.repository.seq;
 
-	if( this.cursorLine === null )
-	{
-		this.cursorLine = 0;
-	}
-	else
-	{
-		this.cursorLine =
-			jools.limit(
-				0,
-				this.cursorLine,
-				doc.ranks.length - 1
-			);
-	}
+	this.cursorLine =
+		jools.limit( 0, this.cursorLine, doc.ranks.length - 1 );
 
-	if( this.cursorAt === null )
-	{
-		this.cursorAt = 0;
-	}
-	else
-	{
-		this.cursorAt =
-			jools.limit(
-				0,
-				this.cursorAt,
-				// FIXME rankAt
-				doc.twig[ doc.ranks[ this.cursorLine ] ].text.length
-			);
-	}
+	this.cursorAt =
+		jools.limit(
+			0,
+			this.cursorAt,
+			doc.atRank( this.cursorLine ).text.length
+		);
 
 	if( !doc )
 	{
@@ -908,10 +883,8 @@ testpad_root.prototype.inputSpecialKey =
 			}
 
 			root.create(
-				'action',
-					root.action.create( 'at', root.action.at - 1 ),
-				'cursorAt',
-					cursorAt - 1
+				'action', root.action.create( 'at', root.action.at - 1 ),
+				'cursorAt', cursorAt - 1
 			);
 
 			return;

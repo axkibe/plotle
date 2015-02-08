@@ -39,7 +39,7 @@ if( JION )
 						type :
 							'integer',
 						defaultValue :
-							'null'
+							'0'
 					},
 				_changeWrapRay :
 					{
@@ -135,11 +135,6 @@ testpad_repository.prototype._init =
 		this._changeWrapRay = change_wrapRay.create( );
 	}
 
-	if( this.seq === null )
-	{
-		this.seq = 0;
-	}
-
 	this.seq = jools.limit( 0, this.seq, this._changeWrapRay.length );
 };
 
@@ -201,8 +196,7 @@ testpad_repository.prototype.alter =
 		cwRay,
 		s,
 		sZ,
-		seq,
-		tree;
+		seq;
 
 	cwRay = this._changeWrapRay;
 
@@ -217,13 +211,11 @@ testpad_repository.prototype.alter =
 		cw = cwRay.get( s ).transform( cw );
 	}
 
-	tree = cw.changeTree( this.space );
-
 	root.create(
 		'repository',
 			this.create(
-				'_changeWrapRay', cwRay,
-				'space', tree
+				'_changeWrapRay', cwRay.append( cw ),
+				'space', cw.changeTree( this.space )
 			)
 	);
 };
