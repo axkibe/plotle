@@ -105,11 +105,11 @@ server_spaceBox.loadSpace =
 		yield* root.repository.collection( 'changes:' + spaceRef.fullname );
 
 	cursor =
-		yield changesDB.find(
+		( yield changesDB.find(
 			{ },
 			{ sort : '_id' },
 			resume( )
-		);
+		) ).batchSize( 100 );
 
 	for(
 		o = yield cursor.nextObject( resume( ) );
