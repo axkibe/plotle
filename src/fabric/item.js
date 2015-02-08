@@ -237,13 +237,6 @@ jools.lazyValue(
 
 		asw =
 			{
-				// ellipse bezier height
-				// TODO remove?
-				bb :
-					Math.round( b / 0.75 ),
-				// TODO remove?
-				zone :
-					zone,
 				nw :
 					ha.nw
 					&&
@@ -386,6 +379,7 @@ fabric_item.prototype.drawHandles =
 	)
 {
 	var
+		a,
 		area,
 		d,
 		d8cwcf,
@@ -416,7 +410,7 @@ fabric_item.prototype.drawHandles =
 	// draws the resize handles
 
 	for(
-		var a = d8cwcf.length - 1;
+		a = d8cwcf.length - 1;
 		a >= 0;
 		a--
 	)
@@ -430,17 +424,9 @@ fabric_item.prototype.drawHandles =
 			continue;
 		}
 
-		fixView =
-			view.review(
-				0,
-				view.point( h.pc )
-			);
+		fixView = view.review( 0, view.point( h.pc ) );
 
-		display.paint(
-			theme.handle.style,
-			h,
-			fixView
-		);
+		display.paint( theme.handle.style, h, fixView );
 	}
 
 	display.deClip( );
@@ -470,10 +456,8 @@ fabric_item.prototype.dragStart =
 
 	if(
 		action === null
-		&&
-		sbary
-		&&
-		sbary.within( view, p )
+		&& sbary
+		&& sbary.within( view, p )
 	)
 	{
 		root.setAction(
@@ -487,9 +471,7 @@ fabric_item.prototype.dragStart =
 		return true;
 	}
 
-	if(
-		!this.silhoutte.within( view, p )
-	)
+	if( !this.silhoutte.within( view, p ) )
 	{
 		return false;
 	}
@@ -693,12 +675,7 @@ fabric_item.prototype.pointingHover =
 		);
 	}
 
-	if(
-		!this.zone.within(
-			view,
-			p
-		)
-	)
+	if( !this.zone.within( view, p ) )
 	{
 		return null;
 	}
@@ -710,21 +687,6 @@ fabric_item.prototype.pointingHover =
 		)
 	);
 };
-
-
-/*
-| Returns true if the item equals another
-|
-| FIXME, make this correct.
-*/
-fabric_item.prototype.equals =
-	function(
-		obj
-	)
-{
-	return this === obj;
-};
-
 
 
 } )( );

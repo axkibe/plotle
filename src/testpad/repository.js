@@ -50,8 +50,7 @@ if( JION )
 						defaultValue :
 							'null'
 					},
-				// TODO _space
-				space :
+				_space :
 					{
 						comment :
 							'the action the user is preparing',
@@ -79,9 +78,9 @@ testpad_repository.prototype._init =
 	function( )
 {
 	// the current space;
-	if( this.space === null )
+	if( this._space === null )
 	{
-		this.space  =
+		this._space  =
 			fabric_space.create(
 				'twig:add',
 				'testnote',
@@ -162,8 +161,7 @@ testpad_repository.prototype.get =
 
 	seq = this.seq;
 
-	space = this.space;
-
+	space = this._space;
 
 	if( seq < 0 || seq > cZ )
 	{
@@ -215,7 +213,7 @@ testpad_repository.prototype.alter =
 		'repository',
 			this.create(
 				'_changeWrapRay', cwRay.append( cw ),
-				'space', cw.changeTree( this.space )
+				'_space', cw.changeTree( this._space )
 			)
 	);
 };
