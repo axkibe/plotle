@@ -51,7 +51,7 @@ if( JION )
 						comment :
 							'removed the beep',
 						type :
-							'Object',
+							'protean',
 						defaultValue :
 							'null'
 					},
@@ -78,7 +78,7 @@ if( JION )
 						comment :
 							'DOM elements',
 						type :
-							'Object',
+							'protean',
 						defaultValue :
 							'undefined'
 					},
@@ -758,16 +758,21 @@ testpad_root.prototype.testInput =
 	function( )
 {
 	var
-		action =
-			root.action,
-		cursorLine =
-			root.cursorLine,
-		cursorAt =
-			root.cursorAt,
-		elements =
-			root.elements,
-		text =
-			elements.input.value;
+		action,
+		cursorLine,
+		cursorAt,
+		elements,
+		text;
+
+	action = root.action;
+
+	cursorLine = root.cursorLine;
+
+	cursorAt = root.cursorAt;
+
+	elements = root.elements;
+
+	text = elements.input.value;
 
 	elements.input.value = '';
 
@@ -1185,6 +1190,10 @@ testpad_root.prototype.makeScreen =
 		aZ,
 		b,
 		bZ,
+		cAt,
+		cLen,
+		cLine,
+		cText,
 		line,
 		lines,
 		ranks,
@@ -1202,13 +1211,12 @@ testpad_root.prototype.makeScreen =
 	// an array of lines which are
 	// an array of chars
 	for(
-		a = 0, aZ = ranks.length;
+		a = 0, aZ = doc.length;
 		a < aZ;
 		a++
 	)
 	{
-		// FIXME use atRank
-		lines.push( twig[ ranks[ a ] ].text.split( '' ) );
+		lines.push( doc.atRank( a ).text.split( '' ) );
 	}
 
 	// replaces HTML entities
@@ -1228,29 +1236,13 @@ testpad_root.prototype.makeScreen =
 		{
 			switch( line[ b ] )
 			{
-				case '&' :
+				case '&' : line[ b ] = '&amp;'; break;
 
-					line[ b ] = '&amp;';
+				case '"' : line[ b ] = '&quot;'; break;
 
-					break;
+				case '<' : line[ b ] = '&lt;';  break;
 
-				case '"' :
-
-					line[ b ] = '&quot;';
-
-					break;
-
-				case '<' :
-
-					line[ b ] = '&lt;';
-
-					break;
-
-				case '>' :
-
-					line[ b ] = '&gt;';
-
-					break;
+				case '>' : line[ b ] = '&gt;';  break;
 			}
 		}
 	}
@@ -1258,28 +1250,25 @@ testpad_root.prototype.makeScreen =
 	// inserts the cursor
 	if( this.haveFocus )
 	{
-		var
-			cLine =
-				this.cursorLine,
-			cText =
-				lines[ cLine ],
-			cAt =
-				this.cursorAt,
-			cLen =
-				lines[ cLine ].length;
+		cLine = this.cursorLine;
+
+		cText = lines[ cLine ];
+
+		cAt = this.cursorAt;
+
+		cLen = lines[ cLine ].length;
 
 		if( cAt >= cText.length )
 		{
-			cAt =
-				cText.length;
+			cAt = cText.length;
 
 			lines[ cLine ][ cAt ] = ' ';
 		}
 
 		lines[ cLine ][ cAt ] =
 			'<span id="cursor">'
-				+ lines[ cLine ][ cAt ] +
-			'</span>';
+			+ lines[ cLine ][ cAt ]
+			+ '</span>';
 
 		if( cAt === cLen )
 		{

@@ -32,16 +32,6 @@ if( JION )
 			'testpad_repository',
 		attributes :
 			{
-				// TODO _space
-				space :
-					{
-						comment :
-							'the action the user is preparing',
-						type :
-							'fabric_space',
-						defaultValue :
-							'null'
-					},
 				seq :
 					{
 						comment :
@@ -60,6 +50,16 @@ if( JION )
 						defaultValue :
 							'null'
 					},
+				// TODO _space
+				space :
+					{
+						comment :
+							'the action the user is preparing',
+						type :
+							'fabric_space',
+						defaultValue :
+							'null'
+					}
 			},
 		init :
 			[ ]
