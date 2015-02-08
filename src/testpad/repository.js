@@ -220,7 +220,7 @@ testpad_repository.prototype.alter =
 	tree = cw.changeTree( this.space );
 
 	root.create(
-		'link',
+		'repository',
 			this.create(
 				'_changeWrapRay', cwRay,
 				'space', tree

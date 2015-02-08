@@ -100,8 +100,7 @@ if( JION )
 						defaultValue :
 							'false'
 					},
-				link :
-					// FIXME call this repository
+				repository :
 					{
 						comment :
 							'the testing repository',
@@ -237,16 +236,16 @@ testpad_root.prototype._init =
 	elements.cancel.disabled =
 		!this.action;
 
-	if( !this.link )
+	if( !this.repository )
 	{
-		this.link = testpad_repository.create( );
+		this.repository = testpad_repository.create( );
 	}
 
 	doc =
 	this._doc =
-		this.link.get( noteDocPath.chop );
+		this.repository.get( noteDocPath.chop );
 
-	elements.now.innerHTML = '' + this.link.seq;
+	elements.now.innerHTML = '' + this.repository.seq;
 
 	if( this.cursorLine === null )
 	{
@@ -335,7 +334,7 @@ testpad_root.prototype.alter =
 				change_ray.create( 'ray:set', 0, change )
 		);
 
-	result = root.link.alter( changeWrap );
+	result = root.repository.alter( changeWrap );
 
 	// FIXME return nothing!
 	return result;
@@ -702,7 +701,7 @@ testpad_root.prototype.send =
 	root.create(
 		'action', null,
 		'cursorAt', cursorAt,
-		'link', root.link.create( 'seq', jools.MAX_INTEGER )
+		'repository', root.repository.create( 'seq', jools.MAX_INTEGER )
 	);
 };
 
@@ -1138,8 +1137,8 @@ testpad_root.prototype.onUpNowButton =
 	function( )
 {
 	root.create(
-		'link',
-			root.link.create( 'seq', jools.MAX_INTEGER )
+		'repository',
+			root.repository.create( 'seq', jools.MAX_INTEGER )
 	);
 
 	this.elements.input.focus( );
@@ -1153,8 +1152,8 @@ testpad_root.prototype.onUpButton =
 	function( )
 {
 	root.create(
-		'link',
-			root.link.create( 'seq', root.link.seq + 1 )
+		'repository',
+			root.repository.create( 'seq', root.repository.seq + 1 )
 	);
 
 	this.elements.input.focus( );
@@ -1168,8 +1167,8 @@ testpad_root.prototype.onDownButton =
 	function( )
 {
 	root.create(
-		'link',
-			root.link.create( 'seq', root.link.seq - 1 )
+		'repository',
+			root.repository.create( 'seq', root.repository.seq - 1 )
 	);
 
 	this.elements.input.focus( );
@@ -1361,38 +1360,39 @@ testpad_root.prototype.makeScreen =
 
 /*
 | Generates the noDataScreen.
-| FIXME lazyFixate
 */
-testpad_root.prototype.noDataScreen =
+jools.lazyValue(
+	testpad_root.prototype,
+	'noDataScreen',
 	function( )
-{
-	// no data
-	var
-		a,
-		line,
-		line2,
-		lines;
-
-	line = [ ];
-
-	lines = [ ];
-
-	for( a = 0; a < 100; a++ )
 	{
-		line.push( '{}  ' );
+		var
+			a,
+			line,
+			line2,
+			lines;
+
+		line = [ ];
+
+		lines = [ ];
+
+		for( a = 0; a < 100; a++ )
+		{
+			line.push( '{}  ' );
+		}
+
+		line = line.join( '' );
+
+		line2 = '  ' + line;
+
+		for( a = 0; a < 50; a++ )
+		{
+			lines.push( line, line2 );
+		}
+
+		return lines.join( '\n' );
 	}
-
-	line = line.join( '' );
-
-	line2 = '  ' + line;
-
-	for( a = 0; a < 50; a++ )
-	{
-		lines.push( line, line2 );
-	}
-
-	return lines.join( '\n' );
-};
+);
 
 
 /*
