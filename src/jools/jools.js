@@ -490,9 +490,6 @@ jools.matches =
 		o2
 	)
 {
-	// TODO
-	//return true;
-
 	if( o1 === o2 )
 	{
 		return true;

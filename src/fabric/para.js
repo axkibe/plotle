@@ -92,9 +92,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'string',
-						defaultValue : // TODO
-							'null'
+							'string'
 					},
 				view :
 					{
@@ -146,10 +144,8 @@ fabric_para.prototype._init =
 
 	if(
 		inherit
-		&&
-		inherit.alikeIgnoringView( this )
-		&&
-		inherit.view.zoom === this.view.zoom
+		&& inherit.alikeIgnoringView( this )
+		&& inherit.view.zoom === this.view.zoom
 	)
 	{
 		jools.aheadValue( this, 'flow', inherit.flow );
