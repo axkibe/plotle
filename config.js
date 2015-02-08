@@ -55,15 +55,14 @@ config.database_name = 'ideoloom-10';
 /*
 | Determines the amount of checking and complaining if things go wrong.
 */
-config.shell_devel = false;
+config.shell_devel = true;
 
 
 /*
 | Do not provide a bundle.
 | Only to be used with develShell
 */
-config.shell_noBundle = false;
-//config.shell_noBundle = true;
+config.shell_noBundle = config.shell_devel;
 
 
 /*

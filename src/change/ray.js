@@ -28,10 +28,12 @@ if( JION )
 			true,
 		ray :
 			[
+				'change_grow',
 				'change_insert',
 				'change_join',
 				'change_remove',
 				'change_set',
+				'change_shrink',
 				'change_split'
 			]
 	};

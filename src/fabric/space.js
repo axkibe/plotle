@@ -6,6 +6,7 @@ var
 	action_itemResize,
 	action_pan,
 	change_join,
+	change_grow,
 	change_remove,
 	change_set,
 	euclid_arrow,
@@ -848,13 +849,13 @@ fabric_space.prototype.dragStop =
 					key = jools.uid( );
 
 					root.alter(
-						change_set.create(
+						change_grow.create(
 							'val', note,
 							'path',
 								jion_path.empty
 								.append( 'twig' )
 								.append( key ),
-							'rank', root.space.length
+							'rank', 0
 						)
 					);
 
@@ -925,13 +926,13 @@ fabric_space.prototype.dragStop =
 					);
 
 					root.alter(
-						change_set.create(
+						change_grow.create(
 							'val', val,
 							'path',
 								jion_path.empty
 								.append( 'twig' )
 								.append( key ),
-							'rank', root.space.length
+							'rank', 0
 						)
 					);
 
@@ -969,14 +970,13 @@ fabric_space.prototype.dragStop =
 					key = jools.uid( );
 
 					root.alter(
-						change_set.create(
+						change_grow.create(
 							'path',
 								jion_path.empty
 								.append( 'twig' )
 								.append( key ),
 							'val', portal,
-							'prev', null,
-							'rank', root.space.length
+							'rank', 0
 						)
 					);
 

@@ -9,7 +9,7 @@
 var
 	disc_disc,
 	disc_mainDisc,
-	change_set,
+	change_shrink,
 	euclid_display,
 	euclid_view,
 	jools,
@@ -371,9 +371,8 @@ disc_mainDisc.prototype.pushButton =
 	if( buttonName === 'Remove' )
 	{
 		root.alter(
-			change_set.create(
+			change_shrink.create(
 				'path', this.mark.itemPath.chop,
-				'val', null,
 				'prev', root.space.getPath( this.mark.itemPath.chop ),
 				'rank', root.space.rankOf( this.mark.itemPath.get( 2 ) )
 			)

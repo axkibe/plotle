@@ -4,7 +4,7 @@
 
 
 var
-	change_set,
+	change_grow,
 	euclid_arrow,
 	fabric_doc,
 	fabric_label,
@@ -200,10 +200,10 @@ fabric_relation.spawn =
 	key = jools.uid( );
 
 	root.alter(
-		change_set.create(
+		change_grow.create(
 			'val', val,
 			'path', jion_path.empty.append( 'twig' ).append( key ),
-			'rank', root.space.length
+			'rank', 0
 		)
 	);
 

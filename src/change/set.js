@@ -122,6 +122,21 @@ change_set.prototype.changeTree =
 	// Stores the old value for history tracking.
 	prev = tree.getPath( this.path );
 
+	// FIXME
+	if( !CONVERT )
+	{
+		if( this.rank !== undefined )
+		{
+			throw new Error( );
+		}
+
+		if( !this.val )
+		{
+			throw new Error( );
+		}
+	}
+
+
 	if( prev === undefined )
 	{
 		prev = null;
@@ -245,14 +260,14 @@ change_set.prototype.transform =
 
 			return this._transformMark( cx );
 
-		case 'mark_widget' :
 
-			return cx;
-
+		case 'change_grow' :
 		case 'change_join' :
+		case 'change_shrinkt' :
 		case 'change_split' :
 		case 'change_insert' :
 		case 'change_remove' :
+		case 'mark_widget' :
 
 			return cx;
 

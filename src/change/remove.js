@@ -196,6 +196,8 @@ change_remove.prototype.transform =
 			return this._transformRangeMark( cx );
 
 
+		case 'change_shrinkt' :
+		case 'change_split' :
 		case 'mark_item' :
 		case 'mark_widget' :
 

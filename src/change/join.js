@@ -245,6 +245,14 @@ change_join.prototype.transform =
 
 			return cx;
 
+		case 'change_grow' :
+		case 'change_shrink' :
+
+			// FUTURE change ranks
+			// but right now this never happens
+			return cx;
+
+
 		case 'change_join' :
 		case 'change_split' :
 
