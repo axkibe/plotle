@@ -38,6 +38,7 @@ module.exports =
 			'src/ast/lessThan.js',
 			'src/ast/member.js',
 			'src/ast/multiply.js',
+			'src/ast/multiplyAssign.js',
 			'src/ast/new.js',
 			'src/ast/not.js',
 			'src/ast/null.js',

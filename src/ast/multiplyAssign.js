@@ -1,5 +1,5 @@
 /*
-| Ast plus assignment ( += )
+| Ast multiply assignment ( *= )
 */
 
 
@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'ast_plusAssign',
+			'ast_multiplyAssign',
 		attributes :
 			{
 				left :
@@ -40,9 +40,9 @@ if( JION )
 
 
 var
-	ast_plusAssign;
+	ast_multiplyAssign;
 
-ast_plusAssign = require( '../jion/this' )( module );
+ast_multiplyAssign = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -53,9 +53,9 @@ ast_plusAssign = require( '../jion/this' )( module );
 /**/	util = require( 'util' );
 /**/
 /***	/
-****	| Custom inspect
+****	| Custom inspect.
 ****	/
-***/	ast_plusAssign.prototype.inspect =
+***/	ast_multiplyAssign.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts
@@ -80,7 +80,7 @@ ast_plusAssign = require( '../jion/this' )( module );
 /**/
 /**/		result += '( ' +  util.inspect( this.left, opts ) + ' )';
 /**/
-/**/		result += ' += ';
+/**/		result += ' *= ';
 /**/
 /**/		result += '( ' +  util.inspect( this.right, opts ) + ' )';
 /**/

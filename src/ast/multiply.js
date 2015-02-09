@@ -1,5 +1,5 @@
 /*
-| Ast plus assignment ( += )
+| A mathematical multiplication.
 */
 
 
@@ -17,20 +17,20 @@ if( JION )
 {
 	return {
 		id :
-			'ast_plusAssign',
+			'ast_multiply',
 		attributes :
 			{
 				left :
 					{
 						comment :
-							'left-hand side',
+							'left expression',
 						type :
 							'->astExpression'
 					},
 				right :
 					{
 						comment :
-							'right-hand side',
+							'right expression',
 						type :
 							'->astExpression'
 					}
@@ -40,9 +40,9 @@ if( JION )
 
 
 var
-	ast_plusAssign;
+	ast_multiply;
 
-ast_plusAssign = require( '../jion/this' )( module );
+ast_multiply = require( '../jion/this' )( module );
 
 
 /**/if( CHECK )
@@ -53,9 +53,9 @@ ast_plusAssign = require( '../jion/this' )( module );
 /**/	util = require( 'util' );
 /**/
 /***	/
-****	| Custom inspect
+****	| Custom inspect.
 ****	/
-***/	ast_plusAssign.prototype.inspect =
+***/	ast_multiply.prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts
@@ -80,7 +80,7 @@ ast_plusAssign = require( '../jion/this' )( module );
 /**/
 /**/		result += '( ' +  util.inspect( this.left, opts ) + ' )';
 /**/
-/**/		result += ' += ';
+/**/		result += ' * ';
 /**/
 /**/		result += '( ' +  util.inspect( this.right, opts ) + ' )';
 /**/
