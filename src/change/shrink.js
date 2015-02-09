@@ -115,19 +115,7 @@ change_shrink.prototype.changeTree =
 	if(
 		prev !== this.prev
 		&&
-		(
-			!this.prev
-			||
-			// FUTURE optimize this
-			!change_shrink.createFromJSON(
-				JSON.parse( JSON.stringify( this ) )
-			)
-			.equals(
-				change_shrink.createFromJSON(
-					JSON.parse( JSON.stringify( this.create( 'prev', prev ) ) )
-				)
-			)
-		)
+		!prev.equalsJSON( this.prev )
 	)
 	{
 		throw change_error( 'shrink.prev doesn\'t match' );

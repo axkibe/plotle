@@ -104,28 +104,10 @@ change_set.prototype.changeTree =
 		throw new Error( );
 	}
 
-
-	if( prev === undefined )
-	{
-		prev = null;
-	}
-
 	if(
 		prev !== this.prev
 		&&
-		(
-			!this.prev
-			||
-			// FUTURE optimize this
-			!change_set.createFromJSON(
-				JSON.parse( JSON.stringify( this ) )
-			)
-			.equals(
-				change_set.createFromJSON(
-					JSON.parse( JSON.stringify( this.create( 'prev', prev ) ) )
-				)
-			)
-		)
+		!prev.equalsJSON( this.prev )
 	)
 	{
 		throw change_error( 'set.prev doesn\'t match' );
