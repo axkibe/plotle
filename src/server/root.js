@@ -186,8 +186,7 @@ prototype.startup =
 		// a table of all clients waiting for an update
 		'$upsleep', { },
 
-		// next upsleepID
-		'$nextSleep', 1,
+		'nextSleepID', 1,
 
 		// next visitors ID
 		'$nextVisitor', 1000,

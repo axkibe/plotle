@@ -412,7 +412,7 @@ serveUpdate =
 	}
 
 	// if not an immediate anwwer, the request is put to sleep
-	sleepID = '' + root.$nextSleep++;
+	sleepID = '' + root.nextSleepID;
 
 	timerID =
 		setTimeout(
@@ -421,14 +421,17 @@ serveUpdate =
 			sleepID
 		);
 
-	root.$upsleep[ sleepID ] =
-		{
-			username : username,
-			seq : seq,
-			timerID : timerID,
-			result : result,
-			spaceRef : spaceRef
-		};
+	root.create(
+		'nextSleepID', root.nextSleepID + 1,
+		'$upsleep',
+			{
+				username : username,
+				seq : seq,
+				timerID : timerID,
+				result : result,
+				spaceRef : spaceRef
+			}
+	);
 
 	result.sleepID = sleepID;
 
