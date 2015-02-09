@@ -363,7 +363,12 @@ euclid_rect.prototype.cardinalResize =
 	}
 
 	// FIXME just call this.create
-	return euclid_rect.renew( wx, ny, ex, sy, this );
+	return(
+		this.create(
+			'pnw', this.pnw.create( 'x', wx, 'y', ny ),
+			'pse', this.pse.create( 'x', ex, 'y', sy )
+		)
+	);
 };
 
 
