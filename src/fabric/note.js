@@ -124,7 +124,14 @@ if( JION )
 					}
 			},
 		init :
-			[ ],
+			[ 'inherit' ],
+		alike :
+			{
+				alikeIgnoringView :
+					{
+						ignores : { 'view' : true }
+					}
+			},
 		subclass :
 			'fabric_docItem'
 	};
@@ -145,7 +152,9 @@ if( SERVER )
 | Initializer.
 */
 fabric_note.prototype._init =
-	function( )
+	function(
+		inherit
+	)
 {
 	var
 		docPath,
@@ -216,7 +225,14 @@ fabric_note.prototype._init =
 			'size', zone.height - theme.scrollbar.vdis * 2
 		);
 
-	// TODO ahead _display if only view changed
+	if(
+		inherit
+		&& inherit.alikeIgnoringView( this )
+		&& inherit.view.zoom === this.view.zoom
+	)
+	{
+		jools.aheadValue( this, '_display', inherit._display );
+	}
 };
 
 

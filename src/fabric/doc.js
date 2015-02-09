@@ -996,7 +996,7 @@ fabric_doc.prototype.input =
 fabric_doc.prototype.specialKey =
 	function(
 		key,
-		item, // TODO remove ?
+		item, // FUTURE remove
 		shift,
 		ctrl
 	)

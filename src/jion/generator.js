@@ -2948,7 +2948,8 @@ generator.prototype.genAttributeEquals =
 	function(
 		name, // attribute name
 		le, // this value expression
-		re  // other value expression
+		re, // other value expression
+		eqFuncName // the equals function name to call
 	)
 {
 	var
@@ -2971,7 +2972,7 @@ generator.prototype.genAttributeEquals =
 
 		default :
 
-
+			// FIXME there is a type allow/s/Null and it happens
 			if( attr.allowNull && attr.allowsUndefined )
 			{
 				throw new Error(
@@ -2986,7 +2987,7 @@ generator.prototype.genAttributeEquals =
 						$equals( le, re ),
 						$and(
 							$differs( le, null ),
-							$call( le.$dot( 'equals' ), re )
+							$call( le.$dot( eqFuncName ), re )
 						)
 					);
 			}
@@ -2997,13 +2998,13 @@ generator.prototype.genAttributeEquals =
 						$equals( le, re ),
 						$and(
 							$differs( le, undefined ),
-							$call( le.$dot( 'equals' ), re )
+							$call( le.$dot( eqFuncName ), re )
 						)
 					);
 			}
 			else
 			{
-				ceq = $call( le.$dot( 'equals' ), re );
+				ceq = $call( le.$dot( eqFuncName ), re );
 			}
 	}
 
@@ -3016,7 +3017,8 @@ generator.prototype.genAttributeEquals =
 */
 generator.prototype.genEquals =
 	function(
-		capsule // block to append to
+		capsule, // block to append to
+		mode     // 'normal' or 'json'
 	)
 {
 	var
@@ -3024,6 +3026,7 @@ generator.prototype.genEquals =
 		block,
 		cond,
 		ceq,
+		eqFuncName,
 		name,
 		groupTest,
 		groupTestLoopBody,
@@ -3034,7 +3037,30 @@ generator.prototype.genEquals =
 
 	cond = null;
 
-	capsule = capsule.$comment( 'Tests equality of object.' );
+	switch( mode )
+	{
+		case 'normal' :
+
+			capsule =
+				capsule.$comment( 'Tests equality of object.' );
+
+			eqFuncName = 'equals';
+
+			break;
+
+		case 'json' :
+
+			capsule =
+				capsule.$comment( 'Tests equality of json representation.' );
+
+			eqFuncName = 'equalsJSON';
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
 
 	block = $block( );
 
@@ -3067,8 +3093,8 @@ generator.prototype.genEquals =
 				$and(
 					'this.group[ k ] !== obj.group[ k ]',
 					$or(
-						'!this.group[ k ].equals',
-						'!this.group[ k ].equals( obj.group[ k ] )'
+						'!this.group[ k ].' + eqFuncName,
+						'!this.group[ k ].' + eqFuncName + '( obj.group[ k ] )'
 					)
 				),
 				$returnFalse
@@ -3097,8 +3123,8 @@ generator.prototype.genEquals =
 				$and(
 					'this.ray[ a ] !== obj.ray[ a ]',
 					$or(
-						'!this.ray[ a ].equals',
-						'!this.ray[ a ].equals( obj.ray[ a ] )'
+						'!this.ray[ a ].' + eqFuncName,
+						'!this.ray[ a ].' + eqFuncName + '( obj.ray[ a ] )'
 					)
 				),
 				$returnFalse
@@ -3130,8 +3156,10 @@ generator.prototype.genEquals =
 				$or(
 					'key !== obj.ranks[ a ]',
 					$condition(
-						'this.twig[ key ].equals',
-						'!this.twig[ key ].equals( obj.twig[ key ] )',
+						'this.twig[ key ].' + eqFuncName,
+						'!this.twig[ key ].'
+						+ eqFuncName
+						+ '( obj.twig[ key ] )',
 						'this.twig[ key ] !== obj.twig[ key ]'
 					)
 				),
@@ -3178,11 +3206,17 @@ generator.prototype.genEquals =
 			continue;
 		}
 
+		if( mode === 'json' && !attr.json )
+		{
+			continue;
+		}
+
 		ceq =
 			this.genAttributeEquals(
 				name,
 				$this.$dot( attr.assign ),
-				$var( 'obj' ).$dot( attr.assign )
+				$var( 'obj' ).$dot( attr.assign ),
+				eqFuncName
 			);
 
 		cond =
@@ -3204,7 +3238,7 @@ generator.prototype.genEquals =
 		capsule
 		.$assign(
 			// FIXME use proto
-			'prototype.equals',
+			'prototype.' + eqFuncName,
 			$func( block )
 			.$arg( 'obj', 'object to compare to' )
 		);
@@ -3284,7 +3318,8 @@ generator.prototype.genAlike =
 				this.genAttributeEquals(
 					name,
 					$this.$dot( attr.assign ),
-					$var( 'obj' ).$dot( attr.assign )
+					$var( 'obj' ).$dot( attr.assign ),
+					'equals'
 				);
 
 			cond =
@@ -3372,8 +3407,7 @@ generator.prototype.genCapsule =
 
 	if( this.hasJSON )
 	{
-		capsule =
-			this.genFromJSONCreator( capsule );
+		capsule = this.genFromJSONCreator( capsule );
 	}
 
 	capsule = this.genReflection( capsule );
@@ -3385,7 +3419,14 @@ generator.prototype.genCapsule =
 		capsule = this.genToJSON( capsule );
 	}
 
-	capsule = this.genEquals( capsule );
+	capsule = this.genEquals( capsule, 'normal' );
+
+	if( this.hasJSON )
+	{
+		// FUTURE in case both genEquals are the same
+		// combine them
+		capsule = this.genEquals( capsule, 'json' );
+	}
 
 	if( this.alike )
 	{

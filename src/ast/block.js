@@ -27,7 +27,6 @@ if( JION )
 var
 	ast_block,
 	ast_comment,
-	ast_new,
 	ast_return,
 	jools,
 	shorthand,
@@ -37,8 +36,6 @@ var
 ast_block = require( '../jion/this' )( module );
 
 ast_comment = require( './comment' );
-
-ast_new = require( './new' );
 
 ast_return = require( './return' );
 
@@ -235,8 +232,7 @@ ast_block.prototype.$new =
 		call
 	)
 {
-	// FIXME use shorthand
-	return this.append( ast_new.create( 'call', call ) );
+	return this.append( shorthand.$new( call ) );
 };
 
 

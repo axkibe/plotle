@@ -93,6 +93,7 @@ module.exports =
 			'src/ast/instanceof.js',
 			'src/ast/lessThan.js',
 			'src/ast/member.js',
+			'src/ast/multiply.js',
 			'src/ast/new.js',
 			'src/ast/not.js',
 			'src/ast/null.js',

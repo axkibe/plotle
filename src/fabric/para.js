@@ -1231,7 +1231,7 @@ fabric_para.prototype._keyLeft =
 fabric_para.prototype._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
-		item,     // TODO remove
+		item,     // FUTURE remove
 		doc,
 		at,
 		retainx,
@@ -1284,12 +1284,7 @@ fabric_para.prototype._pageUpDown =
 			tp.sub( tpnw )
 		);
 
-	tpara._setMark(
-		at,
-		retainx,
-		begin,
-		doc
-	);
+	tpara._setMark( at, retainx, begin, doc );
 };
 
 
@@ -1305,14 +1300,7 @@ fabric_para.prototype._keyPageDown =
 		begin
 	)
 {
-	this._pageUpDown(
-		+1,
-		item,
-		doc,
-		at,
-		retainx,
-		begin
-	);
+	this._pageUpDown( +1, item, doc, at, retainx, begin );
 };
 
 
