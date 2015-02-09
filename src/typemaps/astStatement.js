@@ -26,6 +26,8 @@ module.exports =
 	'ast_instanceof',
 	'ast_lessThan',
 	'ast_member',
+	'ast_multiply',
+	'ast_multiplyAssign',
 	'ast_new',
 	'ast_not',
 	'ast_null',

@@ -53,6 +53,8 @@ var
 	formatInstanceof,
 	formatLessThan,
 	formatMember,
+	formatMultiply,
+	formatMultiplyAssign,
 	formatNew,
 	formatNot,
 	formatNumber,
@@ -98,6 +100,8 @@ precTable =
 		'ast_instanceof' : 8,
 		'ast_lessThan' : 8,
 		'ast_member' : 1,
+		'ast_multiply' : 5,
+		'ast_multiplyAssign' : 17,
 		'ast_new' : 2,
 		'ast_not' : 4,
 		'ast_null' : -1,
@@ -1340,6 +1344,107 @@ formatMember =
 
 
 /*
+| Formats a Multiply
+*/
+formatMultiply =
+	function(
+		context,
+		expr
+	)
+{
+	var
+		text;
+
+/**/if( CHECK )
+/**/{
+/**/	if( expr.reflect !== 'ast_multiply' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	text =
+		formatExpression(
+			context,
+			expr.left,
+			precTable.ast_plus
+		)
+		+ context.sep
+		+ context.tab
+		+ '*'
+		+ context.sep
+		+ formatExpression(
+			context,
+			expr.right,
+			precTable.ast_plus
+		);
+
+	return text;
+};
+
+
+/*
+| Formats a plus-assignment.
+*/
+formatMultiplyAssign =
+	function(
+		context,
+		assign
+	)
+{
+	var
+		text;
+
+	text = '';
+
+	context = context.incSame;
+
+	try
+	{
+		// first tries to inline the
+		// return expression.
+		text =
+			null;
+
+		text =
+			formatExpression(
+				context.setInline,
+				assign.left,
+				precTable.ast_assign
+			)
+			+ ' *= '
+			+ formatExpression(
+				context.setInline,
+				assign.right,
+				precTable.ast_assign
+			);
+	}
+	catch( e )
+	{
+		// rethrows any real error
+		if( e !== 'noinline' )
+		{
+			throw e;
+		}
+	}
+
+	if( text !== null && textLen( text ) < MAX_TEXT_WIDTH )
+	{
+		return text;
+	}
+
+	// caller requested inline, but cannot do.
+	if( context.inline )
+	{
+		throw 'noinline';
+	}
+
+	throw 'FUTURE: implement noinline +=';
+};
+
+
+
+/*
 | Formats a new expression.
 */
 formatNew =
@@ -2314,6 +2419,8 @@ exprFormatter =
 	'ast_instanceof' : formatInstanceof,
 	'ast_lessThan' : formatLessThan,
 	'ast_member' : formatMember,
+	'ast_multiply' : formatMultiply,
+	'ast_multiplyAssign' : formatMultiplyAssign,
 	'ast_new' : formatNew,
 	'ast_not' : formatNot,
 	'ast_null' : formatNull,

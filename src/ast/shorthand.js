@@ -44,6 +44,8 @@ var
 	ast_instanceof,
 	ast_lessThan,
 	ast_member,
+	ast_multiply,
+	ast_multiplyAssign,
 	ast_new,
 	ast_not,
 	ast_null,
@@ -112,6 +114,10 @@ ast_instanceof = require( './instanceof' );
 ast_lessThan = require( './lessThan' );
 
 ast_member = require( './member' );
+
+ast_multiply = require( './multiply' );
+
+ast_multiplyAssign = require( './multiplyAssign' );
 
 ast_new = require( './new' );
 
@@ -681,6 +687,66 @@ shorthand.$member =
 	)
 {
 	return ast_member.create( 'expr', expr, 'member', member );
+};
+
+
+/*
+| Shorthand for creating multiplies.
+*/
+shorthand.$multiply =
+	function(
+		left,
+		right
+		// or more
+	)
+{
+	var
+		args;
+
+	if( arguments.length > 2 )
+	{
+		args = Array.prototype.slice.call( arguments );
+
+		left = tools.convert( left );
+
+		right = tools.convert( right );
+
+		args.splice(
+			0,
+			2,
+			ast_multiply.create( 'left', left, 'right', right )
+		);
+
+		return(
+			shorthand.$multiply.apply(
+				this,
+				args
+			)
+		);
+	}
+
+	left = tools.convert( left );
+
+	right = tools.convert( right );
+
+	return ast_multiply.create( 'left', left, 'right', right );
+};
+
+
+/*
+| Shorthand for creating multiply-assignments.
+*/
+shorthand.$multiplyAssign =
+	function(
+		left,
+		right
+	)
+{
+	left = tools.convert( left );
+
+	right = tools.convert( right );
+
+	return ast_multiplyAssign.create( 'left', left, 'right', right );
 };
 
 

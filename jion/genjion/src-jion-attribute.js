@@ -43,6 +43,8 @@ var
 	ast_instanceof,
 	ast_lessThan,
 	ast_member,
+	ast_multiply,
+	ast_multiplyAssign,
 	ast_new,
 	ast_not,
 	ast_null,
@@ -107,6 +109,10 @@ if( SERVER )
 	ast_lessThan = require( '../../src/ast/lessThan' );
 
 	ast_member = require( '../../src/ast/member' );
+
+	ast_multiply = require( '../../src/ast/multiply' );
+
+	ast_multiplyAssign = require( '../../src/ast/multiplyAssign' );
 
 	ast_new = require( '../../src/ast/new' );
 
@@ -510,6 +516,10 @@ prototype.create =
 /**/			v_defaultValue.reflect !== 'ast_lessThan'
 /**/			&&
 /**/			v_defaultValue.reflect !== 'ast_member'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_multiply'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_multiplyAssign'
 /**/			&&
 /**/			v_defaultValue.reflect !== 'ast_new'
 /**/			&&

@@ -36,6 +36,8 @@ var
 	ast_instanceof,
 	ast_lessThan,
 	ast_member,
+	ast_multiply,
+	ast_multiplyAssign,
 	ast_new,
 	ast_not,
 	ast_null,
@@ -98,6 +100,10 @@ ast_instanceof = require( '../ast/instanceof' );
 ast_lessThan = require( '../ast/lessThan' );
 
 ast_member = require( '../ast/member' );
+
+ast_multiply = require( '../ast/multiply' );
+
+ast_multiplyAssign = require( '../ast/multiplyAssign' );
 
 ast_new = require( '../ast/new' );
 
@@ -891,6 +897,14 @@ rightSpecs[ '+' ] =
 		'associativity', 'l2r'
 	);
 
+rightSpecs[ '*' ] =
+	jsParser_spec.create(
+		'prec', 5,
+		'handler', handleDualisticOps,
+		'astCreator', ast_multiply,
+		'associativity', 'l2r'
+	);
+
 rightSpecs[ '<' ] =
 	jsParser_spec.create(
 		'prec', 8,
@@ -960,6 +974,14 @@ rightSpecs[ '+=' ] =
 		'prec', 16,
 		'handler', handleDualisticOps,
 		'astCreator', ast_plusAssign,
+		'associativity', 'r2l'
+	);
+
+rightSpecs[ '*=' ] =
+	jsParser_spec.create(
+		'prec', 16,
+		'handler', handleDualisticOps,
+		'astCreator', ast_multiplyAssign,
 		'associativity', 'r2l'
 	);
 
