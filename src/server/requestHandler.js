@@ -11,7 +11,6 @@
 
 
 var
-	server_requestHandler,
 	change_wrapRay,
 	config,
 	fabric_spaceRef,
@@ -28,6 +27,8 @@ var
 	request_auth,
 	request_register,
 	request_update,
+	server_requestHandler,
+	server_upSleep,
 	serveAcquire,
 	serveAlter,
 	serveAuth,
@@ -70,6 +71,8 @@ request_update = require( '../request/update' );
 resume = require( 'suspend' ).resume;
 
 fabric_spaceRef = require( '../fabric/spaceRef' );
+
+server_upSleep = require( './upSleep' );
 
 
 /*
@@ -421,16 +424,18 @@ serveUpdate =
 			sleepID
 		);
 
+	// FIXME
+	root.$upsleep[ sleepID ] =
+		server_upSleep.create(
+			'username', username,
+			'seq', seq,
+			'timerID', timerID,
+			'result', result,
+			'spaceRef', spaceRef
+		);
+
 	root.create(
-		'nextSleepID', root.nextSleepID + 1,
-		'$upsleep',
-			{
-				username : username,
-				seq : seq,
-				timerID : timerID,
-				result : result,
-				spaceRef : spaceRef
-			}
+		'nextSleepID', root.nextSleepID + 1
 	);
 
 	result.sleepID = sleepID;

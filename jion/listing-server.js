@@ -65,6 +65,7 @@ module.exports =
 			'src/server/resource.js',
 			'src/server/spaceBox.js',
 			'src/server/spaceNexus.js',
+			'src/server/upSleep.js',
 
 			// built-in genjion
 			'src/ast/and.js',
