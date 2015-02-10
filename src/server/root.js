@@ -192,7 +192,7 @@ prototype.startup =
 		'nextSleepID', 1,
 
 		// next visitors ID
-		'$nextVisitor', 1000,
+		'nextVisitor', 1000,
 
 		// table of all cached user credentials
 		'$users', { }

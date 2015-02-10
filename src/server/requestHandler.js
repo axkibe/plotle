@@ -209,6 +209,7 @@ serveAuth =
 	)
 {
 	var
+		nextVisitor,
 		uid,
 		users,
 		val;
@@ -228,13 +229,17 @@ serveAuth =
 
 	if( request.username === 'visitor' )
 	{
+		nextVisitor = root.nextVisitor;
+
 		do
 		{
-			root.$nextVisitor++;
-
-			uid = 'visitor-' + root.$nextVisitor;
+			uid = 'visitor-' + (++nextVisitor);
 		}
 		while( users[ uid ] );
+
+		root.create(
+			'nextVisitor', nextVisitor
+		);
 
 		users[ uid ] =
 			// FUTURE
