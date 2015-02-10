@@ -58,6 +58,7 @@ var
 	server_requestHandler,
 	server_resource,
 	server_root,
+	server_upSleepGroup,
 	server_spaceBox,
 	server_spaceNexus,
 	server_tools,
@@ -99,6 +100,8 @@ server_spaceBox = require( './spaceBox' );
 server_spaceNexus = require( './spaceNexus' );
 
 server_tools = require( './tools' );
+
+server_upSleepGroup = require( './upSleepGroup' );
 
 sha1 = require( '../jools/sha1' );
 
@@ -184,7 +187,7 @@ prototype.startup =
 		'spaces', server_spaceNexus.create( ),
 
 		// a table of all clients waiting for an update
-		'$upsleep', { },
+		'upSleeps', server_upSleepGroup.create( ),
 
 		'nextSleepID', 1,
 
@@ -1051,7 +1054,7 @@ prototype.closeSleep =
 {
 	var sleep;
 
-	sleep = root.$upsleep[ sleepID ];
+	sleep = root.upSleeps.get( sleepID );
 
 	// maybe it just had expired at the same time
 	if( !sleep )
@@ -1061,7 +1064,9 @@ prototype.closeSleep =
 
 	clearTimeout( sleep.timer );
 
-	delete root.$upsleep[ sleepID ];
+	root.create(
+		'upSleeps', root.upSleeps.remove( sleepID )
+	);
 };
 
 
@@ -1077,12 +1082,15 @@ prototype.wake =
 		a,
 		asw,
 		aZ,
+		modified,
 		result,
-		sKey,
+		key,
 		sleep,
 		sleepKeys;
 
-	sleepKeys = Object.keys( root.$upsleep );
+	sleepKeys = root.upSleeps.keys;
+
+	modified = false;
 
 	// FIXME cache change lists to answer the same to multiple clients.
 	for(
@@ -1091,9 +1099,9 @@ prototype.wake =
 		a++
 	)
 	{
-		sKey = sleepKeys[a];
+		key = sleepKeys[ a ];
 
-		sleep = root.$upsleep[sKey];
+		sleep = root.upSleeps.get( key );
 
 		if( !spaceRef.equals( sleep.spaceRef ) )
 		{
@@ -1102,7 +1110,10 @@ prototype.wake =
 
 		clearTimeout( sleep.timer );
 
-		delete root.$upsleep[ sKey ];
+
+		root.create(
+			'upSleeps', root.upSleeps.remove( key )
+		);
 
 		asw = server_requestHandler.conveyUpdate( sleep.seq, sleep.spaceRef );
 

@@ -424,18 +424,19 @@ serveUpdate =
 			sleepID
 		);
 
-	// FIXME
-	root.$upsleep[ sleepID ] =
-		server_upSleep.create(
-			'username', username,
-			'seq', seq,
-			'timer', timer,
-			'result', result,
-			'spaceRef', spaceRef
-		);
-
 	root.create(
-		'nextSleepID', root.nextSleepID + 1
+		'nextSleepID', root.nextSleepID + 1,
+		'upSleeps',
+			root.upSleeps.set(
+				sleepID,
+				server_upSleep.create(
+					'username', username,
+					'seq', seq,
+					'timer', timer,
+					'result', result,
+					'spaceRef', spaceRef
+				)
+			)
 	);
 
 	result.sleepID = sleepID;
@@ -577,7 +578,7 @@ server_requestHandler.expireUpdateSleep =
 		sleep,
 		spaceBox;
 
-	sleep = root.$upsleep[ sleepID ];
+	sleep = root.upSleep.get( sleepID );
 
 	// maybe it just had expired at the same time
 	if( !sleep )
@@ -589,7 +590,9 @@ server_requestHandler.expireUpdateSleep =
 
 	seqZ = spaceBox.seqZ;
 
-	delete root.$upsleep[ sleepID ]; // FIXME
+	root.create(
+		'upSleeps', root.upSleeps.remove( sleepID )
+	);
 
 	asw =
 		reply_update.create(
