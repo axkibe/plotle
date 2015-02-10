@@ -1059,7 +1059,7 @@ prototype.closeSleep =
 		return;
 	}
 
-	clearTimeout( sleep.timerID );
+	clearTimeout( sleep.timer );
 
 	delete root.$upsleep[ sleepID ];
 };
@@ -1100,7 +1100,7 @@ prototype.wake =
 			continue;
 		}
 
-		clearTimeout( sleep.timerID );
+		clearTimeout( sleep.timer );
 
 		delete root.$upsleep[ sKey ];
 

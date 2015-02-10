@@ -362,7 +362,7 @@ serveUpdate =
 		passhash,
 		seq,
 		sleepID,
-		timerID,
+		timer,
 		spaceBox,
 		spaceRef,
 		username;
@@ -417,7 +417,7 @@ serveUpdate =
 	// if not an immediate anwwer, the request is put to sleep
 	sleepID = '' + root.nextSleepID;
 
-	timerID =
+	timer =
 		setTimeout(
 			server_requestHandler.expireUpdateSleep,
 			60000,
@@ -429,7 +429,7 @@ serveUpdate =
 		server_upSleep.create(
 			'username', username,
 			'seq', seq,
-			'timerID', timerID,
+			'timer', timer,
 			'result', result,
 			'spaceRef', spaceRef
 		);

@@ -35,11 +35,10 @@ if( JION )
 						type :
 							'integer'
 					},
-				'timerID' :
+				'timer' :
 					{
-						// TODO remove ID
 						comment :
-							'the timer ID associated with this sleep',
+							'the timer associated with this sleep',
 						type :
 							'protean',
 					},
