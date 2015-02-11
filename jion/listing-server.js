@@ -69,6 +69,7 @@ module.exports =
 			'src/server/upSleep.js',
 			'src/server/upSleepGroup.js',
 			'src/server/user.js',
+			'src/server/userNexus.js',
 
 			// built-in genjion
 			'src/ast/and.js',

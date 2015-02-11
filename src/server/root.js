@@ -62,6 +62,7 @@ var
 	server_spaceBox,
 	server_spaceNexus,
 	server_tools,
+	server_userNexus,
 	sha1,
 	sus,
 	uglify,
@@ -98,6 +99,8 @@ server_resource = require( './resource' );
 server_spaceBox = require( './spaceBox' );
 
 server_spaceNexus = require( './spaceNexus' );
+
+server_userNexus = require( './userNexus' );
 
 server_tools = require( './tools' );
 
@@ -195,7 +198,7 @@ prototype.startup =
 		'nextVisitor', 1000,
 
 		// table of all cached user credentials
-		'$users', { }
+		'users', server_userNexus.create( )
 	);
 
 	yield* root.prepareInventory( );

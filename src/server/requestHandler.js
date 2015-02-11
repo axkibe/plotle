@@ -145,7 +145,7 @@ serveAlter =
 
 	passhash = request.passhash;
 
-	if( root.$users[ username ].pass !== passhash  )
+	if( root.users.get( username ).pass !== passhash  )
 	{
 		return replyError( 'invalid pass' );
 	}
@@ -216,7 +216,7 @@ serveAuth =
 	var
 		nextVisitor,
 		uid,
-		users,
+		user,
 		val;
 
 	try
@@ -230,8 +230,6 @@ serveAuth =
 		return replyError( 'command not valid jion' );
 	}
 
-	users = root.$users;
-
 	if( request.username === 'visitor' )
 	{
 		nextVisitor = root.nextVisitor;
@@ -240,25 +238,25 @@ serveAuth =
 		{
 			uid = 'visitor-' + (++nextVisitor);
 		}
-		while( users[ uid ] );
+		while( root.users.get( uid ) );
 
 		root.create(
-			'nextVisitor', nextVisitor
+			'nextVisitor', nextVisitor,
+			'users',
+				root.users.set(
+					uid,
+					server_user.create(
+						'username', uid,
+						'pass', request.passhash,
+						'news', false
+					)
+				)
 		);
-
-		users[ uid ] =
-			// FUTURE
-			{
-				username : uid,
-				pass : request.passhash,
-				created : Date.now( ),
-				use : Date.now( )
-			};
 
 		return reply_auth.create( 'username', uid );
 	}
 
-	if( !users[ request.username ] )
+	if( !root.users.get( request.username ) )
 	{
 		val =
 			yield root.repository.users.findOne(
@@ -271,11 +269,18 @@ serveAuth =
 			return replyError( 'Username unknown' );
 		}
 
-		users[ request.username ] =
-			database_userSkid.createFromJSON( val ).asUser;
+		root.create(
+			'users',
+			root.users.set(
+				request.username,
+				database_userSkid.createFromJSON( val ).asUser
+			)
+		);
 	}
 
-	if( users[ request.username ].pass !== request.passhash )
+	user = root.users.get( request.username );
+
+	if( user.pass !== request.passhash )
 	{
 		return replyError( 'Invalid password' );
 	}
@@ -355,7 +360,7 @@ serveRegister =
 		resume( )
 	);
 
-	root.$users[ username ] = user;
+	root.create( 'users', root.users.set( username, user ) );
 
 	yield* root.createSpace(
 		fabric_spaceRef.create( 'username', username, 'tag', 'home' )
@@ -379,9 +384,10 @@ serveUpdate =
 		passhash,
 		seq,
 		sleepID,
-		timer,
 		spaceBox,
 		spaceRef,
+		timer,
+		user,
 		username;
 
 	try
@@ -403,12 +409,11 @@ serveUpdate =
 
 	seq = request.seq;
 
-	if(
-		!root.$users[ username ]
-		|| root.$users[ username ].pass !== passhash
-	)
+	user = root.users.get( username );
+
+	if( !user || user.pass !== passhash )
 	{
-		return replyError( 'Invalid password' );
+		return replyError( 'invalid password' );
 	}
 
 	spaceBox = root.spaces.get( spaceRef.fullname );
@@ -474,6 +479,7 @@ serveAcquire =
 		access,
 		passhash,
 		spaceBox,
+		user,
 		username;
 
 	try
@@ -491,10 +497,9 @@ serveAcquire =
 
 	username = request.username;
 
-	if(
-		root.$users[ username ] === undefined
-		|| passhash !== root.$users[ username ].pass
-	)
+	user = root.users.get( username );
+
+	if( !user || passhash !== user.pass )
 	{
 		return replyError( 'wrong username/password' );
 	}
