@@ -9,6 +9,75 @@
 ( function( ) {
 'use strict';
 
+
+/*
+| The jion definition.
+*/
+if( GLOBAL.JION )
+{
+	return {
+		id :
+			'server_root',
+		attributes :
+			{
+				inventory :
+					{
+						comment :
+							'the servers inventory of ressources',
+						type :
+							'server_inventory'
+					},
+				nextSleepID :
+					{
+						comment :
+							'ID for next upsleep',
+						type :
+							'integer'
+					},
+				nextVisitor :
+					{
+						comment :
+							'next visitors ID',
+						type :
+							'integer'
+					},
+				repository :
+					{
+						comment :
+							'the database backend',
+						type :
+							'database_repository'
+					},
+				spaces :
+					{
+						comment :
+							'all spaces',
+						type :
+							'server_spaceNexus'
+					},
+				users :
+					{
+						comment :
+							'table of all cached user credentials',
+						type :
+							'server_userNexus'
+					},
+				upSleeps :
+					{
+						comment :
+							'a table of all clients waiting for an update',
+						type :
+							'server_upSleepGroup'
+					}
+			},
+
+		// next visitors ID
+		init :
+			[ ]
+	};
+}
+
+
 var config = require( '../../config' );
 
 config.database_version = 11;
@@ -40,6 +109,9 @@ GLOBAL.SERVER = true;
 // and not a shell
 GLOBAL.SHELL = false;
 
+// sets root as global variable
+GLOBAL.root = null;
+
 var
 	database_repository,
 	fabric_spaceRef,
@@ -64,6 +136,7 @@ var
 	server_tools,
 	server_userNexus,
 	sha1,
+	startup,
 	sus,
 	uglify,
 	url,
@@ -123,83 +196,46 @@ fabric_spaceRef = require( '../fabric/spaceRef' );
 zlib = require( 'zlib' );
 
 
-/*
-| Constructor.
-*/
-server_root =
-	function( )
-	{
-		// pass
-	};
+server_root = require( '../jion/this' )( module );
 
 
 prototype = server_root.prototype;
 
+
 /*
-| create replacement until root is a JION
+| Initializer.
 */
-prototype.create =
+server_root.prototype._init =
 	function( )
 {
-	var
-		a,
-		arg,
-		aZ,
-		replace;
-
-	replace = new server_root( );
-
-	for( arg in this )
-	{
-		if( this.hasOwnProperty( arg ) )
-		{
-			replace[ arg ] = this[ arg ];
-		}
-	}
-
-	for(
-		a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		replace[ arguments[ a ] ] = arguments[ a + 1 ];
-	}
-
-	root = replace;
-
-	return replace;
+	root = this;
 };
 
 
 /*
 | Sets up the server.
 |*/
-prototype.startup =
+startup =
 	function*( )
 {
 	// the servers inventory
-	root.create( 'inventory', server_inventory.create( ) );
 
-	root.create(
-		'repository', yield* database_repository.connect( config )
-	);
+	root =
+		server_root.create(
+			'inventory', server_inventory.create( ),
 
-	root.create(
-		// all spaces
-		'spaces', server_spaceNexus.create( ),
+			'nextSleepID', 1,
 
-		// a table of all clients waiting for an update
-		'upSleeps', server_upSleepGroup.create( ),
+			'repository', yield* database_repository.connect( config ),
 
-		'nextSleepID', 1,
+			'spaces', server_spaceNexus.create( ),
 
-		// next visitors ID
-		'nextVisitor', 1000,
+			'upSleeps', server_upSleepGroup.create( ),
 
-		// table of all cached user credentials
-		'users', server_userNexus.create( )
-	);
+			'nextVisitor', 1000,
+
+			'users', server_userNexus.create( )
+		);
 
 	yield* root.prepareInventory( );
 
@@ -1512,9 +1548,7 @@ prototype.webAjax =
 sus(
 	function*( )
 {
-	GLOBAL.root = new server_root( );
-
-	yield* GLOBAL.root.startup( );
+	yield* startup( );
 }
 )( );
 

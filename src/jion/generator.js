@@ -1837,7 +1837,6 @@ generator.prototype.genCreatorUnchanged =
 			case 'function' :
 			case 'integer' :
 			case 'number' :
-			case 'Object' : // FIXME
 			case 'protean' :
 			case 'string' :
 
@@ -2986,7 +2985,7 @@ generator.prototype.genAttributeEquals =
 		case 'boolean' :
 		case 'integer' :
 		case 'number' :
-		case 'Object' :
+		case 'protean' :
 		case 'string' :
 
 			ceq = $equals( le, re );

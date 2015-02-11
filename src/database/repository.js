@@ -18,7 +18,7 @@ if( JION )
 {
 	return {
 		id :
-			'server_repository',
+			'database_repository',
 		attributes :
 			{
 				'_connection' :
@@ -49,14 +49,14 @@ if( JION )
 
 var
 	checkRepository,
+	database_repository,
 	fabric_spaceRef,
 	initRepository,
 	jools,
 	mongodb,
-	repository,
 	resume;
 
-repository = require( '../jion/this' )( module );
+database_repository = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
@@ -70,7 +70,7 @@ fabric_spaceRef = require( '../fabric/spaceRef' );
 | Returns a repository object with
 | an active connection.
 */
-repository.connect =
+database_repository.connect =
 	function*(
 		config
 	)
@@ -114,7 +114,7 @@ repository.connect =
 	yield* checkRepository( connection, config );
 
 	return(
-		repository.create(
+		database_repository.create(
 			'_connection', connection,
 			'users', users,
 			'spaces', spaces
@@ -128,7 +128,7 @@ repository.connect =
 |
 | FIXME let it return a jion.
 */
-repository.prototype.collection =
+database_repository.prototype.collection =
 	function*(
 		name
 	)
@@ -140,7 +140,7 @@ repository.prototype.collection =
 /*
 | Closes the connection.
 */
-repository.prototype.close =
+database_repository.prototype.close =
 	function( )
 {
 	this._connection.close( );

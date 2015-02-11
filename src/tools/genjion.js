@@ -41,6 +41,7 @@ var
 	fs,
 	format_formatter,
 	generator,
+	global,
 	inFilename,
 	inStat,
 	jion,
@@ -222,10 +223,8 @@ for(
 
 	if(
 		all
-		||
-		!outStat
-		||
-		outStat.mtime <= inStat.mtime
+		|| !outStat
+		|| outStat.mtime <= inStat.mtime
 	)
 	{
 		jools.log(
@@ -235,12 +234,17 @@ for(
 
 		input = fs.readFileSync( file.inFilename, readOptions );
 
+		global =
+			{
+				JION : true
+			};
+
+		global.GLOBAL = global;
+
 		jion =
 			vm.runInNewContext(
 				input,
-				{
-					JION : true
-				},
+				global,
 				file.inFilename
 			);
 

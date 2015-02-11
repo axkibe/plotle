@@ -331,13 +331,7 @@ prototype.equals =
 	return (
 		this.associativity === obj.associativity
 		&&
-		(
-			this.astCreator === obj.astCreator
-			||
-			this.astCreator !== undefined
-			&&
-			this.astCreator.equals( obj.astCreator )
-		)
+		this.astCreator === obj.astCreator
 		&&
 		this.handler.equals( obj.handler )
 		&&

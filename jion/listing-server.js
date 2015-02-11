@@ -64,6 +64,7 @@ module.exports =
 
 			'src/server/inventory.js',
 			'src/server/resource.js',
+			'src/server/root.js',
 			'src/server/spaceBox.js',
 			'src/server/spaceNexus.js',
 			'src/server/upSleep.js',
