@@ -1606,9 +1606,7 @@ startup = function( )
 			{
 				system = new shell_system( );
 
-				(
-					new shell_root( system._display )
-				).onload( );
+				shell_root.startup( system._display );
 
 				// FIXME work on IOS
 				_hiddenInput.focus( );

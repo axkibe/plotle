@@ -91,7 +91,7 @@ var
 /**/		};
 /**/}
 /**/
-/**/if( CHECK && FREEZE )
+/**/if( FREEZE )
 /**/{
 /**/	Object.freeze( _modes );
 /**/}
@@ -101,12 +101,77 @@ var
 | Constructor.
 */
 shell_root =
+	function( )
+{
+
+};
+
+
+/*
+| TODO remove.
+*/
+shell_root.create =
+	function( )
+{
+	root = new shell_root( );
+
+	Object.freeze( root ); // FIXME
+
+	return root;
+};
+
+
+/*
+| TODO remove.
+*/
+shell_root.prototype.create =
+	function( )
+{
+	var
+		a,
+		arg,
+		aZ,
+		replace;
+
+	replace = new shell_root( );
+
+	for( arg in this )
+	{
+		if( this.hasOwnProperty( arg ) )
+		{
+			replace[ arg ] = this[ arg ];
+		}
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		replace[ arguments[ a ] ] = arguments[ a + 1 ];
+	}
+
+	root = replace;
+
+	return replace;
+};
+
+
+/*
+| Startup of shell.
+*/
+shell_root.startup =
 	function(
 		display
 	)
 {
 	var
+		ajaxPath,
 		canvas,
+		mode,
+		passhash,
+		username,
 		view;
 
 /**/if( CHECK )
@@ -118,7 +183,7 @@ shell_root =
 /**/	}
 /**/}
 
-	root = this;
+	shell_root.create( );
 
 	canvas = document.createElement( 'canvas' );
 
@@ -127,27 +192,13 @@ shell_root =
 	euclid_measure.init( canvas );
 
 	/*
-	this._fontWFont = shell_fontPool.get( 20, 'la' );
+	root._fontWFont = shell_fontPool.get( 20, 'la' );
 
-	this._fontWatch =
-		euclid_measure.width( this._fontWFont, 'ideoloom$8833' );
+	root._fontWatch =
+		euclid_measure.width( root._fontWFont, 'ideoloom$8833' );
 	*/
 
-	this.display = display;
-
-	this.username = null;
-
-	this.space = null;
-
-	this.action = null;
-
-	this._mode = 'Normal';
-
-	// path of currently hovered thing
-	this._hoverPath = jion_path.empty;
-
 	view =
-	this.view =
 		euclid_view.create(
 			'pan', euclid_point.zero,
 			'fact', 0,
@@ -155,45 +206,83 @@ shell_root =
 			'height', display.height
 		);
 
-	this._formJockey =
-		form_jockey.create(
-			'hover', jion_path.empty,
-			'mark', null,
-			'path', jion_path.empty.append( 'form' ),
-			'view', view,
-			'twig:add', 'login', gruga_login,
-			'twig:add', 'moveTo', gruga_moveTo,
-			'twig:add', 'noAccessToSpace', gruga_noAccessToSpace,
-			'twig:add', 'nonExistingSpace', gruga_nonExistingSpace,
-			'twig:add', 'signUp', gruga_signUp,
-			'twig:add', 'space', gruga_space,
-			'twig:add', 'user', gruga_user,
-			'twig:add', 'welcome', gruga_welcome
-		);
+	mode = 'Normal',
 
-	this._discJockey =
-		disc_jockey.create(
-			'access', '',
-			'action', null,
-			'hover', jion_path.empty,
-			'mark', null,
-			'mode', this._mode,
-			'path', jion_path.empty.append( 'disc' ),
-			'view', view,
-			'twig:add', 'mainDisc', gruga_mainDisc,
-			'twig:add', 'createDisc', gruga_createDisc
-		);
+	ajaxPath = jion_path.empty.append( 'ajax' );
 
-	this.mark = null;
+	root.create(
+		'display', display,
+		'mark', null,
+		'username', null,
+		'space', null,
+		'action', null,
+		'_mode', mode,
+		'_hoverPath', jion_path.empty,
+		'view', view,
+		'_formJockey',
+			form_jockey.create(
+				'hover', jion_path.empty,
+				'mark', null,
+				'path', jion_path.empty.append( 'form' ),
+				'view', view,
+				'twig:add', 'login', gruga_login,
+				'twig:add', 'moveTo', gruga_moveTo,
+				'twig:add', 'noAccessToSpace', gruga_noAccessToSpace,
+				'twig:add', 'nonExistingSpace', gruga_nonExistingSpace,
+				'twig:add', 'signUp', gruga_signUp,
+				'twig:add', 'space', gruga_space,
+				'twig:add', 'user', gruga_user,
+				'twig:add', 'welcome', gruga_welcome
+			),
+		'_discJockey',
+			disc_jockey.create(
+				'access', '',
+				'action', null,
+				'hover', jion_path.empty,
+				'mark', null,
+				'mode', mode,
+				'path', jion_path.empty.append( 'disc' ),
+				'view', view,
+				'twig:add', 'mainDisc', gruga_mainDisc,
+				'twig:add', 'createDisc', gruga_createDisc
+			),
+		// remembers an acquired visitor user name and passhash
+		// so when logging out from a real user the previous
+		// visitor is regained.
+		'_visitUser', null,
+		'_visitPasshash', null,
+		'ajax',
+			net_ajax.create(
+				'path', ajaxPath,
+				'twig:add', 'command',
+					net_channel.create(
+						'path', ajaxPath.append( 'command' )
+					),
+				'twig:add', 'update',
+					net_channel.create(
+						'path', ajaxPath.append( 'update' )
+					)
+			),
+		'link', net_link.create( ),
+		'doTracker', shell_doTracker.create( )
+	);
 
-	// remembers an acquired visitor user name and passhash
-	// so when logging out from a real user the previous
-	// visitor is regained.
-	this._visitUser = null;
+	username = window.localStorage.getItem( 'username' );
 
-	this._visitPasshash = null;
+	if( username )
+	{
+		passhash = window.localStorage.getItem( 'passhash' );
+	}
+	else
+	{
+		username = 'visitor';
 
-	this._draw( );
+		passhash = jools.uid( );
+	}
+
+	root.link.auth( username, passhash );
+
+	root._draw( );
 };
 
 
@@ -1184,54 +1273,6 @@ shell_root.prototype.onAuth =
 	this.setUser( reply.username, request.passhash );
 
 	this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
-};
-
-
-/*
-| Called when loading the website
-| FIXME call onLoad
-*/
-shell_root.prototype.onload =
-	function( )
-{
-	var
-		ajaxPath,
-		passhash,
-		username;
-
-	ajaxPath = jion_path.empty.append( 'ajax' );
-
-	this.ajax =
-		net_ajax.create(
-			'path', ajaxPath,
-			'twig:add', 'command',
-				net_channel.create(
-					'path', ajaxPath.append( 'command' )
-				),
-			'twig:add', 'update',
-				net_channel.create(
-					'path', ajaxPath.append( 'update' )
-				)
-		);
-
-	this.link = net_link.create( );
-
-	this.doTracker = shell_doTracker.create( );
-
-	username = window.localStorage.getItem( 'username' );
-
-	if( username )
-	{
-		passhash = window.localStorage.getItem( 'passhash' );
-	}
-	else
-	{
-		username = 'visitor';
-
-		passhash = jools.uid( );
-	}
-
-	this.link.auth( username, passhash );
 };
 
 
