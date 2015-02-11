@@ -22,6 +22,7 @@ module.exports =
 
 			'src/database/changeSkid.js',
 			'src/database/changeSkidRay.js',
+			'src/database/userSkid.js',
 			'src/database/repository.js',
 
 			'src/euclid/margin.js',
@@ -67,6 +68,7 @@ module.exports =
 			'src/server/spaceNexus.js',
 			'src/server/upSleep.js',
 			'src/server/upSleepGroup.js',
+			'src/server/user.js',
 
 			// built-in genjion
 			'src/ast/and.js',

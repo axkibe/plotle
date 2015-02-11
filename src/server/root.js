@@ -259,12 +259,14 @@ prototype.loadSpaces =
 			'loading and replaying "' + spaceRef.fullname + '"'
 		);
 
-		root.spaces = // FIXME
-			root.spaces.create(
-				'group:set',
-				spaceRef.fullname,
-				yield* server_spaceBox.loadSpace( spaceRef )
-			);
+		root.create(
+			'spaces',
+				root.spaces.create(
+					'group:set',
+					spaceRef.fullname,
+					yield* server_spaceBox.loadSpace( spaceRef )
+				)
+		);
 	}
 };
 

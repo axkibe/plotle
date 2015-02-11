@@ -1,7 +1,5 @@
 /*
 | A change on a skid for database storage.
-|
-| FUTURE only have it changeRays for simplicity.
 */
 
 

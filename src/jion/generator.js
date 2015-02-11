@@ -2100,7 +2100,6 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 		case 'boolean' :
 		case 'integer' :
 		case 'number' :
-		case 'Object' : // FIXME remove
 		case 'protean' : // FIXME remove
 		case 'string' :
 
@@ -2139,11 +2138,35 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 				{
 					switch( idList[ t ].string )
 					{
+						// FIXME make typeof part of the parsed stuff
+						case 'boolean' :
+
+							sif =
+								$if(
+									$equals( $typeof( 'arg' ), '"boolean"' ),
+									$assign( attr.v, 'arg' )
+								);
+
+							break;
+
 						case 'number' :
 
 							sif =
 								$if(
 									$equals( $typeof( 'arg' ), '"number"' ),
+									$assign( attr.v, 'arg' )
+								);
+
+							break;
+
+						case 'string' :
+
+							sif =
+								$if(
+									$or(
+										$equals( $typeof( 'arg' ), '"string"' ),
+										$instanceof( 'arg', 'String' )
+									),
 									$assign( attr.v, 'arg' )
 								);
 
