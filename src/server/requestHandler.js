@@ -13,6 +13,7 @@
 var
 	change_wrapRay,
 	config,
+	database_userSkid,
 	fabric_spaceRef,
 	jools,
 	replyError,
@@ -29,6 +30,7 @@ var
 	request_update,
 	server_requestHandler,
 	server_upSleep,
+	server_user,
 	serveAcquire,
 	serveAlter,
 	serveAuth,
@@ -42,9 +44,11 @@ module.exports =
 
 config = require( '../../config' );
 
+jools = require( '../jools/jools' );
+
 change_wrapRay = require( '../change/wrapRay' );
 
-jools = require( '../jools/jools' );
+database_userSkid = require( '../database/userSkid' );
 
 reply_acquire = require( '../reply/acquire' );
 
@@ -74,6 +78,7 @@ fabric_spaceRef = require( '../fabric/spaceRef' );
 
 server_upSleep = require( './upSleep' );
 
+server_user = require( './user' );
 
 /*
 | Creates a reject error for all
@@ -266,7 +271,8 @@ serveAuth =
 			return replyError( 'Username unknown' );
 		}
 
-		users[ request.username ] = val;
+		users[ request.username ] =
+			database_userSkid.createFromJSON( val ).asUser;
 	}
 
 	if( users[ request.username ].pass !== request.passhash )
@@ -334,14 +340,20 @@ serveRegister =
 		return replyError( 'Username already taken' );
 	}
 
-	user = {
-		_id : username,
-		pass : passhash,
-		mail : mail,
-		news : news
-	};
+	user =
+		server_user.create(
+			'username', username,
+			'pass', passhash,
+			'mail', mail,
+			'news', news
+		);
 
-	yield root.repository.users.insert( user, resume( ) );
+	yield root.repository.users.insert(
+		JSON.parse( JSON.stringify(
+			database_userSkid.createFromUser( user )
+		) ),
+		resume( )
+	);
 
 	root.$users[ username ] = user;
 
@@ -481,8 +493,7 @@ serveAcquire =
 
 	if(
 		root.$users[ username ] === undefined
-		||
-		passhash !== root.$users[ username ].pass
+		|| passhash !== root.$users[ username ].pass
 	)
 	{
 		return replyError( 'wrong username/password' );
