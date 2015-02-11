@@ -179,11 +179,12 @@ serveAlter =
 		}
 
 		// this does not yield, its write and forget.
-		spaceBox =
-			spaceBox.appendChanges( changeWrapRay, request.username );
+		spaceBox = spaceBox.appendChanges( changeWrapRay, request.username );
 
-		root.spaces = // FIXME
-			root.spaces.create( 'group:set', spaceRef.fullname, spaceBox );
+		root.create(
+			'spaces',
+				root.spaces.create( 'group:set', spaceRef.fullname, spaceBox )
+		);
 	}
 	catch( error )
 	{
@@ -599,7 +600,7 @@ server_requestHandler.expireUpdateSleep =
 		sleep,
 		spaceBox;
 
-	sleep = root.upSleep.get( sleepID );
+	sleep = root.upSleeps.get( sleepID );
 
 	// maybe it just had expired at the same time
 	if( !sleep )

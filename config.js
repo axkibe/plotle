@@ -89,6 +89,7 @@ config.server_check = true;
 | NOTE: this make the server very slow!
 */
 config.server_freeze = false;
+config.server_freeze = true;
 
 
 /*

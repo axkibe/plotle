@@ -716,18 +716,20 @@ prototype.prepareInventory =
 			);
 		}
 
-		root.inventory =
-			root.inventory.updateResource(
-				resource,
-				resource.create(
-					'data',
-						server_postProcessor[ resource.postProcessor ](
-							resource.data,
-							root.inventory,
-							bundleFilePath
-						)
+		root.create(
+			'inventory',
+				root.inventory.updateResource(
+					resource,
+					resource.create(
+						'data',
+							server_postProcessor[ resource.postProcessor ](
+								resource.data,
+								root.inventory,
+								bundleFilePath
+							)
+					)
 				)
-			);
+		);
 	}
 
 	inv = root.inventory;
@@ -746,14 +748,16 @@ prototype.prepareInventory =
 			continue;
 		}
 
-		root.inventory =
-			root.inventory.updateResource(
-				resource,
-				resource.create(
-					'gzip',
-						yield zlib.gzip( resource.data, resume( ) )
+		root.create(
+			'inventory',
+				root.inventory.updateResource(
+					resource,
+					resource.create(
+						'gzip',
+							yield zlib.gzip( resource.data, resume( ) )
+					)
 				)
-			);
+		);
 	}
 
 	if( !config.shell_noBundle )
@@ -1075,11 +1079,12 @@ prototype.createSpace =
 /**/	}
 /**/}
 
-	spaceBox =
-		yield* server_spaceBox.createSpace( spaceRef );
+	spaceBox = yield* server_spaceBox.createSpace( spaceRef );
 
-	root.spaces = // FIXME
-		root.spaces.create( 'group:set', spaceRef.fullname, spaceBox );
+	root.create(
+		'spaces',
+			root.spaces.create( 'group:set', spaceRef.fullname, spaceBox )
+	);
 
 	return spaceBox;
 };
