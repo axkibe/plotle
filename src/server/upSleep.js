@@ -20,14 +20,6 @@ if( JION )
 			'server_upSleep',
 		attributes :
 			{
-				// TODO check if needed
-				'username' :
-					{
-						comment :
-							'username that is put the sleep',
-						type :
-							'string'
-					},
 				'seq' :
 					{
 						comment :

@@ -453,7 +453,6 @@ serveUpdate =
 			root.upSleeps.set(
 				sleepID,
 				server_upSleep.create(
-					'username', username,
 					'seq', seq,
 					'timer', timer,
 					'result', result,
