@@ -963,7 +963,7 @@ fabric_space.prototype.dragStop =
 									view.depoint( action.start ),
 									view.depoint( p )
 								),
-							'spaceUser', root.username,
+							'spaceUser', root.user.name,
 							'spaceTag', 'home'
 						);
 

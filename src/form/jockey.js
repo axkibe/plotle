@@ -75,12 +75,12 @@ if( JION )
 						defaultValue :
 							'undefined'
 					},
-				username :
+				user :
 					{
 						comment :
 							'currently logged in user',
 						type :
-							'string',
+							'user_user',
 						defaultValue :
 							'null'
 					},
@@ -162,20 +162,14 @@ form_jockey.prototype._init =
 
 		this.twig[ name ] =
 			form.create(
-				'hover',
-					this.hover,
-				'mark',
-					this.mark,
-				'path',
-					path,
-				'spaceUser',
-					this.spaceUser,
-				'spaceTag',
-					this.spaceTag,
-				'username',
-					this.username,
-				'view',
-					this.view
+				'hover', this.hover,
+				'mark', this.mark,
+				'path', path,
+				'spaceUser', this.spaceUser,
+				'spaceTag', this.spaceTag,
+				// TODO hand user object
+				'username', this.user && this.user.name,
+				'view', this.view
 			);
 
 /**/	if( CHECK )

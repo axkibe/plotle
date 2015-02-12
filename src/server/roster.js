@@ -639,6 +639,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/user/user.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/shell/root.js',
 		'inBundle', true
 	),

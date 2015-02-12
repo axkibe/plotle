@@ -72,6 +72,8 @@ module.exports =
 			'src/server/user.js',
 			'src/server/userNexus.js',
 
+			'src/user/user.js',
+
 			// built-in genjion
 			'src/ast/and.js',
 			'src/ast/arrayLiteral.js',

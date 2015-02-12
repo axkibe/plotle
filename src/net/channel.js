@@ -136,13 +136,14 @@ net_channel.prototype.request =
 		reqWrap = reqWrap.send( );
 	}
 
-	// FUTURE root.Create
-	root.ajax =
-		root.ajax.create(
-			'twig:set',
-			this.channelName,
-			this.create( '_fifo', this._fifo.append( reqWrap ) )
-		);
+	root.create(
+		'ajax',
+			root.ajax.create(
+				'twig:set',
+				this.channelName,
+				this.create( '_fifo', this._fifo.append( reqWrap ) )
+			)
+	);
 };
 
 
@@ -172,13 +173,14 @@ net_channel.prototype.onReply =
 
 	channel = channel.create( '_fifo', fifo );
 
-	// FUTURE root.Create
-	root.ajax =
-		root.ajax.create(
-			'twig:set',
-			channel.channelName,
-			channel
-		);
+	root.create(
+		'ajax',
+			root.ajax.create(
+				'twig:set',
+				channel.channelName,
+				channel
+			)
+	);
 
 	root.link[ wrap.receiverFunc ]( wrap.request, reply );
 };

@@ -107,12 +107,12 @@ if( JION )
 						defaultValue :
 							'null'
 					},
-				username :
+				user :
 					{
 						comment :
 							'currently logged in user',
 						type :
-							'string',
+							'user_user',
 						defaultValue :
 							'null'
 					}
@@ -176,34 +176,25 @@ jockey.prototype._init =
 
 		twig[ name ] =
 			proto.create(
-				'access',
-					this.access,
-				'action',
-					this.action,
+				'access', this.access,
+				'action', this.action,
 				'hover',
 					// FIXME make a concernsHover in the disc
 					( this.hover.isEmpty || this.hover.get( 2 ) !== name )
 					?  jion_path.empty
 					: this.hover,
-				'mark',
-					this.mark,
-				'mode',
-					this.mode,
-				'path',
-					path,
-				'view',
-					this.view,
-				'spaceUser',
-					this.spaceUser,
-				'spaceTag',
-					this.spaceTag,
-				'username',
-					this.username
+				'mark', this.mark,
+				'mode', this.mode,
+				'path', path,
+				'view', this.view,
+				'spaceUser', this.spaceUser,
+				'spaceTag', this.spaceTag,
+				// FIXME hand user object
+				'username', this.user && this.user.name
 			);
 	}
 
-	this.twig =
-		twig;
+	this.twig = twig;
 };
 
 

@@ -32,9 +32,13 @@ var
 	shell_doTracker,
 	shell_root,
 	system,
-	swatch;
+	swatch,
+	user_user,
+	_redraw; // FIXME remove
 
 root = null;
+
+_redraw = true;
 
 
 
@@ -154,6 +158,8 @@ shell_root.prototype.create =
 
 	root = replace;
 
+//	Object.freeze( root ); // XXX
+
 	return replace;
 };
 
@@ -213,7 +219,7 @@ shell_root.startup =
 	root.create(
 		'display', display,
 		'mark', null,
-		'username', null,
+		'user', null,
 		'space', null,
 		'action', null,
 		'_mode', mode,
@@ -267,6 +273,7 @@ shell_root.startup =
 		'doTracker', shell_doTracker.create( )
 	);
 
+	// TODO more into user_user
 	username = window.localStorage.getItem( 'username' );
 
 	if( username )
@@ -411,8 +418,7 @@ shell_root.prototype.click =
 		}
 	}
 
-
-	if( this._redraw )
+	if( _redraw )
 	{
 		this._draw( );
 	}
@@ -445,7 +451,7 @@ shell_root.prototype.setAction =
 	this._discJockey =
 		this._discJockey.create( 'action', action );
 
-	this._redraw = true;
+	_redraw = true;
 };
 
 
@@ -473,7 +479,7 @@ shell_root.prototype.setFocus =
 		}
 	}
 
-	if( this._redraw )
+	if( _redraw )
 	{
 		this._draw( );
 	}
@@ -503,7 +509,7 @@ shell_root.prototype.setMode =
 	this._discJockey =
 		this._discJockey.create( 'mode', mode );
 
-	this._redraw = true;
+	_redraw = true;
 };
 
 
@@ -556,7 +562,7 @@ shell_root.prototype.pointingHover =
 
 			root._setHover( result.path );
 
-			if( this._redraw )
+			if( _redraw )
 			{
 				this._draw( );
 			}
@@ -584,7 +590,7 @@ shell_root.prototype.pointingHover =
 
 		root._setHover( result.path );
 
-		if( this._redraw )
+		if( _redraw )
 		{
 			this._draw( );
 		}
@@ -592,7 +598,7 @@ shell_root.prototype.pointingHover =
 		return result.cursor;
 	}
 
-	if( this._redraw )
+	if( _redraw )
 	{
 		this._draw( );
 	}
@@ -634,7 +640,7 @@ shell_root.prototype.dragStart =
 		}
 	}
 
-	if( this._redraw )
+	if( _redraw )
 	{
 		this._draw( );
 	}
@@ -667,7 +673,7 @@ shell_root.prototype.dragMove =
 		cursor = screen.dragMove( p, shift, ctrl );
 	}
 
-	if( this._redraw )
+	if( _redraw )
 	{
 		this._draw( );
 	}
@@ -699,7 +705,7 @@ shell_root.prototype.dragStop =
 		screen.dragStop( p, shift, ctrl );
 	}
 
-	if( this._redraw )
+	if( _redraw )
 	{
 		this._draw( );
 	}
@@ -751,7 +757,7 @@ shell_root.prototype.mousewheel =
 		screen.mousewheel( p, dir, shift, ctrl );
 	}
 
-	if( this._redraw )
+	if( _redraw )
 	{
 		this._draw( );
 	}
@@ -780,7 +786,7 @@ shell_root.prototype.setMark =
 
 	this._discJockey = this._discJockey.create( 'mark', mark );
 
-	this._redraw = true;
+	_redraw = true;
 };
 
 
@@ -826,7 +832,7 @@ shell_root.prototype.setPath =
 			throw new Error( );
 	}
 
-	root._redraw = true;
+	_redraw = true;
 };
 
 
@@ -858,7 +864,7 @@ shell_root.prototype.specialKey =
 		focusItem.scrollMarkIntoView( );
 	}
 
-	if( this._redraw )
+	if( _redraw )
 	{
 		this._draw( );
 	}
@@ -1002,7 +1008,7 @@ shell_root.prototype._setHover =
 
 	this._hoverPath = path;
 
-	root._redraw = true;
+	_redraw = true;
 };
 
 
@@ -1032,7 +1038,7 @@ shell_root.prototype.input =
 		}
 	}
 
-	if( this._redraw )
+	if( _redraw )
 	{
 		this._draw( );
 	}
@@ -1062,31 +1068,33 @@ shell_root.prototype.resize =
 
 /*
 | Sets the current user
+|
+| TODO move into root._init
 */
 shell_root.prototype.setUser =
 	function(
-		username,
-		passhash
+		user // user_user jion
 	)
 {
 	this.link =
+		// TODO hand user_user
 		this.link.create(
-			'username', username,
-			'passhash', passhash
+			'username', user.name,
+			'passhash', user.passhash
 		);
 
-	if( username.substr( 0, 5 ) !== 'visit' )
+	// FIXME user.isVisitor
+	if( user.name.substr( 0, 5 ) !== 'visit' )
 	{
-		window.localStorage.setItem( 'username', username );
+		window.localStorage.setItem( 'username', user.name );
 
-		window.localStorage.setItem( 'passhash', passhash );
+		window.localStorage.setItem( 'passhash', user.passhash );
 	}
 	else
 	{
 		if(
 			this.space
-			&&
-			this.space.spaceUser !== 'ideoloom'
+			&& this.space.spaceUser !== 'ideoloom'
 		)
 		{
 			this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
@@ -1096,16 +1104,16 @@ shell_root.prototype.setUser =
 
 		window.localStorage.setItem( 'passhash', null );
 
-		this._visitUser = username;
+		this._visitUser = user.name;
 
-		this._visitPasshash = passhash;
+		this._visitPasshash = user.passhash;
 	}
 
-	this.username = username;
-
-	this._discJockey = this._discJockey.create( 'username', username );
-
-	this._formJockey = this._formJockey.create( 'username', username );
+	root.create(
+		'user', user,
+		'_discJockey', this._discJockey.create( 'user', user ),
+		'_formJockey', this._formJockey.create( 'user', user )
+	);
 };
 
 
@@ -1128,7 +1136,7 @@ shell_root.prototype.setView =
 
 	this._formJockey = this._formJockey.create( 'view', view );
 
-	this._redraw = true;
+	_redraw = true;
 };
 
 
@@ -1270,7 +1278,12 @@ shell_root.prototype.onAuth =
 		return;
 	}
 
-	this.setUser( reply.username, request.passhash );
+	this.setUser(
+		user_user.create(
+			'name', reply.username,
+			'passhash', request.passhash
+		)
+	);
 
 	this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 };
@@ -1282,7 +1295,7 @@ shell_root.prototype.onAuth =
 shell_root.prototype.onRegister =
 	function(
 		ok,
-		username,
+		username, // TODO hand user object
 		passhash,
 		message
 	)
@@ -1303,7 +1316,7 @@ shell_root.prototype.onRegister =
 
 	this._formJockey.get( 'signUp' ).onRegister(
 		ok,
-		username,
+		username, // TODO hand user object
 		passhash,
 		message
 	);
@@ -1376,7 +1389,7 @@ shell_root.prototype._draw =
 		this._discJockey.draw( display );
 	}
 
-	this._redraw = false;
+	_redraw = false;
 };
 
 
