@@ -158,7 +158,7 @@ shell_root.prototype.create =
 
 	root = replace;
 
-//	Object.freeze( root ); // XXX
+	Object.freeze( root ); // XXX
 
 	return replace;
 };
@@ -342,18 +342,19 @@ shell_root.prototype.arrivedAtSpace =
 		access
 	)
 {
-	root._discJockey =
-		root._discJockey.create(
-			'access', access,
-			'spaceUser', spaceRef.username, // FIXME
-			'spaceTag', spaceRef.tag // FIXME
-		);
-
-	root._formJockey =
-		root._formJockey.create(
-			'spaceUser', spaceRef.username, // FIXME
-			'spaceTag', spaceRef.tag // FIXME
-		);
+	root.create(
+		'_discJockey',
+			root._discJockey.create(
+				'access', access,
+				'spaceUser', spaceRef.username, // FIXME
+				'spaceTag', spaceRef.tag // FIXME
+			),
+		'_formJockey',
+			root._formJockey.create(
+				'spaceUser', spaceRef.username, // FIXME
+				'spaceTag', spaceRef.tag // FIXME
+			)
+	);
 
 	root.setMode( 'Normal' );
 };
@@ -1228,23 +1229,25 @@ shell_root.prototype.onAcquireSpace =
 
 	access = reply.access;
 
-	root.space =
-		reply.space.create(
-			// FUTURE have the server already set this at JSON level
-			'spaceUser', spaceRef.username, // FIXME have it use a ref
-			'spaceTag', spaceRef.tag,
-			'access', access,
-			'hover', jion_path.empty,
-			'mark', null,
-			'path', jion_path.empty.append( 'space' ),
-			'view',
-				euclid_view.create(
-					'fact', 0,
-					'height', root.display.height,
-					'pan', euclid_point.zero,
-					'width', root.display.width
-				)
-		);
+	root.create(
+		'space',
+			reply.space.create(
+				// FUTURE have the server already set this at JSON level
+				'spaceUser', spaceRef.username, // FIXME have it use a ref
+				'spaceTag', spaceRef.tag,
+				'access', access,
+				'hover', jion_path.empty,
+				'mark', null,
+				'path', jion_path.empty.append( 'space' ),
+				'view',
+					euclid_view.create(
+						'fact', 0,
+						'height', root.display.height,
+						'pan', euclid_point.zero,
+						'width', root.display.width
+					)
+			)
+	);
 
 	root.arrivedAtSpace( spaceRef, access );
 
