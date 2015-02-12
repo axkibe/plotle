@@ -89,11 +89,13 @@ shell_doTracker.prototype.track =
 	}
 
 	// FIXME
-	root.doTracker =
-		this.create(
-			'_undo', undo,
-			'_redo', change_wrapRay.create( )
-		);
+	root.create(
+		'doTracker',
+			this.create(
+				'_undo', undo,
+				'_redo', change_wrapRay.create( )
+			)
+	);
 };
 
 
@@ -218,11 +220,13 @@ shell_doTracker.prototype.undo =
 
 	changeWrap = changeWrap.createInvert( );
 
-	root.doTracker =
-		this.create(
-			'_undo', undo,
-			'_redo', this._redo.append( changeWrap )
-		);
+	root.create(
+		'doTracker',
+			this.create(
+				'_undo', undo,
+				'_redo', this._redo.append( changeWrap )
+			)
+	);
 
 	root.link.alter( changeWrap );
 };

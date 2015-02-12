@@ -12,7 +12,8 @@ var
 	form_signUp,
 	jools,
 	mark_caret,
-	root;
+	root,
+	user_user;
 
 
 /*

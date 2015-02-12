@@ -158,7 +158,7 @@ shell_root.prototype.create =
 
 	root = replace;
 
-//	Object.freeze( root ); // XXX
+	Object.freeze( root ); // XXX
 
 	return replace;
 };
@@ -449,10 +449,11 @@ shell_root.prototype.setAction =
 /**/	}
 /**/}
 
-	root.action = action;
-
-	root._discJockey =
-		root._discJockey.create( 'action', action );
+	// FIXME have _init hand it down
+	root.create(
+		'action', action,
+		'_discJockey', root._discJockey.create( 'action', action )
+	);
 
 	_redraw = true;
 };
@@ -791,13 +792,13 @@ shell_root.prototype.setMark =
 		: ''
 	);
 
-	root.mark = mark;
-
-	root.space = root.space.create( 'mark', mark );
-
-	root._formJockey = root._formJockey.create( 'mark', mark );
-
-	root._discJockey = root._discJockey.create( 'mark', mark );
+	// FIXME have _init hand it down
+	root.create(
+		'mark', mark,
+		'space', root.space.create( 'mark', mark ),
+		'_formJockey', root._formJockey.create( 'mark', mark ),
+		'_discJockey', root._discJockey.create( 'mark', mark )
+	);
 
 	_redraw = true;
 };
@@ -820,23 +821,15 @@ shell_root.prototype.setPath =
 
 		case 'form' :
 
-			root._formJockey =
-				root._formJockey.setPath(
-					path,
-					value,
-					1
-				);
+			root.create(
+				'_formJockey', root._formJockey.setPath( path, value, 1 )
+			);
 
 			break;
 
 		case 'space' :
 
-			root.space =
-				root.space.setPath(
-					path,
-					value,
-					1
-				);
+			root.create( 'space', root.space.setPath( path, value, 1 ) );
 
 			break;
 
@@ -961,20 +954,21 @@ shell_root.prototype.update =
 	}
 
 	// FIXME let the link do the real stuff
-	root.space =
-		space.create(
-			'spaceUser', root.space.spaceUser,
-			'spaceTag', root.space.spaceTag,
-			'access', root.space.access,
-			'hover', root.space.hover,
-			'mark', mark,
-			'path', root.space.path,
-			'view', root.space.view
-		);
-
-	root._discJockey = root._discJockey.create( 'mark', mark );
-
-	root.mark = mark;
+	root.create(
+		'space',
+			space.create(
+				'spaceUser', root.space.spaceUser,
+				'spaceTag', root.space.spaceTag,
+				'access', root.space.access,
+				'hover', root.space.hover,
+				'mark', mark,
+				'path', root.space.path,
+				'view', root.space.view
+			),
+		'_discJockey',
+			root._discJockey.create( 'mark', mark ),
+		'mark', mark
+	);
 
 	root._draw( );
 };
@@ -1069,7 +1063,8 @@ shell_root.prototype.resize =
 		display
 	)
 {
-	root.display = display;
+	// FIXME view should be part of creator
+	root.create( 'display', display );
 
 	root.setView(
 		root.view.create(
@@ -1122,9 +1117,11 @@ shell_root.prototype.setUser =
 
 		window.localStorage.setItem( 'passhash', null );
 
-		root._visitUser = user.name;
-
-		root._visitPasshash = user.passhash;
+		// FIXME make _visitor a jion
+		root.create(
+			'_visitUser', user.name,
+			'_visitPasshash', user.passhash
+		);
 	}
 
 	root.create(
@@ -1145,16 +1142,13 @@ shell_root.prototype.setView =
 		view
 	)
 {
-	root.view = view;
-
-	if( root.space )
-	{
-		root.space = root.space.create( 'view', view );
-	}
-
-	root._discJockey = root._discJockey.create( 'view', view );
-
-	root._formJockey = root._formJockey.create( 'view', view );
+	// FIXME have _init hand it down
+	root.create(
+		'view', view,
+		'space', root.space && root.create( 'view', view ),
+		'_discJockey', root._discJockey.create( 'view', view ),
+		'_formJockey', root._formJockey.create( 'view', view )
+	);
 
 	_redraw = true;
 };

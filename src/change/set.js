@@ -169,7 +169,7 @@ change_set.prototype.transform =
 
 		case 'change_grow' :
 		case 'change_join' :
-		case 'change_shrinkt' :
+		case 'change_shrink' :
 		case 'change_split' :
 		case 'change_insert' :
 		case 'change_remove' :

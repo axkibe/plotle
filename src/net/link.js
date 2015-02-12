@@ -315,7 +315,6 @@ net_link.prototype._onUpdate =
 		changeWrap,
 		changeWrapRay,
 		gotOwnChgs,
-		link,
 		outbox,
 		postbox,
 		report,
@@ -323,11 +322,9 @@ net_link.prototype._onUpdate =
 		cSpace,
 		rSpace;
 
-	link = this;
-
 /**/if( CHECK )
 /**/{
-/**/	if( root.link !== link )
+/**/	if( root.link !== this )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -359,7 +356,7 @@ net_link.prototype._onUpdate =
 
 	cSpace =
 	rSpace =
-		link._rSpace;
+		root.link._rSpace;
 
 	// FUTURE fix these length === 0 cases
 	if( changeWrapRay && changeWrapRay.length > 0 )
@@ -410,34 +407,33 @@ net_link.prototype._onUpdate =
 		cSpace = outbox.changeTree( cSpace );
 	}
 
-	link =
-	root.link =
-		link.create(
-			'_cSpace', cSpace,
-			'_outbox', outbox,
-			'_postbox', postbox,
-			'_rSeq', reply.seq + changeWrapRay.length,
-			'_rSpace', rSpace
-		);
+	root.create(
+		'link',
+			root.link.create(
+				'_cSpace', cSpace,
+				'_outbox', outbox,
+				'_postbox', postbox,
+				'_rSeq', reply.seq + changeWrapRay.length,
+				'_rSpace', rSpace
+			)
+	);
 
-
+	// FIXME simply have it set the space.
 	if( report.length > 0 )
 	{
 		root.update( cSpace, report );
 	}
 
-	// FUTURE
-	//root.doTracker = root.doTracker.update( changeWrapRay );
-	root.doTracker = root.doTracker.update( report );
+	root.create( 'doTracker', root.doTracker.update( report ) );
 
 	if( gotOwnChgs )
 	{
-		link._sendChanges( );
+		root.link._sendChanges( );
 	}
 
 	// issues the following update
 
-	link._update( );
+	root.link._update( );
 };
 
 
@@ -450,29 +446,27 @@ net_link.prototype.alter =
 	)
 {
 	var
-		link,
 		tree;
-
-	link = this;
 
 /**/if( CHECK )
 /**/{
-/**/	if( root.link !== link )
+/**/	if( root.link !== this )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
-	tree = changeWrap.changeTree( link._cSpace );
+	tree = changeWrap.changeTree( root.link._cSpace );
 
-	link =
-	root.link =
-		link.create(
-			'_cSpace', tree,
-			'_outbox', root.link._outbox.append( changeWrap )
-		);
+	root.create(
+		'link',
+			root.link.create(
+				'_cSpace', tree,
+				'_outbox', root.link._outbox.append( changeWrap )
+			)
+	);
 
-	link._sendChanges( );
+	root.link._sendChanges( );
 
 	root.update( tree, changeWrap );
 };
@@ -485,47 +479,45 @@ net_link.prototype._sendChanges =
 	function( )
 {
 	var
-		link,
 		outbox;
-
-	link = this;
 
 /**/if( CHECK )
 /**/{
-/**/	if( root.link !== link )
+/**/	if( root.link !== this )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/}
 
 	// already sending?
-	if( link._postbox.length > 0 )
+	if( root.link._postbox.length > 0 )
 	{
 		return;
 	}
 
 	// nothing to send?
-	if( link._outbox.length === 0 )
+	if( root.link._outbox.length === 0 )
 	{
 		return;
 	}
 
-	outbox = link._outbox;
+	outbox = root.link._outbox;
 
-	link =
-	root.link =
-		link.create(
-			'_outbox', change_wrapRay.create( ),
-			'_postbox', outbox
-		);
+	root.create(
+		'link',
+			root.link.create(
+				'_outbox', change_wrapRay.create( ),
+				'_postbox', outbox
+			)
+	);
 
 	root.ajax.twig.command.request(
 		request_alter.create(
 			'changeWrapRay', outbox,
-			'passhash', link.passhash,
-			'seq', link._rSeq,
-			'spaceRef', link.spaceRef,
-			'username', link.username
+			'passhash', root.link.passhash,
+			'seq', root.link._rSeq,
+			'spaceRef', root.link.spaceRef,
+			'username', root.link.username
 		),
 		'_onSendChanges'
 	);

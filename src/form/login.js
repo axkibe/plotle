@@ -9,7 +9,8 @@ var
 	form_login,
 	jools,
 	mark_caret,
-	root;
+	root,
+	user_user;
 
 
 /*

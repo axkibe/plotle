@@ -98,14 +98,16 @@ net_channel.prototype.abortAll =
 	this._fifo.ray[ 0 ].abort( );
 
 	// FUTURE root.Create
-	root.ajax =
-		root.ajax.create(
-			'twig:set',
-			this.channelName,
-			this.create(
-				'_fifo', net_requestWrapRay.create( )
+	root.create(
+		'ajax',
+			root.ajax.create(
+				'twig:set',
+				this.channelName,
+				this.create(
+					'_fifo', net_requestWrapRay.create( )
+				)
 			)
-		);
+	);
 };
 
 
