@@ -342,15 +342,15 @@ shell_root.prototype.arrivedAtSpace =
 		access
 	)
 {
-	this._discJockey =
-		this._discJockey.create(
+	root._discJockey =
+		root._discJockey.create(
 			'access', access,
 			'spaceUser', spaceRef.username, // FIXME
 			'spaceTag', spaceRef.tag // FIXME
 		);
 
-	this._formJockey =
-		this._formJockey.create(
+	root._formJockey =
+		root._formJockey.create(
 			'spaceUser', spaceRef.username, // FIXME
 			'spaceTag', spaceRef.tag // FIXME
 		);
@@ -379,7 +379,7 @@ Object.defineProperty(
 				var
 					screen;
 
-				screen = this._currentScreen( );
+				screen = root._currentScreen( );
 
 				return screen && screen.attentionCenter;
 			}
@@ -401,10 +401,10 @@ shell_root.prototype.click =
 		click,
 		screen;
 
-	screen = this._currentScreen( ),
+	screen = root._currentScreen( ),
 
 	click =
-		this._discJockey.click(
+		root._discJockey.click(
 			p,
 			shift,
 			ctrl
@@ -420,7 +420,7 @@ shell_root.prototype.click =
 
 	if( _redraw )
 	{
-		this._draw( );
+		root._draw( );
 	}
 };
 
@@ -446,10 +446,10 @@ shell_root.prototype.setAction =
 /**/	}
 /**/}
 
-	this.action = action;
+	root.action = action;
 
-	this._discJockey =
-		this._discJockey.create( 'action', action );
+	root._discJockey =
+		root._discJockey.create( 'action', action );
 
 	_redraw = true;
 };
@@ -465,14 +465,14 @@ shell_root.prototype.setFocus =
 		focus
 	)
 {
-	if( this.mark )
+	if( root.mark )
 	{
-		switch( this.mark.reflect )
+		switch( root.mark.reflect )
 		{
 			case 'mark_caret' :
 
-				this.setMark(
-					this.mark.create( 'focus', focus )
+				root.setMark(
+					root.mark.create( 'focus', focus )
 				);
 
 			break;
@@ -481,7 +481,7 @@ shell_root.prototype.setFocus =
 
 	if( _redraw )
 	{
-		this._draw( );
+		root._draw( );
 	}
 };
 
@@ -504,10 +504,10 @@ shell_root.prototype.setMode =
 /**/	}
 /**/}
 
-	this._mode = mode;
+	root._mode = mode;
 
-	this._discJockey =
-		this._discJockey.create( 'mode', mode );
+	root._discJockey =
+		root._discJockey.create( 'mode', mode );
 
 	_redraw = true;
 };
@@ -522,7 +522,7 @@ shell_root.prototype.cycleFormFocus =
 		dir
 	)
 {
-	this._formJockey.cycleFocus( name, dir );
+	root._formJockey.cycleFocus( name, dir );
 };
 
 
@@ -542,13 +542,13 @@ shell_root.prototype.pointingHover =
 		result,
 		screen;
 
-	screen = this._currentScreen( ),
+	screen = root._currentScreen( ),
 
 	result = null;
 
 	if( screen && screen.showDisc )
 	{
-		result = this._discJockey.pointingHover( p, shift, ctrl );
+		result = root._discJockey.pointingHover( p, shift, ctrl );
 
 		if( result )
 		{
@@ -564,7 +564,7 @@ shell_root.prototype.pointingHover =
 
 			if( _redraw )
 			{
-				this._draw( );
+				root._draw( );
 			}
 
 			return result.cursor;
@@ -592,7 +592,7 @@ shell_root.prototype.pointingHover =
 
 		if( _redraw )
 		{
-			this._draw( );
+			root._draw( );
 		}
 
 		return result.cursor;
@@ -600,7 +600,7 @@ shell_root.prototype.pointingHover =
 
 	if( _redraw )
 	{
-		this._draw( );
+		root._draw( );
 	}
 
 	return 'default';
@@ -625,11 +625,11 @@ shell_root.prototype.dragStart =
 
 	bubble = null;
 
-	screen = this._currentScreen( );
+	screen = root._currentScreen( );
 
 	if( screen && screen.showDisc )
 	{
-		bubble = this._discJockey.dragStart( p, shift, ctrl );
+		bubble = root._discJockey.dragStart( p, shift, ctrl );
 	}
 
 	if( bubble === null )
@@ -642,7 +642,7 @@ shell_root.prototype.dragStart =
 
 	if( _redraw )
 	{
-		this._draw( );
+		root._draw( );
 	}
 };
 
@@ -662,11 +662,11 @@ shell_root.prototype.dragMove =
 		cursor,
 		screen;
 
-	action = this.action;
+	action = root.action;
 
 	cursor = null;
 
-	screen = this._currentScreen( );
+	screen = root._currentScreen( );
 
 	if( screen )
 	{
@@ -675,7 +675,7 @@ shell_root.prototype.dragMove =
 
 	if( _redraw )
 	{
-		this._draw( );
+		root._draw( );
 	}
 
 	return cursor;
@@ -696,9 +696,9 @@ shell_root.prototype.dragStop =
 		action,
 		screen;
 
-	action = this.action;
+	action = root.action;
 
-	screen = this._currentScreen( );
+	screen = root._currentScreen( );
 
 	if( screen )
 	{
@@ -707,7 +707,7 @@ shell_root.prototype.dragStop =
 
 	if( _redraw )
 	{
-		this._draw( );
+		root._draw( );
 	}
 };
 
@@ -718,14 +718,14 @@ shell_root.prototype.dragStop =
 shell_root.prototype.logout =
 	function( )
 {
-	if( this._visitUser )
+	if( root._visitUser )
 	{
-		this.setUser(
-			this._visitUser,
-			this._visitPasshash
+		root.setUser(
+			root._visitUser,
+			root._visitPasshash
 		);
 
-		this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+		root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 
 		return;
 	}
@@ -750,7 +750,7 @@ shell_root.prototype.mousewheel =
 	var
 		screen;
 
-	screen = this._currentScreen( );
+	screen = root._currentScreen( );
 
 	if( screen )
 	{
@@ -759,7 +759,7 @@ shell_root.prototype.mousewheel =
 
 	if( _redraw )
 	{
-		this._draw( );
+		root._draw( );
 	}
 };
 
@@ -778,13 +778,13 @@ shell_root.prototype.setMark =
 		: ''
 	);
 
-	this.mark = mark;
+	root.mark = mark;
 
-	this.space = this.space.create( 'mark', mark );
+	root.space = root.space.create( 'mark', mark );
 
-	this._formJockey = this._formJockey.create( 'mark', mark );
+	root._formJockey = root._formJockey.create( 'mark', mark );
 
-	this._discJockey = this._discJockey.create( 'mark', mark );
+	root._discJockey = root._discJockey.create( 'mark', mark );
 
 	_redraw = true;
 };
@@ -807,8 +807,8 @@ shell_root.prototype.setPath =
 
 		case 'form' :
 
-			this._formJockey =
-				this._formJockey.setPath(
+			root._formJockey =
+				root._formJockey.setPath(
 					path,
 					value,
 					1
@@ -818,8 +818,8 @@ shell_root.prototype.setPath =
 
 		case 'space' :
 
-			this.space =
-				this.space.setPath(
+			root.space =
+				root.space.setPath(
 					path,
 					value,
 					1
@@ -850,14 +850,14 @@ shell_root.prototype.specialKey =
 		focusItem,
 		screen;
 
-	screen = this._currentScreen( );
+	screen = root._currentScreen( );
 
 	if( screen )
 	{
 		screen.specialKey( key, shift, ctrl );
 	}
 
-	focusItem = this.space.focusedItem( );
+	focusItem = root.space.focusedItem( );
 
 	if( focusItem && focusItem.scrollMarkIntoView )
 	{
@@ -866,7 +866,7 @@ shell_root.prototype.specialKey =
 
 	if( _redraw )
 	{
-		this._draw( );
+		root._draw( );
 	}
 };
 
@@ -879,7 +879,7 @@ shell_root.prototype.specialKey =
 shell_root.prototype.suggestingKeyboard =
 	function( )
 {
-	return( this.mark !== null && this.mark.hasCaret );
+	return( root.mark !== null && root.mark.hasCaret );
 };
 
 
@@ -894,7 +894,7 @@ shell_root.prototype.pushButton =
 	{
 		case 'disc' :
 
-			return this._discJockey.pushButton(
+			return root._discJockey.pushButton(
 				path,
 				false,
 				false
@@ -902,7 +902,7 @@ shell_root.prototype.pushButton =
 
 		case 'form' :
 
-			return this._formJockey.pushButton(
+			return root._formJockey.pushButton(
 				path,
 				false,
 				false
@@ -927,7 +927,7 @@ shell_root.prototype.update =
 	var
 		mark;
 
-	mark = this.space.mark;
+	mark = root.space.mark;
 
 	switch( mark && mark.reflect )
 	{
@@ -948,22 +948,22 @@ shell_root.prototype.update =
 	}
 
 	// FIXME let the link do the real stuff
-	this.space =
+	root.space =
 		space.create(
-			'spaceUser', this.space.spaceUser,
-			'spaceTag', this.space.spaceTag,
-			'access', this.space.access,
-			'hover', this.space.hover,
+			'spaceUser', root.space.spaceUser,
+			'spaceTag', root.space.spaceTag,
+			'access', root.space.access,
+			'hover', root.space.hover,
 			'mark', mark,
-			'path', this.space.path,
-			'view', this.space.view
+			'path', root.space.path,
+			'view', root.space.view
 		);
 
-	this._discJockey = this._discJockey.create( 'mark', mark );
+	root._discJockey = root._discJockey.create( 'mark', mark );
 
-	this.mark = mark;
+	root.mark = mark;
 
-	this._draw( );
+	root._draw( );
 };
 
 
@@ -975,13 +975,13 @@ shell_root.prototype._setHover =
 		path
 	)
 {
-	if( this._hoverPath.equals( path ) )
+	if( root._hoverPath.equals( path ) )
 	{
 		return;
 	}
 
-	this._discJockey =
-		this._discJockey.create(
+	root._discJockey =
+		root._discJockey.create(
 			// FIXME make concernsHover
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'disc'
@@ -989,8 +989,8 @@ shell_root.prototype._setHover =
 				: path
 		);
 
-	this._formJockey =
-		this._formJockey.create(
+	root._formJockey =
+		root._formJockey.create(
 			'hover',
 				// FIXME make a concernsHover
 				path.isEmpty || path.get( 0 ) !== 'form'
@@ -998,15 +998,15 @@ shell_root.prototype._setHover =
 				: path
 		);
 
-	this.space =
-		this.space.create(
+	root.space =
+		root.space.create(
 			'hover',
 				path.isEmpty || path.get( 0 ) !== 'space'
 				? jion_path.empty
 				: path
 		);
 
-	this._hoverPath = path;
+	root._hoverPath = path;
 
 	_redraw = true;
 };
@@ -1024,13 +1024,13 @@ shell_root.prototype.input =
 		focusItem,
 		screen;
 
-	screen = this._currentScreen( );
+	screen = root._currentScreen( );
 
 	if( screen )
 	{
 		screen.input( text );
 
-		focusItem = this.space.focusedItem( );
+		focusItem = root.space.focusedItem( );
 
 		if( focusItem && focusItem.scrollMarkIntoView )
 		{
@@ -1040,7 +1040,7 @@ shell_root.prototype.input =
 
 	if( _redraw )
 	{
-		this._draw( );
+		root._draw( );
 	}
 };
 
@@ -1053,16 +1053,16 @@ shell_root.prototype.resize =
 		display
 	)
 {
-	this.display = display;
+	root.display = display;
 
-	this.setView(
-		this.view.create(
+	root.setView(
+		root.view.create(
 			'height', display.height,
 			'width', display.width
 		)
 	);
 
-	this._draw( );
+	root._draw( );
 };
 
 
@@ -1076,12 +1076,16 @@ shell_root.prototype.setUser =
 		user // user_user jion
 	)
 {
-	this.link =
-		// TODO hand user_user
-		this.link.create(
-			'username', user.name,
-			'passhash', user.passhash
-		);
+//	root.create(
+//		'link',
+// XXX
+	root.link =
+			root.link.create(
+				// FIXME hand user_user
+				'username', user.name,
+				'passhash', user.passhash
+			);
+//	);
 
 	// FIXME user.isVisitor
 	if( user.name.substr( 0, 5 ) !== 'visit' )
@@ -1093,48 +1097,50 @@ shell_root.prototype.setUser =
 	else
 	{
 		if(
-			this.space
-			&& this.space.spaceUser !== 'ideoloom'
+			root.space
+			&& root.space.spaceUser !== 'ideoloom'
 		)
 		{
-			this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+			root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 		}
 
 		window.localStorage.setItem( 'username', null );
 
 		window.localStorage.setItem( 'passhash', null );
 
-		this._visitUser = user.name;
+		root._visitUser = user.name;
 
-		this._visitPasshash = user.passhash;
+		root._visitPasshash = user.passhash;
 	}
 
 	root.create(
 		'user', user,
-		'_discJockey', this._discJockey.create( 'user', user ),
-		'_formJockey', this._formJockey.create( 'user', user )
+		'_discJockey', root._discJockey.create( 'user', user ),
+		'_formJockey', root._formJockey.create( 'user', user )
 	);
 };
 
 
 /*
 | Sets the current view ( of the space )
+|
+| TODO move into init
 */
 shell_root.prototype.setView =
 	function(
 		view
 	)
 {
-	this.view = view;
+	root.view = view;
 
-	if( this.space )
+	if( root.space )
 	{
-		this.space = this.space.create( 'view', view );
+		root.space = root.space.create( 'view', view );
 	}
 
-	this._discJockey = this._discJockey.create( 'view', view );
+	root._discJockey = root._discJockey.create( 'view', view );
 
-	this._formJockey = this._formJockey.create( 'view', view );
+	root._formJockey = root._formJockey.create( 'view', view );
 
 	_redraw = true;
 };
@@ -1152,7 +1158,7 @@ shell_root.prototype.moveToSpace =
 		//            // created
 	)
 {
-	this.link.acquireSpace( spaceRef, createMissing );
+	root.link.acquireSpace( spaceRef, createMissing );
 };
 
 
@@ -1185,25 +1191,25 @@ shell_root.prototype.onAcquireSpace =
 
 			root.setMode( 'nonExistingSpace' );
 
-			this._draw( );
+			root._draw( );
 
 			return;
 
 		case 'no access' :
 
 			// FIXME remove get
-			path = this._formJockey.get( 'noAccessToSpace' ).path;
+			path = root._formJockey.get( 'noAccessToSpace' ).path;
 
 			// FIXME have it use a spaceRef
-			this._formJockey =
-				this._formJockey.create(
+			root._formJockey =
+				root._formJockey.create(
 					'spaceUser', spaceRef.username,
 					'spaceTag', spaceRef.tag
 				);
 
 			root.setMode( 'noAccessToSpace' );
 
-			this._draw( );
+			root._draw( );
 
 			return;
 
@@ -1216,7 +1222,7 @@ shell_root.prototype.onAcquireSpace =
 
 	access = reply.access;
 
-	this.space =
+	root.space =
 		reply.space.create(
 			// FUTURE have the server already set this at JSON level
 			'spaceUser', spaceRef.username, // FIXME have it use a ref
@@ -1228,15 +1234,15 @@ shell_root.prototype.onAcquireSpace =
 			'view',
 				euclid_view.create(
 					'fact', 0,
-					'height', this.display.height,
+					'height', root.display.height,
 					'pan', euclid_point.zero,
-					'width', this.display.width
+					'width', root.display.width
 				)
 		);
 
-	this.arrivedAtSpace( spaceRef, access );
+	root.arrivedAtSpace( spaceRef, access );
 
-	this._draw( );
+	root._draw( );
 };
 
 
@@ -1251,9 +1257,9 @@ shell_root.prototype.onAuth =
 {
 	// if in login mode this is a tempted login
 
-	if( this._mode === 'login' )
+	if( root._mode === 'login' )
 	{
-		this._formJockey.get( 'login' ).onAuth( request, reply );
+		root._formJockey.get( 'login' ).onAuth( request, reply );
 
 		return;
 	}
@@ -1267,7 +1273,7 @@ shell_root.prototype.onAuth =
 		// takes a visitor instead
 		if( request.username !== 'visitor' )
 		{
-			this.link.auth( 'visitor', jools.uid( ) );
+			root.link.auth( 'visitor', jools.uid( ) );
 
 			return;
 		}
@@ -1278,14 +1284,14 @@ shell_root.prototype.onAuth =
 		return;
 	}
 
-	this.setUser(
+	root.setUser(
 		user_user.create(
 			'name', reply.username,
 			'passhash', request.passhash
 		)
 	);
 
-	this.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 };
 
 
@@ -1302,7 +1308,7 @@ shell_root.prototype.onRegister =
 {
 	// if in login mode this is a tempted login
 
-	if( this._mode !== 'signUp' )
+	if( root._mode !== 'signUp' )
 	{
 /**/	if( CHECK )
 /**/	{
@@ -1314,7 +1320,7 @@ shell_root.prototype.onRegister =
 		return;
 	}
 
-	this._formJockey.get( 'signUp' ).onRegister(
+	root._formJockey.get( 'signUp' ).onRegister(
 		ok,
 		username, // TODO hand user object
 		passhash,
@@ -1336,14 +1342,14 @@ shell_root.prototype._currentScreen =
 	var
 		name;
 
-	name = this._mode;
+	name = root._mode;
 
 	switch( name )
 	{
 		case 'Create' :
 		case 'Normal' :
 
-			return this.space;
+			return root.space;
 
 		case 'login' :
 		case 'moveTo' :
@@ -1354,7 +1360,7 @@ shell_root.prototype._currentScreen =
 		case 'user' :
 		case 'welcome' :
 
-			return this._formJockey.get( name );
+			return root._formJockey.get( name );
 
 		default :
 
@@ -1373,11 +1379,11 @@ shell_root.prototype._draw =
 		display,
 		screen;
 
-	display = this.display;
+	display = root.display;
 
 	display.clear( );
 
-	screen = this._currentScreen( );
+	screen = root._currentScreen( );
 
 	if( screen )
 	{
@@ -1386,7 +1392,7 @@ shell_root.prototype._draw =
 
 	if( screen && screen.showDisc )
 	{
-		this._discJockey.draw( display );
+		root._discJockey.draw( display );
 	}
 
 	_redraw = false;
