@@ -427,6 +427,8 @@ shell_root.prototype.click =
 
 /*
 | Sets the current action.
+|
+| FIXME move into _init
 */
 shell_root.prototype.setAction =
 	function(
@@ -459,6 +461,8 @@ shell_root.prototype.setAction =
 | The shell got or lost the systems focus.
 |
 | FIXME rename setSystemFocus
+|
+| FIXME move into _init
 */
 shell_root.prototype.setFocus =
 	function(
@@ -488,6 +492,8 @@ shell_root.prototype.setFocus =
 
 /*
 | Changes the mode.
+|
+| FIXME move into _init
 */
 shell_root.prototype.setMode =
 	function(
@@ -766,6 +772,8 @@ shell_root.prototype.mousewheel =
 
 /*
 | Sets the user's mark.
+|
+| FIXME move into _init
 */
 shell_root.prototype.setMark =
 	function(
@@ -1076,16 +1084,14 @@ shell_root.prototype.setUser =
 		user // user_user jion
 	)
 {
-//	root.create(
-//		'link',
-// XXX
-	root.link =
+	root.create(
+		'link',
 			root.link.create(
 				// FIXME hand user_user
 				'username', user.name,
 				'passhash', user.passhash
-			);
-//	);
+			)
+	);
 
 	// FIXME user.isVisitor
 	if( user.name.substr( 0, 5 ) !== 'visit' )

@@ -13,6 +13,7 @@ var
 	request_register,
 	request_update,
 	root,
+	shell_doTracker,
 	system;
 
 
@@ -225,7 +226,7 @@ net_link.prototype._onAcquireSpace =
 		reply
 	)
 {
-	root.doTracker.flush( );
+	shell_doTracker.flush( );
 
 	if( reply.type === 'reply_error' )
 	{
@@ -250,15 +251,17 @@ net_link.prototype._onAcquireSpace =
 			return;
 	}
 
-	root.link =
-		root.link.create(
-			'spaceRef', request.spaceRef,
-			'_cSpace', reply.space,
-			'_rSpace', reply.space,
-			'_outbox', change_wrapRay.create( ),
-			'_postbox', change_wrapRay.create( ),
-			'_rSeq', reply.seq
-		);
+	root.create(
+		'link',
+			root.link.create(
+				'spaceRef', request.spaceRef,
+				'_cSpace', reply.space,
+				'_rSpace', reply.space,
+				'_outbox', change_wrapRay.create( ),
+				'_postbox', change_wrapRay.create( ),
+				'_rSeq', reply.seq
+			)
+	);
 
 	root.onAcquireSpace( request.spaceRef, reply );
 
@@ -266,6 +269,7 @@ net_link.prototype._onAcquireSpace =
 	// stops its wheely thing.
 	system.setTimer(
 		1,
+		// TODO remove func wrapper
 		function( )
 		{
 			root.link._update( );

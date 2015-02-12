@@ -52,17 +52,18 @@ if( JION )
 /*
 | Flushes the stacks.
 */
-shell_doTracker.prototype.flush =
+shell_doTracker.flush =
 	function(
 
 	)
 {
-	// FIXME
-	root.doTracker =
-		this.create(
-			'_undo', change_wrapRay.create( ),
-			'_redo', change_wrapRay.create( )
-		);
+	root.create(
+		'doTracker',
+			shell_doTracker.create(
+				'_undo', change_wrapRay.create( ),
+				'_redo', change_wrapRay.create( )
+			)
+	);
 };
 
 

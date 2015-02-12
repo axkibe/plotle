@@ -338,7 +338,12 @@ form_login.prototype.onAuth =
 		return;
 	}
 
-	root.setUser( reply.username, request.passhash );
+	root.setUser(
+		user_user.create(
+			'name', reply.username,
+			'passhash', request.passhash
+		)
+	);
 
 	this.clear( );
 
