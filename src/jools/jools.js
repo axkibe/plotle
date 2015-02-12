@@ -298,7 +298,7 @@ jools.lazyValue =
 
 /**/if( FREEZE )
 /**/{
-/**/	proto.__lazy = { };
+/**/	proto.__have_lazy = true;
 /**/}
 
 	Object.defineProperty(
@@ -315,9 +315,16 @@ jools.lazyValue =
 
 /**/			if( FREEZE )
 /**/			{
-/**/				if( this.__lazy[ key ] !== undefined )
+/**/				if( this.__lazy )
 /**/				{
-/**/					return this.__lazy[ key ];
+/**/					if( this.__lazy[ key ] !== undefined )
+/**/					{
+/**/						return this.__lazy[ key ];
+/**/					}
+/**/				}
+/**/				else
+/**/				{
+/**/					this.__lazy = { };
 /**/				}
 /**/
 /**/				return(
@@ -360,13 +367,16 @@ jools.aheadValue =
 	var
 		ckey;
 
-/**/if( FREEZE )
+/**/if( CHECK )
 /**/{
 /**/	if( value === undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
-/**/
+/**/}
+
+/**/if( FREEZE )
+/**/{
 /**/	if( obj.__lazy[ key ] !== undefined )
 /**/	{
 /**/		if( obj.__lazy[ key ] !== value )

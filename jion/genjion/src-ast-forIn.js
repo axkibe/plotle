@@ -159,7 +159,7 @@ Constructor =
 {
 /**/if( CHECK )
 /**/{
-/**/	if( prototype.__lazy )
+/**/	if( prototype.__have_lazy )
 /**/	{
 /**/		this.__lazy = { };
 /**/	}

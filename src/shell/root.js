@@ -183,10 +183,18 @@ if( JION )
 							'shell_doTracker'
 					}
 			},
-
-		// next visitors ID
 		init :
-			[ 'inherit' ]
+			[ 'inherit' ],
+		alike :
+			{
+				lookAlike :
+					{
+						ignores : {
+							'ajax' : true,
+							'link' : true
+						}
+					}
+			},
 	};
 }
 
@@ -364,8 +372,6 @@ shell_root.startup =
 	}
 
 	root.link.auth( username, passhash );
-
-	root.draw;
 };
 
 
@@ -375,6 +381,11 @@ shell_root.startup =
 shell_root.prototype._init =
 	function( inherit )
 {
+	if( this.lookAlike( inherit ) )
+	{
+		jools.aheadValue( this, '_drawn', true );
+	}
+
 	root = this;
 };
 
@@ -504,8 +515,6 @@ shell_root.prototype.click =
 			screen.click( p, shift, ctrl );
 		}
 	}
-
-	root.draw;
 };
 
 
@@ -567,8 +576,6 @@ shell_root.prototype.setFocus =
 			break;
 		}
 	}
-
-	root.draw;
 };
 
 
@@ -651,8 +658,6 @@ shell_root.prototype.pointingHover =
 
 			root._setHover( result.path );
 
-			root.draw;
-
 			return result.cursor;
 		}
 	}
@@ -676,12 +681,8 @@ shell_root.prototype.pointingHover =
 
 		root._setHover( result.path );
 
-		root.draw;
-
 		return result.cursor;
 	}
-
-	root.draw;
 
 	return 'default';
 };
@@ -719,8 +720,6 @@ shell_root.prototype.dragStart =
 			bubble = screen.dragStart( p, shift, ctrl );
 		}
 	}
-
-	root.draw;
 };
 
 
@@ -750,8 +749,6 @@ shell_root.prototype.dragMove =
 		cursor = screen.dragMove( p, shift, ctrl );
 	}
 
-	root.draw;
-
 	return cursor;
 };
 
@@ -778,8 +775,6 @@ shell_root.prototype.dragStop =
 	{
 		screen.dragStop( p, shift, ctrl );
 	}
-
-	root.draw;
 };
 
 
@@ -830,8 +825,6 @@ shell_root.prototype.mousewheel =
 	{
 		screen.mousewheel( p, dir, shift, ctrl );
 	}
-
-	root.draw;
 };
 
 
@@ -928,8 +921,6 @@ shell_root.prototype.specialKey =
 	{
 		focusItem.scrollMarkIntoView( );
 	}
-
-	root.draw;
 };
 
 
@@ -1025,8 +1016,6 @@ shell_root.prototype.update =
 			root._discJockey.create( 'mark', mark ),
 		'mark', mark
 	);
-
-	root.draw;
 };
 
 
@@ -1103,8 +1092,6 @@ shell_root.prototype.input =
 			focusItem.scrollMarkIntoView( );
 		}
 	}
-
-	root.draw;
 };
 
 
@@ -1125,8 +1112,6 @@ shell_root.prototype.resize =
 			'width', display.width
 		)
 	);
-
-	root.draw;
 };
 
 
@@ -1252,8 +1237,6 @@ shell_root.prototype.onAcquireSpace =
 
 			root.setMode( 'nonExistingSpace' );
 
-			root.draw;
-
 			return;
 
 		case 'no access' :
@@ -1269,8 +1252,6 @@ shell_root.prototype.onAcquireSpace =
 				);
 
 			root.setMode( 'noAccessToSpace' );
-
-			root.draw;
 
 			return;
 
@@ -1304,8 +1285,6 @@ shell_root.prototype.onAcquireSpace =
 	);
 
 	root.arrivedAtSpace( spaceRef, access );
-
-	root.draw;
 };
 
 
@@ -1432,6 +1411,8 @@ shell_root.prototype._currentScreen =
 };
 
 
+var count = 1; // XXX
+
 
 /*
 | Draws everything and marks
@@ -1439,44 +1420,45 @@ shell_root.prototype._currentScreen =
 */
 jools.lazyValue(
 	shell_root.prototype,
-	'draw',
+	'_drawn',
 	function( )
 	{
-		this._draw( );
+		var
+			display,
+			screen;
+
+		console.log( 'draw' + (count++), new Error( ).stack );
+
+		display = root.display;
+
+		display.clear( );
+
+		screen = root._currentScreen( );
+
+		if( screen )
+		{
+			screen.draw( display );
+		}
+
+		if( screen && screen.showDisc )
+		{
+			root._discJockey.draw( display );
+		}
+
+		_redraw = false;
 
 		return true;
 	}
 );
 
+
 /*
 | Draws everything.
 */
-shell_root.prototype._draw =
+shell_root.prototype.draw =
 	function( )
 {
-	var
-		display,
-		screen;
-
-	console.log( 'draw' );
-
-	display = root.display;
-
-	display.clear( );
-
-	screen = root._currentScreen( );
-
-	if( screen )
-	{
-		screen.draw( display );
-	}
-
-	if( screen && screen.showDisc )
-	{
-		root._discJockey.draw( display );
-	}
-
-	_redraw = false;
+	this._drawn;
 };
 
 

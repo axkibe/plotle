@@ -624,7 +624,7 @@ generator.prototype.genConstructor =
 		$block( )
 		.$check(
 			$if(
-				'prototype.__lazy',
+				'prototype.__have_lazy',
 				$assign( 'this.__lazy', $objLiteral( ) )
 			)
 		);

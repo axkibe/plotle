@@ -48,12 +48,16 @@ _catcher =
 		{
 			func.apply( this, arguments );
 
+			if( root ) root.draw( );
+
 			return;
 		}
 
 		try
 		{
 			func.apply( this, arguments );
+
+			if( root ) root.draw( );
 		}
 		catch( e )
 		{
@@ -164,6 +168,8 @@ catcher =
 
 			system._steerAttention( );
 
+			if( root ) root.draw( );
+
 			return;
 		}
 
@@ -175,6 +181,7 @@ catcher =
 
 			system._steerAttention( );
 
+			if( root ) root.draw( );
 		}
 		catch( e )
 		{
@@ -538,18 +545,9 @@ shell_system.prototype._onAtweenTime =
 
 	_pointingState = 'drag';
 
-	root.dragStart(
-		_atweenPos,
-		_atweenShift,
-		_atweenCtrl
-	);
+	root.dragStart( _atweenPos, _atweenShift, _atweenCtrl );
 
-	cursor =
-		root.dragMove(
-			_atweenMove,
-			_atweenShift,
-			_atweenCtrl
-		);
+	cursor = root.dragMove( _atweenMove, _atweenShift, _atweenCtrl );
 
 	_resetAtweenState( );
 
@@ -692,11 +690,8 @@ shell_system.prototype._onKeyPress =
 
 	if (
 		(
-			(
-				kcode > 0 && kcode < 32
-			)
-			||
-			ew === 0
+			( kcode > 0 && kcode < 32)
+			|| ew === 0
 		)
 		&&
 		_lastSpecialKey !== kcode
@@ -704,13 +699,7 @@ shell_system.prototype._onKeyPress =
 	{
 		_lastSpecialKey = -1;
 
-		return(
-			this._specialKey(
-				kcode,
-				shift,
-				ctrl
-			)
-		);
+		return this._specialKey( kcode, shift, ctrl );
 	}
 	else
 	{
@@ -724,10 +713,7 @@ shell_system.prototype._onKeyPress =
 
 	this._testInput( );
 
-	this.setTimer(
-		0,
-		this._testInputCatcher
-	);
+	this.setTimer( 0, this._testInputCatcher );
 
 	return true;
 };
@@ -842,12 +828,7 @@ shell_system.prototype._pointingHover =
 
 	_hoverCtrl = ctrl;
 
-	cursor =
-		root.pointingHover(
-			p,
-			shift,
-			ctrl
-		);
+	cursor = root.pointingHover( p, shift, ctrl );
 
 	if( cursor !== null )
 	{
@@ -872,12 +853,7 @@ shell_system.prototype._repeatHover =
 		return;
 	}
 
-	cursor =
-		root.pointingHover(
-			_hoverP,
-			_hoverShift,
-			_hoverCtrl
-		);
+	cursor = root.pointingHover( _hoverP, _hoverShift, _hoverCtrl );
 
 	if( cursor !== null )
 	{
@@ -957,12 +933,7 @@ shell_system.prototype._onMouseMove =
 
 		case 'drag':
 
-			cursor =
-				root.dragMove(
-					p,
-					shift,
-					ctrl
-				);
+			cursor = root.dragMove( p, shift, ctrl );
 
 			break;
 
@@ -1400,96 +1371,84 @@ shell_system.prototype._specialKey =
 	}
 	else
 	{
+		// FIXME make this a table
 		switch( keyCode )
 		{
 			case  8 :
 
-				key =
-					'backspace';
+				key = 'backspace';
 
 				break;
 
 			case  9 :
 
-				key =
-					'tab';
+				key = 'tab';
 
 				break;
 
 			case 13 :
 
-				key =
-					'enter';
+				key = 'enter';
 
 				break;
 
 			case 27 :
 
-				key =
-					'esc';
+				key = 'esc';
 
 				break;
 
 			case 33 :
 
-				key =
-					'pageup';
+				key = 'pageup';
 
 				break;
 
 			case 34 :
 
-				key =
-					'pagedown';
+				key = 'pagedown';
 
 				break;
 
 			case 35 :
 
-				key =
-					'end';
+				key = 'end';
 
 				break;
 
 			case 36 :
 
-				key =
-					'pos1';
+				key = 'pos1';
 
 				break;
 
 			case 37 :
 
-				key =
-					'left';
+				key = 'left';
 
 				break;
 
 			case 38 :
 
-				key =
-					'up';
+				key = 'up';
 
 				break;
 
 			case 39 :
 
-				key =
-					'right';
+				key = 'right';
 
 				break;
 
 			case 40 :
 
-				key =
-					'down';
+				key = 'down';
 
 				break;
 
 			case 46 :
 
-				key =
-					'del';
+				key = 'del';
 
 				break;
 		}
@@ -1500,11 +1459,7 @@ shell_system.prototype._specialKey =
 		return true;
 	}
 
-	root.specialKey(
-		key,
-		shift,
-		ctrl
-	);
+	root.specialKey( key, shift, ctrl );
 
 	this._steerAttention( );
 
