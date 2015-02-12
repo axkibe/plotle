@@ -158,7 +158,7 @@ shell_root.prototype.create =
 
 	root = replace;
 
-	Object.freeze( root ); // XXX
+//	Object.freeze( root ); // XXX
 
 	return replace;
 };
@@ -511,10 +511,11 @@ shell_root.prototype.setMode =
 /**/	}
 /**/}
 
-	root._mode = mode;
-
-	root._discJockey =
-		root._discJockey.create( 'mode', mode );
+	// FIXME mode should hand down by init.
+	root.create(
+		'_mode', mode,
+		'_discJockey', root._discJockey.create( 'mode', mode )
+	);
 
 	_redraw = true;
 };
@@ -728,8 +729,11 @@ shell_root.prototype.logout =
 	if( root._visitUser )
 	{
 		root.setUser(
-			root._visitUser,
-			root._visitPasshash
+			// FIXME store visit user as object
+			user_user.create(
+				'name', root._visitUser,
+				'passhash', root._visitPasshash
+			)
 		);
 
 		root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
@@ -978,6 +982,8 @@ shell_root.prototype.update =
 
 /*
 | Sets a hovered component.
+|
+| FIXME let it work with null instead of empty path.
 */
 shell_root.prototype._setHover =
 	function(
@@ -989,33 +995,34 @@ shell_root.prototype._setHover =
 		return;
 	}
 
-	root._discJockey =
-		root._discJockey.create(
-			// FIXME make concernsHover
-			'hover',
-				path.isEmpty || path.get( 0 ) !== 'disc'
-				? jion_path.empty
-				: path
-		);
-
-	root._formJockey =
-		root._formJockey.create(
-			'hover',
-				// FIXME make a concernsHover
-				path.isEmpty || path.get( 0 ) !== 'form'
-				? jion_path.empty
-				: path
-		);
-
-	root.space =
-		root.space.create(
-			'hover',
-				path.isEmpty || path.get( 0 ) !== 'space'
-				? jion_path.empty
-				: path
-		);
-
-	root._hoverPath = path;
+	// FIXME let init hand it down.
+	root.create(
+		'_discJockey',
+			root._discJockey.create(
+				// FIXME make concernsHover
+				'hover',
+					path.isEmpty || path.get( 0 ) !== 'disc'
+					? jion_path.empty
+					: path
+			),
+		'_formJockey',
+			root._formJockey.create(
+				'hover',
+					// FIXME make a concernsHover
+					path.isEmpty || path.get( 0 ) !== 'form'
+					? jion_path.empty
+					: path
+			),
+		'space',
+			root.space.create(
+				'hover',
+					path.isEmpty || path.get( 0 ) !== 'space'
+					? jion_path.empty
+					: path
+			),
+		'_hoverPath',
+			path
+	);
 
 	_redraw = true;
 };

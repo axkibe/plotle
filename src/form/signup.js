@@ -301,7 +301,7 @@ signUp.prototype.signup =
 signUp.prototype.onRegister =
 	function(
 		ok,
-		user,
+		user, // FIXME let it receive a user object
 		passhash,
 		message
 	)
@@ -332,7 +332,12 @@ signUp.prototype.onRegister =
 		return;
 	}
 
-	root.setUser( user, passhash );
+	root.setUser(
+		user_user.create(
+			'name', user,
+			'passhash', passhash
+		)
+	);
 
 	this.clear( );
 
