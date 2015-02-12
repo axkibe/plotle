@@ -645,6 +645,7 @@ module.exports =
 	),
 	resource.create(
 		'filePath', 'src/shell/root.js',
+		'hasJion', true,
 		'inBundle', true
 	),
 	resource.create(

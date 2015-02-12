@@ -50,6 +50,147 @@ _redraw = true;
 
 
 /*
+| The jion definition.
+*/
+if( JION )
+{
+	return {
+		id :
+			'shell_root',
+		attributes :
+			{
+				display :
+					{
+						comment :
+							'the display within everything happens',
+						type :
+							'euclid_display'
+					},
+				mark :
+					{
+						comment :
+							'the users mark',
+						type :
+							'->mark',
+						allowsNull :
+							true
+					},
+				user :
+					{
+						comment :
+							'current user',
+						type :
+							'user_user',
+						allowsNull :
+							true
+					},
+				space :
+					{
+						comment :
+							'current space',
+						type :
+							'fabric_space',
+						allowsNull :
+							true
+					},
+				action :
+					{
+						comment :
+							'current action',
+						type :
+							'->action',
+						allowsNull :
+							true
+					},
+				view :
+					{
+						comment :
+							'current view',
+						type :
+							'euclid_view'
+					},
+				_mode :
+					{
+						comment :
+							'current mode',
+						type :
+							'string'
+					},
+				_hoverPath :
+					{
+						comment :
+							'current hovered item',
+						type :
+							'jion_path',
+						allowsNull :
+							true
+					},
+				_formJockey :
+					{
+						comment :
+							'the master of forms',
+						type :
+							'form_jockey'
+					},
+				_discJockey :
+					{
+						comment :
+							'the master of discs',
+						type :
+							'disc_jockey'
+					},
+				// remembers an acquired visitor user name and passhash
+				// so when logging out from a real user the previous
+				// visitor is regained.
+				// FIXME make it a user_user
+				_visitUser :
+					{
+						comment :
+							'last acquired visitor id',
+						type :
+							'string',
+						allowsNull :
+							true
+					},
+				_visitPasshash :
+					{
+						comment :
+							'last acquired visitor id',
+						type :
+							'string',
+						allowsNull :
+							true
+					},
+				ajax :
+					{
+						comment :
+							'the ajax communication',
+						type :
+							'net_ajax'
+					},
+				link :
+					{
+						comment :
+							'the link to the server',
+						type :
+							'net_link'
+					},
+				doTracker :
+					{
+						comment :
+							'the un/re/do tracker',
+						type :
+							'shell_doTracker'
+					}
+			},
+
+		// next visitors ID
+		init :
+			[ 'inherit' ]
+	};
+}
+
+/*
 | Valid modes
 */
 var
@@ -102,69 +243,6 @@ var
 
 
 /*
-| Constructor.
-*/
-shell_root =
-	function( )
-{
-
-};
-
-
-/*
-| TODO remove.
-*/
-shell_root.create =
-	function( )
-{
-	root = new shell_root( );
-
-	Object.freeze( root ); // FIXME
-
-	return root;
-};
-
-
-/*
-| TODO remove.
-*/
-shell_root.prototype.create =
-	function( )
-{
-	var
-		a,
-		arg,
-		aZ,
-		replace;
-
-	replace = new shell_root( );
-
-	for( arg in this )
-	{
-		if( this.hasOwnProperty( arg ) )
-		{
-			replace[ arg ] = this[ arg ];
-		}
-	}
-
-	for(
-		a = 0, aZ = arguments.length;
-		a < aZ;
-		a += 2
-	)
-	{
-		replace[ arguments[ a ] ] = arguments[ a + 1 ];
-	}
-
-	root = replace;
-
-	Object.freeze( root ); // XXX
-
-	return replace;
-};
-
-
-/*
 | Startup of shell.
 */
 shell_root.startup =
@@ -188,8 +266,6 @@ shell_root.startup =
 /**/		throw new Error( );
 /**/	}
 /**/}
-
-	shell_root.create( );
 
 	canvas = document.createElement( 'canvas' );
 
@@ -216,7 +292,7 @@ shell_root.startup =
 
 	ajaxPath = jion_path.empty.append( 'ajax' );
 
-	root.create(
+	shell_root.create(
 		'display', display,
 		'mark', null,
 		'user', null,
@@ -289,7 +365,17 @@ shell_root.startup =
 
 	root.link.auth( username, passhash );
 
-	root._draw( );
+	root.draw;
+};
+
+
+/*
+| Initializer.
+*/
+shell_root.prototype._init =
+	function( inherit )
+{
+	root = this;
 };
 
 
@@ -419,10 +505,7 @@ shell_root.prototype.click =
 		}
 	}
 
-	if( _redraw )
-	{
-		root._draw( );
-	}
+	root.draw;
 };
 
 
@@ -485,10 +568,7 @@ shell_root.prototype.setFocus =
 		}
 	}
 
-	if( _redraw )
-	{
-		root._draw( );
-	}
+	root.draw;
 };
 
 
@@ -571,10 +651,7 @@ shell_root.prototype.pointingHover =
 
 			root._setHover( result.path );
 
-			if( _redraw )
-			{
-				root._draw( );
-			}
+			root.draw;
 
 			return result.cursor;
 		}
@@ -599,18 +676,12 @@ shell_root.prototype.pointingHover =
 
 		root._setHover( result.path );
 
-		if( _redraw )
-		{
-			root._draw( );
-		}
+		root.draw;
 
 		return result.cursor;
 	}
 
-	if( _redraw )
-	{
-		root._draw( );
-	}
+	root.draw;
 
 	return 'default';
 };
@@ -649,10 +720,7 @@ shell_root.prototype.dragStart =
 		}
 	}
 
-	if( _redraw )
-	{
-		root._draw( );
-	}
+	root.draw;
 };
 
 
@@ -682,10 +750,7 @@ shell_root.prototype.dragMove =
 		cursor = screen.dragMove( p, shift, ctrl );
 	}
 
-	if( _redraw )
-	{
-		root._draw( );
-	}
+	root.draw;
 
 	return cursor;
 };
@@ -714,10 +779,7 @@ shell_root.prototype.dragStop =
 		screen.dragStop( p, shift, ctrl );
 	}
 
-	if( _redraw )
-	{
-		root._draw( );
-	}
+	root.draw;
 };
 
 
@@ -769,10 +831,7 @@ shell_root.prototype.mousewheel =
 		screen.mousewheel( p, dir, shift, ctrl );
 	}
 
-	if( _redraw )
-	{
-		root._draw( );
-	}
+	root.draw;
 };
 
 
@@ -870,10 +929,7 @@ shell_root.prototype.specialKey =
 		focusItem.scrollMarkIntoView( );
 	}
 
-	if( _redraw )
-	{
-		root._draw( );
-	}
+	root.draw;
 };
 
 
@@ -970,7 +1026,7 @@ shell_root.prototype.update =
 		'mark', mark
 	);
 
-	root._draw( );
+	root.draw;
 };
 
 
@@ -1048,10 +1104,7 @@ shell_root.prototype.input =
 		}
 	}
 
-	if( _redraw )
-	{
-		root._draw( );
-	}
+	root.draw;
 };
 
 
@@ -1073,7 +1126,7 @@ shell_root.prototype.resize =
 		)
 	);
 
-	root._draw( );
+	root.draw;
 };
 
 
@@ -1199,7 +1252,7 @@ shell_root.prototype.onAcquireSpace =
 
 			root.setMode( 'nonExistingSpace' );
 
-			root._draw( );
+			root.draw;
 
 			return;
 
@@ -1217,7 +1270,7 @@ shell_root.prototype.onAcquireSpace =
 
 			root.setMode( 'noAccessToSpace' );
 
-			root._draw( );
+			root.draw;
 
 			return;
 
@@ -1252,7 +1305,7 @@ shell_root.prototype.onAcquireSpace =
 
 	root.arrivedAtSpace( spaceRef, access );
 
-	root._draw( );
+	root.draw;
 };
 
 
@@ -1379,6 +1432,22 @@ shell_root.prototype._currentScreen =
 };
 
 
+
+/*
+| Draws everything and marks
+| it as cached.
+*/
+jools.lazyValue(
+	shell_root.prototype,
+	'draw',
+	function( )
+	{
+		this._draw( );
+
+		return true;
+	}
+);
+
 /*
 | Draws everything.
 */
@@ -1388,6 +1457,8 @@ shell_root.prototype._draw =
 	var
 		display,
 		screen;
+
+	console.log( 'draw' );
 
 	display = root.display;
 
