@@ -34,11 +34,8 @@ var
 	system,
 	swatch,
 	user_user,
-	_redraw; // FIXME remove
 
 root = null;
-
-_redraw = true;
 
 
 
@@ -384,7 +381,8 @@ shell_root.prototype._init =
 	function( inherit )
 {
 	var
-		mark;
+		mark,
+		view;
 
 	if( this.lookAlike( inherit ) )
 	{
@@ -393,19 +391,30 @@ shell_root.prototype._init =
 
 	mark = this._mark;
 
+	view = this.view;
+
 	system.setInput( mark ? mark.clipboard : '' );
 
 	if( this.space )
 	{
 		this.space =
-			this.space.create( 'mark', mark );
+			this.space.create(
+				'mark', mark,
+				'view', view
+			);
 	}
 
 	this._formJockey =
-		this._formJockey.create( 'mark', mark );
+		this._formJockey.create(
+			'mark', mark,
+			'view', view
+		);
 
 	this._discJockey =
-		this._discJockey.create( 'mark', mark );
+		this._discJockey.create(
+			'mark', mark,
+			'view', view
+		);
 
 	root = this;
 };
@@ -564,8 +573,6 @@ shell_root.prototype.setAction =
 		'action', action,
 		'_discJockey', root._discJockey.create( 'action', action )
 	);
-
-	_redraw = true;
 };
 
 
@@ -623,8 +630,6 @@ shell_root.prototype.setMode =
 		'_mode', mode,
 		'_discJockey', root._discJockey.create( 'mode', mode )
 	);
-
-	_redraw = true;
 };
 
 
@@ -880,8 +885,6 @@ shell_root.prototype.setPath =
 
 			throw new Error( );
 	}
-
-	_redraw = true;
 };
 
 
@@ -1054,8 +1057,6 @@ shell_root.prototype._setHover =
 		'_hoverPath',
 			path
 	);
-
-	_redraw = true;
 };
 
 
@@ -1095,14 +1096,13 @@ shell_root.prototype.resize =
 		display
 	)
 {
-	// FIXME view should be part of creator
-	root.create( 'display', display );
-
-	root.setView(
-		root.view.create(
-			'height', display.height,
-			'width', display.width
-		)
+	root.create(
+		'display', display,
+		'view',
+			root.view.create(
+				'height', display.height,
+				'width', display.width
+			)
 	);
 };
 
@@ -1159,28 +1159,6 @@ shell_root.prototype.setUser =
 		'_discJockey', root._discJockey.create( 'user', user ),
 		'_formJockey', root._formJockey.create( 'user', user )
 	);
-};
-
-
-/*
-| Sets the current view ( of the space )
-|
-| TODO move into init
-*/
-shell_root.prototype.setView =
-	function(
-		view
-	)
-{
-	// FIXME have _init hand it down
-	root.create(
-		'view', view,
-		'space', root.space && root.create( 'view', view ),
-		'_discJockey', root._discJockey.create( 'view', view ),
-		'_formJockey', root._formJockey.create( 'view', view )
-	);
-
-	_redraw = true;
 };
 
 
@@ -1427,8 +1405,6 @@ jools.lazyValue(
 		{
 			root._discJockey.draw( display );
 		}
-
-		_redraw = false;
 
 		return true;
 	}

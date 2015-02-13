@@ -479,14 +479,12 @@ fabric_space.prototype.mousewheel =
 		}
 	}
 
-	if( dir > 0 )
-	{
-		root.setView( this.view.review( 1, p ) );
-	}
-	else
-	{
-		root.setView( this.view.review( -1, p ) );
-	}
+	root.create(
+		'view',
+			dir > 0
+			? this.view.review( 1, p )
+			: this.view.review( -1, p )
+	);
 
 	return true;
 };
@@ -1281,14 +1279,15 @@ fabric_space.prototype.dragMove =
 
 				pd = p.sub( action.start );
 
-				root.setView(
-					view.create(
-						'pan',
-							action.pan.add(
-								pd.x / view.zoom,
-								pd.y / view.zoom
-							)
-					)
+				root.create(
+					'view',
+						view.create(
+							'pan',
+								action.pan.add(
+									pd.x / view.zoom,
+									pd.y / view.zoom
+								)
+						)
 				);
 
 				return 'pointer';
@@ -1325,14 +1324,15 @@ fabric_space.prototype.dragMove =
 
 			pd = p.sub( action.start );
 
-			root.setView(
-				view.create(
-					'pan',
-						action.pan.add(
-							Math.round( pd.x / view.zoom ),
-							Math.round( pd.y / view.zoom )
-						)
-				)
+			root.create(
+				'view',
+					view.create(
+						'pan',
+							action.pan.add(
+								Math.round( pd.x / view.zoom ),
+								Math.round( pd.y / view.zoom )
+							)
+					)
 			);
 
 			return 'pointer';
@@ -1686,7 +1686,7 @@ fabric_space.prototype._changeZoom =
 
 	pm = this.view.depoint( this.view.baseFrame.pc );
 
-	root.setView( this.view.review( df, pm ) );
+	root.create( 'view', this.view.review( df, pm ) );
 };
 
 
