@@ -783,7 +783,7 @@ fabric_space.prototype.click =
 
 	// otherwise ...
 
-	root.setMark( null );
+	root.create( 'mark', null );
 
 	return true;
 };
@@ -859,15 +859,16 @@ fabric_space.prototype.dragStop =
 						)
 					);
 
-					root.setMark(
-						mark_caret.create(
-							'path',
-								root
-								.space.twig[ key ]
-								.doc
-								.atRank( 0 ).textPath,
-							'at', 0
-						)
+					root.create(
+						'mark',
+							mark_caret.create(
+								'path',
+									root
+									.space.twig[ key ]
+									.doc
+									.atRank( 0 ).textPath,
+								'at', 0
+							)
 					);
 
 					if( !ctrl )
@@ -936,15 +937,16 @@ fabric_space.prototype.dragStop =
 						)
 					);
 
-					root.setMark(
-						mark_caret.create(
-							'path',
-								root
-								.space
-								.twig[ key ]
-								.doc.atRank( 0 ).textPath,
-							'at', 0
-						)
+					root.create(
+						'mark',
+							mark_caret.create(
+								'path',
+									root
+									.space
+									.twig[ key ]
+									.doc.atRank( 0 ).textPath,
+								'at', 0
+							)
 					);
 
 					if( !ctrl )
@@ -980,13 +982,14 @@ fabric_space.prototype.dragStop =
 						)
 					);
 
-					root.setMark(
-						mark_caret.create(
-							'path',
-								root.space.twig[ key ].path
-								.append( 'spaceUser' ),
-							'at', 0
-						)
+					root.create(
+						'mark',
+							mark_caret.create(
+								'path',
+									root.space.twig[ key ].path
+									.append( 'spaceUser' ),
+								'at', 0
+							)
 					);
 
 					if( !ctrl )

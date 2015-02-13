@@ -851,22 +851,6 @@ shell_root.prototype.mousewheel =
 
 
 /*
-| Sets the user's mark.
-|
-| FIXME remove
-*/
-shell_root.prototype.setMark =
-	function(
-		mark
-	)
-{
-	root.create( 'mark', mark );
-
-	_redraw = true;
-};
-
-
-/*
 | Sets the trait(s) of item(s).
 */
 shell_root.prototype.setPath =

@@ -513,9 +513,7 @@ fabric_item.prototype.dragStart =
 		// take focus
 		if( root.space.focusedItem( ) !== this )
 		{
-			root.setMark(
-				mark_item.create( 'path', this.path )
-			);
+			root.create( 'mark', mark_item.create( 'path', this.path ) );
 		}
 
 		root.setAction(

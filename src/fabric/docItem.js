@@ -183,28 +183,26 @@ fabric_docItem.prototype.click =
 	{
 		ppnw = doc.getPNW( para.key );
 
-		at =
-			para.getPointOffset(
-				this,
-				pi.sub( ppnw )
-			);
+		at = para.getPointOffset( this, pi.sub( ppnw ) );
 
-		root.setMark(
-			mark_caret.create(
-				'path', para.textPath,
-				'at', at
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', para.textPath,
+					'at', at
+				)
 		);
 	}
 	else
 	{
 		para = doc.atRank( doc.ranks.length - 1 );
 
-		root.setMark(
-			mark_caret.create(
-				'path', para.textPath,
-				'at', para.text.length
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', para.textPath,
+					'at', para.text.length
+				)
 		);
 	}
 

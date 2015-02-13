@@ -207,11 +207,12 @@ fabric_relation.spawn =
 		)
 	);
 
-	root.setMark(
-		mark_caret.create(
-			'path', root.space.twig[ key ].doc.atRank( 0 ).textPath,
-			'at', 0
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', root.space.twig[ key ].doc.atRank( 0 ).textPath,
+				'at', 0
+			)
 	);
 };
 

@@ -865,20 +865,21 @@ fabric_para.prototype.specialKey =
 
 				v1 = doc.atRank( doc.ranks.length - 1 );
 
-				root.setMark(
-					mark_range.create(
-						'doc', doc,
-						'begin',
-							mark_text.create(
-								'path', v0.textPath,
-								'at', 0
-							),
-						'end',
-							mark_text.create(
-								'path', v1.textPath,
-								'at', v1.text.length
-							)
-					)
+				root.create(
+					'mark',
+						mark_range.create(
+							'doc', doc,
+							'begin',
+								mark_text.create(
+									'path', v0.textPath,
+									'at', 0
+								),
+							'end',
+								mark_text.create(
+									'path', v1.textPath,
+									'at', v1.text.length
+								)
+						)
 				);
 
 				return true;
@@ -1435,20 +1436,15 @@ fabric_para.prototype._setMark =
 		doc      // range mark need this
 	)
 {
-	if( !begin )
-	{
-		return root.setMark(
-			mark_caret.create(
+	root.create(
+		'mark',
+			!begin
+			? mark_caret.create(
 				'path', this.textPath,
 				'at', at,
 				'retainx', retainx
 			)
-		);
-	}
-	else
-	{
-		return root.setMark(
-			mark_range.create(
+			: mark_range.create(
 				'doc', doc,
 				'begin', begin,
 				'end',
@@ -1458,8 +1454,7 @@ fabric_para.prototype._setMark =
 					),
 				'retainx', retainx
 			)
-		);
-	}
+	);
 };
 
 
