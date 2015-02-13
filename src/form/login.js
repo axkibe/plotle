@@ -208,12 +208,13 @@ form_login.prototype.login =
 			'Username too short, min. 4 characters'
 		);
 
-		root.setMark(
-			mark_caret.create(
-				'path', twig.userInput.path,
-				'at', user.length,
-				'retainx', null
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', twig.userInput.path,
+					'at', user.length,
+					'retainx', null
+				)
 		);
 
 		return;
@@ -226,12 +227,13 @@ form_login.prototype.login =
 			'Username must not start with "visit"'
 		);
 
-		root.setMark(
-			mark_caret.create(
-				'path', twig.userInput.path,
-				'at', 0,
-				'retainx', null
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', twig.userInput.path,
+					'at', 0,
+					'retainx', null
+				)
 		);
 
 		return;
@@ -244,11 +246,12 @@ form_login.prototype.login =
 			'Password too short, min. 5 characters'
 		);
 
-		root.setMark(
-			mark_caret.create(
-				'path', twig.passwordInput.path,
-				'at', pass.length
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', twig.passwordInput.path,
+					'at', pass.length
+				)
 		);
 
 		return;
@@ -319,20 +322,22 @@ form_login.prototype.onAuth =
 
 		if( message.search( /Username/ ) >= 0 )
 		{
-			root.setMark(
-				mark_caret.create(
-					'path', twig.userInput.path,
-					'at', twig.userInput.value.length
-				)
+			root.create(
+				'mark',
+					mark_caret.create(
+						'path', twig.userInput.path,
+						'at', twig.userInput.value.length
+					)
 			);
 		}
 		else
 		{
-			root.setMark(
-				mark_caret.create(
-					'path', twig.passwordInput.path,
-					'at', twig.passwordInput.value.length
-				)
+			root.create(
+				'mark',
+					mark_caret.create(
+						'path', twig.passwordInput.path,
+						'at', twig.passwordInput.value.length
+					)
 			);
 		}
 
@@ -371,7 +376,7 @@ form_login.prototype.clear =
 		''
 	);
 
-	root.setMark( null );
+	root.create( 'mark', null );
 };
 
 

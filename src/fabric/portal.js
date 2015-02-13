@@ -417,11 +417,12 @@ fabric_portal.prototype.click =
 		)
 		{
 			mark =
-				root.setMark(
-					mark_caret.create(
-						'path', this.path.append( field  ),
-						'at', this._getOffsetAt( field, pp.x )
-					)
+				root.create(
+					'mark',
+						mark_caret.create(
+							'path', this.path.append( field  ),
+							'at', this._getOffsetAt( field, pp.x )
+						)
 				);
 
 			break;
@@ -435,9 +436,7 @@ fabric_portal.prototype.click =
 		root.space.focusedItem( ) !== this
 	)
 	{
-		root.setMark(
-			mark_item.create( 'path', this.path )
-		);
+		root.create( 'mark', mark_item.create( 'path', this.path ) );
 	}
 
 	return true;
@@ -1081,55 +1080,55 @@ fabric_portal.prototype._keyDown =
 					mark.caretAt
 				);
 
-			root.setMark(
-				mark_caret.create(
-					'path',
-						// FIXME use this paths
-						mark.caretPath.set(
-							mark.caretPath.length - 1,
-							'spaceTag'
-						),
-					'at',
-						this._getOffsetAt(
-							'spaceTag',
-							cpos.x +
-								this._fieldSpaceUser.pnw.x
-						)
-				)
+			root.create(
+				'mark',
+					mark_caret.create(
+						'path',
+							// FIXME use this paths
+							mark.caretPath.set(
+								mark.caretPath.length - 1,
+								'spaceTag'
+							),
+						'at',
+							this._getOffsetAt(
+								'spaceTag',
+								cpos.x + this._fieldSpaceUser.pnw.x
+							)
+					)
 			);
 
 			break;
 
 		case 'spaceTag' :
 
-			root.setMark(
-				mark_caret.create(
-					'path',
-						// FIXME use this paths
-						mark.caretPath.set(
-							mark.caretPath.length - 1,
-							'moveToButton'
-						),
-					'at',
-						0
-				)
+			root.create(
+				'mark',
+					mark_caret.create(
+						'path',
+							// FIXME use this paths
+							mark.caretPath.set(
+								mark.caretPath.length - 1,
+								'moveToButton'
+							),
+						'at', 0
+					)
 			);
 
 			break;
 
 		case 'moveToButton' :
 
-			root.setMark(
-				mark_caret.create(
-					'path',
-						// FIXME use this paths
-						mark.caretPath.set(
-							mark.caretPath.length - 1,
-							'spaceUser'
-						),
-					'at',
-						0
-				)
+			root.create(
+				'mark',
+					mark_caret.create(
+						'path',
+							// FIXME use this paths
+							mark.caretPath.set(
+								mark.caretPath.length - 1,
+								'spaceUser'
+							),
+						'at', 0
+					)
 			);
 
 			break;
@@ -1186,32 +1185,31 @@ fabric_portal.prototype._keyLeft =
 				break;
 		}
 
-		root.setMark(
-			mark_caret.create(
-				'path',
-					// FIXME rather user this.path
-					mark.caretPath.set(
-						mark.caretPath.length - 1,
-						cycle
-					),
-				'at',
-					cycle === 'moveToButton' ?
-						0
-						:
-						this[ cycle ].length
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path',
+						// FIXME rather user this.path
+						mark.caretPath.set(
+							mark.caretPath.length - 1,
+							cycle
+						),
+					'at',
+						cycle === 'moveToButton'
+						?  0
+						: this[ cycle ].length
+				)
 		);
 
 		return;
 	}
 
-	root.setMark(
-		mark_caret.create(
-			'path',
-				mark.caretPath,
-			'at',
-				mark.caretAt - 1
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', mark.caretPath,
+				'at', mark.caretAt - 1
+			)
 	);
 
 	return;
@@ -1260,11 +1258,14 @@ fabric_portal.prototype._keyTab =
 			break;
 	}
 
-	root.setMark(
-		mark_caret.create(
-			'path', mark.caretPath.set( mark.caretPath.length - 1, cycle ),
-			'at', 0
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path',
+					// XXX mark.caretPath.set( mark.caretPath.length - 1, cycle ),
+					mark.caretPath.set( -1, cycle ),
+				'at', 0
+			)
 	);
 };
 
@@ -1294,16 +1295,13 @@ fabric_portal.prototype._keyUp =
 	{
 		case 'spaceUser' :
 
-			root.setMark(
-				mark_caret.create(
-					'path', // FIXME this.paths
-						mark.caretPath.set(
-							mark.caretPath.length - 1,
-							'moveToButton'
-						),
-					'at',
-						0
-				)
+			root.create(
+				'mark',
+					mark_caret.create(
+						'path', // FIXME this.paths
+							mark.caretPath.set( -1, 'moveToButton' ),
+						'at', 0
+					)
 			);
 
 			break;
@@ -1316,36 +1314,31 @@ fabric_portal.prototype._keyUp =
 					mark.caretAt
 				);
 
-			root.setMark(
-				mark_caret.create(
-					'path', // FIXME this.paths
-						mark.caretPath.set(
-							mark.caretPath.length - 1,
-							'spaceUser'
-						),
-					'at',
-						this._getOffsetAt(
-							'spaceUser',
-							cpos.x +
-								this._fieldSpaceTag.pnw.x
-						)
-				)
+			root.create(
+				'mark',
+					mark_caret.create(
+						'path', // FIXME this.paths
+							mark.caretPath.set( -1, 'spaceUser' ),
+						'at',
+							this._getOffsetAt(
+								'spaceUser',
+								cpos.x + this._fieldSpaceTag.pnw.x
+							)
+					)
 			);
 
 			break;
 
 		case 'moveToButton' :
 
-			root.setMark(
-				mark_caret.create(
-					'path', // FIXME this.paths
-						mark.caretPath.set(
-							mark.caretPath.length - 1,
-							'spaceTag'
-						),
-					'at',
-						0
-				)
+			root.create(
+				'mark',
+					mark_caret.create(
+						'path', // FIXME this.paths
+							mark.caretPath.set( -1, 'spaceTag' ),
+						'at',
+							0
+					)
 			);
 
 			break;
@@ -1412,25 +1405,24 @@ fabric_portal.prototype._keyRight =
 				break;
 		}
 
-		root.setMark(
-			mark_caret.create(
-				'path', // FIXME this.paths
-					mark.caretPath.set(
-						mark.caretPath.length - 1,
-						cycle
-					),
-				'at', 0
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', // FIXME this.paths
+						mark.caretPath.set( -1, cycle ),
+					'at', 0
+				)
 		);
 
 		return;
 	}
 
-	root.setMark(
-		mark_caret.create(
-			'path', mark.caretPath,
-			'at', mark.caretAt + 1
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', mark.caretPath,
+				'at', mark.caretAt + 1
+			)
 	);
 
 	return;
@@ -1514,11 +1506,12 @@ fabric_portal.prototype._keyEnd =
 		return;
 	}
 
-	root.setMark(
-		mark_caret.create(
-			'path', mark.caretPath,
-			'at', value.length
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', mark.caretPath,
+				'at', value.length
+			)
 	);
 };
 
@@ -1562,12 +1555,12 @@ fabric_portal.prototype._keyEnter =
 
 	if( cycle )
 	{
-		root.setMark(
-			mark_caret.create(
-				'path',
-					mark.caretPath.set( mark.caretPath.length - 1, cycle ),
-				'at', 0
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', mark.caretPath.set( -1, cycle ),
+					'at', 0
+				)
 		);
 	}
 	else
@@ -1772,12 +1765,7 @@ jools.lazyValue(
 fabric_portal.prototype._keyPos1 =
 	function( )
 {
-	root.setMark(
-		this.mark.create(
-			'at',
-				0
-		)
-	);
+	root.create( 'mark', this.mark.create( 'at', 0 ) );
 };
 
 

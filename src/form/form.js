@@ -410,23 +410,12 @@ form_form.prototype.cycleFocus =
 			ve.visible !== false
 		)
 		{
-			if( ve.caretable )
-			{
-				root.setMark(
-					mark_caret.create(
-						'path', ve.path,
-						'at', 0
-					)
-				);
-			}
-			else
-			{
-				root.setMark(
-					mark_widget.create(
-						'path', ve.path
-					)
-				);
-			}
+			root.create(
+				'mark',
+					ve.caretable
+					? mark_caret.create( 'path', ve.path, 'at', 0 )
+					: mark_widget.create( 'path', ve.path )
+			);
 
 			break;
 		}

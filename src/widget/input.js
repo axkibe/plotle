@@ -631,11 +631,12 @@ widget_input.prototype.input =
 			value.substring( at )
 	);
 
-	root.setMark(
-		mark_caret.create(
-			'path', mark.caretPath,
-			'at', at + text.length
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', mark.caretPath,
+				'at', at + text.length
+			)
 	);
 };
 
@@ -665,11 +666,12 @@ widget_input.prototype._keyBackspace =
 			this.value.substring( at )
 	);
 
-	root.setMark(
-		mark_caret.create(
-			'path', mark.caretPath,
-			'at', at - 1
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', mark.caretPath,
+				'at', at - 1
+			)
 	);
 };
 
@@ -740,11 +742,12 @@ widget_input.prototype._keyEnd =
 		return;
 	}
 
-	root.setMark(
-		mark_caret.create(
-			'path', mark.caretPath,
-			'at', this.value.length
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', mark.caretPath,
+				'at', this.value.length
+			)
 	);
 };
 
@@ -765,11 +768,12 @@ widget_input.prototype._keyLeft =
 		return;
 	}
 
-	root.setMark(
-		mark_caret.create(
-			'path', mark.caretPath,
-			'at', mark.caretAt - 1
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', mark.caretPath,
+				'at', mark.caretAt - 1
+			)
 	);
 };
 
@@ -790,11 +794,12 @@ widget_input.prototype._keyPos1 =
 		return;
 	}
 
-	root.setMark(
-		mark_caret.create(
-			'path', mark.caretPath,
-			'at', 0
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', mark.caretPath,
+				'at', 0
+			)
 	);
 };
 
@@ -815,11 +820,12 @@ widget_input.prototype._keyRight =
 		return;
 	}
 
-	root.setMark(
-		mark_caret.create(
-			'path', mark.caretPath,
-			'at', mark.caretAt + 1
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', mark.caretPath,
+				'at', mark.caretAt + 1
+			)
 	);
 };
 
@@ -991,11 +997,12 @@ widget_input.prototype.click =
 		return null;
 	}
 
-	root.setMark(
-		mark_caret.create(
-			'path', this.path,
-			'at', this.getOffsetAt( pp )
-		)
+	root.create(
+		'mark',
+			mark_caret.create(
+				'path', this.path,
+				'at', this.getOffsetAt( pp )
+			)
 	);
 
 	return false;

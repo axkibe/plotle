@@ -72,6 +72,8 @@ if( JION )
 							'the users mark',
 						type :
 							'->mark',
+						assign :
+							'_mark',
 						allowsNull :
 							true
 					},
@@ -381,10 +383,29 @@ shell_root.startup =
 shell_root.prototype._init =
 	function( inherit )
 {
+	var
+		mark;
+
 	if( this.lookAlike( inherit ) )
 	{
 		jools.aheadValue( this, '_drawn', true );
 	}
+
+	mark = this._mark;
+
+	system.setInput( mark ? mark.clipboard : '' );
+
+	if( this.space )
+	{
+		this.space =
+			this.space.create( 'mark', mark );
+	}
+
+	this._formJockey =
+		this._formJockey.create( 'mark', mark );
+
+	this._discJockey =
+		this._discJockey.create( 'mark', mark );
 
 	root = this;
 };
@@ -563,14 +584,15 @@ shell_root.prototype.setFocus =
 		focus
 	)
 {
-	if( root.mark )
+	if( root._mark )
 	{
-		switch( root.mark.reflect )
+		switch( root._mark.reflect )
 		{
 			case 'mark_caret' :
 
-				root.setMark(
-					root.mark.create( 'focus', focus )
+				root.create(
+					'mark',
+					root._mark.create( 'focus', focus )
 				);
 
 			break;
@@ -831,26 +853,14 @@ shell_root.prototype.mousewheel =
 /*
 | Sets the user's mark.
 |
-| FIXME move into _init
+| FIXME remove
 */
 shell_root.prototype.setMark =
 	function(
 		mark
 	)
 {
-	system.setInput(
-		mark
-		? mark.clipboard
-		: ''
-	);
-
-	// FIXME have _init hand it down
-	root.create(
-		'mark', mark,
-		'space', root.space.create( 'mark', mark ),
-		'_formJockey', root._formJockey.create( 'mark', mark ),
-		'_discJockey', root._discJockey.create( 'mark', mark )
-	);
+	root.create( 'mark', mark );
 
 	_redraw = true;
 };
@@ -932,7 +942,7 @@ shell_root.prototype.specialKey =
 shell_root.prototype.suggestingKeyboard =
 	function( )
 {
-	return( root.mark !== null && root.mark.hasCaret );
+	return( root._mark !== null && root._mark.hasCaret );
 };
 
 
@@ -980,6 +990,7 @@ shell_root.prototype.update =
 	var
 		mark;
 
+	// TODO that is akward
 	mark = root.space.mark;
 
 	switch( mark && mark.reflect )
@@ -1411,9 +1422,6 @@ shell_root.prototype._currentScreen =
 };
 
 
-var count = 1; // XXX
-
-
 /*
 | Draws everything and marks
 | it as cached.
@@ -1426,8 +1434,6 @@ jools.lazyValue(
 		var
 			display,
 			screen;
-
-		console.log( 'draw' + (count++), new Error( ).stack );
 
 		display = root.display;
 

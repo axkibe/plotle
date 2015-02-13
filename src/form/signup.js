@@ -226,11 +226,12 @@ signUp.prototype.signup =
 			'Username too short, min. 4 characters'
 		);
 
-		root.setMark(
-			mark_caret.create(
-				'path', twig.userInput.path,
-				'at', user.length
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', twig.userInput.path,
+					'at', user.length
+				)
 		);
 
 		return;
@@ -243,11 +244,12 @@ signUp.prototype.signup =
 			'Username must not start with "visit"'
 		);
 
-		root.setMark(
-			mark_caret.create(
-				'path', twig.userInput.path,
-				'at', 0
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', twig.userInput.path,
+					'at', 0
+				)
 		);
 
 		return;
@@ -260,11 +262,12 @@ signUp.prototype.signup =
 			'Password too short, min. 5 characters'
 		);
 
-		root.setMark(
-			mark_caret.create(
-				'path', twig.passwordInput.path,
-				'at', pass.length
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', twig.passwordInput.path,
+					'at', pass.length
+				)
 		);
 
 		return;
@@ -277,11 +280,12 @@ signUp.prototype.signup =
 			'Passwords do not match'
 		);
 
-		root.setMark(
-			mark_caret.create(
-				'path', twig.password2Input.path,
-				'at', pass2.length
-			)
+		root.create(
+			'mark',
+				mark_caret.create(
+					'path', twig.password2Input.path,
+					'at', pass2.length
+				)
 		);
 
 		return;
@@ -322,11 +326,12 @@ signUp.prototype.onRegister =
 
 		if( message.search( /Username/ ) >= 0 )
 		{
-			root.setMark(
-				mark_caret.create(
-					'path', twig.userInput.path,
-					'at', twig.userInput.value.length
-				)
+			root.create(
+				'mark',
+					mark_caret.create(
+						'path', twig.userInput.path,
+						'at', twig.userInput.value.length
+					)
 			);
 		}
 
@@ -371,7 +376,7 @@ signUp.prototype.clear =
 
 	root.setPath( twig.newsletterCheckBox.path.append( 'checked' ), true );
 
-	root.setMark( null );
+	root.create( 'mark', null );
 };
 
 
