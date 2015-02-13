@@ -468,10 +468,7 @@ shell_root.prototype.arrivedAtSpace =
 				'spaceTag', spaceRef.tag // FIXME
 			),
 		'_formJockey',
-			root._formJockey.create(
-				'spaceUser', spaceRef.username, // FIXME
-				'spaceTag', spaceRef.tag // FIXME
-			)
+			root._formJockey.create( 'spaceRef', spaceRef )
 	);
 
 	root.setMode( 'Normal' );
@@ -1239,12 +1236,8 @@ shell_root.prototype.onAcquireSpace =
 			// FIXME remove get
 			path = root._formJockey.get( 'noAccessToSpace' ).path;
 
-			// FIXME have it use a spaceRef
 			root._formJockey =
-				root._formJockey.create(
-					'spaceUser', spaceRef.username,
-					'spaceTag', spaceRef.tag
-				);
+				root._formJockey.create( 'spaceRef', spaceRef );
 
 			root.setMode( 'noAccessToSpace' );
 

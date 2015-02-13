@@ -269,7 +269,6 @@ net_link.prototype._onAcquireSpace =
 	// stops its wheely thing.
 	system.setTimer(
 		1,
-		// TODO remove func wrapper
 		function( )
 		{
 			root.link._update( );

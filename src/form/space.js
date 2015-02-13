@@ -65,23 +65,14 @@ if( JION )
 						defaultValue :
 							'undefined'
 					},
-				spaceUser :
+				spaceRef :
 					{
 						comment :
-							'the user of the current space',
+							'the reference to the current space',
 						type :
-							'string',
+							'fabric_spaceRef',
 						defaultValue :
-							'undefined'
-					},
-				spaceTag :
-					{
-						comment :
-							'tag of the current space',
-						type :
-							'string',
-						defaultValue :
-							'undefined'
+							'undefined',
 					},
 				username :
 					{
@@ -137,11 +128,13 @@ form_space.prototype._init =
 			this.twig = jools.copy( this.twig );
 		}
 
-		this.twig.headline =
-			this.twig.headline.create(
-				'text',
-					this.spaceUser + ':' + this.spaceTag
-			);
+		if( this.spaceRef )
+		{
+			this.twig.headline =
+				this.twig.headline.create(
+					'text', this.spaceRef.fullname
+				);
+		}
 	}
 
 	form_form.init.call( this, inherit );

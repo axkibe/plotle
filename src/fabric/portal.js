@@ -1262,7 +1262,6 @@ fabric_portal.prototype._keyTab =
 		'mark',
 			mark_caret.create(
 				'path',
-					// XXX mark.caretPath.set( mark.caretPath.length - 1, cycle ),
 					mark.caretPath.set( -1, cycle ),
 				'at', 0
 			)

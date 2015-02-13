@@ -57,21 +57,12 @@ if( JION )
 						type :
 							'jion_path'
 					},
-				spaceUser :
+				spaceRef :
 					{
 						comment :
-							'the user of the current space',
+							'the reference of current space',
 						type :
-							'string',
-						defaultValue :
-							'undefined'
-					},
-				spaceTag :
-					{
-						comment :
-							'tag of the current space',
-						type :
-							'string',
+							'fabric_spaceRef',
 						defaultValue :
 							'undefined'
 					},
@@ -165,8 +156,7 @@ form_jockey.prototype._init =
 				'hover', this.hover,
 				'mark', this.mark,
 				'path', path,
-				'spaceUser', this.spaceUser,
-				'spaceTag', this.spaceTag,
+				'spaceRef', this.spaceRef,
 				// TODO hand user object
 				'username', this.user && this.user.name,
 				'view', this.view
