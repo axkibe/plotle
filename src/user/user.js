@@ -3,6 +3,11 @@
 */
 
 
+var
+	jools,
+	user_user;
+
+
 /*
 | Capsule
 */
@@ -38,10 +43,25 @@ if( JION )
 	};
 }
 
-if( SERVER)
+if( SERVER )
 {
-	require( '../jion/this' )( module );
+	user_user = require( '../jion/this' )( module );
+
+	jools = require( '../jools/jools' );
 }
+
+
+/*
+| Returns true if this user is a visitor
+*/
+jools.lazyValue(
+	user_user.prototype,
+	'isVisitor',
+	function( )
+	{
+		return this.name.substr( 0, 7 ) === 'visitor';
+	}
+);
 
 
 }( ) );

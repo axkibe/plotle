@@ -140,13 +140,13 @@ if( JION )
 						type :
 							'disc_jockey'
 					},
-				// remembers an acquired visitor user name and passhash
-				// so when logging out from a real user the previous
-				// visitor is regained.
 				_visitor :
 					{
 						comment :
-							'last acquired visitor creds',
+							// remembers an acquired visitor user name and
+							// passhash so when logging out from a real user
+							// the previous visitor id is regained.
+							'last acquired visitor credentials',
 						type :
 							'user_user',
 						allowsNull :
@@ -327,9 +327,6 @@ shell_root.startup =
 				'twig:add', 'mainDisc', gruga_mainDisc,
 				'twig:add', 'createDisc', gruga_createDisc
 			),
-		// remembers an acquired visitor user name and passhash
-		// so when logging out from a real user the previous
-		// visitor is regained.
 		'_visitor', null,
 		'ajax',
 			net_ajax.create(
@@ -685,7 +682,7 @@ shell_root.prototype.pointingHover =
 /**/			}
 /**/		}
 
-			root._setHover( result.path );
+			root.create( 'hover', result.path );
 
 			return result.cursor;
 		}
@@ -706,7 +703,7 @@ shell_root.prototype.pointingHover =
 /**/		}
 /**/	}
 
-		root._setHover( result.path );
+		root.create( 'hover', result.path );
 
 		return result.cursor;
 	}
@@ -1011,20 +1008,6 @@ shell_root.prototype.update =
 
 
 /*
-| Sets a hovered component.
-|
-| FIXME let it work with null instead of empty path.
-*/
-shell_root.prototype._setHover =
-	function(
-		path
-	)
-{
-	root.create('hover', path );
-};
-
-
-/*
 | User entered normal text (one character or more).
 */
 shell_root.prototype.input =
@@ -1090,15 +1073,19 @@ shell_root.prototype.setUser =
 			)
 	);
 
-	// FIXME user.isVisitor
+	// if( !user.isVisitor ) XXX
 	if( user.name.substr( 0, 5 ) !== 'visit' )
 	{
+		if( user.isVisitor ) throw new Error( );
+
 		window.localStorage.setItem( 'username', user.name );
 
 		window.localStorage.setItem( 'passhash', user.passhash );
 	}
 	else
 	{
+		if( !user.isVisitor ) throw new Error( );
+
 		if(
 			root.space
 			&& root.space.spaceUser !== 'ideoloom'
