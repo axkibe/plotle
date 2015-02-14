@@ -141,22 +141,12 @@ if( JION )
 				// remembers an acquired visitor user name and passhash
 				// so when logging out from a real user the previous
 				// visitor is regained.
-				// FIXME make it a user_user
-				_visitUser :
+				_visitor :
 					{
 						comment :
-							'last acquired visitor id',
+							'last acquired visitor creds',
 						type :
-							'string',
-						allowsNull :
-							true
-					},
-				_visitPasshash :
-					{
-						comment :
-							'last acquired visitor id',
-						type :
-							'string',
+							'user_user',
 						allowsNull :
 							true
 					},
@@ -338,8 +328,7 @@ shell_root.startup =
 		// remembers an acquired visitor user name and passhash
 		// so when logging out from a real user the previous
 		// visitor is regained.
-		'_visitUser', null,
-		'_visitPasshash', null,
+		'_visitor', null,
 		'ajax',
 			net_ajax.create(
 				'path', ajaxPath,
@@ -807,15 +796,9 @@ shell_root.prototype.dragStop =
 shell_root.prototype.logout =
 	function( )
 {
-	if( root._visitUser )
+	if( root._visitor )
 	{
-		root.setUser(
-			// FIXME store visit user as object
-			user_user.create(
-				'name', root._visitUser,
-				'passhash', root._visitPasshash
-			)
-		);
+		root.setUser( root._visitor );
 
 		root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 
@@ -1147,10 +1130,7 @@ shell_root.prototype.setUser =
 		window.localStorage.setItem( 'passhash', null );
 
 		// FIXME make _visitor a jion
-		root.create(
-			'_visitUser', user.name,
-			'_visitPasshash', user.passhash
-		);
+		root.create( '_visitor', user );
 	}
 
 	root.create(
