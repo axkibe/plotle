@@ -253,8 +253,7 @@ shell_root.startup =
 		ajaxPath,
 		canvas,
 		mode,
-		passhash,
-		username,
+		user,
 		view;
 
 /**/if( CHECK )
@@ -344,21 +343,21 @@ shell_root.startup =
 		'doTracker', shell_doTracker.create( )
 	);
 
-	// TODO more into user_user
-	username = window.localStorage.getItem( 'username' );
+	// TODO move up.
 
-	if( username )
+	user = user_user.createFromLocalStorage( );
+
+	if( !user )
 	{
-		passhash = window.localStorage.getItem( 'passhash' );
-	}
-	else
-	{
-		username = 'visitor';
-
-		passhash = jools.uid( );
+		user =
+			user_user.create(
+				'name', 'visitor',
+				'passhash', jools.uid( )
+			);
 	}
 
-	root.link.auth( username, passhash );
+	// TODO
+	root.link.auth( user.name, user.passhash );
 };
 
 
@@ -1073,19 +1072,12 @@ shell_root.prototype.setUser =
 			)
 	);
 
-	// if( !user.isVisitor ) XXX
-	if( user.name.substr( 0, 5 ) !== 'visit' )
+	if( !user.isVisitor )
 	{
-		if( user.isVisitor ) throw new Error( );
-
-		window.localStorage.setItem( 'username', user.name );
-
-		window.localStorage.setItem( 'passhash', user.passhash );
+		user.saveToLocalStorage( );
 	}
 	else
 	{
-		if( !user.isVisitor ) throw new Error( );
-
 		if(
 			root.space
 			&& root.space.spaceUser !== 'ideoloom'
@@ -1094,11 +1086,8 @@ shell_root.prototype.setUser =
 			root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 		}
 
-		window.localStorage.setItem( 'username', null );
+		user_user.clearLocalStorage( );
 
-		window.localStorage.setItem( 'passhash', null );
-
-		// FIXME make _visitor a jion
 		root.create( '_visitor', user );
 	}
 

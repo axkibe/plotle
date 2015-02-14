@@ -64,4 +64,55 @@ jools.lazyValue(
 );
 
 
+/*
+| Creates a user jion from the local storage.
+*/
+user_user.createFromLocalStorage =
+	function( )
+{
+	var
+		name;
+
+	name = window.localStorage.getItem( 'username' );
+
+	if( name )
+	{
+		return(
+			user_user.create(
+				'name', name,
+				'passhash', window.localStorage.getItem( 'passhash' )
+			)
+		);
+	}
+	else
+	{
+		return null;
+	}
+};
+
+
+/*
+| Clears the user jion from local storage.
+*/
+user_user.clearLocalStorage =
+	function( )
+{
+	window.localStorage.setItem( 'username', null );
+
+	window.localStorage.setItem( 'passhash', null );
+};
+
+
+/*
+| Saves this user jion to local storage.
+*/
+user_user.prototype.saveToLocalStorage =
+	function( )
+{
+	window.localStorage.setItem( 'username', this.name );
+
+	window.localStorage.setItem( 'passhash', this.passhash );
+};
+
+
 }( ) );
