@@ -86,23 +86,12 @@ if( JION )
 						defaultValue :
 							'undefined'
 					},
-				spaceUser :
+				spaceRef :
 					{
 						comment :
-							'owner of currently loaded space',
+							'reference to current space',
 						type :
-							'string',
-						defaultValue :
-							'null',
-						assign :
-							null
-					},
-				spaceTag :
-					{
-						comment :
-							'name of currently loaded space',
-						type :
-							'string',
+							'fabric_spaceRef',
 						defaultValue :
 							'null',
 						assign :

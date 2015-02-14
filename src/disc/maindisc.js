@@ -86,21 +86,12 @@ if( JION )
 						defaultValue :
 							'undefined'
 					},
-				spaceUser :
+				spaceRef :
 					{
 						comment :
-							'owner of currently loaded space',
+							'reference to current space',
 						type :
-							'string',
-						defaultValue :
-							'null'
-					},
-				spaceTag :
-					{
-						comment :
-							'name of currently loaded space',
-						type :
-							'string',
+							'fabric_spaceRef',
 						defaultValue :
 							'null'
 					},
@@ -222,7 +213,10 @@ disc_mainDisc.prototype._init =
 
 			case 'space' :
 
-				text = this.spaceUser + ':' + this.spaceTag;
+				if( this.spaceRef )
+				{
+					text = this.spaceRef.fullname;
+				}
 
 				visible = true;
 

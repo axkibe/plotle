@@ -89,21 +89,12 @@ if( JION )
 						type :
 							'euclid_view'
 					},
-				spaceUser :
+				spaceRef :
 					{
 						comment :
-							'owner of currently loaded space',
+							'currently loaded space',
 						type :
-							'string',
-						defaultValue :
-							'null'
-					},
-				spaceTag :
-					{
-						comment :
-							'name of currently loaded space',
-						type :
-							'string',
+							'fabric_spaceRef',
 						defaultValue :
 							'null'
 					},
@@ -139,7 +130,9 @@ jockey.prototype._init =
 	function( )
 {
 	var
+		name,
 		path,
+		proto,
 		ranks,
 		twig;
 
@@ -154,12 +147,9 @@ jockey.prototype._init =
 		a++
 	)
 	{
-		var
-			name =
-				ranks[ a ],
+		name = ranks[ a ];
 
-			proto =
-				twig[ name ];
+		proto = twig[ name ];
 
 		if( !proto.path )
 		{
@@ -170,8 +160,7 @@ jockey.prototype._init =
 		}
 		else
 		{
-			path =
-				undefined;
+			path = undefined;
 		}
 
 		twig[ name ] =
@@ -187,8 +176,7 @@ jockey.prototype._init =
 				'mode', this.mode,
 				'path', path,
 				'view', this.view,
-				'spaceUser', this.spaceUser,
-				'spaceTag', this.spaceTag,
+				'spaceRef', this.spaceRef,
 				// FIXME hand user object
 				'username', this.user && this.user.name
 			);

@@ -473,8 +473,7 @@ shell_root.prototype.arrivedAtSpace =
 		'_discJockey',
 			root._discJockey.create(
 				'access', access,
-				'spaceUser', spaceRef.username, // FIXME
-				'spaceTag', spaceRef.tag // FIXME
+				'spaceRef', spaceRef
 			),
 		'_formJockey',
 			root._formJockey.create( 'spaceRef', spaceRef )
