@@ -1259,7 +1259,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		switchExpr
 		.$default(
 			$block( )
-			.$check( $block( ).$fail( ) ) // FIXME remove $block
+			.$check( $fail( ) )
 		);
 
 	loop = loop.append( switchExpr );
@@ -1509,12 +1509,9 @@ generator.prototype.genCreatorChecks =
 				);
 		}
 
-		switch( attr.id.string )
+		if( attr.id.string === 'protean' )
 		{
-			case 'Object' : // FIXME
-			case 'protean' :
-
-				continue;
+			continue;
 		}
 
 		if( attr.allowsNull && !attr.allowsUndefined )
