@@ -56,12 +56,32 @@ if( JION )
 			'shell_root',
 		attributes :
 			{
+				action :
+					{
+						comment :
+							'current action',
+						type :
+							'->action',
+						allowsNull :
+							true
+					},
 				display :
 					{
 						comment :
 							'the display within everything happens',
 						type :
 							'euclid_display'
+					},
+				hover :
+					{
+						comment :
+							'current hovered item',
+						type :
+							'jion_path',
+						allowsNull :
+							true,
+						assign :
+							'_hover',
 					},
 				mark :
 					{
@@ -92,15 +112,6 @@ if( JION )
 						allowsNull :
 							true
 					},
-				action :
-					{
-						comment :
-							'current action',
-						type :
-							'->action',
-						allowsNull :
-							true
-					},
 				view :
 					{
 						comment :
@@ -114,15 +125,6 @@ if( JION )
 							'current mode',
 						type :
 							'string'
-					},
-				_hoverPath :
-					{
-						comment :
-							'current hovered item',
-						type :
-							'jion_path',
-						allowsNull :
-							true
 					},
 				_formJockey :
 					{
@@ -296,7 +298,7 @@ shell_root.startup =
 		'space', null,
 		'action', null,
 		'_mode', mode,
-		'_hoverPath', jion_path.empty,
+		'hover', jion_path.empty,
 		'view', view,
 		'_formJockey',
 			form_jockey.create(
@@ -383,7 +385,7 @@ shell_root.prototype._init =
 
 	view = this.view;
 
-	hpath = this._hoverPath;
+	hpath = this._hover;
 
 	system.setInput( mark ? mark.clipboard : '' );
 
@@ -1018,13 +1020,7 @@ shell_root.prototype._setHover =
 		path
 	)
 {
-	if( root._hoverPath.equals( path ) )
-	{
-		return;
-	}
-
-	root.create( '_hoverPath', path );
-
+	root.create('hover', path );
 };
 
 
