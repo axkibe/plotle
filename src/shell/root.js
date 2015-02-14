@@ -370,6 +370,7 @@ shell_root.prototype._init =
 	function( inherit )
 {
 	var
+		hpath,
 		mark,
 		view;
 
@@ -382,6 +383,8 @@ shell_root.prototype._init =
 
 	view = this.view;
 
+	hpath = this._hoverPath;
+
 	system.setInput( mark ? mark.clipboard : '' );
 
 	if( this.space )
@@ -389,20 +392,32 @@ shell_root.prototype._init =
 		this.space =
 			this.space.create(
 				'mark', mark,
-				'view', view
+				'view', view,
+				'hover',
+					hpath.isEmpty || hpath.get( 0 ) !== 'space'
+					? jion_path.empty
+					: hpath
 			);
 	}
 
 	this._formJockey =
 		this._formJockey.create(
 			'mark', mark,
-			'view', view
+			'view', view,
+			'hover',
+				hpath.isEmpty || hpath.get( 0 ) !== 'form'
+				? jion_path.empty
+				: hpath
 		);
 
 	this._discJockey =
 		this._discJockey.create(
 			'mark', mark,
-			'view', view
+			'view', view,
+			'hover',
+				hpath.isEmpty || hpath.get( 0 ) !== 'disc'
+				? jion_path.empty
+				: hpath
 		);
 
 	root = this;
@@ -674,7 +689,6 @@ shell_root.prototype.pointingHover =
 		}
 	}
 
-
 	if( screen )
 	{
 		result = screen.pointingHover( p, shift, ctrl );
@@ -683,8 +697,7 @@ shell_root.prototype.pointingHover =
 /**/	{
 /**/		if(
 /**/			!result
-/**/			||
-/**/			result.reflect !== 'result_hover'
+/**/			|| result.reflect !== 'result_hover'
 /**/		)
 /**/		{
 /**/			throw new Error( );
@@ -956,7 +969,6 @@ shell_root.prototype.update =
 	var
 		mark;
 
-	// TODO that is akward
 	mark = root.space.mark;
 
 	switch( mark && mark.reflect )
@@ -1011,34 +1023,8 @@ shell_root.prototype._setHover =
 		return;
 	}
 
-	// FIXME let init hand it down.
-	root.create(
-		'_discJockey',
-			root._discJockey.create(
-				// FIXME make concernsHover
-				'hover',
-					path.isEmpty || path.get( 0 ) !== 'disc'
-					? jion_path.empty
-					: path
-			),
-		'_formJockey',
-			root._formJockey.create(
-				'hover',
-					// FIXME make a concernsHover
-					path.isEmpty || path.get( 0 ) !== 'form'
-					? jion_path.empty
-					: path
-			),
-		'space',
-			root.space.create(
-				'hover',
-					path.isEmpty || path.get( 0 ) !== 'space'
-					? jion_path.empty
-					: path
-			),
-		'_hoverPath',
-			path
-	);
+	root.create( '_hoverPath', path );
+
 };
 
 
