@@ -361,6 +361,8 @@ signUp.prototype.clear =
 
 	root.setPath( twig.newsletterCheckBox.path.append( 'checked' ), true );
 
+	root.setPath( this._widgetPath( 'errorLabel' ).append( 'text' ), '' );
+
 	root.create( 'mark', null );
 };
 

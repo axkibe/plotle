@@ -142,9 +142,9 @@ serveAlter =
 
 	user = request.user;
 
-	if( root.users.get( user.name ).pass !== user.passhash )
+	if( !root.userNexus.testInCache( user ) )
 	{
-		return replyError( 'invalid pass' );
+		return replyError( 'invalid creds' );
 	}
 
 	if( root.testAccess( user.name, spaceRef ) !== 'rw' )
@@ -212,11 +212,7 @@ serveAuth =
 	)
 {
 	var
-		nextVisitor,
-		uid,
-		user,
-		sUser,
-		val;
+		user;
 
 	try
 	{
@@ -233,55 +229,12 @@ serveAuth =
 
 	if( user.name === 'visitor' )
 	{
-		nextVisitor = root.nextVisitor;
+		user = root.userNexus.createVisitor( user );
 
-		do
-		{
-			uid = 'visitor-' + (++nextVisitor);
-		}
-		while( root.users.get( uid ) );
-
-		root.create(
-			'nextVisitor', nextVisitor,
-			'users',
-				root.users.set(
-					uid,
-					server_user.create(
-						'username', uid,
-						'pass', user.passhash,
-						'news', false
-					)
-				)
-		);
-
-		return reply_auth.create( 'user', user.create( 'name', uid ) );
+		return reply_auth.create( 'user', user );
 	}
 
-	if( !root.users.get( user.name ) )
-	{
-		val =
-			yield root.repository.users.findOne(
-				{ _id : user.name },
-				resume( )
-			);
-
-		if( val === null )
-		{
-			return replyError( 'Username unknown' );
-		}
-
-		root.create(
-			'users',
-			root.users.set(
-				user.name,
-				database_userSkid.createFromJSON( val ).asUser
-			)
-		);
-	}
-
-	sUser = root.users.get( user.name );
-
-	if( sUser.pass !== user.passhash )
+	if( !( yield* root.userNexus.testUserCreds( user ) ) )
 	{
 		return replyError( 'Invalid password' );
 	}
@@ -292,8 +245,6 @@ serveAuth =
 
 /*
 | Serves a register request.
-|
-| FIXME move user logic into user nexus
 */
 serveRegister =
 	function*(
@@ -304,7 +255,6 @@ serveRegister =
 		mail,
 		news,
 		user,
-		usertest,
 		sUser;
 
 	try
@@ -335,37 +285,20 @@ serveRegister =
 		return replyError( 'Username too short, min. 4 characters' );
 	}
 
-	usertest =
-		yield root.repository.users.findOne(
-			{ _id : user.name },
-			resume( )
+	sUser =
+		yield* root.userNexus.register(
+			server_user.create(
+				'name', user.name,
+				'passhash', user.passhash,
+				'mail', mail,
+				'news', news
+			)
 		);
 
-	if( usertest !== null )
+	if( !sUser )
 	{
 		return replyError( 'Username already taken' );
 	}
-
-	sUser =
-		server_user.create(
-			'username', user.name,
-			'pass', user.passhash,
-			'mail', mail,
-			'news', news
-		);
-
-	yield root.repository.users.insert(
-		JSON.parse( JSON.stringify(
-			database_userSkid.createFromUser( sUser )
-		) ),
-		resume( )
-	);
-
-	root.create( 'users', root.users.set( user.name, sUser ) );
-
-	yield* root.createSpace(
-		fabric_spaceRef.create( 'username', user.name, 'tag', 'home' )
-	);
 
 	return reply_register.create( );
 };
@@ -387,8 +320,7 @@ serveUpdate =
 		spaceBox,
 		spaceRef,
 		timer,
-		user,
-		sUser;
+		user;
 
 	try
 	{
@@ -407,11 +339,9 @@ serveUpdate =
 
 	seq = request.seq;
 
-	sUser = root.users.get( user.name );
-
-	if( !sUser || sUser.pass !== user.passhash )
+	if( !root.userNexus.testInCache( user ) )
 	{
-		return replyError( 'invalid password' );
+		return replyError( 'invalid creds' );
 	}
 
 	spaceBox = root.spaces.get( spaceRef.fullname );
@@ -475,8 +405,7 @@ serveAcquire =
 	var
 		access,
 		spaceBox,
-		user,
-		sUser;
+		user;
 
 	try
 	{
@@ -491,11 +420,9 @@ serveAcquire =
 
 	user = request.user;
 
-	sUser = root.users.get( user.name );
-
-	if( !sUser || user.passhash !== sUser.pass )
+	if( !root.userNexus.testInCache( user ) )
 	{
-		return replyError( 'wrong username/password' );
+		return replyError( 'invalid creds' );
 	}
 
 	access = root.testAccess( user.name, request.spaceRef );

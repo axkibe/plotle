@@ -70,6 +70,7 @@ module.exports =
 			'src/server/upSleep.js',
 			'src/server/upSleepGroup.js',
 			'src/server/user.js',
+			'src/server/userGroup.js',
 			'src/server/userNexus.js',
 
 			'src/user/user.js',

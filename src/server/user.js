@@ -20,14 +20,14 @@ if( JION )
 			'server_user',
 		attributes :
 			{
-				username :
+				name :
 					{
 						comment :
 							'the username',
 						type :
 							'string',
 					},
-				pass :
+				passhash :
 					{
 						comment :
 							'password hash',

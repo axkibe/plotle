@@ -4,6 +4,9 @@
 | Authors: Axel Kittenberger
 */
 
+// deactivated
+if( true ) return false;
+
 /*
 | This tool is configered directly here
 */

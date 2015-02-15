@@ -104,9 +104,7 @@ if( JION )
 		subclass :
 			'form_form',
 		init :
-			[
-				'inherit'
-			],
+			[ 'inherit' ],
 		twig :
 			'->formWidgets'
 	};
@@ -354,15 +352,11 @@ form_login.prototype.clear =
 	function( )
 {
 	// FUTURE combine calls
-	root.setPath(
-		this._widgetPath( 'userInput' ).append( 'value' ),
-		''
-	);
+	root.setPath( this._widgetPath( 'userInput' ).append( 'value' ), '' );
 
-	root.setPath(
-		this._widgetPath( 'passwordInput' ).append( 'value' ),
-		''
-	);
+	root.setPath( this._widgetPath( 'passwordInput' ).append( 'value' ), '' );
+
+	root.setPath( this._widgetPath( 'errorLabel' ).append( 'text' ), '' );
 
 	root.create( 'mark', null );
 };

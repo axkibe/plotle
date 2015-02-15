@@ -1,9 +1,7 @@
 /*
-| Converts a v10 repository to v11.
+| Converts a v11 repository to v12.
 */
 
-// deactivated
-if( true ) return false;
 
 
 /*
@@ -18,13 +16,13 @@ config =
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'ideoloom-10'
+		name : 'ideoloom-11'
 	},
 	trg :
 	{
 		host : '127.0.0.1',
 		port : 27017,
-		name : 'ideoloom-11'
+		name : 'ideoloom-12'
 	}
 };
 
@@ -57,14 +55,13 @@ GLOBAL.SHELL = false;
 var
 	connectToSource,
 	connectToTarget,
+	convertUser,
 	fabric_spaceRef,
 	jools,
 	mongodb,
 	resume,
 	run,
-	sus,
-	translateChange,
-	translateChangeRay;
+	sus;
 
 jools = require( '../jools/jools' );
 
@@ -135,59 +132,19 @@ connectToTarget =
 };
 
 
-translateChange =
-	function(
-		c10
-	)
+/*
+| Converts the user.
+*/
+convertUser =
+	function( o )
 {
-	if( c10.type !== 'change_set' )
-	{
-		return c10;
-	}
+	o.passhash = o.pass;
 
-	if( c10.val === null )
-	{
-		c10.type = 'change_shrink';
+	delete o.pass;
 
-		delete c10.val;
-
-		return c10;
-	}
-
-	if( c10.prev === null )
-	{
-		c10.type = 'change_grow';
-
-		delete c10.prev;
-
-		return c10;
-	}
-
-	delete c10.rank;
-
-	return c10;
+	return o;
 };
 
-
-translateChangeRay =
-	function(
-		cr10
-	)
-{
-	var
-		a, aZ;
-
-	for(
-		a = 0, aZ = cr10.changeRay.ray.length;
-		a < aZ;
-		a++
-	)
-	{
-		translateChange( cr10.changeRay.ray[ a ] );
-	}
-
-	return cr10;
-};
 
 
 /*
@@ -206,6 +163,7 @@ run =
 		srcChanges,
 		srcConnection,
 		srcSpaces,
+		srcGlobal,
 		srcUsers,
 		trgConnection,
 		trgChanges,
@@ -216,6 +174,20 @@ run =
 	console.log( '* connecting to src' );
 
 	srcConnection = yield* connectToSource( );
+
+	srcGlobal =
+		yield srcConnection.collection( 'global', resume( ) );
+
+	o =
+		yield srcGlobal.findOne(
+			{ _id : 'version' },
+			resume( )
+		);
+
+	if( o.version !== 11 )
+	{
+		throw new Error( 'src is not a v11 repository' );
+	}
 
 	console.log( '* connecting to trg' );
 
@@ -240,12 +212,12 @@ run =
 	yield trgGlobal.insert(
 		{
 			_id : 'version',
-			version : 11
+			version : 12
 		},
 		resume( )
 	);
 
-	console.log( '* copying src.users -> trg.users' );
+	console.log( '* converting src.users -> trg.users' );
 
 	cursor = yield srcUsers.find( resume( ) );
 
@@ -257,7 +229,7 @@ run =
 	{
 		console.log( ' * ' + o._id );
 
-		yield trgUsers.insert( o, resume( ) );
+		yield trgUsers.insert( convertUser( o ), resume( ) );
 	}
 
 	console.log( '* copying src.spaces -> trg.spaces' );
@@ -285,7 +257,7 @@ run =
 				'tag', o.tag
 			);
 
-		console.log( ' * translating changes of "' + spaceRef.fullname + '"' );
+		console.log( ' * copying changes of "' + spaceRef.fullname + '"' );
 
 		srcChanges = yield srcConnection.collection( 'changes:' + spaceRef.fullname, resume( ) );
 
@@ -306,7 +278,7 @@ run =
 			c = yield changesCursor.nextObject( resume( ) )
 		)
 		{
-			yield trgChanges.insert( translateChangeRay( c ), resume( ) );
+			yield trgChanges.insert( c, resume( ) );
 		}
 	}
 

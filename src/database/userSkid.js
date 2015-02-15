@@ -29,7 +29,7 @@ if( JION )
 						type :
 							'string',
 					},
-				pass :
+				passhash :
 					{
 						comment :
 							'password hash',
@@ -98,8 +98,8 @@ database_userSkid.createFromUser =
 
 	return(
 		database_userSkid.create(
-			'_id', user.username,
-			'pass', user.pass,
+			'_id', user.name,
+			'passhash', user.passhash,
 			'mail', user.mail,
 			'news', user.news,
 			'clearPass', user.clearPass
@@ -116,8 +116,8 @@ jools.lazyValue(
 {
 	return(
 		server_user.create(
-			'username', this._id,
-			'pass', this.pass,
+			'name', this._id,
+			'passhash', this.passhash,
 			'mail', this.mail,
 			'news', this.news,
 			'clearPass', this.clearPass

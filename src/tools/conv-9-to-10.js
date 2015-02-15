@@ -2,6 +2,10 @@
 | Converts a v8 repository to v9.
 */
 
+// deactivated
+if( true ) return false;
+
+
 /*
 | This tool is configered directly here
 */

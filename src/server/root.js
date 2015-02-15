@@ -55,10 +55,10 @@ if( GLOBAL.JION )
 						type :
 							'server_spaceNexus'
 					},
-				users :
+				userNexus :
 					{
 						comment :
-							'table of all cached user credentials',
+							'manages users',
 						type :
 							'server_userNexus'
 					},
@@ -80,7 +80,7 @@ if( GLOBAL.JION )
 
 var config = require( '../../config' );
 
-config.database_version = 11;
+config.database_version = 12;
 
 /*
 | Globals.
@@ -218,7 +218,6 @@ server_root.prototype._init =
 startup =
 	function*( )
 {
-	// the servers inventory
 
 	root =
 		server_root.create(
@@ -234,7 +233,7 @@ startup =
 
 			'nextVisitor', 1000,
 
-			'users', server_userNexus.create( )
+			'userNexus', server_userNexus.create( )
 		);
 
 	yield* root.prepareInventory( );
