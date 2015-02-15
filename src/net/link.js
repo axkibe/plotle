@@ -150,17 +150,15 @@ net_link.prototype._onAuth =
 */
 net_link.prototype.register =
 	function(
-		username,
+		user,
 		mail,
-		passhash,
 		news
 	)
 {
 	root.ajax.twig.command.request(
 		request_register.create(
-			'username', username,
+			'user', user,
 			'mail', mail,
-			'passhash', passhash,
 			'news', news
 		),
 		'_onRegister'
@@ -185,8 +183,7 @@ net_link.prototype._onRegister =
 	// FUTURE pass request / reply
 	root.onRegister(
 		ok,
-		ok ? request.username : null,
-		ok ? request.passhash : null,
+		ok ? request.user : null,
 		ok ? null : reply.message
 	);
 };

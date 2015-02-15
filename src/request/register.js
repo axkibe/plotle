@@ -38,25 +38,15 @@ if( JION )
 						type :
 							'boolean'
 					},
-				passhash :
+				user :
 					{
 						comment :
-							'password hash of the user/visitor',
+							'user/pass credentials to be registered',
 						json :
 							true,
 						type :
-							'string'
-					},
-				username :
-					{
-						comment :
-							'user to be registered',
-						json :
-							true,
-						type :
-							'string'
+							'user_user'
 					}
-
 			}
 	};
 }

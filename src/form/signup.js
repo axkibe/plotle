@@ -281,9 +281,11 @@ signUp.prototype.signup =
 	}
 
 	root.link.register(
-		user,
+		user_user.create(
+			'name', user,
+			'passhash', jools.passhash( pass )
+		),
 		email,
-		jools.passhash( pass ),
 		newsletter
 	);
 };
@@ -295,14 +297,14 @@ signUp.prototype.signup =
 signUp.prototype.onRegister =
 	function(
 		ok,
-		user, // FIXME let it receive a user object
-		passhash,
+		user,
 		message
 	)
 {
 	var
-		twig =
-			this.twig;
+		twig;
+
+	twig = this.twig;
 
 	if( !ok )
 	{
@@ -327,12 +329,7 @@ signUp.prototype.onRegister =
 		return;
 	}
 
-	root.setUser(
-		user_user.create(
-			'name', user,
-			'passhash', passhash
-		)
-	);
+	root.setUser( user );
 
 	this.clear( );
 

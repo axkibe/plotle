@@ -1244,8 +1244,7 @@ shell_root.prototype.onAuth =
 shell_root.prototype.onRegister =
 	function(
 		ok,
-		username, // TODO hand user object
-		passhash,
+		user,
 		message
 	)
 {
@@ -1263,12 +1262,7 @@ shell_root.prototype.onRegister =
 		return;
 	}
 
-	root._formJockey.get( 'signUp' ).onRegister(
-		ok,
-		username, // TODO hand user object
-		passhash,
-		message
-	);
+	root._formJockey.get( 'signUp' ).onRegister( ok, user, message );
 
 	return;
 };

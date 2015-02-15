@@ -31,13 +31,17 @@ if( JION )
 							'the username',
 						type :
 							'string',
+						json :
+							true
 					},
 				passhash :
 					{
 						comment :
 							'password hash',
 						type :
-							'string'
+							'string',
+						json :
+							true
 					}
 			}
 	};

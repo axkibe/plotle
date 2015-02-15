@@ -292,6 +292,8 @@ serveAuth =
 
 /*
 | Serves a register request.
+|
+| FIXME move user logic into user nexus
 */
 serveRegister =
 	function*(
@@ -301,9 +303,9 @@ serveRegister =
 	var
 		mail,
 		news,
-		passhash,
 		user,
-		username;
+		usertest,
+		sUser;
 
 	try
 	{
@@ -317,54 +319,52 @@ serveRegister =
 	}
 
 
-	username = request.username;
-
-	passhash = request.passhash;
+	user = request.user;
 
 	mail = request.mail;
 
 	news = request.news;
 
-	if( username.substr( 0, 7 ) === 'visitor' )
+	if( user.isVisitor )
 	{
 		return replyError( 'Username must not start with "visitor"' );
 	}
 
-	if( username.length < 4 )
+	if( user.name.length < 4 )
 	{
 		return replyError( 'Username too short, min. 4 characters' );
 	}
 
-	user =
+	usertest =
 		yield root.repository.users.findOne(
-			{ _id : username },
+			{ _id : user.name },
 			resume( )
 		);
 
-	if( user !== null )
+	if( usertest !== null )
 	{
 		return replyError( 'Username already taken' );
 	}
 
-	user =
+	sUser =
 		server_user.create(
-			'username', username,
-			'pass', passhash,
+			'username', user.name,
+			'pass', user.passhash,
 			'mail', mail,
 			'news', news
 		);
 
 	yield root.repository.users.insert(
 		JSON.parse( JSON.stringify(
-			database_userSkid.createFromUser( user )
+			database_userSkid.createFromUser( sUser )
 		) ),
 		resume( )
 	);
 
-	root.create( 'users', root.users.set( username, user ) );
+	root.create( 'users', root.users.set( user.name, sUser ) );
 
 	yield* root.createSpace(
-		fabric_spaceRef.create( 'username', username, 'tag', 'home' )
+		fabric_spaceRef.create( 'username', user.name, 'tag', 'home' )
 	);
 
 	return reply_register.create( );
