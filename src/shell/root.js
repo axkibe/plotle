@@ -290,6 +290,17 @@ shell_root.startup =
 
 	ajaxPath = jion_path.empty.append( 'ajax' );
 
+	user = user_user.createFromLocalStorage( );
+
+	if( !user )
+	{
+		user =
+			user_user.create(
+				'name', 'visitor',
+				'passhash', jools.uid( )
+			);
+	}
+
 	shell_root.create(
 		'display', display,
 		'mark', null,
@@ -342,19 +353,6 @@ shell_root.startup =
 		'link', net_link.create( ),
 		'doTracker', shell_doTracker.create( )
 	);
-
-	// TODO move up.
-
-	user = user_user.createFromLocalStorage( );
-
-	if( !user )
-	{
-		user =
-			user_user.create(
-				'name', 'visitor',
-				'passhash', jools.uid( )
-			);
-	}
 
 	// TODO
 	root.link.auth( user.name, user.passhash );
