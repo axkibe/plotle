@@ -9,7 +9,6 @@ var
 	form_login,
 	jools,
 	mark_caret,
-	root,
 	user_user;
 
 
@@ -181,16 +180,16 @@ form_login.prototype.login =
 {
 	var
 		twig,
-		user,
+		username,
 		pass;
 
 	twig = this.twig;
 
-	user = twig.userInput.value;
+	username = twig.userInput.value;
 
 	pass = twig.passwordInput.value;
 
-	if( user.length < 4 )
+	if( username.length < 4 )
 	{
 		root.setPath(
 			this._widgetPath( 'errorLabel' ).append( 'text' ),
@@ -201,7 +200,7 @@ form_login.prototype.login =
 			'mark',
 				mark_caret.create(
 					'path', twig.userInput.path,
-					'at', user.length,
+					'at', username.length,
 					'retainx', null
 				)
 		);
@@ -209,7 +208,7 @@ form_login.prototype.login =
 		return;
 	}
 
-	if( user.substr( 0, 5 ) === 'visit' )
+	if( username.substr( 0, 5 ) === 'visit' )
 	{
 		root.setPath(
 			this._widgetPath( 'errorLabel' ).append( 'text' ),
@@ -246,7 +245,12 @@ form_login.prototype.login =
 		return;
 	}
 
-	root.link.auth( user, jools.passhash( pass ) );
+	root.link.auth(
+		user_user.create(
+			'name', username,
+			'passhash', jools.passhash( pass )
+		)
+	);
 };
 
 
@@ -300,7 +304,7 @@ form_login.prototype.onAuth =
 
 	twig = this.twig;
 
-	if( reply.type !== 'reply_auth' )
+	if( reply.reflect !== 'reply_auth' )
 	{
 		message = reply.message;
 
@@ -333,12 +337,7 @@ form_login.prototype.onAuth =
 		return;
 	}
 
-	root.setUser(
-		user_user.create(
-			'name', reply.username,
-			'passhash', request.passhash
-		)
-	);
+	root.setUser( reply.user );
 
 	this.clear( );
 

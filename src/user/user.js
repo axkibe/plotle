@@ -108,6 +108,21 @@ user_user.clearLocalStorage =
 
 
 /*
+| Creates a visitor user.
+*/
+user_user.createVisitor =
+	function( )
+{
+	return(
+		user_user.create(
+			'name', 'visitor',
+			'passhash', jools.uid( )
+		)
+	);
+};
+
+
+/*
 | Saves this user jion to local storage.
 */
 user_user.prototype.saveToLocalStorage =

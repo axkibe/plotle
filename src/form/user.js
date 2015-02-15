@@ -6,8 +6,7 @@
 var
 	form_form,
 	form_user,
-	jools,
-	root;
+	jools;
 
 
 /*

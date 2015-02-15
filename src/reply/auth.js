@@ -20,14 +20,14 @@ if( JION )
 			'reply_auth',
 		attributes :
 			{
-				username :
+				user :
 					{
 						comment :
-							'the username. visitors get their real id here',
+							'the user jion. visitors get their real id here',
 						json :
 							true,
 						type :
-							'string'
+							'user_user'
 					}
 			}
 	};

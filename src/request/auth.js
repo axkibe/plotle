@@ -21,23 +21,14 @@ if( JION )
 			'request_auth',
 		attributes :
 			{
-				passhash :
+				user :
 					{
 						comment :
-							'password hash of the user/visitor',
+							'user creds to be authenticated',
 						json :
 							true,
 						type :
-							'string'
-					},
-				username :
-					{
-						comment :
-							'user/visitor to be authenticated',
-						json :
-							true,
-						type :
-							'string'
+							'user_user'
 					}
 
 			}

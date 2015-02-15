@@ -354,8 +354,7 @@ shell_root.startup =
 		'doTracker', shell_doTracker.create( )
 	);
 
-	// TODO
-	root.link.auth( user.name, user.passhash );
+	root.link.auth( user );
 };
 
 
@@ -814,7 +813,7 @@ shell_root.prototype.logout =
 		return;
 	}
 
-	root.link.auth( 'visitor', jools.uid( ) );
+	root.link.auth( user_user.createVisitor( ) );
 };
 
 
@@ -1210,13 +1209,13 @@ shell_root.prototype.onAuth =
 	// otherwise this is an onload login
 	// or logout.
 
-	if( reply.type !== 'reply_auth' )
+	if( reply.reflect !== 'reply_auth' )
 	{
 		// when logging in with a real user failed
 		// takes a visitor instead
-		if( request.username !== 'visitor' )
+		if( !request.user.isVisitor )
 		{
-			root.link.auth( 'visitor', jools.uid( ) );
+			root.link.auth( user_user.createVisitor( ) );
 
 			return;
 		}
@@ -1227,12 +1226,7 @@ shell_root.prototype.onAuth =
 		return;
 	}
 
-	root.setUser(
-		user_user.create(
-			'name', reply.username,
-			'passhash', request.passhash
-		)
-	);
+	root.setUser( reply.user );
 
 	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 };

@@ -218,6 +218,7 @@ serveAuth =
 		nextVisitor,
 		uid,
 		user,
+		sUser,
 		val;
 
 	try
@@ -231,7 +232,11 @@ serveAuth =
 		return replyError( 'command not valid jion' );
 	}
 
-	if( request.username === 'visitor' )
+	user = request.user;
+
+	console.log( 'AUTH', user.name );
+
+	if( user.name === 'visitor' )
 	{
 		nextVisitor = root.nextVisitor;
 
@@ -248,20 +253,20 @@ serveAuth =
 					uid,
 					server_user.create(
 						'username', uid,
-						'pass', request.passhash,
+						'pass', user.passhash,
 						'news', false
 					)
 				)
 		);
 
-		return reply_auth.create( 'username', uid );
+		return reply_auth.create( 'user', user.create( 'name', uid ) );
 	}
 
-	if( !root.users.get( request.username ) )
+	if( !root.users.get( user.name ) )
 	{
 		val =
 			yield root.repository.users.findOne(
-				{ _id : request.username },
+				{ _id : user.name },
 				resume( )
 			);
 
@@ -273,20 +278,20 @@ serveAuth =
 		root.create(
 			'users',
 			root.users.set(
-				request.username,
+				user.name,
 				database_userSkid.createFromJSON( val ).asUser
 			)
 		);
 	}
 
-	user = root.users.get( request.username );
+	sUser = root.users.get( user.name );
 
-	if( user.pass !== request.passhash )
+	if( sUser.pass !== user.passhash )
 	{
 		return replyError( 'Invalid password' );
 	}
 
-	return reply_auth.create( 'username', request.username );
+	return reply_auth.create( 'user', user );
 };
 
 

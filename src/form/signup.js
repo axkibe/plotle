@@ -12,7 +12,6 @@ var
 	form_signUp,
 	jools,
 	mark_caret,
-	root,
 	user_user;
 
 
@@ -177,7 +176,7 @@ signUp.prototype.pushButton =
 
 		default :
 
-/**/		throw new Error( );
+			throw new Error( );
 	}
 };
 
@@ -189,7 +188,7 @@ signUp.prototype.signup =
 {
 	var
 		twig,
-		user,
+		username,
 		email,
 		pass,
 		pass2,
@@ -197,7 +196,7 @@ signUp.prototype.signup =
 
 	twig = this.twig;
 
-	user = twig.userInput.value;
+	username = twig.userInput.value;
 
 	email = twig.emailInput.value;
 
@@ -208,7 +207,7 @@ signUp.prototype.signup =
 	newsletter = twig.newsletterCheckBox.checked;
 
 
-	if( user.length < 4 )
+	if( username.length < 4 )
 	{
 		root.setPath(
 			this._widgetPath( 'errorLabel' ).append( 'text' ),
@@ -219,14 +218,14 @@ signUp.prototype.signup =
 			'mark',
 				mark_caret.create(
 					'path', twig.userInput.path,
-					'at', user.length
+					'at', username.length
 				)
 		);
 
 		return;
 	}
 
-	if( user.substr( 0, 5 ) === 'visit' )
+	if( username.substr( 0, 5 ) === 'visit' )
 	{
 		root.setPath(
 			this._widgetPath( 'errorLabel' ).append( 'text' ),
@@ -282,7 +281,7 @@ signUp.prototype.signup =
 
 	root.link.register(
 		user_user.create(
-			'name', user,
+			'name', username,
 			'passhash', jools.passhash( pass )
 		),
 		email,

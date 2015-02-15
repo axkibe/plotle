@@ -5,6 +5,7 @@
 var
 	change_wrapRay,
 	net_link,
+	reply_auth,
 	reply_acquire,
 	reply_update,
 	request_acquire,
@@ -118,15 +119,11 @@ if( JION )
 */
 net_link.prototype.auth =
 	function(
-		username,
-		passhash
+		user
 	)
 {
 	root.ajax.twig.command.request(
-		request_auth.create(
-			'username', username,
-			'passhash', passhash
-		),
+		request_auth.create( 'user', user ),
 		'_onAuth'
 	);
 };
@@ -141,6 +138,15 @@ net_link.prototype._onAuth =
 		reply
 	)
 {
+	if( reply.type === 'reply_error' )
+	{
+		root.onAuth( request, reply );
+
+		return;
+	}
+
+	reply = reply_auth.createFromJSON( reply );
+
 	root.onAuth( request, reply );
 };
 

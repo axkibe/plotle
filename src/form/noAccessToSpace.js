@@ -5,8 +5,7 @@
 
 var
 	form_form,
-	form_noAccessToSpace,
-	root;
+	form_noAccessToSpace;
 
 
 /*

@@ -11,7 +11,6 @@ var
 	mark_caret,
 	mark_widget,
 	result_hover,
-	root,
 	theme;
 
 

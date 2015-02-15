@@ -12,8 +12,7 @@
 var
 	form_form,
 	form_nonExistingSpace,
-	jools,
-	root;
+	jools;
 
 
 /*

@@ -7,8 +7,7 @@ var
 	fabric_spaceRef,
 	form_form,
 	form_moveTo,
-	jools,
-	root;
+	jools;
 
 
 /*

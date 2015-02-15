@@ -8,8 +8,7 @@
 var
 	form_form,
 	form_welcome,
-	jools,
-	root;
+	jools;
 
 
 /*
