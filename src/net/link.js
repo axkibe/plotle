@@ -105,8 +105,7 @@ if( JION )
 
 
 /*
-| Checks with server if a username / passhash
-| combo is valid.
+| Checks with server if user creds are valid.
 */
 net_link.prototype.auth =
 	function(
@@ -200,12 +199,10 @@ net_link.prototype.acquireSpace =
 	root.ajax.twig.update.abortAll( );
 
 	root.ajax.twig.command.request(
-		// TODO
 		request_acquire.create(
 			'createMissing', createMissing,
-			'passhash', this.user.passhash,
-			'spaceRef', spaceRef,
-			'username', this.user.name
+			'user', this.user,
+			'spaceRef', spaceRef
 		),
 		'_onAcquireSpace'
 	);
@@ -280,15 +277,13 @@ net_link.prototype._update =
 	function( )
 {
 	root.ajax.twig.update.request(
-		// TODO
 		request_update.create(
-			'passhash', this.user.passhash,
 			'spaceRef', this.spaceRef,
 			'seq',
 				this._rSeq !== null
 				? this._rSeq
 				: -1,
-			'username', this.user.name
+			'user', this.user
 		),
 		'_onUpdate'
 	);
@@ -509,10 +504,9 @@ net_link.prototype._sendChanges =
 	root.ajax.twig.command.request(
 		request_alter.create(
 			'changeWrapRay', outbox,
-			'passhash', root.link.passhash,
 			'seq', root.link._rSeq,
 			'spaceRef', root.link.spaceRef,
-			'username', root.link.username
+			'user', root.link.user
 		),
 		'_onSendChanges'
 	);

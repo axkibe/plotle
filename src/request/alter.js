@@ -29,15 +29,6 @@ if( JION )
 						type :
 							'change_wrapRay'
 					},
-				passhash :
-					{
-						comment :
-							'password hash of the user requesting the change',
-						json :
-							true,
-						type :
-							'string'
-					},
 				seq :
 					{
 						comment :
@@ -56,14 +47,14 @@ if( JION )
 						type :
 							'fabric_spaceRef'
 					},
-				username :
+				user :
 					{
 						comment :
 							'user requesting the change',
 						json :
 							true,
 						type :
-							'string'
+							'user_user'
 					}
 
 			}

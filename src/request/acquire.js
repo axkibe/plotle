@@ -29,15 +29,6 @@ if( JION )
 						type :
 							'boolean'
 					},
-				passhash :
-					{
-						comment :
-							'password hash of the user requesting the change',
-						json :
-							true,
-						type :
-							'string'
-					},
 				spaceRef :
 					{
 						comment :
@@ -47,14 +38,14 @@ if( JION )
 						type :
 							'fabric_spaceRef'
 					},
-				username :
+				user :
 					{
 						comment :
-							'user requesting the change',
+							'user requesting the space',
 						json :
 							true,
 						type :
-							'string'
+							'user_user'
 					}
 
 			}

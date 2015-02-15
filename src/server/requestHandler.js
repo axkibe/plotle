@@ -112,12 +112,11 @@ serveAlter =
 	var
 		a,
 		changeWrapRay,
-		passhash,
 		seq,
 		seqZ,
 		spaceBox,
 		spaceRef,
-		username;
+		user;
 
 	if( !config.server_devel )
 	{
@@ -141,16 +140,14 @@ serveAlter =
 
 	spaceRef = request.spaceRef;
 
-	username = request.username;
+	user = request.user;
 
-	passhash = request.passhash;
-
-	if( root.users.get( username ).pass !== passhash  )
+	if( root.users.get( user.name ).pass !== user.passhash )
 	{
 		return replyError( 'invalid pass' );
 	}
 
-	if( root.testAccess( username, spaceRef ) !== 'rw' )
+	if( root.testAccess( user.name, spaceRef ) !== 'rw' )
 	{
 		return replyError( 'no access' );
 	}
@@ -179,7 +176,7 @@ serveAlter =
 		}
 
 		// this does not yield, its write and forget.
-		spaceBox = spaceBox.appendChanges( changeWrapRay, request.username );
+		spaceBox = spaceBox.appendChanges( changeWrapRay, user.name );
 
 		root.create(
 			'spaces',
@@ -385,14 +382,13 @@ serveUpdate =
 {
 	var
 		asw,
-		passhash,
 		seq,
 		sleepID,
 		spaceBox,
 		spaceRef,
 		timer,
 		user,
-		username;
+		sUser;
 
 	try
 	{
@@ -405,17 +401,15 @@ serveUpdate =
 		return replyError( 'command not valid jion' );
 	}
 
-	username = request.username;
-
-	passhash = request.passhash;
+	user = request.user;
 
 	spaceRef = request.spaceRef;
 
 	seq = request.seq;
 
-	user = root.users.get( username );
+	sUser = root.users.get( user.name );
 
-	if( !user || user.pass !== passhash )
+	if( !sUser || sUser.pass !== user.passhash )
 	{
 		return replyError( 'invalid password' );
 	}
@@ -480,10 +474,9 @@ serveAcquire =
 {
 	var
 		access,
-		passhash,
 		spaceBox,
 		user,
-		username;
+		sUser;
 
 	try
 	{
@@ -496,18 +489,16 @@ serveAcquire =
 		return replyError( 'command not valid jion' );
 	}
 
-	passhash = request.passhash;
+	user = request.user;
 
-	username = request.username;
+	sUser = root.users.get( user.name );
 
-	user = root.users.get( username );
-
-	if( !user || passhash !== user.pass )
+	if( !sUser || user.passhash !== sUser.pass )
 	{
 		return replyError( 'wrong username/password' );
 	}
 
-	access = root.testAccess( username, request.spaceRef );
+	access = root.testAccess( user.name, request.spaceRef );
 
 	if( access === 'no' )
 	{
