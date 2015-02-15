@@ -35,15 +35,6 @@ if( JION )
 			'net_link',
 		attributes :
 			{
-				passhash :
-					{
-						comment :
-							'password hashcode of current user',
-						type :
-							'string',
-						defaultValue :
-							'null'
-					},
 				spaceRef :
 					{
 						comment :
@@ -53,12 +44,12 @@ if( JION )
 						defaultValue :
 							'null'
 					},
-				username :
+				user :
 					{
 						comment :
 							'currently logged in user',
 						type :
-							'string',
+							'user_user',
 						defaultValue :
 							'null'
 					},
@@ -209,11 +200,12 @@ net_link.prototype.acquireSpace =
 	root.ajax.twig.update.abortAll( );
 
 	root.ajax.twig.command.request(
+		// TODO
 		request_acquire.create(
 			'createMissing', createMissing,
-			'passhash', this.passhash,
+			'passhash', this.user.passhash,
 			'spaceRef', spaceRef,
-			'username', this.username
+			'username', this.user.name
 		),
 		'_onAcquireSpace'
 	);
@@ -288,14 +280,15 @@ net_link.prototype._update =
 	function( )
 {
 	root.ajax.twig.update.request(
+		// TODO
 		request_update.create(
-			'passhash', this.passhash,
+			'passhash', this.user.passhash,
 			'spaceRef', this.spaceRef,
 			'seq',
 				this._rSeq !== null
 				? this._rSeq
 				: -1,
-			'username', this.username
+			'username', this.user.name
 		),
 		'_onUpdate'
 	);

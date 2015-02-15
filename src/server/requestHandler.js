@@ -234,8 +234,6 @@ serveAuth =
 
 	user = request.user;
 
-	console.log( 'AUTH', user.name );
-
 	if( user.name === 'visitor' )
 	{
 		nextVisitor = root.nextVisitor;

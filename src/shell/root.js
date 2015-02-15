@@ -1060,14 +1060,7 @@ shell_root.prototype.setUser =
 		user // user_user jion
 	)
 {
-	root.create(
-		'link',
-			root.link.create(
-				// FIXME hand user_user
-				'username', user.name,
-				'passhash', user.passhash
-			)
-	);
+	root.create( 'link', root.link.create( 'user', user ) );
 
 	if( !user.isVisitor )
 	{
