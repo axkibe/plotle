@@ -413,41 +413,6 @@ widget_button.prototype.click =
 		return null;
 	}
 
-	/*
-	FIXME repeating buttons
-	if(
-		this.repeating &&
-		!this._$retimer
-	)
-	{
-		root.setAction(
-			'ReButton',
-			'itemPath',
-				this.path
-		);
-
-		var repeatFunc;
-
-		repeatFunc =
-			function( )
-			{
-				root.pushButton( this.path );
-
-				self._$retimer =
-					system.setTimer(
-						theme.zoom.repeatTimer,
-						repeatFunc
-					);
-			};
-
-		this._$retimer =
-			system.setTimer(
-				theme.zoom.firstTimer,
-				repeatFunc
-			);
-	}
-	*/
-
 	root.pushButton( this.path );
 
 	return this.repeating ? 'drag' : false;
@@ -530,16 +495,7 @@ widget_button.prototype.draw =
 widget_button.prototype.dragStop =
 	function( )
 {
-	/*
-	system.cancelTimer(
-		this._$retimer
-	);
-
-	this._$retimer =
-		null;
-	*/
-
-	root.setAction( null );
+	root.create( 'action', null );
 };
 
 

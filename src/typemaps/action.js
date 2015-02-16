@@ -1,10 +1,9 @@
 /*
-| Typemap of fabric items.
+| Typemap of factions.
 */
 module.exports =
 [
 	'action_createGeneric',
-	'action_isAction',
 	'action_itemResize',
 	'action_scrollY',
 	'action_createRelation',

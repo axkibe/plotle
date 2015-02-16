@@ -3,7 +3,6 @@
 */
 
 var
-	action_isAction,
 	change_wrap,
 	change_ray,
 	disc_jockey,
@@ -64,6 +63,7 @@ if( JION )
 							'->action',
 						allowsNull :
 							true
+						// FIXME assign _action
 					},
 				display :
 					{
@@ -365,6 +365,7 @@ shell_root.prototype._init =
 	function( inherit )
 {
 	var
+		action,
 		hpath,
 		mark,
 		user,
@@ -374,6 +375,8 @@ shell_root.prototype._init =
 	{
 		jools.aheadValue( this, '_drawn', true );
 	}
+
+	action = this.action;
 
 	mark = this._mark;
 
@@ -436,6 +439,7 @@ shell_root.prototype._init =
 
 	this._discJockey =
 		this._discJockey.create(
+			'action', action,
 			'hover',
 				hpath.isEmpty || hpath.get( 0 ) !== 'disc'
 				? jion_path.empty
@@ -572,37 +576,6 @@ shell_root.prototype.click =
 			screen.click( p, shift, ctrl );
 		}
 	}
-};
-
-
-/*
-| Sets the current action.
-|
-| FIXME move into _init
-*/
-shell_root.prototype.setAction =
-	function(
-		action
-	)
-{
-
-/**/if ( CHECK )
-/**/{
-/**/	if(
-/**/		action !== null
-/**/		&&
-/**/		!action_isAction( action )
-/**/	)
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	// FIXME have _init hand it down
-	root.create(
-		'action', action,
-		'_discJockey', root._discJockey.create( 'action', action )
-	);
 };
 
 

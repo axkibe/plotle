@@ -605,10 +605,6 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/action/isAction.js',
-		'inBundle', true
-	),
-	resource.create(
 		'filePath', 'src/action/createGeneric.js',
 		'hasJion', true,
 		'inBundle', true

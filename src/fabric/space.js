@@ -590,13 +590,14 @@ fabric_space.prototype.dragStart =
 			// resizing
 			dp = view.depoint( p );
 
-			root.setAction(
-				action_itemResize.create(
-					'start', dp,
-					'transItem', focus,
-					'origin', focus,
-					'align', com
-				)
+			root.create(
+				'action',
+					action_itemResize.create(
+						'start', dp,
+						'transItem', focus,
+						'origin', focus,
+						'align', com
+					)
 			);
 
 			return;
@@ -628,12 +629,13 @@ fabric_space.prototype.dragStart =
 				'view', view
 			);
 
-		root.setAction(
-			action.create(
-				'start', p,
-				'model', transItem,
-				'transItem', transItem
-			)
+		root.create(
+			'action',
+				action.create(
+					'start', p,
+					'model', transItem,
+					'transItem', transItem
+				)
 		);
 
 		return;
@@ -652,12 +654,13 @@ fabric_space.prototype.dragStart =
 				'view', view
 			);
 
-		root.setAction(
-			action.create(
-				'start', p,
-				'model', transItem,
-				'transItem', transItem
-			)
+		root.create(
+			'action',
+				action.create(
+					'start', p,
+					'model', transItem,
+					'transItem', transItem
+				)
 		);
 
 		return;
@@ -681,12 +684,13 @@ fabric_space.prototype.dragStart =
 					)
 			);
 
-		root.setAction(
-			action.create(
-				'start', p,
-				'model', transItem,
-				'transItem', transItem
-			)
+		root.create(
+			'action',
+				action.create(
+					'start', p,
+					'model', transItem,
+					'transItem', transItem
+				)
 		);
 
 		return;
@@ -721,23 +725,25 @@ fabric_space.prototype.dragStart =
 	{
 		case 'action_createRelation' :
 
-			root.setAction(
-				action.create(
-					'pan', view.pan,
-					'relationState', 'pan',
-					'start', p
-				)
+			root.create(
+				'action',
+					action.create(
+						'pan', view.pan,
+						'relationState', 'pan',
+						'start', p
+					)
 			);
 
 			return;
 	}
 
 	// otherwise panning is initiated
-	root.setAction(
-		action_pan.create(
-			'start', p,
-			'pan', view.pan
-		)
+	root.create(
+		'action',
+			action_pan.create(
+				'start', p,
+				'pan', view.pan
+			)
 	);
 
 	return;
@@ -871,7 +877,7 @@ fabric_space.prototype.dragStop =
 
 					if( !ctrl )
 					{
-						root.setAction( null );
+						root.create( 'action', null );
 					}
 
 					break;
@@ -949,7 +955,7 @@ fabric_space.prototype.dragStop =
 
 					if( !ctrl )
 					{
-						root.setAction( null );
+						root.create( 'action', null );
 					}
 
 					break;
@@ -992,7 +998,7 @@ fabric_space.prototype.dragStop =
 
 					if( !ctrl )
 					{
-						root.setAction( null );
+						root.create( 'action', null );
 					}
 
 					break;
@@ -1006,7 +1012,7 @@ fabric_space.prototype.dragStop =
 
 		case 'action_pan' :
 
-			root.setAction( null );
+			root.create( 'action', null );
 
 			break;
 
@@ -1017,7 +1023,7 @@ fabric_space.prototype.dragStop =
 
 				case 'start' :
 
-					root.setAction( null );
+					root.create( 'action', null );
 
 					break;
 
@@ -1033,14 +1039,15 @@ fabric_space.prototype.dragStop =
 						item.dragStop( view, p );
 					}
 
-					root.setAction( null );
+					root.create( 'action', null );
 
 					break;
 
 				case 'pan' :
 
-					root.setAction(
-						action.create( 'relationState', 'start' )
+					root.create(
+						'action',
+							action.create( 'relationState', 'start' )
 					);
 
 					break;
@@ -1096,7 +1103,7 @@ fabric_space.prototype.dragStop =
 				}
 			}
 
-			root.setAction( null );
+			root.create( 'action', null );
 
 			break;
 
@@ -1155,7 +1162,7 @@ fabric_space.prototype.dragStop =
 				}
 			}
 
-			root.setAction( null );
+			root.create( 'action', null );
 
 			break;
 
@@ -1165,7 +1172,7 @@ fabric_space.prototype.dragStop =
 				action.itemPath.get( -1 )
 			).dragStop( view, p, shift, ctrl );
 
-			root.setAction( null );
+			root.create( 'action', null );
 
 			break;
 
@@ -1265,8 +1272,8 @@ fabric_space.prototype.dragMove =
 					throw new Error( );
 			}
 
-			root.setAction(
-				action.create( 'transItem', transItem )
+			root.create(
+				'action', action.create( 'transItem', transItem )
 			);
 
 			return 'pointer';
@@ -1293,11 +1300,12 @@ fabric_space.prototype.dragMove =
 				return 'pointer';
 			}
 
-			root.setAction(
-				action.create(
-					'toItemPath', jion_path.empty,
-					'toPoint', p
-				)
+			root.create(
+				'action',
+					action.create(
+						'toItemPath', jion_path.empty,
+						'toPoint', p
+					)
 			);
 
 			// FIXME why is this?
@@ -1368,8 +1376,8 @@ fabric_space.prototype.dragMove =
 						);
 			}
 
-			root.setAction(
-				action.create( 'transItem', transItem )
+			root.create(
+				'action', action.create( 'transItem', transItem )
 			);
 
 			return true;
@@ -1459,8 +1467,8 @@ fabric_space.prototype.dragMove =
 					throw new Error( );
 			}
 
-			root.setAction(
-				action.create( 'transItem', transItem )
+			root.create(
+				'action', action.create( 'transItem', transItem )
 			);
 
 			return true;

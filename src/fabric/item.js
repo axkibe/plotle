@@ -460,12 +460,13 @@ fabric_item.prototype.dragStart =
 		&& sbary.within( view, p )
 	)
 	{
-		root.setAction(
-			action_scrollY.create(
-				'itemPath', this.path,
-				'start', p,
-				'startPos', sbary.pos
-			)
+		root.create(
+			'action',
+				action_scrollY.create(
+					'itemPath', this.path,
+					'start', p,
+					'startPos', sbary.pos
+				)
 		);
 
 		return true;
@@ -480,12 +481,13 @@ fabric_item.prototype.dragStart =
 	{
 		case 'action_createRelation' :
 
-			root.setAction(
-				action.create(
-					'fromItemPath', this.path,
-					'relationState', 'hadSelect',
-					'toPoint', p
-				)
+			root.create(
+				'action',
+					action.create(
+						'fromItemPath', this.path,
+						'relationState', 'hadSelect',
+						'toPoint', p
+					)
 			);
 
 			return true;
@@ -495,13 +497,14 @@ fabric_item.prototype.dragStart =
 	{
 		// relation binding
 
-		root.setAction(
-			action_createRelation.create(
-				'fromItemPath', this.path,
-				'toItemPath', jion_path.empty,
-				'relationState', 'hadSelect',
-				'toPoint', p
-			)
+		root.create(
+			'action',
+				action_createRelation.create(
+					'fromItemPath', this.path,
+					'toItemPath', jion_path.empty,
+					'relationState', 'hadSelect',
+					'toPoint', p
+				)
 		);
 
 		return true;
@@ -516,12 +519,13 @@ fabric_item.prototype.dragStart =
 			root.create( 'mark', mark_item.create( 'path', this.path ) );
 		}
 
-		root.setAction(
-			action_itemDrag.create(
-				'start', view.depoint( p ),
-				'transItem', this,
-				'origin', this
-			)
+		root.create(
+			'action',
+				action_itemDrag.create(
+					'start', view.depoint( p ),
+					'transItem', this,
+					'origin', this
+				)
 		);
 
 		return true;
@@ -567,11 +571,8 @@ fabric_item.prototype.dragMove =
 				return false;
 			}
 
-			root.setAction(
-				action.create(
-					'toItemPath',
-						this.path
-				)
+			root.create(
+				'action', action.create( 'toItemPath', this.path )
 			);
 
 			return true;

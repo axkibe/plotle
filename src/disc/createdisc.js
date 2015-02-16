@@ -266,51 +266,55 @@ disc_createDisc.prototype.pushButton =
 	{
 		case 'createLabel' :
 
-			root.setAction(
-				action_createGeneric.create(
-					'itemType', 'label',
-					'model', null,
-					'start', null,
-					'transItem', null
-				)
+			root.create(
+				'action',
+					action_createGeneric.create(
+						'itemType', 'label',
+						'model', null,
+						'start', null,
+						'transItem', null
+					)
 			);
 
 			return;
 
 		case 'createNote' :
 
-			root.setAction(
-				action_createGeneric.create(
-					'itemType', 'note',
-					'model', null,
-					'start', null,
-					'transItem', null
-				)
+			root.create(
+				'action',
+					action_createGeneric.create(
+						'itemType', 'note',
+						'model', null,
+						'start', null,
+						'transItem', null
+					)
 			);
 
 			return;
 
 		case 'createPortal' :
 
-			root.setAction(
-				action_createGeneric.create(
-					'itemType', 'portal',
-					'model', null,
-					'start', null,
-					'transItem', null
-				)
+			root.create(
+				'action',
+					action_createGeneric.create(
+						'itemType', 'portal',
+						'model', null,
+						'start', null,
+						'transItem', null
+					)
 			);
 
 			return;
 
 		case 'createRelation' :
 
-			root.setAction(
-				action_createRelation.create(
-					'fromItemPath', jion_path.empty,
-					'relationState', 'start',
-					'toItemPath', jion_path.empty
-				)
+			root.create(
+				'action',
+					action_createRelation.create(
+						'fromItemPath', jion_path.empty,
+						'relationState', 'start',
+						'toItemPath', jion_path.empty
+					)
 			);
 
 			return;
