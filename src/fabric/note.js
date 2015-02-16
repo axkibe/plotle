@@ -157,6 +157,7 @@ fabric_note.prototype._init =
 	)
 {
 	var
+		aperture,
 		docPath,
 		minHeight,
 		minWidth,
@@ -212,18 +213,27 @@ fabric_note.prototype._init =
 		this.scrolly = 0;
 	}
 
-	this.scrollbarY =
-		visual_scrollbar.create(
-			'aperture', zone.height - theme.note.innerMargin.y,
-			'max', this.doc.height,
-			'pnw',
-				euclid_point.create(
-					'x', zone.pse.x,
-					'y', zone.pnw.y + theme.scrollbar.vdis
-				),
-			'pos', this.scrolly,
-			'size', zone.height - theme.scrollbar.vdis * 2
-		);
+	aperture = zone.height - theme.note.innerMargin.y;
+
+	if( this.doc.height > aperture )
+	{
+		this.scrollbarY =
+			visual_scrollbar.create(
+				'aperture', aperture,
+				'max', this.doc.height,
+				'pnw',
+					euclid_point.create(
+						'x', zone.pse.x,
+						'y', zone.pnw.y + theme.scrollbar.vdis
+					),
+				'pos', this.scrolly,
+				'size', zone.height - theme.scrollbar.vdis * 2
+			);
+	}
+	else
+	{
+		this.scrollbarY = null;
+	}
 
 	if(
 		inherit
@@ -239,8 +249,7 @@ fabric_note.prototype._init =
 /*
 | Notes use zone for positioning
 */
-fabric_note.prototype.positioning =
-	'zone';
+fabric_note.prototype.positioning = 'zone';
 
 
 /*
@@ -292,7 +301,7 @@ fabric_note.prototype.dragStop =
 
 		default :
 
-			return (
+			return(
 				fabric_docItem.prototype.dragStop.call(
 					this,
 					view,
@@ -362,16 +371,12 @@ jools.lazyValue(
 			this.zone.width,
 			euclid_point.create(
 				'x', 0,
-				'y', sbary.pos
+				'y', sbary ? sbary.pos : 0
 			)
 		);
 
 		// draws the border
-		f.edge(
-			style,
-			this.zeroSilhoutte,
-			hview
-		);
+		f.edge( style, this.zeroSilhoutte, hview );
 
 		return f;
 	}
@@ -398,8 +403,7 @@ fabric_note.prototype.draw =
 		'pnw', this.view.point( zone.pnw )
 	);
 
-	// FIXME maybe just set sbary null
-	if( sbary.visible )
+	if( sbary )
 	{
 		sbary.draw( display, this.view );
 	}
@@ -529,7 +533,7 @@ fabric_note.prototype.scrollMarkIntoView =
 		return;
 	}
 
-	sy = this.scrollbarY.pos;
+	sy = this.scrollbarY ? this.scrollbarY.pos : 0;
 
 	// FIXME, more elegant path getting
 	para = this.doc.twig[ mark.caretPath.get( 5 )  ];

@@ -394,7 +394,7 @@ fabric_item.prototype.drawHandles =
 
 	sbary = this.scrollbarY;
 
-	if( sbary && sbary.visible )
+	if( sbary )
 	{
 		area = sbary.getArea( view );
 

@@ -1,5 +1,7 @@
 /*
-| A scrollbar (used by note).
+| A scrollbar.
+|
+| Used by note.
 |
 | Currently there are only vertical scrollbars.
 */
@@ -78,8 +80,6 @@ if( JION )
 visual_scrollbar.prototype._init =
 	function( )
 {
-	this.visible = this.max > this.aperture;
-
 	// FIXME this look more complicated than it needs to be
 	if( this.max - this.aperture >= 0 )
 	{
@@ -111,15 +111,6 @@ visual_scrollbar.prototype.draw =
 		view
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( !this.visible )
-/**/	{
-/**/		// Trying to drawing an invisible scrollbar
-/**/		throw new Error( );
-/**/	}
-/**/}
-
 	display.paint(
 		theme.scrollbar.style,
 		this.getArea( view ),
@@ -167,7 +158,7 @@ visual_scrollbar.prototype.getArea =
 
 	s05 = jools.half( ths.strength );
 
-	return (
+	return(
 		euclid_roundRect.create(
 			'pnw', view.point( pnw.add( 0, sy ) ).add( -s05, 0 ),
 			'pse', view.point( pnw.add( 0, sy + map ) ).add( s05, 0 ),
@@ -187,22 +178,18 @@ visual_scrollbar.prototype.within =
 		p
 	)
 {
-	if( !this.visible )
-	{
-		return false;
-	}
-
 	var
-		pnw =
-			this.pnw,
+		pnw,
+		dex,
+		dey;
 
-		dex =
-			view.dex( p.x ),
+	pnw = this.pnw;
 
-		dey =
-			view.dey( p.y );
+	dex = view.dex( p.x );
 
-	return (
+	dey = view.dey( p.y );
+
+	return(
 		dex >= pnw.x &&
 		dey >= pnw.y &&
 		dex <= pnw.x + theme.scrollbar.strength &&
