@@ -367,6 +367,7 @@ shell_root.prototype._init =
 	var
 		hpath,
 		mark,
+		user,
 		view;
 
 	if( this.lookAlike( inherit ) )
@@ -380,7 +381,34 @@ shell_root.prototype._init =
 
 	hpath = this._hover;
 
+	user = this.user;
+
 	system.setInput( mark ? mark.clipboard : '' );
+
+	if(
+		this.user
+		&& ( !inherit || !this.user.equals( inherit.user ) )
+	)
+	{
+		if( !user.isVisitor )
+		{
+			user.saveToLocalStorage( );
+		}
+		else
+		{
+			if(
+				root.space
+				&& root.space.spaceUser !== 'ideoloom'
+			)
+			{
+				root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+			}
+
+			user_creds.clearLocalStorage( );
+
+			root.create( '_visitor', user );
+		}
+	}
 
 	if( this.space )
 	{
@@ -397,23 +425,27 @@ shell_root.prototype._init =
 
 	this._formJockey =
 		this._formJockey.create(
-			'mark', mark,
-			'view', view,
 			'hover',
 				hpath.isEmpty || hpath.get( 0 ) !== 'form'
 				? jion_path.empty
-				: hpath
+				: hpath,
+			'mark', mark,
+			'user', user,
+			'view', view
 		);
 
 	this._discJockey =
 		this._discJockey.create(
-			'mark', mark,
-			'view', view,
 			'hover',
 				hpath.isEmpty || hpath.get( 0 ) !== 'disc'
 				? jion_path.empty
-				: hpath
+				: hpath,
+			'mark', mark,
+			'user', user,
+			'view', view
 		);
+
+	this.link = this.link.create( 'user', user );
 
 	root = this;
 };
@@ -806,7 +838,7 @@ shell_root.prototype.logout =
 {
 	if( root._visitor )
 	{
-		root.setUser( root._visitor );
+		root.create( 'user', root._visitor );
 
 		root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 
@@ -1051,45 +1083,6 @@ shell_root.prototype.resize =
 
 
 /*
-| Sets the current user
-|
-| TODO move into root._init
-*/
-shell_root.prototype.setUser =
-	function(
-		user // user_creds jion
-	)
-{
-	root.create( 'link', root.link.create( 'user', user ) );
-
-	if( !user.isVisitor )
-	{
-		user.saveToLocalStorage( );
-	}
-	else
-	{
-		if(
-			root.space
-			&& root.space.spaceUser !== 'ideoloom'
-		)
-		{
-			root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
-		}
-
-		user_creds.clearLocalStorage( );
-
-		root.create( '_visitor', user );
-	}
-
-	root.create(
-		'user', user,
-		'_discJockey', root._discJockey.create( 'user', user ),
-		'_formJockey', root._formJockey.create( 'user', user )
-	);
-};
-
-
-/*
 | Moves to space with the name name.
 |
 | if spaceRef is null reloads current space
@@ -1219,7 +1212,7 @@ shell_root.prototype.onAuth =
 		return;
 	}
 
-	root.setUser( reply.user );
+	root.create( 'user', reply.user );
 
 	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 };

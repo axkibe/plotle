@@ -335,7 +335,7 @@ form_login.prototype.onAuth =
 		return;
 	}
 
-	root.setUser( reply.user );
+	root.create( 'user', reply.user );
 
 	this.clear( );
 

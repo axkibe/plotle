@@ -157,7 +157,6 @@ form_jockey.prototype._init =
 				'mark', this.mark,
 				'path', path,
 				'spaceRef', this.spaceRef,
-				// TODO hand user object
 				'username', this.user && this.user.name,
 				'view', this.view
 			);

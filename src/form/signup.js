@@ -328,7 +328,7 @@ signUp.prototype.onRegister =
 		return;
 	}
 
-	root.setUser( user );
+	root.create( 'user', user );
 
 	this.clear( );
 
