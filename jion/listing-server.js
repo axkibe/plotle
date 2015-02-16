@@ -69,11 +69,11 @@ module.exports =
 			'src/server/spaceNexus.js',
 			'src/server/upSleep.js',
 			'src/server/upSleepGroup.js',
-			'src/server/user.js',
-			'src/server/userGroup.js',
 			'src/server/userNexus.js',
 
 			'src/user/creds.js',
+			'src/user/info.js',
+			'src/user/infoGroup.js',
 
 			// built-in genjion
 			'src/ast/and.js',

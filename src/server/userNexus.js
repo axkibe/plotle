@@ -27,9 +27,9 @@ if( JION )
 					comment :
 						'table of all cached user credentials',
 					type :
-						'server_userGroup',
+						'user_infoGroup',
 					defaultValue :
-						'server_userGroup.create( )'
+						'user_infoGroup.create( )'
 				},
 			}
 	};
@@ -39,14 +39,14 @@ if( JION )
 var
 	database_userSkid,
 	fabric_spaceRef,
-	server_user,
-	server_userNexus,
-	resume;
+	user_info,
+	resume,
+	server_userNexus;
 
 
 server_userNexus = require( '../jion/this' )( module );
 
-server_user = require( './user' );
+user_info = require( '../user/info' );
 
 database_userSkid = require( '../database/userSkid' );
 
@@ -152,7 +152,7 @@ server_userNexus.prototype.createVisitor =
 				'_cache',
 				this._cache.set(
 					name,
-					server_user.create(
+					user_info.create(
 						'name', name,
 						'passhash', user.passhash,
 						'news', false

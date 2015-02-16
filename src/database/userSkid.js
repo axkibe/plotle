@@ -76,25 +76,25 @@ if( JION )
 
 var
 	database_userSkid,
-	server_user,
-	jools;
+	jools,
+	user_info;
 
 database_userSkid = require( '../jion/this' )( module );
 
-server_user = require( '../server/user' );
+user_info = require( '../user/info' );
 
 jools = require( '../jools/jools' );
 
 
 /*
-| Creates a database_userSkid from a server_user.
+| Creates a database_userSkid from a user_info.
 */
 database_userSkid.createFromUser =
 	function(
 		user
 	)
 {
-	// FUTURE aheadValue server_user, asUser
+	// FUTURE aheadValue user_info, asUser
 
 	return(
 		database_userSkid.create(
@@ -114,7 +114,7 @@ jools.lazyValue(
 	function( )
 {
 	return(
-		server_user.create(
+		user_info.create(
 			'name', this._id,
 			'passhash', this.passhash,
 			'mail', this.mail,

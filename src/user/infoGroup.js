@@ -1,5 +1,5 @@
 /*
-| A group of users.
+| A group of user infos.
 */
 
 
@@ -17,9 +17,9 @@ if( JION )
 {
 	return {
 		id :
-			'server_userGroup',
+			'user_infoGroup',
 		group :
-			[ 'server_user' ]
+			[ 'user_info' ]
 	};
 }
 

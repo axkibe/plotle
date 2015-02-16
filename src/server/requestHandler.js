@@ -28,15 +28,15 @@ var
 	request_auth,
 	request_register,
 	request_update,
+	resume,
 	server_requestHandler,
 	server_upSleep,
-	server_user,
 	serveAcquire,
 	serveAlter,
 	serveAuth,
 	serveRegister,
 	serveUpdate,
-	resume;
+	user_info;
 
 server_requestHandler =
 module.exports =
@@ -78,7 +78,7 @@ fabric_spaceRef = require( '../fabric/spaceRef' );
 
 server_upSleep = require( './upSleep' );
 
-server_user = require( './user' );
+user_info = require( '../user/info' );
 
 /*
 | Creates a reject error for all
@@ -287,7 +287,7 @@ serveRegister =
 
 	sUser =
 		yield* root.userNexus.register(
-			server_user.create(
+			user_info.create(
 				'name', user.name,
 				'passhash', user.passhash,
 				'mail', mail,

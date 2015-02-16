@@ -1,5 +1,5 @@
 /*
-| A user.
+| Extended user info.
 */
 
 
@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'server_user',
+			'user_info',
 		attributes :
 			{
 				name :
