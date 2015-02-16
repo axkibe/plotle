@@ -20,6 +20,15 @@ if( GLOBAL.JION )
 			'server_root',
 		attributes :
 			{
+				bundleFilePath :
+					{
+						comment :
+							'file path of the bundle',
+						type :
+							'string',
+						defaultValue :
+							'undefined'
+					},
 				inventory :
 					{
 						comment :

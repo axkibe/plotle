@@ -81,7 +81,7 @@ if( JION )
 						allowsNull :
 							true,
 						assign :
-							'_hover',
+							'_hover'
 					},
 				mark :
 					{
@@ -185,7 +185,7 @@ if( JION )
 							'link' : true
 						}
 					}
-			},
+			}
 	};
 }
 
