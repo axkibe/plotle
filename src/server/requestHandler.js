@@ -482,7 +482,6 @@ server_requestHandler.conveyUpdate =
 		seqZ,
 		spaceBox;
 
-
 	spaceBox = root.spaces.get( spaceRef.fullname );
 
 	seqZ = spaceBox.seqZ;

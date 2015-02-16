@@ -1146,7 +1146,6 @@ generator.prototype.genCreatorFreeStringsParser =
 				.$( 'rayDup = true' )
 			);
 
-		// FIXME make a sub-function to add the twigDup stuff
 		switchExpr =
 			switchExpr
 			.$case(
@@ -1195,7 +1194,6 @@ generator.prototype.genCreatorFreeStringsParser =
 				.$( 'twigDup = true' )
 			);
 
-		// FIXME make a sub-function to add the twigDup stuff
 		switchExpr =
 			switchExpr
 			.$case(
@@ -2096,7 +2094,6 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 		case 'boolean' :
 		case 'integer' :
 		case 'number' :
-		case 'protean' : // FIXME remove
 		case 'string' :
 
 			code = $assign( attr.v, 'arg' );

@@ -1164,7 +1164,6 @@ prototype.wake =
 
 		clearTimeout( sleep.timer );
 
-
 		root.create(
 			'upSleeps', root.upSleeps.remove( key )
 		);
@@ -1283,7 +1282,11 @@ prototype.requestListener =
 	{
 		if( !config.whiteList[ request.connection.remoteAddress ] )
 		{
-			jools.log( 'web', request.connection.remoteAddress, 'not in whitelist!' );
+			jools.log(
+				'web',
+				request.connection.remoteAddress,
+				'not in whitelist!'
+			);
 
 			root.webError( result, 403, 'Forbidden' );
 
@@ -1405,12 +1408,9 @@ prototype.requestListener =
 	result.writeHead(
 		200,
 		{
-			'Content-Type' :
-				resource.mime,
-			'Cache-Control' :
-				'no-cache',
-			'Date' :
-				new Date().toUTCString()
+			'Content-Type' : resource.mime,
+			'Cache-Control' : 'no-cache',
+			'Date' : new Date().toUTCString()
 		}
 	);
 
@@ -1419,13 +1419,9 @@ prototype.requestListener =
 	if( config.debug.weinre )
 	{
 		data =
-			( '' + data ).replace(
-				/'use strict'/,
-				"'not strict'"
-			).replace(
-				/"use strict"/,
-				'"not strict"'
-			);
+			( '' + data )
+			.replace( /'use strict'/, "'not strict'" )
+			.replace( /"use strict"/, '"not strict"' );
 	}
 
 	result.end( data, resource.coding );

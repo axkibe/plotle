@@ -249,14 +249,7 @@ change_shrink.prototype._transformMark =
 		return mark;
 	}
 
-	// this change removes the item.
-	if( this.val === null )
-	{
-		return null;
-	}
-
-	// this shouldnt ever happen
-	throw new Error( );
+	return null;
 };
 
 
