@@ -28,7 +28,7 @@ if( JION )
 						json :
 							true,
 						type :
-							'user_user'
+							'user_creds'
 					}
 
 			}

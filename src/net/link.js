@@ -49,7 +49,7 @@ if( JION )
 						comment :
 							'currently logged in user',
 						type :
-							'user_user',
+							'user_creds',
 						defaultValue :
 							'null'
 					},

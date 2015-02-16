@@ -73,7 +73,7 @@ module.exports =
 			'src/server/userGroup.js',
 			'src/server/userNexus.js',
 
-			'src/user/user.js',
+			'src/user/creds.js',
 
 			// built-in genjion
 			'src/ast/and.js',

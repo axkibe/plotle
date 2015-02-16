@@ -33,7 +33,7 @@ var
 	shell_root,
 	system,
 	swatch,
-	user_user,
+	user_creds,
 
 root = null;
 
@@ -99,7 +99,7 @@ if( JION )
 						comment :
 							'current user',
 						type :
-							'user_user',
+							'user_creds',
 						allowsNull :
 							true
 					},
@@ -148,7 +148,7 @@ if( JION )
 							// the previous visitor id is regained.
 							'last acquired visitor credentials',
 						type :
-							'user_user',
+							'user_creds',
 						allowsNull :
 							true
 					},
@@ -290,12 +290,12 @@ shell_root.startup =
 
 	ajaxPath = jion_path.empty.append( 'ajax' );
 
-	user = user_user.createFromLocalStorage( );
+	user = user_creds.createFromLocalStorage( );
 
 	if( !user )
 	{
 		user =
-			user_user.create(
+			user_creds.create(
 				'name', 'visitor',
 				'passhash', jools.uid( )
 			);
@@ -813,7 +813,7 @@ shell_root.prototype.logout =
 		return;
 	}
 
-	root.link.auth( user_user.createVisitor( ) );
+	root.link.auth( user_creds.createVisitor( ) );
 };
 
 
@@ -1057,7 +1057,7 @@ shell_root.prototype.resize =
 */
 shell_root.prototype.setUser =
 	function(
-		user // user_user jion
+		user // user_creds jion
 	)
 {
 	root.create( 'link', root.link.create( 'user', user ) );
@@ -1076,7 +1076,7 @@ shell_root.prototype.setUser =
 			root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 		}
 
-		user_user.clearLocalStorage( );
+		user_creds.clearLocalStorage( );
 
 		root.create( '_visitor', user );
 	}
@@ -1208,7 +1208,7 @@ shell_root.prototype.onAuth =
 		// takes a visitor instead
 		if( !request.user.isVisitor )
 		{
-			root.link.auth( user_user.createVisitor( ) );
+			root.link.auth( user_creds.createVisitor( ) );
 
 			return;
 		}

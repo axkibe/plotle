@@ -12,7 +12,7 @@ var
 	form_signUp,
 	jools,
 	mark_caret,
-	user_user;
+	user_creds;
 
 
 /*
@@ -280,7 +280,7 @@ signUp.prototype.signup =
 	}
 
 	root.link.register(
-		user_user.create(
+		user_creds.create(
 			'name', username,
 			'passhash', jools.passhash( pass )
 		),

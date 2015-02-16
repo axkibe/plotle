@@ -639,7 +639,7 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/user/user.js',
+		'filePath', 'src/user/creds.js',
 		'hasJion', true,
 		'inBundle', true
 	),

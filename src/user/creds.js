@@ -1,11 +1,11 @@
 /*
-| A user.
+| User credentials.
 */
 
 
 var
 	jools,
-	user_user;
+	user_creds;
 
 
 /*
@@ -22,7 +22,7 @@ if( JION )
 {
 	return {
 		id :
-			'user_user',
+			'user_creds',
 		attributes :
 			{
 				name :
@@ -49,7 +49,7 @@ if( JION )
 
 if( SERVER )
 {
-	user_user = require( '../jion/this' )( module );
+	user_creds = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
 }
@@ -59,7 +59,7 @@ if( SERVER )
 | Returns true if this user is a visitor
 */
 jools.lazyValue(
-	user_user.prototype,
+	user_creds.prototype,
 	'isVisitor',
 	function( )
 	{
@@ -71,7 +71,7 @@ jools.lazyValue(
 /*
 | Creates a user jion from the local storage.
 */
-user_user.createFromLocalStorage =
+user_creds.createFromLocalStorage =
 	function( )
 {
 	var
@@ -82,7 +82,7 @@ user_user.createFromLocalStorage =
 	if( name )
 	{
 		return(
-			user_user.create(
+			user_creds.create(
 				'name', name,
 				'passhash', window.localStorage.getItem( 'passhash' )
 			)
@@ -98,7 +98,7 @@ user_user.createFromLocalStorage =
 /*
 | Clears the user jion from local storage.
 */
-user_user.clearLocalStorage =
+user_creds.clearLocalStorage =
 	function( )
 {
 	window.localStorage.setItem( 'username', null );
@@ -110,11 +110,11 @@ user_user.clearLocalStorage =
 /*
 | Creates a visitor user.
 */
-user_user.createVisitor =
+user_creds.createVisitor =
 	function( )
 {
 	return(
-		user_user.create(
+		user_creds.create(
 			'name', 'visitor',
 			'passhash', jools.uid( )
 		)
@@ -125,7 +125,7 @@ user_user.createVisitor =
 /*
 | Saves this user jion to local storage.
 */
-user_user.prototype.saveToLocalStorage =
+user_creds.prototype.saveToLocalStorage =
 	function( )
 {
 	window.localStorage.setItem( 'username', this.name );
