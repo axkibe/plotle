@@ -172,6 +172,13 @@ if( JION )
 							'the un/re/do tracker',
 						type :
 							'shell_doTracker'
+					},
+				_drawn :
+					{
+						comment :
+							'this root has been drawn on display',
+						type :
+							'boolean',
 					}
 			},
 		init :
@@ -182,7 +189,8 @@ if( JION )
 					{
 						ignores : {
 							'ajax' : true,
-							'link' : true
+							'link' : true,
+							'_drawn' : true
 						}
 					}
 			}
@@ -310,6 +318,7 @@ shell_root.startup =
 		'_mode', mode,
 		'hover', jion_path.empty,
 		'view', view,
+		'_drawn', false,
 		'_formJockey',
 			form_jockey.create(
 				'hover', jion_path.empty,
@@ -362,7 +371,9 @@ shell_root.startup =
 | Initializer.
 */
 shell_root.prototype._init =
-	function( inherit )
+	function(
+		inherit
+	)
 {
 	var
 		action,
@@ -371,9 +382,10 @@ shell_root.prototype._init =
 		user,
 		view;
 
-	if( this.lookAlike( inherit ) )
+	// sets drawn false
+	if( !this.lookAlike( inherit ) )
 	{
-		jools.aheadValue( this, '_drawn', true );
+		this._drawn = false;
 	}
 
 	action = this.action;
@@ -413,41 +425,51 @@ shell_root.prototype._init =
 		}
 	}
 
-	if( this.space )
+	// skips recreating childs when no need
+	if(
+		!inherit
+		|| hpath !== inherit._hover
+		|| mark !== inherit._mark
+		|| user !== inherit.user
+		|| view !== inherit.view
+	)
 	{
-		this.space =
-			this.space.create(
-				'mark', mark,
-				'view', view,
+		if( this.space )
+		{
+			this.space =
+				this.space.create(
+					'hover',
+						hpath.isEmpty || hpath.get( 0 ) !== 'space'
+						? jion_path.empty
+						: hpath,
+					'mark', mark,
+					'view', view
+				);
+		}
+
+		this._formJockey =
+			this._formJockey.create(
 				'hover',
-					hpath.isEmpty || hpath.get( 0 ) !== 'space'
+					hpath.isEmpty || hpath.get( 0 ) !== 'form'
 					? jion_path.empty
-					: hpath
+					: hpath,
+				'mark', mark,
+				'user', user,
+				'view', view
+			);
+
+		this._discJockey =
+			this._discJockey.create(
+				'action', action,
+				'hover',
+					hpath.isEmpty || hpath.get( 0 ) !== 'disc'
+					? jion_path.empty
+					: hpath,
+				'mark', mark,
+				'user', user,
+				'view', view
 			);
 	}
-
-	this._formJockey =
-		this._formJockey.create(
-			'hover',
-				hpath.isEmpty || hpath.get( 0 ) !== 'form'
-				? jion_path.empty
-				: hpath,
-			'mark', mark,
-			'user', user,
-			'view', view
-		);
-
-	this._discJockey =
-		this._discJockey.create(
-			'action', action,
-			'hover',
-				hpath.isEmpty || hpath.get( 0 ) !== 'disc'
-				? jion_path.empty
-				: hpath,
-			'mark', mark,
-			'user', user,
-			'view', view
-		);
 
 	this.link = this.link.create( 'user', user );
 
@@ -611,7 +633,7 @@ shell_root.prototype.setFocus =
 /*
 | Changes the mode.
 |
-| FIXME move into _init
+| TODO move into _init
 */
 shell_root.prototype.setMode =
 	function(
@@ -833,7 +855,7 @@ shell_root.prototype.mousewheel =
 		ctrl
 	)
 {
-	// FIXME disc?
+	// FUTURE disc
 
 	var
 		screen;
@@ -860,7 +882,7 @@ shell_root.prototype.setPath =
 	{
 		case 'disc' :
 
-			throw new Error( 'FIXME' );
+			throw new Error( 'FUTURE' );
 
 		case 'form' :
 
@@ -1260,46 +1282,45 @@ shell_root.prototype._currentScreen =
 
 
 /*
-| Draws everything and marks
-| it as cached.
-*/
-jools.lazyValue(
-	shell_root.prototype,
-	'_drawn',
-	function( )
-	{
-		var
-			display,
-			screen;
-
-		display = root.display;
-
-		display.clear( );
-
-		screen = root._currentScreen( );
-
-		if( screen )
-		{
-			screen.draw( display );
-		}
-
-		if( screen && screen.showDisc )
-		{
-			root._discJockey.draw( display );
-		}
-
-		return true;
-	}
-);
-
-
-/*
 | Draws everything.
 */
 shell_root.prototype.draw =
 	function( )
 {
-	this._drawn;
+	var
+		display,
+		screen;
+
+/**/if( CHECK )
+/**/{
+/**/	if( this !== root )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( root._drawn )
+	{
+		return;
+	}
+
+	display = root.display;
+
+	display.clear( );
+
+	screen = root._currentScreen( );
+
+	if( screen )
+	{
+		screen.draw( display );
+	}
+
+	if( screen && screen.showDisc )
+	{
+		root._discJockey.draw( display );
+	}
+
+	root = root.create( '_drawn', true );
 };
 
 
