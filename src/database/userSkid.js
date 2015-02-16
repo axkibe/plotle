@@ -101,8 +101,7 @@ database_userSkid.createFromUser =
 			'_id', user.name,
 			'passhash', user.passhash,
 			'mail', user.mail,
-			'news', user.news,
-			'clearPass', user.clearPass
+			'news', user.news
 		)
 	);
 };
@@ -119,8 +118,7 @@ jools.lazyValue(
 			'name', this._id,
 			'passhash', this.passhash,
 			'mail', this.mail,
-			'news', this.news,
-			'clearPass', this.clearPass
+			'news', this.news
 		)
 	);
 }
