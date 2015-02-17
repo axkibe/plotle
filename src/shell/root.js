@@ -94,14 +94,14 @@ if( JION )
 						allowsNull :
 							true
 					},
-				user :
+				mode :
 					{
 						comment :
-							'current user',
+							'current mode',
 						type :
-							'user_creds',
-						allowsNull :
-							true
+							'string',
+						assign :
+							'_mode',
 					},
 				space :
 					{
@@ -112,19 +112,21 @@ if( JION )
 						allowsNull :
 							true
 					},
+				user :
+					{
+						comment :
+							'current user',
+						type :
+							'user_creds',
+						allowsNull :
+							true
+					},
 				view :
 					{
 						comment :
 							'current view',
 						type :
 							'euclid_view'
-					},
-				_mode :
-					{
-						comment :
-							'current mode',
-						type :
-							'string'
 					},
 				_formJockey :
 					{
@@ -315,7 +317,7 @@ shell_root.startup =
 		'user', null,
 		'space', null,
 		'action', null,
-		'_mode', mode,
+		'mode', mode,
 		'hover', jion_path.empty,
 		'view', view,
 		'_drawn', false,
@@ -652,7 +654,7 @@ shell_root.prototype.setMode =
 
 	// FIXME mode should hand down by init.
 	root.create(
-		'_mode', mode,
+		'mode', mode,
 		'_discJockey', root._discJockey.create( 'mode', mode )
 	);
 };
