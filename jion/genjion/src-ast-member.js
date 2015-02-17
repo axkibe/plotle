@@ -398,9 +398,17 @@ prototype.create =
 	if(
 		inherit
 		&&
-		v_expr.equals( inherit.expr )
+		(
+			v_expr === inherit.expr
+			||
+			v_expr.equals && v_expr.equals( inherit.expr )
+		)
 		&&
-		v_member.equals( inherit.member )
+		(
+			v_member === inherit.member
+			||
+			v_member.equals && v_member.equals( inherit.member )
+		)
 	)
 	{
 		return inherit;
@@ -458,9 +466,17 @@ prototype.equals =
 	}
 
 	return (
-		this.expr.equals( obj.expr )
+		(
+			this.expr === obj.expr
+			||
+			this.expr.equals && this.expr.equals( obj.expr )
+		)
 		&&
-		this.member.equals( obj.member )
+		(
+			this.member === obj.member
+			||
+			this.member.equals && this.member.equals( obj.member )
+		)
 	);
 };
 

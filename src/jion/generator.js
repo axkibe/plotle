@@ -1390,7 +1390,8 @@ generator.prototype.genTypeCheckFailCondition =
 	var
 		a,
 		aZ,
-		condArray;
+		condArray,
+		idList;
 
 	if( idx.reflect === 'jion_id' )
 	{
@@ -1417,15 +1418,15 @@ generator.prototype.genTypeCheckFailCondition =
 
 	condArray = [ ];
 
-	idx = idx.idList; // FIXME do not reuse var
+	idList = idx.idList;
 
 	for(
-		a = 0, aZ = idx.length;
+		a = 0, aZ = idList.length;
 		a < aZ;
 		a++
 	)
 	{
-		if( idx[ a ].string === 'null' )
+		if( idList[ a ].string === 'null' )
 		{
 			condArray.unshift( $differs( aVar, 'null' ) );
 
@@ -1433,7 +1434,7 @@ generator.prototype.genTypeCheckFailCondition =
 		}
 
 		condArray.push(
-			this.genSingleTypeCheckFailCondition( aVar, idx[ a ] )
+			this.genSingleTypeCheckFailCondition( aVar, idList[ a ] )
 		);
 	}
 
@@ -2921,6 +2922,9 @@ generator.prototype.genToJSON =
 
 /*
 | Generates the equals condition for an attribute.
+|
+| FUTURE: in case of idLists this is still wonky
+|         it needs to differenciate primitives correctly
 */
 generator.prototype.genAttributeEquals =
 	function(
@@ -2963,8 +2967,7 @@ generator.prototype.genAttributeEquals =
 						)
 					);
 			}
-
-			if( attr.allowsNull)
+			else if( attr.allowsNull)
 			{
 				ceq =
 					$or(
@@ -2988,7 +2991,14 @@ generator.prototype.genAttributeEquals =
 			}
 			else
 			{
-				ceq = $call( le.$dot( eqFuncName ), re );
+				ceq =
+					$or(
+						$equals( le, re ),
+						$and(
+							le.$dot( eqFuncName ),
+							$call( le.$dot( eqFuncName ), re )
+						)
+					);
 			}
 	}
 

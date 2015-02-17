@@ -433,7 +433,11 @@ prototype.create =
 		&&
 		v_pos === inherit.pos
 		&&
-		v_tokens.equals( inherit.tokens )
+		(
+			v_tokens === inherit.tokens
+			||
+			v_tokens.equals && v_tokens.equals( inherit.tokens )
+		)
 	)
 	{
 		return inherit;
@@ -499,7 +503,11 @@ prototype.equals =
 		&&
 		this.pos === obj.pos
 		&&
-		this.tokens.equals( obj.tokens )
+		(
+			this.tokens === obj.tokens
+			||
+			this.tokens.equals && this.tokens.equals( obj.tokens )
+		)
 	);
 };
 

@@ -523,13 +523,29 @@ prototype.create =
 	if(
 		inherit
 		&&
-		v_block.equals( inherit.block )
+		(
+			v_block === inherit.block
+			||
+			v_block.equals && v_block.equals( inherit.block )
+		)
 		&&
-		v_condition.equals( inherit.condition )
+		(
+			v_condition === inherit.condition
+			||
+			v_condition.equals && v_condition.equals( inherit.condition )
+		)
 		&&
-		v_init.equals( inherit.init )
+		(
+			v_init === inherit.init
+			||
+			v_init.equals && v_init.equals( inherit.init )
+		)
 		&&
-		v_iterate.equals( inherit.iterate )
+		(
+			v_iterate === inherit.iterate
+			||
+			v_iterate.equals && v_iterate.equals( inherit.iterate )
+		)
 	)
 	{
 		return inherit;
@@ -587,13 +603,29 @@ prototype.equals =
 	}
 
 	return (
-		this.block.equals( obj.block )
+		(
+			this.block === obj.block
+			||
+			this.block.equals && this.block.equals( obj.block )
+		)
 		&&
-		this.condition.equals( obj.condition )
+		(
+			this.condition === obj.condition
+			||
+			this.condition.equals && this.condition.equals( obj.condition )
+		)
 		&&
-		this.init.equals( obj.init )
+		(
+			this.init === obj.init
+			||
+			this.init.equals && this.init.equals( obj.init )
+		)
 		&&
-		this.iterate.equals( obj.iterate )
+		(
+			this.iterate === obj.iterate
+			||
+			this.iterate.equals && this.iterate.equals( obj.iterate )
+		)
 	);
 };
 

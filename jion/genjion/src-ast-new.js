@@ -160,7 +160,15 @@ prototype.create =
 /**/	}
 /**/}
 
-	if( inherit && v_call.equals( inherit.call ) )
+	if(
+		inherit
+		&&
+		(
+			v_call === inherit.call
+			||
+			v_call.equals && v_call.equals( inherit.call )
+		)
+	)
 	{
 		return inherit;
 	}
@@ -216,7 +224,11 @@ prototype.equals =
 		return false;
 	}
 
-	return this.call.equals( obj.call );
+	return (
+		this.call === obj.call
+		||
+		this.call.equals && this.call.equals( obj.call )
+	);
 };
 
 

@@ -467,7 +467,17 @@ prototype.create =
 /**/	}
 /**/}
 
-	if( inherit && rayDup === false && v_func.equals( inherit.func ) )
+	if(
+		inherit
+		&&
+		rayDup === false
+		&&
+		(
+			v_func === inherit.func
+			||
+			v_func.equals && v_func.equals( inherit.func )
+		)
+	)
 	{
 		return inherit;
 	}
@@ -597,7 +607,11 @@ prototype.equals =
 		}
 	}
 
-	return this.func.equals( obj.func );
+	return (
+		this.func === obj.func
+		||
+		this.func.equals && this.func.equals( obj.func )
+	);
 };
 
 

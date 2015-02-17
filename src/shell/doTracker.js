@@ -263,11 +263,13 @@ shell_doTracker.prototype.redo =
 
 	redo = redo.remove( redo.length - 1 );
 
-	root.doTracker =
-		this.create(
-			'_redo', redo,
-			'_undo', this._undo.append( changeWrap )
-		);
+	root.create(
+		'doTracker',
+			this.create(
+				'_redo', redo,
+				'_undo', this._undo.append( changeWrap )
+			)
+	);
 
 	root.link.alter( changeWrap );
 };

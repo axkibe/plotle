@@ -644,13 +644,21 @@ prototype.create =
 			v_defaultValue.equals( inherit.defaultValue )
 		)
 		&&
-		v_id.equals( inherit.id )
+		(
+			v_id === inherit.id
+			||
+			v_id.equals && v_id.equals( inherit.id )
+		)
 		&&
 		v_json === inherit.json
 		&&
 		v_name === inherit.name
 		&&
-		v_v.equals( inherit.v )
+		(
+			v_v === inherit.v
+			||
+			v_v.equals && v_v.equals( inherit.v )
+		)
 	)
 	{
 		return inherit;
@@ -743,13 +751,21 @@ prototype.equals =
 			this.defaultValue.equals( obj.defaultValue )
 		)
 		&&
-		this.id.equals( obj.id )
+		(
+			this.id === obj.id
+			||
+			this.id.equals && this.id.equals( obj.id )
+		)
 		&&
 		this.json === obj.json
 		&&
 		this.name === obj.name
 		&&
-		this.v.equals( obj.v )
+		(
+			this.v === obj.v
+			||
+			this.v.equals && this.v.equals( obj.v )
+		)
 	);
 };
 

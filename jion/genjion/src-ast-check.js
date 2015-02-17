@@ -160,7 +160,15 @@ prototype.create =
 /**/	}
 /**/}
 
-	if( inherit && v_block.equals( inherit.block ) )
+	if(
+		inherit
+		&&
+		(
+			v_block === inherit.block
+			||
+			v_block.equals && v_block.equals( inherit.block )
+		)
+	)
 	{
 		return inherit;
 	}
@@ -216,7 +224,11 @@ prototype.equals =
 		return false;
 	}
 
-	return this.block.equals( obj.block );
+	return (
+		this.block === obj.block
+		||
+		this.block.equals && this.block.equals( obj.block )
+	);
 };
 
 

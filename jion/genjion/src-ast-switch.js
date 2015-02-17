@@ -459,7 +459,11 @@ prototype.create =
 			v_defaultCase !== null && v_defaultCase.equals( inherit.defaultCase )
 		)
 		&&
-		v_statement.equals( inherit.statement )
+		(
+			v_statement === inherit.statement
+			||
+			v_statement.equals && v_statement.equals( inherit.statement )
+		)
 	)
 	{
 		return inherit;
@@ -599,7 +603,11 @@ prototype.equals =
 			this.defaultCase.equals( obj.defaultCase )
 		)
 		&&
-		this.statement.equals( obj.statement )
+		(
+			this.statement === obj.statement
+			||
+			this.statement.equals && this.statement.equals( obj.statement )
+		)
 	);
 };
 

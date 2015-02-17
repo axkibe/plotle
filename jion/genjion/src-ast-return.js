@@ -307,7 +307,15 @@ prototype.create =
 /**/	}
 /**/}
 
-	if( inherit && v_expr.equals( inherit.expr ) )
+	if(
+		inherit
+		&&
+		(
+			v_expr === inherit.expr
+			||
+			v_expr.equals && v_expr.equals( inherit.expr )
+		)
+	)
 	{
 		return inherit;
 	}
@@ -363,7 +371,11 @@ prototype.equals =
 		return false;
 	}
 
-	return this.expr.equals( obj.expr );
+	return (
+		this.expr === obj.expr
+		||
+		this.expr.equals && this.expr.equals( obj.expr )
+	);
 };
 
 

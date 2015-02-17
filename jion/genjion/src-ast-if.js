@@ -376,7 +376,11 @@ prototype.create =
 	if(
 		inherit
 		&&
-		v_condition.equals( inherit.condition )
+		(
+			v_condition === inherit.condition
+			||
+			v_condition.equals && v_condition.equals( inherit.condition )
+		)
 		&&
 		(
 			v_elsewise === inherit.elsewise
@@ -384,7 +388,11 @@ prototype.create =
 			v_elsewise !== null && v_elsewise.equals( inherit.elsewise )
 		)
 		&&
-		v_then.equals( inherit.then )
+		(
+			v_then === inherit.then
+			||
+			v_then.equals && v_then.equals( inherit.then )
+		)
 	)
 	{
 		return inherit;
@@ -442,7 +450,11 @@ prototype.equals =
 	}
 
 	return (
-		this.condition.equals( obj.condition )
+		(
+			this.condition === obj.condition
+			||
+			this.condition.equals && this.condition.equals( obj.condition )
+		)
 		&&
 		(
 			this.elsewise === obj.elsewise
@@ -450,7 +462,11 @@ prototype.equals =
 			this.elsewise !== null && this.elsewise.equals( obj.elsewise )
 		)
 		&&
-		this.then.equals( obj.then )
+		(
+			this.then === obj.then
+			||
+			this.then.equals && this.then.equals( obj.then )
+		)
 	);
 };
 
