@@ -203,11 +203,11 @@ if( JION )
 | Valid modes
 */
 var
-	_modes;
+	modes;
 
 /**/if( CHECK )
 /**/{
-/**/	_modes =
+/**/	modes =
 /**/		{
 /**/			// Creating a new item.
 /**/			'Create' : true,
@@ -247,7 +247,7 @@ var
 /**/
 /**/if( FREEZE )
 /**/{
-/**/	Object.freeze( _modes );
+/**/	Object.freeze( modes );
 /**/}
 
 
@@ -381,6 +381,7 @@ shell_root.prototype._init =
 		action,
 		hpath,
 		mark,
+		mode,
 		user,
 		view;
 
@@ -399,6 +400,16 @@ shell_root.prototype._init =
 	hpath = this._hover;
 
 	user = this.user;
+
+	mode = this._mode;
+
+/**/if( CHECK )
+/**/{
+/**/	if( !modes[ mode ] )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	system.setInput( mark ? mark.clipboard : '' );
 
@@ -432,6 +443,7 @@ shell_root.prototype._init =
 		!inherit
 		|| hpath !== inherit._hover
 		|| mark !== inherit._mark
+		|| mode !== inherit.mode
 		|| user !== inherit.user
 		|| view !== inherit.view
 	)
@@ -468,6 +480,7 @@ shell_root.prototype._init =
 					? jion_path.empty
 					: hpath,
 				'mark', mark,
+				'mode', mode,
 				'user', user,
 				'view', view
 			);
@@ -642,21 +655,8 @@ shell_root.prototype.setMode =
 		mode
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( !_modes[ mode ] )
-/**/	{
-/**/		throw new Error(
-/**/			'invalid mode : ' + mode
-/**/		);
-/**/	}
-/**/}
-
 	// FIXME mode should hand down by init.
-	root.create(
-		'mode', mode,
-		'_discJockey', root._discJockey.create( 'mode', mode )
-	);
+	root.create( 'mode', mode );
 };
 
 
