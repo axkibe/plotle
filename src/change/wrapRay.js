@@ -30,11 +30,36 @@ if( JION )
 }
 
 
-
 if( SERVER )
 {
 	change_wrapRay = require( '../jion/this' )( module );
 }
+
+
+/*
+| Creates an invertes changeWrapRay
+*/
+change_wrapRay.prototype.createInvert =
+	function( )
+{
+	var
+		a,
+		aZ,
+		iRay;
+
+	iRay = [ ];
+
+	for(
+		a = 0, aZ = this.length;
+		a < aZ;
+		a++
+	)
+	{
+		iRay[ a ] = this.ray[ aZ - 1 - a ].createInvert( );
+	}
+
+	return change_wrapRay.create( 'ray:init', iRay );
+};
 
 
 /*

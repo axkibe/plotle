@@ -2988,12 +2988,17 @@ generator.prototype.genAttributeEquals =
 
 		default :
 
-			// FIXME there is a type allow/s/Null and it happens
-			if( attr.allowNull && attr.allowsUndefined )
+			if( attr.allowsNull && attr.allowsUndefined )
 			{
-				throw new Error(
-					'cannot have allowsNull and allowsUndefined'
-				);
+				ceq =
+					$or(
+						$equals( le, re ),
+						$and(
+							$differs( le, null ),
+							$differs( le, undefined ),
+							$call( le.$dot( eqFuncName ), re )
+						)
+					);
 			}
 
 			if( attr.allowsNull)

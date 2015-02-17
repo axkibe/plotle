@@ -160,27 +160,22 @@ change_set.prototype.transform =
 
 	switch( cx.reflect )
 	{
-		case 'mark_caret' :
-		case 'mark_range' :
-		case 'mark_item' :
-
-			return this._transformMark( cx );
-
-
 		case 'change_grow' :
 		case 'change_join' :
 		case 'change_shrink' :
 		case 'change_split' :
 		case 'change_insert' :
 		case 'change_remove' :
+		case 'mark_caret' :
+		case 'mark_item' :
+		case 'mark_range' :
 		case 'mark_widget' :
 
 			return cx;
 
 		case 'change_set' :
 
-			// FIXME change prev val of change_set
-			return cx;
+			return this._transformChangeSet( cx );
 
 		case 'change_ray' :
 
@@ -202,20 +197,20 @@ change_set.prototype.transform =
 
 
 /*
-| Transforms a mark by this set.
+| Transforms a set by this set actually
+| happening first.
 */
-change_set.prototype._transformMark =
+change_set.prototype._transformChangeSet =
 	function(
-		mark
+		cx
 	)
 {
-	if( !this.path.equals( mark.path.chop ) )
+	if( !this.path.equals( cx.path ) )
 	{
-		return mark;
+		return cx;
 	}
 
-	// this shouldnt ever happen
-	throw new Error( );
+	return cx.create( 'prev', this.val );
 };
 
 

@@ -196,6 +196,7 @@ change_insert.prototype.transform =
 
 		case 'change_shrink' :
 		case 'change_split' :
+		case 'change_set' :
 		case 'mark_item' :
 		case 'mark_widget' :
 

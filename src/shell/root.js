@@ -1000,6 +1000,8 @@ shell_root.prototype.update =
 	}
 
 	// FIXME let the link do the real stuff
+
+	// TODO this  copying is outdated.
 	root.create(
 		'space',
 			space.create(
@@ -1010,8 +1012,7 @@ shell_root.prototype.update =
 				'ref', root.space.ref,
 				'view', root.space.view
 			),
-		'_discJockey',
-			root._discJockey.create( 'mark', mark ),
+		'_discJockey', root._discJockey.create( 'mark', mark ),
 		'mark', mark
 	);
 };

@@ -234,6 +234,7 @@ change_split.prototype.transform =
 			// but right now this never happens
 			return cx;
 
+		case 'change_set' :
 		case 'mark_item' :
 		case 'mark_widget' :
 

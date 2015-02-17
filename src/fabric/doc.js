@@ -175,17 +175,6 @@ fabric_doc.prototype._init =
 			);
 	}
 
-/**/if( CHECK )
-/**/{
-/**/	if( this.mark && this.mark.hasCaret )
-/**/	{
-/**/		if( !this.twig[ this.mark.caretPath.get( 5 ) ] )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-/**/}
-
 	this.twig = twig;
 };
 
@@ -679,6 +668,16 @@ fabric_doc.prototype.draw =
 /**/	if( arguments.length !== 3 )
 /**/	{
 /**/		throw new Error( );
+/**/	}
+/**/
+/**/	// mark sanity check cannot be done in _init
+/**/    // since it might be temporarily outOfOrder during update operation
+/**/	if( this.mark && this.mark.hasCaret )
+/**/	{
+/**/		if( !this.twig[ this.mark.caretPath.get( 5 ) ] )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
 /**/}
 

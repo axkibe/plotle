@@ -1495,8 +1495,8 @@ prototype.webAjax =
 
 		try
 		{
-			// FUTURE REMOTE
-			/*
+			// FUTURE REMOVE
+			// XXX
 			if( cmd.type === 'request_alter' )
 			{
 				console.log( 'DELAYING');
@@ -1505,7 +1505,6 @@ prototype.webAjax =
 
 				console.log( 'EOD');
 			}
-			*/
 
 			asw = yield* server_requestHandler.serve( cmd, result );
 		}

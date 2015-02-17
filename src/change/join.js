@@ -240,6 +240,7 @@ change_join.prototype.transform =
 
 			return this._transformRangeMark( cx );
 
+		case 'change_set' :
 		case 'mark_item' :
 		case 'mark_widget' :
 
