@@ -159,7 +159,7 @@ form_login.prototype.pushButton =
 
 		case 'closeButton' :
 
-			root.setMode( 'Normal' );
+			root.create( 'mode', 'Normal' );
 
 			break;
 
@@ -335,13 +335,14 @@ form_login.prototype.onAuth =
 		return;
 	}
 
-	root.create( 'user', reply.user );
+	root.create(
+		'mode', 'Normal',
+		'user', reply.user
+	);
 
 	this.clear( );
 
 	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
-
-	root.setMode( 'Normal' );
 };
 
 

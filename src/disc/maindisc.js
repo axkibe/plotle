@@ -374,7 +374,7 @@ disc_mainDisc.prototype.pushButton =
 	}
 	else
 	{
-		root.setMode( buttonName );
+		root.create( 'mode', buttonName );
 	}
 };
 

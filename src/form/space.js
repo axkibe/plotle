@@ -167,7 +167,7 @@ form_space.prototype.pushButton =
 	{
 		case 'closeButton' :
 
-			root.setMode( 'Normal' );
+			root.create( 'mode', 'Normal' );
 
 			break;
 

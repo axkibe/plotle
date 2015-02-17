@@ -201,6 +201,8 @@ if( JION )
 
 /*
 | Valid modes
+|
+| FUTURE lowercase all
 */
 var
 	modes;
@@ -542,6 +544,7 @@ shell_root.prototype.arrivedAtSpace =
 	)
 {
 	root.create(
+		'mode', 'Normal',
 		'_discJockey',
 			root._discJockey.create(
 				'access', access,
@@ -550,8 +553,6 @@ shell_root.prototype.arrivedAtSpace =
 		'_formJockey',
 			root._formJockey.create( 'spaceRef', spaceRef )
 	);
-
-	root.setMode( 'Normal' );
 };
 
 
@@ -642,21 +643,6 @@ shell_root.prototype.setFocus =
 			break;
 		}
 	}
-};
-
-
-/*
-| Changes the mode.
-|
-| TODO move into _init
-*/
-shell_root.prototype.setMode =
-	function(
-		mode
-	)
-{
-	// FIXME mode should hand down by init.
-	root.create( 'mode', mode );
 };
 
 
@@ -1122,7 +1108,7 @@ shell_root.prototype.onAcquireSpace =
 				spaceRef
 			);
 
-			root.setMode( 'nonExistingSpace' );
+			root.create( 'mode', 'nonExistingSpace' );
 
 			return;
 
@@ -1131,10 +1117,12 @@ shell_root.prototype.onAcquireSpace =
 			// FIXME remove get
 			path = root._formJockey.get( 'noAccessToSpace' ).path;
 
-			root._formJockey =
-				root._formJockey.create( 'spaceRef', spaceRef );
-
-			root.setMode( 'noAccessToSpace' );
+			// FIXME move spaceRef handing into _init
+			root.create(
+				'mode', 'noAccessToSpace',
+				'_formJockey',
+					root._formJockey.create( 'spaceRef', spaceRef )
+			);
 
 			return;
 

@@ -170,7 +170,7 @@ signUp.prototype.pushButton =
 
 		case 'closeButton' :
 
-			root.setMode( 'Normal' );
+			root.create( 'mode', 'Normal' );
 
 			break;
 
@@ -328,13 +328,14 @@ signUp.prototype.onRegister =
 		return;
 	}
 
-	root.create( 'user', user );
+	root.create(
+		'mode', 'welcome',
+		'user', user
+	);
 
 	this.clear( );
 
 	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
-
-	root.setMode( 'welcome' );
 };
 
 

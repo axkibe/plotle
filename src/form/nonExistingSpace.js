@@ -185,7 +185,7 @@ form_nonExistingSpace.prototype.pushButton =
 	{
 		case 'noButton' :
 
-			root.setMode( 'Normal' );
+			root.create( 'mode', 'Normal' );
 
 			break;
 
@@ -193,7 +193,7 @@ form_nonExistingSpace.prototype.pushButton =
 
 			root.moveToSpace( this.nonSpaceRef, true );
 
-			root.setMode( 'Normal' );
+			root.create( 'mode', 'Normal' );
 
 			break;
 

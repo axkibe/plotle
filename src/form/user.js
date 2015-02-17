@@ -211,6 +211,8 @@ user.prototype.pushButton =
 		// ctrl
 	)
 {
+	var
+		buttonName;
 
 /**/if( CHECK )
 /**/{
@@ -220,15 +222,13 @@ user.prototype.pushButton =
 /**/	}
 /**/}
 
-	var
-		buttonName =
-			path.get( 4 );
+	buttonName = path.get( 4 );
 
 	switch( buttonName )
 	{
 		case 'closeButton' :
 
-			root.setMode( 'Normal' );
+			root.create( 'mode', 'Normal' );
 
 			break;
 

@@ -1,5 +1,7 @@
 /*
 | User has no access to a space s/he tried to port to.
+|
+| FIXME it doesn't anymore show the headline what wasnt possible.
 */
 
 
@@ -146,7 +148,7 @@ form_noAccessToSpace.prototype.pushButton =
 	{
 		case 'okButton' :
 
-			root.setMode( 'Normal' );
+			root.create( 'mode', 'Normal' );
 
 			break;
 
