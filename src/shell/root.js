@@ -1114,9 +1114,6 @@ shell_root.prototype.onAcquireSpace =
 
 		case 'no access' :
 
-			// FIXME remove get
-			path = root._formJockey.get( 'noAccessToSpace' ).path;
-
 			// FIXME move spaceRef handing into _init
 			root.create(
 				'mode', 'noAccessToSpace',
