@@ -428,7 +428,7 @@ shell_root.prototype._init =
 		{
 			if(
 				root.space
-				&& root.space.spaceUser !== 'ideoloom'
+				&& root.space.ref.username !== 'ideoloom'
 			)
 			{
 				root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
@@ -1003,12 +1003,11 @@ shell_root.prototype.update =
 	root.create(
 		'space',
 			space.create(
-				'spaceUser', root.space.spaceUser,
-				'spaceTag', root.space.spaceTag,
 				'access', root.space.access,
 				'hover', root.space.hover,
 				'mark', mark,
 				'path', root.space.path,
+				'ref', root.space.ref,
 				'view', root.space.view
 			),
 		'_discJockey',
@@ -1091,8 +1090,7 @@ shell_root.prototype.onAcquireSpace =
 	)
 {
 	var
-		access,
-		path;
+		access;
 
 	switch( reply.status )
 	{
@@ -1136,12 +1134,11 @@ shell_root.prototype.onAcquireSpace =
 		'space',
 			reply.space.create(
 				// FUTURE have the server already set this at JSON level
-				'spaceUser', spaceRef.username, // FIXME have it use a ref
-				'spaceTag', spaceRef.tag,
 				'access', access,
 				'hover', jion_path.empty,
 				'mark', null,
 				'path', jion_path.empty.append( 'space' ),
+				'ref', spaceRef,
 				'view',
 					euclid_view.create(
 						'fact', 0,
