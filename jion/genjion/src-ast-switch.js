@@ -456,7 +456,7 @@ prototype.create =
 		(
 			v_defaultCase === inherit.defaultCase
 			||
-			v_defaultCase && v_defaultCase.equals( inherit.defaultCase )
+			v_defaultCase !== null && v_defaultCase.equals( inherit.defaultCase )
 		)
 		&&
 		v_statement.equals( inherit.statement )

@@ -333,7 +333,7 @@ prototype.equals =
 		&&
 		this.astCreator === obj.astCreator
 		&&
-		this.handler.equals( obj.handler )
+		this.handler === obj.handler
 		&&
 		this.prec === obj.prec
 	);

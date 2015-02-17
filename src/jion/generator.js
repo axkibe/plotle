@@ -1787,7 +1787,6 @@ generator.prototype.genCreatorUnchanged =
 		attr,
 		ceq,
 		cond,
-		equalsCall,
 		name;
 
 	cond = $var( 'inherit' );
@@ -1824,50 +1823,13 @@ generator.prototype.genCreatorUnchanged =
 			continue;
 		}
 
-		// FIXME use genAttributeEquals
-
-		switch( attr.id.string )
-		{
-			case 'boolean' :
-			case 'function' :
-			case 'integer' :
-			case 'number' :
-			case 'protean' :
-			case 'string' :
-
-				ceq =
-					$equals(
-						attr.v,
-						// FIXME make a $inherit shortcut
-						$var( 'inherit' ).$dot( attr.assign )
-					);
-
-				break;
-
-			default :
-
-				equalsCall =
-					$call(
-						attr.v.$dot( 'equals' ),
-						$var( 'inherit' ).$dot( attr.assign )
-					);
-
-				if( attr.allowsNull || attr.allowsUndefined )
-				{
-					ceq =
-						$or(
-							$equals(
-								attr.v,
-								$var( 'inherit' ).$dot( attr.assign )
-							),
-							$and( attr.v, equalsCall )
-						);
-				}
-				else
-				{
-					ceq = equalsCall;
-				}
-		}
+		ceq =
+			this.genAttributeEquals(
+				name,
+				attr.v,
+				$var( 'inherit' ).$dot( attr.assign ),
+				'equals'
+			);
 
 		cond = $and( cond, ceq );
 	}
@@ -2977,6 +2939,7 @@ generator.prototype.genAttributeEquals =
 	switch( attr.id.string )
 	{
 		case 'boolean' :
+		case 'function' :
 		case 'integer' :
 		case 'number' :
 		case 'protean' :

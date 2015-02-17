@@ -428,7 +428,7 @@ prototype.create =
 		(
 			v_ast === inherit.ast
 			||
-			v_ast && v_ast.equals( inherit.ast )
+			v_ast !== null && v_ast.equals( inherit.ast )
 		)
 		&&
 		v_pos === inherit.pos

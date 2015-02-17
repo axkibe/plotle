@@ -210,7 +210,7 @@ prototype.create =
 		(
 			v_value === inherit.value
 			||
-			v_value && v_value.equals( inherit.value )
+			v_value !== undefined && v_value.equals( inherit.value )
 		)
 	)
 	{

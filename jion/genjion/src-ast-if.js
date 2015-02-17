@@ -381,7 +381,7 @@ prototype.create =
 		(
 			v_elsewise === inherit.elsewise
 			||
-			v_elsewise && v_elsewise.equals( inherit.elsewise )
+			v_elsewise !== null && v_elsewise.equals( inherit.elsewise )
 		)
 		&&
 		v_then.equals( inherit.then )

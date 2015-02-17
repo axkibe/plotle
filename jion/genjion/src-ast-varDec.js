@@ -350,7 +350,7 @@ prototype.create =
 		(
 			v_assign === inherit.assign
 			||
-			v_assign && v_assign.equals( inherit.assign )
+			v_assign !== null && v_assign.equals( inherit.assign )
 		)
 		&&
 		v_name === inherit.name

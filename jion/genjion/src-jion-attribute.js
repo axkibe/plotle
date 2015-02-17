@@ -633,13 +633,15 @@ prototype.create =
 		(
 			v_concerns === inherit.concerns
 			||
-			v_concerns && v_concerns.equals( inherit.concerns )
+			v_concerns !== null && v_concerns.equals( inherit.concerns )
 		)
 		&&
 		(
 			v_defaultValue === inherit.defaultValue
 			||
-			v_defaultValue && v_defaultValue.equals( inherit.defaultValue )
+			v_defaultValue !== undefined
+			&&
+			v_defaultValue.equals( inherit.defaultValue )
 		)
 		&&
 		v_id.equals( inherit.id )

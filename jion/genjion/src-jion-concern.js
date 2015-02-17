@@ -271,7 +271,7 @@ prototype.create =
 		(
 			v_args === inherit.args
 			||
-			v_args && v_args.equals( inherit.args )
+			v_args !== undefined && v_args.equals( inherit.args )
 		)
 		&&
 		v_func === inherit.func
@@ -279,7 +279,7 @@ prototype.create =
 		(
 			v_id === inherit.id
 			||
-			v_id && v_id.equals( inherit.id )
+			v_id !== undefined && v_id.equals( inherit.id )
 		)
 		&&
 		v_member === inherit.member

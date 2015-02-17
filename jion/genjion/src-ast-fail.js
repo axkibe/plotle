@@ -316,7 +316,7 @@ prototype.create =
 		(
 			v_message === inherit.message
 			||
-			v_message && v_message.equals( inherit.message )
+			v_message !== null && v_message.equals( inherit.message )
 		)
 	)
 	{

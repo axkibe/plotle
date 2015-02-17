@@ -304,7 +304,7 @@ prototype.create =
 		(
 			v_block === inherit.block
 			||
-			v_block && v_block.equals( inherit.block )
+			v_block !== null && v_block.equals( inherit.block )
 		)
 		&&
 		v_capsule === inherit.capsule
