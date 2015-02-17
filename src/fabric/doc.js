@@ -162,16 +162,11 @@ fabric_doc.prototype._init =
 
 		twig[ key ] =
 			twig[ key ].create(
-				'path',
-					path,
-				'fontsize',
-					this.fontsize,
-				'flowWidth',
-					this.flowWidth,
-				'mark',
-					this.mark,
-				'view',
-					this.view
+				'path', path,
+				'fontsize', this.fontsize,
+				'flowWidth', this.flowWidth,
+				'mark', this.mark,
+				'view', this.view
 			);
 	}
 

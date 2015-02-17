@@ -48,7 +48,14 @@ _catcher =
 		{
 			func.apply( this, arguments );
 
-			if( root ) root.draw( );
+			if( root )
+			{
+				root.draw( );
+
+				// FIXME make a root.clipboard lazyValue and
+				// use it here and below
+				system.setInput( root._mark ? root._mark.clipboard : '' );
+			}
 
 			return;
 		}
@@ -57,7 +64,12 @@ _catcher =
 		{
 			func.apply( this, arguments );
 
-			if( root ) root.draw( );
+			if( root )
+			{
+				root.draw( );
+
+				system.setInput( root._mark ? root._mark.clipboard : '' );
+			}
 		}
 		catch( e )
 		{
@@ -168,7 +180,12 @@ catcher =
 
 			system._steerAttention( );
 
-			if( root ) root.draw( );
+			if( root )
+			{
+				root.draw( );
+
+				system.setInput( root._mark ? root._mark.clipboard : '' );
+			}
 
 			return;
 		}
@@ -181,7 +198,12 @@ catcher =
 
 			system._steerAttention( );
 
-			if( root ) root.draw( );
+			if( root )
+			{
+				root.draw( );
+
+				system.setInput( root._mark ? root._mark.clipboard : '' );
+			}
 		}
 		catch( e )
 		{

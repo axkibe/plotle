@@ -148,9 +148,15 @@ fabric_para.prototype._init =
 		&& inherit.view.zoom === this.view.zoom
 	)
 	{
-		jools.aheadValue( this, 'flow', inherit.flow );
+		if( jools.hasLazyValueSet( inherit, 'flow' ) )
+		{
+			jools.aheadValue( this, 'flow', inherit.flow );
+		}
 
-		jools.aheadValue( this, '_display', inherit._display );
+		if( jools.hasLazyValueSet( inherit, '_display' ) )
+		{
+			jools.aheadValue( this, '_display', inherit._display );
+		}
 	}
 };
 
@@ -1074,8 +1080,8 @@ fabric_para.prototype._keyDel =
 	{
 		root.alter(
 			change_join.create(
-				'path', doc.atRank( r + 1).textPath.chop,
-				'path2', this.textPath.chop,
+				'path', this.textPath.chop,
+				'path2', doc.atRank( r + 1).textPath.chop,
 				'at1', this.text.length
 			)
 		);

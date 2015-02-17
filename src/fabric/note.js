@@ -239,6 +239,7 @@ fabric_note.prototype._init =
 		inherit
 		&& inherit.alikeIgnoringView( this )
 		&& inherit.view.zoom === this.view.zoom
+		&& jools.hasLazyValueSet( inherit, '_display' )
 	)
 	{
 		jools.aheadValue( this, '_display', inherit._display );

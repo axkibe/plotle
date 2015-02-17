@@ -17,7 +17,7 @@ if( JION )
 {
 	return {
 		id :
-			'action_scrollY',
+			'action_scrolly',
 		attributes :
 			{
 				itemPath :

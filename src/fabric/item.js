@@ -6,7 +6,7 @@
 var
 	action_createRelation,
 	action_itemDrag,
-	action_scrollY,
+	action_scrolly,
 	euclid_compass,
 	euclid_ellipse,
 	euclid_point,
@@ -462,7 +462,7 @@ fabric_item.prototype.dragStart =
 	{
 		root.create(
 			'action',
-				action_scrollY.create(
+				action_scrolly.create(
 					'itemPath', this.path,
 					'start', p,
 					'startPos', sbary.pos
@@ -577,7 +577,7 @@ fabric_item.prototype.dragMove =
 
 			return true;
 
-		case 'action_scrollY' :
+		case 'action_scrolly' :
 
 			start = action.start,
 

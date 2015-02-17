@@ -56,7 +56,6 @@ config.database_name = 'ideoloom-12';
 | Determines the amount of checking and complaining if things go wrong.
 */
 config.shell_devel = true;
-//config.shell_devel = false;
 
 
 /*
@@ -115,13 +114,13 @@ config.uglify = false;
 /*
 | If true does extra mangles on output compression
 */
-config.extraMangle = false;
+config.extraMangle = !config.shell_devel;
 
 
 /*
 | If true "beautifies" uglify output.
 */
-config.beautify = true;
+config.beautify = false;
 
 
 /*

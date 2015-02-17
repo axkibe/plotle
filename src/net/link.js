@@ -396,13 +396,14 @@ net_link.prototype._onUpdate =
 				'_outbox', outbox,
 				'_postbox', postbox,
 				'_rSeq', reply.seq + changeWrapRay.length
-			)
+			),
+		'space', space
 	);
 
-	// FIXME simply have it use root.create the space.
+	// FIXME move to "markJockey"
 	if( report.length > 0 )
 	{
-		root.update( space, report );
+		root.update( report );
 	}
 
 	root.create( 'doTracker', root.doTracker.update( report ) );
@@ -443,12 +444,13 @@ net_link.prototype.alter =
 		'link',
 			root.link.create(
 				'_outbox', root.link._outbox.append( changeWrap )
-			)
+			),
+		'space', space
 	);
 
 	root.link._sendChanges( );
 
-	root.update( space, changeWrap );
+	root.update( changeWrap );
 };
 
 

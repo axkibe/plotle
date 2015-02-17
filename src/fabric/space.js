@@ -42,6 +42,17 @@ if( JION )
 			'fabric_space',
 		attributes :
 			{
+				action :
+					{
+						comment :
+							'current action',
+						type :
+							'->action',
+						defaultValue :
+							'null',
+						assign :
+							'_action'
+					},
 				access :
 					{
 						comment :
@@ -149,6 +160,8 @@ fabric_space.prototype._init =
 		return;
 	}
 
+	// FIXME if path/hover/mark/view are identical to inherit, no need to bother children
+
 	if( !twigDup )
 	{
 		this.twig = jools.copy( this.twig );
@@ -158,16 +171,10 @@ fabric_space.prototype._init =
 	{
 		this.twig[ k ] =
 			this.twig[ k ].create(
-				'path',
-					this.path
-					.append( 'twig' )
-					.appendNC( k ), // FIXME inherit
-				'hover',
-					this.hover,
-				'mark',
-					this.mark,
-				'view',
-					this.view
+				'path', this.path.append( 'twig' ).appendNC( k ), // FIXME inherit
+				'hover', this.hover,
+				'mark', this.mark,
+				'view', this.view
 			);
 	}
 };
@@ -219,7 +226,7 @@ fabric_space.prototype.focusedItem =
 		mark,
 		path;
 
-	action = root.action;
+	action = this._action;
 
 	mark = this.mark;
 
@@ -266,7 +273,7 @@ fabric_space.prototype.getItem =
 	var
 		action;
 
-	action = root.action;
+	action = this._action;
 
 	switch( action && action.reflect )
 	{
@@ -341,7 +348,7 @@ fabric_space.prototype.draw =
 
 	view = this.view,
 
-	action = root.action;
+	action = this._action;
 
 	for(
 		r = this.ranks.length - 1;
@@ -595,7 +602,7 @@ fabric_space.prototype.dragStart =
 		}
 	}
 
-	action = root.action;
+	action = this._action;
 
 	item = null;
 
@@ -812,7 +819,7 @@ fabric_space.prototype.dragStop =
 		view,
 		zone;
 
-	action = root.action;
+	action = this._action;
 
 	view = this.view;
 
@@ -1157,7 +1164,7 @@ fabric_space.prototype.dragStop =
 
 			break;
 
-		case 'action_scrollY' :
+		case 'action_scrolly' :
 
 			this.getItem(
 				action.itemPath.get( -1 )
@@ -1202,7 +1209,7 @@ fabric_space.prototype.dragMove =
 		view,
 		zone;
 
-	action = root.action;
+	action = this._action;
 
 	transItem = null;
 
@@ -1464,7 +1471,7 @@ fabric_space.prototype.dragMove =
 
 			return true;
 
-		case 'action_scrollY' :
+		case 'action_scrolly' :
 
 			this.getItem( action.itemPath.get( -1 ) )
 			.dragMove(

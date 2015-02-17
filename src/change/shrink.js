@@ -210,12 +210,12 @@ change_shrink.prototype.transform =
 			return cx;
 
 		case 'change_join' :
+		case 'change_set' :
 		case 'change_split' :
 		case 'change_insert' :
 		case 'change_remove' :
-		case 'change_set' :
 
-			return cx;
+			return this._transformJIRS( cx );
 
 		case 'change_ray' :
 
@@ -233,6 +233,24 @@ change_shrink.prototype.transform =
 
 			throw new Error( );
 	}
+};
+
+
+/*
+| Transforms a jion/insert/remove/set/split changes
+| by this shrink
+*/
+change_shrink.prototype._transformJIRS =
+	function(
+		cx
+	)
+{
+	if( !this.path.subPathOf( cx.path ) )
+	{
+		return cx;
+	}
+
+	return null;
 };
 
 

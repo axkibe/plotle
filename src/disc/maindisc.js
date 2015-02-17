@@ -192,10 +192,8 @@ disc_mainDisc.prototype._init =
 
 				visible =
 					this.access === 'rw'
-					&&
-					this.mark !== null
-					&&
-					this.mark.itemPath.length > 0;
+					&& this.mark !== null
+					&& this.mark.itemPath.length > 0;
 
 				break;
 
@@ -374,7 +372,7 @@ disc_mainDisc.prototype.pushButton =
 	}
 	else
 	{
-		root.create( 'mode', buttonName );
+		root.create( 'mode', buttonName, 'action', null );
 	}
 };
 

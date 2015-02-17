@@ -195,6 +195,7 @@ change_remove.prototype.transform =
 
 			return this._transformRangeMark( cx );
 
+		case 'change_grow' :
 		case 'change_shrink' :
 		case 'change_split' :
 		case 'change_set' :

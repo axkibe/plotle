@@ -101,7 +101,7 @@ if( JION )
 						type :
 							'string',
 						assign :
-							'_mode',
+							'_mode'
 					},
 				space :
 					{
@@ -180,7 +180,7 @@ if( JION )
 						comment :
 							'this root has been drawn on display',
 						type :
-							'boolean',
+							'boolean'
 					}
 			},
 		init :
@@ -413,8 +413,6 @@ shell_root.prototype._init =
 /**/	}
 /**/}
 
-	system.setInput( mark ? mark.clipboard : '' );
-
 	if(
 		this.user
 		&& ( !inherit || !this.user.equals( inherit.user ) )
@@ -443,6 +441,7 @@ shell_root.prototype._init =
 	// skips recreating childs when no need
 	if(
 		!inherit
+		|| action !== inherit.action
 		|| hpath !== inherit._hover
 		|| mark !== inherit._mark
 		|| mode !== inherit.mode
@@ -454,6 +453,7 @@ shell_root.prototype._init =
 		{
 			this.space =
 				this.space.create(
+					'action', action,
 					'hover',
 						hpath.isEmpty || hpath.get( 0 ) !== 'space'
 						? jion_path.empty
@@ -972,38 +972,49 @@ shell_root.prototype.pushButton =
 */
 shell_root.prototype.update =
 	function(
-		space,
 		changes
 	)
 {
 	var
 		mark;
 
-	mark = root.space.mark;
+	mark = this._mark;
 
-	switch( mark && mark.reflect )
+	if( mark )
 	{
-		case null :
+		switch( mark.reflect )
+		{
+			case 'mark_caret' :
+			case 'mark_item' :
 
-			break;
+				if( mark.path.get( 0 ) === 'space' )
+				{
+					mark = changes.transform( mark );
+				}
 
-		case 'mark_caret' :
-		case 'mark_item' :
-		case 'mark_range' :
+				break;
 
-			if( mark.path.get( 0 ) === 'space' )
-			{
-				mark = changes.transform( mark );
-			}
+			case 'mark_range' :
 
-			break;
+				if( mark.path.get( 0 ) === 'space' )
+				{
+					mark = changes.transform( mark );
+
+					if( mark )
+					{
+						mark =
+							mark.create(
+								'doc',
+								root.getPath( mark.itemPath.append( 'doc' ) )
+							);
+					}
+				}
+
+				break;
+		}
 	}
 
-	root.create(
-		'space', space.create( 'mark', mark ),
-		'_discJockey', root._discJockey.create( 'mark', mark ),
-		'mark', mark
-	);
+	root.create( 'mark', mark );
 };
 
 

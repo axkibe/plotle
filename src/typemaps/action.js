@@ -5,7 +5,7 @@ module.exports =
 [
 	'action_createGeneric',
 	'action_itemResize',
-	'action_scrollY',
+	'action_scrolly',
 	'action_createRelation',
 	'action_itemDrag',
 	'action_pan'

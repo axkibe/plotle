@@ -355,6 +355,31 @@ jools.lazyValue =
 
 
 /*
+| Tests if the object has a lazy value set.
+*/
+jools.hasLazyValueSet =
+	function(
+		obj,
+		key
+	)
+{
+	var
+		ckey;
+
+/**/if( FREEZE )
+/**/{
+/**/	return obj.__lazy[ key ] !== undefined;
+/**/}
+/**/else
+	{
+		ckey = '__lazy_' + key;
+
+		return obj[ ckey ] !== undefined;
+	}
+};
+
+
+/*
 | A lazy value is computed and fixated before it is needed.
 */
 jools.aheadValue =
