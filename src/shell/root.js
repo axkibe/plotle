@@ -999,19 +999,8 @@ shell_root.prototype.update =
 			break;
 	}
 
-	// FIXME let the link do the real stuff
-
-	// TODO this  copying is outdated.
 	root.create(
-		'space',
-			space.create(
-				'access', root.space.access,
-				'hover', root.space.hover,
-				'mark', mark,
-				'path', root.space.path,
-				'ref', root.space.ref,
-				'view', root.space.view
-			),
+		'space', space.create( 'mark', mark ),
 		'_discJockey', root._discJockey.create( 'mark', mark ),
 		'mark', mark
 	);
