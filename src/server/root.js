@@ -10,6 +10,10 @@
 'use strict';
 
 
+// FUTURE remove
+var DELAY = 5000;
+// DELAY = false;
+
 /*
 | The jion definition.
 */
@@ -1496,16 +1500,17 @@ prototype.webAjax =
 		try
 		{
 			// FUTURE REMOVE
-			/*
-			if( cmd.type === 'request_alter' )
+			if( DELAY )
 			{
-				console.log( 'DELAYING');
+				if( cmd.type === 'request_alter' )
+				{
+					console.log( 'DELAYING');
 
-				yield setTimeout( resume( ), 5000 );
+					yield setTimeout( resume( ), DELAY );
 
-				console.log( 'EOD');
+					console.log( 'EOD');
+				}
 			}
-			*/
 
 			asw = yield* server_requestHandler.serve( cmd, result );
 		}

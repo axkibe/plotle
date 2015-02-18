@@ -201,8 +201,6 @@ if( JION )
 
 /*
 | Valid modes
-|
-| FUTURE lowercase all
 */
 var
 	modes;
@@ -221,7 +219,7 @@ var
 /**/			'moveTo' : true,
 /**/
 /**/			// Standard selection, moving stuff around.
-/**/			'Normal' : true,
+/**/			'normal' : true,
 /**/
 /**/			// User does not have access to a space.
 /**/			'noAccessToSpace' : true,
@@ -295,7 +293,7 @@ shell_root.startup =
 			'height', display.height
 		);
 
-	mode = 'Normal',
+	mode = 'normal';
 
 	ajaxPath = jion_path.empty.append( 'ajax' );
 
@@ -541,7 +539,7 @@ shell_root.prototype.arrivedAtSpace =
 	)
 {
 	root.create(
-		'mode', 'Normal',
+		'mode', 'normal',
 		'_discJockey',
 			root._discJockey.create(
 				'access', access,
@@ -1241,7 +1239,7 @@ shell_root.prototype._currentScreen =
 	switch( name )
 	{
 		case 'create' :
-		case 'Normal' :
+		case 'normal' :
 
 			return root.space;
 

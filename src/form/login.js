@@ -159,7 +159,7 @@ form_login.prototype.pushButton =
 
 		case 'closeButton' :
 
-			root.create( 'mode', 'Normal' );
+			root.create( 'mode', 'normal' );
 
 			break;
 
@@ -336,7 +336,7 @@ form_login.prototype.onAuth =
 	}
 
 	root.create(
-		'mode', 'Normal',
+		'mode', 'normal',
 		'user', reply.user
 	);
 
