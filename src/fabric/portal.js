@@ -1466,7 +1466,7 @@ fabric_portal.prototype._keyDel =
 			'path', this.path.append( section ).chop,
 			'at1', at,
 			'at2', at + 1,
-			'val', this[ section ].substring( at - 1, at )
+			'val', this[ section ].substring( at, at + 1 )
 		)
 	);
 };

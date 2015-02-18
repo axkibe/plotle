@@ -259,6 +259,11 @@ disc_mainDisc.prototype._init =
 	}
 
 	this.twig = twig;
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( twig );
+/**/}
 };
 
 

@@ -143,8 +143,11 @@ disc_createDisc.prototype._init =
 	)
 {
 	var
+		focusAccent,
+		path,
+		ranks,
 		twig,
-		ranks;
+		wname;
 
 	if( !this.path )
 	{
@@ -166,17 +169,13 @@ disc_createDisc.prototype._init =
 		r++
 	)
 	{
-		var
-			wname =
-				ranks[ r ],
-			path,
-			focusAccent =
-				disc_createDisc._isActiveButton( this.action, wname );
+		wname = ranks[ r ];
+
+		focusAccent = disc_createDisc._isActiveButton( this.action, wname );
 
 		if( twig[ wname ].path )
 		{
-			path =
-				undefined;
+			path = undefined;
 		}
 		else
 		{
@@ -188,19 +187,19 @@ disc_createDisc.prototype._init =
 
 		twig[ wname ] =
 			twig[ wname ].create(
-				'path',
-					path,
-				'superFrame',
-					this.frame.zeropnw,
-				'hover',
-					this.hover,
-				'focusAccent',
-					focusAccent
+				'path', path,
+				'superFrame', this.frame.zeropnw,
+				'hover', this.hover,
+				'focusAccent', focusAccent
 			);
 	}
 
-	this.twig =
-		twig;
+	this.twig = twig;
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( twig );
+/**/}
 };
 
 
