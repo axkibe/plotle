@@ -117,15 +117,10 @@ if( JION )
 }
 
 
-var
-	signUp;
-
-signUp = form_signUp;
-
 /*
 | The signup form.
 */
-signUp.prototype._init =
+form_signUp.prototype._init =
 	function(
 		inherit
 	)
@@ -140,7 +135,7 @@ signUp.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-signUp.prototype.pushButton =
+form_signUp.prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -183,7 +178,7 @@ signUp.prototype.pushButton =
 /*
 | Signs a new user up
 */
-signUp.prototype.signup =
+form_signUp.prototype.signup =
 	function( )
 {
 	var
@@ -293,7 +288,7 @@ signUp.prototype.signup =
 /*
 | A register operation completed.
 */
-signUp.prototype.onRegister =
+form_signUp.prototype.onRegister =
 	function(
 		ok,
 		user,
@@ -342,7 +337,7 @@ signUp.prototype.onRegister =
 /*
 | Clears all fields
 */
-signUp.prototype.clear =
+form_signUp.prototype.clear =
 	function( )
 {
 	var

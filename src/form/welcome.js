@@ -108,16 +108,10 @@ if( JION )
 }
 
 
-var
-	welcome;
-
-welcome = form_welcome;
-
-
 /*
 | The welcome form.
 */
-welcome.prototype._init =
+form_welcome.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -145,7 +139,7 @@ welcome.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-welcome.prototype.pushButton =
+form_welcome.prototype.pushButton =
 	function(
 		path
 		// shift,

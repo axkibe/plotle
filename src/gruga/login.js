@@ -50,10 +50,8 @@ gruga_login =
 		'twig:add',
 		'headline',
 			widget_label.create(
-				'text',
-					'Log In',
-				'font',
-					shell_fontPool.get( 22, 'la' ),
+				'text', 'Log In',
+				'font', shell_fontPool.get( 22, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -64,10 +62,8 @@ gruga_login =
 		'twig:add',
 		'usernameLabel',
 			widget_label.create(
-				'text',
-					'username',
-				'font',
-					shell_fontPool.get( 16, 'la' ),
+				'text', 'username',
+				'font', shell_fontPool.get( 16, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
@@ -78,10 +74,8 @@ gruga_login =
 		'twig:add',
 		'passwordLabel',
 			widget_label.create(
-				'text',
-					'password',
-				'font',
-					shell_fontPool.get( 16, 'la' ),
+				'text', 'password',
+				'font', shell_fontPool.get( 16, 'la' ),
 				'designPos',
 					design_anchorPoint.create(
 						'anchor', 'c',

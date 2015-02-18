@@ -96,6 +96,7 @@ if( JION )
 		twig :
 			[
 				/* FUTURE
+				'form_loading',
 				'form_login',
 				'form_moveTo',
 				'form_noAccessToSpace',
@@ -119,6 +120,8 @@ form_jockey.prototype._init =
 	)
 {
 	var
+		a,
+		aZ,
 		form,
 		name,
 		path;
@@ -129,7 +132,7 @@ form_jockey.prototype._init =
 	}
 
 	for(
-		var a = 0, aZ = this.ranks.length;
+		a = 0, aZ = this.ranks.length;
 		a < aZ;
 		a++
 	)
@@ -169,6 +172,8 @@ form_jockey.prototype._init =
 /**/		}
 /**/	}
 	}
+
+	// FIXME freeze twig
 };
 
 

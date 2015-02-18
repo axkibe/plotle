@@ -109,16 +109,11 @@ if( JION )
 	};
 }
 
-var
-	moveTo;
-
-moveTo = form_moveTo;
-
 
 /*
 | The moveto form.
 */
-moveTo.prototype._init =
+form_moveTo.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -153,7 +148,7 @@ moveTo.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-moveTo.prototype.pushButton =
+form_moveTo.prototype.pushButton =
 	function(
 		path
 		// shift,

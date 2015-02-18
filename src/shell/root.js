@@ -13,6 +13,7 @@ var
 	fabric_spaceRef,
 	form_jockey,
 	gruga_createDisc,
+	gruga_loading,
 	gruga_login,
 	gruga_mainDisc,
 	gruga_moveTo,
@@ -224,6 +225,9 @@ var
 /**/			// Creating a new item.
 /**/			'create' : true,
 /**/
+/**/			// Loading a space.
+/**/			'loading' : true,
+/**/
 /**/			// Logging in.
 /**/			'login' : true,
 /**/
@@ -305,7 +309,7 @@ shell_root.startup =
 			'height', display.height
 		);
 
-	mode = 'normal';
+	mode = 'loading';
 
 	ajaxPath = jion_path.empty.append( 'ajax' );
 
@@ -359,6 +363,7 @@ shell_root.startup =
 				'mark', null,
 				'path', jion_path.empty.append( 'form' ),
 				'view', view,
+				'twig:add', 'loading', gruga_loading,
 				'twig:add', 'login', gruga_login,
 				'twig:add', 'moveTo', gruga_moveTo,
 				'twig:add', 'noAccessToSpace', gruga_noAccessToSpace,
@@ -418,6 +423,19 @@ shell_root.prototype._init =
 /**/if( CHECK )
 /**/{
 /**/	if( !modes[ mode ] )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( mode === 'loading' && this.screen )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if(
+/**/		( mode === 'normal' || mode === 'create' )
+/**/		&& !this.space
+/**/	)
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -590,7 +608,7 @@ shell_root.prototype.click =
 		click,
 		screen;
 
-	screen = root._currentScreen( ),
+	screen = root._currentScreen( );
 
 	click =
 		root._discJockey.click(
@@ -667,7 +685,7 @@ shell_root.prototype.pointingHover =
 		result,
 		screen;
 
-	screen = root._currentScreen( ),
+	screen = root._currentScreen( );
 
 	result = null;
 
@@ -938,19 +956,11 @@ shell_root.prototype.pushButton =
 	{
 		case 'disc' :
 
-			return root._discJockey.pushButton(
-				path,
-				false,
-				false
-			);
+			return root._discJockey.pushButton( path, false, false );
 
 		case 'form' :
 
-			return root._formJockey.pushButton(
-				path,
-				false,
-				false
-			);
+			return root._formJockey.pushButton( path, false, false );
 
 		default :
 
@@ -1069,6 +1079,12 @@ shell_root.prototype.moveToSpace =
 		//            // created
 	)
 {
+	// TODO show loading what
+	root.create(
+		'mode', 'loading',
+		'space', null
+	);
+
 	root.link.acquireSpace( spaceRef, createMissing );
 };
 
@@ -1223,6 +1239,8 @@ shell_root.prototype.onRegister =
 /*
 | Returns current screen
 |
+| FIXME make this a lazyValue
+|
 | This is either a fabric space or a form
 */
 shell_root.prototype._currentScreen =
@@ -1241,6 +1259,7 @@ shell_root.prototype._currentScreen =
 			return root.space;
 
 		case 'login' :
+		case 'loading' :
 		case 'moveTo' :
 		case 'noAccessToSpace' :
 		case 'nonExistingSpace' :
@@ -1287,12 +1306,9 @@ shell_root.prototype.draw =
 
 	screen = root._currentScreen( );
 
-	if( screen )
-	{
-		screen.draw( display );
-	}
+	screen.draw( display );
 
-	if( screen && screen.showDisc )
+	if( screen.showDisc )
 	{
 		root._discJockey.draw( display );
 	}

@@ -433,6 +433,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/form/loading.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/form/login.js',
 		'hasJion', true,
 		'inBundle', true
@@ -483,6 +488,10 @@ module.exports =
 	),
 	resource.create(
 		'filePath', 'src/gruga/createdisc.js',
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/gruga/loading.js',
 		'inBundle', true
 	),
 	resource.create(

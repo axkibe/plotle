@@ -110,16 +110,11 @@ if( JION )
 	};
 }
 
-var
-	user;
-
-user = form_user;
-
 
 /*
-| The space form.
+| Initializer.
 */
-user.prototype._init =
+form_user.prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -204,7 +199,7 @@ user.prototype._init =
 /*
 | A button of the form has been pushed.
 */
-user.prototype.pushButton =
+form_user.prototype.pushButton =
 	function(
 		path
 		// shift,
