@@ -170,7 +170,7 @@ signUp.prototype.pushButton =
 
 		case 'closeButton' :
 
-			root.create( 'mode', 'Normal' );
+			root.create( 'mode', 'normal' );
 
 			break;
 

@@ -148,7 +148,7 @@ form_noAccessToSpace.prototype.pushButton =
 	{
 		case 'okButton' :
 
-			root.create( 'mode', 'Normal' );
+			root.create( 'mode', 'normal' );
 
 			break;
 

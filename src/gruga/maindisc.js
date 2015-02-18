@@ -113,7 +113,7 @@ dv =
 
 gruga_mainDisc =
 	disc_mainDisc.create(
-		'twig:add', 'Normal',
+		'twig:add', 'normal',
 			widget_button.create(
 				'style', 'mainButton',
 				'icon', 'normal',
