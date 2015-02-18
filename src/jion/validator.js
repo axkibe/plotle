@@ -34,9 +34,13 @@ var
 	attributeGroupBlacklist,
 	attributeRayBlacklist,
 	attributeTwigBlacklist,
+	checkAlikes,
 	checkAttribute,
 	checkAttributeSingleType,
+	checkConcern,
+	checkPrepare,
 	checkRay,
+	checkTwig,
 	jionWhitelist;
 
 /*
@@ -110,7 +114,7 @@ jionWhitelist =
 /*
 | Checks if a jion concern definition looks ok.
 */
-var _checkConcern =
+checkConcern =
 	function(
 		concern
 	)
@@ -144,9 +148,23 @@ var _checkConcern =
 
 
 /*
+| Checks if a jion prepare looks ok.
+*/
+checkConcern =
+	function(
+		// attr
+	)
+{
+	// FUTURE
+	return true;
+};
+
+
+
+/*
 | Checks the alike definitions.
 */
-var _checkAlikes =
+checkAlikes =
 	function(
 		jion // the jion definition
 	)
@@ -203,68 +221,6 @@ var _checkAlikes =
 
 
 /*
-| Checks the twig definition.
-*/
-var _checkTwig =
-	function(
-		jion // the jion definition
-	)
-{
-	var
-		entry,
-		map,
-		twig;
-
-	twig = jion.twig;
-
-	map = { };
-
-	if( jools.isString( twig ) )
-	{
-		if( !( /\->[a-zA-Z_-]+/.test( jion.twig ) ) )
-		{
-			throw new Error( 'invalid typemap reference' );
-		}
-
-		twig = require( '../typemaps/' + twig.substr( 2 ) + '.js' );
-	}
-
-	if( !( Array.isArray( twig ) ) )
-	{
-		throw new Error(
-			'twig definition must be an Array or a typemap to one'
-		);
-	}
-
-	for(
-		var a = 0, aZ = twig.length;
-		a < aZ;
-		a++
-	)
-	{
-		entry = twig[ a ];
-
-		if( !jools.isString( entry ) )
-		{
-			throw new Error(
-				'twig definition entry not a string'
-			);
-		}
-
-		if( map[ entry ] )
-		{
-			throw new Error(
-				'twig definition contains duplicate: '
-				+ entry
-			);
-		}
-
-		map[ entry ] = true;
-	}
-};
-
-
-/*
 | Checks the ray definition.
 */
 checkRay =
@@ -307,6 +263,69 @@ checkRay =
 	)
 	{
 		entry = ray[ a ];
+
+		if( !jools.isString( entry ) )
+		{
+			throw new Error(
+				'twig definition entry not a string'
+			);
+		}
+
+		if( map[ entry ] )
+		{
+			throw new Error(
+				'twig definition contains duplicate: '
+				+ entry
+			);
+		}
+
+		map[ entry ] = true;
+	}
+};
+
+
+
+/*
+| Checks the twig definition.
+*/
+checkTwig =
+	function(
+		jion // the jion definition
+	)
+{
+	var
+		entry,
+		map,
+		twig;
+
+	twig = jion.twig;
+
+	map = { };
+
+	if( jools.isString( twig ) )
+	{
+		if( !( /\->[a-zA-Z_-]+/.test( jion.twig ) ) )
+		{
+			throw new Error( 'invalid typemap reference' );
+		}
+
+		twig = require( '../typemaps/' + twig.substr( 2 ) + '.js' );
+	}
+
+	if( !( Array.isArray( twig ) ) )
+	{
+		throw new Error(
+			'twig definition must be an Array or a typemap to one'
+		);
+	}
+
+	for(
+		var a = 0, aZ = twig.length;
+		a < aZ;
+		a++
+	)
+	{
+		entry = twig[ a ];
 
 		if( !jools.isString( entry ) )
 		{
@@ -503,17 +522,23 @@ checkAttribute =
 
 			case 'concerns' :
 
-				_checkConcern( attr.concerns );
+				checkConcern( attr.concerns );
+
+				break;
+
+			case 'prepare' :
+
+				checkPrepare( attr );
 
 				break;
 
 			default :
 
 				throw new Error(
-					'attribute ' +
-						'"' + name + '"' +
-						' has invalid specifier: ' +
-						'"' + key + '"'
+					'attribute '
+					+ '"' + name + '"'
+					+ ' has invalid specifier: '
+					+ '"' + key + '"'
 				);
 		}
 	}
@@ -562,12 +587,12 @@ validator.check =
 
 	if( !/[a-z]/.exec(idParts[ 0 ][ 0 ] ) )
 	{
-		throw new Error( 'unit ( id ) must start with lowercase letter' );
+		throw new Error( 'unit( id ) must start with lowercase letter' );
 	}
 
 	if( !/[a-z]/.exec(idParts[ 1 ][ 0 ] ) )
 	{
-		throw new Error( 'name ( id ) must start with lowercase letter' );
+		throw new Error( 'name( id ) must start with lowercase letter' );
 	}
 
 	attr = jion.attributes;
@@ -589,24 +614,43 @@ validator.check =
 
 	if( jion.alike )
 	{
-		_checkAlikes( jion );
+		checkAlikes( jion );
 	}
 
-	if( jion.twig && jion.ray )
+	if( jion.group && jion.ray )
+	{
+		throw new Error(
+			'a jion cannot be a group and ray at the same time'
+		);
+	}
+
+	if( jion.group && jion.twig )
+	{
+		throw new Error(
+			'a jion cannot be a group and twig at the same time'
+		);
+	}
+
+	if( jion.ray && jion.twig )
 	{
 		throw new Error(
 			'a jion cannot be a ray and twig at the same time'
 		);
 	}
 
-	if( jion.twig )
+	if( jion.group )
 	{
-		_checkTwig( jion );
+		// checkGroup( jion ); FIXME
 	}
 
 	if( jion.ray )
 	{
 		checkRay( jion );
+	}
+
+	if( jion.twig )
+	{
+		checkTwig( jion );
 	}
 };
 
