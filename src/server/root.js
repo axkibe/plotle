@@ -12,7 +12,7 @@
 
 // FUTURE remove
 var DELAY = 5000;
-// DELAY = false;
+DELAY = false;
 
 /*
 | The jion definition.

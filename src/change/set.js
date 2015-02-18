@@ -210,7 +210,12 @@ change_set.prototype._transformChangeSet =
 		return cx;
 	}
 
-	return cx.create( 'prev', this.val );
+	if( cx.prev.equalsJSON( this.prev ) )
+	{
+		return cx.create( 'prev', this.val );
+	}
+
+	return cx;
 };
 
 
