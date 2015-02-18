@@ -55,6 +55,17 @@ if( JION )
 			'shell_root',
 		attributes :
 			{
+				access :
+					{
+						comment :
+							'access level to current space',
+						type :
+							'string',
+						allowsNull :
+							true,
+						assign :
+							'_access'
+					},
 				action :
 					{
 						comment :
@@ -127,6 +138,7 @@ if( JION )
 							'current view',
 						type :
 							'euclid_view'
+						// FIXME assign _view
 					},
 				_formJockey :
 					{
@@ -309,15 +321,38 @@ shell_root.startup =
 	}
 
 	shell_root.create(
-		'display', display,
-		'mark', null,
-		'user', null,
-		'space', null,
+		'access', null,
 		'action', null,
-		'mode', mode,
+		'ajax',
+			net_ajax.create(
+				'path', ajaxPath,
+				'twig:add', 'command',
+					net_channel.create( 'path', ajaxPath.append( 'command' ) ),
+				'twig:add', 'update',
+					net_channel.create( 'path', ajaxPath.append( 'update' ) )
+			),
+		'display', display,
+		'doTracker', shell_doTracker.create( ),
 		'hover', jion_path.empty,
+		'link', net_link.create( ),
+		'mark', null,
+		'mode', mode,
+		'space', null,
+		'user', null,
 		'view', view,
 		'_drawn', false,
+		'_discJockey',
+			disc_jockey.create(
+				'access', '',
+				'action', null,
+				'hover', jion_path.empty,
+				'mark', null,
+				'mode', mode,
+				'path', jion_path.empty.append( 'disc' ),
+				'view', view,
+				'twig:add', 'mainDisc', gruga_mainDisc,
+				'twig:add', 'createDisc', gruga_createDisc
+			),
 		'_formJockey',
 			form_jockey.create(
 				'hover', jion_path.empty,
@@ -333,33 +368,7 @@ shell_root.startup =
 				'twig:add', 'user', gruga_user,
 				'twig:add', 'welcome', gruga_welcome
 			),
-		'_discJockey',
-			disc_jockey.create(
-				'access', '',
-				'action', null,
-				'hover', jion_path.empty,
-				'mark', null,
-				'mode', mode,
-				'path', jion_path.empty.append( 'disc' ),
-				'view', view,
-				'twig:add', 'mainDisc', gruga_mainDisc,
-				'twig:add', 'createDisc', gruga_createDisc
-			),
-		'_visitor', null,
-		'ajax',
-			net_ajax.create(
-				'path', ajaxPath,
-				'twig:add', 'command',
-					net_channel.create(
-						'path', ajaxPath.append( 'command' )
-					),
-				'twig:add', 'update',
-					net_channel.create(
-						'path', ajaxPath.append( 'update' )
-					)
-			),
-		'link', net_link.create( ),
-		'doTracker', shell_doTracker.create( )
+		'_visitor', null
 	);
 
 	root.link.auth( user );
@@ -375,10 +384,12 @@ shell_root.prototype._init =
 	)
 {
 	var
+		access,
 		action,
 		hpath,
 		mark,
 		mode,
+		spaceRef,
 		user,
 		view;
 
@@ -387,6 +398,8 @@ shell_root.prototype._init =
 	{
 		this._drawn = false;
 	}
+
+	access = this._access;
 
 	action = this.action;
 
@@ -399,6 +412,8 @@ shell_root.prototype._init =
 	user = this.user;
 
 	mode = this._mode;
+
+	spaceRef = this.space && this.space.ref;
 
 /**/if( CHECK )
 /**/{
@@ -436,6 +451,7 @@ shell_root.prototype._init =
 	// skips recreating childs when no need
 	if(
 		!inherit
+		|| access !== inherit._access
 		|| action !== inherit.action
 		|| hpath !== inherit._hover
 		|| mark !== inherit._mark
@@ -465,12 +481,14 @@ shell_root.prototype._init =
 					? jion_path.empty
 					: hpath,
 				'mark', mark,
+				'spaceRef', spaceRef,
 				'user', user,
 				'view', view
 			);
 
 		this._discJockey =
 			this._discJockey.create(
+				'access', access,
 				'action', action,
 				'hover',
 					hpath.isEmpty || hpath.get( 0 ) !== 'disc'
@@ -478,6 +496,7 @@ shell_root.prototype._init =
 					: hpath,
 				'mark', mark,
 				'mode', mode,
+				'spaceRef', spaceRef,
 				'user', user,
 				'view', view
 			);
@@ -526,28 +545,6 @@ shell_root.prototype.alter =
 	root.link.alter( changeWrap );
 
 	root.doTracker.track( changeWrap );
-};
-
-
-/*
-| A space finished loading.
-*/
-shell_root.prototype.arrivedAtSpace =
-	function(
-		spaceRef,
-		access
-	)
-{
-	root.create(
-		'mode', 'normal',
-		'_discJockey',
-			root._discJockey.create(
-				'access', access,
-				'spaceRef', spaceRef
-			),
-		'_formJockey',
-			root._formJockey.create( 'spaceRef', spaceRef )
-	);
 };
 
 
@@ -1127,25 +1124,25 @@ shell_root.prototype.onAcquireSpace =
 	access = reply.access;
 
 	root.create(
+		'access', access,
+		'mark', null,
+		'mode', 'normal',
 		'space',
 			reply.space.create(
 				// FUTURE have the server already set this at JSON level
 				'access', access,
-				'hover', jion_path.empty,
-				'mark', null,
+				'hover', jion_path.empty, // XXX
 				'path', jion_path.empty.append( 'space' ),
-				'ref', spaceRef,
-				'view',
-					euclid_view.create(
-						'fact', 0,
-						'height', root.display.height,
-						'pan', euclid_point.zero,
-						'width', root.display.width
-					)
+				'ref', spaceRef
+			),
+		'view',
+			euclid_view.create(
+				'fact', 0,
+				'height', root.display.height,
+				'pan', euclid_point.zero,
+				'width', root.display.width
 			)
 	);
-
-	root.arrivedAtSpace( spaceRef, access );
 };
 
 

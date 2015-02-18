@@ -11,8 +11,10 @@
 
 
 // FUTURE remove
-var DELAY = 5000;
-DELAY = false;
+var DELAY_ALTER = 5000;
+var DELAY_ACQUIRE = 5000;
+DELAY_ALTER = false;
+//DELAY_ACQUIRE = false;
 
 /*
 | The jion definition.
@@ -1500,16 +1502,18 @@ prototype.webAjax =
 		try
 		{
 			// FUTURE REMOVE
-			if( DELAY )
+			if( DELAY_ALTER && cmd.type === 'request_alter' )
 			{
-				if( cmd.type === 'request_alter' )
-				{
-					console.log( 'DELAYING');
+				console.log( 'DELAYING ALTER');
 
-					yield setTimeout( resume( ), DELAY );
+				yield setTimeout( resume( ), DELAY_ALTER );
+			}
 
-					console.log( 'EOD');
-				}
+			if( DELAY_ACQUIRE && cmd.type === 'request_acquire' )
+			{
+				console.log( 'DELAYING ACQUITE');
+
+				yield setTimeout( resume( ), DELAY_ACQUIRE );
 			}
 
 			asw = yield* server_requestHandler.serve( cmd, result );

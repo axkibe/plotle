@@ -73,7 +73,7 @@ if( JION )
 						type :
 							'fabric_spaceRef',
 						defaultValue :
-							'undefined',
+							'null',
 						assign :
 							null
 					},

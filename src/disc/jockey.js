@@ -30,7 +30,9 @@ if( JION )
 						comment :
 							'users access to current space',
 						type :
-							'string'
+							'string',
+						defaultValue :
+							'null'
 					},
 				action :
 					{
