@@ -38,6 +38,7 @@ var
 	checkAttribute,
 	checkAttributeSingleType,
 	checkConcern,
+	checkGroup,
 	checkPrepare,
 	checkRay,
 	checkTwig,
@@ -221,6 +222,75 @@ checkAlikes =
 
 
 /*
+| Checks the group definition.
+|
+| FUTURE for this and ray/twig, just create
+|        an idGroup, it will complain anyway.
+*/
+checkGroup =
+	function(
+		jion // the jion definition
+	)
+{
+	var
+		a,
+		aZ,
+		entry,
+		map,
+		group;
+
+	group = jion.group;
+
+	map = { };
+
+	if( jools.isString( group ) )
+	{
+		if( !( /\->[a-zA-Z_-]+/.test( jion.group ) ) )
+		{
+			throw new Error( 'invalid typemap reference' );
+		}
+
+		group = require( '../typemaps/' + group.substr( 2 ) + '.js' );
+	}
+
+	if( !( Array.isArray( group ) ) )
+	{
+		throw new Error(
+			'group definition must be an Array or a typemap to one'
+		);
+	}
+
+	for(
+		a = 0, aZ = group.length;
+		a < aZ;
+		a++
+	)
+	{
+		entry = group[ a ];
+
+		if( !jools.isString( entry ) )
+		{
+			throw new Error(
+				'group definition entry not a string'
+			);
+		}
+
+		if( map[ entry ] )
+		{
+			throw new Error(
+				'group definition contains duplicate: '
+				+ entry
+			);
+		}
+
+		map[ entry ] = true;
+	}
+};
+
+
+
+
+/*
 | Checks the ray definition.
 */
 checkRay =
@@ -229,6 +299,8 @@ checkRay =
 	)
 {
 	var
+		a,
+		aZ,
 		entry,
 		map,
 		ray;
@@ -247,9 +319,7 @@ checkRay =
 		ray = require( '../typemaps/' + ray.substr( 2 ) + '.js' );
 	}
 
-	if(
-		!( Array.isArray( ray ) )
-	)
+	if( !( Array.isArray( ray ) ) )
 	{
 		throw new Error(
 			'ray definition must be an Array or a typemap to one'
@@ -257,7 +327,7 @@ checkRay =
 	}
 
 	for(
-		var a = 0, aZ = ray.length;
+		a = 0, aZ = ray.length;
 		a < aZ;
 		a++
 	)
@@ -294,6 +364,8 @@ checkTwig =
 	)
 {
 	var
+		a,
+		aZ,
 		entry,
 		map,
 		twig;
@@ -320,7 +392,7 @@ checkTwig =
 	}
 
 	for(
-		var a = 0, aZ = twig.length;
+		a = 0, aZ = twig.length;
 		a < aZ;
 		a++
 	)
@@ -404,7 +476,8 @@ checkAttribute =
 	)
 {
 	var
-		a, aZ,
+		a,
+		aZ,
 		attr,
 		key,
 		type,
@@ -640,7 +713,7 @@ validator.check =
 
 	if( jion.group )
 	{
-		// checkGroup( jion ); FIXME
+		checkGroup( jion );
 	}
 
 	if( jion.ray )

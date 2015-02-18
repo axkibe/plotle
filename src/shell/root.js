@@ -212,10 +212,7 @@ var
 /**/	modes =
 /**/		{
 /**/			// Creating a new item.
-/**/			'Create' : true,
-/**/
-/**/			// Help.
-/**/			'Help' : true,
+/**/			'create' : true,
 /**/
 /**/			// Logging in.
 /**/			'login' : true,
@@ -1243,7 +1240,7 @@ shell_root.prototype._currentScreen =
 
 	switch( name )
 	{
-		case 'Create' :
+		case 'create' :
 		case 'Normal' :
 
 			return root.space;

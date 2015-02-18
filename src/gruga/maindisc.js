@@ -136,7 +136,7 @@ gruga_mainDisc =
 				'shape',
 					design_anchorEllipse.fullSkewNW
 			),
-		'twig:add', 'Create',
+		'twig:add', 'create',
 			widget_button.create(
 				'style', 'mainButton',
 				'visible', false,

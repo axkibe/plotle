@@ -225,7 +225,7 @@ jockey.prototype.dragStart =
 		return bubble;
 	}
 
-	if( this.mode === 'Create' )
+	if( this.mode === 'create' )
 	{
 		return (
 			this.twig.createDisc.dragStart(
@@ -248,7 +248,7 @@ jockey.prototype.draw =
 		display
 	)
 {
-	if( this.mode === 'Create' )
+	if( this.mode === 'create' )
 	{
 		this.twig.createDisc.draw( display );
 	}
@@ -278,7 +278,7 @@ jockey.prototype.pointingHover =
 		return hover;
 	}
 
-	if( this.mode === 'Create' )
+	if( this.mode === 'create' )
 	{
 		return this.twig.createDisc.pointingHover( p, shift, ctrl );
 	}
@@ -324,15 +324,9 @@ jockey.prototype.click =
 		return start;
 	}
 
-	if( this.mode === 'Create' )
+	if( this.mode === 'create' )
 	{
-		return (
-			this.twig.createDisc.click(
-				p,
-				shift,
-				ctrl
-			)
-		);
+		return this.twig.createDisc.click( p, shift, ctrl );
 	}
 
 	return null;

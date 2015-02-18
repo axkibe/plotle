@@ -95,6 +95,7 @@ if( JION )
 						defaultValue :
 							'null'
 					},
+				// FIXME give user_creds object
 				username :
 					{
 						comment :
@@ -181,13 +182,12 @@ disc_mainDisc.prototype._init =
 
 				text =
 					this._userIsGuest
-						?
-						'log\nin'
-						:
-						'log\nout';
+					? 'log\nin'
+					: 'log\nout';
 
 				break;
 
+			// FIXME lowercase
 			case 'Remove' :
 
 				visible =
@@ -197,7 +197,7 @@ disc_mainDisc.prototype._init =
 
 				break;
 
-			case 'Create' :
+			case 'create' :
 
 				visible = this.access === 'rw';
 
