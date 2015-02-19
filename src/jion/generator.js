@@ -2093,12 +2093,11 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 				{
 					switch( idList[ t ].string )
 					{
-						// FIXME make typeof part of the parsed stuff
 						case 'boolean' :
 
 							sif =
 								$if(
-									$equals( $typeof( 'arg' ), '"boolean"' ),
+									'typeof( arg ) === "boolean"',
 									$assign( attr.v, 'arg' )
 								);
 
@@ -2108,7 +2107,7 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 
 							sif =
 								$if(
-									$equals( $typeof( 'arg' ), '"number"' ),
+									'typeof( arg ) === "number"',
 									$assign( attr.v, 'arg' )
 								);
 
@@ -2119,7 +2118,8 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 							sif =
 								$if(
 									$or(
-										$equals( $typeof( 'arg' ), '"string"' ),
+										'typeof( arg ) === "string"',
+										// FIXME instanceof parseable
 										$instanceof( 'arg', 'String' )
 									),
 									$assign( attr.v, 'arg' )
