@@ -2451,10 +2451,9 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 		loopBody =
 			$block( ).
 			$if(
-				// FIXME are these in reverse?
-				'ray[ r ] === null',
+				'jray[ r ] === null',
 				$block( )
-				.$(' jray [ r ] = null' )
+				.$( 'ray [ r ] = null' )
 				.$continue( )
 			)
 			.append( loopSwitch );
@@ -3168,8 +3167,7 @@ generator.prototype.genEquals =
 		twigTest =
 			$block( )
 			.$if(
-				// FUTURE this.length vs. obj.length
-				'this.ranks.length !== obj.ranks.length',
+				'this.length !== obj.length',
 				$returnFalse
 			)
 			.$for(
@@ -3236,7 +3234,6 @@ generator.prototype.genEquals =
 	capsule =
 		capsule
 		.$assign(
-			// FIXME use proto
 			'prototype.' + eqFuncName,
 			$func( block )
 			.$arg( 'obj', 'object to compare to' )
@@ -3332,7 +3329,6 @@ generator.prototype.genAlike =
 		capsule =
 			capsule
 			.$assign(
-				// FIXME use proto
 				$var( 'prototype' ).$dot( alikeName ),
 				$func( block )
 				.$arg( 'obj', 'object to compare to' )

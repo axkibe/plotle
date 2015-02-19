@@ -56,6 +56,7 @@ config.database_name = 'ideoloom-12';
 | Determines the amount of checking and complaining if things go wrong.
 */
 config.shell_devel = true;
+config.shell_devel = false;
 
 
 /*
@@ -108,7 +109,7 @@ config.noWrite = false;
 /*
 | If true "uglifies" the javascript pack, minimizing its size.
 */
-config.uglify = false;
+config.uglify = !config.shell_devel;
 
 
 /*

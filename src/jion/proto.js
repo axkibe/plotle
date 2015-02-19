@@ -506,8 +506,6 @@ jion_proto.twigLength =
 | Returns the rank of the key.
 |
 | This means it returns the index of key in the ranks array.
-|
-| TODO make it a lazyStringFunc
 */
 jion_proto.twigRankOf =
 	function(

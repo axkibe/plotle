@@ -14,6 +14,7 @@
 > Portal
 . __have_lazy
 . __lazy
+. _access
 . _action
 . _arrow
 . _base1
@@ -615,7 +616,6 @@
 . rayRemove
 . raySet
 > readyState
-. receiverFunc
 . receiverFuncName
 > rect
 . redo
@@ -624,6 +624,7 @@
 . reflect
 . reflectName
 > register
+. reject
 > relation
 . relationState
 > releaseCapture
@@ -772,6 +773,7 @@
 . twigGetKey
 . twigLength
 . twigRankOf
+. twigSet
 > type
 . uid
 > undefined
