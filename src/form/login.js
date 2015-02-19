@@ -159,7 +159,7 @@ form_login.prototype.pushButton =
 
 		case 'closeButton' :
 
-			root.create( 'mode', 'normal' );
+			root.showHome( );
 
 			break;
 

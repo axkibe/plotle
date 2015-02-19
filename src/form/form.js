@@ -53,8 +53,7 @@ form_form.init =
 		return;
 	}
 
-	this.frame =
-		this.view.baseFrame;
+	this.frame = this.view.baseFrame;
 
 	// all components of the form
 	// FIXME do not copy if this.twig !== inherit.twig
@@ -87,23 +86,17 @@ form_form.init =
 			}
 			else
 			{
-				focusAccent =
-					mark.widgetPath.get( 4 ) === name;
+				focusAccent = mark.widgetPath.get( 4 ) === name;
 			}
 		}
 
 		twig[ name ] =
 			widgetProto.create(
-				'path',
-					path,
-				'superFrame',
-					this.frame,
-				'focusAccent',
-					focusAccent,
-				'hover',
-					this.hover,
-				'mark',
-					this.mark
+				'path', path,
+				'superFrame', this.frame,
+				'focusAccent', focusAccent,
+				'hover', this.hover,
+				'mark', this.mark
 			);
 	}
 

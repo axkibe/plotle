@@ -191,12 +191,7 @@ euclid_display.prototype.clip =
 
 	cx.beginPath( );
 
-	this._sketch(
-		shape,
-		border,
-		0.5,
-		view
-	);
+	this._sketch( shape, border, 0.5, view );
 
 	cx.clip( );
 };
@@ -312,11 +307,7 @@ euclid_display.prototype.drawImage =
 	if( image.reflect === 'euclid_display' )
 	{
 		if(
-			!(
-				image.width > 0
-				&&
-				image.height > 0
-			)
+			!( image.width > 0 && image.height > 0 )
 		)
 		{
 			return;
@@ -352,11 +343,7 @@ euclid_display.prototype.drawImage =
 		this._cx.globalAlpha = alpha;
 	}
 
-	this._cx.drawImage(
-		image,
-		x,
-		y
-	);
+	this._cx.drawImage( image, x, y );
 
 	if( composite !== undefined )
 	{
@@ -443,19 +430,9 @@ euclid_display.prototype.fill =
 
 	cx.beginPath( );
 
-	this._sketch(
-		shape,
-		0,
-		0,
-		view
-	);
+	this._sketch( shape, 0, 0, view );
 
-	cx.fillStyle =
-		this._colorStyle(
-			fill,
-			shape,
-			view
-		);
+	cx.fillStyle = this._colorStyle( fill, shape, view );
 
 	cx.fill( );
 };
@@ -558,12 +535,9 @@ euclid_display.prototype.paintText =
 /**/{
 /**/	if(
 /**/		text === undefined
-/**/		||
-/**/		x === undefined
-/**/		||
-/**/		y === undefined
-/**/		||
-/**/		font === undefined
+/**/		|| x === undefined
+/**/		|| y === undefined
+/**/		|| font === undefined
 /**/	)
 /**/	{
 /**/		throw new Error( );
@@ -576,11 +550,7 @@ euclid_display.prototype.paintText =
 
 	if( rotate === undefined )
 	{
-		cx.fillText(
-			text,
-			x,
-			y
-		);
+		cx.fillText( text, x, y );
 	}
 	else
 	{
@@ -725,6 +695,10 @@ euclid_display.prototype.paint =
 		view
 	)
 {
+	var
+		edgeStyle,
+		fillStyle,
+		cx;
 
 /**/if( CHECK )
 /**/{
@@ -734,28 +708,19 @@ euclid_display.prototype.paint =
 /**/	}
 /**/}
 
-	var fillStyle = style.fill;
+	fillStyle = style.fill;
 
-	var edgeStyle = style.edge;
+	edgeStyle = style.edge;
 
-	var cx = this._cx;
+	cx = this._cx;
 
 	cx.beginPath( );
 
-	this._sketch(
-		shape,
-		0,
-		0,
-		view
-	);
+	this._sketch( shape, 0, 0, view );
 
 	if( fillStyle )
 	{
-		cx.fillStyle = this._colorStyle(
-			fillStyle,
-			shape,
-			view
-		);
+		cx.fillStyle = this._colorStyle( fillStyle, shape, view );
 
 		cx.fill( );
 	}
@@ -870,11 +835,6 @@ euclid_display.prototype._setFont =
 	cx = this._cx;
 
 	// already setted this font
-	if( cx._font === font )
-	{
-		return;
-	}
-
 	fill = font.fill;
 
 	align = font.align;
@@ -906,8 +866,6 @@ euclid_display.prototype._setFont =
 	cx.textAlign = align;
 
 	cx.textBaseline = base;
-
-	cx._font = font;
 };
 
 

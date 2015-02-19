@@ -470,7 +470,19 @@ jion_proto.twigAtRank =
 
 
 /*
-| Returns the length of a ray.
+| Returns the twig by key.
+*/
+jion_proto.twigGet =
+	function(
+		key
+	)
+{
+	return this.twig[ key ];
+};
+
+
+/*
+| Returns the key at a rank.
 */
 jion_proto.twigGetKey =
 	function(

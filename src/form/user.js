@@ -223,7 +223,7 @@ form_user.prototype.pushButton =
 	{
 		case 'closeButton' :
 
-			root.create( 'mode', 'normal' );
+			root.showHome( );
 
 			break;
 

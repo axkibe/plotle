@@ -125,10 +125,7 @@ form_signUp.prototype._init =
 		inherit
 	)
 {
-	form_form.init.call(
-		this,
-		inherit
-	);
+	form_form.init.call( this, inherit );
 };
 
 
@@ -165,7 +162,7 @@ form_signUp.prototype.pushButton =
 
 		case 'closeButton' :
 
-			root.create( 'mode', 'normal' );
+			root.showHome( );
 
 			break;
 

@@ -99,11 +99,7 @@ _onReply =
 		reply,
 		wrap;
 
-	if(
-		this.readyState !== 4
-		||
-		this.aborted
-	)
+	if( this.readyState !== 4 || this.aborted )
 	{
 		return;
 	}
@@ -112,17 +108,15 @@ _onReply =
 
 	this.onreadystatechange = null;
 
-	channel = root.ajax.twig[ wrap.channelName ];
+	channel = root.ajax.get( wrap.channelName );
 
 	if( this.status !== 200 )
 	{
 		channel.onReply(
 			wrap,
 			{
-				ok :
-					false,
-				message :
-					'Lost server connection'
+				ok : false,
+				message : 'Lost server connection'
 			}
 		);
 
@@ -138,10 +132,8 @@ _onReply =
 		channel.onReply(
 			wrap,
 			{
-				ok :
-					false,
-				message :
-					'Server answered no JSON!'
+				ok : false,
+				message : 'Server answered no JSON!'
 			}
 		);
 

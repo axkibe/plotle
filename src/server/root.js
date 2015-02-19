@@ -12,7 +12,7 @@
 
 // FUTURE remove
 var DELAY_ALTER = 5000;
-var DELAY_ACQUIRE = 5000;
+var DELAY_ACQUIRE = 50000;
 DELAY_ALTER = false;
 //DELAY_ACQUIRE = false;
 
@@ -1511,7 +1511,7 @@ prototype.webAjax =
 
 			if( DELAY_ACQUIRE && cmd.type === 'request_acquire' )
 			{
-				console.log( 'DELAYING ACQUITE');
+				console.log( 'DELAYING ACQUIRE');
 
 				yield setTimeout( resume( ), DELAY_ACQUIRE );
 			}

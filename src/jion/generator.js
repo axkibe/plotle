@@ -2816,7 +2816,10 @@ generator.prototype.genJionProto =
 				+ ')'
 			)
 
-			.$comment( 'Gets the rank of a key.' )
+			.$comment( 'Gets a twig by its key.' )
+			.$( 'prototype.get = jion_proto.twigGet' )
+
+			.$comment( 'Gets the key at rank.' )
 			.$( 'prototype.getKey = jion_proto.twigGetKey' )
 
 			.$comment( 'Returns the length of the twig.')

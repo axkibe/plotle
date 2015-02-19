@@ -522,7 +522,13 @@ jools.lazyFunctionString( prototype, 'rankOf', jion_proto.twigRankOf );
 
 
 /*
-| Gets the rank of a key.
+| Gets a twig by its key.
+*/
+prototype.get = jion_proto.twigGet;
+
+
+/*
+| Gets the key at rank.
 */
 prototype.getKey = jion_proto.twigGetKey;
 

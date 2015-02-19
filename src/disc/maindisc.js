@@ -122,9 +122,7 @@ if( JION )
 		subclass :
 			'disc_disc',
 		init :
-			[
-				'inherit'
-			],
+			[ 'inherit', 'twigDup' ],
 		twig :
 			[
 				'widget_button',
@@ -141,7 +139,8 @@ if( JION )
 */
 disc_mainDisc.prototype._init =
 	function(
-		inherit
+		inherit,
+		twigDup
 	)
 {
 	var
@@ -160,7 +159,10 @@ disc_mainDisc.prototype._init =
 
 	disc_disc._init.call( this, inherit );
 
-	twig = jools.copy( this.twig ); // FIXME only if needed
+	if( !twigDup )
+	{
+		twig = jools.copy( this.twig );
+	}
 
 	for(
 		r = 0, rZ = this.length;

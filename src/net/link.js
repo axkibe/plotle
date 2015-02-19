@@ -87,6 +87,65 @@ if( JION )
 
 
 /*
+| Aquires a space from the server
+| and starts receiving updates for it.
+*/
+net_link.prototype.acquireSpace =
+	function(
+		spaceRef,
+		createMissing
+	)
+{
+	// aborts the current running update.
+	root.ajax.twig.update.abortAll( );
+
+	root.ajax.twig.command.request(
+		request_acquire.create(
+			'createMissing', createMissing,
+			'user', this.user,
+			'spaceRef', spaceRef
+		),
+		'_onAcquireSpace'
+	);
+};
+
+
+/*
+| Alters the tree.
+*/
+net_link.prototype.alter =
+	function(
+		changeWrap // the changeWrap to apply to tree
+	)
+{
+	var
+		space;
+
+/**/if( CHECK )
+/**/{
+/**/	if( root.link !== this )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	space = changeWrap.changeTree( root.space );
+
+	root.create(
+		'link',
+			root.link.create(
+				'_outbox', root.link._outbox.append( changeWrap )
+			),
+		'space', space
+	);
+
+	root.link._sendChanges( );
+
+	root.update( changeWrap );
+};
+
+
+/*
 | Checks with server if user creds are valid.
 */
 net_link.prototype.auth =
@@ -98,28 +157,6 @@ net_link.prototype.auth =
 		request_auth.create( 'user', user ),
 		'_onAuth'
 	);
-};
-
-
-/*
-| Received an auth reply.
-*/
-net_link.prototype._onAuth =
-	function(
-		request,
-		reply
-	)
-{
-	if( reply.type === 'reply_error' )
-	{
-		root.onAuth( request, reply );
-
-		return;
-	}
-
-	reply = reply_auth.createFromJSON( reply );
-
-	root.onAuth( request, reply );
 };
 
 
@@ -140,53 +177,6 @@ net_link.prototype.register =
 			'news', news
 		),
 		'_onRegister'
-	);
-};
-
-
-/*
-| Received a register reply.
-*/
-net_link.prototype._onRegister =
-	function(
-		request,
-		reply
-	)
-{
-	var
-		ok;
-
-	ok = reply.type === 'reply_register';
-
-	// FUTURE pass request / reply
-	root.onRegister(
-		ok,
-		ok ? request.user : null,
-		ok ? null : reply.message
-	);
-};
-
-
-/*
-| Aquires a space from the server
-| and starts receiving updates for it.
-*/
-net_link.prototype.acquireSpace =
-	function(
-		spaceRef,
-		createMissing
-	)
-{
-	// aborts the current running update.
-	root.ajax.twig.update.abortAll( );
-
-	root.ajax.twig.command.request(
-		request_acquire.create(
-			'createMissing', createMissing,
-			'user', this.user,
-			'spaceRef', spaceRef
-		),
-		'_onAcquireSpace'
 	);
 };
 
@@ -260,24 +250,115 @@ net_link.prototype._onAcquireSpace =
 };
 
 
+/*
+| Received an auth reply.
+*/
+net_link.prototype._onAuth =
+	function(
+		request,
+		reply
+	)
+{
+	if( reply.type === 'reply_error' )
+	{
+		root.onAuth( request, reply );
+
+		return;
+	}
+
+	reply = reply_auth.createFromJSON( reply );
+
+	root.onAuth( request, reply );
+};
+
 
 /*
-| Sends an update request to the server and computes its answer.
+| Received a register reply.
 */
-net_link.prototype._update =
+net_link.prototype._onRegister =
+	function(
+		request,
+		reply
+	)
+{
+	var
+		ok;
+
+	ok = reply.type === 'reply_register';
+
+	// FUTURE pass request / reply
+	root.onRegister(
+		ok,
+		ok ? request.user : null,
+		ok ? null : reply.message
+	);
+};
+
+
+/*
+| Sends the stored changes to server.
+*/
+net_link.prototype._sendChanges =
 	function( )
 {
-	root.ajax.twig.update.request(
-		request_update.create(
-			'spaceRef', this.spaceRef,
-			'seq',
-				this._rSeq !== null
-				? this._rSeq
-				: -1,
-			'user', this.user
-		),
-		'_onUpdate'
+	var
+		outbox;
+
+/**/if( CHECK )
+/**/{
+/**/	if( root.link !== this )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	// already sending?
+	if( root.link._postbox.length > 0 )
+	{
+		return;
+	}
+
+	// nothing to send?
+	if( root.link._outbox.length === 0 )
+	{
+		return;
+	}
+
+	outbox = root.link._outbox;
+
+	root.create(
+		'link',
+			root.link.create(
+				'_outbox', change_wrapRay.create( ),
+				'_postbox', outbox
+			)
 	);
+
+	root.ajax.twig.command.request(
+		request_alter.create(
+			'changeWrapRay', outbox,
+			'seq', root.link._rSeq,
+			'spaceRef', root.link.spaceRef,
+			'user', root.link.user
+		),
+		'_onSendChanges'
+	);
+};
+
+
+/*
+| Received a reply of a sendChanges request.
+*/
+net_link.prototype._onSendChanges =
+	function(
+		request,
+		reply
+	)
+{
+	if( reply.type !== 'reply_alter' )
+	{
+		system.failScreen( 'Server not OK: ' + reply.message );
+	}
 };
 
 
@@ -419,106 +500,26 @@ net_link.prototype._onUpdate =
 };
 
 
-/*
-| Alters the tree.
-*/
-net_link.prototype.alter =
-	function(
-		changeWrap // the changeWrap to apply to tree
-	)
-{
-	var
-		space;
-
-/**/if( CHECK )
-/**/{
-/**/	if( root.link !== this )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	space = changeWrap.changeTree( root.space );
-
-	root.create(
-		'link',
-			root.link.create(
-				'_outbox', root.link._outbox.append( changeWrap )
-			),
-		'space', space
-	);
-
-	root.link._sendChanges( );
-
-	root.update( changeWrap );
-};
-
 
 /*
-| Sends the stored changes to server.
+| Sends an update request to the server and computes its answer.
 */
-net_link.prototype._sendChanges =
+net_link.prototype._update =
 	function( )
 {
-	var
-		outbox;
-
-/**/if( CHECK )
-/**/{
-/**/	if( root.link !== this )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	// already sending?
-	if( root.link._postbox.length > 0 )
-	{
-		return;
-	}
-
-	// nothing to send?
-	if( root.link._outbox.length === 0 )
-	{
-		return;
-	}
-
-	outbox = root.link._outbox;
-
-	root.create(
-		'link',
-			root.link.create(
-				'_outbox', change_wrapRay.create( ),
-				'_postbox', outbox
-			)
-	);
-
-	root.ajax.twig.command.request(
-		request_alter.create(
-			'changeWrapRay', outbox,
-			'seq', root.link._rSeq,
-			'spaceRef', root.link.spaceRef,
-			'user', root.link.user
+	root.ajax.twig.update.request(
+		request_update.create(
+			'spaceRef', this.spaceRef,
+			'seq',
+				this._rSeq !== null
+				? this._rSeq
+				: -1,
+			'user', this.user
 		),
-		'_onSendChanges'
+		'_onUpdate'
 	);
 };
 
-
-/*
-| Received a reply of a sendChanges request.
-*/
-net_link.prototype._onSendChanges =
-	function(
-		request,
-		reply
-	)
-{
-	if( reply.type !== 'reply_alter' )
-	{
-		system.failScreen( 'Server not OK: ' + reply.message );
-	}
-};
 
 
 } )( );

@@ -163,7 +163,7 @@ form_welcome.prototype.pushButton =
 	{
 		case 'closeButton' :
 
-			root.create( 'mode', 'normal' );
+			root.showHome( );
 
 			break;
 

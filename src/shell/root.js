@@ -628,35 +628,6 @@ shell_root.prototype.click =
 
 
 /*
-| The shell got or lost the systems focus.
-|
-| FIXME rename setSystemFocus
-|
-| FIXME move into _init
-*/
-shell_root.prototype.setFocus =
-	function(
-		focus
-	)
-{
-	if( root._mark )
-	{
-		switch( root._mark.reflect )
-		{
-			case 'mark_caret' :
-
-				root.create(
-					'mark',
-					root._mark.create( 'focus', focus )
-				);
-
-			break;
-		}
-	}
-};
-
-
-/*
 | Cycles focus in a form.
 */
 shell_root.prototype.cycleFormFocus =
@@ -669,6 +640,190 @@ shell_root.prototype.cycleFormFocus =
 };
 
 
+/*
+| Moving during an operation with the mouse button held down.
+*/
+shell_root.prototype.dragMove =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		action,
+		cursor,
+		screen;
+
+	action = root.action;
+
+	cursor = null;
+
+	screen = root._currentScreen( );
+
+	if( screen )
+	{
+		cursor = screen.dragMove( p, shift, ctrl );
+	}
+
+	return cursor;
+};
+
+
+
+
+/*
+| Starts an operation with the pointing device active.
+|
+| Mouse down or finger on screen.
+*/
+shell_root.prototype.dragStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		bubble,
+		screen;
+
+	bubble = null;
+
+	screen = root._currentScreen( );
+
+	if( screen && screen.showDisc )
+	{
+		bubble = root._discJockey.dragStart( p, shift, ctrl );
+	}
+
+	if( bubble === null )
+	{
+		if( screen )
+		{
+			bubble = screen.dragStart( p, shift, ctrl );
+		}
+	}
+};
+
+
+/*
+| Stops an operation with the mouse button held down.
+*/
+shell_root.prototype.dragStop =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		action,
+		screen;
+
+	action = root.action;
+
+	screen = root._currentScreen( );
+
+	if( screen )
+	{
+		screen.dragStop( p, shift, ctrl );
+	}
+};
+
+
+/*
+| User entered normal text (one character or more).
+*/
+shell_root.prototype.input =
+	function(
+		text
+	)
+{
+	var
+		focusItem,
+		screen;
+
+	screen = root._currentScreen( );
+
+	if( screen )
+	{
+		screen.input( text );
+
+		focusItem = root.space.focusedItem( );
+
+		if( focusItem && focusItem.scrollMarkIntoView )
+		{
+			focusItem.scrollMarkIntoView( );
+		}
+	}
+};
+
+
+/*
+| Logs out the current user
+*/
+shell_root.prototype.logout =
+	function( )
+{
+	if( root._visitor )
+	{
+		root.create( 'user', root._visitor );
+
+		root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+
+		return;
+	}
+
+	root.link.auth( user_creds.createVisitor( ) );
+};
+
+
+/*
+| Mouse wheel is being turned.
+*/
+shell_root.prototype.mousewheel =
+	function(
+		p,
+		dir,
+		shift,
+		ctrl
+	)
+{
+	// FUTURE disc
+
+	var
+		screen;
+
+	screen = root._currentScreen( );
+
+	if( screen )
+	{
+		screen.mousewheel( p, dir, shift, ctrl );
+	}
+};
+
+
+/*
+| Moves to space with the name name.
+|
+| if spaceRef is null reloads current space
+*/
+shell_root.prototype.moveToSpace =
+	function(
+		spaceRef,     // reference of type fabric_spaceRef
+		createMissing // if true, non-existing spaces are to be
+		//            // created
+	)
+{
+	// TODO show loading what
+	root.create(
+		'mode', 'loading',
+		'space', null
+	);
+
+	root.link.acquireSpace( spaceRef, createMissing );
+};
 
 
 /*
@@ -734,136 +889,40 @@ shell_root.prototype.pointingHover =
 
 
 /*
-| Starts an operation with the pointing device active.
+| A button has been pushed.
+*/
+shell_root.prototype.pushButton =
+	function( path )
+{
+	switch( path.get( 0 ) )
+	{
+		case 'disc' :
+
+			return root._discJockey.pushButton( path, false, false );
+
+		case 'form' :
+
+			return root._formJockey.pushButton( path, false, false );
+
+		default :
+
+			throw new Error( 'invalid path' );
+	}
+};
+
+
+/*
+| Shows the "home" screen.
 |
-| Mouse down or finger on screen.
+| When a space is loaded, this is space/normal
+| otherwise it is the loading screen.
 */
-shell_root.prototype.dragStart =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	var
-		bubble,
-		screen;
-
-	bubble = null;
-
-	screen = root._currentScreen( );
-
-	if( screen && screen.showDisc )
-	{
-		bubble = root._discJockey.dragStart( p, shift, ctrl );
-	}
-
-	if( bubble === null )
-	{
-		if( screen )
-		{
-			bubble = screen.dragStart( p, shift, ctrl );
-		}
-	}
-};
-
-
-/*
-| Moving during an operation with the mouse button held down.
-*/
-shell_root.prototype.dragMove =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	var
-		action,
-		cursor,
-		screen;
-
-	action = root.action;
-
-	cursor = null;
-
-	screen = root._currentScreen( );
-
-	if( screen )
-	{
-		cursor = screen.dragMove( p, shift, ctrl );
-	}
-
-	return cursor;
-};
-
-
-/*
-| Stops an operation with the mouse button held down.
-*/
-shell_root.prototype.dragStop =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	var
-		action,
-		screen;
-
-	action = root.action;
-
-	screen = root._currentScreen( );
-
-	if( screen )
-	{
-		screen.dragStop( p, shift, ctrl );
-	}
-};
-
-
-/*
-| Logs out the current user
-*/
-shell_root.prototype.logout =
+shell_root.prototype.showHome =
 	function( )
 {
-	if( root._visitor )
-	{
-		root.create( 'user', root._visitor );
-
-		root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
-
-		return;
-	}
-
-	root.link.auth( user_creds.createVisitor( ) );
-};
-
-
-/*
-| Mouse wheel is being turned.
-*/
-shell_root.prototype.mousewheel =
-	function(
-		p,
-		dir,
-		shift,
-		ctrl
-	)
-{
-	// FUTURE disc
-
-	var
-		screen;
-
-	screen = root._currentScreen( );
-
-	if( screen )
-	{
-		screen.mousewheel( p, dir, shift, ctrl );
-	}
+	root.create(
+		'mode', root.space ? 'normal' : 'loading'
+	);
 };
 
 
@@ -899,6 +958,35 @@ shell_root.prototype.setPath =
 		default :
 
 			throw new Error( );
+	}
+};
+
+
+/*
+| The shell got or lost the systems focus.
+|
+| FIXME rename setSystemFocus
+|
+| FIXME move into _init
+*/
+shell_root.prototype.setFocus =
+	function(
+		focus
+	)
+{
+	if( root._mark )
+	{
+		switch( root._mark.reflect )
+		{
+			case 'mark_caret' :
+
+				root.create(
+					'mark',
+					root._mark.create( 'focus', focus )
+				);
+
+			break;
+		}
 	}
 };
 
@@ -942,30 +1030,6 @@ shell_root.prototype.suggestingKeyboard =
 	function( )
 {
 	return( root._mark !== null && root._mark.hasCaret );
-};
-
-
-
-/*
-| A button has been pushed.
-*/
-shell_root.prototype.pushButton =
-	function( path )
-{
-	switch( path.get( 0 ) )
-	{
-		case 'disc' :
-
-			return root._discJockey.pushButton( path, false, false );
-
-		case 'form' :
-
-			return root._formJockey.pushButton( path, false, false );
-
-		default :
-
-			throw new Error( 'invalid path' );
-	}
 };
 
 
@@ -1021,34 +1085,6 @@ shell_root.prototype.update =
 
 
 /*
-| User entered normal text (one character or more).
-*/
-shell_root.prototype.input =
-	function(
-		text
-	)
-{
-	var
-		focusItem,
-		screen;
-
-	screen = root._currentScreen( );
-
-	if( screen )
-	{
-		screen.input( text );
-
-		focusItem = root.space.focusedItem( );
-
-		if( focusItem && focusItem.scrollMarkIntoView )
-		{
-			focusItem.scrollMarkIntoView( );
-		}
-	}
-};
-
-
-/*
 | The window has been resized.
 */
 shell_root.prototype.resize =
@@ -1064,28 +1100,6 @@ shell_root.prototype.resize =
 				'width', display.width
 			)
 	);
-};
-
-
-/*
-| Moves to space with the name name.
-|
-| if spaceRef is null reloads current space
-*/
-shell_root.prototype.moveToSpace =
-	function(
-		spaceRef,     // reference of type fabric_spaceRef
-		createMissing // if true, non-existing spaces are to be
-		//            // created
-	)
-{
-	// TODO show loading what
-	root.create(
-		'mode', 'loading',
-		'space', null
-	);
-
-	root.link.acquireSpace( spaceRef, createMissing );
 };
 
 
