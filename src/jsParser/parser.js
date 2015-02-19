@@ -48,6 +48,7 @@ var
 	ast_plusAssign,
 	ast_preIncrement,
 	ast_string,
+	ast_typeof,
 	ast_var,
 	getSpec,
 	jools,
@@ -125,7 +126,7 @@ ast_preIncrement = require( '../ast/preIncrement' );
 
 ast_string = require( '../ast/string' );
 
-//ast_typeof = require( '../ast/typeof' );
+ast_typeof = require( '../ast/typeof' );
 
 ast_var = require( '../ast/var' );
 
@@ -823,6 +824,14 @@ leftSpecs[ 'delete' ] =
 		'associativity', 'r2l'
 	);
 
+leftSpecs[ 'typeof' ] =
+	jsParser_spec.create(
+		'prec', 4,
+		'handler', handleMonoOps,
+		'astCreator', ast_typeof,
+		'associativity', 'r2l'
+	);
+
 leftSpecs[ ',' ] =
 	jsParser_spec.create(
 		'prec', 19,
@@ -985,11 +994,14 @@ rightSpecs[ ',' ] =
 
 // phony spec that cannot be created
 // by lexer denoting start of parsing
+/*
+FIXME remove
 rightSpecs.start =
 	jsParser_spec.create(
 		'prec', 98,
 		'handler', handleParserError
 	);
+*/
 
 
 /*
