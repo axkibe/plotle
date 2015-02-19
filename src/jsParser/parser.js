@@ -125,6 +125,8 @@ ast_preIncrement = require( '../ast/preIncrement' );
 
 ast_string = require( '../ast/string' );
 
+//ast_typeof = require( '../ast/typeof' );
+
 ast_var = require( '../ast/var' );
 
 jools = require( '../jools/jools' );
@@ -821,18 +823,6 @@ leftSpecs[ 'delete' ] =
 		'associativity', 'r2l'
 	);
 
-/*
-| This is a phony token that ought to never come from lexer
-| used to differencate ',' operator from ',' sequences
-| FIXME check if needed
-*/
-leftSpecs.sequence =
-	jsParser_spec.create(
-		'prec', 18,
-		'handler', handleParserError,
-		'associativity', 'l2r'
-	);
-
 leftSpecs[ ',' ] =
 	jsParser_spec.create(
 		'prec', 19,
@@ -983,19 +973,6 @@ rightSpecs[ '*=' ] =
 		'handler', handleDualisticOps,
 		'astCreator', ast_multiplyAssign,
 		'associativity', 'r2l'
-	);
-
-/*
-| This is a phony token that ought to never come from lexer
-| used to differencate ',' operator from ',' sequences
-|
-| FIXME check if needed
-*/
-rightSpecs.sequence =
-	jsParser_spec.create(
-		'prec', 18,
-		'handler', handleParserError,
-		'associativity', 'l2r'
 	);
 
 rightSpecs[ ',' ] =

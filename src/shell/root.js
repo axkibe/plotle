@@ -1173,9 +1173,8 @@ shell_root.prototype.onAcquireSpace =
 		'mode', 'normal',
 		'space',
 			reply.space.create(
-				// FUTURE have the server already set this at JSON level
 				'access', access,
-				'hover', jion_path.empty, // XXX
+				'hover', jion_path.empty,
 				'path', jion_path.empty.append( 'space' ),
 				'ref', spaceRef
 			),

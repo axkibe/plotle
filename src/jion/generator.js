@@ -1113,7 +1113,6 @@ generator.prototype.genCreatorFreeStringsParser =
 				.$( 'groupDup = true' )
 			);
 
-		// FIXME make a sub-function to add the twigDup stuff
 		switchExpr =
 			switchExpr
 			.$case(
