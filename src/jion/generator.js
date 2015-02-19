@@ -2119,8 +2119,7 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 								$if(
 									$or(
 										'typeof( arg ) === "string"',
-										// FIXME instanceof parseable
-										$instanceof( 'arg', 'String' )
+										'arg instanceof String'
 									),
 									$assign( attr.v, 'arg' )
 								);
