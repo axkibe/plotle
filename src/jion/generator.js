@@ -202,7 +202,7 @@ generator.prototype._init =
 
 	units = units.add( jion_id.createFromString( 'jion_proto' ) );
 
-	this.hasJSON = !!jion.json;
+	this.hasJson = !!jion.json;
 
 	this.init = jion.init;
 
@@ -245,7 +245,7 @@ generator.prototype._init =
 
 		if( jAttr.json )
 		{
-			this.hasJSON = true;
+			this.hasJson = true;
 		}
 
 		assign =
@@ -1448,7 +1448,7 @@ generator.prototype.genTypeCheckFailCondition =
 generator.prototype.genCreatorChecks =
 	function(
 		block,  // block to append to
-		json    // do checks for fromJSONCreator
+		json    // do checks for fromJsonCreator
 	)
 {
 	var
@@ -1963,9 +1963,9 @@ generator.prototype.genCreator =
 
 
 /*
-| Generates the fromJSONCreator's variable list.
+| Generates the fromJsonCreator's variable list.
 */
-generator.prototype.genFromJSONCreatorVariables =
+generator.prototype.genFromJsonCreatorVariables =
 	function(
 		block // block to append to
 	)
@@ -1993,7 +1993,7 @@ generator.prototype.genFromJSONCreatorVariables =
 
 	varList.push( 'arg' );
 
-	if( this.hasJSON )
+	if( this.hasJson )
 	{
 		if( this.group )
 		{
@@ -2035,9 +2035,9 @@ generator.prototype.genFromJSONCreatorVariables =
 };
 
 /*
-| Generates a fromJSONCreator's JSON parser for one attribute
+| Generates a fromJsonCreator's json parser for one attribute
 */
-generator.prototype.genFromJSONCreatorAttributeParser =
+generator.prototype.genFromJsonCreatorAttributeParser =
 	function(
 		attr
 	)
@@ -2207,9 +2207,9 @@ generator.prototype.genFromJSONCreatorAttributeParser =
 
 
 /*
-| Generates the fromJSONCreator's JSON parser.
+| Generates the fromJsonCreator's json parser.
 */
-generator.prototype.genFromJSONCreatorParser =
+generator.prototype.genFromJsonCreatorParser =
 	function(
 		block,   // block to append
 		jsonList
@@ -2279,7 +2279,7 @@ generator.prototype.genFromJSONCreatorParser =
 			nameSwitch
 			.$case(
 				$string( attr.name ),
-				this.genFromJSONCreatorAttributeParser( attr )
+				this.genFromJsonCreatorAttributeParser( attr )
 			);
 	}
 
@@ -2297,9 +2297,9 @@ generator.prototype.genFromJSONCreatorParser =
 };
 
 /*
-| Generates the fromJSONCreator's group processing.
+| Generates the fromJsonCreator's group processing.
 */
-generator.prototype.genFromJSONCreatorGroupProcessing =
+generator.prototype.genFromJsonCreatorGroupProcessing =
 	function(
 		block // block to append to
 	)
@@ -2384,9 +2384,9 @@ generator.prototype.genFromJSONCreatorGroupProcessing =
 };
 
 /*
-| Generates the fromJSONCreator's twig processing.
+| Generates the fromJsonCreator's twig processing.
 */
-generator.prototype.genFromJSONCreatorRayProcessing =
+generator.prototype.genFromJsonCreatorRayProcessing =
 	function(
 		block // block to append to
 	)
@@ -2473,9 +2473,9 @@ generator.prototype.genFromJSONCreatorRayProcessing =
 
 
 /*
-| Generates the fromJSONCreator's twig processing.
+| Generates the fromJsonCreator's twig processing.
 */
-generator.prototype.genFromJSONCreatorTwigProcessing =
+generator.prototype.genFromJsonCreatorTwigProcessing =
 	function(
 		block // block to append to
 	)
@@ -2526,7 +2526,7 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 		.$( 'key = ranks[ a ]' )
 		.$if(
 			'!jwig[ key ]',
-			// JSON ranks/twig mismatch
+			// json ranks/twig mismatch
 			$fail( )
 		)
 		.$( 'jval = jwig[ key ]' )
@@ -2551,9 +2551,9 @@ generator.prototype.genFromJSONCreatorTwigProcessing =
 };
 
 /*
-| Generates the fromJSONCreator's return statement
+| Generates the fromJsonCreator's return statement
 */
-generator.prototype.genFromJSONCreatorReturn =
+generator.prototype.genFromJsonCreatorReturn =
 	function(
 		block // block to append to
 	)
@@ -2620,9 +2620,9 @@ generator.prototype.genFromJSONCreatorReturn =
 
 
 /*
-| Generates the fromJSONCreator.
+| Generates the fromJsonCreator.
 */
-generator.prototype.genFromJSONCreator =
+generator.prototype.genFromJsonCreator =
 	function(
 		capsule // block to append to
 	)
@@ -2633,7 +2633,7 @@ generator.prototype.genFromJSONCreator =
 		attr,
 		// function contents
 		funcBlock,
-		// all attributes expected from JSON
+		// all attributes expected from json
 		name,
 		jsonList;
 
@@ -2664,40 +2664,40 @@ generator.prototype.genFromJSONCreator =
 
 	capsule =
 		capsule.$comment(
-			'Creates a new ' + this.id.name + ' object from JSON.'
+			'Creates a new ' + this.id.name + ' object from json.'
 		);
 
-	funcBlock = this.genFromJSONCreatorVariables( $block( ) );
+	funcBlock = this.genFromJsonCreatorVariables( $block( ) );
 
-	funcBlock = this.genFromJSONCreatorParser( funcBlock, jsonList );
+	funcBlock = this.genFromJsonCreatorParser( funcBlock, jsonList );
 
 	funcBlock = this.genCreatorDefaults( funcBlock, true );
 
 	if( this.group )
 	{
-		funcBlock = this.genFromJSONCreatorGroupProcessing( funcBlock );
+		funcBlock = this.genFromJsonCreatorGroupProcessing( funcBlock );
 	}
 
 	if( this.ray )
 	{
-		funcBlock = this.genFromJSONCreatorRayProcessing( funcBlock );
+		funcBlock = this.genFromJsonCreatorRayProcessing( funcBlock );
 	}
 
 	if( this.twig )
 	{
-		funcBlock = this.genFromJSONCreatorTwigProcessing( funcBlock );
+		funcBlock = this.genFromJsonCreatorTwigProcessing( funcBlock );
 	}
 
 	funcBlock = this.genCreatorChecks( funcBlock, true );
 
-	funcBlock = this.genFromJSONCreatorReturn( funcBlock );
+	funcBlock = this.genFromJsonCreatorReturn( funcBlock );
 
 	capsule =
 		capsule
 		.$assign(
 			$var( this.id.global ).$dot( 'createFromJSON' ),
 			$func( funcBlock )
-			.$arg( 'json', 'the JSON object' )
+			.$arg( 'json', 'the json object' )
 		);
 
 	return capsule;
@@ -2840,9 +2840,9 @@ generator.prototype.genJionProto =
 
 
 /*
-| Generates the toJSON converter.
+| Generates the toJson converter.
 */
-generator.prototype.genToJSON =
+generator.prototype.genToJson =
 	function(
 		capsule // block to append to
 	)
@@ -2915,7 +2915,7 @@ generator.prototype.genToJSON =
 
 	capsule =
 		capsule
-		.$comment( 'Converts a ' + this.id.name + ' into JSON.' )
+		.$comment( 'Converts a ' + this.id.name + ' into json.' )
 		.$call(
 			'jools.lazyValue',
 			'prototype',
@@ -3018,13 +3018,13 @@ generator.prototype.genAttributeEquals =
 */
 generator.prototype.genEquals =
 	function(
-		capsule, // block to append to
 		mode     // 'normal' or 'json'
 	)
 {
 	var
 		attr,
 		block,
+		capsule, // FIXME rename
 		cond,
 		ceq,
 		eqFuncName,
@@ -3035,6 +3035,8 @@ generator.prototype.genEquals =
 		rayTestLoopBody,
 		twigTest,
 		twigTestLoopBody;
+
+	capsule = $block( );
 
 	cond = null;
 
@@ -3403,27 +3405,27 @@ generator.prototype.genCapsule =
 
 	capsule = this.genCreator( capsule );
 
-	if( this.hasJSON )
+	if( this.hasJson )
 	{
-		capsule = this.genFromJSONCreator( capsule );
+		capsule = this.genFromJsonCreator( capsule );
 	}
 
 	capsule = this.genReflection( capsule );
 
 	capsule = this.genJionProto( capsule );
 
-	if( this.hasJSON )
+	if( this.hasJson )
 	{
-		capsule = this.genToJSON( capsule );
+		capsule = this.genToJson( capsule );
 	}
 
-	capsule = this.genEquals( capsule, 'normal' );
+	capsule = capsule.$( this.genEquals( 'normal' ) );
 
-	if( this.hasJSON )
+	if( this.hasJson )
 	{
 		// FUTURE in case both genEquals are the same
 		// combine them
-		capsule = this.genEquals( capsule, 'json' );
+		capsule = capsule.$( this.genEquals( 'json' ) );
 	}
 
 	if( this.alike )

@@ -54,6 +54,11 @@ ast_block.prototype.$ =
 		statement
 	)
 {
+	if( statement.reflect === 'ast_block' )
+	{
+		return this.appendRay( statement );
+	}
+
 	return this.append( tools.convert( statement ) );
 };
 
