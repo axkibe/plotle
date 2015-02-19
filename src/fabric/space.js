@@ -988,7 +988,7 @@ fabric_space.prototype.dragStop =
 						'mark',
 							mark_caret.create(
 								'path',
-									root.space.twig[ key ].path
+									root.space.get( key ).path
 									.append( 'spaceUser' ),
 								'at', 0
 							)
@@ -1070,10 +1070,8 @@ fabric_space.prototype.dragStop =
 								'path',
 									action.transItem.path
 									.chop.append( 'zone' ),
-								'val',
-									action.transItem.zone,
-								'prev',
-									action.origin.zone
+								'val', action.transItem.zone,
+								'prev', action.origin.zone
 							)
 						);
 
@@ -1086,10 +1084,8 @@ fabric_space.prototype.dragStop =
 								'path',
 									action.transItem.path
 									.chop.append( 'pnw' ),
-								'val',
-									action.transItem.zone.pnw,
-								'prev',
-									action.origin.zone.pnw
+								'val', action.transItem.zone.pnw,
+								'prev', action.origin.zone.pnw
 							)
 						);
 
@@ -1119,10 +1115,8 @@ fabric_space.prototype.dragStop =
 								'path',
 									action.transItem.path
 									.chop.append( 'zone' ),
-								'val',
-									action.transItem.zone,
-								'prev',
-									action.origin.zone
+								'val', action.transItem.zone,
+								'prev', action.origin.zone
 							)
 						);
 
@@ -1135,10 +1129,8 @@ fabric_space.prototype.dragStop =
 								'path',
 									action.transItem.path
 									.chop.append( 'pnw' ),
-								'val',
-									action.transItem.zone.pnw,
-								'prev',
-									action.origin.zone.pnw
+								'val', action.transItem.zone.pnw,
+								'prev', action.origin.zone.pnw
 							),
 							change_set.create(
 								'path',
@@ -1147,8 +1139,7 @@ fabric_space.prototype.dragStop =
 								'val',
 									// FUTURE why doc?
 									action.transItem.doc.fontsize,
-								'prev',
-									action.origin.fontsize
+								'prev', action.origin.fontsize
 							)
 						);
 

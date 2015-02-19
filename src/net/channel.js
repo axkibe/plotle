@@ -43,7 +43,7 @@ if( JION )
 						type :
 							'net_requestWrapRay',
 						defaultValue :
-							'null'
+							'net_requestWrapRay.create( )'
 					}
 			},
 		init :
@@ -65,21 +65,14 @@ net_channel.prototype._init =
 	this.channelName =
 		this.path.get( -1 );
 
-/**/	// FUTURE allow arbitrary paths.
-/**/	if( CHECK )
+/**/if( CHECK )
+/**/{
+/**/	if(	this.path.get( 0 ) !== 'ajax' )
 /**/	{
-/**/		if(
-/**/			this.path.get( 0 ) !== 'ajax'
-/**/		)
-/**/		{
-/**/			throw new Error( );
-/**/		}
+/**/		throw new Error( );
 /**/	}
+/**/}
 
-	if( !this._fifo )
-	{
-		this._fifo = net_requestWrapRay.create( );
-	}
 };
 
 
@@ -118,6 +111,8 @@ net_channel.prototype.abortAll =
 		{
 			fifo.get( f ).abort( );
 		}
+
+		fifo = net_requestWrapRay.create( );
 	}
 	else
 	{

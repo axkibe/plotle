@@ -1,13 +1,10 @@
 > 1
-. Create
 . FOCUS
 . HOFOC
 . HOVER
-. Help
 > Label
 . MAX_INTEGER
 . NORMA
-. Normal
 > Note
 . PC
 > PI
@@ -15,9 +12,9 @@
 . PSE
 . PSE_M1
 > Portal
-. Remove
 . __have_lazy
 . __lazy
+. _action
 . _arrow
 . _base1
 . _base2
@@ -41,7 +38,6 @@
 . _fieldSpaceUser
 . _fifo
 . _focusedWidget
-. _font
 . _fonts
 . _formJockey
 . _getOffsetAt
@@ -172,7 +168,6 @@
 > apply
 . args
 . array
-. arrivedAtSpace
 . arrow
 . askew
 . assign
@@ -461,6 +456,7 @@
 . link
 > lm
 > load
+> loading
 > localStorage
 . locateOffset
 > log
@@ -620,6 +616,7 @@
 . raySet
 > readyState
 . receiverFunc
+. receiverFuncName
 > rect
 . redo
 . reduce
@@ -627,7 +624,6 @@
 . reflect
 . reflectName
 > register
-. reject
 > relation
 . relationState
 > releaseCapture
@@ -660,6 +656,7 @@
 > save
 . saveToLocalStorage
 > scale
+. screen
 > scrollIntoViewIfNeeded
 . scrollMarkIntoView
 . scrollPage
@@ -694,6 +691,7 @@
 > shiftKey
 . shorten
 . showDisc
+. showHome
 . signUp
 . signup
 . signupButton
@@ -770,6 +768,7 @@
 . twig:remove
 . twig:set
 . twigAtRank
+. twigGet
 . twigGetKey
 . twigLength
 . twigRankOf

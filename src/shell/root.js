@@ -833,10 +833,7 @@ shell_root.prototype.moveToSpace =
 	);
 
 	// FUTURE move setPath into creator
-	root.setPath(
-		loadingSpaceTextPath,
-		spaceRef.fullname
-	);
+	root.setPath( loadingSpaceTextPath, spaceRef.fullname );
 
 	root.link.acquireSpace( spaceRef, createMissing );
 };
