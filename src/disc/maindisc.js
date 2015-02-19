@@ -189,8 +189,7 @@ disc_mainDisc.prototype._init =
 
 				break;
 
-			// FIXME lowercase
-			case 'Remove' :
+			case 'remove' :
 
 				visible =
 					this.access === 'rw'
@@ -216,9 +215,13 @@ disc_mainDisc.prototype._init =
 				if( this.spaceRef )
 				{
 					text = this.spaceRef.fullname;
-				}
 
-				visible = true;
+					visible = true;
+				}
+				else
+				{
+					visible = false;
+				}
 
 				break;
 
@@ -260,12 +263,12 @@ disc_mainDisc.prototype._init =
 			);
 	}
 
-	this.twig = twig;
-
 /**/if( FREEZE )
 /**/{
 /**/	Object.freeze( twig );
 /**/}
+
+	this.twig = twig;
 };
 
 
@@ -367,7 +370,7 @@ disc_mainDisc.prototype.pushButton =
 		return;
 	}
 
-	if( buttonName === 'Remove' )
+	if( buttonName === 'remove' )
 	{
 		root.alter(
 			change_shrink.create(

@@ -447,10 +447,8 @@ fabric_doc.prototype._getRangeShape =
 			f2y =
 				Math.round(
 					frontFlow[ fo.line + 1 ].y
-					+
-					frontPnw.y
-					-
-					scrollp.y
+					+ frontPnw.y
+					- scrollp.y
 				);
 		}
 		else
@@ -458,10 +456,8 @@ fabric_doc.prototype._getRangeShape =
 			f2y =
 				Math.round(
 					f2Para.flow[ 0 ].y
-					+
-					this.getPNW( f2Key ).y
-					-
-					scrollp.y
+					+ this.getPNW( f2Key ).y
+					- scrollp.y
 				);
 		}
 
@@ -470,10 +466,8 @@ fabric_doc.prototype._getRangeShape =
 			b2y =
 				Math.round(
 					backFlow[ bo.line - 1 ].y
-					+
-					backPnw.y
-					-
-					scrollp.y
+					+ backPnw.y
+					- scrollp.y
 				);
 		}
 		else
@@ -487,10 +481,8 @@ fabric_doc.prototype._getRangeShape =
 			b2y =
 				Math.round(
 					b2Para.flow[ b2Para.flow.length - 1 ].y
-					+
-					this.getPNW( b2Key ).y
-					-
-					scrollp.y
+					+ this.getPNW( b2Key ).y
+					- scrollp.y
 				);
 		}
 
@@ -736,6 +728,8 @@ fabric_doc.prototype.draw =
 
 /*
 | The para pnws.
+|
+| FUTURE make this a twig.
 */
 jools.lazyValue(
 	fabric_doc.prototype,
@@ -749,6 +743,8 @@ jools.lazyValue(
 			paraSep,
 			pnws,
 			ranks,
+			r,
+			rZ,
 			y;
 
 		pnws = { };
@@ -762,7 +758,7 @@ jools.lazyValue(
 		ranks = this.ranks;
 
 		for(
-			var r = 0, rZ = ranks.length;
+			r = 0, rZ = ranks.length;
 			r < rZ;
 			r++
 		)

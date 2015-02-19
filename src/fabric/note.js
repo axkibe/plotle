@@ -592,20 +592,15 @@ fabric_note.prototype.mousewheel =
 		// ctrl
 	)
 {
-	if(
-		!this.zone
-			.within(
-				view,
-				p
-			)
-		)
+	if( !this.zone .within( view, p ) )
 	{
 		return false;
 	}
 
 	root.setPath(
 		this.path.append( 'scrolly' ),
-		this.scrollbarY.pos - dir * system.textWheelSpeed
+		( this.scrollbarY ? this.scrollbarY.pos : 0 )
+		- dir * system.textWheelSpeed
 	);
 
 	return true;

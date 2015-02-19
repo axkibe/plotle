@@ -12,7 +12,7 @@
 
 // FUTURE remove
 var DELAY_ALTER = 5000;
-var DELAY_ACQUIRE = 50000;
+var DELAY_ACQUIRE = 1000;
 DELAY_ALTER = false;
 //DELAY_ACQUIRE = false;
 

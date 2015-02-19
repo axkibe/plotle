@@ -30,84 +30,61 @@ dv =
 	{
 		generic :
 		{
-			width :
-				44,
-			height :
-				44,
-			font :
-				shell_fontPool.get( 14, 'cm' )
+			width : 44,
+			height : 44,
+			font : shell_fontPool.get( 14, 'cm' )
 		},
 
 		normal :
 		{
-			x :
-				4,
-			y :
-				120
+			x : 4,
+			y : 120
 		},
 
 		create :
 		{
-			x :
-				20,
-			y :
-				169
+			x : 20,
+			y : 169
 		},
 
 		remove :
 		{
-			x :
-				32,
-			y :
-				218
+			x : 32,
+			y : 218
 		},
 
 		moveto :
 		{
-			x :
-				47,
-			y :
-				326
+			x : 47,
+			y : 326
 		},
 
 		space :
 		{
-			width :
-				28,
-			height :
-				290,
-			x :
-				0,
-			y :
-				170
+			width : 28,
+			height : 290,
+			x : 0,
+			y : 170
 		},
 
 		user :
 		{
-			width :
-				24,
-			height :
-				180,
-			x :
-				0,
-			y :
-				440
+			width : 24,
+			height : 180,
+			x : 0,
+			y : 440
 		},
 
 		login :
 		{
-			x :
-				30,
-			y :
-				535
+			x : 30,
+			y : 535
 		},
 
 		signup :
 		{
-			x :
-				19,
-			y :
-				585
+			x : 19,
+			y : 585
 		}
 	};
 
@@ -161,7 +138,7 @@ gruga_mainDisc =
 				'shape',
 					design_anchorEllipse.fullSkewNW
 			),
-		'twig:add', 'Remove',
+		'twig:add', 'remove',
 			widget_button.create(
 				'style', 'mainButton',
 				'icon', 'remove',

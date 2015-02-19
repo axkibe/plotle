@@ -262,7 +262,7 @@ change_shrink.prototype._transformMark =
 		mark
 	)
 {
-	if( !this.path.equals( mark.path.chop ) )
+	if( !this.path.subPathOf( mark.path.chop ) )
 	{
 		return mark;
 	}
