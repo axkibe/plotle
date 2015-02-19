@@ -12,9 +12,9 @@
 
 // FUTURE remove
 var DELAY_ALTER = 5000;
-var DELAY_ACQUIRE = 1000;
+var DELAY_ACQUIRE = 5000;
 DELAY_ALTER = false;
-//DELAY_ACQUIRE = false;
+DELAY_ACQUIRE = false;
 
 /*
 | The jion definition.

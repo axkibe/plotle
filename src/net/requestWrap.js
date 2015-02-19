@@ -44,7 +44,7 @@ if( JION )
 						type :
 							'->request'
 					},
-				receiverFunc :
+				receiverFuncName :
 					{
 						comment :
 							'name of the receiver function to call',

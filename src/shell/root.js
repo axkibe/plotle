@@ -216,6 +216,7 @@ if( JION )
 | Valid modes
 */
 var
+	loadingSpaceTextPath,
 	modes;
 
 /**/if( CHECK )
@@ -262,6 +263,16 @@ var
 /**/{
 /**/	Object.freeze( modes );
 /**/}
+
+
+loadingSpaceTextPath =
+	jion_path.empty
+	.append( 'form' )
+	.append( 'twig' )
+	.append( 'loading' )
+	.append( 'twig' )
+	.append( 'spaceText' )
+	.append( 'text' );
 
 
 /*
@@ -816,10 +827,15 @@ shell_root.prototype.moveToSpace =
 		//            // created
 	)
 {
-	// TODO show loading what
 	root.create(
 		'mode', 'loading',
 		'space', null
+	);
+
+	// FUTURE move setPath into creator
+	root.setPath(
+		loadingSpaceTextPath,
+		spaceRef.fullname
 	);
 
 	root.link.acquireSpace( spaceRef, createMissing );
@@ -921,6 +937,7 @@ shell_root.prototype.showHome =
 	function( )
 {
 	root.create(
+		'action', null,
 		'mode', root.space ? 'normal' : 'loading'
 	);
 };

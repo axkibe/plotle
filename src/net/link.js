@@ -99,11 +99,14 @@ net_link.prototype.acquireSpace =
 	// aborts the current running update.
 	root.ajax.twig.update.abortAll( );
 
+	// aborts any previous acquireSpace requests.
+	root.ajax.twig.command.abortAll( '_onAcquireSpace' );
+
 	root.ajax.twig.command.request(
 		request_acquire.create(
 			'createMissing', createMissing,
-			'user', this.user,
-			'spaceRef', spaceRef
+			'spaceRef', spaceRef,
+			'user', this.user
 		),
 		'_onAcquireSpace'
 	);

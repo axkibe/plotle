@@ -85,27 +85,69 @@ net_channel.prototype._init =
 
 /*
 | Aborts all pending requests.
+|
+| If receiverFuncName is not undefined only aborts requests
+| with this receiverFuncName
 */
 net_channel.prototype.abortAll =
-	function( )
+	function(
+		receiverFuncName // if not undefined aborts these
+	)
 {
-	if( this._fifo.length === 0 )
+	var
+		f,
+		fZ,
+		fifo,
+		r;
+
+	fifo = this._fifo;
+
+	if( fifo.length === 0 )
 	{
 		// nothing pending
 		return;
 	}
 
-	this._fifo.ray[ 0 ].abort( );
+	if( receiverFuncName === undefined )
+	{
+		for(
+			f = 0, fZ = fifo.length;
+			f < fZ;
+			f++
+		)
+		{
+			fifo.get( f ).abort( );
+		}
+	}
+	else
+	{
+		for(
+			f = 0, fZ = fifo.length;
+			f < fZ;
+			f++
+		)
+		{
+			r = fifo.get( f ) ;
 
-	// FUTURE root.Create
+			if( r.receiverFuncName === receiverFuncName )
+			{
+				r.abort( );
+
+				fifo = fifo.remove( f );
+
+				fZ--;
+
+				f--;
+			}
+		}
+	}
+
 	root.create(
 		'ajax',
 			root.ajax.create(
 				'twig:set',
 				this.channelName,
-				this.create(
-					'_fifo', net_requestWrapRay.create( )
-				)
+				this.create( '_fifo', fifo )
 			)
 	);
 };
@@ -119,8 +161,8 @@ net_channel.prototype.abortAll =
 */
 net_channel.prototype.request =
 	function(
-		request,       // request
-		receiverFunc   // the receivers func to call
+		request,         // request
+		receiverFuncName // the receivers func name to call
 	)
 {
 	var
@@ -129,7 +171,7 @@ net_channel.prototype.request =
 	reqWrap =
 		net_requestWrap.create(
 			'channelName', this.channelName,
-			'receiverFunc', receiverFunc,
+			'receiverFuncName', receiverFuncName,
 			'request', request
 		);
 
@@ -184,7 +226,7 @@ net_channel.prototype.onReply =
 			)
 	);
 
-	root.link[ wrap.receiverFunc ]( wrap.request, reply );
+	root.link[ wrap.receiverFuncName ]( wrap.request, reply );
 };
 
 

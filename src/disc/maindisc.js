@@ -200,7 +200,9 @@ disc_mainDisc.prototype._init =
 
 			case 'create' :
 
-				visible = this.access === 'rw';
+				visible =
+					this.access === 'rw'
+					&& !!this.spaceRef;
 
 				break;
 
@@ -370,7 +372,11 @@ disc_mainDisc.prototype.pushButton =
 		return;
 	}
 
-	if( buttonName === 'remove' )
+	if( buttonName === 'normal' )
+	{
+		root.showHome( );
+	}
+	else if( buttonName === 'remove' )
 	{
 		root.alter(
 			change_shrink.create(
