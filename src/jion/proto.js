@@ -216,18 +216,6 @@ jion_proto.newUID =
 
 
 /*
-| Gets one entry from the group.
-*/
-jion_proto.groupGet =
-	function(
-		key
-	)
-{
-	return this.group[ key ];
-};
-
-
-/*
 | Returns the group with another group added,
 | overwriting collisions.
 */
@@ -260,7 +248,19 @@ jion_proto.groupAddGroup =
 
 
 /*
-| Returns the keys of the group.
+| Gets one entry from the group.
+*/
+jion_proto.groupGet =
+	function(
+		key
+	)
+{
+	return this.group[ key ];
+};
+
+
+/*
+| Returns the group keys.
 */
 jion_proto.groupKeys =
 	function( )
@@ -280,7 +280,7 @@ jion_proto.groupKeys =
 
 
 /*
-| Returns the sorted keys of the group.
+| Returns the sorted group key.
 */
 jion_proto.groupSortedKeys =
 	function( )
@@ -302,7 +302,19 @@ jion_proto.groupSortedKeys =
 
 
 /*
-| Returns the jion with one entry of the ray set.
+| Returns the group with one element removed.
+*/
+jion_proto.groupRemove =
+	function(
+		key
+	)
+{
+	return this.create( 'group:remove', key );
+};
+
+
+/*
+| Returns the group with one element set.
 */
 jion_proto.groupSet =
 	function(
@@ -325,19 +337,7 @@ jion_proto.groupSize =
 
 
 /*
-| Returns a jion with one entry from the ray removed.
-*/
-jion_proto.groupRemove =
-	function(
-		key
-	)
-{
-	return this.create( 'group:remove', key );
-};
-
-
-/*
-| Appends an element to a ray.
+| Returns the ray with an element appended.
 */
 jion_proto.rayAppend =
 	function(
@@ -349,7 +349,7 @@ jion_proto.rayAppend =
 
 
 /*
-| Appends an element to a ray.
+| Returns the ray with another ray appended.
 */
 jion_proto.rayAppendRay =
 	function(
@@ -370,7 +370,7 @@ jion_proto.rayAppendRay =
 
 
 /*
-| Returns the length of a ray.
+| Returns the length of the ray.
 */
 jion_proto.rayLength =
 	function( )
@@ -380,7 +380,7 @@ jion_proto.rayLength =
 
 
 /*
-| Gets one element of a ray.
+| Returns one element of the ray.
 */
 jion_proto.rayGet =
 	function(
@@ -405,7 +405,7 @@ jion_proto.rayGet =
 
 
 /*
-| Returns a ray with one element inserted.
+| Returns the ray with one element inserted.
 */
 jion_proto.rayInsert =
 	function(
@@ -418,7 +418,7 @@ jion_proto.rayInsert =
 
 
 /*
-| Returns a ray with one element removed.
+| Returns the ray with one element removed.
 */
 jion_proto.rayRemove =
 	function(
@@ -430,7 +430,7 @@ jion_proto.rayRemove =
 
 
 /*
-| Returns a ray with one element altered.
+| Returns the ray with one element set.
 */
 jion_proto.raySet =
 	function(
@@ -455,9 +455,8 @@ jion_proto.raySet =
 };
 
 
-
 /*
-| Returns a twig node by its rank.
+| Returns the element at rank.
 */
 jion_proto.twigAtRank =
 	function(
@@ -470,7 +469,7 @@ jion_proto.twigAtRank =
 
 
 /*
-| Returns the twig by key.
+| Returns the element by key.
 */
 jion_proto.twigGet =
 	function(
@@ -494,7 +493,7 @@ jion_proto.twigGetKey =
 
 
 /*
-| Returns the length of a ray.
+| Returns the length of the twig.
 */
 jion_proto.twigLength =
 	function( )
@@ -507,6 +506,8 @@ jion_proto.twigLength =
 | Returns the rank of the key.
 |
 | This means it returns the index of key in the ranks array.
+|
+| TODO make it a lazyStringFunc
 */
 jion_proto.twigRankOf =
 	function(
@@ -524,9 +525,22 @@ jion_proto.twigRankOf =
 
 	return(
 		this.twig[ key ] !== undefined
-		?  this.ranks.indexOf( key )
+		? this.ranks.indexOf( key )
 		: -1
 	);
+};
+
+
+/*
+| Returns the twig with the element at key set.
+*/
+jion_proto.twigSet =
+	function(
+		key,
+		entry
+	)
+{
+	return this.create( 'twig:set', key, entry );
 };
 
 

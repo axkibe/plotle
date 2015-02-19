@@ -226,45 +226,45 @@ prototype.getPath = jion_proto.getPath;
 
 
 /*
+| Returns the group with another group added, overwriting collisions.
+*/
+prototype.addGroup = jion_proto.groupAddGroup;
+
+
+/*
+| Gets one element from the group.
+*/
+prototype.get = jion_proto.groupGet;
+
+
+/*
 | Returns the group keys.
 */
 jools.lazyValue( prototype, 'keys', jion_proto.groupKeys );
 
 
 /*
-| Returns the group keys.
+| Returns the sorted group keys.
 */
 jools.lazyValue( prototype, 'sortedKeys', jion_proto.groupSortedKeys );
 
 
 /*
-| Adds another group to this group, overwriting collisions.
+| Returns the group with one element removed.
 */
-prototype.addGroup = jion_proto.groupAddGroup;
+prototype.remove = jion_proto.groupRemove;
+
+
+/*
+| Returns the group with one element set.
+*/
+prototype.set = jion_proto.groupSet;
 
 
 /*
 | Returns the size of the group.
 */
 jools.lazyValue( prototype, 'size', jion_proto.groupSize );
-
-
-/*
-| Gets one entry from the group.
-*/
-prototype.get = jion_proto.groupGet;
-
-
-/*
-| Returns the jion with one entry of the ray set.
-*/
-prototype.set = jion_proto.groupSet;
-
-
-/*
-| Returns a jion with one entry from the ray removed.
-*/
-prototype.remove = jion_proto.groupRemove;
 
 
 /*

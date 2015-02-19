@@ -2752,36 +2752,37 @@ generator.prototype.genJionProto =
 	{
 		capsule =
 			capsule
+
+			.$comment( 'Returns the group with another group added, overwriting collisions.' )
+			.$( 'prototype.addGroup = jion_proto.groupAddGroup' )
+
+			.$comment( 'Gets one element from the group.' )
+			.$( 'prototype.get = jion_proto.groupGet' )
+
 			.$comment( 'Returns the group keys.')
 			.$( 'jools.lazyValue( prototype, "keys", jion_proto.groupKeys )' )
 
-			.$comment( 'Returns the group keys.')
+			.$comment( 'Returns the sorted group keys.')
 			.$( 'jools.lazyValue( prototype, "sortedKeys", jion_proto.groupSortedKeys )' )
 
-			.$comment( 'Adds another group to this group, overwriting collisions.' )
-			.$( 'prototype.addGroup = jion_proto.groupAddGroup' )
+			.$comment( 'Returns the group with one element removed.' )
+			.$( 'prototype.remove = jion_proto.groupRemove' )
 
-			.$comment( 'Returns the size of the group.')
-			.$( 'jools.lazyValue( prototype, "size", jion_proto.groupSize )' )
-
-			.$comment( 'Gets one entry from the group.' )
-			.$( 'prototype.get = jion_proto.groupGet' )
-
-			.$comment( 'Returns the jion with one entry of the ray set.' )
+			.$comment( 'Returns the group with one element set.' )
 			.$( 'prototype.set = jion_proto.groupSet' )
 
-			.$comment( 'Returns a jion with one entry from the ray removed.' )
-			.$( 'prototype.remove = jion_proto.groupRemove' );
+			.$comment( 'Returns the size of the group.')
+			.$( 'jools.lazyValue( prototype, "size", jion_proto.groupSize )' );
 	}
 
 	if( this.ray )
 	{
 		capsule =
 			capsule
-			.$comment( 'Appends an entry to the ray.' )
+			.$comment( 'Returns the ray with an element appended.' )
 			.$( 'prototype.append = jion_proto.rayAppend' )
 
-			.$comment( 'Appends an entry to the ray.' )
+			.$comment( 'Returns the ray with another ray appended.' )
 			.$( 'prototype.appendRay = jion_proto.rayAppendRay' )
 
 			.$comment( 'Returns the length of the ray.')
@@ -2789,37 +2790,30 @@ generator.prototype.genJionProto =
 				'jools.lazyValue( prototype, "length", jion_proto.rayLength )'
 			)
 
-			.$comment( 'Gets one entry from the ray.' )
+			.$comment( 'Returns one element from the ray.' )
 			.$( 'prototype.get = jion_proto.rayGet' )
 
-			.$comment( 'Returns a jion with one entry inserted to the ray.' )
+			.$comment( 'Returns the ray with one element inserted.' )
 			.$( 'prototype.insert = jion_proto.rayInsert' )
 
-			.$comment( 'Returns the jion with one entry of the ray set.' )
-			.$( 'prototype.set = jion_proto.raySet' )
+			.$comment( 'Returns the ray with one element removed.' )
+			.$( 'prototype.remove = jion_proto.rayRemove' )
 
-			.$comment( 'Returns a jion with one entry from the ray removed.' )
-			.$( 'prototype.remove = jion_proto.rayRemove' );
+			.$comment( 'Returns the ray with one element set.' )
+			.$( 'prototype.set = jion_proto.raySet' );
 	}
 
 	if( this.twig )
 	{
 		capsule =
 			capsule
-			.$comment( 'Returns a twig by rank.' )
+			.$comment( 'Returns the element at rank.' )
 			.$( 'prototype.atRank = jion_proto.twigAtRank' )
 
-			.$comment( 'Gets the rank of a key.' )
-			.$(
-				'jools.lazyFunctionString( '
-				+ 'prototype, "rankOf", jion_proto.twigRankOf '
-				+ ')'
-			)
-
-			.$comment( 'Gets a twig by its key.' )
+			.$comment( 'Returns the element by key.' )
 			.$( 'prototype.get = jion_proto.twigGet' )
 
-			.$comment( 'Gets the key at rank.' )
+			.$comment( 'Returns the key at a rank.' )
 			.$( 'prototype.getKey = jion_proto.twigGetKey' )
 
 			.$comment( 'Returns the length of the twig.')
@@ -2828,7 +2822,17 @@ generator.prototype.genJionProto =
 			)
 
 			.$comment( 'Creates a new unique identifier.' )
-			.$( 'prototype.newUID = jion_proto.newUID' );
+			.$( 'prototype.newUID = jion_proto.newUID' )
+
+			.$comment( 'Returns the rank of the key.' )
+			.$(
+				'jools.lazyFunctionString( '
+				+ 'prototype, "rankOf", jion_proto.twigRankOf '
+				+ ')'
+			)
+
+			.$comment( 'Returns the twig with the element at key set.' )
+			.$( 'prototype.set = jion_proto.twigSet' );
 	}
 
 	return capsule;

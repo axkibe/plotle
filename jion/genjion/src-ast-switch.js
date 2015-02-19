@@ -498,13 +498,13 @@ prototype.getPath = jion_proto.getPath;
 
 
 /*
-| Appends an entry to the ray.
+| Returns the ray with an element appended.
 */
 prototype.append = jion_proto.rayAppend;
 
 
 /*
-| Appends an entry to the ray.
+| Returns the ray with another ray appended.
 */
 prototype.appendRay = jion_proto.rayAppendRay;
 
@@ -516,27 +516,27 @@ jools.lazyValue( prototype, 'length', jion_proto.rayLength );
 
 
 /*
-| Gets one entry from the ray.
+| Returns one element from the ray.
 */
 prototype.get = jion_proto.rayGet;
 
 
 /*
-| Returns a jion with one entry inserted to the ray.
+| Returns the ray with one element inserted.
 */
 prototype.insert = jion_proto.rayInsert;
 
 
 /*
-| Returns the jion with one entry of the ray set.
+| Returns the ray with one element removed.
 */
-prototype.set = jion_proto.raySet;
+prototype.remove = jion_proto.rayRemove;
 
 
 /*
-| Returns a jion with one entry from the ray removed.
+| Returns the ray with one element set.
 */
-prototype.remove = jion_proto.rayRemove;
+prototype.set = jion_proto.raySet;
 
 
 /*

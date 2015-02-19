@@ -510,25 +510,19 @@ prototype.getPath = jion_proto.getPath;
 
 
 /*
-| Returns a twig by rank.
+| Returns the element at rank.
 */
 prototype.atRank = jion_proto.twigAtRank;
 
 
 /*
-| Gets the rank of a key.
-*/
-jools.lazyFunctionString( prototype, 'rankOf', jion_proto.twigRankOf );
-
-
-/*
-| Gets a twig by its key.
+| Returns the element by key.
 */
 prototype.get = jion_proto.twigGet;
 
 
 /*
-| Gets the key at rank.
+| Returns the key at a rank.
 */
 prototype.getKey = jion_proto.twigGetKey;
 
@@ -543,6 +537,18 @@ jools.lazyValue( prototype, 'length', jion_proto.twigLength );
 | Creates a new unique identifier.
 */
 prototype.newUID = jion_proto.newUID;
+
+
+/*
+| Returns the rank of the key.
+*/
+jools.lazyFunctionString( prototype, 'rankOf', jion_proto.twigRankOf );
+
+
+/*
+| Returns the twig with the element at key set.
+*/
+prototype.set = jion_proto.twigSet;
 
 
 /*
