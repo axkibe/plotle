@@ -2750,7 +2750,10 @@ generator.prototype.genJionProto =
 		capsule =
 			capsule
 
-			.$comment( 'Returns the group with another group added, overwriting collisions.' )
+			.$comment(
+				'Returns the group with another group added,',
+				'overwriting collisions.'
+			)
 			.$( 'prototype.addGroup = jion_proto.groupAddGroup' )
 
 			.$comment( 'Gets one element from the group.' )

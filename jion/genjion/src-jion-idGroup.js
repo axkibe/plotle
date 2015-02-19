@@ -226,7 +226,8 @@ prototype.getPath = jion_proto.getPath;
 
 
 /*
-| Returns the group with another group added, overwriting collisions.
+| Returns the group with another group added,
+| overwriting collisions.
 */
 prototype.addGroup = jion_proto.groupAddGroup;
 
