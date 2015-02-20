@@ -1,8 +1,5 @@
 /*
 | A path toward an entity in a tree.
-|
-| FIXME use less init
-| FIXME  do not call anything "item"
 */
 
 
@@ -81,7 +78,7 @@ jion_path.prototype.appendNC =
 
 
 /*
-| Returns a path with the first item chopped of.
+| Returns a path with the first the entry chopped of.
 */
 jools.lazyValue(
 	jion_path.prototype,
@@ -111,7 +108,7 @@ jools.lazyValue(
 
 
 /*
-| Returns a path with the last item removed.
+| Returns a path with the last entry removed.
 */
 jools.lazyValue(
 	jion_path.prototype,
