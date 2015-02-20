@@ -66,7 +66,6 @@ ast_block.prototype.$ =
 
 /*
 | Returns the block with an assignment appended.
-| FIXME use a shorthand
 */
 ast_block.prototype.$assign =
 	function(
@@ -196,8 +195,6 @@ ast_block.prototype.$fail =
 
 /*
 | Returns the block with a classical for loop appended.
-|
-| FIXME use a shorthand
 */
 ast_block.prototype.$for =
 	function(
@@ -213,7 +210,6 @@ ast_block.prototype.$for =
 
 /*
 | Returns the block with a for-in loop appended.
-| FIXME use a shorthand
 */
 ast_block.prototype.$forIn =
 	function(
@@ -243,7 +239,6 @@ ast_block.prototype.$new =
 
 /*
 | Returns the block with a plus-assignment appended.
-| FIXME use a shorthand
 */
 ast_block.prototype.$plusAssign =
 	function(

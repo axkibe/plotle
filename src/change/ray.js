@@ -77,7 +77,7 @@ jools.lazyValue(
 
 		result = change_ray.create( 'ray:init', iRay );
 
-		// FIXME aheadValue on result.
+		jools.aheadValue( result, 'invert', this );
 
 		return result;
 	}
@@ -100,11 +100,6 @@ change_ray.prototype._transformSingle =
 		a,
 		aZ,
 		cx;
-
-/**/if( CHECK )
-/**/{
-/**/	// FIXME check if its a change or mark
-/**/}
 
 	cx = c;
 
@@ -159,13 +154,7 @@ change_ray.prototype._transformChangeWrap =
 		cw
 	)
 {
-	var
-		result;
-
-	// FIXME simplify
-	result = this.transform( cw.changeRay );
-
-	return cw.create( 'changeRay', result );
+	return cw.create( 'changeRay', this.transform( cw.changeRay ) );
 };
 
 

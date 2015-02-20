@@ -867,8 +867,7 @@ if( SHELL )
 						text.substring( 0, offset )
 					)
 				),
-			'y',
-				0
+			'y', 0
 		);
 	};
 }
@@ -1384,22 +1383,19 @@ fabric_portal.prototype._keyRight =
 		{
 			case 'spaceUser' :
 
-				cycle =
-					'spaceTag';
+				cycle = 'spaceTag';
 
 				break;
 
 			case 'spaceTag' :
 
-				cycle =
-					'moveToButton';
+				cycle = 'moveToButton';
 
 				break;
 
 			case 'moveToButton' :
 
-				cycle =
-					'spaceUser';
+				cycle = 'spaceUser';
 
 				break;
 		}
