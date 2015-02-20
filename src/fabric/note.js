@@ -258,7 +258,6 @@ fabric_note.prototype.positioning = 'zone';
 */
 fabric_note.prototype.dragStop =
 	function(
-		view,
 		p
 	)
 {
@@ -305,7 +304,6 @@ fabric_note.prototype.dragStop =
 			return(
 				fabric_docItem.prototype.dragStop.call(
 					this,
-					view,
 					p
 				)
 			);

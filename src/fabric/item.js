@@ -608,7 +608,6 @@ fabric_item.prototype.dragMove =
 */
 fabric_item.prototype.dragStop =
 	function(
-		view,
 		p
 	)
 {

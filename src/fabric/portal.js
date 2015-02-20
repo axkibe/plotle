@@ -288,7 +288,6 @@ jools.lazyValue(
 */
 fabric_portal.prototype.dragStop =
 	function(
-		view,
 		p
 	)
 {
@@ -334,7 +333,6 @@ fabric_portal.prototype.dragStop =
 			return(
 				fabric_item.prototype.dragStop.call(
 					this,
-					view,
 					p
 				)
 			);

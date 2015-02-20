@@ -662,11 +662,8 @@ shell_root.prototype.dragMove =
 	)
 {
 	var
-		action,
 		cursor,
 		screen;
-
-	action = root.action;
 
 	cursor = null;
 
@@ -729,10 +726,7 @@ shell_root.prototype.dragStop =
 	)
 {
 	var
-		action,
 		screen;
-
-	action = root.action;
 
 	screen = root._currentScreen( );
 

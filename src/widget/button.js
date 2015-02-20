@@ -489,8 +489,6 @@ widget_button.prototype.draw =
 
 /*
 | Stops a ReButton action.
-|
-| FIXME refix
 */
 widget_button.prototype.dragStop =
 	function( )

@@ -272,10 +272,7 @@ jools.lazyValue(
 | FIXME, is this ever called???
 */
 fabric_label.prototype.dragStop =
-	function(
-		view,
-		p
-	)
+	function( p )
 {
 	var
 		action,
@@ -325,7 +322,7 @@ fabric_label.prototype.dragStop =
 		default :
 
 			return(
-				fabric_docItem.prototype.dragStop.call( this, view, p )
+				fabric_docItem.prototype.dragStop.call( this, p )
 			);
 	}
 };

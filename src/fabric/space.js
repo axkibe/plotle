@@ -1050,12 +1050,9 @@ fabric_space.prototype.dragStop =
 
 					if( !action.toItemPath.isEmpty )
 					{
-						item =
-							this.getItem(
-								action.toItemPath.get( -1 )
-							);
+						item = this.getItem( action.toItemPath.get( -1 ) );
 
-						item.dragStop( view, p );
+						item.dragStop( p );
 					}
 
 					root.create( 'action', null );
@@ -1180,7 +1177,7 @@ fabric_space.prototype.dragStop =
 
 			this.getItem(
 				action.itemPath.get( -1 )
-			).dragStop( view, p, shift, ctrl );
+			).dragStop( p, shift, ctrl );
 
 			root.create( 'action', null );
 
