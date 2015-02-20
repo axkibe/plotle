@@ -258,7 +258,7 @@ jools.lazyValue(
 
 		ray = this.ray,
 
-		b = [ '[ '[ 0 ] ]; // FIXME jshint bug
+		b = [ '[ '[ 0 ] ]; // FUTURE jshint bug
 
 		for(
 			a = 0, aZ = this.length;
