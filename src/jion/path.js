@@ -101,7 +101,8 @@ jools.lazyValue(
 
 		result = this.create( 'ray:remove', 0 );
 
-		jools.aheadValue( result, 'prepend', this.ray[ 0 ] );
+		// FIXME
+		// jools.aheadLazyStringFunc( result, 'prepend', this.ray[ 0 ], this );
 
 		return result;
 	}
@@ -111,8 +112,6 @@ jools.lazyValue(
 
 /*
 | Returns a path with the last item removed.
-|
-| FIXME ahead value
 */
 jools.lazyValue(
 	jion_path.prototype,
@@ -120,7 +119,7 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			ray;
+			result;
 
 /**/	if( CHECK )
 /**/	{
@@ -130,11 +129,11 @@ jools.lazyValue(
 /**/		}
 /**/	}
 
-		ray = this.ray.slice( );
+		result = this.create( 'ray:remove', this.length - 1 );
 
-		ray.pop( );
+		// FIXME aheadLazyStringFunc
 
-		return this.create( 'ray:init', ray );
+		return result;
 	}
 );
 
@@ -153,9 +152,7 @@ jion_path.prototype.limit =
 /**/{
 /**/	if( n > this.length || n < 0 )
 /**/	{
-/**/		throw new Error(
-/**/			'invalid limit'
-/**/		);
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -288,15 +285,9 @@ jools.lazyValue(
 jion_path.createFromJSON =
 	function( json )
 {
-	// FIXME this is a dirty hack and ought to be removed.
-	if( json.reflect === 'jion_path' )
-	{
-		return json;
-	}
-
 	if( !Array.isArray( json ) )
 	{
-		throw new Error( 'invalid JSON, path is no array' );
+		throw new Error( 'invalid json, path is no array' );
 	}
 
 	return jion_path.create( 'ray:init', json );
