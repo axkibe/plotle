@@ -81,10 +81,9 @@ jools.lazyValue(
 	'attentionCenter',
 	function( )
 	{
-		return (
+		return(
 			this.zone.pnw.y
-			+
-			jools.limit(
+			+ jools.limit(
 				0,
 				this.doc.attentionCenter
 				-

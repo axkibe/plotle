@@ -104,6 +104,8 @@ fabric_item.prototype.checkHandles =
 	)
 {
 	var
+		a,
+		aZ,
 		d,
 		f,
 		fixView,
@@ -118,7 +120,7 @@ fabric_item.prototype.checkHandles =
 	d8cwcf = euclid_compass.dir8CWCF;
 
 	for(
-		var a = 0, aZ = d8cwcf.length;
+		a = 0, aZ = d8cwcf.length;
 		a < aZ;
 		a++
 	)
@@ -403,11 +405,7 @@ fabric_item.prototype.drawHandles =
 		display.reverseClip( area, euclid_view.proper, -1 );
 	}
 
-	display.reverseClip(
-		this.silhoutte,
-		view,
-		-1
-	);
+	display.reverseClip( this.silhoutte, view, -1 );
 
 	// draws the resize handles
 
@@ -607,8 +605,6 @@ fabric_item.prototype.dragMove =
 
 /*
 | Sets the items position and size after an action.
-|
-| FIXME dont take view
 */
 fabric_item.prototype.dragStop =
 	function(
@@ -625,7 +621,7 @@ fabric_item.prototype.dragStop =
 	{
 		case 'action_createRelation' :
 
-			if( !this.zone.within( view, p ) )
+			if( !this.zone.within( this.view, p ) )
 			{
 				return false;
 			}

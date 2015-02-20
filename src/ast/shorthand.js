@@ -1019,6 +1019,8 @@ shorthand.$varDec =
 /*
 | Shorthand for 'undefined'
 */
+shorthand.$undefined = ast_var.create( 'name', 'undefined' );
+/*
 jools.lazyValue(
 	shorthand,
 	'$undefined',
@@ -1027,6 +1029,7 @@ jools.lazyValue(
 		return ast_var.create( 'name', 'undefined' );
 	}
 );
+*/
 
 
 } )( );

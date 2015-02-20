@@ -259,8 +259,6 @@ jools.ensureInt =
 | Sets an not enumerable value
 |
 | if writable is undefined, defaults to false
-|
-| FIXME used?
 */
 jools.innumerable =
 	function(
@@ -274,10 +272,8 @@ jools.innumerable =
 		obj,
 		key,
 		{
-			value :
-				value,
-			writable :
-				typeof( writable ) === 'undefined' ? false : writable
+			value : value,
+			writable : typeof( writable ) === 'undefined' ? false : writable
 		}
 	);
 
@@ -301,6 +297,16 @@ jools.lazyValue =
 /**/	proto.__have_lazy = true;
 /**/}
 
+/**/if( CHECK )
+/**/{
+/**/	// lazy valued stuff must be jions
+/**/
+/**/	if( !proto.create )
+/**/	{
+/**/		// throw new Error( ); // FIXME
+/**/	}
+/**/}
+
 	Object.defineProperty(
 		proto,
 		key,
@@ -315,17 +321,9 @@ jools.lazyValue =
 
 /**/			if( FREEZE )
 /**/			{
-/**/				if( this.__lazy )
+/**/				if( this.__lazy[ key ] !== undefined )
 /**/				{
-/**/					if( this.__lazy[ key ] !== undefined )
-/**/					{
-/**/						return this.__lazy[ key ];
-/**/					}
-/**/				}
-/**/				else
-/**/				{
-						console.log( 'DOES THIS EVER HAPPEN?' );
-/**/					this.__lazy = { };
+/**/					return this.__lazy[ key ];
 /**/				}
 /**/
 /**/				return(
@@ -405,11 +403,6 @@ jools.aheadValue =
 /**/{
 /**/	if( obj.__lazy[ key ] !== undefined )
 /**/	{
-/**/		if( obj.__lazy[ key ] !== value )
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/
 /**/		return value;
 /**/	}
 /**/
@@ -423,10 +416,7 @@ jools.aheadValue =
 
 		if( obj[ ckey ] !== undefined )
 		{
-			if( obj[ ckey ] !== value )
-			{
-				throw new Error( );
-			}
+			return value;
 		}
 
 		return jools.innumerable( obj, ckey, value );
@@ -446,7 +436,7 @@ jools.lazyFunctionString =
 {
 /**/if( FREEZE )
 /**/{
-/**/	proto.__lazy = true;
+/**/	proto.__have_lazy = true;
 /**/}
 
 	proto[ key ] =
@@ -487,7 +477,6 @@ jools.lazyFunctionString =
 		}
 	};
 };
-
 
 
 /*
