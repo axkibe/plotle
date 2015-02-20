@@ -1,7 +1,7 @@
 /*
 | Start section of a shape.
 |
-| FUTURE move all of shapeSection to euclid/shapeSection.
+| FIXME move all of shapeSection to euclid/shapeSection.
 |
 | Used by shape.
 */

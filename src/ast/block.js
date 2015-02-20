@@ -66,7 +66,7 @@ ast_block.prototype.$ =
 
 /*
 | Returns the block with an assignment appended.
-| FUTURE use a shorthand
+| FIXME use a shorthand
 */
 ast_block.prototype.$assign =
 	function(
@@ -197,7 +197,7 @@ ast_block.prototype.$fail =
 /*
 | Returns the block with a classical for loop appended.
 |
-| FUTURE use a shorthand
+| FIXME use a shorthand
 */
 ast_block.prototype.$for =
 	function(
@@ -213,7 +213,7 @@ ast_block.prototype.$for =
 
 /*
 | Returns the block with a for-in loop appended.
-| FUTURE use a shorthand
+| FIXME use a shorthand
 */
 ast_block.prototype.$forIn =
 	function(
@@ -243,7 +243,7 @@ ast_block.prototype.$new =
 
 /*
 | Returns the block with a plus-assignment appended.
-| FUTURE use a shorthand
+| FIXME use a shorthand
 */
 ast_block.prototype.$plusAssign =
 	function(
@@ -263,7 +263,7 @@ ast_block.prototype.$return =
 		expr
 	)
 {
-	// FUTURE use shorthand
+	// FIXME use shorthand
 	if( expr.reflect !== 'ast_return' )
 	{
 		expr = ast_return.create( 'expr', tools.convert( expr ) );

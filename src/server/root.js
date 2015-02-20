@@ -10,7 +10,7 @@
 'use strict';
 
 
-// FUTURE remove
+// FIXME remove
 var DELAY_ALTER = 5000;
 var DELAY_ACQUIRE = 5000;
 DELAY_ALTER = false;
@@ -1501,7 +1501,7 @@ prototype.webAjax =
 
 		try
 		{
-			// FUTURE REMOVE
+			// FIXME REMOVE
 			if( DELAY_ALTER && cmd.type === 'request_alter' )
 			{
 				console.log( 'DELAYING ALTER');

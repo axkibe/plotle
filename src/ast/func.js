@@ -41,7 +41,7 @@ if( JION )
 			},
 		ray :
 			[
-//				FUTURE
+//				FIXME
 //				'ast.FuncArg'
 			]
 	};

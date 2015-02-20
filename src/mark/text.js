@@ -1,7 +1,7 @@
 /*
 | A poition in a text.
 |
-| FUTURE currently unused.
+| FIXME currently unused.
 */
 
 

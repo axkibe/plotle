@@ -1,7 +1,7 @@
 /*
 | Holds a space.
 |
-| FUTURE this should not have skids.
+| FIXME this should not have skids.
 */
 
 
@@ -126,7 +126,7 @@ server_spaceBox.loadSpace =
 			throw new Error( 'sequence mismatch' );
 		}
 
-		// FUTURE there is no need to load the past into memory
+		// FIXME there is no need to load the past into memory
 		changeSkids =
 			changeSkids.create( 'ray:set', seqZ++, changeSkid );
 

@@ -198,7 +198,7 @@ fabric_note.prototype._init =
 
 	this.doc =
 		this.doc.create(
-			'flowWidth', // FUTURE remove?
+			'flowWidth', // FIXME remove?
 				zone.width - theme.note.innerMargin.x,
 			'fontsize', this.fontsize,
 			'innerMargin', theme.note.innerMargin,

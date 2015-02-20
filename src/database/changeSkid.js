@@ -92,7 +92,7 @@ changeSkid.createFromChangeWrap =
 		seq         // if undefined assign this seq to changeWrap.
 	)
 {
-	// FUTURE aheadValue changeWrap asChangeWrap
+	// FIXME aheadValue changeWrap asChangeWrap
 
 	if( changeWrap.changeRay !== null )
 	{

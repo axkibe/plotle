@@ -57,7 +57,7 @@ ast_condition = require( '../jion/this' )( module );
 /*
 | Creates a condition with the elsewise expression set.
 |
-| FUTURE create this single recreators with jion-gen.
+| FIXME create this single recreators with jion-gen.
 */
 ast_condition.prototype.elsewise =
 	function(

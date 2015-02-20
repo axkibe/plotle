@@ -156,7 +156,7 @@ checkConcern =
 		// attr
 	)
 {
-	// FUTURE
+	// FIXME
 	return true;
 };
 
@@ -224,7 +224,7 @@ checkAlikes =
 /*
 | Checks the group definition.
 |
-| FUTURE for this and ray/twig, just create
+| FIXME for this and ray/twig, just create
 |        an idGroup, it will complain anyway.
 */
 checkGroup =
@@ -651,7 +651,7 @@ validator.check =
 		throw new Error( 'id missing' );
 	}
 
-	idParts = jion.id.split( /[_.]/g ); // FUTURE _ only
+	idParts = jion.id.split( /[_.]/g ); // FIXME _ only
 
 	if( idParts.length !== 2 )
 	{

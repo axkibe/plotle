@@ -58,7 +58,7 @@ jsLexer.tokenize =
 		c++
 	)
 	{
-		// FUTURE make the loop body a sub func.
+		// FIXME make the loop body a sub func.
 
 		ch = code[ c ];
 
@@ -140,7 +140,7 @@ jsLexer.tokenize =
 				throw new Error( '" missing' );
 			}
 
-			// FUTURE handle \"
+			// FIXME handle \"
 			while( code[ c ] !== '"' )
 			{
 				value += code[ c ];

@@ -289,7 +289,7 @@ net_link.prototype._onRegister =
 
 	ok = reply.type === 'reply_register';
 
-	// FUTURE pass request / reply
+	// FIXME pass request / reply
 	root.onRegister(
 		ok,
 		ok ? request.user : null,
@@ -423,7 +423,7 @@ net_link.prototype._onUpdate =
 
 		outbox = this._outbox;
 
-		// FUTURE instead of createInvert( ) convert
+		// FIXME instead of createInvert( ) convert
 		// the changeWrapRays to changeRays and invert
 		// them.
 		space = outbox.createInvert( ).changeTree( space );

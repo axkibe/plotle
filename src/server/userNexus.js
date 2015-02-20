@@ -1,7 +1,7 @@
 /*
 | Holds an manages all users.
 |
-| FUTURE move database interaction into here.
+| FIXME move database interaction into here.
 */
 
 

@@ -221,7 +221,7 @@ euclid_view.prototype.dey =
 /*
 | A view with pan zero, but same fact level
 |
-| FUTURE remove?
+| FIXME remove?
 */
 jools.lazyValue(
 	euclid_view.prototype,

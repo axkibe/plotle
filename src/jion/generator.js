@@ -1,7 +1,7 @@
 /*
 | Generates jion objects from a jion definition.
 |
-| FUTURE combine "Export" and "Import" vars into one block.
+| FIXME combine "Export" and "Import" vars into one block.
 */
 
 
@@ -323,7 +323,7 @@ generator.prototype._init =
 					name,
 				'id',
 					aid,
-				'v', // FUTURE rename to creatorVar
+				'v', // FIXME rename to creatorVar
 					$var( 'v_' + name )
 			);
 
@@ -491,12 +491,12 @@ generator.prototype.genImports =
 		.$comment( 'Imports.' )
 		.$varDec( 'jools' );
 
-	// FUTURE: when type checking is there,
+	// FIXME: when type checking is there,
 	// this might become needed always.
 
 	unitList = this.units.unitList;
 
-	// FUTURE this is akward
+	// FIXME this is akward
 	// just put them all together into one simple id list
 	for(
 		a = 0, aZ = unitList.length;
@@ -1582,7 +1582,7 @@ generator.prototype.genCreatorChecks =
 
 	if( this.twig )
 	{
-		// FUTURE check if ranks and twig keys match
+		// FIXME check if ranks and twig keys match
 		check =
 			check
 			.$for(
@@ -1687,7 +1687,7 @@ generator.prototype.genCreatorConcerns =
 				b++
 			)
 			{
-				// FUTURE, make a generator.getCreatorVarName func
+				// FIXME, make a generator.getCreatorVarName func
 
 				bAttr = this.attributes.get( args.get( b ) );
 
@@ -2930,7 +2930,7 @@ generator.prototype.genToJson =
 /*
 | Generates the equals condition for an attribute.
 |
-| FUTURE: in case of idLists this is still wonky
+| FIXME: in case of idLists this is still wonky
 |         it needs to differenciate primitives correctly
 */
 generator.prototype.genAttributeEquals =

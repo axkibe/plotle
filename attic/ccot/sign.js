@@ -118,7 +118,7 @@ if( SERVER )
 
 	jools = require( '../jools/jools' );
 
-	// FUTURE, remove this once createFromJSON is fixed.
+	// FIXME, remove this once createFromJSON is fixed.
 	euclid_point = require( '../euclid/point' );
 
 	euclid_rect = require( '../euclid/rect' );
@@ -201,7 +201,7 @@ ccot_sign.prototype._init =
 | If this sign has the new value already set,
 | it is checked for equality.
 |
-| FUTURE simplify
+| FIXME simplify
 */
 ccot_sign.prototype.affix =
 	function(

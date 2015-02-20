@@ -52,7 +52,7 @@ if( JION )
 							'For some handlers, the ast creator function'
 							+ ' for it to call',
 						type :
-							'protean', // FUTURE
+							'protean', // FIXME
 						defaultValue :
 							'undefined'
 					}

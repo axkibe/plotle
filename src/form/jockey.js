@@ -95,7 +95,7 @@ if( JION )
 			],
 		twig :
 			[
-				/* FUTURE
+				/* FIXME
 				'form_loading',
 				'form_login',
 				'form_moveTo',
@@ -252,7 +252,7 @@ form_jockey.prototype.pushButton =
 	return (
 		this.twig[ path.get( 2 ) ].pushButton(
 			path,
-			false, // FUTURE honor shift / ctrl states
+			false, // FIXME honor shift / ctrl states
 			false
 		)
 	);

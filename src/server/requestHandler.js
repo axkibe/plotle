@@ -486,7 +486,7 @@ server_requestHandler.conveyUpdate =
 
 	seqZ = spaceBox.seqZ;
 
-	// FUTURE have the spaceBox deliver a changeWrapRay
+	// FIXME have the spaceBox deliver a changeWrapRay
 	chgA = [ ];
 
 	for( c = seq; c < seqZ; c++ )
@@ -541,7 +541,7 @@ server_requestHandler.expireUpdateSleep =
 			'changeWrapRay', change_wrapRay.create( )
 		);
 
-	// FUTURE this should be in the ajax/http part
+	// FIXME this should be in the ajax/http part
 	//        of the server
 	jools.log( 'ajax', '->', asw );
 

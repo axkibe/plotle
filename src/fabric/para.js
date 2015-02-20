@@ -387,7 +387,7 @@ jools.lazyValue(
 /*
 | The para's flow, the position of all chunks.
 |
-| FUTURE make this a proper jion.
+| FIXME make this a proper jion.
 */
 jools.lazyValue(
 	fabric_para.prototype,
@@ -424,7 +424,7 @@ jools.lazyValue(
 
 		font = this.font;
 
-		// FUTURE go into subnodes instead
+		// FIXME go into subnodes instead
 		text = this.text;
 
 		// width really used.
@@ -640,7 +640,7 @@ fabric_para.prototype.getOffsetAt =
 /*
 | Returns the point of a given offset.
 |
-| FUTURE: Use lazy value and use two functions
+| FIXME: Use lazy value and use two functions
 |         for p and line which aheadValue each other.
 */
 fabric_para.prototype.locateOffset =
@@ -720,7 +720,7 @@ fabric_para.prototype.locateOffset =
 			);
 	}
 
-	// FUTURE make it a jion result
+	// FIXME make it a jion result
 	result =
 		{
 			p : p,
@@ -1233,12 +1233,12 @@ fabric_para.prototype._keyLeft =
 /*
 | User pressed page up or down
 |
-| FUTURE maintain relative scroll pos
+| FIXME maintain relative scroll pos
 */
 fabric_para.prototype._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
-		item,     // FUTURE remove
+		item,     // FIXME remove
 		doc,
 		at,
 		retainx,

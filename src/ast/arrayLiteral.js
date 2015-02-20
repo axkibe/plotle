@@ -23,7 +23,7 @@ if( JION )
 		id :
 			'ast_arrayLiteral',
 		ray :
-			// '->expression' // FUTURE
+			// '->expression' // FIXME
 			[ ]
 	};
 }

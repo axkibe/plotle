@@ -45,7 +45,7 @@ if( JION )
 /*
 | Gets the source of a projection to p.
 |
-| FUTURE Move the section logic into shapeSection_*
+| FIXME Move the section logic into shapeSection_*
 */
 euclid_shape.prototype.getProjection =
 	function(

@@ -155,7 +155,7 @@ fabric_item.prototype.checkHandles =
 /*i
 | The handle object to plan where to put the handles at
 |
-| FUTURE use fixPoints
+| FIXME use fixPoints
 */
 jools.lazyValue(
 	fabric_item.prototype,

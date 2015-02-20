@@ -148,7 +148,7 @@ widget_label.prototype._init =
 /*
 | Displays the label.
 |
-| FUTURE use _display
+| FIXME use _display
 */
 widget_label.prototype.draw =
 	function(

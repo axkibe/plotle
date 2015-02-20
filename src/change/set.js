@@ -81,7 +81,7 @@ if( SERVER )
 change_set.prototype._init =
 	function ( )
 {
-	// FUTURE make "nonnegativeInteger" a json type
+	// FIXME make "nonnegativeInteger" a json type
 };
 
 

@@ -342,7 +342,7 @@ form_signUp.prototype.clear =
 
 	twig = this.twig;
 
-	// FUTURE make this in one call, somehow
+	// FIXME make this in one call, somehow
 
 	root.setPath( twig.userInput.path.append( 'value' ), '' );
 

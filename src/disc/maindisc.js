@@ -277,7 +277,7 @@ disc_mainDisc.prototype._init =
 /*
 | True if current user is a guest.
 |
-| FUTURE make user an own object.
+| FIXME make user an own object.
 */
 jools.lazyValue(
 	disc_mainDisc.prototype,

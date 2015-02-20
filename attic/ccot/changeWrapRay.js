@@ -55,7 +55,7 @@ ccot_changeWrapRay.prototype.changeTree =
 		cRay,
 		cr;
 
-	// FUTURE in case of resultModality === tree skip building cRay
+	// FIXME in case of resultModality === tree skip building cRay
 
 	cRay = [ ];
 
@@ -66,7 +66,7 @@ ccot_changeWrapRay.prototype.changeTree =
 		a++
 	)
 	{
-		cr = this.get( a ).changeTree( tree, 'combined' ); // FUTURE
+		cr = this.get( a ).changeTree( tree, 'combined' ); // FIXME
 
 		// the tree returned by op-handler is the new tree
 		tree = cr.tree;

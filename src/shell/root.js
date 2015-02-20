@@ -801,7 +801,7 @@ shell_root.prototype.mousewheel =
 		ctrl
 	)
 {
-	// FUTURE disc
+	// FIXME disc
 
 	var
 		screen;
@@ -832,7 +832,7 @@ shell_root.prototype.moveToSpace =
 		'space', null
 	);
 
-	// FUTURE move setPath into creator
+	// FIXME move setPath into creator
 	root.setPath( loadingSpaceTextPath, spaceRef.fullname );
 
 	root.link.acquireSpace( spaceRef, createMissing );
@@ -953,7 +953,7 @@ shell_root.prototype.setPath =
 	{
 		case 'disc' :
 
-			throw new Error( 'FUTURE' );
+			throw new Error( 'FIXME' );
 
 		case 'form' :
 

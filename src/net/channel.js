@@ -151,7 +151,7 @@ net_channel.prototype.abortAll =
 /*
 | Issues a request.
 |
-| FUTURE currently the receiver is hardcoded to be 'root.link'.
+| FIXME currently the receiver is hardcoded to be 'root.link'.
 |    when the root became a JION allow receiverPaths
 */
 net_channel.prototype.request =

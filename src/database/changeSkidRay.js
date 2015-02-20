@@ -44,7 +44,7 @@ database_changeSkid = require( './changeSkid' );
 /*
 | Creates a changeSkid from a changeWrap.
 |
-| FUTURE aheadValue changeWrap asChangeWrap
+| FIXME aheadValue changeWrap asChangeWrap
 */
 database_changeSkidRay.createFromChangeWrapRay =
 	function(

@@ -1,7 +1,7 @@
 /*
 | Runs the jion generator for a list of files.
 |
-| FUTURE modalirize this a bit.
+| FIXME modalirize this a bit.
 */
 
 /*

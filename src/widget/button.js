@@ -121,7 +121,7 @@ if( JION )
 						comment :
 							'shape of the button',
 						type :
-							// FUTURE allow other types
+							// FIXME allow other types
 							'design_anchorEllipse'
 					},
 				superFrame :
@@ -227,7 +227,7 @@ widget_button.prototype._init =
 	}
 
 	// if true repeats the push action if held down
-	// FUTURE
+	// FIXME
 	this.repeating = false;
 };
 

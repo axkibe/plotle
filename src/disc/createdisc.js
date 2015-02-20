@@ -372,7 +372,7 @@ disc_createDisc.prototype.pointingHover =
 
 	pp = p.sub( this.frame.pnw );
 
-	// FUTURE optimize by reusing the latest path of this._display
+	// FIXME optimize by reusing the latest path of this._display
 	if(
 		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
 	)

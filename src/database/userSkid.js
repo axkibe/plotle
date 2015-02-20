@@ -94,7 +94,7 @@ database_userSkid.createFromUser =
 		user
 	)
 {
-	// FUTURE aheadValue user_info, asUser
+	// FIXME aheadValue user_info, asUser
 
 	return(
 		database_userSkid.create(

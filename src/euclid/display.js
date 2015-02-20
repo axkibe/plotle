@@ -1172,7 +1172,7 @@ euclid_display.prototype._sketchShape =
 
 	cx.moveTo( pStart.x + twist, pStart.y + twist );
 
-	// FUTURE why not store the point?
+	// FIXME why not store the point?
 	posx = pStart.x;
 	posy = pStart.y;
 
@@ -1337,7 +1337,7 @@ euclid_display.prototype._sketchRect =
 /*
 | Sketches a shape.
 |
-| FUTURE this is akward.
+| FIXME this is akward.
 */
 euclid_display.prototype._sketch =
 	function(

@@ -352,7 +352,7 @@ form_login.prototype.onAuth =
 form_login.prototype.clear =
 	function( )
 {
-	// FUTURE combine calls
+	// FIXME combine calls
 	root.setPath( this._widgetPath( 'userInput' ).append( 'value' ), '' );
 
 	root.setPath( this._widgetPath( 'passwordInput' ).append( 'value' ), '' );

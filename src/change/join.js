@@ -249,7 +249,7 @@ change_join.prototype.transform =
 		case 'change_grow' :
 		case 'change_shrink' :
 
-			// FUTURE change ranks
+			// FIXME change ranks
 			// but right now this never happens
 			return cx;
 

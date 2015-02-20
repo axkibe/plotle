@@ -172,7 +172,7 @@ formatAnd =
 /*
 | Formats an array literal.
 |
-| FUTURE format also inline
+| FIXME format also inline
 */
 formatArrayLiteral =
 	function(
@@ -1439,7 +1439,7 @@ formatMultiplyAssign =
 		throw 'noinline';
 	}
 
-	throw 'FUTURE: implement noinline +=';
+	throw 'FIXME: implement noinline +=';
 };
 
 
@@ -1683,7 +1683,7 @@ formatPlusAssign =
 		throw 'noinline';
 	}
 
-	throw 'FUTURE: implement noinline +=';
+	throw 'FIXME: implement noinline +=';
 };
 
 
@@ -2169,7 +2169,7 @@ formatTypeof =
 /*
 | Formats an object literal.
 |
-| FUTURE format also inline
+| FIXME format also inline
 */
 var
 formatObjLiteral =

@@ -1,7 +1,7 @@
 /*
 | A path toward an entity in a tree.
 |
-| FUTURE make it a ray.
+| FIXME make it a ray.
 */
 
 
@@ -91,7 +91,7 @@ jools.lazyValue(
 /*
 | Returns a path with the last 'n' item(s) removed.
 |
-| FUTURE cache
+| FIXME cache
 */
 jion_path.prototype.shorten =
 	function(
@@ -254,7 +254,7 @@ jools.lazyValue(
 
 		ray = this.ray,
 
-		b = [ '[ '[ 0 ] ]; // FUTURE jshint bug
+		b = [ '[ '[ 0 ] ]; // FIXME jshint bug
 
 		for(
 			a = 0, aZ = this.length;

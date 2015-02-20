@@ -678,7 +678,7 @@ fabric_doc.prototype.draw =
 	{
 		rs = this._getRangeShape( width, scrollp );
 
-		// FUTURE have shapeRays handled more elegantly
+		// FIXME have shapeRays handled more elegantly
 		if( !Array.isArray( rs ) )
 		{
 			display.paint(
@@ -729,7 +729,7 @@ fabric_doc.prototype.draw =
 /*
 | The para pnws.
 |
-| FUTURE make this a twig.
+| FIXME make this a twig.
 */
 jools.lazyValue(
 	fabric_doc.prototype,
@@ -986,7 +986,7 @@ fabric_doc.prototype.input =
 fabric_doc.prototype.specialKey =
 	function(
 		key,
-		item, // FUTURE remove
+		item, // FIXME remove
 		shift,
 		ctrl
 	)

@@ -240,7 +240,7 @@ ccot_changeRay.prototype.changeTree =
 		cray,
 		cr;
 
-	// FUTURE if resultModality is skip cray
+	// FIXME if resultModality is skip cray
 	cray = [ ];
 
 	// iterates through the change ray

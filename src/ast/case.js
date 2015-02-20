@@ -30,7 +30,7 @@ if( JION )
 			},
 		// ray contains multiple alternatives for the same case block.
 		ray :
-			// '->expression', FUTURE
+			// '->expression', FIXME
 			[ ]
 	};
 }

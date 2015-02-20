@@ -794,7 +794,7 @@ fabric_space.prototype.click =
 /*
 | Stops an operation with the mouse button held down.
 |
-| FUTURE split this up
+| FIXME split this up
 */
 fabric_space.prototype.dragStop =
 	function(
@@ -1137,7 +1137,7 @@ fabric_space.prototype.dragStop =
 									action.transItem.path
 									.chop.append( 'fontsize' ),
 								'val',
-									// FUTURE why doc?
+									// FIXME why doc?
 									action.transItem.doc.fontsize,
 								'prev', action.origin.fontsize
 							)

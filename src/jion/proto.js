@@ -4,7 +4,7 @@
 
 var
 	jools,
-	jion, // FUTURE remove
+	jion, // FIXME remove
 	jion_proto;
 
 

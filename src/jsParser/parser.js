@@ -486,7 +486,7 @@ handleObjectLiteral =
 
 	if( state.current.type !== '}' )
 	{
-		// FUTURE cannot handle element currently
+		// FIXME cannot handle element currently
 		throw new Error( );
 	}
 

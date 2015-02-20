@@ -1027,7 +1027,7 @@ ccot_change.prototype._changeTreeRank =
 
 	trg = trg.affix( 'path', src.path );
 
-	// FUTURE make a twig:rerank
+	// FIXME make a twig:rerank
 	pivot =
 		pivot.create(
 			'twig:remove', key,
@@ -1305,7 +1305,7 @@ ccot_change.prototype._transformSignJoin =
 		throw new Error( );
 	}
 
-	// FUTURE? transform ranks
+	// FIXME? transform ranks
 
 	if( sign.at1 === undefined && sign.at2 === undefined )
 	{

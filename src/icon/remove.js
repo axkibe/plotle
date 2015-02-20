@@ -71,7 +71,7 @@ icon_remove.prototype._init =
 	psw = euclid_point.create( 'x', pnw.x, 'y', pse.y );
 
 	pc =
-		// FUTURE make it an euclid middle call
+		// FIXME make it an euclid middle call
 		euclid_point.create(
 			'x', jools.half( pnw.x + pse.x ),
 			'y', jools.half( pnw.y + pse.y )

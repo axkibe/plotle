@@ -2,7 +2,7 @@
 | Meshcraft default theme.
 |
 | FIXME call shell_theme
-| FUTURE remove and put it all to gruga
+| FIXME remove and put it all to gruga
 */
 
 
