@@ -154,28 +154,46 @@ fabric_space.prototype._init =
 		twigDup
 	)
 {
+	var
+		k,
+		twig;
+
 	if( !this.view )
 	{
 		// abstract
 		return;
 	}
 
-	// FIXME if path/hover/mark/view are identical to inherit, no need to bother children
-
-	if( !twigDup )
+	if(
+		!inherit
+		|| this.path !== inherit.path
+		|| this.hover !== inherit.hover
+		|| this.mark !== inherit.mark
+		|| this.view !== inherit.view
+	)
 	{
-		this.twig = jools.copy( this.twig );
-	}
+		if( !twigDup )
+		{
+			twig = jools.copy( this.twig );
+		}
 
-	for( var k in this.twig )
-	{
-		this.twig[ k ] =
-			this.twig[ k ].create(
-				'path', this.path.append( 'twig' ).appendNC( k ), // FIXME inherit
-				'hover', this.hover,
-				'mark', this.mark,
-				'view', this.view
-			);
+		for( k in twig )
+		{
+			twig[ k ] =
+				twig[ k ].create(
+					'hover', this.hover,
+					'mark', this.mark,
+					'path', this.path.append( 'twig' ).appendNC( k ), // FIXME inherit
+					'view', this.view
+				);
+		}
+
+/**/	if( FREEZE )
+/**/	{
+/**/		Object.freeze( twig );
+/**/	}
+
+		this.twig = twig;
 	}
 };
 
@@ -1304,12 +1322,8 @@ fabric_space.prototype.dragMove =
 				r++
 			)
 			{
-				if(
-					this.atRank( r ).dragMove(
-						view, // FIXME dont
-						p
-					)
-				)
+				 // FIXME dont give view
+				if( this.atRank( r ).dragMove( view, p ) )
 				{
 					return 'pointer';
 				}
@@ -1464,11 +1478,9 @@ fabric_space.prototype.dragMove =
 
 		case 'action_scrolly' :
 
+			// FIXME dont give view
 			this.getItem( action.itemPath.get( -1 ) )
-			.dragMove(
-				view, // FIXME dont
-				p
-			);
+			.dragMove( view, p );
 
 			// FIXME let the item decide on the cursor
 			return 'move';
