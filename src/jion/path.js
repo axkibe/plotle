@@ -1,7 +1,8 @@
 /*
 | A path toward an entity in a tree.
 |
-| FIXME make it a ray.
+| FIXME use less init
+| FIXME  do not call anything "item"
 */
 
 
@@ -50,7 +51,14 @@ jools.lazyFunctionString(
 	'append',
 	function( key )
 	{
-		return this.create( 'ray:append', key );
+		var
+			result;
+
+		result = this.create( 'ray:append', key );
+
+		jools.aheadValue( result, 'shorten', this );
+
+		return result;
 	}
 );
 
@@ -61,14 +69,19 @@ jools.lazyFunctionString(
 jion_path.prototype.appendNC =
 	function( key )
 {
-	return this.create( 'ray:append', key );
+	var
+		result;
+
+	result = this.create( 'ray:append', key );
+
+	jools.aheadValue( result, 'shorten', this );
+
+	return result;
 };
 
 
 /*
 | Returns a path with the first item chopped of.
-|
-| FIXME aheadValue
 */
 jools.lazyValue(
 	jion_path.prototype,
@@ -76,13 +89,21 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			ray;
+			result;
 
-		ray = this.ray.slice( );
+/**/	if( CHECK )
+/**/	{
+/**/		if( this.length === 0 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
 
-		ray.shift( );
+		result = this.create( 'ray:remove', 0 );
 
-		return this.create( 'ray:init', ray );
+		jools.aheadValue( result, 'prepend', this.ray[ 0 ] );
+
+		return result;
 	}
 );
 
@@ -153,24 +174,23 @@ jion_path.prototype.limit =
 };
 
 /*
-| Returns a path with the first item prepended.
-|
-| FIXME cache
+| Returns a path with an entry prepended.
 */
-jion_path.prototype.prepend =
-	function(
-		key
-	)
-{
-	var
-		ray;
+jools.lazyFunctionString(
+	jion_path.prototype,
+	'prepend',
+	function( entry )
+	{
+		var
+			result;
 
-	ray = this.ray.slice( );
+		result = this.create( 'ray:insert', 0, entry );
 
-	ray.unshift( key );
+		jools.aheadValue( result, 'chop', this );
 
-	return this.create( 'ray:init', ray );
-};
+		return result;
+	}
+);
 
 
 /*

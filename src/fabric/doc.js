@@ -193,20 +193,19 @@ jools.lazyValue(
 
 		path = this.mark.caretPath;
 
-		key = path.get( 5 ); // FUTURUE
+		key = path.get( 5 ); // FUTURE
 
-/**/		if( CHECK )
+/**/	if( CHECK )
+/**/	{
+/**/		if( !this.getPNW( key ) )
 /**/		{
-/**/			if( !this.getPNW( key ) )
-/**/			{
-/**/				throw new Error( );
-/**/			}
+/**/			throw new Error( );
 /**/		}
+/**/	}
 
 		return (
 			this.getPNW( key ).y
-			+
-			this.twig[ key ].attentionCenter
+			+ this.twig[ key ].attentionCenter
 		);
 	}
 );
