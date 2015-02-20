@@ -62,13 +62,13 @@ Constructor =
 		v_string // the literal
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( prototype.__have_lazy )
-/**/	{
-/**/		this.__lazy = { };
-/**/	}
-/**/}
+	if( FREEZE )
+	{
+		if( prototype.__have_lazy )
+		{
+			this.__lazy = { };
+		}
+	}
 
 	this.string = v_string;
 

@@ -65,13 +65,13 @@ Constructor =
 		v_prec // operator precedence
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( prototype.__have_lazy )
-/**/	{
-/**/		this.__lazy = { };
-/**/	}
-/**/}
+	if( FREEZE )
+	{
+		if( prototype.__have_lazy )
+		{
+			this.__lazy = { };
+		}
+	}
 
 	this.associativity = v_associativity;
 

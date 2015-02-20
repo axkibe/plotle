@@ -174,7 +174,11 @@ fabric_space.prototype._init =
 	{
 		path = twig[ k ].path;
 
-		if( !path || !path.shorten.shorten.equals( this.path ) )
+		if(
+			!path ||
+			path.length === 0 || // FUTURE remove empty paths
+			!path.shorten.shorten.equals( this.path )
+		)
 		{
 			path = this.path.append( 'twig' ).appendNC( k );
 		}

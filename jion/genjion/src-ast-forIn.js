@@ -157,13 +157,13 @@ Constructor =
 		v_variable // the loop variable
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( prototype.__have_lazy )
-/**/	{
-/**/		this.__lazy = { };
-/**/	}
-/**/}
+	if( FREEZE )
+	{
+		if( prototype.__have_lazy )
+		{
+			this.__lazy = { };
+		}
+	}
 
 	this.block = v_block;
 

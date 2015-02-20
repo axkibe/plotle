@@ -141,13 +141,16 @@ jools.lazyValue(
 /*
 | Returns a path limited to a specific length.
 |
-| FIXME cache
+| FUTURE cache
 */
 jion_path.prototype.limit =
 	function(
 		n
 	)
 {
+	var
+		path;
+
 /**/if( CHECK )
 /**/{
 /**/	if( n > this.length || n < 0 )
@@ -156,18 +159,14 @@ jion_path.prototype.limit =
 /**/	}
 /**/}
 
-	if( n === this.length )
+	path = this;
+
+	while( path.length > n )
 	{
-		return this;
+		path = path.shorten;
 	}
 
-	if( n === 0 )
-	{
-		return jion_path.empty;
-	}
-
-
-	return this.create( 'ray:init', this.ray.slice( 0, n ) );
+	return path;
 };
 
 /*

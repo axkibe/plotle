@@ -160,13 +160,13 @@ Constructor =
 		v_statement // the statement expression
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( prototype.__have_lazy )
-/**/	{
-/**/		this.__lazy = { };
-/**/	}
-/**/}
+	if( FREEZE )
+	{
+		if( prototype.__have_lazy )
+		{
+			this.__lazy = { };
+		}
+	}
 
 	this.defaultCase = v_defaultCase;
 

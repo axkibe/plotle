@@ -71,13 +71,13 @@ Constructor =
 		v_member // concerns member call
 	)
 {
-/**/if( CHECK )
-/**/{
-/**/	if( prototype.__have_lazy )
-/**/	{
-/**/		this.__lazy = { };
-/**/	}
-/**/}
+	if( FREEZE )
+	{
+		if( prototype.__have_lazy )
+		{
+			this.__lazy = { };
+		}
+	}
 
 	if( v_args !== undefined )
 	{

@@ -622,7 +622,8 @@ generator.prototype.genConstructor =
 
 	block =
 		$block( )
-		.$check(
+		.$if(
+			'FREEZE',
 			$if(
 				'prototype.__have_lazy',
 				$assign( 'this.__lazy', $objLiteral( ) )

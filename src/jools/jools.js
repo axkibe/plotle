@@ -324,6 +324,7 @@ jools.lazyValue =
 /**/				}
 /**/				else
 /**/				{
+						console.log( 'DOES THIS EVER HAPPEN?' );
 /**/					this.__lazy = { };
 /**/				}
 /**/
