@@ -109,7 +109,7 @@ change_grow.prototype.changeTree =
 		throw change_error( 'grow.path( -2 ) not a twig' );
 	}
 
-	pivot = tree.getPath( this.path.shorten( 2 ) );
+	pivot = tree.getPath( this.path.shorten.shorten );
 
 	key = this.path.get( -1 );
 
@@ -124,7 +124,7 @@ change_grow.prototype.changeTree =
 
 	if( this.path.length > 2 )
 	{
-		tree = tree.setPath( this.path.shorten( 2 ), pivot );
+		tree = tree.setPath( this.path.shorten.shorten, pivot );
 	}
 	else
 	{

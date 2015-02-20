@@ -95,6 +95,7 @@ jools.lazyValue(
 /*
 | Returns the compass direction of the handle
 | if p is on a resizer handle.
+| FIXME dont take view
 */
 fabric_item.prototype.checkHandles =
 	function(
@@ -371,6 +372,7 @@ jools.lazyValue(
 
 /*
 | Draws the handles of an item ( resize, itemmenu )
+| FIXME dont take view
 */
 fabric_item.prototype.drawHandles =
 	function(
@@ -436,6 +438,7 @@ fabric_item.prototype.drawHandles =
 
 /*
 | Checks if a dragStart targets this item.
+| FIXME dont take view
 */
 fabric_item.prototype.dragStart =
 	function(
@@ -542,7 +545,6 @@ fabric_item.prototype.dragStart =
 */
 fabric_item.prototype.dragMove =
 	function(
-		view,
 		p
 		// shift,
 		// ctrl
@@ -553,20 +555,18 @@ fabric_item.prototype.dragMove =
 		dy,
 		sbary,
 		spos,
-		start;
+		start,
+		view;
 
 	action = root.action;
+
+	view = this.view;
 
 	switch( action.reflect )
 	{
 		case 'action_createRelation' :
 
-			if(
-				!this.zone.within(
-					view,
-					p
-				)
-			)
+			if( !this.zone.within( view, p ) )
 			{
 				return false;
 			}
@@ -607,6 +607,8 @@ fabric_item.prototype.dragMove =
 
 /*
 | Sets the items position and size after an action.
+|
+| FIXME dont take view
 */
 fabric_item.prototype.dragStop =
 	function(
@@ -648,6 +650,7 @@ fabric_item.prototype.dragStop =
 | User is hovering his/her pointing device over something.
 |
 | Checks if this item reacts on this.
+| FIXME dont take view
 */
 fabric_item.prototype.pointingHover =
 	function(

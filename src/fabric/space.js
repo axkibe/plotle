@@ -156,6 +156,7 @@ fabric_space.prototype._init =
 {
 	var
 		k,
+		path,
 		twig;
 
 	if( !this.view )
@@ -164,37 +165,35 @@ fabric_space.prototype._init =
 		return;
 	}
 
-	if(
-		!inherit
-		|| this.path !== inherit.path
-		|| this.hover !== inherit.hover
-		|| this.mark !== inherit.mark
-		|| this.view !== inherit.view
-	)
+	twig =
+		twigDup
+		? this.twig
+		: jools.copy( this.twig );
+
+	for( k in twig )
 	{
-		if( !twigDup )
+		path = twig[ k ].path;
+
+		if( !path || !path.shorten.shorten.equals( this.path ) )
 		{
-			twig = jools.copy( this.twig );
+			path = this.path.append( 'twig' ).appendNC( k );
 		}
 
-		for( k in twig )
-		{
-			twig[ k ] =
-				twig[ k ].create(
-					'hover', this.hover,
-					'mark', this.mark,
-					'path', this.path.append( 'twig' ).appendNC( k ), // FIXME inherit
-					'view', this.view
-				);
-		}
-
-/**/	if( FREEZE )
-/**/	{
-/**/		Object.freeze( twig );
-/**/	}
-
-		this.twig = twig;
+		twig[ k ] =
+			twig[ k ].create(
+				'hover', this.hover,
+				'mark', this.mark,
+				'path', path,
+				'view', this.view
+			);
 	}
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( twig );
+/**/}
+
+	this.twig = twig;
 };
 
 
@@ -1322,8 +1321,7 @@ fabric_space.prototype.dragMove =
 				r++
 			)
 			{
-				 // FIXME dont give view
-				if( this.atRank( r ).dragMove( view, p ) )
+				if( this.atRank( r ).dragMove( p ) )
 				{
 					return 'pointer';
 				}
@@ -1478,9 +1476,8 @@ fabric_space.prototype.dragMove =
 
 		case 'action_scrolly' :
 
-			// FIXME dont give view
 			this.getItem( action.itemPath.get( -1 ) )
-			.dragMove( view, p );
+			.dragMove( p );
 
 			// FIXME let the item decide on the cursor
 			return 'move';
@@ -1578,7 +1575,7 @@ fabric_space.prototype.removeRange =
 
 	k2 = back.path.get( -2 );
 
-	pivot = root.space.getPath( front.path.chop.shorten( 3 ) );
+	pivot = root.space.getPath( front.path.chop.shorten.shorten.shorten );
 
 	r1 = pivot.rankOf( k1 );
 

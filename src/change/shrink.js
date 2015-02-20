@@ -126,7 +126,7 @@ change_shrink.prototype.changeTree =
 		throw change_error( 'shrink.path( -2 ) with rank not twig' );
 	}
 
-	pivot = tree.getPath( this.path.shorten( 2 ) );
+	pivot = tree.getPath( this.path.shorten.shorten );
 
 	key = this.path.get( -1 );
 
@@ -141,7 +141,7 @@ change_shrink.prototype.changeTree =
 
 	if( this.path.length > 2 )
 	{
-		tree = tree.setPath( this.path.shorten( 2 ), pivot );
+		tree = tree.setPath( this.path.shorten.shorten, pivot );
 	}
 	else
 	{

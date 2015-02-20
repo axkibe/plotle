@@ -66,7 +66,7 @@ jion_path.prototype.appendNC =
 
 
 /*
-| Returns a path with the first items chopped of.
+| Returns a path with the first item chopped of.
 |
 | FIXME aheadValue
 */
@@ -89,46 +89,33 @@ jools.lazyValue(
 
 
 /*
-| Returns a path with the last 'n' item(s) removed.
+| Returns a path with the last item removed.
 |
-| FIXME cache
+| FIXME ahead value
 */
-jion_path.prototype.shorten =
-	function(
-		n
-	)
-{
-	var
-		a,
-		ray;
-
-	ray = this.ray.slice( );
-
-	if( n === undefined )
+jools.lazyValue(
+	jion_path.prototype,
+	'shorten',
+	function( )
 	{
-		n = 1;
-	}
+		var
+			ray;
 
-/**/if( CHECK )
-/**/{
-/**/	if( n > this.length )
+/**/	if( CHECK )
 /**/	{
-/**/		throw new Error( );
+/**/		if( this.length === 0 )
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
-/**/}
 
-	if( n === this.length )
-	{
-		return jion_path.empty;
-	}
+		ray = this.ray.slice( );
 
-	for( a = 0; a < n; a++ )
-	{
 		ray.pop( );
-	}
 
-	return this.create( 'ray:init', ray );
-};
+		return this.create( 'ray:init', ray );
+	}
+);
 
 
 /*

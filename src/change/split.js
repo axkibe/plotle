@@ -127,7 +127,7 @@ change_split.prototype.changeTree =
 		throw change_error( 'split.path signates no string' );
 	}
 
-	pivot = tree.getPath( path.shorten( 3 ) );
+	pivot = tree.getPath( path.shorten.shorten.shorten );
 
 	if( !pivot.ranks )
 	{
@@ -139,7 +139,7 @@ change_split.prototype.changeTree =
 		throw change_error( 'split.at1 > text.length' );
 	}
 
-	if( !path2.shorten( 2 ).subPathOf( path ) )
+	if( !path2.shorten.shorten.subPathOf( path ) )
 	{
 		throw change_error( 'split.path2 not a subPath' );
 	}
@@ -172,7 +172,7 @@ change_split.prototype.changeTree =
 			'twig:insert', key2, rank1 + 1, para2
 		);
 
-	tree = tree.setPath( path.shorten( 3 ), pivot );
+	tree = tree.setPath( path.shorten.shorten.shorten, pivot );
 
 	return tree;
 };
