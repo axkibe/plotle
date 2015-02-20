@@ -3016,7 +3016,7 @@ generator.prototype.genAttributeEquals =
 /*
 | Generates the body of an equals test.
 */
-generator.prototype.genEqualsBody =
+generator.prototype.genEqualsFuncBody =
 	function(
 		mode,       // 'normal' or 'json'
 		eqFuncName  // name of equals func to call
@@ -3213,51 +3213,67 @@ generator.prototype.genEqualsBody =
 | Generates the equals tests.
 */
 generator.prototype.genEquals =
-	function(
-		mode     // 'normal' or 'json'
-	)
+	function( )
 {
 	var
 		block,
-		body,
-		eqFuncName;
+		normalEqFuncBody,
+		jsonEqFuncBody;
 
 	block = $block( );
 
-	switch( mode )
+	normalEqFuncBody = this.genEqualsFuncBody( 'normal', 'equals' );
+
+	if( this.hasJson )
 	{
-		case 'normal' :
-
-			block =
-				block.$comment( 'Tests equality of object.' );
-
-			eqFuncName = 'equals';
-
-			break;
-
-		case 'json' :
-
-			block =
-				block.$comment( 'Tests equality of json representation.' );
-
-			eqFuncName = 'equalsJSON';
-
-			break;
-
-		default :
-
-			throw new Error( );
+		jsonEqFuncBody = this.genEqualsFuncBody( 'json', 'equalsJSON' );
 	}
 
-	body = this.genEqualsBody( mode, eqFuncName );
+	if( !normalEqFuncBody.equals( jsonEqFuncBody ) )
+	{
+		block = block.$comment( 'Tests equality of object.' );
 
-	block =
-		block
-		.$assign(
-			'prototype.' + eqFuncName,
-			$func( body )
-			.$arg( 'obj', 'object to compare to' )
-		);
+		block =
+			block
+			.$assign(
+				'prototype.equals',
+				$func( normalEqFuncBody )
+				.$arg( 'obj', 'object to compare to' )
+			);
+
+		if( this.hasJson )
+		{
+			block = block.$comment( 'Tests equality of json representation.' );
+
+			block =
+				block
+				.$assign(
+					'prototype.equalsJSON',
+					$func( jsonEqFuncBody )
+					.$arg( 'obj', 'object to compare to' )
+				);
+		}
+	}
+	else
+	{
+		// equals and equalsJSON have identical
+		// function bodies.
+
+		block =
+			block
+			.$comment(
+				'Tests equality of object.',
+				'Tests equality of json representation.'
+			)
+			.$assign(
+				'prototype.equals',
+				$assign(
+					'prototype.equalsJSON',
+					$func( normalEqFuncBody )
+					.$arg( 'obj', 'object to compare to' )
+				)
+			);
+	}
 
 	return block;
 };
@@ -3434,14 +3450,7 @@ generator.prototype.genCapsule =
 		capsule = this.genToJson( capsule );
 	}
 
-	capsule = capsule.$( this.genEquals( 'normal' ) );
-
-	if( this.hasJson )
-	{
-		// FUTURE in case both genEquals are the same
-		// combine them
-		capsule = capsule.$( this.genEquals( 'json' ) );
-	}
+	capsule = capsule.$( this.genEquals( ) );
 
 	if( this.alike )
 	{
