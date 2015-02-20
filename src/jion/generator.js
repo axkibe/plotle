@@ -3014,20 +3014,19 @@ generator.prototype.genAttributeEquals =
 
 
 /*
-| Generates the equals test.
+| Generates the body of an equals test.
 */
-generator.prototype.genEquals =
+generator.prototype.genEqualsBody =
 	function(
-		mode     // 'normal' or 'json'
+		mode,       // 'normal' or 'json'
+		eqFuncName  // name of equals func to call
 	)
 {
 	var
 		attr,
-		block,
-		capsule, // FIXME rename
+		body,
 		cond,
 		ceq,
-		eqFuncName,
 		name,
 		groupTest,
 		groupTestLoopBody,
@@ -3036,54 +3035,25 @@ generator.prototype.genEquals =
 		twigTest,
 		twigTestLoopBody;
 
-	capsule = $block( );
+	body = $block( );
 
 	cond = null;
 
-	switch( mode )
-	{
-		case 'normal' :
-
-			capsule =
-				capsule.$comment( 'Tests equality of object.' );
-
-			eqFuncName = 'equals';
-
-			break;
-
-		case 'json' :
-
-			capsule =
-				capsule.$comment( 'Tests equality of json representation.' );
-
-			eqFuncName = 'equalsJSON';
-
-			break;
-
-		default :
-
-			throw new Error( );
-	}
-
-	block = $block( );
-
 	if( this.ray || this.twig )
 	{
-		block =
-			block
+		body =
+			body
 			.$varDec( 'a' )
 			.$varDec( 'aZ' );
 	}
 
 	if( this.twig )
 	{
-		block =
-			block
-			.$varDec( 'key' );
+		body = body.$varDec( 'key' );
 	}
 
-	block =
-		block
+	body =
+		body
 		.$if( 'this === obj', $returnTrue )
 		.$if( '!obj', $returnFalse )
 		.$if( $differs( 'obj.reflect', this.id.$string ), $returnFalse );
@@ -3115,7 +3085,7 @@ generator.prototype.genEquals =
 				groupTestLoopBody
 			);
 
-		block = block.$if( 'this.group !== obj.group', groupTest );
+		body = body.$if( 'this.group !== obj.group', groupTest );
 	}
 
 	if( this.ray )
@@ -3147,7 +3117,7 @@ generator.prototype.genEquals =
 				rayTestLoopBody
 			);
 
-		block = block.$if( 'this.ray !== obj.ray', rayTest );
+		body = body.$if( 'this.ray !== obj.ray', rayTest );
 	}
 
 	if( this.twig )
@@ -3182,8 +3152,8 @@ generator.prototype.genEquals =
 				twigTestLoopBody
 			);
 
-		block =
-			block
+		body =
+			body
 			.$if(
 				$or(
 					'this.tree !== obj.tree',
@@ -3229,22 +3199,67 @@ generator.prototype.genEquals =
 
 	if( cond )
 	{
-		block = block.$return( cond );
+		body = body.$return( cond );
 	}
 	else
 	{
-		block = block.$return( true );
+		body = body.$return( true );
 	}
 
-	capsule =
-		capsule
+	return body;
+};
+
+/*
+| Generates the equals tests.
+*/
+generator.prototype.genEquals =
+	function(
+		mode     // 'normal' or 'json'
+	)
+{
+	var
+		block,
+		body,
+		eqFuncName;
+
+	block = $block( );
+
+	switch( mode )
+	{
+		case 'normal' :
+
+			block =
+				block.$comment( 'Tests equality of object.' );
+
+			eqFuncName = 'equals';
+
+			break;
+
+		case 'json' :
+
+			block =
+				block.$comment( 'Tests equality of json representation.' );
+
+			eqFuncName = 'equalsJSON';
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
+
+	body = this.genEqualsBody( mode, eqFuncName );
+
+	block =
+		block
 		.$assign(
 			'prototype.' + eqFuncName,
-			$func( block )
+			$func( body )
 			.$arg( 'obj', 'object to compare to' )
 		);
 
-	return capsule;
+	return block;
 };
 
 
