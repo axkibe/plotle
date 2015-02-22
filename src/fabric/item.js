@@ -95,11 +95,9 @@ jools.lazyValue(
 /*
 | Returns the compass direction of the handle
 | if p is on a resizer handle.
-| FIXME dont take view
 */
 fabric_item.prototype.checkHandles =
 	function(
-		view,
 		p
 	)
 {
@@ -111,9 +109,12 @@ fabric_item.prototype.checkHandles =
 		fixView,
 		h,
 		handles,
-		d8cwcf;
+		d8cwcf,
+		view;
 
 	handles = this._handles;
+
+	view = this.view;
 
 	f = root.display;
 
@@ -134,18 +135,9 @@ fabric_item.prototype.checkHandles =
 			continue;
 		}
 
-		fixView =
-			view.review(
-				0,
-				view.point( h.pc )
-			);
+		fixView = view.review( 0, view.point( h.pc ) );
 
-		if(
-			h.within(
-				fixView,
-				p
-			)
-		)
+		if( h.within( fixView, p ) )
 		{
 			return d;
 		}

@@ -536,7 +536,7 @@ fabric_space.prototype.pointingHover =
 
 	if( focus )
 	{
-		com = focus.checkHandles( view, p );
+		com = focus.checkHandles( p );
 
 		if( com )
 		{
@@ -602,7 +602,7 @@ fabric_space.prototype.dragStart =
 	// see if the handles were targeted
 	if( this.access == 'rw' && focus )
 	{
-		com = focus.checkHandles( view, p );
+		com = focus.checkHandles( p );
 
 		if( com )
 		{
