@@ -129,6 +129,10 @@ if( JION )
 }
 
 
+var
+	spaceFields;
+
+
 /*
 | Node includes.
 */
@@ -136,8 +140,11 @@ if( SERVER )
 {
 	fabric_portal = require( '../jion/this' )( module );
 
-	jools = require( '../jools/jools' );
+	fabric_portal.prototype._init = function( ) { };
+
+	return;
 }
+
 
 /*
 | Initializer.
@@ -185,7 +192,7 @@ fabric_portal.prototype._init =
 /*
 | List of all space fields of the portal
 */
-var _spaceFields =
+spaceFields =
 	{
 		spaceUser : '_fieldSpaceUser',
 		spaceTag : '_fieldSpaceTag'
@@ -194,7 +201,7 @@ var _spaceFields =
 
 /**/if( FREEZE )
 /**/{
-/**/	Object.freeze( _spaceFields );
+/**/	Object.freeze( spaceFields );
 /**/}
 
 
@@ -204,21 +211,16 @@ var _spaceFields =
 fabric_portal.prototype.positioning = 'zone';
 
 
-if( SHELL )
-{
-	/*
-	| Minimum height.
-	*/
-	fabric_portal.prototype.minHeight =
-		theme.portal.minHeight;
+/*
+| Minimum height.
+*/
+fabric_portal.prototype.minHeight = theme.portal.minHeight;
 
 
-	/*
-	| Minimum width.
-	*/
-	fabric_portal.prototype.minWidth =
-		theme.portal.minWidth;
-}
+/*
+| Minimum width.
+*/
+fabric_portal.prototype.minWidth = theme.portal.minWidth;
 
 
 /*
@@ -284,164 +286,6 @@ jools.lazyValue(
 
 
 /*
-| Sets the items position and size after an action.
-*/
-fabric_portal.prototype.dragStop =
-	function(
-		p
-	)
-{
-	var
-		action,
-		zone;
-
-	action = root.action;
-
-	switch( action.reflect )
-	{
-		case 'action_itemDrag' :
-		case 'action_itemResize' :
-
-			zone = this.zone;
-
-			if(
-				zone.width < theme.portal.minWidth ||
-				zone.height < theme.portal.minHeight
-			)
-			{
-				// portal under minimum size!
-				throw new Error( );
-			}
-
-			if( this.zone.equals( zone ) )
-			{
-				return;
-			}
-
-			root.alter(
-				change_set.create(
-					'path', this.path.chop.append( 'zone' ),
-					'val', zone,
-					'prev', this.zone
-				)
-			);
-
-			return true;
-
-		default :
-
-			return(
-				fabric_item.prototype.dragStop.call(
-					this,
-					p
-				)
-			);
-	}
-};
-
-
-/*
-| Sees if this portal is being clicked.
-*/
-fabric_portal.prototype.click =
-	function(
-		space,
-		view,
-		p,
-		shift,
-		ctrl,
-		access
-	)
-{
-	var
-		fieldLazyName,
-		mark,
-		moveToButton,
-		pp,
-		sf,
-		zone;
-
-	mark = null;
-
-	zone = this.zone;
-
-	// not clicked on the portal?
-	if(
-		!this.silhoutte
-			.within(
-				view,
-				p
-			)
-		)
-	{
-		return false;
-	}
-
-	moveToButton = this._moveToButton;
-
-	pp =
-		view
-		.depoint( p )
-		.sub( zone.pnw );
-
-	if(
-		moveToButton.shape
-		.within( euclid_view.proper, pp )
-	)
-	{
-		this._moveTo( );
-
-		return true;
-	}
-
-	if( access != 'rw' )
-	{
-		return false;
-	}
-
-	pp =
-		view
-		.depoint( p )
-		.sub( zone.pnw );
-
-	for( var field in _spaceFields )
-	{
-		fieldLazyName = _spaceFields[ field ];
-
-		sf = this[ fieldLazyName ];
-
-		if(
-			sf.silhoutte.within( euclid_view.proper, pp )
-		)
-		{
-			mark =
-				root.create(
-					'mark',
-						mark_caret.create(
-							'path', this.path.append( field  ),
-							'at', this._getOffsetAt( field, pp.x )
-						)
-				);
-
-			break;
-		}
-	}
-
-	// if non of the field were clicked
-	// just focus the portal itself
-	if(
-		mark === null &&
-		root.space.focusedItem( ) !== this
-	)
-	{
-		root.create( 'mark', mark_item.create( 'path', this.path ) );
-	}
-
-	return true;
-};
-
-
-/*
 | Returns the attention center.
 */
 jools.lazyValue(
@@ -488,7 +332,7 @@ jools.lazyValue(
 
 		descend = fs * theme.bottombox;
 
-		fieldPNW = this[ _spaceFields[ section ] ].pnw;
+		fieldPNW = this[ spaceFields[ section ] ].pnw;
 
 		p =
 			this._locateOffset(
@@ -506,6 +350,164 @@ jools.lazyValue(
 
 
 /*
+| Sees if this portal is being clicked.
+*/
+fabric_portal.prototype.click =
+	function(
+		p,
+		shift,
+		ctrl,
+		access
+	)
+{
+	var
+		fieldLazyName,
+		mark,
+		moveToButton,
+		pp,
+		sf,
+		view,
+		zone;
+
+	mark = null;
+
+	view = this.view;
+
+	zone = this.zone;
+
+	// not clicked on the portal?
+	if(
+		!this.silhoutte
+			.within(
+				view,
+				p
+			)
+		)
+	{
+		return false;
+	}
+
+	moveToButton = this._moveToButton;
+
+	pp =
+		view
+		.depoint( p )
+		.sub( zone.pnw );
+
+	if(
+		moveToButton.shape
+		.within( euclid_view.proper, pp )
+	)
+	{
+		this._moveTo( );
+
+		return true;
+	}
+
+	if( access != 'rw' )
+	{
+		return false;
+	}
+
+	pp =
+		view
+		.depoint( p )
+		.sub( zone.pnw );
+
+	for( var field in spaceFields )
+	{
+		fieldLazyName = spaceFields[ field ];
+
+		sf = this[ fieldLazyName ];
+
+		if(
+			sf.silhoutte.within( euclid_view.proper, pp )
+		)
+		{
+			mark =
+				root.create(
+					'mark',
+						mark_caret.create(
+							'path', this.path.append( field  ),
+							'at', this._getOffsetAt( field, pp.x )
+						)
+				);
+
+			break;
+		}
+	}
+
+	// if non of the field were clicked
+	// just focus the portal itself
+	if( mark === null )
+	{
+		root.create( 'mark', mark_item.create( 'path', this.path ) );
+	}
+
+	return true;
+};
+
+
+/*
+| Handles a potential dragStart event for this item.
+*/
+fabric_portal.prototype.dragStart = fabric_item.dragStart;
+
+
+/*
+| Sets the items position and size after an action.
+*/
+fabric_portal.prototype.dragStop =
+	function(
+		p
+	)
+{
+	var
+		action,
+		zone;
+
+	action = root.action;
+
+	switch( action.reflect )
+	{
+		case 'action_itemDrag' :
+		case 'action_itemResize' :
+
+			zone = this.zone;
+
+			if(
+				zone.width < theme.portal.minWidth ||
+				zone.height < theme.portal.minHeight
+			)
+			{
+				// portal under minimum size!
+				throw new Error( );
+			}
+
+			if( this.zone.equals( zone ) )
+			{
+				return;
+			}
+
+			root.alter(
+				change_set.create(
+					'path', this.path.chop.append( 'zone' ),
+					'val', zone,
+					'prev', this.zone
+				)
+			);
+
+			return true;
+
+		default :
+
+			return fabric_item.prototype.dragStop.call( this, p );
+	}
+};
+
+
+
+/*
 | Draws the portal.
 */
 fabric_portal.prototype.draw =
@@ -516,6 +518,25 @@ fabric_portal.prototype.draw =
 	display.drawImage(
 		'image', this._display,
 		'pnw', this.view.point( this.zone.pnw )
+	);
+};
+
+
+/*
+| Highlights the portal.
+*/
+fabric_portal.prototype.highlight =
+	function(
+		display
+	)
+{
+	display.edge(
+		shell_style.getStyle(
+			theme.portal.style,
+			'highlight'
+		),
+		this.silhoutte,
+		this.view
 	);
 };
 
@@ -537,25 +558,6 @@ fabric_portal.prototype.mousewheel =
 			view,
 			p
 		)
-	);
-};
-
-
-/*
-| Highlights the portal.
-*/
-fabric_portal.prototype.highlight =
-	function(
-		display
-	)
-{
-	display.edge(
-		shell_style.getStyle(
-			theme.portal.style,
-			'highlight'
-		),
-		this.silhoutte,
-		this.view
 	);
 };
 
@@ -616,150 +618,6 @@ fabric_portal.prototype.pointingHover =
 
 
 /*
-| Creates the portal's display.
-*/
-jools.lazyValue(
-	fabric_portal.prototype,
-	'_display',
-	function( )
-	{
-		var
-			f,
-			hview,
-			mark,
-			moveToButton,
-			section,
-			fieldSpaceUser,
-			fieldSpaceTag,
-			vzone;
-
-		vzone = this.view.rect( this.zone );
-
-		f =
-			euclid_display.create(
-				'width', vzone.width + 2,
-				'height', vzone.height + 2
-			),
-
-		hview = this.view.home;
-
-		mark = this.mark;
-
-		section =
-			mark
-			&& mark.hasCaret
-			&& mark.caretPath.get( -1 );
-
-		f.fill(
-			shell_style.getStyle(
-				theme.portal.style,
-				'normal'
-			),
-			this.zeroSilhoutte,
-			hview
-		);
-
-		if( !this.path.isEmpty )
-		{
-			f.clip( this.zeroSilhoutte, hview, 0 );
-
-			fieldSpaceUser = this._fieldSpaceUser;
-
-			fieldSpaceTag = this._fieldSpaceTag;
-
-			moveToButton = this._moveToButton;
-
-			f.paint(
-				shell_style.getStyle(
-					theme.portal.moveTo.style,
-					shell_accent.state(
-						this.hover.equals(
-							this.path.append( 'moveToButton' )
-						),
-						section === 'moveToButton'
-					)
-				),
-				moveToButton.shape,
-				hview
-			);
-
-			f.paint(
-				shell_style.getStyle(
-					theme.portal.input.style,
-					'normal'
-				),
-				fieldSpaceUser.silhoutte,
-				hview
-			);
-
-			f.paint(
-				shell_style.getStyle(
-					theme.portal.input.style,
-					'normal'
-				),
-				fieldSpaceTag.silhoutte,
-				hview
-			);
-
-			f.scale( hview.zoom );
-
-			f.paintText(
-				'text',
-					fieldSpaceUser.text,
-				'p',
-					fieldSpaceUser.pnw,
-				'font',
-					this._fonts.spaceUser
-			);
-
-			f.paintText(
-				'text',
-					fieldSpaceTag.text,
-				'p',
-					fieldSpaceTag.pnw,
-				'font',
-					this._fonts.spaceTag
-			);
-
-			f.paintText(
-				'text',
-					'move to',
-				'p',
-					moveToButton.textCenter,
-				'font',
-					this._fonts.moveTo
-			);
-
-
-			if(
-				mark
-				&& mark.reflect === 'mark_caret'
-				&& mark.focus
-			)
-			{
-				this._drawCaret( f );
-			}
-
-			f.scale( 1 / hview.zoom );
-
-			f.deClip( );
-		}
-
-		// redraws the edge on the end to top
-		// everything else
-
-		f.edge(
-			shell_style.getStyle( theme.portal.style, 'normal' ),
-			this.zeroSilhoutte,
-			hview
-		);
-
-		return f;
-	}
-);
-
-
-/*
 | Text has been inputed.
 */
 fabric_portal.prototype.input =
@@ -813,115 +671,73 @@ fabric_portal.prototype.input =
 };
 
 
-if( SHELL )
-{
-	/*
-	| Font for spacesUser/Tag
-	*/
-	fabric_portal.prototype._fonts =
-		{
-			spaceUser : shell_fontPool.get( 13, 'la' ),
+/*
+| Font for spacesUser/Tag
+*/
+fabric_portal.prototype._fonts =
+	{
+		spaceUser : shell_fontPool.get( 13, 'la' ),
 
-			spaceTag : shell_fontPool.get( 13, 'la' ),
+		spaceTag : shell_fontPool.get( 13, 'la' ),
 
-			moveTo : shell_fontPool.get( 13, 'cm' )
-		};
+		moveTo : shell_fontPool.get( 13, 'cm' )
+	};
 
 /**/if( FREEZE )
 /**/{
 /**/	Object.freeze( fabric_portal.prototype._fonts );
 /**/}
 
-	/*
-	| Returns the point of a given offset.
-	*/
-	fabric_portal.prototype._locateOffset =
-		function(
-			section,   // 'spaceUser' or 'spaceTag'
-			offset     // the offset to get the point from.
-		)
-	{
-		var
-			font,
-			text;
-
-		// FIXME cache position
-		font = this._fonts[ section ];
-
-		text = this[ section ];
-
-		return euclid_point.create(
-			'x',
-				Math.round(
-					euclid_measure.width(
-						font,
-						text.substring( 0, offset )
-					)
-				),
-			'y', 0
-		);
-	};
-}
-
 
 /*
-| Displays the caret.
+| Returns the point of a given offset.
 */
-fabric_portal.prototype._drawCaret =
+fabric_portal.prototype._locateOffset =
 	function(
-		display
+		section,   // 'spaceUser' or 'spaceTag'
+		offset     // the offset to get the point from.
 	)
 {
 	var
-		descend,
-		fieldPNW,
 		font,
-		fs,
-		mark,
-		n,
-		p,
-		s,
-		section;
+		text;
 
-	mark = this.mark;
-
-	section = mark.caretPath.get( -1 );
-
-	if(
-		!this._isSection( section )
-		||
-		section === 'moveToButton' )
-	{
-		return;
-	}
-
+	// FIXME cache position
 	font = this._fonts[ section ];
 
-	fs = font.size;
+	text = this[ section ];
 
-	descend = fs * theme.bottombox;
-
-	fieldPNW = this[ _spaceFields[ section ] ].pnw;
-
-	p =
-		this._locateOffset(
-			section,
-			mark.caretAt
-		);
-
-	s = Math.round( p.y + descend ) + fieldPNW.y;
-
-	n = s - Math.round( fs + descend );
-
-	// displays the caret
-	display.fillRect(
-		'black',
-		p.x + fieldPNW.x,
-		n,
-		1,
-		s - n
+	return euclid_point.create(
+		'x',
+			Math.round(
+				euclid_measure.width(
+					font,
+					text.substring( 0, offset )
+				)
+			),
+		'y', 0
 	);
 };
+
+
+/*
+| The space the portals references as fabric_spaceRef jion.
+|
+| FUTURE make this the primer data.
+*/
+jools.lazyValue(
+	fabric_portal.prototype,
+	'spaceRef',
+	function( )
+{
+	return(
+		fabric_spaceRef.create(
+			'username', this.spaceUser,
+			'tag', this.spaceTag
+		)
+	);
+}
+);
 
 
 /*
@@ -1773,7 +1589,7 @@ fabric_portal.prototype._getOffsetAt =
 		x1,
 		x2;
 
-	dx = x - this[ _spaceFields[ section ] ].pnw.x;
+	dx = x - this[ spaceFields[ section ] ].pnw.x;
 
 	value = this[ section ];
 
@@ -1812,21 +1628,201 @@ fabric_portal.prototype._getOffsetAt =
 
 
 /*
-| The space the portals references as fabric_spaceRef jion.
+| Creates the portal's display.
 */
 jools.lazyValue(
 	fabric_portal.prototype,
-	'spaceRef',
+	'_display',
 	function( )
-{
-	return(
-		fabric_spaceRef.create(
-			'username', this.spaceUser,
-			'tag', this.spaceTag
-		)
-	);
-}
+	{
+		var
+			f,
+			hview,
+			mark,
+			moveToButton,
+			section,
+			fieldSpaceUser,
+			fieldSpaceTag,
+			vzone;
+
+		vzone = this.view.rect( this.zone );
+
+		f =
+			euclid_display.create(
+				'width', vzone.width + 2,
+				'height', vzone.height + 2
+			),
+
+		hview = this.view.home;
+
+		mark = this.mark;
+
+		section =
+			mark
+			&& mark.hasCaret
+			&& mark.caretPath.get( -1 );
+
+		f.fill(
+			shell_style.getStyle(
+				theme.portal.style,
+				'normal'
+			),
+			this.zeroSilhoutte,
+			hview
+		);
+
+		if( !this.path.isEmpty )
+		{
+			f.clip( this.zeroSilhoutte, hview, 0 );
+
+			fieldSpaceUser = this._fieldSpaceUser;
+
+			fieldSpaceTag = this._fieldSpaceTag;
+
+			moveToButton = this._moveToButton;
+
+			f.paint(
+				shell_style.getStyle(
+					theme.portal.moveTo.style,
+					shell_accent.state(
+						this.hover.equals(
+							this.path.append( 'moveToButton' )
+						),
+						section === 'moveToButton'
+					)
+				),
+				moveToButton.shape,
+				hview
+			);
+
+			f.paint(
+				shell_style.getStyle(
+					theme.portal.input.style,
+					'normal'
+				),
+				fieldSpaceUser.silhoutte,
+				hview
+			);
+
+			f.paint(
+				shell_style.getStyle(
+					theme.portal.input.style,
+					'normal'
+				),
+				fieldSpaceTag.silhoutte,
+				hview
+			);
+
+			f.scale( hview.zoom );
+
+			f.paintText(
+				'text',
+					fieldSpaceUser.text,
+				'p',
+					fieldSpaceUser.pnw,
+				'font',
+					this._fonts.spaceUser
+			);
+
+			f.paintText(
+				'text',
+					fieldSpaceTag.text,
+				'p',
+					fieldSpaceTag.pnw,
+				'font',
+					this._fonts.spaceTag
+			);
+
+			f.paintText(
+				'text',
+					'move to',
+				'p',
+					moveToButton.textCenter,
+				'font',
+					this._fonts.moveTo
+			);
+
+
+			if(
+				mark
+				&& mark.reflect === 'mark_caret'
+				&& mark.focus
+			)
+			{
+				this._drawCaret( f );
+			}
+
+			f.scale( 1 / hview.zoom );
+
+			f.deClip( );
+		}
+
+		// redraws the edge on the end to top
+		// everything else
+
+		f.edge(
+			shell_style.getStyle( theme.portal.style, 'normal' ),
+			this.zeroSilhoutte,
+			hview
+		);
+
+		return f;
+	}
 );
+
+
+/*
+| Displays the caret.
+*/
+fabric_portal.prototype._drawCaret =
+	function(
+		display
+	)
+{
+	var
+		descend,
+		fieldPNW,
+		font,
+		fs,
+		mark,
+		n,
+		p,
+		s,
+		section;
+
+	mark = this.mark;
+
+	section = mark.caretPath.get( -1 );
+
+	if(
+		!this._isSection( section )
+		||
+		section === 'moveToButton' )
+	{
+		return;
+	}
+
+	font = this._fonts[ section ];
+
+	fs = font.size;
+
+	descend = fs * theme.bottombox;
+
+	fieldPNW = this[ spaceFields[ section ] ].pnw;
+
+	p =
+		this._locateOffset(
+			section,
+			mark.caretAt
+		);
+
+	s = Math.round( p.y + descend ) + fieldPNW.y;
+
+	n = s - Math.round( fs + descend );
+
+	// displays the caret
+	display.fillRect( 'black', p.x + fieldPNW.x, n, 1, s - n );
+};
 
 
 /*

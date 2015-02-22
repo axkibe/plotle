@@ -328,6 +328,12 @@ fabric_label.prototype.dragStop =
 
 
 /*
+| Handles a potential dragStart event for this item.
+*/
+fabric_label.prototype.dragStart = fabric_item.dragStart;
+
+
+/*
 | Draws the label.
 |
 | FIXME: move the common stuff into fabric_item.draw()

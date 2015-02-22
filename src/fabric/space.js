@@ -794,7 +794,7 @@ fabric_space.prototype.click =
 	{
 		item = this.atRank( a );
 
-		if( item.click( this, view, p, shift, ctrl, access ) )
+		if( item.click( p, shift, ctrl, access ) )
 		{
 			return true;
 		}

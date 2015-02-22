@@ -281,6 +281,12 @@ fabric_relation.prototype.draw =
 
 
 /*
+| Handles a potential dragStart event for this item.
+*/
+fabric_relation.prototype.dragStart = fabric_item.dragStart;
+
+
+/*
 | User is hovering their pointing device over something.
 */
 fabric_relation.prototype.pointingHover = fabric_item.pointingHover;

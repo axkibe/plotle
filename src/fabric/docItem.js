@@ -86,13 +86,10 @@ jools.lazyValue(
 			+ jools.limit(
 				0,
 				this.doc.attentionCenter
-				-
-				(
+				- (
 					this.scrollbarY
-						?
-						this.scrollbarY.pos
-						:
-						0
+					?  this.scrollbarY.pos
+					: 0
 				),
 				this.zone.height
 			)
@@ -125,8 +122,6 @@ fabric_docItem.prototype.getParaAtPoint =
 */
 fabric_docItem.prototype.click =
 	function(
-		space,
-		view,
 		p,
 		shift,
 		ctrl,
@@ -140,7 +135,10 @@ fabric_docItem.prototype.click =
 		ppnw,
 		pnw,
 		pi,
-		vp;
+		vp,
+		view;
+
+	view = this.view;
 
 	if( access != 'rw' )
 	{
@@ -149,12 +147,8 @@ fabric_docItem.prototype.click =
 
 	vp = view.depoint( p );
 
-	if(
-		!this.zone.within(
-			view,
-			p
-		)
-	)
+	// FUTURE rework views
+	if( !this.zone.within( view, p ) )
 	{
 		return false;
 	}
@@ -168,10 +162,8 @@ fabric_docItem.prototype.click =
 			pnw.y -
 				(
 					this.scrollbarY
-						?
-						this.scrollbarY.pos
-						:
-						0
+					? this.scrollbarY.pos
+					: 0
 				)
 		);
 

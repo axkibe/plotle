@@ -81,6 +81,111 @@ fabric_item.concernsMark =
 
 
 /*
+| Handles a potential dragStart event for this item.
+*/
+fabric_item.dragStart =
+	function(
+		p,
+		shift,
+		ctrl,
+		access
+	)
+{
+	var
+		action,
+		sbary,
+		view;
+
+	action = root.action;
+
+	sbary = this.scrollbarY;
+
+	view = this.view;
+
+	if(
+		action === null
+		&& sbary
+		&& sbary.within( view, p )
+	)
+	{
+		root.create(
+			'action',
+				action_scrolly.create(
+					'itemPath', this.path,
+					'start', p,
+					'startPos', sbary.pos
+				)
+		);
+
+		return true;
+	}
+
+	if( !this.silhoutte.within( view, p ) )
+	{
+		return false;
+	}
+
+	switch( action && action.reflect )
+	{
+		case 'action_createRelation' :
+
+			root.create(
+				'action',
+					action.create(
+						'fromItemPath', this.path,
+						'relationState', 'hadSelect',
+						'toPoint', p
+					)
+			);
+
+			return true;
+	}
+
+	if( ctrl && access == 'rw' )
+	{
+		// relation binding
+
+		root.create(
+			'action',
+				action_createRelation.create(
+					'fromItemPath', this.path,
+					'toItemPath', jion_path.empty,
+					'relationState', 'hadSelect',
+					'toPoint', p
+				)
+		);
+
+		return true;
+	}
+
+	// scrolling or dragging
+	if( access == 'rw' )
+	{
+		// take focus
+		if( root.space.focusedItem( ) !== this )
+		{
+			root.create( 'mark', mark_item.create( 'path', this.path ) );
+		}
+
+		root.create(
+			'action',
+				action_itemDrag.create(
+					'start', view.depoint( p ),
+					'transItem', this,
+					'origin', this
+				)
+		);
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+};
+
+
+/*
 | User is hovering their pointing device over something.
 */
 fabric_item.pointingHover =
@@ -121,6 +226,11 @@ fabric_item.pointingHover =
 		)
 	);
 };
+
+
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// FIXME remove everything below
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
 /*
@@ -456,111 +566,6 @@ fabric_item.prototype.drawHandles =
 	display.deClip( );
 };
 
-
-
-/*
-| Checks if a dragStart targets this item.
-*/
-fabric_item.prototype.dragStart =
-	function(
-		p,
-		shift,
-		ctrl,
-		access
-	)
-{
-	var
-		action,
-		sbary,
-		view;
-
-	action = root.action;
-
-	sbary = this.scrollbarY;
-
-	view = this.view;
-
-	if(
-		action === null
-		&& sbary
-		&& sbary.within( view, p )
-	)
-	{
-		root.create(
-			'action',
-				action_scrolly.create(
-					'itemPath', this.path,
-					'start', p,
-					'startPos', sbary.pos
-				)
-		);
-
-		return true;
-	}
-
-	if( !this.silhoutte.within( view, p ) )
-	{
-		return false;
-	}
-
-	switch( action && action.reflect )
-	{
-		case 'action_createRelation' :
-
-			root.create(
-				'action',
-					action.create(
-						'fromItemPath', this.path,
-						'relationState', 'hadSelect',
-						'toPoint', p
-					)
-			);
-
-			return true;
-	}
-
-	if( ctrl && access == 'rw' )
-	{
-		// relation binding
-
-		root.create(
-			'action',
-				action_createRelation.create(
-					'fromItemPath', this.path,
-					'toItemPath', jion_path.empty,
-					'relationState', 'hadSelect',
-					'toPoint', p
-				)
-		);
-
-		return true;
-	}
-
-	// scrolling or dragging
-	if( access == 'rw' )
-	{
-		// take focus
-		if( root.space.focusedItem( ) !== this )
-		{
-			root.create( 'mark', mark_item.create( 'path', this.path ) );
-		}
-
-		root.create(
-			'action',
-				action_itemDrag.create(
-					'start', view.depoint( p ),
-					'transItem', this,
-					'origin', this
-				)
-		);
-
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-};
 
 
 /*

@@ -74,6 +74,8 @@ if( SERVER )
 	jools = require( '../jools/jools' );
 
 	euclid_point = require( './point' );
+
+	// FIXME return
 }
 
 

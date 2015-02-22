@@ -145,8 +145,6 @@ if( SERVER )
 {
 	fabric_note = require( '../jion/this' )( module );
 
-	jools = require( '../jools/jools' );
-
 	fabric_note.prototype._init = function( ) { };
 
 	return;
@@ -253,7 +251,16 @@ fabric_note.prototype._init =
 
 
 /*
+| Handles a potential dragStart event for this item.
+*/
+fabric_note.prototype.dragStart = fabric_item.dragStart;
+
+
+
+/*
 | Sets the items position and size after an action.
+|
+| FIXME this has duplicate code with portal.
 */
 fabric_note.prototype.dragStop =
 	function(
@@ -305,19 +312,16 @@ fabric_note.prototype.dragStop =
 };
 
 
-if( SHELL )
-{
-	/*
-	| Minimum height.
-	*/
-	fabric_note.prototype.minHeight = theme.note.minHeight;
+/*
+| Minimum height.
+*/
+fabric_note.prototype.minHeight = theme.note.minHeight;
 
 
-	/*
-	| Minimum width.
-	*/
-	fabric_note.prototype.minWidth = theme.note.minWidth;
-}
+/*
+| Minimum width.
+*/
+fabric_note.prototype.minWidth = theme.note.minWidth;
 
 
 /*
