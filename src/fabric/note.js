@@ -1,7 +1,7 @@
 /*
 | A fix sized text item.
 |
-| Has a scrollbar.
+| Has potentionaly a scrollbar.
 */
 
 var
@@ -10,6 +10,7 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
+	fabric_item,
 	fabric_docItem,
 	fabric_note,
 	jools,
@@ -145,6 +146,10 @@ if( SERVER )
 	fabric_note = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
+
+	fabric_note.prototype._init = function( ) { };
+
+	return;
 }
 
 
@@ -248,12 +253,6 @@ fabric_note.prototype._init =
 
 
 /*
-| Notes use zone for positioning
-*/
-fabric_note.prototype.positioning = 'zone';
-
-
-/*
 | Sets the items position and size after an action.
 */
 fabric_note.prototype.dragStop =
@@ -301,12 +300,7 @@ fabric_note.prototype.dragStop =
 
 		default :
 
-			return(
-				fabric_docItem.prototype.dragStop.call(
-					this,
-					p
-				)
-			);
+			return fabric_docItem.prototype.dragStop.call( this, p );
 	}
 };
 
@@ -325,61 +319,6 @@ if( SHELL )
 	fabric_note.prototype.minWidth = theme.note.minWidth;
 }
 
-
-/*
-| The notes display.
-*/
-jools.lazyValue(
-	fabric_note.prototype,
-	'_display',
-	function( )
-	{
-		var
-			doc,
-			f,
-			hview,
-			sbary,
-			style,
-			vzone;
-
-		vzone = this.view.rect( this.zone );
-
-		hview = this.view.home;
-
-		f =
-			euclid_display.create(
-				'width', vzone.width + 2,
-				'height', vzone.height + 2
-			);
-
-		doc = this.doc;
-
-		style = shell_style.getStyle( theme.note.style, 'normal' );
-
-		sbary = this.scrollbarY;
-
-		f.fill(
-			style,
-			this.zeroSilhoutte,
-			hview
-		);
-
-		// draws selection and text
-		doc.draw(
-			f,
-			this.zone.width,
-			euclid_point.create(
-				'x', 0,
-				'y', sbary ? sbary.pos : 0
-			)
-		);
-
-		// draws the border
-		f.edge( style, this.zeroSilhoutte, hview );
-
-		return f;
-	}
-);
 
 /*
 | Draws the note.
@@ -459,38 +398,6 @@ jools.lazyValue(
 
 
 /*
-| The notes silhoutte anchored at zero.
-*/
-jools.lazyValue(
-	fabric_note.prototype,
-	'zeroSilhoutte',
-	function( )
-	{
-		var
-			zone,
-			cr;
-
-		zone = this.zone;
-
-		cr = theme.note.cornerRadius;
-
-		return (
-			euclid_roundRect.create(
-				'pnw', euclid_point.zero,
-				'pse',
-					euclid_point.create(
-						'x', zone.width,
-						'y', zone.height
-					),
-				'a', cr,
-				'b', cr
-			)
-		);
-	}
-);
-
-
-/*
 | Highlights the note.
 */
 fabric_note.prototype.highlight =
@@ -504,6 +411,18 @@ fabric_note.prototype.highlight =
 		this.view
 	);
 };
+
+
+/*
+| User is hovering their pointing device over something.
+*/
+fabric_note.prototype.pointingHover = fabric_item.pointingHover;
+
+
+/*
+| Notes use zone for positioning
+*/
+fabric_note.prototype.positioning = 'zone';
 
 
 /*
@@ -603,6 +522,94 @@ fabric_note.prototype.mousewheel =
 
 	return true;
 };
+
+
+/*
+| The notes silhoutte anchored at zero.
+*/
+jools.lazyValue(
+	fabric_note.prototype,
+	'zeroSilhoutte',
+	function( )
+	{
+		var
+			zone,
+			cr;
+
+		zone = this.zone;
+
+		cr = theme.note.cornerRadius;
+
+		return (
+			euclid_roundRect.create(
+				'pnw', euclid_point.zero,
+				'pse',
+					euclid_point.create(
+						'x', zone.width,
+						'y', zone.height
+					),
+				'a', cr,
+				'b', cr
+			)
+		);
+	}
+);
+
+
+/*
+| The notes display.
+*/
+jools.lazyValue(
+	fabric_note.prototype,
+	'_display',
+	function( )
+	{
+		var
+			doc,
+			f,
+			hview,
+			sbary,
+			style,
+			vzone;
+
+		vzone = this.view.rect( this.zone );
+
+		hview = this.view.home;
+
+		f =
+			euclid_display.create(
+				'width', vzone.width + 2,
+				'height', vzone.height + 2
+			);
+
+		doc = this.doc;
+
+		style = shell_style.getStyle( theme.note.style, 'normal' );
+
+		sbary = this.scrollbarY;
+
+		f.fill(
+			style,
+			this.zeroSilhoutte,
+			hview
+		);
+
+		// draws selection and text
+		doc.draw(
+			f,
+			this.zone.width,
+			euclid_point.create(
+				'x', 0,
+				'y', sbary ? sbary.pos : 0
+			)
+		);
+
+		// draws the border
+		f.edge( style, this.zeroSilhoutte, hview );
+
+		return f;
+	}
+);
 
 
 } )( );

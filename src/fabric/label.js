@@ -9,6 +9,7 @@ var
 	euclid_point,
 	euclid_rect,
 	fabric_docItem,
+	fabric_item,
 	fabric_label,
 	jools,
 	root,
@@ -128,6 +129,10 @@ if( SERVER )
 	fabric_label = require( '../jion/this' )( module );
 
 	jools = require( '../jools/jools' );
+
+	fabric_label.prototype._init = function( ) { };
+
+	return;
 }
 
 
@@ -179,12 +184,6 @@ fabric_label.prototype._init =
 				)
 		);
 };
-
-
-/*
-| Labels use pnw/fontsize for positioning
-*/
-fabric_label.prototype.positioning = 'pnw/fontsize';
 
 
 /*
@@ -329,6 +328,72 @@ fabric_label.prototype.dragStop =
 
 
 /*
+| Draws the label.
+|
+| FIXME: move the common stuff into fabric_item.draw()
+*/
+fabric_label.prototype.draw =
+	function(
+		display
+	)
+{
+	display.drawImage(
+		'image', this._display,
+		'pnw', this.view.point( this.zone.pnw )
+	);
+};
+
+
+/*
+| User is hovering their pointing device over something.
+*/
+fabric_label.prototype.pointingHover = fabric_item.pointingHover;
+
+
+/*
+| Labels use pnw/fontsize for positioning
+*/
+fabric_label.prototype.positioning = 'pnw/fontsize';
+
+
+/*
+| Mouse wheel turned.
+*/
+fabric_label.prototype.mousewheel =
+	function(
+		// view,
+		// p,
+		// dir
+	)
+{
+	return false;
+};
+
+
+
+/*
+| Dummy since a label does not scroll.
+*/
+fabric_label.prototype.scrollMarkIntoView =
+	function( )
+{
+	// nada
+};
+
+
+/*
+| Dummy since a label does not scroll.
+*/
+fabric_label.prototype.scrollPage =
+	function(
+		// up
+	)
+{
+	// nada
+};
+
+
+/*
 | The label's display.
 */
 jools.lazyValue(
@@ -369,59 +434,6 @@ jools.lazyValue(
 	}
 );
 
-
-/*
-| Draws the label.
-|
-| FIXME: move the common stuff into fabric_item.draw()
-*/
-fabric_label.prototype.draw =
-	function(
-		display
-	)
-{
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.view.point( this.zone.pnw )
-	);
-};
-
-
-/*
-| Mouse wheel turned.
-*/
-fabric_label.prototype.mousewheel =
-	function(
-		// view,
-		// p,
-		// dir
-	)
-{
-	return false;
-};
-
-
-
-/*
-| Dummy since a label does not scroll.
-*/
-fabric_label.prototype.scrollMarkIntoView =
-	function( )
-{
-	// nada
-};
-
-
-/*
-| Dummy since a label does not scroll.
-*/
-fabric_label.prototype.scrollPage =
-	function(
-		// up
-	)
-{
-	// nada
-};
 
 
 

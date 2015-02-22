@@ -1,5 +1,7 @@
 /*
 | Everything there is in a space.
+|
+| FIXME remove all prototye and superclass being.
 */
 
 
@@ -429,7 +431,6 @@ fabric_item.prototype.drawHandles =
 
 /*
 | Checks if a dragStart targets this item.
-| FIXME dont take view
 */
 fabric_item.prototype.dragStart =
 	function(
@@ -637,11 +638,9 @@ fabric_item.prototype.dragStop =
 
 
 /*
-| User is hovering his/her pointing device over something.
-|
-| Checks if this item reacts on this.
+| User is hovering their pointing device over something.
 */
-fabric_item.prototype.pointingHover =
+fabric_item.pointingHover =
 	function(
 		p
 	)

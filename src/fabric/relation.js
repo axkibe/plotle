@@ -7,6 +7,7 @@ var
 	change_grow,
 	euclid_arrow,
 	fabric_doc,
+	fabric_item,
 	fabric_label,
 	fabric_para,
 	fabric_relation,
@@ -146,19 +147,11 @@ if( SERVER )
 	jools = require( '../jools/jools' );
 
 	fabric_label = require( './label' );
+
+	fabric_relation.prototype._init = function( ) { };
+
+	return;
 }
-
-
-/*
-| Initializer.
-*/
-fabric_relation.prototype._init =
-	function(
-		inherit
-	)
-{
-	fabric_label.prototype._init.call( this, inherit );
-};
 
 
 /*
@@ -218,6 +211,18 @@ fabric_relation.spawn =
 
 
 /*
+| Initializer.
+*/
+fabric_relation.prototype._init =
+	function(
+		inherit
+	)
+{
+	fabric_label.prototype._init.call( this, inherit );
+};
+
+
+/*
 | Displays the relation.
 */
 fabric_relation.prototype.draw =
@@ -273,6 +278,12 @@ fabric_relation.prototype.draw =
 
 	fabric_label.prototype.draw.call( this, display );
 };
+
+
+/*
+| User is hovering their pointing device over something.
+*/
+fabric_relation.prototype.pointingHover = fabric_item.pointingHover;
 
 
 } )( );

@@ -120,6 +120,8 @@ fabric_docItem.prototype.getParaAtPoint =
 
 /*
 | Sees if this item is being clicked.
+|
+| FIXME dont take view or space
 */
 fabric_docItem.prototype.click =
 	function(
