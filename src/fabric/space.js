@@ -586,6 +586,7 @@ fabric_space.prototype.dragStart =
 {
 	var
 		a,
+		access,
 		aZ,
 		action,
 		com,
@@ -595,12 +596,14 @@ fabric_space.prototype.dragStart =
 		transItem,
 		view;
 
-	view = this.view,
+	access = this.access;
+
+	view = this.view;
 
 	focus = this.focusedItem( );
 
 	// see if the handles were targeted
-	if( this.access == 'rw' && focus )
+	if( access == 'rw' && focus )
 	{
 		com = focus.checkHandles( p );
 
@@ -724,15 +727,7 @@ fabric_space.prototype.dragStart =
 	{
 		item = this.atRank( a );
 
-		if(
-			item.dragStart(
-				view,
-				p,
-				shift,
-				ctrl,
-				this.access
-			)
-		)
+		if( item.dragStart( p, shift, ctrl, access ) )
 		{
 			return;
 		}
@@ -782,8 +777,11 @@ fabric_space.prototype.click =
 	var
 		a,
 		aZ,
+		access,
 		item,
 		view;
+
+	access = this.access;
 
 	view = this.view;
 
@@ -796,9 +794,7 @@ fabric_space.prototype.click =
 	{
 		item = this.atRank( a );
 
-		if(
-			item.click( this, view, p, shift, ctrl, this.access )
-		)
+		if( item.click( this, view, p, shift, ctrl, access ) )
 		{
 			return true;
 		}

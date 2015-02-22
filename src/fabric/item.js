@@ -433,7 +433,6 @@ fabric_item.prototype.drawHandles =
 */
 fabric_item.prototype.dragStart =
 	function(
-		view,
 		p,
 		shift,
 		ctrl,
@@ -442,11 +441,14 @@ fabric_item.prototype.dragStart =
 {
 	var
 		action,
-		sbary;
+		sbary,
+		view;
 
 	action = root.action;
 
 	sbary = this.scrollbarY;
+
+	view = this.view;
 
 	if(
 		action === null
