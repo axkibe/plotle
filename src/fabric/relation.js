@@ -186,8 +186,8 @@ fabric_relation.spawn =
 					fabric_para.create( 'text', 'relates to' )
 				),
 			'fontsize', 20,
-			'item1key', item1.key,
-			'item2key', item2.key
+			'item1key', item1.path.get( -1 ),
+			'item2key', item2.path.get( -1 )
 		);
 
 	key = jools.uid( );

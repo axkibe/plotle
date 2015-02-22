@@ -301,7 +301,7 @@ fabric_space.prototype.getItem =
 		case 'action_itemDrag' :
 		case 'action_itemResize' :
 
-			if( action.transItem.key === key )
+			if( action.transItem.path.get( -1 ) === key )
 			{
 				return action.transItem;
 			}

@@ -81,17 +81,46 @@ fabric_item.concernsMark =
 
 
 /*
-| Shortcut to the item's key.
-| It is the last path entry.
+| User is hovering their pointing device over something.
 */
-jools.lazyValue(
-	fabric_item.prototype,
-	'key',
-	function( )
+fabric_item.pointingHover =
+	function(
+		p
+	)
+{
+	var
+		sbary,
+		view;
+
+	sbary = this.scrollbarY;
+
+	view = this.view;
+
+	if(
+		sbary
+		&& sbary.within( view, p )
+	)
 	{
-		return this.path.get( -1 );
+		return(
+			result_hover.create(
+				'path', this.path,
+				'cursor', 'default'
+			)
+		);
 	}
-);
+
+	if( !this.zone.within( view, p ) )
+	{
+		return null;
+	}
+
+	return(
+		result_hover.create(
+			'path', this.path,
+			'cursor', 'default'
+		)
+	);
+};
 
 
 /*
@@ -634,49 +663,6 @@ fabric_item.prototype.dragStop =
 
 			return false;
 	}
-};
-
-
-/*
-| User is hovering their pointing device over something.
-*/
-fabric_item.pointingHover =
-	function(
-		p
-	)
-{
-	var
-		sbary,
-		view;
-
-	sbary = this.scrollbarY;
-
-	view = this.view;
-
-	if(
-		sbary
-		&& sbary.within( view, p )
-	)
-	{
-		return(
-			result_hover.create(
-				'path', this.path,
-				'cursor', 'default'
-			)
-		);
-	}
-
-	if( !this.zone.within( view, p ) )
-	{
-		return null;
-	}
-
-	return(
-		result_hover.create(
-			'path', this.path,
-			'cursor', 'default'
-		)
-	);
 };
 
 
