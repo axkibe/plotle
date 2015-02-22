@@ -366,12 +366,10 @@ jools.lazyValue(
 
 /*
 | Draws the handles of an item ( resize, itemmenu )
-| FIXME dont take view
 */
 fabric_item.prototype.drawHandles =
 	function(
-		display,
-		view
+		display
 	)
 {
 	var
@@ -382,13 +380,16 @@ fabric_item.prototype.drawHandles =
 		fixView,
 		h,
 		handles,
-		sbary;
+		sbary,
+		view;
 
 	d8cwcf = euclid_compass.dir8CWCF;
 
 	handles = this._handles;
 
 	sbary = this.scrollbarY;
+
+	view = this.view;
 
 	if( sbary )
 	{

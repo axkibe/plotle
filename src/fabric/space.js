@@ -384,7 +384,7 @@ fabric_space.prototype.draw =
 
 	if( focus )
 	{
-		focus.drawHandles( display, view );
+		focus.drawHandles( display );
 	}
 
 	switch( action && action.reflect )
