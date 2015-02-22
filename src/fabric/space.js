@@ -557,7 +557,7 @@ fabric_space.prototype.pointingHover =
 	{
 		item = this.atRank( a ),
 
-		result = item.pointingHover( view, p );
+		result = item.pointingHover( p );
 
 		if( result )
 		{

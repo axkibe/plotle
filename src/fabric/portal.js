@@ -567,36 +567,29 @@ fabric_portal.prototype.highlight =
 */
 fabric_portal.prototype.pointingHover =
 	function(
-		view,
 		p
 	)
 {
 	var
 		moveToButton,
 		pp,
+		view,
 		zone;
 
-	zone =
-		this.zone;
+	view = this.view;
+
+	zone = this.zone;
 
 	// not clicked on the portal?
-	if(
-		!this.silhoutte
-			.within(
-				view,
-				p
-			)
-		)
+	if( !this.silhoutte.within( view, p  ) )
 	{
 		return null;
 	}
 
 	moveToButton = this._moveToButton;
 
-	pp =
-		view
-		.depoint( p )
-		.sub( zone.pnw );
+
+	pp = view.depoint( p ).sub( zone.pnw );
 
 	if(
 		moveToButton.shape.within( euclid_view.proper, pp )

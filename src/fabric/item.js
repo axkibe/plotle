@@ -638,23 +638,23 @@ fabric_item.prototype.dragStop =
 | User is hovering his/her pointing device over something.
 |
 | Checks if this item reacts on this.
-| FIXME dont take view
 */
 fabric_item.prototype.pointingHover =
 	function(
-		view,
 		p
 	)
 {
 	var
-		sbary;
+		sbary,
+		view;
 
 	sbary = this.scrollbarY;
 
+	view = this.view;
+
 	if(
 		sbary
-		&&
-		sbary.within( view, p )
+		&& sbary.within( view, p )
 	)
 	{
 		return(
