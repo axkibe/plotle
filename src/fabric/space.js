@@ -389,15 +389,7 @@ fabric_space.prototype.draw =
 
 	if( focus )
 	{
-		if( focus.handlesBezel )
-		{
-			focus.handlesBezel.drawHandles( display );
-		}
-		else
-		{
-			// FIXME remove
-			focus.drawHandles( display );
-		}
+		focus.handlesBezel.drawHandles( display );
 	}
 
 	switch( action && action.reflect )
@@ -549,15 +541,7 @@ fabric_space.prototype.pointingHover =
 
 	if( focus )
 	{
-		if( focus.handlesBezel )
-		{
-			com = focus.handlesBezel.checkHandles( p );
-		}
-		else
-		{
-			// FIXME remove
-			com = focus.checkHandles( p );
-		}
+		com = focus.handlesBezel.checkHandles( p );
 
 		if( com )
 		{
@@ -626,16 +610,7 @@ fabric_space.prototype.dragStart =
 	// see if the handles were targeted
 	if( access == 'rw' && focus )
 	{
-		if( focus.handlesBezel )
-		{
-			com = focus.handlesBezel.checkHandles( p );
-		}
-		else
-		{
-			// FIXME remove
-			com = focus.checkHandles( p );
-		}
-
+		com = focus.handlesBezel.checkHandles( p );
 
 		if( com )
 		{

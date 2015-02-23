@@ -25,7 +25,8 @@ var
 	shell_accent,
 	shell_fontPool,
 	shell_style,
-	theme;
+	theme,
+	visual_handlesBezel;
 
 
 
