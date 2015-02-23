@@ -67,9 +67,7 @@ if( JION )
 						type :
 							'euclid_rect'
 					}
-			},
-		init :
-			[ ]
+			}
 	};
 }
 
