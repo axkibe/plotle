@@ -84,6 +84,16 @@ if( JION )
 						type :
 							'euclid_display'
 					},
+				fallbackSpaceRef :
+					{
+						comment :
+							'fallback to this space'
+							+ 'if loading another failed.',
+						type :
+							'fabric_spaceRef',
+						defaultValue :
+							'null'
+					},
 				hover :
 					{
 						comment :
@@ -817,12 +827,20 @@ shell_root.prototype.mousewheel =
 shell_root.prototype.moveToSpace =
 	function(
 		spaceRef,     // reference of type fabric_spaceRef
-		createMissing // if true, non-existing spaces are to be
-		//            // created
+		createMissing // if true, non-existing spaces are to be created
 	)
 {
+	var
+		mode;
+
+	mode = root._mode;
+
 	root.create(
-		'mode', 'loading',
+		'fallbackSpaceRef', root.space ? root.space.ref : null,
+		'mode',
+			mode === 'normal' || mode === 'create'
+			? 'loading'
+			: undefined,
 		'space', null
 	);
 
@@ -936,6 +954,8 @@ shell_root.prototype.showHome =
 
 /*
 | Sets the trait(s) of item(s).
+|
+| FIXME rename this.disc and this.form jockey so this works again.
 */
 shell_root.prototype.setPath =
 	function(
@@ -1137,18 +1157,28 @@ shell_root.prototype.onAcquireSpace =
 				spaceRef
 			);
 
+			if( root.fallbackSpaceRef )
+			{
+				root.moveToSpace( root.fallbackSpaceRef, false );
+			}
+
 			root.create( 'mode', 'nonExistingSpace' );
 
 			return;
 
 		case 'no access' :
 
-			// FIXME move spaceRef handing into _init
+			// FIXME rename spaceRef of noAccesstoSpace
 			root.create(
 				'mode', 'noAccessToSpace',
 				'_formJockey',
 					root._formJockey.create( 'spaceRef', spaceRef )
 			);
+
+			if( root.fallbackSpaceRef )
+			{
+				root.moveToSpace( root.fallbackSpaceRef, false );
+			}
 
 			return;
 
@@ -1164,7 +1194,10 @@ shell_root.prototype.onAcquireSpace =
 	root.create(
 		'access', access,
 		'mark', null,
-		'mode', 'normal',
+		'mode',
+			root._mode === 'loading'
+			? 'normal'
+			: undefined,
 		'space',
 			reply.space.create(
 				'access', access,

@@ -168,6 +168,8 @@ form_moveTo.prototype.pushButton =
 
 	buttonName = path.get( 4 );
 
+	root.create( 'mode', 'loading' );
+
 	switch( buttonName )
 	{
 		case 'ideoloomHomeButton' :
