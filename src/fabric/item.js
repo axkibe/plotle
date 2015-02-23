@@ -186,6 +186,44 @@ fabric_item.dragStart =
 
 
 /*
+| A draggin action regarding this item stopped.
+*/
+fabric_item.dragStop =
+	function(
+		p
+	)
+{
+	var
+		action;
+
+	action = root.action;
+
+	switch( action.reflect )
+	{
+		case 'action_createRelation' :
+
+			if( !this.zone.within( this.view, p ) )
+			{
+				return false;
+			}
+
+			fabric_relation.spawn(
+				root.space.getItem(
+					action.fromItemPath.get( -1 )
+				),
+				this
+			);
+
+			return true;
+
+		default :
+
+			return false;
+	}
+};
+
+
+/*
 | User is hovering their pointing device over something.
 */
 fabric_item.pointingHover =
@@ -630,44 +668,6 @@ fabric_item.prototype.dragMove =
 	}
 
 	return true;
-};
-
-
-/*
-| Sets the items position and size after an action.
-*/
-fabric_item.prototype.dragStop =
-	function(
-		p
-	)
-{
-	var
-		action;
-
-	action = root.action;
-
-	switch( action.reflect )
-	{
-		case 'action_createRelation' :
-
-			if( !this.zone.within( this.view, p ) )
-			{
-				return false;
-			}
-
-			fabric_relation.spawn(
-				root.space.getItem(
-					action.fromItemPath.get( -1 )
-				),
-				this
-			);
-
-			return true;
-
-		default :
-
-			return false;
-	}
 };
 
 

@@ -501,7 +501,7 @@ fabric_portal.prototype.dragStop =
 
 		default :
 
-			return fabric_item.prototype.dragStop.call( this, p );
+			return fabric_item.dragStop.call( this, p );
 	}
 };
 

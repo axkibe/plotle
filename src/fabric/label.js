@@ -8,7 +8,6 @@ var
 	euclid_display,
 	euclid_point,
 	euclid_rect,
-	fabric_docItem,
 	fabric_item,
 	fabric_label,
 	jools,
@@ -267,8 +266,6 @@ jools.lazyValue(
 
 /*
 | Sets the items position and size after an action.
-|
-| FIXME, is this ever called???
 */
 fabric_label.prototype.dragStop =
 	function( p )
@@ -280,6 +277,8 @@ fabric_label.prototype.dragStop =
 		zone;
 
 	action = root.action;
+
+	console.log( 'FIXME i am called' );
 
 	switch( action.reflect )
 	{
@@ -320,9 +319,7 @@ fabric_label.prototype.dragStop =
 
 		default :
 
-			return(
-				fabric_docItem.prototype.dragStop.call( this, p )
-			);
+			return fabric_item.dragStop.call( this, p );
 	}
 };
 

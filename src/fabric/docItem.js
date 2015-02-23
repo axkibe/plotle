@@ -55,25 +55,6 @@ if( !SERVER )
 
 
 /*
-| Sets the items position and size after an action.
-|
-| FIXME why is this here?
-*/
-fabric_docItem.prototype.dragStop =
-	function(
-		p
-	)
-{
-	return(
-		fabric_item.prototype.dragStop.call(
-			this,
-			p
-		)
-	);
-};
-
-
-/*
 | The attention center.
 */
 jools.lazyValue(

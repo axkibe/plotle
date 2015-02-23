@@ -11,7 +11,6 @@ var
 	euclid_rect,
 	euclid_roundRect,
 	fabric_item,
-	fabric_docItem,
 	fabric_note,
 	jools,
 	shell_style,
@@ -307,7 +306,7 @@ fabric_note.prototype.dragStop =
 
 		default :
 
-			return fabric_docItem.prototype.dragStop.call( this, p );
+			return fabric_item.dragStop.call( this, p );
 	}
 };
 
