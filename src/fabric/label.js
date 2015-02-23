@@ -137,6 +137,24 @@ if( SERVER )
 
 
 /*
+| Resize handles to show on labels
+*/
+fabric_label.handles =
+	{
+		ne : true,
+		se : true,
+		sw : true,
+		nw : true
+	};
+
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( fabric_label.handles );
+/**/}
+
+
+/*
 | Initializer.
 */
 fabric_label.prototype._init =
@@ -187,19 +205,8 @@ fabric_label.prototype._init =
 
 
 /*
-| Resize handles to show on labels
-| FIXME remove
+| Returns a handles jion.
 */
-fabric_label.prototype.handles =
-	{
-		ne : true,
-		se : true,
-		sw : true,
-		nw : true
-	};
-
-
-
 jools.lazyValue(
 	fabric_label.prototype,
 	'handlesBezel',
@@ -207,7 +214,7 @@ jools.lazyValue(
 	{
 		return(
 			visual_handlesBezel.create(
-				'handles', fabric_label.prototype.handles, // FIXME
+				'handles', fabric_label.handles,
 				'silhoutte', this.silhoutte,
 				'view', this.view,
 				'zone', this.zone
@@ -215,12 +222,6 @@ jools.lazyValue(
 		);
 	}
 );
-
-
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( fabric_label.prototype.handles );
-/**/}
 
 
 /*

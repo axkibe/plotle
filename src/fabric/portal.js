@@ -206,9 +206,44 @@ spaceFields =
 
 
 /*
-| Portals are positioned by their zone.
+| Resize handles to show on portals.
 */
-fabric_portal.prototype.positioning = 'zone';
+fabric_portal.handles =
+	{
+		n : true,
+		ne : true,
+		e : true,
+		se : true,
+		s : true,
+		sw : true,
+		w : true,
+		nw : true
+	};
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( fabric_portal.handles );
+/**/}
+
+
+/*
+| Returns a handles jion.
+*/
+jools.lazyValue(
+	fabric_portal.prototype,
+	'handlesBezel',
+	function( )
+	{
+		return(
+			visual_handlesBezel.create(
+				'handles', fabric_portal.handles,
+				'silhoutte', this.silhoutte,
+				'view', this.view,
+				'zone', this.zone
+			)
+		);
+	}
+);
 
 
 /*
@@ -224,24 +259,9 @@ fabric_portal.prototype.minWidth = theme.portal.minWidth;
 
 
 /*
-| Resize handles to show on portals.
+| Portals are positioned by their zone.
 */
-fabric_portal.prototype.handles =
-	{
-		n : true,
-		ne : true,
-		e : true,
-		se : true,
-		s : true,
-		sw : true,
-		w : true,
-		nw : true
-	};
-
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( fabric_portal.prototype.handles );
-/**/}
+fabric_portal.prototype.positioning = 'zone';
 
 
 /*

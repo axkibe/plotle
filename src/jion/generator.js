@@ -1,7 +1,5 @@
 /*
 | Generates jion objects from a jion definition.
-|
-| FIXME combine "Export" and "Import" vars into one block.
 */
 
 

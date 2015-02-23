@@ -17,6 +17,7 @@ var
 	root,
 	system,
 	theme,
+	visual_handlesBezel,
 	visual_scrollbar;
 
 
@@ -148,6 +149,27 @@ if( SERVER )
 
 	return;
 }
+
+
+/*
+| Resize handles to show on notes.
+*/
+fabric_note.handles =
+	{
+		n : true,
+		ne : true,
+		e : true,
+		se : true,
+		s : true,
+		sw : true,
+		w : true,
+		nw : true
+	};
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( fabric_note.handles );
+/**/}
 
 
 /*
@@ -317,6 +339,26 @@ fabric_note.prototype.dragStop =
 
 
 /*
+| Returns a handles jion.
+*/
+jools.lazyValue(
+	fabric_note.prototype,
+	'handlesBezel',
+	function( )
+	{
+		return(
+			visual_handlesBezel.create(
+				'handles', fabric_note.handles,
+				'silhoutte', this.silhoutte,
+				'view', this.view,
+				'zone', this.zone
+			)
+		);
+	}
+);
+
+
+/*
 | Minimum height.
 */
 fabric_note.prototype.minHeight = theme.note.minHeight;
@@ -354,27 +396,6 @@ fabric_note.prototype.draw =
 		sbary.draw( display, this.view );
 	}
 };
-
-
-/*
-| Resize handles to show on notes.
-*/
-fabric_note.prototype.handles =
-	{
-		n : true,
-		ne : true,
-		e : true,
-		se : true,
-		s : true,
-		sw : true,
-		w : true,
-		nw : true
-	};
-
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( fabric_note.prototype.handles );
-/**/}
 
 
 /*
