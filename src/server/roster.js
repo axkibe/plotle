@@ -533,6 +533,11 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/visual/handlesBezel.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/visual/scrollbar.js',
 		'hasJion', true,
 		'inBundle', true

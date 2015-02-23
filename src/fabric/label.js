@@ -13,7 +13,8 @@ var
 	jools,
 	root,
 	shell_style,
-	theme;
+	theme,
+	visual_handlesBezel;
 
 
 /*
@@ -187,6 +188,7 @@ fabric_label.prototype._init =
 
 /*
 | Resize handles to show on labels
+| FIXME remove
 */
 fabric_label.prototype.handles =
 	{
@@ -195,6 +197,24 @@ fabric_label.prototype.handles =
 		sw : true,
 		nw : true
 	};
+
+
+
+jools.lazyValue(
+	fabric_label.prototype,
+	'handlesBezel',
+	function( )
+	{
+		return(
+			visual_handlesBezel.create(
+				'handles', fabric_label.prototype.handles, // FIXME
+				'silhoutte', this.silhoutte,
+				'view', this.view,
+				'zone', this.zone
+			)
+		);
+	}
+);
 
 
 /**/if( FREEZE )
@@ -262,6 +282,12 @@ jools.lazyValue(
 		);
 	}
 );
+
+
+/*
+| A move during an action.
+*/
+fabric_label.prototype.dragMove = fabric_item.dragMove;
 
 
 /*

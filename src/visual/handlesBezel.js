@@ -30,12 +30,21 @@ if( JION )
 			'visual_handlesBezel',
 		attributes :
 			{
+				handles :
+					{
+						comment :
+							'list of available handle directions',
+						type :
+							'protean' // FUTURE jionize
+					},
 				sbary :
 					{
 						comment :
 							'a possible y-scrollbar',
 						type :
-							'visual_scrollbar'
+							'visual_scrollbar',
+						defaultValue :
+							'undefined'
 					},
 				silhoutte :
 					{

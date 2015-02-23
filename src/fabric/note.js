@@ -250,10 +250,15 @@ fabric_note.prototype._init =
 
 
 /*
+| A move during an action.
+*/
+fabric_note.prototype.dragMove = fabric_item.dragMove;
+
+
+/*
 | Handles a potential dragStart event for this item.
 */
 fabric_note.prototype.dragStart = fabric_item.dragStart;
-
 
 
 /*

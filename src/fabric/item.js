@@ -81,6 +81,70 @@ fabric_item.concernsMark =
 
 
 /*
+| A move during an action.
+*/
+fabric_item.dragMove =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
+{
+	var
+		action,
+		dy,
+		sbary,
+		spos,
+		start,
+		view;
+
+	action = root.action;
+
+	view = this.view;
+
+	switch( action.reflect )
+	{
+		case 'action_createRelation' :
+
+			if( !this.zone.within( view, p ) )
+			{
+				return false;
+			}
+
+			root.create(
+				'action', action.create( 'toItemPath', this.path )
+			);
+
+			return true;
+
+		case 'action_scrolly' :
+
+			start = action.start,
+
+			dy = ( p.y - start.y ) / view.zoom,
+
+			sbary = this.scrollbarY,
+
+			spos = action.startPos + sbary.scale( dy );
+
+			root.setPath(
+				this.path.append( 'scrolly' ),
+				spos
+			);
+
+			return true;
+
+		default :
+
+			throw new Error( );
+	}
+
+	return true;
+};
+
+
+
+/*
 | Handles a potential dragStart event for this item.
 */
 fabric_item.dragStart =
@@ -604,71 +668,6 @@ fabric_item.prototype.drawHandles =
 	display.deClip( );
 };
 
-
-
-/*
-| A move during an action.
-*/
-fabric_item.prototype.dragMove =
-	function(
-		p
-		// shift,
-		// ctrl
-	)
-{
-	var
-		action,
-		dy,
-		sbary,
-		spos,
-		start,
-		view;
-
-	action = root.action;
-
-	view = this.view;
-
-	switch( action.reflect )
-	{
-		case 'action_createRelation' :
-
-			if( !this.zone.within( view, p ) )
-			{
-				return false;
-			}
-
-			root.create(
-				'action', action.create( 'toItemPath', this.path )
-			);
-
-			return true;
-
-		case 'action_scrolly' :
-
-			start = action.start,
-
-			dy = ( p.y - start.y ) / view.zoom,
-
-			sbary = this.scrollbarY,
-
-			spos = action.startPos + sbary.scale( dy );
-
-			root.setPath(
-				this.path.append( 'scrolly' ),
-				spos
-			);
-
-			return true;
-
-		default :
-
-			throw new Error(
-				'invalid action in dragMove'
-			);
-	}
-
-	return true;
-};
 
 
 } )( );

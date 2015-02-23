@@ -287,6 +287,12 @@ fabric_relation.prototype.dragStart = fabric_item.dragStart;
 
 
 /*
+| A move during an action.
+*/
+fabric_relation.prototype.dragMove = fabric_item.dragMove;
+
+
+/*
 | User is hovering their pointing device over something.
 */
 fabric_relation.prototype.pointingHover = fabric_item.pointingHover;

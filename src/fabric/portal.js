@@ -439,6 +439,12 @@ fabric_portal.prototype.click =
 
 
 /*
+| A move during an action.
+*/
+fabric_portal.prototype.dragMove = fabric_item.dragMove;
+
+
+/*
 | Handles a potential dragStart event for this item.
 */
 fabric_portal.prototype.dragStart = fabric_item.dragStart;
