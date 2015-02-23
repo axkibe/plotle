@@ -416,7 +416,7 @@ fabric_portal.prototype.click =
 				mark_caret.create(
 					'path', this.path.append( field ),
 					'at', this._getOffsetAt( field, pp.x )
-				)
+				);
 
 			break;
 		}
