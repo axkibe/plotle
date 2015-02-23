@@ -141,7 +141,39 @@ if( SERVER )
 {
 	fabric_space = require( '../jion/this' )( module );
 
-	jools = require( '../jools/jools' );
+	jion_path = require( '../jion/path' );
+
+	fabric_space.prototype._init = function( ){ };
+}
+
+
+/*
+| Returns the mark if the form jockey concerns a mark.
+*/
+fabric_space.concernsMark =
+	function(
+		mark
+	)
+{
+	// returns an undefined mark if it was undefined
+	// or the mark itself if it has a space path
+	if(
+		!mark
+		|| mark.containsPath( jion_path.empty.append( 'space' ) )
+	)
+	{
+		return mark;
+	}
+	else
+	{
+		return null;
+	}
+};
+
+
+if( SERVER )
+{
+	return;
 }
 
 
@@ -205,33 +237,6 @@ fabric_space.prototype._init =
 | The disc is shown while a space is shown.
 */
 fabric_space.prototype.showDisc = true;
-
-
-/*
-| Returns the mark if the form jockey concerns a mark.
-*/
-fabric_space.concernsMark =
-	function(
-		mark
-	)
-{
-	// returns an undefined mark if it was undefined
-	// or the mark itself if it has a space path
-	if(
-		!mark
-		||
-		mark.containsPath(
-			jion_path.empty.append( 'space' )
-		)
-	)
-	{
-		return mark;
-	}
-	else
-	{
-		return null;
-	}
-};
 
 
 /*
