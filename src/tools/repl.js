@@ -32,7 +32,6 @@ GLOBAL.JION = false;
 
 GLOBAL.SERVER = true;
 
-GLOBAL.SHELL = false;
 
 /*
 | Preloads some common modules

@@ -46,8 +46,6 @@ GLOBAL.JION = false;
 
 GLOBAL.SERVER = true;
 
-GLOBAL.SHELL = false;
-
 
 /*
 | Imports

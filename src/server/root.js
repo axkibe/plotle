@@ -121,9 +121,6 @@ GLOBAL.JION = false;
 // server is a server
 GLOBAL.SERVER = true;
 
-// and not a shell
-GLOBAL.SHELL = false;
-
 // sets root as global variable
 GLOBAL.root = null;
 
@@ -632,8 +629,7 @@ prototype.prepareInventory =
 							'CHECK' : config.shell_check,
 							'FREEZE' : config.shell_freeze,
 							'JION' : false,
-							'SERVER' : false,
-							'SHELL' : true,
+							'SERVER' : false
 						}
 					}
 				);
@@ -814,7 +810,6 @@ prototype.prependConfigFlags =
 						+ 'var CHECK = ' + config.shell_check + ';\n'
 						+ 'var FREEZE = ' + config.shell_freeze + ';\n'
 						+ 'var SERVER = false;\n'
-						+ 'var SHELL = true;\n'
 						+ resource.data
 				)
 			)

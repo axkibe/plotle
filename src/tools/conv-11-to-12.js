@@ -2,6 +2,8 @@
 | Converts a v11 repository to v12.
 */
 
+// deactivated
+if( true ) return false;
 
 
 /*
@@ -48,8 +50,6 @@ GLOBAL.JION = false;
 
 // this also not fully true
 GLOBAL.SERVER = true;
-
-GLOBAL.SHELL = false;
 
 
 var

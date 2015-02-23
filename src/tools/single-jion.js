@@ -14,8 +14,6 @@ GLOBAL.JION = false;
 
 GLOBAL.SERVER = true;
 
-GLOBAL.SHELL = false;
-
 if( typeof( require ) === 'undefined' )
 {
 	throw new Error(

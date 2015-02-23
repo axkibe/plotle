@@ -51,8 +51,6 @@ GLOBAL.JION = false;
 // this also not fully true
 GLOBAL.SERVER = true;
 
-GLOBAL.SHELL = false;
-
 
 var
 	connectToSource,

@@ -26,8 +26,6 @@ GLOBAL.FREEZE = true;
 
 GLOBAL.SERVER = true;
 
-GLOBAL.SHELL = false;
-
 
 var
 	a,
