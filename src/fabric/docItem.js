@@ -187,7 +187,7 @@ fabric_docItem.prototype.click =
 /*
 | A text has been inputed.
 */
-fabric_docItem.prototype.input =
+fabric_docItem.input =
 	function(
 		text
 	)

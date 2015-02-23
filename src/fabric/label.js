@@ -205,90 +205,15 @@ fabric_label.prototype._init =
 
 
 /*
-| Returns a handles jion.
-*/
-jools.lazyValue(
-	fabric_label.prototype,
-	'handlesBezel',
-	function( )
-	{
-		return(
-			visual_handlesBezel.create(
-				'handles', fabric_label.handles,
-				'silhoutte', this.silhoutte,
-				'view', this.view,
-				'zone', this.zone
-			)
-		);
-	}
-);
-
-
-/*
-| Highlights the label.
-*/
-fabric_label.prototype.highlight =
-	function(
-		display
-	)
-{
-	display.edge(
-		shell_style.getStyle( theme.label.style, 'highlight' ),
-		this.silhoutte,
-		this.view
-	);
-};
-
-
-/*
-| The label's silhoutte.
-*/
-jools.lazyValue(
-	fabric_label.prototype,
-	'silhoutte',
-	function( )
-	{
-		return(
-			euclid_rect.create(
-				'pnw', this.zone.pnw,
-				'pse', this.zone.pse.sub( 1, 1 )
-			)
-		);
-	}
-);
-
-
-/*
-| The items silhoutte anchored at zero.
-*/
-jools.lazyValue(
-	fabric_label.prototype,
-	'zeroSilhoutte',
-	function( )
-	{
-		var
-			zone;
-
-		zone = this.zone;
-
-		return(
-			euclid_rect.create(
-				'pnw', euclid_point.zero,
-				'pse',
-					euclid_point.create(
-						'x', Math.max( zone.width  - 1, 0 ),
-						'y', Math.max( zone.height - 1, 0 )
-					)
-			)
-		);
-	}
-);
-
-
-/*
 | A move during an action.
 */
 fabric_label.prototype.dragMove = fabric_item.dragMove;
+
+
+/*
+| Handles a potential dragStart event for this item.
+*/
+fabric_label.prototype.dragStart = fabric_item.dragStart;
 
 
 /*
@@ -352,9 +277,90 @@ fabric_label.prototype.dragStop =
 
 
 /*
-| Handles a potential dragStart event for this item.
+| Returns a handles jion.
 */
-fabric_label.prototype.dragStart = fabric_item.dragStart;
+jools.lazyValue(
+	fabric_label.prototype,
+	'handlesBezel',
+	function( )
+	{
+		return(
+			visual_handlesBezel.create(
+				'handles', fabric_label.handles,
+				'silhoutte', this.silhoutte,
+				'view', this.view,
+				'zone', this.zone
+			)
+		);
+	}
+);
+
+
+/*
+| Highlights the label.
+*/
+fabric_label.prototype.highlight =
+	function(
+		display
+	)
+{
+	display.edge(
+		shell_style.getStyle( theme.label.style, 'highlight' ),
+		this.silhoutte,
+		this.view
+	);
+};
+
+
+/*
+| A text has been inputed.
+*/
+fabric_label.prototype.input = fabric_docItem.input;
+
+
+/*
+| The label's silhoutte.
+*/
+jools.lazyValue(
+	fabric_label.prototype,
+	'silhoutte',
+	function( )
+	{
+		return(
+			euclid_rect.create(
+				'pnw', this.zone.pnw,
+				'pse', this.zone.pse.sub( 1, 1 )
+			)
+		);
+	}
+);
+
+
+/*
+| The items silhoutte anchored at zero.
+*/
+jools.lazyValue(
+	fabric_label.prototype,
+	'zeroSilhoutte',
+	function( )
+	{
+		var
+			zone;
+
+		zone = this.zone;
+
+		return(
+			euclid_rect.create(
+				'pnw', euclid_point.zero,
+				'pse',
+					euclid_point.create(
+						'x', Math.max( zone.width  - 1, 0 ),
+						'y', Math.max( zone.height - 1, 0 )
+					)
+			)
+		);
+	}
+);
 
 
 /*

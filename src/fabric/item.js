@@ -1,7 +1,5 @@
 /*
 | Everything there is in a space.
-|
-| FIXME remove all prototye and superclass being.
 */
 
 
@@ -30,21 +28,13 @@ var
 */
 if( SERVER )
 {
+	fabric_item = module.exports;
+
 	jools = require( '../jools/jools' );
 }
-
-
-fabric_item =
-	function( )
+else
 {
-	// this is an abstract class
-	throw new Error( );
-};
-
-
-if( SERVER )
-{
-	module.exports = fabric_item;
+	fabric_item = { };
 }
 
 

@@ -223,6 +223,18 @@ fabric_relation.prototype._init =
 
 
 /*
+| A move during an action.
+*/
+fabric_relation.prototype.dragMove = fabric_item.dragMove;
+
+
+/*
+| Handles a potential dragStart event for this item.
+*/
+fabric_relation.prototype.dragStart = fabric_item.dragStart;
+
+
+/*
 | Displays the relation.
 */
 fabric_relation.prototype.draw =
@@ -281,15 +293,9 @@ fabric_relation.prototype.draw =
 
 
 /*
-| Handles a potential dragStart event for this item.
+| A text has been inputed.
 */
-fabric_relation.prototype.dragStart = fabric_item.dragStart;
-
-
-/*
-| A move during an action.
-*/
-fabric_relation.prototype.dragMove = fabric_item.dragMove;
+fabric_relation.prototype.input = fabric_docItem.input;
 
 
 /*

@@ -284,6 +284,34 @@ fabric_note.prototype.dragStart = fabric_item.dragStart;
 
 
 /*
+| Draws the note.
+*/
+fabric_note.prototype.draw =
+	function(
+		display
+	)
+{
+	var
+		zone,
+		sbary;
+
+	zone = this.zone;
+
+	sbary = this.scrollbarY;
+
+	display.drawImage(
+		'image', this._display,
+		'pnw', this.view.point( zone.pnw )
+	);
+
+	if( sbary )
+	{
+		sbary.draw( display, this.view );
+	}
+};
+
+
+/*
 | Sets the items position and size after an action.
 |
 | FIXME this has duplicate code with portal.
@@ -359,43 +387,9 @@ jools.lazyValue(
 
 
 /*
-| Minimum height.
+| A text has been inputed.
 */
-fabric_note.prototype.minHeight = theme.note.minHeight;
-
-
-/*
-| Minimum width.
-*/
-fabric_note.prototype.minWidth = theme.note.minWidth;
-
-
-/*
-| Draws the note.
-*/
-fabric_note.prototype.draw =
-	function(
-		display
-	)
-{
-	var
-		zone,
-		sbary;
-
-	zone = this.zone;
-
-	sbary = this.scrollbarY;
-
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.view.point( zone.pnw )
-	);
-
-	if( sbary )
-	{
-		sbary.draw( display, this.view );
-	}
-};
+fabric_note.prototype.input = fabric_docItem.input;
 
 
 /*
@@ -446,6 +440,19 @@ fabric_note.prototype.highlight =
 | User is hovering their pointing device over something.
 */
 fabric_note.prototype.pointingHover = fabric_item.pointingHover;
+
+
+/*
+| Minimum height.
+*/
+fabric_note.prototype.minHeight = theme.note.minHeight;
+
+
+/*
+| Minimum width.
+*/
+fabric_note.prototype.minWidth = theme.note.minWidth;
+
 
 
 /*
