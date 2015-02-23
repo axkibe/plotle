@@ -75,7 +75,9 @@ if( SERVER )
 
 	euclid_point = require( './point' );
 
-	// FIXME return
+	euclid_view.prototype._init = function( ) { };
+
+	return;
 }
 
 
@@ -85,21 +87,14 @@ if( SERVER )
 euclid_view.prototype._init =
 	function( )
 {
-	if( SHELL )
-	{
-		this.fact =
-			jools.limit(
-				theme.zoom.min,
-				this.fact,
-				theme.zoom.max
-			);
+	this.fact =
+		jools.limit(
+			theme.zoom.min,
+			this.fact,
+			theme.zoom.max
+		);
 
-		this.zoom =
-			Math.pow(
-				theme.zoom.base,
-				this.fact
-			);
-	}
+	this.zoom = Math.pow( theme.zoom.base, this.fact );
 };
 
 
