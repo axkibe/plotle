@@ -361,28 +361,21 @@ fabric_portal.prototype.click =
 	)
 {
 	var
+		field,
 		fieldLazyName,
-		mark,
 		moveToButton,
 		pp,
+		setMark,
 		sf,
 		view,
 		zone;
-
-	mark = null;
 
 	view = this.view;
 
 	zone = this.zone;
 
 	// not clicked on the portal?
-	if(
-		!this.silhoutte
-			.within(
-				view,
-				p
-			)
-		)
+	if( !this.silhoutte.within( view, p ) )
 	{
 		return false;
 	}
@@ -394,10 +387,7 @@ fabric_portal.prototype.click =
 		.depoint( p )
 		.sub( zone.pnw );
 
-	if(
-		moveToButton.shape
-		.within( euclid_view.proper, pp )
-	)
+	if( moveToButton.shape.within( euclid_view.proper, pp ) )
 	{
 		this._moveTo( );
 
@@ -414,24 +404,19 @@ fabric_portal.prototype.click =
 		.depoint( p )
 		.sub( zone.pnw );
 
-	for( var field in spaceFields )
+	for( field in spaceFields )
 	{
 		fieldLazyName = spaceFields[ field ];
 
 		sf = this[ fieldLazyName ];
 
-		if(
-			sf.silhoutte.within( euclid_view.proper, pp )
-		)
+		if( sf.silhoutte.within( euclid_view.proper, pp ) )
 		{
-			mark =
-				root.create(
-					'mark',
-						mark_caret.create(
-							'path', this.path.append( field  ),
-							'at', this._getOffsetAt( field, pp.x )
-						)
-				);
+			setMark =
+				mark_caret.create(
+					'path', this.path.append( field ),
+					'at', this._getOffsetAt( field, pp.x )
+				)
 
 			break;
 		}
@@ -439,9 +424,14 @@ fabric_portal.prototype.click =
 
 	// if non of the field were clicked
 	// just focus the portal itself
-	if( mark === null )
+	if( !setMark && !this.mark )
 	{
-		root.create( 'mark', mark_item.create( 'path', this.path ) );
+		setMark = mark_item.create( 'path', this.path );
+	}
+
+	if( setMark )
+	{
+		root.create( 'mark', setMark );
 	}
 
 	return true;
