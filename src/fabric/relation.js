@@ -321,5 +321,11 @@ fabric_relation.prototype.input = fabric_docItem.input;
 fabric_relation.prototype.pointingHover = fabric_item.pointingHover;
 
 
+/*
+| Handles a special key.
+*/
+fabric_relation.prototype.specialKey = fabric_docItem.specialKey;
+
+
 } )( );
 

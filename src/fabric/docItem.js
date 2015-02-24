@@ -177,21 +177,14 @@ fabric_docItem.input =
 /*
 | Handles a special key.
 */
-fabric_docItem.prototype.specialKey =
+fabric_docItem.specialKey =
 	function(
 		key,
 		shift,
 		ctrl
 	)
 {
-	return (
-		this.doc.specialKey(
-			key,
-			this,
-			shift,
-			ctrl
-		)
-	);
+	return this.doc.specialKey( key, this, shift, ctrl );
 };
 
 

@@ -354,6 +354,12 @@ jools.lazyValue(
 
 
 /*
+| Handles a special key.
+*/
+fabric_label.prototype.specialKey = fabric_docItem.specialKey;
+
+
+/*
 | The items silhoutte anchored at zero.
 */
 jools.lazyValue(

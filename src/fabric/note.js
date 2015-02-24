@@ -404,40 +404,6 @@ jools.lazyValue(
 
 
 /*
-| A text has been inputed.
-*/
-fabric_note.prototype.input = fabric_docItem.input;
-
-
-/*
-| The notes silhoutte.
-*/
-jools.lazyValue(
-	fabric_note.prototype,
-	'silhoutte',
-	function( )
-	{
-		var
-			zone,
-			cr;
-
-		zone = this.zone;
-
-		cr = theme.note.cornerRadius;
-
-		return(
-			euclid_roundRect.create(
-				'pnw', zone.pnw,
-				'pse', zone.pse,
-				'a', cr,
-				'b', cr
-			)
-		);
-	}
-);
-
-
-/*
 | Highlights the note.
 */
 fabric_note.prototype.highlight =
@@ -451,6 +417,12 @@ fabric_note.prototype.highlight =
 		this.view
 	);
 };
+
+
+/*
+| A text has been inputed.
+*/
+fabric_note.prototype.input = fabric_docItem.input;
 
 
 /*
@@ -470,6 +442,32 @@ fabric_note.prototype.minHeight = theme.note.minHeight;
 */
 fabric_note.prototype.minWidth = theme.note.minWidth;
 
+
+/*
+| Mouse wheel turned.
+*/
+fabric_note.prototype.mousewheel =
+	function(
+		view,
+		p,
+		dir
+		// shift,
+		// ctrl
+	)
+{
+	if( !this.zone .within( view, p ) )
+	{
+		return false;
+	}
+
+	root.setPath(
+		this.path.append( 'scrolly' ),
+		( this.scrollbarY ? this.scrollbarY.pos : 0 )
+		- dir * system.textWheelSpeed
+	);
+
+	return true;
+};
 
 
 /*
@@ -551,30 +549,37 @@ fabric_note.prototype.scrollMarkIntoView =
 
 
 /*
-| Mouse wheel turned.
+| The notes silhoutte.
 */
-fabric_note.prototype.mousewheel =
-	function(
-		view,
-		p,
-		dir
-		// shift,
-		// ctrl
-	)
-{
-	if( !this.zone .within( view, p ) )
+jools.lazyValue(
+	fabric_note.prototype,
+	'silhoutte',
+	function( )
 	{
-		return false;
+		var
+			zone,
+			cr;
+
+		zone = this.zone;
+
+		cr = theme.note.cornerRadius;
+
+		return(
+			euclid_roundRect.create(
+				'pnw', zone.pnw,
+				'pse', zone.pse,
+				'a', cr,
+				'b', cr
+			)
+		);
 	}
+);
 
-	root.setPath(
-		this.path.append( 'scrolly' ),
-		( this.scrollbarY ? this.scrollbarY.pos : 0 )
-		- dir * system.textWheelSpeed
-	);
 
-	return true;
-};
+/*
+| Handles a special key.
+*/
+fabric_note.prototype.specialKey = fabric_docItem.specialKey;
 
 
 /*
