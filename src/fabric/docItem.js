@@ -7,8 +7,7 @@
 | Export
 */
 var
-	fabric_docItem,
-	fabric_item;
+	fabric_docItem;
 
 
 /*
@@ -33,24 +32,12 @@ var
 if( SERVER )
 {
 	jools = require( '../jools/jools' );
+
+	fabric_docItem = module.exports;
 }
-
-
-/*
-| Constructor
-*/
-fabric_docItem =
-	function( )
+else
 {
-	// initializing abstract.
-	throw new Error( );
-};
-
-
-// FIXME this is ugly
-if( !SERVER )
-{
-	jools.subclass( fabric_docItem, fabric_item );
+	fabric_docItem = { };
 }
 
 
