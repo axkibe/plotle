@@ -294,6 +294,22 @@ fabric_label.prototype.dragStop =
 
 
 /*
+| Draws the label.
+*/
+fabric_label.prototype.draw =
+	function(
+		display
+	)
+{
+	display.drawImage(
+		'image', this._display,
+		'pnw', this.view.point( this.zone.pnw )
+	);
+};
+
+
+
+/*
 | Returns a handles jion.
 */
 jools.lazyValue(
@@ -336,7 +352,33 @@ fabric_label.prototype.input = fabric_docItem.input;
 
 
 /*
-| The label's silhoutte.
+| Mouse wheel turned.
+*/
+fabric_label.prototype.mousewheel =
+	function(
+		// view,
+		// p,
+		// dir
+	)
+{
+	return false;
+};
+
+
+/*
+| User is hovering their pointing device over something.
+*/
+fabric_label.prototype.pointingHover = fabric_item.pointingHover;
+
+
+/*
+| Labels use pnw/fontsize for positioning
+*/
+fabric_label.prototype.positioning = 'pnw/fontsize';
+
+
+/*
+| The item's silhoutte.
 */
 jools.lazyValue(
 	fabric_label.prototype,
@@ -357,6 +399,18 @@ jools.lazyValue(
 | Handles a special key.
 */
 fabric_label.prototype.specialKey = fabric_docItem.specialKey;
+
+
+/*
+| Dummy since a label does not scroll.
+*/
+fabric_label.prototype.scrollMarkIntoView = function( ){ };
+
+
+/*
+| Dummy since a label does not scroll.
+*/
+fabric_label.prototype.scrollPage = function( ){ };
 
 
 /*
@@ -385,71 +439,6 @@ jools.lazyValue(
 	}
 );
 
-
-/*
-| Draws the label.
-|
-| FIXME: move the common stuff into fabric_item.draw()
-*/
-fabric_label.prototype.draw =
-	function(
-		display
-	)
-{
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.view.point( this.zone.pnw )
-	);
-};
-
-
-/*
-| User is hovering their pointing device over something.
-*/
-fabric_label.prototype.pointingHover = fabric_item.pointingHover;
-
-
-/*
-| Labels use pnw/fontsize for positioning
-*/
-fabric_label.prototype.positioning = 'pnw/fontsize';
-
-
-/*
-| Mouse wheel turned.
-*/
-fabric_label.prototype.mousewheel =
-	function(
-		// view,
-		// p,
-		// dir
-	)
-{
-	return false;
-};
-
-
-
-/*
-| Dummy since a label does not scroll.
-*/
-fabric_label.prototype.scrollMarkIntoView =
-	function( )
-{
-	// nada
-};
-
-
-/*
-| Dummy since a label does not scroll.
-*/
-fabric_label.prototype.scrollPage =
-	function(
-		// up
-	)
-{
-	// nada
-};
 
 
 /*

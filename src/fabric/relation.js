@@ -6,6 +6,9 @@
 var
 	change_grow,
 	euclid_arrow,
+	euclid_display,
+	euclid_point,
+	euclid_rect,
 	fabric_doc,
 	fabric_docItem,
 	fabric_item,
@@ -16,7 +19,9 @@ var
 	jools,
 	mark_caret,
 	root,
-	theme;
+	shell_style,
+	theme,
+	visual_handlesBezel;
 
 
 /*
@@ -132,8 +137,7 @@ if( JION )
 						'undefined'
 				}
 		},
-		init : [ 'inherit' ],
-		subclass : 'fabric_label'
+		init : [ 'inherit' ]
 	};
 }
 
@@ -153,6 +157,25 @@ if( SERVER )
 
 	return;
 }
+
+
+/*
+| Resize handles to show on relations.
+*/
+fabric_relation.handles =
+	{
+		ne : true,
+		se : true,
+		sw : true,
+		nw : true
+	};
+
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( fabric_relation.handles );
+/**/}
+
 
 
 /*
@@ -252,6 +275,12 @@ fabric_relation.prototype.dragStart = fabric_item.dragStart;
 
 
 /*
+| Sets the items position and size after an action.
+*/
+fabric_relation.prototype.dragStop = fabric_label.prototype.dragStop;
+
+
+/*
 | Displays the relation.
 */
 fabric_relation.prototype.draw =
@@ -310,9 +339,49 @@ fabric_relation.prototype.draw =
 
 
 /*
+| Returns a handles jion.
+*/
+jools.lazyValue(
+	fabric_relation.prototype,
+	'handlesBezel',
+	function( )
+	{
+		return(
+			visual_handlesBezel.create(
+				'handles', fabric_relation.handles,
+				'silhoutte', this.silhoutte,
+				'view', this.view,
+				'zone', this.zone
+			)
+		);
+	}
+);
+
+
+/*
+| Highlights the item.
+*/
+fabric_relation.prototype.highlight = fabric_label.prototype.highlight;
+
+
+/*
 | A text has been inputed.
 */
 fabric_relation.prototype.input = fabric_docItem.input;
+
+
+/*
+| Mouse wheel turned.
+*/
+fabric_relation.prototype.mousewheel =
+	function(
+		// view,
+		// p,
+		// dir
+	)
+{
+	return false;
+};
 
 
 /*
@@ -322,9 +391,115 @@ fabric_relation.prototype.pointingHover = fabric_item.pointingHover;
 
 
 /*
+| Relations use pnw/fontsize for positioning
+*/
+fabric_relation.prototype.positioning = 'pnw/fontsize';
+
+
+/*
+| The item's silhoutte.
+*/
+jools.lazyValue(
+	fabric_relation.prototype,
+	'silhoutte',
+	function( )
+	{
+		return(
+			euclid_rect.create(
+				'pnw', this.zone.pnw,
+				'pse', this.zone.pse.sub( 1, 1 )
+			)
+		);
+	}
+);
+
+
+/*
 | Handles a special key.
 */
 fabric_relation.prototype.specialKey = fabric_docItem.specialKey;
+
+
+
+/*
+| Dummy since a relation does not scroll.
+*/
+fabric_relation.prototype.scrollMarkIntoView = function( ){ };
+
+
+/*
+| Dummy since a label does not scroll.
+*/
+fabric_relation.prototype.scrollPage = function( ){ };
+
+
+/*
+| The items silhoutte anchored at zero.
+*/
+jools.lazyValue(
+	fabric_relation.prototype,
+	'zeroSilhoutte',
+	function( )
+	{
+		var
+			zone;
+
+		zone = this.zone;
+
+		return(
+			euclid_rect.create(
+				'pnw', euclid_point.zero,
+				'pse',
+					euclid_point.create(
+						'x', Math.max( zone.width  - 1, 0 ),
+						'y', Math.max( zone.height - 1, 0 )
+					)
+			)
+		);
+	}
+);
+
+
+/*
+| The relation's display.
+*/
+jools.lazyValue(
+	fabric_relation.prototype,
+	'_display',
+	function( )
+	{
+		var
+			doc,
+			display,
+			vzone;
+
+		vzone = this.view.rect( this.zone );
+
+		display =
+			euclid_display.create(
+				'width', vzone.width,
+				'height', vzone.height
+			);
+
+		doc = this.doc;
+
+		// displays selection and text
+		doc.draw(
+			display,
+			this.zone.width,
+			euclid_point.zero
+		);
+
+		// displays the border
+		display.edge(
+			shell_style.getStyle( theme.label.style, 'normal' ),
+			this.zeroSilhoutte,
+			this.view.home
+		);
+
+		return display;
+	}
+);
 
 
 } )( );
