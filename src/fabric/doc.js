@@ -899,16 +899,15 @@ fabric_doc.prototype.getParaAtPoint =
 		key,
 		para,
 		pnws,
+		r,
 		ranks,
+		rZ,
 		twig;
 
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 1 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
+	if( p.y < this.innerMargin.n )
+	{
+		return null;
+	}
 
 	pnws = this.paraPNWs;
 
@@ -917,7 +916,7 @@ fabric_doc.prototype.getParaAtPoint =
 	twig = this.twig;
 
 	for(
-		var r = 0, rZ = ranks.length;
+		r = 0, rZ = ranks.length;
 		r < rZ;
 		r++
 	)

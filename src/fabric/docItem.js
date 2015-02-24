@@ -77,23 +77,6 @@ fabric_docItem.attentionCenter =
 
 
 /*
-| Returns the para at point. FIXME, honor scroll here.
-*/
-fabric_docItem.prototype.getParaAtPoint =
-	function(
-		p
-	)
-{
-	if( p.y < this.doc.innerMargin.n )
-	{
-		return null;
-	}
-
-	return this.doc.getParaAtPoint( p );
-};
-
-
-/*
 | Sees if this item is being clicked.
 |
 | FIXME dont take view or space
@@ -147,7 +130,7 @@ fabric_docItem.prototype.click =
 
 	doc = this.doc;
 
-	para = this.getParaAtPoint( pi );
+	para = doc.getParaAtPoint( pi );
 
 	// FIXME move into para
 	if( para )
