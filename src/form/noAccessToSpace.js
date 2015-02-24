@@ -159,4 +159,10 @@ form_noAccessToSpace.prototype.pushButton =
 };
 
 
+/*
+| The disc is shown while a form is shown.
+*/
+form_noAccessToSpace.prototype.showDisc = true;
+
+
 } )( );

@@ -119,4 +119,10 @@ form_loading.prototype._init =
 };
 
 
+/*
+| The disc is shown while a form is shown.
+*/
+form_loading.prototype.showDisc = true;
+
+
 } )( );

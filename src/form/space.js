@@ -177,4 +177,11 @@ form_space.prototype.pushButton =
 	}
 };
 
+
+/*
+| The disc is shown while a form is shown.
+*/
+form_space.prototype.showDisc = true;
+
+
 } )( );

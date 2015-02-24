@@ -130,6 +130,85 @@ form_signUp.prototype._init =
 
 
 /*
+| Clears all fields
+*/
+form_signUp.prototype.clear =
+	function( )
+{
+	var
+		twig;
+
+	twig = this.twig;
+
+	// FIXME make this in one call, somehow
+
+	root.setPath( twig.userInput.path.append( 'value' ), '' );
+
+	root.setPath( twig.emailInput.path.append( 'value' ), '' );
+
+	root.setPath( twig.passwordInput.path.append( 'value' ), '' );
+
+	root.setPath( twig.password2Input.path.append( 'value' ), '' );
+
+	root.setPath( twig.newsletterCheckBox.path.append( 'checked' ), true );
+
+	root.setPath( this._widgetPath( 'errorLabel' ).append( 'text' ), '' );
+
+	root.create( 'mark', null );
+};
+
+
+/*
+| A register operation completed.
+*/
+form_signUp.prototype.onRegister =
+	function(
+		ok,
+		user,
+		message
+	)
+{
+	var
+		twig;
+
+	twig = this.twig;
+
+	if( !ok )
+	{
+		root.setPath(
+			this
+			._widgetPath( 'errorLabel' )
+			.append( 'text' ),
+			message
+		);
+
+		if( message.search( /Username/ ) >= 0 )
+		{
+			root.create(
+				'mark',
+					mark_caret.create(
+						'path', twig.userInput.path,
+						'at', twig.userInput.value.length
+					)
+			);
+		}
+
+		return;
+	}
+
+	root.create(
+		'mode', 'welcome',
+		'user', user
+	);
+
+	this.clear( );
+
+	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
+};
+
+
+
+/*
 | A button of the form has been pushed.
 */
 form_signUp.prototype.pushButton =
@@ -171,6 +250,13 @@ form_signUp.prototype.pushButton =
 			throw new Error( );
 	}
 };
+
+
+/*
+| The disc is shown while a form is shown.
+*/
+form_signUp.prototype.showDisc = true;
+
 
 /*
 | Signs a new user up
@@ -279,84 +365,6 @@ form_signUp.prototype.signup =
 		email,
 		newsletter
 	);
-};
-
-
-/*
-| A register operation completed.
-*/
-form_signUp.prototype.onRegister =
-	function(
-		ok,
-		user,
-		message
-	)
-{
-	var
-		twig;
-
-	twig = this.twig;
-
-	if( !ok )
-	{
-		root.setPath(
-			this
-			._widgetPath( 'errorLabel' )
-			.append( 'text' ),
-			message
-		);
-
-		if( message.search( /Username/ ) >= 0 )
-		{
-			root.create(
-				'mark',
-					mark_caret.create(
-						'path', twig.userInput.path,
-						'at', twig.userInput.value.length
-					)
-			);
-		}
-
-		return;
-	}
-
-	root.create(
-		'mode', 'welcome',
-		'user', user
-	);
-
-	this.clear( );
-
-	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
-};
-
-
-/*
-| Clears all fields
-*/
-form_signUp.prototype.clear =
-	function( )
-{
-	var
-		twig;
-
-	twig = this.twig;
-
-	// FIXME make this in one call, somehow
-
-	root.setPath( twig.userInput.path.append( 'value' ), '' );
-
-	root.setPath( twig.emailInput.path.append( 'value' ), '' );
-
-	root.setPath( twig.passwordInput.path.append( 'value' ), '' );
-
-	root.setPath( twig.password2Input.path.append( 'value' ), '' );
-
-	root.setPath( twig.newsletterCheckBox.path.append( 'checked' ), true );
-
-	root.setPath( this._widgetPath( 'errorLabel' ).append( 'text' ), '' );
-
-	root.create( 'mark', null );
 };
 
 

@@ -128,12 +128,6 @@ form_form.concernsMark =
 
 
 /*
-| The disc is shown while a form is shown.
-*/
-form_form.prototype.showDisc = true;
-
-
-/*
 | Returns the focused item.
 */
 form_form.prototype._focusedWidget =
@@ -367,7 +361,7 @@ form_form.prototype.cycleFocus =
 		ranks,
 		rs,
 		ve;
-		
+
 	path = this.mark.widgetPath;
 
 	if( path.isEmpty )

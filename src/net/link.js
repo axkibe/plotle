@@ -193,16 +193,11 @@ net_link.prototype._onAcquireSpace =
 		reply
 	)
 {
-	var
-		space;
-
 	shell_doTracker.flush( );
 
 	if( reply.type === 'reply_error' )
 	{
 		root.onAcquireSpace( request.spaceRef, reply );
-
-		root.link._update( );
 
 		return;
 	}
@@ -216,20 +211,14 @@ net_link.prototype._onAcquireSpace =
 
 			root.onAcquireSpace( request.spaceRef, reply );
 
-			root.link._update( );
-
 			return;
 	}
 
-	space = reply.space;
-
-	space =
-		space.create(
-			'path', jion_path.empty.append( 'space' )
-		);
-
 	root.create(
-		'space', space,
+		'space',
+			reply.space.create(
+				'path', jion_path.empty.append( 'space' )
+			),
 		'link',
 			root.link.create(
 				'spaceRef', request.spaceRef,
@@ -243,6 +232,8 @@ net_link.prototype._onAcquireSpace =
 
 	// waits a second before going into update cycle, so safari
 	// stops its wheely thing.
+
+	// FIXME in case of aborting updates this needs to be aborted.
 	system.setTimer(
 		1,
 		function( )

@@ -234,5 +234,11 @@ form_user.prototype.pushButton =
 };
 
 
+/*
+| The disc is shown while a form is shown.
+*/
+form_user.prototype.showDisc = true;
+
+
 })( );
 

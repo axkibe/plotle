@@ -127,46 +127,19 @@ form_login.prototype._init =
 
 
 /*
-| A button of the form has been pushed.
+| Clears all fields
 */
-form_login.prototype.pushButton =
-	function(
-		path
-		// shift,
-		// ctrl
-	)
+form_login.prototype.clear =
+	function( )
 {
-	var
-		buttonName;
+	// FIXME combine calls
+	root.setPath( this._widgetPath( 'userInput' ).append( 'value' ), '' );
 
-/**/if( CHECK )
-/**/{
-/**/	if( path.get( 2 ) !== this.reflectName )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
+	root.setPath( this._widgetPath( 'passwordInput' ).append( 'value' ), '' );
 
-	buttonName = path.get( 4 );
+	root.setPath( this._widgetPath( 'errorLabel' ).append( 'text' ), '' );
 
-	switch( buttonName )
-	{
-		case 'loginButton' :
-
-			this.login( );
-
-			break;
-
-		case 'closeButton' :
-
-			root.showHome( );
-
-			break;
-
-		default :
-
-			throw new Error( );
-	}
+	root.create( 'mark', null );
 };
 
 
@@ -253,41 +226,6 @@ form_login.prototype.login =
 
 
 /*
-| User is pressing a special key.
-*/
-form_login.prototype.specialKey =
-	function(
-		key,
-		shift,
-		ctrl
-	)
-{
-	// a return in the password field is made
-	// to be a login command right away
-
-	if(
-		key === 'enter' &&
-		this.mark.caretPath &&
-		this.mark.caretPath.get( 2 ) === 'passwordInput'
-	)
-	{
-		this.login( );
-
-		return;
-	}
-
-	return (
-		form_form.prototype.specialKey.call(
-			this,
-			key,
-			shift,
-			ctrl
-		)
-	);
-};
-
-
-/*
 | an auth ( login ) operation completed.
 */
 form_login.prototype.onAuth =
@@ -347,19 +285,88 @@ form_login.prototype.onAuth =
 
 
 /*
-| Clears all fields
+| A button of the form has been pushed.
 */
-form_login.prototype.clear =
-	function( )
+form_login.prototype.pushButton =
+	function(
+		path
+		// shift,
+		// ctrl
+	)
 {
-	// FIXME combine calls
-	root.setPath( this._widgetPath( 'userInput' ).append( 'value' ), '' );
+	var
+		buttonName;
 
-	root.setPath( this._widgetPath( 'passwordInput' ).append( 'value' ), '' );
+/**/if( CHECK )
+/**/{
+/**/	if( path.get( 2 ) !== this.reflectName )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
-	root.setPath( this._widgetPath( 'errorLabel' ).append( 'text' ), '' );
+	buttonName = path.get( 4 );
 
-	root.create( 'mark', null );
+	switch( buttonName )
+	{
+		case 'loginButton' :
+
+			this.login( );
+
+			break;
+
+		case 'closeButton' :
+
+			root.showHome( );
+
+			break;
+
+		default :
+
+			throw new Error( );
+	}
+};
+
+
+
+/*
+| The disc is shown while a form is shown.
+*/
+form_login.prototype.showDisc = true;
+
+
+/*
+| User is pressing a special key.
+*/
+form_login.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
+{
+	// a return in the password field is made
+	// to be a login command right away
+
+	if(
+		key === 'enter' &&
+		this.mark.caretPath &&
+		this.mark.caretPath.get( 2 ) === 'passwordInput'
+	)
+	{
+		this.login( );
+
+		return;
+	}
+
+	return (
+		form_form.prototype.specialKey.call(
+			this,
+			key,
+			shift,
+			ctrl
+		)
+	);
 };
 
 

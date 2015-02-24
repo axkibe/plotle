@@ -715,12 +715,9 @@ shell_root.prototype.dragStart =
 		bubble = root._discJockey.dragStart( p, shift, ctrl );
 	}
 
-	if( bubble === null )
+	if( bubble === null && screen )
 	{
-		if( screen )
-		{
-			bubble = screen.dragStart( p, shift, ctrl );
-		}
+		bubble = screen.dragStart( p, shift, ctrl );
 	}
 };
 
@@ -805,7 +802,7 @@ shell_root.prototype.mousewheel =
 		ctrl
 	)
 {
-	// FIXME disc
+	// FUTURE disc
 
 	var
 		screen;
@@ -1168,11 +1165,10 @@ shell_root.prototype.onAcquireSpace =
 
 		case 'no access' :
 
-			// FIXME rename spaceRef of noAccesstoSpace
+			// FIXME set spaceRef of noAccesstoSpace
 			root.create(
-				'mode', 'noAccessToSpace',
-				'_formJockey',
-					root._formJockey.create( 'spaceRef', spaceRef )
+				'mode', 'noAccessToSpace'
+//				'_formJockey', root._formJockey.create( 'spaceRef', spaceRef )
 			);
 
 			if( root.fallbackSpaceRef )

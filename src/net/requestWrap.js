@@ -15,9 +15,10 @@ var
 (function( ) {
 'use strict';
 
+
 var
-	_onReply,
-	_onReplyCatcher;
+	onReply,
+	onReplyCatcher;
 
 
 /*
@@ -89,9 +90,9 @@ net_requestWrap.prototype.abort =
 /*
 | A request has been replied.
 |
-| 'this' is the ajax request.
+| 'this' is the _xhr ajax request.
 */
-_onReply =
+onReply =
 	function( )
 {
 	var
@@ -144,7 +145,7 @@ _onReply =
 };
 
 
-_onReplyCatcher = null;
+onReplyCatcher = null;
 
 
 /*
@@ -172,12 +173,12 @@ net_requestWrap.prototype.send =
 		'application/x-www-form-urlencoded'
 	);
 
-	if( !_onReplyCatcher )
+	if( !onReplyCatcher )
 	{
-		_onReplyCatcher = catcher( _onReply );
+		onReplyCatcher = catcher( onReply );
 	}
 
-	xhr.onreadystatechange = _onReplyCatcher;
+	xhr.onreadystatechange = onReplyCatcher;
 
 	xhr.send( JSON.stringify( this.request ) );
 
