@@ -234,6 +234,12 @@ jools.lazyValue(
 
 
 /*
+| Checks if the item is being clicked and reacts.
+*/
+fabric_relation.prototype.click = fabric_docItem.click;
+
+
+/*
 | A move during an action.
 */
 fabric_relation.prototype.dragMove = fabric_item.dragMove;

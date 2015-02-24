@@ -77,11 +77,9 @@ fabric_docItem.attentionCenter =
 
 
 /*
-| Sees if this item is being clicked.
-|
-| FIXME dont take view or space
+| Checks if the item is being clicked and reacts.
 */
-fabric_docItem.prototype.click =
+fabric_docItem.click =
 	function(
 		p,
 		shift,
