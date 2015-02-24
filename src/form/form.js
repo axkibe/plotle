@@ -128,9 +128,11 @@ form_form.concernsMark =
 
 
 /*
-| Returns the focused item.
+| Returns the focused widget.
+|
+| To be used as lazyValue getter.
 */
-form_form.prototype._focusedWidget =
+form_form.getFocusedWidget =
 	function( )
 {
 	var
@@ -334,7 +336,7 @@ form_form.prototype.input =
 	var
 		widget;
 
-	widget = this._focusedWidget( );
+	widget = this.focusedWidget;
 
 	if( !widget )
 	{
@@ -422,7 +424,7 @@ form_form.prototype.specialKey =
 	var
 		item;
 
-	item = this._focusedWidget( );
+	item = this.focusedWidget;
 
 	if( !item )
 	{
@@ -511,7 +513,7 @@ jools.lazyValue(
 		var
 			focus;
 
-		focus = this._focusedWidget( );
+		focus = this.focusedWidget;
 
 		if( !focus )
 		{

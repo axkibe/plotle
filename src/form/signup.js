@@ -159,6 +159,16 @@ form_signUp.prototype.clear =
 
 
 /*
+| The focused widget.
+*/
+jools.lazyValue(
+	form_signUp.prototype,
+	'focusedWidget',
+	form_form.getFocusedWidget
+);
+
+
+/*
 | A register operation completed.
 */
 form_signUp.prototype.onRegister =

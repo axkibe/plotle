@@ -128,6 +128,7 @@ form_user.prototype._init =
 		return;
 	}
 
+	// FIXME take a user object
 	if( this.username )
 	{
 		isGuest =
@@ -194,6 +195,16 @@ form_user.prototype._init =
 
 	form_form.init.call( this, inherit );
 };
+
+
+/*
+| The focused widget.
+*/
+jools.lazyValue(
+	form_user.prototype,
+	'focusedWidget',
+	form_form.getFocusedWidget
+);
 
 
 /*

@@ -7,7 +7,8 @@
 
 var
 	form_form,
-	form_noAccessToSpace;
+	form_noAccessToSpace,
+	jools;
 
 
 /*
@@ -119,6 +120,16 @@ form_noAccessToSpace.prototype._init =
 {
 	form_form.init.call( this, inherit );
 };
+
+
+/*
+| The focused widget.
+*/
+jools.lazyValue(
+	form_noAccessToSpace.prototype,
+	'focusedWidget',
+	form_form.getFocusedWidget
+);
 
 
 /*

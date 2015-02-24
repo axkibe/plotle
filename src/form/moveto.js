@@ -146,6 +146,16 @@ form_moveTo.prototype._init =
 
 
 /*
+| The focused widget.
+*/
+jools.lazyValue(
+	form_moveTo.prototype,
+	'focusedWidget',
+	form_form.getFocusedWidget
+);
+
+
+/*
 | A button of the form has been pushed.
 */
 form_moveTo.prototype.pushButton =

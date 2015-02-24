@@ -159,6 +159,16 @@ form_nonExistingSpace.prototype._init =
 
 
 /*
+| The focused widget.
+*/
+jools.lazyValue(
+	form_nonExistingSpace.prototype,
+	'focusedWidget',
+	form_form.getFocusedWidget
+);
+
+
+/*
 | A button of the form has been pushed.
 */
 form_nonExistingSpace.prototype.pushButton =

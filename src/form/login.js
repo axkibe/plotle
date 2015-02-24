@@ -144,6 +144,16 @@ form_login.prototype.clear =
 
 
 /*
+| The focused widget.
+*/
+jools.lazyValue(
+	form_login.prototype,
+	'focusedWidget',
+	form_form.getFocusedWidget
+);
+
+
+/*
 | Logins the user
 */
 form_login.prototype.login =

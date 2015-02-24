@@ -141,6 +141,16 @@ form_space.prototype._init =
 
 
 /*
+| The focused widget.
+*/
+jools.lazyValue(
+	form_space.prototype,
+	'focusedWidget',
+	form_form.getFocusedWidget
+);
+
+
+/*
 | A button of the form has been pushed.
 */
 form_space.prototype.pushButton =

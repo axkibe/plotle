@@ -7,7 +7,8 @@
 
 var
 	form_form,
-	form_loading;
+	form_loading,
+	jools;
 
 
 /*
@@ -117,6 +118,16 @@ form_loading.prototype._init =
 {
 	form_form.init.call( this, inherit );
 };
+
+
+/*
+| The focused widget.
+*/
+jools.lazyValue(
+	form_loading.prototype,
+	'focusedWidget',
+	form_form.getFocusedWidget
+);
 
 
 /*
