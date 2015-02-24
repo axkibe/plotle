@@ -7,6 +7,7 @@ var
 	change_grow,
 	euclid_arrow,
 	fabric_doc,
+	fabric_docItem,
 	fabric_item,
 	fabric_label,
 	fabric_para,
@@ -220,6 +221,16 @@ fabric_relation.prototype._init =
 {
 	fabric_label.prototype._init.call( this, inherit );
 };
+
+
+/*
+| The attention center.
+*/
+jools.lazyValue(
+	fabric_relation.prototype,
+	'attentionCenter',
+	fabric_docItem.attentionCenter
+);
 
 
 /*

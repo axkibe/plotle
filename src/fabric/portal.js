@@ -226,85 +226,6 @@ fabric_portal.handles =
 
 
 /*
-| Returns a handles jion.
-*/
-jools.lazyValue(
-	fabric_portal.prototype,
-	'handlesBezel',
-	function( )
-	{
-		return(
-			visual_handlesBezel.create(
-				'handles', fabric_portal.handles,
-				'silhoutte', this.silhoutte,
-				'view', this.view,
-				'zone', this.zone
-			)
-		);
-	}
-);
-
-
-/*
-| Minimum height.
-*/
-fabric_portal.prototype.minHeight = theme.portal.minHeight;
-
-
-/*
-| Minimum width.
-*/
-fabric_portal.prototype.minWidth = theme.portal.minWidth;
-
-
-/*
-| Portals are positioned by their zone.
-*/
-fabric_portal.prototype.positioning = 'zone';
-
-
-/*
-| The portal's silhoutte.
-*/
-jools.lazyValue(
-	fabric_portal.prototype,
-	'silhoutte',
-	function( )
-	{
-		return(
-			euclid_ellipse.create(
-				'pnw', this.zone.pnw,
-				'pse', this.zone.pse
-			)
-		);
-	}
-);
-
-
-/*
-| The portal's silhoutte at zero.
-*/
-jools.lazyValue(
-	fabric_portal.prototype,
-	'zeroSilhoutte',
-	function( )
-	{
-		return(
-			euclid_ellipse.create(
-				'pnw',
-					euclid_point.zero,
-				'pse',
-					euclid_point.create(
-						'x', this.zone.width,
-						'y', this.zone.height
-				)
-			)
-		);
-	}
-);
-
-
-/*
 | Returns the attention center.
 */
 jools.lazyValue(
@@ -557,6 +478,93 @@ fabric_portal.prototype.highlight =
 
 
 /*
+| Text has been inputed.
+*/
+fabric_portal.prototype.input =
+	function(
+		text
+	)
+{
+	var
+		line,
+		reg,
+		rx,
+		mark,
+		section;
+
+	reg  = /([^\n]+)(\n?)/g;
+
+	mark = this.mark;
+
+	section = mark.caretPath.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return false;
+	}
+
+	if( section === 'moveToButton' )
+	{
+		this._moveTo( );
+
+		return;
+	}
+
+	// ignores newlines
+	for(
+		rx = reg.exec( text );
+		rx !== null;
+		rx = reg.exec( text )
+	)
+	{
+		line = rx[ 1 ];
+
+		root.alter(
+			change_insert.create(
+				'val', line,
+				'path', this.path.append( section ).chop,
+				'at1', mark.caretAt,
+				'at2', mark.caretAt + line.length
+			)
+		);
+	}
+};
+
+
+
+/*
+| Returns a handles jion.
+*/
+jools.lazyValue(
+	fabric_portal.prototype,
+	'handlesBezel',
+	function( )
+	{
+		return(
+			visual_handlesBezel.create(
+				'handles', fabric_portal.handles,
+				'silhoutte', this.silhoutte,
+				'view', this.view,
+				'zone', this.zone
+			)
+		);
+	}
+);
+
+
+/*
+| Minimum height.
+*/
+fabric_portal.prototype.minHeight = theme.portal.minHeight;
+
+
+/*
+| Minimum width.
+*/
+fabric_portal.prototype.minWidth = theme.portal.minWidth;
+
+
+/*
 | Mouse wheel turned.
 */
 fabric_portal.prototype.mousewheel =
@@ -568,12 +576,7 @@ fabric_portal.prototype.mousewheel =
 		// ctrl
 	)
 {
-	return(
-		this.silhoutte.within(
-			view,
-			p
-		)
-	);
+	return this.silhoutte.within( view, p );
 };
 
 
@@ -633,57 +636,50 @@ fabric_portal.prototype.pointingHover =
 
 
 /*
-| Text has been inputed.
+| Portals are positioned by their zone.
 */
-fabric_portal.prototype.input =
-	function(
-		text
-	)
-{
-	var
-		line,
-		reg,
-		rx,
-		mark,
-		section;
+fabric_portal.prototype.positioning = 'zone';
 
-	reg  = /([^\n]+)(\n?)/g;
 
-	mark = this.mark;
-
-	section = mark.caretPath.get( -1 );
-
-	if( !this._isSection( section ) )
+/*
+| The portal's silhoutte.
+*/
+jools.lazyValue(
+	fabric_portal.prototype,
+	'silhoutte',
+	function( )
 	{
-		return false;
-	}
-
-	if( section === 'moveToButton' )
-	{
-		this._moveTo( );
-
-		return;
-	}
-
-	// ignores newlines
-	for(
-		rx = reg.exec( text );
-		rx !== null;
-		rx = reg.exec( text )
-	)
-	{
-		line = rx[ 1 ];
-
-		root.alter(
-			change_insert.create(
-				'val', line,
-				'path', this.path.append( section ).chop,
-				'at1', mark.caretAt,
-				'at2', mark.caretAt + line.length
+		return(
+			euclid_ellipse.create(
+				'pnw', this.zone.pnw,
+				'pse', this.zone.pse
 			)
 		);
 	}
-};
+);
+
+
+/*
+| The portal's silhoutte at zero.
+*/
+jools.lazyValue(
+	fabric_portal.prototype,
+	'zeroSilhoutte',
+	function( )
+	{
+		return(
+			euclid_ellipse.create(
+				'pnw',
+					euclid_point.zero,
+				'pse',
+					euclid_point.create(
+						'x', this.zone.width,
+						'y', this.zone.height
+				)
+			)
+		);
+	}
+);
 
 
 /*
@@ -767,65 +763,25 @@ fabric_portal.prototype.specialKey =
 {
 	switch( key )
 	{
-		case 'backspace' :
+		case 'backspace' : this._keyBackspace( ); break;
 
-			this._keyBackspace( );
+		case 'del' : this._keyDel( ); break;
 
-			break;
+		case 'down' : this._keyDown( ); break;
 
-		case 'del' :
+		case 'end' : this._keyEnd( ); break;
 
-			this._keyDel( );
+		case 'enter' : this._keyEnter( ); break;
 
-			break;
+		case 'left' : this._keyLeft( ); break;
 
-		case 'down' :
+		case 'pos1' : this._keyPos1( ); break;
 
-			this._keyDown( );
+		case 'right' : this._keyRight( ); break;
 
-			break;
+		case 'tab' : this._keyTab( ); break;
 
-		case 'end' :
-
-			this._keyEnd( );
-
-			break;
-
-		case 'enter' :
-
-			this._keyEnter( );
-
-			break;
-
-		case 'left' :
-
-			this._keyLeft( );
-
-			break;
-
-		case 'pos1' :
-
-			this._keyPos1( );
-
-			break;
-
-		case 'right' :
-
-			this._keyRight( );
-
-			break;
-
-		case 'tab' :
-
-			this._keyTab( );
-
-			break;
-
-		case 'up' :
-
-			this._keyUp( );
-
-			break;
+		case 'up' : this._keyUp( ); break;
 	}
 };
 

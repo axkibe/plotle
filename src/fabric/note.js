@@ -10,6 +10,7 @@ var
 	euclid_point,
 	euclid_rect,
 	euclid_roundRect,
+	fabric_docItem,
 	fabric_item,
 	fabric_note,
 	jools,
@@ -269,6 +270,16 @@ fabric_note.prototype._init =
 		jools.aheadValue( this, '_display', inherit._display );
 	}
 };
+
+
+/*
+| The attention center.
+*/
+jools.lazyValue(
+	fabric_note.prototype,
+	'attentionCenter',
+	fabric_docItem.attentionCenter
+);
 
 
 /*

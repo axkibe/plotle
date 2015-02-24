@@ -57,26 +57,23 @@ if( !SERVER )
 /*
 | The attention center.
 */
-jools.lazyValue(
-	fabric_docItem.prototype,
-	'attentionCenter',
+fabric_docItem.attentionCenter =
 	function( )
-	{
-		return(
-			this.zone.pnw.y
-			+ jools.limit(
-				0,
-				this.doc.attentionCenter
-				- (
-					this.scrollbarY
-					?  this.scrollbarY.pos
-					: 0
-				),
-				this.zone.height
-			)
-		);
-	}
-);
+{
+	return(
+		this.zone.pnw.y
+		+ jools.limit(
+			0,
+			this.doc.attentionCenter
+			- (
+				this.scrollbarY
+				?  this.scrollbarY.pos
+				: 0
+			),
+			this.zone.height
+		)
+	);
+};
 
 
 /*
