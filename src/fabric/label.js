@@ -114,10 +114,7 @@ if( JION )
 							'undefined'
 					}
 			},
-		init :
-			[ ],
-		subclass :
-			'fabric_docItem'
+		init : [ ]
 	};
 }
 

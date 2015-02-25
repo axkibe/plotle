@@ -133,9 +133,7 @@ if( JION )
 					{
 						ignores : { 'view' : true }
 					}
-			},
-		subclass :
-			'fabric_docItem'
+			}
 	};
 }
 
