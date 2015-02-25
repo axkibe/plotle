@@ -197,34 +197,6 @@ form_form.draw =
 
 
 /*
-| Moving during an operation with the mouse button held down.
-*/
-form_form.prototype.dragMove =
-	function(
-		// p
-		// shift,
-		// ctrl
-	)
-{
-	return true;
-};
-
-
-/*
-| Stops an operation with the mouse button held down.
-*/
-form_form.prototype.dragStop =
-	function(
-		//p,
-		//shift,
-		//ctrl
-	)
-{
-	return true;
-};
-
-
-/*
 | Returns true if point is on this panel.
 */
 form_form.prototype.pointingHover =
@@ -305,22 +277,6 @@ form_form.prototype.click =
 		}
 	}
 
-	return false;
-};
-
-
-/*
-| Starts an operation with the pointing device active.
-|
-| Mouse down or finger on screen.
-*/
-form_form.prototype.dragStart =
-	function(
-		// p,
-		// shift,
-		// ctrl
-	)
-{
 	return false;
 };
 

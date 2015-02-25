@@ -110,23 +110,73 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+prototype = form_noAccessToSpace.prototype;
+
+
 /*
 | Initializer.
 */
-form_noAccessToSpace.prototype._init = form_form.init;
+prototype._init = form_form.init;
+
+
+/*
+| Moving during an operation with the mouse button held down.
+*/
+prototype.dragMove =
+	function(
+		// p
+		// shift,
+		// ctrl
+	)
+{
+	return true;
+};
+
+
+/*
+| Starts an operation with the pointing device active.
+|
+| Mouse down or finger on screen.
+*/
+prototype.dragStart =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return false;
+};
+
+
+/*
+| Stops an operation with the mouse button held down.
+*/
+prototype.dragStop =
+	function(
+		//p,
+		//shift,
+		//ctrl
+	)
+{
+	return true;
+};
 
 
 /*
 | Draws a form.
 */
-form_noAccessToSpace.prototype.draw = form_form.draw;
+prototype.draw = form_form.draw;
 
 
 /*
 | The focused widget.
 */
 jools.lazyValue(
-	form_noAccessToSpace.prototype,
+	prototype,
 	'focusedWidget',
 	form_form.getFocusedWidget
 );
@@ -135,7 +185,7 @@ jools.lazyValue(
 /*
 | A button of the form has been pushed.
 */
-form_noAccessToSpace.prototype.pushButton =
+prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -173,7 +223,7 @@ form_noAccessToSpace.prototype.pushButton =
 /*
 | The disc is shown while a form is shown.
 */
-form_noAccessToSpace.prototype.showDisc = true;
+prototype.showDisc = true;
 
 
 } )( );

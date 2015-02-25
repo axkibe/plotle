@@ -111,10 +111,16 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+prototype = form_login.prototype;
+
+
 /*
 | The login form.
 */
-form_login.prototype._init =
+prototype._init =
 	function(
 		inherit
 	)
@@ -129,7 +135,7 @@ form_login.prototype._init =
 /*
 | Clears all fields
 */
-form_login.prototype.clear =
+prototype.clear =
 	function( )
 {
 	// FIXME combine calls
@@ -144,16 +150,60 @@ form_login.prototype.clear =
 
 
 /*
+| Moving during an operation with the mouse button held down.
+*/
+prototype.dragMove =
+	function(
+		// p
+		// shift,
+		// ctrl
+	)
+{
+	return true;
+};
+
+
+/*
+| Starts an operation with the pointing device active.
+|
+| Mouse down or finger on screen.
+*/
+prototype.dragStart =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return false;
+};
+
+
+/*
+| Stops an operation with the mouse button held down.
+*/
+prototype.dragStop =
+	function(
+		//p,
+		//shift,
+		//ctrl
+	)
+{
+	return true;
+};
+
+
+/*
 | Draws a form.
 */
-form_login.prototype.draw = form_form.draw;
+prototype.draw = form_form.draw;
 
 
 /*
 | The focused widget.
 */
 jools.lazyValue(
-	form_login.prototype,
+	prototype,
 	'focusedWidget',
 	form_form.getFocusedWidget
 );
@@ -162,7 +212,7 @@ jools.lazyValue(
 /*
 | Logins the user
 */
-form_login.prototype.login =
+prototype.login =
 	function( )
 {
 	var
@@ -244,7 +294,7 @@ form_login.prototype.login =
 /*
 | an auth ( login ) operation completed.
 */
-form_login.prototype.onAuth =
+prototype.onAuth =
 	function(
 		request,
 		reply
@@ -303,7 +353,7 @@ form_login.prototype.onAuth =
 /*
 | A button of the form has been pushed.
 */
-form_login.prototype.pushButton =
+prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -348,13 +398,13 @@ form_login.prototype.pushButton =
 /*
 | The disc is shown while a form is shown.
 */
-form_login.prototype.showDisc = true;
+prototype.showDisc = true;
 
 
 /*
 | User is pressing a special key.
 */
-form_login.prototype.specialKey =
+prototype.specialKey =
 	function(
 		key,
 		shift,
@@ -375,7 +425,8 @@ form_login.prototype.specialKey =
 		return;
 	}
 
-	return (
+	return(
+		// FIXME
 		form_form.prototype.specialKey.call(
 			this,
 			key,

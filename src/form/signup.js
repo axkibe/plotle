@@ -117,10 +117,16 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+prototype = form_signUp.prototype;
+
+
 /*
 | The signup form.
 */
-form_signUp.prototype._init =
+prototype._init =
 	function(
 		inherit
 	)
@@ -132,7 +138,7 @@ form_signUp.prototype._init =
 /*
 | Clears all fields
 */
-form_signUp.prototype.clear =
+prototype.clear =
 	function( )
 {
 	var
@@ -159,16 +165,60 @@ form_signUp.prototype.clear =
 
 
 /*
+| Moving during an operation with the mouse button held down.
+*/
+prototype.dragMove =
+	function(
+		// p
+		// shift,
+		// ctrl
+	)
+{
+	return true;
+};
+
+
+/*
+| Starts an operation with the pointing device active.
+|
+| Mouse down or finger on screen.
+*/
+prototype.dragStart =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return false;
+};
+
+
+/*
+| Stops an operation with the mouse button held down.
+*/
+prototype.dragStop =
+	function(
+		//p,
+		//shift,
+		//ctrl
+	)
+{
+	return true;
+};
+
+
+/*
 | Draws a form.
 */
-form_signUp.prototype.draw = form_form.draw;
+prototype.draw = form_form.draw;
 
 
 /*
 | The focused widget.
 */
 jools.lazyValue(
-	form_signUp.prototype,
+	prototype,
 	'focusedWidget',
 	form_form.getFocusedWidget
 );
@@ -177,7 +227,7 @@ jools.lazyValue(
 /*
 | A register operation completed.
 */
-form_signUp.prototype.onRegister =
+prototype.onRegister =
 	function(
 		ok,
 		user,
@@ -227,7 +277,7 @@ form_signUp.prototype.onRegister =
 /*
 | A button of the form has been pushed.
 */
-form_signUp.prototype.pushButton =
+prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -271,13 +321,13 @@ form_signUp.prototype.pushButton =
 /*
 | The disc is shown while a form is shown.
 */
-form_signUp.prototype.showDisc = true;
+prototype.showDisc = true;
 
 
 /*
 | Signs a new user up
 */
-form_signUp.prototype.signup =
+prototype.signup =
 	function( )
 {
 	var

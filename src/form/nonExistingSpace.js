@@ -126,11 +126,16 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+prototype = form_nonExistingSpace.prototype;
+
 
 /*
 | The space does not exist form.
 */
-form_nonExistingSpace.prototype._init =
+prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -159,16 +164,60 @@ form_nonExistingSpace.prototype._init =
 
 
 /*
+| Moving during an operation with the mouse button held down.
+*/
+prototype.dragMove =
+	function(
+		// p
+		// shift,
+		// ctrl
+	)
+{
+	return true;
+};
+
+
+/*
+| Starts an operation with the pointing device active.
+|
+| Mouse down or finger on screen.
+*/
+prototype.dragStart =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return false;
+};
+
+
+/*
+| Stops an operation with the mouse button held down.
+*/
+prototype.dragStop =
+	function(
+		//p,
+		//shift,
+		//ctrl
+	)
+{
+	return true;
+};
+
+
+/*
 | Draws a form.
 */
-form_nonExistingSpace.prototype.draw = form_form.draw;
+prototype.draw = form_form.draw;
 
 
 /*
 | The focused widget.
 */
 jools.lazyValue(
-	form_nonExistingSpace.prototype,
+	prototype,
 	'focusedWidget',
 	form_form.getFocusedWidget
 );
@@ -177,7 +226,7 @@ jools.lazyValue(
 /*
 | A button of the form has been pushed.
 */
-form_nonExistingSpace.prototype.pushButton =
+prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -223,7 +272,7 @@ form_nonExistingSpace.prototype.pushButton =
 /*
 | The disc is shown while a form is shown.
 */
-form_nonExistingSpace.prototype.showDisc = true;
+prototype.showDisc = true;
 
 
 } )( );

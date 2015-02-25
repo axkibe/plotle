@@ -111,10 +111,16 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+prototype = form_space.prototype;
+
+
 /*
 | The space form.
 */
-form_space.prototype._init =
+prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -141,16 +147,60 @@ form_space.prototype._init =
 
 
 /*
+| Moving during an operation with the mouse button held down.
+*/
+prototype.dragMove =
+	function(
+		// p
+		// shift,
+		// ctrl
+	)
+{
+	return true;
+};
+
+
+/*
+| Starts an operation with the pointing device active.
+|
+| Mouse down or finger on screen.
+*/
+prototype.dragStart =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return false;
+};
+
+
+/*
+| Stops an operation with the mouse button held down.
+*/
+prototype.dragStop =
+	function(
+		//p,
+		//shift,
+		//ctrl
+	)
+{
+	return true;
+};
+
+
+/*
 | Draws a form.
 */
-form_space.prototype.draw = form_form.draw;
+prototype.draw = form_form.draw;
 
 
 /*
 | The focused widget.
 */
 jools.lazyValue(
-	form_space.prototype,
+	prototype,
 	'focusedWidget',
 	form_form.getFocusedWidget
 );
@@ -159,7 +209,7 @@ jools.lazyValue(
 /*
 | A button of the form has been pushed.
 */
-form_space.prototype.pushButton =
+prototype.pushButton =
 	function(
 		path
 		// shift,
@@ -197,7 +247,7 @@ form_space.prototype.pushButton =
 /*
 | The disc is shown while a form is shown.
 */
-form_space.prototype.showDisc = true;
+prototype.showDisc = true;
 
 
 } )( );
