@@ -243,6 +243,21 @@ prototype.input = form_form.input;
 
 
 /*
+| Mouse wheel.
+*/
+prototype.mousewheel =
+	function(
+		// p,
+		// dir,
+		// shift,
+		// ctrl
+	)
+{
+	return true;
+};
+
+
+/*
 | A register operation completed.
 */
 prototype.onRegister =
@@ -468,6 +483,12 @@ prototype.signup =
 		newsletter
 	);
 };
+
+
+/*
+| User is pressing a special key.
+*/
+prototype.specialKey = form_form.specialKey;
 
 
 } )( );

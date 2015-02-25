@@ -232,6 +232,21 @@ prototype.input = form_form.input;
 
 
 /*
+| Mouse wheel.
+*/
+prototype.mousewheel =
+	function(
+		// p,
+		// dir,
+		// shift,
+		// ctrl
+	)
+{
+	return true;
+};
+
+
+/*
 | If point is on the form returns its hovering state.
 */
 prototype.pointingHover = form_form.pointingHover;
@@ -299,6 +314,12 @@ prototype.pushButton =
 | The disc is shown while a form is shown.
 */
 prototype.showDisc = true;
+
+
+/*
+| User is pressing a special key.
+*/
+prototype.specialKey = form_form.specialKey;
 
 
 })( );

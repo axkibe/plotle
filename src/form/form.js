@@ -350,7 +350,7 @@ form_form.cycleFocus =
 /*
 | User is pressing a special key.
 */
-form_form.prototype.specialKey =
+form_form.specialKey =
 	function(
 		key,
 		shift,
@@ -358,45 +358,23 @@ form_form.prototype.specialKey =
 	)
 {
 	var
-		item;
+		widget;
 
-	item = this.focusedWidget;
+	widget = this.focusedWidget;
 
-	if( !item )
+	if( !widget )
 	{
 		return;
 	}
 
 	if( key === 'tab' )
 	{
-		this.cycleFocus(
-			shift ? -1 : 1
-		);
+		this.cycleFocus( shift ? -1 : 1 );
 
 		return;
 	}
 
-	item.specialKey(
-		key,
-		this,
-		shift,
-		ctrl
-	);
-};
-
-
-/*
-| Mouse wheel
-*/
-form_form.prototype.mousewheel =
-	function(
-		// p,
-		// dir,
-		// shift,
-		// ctrl
-	)
-{
-	return true;
+	widget.specialKey( key, this, shift, ctrl );
 };
 
 

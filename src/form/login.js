@@ -337,6 +337,21 @@ prototype.login =
 
 
 /*
+| Mouse wheel.
+*/
+prototype.mousewheel =
+	function(
+		// p,
+		// dir,
+		// shift,
+		// ctrl
+	)
+{
+	return true;
+};
+
+
+/*
 | an auth ( login ) operation completed.
 */
 prototype.onAuth =
@@ -480,15 +495,7 @@ prototype.specialKey =
 		return;
 	}
 
-	return(
-		// FIXME
-		form_form.prototype.specialKey.call(
-			this,
-			key,
-			shift,
-			ctrl
-		)
-	);
+	return form_form.specialKey.call( this, key, shift, ctrl );
 };
 
 
