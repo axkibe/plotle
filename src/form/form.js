@@ -194,9 +194,9 @@ form_form.draw =
 
 
 /*
-| Returns true if point is on this panel.
+| If point is on the form returns its hovering state.
 */
-form_form.prototype.pointingHover =
+form_form.pointingHover =
 	function(
 		p,
 		shift,
@@ -419,31 +419,6 @@ form_form.prototype.mousewheel =
 	)
 {
 	return true;
-};
-
-
-/*
-| Returns the path of a widget
-|
-| FIXME make this go away.
-*/
-form_form.prototype._widgetPath =
-	function(
-		widgetName
-	)
-{
-	var
-		path;
-
-	path = this.twig[ widgetName ].path;
-
-	if( !path )
-	{
-		// at startup the path might still be null
-		return this.path.append( 'twig' ).append( widgetName );
-	}
-
-	return path;
 };
 
 

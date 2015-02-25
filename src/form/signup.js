@@ -158,7 +158,7 @@ prototype.clear =
 
 	root.setPath( twig.newsletterCheckBox.path.append( 'checked' ), true );
 
-	root.setPath( this._widgetPath( 'errorLabel' ).append( 'text' ), '' );
+	root.setPath( this.path.append( 'twig' ).append( 'errorLabel' ).append( 'text' ), '' );
 
 	root.create( 'mark', null );
 };
@@ -242,8 +242,9 @@ prototype.onRegister =
 	if( !ok )
 	{
 		root.setPath(
-			this
-			._widgetPath( 'errorLabel' )
+			this.path
+			.append( 'twig' )
+			.append( 'errorLabel' )
 			.append( 'text' ),
 			message
 		);
@@ -272,6 +273,11 @@ prototype.onRegister =
 	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 };
 
+
+/*
+| If point is on the form returns its hovering state.
+*/
+prototype.pointingHover = form_form.pointingHover;
 
 
 /*
@@ -354,7 +360,10 @@ prototype.signup =
 	if( username.length < 4 )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).append( 'text' ),
+			this.path
+			.append( 'twig' )
+			.append( 'errorLabel' )
+			.append( 'text' ),
 			'Username too short, min. 4 characters'
 		);
 
@@ -372,7 +381,10 @@ prototype.signup =
 	if( username.substr( 0, 5 ) === 'visit' )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).append( 'text' ),
+			this.path
+			.append( 'twig' )
+			.append( 'errorLabel' )
+			.append( 'text' ),
 			'Username must not start with "visit"'
 		);
 
@@ -390,7 +402,10 @@ prototype.signup =
 	if( pass.length < 5 )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).append( 'text' ),
+			this.path
+			.append( 'twig' )
+			.append( 'errorLabel' )
+			.append( 'text' ),
 			'Password too short, min. 5 characters'
 		);
 
@@ -408,7 +423,10 @@ prototype.signup =
 	if( pass !== pass2 )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).append( 'text' ),
+			this.path
+			.append( 'twig' )
+			.append( 'errorLabel' )
+			.append( 'text' ),
 			'Passwords do not match'
 		);
 

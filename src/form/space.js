@@ -207,6 +207,12 @@ jools.lazyValue(
 
 
 /*
+| If point is on the form returns its hovering state.
+*/
+prototype.pointingHover = form_form.pointingHover;
+
+
+/*
 | A button of the form has been pushed.
 */
 prototype.pushButton =

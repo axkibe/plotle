@@ -133,17 +133,35 @@ prototype._init =
 
 
 /*
-| Clears all fields
+| Clears all fields.
 */
 prototype.clear =
 	function( )
 {
 	// FIXME combine calls
-	root.setPath( this._widgetPath( 'userInput' ).append( 'value' ), '' );
+	root.setPath(
+		this.path
+		.append( 'twig' )
+		.append( 'userInput' )
+		.append( 'value' ),
+		''
+	);
 
-	root.setPath( this._widgetPath( 'passwordInput' ).append( 'value' ), '' );
+	root.setPath(
+		this.path
+		.append( 'twig' )
+		.append( 'passwordInput' )
+		.append( 'value' ),
+		''
+	);
 
-	root.setPath( this._widgetPath( 'errorLabel' ).append( 'text' ), '' );
+	root.setPath(
+		this.path
+		.append( 'twig' )
+		.append( 'errorLabel' )
+		.append( 'text' ),
+		''
+	);
 
 	root.create( 'mark', null );
 };
@@ -229,7 +247,10 @@ prototype.login =
 	if( username.length < 4 )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).append( 'text' ),
+			this.path
+			.append( 'twig' )
+			.append( 'errorLabel' )
+			.append( 'text' ),
 			'Username too short, min. 4 characters'
 		);
 
@@ -248,7 +269,10 @@ prototype.login =
 	if( username.substr( 0, 5 ) === 'visit' )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).append( 'text' ),
+			this.path
+			.append( 'twig' )
+			.append( 'errorLabel' )
+			.append( 'text' ),
 			'Username must not start with "visit"'
 		);
 
@@ -267,7 +291,10 @@ prototype.login =
 	if( pass.length < 5 )
 	{
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).append( 'text' ),
+			this.path
+			.append( 'twig' )
+			.append( 'errorLabel' )
+			.append( 'text' ),
 			'Password too short, min. 5 characters'
 		);
 
@@ -311,7 +338,11 @@ prototype.onAuth =
 		message = reply.message;
 
 		root.setPath(
-			this._widgetPath( 'errorLabel' ).append( 'text' ),
+			// FIXME why not make here and else a _errorLabelTextPath
+			this.path
+			.append( 'twig' )
+			.append( 'errorLabel' )
+			.append( 'text' ),
 			message
 		);
 
@@ -348,6 +379,12 @@ prototype.onAuth =
 
 	root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 };
+
+
+/*
+| If point is on the form returns its hovering state.
+*/
+prototype.pointingHover = form_form.pointingHover;
 
 
 /*

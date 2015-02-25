@@ -187,6 +187,12 @@ jools.lazyValue(
 
 
 /*
+| If point is on the form returns its hovering state.
+*/
+prototype.pointingHover = form_form.pointingHover;
+
+
+/*
 | The disc is shown while a form is shown.
 */
 prototype.showDisc = true;
