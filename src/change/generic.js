@@ -108,8 +108,7 @@ change_generic.transformChangeWrap =
 		cw
 	)
 {
-	// FIXME call the correct subroutine right away.
-	return cw.create( 'changeRay', this.transform( cw.changeRay ) );
+	return cw.create( 'changeRay', this._transformChangeRay( cw.changeRay ) );
 };
 
 

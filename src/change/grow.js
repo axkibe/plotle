@@ -161,7 +161,7 @@ jools.lazyValue(
 				'rank', this.rank
 			);
 
-		// FIXME aheadValue inv to be this
+		jools.aheadValue( inv, 'invert', this );
 
 		return inv;
 	}
@@ -200,7 +200,7 @@ prototype.transform =
 		case 'change_grow' :
 		case 'change_shrink' :
 
-			// FIXME fix ranks
+			// FUTURE fix ranks
 			return cx;
 
 		case 'change_set' :
