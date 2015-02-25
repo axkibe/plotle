@@ -61,6 +61,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 /*
 | Node includes.
 */
@@ -78,10 +82,13 @@ if( SERVER )
 }
 
 
+prototype = change_join.prototype;
+
+
 /*
 | Initializer.
 */
-change_join.prototype._init =
+prototype._init =
 	function ( )
 {
 	if( this.at1 < 0 )
@@ -94,7 +101,7 @@ change_join.prototype._init =
 /*
 | Performs the insertion change on a tree.
 */
-change_join.prototype.changeTree =
+prototype.changeTree =
 	function(
 		tree
 	)
@@ -195,7 +202,7 @@ change_join.prototype.changeTree =
 | Returns the inversion to this change.
 */
 jools.lazyValue(
-	change_join.prototype,
+	prototype,
 	'invert',
 	function( )
 	{
@@ -220,7 +227,7 @@ jools.lazyValue(
 | Returns a change, changeRay, changeWrap or changeWrapRay
 | transformed on this change.
 */
-change_join.prototype.transform =
+prototype.transform =
 	function(
 		cx
 	)
@@ -286,29 +293,26 @@ change_join.prototype.transform =
 /*
 | Returns a change ray transformed by this change.
 */
-change_join.prototype._transformChangeRay =
-	change_generic.transformChangeRay;
+prototype._transformChangeRay = change_generic.transformChangeRay;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_join.prototype._transformChangeWrap =
-	change_generic.transformChangeWrap;
+prototype._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_join.prototype._transformChangeWrapRay =
-	change_generic.transformChangeWrapRay;
+prototype._transformChangeWrapRay = change_generic.transformChangeWrapRay;
 
 
 /*
 | Transforms an insert/remove change
 | considering this join actually came first.
 */
-change_join.prototype._transformInsertRemove =
+prototype._transformInsertRemove =
 	function(
 		cx
 	)
@@ -344,7 +348,7 @@ change_join.prototype._transformInsertRemove =
 | Transforms an join/split change
 | considering this join actually came first.
 */
-change_join.prototype._transformJoinSplit =
+prototype._transformJoinSplit =
 	function(
 		cx
 	)
@@ -378,7 +382,7 @@ change_join.prototype._transformJoinSplit =
 /*
 | Transforms a mark by this join.
 */
-change_join.prototype._transformTextMark =
+prototype._transformTextMark =
 	function(
 		mark
 	)
@@ -400,7 +404,7 @@ change_join.prototype._transformTextMark =
 /*
 | Transforms a range mark by this join.
 */
-change_join.prototype._transformRangeMark =
+prototype._transformRangeMark =
 	change_generic.transformRangeMark;
 
 

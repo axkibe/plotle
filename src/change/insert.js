@@ -70,6 +70,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 /*
 | Node includes.
 */
@@ -87,10 +91,13 @@ if( SERVER )
 }
 
 
+prototype = change_insert.prototype;
+
+
 /*
 | Initializer.
 */
-change_insert.prototype._init =
+prototype._init =
 	function ( )
 {
 	if( this.at1 + this.val.length !== this.at2 )
@@ -111,7 +118,7 @@ change_insert.prototype._init =
 /*
 | Performs the insertion change on a tree.
 */
-change_insert.prototype.changeTree =
+prototype.changeTree =
 	function(
 		tree
 	)
@@ -148,7 +155,7 @@ change_insert.prototype.changeTree =
 | Returns the inversion to this change.
 */
 jools.lazyValue(
-	change_insert.prototype,
+	prototype,
 	'invert',
 	function( )
 	{
@@ -174,7 +181,7 @@ jools.lazyValue(
 | Returns a change, changeRay, changeWrap or changeWrapRay
 | transformed on this change.
 */
-change_insert.prototype.transform =
+prototype.transform =
 	function(
 		cx
 	)
@@ -235,22 +242,19 @@ change_insert.prototype.transform =
 /*
 | Returns a change ray transformed by this change.
 */
-change_insert.prototype._transformChangeRay =
-	change_generic.transformChangeRay;
+prototype._transformChangeRay = change_generic.transformChangeRay;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_insert.prototype._transformChangeWrap =
-	change_generic.transformChangeWrap;
+prototype._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_insert.prototype._transformChangeWrapRay =
-	change_generic.transformChangeWrapRay;
+prototype._transformChangeWrapRay = change_generic.transformChangeWrapRay;
 
 
 
@@ -258,7 +262,7 @@ change_insert.prototype._transformChangeWrapRay =
 | Transforms another insert/remove change
 | considering this insert actually came first.
 */
-change_insert.prototype._transformInsertRemove =
+prototype._transformInsertRemove =
 	function(
 		cx
 	)
@@ -303,14 +307,13 @@ change_insert.prototype._transformInsertRemove =
 /*
 | Transforms a range mark by this insert.
 */
-change_insert.prototype._transformRangeMark =
-	change_generic.transformRangeMark;
+prototype._transformRangeMark = change_generic.transformRangeMark;
 
 
 /*
 | Transforms a text mark by this insert.
 */
-change_insert.prototype._transformTextMark =
+prototype._transformTextMark =
 	function(
 		mark
 	)
@@ -340,7 +343,7 @@ change_insert.prototype._transformTextMark =
 | Transforms a join or split change.
 | considering this insert actually came first.
 */
-change_insert.prototype._transformJoinSplit =
+prototype._transformJoinSplit =
 	function(
 		cx
 	)

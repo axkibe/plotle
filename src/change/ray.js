@@ -40,6 +40,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( SERVER )
 {
 	change_ray = require( '../jion/this' )( module );
@@ -50,11 +54,14 @@ if( SERVER )
 }
 
 
+prototype = change_ray.prototype;
+
+
 /*
 | Returns a change ray with inverted changes.
 */
 jools.lazyValue(
-	change_ray.prototype,
+	prototype,
 	'invert',
 	function( )
 	{
@@ -91,7 +98,7 @@ jools.lazyValue(
 |
 | The result can be a change or a change_ray.
 */
-change_ray.prototype._transformSingle =
+prototype._transformSingle =
 	function(
 		c
 	)
@@ -121,7 +128,7 @@ change_ray.prototype._transformSingle =
 |
 | The result is a change_ray.
 */
-change_ray.prototype._transformChangeRay =
+prototype._transformChangeRay =
 	function(
 		cRay
 	)
@@ -149,7 +156,7 @@ change_ray.prototype._transformChangeRay =
 /*
 | Returns a change wrap transformed by this change.
 */
-change_ray.prototype._transformChangeWrap =
+prototype._transformChangeWrap =
 	function(
 		cw
 	)
@@ -161,7 +168,7 @@ change_ray.prototype._transformChangeWrap =
 /*
 | Returns a change wrap transformed by this change.
 */
-change_ray.prototype._transformChangeWrapRay =
+prototype._transformChangeWrapRay =
 	function(
 		cwRay
 	)
@@ -192,7 +199,7 @@ change_ray.prototype._transformChangeWrapRay =
 | change, change_ray, change_wrap or change_wrapRay
 | transformed by this change_ray.
 */
-change_ray.prototype.transform =
+prototype.transform =
 	function(
 		co
 	)
@@ -221,7 +228,7 @@ change_ray.prototype.transform =
 /*
 | Performes this change-ray on a tree.
 */
-change_ray.prototype.changeTree =
+prototype.changeTree =
 	function(
 		tree
 	)

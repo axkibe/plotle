@@ -40,9 +40,12 @@ if( JION )
 
 
 var
-	ast_and;
+	ast_and,
+	prototype;
 
 ast_and = require( '../jion/this' )( module );
+
+prototype = ast_and.prototype;
 
 
 /**/if( CHECK )
@@ -55,7 +58,7 @@ ast_and = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	ast_and.prototype.inspect =
+***/	prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

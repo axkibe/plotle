@@ -60,6 +60,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 /*
 | Node includes.
 */
@@ -75,10 +79,13 @@ if( SERVER )
 }
 
 
+prototype = change_set.prototype;
+
+
 /*
 | Initializer.
 */
-change_set.prototype._init =
+prototype._init =
 	function ( )
 {
 	// FIXME make "nonnegativeInteger" a json type
@@ -88,7 +95,7 @@ change_set.prototype._init =
 /*
 | Performs the insertion change on a tree.
 */
-change_set.prototype.changeTree =
+prototype.changeTree =
 	function(
 		tree
 	)
@@ -124,7 +131,7 @@ change_set.prototype.changeTree =
 | Returns the inversion to this change.
 */
 jools.lazyValue(
-	change_set.prototype,
+	prototype,
 	'invert',
 	function( )
 	{
@@ -148,7 +155,7 @@ jools.lazyValue(
 /*
 | Returns a change* transformed on this change.
 */
-change_set.prototype.transform =
+prototype.transform =
 	function(
 		cx
 	)
@@ -200,7 +207,7 @@ change_set.prototype.transform =
 | Transforms a set by this set actually
 | happening first.
 */
-change_set.prototype._transformChangeSet =
+prototype._transformChangeSet =
 	function(
 		cx
 	)
@@ -222,21 +229,19 @@ change_set.prototype._transformChangeSet =
 /*
 | Returns a change ray transformed by this change.
 */
-change_set.prototype._transformChangeRay =
-	change_generic.transformChangeRay;
+prototype._transformChangeRay = change_generic.transformChangeRay;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_set.prototype._transformChangeWrap =
-	change_generic.transformChangeWrap;
+prototype._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_set.prototype._transformChangeWrapRay =
+prototype._transformChangeWrapRay =
 	change_generic.transformChangeWrapRay;
 
 

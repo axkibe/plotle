@@ -65,6 +65,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 /*
 | Node includes.
 */
@@ -81,11 +85,13 @@ if( SERVER )
 	jools = require( '../jools/jools' );
 }
 
+prototype = change_shrink.prototype;
+
 
 /*
 | Initializer.
 */
-change_shrink.prototype._init =
+prototype._init =
 	function ( )
 {
 	if( this.rank !== undefined && this.rank < 0 )
@@ -98,7 +104,7 @@ change_shrink.prototype._init =
 /*
 | Performs the insertion change on a tree.
 */
-change_shrink.prototype.changeTree =
+prototype.changeTree =
 	function(
 		tree
 	)
@@ -157,7 +163,7 @@ change_shrink.prototype.changeTree =
 | Returns the inversion to this change.
 */
 jools.lazyValue(
-	change_shrink.prototype,
+	prototype,
 	'invert',
 	function( )
 	{
@@ -181,7 +187,7 @@ jools.lazyValue(
 /*
 | Returns a change* transformed on this change.
 */
-change_shrink.prototype.transform =
+prototype.transform =
 	function(
 		cx
 	)
@@ -240,7 +246,7 @@ change_shrink.prototype.transform =
 | Transforms a jion/insert/remove/set/split changes
 | by this shrink
 */
-change_shrink.prototype._transformJIRS =
+prototype._transformJIRS =
 	function(
 		cx
 	)
@@ -257,7 +263,7 @@ change_shrink.prototype._transformJIRS =
 /*
 | Transforms a mark by this set.
 */
-change_shrink.prototype._transformMark =
+prototype._transformMark =
 	function(
 		mark
 	)
@@ -274,21 +280,21 @@ change_shrink.prototype._transformMark =
 /*
 | Returns a change ray transformed by this change.
 */
-change_shrink.prototype._transformChangeRay =
+prototype._transformChangeRay =
 	change_generic.transformChangeRay;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_shrink.prototype._transformChangeWrap =
+prototype._transformChangeWrap =
 	change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_shrink.prototype._transformChangeWrapRay =
+prototype._transformChangeWrapRay =
 	change_generic.transformChangeWrapRay;
 
 

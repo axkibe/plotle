@@ -30,16 +30,23 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( SERVER )
 {
 	change_wrapRay = require( '../jion/this' )( module );
 }
 
 
+prototype = change_wrapRay.prototype;
+
+
 /*
 | Creates an invertes changeWrapRay
 */
-change_wrapRay.prototype.createInvert =
+prototype.createInvert =
 	function( )
 {
 	var
@@ -65,7 +72,7 @@ change_wrapRay.prototype.createInvert =
 /*
 | Performes the wraped-change-(rays) on a tree.
 */
-change_wrapRay.prototype.changeTree =
+prototype.changeTree =
 	function(
 		tree
 	)
@@ -92,7 +99,7 @@ change_wrapRay.prototype.changeTree =
 |
 | cx can be a change, changeRay, changeWrap or changeWrapRay, sign
 */
-change_wrapRay.prototype.transform =
+prototype.transform =
 	function(
 		cx
 	)

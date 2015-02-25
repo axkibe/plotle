@@ -63,6 +63,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 /*
 | Node includes.
 */
@@ -78,10 +82,13 @@ if( SERVER )
 }
 
 
+prototype = change_grow.prototype;
+
+
 /*
 | Initializer.
 */
-change_grow.prototype._init =
+prototype._init =
 	function ( )
 {
 	if( this.rank !== undefined && this.rank < 0 )
@@ -94,7 +101,7 @@ change_grow.prototype._init =
 /*
 | Performs the growth change on a tree.
 */
-change_grow.prototype.changeTree =
+prototype.changeTree =
 	function(
 		tree
 	)
@@ -140,7 +147,7 @@ change_grow.prototype.changeTree =
 | Returns the inversion to this change.
 */
 jools.lazyValue(
-	change_grow.prototype,
+	prototype,
 	'invert',
 	function( )
 	{
@@ -164,7 +171,7 @@ jools.lazyValue(
 /*
 | Returns a change* transformed on this change.
 */
-change_grow.prototype.transform =
+prototype.transform =
 	function(
 		cx
 	)
@@ -223,22 +230,19 @@ change_grow.prototype.transform =
 /*
 | Returns a change ray transformed by this change.
 */
-change_grow.prototype._transformChangeRay =
-	change_generic.transformChangeRay;
+prototype._transformChangeRay = change_generic.transformChangeRay;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_grow.prototype._transformChangeWrap =
-	change_generic.transformChangeWrap;
+prototype._transformChangeWrap = change_generic.transformChangeWrap;
 
 
 /*
 | Returns a change wrap transformed by this change.
 */
-change_grow.prototype._transformChangeWrapRay =
-	change_generic.transformChangeWrapRay;
+prototype._transformChangeWrapRay = change_generic.transformChangeWrapRay;
 
 
 

@@ -68,6 +68,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( SERVER )
 {
 	change_wrap = require( '../jion/this' )( module );
@@ -76,12 +80,15 @@ if( SERVER )
 }
 
 
+prototype = change_wrap.prototype;
+
+
 /*
 | Creates an inverted changeWrap.
 |
 | This one has a distinct change id and no sequence id yet
 */
-change_wrap.prototype.createInvert =
+prototype.createInvert =
 	function( )
 {
 	return(
@@ -98,7 +105,7 @@ change_wrap.prototype.createInvert =
 |
 | cx can be a change, changeRay, changeWrap or changeWrapRay.
 */
-change_wrap.prototype.transform =
+prototype.transform =
 	function(
 		cx
 	)
@@ -111,7 +118,7 @@ change_wrap.prototype.transform =
 /*
 | Performes the wrapped change on a tree.
 */
-change_wrap.prototype.changeTree =
+prototype.changeTree =
 	function(
 		tree
 	)
