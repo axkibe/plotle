@@ -174,8 +174,7 @@ form_form.draw =
 	)
 {
 	var
-		r,
-		ranks;
+		r;
 
 	display.paint(
 		theme.form.style,
@@ -183,10 +182,8 @@ form_form.draw =
 		euclid_view.proper
 	);
 
-	ranks = this.ranks;
-
 	for(
-		r = ranks.length - 1;
+		r = this.length - 1;
 		r >= 0;
 		r--
 	)
@@ -209,23 +206,15 @@ form_form.prototype.pointingHover =
 	var
 		r,
 		rZ,
-		ranks,
 		res;
 
-	ranks = this.ranks;
-
 	for(
-		r = 0, rZ = ranks.length;
+		r = 0, rZ = this.length;
 		r < rZ;
 		r++
 	)
 	{
-		res =
-			this.atRank( r ).pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+		res = this.atRank( r ).pointingHover( p, shift, ctrl );
 
 		if( res )
 		{
