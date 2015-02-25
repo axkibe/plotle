@@ -153,6 +153,12 @@ prototype.click = form_form.click;
 
 
 /*
+| Cycles the focus.
+*/
+prototype.cycleFocus = form_form.cycleFocus;
+
+
+/*
 | Moving during an operation with the mouse button held down.
 */
 prototype.dragMove =
@@ -210,6 +216,12 @@ jools.lazyValue(
 	'focusedWidget',
 	form_form.getFocusedWidget
 );
+
+
+/*
+| User is inputing text.
+*/
+prototype.input = form_form.input;
 
 
 /*

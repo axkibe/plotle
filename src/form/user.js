@@ -189,6 +189,12 @@ prototype.click = form_form.click;
 
 
 /*
+| Cycles the focus.
+*/
+prototype.cycleFocus = form_form.cycleFocus;
+
+
+/*
 | The focused widget.
 */
 jools.lazyValue(
@@ -246,6 +252,12 @@ prototype.dragStop =
 | Draws a form.
 */
 prototype.draw = form_form.draw;
+
+
+/*
+| User is inputing text.
+*/
+prototype.input = form_form.input;
 
 
 /*

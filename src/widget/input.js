@@ -1,5 +1,7 @@
 /*
 | An input field.
+|
+| FIXME remove all 'owner' referenced (including other widgets).
 */
 
 

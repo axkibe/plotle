@@ -273,7 +273,7 @@ form_form.click =
 /*
 | User is inputing text.
 */
-form_form.prototype.input =
+form_form.input =
 	function(
 		text
 	)
@@ -283,31 +283,30 @@ form_form.prototype.input =
 
 	widget = this.focusedWidget;
 
-	if( !widget )
+	if( widget )
 	{
-		return;
+		widget.input( text );
 	}
-
-	widget.input( text );
 };
 
 
 /*
 | Cycles the focus
 */
-form_form.prototype.cycleFocus =
+form_form.cycleFocus =
 	function(
 		dir
 	)
 {
 	var
-		len,
-		name,
+		length,
 		path,
 		rank,
 		ranks,
 		rs,
 		ve;
+
+	length = this.length;
 
 	path = this.mark.widgetPath;
 
@@ -320,28 +319,20 @@ form_form.prototype.cycleFocus =
 
 	rank = this.rankOf( path.get( 4 ) );
 
-	len = ranks.length;
-
 	rs = rank;
 
 	while( true )
 	{
-		rank = ( rank + dir + len ) % len;
+		rank = ( rank + dir + length ) % length;
 
 		if( rank === rs )
 		{
 			break;
 		}
 
-		name = ranks[ rank ];
+		ve = this.atRank( rank );
 
-		ve = this.twig[ name ];
-
-		if(
-			ve.focusable
-			&&
-			ve.visible !== false
-		)
+		if( ve.focusable && ve.visible !== false )
 		{
 			root.create(
 				'mark',
