@@ -111,15 +111,15 @@ if( JION )
 
 
 /*
-| The no access to space form.
+| Initializer.
 */
-form_noAccessToSpace.prototype._init =
-	function(
-		inherit
-	)
-{
-	form_form.init.call( this, inherit );
-};
+form_noAccessToSpace.prototype._init = form_form.init;
+
+
+/*
+| Draws a form.
+*/
+form_noAccessToSpace.prototype.draw = form_form.draw;
 
 
 /*

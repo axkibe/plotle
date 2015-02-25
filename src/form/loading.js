@@ -121,6 +121,12 @@ form_loading.prototype._init =
 
 
 /*
+| Draws a form.
+*/
+form_loading.prototype.draw = form_form.draw;
+
+
+/*
 | The focused widget.
 */
 jools.lazyValue(

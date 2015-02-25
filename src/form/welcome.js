@@ -135,6 +135,11 @@ form_welcome.prototype._init =
 	form_form.init.call( this, inherit );
 };
 
+/*
+| Draws a form.
+*/
+form_welcome.prototype.draw = form_form.draw;
+
 
 /*
 | The focused widget.

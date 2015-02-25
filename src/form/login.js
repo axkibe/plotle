@@ -144,6 +144,12 @@ form_login.prototype.clear =
 
 
 /*
+| Draws a form.
+*/
+form_login.prototype.draw = form_form.draw;
+
+
+/*
 | The focused widget.
 */
 jools.lazyValue(

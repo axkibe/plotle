@@ -159,6 +159,12 @@ form_nonExistingSpace.prototype._init =
 
 
 /*
+| Draws a form.
+*/
+form_nonExistingSpace.prototype.draw = form_form.draw;
+
+
+/*
 | The focused widget.
 */
 jools.lazyValue(

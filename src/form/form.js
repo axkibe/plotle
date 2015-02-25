@@ -166,9 +166,9 @@ form_form.getFocusedWidget =
 
 
 /*
-| Draws the form.
+| Draws a form.
 */
-form_form.prototype.draw =
+form_form.draw =
 	function(
 		display
 	)

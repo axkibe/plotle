@@ -1,5 +1,7 @@
 /*
 | The move to form.
+|
+| FIXME rename moveto
 */
 
 
@@ -143,6 +145,12 @@ form_moveTo.prototype._init =
 
 	form_form.init.call( this, inherit );
 };
+
+
+/*
+| Draws a form.
+*/
+form_moveTo.prototype.draw = form_form.draw;
 
 
 /*

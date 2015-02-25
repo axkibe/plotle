@@ -208,6 +208,12 @@ jools.lazyValue(
 
 
 /*
+| Draws a form.
+*/
+form_user.prototype.draw = form_form.draw;
+
+
+/*
 | A button of the form has been pushed.
 */
 form_user.prototype.pushButton =

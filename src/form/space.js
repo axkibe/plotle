@@ -141,6 +141,12 @@ form_space.prototype._init =
 
 
 /*
+| Draws a form.
+*/
+form_space.prototype.draw = form_form.draw;
+
+
+/*
 | The focused widget.
 */
 jools.lazyValue(

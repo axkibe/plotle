@@ -40,7 +40,7 @@ if( JION )
 							'jion_path',
 						defaultValue :
 							'null'
-			},
+					},
 				mark :
 					{
 						comment :
@@ -156,6 +156,12 @@ form_signUp.prototype.clear =
 
 	root.create( 'mark', null );
 };
+
+
+/*
+| Draws a form.
+*/
+form_signUp.prototype.draw = form_form.draw;
 
 
 /*
