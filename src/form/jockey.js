@@ -87,8 +87,6 @@ if( JION )
 							}
 					}
 			},
-		subclass :
-			'form_form',
 		init :
 			[
 				'twigDup'

@@ -101,8 +101,6 @@ if( JION )
 							'undefined'
 					}
 			},
-		subclass :
-			'form_form',
 		init :
 			[ 'inherit' ],
 		twig :
@@ -130,6 +128,16 @@ prototype._init =
 		inherit
 	);
 };
+
+
+/*
+| The attention center.
+*/
+jools.lazyValue(
+	prototype,
+	'attentionCenter',
+	form_form.getAttentionCenter
+);
 
 
 /*
@@ -485,9 +493,9 @@ prototype.specialKey =
 	// to be a login command right away
 
 	if(
-		key === 'enter' &&
-		this.mark.caretPath &&
-		this.mark.caretPath.get( 2 ) === 'passwordInput'
+		key === 'enter'
+		&& this.mark.caretPath
+		&& this.mark.caretPath.get( 4 ) === 'passwordInput'
 	)
 	{
 		this.login( );

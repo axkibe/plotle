@@ -98,8 +98,6 @@ if( JION )
 							'undefined'
 					}
 			},
-		subclass :
-			'form_form',
 		init :
 			[ 'inherit', 'twigDup' ],
 		twig :
@@ -140,6 +138,16 @@ prototype._init =
 
 	form_form.init.call( this, inherit );
 };
+
+
+/*
+| The attention center.
+*/
+jools.lazyValue(
+	prototype,
+	'attentionCenter',
+	form_form.getAttentionCenter
+);
 
 
 /*

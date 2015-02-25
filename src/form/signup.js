@@ -105,12 +105,8 @@ if( JION )
 							'undefined'
 					}
 			},
-		subclass :
-			'form_form',
 		init :
-			[
-				'inherit'
-			],
+			[ 'inherit' ],
 		twig :
 			'->formWidgets'
 	};
@@ -136,7 +132,17 @@ prototype._init =
 
 
 /*
-| Clears all fields
+| The attention center.
+*/
+jools.lazyValue(
+	prototype,
+	'attentionCenter',
+	form_form.getAttentionCenter
+);
+
+
+/*
+| Clears all fields.
 */
 prototype.clear =
 	function( )

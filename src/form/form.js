@@ -21,12 +21,7 @@ var
 'use strict';
 
 
-form_form =
-	function( )
-{
-	// initializing abstract
-	throw new Error( );
-};
+form_form = { };
 
 
 /*
@@ -105,133 +100,6 @@ form_form.init =
 
 
 /*
-| Returns the mark if a form with 'path' concerns about
-| 'mark'.
-*/
-form_form.concernsMark =
-	function(
-		mark,
-		path
-	)
-{
-	if( !mark )
-	{
-		return mark;
-	}
-
-	return(
-		mark.containsPath( path )
-		? mark
-		: null
-	);
-};
-
-
-/*
-| Returns the focused widget.
-|
-| To be used as lazyValue getter.
-*/
-form_form.getFocusedWidget =
-	function( )
-{
-	var
-		mark,
-		path;
-
-	mark = this.mark;
-
-	if( !mark )
-	{
-		return null;
-	}
-
-	path = mark.widgetPath;
-
-	if( path.length === 0 )
-	{
-		return null;
-	}
-
-/**/if( CHECK )
-/**/{
-/**/	if( path.get( 2 ) !== this.reflectName )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	return this.twig[ path.get( 4 ) ];
-};
-
-
-/*
-| Draws a form.
-*/
-form_form.draw =
-	function(
-		display
-	)
-{
-	var
-		r;
-
-	display.paint(
-		theme.form.style,
-		display.silhoutte,
-		euclid_view.proper
-	);
-
-	for(
-		r = this.length - 1;
-		r >= 0;
-		r--
-	)
-	{
-		this.atRank( r ).draw( display );
-	}
-};
-
-
-/*
-| If point is on the form returns its hovering state.
-*/
-form_form.pointingHover =
-	function(
-		p,
-		shift,
-		ctrl
-	)
-{
-	var
-		r,
-		rZ,
-		res;
-
-	for(
-		r = 0, rZ = this.length;
-		r < rZ;
-		r++
-	)
-	{
-		res = this.atRank( r ).pointingHover( p, shift, ctrl );
-
-		if( res )
-		{
-			return res;
-		}
-	}
-
-	return(
-		result_hover.create(
-			'path', jion_path.empty,
-			'cursor', 'default'
-		)
-	);
-};
-
-
-/*
 | User clicked.
 */
 form_form.click =
@@ -271,22 +139,25 @@ form_form.click =
 
 
 /*
-| User is inputing text.
+| Returns the mark if a form with 'path' concerns about
+| 'mark'.
 */
-form_form.input =
+form_form.concernsMark =
 	function(
-		text
+		mark,
+		path
 	)
 {
-	var
-		widget;
-
-	widget = this.focusedWidget;
-
-	if( widget )
+	if( !mark )
 	{
-		widget.input( text );
+		return mark;
 	}
+
+	return(
+		mark.containsPath( path )
+		? mark
+		: null
+	);
 };
 
 
@@ -348,6 +219,152 @@ form_form.cycleFocus =
 
 
 /*
+| Draws a form.
+*/
+form_form.draw =
+	function(
+		display
+	)
+{
+	var
+		r;
+
+	display.paint(
+		theme.form.style,
+		display.silhoutte,
+		euclid_view.proper
+	);
+
+	for(
+		r = this.length - 1;
+		r >= 0;
+		r--
+	)
+	{
+		this.atRank( r ).draw( display );
+	}
+};
+
+
+/*
+| Returns the attention center.
+|
+| To be used as lazyValue getter.
+*/
+form_form.getAttentionCenter =
+	function( )
+{
+	var
+		focus;
+
+	focus = this.focusedWidget;
+
+	if( !focus )
+	{
+		return null;
+	}
+
+	return focus.attentionCenter;
+};
+
+
+/*
+| Returns the focused widget.
+|
+| To be used as lazyValue getter.
+*/
+form_form.getFocusedWidget =
+	function( )
+{
+	var
+		mark,
+		path;
+
+	mark = this.mark;
+
+	if( !mark )
+	{
+		return null;
+	}
+
+	path = mark.widgetPath;
+
+	if( path.length === 0 )
+	{
+		return null;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( path.get( 2 ) !== this.reflectName )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return this.twig[ path.get( 4 ) ];
+};
+
+
+/*
+| User is inputing text.
+*/
+form_form.input =
+	function(
+		text
+	)
+{
+	var
+		widget;
+
+	widget = this.focusedWidget;
+
+	if( widget )
+	{
+		widget.input( text );
+	}
+};
+
+
+/*
+| If point is on the form returns its hovering state.
+*/
+form_form.pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	var
+		r,
+		rZ,
+		res;
+
+	for(
+		r = 0, rZ = this.length;
+		r < rZ;
+		r++
+	)
+	{
+		res = this.atRank( r ).pointingHover( p, shift, ctrl );
+
+		if( res )
+		{
+			return res;
+		}
+	}
+
+	return(
+		result_hover.create(
+			'path', jion_path.empty,
+			'cursor', 'default'
+		)
+	);
+};
+
+
+/*
 | User is pressing a special key.
 */
 form_form.specialKey =
@@ -376,29 +393,6 @@ form_form.specialKey =
 
 	widget.specialKey( key, this, shift, ctrl );
 };
-
-
-/*
-| The attention center.
-*/
-jools.lazyValue(
-	form_form.prototype,
-	'attentionCenter',
-	function( )
-	{
-		var
-			focus;
-
-		focus = this.focusedWidget;
-
-		if( !focus )
-		{
-			return null;
-		}
-
-		return focus.attentionCenter;
-	}
-);
 
 
 } )( );

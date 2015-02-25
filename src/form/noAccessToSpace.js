@@ -100,8 +100,6 @@ if( JION )
 							'undefined'
 					}
 			},
-		subclass :
-			'form_form',
 		init :
 			[ 'inherit' ],
 		twig :
@@ -120,6 +118,16 @@ prototype = form_noAccessToSpace.prototype;
 | Initializer.
 */
 prototype._init = form_form.init;
+
+
+/*
+| The attention center.
+*/
+jools.lazyValue(
+	prototype,
+	'attentionCenter',
+	form_form.getAttentionCenter
+);
 
 
 /*
