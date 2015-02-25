@@ -109,6 +109,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 /*
 | Node includes.
 */
@@ -120,10 +124,13 @@ if( SERVER )
 }
 
 
+prototype = fabric_doc.prototype;
+
+
 /*
 | Initializer.
 */
-fabric_doc.prototype._init =
+prototype._init =
 	function(
 		twigDup
 	)
@@ -178,7 +185,7 @@ fabric_doc.prototype._init =
 | Returns the attention center.
 */
 jools.lazyValue(
-	fabric_doc.prototype,
+	prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -216,7 +223,7 @@ jools.lazyValue(
 |
 | FIXME, remove parameters and make lazy
 */
-fabric_doc.prototype._getRangeShape =
+prototype._getRangeShape =
 	function(
 		width,       // width the doc is drawn
 		scrollp      // scroll position of the doc
@@ -631,7 +638,7 @@ fabric_doc.prototype._getRangeShape =
 /*
 | Displays the document.
 */
-fabric_doc.prototype.draw =
+prototype.draw =
 	function(
 		display,     // to display within
 		width,       // the width to draw the document with
@@ -731,7 +738,7 @@ fabric_doc.prototype.draw =
 | FIXME make this a twig.
 */
 jools.lazyValue(
-	fabric_doc.prototype,
+	prototype,
 	'paraPNWs',
 	function( )
 	{
@@ -784,7 +791,7 @@ jools.lazyValue(
 | The height of the document.
 */
 jools.lazyValue(
-	fabric_doc.prototype,
+	prototype,
 	'height',
 	function( )
 	{
@@ -832,7 +839,7 @@ jools.lazyValue(
 /*
 | returns the north-west point of the paragraph with the key 'key'.
 */
-fabric_doc.prototype.getPNW =
+prototype.getPNW =
 	function(
 		key
 	)
@@ -845,7 +852,7 @@ fabric_doc.prototype.getPNW =
 | The width actually used by the document.
 */
 jools.lazyValue(
-	fabric_doc.prototype,
+	prototype,
 	'widthUsed',
 	function( )
 	{
@@ -878,7 +885,7 @@ jools.lazyValue(
 | The default font for the document.
 */
 jools.lazyValue(
-	fabric_doc.prototype,
+	prototype,
 	'font',
 	function( )
 	{
@@ -890,7 +897,7 @@ jools.lazyValue(
 /*
 | Returns the paragraph at point
 */
-fabric_doc.prototype.getParaAtPoint =
+prototype.getParaAtPoint =
 	function(
 		p
 	)
@@ -937,7 +944,7 @@ fabric_doc.prototype.getParaAtPoint =
 /*
 | A text has been inputed.
 */
-fabric_doc.prototype.input =
+prototype.input =
 	function(
 		text,
 		item
@@ -981,7 +988,7 @@ fabric_doc.prototype.input =
 /*
 | Handles a special key.
 */
-fabric_doc.prototype.specialKey =
+prototype.specialKey =
 	function(
 		key,
 		item, // FIXME remove

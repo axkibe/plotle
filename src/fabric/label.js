@@ -122,6 +122,9 @@ if( JION )
 }
 
 
+var
+	prototype;
+
 /*
 | Node includes.
 */
@@ -135,6 +138,9 @@ if( SERVER )
 
 	return;
 }
+
+
+prototype = fabric_label.prototype;
 
 
 /*
@@ -158,7 +164,7 @@ fabric_label.handles =
 /*
 | Initializer.
 */
-fabric_label.prototype._init =
+prototype._init =
 	function( )
 {
 	var
@@ -209,7 +215,7 @@ fabric_label.prototype._init =
 | The attention center.
 */
 jools.lazyValue(
-	fabric_label.prototype,
+	prototype,
 	'attentionCenter',
 	fabric_docItem.attentionCenter
 );
@@ -218,25 +224,25 @@ jools.lazyValue(
 /*
 | Checks if the item is being clicked and reacts.
 */
-fabric_label.prototype.click = fabric_docItem.click;
+prototype.click = fabric_docItem.click;
 
 
 /*
 | A move during an action.
 */
-fabric_label.prototype.dragMove = fabric_item.dragMove;
+prototype.dragMove = fabric_item.dragMove;
 
 
 /*
 | Handles a potential dragStart event for this item.
 */
-fabric_label.prototype.dragStart = fabric_item.dragStart;
+prototype.dragStart = fabric_item.dragStart;
 
 
 /*
 | Sets the items position and size after an action.
 */
-fabric_label.prototype.dragStop =
+prototype.dragStop =
 	function( p )
 {
 	var
@@ -296,7 +302,7 @@ fabric_label.prototype.dragStop =
 /*
 | Draws the label.
 */
-fabric_label.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -313,7 +319,7 @@ fabric_label.prototype.draw =
 | Returns a handles jion.
 */
 jools.lazyValue(
-	fabric_label.prototype,
+	prototype,
 	'handlesBezel',
 	function( )
 	{
@@ -332,7 +338,7 @@ jools.lazyValue(
 /*
 | Highlights the label.
 */
-fabric_label.prototype.highlight =
+prototype.highlight =
 	function(
 		display
 	)
@@ -348,13 +354,13 @@ fabric_label.prototype.highlight =
 /*
 | A text has been inputed.
 */
-fabric_label.prototype.input = fabric_docItem.input;
+prototype.input = fabric_docItem.input;
 
 
 /*
 | Mouse wheel turned.
 */
-fabric_label.prototype.mousewheel =
+prototype.mousewheel =
 	function(
 		// view,
 		// p,
@@ -368,20 +374,20 @@ fabric_label.prototype.mousewheel =
 /*
 | User is hovering their pointing device over something.
 */
-fabric_label.prototype.pointingHover = fabric_item.pointingHover;
+prototype.pointingHover = fabric_item.pointingHover;
 
 
 /*
 | Labels use pnw/fontsize for positioning
 */
-fabric_label.prototype.positioning = 'pnw/fontsize';
+prototype.positioning = 'pnw/fontsize';
 
 
 /*
 | The item's silhoutte.
 */
 jools.lazyValue(
-	fabric_label.prototype,
+	prototype,
 	'silhoutte',
 	function( )
 	{
@@ -398,26 +404,26 @@ jools.lazyValue(
 /*
 | Handles a special key.
 */
-fabric_label.prototype.specialKey = fabric_docItem.specialKey;
+prototype.specialKey = fabric_docItem.specialKey;
 
 
 /*
 | Dummy since a label does not scroll.
 */
-fabric_label.prototype.scrollMarkIntoView = function( ){ };
+prototype.scrollMarkIntoView = function( ){ };
 
 
 /*
 | Dummy since a label does not scroll.
 */
-fabric_label.prototype.scrollPage = function( ){ };
+prototype.scrollPage = function( ){ };
 
 
 /*
 | The items silhoutte anchored at zero.
 */
 jools.lazyValue(
-	fabric_label.prototype,
+	prototype,
 	'zeroSilhoutte',
 	function( )
 	{
@@ -445,7 +451,7 @@ jools.lazyValue(
 | The label's display.
 */
 jools.lazyValue(
-	fabric_label.prototype,
+	prototype,
 	'_display',
 	function( )
 	{

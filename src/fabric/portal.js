@@ -129,6 +129,7 @@ if( JION )
 
 
 var
+	prototype,
 	spaceFields;
 
 
@@ -145,10 +146,13 @@ if( SERVER )
 }
 
 
+prototype = fabric_portal.prototype;
+
+
 /*
 | Initializer.
 */
-fabric_portal.prototype._init =
+prototype._init =
 	function( )
 {
 	var
@@ -229,7 +233,7 @@ fabric_portal.handles =
 | Returns the attention center.
 */
 jools.lazyValue(
-	fabric_portal.prototype,
+	prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -292,7 +296,7 @@ jools.lazyValue(
 /*
 | Sees if this portal is being clicked.
 */
-fabric_portal.prototype.click =
+prototype.click =
 	function(
 		p,
 		shift,
@@ -381,19 +385,19 @@ fabric_portal.prototype.click =
 /*
 | A move during an action.
 */
-fabric_portal.prototype.dragMove = fabric_item.dragMove;
+prototype.dragMove = fabric_item.dragMove;
 
 
 /*
 | Handles a potential dragStart event for this item.
 */
-fabric_portal.prototype.dragStart = fabric_item.dragStart;
+prototype.dragStart = fabric_item.dragStart;
 
 
 /*
 | Sets the items position and size after an action.
 */
-fabric_portal.prototype.dragStop =
+prototype.dragStop =
 	function(
 		p
 	)
@@ -446,7 +450,7 @@ fabric_portal.prototype.dragStop =
 /*
 | Draws the portal.
 */
-fabric_portal.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -461,7 +465,7 @@ fabric_portal.prototype.draw =
 /*
 | Highlights the portal.
 */
-fabric_portal.prototype.highlight =
+prototype.highlight =
 	function(
 		display
 	)
@@ -480,7 +484,7 @@ fabric_portal.prototype.highlight =
 /*
 | Text has been inputed.
 */
-fabric_portal.prototype.input =
+prototype.input =
 	function(
 		text
 	)
@@ -536,7 +540,7 @@ fabric_portal.prototype.input =
 | Returns a handles jion.
 */
 jools.lazyValue(
-	fabric_portal.prototype,
+	prototype,
 	'handlesBezel',
 	function( )
 	{
@@ -555,19 +559,19 @@ jools.lazyValue(
 /*
 | Minimum height.
 */
-fabric_portal.prototype.minHeight = theme.portal.minHeight;
+prototype.minHeight = theme.portal.minHeight;
 
 
 /*
 | Minimum width.
 */
-fabric_portal.prototype.minWidth = theme.portal.minWidth;
+prototype.minWidth = theme.portal.minWidth;
 
 
 /*
 | Mouse wheel turned.
 */
-fabric_portal.prototype.mousewheel =
+prototype.mousewheel =
 	function(
 		view,
 		p
@@ -585,7 +589,7 @@ fabric_portal.prototype.mousewheel =
 |
 | Checks if this item reacts on this.
 */
-fabric_portal.prototype.pointingHover =
+prototype.pointingHover =
 	function(
 		p
 	)
@@ -638,14 +642,14 @@ fabric_portal.prototype.pointingHover =
 /*
 | Portals are positioned by their zone.
 */
-fabric_portal.prototype.positioning = 'zone';
+prototype.positioning = 'zone';
 
 
 /*
 | The portal's silhoutte.
 */
 jools.lazyValue(
-	fabric_portal.prototype,
+	prototype,
 	'silhoutte',
 	function( )
 	{
@@ -663,7 +667,7 @@ jools.lazyValue(
 | The portal's silhoutte at zero.
 */
 jools.lazyValue(
-	fabric_portal.prototype,
+	prototype,
 	'zeroSilhoutte',
 	function( )
 	{
@@ -685,7 +689,7 @@ jools.lazyValue(
 /*
 | Font for spacesUser/Tag
 */
-fabric_portal.prototype._fonts =
+prototype._fonts =
 	{
 		spaceUser : shell_fontPool.get( 13, 'la' ),
 
@@ -696,14 +700,14 @@ fabric_portal.prototype._fonts =
 
 /**/if( FREEZE )
 /**/{
-/**/	Object.freeze( fabric_portal.prototype._fonts );
+/**/	Object.freeze( prototype._fonts );
 /**/}
 
 
 /*
 | Returns the point of a given offset.
 */
-fabric_portal.prototype._locateOffset =
+prototype._locateOffset =
 	function(
 		section,   // 'spaceUser' or 'spaceTag'
 		offset     // the offset to get the point from.
@@ -737,7 +741,7 @@ fabric_portal.prototype._locateOffset =
 | FUTURE make this the primer data.
 */
 jools.lazyValue(
-	fabric_portal.prototype,
+	prototype,
 	'spaceRef',
 	function( )
 {
@@ -754,7 +758,7 @@ jools.lazyValue(
 /*
 | User pressed a special key.
 */
-fabric_portal.prototype.specialKey =
+prototype.specialKey =
 	function(
 		key
 		// shift
@@ -789,7 +793,7 @@ fabric_portal.prototype.specialKey =
 /*
 | User pressed backspace.
 */
-fabric_portal.prototype._keyBackspace =
+prototype._keyBackspace =
 	function( )
 {
 	var
@@ -828,7 +832,7 @@ fabric_portal.prototype._keyBackspace =
 /*
 | User pressed down key.
 */
-fabric_portal.prototype._keyDown =
+prototype._keyDown =
 	function( )
 {
 	var
@@ -917,7 +921,7 @@ fabric_portal.prototype._keyDown =
 /*
 | User pressed right key.
 */
-fabric_portal.prototype._keyLeft =
+prototype._keyLeft =
 	function( )
 {
 	var
@@ -995,7 +999,7 @@ fabric_portal.prototype._keyLeft =
 /*
 | User pressed down key.
 */
-fabric_portal.prototype._keyTab =
+prototype._keyTab =
 	function( )
 {
 	var
@@ -1048,7 +1052,7 @@ fabric_portal.prototype._keyTab =
 /*
 | User pressed down key.
 */
-fabric_portal.prototype._keyUp =
+prototype._keyUp =
 	function( )
 {
 	var
@@ -1124,7 +1128,7 @@ fabric_portal.prototype._keyUp =
 /*
 | User pressed right key.
 */
-fabric_portal.prototype._keyRight =
+prototype._keyRight =
 	function( )
 {
 	var
@@ -1205,7 +1209,7 @@ fabric_portal.prototype._keyRight =
 /*
 | User pressed del.
 */
-fabric_portal.prototype._keyDel =
+prototype._keyDel =
 	function( )
 {
 	var
@@ -1249,7 +1253,7 @@ fabric_portal.prototype._keyDel =
 /*
 | User pressed end key.
 */
-fabric_portal.prototype._keyEnd =
+prototype._keyEnd =
 	function( )
 {
 	var
@@ -1292,7 +1296,7 @@ fabric_portal.prototype._keyEnd =
 /*
 | User pressed enter key.
 */
-fabric_portal.prototype._keyEnter =
+prototype._keyEnter =
 	function( )
 {
 	var
@@ -1354,7 +1358,7 @@ fabric_portal.prototype._keyEnter =
 /*
 | Returns true if section is a section.
 */
-fabric_portal.prototype._isSection =
+prototype._isSection =
 	function(
 		section
 	)
@@ -1379,7 +1383,7 @@ fabric_portal.prototype._isSection =
 | Prepares the moveTo button.
 */
 jools.lazyValue(
-	fabric_portal.prototype,
+	prototype,
 	'_moveToButton',
 	function( )
 	{
@@ -1440,7 +1444,7 @@ jools.lazyValue(
 /*
 | Prepares an input field ( user / tag )
 */
-fabric_portal.prototype._prepareField =
+prototype._prepareField =
 	function(
 		section,
 		basePNW
@@ -1511,7 +1515,7 @@ fabric_portal.prototype._prepareField =
 | Prepares the spaceUser field.
 */
 jools.lazyValue(
-	fabric_portal.prototype,
+	prototype,
 	'_fieldSpaceUser',
 	function( )
 	{
@@ -1524,7 +1528,7 @@ jools.lazyValue(
 | Prepares the spaceTag field.
 */
 jools.lazyValue(
-	fabric_portal.prototype,
+	prototype,
 	'_fieldSpaceTag',
 	function( )
 	{
@@ -1535,7 +1539,7 @@ jools.lazyValue(
 /*
 | User pressed pos1 key,
 */
-fabric_portal.prototype._keyPos1 =
+prototype._keyPos1 =
 	function( )
 {
 	root.create( 'mark', this.mark.create( 'at', 0 ) );
@@ -1545,7 +1549,7 @@ fabric_portal.prototype._keyPos1 =
 /*
 | Returns the offset nearest to point p.
 */
-fabric_portal.prototype._getOffsetAt =
+prototype._getOffsetAt =
 	function(
 		section,
 		x
@@ -1602,7 +1606,7 @@ fabric_portal.prototype._getOffsetAt =
 | Creates the portal's display.
 */
 jools.lazyValue(
-	fabric_portal.prototype,
+	prototype,
 	'_display',
 	function( )
 	{
@@ -1745,7 +1749,7 @@ jools.lazyValue(
 /*
 | Displays the caret.
 */
-fabric_portal.prototype._drawCaret =
+prototype._drawCaret =
 	function(
 		display
 	)
@@ -1799,7 +1803,7 @@ fabric_portal.prototype._drawCaret =
 /*
 | Issues the moveTo action.
 */
-fabric_portal.prototype._moveTo =
+prototype._moveTo =
 	function( )
 {
 	root.moveToSpace( this.spaceRef, false );

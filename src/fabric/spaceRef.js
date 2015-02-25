@@ -48,6 +48,9 @@ if( JION )
 }
 
 
+var
+	prototype;
+
 
 if( SERVER )
 {
@@ -57,11 +60,14 @@ if( SERVER )
 }
 
 
+prototype = fabric_spaceRef.prototype;
+
+
 /*
 | Returns the space's full name.
 */
 jools.lazyValue(
-	fabric_spaceRef.prototype,
+	prototype,
 	'fullname',
 	function( )
 {

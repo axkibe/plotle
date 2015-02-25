@@ -3,17 +3,8 @@
 */
 
 
-/*
-| Export
-*/
 var
-	fabric_docItem;
-
-
-/*
-| Imports
-*/
-var
+	fabric_docItem,
 	jools,
 	mark_caret,
 	root;

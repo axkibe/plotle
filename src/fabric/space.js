@@ -137,6 +137,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( SERVER )
 {
 	fabric_space = require( '../jion/this' )( module );
@@ -145,6 +149,9 @@ if( SERVER )
 
 	fabric_space.prototype._init = function( ){ };
 }
+
+
+prototype = fabric_space.prototype;
 
 
 /*
@@ -180,7 +187,7 @@ if( SERVER )
 /*
 | Initializer.
 */
-fabric_space.prototype._init =
+prototype._init =
 	function(
 		inherit,
 		twigDup
@@ -236,7 +243,7 @@ fabric_space.prototype._init =
 /*
 | The disc is shown while a space is shown.
 */
-fabric_space.prototype.showDisc = true;
+prototype.showDisc = true;
 
 
 /*
@@ -244,7 +251,7 @@ fabric_space.prototype.showDisc = true;
 |
 | FIXME handle this more gracefully
 */
-fabric_space.prototype.focusedItem =
+prototype.focusedItem =
 	function( )
 {
 	var
@@ -291,7 +298,7 @@ fabric_space.prototype.focusedItem =
 /*
 | Returns an item by its key.
 */
-fabric_space.prototype.getItem =
+prototype.getItem =
 	function(
 		key
 	)
@@ -320,8 +327,10 @@ fabric_space.prototype.getItem =
 
 /*
 | Returns the item by a given tree-rank.
+|
+| FUTURE remove
 */
-fabric_space.prototype.atRank =
+prototype.atRank =
 	function(
 		rank
 	)
@@ -334,7 +343,7 @@ fabric_space.prototype.atRank =
 | The attention center.
 */
 jools.lazyValue(
-	fabric_space.prototype,
+	prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -356,7 +365,7 @@ jools.lazyValue(
 /*
 | Displays the whole space.
 */
-fabric_space.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -473,7 +482,7 @@ fabric_space.prototype.draw =
 /*
 | Mouse wheel
 */
-fabric_space.prototype.mousewheel =
+prototype.mousewheel =
 	function(
 		p,
 		dir,
@@ -519,7 +528,7 @@ fabric_space.prototype.mousewheel =
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-fabric_space.prototype.pointingHover =
+prototype.pointingHover =
 	function(
 		p
 		// shift,
@@ -582,7 +591,7 @@ fabric_space.prototype.pointingHover =
 /*
 | Starts an operation with the mouse button held down.
 */
-fabric_space.prototype.dragStart =
+prototype.dragStart =
 	function(
 		p,
 		shift,
@@ -772,7 +781,7 @@ fabric_space.prototype.dragStart =
 /*
 | A mouse click.
 */
-fabric_space.prototype.click =
+prototype.click =
 	function(
 		p,
 		shift,
@@ -818,7 +827,7 @@ fabric_space.prototype.click =
 |
 | FIXME split this up
 */
-fabric_space.prototype.dragStop =
+prototype.dragStop =
 	function(
 		p,
 		shift,
@@ -1196,7 +1205,7 @@ fabric_space.prototype.dragStop =
 /*
 | Moving during an operation with the mouse button held down.
 */
-fabric_space.prototype.dragMove =
+prototype.dragMove =
 	function(
 		p
 		// shift,
@@ -1494,7 +1503,7 @@ fabric_space.prototype.dragMove =
 /*
 | Text input
 */
-fabric_space.prototype.input =
+prototype.input =
 	function(
 		text
 	)
@@ -1525,7 +1534,7 @@ fabric_space.prototype.input =
 /*
 | Removes a text spawning over several entities.
 */
-fabric_space.prototype.removeRange =
+prototype.removeRange =
 	function(
 		front,
 		back
@@ -1626,7 +1635,7 @@ fabric_space.prototype.removeRange =
 /*
 | User pressed a special key.
 */
-fabric_space.prototype.specialKey =
+prototype.specialKey =
 	function(
 		key,
 		shift,
@@ -1686,7 +1695,7 @@ fabric_space.prototype.specialKey =
 /*
 | Changes the zoom factor ( around center )
 */
-fabric_space.prototype._changeZoom =
+prototype._changeZoom =
 	function( df )
 {
 	var

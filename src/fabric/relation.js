@@ -142,6 +142,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 /*
 | Node includes.
 */
@@ -157,6 +161,9 @@ if( SERVER )
 
 	return;
 }
+
+
+prototype = fabric_relation.prototype;
 
 
 /*
@@ -237,7 +244,7 @@ fabric_relation.spawn =
 /*
 | Initializer.
 */
-fabric_relation.prototype._init =
+prototype._init =
 	function(
 		inherit
 	)
@@ -250,7 +257,7 @@ fabric_relation.prototype._init =
 | The attention center.
 */
 jools.lazyValue(
-	fabric_relation.prototype,
+	prototype,
 	'attentionCenter',
 	fabric_docItem.attentionCenter
 );
@@ -259,31 +266,31 @@ jools.lazyValue(
 /*
 | Checks if the item is being clicked and reacts.
 */
-fabric_relation.prototype.click = fabric_docItem.click;
+prototype.click = fabric_docItem.click;
 
 
 /*
 | A move during an action.
 */
-fabric_relation.prototype.dragMove = fabric_item.dragMove;
+prototype.dragMove = fabric_item.dragMove;
 
 
 /*
 | Handles a potential dragStart event for this item.
 */
-fabric_relation.prototype.dragStart = fabric_item.dragStart;
+prototype.dragStart = fabric_item.dragStart;
 
 
 /*
 | Sets the items position and size after an action.
 */
-fabric_relation.prototype.dragStop = fabric_label.prototype.dragStop;
+prototype.dragStop = fabric_label.prototype.dragStop;
 
 
 /*
 | Displays the relation.
 */
-fabric_relation.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -342,7 +349,7 @@ fabric_relation.prototype.draw =
 | Returns a handles jion.
 */
 jools.lazyValue(
-	fabric_relation.prototype,
+	prototype,
 	'handlesBezel',
 	function( )
 	{
@@ -361,19 +368,19 @@ jools.lazyValue(
 /*
 | Highlights the item.
 */
-fabric_relation.prototype.highlight = fabric_label.prototype.highlight;
+prototype.highlight = fabric_label.prototype.highlight;
 
 
 /*
 | A text has been inputed.
 */
-fabric_relation.prototype.input = fabric_docItem.input;
+prototype.input = fabric_docItem.input;
 
 
 /*
 | Mouse wheel turned.
 */
-fabric_relation.prototype.mousewheel =
+prototype.mousewheel =
 	function(
 		// view,
 		// p,
@@ -387,20 +394,20 @@ fabric_relation.prototype.mousewheel =
 /*
 | User is hovering their pointing device over something.
 */
-fabric_relation.prototype.pointingHover = fabric_item.pointingHover;
+prototype.pointingHover = fabric_item.pointingHover;
 
 
 /*
 | Relations use pnw/fontsize for positioning
 */
-fabric_relation.prototype.positioning = 'pnw/fontsize';
+prototype.positioning = 'pnw/fontsize';
 
 
 /*
 | The item's silhoutte.
 */
 jools.lazyValue(
-	fabric_relation.prototype,
+	prototype,
 	'silhoutte',
 	function( )
 	{
@@ -417,27 +424,27 @@ jools.lazyValue(
 /*
 | Handles a special key.
 */
-fabric_relation.prototype.specialKey = fabric_docItem.specialKey;
+prototype.specialKey = fabric_docItem.specialKey;
 
 
 
 /*
 | Dummy since a relation does not scroll.
 */
-fabric_relation.prototype.scrollMarkIntoView = function( ){ };
+prototype.scrollMarkIntoView = function( ){ };
 
 
 /*
 | Dummy since a label does not scroll.
 */
-fabric_relation.prototype.scrollPage = function( ){ };
+prototype.scrollPage = function( ){ };
 
 
 /*
 | The items silhoutte anchored at zero.
 */
 jools.lazyValue(
-	fabric_relation.prototype,
+	prototype,
 	'zeroSilhoutte',
 	function( )
 	{
@@ -464,7 +471,7 @@ jools.lazyValue(
 | The relation's display.
 */
 jools.lazyValue(
-	fabric_relation.prototype,
+	prototype,
 	'_display',
 	function( )
 	{

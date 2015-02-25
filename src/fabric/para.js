@@ -117,6 +117,9 @@ if( JION )
 }
 
 
+var
+	prototype;
+
 
 /*
 | Node includes.
@@ -129,10 +132,13 @@ if( SERVER )
 }
 
 
+prototype = fabric_para.prototype;
+
+
 /*
 | Initializer.
 */
-fabric_para.prototype._init =
+prototype._init =
 	function(
 		inherit
 	)
@@ -198,7 +204,7 @@ fabric_para.concernsMark =
 | It is the last path entry.
 */
 jools.lazyValue(
-	fabric_para.prototype,
+	prototype,
 	'key',
 	function( )
 	{
@@ -211,7 +217,7 @@ jools.lazyValue(
 | The attention center.
 */
 jools.lazyValue(
-	fabric_para.prototype,
+	prototype,
 	'attentionCenter',
 	function( )
 	{
@@ -241,7 +247,7 @@ jools.lazyValue(
 | The para's display.
 */
 jools.lazyValue(
-	fabric_para.prototype,
+	prototype,
 	'_display',
 	function( )
 	{
@@ -322,7 +328,7 @@ jools.lazyValue(
 /*
 | Draws the paragraph in a display.
 */
-fabric_para.prototype.draw =
+prototype.draw =
 	function(
 		display, // the display to draw upon
 		pnw      // pnw of this para
@@ -338,7 +344,7 @@ fabric_para.prototype.draw =
 /*
 | Draws the caret.
 */
-fabric_para.prototype._drawCaret =
+prototype._drawCaret =
 	function(
 		display
 	)
@@ -375,7 +381,7 @@ fabric_para.prototype._drawCaret =
 | The font for this para.
 */
 jools.lazyValue(
-	fabric_para.prototype,
+	prototype,
 	'font',
 	function( )
 	{
@@ -390,7 +396,7 @@ jools.lazyValue(
 | FIXME make this a proper jion.
 */
 jools.lazyValue(
-	fabric_para.prototype,
+	prototype,
 	'flow',
 	function( )
 	{
@@ -532,15 +538,13 @@ jools.lazyValue(
 | The height of the para.
 */
 jools.lazyValue(
-	fabric_para.prototype,
+	prototype,
 	'height',
 	function( )
 	{
-		return (
-			this.flow.height +
-			Math.round(
-				this.fontsize * theme.bottombox
-			)
+		return(
+			this.flow.height
+			+ Math.round( this.fontsize * theme.bottombox )
 		);
 	}
 );
@@ -549,7 +553,7 @@ jools.lazyValue(
 /*
 | Returns the offset by an x coordinate in a flow.
 */
-fabric_para.prototype.getOffsetAt =
+prototype.getOffsetAt =
 	function(
 		line,
 		x
@@ -643,7 +647,7 @@ fabric_para.prototype.getOffsetAt =
 | FIXME: Use lazy value and use two functions
 |         for p and line which aheadValue each other.
 */
-fabric_para.prototype.locateOffset =
+prototype.locateOffset =
 	function(
 		offset    // the offset to get the point from.
 	)
@@ -739,7 +743,7 @@ fabric_para.prototype.locateOffset =
 /*
 | Returns the offset closest to a point.
 */
-fabric_para.prototype.getPointOffset =
+prototype.getPointOffset =
 	function(
 		item,
 		point     // the point to look for
@@ -771,7 +775,7 @@ fabric_para.prototype.getPointOffset =
 /*
 | A text has been inputed.
 */
-fabric_para.prototype.input =
+prototype.input =
 	function(
 		text,
 		item
@@ -839,7 +843,7 @@ fabric_para.prototype.input =
 /*
 | Handles a special key.
 */
-fabric_para.prototype.specialKey =
+prototype.specialKey =
 	function(
 		key,
 		item,
@@ -956,7 +960,7 @@ fabric_para.prototype.specialKey =
 | The path to the .text attribute
 */
 jools.lazyValue(
-	fabric_para.prototype,
+	prototype,
 	'textPath',
 	function( )
 	{
@@ -1001,7 +1005,7 @@ _keyMap =
 /*
 | Backspace pressed.
 */
-fabric_para.prototype._keyBackspace =
+prototype._keyBackspace =
 	function(
 		item,
 		doc,
@@ -1048,7 +1052,7 @@ fabric_para.prototype._keyBackspace =
 /*
 | Del-key pressed.
 */
-fabric_para.prototype._keyDel =
+prototype._keyDel =
 	function(
 		item,
 		doc,
@@ -1092,7 +1096,7 @@ fabric_para.prototype._keyDel =
 /*
 | Down arrow pressed.
 */
-fabric_para.prototype._keyDown =
+prototype._keyDown =
 	function(
 		item,
 		doc,
@@ -1150,7 +1154,7 @@ fabric_para.prototype._keyDown =
 /*
 | End-key pressed.
 */
-fabric_para.prototype._keyEnd =
+prototype._keyEnd =
 	function(
 		item,
 		doc,
@@ -1166,7 +1170,7 @@ fabric_para.prototype._keyEnd =
 /*
 | Enter-key pressed
 */
-fabric_para.prototype._keyEnter =
+prototype._keyEnter =
 	function(
 		item,
 		doc,
@@ -1193,7 +1197,7 @@ fabric_para.prototype._keyEnter =
 /*
 | Left arrow pressed.
 */
-fabric_para.prototype._keyLeft =
+prototype._keyLeft =
 	function(
 		item,
 		doc,
@@ -1235,7 +1239,7 @@ fabric_para.prototype._keyLeft =
 |
 | FIXME maintain relative scroll pos
 */
-fabric_para.prototype._pageUpDown =
+prototype._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
 		item,     // FIXME remove
@@ -1298,7 +1302,7 @@ fabric_para.prototype._pageUpDown =
 /*
 | PageDown key pressed.
 */
-fabric_para.prototype._keyPageDown =
+prototype._keyPageDown =
 	function(
 		item,
 		doc,
@@ -1314,7 +1318,7 @@ fabric_para.prototype._keyPageDown =
 /*
 | PageUp key pressed.
 */
-fabric_para.prototype._keyPageUp =
+prototype._keyPageUp =
 	function(
 		item,
 		doc,
@@ -1330,7 +1334,7 @@ fabric_para.prototype._keyPageUp =
 /*
 | Pos1-key pressed.
 */
-fabric_para.prototype._keyPos1 =
+prototype._keyPos1 =
 	function(
 		item,
 		doc,
@@ -1346,7 +1350,7 @@ fabric_para.prototype._keyPos1 =
 /*
 | Right arrow pressed.
 */
-fabric_para.prototype._keyRight =
+prototype._keyRight =
 	function(
 		item,
 		doc,
@@ -1385,7 +1389,7 @@ fabric_para.prototype._keyRight =
 /*
 | Up arrow pressed.
 */
-fabric_para.prototype._keyUp =
+prototype._keyUp =
 	function(
 		item,
 		doc,
@@ -1434,7 +1438,7 @@ fabric_para.prototype._keyUp =
 /*
 | Sets the users caret or range
 */
-fabric_para.prototype._setMark =
+prototype._setMark =
 	function(
 		at,      // position to mark caret (or end of range)
 		retainx, // retains this x position when moving up/down

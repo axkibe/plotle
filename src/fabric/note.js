@@ -139,6 +139,11 @@ if( JION )
 	};
 }
 
+
+var
+	prototype;
+
+
 /*
 | Node includes.
 */
@@ -150,6 +155,9 @@ if( SERVER )
 
 	return;
 }
+
+
+prototype = fabric_note.prototype;
 
 
 /*
@@ -176,7 +184,7 @@ fabric_note.handles =
 /*
 | Initializer.
 */
-fabric_note.prototype._init =
+prototype._init =
 	function(
 		inherit
 	)
@@ -276,7 +284,7 @@ fabric_note.prototype._init =
 | The attention center.
 */
 jools.lazyValue(
-	fabric_note.prototype,
+	prototype,
 	'attentionCenter',
 	fabric_docItem.attentionCenter
 );
@@ -285,25 +293,25 @@ jools.lazyValue(
 /*
 | Checks if the item is being clicked and reacts.
 */
-fabric_note.prototype.click = fabric_docItem.click;
+prototype.click = fabric_docItem.click;
 
 
 /*
 | A move during an action.
 */
-fabric_note.prototype.dragMove = fabric_item.dragMove;
+prototype.dragMove = fabric_item.dragMove;
 
 
 /*
 | Handles a potential dragStart event for this item.
 */
-fabric_note.prototype.dragStart = fabric_item.dragStart;
+prototype.dragStart = fabric_item.dragStart;
 
 
 /*
 | Draws the note.
 */
-fabric_note.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -333,7 +341,7 @@ fabric_note.prototype.draw =
 |
 | FIXME this has duplicate code with portal.
 */
-fabric_note.prototype.dragStop =
+prototype.dragStop =
 	function(
 		p
 	)
@@ -387,7 +395,7 @@ fabric_note.prototype.dragStop =
 | Returns a handles jion.
 */
 jools.lazyValue(
-	fabric_note.prototype,
+	prototype,
 	'handlesBezel',
 	function( )
 	{
@@ -406,7 +414,7 @@ jools.lazyValue(
 /*
 | Highlights the note.
 */
-fabric_note.prototype.highlight =
+prototype.highlight =
 	function(
 		display
 	)
@@ -422,31 +430,31 @@ fabric_note.prototype.highlight =
 /*
 | A text has been inputed.
 */
-fabric_note.prototype.input = fabric_docItem.input;
+prototype.input = fabric_docItem.input;
 
 
 /*
 | User is hovering their pointing device over something.
 */
-fabric_note.prototype.pointingHover = fabric_item.pointingHover;
+prototype.pointingHover = fabric_item.pointingHover;
 
 
 /*
 | Minimum height.
 */
-fabric_note.prototype.minHeight = theme.note.minHeight;
+prototype.minHeight = theme.note.minHeight;
 
 
 /*
 | Minimum width.
 */
-fabric_note.prototype.minWidth = theme.note.minWidth;
+prototype.minWidth = theme.note.minWidth;
 
 
 /*
 | Mouse wheel turned.
 */
-fabric_note.prototype.mousewheel =
+prototype.mousewheel =
 	function(
 		view,
 		p,
@@ -473,13 +481,13 @@ fabric_note.prototype.mousewheel =
 /*
 | Notes use zone for positioning
 */
-fabric_note.prototype.positioning = 'zone';
+prototype.positioning = 'zone';
 
 
 /*
 | Scrolls the note so the caret comes into view.
 */
-fabric_note.prototype.scrollMarkIntoView =
+prototype.scrollMarkIntoView =
 	function( )
 {
 	var
@@ -552,7 +560,7 @@ fabric_note.prototype.scrollMarkIntoView =
 | The notes silhoutte.
 */
 jools.lazyValue(
-	fabric_note.prototype,
+	prototype,
 	'silhoutte',
 	function( )
 	{
@@ -579,14 +587,14 @@ jools.lazyValue(
 /*
 | Handles a special key.
 */
-fabric_note.prototype.specialKey = fabric_docItem.specialKey;
+prototype.specialKey = fabric_docItem.specialKey;
 
 
 /*
 | The notes silhoutte anchored at zero.
 */
 jools.lazyValue(
-	fabric_note.prototype,
+	prototype,
 	'zeroSilhoutte',
 	function( )
 	{
@@ -618,7 +626,7 @@ jools.lazyValue(
 | The notes display.
 */
 jools.lazyValue(
-	fabric_note.prototype,
+	prototype,
 	'_display',
 	function( )
 	{
