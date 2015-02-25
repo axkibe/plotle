@@ -946,8 +946,7 @@ prototype.getParaAtPoint =
 */
 prototype.input =
 	function(
-		text,
-		item
+		text  // text inputed
 	)
 {
 	var
@@ -977,10 +976,10 @@ prototype.input =
 		return true;
 	}
 
-	return (
+	return(
 		this
 		.twig[ path.get( 5 ) ]
-		.input( text, item )
+		.input( text )
 	);
 };
 

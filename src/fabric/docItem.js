@@ -148,7 +148,7 @@ fabric_docItem.input =
 		text
 	)
 {
-	return this.doc.input( text, this );
+	return this.doc.input( text );
 };
 
 

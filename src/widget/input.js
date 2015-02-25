@@ -74,9 +74,7 @@ if( JION )
 								func :
 									'concernsHover',
 								args :
-									[
-										'hover', 'path'
-									]
+									[ 'hover', 'path' ]
 							}
 					},
 				font :
@@ -97,10 +95,7 @@ if( JION )
 								func :
 									'concernsMark',
 								args :
-									[
-										'mark',
-										'path'
-									]
+									[ 'mark', 'path' ]
 							},
 						type :
 							'->mark',

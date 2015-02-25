@@ -334,10 +334,7 @@ prototype.draw =
 		pnw      // pnw of this para
 	)
 {
-	display.drawImage(
-		'image', this._display,
-		'pnw', pnw
-	);
+	display.drawImage( 'image', this._display, 'pnw', pnw );
 };
 
 
@@ -360,7 +357,7 @@ prototype._drawCaret =
 
 	descend = this.fontsize * theme.bottombox;
 
-	p = this.locateOffset( this.mark.caretAt ).p,
+	p = this.locateOffset( this.mark.caretAt ).p;
 
 	s = Math.round( p.y + descend );
 
@@ -465,17 +462,13 @@ jools.lazyValue(
 		)
 		{
 			// a token is a word plus following hard spaces
-			token = ca[ 1 ] + ca[ 2 ] + ca[ 3 ];
+			token = ca[ 1 ] + ca[ 3 ];
 
 			w = euclid_measure.width( font, token );
 
-			xw = x + w;
+			xw = x + space + w;
 
-			if(
-				flowWidth > 0
-				&&
-				xw > flowWidth
-			)
+			if( flowWidth > 0 && xw > flowWidth )
 			{
 				if( x > 0 )
 				{
@@ -487,7 +480,7 @@ jools.lazyValue(
 
 					x = 0;
 
-					xw = x + w;
+					xw = w + space;
 
 					y += Math.round( font.size * ( 1 + theme.bottombox ) );
 
@@ -555,19 +548,19 @@ jools.lazyValue(
 */
 prototype.getOffsetAt =
 	function(
-		line,
-		x
+		ln,  // line number
+		x    // x coordinate
 	)
 {
 	var
 		a,
 		dx,
-		fline,
 		flow,
 		font,
-		ftoken,
-		text,
+		line,
 		token,
+		text,
+		tn,
 		x1,
 		x2;
 
@@ -575,37 +568,37 @@ prototype.getOffsetAt =
 
 	flow = this.flow;
 
-	fline = flow[ line ];
+	line = flow[ ln ];
 
-	ftoken = null;
+	token = null;
 
 	for(
-		token = 0;
-		token < fline.a.length;
-		token++
+		tn = 0;
+		tn < line.a.length;
+		tn++
 	)
 	{
-		ftoken = fline.a[ token ];
+		token = line.a[ tn ];
 
-		if( x <= ftoken.x + ftoken.w )
+		if( x <= token.x + token.w )
 		{
 			break;
 		}
 	}
 
-	if( token >= fline.a.length )
+	if( tn >= line.a.length )
 	{
-		ftoken = fline.a[ --token ];
+		token = line.a[ --tn ];
 	}
 
-	if( !ftoken )
+	if( !token )
 	{
 		return 0;
 	}
 
-	dx = x - ftoken.x;
+	dx = x - token.x;
 
-	text = ftoken.t;
+	text = token.t;
 
 	x1 = 0;
 
@@ -637,7 +630,7 @@ prototype.getOffsetAt =
 		a--;
 	}
 
-	return ftoken.o + a;
+	return token.o + a;
 };
 
 
@@ -705,23 +698,18 @@ prototype.locateOffset =
 			euclid_point.create(
 				'x',
 					Math.round(
-						token.x +
-						euclid_measure.width(
+						token.x
+						+ euclid_measure.width(
 							font,
 							text.substring( token.o, offset )
 						)
 					),
-				'y',
-					line.y
+				'y', line.y
 			);
 	}
 	else
 	{
-		p =
-			euclid_point.create(
-				'x', 0,
-				'y', line.y
-			);
+		p = euclid_point.create( 'x', 0, 'y', line.y );
 	}
 
 	// FIXME make it a jion result
@@ -777,14 +765,12 @@ prototype.getPointOffset =
 */
 prototype.input =
 	function(
-		text,
-		item
+		text   // text inputed
 	)
 {
 	var
 		caretAt,
 		changes,
-		doc,
 		line,
 		textPath,
 		textPath2,
@@ -796,8 +782,6 @@ prototype.input =
 	reg = /([^\n]+)(\n?)/g;
 
 	textPath = this.textPath;
-
-	doc = item.doc;
 
 	caretAt = this.mark.caretAt;
 
@@ -837,6 +821,8 @@ prototype.input =
 	}
 
 	root.alter( changes );
+
+	root.clearCaretRetainX( );
 };
 
 
@@ -1118,17 +1104,14 @@ prototype._keyDown =
 
 	x =
 		retainx !== null
-		?  retainx
+		? retainx
 		: cpos.p.x;
 
 	if( cpos.line < flow.length - 1 )
 	{
 		// stays within this para
 		this._setMark(
-			this.getOffsetAt(
-				cpos.line + 1,
-				x
-			),
+			this.getOffsetAt( cpos.line + 1, x ),
 			x,
 			begin,
 			doc
@@ -1365,12 +1348,7 @@ prototype._keyRight =
 
 	if( at < this.text.length )
 	{
-		this._setMark(
-			at + 1,
-			null,
-			begin,
-			doc
-		);
+		this._setMark( at + 1, null, begin, doc );
 
 		return;
 	}

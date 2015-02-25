@@ -227,7 +227,9 @@ if( JION )
 */
 var
 	loadingSpaceTextPath,
-	modes;
+	modes,
+	prototype;
+
 
 /**/if( CHECK )
 /**/{
@@ -274,6 +276,8 @@ var
 /**/	Object.freeze( modes );
 /**/}
 
+
+prototype = shell_root.prototype;
 
 loadingSpaceTextPath =
 	jion_path.empty
@@ -404,7 +408,7 @@ shell_root.startup =
 /*
 | Initializer.
 */
-shell_root.prototype._init =
+prototype._init =
 	function(
 		inherit
 	)
@@ -552,7 +556,7 @@ shell_root.prototype._init =
 |
 | Feeds the doTracker.
 */
-shell_root.prototype.alter =
+prototype.alter =
 	function(
 		a1 // change, several changes or array of changes
 		// // ...
@@ -598,7 +602,7 @@ shell_root.prototype.alter =
 | when the keyboard is visible.
 */
 Object.defineProperty(
-	shell_root.prototype,
+	prototype,
 	'attentionCenter',
 	{
 		get :
@@ -618,7 +622,7 @@ Object.defineProperty(
 /*
 | User clicked.
 */
-shell_root.prototype.click =
+prototype.click =
 	function(
 		p,
 		shift,
@@ -649,9 +653,25 @@ shell_root.prototype.click =
 
 
 /*
+| Clears the carets retainx info.
+*/
+prototype.clearCaretRetainX =
+	function( )
+{
+	if(
+		this._mark.reflect === 'mark_caret'
+		&& this._mark.retainx !== null
+	)
+	{
+		this.create( 'mark', this._mark.create( 'retainx', null ) );
+	}
+};
+
+
+/*
 | Cycles focus in a form.
 */
-shell_root.prototype.cycleFormFocus =
+prototype.cycleFormFocus =
 	function(
 		name,
 		dir
@@ -664,7 +684,7 @@ shell_root.prototype.cycleFormFocus =
 /*
 | Moving during an operation with the mouse button held down.
 */
-shell_root.prototype.dragMove =
+prototype.dragMove =
 	function(
 		p,
 		shift,
@@ -695,7 +715,7 @@ shell_root.prototype.dragMove =
 |
 | Mouse down or finger on screen.
 */
-shell_root.prototype.dragStart =
+prototype.dragStart =
 	function(
 		p,
 		shift,
@@ -725,7 +745,7 @@ shell_root.prototype.dragStart =
 /*
 | Stops an operation with the mouse button held down.
 */
-shell_root.prototype.dragStop =
+prototype.dragStop =
 	function(
 		p,
 		shift,
@@ -747,7 +767,7 @@ shell_root.prototype.dragStop =
 /*
 | User entered normal text (one character or more).
 */
-shell_root.prototype.input =
+prototype.input =
 	function(
 		text
 	)
@@ -775,7 +795,7 @@ shell_root.prototype.input =
 /*
 | Logs out the current user
 */
-shell_root.prototype.logout =
+prototype.logout =
 	function( )
 {
 	if( root._visitor )
@@ -794,7 +814,7 @@ shell_root.prototype.logout =
 /*
 | Mouse wheel is being turned.
 */
-shell_root.prototype.mousewheel =
+prototype.mousewheel =
 	function(
 		p,
 		dir,
@@ -821,7 +841,7 @@ shell_root.prototype.mousewheel =
 |
 | if spaceRef is null reloads current space
 */
-shell_root.prototype.moveToSpace =
+prototype.moveToSpace =
 	function(
 		spaceRef,     // reference of type fabric_spaceRef
 		createMissing // if true, non-existing spaces are to be created
@@ -851,7 +871,7 @@ shell_root.prototype.moveToSpace =
 /*
 | User is hovering his/her pointing device ( mouse move )
 */
-shell_root.prototype.pointingHover =
+prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -913,7 +933,7 @@ shell_root.prototype.pointingHover =
 /*
 | A button has been pushed.
 */
-shell_root.prototype.pushButton =
+prototype.pushButton =
 	function( path )
 {
 	switch( path.get( 0 ) )
@@ -939,7 +959,7 @@ shell_root.prototype.pushButton =
 | When a space is loaded, this is space/normal
 | otherwise it is the loading screen.
 */
-shell_root.prototype.showHome =
+prototype.showHome =
 	function( )
 {
 	root.create(
@@ -954,7 +974,7 @@ shell_root.prototype.showHome =
 |
 | FIXME rename this.disc and this.form jockey so this works again.
 */
-shell_root.prototype.setPath =
+prototype.setPath =
 	function(
 		path,
 		value
@@ -994,7 +1014,7 @@ shell_root.prototype.setPath =
 |
 | FIXME move into _init
 */
-shell_root.prototype.setFocus =
+prototype.setFocus =
 	function(
 		focus
 	)
@@ -1019,7 +1039,7 @@ shell_root.prototype.setFocus =
 /*
 | User is pressing a special key.
 */
-shell_root.prototype.specialKey =
+prototype.specialKey =
 	function(
 		key,
 		shift,
@@ -1051,7 +1071,7 @@ shell_root.prototype.specialKey =
 | Returns true if the iPad ought to showy
 | the virtual keyboard
 */
-shell_root.prototype.suggestingKeyboard =
+prototype.suggestingKeyboard =
 	function( )
 {
 	return( root._mark !== null && root._mark.hasCaret );
@@ -1061,7 +1081,7 @@ shell_root.prototype.suggestingKeyboard =
 /*
 | The link is reporting updates.
 */
-shell_root.prototype.update =
+prototype.update =
 	function(
 		changes
 	)
@@ -1112,7 +1132,7 @@ shell_root.prototype.update =
 /*
 | The window has been resized.
 */
-shell_root.prototype.resize =
+prototype.resize =
 	function(
 		display
 	)
@@ -1131,7 +1151,7 @@ shell_root.prototype.resize =
 /*
 | Receiving a moveTo event
 */
-shell_root.prototype.onAcquireSpace =
+prototype.onAcquireSpace =
 	function(
 		spaceRef,
 		reply
@@ -1215,7 +1235,7 @@ shell_root.prototype.onAcquireSpace =
 /*
 | Received an 'auth' reply.
 */
-shell_root.prototype.onAuth =
+prototype.onAuth =
 	function(
 		request,
 		reply
@@ -1259,7 +1279,7 @@ shell_root.prototype.onAuth =
 /*
 | Received a 'register' reply.
 */
-shell_root.prototype.onRegister =
+prototype.onRegister =
 	function(
 		ok,
 		user,
@@ -1293,7 +1313,7 @@ shell_root.prototype.onRegister =
 |
 | This is either a fabric space or a form
 */
-shell_root.prototype._currentScreen =
+prototype._currentScreen =
 	function( )
 {
 	var
@@ -1330,7 +1350,7 @@ shell_root.prototype._currentScreen =
 /*
 | Draws everything.
 */
-shell_root.prototype.draw =
+prototype.draw =
 	function( )
 {
 	var
