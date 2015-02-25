@@ -203,7 +203,7 @@ jools.lazyValue(
 				'path2', this.path2
 			);
 
-		// FIXME aheadValue inv to be this
+		jools.aheadValue( inv, 'invert', this );
 
 		return inv;
 	}

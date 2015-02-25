@@ -53,9 +53,7 @@ if( JION )
 						type :
 							'->spaceVal'
 					}
-			},
-		init :
-			[ ]
+			}
 	};
 }
 
@@ -80,16 +78,6 @@ if( SERVER )
 
 
 prototype = change_set.prototype;
-
-
-/*
-| Initializer.
-*/
-prototype._init =
-	function ( )
-{
-	// FIXME make "nonnegativeInteger" a json type
-};
 
 
 /*
@@ -145,7 +133,7 @@ jools.lazyValue(
 				'prev', this.val
 			);
 
-		// FIXME aheadValue inv to be this
+		jools.aheadValue( inv, 'invert', this );
 
 		return inv;
 	}

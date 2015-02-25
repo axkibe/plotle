@@ -177,7 +177,7 @@ jools.lazyValue(
 				'rank', this.rank
 			);
 
-		// FIXME aheadValue inv to be this
+		jools.aheadValue( inv, 'invert', this );
 
 		return inv;
 	}

@@ -171,7 +171,7 @@ jools.lazyValue(
 				'at2', this.at2
 			);
 
-		// FIXME aheadValue inv to be this
+		jools.aheadValue( inv, 'invert', this );
 
 		return inv;
 	}
