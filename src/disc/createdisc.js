@@ -123,8 +123,6 @@ if( JION )
 							'null'
 					}
 			},
-		subclass :
-			'disc_disc',
 		init :
 			[ 'inherit', 'twigDup' ],
 		twig :

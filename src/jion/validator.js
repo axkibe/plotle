@@ -105,7 +105,6 @@ jionWhitelist =
 		'init' : true,
 		'json' : true,
 		'group' : true,
-		'subclass' : true,
 		'singleton' : true,
 		'ray' : true,
 		'twig' : true,

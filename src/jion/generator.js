@@ -187,7 +187,6 @@ generator.prototype._init =
 		jdv,
 		name,
 		rayDef,
-		subID, // twig id
 		type,
 		twigDef, // twig map to be used (the definition)
 		units; // units used
@@ -207,15 +206,6 @@ generator.prototype._init =
 	this.singleton = !!jion.singleton;
 
 	this.id = jion_id.createFromString( jion.id );
-
-	if( jion.subclass )
-	{
-		subID = jion_id.createFromString( jion.subclass );
-
-		units = units.add( subID );
-
-		this.subclass = subID.$global;
-	}
 
 	for( name in jion.attributes || { } )
 	{
@@ -844,19 +834,6 @@ generator.prototype.genConstructor =
 		.$varDec( 'Constructor' )
 		.$varDec( 'prototype' )
 		.$assign( 'Constructor', constructor );
-
-	// subclass
-	if( this.subclass )
-	{
-		capsule =
-			capsule
-			.$comment( 'Subclass.' )
-			.$call(
-				'jools.subclass',
-				'Constructor',
-				this.subclass
-			);
-	}
 
 	// prototype shortcut
 	capsule =

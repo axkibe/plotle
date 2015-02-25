@@ -24,13 +24,7 @@ var
 /*
 | Constructor
 */
-disc_disc =
-	function( )
-{
-	// abstract should not be constructed.
-	// FIXME just make it an object?
-	throw new Error( );
-};
+disc_disc = { };
 
 
 /*

@@ -110,8 +110,6 @@ if( JION )
 							'null'
 					}
 			},
-		subclass :
-			'disc_disc',
 		init :
 			[ ],
 		twig :
@@ -119,16 +117,31 @@ if( JION )
 	};
 }
 
-var
-	jockey;
 
-jockey = disc_jockey;
+var
+	prototype;
+
+prototype = disc_jockey.prototype;
+
+
+/*
+| Returns the mark if the form jockey concerns a mark.
+|
+| FIXME go into markItemPath
+*/
+disc_jockey.concernsMark =
+	function(
+		mark
+	)
+{
+	return mark;
+};
 
 
 /*
 | Initializes the disc jockey.
 */
-jockey.prototype._init =
+prototype._init =
 	function( )
 {
 	var
@@ -189,23 +202,9 @@ jockey.prototype._init =
 
 
 /*
-| Returns the mark if the form jockey concerns a mark.
-|
-| FIXME go into markItemPath
-*/
-jockey.concernsMark =
-	function(
-		mark
-	)
-{
-	return mark;
-};
-
-
-/*
 | Start of a dragging operation.
 */
-jockey.prototype.dragStart =
+prototype.dragStart =
 	function(
 		p,
 		shift,
@@ -229,13 +228,7 @@ jockey.prototype.dragStart =
 
 	if( this.mode === 'create' )
 	{
-		return (
-			this.twig.createDisc.dragStart(
-				p,
-				shift,
-				ctrl
-			)
-		);
+		return this.twig.createDisc.dragStart( p, shift, ctrl );
 	}
 
 	return null;
@@ -245,7 +238,7 @@ jockey.prototype.dragStart =
 /*
 | Dispalys the disc panel.
 */
-jockey.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -262,7 +255,7 @@ jockey.prototype.draw =
 /*
 | Returns true if point is on the disc panel.
 */
-jockey.prototype.pointingHover =
+prototype.pointingHover =
 	function(
 		p,
 		shift,
@@ -290,21 +283,9 @@ jockey.prototype.pointingHover =
 
 
 /*
-| Displays a message
-*/
-jockey.prototype.message =
-	function(
-		// message
-	)
-{
-	// nothing
-};
-
-
-/*
 | Returns true if point is on this panel.
 */
-jockey.prototype.click =
+prototype.click =
 	function(
 		p,
 		shift,
@@ -314,12 +295,7 @@ jockey.prototype.click =
 	var
 		start;
 
-	start =
-		this.twig.mainDisc.click(
-			p,
-			shift,
-			ctrl
-		);
+	start = this.twig.mainDisc.click( p, shift, ctrl );
 
 	if( start !== null )
 	{
@@ -338,7 +314,7 @@ jockey.prototype.click =
 /*
 | A button of the main disc has been pushed.
 */
-jockey.prototype.pushButton =
+prototype.pushButton =
 	function(
 		path,
 		shift,
@@ -349,23 +325,11 @@ jockey.prototype.pushButton =
 	{
 		case 'createDisc' :
 
-			return (
-				this.twig.createDisc.pushButton(
-					path,
-					shift,
-					ctrl
-				)
-			);
+			return this.twig.createDisc.pushButton( path, shift, ctrl );
 
 		case 'mainDisc' :
 
-			return (
-				this.twig.mainDisc.pushButton(
-					path,
-					shift,
-					ctrl
-				)
-			);
+			return this.twig.mainDisc.pushButton( path, shift, ctrl );
 
 		default :
 
