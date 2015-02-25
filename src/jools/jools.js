@@ -214,28 +214,6 @@ if( !Object.freeze )
 
 
 /*
-| Subclassing helper.
-*/
-jools.subclass =
-	function(
-		sub,   // prototype to become a subclass.
-		base   // either a prototype to become the base.
-		//     //   or a table of prototypes to become the base for multiple
-		//     //   inheritance.
-	)
-{
-	function Inherit( ) { }
-
-	// single inheritance
-	Inherit.prototype = base.prototype;
-
-	sub.prototype = new Inherit( );
-
-	sub.prototype.constructor = sub;
-};
-
-
-/*
 | Throws an error if any argument is not an integer.
 */
 jools.ensureInt =
@@ -303,7 +281,7 @@ jools.lazyValue =
 /**/
 /**/	if( !proto.create )
 /**/	{
-/**/		// throw new Error( ); // FIXME
+/**/		throw new Error( );
 /**/	}
 /**/}
 
