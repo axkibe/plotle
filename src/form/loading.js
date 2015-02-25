@@ -127,6 +127,12 @@ prototype._init =
 
 
 /*
+| User clicked.
+*/
+prototype.click = form_form.click;
+
+
+/*
 | Moving during an operation with the mouse button held down.
 */
 prototype.dragMove =

@@ -232,9 +232,9 @@ form_form.pointingHover =
 
 
 /*
-| User clicked
+| User clicked.
 */
-form_form.prototype.click =
+form_form.click =
 	function(
 		p,
 		shift,
@@ -391,19 +391,6 @@ form_form.prototype.specialKey =
 		shift,
 		ctrl
 	);
-};
-
-
-/*
-| A button of the form has been pushed.
-*/
-form_form.prototype.pushButton =
-	function(
-		// buttonName
-	)
-{
-	// should be overloaded
-	throw new Error( );
 };
 
 

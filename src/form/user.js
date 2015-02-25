@@ -158,49 +158,34 @@ prototype._init =
 		);
 
 	this.twig.visitor1 =
-		this.twig.visitor1.create(
-			'visible',
-				isGuest
-		);
+		this.twig.visitor1.create( 'visible', isGuest );
 
 	this.twig.visitor2 =
-		this.twig.visitor2.create(
-			'visible',
-				isGuest
-		);
+		this.twig.visitor2.create( 'visible', isGuest );
 
 	this.twig.visitor3 =
-		this.twig.visitor3.create(
-			'visible',
-				isGuest
-		);
+		this.twig.visitor3.create( 'visible', isGuest );
 
 	this.twig.visitor4 =
-		this.twig.visitor4.create(
-			'visible',
-				isGuest
-		);
+		this.twig.visitor4.create( 'visible', isGuest );
 
 	this.twig.greeting1 =
-		this.twig.greeting1.create(
-			'visible',
-				!isGuest
-		);
+		this.twig.greeting1.create( 'visible', !isGuest );
 
 	this.twig.greeting2 =
-		this.twig.greeting2.create(
-			'visible',
-				!isGuest
-		);
+		this.twig.greeting2.create( 'visible', !isGuest );
 
 	this.twig.greeting3 =
-		this.twig.greeting3.create(
-			'visible',
-				!isGuest
-		);
+		this.twig.greeting3.create( 'visible', !isGuest );
 
 	form_form.init.call( this, inherit );
 };
+
+
+/*
+| User clicked.
+*/
+prototype.click = form_form.click;
 
 
 /*
