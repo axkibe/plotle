@@ -189,7 +189,6 @@ prototype._init =
 {
 	var
 		aperture,
-		docPath,
 		minHeight,
 		minWidth,
 		zone;
@@ -224,18 +223,14 @@ prototype._init =
 			);
 	}
 
-	// FIXME not if inherited
-	docPath = this.path.append( 'doc' );
-
 	this.doc =
 		this.doc.create(
-			'flowWidth', // FIXME remove?
-				zone.width - theme.note.innerMargin.x,
+			'flowWidth', zone.width - theme.note.innerMargin.x,
 			'fontsize', this.fontsize,
 			'innerMargin', theme.note.innerMargin,
 			'mark', this.mark,
 			'paraSep', jools.half( this.fontsize ),
-			'path', docPath,
+			'path', this.path.append( 'doc' ),
 			'view', this.view.home
 		);
 
@@ -246,6 +241,7 @@ prototype._init =
 
 	aperture = zone.height - theme.note.innerMargin.y;
 
+	// FIXME lazyvalue sbary
 	if( this.doc.height > aperture )
 	{
 		this.scrollbarY =
