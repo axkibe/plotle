@@ -1254,7 +1254,7 @@ prototype._pageUpDown =
 
 	if( tpara === null )
 	{
-		tpara = doc.atRank( doc.ranks.length - 1 );
+		tpara = doc.atRank( dir > 0 ? doc.ranks.length - 1 : 0 );
 	}
 
 	tpnw = doc.getPNW( tpara.key );
