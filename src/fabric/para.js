@@ -2,7 +2,6 @@
 | A paragraph.
 */
 
-
 var
 	change_insert,
 	change_join,
@@ -257,12 +256,12 @@ jools.lazyValue(
 			aZ,
 			b,
 			bZ,
-			chunk,  // FIXME rename token
 			f,
 			flow,
 			font,
 			line,
 			mark,
+			token,
 			view,
 			zoom;
 
@@ -295,16 +294,18 @@ jools.lazyValue(
 			line = flow[ a ];
 
 			for(
+				//b = 0, bZ = line.length; FIXME
 				b = 0, bZ = line.a.length;
 				b < bZ;
 				b++
 			)
 			{
-				chunk = line.a[ b ];
+//				token = line.get( b ); FIXME
+				token = line.a[ b ];
 
 				f.paintText(
-					'text', chunk.text,
-					'xy', chunk.x, line.y,
+					'text', token.text,
+					'xy', token.x, line.y,
 					'font', font
 				);
 			}
@@ -400,6 +401,7 @@ jools.lazyValue(
 	{
 		var
 			ca,
+			currentLine,
 			flow,
 			flowWidth,
 			font,
@@ -447,10 +449,13 @@ jools.lazyValue(
 
 		flow = [ ];
 
+		currentLine = [ ];
+
+		// FIXME
 		flow[ line ] = {
 			a : [ ],
 			y : y,
-			o : 0
+			offset : 0
 		};
 
 		reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
@@ -463,6 +468,7 @@ jools.lazyValue(
 		)
 		{
 			// a token is a word plus following hard spaces
+			// FIXME rename tokenText
 			token = ca[ 1 ] + ca[ 3 ];
 
 			w = euclid_measure.width( font, token );
@@ -490,7 +496,7 @@ jools.lazyValue(
 					flow[ line ] = {
 						a : [ ],
 						y : y,
-						o : ca.index
+						offset : ca.index
 					};
 				}
 				else

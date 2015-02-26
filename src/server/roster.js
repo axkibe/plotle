@@ -160,6 +160,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/flow/line.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/shell/fontpool.js',
 		'inBundle', true,
 		'inTestPad', true
