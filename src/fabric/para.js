@@ -11,6 +11,7 @@ var
 	euclid_measure,
 	euclid_point,
 	fabric_para,
+	flow_block,
 	flow_line,
 	flow_token,
 	jools,
@@ -279,7 +280,7 @@ jools.lazyValue(
 		// adds to width so the caret gets visible.
 		f =
 			euclid_display.create(
-				'width', Math.round( flow.widthUsed * zoom + 5 ),
+				'width', Math.round( flow.width * zoom + 5 ),
 				'height', Math.round( this.height * zoom + 1 )
 			);
 
@@ -292,7 +293,7 @@ jools.lazyValue(
 			a++
 		)
 		{
-			line = flow[ a ];
+			line = flow.get( a );
 
 			for(
 				b = 0, bZ = line.length;
@@ -400,13 +401,11 @@ jools.lazyValue(
 	{
 		var
 			ca,
-			currentLine,
 			currentLineOffset,
 			currentLineRay,
-			flow,
+			lines,
 			flowWidth,
 			font,
-			line,
 			reg,
 			space,
 			widthUsed,
@@ -446,16 +445,11 @@ jools.lazyValue(
 
 		space = euclid_measure.width( font, ' ' );
 
-		line = 0;
-
-		flow = [ ];
+		lines = [ ];
 
 		currentLineOffset = 0;
 
 		currentLineRay = [ ];
-
-		// FIXME
-		flow[ line ] = currentLine;
 
 		reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
 		// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
@@ -480,12 +474,13 @@ jools.lazyValue(
 					// soft break
 					if( widthUsed < xw ) { widthUsed = xw; }
 
-					flow[ line++ ] =
+					lines.push(
 						flow_line.create(
 							'ray:init', currentLineRay,
 							'y', y,
 							'offset', currentLineOffset
-						);
+						)
+					);
 
 					x = 0;
 
@@ -516,22 +511,23 @@ jools.lazyValue(
 			x = xw;
 		}
 
-		flow[ line ] =
+		lines.push(
 			flow_line.create(
 				'ray:init', currentLineRay,
 				'offset', currentLineOffset,
 				'y', y
-			);
+			)
+		);
 
 		if( widthUsed < x ) { widthUsed = x; }
 
-		flow.height = y;
-
-		flow.flowWidth = flowWidth;
-
-		flow.widthUsed = widthUsed;
-
-		return flow;
+		return(
+			flow_block.create(
+				'ray:init', lines,
+				'height', y,
+				'width', widthUsed
+			)
+		);
 	}
 );
 
@@ -577,7 +573,7 @@ prototype.getOffsetAt =
 
 	flow = this.flow;
 
-	line = flow[ ln ];
+	line = flow.get( ln );
 
 	token = null;
 
@@ -679,13 +675,13 @@ prototype.locateOffset =
 		lineN++
 	)
 	{
-		if( flow[ lineN + 1 ].offset > offset )
+		if( flow.get( lineN + 1 ).offset > offset )
 		{
 			break;
 		}
 	}
 
-	line = flow[ lineN ];
+	line = flow.get( lineN );
 
 	for(
 		tokenN = 0, aZ = line.length - 1;
@@ -754,7 +750,7 @@ prototype.getPointOffset =
 
 	for( line = 0; line < flow.length; line++ )
 	{
-		if( point.y <= flow[ line ].y )
+		if( point.y <= flow.get( line ).y )
 		{
 			break;
 		}

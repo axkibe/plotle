@@ -452,7 +452,7 @@ prototype._getRangeShape =
 		{
 			f2y =
 				Math.round(
-					frontFlow[ fo.line + 1 ].y
+					frontFlow.get( fo.line + 1 ).y
 					+ frontPnw.y
 					- scrollp.y
 				);
@@ -461,7 +461,7 @@ prototype._getRangeShape =
 		{
 			f2y =
 				Math.round(
-					f2Para.flow[ 0 ].y
+					f2Para.flow.get( 0 ).y
 					+ this.getPNW( f2Key ).y
 					- scrollp.y
 				);
@@ -471,7 +471,7 @@ prototype._getRangeShape =
 		{
 			b2y =
 				Math.round(
-					backFlow[ bo.line - 1 ].y
+					backFlow.get( bo.line - 1 ).y
 					+ backPnw.y
 					- scrollp.y
 				);
@@ -486,7 +486,7 @@ prototype._getRangeShape =
 
 			b2y =
 				Math.round(
-					b2Para.flow[ b2Para.flow.length - 1 ].y
+					b2Para.flow.get( b2Para.flow.length - 1 ).y
 					+ this.getPNW( b2Key ).y
 					- scrollp.y
 				);
