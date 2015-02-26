@@ -1234,7 +1234,7 @@ prototype._keyLeft =
 prototype._pageUpDown =
 	function(
 		dir,      // +1 for down, -1 for up
-		item,     // FIXME remove
+		item,
 		doc,
 		at,
 		retainx,
