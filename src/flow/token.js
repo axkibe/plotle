@@ -37,7 +37,7 @@ if( JION )
 				offset :
 					{
 						comment :
-							'offset in text of the token',
+							'offset in text',
 						type :
 							'integer'
 					},

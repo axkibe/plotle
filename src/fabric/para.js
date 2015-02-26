@@ -11,6 +11,7 @@ var
 	euclid_measure,
 	euclid_point,
 	fabric_para,
+	flow_line,
 	flow_token,
 	jools,
 	mark_caret,
@@ -294,14 +295,12 @@ jools.lazyValue(
 			line = flow[ a ];
 
 			for(
-				//b = 0, bZ = line.length; FIXME
-				b = 0, bZ = line.a.length;
+				b = 0, bZ = line.length;
 				b < bZ;
 				b++
 			)
 			{
-//				token = line.get( b ); FIXME
-				token = line.a[ b ];
+				token = line.get( b );
 
 				f.paintText(
 					'text', token.text,
@@ -410,7 +409,7 @@ jools.lazyValue(
 			space,
 			widthUsed,
 			text,
-			token,
+			tokenText,
 			w,
 			x,
 			xw,
@@ -449,14 +448,15 @@ jools.lazyValue(
 
 		flow = [ ];
 
-		currentLine = [ ];
+		// FIXME create with ray.
+		currentLine =
+			flow_line.create(
+				'y', y,
+				'offset', 0
+			);
 
 		// FIXME
-		flow[ line ] = {
-			a : [ ],
-			y : y,
-			offset : 0
-		};
+		flow[ line ] = currentLine;
 
 		reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
 		// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
@@ -468,10 +468,9 @@ jools.lazyValue(
 		)
 		{
 			// a token is a word plus following hard spaces
-			// FIXME rename tokenText
-			token = ca[ 1 ] + ca[ 3 ];
+			tokenText = ca[ 1 ] + ca[ 3 ];
 
-			w = euclid_measure.width( font, token );
+			w = euclid_measure.width( font, tokenText );
 
 			xw = x + space + w;
 
@@ -493,35 +492,39 @@ jools.lazyValue(
 
 					line++;
 
-					flow[ line ] = {
-						a : [ ],
-						y : y,
-						offset : ca.index
-					};
+					// FIXME create with ray.
+					currentLine =
+						flow_line.create(
+							'y', y,
+							'offset', ca.index
+						);
+
+					// FIXME
+					flow[ line ] = currentLine;
 				}
 				else
 				{
 					// horizontal overflow
-					// ('HORIZONTAL OVERFLOW'); // FIXME
+					// ('HORIZONTAL OVERFLOW'); // FUTURE
 				}
 			}
 
-			flow[ line ].a.push(
-				flow_token.create(
-					'x', x,
-					'width', w,
-					'offset', ca.index,
-					'text', token
-				)
-			);
+			// FIXME
+			flow[ line ] =
+				flow[ line ].create(
+					'ray:append',
+					flow_token.create(
+						'x', x,
+						'width', w,
+						'offset', ca.index,
+						'text', tokenText
+					)
+				);
 
 			x = xw;
 		}
 
-		if( widthUsed < x )
-		{
-			widthUsed = x;
-		}
+		if( widthUsed < x ) { widthUsed = x; }
 
 		flow.height = y;
 
@@ -581,11 +584,11 @@ prototype.getOffsetAt =
 
 	for(
 		tn = 0;
-		tn < line.a.length;
+		tn < line.length;
 		tn++
 	)
 	{
-		token = line.a[ tn ];
+		token = line.get( tn );
 
 		if( x <= token.x + token.width )
 		{
@@ -593,9 +596,9 @@ prototype.getOffsetAt =
 		}
 	}
 
-	if( tn >= line.a.length )
+	if( tn >= line.length )
 	{
-		token = line.a[ --tn ];
+		token = line.get( --tn );
 	}
 
 	if( !token )
@@ -686,18 +689,18 @@ prototype.locateOffset =
 	line = flow[ lineN ];
 
 	for(
-		tokenN = 0, aZ = line.a.length - 1;
+		tokenN = 0, aZ = line.length - 1;
 		tokenN < aZ;
 		tokenN++
 	)
 	{
-		if( line.a[ tokenN + 1 ].offset > offset )
+		if( line.get( tokenN + 1 ).offset > offset )
 		{
 			break;
 		}
 	}
 
-	token = line.a[ tokenN ];
+	token = line.get( tokenN );
 
 	if( token )
 	{
