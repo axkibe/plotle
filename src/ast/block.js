@@ -258,10 +258,9 @@ ast_block.prototype.$return =
 		expr
 	)
 {
-	// FIXME use shorthand
 	if( expr.reflect !== 'ast_return' )
 	{
-		expr = ast_return.create( 'expr', tools.convert( expr ) );
+		expr = shorthand.$return( expr );
 	}
 
 	return this.append( expr );
