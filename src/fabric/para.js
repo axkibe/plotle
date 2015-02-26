@@ -411,7 +411,6 @@ jools.lazyValue(
 			tokenText,
 			w,
 			x,
-			xw,
 			y;
 
 /**/	if( CHECK )
@@ -437,8 +436,6 @@ jools.lazyValue(
 		// current x positon, and current x including last tokens width
 		x = 0;
 
-		xw = 0;
-
 		y = Math.round( font.size );
 
 		space = euclid_measure.width( font, ' ' );
@@ -463,15 +460,11 @@ jools.lazyValue(
 
 			w = euclid_measure.width( font, tokenText );
 
-			xw = x + space + w;
-
-			if( flowWidth > 0 && xw > flowWidth )
+			if( flowWidth > 0 && x + w > flowWidth )
 			{
 				if( x > 0 )
 				{
 					// soft break
-					if( widthUsed < xw ) { widthUsed = xw; }
-
 					lines.push(
 						flow_line.create(
 							'ray:init', currentLineRay,
@@ -481,8 +474,6 @@ jools.lazyValue(
 					);
 
 					x = 0;
-
-					xw = w + space;
 
 					currentLineRay = [ ];
 
@@ -506,7 +497,9 @@ jools.lazyValue(
 				)
 			);
 
-			x = xw;
+			if( widthUsed < x + w ) { widthUsed = x + w; }
+
+			x = x + w + space;
 		}
 
 		lines.push(
@@ -516,8 +509,6 @@ jools.lazyValue(
 				'y', y
 			)
 		);
-
-		if( widthUsed < x ) { widthUsed = x; }
 
 		return(
 			flow_block.create(
