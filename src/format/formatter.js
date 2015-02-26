@@ -20,9 +20,7 @@ var
 var MAX_TEXT_WIDTH = 79;
 
 
-format_formatter =
-module.exports =
-	{ };
+format_formatter = module.exports;
 
 
 var
@@ -172,7 +170,7 @@ formatAnd =
 /*
 | Formats an array literal.
 |
-| FIXME format also inline
+| FUTURE format also inline
 */
 formatArrayLiteral =
 	function(
@@ -813,8 +811,7 @@ formatExpression =
 		subtext,
 		text;
 
-	// FIXME remove reflectName
-	prec = precTable[ expr.reflectName ] || precTable[ expr.reflect ];
+	prec = precTable[ expr.reflect ];
 
 	if( prec === undefined )
 	{
@@ -1439,7 +1436,7 @@ formatMultiplyAssign =
 		throw 'noinline';
 	}
 
-	throw 'FIXME: implement noinline +=';
+	throw 'FUTURE: implement noinline *=';
 };
 
 
@@ -1683,7 +1680,7 @@ formatPlusAssign =
 		throw 'noinline';
 	}
 
-	throw 'FIXME: implement noinline +=';
+	throw 'FUTURE: implement noinline +=';
 };
 
 
