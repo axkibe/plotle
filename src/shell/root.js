@@ -782,11 +782,14 @@ prototype.input =
 	{
 		screen.input( text );
 
-		focusItem = root.space.focusedItem( );
-
-		if( focusItem && focusItem.scrollMarkIntoView )
+		if( root.space )
 		{
-			focusItem.scrollMarkIntoView( );
+			focusItem = root.space.focusedItem( );
+
+			if( focusItem && focusItem.scrollMarkIntoView )
+			{
+				focusItem.scrollMarkIntoView( );
+			}
 		}
 	}
 };
@@ -1057,11 +1060,14 @@ prototype.specialKey =
 		screen.specialKey( key, shift, ctrl );
 	}
 
-	focusItem = root.space.focusedItem( );
-
-	if( focusItem && focusItem.scrollMarkIntoView )
+	if( root.space )
 	{
-		focusItem.scrollMarkIntoView( );
+		focusItem = root.space.focusedItem( );
+
+		if( focusItem && focusItem.scrollMarkIntoView )
+		{
+			focusItem.scrollMarkIntoView( );
+		}
 	}
 };
 
