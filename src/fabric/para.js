@@ -12,6 +12,7 @@ var
 	euclid_measure,
 	euclid_point,
 	fabric_para,
+	flow_token,
 	jools,
 	mark_caret,
 	mark_range,
@@ -256,7 +257,7 @@ jools.lazyValue(
 			aZ,
 			b,
 			bZ,
-			chunk,
+			chunk,  // FIXME rename token
 			f,
 			flow,
 			font,
@@ -302,7 +303,7 @@ jools.lazyValue(
 				chunk = line.a[ b ];
 
 				f.paintText(
-					'text', chunk.t,
+					'text', chunk.text,
 					'xy', chunk.x, line.y,
 					'font', font
 				);
@@ -500,12 +501,12 @@ jools.lazyValue(
 			}
 
 			flow[ line ].a.push(
-				{
-					x : x,
-					w : w,
-					o : ca.index,
-					t : token
-				}
+				flow_token.create(
+					'x', x,
+					'width', w,
+					'offset', ca.index,
+					'text', token
+				)
 			);
 
 			x = xw;
@@ -580,7 +581,7 @@ prototype.getOffsetAt =
 	{
 		token = line.a[ tn ];
 
-		if( x <= token.x + token.w )
+		if( x <= token.x + token.width )
 		{
 			break;
 		}
@@ -598,7 +599,7 @@ prototype.getOffsetAt =
 
 	dx = x - token.x;
 
-	text = token.t;
+	text = token.text;
 
 	x1 = 0;
 
@@ -630,7 +631,7 @@ prototype.getOffsetAt =
 		a--;
 	}
 
-	return token.o + a;
+	return token.offset + a;
 };
 
 
@@ -670,7 +671,7 @@ prototype.locateOffset =
 		lineN++
 	)
 	{
-		if( flow[ lineN + 1 ].o > offset )
+		if( flow[ lineN + 1 ].offset > offset )
 		{
 			break;
 		}
@@ -684,7 +685,7 @@ prototype.locateOffset =
 		tokenN++
 	)
 	{
-		if( line.a[ tokenN + 1 ].o > offset )
+		if( line.a[ tokenN + 1 ].offset > offset )
 		{
 			break;
 		}
@@ -701,7 +702,7 @@ prototype.locateOffset =
 						token.x
 						+ euclid_measure.width(
 							font,
-							text.substring( token.o, offset )
+							text.substring( token.offset, offset )
 						)
 					),
 				'y', line.y
