@@ -872,7 +872,7 @@ jools.lazyValue(
 			widthUsed =
 				max(
 					widthUsed,
-					twig[ key ].flow.widthUsed
+					twig[ key ].flow.width
 				);
 		}
 

@@ -293,8 +293,12 @@ euclid_shape.prototype.getProjection =
 		pp = pn;
 	}
 
+	console.log( 'no section created a projection.' );
+
+	return pc;
+
 	// no section created a projection.
-	throw new Error( );
+	//throw new Error( );
 };
 
 

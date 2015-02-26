@@ -693,10 +693,10 @@ prototype.locateOffset =
 		}
 	}
 
-	token = line.get( tokenN );
-
-	if( token )
+	if( tokenN < line.length )
 	{
+		token = line.get( tokenN );
+
 		p =
 			euclid_point.create(
 				'x',

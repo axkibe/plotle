@@ -129,6 +129,7 @@ if( JION )
 
 
 var
+	isSection,
 	prototype,
 	spaceFields;
 
@@ -172,11 +173,7 @@ prototype._init =
 
 	minHeight = theme.portal.minHeight;
 
-	if(
-		zone.width  < minWidth
-		||
-		zone.height < minHeight
-	)
+	if( zone.width  < minWidth || zone.height < minHeight )
 	{
 		zone =
 		this.zone =
@@ -230,6 +227,30 @@ fabric_portal.handles =
 
 
 /*
+| Returns true if section is a section.
+*/
+isSection =
+	function(
+		section
+	)
+{
+	switch( section )
+	{
+		case 'spaceUser' :
+		case 'spaceTag' :
+		case 'moveToButton' :
+
+			return true;
+
+		default :
+
+			return false;
+	}
+};
+
+
+
+/*
 | Returns the attention center.
 */
 jools.lazyValue(
@@ -260,7 +281,7 @@ jools.lazyValue(
 
 		section = mark.caretPath.get( -1 );
 
-		if( !this._isSection( section ) )
+		if( !isSection( section ) )
 		{
 			return ac;
 		}
@@ -502,7 +523,7 @@ prototype.input =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !this._isSection( section ) )
+	if( !isSection( section ) )
 	{
 		return false;
 	}
@@ -717,7 +738,7 @@ prototype._locateOffset =
 		font,
 		text;
 
-	// FIXME cache position
+	// FUTURE cache position
 	font = this._fonts[ section ];
 
 	text = this[ section ];
@@ -805,7 +826,7 @@ prototype._keyBackspace =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !this._isSection( section ) )
+	if( !isSection( section ) )
 	{
 		return;
 	}
@@ -844,9 +865,7 @@ prototype._keyDown =
 
 	section = mark.caretPath.get( -1 );
 
-	if(
-		!this._isSection( section )
-	)
+	if( !isSection( section ) )
 	{
 		return;
 	}
@@ -925,43 +944,40 @@ prototype._keyLeft =
 	function( )
 {
 	var
-		mark =
-			this.mark,
+		cycle,
+		mark,
+		section;
 
-		section =
-			mark.caretPath.get( -1 );
+	mark = this.mark;
 
-	if( !this._isSection( section ) )
+	section = mark.caretPath.get( -1 );
+
+	if( !isSection( section ) )
 	{
 		return;
 	}
 
 	if( mark.caretAt === 0 )
 	{
-		var
-			cycle =
-				null;
+		cycle = null;
 
 		switch( section )
 		{
 			case 'spaceUser' :
 
-				cycle =
-					'moveToButton';
+				cycle = 'moveToButton';
 
 				break;
 
 			case 'spaceTag' :
 
-				cycle =
-					'spaceUser';
+				cycle = 'spaceUser';
 
 				break;
 
 			case 'moveToButton' :
 
-				cycle =
-					'spaceTag';
+				cycle = 'spaceTag';
 
 				break;
 		}
@@ -1011,7 +1027,7 @@ prototype._keyTab =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !this._isSection( section ) )
+	if( !isSection( section ) )
 	{
 		return;
 	}
@@ -1042,8 +1058,7 @@ prototype._keyTab =
 	root.create(
 		'mark',
 			mark_caret.create(
-				'path',
-					mark.caretPath.set( -1, cycle ),
+				'path', mark.caretPath.set( -1, cycle ),
 				'at', 0
 			)
 	);
@@ -1064,9 +1079,7 @@ prototype._keyUp =
 
 	section = mark.caretPath.get( -1 );
 
-	if(
-		!this._isSection( section )
-	)
+	if( !isSection( section ) )
 	{
 		return;
 	}
@@ -1132,23 +1145,21 @@ prototype._keyRight =
 	function( )
 {
 	var
+		cycle,
 		mark,
 		section,
 		value;
 
-	mark =
-		this.mark;
+	mark = this.mark;
 
-	section =
-		mark.caretPath.get( -1 );
+	section = mark.caretPath.get( -1 );
 
-	if( !this._isSection( section ) )
+	if( !isSection( section ) )
 	{
 		return false;
 	}
 
-	value =
-		this[ section ];
+	value = this[ section ];
 
 	// FIXME make true circulation
 	if(
@@ -1157,9 +1168,7 @@ prototype._keyRight =
 		( value && mark.caretAt >= value.length )
 	)
 	{
-		var
-			cycle =
-				null;
+		cycle = null;
 
 		switch( section )
 		{
@@ -1225,7 +1234,7 @@ prototype._keyDel =
 	value = this[ section ];
 
 	if(
-		!this._isSection( section ) ||
+		!isSection( section ) ||
 		section === 'moveToButton'
 	)
 	{
@@ -1267,8 +1276,8 @@ prototype._keyEnd =
 	section = mark.caretPath.get( -1 );
 
 	if(
-		!this._isSection( section ) ||
-		section === 'moveToButton'
+		!isSection( section )
+		|| section === 'moveToButton'
 	)
 	{
 		return;
@@ -1308,7 +1317,7 @@ prototype._keyEnter =
 
 	section = mark.caretPath.get( -1 );
 
-	if( !this._isSection( section ) )
+	if( !isSection( section ) )
 	{
 		return;
 	}
@@ -1351,30 +1360,6 @@ prototype._keyEnter =
 		}
 
 		this._moveTo( );
-	}
-};
-
-
-/*
-| Returns true if section is a section.
-*/
-prototype._isSection =
-	function(
-		section
-	)
-{
-	switch( section )
-	{
-		case 'spaceUser' :
-		case 'spaceTag' :
-		case 'moveToButton' :
-
-			return true;
-
-		default :
-
-			return false;
-
 	}
 };
 
@@ -1770,9 +1755,9 @@ prototype._drawCaret =
 	section = mark.caretPath.get( -1 );
 
 	if(
-		!this._isSection( section )
-		||
-		section === 'moveToButton' )
+		!isSection( section )
+		|| section === 'moveToButton'
+	)
 	{
 		return;
 	}
