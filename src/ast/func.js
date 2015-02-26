@@ -40,10 +40,7 @@ if( JION )
 					}
 			},
 		ray :
-			[
-//				FIXME
-//				'ast.FuncArg'
-			]
+			[ 'ast_funcArg' ]
 	};
 }
 

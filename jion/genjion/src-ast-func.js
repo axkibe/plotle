@@ -28,6 +28,7 @@ else
 var
 	jools,
 	ast_block,
+	ast_funcArg,
 	jion_proto;
 
 
@@ -47,6 +48,8 @@ if( SERVER )
 	jools = require( '../../src/jools/jools' );
 
 	ast_block = require( '../../src/ast/block' );
+
+	ast_funcArg = require( '../../src/ast/funcArg' );
 
 	jion_proto = require( '../../src/jion/proto' );
 }
@@ -289,7 +292,7 @@ prototype.create =
 /**/	{
 /**/		o = ray[ r ];
 /**/
-/**/		if( undefined && undefined )
+/**/		if( o.reflect !== 'ast_funcArg' )
 /**/		{
 /**/			throw new Error( );
 /**/		}
