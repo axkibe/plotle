@@ -427,7 +427,7 @@ jools.lazyValue(
 
 		font = this.font;
 
-		// FIXME go into subnodes instead
+		// FUTURE go into subnodes
 		text = this.text;
 
 		// width really used.

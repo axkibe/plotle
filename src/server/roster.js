@@ -152,8 +152,12 @@ module.exports =
 		'filePath', 'src/euclid/rect.js',
 		'hasJion', true,
 		'inBundle', true,
-		'inTestPad',
-			true
+		'inTestPad', true
+	),
+	resource.create(
+		'filePath', 'src/flow/token.js',
+		'hasJion', true,
+		'inBundle', true
 	),
 	resource.create(
 		'filePath', 'src/shell/fontpool.js',
