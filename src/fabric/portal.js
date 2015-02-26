@@ -966,12 +966,7 @@ prototype._keyLeft =
 		root.create(
 			'mark',
 				mark_caret.create(
-					'path',
-						// FIXME rather user this.path
-						mark.caretPath.set(
-							mark.caretPath.length - 1,
-							cycle
-						),
+					'path', this.path.append( cycle ),
 					'at',
 						cycle === 'moveToButton'
 						?  0
@@ -1072,8 +1067,7 @@ prototype._keyUp =
 			root.create(
 				'mark',
 					mark_caret.create(
-						'path', // FIXME this.paths
-							mark.caretPath.set( -1, 'moveToButton' ),
+						'path', this.path.append( 'moveToButton' ),
 						'at', 0
 					)
 			);
@@ -1091,8 +1085,7 @@ prototype._keyUp =
 			root.create(
 				'mark',
 					mark_caret.create(
-						'path', // FIXME this.paths
-							mark.caretPath.set( -1, 'spaceUser' ),
+						'path', this.path.append( 'spaceUser' ),
 						'at',
 							this._getOffsetAt(
 								'spaceUser',
@@ -1108,10 +1101,8 @@ prototype._keyUp =
 			root.create(
 				'mark',
 					mark_caret.create(
-						'path', // FIXME this.paths
-							mark.caretPath.set( -1, 'spaceTag' ),
-						'at',
-							0
+						'path', this.path.append( 'spaceTag' ),
+						'at', 0
 					)
 			);
 
@@ -1142,11 +1133,9 @@ prototype._keyRight =
 
 	value = this[ section ];
 
-	// FIXME make true circulation
 	if(
 		section === 'moveToButton'
-		||
-		( value && mark.caretAt >= value.length )
+		|| ( value && mark.caretAt >= value.length )
 	)
 	{
 		cycle = null;
@@ -1175,8 +1164,7 @@ prototype._keyRight =
 		root.create(
 			'mark',
 				mark_caret.create(
-					'path', // FIXME this.paths
-						mark.caretPath.set( -1, cycle ),
+					'path', this.path.append( cycle ),
 					'at', 0
 				)
 		);
