@@ -401,6 +401,8 @@ jools.lazyValue(
 		var
 			ca,
 			currentLine,
+			currentLineOffset,
+			currentLineRay,
 			flow,
 			flowWidth,
 			font,
@@ -448,12 +450,9 @@ jools.lazyValue(
 
 		flow = [ ];
 
-		// FIXME create with ray.
-		currentLine =
-			flow_line.create(
-				'y', y,
-				'offset', 0
-			);
+		currentLineOffset = 0;
+
+		currentLineRay = [ ];
 
 		// FIXME
 		flow[ line ] = currentLine;
@@ -479,28 +478,24 @@ jools.lazyValue(
 				if( x > 0 )
 				{
 					// soft break
-					if( widthUsed < xw )
-					{
-						widthUsed = xw;
-					}
+					if( widthUsed < xw ) { widthUsed = xw; }
+
+					flow[ line++ ] =
+						flow_line.create(
+							'ray:init', currentLineRay,
+							'y', y,
+							'offset', currentLineOffset
+						);
 
 					x = 0;
 
 					xw = w + space;
 
+					currentLineRay = [ ];
+
 					y += Math.round( font.size * ( 1 + theme.bottombox ) );
 
-					line++;
-
-					// FIXME create with ray.
-					currentLine =
-						flow_line.create(
-							'y', y,
-							'offset', ca.index
-						);
-
-					// FIXME
-					flow[ line ] = currentLine;
+					currentLineOffset = ca.index;
 				}
 				else
 				{
@@ -509,20 +504,24 @@ jools.lazyValue(
 				}
 			}
 
-			// FIXME
-			flow[ line ] =
-				flow[ line ].create(
-					'ray:append',
-					flow_token.create(
-						'x', x,
-						'width', w,
-						'offset', ca.index,
-						'text', tokenText
-					)
-				);
+			currentLineRay.push(
+				flow_token.create(
+					'x', x,
+					'width', w,
+					'offset', ca.index,
+					'text', tokenText
+				)
+			);
 
 			x = xw;
 		}
+
+		flow[ line ] =
+			flow_line.create(
+				'ray:init', currentLineRay,
+				'offset', currentLineOffset,
+				'y', y
+			);
 
 		if( widthUsed < x ) { widthUsed = x; }
 
