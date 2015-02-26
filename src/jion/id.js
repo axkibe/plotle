@@ -38,9 +38,7 @@ if( JION )
 						defaultValue :
 							'undefined'
 					}
-			},
-		init :
-			[ ]
+			}
 	};
 }
 
@@ -48,22 +46,16 @@ if( JION )
 var
 	jion_id,
 	jools,
+	prototype,
 	shorthand;
 
 jion_id = require( '../jion/this' )( module );
 
+prototype = jion_id.prototype;
+
 jools = require( '../jools/jools' );
 
 shorthand = require( '../ast/shorthand' );
-
-/*
-| Initializer.
-*/
-jion_id.prototype._init =
-	function( )
-{
-	// FIXME?
-};
 
 
 /*
@@ -83,13 +75,11 @@ jion_id.createFromString =
 	{
 		switch( string )
 		{
-			// FIXME all lowercase
 			case 'boolean' : break;
 			case 'integer' : break;
 			case 'function' : break;
 			case 'null' : break;
 			case 'number' : break;
-			case 'Object' : break; // FIXME
 			case 'protean' : break;
 			case 'string' : break;
 			case 'undefined' : break;
@@ -165,7 +155,7 @@ jion_id.compare =
 | This id as string.
 */
 jools.lazyValue(
-	jion_id.prototype,
+	prototype,
 	'string',
 	function( )
 	{
@@ -185,7 +175,7 @@ jools.lazyValue(
 | This id as ast string.
 */
 jools.lazyValue(
-	jion_id.prototype,
+	prototype,
 	'$string',
 	function( )
 	{
@@ -199,7 +189,7 @@ jools.lazyValue(
 | This id as global varname
 */
 jools.lazyValue(
-	jion_id.prototype,
+	prototype,
 	'global',
 	function( )
 	{
@@ -219,7 +209,7 @@ jools.lazyValue(
 | This id as ast variable
 */
 jools.lazyValue(
-	jion_id.prototype,
+	prototype,
 	'$global',
 	function( )
 	{

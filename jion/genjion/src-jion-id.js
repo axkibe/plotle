@@ -81,8 +81,6 @@ Constructor =
 		this.unit = v_unit;
 	}
 
-	this._init( );
-
 	if( FREEZE )
 	{
 		Object.freeze( this );
