@@ -26,20 +26,16 @@ shell_style.styles =
 		*/
 		normal :
 		{
-			fill :
-				'rgba( 255, 255, 240, 0.7 )',
+			fill : 'rgba( 255, 255, 240, 0.7 )',
 
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgba( 196, 94, 44, 0.4 )'
+					color : 'rgba( 196, 94, 44, 0.4 )'
 				}
 			]
 		},
@@ -49,20 +45,16 @@ shell_style.styles =
 		*/
 		hover :
 		{
-			fill :
-				'rgba( 255, 235, 210, 0.7 )',
+			fill : 'rgba( 255, 235, 210, 0.7 )',
 
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgba( 196, 94, 44, 0.4 )'
+					color : 'rgba( 196, 94, 44, 0.4 )'
 				}
 			]
 		},
@@ -72,20 +64,16 @@ shell_style.styles =
 		*/
 		focus :
 		{
-			fill :
-				'rgb( 255, 188, 88 )',
+			fill : 'rgb( 255, 188, 88 )',
 
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgba( 196, 94, 44, 0.4 )'
+					color : 'rgba( 196, 94, 44, 0.4 )'
 				}
 			]
 		},
@@ -95,20 +83,16 @@ shell_style.styles =
 		*/
 		hofoc :
 		{
-			fill :
-				'rgb( 255, 188, 88 )',
+			fill : 'rgb( 255, 188, 88 )',
 
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgba( 196, 94, 44, 0.4 )'
+					color : 'rgba( 196, 94, 44, 0.4 )'
 				}
 			]
 		}
@@ -165,14 +149,11 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgba( 196, 94, 44, 0.4 )'
+					color : 'rgba( 196, 94, 44, 0.4 )'
 				}
 			]
 		},
@@ -187,18 +168,16 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgba( 196, 94, 44, 0.4 )'
+					color : 'rgba( 196, 94, 44, 0.4 )'
 				}
 			]
 		}
 	},
+
 
 	/*
 	| The default arrow for the normal button.
@@ -207,27 +186,20 @@ shell_style.styles =
 	{
 		normal :
 		{
-			fill :
-				'black',
+			fill : 'black',
 
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgba( 128, 0, 0, 1 )'
+					color : 'rgba( 128, 0, 0, 1 )'
 				}
 			]
 		}
 	},
-
-
-
 
 
 	/*
@@ -237,26 +209,20 @@ shell_style.styles =
 	{
 		normal :
 		{
-			fill :
-				'#ff0000',
+			fill : '#ff0000',
 
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgba( 128, 0, 0, 1 )'
+					color : 'rgba( 128, 0, 0, 1 )'
 				}
 			]
 		}
 	},
-
-
 
 
 	/*
@@ -270,20 +236,16 @@ shell_style.styles =
 		normal :
 		{
 
-			fill :
-				'rgba( 255, 255, 240, 0.7 )',
+			fill : 'rgba( 255, 255, 240, 0.7 )',
 
 			edge :
 			[
 				{
-					border :
-						1,
+					border : 1,
 
-					width :
-						2,
+					width : 2,
 
-					color :
-						'rgba( 196, 94, 44, 0.7 )'
+					color : 'rgba( 196, 94, 44, 0.7 )'
 				}
 			]
 		},
@@ -293,20 +255,16 @@ shell_style.styles =
 		*/
 		hover :
 		{
-			fill :
-				'rgba( 255, 235, 210, 0.7 )',
+			fill : 'rgba( 255, 235, 210, 0.7 )',
 
 			edge :
 			[
 				{
-					border :
-						1,
+					border : 1,
 
-					width  :
-						2,
+					width  : 2,
 
-					color :
-						'rgba( 196, 94, 44, 0.7 )'
+					color : 'rgba( 196, 94, 44, 0.7 )'
 				}
 			]
 		},
@@ -316,30 +274,23 @@ shell_style.styles =
 		*/
 		focus :
 		{
-			fill :
-				'rgba( 255, 255, 240, 0.7 )',
+			fill : 'rgba( 255, 255, 240, 0.7 )',
 
 			edge :
 			[
 				{
-					border :
-						2,
+					border : 2,
 
-					width :
-						1.5,
+					width : 1.5,
 
-					color :
-						'rgb( 255, 99, 188 )'
+					color : 'rgb( 255, 99, 188 )'
 				},
 				{
-					border :
-						1,
+					border : 1,
 
-					width :
-						2,
+					width : 2,
 
-					color :
-						'rgba( 196, 94, 44, 0.7 )'
+					color : 'rgba( 196, 94, 44, 0.7 )'
 				}
 			]
 		},
@@ -353,24 +304,18 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						2,
+					border : 2,
 
-					width :
-						1.5,
+					width : 1.5,
 
-					color :
-						'rgb( 255, 99, 188 )'
+					color : 'rgb( 255, 99, 188 )'
 				},
 				{
-					border :
-						1,
+					border : 1,
 
-					width :
-						2,
+					width : 2,
 
-					color :
-						'rgba( 196, 94, 44, 0.7 )'
+					color : 'rgba( 196, 94, 44, 0.7 )'
 				}
 			]
 		}
@@ -401,24 +346,18 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						1,
+					border : 1,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgb( 255, 188, 87 )'
+					color : 'rgb( 255, 188, 87 )'
 				},
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'black'
+					color : 'black'
 				}
 			]
 		},
@@ -428,14 +367,11 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						3,
+					width : 3,
 
-					color :
-						'rgba( 255, 183, 15, 0.5 )'
+					color : 'rgba( 255, 183, 15, 0.5 )'
 				}
 			]
 		}
@@ -450,8 +386,7 @@ shell_style.styles =
 		{
 			fill :
 			{
-				gradient :
-					'radial',
+				gradient : 'radial',
 
 				steps :
 				[
@@ -463,24 +398,18 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						3,
+					border : 3,
 
-					width :
-						6,
+					width : 6,
 
-					color :
-						'rgb( 255, 220, 128 )'
+					color : 'rgb( 255, 220, 128 )'
 				},
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'black'
+					color : 'black'
 				}
 			]
 		},
@@ -490,14 +419,11 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						3,
+					width : 3,
 
-					color :
-						'rgba( 255, 183, 15, 0.5 )'
+					color : 'rgba( 255, 183, 15, 0.5 )'
 				}
 			]
 		}
@@ -513,14 +439,11 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgb( 255, 219, 165 )'
+					color : 'rgb( 255, 219, 165 )'
 				}
 			]
 		}
@@ -537,20 +460,16 @@ shell_style.styles =
 		*/
 		normal :
 		{
-			fill :
-				'rgba( 255, 237, 210, 0.5 )',
+			fill : 'rgba( 255, 237, 210, 0.5 )',
 
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgb( 255, 141, 66 )'
+					color : 'rgb( 255, 141, 66 )'
 				}
 			]
 		},
@@ -560,20 +479,16 @@ shell_style.styles =
 		*/
 		hover :
 		{
-			fill :
-				'rgba( 255, 188, 88, 0.7 )',
+			fill : 'rgba( 255, 188, 88, 0.7 )',
 
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1.5,
+					width : 1.5,
 
-					color :
-						'rgb( 255, 141, 66 )'
+					color : 'rgb( 255, 141, 66 )'
 				}
 			]
 		},
@@ -583,20 +498,16 @@ shell_style.styles =
 		*/
 		focus :
 		{
-			fill :
-				'rgba( 255, 237, 210, 0.5 )',
+			fill : 'rgba( 255, 237, 210, 0.5 )',
 
 			edge :
 			[
 				{
-					border :
-						1,
+					border : 1,
 
-					width  :
-						1.5,
+					width  : 1.5,
 
-					color :
-						'rgb( 255, 99, 188 )'
+					color : 'rgb( 255, 99, 188 )'
 				}
 			]
 		},
@@ -606,20 +517,16 @@ shell_style.styles =
 		*/
 		hofoc :
 		{
-			fill :
-				'rgba( 255, 188, 88, 0.7 )',
+			fill : 'rgba( 255, 188, 88, 0.7 )',
 
 			edge :
 			[
 				{
-					border :
-						1,
+					border : 1,
 
-					width  :
-						1.5,
+					width  : 1.5,
 
-					color :
-						'rgb( 255, 99, 188 )'
+					color : 'rgb( 255, 99, 188 )'
 				}
 			]
 		}
@@ -636,14 +543,11 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgba( 100, 100, 0, 0.1 )'
+					color : 'rgba( 100, 100, 0, 0.1 )'
 				}
 			]
 		},
@@ -653,14 +557,11 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						3,
+					width : 3,
 
-					color :
-						'rgba( 255, 183, 15, 0.5 )'
+					color : 'rgba( 255, 183, 15, 0.5 )'
 				}
 			]
 		}
@@ -677,30 +578,23 @@ shell_style.styles =
 		*/
 		normal :
 		{
-			fill :
-				'white',
+			fill : 'white',
 
 			edge :
 			[
 				{
-					border :
-						1,
+					border : 1,
 
-					width :
-						1.5,
+					width : 1.5,
 
-					color :
-						'rgb( 255, 188, 87 )'
+					color : 'rgb( 255, 188, 87 )'
 				},
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'black'
+					color : 'black'
 				}
 			]
 		},
@@ -713,24 +607,18 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						1,
+					border : 1,
 
-					width :
-						2,
+					width : 2,
 
-					color :
-						'rgb( 255, 188, 87 )'
+					color : 'rgb( 255, 188, 87 )'
 				},
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'rgb( 128, 128, 0 )'
+					color : 'rgb( 128, 128, 0 )'
 				}
 			]
 		},
@@ -743,44 +631,34 @@ shell_style.styles =
 			edge :
 			[
 				{
-					border :
-						1,
+					border : 1,
 
-					width :
-						2,
+					width : 2,
 
-					color :
-						'rgb( 255, 99, 188 )'
+					color : 'rgb( 255, 99, 188 )'
 				},
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'black'
+					color : 'black'
 				}
 			]
 		},
 
 		hofoc :
 		{
-			fill :
-				'white',
+			fill : 'white',
 
 			edge :
 			[
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'black'
+					color : 'black'
 				}
 			]
 		}
@@ -793,11 +671,9 @@ shell_style.styles =
 	{
 		normal :
 		{
-			fill :
-				'black',
+			fill : 'black',
 
-			edge :
-				[ ]
+			edge : [ ]
 		}
 	},
 
@@ -810,30 +686,23 @@ shell_style.styles =
 	{
 		normal :
 		{
-			fill :
-				'white',
+			fill : 'white',
 
 			edge :
 			[
 				{
-					border :
-						1,
+					border : 1,
 
-					width :
-						1.5,
+					width : 1.5,
 
-					color :
-						'rgb( 255, 188, 87 )'
+					color : 'rgb( 255, 188, 87 )'
 				},
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'black'
+					color : 'black'
 				}
 			]
 		},
@@ -843,30 +712,23 @@ shell_style.styles =
 		*/
 		focus :
 		{
-			fill :
-				'white',
+			fill : 'white',
 
 			edge :
 			[
 				{
-					border :
-						1,
+					border : 1,
 
-					width :
-						2,
+					width : 2,
 
-					color :
-						'rgb( 255, 99, 188 )'
+					color : 'rgb( 255, 99, 188 )'
 				},
 				{
-					border :
-						0,
+					border : 0,
 
-					width :
-						1,
+					width : 1,
 
-					color :
-						'black'
+					color : 'black'
 				}
 			]
 		}
@@ -941,4 +803,4 @@ shell_style.getStyle =
 	return style;
 };
 
-} ) ();
+} )( );

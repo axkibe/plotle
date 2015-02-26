@@ -80,24 +80,13 @@ if( JION )
 visual_scrollbar.prototype._init =
 	function( )
 {
-	// FIXME this look more complicated than it needs to be
-	if( this.max - this.aperture >= 0 )
+	if( this.max - this.aperture > 0 )
 	{
-		this.pos =
-			jools.limit(
-				0,
-				this.pos,
-				this.max - this.aperture
-			);
+		this.pos = jools.limit( 0, this.pos, this.max - this.aperture );
 	}
 	else
 	{
 		this.pos = 0;
-	}
-
-	if( this.pos < 0 )
-	{
-		throw new Error( );
 	}
 };
 
