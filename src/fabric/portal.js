@@ -874,21 +874,12 @@ prototype._keyDown =
 	{
 		case 'spaceUser' :
 
-			cpos =
-				this._locateOffset(
-					section,
-					mark.caretAt
-				);
+			cpos = this._locateOffset( section, mark.caretAt );
 
 			root.create(
 				'mark',
 					mark_caret.create(
-						'path',
-							// FIXME use this paths
-							mark.caretPath.set(
-								mark.caretPath.length - 1,
-								'spaceTag'
-							),
+						'path', this.path.append( 'spaceTag' ),
 						'at',
 							this._getOffsetAt(
 								'spaceTag',
@@ -904,12 +895,7 @@ prototype._keyDown =
 			root.create(
 				'mark',
 					mark_caret.create(
-						'path',
-							// FIXME use this paths
-							mark.caretPath.set(
-								mark.caretPath.length - 1,
-								'moveToButton'
-							),
+						'path', this.path.append( 'moveToButton' ),
 						'at', 0
 					)
 			);
@@ -921,12 +907,7 @@ prototype._keyDown =
 			root.create(
 				'mark',
 					mark_caret.create(
-						'path',
-							// FIXME use this paths
-							mark.caretPath.set(
-								mark.caretPath.length - 1,
-								'spaceUser'
-							),
+						'path', this.path.append( 'spaceUser' ),
 						'at', 0
 					)
 			);
