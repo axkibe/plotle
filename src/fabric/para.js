@@ -391,8 +391,6 @@ jools.lazyValue(
 
 /*
 | The para's flow, the position of all chunks.
-|
-| FIXME make this a proper jion.
 */
 jools.lazyValue(
 	prototype,
@@ -1237,17 +1235,6 @@ prototype._pageUpDown =
 		begin
 	)
 {
-
-
-/**/if( CHECK )
-/**/{
-/**/	if( dir !== +1 && dir !== -1 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-
 	var
 		p,
 		pnw,
@@ -1256,17 +1243,21 @@ prototype._pageUpDown =
 		tpnw,
 		zone;
 
+/**/if( CHECK )
+/**/{
+/**/	if( dir !== 1 && dir !== -1 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	p = this.locateOffset( at ).p,
 
-	zone = item.zone,
+	zone = item.zone;
 
-	pnw = doc.getPNW( this.key ),
+	pnw = doc.getPNW( this.key );
 
-	tp =
-		p.add(
-			pnw.x,
-			pnw.y + zone.height * dir
-		),
+	tp = p.add( pnw.x, pnw.y + zone.height * dir );
 
 	tpara = doc.getParaAtPoint( tp );
 
@@ -1277,11 +1268,7 @@ prototype._pageUpDown =
 
 	tpnw = doc.getPNW( tpara.key );
 
-	at =
-		tpara.getPointOffset(
-			item,
-			tp.sub( tpnw )
-		);
+	at = tpara.getPointOffset( item, tp.sub( tpnw ) );
 
 	tpara._setMark( at, retainx, begin, doc );
 };
