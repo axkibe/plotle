@@ -1,7 +1,5 @@
 /*
 | A poition in a text.
-|
-| FIXME currently unused.
 */
 
 
@@ -47,16 +45,23 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( SERVER )
 {
 	mark_text = require( '../jion/this' )( module );
 }
 
 
+prototype = mark_text.prototype;
+
+
 /*
 | Initializer.
 */
-mark_text.prototype._init =
+prototype._init =
 	function( )
 {
 

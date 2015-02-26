@@ -38,6 +38,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( SERVER )
 {
 	jools = require( '../jools/jools' );
@@ -46,20 +50,23 @@ if( SERVER )
 }
 
 
+prototype = mark_item.prototype;
+
+
 /*
 | A caret mark has a caret.
 |
 | (the text range is the other mark
 |  which has this too )
 */
-mark_item.prototype.hasCaret = false;
+prototype.hasCaret = false;
 
 
 /*
 | The item's path.
 */
 jools.lazyValue(
-	mark_item.prototype,
+	prototype,
 	'itemPath',
 	function( )
 	{
@@ -72,7 +79,7 @@ jools.lazyValue(
 | The widget's path.
 */
 jools.lazyValue(
-	mark_item.prototype,
+	prototype,
 	'widgetPath',
 	function( )
 	{
@@ -85,16 +92,16 @@ jools.lazyValue(
 /*
 | The content the mark puts into the clipboard.
 |
-| FIXME write something
+| FUTURE write something
 */
-mark_item.prototype.clipboard = '';
+prototype.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-mark_item.prototype.containsPath =
+prototype.containsPath =
 	function(
 		path
 	)

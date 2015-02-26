@@ -66,6 +66,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( SERVER )
 {
 	jools = require( '../jools/jools' );
@@ -74,10 +78,13 @@ if( SERVER )
 }
 
 
+prototype = mark_caret.prototype;
+
+
 /*
 | Initializer.
 */
-mark_caret.prototype._init =
+prototype._init =
 	function( )
 {
 
@@ -102,21 +109,20 @@ mark_caret.prototype._init =
 | (the text range is the other mark
 |  which has this too )
 */
-mark_caret.prototype.hasCaret = true;
+prototype.hasCaret = true;
 
 
 /*
 | The item's path.
 */
 jools.lazyValue(
-	mark_caret.prototype,
+	prototype,
 	'itemPath',
 	function( )
 	{
 		if(
 			this.path.length < 3
-			||
-			this.path.get( 0 ) !== 'space'
+			|| this.path.get( 0 ) !== 'space'
 		)
 		{
 			return jion_path.empty;
@@ -131,7 +137,7 @@ jools.lazyValue(
 | The widget's path.
 */
 jools.lazyValue(
-	mark_caret.prototype,
+	prototype,
 	'widgetPath',
 	function( )
 	{
@@ -156,7 +162,7 @@ jools.lazyValue(
 | FIXME remove
 */
 jools.lazyValue(
-	mark_caret.prototype,
+	prototype,
 	'caretPath',
 	function( )
 	{
@@ -172,7 +178,7 @@ jools.lazyValue(
 | FIXME remove
 */
 jools.lazyValue(
-	mark_caret.prototype,
+	prototype,
 	'caretAt',
 	function( )
 	{
@@ -188,7 +194,7 @@ jools.lazyValue(
 | FIXME remove
 */
 jools.lazyValue(
-	mark_caret.prototype,
+	prototype,
 	'caret',
 	function( )
 	{
@@ -205,15 +211,14 @@ jools.lazyValue(
 /*
 | The content the mark puts into the clipboard.
 */
-mark_caret.prototype.clipboard =
-	'';
+prototype.clipboard = '';
 
 
 /*
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-mark_caret.prototype.containsPath =
+prototype.containsPath =
 	function(
 		path
 	)

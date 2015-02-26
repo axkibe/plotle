@@ -63,6 +63,10 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+
 if( SERVER )
 {
 	jools = require( '../jools/jools' );
@@ -71,10 +75,13 @@ if( SERVER )
 }
 
 
+prototype = mark_range.prototype;
+
+
 /*
 | Initializer
 */
-mark_range.prototype._init =
+prototype._init =
 	function( )
 {
 	var
@@ -105,7 +112,7 @@ mark_range.prototype._init =
 | dependening on which comes first in the doc.
 */
 jools.lazyValue(
-	mark_range.prototype,
+	prototype,
 	'front',
 	function( )
 	{
@@ -121,7 +128,7 @@ jools.lazyValue(
 | dependening on which comes last in the doc.
 */
 jools.lazyValue(
-	mark_range.prototype,
+	prototype,
 	'back',
 	function( )
 	{
@@ -139,7 +146,7 @@ jools.lazyValue(
 | The caretPath and caretAt are identical to
 | end.path and end.at
 */
-mark_range.prototype.hasCaret = true;
+prototype.hasCaret = true;
 
 
 /*
@@ -148,7 +155,7 @@ mark_range.prototype.hasCaret = true;
 | This allows a common interface with text range.
 */
 jools.lazyValue(
-	mark_range.prototype,
+	prototype,
 	'caretPath',
 	function( )
 	{
@@ -163,7 +170,7 @@ jools.lazyValue(
 | This allows a common interface with text range.
 */
 jools.lazyValue(
-	mark_range.prototype,
+	prototype,
 	'caretAt',
 	function( )
 	{
@@ -176,7 +183,7 @@ jools.lazyValue(
 | The item's path.
 */
 jools.lazyValue(
-	mark_range.prototype,
+	prototype,
 	'itemPath',
 	function( )
 	{
@@ -194,7 +201,7 @@ jools.lazyValue(
 | Returns true if an entity of this mark
 | contains 'path'.
 */
-mark_range.prototype.containsPath =
+prototype.containsPath =
 	function(
 		path
 	)
@@ -224,7 +231,7 @@ mark_range.prototype.containsPath =
 | The content the mark puts into the clipboard.
 */
 jools.lazyValue(
-	mark_range.prototype,
+	prototype,
 	'clipboard',
 	function( )
 	{
@@ -292,7 +299,7 @@ jools.lazyValue(
 | True if begin equals end
 */
 jools.lazyValue(
-	mark_range.prototype,
+	prototype,
 	'empty',
 	function( )
 	{
@@ -304,7 +311,7 @@ jools.lazyValue(
 /*
 | Sets front/back so front is before back.
 */
-mark_range.prototype._normalize =
+prototype._normalize =
 	function( )
 {
 	var
