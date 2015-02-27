@@ -4,6 +4,7 @@
 
 
 var
+	euclid_color,
 	shell_accent,
 	shell_style;
 
@@ -26,7 +27,7 @@ shell_style.styles =
 		*/
 		normal :
 		{
-			fill : 'rgba( 255, 255, 240, 0.7 )',
+			fill : euclid_color.rgba( 255, 255, 240, 0.7 ),
 
 			edge :
 			[

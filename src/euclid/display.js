@@ -932,6 +932,7 @@ euclid_display.prototype._colorStyle =
 		r0,
 		r1;
 
+	// FIXME remove
 	if( style.substring )
 	{
 		return style;
@@ -939,7 +940,7 @@ euclid_display.prototype._colorStyle =
 
 	else if( !style.gradient )
 	{
-		throw new Error( );
+		return style.css;
 	}
 
 	switch( style.gradient )
