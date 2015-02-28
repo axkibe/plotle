@@ -481,7 +481,7 @@ shell_style.styles =
 
 					width : 1.5,
 
-					color : 'rgb( 255, 141, 66 )'
+					color : euclid_color.rgb( 255, 141, 66 )
 				}
 			]
 		},
@@ -491,7 +491,7 @@ shell_style.styles =
 		*/
 		focus :
 		{
-			fill : 'rgba( 255, 237, 210, 0.5 )',
+			fill : euclid_color.rgba( 255, 237, 210, 0.5 ),
 
 			edge :
 			[
@@ -500,7 +500,7 @@ shell_style.styles =
 
 					width  : 1.5,
 
-					color : 'rgb( 255, 99, 188 )'
+					color : euclid_color.rgb( 255, 99, 188 )
 				}
 			]
 		},
@@ -580,7 +580,7 @@ shell_style.styles =
 
 					width : 1.5,
 
-					color : 'rgb( 255, 188, 87 )'
+					color : euclid_color.rgb( 255, 188, 87 )
 				},
 				{
 					border : 0,
@@ -603,22 +603,21 @@ shell_style.styles =
 
 					width : 2,
 
-					color : 'rgb( 255, 188, 87 )'
+					color : euclid_color.rgb( 255, 188, 87 )
 				},
 				{
 					border : 0,
 
 					width : 1,
 
-					color : 'rgb( 128, 128, 0 )'
+					color : euclid_color.rgb( 128, 128, 0 )
 				}
 			]
 		},
 
 		focus :
 		{
-			fill :
-				'white',
+			fill : euclid_color.white,
 
 			edge :
 			[
@@ -627,21 +626,21 @@ shell_style.styles =
 
 					width : 2,
 
-					color : 'rgb( 255, 99, 188 )'
+					color : euclid_color.rgb( 255, 99, 188 )
 				},
 				{
 					border : 0,
 
 					width : 1,
 
-					color : 'black'
+					color : euclid_color.black
 				}
 			]
 		},
 
 		hofoc :
 		{
-			fill : 'white',
+			fill : euclid_color.white,
 
 			edge :
 			[
@@ -650,7 +649,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'black'
+					color : euclid_color.black
 				}
 			]
 		}
@@ -663,7 +662,7 @@ shell_style.styles =
 	{
 		normal :
 		{
-			fill : 'black',
+			fill : euclid_color.black,
 
 			edge : [ ]
 		}
@@ -678,7 +677,7 @@ shell_style.styles =
 	{
 		normal :
 		{
-			fill : 'white',
+			fill : euclid_color.white,
 
 			edge :
 			[
@@ -687,14 +686,14 @@ shell_style.styles =
 
 					width : 1.5,
 
-					color : 'rgb( 255, 188, 87 )'
+					color : euclid_color.rgb( 255, 188, 87 )
 				},
 				{
 					border : 0,
 
 					width : 1,
 
-					color : 'black'
+					color : euclid_color.black
 				}
 			]
 		},
@@ -704,7 +703,7 @@ shell_style.styles =
 		*/
 		focus :
 		{
-			fill : 'white',
+			fill : euclid_color.white,
 
 			edge :
 			[
@@ -713,14 +712,14 @@ shell_style.styles =
 
 					width : 2,
 
-					color : 'rgb( 255, 99, 188 )'
+					color : euclid_color.rgb( 255, 99, 188 )
 				},
 				{
 					border : 0,
 
 					width : 1,
 
-					color : 'black'
+					color : euclid_color.black
 				}
 			]
 		}
