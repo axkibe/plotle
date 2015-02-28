@@ -157,8 +157,19 @@ euclid_color.black =
 		'blue', 0
 	);
 
+
 /*
-| Black.
+| Red.
+*/
+euclid_color.red =
+	euclid_color.create(
+		'red', 255,
+		'green', 0,
+		'blue', 0
+	);
+
+/*
+| White.
 */
 euclid_color.white =
 	euclid_color.create(

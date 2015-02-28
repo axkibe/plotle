@@ -47,7 +47,7 @@ _styles =
 	{
 		type   : 'font',
 		family : '(default)',
-		fill   : 'red',
+		fill   : euclid_color.red,
 		align  : 'center',
 		base   : 'alphabetic'
 	},
@@ -56,7 +56,7 @@ _styles =
 	{
 		type   : 'font',
 		family : '(default)',
-		fill   : 'black',
+		fill   : euclid_color.black,
 		align  : 'center',
 		base   : 'middle'
 	},
@@ -65,7 +65,7 @@ _styles =
 	{
 		type   : 'font',
 		family : '(default)',
-		fill   : 'black',
+		fill   : euclid_color.black,
 		align  : 'start',
 		base   : 'alphabetic'
 	},
@@ -74,7 +74,7 @@ _styles =
 	{
 		type   : 'font',
 		family : '(default)',
-		fill   : 'black',
+		fill   : euclid_color.black,
 		align  : 'start',
 		base   : 'middle'
 	},
@@ -83,7 +83,7 @@ _styles =
 	{
 		type   : 'font',
 		family : '(default)',
-		fill   : 'black',
+		fill   : euclid_color.black,
 		align  : 'end',
 		base   : 'alphabetic'
 	}
