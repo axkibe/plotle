@@ -368,6 +368,8 @@ euclid_display.prototype.edge =
 	)
 {
 	var
+		a,
+		aZ,
 		edge;
 
 /**/if( CHECK )
@@ -382,22 +384,14 @@ euclid_display.prototype.edge =
 
 	if( Array.isArray( edge ) )
 	{
-		for( var i = 0; i < edge.length; i++ )
+		for( a = 0, aZ = edge.length; a < aZ; a++ )
 		{
-			this._edge(
-				edge[ i ],
-				shape,
-				view
-			);
+			this._edge( edge[ a ], shape, view );
 		}
 	}
 	else
 	{
-		this._edge(
-			edge,
-			shape,
-			view
-		);
+		this._edge( edge, shape, view );
 	}
 };
 
@@ -606,35 +600,18 @@ euclid_display.prototype.fillRect =
 	{
 		if( a1.reflect === 'euclid_rect' )
 		{
-			return this._cx.fillRect(
-				a1.pnw.x,
-				a1.pnw.y,
-				a1.pse.x,
-				a1.pse.y
-			);
+			return this._cx.fillRect( a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y );
 		}
 		else if( a1.reflect === 'euclid_point' )
 		{
-			return this._cx.fillRect(
-				a1.x,
-				a1.y,
-				a2.x,
-				a2.y
-			);
+			return this._cx.fillRect( a1.x, a1.y, a2.x, a2.y );
 		}
 
 		// fillRect not a rectangle
 		throw new Error( );
 	}
 
-	return (
-		this._cx.fillRect(
-			a1,
-			a2,
-			a3,
-			a4
-		)
-	);
+	return this._cx.fillRect( a1, a2, a3, a4 );
 };
 
 
@@ -671,7 +648,7 @@ euclid_display.prototype.globalAlpha =
 
 
 /*
-| Thedisplay is cleared.
+| The display is cleared.
 */
 euclid_display.prototype.clear =
 	function( )
@@ -827,50 +804,17 @@ euclid_display.prototype._setFont =
 	)
 {
 	var
-		align,
-		base,
-		cx,
-		fill;
+		cx;
 
 	cx = this._cx;
 
-	fill = font.fill;
-
-	// FIXME
-	if( fill.reflect === 'euclid_color' )
-	{
-		fill = fill.css;
-	}
-
-	align = font.align;
-
-	base = font.base;
-
-/**/if( CHECK )
-/**/{
-/**/	if(	fill === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( align === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( base === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
 	cx.font = font.css;
 
-	cx.fillStyle = fill;
+	cx.fillStyle = font.fill.css;
 
-	cx.textAlign = align;
+	cx.textAlign = font.align;
 
-	cx.textBaseline = base;
+	cx.textBaseline = font.base;
 };
 
 
@@ -907,12 +851,7 @@ euclid_display.prototype.withinSketch =
 
 	cx.beginPath( );
 
-	this._sketch(
-		shape,
-		0,
-		0.5,
-		view
-	);
+	this._sketch( shape, 0, 0.5, view );
 
 	return cx.isPointInPath( p.x, p.y );
 };
@@ -1013,10 +952,8 @@ euclid_display.prototype._colorStyle =
 /**/		{
 /**/			if( !pc || !r1 )
 /**/			{
-/**/				throw new Error(
-/**/					style.gradient +
-/**/						'gradient misses gradient[PC|R0|R1]'
-/**/				);
+/**/				// gradient misses gradient[PC|R0|R1]
+/**/				throw new Error( );
 /**/			}
 /**/		}
 
@@ -1077,19 +1014,9 @@ euclid_display.prototype._edge =
 
 	cx.beginPath( );
 
-	this._sketch(
-		shape,
-		style.border,
-		0.5,
-		view
-	);
+	this._sketch( shape, style.border, 0.5, view );
 
-	cx.strokeStyle =
-		this._colorStyle(
-			style.color,
-			shape,
-			view
-		);
+	cx.strokeStyle = this._colorStyle( style.color, shape, view );
 
 	cx.lineWidth = style.width;
 

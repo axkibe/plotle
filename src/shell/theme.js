@@ -3,6 +3,7 @@
 |
 | FIXME call shell_theme
 | FIXME remove and put it all to gruga
+| FIXME string styles
 */
 
 
@@ -12,6 +13,7 @@
 */
 var
 	theme,
+	euclid_color,
 	euclid_margin,
 	shell_fontPool;
 
@@ -46,9 +48,7 @@ theme =
 	zoom :
 	{
 		base : 1.1,
-
 		min : -15,
-
 		max : 15
 	},
 
@@ -58,9 +58,7 @@ theme =
 	note :
 	{
 		minWidth : 30,
-
 		minHeight : 30,
-
 		innerMargin  :
 			euclid_margin.create(
 				'n', 4,
@@ -68,11 +66,8 @@ theme =
 				's', 4,
 				'w', 5
 			),
-
 		style : 'note',
-
 		cornerRadius : 8,
-
 		// default fontsize
 		fontsize : 13
 	},
@@ -83,9 +78,7 @@ theme =
 	portal :
 	{
 		minWidth : 40,
-
 		minHeight : 40,
-
 		style : 'portal',
 
 		/*
@@ -94,9 +87,7 @@ theme =
 		input :
 		{
 			style : 'portalInput',
-
 			rounding : 3,
-
 			pitch : 5
 		},
 
@@ -106,11 +97,8 @@ theme =
 		moveTo :
 		{
 			style : 'portalButton',
-
 			width : 80,
-
 			height : 22,
-
 			rounding : 11
 		}
 	},
@@ -122,16 +110,9 @@ theme =
 	label :
 	{
 		minSize : 8,
-
 		style : 'label',
-
 		innerMargin  :
-			euclid_margin.create(
-				'n', 1,
-				'e', 1,
-				's', 1,
-				'w', 1
-			)
+			euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 )
 	},
 
 
@@ -152,7 +133,6 @@ theme =
 			ellipse :
 			{
 				width : 1600,
-
 				height : 1600
 			},
 
@@ -162,14 +142,8 @@ theme =
 
 				steps :
 				[
-					[
-						0,
-						'rgba( 255, 255,  20, 0.955 )'
-					],
-					[
-						1,
-						'rgba( 255, 255, 180, 0.955 )'
-					]
+					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
 				]
 			},
 
@@ -177,17 +151,13 @@ theme =
 			[
 				{
 					border : 1,
-
 					width : 1,
-
 					color : 'rgb( 255, 94, 44 )'
 				},
 
 				{
 					border : 0,
-
 					width : 1,
-
 					color : 'rgb( 94, 94,  0)'
 				}
 			]
@@ -200,13 +170,10 @@ theme =
 		{
 
 			width : 176,
-
 			height : 1010,
-
 			ellipse :
 			{
 				width : 1700,
-
 				height : 1700
 			},
 
@@ -216,14 +183,8 @@ theme =
 
 				steps :
 				[
-					[
-						0,
-						'rgba( 255, 255,  20, 0.955 )'
-					],
-					[
-						1,
-						'rgba( 255, 255, 205, 0.955 )'
-					]
+					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 205, 0.955 )' ]
 				]
 			},
 
@@ -231,16 +192,12 @@ theme =
 			[
 				{
 					border : 1,
-
 					width : 1,
-
 					color : 'rgb( 255, 94, 44 )'
 				},
 				{
 					border : 0,
-
 					width : 1,
-
 					color : 'rgb( 94, 94,  0)'
 				}
 			]
@@ -260,8 +217,8 @@ theme =
 
 				steps :
 				[
-					[ 0, 'rgba( 255, 255, 248, 0.955 )' ],
-					[ 1, 'rgba( 255, 255, 210, 0.955 )' ]
+					[ 0, euclid_color.rgb( 255, 255, 248 ) ],
+					[ 1, euclid_color.rgb( 255, 255, 210 ) ]
 				]
 			},
 
@@ -277,16 +234,13 @@ theme =
 	{
 		style :
 		{
-			fill : 'rgba( 243, 203, 255, 0.9 )',
-
+			fill : euclid_color.rgba( 243, 203, 255, 0.9 ),
 			edge :
 			[
 				{
 					border : 0,
-
 					width : 1,
-
-					color : 'black'
+					color : euclid_color.black
 				}
 			]
 		}
@@ -300,16 +254,14 @@ theme =
 	{
 		style :
 		{
-			fill : 'rgb( 255, 188, 87 )',
+			fill : euclid_color.rgb( 255, 188, 87 ),
 
 			edge :
 			[
 				{
 					border : 0,
-
 					width : 1,
-
-					color : 'rgb( 221, 154, 52 )'
+					color : euclid_color.rgb( 221, 154, 52 )
 				}
 			]
 		},
@@ -343,16 +295,14 @@ theme =
 
 		style :
 		{
-			fill : 'rgba( 255, 240, 150, 0.9 )',
+			fill : euclid_color.rgba( 255, 240, 150, 0.9 ),
 
 			edge :
 			[
 				{
 					border : 0,
-
 					width : 1,
-
-					color : 'rgba( 255, 180, 110, 0.9 )'
+					color : euclid_color.rgba( 255, 180, 110, 0.9 )
 				}
 			]
 		}
@@ -366,23 +316,19 @@ theme =
 	{
 		style :
 		{
-			fill : 'rgba( 255, 225, 40, 0.5 )',
+			fill : euclid_color.rgba( 255, 225, 40, 0.5 ),
 
 			edge :
 			[
 				{
 					border : 0,
-
 					width : 3,
-
-					color : 'rgba( 255, 225, 80, 0.4 )'
+					color : euclid_color.rgba( 255, 225, 80, 0.4 )
 				},
 				{
 					border : 0,
-
 					width : 1,
-
-					color : 'rgba( 200, 100, 0,  0.8 )'
+					color : euclid_color.rgba( 200, 100, 0,  0.8 )
 				}
 			],
 
@@ -390,30 +336,22 @@ theme =
 			[
 				{
 					border : 0,
-
 					width : 3,
-
-					color : 'rgba( 255, 183, 15, 0.5 )'
+					color : euclid_color.rgba( 255, 183, 15, 0.5 )
 				}
 			]
 		},
 
 		innerMargin :
-			euclid_margin.create(
-				'n', 1,
-				'e', 1,
-				's', 1,
-				'w', 1
-			),
+			euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 ),
 
 		// offset for creation // FUTURE calculate dynamically
 		spawnOffset :
 		{
 			x : 44,
-
 			y : 12
 		}
 	}
 };
 
-} ) ();
+} )( );
