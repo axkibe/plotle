@@ -1,9 +1,12 @@
 /*
 | Creates font objects by size and code.
+|
+| FIXME this is pretty old style as well
 */
 
 
 var
+	euclid_color,
 	euclid_font,
 	shell_fontPool;
 
@@ -35,7 +38,7 @@ _styles =
 	{
 		type   : 'font',
 		family : '(default)',
-		fill   : 'black',
+		fill   : euclid_color.black,
 		align  : 'center',
 		base   : 'alphabetic'
 	},

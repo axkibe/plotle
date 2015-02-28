@@ -27,38 +27,28 @@ if( JION )
 			{
 				size :
 					{
-						comment :
-							'font size',
-						type :
-							'number'
+						comment : 'font size',
+						type : 'number'
 					},
 				family :
 					{
-						comment :
-							'font family',
-						type :
-							'string'
+						comment : 'font family',
+						type : 'string'
 					},
 				align :
 					{
-						comment :
-							'horizonal alignment',
-						type :
-							'string'
+						comment : 'horizonal alignment',
+						type : 'string'
 					},
 				fill :
 					{
-						comment :
-							'font color',
-						type :
-							'string'
+						comment : 'font color',
+						type : [ 'string', 'euclid_color' ]  // FIXME
 					},
 				base :
 					{
-						comment :
-							'vertical alignment',
-						type :
-							'string'
+						comment : 'vertical alignment',
+						type : 'string'
 					}
 			}
 	};

@@ -834,8 +834,13 @@ euclid_display.prototype._setFont =
 
 	cx = this._cx;
 
-	// already setted this font
 	fill = font.fill;
+
+	// FIXME
+	if( fill.reflect === 'euclid_color' )
+	{
+		fill = fill.css;
+	}
 
 	align = font.align;
 
