@@ -43,7 +43,7 @@ if( JION )
 				fill :
 					{
 						comment : 'font color',
-						type : [ 'string', 'euclid_color' ]  // FIXME
+						type : 'euclid_color'
 					},
 				base :
 					{
