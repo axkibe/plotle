@@ -69,17 +69,6 @@ prototype = euclid_color.prototype;
 
 
 /*
-| Black.
-*/
-euclid_color.black =
-	euclid_color.create(
-		'red', 0,
-		'green', 0,
-		'blue', 0
-	);
-
-
-/*
 | Shortcut creator.
 */
 euclid_color.rgb =
@@ -153,6 +142,30 @@ jools.lazyValue(
 	}
 );
 
+
+/*-----------------
+| precreated colors
+*-----------------*/
+
+/*
+| Black.
+*/
+euclid_color.black =
+	euclid_color.create(
+		'red', 0,
+		'green', 0,
+		'blue', 0
+	);
+
+/*
+| Black.
+*/
+euclid_color.white =
+	euclid_color.create(
+		'red', 255,
+		'green', 255,
+		'blue', 255
+	);
 
 
 

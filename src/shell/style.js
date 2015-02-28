@@ -416,7 +416,7 @@ shell_style.styles =
 
 					width : 3,
 
-					color : 'rgba( 255, 183, 15, 0.5 )'
+					color : euclid_color.rgba( 255, 183, 15, 0.5 )
 				}
 			]
 		}
@@ -436,7 +436,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgb( 255, 219, 165 )'
+					color : euclid_color.rgb( 255, 219, 165 )
 				}
 			]
 		}
@@ -453,7 +453,7 @@ shell_style.styles =
 		*/
 		normal :
 		{
-			fill : 'rgba( 255, 237, 210, 0.5 )',
+			fill : euclid_color.rgba( 255, 237, 210, 0.5 ),
 
 			edge :
 			[
@@ -462,7 +462,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgb( 255, 141, 66 )'
+					color : euclid_color.rgb( 255, 141, 66 )
 				}
 			]
 		},
@@ -472,7 +472,7 @@ shell_style.styles =
 		*/
 		hover :
 		{
-			fill : 'rgba( 255, 188, 88, 0.7 )',
+			fill : euclid_color.rgba( 255, 188, 88, 0.7 ),
 
 			edge :
 			[
@@ -510,7 +510,7 @@ shell_style.styles =
 		*/
 		hofoc :
 		{
-			fill : 'rgba( 255, 188, 88, 0.7 )',
+			fill : euclid_color.rgba( 255, 188, 88, 0.7 ),
 
 			edge :
 			[
@@ -519,7 +519,7 @@ shell_style.styles =
 
 					width  : 1.5,
 
-					color : 'rgb( 255, 99, 188 )'
+					color : euclid_color.rgb( 255, 99, 188 )
 				}
 			]
 		}
@@ -540,7 +540,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgba( 100, 100, 0, 0.1 )'
+					color : euclid_color.rgba( 100, 100, 0, 0.1 )
 				}
 			]
 		},
@@ -554,7 +554,7 @@ shell_style.styles =
 
 					width : 3,
 
-					color : 'rgba( 255, 183, 15, 0.5 )'
+					color : euclid_color.rgba( 255, 183, 15, 0.5 )
 				}
 			]
 		}
@@ -571,7 +571,7 @@ shell_style.styles =
 		*/
 		normal :
 		{
-			fill : 'white',
+			fill : euclid_color.white,
 
 			edge :
 			[
@@ -587,15 +587,14 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'black'
+					color : euclid_color.black
 				}
 			]
 		},
 
 		hover :
 		{
-			fill :
-				'white',
+			fill : euclid_color.white,
 
 			edge :
 			[
