@@ -924,6 +924,9 @@ euclid_display.prototype._colorStyle =
 	)
 {
 	var
+		a,
+		aZ,
+		color,
 		grad,
 		pc,
 		pnw,
@@ -1032,15 +1035,20 @@ euclid_display.prototype._colorStyle =
 	steps = style.steps;
 
 	for(
-		var i = 0;
-		i < steps.length;
-		i++
+		a = 0, aZ = steps.length;
+		a < aZ;
+		a++
 	)
 	{
-		grad.addColorStop(
-			steps[ i ][ 0 ],
-			steps[ i ][ 1 ]
-		);
+		color = steps[ a ][ 1 ];
+
+		// FIXME
+		if( color.reflect === 'euclid_color' )
+		{
+			color = color.css;
+		}
+
+		grad.addColorStop( steps[ a ][ 0 ], color );
 	}
 
 	return grad;

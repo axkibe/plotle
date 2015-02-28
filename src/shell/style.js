@@ -1,5 +1,7 @@
 /*
 | Styles.
+|
+| FIXME steps
 */
 
 
@@ -36,7 +38,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgba( 196, 94, 44, 0.4 )'
+					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
 		},
@@ -46,7 +48,7 @@ shell_style.styles =
 		*/
 		hover :
 		{
-			fill : 'rgba( 255, 235, 210, 0.7 )',
+			fill : euclid_color.rgba( 255, 235, 210, 0.7 ),
 
 			edge :
 			[
@@ -55,7 +57,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgba( 196, 94, 44, 0.4 )'
+					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
 		},
@@ -65,7 +67,7 @@ shell_style.styles =
 		*/
 		focus :
 		{
-			fill : 'rgb( 255, 188, 88 )',
+			fill : euclid_color.rgb( 255, 188, 88 ),
 
 			edge :
 			[
@@ -74,7 +76,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgba( 196, 94, 44, 0.4 )'
+					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
 		},
@@ -84,7 +86,7 @@ shell_style.styles =
 		*/
 		hofoc :
 		{
-			fill : 'rgb( 255, 188, 88 )',
+			fill : euclid_color.rgb( 255, 188, 88 ),
 
 			edge :
 			[
@@ -93,7 +95,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgba( 196, 94, 44, 0.4 )'
+					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
 		}
@@ -109,18 +111,9 @@ shell_style.styles =
 		*/
 		normal :
 		{
-			//fill : 'rgba( 255, 255, 240, 0.7 )',
+			fill : null,
 
-			edge :
-			[
-				/*
-				{
-					border : 0,
-					width  : 1,
-					color  : 'rgba( 196, 94, 44, 0.4 )'
-				}
-				*/
-			]
+			edge : [ ]
 		},
 
 		/*
@@ -128,14 +121,14 @@ shell_style.styles =
 		*/
 		hover :
 		{
-			fill : 'rgba( 255, 235, 210, 0.7 )',
+			fill : euclid_color.rgba( 255, 235, 210, 0.7 ),
 
 			edge :
 			[
 				{
 					border : 0,
 					width  : 1,
-					color  : 'rgba( 196, 94, 44, 0.4 )'
+					color  : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
 		},
@@ -145,7 +138,7 @@ shell_style.styles =
 		*/
 		focus :
 		{
-			fill : 'rgb( 255, 188, 88 )',
+			fill : euclid_color.rgb( 255, 188, 88 ),
 
 			edge :
 			[
@@ -154,7 +147,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgba( 196, 94, 44, 0.4 )'
+					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
 		},
@@ -164,7 +157,7 @@ shell_style.styles =
 		*/
 		hofoc :
 		{
-			fill : 'rgb( 255, 188, 88 )',
+			fill : euclid_color.rgb( 255, 188, 88 ),
 
 			edge :
 			[
@@ -173,7 +166,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgba( 196, 94, 44, 0.4 )'
+					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
 		}
@@ -187,7 +180,7 @@ shell_style.styles =
 	{
 		normal :
 		{
-			fill : 'black',
+			fill : euclid_color.black,
 
 			edge :
 			[
@@ -196,7 +189,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgba( 128, 0, 0, 1 )'
+					color : euclid_color.rgb( 128, 0, 0 )
 				}
 			]
 		}
@@ -210,7 +203,7 @@ shell_style.styles =
 	{
 		normal :
 		{
-			fill : '#ff0000',
+			fill : euclid_color.rgb( 255, 0, 0 ),
 
 			edge :
 			[
@@ -219,7 +212,7 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgba( 128, 0, 0, 1 )'
+					color : euclid_color.rgb( 128, 0, 0 )
 				}
 			]
 		}
@@ -237,7 +230,7 @@ shell_style.styles =
 		normal :
 		{
 
-			fill : 'rgba( 255, 255, 240, 0.7 )',
+			fill : euclid_color.rgba( 255, 255, 240, 0.7 ),
 
 			edge :
 			[
@@ -246,7 +239,7 @@ shell_style.styles =
 
 					width : 2,
 
-					color : 'rgba( 196, 94, 44, 0.7 )'
+					color : euclid_color.rgba( 196, 94, 44, 0.7 )
 				}
 			]
 		},
@@ -256,7 +249,7 @@ shell_style.styles =
 		*/
 		hover :
 		{
-			fill : 'rgba( 255, 235, 210, 0.7 )',
+			fill : euclid_color.rgba( 255, 235, 210, 0.7 ),
 
 			edge :
 			[
@@ -265,7 +258,7 @@ shell_style.styles =
 
 					width  : 2,
 
-					color : 'rgba( 196, 94, 44, 0.7 )'
+					color : euclid_color.rgba( 196, 94, 44, 0.7 )
 				}
 			]
 		},
@@ -275,7 +268,7 @@ shell_style.styles =
 		*/
 		focus :
 		{
-			fill : 'rgba( 255, 255, 240, 0.7 )',
+			fill : euclid_color.rgba( 255, 255, 240, 0.7 ),
 
 			edge :
 			[
@@ -284,14 +277,14 @@ shell_style.styles =
 
 					width : 1.5,
 
-					color : 'rgb( 255, 99, 188 )'
+					color : euclid_color.rgb( 255, 99, 188 )
 				},
 				{
 					border : 1,
 
 					width : 2,
 
-					color : 'rgba( 196, 94, 44, 0.7 )'
+					color : euclid_color.rgba( 196, 94, 44, 0.7 )
 				}
 			]
 		},
@@ -299,8 +292,7 @@ shell_style.styles =
 
 		hofoc :
 		{
-			fill :
-				'rgba( 255, 235, 210, 0.7 )',
+			fill : euclid_color.rgba( 255, 235, 210, 0.7 ),
 
 			edge :
 			[
@@ -309,14 +301,14 @@ shell_style.styles =
 
 					width : 1.5,
 
-					color : 'rgb( 255, 99, 188 )'
+					color : euclid_color.rgb( 255, 99, 188 ),
 				},
 				{
 					border : 1,
 
 					width : 2,
 
-					color : 'rgba( 196, 94, 44, 0.7 )'
+					color : euclid_color.rgba( 196, 94, 44, 0.7 )
 				}
 			]
 		}
@@ -332,15 +324,15 @@ shell_style.styles =
 	{
 		normal :
 		{
+			// FIXME jionize
 			fill :
 			{
-				gradient :
-					'askew',
+				gradient : 'askew',
 
 				steps :
 				[
-					[ 0, 'rgba( 255, 255, 248, 0.955 )' ],
-					[ 1, 'rgba( 255, 255, 160, 0.955 )' ]
+					[ 0, euclid_color.rgba( 255, 255, 248, 0.955 ) ],
+					[ 1, euclid_color.rgba( 255, 255, 160, 0.955 ) ]
 				]
 			},
 
@@ -351,14 +343,14 @@ shell_style.styles =
 
 					width : 1,
 
-					color : 'rgb( 255, 188, 87 )'
+					color : euclid_color.rgb( 255, 188, 87 )
 				},
 				{
 					border : 0,
 
 					width : 1,
 
-					color : 'black'
+					color : euclid_color.black
 				}
 			]
 		},
@@ -372,7 +364,7 @@ shell_style.styles =
 
 					width : 3,
 
-					color : 'rgba( 255, 183, 15, 0.5 )'
+					color : euclid_color.rgba( 255, 183, 15, 0.5 )
 				}
 			]
 		}
@@ -391,8 +383,8 @@ shell_style.styles =
 
 				steps :
 				[
-					[ 0, 'rgba( 255, 255, 248, 0.955 )' ],
-					[ 1, 'rgba( 255, 255, 160, 0.955 )' ]
+					[ 0, euclid_color.rgba( 255, 255, 248, 0.955 ) ],
+					[ 1, euclid_color.rgba( 255, 255, 160, 0.955 ) ]
 				]
 			},
 
@@ -403,14 +395,14 @@ shell_style.styles =
 
 					width : 6,
 
-					color : 'rgb( 255, 220, 128 )'
+					color : euclid_color.rgb( 255, 220, 128 )
 				},
 				{
 					border : 0,
 
 					width : 1,
 
-					color : 'black'
+					color : euclid_color.black
 				}
 			]
 		},

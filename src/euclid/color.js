@@ -69,6 +69,17 @@ prototype = euclid_color.prototype;
 
 
 /*
+| Black.
+*/
+euclid_color.black =
+	euclid_color.create(
+		'red', 0,
+		'green', 0,
+		'blue', 0
+	);
+
+
+/*
 | Shortcut creator.
 */
 euclid_color.rgb =
