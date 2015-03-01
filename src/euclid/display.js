@@ -1,5 +1,7 @@
 /*
 | Wrapper around HTML5 canvas.
+|
+| FIXME check all "edge"
 */
 
 
@@ -370,7 +372,8 @@ euclid_display.prototype.edge =
 /**/	}
 /**/}
 
-	edge = style.edge;
+	// FIXME
+	edge = style.border || style.edge;
 
 	if( Array.isArray( edge ) )
 	{
@@ -484,6 +487,8 @@ euclid_display.prototype.paint =
 	)
 {
 	var
+		a,
+		aZ,
 		edgeStyle,
 		fillStyle,
 		cx;
@@ -498,7 +503,8 @@ euclid_display.prototype.paint =
 
 	fillStyle = style.fill;
 
-	edgeStyle = style.edge;
+	// FIXME
+	edgeStyle = style.border || style.edge;
 
 	cx = this._cx;
 
@@ -515,22 +521,14 @@ euclid_display.prototype.paint =
 
 	if( Array.isArray( edgeStyle ) )
 	{
-		for(var i = 0; i < edgeStyle.length; i++)
+		for( a = 0, aZ = edgeStyle.length; a < aZ; a++)
 		{
-			this._edge(
-				edgeStyle[ i ],
-				shape,
-				view
-			);
+			this._edge( edgeStyle[ a ], shape, view );
 		}
 	}
 	else
 	{
-		this._edge(
-			edgeStyle,
-			shape,
-			view
-		);
+		this._edge( edgeStyle, shape, view );
 	}
 };
 
@@ -997,11 +995,23 @@ euclid_display.prototype._edge =
 
 	cx.beginPath( );
 
-	this._sketch( shape, style.border, 0.5, view );
+	if( style.reflect === 'euclid_border' )
+	{
+		this._sketch( shape, style.distance, 0.5, view );
 
-	cx.strokeStyle = this._colorStyle( style.color, shape, view );
+		cx.strokeStyle = this._colorStyle( style.color, shape, view );
 
-	cx.lineWidth = style.width;
+		cx.lineWidth = style.width;
+	}
+	else
+	{
+		// FIXME remove
+		this._sketch( shape, style.border, 0.5, view );
+
+		cx.strokeStyle = this._colorStyle( style.color, shape, view );
+
+		cx.lineWidth = style.width;
+	}
 
 	cx.stroke( );
 };

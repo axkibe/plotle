@@ -6,6 +6,7 @@
 
 
 var
+	euclid_border,
 	euclid_color,
 	shell_accent,
 	shell_style;
@@ -31,14 +32,12 @@ shell_style.styles =
 		{
 			fill : euclid_color.rgba( 255, 255, 240, 0.7 ),
 
-			edge :
-			[
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.rgba( 196, 94, 44, 0.4 )
-				}
-			]
+			border :
+				euclid_border.create(
+					'distance', 0,
+					'width', 1,
+					'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+				)
 		},
 
 		/*

@@ -106,8 +106,7 @@ theme =
 	{
 		minSize : 8,
 		style : 'label',
-		innerMargin  :
-			euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 )
+		innerMargin  : euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 )
 	},
 
 
