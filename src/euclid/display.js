@@ -519,6 +519,7 @@ euclid_display.prototype.paint =
 		cx.fill( );
 	}
 
+	// FIXME no array
 	if( Array.isArray( edgeStyle ) )
 	{
 		for( a = 0, aZ = edgeStyle.length; a < aZ; a++)
@@ -526,7 +527,7 @@ euclid_display.prototype.paint =
 			this._edge( edgeStyle[ a ], shape, view );
 		}
 	}
-	else
+	else if( edgeStyle !== null )
 	{
 		this._edge( edgeStyle, shape, view );
 	}
