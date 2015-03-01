@@ -184,15 +184,12 @@ shell_style.styles =
 		hover :
 		{
 			fill : euclid_color.rgba( 255, 235, 210, 0.7 ),
-
-			edge :
-			[
-				{
-					border : 1,
-					width  : 2,
-					color : euclid_color.rgba( 196, 94, 44, 0.7 )
-				}
-			]
+			border :
+				euclid_border.create(
+					'distance', 1,
+					'width', 2,
+					'color', euclid_color.rgba( 196, 94, 44, 0.7 )
+				)
 		},
 
 		/*
@@ -323,14 +320,11 @@ shell_style.styles =
 
 		highlight :
 		{
-			edge :
-			[
-				{
-					border : 0,
-					width : 3,
-					color : euclid_color.rgba( 255, 183, 15, 0.5 )
-				}
-			]
+			border :
+				euclid_border.create(
+					'width', 3,
+					'color', euclid_color.rgba( 255, 183, 15, 0.5 )
+				)
 		}
 	},
 
@@ -341,14 +335,11 @@ shell_style.styles =
 	{
 		normal :
 		{
-			edge :
-			[
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.rgb( 255, 219, 165 )
-				}
-			]
+			border :
+				euclid_border.create(
+					'width', 1,
+					'color', euclid_color.rgb( 255, 219, 165 )
+				)
 		}
 	},
 
