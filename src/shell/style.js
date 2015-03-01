@@ -35,9 +35,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
@@ -54,9 +52,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
@@ -73,9 +69,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
@@ -92,9 +86,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
@@ -144,9 +136,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
@@ -163,9 +153,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgba( 196, 94, 44, 0.4 )
 				}
 			]
@@ -186,9 +174,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgb( 128, 0, 0 )
 				}
 			]
@@ -209,9 +195,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgb( 128, 0, 0 )
 				}
 			]
@@ -236,9 +220,7 @@ shell_style.styles =
 			[
 				{
 					border : 1,
-
 					width : 2,
-
 					color : euclid_color.rgba( 196, 94, 44, 0.7 )
 				}
 			]
@@ -255,9 +237,7 @@ shell_style.styles =
 			[
 				{
 					border : 1,
-
 					width  : 2,
-
 					color : euclid_color.rgba( 196, 94, 44, 0.7 )
 				}
 			]
@@ -274,16 +254,12 @@ shell_style.styles =
 			[
 				{
 					border : 2,
-
 					width : 1.5,
-
 					color : euclid_color.rgb( 255, 99, 188 )
 				},
 				{
 					border : 1,
-
 					width : 2,
-
 					color : euclid_color.rgba( 196, 94, 44, 0.7 )
 				}
 			]
@@ -298,16 +274,12 @@ shell_style.styles =
 			[
 				{
 					border : 2,
-
 					width : 1.5,
-
 					color : euclid_color.rgb( 255, 99, 188 ),
 				},
 				{
 					border : 1,
-
 					width : 2,
-
 					color : euclid_color.rgba( 196, 94, 44, 0.7 )
 				}
 			]
@@ -340,16 +312,12 @@ shell_style.styles =
 			[
 				{
 					border : 1,
-
 					width : 1,
-
 					color : euclid_color.rgb( 255, 188, 87 )
 				},
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.black
 				}
 			]
@@ -361,9 +329,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 3,
-
 					color : euclid_color.rgba( 255, 183, 15, 0.5 )
 				}
 			]
@@ -392,16 +358,12 @@ shell_style.styles =
 			[
 				{
 					border : 3,
-
 					width : 6,
-
 					color : euclid_color.rgb( 255, 220, 128 )
 				},
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.black
 				}
 			]
@@ -413,9 +375,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 3,
-
 					color : euclid_color.rgba( 255, 183, 15, 0.5 )
 				}
 			]
@@ -433,9 +393,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgb( 255, 219, 165 )
 				}
 			]
@@ -459,9 +417,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgb( 255, 141, 66 )
 				}
 			]
@@ -478,9 +434,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1.5,
-
 					color : euclid_color.rgb( 255, 141, 66 )
 				}
 			]
@@ -497,9 +451,7 @@ shell_style.styles =
 			[
 				{
 					border : 1,
-
 					width  : 1.5,
-
 					color : euclid_color.rgb( 255, 99, 188 )
 				}
 			]
@@ -516,9 +468,7 @@ shell_style.styles =
 			[
 				{
 					border : 1,
-
 					width  : 1.5,
-
 					color : euclid_color.rgb( 255, 99, 188 )
 				}
 			]
@@ -537,9 +487,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgba( 100, 100, 0, 0.1 )
 				}
 			]
@@ -551,9 +499,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 3,
-
 					color : euclid_color.rgba( 255, 183, 15, 0.5 )
 				}
 			]
@@ -577,16 +523,12 @@ shell_style.styles =
 			[
 				{
 					border : 1,
-
 					width : 1.5,
-
 					color : euclid_color.rgb( 255, 188, 87 )
 				},
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.black
 				}
 			]
@@ -600,16 +542,12 @@ shell_style.styles =
 			[
 				{
 					border : 1,
-
 					width : 2,
-
 					color : euclid_color.rgb( 255, 188, 87 )
 				},
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.rgb( 128, 128, 0 )
 				}
 			]
@@ -623,16 +561,12 @@ shell_style.styles =
 			[
 				{
 					border : 1,
-
 					width : 2,
-
 					color : euclid_color.rgb( 255, 99, 188 )
 				},
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.black
 				}
 			]
@@ -646,9 +580,7 @@ shell_style.styles =
 			[
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.black
 				}
 			]
@@ -683,16 +615,12 @@ shell_style.styles =
 			[
 				{
 					border : 1,
-
 					width : 1.5,
-
 					color : euclid_color.rgb( 255, 188, 87 )
 				},
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.black
 				}
 			]
@@ -709,16 +637,12 @@ shell_style.styles =
 			[
 				{
 					border : 1,
-
 					width : 2,
-
 					color : euclid_color.rgb( 255, 99, 188 )
 				},
 				{
 					border : 0,
-
 					width : 1,
-
 					color : euclid_color.black
 				}
 			]
@@ -743,9 +667,7 @@ shell_style.getStyle =
 
 	if( !style )
 	{
-		throw new Error(
-			'Invalid style name: ' + name
-		);
+		throw new Error( );
 	}
 
 	switch( accent )

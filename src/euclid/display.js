@@ -72,38 +72,6 @@ if( JION )
 
 
 /*
-| Initializer.
-*/
-euclid_display.prototype._init =
-	function( )
-{
-	var
-		cv;
-
-	cv = this._cv;
-
-	if( !cv )
-	{
-		cv =
-		this._cv =
-			document.createElement( 'canvas' );
-
-		this._cx = cv.getContext( '2d' );
-	}
-
-	if( cv.width !== this.width )
-	{
-		cv.width = this.width;
-	}
-
-	if( cv.height !== this.height )
-	{
-		cv.height = this.height;
-	}
-};
-
-
-/*
 | Creates a display around an existing HTML canvas.
 */
 euclid_display.createAroundHTMLCanvas =
@@ -137,26 +105,47 @@ euclid_display.createAroundHTMLCanvas =
 
 
 /*
-| Returns the silhoutte that entails the whole display.
+| Initializer.
 */
-jools.lazyValue(
-	euclid_display.prototype,
-	'silhoutte',
+euclid_display.prototype._init =
 	function( )
+{
+	var
+		cv;
+
+	cv = this._cv;
+
+	if( !cv )
 	{
-		return(
-			euclid_rect.create(
-				'pnw',
-					euclid_point.zero,
-				'pse',
-					euclid_point.create(
-						'x', this.width,
-						'y', this.height
-					)
-			)
-		);
+		cv =
+		this._cv =
+			document.createElement( 'canvas' );
+
+		this._cx = cv.getContext( '2d' );
 	}
-);
+
+	if( cv.width !== this.width )
+	{
+		cv.width = this.width;
+	}
+
+	if( cv.height !== this.height )
+	{
+		cv.height = this.height;
+	}
+};
+
+
+/*
+| The display is cleared.
+*/
+euclid_display.prototype.clear =
+	function( )
+{
+	this._cx.clearRect( 0, 0, this.width, this.height );
+};
+
+
 
 
 /*
@@ -195,6 +184,7 @@ euclid_display.prototype.clip =
 
 	cx.clip( );
 };
+
 
 /*
 | Removes the clipping
@@ -433,6 +423,120 @@ euclid_display.prototype.fill =
 
 
 /*
+| fillRect( style, rect )     -or-
+| fillRect( style, pnw, pse ) -or-
+| fillRect( style, nwx, nwy, width, height )
+*/
+euclid_display.prototype.fillRect =
+	function(
+		style,
+		a1,
+		a2,
+		a3,
+		a4
+	)
+{
+	var
+		cx;
+
+	cx = this._cx;
+
+	cx.fillStyle = style;
+
+	if( typeof( a1 ) === 'object' )
+	{
+		if( a1.reflect === 'euclid_rect' )
+		{
+			return this._cx.fillRect( a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y );
+		}
+		else if( a1.reflect === 'euclid_point' )
+		{
+			return this._cx.fillRect( a1.x, a1.y, a2.x, a2.y );
+		}
+
+		// fillRect not a rectangle
+		throw new Error( );
+	}
+
+	return this._cx.fillRect( a1, a2, a3, a4 );
+};
+
+
+/*
+| Sets the global alpha
+| FIXME remove
+*/
+euclid_display.prototype.globalAlpha =
+	function( a )
+{
+	this._cx.globalAlpha = a;
+};
+
+
+/*
+| Fills an aera and draws its borders.
+*/
+euclid_display.prototype.paint =
+	function(
+		style,
+		shape,
+		view
+	)
+{
+	var
+		edgeStyle,
+		fillStyle,
+		cx;
+
+/**/if( CHECK )
+/**/{
+/**/	if( arguments.length !== 3 )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	fillStyle = style.fill;
+
+	edgeStyle = style.edge;
+
+	cx = this._cx;
+
+	cx.beginPath( );
+
+	this._sketch( shape, 0, 0, view );
+
+	if( fillStyle )
+	{
+		cx.fillStyle = this._colorStyle( fillStyle, shape, view );
+
+		cx.fill( );
+	}
+
+	if( Array.isArray( edgeStyle ) )
+	{
+		for(var i = 0; i < edgeStyle.length; i++)
+		{
+			this._edge(
+				edgeStyle[ i ],
+				shape,
+				view
+			);
+		}
+	}
+	else
+	{
+		this._edge(
+			edgeStyle,
+			shape,
+			view
+		);
+	}
+};
+
+
+
+/*
 | Draws some text.
 |
 | Free string arguments
@@ -576,46 +680,6 @@ euclid_display.prototype.paintText =
 
 
 /*
-| fillRect( style, rect )     -or-
-| fillRect( style, pnw, pse ) -or-
-| fillRect( style, nwx, nwy, width, height )
-*/
-euclid_display.prototype.fillRect =
-	function(
-		style,
-		a1,
-		a2,
-		a3,
-		a4
-	)
-{
-	var
-		cx;
-
-	cx = this._cx;
-
-	cx.fillStyle = style;
-
-	if( typeof( a1 ) === 'object' )
-	{
-		if( a1.reflect === 'euclid_rect' )
-		{
-			return this._cx.fillRect( a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y );
-		}
-		else if( a1.reflect === 'euclid_point' )
-		{
-			return this._cx.fillRect( a1.x, a1.y, a2.x, a2.y );
-		}
-
-		// fillRect not a rectangle
-		throw new Error( );
-	}
-
-	return this._cx.fillRect( a1, a2, a3, a4 );
-};
-
-
-/*
 | The center point of the display.
 */
 jools.lazyValue(
@@ -637,91 +701,26 @@ jools.lazyValue(
 
 
 /*
-| Sets the global alpha
-| FIXME remove
+| Returns the silhoutte that entails the whole display.
 */
-euclid_display.prototype.globalAlpha =
-	function( a )
-{
-	this._cx.globalAlpha = a;
-};
-
-
-/*
-| The display is cleared.
-*/
-euclid_display.prototype.clear =
+jools.lazyValue(
+	euclid_display.prototype,
+	'silhoutte',
 	function( )
-{
-	this._cx.clearRect(
-		0,
-		0,
-		this.width,
-		this.height
-	);
-};
-
-
-/*
-| Fills an aera and draws its borders.
-*/
-euclid_display.prototype.paint =
-	function(
-		style,
-		shape,
-		view
-	)
-{
-	var
-		edgeStyle,
-		fillStyle,
-		cx;
-
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	fillStyle = style.fill;
-
-	edgeStyle = style.edge;
-
-	cx = this._cx;
-
-	cx.beginPath( );
-
-	this._sketch( shape, 0, 0, view );
-
-	if( fillStyle )
 	{
-		cx.fillStyle = this._colorStyle( fillStyle, shape, view );
-
-		cx.fill( );
-	}
-
-	if( Array.isArray( edgeStyle ) )
-	{
-		for(var i = 0; i < edgeStyle.length; i++)
-		{
-			this._edge(
-				edgeStyle[ i ],
-				shape,
-				view
-			);
-		}
-	}
-	else
-	{
-		this._edge(
-			edgeStyle,
-			shape,
-			view
+		return(
+			euclid_rect.create(
+				'pnw',
+					euclid_point.zero,
+				'pse',
+					euclid_point.create(
+						'x', this.width,
+						'y', this.height
+					)
+			)
 		);
 	}
-};
+);
 
 
 /*
@@ -796,29 +795,6 @@ euclid_display.prototype.scale =
 
 
 /*
-| Sets the font.
-*/
-euclid_display.prototype._setFont =
-	function(
-		font
-	)
-{
-	var
-		cx;
-
-	cx = this._cx;
-
-	cx.font = font.css;
-
-	cx.fillStyle = font.fill.css;
-
-	cx.textAlign = font.align;
-
-	cx.textBaseline = font.base;
-};
-
-
-/*
 | Returns true if a point is in a sketch.
 |
 | euclid_point -or-
@@ -855,6 +831,11 @@ euclid_display.prototype.withinSketch =
 
 	return cx.isPointInPath( p.x, p.y );
 };
+
+
+/*::::::::::::
+| Private
+:::::::::::::*/
 
 
 /*
@@ -1050,6 +1031,102 @@ jools.lazyValue(
 
 
 /*
+| Sets the font.
+*/
+euclid_display.prototype._setFont =
+	function(
+		font
+	)
+{
+	var
+		cx;
+
+	cx = this._cx;
+
+	cx.font = font.css;
+
+	cx.fillStyle = font.fill.css;
+
+	cx.textAlign = font.align;
+
+	cx.textBaseline = font.base;
+};
+
+
+/*
+| Sketches a shape.
+|
+| FIXME this is akward.
+*/
+euclid_display.prototype._sketch =
+	function(
+		shape,
+		border,
+		twist,
+		view
+	)
+{
+	if( shape.shape )
+	{
+		shape = shape.shape;
+	}
+
+	switch( shape.reflect )
+	{
+		case 'euclid_rect' :
+
+			return this._sketchRect( shape, border, twist, view );
+	}
+
+	if( shape.ray )
+	{
+		return this._sketchShape( shape, border, twist, view );
+	}
+
+	throw new Error( );
+};
+
+/*
+| Draws the rectangle.
+*/
+euclid_display.prototype._sketchRect =
+	function(
+		rect,
+		border,
+		twist,
+		view
+	)
+{
+	var
+		cx,
+		wx,
+		ny,
+		ex,
+		sy;
+
+	cx = this._cx;
+
+	wx = view.x( rect.pnw.x ) + border + twist;
+
+	ny = view.y( rect.pnw.y ) + border + twist;
+
+	ex = view.x( rect.pse.x ) - border + twist;
+
+	sy = view.y( rect.pse.y ) - border + twist;
+
+	cx.moveTo( wx, ny );
+
+	cx.lineTo( ex, ny );
+
+	cx.lineTo( ex, sy );
+
+	cx.lineTo( wx, sy );
+
+	cx.lineTo( wx, ny );
+};
+
+
+/*
 | Sketches a generic shape.
 */
 euclid_display.prototype._sketchShape =
@@ -1235,77 +1312,5 @@ euclid_display.prototype._sketchShape =
 /**/}
 };
 
-/*
-| Draws the rectangle.
-*/
-euclid_display.prototype._sketchRect =
-	function(
-		rect,
-		border,
-		twist,
-		view
-	)
-{
-	var
-		cx,
-		wx,
-		ny,
-		ex,
-		sy;
-
-	cx = this._cx;
-
-	wx = view.x( rect.pnw.x ) + border + twist;
-
-	ny = view.y( rect.pnw.y ) + border + twist;
-
-	ex = view.x( rect.pse.x ) - border + twist;
-
-	sy = view.y( rect.pse.y ) - border + twist;
-
-	cx.moveTo( wx, ny );
-
-	cx.lineTo( ex, ny );
-
-	cx.lineTo( ex, sy );
-
-	cx.lineTo( wx, sy );
-
-	cx.lineTo( wx, ny );
-};
-
-
-/*
-| Sketches a shape.
-|
-| FIXME this is akward.
-*/
-euclid_display.prototype._sketch =
-	function(
-		shape,
-		border,
-		twist,
-		view
-	)
-{
-	if( shape.shape )
-	{
-		shape = shape.shape;
-	}
-
-	switch( shape.reflect )
-	{
-		case 'euclid_rect' :
-
-			return this._sketchRect( shape, border, twist, view );
-	}
-
-	if( shape.ray )
-	{
-		return this._sketchShape( shape, border, twist, view );
-	}
-
-	throw new Error( );
-};
 
 } )( );
