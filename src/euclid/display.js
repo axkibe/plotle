@@ -373,7 +373,7 @@ euclid_display.prototype.edge =
 /**/}
 
 	// FIXME
-	edge = style.border || style.edge;
+	edge = style.border !== undefined ?  style.border : style.edge;
 
 	if( Array.isArray( edge ) )
 	{
@@ -504,7 +504,7 @@ euclid_display.prototype.paint =
 	fillStyle = style.fill;
 
 	// FIXME
-	edgeStyle = style.border || style.edge;
+	edgeStyle = style.border !== undefined ? style.border : style.edge;
 
 	cx = this._cx;
 
