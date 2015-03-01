@@ -311,11 +311,7 @@ jools.lazyValue(
 				'height', this.style.height
 			);
 
-		display.fill(
-			this.style,
-			this.silhoutte,
-			euclid_view.proper
-		);
+		display.fill( this.style, this.silhoutte, euclid_view.proper );
 
 		for(
 			r = 0, rZ = this.length;
@@ -326,11 +322,7 @@ jools.lazyValue(
 			this.atRank( r ).draw( display );
 		}
 
-		display.edge(
-			this.style,
-			this.silhoutte,
-			euclid_view.proper
-		);
+		display.edge( this.style, this.silhoutte, euclid_view.proper );
 
 		return display;
 	}

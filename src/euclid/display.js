@@ -352,7 +352,7 @@ euclid_display.prototype.drawImage =
 */
 euclid_display.prototype.edge =
 	function(
-		style,  // the style formated in meshcraft style notation.
+		style,  // the style
 		shape,  // an object which has sketch defined
 		view
 	)
@@ -391,7 +391,7 @@ euclid_display.prototype.edge =
 */
 euclid_display.prototype.fill =
 	function(
-		style,   // the style formated in meshcraft style notation.
+		style,   // the style
 		shape,   // an object which has sketch defined
 		view
 	)
@@ -839,7 +839,9 @@ euclid_display.prototype.withinSketch =
 
 
 /*
-| Returns a HTML5 color style for a meshcraft style notation.
+| Returns a HTML5 color style
+|
+| FIXME remove
 */
 euclid_display.prototype._colorStyle =
 	function(
@@ -863,7 +865,7 @@ euclid_display.prototype._colorStyle =
 	// FIXME remove
 	if( style.substring )
 	{
-		return style;
+		throw new Error( );
 	}
 
 	else if( !style.gradient )
@@ -983,7 +985,7 @@ euclid_display.prototype._colorStyle =
 */
 euclid_display.prototype._edge =
 	function(
-		style,  // the style formated in meshcraft style notation.
+		style,  // the style
 		shape,  // an object which has sketch defined
 		view
 	)

@@ -60,12 +60,7 @@ theme =
 		minWidth : 30,
 		minHeight : 30,
 		innerMargin  :
-			euclid_margin.create(
-				'n', 4,
-				'e', 5,
-				's', 4,
-				'w', 5
-			),
+			euclid_margin.create( 'n', 4, 'e', 5, 's', 4, 'w', 5 ),
 		style : 'note',
 		cornerRadius : 8,
 		// default fontsize
@@ -142,8 +137,8 @@ theme =
 
 				steps :
 				[
-					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
-					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
+					[ 0, euclid_color.rgba( 255, 255,  20, 0.955 ) ],
+					[ 1, euclid_color.rgba( 255, 255, 180, 0.955 ) ]
 				]
 			},
 
@@ -152,13 +147,13 @@ theme =
 				{
 					border : 1,
 					width : 1,
-					color : 'rgb( 255, 94, 44 )'
+					color : euclid_color.rgb( 255, 94, 44 )
 				},
 
 				{
 					border : 0,
 					width : 1,
-					color : 'rgb( 94, 94,  0)'
+					color : euclid_color.rgb( 94, 94,  0)
 				}
 			]
 		},
@@ -183,8 +178,8 @@ theme =
 
 				steps :
 				[
-					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
-					[ 1, 'rgba( 255, 255, 205, 0.955 )' ]
+					[ 0, euclid_color.rgba( 255, 255,  20, 0.955 ) ],
+					[ 1, euclid_color.rgba( 255, 255, 205, 0.955 ) ]
 				]
 			},
 
@@ -193,12 +188,12 @@ theme =
 				{
 					border : 1,
 					width : 1,
-					color : 'rgb( 255, 94, 44 )'
+					color : euclid_color.rgb( 255, 94, 44 )
 				},
 				{
 					border : 0,
 					width : 1,
-					color : 'rgb( 94, 94,  0)'
+					color : euclid_color.rgb( 94, 94,  0)
 				}
 			]
 		}
