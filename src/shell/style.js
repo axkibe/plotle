@@ -258,31 +258,27 @@ shell_style.styles =
 				]
 			},
 
-			edge :
-			[
-				{
-					border : 1,
-					width : 1,
-					color : euclid_color.rgb( 255, 188, 87 )
-				},
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.black
-				}
-			]
+			border :
+				euclid_borderRay.create(
+					'ray:append',
+					euclid_border.create(
+						'distance', 1,
+						'color', euclid_color.rgb( 255, 188, 87 )
+					),
+					'ray:append',
+					euclid_border.create(
+						'color', euclid_color.black
+					)
+				)
 		},
 
 		highlight :
 		{
-			edge :
-			[
-				{
-					border : 0,
-					width : 3,
-					color : euclid_color.rgba( 255, 183, 15, 0.5 )
-				}
-			]
+			border :
+				euclid_border.create(
+					'width', 3,
+					'color', euclid_color.rgba( 255, 183, 15, 0.5 )
+				)
 		}
 	},
 
@@ -304,19 +300,19 @@ shell_style.styles =
 				]
 			},
 
-			edge :
-			[
-				{
-					border : 3,
-					width : 6,
-					color : euclid_color.rgb( 255, 220, 128 )
-				},
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.black
-				}
-			]
+			border :
+				euclid_borderRay.create(
+					'ray:append',
+					euclid_border.create(
+						'distance', 3,
+						'width', 6,
+						'color', euclid_color.rgb( 255, 220, 128 )
+					),
+					'ray:append',
+					euclid_border.create(
+						'color', euclid_color.black
+					)
+				)
 		},
 
 		highlight :
