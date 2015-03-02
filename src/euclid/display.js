@@ -375,11 +375,18 @@ euclid_display.prototype.edge =
 	// FIXME
 	edge = style.border !== undefined ?  style.border : style.edge;
 
-	if( Array.isArray( edge ) )
+	if( Array.isArray( edge ) ) // FIXME remove
 	{
 		for( a = 0, aZ = edge.length; a < aZ; a++ )
 		{
 			this._edge( edge[ a ], shape, view );
+		}
+	}
+	else if( edge.reflect === 'euclid_borderRay' )
+	{
+		for( a = 0, aZ = edge.length; a < aZ; a++ )
+		{
+			this._edge( edge.get( a ), shape, view );
 		}
 	}
 	else
@@ -519,12 +526,18 @@ euclid_display.prototype.paint =
 		cx.fill( );
 	}
 
-	// FIXME no array
-	if( Array.isArray( edgeStyle ) )
+	if( Array.isArray( edgeStyle ) )  // FIXME remove
 	{
-		for( a = 0, aZ = edgeStyle.length; a < aZ; a++)
+		for( a = 0, aZ = edgeStyle.length; a < aZ; a++ )
 		{
 			this._edge( edgeStyle[ a ], shape, view );
+		}
+	}
+	else if( edgeStyle.reflect === 'euclid_borderRay' )
+	{
+		for( a = 0, aZ = edgeStyle.length; a < aZ; a++ )
+		{
+			this._edge( edgeStyle.get( a ), shape, view );
 		}
 	}
 	else if( edgeStyle !== null )
