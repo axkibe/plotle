@@ -148,6 +148,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/euclid/borderRay.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/euclid/point.js',
 		'hasJion', true,
 		'inBundle', true,
