@@ -170,7 +170,6 @@ theme =
 				width : 1700,
 				height : 1700
 			},
-
 			fill :
 			{
 				gradient : 'radial',
@@ -181,20 +180,18 @@ theme =
 					[ 1, euclid_color.rgba( 255, 255, 205, 0.955 ) ]
 				]
 			},
-
-			edge :
-			[
-				{
-					border : 1,
-					width : 1,
-					color : euclid_color.rgb( 255, 94, 44 )
-				},
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.rgb( 94, 94,  0)
-				}
-			]
+			border :
+				euclid_borderRay.create(
+					'ray:append',
+					euclid_border.create(
+						'distance', 1,
+						'color', euclid_color.rgb( 255, 94, 44 )
+					),
+					'ray:append',
+					euclid_border.create(
+						'color', euclid_color.rgb( 94, 94, 0 )
+					)
+				)
 		}
 	},
 
@@ -208,15 +205,13 @@ theme =
 		{
 			fill : {
 				gradient : 'askew',
-
 				steps :
 				[
 					[ 0, euclid_color.rgb( 255, 255, 248 ) ],
 					[ 1, euclid_color.rgb( 255, 255, 210 ) ]
 				]
 			},
-
-			edge : [ ]
+			border : null
 		}
 	},
 
@@ -229,14 +224,7 @@ theme =
 		style :
 		{
 			fill : euclid_color.rgba( 243, 203, 255, 0.9 ),
-			edge :
-			[
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.black
-				}
-			]
+			border : euclid_border.simpleBlack
 		}
 	},
 
@@ -249,28 +237,18 @@ theme =
 		style :
 		{
 			fill : euclid_color.rgb( 255, 188, 87 ),
-
-			edge :
-			[
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.rgb( 221, 154, 52 )
-				}
-			]
+			border :
+				euclid_border.create(
+					'color', euclid_color.rgb( 221, 154, 52 )
+				)
 		},
-
 		// width
 		strength : 8,
-
 		// ellipse cap
 		ellipseA : 4,
-
 		ellipseB : 3,
-
 		// minimum height
 		minSize : 12,
-
 		// vertical distance from border of note
 		vdis : 5
 	},
@@ -282,23 +260,15 @@ theme =
 	handle :
 	{
 		maxSize : 12,
-
 		cdistance : 12,
-
 		edistance : 12,
-
 		style :
 		{
 			fill : euclid_color.rgba( 255, 240, 150, 0.9 ),
-
-			edge :
-			[
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.rgba( 255, 180, 110, 0.9 )
-				}
-			]
+			border :
+				euclid_border.create(
+					'color', euclid_color.rgba( 255, 180, 110, 0.9 )
+				)
 		}
 	},
 
@@ -311,21 +281,18 @@ theme =
 		style :
 		{
 			fill : euclid_color.rgba( 255, 225, 40, 0.5 ),
-
-			edge :
-			[
-				{
-					border : 0,
-					width : 3,
-					color : euclid_color.rgba( 255, 225, 80, 0.4 )
-				},
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.rgba( 200, 100, 0,  0.8 )
-				}
-			],
-
+			border :
+				euclid_borderRay.create(
+					'ray:append',
+					euclid_border.create(
+						'width', 3,
+						'color', euclid_color.rgba( 255, 225, 80, 0.4 )
+					),
+					'ray:append',
+					euclid_border.create(
+						'color', euclid_color.rgba( 200, 100, 0,  0.8 )
+					)
+				),
 			highlight :
 			[
 				{

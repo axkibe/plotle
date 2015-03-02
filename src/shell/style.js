@@ -266,9 +266,7 @@ shell_style.styles =
 						'color', euclid_color.rgb( 255, 188, 87 )
 					),
 					'ray:append',
-					euclid_border.create(
-						'color', euclid_color.black
-					)
+					euclid_border.simpleBlack
 				)
 		},
 
@@ -309,9 +307,7 @@ shell_style.styles =
 						'color', euclid_color.rgb( 255, 220, 128 )
 					),
 					'ray:append',
-					euclid_border.create(
-						'color', euclid_color.black
-					)
+					euclid_border.simpleBlack
 				)
 		},
 
@@ -435,7 +431,7 @@ shell_style.styles =
 		normal :
 		{
 			fill : euclid_color.white,
-			edge :
+			border :
 				euclid_borderRay.create(
 					'ray:append',
 					euclid_border.create(
@@ -451,51 +447,41 @@ shell_style.styles =
 		hover :
 		{
 			fill : euclid_color.white,
-
-			edge :
-			[
-				{
-					border : 1,
-					width : 2,
-					color : euclid_color.rgb( 255, 188, 87 )
-				},
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.rgb( 128, 128, 0 )
-				}
-			]
+			border :
+				euclid_borderRay.create(
+					'ray:append',
+					euclid_border.create(
+						'distance', 1,
+						'width', 2,
+						'color', euclid_color.rgb( 255, 188, 87 )
+					),
+					'ray:append',
+					euclid_border.create(
+						'color', euclid_color.rgb( 128, 128, 0 )
+					)
+				)
 		},
 
 		focus :
 		{
 			fill : euclid_color.white,
-			edge :
-			[
-				{
-					border : 1,
-					width : 2,
-					color : euclid_color.rgb( 255, 99, 188 )
-				},
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.black
-				}
-			]
+			border:
+				euclid_borderRay.create(
+					'ray:append',
+					euclid_border.create(
+						'distance', 1,
+						'width', 2,
+						'color', euclid_color.rgb( 255, 99, 188 )
+					),
+					'ray:append',
+					euclid_border.simpleBlack
+				)
 		},
 
 		hofoc :
 		{
 			fill : euclid_color.white,
-			edge :
-			[
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.black
-				}
-			]
+			border : euclid_border.simpleBlack
 		}
 	},
 
@@ -507,7 +493,7 @@ shell_style.styles =
 		normal :
 		{
 			fill : euclid_color.black,
-			edge : [ ]
+			border : null
 		}
 	},
 
@@ -521,19 +507,17 @@ shell_style.styles =
 		normal :
 		{
 			fill : euclid_color.white,
-			edge :
-			[
-				{
-					border : 1,
-					width : 1.5,
-					color : euclid_color.rgb( 255, 188, 87 )
-				},
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.black
-				}
-			]
+			border :
+				euclid_borderRay.create(
+					'ray:append',
+					euclid_border.create(
+						'distance', 1,
+						'width', 1.5,
+						'color', euclid_color.rgb( 255, 188, 87 )
+					),
+					'ray:append',
+					euclid_border.simpleBlack
+				)
 		},
 
 		/*
@@ -542,20 +526,17 @@ shell_style.styles =
 		focus :
 		{
 			fill : euclid_color.white,
-
-			edge :
-			[
-				{
-					border : 1,
-					width : 2,
-					color : euclid_color.rgb( 255, 99, 188 )
-				},
-				{
-					border : 0,
-					width : 1,
-					color : euclid_color.black
-				}
-			]
+			border :
+				euclid_borderRay.create(
+					'ray:append',
+					euclid_border.create(
+						'distance', 1,
+						'width', 2,
+						'color', euclid_color.rgb( 255, 99, 188 )
+					),
+					'ray:append',
+					euclid_border.simpleBlack
+				)
 		}
 	}
 };
