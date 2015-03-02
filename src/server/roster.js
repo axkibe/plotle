@@ -170,6 +170,11 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
+		'filePath', 'src/gradient/step.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/flow/token.js',
 		'hasJion', true,
 		'inBundle', true
