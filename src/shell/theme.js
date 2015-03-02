@@ -145,16 +145,15 @@ theme =
 
 			border :
 				euclid_borderRay.create(
-					'ray:init',
-					[
-						euclid_border.create(
-							'distance', 1,
-							'color', euclid_color.rgb( 255, 94, 44 )
-						),
-						euclid_border.create(
-							'color', euclid_color.rgb( 94, 94, 0 )
-						),
-					]
+					'ray:append',
+					euclid_border.create(
+						'distance', 1,
+						'color', euclid_color.rgb( 255, 94, 44 )
+					),
+					'ray:append',
+					euclid_border.create(
+						'color', euclid_color.rgb( 94, 94, 0 )
+					)
 				)
 		},
 

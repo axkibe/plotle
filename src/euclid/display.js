@@ -382,7 +382,7 @@ euclid_display.prototype.edge =
 			this._edge( edge[ a ], shape, view );
 		}
 	}
-	else if( edge.reflect === 'euclid_borderRay' )
+	else if( edge && edge.reflect === 'euclid_borderRay' )
 	{
 		for( a = 0, aZ = edge.length; a < aZ; a++ )
 		{
@@ -533,7 +533,7 @@ euclid_display.prototype.paint =
 			this._edge( edgeStyle[ a ], shape, view );
 		}
 	}
-	else if( edgeStyle.reflect === 'euclid_borderRay' )
+	else if( edgeStyle && edgeStyle.reflect === 'euclid_borderRay' )
 	{
 		for( a = 0, aZ = edgeStyle.length; a < aZ; a++ )
 		{

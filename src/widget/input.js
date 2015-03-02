@@ -9,6 +9,7 @@
 | Imports
 */
 var
+	euclid_color,
 	euclid_display,
 	euclid_ellipse,
 	euclid_measure,
@@ -167,6 +168,10 @@ if( JION )
 			[ ]
 	};
 }
+
+
+var
+	blackStyle;
 
 
 /*
@@ -378,11 +383,12 @@ jools.lazyValue(
 
 /*
 | Black style
+|
+| FIXME move to style
 */
-var blackStyle =
+blackStyle =
 	{
-		fill :
-			'black'
+		fill : euclid_color.black
 	};
 
 

@@ -7,6 +7,7 @@
 
 var
 	euclid_border,
+	euclid_borderRay,
 	euclid_color,
 	shell_accent,
 	shell_style;
@@ -198,44 +199,44 @@ shell_style.styles =
 		focus :
 		{
 			fill : euclid_color.rgba( 255, 255, 240, 0.7 ),
-
-			edge :
-			[
-				{
-					border : 2,
-					width : 1.5,
-					color : euclid_color.rgb( 255, 99, 188 )
-				},
-				{
-					border : 1,
-					width : 2,
-					color : euclid_color.rgba( 196, 94, 44, 0.7 )
-				}
-			]
+			border :
+				euclid_borderRay.create(
+					'ray:append',
+					euclid_border.create(
+						'distance', 2,
+						'width', 1.5,
+						'color', euclid_color.rgb( 255, 99, 188 )
+					),
+					'ray:append',
+					euclid_border.create(
+						'distance', 1,
+						'width', 2,
+						'color', euclid_color.rgba( 196, 94, 44, 0.7 )
+					)
+				)
 		},
 
 
 		hofoc :
 		{
 			fill : euclid_color.rgba( 255, 235, 210, 0.7 ),
-
-			edge :
-			[
-				{
-					border : 2,
-					width : 1.5,
-					color : euclid_color.rgb( 255, 99, 188 ),
-				},
-				{
-					border : 1,
-					width : 2,
-					color : euclid_color.rgba( 196, 94, 44, 0.7 )
-				}
-			]
+			border :
+				euclid_borderRay.create(
+					'ray:append',
+					euclid_border.create(
+						'distance', 2,
+						'width', 1.5,
+						'color', euclid_color.rgb( 255, 99, 188 )
+					),
+					'ray:append',
+					euclid_border.create(
+						'distance', 1,
+						'width', 2,
+						'color', euclid_color.rgba( 196, 94, 44, 0.7 )
+					)
+				)
 		}
 	},
-
-
 
 
 	/*
