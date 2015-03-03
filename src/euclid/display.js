@@ -526,23 +526,29 @@ euclid_display.prototype.paint =
 		cx.fill( );
 	}
 
-	if( Array.isArray( edgeStyle ) )  // FIXME remove
+	if( edgeStyle )
 	{
-		for( a = 0, aZ = edgeStyle.length; a < aZ; a++ )
+		switch( edgeStyle.reflect )
 		{
-			this._edge( edgeStyle[ a ], shape, view );
+			case 'euclid_borderRay' :
+
+				for( a = 0, aZ = edgeStyle.length; a < aZ; a++ )
+				{
+					this._edge( edgeStyle.get( a ), shape, view );
+				}
+
+				break;
+
+			case 'euclid_border' :
+
+				this._edge( edgeStyle, shape, view );
+
+				break;
+
+			default :
+
+				throw new Error( );
 		}
-	}
-	else if( edgeStyle && edgeStyle.reflect === 'euclid_borderRay' )
-	{
-		for( a = 0, aZ = edgeStyle.length; a < aZ; a++ )
-		{
-			this._edge( edgeStyle.get( a ), shape, view );
-		}
-	}
-	else if( edgeStyle !== null )
-	{
-		this._edge( edgeStyle, shape, view );
 	}
 };
 
