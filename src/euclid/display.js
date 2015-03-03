@@ -876,22 +876,16 @@ euclid_display.prototype._colorStyle =
 		r0,
 		r1;
 
-	// FIXME remove
-	if( style.substring )
-	{
-		throw new Error( );
-	}
+	console.log( style.reflect );
 
-	else if( !style.gradient )
+	switch( style.reflect )
 	{
-		return style.css;
-	}
+		case 'euclid_color' :
 
-	switch( style.gradient )
-	{
-		case 'askew' :
+			return style.css;
 
-			// FUTURE use gradientPNW
+		case 'gradient_askew' :
+
 /**/		if( CHECK )
 /**/		{
 /**/			if( !shape.pnw || !shape.pse )
@@ -909,7 +903,22 @@ euclid_display.prototype._colorStyle =
 					view.y( shape.pse.y )
 				);
 
+			// FIXME
+			colorStops = style.ray;
+
+			console.log( colorStops );
+
 			break;
+
+		default :
+
+			// FIXME remove
+
+			switch( style.gradient )
+	{
+		case 'askew' :
+
+			throw new Error( );
 
 		case 'horizontal' :
 
@@ -967,15 +976,23 @@ euclid_display.prototype._colorStyle =
 
 			break;
 
-		default :
-
-			throw new Error( );
+//		default :
+//			FIXME
+//			throw new Error( );
 	}
 
-	if( style.colorStops )
+	break;
+
+	}
+
+	// FIXME remove
+	if( !colorStops )
 	{
 		colorStops = style.colorStops;
+	}
 
+	if( colorStops )
+	{
 		for(
 			a = 0, aZ = colorStops.length;
 			a < aZ;

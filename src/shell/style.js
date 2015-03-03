@@ -7,6 +7,7 @@ var
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
+	gradient_askew,
 	gradient_colorStop,
 	shell_accent,
 	shell_style;
@@ -245,24 +246,19 @@ shell_style.styles =
 	{
 		normal :
 		{
-			// FIXME jionize
 			fill :
-			{
-				gradient : 'askew',
-
-				colorStops :
-				[
+				gradient_askew.create(
+					'ray:append',
 					gradient_colorStop.create(
 						'offset', 0,
 						'color', euclid_color.rgba( 255, 255, 248, 0.955 )
 					),
+					'ray:append',
 					gradient_colorStop.create(
 						'offset', 1,
 						'color', euclid_color.rgba( 255, 255, 160, 0.955 )
 					)
-				]
-			},
-
+				),
 			border :
 				euclid_borderRay.create(
 					'ray:append',
