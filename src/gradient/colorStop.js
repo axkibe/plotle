@@ -1,5 +1,5 @@
 /*
-| A gradient step (color stop)
+| A gradient color stop.
 */
 
 
@@ -17,20 +17,20 @@ if( JION )
 {
 	return {
 		id :
-			'gradient_step',
+			'gradient_colorStop',
 		attributes :
 			{
-				step :
+				offset :
 					{
 						comment :
-							'gradient step position 0-1',
+							'color stop offset (0-1)',
 						type :
 							'number'
 					},
 				color :
 					{
 						comment :
-							'the color for the step',
+							'color stop color',
 						type :
 							'euclid_color'
 					}

@@ -1,7 +1,5 @@
 /*
 | Styles.
-|
-| FIXME steps
 */
 
 
@@ -9,6 +7,7 @@ var
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
+	gradient_colorStop,
 	shell_accent,
 	shell_style;
 
@@ -251,10 +250,16 @@ shell_style.styles =
 			{
 				gradient : 'askew',
 
-				steps :
+				colorStops :
 				[
-					[ 0, euclid_color.rgba( 255, 255, 248, 0.955 ) ],
-					[ 1, euclid_color.rgba( 255, 255, 160, 0.955 ) ]
+					gradient_colorStop.create(
+						'offset', 0,
+						'color', euclid_color.rgba( 255, 255, 248, 0.955 )
+					),
+					gradient_colorStop.create(
+						'offset', 1,
+						'color', euclid_color.rgba( 255, 255, 160, 0.955 )
+					)
 				]
 			},
 
@@ -291,10 +296,16 @@ shell_style.styles =
 			{
 				gradient : 'radial',
 
-				steps :
+				colorStops :
 				[
-					[ 0, euclid_color.rgba( 255, 255, 248, 0.955 ) ],
-					[ 1, euclid_color.rgba( 255, 255, 160, 0.955 ) ]
+					gradient_colorStop.create(
+						'offset', 0,
+						'color', euclid_color.rgba( 255, 255, 248, 0.955 )
+					),
+					gradient_colorStop.create(
+						'offset', 1,
+						'color', euclid_color.rgba( 255, 255, 160, 0.955 )
+					)
 				]
 			},
 

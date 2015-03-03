@@ -866,11 +866,13 @@ euclid_display.prototype._colorStyle =
 		a,
 		aZ,
 		color,
+		cs,
+		colorStops,
 		grad,
 		pc,
 		pnw,
 		pse,
-		steps,
+		steps, // FIXME remove
 		r0,
 		r1;
 
@@ -889,7 +891,7 @@ euclid_display.prototype._colorStyle =
 	{
 		case 'askew' :
 
-			// FIXME use gradientPNW
+			// FUTURE use gradientPNW
 /**/		if( CHECK )
 /**/		{
 /**/			if( !shape.pnw || !shape.pse )
@@ -902,7 +904,8 @@ euclid_display.prototype._colorStyle =
 				this._cx.createLinearGradient(
 					view.x( shape.pnw.x ),
 					view.y( shape.pnw.y ),
-					view.x( shape.pnw.x ) + view.scale( shape.width / 10 ),
+					view.x( shape.pnw.x )
+					+ view.scale( shape.width / 10 ),
 					view.y( shape.pse.y )
 				);
 
@@ -969,23 +972,42 @@ euclid_display.prototype._colorStyle =
 			throw new Error( );
 	}
 
-	steps = style.steps;
-
-	for(
-		a = 0, aZ = steps.length;
-		a < aZ;
-		a++
-	)
+	if( style.colorStops )
 	{
-		color = steps[ a ][ 1 ];
+		colorStops = style.colorStops;
 
-		// FIXME
-		if( color.reflect === 'euclid_color' )
+		for(
+			a = 0, aZ = colorStops.length;
+			a < aZ;
+			a++
+		)
 		{
-			color = color.css;
-		}
+			cs = colorStops[ a ];
 
-		grad.addColorStop( steps[ a ][ 0 ], color );
+			grad.addColorStop( cs.offset, cs.color.css );
+		}
+	}
+	else
+	{
+		// FIXME remove
+		steps = style.steps;
+
+		for(
+			a = 0, aZ = steps.length;
+			a < aZ;
+			a++
+		)
+		{
+			color = steps[ a ][ 1 ];
+
+			// FIXME
+			if( color.reflect === 'euclid_color' )
+			{
+				color = color.css;
+			}
+
+			grad.addColorStop( steps[ a ][ 0 ], color );
+		}
 	}
 
 	return grad;

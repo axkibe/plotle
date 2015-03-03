@@ -170,7 +170,7 @@ module.exports =
 		'inTestPad', true
 	),
 	resource.create(
-		'filePath', 'src/gradient/step.js',
+		'filePath', 'src/gradient/colorStop.js',
 		'hasJion', true,
 		'inBundle', true
 	),
