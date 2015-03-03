@@ -17,6 +17,7 @@ var
 	euclid_borderRay,
 	euclid_color,
 	euclid_margin,
+	gradient_colorStop,
 	shell_fontPool;
 
 /*
@@ -136,10 +137,16 @@ theme =
 			{
 				gradient : 'radial',
 
-				steps :
+				colorStops :
 				[
-					[ 0, euclid_color.rgba( 255, 255,  20, 0.955 ) ],
-					[ 1, euclid_color.rgba( 255, 255, 180, 0.955 ) ]
+					gradient_colorStop.create(
+						'offset', 0,
+						'color', euclid_color.rgba( 255, 255,  20, 0.955 )
+					),
+					gradient_colorStop.create(
+						'offset', 1,
+						'color', euclid_color.rgba( 255, 255, 180, 0.955 )
+					)
 				]
 			},
 
@@ -173,11 +180,16 @@ theme =
 			fill :
 			{
 				gradient : 'radial',
-
-				steps :
+				colorStops :
 				[
-					[ 0, euclid_color.rgba( 255, 255,  20, 0.955 ) ],
-					[ 1, euclid_color.rgba( 255, 255, 205, 0.955 ) ]
+					gradient_colorStop.create(
+						'offset', 0,
+						'color', euclid_color.rgba( 255, 255,  20, 0.955 )
+					),
+					gradient_colorStop.create(
+						'offset', 1,
+						'color', euclid_color.rgba( 255, 255, 205, 0.955 )
+					)
 				]
 			},
 			border :
@@ -205,10 +217,16 @@ theme =
 		{
 			fill : {
 				gradient : 'askew',
-				steps :
+				colorStops :
 				[
-					[ 0, euclid_color.rgb( 255, 255, 248 ) ],
-					[ 1, euclid_color.rgb( 255, 255, 210 ) ]
+					gradient_colorStop.create(
+						'offset', 0,
+						'color', euclid_color.rgb( 255, 255, 248 )
+					),
+					gradient_colorStop.create(
+						'offset', 1,
+						'color', euclid_color.rgb( 255, 255, 210 )
+					)
 				]
 			},
 			border : null
