@@ -943,54 +943,7 @@ euclid_display.prototype._colorStyle =
 
 		default :
 
-			// FIXME remove
-
-			switch( style.gradient )
-	{
-		case 'askew' :
-
 			throw new Error( );
-
-		case 'horizontal' :
-
-			pnw = shape.pnw,
-
-			pse = shape.pse;
-
-			// FIXME use gradientPNW
-/**/		if( CHECK )
-/**/		{
-/**/			if( !pnw || !pse )
-/**/			{
-/**/				throw new Error(
-/**/					style.gradient + ': gradient misses pnw/pse'
-/**/				);
-/**/			}
-/**/		}
-
-			grad =
-				this._cx.createLinearGradient(
-					0,
-					pnw.y,
-					0,
-					pse.y
-				);
-
-			break;
-
-//		default :
-//			FIXME
-//			throw new Error( );
-	}
-
-	break;
-
-	}
-
-	// FIXME remove
-	if( !colorStops )
-	{
-		colorStops = style.colorStops;
 	}
 
 	if( colorStops )
