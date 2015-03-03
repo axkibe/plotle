@@ -180,6 +180,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/gradient/radial.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/flow/token.js',
 		'hasJion', true,
 		'inBundle', true

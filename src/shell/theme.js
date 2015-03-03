@@ -19,6 +19,7 @@ var
 	euclid_margin,
 	gradient_askew,
 	gradient_colorStop,
+	gradient_radial,
 	shell_fontPool;
 
 /*
@@ -135,22 +136,18 @@ theme =
 			},
 
 			fill :
-			{
-				gradient : 'radial',
-
-				colorStops :
-				[
+				gradient_radial.create(
+					'ray:append',
 					gradient_colorStop.create(
 						'offset', 0,
 						'color', euclid_color.rgba( 255, 255,  20, 0.955 )
 					),
+					'ray:append',
 					gradient_colorStop.create(
 						'offset', 1,
 						'color', euclid_color.rgba( 255, 255, 180, 0.955 )
 					)
-				]
-			},
-
+				),
 			border :
 				euclid_borderRay.create(
 					'ray:append',
@@ -179,20 +176,18 @@ theme =
 				height : 1700
 			},
 			fill :
-			{
-				gradient : 'radial',
-				colorStops :
-				[
+				gradient_radial.create(
+					'ray:append',
 					gradient_colorStop.create(
 						'offset', 0,
 						'color', euclid_color.rgba( 255, 255,  20, 0.955 )
 					),
+					'ray:append',
 					gradient_colorStop.create(
 						'offset', 1,
 						'color', euclid_color.rgba( 255, 255, 205, 0.955 )
 					)
-				]
-			},
+				),
 			border :
 				euclid_borderRay.create(
 					'ray:append',

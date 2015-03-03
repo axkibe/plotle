@@ -906,9 +906,40 @@ euclid_display.prototype._colorStyle =
 			// FIXME
 			colorStops = style.ray;
 
-			console.log( colorStops );
+			break;
+
+		case 'gradient_radial' :
+
+			r0 = shape.gradientR0 || 0;
+
+			r1 = shape.gradientR1;
+
+			pc = shape.gradientPC;
+
+/**/		if( CHECK )
+/**/		{
+/**/			if( !pc || !r1 )
+/**/			{
+/**/				// gradient misses gradient[PC|R0|R1]
+/**/				throw new Error( );
+/**/			}
+/**/		}
+
+			// FIXME
+			colorStops = style.ray;
+
+			grad =
+				this._cx.createRadialGradient(
+					pc.x,
+					pc.y,
+					r0,
+					pc.x,
+					pc.y,
+					r1
+				);
 
 			break;
+
 
 		default :
 
@@ -943,35 +974,6 @@ euclid_display.prototype._colorStyle =
 					pnw.y,
 					0,
 					pse.y
-				);
-
-			break;
-
-		case 'radial' :
-
-			r0 = shape.gradientR0 || 0;
-
-			r1 = shape.gradientR1;
-
-			pc = shape.gradientPC;
-
-/**/		if( CHECK )
-/**/		{
-/**/			if( !pc || !r1 )
-/**/			{
-/**/				// gradient misses gradient[PC|R0|R1]
-/**/				throw new Error( );
-/**/			}
-/**/		}
-
-			grad =
-				this._cx.createRadialGradient(
-					pc.x,
-					pc.y,
-					r0,
-					pc.x,
-					pc.y,
-					r1
 				);
 
 			break;
