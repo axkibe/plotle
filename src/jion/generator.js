@@ -3381,9 +3381,9 @@ generator.prototype.genCapsule =
 	var
 		capsule;
 
-	capsule = $block( );
-
-	capsule = capsule.append( $string( 'use strict' ) );
+	capsule =
+		$block( )
+		.$( '"use strict"' );
 
 	capsule = capsule.$( this.genNodeIncludes( ) );
 
