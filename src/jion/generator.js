@@ -2573,9 +2573,7 @@ generator.prototype.genFromJsonCreatorReturn =
 | Generates the fromJsonCreator.
 */
 generator.prototype.genFromJsonCreator =
-	function(
-		capsule // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -2612,11 +2610,6 @@ generator.prototype.genFromJsonCreator =
 
 	jsonList.sort( );
 
-	capsule =
-		capsule.$comment(
-			'Creates a new ' + this.id.name + ' object from json.'
-		);
-
 	funcBlock = this.genFromJsonCreatorVariables( $block( ) );
 
 	funcBlock = this.genFromJsonCreatorParser( funcBlock, jsonList );
@@ -2642,15 +2635,15 @@ generator.prototype.genFromJsonCreator =
 
 	funcBlock = this.genFromJsonCreatorReturn( funcBlock );
 
-	capsule =
-		capsule
+	return(
+		$block( )
+		.$comment( 'Creates a new ' + this.id.name + ' object from json.' )
 		.$assign(
 			$var( this.id.global ).$dot( 'createFromJSON' ),
 			$func( funcBlock )
 			.$arg( 'json', 'the json object' )
-		);
-
-	return capsule;
+		)
+	);
 };
 
 
@@ -2658,24 +2651,18 @@ generator.prototype.genFromJsonCreator =
 | Generates the node include section.
 */
 generator.prototype.genReflection =
-	function(
-		capsule // block to append to
-	)
+	function( )
 {
-	capsule =
-		capsule
+	return(
+		$block( )
 		.$comment( 'Reflection.' )
-		.$assign( 'prototype.reflect', this.id.$string );
-
-	capsule =
-		capsule
+		.$assign( 'prototype.reflect', this.id.$string )
 		.$comment( 'Name Reflection.' )
 		.$assign(
 			'prototype.reflectName',
 			$string( this.id.name )
-		);
-
-	return capsule;
+		)
+	);
 };
 
 
@@ -2683,12 +2670,13 @@ generator.prototype.genReflection =
 | Generates the jionProto stuff.
 */
 generator.prototype.genJionProto =
-	function(
-		capsule // block to append to
-	)
+	function( )
 {
-	capsule =
-		capsule
+	var
+		result;
+
+	result =
+		$block( )
 		.$comment( 'Sets values by path.' )
 		.$( 'prototype.setPath = jion_proto.setPath' )
 
@@ -2697,8 +2685,8 @@ generator.prototype.genJionProto =
 
 	if( this.group )
 	{
-		capsule =
-			capsule
+		result =
+			result
 
 			.$comment(
 				'Returns the group with another group added,',
@@ -2727,8 +2715,8 @@ generator.prototype.genJionProto =
 
 	if( this.ray )
 	{
-		capsule =
-			capsule
+		result =
+			result
 			.$comment( 'Returns the ray with an element appended.' )
 			.$( 'prototype.append = jion_proto.rayAppend' )
 
@@ -2755,8 +2743,8 @@ generator.prototype.genJionProto =
 
 	if( this.twig )
 	{
-		capsule =
-			capsule
+		result =
+			result
 			.$comment( 'Returns the element at rank.' )
 			.$( 'prototype.atRank = jion_proto.twigAtRank' )
 
@@ -2785,7 +2773,7 @@ generator.prototype.genJionProto =
 			.$( 'prototype.set = jion_proto.twigSet' );
 	}
 
-	return capsule;
+	return result;
 };
 
 
@@ -3386,12 +3374,13 @@ generator.prototype.genCapsule =
 
 	if( this.hasJson )
 	{
-		capsule = this.genFromJsonCreator( capsule );
+		capsule = capsule.$( this.genFromJsonCreator( ) );
 	}
 
-	capsule = this.genReflection( capsule );
-
-	capsule = this.genJionProto( capsule );
+	capsule =
+		capsule
+		.$( this.genReflection( ) )
+		.$( this.genJionProto( ) );
 
 	if( this.hasJson )
 	{
@@ -3423,7 +3412,6 @@ generator.generate =
 	)
 {
 	var
-		// file,
 		result,
 		gi;
 
