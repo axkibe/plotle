@@ -508,9 +508,7 @@ generator.prototype.genImports =
 | Generates the node include.
 */
 generator.prototype.genNodeIncludes =
-	function(
-		capsule // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -522,8 +520,6 @@ generator.prototype.genNodeIncludes =
 		nameList,
 		unitList,
 		unitStr;
-
-	capsule = capsule.$comment( 'Node includes.' );
 
 	block =
 		$block( )
@@ -573,9 +569,11 @@ generator.prototype.genNodeIncludes =
 		}
 	}
 
-	capsule = capsule.$if( 'SERVER', block );
-
-	return capsule;
+	return(
+		$block( )
+		.$comment( 'Node includes.' )
+		.$if( 'SERVER', block )
+	);
 };
 
 
@@ -3387,7 +3385,7 @@ generator.prototype.genCapsule =
 
 	capsule = capsule.append( $string( 'use strict' ) );
 
-	capsule = this.genNodeIncludes( capsule );
+	capsule = capsule.$( this.genNodeIncludes( ) );
 
 	capsule = capsule.$( this.genConstructor( ) );
 
