@@ -25,6 +25,15 @@ var
 */
 var
 	dv;
+//	mainButtonModel;
+
+
+//mainButtonModel =
+//	widget_button.create(
+//		'style', 'mainButton',
+//		'shape', design_anchorEllipse.fullSkewNW
+//	);
+
 
 dv =
 	{
@@ -88,6 +97,9 @@ dv =
 		}
 	};
 
+
+
+
 gruga_mainDisc =
 	disc_mainDisc.create(
 		'twig:add', 'normal',
@@ -110,8 +122,7 @@ gruga_mainDisc =
 								'y', dv.normal.y + dv.generic.height
 							)
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add', 'create',
 			widget_button.create(
@@ -135,8 +146,7 @@ gruga_mainDisc =
 								'y', dv.create.y + dv.generic.height
 							)
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add', 'remove',
 			widget_button.create(
@@ -159,8 +169,7 @@ gruga_mainDisc =
 								'y', dv.remove.y + dv.generic.height
 							)
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add', 'moveTo',
 			widget_button.create(

@@ -95,13 +95,22 @@ if( JION )
 						type :
 							[ 'jion_id', 'jion_idGroup' ]
 					},
-				v :
+				v : // FIXME remove
 					{
 						comment :
 							'attribute variable used in generate',
 							// FIXME name vVar
 						type :
-							'ast_var'
+							'ast_var',
+						allowsUndefined : true // FIXME
+					},
+				varRef :
+					{
+						comment :
+							'attribute variable used in generate',
+						type :
+							'ast_var',
+						allowsUndefined : true // FIXME
 					}
 			}
 	};

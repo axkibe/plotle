@@ -871,14 +871,9 @@ euclid_display.prototype._colorStyle =
 	var
 		a,
 		aZ,
-		color,
 		cs,
-		colorStops,
 		grad,
 		pc,
-		pnw,
-		pse,
-		steps, // FIXME remove
 		r0,
 		r1;
 
@@ -909,9 +904,6 @@ euclid_display.prototype._colorStyle =
 					view.y( shape.pse.y )
 				);
 
-			// FIXME
-			colorStops = style.ray;
-
 			break;
 
 		case 'gradient_radial' :
@@ -931,9 +923,6 @@ euclid_display.prototype._colorStyle =
 /**/			}
 /**/		}
 
-			// FIXME
-			colorStops = style.ray;
-
 			grad =
 				this._cx.createRadialGradient(
 					pc.x,
@@ -952,40 +941,15 @@ euclid_display.prototype._colorStyle =
 			throw new Error( );
 	}
 
-	if( colorStops )
+	for(
+		a = 0, aZ = style.length;
+		a < aZ;
+		a++
+	)
 	{
-		for(
-			a = 0, aZ = colorStops.length;
-			a < aZ;
-			a++
-		)
-		{
-			cs = colorStops[ a ];
+		cs = style.get( a );
 
-			grad.addColorStop( cs.offset, cs.color.css );
-		}
-	}
-	else
-	{
-		// FIXME remove
-		steps = style.steps;
-
-		for(
-			a = 0, aZ = steps.length;
-			a < aZ;
-			a++
-		)
-		{
-			color = steps[ a ][ 1 ];
-
-			// FIXME
-			if( color.reflect === 'euclid_color' )
-			{
-				color = color.css;
-			}
-
-			grad.addColorStop( steps[ a ][ 0 ], color );
-		}
+		grad.addColorStop( cs.offset, cs.color.css );
 	}
 
 	return grad;
