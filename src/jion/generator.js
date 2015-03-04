@@ -455,9 +455,7 @@ generator.prototype._init =
 | Generates the imports.
 */
 generator.prototype.genImports =
-	function(
-		capsule // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -465,10 +463,11 @@ generator.prototype.genImports =
 		b,
 		bZ,
 		nameList,
+		result,
 		unitList;
 
-	capsule =
-		capsule
+	result =
+		$block( )
 		.$comment( 'Imports.' )
 		.$varDec( 'jools' );
 
@@ -493,14 +492,13 @@ generator.prototype.genImports =
 			b++
 		)
 		{
-			capsule =
-				capsule.$varDec(
-					unitList[ a ] + '_' + nameList[ b ]
-				);
+			result =
+				result
+				.$varDec( unitList[ a ] + '_' + nameList[ b ] );
 		}
 	}
 
-	return capsule;
+	return result;
 };
 
 
@@ -3310,10 +3308,10 @@ generator.prototype.genAlike =
 | Returns the generated export block.
 */
 generator.prototype.genExport =
-	function( block )
+	function( )
 {
 	return(
-		block
+		$block( )
 		.$comment( 'Export.' )
 		.$varDec( this.id.global )
 		.$if(
@@ -3333,10 +3331,6 @@ generator.prototype.genPreamble =
 		block // block to append to
 	)
 {
-	block = this.genExport( block );
-
-	block = this.genImports( block );
-
 	return block;
 };
 
@@ -3420,7 +3414,10 @@ generator.generate =
 			'DO NOT EDIT!'
 		);
 
-	result = gi.genPreamble( result );
+	result =
+		result
+		.$( gi.genExport( ) )
+		.$( gi.genImports( ) );
 
 	result = gi.genCapsule( result );
 
