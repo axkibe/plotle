@@ -167,7 +167,6 @@ Constructor =
 		v_id, // attribute type id
 		v_json, // include in JSON export/import
 		v_name, // attribute name
-		v_v, // attribute variable used in generate
 		v_varRef // attribute variable used in generate
 	)
 {
@@ -200,15 +199,7 @@ Constructor =
 
 	this.name = v_name;
 
-	if( v_v !== undefined )
-	{
-		this.v = v_v;
-	}
-
-	if( v_varRef !== undefined )
-	{
-		this.varRef = v_varRef;
-	}
+	this.varRef = v_varRef;
 
 	if( FREEZE )
 	{
@@ -249,7 +240,6 @@ prototype.create =
 		v_id,
 		v_json,
 		v_name,
-		v_v,
 		v_varRef;
 
 	if( this !== jion_attribute )
@@ -273,8 +263,6 @@ prototype.create =
 		v_json = this.json;
 
 		v_name = this.name;
-
-		v_v = this.v;
 
 		v_varRef = this.varRef;
 	}
@@ -366,15 +354,6 @@ prototype.create =
 				if( arg !== undefined )
 				{
 					v_name = arg;
-				}
-
-				break;
-
-			case 'v' :
-
-				if( arg !== undefined )
-				{
-					v_v = arg;
 				}
 
 				break;
@@ -624,17 +603,9 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_v === null )
+/**/	if( v_varRef === undefined )
 /**/	{
 /**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_v !== undefined )
-/**/	{
-/**/		if( v_v.reflect !== 'ast_var' )
-/**/		{
-/**/			throw new Error( );
-/**/		}
 /**/	}
 /**/
 /**/	if( v_varRef === null )
@@ -642,12 +613,9 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_varRef !== undefined )
+/**/	if( v_varRef.reflect !== 'ast_var' )
 /**/	{
-/**/		if( v_varRef.reflect !== 'ast_var' )
-/**/		{
-/**/			throw new Error( );
-/**/		}
+/**/		throw new Error( );
 /**/	}
 /**/}
 
@@ -687,15 +655,9 @@ prototype.create =
 		v_name === inherit.name
 		&&
 		(
-			v_v === inherit.v
-			||
-			v_v !== undefined && v_v.equals( inherit.v )
-		)
-		&&
-		(
 			v_varRef === inherit.varRef
 			||
-			v_varRef !== undefined && v_varRef.equals( inherit.varRef )
+			v_varRef.equals && v_varRef.equals( inherit.varRef )
 		)
 	)
 	{
@@ -713,7 +675,6 @@ prototype.create =
 			v_id,
 			v_json,
 			v_name,
-			v_v,
 			v_varRef
 		)
 	);
@@ -801,15 +762,9 @@ prototype.equals =
 		this.name === obj.name
 		&&
 		(
-			this.v === obj.v
-			||
-			this.v !== undefined && this.v.equals( obj.v )
-		)
-		&&
-		(
 			this.varRef === obj.varRef
 			||
-			this.varRef !== undefined && this.varRef.equals( obj.varRef )
+			this.varRef.equals && this.varRef.equals( obj.varRef )
 		)
 	);
 };

@@ -285,10 +285,8 @@ generator.prototype._init =
 				'allowsUndefined',
 					jAttr.allowsUndefined
 					|| shorthand.$undefined.equals( defaultValue ),
-				'assign',
-					assign,
-				'comment',
-					jAttr.comment,
+				'assign', assign,
+				'comment', jAttr.comment,
 				'concerns',
 					jAttr.concerns
 					? jion_concern.create(
@@ -303,16 +301,11 @@ generator.prototype._init =
 						'member', jAttr.concerns.member
 					)
 					: null,
-				'defaultValue',
-					defaultValue,
-				'json',
-					!!jAttr.json,
-				'name',
-					name,
-				'id',
-					aid,
-				'v', // FIXME rename to creatorVar
-					$var( 'v_' + name )
+				'defaultValue', defaultValue,
+				'json', !!jAttr.json,
+				'name', name,
+				'id', aid,
+				'varRef', $var( 'v_' + name )
 			);
 
 		attributes = attributes.set( name, attr );
@@ -637,7 +630,7 @@ generator.prototype.genConstructor =
 		assign =
 			$assign(
 				$this.$dot( attr.assign ),
-				attr.v
+				attr.varRef
 			);
 
 		if( !attr.allowsUndefined )
@@ -649,7 +642,7 @@ generator.prototype.genConstructor =
 			block =
 				block
 				.$if(
-					$differs( attr.v, undefined ),
+					$differs( attr.varRef, undefined ),
 					assign
 				);
 		}
@@ -706,7 +699,7 @@ generator.prototype.genConstructor =
 				);
 			}
 
-			initCall = initCall.addArgument( ( attr.v ) );
+			initCall = initCall.addArgument( ( attr.varRef ) );
 		}
 
 		block = block.append( initCall );
@@ -823,7 +816,7 @@ generator.prototype.genConstructor =
 
 				constructor =
 					constructor.$arg(
-						attr.v.name,
+						attr.varRef.name,
 						attr.comment
 					);
 		}
@@ -882,7 +875,7 @@ generator.prototype.genCreatorVariables =
 
 	for( name in this.attributes.group )
 	{
-		varList.push( this.attributes.get( name ).v.name );
+		varList.push( this.attributes.get( name ).varRef.name );
 	}
 
 	varList.push( 'inherit' );
@@ -983,7 +976,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 		receiver =
 			receiver
 			.$assign(
-				attr.v,
+				attr.varRef,
 				$this.$dot( attr.assign )
 			);
 	}
@@ -1074,7 +1067,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				$string( name ),
 				$if(
 					'arg !== undefined',
-					$assign( attr.v, 'arg' )
+					$assign( attr.varRef, 'arg' )
 				)
 			);
 	}
@@ -1289,8 +1282,8 @@ generator.prototype.genCreatorDefaults =
 			block =
 				block
 				.$if(
-					$equals( attr.v, undefined ),
-					$assign( attr.v, attr.defaultValue )
+					$equals( attr.varRef, undefined ),
+					$assign( attr.varRef, attr.defaultValue )
 				);
 		}
 	}
@@ -1461,7 +1454,7 @@ generator.prototype.genCreatorChecks =
 			continue;
 		}
 
-		av = attr.v;
+		av = attr.varRef;
 
 		if( !attr.allowsUndefined )
 		{
@@ -1509,7 +1502,7 @@ generator.prototype.genCreatorChecks =
 			cond = null;
 		}
 
-		tcheck = this.genTypeCheckFailCondition( attr.v, attr.id );
+		tcheck = this.genTypeCheckFailCondition( attr.varRef, attr.id );
 
 		if( cond )
 		{
@@ -1674,7 +1667,7 @@ generator.prototype.genCreatorConcerns =
 					);
 				}
 
-				cExpr = cExpr.addArgument( bAttr.v );
+				cExpr = cExpr.addArgument( bAttr.varRef );
 			}
 		}
 		else
@@ -1696,8 +1689,8 @@ generator.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						$condition(
-							$differs( attr.v, null ),
-							attr.v.$dot( member ),
+							$differs( attr.varRef, null ),
+							attr.varRef.$dot( member ),
 							null
 						);
 
@@ -1706,19 +1699,19 @@ generator.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						$condition(
-							$differs( attr.v, undefined ),
-							attr.v.$dot( member ),
+							$differs( attr.varRef, undefined ),
+							attr.varRef.$dot( member ),
 							null
 						);
 				}
 				else
 				{
-					cExpr = attr.v.$dot( member );
+					cExpr = attr.varRef.$dot( member );
 				}
 			}
 			else
 			{
-				cExpr = $call( attr.v.$dot( member ) );
+				cExpr = $call( attr.varRef.$dot( member ) );
 
 				for(
 					b = 0, bZ = args.length;
@@ -1735,12 +1728,12 @@ generator.prototype.genCreatorConcerns =
 						);
 					}
 
-					cExpr = cExpr.append( bAttr.v );
+					cExpr = cExpr.append( bAttr.varRef );
 				}
 			}
 		}
 
-		block = block.$assign( attr.v, cExpr );
+		block = block.$assign( attr.varRef, cExpr );
 	}
 
 	return block;
@@ -1794,7 +1787,7 @@ generator.prototype.genCreatorUnchanged =
 
 		if( attr.assign === null )
 		{
-			cond = $and( cond, $equals( attr.v, null ) );
+			cond = $and( cond, $equals( attr.varRef, null ) );
 
 			continue;
 		}
@@ -1802,7 +1795,7 @@ generator.prototype.genCreatorUnchanged =
 		ceq =
 			this.genAttributeEquals(
 				name,
-				attr.v,
+				attr.varRef,
 				$var( 'inherit' ).$dot( attr.assign ),
 				'equals'
 			);
@@ -1876,7 +1869,7 @@ generator.prototype.genCreatorReturn =
 
 				attr = this.attributes.get( name );
 
-				call = call.addArgument( attr.v );
+				call = call.addArgument( attr.varRef );
 		}
 	}
 
@@ -1964,7 +1957,7 @@ generator.prototype.genFromJsonCreatorVariables =
 			continue;
 		}
 
-		varList.push( attr.v.name );
+		varList.push( attr.varRef.name );
 	}
 
 	varList.push( 'arg' );
@@ -2034,7 +2027,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 		case 'number' :
 		case 'string' :
 
-			code = $assign( attr.v, 'arg' );
+			code = $assign( attr.varRef, 'arg' );
 
 			break;
 
@@ -2044,7 +2037,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 			{
 				code =
 					$assign(
-						attr.v,
+						attr.varRef,
 						$call(
 							attr.id.$global.$dot( 'createFromJSON' ),
 							'arg'
@@ -2074,7 +2067,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 							sif =
 								$if(
 									'typeof( arg ) === "boolean"',
-									$assign( attr.v, 'arg' )
+									$assign( attr.varRef, 'arg' )
 								);
 
 							break;
@@ -2084,7 +2077,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 							sif =
 								$if(
 									'typeof( arg ) === "number"',
-									$assign( attr.v, 'arg' )
+									$assign( attr.varRef, 'arg' )
 								);
 
 							break;
@@ -2097,7 +2090,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 										'typeof( arg ) === "string"',
 										'arg instanceof String'
 									),
-									$assign( attr.v, 'arg' )
+									$assign( attr.varRef, 'arg' )
 								);
 
 							break;
@@ -2134,7 +2127,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 							.$case(
 								idList[ t ].$string,
 								$assign(
-									attr.v,
+									attr.varRef,
 									$call(
 										idList[ t ].$global
 										.$dot( 'createFromJSON' ),
@@ -2173,7 +2166,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 		code =
 			$if(
 				'arg === null ',
-				/* then */ $assign( attr.v, null ),
+				/* then */ $assign( attr.varRef, null ),
 				/* else */ code
 			);
 	}
@@ -2586,7 +2579,7 @@ generator.prototype.genFromJsonCreatorReturn =
 				}
 				else
 				{
-					call = call.addArgument( attr.v );
+					call = call.addArgument( attr.varRef );
 				}
 		}
 	}
