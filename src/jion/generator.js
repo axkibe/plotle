@@ -173,6 +173,7 @@ generator.prototype._init =
 {
 	var
 		a,
+		abstractConstructorList,
 		aid,
 		assign,
 		attr,
@@ -192,6 +193,8 @@ generator.prototype._init =
 		units; // units used
 
 	attributes = jion_attributeGroup.create( );
+
+	abstractConstructorList = [ ];
 
 	constructorList = [ ];
 
@@ -241,13 +244,13 @@ generator.prototype._init =
 			? jAttr.assign
 			: name;
 
-		if(
-			assign !== null
-			|| (
-				this.init
-				&& this.init.indexOf( name ) >= 0
-			)
-		)
+		if( assign !== null )
+		{
+			abstractConstructorList.push( name );
+
+			constructorList.push( name );
+		}
+		else if( this.init && this.init.indexOf( name ) >= 0 )
 		{
 			constructorList.push( name );
 		}
@@ -313,20 +316,30 @@ generator.prototype._init =
 
 	this.attributes = attributes;
 
+	abstractConstructorList.sort( );
+
 	constructorList.sort( );
 
 	if( jion.group )
 	{
+		abstractConstructorList.unshift( 'group' );
+
 		constructorList.unshift( 'group' );
 	}
 
 	if( jion.ray )
 	{
+		abstractConstructorList.unshift( 'ray' );
+
 		constructorList.unshift( 'ray' );
 	}
 
 	if( jion.twig )
 	{
+		abstractConstructorList.unshift( 'ranks' );
+
+		abstractConstructorList.unshift( 'twig' );
+
 		constructorList.unshift( 'ranks' );
 
 		constructorList.unshift( 'twig' );
@@ -373,8 +386,12 @@ generator.prototype._init =
 
 	if( FREEZE )
 	{
+		Object.freeze( abstractConstructorList );
+
 		Object.freeze( constructorList );
 	}
+
+	this.abstractConstructorList = abstractConstructorList;
 
 	this.constructorList = constructorList;
 
@@ -590,6 +607,7 @@ generator.prototype.genConstructor =
 		attr,
 		block,
 		cf,
+		cList,
 		freezeBlock,
 		initCall,
 		name;
@@ -625,11 +643,7 @@ generator.prototype.genConstructor =
 			continue;
 		}
 
-		assign =
-			$assign(
-				$this.$dot( attr.assign ),
-				attr.varRef
-			);
+		assign = $assign( $this.$dot( attr.assign ), attr.varRef );
 
 		if( !abstract && !attr.allowsUndefined )
 		{
@@ -737,13 +751,14 @@ generator.prototype.genConstructor =
 
 	cf = $func( block );
 
-	for(
-		a = 0, aZ = this.constructorList.length;
-		a < aZ;
-		a++
-	)
+	cList =
+		abstract
+		? this.abstractConstructorList
+		: this.constructorList;
+
+	for( a = 0, aZ = cList.length; a < aZ; a++ )
 	{
-		name = this.constructorList[ a ];
+		name = cList[ a ];
 
 		switch( name )
 		{
@@ -812,6 +827,8 @@ generator.prototype.genConstructor =
 				attr = this.attributes.get( name );
 
 				cf = cf.$arg( attr.varRef.name, attr.comment );
+
+				break;
 		}
 	}
 
@@ -3360,7 +3377,7 @@ generator.prototype.genCapsule =
 		$block( )
 		.$( '"use strict"' )
 		.$( this.genNodeIncludes( ) )
-//		.$( this.genConstructor( true ) )
+		.$( this.genConstructor( true ) )
 		.$( this.genConstructor( false ) );
 
 	if( this.singleton )

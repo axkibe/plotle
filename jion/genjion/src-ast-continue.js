@@ -50,6 +50,23 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function( )
+{
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

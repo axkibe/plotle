@@ -149,6 +149,84 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_allowsNull, // attribute may be null
+		v_allowsUndefined, // attribute may be undefined
+		v_assign, // variable name to assign to
+		v_comment, // comment
+		v_concerns, // concerns function call
+		v_defaultValue, // default value
+		v_id, // attribute type id
+		v_json, // include in JSON export/import
+		v_name, // attribute name
+		v_varRef // attribute variable used in generate
+	)
+{
+	if( v_allowsNull !== undefined )
+	{
+		this.allowsNull = v_allowsNull;
+	}
+
+	if( v_allowsUndefined !== undefined )
+	{
+		this.allowsUndefined = v_allowsUndefined;
+	}
+
+	if( v_assign !== undefined )
+	{
+		this.assign = v_assign;
+	}
+
+	if( v_comment !== undefined )
+	{
+		this.comment = v_comment;
+	}
+
+	if( v_concerns !== undefined )
+	{
+		this.concerns = v_concerns;
+	}
+
+	if( v_defaultValue !== undefined )
+	{
+		this.defaultValue = v_defaultValue;
+	}
+
+	if( v_id !== undefined )
+	{
+		this.id = v_id;
+	}
+
+	if( v_json !== undefined )
+	{
+		this.json = v_json;
+	}
+
+	if( v_name !== undefined )
+	{
+		this.name = v_name;
+	}
+
+	if( v_varRef !== undefined )
+	{
+		this.varRef = v_varRef;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

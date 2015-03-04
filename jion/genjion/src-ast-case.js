@@ -53,6 +53,35 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		ray, // ray
+		v_block // the statement
+	)
+{
+	if( v_block !== undefined )
+	{
+		this.block = v_block;
+	}
+
+	this.ray = ray;
+
+	if( FREEZE )
+	{
+		Object.freeze( ray );
+
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

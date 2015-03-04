@@ -53,6 +53,30 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_call // the constrcutor call
+	)
+{
+	if( v_call !== undefined )
+	{
+		this.call = v_call;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

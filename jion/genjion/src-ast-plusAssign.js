@@ -138,6 +138,36 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_left, // left-hand side
+		v_right // right-hand side
+	)
+{
+	if( v_left !== undefined )
+	{
+		this.left = v_left;
+	}
+
+	if( v_right !== undefined )
+	{
+		this.right = v_right;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

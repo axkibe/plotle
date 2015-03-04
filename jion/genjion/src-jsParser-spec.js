@@ -50,6 +50,48 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_associativity, // "r2l", "l2r" or "n/a"
+		v_astCreator, // For some handlers, the ast creator function for it to call
+		v_handler, // Handler function to be called
+		v_prec // operator precedence
+	)
+{
+	if( v_associativity !== undefined )
+	{
+		this.associativity = v_associativity;
+	}
+
+	if( v_astCreator !== undefined )
+	{
+		this.astCreator = v_astCreator;
+	}
+
+	if( v_handler !== undefined )
+	{
+		this.handler = v_handler;
+	}
+
+	if( v_prec !== undefined )
+	{
+		this.prec = v_prec;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

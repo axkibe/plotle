@@ -140,6 +140,30 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_expr // the expression to return
+	)
+{
+	if( v_expr !== undefined )
+	{
+		this.expr = v_expr;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

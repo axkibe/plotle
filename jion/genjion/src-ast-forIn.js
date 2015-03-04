@@ -143,6 +143,42 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_block, // the for block
+		v_object, // the object expression to iterate over
+		v_variable // the loop variable
+	)
+{
+	if( v_block !== undefined )
+	{
+		this.block = v_block;
+	}
+
+	if( v_object !== undefined )
+	{
+		this.object = v_object;
+	}
+
+	if( v_variable !== undefined )
+	{
+		this.variable = v_variable;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

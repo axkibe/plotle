@@ -50,6 +50,30 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_boolean // the boolean
+	)
+{
+	if( v_boolean !== undefined )
+	{
+		this.boolean = v_boolean;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

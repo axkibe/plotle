@@ -173,6 +173,42 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_ast, // current ast entity
+		v_pos, // current position in token ray
+		v_tokens // ray of tokens to parse
+	)
+{
+	if( v_ast !== undefined )
+	{
+		this.ast = v_ast;
+	}
+
+	if( v_pos !== undefined )
+	{
+		this.pos = v_pos;
+	}
+
+	if( v_tokens !== undefined )
+	{
+		this.tokens = v_tokens;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

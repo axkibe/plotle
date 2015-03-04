@@ -56,6 +56,48 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_args, // concerns arguments
+		v_func, // concerns function to call
+		v_id, // concerns id
+		v_member // concerns member call
+	)
+{
+	if( v_args !== undefined )
+	{
+		this.args = v_args;
+	}
+
+	if( v_func !== undefined )
+	{
+		this.func = v_func;
+	}
+
+	if( v_id !== undefined )
+	{
+		this.id = v_id;
+	}
+
+	if( v_member !== undefined )
+	{
+		this.member = v_member;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

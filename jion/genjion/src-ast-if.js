@@ -143,6 +143,42 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_condition, // the if condition
+		v_elsewise, // the else wise
+		v_then // the then code
+	)
+{
+	if( v_condition !== undefined )
+	{
+		this.condition = v_condition;
+	}
+
+	if( v_elsewise !== undefined )
+	{
+		this.elsewise = v_elsewise;
+	}
+
+	if( v_then !== undefined )
+	{
+		this.then = v_then;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

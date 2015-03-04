@@ -53,6 +53,29 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		group // group
+	)
+{
+	this.group = group;
+
+	if( FREEZE )
+	{
+		Object.freeze( group );
+
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

@@ -16,10 +16,8 @@
 if( JION )
 {
 	return {
-		id :
-			'ast_continue',
-		singleton :
-			true
+		id : 'ast_continue',
+		singleton : true
 	};
 }
 

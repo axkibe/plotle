@@ -1160,18 +1160,21 @@ formatIf =
 	)
 {
 	var
-		cond = statement.condition,
+		cond,
+		text;
 
-		text = null;
+	cond = statement.condition,
+
+	text = null;
+
+	if( context.inline )
+	{
+		throw 'noinline';
+	}
 
 /**/if( CHECK )
 /**/{
 /**/	if( statement.reflect !== 'ast_if' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( context.inline )
 /**/	{
 /**/		throw new Error( );
 /**/	}

@@ -140,6 +140,36 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_assign, // Assignment of variable
+		v_name // variable name
+	)
+{
+	if( v_assign !== undefined )
+	{
+		this.assign = v_assign;
+	}
+
+	if( v_name !== undefined )
+	{
+		this.name = v_name;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

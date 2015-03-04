@@ -146,6 +146,41 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		ray, // ray
+		v_defaultCase, // the default block
+		v_statement // the statement expression
+	)
+{
+	if( v_defaultCase !== undefined )
+	{
+		this.defaultCase = v_defaultCase;
+	}
+
+	if( v_statement !== undefined )
+	{
+		this.statement = v_statement;
+	}
+
+	this.ray = ray;
+
+	if( FREEZE )
+	{
+		Object.freeze( ray );
+
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

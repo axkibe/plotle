@@ -138,6 +138,36 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_expr, // the expression to get the member of
+		v_member // the members name
+	)
+{
+	if( v_expr !== undefined )
+	{
+		this.expr = v_expr;
+	}
+
+	if( v_member !== undefined )
+	{
+		this.member = v_member;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

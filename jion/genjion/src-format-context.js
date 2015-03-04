@@ -50,6 +50,48 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_check, // true if within optinal CHECK code
+		v_indent, // the indentation
+		v_inline, // true if to be formated inline
+		v_root // true if in root context
+	)
+{
+	if( v_check !== undefined )
+	{
+		this.check = v_check;
+	}
+
+	if( v_indent !== undefined )
+	{
+		this.indent = v_indent;
+	}
+
+	if( v_inline !== undefined )
+	{
+		this.inline = v_inline;
+	}
+
+	if( v_root !== undefined )
+	{
+		this.root = v_root;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

@@ -170,6 +170,29 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		ray // ray
+	)
+{
+	this.ray = ray;
+
+	if( FREEZE )
+	{
+		Object.freeze( ray );
+
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

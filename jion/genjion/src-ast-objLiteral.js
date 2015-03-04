@@ -168,6 +168,34 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		twig, // twig
+		ranks // twig ranks
+	)
+{
+	this.twig = twig;
+
+	this.ranks = ranks;
+
+	if( FREEZE )
+	{
+		Object.freeze( twig );
+
+		Object.freeze( ranks );
+
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

@@ -50,6 +50,36 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_comment, // argument comment
+		v_name // argument name
+	)
+{
+	if( v_comment !== undefined )
+	{
+		this.comment = v_comment;
+	}
+
+	if( v_name !== undefined )
+	{
+		this.name = v_name;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

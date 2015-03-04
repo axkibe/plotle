@@ -50,6 +50,36 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_name, // the name part of the id if applicable
+		v_unit // the unit part of the id if applicable
+	)
+{
+	if( v_name !== undefined )
+	{
+		this.name = v_name;
+	}
+
+	if( v_unit !== undefined )
+	{
+		this.unit = v_unit;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

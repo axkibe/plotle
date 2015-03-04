@@ -138,6 +138,35 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		ray, // ray
+		v_func // the function to call
+	)
+{
+	if( v_func !== undefined )
+	{
+		this.func = v_func;
+	}
+
+	this.ray = ray;
+
+	if( FREEZE )
+	{
+		Object.freeze( ray );
+
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var

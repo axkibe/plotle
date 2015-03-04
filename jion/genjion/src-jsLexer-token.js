@@ -50,6 +50,36 @@ if( SERVER )
 
 
 /*
+| Abstract constructor.
+*/
+var
+	AbstractConstructor;
+
+
+AbstractConstructor =
+	function(
+		v_type, // the token type
+		v_value // the token value
+	)
+{
+	if( v_type !== undefined )
+	{
+		this.type = v_type;
+	}
+
+	if( v_value !== undefined )
+	{
+		this.value = v_value;
+	}
+
+	if( FREEZE )
+	{
+		Object.freeze( this );
+	}
+};
+
+
+/*
 | Constructor.
 */
 var
