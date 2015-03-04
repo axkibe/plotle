@@ -2781,9 +2781,7 @@ generator.prototype.genJionProto =
 | Generates the toJson converter.
 */
 generator.prototype.genToJson =
-	function(
-		capsule // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -2814,12 +2812,7 @@ generator.prototype.genToJson =
 			continue;
 		}
 
-		olit =
-			olit
-			.add(
-				name,
-				$this.$dot( attr.assign )
-			);
+		olit = olit.add( name, $this.$dot( attr.assign ) );
 	}
 
 	if( this.group )
@@ -2851,17 +2844,16 @@ generator.prototype.genToJson =
 			$func( $return( 'json' ) )
 		);
 
-	capsule =
-		capsule
+	return(
+		$block( )
 		.$comment( 'Converts a ' + this.id.name + ' into json.' )
 		.$call(
 			'jools.lazyValue',
 			'prototype',
 			'"toJSON"',
 			$func( block )
-		);
-
-	return capsule;
+		)
+	);
 };
 
 
@@ -3221,9 +3213,7 @@ generator.prototype.genEquals =
 | Generates the alike test(s).
 */
 generator.prototype.genAlike =
-	function(
-		capsule // block to append to
-	)
+	function( )
 {
 	var
 		a, aZ,
@@ -3234,13 +3224,16 @@ generator.prototype.genAlike =
 		ceq,
 		cond,
 		ignores,
-		name;
+		name,
+		result;
 
 	alikeList = Object.keys( this.alike );
 
 	alikeList.sort( );
 
 	cond = null;
+
+	result = $block( );
 
 	for(
 		a = 0, aZ = alikeList.length;
@@ -3252,7 +3245,7 @@ generator.prototype.genAlike =
 
 		ignores = this.alike[ alikeName ].ignores;
 
-		capsule = capsule.$comment( 'Tests partial equality.' );
+		result = result.$comment( 'Tests partial equality.' );
 
 		block =
 			$block( )
@@ -3300,8 +3293,8 @@ generator.prototype.genAlike =
 
 		block = block.$return( cond );
 
-		capsule =
-			capsule
+		result =
+			result
 			.$assign(
 				$var( 'prototype' ).$dot( alikeName ),
 				$func( block )
@@ -3309,7 +3302,7 @@ generator.prototype.genAlike =
 			);
 	}
 
-	return capsule;
+	return result;
 };
 
 
@@ -3384,14 +3377,14 @@ generator.prototype.genCapsule =
 
 	if( this.hasJson )
 	{
-		capsule = this.genToJson( capsule );
+		capsule = capsule.$( this.genToJson( ) );
 	}
 
 	capsule = capsule.$( this.genEquals( ) );
 
 	if( this.alike )
 	{
-		capsule = this.genAlike( capsule );
+		capsule = capsule.$( this.genAlike( ) );
 	}
 
 	block =

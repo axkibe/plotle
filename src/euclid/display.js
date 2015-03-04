@@ -877,8 +877,6 @@ euclid_display.prototype._colorStyle =
 		r0,
 		r1;
 
-	console.log( style.reflect );
-
 	switch( style.reflect )
 	{
 		case 'euclid_color' :
