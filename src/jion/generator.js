@@ -579,7 +579,9 @@ generator.prototype.genNodeIncludes =
 | Generates the constructor.
 */
 generator.prototype.genConstructor =
-	function( )
+	function(
+		abstract // if true generate abstract constructor
+	)
 {
 	var
 		a,
@@ -587,21 +589,25 @@ generator.prototype.genConstructor =
 		aZ,
 		attr,
 		block,
-		constructor,
+		cf,
 		freezeBlock,
 		initCall,
-		name,
-		result;
+		name;
 
-	block =
-		$block( )
-		.$if(
-			'FREEZE',
-			$if(
-				'prototype.__have_lazy',
-				$assign( 'this.__lazy', $objLiteral( ) )
-			)
-		);
+	block = $block( );
+
+	if( !abstract )
+	{
+		block =
+			block.$if(
+				'FREEZE',
+				$if(
+					'prototype.__have_lazy',
+					//$( 'this.__lazy = { }' ) FIXME
+					$assign( 'this.__lazy', $objLiteral( ) )
+				)
+			);
+	}
 
 	// assigns the variables
 	for(
@@ -625,7 +631,7 @@ generator.prototype.genConstructor =
 				attr.varRef
 			);
 
-		if( !attr.allowsUndefined )
+		if( !abstract && !attr.allowsUndefined )
 		{
 			block = block.append( assign );
 		}
@@ -659,7 +665,7 @@ generator.prototype.genConstructor =
 	}
 
 	// calls the initializer
-	if( this.init )
+	if( !abstract && this.init )
 	{
 		initCall = $( 'this._init( )' );
 
@@ -729,7 +735,7 @@ generator.prototype.genConstructor =
 
 	block = block.$if( 'FREEZE', freezeBlock );
 
-	constructor = $func( block );
+	cf = $func( block );
 
 	for(
 		a = 0, aZ = this.constructorList.length;
@@ -743,20 +749,20 @@ generator.prototype.genConstructor =
 		{
 			case 'inherit' :
 
-				constructor = constructor.$arg( 'inherit', 'inheritance' );
+				cf = cf.$arg( 'inherit', 'inheritance' );
 
 				break;
 
 			case 'group' :
 
-				constructor = constructor.$arg( 'group', 'group' );
+				cf = cf.$arg( 'group', 'group' );
 
 				break;
 
 			case 'groupDup' :
 
-				constructor =
-					constructor.$arg(
+				cf =
+					cf.$arg(
 						'groupDup',
 						'true if group is already been duplicated'
 					);
@@ -765,20 +771,20 @@ generator.prototype.genConstructor =
 
 			case 'ranks' :
 
-				constructor = constructor.$arg( 'ranks', 'twig ranks' );
+				cf = cf.$arg( 'ranks', 'twig ranks' );
 
 				break;
 
 			case 'ray' :
 
-				constructor = constructor.$arg( 'ray', 'ray' );
+				cf = cf.$arg( 'ray', 'ray' );
 
 				break;
 
 			case 'rayDup' :
 
-				constructor =
-					constructor.$arg(
+				cf =
+					cf.$arg(
 						'rayDup',
 						'true if ray is already been duplicated'
 					);
@@ -787,44 +793,50 @@ generator.prototype.genConstructor =
 
 			case 'twig' :
 
-				constructor =
-					constructor.$arg( 'twig', 'twig' );
+				cf = cf.$arg( 'twig', 'twig' );
 
 				break;
 
 			case 'twigDup' :
 
-				constructor =
-					constructor.$arg(
+				cf =
+					cf.$arg(
 						'twigDup',
 						'true if twig is already been duplicated'
 					);
 
 				break;
+
 			default :
 
-				attr =
-					this.attributes.get( name );
+				attr = this.attributes.get( name );
 
-				constructor =
-					constructor.$arg(
-						attr.varRef.name,
-						attr.comment
-					);
+				cf = cf.$arg( attr.varRef.name, attr.comment );
 		}
 	}
 
-	result =
-		$block( )
-		.$comment( 'Constructor.' )
-		.$varDec( 'Constructor' )
-		.$varDec( 'prototype' )
-		.$assign( 'Constructor', constructor )
-		.$comment( 'Prototype shortcut' )
-		.$assign( 'prototype', 'Constructor.prototype' )
-		.$assign( this.id.$global.$dot( 'prototype' ), 'prototype' );
-
-	return result;
+	if( !abstract )
+	{
+		return(
+			$block( )
+			.$comment( 'Constructor.' )
+			.$varDec( 'Constructor' )
+			.$varDec( 'prototype' )
+			.$assign( 'Constructor', cf )
+			.$comment( 'Prototype shortcut' )
+			.$assign( 'prototype', 'Constructor.prototype' )
+			.$assign( this.id.$global.$dot( 'prototype' ), 'prototype' )
+		);
+	}
+	else
+	{
+		return(
+			$block( )
+			.$comment( 'Abstract constructor.' )
+			.$varDec( 'AbstractConstructor' )
+			.$assign( 'AbstractConstructor', cf )
+		);
+	}
 };
 
 
@@ -3348,7 +3360,8 @@ generator.prototype.genCapsule =
 		$block( )
 		.$( '"use strict"' )
 		.$( this.genNodeIncludes( ) )
-		.$( this.genConstructor( ) );
+//		.$( this.genConstructor( true ) )
+		.$( this.genConstructor( false ) );
 
 	if( this.singleton )
 	{
