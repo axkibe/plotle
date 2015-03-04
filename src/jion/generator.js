@@ -583,9 +583,7 @@ generator.prototype.genNodeIncludes =
 | Generates the constructor.
 */
 generator.prototype.genConstructor =
-	function(
-		capsule // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -596,10 +594,8 @@ generator.prototype.genConstructor =
 		constructor,
 		freezeBlock,
 		initCall,
-		name;
-
-	capsule =
-		capsule.$comment( 'Constructor.' );
+		name,
+		result;
 
 	block =
 		$block( )
@@ -822,20 +818,17 @@ generator.prototype.genConstructor =
 		}
 	}
 
-	capsule =
-		capsule
+	result =
+		$block( )
+		.$comment( 'Constructor.' )
 		.$varDec( 'Constructor' )
 		.$varDec( 'prototype' )
-		.$assign( 'Constructor', constructor );
-
-	// prototype shortcut
-	capsule =
-		capsule
+		.$assign( 'Constructor', constructor )
 		.$comment( 'Prototype shortcut' )
 		.$assign( 'prototype', 'Constructor.prototype' )
 		.$assign( this.id.$global.$dot( 'prototype' ), 'prototype' );
 
-	return capsule;
+	return result;
 };
 
 
@@ -3396,7 +3389,7 @@ generator.prototype.genCapsule =
 
 	capsule = this.genNodeIncludes( capsule );
 
-	capsule = this.genConstructor( capsule );
+	capsule = capsule.$( this.genConstructor( ) );
 
 	if( this.singleton )
 	{
