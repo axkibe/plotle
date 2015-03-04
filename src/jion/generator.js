@@ -835,12 +835,10 @@ generator.prototype.genConstructor =
 | Generates the singleton decleration.
 */
 generator.prototype.genSingleton =
-	function(
-		capsule // block to append to
-	)
+	function( )
 {
-	return (
-		capsule
+	return(
+		$block( )
 		.$comment( 'Singleton' )
 		.$varDec( '_singleton' )
 		.$assign( '_singleton', null )
@@ -1872,18 +1870,11 @@ generator.prototype.genCreatorReturn =
 | Generates the creator.
 */
 generator.prototype.genCreator =
-	function(
-		capsule // block to append to
-	)
+	function( )
 {
 	var
 		block,
 		creator;
-
-	capsule =
-		capsule.$comment(
-			'Creates a new ' + this.id.name + ' object.'
-		);
 
 	block = $block( );
 
@@ -1910,15 +1901,14 @@ generator.prototype.genCreator =
 		$func( block )
 		.$arg( null, 'free strings' );
 
-
-	capsule =
-		capsule
+	return(
+		$block( )
+		.$comment( 'Creates a new ' + this.id.name + ' object.')
 		.$assign(
 			$var( this.id.global ).$dot( 'create' ),
 			$assign( 'prototype.create', creator )
-		);
-
-	return capsule;
+		)
+	);
 };
 
 
@@ -3383,18 +3373,16 @@ generator.prototype.genCapsule =
 
 	capsule =
 		$block( )
-		.$( '"use strict"' );
-
-	capsule = capsule.$( this.genNodeIncludes( ) );
-
-	capsule = capsule.$( this.genConstructor( ) );
+		.$( '"use strict"' )
+		.$( this.genNodeIncludes( ) )
+		.$( this.genConstructor( ) );
 
 	if( this.singleton )
 	{
-		capsule = this.genSingleton( capsule );
+		capsule = capsule.$( this.genSingleton( ) );
 	}
 
-	capsule = this.genCreator( capsule );
+	capsule = capsule.$( this.genCreator( ) );
 
 	if( this.hasJson )
 	{
