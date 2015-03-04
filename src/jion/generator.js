@@ -3339,9 +3339,7 @@ generator.prototype.genPreamble =
 | Returns the generated capsule block.
 */
 generator.prototype.genCapsule =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		capsule;
@@ -3381,12 +3379,11 @@ generator.prototype.genCapsule =
 		capsule = capsule.$( this.genAlike( ) );
 	}
 
-	block =
-		block
+	return(
+		$block( )
 		.$comment( 'Capsule' )
-		.append( $capsule( capsule ) );
-
-	return block;
+		.append( $capsule( capsule ) )
+	);
 };
 
 
@@ -3412,14 +3409,10 @@ generator.generate =
 			'This is an auto generated file.',
 			'',
 			'DO NOT EDIT!'
-		);
-
-	result =
-		result
+		)
 		.$( gi.genExport( ) )
-		.$( gi.genImports( ) );
-
-	result = gi.genCapsule( result );
+		.$( gi.genImports( ) )
+		.$( gi.genCapsule( ) );
 
 	return result;
 };
