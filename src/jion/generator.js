@@ -634,7 +634,7 @@ generator.prototype.genConstructor =
 			continue;
 		}
 
-		assign = $assign( $this.$dot( attr.assign ), attr.varRef );
+		assign = $( 'this.', attr.assign, '=', attr.varRef );
 
 		if( !abstract && !attr.allowsUndefined )
 		{
@@ -830,9 +830,9 @@ generator.prototype.genConstructor =
 			.$comment( 'Constructor.' )
 			.$varDec( 'Constructor' )
 			.$varDec( 'prototype' )
-			.$assign( 'Constructor', cf )
+			.$( 'Constructor = ', cf )
 			.$comment( 'Prototype shortcut' )
-			.$assign( 'prototype', 'Constructor.prototype' )
+			.$( 'prototype = Constructor.prototype' )
 			.$assign( this.id.$global.$dot( 'prototype' ), 'prototype' )
 		);
 	}
@@ -979,12 +979,8 @@ generator.prototype.genCreatorInheritanceReceiver =
 			continue;
 		}
 
-		receiver =
-			receiver
-			.$assign(
-				attr.varRef,
-				$this.$dot( attr.assign )
-			);
+		// XXX
+		receiver = receiver.$( attr.varRef, '=', $this.$dot( attr.assign ) );
 	}
 
 	result =
