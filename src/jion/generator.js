@@ -1324,7 +1324,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		case 'function' :
 
-			return $differs( $typeof( aVar ), '"function"' );
+			return $( 'typeof( ', aVar, ' ) !== "function"' );
 
 		case 'null' :
 
@@ -1332,20 +1332,20 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		case 'number' :
 
-			return $differs( $typeof( aVar ), '"number"' );
+			return $( 'typeof( ', aVar, ' ) !== "number"' );
 
 		case 'string' :
 
 			return(
 				$and(
-					$differs( $typeof( aVar ), '"string"' ),
+					$( 'typeof( ', aVar, ' ) !== "string"' ),
 					$( '!( ', aVar, ' instanceof String )' )
 				)
 			);
-// XX
+
 		default :
 
-			return $differs( aVar.$dot( 'reflect' ), id.$string );
+			return $( aVar, '.reflect !== ', id.$string );
 	}
 };
 
