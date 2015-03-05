@@ -361,10 +361,8 @@ parser.handleRoundBrackets =
 				}
 				while(
 					!state.reachedEnd
-					&&
-					state.current.type !== ')'
-					&&
-					state.current.type !== ','
+					&& state.current.type !== ')'
+					&& state.current.type !== ','
 				);
 
 				if( state.reachedEnd )
@@ -1025,9 +1023,17 @@ parseToken =
 		nextSpec,
 		tokenSpec;
 
-	tokenSpec = getSpec( state.ast, state.current );
+	// this is already a preparsed astTree.
+	if( state.ast === null && state.current.reflect !== 'jsLexer_token' )
+	{
+		state = state.create( 'ast', state.current, 'pos', state.pos + 1 );
+	}
+	else
+	{
+		tokenSpec = getSpec( state.ast, state.current );
 
-	state = parser[ tokenSpec.handler ]( state, tokenSpec );
+		state = parser[ tokenSpec.handler ]( state, tokenSpec );
+	}
 
 	while( !state.reachedEnd )
 	{
@@ -1077,6 +1083,10 @@ parser.parse =
 		{
 			tokens = tokens.appendRay( lexer.tokenize( arg ) );
 		}
+		else
+		{
+			tokens = tokens.append( arg );
+		}
 	}
 
 	st =
@@ -1086,7 +1096,7 @@ parser.parse =
 			'ast', null
 		);
 
-		st = parseToken( st, leftSpecs.start );
+	st = parseToken( st, leftSpecs.start );
 
 	if( !st.reachedEnd )
 	{
