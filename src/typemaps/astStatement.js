@@ -7,6 +7,7 @@ module.exports =
 	'ast_arrayLiteral',
 	'ast_assign',
 	'ast_boolean',
+	'ast_block',
 	'ast_call',
 	'ast_check',
 	'ast_comma',

@@ -19,7 +19,7 @@ if( JION )
 		id :
 			'ast_objLiteral',
 		twig :
-			'->astStatement'
+			'->astStatement'  // FIXME astExpression?
 	};
 }
 

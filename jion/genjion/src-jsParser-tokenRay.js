@@ -30,6 +30,7 @@ var
 	ast_and,
 	ast_arrayLiteral,
 	ast_assign,
+	ast_block,
 	ast_boolean,
 	ast_call,
 	ast_check,
@@ -91,6 +92,8 @@ if( SERVER )
 	ast_arrayLiteral = require( '../../src/ast/arrayLiteral' );
 
 	ast_assign = require( '../../src/ast/assign' );
+
+	ast_block = require( '../../src/ast/block' );
 
 	ast_boolean = require( '../../src/ast/boolean' );
 
@@ -374,6 +377,8 @@ prototype.create =
 /**/			o.reflect !== 'ast_arrayLiteral'
 /**/			&&
 /**/			o.reflect !== 'ast_assign'
+/**/			&&
+/**/			o.reflect !== 'ast_block'
 /**/			&&
 /**/			o.reflect !== 'ast_boolean'
 /**/			&&

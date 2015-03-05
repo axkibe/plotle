@@ -2954,6 +2954,8 @@ generator.prototype.genEqualsFuncBody =
 	)
 {
 	var
+		a,
+		aZ,
 		attr,
 		body,
 		cond,
@@ -3095,7 +3097,7 @@ generator.prototype.genEqualsFuncBody =
 	}
 
 	for(
-		var a = 0, aZ = this.attributes.size;
+		a = 0, aZ = this.attributes.size;
 		a < aZ;
 		a++
 	)

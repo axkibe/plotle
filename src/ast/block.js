@@ -29,6 +29,7 @@ var
 	ast_comment,
 	ast_return,
 	jools,
+	parser,
 	shorthand,
 	tools;
 
@@ -41,6 +42,8 @@ ast_return = require( './return' );
 
 jools = require( '../jools/jools' );
 
+parser = require( '../jsParser/parser' );
+
 shorthand = require( './shorthand' );
 
 tools = require( './tools' );
@@ -50,16 +53,19 @@ tools = require( './tools' );
 | Returns the block with a parsed statement appended.
 */
 ast_block.prototype.$ =
-	function(
-		statement
-	)
+	function( )
 {
-	if( statement.reflect === 'ast_block' )
+	var
+		ast;
+
+	ast = parser.parse.apply( parser, arguments );
+
+	if( ast.reflect === 'ast_block' )
 	{
-		return this.appendRay( statement );
+		return this.appendRay( ast );
 	}
 
-	return this.append( tools.convert( statement ) );
+	return this.append( ast );
 };
 
 

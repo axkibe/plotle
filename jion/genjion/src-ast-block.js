@@ -30,6 +30,7 @@ var
 	ast_and,
 	ast_arrayLiteral,
 	ast_assign,
+	ast_block,
 	ast_boolean,
 	ast_call,
 	ast_check,
@@ -371,6 +372,8 @@ prototype.create =
 /**/			o.reflect !== 'ast_arrayLiteral'
 /**/			&&
 /**/			o.reflect !== 'ast_assign'
+/**/			&&
+/**/			o.reflect !== 'ast_block'
 /**/			&&
 /**/			o.reflect !== 'ast_boolean'
 /**/			&&
