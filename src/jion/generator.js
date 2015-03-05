@@ -1315,14 +1315,14 @@ generator.prototype.genSingleTypeCheckFailCondition =
 	{
 		case 'boolean' :
 
-			return $differs( $typeof( aVar ), '"boolean"' );
+			return $( 'typeof( ', aVar, ' ) !== "boolean"' );
 
 		case 'integer' :
 
 			return(
 				$or(
 					$differs( $typeof( aVar ), '"number"' ),
-					$differs( $call( 'Math.floor', aVar ), aVar )
+					$( 'Math.floor( ', aVar, ' ) !== ', aVar )
 				)
 			);
 
