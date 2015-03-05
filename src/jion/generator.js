@@ -1053,7 +1053,7 @@ generator.prototype.genCreatorFreeStringsParser =
 
 	loop =
 		$block( )
-		.$assign( 'arg', 'arguments[ a + 1 ]' );
+		.$( 'arg = arguments[ a + 1 ]' );
 
 	switchExpr = $switch( 'arguments[ a ]' );
 
@@ -1073,7 +1073,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				$string( name ),
 				$if(
 					'arg !== undefined',
-					$assign( attr.varRef, 'arg' )
+					$( attr.varRef, '= arg' )
 				)
 			);
 	}
@@ -1310,6 +1310,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 		id
 	)
 {
+	// XXX
 	switch( id.string )
 	{
 		case 'boolean' :
