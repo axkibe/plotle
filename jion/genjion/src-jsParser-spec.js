@@ -273,8 +273,6 @@ prototype.create =
 /**/	}
 /**/
 /**/	if(
-/**/		typeof( v_handler ) !== 'function'
-/**/		&&
 /**/		typeof( v_handler ) !== 'string'
 /**/		&&
 /**/		!( v_handler instanceof String )
@@ -310,11 +308,7 @@ prototype.create =
 		&&
 		v_astCreator === inherit.astCreator
 		&&
-		(
-			v_handler === inherit.handler
-			||
-			v_handler.equals && v_handler.equals( inherit.handler )
-		)
+		v_handler === inherit.handler
 		&&
 		v_prec === inherit.prec
 	)
@@ -385,11 +379,7 @@ prototype.equals =
 		&&
 		this.astCreator === obj.astCreator
 		&&
-		(
-			this.handler === obj.handler
-			||
-			this.handler.equals && this.handler.equals( obj.handler )
-		)
+		this.handler === obj.handler
 		&&
 		this.prec === obj.prec
 	);
