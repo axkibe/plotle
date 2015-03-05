@@ -29,7 +29,7 @@ if( JION )
 				tokens :
 					{
 						comment : 'ray of tokens to parse',
-						type : 'jsLexer_tokenRay'
+						type : 'jsParser_tokenRay'
 					},
 				pos :
 					{

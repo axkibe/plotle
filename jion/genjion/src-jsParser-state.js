@@ -68,7 +68,7 @@ var
 	ast_var,
 	ast_varDec,
 	jion_proto,
-	jsLexer_tokenRay;
+	jsParser_tokenRay;
 
 
 /*
@@ -168,7 +168,7 @@ if( SERVER )
 
 	jion_proto = require( '../../src/jion/proto' );
 
-	jsLexer_tokenRay = require( '../../src/jsLexer/tokenRay' );
+	jsParser_tokenRay = require( '../../src/jsParser/tokenRay' );
 }
 
 
@@ -452,7 +452,7 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_tokens.reflect !== 'jsLexer_tokenRay' )
+/**/	if( v_tokens.reflect !== 'jsParser_tokenRay' )
 /**/	{
 /**/		throw new Error( );
 /**/	}

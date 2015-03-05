@@ -53,7 +53,7 @@ var
 	getSpec,
 	jools,
 	jsParser_spec,
-	jsLexer_tokenRay,
+	jsParser_tokenRay,
 	lexer,
 	parseToken,
 	state,
@@ -123,7 +123,7 @@ lexer = require( '../jsLexer/lexer' );
 
 state = require( './state' );
 
-jsLexer_tokenRay = require( '../jsLexer/tokenRay' );
+jsParser_tokenRay = require( './tokenRay' );
 
 jsParser_spec = require( './spec' );
 
@@ -1067,7 +1067,7 @@ parser.parse =
 		st,
 		tokens;
 
-	tokens = jsLexer_tokenRay.create( );
+	tokens = jsParser_tokenRay.create( );
 
 	for( a = 0, aZ = arguments.length; a < aZ; a++ )
 	{
