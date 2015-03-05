@@ -1599,9 +1599,7 @@ generator.prototype.genCreatorChecks =
 | 'member' is an access to an attribute ( without call )
 */
 generator.prototype.genCreatorConcerns =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -1616,7 +1614,10 @@ generator.prototype.genCreatorConcerns =
 		func,
 		id,
 		member,
-		name;
+		name,
+		result;
+
+	result = $block( );
 
 	for(
 		a = 0, aZ = this.attributes.size;
@@ -1737,10 +1738,10 @@ generator.prototype.genCreatorConcerns =
 			}
 		}
 
-		block = block.$assign( attr.varRef, cExpr );
+		result = result.$assign( attr.varRef, cExpr );
 	}
 
-	return block;
+	return result;
 };
 
 
@@ -1750,9 +1751,7 @@ generator.prototype.genCreatorConcerns =
 | returning this object if so.
 */
 generator.prototype.genCreatorUnchanged =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -1807,13 +1806,7 @@ generator.prototype.genCreatorUnchanged =
 		cond = $and( cond, ceq );
 	}
 
-	block =
-		block.$if(
-			cond,
-			$return( 'inherit' )
-		);
-
-	return block;
+	return $block( ).$if( cond, $return( 'inherit' ) );
 };
 
 
@@ -1904,11 +1897,9 @@ generator.prototype.genCreator =
 	block =
 		block
 		.$( this.genCreatorDefaults( false ) )
-		.$( this.genCreatorChecks( false ) );
-
-	block = this.genCreatorConcerns( block );
-
-	block = this.genCreatorUnchanged( block );
+		.$( this.genCreatorChecks( false ) )
+		.$( this.genCreatorConcerns( ) )
+		.$( this.genCreatorUnchanged( ) );
 
 	block = this.genCreatorReturn( block );
 
