@@ -1246,7 +1246,7 @@ generator.prototype.genCreatorFreeStringsParser =
 		.$for(
 			'a = 0, aZ = arguments.length',
 			'a < aZ',
-			$plusAssign( 'a', 2 ),
+			'a += 2',
 			loop
 		)
 	);
