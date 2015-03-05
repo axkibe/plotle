@@ -22,12 +22,9 @@ if( JION )
 			{
 				'jion' :
 					{
-						comment :
-							'the jion definition',
-						type :
-							'protean',
-						assign :
-							null
+						comment : 'the jion definition',
+						type : 'protean',
+						assign : null
 					}
 			},
 		init :
@@ -842,7 +839,7 @@ generator.prototype.genConstructor =
 			$block( )
 			.$comment( 'Abstract constructor.' )
 			.$varDec( 'AbstractConstructor' )
-			.$assign( 'AbstractConstructor', cf )
+			.$( 'AbstractConstructor = ', cf )
 		);
 	}
 };
@@ -859,7 +856,7 @@ generator.prototype.genSingleton =
 		$block( )
 		.$comment( 'Singleton' )
 		.$varDec( '_singleton' )
-		.$assign( '_singleton', null )
+		.$( '_singleton = null' )
 	);
 };
 
@@ -1281,8 +1278,8 @@ generator.prototype.genCreatorDefaults =
 			result =
 				result
 				.$if(
-					$equals( attr.varRef, undefined ),
-					$assign( attr.varRef, attr.defaultValue )
+					$( attr.varRef, '=== undefined' ),
+					$( attr.varRef, '=', attr.defaultValue )
 				);
 		}
 	}
@@ -1721,7 +1718,7 @@ generator.prototype.genCreatorConcerns =
 			}
 		}
 
-		result = result.$assign( attr.varRef, cExpr );
+		result = result.$( attr.varRef, '=', cExpr );
 	}
 
 	return result;
@@ -1995,7 +1992,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 		case 'number' :
 		case 'string' :
 
-			code = $assign( attr.varRef, 'arg' );
+			code = $( attr.varRef, '= arg' );
 
 			break;
 
@@ -2032,7 +2029,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 							sif =
 								$if(
 									'typeof( arg ) === "boolean"',
-									$assign( attr.varRef, 'arg' )
+									$( attr.varRef, '= arg' )
 								);
 
 							break;
@@ -2042,7 +2039,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 							sif =
 								$if(
 									'typeof( arg ) === "number"',
-									$assign( attr.varRef, 'arg' )
+									$( attr.varRef, '= arg' )
 								);
 
 							break;
@@ -2129,7 +2126,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 		code =
 			$if(
 				'arg === null ',
-				/* then */ $assign( attr.varRef, null ),
+				/* then */ $( attr.varRef, '= null' ),
 				/* else */ code
 			);
 	}
