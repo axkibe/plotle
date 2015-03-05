@@ -1814,9 +1814,7 @@ generator.prototype.genCreatorUnchanged =
 | Generates the creators return statement
 */
 generator.prototype.genCreatorReturn =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -1827,8 +1825,8 @@ generator.prototype.genCreatorReturn =
 
 	if( this.singleton )
 	{
-		return (
-			block
+		return(
+			$block( )
 			.$if(
 				'!_singleton',
 				$( '_singleton = new Constructor( )' )
@@ -1870,7 +1868,7 @@ generator.prototype.genCreatorReturn =
 		}
 	}
 
-	return block.$return( $new( call ) );
+	return $block( ).$return( $new( call ) );
 };
 
 
@@ -1899,9 +1897,8 @@ generator.prototype.genCreator =
 		.$( this.genCreatorDefaults( false ) )
 		.$( this.genCreatorChecks( false ) )
 		.$( this.genCreatorConcerns( ) )
-		.$( this.genCreatorUnchanged( ) );
-
-	block = this.genCreatorReturn( block );
+		.$( this.genCreatorUnchanged( ) )
+		.$( this.genCreatorReturn( block ) );
 
 	creator =
 		$func( block )
