@@ -3,6 +3,8 @@
 | in a ideoloom environment supporting JIONs etc.
 */
 
+Error.stackTraceLimit = Infinity;
+
 /*
 | Capsule.
 */
@@ -13,8 +15,6 @@
 /*
 | Global Constants
 */
-Error.stackTraceLimit = 99999;
-
 GLOBAL.APP = 'server';
 //GLOBAL.APP = 'genjion';
 
@@ -37,6 +37,9 @@ GLOBAL.SERVER = true;
 | Preloads some common modules
 */
 GLOBAL.jools = require( '../jools/jools' );
+
+// hackish needed due to circular requirements
+require( '../ast/shorthand' );
 
 GLOBAL.ast_tools = require( '../ast/tools' );
 
