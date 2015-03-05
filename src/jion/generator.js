@@ -1631,11 +1631,11 @@ generator.prototype.genCreatorConcerns =
 		{
 			if( id )
 			{
-				cExpr = $call( id.$global.$dot( func ) );
+				cExpr = $( id.$global, '.', func, '( )' );
 			}
 			else
 			{
-				cExpr = $call( func );
+				cExpr = $( func, '( )' );
 			}
 
 			for(
@@ -1678,8 +1678,8 @@ generator.prototype.genCreatorConcerns =
 					cExpr =
 						$condition(
 							$( attr.varRef, ' !== null' ),
-							attr.varRef.$dot( member ),
-							null
+							$( attr.varRef, '.', member ),
+							$( 'null' )
 						);
 
 				}
@@ -1688,8 +1688,8 @@ generator.prototype.genCreatorConcerns =
 					cExpr =
 						$condition(
 							$( attr.varRef, ' !== undefined' ),
-							attr.varRef.$dot( member ),
-							null
+							$( attr.varRef, '.', member ),
+							$( 'null' )
 						);
 				}
 				else
@@ -1891,8 +1891,8 @@ generator.prototype.genCreator =
 		$block( )
 		.$comment( 'Creates a new ' + this.id.name + ' object.')
 		.$assign(
-			$var( this.id.global ).$dot( 'create' ),
-			$assign( 'prototype.create', creator )
+			$( this.id.global, '.create' ),
+			$( 'prototype.create = ', creator )
 		)
 	);
 };
@@ -2004,12 +2004,9 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 			if( attr.id.reflect === 'jion_id' )
 			{
 				code =
-					$assign(
-						attr.varRef,
-						$call(
-							attr.id.$global.$dot( 'createFromJSON' ),
-							'arg'
-						)
+					$(
+						attr.varRef, '=',
+							attr.id.$global, '.createFromJSON( arg )'
 					);
 			}
 			else
@@ -2284,7 +2281,7 @@ generator.prototype.genFromJsonCreatorGroupProcessing =
 				$assign(
 					'group[ k ]',
 					$call(
-						gid.$global.$dot( 'createFromJSON' ),
+						$( gid.$global, '.createFromJSON' ),
 						'jgroup[ k ]'
 					)
 				)
@@ -2369,7 +2366,7 @@ generator.prototype.genFromJsonCreatorRayProcessing =
 				$assign(
 					'ray[ r ]',
 					$call(
-						rid.$global.$dot( 'createFromJSON' ),
+						$( rid.$global, '.createFromJSON' ),
 						'jray[ r ]'
 					)
 				)
@@ -2438,7 +2435,7 @@ generator.prototype.genFromJsonCreatorTwigProcessing =
 				$assign(
 					'twig[ key ]',
 					$call(
-						twigID.$global.$dot( 'createFromJSON' ),
+						$( twigID.$global, '.createFromJSON' ),
 						'jval'
 					)
 				)
