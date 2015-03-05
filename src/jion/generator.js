@@ -833,7 +833,7 @@ generator.prototype.genConstructor =
 			.$( 'Constructor = ', cf )
 			.$comment( 'Prototype shortcut' )
 			.$( 'prototype = Constructor.prototype' )
-			.$assign( this.id.$global.$dot( 'prototype' ), 'prototype' )
+			.$( this.id.$global, '.prototype = prototype' )
 		);
 	}
 	else
@@ -979,13 +979,12 @@ generator.prototype.genCreatorInheritanceReceiver =
 			continue;
 		}
 
-		// XXX
-		receiver = receiver.$( attr.varRef, '=', $this.$dot( attr.assign ) );
+		receiver = receiver.$( attr.varRef, '=', 'this.', attr.assign );
 	}
 
 	result =
 		$if(
-			$differs( $this, this.id.global ),
+			$( 'this !==', this.id.global ),
 			receiver
 		);
 
