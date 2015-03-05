@@ -1343,7 +1343,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 			return(
 				$and(
 					$differs( $typeof( aVar ), '"string"' ),
-					$not( $( aVar, ' instanceof String' ) )
+					$( '!( ', aVar, ' instanceof String )' )
 				)
 			);
 // XX
