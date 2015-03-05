@@ -1428,7 +1428,6 @@ generator.prototype.genTypeCheckFailCondition =
 */
 generator.prototype.genCreatorChecks =
 	function(
-		block,  // block to append to
 		json    // do checks for fromJsonCreator
 	)
 {
@@ -1442,14 +1441,7 @@ generator.prototype.genCreatorChecks =
 		name,
 		tcheck;
 
-	if( json )
-	{
-		check = block;
-	}
-	else
-	{
-		check = $block( );
-	}
+	check = $block( );
 
 	for(
 		a = 0, aZ = this.attributes.size;
@@ -1586,11 +1578,11 @@ generator.prototype.genCreatorChecks =
 	{
 		if( check.length > 0 )
 		{
-			return block.$check( check );
+			return $block( ).$check( check );
 		}
 		else
 		{
-			return block;
+			return $block( );
 		}
 	}
 	else
@@ -1909,9 +1901,10 @@ generator.prototype.genCreator =
 		block = block.$( this.genCreatorFreeStringsParser( ) );
 	}
 
-	block = block.$( this.genCreatorDefaults( false ) );
-
-	block = this.genCreatorChecks( block, false );
+	block =
+		block
+		.$( this.genCreatorDefaults( false ) )
+		.$( this.genCreatorChecks( false ) );
 
 	block = this.genCreatorConcerns( block );
 
@@ -2653,7 +2646,7 @@ generator.prototype.genFromJsonCreator =
 		funcBlock = this.genFromJsonCreatorTwigProcessing( funcBlock );
 	}
 
-	funcBlock = this.genCreatorChecks( funcBlock, true );
+	funcBlock = funcBlock.$( this.genCreatorChecks( true ) );
 
 	funcBlock = this.genFromJsonCreatorReturn( funcBlock );
 
