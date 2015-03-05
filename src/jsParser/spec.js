@@ -44,7 +44,7 @@ if( JION )
 						comment :
 							'Handler function to be called',
 						type :
-							'function',
+							[ 'string', 'function' ]
 					},
 				astCreator :
 					{

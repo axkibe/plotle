@@ -54,20 +54,6 @@ var
 	jools,
 	jsParser_spec,
 	lexer,
-	handleBooleanLiteral,
-	handleDot,
-	handleDualisticOps,
-	handleMonoOps,
-	handleNew,
-	handleNumber,
-	handleNull,
-	handleIdentifier,
-	handleObjectLiteral,
-	handleParserError,
-	handlePass,
-	handleRoundBrackets,
-	handleString,
-	handleSquareBrackets,
 	parseToken,
 	state,
 	leftSpecs,
@@ -142,7 +128,7 @@ jsParser_spec = require( './spec' );
 /*
 | Handler for boolean literals.
 */
-handleBooleanLiteral =
+parser.handleBooleanLiteral =
 	function(
 		state // current parser state
 		// spec   // operator spec
@@ -171,7 +157,7 @@ handleBooleanLiteral =
 /*
 | Handler for dots.
 */
-handleDot =
+parser.handleDot =
 	function(
 		state // current parser state
 		// spec   // operator spec
@@ -212,7 +198,7 @@ handleDot =
 /*
 | Generic handler for dualistic operations.
 */
-handleDualisticOps =
+parser.handleDualisticOps =
 	function(
 		state, // current parser state
 		spec   // operator spec
@@ -252,7 +238,7 @@ handleDualisticOps =
 /*
 | Generic handler for mono operations.
 */
-handleMonoOps =
+parser.handleMonoOps =
 	function(
 		state, // current parser state
 		spec   // operator spec
@@ -290,7 +276,7 @@ handleMonoOps =
 /*
 | Handler for new operations.
 */
-handleNew =
+parser.handleNew =
 	function(
 		state, // current parser state
 		spec   // operator spec
@@ -332,7 +318,7 @@ handleNew =
 |
 | This can be grouping or a call.
 */
-handleRoundBrackets =
+parser.handleRoundBrackets =
 	function(
 		state, // current parser state
 		spec   // operator spec
@@ -453,7 +439,7 @@ handleRoundBrackets =
 /*
 | Handler for { } Object literals
 */
-handleObjectLiteral =
+parser.handleObjectLiteral =
 	function(
 		state // current parser state
 		// spec   // operator spec
@@ -504,7 +490,7 @@ handleObjectLiteral =
 /*
 | Handler for [ ].
 */
-handleSquareBrackets =
+parser.handleSquareBrackets =
 	function(
 		state, // current parser state
 		spec   // operator spec
@@ -629,7 +615,7 @@ handleSquareBrackets =
 /*
 | Generic parser error.
 */
-handleParserError =
+parser.handleParserError =
 	function(
 		// state // current parser state
 		// spec   // operator spec
@@ -644,7 +630,7 @@ handleParserError =
 | Generic pass handler.
 | It just passes back up
 */
-handlePass =
+parser.handlePass =
 	function(
 		state // current parser state
 		// spec   // operator spec
@@ -657,7 +643,7 @@ handlePass =
 /*
 | Handler for string literals.
 */
-handleString =
+parser.handleString =
 	function(
 		state // current parser state
 		// spec   // operator spec
@@ -676,7 +662,7 @@ handleString =
 /*
 | Handler for null.
 */
-handleNull =
+parser.handleNull =
 	function(
 		state // current parser state
 		// spec   // operator spec
@@ -696,7 +682,7 @@ handleNull =
 /*
 | Handler for numeric literals.
 */
-handleNumber =
+parser.handleNumber =
 	function(
 		state // current parser state
 		// spec   // operator spec
@@ -716,7 +702,7 @@ handleNumber =
 /*
 | Handler for identifiers.
 */
-handleIdentifier =
+parser.handleIdentifier =
 	function(
 		state // current parser state
 		// spec   // operator spec
@@ -741,77 +727,77 @@ leftSpecs = { };
 leftSpecs.identifier =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleIdentifier
+		'handler', 'handleIdentifier'
 	);
 
 leftSpecs.null =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleNull
+		'handler', 'handleNull'
 	);
 
 leftSpecs.number =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleNumber
+		'handler', 'handleNumber'
 	);
 
 leftSpecs.string =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleString
+		'handler', 'handleString'
 	);
 
 leftSpecs[ 'true' ] =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleBooleanLiteral
+		'handler', 'handleBooleanLiteral'
 	);
 
 leftSpecs[ 'false' ] =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleBooleanLiteral
+		'handler', 'handleBooleanLiteral'
 	);
 
 leftSpecs[ '[' ] =
 	jsParser_spec.create(
 		'prec', 1,
-		'handler', handleSquareBrackets, // FIXME handleArrayLit
+		'handler', 'handleSquareBrackets', // FIXME handleArrayLit
 		'associativity', 'l2r'
 	);
 
 leftSpecs[ '{' ] =
 	jsParser_spec.create(
 		'prec', -1,
-		'handler', handleObjectLiteral
+		'handler', 'handleObjectLiteral'
 	);
 
 leftSpecs[ '(' ] =
 	jsParser_spec.create(
 		'prec', 0,
-		'handler', handleRoundBrackets,
+		'handler', 'handleRoundBrackets',
 		'associativity', 'l2r'
 	);
 
 leftSpecs[ 'new' ] =
 	jsParser_spec.create(
 		'prec', 2,
-		'handler', handleNew,
+		'handler', 'handleNew',
 		'associativity', 'r2l'
 	);
 
 leftSpecs[ '++' ] =
 	jsParser_spec.create(
 		'prec', 3,
-		'handler', handleMonoOps,
+		'handler', 'handleMonoOps',
 		'astCreator', ast_preIncrement
 	);
 
 leftSpecs[ '!' ] =
 	jsParser_spec.create(
 		'prec', 4,
-		'handler', handleMonoOps,
+		'handler', 'handleMonoOps',
 		'astCreator', ast_not,
 		'associativity', 'r2l'
 	);
@@ -819,7 +805,7 @@ leftSpecs[ '!' ] =
 leftSpecs[ 'delete' ] =
 	jsParser_spec.create(
 		'prec', 4,
-		'handler', handleMonoOps,
+		'handler', 'handleMonoOps',
 		'astCreator', ast_delete,
 		'associativity', 'r2l'
 	);
@@ -827,7 +813,7 @@ leftSpecs[ 'delete' ] =
 leftSpecs[ 'typeof' ] =
 	jsParser_spec.create(
 		'prec', 4,
-		'handler', handleMonoOps,
+		'handler', 'handleMonoOps',
 		'astCreator', ast_typeof,
 		'associativity', 'r2l'
 	);
@@ -835,7 +821,7 @@ leftSpecs[ 'typeof' ] =
 leftSpecs[ ',' ] =
 	jsParser_spec.create(
 		'prec', 19,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_comma,
 		'associativity', 'l2r'
 	);
@@ -845,7 +831,7 @@ leftSpecs[ ',' ] =
 leftSpecs.start =
 	jsParser_spec.create(
 		'prec', 99,
-		'handler', handleParserError
+		'handler', 'handleParserError'
 	);
 
 
@@ -858,40 +844,40 @@ rightSpecs = { };
 rightSpecs[ '(' ] =
 	jsParser_spec.create(
 		'prec', 1,
-		'handler', handleRoundBrackets,
+		'handler', 'handleRoundBrackets',
 		'associativity', 'l2r'
 	);
 
 rightSpecs[ ')' ] =
 	jsParser_spec.create(
 		'prec', 98,
-		'handler', handlePass
+		'handler', 'handlePass'
 	);
 
 rightSpecs[ '[' ] =
 	jsParser_spec.create(
 		'prec', 1,
-		'handler', handleSquareBrackets, // FIXME handleMember
+		'handler', 'handleSquareBrackets', // FIXME handleMember
 		'associativity', 'l2r'
 	);
 
 rightSpecs[ ']' ] =
 	jsParser_spec.create(
 		'prec', 1, // 98?
-		'handler', handlePass
+		'handler', 'handlePass'
 	);
 
 rightSpecs[ '.' ] =
 	jsParser_spec.create(
 		'prec', 1,
-		'handler', handleDot,
+		'handler', 'handleDot',
 		'associativity', 'l2r'
 	);
 
 rightSpecs[ '+' ] =
 	jsParser_spec.create(
 		'prec', 6,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_plus,
 		'associativity', 'l2r'
 	);
@@ -899,7 +885,7 @@ rightSpecs[ '+' ] =
 rightSpecs[ '*' ] =
 	jsParser_spec.create(
 		'prec', 5,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_multiply,
 		'associativity', 'l2r'
 	);
@@ -907,7 +893,7 @@ rightSpecs[ '*' ] =
 rightSpecs[ '<' ] =
 	jsParser_spec.create(
 		'prec', 8,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_lessThan,
 		'associativity', 'l2r'
 	);
@@ -915,7 +901,7 @@ rightSpecs[ '<' ] =
 rightSpecs[ '>' ] =
 	jsParser_spec.create(
 		'prec', 8,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_greaterThan,
 		'associativity', 'l2r'
 	);
@@ -923,7 +909,7 @@ rightSpecs[ '>' ] =
 rightSpecs[ '===' ] =
 	jsParser_spec.create(
 		'prec', 9,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_equals,
 		'associativity', 'l2r'
 	);
@@ -931,7 +917,7 @@ rightSpecs[ '===' ] =
 rightSpecs[ '!==' ] =
 	jsParser_spec.create(
 		'prec', 9,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_differs,
 		'associativity', 'l2r'
 	);
@@ -939,7 +925,7 @@ rightSpecs[ '!==' ] =
 rightSpecs[ 'instanceof' ] =
 	jsParser_spec.create(
 		'prec', 11,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_instanceof,
 		'associativity', 'l2r'
 	);
@@ -947,7 +933,7 @@ rightSpecs[ 'instanceof' ] =
 rightSpecs[ '&&' ] =
 	jsParser_spec.create(
 		'prec', 13,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_and,
 		'associativity', 'l2r'
 	);
@@ -955,7 +941,7 @@ rightSpecs[ '&&' ] =
 rightSpecs[ '||' ] =
 	jsParser_spec.create(
 		'prec', 14,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_or,
 		'associativity', 'l2r'
 	);
@@ -963,7 +949,7 @@ rightSpecs[ '||' ] =
 rightSpecs[ '=' ] =
 	jsParser_spec.create(
 		'prec', 16,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_assign,
 		'associativity', 'r2l'
 	);
@@ -971,7 +957,7 @@ rightSpecs[ '=' ] =
 rightSpecs[ '+=' ] =
 	jsParser_spec.create(
 		'prec', 16,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_plusAssign,
 		'associativity', 'r2l'
 	);
@@ -979,7 +965,7 @@ rightSpecs[ '+=' ] =
 rightSpecs[ '*=' ] =
 	jsParser_spec.create(
 		'prec', 16,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_multiplyAssign,
 		'associativity', 'r2l'
 	);
@@ -987,21 +973,10 @@ rightSpecs[ '*=' ] =
 rightSpecs[ ',' ] =
 	jsParser_spec.create(
 		'prec', 19,
-		'handler', handleDualisticOps,
+		'handler', 'handleDualisticOps',
 		'astCreator', ast_comma,
 		'associativity', 'l2r'
 	);
-
-// phony spec that cannot be created
-// by lexer denoting start of parsing
-/*
-FIXME remove
-rightSpecs.start =
-	jsParser_spec.create(
-		'prec', 98,
-		'handler', handleParserError
-	);
-*/
 
 
 /*
@@ -1049,7 +1024,7 @@ parseToken =
 
 	tokenSpec = getSpec( state.ast, state.current );
 
-	state = tokenSpec.handler( state, tokenSpec );
+	state = parser[ tokenSpec.handler ]( state, tokenSpec );
 
 	while( !state.reachedEnd )
 	{
@@ -1060,11 +1035,10 @@ parseToken =
 			||
 			(
 				nextSpec.prec === spec.prec
-				&&
-				spec.associativity === 'l2r'
+				&& spec.associativity === 'l2r'
 			)
 			||
-			nextSpec.handler === handlePass
+			nextSpec.handler === 'handlePass'
 		)
 		{
 			break;
@@ -1082,7 +1056,9 @@ parseToken =
 | Parses a code to create an ast of it
 */
 parser.parse =
-	function( code )
+	function(
+		code
+	)
 {
 	var
 		st,
