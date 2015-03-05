@@ -2620,10 +2620,9 @@ generator.prototype.genFromJsonCreator =
 	return(
 		$block( )
 		.$comment( 'Creates a new ' + this.id.name + ' object from json.' )
-		.$assign(
-			$var( this.id.global ).$dot( 'createFromJSON' ),
-			$func( funcBlock )
-			.$arg( 'json', 'the json object' )
+		.$(
+			this.id.global, '.createFromJSON =',
+			$func( funcBlock ).$arg( 'json', 'the json object' )
 		)
 	);
 };
@@ -2794,7 +2793,7 @@ generator.prototype.genToJson =
 			continue;
 		}
 
-		olit = olit.add( name, $this.$dot( attr.assign ) );
+		olit = olit.add( name, $( 'this.', attr.assign ) );
 	}
 
 	if( this.group )
@@ -2880,8 +2879,8 @@ generator.prototype.genAttributeEquals =
 					$or(
 						$equals( le, re ),
 						$and(
-							$differs( le, null ),
-							$differs( le, undefined ),
+							$( le, ' !== null' ),
+							$( le, ' !== undefined' ),
 							$call( le.$dot( eqFuncName ), re )
 						)
 					);
@@ -2892,7 +2891,7 @@ generator.prototype.genAttributeEquals =
 					$or(
 						$equals( le, re ),
 						$and(
-							$differs( le, null ),
+							$( le, ' !== null' ),
 							$call( le.$dot( eqFuncName ), re )
 						)
 					);
@@ -2901,7 +2900,7 @@ generator.prototype.genAttributeEquals =
 			{
 				ceq =
 					$or(
-						$equals( le, re ),
+						$( le, '===', re ),
 						$and(
 							$differs( le, undefined ),
 							$call( le.$dot( eqFuncName ), re )
