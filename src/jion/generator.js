@@ -2092,13 +2092,10 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 							cSwitch
 							.$case(
 								idList[ t ].$string,
-								$assign(
-									attr.varRef,
-									$call(
-										idList[ t ].$global
-										.$dot( 'createFromJSON' ),
-										'arg'
-									)
+								$(
+									attr.varRef, '=',
+									idList[ t ].$global,
+									'.createFromJSON', '( arg )'
 								)
 							);
 					}
@@ -2877,11 +2874,11 @@ generator.prototype.genAttributeEquals =
 			{
 				ceq =
 					$or(
-						$equals( le, re ),
+						$( le, '===', re ),
 						$and(
 							$( le, ' !== null' ),
 							$( le, ' !== undefined' ),
-							$call( le.$dot( eqFuncName ), re )
+							$( le, '.', eqFuncName, '(', re, ')' )
 						)
 					);
 			}
@@ -2889,10 +2886,10 @@ generator.prototype.genAttributeEquals =
 			{
 				ceq =
 					$or(
-						$equals( le, re ),
+						$( le, '===', re ),
 						$and(
 							$( le, ' !== null' ),
-							$call( le.$dot( eqFuncName ), re )
+							$( le, '.', eqFuncName, '(', re, ')' )
 						)
 					);
 			}
@@ -2902,8 +2899,8 @@ generator.prototype.genAttributeEquals =
 					$or(
 						$( le, '===', re ),
 						$and(
-							$differs( le, undefined ),
-							$call( le.$dot( eqFuncName ), re )
+							$( le, '!== undefined' ),
+							$( le, '.', eqFuncName, '(', re, ')' )
 						)
 					);
 			}
@@ -2911,7 +2908,7 @@ generator.prototype.genAttributeEquals =
 			{
 				ceq =
 					$or(
-						$equals( le, re ),
+						$( le, '===', re ),
 						$and(
 							le.$dot( eqFuncName ),
 							$call( le.$dot( eqFuncName ), re )
