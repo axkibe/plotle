@@ -131,6 +131,7 @@ module.exports =
 			'src/jion/idGroup.js',
 			'src/jion/stringRay.js',
 			'src/jsParser/state.js',
-			'src/jsParser/spec.js'
+			'src/jsParser/spec.js',
+			'src/jsParser/tokenRay.js'
 		]
 };

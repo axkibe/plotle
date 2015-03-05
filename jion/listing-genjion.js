@@ -66,6 +66,7 @@ module.exports =
 			'src/jsLexer/token.js',
 			'src/jsLexer/tokenRay.js',
 			'src/jsParser/state.js',
-			'src/jsParser/spec.js'
+			'src/jsParser/spec.js',
+			'src/jsParser/tokenRay.js'
 		]
 };

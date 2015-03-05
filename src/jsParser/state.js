@@ -22,26 +22,19 @@ if( JION )
 			{
 				ast :
 					{
-						comment :
-							'current ast entity',
-						type :
-							'->astStatement',
-						allowsNull :
-							true
+						comment : 'current ast entity',
+						type : '->astStatement',
+						allowsNull : true
 					},
 				tokens :
 					{
-						comment :
-							'ray of tokens to parse',
-						type :
-							'jsLexer_tokenRay'
+						comment : 'ray of tokens to parse',
+						type : 'jsLexer_tokenRay'
 					},
 				pos :
 					{
-						comment :
-							'current position in token ray',
-						type :
-							'integer'
+						comment : 'current position in token ray',
+						type : 'integer'
 					}
 			},
 	};

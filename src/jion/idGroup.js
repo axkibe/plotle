@@ -47,10 +47,15 @@ jion_idGroup.createFromIDStrings =
 	)
 {
 	var
-		i,
+		a,
+		aZ,
+		b,
+		bZ,
 		id,
 		ids,
-		iZ;
+		s,
+		subId,
+		subList;
 
 /**/if( CHECK )
 /**/{
@@ -62,20 +67,31 @@ jion_idGroup.createFromIDStrings =
 
 	ids = { };
 
-	for(
-		i = 0, iZ = idStrings.length;
-		i < iZ;
-		i++
-	)
+	for( a = 0, aZ = idStrings.length; a < aZ; a++ )
 	{
-		id = jion_id.createFromString( idStrings[ i ] );
+		s = idStrings[ a ];
 
-		if( ids[ id.string ] )
+		if( s.substring( 0, 2 ) !== '->' )
 		{
-			throw new Error( 'double id' );
-		}
+			id = jion_id.createFromString( idStrings[ a ] );
 
-		ids[ id.string ] = id;
+			ids[ id.string ] = id;
+		}
+		else
+		{
+			// FUTURE may check for circular requirements
+			subList =
+				jion_idGroup.createFromIDStrings(
+					require( '../typemaps/' + s.substring( 2 ) )
+				).idList;
+
+			for( b = 0, bZ = subList.length; b < bZ; b++ )
+			{
+				subId = subList[ b ];
+
+				ids[ subId.string ] = subId;
+			}
+		}
 	}
 
 	return jion_idGroup.create( 'group:init', ids );
@@ -90,13 +106,7 @@ jion_idGroup.prototype.add =
 		id
 	)
 {
-	return(
-		this.create(
-			'group:set',
-			id.string,
-			id
-		)
-	);
+	return this.create( 'group:set', id.string, id );
 };
 
 

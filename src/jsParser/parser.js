@@ -1033,10 +1033,7 @@ parseToken =
 		if(
 			nextSpec.prec > spec.prec
 			||
-			(
-				nextSpec.prec === spec.prec
-				&& spec.associativity === 'l2r'
-			)
+			( nextSpec.prec === spec.prec && spec.associativity === 'l2r' )
 			||
 			nextSpec.handler === 'handlePass'
 		)
@@ -1045,7 +1042,6 @@ parseToken =
 		}
 
 		state = parseToken( state, nextSpec );
-
 	}
 
 	return state;
