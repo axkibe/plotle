@@ -2253,9 +2253,7 @@ generator.prototype.genFromJsonCreatorParser =
 | Generates the fromJsonCreator's group processing.
 */
 generator.prototype.genFromJsonCreatorGroupProcessing =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		haveNull,
@@ -2264,12 +2262,13 @@ generator.prototype.genFromJsonCreatorGroupProcessing =
 		loopSwitch,
 		g,
 		gid,
-		gZ;
+		gZ,
+		result;
 
 	haveNull = false;
 
-	block =
-		block
+	result =
+		$block( )
 		.$if( '!jgroup', $fail( ) )
 		.$( 'group = { }' );
 
@@ -2322,27 +2321,24 @@ generator.prototype.genFromJsonCreatorGroupProcessing =
 				.$(' group[ k ] = null' )
 				.$continue( )
 			)
-			.append( loopSwitch );
+			.$( loopSwitch );
 	}
 
-	block =
-		block
+	return(
+		result
 		.$forIn(
 			'k',
 			'jgroup',
 			loopBody
-		);
-
-	return block;
+		)
+	);
 };
 
 /*
 | Generates the fromJsonCreator's twig processing.
 */
 generator.prototype.genFromJsonCreatorRayProcessing =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		haveNull,
@@ -2350,13 +2346,14 @@ generator.prototype.genFromJsonCreatorRayProcessing =
 		loopBody,
 		loopSwitch,
 		r,
+		result,
 		rid,
 		rZ;
 
 	haveNull = false;
 
-	block =
-		block
+	result =
+		$block( )
 		.$if( '!jray', $fail( ) )
 		.$( 'ray = [ ]' );
 
@@ -2412,16 +2409,15 @@ generator.prototype.genFromJsonCreatorRayProcessing =
 			.append( loopSwitch );
 	}
 
-	block =
-		block
+	return(
+		result
 		.$for(
 			'r = 0, rZ = jray.length',
 			'r < rZ',
 			'++r',
 			loopBody
-		);
-
-	return block;
+		)
+	);
 };
 
 
@@ -2618,15 +2614,16 @@ generator.prototype.genFromJsonCreator =
 		.$( this.genFromJsonCreatorParser( jsonList ) )
 		.$( this.genCreatorDefaults( true ) );
 
-	// XXX
 	if( this.group )
 	{
-		funcBlock = this.genFromJsonCreatorGroupProcessing( funcBlock );
+		funcBlock =
+			funcBlock.$( this.genFromJsonCreatorGroupProcessing( ) );
 	}
 
 	if( this.ray )
 	{
-		funcBlock = this.genFromJsonCreatorRayProcessing( funcBlock );
+		funcBlock =
+			funcBlock.$( this.genFromJsonCreatorRayProcessing( ) );
 	}
 
 	if( this.twig )
