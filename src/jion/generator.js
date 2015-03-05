@@ -621,8 +621,7 @@ generator.prototype.genConstructor =
 				'FREEZE',
 				$if(
 					'prototype.__have_lazy',
-					//$( 'this.__lazy = { }' ) FIXME
-					$assign( 'this.__lazy', $objLiteral( ) )
+					$( 'this.__lazy = { }' )
 				)
 			);
 	}
@@ -877,14 +876,13 @@ generator.prototype.genSingleton =
 | Generates the creators variable list.
 */
 generator.prototype.genCreatorVariables =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		a,
 		aZ,
 		name,
+		result,
 		varList;
 
 	varList = [ ];
@@ -918,16 +916,18 @@ generator.prototype.genCreatorVariables =
 
 	varList.sort( );
 
+	result = $block( );
+
 	for(
 		a = 0, aZ = varList.length;
 		a < aZ;
 		a++
 	)
 	{
-		block = block.$varDec( varList[ a ] );
+		result = result.$varDec( varList[ a ] );
 	}
 
-	return block;
+	return result;
 };
 
 
@@ -935,17 +935,15 @@ generator.prototype.genCreatorVariables =
 | Generates the creators inheritance receiver.
 */
 generator.prototype.genCreatorInheritanceReceiver =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		a,
 		aZ,
 		attr,
-		thisCheck,
 		name,
-		receiver;
+		receiver,
+		result;
 
 	receiver = $block( ).$( 'inherit = this' );
 
@@ -997,7 +995,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 			);
 	}
 
-	thisCheck =
+	result =
 		$if(
 			$differs( $this, this.id.global ),
 			receiver
@@ -1005,8 +1003,8 @@ generator.prototype.genCreatorInheritanceReceiver =
 
 	if( this.group )
 	{
-		thisCheck =
-			thisCheck
+		result =
+			result
 			.$elsewise(
 				$block( )
 				.$( 'group = { }' )
@@ -1016,8 +1014,8 @@ generator.prototype.genCreatorInheritanceReceiver =
 
 	if( this.ray )
 	{
-		thisCheck =
-			thisCheck
+		result =
+			result
 			.$elsewise(
 				$block( )
 				.$( 'ray = [ ]' )
@@ -1027,18 +1025,17 @@ generator.prototype.genCreatorInheritanceReceiver =
 
 	if( this.twig )
 	{
-		thisCheck =
-			thisCheck
+		result =
+			result
 			.$elsewise(
 				$block( )
-				//.$assign( 'twig', $objLiteral( ) )
 				.$( 'twig = { }' )
 				.$( 'ranks = [ ]' )
 				.$( 'twigDup = true' )
 			);
 	}
 
-	return block.append( thisCheck );
+	return result;
 };
 
 
@@ -1903,11 +1900,10 @@ generator.prototype.genCreator =
 		block,
 		creator;
 
-	block = $block( );
-
-	block = this.genCreatorVariables( block );
-
-	block = this.genCreatorInheritanceReceiver( block );
+	block =
+		$block( )
+		.$( this.genCreatorVariables( ) )
+		.$( this.genCreatorInheritanceReceiver( ) );
 
 	if( this.creatorHasFreeStringsParser )
 	{
