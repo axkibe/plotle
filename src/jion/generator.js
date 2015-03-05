@@ -1258,7 +1258,6 @@ generator.prototype.genCreatorFreeStringsParser =
 */
 generator.prototype.genCreatorDefaults =
 	function(
-		block,   // block to append to
 		json     // only do jsons
 	)
 {
@@ -1266,7 +1265,10 @@ generator.prototype.genCreatorDefaults =
 		a,
 		aZ,
 		attr,
-		name;
+		name,
+		result;
+
+	result = $block( );
 
 	for(
 		a = 0, aZ = this.attributes.size;
@@ -1289,8 +1291,8 @@ generator.prototype.genCreatorDefaults =
 			!attr.defaultValue.equals( shorthand.$undefined )
 		)
 		{
-			block =
-				block
+			result =
+				result
 				.$if(
 					$equals( attr.varRef, undefined ),
 					$assign( attr.varRef, attr.defaultValue )
@@ -1298,7 +1300,7 @@ generator.prototype.genCreatorDefaults =
 		}
 	}
 
-	return block;
+	return result;
 };
 
 
@@ -1907,7 +1909,7 @@ generator.prototype.genCreator =
 		block = block.$( this.genCreatorFreeStringsParser( ) );
 	}
 
-	block = this.genCreatorDefaults( block, false );
+	block = block.$( this.genCreatorDefaults( false ) );
 
 	block = this.genCreatorChecks( block, false );
 
@@ -2634,7 +2636,7 @@ generator.prototype.genFromJsonCreator =
 
 	funcBlock = this.genFromJsonCreatorParser( funcBlock, jsonList );
 
-	funcBlock = this.genCreatorDefaults( funcBlock, true );
+	funcBlock = funcBlock.$( this.genCreatorDefaults( true ) );
 
 	if( this.group )
 	{
