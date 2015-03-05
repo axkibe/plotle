@@ -1043,9 +1043,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 | Generates the creators free strings parser.
 */
 generator.prototype.genCreatorFreeStringsParser =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -1243,16 +1241,15 @@ generator.prototype.genCreatorFreeStringsParser =
 
 	loop = loop.append( switchExpr );
 
-	block =
-		block
+	return(
+		$block( )
 		.$for(
 			'a = 0, aZ = arguments.length',
 			'a < aZ',
 			$plusAssign( 'a', 2 ),
 			loop
-		);
-
-	return block;
+		)
+	);
 };
 
 
@@ -1907,7 +1904,7 @@ generator.prototype.genCreator =
 
 	if( this.creatorHasFreeStringsParser )
 	{
-		block = this.genCreatorFreeStringsParser( block );
+		block = block.$( this.genCreatorFreeStringsParser( ) );
 	}
 
 	block = this.genCreatorDefaults( block, false );
