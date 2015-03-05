@@ -76,6 +76,7 @@ var
 	jion_stringRay,
 	jion_validator,
 	jools,
+	parser,
 	shorthand;
 
 
@@ -97,12 +98,14 @@ jion_concern = require( './concern' );
 
 jion_validator = require( './validator' );
 
+parser = require( '../jsParser/parser' );
+
 shorthand = require( '../ast/shorthand' );
 
 /*
 | Shorthanding Shorthands.
 */
-$ = shorthand.$;
+$ = shorthand.$; // XXX
 
 $and = shorthand.$and;
 
