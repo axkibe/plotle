@@ -2425,9 +2425,7 @@ generator.prototype.genFromJsonCreatorRayProcessing =
 | Generates the fromJsonCreator's twig processing.
 */
 generator.prototype.genFromJsonCreatorTwigProcessing =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -2481,8 +2479,8 @@ generator.prototype.genFromJsonCreatorTwigProcessing =
 		.$( 'jval = jwig[ key ]' )
 		.append( switchExpr );
 
-	block =
-		block
+	return(
+		$block( )
 		.$assign( 'twig', $objLiteral( ) )
 		.$if(
 			'!jwig || !ranks',
@@ -2494,18 +2492,16 @@ generator.prototype.genFromJsonCreatorTwigProcessing =
 			'a < aZ',
 			'++a',
 			loop
-		);
-
-	return block;
+		)
+	);
 };
+
 
 /*
 | Generates the fromJsonCreator's return statement
 */
 generator.prototype.genFromJsonCreatorReturn =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		a,
@@ -2564,7 +2560,7 @@ generator.prototype.genFromJsonCreatorReturn =
 		}
 	}
 
-	return block.$return( $new( call ) );
+	return $return( $new( call ) );
 };
 
 
@@ -2617,23 +2613,28 @@ generator.prototype.genFromJsonCreator =
 	if( this.group )
 	{
 		funcBlock =
-			funcBlock.$( this.genFromJsonCreatorGroupProcessing( ) );
+			funcBlock
+			.$( this.genFromJsonCreatorGroupProcessing( ) );
 	}
 
 	if( this.ray )
 	{
 		funcBlock =
-			funcBlock.$( this.genFromJsonCreatorRayProcessing( ) );
+			funcBlock
+			.$( this.genFromJsonCreatorRayProcessing( ) );
 	}
 
 	if( this.twig )
 	{
-		funcBlock = this.genFromJsonCreatorTwigProcessing( funcBlock );
+		funcBlock =
+			funcBlock
+			.$( this.genFromJsonCreatorTwigProcessing( ) );
 	}
 
-	funcBlock = funcBlock.$( this.genCreatorChecks( true ) );
-
-	funcBlock = this.genFromJsonCreatorReturn( funcBlock );
+	funcBlock =
+		funcBlock
+		.$( this.genCreatorChecks( true ) )
+		.$( this.genFromJsonCreatorReturn( ) );
 
 	return(
 		$block( )
