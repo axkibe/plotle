@@ -2910,8 +2910,8 @@ generator.prototype.genAttributeEquals =
 					$or(
 						$( le, '===', re ),
 						$and(
-							le.$dot( eqFuncName ),
-							$call( le.$dot( eqFuncName ), re )
+							$( le, '.', eqFuncName ),
+							$( le, '.', eqFuncName, '(', re, ')' )
 						)
 					);
 			}
@@ -3096,8 +3096,8 @@ generator.prototype.genEqualsFuncBody =
 		ceq =
 			this.genAttributeEquals(
 				name,
-				$this.$dot( attr.assign ),
-				$var( 'obj' ).$dot( attr.assign ),
+				$( 'this.', attr.assign ),
+				$( 'obj.', attr.assign ),
 				eqFuncName
 			);
 
@@ -3260,8 +3260,8 @@ generator.prototype.genAlike =
 			ceq =
 				this.genAttributeEquals(
 					name,
-					$this.$dot( attr.assign ),
-					$var( 'obj' ).$dot( attr.assign ),
+					$( 'this.', attr.assign ),
+					$( 'obj.', attr.assign ),
 					'equals'
 				);
 
@@ -3276,7 +3276,7 @@ generator.prototype.genAlike =
 		result =
 			result
 			.$assign(
-				$var( 'prototype' ).$dot( alikeName ),
+				$( 'prototype.', alikeName ),
 				$func( block )
 				.$arg( 'obj', 'object to compare to' )
 			);
