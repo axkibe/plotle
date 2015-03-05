@@ -2063,11 +2063,12 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 
 							sif =
 								$if(
-									$or(
+									$(
 										'typeof( arg ) === "string"',
+										'||',
 										'arg instanceof String'
 									),
-									$assign( attr.varRef, 'arg' )
+									$( attr.varRef, '= arg' )
 								);
 
 							break;
