@@ -356,15 +356,6 @@ jion_proto.rayAppendRay =
 		ray
 	)
 {
-
-/**/if( CHECK )
-/**/{
-/**/	if( this.reflect !== ray.reflect )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
 	return this.create( 'ray:init', this.ray.concat( ray.ray ) );
 };
 

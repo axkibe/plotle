@@ -53,6 +53,7 @@ var
 	getSpec,
 	jools,
 	jsParser_spec,
+	jsLexer_tokenRay,
 	lexer,
 	parseToken,
 	state,
@@ -121,6 +122,8 @@ jools = require( '../jools/jools' );
 lexer = require( '../jsLexer/lexer' );
 
 state = require( './state' );
+
+jsLexer_tokenRay = require( '../jsLexer/tokenRay' );
 
 jsParser_spec = require( './spec' );
 
@@ -1049,26 +1052,32 @@ parseToken =
 
 
 /*
-| Parses a code to create an ast of it
+| Parses code to create an ast tree.
 */
 parser.parse =
 	function(
-		code
+		// list of strings to parse
+		// or ast subtrees.
 	)
 {
 	var
+		a,
+		arg,
+		aZ,
 		st,
 		tokens;
 
-/**/if( CHECK )
-/**/{
-/**/	if( !jools.isString( code ) )
-/**/	{
-/**/		throw new Error( 'cannot parse non-strings' );
-/**/	}
-/**/}
+	tokens = jsLexer_tokenRay.create( );
 
-	tokens = lexer.tokenize( code );
+	for( a = 0, aZ = arguments.length; a < aZ; a++ )
+	{
+		arg = arguments[ a ];
+
+		if( jools.isString( arg ) )
+		{
+			tokens = tokens.appendRay( lexer.tokenize( arg ) );
+		}
+	}
 
 	st =
 		state.create(
