@@ -1974,6 +1974,8 @@ generator.prototype.genFromJsonCreatorVariables =
 
 	varList.sort( );
 
+	result = $block( );
+
 	for(
 		a = 0, aZ = varList.length;
 		a < aZ;
