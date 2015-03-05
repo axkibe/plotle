@@ -51,7 +51,6 @@ var
 	$fail,
 	$func,
 	$if,
-	$instanceof,
 	$new,
 	$not,
 	$number,
@@ -132,8 +131,6 @@ $fail = shorthand.$fail;
 $func = shorthand.$func;
 
 $if = shorthand.$if;
-
-$instanceof = shorthand.$instanceof;
 
 $new = shorthand.$new;
 
@@ -1319,11 +1316,10 @@ generator.prototype.genSingleTypeCheckFailCondition =
 
 		case 'integer' :
 
-			return(
-				$or(
-					$differs( $typeof( aVar ), '"number"' ),
-					$( 'Math.floor( ', aVar, ' ) !== ', aVar )
-				)
+			return $(
+				$( 'typeof( ', aVar, ' ) !== "number"' ),
+				'||',
+				$( 'Math.floor( ', aVar, ' ) !== ', aVar )
 			);
 
 		case 'function' :
