@@ -1699,12 +1699,12 @@ generator.prototype.genCreatorConcerns =
 				}
 				else
 				{
-					cExpr = attr.varRef.$dot( member );
+					cExpr = $( attr.varRef, '.', member );
 				}
 			}
 			else
 			{
-				cExpr = $call( attr.varRef.$dot( member ) );
+				cExpr = $( attr.varRef, '.', member, '( )' );
 
 				for(
 					b = 0, bZ = args.length;
@@ -1753,17 +1753,17 @@ generator.prototype.genCreatorUnchanged =
 
 	if( this.group )
 	{
-		cond = $and( cond, 'groupDup === false' );
+		cond = $( cond, '&& groupDup === false' );
 	}
 
 	if( this.ray )
 	{
-		cond = $and( cond, 'rayDup === false' );
+		cond = $( cond, '&& rayDup === false' );
 	}
 
 	if( this.twig )
 	{
-		cond = $and( cond, 'twigDup === false' );
+		cond = $( cond, '&& twigDup === false' );
 	}
 
 	for(
@@ -1778,7 +1778,7 @@ generator.prototype.genCreatorUnchanged =
 
 		if( attr.assign === null )
 		{
-			cond = $and( cond, $equals( attr.varRef, null ) );
+			cond = $and( cond, $( attr.varRef, '=== null' ) );
 
 			continue;
 		}
@@ -2754,9 +2754,9 @@ generator.prototype.genJionProto =
 
 			.$comment( 'Returns the rank of the key.' )
 			.$(
-				'jools.lazyFunctionString( '
-				+ 'prototype, "rankOf", jion_proto.twigRankOf '
-				+ ')'
+				'jools.lazyFunctionString( ',
+					'prototype, "rankOf", jion_proto.twigRankOf ',
+				')'
 			)
 
 			.$comment( 'Returns the twig with the element at key set.' )
