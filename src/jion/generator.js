@@ -1343,10 +1343,10 @@ generator.prototype.genSingleTypeCheckFailCondition =
 			return(
 				$and(
 					$differs( $typeof( aVar ), '"string"' ),
-					$not( $instanceof( aVar, 'String' ) )
+					$not( $( aVar, ' instanceof String' ) )
 				)
 			);
-
+// XX
 		default :
 
 			return $differs( aVar.$dot( 'reflect' ), id.$string );
