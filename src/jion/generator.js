@@ -567,18 +567,15 @@ generator.prototype.genNodeIncludes =
 				continue;
 			}
 
+			// XXX
 			block =
 				block
-				.$assign(
-					$var( unitStr + '_' + name ),
+				.$(
+					unitStr + '_' + name,
+					'=',
 					$call(
 						'require',
-						$string(
-							'../../src/'
-							+ unitStr
-							+ '/'
-							+ name
-						)
+						$string( '../../src/' + unitStr + '/' + name )
 					)
 				);
 		}
