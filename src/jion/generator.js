@@ -44,17 +44,12 @@ var
 	$comment,
 	$condition,
 	$differs,
-	$equals,
 	$fail,
 	$func,
 	$if,
 	$new,
-	$not,
-	$number,
 	$objLiteral,
 	$or,
-	$plus,
-	$plusAssign,
 	$return,
 	$returnFalse,
 	$returnTrue,
@@ -121,8 +116,6 @@ $condition = shorthand.$condition;
 
 $differs = shorthand.$differs;
 
-$equals = shorthand.$equals;
-
 $fail = shorthand.$fail;
 
 $func = shorthand.$func;
@@ -131,17 +124,9 @@ $if = shorthand.$if;
 
 $new = shorthand.$new;
 
-$not = shorthand.$not;
-
-$number = shorthand.$number;
-
 $objLiteral = shorthand.$objLiteral;
 
 $or = shorthand.$or;
-
-$plus = shorthand.$plus;
-
-$plusAssign = shorthand.$plusAssign;
 
 $return = shorthand.$return;
 
@@ -1449,7 +1434,7 @@ generator.prototype.genCreatorChecks =
 			check =
 				check
 				.$if(
-					$equals( av, undefined ),
+					$( av, '=== undefined' ),
 					$fail( )
 				);
 		}
@@ -1459,7 +1444,7 @@ generator.prototype.genCreatorChecks =
 			check =
 				check
 				.$if(
-					$equals( av, null ),
+					$( av, '=== null' ),
 					$fail( )
 				);
 		}
@@ -2861,7 +2846,7 @@ generator.prototype.genAttributeEquals =
 		case 'protean' :
 		case 'string' :
 
-			ceq = $equals( le, re );
+			ceq = $( le, '===', re );
 
 			break;
 
