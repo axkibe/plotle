@@ -1479,19 +1479,15 @@ generator.prototype.genCreatorChecks =
 
 		if( attr.allowsNull && !attr.allowsUndefined )
 		{
-			cond = $differs( av, null );
+			cond = $( av, ' !== null' );
 		}
 		else if( !attr.allowsNull && attr.allowsUndefined )
 		{
-			cond = $differs( av, undefined );
+			cond = $( av, ' !== undefined' );
 		}
 		else if( attr.allowsNull && attr.allowsUndefined )
 		{
-			cond =
-				$and(
-					$differs( av, null ),
-					$differs( av, undefined )
-				);
+			cond = $( av, ' !== null && ', av, ' !== undefined' );
 		}
 		else
 		{
@@ -1686,7 +1682,7 @@ generator.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						$condition(
-							$differs( attr.varRef, null ),
+							$( attr.varRef, ' !== null' ),
 							attr.varRef.$dot( member ),
 							null
 						);
@@ -1696,7 +1692,7 @@ generator.prototype.genCreatorConcerns =
 				{
 					cExpr =
 						$condition(
-							$differs( attr.varRef, undefined ),
+							$( attr.varRef, ' !== undefined' ),
 							attr.varRef.$dot( member ),
 							null
 						);
@@ -1753,7 +1749,7 @@ generator.prototype.genCreatorUnchanged =
 		cond,
 		name;
 
-	cond = $var( 'inherit' );
+	cond = $( 'inherit' );
 
 	if( this.group )
 	{
@@ -1791,7 +1787,7 @@ generator.prototype.genCreatorUnchanged =
 			this.genAttributeEquals(
 				name,
 				attr.varRef,
-				$var( 'inherit' ).$dot( attr.assign ),
+				$( 'inherit.', attr.assign ),
 				'equals'
 			);
 
