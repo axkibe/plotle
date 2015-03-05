@@ -105,7 +105,7 @@ shorthand = require( '../ast/shorthand' );
 /*
 | Shorthanding Shorthands.
 */
-$ = shorthand.$; // XXX
+$ = parser.parse;
 
 $and = shorthand.$and;
 
