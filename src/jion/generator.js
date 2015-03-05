@@ -1919,16 +1919,15 @@ generator.prototype.genCreator =
 | Generates the fromJsonCreator's variable list.
 */
 generator.prototype.genFromJsonCreatorVariables =
-	function(
-		block // block to append to
-	)
+	function( )
 {
 	var
 		a,
 		aZ,
 		attr,
 		name,
-		varList;
+		varList,
+		result;
 
 	varList = [ ];
 
@@ -1981,10 +1980,10 @@ generator.prototype.genFromJsonCreatorVariables =
 		a++
 	)
 	{
-		block = block.$varDec( varList[ a ] );
+		result = result.$varDec( varList[ a ] );
 	}
 
-	return block;
+	return result;
 };
 
 /*
@@ -2164,7 +2163,6 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 */
 generator.prototype.genFromJsonCreatorParser =
 	function(
-		block,   // block to append
 		jsonList
 	)
 {
@@ -2236,18 +2234,18 @@ generator.prototype.genFromJsonCreatorParser =
 			);
 	}
 
-	block =
-		block
+	return(
+		$block( )
 		.$forIn(
 			'name',
 			'json',
 			$block( )
 			.$( 'arg = json[ name ]' )
 			.append( nameSwitch )
-		);
-
-	return block;
+		)
+	);
 };
+
 
 /*
 | Generates the fromJsonCreator's group processing.
@@ -2613,12 +2611,12 @@ generator.prototype.genFromJsonCreator =
 
 	jsonList.sort( );
 
-	funcBlock = this.genFromJsonCreatorVariables( $block( ) );
+	funcBlock =
+		this.genFromJsonCreatorVariables( )
+		.$( this.genFromJsonCreatorParser( jsonList ) )
+		.$( this.genCreatorDefaults( true ) );
 
-	funcBlock = this.genFromJsonCreatorParser( funcBlock, jsonList );
-
-	funcBlock = funcBlock.$( this.genCreatorDefaults( true ) );
-
+	// XXX
 	if( this.group )
 	{
 		funcBlock = this.genFromJsonCreatorGroupProcessing( funcBlock );
