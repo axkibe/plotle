@@ -124,7 +124,10 @@ Constructor =
 
 	this.handler = v_handler;
 
-	this.prec = v_prec;
+	if( v_prec !== undefined )
+	{
+		this.prec = v_prec;
+	}
 
 	this._init( );
 
@@ -281,23 +284,21 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_prec === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
 /**/	if( v_prec === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if(
-/**/		typeof( v_prec ) !== 'number'
-/**/		||
-/**/		Math.floor( v_prec ) !== v_prec
-/**/	)
+/**/	if( v_prec !== undefined )
 /**/	{
-/**/		throw new Error( );
+/**/		if(
+/**/			typeof( v_prec ) !== 'number'
+/**/			||
+/**/			Math.floor( v_prec ) !== v_prec
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
 /**/	}
 /**/}
 

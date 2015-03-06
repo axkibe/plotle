@@ -47,6 +47,7 @@ var
 	ast_plus,
 	ast_plusAssign,
 	ast_preIncrement,
+	ast_return,
 	ast_string,
 	ast_typeof,
 	ast_var,
@@ -58,7 +59,8 @@ var
 	parseToken,
 	state,
 	leftSpecs,
-	rightSpecs;
+	rightSpecs,
+	statementSpecs;
 
 
 ast_and = require( '../ast/and' );
@@ -110,6 +112,8 @@ ast_plus = require( '../ast/plus' );
 ast_plusAssign = require( '../ast/plusAssign' );
 
 ast_preIncrement = require( '../ast/preIncrement' );
+
+ast_return = require( '../ast/return' );
 
 ast_string = require( '../ast/string' );
 
@@ -314,6 +318,43 @@ parser.handleNew =
 	return state;
 };
 
+
+/*
+| Handler for return
+*/
+parser.handleReturn =
+	function(
+		state // current parser state
+	)
+{
+	var
+		ast;
+
+	ast = state.ast;
+
+/**/if( CHECK )
+/**/{
+/**/	if( state.ast !== null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( state.current.type !== 'return' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	state = state.create( 'pos', state.pos + 1 );
+
+	state = parseToken( state, leftSpecs.start );
+
+	return(
+		state.create(
+			'ast', ast_return.create( 'expr', state.ast )
+		)
+	);
+};
 
 
 /*
@@ -979,31 +1020,40 @@ rightSpecs[ ',' ] =
 		'associativity', 'l2r'
 	);
 
+/*
+| Statement token specifications.
+*/
+statementSpecs = { };
+
+statementSpecs[ 'return' ] =
+	jsParser_spec.create(
+		'handler', 'handleReturn'
+	);
+
 
 /*
 | Returns the spec for a state
 */
 getSpec =
 	function(
-		ast,
-		token
+		state
 	)
 {
 	var
 		spec;
 
-	if( ast === null )
+	if( state.ast === null )
 	{
-		spec = leftSpecs[ token.type ];
+		spec = leftSpecs[ state.current.type ];
 	}
 	else
 	{
-		spec = rightSpecs[ token.type ];
+		spec = rightSpecs[ state.current.type ];
 	}
 
 	if( !spec )
 	{
-		throw new Error( 'unexpected ' + token.type );
+		throw new Error( 'unexpected ' + state.current.type );
 	}
 
 	return spec;
@@ -1030,16 +1080,18 @@ parseToken =
 	}
 	else
 	{
-		tokenSpec = getSpec( state.ast, state.current );
+		tokenSpec = getSpec( state );
 
 		state = parser[ tokenSpec.handler ]( state, tokenSpec );
 	}
 
 	while( !state.reachedEnd )
 	{
-		nextSpec = getSpec( state.ast, state.current );
+		nextSpec = getSpec( state );
 
 		if(
+			nextSpec.prec === undefined
+			||
 			nextSpec.prec > spec.prec
 			||
 			( nextSpec.prec === spec.prec && spec.associativity === 'l2r' )

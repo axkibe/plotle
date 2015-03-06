@@ -37,7 +37,9 @@ if( JION )
 						comment :
 							'operator precedence',
 						type :
-							'integer'
+							'integer',
+						defaultValue :
+							'undefined'
 					},
 				handler :
 					{
@@ -52,7 +54,7 @@ if( JION )
 							'For some handlers, the ast creator function'
 							+ ' for it to call',
 						type :
-							'protean', // FIXME
+							'protean', // FUTURE
 						defaultValue :
 							'undefined'
 					}
