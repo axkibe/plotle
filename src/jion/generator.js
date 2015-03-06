@@ -47,7 +47,6 @@ var
 	$if,
 	$objLiteral,
 	$or,
-	$return,
 	$string,
 	$switch,
 	$var,
@@ -114,8 +113,6 @@ $if = shorthand.$if;
 $objLiteral = shorthand.$objLiteral;
 
 $or = shorthand.$or;
-
-$return = shorthand.$return;
 
 $string = shorthand.$string;
 
@@ -2771,9 +2768,7 @@ generator.prototype.genToJson =
 			'FREEZE',
 			$( 'Object.freeze( json )' )
 		)
-		.$return(
-			$func( 'return json' )
-		);
+		.$( 'return', $func( 'return json' ) );
 
 	return(
 		$block( )
@@ -3222,7 +3217,7 @@ generator.prototype.genAlike =
 				: $and( cond, ceq );
 		}
 
-		block = block.$return( cond );
+		block = block.$( 'return', cond );
 
 		result =
 			result

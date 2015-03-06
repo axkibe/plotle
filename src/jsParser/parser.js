@@ -514,7 +514,7 @@ parser.handleObjectLiteral =
 
 	if( state.current.type !== '}' )
 	{
-		// FIXME cannot handle element currently
+		// FIXME cannot handle elements currently
 		throw new Error( );
 	}
 
