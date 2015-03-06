@@ -1062,7 +1062,6 @@ getSpec =
 
 	if( !spec )
 	{
-		console.log( state );
 		throw new Error( 'unexpected ' + state.current.type );
 	}
 
