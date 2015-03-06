@@ -1813,7 +1813,7 @@ generator.prototype.genCreatorReturn =
 		}
 	}
 
-	return $block( ).$return( $( 'new', call ) );
+	return $( 'return new', call );
 };
 
 
@@ -2491,7 +2491,7 @@ generator.prototype.genFromJsonCreatorReturn =
 		}
 	}
 
-	return $return( $( 'new', call ) );
+	return $( 'return new', call );
 };
 
 
@@ -3062,14 +3062,12 @@ generator.prototype.genEqualsFuncBody =
 
 	if( cond )
 	{
-		body = body.$return( cond );
+		return body.$( 'return ', cond );
 	}
 	else
 	{
-		body = body.$return( true );
+		return body.$( 'return true' );
 	}
-
-	return body;
 };
 
 /*
