@@ -43,7 +43,6 @@ var
 	$check,
 	$comment,
 	$condition,
-	$differs,
 	$fail,
 	$func,
 	$if,
@@ -55,8 +54,6 @@ var
 	$returnTrue,
 	$string,
 	$switch,
-	$this,
-	$typeof,
 	$var,
 	jion_id,
 	generator,
@@ -114,8 +111,6 @@ $comment = shorthand.$comment;
 
 $condition = shorthand.$condition;
 
-$differs = shorthand.$differs;
-
 $fail = shorthand.$fail;
 
 $func = shorthand.$func;
@@ -133,10 +128,6 @@ $return = shorthand.$return;
 $string = shorthand.$string;
 
 $switch = shorthand.$switch;
-
-$this = shorthand.$var( 'this' );
-
-$typeof = shorthand.$typeof;
 
 $var = shorthand.$var;
 
@@ -627,7 +618,7 @@ generator.prototype.genConstructor =
 			block =
 				block
 				.$if(
-					$differs( attr.varRef, undefined ),
+					$( attr.varRef, '!== undefined' ),
 					assign
 				);
 		}
@@ -966,7 +957,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 
 	result =
 		$if(
-			$( 'this !==', this.id.global ),
+			$( 'this !== ', this.id.global ),
 			receiver
 		);
 
@@ -1377,7 +1368,7 @@ generator.prototype.genTypeCheckFailCondition =
 	{
 		if( idList[ a ].string === 'null' )
 		{
-			condArray.unshift( $differs( aVar, 'null' ) );
+			condArray.unshift( $( aVar, '!== null' ) );
 
 			continue;
 		}
@@ -2141,7 +2132,7 @@ generator.prototype.genFromJsonCreatorParser =
 		.$case(
 			'"type"',
 			$if(
-				$differs( 'arg', this.id.$string ),
+				$( 'arg !== ', this.id.$string ),
 				$fail( )
 			)
 		);
@@ -2846,7 +2837,7 @@ generator.prototype.genAttributeEquals =
 		case 'protean' :
 		case 'string' :
 
-			ceq = $( le, '===', re );
+			ceq = $( le, ' === ', re );
 
 			break;
 
@@ -2856,7 +2847,7 @@ generator.prototype.genAttributeEquals =
 			{
 				ceq =
 					$or(
-						$( le, '===', re ),
+						$( le, ' === ', re ),
 						$and(
 							$( le, ' !== null' ),
 							$( le, ' !== undefined' ),
@@ -2868,7 +2859,7 @@ generator.prototype.genAttributeEquals =
 			{
 				ceq =
 					$or(
-						$( le, '===', re ),
+						$( le, ' === ', re ),
 						$and(
 							$( le, ' !== null' ),
 							$( le, '.', eqFuncName, '(', re, ')' )
@@ -2879,7 +2870,7 @@ generator.prototype.genAttributeEquals =
 			{
 				ceq =
 					$or(
-						$( le, '===', re ),
+						$( le, ' === ', re ),
 						$and(
 							$( le, '!== undefined' ),
 							$( le, '.', eqFuncName, '(', re, ')' )
@@ -2890,7 +2881,7 @@ generator.prototype.genAttributeEquals =
 			{
 				ceq =
 					$or(
-						$( le, '===', re ),
+						$( le, ' === ', re ),
 						$and(
 							$( le, '.', eqFuncName ),
 							$( le, '.', eqFuncName, '(', re, ')' )
@@ -2948,7 +2939,7 @@ generator.prototype.genEqualsFuncBody =
 		body
 		.$if( 'this === obj', $returnTrue )
 		.$if( '!obj', $returnFalse )
-		.$if( $differs( 'obj.reflect', this.id.$string ), $returnFalse );
+		.$if( $( 'obj.reflect !== ', this.id.$string ), $returnFalse );
 
 	if( this.group )
 	{
