@@ -1044,7 +1044,15 @@ getSpec =
 
 	if( state.ast === null )
 	{
-		spec = leftSpecs[ state.current.type ];
+		if( state.prec === 99 )
+		{
+			spec = statementSpecs[ state.current.type ];
+		}
+
+		if( !spec )
+		{
+			spec = leftSpecs[ state.current.type ];
+		}
 	}
 	else
 	{
