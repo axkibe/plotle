@@ -48,8 +48,6 @@ var
 	$objLiteral,
 	$or,
 	$return,
-	$returnFalse,
-	$returnTrue,
 	$string,
 	$switch,
 	$var,
@@ -124,10 +122,6 @@ $string = shorthand.$string;
 $switch = shorthand.$switch;
 
 $var = shorthand.$var;
-
-$returnTrue = $return( true );
-
-$returnFalse = $return( false );
 
 
 /*
@@ -1757,7 +1751,7 @@ generator.prototype.genCreatorUnchanged =
 		cond = $and( cond, ceq );
 	}
 
-	return $block( ).$if( cond, $return( 'inherit' ) );
+	return $block( ).$if( cond, $( 'return inherit' ) );
 };
 
 
@@ -1782,7 +1776,7 @@ generator.prototype.genCreatorReturn =
 				'!_singleton',
 				$( '_singleton = new Constructor( )' )
 			)
-			.$return( '_singleton' )
+			.$( 'return _singleton' )
 		);
 	}
 
@@ -2778,7 +2772,7 @@ generator.prototype.genToJson =
 			$( 'Object.freeze( json )' )
 		)
 		.$return(
-			$func( $return( 'json' ) )
+			$func( $( 'return json' ) ) // FIXME
 		);
 
 	return(
@@ -2939,14 +2933,14 @@ generator.prototype.genEqualsFuncBody =
 						'!this.group[ k ].' + eqFuncName + '( obj.group[ k ] )'
 					)
 				),
-				$returnFalse
+				$( 'return false' )
 			);
 
 		groupTest =
 			$block( )
 			.$if(
 				'this.size !== obj.size',
-				$returnFalse
+				$( 'return false' )
 			)
 			.$forIn(
 				'k',
@@ -2969,14 +2963,14 @@ generator.prototype.genEqualsFuncBody =
 						'!this.ray[ a ].' + eqFuncName + '( obj.ray[ a ] )'
 					)
 				),
-				$returnFalse
+				$( 'return false' )
 			);
 
 		rayTest =
 			$block( )
 			.$if(
 				'this.ray.length !== obj.ray.length',
-				$returnFalse
+				$( 'return false' )
 			)
 			.$for(
 				// this.length?
@@ -3005,14 +2999,14 @@ generator.prototype.genEqualsFuncBody =
 						'this.twig[ key ] !== obj.twig[ key ]'
 					)
 				),
-				$returnFalse
+				$( 'return false' )
 			);
 
 		twigTest =
 			$block( )
 			.$if(
 				'this.length !== obj.length',
-				$returnFalse
+				$( 'return false' )
 			)
 			.$for(
 				'a = 0, aZ = this.ranks.length',
@@ -3188,8 +3182,8 @@ generator.prototype.genAlike =
 
 		block =
 			$block( )
-			.$if( 'this === obj', $returnTrue )
-			.$if( '!obj', $returnFalse );
+			.$if( 'this === obj', $( 'return true') )
+			.$if( '!obj', $(' return false' ) );
 
 		if( this.twig )
 		{
