@@ -622,11 +622,9 @@ shorthand.$func =
 		block
 	)
 {
-	if(
-		block
-		&&
-		block.reflect !== 'ast_block'
-	)
+	block = tools.convert( block );
+
+	if( block && block.reflect !== 'ast_block' )
 	{
 		block = ast_block.create( ).append( block );
 	}

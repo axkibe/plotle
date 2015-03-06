@@ -2772,7 +2772,7 @@ generator.prototype.genToJson =
 			$( 'Object.freeze( json )' )
 		)
 		.$return(
-			$func( $( 'return json' ) ) // FIXME
+			$func( 'return json' )
 		);
 
 	return(
