@@ -1788,7 +1788,7 @@ generator.prototype.genCreatorReturn =
 		);
 	}
 
-	call = $call( 'Constructor' );
+	call = $( 'Constructor( )' );
 
 	for(
 		a = 0, aZ = this.constructorList.length;
@@ -2247,10 +2247,7 @@ generator.prototype.genFromJsonCreatorGroupProcessing =
 				gid.$string,
 				$assign(
 					'group[ k ]',
-					$call(
-						$( gid.$global, '.createFromJSON' ),
-						'jgroup[ k ]'
-					)
+					$( gid.$global, '.createFromJSON( jgroup[ k ] )' )
 				)
 			);
 	}
@@ -2332,10 +2329,7 @@ generator.prototype.genFromJsonCreatorRayProcessing =
 				rid.$string,
 				$assign(
 					'ray[ r ]',
-					$call(
-						$( rid.$global, '.createFromJSON' ),
-						'jray[ r ]'
-					)
+					$( rid.$global, '.createFromJSON( jray[ r ] )' )
 				)
 			);
 	}
@@ -2401,10 +2395,7 @@ generator.prototype.genFromJsonCreatorTwigProcessing =
 				twigID.$string,
 				$assign(
 					'twig[ key ]',
-					$call(
-						$( twigID.$global, '.createFromJSON' ),
-						'jval'
-					)
+					$( twigID.$global, '.createFromJSON( jval )' )
 				)
 			);
 	}
