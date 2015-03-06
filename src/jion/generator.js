@@ -38,7 +38,6 @@ var
 	$and,
 	$assign,
 	$block,
-	$call,
 	$capsule,
 	$check,
 	$comment,
@@ -99,8 +98,6 @@ $and = shorthand.$and;
 $assign = shorthand.$assign;
 
 $block = shorthand.$block;
-
-$call = shorthand.$call;
 
 $capsule = shorthand.$capsule;
 
@@ -1302,9 +1299,10 @@ generator.prototype.genSingleTypeCheckFailCondition =
 		case 'string' :
 
 			return(
-				$and(
-					$( 'typeof( ', aVar, ' ) !== "string"' ),
-					$( '!( ', aVar, ' instanceof String )' )
+				$(
+					'typeof( ', aVar, ' ) !== "string"',
+					'&&',
+					'!( ', aVar, ' instanceof String )'
 				)
 			);
 
@@ -2786,11 +2784,8 @@ generator.prototype.genToJson =
 	return(
 		$block( )
 		.$comment( 'Converts a ' + this.id.name + ' into json.' )
-		.$call(
-			'jools.lazyValue',
-			'prototype',
-			'"toJSON"',
-			$func( block )
+		.$(
+			'jools.lazyValue( prototype, "toJSON", ', $func( block ), ')'
 		)
 	);
 };
