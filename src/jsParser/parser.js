@@ -1036,7 +1036,8 @@ statementSpecs[ 'return' ] =
 */
 getSpec =
 	function(
-		state
+		state,
+		statement
 	)
 {
 	var
@@ -1044,7 +1045,7 @@ getSpec =
 
 	if( state.ast === null )
 	{
-		if( state.prec === 99 )
+		if( statement )
 		{
 			spec = statementSpecs[ state.current.type ];
 		}
@@ -1061,6 +1062,7 @@ getSpec =
 
 	if( !spec )
 	{
+		console.log( state );
 		throw new Error( 'unexpected ' + state.current.type );
 	}
 
@@ -1088,14 +1090,14 @@ parseToken =
 	}
 	else
 	{
-		tokenSpec = getSpec( state );
+		tokenSpec = getSpec( state, spec.prec === 99 );
 
 		state = parser[ tokenSpec.handler ]( state, tokenSpec );
 	}
 
 	while( !state.reachedEnd )
 	{
-		nextSpec = getSpec( state );
+		nextSpec = getSpec( state, false );
 
 		if(
 			nextSpec.prec === undefined
