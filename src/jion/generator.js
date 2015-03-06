@@ -2920,9 +2920,12 @@ generator.prototype.genEqualsFuncBody =
 
 	body =
 		body
-		.$if( 'this === obj', $returnTrue )
-		.$if( '!obj', $returnFalse )
-		.$if( $( 'obj.reflect !== ', this.id.$string ), $returnFalse );
+		.$if( 'this === obj', $( 'return true' ) )
+		.$if( '!obj', $( 'return false' ) )
+		.$if(
+			$( 'obj.reflect !== ', this.id.$string ),
+			$(' return false' )
+		);
 
 	if( this.group )
 	{
