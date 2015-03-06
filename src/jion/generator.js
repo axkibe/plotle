@@ -46,7 +46,6 @@ var
 	$fail,
 	$func,
 	$if,
-	$new,
 	$objLiteral,
 	$or,
 	$return,
@@ -116,8 +115,6 @@ $fail = shorthand.$fail;
 $func = shorthand.$func;
 
 $if = shorthand.$if;
-
-$new = shorthand.$new;
 
 $objLiteral = shorthand.$objLiteral;
 
@@ -544,7 +541,7 @@ generator.prototype.genNodeIncludes =
 				block
 				.$(
 					unitStr + '_' + name,
-					'= require( "../../src/' + unitStr + '/' + name + '" )'
+					' = require( "../../src/' + unitStr + '/' + name + '" )'
 				);
 		}
 	}
@@ -607,7 +604,7 @@ generator.prototype.genConstructor =
 			continue;
 		}
 
-		assign = $( 'this.', attr.assign, '=', attr.varRef );
+		assign = $( 'this.', attr.assign, ' = ', attr.varRef );
 
 		if( !abstract && !attr.allowsUndefined )
 		{
@@ -952,7 +949,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 			continue;
 		}
 
-		receiver = receiver.$( attr.varRef, '=', 'this.', attr.assign );
+		receiver = receiver.$( attr.varRef, ' = ', 'this.', attr.assign );
 	}
 
 	result =
@@ -1038,7 +1035,7 @@ generator.prototype.genCreatorFreeStringsParser =
 				$string( name ),
 				$if(
 					'arg !== undefined',
-					$( attr.varRef, '= arg' )
+					$( attr.varRef, ' = arg' )
 				)
 			);
 	}
@@ -1254,8 +1251,8 @@ generator.prototype.genCreatorDefaults =
 			result =
 				result
 				.$if(
-					$( attr.varRef, '=== undefined' ),
-					$( attr.varRef, '=', attr.defaultValue )
+					$( attr.varRef, ' === undefined' ),
+					$( attr.varRef, ' = ', attr.defaultValue )
 				);
 		}
 	}
@@ -1425,7 +1422,7 @@ generator.prototype.genCreatorChecks =
 			check =
 				check
 				.$if(
-					$( av, '=== undefined' ),
+					$( av, ' === undefined' ),
 					$fail( )
 				);
 		}
@@ -1435,7 +1432,7 @@ generator.prototype.genCreatorChecks =
 			check =
 				check
 				.$if(
-					$( av, '=== null' ),
+					$( av, ' === null' ),
 					$fail( )
 				);
 		}
@@ -1694,7 +1691,7 @@ generator.prototype.genCreatorConcerns =
 			}
 		}
 
-		result = result.$( attr.varRef, '=', cExpr );
+		result = result.$( attr.varRef, ' = ', cExpr );
 	}
 
 	return result;
@@ -1746,7 +1743,7 @@ generator.prototype.genCreatorUnchanged =
 
 		if( attr.assign === null )
 		{
-			cond = $and( cond, $( attr.varRef, '=== null' ) );
+			cond = $and( cond, $( attr.varRef, ' === null' ) );
 
 			continue;
 		}
@@ -1824,7 +1821,7 @@ generator.prototype.genCreatorReturn =
 		}
 	}
 
-	return $block( ).$return( $new( call ) );
+	return $block( ).$return( $( 'new', call ) );
 };
 
 
@@ -1968,7 +1965,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 		case 'number' :
 		case 'string' :
 
-			code = $( attr.varRef, '= arg' );
+			code = $( attr.varRef, ' = arg' );
 
 			break;
 
@@ -1978,7 +1975,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 			{
 				code =
 					$(
-						attr.varRef, '=',
+						attr.varRef, ' = ',
 							attr.id.$global, '.createFromJSON( arg )'
 					);
 			}
@@ -2005,7 +2002,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 							sif =
 								$if(
 									'typeof( arg ) === "boolean"',
-									$( attr.varRef, '= arg' )
+									$( attr.varRef, ' = arg' )
 								);
 
 							break;
@@ -2015,7 +2012,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 							sif =
 								$if(
 									'typeof( arg ) === "number"',
-									$( attr.varRef, '= arg' )
+									$( attr.varRef, ' = arg' )
 								);
 
 							break;
@@ -2029,7 +2026,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 										'||',
 										'arg instanceof String'
 									),
-									$( attr.varRef, '= arg' )
+									$( attr.varRef, ' = arg' )
 								);
 
 							break;
@@ -2066,7 +2063,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 							.$case(
 								idList[ t ].$string,
 								$(
-									attr.varRef, '=',
+									attr.varRef, ' = ',
 									idList[ t ].$global,
 									'.createFromJSON', '( arg )'
 								)
@@ -2101,8 +2098,8 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 	{
 		code =
 			$if(
-				'arg === null ',
-				/* then */ $( attr.varRef, '= null' ),
+				'arg === null',
+				/* then */ $( attr.varRef, ' = null' ),
 				/* else */ code
 			);
 	}
@@ -2432,7 +2429,7 @@ generator.prototype.genFromJsonCreatorTwigProcessing =
 
 	return(
 		$block( )
-		.$assign( 'twig', $objLiteral( ) )
+		.$( 'twig = { }' )
 		.$if(
 			'!jwig || !ranks',
 			// ranks/twig information missing
@@ -2511,7 +2508,7 @@ generator.prototype.genFromJsonCreatorReturn =
 		}
 	}
 
-	return $return( $new( call ) );
+	return $return( $( 'new', call ) );
 };
 
 
@@ -3271,8 +3268,8 @@ generator.prototype.genExport =
 		.$varDec( this.id.global )
 		.$if(
 			'SERVER',
-			$assign( this.id.global, 'module.exports' ),
-			$assign( this.id.global, $objLiteral( ) )
+			$( this.id.global, ' = module.exports' ),
+			$( this.id.global, ' = { }' )
 		)
 	);
 };
