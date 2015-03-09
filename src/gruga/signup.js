@@ -296,7 +296,7 @@ gruga_signUp =
 				'font',
 					shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design_anchorPoint.PC,
+					design_anchorPoint.c,
 				'shape',
 					design_anchorEllipse.fullSkewNW
 			),
@@ -325,7 +325,7 @@ gruga_signUp =
 				'font',
 					shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
-					design_anchorPoint.PC,
+					design_anchorPoint.c,
 				'shape',
 					design_anchorEllipse.fullSkewNW
 			)

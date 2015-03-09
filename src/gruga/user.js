@@ -66,7 +66,7 @@ gruga_user =
 			widget_label.create(
 				'text', 'Click on "sign up" or "log in"',
 				'font', shell_fontPool.get( 16, 'ca' ),
-				'designPos', design_anchorPoint.PC
+				'designPos', design_anchorPoint.c
 			),
 		'twig:add',
 		'visitor3',
@@ -149,7 +149,7 @@ gruga_user =
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);

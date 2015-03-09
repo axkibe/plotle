@@ -80,7 +80,7 @@ gruga_space =
 					),
 				'text', 'close',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);

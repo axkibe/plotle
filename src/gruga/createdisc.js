@@ -77,7 +77,7 @@ gruga_createDisc =
 				'style', 'createButton',
 				'text', 'Note',
 				'font', dv.generic.font,
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -102,7 +102,7 @@ gruga_createDisc =
 				'style', 'createButton',
 				'text', 'Label',
 				'font', dv.generic.font,
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -128,7 +128,7 @@ gruga_createDisc =
 				'text', 'Rela-\ntion',
 				'textNewline', 20,
 				'font', dv.generic.font,
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -153,7 +153,7 @@ gruga_createDisc =
 				'style', 'createButton',
 				'text', 'Portal',
 				'font', dv.generic.font,
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',

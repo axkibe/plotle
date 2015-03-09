@@ -56,7 +56,7 @@ if( JION )
 /*
 | Point in center.
 */
-design_anchorPoint.PC =
+design_anchorPoint.c =
 	design_anchorPoint.create(
 		'anchor', 'c',
 		'x', 0,

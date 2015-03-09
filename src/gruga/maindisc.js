@@ -104,7 +104,7 @@ gruga_mainDisc =
 				'visible', false,
 				'text', 'new',
 				'font', dv.generic.font,
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -182,7 +182,7 @@ gruga_mainDisc =
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'shape',
 					design_anchorEllipse.create(
 						'pnw',
@@ -214,7 +214,7 @@ gruga_mainDisc =
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'shape',
 					design_anchorEllipse.create(
 						'pnw',
@@ -233,7 +233,7 @@ gruga_mainDisc =
 				'text', 'log\nin',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -256,7 +256,7 @@ gruga_mainDisc =
 				'text', 'sign\nup',
 				'textNewline', 14,
 				'font', shell_fontPool.get( 13, 'cm' ),
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',

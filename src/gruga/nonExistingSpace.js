@@ -93,7 +93,7 @@ gruga_nonExistingSpace =
 					),
 				'text', 'No',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
@@ -117,7 +117,7 @@ gruga_nonExistingSpace =
 					),
 				'text', 'Yes',
 				'font', shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos', design_anchorPoint.PC,
+				'textDesignPos', design_anchorPoint.c,
 				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
