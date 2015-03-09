@@ -1,9 +1,3 @@
-> black
-> c
-. rgb
-. rgba
-. simpleBlack
-. white
 . FOCUS
 . HOFOC
 . HOVER
@@ -190,11 +184,13 @@
 > begin
 > beginPath
 > bezierCurveTo
+> black
 . blue
 > body
 . border
 . bottombox
 > button
+> c
 > ca
 > call
 . cancelTimer
@@ -651,6 +647,8 @@
 . retainx
 . reverseClip
 . review
+. rgb
+. rgba
 . right
 . rotate
 . rotation
@@ -702,6 +700,7 @@
 . signup
 . signupButton
 . silhoutte
+. simpleBlack
 > sin
 . singleton
 . size
@@ -804,6 +803,7 @@
 . welcome
 > wheelDelta
 > which
+. white
 > whiteSpace
 . widget
 . widgetPath
