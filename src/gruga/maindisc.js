@@ -26,10 +26,17 @@ var
 */
 var
 	dnw,
-	dv,
+	createButtonPnw,
 	genericButtonModel,
 	genericButtonSize,
+	loginButtonPnw,
+	movetoButtonPnw,
+	normalButtonPnw,
+	removeButtonPnw,
+	signupButtonPnw,
+	spaceButtonPnw,
 	spaceButtonSize,
+	userButtonPnw,
 	userButtonSize;
 
 dnw = design_anchorPoint.nw;
@@ -42,30 +49,25 @@ genericButtonModel =
 
 genericButtonSize = euclid_point.create( 'x', 44, 'y', 44 );
 
+createButtonPnw = dnw.create( 'x', 20, 'y', 169 );
+
+loginButtonPnw = dnw.create( 'x', 30, 'y', 535 );
+
+movetoButtonPnw = dnw.create( 'x', 47, 'y', 326 );
+
+normalButtonPnw = dnw.create( 'x', 4, 'y', 120 );
+
+removeButtonPnw = dnw.create( 'x', 32, 'y', 218 );
+
+signupButtonPnw = dnw.create( 'x', 19, 'y', 585 );
+
+spaceButtonPnw = dnw.create( 'x', 0, 'y', 170 );
+
 spaceButtonSize = euclid_point.create( 'x', 28, 'y', 290 );
 
+userButtonPnw = dnw.create( 'x', 0, 'y', 440 );
+
 userButtonSize = euclid_point.create( 'x', 24, 'y', 180 );
-
-dv =
-	{
-		normal : dnw.create( 'x', 4, 'y', 120 ),
-
-		create : dnw.create( 'x', 20, 'y', 169 ),
-
-		remove : dnw.create( 'x', 32, 'y', 218 ),
-
-		moveto : dnw.create( 'x', 47, 'y', 326 ),
-
-		space : dnw.create( 'x', 0, 'y', 170 ),
-
-		user : dnw.create( 'x', 0, 'y', 440 ),
-
-		login : dnw.create( 'x', 30, 'y', 535 ),
-
-		signup : dnw.create( 'x', 19, 'y', 585 )
-	};
-
-
 
 
 gruga_mainDisc =
@@ -76,8 +78,8 @@ gruga_mainDisc =
 				'iconStyle', 'iconNormal',
 				'designFrame',
 					design_anchorRect.create(
-						'pnw', dv.normal,
-						'pse', dv.normal.add( genericButtonSize )
+						'pnw', normalButtonPnw,
+						'pse', normalButtonPnw.add( genericButtonSize )
 					)
 			),
 		'twig:add', 'create',
@@ -88,8 +90,8 @@ gruga_mainDisc =
 				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw', dv.create,
-						'pse', dv.create.add( genericButtonSize )
+						'pnw', createButtonPnw,
+						'pse', createButtonPnw.add( genericButtonSize )
 					)
 			),
 		'twig:add', 'remove',
@@ -99,8 +101,8 @@ gruga_mainDisc =
 				'visible', false,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw', dv.remove,
-						'pse', dv.remove.add( genericButtonSize )
+						'pnw', removeButtonPnw,
+						'pse', removeButtonPnw.add( genericButtonSize )
 					)
 			),
 		'twig:add', 'moveTo',
@@ -110,16 +112,16 @@ gruga_mainDisc =
 				'visible', false,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw', dv.moveto,
-						'pse', dv.moveto.add( genericButtonSize )
+						'pnw', movetoButtonPnw,
+						'pse', movetoButtonPnw.add( genericButtonSize )
 					)
 			),
 		'twig:add', 'space',
 			genericButtonModel.create(
 				'designFrame',
 					design_anchorRect.create(
-						'pnw', dv.space,
-						'pse', dv.space.add( spaceButtonSize )
+						'pnw', spaceButtonPnw,
+						'pse', spaceButtonPnw.add( spaceButtonSize )
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
@@ -135,8 +137,8 @@ gruga_mainDisc =
 			genericButtonModel.create(
 				'designFrame',
 					design_anchorRect.create(
-						'pnw', dv.user,
-						'pse', dv.user.add( userButtonSize )
+						'pnw', userButtonPnw,
+						'pse', userButtonPnw.add( userButtonSize )
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
@@ -157,8 +159,8 @@ gruga_mainDisc =
 				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw', dv.login,
-						'pse', dv.login.add( genericButtonSize )
+						'pnw', loginButtonPnw,
+						'pse', loginButtonPnw.add( genericButtonSize )
 					)
 			),
 		'twig:add', 'signUp',
@@ -170,8 +172,8 @@ gruga_mainDisc =
 				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw', dv.signup,
-						'pse', dv.signup.add( genericButtonSize )
+						'pnw', signupButtonPnw,
+						'pse', signupButtonPnw.add( genericButtonSize )
 					)
 			)
 	);
