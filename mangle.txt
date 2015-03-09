@@ -1,3 +1,9 @@
+> black
+> c
+. rgb
+. rgba
+. simpleBlack
+. white
 . FOCUS
 . HOFOC
 . HOVER
@@ -5,11 +11,7 @@
 . MAX_INTEGER
 . NORMA
 > Note
-. PC
 > PI
-. PNW
-. PSE
-. PSE_M1
 > Portal
 . __have_lazy
 . __lazy
@@ -136,6 +138,7 @@
 . abortAll
 . aborted
 > abs
+. abstract
 > access
 . acquire
 . acquireSpace
@@ -152,6 +155,7 @@
 . all
 . allowsNull
 . allowsUndefined
+. alpha
 > alter
 . anchor
 . anchorEllipse
@@ -186,6 +190,7 @@
 > begin
 > beginPath
 > bezierCurveTo
+. blue
 > body
 . border
 . bottombox
@@ -284,6 +289,7 @@
 . dir8CWCF
 . disc
 > display
+. distance
 . doTracker
 > doc
 . down
@@ -348,7 +354,6 @@
 . fullname
 . func
 > function
-. generic
 . genericButton
 . genjion
 > get
@@ -373,10 +378,10 @@
 . getStyle
 > globalAlpha
 > globalCompositeOperation
-. gradient
 . gradientPC
 . gradientR0
 . gradientR1
+. green
 . greeting1
 . greeting2
 . greeting3
@@ -400,7 +405,6 @@
 . highlight
 . hofoc
 > home
-. horizontal
 . hover
 . icon
 . iconNormal
@@ -618,6 +622,7 @@
 > readyState
 . receiverFuncName
 > rect
+. red
 . redo
 . reduce
 . ref
@@ -666,6 +671,7 @@
 . scrollbarY
 . scrolly
 > se
+. seMin1
 > search
 . selection
 > selectionEnd
@@ -718,7 +724,6 @@
 . startup
 . state
 > status
-. steps
 > stopPropagation
 . strength
 > string

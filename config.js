@@ -56,7 +56,7 @@ config.database_name = 'ideoloom-12';
 | Determines the amount of checking and complaining if things go wrong.
 */
 config.shell_devel = true;
-//config.shell_devel = false;
+config.shell_devel = false;
 
 
 /*
