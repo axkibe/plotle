@@ -126,12 +126,7 @@ gruga_mainDisc =
 				'textDesignPos', design_anchorPoint.c,
 				'shape',
 					design_anchorEllipse.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', -60,
-								'y', 0
-							),
+						'pnw', design_anchorPoint.nw.create( 'x', -60, 'y', 0 ),
 						'pse', design_anchorPoint.seMin1
 					),
 				'textRotation', - Math.PI / 2
@@ -148,12 +143,7 @@ gruga_mainDisc =
 				'textDesignPos', design_anchorPoint.c,
 				'shape',
 					design_anchorEllipse.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', -70,
-								'y', 0
-							),
+						'pnw', design_anchorPoint.nw.create( 'x', -70, 'y', 0 ),
 						'pse', design_anchorPoint.seMin1
 					),
 				'textRotation', ( -Math.PI / 2 )
