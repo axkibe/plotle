@@ -362,22 +362,20 @@ euclid_display.prototype.edge =
 	var
 		a,
 		aZ,
-		edge;
+		border;
 
-	// FIXME
-	edge = style.border;
+	border = style.border;
 
-	if( edge.reflect === 'euclid_borderRay' )
-	//if( edge && edge.reflect === 'euclid_borderRay' )
+	if( border.reflect === 'euclid_borderRay' )
 	{
-		for( a = 0, aZ = edge.length; a < aZ; a++ )
+		for( a = 0, aZ = border.length; a < aZ; a++ )
 		{
-			this._edge( edge.get( a ), shape, view );
+			this._border( border.get( a ), shape, view );
 		}
 	}
 	else
 	{
-		this._edge( edge, shape, view );
+		this._border( border, shape, view );
 	}
 };
 
@@ -520,14 +518,14 @@ euclid_display.prototype.paint =
 
 				for( a = 0, aZ = edgeStyle.length; a < aZ; a++ )
 				{
-					this._edge( edgeStyle.get( a ), shape, view );
+					this._border( edgeStyle.get( a ), shape, view );
 				}
 
 				break;
 
 			case 'euclid_border' :
 
-				this._edge( edgeStyle, shape, view );
+				this._border( edgeStyle, shape, view );
 
 				break;
 
@@ -941,11 +939,11 @@ euclid_display.prototype._colorStyle =
 
 
 /*
-| Draws a single edge.
+| Draws a single border.
 */
-euclid_display.prototype._edge =
+euclid_display.prototype._border =
 	function(
-		style,  // the style
+		border,  // the euclid_border
 		shape,  // an object which has sketch defined
 		view
 	)
@@ -953,27 +951,20 @@ euclid_display.prototype._edge =
 	var
 		cx;
 
+	if( border.reflect !== 'euclid_border' )
+	{
+		throw new Error( );
+	}
+
 	cx = this._cx;
 
 	cx.beginPath( );
 
-	if( style.reflect === 'euclid_border' )
-	{
-		this._sketch( shape, style.distance, 0.5, view );
+	this._sketch( shape, border.distance, 0.5, view );
 
-		cx.strokeStyle = this._colorStyle( style.color, shape, view );
+	cx.strokeStyle = this._colorStyle( border.color, shape, view );
 
-		cx.lineWidth = style.width;
-	}
-	else
-	{
-		// FIXME remove
-		this._sketch( shape, style.border, 0.5, view );
-
-		cx.strokeStyle = this._colorStyle( style.color, shape, view );
-
-		cx.lineWidth = style.width;
-	}
+	cx.lineWidth = border.width;
 
 	cx.stroke( );
 };
