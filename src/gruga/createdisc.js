@@ -8,6 +8,7 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	disc_createDisc,
+	euclid_point,
 	gruga_createDisc,
 	shell_fontPool,
 	widget_button;
@@ -20,41 +21,26 @@ var
 
 
 var
+	dnw,
 	genericButtonModel,
-	dv;
+	genericButtonSize,
+	labelButtonPnw,
+	noteButtonPnw,
+	portalButtonPnw,
+	relationButtonPnw;
 
-dv =
-	{
-		generic :
-		{
-			width : 70,
-			height : 70,
-		},
 
-		note :
-		{
-			x : 62,
-			y : 216
-		},
+dnw = design_anchorPoint.nw;
 
-		label :
-		{
-			x : 81,
-			y : 284
-		},
+noteButtonPnw = dnw.create( 'x', 62, 'y', 216 );
 
-	relation :
-		{
-			x : 94,
-			y : 354
-		},
+labelButtonPnw = dnw.create( 'x', 81, 'y', 284 );
 
-	portal :
-		{
-			x : 101,
-			y : 425
-		}
-	};
+portalButtonPnw = dnw.create( 'x', 101, 'y', 425 );
+
+relationButtonPnw = dnw.create( 'x', 94, 'y', 354 );
+
+genericButtonSize = euclid_point.create( 'x', 70, 'y', 70 );
 
 genericButtonModel =
 	widget_button.abstract(
@@ -64,7 +50,6 @@ genericButtonModel =
 		'textDesignPos', design_anchorPoint.c
 	);
 
-
 gruga_createDisc =
 	disc_createDisc.create(
 		'twig:add',
@@ -73,18 +58,8 @@ gruga_createDisc =
 				'text', 'Note',
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.note.x,
-								'y', dv.note.y
-							),
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.note.x + dv.generic.width,
-								'y', dv.note.y + dv.generic.height
-							)
+						'pnw', noteButtonPnw,
+						'pse', noteButtonPnw.add( genericButtonSize )
 					)
 			),
 		'twig:add',
@@ -93,18 +68,8 @@ gruga_createDisc =
 				'text', 'Label',
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.label.x,
-								'y', dv.label.y
-							),
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.label.x + dv.generic.width,
-								'y', dv.label.y + dv.generic.height
-							)
+						'pnw', labelButtonPnw,
+						'pse', labelButtonPnw.add( genericButtonSize )
 					),
 				'shape', design_anchorEllipse.fullSkewNW
 			),
@@ -115,18 +80,8 @@ gruga_createDisc =
 				'textNewline', 20,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.relation.x,
-								'y', dv.relation.y
-							),
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.relation.x + dv.generic.width,
-								'y', dv.relation.y + dv.generic.height
-							)
+						'pnw', relationButtonPnw,
+						'pse', relationButtonPnw.add( genericButtonSize )
 					)
 			),
 		'twig:add',
@@ -135,18 +90,8 @@ gruga_createDisc =
 				'text', 'Portal',
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.portal.x,
-								'y', dv.portal.y
-							),
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.portal.x + dv.generic.width,
-								'y', dv.portal.y + dv.generic.height
-							)
+						'pnw', portalButtonPnw,
+						'pse', portalButtonPnw.add( genericButtonSize )
 					)
 			)
 	);
