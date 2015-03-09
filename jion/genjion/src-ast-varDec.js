@@ -212,9 +212,190 @@ ast_varDec.prototype = prototype;
 
 
 /*
+| Creates an varDec object.
+*/
+ast_varDec.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_assign,
+		v_name;
+
+	if( this !== ast_varDec )
+	{
+		inherit = this;
+
+		v_assign = this.assign;
+
+		v_name = this.name;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'assign' :
+
+				if( arg !== undefined )
+				{
+					v_assign = arg;
+				}
+
+				break;
+
+			case 'name' :
+
+				if( arg !== undefined )
+				{
+					v_name = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+	if( v_assign === undefined )
+	{
+		v_assign = null;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_assign !== null && v_assign !== undefined )
+/**/	{
+/**/		if(
+/**/			v_assign.reflect !== 'ast_and'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_assign'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_boolean'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_call'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_comma'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_condition'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_delete'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_differs'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_dot'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_equals'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_func'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_member'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_multiply'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_multiplyAssign'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_new'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_not'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_null'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_number'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_or'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_plus'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_string'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_typeof'
+/**/			&&
+/**/			v_assign.reflect !== 'ast_var'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_name === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_name !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_name ) !== 'string'
+/**/			&&
+/**/			!( v_name instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		(
+			v_assign === inherit.assign
+			||
+			v_assign !== null
+			&&
+			v_assign !== undefined
+			&&
+			v_assign.equals( inherit.assign )
+		)
+		&&
+		v_name === inherit.name
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_assign, v_name );
+};
+
+
+/*
 | Creates a new varDec object.
 */
 ast_varDec.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

@@ -148,9 +148,188 @@ jsParser_tokenSpec.prototype = prototype;
 
 
 /*
+| Creates an tokenSpec object.
+*/
+jsParser_tokenSpec.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_associativity,
+		v_astCreator,
+		v_handler,
+		v_prec;
+
+	if( this !== jsParser_tokenSpec )
+	{
+		inherit = this;
+
+		v_associativity = this.associativity;
+
+		v_astCreator = this.astCreator;
+
+		v_handler = this.handler;
+
+		v_prec = this.prec;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'associativity' :
+
+				if( arg !== undefined )
+				{
+					v_associativity = arg;
+				}
+
+				break;
+
+			case 'astCreator' :
+
+				if( arg !== undefined )
+				{
+					v_astCreator = arg;
+				}
+
+				break;
+
+			case 'handler' :
+
+				if( arg !== undefined )
+				{
+					v_handler = arg;
+				}
+
+				break;
+
+			case 'prec' :
+
+				if( arg !== undefined )
+				{
+					v_prec = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+	if( v_associativity === undefined )
+	{
+		v_associativity = 'n/a';
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_associativity === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_associativity !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_associativity ) !== 'string'
+/**/			&&
+/**/			!( v_associativity instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_astCreator === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_handler === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_handler !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_handler ) !== 'string'
+/**/			&&
+/**/			!( v_handler instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_prec === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_prec !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_prec ) !== 'number'
+/**/			||
+/**/			Math.floor( v_prec ) !== v_prec
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		v_associativity === inherit.associativity
+		&&
+		v_astCreator === inherit.astCreator
+		&&
+		v_handler === inherit.handler
+		&&
+		v_prec === inherit.prec
+	)
+	{
+		return inherit;
+	}
+
+	return (
+		new AbstractConstructor(
+			v_associativity,
+			v_astCreator,
+			v_handler,
+			v_prec
+		)
+	);
+};
+
+
+/*
 | Creates a new tokenSpec object.
 */
 jsParser_tokenSpec.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

@@ -106,9 +106,77 @@ jion_generator.prototype = prototype;
 
 
 /*
+| Creates an generator object.
+*/
+jion_generator.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_jion;
+
+	if( this !== jion_generator )
+	{
+		inherit = this;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'jion' :
+
+				if( arg !== undefined )
+				{
+					v_jion = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_jion === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	if( inherit && v_jion === null )
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( );
+};
+
+
+/*
 | Creates a new generator object.
 */
 jion_generator.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

@@ -140,9 +140,191 @@ format_context.prototype = prototype;
 
 
 /*
+| Creates an context object.
+*/
+format_context.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_check,
+		v_indent,
+		v_inline,
+		v_root;
+
+	if( this !== format_context )
+	{
+		inherit = this;
+
+		v_check = this.check;
+
+		v_indent = this.indent;
+
+		v_inline = this.inline;
+
+		v_root = this.root;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'check' :
+
+				if( arg !== undefined )
+				{
+					v_check = arg;
+				}
+
+				break;
+
+			case 'indent' :
+
+				if( arg !== undefined )
+				{
+					v_indent = arg;
+				}
+
+				break;
+
+			case 'inline' :
+
+				if( arg !== undefined )
+				{
+					v_inline = arg;
+				}
+
+				break;
+
+			case 'root' :
+
+				if( arg !== undefined )
+				{
+					v_root = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+	if( v_check === undefined )
+	{
+		v_check = false;
+	}
+
+	if( v_indent === undefined )
+	{
+		v_indent = 0;
+	}
+
+	if( v_inline === undefined )
+	{
+		v_inline = false;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_check === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_check !== undefined )
+/**/	{
+/**/		if( typeof( v_check ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_indent === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_indent !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_indent ) !== 'number'
+/**/			||
+/**/			Math.floor( v_indent ) !== v_indent
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_inline === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_inline !== undefined )
+/**/	{
+/**/		if( typeof( v_inline ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_root === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_root !== undefined )
+/**/	{
+/**/		if( typeof( v_root ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		v_check === inherit.check
+		&&
+		v_indent === inherit.indent
+		&&
+		v_inline === inherit.inline
+		&&
+		v_root === inherit.root
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_check, v_indent, v_inline, v_root );
+};
+
+
+/*
 | Creates a new context object.
 */
 format_context.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

@@ -112,9 +112,42 @@ _singleton = null;
 
 
 /*
+| Creates an continue object.
+*/
+ast_continue.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit;
+
+	if( this !== ast_continue )
+	{
+		inherit = this;
+	}
+
+	if( inherit )
+	{
+		return inherit;
+	}
+
+	if( !_singleton )
+	{
+		_singleton = new AbstractConstructor( );
+	}
+
+	return _singleton;
+};
+
+
+/*
 | Creates a new continue object.
 */
 ast_continue.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

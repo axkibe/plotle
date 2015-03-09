@@ -210,9 +210,246 @@ ast_member.prototype = prototype;
 
 
 /*
+| Creates an member object.
+*/
+ast_member.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_expr,
+		v_member;
+
+	if( this !== ast_member )
+	{
+		inherit = this;
+
+		v_expr = this.expr;
+
+		v_member = this.member;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'expr' :
+
+				if( arg !== undefined )
+				{
+					v_expr = arg;
+				}
+
+				break;
+
+			case 'member' :
+
+				if( arg !== undefined )
+				{
+					v_member = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_expr === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_expr !== undefined )
+/**/	{
+/**/		if(
+/**/			v_expr.reflect !== 'ast_and'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_assign'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_boolean'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_call'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_comma'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_condition'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_delete'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_differs'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_dot'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_equals'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_func'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_member'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_multiply'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_multiplyAssign'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_new'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_not'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_null'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_number'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_or'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_plus'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_string'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_typeof'
+/**/			&&
+/**/			v_expr.reflect !== 'ast_var'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_member === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_member !== undefined )
+/**/	{
+/**/		if(
+/**/			v_member.reflect !== 'ast_and'
+/**/			&&
+/**/			v_member.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			v_member.reflect !== 'ast_assign'
+/**/			&&
+/**/			v_member.reflect !== 'ast_boolean'
+/**/			&&
+/**/			v_member.reflect !== 'ast_call'
+/**/			&&
+/**/			v_member.reflect !== 'ast_comma'
+/**/			&&
+/**/			v_member.reflect !== 'ast_condition'
+/**/			&&
+/**/			v_member.reflect !== 'ast_delete'
+/**/			&&
+/**/			v_member.reflect !== 'ast_differs'
+/**/			&&
+/**/			v_member.reflect !== 'ast_dot'
+/**/			&&
+/**/			v_member.reflect !== 'ast_equals'
+/**/			&&
+/**/			v_member.reflect !== 'ast_func'
+/**/			&&
+/**/			v_member.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			v_member.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			v_member.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			v_member.reflect !== 'ast_member'
+/**/			&&
+/**/			v_member.reflect !== 'ast_multiply'
+/**/			&&
+/**/			v_member.reflect !== 'ast_multiplyAssign'
+/**/			&&
+/**/			v_member.reflect !== 'ast_new'
+/**/			&&
+/**/			v_member.reflect !== 'ast_not'
+/**/			&&
+/**/			v_member.reflect !== 'ast_null'
+/**/			&&
+/**/			v_member.reflect !== 'ast_number'
+/**/			&&
+/**/			v_member.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			v_member.reflect !== 'ast_or'
+/**/			&&
+/**/			v_member.reflect !== 'ast_plus'
+/**/			&&
+/**/			v_member.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			v_member.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			v_member.reflect !== 'ast_string'
+/**/			&&
+/**/			v_member.reflect !== 'ast_typeof'
+/**/			&&
+/**/			v_member.reflect !== 'ast_var'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		(
+			v_expr === inherit.expr
+			||
+			v_expr !== undefined && v_expr.equals( inherit.expr )
+		)
+		&&
+		(
+			v_member === inherit.member
+			||
+			v_member !== undefined && v_member.equals( inherit.member )
+		)
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_expr, v_member );
+};
+
+
+/*
 | Creates a new member object.
 */
 ast_member.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

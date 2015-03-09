@@ -116,9 +116,95 @@ ast_new.prototype = prototype;
 
 
 /*
+| Creates an new object.
+*/
+ast_new.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_call;
+
+	if( this !== ast_new )
+	{
+		inherit = this;
+
+		v_call = this.call;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'call' :
+
+				if( arg !== undefined )
+				{
+					v_call = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_call === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_call !== undefined )
+/**/	{
+/**/		if( v_call.reflect !== 'ast_call' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		(
+			v_call === inherit.call
+			||
+			v_call !== undefined && v_call.equals( inherit.call )
+		)
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_call );
+};
+
+
+/*
 | Creates a new new object.
 */
 ast_new.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

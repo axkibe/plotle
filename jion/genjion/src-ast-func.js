@@ -141,9 +141,225 @@ ast_func.prototype = prototype;
 
 
 /*
+| Creates an func object.
+*/
+ast_func.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		o,
+		r,
+		rZ,
+		ray,
+		rayDup,
+		v_block,
+		v_capsule;
+
+	if( this !== ast_func )
+	{
+		inherit = this;
+
+		ray = inherit.ray;
+
+		rayDup = false;
+
+		v_block = this.block;
+
+		v_capsule = this.capsule;
+	}
+	else
+	{
+		ray = [ ];
+
+		rayDup = true;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'block' :
+
+				if( arg !== undefined )
+				{
+					v_block = arg;
+				}
+
+				break;
+
+			case 'capsule' :
+
+				if( arg !== undefined )
+				{
+					v_capsule = arg;
+				}
+
+				break;
+
+			case 'ray:init' :
+
+/**/			if( CHECK )
+/**/			{
+/**/				if( !Array.isArray( arg ) )
+/**/				{
+/**/					throw new Error( );
+/**/				}
+/**/			}
+
+				ray = arg;
+
+				rayDup = 'init';
+
+				break;
+
+			case 'ray:append' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray.push( arg );
+
+				break;
+
+			case 'ray:insert' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray.splice( arg, 0, arguments[ ++a + 1 ] );
+
+				break;
+
+			case 'ray:remove' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray.splice( arg, 1 );
+
+				break;
+
+			case 'ray:set' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray[ arg ] = arguments[ ++a + 1 ];
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+	if( v_block === undefined )
+	{
+		v_block = null;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_block !== null && v_block !== undefined )
+/**/	{
+/**/		if( v_block.reflect !== 'ast_block' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_capsule === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_capsule !== undefined )
+/**/	{
+/**/		if( typeof( v_capsule ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	for(
+/**/		r = 0, rZ = ray.length;
+/**/		r < rZ;
+/**/		++r
+/**/	)
+/**/	{
+/**/		o = ray[ r ];
+/**/
+/**/		if( o.reflect !== 'ast_funcArg' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		rayDup === false
+		&&
+		(
+			v_block === inherit.block
+			||
+			v_block !== null
+			&&
+			v_block !== undefined
+			&&
+			v_block.equals( inherit.block )
+		)
+		&&
+		v_capsule === inherit.capsule
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( ray, v_block, v_capsule );
+};
+
+
+/*
 | Creates a new func object.
 */
 ast_func.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

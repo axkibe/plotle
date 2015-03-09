@@ -245,9 +245,285 @@ ast_objLiteral.prototype = prototype;
 
 
 /*
+| Creates an objLiteral object.
+*/
+ast_objLiteral.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		key,
+		o,
+		rank,
+		ranks,
+		twig,
+		twigDup;
+
+	if( this !== ast_objLiteral )
+	{
+		inherit = this;
+
+		twig = inherit.twig;
+
+		ranks = inherit.ranks;
+
+		twigDup = false;
+	}
+	else
+	{
+		twig = { };
+
+		ranks = [ ];
+
+		twigDup = true;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'twig:add' :
+
+				if( twigDup !== true )
+				{
+					twig = jools.copy( twig );
+
+					ranks = ranks.slice( );
+
+					twigDup = true;
+				}
+
+				key = arg;
+
+				arg = arguments[ ++a + 1 ];
+
+				if( twig[ key ] !== undefined )
+				{
+					throw new Error( );
+				}
+
+				twig[ key ] = arg;
+
+				ranks.push( key );
+
+				break;
+
+			case 'twig:set' :
+
+				if( twigDup !== true )
+				{
+					twig = jools.copy( twig );
+
+					ranks = ranks.slice( );
+
+					twigDup = true;
+				}
+
+				key = arg;
+
+				arg = arguments[ ++a + 1 ];
+
+				if( twig[ key ] === undefined )
+				{
+					throw new Error( );
+				}
+
+				twig[ key ] = arg;
+
+				break;
+
+			case 'twig:insert' :
+
+				if( twigDup !== true )
+				{
+					twig = jools.copy( twig );
+
+					ranks = ranks.slice( );
+
+					twigDup = true;
+				}
+
+				key = arg;
+
+				rank = arguments[ a + 2 ];
+
+				arg = arguments[ a + 3 ];
+
+				a += 2;
+
+				if( twig[ key ] !== undefined )
+				{
+					throw new Error( );
+				}
+
+				if( rank < 0 || rank > ranks.length )
+				{
+					throw new Error( );
+				}
+
+				twig[ key ] = arg;
+
+				ranks.splice( rank, 0, key );
+
+				break;
+
+			case 'twig:remove' :
+
+				if( twigDup !== true )
+				{
+					twig = jools.copy( twig );
+
+					ranks = ranks.slice( );
+
+					twigDup = true;
+				}
+
+				if( twig[ arg ] === undefined )
+				{
+					throw new Error( );
+				}
+
+				delete twig[ arg ];
+
+				ranks.splice( ranks.indexOf( arg ), 1 );
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	for(
+/**/		a = 0, aZ = ranks.length;
+/**/		a < aZ;
+/**/		++a
+/**/	)
+/**/	{
+/**/		o = twig[ ranks[ a ] ];
+/**/
+/**/		if(
+/**/			o.reflect !== 'ast_and'
+/**/			&&
+/**/			o.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			o.reflect !== 'ast_assign'
+/**/			&&
+/**/			o.reflect !== 'ast_block'
+/**/			&&
+/**/			o.reflect !== 'ast_boolean'
+/**/			&&
+/**/			o.reflect !== 'ast_call'
+/**/			&&
+/**/			o.reflect !== 'ast_check'
+/**/			&&
+/**/			o.reflect !== 'ast_comma'
+/**/			&&
+/**/			o.reflect !== 'ast_comment'
+/**/			&&
+/**/			o.reflect !== 'ast_condition'
+/**/			&&
+/**/			o.reflect !== 'ast_continue'
+/**/			&&
+/**/			o.reflect !== 'ast_delete'
+/**/			&&
+/**/			o.reflect !== 'ast_differs'
+/**/			&&
+/**/			o.reflect !== 'ast_dot'
+/**/			&&
+/**/			o.reflect !== 'ast_equals'
+/**/			&&
+/**/			o.reflect !== 'ast_fail'
+/**/			&&
+/**/			o.reflect !== 'ast_for'
+/**/			&&
+/**/			o.reflect !== 'ast_forIn'
+/**/			&&
+/**/			o.reflect !== 'ast_func'
+/**/			&&
+/**/			o.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			o.reflect !== 'ast_if'
+/**/			&&
+/**/			o.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			o.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			o.reflect !== 'ast_member'
+/**/			&&
+/**/			o.reflect !== 'ast_multiply'
+/**/			&&
+/**/			o.reflect !== 'ast_multiplyAssign'
+/**/			&&
+/**/			o.reflect !== 'ast_new'
+/**/			&&
+/**/			o.reflect !== 'ast_not'
+/**/			&&
+/**/			o.reflect !== 'ast_null'
+/**/			&&
+/**/			o.reflect !== 'ast_number'
+/**/			&&
+/**/			o.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			o.reflect !== 'ast_or'
+/**/			&&
+/**/			o.reflect !== 'ast_plus'
+/**/			&&
+/**/			o.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			o.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			o.reflect !== 'ast_return'
+/**/			&&
+/**/			o.reflect !== 'ast_string'
+/**/			&&
+/**/			o.reflect !== 'ast_switch'
+/**/			&&
+/**/			o.reflect !== 'ast_typeof'
+/**/			&&
+/**/			o.reflect !== 'ast_var'
+/**/			&&
+/**/			o.reflect !== 'ast_varDec'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if( inherit && twigDup === false )
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( twig, ranks );
+};
+
+
+/*
 | Creates a new objLiteral object.
 */
 ast_objLiteral.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

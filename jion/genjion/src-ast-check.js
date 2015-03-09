@@ -116,9 +116,95 @@ ast_check.prototype = prototype;
 
 
 /*
+| Creates an check object.
+*/
+ast_check.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_block;
+
+	if( this !== ast_check )
+	{
+		inherit = this;
+
+		v_block = this.block;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'block' :
+
+				if( arg !== undefined )
+				{
+					v_block = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_block === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_block !== undefined )
+/**/	{
+/**/		if( v_block.reflect !== 'ast_block' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		(
+			v_block === inherit.block
+			||
+			v_block !== undefined && v_block.equals( inherit.block )
+		)
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_block );
+};
+
+
+/*
 | Creates a new check object.
 */
 ast_check.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

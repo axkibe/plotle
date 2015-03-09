@@ -127,9 +127,134 @@ jsLexer_token.prototype = prototype;
 
 
 /*
+| Creates an token object.
+*/
+jsLexer_token.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_type,
+		v_value;
+
+	if( this !== jsLexer_token )
+	{
+		inherit = this;
+
+		v_type = this.type;
+
+		v_value = this.value;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'type' :
+
+				if( arg !== undefined )
+				{
+					v_type = arg;
+				}
+
+				break;
+
+			case 'value' :
+
+				if( arg !== undefined )
+				{
+					v_value = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_type === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_type !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_type ) !== 'string'
+/**/			&&
+/**/			!( v_type instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_value === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_value !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_value ) !== 'boolean'
+/**/			&&
+/**/			typeof( v_value ) !== 'number'
+/**/			&&
+/**/			typeof( v_value ) !== 'string'
+/**/			&&
+/**/			!( v_value instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		v_type === inherit.type
+		&&
+		(
+			v_value === inherit.value
+			||
+			v_value !== undefined && v_value.equals( inherit.value )
+		)
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_type, v_value );
+};
+
+
+/*
 | Creates a new token object.
 */
 jsLexer_token.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

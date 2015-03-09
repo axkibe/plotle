@@ -117,9 +117,119 @@ jion_idGroup.prototype = prototype;
 
 
 /*
+| Creates an idGroup object.
+*/
+jion_idGroup.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		group,
+		groupDup,
+		inherit,
+		o;
+
+	if( this !== jion_idGroup )
+	{
+		inherit = this;
+
+		group = inherit.group;
+
+		groupDup = false;
+	}
+	else
+	{
+		group = { };
+
+		groupDup = true;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'group:init' :
+
+				group = arg;
+
+				groupDup = 'init';
+
+				break;
+
+			case 'group:set' :
+
+				if( !groupDup )
+				{
+					group = jools.copy( group );
+
+					groupDup = true;
+				}
+
+				group[ arg ] = arguments[ ++a + 1 ];
+
+				break;
+
+			case 'group:remove' :
+
+				if( !groupDup )
+				{
+					group = jools.copy( group );
+
+					groupDup = true;
+				}
+
+				delete group[ arg ];
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	for( var k in group )
+/**/	{
+/**/		o = group[ k ];
+/**/
+/**/		if( o.reflect !== 'jion_id' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if( inherit && groupDup === false )
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( group );
+};
+
+
+/*
 | Creates a new idGroup object.
 */
 jion_idGroup.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

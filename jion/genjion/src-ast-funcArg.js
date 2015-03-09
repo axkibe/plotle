@@ -122,9 +122,121 @@ ast_funcArg.prototype = prototype;
 
 
 /*
+| Creates an funcArg object.
+*/
+ast_funcArg.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_comment,
+		v_name;
+
+	if( this !== ast_funcArg )
+	{
+		inherit = this;
+
+		v_comment = this.comment;
+
+		v_name = this.name;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'comment' :
+
+				if( arg !== undefined )
+				{
+					v_comment = arg;
+				}
+
+				break;
+
+			case 'name' :
+
+				if( arg !== undefined )
+				{
+					v_name = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+	if( v_comment === undefined )
+	{
+		v_comment = null;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_comment !== null && v_comment !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_comment ) !== 'string'
+/**/			&&
+/**/			!( v_comment instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_name !== null && v_name !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_name ) !== 'string'
+/**/			&&
+/**/			!( v_name instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		v_comment === inherit.comment
+		&&
+		v_name === inherit.name
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_comment, v_name );
+};
+
+
+/*
 | Creates a new funcArg object.
 */
 ast_funcArg.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

@@ -112,9 +112,42 @@ _singleton = null;
 
 
 /*
+| Creates an null object.
+*/
+ast_null.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit;
+
+	if( this !== ast_null )
+	{
+		inherit = this;
+	}
+
+	if( inherit )
+	{
+		return inherit;
+	}
+
+	if( !_singleton )
+	{
+		_singleton = new AbstractConstructor( );
+	}
+
+	return _singleton;
+};
+
+
+/*
 | Creates a new null object.
 */
 ast_null.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

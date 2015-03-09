@@ -113,9 +113,87 @@ ast_boolean.prototype = prototype;
 
 
 /*
+| Creates an boolean object.
+*/
+ast_boolean.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_boolean;
+
+	if( this !== ast_boolean )
+	{
+		inherit = this;
+
+		v_boolean = this.boolean;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'boolean' :
+
+				if( arg !== undefined )
+				{
+					v_boolean = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_boolean === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_boolean !== undefined )
+/**/	{
+/**/		if( typeof( v_boolean ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if( inherit && v_boolean === inherit.boolean )
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_boolean );
+};
+
+
+/*
 | Creates a new boolean object.
 */
 ast_boolean.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

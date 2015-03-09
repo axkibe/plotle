@@ -203,9 +203,159 @@ ast_fail.prototype = prototype;
 
 
 /*
+| Creates an fail object.
+*/
+ast_fail.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_message;
+
+	if( this !== ast_fail )
+	{
+		inherit = this;
+
+		v_message = this.message;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'message' :
+
+				if( arg !== undefined )
+				{
+					v_message = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+	if( v_message === undefined )
+	{
+		v_message = null;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_message !== null && v_message !== undefined )
+/**/	{
+/**/		if(
+/**/			v_message.reflect !== 'ast_and'
+/**/			&&
+/**/			v_message.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			v_message.reflect !== 'ast_assign'
+/**/			&&
+/**/			v_message.reflect !== 'ast_boolean'
+/**/			&&
+/**/			v_message.reflect !== 'ast_call'
+/**/			&&
+/**/			v_message.reflect !== 'ast_comma'
+/**/			&&
+/**/			v_message.reflect !== 'ast_condition'
+/**/			&&
+/**/			v_message.reflect !== 'ast_delete'
+/**/			&&
+/**/			v_message.reflect !== 'ast_differs'
+/**/			&&
+/**/			v_message.reflect !== 'ast_dot'
+/**/			&&
+/**/			v_message.reflect !== 'ast_equals'
+/**/			&&
+/**/			v_message.reflect !== 'ast_func'
+/**/			&&
+/**/			v_message.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			v_message.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			v_message.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			v_message.reflect !== 'ast_member'
+/**/			&&
+/**/			v_message.reflect !== 'ast_multiply'
+/**/			&&
+/**/			v_message.reflect !== 'ast_multiplyAssign'
+/**/			&&
+/**/			v_message.reflect !== 'ast_new'
+/**/			&&
+/**/			v_message.reflect !== 'ast_not'
+/**/			&&
+/**/			v_message.reflect !== 'ast_null'
+/**/			&&
+/**/			v_message.reflect !== 'ast_number'
+/**/			&&
+/**/			v_message.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			v_message.reflect !== 'ast_or'
+/**/			&&
+/**/			v_message.reflect !== 'ast_plus'
+/**/			&&
+/**/			v_message.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			v_message.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			v_message.reflect !== 'ast_string'
+/**/			&&
+/**/			v_message.reflect !== 'ast_typeof'
+/**/			&&
+/**/			v_message.reflect !== 'ast_var'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		(
+			v_message === inherit.message
+			||
+			v_message !== null
+			&&
+			v_message !== undefined
+			&&
+			v_message.equals( inherit.message )
+		)
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_message );
+};
+
+
+/*
 | Creates a new fail object.
 */
 ast_fail.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

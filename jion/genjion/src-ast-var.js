@@ -115,9 +115,91 @@ ast_var.prototype = prototype;
 
 
 /*
+| Creates an var object.
+*/
+ast_var.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_name;
+
+	if( this !== ast_var )
+	{
+		inherit = this;
+
+		v_name = this.name;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'name' :
+
+				if( arg !== undefined )
+				{
+					v_name = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_name === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_name !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_name ) !== 'string'
+/**/			&&
+/**/			!( v_name instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if( inherit && v_name === inherit.name )
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_name );
+};
+
+
+/*
 | Creates a new var object.
 */
 ast_var.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

@@ -228,9 +228,289 @@ ast_switch.prototype = prototype;
 
 
 /*
+| Creates an switch object.
+*/
+ast_switch.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		o,
+		r,
+		rZ,
+		ray,
+		rayDup,
+		v_defaultCase,
+		v_statement;
+
+	if( this !== ast_switch )
+	{
+		inherit = this;
+
+		ray = inherit.ray;
+
+		rayDup = false;
+
+		v_defaultCase = this.defaultCase;
+
+		v_statement = this.statement;
+	}
+	else
+	{
+		ray = [ ];
+
+		rayDup = true;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'defaultCase' :
+
+				if( arg !== undefined )
+				{
+					v_defaultCase = arg;
+				}
+
+				break;
+
+			case 'statement' :
+
+				if( arg !== undefined )
+				{
+					v_statement = arg;
+				}
+
+				break;
+
+			case 'ray:init' :
+
+/**/			if( CHECK )
+/**/			{
+/**/				if( !Array.isArray( arg ) )
+/**/				{
+/**/					throw new Error( );
+/**/				}
+/**/			}
+
+				ray = arg;
+
+				rayDup = 'init';
+
+				break;
+
+			case 'ray:append' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray.push( arg );
+
+				break;
+
+			case 'ray:insert' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray.splice( arg, 0, arguments[ ++a + 1 ] );
+
+				break;
+
+			case 'ray:remove' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray.splice( arg, 1 );
+
+				break;
+
+			case 'ray:set' :
+
+				if( !rayDup )
+				{
+					ray = ray.slice( );
+
+					rayDup = true;
+				}
+
+				ray[ arg ] = arguments[ ++a + 1 ];
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+	if( v_defaultCase === undefined )
+	{
+		v_defaultCase = null;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_defaultCase !== null && v_defaultCase !== undefined )
+/**/	{
+/**/		if( v_defaultCase.reflect !== 'ast_block' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_statement === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_statement !== undefined )
+/**/	{
+/**/		if(
+/**/			v_statement.reflect !== 'ast_and'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_assign'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_boolean'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_call'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_comma'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_condition'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_delete'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_differs'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_dot'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_equals'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_func'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_member'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_multiply'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_multiplyAssign'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_new'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_not'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_null'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_number'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_or'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_plus'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_string'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_typeof'
+/**/			&&
+/**/			v_statement.reflect !== 'ast_var'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	for(
+/**/		r = 0, rZ = ray.length;
+/**/		r < rZ;
+/**/		++r
+/**/	)
+/**/	{
+/**/		o = ray[ r ];
+/**/
+/**/		if( o.reflect !== 'ast_case' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		rayDup === false
+		&&
+		(
+			v_defaultCase === inherit.defaultCase
+			||
+			v_defaultCase !== null
+			&&
+			v_defaultCase !== undefined
+			&&
+			v_defaultCase.equals( inherit.defaultCase )
+		)
+		&&
+		(
+			v_statement === inherit.statement
+			||
+			v_statement !== undefined && v_statement.equals( inherit.statement )
+		)
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( ray, v_defaultCase, v_statement );
+};
+
+
+/*
 | Creates a new switch object.
 */
 ast_switch.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

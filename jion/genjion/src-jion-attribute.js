@@ -296,9 +296,455 @@ jion_attribute.prototype = prototype;
 
 
 /*
+| Creates an attribute object.
+*/
+jion_attribute.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_allowsNull,
+		v_allowsUndefined,
+		v_assign,
+		v_comment,
+		v_concerns,
+		v_defaultValue,
+		v_id,
+		v_json,
+		v_name,
+		v_varRef;
+
+	if( this !== jion_attribute )
+	{
+		inherit = this;
+
+		v_allowsNull = this.allowsNull;
+
+		v_allowsUndefined = this.allowsUndefined;
+
+		v_assign = this.assign;
+
+		v_comment = this.comment;
+
+		v_concerns = this.concerns;
+
+		v_defaultValue = this.defaultValue;
+
+		v_id = this.id;
+
+		v_json = this.json;
+
+		v_name = this.name;
+
+		v_varRef = this.varRef;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'allowsNull' :
+
+				if( arg !== undefined )
+				{
+					v_allowsNull = arg;
+				}
+
+				break;
+
+			case 'allowsUndefined' :
+
+				if( arg !== undefined )
+				{
+					v_allowsUndefined = arg;
+				}
+
+				break;
+
+			case 'assign' :
+
+				if( arg !== undefined )
+				{
+					v_assign = arg;
+				}
+
+				break;
+
+			case 'comment' :
+
+				if( arg !== undefined )
+				{
+					v_comment = arg;
+				}
+
+				break;
+
+			case 'concerns' :
+
+				if( arg !== undefined )
+				{
+					v_concerns = arg;
+				}
+
+				break;
+
+			case 'defaultValue' :
+
+				if( arg !== undefined )
+				{
+					v_defaultValue = arg;
+				}
+
+				break;
+
+			case 'id' :
+
+				if( arg !== undefined )
+				{
+					v_id = arg;
+				}
+
+				break;
+
+			case 'json' :
+
+				if( arg !== undefined )
+				{
+					v_json = arg;
+				}
+
+				break;
+
+			case 'name' :
+
+				if( arg !== undefined )
+				{
+					v_name = arg;
+				}
+
+				break;
+
+			case 'varRef' :
+
+				if( arg !== undefined )
+				{
+					v_varRef = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+	if( v_allowsNull === undefined )
+	{
+		v_allowsNull = false;
+	}
+
+	if( v_allowsUndefined === undefined )
+	{
+		v_allowsUndefined = false;
+	}
+
+	if( v_concerns === undefined )
+	{
+		v_concerns = null;
+	}
+
+	if( v_json === undefined )
+	{
+		v_json = false;
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_allowsNull === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_allowsNull !== undefined )
+/**/	{
+/**/		if( typeof( v_allowsNull ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_allowsUndefined === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_allowsUndefined !== undefined )
+/**/	{
+/**/		if( typeof( v_allowsUndefined ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_assign !== null && v_assign !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_assign ) !== 'string'
+/**/			&&
+/**/			!( v_assign instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_comment === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_comment !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_comment ) !== 'string'
+/**/			&&
+/**/			!( v_comment instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_concerns !== null && v_concerns !== undefined )
+/**/	{
+/**/		if( v_concerns.reflect !== 'jion_concern' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_defaultValue === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_defaultValue !== undefined )
+/**/	{
+/**/		if(
+/**/			v_defaultValue.reflect !== 'ast_and'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_assign'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_boolean'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_call'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_comma'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_condition'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_delete'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_differs'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_dot'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_equals'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_func'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_member'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_multiply'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_multiplyAssign'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_new'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_not'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_null'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_number'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_or'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_plus'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_string'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_typeof'
+/**/			&&
+/**/			v_defaultValue.reflect !== 'ast_var'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_id === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_id !== undefined )
+/**/	{
+/**/		if(
+/**/			v_id.reflect !== 'jion_id'
+/**/			&&
+/**/			v_id.reflect !== 'jion_idGroup'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_json === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_json !== undefined )
+/**/	{
+/**/		if( typeof( v_json ) !== 'boolean' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_name === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_name !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_name ) !== 'string'
+/**/			&&
+/**/			!( v_name instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_varRef === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_varRef !== undefined )
+/**/	{
+/**/		if( v_varRef.reflect !== 'ast_var' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		v_allowsNull === inherit.allowsNull
+		&&
+		v_allowsUndefined === inherit.allowsUndefined
+		&&
+		v_assign === inherit.assign
+		&&
+		v_comment === inherit.comment
+		&&
+		(
+			v_concerns === inherit.concerns
+			||
+			v_concerns !== null
+			&&
+			v_concerns !== undefined
+			&&
+			v_concerns.equals( inherit.concerns )
+		)
+		&&
+		(
+			v_defaultValue === inherit.defaultValue
+			||
+			v_defaultValue !== undefined
+			&&
+			v_defaultValue.equals( inherit.defaultValue )
+		)
+		&&
+		(
+			v_id === inherit.id
+			||
+			v_id !== undefined && v_id.equals( inherit.id )
+		)
+		&&
+		v_json === inherit.json
+		&&
+		v_name === inherit.name
+		&&
+		(
+			v_varRef === inherit.varRef
+			||
+			v_varRef !== undefined && v_varRef.equals( inherit.varRef )
+		)
+	)
+	{
+		return inherit;
+	}
+
+	return (
+		new AbstractConstructor(
+			v_allowsNull,
+			v_allowsUndefined,
+			v_assign,
+			v_comment,
+			v_concerns,
+			v_defaultValue,
+			v_id,
+			v_json,
+			v_name,
+			v_varRef
+		)
+	);
+};
+
+
+/*
 | Creates a new attribute object.
 */
 jion_attribute.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

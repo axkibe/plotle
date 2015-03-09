@@ -257,9 +257,234 @@ jsParser_state.prototype = prototype;
 
 
 /*
+| Creates an state object.
+*/
+jsParser_state.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_ast,
+		v_pos,
+		v_tokens;
+
+	if( this !== jsParser_state )
+	{
+		inherit = this;
+
+		v_ast = this.ast;
+
+		v_pos = this.pos;
+
+		v_tokens = this.tokens;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'ast' :
+
+				if( arg !== undefined )
+				{
+					v_ast = arg;
+				}
+
+				break;
+
+			case 'pos' :
+
+				if( arg !== undefined )
+				{
+					v_pos = arg;
+				}
+
+				break;
+
+			case 'tokens' :
+
+				if( arg !== undefined )
+				{
+					v_tokens = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_ast !== null && v_ast !== undefined )
+/**/	{
+/**/		if(
+/**/			v_ast.reflect !== 'ast_and'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_arrayLiteral'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_assign'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_block'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_boolean'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_call'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_check'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_comma'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_comment'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_condition'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_continue'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_delete'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_differs'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_dot'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_equals'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_fail'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_for'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_forIn'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_func'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_greaterThan'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_if'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_instanceof'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_lessThan'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_member'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_multiply'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_multiplyAssign'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_new'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_not'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_null'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_number'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_objLiteral'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_or'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_plus'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_plusAssign'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_preIncrement'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_return'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_string'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_switch'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_typeof'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_var'
+/**/			&&
+/**/			v_ast.reflect !== 'ast_varDec'
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_pos === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_pos !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_pos ) !== 'number'
+/**/			||
+/**/			Math.floor( v_pos ) !== v_pos
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_tokens === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_tokens !== undefined )
+/**/	{
+/**/		if( v_tokens.reflect !== 'jsParser_tokenRay' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if(
+		inherit
+		&&
+		(
+			v_ast === inherit.ast
+			||
+			v_ast !== null && v_ast !== undefined && v_ast.equals( inherit.ast )
+		)
+		&&
+		v_pos === inherit.pos
+		&&
+		(
+			v_tokens === inherit.tokens
+			||
+			v_tokens !== undefined && v_tokens.equals( inherit.tokens )
+		)
+	)
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_ast, v_pos, v_tokens );
+};
+
+
+/*
 | Creates a new state object.
 */
 jsParser_state.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

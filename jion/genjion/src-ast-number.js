@@ -113,9 +113,87 @@ ast_number.prototype = prototype;
 
 
 /*
+| Creates an number object.
+*/
+ast_number.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_number;
+
+	if( this !== ast_number )
+	{
+		inherit = this;
+
+		v_number = this.number;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'number' :
+
+				if( arg !== undefined )
+				{
+					v_number = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_number === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_number !== undefined )
+/**/	{
+/**/		if( typeof( v_number ) !== 'number' )
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if( inherit && v_number === inherit.number )
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_number );
+};
+
+
+/*
 | Creates a new number object.
 */
 ast_number.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

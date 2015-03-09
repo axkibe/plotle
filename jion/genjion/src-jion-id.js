@@ -128,9 +128,120 @@ jion_id.prototype = prototype;
 
 
 /*
+| Creates an id object.
+*/
+jion_id.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_name,
+		v_unit;
+
+	if( this !== jion_id )
+	{
+		inherit = this;
+
+		v_name = this.name;
+
+		v_unit = this.unit;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'name' :
+
+				if( arg !== undefined )
+				{
+					v_name = arg;
+				}
+
+				break;
+
+			case 'unit' :
+
+				if( arg !== undefined )
+				{
+					v_unit = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_name === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_name !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_name ) !== 'string'
+/**/			&&
+/**/			!( v_name instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
+/**/	if( v_unit === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_unit !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_unit ) !== 'string'
+/**/			&&
+/**/			!( v_unit instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if( inherit && v_name === inherit.name && v_unit === inherit.unit )
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_name, v_unit );
+};
+
+
+/*
 | Creates a new id object.
 */
 jion_id.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings

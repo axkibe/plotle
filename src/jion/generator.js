@@ -837,6 +837,14 @@ generator.prototype.genCreatorVariables =
 		result,
 		varList;
 
+/**/if( CHECK )
+/**/{
+/**/	if( typeof( abstract ) !== 'boolean' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	varList = [ ];
 
 	for( name in this.attributes.group )
@@ -898,6 +906,14 @@ generator.prototype.genCreatorInheritanceReceiver =
 		name,
 		receiver,
 		result;
+
+/**/if( CHECK )
+/**/{
+/**/	if( typeof( abstract ) !== 'boolean' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	receiver = $block( ).$( 'inherit = this' );
 
@@ -993,7 +1009,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 */
 generator.prototype.genCreatorFreeStringsParser =
 	function(
-		abstract  // if true generates the abstract creator
+		// abstract  // if true generates the abstract creator
 	)
 {
 	var
@@ -1222,7 +1238,7 @@ generator.prototype.genCreatorDefaults =
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.json && this.abstract !== undefined )
+/**/	if( json && abstract !== undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1395,6 +1411,8 @@ generator.prototype.genCreatorChecks =
 {
 	var
 		a,
+		allowsNull,
+		allowsUndefined,
 		attr,
 		av,
 		aZ,
@@ -1405,7 +1423,7 @@ generator.prototype.genCreatorChecks =
 
 /**/if( CHECK )
 /**/{
-/**/	if( this.json && this.abstract !== undefined )
+/**/	if( json && abstract !== undefined )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1430,7 +1448,11 @@ generator.prototype.genCreatorChecks =
 
 		av = attr.varRef;
 
-		if( !attr.allowsUndefined )
+		allowsNull = attr.allowsNull;
+
+		allowsUndefined = abstract || attr.allowsUndefined;
+
+		if( !allowsUndefined )
 		{
 			check =
 				check
@@ -1440,7 +1462,7 @@ generator.prototype.genCreatorChecks =
 				);
 		}
 
-		if( !attr.allowsNull )
+		if( !allowsNull )
 		{
 			check =
 				check
@@ -1455,15 +1477,15 @@ generator.prototype.genCreatorChecks =
 			continue;
 		}
 
-		if( attr.allowsNull && !attr.allowsUndefined )
+		if( allowsNull && !allowsUndefined )
 		{
 			cond = $( av, ' !== null' );
 		}
-		else if( !attr.allowsNull && attr.allowsUndefined )
+		else if( !allowsNull && allowsUndefined )
 		{
 			cond = $( av, ' !== undefined' );
 		}
-		else if( attr.allowsNull && attr.allowsUndefined )
+		else if( allowsNull && allowsUndefined )
 		{
 			cond = $( av, ' !== null && ', av, ' !== undefined' );
 		}
@@ -1491,8 +1513,7 @@ generator.prototype.genCreatorChecks =
 		check =
 			check
 			.$forIn(
-				'k',
-				'group',
+				'k', 'group',
 				$block( )
 				.$( 'o = group[ k ]' )
 				.$if(
@@ -1521,7 +1542,7 @@ generator.prototype.genCreatorChecks =
 
 	if( this.twig )
 	{
-		// FIXME check if ranks and twig keys match
+		// FUTURE check if ranks and twig keys match
 		check =
 			check
 			.$for(
@@ -1531,10 +1552,7 @@ generator.prototype.genCreatorChecks =
 				$block( )
 				.$( 'o = twig[ ranks[ a ] ]' )
 				.$if(
-					this.genTypeCheckFailCondition(
-						$( 'o' ),
-						this.twig
-					),
+					this.genTypeCheckFailCondition( $( 'o' ), this.twig ),
 					$fail( )
 				)
 			);
@@ -1565,9 +1583,7 @@ generator.prototype.genCreatorChecks =
 | 'member' is an access to an attribute ( without call )
 */
 generator.prototype.genCreatorConcerns =
-	function(
-		abstract  // if true generates the abstract creator
-	)
+	function( )
 {
 	var
 		a,
@@ -1731,6 +1747,14 @@ generator.prototype.genCreatorUnchanged =
 		cond,
 		name;
 
+/**/if( CHECK )
+/**/{
+/**/	if( typeof( abstract ) !== 'boolean' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	cond = $( 'inherit' );
 
 	if( this.group )
@@ -1770,7 +1794,8 @@ generator.prototype.genCreatorUnchanged =
 				name,
 				attr.varRef,
 				$( 'inherit.', attr.assign ),
-				'equals'
+				'equals',
+				abstract
 			);
 
 		cond = $and( cond, ceq );
@@ -1791,9 +1816,23 @@ generator.prototype.genCreatorReturn =
 	var
 		a,
 		aZ,
+		argName,
+		argList,
 		attr,
 		call,
-		name;
+		conName;
+
+/**/if( CHECK )
+/**/{
+/**/	if( typeof( abstract ) !== 'boolean' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	argList = abstract ? this.abstractConstructorList : this.constructorList;
+
+	conName = abstract ? 'AbstractConstructor' : 'Constructor';
 
 	if( this.singleton )
 	{
@@ -1801,23 +1840,19 @@ generator.prototype.genCreatorReturn =
 			$block( )
 			.$if(
 				'!_singleton',
-				$( '_singleton = new Constructor( )' )
+				$( '_singleton = new ', conName, '( )' )
 			)
 			.$( 'return _singleton' )
 		);
 	}
 
-	call = $( 'Constructor( )' );
+	call = $( conName ,'( )' );
 
-	for(
-		a = 0, aZ = this.constructorList.length;
-		a < aZ;
-		a++
-	)
+	for( a = 0, aZ = argList.length; a < aZ; a++ )
 	{
-		name = this.constructorList[ a ];
+		argName = argList[ a ];
 
-		switch( name )
+		switch( argName )
 		{
 			case 'group' :
 			case 'groupDup' :
@@ -1828,13 +1863,13 @@ generator.prototype.genCreatorReturn =
 			case 'twig' :
 			case 'twigDup' :
 
-				call = call.addArgument( name );
+				call = call.addArgument( argName );
 
 				break;
 
 			default :
 
-				attr = this.attributes.get( name );
+				attr = this.attributes.get( argName );
 
 				call = call.addArgument( attr.varRef );
 		}
@@ -1854,9 +1889,8 @@ generator.prototype.genCreator =
 {
 	var
 		block,
-		creator;
-
-	if( abstract ) return $block( ); // FIXME
+		creator,
+		funcName;
 
 	block =
 		$block( )
@@ -1872,13 +1906,15 @@ generator.prototype.genCreator =
 		block
 		.$( this.genCreatorDefaults( false, abstract ) )
 		.$( this.genCreatorChecks( false, abstract ) )
-		.$( this.genCreatorConcerns( abstract ) )
+		.$( abstract ? $block( ) : this.genCreatorConcerns( ) )
 		.$( this.genCreatorUnchanged( abstract ) )
 		.$( this.genCreatorReturn( abstract ) );
 
 	creator =
 		$func( block )
 		.$arg( null, 'free strings' );
+
+	funcName = abstract ? 'abstract' : 'create';
 
 	return(
 		$block( )
@@ -1887,13 +1923,11 @@ generator.prototype.genCreator =
 			? 'Creates an ' + this.id.name + ' object.'
 			: 'Creates a new ' + this.id.name + ' object.'
 		)
-		.$assign(
-			$( this.id.global, ( abstract ? '.abstract' : '.create' ) ),
-			$(
-				abstract ? 'prototype.abstract' : 'prototype.create',
-				' = ',
-				creator
-			)
+		.$(
+			this.id.global, '.', funcName,
+			' = ', 'AbstractConstructor.prototype.', funcName,
+			' = prototype.', funcName,
+			' = ', creator
 		)
 	);
 };
@@ -2830,17 +2864,25 @@ generator.prototype.genToJson =
 */
 generator.prototype.genAttributeEquals =
 	function(
-		name, // attribute name
-		le, // this value expression
-		re, // other value expression
-		eqFuncName // the equals function name to call
+		name,       // attribute name
+		le,         // this value expression
+		re,         // other value expression
+		eqFuncName, // the equals function name to call
+		abstract    // if true considers all attributed to be potentially
+		//          // undefined
 	)
 {
 	var
+		allowsNull,
+		allowsUndefined,
 		attr,
 		ceq;
 
 	attr = this.attributes.get( name );
+
+	allowsNull = attr.allowsNull;
+
+	allowsUndefined = abstract || attr.allowsUndefined;
 
 	switch( attr.id.string )
 	{
@@ -2857,7 +2899,7 @@ generator.prototype.genAttributeEquals =
 
 		default :
 
-			if( attr.allowsNull && attr.allowsUndefined )
+			if( allowsNull && allowsUndefined )
 			{
 				ceq =
 					$or(
@@ -2869,7 +2911,7 @@ generator.prototype.genAttributeEquals =
 						)
 					);
 			}
-			else if( attr.allowsNull)
+			else if( allowsNull )
 			{
 				ceq =
 					$or(
@@ -2880,7 +2922,7 @@ generator.prototype.genAttributeEquals =
 						)
 					);
 			}
-			else if( attr.allowsUndefined )
+			else if( allowsUndefined )
 			{
 				ceq =
 					$or(
@@ -2897,6 +2939,7 @@ generator.prototype.genAttributeEquals =
 					$or(
 						$( le, ' === ', re ),
 						$and(
+							// FIXME this shouldnt be necessary
 							$( le, '.', eqFuncName ),
 							$( le, '.', eqFuncName, '(', re, ')' )
 						)
@@ -3088,7 +3131,8 @@ generator.prototype.genEqualsFuncBody =
 				name,
 				$( 'this.', attr.assign ),
 				$( 'obj.', attr.assign ),
-				eqFuncName
+				eqFuncName,
+				false
 			);
 
 		cond =
@@ -3250,7 +3294,8 @@ generator.prototype.genAlike =
 					name,
 					$( 'this.', attr.assign ),
 					$( 'obj.', attr.assign ),
-					'equals'
+					'equals',
+					false
 				);
 
 			cond =

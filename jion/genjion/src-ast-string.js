@@ -113,9 +113,91 @@ ast_string.prototype = prototype;
 
 
 /*
+| Creates an string object.
+*/
+ast_string.abstract =
+AbstractConstructor.prototype.abstract =
+prototype.abstract =
+	function(
+		// free strings
+	)
+{
+	var
+		a,
+		aZ,
+		arg,
+		inherit,
+		v_string;
+
+	if( this !== ast_string )
+	{
+		inherit = this;
+
+		v_string = this.string;
+	}
+
+	for(
+		a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		arg = arguments[ a + 1 ];
+
+		switch( arguments[ a ] )
+		{
+			case 'string' :
+
+				if( arg !== undefined )
+				{
+					v_string = arg;
+				}
+
+				break;
+
+			default :
+
+/**/			if( CHECK )
+/**/			{
+/**/				throw new Error( );
+/**/			}
+		}
+	}
+
+/**/if( CHECK )
+/**/{
+/**/	if( v_string === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_string !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_string ) !== 'string'
+/**/			&&
+/**/			!( v_string instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/}
+
+	if( inherit && v_string === inherit.string )
+	{
+		return inherit;
+	}
+
+	return new AbstractConstructor( v_string );
+};
+
+
+/*
 | Creates a new string object.
 */
 ast_string.create =
+AbstractConstructor.prototype.create =
 prototype.create =
 	function(
 		// free strings
