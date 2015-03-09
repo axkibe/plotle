@@ -8,6 +8,7 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	disc_mainDisc,
+	euclid_point,
 	gruga_mainDisc,
 	shell_fontPool,
 	widget_button;
@@ -27,8 +28,9 @@ var
 	dnw,
 	dv,
 	genericButtonModel,
-	spaceSize,
-	userSize;
+	genericButtonSize,
+	spaceButtonSize,
+	userButtonSize;
 
 dnw = design_anchorPoint.nw;
 
@@ -38,27 +40,14 @@ genericButtonModel =
 		'shape', design_anchorEllipse.fullSkewNW
 	);
 
-spaceSize =
-	{
-		width : 28,
-		height : 290
-	};
+genericButtonSize = euclid_point.create( 'x', 44, 'y', 44 );
 
-userSize =
-	{
-		width : 24,
-		height : 180
-	};
+spaceButtonSize = euclid_point.create( 'x', 28, 'y', 290 );
+
+userButtonSize = euclid_point.create( 'x', 24, 'y', 180 );
 
 dv =
 	{
-		generic :
-		{
-			width : 44,
-			height : 44,
-			font : shell_fontPool.get( 14, 'cm' )
-		},
-
 		normal : dnw.create( 'x', 4, 'y', 120 ),
 
 		create : dnw.create( 'x', 20, 'y', 169 ),
@@ -88,29 +77,19 @@ gruga_mainDisc =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', dv.normal,
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.normal.x + dv.generic.width,
-								'y', dv.normal.y + dv.generic.height
-							)
+						'pse', dv.normal.add( genericButtonSize )
 					)
 			),
 		'twig:add', 'create',
 			genericButtonModel.create(
 				'visible', false,
 				'text', 'new',
-				'font', dv.generic.font,
+				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', dv.create,
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.create.x + dv.generic.width,
-								'y', dv.create.y + dv.generic.height
-							)
+						'pse', dv.create.add( genericButtonSize )
 					)
 			),
 		'twig:add', 'remove',
@@ -121,12 +100,7 @@ gruga_mainDisc =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', dv.remove,
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.remove.x + dv.generic.width,
-								'y', dv.remove.y + dv.generic.height
-							)
+						'pse', dv.remove.add( genericButtonSize )
 					)
 			),
 		'twig:add', 'moveTo',
@@ -137,12 +111,7 @@ gruga_mainDisc =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', dv.moveto,
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.moveto.x + dv.generic.width,
-								'y', dv.moveto.y + dv.generic.height
-							)
+						'pse', dv.moveto.add( genericButtonSize )
 					)
 			),
 		'twig:add', 'space',
@@ -150,12 +119,7 @@ gruga_mainDisc =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', dv.space,
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.space.x + spaceSize.width,
-								'y', dv.space.y + spaceSize.height
-							)
+						'pse', dv.space.add( spaceButtonSize )
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
@@ -177,12 +141,7 @@ gruga_mainDisc =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', dv.user,
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.user.x + userSize.width,
-								'y', dv.user.y + userSize.height
-							)
+						'pse', dv.user.add( userButtonSize )
 					),
 				'text', '',
 				'font', shell_fontPool.get( 12, 'cm' ),
@@ -208,18 +167,8 @@ gruga_mainDisc =
 				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.login.x,
-								'y', dv.login.y
-							),
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.login.x + dv.generic.width,
-								'y', dv.login.y + dv.generic.height
-							)
+						'pnw', dv.login,
+						'pse', dv.login.add( genericButtonSize )
 					)
 			),
 		'twig:add', 'signUp',
@@ -232,12 +181,7 @@ gruga_mainDisc =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', dv.signup,
-						'pse',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.signup.x + dv.generic.width,
-								'y', dv.signup.y + dv.generic.height
-							)
+						'pse', dv.signup.add( genericButtonSize )
 					)
 			)
 	);
