@@ -24,15 +24,15 @@ var
 | All important design variables for convenience.
 */
 var
-	dv;
-//	mainButtonModel;
+	dv,
+	genericButtonModel;
 
 
-//mainButtonModel =
-//	widget_button.create(
-//		'style', 'mainButton',
-//		'shape', design_anchorEllipse.fullSkewNW
-//	);
+genericButtonModel =
+	widget_button.abstract(
+		'style', 'mainButton',
+		'shape', design_anchorEllipse.fullSkewNW
+	);
 
 
 dv =
@@ -103,8 +103,7 @@ dv =
 gruga_mainDisc =
 	disc_mainDisc.create(
 		'twig:add', 'normal',
-			widget_button.create(
-				'style', 'mainButton',
+			genericButtonModel.create(
 				'icon', 'normal',
 				'iconStyle', 'iconNormal',
 				'designFrame',
@@ -121,12 +120,10 @@ gruga_mainDisc =
 								'x', dv.normal.x + dv.generic.width,
 								'y', dv.normal.y + dv.generic.height
 							)
-					),
-				'shape', design_anchorEllipse.fullSkewNW
+					)
 			),
 		'twig:add', 'create',
-			widget_button.create(
-				'style', 'mainButton',
+			genericButtonModel.create(
 				'visible', false,
 				'text', 'new',
 				'font', dv.generic.font,
@@ -145,12 +142,10 @@ gruga_mainDisc =
 								'x', dv.create.x + dv.generic.width,
 								'y', dv.create.y + dv.generic.height
 							)
-					),
-				'shape', design_anchorEllipse.fullSkewNW
+					)
 			),
 		'twig:add', 'remove',
-			widget_button.create(
-				'style', 'mainButton',
+			genericButtonModel.create(
 				'icon', 'remove',
 				'iconStyle', 'iconRemove',
 				'visible', false,
@@ -168,12 +163,10 @@ gruga_mainDisc =
 								'x', dv.remove.x + dv.generic.width,
 								'y', dv.remove.y + dv.generic.height
 							)
-					),
-				'shape', design_anchorEllipse.fullSkewNW
+					)
 			),
 		'twig:add', 'moveTo',
-			widget_button.create(
-				'style', 'mainButton',
+			genericButtonModel.create(
 				'icon', 'moveto',
 				'iconStyle', 'iconNormal',
 				'visible', false,
@@ -191,12 +184,10 @@ gruga_mainDisc =
 								'x', dv.moveto.x + dv.generic.width,
 								'y', dv.moveto.y + dv.generic.height
 							)
-					),
-				'shape', design_anchorEllipse.fullSkewNW
+					)
 			),
 		'twig:add', 'space',
-			widget_button.create(
-				'style', 'mainButton',
+			genericButtonModel.create(
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -229,8 +220,7 @@ gruga_mainDisc =
 				'textRotation', - Math.PI / 2
 			),
 		'twig:add', 'user',
-			widget_button.create(
-				'style', 'mainButton',
+			genericButtonModel.create(
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -257,14 +247,12 @@ gruga_mainDisc =
 								'x', -70,
 								'y', 0
 							),
-						'pse',
-							design_anchorPoint.PSE_M1
+						'pse', design_anchorPoint.PSE_M1
 					),
 				'textRotation', ( -Math.PI / 2 )
 			),
 		'twig:add', 'login',
-			widget_button.create(
-				'style', 'mainButton',
+			genericButtonModel.create(
 				'visible', false,
 				'text', 'log\nin',
 				'textNewline', 14,
@@ -284,12 +272,10 @@ gruga_mainDisc =
 								'x', dv.login.x + dv.generic.width,
 								'y', dv.login.y + dv.generic.height
 							)
-					),
-				'shape', design_anchorEllipse.fullSkewNW
+					)
 			),
 		'twig:add', 'signUp',
-			widget_button.create(
-				'style', 'mainButton',
+			genericButtonModel.create(
 				'visible', false,
 				'text', 'sign\nup',
 				'textNewline', 14,
@@ -309,8 +295,7 @@ gruga_mainDisc =
 								'x', dv.signup.x + dv.generic.width,
 								'y', dv.signup.y + dv.generic.height
 							)
-					),
-				'shape', design_anchorEllipse.fullSkewNW
+					)
 			)
 	);
 
