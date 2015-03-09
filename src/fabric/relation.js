@@ -498,7 +498,7 @@ jools.lazyValue(
 		);
 
 		// displays the border
-		display.edge(
+		display.border(
 			shell_style.getStyle( theme.label.style, 'normal' ),
 			this.zeroSilhoutte,
 			this.view.home

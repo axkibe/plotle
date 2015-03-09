@@ -483,7 +483,7 @@ jools.lazyValue(
 			this._drawCaret( f );
 		}
 
-		f.edge( style, shape, euclid_view.proper );
+		f.border( style, shape, euclid_view.proper );
 
 		return f;
 	}
@@ -498,10 +498,7 @@ widget_input.prototype.draw =
 		display
 	)
 {
-	display.drawImage(
-		'image', this._display,
-		'pnw', this.frame.pnw
-	);
+	display.drawImage( 'image', this._display, 'pnw', this.frame.pnw );
 };
 
 

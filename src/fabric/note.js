@@ -413,7 +413,7 @@ prototype.highlight =
 		display
 	)
 {
-	display.edge(
+	display.border(
 		shell_style.getStyle( theme.note.style, 'highlight' ),
 		this.silhoutte,
 		this.view
@@ -665,7 +665,7 @@ jools.lazyValue(
 		);
 
 		// draws the border
-		f.edge( style, this.zeroSilhoutte, hview );
+		f.border( style, this.zeroSilhoutte, hview );
 
 		return f;
 	}

@@ -1,6 +1,7 @@
 /*
 | An invisible line section of a shape.
-| Makes a fill but not an edge.
+|
+| Makes a fill but not an border.
 |
 | Used by shape.
 */

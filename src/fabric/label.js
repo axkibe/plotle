@@ -340,7 +340,7 @@ prototype.highlight =
 		display
 	)
 {
-	display.edge(
+	display.border(
 		shell_style.getStyle( theme.label.style, 'highlight' ),
 		this.silhoutte,
 		this.view
@@ -475,7 +475,7 @@ jools.lazyValue(
 		);
 
 		// displays the border
-		display.edge(
+		display.border(
 			shell_style.getStyle( theme.label.style, 'normal' ),
 			this.zeroSilhoutte,
 			this.view.home

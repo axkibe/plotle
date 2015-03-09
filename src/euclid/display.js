@@ -1,7 +1,5 @@
 /*
 | Wrapper around HTML5 canvas.
-|
-| FIXME check all "edge"
 */
 
 
@@ -350,9 +348,9 @@ euclid_display.prototype.drawImage =
 
 
 /*
-| Draws an edge.
+| Draws a border.
 */
-euclid_display.prototype.edge =
+euclid_display.prototype.border =
 	function(
 		style,  // the style
 		shape,  // an object which has sketch defined
@@ -480,7 +478,7 @@ euclid_display.prototype.paint =
 	var
 		a,
 		aZ,
-		edgeStyle,
+		borderStyle,
 		fillStyle,
 		cx;
 
@@ -494,8 +492,7 @@ euclid_display.prototype.paint =
 
 	fillStyle = style.fill;
 
-	// FIXME
-	edgeStyle = style.border !== undefined ? style.border : style.edge;
+	borderStyle = style.border;
 
 	cx = this._cx;
 
@@ -510,22 +507,22 @@ euclid_display.prototype.paint =
 		cx.fill( );
 	}
 
-	if( edgeStyle )
+	if( borderStyle )
 	{
-		switch( edgeStyle.reflect )
+		switch( borderStyle.reflect )
 		{
 			case 'euclid_borderRay' :
 
-				for( a = 0, aZ = edgeStyle.length; a < aZ; a++ )
+				for( a = 0, aZ = borderStyle.length; a < aZ; a++ )
 				{
-					this._border( edgeStyle.get( a ), shape, view );
+					this._border( borderStyle.get( a ), shape, view );
 				}
 
 				break;
 
 			case 'euclid_border' :
 
-				this._border( edgeStyle, shape, view );
+				this._border( borderStyle, shape, view );
 
 				break;
 

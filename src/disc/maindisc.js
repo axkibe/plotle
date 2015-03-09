@@ -322,7 +322,7 @@ jools.lazyValue(
 			this.atRank( r ).draw( display );
 		}
 
-		display.edge( this.style, this.silhoutte, euclid_view.proper );
+		display.border( this.style, this.silhoutte, euclid_view.proper );
 
 		return display;
 	}

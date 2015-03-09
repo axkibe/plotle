@@ -491,11 +491,8 @@ prototype.highlight =
 		display
 	)
 {
-	display.edge(
-		shell_style.getStyle(
-			theme.portal.style,
-			'highlight'
-		),
+	display.border(
+		shell_style.getStyle( theme.portal.style, 'highlight' ),
 		this.silhoutte,
 		this.view
 	);
@@ -1686,10 +1683,10 @@ jools.lazyValue(
 			f.deClip( );
 		}
 
-		// redraws the edge on the end to top
+		// redraws the border on the end to top
 		// everything else
 
-		f.edge(
+		f.border(
 			shell_style.getStyle( theme.portal.style, 'normal' ),
 			this.zeroSilhoutte,
 			hview
