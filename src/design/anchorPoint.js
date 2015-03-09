@@ -53,6 +53,12 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+prototype = design_anchorPoint.prototype;
+
+
 /*
 | Point in center.
 */
@@ -94,10 +100,38 @@ design_anchorPoint.seMin1 =
 		'y', -1
 	);
 
+
+/*
+| Adds this point by another.
+*/
+prototype.add =
+	function(
+		p
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( p.reflect !== 'euclid_point' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	return(
+		this.create(
+			'x', this.x + p.x,
+			'y', this.y + p.y
+		)
+	);
+};
+
+
+
 /*
 | Computes the anchorPoint to an euclid one.
 */
-design_anchorPoint.prototype.compute =
+prototype.compute =
 	function(
 		frame
 	)

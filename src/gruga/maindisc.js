@@ -7,7 +7,6 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
-	euclid_point,
 	disc_mainDisc,
 	gruga_mainDisc,
 	shell_fontPool,
@@ -25,10 +24,13 @@ var
 | All important design variables for convenience.
 */
 var
+	dnw,
 	dv,
 	genericButtonModel,
 	spaceSize,
 	userSize;
+
+dnw = design_anchorPoint.nw;
 
 genericButtonModel =
 	widget_button.abstract(
@@ -57,21 +59,21 @@ dv =
 			font : shell_fontPool.get( 14, 'cm' )
 		},
 
-		normal : euclid_point.create( 'x', 4, 'y', 120 ),
+		normal : dnw.create( 'x', 4, 'y', 120 ),
 
-		create : euclid_point.create( 'x', 20, 'y', 169 ),
+		create : dnw.create( 'x', 20, 'y', 169 ),
 
-		remove : euclid_point.create( 'x', 32, 'y', 218 ),
+		remove : dnw.create( 'x', 32, 'y', 218 ),
 
-		moveto : euclid_point.create( 'x', 47, 'y', 326 ),
+		moveto : dnw.create( 'x', 47, 'y', 326 ),
 
-		space : euclid_point.create( 'x', 0, 'y', 170 ),
+		space : dnw.create( 'x', 0, 'y', 170 ),
 
-		user : euclid_point.create( 'x', 0, 'y', 440 ),
+		user : dnw.create( 'x', 0, 'y', 440 ),
 
-		login : euclid_point.create( 'x', 30, 'y', 535 ),
+		login : dnw.create( 'x', 30, 'y', 535 ),
 
-		signup : euclid_point.create( 'x', 19, 'y', 585 )
+		signup : dnw.create( 'x', 19, 'y', 585 )
 	};
 
 
@@ -85,12 +87,7 @@ gruga_mainDisc =
 				'iconStyle', 'iconNormal',
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.normal.x,
-								'y', dv.normal.y
-							),
+						'pnw', dv.normal,
 						'pse',
 							design_anchorPoint.create(
 								'anchor', 'nw',
@@ -107,12 +104,7 @@ gruga_mainDisc =
 				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.create.x,
-								'y', dv.create.y
-							),
+						'pnw', dv.create,
 						'pse',
 							design_anchorPoint.create(
 								'anchor', 'nw',
@@ -128,12 +120,7 @@ gruga_mainDisc =
 				'visible', false,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.remove.x,
-								'y', dv.remove.y
-							),
+						'pnw', dv.remove,
 						'pse',
 							design_anchorPoint.create(
 								'anchor', 'nw',
@@ -149,12 +136,7 @@ gruga_mainDisc =
 				'visible', false,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.moveto.x,
-								'y', dv.moveto.y
-							),
+						'pnw', dv.moveto,
 						'pse',
 							design_anchorPoint.create(
 								'anchor', 'nw',
@@ -167,12 +149,7 @@ gruga_mainDisc =
 			genericButtonModel.create(
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.space.x,
-								'y', dv.space.y
-							),
+						'pnw', dv.space,
 						'pse',
 							design_anchorPoint.create(
 								'anchor', 'nw',
@@ -199,12 +176,7 @@ gruga_mainDisc =
 			genericButtonModel.create(
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.user.x,
-								'y', dv.user.y
-							),
+						'pnw', dv.user,
 						'pse',
 							design_anchorPoint.create(
 								'anchor', 'nw',
@@ -259,12 +231,7 @@ gruga_mainDisc =
 				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
-						'pnw',
-							design_anchorPoint.create(
-								'anchor', 'nw',
-								'x', dv.signup.x,
-								'y', dv.signup.y
-							),
+						'pnw', dv.signup,
 						'pse',
 							design_anchorPoint.create(
 								'anchor', 'nw',
