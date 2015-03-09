@@ -826,7 +826,9 @@ generator.prototype.genSingleton =
 | Generates the creators variable list.
 */
 generator.prototype.genCreatorVariables =
-	function( )
+	function(
+		abstract  // if true generates the abstract creator
+	)
 {
 	var
 		a,
@@ -885,7 +887,9 @@ generator.prototype.genCreatorVariables =
 | Generates the creators inheritance receiver.
 */
 generator.prototype.genCreatorInheritanceReceiver =
-	function( )
+	function(
+		abstract  // if true generates the abstract creator
+	)
 {
 	var
 		a,
@@ -988,7 +992,9 @@ generator.prototype.genCreatorInheritanceReceiver =
 | Generates the creators free strings parser.
 */
 generator.prototype.genCreatorFreeStringsParser =
-	function( )
+	function(
+		abstract  // if true generates the abstract creator
+	)
 {
 	var
 		a,
@@ -1203,7 +1209,8 @@ generator.prototype.genCreatorFreeStringsParser =
 */
 generator.prototype.genCreatorDefaults =
 	function(
-		json     // only do jsons
+		json,     // only do jsons
+		abstract  // if true generates the abstract creator
 	)
 {
 	var
@@ -1212,6 +1219,14 @@ generator.prototype.genCreatorDefaults =
 		attr,
 		name,
 		result;
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.json && this.abstract !== undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	result = $block( );
 
@@ -1374,7 +1389,8 @@ generator.prototype.genTypeCheckFailCondition =
 */
 generator.prototype.genCreatorChecks =
 	function(
-		json    // do checks for fromJsonCreator
+		json,    // do checks for fromJsonCreator
+		abstract  // if true generates the abstract creator
 	)
 {
 	var
@@ -1386,6 +1402,14 @@ generator.prototype.genCreatorChecks =
 		cond,
 		name,
 		tcheck;
+
+/**/if( CHECK )
+/**/{
+/**/	if( this.json && this.abstract !== undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
 
 	check = $block( );
 
@@ -1541,7 +1565,9 @@ generator.prototype.genCreatorChecks =
 | 'member' is an access to an attribute ( without call )
 */
 generator.prototype.genCreatorConcerns =
-	function( )
+	function(
+		abstract  // if true generates the abstract creator
+	)
 {
 	var
 		a,
@@ -1693,7 +1719,9 @@ generator.prototype.genCreatorConcerns =
 | returning this object if so.
 */
 generator.prototype.genCreatorUnchanged =
-	function( )
+	function(
+		abstract  // if true generates the abstract creator
+	)
 {
 	var
 		a,
@@ -1756,7 +1784,9 @@ generator.prototype.genCreatorUnchanged =
 | Generates the creators return statement
 */
 generator.prototype.genCreatorReturn =
-	function( )
+	function(
+		abstract  // if true generates the abstract creator
+	)
 {
 	var
 		a,
@@ -1818,29 +1848,33 @@ generator.prototype.genCreatorReturn =
 | Generates the creator.
 */
 generator.prototype.genCreator =
-	function( )
+	function(
+		abstract  // if true generates the abstract creator
+	)
 {
 	var
 		block,
 		creator;
 
+	if( abstract ) return $block( ); // FIXME
+
 	block =
 		$block( )
-		.$( this.genCreatorVariables( ) )
-		.$( this.genCreatorInheritanceReceiver( ) );
+		.$( this.genCreatorVariables( abstract ) )
+		.$( this.genCreatorInheritanceReceiver( abstract ) );
 
 	if( this.creatorHasFreeStringsParser )
 	{
-		block = block.$( this.genCreatorFreeStringsParser( ) );
+		block = block.$( this.genCreatorFreeStringsParser( abstract ) );
 	}
 
 	block =
 		block
-		.$( this.genCreatorDefaults( false ) )
-		.$( this.genCreatorChecks( false ) )
-		.$( this.genCreatorConcerns( ) )
-		.$( this.genCreatorUnchanged( ) )
-		.$( this.genCreatorReturn( block ) );
+		.$( this.genCreatorDefaults( false, abstract ) )
+		.$( this.genCreatorChecks( false, abstract ) )
+		.$( this.genCreatorConcerns( abstract ) )
+		.$( this.genCreatorUnchanged( abstract ) )
+		.$( this.genCreatorReturn( abstract ) );
 
 	creator =
 		$func( block )
@@ -1848,10 +1882,18 @@ generator.prototype.genCreator =
 
 	return(
 		$block( )
-		.$comment( 'Creates a new ' + this.id.name + ' object.')
+		.$comment(
+			abstract
+			? 'Creates an ' + this.id.name + ' object.'
+			: 'Creates a new ' + this.id.name + ' object.'
+		)
 		.$assign(
-			$( this.id.global, '.create' ),
-			$( 'prototype.create = ', creator )
+			$( this.id.global, ( abstract ? '.abstract' : '.create' ) ),
+			$(
+				abstract ? 'prototype.abstract' : 'prototype.create',
+				' = ',
+				creator
+			)
 		)
 	);
 };
@@ -3284,7 +3326,10 @@ generator.prototype.genCapsule =
 		capsule = capsule.$( this.genSingleton( ) );
 	}
 
-	capsule = capsule.$( this.genCreator( ) );
+	capsule =
+		capsule
+		.$( this.genCreator( true ) )
+		.$( this.genCreator( false ) );
 
 	if( this.hasJson )
 	{
