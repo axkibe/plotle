@@ -367,7 +367,8 @@ euclid_display.prototype.edge =
 	// FIXME
 	edge = style.border;
 
-	if( edge && edge.reflect === 'euclid_borderRay' )
+	if( edge.reflect === 'euclid_borderRay' )
+	//if( edge && edge.reflect === 'euclid_borderRay' )
 	{
 		for( a = 0, aZ = edge.length; a < aZ; a++ )
 		{
