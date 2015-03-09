@@ -364,25 +364,10 @@ euclid_display.prototype.edge =
 		aZ,
 		edge;
 
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
 	// FIXME
-	edge = style.border !== undefined ?  style.border : style.edge;
+	edge = style.border;
 
-	if( Array.isArray( edge ) ) // FIXME remove
-	{
-		for( a = 0, aZ = edge.length; a < aZ; a++ )
-		{
-			this._edge( edge[ a ], shape, view );
-		}
-	}
-	else if( edge && edge.reflect === 'euclid_borderRay' )
+	if( edge && edge.reflect === 'euclid_borderRay' )
 	{
 		for( a = 0, aZ = edge.length; a < aZ; a++ )
 		{

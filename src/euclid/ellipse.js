@@ -43,7 +43,6 @@ if( JION )
 						type :
 							'euclid_point'
 					},
-				// FIXME make proper optionals
 				gradientPC :
 					{
 						comment :
@@ -188,7 +187,6 @@ jools.lazyValue(
 	'gradientPC',
 	function( )
 	{
-		// FIXME this is just a workaround
 		if( this._gradientPC )
 		{
 			return this._gradientPC;
@@ -216,7 +214,6 @@ jools.lazyValue(
 			dx,
 			dy;
 
-		// FIXME this is just a workaround
 		if( this._gradientR1 )
 		{
 			return this._gradientR1;
@@ -239,7 +236,6 @@ jools.lazyValue(
 	'gradientR0',
 	function( )
 	{
-		// FIXME this is just a workaround
 		if( this._gradientR0 )
 		{
 			return this._gradientR0;
