@@ -1291,7 +1291,6 @@ generator.prototype.genSingleTypeCheckFailCondition =
 		id
 	)
 {
-	// XXX
 	switch( id.string )
 	{
 		case 'boolean' :
