@@ -18,66 +18,59 @@ var
 ( function( ) {
 'use strict';
 
-/*
-| All important design variables for convenience.
-*/
+
 var
+	genericButtonModel,
 	dv;
 
 dv =
 	{
 		generic :
 		{
-			width :
-				70,
-			height :
-				70,
-			font :
-				shell_fontPool.get( 16, 'cm' )
+			width : 70,
+			height : 70,
 		},
 
 		note :
 		{
-			x :
-				62,
-			y :
-				216
+			x : 62,
+			y : 216
 		},
 
 		label :
 		{
-			x :
-				81,
-			y :
-				284
+			x : 81,
+			y : 284
 		},
 
 	relation :
 		{
-			x :
-				94,
-			y :
-				354
+			x : 94,
+			y : 354
 		},
 
 	portal :
 		{
-			x :
-				101,
-			y :
-				425
+			x : 101,
+			y : 425
 		}
 	};
+
+genericButtonModel =
+	widget_button.abstract(
+		'font', shell_fontPool.get( 16, 'cm' ),
+		'shape', design_anchorEllipse.fullSkewNW,
+		'style', 'createButton',
+		'textDesignPos', design_anchorPoint.c
+	);
+
 
 gruga_createDisc =
 	disc_createDisc.create(
 		'twig:add',
 		'createNote',
-			widget_button.create(
-				'style', 'createButton',
+			genericButtonModel.create(
 				'text', 'Note',
-				'font', dv.generic.font,
-				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -92,17 +85,12 @@ gruga_createDisc =
 								'x', dv.note.x + dv.generic.width,
 								'y', dv.note.y + dv.generic.height
 							)
-					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+					)
 			),
 		'twig:add',
 		'createLabel',
-			widget_button.create(
-				'style', 'createButton',
+			genericButtonModel.create(
 				'text', 'Label',
-				'font', dv.generic.font,
-				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -118,17 +106,13 @@ gruga_createDisc =
 								'y', dv.label.y + dv.generic.height
 							)
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'createRelation',
-			widget_button.create(
-				'style', 'createButton',
+			genericButtonModel.create(
 				'text', 'Rela-\ntion',
 				'textNewline', 20,
-				'font', dv.generic.font,
-				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -143,17 +127,12 @@ gruga_createDisc =
 								'x', dv.relation.x + dv.generic.width,
 								'y', dv.relation.y + dv.generic.height
 							)
-					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+					)
 			),
 		'twig:add',
 		'createPortal',
-			widget_button.create(
-				'style', 'createButton',
+			genericButtonModel.create(
 				'text', 'Portal',
-				'font', dv.generic.font,
-				'textDesignPos', design_anchorPoint.c,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -168,8 +147,7 @@ gruga_createDisc =
 								'x', dv.portal.x + dv.generic.width,
 								'y', dv.portal.y + dv.generic.height
 							)
-					),
-				'shape', design_anchorEllipse.fullSkewNW
+					)
 			)
 	);
 
