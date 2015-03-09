@@ -7,6 +7,7 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
+	euclid_point,
 	disc_mainDisc,
 	gruga_mainDisc,
 	shell_fontPool,
@@ -25,8 +26,9 @@ var
 */
 var
 	dv,
-	genericButtonModel;
-
+	genericButtonModel,
+	spaceSize,
+	userSize;
 
 genericButtonModel =
 	widget_button.abstract(
@@ -34,6 +36,17 @@ genericButtonModel =
 		'shape', design_anchorEllipse.fullSkewNW
 	);
 
+spaceSize =
+	{
+		width : 28,
+		height : 290
+	};
+
+userSize =
+	{
+		width : 24,
+		height : 180
+	};
 
 dv =
 	{
@@ -44,57 +57,21 @@ dv =
 			font : shell_fontPool.get( 14, 'cm' )
 		},
 
-		normal :
-		{
-			x : 4,
-			y : 120
-		},
+		normal : euclid_point.create( 'x', 4, 'y', 120 ),
 
-		create :
-		{
-			x : 20,
-			y : 169
-		},
+		create : euclid_point.create( 'x', 20, 'y', 169 ),
 
-		remove :
-		{
-			x : 32,
-			y : 218
-		},
+		remove : euclid_point.create( 'x', 32, 'y', 218 ),
 
-		moveto :
-		{
-			x : 47,
-			y : 326
-		},
+		moveto : euclid_point.create( 'x', 47, 'y', 326 ),
 
-		space :
-		{
-			width : 28,
-			height : 290,
-			x : 0,
-			y : 170
-		},
+		space : euclid_point.create( 'x', 0, 'y', 170 ),
 
-		user :
-		{
-			width : 24,
-			height : 180,
-			x : 0,
-			y : 440
-		},
+		user : euclid_point.create( 'x', 0, 'y', 440 ),
 
-		login :
-		{
-			x : 30,
-			y : 535
-		},
+		login : euclid_point.create( 'x', 30, 'y', 535 ),
 
-		signup :
-		{
-			x : 19,
-			y : 585
-		}
+		signup : euclid_point.create( 'x', 19, 'y', 585 )
 	};
 
 
@@ -199,8 +176,8 @@ gruga_mainDisc =
 						'pse',
 							design_anchorPoint.create(
 								'anchor', 'nw',
-								'x', dv.space.x + dv.space.width,
-								'y', dv.space.y + dv.space.height
+								'x', dv.space.x + spaceSize.width,
+								'y', dv.space.y + spaceSize.height
 							)
 					),
 				'text', '',
@@ -214,8 +191,7 @@ gruga_mainDisc =
 								'x', -60,
 								'y', 0
 							),
-						'pse',
-							design_anchorPoint.PSE_M1
+						'pse', design_anchorPoint.seMin1
 					),
 				'textRotation', - Math.PI / 2
 			),
@@ -232,8 +208,8 @@ gruga_mainDisc =
 						'pse',
 							design_anchorPoint.create(
 								'anchor', 'nw',
-								'x', dv.user.x + dv.user.width,
-								'y', dv.user.y + dv.user.height
+								'x', dv.user.x + userSize.width,
+								'y', dv.user.y + userSize.height
 							)
 					),
 				'text', '',
@@ -247,7 +223,7 @@ gruga_mainDisc =
 								'x', -70,
 								'y', 0
 							),
-						'pse', design_anchorPoint.PSE_M1
+						'pse', design_anchorPoint.seMin1
 					),
 				'textRotation', ( -Math.PI / 2 )
 			),

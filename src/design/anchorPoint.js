@@ -67,7 +67,7 @@ design_anchorPoint.PC =
 /*
 | Point in north west.
 */
-design_anchorPoint.PNW =
+design_anchorPoint.nw =
 	design_anchorPoint.create(
 		'anchor', 'nw',
 		'x', 0,
@@ -77,7 +77,7 @@ design_anchorPoint.PNW =
 /*
 | Point in south east.
 */
-design_anchorPoint.PSE =
+design_anchorPoint.se =
 	design_anchorPoint.create(
 		'anchor', 'se',
 		'x', 0,
@@ -87,7 +87,7 @@ design_anchorPoint.PSE =
 /*
 | Point in south east minus 1.
 */
-design_anchorPoint.PSE_M1 =
+design_anchorPoint.seMin1 =
 	design_anchorPoint.create(
 		'anchor', 'se',
 		'x', -1,

@@ -50,8 +50,8 @@ if( JION )
 */
 design_anchorEllipse.fullSkewNW =
 	design_anchorEllipse.create(
-		'pnw', design_anchorPoint.PNW,
-		'pse', design_anchorPoint.PSE_M1
+		'pnw', design_anchorPoint.nw,
+		'pse', design_anchorPoint.seMin1
 	);
 
 
