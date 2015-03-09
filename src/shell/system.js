@@ -588,7 +588,7 @@ shell_system.prototype._onSystemBlur =
 		// event
 	)
 {
-	root.setFocus( false );
+	root.create( 'systemFocus', false );
 };
 
 
@@ -610,7 +610,7 @@ shell_system.prototype._onSystemFocus =
 		// event
 	)
 {
-	root.setFocus( true );
+	root.create( 'systemFocus', true );
 };
 
 

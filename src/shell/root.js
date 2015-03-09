@@ -58,112 +58,106 @@ if( JION )
 			{
 				access :
 					{
-						comment :
-							'access level to current space',
-						type :
-							'string',
-						allowsNull :
-							true,
-						assign :
-							'_access'
+						comment : 'access level to current space',
+						type : 'string',
+						allowsNull : true,
+						assign : '_access'
 					},
 				action :
 					{
-						comment :
-							'current action',
-						type :
-							'->action',
-						allowsNull :
-							true
+						comment : 'current action',
+						type : '->action',
+						allowsNull : true
 						// FIXME assign _action
+					},
+				ajax :
+					{
+						comment : 'the ajax communication',
+						type : 'net_ajax'
 					},
 				display :
 					{
-						comment :
-							'the display within everything happens',
-						type :
-							'euclid_display'
+						comment : 'the display within everything happens',
+						type : 'euclid_display'
+					},
+				doTracker :
+					{
+						comment : 'the un/re/do tracker',
+						type : 'shell_doTracker'
 					},
 				fallbackSpaceRef :
 					{
 						comment :
 							'fallback to this space'
 							+ 'if loading another failed.',
-						type :
-							'fabric_spaceRef',
-						defaultValue :
-							'null'
+						type : 'fabric_spaceRef',
+						defaultValue : 'null'
 					},
 				hover :
 					{
-						comment :
-							'current hovered item',
-						type :
-							'jion_path',
-						allowsNull :
-							true,
-						assign :
-							'_hover'
+						comment : 'current hovered item',
+						type : 'jion_path',
+						allowsNull : true,
+						assign : '_hover'
+					},
+				link :
+					{
+						comment : 'the link to the server',
+						type : 'net_link'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
-						type :
-							'->mark',
-						assign :
-							'_mark',
-						allowsNull :
-							true
+						comment : 'the users mark',
+						type : '->mark',
+						assign : '_mark',
+						allowsNull : true
 					},
 				mode :
 					{
-						comment :
-							'current mode',
-						type :
-							'string',
-						assign :
-							'_mode'
+						comment : 'current mode',
+						type : 'string',
+						assign : '_mode'
+					},
+				systemFocus :
+					{
+						comment : 'shell has system focus',
+						type : 'boolean',
+						assign : '_systemFocus'
 					},
 				space :
 					{
-						comment :
-							'current space',
-						type :
-							'fabric_space',
-						allowsNull :
-							true
+						comment : 'current space',
+						type : 'fabric_space',
+						allowsNull : true
 					},
 				user :
 					{
-						comment :
-							'current user',
-						type :
-							'user_creds',
-						allowsNull :
-							true
+						comment : 'current user',
+						type : 'user_creds',
+						allowsNull : true
 					},
 				view :
 					{
-						comment :
-							'current view',
-						type :
-							'euclid_view'
+						comment : 'current view',
+						type : 'euclid_view'
 						// FIXME assign _view
-					},
-				_formJockey :
-					{
-						comment :
-							'the master of forms',
-						type :
-							'form_jockey'
 					},
 				_discJockey :
 					{
+						comment : 'the master of discs',
+						type : 'disc_jockey'
+					},
+				_drawn :
+					{
 						comment :
-							'the master of discs',
+							'this root has been drawn on display',
 						type :
-							'disc_jockey'
+							'boolean'
+					},
+				_formJockey :
+					{
+						comment : 'the master of forms',
+						type : 'form_jockey'
 					},
 				_visitor :
 					{
@@ -172,38 +166,8 @@ if( JION )
 							// passhash so when logging out from a real user
 							// the previous visitor id is regained.
 							'last acquired visitor credentials',
-						type :
-							'user_creds',
-						allowsNull :
-							true
-					},
-				ajax :
-					{
-						comment :
-							'the ajax communication',
-						type :
-							'net_ajax'
-					},
-				link :
-					{
-						comment :
-							'the link to the server',
-						type :
-							'net_link'
-					},
-				doTracker :
-					{
-						comment :
-							'the un/re/do tracker',
-						type :
-							'shell_doTracker'
-					},
-				_drawn :
-					{
-						comment :
-							'this root has been drawn on display',
-						type :
-							'boolean'
+						type : 'user_creds',
+						allowsNull : true
 					}
 			},
 		init :
@@ -367,9 +331,9 @@ shell_root.startup =
 		'mark', null,
 		'mode', mode,
 		'space', null,
+		'systemFocus', true,
 		'user', null,
 		'view', view,
-		'_drawn', false,
 		'_discJockey',
 			disc_jockey.create(
 				'access', '',
@@ -382,6 +346,7 @@ shell_root.startup =
 				'twig:add', 'mainDisc', gruga_mainDisc,
 				'twig:add', 'createDisc', gruga_createDisc
 			),
+		'_drawn', false,
 		'_formJockey',
 			form_jockey.create(
 				'hover', jion_path.empty,
@@ -477,10 +442,7 @@ prototype._init =
 		}
 		else
 		{
-			if(
-				root.space
-				&& root.space.ref.username !== 'ideoloom'
-			)
+			if( root.space && root.space.ref.username !== 'ideoloom' )
 			{
 				root.moveToSpace( fabric_spaceRef.ideoloomHome, false );
 			}
@@ -489,6 +451,11 @@ prototype._init =
 
 			root.create( '_visitor', user );
 		}
+	}
+
+	if( mark && mark.reflect === 'mark_caret' )
+	{
+		mark = mark.create( 'focus', this._systemFocus );
 	}
 
 	// skips recreating childs when no need
@@ -1006,35 +973,6 @@ prototype.setPath =
 		default :
 
 			throw new Error( );
-	}
-};
-
-
-/*
-| The shell got or lost the systems focus.
-|
-| FIXME rename setSystemFocus
-|
-| FIXME move into _init
-*/
-prototype.setFocus =
-	function(
-		focus
-	)
-{
-	if( root._mark )
-	{
-		switch( root._mark.reflect )
-		{
-			case 'mark_caret' :
-
-				root.create(
-					'mark',
-					root._mark.create( 'focus', focus )
-				);
-
-			break;
-		}
 	}
 };
 
