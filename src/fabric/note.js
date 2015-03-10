@@ -41,92 +41,57 @@ if( JION )
 			{
 				doc :
 					{
-						comment :
-							'the notes document',
-						type :
-							'fabric_doc',
-						json :
-							true
+						comment : 'the notes document',
+						type : 'fabric_doc',
+						json : true
 					},
 				fontsize :
 					{
-						comment :
-							'the fontsize of the note',
-						type :
-							'number',
-						json :
-							true
+						comment : 'the fontsize of the note',
+						type : 'number',
+						json : true
 					},
 				hover :
 					{
-						comment :
-							'node currently hovered upon',
-						type :
-							'jion_path',
-						assign :
-							null,
-						defaultValue :
-							'null'
+						comment : 'node currently hovered upon',
+						type : 'jion_path',
+						assign : null,
+						defaultValue : 'null'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
-						concerns :
-							{
-								type :
-									'fabric_item',
-								func :
-									'concernsMark',
-								args :
-									[ 'mark', 'path' ]
-							},
-						type :
-							'->mark',
-						defaultValue :
-							'undefined',
-						allowsNull :
-							true
+						comment : 'the users mark',
+						prepare : 'fabric_item.concernsMark( mark, path )',
+						type : '->mark',
+						defaultValue : 'undefined',
+						allowsNull : true
 					},
 				path :
 					{
-						comment :
-							'the path of the note',
-						type :
-							'jion_path',
-						defaultValue :
-							'undefined'
+						comment : 'the path of the note',
+						type : 'jion_path',
+						defaultValue : 'undefined'
 					},
 				scrolly :
 					{
-						comment :
-							'vertical scroll position',
-						type :
-							'number',
-						defaultValue :
-							'undefined'
+						comment : 'vertical scroll position',
+						type : 'number',
+						defaultValue : 'undefined'
 					},
 				view :
 					{
-						comment :
-							'the current view',
-						type :
-							'euclid_view',
-						defaultValue :
-							'undefined'
+						comment : 'the current view',
+						type : 'euclid_view',
+						defaultValue : 'undefined'
 					},
 				zone :
 					{
-						comment :
-							'the notes zone',
-						type :
-							'euclid_rect',
-						json :
-							true
+						comment : 'the notes zone',
+						type : 'euclid_rect',
+						json : true
 					}
 			},
-		init :
-			[ 'inherit' ],
+		init : [ 'inherit' ],
 		alike :
 			{
 				alikeIgnoringView :
