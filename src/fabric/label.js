@@ -31,87 +31,60 @@ var
 if( JION )
 {
 	return {
-		id :
-			'fabric_label',
+		id : 'fabric_label',
 		attributes :
 			{
 				doc :
 					{
-						comment :
-							'the labels document',
-						type :
-							'fabric_doc',
-						json :
-							true
+						comment : 'the labels document',
+						type : 'fabric_doc',
+						json : true
 					},
 				fontsize :
 					{
-						comment :
-							'the fontsize of the label',
-						type :
-							'number',
-						json :
-							true
+						comment : 'the fontsize of the label',
+						type : 'number',
+						json : true
 					},
 				hover :
 					{
-						comment :
-							'node currently hovered upon',
-						type :
-							'jion_path',
-						assign :
-							null,
+						comment : 'node currently hovered upon',
+						type : 'jion_path',
+						assign : null,
 						// FIXME make defaultValue undefined for server
-						defaultValue :
-							'null'
+						defaultValue : 'null'
 					},
 				path :
 					{
-						comment :
-							'the path of the doc',
-						type :
-							'jion_path',
-						defaultValue :
-							'undefined'
+						comment : 'the path of the doc',
+						type : 'jion_path',
+						defaultValue : 'undefined'
 					},
 				pnw :
 					{
-						comment :
-							'point in the north-west',
-						type :
-							'euclid_point',
-						json :
-							true
+						comment : 'point in the north-west',
+						type : 'euclid_point',
+						json : true
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
+						comment : 'the users mark',
+						// prepare : 'fabric_item.concernsMark( mark, path )',
 						concerns :
 							{
-								type :
-									'fabric_item',
-								func :
-									'concernsMark',
-								args :
-									[ 'mark', 'path' ]
+								type : 'fabric_item',
+								func : 'concernsMark',
+								args : [ 'mark', 'path' ]
 							},
-
-						type :
-							'->mark',
-						defaultValue :
-							'undefined',
-						allowsNull :
-							true
+						type : '->mark',
+						defaultValue : 'undefined',
+						allowsNull : true
 					},
 				view :
 					{
-						comment :
-							'the current view',
-						type :
-							'euclid_view',
-						defaultValue :
-							'undefined'
+						comment : 'the current view',
+						type : 'euclid_view',
+						defaultValue : 'undefined'
 					}
 			},
 		init : [ ]
