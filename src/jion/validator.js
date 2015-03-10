@@ -150,15 +150,14 @@ checkConcern =
 /*
 | Checks if a jion prepare looks ok.
 */
-checkConcern =
+checkPrepare =
 	function(
 		// attr
 	)
 {
-	// FIXME
+	// FUTURE
 	return true;
 };
-
 
 
 /*

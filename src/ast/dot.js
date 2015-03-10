@@ -42,15 +42,15 @@ if( JION )
 
 
 
-/*
-| Import
-*/
 var
 	ast_dot,
-	ast_member;
+	ast_member,
+	prototype;
 
 
 ast_dot = require( '../jion/this' )( module );
+
+prototype = ast_dot.prototype;
 
 ast_member = require( './member' );
 
@@ -58,7 +58,7 @@ ast_member = require( './member' );
 /*
 | Initializer.
 */
-ast_dot.prototype._init =
+prototype._init =
 	function( )
 {
 	var
@@ -86,9 +86,28 @@ ast_dot.prototype._init =
 
 
 /*
+| Walks the ast tree depth-first, pre-order
+| creating a transformed copy.
+*/
+prototype.walk =
+	function(
+		transform	// a function to be called for all
+		//			// walked nodes.
+	)
+{
+	var
+		expr;
+
+	expr = this.expr.walk( transform );
+
+	return transform( this.create( 'expr', expr ) );
+};
+
+
+/*
 | Creates a dot member access of a dot.
 */
-ast_dot.prototype.$dot =
+prototype.$dot =
 	function(
 		member // member string
 	)
@@ -102,7 +121,7 @@ ast_dot.prototype.$dot =
 /*
 | Creates a generic member access of a variable.
 */
-ast_dot.prototype.$member =
+prototype.$member =
 	function(
 		member // member expression
 	)
@@ -121,7 +140,7 @@ ast_dot.prototype.$member =
 /***	/
 ****	| Custom inspect
 ****	/
-***/	ast_dot.prototype.inspect =
+***/	prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

@@ -55,6 +55,7 @@ if( JION )
 							'string'
 					},
 				concerns :
+					// FIXME remove
 					{
 						comment :
 							'concerns function call',
@@ -87,6 +88,15 @@ if( JION )
 							'attribute name',
 						type :
 							'string'
+					},
+				prepare :
+					{
+						comment :
+							'attribute preparation code',
+						type :
+							'string',
+						defaultValue :
+							'null'
 					},
 				id :
 					{

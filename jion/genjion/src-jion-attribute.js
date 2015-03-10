@@ -166,6 +166,7 @@ AbstractConstructor =
 		v_id, // attribute type id
 		v_json, // include in JSON export/import
 		v_name, // attribute name
+		v_prepare, // attribute preparation code
 		v_varRef // attribute variable used in generate
 	)
 {
@@ -214,6 +215,11 @@ AbstractConstructor =
 		this.name = v_name;
 	}
 
+	if( v_prepare !== undefined )
+	{
+		this.prepare = v_prepare;
+	}
+
 	if( v_varRef !== undefined )
 	{
 		this.varRef = v_varRef;
@@ -245,6 +251,7 @@ Constructor =
 		v_id, // attribute type id
 		v_json, // include in JSON export/import
 		v_name, // attribute name
+		v_prepare, // attribute preparation code
 		v_varRef // attribute variable used in generate
 	)
 {
@@ -276,6 +283,8 @@ Constructor =
 	this.json = v_json;
 
 	this.name = v_name;
+
+	this.prepare = v_prepare;
 
 	this.varRef = v_varRef;
 
@@ -319,6 +328,7 @@ prototype.abstract =
 		v_id,
 		v_json,
 		v_name,
+		v_prepare,
 		v_varRef;
 
 	if( this !== jion_attribute )
@@ -342,6 +352,8 @@ prototype.abstract =
 		v_json = this.json;
 
 		v_name = this.name;
+
+		v_prepare = this.prepare;
 
 		v_varRef = this.varRef;
 	}
@@ -437,6 +449,15 @@ prototype.abstract =
 
 				break;
 
+			case 'prepare' :
+
+				if( arg !== undefined )
+				{
+					v_prepare = arg;
+				}
+
+				break;
+
 			case 'varRef' :
 
 				if( arg !== undefined )
@@ -473,6 +494,11 @@ prototype.abstract =
 	if( v_json === undefined )
 	{
 		v_json = false;
+	}
+
+	if( v_prepare === undefined )
+	{
+		v_prepare = null;
 	}
 
 /**/if( CHECK )
@@ -660,6 +686,18 @@ prototype.abstract =
 /**/		}
 /**/	}
 /**/
+/**/	if( v_prepare !== null && v_prepare !== undefined )
+/**/	{
+/**/		if(
+/**/			typeof( v_prepare ) !== 'string'
+/**/			&&
+/**/			!( v_prepare instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
 /**/	if( v_varRef === null )
 /**/	{
 /**/		throw new Error( );
@@ -713,6 +751,8 @@ prototype.abstract =
 		&&
 		v_name === inherit.name
 		&&
+		v_prepare === inherit.prepare
+		&&
 		(
 			v_varRef === inherit.varRef
 			||
@@ -734,6 +774,7 @@ prototype.abstract =
 			v_id,
 			v_json,
 			v_name,
+			v_prepare,
 			v_varRef
 		)
 	);
@@ -764,6 +805,7 @@ prototype.create =
 		v_id,
 		v_json,
 		v_name,
+		v_prepare,
 		v_varRef;
 
 	if( this !== jion_attribute )
@@ -787,6 +829,8 @@ prototype.create =
 		v_json = this.json;
 
 		v_name = this.name;
+
+		v_prepare = this.prepare;
 
 		v_varRef = this.varRef;
 	}
@@ -882,6 +926,15 @@ prototype.create =
 
 				break;
 
+			case 'prepare' :
+
+				if( arg !== undefined )
+				{
+					v_prepare = arg;
+				}
+
+				break;
+
 			case 'varRef' :
 
 				if( arg !== undefined )
@@ -918,6 +971,11 @@ prototype.create =
 	if( v_json === undefined )
 	{
 		v_json = false;
+	}
+
+	if( v_prepare === undefined )
+	{
+		v_prepare = null;
 	}
 
 /**/if( CHECK )
@@ -1127,6 +1185,23 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
+/**/	if( v_prepare === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_prepare !== null )
+/**/	{
+/**/		if(
+/**/			typeof( v_prepare ) !== 'string'
+/**/			&&
+/**/			!( v_prepare instanceof String )
+/**/		)
+/**/		{
+/**/			throw new Error( );
+/**/		}
+/**/	}
+/**/
 /**/	if( v_varRef === undefined )
 /**/	{
 /**/		throw new Error( );
@@ -1178,6 +1253,8 @@ prototype.create =
 		&&
 		v_name === inherit.name
 		&&
+		v_prepare === inherit.prepare
+		&&
 		(
 			v_varRef === inherit.varRef
 			||
@@ -1199,6 +1276,7 @@ prototype.create =
 			v_id,
 			v_json,
 			v_name,
+			v_prepare,
 			v_varRef
 		)
 	);
@@ -1284,6 +1362,8 @@ prototype.equals =
 		this.json === obj.json
 		&&
 		this.name === obj.name
+		&&
+		this.prepare === obj.prepare
 		&&
 		(
 			this.varRef === obj.varRef

@@ -145,7 +145,9 @@ generator.prototype._init =
 		jAttr,
 		jdv,
 		name,
+		prepare,
 		rayDef,
+		searchIdWalk,
 		type,
 		twigDef, // twig map to be used (the definition)
 		units; // units used
@@ -159,6 +161,20 @@ generator.prototype._init =
 	units = jion_idGroup.create( );
 
 	units = units.add( jion_id.createFromString( 'jion_proto' ) );
+
+	searchIdWalk =
+		function( node )
+	{
+		if( node.reflect === 'ast_var' )
+		{
+			if( node.name.indexOf( '_' ) >= 0 )
+			{
+				units = units.add( jion_id.createFromString( node.name ) );
+			}
+		}
+
+		return node;
+	};
 
 	this.hasJson = !!jion.json;
 
@@ -217,11 +233,18 @@ generator.prototype._init =
 
 		concerns = jAttr.concerns;
 
+		prepare = jAttr.prepare;
+
 		if( concerns && concerns.type )
 		{
 			concernsID = jion_id.createFromString( concerns.type );
 
 			units = units.add( concernsID );
+		}
+
+		if( prepare )
+		{
+			$( prepare ).walk( searchIdWalk );
 		}
 
 		jdv = jAttr.defaultValue;
@@ -262,6 +285,7 @@ generator.prototype._init =
 						'member', jAttr.concerns.member
 					)
 					: null,
+				'prepare', prepare,
 				'defaultValue', defaultValue,
 				'json', !!jAttr.json,
 				'name', name,
@@ -1580,6 +1604,8 @@ generator.prototype.genCreatorChecks =
 |
 | 'func' is a call to a function
 | 'member' is an access to an attribute ( without call )
+|
+| FIXME remove
 */
 generator.prototype.genCreatorConcerns =
 	function( )
@@ -1726,6 +1752,70 @@ generator.prototype.genCreatorConcerns =
 
 	return result;
 };
+
+
+/*
+| Generates the creators prepares.
+*/
+generator.prototype.genCreatorPrepares =
+	function( )
+{
+	var
+		a,
+		aZ,
+		attr,
+		name,
+		pAst,
+		prepare,
+		result,
+		transform;
+
+	result = $block( );
+
+	transform =
+		function( node )
+	{
+		if( node.reflect === 'ast_var' )
+		{
+			return(
+				node.name.indexOf( '_' ) >= 0
+				? node
+				: node.create( 'name', 'v_' + node.name )
+			);
+		}
+		else
+		{
+			return node;
+		}
+	};
+
+	for(
+		a = 0, aZ = this.attributes.size;
+		a < aZ;
+		a++
+	)
+	{
+		name = this.attributes.sortedKeys[ a ];
+
+		attr = this.attributes.get( name );
+
+		prepare = attr.prepare;
+
+		if( !prepare )
+		{
+			continue;
+		}
+
+		pAst = $( prepare );
+
+		pAst = pAst.walk( transform );
+
+		result = result.$( attr.varRef, ' = ', pAst );
+	}
+
+	return result;
+};
+
 
 
 /*
@@ -1906,6 +1996,7 @@ generator.prototype.genCreator =
 		.$( this.genCreatorDefaults( false, abstract ) )
 		.$( this.genCreatorChecks( false, abstract ) )
 		.$( abstract ? $block( ) : this.genCreatorConcerns( ) )
+		.$( abstract ? $block( ) : this.genCreatorPrepares( ) )
 		.$( this.genCreatorUnchanged( abstract ) )
 		.$( this.genCreatorReturn( abstract ) );
 

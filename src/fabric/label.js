@@ -69,13 +69,15 @@ if( JION )
 				mark :
 					{
 						comment : 'the users mark',
-						// prepare : 'fabric_item.concernsMark( mark, path )',
+						prepare : 'fabric_item.concernsMark( mark, path )',
+						/*
 						concerns :
 							{
 								type : 'fabric_item',
 								func : 'concernsMark',
 								args : [ 'mark', 'path' ]
 							},
+						*/
 						type : '->mark',
 						defaultValue : 'undefined',
 						allowsNull : true

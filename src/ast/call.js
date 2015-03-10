@@ -36,6 +36,7 @@ if( JION )
 var
 	ast_call,
 	jools,
+	prototype,
 	tools;
 
 
@@ -43,18 +44,53 @@ ast_call = require( '../jion/this' )( module );
 
 jools = require( '../jools/jools' );
 
+prototype = ast_call.prototype;
+
 tools = require( './tools' );
 
 
 /*
 | Returns a call with a parameter appended
 */
-ast_call.prototype.addArgument =
+prototype.addArgument =
 	function(
 		expr
 	)
 {
 	return this.append( tools.convert( expr ) );
+};
+
+
+/*
+| Walks the ast tree depth-first, pre-order
+| creating a transformed copy.
+*/
+prototype.walk =
+	function(
+		transform	// a function to be called for all
+		//			// walked nodes.
+	)
+{
+	var
+		a,
+		aZ,
+		args,
+		func;
+
+	func = this.func.walk( transform );
+
+	args = [ ];
+
+	for( a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		args[ a ] = this.get( a ).walk( transform );
+	}
+
+	return(
+		transform(
+			this.create( 'func', func, 'ray:init', args )
+		)
+	);
 };
 
 
