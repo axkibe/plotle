@@ -60,10 +60,13 @@ var
 	jion_validator,
 	jools,
 	parser,
+	prototype,
 	shorthand;
 
 
 generator = require( '../jion/this' )( module );
+
+prototype = generator.prototype;
 
 jion_id = require( './id' );
 
@@ -124,7 +127,7 @@ $var = shorthand.$var;
 /*
 | Initializes a generator.
 */
-generator.prototype._init =
+prototype._init =
 	function(
 		jion
 	)
@@ -453,7 +456,7 @@ generator.prototype._init =
 /*
 | Generates the imports.
 */
-generator.prototype.genImports =
+prototype.genImports =
 	function( )
 {
 	var
@@ -504,7 +507,7 @@ generator.prototype.genImports =
 /*
 | Generates the node include.
 */
-generator.prototype.genNodeIncludes =
+prototype.genNodeIncludes =
 	function( )
 {
 	var
@@ -569,7 +572,7 @@ generator.prototype.genNodeIncludes =
 /*
 | Generates the constructor.
 */
-generator.prototype.genConstructor =
+prototype.genConstructor =
 	function(
 		abstract // if true generate abstract constructor
 	)
@@ -834,7 +837,7 @@ generator.prototype.genConstructor =
 /*
 | Generates the singleton decleration.
 */
-generator.prototype.genSingleton =
+prototype.genSingleton =
 	function( )
 {
 	return(
@@ -849,7 +852,7 @@ generator.prototype.genSingleton =
 /*
 | Generates the creators variable list.
 */
-generator.prototype.genCreatorVariables =
+prototype.genCreatorVariables =
 	function(
 		abstract  // if true generates the abstract creator
 	)
@@ -918,7 +921,7 @@ generator.prototype.genCreatorVariables =
 /*
 | Generates the creators inheritance receiver.
 */
-generator.prototype.genCreatorInheritanceReceiver =
+prototype.genCreatorInheritanceReceiver =
 	function(
 		abstract  // if true generates the abstract creator
 	)
@@ -1031,7 +1034,7 @@ generator.prototype.genCreatorInheritanceReceiver =
 /*
 | Generates the creators free strings parser.
 */
-generator.prototype.genCreatorFreeStringsParser =
+prototype.genCreatorFreeStringsParser =
 	function(
 		// abstract  // if true generates the abstract creator
 	)
@@ -1247,7 +1250,7 @@ generator.prototype.genCreatorFreeStringsParser =
 /*
 | Generates the creators default values
 */
-generator.prototype.genCreatorDefaults =
+prototype.genCreatorDefaults =
 	function(
 		json,     // only do jsons
 		abstract  // if true generates the abstract creator
@@ -1309,7 +1312,7 @@ generator.prototype.genCreatorDefaults =
 |
 | It is true if the variable fails the check.
 */
-generator.prototype.genSingleTypeCheckFailCondition =
+prototype.genSingleTypeCheckFailCondition =
 	function(
 		aVar,
 		id
@@ -1361,7 +1364,7 @@ generator.prototype.genSingleTypeCheckFailCondition =
 /*
 | Generates a type check of a variable.
 */
-generator.prototype.genTypeCheckFailCondition =
+prototype.genTypeCheckFailCondition =
 	function(
 		aVar,  // the variable to check
 		idx  // the id or idGroup it has to match
@@ -1426,7 +1429,7 @@ generator.prototype.genTypeCheckFailCondition =
 /*
 | Generates the creators checks.
 */
-generator.prototype.genCreatorChecks =
+prototype.genCreatorChecks =
 	function(
 		json,    // do checks for fromJsonCreator
 		abstract  // if true generates the abstract creator
@@ -1607,7 +1610,7 @@ generator.prototype.genCreatorChecks =
 |
 | FIXME remove
 */
-generator.prototype.genCreatorConcerns =
+prototype.genCreatorConcerns =
 	function( )
 {
 	var
@@ -1757,7 +1760,7 @@ generator.prototype.genCreatorConcerns =
 /*
 | Generates the creators prepares.
 */
-generator.prototype.genCreatorPrepares =
+prototype.genCreatorPrepares =
 	function( )
 {
 	var
@@ -1823,7 +1826,7 @@ generator.prototype.genCreatorPrepares =
 |
 | returning this object if so.
 */
-generator.prototype.genCreatorUnchanged =
+prototype.genCreatorUnchanged =
 	function(
 		abstract  // if true generates the abstract creator
 	)
@@ -1897,7 +1900,7 @@ generator.prototype.genCreatorUnchanged =
 /*
 | Generates the creators return statement
 */
-generator.prototype.genCreatorReturn =
+prototype.genCreatorReturn =
 	function(
 		abstract  // if true generates the abstract creator
 	)
@@ -1971,7 +1974,7 @@ generator.prototype.genCreatorReturn =
 /*
 | Generates the creator.
 */
-generator.prototype.genCreator =
+prototype.genCreator =
 	function(
 		abstract  // if true generates the abstract creator
 	)
@@ -2015,7 +2018,7 @@ generator.prototype.genCreator =
 		)
 		.$(
 			this.id.global, '.', funcName,
-			' = ', 'AbstractConstructor.prototype.', funcName,
+		' = ', 'AbstractConstructor.prototype.', funcName,
 			' = prototype.', funcName,
 			' = ', creator
 		)
@@ -2026,7 +2029,7 @@ generator.prototype.genCreator =
 /*
 | Generates the fromJsonCreator's variable list.
 */
-generator.prototype.genFromJsonCreatorVariables =
+prototype.genFromJsonCreatorVariables =
 	function( )
 {
 	var
@@ -2099,7 +2102,7 @@ generator.prototype.genFromJsonCreatorVariables =
 /*
 | Generates a fromJsonCreator's json parser for one attribute
 */
-generator.prototype.genFromJsonCreatorAttributeParser =
+prototype.genFromJsonCreatorAttributeParser =
 	function(
 		attr
 	)
@@ -2266,7 +2269,7 @@ generator.prototype.genFromJsonCreatorAttributeParser =
 /*
 | Generates the fromJsonCreator's json parser.
 */
-generator.prototype.genFromJsonCreatorParser =
+prototype.genFromJsonCreatorParser =
 	function(
 		jsonList
 	)
@@ -2355,7 +2358,7 @@ generator.prototype.genFromJsonCreatorParser =
 /*
 | Generates the fromJsonCreator's group processing.
 */
-generator.prototype.genFromJsonCreatorGroupProcessing =
+prototype.genFromJsonCreatorGroupProcessing =
 	function( )
 {
 	var
@@ -2437,7 +2440,7 @@ generator.prototype.genFromJsonCreatorGroupProcessing =
 /*
 | Generates the fromJsonCreator's twig processing.
 */
-generator.prototype.genFromJsonCreatorRayProcessing =
+prototype.genFromJsonCreatorRayProcessing =
 	function( )
 {
 	var
@@ -2521,7 +2524,7 @@ generator.prototype.genFromJsonCreatorRayProcessing =
 /*
 | Generates the fromJsonCreator's twig processing.
 */
-generator.prototype.genFromJsonCreatorTwigProcessing =
+prototype.genFromJsonCreatorTwigProcessing =
 	function( )
 {
 	var
@@ -2594,7 +2597,7 @@ generator.prototype.genFromJsonCreatorTwigProcessing =
 /*
 | Generates the fromJsonCreator's return statement
 */
-generator.prototype.genFromJsonCreatorReturn =
+prototype.genFromJsonCreatorReturn =
 	function( )
 {
 	var
@@ -2661,7 +2664,7 @@ generator.prototype.genFromJsonCreatorReturn =
 /*
 | Generates the fromJsonCreator.
 */
-generator.prototype.genFromJsonCreator =
+prototype.genFromJsonCreator =
 	function( )
 {
 	var
@@ -2744,7 +2747,7 @@ generator.prototype.genFromJsonCreator =
 /*
 | Generates the node include section.
 */
-generator.prototype.genReflection =
+prototype.genReflection =
 	function( )
 {
 	return(
@@ -2763,7 +2766,7 @@ generator.prototype.genReflection =
 /*
 | Generates the jionProto stuff.
 */
-generator.prototype.genJionProto =
+prototype.genJionProto =
 	function( )
 {
 	var
@@ -2795,7 +2798,13 @@ generator.prototype.genJionProto =
 			.$( 'jools.lazyValue( prototype, "keys", jion_proto.groupKeys )' )
 
 			.$comment( 'Returns the sorted group keys.')
-			.$( 'jools.lazyValue( prototype, "sortedKeys", jion_proto.groupSortedKeys )' )
+			.$(
+				'jools.lazyValue(',
+					'prototype,',
+					'"sortedKeys",',
+					'jion_proto.groupSortedKeys',
+				')'
+			)
 
 			.$comment( 'Returns the group with one element removed.' )
 			.$( 'prototype.remove = jion_proto.groupRemove' )
@@ -2874,7 +2883,7 @@ generator.prototype.genJionProto =
 /*
 | Generates the toJson converter.
 */
-generator.prototype.genToJson =
+prototype.genToJson =
 	function( )
 {
 	var
@@ -2952,7 +2961,7 @@ generator.prototype.genToJson =
 | FIXME: in case of idLists this is still wonky
 |         it needs to differenciate primitives correctly
 */
-generator.prototype.genAttributeEquals =
+prototype.genAttributeEquals =
 	function(
 		name,       // attribute name
 		le,         // this value expression
@@ -3044,7 +3053,7 @@ generator.prototype.genAttributeEquals =
 /*
 | Generates the body of an equals test.
 */
-generator.prototype.genEqualsFuncBody =
+prototype.genEqualsFuncBody =
 	function(
 		mode,       // 'normal' or 'json'
 		eqFuncName  // name of equals func to call
@@ -3244,7 +3253,7 @@ generator.prototype.genEqualsFuncBody =
 /*
 | Generates the equals tests.
 */
-generator.prototype.genEquals =
+prototype.genEquals =
 	function( )
 {
 	var
@@ -3314,7 +3323,7 @@ generator.prototype.genEquals =
 /*
 | Generates the alike test(s).
 */
-generator.prototype.genAlike =
+prototype.genAlike =
 	function( )
 {
 	var
@@ -3412,7 +3421,7 @@ generator.prototype.genAlike =
 /*
 | Returns the generated export block.
 */
-generator.prototype.genExport =
+prototype.genExport =
 	function( )
 {
 	return(
@@ -3431,7 +3440,7 @@ generator.prototype.genExport =
 /*
 | Generates the preamble.
 */
-generator.prototype.genPreamble =
+prototype.genPreamble =
 	function(
 		block // block to append to
 	)
@@ -3443,7 +3452,7 @@ generator.prototype.genPreamble =
 /*
 | Returns the generated capsule block.
 */
-generator.prototype.genCapsule =
+prototype.genCapsule =
 	function( )
 {
 	var
