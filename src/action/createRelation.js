@@ -53,7 +53,7 @@ if( JION )
 							'null'
 					},
 				// FIXME rename
-				// FIXME make a defined state list
+				// FUTURE make a defined state list
 				relationState :
 					{
 						comment :

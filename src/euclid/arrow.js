@@ -232,7 +232,7 @@ jools.lazyValue(
 
 		sections = [ ];
 
-		// FIXME, allow arrows on p1.
+		// FUTURE, allow arrows on p1.
 		switch( this.p1end )
 		{
 			case 'normal':

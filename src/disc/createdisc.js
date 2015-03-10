@@ -356,12 +356,7 @@ disc_createDisc.prototype.pointingHover =
 		reply;
 
 	// shortcut if p is not near the panel
-	if(
-		!this.frame.within(
-			null,
-			p
-		)
-	)
+	if( !this.frame.within( null, p ) )
 	{
 		return null;
 	}
@@ -370,10 +365,8 @@ disc_createDisc.prototype.pointingHover =
 
 	pp = p.sub( this.frame.pnw );
 
-	// FIXME optimize by reusing the latest path of this._display
-	if(
-		!display.withinSketch( this.silhoutte, euclid_view.proper, pp )
-	)
+	// FUTURE optimize by reusing the latest path of this._display
+	if( !display.withinSketch( this.silhoutte, euclid_view.proper, pp ) )
 	{
 		return null;
 	}
@@ -429,14 +422,8 @@ disc_createDisc.prototype.click =
 
 	pp = p.sub( this.frame.pnw );
 
-	// FIXME Optimize by reusing the latest path of this._display
-	if(
-		!display.withinSketch(
-			this.silhoutte,
-			euclid_view.proper,
-			pp
-		)
-	)
+	// FUTURE optimize by reusing the latest path of this._display
+	if( !display.withinSketch( this.silhoutte, euclid_view.proper, pp ) )
 	{
 		return null;
 	}

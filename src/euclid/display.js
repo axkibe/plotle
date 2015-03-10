@@ -33,7 +33,7 @@ if( JION )
 						comment :
 							'height of the display',
 						type :
-							'number', // FIXME integer
+							'number',
 						defaultValue :
 							'undefined'
 					},
@@ -42,7 +42,7 @@ if( JION )
 						comment :
 							'width of the display',
 						type :
-							'number', // FIXME integer
+							'number',
 						defaultValue :
 							'undefined'
 					},
@@ -455,8 +455,9 @@ euclid_display.prototype.fillRect =
 
 
 /*
-| Sets the global alpha
-| FIXME remove
+| Sets the global alpha.
+|
+| FUTURE remove
 */
 euclid_display.prototype.globalAlpha =
 	function( a )
@@ -782,7 +783,7 @@ euclid_display.prototype.reverseClip =
 /*
 | Sets the display scale
 |
-| FIXME remove
+| FUTURE remove
 */
 euclid_display.prototype.scale =
 	function(
@@ -839,8 +840,6 @@ euclid_display.prototype.withinSketch =
 
 /*
 | Returns a HTML5 color style
-|
-| FIXME remove
 */
 euclid_display.prototype._colorStyle =
 	function(
