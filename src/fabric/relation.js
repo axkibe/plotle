@@ -43,98 +43,61 @@ if( JION )
 		{
 			doc :
 				{
-					comment :
-						'the labels document',
-					type :
-						'fabric_doc',
-					json :
-						true
+					comment : 'the labels document',
+					type : 'fabric_doc',
+					json : true
 				},
 			fontsize :
 				{
-					comment :
-						'the fontsize of the label',
-					type :
-						'number',
-					json :
-						true
+					comment : 'the fontsize of the label',
+					type : 'number',
+					json : true
 				},
 			hover :
 				{
-					comment :
-						'node currently hovered upon',
-					type :
-						'jion_path',
-					assign :
-						null,
-					defaultValue :
-						// FIXME undefined
-						'null'
+					comment : 'node currently hovered upon',
+					type : 'jion_path',
+					assign : null,
+					// FIXME undefined
+					defaultValue : 'null'
 				},
 			item1key :
 				{
-					comment :
-						'item the relation goes from',
-					type :
-						'string',
-					json :
-						true
+					comment : 'item the relation goes from',
+					type : 'string',
+					json : true
 				},
 			item2key :
 				{
-					comment :
-						'item the relation goes to',
-					type :
-						'string',
-					json :
-						true
+					comment : 'item the relation goes to',
+					type : 'string',
+					json : true
 				},
 			path :
 				{
-					comment :
-						'the path of the doc',
-					type :
-						'jion_path',
-					defaultValue :
-						'undefined'
+					comment : 'the path of the doc',
+					type : 'jion_path',
+					defaultValue : 'undefined'
 				},
 			pnw :
 				{
-					comment :
-						'point in the north-west',
-					type :
-						'euclid_point',
-					json :
-						true
+					comment : 'point in the north-west',
+					type : 'euclid_point',
+					json : true
 				},
 			mark :
 				{
-					comment :
-						'the users mark',
-					concerns :
-						{
-							type :
-								'fabric_item',
-							func :
-								'concernsMark',
-							args :
-								[ 'mark', 'path' ]
-						},
-					type :
-						'->mark',
-					defaultValue :
-						'undefined',
-					allowsNull :
-						true
+					comment : 'the users mark',
+					prepare : 'fabric_item.concernsMark( mark, path )',
+					type : '->mark',
+					defaultValue : 'undefined',
+					allowsNull : true
 				},
 			view :
 				{
-					comment :
-						'the current view',
-					type :
-						'euclid_view',
-					defaultValue :
-						'undefined'
+					comment : 'the current view',
+					type : 'euclid_view',
+					defaultValue : 'undefined'
 				}
 		},
 		init : [ 'inherit' ]

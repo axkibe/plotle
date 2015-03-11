@@ -162,6 +162,105 @@ parser.handleBooleanLiteral =
 
 
 /*
+| Handler for ( ) in case of calls.
+*/
+parser.handleCall =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		call,
+		ast;
+
+	ast = state.ast;
+
+/**/if( CHECK )
+/**/{
+/**/	if( !ast )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	call = ast_call.create( 'func', ast );
+
+	state =
+		state.create(
+			'ast', null,
+			'pos', state.pos + 1
+		);
+
+	if( state.reachedEnd )
+	{
+		throw new Error( 'missing ")"' );
+	}
+
+	if( state.current.type !== ')' )
+	{
+		// there are arguments
+
+		for( ;; )
+		{
+			do
+			{
+				state = parseToken( state, spec );
+			}
+			while(
+				!state.reachedEnd
+				&& state.current.type !== ')'
+				&& state.current.type !== ','
+			);
+
+			if( state.reachedEnd )
+			{
+				throw new Error( 'missing ")"' );
+			}
+
+			if( state.ast )
+			{
+				call = call.addArgument( state.ast );
+			}
+
+			if( state.current.type === ')' )
+			{
+				// finished call
+				break;
+			}
+
+			if( state.current.type === ',' )
+			{
+				state =
+					state.create(
+						'ast', null,
+						'pos', state.pos + 1
+					);
+
+				if( state.current.type === ')' )
+				{
+					throw new Error( 'parser error' );
+				}
+
+				continue;
+			}
+
+			throw new Error( 'parser error' );
+		}
+	}
+
+	// advances over closing bracket
+	state =
+		state.create(
+			'ast', call,
+			'pos', state.pos + 1
+		);
+
+	return state;
+};
+
+
+/*
 | Handler for dots.
 */
 parser.handleDot =
@@ -237,6 +336,48 @@ parser.handleDualisticOps =
 					'right', state.ast
 				)
 		);
+
+	return state;
+};
+
+
+/*
+| Handler for ( ) in case of groupings.
+*/
+parser.handleGrouping =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+
+/**/if( CHECK )
+/**/{
+/**/	if( state.ast )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	state =
+		state.create(
+			'ast', null,
+			'pos', state.pos + 1
+		);
+
+	state = parseToken( state, spec );
+
+	while( state.current.type !== ')' )
+	{
+		state = parseToken( state, spec );
+
+		if( state.reachedEnd )
+		{
+			throw new Error( 'missing ")"' );
+		}
+	}
+
+	state = state.create( 'pos', state.pos + 1 );
 
 	return state;
 };
@@ -354,127 +495,6 @@ parser.handleReturn =
 			'ast', ast_return.create( 'expr', state.ast )
 		)
 	);
-};
-
-
-/*
-| Handler for ( ).
-|
-| This can be grouping or a call.
-*/
-parser.handleRoundBrackets =
-	function(
-		state, // current parser state
-		spec   // operator spec
-	)
-{
-	var
-		call,
-		ast;
-
-	ast = state.ast;
-
-	if( ast )
-	{
-		// this is a call.
-		call = ast_call.create( 'func', ast );
-
-		state =
-			state.create(
-				'ast', null,
-				'pos', state.pos + 1
-			);
-
-		if( state.reachedEnd )
-		{
-			throw new Error( 'missing ")"' );
-		}
-
-		if( state.current.type !== ')' )
-		{
-			// there are arguments
-
-			for( ;; )
-			{
-				do
-				{
-					state = parseToken( state, spec );
-				}
-				while(
-					!state.reachedEnd
-					&& state.current.type !== ')'
-					&& state.current.type !== ','
-				);
-
-				if( state.reachedEnd )
-				{
-					throw new Error( 'missing ")"' );
-				}
-
-				if( state.ast )
-				{
-					call = call.addArgument( state.ast );
-				}
-
-				if( state.current.type === ')' )
-				{
-					// finished call
-					break;
-				}
-
-				if( state.current.type === ',' )
-				{
-					state =
-						state.create(
-							'ast', null,
-							'pos', state.pos + 1
-						);
-
-					if( state.current.type === ')' )
-					{
-						throw new Error( 'parser error' );
-					}
-
-					continue;
-				}
-
-				throw new Error( 'parser error' );
-			}
-		}
-
-		// advances over closing bracket
-		state =
-			state.create(
-				'ast', call,
-				'pos', state.pos + 1
-			);
-
-		return state;
-	}
-
-	// this is a grouping
-
-	state =
-		state.create(
-			'ast', null,
-			'pos', state.pos + 1
-		);
-
-	state = parseToken( state, spec );
-
-	while( state.current.type !== ')' )
-	{
-		state = parseToken( state, spec );
-
-		if( state.reachedEnd )
-		{
-			throw new Error( 'missing ")"' );
-		}
-	}
-
-	state = state.create( 'pos', state.pos + 1 );
-
-	return state;
 };
 
 
@@ -818,7 +838,7 @@ leftSpecs[ '{' ] =
 leftSpecs[ '(' ] =
 	jsParser_spec.create(
 		'prec', 0,
-		'handler', 'handleRoundBrackets',
+		'handler', 'handleGrouping',
 		'associativity', 'l2r'
 	);
 
@@ -886,7 +906,7 @@ rightSpecs = { };
 rightSpecs[ '(' ] =
 	jsParser_spec.create(
 		'prec', 1,
-		'handler', 'handleRoundBrackets',
+		'handler', 'handleCall',
 		'associativity', 'l2r'
 	);
 
