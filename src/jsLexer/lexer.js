@@ -112,10 +112,10 @@ jsLexer.tokenize =
 
 		if( ch.match(/[0-9]/ ) )
 		{
-			// a name specifier
+			// a number
 			value = ch;
 
-			while( c + 1 < cZ && code[ c+ 1 ].match( /0-9/ ) )
+			while( c + 1 < cZ && code[ c + 1 ].match( /[0-9]/ ) )
 			{
 				value += code[ ++c ];
 			}
@@ -141,7 +141,7 @@ jsLexer.tokenize =
 				throw new Error( '" missing' );
 			}
 
-			// FIXME handle \"
+			// FUTURE handle \"
 			while( code[ c ] !== '"' )
 			{
 				value += code[ c ];
