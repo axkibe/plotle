@@ -28,6 +28,7 @@ var
 	ast_boolean,
 	ast_call,
 	ast_comma,
+	ast_condition,
 	ast_delete,
 	ast_differs,
 	ast_dot,
@@ -74,6 +75,8 @@ ast_boolean = require( '../ast/boolean' );
 ast_call = require( '../ast/call' );
 
 ast_comma = require( '../ast/comma' );
+
+ast_condition = require( '../ast/condition' );
 
 ast_delete = require( '../ast/delete' );
 
@@ -353,6 +356,77 @@ parser.handleCall =
 		state.create(
 			'ast', call,
 			'pos', state.pos + 1
+		);
+
+	return state;
+};
+
+
+/*
+| Handler for ? : conditionals
+*/
+parser.handleCondition =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		condition,
+		then;
+
+	condition = state.ast;
+
+/**/if( CHECK )
+/**/{
+/**/	if( !condition )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( state.current.type !== '?' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	state =
+		state.create(
+			'ast', null,
+			'pos', state.pos + 1
+		);
+
+	if( state.reachedEnd )
+	{
+		throw new Error( 'parser error' );
+	}
+
+	state = parseToken( state, spec );
+
+	then = state.ast;
+
+	if( state.current.type !== ':' )
+	{
+		throw new Error( 'missing ":"' );
+	}
+
+	state =
+		state.create(
+			'ast', null,
+			'pos', state.pos + 1
+		);
+
+	state = parseToken( state, spec );
+
+	// advances over closing bracket
+	state =
+		state.create(
+			'ast',
+				ast_condition.create(
+					'condition', condition,
+					'then', then,
+					'elsewise', state.ast
+				)
 		);
 
 	return state;
@@ -936,12 +1010,6 @@ rightSpecs[ '(' ] =
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ ')' ] =
-	jsParser_spec.create(
-		'prec', 98,
-		'handler', 'handlePass'
-	);
-
 rightSpecs[ '[' ] =
 	jsParser_spec.create(
 		'prec', 1,
@@ -962,19 +1030,19 @@ rightSpecs[ '.' ] =
 		'associativity', 'l2r'
 	);
 
-rightSpecs[ '+' ] =
-	jsParser_spec.create(
-		'prec', 6,
-		'handler', 'handleDualisticOps',
-		'astCreator', ast_plus,
-		'associativity', 'l2r'
-	);
-
 rightSpecs[ '*' ] =
 	jsParser_spec.create(
 		'prec', 5,
 		'handler', 'handleDualisticOps',
 		'astCreator', ast_multiply,
+		'associativity', 'l2r'
+	);
+
+rightSpecs[ '+' ] =
+	jsParser_spec.create(
+		'prec', 6,
+		'handler', 'handleDualisticOps',
+		'astCreator', ast_plus,
 		'associativity', 'l2r'
 	);
 
@@ -1034,6 +1102,13 @@ rightSpecs[ '||' ] =
 		'associativity', 'l2r'
 	);
 
+rightSpecs[ '?' ] =
+	jsParser_spec.create(
+		'prec', 15,
+		'handler', 'handleCondition',
+		'associativity', 'l2r'
+	);
+
 rightSpecs[ '=' ] =
 	jsParser_spec.create(
 		'prec', 16,
@@ -1065,6 +1140,19 @@ rightSpecs[ ',' ] =
 		'astCreator', ast_comma,
 		'associativity', 'l2r'
 	);
+
+rightSpecs[ ')' ] =
+	jsParser_spec.create(
+		'prec', 98,
+		'handler', 'handlePass'
+	);
+
+rightSpecs[ ':' ] =
+	jsParser_spec.create(
+		'prec', 98,
+		'handler', 'handlePass'
+	);
+
 
 /*
 | Statement token specifications.

@@ -38,9 +38,7 @@ jion_stringRay.stringRay =
 		array
 	)
 {
-	return(
-		jion_stringRay.create( 'ray:init', array )
-	);
+	return jion_stringRay.create( 'ray:init', array );
 };
 
 

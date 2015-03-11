@@ -49,23 +49,73 @@ if( JION )
 
 
 var
-	ast_condition;
+	ast_condition,
+	prototype;
 
 ast_condition = require( '../jion/this' )( module );
+
+prototype = ast_condition.prototype;
 
 
 /*
 | Creates a condition with the elsewise expression set.
-|
-| FIXME create this single recreators with jion-gen.
 */
-ast_condition.prototype.elsewise =
+prototype.$elsewise =
 	function(
 		expr
 	)
 {
 	return this.create( 'elsewise', expr );
 };
+
+
+/**/if( CHECK )
+/**/{
+/**/	var
+/**/		util;
+/**/
+/**/	util = require( 'util' );
+/**/
+/***	/
+****	| Custom inspect
+****	/
+***/	prototype.inspect =
+/**/		function(
+/**/			depth,
+/**/			opts
+/**/		)
+/**/	{
+/**/		var
+/**/			postfix,
+/**/			result;
+/**/
+/**/		if( !opts.ast )
+/**/		{
+/**/			result = 'ast{ ';
+/**/
+/**/			postfix = ' }';
+/**/		}
+/**/		else
+/**/		{
+/**/			result = postfix = '';
+/**/		}
+/**/
+/**/		opts.ast = true;
+/**/
+/**/		result += '( ' +  util.inspect( this.condition, opts ) + ' )';
+/**/
+/**/		result += ' ? ';
+/**/
+/**/		result += '( ' +  util.inspect( this.then, opts ) + ' )';
+/**/
+/**/		result += ' : ';
+/**/
+/**/		result += '( ' +  util.inspect( this.elsewise, opts ) + ' )';
+/**/
+/**/		return result + postfix;
+/**/	};
+/**/}
+
 
 
 } )( );
