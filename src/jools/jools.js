@@ -18,7 +18,6 @@ var
 
 if( SERVER )
 {
-	// in node
 	jools = module.exports;
 
 	config = require( '../../config' );
@@ -29,7 +28,6 @@ if( SERVER )
 }
 else
 {
-	// in shell
 	jools = { };
 
 	jools.devel = config.shell_devel;

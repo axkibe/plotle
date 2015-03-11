@@ -4,7 +4,8 @@
 
 var
 	jools,
-	jion_proto;
+	jion_proto,
+	pass;
 
 
 /*
@@ -19,11 +20,25 @@ if( SERVER )
 	jion_proto = module.exports;
 
 	jools = require( '../jools/jools' );
+
+	// global pass flag for creators
+	pass =
+	GLOBAL.pass =
+	jion_proto.pass =
+		{ };
 }
 else
 {
 	jion_proto = { };
+
+	// global pass flag for creators
+	pass =
+	jion_proto.pass =
+		{ };
 }
+
+
+Object.freeze( pass );
 
 
 /*

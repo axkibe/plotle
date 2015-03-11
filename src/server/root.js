@@ -10,7 +10,7 @@
 'use strict';
 
 
-// FIXME remove
+// FUTURE remove
 var DELAY_ALTER = 5000;
 var DELAY_ACQUIRE = 5000;
 DELAY_ALTER = false;
@@ -155,13 +155,13 @@ var
 	util,
 	zlib;
 
+jools = require( '../jools/jools' );
+
 fs = require( 'fs' );
 
 server_generateJion = require( './generateJion' );
 
 http = require( 'http' );
-
-jools = require( '../jools/jools' );
 
 isString = jools.isString;
 
