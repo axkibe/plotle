@@ -133,6 +133,105 @@ jsParser_spec = require( './spec' );
 
 
 /*
+| Handler for array literals.
+*/
+parser.handleArrayLiteral =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		alit,
+		ast;
+
+	ast = state.ast;
+
+/**/if( CHECK )
+/**/{
+/**/	if( state.ast )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	// this is an array literal
+	alit = ast_arrayLiteral.create( );
+
+	state =
+		state.create(
+			'ast', null,
+			'pos', state.pos + 1
+		);
+
+	if( state.reachedEnd )
+	{
+		throw new Error( 'missing "]"' );
+	}
+
+	if( state.current.type !== ']' )
+	{
+		// there are elements
+
+		for( ;; )
+		{
+			do {
+				state = parseToken( state, spec );
+			}
+			while(
+				!state.reachedEnd
+				&& state.current.type !== ']'
+				&& state.current.type !== ','
+			);
+
+			if( state.reachedEnd )
+			{
+				throw new Error( 'missing "]"' );
+			}
+
+			if( state.ast )
+			{
+				alit = alit.append( state.ast );
+			}
+
+			if( state.current.type === ']' )
+			{
+				// fiinished array literal
+				break;
+			}
+
+			if( state.current.type === ',' )
+			{
+				state =
+					state.create(
+						'ast', null,
+						'pos', state.pos + 1
+					);
+
+				if( state.current.type === ']' )
+				{
+					throw new Error( 'parser error' );
+				}
+
+				continue;
+			}
+
+			throw new Error( 'parser error' );
+		}
+	}
+
+	// advances over closing square bracket
+	state =
+		state.create(
+			'ast', alit,
+			'pos', state.pos + 1
+		);
+
+	return state;
+};
+
+
+/*
 | Handler for boolean literals.
 */
 parser.handleBooleanLiteral =
@@ -384,6 +483,60 @@ parser.handleGrouping =
 
 
 /*
+| Handler for member operations.
+*/
+parser.handleMember =
+	function(
+		state, // current parser state
+		spec   // operator spec
+	)
+{
+	var
+		ast;
+
+	ast = state.ast;
+
+/**/if( CHECK )
+/**/{
+/**/	if( !ast )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	state =
+		state.create(
+			'ast', null,
+			'pos', state.pos + 1
+		);
+
+	state = parseToken( state, spec );
+
+	while( state.current.type !== ']' )
+	{
+		state = parseToken( state, spec );
+
+		if( state.reachedEnd )
+		{
+			throw new Error( );
+		}
+	}
+
+	state =
+		state.create(
+			'ast',
+				ast_member.create(
+					'expr', ast,
+					'member', state.ast
+				),
+			'pos', state.pos + 1
+		);
+
+	return state;
+};
+
+
+/*
 | Generic handler for mono operations.
 */
 parser.handleMonoOps =
@@ -399,9 +552,7 @@ parser.handleMonoOps =
 
 	if( ast )
 	{
-		throw new Error(
-			'FIXME cannot do postfix ops'
-		);
+		throw new Error( 'FUTURE cannot do postfix ops' );
 	}
 
 	state =
@@ -534,7 +685,7 @@ parser.handleObjectLiteral =
 
 	if( state.current.type !== '}' )
 	{
-		// FIXME cannot handle elements currently
+		// FUTURE cannot handle elements currently
 		throw new Error( );
 	}
 
@@ -542,131 +693,6 @@ parser.handleObjectLiteral =
 	state =
 		state.create(
 			'ast', olit,
-			'pos', state.pos + 1
-		);
-
-	return state;
-};
-
-
-/*
-| Handler for [ ].
-*/
-parser.handleSquareBrackets =
-	function(
-		state, // current parser state
-		spec   // operator spec
-	)
-{
-	var
-		alit,
-		ast;
-
-	ast = state.ast;
-
-	if( !ast )
-	{
-		// this is an array literal
-		alit = ast_arrayLiteral.create( );
-
-		state =
-			state.create(
-				'ast', null,
-				'pos', state.pos + 1
-			);
-
-		if( state.reachedEnd )
-		{
-			throw new Error( 'missing "]"' );
-		}
-
-		if( state.current.type !== ']' )
-		{
-			// there are elements
-
-			for( ;; )
-			{
-				do{
-					state = parseToken( state, spec );
-				} while(
-					!state.reachedEnd
-					&&
-					state.current.type !== ']'
-					&&
-					state.current.type !== ','
-				);
-
-				if( state.reachedEnd )
-				{
-					throw new Error( 'missing "]"' );
-				}
-
-				if( state.ast )
-				{
-					alit = alit.append( state.ast );
-				}
-
-				if( state.current.type === ']' )
-				{
-					// fiinished array literal
-					break;
-				}
-
-				if( state.current.type === ',' )
-				{
-					state =
-						state.create(
-							'ast', null,
-							'pos', state.pos + 1
-						);
-
-					if( state.current.type === ']' )
-					{
-						throw new Error( 'parser error' );
-					}
-
-					continue;
-				}
-
-				throw new Error( 'parser error' );
-			}
-		}
-
-		// advances over closing square bracket
-		state =
-			state.create(
-				'ast', alit,
-				'pos', state.pos + 1
-			);
-
-		return state;
-	}
-
-	state =
-		state.create(
-			'ast', null,
-			'pos', state.pos + 1
-		);
-
-	state = parseToken( state, spec );
-
-	while( state.current.type !== ']' )
-	{
-		state = parseToken( state, spec );
-
-		if( state.reachedEnd )
-		{
-			throw new Error( );
-		}
-	}
-
-	state =
-		state.create(
-			'ast',
-				ast_member.create(
-					'expr', ast,
-					'member', state.ast
-				),
 			'pos', state.pos + 1
 		);
 
@@ -825,7 +851,7 @@ leftSpecs[ 'false' ] =
 leftSpecs[ '[' ] =
 	jsParser_spec.create(
 		'prec', 1,
-		'handler', 'handleSquareBrackets', // FIXME handleArrayLit
+		'handler', 'handleArrayLiteral',
 		'associativity', 'l2r'
 	);
 
@@ -919,7 +945,7 @@ rightSpecs[ ')' ] =
 rightSpecs[ '[' ] =
 	jsParser_spec.create(
 		'prec', 1,
-		'handler', 'handleSquareBrackets', // FIXME handleMember
+		'handler', 'handleMember',
 		'associativity', 'l2r'
 	);
 
