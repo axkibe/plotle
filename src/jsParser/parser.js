@@ -483,6 +483,25 @@ parser.handleGrouping =
 
 
 /*
+| Handler for identifiers.
+*/
+parser.handleIdentifier =
+	function(
+		state // current parser state
+		// spec   // operator spec
+	)
+{
+	state =
+		state.create(
+			'ast', ast_var.create( 'name', state.current.value ),
+			'pos', state.pos + 1
+		);
+
+	return state;
+};
+
+
+/*
 | Handler for member operations.
 */
 parser.handleMember =
@@ -612,40 +631,41 @@ parser.handleNew =
 
 
 /*
-| Handler for return
+| Handler for null.
 */
-parser.handleReturn =
+parser.handleNull =
 	function(
 		state // current parser state
+		// spec   // operator spec
 	)
 {
-	var
-		ast;
-
-	ast = state.ast;
-
-/**/if( CHECK )
-/**/{
-/**/	if( state.ast !== null )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( state.current.type !== 'return' )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	state = state.create( 'pos', state.pos + 1 );
-
-	state = parseToken( state, leftSpecs.start );
-
-	return(
+	state =
 		state.create(
-			'ast', ast_return.create( 'expr', state.ast )
-		)
-	);
+			'ast', ast_null.create( ),
+			'pos', state.pos + 1
+		);
+
+	return state;
+};
+
+
+
+/*
+| Handler for numeric literals.
+*/
+parser.handleNumber =
+	function(
+		state // current parser state
+		// spec   // operator spec
+	)
+{
+	state =
+		state.create(
+			'ast', ast_number.create( 'number', state.current.value ),
+			'pos', state.pos + 1
+		);
+
+	return state;
 };
 
 
@@ -729,6 +749,44 @@ parser.handlePass =
 
 
 /*
+| Handler for return
+*/
+parser.handleReturn =
+	function(
+		state // current parser state
+	)
+{
+	var
+		ast;
+
+	ast = state.ast;
+
+/**/if( CHECK )
+/**/{
+/**/	if( state.ast !== null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( state.current.type !== 'return' )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
+	state = state.create( 'pos', state.pos + 1 );
+
+	state = parseToken( state, leftSpecs.start );
+
+	return(
+		state.create(
+			'ast', ast_return.create( 'expr', state.ast )
+		)
+	);
+};
+
+
+/*
 | Handler for string literals.
 */
 parser.handleString =
@@ -746,64 +804,6 @@ parser.handleString =
 	return state;
 };
 
-
-/*
-| Handler for null.
-*/
-parser.handleNull =
-	function(
-		state // current parser state
-		// spec   // operator spec
-	)
-{
-	state =
-		state.create(
-			'ast', ast_null.create( ),
-			'pos', state.pos + 1
-		);
-
-	return state;
-};
-
-
-
-/*
-| Handler for numeric literals.
-*/
-parser.handleNumber =
-	function(
-		state // current parser state
-		// spec   // operator spec
-	)
-{
-	state =
-		state.create(
-			'ast', ast_number.create( 'number', state.current.value ),
-			'pos', state.pos + 1
-		);
-
-	return state;
-};
-
-
-
-/*
-| Handler for identifiers.
-*/
-parser.handleIdentifier =
-	function(
-		state // current parser state
-		// spec   // operator spec
-	)
-{
-	state =
-		state.create(
-			'ast', ast_var.create( 'name', state.current.value ),
-			'pos', state.pos + 1
-		);
-
-	return state;
-};
 
 
 /*
