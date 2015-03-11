@@ -40,9 +40,35 @@ if( JION )
 
 
 var
-	ast_differs;
+	ast_differs,
+	prototype;
 
 ast_differs = require( '../jion/this' )( module );
+
+prototype = ast_differs.prototype;
+
+
+/*
+| Walks the ast tree depth-first, pre-order
+| creating a transformed copy.
+*/
+prototype.walk =
+	function(
+		transform	// a function to be called for all
+		//			// walked nodes.
+	)
+{
+	var
+		left,
+		right;
+
+	left = this.left.walk( transform );
+
+	right = this.right.walk( transform );
+
+	return transform( this.create( 'left', left, 'right', right ) );
+};
+
 
 
 /**/if( CHECK )
@@ -55,7 +81,7 @@ ast_differs = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	ast_differs.prototype.inspect =
+***/	prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

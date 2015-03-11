@@ -69,6 +69,39 @@ prototype.$elsewise =
 };
 
 
+/*
+| Walks the ast tree depth-first, pre-order
+| creating a transformed copy.
+*/
+prototype.walk =
+	function(
+		transform	// a function to be called for all
+		//			// walked nodes.
+	)
+{
+	var
+		condition,
+		then,
+		elsewise;
+
+	condition = this.condition.walk( transform );
+
+	then = this.then.walk( transform );
+
+	if( elsewise )
+	{
+		elsewise = this.elsewise.walk( transform );
+	}
+
+	return(
+		transform(
+			this.create( 'condition', condition, 'then', then, 'elsewise', elsewise )
+		)
+	);
+};
+
+
+
 /**/if( CHECK )
 /**/{
 /**/	var

@@ -41,10 +41,13 @@ if( JION )
 
 var
 	ast_dot,
-	ast_member;
+	ast_member,
+	prototype;
 
 
 ast_member = require( '../jion/this' )( module );
+
+prototype = ast_member.prototype;
 
 
 ast_dot = require( './dot' );
@@ -53,13 +56,32 @@ ast_dot = require( './dot' );
 /*
 | Creates a dot member access of a dot.
 */
-ast_member.prototype.$dot =
+prototype.$dot =
 	function(
 		member // member string
 	)
 {
 	// checks if member is a string is done in 'ast_dot.create'
 	return ast_dot.create( 'expr', this, 'member', member );
+};
+
+
+/*
+| Walks the ast tree depth-first, pre-order
+| creating a transformed copy.
+*/
+prototype.walk =
+	function(
+		transform	// a function to be called for all
+		//			// walked nodes.
+	)
+{
+	var
+		expr;
+
+	expr = this.expr.walk( transform );
+
+	return transform( this.create( 'expr', expr ) );
 };
 
 
@@ -73,7 +95,7 @@ ast_member.prototype.$dot =
 /***	/
 ****	| Custom inspect
 ****	/
-***/	ast_member.prototype.inspect =
+***/	prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts

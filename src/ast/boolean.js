@@ -34,9 +34,12 @@ if( JION )
 
 
 var
-	ast_boolean;
+	ast_boolean,
+	prototype;
 
 ast_boolean = require( '../jion/this' )( module );
+
+prototype = ast_boolean.prototype;
 
 
 /**/if( CHECK )
@@ -49,7 +52,7 @@ ast_boolean = require( '../jion/this' )( module );
 /***	/
 ****	| Custom inspect
 ****	/
-***/	ast_boolean.prototype.inspect =
+***/	prototype.inspect =
 /**/		function(
 /**/			depth,
 /**/			opts
