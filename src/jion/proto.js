@@ -4,11 +4,7 @@
 
 var
 	jools,
-	jion, // FIXME remove
 	jion_proto;
-
-
-jion = jion || { };
 
 
 /*
@@ -18,26 +14,15 @@ jion = jion || { };
 'use strict';
 
 
-jion.proto =
-jion_proto =
-	{ };
-
-/*
-| Node export.
-*/
 if( SERVER )
 {
-	module.exports = jion_proto;
-}
+	jion_proto = module.exports;
 
-
-
-/*
-| Node includes.
-*/
-if( SERVER )
-{
 	jools = require( '../jools/jools' );
+}
+else
+{
+	jion_proto = { };
 }
 
 
@@ -120,7 +105,7 @@ jion_proto.setPath =
 		);
 	}
 
-	return (
+	return(
 		this.create(
 			key,
 			this[ key ].setPath(
