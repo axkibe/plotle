@@ -36,47 +36,28 @@ if( JION )
 			{
 				designFrame :
 					{
-						comment :
-							'designed frame (using anchors',
-						type :
-							'design_anchorRect'
+						comment : 'designed frame (using anchors',
+						type : 'design_anchorRect'
 					},
 				// FIXME deduce from mark
 				focusAccent :
 					{
-						comment :
-							'true if the widget got focus',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
+						comment : 'true if the widget got focus',
+						type : 'boolean',
+						defaultValue : 'false'
 					},
 				font :
 					{
-						comment :
-							'font of the text',
-						type :
-							'euclid_font',
-						defaultValue :
-							'null'
+						comment : 'font of the text',
+						type : 'euclid_font',
+						defaultValue : 'null'
 					},
 				hover :
 					{
-						comment :
-							'component hovered upon',
-						type :
-							'jion_path',
-						defaultValue :
-							'null',
-						concerns :
-							{
-								type :
-									'widget_widget',
-								func :
-									'concernsHover',
-								args :
-									[ 'hover', 'path' ]
-							}
+						comment : 'component hovered upon',
+						type : 'jion_path',
+						defaultValue : 'null',
+						prepare : 'widget_widget.concernsHover( hover, path )'
 					},
 				icon :
 					{

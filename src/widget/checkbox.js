@@ -35,93 +35,59 @@ if( JION )
 			{
 				checked :
 					{
-						comment :
-							'true if the checkbox is checked',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
+						comment : 'true if the checkbox is checked',
+						type : 'boolean',
+						defaultValue : 'false'
 					},
 				designFrame :
 					{
-						comment :
-							'designed frame (using anchors',
-						type :
-							'design_anchorRect'
+						comment : 'designed frame (using anchors)',
+						type : 'design_anchorRect'
 					},
 				// FIXME deduce from mark
 				focusAccent :
 					{
-						comment :
-							'true if the widget got focus',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
+						comment : 'true if the widget got focus',
+						type : 'boolean',
+						defaultValue : 'false'
 					},
 				hover :
 					{
-						comment :
-							'component hovered upon',
-						type :
-							'jion_path',
-						defaultValue :
-							'null',
-						concerns :
-							{
-								type :
-									'widget_widget',
-								func :
-									'concernsHover',
-								args :
-									[ 'hover', 'path' ]
-							}
+						comment : 'component hovered upon',
+						type : 'jion_path',
+						defaultValue : 'null',
+						prepare : 'widget_widget.concernsHover( hover, path )'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
-						type :
-							'->mark',
-						defaultValue :
-							'null',
-						assign :
-							null
+						comment : 'the users mark',
+						type : '->mark',
+						defaultValue : 'null',
+						assign : null
 					},
 				path :
 					{
-						comment :
-							'the path of the widget',
-						type :
-							'jion_path',
-						defaultValue :
-							'null'
+						comment : 'the path of the widget',
+						type : 'jion_path',
+						defaultValue : 'null'
 					},
 				superFrame :
 					{
-						comment :
-							'the frame the widget resides in',
-						type :
-							'euclid_rect',
-						defaultValue :
-							'null'
+						comment : 'the frame the widget resides in',
+						type : 'euclid_rect',
+						defaultValue : 'null'
 					},
 				style :
 					{
 						// FIXME put in a real object instead
-						comment :
-							'name of the style used',
-						type :
-							'string'
+						comment : 'name of the style used',
+						type : 'string'
 					},
 				visible :
 					{
-						comment :
-							'if false the button is hidden',
-						type :
-							'boolean',
-						defaultValue :
-							'true'
+						comment : 'if false the button is hidden',
+						type : 'boolean',
+						defaultValue : 'true'
 					}
 			},
 		init :

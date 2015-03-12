@@ -223,7 +223,7 @@ net_link.prototype._onAcquireSpace =
 
 	// FIXME in case of aborting updates this needs to be aborted.
 	system.setTimer(
-		1,
+		1000,
 		function( )
 		{
 			root.link._update( );
@@ -456,6 +456,8 @@ net_link.prototype._onUpdate =
 	root.create(
 		'link',
 			root.link.create(
+				// FIXME check why this gets zero
+				//       in case of timeout
 				'_outbox', outbox || change_wrapRay.create( ),
 				'_postbox', postbox || change_wrapRay.create( ),
 				'_rSeq', reply.seq + changeWrapRay.length

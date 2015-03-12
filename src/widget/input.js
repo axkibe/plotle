@@ -45,139 +45,93 @@ if( JION )
 			{
 				designFrame :
 					{
-						comment :
-							'designed frame (using anchors',
-						type :
-							'design_anchorRect'
+						comment : 'designed frame (using anchors',
+						type : 'design_anchorRect'
 					},
 				// FIXME deduce from mark
 				focusAccent :
 					{
-						comment :
-							'true if the widget got focus',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
+						comment : 'true if the widget got focus',
+						type : 'boolean',
+						defaultValue : 'false'
 					},
 				hover :
 					{
-						comment :
-							'component hovered upon',
-						type :
-							'jion_path',
-						defaultValue :
-							'null',
-						concerns :
-							{
-								type :
-									'widget_widget',
-								func :
-									'concernsHover',
-								args :
-									[ 'hover', 'path' ]
-							}
+						comment : 'component hovered upon',
+						type : 'jion_path',
+						defaultValue : 'null',
+						prepare : 'widget_widget.concernsHover( hover, path )',
 					},
 				font :
 					{
-						comment :
-							'font of the text',
-						type :
-							'euclid_font'
+						comment : 'font of the text',
+						type : 'euclid_font'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
-						concerns :
-							{
-								type :
-									'widget_widget',
-								func :
-									'concernsMark',
-								args :
-									[ 'mark', 'path' ]
-							},
-						type :
-							'->mark',
-						defaultValue :
-							'null'
+						comment : 'the users mark',
+						prepare : 'widget_widget.concernsMark( mark, path )',
+						type : '->mark',
+						defaultValue : 'null'
 					},
 				maxlen :
 					{
-						comment :
-							'maximum input length',
-						type :
-							'integer'
+						comment : 'maximum input length',
+						type : 'integer'
 					},
 				password :
 					{
-						comment :
-							'true for password input',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
+						comment : 'true for password input',
+						type : 'boolean',
+						defaultValue : 'false'
 					},
 				path :
 					{
-						comment :
-							'the path of the widget',
-						type :
-							'jion_path',
-						defaultValue :
-							'null'
+						comment : 'the path of the widget',
+						type : 'jion_path',
+						defaultValue : 'null'
 					},
 				superFrame :
 					{
-						comment :
-							'the frame the widget resides in',
-						type :
-							'euclid_rect',
-						defaultValue :
-							'null'
+						comment : 'the frame the widget resides in',
+						type : 'euclid_rect',
+						defaultValue : 'null'
 					},
 				style :
 					{
 						// FIXME put in a real object instead
-						comment :
-							'name of the style used',
-						type :
-							'string'
+						comment : 'name of the style used',
+						type : 'string'
 					},
 				value :
 					{
-						comment :
-							'the value in the input box',
-						type :
-							'string',
-						defaultValue :
-							'""'
+						comment : 'the value in the input box',
+						type : 'string',
+						defaultValue : '""'
 					},
 				visible :
 					{
-						comment :
-							'if false the button is hidden',
-						type :
-							'boolean',
-						defaultValue :
-							'true'
+						comment : 'if false the button is hidden',
+						type : 'boolean',
+						defaultValue : 'true'
 					}
 			},
-		init :
-			[ ]
+		init : [ ]
 	};
 }
 
 
 var
-	blackStyle;
+	blackStyle,
+	prototype;
 
+
+prototype = widget_input.prototype;
 
 /*
 | Initializes the widget.
 */
-widget_input.prototype._init =
+prototype._init =
 	function( )
 {
 	var
@@ -219,7 +173,7 @@ widget_input._pitch = euclid_point.create( 'x', 8, 'y', 3 );
 /*
 | Returns the offset nearest to point p.
 */
-widget_input.prototype.getOffsetAt =
+prototype.getOffsetAt =
 	function(
 		p
 	)
@@ -289,7 +243,7 @@ widget_input.prototype.getOffsetAt =
 /*
 | Returns the width of a character for password masks.
 */
-widget_input.prototype.maskWidth =
+prototype.maskWidth =
 	function(
 		size
 	)
@@ -301,7 +255,7 @@ widget_input.prototype.maskWidth =
 /*
 | Returns the kerning of characters for password masks.
 */
-widget_input.prototype.maskKern =
+prototype.maskKern =
 	function(
 		size
 	)
@@ -315,7 +269,7 @@ widget_input.prototype.maskKern =
 | representing the password mask.
 */
 jools.lazyValue(
-	widget_input.prototype,
+	prototype,
 	'_passMask',
 	function( )
 	{
@@ -396,7 +350,7 @@ blackStyle =
 | Returns the display for the input field.
 */
 jools.lazyValue(
-	widget_input.prototype,
+	prototype,
 	'_display',
 	function( )
 	{
@@ -493,7 +447,7 @@ jools.lazyValue(
 /*
 | Draws the input field.
 */
-widget_input.prototype.draw =
+prototype.draw =
 	function(
 		display
 	)
@@ -505,7 +459,7 @@ widget_input.prototype.draw =
 /*
 | Returns the point of a given offset.
 */
-widget_input.prototype.locateOffset =
+prototype.locateOffset =
 	function(
 		offset // the offset to get the point from.
 	)
@@ -559,7 +513,7 @@ widget_input.prototype.locateOffset =
 /*
 | Draws the caret
 */
-widget_input.prototype._drawCaret =
+prototype._drawCaret =
 	function(
 		display
 	)
@@ -595,7 +549,7 @@ widget_input.prototype._drawCaret =
 /*
 | User input.
 */
-widget_input.prototype.input =
+prototype.input =
 	function(
 		text
 	)
@@ -644,7 +598,7 @@ widget_input.prototype.input =
 /*
 | User pressed backspace.
 */
-widget_input.prototype._keyBackspace =
+prototype._keyBackspace =
 	function( )
 {
 	var
@@ -679,7 +633,7 @@ widget_input.prototype._keyBackspace =
 /*
 | User pressed del.
 */
-widget_input.prototype._keyDel =
+prototype._keyDel =
 	function( )
 {
 	var
@@ -704,7 +658,7 @@ widget_input.prototype._keyDel =
 /*
 | User pressed return key.
 */
-widget_input.prototype._keyEnter =
+prototype._keyEnter =
 	function( )
 {
 	root.cycleFormFocus( this.path.get( 2 ), 1 );
@@ -714,7 +668,7 @@ widget_input.prototype._keyEnter =
 /*
 | User pressed down key.
 */
-widget_input.prototype._keyDown =
+prototype._keyDown =
 	function(
 		owner
 	)
@@ -726,7 +680,7 @@ widget_input.prototype._keyDown =
 /*
 | User pressed end key.
 */
-widget_input.prototype._keyEnd =
+prototype._keyEnd =
 	function( )
 {
 	var
@@ -755,7 +709,7 @@ widget_input.prototype._keyEnd =
 /*
 | User pressed left key.
 */
-widget_input.prototype._keyLeft =
+prototype._keyLeft =
 	function( )
 {
 	var
@@ -781,7 +735,7 @@ widget_input.prototype._keyLeft =
 /*
 | User pressed pos1 key
 */
-widget_input.prototype._keyPos1 =
+prototype._keyPos1 =
 	function( )
 {
 	var
@@ -807,7 +761,7 @@ widget_input.prototype._keyPos1 =
 /*
 | User pressed right key
 */
-widget_input.prototype._keyRight =
+prototype._keyRight =
 	function( )
 {
 	var
@@ -833,7 +787,7 @@ widget_input.prototype._keyRight =
 /*
 | User pressed up key.
 */
-widget_input.prototype._keyUp =
+prototype._keyUp =
 	function(
 		owner
 	)
@@ -847,7 +801,7 @@ widget_input.prototype._keyUp =
 /*
 | User pressed a special key
 */
-widget_input.prototype.specialKey =
+prototype.specialKey =
 	function(
 		key,
 		owner
@@ -917,19 +871,19 @@ widget_input.prototype.specialKey =
 /*
 | Inputs can hold a caret.
 */
-widget_input.prototype.caretable = true;
+prototype.caretable = true;
 
 
 /*
 | Inputs are focusable
 */
-widget_input.prototype.focusable = true;
+prototype.focusable = true;
 
 
 /*
 | Mouse hover
 */
-widget_input.prototype.pointingHover =
+prototype.pointingHover =
 	function(
 		p
 		// shift,
@@ -964,7 +918,7 @@ widget_input.prototype.pointingHover =
 /*
 | User clicked.
 */
-widget_input.prototype.click =
+prototype.click =
 	function(
 		p
 		// shift
@@ -1013,7 +967,7 @@ widget_input.prototype.click =
 | The attention center.
 */
 jools.lazyValue(
-	widget_input.prototype,
+	prototype,
 	'attentionCenter',
 	function( )
 	{
