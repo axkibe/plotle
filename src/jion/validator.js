@@ -37,7 +37,6 @@ var
 	checkAlikes,
 	checkAttribute,
 	checkAttributeSingleType,
-	checkConcern,
 	checkGroup,
 	checkPrepare,
 	checkRay,
@@ -109,42 +108,6 @@ jionWhitelist =
 		'ray' : true,
 		'twig' : true,
 	} );
-
-
-/*
-| Checks if a jion concern definition looks ok.
-*/
-checkConcern =
-	function(
-		concern
-	)
-{
-	for( var name in concern )
-	{
-		switch( name )
-		{
-			case 'args' :
-			case 'func' :
-			case 'member' :
-			case 'type' :
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid concerns: "' + name + '"'
-				);
-		}
-	}
-
-	if( concern.unit && !concern.type )
-	{
-		throw new Error(
-			'concern "' + name + '" has unit but not type'
-		);
-	}
-};
 
 
 /*
@@ -588,12 +551,6 @@ checkAttribute =
 			case 'assign' :
 			case 'comment' :
 			case 'type' :
-
-				break;
-
-			case 'concerns' :
-
-				checkConcern( attr.concerns );
 
 				break;
 

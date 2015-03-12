@@ -36,55 +36,37 @@ if( JION )
 			{
 				hover :
 					{
-						comment :
-							'the widget hovered upon',
-						type :
-							'jion_path'
+						comment : 'the widget hovered upon',
+						type : 'jion_path'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
-						type :
-							'->mark',
-						allowsNull :
-							true
+						comment : 'the users mark',
+						type : '->mark',
+						allowsNull : true
 					},
 				path :
 					{
-						comment :
-							'the path of the form jockey',
-						type :
-							'jion_path'
+						comment : 'the path of the form jockey',
+						type : 'jion_path'
 					},
 				spaceRef :
 					{
-						comment :
-							'the reference of current space',
-						type :
-							'fabric_spaceRef',
-						defaultValue :
-							'null'
+						comment : 'the reference of current space',
+						type : 'fabric_spaceRef',
+						defaultValue : 'null'
 					},
 				user :
 					{
-						comment :
-							'currently logged in user',
-						type :
-							'user_creds',
-						defaultValue :
-							'null'
+						comment : 'currently logged in user',
+						type : 'user_creds',
+						defaultValue : 'null'
 					},
 				view :
 					{
-						comment :
-							'the current view',
-						type :
-							'euclid_view',
-						concerns :
-							{
-								member : 'sizeOnly'
-							}
+						comment : 'the current view',
+						type : 'euclid_view',
+						prepare : 'view ? view.sizeOnly : view'
 					}
 			},
 		init :
