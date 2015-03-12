@@ -45,12 +45,7 @@ if( JION )
 				mark :
 					{
 						comment : 'the users mark',
-						concerns :
-							{
-								type : 'disc_jockey',
-								func : 'concernsMark',
-								args : [ 'mark' ]
-							},
+						prepare : 'disc_jockey.concernsMark( mark )',
 						type : '->mark',
 						allowsNull : true
 					},
