@@ -160,7 +160,7 @@ prototype.abstract =
 		{
 			case 'comment' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_comment = arg;
 				}
@@ -169,7 +169,7 @@ prototype.abstract =
 
 			case 'name' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_name = arg;
 				}
@@ -271,7 +271,7 @@ prototype.create =
 		{
 			case 'comment' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_comment = arg;
 				}
@@ -280,7 +280,7 @@ prototype.create =
 
 			case 'name' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_name = arg;
 				}

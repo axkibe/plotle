@@ -142,11 +142,13 @@ disc_createDisc.prototype._init =
 {
 	var
 		focusAccent,
-		path,
+		r,
+		rZ,
 		ranks,
 		twig,
 		wname;
 
+	// FUTURE remove
 	if( !this.path )
 	{
 		return;
@@ -162,7 +164,7 @@ disc_createDisc.prototype._init =
 	ranks = this.ranks;
 
 	for(
-		var r = 0, rZ = ranks.length;
+		r = 0, rZ = ranks.length;
 		r < rZ;
 		r++
 	)
@@ -171,21 +173,12 @@ disc_createDisc.prototype._init =
 
 		focusAccent = disc_createDisc._isActiveButton( this.action, wname );
 
-		if( twig[ wname ].path )
-		{
-			path = undefined;
-		}
-		else
-		{
-			path =
-				this.path
-				.append( 'twig' )
-				.append( wname );
-		}
-
 		twig[ wname ] =
 			twig[ wname ].create(
-				'path', path,
+				'path',
+					 twig[ wname ].path
+					 ? pass
+					 : this.path.append( 'twig' ).append( wname ),
 				'superFrame', this.frame.zeropnw,
 				'hover', this.hover,
 				'focusAccent', focusAccent

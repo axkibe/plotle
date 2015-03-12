@@ -192,7 +192,7 @@ prototype.abstract =
 		{
 			case 'associativity' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_associativity = arg;
 				}
@@ -201,7 +201,7 @@ prototype.abstract =
 
 			case 'astCreator' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_astCreator = arg;
 				}
@@ -210,7 +210,7 @@ prototype.abstract =
 
 			case 'handler' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_handler = arg;
 				}
@@ -219,7 +219,7 @@ prototype.abstract =
 
 			case 'prec' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_prec = arg;
 				}
@@ -370,7 +370,7 @@ prototype.create =
 		{
 			case 'associativity' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_associativity = arg;
 				}
@@ -379,7 +379,7 @@ prototype.create =
 
 			case 'astCreator' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_astCreator = arg;
 				}
@@ -388,7 +388,7 @@ prototype.create =
 
 			case 'handler' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_handler = arg;
 				}
@@ -397,7 +397,7 @@ prototype.create =
 
 			case 'prec' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_prec = arg;
 				}

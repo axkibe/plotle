@@ -238,7 +238,7 @@ prototype.abstract =
 		{
 			case 'message' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_message = arg;
 				}
@@ -387,7 +387,7 @@ prototype.create =
 		{
 			case 'message' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_message = arg;
 				}

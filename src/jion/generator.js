@@ -1071,7 +1071,7 @@ prototype.genCreatorFreeStringsParser =
 			.$case(
 				$string( name ),
 				$if(
-					'arg !== undefined',
+					'arg !== pass',
 					$( attr.varRef, ' = arg' )
 				)
 			);

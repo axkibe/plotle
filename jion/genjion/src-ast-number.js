@@ -148,7 +148,7 @@ prototype.abstract =
 		{
 			case 'number' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_number = arg;
 				}
@@ -225,7 +225,7 @@ prototype.create =
 		{
 			case 'number' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_number = arg;
 				}

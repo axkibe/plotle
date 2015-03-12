@@ -148,7 +148,7 @@ prototype.abstract =
 		{
 			case 'string' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_string = arg;
 				}
@@ -229,7 +229,7 @@ prototype.create =
 		{
 			case 'string' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_string = arg;
 				}

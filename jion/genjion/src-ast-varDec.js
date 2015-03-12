@@ -250,7 +250,7 @@ prototype.abstract =
 		{
 			case 'assign' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_assign = arg;
 				}
@@ -259,7 +259,7 @@ prototype.abstract =
 
 			case 'name' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_name = arg;
 				}
@@ -430,7 +430,7 @@ prototype.create =
 		{
 			case 'assign' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_assign = arg;
 				}
@@ -439,7 +439,7 @@ prototype.create =
 
 			case 'name' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_name = arg;
 				}

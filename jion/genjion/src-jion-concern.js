@@ -202,7 +202,7 @@ prototype.abstract =
 		{
 			case 'args' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_args = arg;
 				}
@@ -211,7 +211,7 @@ prototype.abstract =
 
 			case 'func' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_func = arg;
 				}
@@ -220,7 +220,7 @@ prototype.abstract =
 
 			case 'id' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_id = arg;
 				}
@@ -229,7 +229,7 @@ prototype.abstract =
 
 			case 'member' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_member = arg;
 				}
@@ -380,7 +380,7 @@ prototype.create =
 		{
 			case 'args' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_args = arg;
 				}
@@ -389,7 +389,7 @@ prototype.create =
 
 			case 'func' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_func = arg;
 				}
@@ -398,7 +398,7 @@ prototype.create =
 
 			case 'id' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_id = arg;
 				}
@@ -407,7 +407,7 @@ prototype.create =
 
 			case 'member' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_member = arg;
 				}

@@ -20,6 +20,11 @@ fs = require( 'fs' );
 
 vm = require( 'vm' );
 
+/*
+| needs to set 'pass' global.
+*/
+require( './proto' );
+
 
 jionNodeGenerator =
 module.exports =

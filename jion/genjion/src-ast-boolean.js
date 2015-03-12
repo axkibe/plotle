@@ -148,7 +148,7 @@ prototype.abstract =
 		{
 			case 'boolean' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_boolean = arg;
 				}
@@ -225,7 +225,7 @@ prototype.create =
 		{
 			case 'boolean' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_boolean = arg;
 				}

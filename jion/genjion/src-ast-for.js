@@ -277,7 +277,7 @@ prototype.abstract =
 		{
 			case 'block' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_block = arg;
 				}
@@ -286,7 +286,7 @@ prototype.abstract =
 
 			case 'condition' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_condition = arg;
 				}
@@ -295,7 +295,7 @@ prototype.abstract =
 
 			case 'init' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_init = arg;
 				}
@@ -304,7 +304,7 @@ prototype.abstract =
 
 			case 'iterate' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_iterate = arg;
 				}
@@ -642,7 +642,7 @@ prototype.create =
 		{
 			case 'block' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_block = arg;
 				}
@@ -651,7 +651,7 @@ prototype.create =
 
 			case 'condition' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_condition = arg;
 				}
@@ -660,7 +660,7 @@ prototype.create =
 
 			case 'init' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_init = arg;
 				}
@@ -669,7 +669,7 @@ prototype.create =
 
 			case 'iterate' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_iterate = arg;
 				}

@@ -261,7 +261,7 @@ prototype.abstract =
 		{
 			case 'func' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_func = arg;
 				}
@@ -565,7 +565,7 @@ prototype.create =
 		{
 			case 'func' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_func = arg;
 				}

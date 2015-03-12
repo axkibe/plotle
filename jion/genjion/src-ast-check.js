@@ -151,7 +151,7 @@ prototype.abstract =
 		{
 			case 'block' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_block = arg;
 				}
@@ -236,7 +236,7 @@ prototype.create =
 		{
 			case 'block' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_block = arg;
 				}

@@ -88,14 +88,15 @@ prototype.walk =
 
 	then = this.then.walk( transform );
 
-	if( elsewise )
-	{
-		elsewise = this.elsewise.walk( transform );
-	}
+	elsewise = this.elsewise.walk( transform );
 
 	return(
 		transform(
-			this.create( 'condition', condition, 'then', then, 'elsewise', elsewise )
+			this.create(
+				'condition', condition,
+				'then', then,
+				'elsewise', elsewise
+			)
 		)
 	);
 };

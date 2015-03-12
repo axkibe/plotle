@@ -248,7 +248,7 @@ prototype.abstract =
 		{
 			case 'left' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_left = arg;
 				}
@@ -257,7 +257,7 @@ prototype.abstract =
 
 			case 'right' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_right = arg;
 				}
@@ -484,7 +484,7 @@ prototype.create =
 		{
 			case 'left' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_left = arg;
 				}
@@ -493,7 +493,7 @@ prototype.create =
 
 			case 'right' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_right = arg;
 				}

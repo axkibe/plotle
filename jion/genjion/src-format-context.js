@@ -184,7 +184,7 @@ prototype.abstract =
 		{
 			case 'check' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_check = arg;
 				}
@@ -193,7 +193,7 @@ prototype.abstract =
 
 			case 'indent' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_indent = arg;
 				}
@@ -202,7 +202,7 @@ prototype.abstract =
 
 			case 'inline' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_inline = arg;
 				}
@@ -211,7 +211,7 @@ prototype.abstract =
 
 			case 'root' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_root = arg;
 				}
@@ -365,7 +365,7 @@ prototype.create =
 		{
 			case 'check' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_check = arg;
 				}
@@ -374,7 +374,7 @@ prototype.create =
 
 			case 'indent' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_indent = arg;
 				}
@@ -383,7 +383,7 @@ prototype.create =
 
 			case 'inline' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_inline = arg;
 				}
@@ -392,7 +392,7 @@ prototype.create =
 
 			case 'root' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_root = arg;
 				}

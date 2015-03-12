@@ -112,7 +112,6 @@ disc_mainDisc.prototype._init =
 	)
 {
 	var
-		path,
 		r,
 		rZ,
 		text,
@@ -120,6 +119,7 @@ disc_mainDisc.prototype._init =
 		visible,
 		wname;
 
+	// FIXME remove
 	if( !this.path )
 	{
 		return;
@@ -140,9 +140,9 @@ disc_mainDisc.prototype._init =
 	{
 		wname = this.getKey( r );
 
-		text = undefined;
+		text = pass;
 
-		visible = undefined;
+		visible = pass;
 
 		switch( wname )
 		{
@@ -210,23 +210,14 @@ disc_mainDisc.prototype._init =
 				break;
 		}
 
-		if( twig[ wname ].path )
-		{
-			path = undefined;
-		}
-		else
-		{
-			path =
-				this.path
-				.append( 'twig' )
-				.append( wname );
-		}
-
 		twig[ wname ] =
 			twig[ wname ].create(
 				'hover', this.hover,
 				'focusAccent', this.mode === wname,
-				'path', path,
+				'path',
+					twig[ wname ].path
+					? pass
+					: this.path.append( 'twig' ).append( wname ),
 				'superFrame', this.frame.zeropnw,
 				'text', text,
 				'visible', visible

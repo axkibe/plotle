@@ -148,8 +148,7 @@ form_jockey.prototype._init =
 		}
 		else
 		{
-			path =
-				undefined; // inherit
+			path = pass;
 		}
 
 		this.twig[ name ] =

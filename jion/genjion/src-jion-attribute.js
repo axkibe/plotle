@@ -370,7 +370,7 @@ prototype.abstract =
 		{
 			case 'allowsNull' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_allowsNull = arg;
 				}
@@ -379,7 +379,7 @@ prototype.abstract =
 
 			case 'allowsUndefined' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_allowsUndefined = arg;
 				}
@@ -388,7 +388,7 @@ prototype.abstract =
 
 			case 'assign' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_assign = arg;
 				}
@@ -397,7 +397,7 @@ prototype.abstract =
 
 			case 'comment' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_comment = arg;
 				}
@@ -406,7 +406,7 @@ prototype.abstract =
 
 			case 'concerns' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_concerns = arg;
 				}
@@ -415,7 +415,7 @@ prototype.abstract =
 
 			case 'defaultValue' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_defaultValue = arg;
 				}
@@ -424,7 +424,7 @@ prototype.abstract =
 
 			case 'id' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_id = arg;
 				}
@@ -433,7 +433,7 @@ prototype.abstract =
 
 			case 'json' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_json = arg;
 				}
@@ -442,7 +442,7 @@ prototype.abstract =
 
 			case 'name' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_name = arg;
 				}
@@ -451,7 +451,7 @@ prototype.abstract =
 
 			case 'prepare' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_prepare = arg;
 				}
@@ -460,7 +460,7 @@ prototype.abstract =
 
 			case 'varRef' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_varRef = arg;
 				}
@@ -847,7 +847,7 @@ prototype.create =
 		{
 			case 'allowsNull' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_allowsNull = arg;
 				}
@@ -856,7 +856,7 @@ prototype.create =
 
 			case 'allowsUndefined' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_allowsUndefined = arg;
 				}
@@ -865,7 +865,7 @@ prototype.create =
 
 			case 'assign' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_assign = arg;
 				}
@@ -874,7 +874,7 @@ prototype.create =
 
 			case 'comment' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_comment = arg;
 				}
@@ -883,7 +883,7 @@ prototype.create =
 
 			case 'concerns' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_concerns = arg;
 				}
@@ -892,7 +892,7 @@ prototype.create =
 
 			case 'defaultValue' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_defaultValue = arg;
 				}
@@ -901,7 +901,7 @@ prototype.create =
 
 			case 'id' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_id = arg;
 				}
@@ -910,7 +910,7 @@ prototype.create =
 
 			case 'json' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_json = arg;
 				}
@@ -919,7 +919,7 @@ prototype.create =
 
 			case 'name' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_name = arg;
 				}
@@ -928,7 +928,7 @@ prototype.create =
 
 			case 'prepare' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_prepare = arg;
 				}
@@ -937,7 +937,7 @@ prototype.create =
 
 			case 'varRef' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_varRef = arg;
 				}

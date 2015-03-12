@@ -24,6 +24,7 @@
 		"SHELL" : true,
 		"SHELLAPP" : true,
 		"SERVER" : true,
+		"pass" : true,
 		"root" : true
 	}
 }

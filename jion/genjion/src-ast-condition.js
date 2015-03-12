@@ -260,7 +260,7 @@ prototype.abstract =
 		{
 			case 'condition' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_condition = arg;
 				}
@@ -269,7 +269,7 @@ prototype.abstract =
 
 			case 'elsewise' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_elsewise = arg;
 				}
@@ -278,7 +278,7 @@ prototype.abstract =
 
 			case 'then' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_then = arg;
 				}
@@ -587,7 +587,7 @@ prototype.create =
 		{
 			case 'condition' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_condition = arg;
 				}
@@ -596,7 +596,7 @@ prototype.create =
 
 			case 'elsewise' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_elsewise = arg;
 				}
@@ -605,7 +605,7 @@ prototype.create =
 
 			case 'then' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_then = arg;
 				}

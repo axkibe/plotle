@@ -27,87 +27,59 @@ if( JION )
 			{
 				access :
 					{
-						comment :
-							'users access to current space',
-						type :
-							'string',
-						defaultValue :
-							'null'
+						comment : 'users access to current space',
+						type : 'string',
+						defaultValue : 'null'
 					},
 				action :
 					{
-						comment :
-							'currently active action',
-						type :
-							'->action',
-						allowsNull :
-							true
+						comment : 'currently active action',
+						type : '->action',
+						allowsNull : true
 					},
 				hover :
 					{
-						comment :
-							'the widget hovered upon',
-						type :
-							'jion_path'
+						comment : 'the widget hovered upon',
+						type : 'jion_path'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
+						comment : 'the users mark',
 						concerns :
 							{
-								type :
-									'disc_jockey',
-								func :
-									'concernsMark',
-								args :
-									[
-										'mark'
-									]
+								type : 'disc_jockey',
+								func : 'concernsMark',
+								args : [ 'mark' ]
 							},
-						type :
-							'->mark',
-						allowsNull :
-							true
+						type : '->mark',
+						allowsNull : true
 					},
 				mode :
 					{
-						comment :
-							'current mode the UI is in',
-						type :
-							'string'
+						comment : 'current mode the UI is in',
+						type : 'string'
 					},
 				path :
 					{
-						comment :
-							'path of the disc',
-						type :
-							'jion_path'
+						comment : 'path of the disc',
+						type : 'jion_path'
 					},
 				view :
 					{
-						comment :
-							'the current view',
-						type :
-							'euclid_view'
+						comment : 'the current view',
+						type : 'euclid_view'
 					},
 				spaceRef :
 					{
-						comment :
-							'currently loaded space',
-						type :
-							'fabric_spaceRef',
-						defaultValue :
-							'null'
+						comment : 'currently loaded space',
+						type : 'fabric_spaceRef',
+						defaultValue : 'null'
 					},
 				user :
 					{
-						comment :
-							'currently logged in user',
-						type :
-							'user_creds',
-						defaultValue :
-							'null'
+						comment : 'currently logged in user',
+						type : 'user_creds',
+						defaultValue : 'null'
 					}
 			},
 		init :
@@ -175,7 +147,7 @@ prototype._init =
 		}
 		else
 		{
-			path = undefined;
+			path = pass;
 		}
 
 		twig[ name ] =

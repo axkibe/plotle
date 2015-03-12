@@ -59,16 +59,8 @@ disc_disc._init =
 
 	this.frame =
 		euclid_rect.create(
-			'pnw',
-				euclid_point.create(
-					'x', 0,
-					'y', ny
-				),
-			'pse',
-				euclid_point.create(
-					'x', width,
-					'y', ny + height
-				)
+			'pnw', euclid_point.create( 'x', 0, 'y', ny ),
+			'pse', euclid_point.create( 'x', width, 'y', ny + height )
 		);
 
 	this.silhoutte =
@@ -88,8 +80,7 @@ disc_disc._init =
 					'x', -600,
 					'y', jools.half( height )
 				),
-			'gradientR1',
-				650
+			'gradientR1', 650
 		);
 };
 

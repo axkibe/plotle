@@ -248,7 +248,7 @@ prototype.abstract =
 		{
 			case 'expr' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_expr = arg;
 				}
@@ -257,7 +257,7 @@ prototype.abstract =
 
 			case 'member' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_member = arg;
 				}
@@ -484,7 +484,7 @@ prototype.create =
 		{
 			case 'expr' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_expr = arg;
 				}
@@ -493,7 +493,7 @@ prototype.create =
 
 			case 'member' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_member = arg;
 				}

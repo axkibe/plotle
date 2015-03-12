@@ -265,7 +265,7 @@ prototype.abstract =
 		{
 			case 'block' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_block = arg;
 				}
@@ -274,7 +274,7 @@ prototype.abstract =
 
 			case 'object' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_object = arg;
 				}
@@ -283,7 +283,7 @@ prototype.abstract =
 
 			case 'variable' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_variable = arg;
 				}
@@ -472,7 +472,7 @@ prototype.create =
 		{
 			case 'block' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_block = arg;
 				}
@@ -481,7 +481,7 @@ prototype.create =
 
 			case 'object' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_object = arg;
 				}
@@ -490,7 +490,7 @@ prototype.create =
 
 			case 'variable' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_variable = arg;
 				}

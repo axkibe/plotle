@@ -827,7 +827,7 @@ prototype.moveToSpace =
 		'mode',
 			mode === 'normal' || mode === 'create'
 			? 'loading'
-			: undefined,
+			: pass,
 		'space', null
 	);
 

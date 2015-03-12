@@ -151,7 +151,7 @@ prototype.abstract =
 		{
 			case 'call' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_call = arg;
 				}
@@ -236,7 +236,7 @@ prototype.create =
 		{
 			case 'call' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_call = arg;
 				}

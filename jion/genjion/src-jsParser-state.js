@@ -298,7 +298,7 @@ prototype.abstract =
 		{
 			case 'ast' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_ast = arg;
 				}
@@ -307,7 +307,7 @@ prototype.abstract =
 
 			case 'pos' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_pos = arg;
 				}
@@ -316,7 +316,7 @@ prototype.abstract =
 
 			case 'tokens' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_tokens = arg;
 				}
@@ -522,7 +522,7 @@ prototype.create =
 		{
 			case 'ast' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_ast = arg;
 				}
@@ -531,7 +531,7 @@ prototype.create =
 
 			case 'pos' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_pos = arg;
 				}
@@ -540,7 +540,7 @@ prototype.create =
 
 			case 'tokens' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_tokens = arg;
 				}

@@ -139,7 +139,7 @@ prototype.abstract =
 		{
 			case 'jion' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_jion = arg;
 				}
@@ -206,7 +206,7 @@ prototype.create =
 		{
 			case 'jion' :
 
-				if( arg !== undefined )
+				if( arg !== pass )
 				{
 					v_jion = arg;
 				}
