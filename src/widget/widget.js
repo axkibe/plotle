@@ -61,11 +61,7 @@ widget_widget.concernsHover =
 		path
 	)
 {
-	if(
-		!hover
-		||
-		!hover.equals( path )
-	)
+	if( !hover || !hover.equals( path ) )
 	{
 		return null;
 	}

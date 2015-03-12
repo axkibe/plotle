@@ -42,68 +42,41 @@ if( JION )
 			{
 				flowWidth :
 					{
-						comment :
-							'width of the para flow',
-						type :
-							'number',
-						defaultValue :
-							'undefined'
+						comment : 'width of the para flow',
+						type : 'number',
+						defaultValue : 'undefined'
 					},
 				fontsize :
 					{
-						comment :
-							'size of the font',
-						type :
-							'number',
-						defaultValue :
-							'undefined'
+						comment : 'size of the font',
+						type : 'number',
+						defaultValue : 'undefined'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
-						concerns :
-							{
-								type :
-									'fabric_para',
-								func :
-									'concernsMark',
-								args :
-									[ 'mark', 'path' ]
-							},
-						type :
-							'->mark',
-						defaultValue :
-							'undefined',
-						allowsNull :
-							true
+						comment : 'the users mark',
+						prepare : 'fabric_para.concernsMark( mark, path )',
+						type : '->mark',
+						defaultValue : 'undefined',
+						allowsNull : true
 					},
 				path :
 					{
-						comment :
-							'the path of the para',
-						type :
-							'jion_path',
-						defaultValue :
-							'undefined'
+						comment : 'the path of the para',
+						type : 'jion_path',
+						defaultValue : 'undefined'
 					},
 				text :
 					{
-						comment :
-							'the paragraphs text',
-						json :
-							true,
-						type :
-							'string'
+						comment : 'the paragraphs text',
+						json : true,
+						type : 'string'
 					},
 				view :
 					{
-						comment :
-							'the current view',
-						type :
-							'euclid_view',
-						defaultValue :
-							'undefined'
+						comment : 'the current view',
+						type : 'euclid_view',
+						defaultValue : 'undefined'
 					}
 			},
 		alike :
