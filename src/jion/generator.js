@@ -54,7 +54,6 @@ var
 	generator,
 	jion_attribute,
 	jion_attributeGroup,
-	jion_concern,
 	jion_idGroup,
 	jion_stringRay,
 	jion_validator,
@@ -79,8 +78,6 @@ jools = require( '../jools/jools' );
 jion_attribute = require( './attribute' );
 
 jion_attributeGroup = require( './attributeGroup' );
-
-jion_concern = require( './concern' );
 
 jion_validator = require( './validator' );
 
@@ -139,8 +136,6 @@ prototype._init =
 		assign,
 		attr,
 		attributes,
-		concerns,
-		concernsID,
 		constructorList,
 		defaultValue,
 		groupDef,
@@ -234,16 +229,7 @@ prototype._init =
 
 		defaultValue = undefined;
 
-		concerns = jAttr.concerns;
-
 		prepare = jAttr.prepare;
-
-		if( concerns && concerns.type )
-		{
-			concernsID = jion_id.createFromString( concerns.type );
-
-			units = units.add( concernsID );
-		}
 
 		if( prepare )
 		{
@@ -274,20 +260,7 @@ prototype._init =
 					|| shorthand.$undefined.equals( defaultValue ),
 				'assign', assign,
 				'comment', jAttr.comment,
-				'concerns',
-					jAttr.concerns
-					? jion_concern.create(
-						'id', concernsID,
-						'func', jAttr.concerns.func,
-						'args',
-							jAttr.concerns.args
-							&&
-							jion_stringRay.create(
-								'ray:init', jAttr.concerns.args
-							),
-						'member', jAttr.concerns.member
-					)
-					: null,
+				'concerns', null, // FIXME
 				'prepare', prepare,
 				'defaultValue', defaultValue,
 				'json', !!jAttr.json,
@@ -1603,161 +1576,6 @@ prototype.genCreatorChecks =
 
 
 /*
-| Generates the creators concerns.
-|
-| 'func' is a call to a function
-| 'member' is an access to an attribute ( without call )
-|
-| FIXME remove
-*/
-prototype.genCreatorConcerns =
-	function( )
-{
-	var
-		a,
-		aZ,
-		attr,
-		args,
-		b,
-		bZ,
-		bAttr,
-		cExpr,
-		concerns,
-		func,
-		id,
-		member,
-		name,
-		result;
-
-	result = $block( );
-
-	for(
-		a = 0, aZ = this.attributes.size;
-		a < aZ;
-		a++
-	)
-	{
-		name = this.attributes.sortedKeys[ a ];
-
-		attr = this.attributes.get( name );
-
-		concerns = attr.concerns;
-
-		if( !concerns )
-		{
-			continue;
-		}
-
-		args = concerns.args;
-
-		func = concerns.func;
-
-		id = concerns.id;
-
-		member = concerns.member;
-
-		if( func )
-		{
-			if( id )
-			{
-				cExpr = $( id.$global, '.', func, '( )' );
-			}
-			else
-			{
-				cExpr = $( func, '( )' );
-			}
-
-			for(
-				b = 0, bZ = args.length;
-				b < bZ;
-				b++
-			)
-			{
-				// FIXME, make a generator.getCreatorVarName func
-
-				bAttr = this.attributes.get( args.get( b ) );
-
-				if( !bAttr )
-				{
-					throw new Error(
-						'unknown attribute: ' + args.get( b )
-					);
-				}
-
-				cExpr = cExpr.addArgument( bAttr.varRef );
-			}
-		}
-		else
-		{
-			if( !member )
-			{
-				throw new Error(
-					'concerns neither func or member'
-				);
-			}
-
-			if( !args )
-			{
-				if( attr.allowsNull && attr.allowsUndefined )
-				{
-					throw new Error( 'FIXME' );
-				}
-				else if( attr.allowsNull )
-				{
-					cExpr =
-						$condition(
-							$( attr.varRef, ' !== null' ),
-							$( attr.varRef, '.', member ),
-							$( 'null' )
-						);
-
-				}
-				else if( attr.allowsUndefined )
-				{
-					cExpr =
-						$condition(
-							$( attr.varRef, ' !== undefined' ),
-							$( attr.varRef, '.', member ),
-							$( 'null' )
-						);
-				}
-				else
-				{
-					cExpr = $( attr.varRef, '.', member );
-				}
-			}
-			else
-			{
-				cExpr = $( attr.varRef, '.', member, '( )' );
-
-				for(
-					b = 0, bZ = args.length;
-					b < bZ;
-					b++
-				)
-				{
-					bAttr = this.attributes.get( args.get( b ) );
-
-					if( !bAttr )
-					{
-						throw new Error(
-							'unknown attribute: ' + args.get( b )
-						);
-					}
-
-					cExpr = cExpr.append( bAttr.varRef );
-				}
-			}
-		}
-
-		result = result.$( attr.varRef, ' = ', cExpr );
-	}
-
-	return result;
-};
-
-
-/*
 | Generates the creators prepares.
 */
 prototype.genCreatorPrepares =
@@ -1998,7 +1816,6 @@ prototype.genCreator =
 		block
 		.$( this.genCreatorDefaults( false, abstract ) )
 		.$( this.genCreatorChecks( false, abstract ) )
-		.$( abstract ? $block( ) : this.genCreatorConcerns( ) )
 		.$( abstract ? $block( ) : this.genCreatorPrepares( ) )
 		.$( this.genCreatorUnchanged( abstract ) )
 		.$( this.genCreatorReturn( abstract ) );
