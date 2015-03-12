@@ -63,17 +63,12 @@ if( JION )
 					{
 						comment : 'the current view',
 						type : 'euclid_view',
-						concerns :
-							{
-								member : 'sizeOnly'
-							},
+						prepare : 'view ? view.sizeOnly : view',
 						defaultValue : 'undefined'
 					}
 			},
-		init :
-			[ 'inherit', 'twigDup' ],
-		twig :
-			'->formWidgets'
+		init : [ 'inherit', 'twigDup' ],
+		twig : '->formWidgets'
 	};
 }
 

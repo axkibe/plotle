@@ -65,7 +65,7 @@ if( JION )
 					{
 						comment : 'the users mark',
 						type : '->mark',
-						prepare : 'fabric_item.concernsMark( mark, path )',
+						prepare : 'fabric_space.concernsMark( mark )',
 						defaultValue : 'undefined',
 						allowsNull : true
 					},
@@ -126,8 +126,6 @@ prototype = fabric_space.prototype;
 /*
 | Returns the mark if the form jockey concerns a mark.
 */
-/*
-FIXME remove
 fabric_space.concernsMark =
 	function(
 		mark
@@ -147,7 +145,6 @@ fabric_space.concernsMark =
 		return null;
 	}
 };
-*/
 
 
 if( SERVER )
