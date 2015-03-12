@@ -1157,7 +1157,7 @@ prototype.onAcquireSpace =
 		'mode',
 			root._mode === 'loading'
 			? 'normal'
-			: undefined,
+			: pass,
 		'space',
 			reply.space.create(
 				'access', access,
