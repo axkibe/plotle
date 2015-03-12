@@ -34,99 +34,64 @@ if( JION )
 			{
 				access :
 					{
-						comment :
-							'users access to current space',
-						type :
-							'string',
-						defaultValue :
-							'null'
+						comment : 'users access to current space',
+						type : 'string',
+						defaultValue : 'null'
 					},
 				action :
 					{
-						comment :
-							'currently active action',
-						type :
-							'->action',
-						defaultValue :
-							'null'
+						comment : 'currently active action',
+						type : '->action',
+						defaultValue : 'null'
 					},
 				hover :
 					{
-						comment :
-							'the widget hovered upon',
-						type :
-							'jion_path',
-						defaultValue :
-							'null'
+						comment : 'the widget hovered upon',
+						type : 'jion_path',
+						defaultValue : 'null'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
-						type :
-							'->mark',
-						defaultValue :
-							'null'
+						comment : 'the users mark',
+						type : '->mark',
+						defaultValue : 'null'
 					},
 				mode :
 					{
-						comment :
-							'current mode the UI is in',
-						type :
-							'string',
-						defaultValue :
-							'null'
+						comment : 'current mode the UI is in',
+						type : 'string',
+						defaultValue : 'null'
 					},
 				path :
 					{
-						comment :
-							'path of the disc',
-						type :
-							'jion_path',
-						defaultValue :
-							'undefined'
+						comment : 'path of the disc',
+						type : 'jion_path',
+						defaultValue : 'undefined'
 					},
 				spaceRef :
 					{
-						comment :
-							'reference to current space',
-						type :
-							'fabric_spaceRef',
-						defaultValue :
-							'null',
-						assign :
-							null
+						comment : 'reference to current space',
+						type : 'fabric_spaceRef',
+						defaultValue : 'null',
+						assign : null
 					},
 				username :
 					{
-						comment :
-							'currently logged in user',
-						type :
-							'string',
-						defaultValue :
-							'null',
-						assign :
-							null
+						comment : 'currently logged in user',
+						type : 'string',
+						defaultValue : 'null',
+						assign : null
 					},
 				view :
 					{
-						comment :
-							'the current view',
-						type :
-							'euclid_view',
-						concerns :
-							{
-								member :
-									'sizeOnly'
-							},
-						defaultValue :
-							'null'
+						comment : 'the current view',
+						type : 'euclid_view',
+						prepare : 'view ? view.sizeOnly : view',
+						defaultValue : 'null'
 					}
 			},
-		init :
-			[ 'inherit', 'twigDup' ],
-		twig :
-			'->formWidgets'
+		init : [ 'inherit', 'twigDup' ],
+		twig : '->formWidgets'
 	};
 }
 

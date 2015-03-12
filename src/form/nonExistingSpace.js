@@ -34,83 +34,49 @@ if( JION )
 			{
 				hover :
 					{
-						comment :
-							'the widget hovered upon',
-						type :
-							'jion_path',
-						defaultValue :
-							'null'
+						comment : 'the widget hovered upon',
+						type : 'jion_path',
+						defaultValue : 'null'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
-						type :
-							'->mark',
-						concerns :
-							{
-								type :
-									'form_form',
-								func :
-									'concernsMark',
-								args :
-									[ 'mark', 'path' ]
-							},
-						defaultValue :
-							'null'
+						comment : 'the users mark',
+						type : '->mark',
+						prepare : 'form_form.concernsMark( mark, path )',
+						defaultValue : 'null'
 					},
 				nonSpaceRef :
 					{
-						comment :
-							'the non-existing-space',
-						type :
-							'fabric_spaceRef',
-						defaultValue :
-							'undefined'
+						comment : 'the non-existing-space',
+						type : 'fabric_spaceRef',
+						defaultValue : 'undefined'
 					},
 				path :
 					{
-						comment :
-							'the path of the form',
-						type :
-							'jion_path',
-						defaultValue :
-							'undefined'
+						comment : 'the path of the form',
+						type : 'jion_path',
+						defaultValue : 'undefined'
 					},
 				spaceRef :
 					{
-						comment :
-							'the reference to the current space',
-						type :
-							'fabric_spaceRef',
-						defaultValue :
-							'null',
-						assign :
-							null
+						comment : 'the reference to the current space',
+						type : 'fabric_spaceRef',
+						defaultValue : 'null',
+						assign : null
 					},
 				username :
 					{
-						comment :
-							'currently logged in user',
-						type :
-							'string',
-						defaultValue :
-							'null',
-						assign :
-							null
+						comment : 'currently logged in user',
+						type : 'string',
+						defaultValue : 'null',
+						assign : null
 					},
 				view :
 					{
-						comment :
-							'the current view',
-						type :
-							'euclid_view',
-						concerns :
-							{
-								member : 'sizeOnly'
-							},
-						defaultValue :
-							'undefined'
+						comment : 'the current view',
+						type : 'euclid_view',
+						prepare : 'view ? view.sizeOnly : view',
+						defaultValue : 'undefined'
 					}
 			},
 		init :
