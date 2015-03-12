@@ -217,8 +217,6 @@ prototype.dragStop =
 
 	action = root.action;
 
-	console.log( 'FIXME i am called' );
-
 	switch( action.reflect )
 	{
 		case 'action_itemDrag' :

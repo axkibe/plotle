@@ -38,12 +38,9 @@ if( JION )
 			{
 				spaceRef :
 					{
-						comment :
-							'reference to the current space',
-						type :
-							'fabric_spaceRef',
-						defaultValue :
-							'null'
+						comment : 'reference to the current space',
+						type : 'fabric_spaceRef',
+						defaultValue : 'null'
 					},
 				user :
 					{
@@ -56,30 +53,21 @@ if( JION )
 					},
 				_outbox :
 					{
-						comment :
-							'changes to be send to the server',
-						type :
-							'change_wrapRay',
-						defaultValue :
-							'null'
+						comment : 'changes to be send to the server',
+						type : 'change_wrapRay',
+						defaultValue : 'null'
 					},
 				_postbox :
 					{
-						comment :
-							'changes that are currently on the way',
-						type :
-							'change_wrapRay',
-						defaultValue :
-							'null'
+						comment : 'changes that are currently on the way',
+						type : 'change_wrapRay',
+						defaultValue : 'null'
 					},
 				_rSeq :
 					{
-						comment :
-							'the remote sequence number',
-						type :
-							'integer',
-						defaultValue :
-							'null'
+						comment : 'the remote sequence number',
+						type : 'integer',
+						defaultValue : 'null'
 					}
 			}
 	};
@@ -468,8 +456,8 @@ net_link.prototype._onUpdate =
 	root.create(
 		'link',
 			root.link.create(
-				'_outbox', outbox,
-				'_postbox', postbox,
+				'_outbox', outbox || change_wrapRay.create( ),
+				'_postbox', postbox || change_wrapRay.create( ),
 				'_rSeq', reply.seq + changeWrapRay.length
 			),
 		'space', space

@@ -371,6 +371,7 @@ serveUpdate =
 		setTimeout(
 			server_requestHandler.expireUpdateSleep,
 			60000,
+			100,
 			sleepID
 		);
 
