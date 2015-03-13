@@ -260,7 +260,6 @@ prototype._init =
 					|| shorthand.$undefined.equals( defaultValue ),
 				'assign', assign,
 				'comment', jAttr.comment,
-				'concerns', null, // FIXME
 				'prepare', prepare,
 				'defaultValue', defaultValue,
 				'json', !!jAttr.json,
