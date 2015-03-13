@@ -303,39 +303,37 @@ shell_system =
 
 	// remembers last pointing device hovering state.
 
-	canvas.onmousedown = systemTransmitter( '_onMouseDown' );
+	//canvas.onmousedown = systemTransmitter( '_onMouseDown' );
 
-	canvas.onmousemove = systemTransmitter( '_onMouseMove' );
+	//canvas.onmousemove = systemTransmitter( '_onMouseMove' );
 
-	canvas.onmouseup = systemTransmitter( '_onMouseUp' );
+	//canvas.onmouseup = systemTransmitter( '_onMouseUp' );
 
 	canvas.ontouchstart = systemTransmitter( '_onTouchStart' );
 
-	canvas.ontouchmove = systemTransmitter( '_onTouchMove' );
+	//canvas.ontouchmove = systemTransmitter( '_onTouchMove' );
 
 	canvas.ontouchend = systemTransmitter( '_onTouchEnd' );
 
-	canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
+	//canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
 
 	// firefox wheel listening
-	canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false );
+	//canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false );
 
 	// iPad sometimes starts just somewhere
 	window.scrollTo( 0, 0 );
 
-	window.onresize = systemTransmitter( '_onResize' );
+	//window.onresize = systemTransmitter( '_onResize' );
 
-	window.onfocus = systemTransmitter( '_onSystemFocus' );
+	//window.onfocus = systemTransmitter( '_onSystemFocus' );
 
-	window.onblur = systemTransmitter( '_onSystemBlur' );
+	//window.onblur = systemTransmitter( '_onSystemBlur' );
 
-	hiddenInput.onblur = systemTransmitter( '_onHiddenInputBlur' );
+	//document.onkeyup = systemTransmitter( '_onKeyUp' );
 
-	document.onkeyup = systemTransmitter( '_onKeyUp' );
+	//document.onkeydown = systemTransmitter( '_onKeyDown' );
 
-	document.onkeydown = systemTransmitter( '_onKeyDown' );
-
-	document.onkeypress = systemTransmitter( '_onKeyPress' );
+	//document.onkeypress = systemTransmitter( '_onKeyPress' );
 
 	this._testInputTransmitter = systemTransmitter( '_testInput' );
 
@@ -590,15 +588,6 @@ prototype._onSystemBlur =
 	root.create( 'systemFocus', false );
 };
 
-
-prototype._onHiddenInputBlur =
-	function(
-		// event
-	)
-{
-	// resets the view on ipad
-	window.scrollTo( 0, 0 );
-};
 
 
 /*
@@ -1514,28 +1503,23 @@ prototype._steerAttention =
 	if( ac === null )
 	{
 		hiddenInput.style.top = '0';
+
+//		window.scrollTo( 0, 0 );
+
+		receiver.focus( );
 	}
 	else
 	{
 		ac = jools.limit( 0, ac, mainWindowHeight - 15 );
 
 		hiddenInput.style.top = ac + 'px';
-	}
-
-	if( root.suggestingKeyboard( ) )
-	{
-		console.log( 'HI' );
-		hiddenInput.focus( );
 
 		if( hiddenInput.scrollIntoViewIfNeeded )
 		{
 			hiddenInput.scrollIntoViewIfNeeded( true );
 		}
-	}
-	else
-	{
-		console.log( 'R' );
-		receiver.focus( );
+
+		hiddenInput.focus( );
 	}
 };
 
