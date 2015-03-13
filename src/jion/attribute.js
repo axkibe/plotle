@@ -54,16 +54,6 @@ if( JION )
 						type :
 							'string'
 					},
-				concerns :
-					// FIXME remove
-					{
-						comment :
-							'concerns function call',
-						type :
-							'jion_concern',
-						defaultValue :
-							'null'
-					},
 				defaultValue :
 					{
 						comment :

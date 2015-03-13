@@ -57,7 +57,6 @@ var
 	ast_string,
 	ast_typeof,
 	ast_var,
-	jion_concern,
 	jion_id,
 	jion_idGroup,
 	jion_proto;
@@ -138,8 +137,6 @@ if( SERVER )
 
 	ast_var = require( '../../src/ast/var' );
 
-	jion_concern = require( '../../src/jion/concern' );
-
 	jion_id = require( '../../src/jion/id' );
 
 	jion_idGroup = require( '../../src/jion/idGroup' );
@@ -161,7 +158,6 @@ AbstractConstructor =
 		v_allowsUndefined, // attribute may be undefined
 		v_assign, // variable name to assign to
 		v_comment, // comment
-		v_concerns, // concerns function call
 		v_defaultValue, // default value
 		v_id, // attribute type id
 		v_json, // include in JSON export/import
@@ -188,11 +184,6 @@ AbstractConstructor =
 	if( v_comment !== undefined )
 	{
 		this.comment = v_comment;
-	}
-
-	if( v_concerns !== undefined )
-	{
-		this.concerns = v_concerns;
 	}
 
 	if( v_defaultValue !== undefined )
@@ -246,7 +237,6 @@ Constructor =
 		v_allowsUndefined, // attribute may be undefined
 		v_assign, // variable name to assign to
 		v_comment, // comment
-		v_concerns, // concerns function call
 		v_defaultValue, // default value
 		v_id, // attribute type id
 		v_json, // include in JSON export/import
@@ -270,8 +260,6 @@ Constructor =
 	this.assign = v_assign;
 
 	this.comment = v_comment;
-
-	this.concerns = v_concerns;
 
 	if( v_defaultValue !== undefined )
 	{
@@ -323,7 +311,6 @@ prototype.abstract =
 		v_allowsUndefined,
 		v_assign,
 		v_comment,
-		v_concerns,
 		v_defaultValue,
 		v_id,
 		v_json,
@@ -342,8 +329,6 @@ prototype.abstract =
 		v_assign = this.assign;
 
 		v_comment = this.comment;
-
-		v_concerns = this.concerns;
 
 		v_defaultValue = this.defaultValue;
 
@@ -400,15 +385,6 @@ prototype.abstract =
 				if( arg !== pass )
 				{
 					v_comment = arg;
-				}
-
-				break;
-
-			case 'concerns' :
-
-				if( arg !== pass )
-				{
-					v_concerns = arg;
 				}
 
 				break;
@@ -486,11 +462,6 @@ prototype.abstract =
 		v_allowsUndefined = false;
 	}
 
-	if( v_concerns === undefined )
-	{
-		v_concerns = null;
-	}
-
 	if( v_json === undefined )
 	{
 		v_json = false;
@@ -553,14 +524,6 @@ prototype.abstract =
 /**/			&&
 /**/			!( v_comment instanceof String )
 /**/		)
-/**/		{
-/**/			throw new Error( );
-/**/		}
-/**/	}
-/**/
-/**/	if( v_concerns !== null && v_concerns !== undefined )
-/**/	{
-/**/		if( v_concerns.reflect !== 'jion_concern' )
 /**/		{
 /**/			throw new Error( );
 /**/		}
@@ -724,16 +687,6 @@ prototype.abstract =
 		v_comment === inherit.comment
 		&&
 		(
-			v_concerns === inherit.concerns
-			||
-			v_concerns !== null
-			&&
-			v_concerns !== undefined
-			&&
-			v_concerns.equals( inherit.concerns )
-		)
-		&&
-		(
 			v_defaultValue === inherit.defaultValue
 			||
 			v_defaultValue !== undefined
@@ -769,7 +722,6 @@ prototype.abstract =
 			v_allowsUndefined,
 			v_assign,
 			v_comment,
-			v_concerns,
 			v_defaultValue,
 			v_id,
 			v_json,
@@ -800,7 +752,6 @@ prototype.create =
 		v_allowsUndefined,
 		v_assign,
 		v_comment,
-		v_concerns,
 		v_defaultValue,
 		v_id,
 		v_json,
@@ -819,8 +770,6 @@ prototype.create =
 		v_assign = this.assign;
 
 		v_comment = this.comment;
-
-		v_concerns = this.concerns;
 
 		v_defaultValue = this.defaultValue;
 
@@ -877,15 +826,6 @@ prototype.create =
 				if( arg !== pass )
 				{
 					v_comment = arg;
-				}
-
-				break;
-
-			case 'concerns' :
-
-				if( arg !== pass )
-				{
-					v_concerns = arg;
 				}
 
 				break;
@@ -961,11 +901,6 @@ prototype.create =
 	if( v_allowsUndefined === undefined )
 	{
 		v_allowsUndefined = false;
-	}
-
-	if( v_concerns === undefined )
-	{
-		v_concerns = null;
 	}
 
 	if( v_json === undefined )
@@ -1044,19 +979,6 @@ prototype.create =
 /**/	)
 /**/	{
 /**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_concerns === undefined )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/
-/**/	if( v_concerns !== null )
-/**/	{
-/**/		if( v_concerns.reflect !== 'jion_concern' )
-/**/		{
-/**/			throw new Error( );
-/**/		}
 /**/	}
 /**/
 /**/	if( v_defaultValue === null )
@@ -1230,12 +1152,6 @@ prototype.create =
 		v_comment === inherit.comment
 		&&
 		(
-			v_concerns === inherit.concerns
-			||
-			v_concerns !== null && v_concerns.equals( inherit.concerns )
-		)
-		&&
-		(
 			v_defaultValue === inherit.defaultValue
 			||
 			v_defaultValue !== undefined
@@ -1271,7 +1187,6 @@ prototype.create =
 			v_allowsUndefined,
 			v_assign,
 			v_comment,
-			v_concerns,
 			v_defaultValue,
 			v_id,
 			v_json,
@@ -1338,12 +1253,6 @@ prototype.equals =
 		this.assign === obj.assign
 		&&
 		this.comment === obj.comment
-		&&
-		(
-			this.concerns === obj.concerns
-			||
-			this.concerns !== null && this.concerns.equals( obj.concerns )
-		)
 		&&
 		(
 			this.defaultValue === obj.defaultValue
