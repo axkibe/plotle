@@ -15,6 +15,7 @@ var
 	jools,
 	root,
 	shell_root,
+	shell_system,
 	startup,
 	system,
 	transmitter;
@@ -42,7 +43,7 @@ transmitter =
 		var
 			message;
 
-		if( _failScreen )
+		if( failScreen )
 		{
 			return;
 		}
@@ -116,7 +117,21 @@ transmitter =
 
 
 var
+	atweenCtrl,
+	atweenMove,
+	atweenPos,
+	atweenShift,
 	atweenTimer,
+	canvas,
+	failScreen,
+	hiddenInput,
+	hoverCtrl,
+	hoverP,
+	hoverShift,
+	inputVal,
+	lastSpecialKey,
+	mainWindowHeight,
+	pointingState,
 	systemTransmitter;
 
 /* atween is the state where the mouse button went down,
@@ -128,49 +143,80 @@ var
 */
 atweenTimer = null;
 
-var
-	// status of shift / ctrl when atween state starte
-	_atweenShift = false,
-	_atweenCtrl = false,
 
-	// position where mouse went down
-	_atweenPos = null,
+/*
+| status of shift / ctrl when atween state starts.
+*/
+atweenCtrl = false;
 
-	// move position where cursor moved to in atween state
-	_atweenMove = null,
+atweenShift = false;
 
-	// hover is getting repeated by events that change
-	// the root, so it can react properly
-	_hoverP = null,
-	_hoverShift = false,
-	_hoverCtrl = false,
 
-	// remembers last special key pressed, to hinder double events.
-	// Opera is behaving stupid here.
-	_lastSpecialKey = -1,
+/*
+| Position where mouse went down.
+*/
+atweenPos = null;
 
-	// if true the system dropped down to show
-	// a fail screen
-	_failScreen = false,
 
-	// the main canvas everything is
-	// drawn upon
-	_canvas,
+/*
+| Move position where cursor moved to in atween state.
+*/
+atweenMove = null;
 
-	// The value expected to be in input.
-	// either nothing or the text selection.
-	// if it changes the user did something.
-	_inputVal =
-		'',
 
-	// the hidden input taking text input
-	_hiddenInput,
+/*
+| if true the system dropped down to show
+| a fail screen
+*/
+failScreen = false;
 
-	// current height of the main window
-	_height,
 
-	// false, 'atween' or 'drag'
-	_pointingState = false;
+/*
+| Hover is getting repeated by events that change
+| the root, so it can react properly.
+*/
+hoverP = null;
+hoverShift = false;
+hoverCtrl = false;
+
+
+/*
+| The value expected to be in input.
+| either nothing or the text selection.
+| if it changes the user did something.
+*/
+inputVal = '';
+
+
+/*
+| Remembers last special key pressed, to hinder double events.
+| Opera is behaving stupid here.
+*/
+lastSpecialKey = -1;
+
+
+/*
+| current height of the main window
+*/
+mainWindowHeight = null;
+
+
+/*
+| The canvas everything is drawn upon.
+*/
+canvas = null;
+
+
+/*
+| The hidden input taking text input.
+*/
+hiddenInput = null;
+
+/*
+| false, 'atween' or 'drag'
+*/
+pointingState = false;
+
 
 /*
 | Creates a catcher that calls a system function.
@@ -196,7 +242,7 @@ systemTransmitter =
 /*
 | The system.
 */
-var shell_system =
+shell_system =
 	function( )
 {
 	if( system )
@@ -204,41 +250,43 @@ var shell_system =
 		throw new Error( );
 	}
 
-	_canvas = document.getElementById( 'canvas' );
+	canvas = document.getElementById( 'canvas' );
 
-	_canvas.width = window.innerWidth - 1;
+	canvas.width = window.innerWidth - 1;
 
-	_canvas.height = window.innerHeight - 1;
+	mainWindowHeight =
+	canvas.height =
+		window.innerHeight - 1;
 
-	this._display = euclid_display.createAroundHTMLCanvas( _canvas );
+	this._display = euclid_display.createAroundHTMLCanvas( canvas );
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
-	this._useCapture = !!_canvas.setCapture;
+	this._useCapture = !!canvas.setCapture;
 
 	// hidden input that forwards all events
-	_hiddenInput = document.getElementById( 'input' );
+	hiddenInput = document.getElementById( 'input' );
 
 	// remembers last pointing device hovering state.
 
-	_canvas.onmousedown = systemTransmitter( '_onMouseDown' );
+	canvas.onmousedown = systemTransmitter( '_onMouseDown' );
 
-	_canvas.onmousemove = systemTransmitter( '_onMouseMove' );
+	canvas.onmousemove = systemTransmitter( '_onMouseMove' );
 
-	_canvas.onmouseup = systemTransmitter( '_onMouseUp' );
+	canvas.onmouseup = systemTransmitter( '_onMouseUp' );
 
-	_canvas.ontouchstart = systemTransmitter( '_onTouchStart' );
+	canvas.ontouchstart = systemTransmitter( '_onTouchStart' );
 
-	_canvas.ontouchmove = systemTransmitter( '_onTouchMove' );
+	canvas.ontouchmove = systemTransmitter( '_onTouchMove' );
 
-	_canvas.ontouchend = systemTransmitter( '_onTouchEnd' );
+	canvas.ontouchend = systemTransmitter( '_onTouchEnd' );
 
-	_canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
+	canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
 
 	// firefox wheel listening
-	_canvas.addEventListener(
+	canvas.addEventListener(
 		'DOMMouseScroll',
-		_canvas.onmousewheel,
+		canvas.onmousewheel,
 		false
 	);
 
@@ -251,7 +299,7 @@ var shell_system =
 
 	window.onblur = systemTransmitter( '_onSystemBlur' );
 
-	_hiddenInput.onblur = systemTransmitter( '_onHiddenInputBlur' );
+	hiddenInput.onblur = systemTransmitter( '_onHiddenInputBlur' );
 
 	document.onkeyup = systemTransmitter( '_onKeyUp' );
 
@@ -270,7 +318,7 @@ var shell_system =
 	// the blink (and check input) timer
 	this._blinkTimer = null;
 
-	_canvas.focus( );
+	canvas.focus( );
 
 	this.restartBlinker( );
 };
@@ -317,18 +365,18 @@ shell_system.prototype.failScreen =
 		console.log( 'failScreen', message );
 	}
 
-	if( _failScreen )
+	if( failScreen )
 	{
 		return;
 	}
 
-	_failScreen = true;
+	failScreen = true;
 
 	body = document.body;
 
-	body.removeChild( _canvas );
+	body.removeChild( canvas );
 
-	body.removeChild( _hiddenInput );
+	body.removeChild( hiddenInput );
 
 	divWrap = document.createElement( 'div' );
 
@@ -412,15 +460,15 @@ shell_system.prototype.setInput =
 		text
 	)
 {
-	_inputVal =
-	_hiddenInput.value =
+	inputVal =
+	hiddenInput.value =
 		'' + text;
 
-	_hiddenInput.selectionStart = 0;
+	hiddenInput.selectionStart = 0;
 
 	if( text !== '' )
 	{
-		_hiddenInput.selectionEnd = text.length;
+		hiddenInput.selectionEnd = text.length;
 	}
 };
 
@@ -454,7 +502,7 @@ shell_system.prototype.textWheelSpeed =
 shell_system.prototype._blink =
 	function( )
 {
-	if( _failScreen )
+	if( failScreen )
 	{
 		return;
 	}
@@ -471,13 +519,13 @@ _resetAtweenState =
 {
 	atweenTimer = null;
 
-	_atweenShift = false;
+	atweenShift = false;
 
-	_atweenCtrl = false;
+	atweenCtrl = false;
 
-	_atweenPos = null;
+	atweenPos = null;
 
-	_atweenMove = null;
+	atweenMove = null;
 };
 
 /*
@@ -491,7 +539,7 @@ shell_system.prototype._onAtweenTime =
 
 /**/if( CHECK )
 /**/{
-/**/	if( _pointingState !== 'atween' )
+/**/	if( pointingState !== 'atween' )
 /**/	{
 /**/		jools.log(
 /**/			'warn',
@@ -502,17 +550,17 @@ shell_system.prototype._onAtweenTime =
 /**/	}
 /**/}
 
-	_pointingState = 'drag';
+	pointingState = 'drag';
 
-	root.dragStart( _atweenPos, _atweenShift, _atweenCtrl );
+	root.dragStart( atweenPos, atweenShift, atweenCtrl );
 
-	cursor = root.dragMove( _atweenMove, _atweenShift, _atweenCtrl );
+	cursor = root.dragMove( atweenMove, atweenShift, atweenCtrl );
 
 	_resetAtweenState( );
 
 	if( cursor !== null )
 	{
-		_canvas.style.cursor = cursor;
+		canvas.style.cursor = cursor;
 	}
 };
 
@@ -562,13 +610,13 @@ shell_system.prototype._onResize =
 	var
 		display;
 
-	_height = window.innerHeight - 1;
+	mainWindowHeight = window.innerHeight - 1;
 
 	display =
 	this._display =
 		this._display.create(
 			'width', window.innerWidth - 1,
-			'height', _height
+			'height', mainWindowHeight
 		);
 
 	if( root )
@@ -586,14 +634,14 @@ shell_system.prototype._captureEvents =
 {
 	if( this._useCapture )
 	{
-		_canvas.setCapture( _canvas );
+		canvas.setCapture( canvas );
 
 		return;
 	}
 
-	document.onmouseup = _canvas.onmouseup;
+	document.onmouseup = canvas.onmouseup;
 
-	document.onmousemove = _canvas.onmousemove;
+	document.onmousemove = canvas.onmousemove;
 };
 
 
@@ -610,8 +658,8 @@ shell_system.prototype._onKeyDown =
 		kcode;
 
 	kcode =
-	_lastSpecialKey =
-			event.keyCode;
+	lastSpecialKey =
+		event.keyCode;
 
 	if(
 		!this._specialKey(
@@ -635,17 +683,18 @@ shell_system.prototype._onKeyPress =
 	)
 {
 	var
-		ew =
-			event.which,
+		ctrl,
+		ew,
+		kcode,
+		shift;
 
-		kcode =
-			event.keyCode,
+	ew = event.which;
 
-		shift =
-			event.shiftKey,
+	kcode = event.keyCode;
 
-		ctrl =
-			event.ctrlKey || event.metaKey;
+	shift = event.shiftKey;
+
+	ctrl = event.ctrlKey || event.metaKey;
 
 	if (
 		(
@@ -653,10 +702,10 @@ shell_system.prototype._onKeyPress =
 			|| ew === 0
 		)
 		&&
-		_lastSpecialKey !== kcode
+		lastSpecialKey !== kcode
 	)
 	{
-		_lastSpecialKey = -1;
+		lastSpecialKey = -1;
 
 		return this._specialKey( kcode, shift, ctrl );
 	}
@@ -668,7 +717,7 @@ shell_system.prototype._onKeyPress =
 		}
 	}
 
-	_lastSpecialKey = -1;
+	lastSpecialKey = -1;
 
 	this._testInput( );
 
@@ -715,7 +764,6 @@ shell_system.prototype._onMouseDown =
 	)
 {
 	var
-		canvas,
 		ctrl,
 		p,
 		shift;
@@ -734,8 +782,6 @@ shell_system.prototype._onMouseDown =
 	// Opera requires focusing the window first
 	window.focus( );
 
-	canvas = _canvas;
-
 	p =
 		euclid_point.create(
 			'x', event.pageX - canvas.offsetLeft,
@@ -746,15 +792,15 @@ shell_system.prototype._onMouseDown =
 
 	ctrl = event.ctrlKey || event.metaKey;
 
-	_pointingState = 'atween';
+	pointingState = 'atween';
 
-	_atweenPos = p;
+	atweenPos = p;
 
-	_atweenMove = p;
+	atweenMove = p;
 
-	_atweenShift = shift;
+	atweenShift = shift;
 
-	_atweenCtrl = ctrl;
+	atweenCtrl = ctrl;
 
 	atweenTimer =
 		this.setTimer(
@@ -781,17 +827,17 @@ shell_system.prototype._pointingHover =
 	var
 		cursor;
 
-	_hoverP = p;
+	hoverP = p;
 
-	_hoverShift = shift;
+	hoverShift = shift;
 
-	_hoverCtrl = ctrl;
+	hoverCtrl = ctrl;
 
 	cursor = root.pointingHover( p, shift, ctrl );
 
 	if( cursor !== null )
 	{
-		_canvas.style.cursor = cursor;
+		canvas.style.cursor = cursor;
 	}
 };
 
@@ -807,16 +853,16 @@ shell_system.prototype._repeatHover =
 	var
 		cursor;
 
-	if( !_hoverP )
+	if( !hoverP )
 	{
 		return;
 	}
 
-	cursor = root.pointingHover( _hoverP, _hoverShift, _hoverCtrl );
+	cursor = root.pointingHover( hoverP, hoverShift, hoverCtrl );
 
 	if( cursor !== null )
 	{
-		_canvas.style.cursor = cursor;
+		canvas.style.cursor = cursor;
 	}
 };
 
@@ -838,8 +884,8 @@ shell_system.prototype._onMouseMove =
 
 	p =
 		euclid_point.create(
-			'x', event.pageX - _canvas.offsetLeft,
-			'y', event.pageY - _canvas.offsetTop
+			'x', event.pageX - canvas.offsetLeft,
+			'y', event.pageY - canvas.offsetTop
 		);
 
 	shift = event.shiftKey;
@@ -848,7 +894,7 @@ shell_system.prototype._onMouseMove =
 
 	cursor = null;
 
-	switch( _pointingState )
+	switch( pointingState )
 	{
 		case false :
 
@@ -865,17 +911,17 @@ shell_system.prototype._onMouseMove =
 			dragbox = _settings.dragbox;
 
 			if(
-				( Math.abs( p.x - _atweenPos.x ) > dragbox )
+				( Math.abs( p.x - atweenPos.x ) > dragbox )
 				||
-				( Math.abs( p.y - _atweenPos.y ) > dragbox )
+				( Math.abs( p.y - atweenPos.y ) > dragbox )
 			)
 			{
 				// moved out of dragbox -> start dragging
 				clearTimeout( atweenTimer );
 
-				_pointingState = 'drag';
+				pointingState = 'drag';
 
-				root.dragStart( _atweenPos, shift, ctrl );
+				root.dragStart( atweenPos, shift, ctrl );
 
 				cursor = root.dragMove( p, shift, ctrl );
 
@@ -886,7 +932,7 @@ shell_system.prototype._onMouseMove =
 			else
 			{
 				// saves position for possible atween timeout
-				_atweenMove = p;
+				atweenMove = p;
 			}
 			break;
 
@@ -904,8 +950,7 @@ shell_system.prototype._onMouseMove =
 
 	if( cursor !== null )
 	{
-		_canvas.style.cursor =
-			cursor;
+		canvas.style.cursor = cursor;
 	}
 
 	return true;
@@ -931,15 +976,15 @@ shell_system.prototype._onMouseUp =
 
 	p =
 		euclid_point.create(
-			'x', event.pageX - _canvas.offsetLeft,
-			'y', event.pageY - _canvas.offsetTop
+			'x', event.pageX - canvas.offsetLeft,
+			'y', event.pageY - canvas.offsetTop
 		);
 
 	shift = event.shiftKey;
 
 	ctrl = event.ctrlKey || event.metaKey;
 
-	switch( _pointingState )
+	switch( pointingState )
 	{
 		case false :
 
@@ -959,7 +1004,7 @@ shell_system.prototype._onMouseUp =
 
 			_resetAtweenState( );
 
-			_pointingState = false;
+			pointingState = false;
 
 			break;
 
@@ -971,7 +1016,7 @@ shell_system.prototype._onMouseUp =
 
 			this._steerAttention( );
 
-			_pointingState = false;
+			pointingState = false;
 
 			break;
 
@@ -998,8 +1043,8 @@ shell_system.prototype._onMouseWheel =
 
 	p =
 		euclid_point.create(
-			'x', event.pageX - _canvas.offsetLeft,
-			'y', event.pageY - _canvas.offsetTop
+			'x', event.pageX - canvas.offsetLeft,
+			'y', event.pageY - canvas.offsetTop
 		);
 
 	if( event.wheelDelta !== undefined )
@@ -1052,23 +1097,23 @@ shell_system.prototype._onTouchStart =
 
 	p =
 		euclid_point.create(
-			'x', event.pageX - _canvas.offsetLeft,
-			'y', event.pageY - _canvas.offsetTop
+			'x', event.pageX - canvas.offsetLeft,
+			'y', event.pageY - canvas.offsetTop
 		),
 
 	shift = event.shiftKey;
 
 	ctrl = event.ctrlKey || event.metaKey;
 
-	_pointingState = 'atween';
+	pointingState = 'atween';
 
-	_atweenPos = p;
+	atweenPos = p;
 
-	_atweenMove = p;
+	atweenMove = p;
 
-	_atweenShift = shift;
+	atweenShift = shift;
 
-	_atweenCtrl = ctrl;
+	atweenCtrl = ctrl;
 
 	atweenTimer =
 		this.setTimer(
@@ -1105,8 +1150,8 @@ shell_system.prototype._onTouchMove =
 
 	p =
 		euclid_point.create(
-			'x', event.pageX - _canvas.offsetLeft,
-			'y', event.pageY - _canvas.offsetTop
+			'x', event.pageX - canvas.offsetLeft,
+			'y', event.pageY - canvas.offsetTop
 		),
 
 	shift = event.shiftKey;
@@ -1115,7 +1160,7 @@ shell_system.prototype._onTouchMove =
 
 	cursor = null;
 
-	switch( _pointingState )
+	switch( pointingState )
 	{
 		case false:
 
@@ -1128,17 +1173,17 @@ shell_system.prototype._onTouchMove =
 			dragbox = _settings.dragbox;
 
 			if(
-				( Math.abs( p.x - _atweenPos.x ) > dragbox )
+				( Math.abs( p.x - atweenPos.x ) > dragbox )
 				||
-				( Math.abs( p.y - _atweenPos.y ) > dragbox )
+				( Math.abs( p.y - atweenPos.y ) > dragbox )
 			)
 			{
 				// moved out of dragbox -> start dragging
 				clearTimeout( atweenTimer );
 
-				_pointingState = 'drag';
+				pointingState = 'drag';
 
-				root.dragStart( _atweenPos, shift, ctrl );
+				root.dragStart( atweenPos, shift, ctrl );
 
 				cursor = root.dragMove( p, shift, ctrl );
 
@@ -1149,7 +1194,7 @@ shell_system.prototype._onTouchMove =
 			else
 			{
 				// saves position for possible atween timeout
-				_atweenMove = p;
+				atweenMove = p;
 			}
 
 			break;
@@ -1195,17 +1240,17 @@ shell_system.prototype._onTouchEnd =
 		euclid_point.create(
 			'x',
 				event.changedTouches[ 0 ].pageX -
-				_canvas.offsetLeft,
+				canvas.offsetLeft,
 			'y',
 				event.changedTouches[ 0 ].pageY -
-				_canvas.offsetTop
+				canvas.offsetTop
 		);
 
 	shift = event.shiftKey;
 
 	ctrl = event.ctrlKey || event.metaKey;
 
-	switch( _pointingState )
+	switch( pointingState )
 	{
 		case false :
 
@@ -1226,7 +1271,7 @@ shell_system.prototype._onTouchEnd =
 
 			_resetAtweenState( );
 
-			_pointingState = false;
+			pointingState = false;
 
 			break;
 
@@ -1242,7 +1287,7 @@ shell_system.prototype._onTouchEnd =
 
 			this._steerAttention( );
 
-			_pointingState = false;
+			pointingState = false;
 
 			break;
 
@@ -1263,15 +1308,14 @@ shell_system.prototype._releaseEvents =
 {
 	if ( this._useCapture )
 	{
-		document.releaseCapture( _canvas );
+		document.releaseCapture( canvas );
 
 		return;
 	}
 
-	document.onmouseup =
-		null;
-	document.onmousemove =
-		null;
+	document.onmouseup = null;
+
+	document.onmousemove = null;
 };
 
 
@@ -1436,21 +1480,19 @@ shell_system.prototype._testInput =
 		hi,
 		text;
 
-	hi = _hiddenInput;
+	hi = hiddenInput;
 
 	text = hi.value;
 
 	// works around opera quirks inserting CR characters
 	text = text.replace( /\r/g, '' );
 
-	if( text === _inputVal || !root )
+	if( text === inputVal || !root )
 	{
 		return;
 	}
 
-	hi.value =
-	_inputVal =
-		'';
+	hi.value = inputVal = '';
 
 	hi.selectionStart = 0;
 
@@ -1477,32 +1519,27 @@ shell_system.prototype._steerAttention =
 
 	if( ac === null )
 	{
-		_hiddenInput.style.top = '0';
+		hiddenInput.style.top = '0';
 	}
 	else
 	{
-		ac =
-			jools.limit(
-				0,
-				ac,
-				_height - 15
-			);
+		ac = jools.limit( 0, ac, mainWindowHeight - 15 );
 
-		_hiddenInput.style.top = ac + 'px';
+		hiddenInput.style.top = ac + 'px';
 	}
 
 	if( root.suggestingKeyboard( ) )
 	{
-		_hiddenInput.focus( );
+		hiddenInput.focus( );
 
-		if( _hiddenInput.scrollIntoViewIfNeeded )
+		if( hiddenInput.scrollIntoViewIfNeeded )
 		{
-			_hiddenInput.scrollIntoViewIfNeeded( true );
+			hiddenInput.scrollIntoViewIfNeeded( true );
 		}
 	}
 	else
 	{
-		_canvas.focus( );
+		canvas.focus( );
 	}
 };
 
@@ -1524,7 +1561,7 @@ startup = function( )
 				shell_root.startup( system._display );
 
 				// FIXME work on IOS
-				_hiddenInput.focus( );
+				hiddenInput.focus( );
 			},
 			true
 		);
