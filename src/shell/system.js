@@ -9,7 +9,6 @@
 | Export
 */
 var
-	catcher,
 	config,
 	euclid_display,
 	euclid_point,
@@ -17,7 +16,8 @@ var
 	root,
 	shell_root,
 	startup,
-	system;
+	system,
+	transmitter;
 
 
 /*
@@ -31,7 +31,7 @@ var
 | Catches all error a function throws
 | and coorects hover and attention steering.
 */
-catcher =
+transmitter =
 	function(
 		func,        // event function to wrap
 		nosteering   // if true it won't stear hovering/attention
@@ -115,16 +115,20 @@ catcher =
 };
 
 
+var
+	atweenTimer,
+	systemTransmitter;
+
+/* atween is the state where the mouse button went down,
+| and its yet unsure if this is a click or drag.
+| if the mouse moves out of the atweenBox or the atweenTimer ticks its
+| a drag, if it goes up before either happens, its a click
+|
+| timer of the atween state
+*/
+atweenTimer = null;
 
 var
-	// atween is the state where the mouse button went down,
-	// and its yet unsure if this is a click or drag.
-	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
-	// a drag, if it goes up before either happens, its a click
-	//
-	// timer of the atween state
-	_atweenTimer = null,
-
 	// status of shift / ctrl when atween state starte
 	_atweenShift = false,
 	_atweenCtrl = false,
@@ -171,13 +175,13 @@ var
 /*
 | Creates a catcher that calls a system function.
 */
-var _systemCatcher =
+systemTransmitter =
 	function(
 		funcName  // name of the function to call
 	)
 {
 	return(
-		catcher(
+		transmitter(
 			function( )
 			{
 				system[ funcName ].apply( system, arguments );
@@ -217,19 +221,19 @@ var shell_system =
 
 	// remembers last pointing device hovering state.
 
-	_canvas.onmousedown = _systemCatcher( '_onMouseDown' );
+	_canvas.onmousedown = systemTransmitter( '_onMouseDown' );
 
-	_canvas.onmousemove = _systemCatcher( '_onMouseMove' );
+	_canvas.onmousemove = systemTransmitter( '_onMouseMove' );
 
-	_canvas.onmouseup = _systemCatcher( '_onMouseUp' );
+	_canvas.onmouseup = systemTransmitter( '_onMouseUp' );
 
-	_canvas.ontouchstart = _systemCatcher( '_onTouchStart' );
+	_canvas.ontouchstart = systemTransmitter( '_onTouchStart' );
 
-	_canvas.ontouchmove = _systemCatcher( '_onTouchMove' );
+	_canvas.ontouchmove = systemTransmitter( '_onTouchMove' );
 
-	_canvas.ontouchend = _systemCatcher( '_onTouchEnd' );
+	_canvas.ontouchend = systemTransmitter( '_onTouchEnd' );
 
-	_canvas.onmousewheel = _systemCatcher( '_onMouseWheel' );
+	_canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
 
 	// firefox wheel listening
 	_canvas.addEventListener(
@@ -241,27 +245,27 @@ var shell_system =
 	// iPad sometimes starts just somewhere
 	window.scrollTo( 0, 0 );
 
-	window.onresize = _systemCatcher( '_onResize' );
+	window.onresize = systemTransmitter( '_onResize' );
 
-	window.onfocus = _systemCatcher( '_onSystemFocus' );
+	window.onfocus = systemTransmitter( '_onSystemFocus' );
 
-	window.onblur = _systemCatcher( '_onSystemBlur' );
+	window.onblur = systemTransmitter( '_onSystemBlur' );
 
-	_hiddenInput.onblur = _systemCatcher( '_onHiddenInputBlur' );
+	_hiddenInput.onblur = systemTransmitter( '_onHiddenInputBlur' );
 
-	document.onkeyup = _systemCatcher( '_onKeyUp' );
+	document.onkeyup = systemTransmitter( '_onKeyUp' );
 
-	document.onkeydown = _systemCatcher( '_onKeyDown' );
+	document.onkeydown = systemTransmitter( '_onKeyDown' );
 
-	document.onkeypress = _systemCatcher( '_onKeyPress' );
+	document.onkeypress = systemTransmitter( '_onKeyPress' );
 
-	this._testInputCatcher = _systemCatcher( '_testInput' );
+	this._testInputTransmitter = systemTransmitter( '_testInput' );
 
-	this._onAtweenTimeCatcher = _systemCatcher( '_onAtweenTime' );
+	this._onAtweenTimeTransmitter = systemTransmitter( '_onAtweenTime' );
 
-	this._blinkCatcher = _systemCatcher( '_blink' );
+	this._blinkTransmitter = systemTransmitter( '_blink' );
 
-	document.oncontextmenu = _systemCatcher( '_onContextMenu' );
+	document.oncontextmenu = systemTransmitter( '_onContextMenu' );
 
 	// the blink (and check input) timer
 	this._blinkTimer = null;
@@ -392,10 +396,11 @@ shell_system.prototype.restartBlinker =
 		clearInterval( this._blinkTimer );
 	}
 
-	this._blinkTimer = setInterval(
-		this._blinkCatcher,
-		_settings.caretBlinkSpeed
-	);
+	this._blinkTimer =
+		setInterval(
+			this._blinkTransmitter,
+			_settings.caretBlinkSpeed
+		);
 };
 
 
@@ -429,7 +434,7 @@ shell_system.prototype.setTimer =
 		callback
 	)
 {
-	return window.setTimeout( catcher( callback, true ), time );
+	return window.setTimeout( transmitter( callback, true ), time );
 };
 
 
@@ -464,7 +469,7 @@ var
 _resetAtweenState =
 	function( )
 {
-	_atweenTimer = null;
+	atweenTimer = null;
 
 	_atweenShift = false;
 
@@ -667,7 +672,7 @@ shell_system.prototype._onKeyPress =
 
 	this._testInput( );
 
-	this.setTimer( 0, this._testInputCatcher );
+	this.setTimer( 0, this._testInputTransmitter );
 
 	return true;
 };
@@ -751,10 +756,10 @@ shell_system.prototype._onMouseDown =
 
 	_atweenCtrl = ctrl;
 
-	_atweenTimer =
+	atweenTimer =
 		this.setTimer(
 			_settings.dragtime,
-			this._onAtweenTimeCatcher
+			this._onAtweenTimeTransmitter
 		);
 
 	this._pointingHover( p, shift, ctrl );
@@ -866,7 +871,7 @@ shell_system.prototype._onMouseMove =
 			)
 			{
 				// moved out of dragbox -> start dragging
-				clearTimeout( _atweenTimer );
+				clearTimeout( atweenTimer );
 
 				_pointingState = 'drag';
 
@@ -944,7 +949,7 @@ shell_system.prototype._onMouseUp =
 
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
-			clearTimeout( _atweenTimer );
+			clearTimeout( atweenTimer );
 
 			root.click( p, shift, ctrl );
 
@@ -1065,10 +1070,10 @@ shell_system.prototype._onTouchStart =
 
 	_atweenCtrl = ctrl;
 
-	_atweenTimer =
+	atweenTimer =
 		this.setTimer(
 			_settings.dragtime,
-			this._onAtweenTimeCatcher
+			this._onAtweenTimeTransmitter
 		);
 
 	return false;
@@ -1129,7 +1134,7 @@ shell_system.prototype._onTouchMove =
 			)
 			{
 				// moved out of dragbox -> start dragging
-				clearTimeout( _atweenTimer );
+				clearTimeout( atweenTimer );
 
 				_pointingState = 'drag';
 
@@ -1211,7 +1216,7 @@ shell_system.prototype._onTouchEnd =
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
 
-			clearTimeout( _atweenTimer );
+			clearTimeout( atweenTimer );
 
 			root.click( p, shift, ctrl );
 
@@ -1511,7 +1516,7 @@ startup = function( )
 		start;
 
 	start =
-		catcher(
+		transmitter(
 			function( )
 			{
 				system = new shell_system( );

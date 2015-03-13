@@ -4,9 +4,9 @@
 
 
 var
-	catcher,
 	net_requestWrap,
-	root;
+	root,
+	transmitter;
 
 
 /*
@@ -18,7 +18,7 @@ var
 
 var
 	onReply,
-	onReplyCatcher;
+	onReplyTransmitter;
 
 
 /*
@@ -145,7 +145,7 @@ onReply =
 };
 
 
-onReplyCatcher = null;
+onReplyTransmitter = null;
 
 
 /*
@@ -173,12 +173,12 @@ net_requestWrap.prototype.send =
 		'application/x-www-form-urlencoded'
 	);
 
-	if( !onReplyCatcher )
+	if( !onReplyTransmitter )
 	{
-		onReplyCatcher = catcher( onReply );
+		onReplyTransmitter = transmitter( onReply );
 	}
 
-	xhr.onreadystatechange = onReplyCatcher;
+	xhr.onreadystatechange = onReplyTransmitter;
 
 	xhr.send( JSON.stringify( this.request ) );
 
