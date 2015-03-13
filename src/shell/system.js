@@ -132,6 +132,7 @@ var
 	lastSpecialKey,
 	mainWindowHeight,
 	pointingState,
+	prototype,
 	receiver,
 	settings,
 	systemTransmitter;
@@ -353,10 +354,13 @@ shell_system =
 };
 
 
+prototype = shell_system.prototype;
+
+
 /*
 | Replaces the shell by a failscreen
 */
-shell_system.prototype.failScreen =
+prototype.failScreen =
 	function(
 		message
 	)
@@ -433,7 +437,7 @@ shell_system.prototype.failScreen =
 /*
 | Cancels a timer
 */
-shell_system.prototype.cancelTimer =
+prototype.cancelTimer =
 	function( id )
 {
 	return window.clearTimeout( id );
@@ -443,7 +447,7 @@ shell_system.prototype.cancelTimer =
 /*
 | (Re)Starts the blink timer
 */
-shell_system.prototype.restartBlinker =
+prototype.restartBlinker =
 	function( )
 {
 	// double uses the blink timer
@@ -465,7 +469,7 @@ shell_system.prototype.restartBlinker =
 /*
 | Sets the hidden input field (text selection)
 */
-shell_system.prototype.setInput =
+prototype.setInput =
 	function(
 		text
 	)
@@ -486,7 +490,7 @@ shell_system.prototype.setInput =
 /*
 | Sets a timer with an error catcher
 */
-shell_system.prototype.setTimer =
+prototype.setTimer =
 	function(
 		time,
 		callback
@@ -499,7 +503,7 @@ shell_system.prototype.setTimer =
 /*
 | Pixels to scroll on a wheel event
 */
-shell_system.prototype.textWheelSpeed =
+prototype.textWheelSpeed =
 	12 * 5;
 
 
@@ -509,7 +513,7 @@ shell_system.prototype.textWheelSpeed =
 /*
 | Blinks the caret
 */
-shell_system.prototype._blink =
+prototype._blink =
 	function( )
 {
 	if( failScreen )
@@ -541,7 +545,7 @@ _resetAtweenState =
 /*
 | timeout after mouse down so dragging starts
 */
-shell_system.prototype._onAtweenTime =
+prototype._onAtweenTime =
 	function( )
 {
 	var
@@ -578,7 +582,7 @@ shell_system.prototype._onAtweenTime =
 /*
 | Lost focus.
 */
-shell_system.prototype._onSystemBlur =
+prototype._onSystemBlur =
 	function(
 		// event
 	)
@@ -587,7 +591,7 @@ shell_system.prototype._onSystemBlur =
 };
 
 
-shell_system.prototype._onHiddenInputBlur =
+prototype._onHiddenInputBlur =
 	function(
 		// event
 	)
@@ -600,7 +604,7 @@ shell_system.prototype._onHiddenInputBlur =
 /*
 | Got focus.
 */
-shell_system.prototype._onSystemFocus =
+prototype._onSystemFocus =
 	function(
 		// event
 	)
@@ -612,7 +616,7 @@ shell_system.prototype._onSystemFocus =
 /*
 | Window is being resized.
 */
-shell_system.prototype._onResize =
+prototype._onResize =
 	function(
 		// event
 	)
@@ -639,7 +643,7 @@ shell_system.prototype._onResize =
 /*
 | Captures all mouseevents event beyond the canvas (for dragging)
 */
-shell_system.prototype._captureEvents =
+prototype._captureEvents =
 	function( )
 {
 	if( this._useCapture )
@@ -659,7 +663,7 @@ shell_system.prototype._captureEvents =
 | Key down on hidden input field.
 | Used when suggesting a keyboard.
 */
-shell_system.prototype._onKeyDown =
+prototype._onKeyDown =
 	function(
 		event
 	)
@@ -687,7 +691,7 @@ shell_system.prototype._onKeyDown =
 /*
 | Hidden input key press.
 */
-shell_system.prototype._onKeyPress =
+prototype._onKeyPress =
 	function(
 		event
 	)
@@ -736,7 +740,7 @@ shell_system.prototype._onKeyPress =
 /*
 | Hidden input key up.
 */
-shell_system.prototype._onKeyUp =
+prototype._onKeyUp =
 	function(
 		// event
 	)
@@ -750,7 +754,7 @@ shell_system.prototype._onKeyUp =
 /*
 | Disables context menues.
 */
-shell_system.prototype._onContextMenu =
+prototype._onContextMenu =
 	function(
 		event
 	)
@@ -764,7 +768,7 @@ shell_system.prototype._onContextMenu =
 /*
 | Mouse down event.
 */
-shell_system.prototype._onMouseDown =
+prototype._onMouseDown =
 	function(
 		event
 	)
@@ -786,7 +790,7 @@ shell_system.prototype._onMouseDown =
 	}
 
 	// Opera requires focusing the window first
-	window.focus( );
+	//window.focus( );
 
 	p =
 		euclid_point.create(
@@ -823,7 +827,7 @@ shell_system.prototype._onMouseDown =
 /*
 | Handles hovering of the pointing device.
 */
-shell_system.prototype._pointingHover =
+prototype._pointingHover =
 	function(
 		p,
 		shift,
@@ -853,7 +857,7 @@ shell_system.prototype._pointingHover =
 |
 | Used by asyncEvents so the hoveringState is corrected.
 */
-shell_system.prototype._repeatHover =
+prototype._repeatHover =
 	function( )
 {
 	var
@@ -876,7 +880,7 @@ shell_system.prototype._repeatHover =
 /*
 | Mouse move event.
 */
-shell_system.prototype._onMouseMove =
+prototype._onMouseMove =
 	function(
 		event
 	)
@@ -904,11 +908,7 @@ shell_system.prototype._onMouseMove =
 	{
 		case false :
 
-			this._pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+			this._pointingHover( p, shift, ctrl );
 
 			break;
 
@@ -966,7 +966,7 @@ shell_system.prototype._onMouseMove =
 /*
 | Mouse up event.
 */
-shell_system.prototype._onMouseUp =
+prototype._onMouseUp =
 	function(
 		event
 	)
@@ -1038,7 +1038,7 @@ shell_system.prototype._onMouseUp =
 /*
 | The mouse wheel is being turned.
 */
-shell_system.prototype._onMouseWheel =
+prototype._onMouseWheel =
 	function(
 		event
 	)
@@ -1071,19 +1071,14 @@ shell_system.prototype._onMouseWheel =
 		return;
 	}
 
-	root.mousewheel(
-		p,
-		dir,
-		event.shiftKey,
-		event.ctrlKey || event.metaKey
-	);
+	root.mousewheel( p, dir, event.shiftKey, event.ctrlKey || event.metaKey );
 };
 
 
 /*
 | The user is touching something ( on mobile devices )
 */
-shell_system.prototype._onTouchStart =
+prototype._onTouchStart =
 	function(
 		event
 	)
@@ -1134,7 +1129,7 @@ shell_system.prototype._onTouchStart =
 /*
 | The use is moving the touch ( on mobile devices )
 */
-shell_system.prototype._onTouchMove =
+prototype._onTouchMove =
 	function(
 		event
 	)
@@ -1224,8 +1219,10 @@ shell_system.prototype._onTouchMove =
 /*
 | The using is lifting his/her finger ( on mobile devices)
 */
-shell_system.prototype._onTouchEnd =
-	function( event )
+prototype._onTouchEnd =
+	function(
+		event
+	)
 {
 	var
 		p,
@@ -1283,11 +1280,7 @@ shell_system.prototype._onTouchEnd =
 
 		case 'drag' :
 
-			root.dragStop(
-				p,
-				shift,
-				ctrl
-			);
+			root.dragStop( p, shift, ctrl );
 
 			this._pointingHover( p, shift, ctrl );
 
@@ -1309,7 +1302,7 @@ shell_system.prototype._onTouchEnd =
 /*
 | Stops capturing all mouseevents
 */
-shell_system.prototype._releaseEvents =
+prototype._releaseEvents =
 	function( )
 {
 	if ( this._useCapture )
@@ -1328,7 +1321,7 @@ shell_system.prototype._releaseEvents =
 /*
 | A special key is being pressed.
 */
-shell_system.prototype._specialKey =
+prototype._specialKey =
 	function(
 		keyCode,
 		shift,
@@ -1344,36 +1337,31 @@ shell_system.prototype._specialKey =
 		{
 			case 65 :
 
-				key =
-					'a';
+				key = 'a';
 
 				break;
 
 			case 89 :
 
-				key =
-					'y';
+				key = 'y';
 
 				break;
 
 			case 90 :
 
-				key =
-					'z';
+				key = 'z';
 
 				break;
 
 			case 188 :
 
-				key =
-					',';
+				key = ',';
 
 				break;
 
 			case 190 :
 
-				key =
-					'.';
+				key = '.';
 
 				break;
 		}
@@ -1479,7 +1467,7 @@ shell_system.prototype._specialKey =
 /*
 | Tests if the hidden input field got data
 */
-shell_system.prototype._testInput =
+prototype._testInput =
 	function( )
 {
 	var
@@ -1515,7 +1503,7 @@ shell_system.prototype._testInput =
 | and if takes care the caret is scrolled into
 | visible screen area
 */
-shell_system.prototype._steerAttention =
+prototype._steerAttention =
 	function( )
 {
 	var
@@ -1536,6 +1524,7 @@ shell_system.prototype._steerAttention =
 
 	if( root.suggestingKeyboard( ) )
 	{
+		console.log( 'HI' );
 		hiddenInput.focus( );
 
 		if( hiddenInput.scrollIntoViewIfNeeded )
@@ -1545,6 +1534,7 @@ shell_system.prototype._steerAttention =
 	}
 	else
 	{
+		console.log( 'R' );
 		receiver.focus( );
 	}
 };
