@@ -15,8 +15,9 @@
 . _base1
 . _base2
 . _blink
-. _blinkCatcher
 . _blinkTimer
+. _blinkTransmitter
+. _border
 . _captureEvents
 . _changeZoom
 . _check
@@ -29,7 +30,6 @@
 . _display
 . _drawCaret
 . _drawn
-. _edge
 . _fieldSpaceTag
 . _fieldSpaceUser
 . _fifo
@@ -65,7 +65,7 @@
 . _normalize
 . _onAcquireSpace
 . _onAtweenTime
-. _onAtweenTimeCatcher
+. _onAtweenTimeTransmitter
 . _onAuth
 . _onContextMenu
 . _onHiddenInputBlur
@@ -105,8 +105,9 @@
 . _sketchShape
 . _specialKey
 . _steerAttention
+. _systemFocus
 . _testInput
-. _testInputCatcher
+. _testInputTransmitter
 . _transformChangeRay
 . _transformChangeSet
 . _transformChangeWrap
@@ -161,7 +162,6 @@
 . appendNC
 . appendRay
 > apply
-. args
 . array
 . arrow
 . askew
@@ -237,7 +237,6 @@
 . compute
 . computeEllipse
 . concat
-. concerns
 . concernsHover
 . concernsMark
 . connect
@@ -298,7 +297,6 @@
 . drawHandles
 > drawImage
 > e
-. edge
 . edistance
 . ellipse
 . ellipseA
@@ -348,7 +346,6 @@
 . front
 . fullSkewNW
 . fullname
-. func
 > function
 . genericButton
 . genjion
@@ -484,7 +481,6 @@
 . maxUndo
 . maxlen
 > measureText
-. member
 > message
 . message1
 > metaKey
@@ -563,6 +559,7 @@
 . paraPNWs
 . paraSep
 > parse
+. pass
 > passhash
 > password
 . password2Input
@@ -584,11 +581,11 @@
 . pos1
 . positioning
 > pow
+. prepare
 . prepend
 > prev
 > preventDefault
 . proper
-. proto
 > prototype
 > pse
 . puffed
@@ -680,7 +677,6 @@
 > set
 . setCapture
 . setDefaultFonts
-. setFocus
 . setInput
 > setItem
 . setPath
@@ -738,6 +734,7 @@
 . suggestingKeyboard
 . superFrame
 > sw
+. systemFocus
 > tag
 > text
 > textAlign

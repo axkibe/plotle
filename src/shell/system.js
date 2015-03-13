@@ -132,6 +132,8 @@ var
 	lastSpecialKey,
 	mainWindowHeight,
 	pointingState,
+	receiver,
+	settings,
 	systemTransmitter;
 
 /* atween is the state where the mouse button went down,
@@ -208,6 +210,13 @@ canvas = null;
 
 
 /*
+| A hidden div used as event receiver instead of input
+| to hint an onScreenKeyboard is not to be shown.
+*/
+receiver = null;
+
+
+/*
 | The hidden input taking text input.
 */
 hiddenInput = null;
@@ -216,6 +225,28 @@ hiddenInput = null;
 | false, 'atween' or 'drag'
 */
 pointingState = false;
+
+/*
+| Default system behavior settings
+*/
+settings =
+	{
+		// blink speed of the caret.
+		caretBlinkSpeed : 530,
+
+		// milliseconds after mouse down, dragging starts
+		dragtime : 400,
+
+		// pixels after mouse down and move, dragging starts
+		dragbox : 10
+	};
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( settings );
+/**/}
+
+
 
 
 /*
@@ -252,6 +283,8 @@ shell_system =
 
 	canvas = document.getElementById( 'canvas' );
 
+	receiver = document.getElementById( 'receiver' );
+
 	canvas.width = window.innerWidth - 1;
 
 	mainWindowHeight =
@@ -284,11 +317,7 @@ shell_system =
 	canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
 
 	// firefox wheel listening
-	canvas.addEventListener(
-		'DOMMouseScroll',
-		canvas.onmousewheel,
-		false
-	);
+	canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false );
 
 	// iPad sometimes starts just somewhere
 	window.scrollTo( 0, 0 );
@@ -318,31 +347,10 @@ shell_system =
 	// the blink (and check input) timer
 	this._blinkTimer = null;
 
-	canvas.focus( );
+	receiver.focus( );
 
 	this.restartBlinker( );
 };
-
-
-/*
-| Default system behavior settings
-*/
-var _settings =
-	{
-		// blink speed of the caret.
-		caretBlinkSpeed : 530,
-
-		// milliseconds after mouse down, dragging starts
-		dragtime : 400,
-
-		// pixels after mouse down and move, dragging starts
-		dragbox : 10
-	};
-
-/**/if( FREEZE )
-/**/{
-/**/	Object.freeze( _settings );
-/**/}
 
 
 /*
@@ -375,6 +383,8 @@ shell_system.prototype.failScreen =
 	body = document.body;
 
 	body.removeChild( canvas );
+
+	body.removeChild( receiver );
 
 	body.removeChild( hiddenInput );
 
@@ -447,7 +457,7 @@ shell_system.prototype.restartBlinker =
 	this._blinkTimer =
 		setInterval(
 			this._blinkTransmitter,
-			_settings.caretBlinkSpeed
+			settings.caretBlinkSpeed
 		);
 };
 
@@ -583,7 +593,8 @@ shell_system.prototype._onHiddenInputBlur =
 	)
 {
 	// resets the view on ipad
-	window.scrollTo( 0, 0 );
+	console.log( 'XXX');
+//	window.scrollTo( 0, 0 );
 };
 
 
@@ -696,13 +707,9 @@ shell_system.prototype._onKeyPress =
 
 	ctrl = event.ctrlKey || event.metaKey;
 
-	if (
-		(
-			( kcode > 0 && kcode < 32)
-			|| ew === 0
-		)
-		&&
-		lastSpecialKey !== kcode
+	if(
+		( ( kcode > 0 && kcode < 32) || ew === 0)
+		&& lastSpecialKey !== kcode
 	)
 	{
 		lastSpecialKey = -1;
@@ -804,7 +811,7 @@ shell_system.prototype._onMouseDown =
 
 	atweenTimer =
 		this.setTimer(
-			_settings.dragtime,
+			settings.dragtime,
 			this._onAtweenTimeTransmitter
 		);
 
@@ -908,7 +915,7 @@ shell_system.prototype._onMouseMove =
 
 		case 'atween' :
 
-			dragbox = _settings.dragbox;
+			dragbox = settings.dragbox;
 
 			if(
 				( Math.abs( p.x - atweenPos.x ) > dragbox )
@@ -1117,7 +1124,7 @@ shell_system.prototype._onTouchStart =
 
 	atweenTimer =
 		this.setTimer(
-			_settings.dragtime,
+			settings.dragtime,
 			this._onAtweenTimeTransmitter
 		);
 
@@ -1170,7 +1177,7 @@ shell_system.prototype._onTouchMove =
 
 		case 'atween':
 
-			dragbox = _settings.dragbox;
+			dragbox = settings.dragbox;
 
 			if(
 				( Math.abs( p.x - atweenPos.x ) > dragbox )
@@ -1539,7 +1546,7 @@ shell_system.prototype._steerAttention =
 	}
 	else
 	{
-		canvas.focus( );
+		receiver.focus( );
 	}
 };
 

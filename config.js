@@ -139,8 +139,8 @@ config.debug.puffed = true;
 | Activates all hacks needed to debug the client with weinre.
 | Set to false/null or the address of the weinre server
 */
+config.debug.weinre = '131.130.188.200:8080';
 config.debug.weinre = false;
-//config.debug.weinre = '192.168.77.1:8080';
 
 
 /*

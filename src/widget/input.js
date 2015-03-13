@@ -60,7 +60,7 @@ if( JION )
 						comment : 'component hovered upon',
 						type : 'jion_path',
 						defaultValue : 'null',
-						prepare : 'widget_widget.concernsHover( hover, path )',
+						prepare : 'widget_widget.concernsHover( hover, path )'
 					},
 				font :
 					{
