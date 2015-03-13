@@ -133,7 +133,6 @@ var
 	mainWindowHeight,
 	pointingState,
 	prototype,
-	receiver,
 	settings,
 	systemTransmitter;
 
@@ -211,13 +210,6 @@ canvas = null;
 
 
 /*
-| A hidden div used as event receiver instead of input
-| to hint an onScreenKeyboard is not to be shown.
-*/
-receiver = null;
-
-
-/*
 | The hidden input taking text input.
 */
 hiddenInput = null;
@@ -284,8 +276,6 @@ shell_system =
 
 	canvas = document.getElementById( 'canvas' );
 
-	receiver = document.getElementById( 'receiver' );
-
 	canvas.width = window.innerWidth - 1;
 
 	mainWindowHeight =
@@ -301,39 +291,37 @@ shell_system =
 	// hidden input that forwards all events
 	hiddenInput = document.getElementById( 'input' );
 
-	// remembers last pointing device hovering state.
+	canvas.onmousedown = systemTransmitter( '_onMouseDown' );
 
-	//canvas.onmousedown = systemTransmitter( '_onMouseDown' );
+	canvas.onmousemove = systemTransmitter( '_onMouseMove' );
 
-	//canvas.onmousemove = systemTransmitter( '_onMouseMove' );
-
-	//canvas.onmouseup = systemTransmitter( '_onMouseUp' );
+	canvas.onmouseup = systemTransmitter( '_onMouseUp' );
 
 	canvas.ontouchstart = systemTransmitter( '_onTouchStart' );
 
-	//canvas.ontouchmove = systemTransmitter( '_onTouchMove' );
+	canvas.ontouchmove = systemTransmitter( '_onTouchMove' );
 
 	canvas.ontouchend = systemTransmitter( '_onTouchEnd' );
 
-	//canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
+	canvas.onmousewheel = systemTransmitter( '_onMouseWheel' );
 
 	// firefox wheel listening
-	//canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false );
+	canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false );
 
 	// iPad sometimes starts just somewhere
 	window.scrollTo( 0, 0 );
 
-	//window.onresize = systemTransmitter( '_onResize' );
+	window.onresize = systemTransmitter( '_onResize' );
 
-	//window.onfocus = systemTransmitter( '_onSystemFocus' );
+	window.onfocus = systemTransmitter( '_onSystemFocus' );
 
-	//window.onblur = systemTransmitter( '_onSystemBlur' );
+	window.onblur = systemTransmitter( '_onSystemBlur' );
 
-	//document.onkeyup = systemTransmitter( '_onKeyUp' );
+	document.onkeyup = systemTransmitter( '_onKeyUp' );
 
-	//document.onkeydown = systemTransmitter( '_onKeyDown' );
+	document.onkeydown = systemTransmitter( '_onKeyDown' );
 
-	//document.onkeypress = systemTransmitter( '_onKeyPress' );
+	document.onkeypress = systemTransmitter( '_onKeyPress' );
 
 	this._testInputTransmitter = systemTransmitter( '_testInput' );
 
@@ -345,8 +333,6 @@ shell_system =
 
 	// the blink (and check input) timer
 	this._blinkTimer = null;
-
-	receiver.focus( );
 
 	this.restartBlinker( );
 };
@@ -385,8 +371,6 @@ prototype.failScreen =
 	body = document.body;
 
 	body.removeChild( canvas );
-
-	body.removeChild( receiver );
 
 	body.removeChild( hiddenInput );
 
@@ -1506,7 +1490,7 @@ prototype._steerAttention =
 
 //		window.scrollTo( 0, 0 );
 
-		receiver.focus( );
+		hiddenInput.blur( );
 	}
 	else
 	{
