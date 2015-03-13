@@ -593,8 +593,7 @@ shell_system.prototype._onHiddenInputBlur =
 	)
 {
 	// resets the view on ipad
-	console.log( 'XXX');
-//	window.scrollTo( 0, 0 );
+	window.scrollTo( 0, 0 );
 };
 
 
@@ -1568,7 +1567,7 @@ startup = function( )
 				shell_root.startup( system._display );
 
 				// FIXME work on IOS
-				hiddenInput.focus( );
+				//hiddenInput.focus( );
 			},
 			true
 		);
