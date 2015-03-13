@@ -231,13 +231,11 @@ widget_checkbox.prototype.specialKey =
 */
 widget_checkbox.prototype.input =
 	function(
-		// text
+		text
 	)
 {
-	root.setPath(
-		this.path.append( 'checked' ),
-		!this.checked
-	);
+	console.log( 'I', text ) ;
+	root.setPath( this.path.append( 'checked' ), !this.checked );
 
 	return true;
 };

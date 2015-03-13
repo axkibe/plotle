@@ -27,16 +27,14 @@ var
 'use strict';
 
 
-var
-	_catcher;
-
-
 /*
-| Catches all errors a function throws if config.devel is set.
+| Catches all error a function throws
+| and coorects hover and attention steering.
 */
-_catcher =
+catcher =
 	function(
-		func
+		func,        // event function to wrap
+		nosteering   // if true it won't stear hovering/attention
 	)
 {
 	return function( )
@@ -44,16 +42,26 @@ _catcher =
 		var
 			message;
 
+		if( _failScreen )
+		{
+			return;
+		}
+
 		if( config.devel && !config.debug.weinre )
 		{
 			func.apply( this, arguments );
+
+			if( !nosteering )
+			{
+				system._repeatHover( );
+
+				system._steerAttention( );
+			}
 
 			if( root )
 			{
 				root.draw( );
 
-				// FIXME make a root.clipboard lazyValue and
-				// use it here and below
 				system.setInput( root._mark ? root._mark.clipboard : '' );
 			}
 
@@ -63,6 +71,10 @@ _catcher =
 		try
 		{
 			func.apply( this, arguments );
+
+			system._repeatHover( );
+
+			system._steerAttention( );
 
 			if( root )
 			{
@@ -101,6 +113,7 @@ _catcher =
 		}
 	};
 };
+
 
 
 var
@@ -156,88 +169,6 @@ var
 	_pointingState = false;
 
 /*
-| This public version of the catcher is
-| to be used by asynchronous events
-| (especially network events)
-*/
-catcher =
-	function( func )
-{
-	return function( )
-	{
-		var message;
-
-		if( _failScreen )
-		{
-			return;
-		}
-
-		if( config.devel && !config.debug.weinre )
-		{
-			func.apply( this, arguments );
-
-			system._repeatHover( );
-
-			system._steerAttention( );
-
-			if( root )
-			{
-				root.draw( );
-
-				system.setInput( root._mark ? root._mark.clipboard : '' );
-			}
-
-			return;
-		}
-
-		try
-		{
-			func.apply( this, arguments );
-
-			system._repeatHover( );
-
-			system._steerAttention( );
-
-			if( root )
-			{
-				root.draw( );
-
-				system.setInput( root._mark ? root._mark.clipboard : '' );
-			}
-		}
-		catch( e )
-		{
-			try {
-				message =
-					[
-						'OOPS! Internal failure, ',
-						e.name, ': ',
-						e.message, '\n\n',
-						'stack: ',
-						e.stack,
-						'\n\n',
-						'Please report to axkibe@gmail.com'
-					].join('');
-
-				if( !config.debug.weinre )
-				{
-					system.failScreen( message );
-				}
-				else
-				{
-					console.log( message );
-				}
-			}
-			catch ( ee )
-			{
-				console.log( 'error in error:' + ee );
-			}
-		}
-	};
-};
-
-
-/*
 | Creates a catcher that calls a system function.
 */
 var _systemCatcher =
@@ -246,11 +177,12 @@ var _systemCatcher =
 	)
 {
 	return(
-		_catcher(
+		catcher(
 			function( )
 			{
 				system[ funcName ].apply( system, arguments );
-			}
+			},
+			true
 		)
 	);
 };
@@ -497,7 +429,7 @@ shell_system.prototype.setTimer =
 		callback
 	)
 {
-	return window.setTimeout( _catcher( callback ), time );
+	return window.setTimeout( catcher( callback, true ), time );
 };
 
 
@@ -1575,10 +1507,11 @@ shell_system.prototype._steerAttention =
 */
 startup = function( )
 {
-	var start;
+	var
+		start;
 
 	start =
-		_catcher(
+		catcher(
 			function( )
 			{
 				system = new shell_system( );
@@ -1587,7 +1520,8 @@ startup = function( )
 
 				// FIXME work on IOS
 				_hiddenInput.focus( );
-			}
+			},
+			true
 		);
 
 	if( !config.debug.weinre )
