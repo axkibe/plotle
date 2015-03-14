@@ -292,6 +292,8 @@ shell_system =
 
 	hiddenInput.onblur = systemTransmitter( '_onInputBlur' );
 
+	hiddenInput.autocomplete = 'off';
+
 	canvas.onmousedown = systemTransmitter( '_onMouseDown' );
 
 	canvas.onmousemove = systemTransmitter( '_onMouseMove' );
@@ -457,16 +459,11 @@ prototype.setInput =
 		text
 	)
 {
-	inputVal =
-	hiddenInput.value =
-		'' + text;
+	inputVal = text;
 
-	hiddenInput.selectionStart = 0;
+	hiddenInput.value = '88' + text;
 
-	if( text !== '' )
-	{
-		hiddenInput.selectionEnd = text.length;
-	}
+	hiddenInput.setSelectionRange( 2, 2 + text.length );
 };
 
 
@@ -722,7 +719,7 @@ prototype._onKeyPress =
 */
 prototype._onKeyUp =
 	function(
-		// event
+		event
 	)
 {
 	this._testInput( );
@@ -1078,8 +1075,8 @@ prototype._onTouchStart =
 
 	p =
 		euclid_point.create(
-			'x', event.pageX - canvas.offsetLeft,
-			'y', event.pageY - canvas.offsetTop
+			'x', event.touches[ 0 ].pageX - canvas.offsetLeft,
+			'y', event.touches[ 0 ].pageY - canvas.offsetTop
 		),
 
 	shift = event.shiftKey;
@@ -1127,8 +1124,8 @@ prototype._onTouchMove =
 
 	p =
 		euclid_point.create(
-			'x', event.pageX - canvas.offsetLeft,
-			'y', event.pageY - canvas.offsetTop
+			'x', event.touches[ 0 ].pageX - canvas.offsetLeft,
+			'y', event.touches[ 0 ].pageY - canvas.offsetTop
 		),
 
 	shift = event.shiftKey;
@@ -1447,26 +1444,19 @@ prototype._testInput =
 	function( )
 {
 	var
-		hi,
 		text;
 
-	hi = hiddenInput;
+	text = hiddenInput.value;
 
-	text = hi.value;
-
-	// works around opera quirks inserting CR characters
-	text = text.replace( /\r/g, '' );
-
-	if( text === inputVal || !root )
+	if( text === '88' + inputVal || !root )
 	{
 		return;
 	}
 
-	hi.value = inputVal = '';
+	// works around opera quirks inserting CR characters
+	text = text.replace( /\r/g, '' );
 
-	hi.selectionStart = 0;
-
-	root.input( text );
+	root.input( text.substr( 2 ) );
 
 	this._steerAttention( );
 };
@@ -1483,7 +1473,8 @@ prototype._steerAttention =
 	function( )
 {
 	var
-		ac;
+		ac,
+		clipboard;
 
 	ac = root.attentionCenter;
 
@@ -1501,7 +1492,9 @@ prototype._steerAttention =
 
 		hiddenInput.style.top = ac + 'px';
 
-		system.setInput( root.clipboard );
+		clipboard = root.clipboard;
+
+		system.setInput( clipboard );
 
 		hiddenInput.focus( );
 	}
