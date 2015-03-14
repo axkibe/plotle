@@ -128,6 +128,8 @@ var
 	hoverP,
 	hoverShift,
 	inputVal,
+	keyCodeNames,
+	keyCodeNamesCtrl,
 	lastSpecialKey,
 	mainWindowHeight,
 	pointingState,
@@ -218,6 +220,41 @@ hiddenInput = null;
 */
 pointingState = false;
 
+
+keyCodeNames =
+	{
+		8 : 'backspace',
+		9 : 'tab',
+		13 : 'enter',
+		27 : 'esc',
+		33 : 'pageup',
+		34 : 'pagedown',
+		35 : 'end',
+		36 : 'pos1',
+		37 : 'left',
+		38 : 'up',
+		39 : 'right',
+		40 : 'down',
+		46 : 'del'
+	};
+
+keyCodeNamesCtrl =
+	{
+		65 : 'a',
+		89 : 'y',
+		90 : 'z',
+		188 : ',',
+		190 : '.'
+	};
+
+/**/if( FREEZE )
+/**/{
+/**/	Object.freeze( keyCodeNames );
+/**/
+/**/	Object.freeze( keyCodeNamesCtrl );
+/**/}
+
+
 /*
 | Default system behavior settings
 */
@@ -239,8 +276,6 @@ settings =
 /**/}
 
 
-
-
 /*
 | Creates a catcher that calls a system function.
 */
@@ -259,7 +294,6 @@ systemTransmitter =
 		)
 	);
 };
-
 
 
 /*
@@ -718,9 +752,7 @@ prototype._onKeyPress =
 | Hidden input key up.
 */
 prototype._onKeyUp =
-	function(
-		event
-	)
+	function( )
 {
 	this._testInput( );
 
@@ -1301,130 +1333,19 @@ prototype._specialKey =
 		ctrl
 	)
 {
-	var key =
-		null;
+	var
+		key;
 
 	if( ctrl )
 	{
-		switch( keyCode )
-		{
-			case 65 :
-
-				key = 'a';
-
-				break;
-
-			case 89 :
-
-				key = 'y';
-
-				break;
-
-			case 90 :
-
-				key = 'z';
-
-				break;
-
-			case 188 :
-
-				key = ',';
-
-				break;
-
-			case 190 :
-
-				key = '.';
-
-				break;
-		}
+		key = keyCodeNamesCtrl[ keyCode ];
 	}
 	else
 	{
-		// FIXME make this a table
-		switch( keyCode )
-		{
-			case  8 :
-
-				key = 'backspace';
-
-				break;
-
-			case  9 :
-
-				key = 'tab';
-
-				break;
-
-			case 13 :
-
-				key = 'enter';
-
-				break;
-
-			case 27 :
-
-				key = 'esc';
-
-				break;
-
-			case 33 :
-
-				key = 'pageup';
-
-				break;
-
-			case 34 :
-
-				key = 'pagedown';
-
-				break;
-
-			case 35 :
-
-				key = 'end';
-
-				break;
-
-			case 36 :
-
-				key = 'pos1';
-
-				break;
-
-			case 37 :
-
-				key = 'left';
-
-				break;
-
-			case 38 :
-
-				key = 'up';
-
-				break;
-
-			case 39 :
-
-				key = 'right';
-
-				break;
-
-			case 40 :
-
-				key = 'down';
-
-				break;
-
-			case 46 :
-
-				key = 'del';
-
-				break;
-		}
+		key = keyCodeNames[ keyCode ];
 	}
 
-	if( key === null )
+	if( !key )
 	{
 		return true;
 	}
