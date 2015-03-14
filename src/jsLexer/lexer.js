@@ -6,9 +6,8 @@
 var
 	jsLexer;
 
-jsLexer =
-module.exports =
-	{ };
+
+jsLexer = module.exports;
 
 
 /*
