@@ -62,8 +62,6 @@ transmitter =
 			if( root )
 			{
 				root.draw( );
-
-				system.setInput( root._mark ? root._mark.clipboard : '' );
 			}
 
 			return;
@@ -73,15 +71,16 @@ transmitter =
 		{
 			func.apply( this, arguments );
 
-			system._repeatHover( );
+			if( !nosteering )
+			{
+				system._repeatHover( );
 
-			system._steerAttention( );
+				system._steerAttention( );
+			}
 
 			if( root )
 			{
 				root.draw( );
-
-				system.setInput( root._mark ? root._mark.clipboard : '' );
 			}
 		}
 		catch( e )
@@ -291,6 +290,8 @@ shell_system =
 	// hidden input that forwards all events
 	hiddenInput = document.getElementById( 'input' );
 
+	hiddenInput.onblur = systemTransmitter( '_onInputBlur' );
+
 	canvas.onmousedown = systemTransmitter( '_onMouseDown' );
 
 	canvas.onmousemove = systemTransmitter( '_onMouseMove' );
@@ -485,8 +486,7 @@ prototype.setTimer =
 /*
 | Pixels to scroll on a wheel event
 */
-prototype.textWheelSpeed =
-	12 * 5;
+prototype.textWheelSpeed = 12 * 5;
 
 
 // ---------------------------
@@ -559,6 +559,20 @@ prototype._onAtweenTime =
 		canvas.style.cursor = cursor;
 	}
 };
+
+
+
+/*
+| Input blur
+*/
+prototype._onInputBlur =
+	function(
+		// event
+	)
+{
+	window.scrollTo( 0, 0 );
+};
+
 
 
 /*
@@ -691,13 +705,6 @@ prototype._onKeyPress =
 		lastSpecialKey = -1;
 
 		return this._specialKey( kcode, shift, ctrl );
-	}
-	else
-	{
-		if( !root.suggestingKeyboard( ) )
-		{
-			root.input( String.fromCharCode( kcode ) );
-		}
 	}
 
 	lastSpecialKey = -1;
@@ -1089,11 +1096,7 @@ prototype._onTouchStart =
 
 	atweenCtrl = ctrl;
 
-	atweenTimer =
-		this.setTimer(
-			settings.dragtime,
-			this._onAtweenTimeTransmitter
-		);
+	atweenTimer = this.setTimer( settings.dragtime, this._onAtweenTimeTransmitter );
 
 	return false;
 };
@@ -1488,7 +1491,7 @@ prototype._steerAttention =
 	{
 		hiddenInput.style.top = '0';
 
-//		window.scrollTo( 0, 0 );
+		window.scrollTo( 0, 0 );
 
 		hiddenInput.blur( );
 	}
@@ -1498,10 +1501,7 @@ prototype._steerAttention =
 
 		hiddenInput.style.top = ac + 'px';
 
-		if( hiddenInput.scrollIntoViewIfNeeded )
-		{
-			hiddenInput.scrollIntoViewIfNeeded( true );
-		}
+		system.setInput( root.clipboard );
 
 		hiddenInput.focus( );
 	}
@@ -1523,9 +1523,6 @@ startup = function( )
 				system = new shell_system( );
 
 				shell_root.startup( system._display );
-
-				// FIXME work on IOS
-				//hiddenInput.focus( );
 			},
 			true
 		);

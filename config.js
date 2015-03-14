@@ -140,7 +140,7 @@ config.debug.puffed = true;
 | Set to false/null or the address of the weinre server
 */
 config.debug.weinre = '131.130.188.200:8080';
-//config.debug.weinre = false;
+config.debug.weinre = false;
 
 
 /*
@@ -153,6 +153,8 @@ config.whiteList =
 		'131.130.188.200' : true,
 		'::ffff:131.130.188.224' : true
 	};
+
+config.whiteList = false;
 
 /*
 | enable specific logging categories

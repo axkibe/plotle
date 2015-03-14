@@ -620,6 +620,27 @@ prototype.click =
 
 
 /*
+| Returns the what the clipboard should hold.
+*/
+Object.defineProperty(
+	prototype,
+	'clipboard',
+	{
+		get :
+			function( )
+			{
+				var
+					mark;
+
+				mark = this._mark;
+
+				return mark ? mark.clipboard : '';
+			}
+	}
+);
+
+
+/*
 | Clears the carets retainx info.
 */
 prototype.clearCaretRetainX =

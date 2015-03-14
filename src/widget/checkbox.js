@@ -231,10 +231,9 @@ widget_checkbox.prototype.specialKey =
 */
 widget_checkbox.prototype.input =
 	function(
-		text
+		// text
 	)
 {
-	console.log( 'I', text ) ;
 	root.setPath( this.path.append( 'checked' ), !this.checked );
 
 	return true;
