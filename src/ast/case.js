@@ -16,22 +16,16 @@
 if( JION )
 {
 	return {
-		id :
-			'ast_case',
+		id : 'ast_case',
 		attributes :
 			{
 				block :
-					{
-						comment :
-							'the statement',
-						type :
-							'ast_block'
-					}
+				{
+					comment : 'the statement',
+					type : 'ast_block'
+				}
 			},
-		// ray contains multiple alternatives for the same case block.
-		ray :
-			// '->expression', FIXME
-			[ ]
+		ray : '->astExpression'
 	};
 }
 

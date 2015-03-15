@@ -68,7 +68,7 @@
 . _onAtweenTimeTransmitter
 . _onAuth
 . _onContextMenu
-. _onHiddenInputBlur
+. _onInputBlur
 . _onKeyDown
 . _onKeyPress
 . _onKeyUp
@@ -175,6 +175,7 @@
 . attributes
 . atween
 > auth
+> autocomplete
 > b
 . back
 > backgroundColor
@@ -186,6 +187,7 @@
 > bezierCurveTo
 > black
 . blue
+> blur
 > body
 . border
 . bottombox
@@ -658,7 +660,6 @@
 . sbary
 > scale
 . screen
-> scrollIntoViewIfNeeded
 . scrollMarkIntoView
 . scrollPage
 > scrollTo
@@ -669,8 +670,6 @@
 . seMin1
 > search
 . selection
-> selectionEnd
-> selectionStart
 > send
 > seq
 . server_devel
@@ -681,6 +680,7 @@
 > setItem
 . setPath
 > setRequestHeader
+> setSelectionRange
 > setTimeout
 > setTimer
 > setTransform
