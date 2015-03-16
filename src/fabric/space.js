@@ -1154,9 +1154,12 @@ prototype.dragStop =
 
 		case 'action_scrolly' :
 
-			this.getItem(
-				action.itemPath.get( -1 )
-			).dragStop( p, shift, ctrl );
+			item = this.getItem( action.itemPath.get( -1 ));
+
+			if( item )
+			{
+				item.dragStop( p, shift, ctrl );
+			}
 
 			root.create( 'action', null );
 
@@ -1187,6 +1190,7 @@ prototype.dragMove =
 		dy,
 		fs,
 		model,
+		item,
 		origin,
 		oheight,
 		pd,
@@ -1456,10 +1460,13 @@ prototype.dragMove =
 
 		case 'action_scrolly' :
 
-			this.getItem( action.itemPath.get( -1 ) )
-			.dragMove( p );
+			item = this.getItem( action.itemPath.get( -1 ) );
 
-			// FIXME let the item decide on the cursor
+			if( item )
+			{
+				item.dragMove( p );
+			}
+
 			return 'move';
 
 		default :

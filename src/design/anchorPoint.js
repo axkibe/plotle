@@ -1,7 +1,5 @@
 /*
 | A point anchored within a frame.
-|
-| FIXME uppercase names
 */
 
 
@@ -9,6 +7,7 @@ var
 	design_anchorPoint,
 	euclid_point,
 	jools;
+
 
 /*
 | Capsule
@@ -23,30 +22,23 @@ var
 if( JION )
 {
 	return{
-		id :
-			'design_anchorPoint',
+		id : 'design_anchorPoint',
 		attributes :
 			{
 				anchor :
 					{
-						comment :
-							'compass of the anchor',
-						type :
-							'string'
+						comment : 'compass of the anchor',
+						type : 'string'
 					},
 				x :
 					{
-						comment :
-							'x-distance',
-						type :
-							'integer'
+						comment : 'x-distance',
+						type : 'integer'
 					},
 				y :
 					{
-						comment :
-							'y-distance',
-						type :
-							'integer'
+						comment : 'y-distance',
+						type : 'integer'
 					}
 			}
 	};

@@ -464,7 +464,7 @@ prototype.scrollMarkIntoView =
 
 	mark = this.mark;
 
-	if( !mark.hasCaret )
+	if( !mark || !mark.hasCaret )
 	{
 		return;
 	}

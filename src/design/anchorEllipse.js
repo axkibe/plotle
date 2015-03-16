@@ -21,27 +21,28 @@ var
 if( JION )
 {
 	return {
-		id :
-			'design_anchorEllipse',
+		id : 'design_anchorEllipse',
 		attributes :
 			{
 				pnw :
 					{
-						comment :
-							'point in north-west',
-						type :
-							'design_anchorPoint'
+						comment : 'point in north-west',
+						type : 'design_anchorPoint'
 					},
 				pse :
 					{
-						comment :
-							'point in south-east',
-						type :
-							'design_anchorPoint'
+						comment : 'point in south-east',
+						type : 'design_anchorPoint'
 					}
 			}
 	};
 }
+
+
+var
+	prototype;
+
+prototype = design_anchorEllipse.prototype;
 
 
 /*
@@ -58,7 +59,7 @@ design_anchorEllipse.fullSkewNW =
 /*
 | Computes a rect modelled relative to this rect.
 */
-design_anchorEllipse.prototype.compute =
+prototype.compute =
 	function(
 		frame
 	)

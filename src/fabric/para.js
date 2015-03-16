@@ -525,6 +525,7 @@ prototype.getOffsetAt =
 		flow,
 		font,
 		line,
+		lZ,
 		token,
 		text,
 		tn,
@@ -537,13 +538,11 @@ prototype.getOffsetAt =
 
 	line = flow.get( ln );
 
+	lZ = line.length;
+
 	token = null;
 
-	for(
-		tn = 0;
-		tn < line.length;
-		tn++
-	)
+	for( tn = 0; tn < lZ; tn++ )
 	{
 		token = line.get( tn );
 
@@ -553,7 +552,7 @@ prototype.getOffsetAt =
 		}
 	}
 
-	if( tn >= line.length )
+	if( tn >= lZ && lZ > 0 )
 	{
 		token = line.get( --tn );
 	}

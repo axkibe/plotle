@@ -105,6 +105,8 @@ prototype.changeTree =
 		!prev.equalsJSON( this.prev )
 	)
 	{
+		console.log( 'set.prev mismatch', prev, this.prev );
+
 		throw change_error( 'set.prev doesn\'t match' );
 	}
 

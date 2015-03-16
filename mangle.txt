@@ -624,7 +624,7 @@
 . reflect
 . reflectName
 > register
-. reject
+> reject
 > relation
 . relationState
 > releaseCapture
