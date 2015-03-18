@@ -25,12 +25,21 @@ var
 if( JION )
 {
 	return {
-		id :
-			'icon_moveto',
-		singleton :
-			true,
-		init :
-			[ ]
+		id : 'icon_moveto',
+		attributes :
+		{
+			border :
+				{
+					comment : 'border',
+					type : 'euclid_border'
+				},
+			fill :
+				{
+					comment : 'fill',
+					type : 'euclid_color'
+				}
+		},
+		init : [ ]
 	};
 }
 
@@ -99,15 +108,14 @@ icon_moveto.prototype._init =
 icon_moveto.prototype.draw =
 	function(
 		display,
-		style,
 		view
 	)
 {
-	display.oldPaint( style, this._arrow, view );
+	display.paint( this.fill, this.border, this._arrow, view );
 
-	display.oldPaint( style, this._base1, view );
+	display.paint( this.fill, this.border, this._base1, view );
 
-	display.oldPaint( style, this._base2, view );
+	display.paint( this.fill, this.border, this._base2, view );
 };
 
 

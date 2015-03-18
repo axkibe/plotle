@@ -25,7 +25,19 @@ if( JION )
 {
 	return {
 		id : 'icon_normal',
-		singleton : true,
+		attributes :
+		{
+			border :
+				{
+					comment : 'border',
+					type : 'euclid_border'
+				},
+			fill :
+				{
+					comment : 'fill',
+					type : 'euclid_color'
+				}
+		},
 		init : [ ]
 	};
 }
@@ -84,11 +96,10 @@ icon_normal.prototype._init =
 icon_normal.prototype.draw =
 	function(
 		display,
-		style,
 		view
 	)
 {
-	display.oldPaint( style, this._arrow, view );
+	display.paint( this.fill, this.border, this._arrow, view );
 };
 
 

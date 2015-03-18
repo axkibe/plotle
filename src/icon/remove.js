@@ -24,12 +24,21 @@ var
 if( JION )
 {
 	return {
-		id :
-			'icon_remove',
-		singleton :
-			true,
-		init :
-			[ ]
+		id : 'icon_remove',
+		attributes :
+		{
+			border :
+				{
+					comment : 'border',
+					type : 'euclid_border'
+				},
+			fill :
+				{
+					comment : 'fill',
+					type : 'euclid_color'
+				}
+		},
+		init : [ ]
 	};
 }
 
@@ -116,11 +125,10 @@ icon_remove.prototype._init =
 icon_remove.prototype.draw =
 	function(
 		display,
-		style,
 		view
 	)
 {
-	display.oldPaint( style, this._x, view );
+	display.paint( this.fill, this.border, this._x, view );
 };
 
 

@@ -3,10 +3,8 @@
 */
 
 
-/*
-| Imports
-*/
 var
+	euclid_color,
 	euclid_view,
 	icon_check,
 	jools,
@@ -29,8 +27,7 @@ var
 if( JION )
 {
 	return {
-		id :
-			'widget_checkbox',
+		id : 'widget_checkbox',
 		attributes :
 			{
 				checked :
@@ -90,8 +87,7 @@ if( JION )
 						defaultValue : 'true'
 					}
 			},
-		init :
-			[ ]
+		init : [ ]
 	};
 }
 
@@ -122,7 +118,13 @@ jools.lazyValue(
 	'checkIcon',
 	function( )
 	{
-		return icon_check.create( 'pc', this.frame.pc );
+		return(
+			icon_check.create(
+				'border', null,
+				'fill', euclid_color.black,
+				'pc', this.frame.pc
+			)
+		);
 	}
 );
 
@@ -271,7 +273,6 @@ widget_checkbox.prototype.draw =
 	{
 		this.checkIcon.draw(
 			display,
-			widget_style.get( 'checkboxCheck', shell_accent.NORMA ),
 			euclid_view.proper
 		);
 	}

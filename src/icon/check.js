@@ -23,21 +23,27 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'icon_check',
+	return{
+		id : 'icon_check',
 		attributes :
-			{
-				pc :
-					{
-						comment :
-							'center of the check',
-						type :
-							'euclid_point'
-					}
-			},
-		init :
-			[ ]
+		{
+			border :
+				{
+					comment : 'border',
+					type : 'euclid_border'
+				},
+			fill :
+				{
+					comment : 'fill',
+					type : 'euclid_color'
+				},
+			pc :
+				{
+					comment : 'center of the check',
+					type : 'euclid_point'
+				}
+		},
+		init : [ ]
 	};
 }
 
@@ -74,11 +80,10 @@ icon_check.prototype._init =
 icon_check.prototype.draw =
 	function(
 		display,
-		style,
 		view
 	)
 {
-	display.oldPaint( style, this._check, view );
+	display.paint( this.fill, this.border, this._check, view );
 };
 
 

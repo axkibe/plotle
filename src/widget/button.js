@@ -6,9 +6,6 @@
 var
 	euclid_display,
 	euclid_view,
-	icon_moveto,
-	icon_normal,
-	icon_remove,
 	jools,
 	result_hover,
 	root,
@@ -67,14 +64,8 @@ if( JION )
 				icon :
 					{
 						comment : 'icon to display',
-						type : 'string',
+						type : '->icon',
 						defaultValue : 'undefined'
-					},
-				iconStyle :
-					{
-						comment : 'icon style to display',
-						type : 'string',
-						defaultValue : 'null'
 					},
 				mark :
 					{
@@ -163,20 +154,6 @@ widget_button.prototype._init =
 		this.frame = null;
 
 		this._shape = null;
-	}
-
-	if( this.icon )
-	{
-		switch( this.icon )
-		{
-			case 'moveto' : this._icon = icon_moveto.create( ); break;
-
-			case 'normal' : this._icon = icon_normal.create( ); break;
-
-			case 'remove' : this._icon = icon_remove.create( ); break;
-
-			default : throw new Error( );
-		}
 	}
 
 	// if true repeats the push action if held down
@@ -298,13 +275,9 @@ jools.lazyValue(
 			}
 		}
 
-		if( this._icon )
+		if( this.icon )
 		{
-			this._icon.draw(
-				d,
-				widget_style.get( this.iconStyle, shell_accent.NORMA ),
-				euclid_view.proper
-			);
+			this.icon.draw( d, euclid_view.proper );
 		}
 
 		return d;
@@ -323,11 +296,7 @@ widget_button.prototype.pointingHover =
 	var
 		pp;
 
-	if(
-		!this.visible
-		||
-		!this.frame.within( euclid_view.proper, p )
-	)
+	if( !this.visible || !this.frame.within( euclid_view.proper, p ) )
 	{
 		return null;
 	}

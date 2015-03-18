@@ -14,6 +14,9 @@ var
 	euclid_color,
 	euclid_point,
 	gruga_mainDisc,
+	icon_moveto,
+	icon_normal,
+	icon_remove,
 	shell_fontPool,
 	widget_button;
 
@@ -34,6 +37,9 @@ var
 	genericButtonFacets,
 	genericButtonModel,
 	genericButtonSize,
+	iconMoveTo,
+	iconNormal,
+	iconRemove,
 	loginButtonPnw,
 	movetoButtonPnw,
 	normalButtonPnw,
@@ -45,6 +51,37 @@ var
 	userButtonSize;
 
 dnw = design_anchorPoint.nw;
+
+
+iconMoveTo =
+	icon_moveto.create(
+		'fill', euclid_color.rgb( 107, 91, 73 ),
+		'border',
+			euclid_border.create(
+				'color', euclid_color.rgb( 128, 0, 0 )
+			)
+	);
+
+iconNormal =
+	icon_normal.create(
+		'fill', euclid_color.black,
+		'border',
+			euclid_border.create(
+				'color', euclid_color.rgb( 128, 0, 0 )
+			)
+	);
+
+
+// The red criss-cross for the remove button
+iconRemove =
+	icon_remove.create(
+		'fill', euclid_color.rgb( 255, 0, 0 ),
+		'border',
+			euclid_border.create(
+				'color', euclid_color.rgb( 128, 0, 0 )
+			)
+	);
+
 
 genericButtonFacets =
 	design_facetRay.create(
@@ -130,8 +167,7 @@ gruga_mainDisc =
 	disc_mainDisc.create(
 		'twig:add', 'normal',
 			genericButtonModel.create(
-				'icon', 'normal',
-				'iconStyle', 'iconNormal',
+				'icon', iconNormal,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', normalButtonPnw,
@@ -152,8 +188,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'remove',
 			genericButtonModel.create(
-				'icon', 'remove',
-				'iconStyle', 'iconRemove',
+				'icon', iconRemove,
 				'visible', false,
 				'designFrame',
 					design_anchorRect.create(
@@ -163,8 +198,7 @@ gruga_mainDisc =
 			),
 		'twig:add', 'moveTo',
 			genericButtonModel.create(
-				'icon', 'moveto',
-				'iconStyle', 'iconNormal',
+				'icon', iconMoveTo,
 				'visible', false,
 				'designFrame',
 					design_anchorRect.create(

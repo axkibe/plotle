@@ -26,89 +26,6 @@ shell_style = { };
 shell_style.styles =
 {
 
-	/*
-	| Buttons on the create disc.
-	*/
-	createButton :
-	{
-		/*
-		| Widget is in its default state.
-		*/
-		normal :
-		{
-			fill : null,
-			border : null
-		},
-
-		/*
-		| The users pointing device is hovering over the widget
-		*/
-		hover :
-		{
-			fill : euclid_color.rgba( 255, 235, 210, 0.7 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgba( 196, 94, 44, 0.4 )
-				)
-		},
-
-		/*
-		| This button is currently active.
-		*/
-		focus :
-		{
-			fill : euclid_color.rgb( 255, 188, 88 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgba( 196, 94, 44, 0.4 )
-				)
-		},
-
-		/*
-		| This button is currently active.
-		*/
-		hofoc :
-		{
-			fill : euclid_color.rgb( 255, 188, 88 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgba( 196, 94, 44, 0.4 )
-				)
-		}
-	},
-
-
-	/*
-	| The default arrow for the normal button.
-	*/
-	iconNormal :
-	{
-		normal :
-		{
-			fill : euclid_color.black,
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgb( 128, 0, 0 )
-				)
-		}
-	},
-
-
-	/*
-	| The red criss-cross for the remove button
-	*/
-	iconRemove :
-	{
-		normal :
-		{
-			fill : euclid_color.rgb( 255, 0, 0 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgb( 128, 0, 0 )
-				)
-		}
-	},
-
 
 	/*
 	| Default button.
@@ -438,19 +355,6 @@ shell_style.styles =
 			border : euclid_border.simpleBlack
 		}
 	},
-
-	/*
-	| FIXME make this an icon
-	*/
-	checkboxCheck :
-	{
-		normal :
-		{
-			fill : euclid_color.black,
-			border : null
-		}
-	},
-
 
 
 	/*
