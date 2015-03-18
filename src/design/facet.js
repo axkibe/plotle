@@ -36,7 +36,8 @@ if( JION )
 						type : 'euclid_color',
 						defaultValue : 'undefined'
 					}
-			}
+			},
+		group : [ 'boolean' ]
 	};
 }
 

@@ -7,7 +7,11 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
+	design_facet,
+	design_facetRay,
 	disc_mainDisc,
+	euclid_border,
+	euclid_color,
 	euclid_point,
 	gruga_mainDisc,
 	shell_fontPool,
@@ -27,6 +31,7 @@ var
 var
 	dnw,
 	createButtonPnw,
+	genericButtonFacets,
 	genericButtonModel,
 	genericButtonSize,
 	loginButtonPnw,
@@ -41,9 +46,60 @@ var
 
 dnw = design_anchorPoint.nw;
 
+genericButtonFacets =
+	design_facetRay.create(
+		'ray:init',
+		[
+			// default state.
+			design_facet.create(
+				'group:init',
+					{ },
+				'fill',
+					euclid_color.rgba( 255, 255, 240, 0.7 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+					)
+			),
+			// hover
+			design_facet.create(
+				'group:init',
+					{ 'hover' : true },
+				'fill',
+					euclid_color.rgba( 255, 235, 210, 0.7 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+					)
+			),
+			// focus
+			design_facet.create(
+				'group:init',
+					{ 'focus' : true },
+				'fill',
+					euclid_color.rgb( 255, 188, 88 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+					)
+			),
+			// focus and hover
+			design_facet.create(
+				'group:init',
+					{ 'focus' : true, 'hover' : true },
+				'fill',
+					euclid_color.rgb( 255, 188, 88 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+					)
+			)
+		]
+	);
+
 genericButtonModel =
 	widget_button.abstract(
-		'style', 'mainButton',
+		'facets', genericButtonFacets,
 		'shape', design_anchorEllipse.fullSkewNW
 	);
 

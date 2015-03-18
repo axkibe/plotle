@@ -120,7 +120,7 @@ euclid_line.prototype.draw =
 		style
 	)
 {
-	display.paint( style, this, view );
+	display.oldPaint( style, this, view );
 };
 
 

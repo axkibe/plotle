@@ -687,7 +687,7 @@ prototype.draw =
 		// FIXME have shapeRays handled more elegantly
 		if( !Array.isArray( rs ) )
 		{
-			display.paint(
+			display.oldPaint(
 				theme.selection.style,
 				rs,
 				this.view
@@ -701,7 +701,7 @@ prototype.draw =
 				a++
 			)
 			{
-				display.paint(
+				display.oldPaint(
 					theme.selection.style,
 					rs[ a ],
 					this.view

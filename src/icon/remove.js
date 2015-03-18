@@ -120,7 +120,7 @@ icon_remove.prototype.draw =
 		view
 	)
 {
-	display.paint( style, this._x, view );
+	display.oldPaint( style, this._x, view );
 };
 
 

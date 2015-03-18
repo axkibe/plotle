@@ -24,12 +24,9 @@ var
 if( JION )
 {
 	return {
-		id :
-			'icon_normal',
-		singleton :
-			true,
-		init :
-			[ ]
+		id : 'icon_normal',
+		singleton : true,
+		init : [ ]
 	};
 }
 
@@ -91,7 +88,7 @@ icon_normal.prototype.draw =
 		view
 	)
 {
-	display.paint( style, this._arrow, view );
+	display.oldPaint( style, this._arrow, view );
 };
 
 

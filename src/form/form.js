@@ -229,7 +229,7 @@ form_form.draw =
 	var
 		r;
 
-	display.paint(
+	display.oldPaint(
 		theme.form.style,
 		display.silhoutte,
 		euclid_view.proper

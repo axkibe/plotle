@@ -332,7 +332,7 @@ euclid_arrow.prototype.draw =
 		style
 	)
 {
-	display.paint( style, this._shape, view );
+	display.oldPaint( style, this._shape, view );
 };
 
 

@@ -29,15 +29,20 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'widget_button',
+	return{
+		id : 'widget_button',
 		attributes :
 			{
 				designFrame :
 					{
 						comment : 'designed frame (using anchors',
 						type : 'design_anchorRect'
+					},
+				facets :
+					{
+						comment : 'style facets',
+						type : 'design_facetRay',
+						defaultValue : 'undefined'
 					},
 				// FIXME deduce from mark
 				focusAccent :
@@ -61,111 +66,78 @@ if( JION )
 					},
 				icon :
 					{
-						comment :
-							'icon to display',
-						type :
-							'string',
-						defaultValue :
-							'undefined'
+						comment : 'icon to display',
+						type : 'string',
+						defaultValue : 'undefined'
 					},
 				iconStyle :
 					{
-						comment :
-							'icon style to display',
-						type :
-							'string',
-						defaultValue :
-							'null'
+						comment : 'icon style to display',
+						type : 'string',
+						defaultValue : 'null'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
-						type :
-							'->mark',
-						defaultValue :
-							'null',
-						assign :
-							null
+						comment : 'the users mark',
+						type : '->mark',
+						defaultValue : 'null',
+						assign : null
 					},
 				path :
 					{
-						comment :
-							'the path of the widget',
-						type :
-							'jion_path',
-						defaultValue :
-							'null'
+						comment : 'the path of the widget',
+						type : 'jion_path',
+						defaultValue : 'null'
 					},
 				shape :
 					{
-						comment :
-							'shape of the button',
-						type :
-							// FIXME allow other types
-							'design_anchorEllipse'
+						comment : 'shape of the button',
+						// FUTURE allow other types
+						type : 'design_anchorEllipse'
 					},
 				superFrame :
 					{
-						comment :
-							'the frame the widget resides in',
-						type :
-							'euclid_rect',
-						defaultValue :
-							'null'
+						comment : 'the frame the widget resides in',
+						type : 'euclid_rect',
+						defaultValue : 'null'
 					},
+				// FIXME remove
 				style :
 					{
 						// FIXME put in a real object instead
-						comment :
-							'name of the style used',
-						type :
-							'string'
+						comment : 'name of the style used',
+						type : 'string',
+						defaultValue : 'undefined'
 					},
 				text :
 					{
-						comment :
-							'the text written in the button',
-						type :
-							'string',
-						defaultValue :
-							'null'
+						comment : 'the text written in the button',
+						type : 'string',
+						defaultValue : 'null'
 					},
 				textDesignPos :
 					{
-						comment :
-							'designed position of the text',
-						type :
-							'design_anchorPoint',
-						defaultValue :
-							'null'
+						comment : 'designed position of the text',
+						type : 'design_anchorPoint',
+						defaultValue : 'null'
 					},
 				textNewline :
 					{
-						comment :
-							'vertical distance of newline',
-						type :
-							'number',
-						defaultValue :
-							'null'
+						comment : 'vertical distance of newline',
+						type : 'number',
+						defaultValue : 'null'
 					},
 				textRotation :
 					{
-						comment :
-							'rotation of the text',
-						type :
-							'number',
-						defaultValue :
-							'null'
+						comment : 'rotation of the text',
+						type : 'number',
+						defaultValue : 'null'
 					},
 				visible :
 					{
-						comment :
-							'if false the button is hidden',
-						type :
-							'boolean',
-						defaultValue :
-							'true'
+						comment : 'if false the button is hidden',
+						type : 'boolean',
+						defaultValue : 'true'
 					}
 			},
 		init :
@@ -208,7 +180,7 @@ widget_button.prototype._init =
 	}
 
 	// if true repeats the push action if held down
-	// FIXME
+	// FUTURE
 	this.repeating = false;
 };
 
@@ -229,28 +201,51 @@ jools.lazyValue(
 	{
 		var
 			accent,
-			f,
+			d,
+			facet,
+			facets,
 			font,
 			newline,
-			style,
+			style, // FIXME remove
 			textPos;
 
 		accent =
 			shell_accent.state(
-				this.hover
-				&& this.hover.equals( this.path ),
+				this.hover && this.hover.equals( this.path ),
 				this.focusAccent
 			);
 
-		f =
+		d =
 			euclid_display.create(
 				'width', this.frame.width,
 				'height', this.frame.height
 			);
 
-		style = widget_style.get( this.style, accent );
+		facets = this.facets;
 
-		f.paint( style, this._shape, euclid_view.proper );
+		if( facets )
+		{
+			facet =
+				facets.getFacet(
+					'hover',
+						!!( this.hover && this.hover.equals( this.path ) ),
+					'focus',
+						!!( this.focusAccent )
+				);
+
+			d.paint(
+				facet.fill,
+				facet.border,
+				this._shape,
+				euclid_view.proper
+			);
+		}
+		else
+		{
+			style = widget_style.get( this.style, accent );
+
+			d.oldPaint( style, this._shape, euclid_view.proper );
+		}
 
 		if( this.text )
 		{
@@ -266,7 +261,7 @@ jools.lazyValue(
 
 			if( newline === null )
 			{
-				f.paintText(
+				d.paintText(
 					'text', this.text,
 					'p', textPos,
 					'font', font,
@@ -294,7 +289,7 @@ jools.lazyValue(
 					a++, y += newline
 				)
 				{
-					f.paintText(
+					d.paintText(
 						'text', text[ a ],
 						'xy', x, y,
 						'font', font
@@ -306,13 +301,13 @@ jools.lazyValue(
 		if( this._icon )
 		{
 			this._icon.draw(
-				f,
+				d,
 				widget_style.get( this.iconStyle, shell_accent.NORMA ),
 				euclid_view.proper
 			);
 		}
 
-		return f;
+		return d;
 	}
 );
 

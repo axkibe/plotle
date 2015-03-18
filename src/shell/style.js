@@ -25,6 +25,7 @@ shell_style = { };
 
 shell_style.styles =
 {
+	// FIXME remove
 	mainButton :
 	{
 		/*

@@ -265,7 +265,7 @@ widget_checkbox.prototype.draw =
 			)
 		);
 
-	display.paint( style, this.frame, euclid_view.proper );
+	display.oldPaint( style, this.frame, euclid_view.proper );
 
 	if( this.checked )
 	{

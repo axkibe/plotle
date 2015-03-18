@@ -100,7 +100,7 @@ visual_scrollbar.prototype.draw =
 		view
 	)
 {
-	display.paint(
+	display.oldPaint(
 		theme.scrollbar.style,
 		this.getArea( view ),
 		euclid_view.proper

@@ -1576,7 +1576,7 @@ jools.lazyValue(
 
 			moveToButton = this._moveToButton;
 
-			f.paint(
+			f.oldPaint(
 				shell_style.getStyle(
 					theme.portal.moveTo.style,
 					shell_accent.state(
@@ -1590,7 +1590,7 @@ jools.lazyValue(
 				hview
 			);
 
-			f.paint(
+			f.oldPaint(
 				shell_style.getStyle(
 					theme.portal.input.style,
 					'normal'
@@ -1599,7 +1599,7 @@ jools.lazyValue(
 				hview
 			);
 
-			f.paint(
+			f.oldPaint(
 				shell_style.getStyle(
 					theme.portal.input.style,
 					'normal'

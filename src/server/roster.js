@@ -298,6 +298,11 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/design/facetRay.js',
+		'hasJion', true,
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/shell/theme.js',
 		'inBundle', true,
 		'inTestPad', true

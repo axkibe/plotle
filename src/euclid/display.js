@@ -30,43 +30,30 @@ if( JION )
 			{
 				'height' :
 					{
-						comment :
-							'height of the display',
-						type :
-							'number',
-						defaultValue :
-							'undefined'
+						comment : 'height of the display',
+						type : 'number',
+						defaultValue : 'undefined'
 					},
 				'width' :
 					{
-						comment :
-							'width of the display',
-						type :
-							'number',
-						defaultValue :
-							'undefined'
+						comment : 'width of the display',
+						type : 'number',
+						defaultValue : 'undefined'
 					},
 				'_cv' :
 					{
-						comment :
-							'the html canvas',
-						type :
-							'protean',
-						defaultValue :
-							'undefined'
+						comment : 'the html canvas',
+						type : 'protean',
+						defaultValue : 'undefined'
 					},
 				'_cx' :
 					{
-						comment :
-							'the html canvas context',
-						type :
-							'protean',
-						defaultValue :
-							'undefined'
+						comment : 'the html canvas context',
+						type : 'protean',
+						defaultValue : 'undefined'
 					}
 			},
-		init :
-			[ ]
+		init : [ ]
 	};
 }
 
@@ -88,7 +75,7 @@ euclid_display.createAroundHTMLCanvas =
 /**/{
 /**/	if( cx._clip !== undefined )
 /**/	{
-/**/		// canvas is already wrapp
+/**/		// canvas is already wrapped
 /**/		throw new Error( );
 /**/	}
 /**/}
@@ -144,8 +131,6 @@ euclid_display.prototype.clear =
 {
 	this._cx.clearRect( 0, 0, this.width, this.height );
 };
-
-
 
 
 /*
@@ -468,10 +453,29 @@ euclid_display.prototype.globalAlpha =
 
 /*
 | Fills an aera and draws its borders.
+|
+| FIXME remove
+*/
+euclid_display.prototype.oldPaint =
+	function(
+		style,
+		shape,
+		view
+	)
+{
+	return this.paint( style.fill, style.border, shape, view );
+};
+
+
+
+
+/*
+| Fills an aera and draws its borders.
 */
 euclid_display.prototype.paint =
 	function(
-		style,
+		fill,
+		border,
 		shape,
 		view
 	)
@@ -479,21 +483,7 @@ euclid_display.prototype.paint =
 	var
 		a,
 		aZ,
-		borderStyle,
-		fillStyle,
 		cx;
-
-/**/if( CHECK )
-/**/{
-/**/	if( arguments.length !== 3 )
-/**/	{
-/**/		throw new Error( );
-/**/	}
-/**/}
-
-	fillStyle = style.fill;
-
-	borderStyle = style.border;
 
 	cx = this._cx;
 
@@ -501,29 +491,29 @@ euclid_display.prototype.paint =
 
 	this._sketch( shape, 0, 0, view );
 
-	if( fillStyle )
+	if( fill )
 	{
-		cx.fillStyle = this._colorStyle( fillStyle, shape, view );
+		cx.fillStyle = this._colorStyle( fill, shape, view );
 
 		cx.fill( );
 	}
 
-	if( borderStyle )
+	if( border )
 	{
-		switch( borderStyle.reflect )
+		switch( border.reflect )
 		{
 			case 'euclid_borderRay' :
 
-				for( a = 0, aZ = borderStyle.length; a < aZ; a++ )
+				for( a = 0, aZ = border.length; a < aZ; a++ )
 				{
-					this._border( borderStyle.get( a ), shape, view );
+					this._border( border.get( a ), shape, view );
 				}
 
 				break;
 
 			case 'euclid_border' :
 
-				this._border( borderStyle, shape, view );
+				this._border( border, shape, view );
 
 				break;
 

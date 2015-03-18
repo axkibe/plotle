@@ -78,7 +78,7 @@ icon_check.prototype.draw =
 		view
 	)
 {
-	display.paint( style, this._check, view );
+	display.oldPaint( style, this._check, view );
 };
 
 

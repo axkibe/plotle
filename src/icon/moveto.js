@@ -103,11 +103,11 @@ icon_moveto.prototype.draw =
 		view
 	)
 {
-	display.paint( style, this._arrow, view );
+	display.oldPaint( style, this._arrow, view );
 
-	display.paint( style, this._base1, view );
+	display.oldPaint( style, this._base1, view );
 
-	display.paint( style, this._base2, view );
+	display.oldPaint( style, this._base2, view );
 };
 
 

@@ -399,7 +399,7 @@ visual_handlesBezel.prototype.drawHandles =
 
 		fixView = view.review( 0, view.point( h.pc ) );
 
-		display.paint( theme.handle.style, h, fixView );
+		display.oldPaint( theme.handle.style, h, fixView );
 	}
 
 	display.deClip( );
