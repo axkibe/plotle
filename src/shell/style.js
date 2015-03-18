@@ -25,57 +25,6 @@ shell_style = { };
 
 shell_style.styles =
 {
-	// FIXME remove
-	mainButton :
-	{
-		/*
-		| Widget is in its default state.
-		*/
-		normal :
-		{
-			fill : euclid_color.rgba( 255, 255, 240, 0.7 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgba( 196, 94, 44, 0.4 )
-				)
-		},
-
-		/*
-		| The users pointing device is hovering over the widget.
-		*/
-		hover :
-		{
-			fill : euclid_color.rgba( 255, 235, 210, 0.7 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgba( 196, 94, 44, 0.4 )
-				)
-		},
-
-		/*
-		| Widget has focus
-		*/
-		focus :
-		{
-			fill : euclid_color.rgb( 255, 188, 88 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgba( 196, 94, 44, 0.4 )
-				)
-		},
-
-		/*
-		| Widget has focus and hover.
-		*/
-		hofoc :
-		{
-			fill : euclid_color.rgb( 255, 188, 88 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgba( 196, 94, 44, 0.4 )
-				)
-		}
-	},
 
 	/*
 	| Buttons on the create disc.
