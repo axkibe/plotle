@@ -7,8 +7,11 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
+	design_facet,
+	design_facetRay,
 	form_moveTo,
 	gruga_moveTo,
+	portalButtonFacets,
 	shell_fontPool,
 	widget_button,
 	widget_label;
@@ -46,6 +49,55 @@ var
 	};
 
 
+portalButtonFacets =
+	design_facetRay.create(
+		'ray:init',
+		[
+			// default state.
+			design_facet.create(
+				'group:init', { },
+				'fill', euclid_color.rgba( 255, 237, 210, 0.5 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgb( 255, 141, 66 )
+					)
+			),
+			// hover
+			design_facet.create(
+				'group:init', { 'hover' : true },
+				'fill', euclid_color.rgba( 255, 188, 88, 0.7 ),
+				'border',
+					euclid_border.create(
+						'width', 1.5,
+						'color', euclid_color.rgb( 255, 141, 66 )
+					)
+			),
+			// focus
+			design_facet.create(
+				'group:init', { 'focus' : true },
+				'fill', euclid_color.rgba( 255, 237, 210, 0.5 ),
+				'border',
+					euclid_border.create(
+						'distance', 1,
+						'width', 1.5,
+						'color', euclid_color.rgb( 255, 99, 188 )
+					)
+			),
+			// focus and hover
+			design_facet.create(
+				'group:init', { 'focus' : true, 'hover' : true },
+				'fill', euclid_color.rgba( 255, 188, 88, 0.7 ),
+				'border',
+					euclid_border.create(
+						'distance', 1,
+						'width', 1.5,
+						'color', euclid_color.rgb( 255, 99, 188 )
+					)
+			)
+		]
+	);
+
+
 /*
 | Layout
 */
@@ -66,7 +118,7 @@ gruga_moveTo =
 		'twig:add',
 		'ideoloomHomeButton',
 			widget_button.create(
-				'style', 'portalButton',
+				'facets', portalButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -95,14 +147,12 @@ gruga_moveTo =
 						'x', 0,
 						'y', 0
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'ideoloomSandboxButton',
 			widget_button.create(
-				'style',
-					'portalButton',
+				'facets', portalButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -122,25 +172,21 @@ gruga_moveTo =
 									ideoloomSandboxButton.height
 							)
 					),
-				'text',
-					'ideoloom\nsandbox',
-				'textNewline',
-					25,
-				'font',
-					shell_fontPool.get( 14, 'cm' ),
+				'text', 'ideoloom\nsandbox',
+				'textNewline', 25,
+				'font', shell_fontPool.get( 14, 'cm' ),
 				'textDesignPos',
 					design_anchorPoint.create(
 						'anchor', 'c',
 						'x', 0,
 						'y', 0
 					),
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'userHomeButton',
 			widget_button.create(
-				'style', 'portalButton',
+				'facets', portalButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',

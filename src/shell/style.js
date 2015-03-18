@@ -126,66 +126,6 @@ shell_style.styles =
 
 
 	/*
-	| Portal buttons on moveto form and in the portal
-	*/
-	portalButton :
-	{
-		/*
-		| Widget is in its default state.
-		*/
-		normal :
-		{
-			fill : euclid_color.rgba( 255, 237, 210, 0.5 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgb( 255, 141, 66 )
-				)
-		},
-
-		/*
-		| The users pointing device is hovering over the widget.
-		*/
-		hover :
-		{
-			fill : euclid_color.rgba( 255, 188, 88, 0.7 ),
-			border :
-				euclid_border.create(
-					'width', 1.5,
-					'color', euclid_color.rgb( 255, 141, 66 )
-				)
-		},
-
-		/*
-		| Widget has focus.
-		*/
-		focus :
-		{
-			fill : euclid_color.rgba( 255, 237, 210, 0.5 ),
-			border :
-				euclid_border.create(
-					'distance', 1,
-					'width', 1.5,
-					'color', euclid_color.rgb( 255, 99, 188 )
-				)
-		},
-
-		/*
-		| Widget has focus and hover.
-		*/
-		hofoc :
-		{
-			fill : euclid_color.rgba( 255, 188, 88, 0.7 ),
-			border :
-				euclid_border.create(
-					'distance', 1,
-					'width', 1.5,
-					'color', euclid_color.rgb( 255, 99, 188 )
-				)
-		}
-	},
-
-
-	/*
 	| Standard look of a label.
 	*/
 	label :
