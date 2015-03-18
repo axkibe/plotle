@@ -7,7 +7,11 @@ var
 	design_anchorEllipse,
 	design_anchorPoint,
 	design_anchorRect,
+	design_facet,
+	design_facetRay,
 	disc_createDisc,
+	euclid_border,
+	euclid_color,
 	euclid_point,
 	gruga_createDisc,
 	shell_fontPool,
@@ -22,6 +26,7 @@ var
 
 var
 	dnw,
+	genericButtonFacets,
 	genericButtonModel,
 	genericButtonSize,
 	labelButtonPnw,
@@ -42,13 +47,57 @@ relationButtonPnw = dnw.create( 'x', 94, 'y', 354 );
 
 genericButtonSize = euclid_point.create( 'x', 70, 'y', 70 );
 
+genericButtonFacets =
+	design_facetRay.create(
+		'ray:init',
+		[
+			// default state.
+			design_facet.create( ),
+			// hover
+			design_facet.create(
+				'group:init',
+					{ 'hover' : true },
+				'fill',
+					euclid_color.rgba( 255, 235, 210, 0.7 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+					)
+			),
+			// focus
+			design_facet.create(
+				'group:init',
+					{ 'focus' : true },
+				'fill',
+					euclid_color.rgb( 255, 188, 88 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+					)
+			),
+			// focus and hover
+			design_facet.create(
+				'group:init',
+					{ 'focus' : true, 'hover' : true },
+				'fill',
+					euclid_color.rgb( 255, 188, 88 ),
+				'border',
+					euclid_border.create(
+						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
+					)
+			)
+		]
+	);
+
+
 genericButtonModel =
 	widget_button.abstract(
+		'facets', genericButtonFacets,
 		'font', shell_fontPool.get( 16, 'cm' ),
 		'shape', design_anchorEllipse.fullSkewNW,
-		'style', 'createButton',
 		'textDesignPos', design_anchorPoint.c
 	);
+
 
 gruga_createDisc =
 	disc_createDisc.create(
