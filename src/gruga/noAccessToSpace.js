@@ -8,6 +8,7 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	form_noAccessToSpace,
+	gruga_genericButtonFacets,
 	gruga_noAccessToSpace,
 	shell_fontPool,
 	widget_button,
@@ -62,7 +63,7 @@ gruga_noAccessToSpace =
 			),
 		'twig:add', 'okButton',
 			widget_button.create(
-				'style', 'genericButton',
+				'facets', gruga_genericButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',

@@ -9,6 +9,7 @@ var
 	design_anchorRect,
 	shell_fontPool,
 	form_welcome,
+	gruga_genericButtonFacets,
 	gruga_welcome,
 	widget_button,
 	widget_label;
@@ -63,7 +64,7 @@ gruga_welcome =
 			),
 		'twig:add', 'closeButton',
 			widget_button.create(
-				'style', 'genericButton',
+				'facets', gruga_genericButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',

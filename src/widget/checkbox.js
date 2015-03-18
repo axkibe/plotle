@@ -271,10 +271,7 @@ widget_checkbox.prototype.draw =
 
 	if( this.checked )
 	{
-		this.checkIcon.draw(
-			display,
-			euclid_view.proper
-		);
+		this.checkIcon.draw( display, euclid_view.proper );
 	}
 };
 

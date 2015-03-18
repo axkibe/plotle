@@ -33,10 +33,10 @@ var
 */
 var
 	dnw,
+	buttonFacets,
+	buttonModel,
+	buttonSize,
 	createButtonPnw,
-	genericButtonFacets,
-	genericButtonModel,
-	genericButtonSize,
 	iconMoveTo,
 	iconNormal,
 	iconRemove,
@@ -83,7 +83,7 @@ iconRemove =
 	);
 
 
-genericButtonFacets =
+buttonFacets =
 	design_facetRay.create(
 		'ray:init',
 		[
@@ -134,13 +134,13 @@ genericButtonFacets =
 		]
 	);
 
-genericButtonModel =
+buttonModel =
 	widget_button.abstract(
-		'facets', genericButtonFacets,
+		'facets', buttonFacets,
 		'shape', design_anchorEllipse.fullSkewNW
 	);
 
-genericButtonSize = euclid_point.create( 'x', 44, 'y', 44 );
+buttonSize = euclid_point.create( 'x', 44, 'y', 44 );
 
 createButtonPnw = dnw.create( 'x', 20, 'y', 169 );
 
@@ -166,16 +166,16 @@ userButtonSize = euclid_point.create( 'x', 24, 'y', 180 );
 gruga_mainDisc =
 	disc_mainDisc.create(
 		'twig:add', 'normal',
-			genericButtonModel.create(
+			buttonModel.create(
 				'icon', iconNormal,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', normalButtonPnw,
-						'pse', normalButtonPnw.add( genericButtonSize )
+						'pse', normalButtonPnw.add( buttonSize )
 					)
 			),
 		'twig:add', 'create',
-			genericButtonModel.create(
+			buttonModel.create(
 				'visible', false,
 				'text', 'new',
 				'font', shell_fontPool.get( 14, 'cm' ),
@@ -183,31 +183,31 @@ gruga_mainDisc =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', createButtonPnw,
-						'pse', createButtonPnw.add( genericButtonSize )
+						'pse', createButtonPnw.add( buttonSize )
 					)
 			),
 		'twig:add', 'remove',
-			genericButtonModel.create(
+			buttonModel.create(
 				'icon', iconRemove,
 				'visible', false,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', removeButtonPnw,
-						'pse', removeButtonPnw.add( genericButtonSize )
+						'pse', removeButtonPnw.add( buttonSize )
 					)
 			),
 		'twig:add', 'moveTo',
-			genericButtonModel.create(
+			buttonModel.create(
 				'icon', iconMoveTo,
 				'visible', false,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', movetoButtonPnw,
-						'pse', movetoButtonPnw.add( genericButtonSize )
+						'pse', movetoButtonPnw.add( buttonSize )
 					)
 			),
 		'twig:add', 'space',
-			genericButtonModel.create(
+			buttonModel.create(
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', spaceButtonPnw,
@@ -224,7 +224,7 @@ gruga_mainDisc =
 				'textRotation', - Math.PI / 2
 			),
 		'twig:add', 'user',
-			genericButtonModel.create(
+			buttonModel.create(
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', userButtonPnw,
@@ -241,7 +241,7 @@ gruga_mainDisc =
 				'textRotation', ( -Math.PI / 2 )
 			),
 		'twig:add', 'login',
-			genericButtonModel.create(
+			buttonModel.create(
 				'visible', false,
 				'text', 'log\nin',
 				'textNewline', 14,
@@ -250,11 +250,11 @@ gruga_mainDisc =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', loginButtonPnw,
-						'pse', loginButtonPnw.add( genericButtonSize )
+						'pse', loginButtonPnw.add( buttonSize )
 					)
 			),
 		'twig:add', 'signUp',
-			genericButtonModel.create(
+			buttonModel.create(
 				'visible', false,
 				'text', 'sign\nup',
 				'textNewline', 14,
@@ -263,7 +263,7 @@ gruga_mainDisc =
 				'designFrame',
 					design_anchorRect.create(
 						'pnw', signupButtonPnw,
-						'pse', signupButtonPnw.add( genericButtonSize )
+						'pse', signupButtonPnw.add( buttonSize )
 					)
 			)
 	);

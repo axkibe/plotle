@@ -8,6 +8,7 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	form_nonExistingSpace,
+	gruga_genericButtonFacets,
 	gruga_nonExistingSpace,
 	shell_fontPool,
 	widget_button,
@@ -74,8 +75,7 @@ gruga_nonExistingSpace =
 		'twig:add',
 		'noButton',
 			widget_button.create(
-				'style',
-					'genericButton',
+				'facets', gruga_genericButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -99,7 +99,7 @@ gruga_nonExistingSpace =
 		'twig:add',
 		'yesButton',
 			widget_button.create(
-				'style', 'genericButton',
+				'facets', gruga_genericButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',

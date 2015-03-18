@@ -27,7 +27,7 @@ if( JION )
 				border :
 					{
 						comment : 'border',
-						type : 'euclid_border',
+						type : [ 'euclid_border', 'euclid_borderRay' ],
 						defaultValue : 'undefined'
 					},
 				fill :

@@ -8,6 +8,7 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	form_space,
+	gruga_genericButtonFacets,
 	gruga_space,
 	shell_fontPool,
 	widget_button,
@@ -62,7 +63,7 @@ gruga_space =
 			),
 		'twig:add', 'closeButton',
 			widget_button.create(
-				'style', 'genericButton',
+				'facets', gruga_genericButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',

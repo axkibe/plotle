@@ -30,12 +30,14 @@ if( JION )
 			border :
 				{
 					comment : 'border',
-					type : 'euclid_border'
+					type : 'euclid_border',
+					allowsNull : true
 				},
 			fill :
 				{
 					comment : 'fill',
-					type : 'euclid_color'
+					type : 'euclid_color',
+					allowsNull : true
 				},
 			pc :
 				{

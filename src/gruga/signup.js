@@ -9,6 +9,7 @@ var
 	design_anchorRect,
 	shell_fontPool,
 	form_signUp,
+	gruga_genericButtonFacets,
 	gruga_signUp,
 	widget_button,
 	widget_checkbox,
@@ -32,6 +33,7 @@ var
 		w : 95,
 		n : 95
 	},
+
 	/*
 	| Close control
 	*/
@@ -226,10 +228,8 @@ gruga_signUp =
 		'twig:add',
 		'newsletterCheckBox',
 			widget_checkbox.create(
-				'style',
-					'checkbox',
-				'checked',
-					true,
+				'style', 'checkbox',
+				'checked', true,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -274,8 +274,7 @@ gruga_signUp =
 		'twig:add',
 		'signupButton',
 			widget_button.create(
-				'style',
-					'genericButton',
+				'facets', gruga_genericButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -291,20 +290,15 @@ gruga_signUp =
 								'y', signupButton.n + signupButton.height
 							)
 					),
-				'text',
-					'sign up',
-				'font',
-					shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.c,
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'text', 'sign up',
+				'font', shell_fontPool.get( 14, 'cm' ),
+				'textDesignPos', design_anchorPoint.c,
+				'shape', design_anchorEllipse.fullSkewNW
 			),
 		'twig:add',
 		'closeButton',
 			widget_button.create(
-				'style',
-					'genericButton',
+				'facets', gruga_genericButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -320,14 +314,10 @@ gruga_signUp =
 								'y', closeButton.n + closeButton.height
 							)
 					),
-				'text',
-					'close',
-				'font',
-					shell_fontPool.get( 14, 'cm' ),
-				'textDesignPos',
-					design_anchorPoint.c,
-				'shape',
-					design_anchorEllipse.fullSkewNW
+				'text', 'close',
+				'font', shell_fontPool.get( 14, 'cm' ),
+				'textDesignPos', design_anchorPoint.c,
+				'shape', design_anchorEllipse.fullSkewNW
 			)
 	);
 

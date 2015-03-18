@@ -537,6 +537,10 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/gruga/genericButtonFacets.js',
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/gruga/maindisc.js',
 		'inBundle', true
 	),

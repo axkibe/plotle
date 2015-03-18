@@ -8,6 +8,7 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	form_user,
+	gruga_genericButtonFacets,
 	gruga_user,
 	shell_fontPool,
 	widget_button,
@@ -20,10 +21,14 @@ var
 'use strict';
 
 
+var
+	closeButton;
+
+
 /*
 | Close control
 */
-var closeButton =
+closeButton =
 {
 	width : 50,
 	height : 50,
@@ -131,7 +136,7 @@ gruga_user =
 		'twig:add',
 		'closeButton',
 			widget_button.create(
-				'style', 'genericButton',
+				'facets', gruga_genericButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',

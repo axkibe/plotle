@@ -8,6 +8,7 @@ var
 	design_anchorPoint,
 	design_anchorRect,
 	form_login,
+	gruga_genericButtonFacets,
 	gruga_login,
 	shell_fontPool,
 	widget_button,
@@ -143,7 +144,7 @@ gruga_login =
 		'twig:add',
 		'loginButton',
 			widget_button.create(
-				'style', 'genericButton',
+				'facets', gruga_genericButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
@@ -167,7 +168,7 @@ gruga_login =
 		'twig:add',
 		'closeButton',
 			widget_button.create(
-				'style', 'genericButton',
+				'facets', gruga_genericButtonFacets,
 				'designFrame',
 					design_anchorRect.create(
 						'pnw',
