@@ -17,12 +17,12 @@ var
 	fabric_item,
 	fabric_portal,
 	fabric_spaceRef,
+	gruga_portalButtonFacets,
 	jools,
 	mark_caret,
 	mark_item,
 	result_hover,
 	root,
-	shell_accent,
 	shell_fontPool,
 	shell_style,
 	theme,
@@ -1531,6 +1531,7 @@ jools.lazyValue(
 	function( )
 	{
 		var
+			buttonFacet,
 			f,
 			hview,
 			mark,
@@ -1558,10 +1559,7 @@ jools.lazyValue(
 			&& mark.caretPath.get( -1 );
 
 		f.fill(
-			shell_style.getStyle(
-				theme.portal.style,
-				'normal'
-			),
+			shell_style.getStyle( theme.portal.style, 'normal' ),
 			this.zeroSilhoutte,
 			hview
 		);
@@ -1576,16 +1574,18 @@ jools.lazyValue(
 
 			moveToButton = this._moveToButton;
 
-			f.oldPaint(
-				shell_style.getStyle(
-					theme.portal.moveTo.style,
-					shell_accent.state(
-						this.hover.equals(
+			buttonFacet =
+				gruga_portalButtonFacets.getFacet(
+					'hover',
+						!!this.hover.equals(
 							this.path.append( 'moveToButton' )
 						),
-						section === 'moveToButton'
-					)
-				),
+					'focus', section === 'moveToButton'
+				);
+
+			f.paint(
+				buttonFacet.fill,
+				buttonFacet.border,
 				moveToButton.shape,
 				hview
 			);

@@ -9,6 +9,8 @@ var
 	design_anchorRect,
 	design_facet,
 	design_facetRay,
+	euclid_border,
+	euclid_color,
 	form_moveTo,
 	gruga_moveTo,
 	portalButtonFacets,
