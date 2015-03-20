@@ -18,6 +18,7 @@ var
 	fabric_portal,
 	fabric_spaceRef,
 	gruga_portalButtonFacets,
+	gruga_portalInputFacets,
 	jools,
 	mark_caret,
 	mark_item,
@@ -243,7 +244,7 @@ jools.lazyValue(
 
 		mark = this.mark;
 
-		if( !mark.hasCaret )
+		if( !mark || !mark.hasCaret )
 		{
 			return ac;
 		}
@@ -1534,6 +1535,7 @@ jools.lazyValue(
 			buttonFacet,
 			f,
 			hview,
+			inputFacet,
 			mark,
 			moveToButton,
 			section,
@@ -1583,6 +1585,12 @@ jools.lazyValue(
 					'focus', section === 'moveToButton'
 				);
 
+			inputFacet =
+				gruga_portalInputFacets.getFacet(
+					'hover', false,
+					'focus', false
+				);
+
 			f.paint(
 				buttonFacet.fill,
 				buttonFacet.border,
@@ -1590,20 +1598,16 @@ jools.lazyValue(
 				hview
 			);
 
-			f.oldPaint(
-				shell_style.getStyle(
-					theme.portal.input.style,
-					'normal'
-				),
+			f.paint(
+				inputFacet.fill,
+				inputFacet.border,
 				fieldSpaceUser.silhoutte,
 				hview
 			);
 
-			f.oldPaint(
-				shell_style.getStyle(
-					theme.portal.input.style,
-					'normal'
-				),
+			f.paint(
+				inputFacet.fill,
+				inputFacet.border,
 				fieldSpaceTag.silhoutte,
 				hview
 			);
@@ -1611,30 +1615,21 @@ jools.lazyValue(
 			f.scale( hview.zoom );
 
 			f.paintText(
-				'text',
-					fieldSpaceUser.text,
-				'p',
-					fieldSpaceUser.pnw,
-				'font',
-					this._fonts.spaceUser
+				'text', fieldSpaceUser.text,
+				'p', fieldSpaceUser.pnw,
+				'font', this._fonts.spaceUser
 			);
 
 			f.paintText(
-				'text',
-					fieldSpaceTag.text,
-				'p',
-					fieldSpaceTag.pnw,
-				'font',
-					this._fonts.spaceTag
+				'text', fieldSpaceTag.text,
+				'p', fieldSpaceTag.pnw,
+				'font', this._fonts.spaceTag
 			);
 
 			f.paintText(
-				'text',
-					'move to',
-				'p',
-					moveToButton.textCenter,
-				'font',
-					this._fonts.moveTo
+				'text', 'move to',
+				'p', moveToButton.textCenter,
+				'font', this._fonts.moveTo
 			);
 
 
