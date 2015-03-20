@@ -110,20 +110,6 @@ shell_style.styles =
 		}
 	},
 
-	/*
-	| Input fields on portals.
-	*/
-	portalInput :
-	{
-		normal :
-		{
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgb( 255, 219, 165 )
-				)
-		}
-	},
-
 
 	/*
 	| Standard look of a label.
@@ -147,48 +133,6 @@ shell_style.styles =
 				)
 		}
 	},
-
-
-	/*
-	| Default input field style.
-	*/
-	input :
-	{
-		normal :
-		{
-			fill : euclid_color.white,
-			border :
-				euclid_borderRay.create(
-					'ray:append',
-					euclid_border.create(
-						'distance', 1,
-						'width', 1.5,
-						'color', euclid_color.rgb( 255, 188, 87 )
-					),
-					'ray:append',
-					euclid_border.simpleBlack
-				)
-		},
-
-		/*
-		| Default input focused field style.
-		*/
-		focus :
-		{
-			fill : euclid_color.white,
-			border :
-				euclid_borderRay.create(
-					'ray:append',
-					euclid_border.create(
-						'distance', 1,
-						'width', 2,
-						'color', euclid_color.rgb( 255, 99, 188 )
-					),
-					'ray:append',
-					euclid_border.simpleBlack
-				)
-		}
-	}
 };
 
 
