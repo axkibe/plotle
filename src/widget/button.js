@@ -10,8 +10,7 @@ var
 	result_hover,
 	root,
 	shell_accent,
-	widget_button,
-	widget_style;
+	widget_button;
 
 
 /*
@@ -38,8 +37,7 @@ if( JION )
 				facets :
 					{
 						comment : 'style facets',
-						type : 'design_facetRay',
-						defaultValue : 'undefined'
+						type : 'design_facetRay'
 					},
 				// FIXME deduce from mark
 				focusAccent :
@@ -91,14 +89,6 @@ if( JION )
 						comment : 'the frame the widget resides in',
 						type : 'euclid_rect',
 						defaultValue : 'null'
-					},
-				// FIXME remove
-				style :
-					{
-						// FIXME put in a real object instead
-						comment : 'name of the style used',
-						type : 'string',
-						defaultValue : 'undefined'
 					},
 				text :
 					{
@@ -180,10 +170,8 @@ jools.lazyValue(
 			accent,
 			d,
 			facet,
-			facets,
 			font,
 			newline,
-			style, // FIXME remove
 			textPos;
 
 		accent =
@@ -198,31 +186,18 @@ jools.lazyValue(
 				'height', this.frame.height
 			);
 
-		facets = this.facets;
-
-		if( facets )
-		{
-			facet =
-				facets.getFacet(
-					'hover',
-						!!( this.hover && this.hover.equals( this.path ) ),
-					'focus',
-						!!( this.focusAccent )
-				);
-
-			d.paint(
-				facet.fill,
-				facet.border,
-				this._shape,
-				euclid_view.proper
+		facet =
+			this.facets.getFacet(
+				'hover', !!( this.hover && this.hover.equals( this.path ) ),
+				'focus', !!this.focusAccent
 			);
-		}
-		else
-		{
-			style = widget_style.get( this.style, accent );
 
-			d.oldPaint( style, this._shape, euclid_view.proper );
-		}
+		d.paint(
+			facet.fill,
+			facet.border,
+			this._shape,
+			euclid_view.proper
+		);
 
 		if( this.text )
 		{
@@ -303,13 +278,7 @@ widget_button.prototype.pointingHover =
 
 	pp = p.sub( this.frame.pnw );
 
-	if(
-		!this._display.withinSketch(
-			this._shape,
-			euclid_view.proper,
-			pp
-		)
-	)
+	if( !this._display.withinSketch( this._shape, euclid_view.proper, pp ) )
 	{
 		return null;
 	}
@@ -317,7 +286,7 @@ widget_button.prototype.pointingHover =
 	return(
 		result_hover.create(
 			'path', this.path,
-			'cursor', 'default'
+			'cursor', 'pointer'
 		)
 	);
 };

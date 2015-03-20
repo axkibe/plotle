@@ -8,10 +8,9 @@ var
 	euclid_view,
 	icon_check,
 	jools,
+	result_hover,
 	root,
-	shell_accent,
-	widget_checkbox,
-	widget_style;
+	widget_checkbox;
 
 
 /*
@@ -40,6 +39,11 @@ if( JION )
 					{
 						comment : 'designed frame (using anchors)',
 						type : 'design_anchorRect'
+					},
+				facets :
+					{
+						comment : 'style facets',
+						type : 'design_facetRay'
 					},
 				// FIXME deduce from mark
 				focusAccent :
@@ -73,12 +77,6 @@ if( JION )
 						comment : 'the frame the widget resides in',
 						type : 'euclid_rect',
 						defaultValue : 'null'
-					},
-				style :
-					{
-						// FIXME put in a real object instead
-						comment : 'name of the style used',
-						type : 'string'
 					},
 				visible :
 					{
@@ -140,10 +138,20 @@ widget_checkbox.prototype.focusable = true;
 */
 widget_checkbox.prototype.pointingHover =
 	function(
-		// p
+		p
 	)
 {
-	return null;
+	if( !this.visible || !this.frame.within( euclid_view.proper, p ) )
+	{
+		return null;
+	}
+
+	return(
+		result_hover.create(
+			'path', this.path,
+			'cursor', 'pointer'
+		)
+	);
 };
 
 
@@ -251,29 +259,27 @@ widget_checkbox.prototype.draw =
 	)
 {
 	var
-		style;
+		facet;
 
 	if( !this.visible )
 	{
 		return;
 	}
 
-	style =
-		widget_style.get(
-			this.style,
-			shell_accent.state(
-				this.hover && this.hover.equals( this.path ),
-				this.focusAccent
-			)
+	facet =
+		this.facets.getFacet(
+			'hover', !!( this.hover && this.hover.equals( this.path ) ),
+			'focus', !!this.focusAccent
 		);
 
-	display.oldPaint( style, this.frame, euclid_view.proper );
+	display.paint( facet.fill, facet.border, this.frame, euclid_view.proper );
 
 	if( this.checked )
 	{
 		this.checkIcon.draw( display, euclid_view.proper );
 	}
 };
+
 
 
 } )( );

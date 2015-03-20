@@ -9,6 +9,7 @@ var
 	design_anchorRect,
 	form_login,
 	gruga_genericButtonFacets,
+	gruga_genericInputFacets,
 	gruga_login,
 	shell_fontPool,
 	widget_button,
@@ -99,7 +100,7 @@ gruga_login =
 		'twig:add',
 		'userInput',
 			widget_input.create(
-				'style', 'input',
+				'facets', gruga_genericInputFacets,
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',
@@ -121,8 +122,8 @@ gruga_login =
 		'twig:add',
 		'passwordInput',
 			widget_input.create(
+				'facets', gruga_genericInputFacets,
 				'password', true,
-				'style', 'input',
 				'font', shell_fontPool.get( 14, 'la' ),
 				'maxlen', 100,
 				'designFrame',

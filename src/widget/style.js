@@ -1,5 +1,7 @@
 /*
 | Gets styles by a name.
+|
+| FIXME remove
 */
 
 

@@ -48,6 +48,12 @@ if( JION )
 						comment : 'designed frame (using anchors',
 						type : 'design_anchorRect'
 					},
+				facets :
+					{
+						comment : 'style facets',
+						type : 'design_facetRay',
+						defaultValue : 'undefined' // FIXME remove
+					},
 				// FIXME deduce from mark
 				focusAccent :
 					{
@@ -97,11 +103,13 @@ if( JION )
 						type : 'euclid_rect',
 						defaultValue : 'null'
 					},
+				// FIXME remove
 				style :
 					{
 						// FIXME put in a real object instead
 						comment : 'name of the style used',
-						type : 'string'
+						type : 'string',
+						defaultValue : 'undefined',
 					},
 				value :
 					{
@@ -122,7 +130,6 @@ if( JION )
 
 
 var
-	blackStyle,
 	prototype;
 
 
@@ -335,16 +342,6 @@ jools.lazyValue(
 	}
 );
 
-/*
-| Black style
-|
-| FIXME move to style
-*/
-blackStyle =
-	{
-		fill : euclid_color.black
-	};
-
 
 /*
 | Returns the display for the input field.
@@ -358,6 +355,7 @@ jools.lazyValue(
 			a,
 			aZ,
 			f,
+			facet,
 			font,
 			mark,
 			pitch,
@@ -380,22 +378,31 @@ jools.lazyValue(
 				'height', shape.height + 1
 			);
 
-		style =
-			widget_style.get(
-				this.style,
-				shell_accent.state(
-					false, // FIXME
-					this.focusAccent
-				)
-			),
+		if( this.facets )
+		{
+			facet =
+				this.facets.getFacet(
+					'hover', false, // FUTURE
+					'focus', !!this.focusAccent
+				);
+		}
+		else
+		{
+			// FIXME remove
+			style =
+				widget_style.get(
+					this.style,
+					shell_accent.state(
+						false,
+						this.focusAccent
+					)
+				);
+		}
 
 		font = this.font;
 
-		f.fill(
-			style,
-			shape,
-			euclid_view.proper
-		);
+		// FIXME
+		f.fill( facet || style, shape, euclid_view.proper );
 
 		if( this.password )
 		{
@@ -407,23 +414,15 @@ jools.lazyValue(
 				a++
 			)
 			{
-				f.fill(
-					blackStyle,
-					pm[ a ],
-					euclid_view.proper
-				);
+				f.fill( euclid_color.black, pm[ a ], euclid_view.proper );
 			}
 		}
 		else
 		{
 			f.paintText(
-				'text',
-					value,
-				'xy',
-					pitch.x,
-					font.size + pitch.y,
-				'font',
-					font
+				'text', value,
+				'xy', pitch.x, font.size + pitch.y,
+				'font', font
 			);
 		}
 
@@ -437,7 +436,8 @@ jools.lazyValue(
 			this._drawCaret( f );
 		}
 
-		f.border( style, shape, euclid_view.proper );
+		// FIXME
+		f.border( facet || style, shape, euclid_view.proper );
 
 		return f;
 	}

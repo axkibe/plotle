@@ -347,7 +347,15 @@ euclid_display.prototype.border =
 		aZ,
 		border;
 
-	border = style.border;
+	// FIXME
+	if( style.border )
+	{
+		border = style.border;
+	}
+	else
+	{
+		border = style;
+	}
 
 	if( border.reflect === 'euclid_borderRay' )
 	{
@@ -387,7 +395,15 @@ euclid_display.prototype.fill =
 
 	cx = this._cx;
 
-	fill = style.fill;
+	// FIXME remove
+	if( style.fill )
+	{
+		fill = style.fill;
+	}
+	else
+	{
+		fill = style;
+	}
 
 	cx.beginPath( );
 

@@ -541,6 +541,14 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/gruga/genericCheckboxFacets.js',
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/gruga/genericInputFacets.js',
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/gruga/portalButtonFacets.js',
 		'inBundle', true
 	),
