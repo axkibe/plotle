@@ -41,6 +41,7 @@ if( JION )
 						[
 							'euclid_color',
 							'gradient_askew',
+							'gradient_radial',
 						],
 						defaultValue : 'undefined'
 					}

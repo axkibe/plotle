@@ -1,5 +1,5 @@
 /*
-| Default note.
+| Default portal.
 */
 
 
@@ -9,9 +9,9 @@ var
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
-	gradient_askew,
+	gradient_radial,
 	gradient_colorStop,
-	gruga_note;
+	gruga_portal;
 
 
 /*
@@ -21,13 +21,13 @@ var
 'use strict';
 
 
-gruga_note =
+gruga_portal =
 	design_facetRay.create(
 		'ray:append',
 		// default
 		design_facet.create(
 			'fill',
-				gradient_askew.create(
+				gradient_radial.create(
 					'ray:append',
 					gradient_colorStop.create(
 						'offset', 0,
@@ -43,8 +43,9 @@ gruga_note =
 				euclid_borderRay.create(
 					'ray:append',
 					euclid_border.create(
-						'distance', 1,
-						'color', euclid_color.rgb( 255, 188, 87 )
+						'distance', 3,
+						'width', 6,
+						'color', euclid_color.rgb( 255, 220, 128 )
 					),
 					'ray:append',
 					euclid_border.simpleBlack

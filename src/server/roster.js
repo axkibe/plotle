@@ -573,6 +573,10 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/gruga/portal.js',
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/gruga/loading.js',
 		'inBundle', true
 	),

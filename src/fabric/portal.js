@@ -17,6 +17,7 @@ var
 	fabric_item,
 	fabric_portal,
 	fabric_spaceRef,
+	gruga_portal,
 	gruga_portalButtonFacets,
 	gruga_portalInputFacets,
 	jools,
@@ -25,7 +26,6 @@ var
 	result_hover,
 	root,
 	shell_fontPool,
-	shell_style,
 	theme,
 	visual_handlesBezel;
 
@@ -455,6 +455,8 @@ prototype.draw =
 
 /*
 | Highlights the portal.
+|
+| FIXME jionize
 */
 prototype.highlight =
 	function(
@@ -462,7 +464,7 @@ prototype.highlight =
 	)
 {
 	display.border(
-		shell_style.getStyle( theme.portal.style, 'highlight' ),
+		gruga_portal.getFacet( 'highlight', true ).border,
 		this.silhoutte,
 		this.view
 	);
@@ -1533,7 +1535,8 @@ jools.lazyValue(
 	{
 		var
 			buttonFacet,
-			f,
+			display,
+			facet,
 			hview,
 			inputFacet,
 			mark,
@@ -1545,7 +1548,7 @@ jools.lazyValue(
 
 		vzone = this.view.rect( this.zone );
 
-		f =
+		display =
 			euclid_display.create(
 				'width', vzone.width + 2,
 				'height', vzone.height + 2
@@ -1560,15 +1563,17 @@ jools.lazyValue(
 			&& mark.hasCaret
 			&& mark.caretPath.get( -1 );
 
-		f.fill(
-			shell_style.getStyle( theme.portal.style, 'normal' ),
+		facet = gruga_portal.getFacet( );
+
+		display.fill(
+			facet.fill,
 			this.zeroSilhoutte,
 			hview
 		);
 
 		if( !this.path.isEmpty )
 		{
-			f.clip( this.zeroSilhoutte, hview, 0 );
+			display.clip( this.zeroSilhoutte, hview, 0 );
 
 			fieldSpaceUser = this._fieldSpaceUser;
 
@@ -1591,42 +1596,42 @@ jools.lazyValue(
 					'focus', false
 				);
 
-			f.paint(
+			display.paint(
 				buttonFacet.fill,
 				buttonFacet.border,
 				moveToButton.shape,
 				hview
 			);
 
-			f.paint(
+			display.paint(
 				inputFacet.fill,
 				inputFacet.border,
 				fieldSpaceUser.silhoutte,
 				hview
 			);
 
-			f.paint(
+			display.paint(
 				inputFacet.fill,
 				inputFacet.border,
 				fieldSpaceTag.silhoutte,
 				hview
 			);
 
-			f.scale( hview.zoom );
+			display.scale( hview.zoom );
 
-			f.paintText(
+			display.paintText(
 				'text', fieldSpaceUser.text,
 				'p', fieldSpaceUser.pnw,
 				'font', this._fonts.spaceUser
 			);
 
-			f.paintText(
+			display.paintText(
 				'text', fieldSpaceTag.text,
 				'p', fieldSpaceTag.pnw,
 				'font', this._fonts.spaceTag
 			);
 
-			f.paintText(
+			display.paintText(
 				'text', 'move to',
 				'p', moveToButton.textCenter,
 				'font', this._fonts.moveTo
@@ -1639,24 +1644,20 @@ jools.lazyValue(
 				&& mark.focus
 			)
 			{
-				this._drawCaret( f );
+				this._drawCaret( display );
 			}
 
-			f.scale( 1 / hview.zoom );
+			display.scale( 1 / hview.zoom );
 
-			f.deClip( );
+			display.deClip( );
 		}
 
 		// redraws the border on the end to top
 		// everything else
 
-		f.border(
-			shell_style.getStyle( theme.portal.style, 'normal' ),
-			this.zeroSilhoutte,
-			hview
-		);
+		display.border( facet.border, this.zeroSilhoutte, hview );
 
-		return f;
+		return display;
 	}
 );
 
