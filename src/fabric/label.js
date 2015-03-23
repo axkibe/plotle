@@ -11,9 +11,9 @@ var
 	fabric_docItem,
 	fabric_item,
 	fabric_label,
+	gruga_label,
 	jools,
 	root,
-	shell_style,
 	theme,
 	visual_handlesBezel;
 
@@ -299,6 +299,8 @@ jools.lazyValue(
 
 /*
 | Highlights the label.
+|
+| FIXME jionize
 */
 prototype.highlight =
 	function(
@@ -306,7 +308,7 @@ prototype.highlight =
 	)
 {
 	display.border(
-		shell_style.getStyle( theme.label.style, 'highlight' ),
+		gruga_label.getFacet( 'highlight', true ).border,
 		this.silhoutte,
 		this.view
 	);
@@ -420,6 +422,7 @@ jools.lazyValue(
 		var
 			doc,
 			display,
+			facet,
 			vzone;
 
 		vzone = this.view.rect( this.zone );
@@ -439,18 +442,14 @@ jools.lazyValue(
 			euclid_point.zero
 		);
 
+		facet = gruga_label.getFacet( );
+
 		// displays the border
-		display.border(
-			shell_style.getStyle( theme.label.style, 'normal' ),
-			this.zeroSilhoutte,
-			this.view.home
-		);
+		display.border( facet.border, this.zeroSilhoutte, this.view.home );
 
 		return display;
 	}
 );
-
-
 
 
 } )( );

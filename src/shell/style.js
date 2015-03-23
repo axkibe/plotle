@@ -66,30 +66,6 @@ shell_style.styles =
 				)
 		}
 	},
-
-
-	/*
-	| Standard look of a label.
-	*/
-	label :
-	{
-		normal :
-		{
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgba( 100, 100, 0, 0.1 )
-				)
-		},
-
-		highlight :
-		{
-			border :
-				euclid_border.create(
-					'width', 3,
-					'color', euclid_color.rgba( 255, 183, 15, 0.5 )
-				)
-		}
-	},
 };
 
 

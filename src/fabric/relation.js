@@ -15,11 +15,11 @@ var
 	fabric_label,
 	fabric_para,
 	fabric_relation,
+	gruga_label,
 	jion_path,
 	jools,
 	mark_caret,
 	root,
-	shell_style,
 	theme,
 	visual_handlesBezel;
 
@@ -282,11 +282,7 @@ prototype.draw =
 				zone, 'normal'
 			);
 
-		arrow1.draw(
-			display,
-			this.view,
-			theme.relation.style
-		);
+		arrow1.draw( display, this.view, theme.relation.style );
 	}
 
 	if( item2 )
@@ -297,11 +293,7 @@ prototype.draw =
 				item2.silhoutte, 'arrow'
 			);
 
-		arrow2.draw(
-			display,
-			this.view,
-			theme.relation.style
-		);
+		arrow2.draw( display, this.view, theme.relation.style );
 	}
 
 	fabric_label.prototype.draw.call( this, display );
@@ -441,6 +433,7 @@ jools.lazyValue(
 		var
 			doc,
 			display,
+			facet,
 			vzone;
 
 		vzone = this.view.rect( this.zone );
@@ -460,9 +453,11 @@ jools.lazyValue(
 			euclid_point.zero
 		);
 
+		facet = gruga_label.getFacet( );
+
 		// displays the border
 		display.border(
-			shell_style.getStyle( theme.label.style, 'normal' ),
+			facet.border,
 			this.zeroSilhoutte,
 			this.view.home
 		);
