@@ -20,10 +20,8 @@ var
 	mark_caret,
 	result_hover,
 	root,
-	shell_accent,
 	theme,
-	widget_input,
-	widget_style;
+	widget_input;
 
 
 /*
@@ -39,8 +37,7 @@ var
 if( JION )
 {
 	return {
-		id :
-			'widget_input',
+		id : 'widget_input',
 		attributes :
 			{
 				designFrame :
@@ -102,14 +99,6 @@ if( JION )
 						comment : 'the frame the widget resides in',
 						type : 'euclid_rect',
 						defaultValue : 'null'
-					},
-				// FIXME remove
-				style :
-					{
-						// FIXME put in a real object instead
-						comment : 'name of the style used',
-						type : 'string',
-						defaultValue : 'undefined',
 					},
 				value :
 					{
@@ -354,14 +343,13 @@ jools.lazyValue(
 		var
 			a,
 			aZ,
-			f,
+			display,
 			facet,
 			font,
 			mark,
 			pitch,
 			pm,
 			shape,
-			style,
 			value;
 
 		pitch = this._pitch;
@@ -372,37 +360,21 @@ jools.lazyValue(
 
 		mark = this.mark;
 
-		f =
+		display =
 			euclid_display.create(
 				'width', shape.width + 1,
 				'height', shape.height + 1
 			);
 
-		if( this.facets )
-		{
-			facet =
-				this.facets.getFacet(
-					'hover', false, // FUTURE
-					'focus', !!this.focusAccent
-				);
-		}
-		else
-		{
-			// FIXME remove
-			style =
-				widget_style.get(
-					this.style,
-					shell_accent.state(
-						false,
-						this.focusAccent
-					)
-				);
-		}
+		facet =
+			this.facets.getFacet(
+				'hover', false, // FUTURE
+				'focus', !!this.focusAccent
+			);
 
 		font = this.font;
 
-		// FIXME
-		f.fill( facet || style, shape, euclid_view.proper );
+		display.fill( facet.fill, shape, euclid_view.proper );
 
 		if( this.password )
 		{
@@ -414,12 +386,12 @@ jools.lazyValue(
 				a++
 			)
 			{
-				f.fill( euclid_color.black, pm[ a ], euclid_view.proper );
+				display.fill( euclid_color.black, pm[ a ], euclid_view.proper );
 			}
 		}
 		else
 		{
-			f.paintText(
+			display.paintText(
 				'text', value,
 				'xy', pitch.x, font.size + pitch.y,
 				'font', font
@@ -433,13 +405,12 @@ jools.lazyValue(
 			&& mark.focus
 		)
 		{
-			this._drawCaret( f );
+			this._drawCaret( display );
 		}
 
-		// FIXME
-		f.border( facet || style, shape, euclid_view.proper );
+		display.border( facet.border, shape, euclid_view.proper );
 
-		return f;
+		return display;
 	}
 );
 

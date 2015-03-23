@@ -317,10 +317,6 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/widget/style.js',
-		'inBundle', true
-	),
-	resource.create(
 		'filePath', 'src/widget/button.js',
 		'hasJion', true,
 		'inBundle', true
