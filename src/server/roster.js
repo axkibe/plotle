@@ -565,6 +565,10 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/gruga/note.js',
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/gruga/loading.js',
 		'inBundle', true
 	),

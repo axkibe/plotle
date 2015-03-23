@@ -13,8 +13,8 @@ var
 	fabric_docItem,
 	fabric_item,
 	fabric_note,
+	gruga_note,
 	jools,
-	shell_style,
 	root,
 	system,
 	theme,
@@ -372,6 +372,8 @@ jools.lazyValue(
 
 /*
 | Highlights the note.
+|
+| FIXME this should be jion variable
 */
 prototype.highlight =
 	function(
@@ -379,7 +381,7 @@ prototype.highlight =
 	)
 {
 	display.border(
-		shell_style.getStyle( theme.note.style, 'highlight' ),
+		gruga_note.getFacet( 'highlight', true ).border,
 		this.silhoutte,
 		this.view
 	);
@@ -590,18 +592,18 @@ jools.lazyValue(
 	function( )
 	{
 		var
+			d,
 			doc,
-			f,
+			facet,
 			hview,
 			sbary,
-			style,
 			vzone;
 
 		vzone = this.view.rect( this.zone );
 
 		hview = this.view.home;
 
-		f =
+		d =
 			euclid_display.create(
 				'width', vzone.width + 2,
 				'height', vzone.height + 2
@@ -609,19 +611,15 @@ jools.lazyValue(
 
 		doc = this.doc;
 
-		style = shell_style.getStyle( theme.note.style, 'normal' );
+		facet = gruga_note.getFacet( );
 
 		sbary = this.scrollbarY;
 
-		f.fill(
-			style,
-			this.zeroSilhoutte,
-			hview
-		);
+		d.fill( facet.fill, this.zeroSilhoutte, hview );
 
 		// draws selection and text
 		doc.draw(
-			f,
+			d,
 			this.zone.width,
 			euclid_point.create(
 				'x', 0,
@@ -630,9 +628,9 @@ jools.lazyValue(
 		);
 
 		// draws the border
-		f.border( style, this.zeroSilhoutte, hview );
+		d.border( facet.border, this.zeroSilhoutte, hview );
 
-		return f;
+		return d;
 	}
 );
 

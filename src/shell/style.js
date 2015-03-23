@@ -7,7 +7,6 @@ var
 	euclid_border,
 	euclid_borderRay,
 	euclid_color,
-	gradient_askew,
 	gradient_colorStop,
 	gradient_radial,
 	shell_accent,
@@ -25,48 +24,6 @@ shell_style = { };
 
 shell_style.styles =
 {
-	/*
-	| Standard look of a note.
-	*/
-	note :
-	{
-		normal :
-		{
-			fill :
-				gradient_askew.create(
-					'ray:append',
-					gradient_colorStop.create(
-						'offset', 0,
-						'color', euclid_color.rgba( 255, 255, 248, 0.955 )
-					),
-					'ray:append',
-					gradient_colorStop.create(
-						'offset', 1,
-						'color', euclid_color.rgba( 255, 255, 160, 0.955 )
-					)
-				),
-			border :
-				euclid_borderRay.create(
-					'ray:append',
-					euclid_border.create(
-						'distance', 1,
-						'color', euclid_color.rgb( 255, 188, 87 )
-					),
-					'ray:append',
-					euclid_border.simpleBlack
-				)
-		},
-
-		highlight :
-		{
-			border :
-				euclid_border.create(
-					'width', 3,
-					'color', euclid_color.rgba( 255, 183, 15, 0.5 )
-				)
-		}
-	},
-
 	/*
 	| Standard look of a portal.
 	*/
