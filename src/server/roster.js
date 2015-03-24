@@ -337,10 +337,6 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/shell/style.js',
-		'inBundle', true
-	),
-	resource.create(
 		'filePath', 'src/shell/accent.js',
 		'inBundle', true
 	),
@@ -570,6 +566,10 @@ module.exports =
 	),
 	resource.create(
 		'filePath', 'src/gruga/portal.js',
+		'inBundle', true
+	),
+	resource.create(
+		'filePath', 'src/gruga/relation.js',
 		'inBundle', true
 	),
 	resource.create(

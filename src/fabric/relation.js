@@ -16,6 +16,7 @@ var
 	fabric_para,
 	fabric_relation,
 	gruga_label,
+	gruga_relation,
 	jion_path,
 	jools,
 	mark_caret,
@@ -36,9 +37,8 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'fabric_relation',
+	return{
+		id : 'fabric_relation',
 		attributes :
 		{
 			doc :
@@ -282,7 +282,7 @@ prototype.draw =
 				zone, 'normal'
 			);
 
-		arrow1.draw( display, this.view, theme.relation.style );
+		arrow1.draw( display, this.view, gruga_relation );
 	}
 
 	if( item2 )
@@ -293,7 +293,7 @@ prototype.draw =
 				item2.silhoutte, 'arrow'
 			);
 
-		arrow2.draw( display, this.view, theme.relation.style );
+		arrow2.draw( display, this.view, gruga_relation );
 	}
 
 	fabric_label.prototype.draw.call( this, display );

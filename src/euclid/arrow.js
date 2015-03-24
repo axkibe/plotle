@@ -329,10 +329,10 @@ euclid_arrow.prototype.draw =
 	function(
 		display,
 		view,
-		style
+		facet
 	)
 {
-	display.oldPaint( style, this._shape, view );
+	display.paint( facet.fill, facet.border, this._shape, view );
 };
 
 

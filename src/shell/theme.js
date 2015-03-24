@@ -1,9 +1,8 @@
 /*
 | Meshcraft default theme.
 |
-| FIXME call shell_theme
+| FIXME call shell_settings
 | FIXME remove and put it all to gruga
-| FIXME string styles
 */
 
 
@@ -66,7 +65,6 @@ theme =
 		minHeight : 30,
 		innerMargin  :
 			euclid_margin.create( 'n', 4, 'e', 5, 's', 4, 'w', 5 ),
-		style : 'note',
 		cornerRadius : 8,
 		// default fontsize
 		fontsize : 13
@@ -79,14 +77,12 @@ theme =
 	{
 		minWidth : 40,
 		minHeight : 40,
-		style : 'portal',
 
 		/*
 		| input fields on the portal
 		*/
 		input :
 		{
-			style : 'portalInput',
 			rounding : 3,
 			pitch : 5
 		},
@@ -96,7 +92,6 @@ theme =
 		*/
 		moveTo :
 		{
-			style : 'portalButton',
 			width : 80,
 			height : 22,
 			rounding : 11
@@ -110,7 +105,6 @@ theme =
 	label :
 	{
 		minSize : 8,
-		style : 'label',
 		innerMargin  : euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 )
 	},
 
@@ -291,23 +285,6 @@ theme =
 	*/
 	relation :
 	{
-		style :
-		{
-			fill : euclid_color.rgba( 255, 225, 40, 0.5 ),
-			border :
-				euclid_borderRay.create(
-					'ray:append',
-					euclid_border.create(
-						'width', 3,
-						'color', euclid_color.rgba( 255, 225, 80, 0.4 )
-					),
-					'ray:append',
-					euclid_border.create(
-						'color', euclid_color.rgba( 200, 100, 0,  0.8 )
-					)
-				)
-		},
-
 		innerMargin :
 			euclid_margin.create( 'n', 1, 'e', 1, 's', 1, 'w', 1 ),
 
