@@ -469,24 +469,6 @@ euclid_display.prototype.globalAlpha =
 
 /*
 | Fills an aera and draws its borders.
-|
-| FIXME remove
-*/
-euclid_display.prototype.oldPaint =
-	function(
-		style,
-		shape,
-		view
-	)
-{
-	return this.paint( style.fill, style.border, shape, view );
-};
-
-
-
-
-/*
-| Fills an aera and draws its borders.
 */
 euclid_display.prototype.paint =
 	function(

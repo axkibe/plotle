@@ -110,18 +110,4 @@ jools.lazyValue(
 );
 
 
-/*
-| Draws the line.
-*/
-euclid_line.prototype.draw =
-	function(
-		display,
-		view,
-		style
-	)
-{
-	display.oldPaint( style, this, view );
-};
-
-
 } )( );

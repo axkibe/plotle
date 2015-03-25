@@ -426,11 +426,7 @@ prototype.draw =
 							toSilhoutte, 'arrow'
 						);
 
-					arrow.draw(
-						display,
-						view,
-						theme.relation.style
-					);
+					arrow.draw( display, view, gruga_relation );
 				}
 			}
 			else

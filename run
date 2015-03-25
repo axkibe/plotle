@@ -2,5 +2,5 @@
 set -e
 node --harmony src/tools/genjion.js jion/listing-genjion.js
 node --harmony src/tools/genjion.js jion/listing-server.js
-./jshint
+#./jshint
 node --harmony src/server/root.js
