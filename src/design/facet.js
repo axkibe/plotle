@@ -27,22 +27,13 @@ if( JION )
 				border :
 					{
 						comment : 'border',
-						type :
-						[
-							'euclid_border',
-							'euclid_borderRay'
-						],
+						type : '->border',
 						defaultValue : 'undefined'
 					},
 				fill :
 					{
 						comment : 'fill',
-						type :
-						[
-							'euclid_color',
-							'gradient_askew',
-							'gradient_radial',
-						],
+						type : '->fill',
 						defaultValue : 'undefined'
 					}
 			},

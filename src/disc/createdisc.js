@@ -44,6 +44,16 @@ if( JION )
 						type : '->action',
 						defaultValue : 'null'
 					},
+				border :
+					{
+						comment : 'display border',
+						type : '->border'
+					},
+				fill :
+					{
+						comment : 'display fill',
+						type : '->fill'
+					},
 				hover :
 					{
 						comment : 'the widget hovered upon',
@@ -176,7 +186,7 @@ jools.lazyValue(
 				'height', this.style.height
 			);
 
-		display.fill( this.style, this.silhoutte, euclid_view.proper );
+		display.fill( this.fill, this.silhoutte, euclid_view.proper );
 
 		for(
 			var r = 0, rZ = this.ranks.length;
@@ -187,7 +197,7 @@ jools.lazyValue(
 			this.atRank( r ).draw( display );
 		}
 
-		display.border( this.style, this.silhoutte, euclid_view.proper );
+		display.border( this.border, this.silhoutte, euclid_view.proper );
 
 		return display;
 	}

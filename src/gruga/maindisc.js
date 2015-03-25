@@ -11,8 +11,11 @@ var
 	design_facetRay,
 	disc_mainDisc,
 	euclid_border,
+	euclid_borderRay,
 	euclid_color,
 	euclid_point,
+	gradient_colorStop,
+	gradient_radial,
 	gruga_mainDisc,
 	icon_moveto,
 	icon_normal,
@@ -165,6 +168,31 @@ userButtonSize = euclid_point.create( 'x', 24, 'y', 180 );
 
 gruga_mainDisc =
 	disc_mainDisc.create(
+		'border',
+			euclid_borderRay.create(
+				'ray:append',
+				euclid_border.create(
+					'distance', 1,
+					'color', euclid_color.rgb( 255, 94, 44 )
+				),
+				'ray:append',
+				euclid_border.create(
+					'color', euclid_color.rgb( 94, 94, 0 )
+				)
+			),
+		'fill',
+			gradient_radial.create(
+				'ray:append',
+				gradient_colorStop.create(
+					'offset', 0,
+					'color', euclid_color.rgba( 255, 255,  20, 0.955 )
+				),
+				'ray:append',
+				gradient_colorStop.create(
+					'offset', 1,
+					'color', euclid_color.rgba( 255, 255, 180, 0.955 )
+				)
+			),
 		'twig:add', 'normal',
 			buttonModel.create(
 				'icon', iconNormal,

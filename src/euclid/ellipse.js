@@ -86,10 +86,16 @@ if( JION )
 }
 
 
+var
+	prototype;
+
+prototype = euclid_ellipse.prototype;
+
+
 /*
 | Initialization.
 */
-euclid_ellipse.prototype._init =
+prototype._init =
 	function(
 		pnw,
 		pse
@@ -162,28 +168,23 @@ euclid_ellipse.prototype._init =
 
 
 /*
-| Center point of an ellipse.
+| Gets the source of a projection to p.
 */
-jools.lazyValue(
-	euclid_ellipse.prototype,
-	'pc',
-	function( )
-	{
-		return(
-			euclid_point.create(
-				'x', jools.half( this.pnw.x + this.pse.x ),
-				'y', jools.half( this.pnw.y + this.pse.y )
-			)
-		);
-	}
-);
+prototype.getProjection =
+	function
+	(
+		// ...
+	)
+{
+	return this.shape.getProjection.apply( this.shape, arguments );
+};
 
 
 /*
 | Gradient's center point.
 */
 jools.lazyValue(
-	euclid_ellipse.prototype,
+	prototype,
 	'gradientPC',
 	function( )
 	{
@@ -206,7 +207,7 @@ jools.lazyValue(
 | Gradient inner radius.
 */
 jools.lazyValue(
-	euclid_ellipse.prototype,
+	prototype,
 	'gradientR1',
 	function( )
 	{
@@ -232,7 +233,7 @@ jools.lazyValue(
 | Gradient inner radius.
 */
 jools.lazyValue(
-	euclid_ellipse.prototype,
+	prototype,
 	'gradientR0',
 	function( )
 	{
@@ -247,11 +248,41 @@ jools.lazyValue(
 
 
 /*
+| Ellipse height.
+*/
+jools.lazyValue(
+	prototype,
+	'height',
+	function( )
+	{
+		return this.pse.y - this.pnw.y;
+	}
+);
+
+
+/*
+| Center point of an ellipse.
+*/
+jools.lazyValue(
+	prototype,
+	'pc',
+	function( )
+	{
+		return(
+			euclid_point.create(
+				'x', jools.half( this.pnw.x + this.pse.x ),
+				'y', jools.half( this.pnw.y + this.pse.y )
+			)
+		);
+	}
+);
+
+
+/*
 | Returns true if point is within the ellipse.
 */
-euclid_ellipse.prototype.within =
-	function
-	(
+prototype.within =
+	function(
 		view,
 		p
 	)
@@ -276,16 +307,16 @@ euclid_ellipse.prototype.within =
 
 
 /*
-| Gets the source of a projection to p.
+| Ellipse width.
 */
-euclid_ellipse.prototype.getProjection =
-	function
-	(
-		// ...
-	)
-{
-	return this.shape.getProjection.apply( this.shape, arguments );
-};
+jools.lazyValue(
+	prototype,
+	'width',
+	function( )
+	{
+		return this.pse.x - this.pnw.x;
+	}
+);
 
 
 } )( );

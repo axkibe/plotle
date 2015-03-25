@@ -44,6 +44,16 @@ if( JION )
 						type : '->action',
 						defaultValue : 'null'
 					},
+				border :
+					{
+						comment : 'display border',
+						type : '->border'
+					},
+				fill :
+					{
+						comment : 'display fill',
+						type : '->fill'
+					},
 				hover :
 					{
 						comment : 'the widget hovered upon',
@@ -267,12 +277,13 @@ jools.lazyValue(
 			rZ;
 
 		display =
+			// FIXME remove style
 			euclid_display.create(
 				'width', this.style.width,
 				'height', this.style.height
 			);
 
-		display.fill( this.style, this.silhoutte, euclid_view.proper );
+		display.fill( this.fill, this.silhoutte, euclid_view.proper );
 
 		for(
 			r = 0, rZ = this.length;
@@ -283,7 +294,7 @@ jools.lazyValue(
 			this.atRank( r ).draw( display );
 		}
 
-		display.border( this.style, this.silhoutte, euclid_view.proper );
+		display.border( this.border, this.silhoutte, euclid_view.proper );
 
 		return display;
 	}
