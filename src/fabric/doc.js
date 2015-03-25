@@ -7,6 +7,7 @@ var
 	euclid_point,
 	euclid_shape,
 	fabric_doc,
+	gruga_selection,
 	jools,
 	root,
 	shapeSection_start,
@@ -687,8 +688,9 @@ prototype.draw =
 		// FIXME have shapeRays handled more elegantly
 		if( !Array.isArray( rs ) )
 		{
-			display.oldPaint(
-				theme.selection.style,
+			display.paint(
+				gruga_selection.fill,
+				gruga_selection.border,
 				rs,
 				this.view
 			);
@@ -701,8 +703,9 @@ prototype.draw =
 				a++
 			)
 			{
-				display.oldPaint(
-					theme.selection.style,
+				display.paint(
+					gruga_selection.fill,
+					gruga_selection.border,
 					rs[ a ],
 					this.view
 				);

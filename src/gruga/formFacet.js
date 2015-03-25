@@ -1,5 +1,5 @@
 /*
-| Default note.
+| Default form background.
 */
 
 

@@ -144,26 +144,10 @@ theme =
 
 
 	/*
-	| Form
-	*/
-	form :
-	{
-		style :
-		{
-		}
-	},
-
-
-	/*
 	| Selection
 	*/
 	selection :
 	{
-		style :
-		{
-			fill : euclid_color.rgba( 243, 203, 255, 0.9 ),
-			border : euclid_border.simpleBlack
-		}
 	},
 
 

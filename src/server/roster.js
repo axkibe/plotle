@@ -561,6 +561,10 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
+		'filePath', 'src/gruga/selection.js',
+		'inBundle', true
+	),
+	resource.create(
 		'filePath', 'src/gruga/label.js',
 		'inBundle', true
 	),
