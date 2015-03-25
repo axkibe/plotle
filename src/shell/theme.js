@@ -158,11 +158,6 @@ theme =
 	{
 		style :
 		{
-			fill : euclid_color.rgb( 255, 188, 87 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgb( 221, 154, 52 )
-				)
 		},
 		// width
 		strength : 8,

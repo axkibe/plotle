@@ -10,6 +10,7 @@
 var
 	euclid_roundRect,
 	euclid_view,
+	gruga_scrollbar,
 	jools,
 	theme,
 	visual_scrollbar;
@@ -100,8 +101,9 @@ visual_scrollbar.prototype.draw =
 		view
 	)
 {
-	display.oldPaint(
-		theme.scrollbar.style,
+	display.paint(
+		gruga_scrollbar.fill,
+		gruga_scrollbar.border,
 		this.getArea( view ),
 		euclid_view.proper
 	);
