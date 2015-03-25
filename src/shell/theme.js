@@ -15,8 +15,6 @@ var
 	euclid_border,
 	euclid_color,
 	euclid_margin,
-	gradient_askew,
-	gradient_colorStop,
 	shell_fontPool;
 
 /*
@@ -152,20 +150,6 @@ theme =
 	{
 		style :
 		{
-			fill :
-				gradient_askew.create(
-					'ray:append',
-					gradient_colorStop.create(
-						'offset', 0,
-						'color', euclid_color.rgb( 255, 255, 248 )
-					),
-					'ray:append',
-					gradient_colorStop.create(
-						'offset', 1,
-						'color', euclid_color.rgb( 255, 255, 210 )
-					)
-				),
-			border : null
 		}
 	},
 

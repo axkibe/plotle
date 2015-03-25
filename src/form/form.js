@@ -6,12 +6,12 @@
 var
 	form_form,
 	euclid_view,
+	gruga_formFacet,
 	jion_path,
 	jools,
 	mark_caret,
 	mark_widget,
-	result_hover,
-	theme;
+	result_hover;
 
 
 /*
@@ -229,8 +229,8 @@ form_form.draw =
 	var
 		r;
 
-	display.oldPaint(
-		theme.form.style,
+	display.fill(
+		gruga_formFacet.fill,
 		display.silhoutte,
 		euclid_view.proper
 	);
