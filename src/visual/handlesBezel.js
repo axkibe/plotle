@@ -8,6 +8,7 @@ var
 	euclid_ellipse,
 	euclid_point,
 	euclid_view,
+	gruga_handles,
 	jools,
 	root,
 	theme,
@@ -399,7 +400,7 @@ visual_handlesBezel.prototype.drawHandles =
 
 		fixView = view.review( 0, view.point( h.pc ) );
 
-		display.oldPaint( theme.handle.style, h, fixView );
+		display.paint( gruga_handles.fill, gruga_handles.border, h, fixView );
 	}
 
 	display.deClip( );

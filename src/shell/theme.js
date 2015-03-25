@@ -12,8 +12,6 @@
 */
 var
 	theme,
-	euclid_border,
-	euclid_color,
 	euclid_margin,
 	shell_fontPool;
 
@@ -178,15 +176,7 @@ theme =
 	{
 		maxSize : 12,
 		cdistance : 12,
-		edistance : 12,
-		style :
-		{
-			fill : euclid_color.rgba( 255, 240, 150, 0.9 ),
-			border :
-				euclid_border.create(
-					'color', euclid_color.rgba( 255, 180, 110, 0.9 )
-				)
-		}
+		edistance : 12
 	},
 
 
