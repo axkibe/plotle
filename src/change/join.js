@@ -29,30 +29,23 @@ if( JION )
 			{
 				path :
 					{
-						comment :
-							'join at this path',
-						json :
-							'true',
-						type :
-							'jion_path'
+						comment : 'join at this path',
+						json : 'true',
+						type : 'jion_path'
 					},
 				at1 :
 					{
-						comment :
-							'join at this place ( must be length of text )',
-						json :
-							'true',
-						type :
-							'integer'
+						comment : 'join at this place ',
+						// must be length of text
+						json : 'true',
+						type : 'integer'
 					},
 				path2 :
 					{
-						comment :
-							'join this ( must be after path )',
-						json :
-							'true',
-						type :
-							'jion_path'
+						comment : 'join this'
+						// must be after path
+						json : 'true',
+						type : 'jion_path'
 					}
 			},
 		init :

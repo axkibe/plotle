@@ -110,7 +110,6 @@ if( JION )
 						comment : 'the users mark',
 						type : '->mark',
 						assign : '_mark',
-						allowsNull : true,  // FIXME
 						allowsUndefined : true
 					},
 				mode :
@@ -1174,7 +1173,7 @@ prototype.onAcquireSpace =
 
 	root.create(
 		'access', access,
-		'mark', null,
+		'mark', undefined,
 		'mode',
 			root._mode === 'loading'
 			? 'normal'

@@ -28,30 +28,21 @@ if( JION )
 			{
 				path :
 					{
-						comment :
-							'set at this path',
-						json :
-							'true',
-						type :
-							'jion_path'
+						comment : 'set at this path',
+						json : 'true',
+						type : 'jion_path'
 					},
 				val :
 					{
-						comment :
-							'value to set',
-						json :
-							'true',
-						type :
-							'->spaceVal'
+						comment : 'value to set',
+						json : 'true',
+						type : '->spaceVal'
 					},
 				prev :
 					{
-						comment :
-							'value tree had',
-						json :
-							'true',
-						type :
-							'->spaceVal'
+						comment : 'value tree had',
+						json : 'true',
+						type : '->spaceVal'
 					}
 			}
 	};

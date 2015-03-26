@@ -29,32 +29,22 @@ if( JION )
 			{
 				path :
 					{
-						comment :
-							'grow at this path',
-						json :
-							'true',
-						type :
-							'jion_path'
+						comment : 'grow at this path',
+						json : 'true',
+						type : 'jion_path'
 					},
 				val :
 					{
-						comment :
-							'value to grow',
-						json :
-							'true',
-						type :
-							'->spaceVal',
-						allowsNull :
-							true
+						comment : 'value to grow',
+						json : 'true',
+						type : '->spaceVal',
+						allowsNull : true
 					},
 				rank :
 					{
-						comment :
-							'rank of new node',
-						json :
-							'true',
-						type :
-							'integer'
+						comment : 'rank of new node',
+						json : 'true',
+						type : 'integer'
 					}
 			},
 		init :

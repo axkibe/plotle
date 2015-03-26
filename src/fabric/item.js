@@ -48,20 +48,15 @@ fabric_item.concernsMark =
 		path
 	)
 {
-	if( !path )
+	if( !path || path.isEmpty || !mark )
 	{
 		return undefined;
-	}
-
-	if( !mark || path.isEmpty )
-	{
-		return null;
 	}
 
 	return(
 		mark.containsPath( path )
 		? mark
-		: null
+		: undefined
 	);
 };
 

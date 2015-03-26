@@ -29,34 +29,23 @@ if( JION )
 			{
 				path :
 					{
-						comment :
-							'shrink at this path',
-						json :
-							'true',
-						type :
-							'jion_path'
+						comment : 'shrink at this path',
+						json : 'true',
+						type : 'jion_path'
 					},
 				prev :
 					{
-						comment :
-							'value tree had',
-						json :
-							'true',
-						type :
-							'->spaceVal',
-						defaultValue :
-							'null'
+						comment : 'value tree had',
+						json : 'true',
+						type : '->spaceVal',
+						defaultValue : 'null'
 					},
 				rank :
 					{
-						comment :
-							'rank of new node',
-						json :
-							'true',
-						type :
-							'integer',
-						allowsUndefined :
-							true
+						comment : 'rank of new node',
+						json : 'true',
+						type : 'integer',
+						allowsUndefined : true
 					}
 			},
 		init :
@@ -273,7 +262,7 @@ prototype._transformMark =
 		return mark;
 	}
 
-	return null;
+	return undefined;
 };
 
 

@@ -782,7 +782,7 @@ prototype.click =
 
 	// otherwise ...
 
-	root.create( 'mark', null );
+	root.create( 'mark', undefined );
 
 	return true;
 };
