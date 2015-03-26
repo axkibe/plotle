@@ -489,7 +489,7 @@ prototype._init =
 					hpath.isEmpty || hpath.get( 0 ) !== 'form'
 					? jion_path.empty
 					: hpath,
-				'mark', mark || undefined, // FIXME
+				'mark', mark,
 				'spaceRef', spaceRef,
 				'user', user,
 				'view', view
@@ -503,7 +503,7 @@ prototype._init =
 					hpath.isEmpty || hpath.get( 0 ) !== 'disc'
 					? jion_path.empty
 					: hpath,
-				'mark', mark || undefined, // FIXME
+				'mark', mark,
 				'mode', mode,
 				'spaceRef', spaceRef,
 				'user', user,
