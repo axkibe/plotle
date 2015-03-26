@@ -45,13 +45,6 @@ if( JION )
 						comment : 'style facets',
 						type : 'design_facetRay'
 					},
-				// FIXME deduce from mark
-				focusAccent :
-					{
-						comment : 'true if the widget got focus',
-						type : 'boolean',
-						defaultValue : 'false'
-					},
 				hover :
 					{
 						comment : 'component hovered upon',
@@ -63,8 +56,9 @@ if( JION )
 					{
 						comment : 'the users mark',
 						type : '->mark',
-						defaultValue : 'null',
-						assign : null
+						defaultValue : 'undefined',
+						prepare : 'widget_widget.concernsMark( mark, path )',
+						allowsNull : true // FIXME
 					},
 				path :
 					{
@@ -269,7 +263,7 @@ widget_checkbox.prototype.draw =
 	facet =
 		this.facets.getFacet(
 			'hover', !!( this.hover && this.hover.equals( this.path ) ),
-			'focus', !!this.focusAccent
+			'focus', !!this.mark
 		);
 
 	display.paint( facet.fill, facet.border, this.frame, euclid_view.proper );

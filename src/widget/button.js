@@ -44,13 +44,6 @@ if( JION )
 						comment : 'style facets',
 						type : 'design_facetRay'
 					},
-				// FIXME deduce from mark
-				focusAccent :
-					{
-						comment : 'true if the widget got focus',
-						type : 'boolean',
-						defaultValue : 'false'
-					},
 				font :
 					{
 						comment : 'font of the text',
@@ -74,8 +67,9 @@ if( JION )
 					{
 						comment : 'the users mark',
 						type : '->mark',
-						defaultValue : 'null',
-						assign : null
+						prepare : 'widget_widget.concernsMark( mark, path )',
+						defaultValue : 'undefined',
+						allowsNull : true // FIXME
 					},
 				path :
 					{
@@ -188,7 +182,7 @@ jools.lazyValue(
 			this.facets.getFacet(
 				'down', this.down,
 				'hover', !!( this.hover && this.hover.equals( this.path ) ),
-				'focus', !!this.focusAccent
+				'focus', !!this.mark
 			);
 
 		display.paint(

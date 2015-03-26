@@ -48,15 +48,7 @@ if( JION )
 				facets :
 					{
 						comment : 'style facets',
-						type : 'design_facetRay',
-						defaultValue : 'undefined' // FIXME remove
-					},
-				// FIXME deduce from mark
-				focusAccent :
-					{
-						comment : 'true if the widget got focus',
-						type : 'boolean',
-						defaultValue : 'false'
+						type : 'design_facetRay'
 					},
 				hover :
 					{
@@ -369,7 +361,7 @@ jools.lazyValue(
 		facet =
 			this.facets.getFacet(
 				'hover', false, // FUTURE
-				'focus', !!this.focusAccent
+				'focus', !!this.mark
 			);
 
 		font = this.font;

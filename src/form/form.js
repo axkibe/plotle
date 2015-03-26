@@ -33,7 +33,6 @@ form_form.init =
 	)
 {
 	var
-		focusAccent,
 		mark,
 		name,
 		path,
@@ -68,28 +67,13 @@ form_form.init =
 
 		widgetProto = twig[ name ];
 
-		focusAccent = false;
-
 		// FIXME only when not having widgetProto
 		path = this.path.append( 'twig' ).append( name );
-
-		if( widgetProto.focusable )
-		{
-			if( !mark || mark.widgetPath.isEmpty )
-			{
-				focusAccent = false;
-			}
-			else
-			{
-				focusAccent = mark.widgetPath.get( 4 ) === name;
-			}
-		}
 
 		twig[ name ] =
 			widgetProto.create(
 				'path', path,
 				'superFrame', this.frame,
-				'focusAccent', focusAccent,
 				'hover', this.hover,
 				'mark', this.mark
 			);
