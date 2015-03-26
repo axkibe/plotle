@@ -112,10 +112,10 @@ buttonFacets =
 						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
 					)
 			),
-			// focus
+			// down
 			design_facet.create(
 				'group:init',
-					{ 'focus' : true },
+					{ 'down' : true },
 				'fill',
 					euclid_color.rgb( 255, 188, 88 ),
 				'border',
@@ -123,10 +123,10 @@ buttonFacets =
 						'color', euclid_color.rgba( 196, 94, 44, 0.4 )
 					)
 			),
-			// focus and hover
+			// down and hover
 			design_facet.create(
 				'group:init',
-					{ 'focus' : true, 'hover' : true },
+					{ 'down' : true, 'hover' : true },
 				'fill',
 					euclid_color.rgb( 255, 188, 88 ),
 				'border',

@@ -337,10 +337,6 @@ module.exports =
 		'inBundle', true
 	),
 	resource.create(
-		'filePath', 'src/shell/accent.js',
-		'inBundle', true
-	),
-	resource.create(
 		'filePath', 'src/fabric/spaceRef.js',
 		'hasJion', true,
 		'inBundle', true

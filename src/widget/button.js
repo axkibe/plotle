@@ -9,7 +9,6 @@ var
 	jools,
 	result_hover,
 	root,
-	shell_accent,
 	widget_button;
 
 
@@ -33,6 +32,12 @@ if( JION )
 					{
 						comment : 'designed frame (using anchors',
 						type : 'design_anchorRect'
+					},
+				down :
+					{
+						comment : 'true if the button is down',
+						type : 'boolean',
+						defaultValue : 'false'
 					},
 				facets :
 					{
@@ -167,20 +172,13 @@ jools.lazyValue(
 	function( )
 	{
 		var
-			accent,
-			d,
+			display,
 			facet,
 			font,
 			newline,
 			textPos;
 
-		accent =
-			shell_accent.state(
-				this.hover && this.hover.equals( this.path ),
-				this.focusAccent
-			);
-
-		d =
+		display =
 			euclid_display.create(
 				'width', this.frame.width,
 				'height', this.frame.height
@@ -188,11 +186,12 @@ jools.lazyValue(
 
 		facet =
 			this.facets.getFacet(
+				'down', this.down,
 				'hover', !!( this.hover && this.hover.equals( this.path ) ),
 				'focus', !!this.focusAccent
 			);
 
-		d.paint(
+		display.paint(
 			facet.fill,
 			facet.border,
 			this._shape,
@@ -213,7 +212,7 @@ jools.lazyValue(
 
 			if( newline === null )
 			{
-				d.paintText(
+				display.paintText(
 					'text', this.text,
 					'p', textPos,
 					'font', font,
@@ -241,7 +240,7 @@ jools.lazyValue(
 					a++, y += newline
 				)
 				{
-					d.paintText(
+					display.paintText(
 						'text', text[ a ],
 						'xy', x, y,
 						'font', font
@@ -252,10 +251,10 @@ jools.lazyValue(
 
 		if( this.icon )
 		{
-			this.icon.draw( d, euclid_view.proper );
+			this.icon.draw( display, euclid_view.proper );
 		}
 
-		return d;
+		return display;
 	}
 );
 

@@ -116,7 +116,6 @@ disc_createDisc.prototype._init =
 	)
 {
 	var
-		focusAccent,
 		r,
 		rZ,
 		ranks,
@@ -146,8 +145,6 @@ disc_createDisc.prototype._init =
 	{
 		wname = ranks[ r ];
 
-		focusAccent = disc_createDisc._isActiveButton( this.action, wname );
-
 		twig[ wname ] =
 			twig[ wname ].create(
 				'path',
@@ -156,7 +153,8 @@ disc_createDisc.prototype._init =
 					 : this.path.append( 'twig' ).append( wname ),
 				'superFrame', this.frame.zeropnw,
 				'hover', this.hover,
-				'focusAccent', focusAccent
+				'down',
+					disc_createDisc._isActiveButton( this.action, wname )
 			);
 	}
 

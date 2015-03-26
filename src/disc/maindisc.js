@@ -223,7 +223,7 @@ disc_mainDisc.prototype._init =
 		twig[ wname ] =
 			twig[ wname ].create(
 				'hover', this.hover,
-				'focusAccent', this.mode === wname,
+				'down', this.mode === wname,
 				'path',
 					twig[ wname ].path
 					? pass
