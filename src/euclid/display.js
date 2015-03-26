@@ -337,25 +337,14 @@ euclid_display.prototype.drawImage =
 */
 euclid_display.prototype.border =
 	function(
-		style,  // the style
+		border,  // the border
 		shape,  // an object which has sketch defined
 		view
 	)
 {
 	var
 		a,
-		aZ,
-		border;
-
-	// FIXME
-	if( style.border )
-	{
-		border = style.border;
-	}
-	else
-	{
-		border = style;
-	}
+		aZ;
 
 	if( border.reflect === 'euclid_borderRay' )
 	{
@@ -376,14 +365,13 @@ euclid_display.prototype.border =
 */
 euclid_display.prototype.fill =
 	function(
-		style,   // the style
-		shape,   // an object which has sketch defined
+		fill,   // the fill
+		shape,  // an object which has sketch defined
 		view
 	)
 {
 	var
-		cx,
-		fill;
+		cx;
 
 /**/if( CHECK )
 /**/{
@@ -394,16 +382,6 @@ euclid_display.prototype.fill =
 /**/}
 
 	cx = this._cx;
-
-	// FIXME remove
-	if( style.fill )
-	{
-		fill = style.fill;
-	}
-	else
-	{
-		fill = style;
-	}
 
 	cx.beginPath( );
 
@@ -1003,37 +981,37 @@ euclid_display.prototype._setFont =
 
 
 /*
-| Sketches a shape.
-|
-| FIXME this is akward.
+| Sketches an euclidian object.
 */
 euclid_display.prototype._sketch =
 	function(
-		shape,
-		border,
-		twist,
-		view
+		euclid, // the euclidian object to sketch
+		border, // additional border
+		twist,  // 0.5 offset in case of borders vs. fills
+		view    // the view
 	)
 {
-	if( shape.shape )
+	switch( euclid.reflect )
 	{
-		shape = shape.shape;
-	}
+		case 'euclid_ellipse' :
+		case 'euclid_roundRect' :
 
-	switch( shape.reflect )
-	{
+			return this._sketchShape( euclid.shape, border, twist, view );
+
 		case 'euclid_rect' :
 
-			return this._sketchRect( shape, border, twist, view );
-	}
+			return this._sketchRect( euclid, border, twist, view );
 
-	if( shape.ray )
-	{
-		return this._sketchShape( shape, border, twist, view );
-	}
+		case 'euclid_shape' :
 
-	throw new Error( );
+			return this._sketchShape( euclid, border, twist, view );
+
+		default :
+
+			throw new Error( );
+	}
 };
+
 
 /*
 | Draws the rectangle.
