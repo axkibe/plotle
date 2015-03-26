@@ -40,7 +40,7 @@ if( JION )
 						comment : 'the users mark',
 						prepare : 'form_form.concernsMark( mark, path )',
 						type : '->mark',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				path :
 					{

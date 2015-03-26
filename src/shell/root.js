@@ -110,7 +110,8 @@ if( JION )
 						comment : 'the users mark',
 						type : '->mark',
 						assign : '_mark',
-						allowsNull : true
+						allowsNull : true,  // FIXME
+						allowsUndefined : true
 					},
 				mode :
 					{
@@ -328,7 +329,7 @@ shell_root.startup =
 		'doTracker', shell_doTracker.create( ),
 		'hover', jion_path.empty,
 		'link', net_link.create( ),
-		'mark', null,
+		'mark', undefined,
 		'mode', mode,
 		'space', null,
 		'systemFocus', true,
@@ -339,7 +340,7 @@ shell_root.startup =
 				'access', '',
 				'action', null,
 				'hover', jion_path.empty,
-				'mark', null,
+				'mark', undefined,
 				'mode', mode,
 				'path', jion_path.empty.append( 'disc' ),
 				'view', view,
@@ -350,7 +351,6 @@ shell_root.startup =
 		'_formJockey',
 			form_jockey.create(
 				'hover', jion_path.empty,
-				'mark', null,
 				'path', jion_path.empty.append( 'form' ),
 				'view', view,
 				'twig:add', 'loading', gruga_loading,
@@ -490,7 +490,7 @@ prototype._init =
 					hpath.isEmpty || hpath.get( 0 ) !== 'form'
 					? jion_path.empty
 					: hpath,
-				'mark', mark,
+				'mark', mark || undefined, // FIXME
 				'spaceRef', spaceRef,
 				'user', user,
 				'view', view
@@ -504,7 +504,7 @@ prototype._init =
 					hpath.isEmpty || hpath.get( 0 ) !== 'disc'
 					? jion_path.empty
 					: hpath,
-				'mark', mark,
+				'mark', mark || undefined, // FIXME
 				'mode', mode,
 				'spaceRef', spaceRef,
 				'user', user,

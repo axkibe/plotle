@@ -43,7 +43,7 @@ if( JION )
 					{
 						comment : 'the users mark',
 						type : '->mark',
-						allowsNull : true
+						allowsUndefined : true
 					},
 				path :
 					{

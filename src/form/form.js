@@ -140,7 +140,7 @@ form_form.concernsMark =
 	return(
 		mark.containsPath( path )
 		? mark
-		: null
+		: undefined
 	);
 };
 
