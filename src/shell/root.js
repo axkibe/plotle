@@ -67,7 +67,8 @@ if( JION )
 					{
 						comment : 'current action',
 						type : '->action',
-						allowsNull : true
+						defaultValue : 'undefined',
+						prepare : 'shell_root.prepareAction( action, space )'
 						// FIXME assign _action
 					},
 				ajax :
@@ -110,6 +111,7 @@ if( JION )
 						comment : 'the users mark',
 						type : '->mark',
 						assign : '_mark',
+						// FIXME defaultValue : 'undefined',
 						allowsUndefined : true
 					},
 				mode :
@@ -254,6 +256,39 @@ loadingSpaceTextPath =
 
 
 /*
+| Prepares the current action.
+|
+| Makes sure the action has not been invalidated by
+| a space update. In that case it is set undefined.
+*/
+shell_root.prepareAction =
+	function(
+		action,
+		space
+	)
+{
+	if( !space || !action )
+	{
+		return undefined;
+	}
+
+	switch( action.reflect )
+	{
+		case 'action_itemDrag' :
+		case 'action_itemResize' :
+
+			return(
+				space.get( action.origin.path.get( -1 ) )
+				? action
+				: undefined
+			);
+
+		default : return action;
+	}
+};
+
+
+/*
 | Startup of shell.
 */
 shell_root.startup =
@@ -315,7 +350,6 @@ shell_root.startup =
 
 	shell_root.create(
 		'access', null,
-		'action', null,
 		'ajax',
 			net_ajax.create(
 				'path', ajaxPath,
@@ -337,7 +371,6 @@ shell_root.startup =
 		'_discJockey',
 			disc_jockey.create(
 				'access', '',
-				'action', null,
 				'hover', jion_path.empty,
 				'mark', undefined,
 				'mode', mode,
@@ -457,7 +490,7 @@ prototype._init =
 		mark = mark.create( 'focus', this._systemFocus );
 	}
 
-	// skips recreating childs when no need
+	// skips recreating children when no need
 	if(
 		!inherit
 		|| access !== inherit._access
@@ -953,7 +986,7 @@ prototype.showHome =
 	function( )
 {
 	root.create(
-		'action', null,
+		'action', undefined,
 		'mode', root.space ? 'normal' : 'loading'
 	);
 };

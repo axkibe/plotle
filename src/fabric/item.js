@@ -148,7 +148,7 @@ fabric_item.dragStart =
 	view = this.view;
 
 	if(
-		action === null
+		!action
 		&& sbary
 		&& sbary.within( view, p )
 	)

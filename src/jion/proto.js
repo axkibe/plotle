@@ -174,12 +174,7 @@ jion_proto.getPath =
 			return this.twig[ key ];
 		}
 
-		return (
-			this.twig[ key ].getPath(
-				path,
-				pos + 2
-			)
-		);
+		return this.twig[ key ].getPath( path, pos + 2 );
 	}
 
 	if( pos + 1 === pZ )
@@ -187,12 +182,7 @@ jion_proto.getPath =
 		return this[ key ];
 	}
 
-	return (
-		this[ key ].getPath(
-			path,
-			pos + 1
-		)
-	);
+	return this[ key ].getPath( path, pos + 1 );
 };
 
 

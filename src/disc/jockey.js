@@ -35,7 +35,7 @@ if( JION )
 					{
 						comment : 'currently active action',
 						type : '->action',
-						allowsNull : true
+						defaultValue : 'undefined'
 					},
 				hover :
 					{

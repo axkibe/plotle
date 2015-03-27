@@ -135,7 +135,7 @@ prototype.clear =
 		''
 	);
 
-	root.create( 'mark', null );
+	root.create( 'mark', undefined );
 };
 
 

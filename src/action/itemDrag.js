@@ -16,30 +16,23 @@
 if( JION )
 {
 	return {
-		id :
-			'action_itemDrag',
+		id : 'action_itemDrag',
 		attributes :
 			{
 				origin :
 					{
-						comment :
-							'the item being dragged',
-						type :
-							'->fabricItems'
+						comment : 'the item being dragged',
+						type : '->fabricItems'
 					},
 				start :
 					{
-						comment :
-							'mouse down point on drag creation',
-						type :
-							'euclid_point'
+						comment : 'mouse down point on drag creation',
+						type : 'euclid_point'
 					},
 				transItem :
 					{
-						comment :
-							'the transient item while it is dragged',
-						type :
-							'->fabricItems'
+						comment : 'the transient item while it is dragged',
+						type : '->fabricItems'
 					}
 			}
 	};

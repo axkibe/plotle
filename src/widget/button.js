@@ -400,7 +400,7 @@ widget_button.prototype.draw =
 widget_button.prototype.dragStop =
 	function( )
 {
-	root.create( 'action', null );
+	root.create( 'action', undefined );
 };
 
 

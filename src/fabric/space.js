@@ -47,7 +47,7 @@ if( JION )
 					{
 						comment : 'current action',
 						type : '->action',
-						defaultValue : 'null',
+						defaultValue : 'undefined',
 						assign : '_action'
 					},
 				access :
@@ -67,8 +67,7 @@ if( JION )
 						comment : 'the users mark',
 						type : '->mark',
 						prepare : 'fabric_space.concernsMark( mark )',
-						defaultValue : 'undefined',
-						allowsNull : true
+						defaultValue : 'undefined'
 					},
 				path :
 					{
@@ -140,7 +139,7 @@ fabric_space.concernsMark =
 	}
 	else
 	{
-		return null;
+		return undefined;
 	}
 };
 
@@ -181,8 +180,8 @@ prototype._init =
 		path = twig[ k ].path;
 
 		if(
-			!path ||
-			path.length === 0 || // FUTURE remove empty paths
+			!path
+			||
 			!path.shorten.shorten.equals( this.path )
 		)
 		{
@@ -191,6 +190,7 @@ prototype._init =
 
 		twig[ k ] =
 			twig[ k ].create(
+//				'action', this.action,
 				'hover', this.hover,
 				'mark', this.mark,
 				'path', path,
@@ -866,7 +866,7 @@ prototype.dragStop =
 
 					if( !ctrl )
 					{
-						root.create( 'action', null );
+						root.create( 'action', undefined );
 					}
 
 					break;
@@ -944,7 +944,7 @@ prototype.dragStop =
 
 					if( !ctrl )
 					{
-						root.create( 'action', null );
+						root.create( 'action', undefined );
 					}
 
 					break;
@@ -987,7 +987,7 @@ prototype.dragStop =
 
 					if( !ctrl )
 					{
-						root.create( 'action', null );
+						root.create( 'action', undefined );
 					}
 
 					break;
@@ -1001,7 +1001,7 @@ prototype.dragStop =
 
 		case 'action_pan' :
 
-			root.create( 'action', null );
+			root.create( 'action', undefined );
 
 			break;
 
@@ -1012,7 +1012,7 @@ prototype.dragStop =
 
 				case 'start' :
 
-					root.create( 'action', null );
+					root.create( 'action', undefined );
 
 					break;
 
@@ -1025,7 +1025,7 @@ prototype.dragStop =
 						item.dragStop( p );
 					}
 
-					root.create( 'action', null );
+					root.create( 'action', undefined );
 
 					break;
 
@@ -1085,7 +1085,7 @@ prototype.dragStop =
 				}
 			}
 
-			root.create( 'action', null );
+			root.create( 'action', undefined );
 
 			break;
 
@@ -1139,7 +1139,7 @@ prototype.dragStop =
 				}
 			}
 
-			root.create( 'action', null );
+			root.create( 'action', undefined );
 
 			break;
 
@@ -1152,7 +1152,7 @@ prototype.dragStop =
 				item.dragStop( p, shift, ctrl );
 			}
 
-			root.create( 'action', null );
+			root.create( 'action', undefined );
 
 			break;
 
@@ -1198,7 +1198,7 @@ prototype.dragMove =
 
 	view = this.view;
 
-	if( action === null )
+	if( action === undefined )
 	{
 		return 'pointer';
 	}

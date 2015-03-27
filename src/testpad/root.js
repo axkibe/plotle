@@ -762,7 +762,7 @@ testpad_root.prototype.testInput =
 		return;
 	}
 
-	if( action === null )
+	if( !action )
 	{
 		root.create(
 			'action',
@@ -810,14 +810,18 @@ testpad_root.prototype.inputSpecialKey =
 	)
 {
 	var
-		action =
-			root.action,
-		cursorLine =
-			root.cursorLine,
-		cursorAt =
-			root.cursorAt,
-		doc =
-			root._doc;
+		action,
+		cursorAt,
+		cursorLine,
+		doc;
+
+	action = root.action;
+
+	cursorLine = root.cursorLine;
+
+	cursorAt = root.cursorAt;
+
+	doc = root._doc;
 
 	switch( keyCode )
 	{
@@ -1089,13 +1093,8 @@ testpad_root.prototype.inputSpecialKey =
 			}
 
 			root.create(
-				'action',
-					action.create(
-						'at2',
-							action.at2 + 1
-					),
-				'cursorAt',
-					cursorAt + 1
+				'action', action.create( 'at2', action.at2 + 1 ),
+				'cursorAt', cursorAt + 1
 			);
 
 			return;
@@ -1257,26 +1256,22 @@ testpad_root.prototype.makeScreen =
 
 		case 'join' :
 
-			lines[ action.line ].
-				unshift( '<span id="join">↰</span>' );
+			lines[ action.line ]
+			.unshift( '<span id="join">↰</span>' );
 
 			break;
 
 		case 'split' :
 
-			lines[ action.line ].
-				splice(
-					action.at,
-					0,
-					'<span id="split">⤶</span>'
-				);
+			lines[ action.line ]
+			.splice( action.at, 0, '<span id="split">⤶</span>' );
 
 			break;
 
 		case 'insert' :
 
-			lines[ action.line ].
-				splice(
+			lines[ action.line ]
+			.splice(
 					action.at,
 					0,
 					'<span id="insert">',

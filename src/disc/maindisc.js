@@ -42,7 +42,7 @@ if( JION )
 					{
 						comment : 'currently active action',
 						type : '->action',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				border :
 					{
@@ -350,7 +350,7 @@ disc_mainDisc.prototype.pushButton =
 	}
 	else
 	{
-		root.create( 'mode', buttonName, 'action', null );
+		root.create( 'mode', buttonName, 'action', undefined );
 	}
 };
 

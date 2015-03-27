@@ -42,7 +42,7 @@ if( JION )
 					{
 						comment : 'currently active action',
 						type : '->action',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				border :
 					{
@@ -499,7 +499,7 @@ disc_createDisc._isActiveButton =
 		wname    // the widget name
 	)
 {
-	if( action === null )
+	if( !action )
 	{
 		return false;
 	}
