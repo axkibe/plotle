@@ -622,8 +622,10 @@ prototype.genConstructor =
 	{
 		block =
 			block
-			.$( 'this.twig = twig' )
-			.$( 'this.ranks = ranks' );
+			.$( 'this.twig = twig' )  // FIXME remove
+			.$( 'this._twig = twig' )
+			.$( 'this.ranks = ranks' )  // FIXME remove
+			.$( 'this._ranks = ranks' );
 	}
 
 	// calls the initializer
@@ -1886,8 +1888,7 @@ prototype.genFromJsonCreatorVariables =
 
 		if( this.twig )
 		{
-			varList.push(
-				'a',
+			varList.push( 'a',
 				'aZ',
 				'key',
 				'jval',
@@ -2748,8 +2749,8 @@ prototype.genToJson =
 	{
 		olit =
 			olit
-			.add( 'ranks', 'this.ranks' )
-			.add( 'twig', 'this.twig' );
+			.add( 'ranks', 'this._ranks' )
+			.add( 'twig', 'this._twig' );
 	}
 
 	block =
@@ -2982,16 +2983,16 @@ prototype.genEqualsFuncBody =
 	{
 		twigTestLoopBody =
 			$block( )
-			.$( 'key = this.ranks[ a ]' )
+			.$( 'key = this._ranks[ a ]' )
 			.$if(
 				$or(
-					'key !== obj.ranks[ a ]',
+					'key !== obj._ranks[ a ]',
 					$condition(
-						'this.twig[ key ].' + eqFuncName,
-						'!this.twig[ key ].'
+						'this._twig[ key ].' + eqFuncName,
+						'!this._twig[ key ].'
 						+ eqFuncName
-						+ '( obj.twig[ key ] )',
-						'this.twig[ key ] !== obj.twig[ key ]'
+						+ '( obj._twig[ key ] )',
+						'this._twig[ key ] !== obj._twig[ key ]'
 					)
 				),
 				$( 'return false' )
@@ -3004,7 +3005,7 @@ prototype.genEqualsFuncBody =
 				$( 'return false' )
 			)
 			.$for(
-				'a = 0, aZ = this.ranks.length',
+				'a = 0, aZ = this.length',
 				'a < aZ',
 				'++a',
 				twigTestLoopBody
@@ -3013,9 +3014,10 @@ prototype.genEqualsFuncBody =
 		body =
 			body
 			.$if(
-				$or(
-					'this.tree !== obj.tree',
-					'this.ranks !== obj.ranks'
+				$(
+					'this._twig !== obj._twig',
+					'||',
+					'this._ranks !== obj._ranks'
 				),
 				twigTest
 			);
@@ -3183,9 +3185,10 @@ prototype.genAlike =
 		{
 			// FIXME same test as in equals
 			cond =
-				$and(
-					'this.tree === obj.tree',
-					'this.ranks === obj.ranks'
+				$(
+					'this._twig === obj._twig',
+					'&&',
+					'this._ranks === obj._ranks'
 				);
 		}
 

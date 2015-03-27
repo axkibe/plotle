@@ -185,7 +185,11 @@ AbstractConstructor =
 {
 	this.twig = twig;
 
+	this._twig = twig;
+
 	this.ranks = ranks;
+
+	this._ranks = ranks;
 
 	if( FREEZE )
 	{
@@ -222,7 +226,11 @@ Constructor =
 
 	this.twig = twig;
 
+	this._twig = twig;
+
 	this.ranks = ranks;
+
+	this._ranks = ranks;
 
 	if( FREEZE )
 	{
@@ -888,7 +896,7 @@ prototype.equals =
 		return false;
 	}
 
-	if( this.tree !== obj.tree || this.ranks !== obj.ranks )
+	if( this._twig !== obj._twig || this._ranks !== obj._ranks )
 	{
 		if( this.length !== obj.length )
 		{
@@ -896,20 +904,20 @@ prototype.equals =
 		}
 
 		for(
-			a = 0, aZ = this.ranks.length;
+			a = 0, aZ = this.length;
 			a < aZ;
 			++a
 		)
 		{
-			key = this.ranks[ a ];
+			key = this._ranks[ a ];
 
 			if(
-				key !== obj.ranks[ a ]
+				key !== obj._ranks[ a ]
 				||
 				(
-					this.twig[ key ].equals
-					? !this.twig[ key ].equals( obj.twig[ key ] )
-					: this.twig[ key ] !== obj.twig[ key ]
+					this._twig[ key ].equals
+					? !this._twig[ key ].equals( obj._twig[ key ] )
+					: this._twig[ key ] !== obj._twig[ key ]
 				)
 			)
 			{
