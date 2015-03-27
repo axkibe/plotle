@@ -90,10 +90,7 @@ if( JION )
 					}
 			},
 		init :
-			[
-				'inherit',
-				'twigDup'
-			],
+			[ 'inherit', 'twigDup' ],
 		json :
 			true,
 		twig :
@@ -626,7 +623,6 @@ prototype.dragStart =
 						'pnw', p,  // FIXME why no depoint?
 						'pse', p
 					),
-				'mark', null,
 				'path', jion_path.empty,
 				'view', view
 			);
@@ -651,7 +647,6 @@ prototype.dragStart =
 		transItem =
 			shell_stubs.emptyLabel.create(
 				'pnw', view.depoint( p ),
-				'mark', null,
 				'path', jion_path.empty,
 				'view', view
 			);
@@ -676,7 +671,6 @@ prototype.dragStart =
 		transItem =
 			shell_stubs.emptyPortal.create(
 				'hover', jion_path.empty,
-				'mark', null,
 				'path', jion_path.empty,
 				'view', view,
 				'zone',

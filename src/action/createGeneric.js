@@ -25,40 +25,29 @@ if( JION )
 		attributes :
 			{
 				itemType :
-					{
-						comment :
-							'item type to be created',
-						// FIXME make list of possibilities
-						type :
-							'string'
-					},
+				{
+					comment : 'item type to be created',
+					// FUTURE make list of possibilities
+					type : 'string'
+				},
 				transItem :
-					{
-						comment :
-							'the transient item in creation',
-						type :
-							'->fabricItems',
-						allowsNull :
-							true
-					},
+				{
+					comment : 'the transient item in creation',
+					type : '->fabricItems',
+					allowsNull : true
+				},
 				model :
-					{
-						comment :
-							'a transient item used as model',
-						type :
-							'->fabricItems',
-						allowsNull :
-							true
-					},
+				{
+					comment : 'a transient item used as model',
+					type : '->fabricItems',
+					allowsNull : true
+				},
 				start :
-					{
-						comment :
-							'mouse down point on drag creation',
-						type :
-							'euclid_point',
-						allowsNull :
-							true
-					}
+				{
+					comment : 'mouse down point on drag creation',
+					type : 'euclid_point',
+					allowsNull : true
+				}
 			}
 	};
 }

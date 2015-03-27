@@ -63,8 +63,7 @@ if( JION )
 						comment : 'the users mark',
 						prepare : 'fabric_item.concernsMark( mark, path )',
 						type : '->mark',
-						defaultValue : 'undefined',
-						allowsNull : true
+						defaultValue : 'undefined'
 					},
 				path :
 					{
