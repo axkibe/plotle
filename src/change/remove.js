@@ -47,7 +47,7 @@ if( JION )
 					},
 				at2 :
 					{
-						comment : 'insert ends here'
+						comment : 'insert ends here',
 						// must be at1 + val.length
 						json : 'true',
 						type : 'integer'

@@ -42,7 +42,7 @@ if( JION )
 					},
 				path2 :
 					{
-						comment : 'join this'
+						comment : 'join this',
 						// must be after path
 						json : 'true',
 						type : 'jion_path'
