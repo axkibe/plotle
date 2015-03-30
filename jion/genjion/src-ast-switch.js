@@ -203,7 +203,10 @@ Constructor =
 		}
 	}
 
-	this.defaultCase = v_defaultCase;
+	if( v_defaultCase !== undefined )
+	{
+		this.defaultCase = v_defaultCase;
+	}
 
 	this.statement = v_statement;
 
@@ -374,14 +377,14 @@ prototype.abstract =
 		}
 	}
 
-	if( v_defaultCase === undefined )
-	{
-		v_defaultCase = null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_defaultCase !== null && v_defaultCase !== undefined )
+/**/	if( v_defaultCase === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_defaultCase !== undefined )
 /**/	{
 /**/		if( v_defaultCase.reflect !== 'ast_block' )
 /**/		{
@@ -485,8 +488,6 @@ prototype.abstract =
 		(
 			v_defaultCase === inherit.defaultCase
 			||
-			v_defaultCase !== null
-			&&
 			v_defaultCase !== undefined
 			&&
 			v_defaultCase.equals( inherit.defaultCase )
@@ -653,19 +654,14 @@ prototype.create =
 		}
 	}
 
-	if( v_defaultCase === undefined )
-	{
-		v_defaultCase = null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_defaultCase === undefined )
+/**/	if( v_defaultCase === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_defaultCase !== null )
+/**/	if( v_defaultCase !== undefined )
 /**/	{
 /**/		if( v_defaultCase.reflect !== 'ast_block' )
 /**/		{
@@ -771,7 +767,9 @@ prototype.create =
 		(
 			v_defaultCase === inherit.defaultCase
 			||
-			v_defaultCase !== null && v_defaultCase.equals( inherit.defaultCase )
+			v_defaultCase !== undefined
+			&&
+			v_defaultCase.equals( inherit.defaultCase )
 		)
 		&&
 		(
@@ -913,7 +911,7 @@ prototype.equals =
 		(
 			this.defaultCase === obj.defaultCase
 			||
-			this.defaultCase !== null
+			this.defaultCase !== undefined
 			&&
 			this.defaultCase.equals( obj.defaultCase )
 		)

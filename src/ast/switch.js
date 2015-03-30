@@ -15,30 +15,23 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'ast_switch',
+	return{
+		id : 'ast_switch',
 		attributes :
+		{
+			statement :
 			{
-				statement :
-					{
-						comment :
-							'the statement expression',
-						type :
-							'->astExpression'
-					},
-				defaultCase :
-					{
-						comment :
-							'the default block',
-						type :
-							'ast_block',
-						defaultValue :
-							'null'
-					}
+				comment : 'the statement expression',
+				type : '->astExpression'
 			},
-		ray :
-			[ 'ast_case' ]
+			defaultCase :
+			{
+				comment : 'the default block',
+				type : 'ast_block',
+				defaultValue : 'undefined'
+			}
+		},
+		ray : [ 'ast_case' ]
 	};
 }
 
