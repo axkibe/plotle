@@ -254,7 +254,7 @@ shorthand.$capsule =
 		ast_call.create(
 			'func',
 			ast_func.create(
-				'block', block || null,
+				'block', block || undefined,
 				'capsule', true
 			)
 		)
@@ -465,7 +465,7 @@ shorthand.$fail =
 {
 	if( !message )
 	{
-		message = null;
+		message = undefined;
 	}
 	else if( jools.isString( message ) )
 	{
@@ -984,12 +984,11 @@ shorthand.$varDec =
 {
 	return(
 		ast_varDec.create(
-			'name',
-				name,
+			'name', name,
 			'assign',
 				arguments.length > 1
 				? tools.convert( assign )
-				: null
+				: undefined
 		)
 	);
 };

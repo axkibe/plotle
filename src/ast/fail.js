@@ -16,20 +16,16 @@
 if( JION )
 {
 	return {
-		id :
-			'ast_fail',
+		id : 'ast_fail',
 		attributes :
+		{
+			message :
 			{
-				message :
-					{
-						comment :
-							'the error message expression',
-						type :
-							'->astExpression',
-						defaultValue :
-							'null'
-					}
+				comment : 'the error message expression',
+				type : '->astExpression',
+				defaultValue : 'undefined'
 			}
+		}
 	};
 }
 

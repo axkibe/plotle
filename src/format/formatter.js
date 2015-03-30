@@ -903,11 +903,9 @@ formatFail =
 /**/	}
 /**/}
 
-	if( fail.message === null )
+	if( !fail.message )
 	{
-		return (
-			context.tab + 'throw new Error( )'
-		);
+		return context.tab + 'throw new Error( )';
 	}
 
 	if( context.check )

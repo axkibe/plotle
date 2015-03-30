@@ -15,28 +15,22 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'ast_varDec',
+	return{
+		id : 'ast_varDec',
 		attributes :
+		{
+			name :
 			{
-				name :
-					{
-						comment :
-							'variable name',
-						type :
-							'string'
-					},
-				assign :
-					{
-						comment :
-							'Assignment of variable',
-						type :
-							'->astExpression',
-						defaultValue :
-							'null'
-					}
+				comment : 'variable name',
+				type : 'string'
+			},
+			assign :
+			{
+				comment : 'Assignment of variable',
+				type : '->astExpression',
+				defaultValue : 'undefined'
 			}
+		}
 	};
 }
 

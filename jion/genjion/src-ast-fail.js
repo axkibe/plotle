@@ -184,7 +184,10 @@ Constructor =
 		}
 	}
 
-	this.message = v_message;
+	if( v_message !== undefined )
+	{
+		this.message = v_message;
+	}
 
 	if( FREEZE )
 	{
@@ -254,14 +257,14 @@ prototype.abstract =
 		}
 	}
 
-	if( v_message === undefined )
-	{
-		v_message = null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_message !== null && v_message !== undefined )
+/**/	if( v_message === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_message !== undefined )
 /**/	{
 /**/		if(
 /**/			v_message.reflect !== 'ast_and'
@@ -336,11 +339,7 @@ prototype.abstract =
 		(
 			v_message === inherit.message
 			||
-			v_message !== null
-			&&
-			v_message !== undefined
-			&&
-			v_message.equals( inherit.message )
+			v_message !== undefined && v_message.equals( inherit.message )
 		)
 	)
 	{
@@ -403,19 +402,14 @@ prototype.create =
 		}
 	}
 
-	if( v_message === undefined )
-	{
-		v_message = null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_message === undefined )
+/**/	if( v_message === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_message !== null )
+/**/	if( v_message !== undefined )
 /**/	{
 /**/		if(
 /**/			v_message.reflect !== 'ast_and'
@@ -490,7 +484,7 @@ prototype.create =
 		(
 			v_message === inherit.message
 			||
-			v_message !== null && v_message.equals( inherit.message )
+			v_message !== undefined && v_message.equals( inherit.message )
 		)
 	)
 	{
@@ -551,7 +545,7 @@ prototype.equals =
 	return (
 		this.message === obj.message
 		||
-		this.message !== null && this.message.equals( obj.message )
+		this.message !== undefined && this.message.equals( obj.message )
 	);
 };
 

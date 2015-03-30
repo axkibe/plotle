@@ -191,7 +191,10 @@ Constructor =
 		}
 	}
 
-	this.assign = v_assign;
+	if( v_assign !== undefined )
+	{
+		this.assign = v_assign;
+	}
 
 	this.name = v_name;
 
@@ -275,14 +278,14 @@ prototype.abstract =
 		}
 	}
 
-	if( v_assign === undefined )
-	{
-		v_assign = null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_assign !== null && v_assign !== undefined )
+/**/	if( v_assign === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_assign !== undefined )
 /**/	{
 /**/		if(
 /**/			v_assign.reflect !== 'ast_and'
@@ -374,11 +377,7 @@ prototype.abstract =
 		(
 			v_assign === inherit.assign
 			||
-			v_assign !== null
-			&&
-			v_assign !== undefined
-			&&
-			v_assign.equals( inherit.assign )
+			v_assign !== undefined && v_assign.equals( inherit.assign )
 		)
 		&&
 		v_name === inherit.name
@@ -455,19 +454,14 @@ prototype.create =
 		}
 	}
 
-	if( v_assign === undefined )
-	{
-		v_assign = null;
-	}
-
 /**/if( CHECK )
 /**/{
-/**/	if( v_assign === undefined )
+/**/	if( v_assign === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_assign !== null )
+/**/	if( v_assign !== undefined )
 /**/	{
 /**/		if(
 /**/			v_assign.reflect !== 'ast_and'
@@ -561,7 +555,7 @@ prototype.create =
 		(
 			v_assign === inherit.assign
 			||
-			v_assign !== null && v_assign.equals( inherit.assign )
+			v_assign !== undefined && v_assign.equals( inherit.assign )
 		)
 		&&
 		v_name === inherit.name
@@ -625,7 +619,7 @@ prototype.equals =
 		(
 			this.assign === obj.assign
 			||
-			this.assign !== null && this.assign.equals( obj.assign )
+			this.assign !== undefined && this.assign.equals( obj.assign )
 		)
 		&&
 		this.name === obj.name
