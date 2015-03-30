@@ -229,13 +229,7 @@ disc_createDisc.prototype.pushButton =
 		case 'createLabel' :
 
 			root.create(
-				'action',
-					action_createGeneric.create(
-						'itemType', 'label',
-						'model', null,
-						'start', null,
-						'transItem', null
-					)
+				'action', action_createGeneric.create( 'itemType', 'label' )
 			);
 
 			return;
@@ -243,13 +237,7 @@ disc_createDisc.prototype.pushButton =
 		case 'createNote' :
 
 			root.create(
-				'action',
-					action_createGeneric.create(
-						'itemType', 'note',
-						'model', null,
-						'start', null,
-						'transItem', null
-					)
+				'action', action_createGeneric.create( 'itemType', 'note' )
 			);
 
 			return;
@@ -257,13 +245,7 @@ disc_createDisc.prototype.pushButton =
 		case 'createPortal' :
 
 			root.create(
-				'action',
-					action_createGeneric.create(
-						'itemType', 'portal',
-						'model', null,
-						'start', null,
-						'transItem', null
-					)
+				'action', action_createGeneric.create( 'itemType', 'portal' )
 			);
 
 			return;

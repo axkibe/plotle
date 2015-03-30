@@ -34,19 +34,19 @@ if( JION )
 				{
 					comment : 'the transient item in creation',
 					type : '->fabricItems',
-					allowsNull : true
+					defaultValue : 'undefined'
 				},
 				model :
 				{
 					comment : 'a transient item used as model',
 					type : '->fabricItems',
-					allowsNull : true
+					defaultValue : 'undefined'
 				},
 				start :
 				{
 					comment : 'mouse down point on drag creation',
 					type : 'euclid_point',
-					allowsNull : true
+					defaultValue : 'undefined'
 				}
 			}
 	};
