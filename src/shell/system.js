@@ -116,14 +116,33 @@ transmitter =
 
 
 var
+	// atween is the state where the mouse button went down,
+	// and its yet unsure if this is a click or drag.
+	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
+	// a drag, if it goes up before either happens, its a click
+
+	// status of ctrl when atween state starts.
 	atweenCtrl,
+	// move position where cursor moved to in atween state.
 	atweenMove,
+	// position where mouse went down.
 	atweenPos,
+	// status of shift when atween state starts.
 	atweenShift,
+	// timer of the atween state
 	atweenTimer,
+
+	// the canvas everything is drawn upon.
 	canvas,
+
+	// if true the system dropped down to show a fail screen
 	failScreen,
+
+	// the hidden input taking text input.
 	hiddenInput,
+
+	// hover is getting repeated by events that change
+	// the root, so it can react properly.
 	hoverCtrl,
 	hoverP,
 	hoverShift,
@@ -131,55 +150,23 @@ var
 	keyCodeNames,
 	keyCodeNamesCtrl,
 	lastSpecialKey,
+
+	// current height of the main window
 	mainWindowHeight,
 	pointingState,
 	prototype,
 	settings,
 	systemTransmitter;
 
-/* atween is the state where the mouse button went down,
-| and its yet unsure if this is a click or drag.
-| if the mouse moves out of the atweenBox or the atweenTimer ticks its
-| a drag, if it goes up before either happens, its a click
-|
-| timer of the atween state
-*/
-atweenTimer = null;
 
-
-/*
-| status of shift / ctrl when atween state starts.
-*/
 atweenCtrl = false;
 
 atweenShift = false;
 
-
-/*
-| Position where mouse went down.
-*/
-atweenPos = null;
-
-
-/*
-| Move position where cursor moved to in atween state.
-*/
-atweenMove = null;
-
-
-/*
-| if true the system dropped down to show
-| a fail screen
-*/
 failScreen = false;
 
-
-/*
-| Hover is getting repeated by events that change
-| the root, so it can react properly.
-*/
-hoverP = null;
 hoverShift = false;
+
 hoverCtrl = false;
 
 
@@ -197,23 +184,6 @@ inputVal = '';
 */
 lastSpecialKey = -1;
 
-
-/*
-| current height of the main window
-*/
-mainWindowHeight = null;
-
-
-/*
-| The canvas everything is drawn upon.
-*/
-canvas = null;
-
-
-/*
-| The hidden input taking text input.
-*/
-hiddenInput = null;
 
 /*
 | false, 'atween' or 'drag'
@@ -369,7 +339,7 @@ shell_system =
 	document.oncontextmenu = systemTransmitter( '_onContextMenu' );
 
 	// the blink (and check input) timer
-	this._blinkTimer = null;
+	this._blinkTimer = undefined;
 
 	this.restartBlinker( );
 };
@@ -544,15 +514,15 @@ var
 _resetAtweenState =
 	function( )
 {
-	atweenTimer = null;
+	atweenTimer = undefined;
 
 	atweenShift = false;
 
 	atweenCtrl = false;
 
-	atweenPos = null;
+	atweenPos = undefined;
 
-	atweenMove = null;
+	atweenMove = undefined;
 };
 
 /*
@@ -585,10 +555,7 @@ prototype._onAtweenTime =
 
 	_resetAtweenState( );
 
-	if( cursor !== null )
-	{
-		canvas.style.cursor = cursor;
-	}
+	if( cursor ) canvas.style.cursor = cursor;
 };
 
 
@@ -854,10 +821,7 @@ prototype._pointingHover =
 
 	cursor = root.pointingHover( p, shift, ctrl );
 
-	if( cursor !== null )
-	{
-		canvas.style.cursor = cursor;
-	}
+	if( cursor ) canvas.style.cursor = cursor;
 };
 
 
@@ -879,10 +843,7 @@ prototype._repeatHover =
 
 	cursor = root.pointingHover( hoverP, hoverShift, hoverCtrl );
 
-	if( cursor !== null )
-	{
-		canvas.style.cursor = cursor;
-	}
+	if( cursor ) canvas.style.cursor = cursor;
 };
 
 
@@ -911,7 +872,7 @@ prototype._onMouseMove =
 
 	ctrl = event.ctrlKey || event.metaKey;
 
-	cursor = null;
+	cursor = undefined;
 
 	switch( pointingState )
 	{
@@ -963,10 +924,7 @@ prototype._onMouseMove =
 
 	}
 
-	if( cursor !== null )
-	{
-		canvas.style.cursor = cursor;
-	}
+	if( cursor ) canvas.style.cursor = cursor;
 
 	return true;
 };
@@ -1164,8 +1122,6 @@ prototype._onTouchMove =
 
 	ctrl = event.ctrlKey || event.metaKey;
 
-	cursor = null;
-
 	switch( pointingState )
 	{
 		case false:
@@ -1317,9 +1273,9 @@ prototype._releaseEvents =
 		return;
 	}
 
-	document.onmouseup = null;
+	document.onmouseup = undefined;
 
-	document.onmousemove = null;
+	document.onmousemove = undefined;
 };
 
 
@@ -1399,7 +1355,7 @@ prototype._steerAttention =
 
 	ac = root.attentionCenter;
 
-	if( ac === null )
+	if( ac === undefined || ac === null ) // FIXME remove nullo
 	{
 		hiddenInput.style.top = '0';
 
