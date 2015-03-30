@@ -272,7 +272,10 @@ Constructor =
 
 	this.name = v_name;
 
-	this.prepare = v_prepare;
+	if( v_prepare !== undefined )
+	{
+		this.prepare = v_prepare;
+	}
 
 	this.varRef = v_varRef;
 
@@ -467,11 +470,6 @@ prototype.abstract =
 		v_json = false;
 	}
 
-	if( v_prepare === undefined )
-	{
-		v_prepare = null;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_allowsNull === null )
@@ -500,7 +498,12 @@ prototype.abstract =
 /**/		}
 /**/	}
 /**/
-/**/	if( v_assign !== null && v_assign !== undefined )
+/**/	if( v_assign === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_assign !== undefined )
 /**/	{
 /**/		if(
 /**/			typeof( v_assign ) !== 'string'
@@ -649,7 +652,12 @@ prototype.abstract =
 /**/		}
 /**/	}
 /**/
-/**/	if( v_prepare !== null && v_prepare !== undefined )
+/**/	if( v_prepare === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_prepare !== undefined )
 /**/	{
 /**/		if(
 /**/			typeof( v_prepare ) !== 'string'
@@ -908,11 +916,6 @@ prototype.create =
 		v_json = false;
 	}
 
-	if( v_prepare === undefined )
-	{
-		v_prepare = null;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_allowsNull === undefined )
@@ -950,16 +953,18 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_assign !== null )
+/**/	if( v_assign === null )
 /**/	{
-/**/		if(
-/**/			typeof( v_assign ) !== 'string'
-/**/			&&
-/**/			!( v_assign instanceof String )
-/**/		)
-/**/		{
-/**/			throw new Error( );
-/**/		}
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if(
+/**/		typeof( v_assign ) !== 'string'
+/**/		&&
+/**/		!( v_assign instanceof String )
+/**/	)
+/**/	{
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	if( v_comment === undefined )
@@ -1107,12 +1112,12 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_prepare === undefined )
+/**/	if( v_prepare === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_prepare !== null )
+/**/	if( v_prepare !== undefined )
 /**/	{
 /**/		if(
 /**/			typeof( v_prepare ) !== 'string'

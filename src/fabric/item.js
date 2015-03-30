@@ -284,10 +284,7 @@ fabric_item.pointingHover =
 
 	view = this.view;
 
-	if(
-		sbary
-		&& sbary.within( view, p )
-	)
+	if( sbary && sbary.within( view, p ) )
 	{
 		return(
 			result_hover.create(
@@ -299,7 +296,7 @@ fabric_item.pointingHover =
 
 	if( !this.zone.within( view, p ) )
 	{
-		return null;
+		return;
 	}
 
 	return(

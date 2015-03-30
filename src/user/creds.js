@@ -83,7 +83,7 @@ user_creds.createFromLocalStorage =
 	}
 	else
 	{
-		return null;
+		return;
 	}
 };
 
@@ -94,9 +94,9 @@ user_creds.createFromLocalStorage =
 user_creds.clearLocalStorage =
 	function( )
 {
-	window.localStorage.setItem( 'username', null );
+	window.localStorage.setItem( 'username', undefined );
 
-	window.localStorage.setItem( 'passhash', null );
+	window.localStorage.setItem( 'passhash', undefined );
 };
 
 

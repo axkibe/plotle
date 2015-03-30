@@ -55,8 +55,8 @@ if( JION )
 					{
 						comment : 'node currently hovered upon',
 						type : 'jion_path',
-						assign : '',
-						defaultValue : 'null'
+						defaultValue : 'undefined',
+						assign : ''
 					},
 				mark :
 					{
@@ -223,7 +223,7 @@ prototype._init =
 	}
 	else
 	{
-		this.scrollbarY = null;
+		this.scrollbarY = undefined;
 	}
 
 	if(
