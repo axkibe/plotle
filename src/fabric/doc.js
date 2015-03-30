@@ -36,76 +36,51 @@ if( JION )
 			{
 				flowWidth :
 					{
-						comment :
-							'width of the para its flow',
-						type :
-							'number',
-						defaultValue :
-							'undefined'
+						comment : 'width of the para its flow',
+						type : 'number',
+						defaultValue : 'undefined'
 					},
 				fontsize :
 					{
-						comment :
-							'size of the font',
-						type :
-							'number',
-						defaultValue :
-							'undefined'
+						comment : 'size of the font',
+						type : 'number',
+						defaultValue : 'undefined'
 					},
 				innerMargin :
 					{
-						comment :
-							'inner margin of the doc',
-						type :
-							'euclid_margin',
-						defaultValue :
-							'undefined'
+						comment : 'inner margin of the doc',
+						type : 'euclid_margin',
+						defaultValue : 'undefined'
 					},
 				paraSep :
 					{
-						comment :
-							'vertical seperation of paragraphs',
-						type :
-							'number',
-						defaultValue :
-							'undefined'
+						comment : 'vertical seperation of paragraphs',
+						type : 'number',
+						defaultValue : 'undefined'
 					},
 				path :
 					{
-						comment :
-							'the path of the doc',
-						type :
-							'jion_path',
-						defaultValue :
-							'undefined'
+						comment : 'the path of the doc',
+						type : 'jion_path',
+						defaultValue : 'undefined'
 					},
 				mark :
 					{
-						comment :
-							'the users mark',
-						type :
-							'->mark',
-						defaultValue :
-							'undefined',
-						allowsNull :
-							true
+						comment : 'the users mark',
+						type : '->mark',
+						defaultValue : 'undefined',
+						allowsNull : true
 					},
 				view :
 					{
-						comment :
-							'the current view',
-						type :
-							'euclid_view',
-						defaultValue :
-							'undefined'
+						comment : 'the current view',
+						type : 'euclid_view',
+						defaultValue : 'undefined'
 					}
 			},
-		init :
-			[ 'twigDup' ],
-		json :
-			true,
-		twig :
-			[ 'fabric_para' ]
+		init : [ 'twigDup' ],
+		json : true,
+		twig : [ 'fabric_para' ]
 	};
 }
 
@@ -138,7 +113,6 @@ prototype._init =
 {
 	var
 		key,
-		path,
 		twig,
 		twigPath,
 		r,

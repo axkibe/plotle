@@ -23,45 +23,33 @@ var
 if( JION )
 {
 	return {
-		id :
-			'mark_caret',
+		id : 'mark_caret',
 		attributes :
+		{
+			path :
 			{
-				path :
-					{
-						comment :
-							'path of the caret',
-						type :
-							'jion_path'
-					},
-				at :
-					{
-						comment :
-							'offset of the caret',
-						type :
-							'integer'
-					},
-				retainx :
-					{
-						comment :
-							'x-position of the caret kept',
-						type :
-							'number',
-						defaultValue :
-							'null'
-					},
-				focus :
-					{
-						comment :
-							'the shell has the system focus',
-						type :
-							'boolean',
-						defaultValue :
-							'true'
-					}
+				comment : 'path of the caret',
+				type : 'jion_path'
 			},
-		init :
-			[ ]
+			at :
+			{
+				comment : 'offset of the caret',
+				type : 'integer'
+			},
+			retainx :
+			{
+				comment : 'x-position of the caret kept',
+				type : 'number',
+				defaultValue : 'undefined'
+			},
+			focus :
+			{
+				comment : 'the shell has the system focus',
+				type : 'boolean',
+				defaultValue : 'true'
+			}
+		},
+		init : [ ]
 	};
 }
 

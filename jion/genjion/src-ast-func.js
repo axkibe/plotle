@@ -66,7 +66,7 @@ AbstractConstructor =
 	function(
 		ray, // ray
 		v_block, // function code
-		v_capsule // if true its the capsule, to be formatted a little different
+		v_capsule // if true its the capsule
 	)
 {
 	if( v_block !== undefined )
@@ -102,7 +102,7 @@ Constructor =
 	function(
 		ray, // ray
 		v_block, // function code
-		v_capsule // if true its the capsule, to be formatted a little different
+		v_capsule // if true its the capsule
 	)
 {
 	if( FREEZE )
@@ -113,12 +113,12 @@ Constructor =
 		}
 	}
 
-	this.block = v_block;
-
-	if( v_capsule !== undefined )
+	if( v_block !== undefined )
 	{
-		this.capsule = v_capsule;
+		this.block = v_block;
 	}
+
+	this.capsule = v_capsule;
 
 	this.ray = ray;
 
@@ -287,14 +287,19 @@ prototype.abstract =
 		}
 	}
 
-	if( v_block === undefined )
+	if( v_capsule === undefined )
 	{
-		v_block = null;
+		v_capsule = false;
 	}
 
 /**/if( CHECK )
 /**/{
-/**/	if( v_block !== null && v_block !== undefined )
+/**/	if( v_block === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_block !== undefined )
 /**/	{
 /**/		if( v_block.reflect !== 'ast_block' )
 /**/		{
@@ -338,11 +343,7 @@ prototype.abstract =
 		(
 			v_block === inherit.block
 			||
-			v_block !== null
-			&&
-			v_block !== undefined
-			&&
-			v_block.equals( inherit.block )
+			v_block !== undefined && v_block.equals( inherit.block )
 		)
 		&&
 		v_capsule === inherit.capsule
@@ -502,19 +503,19 @@ prototype.create =
 		}
 	}
 
-	if( v_block === undefined )
+	if( v_capsule === undefined )
 	{
-		v_block = null;
+		v_capsule = false;
 	}
 
 /**/if( CHECK )
 /**/{
-/**/	if( v_block === undefined )
+/**/	if( v_block === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_block !== null )
+/**/	if( v_block !== undefined )
 /**/	{
 /**/		if( v_block.reflect !== 'ast_block' )
 /**/		{
@@ -522,17 +523,19 @@ prototype.create =
 /**/		}
 /**/	}
 /**/
+/**/	if( v_capsule === undefined )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
 /**/	if( v_capsule === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_capsule !== undefined )
+/**/	if( typeof( v_capsule ) !== 'boolean' )
 /**/	{
-/**/		if( typeof( v_capsule ) !== 'boolean' )
-/**/		{
-/**/			throw new Error( );
-/**/		}
+/**/		throw new Error( );
 /**/	}
 /**/
 /**/	for(
@@ -558,7 +561,7 @@ prototype.create =
 		(
 			v_block === inherit.block
 			||
-			v_block !== null && v_block.equals( inherit.block )
+			v_block !== undefined && v_block.equals( inherit.block )
 		)
 		&&
 		v_capsule === inherit.capsule
@@ -696,7 +699,7 @@ prototype.equals =
 		(
 			this.block === obj.block
 			||
-			this.block !== null && this.block.equals( obj.block )
+			this.block !== undefined && this.block.equals( obj.block )
 		)
 		&&
 		this.capsule === obj.capsule

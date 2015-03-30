@@ -16,31 +16,24 @@
 if( JION )
 {
 	return {
-		id :
-			'ast_func',
+		id : 'ast_func',
 		attributes :
+		{
+			block :
 			{
-				block :
-					{
-						comment :
-							'function code',
-						type :
-							'ast_block',
-						defaultValue :
-							'null'
-					},
-				capsule :
-					{
-						comment :
-							'if true its the capsule, to be formatted a little different',
-						type :
-							'boolean',
-						defaultValue :
-							'undefined'
-					}
+				comment : 'function code',
+				type : 'ast_block',
+				defaultValue : 'undefined'
 			},
-		ray :
-			[ 'ast_funcArg' ]
+			capsule :
+			{
+				comment : 'if true its the capsule',
+				// to be formatted a little different
+				type : 'boolean',
+				defaultValue : 'false'
+			}
+		},
+		ray : [ 'ast_funcArg' ]
 	};
 }
 

@@ -36,58 +36,56 @@ var
 if( JION )
 {
 	return {
-		id :
-			'fabric_para',
+		id : 'fabric_para',
 		attributes :
+		{
+			flowWidth :
 			{
-				flowWidth :
-					{
-						comment : 'width of the para flow',
-						type : 'number',
-						defaultValue : 'undefined'
-					},
-				fontsize :
-					{
-						comment : 'size of the font',
-						type : 'number',
-						defaultValue : 'undefined'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						prepare : 'fabric_para.concernsMark( mark, path )',
-						type : '->mark',
-						defaultValue : 'undefined',
-						allowsNull : true
-					},
-				path :
-					{
-						comment : 'the path of the para',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				text :
-					{
-						comment : 'the paragraphs text',
-						json : true,
-						type : 'string'
-					},
-				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						defaultValue : 'undefined'
-					}
+				comment : 'width of the para flow',
+				type : 'number',
+				defaultValue : 'undefined'
 			},
+			fontsize :
+			{
+				comment : 'size of the font',
+				type : 'number',
+				defaultValue : 'undefined'
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				prepare : 'fabric_para.concernsMark( mark, path )',
+				type : '->mark',
+				defaultValue : 'undefined',
+				allowsNull : true
+			},
+			path :
+			{
+				comment : 'the path of the para',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			text :
+			{
+				comment : 'the paragraphs text',
+				json : true,
+				type : 'string'
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view',
+				defaultValue : 'undefined'
+			}
+		},
 		alike :
-			{
-				alikeIgnoringView :
-					{
-						ignores : { 'view' : true }
-					}
-			},
-		init :
-			[ 'inherit' ]
+		{
+			alikeIgnoringView :
+				{
+					ignores : { 'view' : true }
+				}
+		},
+		init : [ 'inherit' ]
 	};
 }
 
@@ -162,14 +160,14 @@ fabric_para.concernsMark =
 		return(
 			mark.itemPath.subPathOf( path )
 			? mark
-			: null
+			: undefined
 		);
 	}
 
 	return(
 		mark.containsPath( path )
 		? mark
-		: null
+		: undefined
 	);
 };
 
@@ -422,11 +420,7 @@ jools.lazyValue(
 		reg = ( /(\S+\s*$|\s*\S+|^\s+$)(\s?)(\s*)/g );
 		// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 
-		for(
-			ca = reg.exec( text );
-			ca !== null;
-			ca = reg.exec( text )
-		)
+		for( ca = reg.exec( text ); ca; ca = reg.exec( text ) )
 		{
 			// a token is a word plus following hard spaces
 			tokenText = ca[ 1 ] + ca[ 3 ];
@@ -680,10 +674,10 @@ prototype.locateOffset =
 
 	// FIXME make it a jion result
 	result =
-		{
-			p : p,
-			line : lineN
-		};
+	{
+		p : p,
+		line : lineN
+	};
 
 /**/if( FREEZE )
 /**/{
@@ -853,8 +847,6 @@ prototype.specialKey =
 	at = null;
 
 	begin = null;
-
-	retainx = null;
 
 	switch( mark.reflect )
 	{
@@ -1068,10 +1060,7 @@ prototype._keyDown =
 
 	cpos = this.locateOffset( at );
 
-	x =
-		retainx !== null
-		? retainx
-		: cpos.p.x;
+	x = retainx !== undefined ? retainx : cpos.p.x;
 
 	if( cpos.line < flow.length - 1 )
 	{
@@ -1112,7 +1101,7 @@ prototype._keyEnd =
 		begin
 	)
 {
-	this._setMark( this.text.length, null, begin, doc );
+	this._setMark( this.text.length, undefined, begin, doc );
 };
 
 
@@ -1161,7 +1150,7 @@ prototype._keyLeft =
 
 	if( at > 0 )
 	{
-		this._setMark( at - 1, null, begin, doc );
+		this._setMark( at - 1, undefined, begin, doc );
 
 		return;
 	}
@@ -1172,13 +1161,13 @@ prototype._keyLeft =
 	{
 		ve = doc.atRank( r - 1 );
 
-		ve._setMark( ve.text.length, null, begin, doc );
+		ve._setMark( ve.text.length, undefined, begin, doc );
 
 		return;
 	}
 	else
 	{
-		this._setMark( at, null, begin, doc );
+		this._setMark( at, undefined, begin, doc );
 	}
 };
 
@@ -1224,7 +1213,7 @@ prototype._pageUpDown =
 
 	tpara = doc.getParaAtPoint( tp );
 
-	if( tpara === null )
+	if( tpara === null ) // FIXME
 	{
 		tpara = doc.atRank( dir > 0 ? doc.ranks.length - 1 : 0 );
 	}
@@ -1281,7 +1270,7 @@ prototype._keyPos1 =
 		begin
 	)
 {
-	this._setMark( 0, null, begin, doc );
+	this._setMark( 0, undefined, begin, doc );
 };
 
 
@@ -1303,7 +1292,7 @@ prototype._keyRight =
 
 	if( at < this.text.length )
 	{
-		this._setMark( at + 1, null, begin, doc );
+		this._setMark( at + 1, undefined, begin, doc );
 
 		return;
 	}
@@ -1314,7 +1303,7 @@ prototype._keyRight =
 	{
 		ve = doc.atRank( r + 1 );
 
-		ve._setMark( 0, null, begin, doc );
+		ve._setMark( 0, undefined, begin, doc );
 	}
 };
 
@@ -1339,10 +1328,7 @@ prototype._keyUp =
 
 	cpos = this.locateOffset( at );
 
-	x =
-		retainx !== null
-		? retainx
-		: cpos.p.x;
+	x = retainx !== undefined ? retainx : cpos.p.x;
 
 	if( cpos.line > 0 )
 	{

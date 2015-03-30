@@ -22,43 +22,32 @@ var
 if( JION )
 {
 	return {
-		id :
-			'mark_range',
+		id : 'mark_range',
 		attributes :
+		{
+			begin :
 			{
-				begin :
-					{
-						comment :
-							'begin of the range',
-						type :
-							'mark_text'
-					},
-				doc :
-					{
-						comment :
-							'the document the range belongs to',
-						type :
-							'fabric_doc'
-					},
-				end :
-					{
-						comment :
-							'end of the range',
-						type :
-							'mark_text'
-					},
-				retainx :
-					{
-						comment :
-							'x-position of the caret kept',
-						type :
-							'number',
-						defaultValue :
-							'null'
-					}
+				comment : 'begin of the range',
+				type : 'mark_text'
 			},
-		init :
-			[ ]
+			doc :
+			{
+				comment : 'the document the range belongs to',
+				type : 'fabric_doc'
+			},
+			end :
+			{
+				comment : 'end of the range',
+				type : 'mark_text'
+			},
+			retainx :
+			{
+				comment : 'x-position of the caret kept',
+				type : 'number',
+				defaultValue : 'undefined'
+			}
+		},
+		init : [ ]
 	};
 }
 

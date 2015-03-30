@@ -91,7 +91,7 @@ if( JION )
 					'fallback to this space'
 					+ 'if loading another failed.',
 				type : 'fabric_spaceRef',
-				defaultValue : 'null'
+				defaultValue : 'null' // FIXME
 			},
 			hover :
 			{
@@ -662,16 +662,18 @@ Object.defineProperty(
 
 /*
 | Clears the carets retainx info.
+|
+| FIXME remove
 */
 prototype.clearCaretRetainX =
 	function( )
 {
 	if(
 		this._mark.reflect === 'mark_caret'
-		&& this._mark.retainx !== null
+		&& this._mark.retainx !== undefined
 	)
 	{
-		this.create( 'mark', this._mark.create( 'retainx', null ) );
+		this.create( 'mark', this._mark.create( 'retainx', undefined ) );
 	}
 };
 
@@ -850,7 +852,7 @@ prototype.mousewheel =
 /*
 | Moves to space with the name name.
 |
-| if spaceRef is null reloads current space
+| if spaceRef is undefined reloads current space
 */
 prototype.moveToSpace =
 	function(
