@@ -303,9 +303,9 @@ disc_createDisc.prototype.pointingHover =
 		reply;
 
 	// shortcut if p is not near the panel
-	if( !this.frame.within( null, p ) )
+	if( !this.frame.within( p ) )
 	{
-		return null;
+		return;
 	}
 
 	display = this._display;
@@ -315,7 +315,7 @@ disc_createDisc.prototype.pointingHover =
 	// FUTURE optimize by reusing the latest path of this._display
 	if( !display.withinSketch( this.silhoutte, euclid_view.proper, pp ) )
 	{
-		return null;
+		return;
 	}
 
 	// it's on the disc
@@ -334,8 +334,6 @@ disc_createDisc.prototype.pointingHover =
 			return reply;
 		}
 	}
-
-	return null;
 };
 
 
@@ -355,12 +353,7 @@ disc_createDisc.prototype.click =
 		reply;
 
 	// shortcut if p is not near the panel
-	if(
-		!this.frame.within(
-			null,
-			p
-		)
-	)
+	if( !this.frame.within( p ) )
 	{
 		return null;
 	}
@@ -445,12 +438,7 @@ disc_createDisc.prototype.dragStart =
 	)
 {
 	// shortcut if p is not near the panel
-	if(
-		!this.frame.within(
-			null,
-			p
-		)
-	)
+	if( !this.frame.within( p ) )
 	{
 		return null;
 	}

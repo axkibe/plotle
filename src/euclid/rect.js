@@ -22,30 +22,23 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'euclid_rect',
+	return{
+		id : 'euclid_rect',
 		attributes :
+		{
+			pnw :
 			{
-				pnw :
-					{
-						comment :
-							'point in north west',
-						json :
-							'true',
-						type :
-							'euclid_point'
-					},
-				pse :
-					{
-						comment :
-							'point in south east',
-						json :
-							'true',
-						type :
-							'euclid_point'
-					}
+				comment : 'point in north west',
+				json : 'true',
+				type : 'euclid_point'
+			},
+			pse :
+			{
+				comment : 'point in south east',
+				json : 'true',
+				type : 'euclid_point'
 			}
+		}
 	};
 }
 
@@ -619,15 +612,20 @@ euclid_rect.prototype.within =
 		pnw,
 		pse;
 
-	x =
-		view
-		? view.dex( p.x )
-		: p.x;
+	if( arguments.length === 2 )
+	{
+		// FIXME require view to be set
+		x = view ? view.dex( p.x ) : p.x;
 
-	y =
-		view
-		?  view.dey( p.y )
-		: p.y;
+		y = view ? view.dey( p.y ) : p.y;
+	}
+	else
+	{
+		x = view.x;
+
+		y = view.y;
+	}
+
 
 	pnw = this.pnw;
 
@@ -635,12 +633,9 @@ euclid_rect.prototype.within =
 
 	return(
 		x >= pnw.x
-		&&
-		y >= pnw.y
-		&&
-		x <= pse.x
-		&&
-		y <= pse.y
+		&& y >= pnw.y
+		&& x <= pse.x
+		&& y <= pse.y
 	);
 };
 
