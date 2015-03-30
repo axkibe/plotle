@@ -33,9 +33,9 @@ var
 	shell_root,
 	system,
 	swatch,
-	user_creds,
+	user_creds;
 
-root = null;
+root = undefined;
 
 
 
@@ -52,139 +52,135 @@ root = null;
 if( JION )
 {
 	return {
-		id :
-			'shell_root',
+		id : 'shell_root',
 		attributes :
+		{
+			access :
 			{
-				access :
-					{
-						comment : 'access level to current space',
-						type : 'string',
-						allowsNull : true,
-						assign : '_access'
-					},
-				action :
-					{
-						comment : 'current action',
-						type : '->action',
-						defaultValue : 'undefined',
-						prepare : 'shell_root.prepareAction( action, space )'
-						// FIXME assign _action
-					},
-				ajax :
-					{
-						comment : 'the ajax communication',
-						type : 'net_ajax'
-					},
-				display :
-					{
-						comment : 'the display within everything happens',
-						type : 'euclid_display'
-					},
-				doTracker :
-					{
-						comment : 'the un/re/do tracker',
-						type : 'shell_doTracker'
-					},
-				fallbackSpaceRef :
-					{
-						comment :
-							'fallback to this space'
-							+ 'if loading another failed.',
-						type : 'fabric_spaceRef',
-						defaultValue : 'null'
-					},
-				hover :
-					{
-						comment : 'current hovered item',
-						type : 'jion_path',
-						defaultValue : 'undefined',
-						assign : '_hover'
-					},
-				link :
-					{
-						comment : 'the link to the server',
-						type : 'net_link'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						type : '->mark',
-						assign : '_mark',
-						// FIXME defaultValue : 'undefined',
-						allowsUndefined : true
-					},
-				mode :
-					{
-						comment : 'current mode',
-						type : 'string',
-						assign : '_mode'
-					},
-				systemFocus :
-					{
-						comment : 'shell has system focus',
-						type : 'boolean',
-						assign : '_systemFocus'
-					},
-				space :
-					{
-						comment : 'current space',
-						type : 'fabric_space',
-						allowsNull : true
-					},
-				user :
-					{
-						comment : 'current user',
-						type : 'user_creds',
-						allowsNull : true
-					},
-				view :
-					{
-						comment : 'current view',
-						type : 'euclid_view'
-						// FIXME assign _view
-					},
-				_discJockey :
-					{
-						comment : 'the master of discs',
-						type : 'disc_jockey'
-					},
-				_drawn :
-					{
-						comment :
-							'this root has been drawn on display',
-						type :
-							'boolean'
-					},
-				_formJockey :
-					{
-						comment : 'the master of forms',
-						type : 'form_jockey'
-					},
-				_visitor :
-					{
-						comment :
-							// remembers an acquired visitor user name and
-							// passhash so when logging out from a real user
-							// the previous visitor id is regained.
-							'last acquired visitor credentials',
-						type : 'user_creds',
-						allowsNull : true
-					}
+				comment : 'access level to current space',
+				type : 'string',
+				assign : '_access',
+				defaultValue : 'undefined',
 			},
-		init :
-			[ 'inherit' ],
-		alike :
+			action :
 			{
-				lookAlike :
-					{
-						ignores : {
-							'ajax' : true,
-							'link' : true,
-							'_drawn' : true
-						}
-					}
+				comment : 'current action',
+				type : '->action',
+				defaultValue : 'undefined',
+				prepare : 'shell_root.prepareAction( action, space )'
+				// FIXME assign _action
+			},
+			ajax :
+			{
+				comment : 'the ajax communication',
+				type : 'net_ajax'
+			},
+			display :
+			{
+				comment : 'the display within everything happens',
+				type : 'euclid_display'
+			},
+			doTracker :
+			{
+				comment : 'the un/re/do tracker',
+				type : 'shell_doTracker'
+			},
+			fallbackSpaceRef :
+			{
+				comment :
+					'fallback to this space'
+					+ 'if loading another failed.',
+				type : 'fabric_spaceRef',
+				defaultValue : 'null'
+			},
+			hover :
+			{
+				comment : 'current hovered item',
+				type : 'jion_path',
+				defaultValue : 'undefined',
+				assign : '_hover'
+			},
+			link :
+			{
+				comment : 'the link to the server',
+				type : 'net_link'
+			},
+			mark :
+			{
+				comment : 'the users mark',
+				type : '->mark',
+				assign : '_mark',
+				defaultValue : 'undefined'
+			},
+			mode :
+			{
+				comment : 'current mode',
+				type : 'string',
+				assign : '_mode'
+			},
+			systemFocus :
+			{
+				comment : 'shell has system focus',
+				type : 'boolean',
+				assign : '_systemFocus'
+			},
+			space :
+			{
+				comment : 'current space',
+				type : 'fabric_space',
+				defaultValue : 'undefined'
+			},
+			user :
+			{
+				comment : 'current user',
+				type : 'user_creds',
+				allowsNull : true
+			},
+			view :
+			{
+				comment : 'current view',
+				type : 'euclid_view'
+				// FIXME assign _view
+			},
+			_discJockey :
+			{
+				comment : 'the master of discs',
+				type : 'disc_jockey'
+			},
+			_drawn :
+			{
+				comment : 'this root has been drawn on display',
+				type : 'boolean'
+			},
+			_formJockey :
+			{
+				comment : 'the master of forms',
+				type : 'form_jockey'
+			},
+			_visitor :
+			{
+				comment :
+					// remembers an acquired visitor user name and
+					// passhash so when logging out from a real user
+					// the previous visitor id is regained.
+					'last acquired visitor credentials',
+				type : 'user_creds',
+				defaultValue : 'undefined'
 			}
+		},
+		init : [ 'inherit' ],
+		alike :
+		{
+			lookAlike :
+			{
+				ignores :
+				{
+					'ajax' : true,
+					'link' : true,
+					'_drawn' : true
+				}
+			}
+		}
 	};
 }
 
@@ -305,7 +301,7 @@ shell_root.startup =
 
 /**/if( CHECK )
 /**/{
-/**/	if( root !== null )
+/**/	if( root )
 /**/	{
 /**/		// singleton
 /**/		throw new Error( );
@@ -349,7 +345,6 @@ shell_root.startup =
 	}
 
 	shell_root.create(
-		'access', null, // FIXME
 		'ajax',
 			net_ajax.create(
 				'path', ajaxPath,
@@ -362,13 +357,12 @@ shell_root.startup =
 		'doTracker', shell_doTracker.create( ),
 		'link', net_link.create( ),
 		'mode', mode,
-		'space', null, //FIXME
 		'systemFocus', true,
 		'user', null, //FIXME
 		'view', view,
 		'_discJockey',
 			disc_jockey.create(
-				'access', '',
+				'access', '', // FIXME
 				'mode', mode,
 				'path', jion_path.empty.append( 'disc' ),
 				'view', view,
@@ -390,8 +384,7 @@ shell_root.startup =
 				'twig:add', 'space', gruga_space,
 				'twig:add', 'user', gruga_user,
 				'twig:add', 'welcome', gruga_welcome
-			),
-		'_visitor', null //FIXME
+			)
 	);
 
 	root.link.auth( user );
@@ -465,8 +458,8 @@ prototype._init =
 /**/}
 
 	if(
-		this.user
-		&& ( !inherit || !this.user.equals( inherit.user ) )
+		user
+		&& ( !inherit || !user.equals( inherit.user ) )
 	)
 	{
 		if( !user.isVisitor )
@@ -482,7 +475,7 @@ prototype._init =
 
 			user_creds.clearLocalStorage( );
 
-			root.create( '_visitor', user );
+			this._visitor = user;
 		}
 	}
 
@@ -877,7 +870,7 @@ prototype.moveToSpace =
 			mode === 'normal' || mode === 'create'
 			? 'loading'
 			: pass,
-		'space', null
+		'space', undefined
 	);
 
 	// FIXME move setPath into creator

@@ -1570,7 +1570,7 @@ jools.lazyValue(
 			hview
 		);
 
-		if( !this.path.isEmpty )
+		if( this.path )
 		{
 			display.clip( this.zeroSilhoutte, hview, 0 );
 

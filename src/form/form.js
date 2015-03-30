@@ -93,23 +93,20 @@ form_form.click =
 	)
 {
 	var
+		r,
+		rZ,
 		ranks,
 		res;
 
 	ranks = this.ranks;
 
 	for(
-		var r = 0, rZ = ranks.length;
+		r = 0, rZ = ranks.length;
 		r < rZ;
 		r++
 	)
 	{
-		res =
-			this.atRank( r ).click(
-				p,
-				shift,
-				ctrl
-			);
+		res = this.atRank( r ).click( p, shift, ctrl );
 
 		if( res !== null )
 		{
