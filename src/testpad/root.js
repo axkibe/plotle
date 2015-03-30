@@ -39,13 +39,13 @@ if( JION )
 			{
 				comment : 'the action the user is preparing',
 				type : 'testpad_action',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			beepTimer :
 			{
 				comment : 'removes the beep',
 				type : 'protean',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			cursorAt :
 			{
@@ -91,8 +91,6 @@ if( JION )
 var
 	isSpecialKey,
 	noteDocPath;
-
-root = null;
 
 noteDocPath =
 	jion_path.empty
@@ -145,16 +143,16 @@ testpad_root.prototype._init =
 		elements =
 		this.elements =
 			{
-				measure : null,
-				pad : null,
-				input : null,
-				beep : null,
-				send : null,
-				cancel : null,
-				upnow : null,
-				up : null,
-				now : null,
-				down : null
+				measure : undefined,
+				pad : undefined,
+				input : undefined,
+				beep : undefined,
+				send : undefined,
+				cancel : undefined,
+				upnow : undefined,
+				up : undefined,
+				now : undefined,
+				down : undefined
 			};
 
 		for( id in elements )
@@ -402,7 +400,7 @@ testpad_root.prototype.releaseEvents =
 	{
 		document.onmouseup =
 		document.onmousemove =
-			null;
+			undefined;
 	}
 };
 
@@ -648,7 +646,7 @@ testpad_root.prototype.send =
 	}
 
 	root.create(
-		'action', null,
+		'action', undefined,
 		'cursorAt', cursorAt,
 		'repository', root.repository.create( 'seq', jools.MAX_INTEGER )
 	);
@@ -661,7 +659,7 @@ testpad_root.prototype.send =
 testpad_root.prototype.onCancelButton =
 	function( )
 {
-	root.create( 'action', null );
+	root.create( 'action', undefined );
 };
 
 
@@ -695,7 +693,7 @@ testpad_root.prototype.clearBeep =
 
 	clearInterval( root.beepTimer );
 
-	root.create( 'beepTimer', null );
+	root.create( 'beepTimer', undefined );
 };
 
 
@@ -905,10 +903,7 @@ testpad_root.prototype.inputSpecialKey =
 		case 27 :
 			// esc
 
-			root.create(
-				'action',
-					null
-			);
+			root.create( 'action', undefined );
 
 			return;
 
@@ -1224,7 +1219,7 @@ testpad_root.prototype.makeScreen =
 	// inserts the action
 	switch( action && action.command )
 	{
-		case null :
+		case undefined :
 
 			break;
 
