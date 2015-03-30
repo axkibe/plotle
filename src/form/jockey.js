@@ -54,7 +54,7 @@ if( JION )
 			{
 				comment : 'the reference of current space',
 				type : 'fabric_spaceRef',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			user :
 			{
@@ -164,7 +164,7 @@ form_jockey.concernsMark =
 	return(
 		mark.containsPath( form_jockey.path )
 		? mark
-		: null
+		: undefined
 	);
 };
 

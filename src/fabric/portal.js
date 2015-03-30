@@ -504,11 +504,7 @@ prototype.input =
 	}
 
 	// ignores newlines
-	for(
-		rx = reg.exec( text );
-		rx !== null;
-		rx = reg.exec( text )
-	)
+	for( rx = reg.exec( text ); rx; rx = reg.exec( text ) )
 	{
 		line = rx[ 1 ];
 
@@ -596,7 +592,7 @@ prototype.pointingHover =
 	// not clicked on the portal?
 	if( !this.silhoutte.within( view, p  ) )
 	{
-		return null;
+		return;
 	}
 
 	moveToButton = this._moveToButton;
@@ -908,8 +904,6 @@ prototype._keyLeft =
 
 	if( mark.caretAt === 0 )
 	{
-		cycle = null;
-
 		switch( section )
 		{
 			case 'spaceUser' :
@@ -958,6 +952,8 @@ prototype._keyLeft =
 
 /*
 | User pressed down key.
+|
+| FIXME take care of shift.
 */
 prototype._keyTab =
 	function( )
@@ -976,27 +972,13 @@ prototype._keyTab =
 		return;
 	}
 
-	cycle = null;
-
 	switch( section )
 	{
-		case 'spaceUser' :
+		case 'spaceUser' : cycle = 'spaceTag'; break;
 
-			cycle = 'spaceTag';
+		case 'spaceTag' : cycle = 'moveToButton'; break;
 
-			break;
-
-		case 'spaceTag' :
-
-			cycle = 'moveToButton';
-
-			break;
-
-		case 'moveToButton' :
-
-			cycle = 'spaceUser';
-
-			break;
+		case 'moveToButton' : cycle = 'spaceUser'; break;
 	}
 
 	root.create(
@@ -1106,27 +1088,13 @@ prototype._keyRight =
 		|| ( value && mark.caretAt >= value.length )
 	)
 	{
-		cycle = null;
-
 		switch( section )
 		{
-			case 'spaceUser' :
+			case 'spaceUser' : cycle = 'spaceTag'; break;
 
-				cycle = 'spaceTag';
+			case 'spaceTag' : cycle = 'moveToButton'; break;
 
-				break;
-
-			case 'spaceTag' :
-
-				cycle = 'moveToButton';
-
-				break;
-
-			case 'moveToButton' :
-
-				cycle = 'spaceUser';
-
-				break;
+			case 'moveToButton' : cycle = 'spaceUser'; break;
 		}
 
 		root.create(
@@ -1259,21 +1227,11 @@ prototype._keyEnter =
 		return;
 	}
 
-	cycle = null;
-
 	switch( section )
 	{
-		case 'spaceUser' :
+		case 'spaceUser' : cycle = 'spaceTag'; break;
 
-			cycle = 'spaceTag';
-
-			break;
-
-		case 'spaceTag' :
-
-			cycle = 'moveToButton';
-
-			break;
+		case 'spaceTag' : cycle = 'moveToButton'; break;
 	}
 
 	if( cycle )
@@ -1399,20 +1357,14 @@ prototype._prepareField =
 	height = this._fonts[ section ].size + 2;
 
 	pnw =
-		basePNW === null
-		?
-		(
-			euclid_point.create(
-				'x', jools.half( zone.width - width ),
-				'y', Math.round( jools.half( zone.height ) - 30 )
-			)
+		basePNW
+		? euclid_point.create(
+			'x', jools.half( zone.width - width ),
+			'y', basePNW.y + 23
 		)
-		:
-		(
-			euclid_point.create(
-				'x', jools.half( zone.width - width ),
-				'y', basePNW.y + 23
-			)
+		: euclid_point.create(
+			'x', jools.half( zone.width - width ),
+			'y', Math.round( jools.half( zone.height ) - 30 )
 		);
 
 	silhoutte =
@@ -1441,7 +1393,7 @@ jools.lazyValue(
 	'_fieldSpaceUser',
 	function( )
 	{
-		return this._prepareField( 'spaceUser', null );
+		return this._prepareField( 'spaceUser' );
 	}
 );
 

@@ -55,7 +55,7 @@ if( JION )
 				{
 					comment : 'the reference to the current space',
 					type : 'fabric_spaceRef',
-					defaultValue : 'null',
+					defaultValue : 'undefined',
 					assign : ''
 				},
 				user :
@@ -132,7 +132,7 @@ prototype.clear =
 
 	root.setPath( this.path.append( 'twig' ).append( 'errorLabel' ).append( 'text' ), '' );
 
-	root.create( 'mark', null );
+	root.create( 'mark', undefined );
 };
 
 

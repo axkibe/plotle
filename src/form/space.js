@@ -48,7 +48,7 @@ if( JION )
 				{
 					comment : 'the reference to the current space',
 					type : 'fabric_spaceRef',
-					defaultValue : 'null'
+					defaultValue : 'undefined'
 				},
 				user :
 				{

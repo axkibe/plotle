@@ -51,7 +51,7 @@ if( JION )
 			{
 				comment : 'the reference to the current space',
 				type : 'fabric_spaceRef',
-				defaultValue : 'null',
+				defaultValue : 'undefined',
 				assign : ''
 			},
 			user :
@@ -247,8 +247,7 @@ prototype.login =
 			'mark',
 				mark_caret.create(
 					'path', twig.userInput.path,
-					'at', username.length,
-					'retainx', null
+					'at', username.length
 				)
 		);
 
@@ -269,8 +268,7 @@ prototype.login =
 			'mark',
 				mark_caret.create(
 					'path', twig.userInput.path,
-					'at', 0,
-					'retainx', null
+					'at', 0
 				)
 		);
 

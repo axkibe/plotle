@@ -38,60 +38,57 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'fabric_space',
+	return{
+		id : 'fabric_space',
 		attributes :
 			{
 				action :
-					{
-						comment : 'current action',
-						type : '->action',
-						defaultValue : 'undefined',
-						assign : '_action'
-					},
+				{
+					comment : 'current action',
+					type : '->action',
+					defaultValue : 'undefined',
+					assign : '_action'
+				},
 				access :
-					{
-						comment : 'rights the current user has for this space',
-						type : 'string',
-						defaultValue : 'undefined'
-					},
+				{
+					comment : 'rights the current user has for this space',
+					type : 'string',
+					defaultValue : 'undefined'
+				},
 				hover :
-					{
-						comment : 'node currently hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
+				{
+					comment : 'node currently hovered upon',
+					type : 'jion_path',
+					defaultValue : 'undefined'
+				},
 				mark :
-					{
-						comment : 'the users mark',
-						type : '->mark',
-						prepare : 'fabric_space.concernsMark( mark )',
-						defaultValue : 'undefined'
-					},
+				{
+					comment : 'the users mark',
+					type : '->mark',
+					prepare : 'fabric_space.concernsMark( mark )',
+					defaultValue : 'undefined'
+				},
 				path :
-					{
-						comment : 'the path of the space',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
+				{
+					comment : 'the path of the space',
+					type : 'jion_path',
+					defaultValue : 'undefined'
+				},
 				ref :
-					{
-						comment : 'reference to this space',
-						type : 'fabric_spaceRef',
-						defaultValue : 'undefined'
-					},
+				{
+					comment : 'reference to this space',
+					type : 'fabric_spaceRef',
+					defaultValue : 'undefined'
+				},
 				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						defaultValue : 'undefined'
-					}
+				{
+					comment : 'the current view',
+					type : 'euclid_view',
+					defaultValue : 'undefined'
+				}
 			},
-		init :
-			[ 'inherit', 'twigDup' ],
-		json :
-			true,
+		init : [ 'inherit', 'twigDup' ],
+		json : true,
 		twig :
 			[
 				'fabric_note',
@@ -254,7 +251,7 @@ prototype.focusedItem =
 	}
 	else
 	{
-		return null;
+		return undefined;
 	}
 };
 
@@ -318,7 +315,7 @@ jools.lazyValue(
 
 		if( !focus )
 		{
-			return null;
+			return undefined;
 		}
 
 		return this.view.y( focus.attentionCenter );
@@ -386,8 +383,6 @@ prototype.draw =
 					);
 
 				fromItem.highlight( display );
-
-				toItem = null;
 
 				if( !action.toItemPath.isEmpty )
 				{
@@ -591,10 +586,6 @@ prototype.dragStart =
 	}
 
 	action = this._action;
-
-	item = null;
-
-	transItem = null;
 
 	// FIXME simplify
 	if(
@@ -1178,14 +1169,9 @@ prototype.dragMove =
 
 	action = this._action;
 
-	transItem = null;
-
 	view = this.view;
 
-	if( action === undefined )
-	{
-		return 'pointer';
-	}
+	if( !action ) return 'pointer';
 
 	switch( action.reflect )
 	{

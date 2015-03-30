@@ -51,14 +51,14 @@ if( JION )
 			{
 				comment : 'the reference to the current space',
 				type : 'fabric_spaceRef',
-				defaultValue : 'null',
+				defaultValue : 'undefined',
 				assign : ''
 			},
 			user :
 			{
 				comment : 'currently logged in user',
 				type : 'user_creds',
-				defaultValue : 'null'
+				defaultValue : 'undefined'
 			},
 			view :
 			{
