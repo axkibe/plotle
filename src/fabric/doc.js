@@ -286,17 +286,9 @@ prototype._getRangeShape =
 
 	// FIXME do not create points
 
-	fp =
-		fp.add(
-			frontPnw.x - scrollp.x,
-			frontPnw.y - scrollp.y
-		);
+	fp = fp.add( frontPnw.x - scrollp.x, frontPnw.y - scrollp.y );
 
-	bp =
-		bp.add(
-			backPnw.x - scrollp.x,
-			backPnw.y - scrollp.y
-		);
+	bp = bp.add( backPnw.x - scrollp.x, backPnw.y - scrollp.y );
 
 	frontFlow = frontPara.flow;
 
@@ -306,8 +298,8 @@ prototype._getRangeShape =
 
 	f2Key =
 		( frontRank + 1 < this.ranks.length )
-			? this.ranks[ frontRank + 1 ]
-			: null;
+		? this.ranks[ frontRank + 1 ]
+		: undefined;
 
 	f2Para = f2Key && this.twig[ f2Key ];
 
@@ -343,9 +335,9 @@ prototype._getRangeShape =
 			frontKey === backKey && fo.line + 1 === bo.line
 			||
 			(
-				f2Key === backKey &&
-				fo.line + 1 >= frontFlow.length &&
-				bo.line === 0
+				f2Key === backKey
+				&& fo.line + 1 >= frontFlow.length
+				&& bo.line === 0
 			)
 		)
 	)
@@ -367,9 +359,7 @@ prototype._getRangeShape =
 			shapeSection_line.create(
 				'p', euclid_point.create( 'x', rx, 'y', fp.y + descend )
 			),
-			shapeSection_flyLine.create(
-				'close', true
-			)
+			shapeSection_flyLine.create( 'close', true )
 		];
 
 		sections2 =
@@ -419,10 +409,6 @@ prototype._getRangeShape =
 		//      ::::::::::::+-----+  bp2
 		//      +-----------o bp   1
 		//      4          2/3
-
-		f2y = null;
-
-		b2y = null;
 
 		if( fo.line + 1 < frontFlow.length )
 		{
@@ -891,7 +877,7 @@ prototype.getParaAtPoint =
 
 	if( p.y < this.innerMargin.n )
 	{
-		return null;
+		return;
 	}
 
 	pnws = this.paraPNWs;
@@ -916,7 +902,7 @@ prototype.getParaAtPoint =
 		}
 	}
 
-	return null;
+	return;
 };
 
 /*

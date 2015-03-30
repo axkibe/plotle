@@ -534,8 +534,6 @@ prototype.getOffsetAt =
 
 	lZ = line.length;
 
-	token = null;
-
 	for( tn = 0; tn < lZ; tn++ )
 	{
 		token = line.get( tn );
@@ -745,11 +743,7 @@ prototype.input =
 
 	caretAt = this.mark.caretAt;
 
-	for(
-		rx = reg.exec( text );
-		rx !== null;
-		rx = reg.exec( text )
-	)
+	for( rx = reg.exec( text ); rx; rx = reg.exec( text ) )
 	{
 		line = rx[ 1 ];
 
@@ -844,10 +838,6 @@ prototype.specialKey =
 
 	keyHandler = _keyMap[ key ];
 
-	at = null;
-
-	begin = null;
-
 	switch( mark.reflect )
 	{
 		case 'mark_caret' :
@@ -908,12 +898,11 @@ jools.lazyValue(
 	'textPath',
 	function( )
 	{
-		if( this.path === null )
-		{
-			return null;
-		}
-
-		return this.path.append( 'text' );
+		return(
+			this.path
+			? this.path.append( 'text' )
+			: undefined
+		);
 	}
 );
 
@@ -1213,7 +1202,7 @@ prototype._pageUpDown =
 
 	tpara = doc.getParaAtPoint( tp );
 
-	if( tpara === null ) // FIXME
+	if( !tpara )
 	{
 		tpara = doc.atRank( dir > 0 ? doc.ranks.length - 1 : 0 );
 	}
