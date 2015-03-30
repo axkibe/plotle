@@ -176,10 +176,7 @@ prototype.transform =
 		cx
 	)
 {
-	if( cx === null )
-	{
-		return null;
-	}
+	if( !cx ) return cx;
 
 	switch( cx.reflect )
 	{
@@ -400,7 +397,7 @@ prototype._transformRemove =
 	{
 		// console.log( 'case 3' );
 
-		return null;
+		return undefined;
 	}
 	else if( cx.at1 < this.at1 && cx.at2 <= this.at2 )
 	{

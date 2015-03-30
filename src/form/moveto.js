@@ -24,55 +24,52 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'form_moveTo',
+	return{
+		id : 'form_moveTo',
 		attributes :
+		{
+			hover :
 			{
-				hover :
-					{
-						comment : 'the widget hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						type : '->mark',
-						prepare : 'form_form.concernsMark( mark, path )',
-						defaultValue : 'undefined'
-					},
-				path :
-					{
-						comment : 'the path of the form',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				spaceRef :
-					{
-						comment : 'the reference to the current space',
-						type : 'fabric_spaceRef',
-						defaultValue : 'null',
-						assign : ''
-					},
-				username :
-					{
-						comment : 'currently logged in user',
-						type : 'string',
-						defaultValue : 'null'
-					},
-				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						prepare : 'view ? view.sizeOnly : view',
-						defaultValue : 'undefined'
-					}
+				comment : 'the widget hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined'
 			},
-		init :
-			[ 'inherit', 'twigDup' ],
-		twig :
-			'->formWidgets'
+			mark :
+			{
+				comment : 'the users mark',
+				type : '->mark',
+				prepare : 'form_form.concernsMark( mark, path )',
+				defaultValue : 'undefined'
+			},
+			path :
+			{
+				comment : 'the path of the form',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			spaceRef :
+			{
+				comment : 'the reference to the current space',
+				type : 'fabric_spaceRef',
+				defaultValue : 'null',
+				assign : ''
+			},
+			user :
+			{
+				comment : 'currently logged in user',
+				type : 'user_creds',
+				defaultValue : 'null'
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view',
+				prepare : 'view ? view.sizeOnly : view',
+				defaultValue : 'undefined'
+			}
+		},
+		init : [ 'inherit', 'twigDup' ],
+		twig : '->formWidgets'
 	};
 }
 
@@ -92,16 +89,8 @@ prototype._init =
 		twigDup
 	)
 {
-	var
-		isGuest;
-
 	if( this.path )
 	{
-		isGuest =
-			this.username === null
-			?  false
-			: this.username.substr( 0, 7 ) === 'visitor';
-
 		if( !twigDup )
 		{
 			this.twig = jools.copy( this.twig );
@@ -109,8 +98,8 @@ prototype._init =
 
 		this.twig.userHomeButton =
 			this.twig.userHomeButton.create(
-				'visible', !isGuest,
-				'text', this.username + '\n' + 'home'
+				'visible', this.user ? !this.user.isVisitor : false,
+				'text', this.user ? this.user.name + '\n' + 'home' : ''
 			);
 	}
 
@@ -270,7 +259,7 @@ prototype.pushButton =
 
 			root.moveToSpace(
 				fabric_spaceRef.create(
-					'username', this.username,
+					'username', this.user.name,
 					'tag', 'home'
 				),
 				false

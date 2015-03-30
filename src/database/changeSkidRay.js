@@ -26,12 +26,9 @@ var
 if( JION )
 {
 	return {
-		id :
-			'database_changeSkidRay',
-		ray :
-			[ 'database_changeSkid', 'null' ],
-		json :
-			true,
+		id : 'database_changeSkidRay',
+		ray : [ 'database_changeSkid', 'null' ],  // FIXME
+		json : true,
 	};
 }
 
@@ -71,17 +68,11 @@ database_changeSkidRay.createFromChangeWrapRay =
 	{
 		cw = changeWrapRay.get( a );
 
-		if( cw === null )
-		{
-			continue;
-		}
+		if( !cw ) continue;
 
 		cs = database_changeSkid.createFromChangeWrap( cw, user, seq++ );
 
-		if( cs === null )
-		{
-			continue;
-		}
+		if( !cs ) continue;
 
 		ray.push( cs );
 	}

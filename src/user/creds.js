@@ -21,29 +21,22 @@ var
 if( JION )
 {
 	return {
-		id :
-			'user_creds',
+		id : 'user_creds',
 		attributes :
+		{
+			name :
 			{
-				name :
-					{
-						comment :
-							'the username',
-						type :
-							'string',
-						json :
-							true
-					},
-				passhash :
-					{
-						comment :
-							'password hash',
-						type :
-							'string',
-						json :
-							true
-					}
+				comment : 'the username',
+				type : 'string',
+				json : true
+			},
+			passhash :
+			{
+				comment : 'password hash',
+				type : 'string',
+				json : true
 			}
+		}
 	};
 }
 

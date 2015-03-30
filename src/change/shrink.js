@@ -38,7 +38,7 @@ if( JION )
 						comment : 'value tree had',
 						json : 'true',
 						type : '->spaceVal',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				rank :
 					{
@@ -181,10 +181,7 @@ prototype.transform =
 		cx
 	)
 {
-	if( cx === null )
-	{
-		return null;
-	}
+	if( !cx ) return cx;
 
 	switch( cx.reflect )
 	{
@@ -245,7 +242,7 @@ prototype._transformJIRS =
 		return cx;
 	}
 
-	return null;
+	return undefined;
 };
 
 

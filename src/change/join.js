@@ -225,10 +225,7 @@ prototype.transform =
 		cx
 	)
 {
-	if( cx === null )
-	{
-		return null;
-	}
+	if( !cx ) return cx;
 
 	switch( cx.reflect )
 	{

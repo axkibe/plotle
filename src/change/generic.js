@@ -88,12 +88,8 @@ change_generic.transformChangeRay =
 		// FIXME in case this returns a change_ray this fails
 		c = this.transform( cRay.get( r ) );
 
-		if( c !== null )
-		{
-			// nulled changes are sliced out.
-
-			tRay[ tZ++ ] = c;
-		}
+		// changes that transformed away are sliced out.
+		if( c ) tRay[ tZ++ ] = c;
 	}
 
 	return cRay.create( 'ray:init', tRay );

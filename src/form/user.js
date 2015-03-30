@@ -26,44 +26,44 @@ if( JION )
 		attributes :
 			{
 				hover :
-					{
-						comment : 'the widget hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
+				{
+					comment : 'the widget hovered upon',
+					type : 'jion_path',
+					defaultValue : 'undefined'
+				},
 				mark :
-					{
-						comment : 'the users mark',
-						type : '->mark',
-						prepare : 'form_form.concernsMark( mark, path )',
-						defaultValue : 'undefined'
-					},
+				{
+					comment : 'the users mark',
+					type : '->mark',
+					prepare : 'form_form.concernsMark( mark, path )',
+					defaultValue : 'undefined'
+				},
 				path :
-					{
-						comment : 'the path of the form',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
+				{
+					comment : 'the path of the form',
+					type : 'jion_path',
+					defaultValue : 'undefined'
+				},
 				spaceRef :
-					{
-						comment : 'the reference to the current space',
-						type : 'fabric_spaceRef',
-						defaultValue : 'null',
-						assign : ''
-					},
-				username :
-					{
-						comment : 'currently logged in user',
-						type : 'string',
-						defaultValue : 'null'
-					},
+				{
+					comment : 'the reference to the current space',
+					type : 'fabric_spaceRef',
+					defaultValue : 'null',
+					assign : ''
+				},
+				user :
+				{
+					comment : 'currently logged in user',
+					type : 'user_creds',
+					defaultValue : 'undefined'
+				},
 				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						prepare : 'view ? view.sizeOnly : view',
-						defaultValue : 'undefined'
-					}
+				{
+					comment : 'the current view',
+					type : 'euclid_view',
+					prepare : 'view ? view.sizeOnly : view',
+					defaultValue : 'undefined'
+				}
 			},
 		init : [ 'inherit', 'twigDup' ],
 		twig : '->formWidgets'
@@ -87,24 +87,14 @@ prototype._init =
 	)
 {
 	var
-		isGuest;
+		isVisitor;
 
 	if( !this.path )
 	{
 		return;
 	}
 
-	// FIXME take a user object
-	if( this.username )
-	{
-		isGuest =
-			this.username.substr( 0, 7 ) === 'visitor';
-	}
-	else
-	{
-		isGuest =
-			true;
-	}
+	isVisitor = this.user ? this.user.isVisitor : true;
 
 	if( !twigDup )
 	{
@@ -113,30 +103,29 @@ prototype._init =
 
 	this.twig.headline =
 		this.twig.headline.create(
-			'text',
-				'hello ' + ( this.username || '' )
+			'text', 'hello ' + ( this.user ? this.user.name : '' )
 		);
 
 	this.twig.visitor1 =
-		this.twig.visitor1.create( 'visible', isGuest );
+		this.twig.visitor1.create( 'visible', isVisitor );
 
 	this.twig.visitor2 =
-		this.twig.visitor2.create( 'visible', isGuest );
+		this.twig.visitor2.create( 'visible', isVisitor );
 
 	this.twig.visitor3 =
-		this.twig.visitor3.create( 'visible', isGuest );
+		this.twig.visitor3.create( 'visible', isVisitor );
 
 	this.twig.visitor4 =
-		this.twig.visitor4.create( 'visible', isGuest );
+		this.twig.visitor4.create( 'visible', isVisitor );
 
 	this.twig.greeting1 =
-		this.twig.greeting1.create( 'visible', !isGuest );
+		this.twig.greeting1.create( 'visible', !isVisitor );
 
 	this.twig.greeting2 =
-		this.twig.greeting2.create( 'visible', !isGuest );
+		this.twig.greeting2.create( 'visible', !isVisitor );
 
 	this.twig.greeting3 =
-		this.twig.greeting3.create( 'visible', !isGuest );
+		this.twig.greeting3.create( 'visible', !isVisitor );
 
 	form_form.init.call( this, inherit );
 };

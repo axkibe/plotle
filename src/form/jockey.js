@@ -29,54 +29,50 @@ var
 */
 if( JION )
 {
-	return {
-		id :
-			'form_jockey',
+	return{
+		id : 'form_jockey',
 		attributes :
+		{
+			hover :
 			{
-				hover :
-					{
-						comment : 'the widget hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						type : '->mark',
-						allowsUndefined : true
-					},
-				path :
-					{
-						comment : 'the path of the form jockey',
-						type : 'jion_path'
-					},
-				spaceRef :
-					{
-						comment : 'the reference of current space',
-						type : 'fabric_spaceRef',
-						defaultValue : 'null'
-					},
-				user :
-					{
-						comment : 'currently logged in user',
-						type : 'user_creds',
-						defaultValue : 'null'
-					},
-				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						prepare : 'view ? view.sizeOnly : view'
-					}
+				comment : 'the widget hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined'
 			},
-		init :
-			[
-				'twigDup'
-			],
+			mark :
+			{
+				comment : 'the users mark',
+				type : '->mark',
+				allowsUndefined : true
+			},
+			path :
+			{
+				comment : 'the path of the form jockey',
+				type : 'jion_path'
+			},
+			spaceRef :
+			{
+				comment : 'the reference of current space',
+				type : 'fabric_spaceRef',
+				defaultValue : 'null'
+			},
+			user :
+			{
+				comment : 'currently logged in user',
+				type : 'user_creds',
+				defaultValue : 'undefined'
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view',
+				prepare : 'view ? view.sizeOnly : view'
+			}
+		},
+		init : [ 'twigDup' ],
 		twig :
 			[
-				/* FIXME
+				/* FUTURE
 				'form_loading',
 				'form_login',
 				'form_moveTo',
@@ -140,7 +136,7 @@ form_jockey.prototype._init =
 				'mark', this.mark,
 				'path', path,
 				'spaceRef', this.spaceRef,
-				'username', this.user && this.user.name,
+				'user', this.user,
 				'view', this.view
 			);
 

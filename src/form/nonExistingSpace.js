@@ -28,61 +28,58 @@ var
 if( JION )
 {
 	return {
-		id :
-			'form_nonExistingSpace',
+		id : 'form_nonExistingSpace',
 		attributes :
+		{
+			hover :
 			{
-				hover :
-					{
-						comment : 'the widget hovered upon',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				mark :
-					{
-						comment : 'the users mark',
-						type : '->mark',
-						prepare : 'form_form.concernsMark( mark, path )',
-						defaultValue : 'undefined'
-					},
-				nonSpaceRef :
-					{
-						comment : 'the non-existing-space',
-						type : 'fabric_spaceRef',
-						defaultValue : 'undefined'
-					},
-				path :
-					{
-						comment : 'the path of the form',
-						type : 'jion_path',
-						defaultValue : 'undefined'
-					},
-				spaceRef :
-					{
-						comment : 'the reference to the current space',
-						type : 'fabric_spaceRef',
-						defaultValue : 'null',
-						assign : ''
-					},
-				username :
-					{
-						comment : 'currently logged in user',
-						type : 'string',
-						defaultValue : 'null',
-						assign : ''
-					},
-				view :
-					{
-						comment : 'the current view',
-						type : 'euclid_view',
-						prepare : 'view ? view.sizeOnly : view',
-						defaultValue : 'undefined'
-					}
+				comment : 'the widget hovered upon',
+				type : 'jion_path',
+				defaultValue : 'undefined'
 			},
-		init :
-			[ 'inherit', 'twigDup' ],
-		twig :
-			'->formWidgets'
+			mark :
+			{
+				comment : 'the users mark',
+				type : '->mark',
+				prepare : 'form_form.concernsMark( mark, path )',
+				defaultValue : 'undefined'
+			},
+			nonSpaceRef :
+			{
+				comment : 'the non-existing-space',
+				type : 'fabric_spaceRef',
+				defaultValue : 'undefined'
+			},
+			path :
+			{
+				comment : 'the path of the form',
+				type : 'jion_path',
+				defaultValue : 'undefined'
+			},
+			spaceRef :
+			{
+				comment : 'the reference to the current space',
+				type : 'fabric_spaceRef',
+				defaultValue : 'null',
+				assign : ''
+			},
+			user :
+			{
+				comment : 'currently logged in user',
+				type : 'user_creds',
+				defaultValue : 'undefined',
+				assign : ''
+			},
+			view :
+			{
+				comment : 'the current view',
+				type : 'euclid_view',
+				prepare : 'view ? view.sizeOnly : view',
+				defaultValue : 'undefined'
+			}
+		},
+		init : [ 'inherit', 'twigDup' ],
+		twig : '->formWidgets'
 	};
 }
 
