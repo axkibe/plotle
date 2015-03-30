@@ -15,20 +15,18 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'jion_generator',
+	return{
+		id : 'jion_generator',
 		attributes :
+		{
+			'jion' :
 			{
-				'jion' :
-					{
-						comment : 'the jion definition',
-						type : 'protean',
-						assign : ''
-					}
-			},
-		init :
-			[ 'jion' ]
+				comment : 'the jion definition',
+				type : 'protean',
+				assign : ''
+			}
+		},
+		init : [ 'jion' ]
 	};
 }
 
@@ -369,7 +367,7 @@ prototype._init =
 	}
 	else
 	{
-		this.group = null;
+		this.group = undefined;
 	}
 
 	if( jion.ray )
@@ -389,7 +387,7 @@ prototype._init =
 	}
 	else
 	{
-		this.ray = null;
+		this.ray = undefined;
 	}
 
 	if( jion.twig )
@@ -410,7 +408,7 @@ prototype._init =
 	}
 	else
 	{
-		this.twig = null;
+		this.twig = undefined;
 	}
 
 	this.units = units;
@@ -818,7 +816,6 @@ prototype.genSingleton =
 		$block( )
 		.$comment( 'Singleton' )
 		.$varDec( '_singleton' )
-		.$( '_singleton = null' )
 	);
 };
 
@@ -1491,16 +1488,14 @@ prototype.genCreatorChecks =
 		}
 		else
 		{
-			cond = null;
+			cond = undefined;
 		}
 
 		tcheck = this.genTypeCheckFailCondition( attr.varRef, attr.id );
 
 		if( cond )
 		{
-			check =
-				check
-				.$if( cond, $if( tcheck, $fail( ) ) );
+			check = check.$if( cond, $if( tcheck, $fail( ) ) );
 		}
 		else
 		{
@@ -1695,7 +1690,7 @@ prototype.genCreatorUnchanged =
 
 		if( attr.assign === '' )
 		{
-			cond = $and( cond, $( attr.varRef, ' === null' ) );
+			cond = $and( cond, $( attr.varRef, ' === undefined' ) );
 
 			continue;
 		}

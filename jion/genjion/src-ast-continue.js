@@ -108,9 +108,6 @@ var
 	_singleton;
 
 
-_singleton = null;
-
-
 /*
 | Creates an continue object.
 */

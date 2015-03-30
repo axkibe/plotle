@@ -163,7 +163,7 @@ prototype.abstract =
 /**/	}
 /**/}
 
-	if( inherit && v_jion === null )
+	if( inherit && v_jion === undefined )
 	{
 		return inherit;
 	}
@@ -235,7 +235,7 @@ prototype.create =
 /**/	}
 /**/}
 
-	if( inherit && v_jion === null )
+	if( inherit && v_jion === undefined )
 	{
 		return inherit;
 	}
