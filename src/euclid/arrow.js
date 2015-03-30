@@ -27,43 +27,30 @@ var
 if( JION )
 {
 	return {
-		id :
-			'euclid_arrow',
+		id : 'euclid_arrow',
 		attributes :
+		{
+			p1 :
 			{
-				p1 :
-					{
-						comment :
-							'first point',
-						type :
-							'euclid_point'
-					},
-				p1end :
-					{
-						comment :
-							'end style of first point',
-						type :
-							'string',
-						allowsNull :
-							true
-					},
-				p2 :
-					{
-						comment :
-							'second point',
-						type :
-							'euclid_point'
-					},
-				p2end :
-					{
-						comment :
-							'end style of second point',
-						type :
-							'string',
-						allowsNull :
-							true
-					}
+				comment : 'first point',
+				type : 'euclid_point'
+			},
+			p1end :
+			{
+				comment : 'end style of first point',
+				type : 'string'
+			},
+			p2 :
+			{
+				comment : 'second point',
+				type : 'euclid_point'
+			},
+			p2end :
+			{
+				comment : 'end style of second point',
+				type : 'string'
 			}
+		}
 	};
 }
 

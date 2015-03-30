@@ -57,9 +57,8 @@ if( JION )
 				{
 					comment : 'node currently hovered upon',
 					type : 'jion_path',
-					assign : '',
-					// FIXME undefined
-					defaultValue : 'null'
+					defaultValue : 'undefined',
+					assign : ''
 				},
 			item1key :
 				{
@@ -164,8 +163,8 @@ fabric_relation.spawn =
 
 	arrow =
 		euclid_arrow.connect(
-			item1.silhoutte, null,
-			item2.silhoutte, null
+			item1.silhoutte, 'normal',
+			item2.silhoutte, 'normal'
 		);
 
 	pnw = arrow.pc.sub( theme.relation.spawnOffset );
