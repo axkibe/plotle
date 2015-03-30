@@ -134,7 +134,7 @@ if( JION )
 			{
 				comment : 'current user',
 				type : 'user_creds',
-				allowsNull : true
+				defaultValue : 'undefined'
 			},
 			view :
 			{
@@ -358,7 +358,6 @@ shell_root.startup =
 		'link', net_link.create( ),
 		'mode', mode,
 		'systemFocus', true,
-		'user', null, //FIXME
 		'view', view,
 		'_discJockey',
 			disc_jockey.create(
@@ -626,14 +625,14 @@ prototype.click =
 	)
 {
 	var
-		click,
+		result,
 		screen;
 
 	screen = root._currentScreen( );
 
-	click = root._discJockey.click( p, shift, ctrl );
+	result = root._discJockey.click( p, shift, ctrl );
 
-	if( click === null && screen )
+	if( !result && screen )
 	{
 		screen.click( p, shift, ctrl );
 	}

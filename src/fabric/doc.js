@@ -140,7 +140,10 @@ prototype._init =
 		key,
 		path,
 		twig,
-		ranks;
+		twigPath,
+		r,
+		ranks,
+		rZ;
 
 	if( !this.view )
 	{
@@ -155,22 +158,20 @@ prototype._init =
 		? this.twig
 		: jools.copy( this.twig );
 
+	twigPath = this.path && this.path.append( 'twig' );
+
 	for(
-		var r = 0, rZ = this.ranks.length;
+		r = 0, rZ = this.ranks.length;
 		r < rZ;
 		r++
 	)
 	{
 		key = ranks[ r ];
 
-		path =
-			this.path
-			.append( 'twig' )
-			.appendNC( key );
 
 		twig[ key ] =
 			twig[ key ].create(
-				'path', path,
+				'path', twigPath && twigPath.appendNC( key ),
 				'fontsize', this.fontsize,
 				'flowWidth', this.flowWidth,
 				'mark', this.mark,

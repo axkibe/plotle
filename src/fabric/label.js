@@ -132,7 +132,6 @@ prototype._init =
 {
 	var
 		doc,
-		docPath,
 		height,
 		pnw;
 
@@ -142,9 +141,6 @@ prototype._init =
 		return;
 	}
 
-	// FIXME not if inherited
-	docPath = this.path.append( 'doc' );
-
 	doc =
 	this.doc =
 		this.doc.create(
@@ -153,7 +149,7 @@ prototype._init =
 			'innerMargin', theme.label.innerMargin,
 			'mark', this.mark,
 			'paraSep', Math.round( this.fontsize / 20 ),
-			'path', docPath,
+			'path', this.path && this.path.append( 'doc' ),
 			'view', this.view.home
 		);
 

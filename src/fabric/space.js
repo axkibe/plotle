@@ -426,7 +426,7 @@ prototype.draw =
 			}
 			else
 			{
-				if( !this.hover.isEmpty )
+				if( this.hover )
 				{
 					this
 					.getItem( this.hover.get( 2 ) )

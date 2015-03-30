@@ -194,7 +194,7 @@ prototype._init =
 			'innerMargin', theme.note.innerMargin,
 			'mark', this.mark,
 			'paraSep', jools.half( this.fontsize ),
-			'path', this.path.append( 'doc' ),
+			'path', this.path && this.path.append( 'doc' ),
 			'view', this.view.home
 		);
 
