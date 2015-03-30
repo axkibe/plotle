@@ -15,35 +15,27 @@
 */
 if( JION )
 {
-	return {
-		id :
-			'ast_if',
+	return{
+		id : 'ast_if',
 		attributes :
+		{
+			condition :
 			{
-				condition :
-					{
-						comment :
-							'the if condition',
-						type :
-							'->astExpression'
-					},
-				then :
-					{
-						comment :
-							'the then code',
-						type :
-							'ast_block'
-					},
-				elsewise :
-					{
-						comment :
-							'the else wise',
-						type :
-							'ast_block',
-						defaultValue :
-							'null'
-					}
+				comment : 'the if condition',
+				type : '->astExpression'
+			},
+			then :
+			{
+				comment : 'the then code',
+				type : 'ast_block'
+			},
+			elsewise :
+			{
+				comment : 'the else wise',
+				type : 'ast_block',
+				defaultValue : 'undefined'
 			}
+		}
 	};
 }
 

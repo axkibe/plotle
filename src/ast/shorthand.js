@@ -546,7 +546,7 @@ shorthand.$if =
 		ast_if.create(
 			'condition', condition,
 			'then', then,
-			'elsewise', elsewise || null
+			'elsewise', elsewise
 		)
 	);
 };
@@ -629,7 +629,7 @@ shorthand.$func =
 		block = ast_block.create( ).append( block );
 	}
 
-	return ast_func.create( 'block', block || null );
+	return ast_func.create( 'block', block );
 };
 
 

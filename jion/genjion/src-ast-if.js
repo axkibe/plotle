@@ -203,7 +203,10 @@ Constructor =
 
 	this.condition = v_condition;
 
-	this.elsewise = v_elsewise;
+	if( v_elsewise !== undefined )
+	{
+		this.elsewise = v_elsewise;
+	}
 
 	this.then = v_then;
 
@@ -299,11 +302,6 @@ prototype.abstract =
 		}
 	}
 
-	if( v_elsewise === undefined )
-	{
-		v_elsewise = null;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_condition === null )
@@ -379,7 +377,12 @@ prototype.abstract =
 /**/		}
 /**/	}
 /**/
-/**/	if( v_elsewise !== null && v_elsewise !== undefined )
+/**/	if( v_elsewise === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_elsewise !== undefined )
 /**/	{
 /**/		if( v_elsewise.reflect !== 'ast_block' )
 /**/		{
@@ -413,11 +416,7 @@ prototype.abstract =
 		(
 			v_elsewise === inherit.elsewise
 			||
-			v_elsewise !== null
-			&&
-			v_elsewise !== undefined
-			&&
-			v_elsewise.equals( inherit.elsewise )
+			v_elsewise !== undefined && v_elsewise.equals( inherit.elsewise )
 		)
 		&&
 		(
@@ -510,11 +509,6 @@ prototype.create =
 		}
 	}
 
-	if( v_elsewise === undefined )
-	{
-		v_elsewise = null;
-	}
-
 /**/if( CHECK )
 /**/{
 /**/	if( v_condition === undefined )
@@ -592,12 +586,12 @@ prototype.create =
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_elsewise === undefined )
+/**/	if( v_elsewise === null )
 /**/	{
 /**/		throw new Error( );
 /**/	}
 /**/
-/**/	if( v_elsewise !== null )
+/**/	if( v_elsewise !== undefined )
 /**/	{
 /**/		if( v_elsewise.reflect !== 'ast_block' )
 /**/		{
@@ -633,7 +627,7 @@ prototype.create =
 		(
 			v_elsewise === inherit.elsewise
 			||
-			v_elsewise !== null && v_elsewise.equals( inherit.elsewise )
+			v_elsewise !== undefined && v_elsewise.equals( inherit.elsewise )
 		)
 		&&
 		(
@@ -707,7 +701,7 @@ prototype.equals =
 		(
 			this.elsewise === obj.elsewise
 			||
-			this.elsewise !== null && this.elsewise.equals( obj.elsewise )
+			this.elsewise !== undefined && this.elsewise.equals( obj.elsewise )
 		)
 		&&
 		(
