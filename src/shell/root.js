@@ -87,11 +87,9 @@ if( JION )
 			},
 			fallbackSpaceRef :
 			{
-				comment :
-					'fallback to this space'
-					+ 'if loading another failed.',
+				comment : 'fallback to this space if loading another failed.',
 				type : 'fabric_spaceRef',
-				defaultValue : 'null' // FIXME
+				defaultValue : 'undefined'
 			},
 			hover :
 			{
@@ -702,19 +700,16 @@ prototype.dragMove =
 	)
 {
 	var
-		cursor,
 		screen;
-
-	cursor = null;
 
 	screen = root._currentScreen( );
 
 	if( screen )
 	{
-		cursor = screen.dragMove( p, shift, ctrl );
+		return screen.dragMove( p, shift, ctrl );
 	}
 
-	return cursor;
+	return;
 };
 
 
@@ -866,7 +861,7 @@ prototype.moveToSpace =
 	mode = root._mode;
 
 	root.create(
-		'fallbackSpaceRef', root.space ? root.space.ref : null,
+		'fallbackSpaceRef', root.space ? root.space.ref : undefined,
 		'mode',
 			mode === 'normal' || mode === 'create'
 			? 'loading'
@@ -896,8 +891,6 @@ prototype.pointingHover =
 		screen;
 
 	screen = root._currentScreen( );
-
-	result = null;
 
 	if( screen && screen.showDisc )
 	{
@@ -1058,7 +1051,7 @@ prototype.specialKey =
 prototype.suggestingKeyboard =
 	function( )
 {
-	return( root._mark !== null && root._mark.hasCaret );
+	return this._mark && this._mark.hasCaret;
 };
 
 

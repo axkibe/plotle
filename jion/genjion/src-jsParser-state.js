@@ -337,7 +337,12 @@ prototype.abstract =
 
 /**/if( CHECK )
 /**/{
-/**/	if( v_ast !== null && v_ast !== undefined )
+/**/	if( v_ast === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_ast !== undefined )
 /**/	{
 /**/		if(
 /**/			v_ast.reflect !== 'ast_and'
@@ -464,7 +469,7 @@ prototype.abstract =
 		(
 			v_ast === inherit.ast
 			||
-			v_ast !== null && v_ast !== undefined && v_ast.equals( inherit.ast )
+			v_ast !== undefined && v_ast.equals( inherit.ast )
 		)
 		&&
 		v_pos === inherit.pos
@@ -561,7 +566,12 @@ prototype.create =
 
 /**/if( CHECK )
 /**/{
-/**/	if( v_ast !== null && v_ast !== undefined )
+/**/	if( v_ast === null )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( v_ast !== undefined )
 /**/	{
 /**/		if(
 /**/			v_ast.reflect !== 'ast_and'
@@ -692,7 +702,7 @@ prototype.create =
 		(
 			v_ast === inherit.ast
 			||
-			v_ast !== null && v_ast !== undefined && v_ast.equals( inherit.ast )
+			v_ast !== undefined && v_ast.equals( inherit.ast )
 		)
 		&&
 		v_pos === inherit.pos
@@ -762,11 +772,7 @@ prototype.equals =
 		(
 			this.ast === obj.ast
 			||
-			this.ast !== null
-			&&
-			this.ast !== undefined
-			&&
-			this.ast.equals( obj.ast )
+			this.ast !== undefined && this.ast.equals( obj.ast )
 		)
 		&&
 		this.pos === obj.pos

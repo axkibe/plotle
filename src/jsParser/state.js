@@ -23,8 +23,7 @@ if( JION )
 			{
 				comment : 'current ast entity',
 				type : '->astStatement',
-				defaultValue : 'undefined',
-				allowsNull : true // FIXME
+				defaultValue : 'undefined'
 			},
 			tokens :
 			{
@@ -74,7 +73,7 @@ jools.lazyValue(
 		return(
 			( this.pos < this.tokens.length )
 			?  this.tokens.get( this.pos )
-			: null
+			: undefined
 		);
 	}
 );
@@ -91,7 +90,7 @@ jools.lazyValue(
 		return(
 			( this.pos + 1 < this.tokens.length )
 			? this.tokens.get( this.pos + 1 )
-			: null
+			: undefined
 		);
 	}
 );
