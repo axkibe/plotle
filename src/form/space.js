@@ -22,15 +22,14 @@ var
 if( JION )
 {
 	return {
-		id :
-			'form_space',
+		id : 'form_space',
 		attributes :
 			{
 				hover :
 					{
 						comment : 'the widget hovered upon',
 						type : 'jion_path',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				mark :
 					{
@@ -56,7 +55,7 @@ if( JION )
 						comment : 'currently logged in user',
 						type : 'string',
 						defaultValue : 'null',
-						assign : null
+						assign : ''
 					},
 				view :
 					{

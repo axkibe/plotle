@@ -37,7 +37,8 @@ if( JION )
 				hover :
 					{
 						comment : 'the widget hovered upon',
-						type : 'jion_path'
+						type : 'jion_path',
+						defaultValue : 'undefined'
 					},
 				mark :
 					{

@@ -32,7 +32,7 @@ if( JION )
 					{
 						comment : 'the widget hovered upon',
 						type : 'jion_path',
-						defaultValue : 'null'
+						defaultValue : 'undefined'
 					},
 				mark :
 					{
@@ -52,14 +52,14 @@ if( JION )
 						comment : 'the reference to the current space',
 						type : 'fabric_spaceRef',
 						defaultValue : 'null',
-						assign : null
+						assign : ''
 					},
 				username :
 					{
 						comment : 'currently logged in user',
 						type : 'string',
 						defaultValue : 'null',
-						assign : null
+						assign : ''
 					},
 				view :
 					{

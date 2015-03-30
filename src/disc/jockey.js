@@ -5,7 +5,6 @@
 
 var
 	disc_jockey,
-	jion_path,
 	jools;
 
 /*
@@ -40,7 +39,8 @@ if( JION )
 				hover :
 					{
 						comment : 'the widget hovered upon',
-						type : 'jion_path'
+						type : 'jion_path',
+						defaultValue : 'undefined'
 					},
 				mark :
 					{
@@ -118,6 +118,14 @@ prototype._init =
 		ranks,
 		twig;
 
+/**/if( CHECK )
+/**/{
+/**/	if( this.hover && this.hover.isEmpty )
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/}
+
 	ranks = this.ranks;
 
 	// FIXME do not copy when inherit.twig !== this.twig
@@ -151,9 +159,9 @@ prototype._init =
 				'action', this.action,
 				'hover',
 					// FIXME make a concernsHover in the disc
-					( this.hover.isEmpty || this.hover.get( 2 ) !== name )
-					?  jion_path.empty
-					: this.hover,
+					( this.hover && this.hover.get( 2 ) === name )
+					? this.hover
+					: undefined,
 				'mark', this.mark,
 				'mode', this.mode,
 				'path', path,
@@ -245,7 +253,7 @@ prototype.pointingHover =
 		return this.twig.createDisc.pointingHover( p, shift, ctrl );
 	}
 
-	return null;
+	return undefined;
 };
 
 

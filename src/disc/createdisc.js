@@ -83,14 +83,14 @@ if( JION )
 						comment : 'reference to current space',
 						type : 'fabric_spaceRef',
 						defaultValue : 'null',
-						assign : null
+						assign : ''
 					},
 				username :
 					{
 						comment : 'currently logged in user',
 						type : 'string',
 						defaultValue : 'null',
-						assign : null
+						assign : ''
 					},
 				view :
 					{

@@ -230,10 +230,7 @@ prototype.focusedItem =
 
 	mark = this.mark;
 
-	path =
-		mark
-		? mark.itemPath
-		: jion_path.empty;
+	path = mark ? mark.itemPath : undefined;
 
 	if( action )
 	{
@@ -251,7 +248,7 @@ prototype.focusedItem =
 		}
 	}
 
-	if( path.length > 2 )
+	if( path && path.length > 2 )
 	{
 		return this.getItem( path.get( 2 ) );
 	}
@@ -517,12 +514,7 @@ prototype.pointingHover =
 
 		if( com )
 		{
-			return(
-				result_hover.create(
-					'path', jion_path.empty,
-					'cursor', com + '-resize'
-				)
-			);
+			return result_hover.create( 'cursor', com + '-resize' );
 		}
 	}
 
@@ -542,12 +534,7 @@ prototype.pointingHover =
 		}
 	}
 
-	return(
-		result_hover.create(
-			'path', jion_path.empty,
-			'cursor', 'pointer'
-		)
-	);
+	return result_hover.create( 'cursor', 'pointer' );
 };
 
 
@@ -623,7 +610,6 @@ prototype.dragStart =
 						'pnw', p,  // FIXME why no depoint?
 						'pse', p
 					),
-				'path', jion_path.empty,
 				'view', view
 			);
 
@@ -647,7 +633,6 @@ prototype.dragStart =
 		transItem =
 			shell_stubs.emptyLabel.create(
 				'pnw', view.depoint( p ),
-				'path', jion_path.empty,
 				'view', view
 			);
 
@@ -670,8 +655,7 @@ prototype.dragStart =
 	{
 		transItem =
 			shell_stubs.emptyPortal.create(
-				'hover', jion_path.empty,
-				'path', jion_path.empty,
+				'hover', jion_path.empty, // FIXME
 				'view', view,
 				'zone',
 					euclid_rect.create(
@@ -1284,7 +1268,7 @@ prototype.dragMove =
 			root.create(
 				'action',
 					action.create(
-						'toItemPath', jion_path.empty,
+						'toItemPath', jion_path.empty, // FIXME
 						'toPoint', p
 					)
 			);

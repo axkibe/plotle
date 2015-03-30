@@ -98,7 +98,7 @@ if( JION )
 					{
 						comment : 'current hovered item',
 						type : 'jion_path',
-						allowsNull : true,
+						defaultValue : 'undefined',
 						assign : '_hover'
 					},
 				link :
@@ -349,7 +349,7 @@ shell_root.startup =
 	}
 
 	shell_root.create(
-		'access', null,
+		'access', null, // FIXME
 		'ajax',
 			net_ajax.create(
 				'path', ajaxPath,
@@ -360,19 +360,15 @@ shell_root.startup =
 			),
 		'display', display,
 		'doTracker', shell_doTracker.create( ),
-		'hover', jion_path.empty,
 		'link', net_link.create( ),
-		'mark', undefined,
 		'mode', mode,
-		'space', null,
+		'space', null, //FIXME
 		'systemFocus', true,
-		'user', null,
+		'user', null, //FIXME
 		'view', view,
 		'_discJockey',
 			disc_jockey.create(
 				'access', '',
-				'hover', jion_path.empty,
-				'mark', undefined,
 				'mode', mode,
 				'path', jion_path.empty.append( 'disc' ),
 				'view', view,
@@ -395,7 +391,7 @@ shell_root.startup =
 				'twig:add', 'user', gruga_user,
 				'twig:add', 'welcome', gruga_welcome
 			),
-		'_visitor', null
+		'_visitor', null //FIXME
 	);
 
 	root.link.auth( user );
@@ -413,7 +409,7 @@ prototype._init =
 	var
 		access,
 		action,
-		hpath,
+		hover,
 		mark,
 		mode,
 		spaceRef,
@@ -434,7 +430,7 @@ prototype._init =
 
 	view = this.view;
 
-	hpath = this._hover;
+	hover = this._hover;
 
 	user = this.user;
 
@@ -458,6 +454,11 @@ prototype._init =
 /**/		( mode === 'normal' || mode === 'create' )
 /**/		&& !this.space
 /**/	)
+/**/	{
+/**/		throw new Error( );
+/**/	}
+/**/
+/**/	if( hover && hover.isEmpty )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -495,7 +496,7 @@ prototype._init =
 		!inherit
 		|| access !== inherit._access
 		|| action !== inherit.action
-		|| hpath !== inherit._hover
+		|| hover !== inherit._hover
 		|| mark !== inherit._mark
 		|| mode !== inherit.mode
 		|| user !== inherit.user
@@ -508,9 +509,10 @@ prototype._init =
 				this.space.create(
 					'action', action,
 					'hover',
-						hpath.isEmpty || hpath.get( 0 ) !== 'space'
-						? jion_path.empty
-						: hpath,
+						// FIXME let it prepare
+						hover && hover.get( 0 ) === 'space'
+						? hover
+						: undefined,
 					'mark', mark,
 					'view', view
 				);
@@ -519,9 +521,10 @@ prototype._init =
 		this._formJockey =
 			this._formJockey.create(
 				'hover',
-					hpath.isEmpty || hpath.get( 0 ) !== 'form'
-					? jion_path.empty
-					: hpath,
+					// FIXME let it prepare
+					hover && hover.get( 0 ) === 'form'
+					? hover
+					: undefined,
 				'mark', mark,
 				'spaceRef', spaceRef,
 				'user', user,
@@ -533,9 +536,10 @@ prototype._init =
 				'access', access,
 				'action', action,
 				'hover',
-					hpath.isEmpty || hpath.get( 0 ) !== 'disc'
-					? jion_path.empty
-					: hpath,
+					// FIXME let it prepare
+					hover && hover.get( 0 ) === 'disc'
+					? hover
+					: undefined,
 				'mark', mark,
 				'mode', mode,
 				'spaceRef', spaceRef,
@@ -634,19 +638,11 @@ prototype.click =
 
 	screen = root._currentScreen( );
 
-	click =
-		root._discJockey.click(
-			p,
-			shift,
-			ctrl
-		);
+	click = root._discJockey.click( p, shift, ctrl );
 
-	if( click === null )
+	if( click === null && screen )
 	{
-		if( screen )
-		{
-			screen.click( p, shift, ctrl );
-		}
+		screen.click( p, shift, ctrl );
 	}
 };
 
@@ -935,10 +931,7 @@ prototype.pointingHover =
 
 /**/	if( CHECK )
 /**/	{
-/**/		if(
-/**/			!result
-/**/			|| result.reflect !== 'result_hover'
-/**/		)
+/**/		if( result.reflect !== 'result_hover' )
 /**/		{
 /**/			throw new Error( );
 /**/		}

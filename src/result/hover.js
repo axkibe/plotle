@@ -25,17 +25,14 @@ if( JION )
 			{
 				cursor :
 					{
-						comment :
-							'the cursor to display',
-						type :
-							'string'
+						comment : 'the cursor to display',
+						type : 'string'
 					},
 				path :
 					{
-						comment :
-							'the path to the thing being hovered upon',
-						type :
-							'jion_path'
+						comment : 'the path to the thing being hovered upon',
+						type : 'jion_path',
+						defaultValue : 'undefined'
 					}
 			}
 	};

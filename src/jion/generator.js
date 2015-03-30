@@ -24,7 +24,7 @@ if( JION )
 					{
 						comment : 'the jion definition',
 						type : 'protean',
-						assign : null
+						assign : ''
 					}
 			},
 		init :
@@ -216,7 +216,7 @@ prototype._init =
 			? jAttr.assign
 			: name;
 
-		if( assign !== null )
+		if( assign !== '' )
 		{
 			abstractConstructorList.push( name );
 
@@ -586,7 +586,7 @@ prototype.genConstructor =
 
 		attr = this.attributes.get( name );
 
-		if( attr.assign === null )
+		if( attr.assign === '' )
 		{
 			continue;
 		}
@@ -953,7 +953,7 @@ prototype.genCreatorInheritanceReceiver =
 
 		attr = this.attributes.get( name );
 
-		if( attr.assign === null )
+		if( attr.assign === '' )
 		{
 			continue;
 		}
@@ -1693,7 +1693,7 @@ prototype.genCreatorUnchanged =
 
 		attr = this.attributes.get( name );
 
-		if( attr.assign === null )
+		if( attr.assign === '' )
 		{
 			cond = $and( cond, $( attr.varRef, ' === null' ) );
 
@@ -1864,7 +1864,7 @@ prototype.genFromJsonCreatorVariables =
 	{
 		attr = this.attributes.get( name );
 
-		if( attr.assign === null )
+		if( attr.assign === '' )
 		{
 			continue;
 		}
@@ -2463,7 +2463,7 @@ prototype.genFromJsonCreatorReturn =
 
 				attr = this.attributes.get( name );
 
-				if( attr.assign === null )
+				if( attr.assign === '' )
 				{
 					call = call.addArgument( null );
 				}
@@ -3033,7 +3033,7 @@ prototype.genEqualsFuncBody =
 
 		attr = this.attributes.get( name );
 
-		if( attr.assign === null )
+		if( attr.assign === '' )
 		{
 			continue;
 		}
@@ -3202,7 +3202,7 @@ prototype.genAlike =
 
 			attr = this.attributes.get( name );
 
-			if( attr.assign === null || ignores[ name ] )
+			if( attr.assign === '' || ignores[ name ] )
 			{
 				continue;
 			}

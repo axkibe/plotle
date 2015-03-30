@@ -7,7 +7,6 @@ var
 	form_form,
 	euclid_view,
 	gruga_formFacet,
-	jion_path,
 	jools,
 	mark_caret,
 	mark_widget,
@@ -339,12 +338,7 @@ form_form.pointingHover =
 		}
 	}
 
-	return(
-		result_hover.create(
-			'path', jion_path.empty,
-			'cursor', 'default'
-		)
-	);
+	return result_hover.create( 'cursor', 'default' );
 };
 
 

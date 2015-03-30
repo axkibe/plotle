@@ -1583,9 +1583,11 @@ jools.lazyValue(
 			buttonFacet =
 				gruga_portalButtonFacets.getFacet(
 					'hover',
-						!!this.hover.equals(
+						this.hover
+						?  this.hover.equals(
 							this.path.append( 'moveToButton' )
-						),
+						)
+						: false,
 					'focus', section === 'moveToButton'
 				);
 

@@ -57,7 +57,7 @@ if( JION )
 				{
 					comment : 'node currently hovered upon',
 					type : 'jion_path',
-					assign : null,
+					assign : '',
 					// FIXME undefined
 					defaultValue : 'null'
 				},

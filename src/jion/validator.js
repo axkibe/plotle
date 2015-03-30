@@ -539,16 +539,24 @@ checkAttribute =
 
 			case 'json' :
 
-				if( attr.assign === null )
+				if( attr.assign === '' )
 				{
 					throw new Error(
-						'json attributes most not have null assignment'
+						'json attributes most not have empty assignment'
 					);
 				}
 
 				break;
 
 			case 'assign' :
+
+				if( !jools.isString( attr.assign ) )
+				{
+					throw new Error( 'assign not a string' );
+				}
+
+				break;
+
 			case 'comment' :
 			case 'type' :
 
