@@ -16,27 +16,27 @@
 if( JION )
 {
 	return {
-		id :
-			'jsParser_state',
+		id : 'jsParser_state',
 		attributes :
+		{
+			ast :
 			{
-				ast :
-					{
-						comment : 'current ast entity',
-						type : '->astStatement',
-						allowsNull : true
-					},
-				tokens :
-					{
-						comment : 'ray of tokens to parse',
-						type : 'jsParser_tokenRay'
-					},
-				pos :
-					{
-						comment : 'current position in token ray',
-						type : 'integer'
-					}
+				comment : 'current ast entity',
+				type : '->astStatement',
+				defaultValue : 'undefined',
+				allowsNull : true // FIXME
 			},
+			tokens :
+			{
+				comment : 'ray of tokens to parse',
+				type : 'jsParser_tokenRay'
+			},
+			pos :
+			{
+				comment : 'current position in token ray',
+				type : 'integer'
+			}
+		},
 	};
 }
 

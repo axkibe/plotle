@@ -140,7 +140,8 @@ module.exports =
 	resource.create(
 		'filePath', 'src/euclid/color.js',
 		'hasJion', true,
-		'inBundle', true
+		'inBundle', true,
+		'inTestPad', true
 	),
 	resource.create(
 		'filePath', 'src/euclid/border.js',

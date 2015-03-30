@@ -163,7 +163,7 @@ parser.handleArrayLiteral =
 
 	state =
 		state.create(
-			'ast', null,
+			'ast', undefined,
 			'pos', state.pos + 1
 		);
 
@@ -207,7 +207,7 @@ parser.handleArrayLiteral =
 			{
 				state =
 					state.create(
-						'ast', null,
+						'ast', undefined,
 						'pos', state.pos + 1
 					);
 
@@ -290,7 +290,7 @@ parser.handleCall =
 
 	state =
 		state.create(
-			'ast', null,
+			'ast', undefined,
 			'pos', state.pos + 1
 		);
 
@@ -335,7 +335,7 @@ parser.handleCall =
 			{
 				state =
 					state.create(
-						'ast', null,
+						'ast', undefined,
 						'pos', state.pos + 1
 					);
 
@@ -392,7 +392,7 @@ parser.handleCondition =
 
 	state =
 		state.create(
-			'ast', null,
+			'ast', undefined,
 			'pos', state.pos + 1
 		);
 
@@ -412,7 +412,7 @@ parser.handleCondition =
 
 	state =
 		state.create(
-			'ast', null,
+			'ast', undefined,
 			'pos', state.pos + 1
 		);
 
@@ -495,7 +495,7 @@ parser.handleDualisticOps =
 
 	state =
 		state.create(
-			'ast', null,
+			'ast', undefined,
 			'pos', state.pos + 1
 		);
 
@@ -534,7 +534,7 @@ parser.handleGrouping =
 
 	state =
 		state.create(
-			'ast', null,
+			'ast', undefined,
 			'pos', state.pos + 1
 		);
 
@@ -599,7 +599,7 @@ parser.handleMember =
 
 	state =
 		state.create(
-			'ast', null,
+			'ast', undefined,
 			'pos', state.pos + 1
 		);
 
@@ -650,7 +650,7 @@ parser.handleMonoOps =
 
 	state =
 		state.create(
-			'ast', null,
+			'ast', undefined,
 			'pos', state.pos + 1
 		);
 
@@ -686,7 +686,7 @@ parser.handleNew =
 
 	state =
 		state.create(
-			'ast', null,
+			'ast', undefined,
 			'pos', state.pos + 1
 		);
 
@@ -768,7 +768,7 @@ parser.handleObjectLiteral =
 
 	state =
 		state.create(
-			'ast', null,
+			'ast', undefined,
 			'pos', state.pos + 1
 		);
 
@@ -837,7 +837,7 @@ parser.handleReturn =
 
 /**/if( CHECK )
 /**/{
-/**/	if( state.ast !== null )
+/**/	if( state.ast )
 /**/	{
 /**/		throw new Error( );
 /**/	}
@@ -1177,7 +1177,7 @@ getSpec =
 	var
 		spec;
 
-	if( state.ast === null )
+	if( !state.ast )
 	{
 		if( statement )
 		{
@@ -1217,7 +1217,7 @@ parseToken =
 		tokenSpec;
 
 	// this is already a preparsed astTree.
-	if( state.ast === null && state.current.reflect !== 'jsLexer_token' )
+	if( !state.ast && state.current.reflect !== 'jsLexer_token' )
 	{
 		state = state.create( 'ast', state.current, 'pos', state.pos + 1 );
 	}
@@ -1288,7 +1288,7 @@ parser.parse =
 		state.create(
 			'tokens', tokens,
 			'pos', 0,
-			'ast', null
+			'ast', undefined
 		);
 
 	st = parseToken( st, leftSpecs.start );

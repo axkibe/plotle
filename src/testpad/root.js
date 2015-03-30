@@ -32,85 +32,59 @@ var
 if( JION )
 {
 	return {
-		id :
-			'testpad_root',
+		id : 'testpad_root',
 		attributes :
+		{
+			action :
 			{
-				action :
-					{
-						comment :
-							'the action the user is preparing',
-						type :
-							'testpad_action',
-						defaultValue :
-							'null'
-					},
-				beepTimer :
-					{
-						comment :
-							'removes the beep',
-						type :
-							'protean',
-						defaultValue :
-							'null'
-					},
-				cursorAt :
-					{
-						comment :
-							'offset cursor is at',
-						type :
-							'integer',
-						defaultValue :
-							'0'
-					},
-				cursorLine :
-					{
-						comment :
-							'line cursor is in',
-						type :
-							'integer',
-						defaultValue :
-							'0'
-					},
-				elements :
-					{
-						comment :
-							'DOM elements',
-						type :
-							'protean',
-						defaultValue :
-							'undefined'
-					},
-				haveFocus :
-					{
-						comment :
-							'true when having focus',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
-					},
-				mouseDown :
-					{
-						comment :
-							'true when mouse button is held down',
-						type :
-							'boolean',
-						defaultValue :
-							'false'
-					},
-				repository :
-					{
-						comment :
-							'the testing repository',
-						type :
-							'testpad_repository',
-						defaultValue :
-							'testpad_repository.create( )'
-					}
+				comment : 'the action the user is preparing',
+				type : 'testpad_action',
+				defaultValue : 'null'
 			},
-		init :
-			[ ]
+			beepTimer :
+			{
+				comment : 'removes the beep',
+				type : 'protean',
+				defaultValue : 'null'
+			},
+			cursorAt :
+			{
+				comment : 'offset cursor is at',
+				type : 'integer',
+				defaultValue : '0'
+			},
+			cursorLine :
+			{
+				comment : 'line cursor is in',
+				type : 'integer',
+				defaultValue : '0'
+			},
+			elements :
+			{
+				comment : 'DOM elements',
+				type : 'protean',
+				defaultValue : 'undefined'
+			},
+			haveFocus :
+			{
+				comment : 'true when having focus',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
+			mouseDown :
+			{
+				comment : 'true when mouse button is held down',
+				type : 'boolean',
+				defaultValue : 'false'
+			},
+			repository :
+			{
+				comment : 'the testing repository',
+				type : 'testpad_repository',
+				defaultValue : 'testpad_repository.create( )'
+			}
+		},
+		init : [ ]
 	};
 }
 
